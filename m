@@ -1,167 +1,252 @@
-Return-Path: <linux-pm+bounces-4323-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4324-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB6D08613FD
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 15:32:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C73F861447
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 15:42:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C9BD21C21898
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 14:32:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 151181F217E3
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 14:42:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E87824C64;
-	Fri, 23 Feb 2024 14:32:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 518E722301;
+	Fri, 23 Feb 2024 14:38:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=trvn.ru header.i=@trvn.ru header.b="q1JvnxXT"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OWopO9Si"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C425979CC;
-	Fri, 23 Feb 2024 14:32:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.87.146.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9593322329
+	for <linux-pm@vger.kernel.org>; Fri, 23 Feb 2024 14:38:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708698745; cv=none; b=BL8Q1xZ7xL7ZLPxqxfOsPxjYnfSajlWBzzkMakRgF2fwCHVw48bHaFab0hM+FVnY+mZvCZetEYFyansbW2UNl62CH4ECO57ctBED4Xfo+S6UupaxgVy71BXLbh7nANQlojJgB5NDA9mTokmSYJIoDqrWXOUxEGivwJjwuwYSWfQ=
+	t=1708699121; cv=none; b=s0lR6fvgOyPuvEYZSwnAjYcwEgfXkPFzXRDTDFjrlQ0rmoZdU6i7gR43s7BfSM+ql7YhqQhDU3RSgLCylorHB8oVWFjMlxafFvBzZTepJrNQAJ3STs6Cz27Ye3kl2RRGepzGX3F2Rtc55goepJBkFlqOSTQEvsyU8f66mJxpj9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708698745; c=relaxed/simple;
-	bh=jiMJsyiTNHv8UOOvPguE/ydpC4lYJNHBv7Q8fPcd5vw=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=grlL2NpDAx7gUApnQp4Z8lyVpIqKuRPBd0yy0a7/sXRaBnMgousxv/YUvDsyC0uWrEM+u+Y+lCi+oPJRBnLPEhIT0y8klK8VTMlJlyD5jpsGxEXGZOK+9f2cAtW/R4nNqeoYnCN0CRoB/EK6uDK/7koUQ2TfdlQ3lfu4uk5GN5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=trvn.ru; spf=pass smtp.mailfrom=trvn.ru; dkim=pass (2048-bit key) header.d=trvn.ru header.i=@trvn.ru header.b=q1JvnxXT; arc=none smtp.client-ip=194.87.146.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=trvn.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trvn.ru
-Received: from authenticated-user (box.trvn.ru [194.87.146.52])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-	(No client certificate requested)
-	by box.trvn.ru (Postfix) with ESMTPSA id 81FE0408D8;
-	Fri, 23 Feb 2024 19:32:19 +0500 (+05)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-	t=1708698739; bh=jiMJsyiTNHv8UOOvPguE/ydpC4lYJNHBv7Q8fPcd5vw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=q1JvnxXTtJ3QhyO00A/qk6Ygn5aeMNvly1UmdUKktB4H7OxrI9esp/pwqHM0iUxVa
-	 /jkGL1o67J8wqqZuSQCZIGBEyH8ZgXGJgG0QjEEl8vb/IXysGhsi8sPP4ndwY3sYgO
-	 g8Fwjt4BsNE6RmUxRE4pMeGWG0DWhLbJr2OWd24I1EXIPVG6oEUb8OLb+/JB3BTwJs
-	 SiqSgVQ8yoU/3nTJKUiEUievYmOo/14iXdbTa+riOvjxI9iS2BVhDinNK21Ba0ehnR
-	 V+oO8zZNuCra5R+b9DxSwauCA8GNRqaj2ArPhMDiyVX1d0J/sOOAiDm2QmkKzoiV0D
-	 R8Ia+QYER9I5Q==
+	s=arc-20240116; t=1708699121; c=relaxed/simple;
+	bh=lPpsf+ctjoERqolin0a9v4LZu/IJHVLvdotwrmjWYEw=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Bpp1XCxiqpjll2iYtriyrnRx3Ln0IpbMQFfifGZO7MeQ1s1Uk7hNpayCNm+GFuxSPdLSrA1hVT5iE4neg6FvEdGVN122BT8lY5ntMYrpUAKF4AfM8YcdpoEseY+2Lv0HqTL34kVbaODt12zf0+lGB2ZjuFgwdL/KWqoPvwfdlYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OWopO9Si; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-1dbf6b00c8cso1748795ad.0
+        for <linux-pm@vger.kernel.org>; Fri, 23 Feb 2024 06:38:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1708699119; x=1709303919; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=xNKWGob6G7Q1K3q4m5EExpE7FnwHmLwzIXKPndEszZM=;
+        b=OWopO9SiwfNI712UpmT9KlQlOq71/RcxWbeVzgm0tqIcADYPE8PzAyW1RSeb3XIP1N
+         JzPbQDRdl0DYtPGmkdIfcdIZT1xxHBSPIE2IPCDeX6B/rTo/vAaKQkVWNLNi8TmAnxf+
+         +04KncY6JJ4DPyuMkg1/nKGH3833WbhOB0y+KIAc7ArljiAwQ3jaX3jzsrAliINjy4OO
+         5Bp5RWv3ZXe+YzAVXZcPcmgs2uTXbPEmKk8HgrkSUZVjJdaUp8y+KidxCE+mV7t8uRmx
+         ERhriad7yvMukU1xEB7ahQw5NaFeLmmX6jidZUdiAwvtCVZPYYYXdoQCwaFJ8wp5vm8P
+         wRRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708699119; x=1709303919;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xNKWGob6G7Q1K3q4m5EExpE7FnwHmLwzIXKPndEszZM=;
+        b=QUiurDsUgMs7L+dr+SuQ6qA741cdejcqixSGmcvFG1LWlLsGBfFfIJhgFvC2gyrGi+
+         pP7OvsYzlqTkPWfAQaXi4WVzwjkSbS11OpBEgFxRuyJ9/j0vIn4vGq7cU8ow52HqQiYU
+         R2ShHK+l2c/jpMUbAfy1eBEEdKNWvx1pHLlqInL33gQe05Td/7D3sxdXZczjsiS9EMjn
+         2yQlgCKAJGZkoWzC8PMDrzw/drC5BM/QgHwihqGfyEQVSuQ1xh7LO+DAJFya6CzNv1Ue
+         DJ8IxLYyNhQSq+ju+1SZ64K7Sc6xjvndni+jHWX4swi/clhanCS7u466Fg0FoAwcfTsl
+         5Q8A==
+X-Forwarded-Encrypted: i=1; AJvYcCU26CNLI5YuxK+7pi6um4WoZKDL4cPTXsvg6kajuBQdzQvaZTbqIu/8HZS91iwcClmNjWSdiS6YXhjcS0o0EViNpj6Xz/1x4eM=
+X-Gm-Message-State: AOJu0YxWSucaVlPb9M2nQL1p7pksQ6ldtxujTsFbwIgcVE6AXyQnU2iX
+	pFSrp4KBFYbdnu8PbbzbL4GUi9D0PGCBrVL2yPW8y+AlmUSxFwFREWvEEqlM/dXrqrXslDUhZS4
+	sU//YDY2AnNniIQ==
+X-Google-Smtp-Source: AGHT+IFTiGCoBvAgUBZXt0Q1pMETEIr1MdripTJ2jtoCm510pap6JTosXI3YJq6SK8nb/Qfn70+9sAtQJb1REBk=
+X-Received: from guanyulin.c.googlers.com ([fda3:e722:ac3:cc00:3:22c1:c0a8:1af])
+ (user=guanyulin job=sendgmr) by 2002:a17:903:187:b0:1db:eec6:5b81 with SMTP
+ id z7-20020a170903018700b001dbeec65b81mr6035plg.5.1708699118780; Fri, 23 Feb
+ 2024 06:38:38 -0800 (PST)
+Date: Fri, 23 Feb 2024 14:38:29 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Date: Fri, 23 Feb 2024 19:32:17 +0500
-From: Nikita Travkin <nikita@trvn.ru>
-To: Sebastian Reichel <sebastian.reichel@collabora.com>, Hans de Goede
- <hdegoede@redhat.com>
-Cc: Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
- cros-qcom-dts-watchers@chromium.org, Andy Gross <agross@kernel.org>, Bjorn
- Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>,
- Rob Herring <robh@kernel.org>, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] power: supply: Add Acer Aspire 1 embedded
- controller driver
-In-Reply-To: <qoidm5wujjbeoc2hlraky26wuwmuaxi2atyl6ehovhvffdbfeh@g5gunqdei45m>
-References: <20240220-aspire1-ec-v3-0-02cb139a4931@trvn.ru>
- <20240220-aspire1-ec-v3-2-02cb139a4931@trvn.ru>
- <qoidm5wujjbeoc2hlraky26wuwmuaxi2atyl6ehovhvffdbfeh@g5gunqdei45m>
-Message-ID: <7c429d2110dbac68d0c82c8fb8bfb742@trvn.ru>
-X-Sender: nikita@trvn.ru
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.44.0.rc0.258.g7320e95886-goog
+Message-ID: <20240223143833.1509961-1-guanyulin@google.com>
+Subject: [PATCH v3] PM / core: conditionally skip system pm in device/driver model
+From: Guan-Yu Lin <guanyulin@google.com>
+To: rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com, 
+	gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com, 
+	petr.tesarik.ext@huawei.com, rdunlap@infradead.org, james@equiv.tech, 
+	broonie@kernel.org, james.clark@arm.com, masahiroy@kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Guan-Yu Lin <guanyulin@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Sebastian Reichel писал(а) 22.02.2024 04:41:
-> Hi,
-> 
-> On Tue, Feb 20, 2024 at 04:57:13PM +0500, Nikita Travkin wrote:
->> Acer Aspire 1 is a Snapdragon 7c based laptop. It uses an embedded
->> controller to control the charging and battery management, as well as to
->> perform a set of misc functions.
->>
->> Unfortunately, while all this functionality is implemented in ACPI, it's
->> currently not possible to use ACPI to boot Linux on such Qualcomm
->> devices. To allow Linux to still support the features provided by EC,
->> this driver reimplments the relevant ACPI parts. This allows us to boot
->> the laptop with Device Tree and retain all the features.
->>
->> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
->> ---
->>  drivers/power/supply/Kconfig           |  14 +
->>  drivers/power/supply/Makefile          |   1 +
->>  drivers/power/supply/acer-aspire1-ec.c | 453 +++++++++++++++++++++++++++++++++
-> 
-> I think this belongs into drivers/platform, as it handles all bits of
-> the EC.
-> 
+In systems with a main processor and a co-processor, asynchronous
+controller management can lead to conflicts.  One example is the main
+processor attempting to suspend a device while the co-processor is
+actively using it. To address this, we introduce a new sysfs entry
+called "conditional_skip". This entry allows the system to selectively
+skip certain device power management state transitions. To use this
+feature, set the value in "conditional_skip" to indicate the type of
+state transition you want to avoid.  Please review /Documentation/ABI/
+testing/sysfs-devices-power for more detailed information.
 
-Hm, I initially submitted it to power/supply following the c630 driver,
-but I think you're right... Though I'm not sure where in platform/ I'd
-put this driver... (+CC Hans)
+Signed-off-by: Guan-Yu Lin <guanyulin@google.com>
+---
+V2 -> V3: Integrate the feature with the pm core framework.
+V1 -> V2: Cosmetics changes on coding style.
+[v2] usb: host: enable suspend-to-RAM control in userspace
+[v1] [RFC] usb: host: Allow userspace to control usb suspend flows
+---
+ Documentation/ABI/testing/sysfs-devices-power | 11 ++++++++
+ drivers/base/power/main.c                     | 16 ++++++++++++
+ drivers/base/power/sysfs.c                    | 26 +++++++++++++++++++
+ include/linux/device.h                        |  7 +++++
+ include/linux/pm.h                            |  1 +
+ 5 files changed, 61 insertions(+)
 
-Seems like most of the things live in platform/x86 but there is no i.e.
-platform/arm64...
+diff --git a/Documentation/ABI/testing/sysfs-devices-power b/Documentation/ABI/testing/sysfs-devices-power
+index 54195530e97a..3ac4e40f07a0 100644
+--- a/Documentation/ABI/testing/sysfs-devices-power
++++ b/Documentation/ABI/testing/sysfs-devices-power
+@@ -305,3 +305,14 @@ Description:
+ 		Reports the runtime PM children usage count of a device, or
+ 		0 if the children will be ignored.
+ 
++What:		/sys/devices/.../power/conditional_skip
++Date:		Feburary 2024
++Contact:	Guan-Yu Lin <guanyulin@google.com>
++Description:
++		The /sys/devices/.../conditional_skip attribute provides a way
++		to selectively skip system-wide power transitions like
++		suspend-to-RAM or hibernation. To skip a specific transition,
++		write its corresponding value to this attribute. For skipping
++		multiple transitions, combine their values using a bitwise OR
++		and write the result to this attribute.
++
+diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+index fadcd0379dc2..d507626c7892 100644
+--- a/drivers/base/power/main.c
++++ b/drivers/base/power/main.c
+@@ -1881,6 +1881,7 @@ static int device_prepare(struct device *dev, pm_message_t state)
+  */
+ int dpm_prepare(pm_message_t state)
+ {
++	struct list_head list;
+ 	int error = 0;
+ 
+ 	trace_suspend_resume(TPS("dpm_prepare"), state.event, true);
+@@ -1900,12 +1901,26 @@ int dpm_prepare(pm_message_t state)
+ 	 */
+ 	device_block_probing();
+ 
++	INIT_LIST_HEAD(&list);
+ 	mutex_lock(&dpm_list_mtx);
+ 	while (!list_empty(&dpm_list) && !error) {
+ 		struct device *dev = to_device(dpm_list.next);
+ 
+ 		get_device(dev);
+ 
++		if (dev->power.conditional_skip_pm & state.event) {
++			dev_info(dev, "skip system PM transition (event = 0x%04x)\n",
++				 state.event);
++
++			if (!list_empty(&dev->power.entry))
++				list_move_tail(&dev->power.entry, &list);
++
++			mutex_unlock(&dpm_list_mtx);
++			put_device(dev);
++			mutex_lock(&dpm_list_mtx);
++			continue;
++		}
++
+ 		mutex_unlock(&dpm_list_mtx);
+ 
+ 		trace_device_pm_callback_start(dev, "", state.event);
+@@ -1931,6 +1946,7 @@ int dpm_prepare(pm_message_t state)
+ 
+ 		mutex_lock(&dpm_list_mtx);
+ 	}
++	list_splice(&list, &dpm_list);
+ 	mutex_unlock(&dpm_list_mtx);
+ 	trace_suspend_resume(TPS("dpm_prepare"), state.event, false);
+ 	return error;
+diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
+index a1474fb67db9..1feacb01b1e9 100644
+--- a/drivers/base/power/sysfs.c
++++ b/drivers/base/power/sysfs.c
+@@ -610,6 +610,31 @@ static DEVICE_ATTR_RW(async);
+ #endif /* CONFIG_PM_SLEEP */
+ #endif /* CONFIG_PM_ADVANCED_DEBUG */
+ 
++static ssize_t conditional_skip_show(struct device *dev,
++				     struct device_attribute *attr,
++				     char *buf)
++{
++	return sysfs_emit(buf, "0x%04x\n", dev->power.conditional_skip_pm);
++}
++
++static ssize_t conditional_skip_store(struct device *dev,
++				      struct device_attribute *attr,
++				      const char *buf, size_t n)
++{
++	int ret;
++
++	if (kstrtoint(buf, 0, &ret))
++		return -EINVAL;
++
++	ret &= (PM_EVENT_FREEZE|PM_EVENT_SUSPEND|PM_EVENT_HIBERNATE);
++
++	dev->power.conditional_skip_pm = ret;
++
++	return n;
++}
++
++static DEVICE_ATTR_RW(conditional_skip);
++
+ static struct attribute *power_attrs[] = {
+ #ifdef CONFIG_PM_ADVANCED_DEBUG
+ #ifdef CONFIG_PM_SLEEP
+@@ -620,6 +645,7 @@ static struct attribute *power_attrs[] = {
+ 	&dev_attr_runtime_active_kids.attr,
+ 	&dev_attr_runtime_enabled.attr,
+ #endif /* CONFIG_PM_ADVANCED_DEBUG */
++	&dev_attr_conditional_skip.attr,
+ 	NULL,
+ };
+ static const struct attribute_group pm_attr_group = {
+diff --git a/include/linux/device.h b/include/linux/device.h
+index 97c4b046c09d..f2c73dd00211 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -968,6 +968,13 @@ static inline void device_set_pm_not_required(struct device *dev)
+ 	dev->power.no_pm = true;
+ }
+ 
++static inline void device_set_pm_conditional_skip(struct device *dev,
++						  int condition)
++{
++	condition &= (PM_EVENT_FREEZE|PM_EVENT_SUSPEND|PM_EVENT_HIBERNATE);
++	dev->power.conditional_skip_pm = condition;
++}
++
+ static inline void dev_pm_syscore_device(struct device *dev, bool val)
+ {
+ #ifdef CONFIG_PM_SLEEP
+diff --git a/include/linux/pm.h b/include/linux/pm.h
+index a2f3e53a8196..890c7a601c2a 100644
+--- a/include/linux/pm.h
++++ b/include/linux/pm.h
+@@ -713,6 +713,7 @@ struct dev_pm_info {
+ 	enum rpm_status		last_status;
+ 	int			runtime_error;
+ 	int			autosuspend_delay;
++	int			conditional_skip_pm;
+ 	u64			last_busy;
+ 	u64			active_time;
+ 	u64			suspended_time;
+-- 
+2.44.0.rc0.258.g7320e95886-goog
 
-Hans, (as a maintainer for most things in platform/) what do you think
-would be the best place to put this (and at least two more I'd expect)
-driver in inside platform/? And can we handle it through the
-platform-driver-x86 list?
-
-> [...]
-> 
->>  3 files changed, 468 insertions(+)
->>
->> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
->> index 3e31375491d5..e91a3acecb41 100644
->> --- a/drivers/power/supply/Kconfig
->> +++ b/drivers/power/supply/Kconfig
->> @@ -985,4 +985,18 @@ config FUEL_GAUGE_MM8013
->>  	  the state of charge, temperature, cycle count, actual and design
->>  	  capacity, etc.
->>
->> +config EC_ACER_ASPIRE1
->> +	tristate "Acer Aspire 1 Emedded Controller driver"
->> +	depends on I2C
->> +	depends on DRM
->> +	help
->> +	  Say Y here to enable the EC driver for the (Snapdragon-based)
->> +	  Acer Aspire 1 laptop. The EC handles battery and charging
->> +	  monitoring as well as some misc functions like the lid sensor
->> +	  and USB Type-C DP HPD events.
->> +
->> +	  This driver provides battery and AC status support for the mentioned
-> 
-> I did not see any AC status bits?
-> 
-
-I was referring to whatever ACPI spec calls "AC Adapter" but I guess
-I should have used the word "charger" instead... Will reword this.
-
->> [...]
-> 
->> +	case POWER_SUPPLY_PROP_PRESENT:
->> +		val->intval = 1;
-> 
-> You have an unused ASPIRE_EC_FG_FLAG_PRESENT, that looks like it
-> should be used here?
-> 
-
-Oh, you're right! I think I initially didn't have this property and
-added it like this as a reaction to that upower change that made it
-consider everything not explicitly present as absent.
-
-I've just checked what is reported after unplugging the battery and
-seems like the flag (as well as everything else) is gone. Will change
-the driver to read the flag.
-
-Thanks for your review!
-Nikita
-
->> [...]
-> 
-> Otherwise the power-supply bits LGTM.
-> 
-> -- Sebastian
 
