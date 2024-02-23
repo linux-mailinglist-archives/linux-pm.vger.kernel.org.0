@@ -1,95 +1,117 @@
-Return-Path: <linux-pm+bounces-4347-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4348-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E7DB861B19
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 19:05:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F577861B71
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 19:20:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37F2F289727
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 18:05:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 429DA28BA93
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 18:20:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 017C4143C64;
-	Fri, 23 Feb 2024 18:05:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FB42143C74;
+	Fri, 23 Feb 2024 18:20:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jrLpW/XA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54FA414263E;
-	Fri, 23 Feb 2024 18:05:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E44414263E;
+	Fri, 23 Feb 2024 18:20:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708711506; cv=none; b=dqsRPXUhBgflnNQnAJg8h2CQcKaCCgoGoTAKoQs48//AYlFjz7Qs2O+6lhHNnhCBYxuyThH4Hq5hr8rcInzvTo0BpWeiK1uii8wIKsYJ0OaI16TSkUpibTSFXVv2r3hKW5mhUMIuLnkB52NWyI9eE3yR25DZXiLP3NqqFin1TxY=
+	t=1708712443; cv=none; b=X8de8bc8EZW/CJ+LAjVbPtyRjI+v5/ULVoPU1oSAoO7jkofKjgbOYfjMsTfEhv0osFLSyJXq7QqOzzjoYhzDVlcQBizqKfsVombK9S4nxWHrm/rirR9zOxlY6F2hHY7pRgZxAIs6dDhLaVveYyTCNnGrNN9onUi1GXAractLA6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708711506; c=relaxed/simple;
-	bh=LnhjvqUeq0CK0kIwGNY2StqDTPb27nbR7qd6jVWv0QA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WMSzBA10+2Z3T90xbs5EiUSeTqNg7jmyGmiZQOxZXuOFM1nATIvRraeF0YyclHdUwGpK8Ggz0K5mWr53bADO5hQ6lcWXK8E/ZBr/Z92x1oO9dVw+5KByebqUx5GQNBVnqbc3fBCHbRlfBDigxw9Ro+tFUroYHpKhqigrVFFAMPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 370BEC433C7;
-	Fri, 23 Feb 2024 18:05:01 +0000 (UTC)
-Date: Fri, 23 Feb 2024 13:06:53 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
- <linux-trace-kernel@vger.kernel.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Linus Torvalds
- <torvalds@linux-foundation.org>, linuxppc-dev@lists.ozlabs.org,
- kvm@vger.kernel.org, linux-block@vger.kernel.org,
- linux-cxl@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
- intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
- linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
- virtualization@lists.linux.dev, linux-rdma@vger.kernel.org,
- linux-pm@vger.kernel.org, iommu@lists.linux.dev,
- linux-tegra@vger.kernel.org, netdev@vger.kernel.org,
- linux-hyperv@vger.kernel.org, ath10k@lists.infradead.org,
- linux-wireless@vger.kernel.org, ath11k@lists.infradead.org,
- ath12k@lists.infradead.org, brcm80211@lists.linux.dev,
- brcm80211-dev-list.pdl@broadcom.com, linux-usb@vger.kernel.org,
- linux-bcachefs@vger.kernel.org, linux-nfs@vger.kernel.org,
- ocfs2-devel@lists.linux.dev, linux-cifs@vger.kernel.org,
- linux-xfs@vger.kernel.org, linux-edac@vger.kernel.org,
- selinux@vger.kernel.org, linux-btrfs@vger.kernel.org,
- linux-erofs@lists.ozlabs.org, linux-f2fs-devel@lists.sourceforge.net,
- linux-hwmon@vger.kernel.org, io-uring@vger.kernel.org,
- linux-sound@vger.kernel.org, bpf@vger.kernel.org,
- linux-wpan@vger.kernel.org, dev@openvswitch.org,
- linux-s390@vger.kernel.org, tipc-discussion@lists.sourceforge.net, Julia
- Lawall <Julia.Lawall@inria.fr>
-Subject: Re: [FYI][PATCH] tracing/treewide: Remove second parameter of
- __assign_str()
-Message-ID: <20240223130653.2cc317a8@gandalf.local.home>
-In-Reply-To: <20240223125634.2888c973@gandalf.local.home>
-References: <20240223125634.2888c973@gandalf.local.home>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1708712443; c=relaxed/simple;
+	bh=4Qrvq1AhP6eyIkuoH88pa0hlk5TiVVHr6E9tQvZNksE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BPTv6Mavb8Y6eUlGkIEzWUuPnE90mIVLQqLEXJG5re2ASKKMEhQ51TKTf6HV0+1cds6lIoarLkdyS+5dhOh0wrZtDEeSUdhQR5eP+wQWjdkr/g+bKYVqBVxFUM2Nunzw/gsKxS6lah3EE4svFtulB7n4WR4t9Spx00wm06A3ce8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jrLpW/XA; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-53fbf2c42bfso999005a12.3;
+        Fri, 23 Feb 2024 10:20:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1708712438; x=1709317238; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uvmCBum3obDIzEvJJBYCmhBj4c5cWpFkxhaUjZo6Kko=;
+        b=jrLpW/XA9Gpvqhw2vvohkxecNbvp2boguflh8dUqSnJ7otPwc2uXpYjE5dO20hdeuP
+         EluHRC6NhES11Iq+xbCEOcl9lsXXt14u7UZZJETWX9zuafRWtX2bc/t66p1nnkVLNLF9
+         VfADDENc5cg4P6UQuWDGGbyDty5hT+bLzWVULGjgZf1HLYfLQZOVmjHRalfifH/or/Av
+         JdWUjM9SaUbjFQotcp0anP4rmO10F4vLp32KbThK8xH9IgRzQOPNl6GjPbtBOCbuv/uY
+         zeGoIJruytT3Q1qdZntKAvJPVWgNaHs+N0gYe1A28bl10ve5Hsdc4dEwZAS6BS4pHzXE
+         55hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708712438; x=1709317238;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uvmCBum3obDIzEvJJBYCmhBj4c5cWpFkxhaUjZo6Kko=;
+        b=lhUIVWehDyaUXA6h4XSupE8bOdd3wu0j9YRPH9FH77soo9tvbcpZbsZtnrNIAKvQHg
+         9uND2FWe7Z7fQIHmfYes9fnTW4cjaOfdhxiTCoEsEp+4a0yKWRTRMcgh3mHoQKK0/imc
+         QVZ19GhqkOFT9w85ntRj7VynWTpmktiWTD/DBsPQ6dZ64dwIvX/IHSyUkarvPow04EgV
+         8L4fQuC0QgdH8eP56UTcDlmhTn0W9qf0ZohHaZ1y1Bj6cTjfXnFsimBMSPybTmhCiVo/
+         Z8LtwRQhnbiTs09VVDDn6xuA/NbtJpRyKRKp1XzakLJOUGFljWvku2BiWqmdsfrG+VZk
+         tNMw==
+X-Forwarded-Encrypted: i=1; AJvYcCVBqQsdf9keqRJ0PTNa4BpEpE5Ms/tWxl+xpPQcOTvgbF5RwiljKO4opp//uccC48QvRXel+uPhJ9nipsL462hxtMYUOqOHExc=
+X-Gm-Message-State: AOJu0YwVjDAbJLWQ6CjFlVlFGx+1tagegCczdMKV95HZqbhQQ2lZYagu
+	y7q+fgjsXespj9iV4DyeKC8z2VadTHtXwmhPEoMzciVsiPQsmaUg
+X-Google-Smtp-Source: AGHT+IGg7ReM16zETYG2CYBHHz4NjUZ7dBtJCjwrpYyfNBFSVowWkw/L6NHszSznrq68kkWUt/LnqQ==
+X-Received: by 2002:a05:6a20:4c9b:b0:1a0:ce31:128b with SMTP id fq27-20020a056a204c9b00b001a0ce31128bmr519668pzb.34.1708712437592;
+        Fri, 23 Feb 2024 10:20:37 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id t42-20020a056a0013aa00b006e06b8548c3sm3986146pfg.139.2024.02.23.10.20.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Feb 2024 10:20:37 -0800 (PST)
+Message-ID: <a299118d-eeec-40b4-9a3d-48dc40f34e12@gmail.com>
+Date: Fri, 23 Feb 2024 10:20:32 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] PM / core: conditionally skip system pm in
+ device/driver model
+Content-Language: en-US
+To: Guan-Yu Lin <guanyulin@google.com>, rafael@kernel.org, pavel@ucw.cz,
+ len.brown@intel.com, gregkh@linuxfoundation.org,
+ andriy.shevchenko@linux.intel.com, petr.tesarik.ext@huawei.com,
+ rdunlap@infradead.org, james@equiv.tech, broonie@kernel.org,
+ james.clark@arm.com, masahiroy@kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20240223143833.1509961-1-guanyulin@google.com>
+From: Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20240223143833.1509961-1-guanyulin@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Fri, 23 Feb 2024 12:56:34 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On 2/23/24 06:38, Guan-Yu Lin wrote:
+> In systems with a main processor and a co-processor, asynchronous
+> controller management can lead to conflicts.  One example is the main
+> processor attempting to suspend a device while the co-processor is
+> actively using it. To address this, we introduce a new sysfs entry
+> called "conditional_skip". This entry allows the system to selectively
+> skip certain device power management state transitions. To use this
+> feature, set the value in "conditional_skip" to indicate the type of
+> state transition you want to avoid.  Please review /Documentation/ABI/
+> testing/sysfs-devices-power for more detailed information.
 
-> Note, the same updates will need to be done for:
-> 
->   __assign_str_len()
->   __assign_rel_str()
->   __assign_rel_str_len()
+This looks like a poor way of dealing with a lack of adequate resource 
+tracking from Linux on behalf of the co-processor(s) and I really do not 
+understand how someone is supposed to use that in a way that works.
 
-Correction: The below macros do not pass in their source to the entry
-macros, so they will not need to be updated.
-
--- Steve
-
->   __assign_bitmask()
->   __assign_rel_bitmask()
->   __assign_cpumask()
->   __assign_rel_cpumask()
+Cannot you use a HW maintained spinlock between your host processor and 
+the co-processor such that they can each claim exclusive access to the 
+hardware and you can busy-wait until one or the other is done using the 
+device? How is your partitioning between host processor owned blocks and 
+co-processor(s) owned blocks? Is it static or is it dynamic?
+-- 
+Florian
 
 
