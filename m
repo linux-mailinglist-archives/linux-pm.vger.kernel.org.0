@@ -1,193 +1,141 @@
-Return-Path: <linux-pm+bounces-4350-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4351-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DB49861B8C
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 19:26:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E023861BBD
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 19:34:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A1FF31C22BC4
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 18:26:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 615C21C2188C
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 18:34:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94F9713F00B;
-	Fri, 23 Feb 2024 18:26:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C8D25B1E1;
+	Fri, 23 Feb 2024 18:34:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jbAZS13H"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="SM1IU5a4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 636A012BE83
-	for <linux-pm@vger.kernel.org>; Fri, 23 Feb 2024 18:26:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86DB4101DE;
+	Fri, 23 Feb 2024 18:33:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708712793; cv=none; b=WaE4tzjumVZHFe5lKXytpNgorlL34aFJs8OKeNnyfER7/mIlXaB133dcCT/DGJEkpk4U4BIgffxySuIa6Z89dj/2NC7tkGha7JIXkKBztIYo92GK6RwJ9io677XxvJ8WdJgcSApsSbpeUErXt46IaRVPaomnL9Jdsd1cIIdYyJ0=
+	t=1708713241; cv=none; b=L+a1ixt46PE1vFVncdz3W3G3T76RRan8AraljVk6FRQYyAxdD06ElLefZIXwxdwuMlG9aPxk/MNMVvDg3PSSZXGg15EnZGFnSUFi34rQYqMVB4Vw8zhKITXA+mHEaQiL3G7ZjVHAR3DzHbUO7CcK9IGsteUKrESiuduQGDBDeqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708712793; c=relaxed/simple;
-	bh=2WkvgJMrdc2BL3LK7Dwe97PYd6AE58RjzA6SZMeaw/o=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=tE8Dqa63hYINtg9AtAgKaDzp6Idi43lxF7DTQdL8yIoeHc83QJSJbMECOD1YFUm7HadZtiPKAAqSDqMH2DQTy3lfnYv4uAn7eP8sM3gnQkb1jHqX9Vsposzeq1Agjizsk7Aq0jSrcCnnxE33czW/M8/6Cq4bR+BUgqtDuDyQOMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jbAZS13H; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708712791; x=1740248791;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=2WkvgJMrdc2BL3LK7Dwe97PYd6AE58RjzA6SZMeaw/o=;
-  b=jbAZS13HQJlEj4rOFKiOlZAdXEOfqiMWMmgLmTSg9dIqZfyx10izwwkQ
-   pggSEtrkcnjxHf0j7dabR3kkE3zLue8DChAmY3kINLC0Rv9AO4FrFBgZW
-   +6pgHT8S9T4mjQAtYpPTUjgFe+0UaVIiWEEK8sknruqkX+yjUs8ZMpsms
-   9QzCBbpc/yVczzaJELhRvFGqzIdNHLUVOzHrDaZ+78m+R1g4AWLzn8+1q
-   wSDjGDc0c++6e84PUIDpEJpt+JsfxBPOUj8BR6d8qLpF2mmTaiv5HPNu4
-   ZLxjDfKN95JC5ABRWxcr4BCTPvxYlVIOroJGdibXNoIhbw8ptLxuW1qhD
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10993"; a="5989698"
-X-IronPort-AV: E=Sophos;i="6.06,180,1705392000"; 
-   d="scan'208";a="5989698"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2024 10:26:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,180,1705392000"; 
-   d="scan'208";a="6463178"
-Received: from anwespi-mobl1.amr.corp.intel.com (HELO [10.213.185.77]) ([10.213.185.77])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2024 10:26:24 -0800
-Message-ID: <7e118d890e1907fa19021e4c20cd2a4b76d2be77.camel@linux.intel.com>
-Subject: Re: [PATCH v4 0/3] thermal/netlink/intel_hfi: Enable HFI feature
- only when required
-From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>, 
-	linux-pm@vger.kernel.org
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Ricardo Neri
-	 <ricardo.neri-calderon@linux.intel.com>, Daniel Lezcano
-	 <daniel.lezcano@linaro.org>
-Date: Fri, 23 Feb 2024 13:26:22 -0500
-In-Reply-To: <20240223155942.60813-1-stanislaw.gruszka@linux.intel.com>
-References: <20240223155942.60813-1-stanislaw.gruszka@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+	s=arc-20240116; t=1708713241; c=relaxed/simple;
+	bh=W16s7HsLRKeMogf+4P40NdsqJiCC7rUspv0L6Ekrt7w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=rl541vZPu4amQbSs75HuxToTVKYCMZbOcDJYuNHjxS3XEkAdVhQQOSPdYtx9dD3siUhliA4nZdULOlRQVDOij0Xw7GNPuhpcG8ploTi6VEoXeUf4TecdQsHDnuX4e6YfC6Bmxd7A11QAEEx+O/M9mRi+/s4AItagHNUg0Oc8zRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=SM1IU5a4; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41NEnafk007025;
+	Fri, 23 Feb 2024 18:30:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=Kfo/C8zqynWW3khr9w38fLA/juhM//M+1TSK7YbUzao=; b=SM
+	1IU5a4CNIWLmOnc+jXipb4Ga9eIJLWms0rnPxEXMwHDSoxe92W9Ew+cz2UneOT08
+	Iyi2XyxnbZDa1t3nXppWD2gBv5baFGSu5jpaJXHu6vAsxhujSo74jXQc1qhtrkyj
+	b1JYz/cxWMolVJrmsIH4767eZriXHsfPc1ASRZIKs+Vh4MImjLRwoZRf+c04IWja
+	WREgwfvGpnGGa1IxPu7qJXJNToVvZY2M73nvMYmrwiDnSM6QuEXhaYYJoUiQlYDP
+	AVkDtm/36vZFGTWQ5CsU0kJMULpTBDkWBl74wMVr5RZuQ0KaRJ0q/8gb9Xik4nP2
+	o7j3uPWaxue4GCbloFJw==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3we3233ydp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 23 Feb 2024 18:30:49 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41NIUm69006076
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 23 Feb 2024 18:30:48 GMT
+Received: from [10.110.104.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Fri, 23 Feb
+ 2024 10:30:46 -0800
+Message-ID: <0aed6cf2-17ae-45aa-b7ff-03da932ea4e0@quicinc.com>
+Date: Fri, 23 Feb 2024 10:30:45 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [FYI][PATCH] tracing/treewide: Remove second parameter of
+ __assign_str()
+Content-Language: en-US
+To: Steven Rostedt <rostedt@goodmis.org>, LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+CC: Masami Hiramatsu <mhiramat@kernel.org>,
+        Mathieu Desnoyers
+	<mathieu.desnoyers@efficios.com>,
+        Linus Torvalds
+	<torvalds@linux-foundation.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <amd-gfx@lists.freedesktop.org>, <intel-gfx@lists.freedesktop.org>,
+        <intel-xe@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <freedreno@lists.freedesktop.org>, <virtualization@lists.linux.dev>,
+        <linux-rdma@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <iommu@lists.linux.dev>, <linux-tegra@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-hyperv@vger.kernel.org>,
+        <ath10k@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
+        <ath11k@lists.infradead.org>, <ath12k@lists.infradead.org>,
+        <brcm80211@lists.linux.dev>, <brcm80211-dev-list.pdl@broadcom.com>,
+        <linux-usb@vger.kernel.org>, <linux-bcachefs@vger.kernel.org>,
+        <linux-nfs@vger.kernel.org>, <ocfs2-devel@lists.linux.dev>,
+        <linux-cifs@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
+        <linux-edac@vger.kernel.org>, <selinux@vger.kernel.org>,
+        <linux-btrfs@vger.kernel.org>, <linux-erofs@lists.ozlabs.org>,
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        <linux-hwmon@vger.kernel.org>, <io-uring@vger.kernel.org>,
+        <linux-sound@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-wpan@vger.kernel.org>, <dev@openvswitch.org>,
+        <linux-s390@vger.kernel.org>, <tipc-discussion@lists.sourceforge.net>,
+        Julia
+ Lawall <Julia.Lawall@inria.fr>
+References: <20240223125634.2888c973@gandalf.local.home>
+From: Jeff Johnson <quic_jjohnson@quicinc.com>
+In-Reply-To: <20240223125634.2888c973@gandalf.local.home>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: wCcVNA_rPgQQt00obewLDHJucphy8QWk
+X-Proofpoint-GUID: wCcVNA_rPgQQt00obewLDHJucphy8QWk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-23_04,2024-02-23_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
+ impostorscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
+ clxscore=1011 suspectscore=0 malwarescore=0 mlxlogscore=793 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2402120000 definitions=main-2402230136
 
-Your heading version is not correct:
+On 2/23/2024 9:56 AM, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> 
+> [
+>    This is a treewide change. I will likely re-create this patch again in
+>    the second week of the merge window of v6.9 and submit it then. Hoping
+>    to keep the conflicts that it will cause to a minimum.
+> ]
+> 
+> With the rework of how the __string() handles dynamic strings where it
+> saves off the source string in field in the helper structure[1], the
+> assignment of that value to the trace event field is stored in the helper
+> value and does not need to be passed in again.
 
-It should be
- "[PATCH v5 0/3] thermal/netlink/intel_hfi: Enable HFI feature only
-when required"
-
-Not "[PATCH v4.."
-
-Thanks,
-Srinivas
-
-On Fri, 2024-02-23 at 16:59 +0100, Stanislaw Gruszka wrote:
-> The patchset is based on
->=20
-> =C2=A0https://git.kernel.org/pub/scm/linux/kernel/git/kuba/linux.git
-> =C2=A0for-thermal-genetlink-family-bind-unbind-callbacks
->=20
-> and implement genetlink family bind/unbind callbacks in thermal-
-> netlink and
-> add notifications to thermal subdrivers. Those willh allow drivers to
-> send
-> netlink multicast events based on the presence of actual user-space
-> consumers.
-> This functionality optimizes resource usage by allowing disabling
-> of features when not needed.
->=20
-> Then implement the notification mechanism in the intel_hif driver,
-> it is utilized to disable the Hardware Feedback Interface (HFI)
-> dynamically. By implementing a thermal genl notify callback, the
-> driver
-> can now enable or disable the HFI based on actual demand,
-> particularly
-> when user-space applications like intel-speed-select or Intel Low
-> Power
-> daemon utilize events related to performance and energy efficiency
-> capabilities.
->=20
-> On machines where Intel HFI is present, but there are no user-space
-> components installed, we can save tons of CPU cycles.
->=20
-> Changes v4 -> v5:
->=20
-> - Fix hif vs. hfi in the changelog
-> - Rename thermal_gnl_chain
-> - Add new patch with rename of thermal_gnl_family
-> - Fix syscore concurrency comment
-> - Remove unneeded hfi_instance variable
-> - Rename hfi_do_enable/disable
-> - Avoid multiple enabling=20
-> - Add comment about registering for events before they can be
-> generated
-> - Rename hfi_thermal_clients_num since later there will be KVM
-> clients
->=20
-> Changes v3 -> v4:
->=20
-> - Add 'static inline' in patch2
->=20
-> Changes v2 -> v3:
->=20
-> - Fix unused variable compilation warning
-> - Add missed Suggested by tag to patch2
-> =C2=A0
-> Changes v1 -> v2:
->=20
-> - Rewrite using netlink_bind/netlink_unbind callbacks.
->=20
-> - Minor changelog tweaks.
->=20
-> - Add missing check in intel hfi syscore resume (had it on my
-> testing,
-> but somehow missed in post).
->=20
-> - Do not use netlink_has_listeners() any longer, use custom counter
-> instead.
-> To keep using netlink_has_listners() would be required to rearrange=20
-> netlink_setsockopt() and possibly netlink_bind() functions, to call=20
-> nlk->netlink_bind() after listeners are updated. So I decided to
-> custom
-> counter. This have potential issue as thermal netlink registers
-> before
-> intel_hif, so theoretically intel_hif can miss events. But since both
-> are required to be kernel build-in (if CONFIG_INTEL_HFI_THERMAL is
-> configured), they start before any user-space.
->=20
-> v1:
-> https://lore.kernel.org/linux-pm/20240131120535.933424-1-stanislaw.gruszk=
-a@linux.intel.com//
-> v2:
-> https://lore.kernel.org/linux-pm/20240206133605.1518373-1-stanislaw.grusz=
-ka@linux.intel.com/
-> v3:
-> https://lore.kernel.org/linux-pm/20240209120625.1775017-1-stanislaw.grusz=
-ka@linux.intel.com/
-> v4:
-> https://lore.kernel.org/linux-pm/20240212161615.161935-1-stanislaw.gruszk=
-a@linux.intel.com/
->=20
->=20
-> *** BLURB HERE ***
->=20
-> Stanislaw Gruszka (3):
-> =C2=A0 thermal: netlink: Add genetlink bind/unbind notifications
-> =C2=A0 thermal: netlink: Rename thermal_gnl_family
-> =C2=A0 thermal: intel: hfi: Enable interface only when required
->=20
-> =C2=A0drivers/thermal/intel/intel_hfi.c | 97 ++++++++++++++++++++++++++++=
--
-> --
-> =C2=A0drivers/thermal/thermal_netlink.c | 62 +++++++++++++++-----
-> =C2=A0drivers/thermal/thermal_netlink.h | 26 +++++++++
-> =C2=A03 files changed, 161 insertions(+), 24 deletions(-)
->=20
-
+Just curious if this could be done piecemeal by first changing the
+macros to be variadic macros which allows you to ignore the extra
+argument. The callers could then be modified in their separate trees.
+And then once all the callers have be merged, the macros could be
+changed to no longer be variadic.
 
