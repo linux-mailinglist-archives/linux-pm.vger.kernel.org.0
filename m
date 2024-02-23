@@ -1,136 +1,188 @@
-Return-Path: <linux-pm+bounces-4314-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4315-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A22A860A14
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 05:56:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CCF0860A30
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 06:21:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0E8F2842D7
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 04:56:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00BD0287F03
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 05:20:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41B9811706;
-	Fri, 23 Feb 2024 04:56:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CB2711716;
+	Fri, 23 Feb 2024 05:20:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mQ2o3Tq8"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="aiV8mtXW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D5E1111B7;
-	Fri, 23 Feb 2024 04:56:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD11101FA;
+	Fri, 23 Feb 2024 05:20:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708664200; cv=none; b=qogRkkNk9pzNLLnKmN8NRQcEJno8ufxe0rmIt38UdB0JC0gl73FYidt2VzFhRaGt7Lb8a30I3jxQ1EYJBhHvjPXcAoQuCs7YV+q3i/4y6arU8Q4fEjCaOhcykkU2CeuVpE5OJkUhnkAQ3hQPBUoWKJiR6OPWo3jAhCkVXxm4drc=
+	t=1708665654; cv=none; b=GXZ4hgPIwoyste1+ICEvReuYXfKsEj6024pQTJNd+Udrw5YZoxkvMH+VmCGaygIkOyrddz7aKgjEMaWnryXqXkG6ONIKiMFbpOhmYBGC2MJQ0qbQu4drTWaRnSyKjxijzwjCzUySe2+aQe0lV4SHQcPyeXxrcpS/3n0aY3WhNF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708664200; c=relaxed/simple;
-	bh=L8JdLJIOPT7SiDgt1sNgOXc6HQyxnRcj+oNXHWOfILY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GA+zIC9RQXiMcqvBUBhIZNvcCnjsZ/dt5yy6CAWSxJR9wpLyqLCrFbfLDwOQUkF2y4kU7mx6S9uNrJ3f2pEXJhb3E4RgxbQSFnUt/NP2p899zprzaRu9lwd39UVTTkATDZEfhjmJ9z5cHrkzW8eKV+1NlOpw7uR8Qh/Dqi18i8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mQ2o3Tq8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C613C433C7;
-	Fri, 23 Feb 2024 04:56:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708664199;
-	bh=L8JdLJIOPT7SiDgt1sNgOXc6HQyxnRcj+oNXHWOfILY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mQ2o3Tq8wLW451fEuRAyWrxRjveeCXKHZ1+S1Ok1khINwFiaLvH7V9NdJlDILhHf8
-	 XI7NcxUXo8up8b0ppbHK0Zm2Gg5B6mnoNnkHjDpleF8O4QDBRiIc/FvmoInPJVEDfC
-	 YLb037PuZEWQp52/GQRGhEUGkfJbUoMKoP9zwnLZKpnEKgOUC2seApF3O6Y8ZiuSGo
-	 U9sGqMEBzTIG1X3hxE/2+kCasSJru2XrT44kMFba7uPTQHflERxduzmIoj6fnwHIGr
-	 1K6bob0JcNCSsQbwZLR7tkm2NEct7IqGYEhr5vc/HlgXAHX2cUwVgB7jFWeD8Ctp9r
-	 O0WJHhrSly6qw==
-Date: Thu, 22 Feb 2024 21:56:37 -0700
-From: Rob Herring <robh@kernel.org>
-To: Conor Dooley <conor@kernel.org>
-Cc: Nikita Travkin <nikita@trvn.ru>, Sebastian Reichel <sre@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	cros-qcom-dts-watchers@chromium.org, Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] dt-bindings: power: supply: Add Acer Aspire 1 EC
-Message-ID: <20240223045637.GA3983053-robh@kernel.org>
-References: <20240220-aspire1-ec-v3-0-02cb139a4931@trvn.ru>
- <20240220-aspire1-ec-v3-1-02cb139a4931@trvn.ru>
- <20240220-splinter-jackpot-ac1571af5b2d@spud>
+	s=arc-20240116; t=1708665654; c=relaxed/simple;
+	bh=Mhdw9Zu4ydEVNNkZDl6MlHFqITqdLsrXh+2UiUSmICM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=cXUCRIX+ve8zm2zCkgm0FkJ2qvBdHl0MvFe4z4qB6vQiTjTTR5ku4rkGAonhag0nByN9mZ2ObnuVA+H40b/eOjgGr7N4FiLGO07ZFrtx1q5CPjIkadSF55+oPVyhsIYO7sSEmd5QWWXvp8L81aNKomyjaJa0Jlzf8xQXhImamTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=aiV8mtXW; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41N3wLZw001771;
+	Fri, 23 Feb 2024 05:20:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=XtP90d2oLGHAANc4Hry0XB7XCfCAgx7Z9UEZsQuUESs=; b=ai
+	V8mtXWQ+ss7kaXUqUgc4Dyh54flRGB0gSiZf3MG9OzQBiexfm9XJENQTID2bJ6bz
+	fZdU5hsNthYCgviFZJpllQh17SQhQJHUIufHQO/2XysxoDyJTZP5UW3D11gcDZGa
+	DmT60KQ5oXQ4iQlMvJRXIqwncyzP/UAqz3cJorxDCHugg1SSR59hsC68vsZFTTvy
+	mg4nYjIp9K2Au+3kN0ru+2u8RaGOopH5Yl0TcIV4axHXQgofJetUPoXkKZf0gFV8
+	/4saDP59GT2ZEAeeX6PcWnn5yDI160Qi459pJvlIkE+dcXEe/RRb+DqUy5+dWbwG
+	XE6AgYctFu2e44Dy6sCQ==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3weasbst7w-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 23 Feb 2024 05:20:42 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41N5Kgms001975
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 23 Feb 2024 05:20:42 GMT
+Received: from [10.216.26.154] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Thu, 22 Feb
+ 2024 21:20:37 -0800
+Message-ID: <ef3f5a8a-f5c7-3a2c-191b-4ce0db5cd79f@quicinc.com>
+Date: Fri, 23 Feb 2024 10:50:34 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240220-splinter-jackpot-ac1571af5b2d@spud>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] thermal/drivers/tsens: Add suspend to RAM support for
+ tsens
+To: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>,
+        Konrad Dybcio
+	<konrad.dybcio@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath
+	<thara.gopinath@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Rafael J
+ . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_mkshah@quicinc.com>,
+        "Raghavendra
+ Kakarla" <quic_rkakarla@quicinc.com>
+References: <20240122100726.16993-1-quic_priyjain@quicinc.com>
+ <548e2f24-a51e-4593-9463-09506488c70e@linaro.org>
+ <f415a8cd-4cae-d7c3-60fc-674b3e660f6b@quicinc.com>
+ <aeae2e69-8407-4d90-9d16-27798e2f3248@linaro.org>
+ <be69e0a6-fdc8-c24b-9beb-adaac4a97776@quicinc.com>
+ <b5ea1c8c-c35d-45e3-9b90-d3dc480f4463@linaro.org>
+ <1cd754e5-fc5e-bd8b-1d70-8de40c9a85e7@quicinc.com>
+Content-Language: en-US
+From: Priyansh Jain <quic_priyjain@quicinc.com>
+In-Reply-To: <1cd754e5-fc5e-bd8b-1d70-8de40c9a85e7@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: cH7944HrqCUIXbrJjQXy0ezi4puFE66n
+X-Proofpoint-GUID: cH7944HrqCUIXbrJjQXy0ezi4puFE66n
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-22_15,2024-02-22_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=1 mlxscore=1 suspectscore=0
+ mlxlogscore=186 impostorscore=0 bulkscore=0 phishscore=0 spamscore=1
+ clxscore=1011 lowpriorityscore=0 malwarescore=0 adultscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2402120000 definitions=main-2402230035
 
-On Tue, Feb 20, 2024 at 06:41:06PM +0000, Conor Dooley wrote:
-> Rob,
-> 
-> On Tue, Feb 20, 2024 at 04:57:12PM +0500, Nikita Travkin wrote:
-> > Add binding for the EC found in the Acer Aspire 1 laptop.
-> > 
-> > Signed-off-by: Nikita Travkin <nikita@trvn.ru>
-> > ---
-> >  .../bindings/power/supply/acer,aspire1-ec.yaml     | 69 ++++++++++++++++++++++
-> >  1 file changed, 69 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/power/supply/acer,aspire1-ec.yaml b/Documentation/devicetree/bindings/power/supply/acer,aspire1-ec.yaml
-> > new file mode 100644
-> > index 000000000000..984cf19cf806
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/power/supply/acer,aspire1-ec.yaml
-> > @@ -0,0 +1,69 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/power/supply/acer,aspire1-ec.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Acer Aspire 1 Embedded Controller
-> > +
-> > +maintainers:
-> > +  - Nikita Travkin <nikita@trvn.ru>
-> > +
-> > +description:
-> > +  The Acer Aspire 1 laptop uses an embedded controller to control battery
-> > +  and charging as well as to provide a set of misc features such as the
-> > +  laptop lid status and HPD events for the USB Type-C DP alt mode.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: acer,aspire1-ec
-> > +
-> > +  reg:
-> > +    const: 0x76
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  acer,fn-selects-media-keys:
-> > +    description: Configure the keyboard layout to invert the Fn key.
-> > +      By default the function row of the keyboard inputs media keys
-> > +      (i.e Vol-Up) when Fn is not pressed. With this option set, pressing
-> > +      the key without Fn would input function keys (i.e. F11). The
-> > +      firmware may choose to add this property when user selects the fn
-> > +      mode in the firmware setup utility.
-> > +    type: boolean
-> 
-> We both had some comments on this property, and Nikita tried to follow
-> up on yours (which was much more substantive than mine) but got no
-> response:
-> https://lore.kernel.org/all/20231214220210.GA988134-robh@kernel.org/
-> 
-> Reading what you said, I'm not entirely sure what you were looking for,
-> my guess is that you were wanted something controllable from userspace,
-> but I'm not sure how you figured that should work where the firmware
-> alone is able to control this.
 
-I replied there, but what I want is whatever the solution is to work on 
-any laptop, not just this Acer device.
 
-Rob
+On 1/27/2024 9:07 PM, Manaf Meethalavalappu Pallikunhi wrote:
+
+> +Maulik and Raghavendra
+> 
+> Hi Konrad,
+> 
+> On 1/25/2024 4:38 PM, Konrad Dybcio wrote:
+>>
+>>
+>> On 1/24/24 16:25, Priyansh Jain wrote:
+>>>
+>>>
+>>> On 1/24/2024 6:04 PM, Konrad Dybcio wrote:
+>>>>
+>>>>
+>>>> On 1/24/24 11:42, Priyansh Jain wrote:
+>>>>>
+>>>>>
+>>>>> On 1/22/2024 8:02 PM, Konrad Dybcio wrote:
+>>>>>> On 22.01.2024 11:07, Priyansh Jain wrote:
+>>>>>>> Add suspend callback support for tsens which disables tsens 
+>>>>>>> interrupts
+>>>>>>> in suspend to RAM callback.
+>>>>>>
+>>>>>> Would it not be preferrable to have the "critical overheat", wakeup-
+>>>>>> capable interrupts be enabled, even if the system is suspended?
+>>>>>>
+>>>>>
+>>>>>
+>>>>> As part of suspend to RAM, tsens hardware will be turned off and it 
+>>>>> cannot generate any interrupt.Also system doesn't want to abort 
+>>>>> suspend to RAM due to tsens interrupts since system is already 
+>>>>> going into lowest
+>>>>> power state. Hence disabling tsens interrupt during suspend to RAM 
+>>>>> callback.
+>>>>
+>>>> Is that a hardware limitation, or a software design choice? I'm not
+>>>> sure I want my phone to have thermal notifications disabled when
+>>>> it's suspended.
+>>>
+>>>> Konrad
+>>>
+>>> As part of suspend to RAM , entire SOC will be off,
+>>
+>> What do you mean by "entire SOC[sic] will be off"? Surely the memory
+>> controller must be on to keep refreshing the memory? Are you thinking
+>> of suspend-to-disk (hibernation), by chance?
+> 
+> Yes, Memory will be in self refreshing  mode(Retained). But SOC will be off
+> 
+> and will do cold boot to come out of S2R.
+> 
+>>
+>>> this mode (suspend to RAM) is not intended for Mobile product. Tsens 
+>>> interrupts are not
+>>> disabled as part of suspend to idle(suspend mode for mobile).
+>>
+>> That's clearly untrue, e.g. the PSCI firmware on SM8550 implements
+>> PSCI_SYSTEM_SUSPEND, which does S2R.
+> 
+> IIUC, PSCI_SYSTEM_SUSPEND will be enabled only for S2R supported 
+> products and will be removed it for others.
+> 
+> Maulik/Raghavendra can comment more
+> 
+Sorry for delayed response, we have discussed internally on this and
+came to the conclusion that disabling tsens interrupt in S2R path is not 
+correct approach as S2R is being exercised on mobile kind of products as 
+well. I will update the required changes in the next patch.
+
+Priyansh
+>>
+>> Konrad
 
