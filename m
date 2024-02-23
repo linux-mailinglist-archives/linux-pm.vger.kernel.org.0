@@ -1,114 +1,93 @@
-Return-Path: <linux-pm+bounces-4343-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4345-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BD978619E6
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 18:36:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82280861A7B
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 18:49:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 96BBE1F21856
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 17:36:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D460288E9F
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 17:49:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C8B5143C76;
-	Fri, 23 Feb 2024 17:30:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="wujqctl4"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95F7912FB22;
+	Fri, 23 Feb 2024 17:44:05 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC8C012D77A;
-	Fri, 23 Feb 2024 17:30:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2789112FB11;
+	Fri, 23 Feb 2024 17:44:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708709441; cv=none; b=dH1K3vM+JsUJr/VabW7TmnKNJ7CXJhl7+W7tjbQmoXWEmOOXPzehHo/46Maefw307HE1vgpURVU6TVgmYGeWhbO2NKYDRuacYg1i7UuXnMIqAkjmYLcPL1/iDKK5XTl650Me+i/L5OaV5fPAK8HbqjHagWuvKHPwmKnqmzcThRY=
+	t=1708710245; cv=none; b=fra+yOjPz81lJic1lk+o2GCwKFHCv6d7XCiriKqCuuvImYTxeGpgDNv1VkkQb5bsJf0tuIxLJ/tPBUsHJPMEigfO7yAkTv/2uso68+XeriaIzF5gpGv2otwdB1SJCpk2bSxu1troni3ODPqsq0gXMsmHcfFbo7TXrvXgcoDwZJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708709441; c=relaxed/simple;
-	bh=cYlBxp5NBE+Wc9M1WxlfVZ7eP5k9B5chPb5kAuyh3Jw=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FRZy90D9CZTKRmaZnSIWURQ5beMo+vFKcsFqJs6x1+XiCM7bxqkeSVmjFdhgPscoDQ3NFL1vQTU6bUaIdlwcoDwcVobRodvUw1zquFEvfnyyNk0UZ6Mw/tL3yu8luPegVKfuMgsNuT+EVGg/pFayXnt1iEePX3VkpWC/ukdB3gI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=wujqctl4; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1708709440; x=1740245440;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=cYlBxp5NBE+Wc9M1WxlfVZ7eP5k9B5chPb5kAuyh3Jw=;
-  b=wujqctl4vpWtSJxoOTElla16lhYfwV6A1GFM6se1eIqVbr8WiST1X9nD
-   n5OZNAgmnqsiWRj5x6Ju10fai+CpI702VLpfB9ZHbzazamM4Jk9qFrssZ
-   HN9cDNSUWYaDYsY0+i3SMEdOw4jAt3tiC0APygqMLlduJ8cVg9gpVvfUj
-   bJ06cA7gLtTid+LwtpXPMk+p7YgRkCPoJ0usXh7pmpqQXgcGJV7qBhZUo
-   cvHJOymSfOdH2hjsW+Ogkp4qtAcKxTpBMe12eF3kaDTt3E01r0kFknGUP
-   hD1/c367ext5TPNWO/jTh/DGIF8Ks19uw2a84/Yl5yZrLMGNZyaD0DZU3
-   g==;
-X-CSE-ConnectionGUID: WsimkxkcQRiUq4IidYZ/ag==
-X-CSE-MsgGUID: h1jsnocJSfSFWYgiuCMAJA==
-X-IronPort-AV: E=Sophos;i="6.06,180,1705388400"; 
-   d="scan'208";a="16734771"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Feb 2024 10:30:39 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Fri, 23 Feb 2024 10:30:34 -0700
-Received: from che-lt-i67070.microchip.com (10.10.85.11) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.35 via Frontend Transport; Fri, 23 Feb 2024 10:30:29 -0700
-From: Varshini Rajendran <varshini.rajendran@microchip.com>
-To: <claudiu.beznea@tuxon.dev>, <sre@kernel.org>, <robh+dt@kernel.org>,
-	<krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-	<linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-CC: <varshini.rajendran@microchip.com>, Krzysztof Kozlowski
-	<krzysztof.kozlowski@linaro.org>, Sebastian Reichel
-	<sebastian.reichel@collabora.com>
-Subject: [PATCH v4 34/39] dt-bindings: power: reset: atmel,sama5d2-shdwc: add sam9x7
-Date: Fri, 23 Feb 2024 23:00:23 +0530
-Message-ID: <20240223173023.673336-1-varshini.rajendran@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240223171342.669133-1-varshini.rajendran@microchip.com>
-References: <20240223171342.669133-1-varshini.rajendran@microchip.com>
+	s=arc-20240116; t=1708710245; c=relaxed/simple;
+	bh=WEk1o9DuGmQhfb4DIwZNU1PBokH4l8izWHl46k4dtUY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tgJoRyN9gCrZTJ/FPrFD/fYm7PxlMSqO1iw/bpl4P36ATOGh2peNb03knVrjBbJfXmzZUUKHTEuqDKx+l3fxjDWHDhr3Pj1cK8jO19ngi3Kpmnlsgt/GBXoNHII9yCBACVtWGObRkC0G9irnmalMJM17JgS7+JV24oVl7ayjdZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-59fc31c57easo176327eaf.1;
+        Fri, 23 Feb 2024 09:44:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708710243; x=1709315043;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=98xGer5jHOdOa0i64FybVWh8Yw0etQEzmf5UkGSwIe0=;
+        b=Ph4DGrmahlx9JeGn+UwJ44uCAn1BKRsjYw8PLIFKksCBW7fuwnLiZHcT2qx6l+5nxl
+         KQmFkGTk8BKbpEAKZLiKyWyzuSHYZXFkBRvX9kEGPrWDFhPJGYCHiJnuHdxfiblRMrGL
+         BNTgsSn649LwFqGxpXNv/P8egLiyTCZa7zO1vwiIJTpF2qylR72NKyY1xkMbEDGJl+Hi
+         XuSLnvhKRWvyJ68GxzDbRPdBg7tOrz2g5J6vCNdUOuS4PHV+4sMHW3mCBAwdIKmQ4twd
+         v4T7RoDYFuSIV9MqF84H7B7nDgtCgCwOsaIFA+2yZ3e4FIivWoYkn3yJHANlH5ojq5rN
+         I+1A==
+X-Forwarded-Encrypted: i=1; AJvYcCVQxLtQ/322JP/208bE4vv4oYx1c2IsWlnctvKqi9NIVhoaq8p6h1dKL/bT5v4/1VoubyM07IPxIrsAiiO0bQmcPR8ir7hLtFcTzQ/EPAKgtkAtLsClcFyUTpLvEbrc3VlRBYafkIU=
+X-Gm-Message-State: AOJu0Yzx3bLltTGjjkEdrjsltqiqq7mCaoXNSwanr1liUyKZflCnwH1R
+	AhsUJbwVrld36xxcpVk6HSNQgB1VPZaKtwB7Inf4caU3CQ8vDK4VHFrR9XkFz0x2n/aOe34xzF1
+	BbRH9GTa23CjykCkdo2Jzi6a2R+s=
+X-Google-Smtp-Source: AGHT+IHvImEtq21fFsYLwZYUaBgEjYxLD1NeXI6eBPFaNO8W1+4H9wliGzA3OofhtI11Qv9j+oIGk6WP6kH280DAE9c=
+X-Received: by 2002:a4a:d6d8:0:b0:5a0:3c8a:4940 with SMTP id
+ j24-20020a4ad6d8000000b005a03c8a4940mr531977oot.1.1708710243316; Fri, 23 Feb
+ 2024 09:44:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+References: <20240223143833.1509961-1-guanyulin@google.com>
+In-Reply-To: <20240223143833.1509961-1-guanyulin@google.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 23 Feb 2024 18:43:51 +0100
+Message-ID: <CAJZ5v0gM=0rU6a1A6Bh2Ed=4=1AtQ3p5aDJVCOioA6qxGv1jtQ@mail.gmail.com>
+Subject: Re: [PATCH v3] PM / core: conditionally skip system pm in
+ device/driver model
+To: Guan-Yu Lin <guanyulin@google.com>
+Cc: rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com, 
+	gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com, 
+	petr.tesarik.ext@huawei.com, rdunlap@infradead.org, james@equiv.tech, 
+	broonie@kernel.org, james.clark@arm.com, masahiroy@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add shutdown controller DT bindings.
+On Fri, Feb 23, 2024 at 3:38=E2=80=AFPM Guan-Yu Lin <guanyulin@google.com> =
+wrote:
+>
+> In systems with a main processor and a co-processor, asynchronous
+> controller management can lead to conflicts.  One example is the main
+> processor attempting to suspend a device while the co-processor is
+> actively using it. To address this, we introduce a new sysfs entry
+> called "conditional_skip". This entry allows the system to selectively
+> skip certain device power management state transitions. To use this
+> feature, set the value in "conditional_skip" to indicate the type of
+> state transition you want to avoid.  Please review /Documentation/ABI/
+> testing/sysfs-devices-power for more detailed information.
+>
+> Signed-off-by: Guan-Yu Lin <guanyulin@google.com>
 
-Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
----
-Changes in v4:
-- Updated Acked-by and Reviewed-by tags
----
- .../devicetree/bindings/power/reset/atmel,sama5d2-shdwc.yaml   | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.yaml b/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.yaml
-index 8c58e12cdb60..0735ceb7c103 100644
---- a/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.yaml
-+++ b/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.yaml
-@@ -22,6 +22,9 @@ properties:
-       - enum:
-           - atmel,sama5d2-shdwc
-           - microchip,sam9x60-shdwc
-+      - items:
-+          - const: microchip,sam9x7-shdwc
-+          - const: microchip,sam9x60-shdwc
- 
-   reg:
-     maxItems: 1
--- 
-2.25.1
-
+Please explain how this is intended to work.  That is, what exactly
+you expect to happen when the new attribute is set.
 
