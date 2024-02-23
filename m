@@ -1,130 +1,131 @@
-Return-Path: <linux-pm+bounces-4326-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4327-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FA6C86151E
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 16:04:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B453E861560
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 16:18:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F30831F23C18
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 15:04:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5266A1F25690
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 15:18:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2367673F2A;
-	Fri, 23 Feb 2024 15:04:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88EF981AD3;
+	Fri, 23 Feb 2024 15:18:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="VyJmqqsg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bcqvNIJL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67C2B29AF;
-	Fri, 23 Feb 2024 15:04:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB7E135EF1;
+	Fri, 23 Feb 2024 15:18:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708700684; cv=none; b=hSiLhTcLL7ckatWIB+gSYq4idV+WoqQoRr4OdTQSeP8rvb5ZOppMlWE2jSN4QHvkshiTK1S11mr4AbQvbRUoSAQ7TR+NWkieo0qVLSdVqJ4UhxWf0rp5Jx5H3vrADiWV0W9gNtLJVYTPvuvFCEbKTYVuaLkqbtZdGsOtX9YYWVE=
+	t=1708701530; cv=none; b=YOjnRWyETEzqOrA2Rqwg07lz2HwHlMF/VuYyyMny7ve38WbgsSVRxeODVP+I8YbrRV4PK/b3h6aT3GR5YjuMqqx/LyjbitwutyubiBXzjKFXf1rfbLGnmHcqrcZ43gGFkV4evRVZjTse/At+Fd8tjvMcO4knkLP0QuVH+1aCvPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708700684; c=relaxed/simple;
-	bh=5x6pYf9qLTpW8AR7rB7BIZ/ftWmhCe5nScEqQHk3wMQ=;
+	s=arc-20240116; t=1708701530; c=relaxed/simple;
+	bh=Os0Q+W8N00jfigFeOBwUgp4cCuPYza9m4uboeFPhkXA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R0nlfI9McLxMuFSXlZxCKHMkFFgjLxFP09lDQEQ0E8Z3hW1lYmBfAjy4wuxzgCuYP+Kz1tsz2ezmGbH62JppLtQmWEg61u8WO2s6YpdIqcpogwow+UjXBPci7pU4OurmJLTkHhEduoFiD30QWEttwyxsdJwrTv60DnVBMGJCjdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=VyJmqqsg; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1708700676;
-	bh=5x6pYf9qLTpW8AR7rB7BIZ/ftWmhCe5nScEqQHk3wMQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VyJmqqsgpm5U9Y5HtXtI531KmUgmHHitp9i69QI4A+zH5d52EXsfvN55wwYd1KTvP
-	 5SL2CNKtxJ29VXhp+eRVRNcg1/MrKgpLyuAnPxl7KRtEvZc+y8lBvVxQT8LYJLF/FR
-	 IRnVg9ZGUjzW5p9qC/0LoFwwm58SkAtvIrtZjEFgJ+GQXjqhdMiB1xjSND/T/a9OiH
-	 FD0ihu5q66PVpVWD1Fe6rVdSRSU9Se9SwOtuGxtF9A7Wn/gEcyDhXB8vig62Z5ErTY
-	 9DS/5EMBwG18wOc0EqHvYkQSoxMutq4GruMj63dhD8Pe1nKj3e05JIgP4qmyGE0UyU
-	 /EvO+Rx6WTX+w==
-Received: from mercury (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sre)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 94627378000E;
-	Fri, 23 Feb 2024 15:04:36 +0000 (UTC)
-Received: by mercury (Postfix, from userid 1000)
-	id 352031060C95; Fri, 23 Feb 2024 16:04:36 +0100 (CET)
-Date: Fri, 23 Feb 2024 16:04:36 +0100
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Nikita Travkin <nikita@trvn.ru>
-Cc: Hans de Goede <hdegoede@redhat.com>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	cros-qcom-dts-watchers@chromium.org, Andy Gross <agross@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Rob Herring <robh@kernel.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] power: supply: Add Acer Aspire 1 embedded
- controller driver
-Message-ID: <xelebhoitnwguhewahw26xopl5btjo5ezznjjaeb2zfyy2bpcr@7pmclezshwck>
-References: <20240220-aspire1-ec-v3-0-02cb139a4931@trvn.ru>
- <20240220-aspire1-ec-v3-2-02cb139a4931@trvn.ru>
- <qoidm5wujjbeoc2hlraky26wuwmuaxi2atyl6ehovhvffdbfeh@g5gunqdei45m>
- <7c429d2110dbac68d0c82c8fb8bfb742@trvn.ru>
+	 Content-Type:Content-Disposition:In-Reply-To; b=KANTopI2jHYcdkA52kk8pZfnKVhISLzNuNxuTt7kgjp9eqL+I6iD5N5+yg/FaB0qIoqWzayfb4m5HLVLm5veF45wzqA3hjKc3t36wXFVCLAaRX8D1iGsCmONKRrkolOoGLisvu8gM+M0e0uxlFwyUxsb+LO1nMVb8SOMgA0f+w8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bcqvNIJL; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708701529; x=1740237529;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Os0Q+W8N00jfigFeOBwUgp4cCuPYza9m4uboeFPhkXA=;
+  b=bcqvNIJLElnWzaJp9iqp5vX/V8opbg6mgNbilvW0t8aSWx3r8KhTmf2z
+   CBII8sFzy7m6P/MGE+Xv9l/86tQ3tlR5/jUNW+xkMWVztf5Fq0bsbzshH
+   Uc7u3AgFG6I77I2FMdYrQW4eFPBGtgFrKNW3Q3jguVuJ5nHLjnDFQz31u
+   UYuLjno8Hstk1KQk96pVIuFI93ipIKUjZPGf9PQA0fdgFj2HwQucEdIIL
+   fFySqjdo15g3+l9Mws+9wA7XbRWoqkqhscR5mql7rLfj0zJiU0KssF30+
+   35cfwsJZ8jEWi5SGGtEcmmkJVijmPmgxvjqZcjyB8bthljTu9E06pbBiE
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10993"; a="6837496"
+X-IronPort-AV: E=Sophos;i="6.06,180,1705392000"; 
+   d="scan'208";a="6837496"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2024 07:18:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10993"; a="913748814"
+X-IronPort-AV: E=Sophos;i="6.06,180,1705392000"; 
+   d="scan'208";a="913748814"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2024 07:18:44 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1rdXJx-00000006vvg-1Kjl;
+	Fri, 23 Feb 2024 17:18:41 +0200
+Date: Fri, 23 Feb 2024 17:18:41 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Guan-Yu Lin <guanyulin@google.com>
+Cc: rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
+	gregkh@linuxfoundation.org, petr.tesarik.ext@huawei.com,
+	rdunlap@infradead.org, james@equiv.tech, broonie@kernel.org,
+	james.clark@arm.com, masahiroy@kernel.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3] PM / core: conditionally skip system pm in
+ device/driver model
+Message-ID: <Zdi3UWWRfKw1N_Jn@smile.fi.intel.com>
+References: <20240223143833.1509961-1-guanyulin@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="zxpcrmzfdpf2u4kj"
-Content-Disposition: inline
-In-Reply-To: <7c429d2110dbac68d0c82c8fb8bfb742@trvn.ru>
-
-
---zxpcrmzfdpf2u4kj
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240223143833.1509961-1-guanyulin@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hi,
+On Fri, Feb 23, 2024 at 02:38:29PM +0000, Guan-Yu Lin wrote:
+> In systems with a main processor and a co-processor, asynchronous
+> controller management can lead to conflicts.  One example is the main
+> processor attempting to suspend a device while the co-processor is
+> actively using it. To address this, we introduce a new sysfs entry
+> called "conditional_skip". This entry allows the system to selectively
+> skip certain device power management state transitions. To use this
+> feature, set the value in "conditional_skip" to indicate the type of
+> state transition you want to avoid.  Please review /Documentation/ABI/
+> testing/sysfs-devices-power for more detailed information.
 
-On Fri, Feb 23, 2024 at 07:32:17PM +0500, Nikita Travkin wrote:
-> >> + This driver provides battery and AC status support for the mentioned
-> >=20
-> > I did not see any AC status bits?
->=20
-> I was referring to whatever ACPI spec calls "AC Adapter" but I guess
-> I should have used the word "charger" instead... Will reword this.
+...
 
-But you only register a power-supply device for the battery and not
-for the AC adapter/charger. When you write "and AC status support" I
-would have expected something similar to this (that's from ACPI AC
-adapter driver):
+> +static ssize_t conditional_skip_store(struct device *dev,
+> +				      struct device_attribute *attr,
+> +				      const char *buf, size_t n)
+> +{
 
-$ cat /sys/class/power_supply/AC/uevent
-POWER_SUPPLY_NAME=3DAC
-POWER_SUPPLY_TYPE=3DMains
-POWER_SUPPLY_ONLINE=3D1
+> +	int ret;
 
--- Sebastian
+> +	if (kstrtoint(buf, 0, &ret))
 
---zxpcrmzfdpf2u4kj
-Content-Type: application/pgp-signature; name="signature.asc"
+Why is it int? It seems like flags, should not be unsigned as u32 or so?
 
------BEGIN PGP SIGNATURE-----
+> +		return -EINVAL;
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmXYs+8ACgkQ2O7X88g7
-+pp0pQ/+I8r1MIK+6d+62Nhgu1dizPhWY5c5s1DPh3CbJHrAhUlfgaTisBQBldsz
-WkzDoOnYEG1lLDSlhsi+0/JbfufNry+gewlCbZ+WR8xPi/R7Zczp94TVvnVixD3e
-TJeyAlv4adPN1FJs7YIVnZE8e77xb8VeCTUq0vLXWlFi0hLt4lHyAdZk9ZihokTO
-EvKw/1rdVPn1Ztu5EIRZkPfHJvnOlnahTqcV/CEb5Q1W6vq+A4TS8cY1GkJXGGBc
-FTDbMPeaYn/VWxIyqKCgatcd1ypqP5mWhm7JdARSe1vMQw2InVyoNjMmG5I1HxBT
-ndudYQhftgOiDpeh8QcdfxFOhT5Yp9/rAO/DKm68URKBh3mbb0EZvIk46afZPIls
-+DfLtw5FeWNnU5Q0Ak8JY6mFEyqOMLR5IpSUAuHxY4STLsKBDStHBVwYZn0+C4D2
-QmNj9IgWAq51SJVKHWOB1afsPP1JPIyDJsHF8jCubdoAOlywd/HyxPlHXpFqxQsA
-JxvFM/mGHseeE/Q05UNMApNxdn/+wao1bXF2h1JSpW3VOwOSRdLqFJ4I7HzlGpD9
-9uxdqBb/3wRTLsZKIRchIQtbG6j88meODLU7kq4+Yn+UlEVLktfxHFztK5aPfoLy
-ngO2wlTKZs6wUAJuGJJidndXx21+4SJloIOhaLRHO2tmhEG6c1U=
-=X9fX
------END PGP SIGNATURE-----
+Do not shadow the real error code without justification.
 
---zxpcrmzfdpf2u4kj--
+> +	ret &= (PM_EVENT_FREEZE|PM_EVENT_SUSPEND|PM_EVENT_HIBERNATE);
+> +
+> +	dev->power.conditional_skip_pm = ret;
+> +
+> +	return n;
+> +}
+
+> +
+
+Redundant blank line.
+
+> +static DEVICE_ATTR_RW(conditional_skip);
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
 
