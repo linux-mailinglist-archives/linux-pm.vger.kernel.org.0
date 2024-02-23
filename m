@@ -1,145 +1,258 @@
-Return-Path: <linux-pm+bounces-4317-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4318-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5A4F860D77
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 10:04:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CC4C860E9C
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 10:51:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 800DBB214FE
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 09:04:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE4001F22DC0
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 09:51:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 210DB1A701;
-	Fri, 23 Feb 2024 09:04:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="FMWnDQCI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 724615C615;
+	Fri, 23 Feb 2024 09:48:55 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25D7C1864C;
-	Fri, 23 Feb 2024 09:04:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7EFC5D471;
+	Fri, 23 Feb 2024 09:48:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708679081; cv=none; b=lIZtNhxinl+Zb636K1MFAXDgrDJ4nu2Xh9wS2ETaf/4atwH935d732/1MN29hlVNxcrw+hcGsD1WLD/PGD+z1rvJ6GJzSPmLaAS5dGYWsNgp86lGhgD+PrckmJMPB+k09oo8knB1jdCpL7wV7SsHl45hruQkSpHN6Ek6nHGhAmg=
+	t=1708681735; cv=none; b=YnthpCRAsUgB1ShvPqTRKBg0CWcd+KuXZzNhp+ccyZ5gfgKL5mLw2DHNveHMuAv5+j/TLmWX8PCqWUmjAkEhTNTZsD0vWTVQK0soL0n83CiCs3xxx5JFIRnVw1lnOs2LQlUvxiqBCQWnWoIi/a6nsRgtaagZfLojcsn/xrrw/Vk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708679081; c=relaxed/simple;
-	bh=TQspUFQIuS/lSdvzU4xISypGBS54MESafBqD3EWI+Tw=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TxBjvNP7I9jwaGDp8xSed8Ak5p7vB405XlcvVXS7ntE/2y9eMySzyYAeYe6k74jk+xeezL7A0sfewlFYSw5JkD+zM6l2cW3qx+6eWGljsniHYMX0eFMAQeh62Ko8zQJcHpf+jUjc9sDeQuRif9S4VSy6PX/Z7Fi4E1yqLC45M6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=FMWnDQCI; arc=none smtp.client-ip=198.47.23.249
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 41N94CTN079911;
-	Fri, 23 Feb 2024 03:04:12 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1708679052;
-	bh=MV0WiK50sWpN/D2ImeC0rSquTMqXvPnv7oAy3Kp3On8=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=FMWnDQCIfisZAGk69C4E8+umZIj282DKybEUJATKNTRPywDjTxwlUV4TFvhNbrOAt
-	 yLBzWAyA2r9pSy/MuO6zFoz3xAe5lSTBusQeL2x2MhvnpUZHW7v7s4uydcHFpSvEO8
-	 KPRWyBLNs9F1oIwV05gMSU6ipLVNEqCDrGZsubkc=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 41N94CQE013247
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 23 Feb 2024 03:04:12 -0600
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 23
- Feb 2024 03:04:11 -0600
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 23 Feb 2024 03:04:11 -0600
-Received: from localhost (dhruva.dhcp.ti.com [172.24.227.68])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 41N94Bs1027980;
-	Fri, 23 Feb 2024 03:04:11 -0600
-Date: Fri, 23 Feb 2024 14:34:10 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: "Maulik Shah (mkshah)" <quic_mkshah@quicinc.com>
-CC: Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mark Rutland
-	<mark.rutland@arm.com>, <andersson@kernel.org>,
-        <ulf.hansson@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-pm@vger.kernel.org>, <quic_lsrao@quicinc.com>,
-        <stable@vger.kernel.org>
-Subject: Re: [PATCH] firmware/psci: Move psci_init_system_suspend() to
- late_initcall()
-Message-ID: <20240223090410.mgsu47wqinw33wep@dhruva>
-References: <20240219-suspend_ops_late_init-v1-1-6330ca9597fa@quicinc.com>
- <ZdOP5oAwZvEhNAsn@lpieralisi>
- <dc16acc1-6ad1-4a81-8eeb-aadaf837ff2c@quicinc.com>
+	s=arc-20240116; t=1708681735; c=relaxed/simple;
+	bh=nRLPoamuIA2shnoR1FKakvBvVXEWTXJdoH6Txg+Qw14=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=prLllwhhXNBhizY52vgX2Y42v5eWU3QKft2yLshK/ikPdnW6JRukdYckvdKevZvgY/d3WYMbvQFG5tOofbxoyKbs0uWcFtd7jzV978S++782+TaM/+IgG9KclHuJB1mBfSKJiGF69vK6Gm1z2G0MOgtANw2XC1if64XoVenVlD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B22E81596;
+	Fri, 23 Feb 2024 01:49:29 -0800 (PST)
+Received: from [192.168.1.13] (unknown [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 096983F766;
+	Fri, 23 Feb 2024 01:48:48 -0800 (PST)
+Message-ID: <fdd82ddb-82bc-4c8c-86ef-c80505881013@arm.com>
+Date: Fri, 23 Feb 2024 10:48:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <dc16acc1-6ad1-4a81-8eeb-aadaf837ff2c@quicinc.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-
-On Feb 20, 2024 at 11:18:39 +0530, Maulik Shah (mkshah) wrote:
-> 
-> 
-> On 2/19/2024 10:59 PM, Lorenzo Pieralisi wrote:
-> > On Mon, Feb 19, 2024 at 03:02:04PM +0530, Maulik Shah wrote:
-> > > psci_init_system_suspend() invokes suspend_set_ops() very early during
-> > > bootup even before kernel command line for mem_sleep_default is setup.
-> > > This leads to kernel command line mem_sleep_default=s2idle not working
-> > > as mem_sleep_current gets changed to deep via suspend_set_ops() and never
-> > > changes back to s2idle.
-> > > 
-> > > Move psci_init_system_suspend() to late_initcall() to make sure kernel
-> > > command line mem_sleep_default=s2idle sets up s2idle as default suspend
-> > > mode.
-> > 
-> > Why can't we fix it the other way around, namely enforce
-> > mem_sleep_current according to the mem_sleep_default command line
-> > even if suspend_set_ops() was already called ?
-> 
-> yes, this may be fixed other way also and i did not implement other way
-> since mem_sleep_default_setup() only update mem_sleep_default and to avoid
-> this race, it needs to also need to update mem_sleep_current along
-> with it. Below change also resolves the issue.
-> 
-> --- a/kernel/power/suspend.c
-> +++ b/kernel/power/suspend.c
-> @@ -192,6 +192,7 @@ static int __init mem_sleep_default_setup(char *str)
->                 if (mem_sleep_labels[state] &&
->                     !strcmp(str, mem_sleep_labels[state])) {
->                         mem_sleep_default = state;
-> +                       mem_sleep_current = state;
->                         break;
->                 }
-> 
-> however it may be erasing thin line between mem_sleep_default v/s
-> mem_sleep_current as both gets updated while set up of mem_sleep_default.
-> 
-> if this change looks Ok, i can send v2 with it.
-
-Honestly, I don't see too much of a problem with this, it only makes
-sense that we're starting off with a default sleep state which means
-that it will be considered as "current" sleep state.
-
-For the issue that you described originally, I think this is a fine
-solution.
-
-> 
-> > 
-> > Just asking, I am not super keen on using initcalls ordering, it
-> > looks fragile to me.
-> 
-> i agree with above.
-
-Same.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] cpufreq: Change default transition delay to 2ms
+Content-Language: en-US
+To: Qais Yousef <qyousef@layalina.io>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, Christian.Loehle@arm.com
+References: <20240205022500.2232124-1-qyousef@layalina.io>
+ <20240205074514.kiolurpounokalum@vireshk-i7>
+ <CAJZ5v0j2rA-+Jpdv6OZ_ymiqh0+RGzmJBNncKGBwuxO3PxgSKA@mail.gmail.com>
+ <ca000b2d-b552-43cb-8807-0a5f1450c6a2@arm.com>
+ <20240220135037.qriyapwrznz2wdni@airbuntu>
+ <d58de550-0ce1-4af9-9e2d-dedd5e73c797@arm.com>
+ <20240222115557.blnm4uulkxnorrl4@airbuntu>
+ <f4c3f028-b93e-4658-af28-ac2123203d68@arm.com>
+ <20240222233947.sl435tvhhpe5iqzw@airbuntu>
+From: Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <20240222233947.sl435tvhhpe5iqzw@airbuntu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
--- 
-Best regards,
-Dhruva Gole <d-gole@ti.com>
+
+On 2/23/24 00:39, Qais Yousef wrote:
+> On 02/22/24 16:15, Pierre Gondois wrote:
+> 
+>>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+>>> index 66cef33c4ec7..68a5ba24a5e0 100644
+>>> --- a/drivers/cpufreq/cpufreq.c
+>>> +++ b/drivers/cpufreq/cpufreq.c
+>>> @@ -576,6 +576,15 @@ unsigned int cpufreq_policy_transition_delay_us(struct cpufreq_policy *policy)
+>>>
+>>>           latency = policy->cpuinfo.transition_latency / NSEC_PER_USEC;
+>>>           if (latency) {
+>>> +               unsigned int max_delay_us = 2 * MSEC_PER_SEC;;
+>>> +
+>>> +               /*
+>>> +                * If the platform already has high transition_latency, use it
+>>> +                * as-is.
+>>> +                */
+>>> +               if (latency > max_delay_us)
+>> [1]  return min(latency, 10ms);
+>>> +                       return latency;
+>>> +
+>>>                   /*
+>>>                    * For platforms that can change the frequency very fast (< 10
+>>>                    * us), the above formula gives a decent transition delay. But
+>>> @@ -586,7 +595,7 @@ unsigned int cpufreq_policy_transition_delay_us(struct cpufreq_policy *policy)
+>>>                    * a reasonable amount of time after which we should reevaluate
+>>>                    * the frequency.
+>>>                    */
+>>> -               return min(latency * LATENCY_MULTIPLIER, (unsigned int)(2 * MSEC_PER_SEC));
+>>> +               return min(latency * LATENCY_MULTIPLIER, max_delay_us);
+>>>           }
+>>>
+>>>           return LATENCY_MULTIPLIER;
+>>>
+>>
+>> A policy with these values:
+>> - transition_delay_us = 0
+>> - transition_latency = 30ms
+>> would get a transition_delay of 30ms I think.
+>>
+>> Maybe it would be better to default to the old value in this case [1].
+> 
+> Hmm. I think it wouldn't make sense to have 2 levels of capping. It's either we
+> cap to 2ms, or honour the transition latency from the driver if it is higher
+> and let it lower it if it can truly handle smaller values?
+> 
+> Rafael, should I send a new version of the patch, a new patch on top or would
+> you like to take a fixup if you can amend the commit? If you and Viresh think
+> the two levels of capping make sense as suggested above let me know. I think
+> better to delegate to the drivers if they report transition_latency higher than
+> 2ms.
+
+The latency can be computed by dev_pm_opp_get_max_transition_latency() and
+one of its component comes from `clock-latency-ns` DT binding. The maximum value
+I saw is 10ms, so it seems it should be ok not to add: `min(latency, 10ms)`
+
+
+> 
+> -->8--
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 66cef33c4ec7..668263c53810 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -576,8 +576,17 @@ unsigned int cpufreq_policy_transition_delay_us(struct cpufreq_policy *policy)
+>   
+>          latency = policy->cpuinfo.transition_latency / NSEC_PER_USEC;
+>          if (latency) {
+> +               unsigned int max_delay_us = 2 * MSEC_PER_SEC;;
+> +
+> +               /*
+> +                * If the platform already has high transition_latency, use it
+> +                * as-is.
+> +                */
+> +               if (latency > max_delay_us)
+> +                       return latency;
+> +
+>                  /*
+> -                * For platforms that can change the frequency very fast (< 10
+> +                * For platforms that can change the frequency very fast (< 20
+
+I think it should be 10->2us as we do:
+   min(latency * 1000, 2ms)
+
+
+>                   * us), the above formula gives a decent transition delay. But
+>                   * for platforms where transition_latency is in milliseconds, it
+>                   * ends up giving unrealistic values.
+> @@ -586,7 +595,7 @@ unsigned int cpufreq_policy_transition_delay_us(struct cpufreq_policy *policy)
+>                   * a reasonable amount of time after which we should reevaluate
+>                   * the frequency.
+>                   */
+> -               return min(latency * LATENCY_MULTIPLIER, (unsigned int)(2 * MSEC_PER_SEC));
+> +               return min(latency * LATENCY_MULTIPLIER, max_delay_us);
+>          }
+>   
+>          return LATENCY_MULTIPLIER;
+> 
+> -->8--
+> 
+>>
+>> ---
+>>
+>> Also a note that on the Pixel6 I have, transition_latency=5ms,
+>> so the platform's policies would end up with transition_delay=5ms
+> 
+> Yes I know. But at this stage it's a driver issue. I think this value is not
+> correct and there's a typo.
+> 
+>>
+>>
+>>>>
+>>>>
+>>>> 2.
+>>>> There are references to the 10ms values at other places in the code:
+>>>>
+>>>> include/linux/cpufreq.h
+>>>>    * ondemand governor will work on any processor with transition latency <= 10ms,
+>>>
+>>> Not sure this one needs updating. Especially with the change above which means
+>>> 10ms could theoretically happen. But if there are suggestions happy to take
+>>> them.
+>>
+>> a.
+>> LATENCY_MULTIPLIER introduction:
+>> 112124ab0a9f ("[CPUFREQ] ondemand/conservative: sanitize sampling_rate restrictions")
+>>
+>> b.
+>> max_transition_latency removal:
+>> ed4676e25463 ("cpufreq: Replace "max_transition_latency" with "dynamic_switching"")
+>>
+>> c.
+>> dynamic_switching removal:
+>> 9a2a9ebc0a75 ("cpufreq: Introduce governor flags")
+>>
+>> The value could be removed independently from this patch indeed, as this is not
+>> related to cpufreq_policy_transition_delay_us() since b.
+> 
+> Thanks for sending the patch.
+> 
+>>
+>>
+>>>
+>>>>
+>>>> drivers/cpufreq/cpufreq.c
+>>>>    * For platforms that can change the frequency very fast (< 10
+>>>>    * us), the above formula gives a decent transition delay. But
+>>>> -> the 10us value matches 10ms = 10us * LATENCY_MULTIPLIER
+>>>
+>>> I can't find this one.
+>>
+>> It's in cpufreq_policy_transition_delay_us(),
+>>    "the 10us value matches 10ms = 10us * LATENCY_MULTIPLIER"
+>> is a sentence I wrote, the comment to modify would be:
+>> """
+>> * For platforms that can change the frequency very fast (< 10
+>> * us), the above formula gives a decent transition delay. But
+>> """
+> 
+> Ah you were referring to s/10/20/. Done.
+> 
+>>
+>>>
+>>>>
+>>>> Documentation/admin-guide/pm/cpufreq.rst
+>>>>    Typically, it is set to values of the order of 10000 (10 ms).  Its
+>>>>    default value is equal to the value of ``cpuinfo_transition_latency``
+>>>
+>>> I am not sure about this one. It refers to cpuinfo_transition_latency not the
+>>> delay and uses a formula to calculate it based on that.
+>>>
+>>> Seems the paragraph needs updating in general to reflect other changes?
+>>
+>> aa7519af450d ("cpufreq: Use transition_delay_us for legacy governors as well")
+>>
+>> The cpufreq_policy_transition_delay_us() was introduced there and integrates the
+>> 10ms value related to this paragraph.
+>>
+>> ---
+>>
+>> I assume that if we keep the 10ms value in the code, it should be ok to let
+>> the comment as is. I'll send a patch to remove the first one as it can be
+>> done independently.
+> 
+> Thanks!
+> 
+> --
+> Qais Yousef
 
