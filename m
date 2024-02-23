@@ -1,111 +1,105 @@
-Return-Path: <linux-pm+bounces-4328-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4329-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 717A38615E6
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 16:34:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F4A5861621
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 16:44:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 12BDE1F25733
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 15:34:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DBE8E1F210ED
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 15:44:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF5CB823DE;
-	Fri, 23 Feb 2024 15:34:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C22E182882;
+	Fri, 23 Feb 2024 15:44:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=trvn.ru header.i=@trvn.ru header.b="qq6TzNBG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e8mhjl5s"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from box.trvn.ru (unknown [194.87.146.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 827214A3D;
-	Fri, 23 Feb 2024 15:34:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.87.146.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BEBB8287B;
+	Fri, 23 Feb 2024 15:44:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708702484; cv=none; b=tmTTw2da6IM0n0IcsmagIAG0cK7BR6h+UTMMm7+qC0nGcpnxTCUxfHKLXbXbpdmWNzpTTE1P+krNBnL2bsAvQMdxLlAtsYNk9zGTYl6ynAuq0rnq/OqrPiXHFwZVk6s4D1R/lwgrjULEes5jl+RXXWw/RBqWbs9Z/WFK18kf+W4=
+	t=1708703056; cv=none; b=sHbtDw6TbaGo59cgelLQFDkpHw73I25oWSpdov8F400vcTcoZf23fQnj2l1i5krWyRDPEadSihjQ0tH6uHl2bC0fY2u3dj0DPTjmLOO9Tj/OaqZsJXJ5Jv5BBzMMKPCPjCt/rDHjF9OowsI10DvWxyZeOBmN0jCIvdqXAT4IfTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708702484; c=relaxed/simple;
-	bh=0SNtXViAi/uuzITK6f3+yak148HxUT/1hggSYF8AK6Y=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=SmmfxeQ9jWjmDSuk33Sm9WTsdLK2WZB+pJ68pPZ3C9Ho1FR1XH1vohWb+b2nCy9r+CMcVX0IWgyrE9YDWiVkCWep7I2CfsOFjgp9Ar+LyT71F2kx1SZwvkCNL4cl3HPQ7NyzILZkS8W/enWDIiyr12y+o2wozFeHOVkELBsU0pU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=trvn.ru; spf=pass smtp.mailfrom=trvn.ru; dkim=pass (2048-bit key) header.d=trvn.ru header.i=@trvn.ru header.b=qq6TzNBG; arc=none smtp.client-ip=194.87.146.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=trvn.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trvn.ru
-Received: from authenticated-user (box.trvn.ru [194.87.146.52])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-	(No client certificate requested)
-	by box.trvn.ru (Postfix) with ESMTPSA id 9694A40164;
-	Fri, 23 Feb 2024 20:34:30 +0500 (+05)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-	t=1708702471; bh=0SNtXViAi/uuzITK6f3+yak148HxUT/1hggSYF8AK6Y=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=qq6TzNBGn05giGvmcRQt3AaAYb/F/pzsMBFrc0khdePz1ghzyF/iRXUEmoaELmULx
-	 kGf29xKC7wG0D4ZNvipJkyYDbp7hnSCsq/2MHRw8ko6B4+ndA0lGGw2ylRvH3tKsZt
-	 qdrTV6ECrpuN7f0V2xSsBgWoNyLUJQeJikTicP3lSiGIaIXp7QhUDaimK4uKjAE3eC
-	 rcSnmEdBRh0QskL1PWIAyqEcZXukZp378sMEb7T5RFPDvw+44WEGLPaWS4j66IfprM
-	 R5oBdwi2MET5cZCR+LtLhHxzrZxVDPWBeGtgereyi5DxsLAzQqEMUMP32E8hJP71Yd
-	 CaU1bnWbVbJkA==
+	s=arc-20240116; t=1708703056; c=relaxed/simple;
+	bh=GKrFapZlvSWxGoxTrSpuYyRv5Do4WhNJBO+W7E9esiE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=C89/wk3LjuqL+5wn/tZIKBp5reCHhVQ+rYyzn+gzLkTlogrgLcbSDvh+Sg0y5migTJvO3nLq60Vrz4C9ns9l9L8Li3H5OK8+/tTVd1FSKUs8kVI8fUkSiBqXlQnddSKSsWGIkgfo/6Ff5p20Xo4YmrPNAhfcEipb5tF9PMW7mF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e8mhjl5s; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708703056; x=1740239056;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GKrFapZlvSWxGoxTrSpuYyRv5Do4WhNJBO+W7E9esiE=;
+  b=e8mhjl5sp4Em3UZciQONniNIue5ZLDTqq/jvQ7vRK4u/xX9H5GvDTl7n
+   d2ILViK2RaMtb2x9SFGG+SOTB5RwKVMzcLRXtlvgjEypLHJy1TpmIfmGP
+   RfHUwi9yuu+3wRA7+GTFModokTD4j2+L2i5GuuMb4B+a0Uewb4f326jY2
+   oRVocclncmJHEDPCQU/YoamgB1+J/tbvgTLZl8boxGUUfy0ews2hbyxDk
+   cSZ8kMVmyfu/gcMMPNl2Sfz1D4pNCmRiCd0NHAxBk/Q3xWnpwL0ANDMD7
+   hdTo9JyIhYNjAXQqMk2QxzlDAgRwIi4r1lIsVBR/WZo6OnJtlRGkaFryD
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10993"; a="2909710"
+X-IronPort-AV: E=Sophos;i="6.06,180,1705392000"; 
+   d="scan'208";a="2909710"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2024 07:44:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,180,1705392000"; 
+   d="scan'208";a="5888041"
+Received: from sgruszka-mobl.ger.corp.intel.com (HELO localhost) ([10.252.47.110])
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2024 07:44:11 -0800
+Date: Fri, 23 Feb 2024 16:44:08 +0100
+From: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Jiri Pirko <jiri@resnulli.us>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org
+Subject: Re: [PATCH v4 0/3] thermal/netlink/intel_hfi: Enable HFI feature
+ only when required
+Message-ID: <Zdi9SGVE3tT/f2KT@linux.intel.com>
+References: <20240212161615.161935-1-stanislaw.gruszka@linux.intel.com>
+ <20240215212946.08c730d9@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Fri, 23 Feb 2024 20:34:29 +0500
-From: Nikita Travkin <nikita@trvn.ru>
-To: Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: Hans de Goede <hdegoede@redhat.com>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
- <conor+dt@kernel.org>, cros-qcom-dts-watchers@chromium.org, Andy Gross
- <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio
- <konrad.dybcio@linaro.org>, Rob Herring <robh@kernel.org>,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] power: supply: Add Acer Aspire 1 embedded
- controller driver
-In-Reply-To: <xelebhoitnwguhewahw26xopl5btjo5ezznjjaeb2zfyy2bpcr@7pmclezshwck>
-References: <20240220-aspire1-ec-v3-0-02cb139a4931@trvn.ru>
- <20240220-aspire1-ec-v3-2-02cb139a4931@trvn.ru>
- <qoidm5wujjbeoc2hlraky26wuwmuaxi2atyl6ehovhvffdbfeh@g5gunqdei45m>
- <7c429d2110dbac68d0c82c8fb8bfb742@trvn.ru>
- <xelebhoitnwguhewahw26xopl5btjo5ezznjjaeb2zfyy2bpcr@7pmclezshwck>
-Message-ID: <6e3fb1080c54cfc38dc3c3e79e32a53d@trvn.ru>
-X-Sender: nikita@trvn.ru
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240215212946.08c730d9@kernel.org>
 
-Sebastian Reichel писал(а) 23.02.2024 20:04:
-> Hi,
+On Thu, Feb 15, 2024 at 09:29:46PM -0800, Jakub Kicinski wrote:
+> On Mon, 12 Feb 2024 17:16:12 +0100 Stanislaw Gruszka wrote:
+> >   genetlink: Add per family bind/unbind callbacks
 > 
-> On Fri, Feb 23, 2024 at 07:32:17PM +0500, Nikita Travkin wrote:
->> >> + This driver provides battery and AC status support for the mentioned
->> >
->> > I did not see any AC status bits?
->>
->> I was referring to whatever ACPI spec calls "AC Adapter" but I guess
->> I should have used the word "charger" instead... Will reword this.
+> genetlink patch is now in net-next, and pushed to a 6.8-rc4-based
+> branch at:
 > 
-> But you only register a power-supply device for the battery and not
-> for the AC adapter/charger. When you write "and AC status support" I
-> would have expected something similar to this (that's from ACPI AC
-> adapter driver):
+>  https://git.kernel.org/pub/scm/linux/kernel/git/kuba/linux.git
+>   for-thermal-genetlink-family-bind-unbind-callbacks
 > 
-> $ cat /sys/class/power_supply/AC/uevent
-> POWER_SUPPLY_NAME=AC
-> POWER_SUPPLY_TYPE=Mains
-> POWER_SUPPLY_ONLINE=1
-> 
+> for anyone to pull.
 
-Ah, I see... Yeah looking at it one more time, I mistakenly assumed the
-acpi ac code uses the same data fields as the battery but seems like it
-reads the single online flag from a different place. I don't think there
-is really a point on implementing that field since we can still easily
-track the battery charging/discharging status so I will probably omit it
-for now. Will reword the help text to not mention charger/ac adapter.
+Thanks!
 
-Thanks for clarifying!
-Nikita
+I'll post next version of this set just to linux-pm since remaining
+patches are thermal specific. If they will be ready to apply
+the above dependency can be pulled by Rafael - I assume this will
+not create any marge conflict.
 
-> -- Sebastian
+Regards
+Stanislaw
 
