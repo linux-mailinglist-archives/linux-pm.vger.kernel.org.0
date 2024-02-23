@@ -1,252 +1,122 @@
-Return-Path: <linux-pm+bounces-4324-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4325-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C73F861447
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 15:42:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 11CFB8614EC
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 15:56:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 151181F217E3
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 14:42:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F78B1F218A7
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 14:56:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 518E722301;
-	Fri, 23 Feb 2024 14:38:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F33D3224E8;
+	Fri, 23 Feb 2024 14:56:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OWopO9Si"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UC/9kXj8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9593322329
-	for <linux-pm@vger.kernel.org>; Fri, 23 Feb 2024 14:38:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA8B44A3D;
+	Fri, 23 Feb 2024 14:56:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708699121; cv=none; b=s0lR6fvgOyPuvEYZSwnAjYcwEgfXkPFzXRDTDFjrlQ0rmoZdU6i7gR43s7BfSM+ql7YhqQhDU3RSgLCylorHB8oVWFjMlxafFvBzZTepJrNQAJ3STs6Cz27Ye3kl2RRGepzGX3F2Rtc55goepJBkFlqOSTQEvsyU8f66mJxpj9w=
+	t=1708700197; cv=none; b=lbD6+hp7g81hSfSDVQf4y2755tNLycRwn3N6oAvGtoxMxfkbto10M7a2Wf5MFQFkCgDdF3CWrvULiUE7IG3h+DRS+rJ2Hd44+/pV/L2XUdC/ejpK2UOzPDogcdC805ZRvxSwv5VGh2cb6HFiSiPQ0gzXh9bnoKTf/q6aRql0snY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708699121; c=relaxed/simple;
-	bh=lPpsf+ctjoERqolin0a9v4LZu/IJHVLvdotwrmjWYEw=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Bpp1XCxiqpjll2iYtriyrnRx3Ln0IpbMQFfifGZO7MeQ1s1Uk7hNpayCNm+GFuxSPdLSrA1hVT5iE4neg6FvEdGVN122BT8lY5ntMYrpUAKF4AfM8YcdpoEseY+2Lv0HqTL34kVbaODt12zf0+lGB2ZjuFgwdL/KWqoPvwfdlYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OWopO9Si; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-1dbf6b00c8cso1748795ad.0
-        for <linux-pm@vger.kernel.org>; Fri, 23 Feb 2024 06:38:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1708699119; x=1709303919; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=xNKWGob6G7Q1K3q4m5EExpE7FnwHmLwzIXKPndEszZM=;
-        b=OWopO9SiwfNI712UpmT9KlQlOq71/RcxWbeVzgm0tqIcADYPE8PzAyW1RSeb3XIP1N
-         JzPbQDRdl0DYtPGmkdIfcdIZT1xxHBSPIE2IPCDeX6B/rTo/vAaKQkVWNLNi8TmAnxf+
-         +04KncY6JJ4DPyuMkg1/nKGH3833WbhOB0y+KIAc7ArljiAwQ3jaX3jzsrAliINjy4OO
-         5Bp5RWv3ZXe+YzAVXZcPcmgs2uTXbPEmKk8HgrkSUZVjJdaUp8y+KidxCE+mV7t8uRmx
-         ERhriad7yvMukU1xEB7ahQw5NaFeLmmX6jidZUdiAwvtCVZPYYYXdoQCwaFJ8wp5vm8P
-         wRRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708699119; x=1709303919;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xNKWGob6G7Q1K3q4m5EExpE7FnwHmLwzIXKPndEszZM=;
-        b=QUiurDsUgMs7L+dr+SuQ6qA741cdejcqixSGmcvFG1LWlLsGBfFfIJhgFvC2gyrGi+
-         pP7OvsYzlqTkPWfAQaXi4WVzwjkSbS11OpBEgFxRuyJ9/j0vIn4vGq7cU8ow52HqQiYU
-         R2ShHK+l2c/jpMUbAfy1eBEEdKNWvx1pHLlqInL33gQe05Td/7D3sxdXZczjsiS9EMjn
-         2yQlgCKAJGZkoWzC8PMDrzw/drC5BM/QgHwihqGfyEQVSuQ1xh7LO+DAJFya6CzNv1Ue
-         DJ8IxLYyNhQSq+ju+1SZ64K7Sc6xjvndni+jHWX4swi/clhanCS7u466Fg0FoAwcfTsl
-         5Q8A==
-X-Forwarded-Encrypted: i=1; AJvYcCU26CNLI5YuxK+7pi6um4WoZKDL4cPTXsvg6kajuBQdzQvaZTbqIu/8HZS91iwcClmNjWSdiS6YXhjcS0o0EViNpj6Xz/1x4eM=
-X-Gm-Message-State: AOJu0YxWSucaVlPb9M2nQL1p7pksQ6ldtxujTsFbwIgcVE6AXyQnU2iX
-	pFSrp4KBFYbdnu8PbbzbL4GUi9D0PGCBrVL2yPW8y+AlmUSxFwFREWvEEqlM/dXrqrXslDUhZS4
-	sU//YDY2AnNniIQ==
-X-Google-Smtp-Source: AGHT+IFTiGCoBvAgUBZXt0Q1pMETEIr1MdripTJ2jtoCm510pap6JTosXI3YJq6SK8nb/Qfn70+9sAtQJb1REBk=
-X-Received: from guanyulin.c.googlers.com ([fda3:e722:ac3:cc00:3:22c1:c0a8:1af])
- (user=guanyulin job=sendgmr) by 2002:a17:903:187:b0:1db:eec6:5b81 with SMTP
- id z7-20020a170903018700b001dbeec65b81mr6035plg.5.1708699118780; Fri, 23 Feb
- 2024 06:38:38 -0800 (PST)
-Date: Fri, 23 Feb 2024 14:38:29 +0000
+	s=arc-20240116; t=1708700197; c=relaxed/simple;
+	bh=qRqiZWK+ROUXc7RKxQAD7c06nWL8iNefLn1MrEIIsio=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=avlF2wlICr349Tn5wxGzkpZhA9Oyj8Y5lZaLYWjJwcy7fDTKMNLvFHoz7OFNYpRyiwOc50abAtWPzpDbDg8TAqpf8sAyqrVlFkwq2WTyUdRsA9GKjJef3RNm9685s2G8ip/MMISNemVifsZmSp3fJcvMD3kNr2hs71q1xs+INwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UC/9kXj8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34B9AC433C7;
+	Fri, 23 Feb 2024 14:56:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708700197;
+	bh=qRqiZWK+ROUXc7RKxQAD7c06nWL8iNefLn1MrEIIsio=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UC/9kXj8rodo+yIh1/wpec/Gw94Ss+9rlff9WL77kqnQusyOqQrezzvoxB7d2R229
+	 KfL/w24V6ugi5mzDqnqaflgbsqwzX5spbpJ4pjlaIOi/k66yjqkrvmrAvRpIpYfd31
+	 o9g1SwzoFAxPZs2reosHn+A8GH2soGadZRZLFUI+to2i19/MK3YdeL2atOa9JY1iaI
+	 B6hU9eEy4gfLvivEqfL3ZYTRGN8UN/TSjxNDUUaHJ9NRqO4JLdcizGbSkPcJHIfuXq
+	 ywrD+/oi+ohIuL6jCmVbeB7lVLzDMAS391jS0hdzkekltsFrVVuyGcooSt/R0XXFUd
+	 952xBOq5Cls2g==
+Date: Fri, 23 Feb 2024 14:56:30 +0000
+From: Lee Jones <lee@kernel.org>
+To: Biju Das <biju.das.jz@bp.renesas.com>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Support Opensource <support.opensource@diasemi.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Steve Twiss <stwiss.opensource@diasemi.com>,
+	linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.au@gmail.com>, linux-renesas-soc@vger.kernel.org
+Subject: [GIT PULL] Immutable branch between MFD, Input and Thermal due for
+ the v6.9 merge window
+Message-ID: <20240223145630.GC1666215@google.com>
+References: <20240131102656.3379-1-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.44.0.rc0.258.g7320e95886-goog
-Message-ID: <20240223143833.1509961-1-guanyulin@google.com>
-Subject: [PATCH v3] PM / core: conditionally skip system pm in device/driver model
-From: Guan-Yu Lin <guanyulin@google.com>
-To: rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com, 
-	gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com, 
-	petr.tesarik.ext@huawei.com, rdunlap@infradead.org, james@equiv.tech, 
-	broonie@kernel.org, james.clark@arm.com, masahiroy@kernel.org
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Guan-Yu Lin <guanyulin@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240131102656.3379-1-biju.das.jz@bp.renesas.com>
 
-In systems with a main processor and a co-processor, asynchronous
-controller management can lead to conflicts.  One example is the main
-processor attempting to suspend a device while the co-processor is
-actively using it. To address this, we introduce a new sysfs entry
-called "conditional_skip". This entry allows the system to selectively
-skip certain device power management state transitions. To use this
-feature, set the value in "conditional_skip" to indicate the type of
-state transition you want to avoid.  Please review /Documentation/ABI/
-testing/sysfs-devices-power for more detailed information.
+Sorry for the delay, I was on vacation.
 
-Signed-off-by: Guan-Yu Lin <guanyulin@google.com>
----
-V2 -> V3: Integrate the feature with the pm core framework.
-V1 -> V2: Cosmetics changes on coding style.
-[v2] usb: host: enable suspend-to-RAM control in userspace
-[v1] [RFC] usb: host: Allow userspace to control usb suspend flows
----
- Documentation/ABI/testing/sysfs-devices-power | 11 ++++++++
- drivers/base/power/main.c                     | 16 ++++++++++++
- drivers/base/power/sysfs.c                    | 26 +++++++++++++++++++
- include/linux/device.h                        |  7 +++++
- include/linux/pm.h                            |  1 +
- 5 files changed, 61 insertions(+)
+Enjoy!
 
-diff --git a/Documentation/ABI/testing/sysfs-devices-power b/Documentation/ABI/testing/sysfs-devices-power
-index 54195530e97a..3ac4e40f07a0 100644
---- a/Documentation/ABI/testing/sysfs-devices-power
-+++ b/Documentation/ABI/testing/sysfs-devices-power
-@@ -305,3 +305,14 @@ Description:
- 		Reports the runtime PM children usage count of a device, or
- 		0 if the children will be ignored.
- 
-+What:		/sys/devices/.../power/conditional_skip
-+Date:		Feburary 2024
-+Contact:	Guan-Yu Lin <guanyulin@google.com>
-+Description:
-+		The /sys/devices/.../conditional_skip attribute provides a way
-+		to selectively skip system-wide power transitions like
-+		suspend-to-RAM or hibernation. To skip a specific transition,
-+		write its corresponding value to this attribute. For skipping
-+		multiple transitions, combine their values using a bitwise OR
-+		and write the result to this attribute.
-+
-diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-index fadcd0379dc2..d507626c7892 100644
---- a/drivers/base/power/main.c
-+++ b/drivers/base/power/main.c
-@@ -1881,6 +1881,7 @@ static int device_prepare(struct device *dev, pm_message_t state)
-  */
- int dpm_prepare(pm_message_t state)
- {
-+	struct list_head list;
- 	int error = 0;
- 
- 	trace_suspend_resume(TPS("dpm_prepare"), state.event, true);
-@@ -1900,12 +1901,26 @@ int dpm_prepare(pm_message_t state)
- 	 */
- 	device_block_probing();
- 
-+	INIT_LIST_HEAD(&list);
- 	mutex_lock(&dpm_list_mtx);
- 	while (!list_empty(&dpm_list) && !error) {
- 		struct device *dev = to_device(dpm_list.next);
- 
- 		get_device(dev);
- 
-+		if (dev->power.conditional_skip_pm & state.event) {
-+			dev_info(dev, "skip system PM transition (event = 0x%04x)\n",
-+				 state.event);
-+
-+			if (!list_empty(&dev->power.entry))
-+				list_move_tail(&dev->power.entry, &list);
-+
-+			mutex_unlock(&dpm_list_mtx);
-+			put_device(dev);
-+			mutex_lock(&dpm_list_mtx);
-+			continue;
-+		}
-+
- 		mutex_unlock(&dpm_list_mtx);
- 
- 		trace_device_pm_callback_start(dev, "", state.event);
-@@ -1931,6 +1946,7 @@ int dpm_prepare(pm_message_t state)
- 
- 		mutex_lock(&dpm_list_mtx);
- 	}
-+	list_splice(&list, &dpm_list);
- 	mutex_unlock(&dpm_list_mtx);
- 	trace_suspend_resume(TPS("dpm_prepare"), state.event, false);
- 	return error;
-diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
-index a1474fb67db9..1feacb01b1e9 100644
---- a/drivers/base/power/sysfs.c
-+++ b/drivers/base/power/sysfs.c
-@@ -610,6 +610,31 @@ static DEVICE_ATTR_RW(async);
- #endif /* CONFIG_PM_SLEEP */
- #endif /* CONFIG_PM_ADVANCED_DEBUG */
- 
-+static ssize_t conditional_skip_show(struct device *dev,
-+				     struct device_attribute *attr,
-+				     char *buf)
-+{
-+	return sysfs_emit(buf, "0x%04x\n", dev->power.conditional_skip_pm);
-+}
-+
-+static ssize_t conditional_skip_store(struct device *dev,
-+				      struct device_attribute *attr,
-+				      const char *buf, size_t n)
-+{
-+	int ret;
-+
-+	if (kstrtoint(buf, 0, &ret))
-+		return -EINVAL;
-+
-+	ret &= (PM_EVENT_FREEZE|PM_EVENT_SUSPEND|PM_EVENT_HIBERNATE);
-+
-+	dev->power.conditional_skip_pm = ret;
-+
-+	return n;
-+}
-+
-+static DEVICE_ATTR_RW(conditional_skip);
-+
- static struct attribute *power_attrs[] = {
- #ifdef CONFIG_PM_ADVANCED_DEBUG
- #ifdef CONFIG_PM_SLEEP
-@@ -620,6 +645,7 @@ static struct attribute *power_attrs[] = {
- 	&dev_attr_runtime_active_kids.attr,
- 	&dev_attr_runtime_enabled.attr,
- #endif /* CONFIG_PM_ADVANCED_DEBUG */
-+	&dev_attr_conditional_skip.attr,
- 	NULL,
- };
- static const struct attribute_group pm_attr_group = {
-diff --git a/include/linux/device.h b/include/linux/device.h
-index 97c4b046c09d..f2c73dd00211 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -968,6 +968,13 @@ static inline void device_set_pm_not_required(struct device *dev)
- 	dev->power.no_pm = true;
- }
- 
-+static inline void device_set_pm_conditional_skip(struct device *dev,
-+						  int condition)
-+{
-+	condition &= (PM_EVENT_FREEZE|PM_EVENT_SUSPEND|PM_EVENT_HIBERNATE);
-+	dev->power.conditional_skip_pm = condition;
-+}
-+
- static inline void dev_pm_syscore_device(struct device *dev, bool val)
- {
- #ifdef CONFIG_PM_SLEEP
-diff --git a/include/linux/pm.h b/include/linux/pm.h
-index a2f3e53a8196..890c7a601c2a 100644
---- a/include/linux/pm.h
-+++ b/include/linux/pm.h
-@@ -713,6 +713,7 @@ struct dev_pm_info {
- 	enum rpm_status		last_status;
- 	int			runtime_error;
- 	int			autosuspend_delay;
-+	int			conditional_skip_pm;
- 	u64			last_busy;
- 	u64			active_time;
- 	u64			suspended_time;
+The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
+
+  Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-input-thermal-v6.9
+
+for you to fetch changes up to f1eb64bf6d4bef5295ab7633874960fbcfadca46:
+
+  dt-bindings: mfd: dlg,da9063: Convert da9062 to json-schema (2024-02-08 13:06:03 +0000)
+
+----------------------------------------------------------------
+Immutable branch between MFD, Input and Thermal due for the v6.9 merge window
+
+----------------------------------------------------------------
+Biju Das (6):
+      dt-bindings: mfd: da9062: Update watchdog description
+      dt-bindings: mfd: dlg,da9063: Update watchdog child node
+      dt-bindings: input: Convert da906{1,2,3} onkey to json-schema
+      dt-bindings: thermal: Convert da906{1,2} thermal to json-schema
+      dt-bindings: mfd: dlg,da9063: Sort child devices
+      dt-bindings: mfd: dlg,da9063: Convert da9062 to json-schema
+
+ .../devicetree/bindings/input/da9062-onkey.txt     |  47 ----
+ .../bindings/input/dlg,da9062-onkey.yaml           |  38 ++++
+ Documentation/devicetree/bindings/mfd/da9062.txt   | 124 -----------
+ .../devicetree/bindings/mfd/dlg,da9063.yaml        | 248 ++++++++++++++++++---
+ .../devicetree/bindings/thermal/da9062-thermal.txt |  36 ---
+ .../bindings/thermal/dlg,da9062-thermal.yaml       |  35 +++
+ MAINTAINERS                                        |   6 +-
+ 7 files changed, 290 insertions(+), 244 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/input/da9062-onkey.txt
+ create mode 100644 Documentation/devicetree/bindings/input/dlg,da9062-onkey.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mfd/da9062.txt
+ delete mode 100644 Documentation/devicetree/bindings/thermal/da9062-thermal.txt
+ create mode 100644 Documentation/devicetree/bindings/thermal/dlg,da9062-thermal.yaml
+
 -- 
-2.44.0.rc0.258.g7320e95886-goog
-
+Lee Jones [李琼斯]
 
