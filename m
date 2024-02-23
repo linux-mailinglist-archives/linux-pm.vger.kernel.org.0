@@ -1,165 +1,208 @@
-Return-Path: <linux-pm+bounces-4321-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4322-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 249B68612A5
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 14:27:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41E6186132B
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 14:47:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 59749B215A0
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 13:27:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5D401F2246B
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Feb 2024 13:47:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8652B7EF0A;
-	Fri, 23 Feb 2024 13:27:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4A7D80058;
+	Fri, 23 Feb 2024 13:46:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="xwRkhhr+"
+	dkim=pass (2048-bit key) header.d=trvn.ru header.i=@trvn.ru header.b="fEnAJIVy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E2A576C83
-	for <linux-pm@vger.kernel.org>; Fri, 23 Feb 2024 13:27:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10BD38003B;
+	Fri, 23 Feb 2024 13:46:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.87.146.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708694864; cv=none; b=i9gBsDVGH9mFaM/iulWLVflF8cBoEor0AWaX5FK5Rm04hZpS/iT1g1ikXCJri4geYwcDGC08BEKk5enaALwXhumIX3uePh/a61G4KOBxJMA0rx7ZIa9WG30LxY/eMLttLHVqaXvvEzcMIVJ3mEV1HdXFg4k/GJetfxTZ39TCgqo=
+	t=1708695972; cv=none; b=l5bRlgfoUYjo9OsBs0W4pO0EQIIV9xcxCJWzF3VattH+sVP531BMvfzcXVRZR10niNJ5PjNLjxYjNvNXUhrrOPBWaXzaJw0fzXLCDnAhAnuM+OCMQZSAN/mSpsnIynIutU38pbhvPTI5N1YaiShmVsNLvrC7KaVAf7QJ3DCLr7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708694864; c=relaxed/simple;
-	bh=vP8k20Ag1O076Uu/hwPXs6RI5WGURVuUjElcUfCfwMU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JZ0Sp+5DUcS2Bj6HlCNfB/DiMb/eo1Iu8HOssOC0VzFNEF6sW7BEaFebMLTb/IrlCvqnWTgUlAH3ShUNvi4twJLmT6LyfwyTmfzmQ6RcxNmY7XaYgj6mGoBr0Uu8hvKjJvLufnHHSCjoIgShKoZlpMvochXszY4jQDLZp/tkvqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=xwRkhhr+; arc=none smtp.client-ip=209.85.208.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2d2509c66daso11624501fa.3
-        for <linux-pm@vger.kernel.org>; Fri, 23 Feb 2024 05:27:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1708694858; x=1709299658; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0ncctXod7EUhdZeRvIKR8JyC0fIDHtd7Zc9VFP5vKak=;
-        b=xwRkhhr+N5ps8c3gtgLANKB4vJDSeXxAnJNDPYElg79Nu/oJ07XBQz6W9qcz3rqo5p
-         XFyiH9ZO9MSOBA5MBD3sAgHf6JmhZFnN19J1963kSMWPEblpGisElSVKSXy0WAEed5/s
-         aMAqpjlBs1Xr2xT1i5HQlNboip2m+AlFcgyJWf21JFsImu4rPKhJipzQLSsP0DlfaGfr
-         vwRYyersVCn6PkI0rstJBSiI09vhPswOX3NfNlCXR+SnTjGYUQsJcBEOb+25U+ROFxJk
-         FCUMYEU72nBSVRWBYQIZ1aET6k3Mp+/+Wioq813VJGduZDyFNNz+Q59FcJ1px7HYy2xd
-         CkUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708694858; x=1709299658;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0ncctXod7EUhdZeRvIKR8JyC0fIDHtd7Zc9VFP5vKak=;
-        b=WcBmw20aU5PzNfyuZsqrULAdvfHBWWt89Xin2fWn5P/3RqbAVMsqGvMpiKyGALnKA6
-         4snDkkok1RJ/3qQ1Dwdw43/tL9ROG06m81yybv/EPGhLmB3D5T9G9zV7j656wJ7t0uDV
-         u54KLI+e+xSrfOs0/GaKTLuJlIFaz/nXhYtr0KKWv4rSCpKw+c/rZT6ddfc/6sh11uCm
-         JGPn2l1A6rt4K94PmW/g7o+xYEuK2klNY7lVnh92uXUf9z98EjUbQrVMcNOCZ86ze3yb
-         IDLmuBzAlmjnNjUNjT4fjaCN2L8rQtbFwNwWPdTM7sneLU97FRFOCFrNd7gmcE5u/28v
-         9omQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXTZH0jxwxr2DpDZZZPKYsKZEPnLJ5T4a1JFgXH7Dqyo//xx8arQfqjHqWmzpimULVOsy++jADGgrwCAY14cqr71/36XXs1GsY=
-X-Gm-Message-State: AOJu0Yw1YLi09UmMCgjUtGQwgZlONn/OnTLrEVcv8p8OsIszhmYxXe34
-	0QVwYQA69rjSenzZAOSG4BX0RXuTgsO9aP56Oq+DSFGcd3le/4g496if908Cbf8=
-X-Google-Smtp-Source: AGHT+IGHJQtc7/fhy/7PUeyUCJgrv+2MPR6+rU59HBCi8qFcbLzNLCKyqDFu48LBc4YqazWm6Sw1dA==
-X-Received: by 2002:a05:6512:a90:b0:512:ed29:684 with SMTP id m16-20020a0565120a9000b00512ed290684mr124852lfu.54.1708694858420;
-        Fri, 23 Feb 2024 05:27:38 -0800 (PST)
-Received: from airbuntu (host109-154-46-208.range109-154.btcentralplus.com. [109.154.46.208])
-        by smtp.gmail.com with ESMTPSA id d18-20020a50fe92000000b0056484c0eab8sm4391485edt.57.2024.02.23.05.27.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Feb 2024 05:27:37 -0800 (PST)
-Date: Fri, 23 Feb 2024 13:27:36 +0000
-From: Qais Yousef <qyousef@layalina.io>
-To: Pierre Gondois <pierre.gondois@arm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	Ingo Molnar <mingo@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Christian.Loehle@arm.com
-Subject: Re: [PATCH] cpufreq: Change default transition delay to 2ms
-Message-ID: <20240223132736.xp3c3k4k6y2a2ep7@airbuntu>
-References: <20240205022500.2232124-1-qyousef@layalina.io>
- <20240205074514.kiolurpounokalum@vireshk-i7>
- <CAJZ5v0j2rA-+Jpdv6OZ_ymiqh0+RGzmJBNncKGBwuxO3PxgSKA@mail.gmail.com>
- <ca000b2d-b552-43cb-8807-0a5f1450c6a2@arm.com>
- <20240220135037.qriyapwrznz2wdni@airbuntu>
- <d58de550-0ce1-4af9-9e2d-dedd5e73c797@arm.com>
- <20240222115557.blnm4uulkxnorrl4@airbuntu>
- <f4c3f028-b93e-4658-af28-ac2123203d68@arm.com>
- <20240222233947.sl435tvhhpe5iqzw@airbuntu>
- <fdd82ddb-82bc-4c8c-86ef-c80505881013@arm.com>
+	s=arc-20240116; t=1708695972; c=relaxed/simple;
+	bh=VKyijuW+QYpVtdh3FevlUhFteoZyVClemqfIxUdTt6c=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=rjYzmUoxaSMPzfeISgkOmDU1lEdbM15f7Sedgbjale0ASwSbeoY3T6X/VKAPu2jxKOPl+i8HMw3MJRFCbeYTdOUTcAWSsKK58NKUbI8sqJEnelplJejTNP83eyB3FI7XFzKg/ClN5hIuOsrAqRSIHkGKfWZD4x9ICGV3AfVvKrU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=trvn.ru; spf=pass smtp.mailfrom=trvn.ru; dkim=pass (2048-bit key) header.d=trvn.ru header.i=@trvn.ru header.b=fEnAJIVy; arc=none smtp.client-ip=194.87.146.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=trvn.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trvn.ru
+Received: from authenticated-user (box.trvn.ru [194.87.146.52])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+	(No client certificate requested)
+	by box.trvn.ru (Postfix) with ESMTPSA id F0B12408F0;
+	Fri, 23 Feb 2024 18:45:55 +0500 (+05)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
+	t=1708695958; bh=VKyijuW+QYpVtdh3FevlUhFteoZyVClemqfIxUdTt6c=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=fEnAJIVyGEsmi4ReEAQHlsXOOdaaXMFFSTfySA9Nh9591+MkexHsDdhHfoByIshfu
+	 lEpSICw5FCjZs4t9eY6mPHKi43c4ZFcSfpvAUA1FHRAsIatbfdiRaFKl1AMryoxy7Y
+	 JlpOoK9xoU9hrP6D3ku7NVHGYr9fuWcC5+BttuGog3Dsk7/JV5WSiNj1aCq3lIQuYp
+	 iK9oOftJOnuse8qQrthhSCLFqDvv5p+dg5fIWGrbUBa+fNfOaaAb39iL9M+NBZ8bVh
+	 2a+Q4P94q7jlgGBxTQHIy2r7Ud4blz+bljm5i/b4/N9tdv5u9057mJDcCONrTJzI+P
+	 mud9dvToq2R7Q==
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <fdd82ddb-82bc-4c8c-86ef-c80505881013@arm.com>
+Date: Fri, 23 Feb 2024 18:45:52 +0500
+From: Nikita Travkin <nikita@trvn.ru>
+To: Rob Herring <robh@kernel.org>
+Cc: Sebastian Reichel <sre@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
+ cros-qcom-dts-watchers@chromium.org, Andy Gross <agross@kernel.org>, Bjorn
+ Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: power: supply: Add Acer Aspire 1 EC
+In-Reply-To: <20240223045227.GA4017491-robh@kernel.org>
+References: <20231212-aspire1-ec-v2-0-ca495ea0a7ac@trvn.ru>
+ <20231212-aspire1-ec-v2-1-ca495ea0a7ac@trvn.ru>
+ <20231214220210.GA988134-robh@kernel.org>
+ <207edefe4e8eac9679cd8966d28820cd@trvn.ru>
+ <20240223045227.GA4017491-robh@kernel.org>
+Message-ID: <c402da126fcc832c08dc4006542740cb@trvn.ru>
+X-Sender: nikita@trvn.ru
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 02/23/24 10:48, Pierre Gondois wrote:
-
-> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > index 66cef33c4ec7..668263c53810 100644
-> > --- a/drivers/cpufreq/cpufreq.c
-> > +++ b/drivers/cpufreq/cpufreq.c
-> > @@ -576,8 +576,17 @@ unsigned int cpufreq_policy_transition_delay_us(struct cpufreq_policy *policy)
-> >          latency = policy->cpuinfo.transition_latency / NSEC_PER_USEC;
-> >          if (latency) {
-> > +               unsigned int max_delay_us = 2 * MSEC_PER_SEC;;
-> > +
-> > +               /*
-> > +                * If the platform already has high transition_latency, use it
-> > +                * as-is.
-> > +                */
-> > +               if (latency > max_delay_us)
-> > +                       return latency;
-> > +
-> >                  /*
-> > -                * For platforms that can change the frequency very fast (< 10
-> > +                * For platforms that can change the frequency very fast (< 20
+Rob Herring писал(а) 23.02.2024 09:52:
+> On Fri, Dec 15, 2023 at 10:29:22AM +0500, Nikita Travkin wrote:
+>> Rob Herring писал(а) 15.12.2023 03:02:
+>> > On Tue, Dec 12, 2023 at 05:49:09PM +0500, Nikita Travkin wrote:
+>> >> Add binding for the EC found in the Acer Aspire 1 laptop.
+>> >>
+>> >> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+>> >> ---
+>> >>  .../bindings/power/supply/acer,aspire1-ec.yaml     | 67 ++++++++++++++++++++++
+>> >>  1 file changed, 67 insertions(+)
+>> >>
+>> >> diff --git a/Documentation/devicetree/bindings/power/supply/acer,aspire1-ec.yaml b/Documentation/devicetree/bindings/power/supply/acer,aspire1-ec.yaml
+>> >> new file mode 100644
+>> >> index 000000000000..1fbf1272a00f
+>> >> --- /dev/null
+>> >> +++ b/Documentation/devicetree/bindings/power/supply/acer,aspire1-ec.yaml
+>> >> @@ -0,0 +1,67 @@
+>> >> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> >> +%YAML 1.2
+>> >> +---
+>> >> +$id: http://devicetree.org/schemas/power/supply/acer,aspire1-ec.yaml#
+>> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> >> +
+>> >> +title: Acer Aspire 1 Embedded Controller
+>> >> +
+>> >> +maintainers:
+>> >> +  - Nikita Travkin <nikita@trvn.ru>
+>> >> +
+>> >> +description:
+>> >> +  The Acer Aspire 1 laptop uses an embedded controller to control battery
+>> >> +  and charging as well as to provide a set of misc features such as the
+>> >> +  laptop lid status and HPD events for the USB Type-C DP alt mode.
+>> >> +
+>> >> +properties:
+>> >> +  compatible:
+>> >> +    const: acer,aspire1-ec
+>> >> +
+>> >> +  reg:
+>> >> +    const: 0x76
+>> >> +
+>> >> +  interrupts:
+>> >> +    maxItems: 1
+>> >> +
+>> >> +  acer,media-keys-on-top:
+>> >> +    description: Configure the keyboard layout to use media features of
+>> >> +      the fn row when the fn key is not pressed. The firmware may choose
+>> >> +      to add this property when user selects the fn mode in the firmware
+>> >> +      setup utility.
+>> >> +    type: boolean
+>> >
+>> > Besides the naming, this isn't really a property of the EC, but really
+>> > part of the keyboard layout. It seems you just stuck it here because
+>> > this is part of the specific device.
+>> >
+>>
+>> The EC on this device is also a keyboard controller, but the keyboard
+>> part has a dedicated i2c bus with hid-over-i2c. Since this is the
+>> "management" bus of the same device, I decided that it fits here.
 > 
-> I think it should be 10->2us as we do:
->   min(latency * 1000, 2ms)
+> So there's also a hid-over-i2c DT node? Then why wouldn't you put this 
+> there?
+> 
 
-Yeah I meant 2, that was a typo
+Yes indeed, however I wasn't sure of a nice way to make two drivers
+interact so I opted to having the prop here instead given I was trying
+to reflect "device specific" (in terms of uefi setup -> os code
+interaction) property.
 
-Thanks
+>>
+>> > It is also hardly a feature unique to this device. I'm typing this from
+>> > a device with the exact same thing (M1 Macbook Pro). Actually, all 3
+>> > laptops I have in front of me have the same thing. The other 2 have
+>> > a Fnlock (Fn+ESC) though.  On the M1, it's just a module param which I
+>> > set as persistent. Though I now wonder if the Fnlock could be
+>> > implemented on it too. Being able to switch whenever I want would be
+>> > nice. That would probably have to be in Linux where as these other
+>> > laptops probably implement this in their EC/firmware?
+>> >
+>> > What I'm getting at is controlling changing this in firmware is not a
+>> > great experience and this should all be common.
+>> >
+>>
+>> You may be right, however my goal here is to support the original
+>> firmware feature that is lost when we use DT.
+>>
+>> This is a WoA laptop with UEFI/ACPI and, as usual for "Windows"
+>> machines, there is a setting in the firmware setup utility ("bios") to
+>> set the fn behavior. But it works by setting an ACPI value, and for
+>> Snapdragon devices we can't use that now.
+>>
+>> Long term I want to have a EFI driver that would automatically
+>> detect/load DT and my plan is to handle things like this (and i.e. mac
+>> address, different touchpad vendor, etc) there. Thus I'm adding this
+>> property already, as an equivalent of that weird acpi bit that original
+>> firmware sets.
+>>
+>> If we only provide a module param, the "intended by OEM" way of setting
+>> the fn mode will be broken, and one would need to know how to write a
+>> magic special config file to set a kernel module param. I think it's not
+>> the best UX. (and just adds to the silly "arm/dt bad, x86/uefi/acpi
+>> "just works"" argument many people sadly have)
+> 
+> But it always works, it is just a question of what is the default mode 
+> and I, as a user, want to decide that, not the OEM. And I want to change 
+> it at run-time, not reboot into BIOS to change it.
+> 
+> I wasn't suggesting you do a module param either. That's still specific 
+> to the module. Something like a sysfs file would be nice:
+> 
+> echo 1 >  /sys/class/input/input1/fnlock
+> 
 
--->8--
+I see your point. Having a generic way of switching fnlock, attached to
+the correct input device would be great. However as I wasn't sure how
+exactly that can be implemented in a generic manner, I opted to just
+make sure that at least the user manual for this device still "works".
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 66cef33c4ec7..de92a9912587 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -576,8 +576,17 @@ unsigned int cpufreq_policy_transition_delay_us(struct cpufreq_policy *policy)
+> 
+>> If you think I shouldn't use DT to pass this info, feel free to say so.
+>> I will drop this property and see if there is something else I can do
+>> to still support this without relying on Linux cooperation.
+> 
+> Not saying no to being in DT, but if it is, it should be a common 
+> property because it is a common thing on all laptops.
+> 
 
-        latency = policy->cpuinfo.transition_latency / NSEC_PER_USEC;
-        if (latency) {
-+               unsigned int max_delay_us = 2 * MSEC_PER_SEC;;
-+
-+               /*
-+                * If the platform already has high transition_latency, use it
-+                * as-is.
-+                */
-+               if (latency > max_delay_us)
-+                       return latency;
-+
-                /*
--                * For platforms that can change the frequency very fast (< 10
-+                * For platforms that can change the frequency very fast (< 2
-                 * us), the above formula gives a decent transition delay. But
-                 * for platforms where transition_latency is in milliseconds, it
-                 * ends up giving unrealistic values.
-@@ -586,7 +595,7 @@ unsigned int cpufreq_policy_transition_delay_us(struct cpufreq_policy *policy)
-                 * a reasonable amount of time after which we should reevaluate
-                 * the frequency.
-                 */
--               return min(latency * LATENCY_MULTIPLIER, (unsigned int)(2 * MSEC_PER_SEC));
-+               return min(latency * LATENCY_MULTIPLIER, max_delay_us);
-        }
+Right. Then I think I will drop the property for now and will see if
+we can introduce something better and generic later.
 
-        return LATENCY_MULTIPLIER;
+Thanks for explaining!
+Nikita
+
+> Rob
 
