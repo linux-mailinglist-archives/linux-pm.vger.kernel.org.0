@@ -1,349 +1,214 @@
-Return-Path: <linux-pm+bounces-4372-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4373-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43B558625E5
-	for <lists+linux-pm@lfdr.de>; Sat, 24 Feb 2024 17:01:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06B2E862742
+	for <lists+linux-pm@lfdr.de>; Sat, 24 Feb 2024 21:14:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED6F928217E
-	for <lists+linux-pm@lfdr.de>; Sat, 24 Feb 2024 16:01:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82ECE282B48
+	for <lists+linux-pm@lfdr.de>; Sat, 24 Feb 2024 20:14:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEE4547A40;
-	Sat, 24 Feb 2024 16:01:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 037944CDF9;
+	Sat, 24 Feb 2024 20:14:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="dlLJScGN"
+	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="mjvmKWjw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC854642A
-	for <linux-pm@vger.kernel.org>; Sat, 24 Feb 2024 16:01:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2008A4CB41;
+	Sat, 24 Feb 2024 20:14:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708790508; cv=none; b=WuDdc4aDml6mOCkEk4e2wRqL3MfCPge8dO0J3ZZR1s3fajRB2DyhWKCbfGtFSyP+0qvuUJs5OxirZi604i1vgM676jz8slIcCGS61GjbxbT3UYlqnETEE+yCmieblSAQI1umCQtxsHPRsyq0aP+h2IZ5UVfEbCS/lqYJ1pvriEI=
+	t=1708805693; cv=none; b=rSO5Oy8RT3Fa5QJBUXUe/WmAqo9kKE7RLnu0IKbNRDNSXDLpvXcKTU5HywDUNWc32fVII/6cx8xgbIS0R1dXcIjxegCE5OiQXLJQjHn+/oQZJJkgXFRkiWoSwB/ExSFyOPkyYTjOQpg274XbLi0dIE1XYy7m6mvLhYBKGGZgF6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708790508; c=relaxed/simple;
-	bh=epXIMQ3XjwyKOoB7fiYCvznsxaDX2d6H4sdGqVmwlWQ=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=lJRlb6R57puRAaZwdTjqQcUHONBCME4dbowQGPh2jJigQE01ZsmFonCiD6MVMpcP3srWf4ixPWlBFVDedc54iwaZ/wu4AH5eSq8ZW7L+odGAtabccSRXQidyHIkEugYizinoOYAbFPJNN0v23B69TkYkvJ7gZukmoQ/TTAeWUs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=dlLJScGN; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1dba94f9201so11346795ad.0
-        for <linux-pm@vger.kernel.org>; Sat, 24 Feb 2024 08:01:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1708790506; x=1709395306; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=+k5pTXtVkP49PIoxU4IpMS6FpZkpKNKMNJ5g671Ly2w=;
-        b=dlLJScGNEfNZO0bhe56WLjFNmQrMy18LKeXsrG5c4EBF15appGmNmuvxuBeWapISwJ
-         APmVD1VukRNOLZiXkSlxDHtu8LS5OcwiwOQtiJReUDJTDuEr1N2YomxpA6fj0/FjcYKm
-         SF2dJdjKqRn1Xpwc+dAiF4mej2csbu41TJmbB+p1YMOJxq6WXHtpQSGxq03ZWFwJR44Q
-         524gc76J4rDgHGbFFF26Dz+qYZLfd9/jeGTUvQNO7nqnHGQYOLsx4vl7dllPI4XOFqzd
-         P28OO1DF+Qg0ssrsHlYo8xRUgxEeq7w3DJ6LPqYPxbhM477U9r5GyIuYa32S/Y+4eTXA
-         dTNA==
+	s=arc-20240116; t=1708805693; c=relaxed/simple;
+	bh=wut1YBosBzB1qnnzqe5CqtzGgR1GNO22CaEOegfGHPU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ViudLLutuSwAWloqKRnKwgHJ8LbMRrjuF+6wYbuUatbgUM2BPDLvSfBPtc/8QgNvugUG0u5Rv8KpipTwMhzCeM7ugm5RktXa+6jbxP/fbacqGuWGL//FwOSHxjILLbD9ClxWTnkXJEefAc3AYb5aht9NDzvJiwz332FYtzUJXRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=mjvmKWjw; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1dc49afb495so13231105ad.2;
+        Sat, 24 Feb 2024 12:14:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708790506; x=1709395306;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+k5pTXtVkP49PIoxU4IpMS6FpZkpKNKMNJ5g671Ly2w=;
-        b=rYMZdSSBxp6TlIyBCSOgI97SkoDm6twda9oP4s3++L4BIJz0b1AEo8cBM8oVscpd0R
-         ZIiAx1BPa9l6zAf3eOp5HuS4lPlGt2sid1ttmIZ3YrYb7xjQOtU1HPly2j14760aNoHp
-         fX7CbHkSDL7Cf79l6pB7g+ZATQPRJkeU7nFe+8uee2gMR2+9cVKlCfATHjFLtRVOYYkG
-         jGgdTFii7lgljxUuxaIrXvLuO44RDqeyMJ2rC2rLpxu/VsSAturASG42afHKM+JBVzgI
-         qRdn5CyBICkFQ/sR8ubacrppSyresJKLlgBStpHL9IftGxHrfv3i7Z1t7X8q2rJUNi+q
-         yusQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUBQuLQih8NenicUqNIc6ZeK2g3lRsC1P9gd+nj9YQlCgAzcRMi3IjjkvaUDtfDdjsFi1/kzdtcu0jTKq1ln304X6jzxF3oaos=
-X-Gm-Message-State: AOJu0YztZWSwTKR92jQMvqmXWQyPSLmtr+QppItQhPbfiKUdHYAkOmgN
-	mnI2tOa1IJ3OvaJvXIK+K7xFKVlwDZsmII2Fi/f1hhHe2sOj756Gccvwbfzzu1KqDQK3EMOLC5I
-	h
-X-Google-Smtp-Source: AGHT+IFRwR80RRFsoCAn1u78C9iCMy3xoB2UH/HgMIBQiZEN4Gu3ZyXczh4zM1BS9fWco9Gfd0FvCA==
-X-Received: by 2002:a17:903:2784:b0:1db:d184:c45a with SMTP id jw4-20020a170903278400b001dbd184c45amr2604145plb.67.1708790506200;
-        Sat, 24 Feb 2024 08:01:46 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id j5-20020a170902c3c500b001d5f1005096sm1172108plj.55.2024.02.24.08.01.45
+        d=1e100.net; s=20230601; t=1708805691; x=1709410491;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:dkim-signature:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NlpDMTFxYtnaC+isKcoQ/ZJqOvMqucO6+nla6ANJH8Q=;
+        b=i69u6C3lTVXCRqqwQP9IfHT2yQxH3uUOwTFMIU+aRCa2X9946YQo1JWyc0gY9n0cWs
+         D+cOxSIH/fNAkt5EL1hUqzrL6qqqfjwTYzOm4ZXmv/dUNiKMBDpO3DHRk/tiJCxffDEi
+         hWLmVXEm/ofPaU8irYkiQqMOirFGk2kZees0m3DoTony7lz3uG/09A+5hjnkGbn4W865
+         rHqLydxjgNRyQEhczIcx3rTocR/sT2FF+UHHvsyP35SZNFcfyAU6XvnUChJKVIXkbAPc
+         Cpd9OgQ9996VvXs6ERkW99OlxQh81UkN1xy7Ni5RaCiepzSrMB0wQG1nURLLVVX23ISh
+         mcTg==
+X-Forwarded-Encrypted: i=1; AJvYcCXFmdYDWZRyAkuS5RHmUinmkSwwE86T5ehxCxvsyt4kXWBNMGPJ77F4ddm9+2bViRJNlKaaCQuUY4Qw5zqR6XcTmzP2nvlqDagV2piq
+X-Gm-Message-State: AOJu0YwJRVyBH9M67AVtb+lLvcaSUDF9KKepqZvNFszhhjpiyuu44WW6
+	PlxNyZqlmqBhHfWHy8b1BsdO0V4xAZUn7AImfWm3sfOVgLEPI0f7z9038Ab5VE/7Mg==
+X-Google-Smtp-Source: AGHT+IGO3LyDxc2jmqJU1ejF6Z8O9ONrCewmzj5imTwIAAgxIT5K8SmkPfnB3xJ3A3D+ubKw6UBTPA==
+X-Received: by 2002:a17:902:6b81:b0:1dc:334:a87b with SMTP id p1-20020a1709026b8100b001dc0334a87bmr3151842plk.20.1708805691230;
+        Sat, 24 Feb 2024 12:14:51 -0800 (PST)
+Received: from mail.marliere.net ([24.199.118.162])
+        by smtp.gmail.com with ESMTPSA id v11-20020a170902d08b00b001dc71ead7e5sm1339356plv.165.2024.02.24.12.14.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Feb 2024 08:01:45 -0800 (PST)
-Message-ID: <65da12e9.170a0220.62874.2a2d@mx.google.com>
-Date: Sat, 24 Feb 2024 08:01:45 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Sat, 24 Feb 2024 12:14:50 -0800 (PST)
+From: "Ricardo B. Marliere" <ricardo@marliere.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
+	s=2024; t=1708805688;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=NlpDMTFxYtnaC+isKcoQ/ZJqOvMqucO6+nla6ANJH8Q=;
+	b=mjvmKWjwV8/PcaobuyxyeptvkNwFMGBp2/OQm29Xd+mni9lQGLHPNQ9BEpUxYs2+/nigrN
+	RhFNmh2BWN3V1rW0goWv45j+Vv21jI8TKJqrQTQ/wVb97+f7r00ZOQEJIjxKxVvA9W+Jqc
+	7oMIw3WQLJNKLGNQgQfKd7kQkeJNpi8y8OUG8DNVGb2NXO7sgYSOJ/pfWbLz0fIEl5rJ3v
+	+3rJNIEEo80u4y+eD9lYjFR+PX0oY9KVHMCONeqMM1/MbNQijnKoIZP5fFxlWnRTjpPPJZ
+	FAapH0+pG1U4UsQPwhfP6F6DrcYqPqqsP5R04Kkq2jx85mRzzccmKRJiXX5jqA==
+Authentication-Results: ORIGINATING;
+	auth=pass smtp.auth=ricardo@marliere.net smtp.mailfrom=ricardo@marliere.net
+Date: Sat, 24 Feb 2024 17:15:41 -0300
+Subject: [PATCH v2] power: supply: core: constify the struct device_type
+ usage
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v6.8-rc5-120-gb9dcbdb099e4c
-X-Kernelci-Report-Type: test
-Subject: pm/testing baseline: 31 runs,
- 9 regressions (v6.8-rc5-120-gb9dcbdb099e4c)
-To: rafael@kernel.org, linux-pm@vger.kernel.org,
- kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240224-device_cleanup-power-v2-1-465ff94b896c@marliere.net>
+X-B4-Tracking: v=1; b=H4sIAGxO2mUC/4WNTQ6CMBCFr0JmbU1bNQRX3sMQU8pTJsHSTBE1h
+ LtbuIDL7/3OlCCMROdiJsHEiYeQwe4K8p0LDyhuM5PV9qit1arNIY+b7+HCK6o4vCFKH8pTtfq
+ +MZSrUXDnzzZ7rTN3nMZBvtvLZFb1z+BklFGwTQXt4XRpL08nPUOwDxipXpblB4BVj2e7AAAA
+To: Sebastian Reichel <sre@kernel.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Ricardo B. Marliere" <ricardo@marliere.net>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3997; i=ricardo@marliere.net;
+ h=from:subject:message-id; bh=wut1YBosBzB1qnnzqe5CqtzGgR1GNO22CaEOegfGHPU=;
+ b=owEBbQKS/ZANAwAKAckLinxjhlimAcsmYgBl2k5smtAngcd7CnWTA/kU6wiQ90b5SKBF1MCVP
+ 5tKHZld4FWJAjMEAAEKAB0WIQQDCo6eQk7jwGVXh+HJC4p8Y4ZYpgUCZdpObAAKCRDJC4p8Y4ZY
+ pigwD/wKiRd4R9+aWZHmjxklfzTBLvKBcaPE7209701S+r5sS8xSSVCQHCD1d2xarebPOuKYW8Z
+ pbPZImKRzsuahRu7+WwB5RkPFL3BAndxb6gPFDqG9uApiMtkI8fjKhc5d1UpTMYiuBGIxMNnoxG
+ BgKQYFYAe/3PkEJ6WsTnHPGBOdG7ENXBdoBp0sbYjs/PG5K/WTjYiQXUB5Zsvola/JGRupEHFwm
+ /5z0SoxKsP4/aRK0VcHjpclTABVAstv2SYuTZbFKBdM0k18lQFrTnTte8CrFBRcLuHqwiHgw4ey
+ PAxFGcXR74RadUKx2f9iZdr09LyHnH8kg+lQ5VMcO9OiNYRn47hBnh9cXDl+VOud+BXV9qSRkUz
+ ngWIhvPJ8c8aKcE/12U94GhP6AB4uhM9M+8jdFjRR0g6k8G27q0MnrK9+sbqlv93zvijTxMqQgE
+ 3ml1eTGA7kLUIsPB0bZVHyPOXaArZrPrKsAvgkSm5J/NvbeDnsrfS/8DP9HVflJEZLglcIrMlNY
+ 9kRFRZV1lqRaJU3TQpqn1pw2IALFo8YiJWZa/GvKLy+/SHk0t2z9AaUhPreHKxhQUjI9atln4IM
+ iJts1HskJLY8RLse9t4SKVSn2h0staMqvPwTPH4r1jQVakTic1R06iO5RqJWjQTW9gu3w0UyciX
+ Pr+Cy7KFswlftmQ==
+X-Developer-Key: i=ricardo@marliere.net; a=openpgp;
+ fpr=030A8E9E424EE3C0655787E1C90B8A7C638658A6
+
+Since commit aed65af1cc2f ("drivers: make device_type const"), the driver
+core can properly handle constant struct device_type. Move the
+power_supply_dev_type variable to be a constant structure as well, placing
+it into read-only memory which can not be modified at runtime.
+
+In order to accomplish that, export power_supply_attr_group in
+power_supply.h and use it with the macro __ATTRIBUTE_GROUPS when defining
+power_supply_dev_type in power_supply_core.c. Therefore the attribute group
+is no longer static. Lastly, because power_supply_attr_groups is no longer
+dynamically associated to power_supply_dev_type in
+power_supply_init_attrs(), make the function receive zero arguments.
+
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
+---
+Changes in v2:
+- Exported attribute group and made use of __ATTRIBUTE_GROUPS macro.
+- Properly put the struct back where it should be (power_supply_core.c).
+- Cleaned power_supply_init_attrs()
+- Link to v1: https://lore.kernel.org/r/20240220-device_cleanup-power-v1-1-e2b9e0cea072@marliere.net
+---
+ drivers/power/supply/power_supply.h       |  4 +++-
+ drivers/power/supply/power_supply_core.c  |  8 ++++++--
+ drivers/power/supply/power_supply_sysfs.c | 11 ++---------
+ 3 files changed, 11 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/power/supply/power_supply.h b/drivers/power/supply/power_supply.h
+index 645eee4d6b6a..232fdd8c1212 100644
+--- a/drivers/power/supply/power_supply.h
++++ b/drivers/power/supply/power_supply.h
+@@ -13,9 +13,11 @@ struct device;
+ struct device_type;
+ struct power_supply;
+ 
++extern const struct attribute_group power_supply_attr_group;
++
+ #ifdef CONFIG_SYSFS
+ 
+-extern void power_supply_init_attrs(struct device_type *dev_type);
++extern void power_supply_init_attrs(void);
+ extern int power_supply_uevent(const struct device *dev, struct kobj_uevent_env *env);
+ 
+ #else
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index ecef35ac3b7e..37dac7669090 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -31,7 +31,11 @@ EXPORT_SYMBOL_GPL(power_supply_class);
+ 
+ static BLOCKING_NOTIFIER_HEAD(power_supply_notifier);
+ 
+-static struct device_type power_supply_dev_type;
++__ATTRIBUTE_GROUPS(power_supply_attr);
++static const struct device_type power_supply_dev_type = {
++	.name = "power_supply",
++	.groups = power_supply_attr_groups,
++};
+ 
+ #define POWER_SUPPLY_DEFERRED_REGISTER_TIME	msecs_to_jiffies(10)
+ 
+@@ -1623,7 +1627,7 @@ static int __init power_supply_class_init(void)
+ 		return PTR_ERR(power_supply_class);
+ 
+ 	power_supply_class->dev_uevent = power_supply_uevent;
+-	power_supply_init_attrs(&power_supply_dev_type);
++	power_supply_init_attrs();
+ 
+ 	return 0;
+ }
+diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+index 977611e16373..edb240450e38 100644
+--- a/drivers/power/supply/power_supply_sysfs.c
++++ b/drivers/power/supply/power_supply_sysfs.c
+@@ -389,22 +389,15 @@ static umode_t power_supply_attr_is_visible(struct kobject *kobj,
+ 	return 0;
+ }
+ 
+-static const struct attribute_group power_supply_attr_group = {
++const struct attribute_group power_supply_attr_group = {
+ 	.attrs = __power_supply_attrs,
+ 	.is_visible = power_supply_attr_is_visible,
+ };
+ 
+-static const struct attribute_group *power_supply_attr_groups[] = {
+-	&power_supply_attr_group,
+-	NULL,
+-};
+-
+-void power_supply_init_attrs(struct device_type *dev_type)
++void power_supply_init_attrs(void)
+ {
+ 	int i;
+ 
+-	dev_type->groups = power_supply_attr_groups;
+-
+ 	for (i = 0; i < ARRAY_SIZE(power_supply_attrs); i++) {
+ 		struct device_attribute *attr;
+ 
+
+---
+base-commit: a9b254892ce1a447b06c5019cbf0e9caeb48c138
+change-id: 20240220-device_cleanup-power-037594022cb1
+
+Best regards,
+-- 
+Ricardo B. Marliere <ricardo@marliere.net>
 
-pm/testing baseline: 31 runs, 9 regressions (v6.8-rc5-120-gb9dcbdb099e4c)
-
-Regressions Summary
--------------------
-
-platform                 | arch  | lab             | compiler | defconfig |=
- regressions
--------------------------+-------+-----------------+----------+-----------+=
-------------
-imx8mm-innocomm-wb15-evk | arm64 | lab-pengutronix | gcc-10   | defconfig |=
- 1          =
-
-kontron-kbox-a-230-ls    | arm64 | lab-kontron     | gcc-10   | defconfig |=
- 5          =
-
-kontron-sl28-var3-ads2   | arm64 | lab-kontron     | gcc-10   | defconfig |=
- 2          =
-
-rk3399-roc-pc            | arm64 | lab-broonie     | gcc-10   | defconfig |=
- 1          =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.8-rc5=
--120-gb9dcbdb099e4c/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v6.8-rc5-120-gb9dcbdb099e4c
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      b9dcbdb099e4c025188fd3f9c31ebd5fc6784049 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                 | arch  | lab             | compiler | defconfig |=
- regressions
--------------------------+-------+-----------------+----------+-----------+=
-------------
-imx8mm-innocomm-wb15-evk | arm64 | lab-pengutronix | gcc-10   | defconfig |=
- 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/65da01847e0252676463701f
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.8-rc5-120-gb9dcb=
-db099e4c/arm64/defconfig/gcc-10/lab-pengutronix/baseline-imx8mm-innocomm-wb=
-15-evk.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.8-rc5-120-gb9dcb=
-db099e4c/arm64/defconfig/gcc-10/lab-pengutronix/baseline-imx8mm-innocomm-wb=
-15-evk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/65da01847e02526764637=
-020
-        failing since 0 day (last pass: v6.8-rc5-92-g4cb5c331c4dfd, first f=
-ail: v6.8-rc5-119-gbc3fe166fc9a9) =
-
- =
-
-
-
-platform                 | arch  | lab             | compiler | defconfig |=
- regressions
--------------------------+-------+-----------------+----------+-----------+=
-------------
-kontron-kbox-a-230-ls    | arm64 | lab-kontron     | gcc-10   | defconfig |=
- 5          =
-
-
-  Details:     https://kernelci.org/test/plan/id/65da016ef0d089007a63703f
-
-  Results:     90 PASS, 5 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.8-rc5-120-gb9dcb=
-db099e4c/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.=
-txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.8-rc5-120-gb9dcb=
-db099e4c/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.=
-html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/65da016ef0d089007a637046
-        failing since 31 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
-4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
-
-    2024-02-24T14:46:46.811323  / #
-    2024-02-24T14:46:46.913897  # #export SHELL=3D/bin/sh
-    2024-02-24T14:46:46.914660  =
-
-    2024-02-24T14:46:47.016178  / # export SHELL=3D/bin/sh. /lava-434529/en=
-vironment
-    2024-02-24T14:46:47.016925  =
-
-    2024-02-24T14:46:47.118129  / # . /lava-434529/environment/lava-434529/=
-bin/lava-test-runner /lava-434529/1
-    2024-02-24T14:46:47.119262  =
-
-    2024-02-24T14:46:47.137670  / # /lava-434529/bin/lava-test-runner /lava=
--434529/1
-    2024-02-24T14:46:47.181480  + export 'TESTRUN_ID=3D1_bootrr'
-    2024-02-24T14:46:47.181835  + <8>[   20.730255] <LAVA_SIGNAL_STARTRUN 1=
-_bootrr 434529_1.5.2.4.5> =
-
-    ... (14 line(s) more)  =
-
-
-  * baseline.bootrr.fsl_enetc-enetc2-probed: https://kernelci.org/test/case=
-/id/65da016ef0d089007a63704a
-        failing since 31 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
-4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
-
-    2024-02-24T14:46:49.289728  /lava-434529/1/../bin/lava-test-case
-    2024-02-24T14:46:49.290192  <8>[   22.838772] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dfsl_enetc-enetc2-probed RESULT=3Dfail>
-    2024-02-24T14:46:49.290491  /lava-434529/1/../bin/lava-test-case   =
-
-
-  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/65=
-da016ef0d089007a63704c
-        failing since 31 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
-4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
-
-    2024-02-24T14:46:50.349595  /lava-434529/1/../bin/lava-test-case
-    2024-02-24T14:46:50.350052  <8>[   23.877280] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>   =
-
-
-  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
-/id/65da016ef0d089007a637051
-        failing since 31 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
-4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
-
-    2024-02-24T14:46:51.425245  /lava-434529/1/../bin/lava-test-case   =
-
-
-  * baseline.bootrr.fsl_enetc-enetc1-probed: https://kernelci.org/test/case=
-/id/65da016ef0d089007a637052
-        failing since 31 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
-4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
-
-    2024-02-24T14:46:51.428421  <8>[   24.992561] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>
-    2024-02-24T14:46:52.482414  /lava-434529/1/../bin/lava-test-case   =
-
- =
-
-
-
-platform                 | arch  | lab             | compiler | defconfig |=
- regressions
--------------------------+-------+-----------------+----------+-----------+=
-------------
-kontron-sl28-var3-ads2   | arm64 | lab-kontron     | gcc-10   | defconfig |=
- 2          =
-
-
-  Details:     https://kernelci.org/test/plan/id/65da015a31219ef9fb637036
-
-  Results:     101 PASS, 2 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.8-rc5-120-gb9dcb=
-db099e4c/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-sl28-var3-ads2=
-.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.8-rc5-120-gb9dcb=
-db099e4c/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-sl28-var3-ads2=
-.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/65da015a31219ef9fb63703d
-        failing since 31 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
-4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
-
-    2024-02-24T14:46:33.853333  / # #
-    2024-02-24T14:46:33.955381  export SHELL=3D/bin/sh
-    2024-02-24T14:46:33.956096  #
-    2024-02-24T14:46:34.057622  / # export SHELL=3D/bin/sh. /lava-434532/en=
-vironment
-    2024-02-24T14:46:34.058399  =
-
-    2024-02-24T14:46:34.159790  / # . /lava-434532/environment/lava-434532/=
-bin/lava-test-runner /lava-434532/1
-    2024-02-24T14:46:34.160956  =
-
-    2024-02-24T14:46:34.165283  / # /lava-434532/bin/lava-test-runner /lava=
--434532/1
-    2024-02-24T14:46:34.233368  + export 'TESTRUN_ID=3D1_bootrr'
-    2024-02-24T14:46:34.233794  + <8>[   21.062706] <LAVA_SIGNAL_STARTRUN 1=
-_bootrr 434532_1.5.2.4.5> =
-
-    ... (13 line(s) more)  =
-
-
-  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
-/id/65da015a31219ef9fb637050
-        failing since 31 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
-4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
-
-    2024-02-24T14:46:36.660873  /lava-434532/1/../bin/lava-test-case
-    2024-02-24T14:46:36.661322  <8>[   23.477701] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>
-    2024-02-24T14:46:36.661620  /lava-434532/1/../bin/lava-test-case   =
-
- =
-
-
-
-platform                 | arch  | lab             | compiler | defconfig |=
- regressions
--------------------------+-------+-----------------+----------+-----------+=
-------------
-rk3399-roc-pc            | arm64 | lab-broonie     | gcc-10   | defconfig |=
- 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/65da0267326691a86c63701c
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.8-rc5-120-gb9dcb=
-db099e4c/arm64/defconfig/gcc-10/lab-broonie/baseline-rk3399-roc-pc.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.8-rc5-120-gb9dcb=
-db099e4c/arm64/defconfig/gcc-10/lab-broonie/baseline-rk3399-roc-pc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/65da0267326691a86c637=
-01d
-        failing since 18 days (last pass: v6.8-rc2-29-gc24c55a0329d1, first=
- fail: v6.8-rc3-31-g7cfffced6d0e) =
-
- =20
 
