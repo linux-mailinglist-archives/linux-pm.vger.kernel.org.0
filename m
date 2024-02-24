@@ -1,237 +1,115 @@
-Return-Path: <linux-pm+bounces-4366-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4367-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45B9186252B
-	for <lists+linux-pm@lfdr.de>; Sat, 24 Feb 2024 14:44:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABC7D862593
+	for <lists+linux-pm@lfdr.de>; Sat, 24 Feb 2024 15:12:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3313EB2195D
-	for <lists+linux-pm@lfdr.de>; Sat, 24 Feb 2024 13:44:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD4681C211BD
+	for <lists+linux-pm@lfdr.de>; Sat, 24 Feb 2024 14:12:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2381543AC6;
-	Sat, 24 Feb 2024 13:44:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="bJahFEi+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24E793FB28;
+	Sat, 24 Feb 2024 14:12:13 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE06B43AB7;
-	Sat, 24 Feb 2024 13:44:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAABF18622;
+	Sat, 24 Feb 2024 14:12:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708782244; cv=none; b=W+o1ADnSrGmHu4ZbHIDml3TleTtqOrPCjrm59bNu6eSWhGl5c+U274RWB27tQiRFrIq498fK9RS1qs4uuhPoFZErO+iV/k+Onc2/G57vhiM6OeuxRVLXbbhkao6SIqjZJoXlDXMuwgEI2KtgUr3pUY0EJjUS5loOQDCcF3pR0d4=
+	t=1708783933; cv=none; b=B0byjrv4gcGUfw9CRwl+US627BgWIspCkcC8fKOi8mHRxhJGksx7zI8Ayle48Mt0yZFEG/nnTuIZZe+/ELhHPB9AzReckD3js59aWEeFNURQpEDim8FnxTQHzFCrYx3zlBUs1wXjOYeVr38KSUFtZyFcozQAnWBTtHvNkTqQHco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708782244; c=relaxed/simple;
-	bh=TaMAjuxK0M1/m1+E5BavhTKhJuPyR1t8GMHXzHJ3M6U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sjqOPYieCMmdkkThAxPnaeArnXdiIZ8CkzCKGVoZQ8zn+H4JSegiFZ4WMh3T9aSq6n3+eaE3wRRl2ni1dKHCh8DSgjWB2lJT+9q7vK+BSrdTCAJ6M6PPRE0Azsz9rW0AuydYH38sT0eFqqn5whHZMhqoQg6DSjnkr8Ej7UFxRuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=bJahFEi+; arc=none smtp.client-ip=80.237.130.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:Reply-To:MIME-Version:Date:
-	Message-ID:From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:
-	Content-Type:Content-Transfer-Encoding:Content-ID:Content-Description:
-	In-Reply-To:References; bh=6wjvGHv5rABfYh1OC9kfAOfTV9TqIB8vdA16HuVPu/k=;
-	t=1708782241; x=1709214241; b=bJahFEi+DIFrvS5pc88TVZlTRNVycCgNw/aAN9JxP1KBnNZ
-	lKFisCqiX0RTkNSWu627RfMFvI5OditP1CXi1tD2jh8fv0VfxA901o781Fh0B4nL5nUQpj/uRQ82p
-	/t6njDZn9VSvJWdyQkQWCD0C84bT4GlYUYuHS2mCrme/wxXAEsJ3ewxfiMgsRp50GFFeLvrRU4uQn
-	ptj/7ugYC9at0vWwU6mFfxdpOHLWZJ/JxhvU3/daJRFAMBXhqHTP33WPRJg7WNa4eP7C2oEdC55/M
-	FolgGzztVF5S+FCP0wFAap3p8Qhn/w3CYQo5JzjnnpvR5g2JrKPOGXt6TOcNbFxw==;
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	id 1rdsJm-0002R8-Eb; Sat, 24 Feb 2024 14:43:54 +0100
-Message-ID: <c03533dc-73fc-4d97-8248-0affbddbed32@leemhuis.info>
-Date: Sat, 24 Feb 2024 14:43:53 +0100
+	s=arc-20240116; t=1708783933; c=relaxed/simple;
+	bh=0FgNsjxOprgob6IpBDE43VocMkHW5zVSFxJ4WpG2R4s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pOzIO/dbsHedx9I6Fcau7zwkVzVh36bsZhIr2wpCIWRrMeB2UQj7xrt2HgN1GEqgITuGnJcCz1cQ/ehlkJllWyt5G/mFU8lOeWv2Zp21Ox9N/4+/F4fjrPvzFtRk4dy6pM0Gs1tc4l5sMc37yb4pLio2Ztkj47yl6vwC3+7ZXZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3bc21303a35so654848b6e.0;
+        Sat, 24 Feb 2024 06:12:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708783931; x=1709388731;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0FgNsjxOprgob6IpBDE43VocMkHW5zVSFxJ4WpG2R4s=;
+        b=OfNrZlfxfnaGwJ59xbGxHbN0xhVjMlGVY9fVe4h6haq8jjx9wxMXGZp5M2cpwhJ2vs
+         JTBF1JhS0d+pijdy0CKW8REitYtdonh8O3rh601ymGy+MpD9QZYYXsFIi3BG1gBFoVEr
+         6iPoiVqUHzS/vhYaUiDGf/vds/EAC9Sah8kWffpaoL4nRCi5HcT/MJbxP2j4le2B1c2+
+         ZBosKRV2nNSGnHwPGODyPqSEFbaYYOiXKu7O5JWF9R5tWBspkfT5PxBEg8o7D4BsbqH3
+         a8+yQvE0uBF9YgyxU3sx1GuAuxjSEF017Vr84w0fk/JWc0IODqMRMrYQoxdSOy02g4k1
+         xuhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUyDxxzO+3cnzK7OjGc5ra0HSrT2B4B+xPpPKXjqLTWLxClhLzvxWStT9mThUfuHduSbAEaJ5dbK/ysr6deGmrwskt6KlI0mQFwFFjErx7gyNKVja/peew/4JwOJJwyrmcWALcr/T4=
+X-Gm-Message-State: AOJu0YybLC48V1WIZa55YC7PQF5/2yNwhH6MJrHYLaZGcMUpMNFJm1e+
+	ShTLm1JAQQ6AKrxCf16lsS4hGG1R8dR4zymjmVzJPiFpQKz9nO4QchpDDchwk94pBkcYm6xh4Rj
+	uB7NK6s0d2EFeCt2XSVZno+nPWD8=
+X-Google-Smtp-Source: AGHT+IEVnUZQ1BW/6uiqG0tAPjBJBhge0xO0MypFZh90pjdUMU6FtbvTfMVVjuP/it801XVImJNU1DnIzuC7z3kUutk=
+X-Received: by 2002:a4a:d037:0:b0:5a0:3d13:a45a with SMTP id
+ w23-20020a4ad037000000b005a03d13a45amr2466185oor.0.1708783930814; Sat, 24 Feb
+ 2024 06:12:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+References: <002f01da5ba0$49cbf810$dd63e830$@telus.net> <CAKfTPtA-jizig0sh_shmkAMudAxDPYHP0SdanZe=Gc57jVKouQ@mail.gmail.com>
+ <003801da5bae$02d6f550$0884dff0$@telus.net> <CAKfTPtC7pOtb-srrgQLFbTueLLDqHay+GQBm9=sNsnZDg_UYSQ@mail.gmail.com>
+ <000b01da5d09$8219f900$864deb00$@telus.net> <CAKfTPtB8v30LzL3EufRqbfcCceS2nQ_2G8ZHuoD5N1_y-pvFbg@mail.gmail.com>
+ <001b01da5ea7$86c7a070$9456e150$@telus.net> <CAKfTPtD4Un-A2FcdsvKnNZskG=xH0wrsT3xzaWDs--mQjgZ3rg@mail.gmail.com>
+ <003001da6061$bbad1e30$33075a90$@telus.net> <CAKfTPtC82YXOw5yYPNkHHyF+DYSG+Ts9OjnwsVjbd_HcUsZQMg@mail.gmail.com>
+ <c03533dc-73fc-4d97-8248-0affbddbed32@leemhuis.info>
+In-Reply-To: <c03533dc-73fc-4d97-8248-0affbddbed32@leemhuis.info>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Sat, 24 Feb 2024 15:11:59 +0100
+Message-ID: <CAJZ5v0hfMuiZCFU6e9TZ7yZV1qER2ymOM7d=AAf5beyMOyHg+g@mail.gmail.com>
 Subject: Re: sched/cpufreq: Rework schedutil governor performance estimation -
  Regression bisected
-Content-Language: en-US, de-DE
-To: Vincent Guittot <vincent.guittot@linaro.org>,
- Doug Smythies <dsmythies@telus.net>, "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Ingo Molnar <mingo@kernel.org>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- Linux kernel regressions list <regressions@lists.linux.dev>
-References: <002f01da5ba0$49cbf810$dd63e830$@telus.net>
- <CAKfTPtA-jizig0sh_shmkAMudAxDPYHP0SdanZe=Gc57jVKouQ@mail.gmail.com>
- <003801da5bae$02d6f550$0884dff0$@telus.net>
- <CAKfTPtC7pOtb-srrgQLFbTueLLDqHay+GQBm9=sNsnZDg_UYSQ@mail.gmail.com>
- <000b01da5d09$8219f900$864deb00$@telus.net>
- <CAKfTPtB8v30LzL3EufRqbfcCceS2nQ_2G8ZHuoD5N1_y-pvFbg@mail.gmail.com>
- <001b01da5ea7$86c7a070$9456e150$@telus.net>
- <CAKfTPtD4Un-A2FcdsvKnNZskG=xH0wrsT3xzaWDs--mQjgZ3rg@mail.gmail.com>
- <003001da6061$bbad1e30$33075a90$@telus.net>
- <CAKfTPtC82YXOw5yYPNkHHyF+DYSG+Ts9OjnwsVjbd_HcUsZQMg@mail.gmail.com>
-From: "Linux regression tracking (Thorsten Leemhuis)"
- <regressions@leemhuis.info>
-In-Reply-To: <CAKfTPtC82YXOw5yYPNkHHyF+DYSG+Ts9OjnwsVjbd_HcUsZQMg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1708782241;a9f43a03;
-X-HE-SMSGID: 1rdsJm-0002R8-Eb
+To: Linux regressions mailing list <regressions@lists.linux.dev>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>, Doug Smythies <dsmythies@telus.net>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Ingo Molnar <mingo@kernel.org>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 16.02.24 14:17, Vincent Guittot wrote:
-> On Thu, 15 Feb 2024 at 23:53, Doug Smythies <dsmythies@telus.net> wrote:
->>
->> This email thread appears as if it might be moving away from a regression
->> caused by your commit towards a conclusion that your commit exposed
->> a pre-existing bug in the intel_psate.c code.
-> Ok
+On Sat, Feb 24, 2024 at 2:44=E2=80=AFPM Linux regression tracking (Thorsten
+Leemhuis) <regressions@leemhuis.info> wrote:
+>
+> On 16.02.24 14:17, Vincent Guittot wrote:
+> > On Thu, 15 Feb 2024 at 23:53, Doug Smythies <dsmythies@telus.net> wrote=
+:
+> >>
+> >> This email thread appears as if it might be moving away from a regress=
+ion
+> >> caused by your commit towards a conclusion that your commit exposed
+> >> a pre-existing bug in the intel_psate.c code.
+> > Ok
+>
+> Well, even in that case it's a regression that must be fixed -- ideally
+> before 6.8. Did anything happen towards that?
+>
+> I noticed that Doug send the fix "cpufreq: intel_pstate: fix pstate
+> limits enforcement for adjust_perf call back":
+> https://lore.kernel.org/all/20240217213010.2466-1-dsmythies@telus.net/
+>
+> Is that supposed to fix the problem? Looks a bit like it, but I'm not
+> totally sure. In that case I'd say it likely should be applied to 6.8,
+> but Rafael apparently applied it to 6.9.
 
-Well, even in that case it's a regression that must be fixed -- ideally
-before 6.8. Did anything happen towards that?
+This hasn't reached linux-next yet, so I rebased it on top of -rc5 in
+order to push it as a 6.8 fix.
 
-I noticed that Doug send the fix "cpufreq: intel_pstate: fix pstate
-limits enforcement for adjust_perf call back":
-https://lore.kernel.org/all/20240217213010.2466-1-dsmythies@telus.net/
+> I'd also say that a Fixes: would be good as well (to ensure that fix is
+> also backported in case anyone backports 9c0b4bb7f630), but I know that
+> subsystems handle this differently.
 
-Is that supposed to fix the problem? Looks a bit like it, but I'm not
-totally sure. In that case I'd say it likely should be applied to 6.8,
-but Rafael apparently applied it to 6.9.
+So I added a Fixes: tag to it, but it points to the original change
+that missed the check.
 
-I'd also say that a Fixes: would be good as well (to ensure that fix is
-also backported in case anyone backports 9c0b4bb7f630), but I know that
-subsystems handle this differently.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
-
-#regzbot poke
-
->> Therefore, I have moved Rafael from the C.C. line to the "to" line and
->> added Srinivas.
->>
->> On 2024.02.14 07:38 Vincent wrote:
->>> On Tue, 13 Feb 2024 at 19:07, Doug Smythies <dsmythies@telus.net> wrote:
->>>> On 2024.02.13 03:27 Vincent wrote:
->>>>> On Sun, 11 Feb 2024 at 17:43, Doug Smythies <dsmythies@telus.net> wrote:
->>>>>> On 2024.02.11 05:36 Vincent wrote:
->>>>>>> On Sat, 10 Feb 2024 at 00:16, Doug Smythies <dsmythies@telus.net> wrote:
->>>>>>>> On 2024.02.09.14:11 Vincent wrote:
->>>>>>>>> On Fri, 9 Feb 2024 at 22:38, Doug Smythies <dsmythies@telus.net> wrote:
->>>>>>>>>>
->>>>>>>>>> I noticed a regression in the 6.8rc series kernels. Bisecting the kernel pointed to:
->>>>>>>>>>
->>>>>>>>>> # first bad commit: [9c0b4bb7f6303c9c4e2e34984c46f5a86478f84d]
->>>>>>>>>> sched/cpufreq: Rework schedutil governor performance estimation
->>>>>>>>>>
->>>>>>>>>> There was previous bisection and suggestion of reversion,
->>>>>>>>>> but I guess it wasn't done in the end. [1]
->>>>>>>>>
->>>>>>>>> This has been fixed with
->>>>>>>>> https://lore.kernel.org/all/170539970061.398.16662091173685476681.tip-bot2@tip-bot2/
->>>>>>>>
->>>>>>>> Okay, thanks. I didn't find that one.
->>>>>>>>
->>>>>>>>>> The regression: reduced maximum CPU frequency is ignored.
->>>>>>
->>>>>> Perhaps I should have said "sometimes ignored".
->>>>>> With a maximum CPU frequency for all CPUs set to 2.4 GHz and
->>>>>> a 100% load on CPU 5, its frequency was sampled 1000 times:
->>>>>> 28.6% of samples were 2.4 GHz.
->>>>>> 71.4% of samples were 4.8 GHz (the max turbo frequency)
->>>>>> The results are highly non-repeatable, for example another sample:
->>>>>> 32.8% of samples were 2.4 GHz.
->>>>>> 76.2% of samples were 4.8 GHz
->>>>>>
->>>>>> Another interesting side note: If load is added to the other CPUs,
->>>>>> the set maximum CPU frequency is enforced.
->>>>>
->>>>> Could you trace cpufreq and pstate ? I'd like to understand how
->>>>> policy->cur can be changed
->>>>> whereas there is this comment in intel_pstate_set_policy():
->>>>>        /*
->>>>>         * policy->cur is never updated with the intel_pstate driver, but it
->>>>>         * is used as a stale frequency value. So, keep it within limits.
->>>>>         */
->>>>>
->>>>> but cpufreq_driver_fast_switch() updates it with the freq returned by
->>>>> intel_cpufreq_fast_switch()
->>>>
->>>> Perhaps I should submit a patch clarifying that comment.
->>>> It is true for the "intel_pstate" CPU frequency scaling driver but not for the
->>>> "intel_cpufreq" CPU frequency scaling driver, also known as the intel_pstate
->>>> driver in passive mode. Sorry for any confusion.
->>>>
->>>> I ran the intel_pstate_tracer.py during the test and do observe many, but
->>>> not all, CPUs requesting pstate 48 when the max is set to 24.
->>>> The calling request seems to always be via "fast_switch" path.
->>>> The root issue here appears to be a limit clamping problem for that path.
->>>
->>> Yes, I came to a similar conclusion as well. Whatever does schedutil
->>> ask for, it should be clamped by  cpu->max|min_perf_ratio.
->>
->> Agreed. And it is not clamping properly under specific conditions.
->>
->>> Do you know if you use fast_switch or adjust_perf call back ?
->>
->> I am not certain, but I think it uses "adjust_perf" call back.
->> I do know for certain that it never takes the
->> "intel_cpufreq_update_pstate" path
->> and always takes the
->> "intel_cpu_freq_adjust_perf" path.
-> 
-> intel_cpu_freq_adjust_perf is registered as the callback for
-> cpufreq->adjust_perf
-> 
->>
->> The problem seems to occur when that function is called with:
->> min_perf = 1024
->> target_perf = 1024
->> capacity = 1024
->>
->> Even though cpu->max_perf_ratio is 24, the related HWP MSR,
->> 0x774: IA32_HWP_REQUEST, ends up as 48, 48, 48 for min, max, des.
->>
->> This patch appears to fix the issue (still has my debug code and
->> includes a question):
->>
->> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
->> index ca94e60e705a..8f88a04a494b 100644
->> --- a/drivers/cpufreq/intel_pstate.c
->> +++ b/drivers/cpufreq/intel_pstate.c
->> @@ -2987,12 +2987,22 @@ static void intel_cpufreq_adjust_perf(unsigned int cpunum,
->>         if (min_pstate < cpu->min_perf_ratio)
->>                 min_pstate = cpu->min_perf_ratio;
->>
->> +//     if (min_pstate > cpu->pstate.max_pstate)   /* needed? I don't know */
->> +//             min_pstate = cpu->pstate.max_pstate;
->> +
->> +       if (min_pstate > cpu->max_perf_ratio)
->> +               min_pstate = cpu->max_perf_ratio;
->> +
->>         max_pstate = min(cap_pstate, cpu->max_perf_ratio);
->>         if (max_pstate < min_pstate)
->>                 max_pstate = min_pstate;
->>
->>         target_pstate = clamp_t(int, target_pstate, min_pstate, max_pstate);
->>
->> +       if((max_pstate > 40) || (max_pstate < 7) || (min_pstate < 7) || min_pstate > 40 || target_pstate > 40){
->> +               pr_debug("Doug: t: %d : min %d : max %d : minp %d : maxp %d : mnperf %lu : tgperf %lu : capacity %lu\n", target_pstate, min_pstate, max_pstate, cpu->min_perf_ratio, cpu->max_perf_ratio, min_perf, target_perf, capacity);
->> +       }
->> +
->>         intel_cpufreq_hwp_update(cpu, min_pstate, max_pstate, target_pstate, true);
->>
->>         cpu->pstate.current_pstate = target_pstate;
->>
->> With the patch, I never hit the debug statement if the max CPU frequency is limited to 2.4 GHz,
->> whereas it used to get triggered often.
->> More importantly, the system seems to now behave properly and obey set CPU frequency limits.
->>
->>
+Thanks!
 
