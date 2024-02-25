@@ -1,80 +1,134 @@
-Return-Path: <linux-pm+bounces-4378-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4379-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E9FE862CE4
-	for <lists+linux-pm@lfdr.de>; Sun, 25 Feb 2024 21:41:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68C9D862D13
+	for <lists+linux-pm@lfdr.de>; Sun, 25 Feb 2024 22:10:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D63D1C21417
-	for <lists+linux-pm@lfdr.de>; Sun, 25 Feb 2024 20:41:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 08DE41F21B4B
+	for <lists+linux-pm@lfdr.de>; Sun, 25 Feb 2024 21:10:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E40515E86;
-	Sun, 25 Feb 2024 20:41:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41856199B8;
+	Sun, 25 Feb 2024 21:10:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="JDGQ42iZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 637B7111A5;
-	Sun, 25 Feb 2024 20:41:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87394D2FE;
+	Sun, 25 Feb 2024 21:10:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708893660; cv=none; b=YAi1ShU921+fSwyvp7dzKTdm0da1r0/wXz51VjmPsT/thbLFztWCM2xbfPiUZMd50zqxinO6GE0jBF1R0UTwqNWYrvR09TAWyM5/Yrn26eUKVpMHxEY9IglRH7BqOtBQmb+TMSrt7KNIRBrngM3cz+ktjwSR+20ld2CeC6Y6E0w=
+	t=1708895440; cv=none; b=V0CFP/6BneXsTQmJUuoBaGhJMfYtQBYLAVecKLLh0cXZgvSEfmDHAscH4alCETYjh2qI2PiJey6wCZhVqGeVu70LCLBVLo+lszwzSmH9hNBfXAN3j6RP5VRQdJ7YiPno1db6itCGWVfdoZ/ECznItrTxYZDdAfPWxsYDAImcis8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708893660; c=relaxed/simple;
-	bh=XumoTfKfv/ZGFc5svkWZgCNU7144b6sk/mox3FGWCLM=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=RhqwRouy9KQam4FA5xXsjrs8wXjAp4bVFvBkZYA3EkrMwKdHt+aOA1eTN+2piPcHUn/miWdnlVSoM5+mM4Flq3jVIuJQixqN6vPSrl9b66I9/Mx+tv4aEFgR0wQpn5atVDn437Q/HOZnLQFyAjrFNrBB3IWdcGc5Aw4nrxJkXcc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8402EC433C7;
-	Sun, 25 Feb 2024 20:40:59 +0000 (UTC)
+	s=arc-20240116; t=1708895440; c=relaxed/simple;
+	bh=ryofm9AyC66ppNGNCwpZaLes36i3wdGJU2nOHNj7U7Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QXTVCzXSNW7MgSsscDQIj5MrT/uOuDT5/Vevp5rv90beADV8elCsYISyskOVdrBDIOf27GWxJI0XJFglfQ9epuNMz9PKrV86V9zGxwiY+WJlwxyqRImXRSGdhC4GNxASHQvinuWH6WCW3Am26PqAKBDFxfkrJ4o0HM2q99+S51Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=JDGQ42iZ; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1708895431;
+	bh=ryofm9AyC66ppNGNCwpZaLes36i3wdGJU2nOHNj7U7Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JDGQ42iZF9z9zvzCL5m1pkvzT+1qD6P8H6wOv+VUegTaqiJq4+BizCI7MNmF1GsSS
+	 lk7tCPFlXoJBF3jqlaWFAuaf+5kCXt48/g9XgbSgHE7f49N2aqEHjxvvs7gtum/mww
+	 nFS1dZhs0jT+Y5ST8JOT5gmrvT5xUGboplqgkA6fdWTJ5mdbawfdbzTI3fIhT/6VCI
+	 jZTgo26gWSsIeMlbbh4IBUPNjTzCmUvOEs/pgGKkqzIauAqhx0gcimWF/nVxL08ovT
+	 mvjE9q4ojyNeIOp7zrIP/EY7VYn+V1I4jyi3ft2SZ13UW2yAO4PYiOy1MBCNQz2jIU
+	 TL6jPJTJjEeIA==
+Received: from mercury (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sre)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 4A78C3781FD9;
+	Sun, 25 Feb 2024 21:10:31 +0000 (UTC)
 Received: by mercury (Postfix, from userid 1000)
-	id 088151060D21; Sun, 25 Feb 2024 21:40:57 +0100 (CET)
+	id C300F1060D21; Sun, 25 Feb 2024 22:10:30 +0100 (CET)
+Date: Sun, 25 Feb 2024 22:10:30 +0100
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Sebastian Reichel <sre@kernel.org>, 
- "Ricardo B. Marliere" <ricardo@marliere.net>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-In-Reply-To: <20240224-device_cleanup-power-v2-1-465ff94b896c@marliere.net>
-References: <20240224-device_cleanup-power-v2-1-465ff94b896c@marliere.net>
-Subject: Re: [PATCH v2] power: supply: core: constify the struct
- device_type usage
-Message-Id: <170889365697.1930401.10570101771941744000.b4-ty@collabora.com>
-Date: Sun, 25 Feb 2024 21:40:56 +0100
+To: Hermes Zhang <chenhuiz@axis.com>
+Cc: Hermes Zhang <Hermes.Zhang@axis.com>, kernel@axis.com, 
+	Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: bq27xxx: Introduce parameter to config
+ cache regs
+Message-ID: <op5ovg3cv4raqy4zmol7wfy7hm72ptgxleh2ykoyg5qvnbhfcl@pxfzkij5xkkw>
+References: <20240219100541.48453-1-Hermes.Zhang@axis.com>
+ <eh34cvorgnrw4v5a6emzjk2p6om2ybkn627bpmh775z4ubw63h@nbxgpm767u4x>
+ <1fe2c4b3-9dd2-a961-4198-45aca3449c36@axis.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.4
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="aqiglmpeyh36bxal"
+Content-Disposition: inline
+In-Reply-To: <1fe2c4b3-9dd2-a961-4198-45aca3449c36@axis.com>
 
 
-On Sat, 24 Feb 2024 17:15:41 -0300, Ricardo B. Marliere wrote:
-> Since commit aed65af1cc2f ("drivers: make device_type const"), the driver
-> core can properly handle constant struct device_type. Move the
-> power_supply_dev_type variable to be a constant structure as well, placing
-> it into read-only memory which can not be modified at runtime.
-> 
-> In order to accomplish that, export power_supply_attr_group in
-> power_supply.h and use it with the macro __ATTRIBUTE_GROUPS when defining
-> power_supply_dev_type in power_supply_core.c. Therefore the attribute group
-> is no longer static. Lastly, because power_supply_attr_groups is no longer
-> dynamically associated to power_supply_dev_type in
-> power_supply_init_attrs(), make the function receive zero arguments.
-> 
-> [...]
+--aqiglmpeyh36bxal
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Applied, thanks!
+Hi,
 
-[1/1] power: supply: core: constify the struct device_type usage
-      commit: 7b46b60944d77e361a727cd8ce46aec31c146e26
+On Fri, Feb 23, 2024 at 04:40:18PM +0800, Hermes Zhang wrote:
+> On 2024/2/22 7:03, Sebastian Reichel wrote:
+> > On Mon, Feb 19, 2024 at 06:05:40PM +0800, Hermes Zhang wrote:
+> > > Since all of the regs in the bq27xxx_reg_cache are now cached, a simp=
+le
+> > > property read (such as temperature) will need nine I2C transmissions.
+> > > Introduce a new module parameter to enable the reg cache to be config=
+ured,
+> > > which decrease the amount of unnecessary I2C transmission and prevent=
+ing
+> > > the error -16 (EBUSY) happen when working on an I2C bus that is share=
+d by
+> > > many devices.
+> > So the problem is not the caching, but the grouping. So instead
+> > of adding this hack, please change the code to do the caching
+> > per register. That way you can just keep the caching enabled and
+> > don't need any custom module parameters.
+>=20
+> Thanks for the reply. Yes, the key is the grouping. So do you suggest to
+> drop the bq27xxx_reg_cache struct totally and handle the cache for each
+> register in e.g. bq27xxx_battery_get_property()? Then it will require an
+> extra time info for each register, will that be a big cost? Or am I
+> misunderstanding?
 
-Best regards,
--- 
-Sebastian Reichel <sebastian.reichel@collabora.com>
+Yes, this requires time info for each cached register. I don't think
+the added memory is a big deal. There usually is only a single
+battery and we are caching 10 timestamps. So that's 80 bytes.
 
+-- Sebastian
+
+--aqiglmpeyh36bxal
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmXbrLkACgkQ2O7X88g7
++pocVA//Q3NWvrv9EnteHXjrW328s/R0Hdu1cPyVLAEt1j7UCWIMBwo38e5JuZuf
+sEKkvFNDgGe+jJzVS2DRkvky8J+JvUZ4L0pgXdbGHPKhM/vIRjyD1RhJneIc6U3S
+q3e7hUOSj0YrKBHO/GbDpyB77p1Uo23E+e7Fs9EWPEc9ZawvOqBxb6b9O29Dyf3x
+ZbliWPS6JZ2cIZ7RFtUMHc8e1AItmluyHTHMxJz9d2gL1vPrUBT7gmD6PzZl/u1o
+EI7c4DXDUUKb2Cvqh04pXMrVMU8z+u6SIhZExFtijs5VZjzn3BjREIo8Vj046shC
+ggB2awWdekGzLw0qjiRlRicy2eP76lCKFfeDt1MGwLxDLExVi1vwQcxsjKBjNUfK
+QzwZgIGQUc/zzKwhGagjh+oJebCqnUgd8K9S/226Z/m1oDona/Rt1aJios780UA4
+NyeI7O2BgnpDzRoFJnqLduzFiXuW5KakLkRqwrQeb14HucMvWDxILGBmJPH+Y11W
+ZHlBML5F2VYYxx7qgpgM/nYmKPM+g3uJXuGLlubdkV2rrwVcy4uB1kZNjhFJblCh
+hn/0JNoSJtjnzmwYRvOEOAcuAHgDEyjaLkNs+LwDtrQkEeIcFI/+TU3vqdU+sFxJ
+n0yEeuGxMdC3dk9nE6bAn9DJ7DrynifbW74RVxrtaWGlY5uCrus=
+=e0sY
+-----END PGP SIGNATURE-----
+
+--aqiglmpeyh36bxal--
 
