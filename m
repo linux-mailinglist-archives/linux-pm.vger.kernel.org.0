@@ -1,211 +1,162 @@
-Return-Path: <linux-pm+bounces-4382-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4383-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E15C586675B
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Feb 2024 01:29:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D64358668D1
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Feb 2024 04:44:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D6B91F21377
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Feb 2024 00:29:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 635F51F21290
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Feb 2024 03:44:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45E361C36;
-	Mon, 26 Feb 2024 00:28:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E69F101C4;
+	Mon, 26 Feb 2024 03:44:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="I0+9DS8g"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="hsR4Bpa6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2059.outbound.protection.outlook.com [40.107.8.59])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CFC8ED9;
-	Mon, 26 Feb 2024 00:28:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.8.59
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708907336; cv=fail; b=BHeRMAdp8wOqsw0LxR/zqvS5zSA/lkuywze+mVJhbjXXiJIMT9OpZQsc8zp9KKlZTm7qFWCt8bnfpk9bGkoII0qeoV2ZGJmw4dRQ71mFy68XGDIyFTtL1pQTILwGco9opP2Vg+Ownkqfrpp174Fb+OWuabHIbanB3GIyCtVX4fQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708907336; c=relaxed/simple;
-	bh=kVLBfhQC5nk3GBJw6sb8GiBG6NDTnx2Syhi5Q8pWS/I=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=Txp1rwW1bNpWlof2iYBMC+kQCFxwhwguPp0+Rql3Lyhvi31WpzNdrl1vm1G383uIBFEvcSRzL9Hi3xNiJ63Z+Nkrk1hmf51YqHgdvBxWYJlUpitQeEy2TrcGVwdqkEyNTkl4QCvYOZ5aCRXiD1fXAr+IxP/hoVvgObPNV5w2tWI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=I0+9DS8g; arc=fail smtp.client-ip=40.107.8.59
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BuHUdJncO5EUe8QYLaDMPj+zHtKQ3LLRQ5ma/WYAv4m3fhI9+Wk+xEQ1yQbBif328SJDTMxbPfN4m+kT/V1+1a15oiZdbPSeWxMV3lwJCjBUUzNjpwQy+64D70vDVQmw4tn/8YBLJ+OqWjAyJ1mXEESnS/b8eIVlHiNGwoS2/ugkZKsc+I2Q9DIaHEwi3o3HYz9DD4Y4IUc3tBpso93UvBBfFAnhn0ZfXBO9YZiTN2Yf4KYv6NnQQTEwUhJoi8DoqRuzvGO+i/NubQVV3KBwLYL+FNHhGG6jtNelbnLzTtE8KQgup4Z14mnLy/5qHZz6XJyK1MG3+2YMmMKkJ5gKJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4lSIVSefzI4Ll1HhaaSr0w8grOd298QhYfjbJ6Ed4kI=;
- b=W08AdrhAIyjc/KUOoA2YEWqt39jcuQCH/fdLvvoS2uwBouAOv6MvZWB1BIYffRZeWRg8ayBPExxeRXNfECBMNicg+zJKsIpFjutAeIqsOYbFoErpWY5FaaRP/j9bt4MogiV7g14FBP9V0PKrkfGkJe6Aa0441SDXGYpi+Dui1RrBZdnDzR10rVzi/QKHzMpt+kxHnVQSayxWoQ5TdHQPf1xUVe+KCURoHb6t2gFcJTv16OEn7WURAa3DWiKFmGW1sf0dkE2+9VVgWhxXp0RwfEjdZG7k+D2ztH5o/fzCEy+bL+WN9vz2AKtT9Rbh/nsKpvXvxwlyH/+oRvFKEKpTuw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4lSIVSefzI4Ll1HhaaSr0w8grOd298QhYfjbJ6Ed4kI=;
- b=I0+9DS8g9d+xE1EWuRciBiZ/fBbTixbDOekBj2L908V6KWdAN/jVLcm892mj2lRykpqIym51Z93j4SlPPatNPwTdM6pOEGpkHxUJ6VuacVv9cUg+o9aQRDSxp0OhMi4SGawDXSZFPtMxOoaSvlP0hVowtkxOcojUk7xsj3l2nXc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AM8PR04MB7891.eurprd04.prod.outlook.com (2603:10a6:20b:237::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.34; Mon, 26 Feb
- 2024 00:28:50 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::1232:ed97:118f:72fd]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::1232:ed97:118f:72fd%4]) with mapi id 15.20.7316.034; Mon, 26 Feb 2024
- 00:28:50 +0000
-From: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Received: from m15.mail.163.com (m15.mail.163.com [45.254.50.219])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D3B11BC20;
+	Mon, 26 Feb 2024 03:44:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.50.219
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708919054; cv=none; b=ONeK8sQrd7u2vvvt4yJfxM2oZ570L0yX+4s4b7TMJNoHQvF0wAw7du9xYNGOgVMzwNj9aVSfGg4OFAGyy+nTGgrlTrAgB2UXuQY0CkGUY0GoYrThkHtvxzSW7pqZBlggbaLfSw9+dMCNdgVzrWJ39Qq82sKUg+qoT9SuVLpSKwA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708919054; c=relaxed/simple;
+	bh=Cs8RzTLxWjKHYVWlb2Iyv2mUBYHBeeXBS/PpihNFavM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=Ocscg9yfUp6n6I+cKtnokpxBzmHRqWXAdoqF5Ubvwwt9JMqw/KE5VtNCmVDofCXWc1md0pM0dM+k0kllQ919UCLQ26536+KTGVhOcOnZ667EMntBAipOSamLV5d2SEnda3p/djoi3LXVX9K87tGJ5UR8AzvsZKTKxrPR5tmjsGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=hsR4Bpa6; arc=none smtp.client-ip=45.254.50.219
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version:
+	Content-Type; bh=9Rybs8KInQJ0C057G0PgEOPSQr26naGjAXr4L52dsYQ=;
+	b=hsR4Bpa64WuHdhOppQf/ln1Ev4029yuWV2XIgnQ1W3zAl1cWlJQ4FSUC1lV7j1
+	XfFR8Q6MTmES0s+fIoa0bPhoBXbdgyBGOmJEHiDcOZAtsncnoAaCaC8wTL/ZzfAX
+	HM/pf0IZewdfcFAzsk5zUfzUguggqnOocP+W813h+ckJQ=
+Received: from tian-ThinkPad-X390.. (unknown [111.48.58.12])
+	by gzga-smtp-mta-g0-2 (Coremail) with SMTP id _____wD3X8+jCNxlq8t9Bw--.42406S2;
+	Mon, 26 Feb 2024 11:42:28 +0800 (CST)
+From: Yaxiong Tian <13327272236@163.com>
 To: rafael@kernel.org,
-	daniel.lezcano@linaro.org
-Cc: rui.zhang@intel.com,
-	linux-pm@vger.kernel.org,
+	pavel@ucw.cz,
+	len.brown@intel.com,
+	keescook@chromium.org,
+	tony.luck@intel.com,
+	gpiccoli@igalia.com,
+	akpm@linux-foundation.org,
+	ardb@kernel.org,
+	rppt@kernel.org,
+	david@redhat.com,
+	wangkefeng.wang@huawei.com,
+	catalin.marinas@arm.com,
+	will@kernel.org
+Cc: linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Peng Fan <peng.fan@nxp.com>,
-	Sascha Hauer <s.hauer@pengutronix.de>
-Subject: [PATCH V2] thermal/drivers/qoriq: fix getting tmu range
-Date: Mon, 26 Feb 2024 08:36:57 +0800
-Message-Id: <20240226003657.3012880-1-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.37.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0039.apcprd02.prod.outlook.com
- (2603:1096:4:1f6::9) To DU0PR04MB9417.eurprd04.prod.outlook.com
- (2603:10a6:10:358::11)
+	linux-hardening@vger.kernel.org,
+	Yaxiong Tian <tianyaxiong@kylinos.cn>,
+	xiongxin <xiongxin@kylinos.cn>
+Subject: [PATCH] PM: hibernate: Fix level3 translation fault in swsusp_save()
+Date: Mon, 26 Feb 2024 11:42:25 +0800
+Message-Id: <20240226034225.48689-1-13327272236@163.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|AM8PR04MB7891:EE_
-X-MS-Office365-Filtering-Correlation-Id: eee1fefd-8e38-41b8-1cf1-08dc3661e76d
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	O6HcQV5TiUNQyaLntKKV+SAx+uC0tYFG49Lr+Zs1DlWKHCFFTV9Myuep4MExCvpTWi+Jcysff8cxj/7JTNrP0yvH7VbmUFpHw5ZOugq2Ui+7fxLEKr7i4LKgW2mYIiYkJPmaKLvJZ2jUaDCBV+AUza9EluU4vHR8mpsR+snvN59HJvQu1y7qln2yPT+tjCpIRa7ZXpdz8E/9NSs2UEzXtX/XT/cx8xCSyh9v8LI9KdvIpEAXL2X1bQ+Zbj/46eSvEQqLs1IwPKcXx6ON5yYLgXbuBKkho3JO1UceKPhDr0s9MwMTrMCnW98TedeD+HIFkOB1EFtbkwMq2jTFt50agEkq+tYNoRt2TqAnx4DU2XMWF4ohbhocjJijbvcBykRO0HALkNo1GpaxmOMW/M7TwIhB1HYs5GSM5qvnRcI56varYMslO4qrAsdq+boYzvl8kqEHYjLJrJNjhy1e+LaPyOg5g1NEu6Pu3adAhvi72vx4TugSRdFjjqxY1vSl2PQucIJRUE5wW2+6EvdAMxmWRffhi7awVPF3x2GDGNWvCSbxr/TgjQGPpT4/IU1lFialu2oV08xLATvN7PfHeCl17wSZ21xCbRz0WcfbjHLBVCEMTe66UTnsrpQQSWpngVC61yrYN/468jZkqYHOdSPrsNstUIxBU0okgOPdJJ7s1wP+ErHoOsztCYe2jbd5idhdk35oiKoWBq8KsCiCbXkm8A==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(38350700005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?aPrPbdHtgJXsqI+eD1oRcO7DzGCog+d1dQ8UZfvd89Lz9+sOAsIqKUumTtuO?=
- =?us-ascii?Q?1aBF5uVHoAvyXlg1XFBTRrUSb062jXmvv/UOWk4KkqNl0m/2pbRf9tVygzKC?=
- =?us-ascii?Q?Hc9SJlvKFBnism9EGHr8T74lS3HiQhfxhtKd1g8kQ0YRZhOTx+uyaY+ysyP3?=
- =?us-ascii?Q?BKXQKEEe0xbb7amAvEyuk1+6PRS7Ebktow0BDbDcB24RA4GVQhDujaJIG505?=
- =?us-ascii?Q?DFRxFu0J2C5Pt8JM5pu3BGp3g/iagpWVALmq7ueBii6aGYiUFQFFpu8Wp03S?=
- =?us-ascii?Q?hoM9ERnu54GYFfkdolHc5E6cfWYWuGCgTT4oMVMpsCFMegPPrlmWooIWFzjP?=
- =?us-ascii?Q?mU1lKN/+Zq6A/5VSSYhb+b5nKxOdoYbeVO4jxX69J3QpkCflVCrKCMzOAGA0?=
- =?us-ascii?Q?EbaMSMlldh98mouI34A8cz+aWD7bGpTaNWV5xANSmqHp2w8ze4QbgW0emMxh?=
- =?us-ascii?Q?cbc9sFpozbwB6nZcLGquOEqA/F3x9MkOkmEz/IdJiZg0YAR/rdoygUHjRF9h?=
- =?us-ascii?Q?6z19gFDpn5VxS6eicBynDjdgolpnLT1d3q4ZCZ59p/xiOhzb1on5+Lh2WFxA?=
- =?us-ascii?Q?Aq1NC5/w2LR8C4KqwQvWhQiHA17LzkfU+2iEPGB8V8HLLd9NOzJjGk3BBzI4?=
- =?us-ascii?Q?zSpZyGViwUSNrDkJdS7h/MVEcti7UEL6B38irMna6DpiZAYr9c8thiGxQ5d0?=
- =?us-ascii?Q?IZ51PW8b6y7NT1EZFSS4eD7WF8otZwPe43tmDT4TURTO46jvaL6VXmA5vbqD?=
- =?us-ascii?Q?mAvYfoGgQpnGfYAgUj/pYaMW6RQb73J/Aw33cIrfWRW+QkLxmlvbrwm4/q6D?=
- =?us-ascii?Q?UqsmW3icIoK4CDUFeIG9jPpLcTBKU3sOADlRWezEJu7XocZ3MnNfHqsZV0KF?=
- =?us-ascii?Q?2y8r1OoQGLMME9JsIqYDXMt6whJfgrkVejlK8I/Gfn8oqFAccQJzntXLQHOx?=
- =?us-ascii?Q?SVWekujrHuU/RxtmUvWtcnNQtHCgnKdeJlakUQBweIWj8kvPkTaEnhJr8R8n?=
- =?us-ascii?Q?tmqsRnQRm1RAx4+urW0HQDb9gTT4+GGOOrv1kUmb5xGoEw18+E08Lus2KPK8?=
- =?us-ascii?Q?qafbirgj1y9tVOV0wVTvh6afAAlpSeSvzAP9PiOHH/XUqcjwXb3o6g0QOqAY?=
- =?us-ascii?Q?inGQjreUwZ3S6NQapA03dKFE2ZgWdQxXJm6woEEdDliXohezlBhErgNuWwp8?=
- =?us-ascii?Q?9rB6fKoksYmSIL/l6qC5lYtsyvMXNMowQQT63BesU49C7/rPdyufIhAz7IcB?=
- =?us-ascii?Q?WAz71LKAY3+DabJjyrdmXb7Qo/KXutEJrz5kMVaowqRHEg9x7K5wbBwjBJ3E?=
- =?us-ascii?Q?iIqSGWavCC7R3bVHf6uSmSgO05KLGvlFDXO7uG5mkw60wz5DGlpc2Knu8XCz?=
- =?us-ascii?Q?khnbIVQmZUZuEasyM7UZTfhk3gTf48XNjnQ7bpBzWsTh8HHk+29gWhTjL4CP?=
- =?us-ascii?Q?5lzLeMDlghBLYOeqI6GLrt9KbY5+tzlUZcICVQ3g1heNpaNOjoIV7gxHNT4c?=
- =?us-ascii?Q?JpyJcTBeu0Ps+3Y7XO4ykvDVjxlxRnLRT71i+e23+WMHVMxFGh5Nc1/sDmfm?=
- =?us-ascii?Q?lzl3SqVIg76ko0t9JcLg6g/6Uxn4xdbXZW2KbfJq?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eee1fefd-8e38-41b8-1cf1-08dc3661e76d
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Feb 2024 00:28:50.7229
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1Tpq3F07LHF7AeYiPnVgPo45H0I4FVcFJu6VasENgdOk2byP767mupyuDHMoPIU8inj84/KbTIG/zYo5QhDCOw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7891
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3X8+jCNxlq8t9Bw--.42406S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxAFWxXr4kJryftw47trWUJwb_yoWrKry8pF
+	4UGr1DGr4xAF1jyr4UtFyruw18Wr4jvanxXr1UJws7JF1UCw15Xr47KryUKF1Dtw43WFsF
+	qrWDKa10ya1DGaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07b8lksUUUUU=
+X-CM-SenderInfo: jprtjjaxsxjjitw6il2tof0z/1tbiYQeQJWV4HPTFGgAAs5
 
-From: Peng Fan <peng.fan@nxp.com>
+From: Yaxiong Tian <tianyaxiong@kylinos.cn>
 
-TMU Version 1 has 4 TTRCRs, while TMU Version >=2 has 16 TTRCRs.
-So limit the len to 4 will report "invalid range data" for i.MX93.
+On ARM64 machines using UEFI, if the linear map is not set (can_set_direct_map() 
+return false), swsusp_save() will fail due to can't finding the map table 
+under the nomap memory.such as:
 
-This patch drop the local array with allocated ttrcr array and
-able to support larger tmu ranges.
+[   48.532162] Unable to handle kernel paging request at virtual address ffffff8000000000
+[   48.532162] Mem abort info:
+[   48.532162]   ESR = 0x0000000096000007
+[   48.532162]   EC = 0x25: DABT (current EL), IL = 32 bits
+[   48.532162]   SET = 0, FnV = 0
+[   48.532162]   EA = 0, S1PTW = 0
+[   48.532162]   FSC = 0x07: level 3 translation fault
+[   48.532162] Data abort info:
+[   48.532162]   ISV = 0, ISS = 0x00000007, ISS2 = 0x00000000
+[   48.532162]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+[   48.532162]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+[   48.532162] swapper pgtable: 4k pages, 39-bit VAs, pgdp=00000000eeb0b000
+[   48.532162] [ffffff8000000000] pgd=180000217fff9803, p4d=180000217fff9803, pud=180000217fff9803, pmd=180000217fff8803, pte=0000000000000000
+[   48.532162] Internal error: Oops: 0000000096000007 [#1] SMP
+[   48.532162] Internal error: Oops: 0000000096000007 [#1] SMP
+[   48.532162] Modules linked in: xt_multiport ipt_REJECT nf_reject_ipv4 xt_conntrack nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 libcrc32c iptable_filter bpfilter rfkill at803x snd_hda_codec_hdmi snd_hda_intel snd_intel_dspcfg dwmac_generic stmmac_platform snd_hda_codec stmmac joydev pcs_xpcs snd_hda_core phylink ppdev lp parport ramoops reed_solomon ip_tables x_tables nls_iso8859_1 vfat multipath linear amdgpu amdxcp drm_exec gpu_sched drm_buddy hid_generic usbhid hid radeon video drm_suballoc_helper drm_ttm_helper ttm i2c_algo_bit drm_display_helper cec drm_kms_helper drm
+[   48.532162] CPU: 0 PID: 3663 Comm: systemd-sleep Not tainted 6.6.2+ #76
+[   48.532162] Source Version: 4e22ed63a0a48e7a7cff9b98b7806d8d4add7dc0
+[   48.532162] Hardware name: Greatwall GW-XXXXXX-XXX/GW-XXXXXX-XXX, BIOS KunLun BIOS V4.0 01/19/2021
+[   48.532162] pstate: 600003c5 (nZCv DAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   48.532162] pc : swsusp_save+0x280/0x538
+[   48.532162] lr : swsusp_save+0x280/0x538
+[   48.532162] sp : ffffffa034a3fa40
+[   48.532162] x29: ffffffa034a3fa40 x28: ffffff8000001000 x27: 0000000000000000
+[   48.532162] x26: ffffff8001400000 x25: ffffffc08113e248 x24: 0000000000000000
+[   48.532162] x23: 0000000000080000 x22: ffffffc08113e280 x21: 00000000000c69f2
+[   48.532162] x20: ffffff8000000000 x19: ffffffc081ae2500 x18: 0000000000000000
+[   48.532162] x17: 6666662074736420 x16: 3030303030303030 x15: 3038666666666666
+[   48.532162] x14: 0000000000000b69 x13: ffffff9f89088530 x12: 00000000ffffffea
+[   48.532162] x11: 00000000ffff7fff x10: 00000000ffff7fff x9 : ffffffc08193f0d0
+[   48.532162] x8 : 00000000000bffe8 x7 : c0000000ffff7fff x6 : 0000000000000001
+[   48.532162] x5 : ffffffa0fff09dc8 x4 : 0000000000000000 x3 : 0000000000000027
+[   48.532162] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 000000000000004e
+[   48.532162] Call trace:
+[   48.532162]  swsusp_save+0x280/0x538
+[   48.532162]  swsusp_arch_suspend+0x148/0x190
+[   48.532162]  hibernation_snapshot+0x240/0x39c
+[   48.532162]  hibernate+0xc4/0x378
+[   48.532162]  state_store+0xf0/0x10c
+[   48.532162]  kobj_attr_store+0x14/0x24
 
-Fixes: f12d60c81fce ("thermal/drivers/qoriq: Support version 2.1")
-Tested-by: Sascha Hauer <s.hauer@pengutronix.de>
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
+QEMU ARM64 using UEFI also has the problem by setting can_set_direct_map() 
+return false.
+
+Since the NOMAP regions are now marked as PageReserved(), pfn walkers
+and the rest of core mm will treat them as unusable memory. So this
+regions should not saved in hibernation.
+
+This problem may cause by changes to pfn_valid() logic in commit
+a7d9f306ba70 ("arm64: drop pfn_valid_within() and simplify pfn_valid()").
+
+So to fix it, we add pfn_is_map_memory() check in saveable_page(). It
+make such regisons don't save in hibernation.
+
+Fixes: a7d9f306ba70 ("arm64: drop pfn_valid_within() and simplify pfn_valid()")
+Co-developed-by: xiongxin <xiongxin@kylinos.cn>
+Signed-off-by: xiongxin <xiongxin@kylinos.cn>
+Signed-off-by: Yaxiong Tian <tianyaxiong@kylinos.cn>
 ---
+ kernel/power/snapshot.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-V2:
- Rebased to linux-next
- Add T-b
- Link to v1: https://lore.kernel.org/all/20231020081337.3141488-1-peng.fan@oss.nxp.com/
-
- drivers/thermal/qoriq_thermal.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
-index 8552d2ca87ad..0cc883818878 100644
---- a/drivers/thermal/qoriq_thermal.c
-+++ b/drivers/thermal/qoriq_thermal.c
-@@ -62,6 +62,9 @@
- #define REGS_TTRnCR(n)	(0xf10 + 4 * (n)) /* Temperature Range n
- 					   * Control Register
- 					   */
-+#define NUM_TTRCR_V1	4
-+#define NUM_TTRCR_MAX	16
-+
- #define REGS_IPBRR(n)		(0xbf8 + 4 * (n)) /* IP Block Revision
- 						   * Register n
- 						   */
-@@ -79,6 +82,7 @@ struct qoriq_sensor {
+diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+index 0f12e0a97e43..a06e3b1869d2 100644
+--- a/kernel/power/snapshot.c
++++ b/kernel/power/snapshot.c
+@@ -1400,7 +1400,7 @@ static struct page *saveable_page(struct zone *zone, unsigned long pfn)
+ 		return NULL;
  
- struct qoriq_tmu_data {
- 	int ver;
-+	u32 ttrcr[NUM_TTRCR_MAX];
- 	struct regmap *regmap;
- 	struct clk *clk;
- 	struct qoriq_sensor	sensor[SITES_MAX];
-@@ -255,17 +259,17 @@ static int qoriq_tmu_calibration(struct device *dev,
- 				 struct qoriq_tmu_data *data)
- {
- 	int i, val, len;
--	u32 range[4];
- 	const u32 *calibration;
- 	struct device_node *np = dev->of_node;
+ 	if (PageReserved(page)
+-	    && (!kernel_page_present(page) || pfn_is_nosave(pfn)))
++	    && (!kernel_page_present(page) || pfn_is_nosave(pfn) || !pfn_is_map_memory(pfn)))
+ 		return NULL;
  
- 	len = of_property_count_u32_elems(np, "fsl,tmu-range");
--	if (len < 0 || len > 4) {
-+	if (len < 0 || (data->ver == TMU_VER1 && len > NUM_TTRCR_V1) ||
-+	    (data->ver > TMU_VER1 && len > NUM_TTRCR_MAX)) {
- 		dev_err(dev, "invalid range data.\n");
- 		return len;
- 	}
- 
--	val = of_property_read_u32_array(np, "fsl,tmu-range", range, len);
-+	val = of_property_read_u32_array(np, "fsl,tmu-range", data->ttrcr, len);
- 	if (val != 0) {
- 		dev_err(dev, "failed to read range data.\n");
- 		return val;
-@@ -273,7 +277,7 @@ static int qoriq_tmu_calibration(struct device *dev,
- 
- 	/* Init temperature range registers */
- 	for (i = 0; i < len; i++)
--		regmap_write(data->regmap, REGS_TTRnCR(i), range[i]);
-+		regmap_write(data->regmap, REGS_TTRnCR(i), data->ttrcr[i]);
- 
- 	calibration = of_get_property(np, "fsl,tmu-calibration", &len);
- 	if (calibration == NULL || len % 8) {
+ 	if (page_is_guard(page))
 -- 
-2.37.1
+2.25.1
 
 
