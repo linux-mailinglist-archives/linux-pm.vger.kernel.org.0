@@ -1,74 +1,40 @@
-Return-Path: <linux-pm+bounces-4406-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4407-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1D0886796E
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Feb 2024 16:05:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 16AC8867BF8
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Feb 2024 17:29:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9148E1F26FFD
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Feb 2024 15:05:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B4B11F2B5A8
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Feb 2024 16:29:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DECCC130AFE;
-	Mon, 26 Feb 2024 14:43:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AbPBzyEG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87C1012F588;
+	Mon, 26 Feb 2024 16:29:24 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3CDB12BF07
-	for <linux-pm@vger.kernel.org>; Mon, 26 Feb 2024 14:43:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FF8012F39B;
+	Mon, 26 Feb 2024 16:29:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708958587; cv=none; b=tN4MGyKxFvBsnmm+fmboEV+QpsMNAGdImzoEuLOz1cFzRlmvuVX46oXz0zeQzuI7N92smYHYSfLwmU0JeDYCxXJ7++0kE5z/zNmE2Ntz0toV0PSOA+6cFSLd+lcE50KO38AZP1dOqdgEKHL9taMCXZtTmmfet+sLnS9ppB+TwYA=
+	t=1708964964; cv=none; b=spCevTfV3iw0pqYcUYlzkkC02G9tcL1D66u6gxhIMpzFkw91aluQXIQduHPo0bgEAtouPFUePHu3dsHhej4wHNysIDb/FyAEJBuHTbViai0mbwv3AsEuevnxjedCE9MzY3BVfe10pY0+N4vfgq6MfE/gvZnVC151qUNwQq2nbw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708958587; c=relaxed/simple;
-	bh=194/ZcRx90rMT6lhPS7u93Tfa7QH/NXGR85wnsvgn5U=;
+	s=arc-20240116; t=1708964964; c=relaxed/simple;
+	bh=RqI1ZOwpCqfHOLSUWAUd97Slp9znorLCgecOqeZopt8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H3Md/2pdGGB4ilwQwVDwy9zYt6MzmbPGMUQ41c3NBVZYZczV+BkTGPxj7Tn4Z7RG3lXFim7AIKXa2KZv4aZom7dHPc9Y6Vd5VT1k9YitHh46io0HhLYBfwW+aN+n8Pt9qio06vLVw9MpBKWWl9GA1bYSxYAeNw9HIXFyNoNbDvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=AbPBzyEG; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-41298159608so14457405e9.0
-        for <linux-pm@vger.kernel.org>; Mon, 26 Feb 2024 06:43:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708958584; x=1709563384; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=D9tbNaYjJUe+G+wb/l7hVhkbXYhWJjIHDAkvy08BoSQ=;
-        b=AbPBzyEGQYrNJGEAKMfDv6AUSvzbGZsU3PAhyXTa4KdkMVXcOGi0pSnF5sredsxVT9
-         B3Iia8TFBXkZX5FCpS3QSoVq6rs/IYrKf8h0Sy0aAJpDXOYJCChK0JImZA9d3TDvmX44
-         SIRGEwYafdF8UlpqB2j25Z/O4mt6FL8LLzUVrXz1h2VS4TUcjX9i8VTR90QbKeXjJwaC
-         Yqlkg7DlFv5PyqwzO4DWelZ2+MRUarfuZ5QFhiYa2sZhtdqmzvFVnroJFBz2NPNmbhwj
-         XxPJZVJ1zGPDiUFapK6Ks0Z7BW6m4SaD7tCihnErgqP7B7ix30uXd3qQ9bX5QY798vBD
-         12Jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708958584; x=1709563384;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D9tbNaYjJUe+G+wb/l7hVhkbXYhWJjIHDAkvy08BoSQ=;
-        b=H+UScMtEqXnc0AvGmbV39QtOQB8DA/iVOpKAQNmNREtPdlKxtZRVItb9liZ/Hk69vV
-         AAQI6dRKBetazE+vSrU6D160LhAc6Vb2aBGQ7iz1mJSnoJKdM++lPTTzECZJnotVvZbk
-         2+hEKWYKe6TbCyjjj9qMTwueywrHE0SQEQzNvnwq7R8d93yA7r1nYdtHJGA16SU4LehD
-         bp8VQORKTIVXI3MwiVrPugB47ZM3qvgMYpvS01EWNB3PpqUmRUQj5O2CTnOBv7LOjR0U
-         wyKv2CcEB6mNeg2qde1RSJsKmlVzMvjlqqhGQ+tkI1vY5duYE9yhqx4oBr03m0txugo+
-         BPJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX308CndHyEnKI4MaRk0xCxrlKn5FyJt+rvDzROCsQjjF8QC91u+xrcO7jFkl2SnTQyhGC+nXOBba+tGnZTrixZ/+0g/tQMJgM=
-X-Gm-Message-State: AOJu0Yzxpge7exJn/gKsRswJb8iMEyFJSuoRSIPSZtsOPsb/wGDmN3bk
-	ACnlVL8iJy6RHop3BPhhqu1pW7G4rPztjiimukzuFW9243s6iGcpki8ZcsYAPfI=
-X-Google-Smtp-Source: AGHT+IH2Ee7jy/1HUKjhnM0FzWr1llSFk1mmZxb+jGS8XK1HpX8qhtkl8SiSACuchuYO1pFYaOe8YA==
-X-Received: by 2002:a05:600c:1992:b0:412:9c2a:7622 with SMTP id t18-20020a05600c199200b004129c2a7622mr5989940wmq.8.1708958584336;
-        Mon, 26 Feb 2024 06:43:04 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id n1-20020a05600c4f8100b004127ead18aasm8586036wmq.22.2024.02.26.06.43.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Feb 2024 06:43:04 -0800 (PST)
-Message-ID: <6f4a4d7f-e258-47de-ae9d-026370339641@linaro.org>
-Date: Mon, 26 Feb 2024 15:43:03 +0100
+	 In-Reply-To:Content-Type; b=SsiOx7i+OpFiWWjsxPw8CrmBmI7bPhzC5OB/mLuiczkPuNOMuGOZe6MSCIZoDrqDXa+LinKeCDhfe0vUS8bQomTe8DmUuSZfSJOca2ap1g9tIXohHDtjQ3WErj+D37dVnTbtJlpPWsV+76IVVpOsL6M+0zgZclRbFEDvvirMQ3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 230FBDA7;
+	Mon, 26 Feb 2024 08:30:01 -0800 (PST)
+Received: from [10.57.12.43] (unknown [10.57.12.43])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D7C9B3F73F;
+	Mon, 26 Feb 2024 08:29:19 -0800 (PST)
+Message-ID: <b86a2c0c-72a6-4b14-92f6-523da8291631@arm.com>
+Date: Mon, 26 Feb 2024 16:29:36 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -76,39 +42,59 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2] thermal/drivers/qoriq: fix getting tmu range
+Subject: Re: [PATCH 1/3] OPP: Extend dev_pm_opp_data with turbo support
 Content-Language: en-US
-To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, rafael@kernel.org
-Cc: rui.zhang@intel.com, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
- Sascha Hauer <s.hauer@pengutronix.de>
-References: <20240226003657.3012880-1-peng.fan@oss.nxp.com>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20240226003657.3012880-1-peng.fan@oss.nxp.com>
+To: Sibi Sankar <quic_sibis@quicinc.com>
+Cc: linux-arm-kernel@lists.infradead.org, sboyd@kernel.org,
+ morten.rasmussen@arm.com, viresh.kumar@linaro.org, rafael@kernel.org,
+ cristian.marussi@arm.com, sudeep.holla@arm.com, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, quic_mdtipton@quicinc.com,
+ linux-arm-msm@vger.kernel.org, nm@ti.com, dietmar.eggemann@arm.com
+References: <20240117110443.2060704-1-quic_sibis@quicinc.com>
+ <20240117110443.2060704-2-quic_sibis@quicinc.com>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20240117110443.2060704-2-quic_sibis@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 26/02/2024 01:36, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+
+
+On 1/17/24 11:04, Sibi Sankar wrote:
+> Let's extend the dev_pm_opp_data with a turbo variable, to allow users to
+> specify if it's a boost frequency for a dynamically added OPP.
 > 
-> TMU Version 1 has 4 TTRCRs, while TMU Version >=2 has 16 TTRCRs.
-> So limit the len to 4 will report "invalid range data" for i.MX93.
-> 
-> This patch drop the local array with allocated ttrcr array and
-> able to support larger tmu ranges.
-> 
-> Fixes: f12d60c81fce ("thermal/drivers/qoriq: Support version 2.1")
-> Tested-by: Sascha Hauer <s.hauer@pengutronix.de>
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
 > ---
+>   drivers/opp/core.c     | 1 +
+>   include/linux/pm_opp.h | 1 +
+>   2 files changed, 2 insertions(+)
+> 
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index c4e0432ae42a..e233734b7220 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -2065,6 +2065,7 @@ int _opp_add_v1(struct opp_table *opp_table, struct device *dev,
+>   	/* populate the opp table */
+>   	new_opp->rates[0] = data->freq;
+>   	new_opp->level = data->level;
+> +	new_opp->turbo = data->turbo;
+>   	tol = u_volt * opp_table->voltage_tolerance_v1 / 100;
+>   	new_opp->supplies[0].u_volt = u_volt;
+>   	new_opp->supplies[0].u_volt_min = u_volt - tol;
+> diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
+> index 76dcb7f37bcd..a08a1fb1ca2a 100644
+> --- a/include/linux/pm_opp.h
+> +++ b/include/linux/pm_opp.h
+> @@ -93,6 +93,7 @@ struct dev_pm_opp_config {
+>    * @u_volt: The voltage in uV for the OPP.
+>    */
+>   struct dev_pm_opp_data {
+> +	bool turbo;
 
-Applied, thanks
+Please add description of that new field, like other
+fields in the comment above.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+>   	unsigned int level;
+>   	unsigned long freq;
+>   	unsigned long u_volt;
 
