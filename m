@@ -1,181 +1,152 @@
-Return-Path: <linux-pm+bounces-4395-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4396-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FDE7866F2F
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Feb 2024 10:50:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F34B866F37
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Feb 2024 10:51:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 600B0B26DE5
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Feb 2024 09:49:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D2E11F24B07
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Feb 2024 09:51:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9B501DDF2;
-	Mon, 26 Feb 2024 09:15:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E74212BEB9;
+	Mon, 26 Feb 2024 09:15:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OEFa3PNl"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="R12ayGvb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BEA31CD37;
-	Mon, 26 Feb 2024 09:15:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E05AE12BEB4
+	for <linux-pm@vger.kernel.org>; Mon, 26 Feb 2024 09:15:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708938908; cv=none; b=tZhRaN3l0+WHeSyTIgDbVNn9YUBdvhVK5nT+GcQgb6AjYw40o19uKVhStK2eLOv7KsNtY8YXWx/wyxGx8KUmxux6/tRrmoo5iLekxPjjCs4nTOhOcSjLAsx8tyTFwhp/apkk9GE8ftkeLqbm98r2FG9Mo9EXvPdacYvoI2cuFp0=
+	t=1708938934; cv=none; b=OaNXAdhKfpGj0EaSC5Zwoa7JfqE3GNx0keIn4/0S4gh4RTDLtRMuXVFzUXzR4fbQujYSXghs1vP5lhuQD+6tXoFkgyf/bXdR3xiPaM5t9EHT/ncrFQIDtnX802WGCSr57wD0gYj8YDcQuaruSvv1CZyZwY1AmGdctPBmGhK7B6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708938908; c=relaxed/simple;
-	bh=icBzWWPMhTbM0D+VTKjVVVPUQSzGPofIgP2e1+sbI4k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dMHxfG5Vby+oqzwBUxKWrUsLWeIA3bSyLjJv2PfSeOqXqzfvlYRZ73Exw9BtKeC5ALo/MHmew1uU+N6VAtfWKmzLNkm2ls8Mq9KEOktx2W7rciFeNp1+Gmj9ZjFssSJ2dfOkWA62v0kASpVwZRCq1rkgVwSjG4abc6jFYKD2fA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OEFa3PNl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8856AC433F1;
-	Mon, 26 Feb 2024 09:15:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708938908;
-	bh=icBzWWPMhTbM0D+VTKjVVVPUQSzGPofIgP2e1+sbI4k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OEFa3PNl5ppckn9UbfsoIUdeNBKcqnPxAUGlk9sAVeRMNg5VPY9Fmb21oGBfB6uzp
-	 FPbl1yxOYcFbYOJv1XPl/cI4X5sbbMQveHqeirKN8cb6Fe2/r8vyjUMNwKqXznFb8G
-	 X31wkyjD+Sz2h2rMrS6cVjLkjmF2IRj2qKBI69sUhbHbPcpcC96RmHqQ2hoiSDkPi0
-	 qHMeUx4LN2gH3o5nqR5rLeZDAv0gwiAnz0S/pW6QPlaJWVz9HxVm34FMGVgV4DLsf1
-	 pHGht4iB0c8dfrpHggPH3qynqxi3jMR9NVj28lmb72+BMQ8CAm8nWVfEtp+zISiuJz
-	 HD9T+3NkICQ7Q==
-Date: Mon, 26 Feb 2024 11:14:24 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: David Hildenbrand <david@redhat.com>,
-	Yaxiong Tian <13327272236@163.com>
-Cc: rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
-	keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
-	akpm@linux-foundation.org, ardb@kernel.org,
-	wangkefeng.wang@huawei.com, catalin.marinas@arm.com,
-	will@kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-	Yaxiong Tian <tianyaxiong@kylinos.cn>,
-	xiongxin <xiongxin@kylinos.cn>
-Subject: Re: [PATCH] PM: hibernate: Fix level3 translation fault in
- swsusp_save()
-Message-ID: <ZdxWcG2XCqBum3_R@kernel.org>
-References: <20240226034225.48689-1-13327272236@163.com>
- <8d70939f-ca14-4167-9647-b8f44ddcbb98@redhat.com>
+	s=arc-20240116; t=1708938934; c=relaxed/simple;
+	bh=QF9YeSn2bc4tYDCafTxeVXBSQs58EaDIiH/nuRQ20NI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Np2vIPdnuGEl2E9/otz6Ad3hzYsib8L3kJ0SLpbz1pWA3YnjEBuLwgv0JCcHC4usYWU+wJGlb5MXKkrOe5XrKl+k/2r0ooD/Qy8pcrsDnd30IE31Gg/eufpQuAUYDwE+soW3nBTBBYDhh1lzz74bLoAYHdwmoJ+8c3+bNk1t+N4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=R12ayGvb; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-564e4477b7cso11381a12.1
+        for <linux-pm@vger.kernel.org>; Mon, 26 Feb 2024 01:15:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1708938931; x=1709543731; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3PpUbqhc+g7vhrTDiU7KzbrIeL60wiFB52dzsG8i29k=;
+        b=R12ayGvbH08lYqy3CtK2M4FJOtfyDrXmDiUE4Vr12v4+XBR8Q7NAQqpSGLfwCzLvzu
+         6wZ/0CrFVpw6I59RqzAIimZkZIEWyvwloh7cJ9uzKzzJIXrJbCkGuHQAhW/N4PndBKh+
+         wh1EuusR1wpcWq6LqTf92jVqu1ZjqCP3iEos4QN3Ho2PvtAGPHcQsnzOfNmyNiTkvVRG
+         LP0h4OIG8X/ox1qJl9+vy/TT4/PEXsj45rH4UYOTDmH/qaRrZU7anMSeIRHvsFrwHv/N
+         oxAoCC09Ejkl2GnTAqRFtzHpt4Y++Q8IF9GYWlGJSKETX197PQedgwCAdPBmiTLc9wr7
+         7FzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708938931; x=1709543731;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3PpUbqhc+g7vhrTDiU7KzbrIeL60wiFB52dzsG8i29k=;
+        b=PWd1OpDun8jRKhAadblKbkLZC3p9WiTcEnMVQy9kSFRSVGeqxQq3a/FFLFTa/sh3uv
+         tqO/p2WN/37HYkms0znF5H4KsviF52hJ2ywcX2F/cZThoH2Kh4yGi/1+6I+b9IZzxW8f
+         ygQLwV4DFfsHcVTpt7iwjTbldB/YrrmGtiYFaOj7X1N/OqJ/DYUduQRdyBfSqohRkpdU
+         8LtqcmgHPZgu+zMiqNG7SZJZIy1zvzEgnNUNCMplpuuQ19L3iXqlbmEkpQ8r7iTS3EcA
+         /LyGmwnaf2dzRteQq+s2w2qEXzCpxxb8BslnhqHwkpuNjM4r1Dzmbfdfod9+D6sU+MEs
+         FvcA==
+X-Forwarded-Encrypted: i=1; AJvYcCW8wI8efyYguSlzpCLY07mNO+2wG/1ZKmwFMIGpfDkUNR8Smie+d4EMlQem97kFSpsHISFOLjAT1g4OtPWuzo81kF/EmpNqz/w=
+X-Gm-Message-State: AOJu0Yyi9ZnOJGY+uIQNnbK+LkYN4fKIsS3xfhu/ge3xX9TDsYWYjOaJ
+	CntPYffZHwlUjcZ5yTCWi/hmWC9DeNalUlCg3a5ASIeZRRRir2jfurT63xRP29XVM2A7NGrrcN6
+	spJ/hNvm3ir9ISfV929q7QsjDa96AmV+TbKhW
+X-Google-Smtp-Source: AGHT+IFYC4cdUdD58nWD8MZNjN7IfTcOlMWs2ezscub4EPb/vnrtmbhgho8MUB/aoZHnXQk3kNcCtBi9wQrZP9SgN40=
+X-Received: by 2002:a50:c30a:0:b0:566:306:22b7 with SMTP id
+ a10-20020a50c30a000000b00566030622b7mr49949edb.1.1708938930851; Mon, 26 Feb
+ 2024 01:15:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8d70939f-ca14-4167-9647-b8f44ddcbb98@redhat.com>
+References: <20240223143833.1509961-1-guanyulin@google.com> <Zdi3UWWRfKw1N_Jn@smile.fi.intel.com>
+In-Reply-To: <Zdi3UWWRfKw1N_Jn@smile.fi.intel.com>
+From: Guan-Yu Lin <guanyulin@google.com>
+Date: Mon, 26 Feb 2024 17:15:00 +0800
+Message-ID: <CAOuDEK1KbZ9=W3ffWN-h_AAhbB9RqJvKsnF4G9qus3o2wkk=3w@mail.gmail.com>
+Subject: Re: [PATCH v3] PM / core: conditionally skip system pm in
+ device/driver model
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com, 
+	gregkh@linuxfoundation.org, petr.tesarik.ext@huawei.com, 
+	rdunlap@infradead.org, james@equiv.tech, broonie@kernel.org, 
+	james.clark@arm.com, masahiroy@kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 26, 2024 at 09:37:06AM +0100, David Hildenbrand wrote:
-> On 26.02.24 04:42, Yaxiong Tian wrote:
-> > From: Yaxiong Tian <tianyaxiong@kylinos.cn>
-> > 
-> > On ARM64 machines using UEFI, if the linear map is not set (can_set_direct_map()
-> > return false), swsusp_save() will fail due to can't finding the map table
-> > under the nomap memory.such as:
+On Fri, Feb 23, 2024 at 11:18=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Fri, Feb 23, 2024 at 02:38:29PM +0000, Guan-Yu Lin wrote:
+> > In systems with a main processor and a co-processor, asynchronous
+> > controller management can lead to conflicts.  One example is the main
+> > processor attempting to suspend a device while the co-processor is
+> > actively using it. To address this, we introduce a new sysfs entry
+> > called "conditional_skip". This entry allows the system to selectively
+> > skip certain device power management state transitions. To use this
+> > feature, set the value in "conditional_skip" to indicate the type of
+> > state transition you want to avoid.  Please review /Documentation/ABI/
+> > testing/sysfs-devices-power for more detailed information.
+>
+> ...
+>
+> > +static ssize_t conditional_skip_store(struct device *dev,
+> > +                                   struct device_attribute *attr,
+> > +                                   const char *buf, size_t n)
+> > +{
+>
+> > +     int ret;
+>
+> > +     if (kstrtoint(buf, 0, &ret))
+>
+> Why is it int? It seems like flags, should not be unsigned as u32 or so?
+>
 
-can_set_direct_map() has nothing to do with presence or absence of the
-linear map.
+The ".event" member in struct pm_message is an int, but the values
+assigned to it are used like bit flags (e.g. PM_EVENT_FREEZE=3D0x1,
+PM_EVENT_SUSPEND=3D0x2, PM_EVENT_HIBERNATE=3D0x4). Is this an intentional
+design choice? We might need to change the design accordingly.
 
-Do you mean that kernel_page_present() presumes that a page is present when
-can_set_direct_map() returns false even for NOMAP ranges?
+> > +             return -EINVAL;
+>
+> Do not shadow the real error code without justification.
+>
 
-> > [   48.532162] Unable to handle kernel paging request at virtual address ffffff8000000000
-> > [   48.532162] Mem abort info:
-> > [   48.532162]   ESR = 0x0000000096000007
-> > [   48.532162]   EC = 0x25: DABT (current EL), IL = 32 bits
-> > [   48.532162]   SET = 0, FnV = 0
-> > [   48.532162]   EA = 0, S1PTW = 0
-> > [   48.532162]   FSC = 0x07: level 3 translation fault
-> > [   48.532162] Data abort info:
-> > [   48.532162]   ISV = 0, ISS = 0x00000007, ISS2 = 0x00000000
-> > [   48.532162]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-> > [   48.532162]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-> > [   48.532162] swapper pgtable: 4k pages, 39-bit VAs, pgdp=00000000eeb0b000
-> > [   48.532162] [ffffff8000000000] pgd=180000217fff9803, p4d=180000217fff9803, pud=180000217fff9803, pmd=180000217fff8803, pte=0000000000000000
-> > [   48.532162] Internal error: Oops: 0000000096000007 [#1] SMP
-> > [   48.532162] Internal error: Oops: 0000000096000007 [#1] SMP
-> > [   48.532162] Modules linked in: xt_multiport ipt_REJECT nf_reject_ipv4 xt_conntrack nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 libcrc32c iptable_filter bpfilter rfkill at803x snd_hda_codec_hdmi snd_hda_intel snd_intel_dspcfg dwmac_generic stmmac_platform snd_hda_codec stmmac joydev pcs_xpcs snd_hda_core phylink ppdev lp parport ramoops reed_solomon ip_tables x_tables nls_iso8859_1 vfat multipath linear amdgpu amdxcp drm_exec gpu_sched drm_buddy hid_generic usbhid hid radeon video drm_suballoc_helper drm_ttm_helper ttm i2c_algo_bit drm_display_helper cec drm_kms_helper drm
-> > [   48.532162] CPU: 0 PID: 3663 Comm: systemd-sleep Not tainted 6.6.2+ #76
-> > [   48.532162] Source Version: 4e22ed63a0a48e7a7cff9b98b7806d8d4add7dc0
-> > [   48.532162] Hardware name: Greatwall GW-XXXXXX-XXX/GW-XXXXXX-XXX, BIOS KunLun BIOS V4.0 01/19/2021
-> > [   48.532162] pstate: 600003c5 (nZCv DAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > [   48.532162] pc : swsusp_save+0x280/0x538
-> > [   48.532162] lr : swsusp_save+0x280/0x538
-> > [   48.532162] sp : ffffffa034a3fa40
-> > [   48.532162] x29: ffffffa034a3fa40 x28: ffffff8000001000 x27: 0000000000000000
-> > [   48.532162] x26: ffffff8001400000 x25: ffffffc08113e248 x24: 0000000000000000
-> > [   48.532162] x23: 0000000000080000 x22: ffffffc08113e280 x21: 00000000000c69f2
-> > [   48.532162] x20: ffffff8000000000 x19: ffffffc081ae2500 x18: 0000000000000000
-> > [   48.532162] x17: 6666662074736420 x16: 3030303030303030 x15: 3038666666666666
-> > [   48.532162] x14: 0000000000000b69 x13: ffffff9f89088530 x12: 00000000ffffffea
-> > [   48.532162] x11: 00000000ffff7fff x10: 00000000ffff7fff x9 : ffffffc08193f0d0
-> > [   48.532162] x8 : 00000000000bffe8 x7 : c0000000ffff7fff x6 : 0000000000000001
-> > [   48.532162] x5 : ffffffa0fff09dc8 x4 : 0000000000000000 x3 : 0000000000000027
-> > [   48.532162] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 000000000000004e
-> > [   48.532162] Call trace:
-> > [   48.532162]  swsusp_save+0x280/0x538
-> > [   48.532162]  swsusp_arch_suspend+0x148/0x190
-> > [   48.532162]  hibernation_snapshot+0x240/0x39c
-> > [   48.532162]  hibernate+0xc4/0x378
-> > [   48.532162]  state_store+0xf0/0x10c
-> > [   48.532162]  kobj_attr_store+0x14/0x24
-> > 
-> > QEMU ARM64 using UEFI also has the problem by setting can_set_direct_map()
-> > return false.
+Thanks for suggesting the desired implementation. I'll refactor it in
+the next version.
 
-Huh?
-Why would you do that?
+> > +     ret &=3D (PM_EVENT_FREEZE|PM_EVENT_SUSPEND|PM_EVENT_HIBERNATE);
+> > +
+> > +     dev->power.conditional_skip_pm =3D ret;
+> > +
+> > +     return n;
+> > +}
+>
+> > +
+>
+> Redundant blank line.
+>
 
-> > 
-> > Since the NOMAP regions are now marked as PageReserved(), pfn walkers
-> > and the rest of core mm will treat them as unusable memory. So this
-> > regions should not saved in hibernation.
-> > 
-> > This problem may cause by changes to pfn_valid() logic in commit
-> > a7d9f306ba70 ("arm64: drop pfn_valid_within() and simplify pfn_valid()").
-> > 
-> > So to fix it, we add pfn_is_map_memory() check in saveable_page(). It
-> > make such regisons don't save in hibernation.
-> > 
-> > Fixes: a7d9f306ba70 ("arm64: drop pfn_valid_within() and simplify pfn_valid()")
-> > Co-developed-by: xiongxin <xiongxin@kylinos.cn>
-> > Signed-off-by: xiongxin <xiongxin@kylinos.cn>
-> > Signed-off-by: Yaxiong Tian <tianyaxiong@kylinos.cn>
-> > ---
-> >   kernel/power/snapshot.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-> > index 0f12e0a97e43..a06e3b1869d2 100644
-> > --- a/kernel/power/snapshot.c
-> > +++ b/kernel/power/snapshot.c
-> > @@ -1400,7 +1400,7 @@ static struct page *saveable_page(struct zone *zone, unsigned long pfn)
-> >   		return NULL;
-> >   	if (PageReserved(page)
-> > -	    && (!kernel_page_present(page) || pfn_is_nosave(pfn)))
-> > +	    && (!kernel_page_present(page) || pfn_is_nosave(pfn) || !pfn_is_map_memory(pfn)))
+Thanks for the heads-up.
 
-I think adding the check for !pfn_is_map_memory() to arm64::pfn_is_nosave()
-is the best way to fix this.
-
-> >   		return NULL;
-> >   	if (page_is_guard(page))
-> 
-> On top of which tree does this apply?
-> 
-> All occurrences of pfn_is_map_memory() are in arch/arm64, how does this
-> compile on other architectures?
-> 
-> -- 
-> Cheers,
-> 
-> David / dhildenb
-> 
-
--- 
-Sincerely yours,
-Mike.
+> > +static DEVICE_ATTR_RW(conditional_skip);
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
 
