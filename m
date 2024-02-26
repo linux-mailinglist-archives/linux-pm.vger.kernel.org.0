@@ -1,220 +1,116 @@
-Return-Path: <linux-pm+bounces-4386-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4387-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B72EF866ABA
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Feb 2024 08:31:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A514866B1A
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Feb 2024 08:40:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB1BF1C20C39
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Feb 2024 07:31:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 05EBF283EFD
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Feb 2024 07:40:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 858661C2A6;
-	Mon, 26 Feb 2024 07:31:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEF211CA8C;
+	Mon, 26 Feb 2024 07:35:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JsGslZ9K"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HFGl4nCL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603A51BF50;
-	Mon, 26 Feb 2024 07:31:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21D1C1BF28;
+	Mon, 26 Feb 2024 07:35:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708932682; cv=none; b=LiLHUk+Ei4qk7BDuZaEZ+hzgrREIrLN/cKGVnoSazNhcNOpy89k9ebSuRhwbHfPnnwCCyBymzBN/zaF6AF7///WGOKUjftAThhCPOZrOuolodCKR/Fbf7R55pyibq+cD1xFQMFAs8pki40fefKoOpXi1LcSD1pofJ5s7C9Wx0Pk=
+	t=1708932946; cv=none; b=YPTWLUlzBDTwAv869BEt0heGhVHh+Qk99vs9+MITWL5s8lojbJ5OHOSng0aMDa7I8YQ2v1m+8hJ7D8WNCBC07TPm93+QYbReHJZDyEdR5tgLJ6GX5KUwyMiyeaerMYtzBwbKLqbnO5JoHILUXAztwoVqZCAAhwDGvgQuZk/ymYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708932682; c=relaxed/simple;
-	bh=TYixwRJ/HLIf39is6KOuK1f7P0/ZpeuMCtRoeFDjtsw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=TN5HJjkT90Ldki8OiDg8bkldvoLRI3Zpff4KuIUGYEwpXl84SbMtCCzg5emLzO6+wpt06n4fKP70H6prbsqJFNbo+GezvwbkuZNaV5714hCdv1/iQ2gh66hCb6iQiKKUs+XY1Y+ISyA8N9/oou2Hqr3VvAjtpKyO0hxOUlkMYYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JsGslZ9K; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E72C2C41679;
-	Mon, 26 Feb 2024 07:31:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708932681;
-	bh=TYixwRJ/HLIf39is6KOuK1f7P0/ZpeuMCtRoeFDjtsw=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=JsGslZ9KLtiyyCW94IzHxMy8vZqyWx7CKC8zKoHOHg1q8oGixHtpLaCrnLC4gvdAW
-	 Zm+QiaeHW2vkR2mkQu7OY1YO2+n/HNY390RND5R+k5hQXuyqHfUfMCeXBO6Yn2ry99
-	 YgC7Nda2+P4C3ajhpJ6r2a6ZkyNbhmrL+CXtZlcYXqKHD/e5g7/CioyoXh7eLrZdNc
-	 DRkPJCCeFLVSUu1rpbOH1ITwwTrH26ET2RPcFxcudnzvdITPEiY6dCrWXYi/bHvnCT
-	 VCoa8kOTo3v10lEbKfgnbNv+Ba4Z2QAyz8jqzIY3+qU2bVHVPkSdaUycnys0g4XxaG
-	 vsM2bkOlRENIQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7CE8C54E49;
-	Mon, 26 Feb 2024 07:31:21 +0000 (UTC)
-From:
- Nikita Shubin via B4 Relay <devnull+nikita.shubin.maquefel.me@kernel.org>
-Date: Mon, 26 Feb 2024 10:30:01 +0300
-Subject: [PATCH v8 05/38] power: reset: Add a driver for the ep93xx reset
+	s=arc-20240116; t=1708932946; c=relaxed/simple;
+	bh=ea7JHUhie8Kli8vmxWmR/LWrRmbZu8hDvuuE7vFplkU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OIXzaKdqkP84bdc7vwDzfztUFsW0LCGzITFQGP6JSf/1DbvdglslGEdHjxfNuJbPwCdR1vhQ+EvXWh4nSefvvMrYF0MT1cEhXWASj2GAqMEhigwzRuC0DFfjGZLe3C2buueFt5o+HLGC6XH1nesgkhrtvpK2ND6KpKEtHE5dz8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HFGl4nCL; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708932945; x=1740468945;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ea7JHUhie8Kli8vmxWmR/LWrRmbZu8hDvuuE7vFplkU=;
+  b=HFGl4nCLlLqFuL61V3CWNUmE+aPohHkFRuCr7RRsHTjGM5nUmYKmUMj7
+   tNbuzBmWpnYmbJ4UbCyYWfu2VBympTlCZdF3MHyRQfWAf/zYKeEIN52eW
+   tDPMNsHHfx24FqEVDUwtaeAtw/IzCyEkFi6r0ciWndhxePTsmWuBqdw9M
+   YTQGRNq6VxdgJ/sIofc7Eg/WwTQ5a4Vj6jO+lu/h0zD7oqp+uYCG84Mq7
+   VI9C4M9DjzOqWkkwjwbKZDUntQ6Fk8l6kNGWxxHdv4beYBeNNs6VuHVCD
+   HRlGtnBUN1PMnqdIwiNd82sJ96NTxGdio/o3gZBpF8NH5iftsaVg53alM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10995"; a="3366131"
+X-IronPort-AV: E=Sophos;i="6.06,185,1705392000"; 
+   d="scan'208";a="3366131"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2024 23:35:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10995"; a="937029406"
+X-IronPort-AV: E=Sophos;i="6.06,185,1705392000"; 
+   d="scan'208";a="937029406"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2024 23:35:40 -0800
+Date: Mon, 26 Feb 2024 09:35:37 +0200
+From: Raag Jadav <raag.jadav@intel.com>
+To: Bjorn Helgaas <helgaas@kernel.org>, mika.westerberg@linux.intel.com
+Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>, bhelgaas@google.com,
+	mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com,
+	stanislaw.gruszka@linux.intel.com, lukas@wunner.de,
+	rafael@kernel.org, ilpo.jarvinen@linux.intel.com,
+	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+	sashal@kernel.org
+Subject: Re: [PATCH v1] PCI / PM: Really allow runtime PM without callback
+ functions
+Message-ID: <Zdw_SV81YfJvCx2I@black.fi.intel.com>
+References: <93c77778-fbdc-4345-be8b-04959d1ce929@linux.intel.com>
+ <20240214165800.GA1254628@bhelgaas>
+ <Zc0fW0ZIzfNOMj2w@black.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240226-ep93xx-v8-5-3136dca7238f@maquefel.me>
-References: <20240226-ep93xx-v8-0-3136dca7238f@maquefel.me>
-In-Reply-To: <20240226-ep93xx-v8-0-3136dca7238f@maquefel.me>
-To: Sebastian Reichel <sre@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
- Arnd Bergmann <arnd@arndb.de>
-X-Mailer: b4 0.13-dev-e3e53
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1708932678; l=4433;
- i=nikita.shubin@maquefel.me; s=20230718; h=from:subject:message-id;
- bh=KjqqsnfXxGMwFFM/StkMK0mGDkJJNduKtVKAsKoiuVY=; =?utf-8?q?b=3D3drhl5EXDiGL?=
- =?utf-8?q?DTo/4kW6UjThL9XgCB1A+tmm5lWyZZEZDU5EX5a1FEXqet4OON7zfEIYc1HKxTN2?=
- c9LME5WHAIfb8AEngpWFSwPrZcDNizBDnmKkimNOnAVu/JcuVFDw
-X-Developer-Key: i=nikita.shubin@maquefel.me; a=ed25519;
- pk=vqf5YIUJ7BJv3EJFaNNxWZgGuMgDH6rwufTLflwU9ac=
-X-Endpoint-Received:
- by B4 Relay for nikita.shubin@maquefel.me/20230718 with auth_id=65
-X-Original-From: Nikita Shubin <nikita.shubin@maquefel.me>
-Reply-To: <nikita.shubin@maquefel.me>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zc0fW0ZIzfNOMj2w@black.fi.intel.com>
 
-From: Nikita Shubin <nikita.shubin@maquefel.me>
+On Wed, Feb 14, 2024 at 10:15:29PM +0200, Raag Jadav wrote:
+> On Wed, Feb 14, 2024 at 10:58:00AM -0600, Bjorn Helgaas wrote:
+> > On Wed, Feb 14, 2024 at 08:58:48AM +0200, Jarkko Nikula wrote:
+> > > On 2/13/24 22:06, Bjorn Helgaas wrote:
+> > > > > Debugged-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > > > 
+> > > > Sounds like this resolves a problem report?  Is there a URL we can
+> > > > cite?  If not, at least a mention of what the user-visible problem is?
+> > > > 
+> > > >  From the c5eb1190074c commit log, it sounds like maybe this allows
+> > > > devices to be autosuspended when they previously could not be?
+> > > > 
+> > > > Possibly this should have "Fixes: c5eb1190074c ("PCI / PM: Allow
+> > > > runtime PM without callback functions")" since it sounds like it goes
+> > > > with it?
+> > > > 
+> > > I don't think there's known regression but my above commit wasn't complete.
+> > > Autosuspending works without runtime PM callback as long as the driver has
+> > > the PM callbacks structure set.
+> > 
+> > I didn't suggest there was a regression, but if we mention that Mika
+> > debugged something, I want to know what the something was.
+> 
+> Considering it's not a bug to begin with, perhaps we can change it to
+> Suggested-by or Co-developed-by?
 
-Implement the reset behaviour of the various EP93xx SoCS
-in drivers/power/reset.
+Hi Mika,
 
-It used to be located in arch/arm/mach-ep93xx.
+If you are okay with this, please let me know and perhaps suggest a better
+fit for the scenario.
 
-Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
-Acked-by: Sebastian Reichel <sre@kernel.org>
----
- drivers/power/reset/Kconfig          | 10 +++++
- drivers/power/reset/Makefile         |  1 +
- drivers/power/reset/ep93xx-restart.c | 84 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 95 insertions(+)
-
-diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-index fece990af4a7..389d5a193e5d 100644
---- a/drivers/power/reset/Kconfig
-+++ b/drivers/power/reset/Kconfig
-@@ -75,6 +75,16 @@ config POWER_RESET_BRCMSTB
- 	  Say Y here if you have a Broadcom STB board and you wish
- 	  to have restart support.
- 
-+config POWER_RESET_EP93XX
-+	bool "Cirrus EP93XX reset driver" if COMPILE_TEST
-+	depends on MFD_SYSCON
-+	default ARCH_EP93XX
-+	help
-+	  This driver provides restart support for Cirrus EP93XX SoC.
-+
-+	  Say Y here if you have a Cirrus EP93XX SoC and you wish
-+	  to have restart support.
-+
- config POWER_RESET_GEMINI_POWEROFF
- 	bool "Cortina Gemini power-off driver"
- 	depends on ARCH_GEMINI || COMPILE_TEST
-diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
-index a95d1bd275d1..10782d32e1da 100644
---- a/drivers/power/reset/Makefile
-+++ b/drivers/power/reset/Makefile
-@@ -7,6 +7,7 @@ obj-$(CONFIG_POWER_RESET_ATC260X) += atc260x-poweroff.o
- obj-$(CONFIG_POWER_RESET_AXXIA) += axxia-reset.o
- obj-$(CONFIG_POWER_RESET_BRCMKONA) += brcm-kona-reset.o
- obj-$(CONFIG_POWER_RESET_BRCMSTB) += brcmstb-reboot.o
-+obj-$(CONFIG_POWER_RESET_EP93XX) += ep93xx-restart.o
- obj-$(CONFIG_POWER_RESET_GEMINI_POWEROFF) += gemini-poweroff.o
- obj-$(CONFIG_POWER_RESET_GPIO) += gpio-poweroff.o
- obj-$(CONFIG_POWER_RESET_GPIO_RESTART) += gpio-restart.o
-diff --git a/drivers/power/reset/ep93xx-restart.c b/drivers/power/reset/ep93xx-restart.c
-new file mode 100644
-index 000000000000..57cfb8620faf
---- /dev/null
-+++ b/drivers/power/reset/ep93xx-restart.c
-@@ -0,0 +1,84 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Cirrus EP93xx SoC reset driver
-+ *
-+ * Copyright (C) 2021 Nikita Shubin <nikita.shubin@maquefel.me>
-+ */
-+
-+#include <linux/bits.h>
-+#include <linux/container_of.h>
-+#include <linux/delay.h>
-+#include <linux/errno.h>
-+#include <linux/mfd/syscon.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/notifier.h>
-+#include <linux/reboot.h>
-+#include <linux/slab.h>
-+
-+#include <linux/soc/cirrus/ep93xx.h>
-+
-+#define EP93XX_SYSCON_DEVCFG		0x80
-+#define EP93XX_SYSCON_DEVCFG_SWRST	BIT(31)
-+
-+struct ep93xx_restart {
-+	struct ep93xx_regmap_adev *aux_dev;
-+	struct notifier_block restart_handler;
-+};
-+
-+static int ep93xx_restart_handle(struct notifier_block *this,
-+				 unsigned long mode, void *cmd)
-+{
-+	struct ep93xx_restart *priv =
-+		container_of(this, struct ep93xx_restart, restart_handler);
-+	struct ep93xx_regmap_adev *aux = priv->aux_dev;
-+
-+	/* Issue the reboot */
-+	aux->update_bits(aux->map, aux->lock, EP93XX_SYSCON_DEVCFG,
-+			 EP93XX_SYSCON_DEVCFG_SWRST, EP93XX_SYSCON_DEVCFG_SWRST);
-+	aux->update_bits(aux->map, aux->lock, EP93XX_SYSCON_DEVCFG,
-+			 EP93XX_SYSCON_DEVCFG_SWRST, 0);
-+
-+	return NOTIFY_DONE;
-+}
-+
-+static int ep93xx_reboot_probe(struct auxiliary_device *adev,
-+			       const struct auxiliary_device_id *id)
-+{
-+	struct ep93xx_regmap_adev *rdev = to_ep93xx_regmap_adev(adev);
-+	struct device *dev = &adev->dev;
-+	struct ep93xx_restart *priv;
-+	int err;
-+
-+	if (!rdev->update_bits)
-+		return -ENODEV;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->aux_dev = rdev;
-+
-+	priv->restart_handler.notifier_call = ep93xx_restart_handle;
-+	priv->restart_handler.priority = 128;
-+
-+	err = register_restart_handler(&priv->restart_handler);
-+	if (err)
-+		return dev_err_probe(dev, err, "can't register restart notifier\n");
-+
-+	return 0;
-+}
-+
-+static const struct auxiliary_device_id ep93xx_reboot_ids[] = {
-+	{
-+		.name = "soc_ep93xx.reset-ep93xx",
-+	},
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(auxiliary, ep93xx_reboot_ids);
-+
-+static struct auxiliary_driver ep93xx_reboot_driver = {
-+	.probe		= ep93xx_reboot_probe,
-+	.id_table	= ep93xx_reboot_ids,
-+};
-+module_auxiliary_driver(ep93xx_reboot_driver);
-
--- 
-2.41.0
-
+Raag
 
