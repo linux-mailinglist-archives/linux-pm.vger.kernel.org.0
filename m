@@ -1,137 +1,295 @@
-Return-Path: <linux-pm+bounces-4439-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4440-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 172CF868E6C
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 12:10:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B23F868EA9
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 12:21:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4883D1C24263
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 11:10:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E2C31C243D0
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 11:21:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15FFF139585;
-	Tue, 27 Feb 2024 11:10:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BA50139580;
+	Tue, 27 Feb 2024 11:21:39 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F3AC139589;
-	Tue, 27 Feb 2024 11:10:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C0122A8C1;
+	Tue, 27 Feb 2024 11:21:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709032203; cv=none; b=CbkRgrdbV/AJNgdlNq2Sans+WmDNC5e8UETSHftD0vi7gaYI2VsQe5YHyHL2snGUAhA7QobUa20A2Wp6W8ulv5rP8/XdAaW9Q/HjdE731glsvG7tK9oMWJhSSsj/t8+bJxSgL/nKYQIh6LxryNI5RLf4KrcLw1FN9oe/LZegVXc=
+	t=1709032899; cv=none; b=hmym1+yeT8I8X9bD14IMgjZ3Y1QOlxTB2dsXRyRz1TmmSHAeVLrBGZy9wXPpOTOUZO/sS8Za2sIv+iR3kNFk86Yo+Y9OwTV9bcHrh9l6sgWeQXHVLiwqIrc1ZrL0t2KoNPGChhEEG3R00xpQX9KcljX36PZ3wxzdDpUrPvU3TfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709032203; c=relaxed/simple;
-	bh=oUFC+Ms/PGoprdHPfwJASHTgX7mCTMpNsR2R0SvHniw=;
+	s=arc-20240116; t=1709032899; c=relaxed/simple;
+	bh=RaWEV72BqNmmOYLtb7IS8wMv+m+y+FZZl/ZP+h5IzIc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZELW2Zn87P2QKM4Zpdk93TWe0kektMcHAMMsO/aPxURFmx61c+GYS1TefyZsJQUycSppgir1YIdfz7FzBDt9xN9HJ7yJhUm/+9Y3Z4tv7ToiVGf0+rt+1r1CWzyN+8WkyDg/b1TpBFNWb1AHeQ5ZW+/sA/hm0WZ9TWOp3mWZkL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.51
+	 To:Cc:Content-Type; b=ZOicVBJgvlacq8Za14nKTv02rxEv7ydkevyRYY3llp6rhchxU+fO5soiGKhlO/UsKUOvw3OqDKL/PLxSMMDQANpu5OND0qWrZTolF5jJ0xByN3YhmHDPW8jvTMIgAcdNEllVJUpOxG15A+Nji0Zphu0TR6PX52vjupiePQ1WQ9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-6e45f7c63f4so377484a34.1;
-        Tue, 27 Feb 2024 03:10:01 -0800 (PST)
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6e4aa4877a9so37095a34.0;
+        Tue, 27 Feb 2024 03:21:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709032200; x=1709637000;
+        d=1e100.net; s=20230601; t=1709032896; x=1709637696;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=58qasL+PjuH6C+4EgXRIPgaJXcrY9WER2jiA7gx3XRI=;
-        b=Hd/WKssnBj2Ow/6Dmf74/4qmrk3EFIi5GAZgBmp+rFW6s7MG3sda+gR0zXng3/Lu6x
-         u2ZJ9L352R0FW+eeNlwXcFxTG9thYiu4SifmXucv+4tTAeC1IDOo058kGyUONd+Af05v
-         31wz0OtXDNk8VRht0HIWN37BF8yjGBF1zXwqcjj2hv+a9D5C+ngEjMOlCVJgLo2seaQ7
-         U9tMigXTKFpC5sq1qRCXdfpOQMwCpUvyiDY2c+QT0SX9oU9ZMetlwe9IcDlmnG+FINre
-         lAPjRGYHmnMtEDAE+UYdKcMbt+LNS7tlejznR27AEaCdphZgNW6SPMt6V3w+ory0NAIs
-         HZNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW6f5z8veDZgYABIiiobGH1KRm726hCvsf3YYGq2E5s5cpGt4LTpc4Uzpatk6G2+bGIB+jNwqZ8EWsP68JXHwrwKaS0w+/+5xdsDvhflHSYD1deLt+tgADL0pubLiHWHivokLWXl0dfNkQ=
-X-Gm-Message-State: AOJu0YxGdByp9tLRqW67BNQZz6mAVtmcq28bEu5QxmfQ0RYlQrVn49Ui
-	+jXkoyHro5Ww9rd4j9jWnLRkV7T4GKWKR20SCH5v4DDFLNHxDP+xo4VpSwPTcx9XRBHnCZ987qa
-	oIpNeMzwNP4roBlDsPSS+rxH2moM=
-X-Google-Smtp-Source: AGHT+IHhkogYh5axZJlkdz39EXpfWA4N1lmL2hWGrLTfQK1CgX8f2AdRQ7BWQZA4oTIjqFYYolsDnWhY+2YEQoRtCZQ=
-X-Received: by 2002:a4a:d037:0:b0:5a0:3d13:a45a with SMTP id
- w23-20020a4ad037000000b005a03d13a45amr9157307oor.0.1709032200531; Tue, 27 Feb
- 2024 03:10:00 -0800 (PST)
+        bh=VJa7MEOXe9perm2OgBKMzPUDW7pCOyIoOUv/oJgjUmw=;
+        b=Ptt1TZt/4Mvw22VF3ycC047q5A/Vmk3mlb16kbV+ET4Fv7V4zHdq/j95RxBd1dn6zQ
+         0omI1WpWrv4xx4i8XJGuMD2zCVgEU1M7N7qWKFlAEDbyRDoGqZmBEKfCWvlpvKFUIv7S
+         hc91aNQl+hr6j0NVQHl4aS12XKKdKCFHF3xNTknl2muZS1LQ/ghJk0tgGPNlaJlytKmm
+         wWUvEDb3qBM8oyObAZfeKHtKji/rns0I2ZSFjAC2wU4R6nkvPJjaPj0GO4CYzlqICJcb
+         FQ2DpHHBT8gbHugj3ja6LXUVuTyE2/negxNPADN65IPopxJnX5hJKV6wfndY1jvZW6ml
+         0Iog==
+X-Forwarded-Encrypted: i=1; AJvYcCW/9QmpdCTeb3CoPURwqRu/mh+PuU3mo83KW2Q29QZwNuEBjJAXuKReGrrhBbf5A5xV9d0MRvhdzxelcNfwrxJeH0zvYMFleNlSERJUTYZ2l0J9Md0zqZ4vLjkXrnIklFbMnVBDoM9Nbpp1N+f/DhRKGlhDGcujxyWdjbimKGoR8pzY7U4=
+X-Gm-Message-State: AOJu0YwjOlhJaALmuqk00Cy2Kng7cnc75ECPYaZgC2Rt9hY5/E2yehUw
+	XbPiOl63hf5ruc6ntDnkzuvOksakQOHaRZPSPbNaixzuv0F/NbuvtZhxlWjwGbaqDbUWLbULj8M
+	TamWYjqBBh2fXE4PH4koaJZ6RtznyVJIb
+X-Google-Smtp-Source: AGHT+IG9R13m5DR4gqp8WyHLIwyWyY0kzDaW1HOcNY3cc8IEXbuXqtoRojPV8BUhSKwMbh395KfY6gadg4eji0L5rKk=
+X-Received: by 2002:a05:6820:2b15:b0:5a0:396d:2489 with SMTP id
+ dt21-20020a0568202b1500b005a0396d2489mr9325087oob.1.1709032896476; Tue, 27
+ Feb 2024 03:21:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240226-thermal-fix-fortify-panic-num_trips-v1-1-accc12a341d7@kernel.org>
- <6a6be01d-3453-4268-8b2e-0279cc20835d@linaro.org>
-In-Reply-To: <6a6be01d-3453-4268-8b2e-0279cc20835d@linaro.org>
+References: <6017196.lOV4Wx5bFT@kreacher> <2173914.irdbgypaU6@kreacher> <5779195.DvuYhMxLoT@kreacher>
+In-Reply-To: <5779195.DvuYhMxLoT@kreacher>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 27 Feb 2024 12:09:48 +0100
-Message-ID: <CAJZ5v0h87k6xoi-9V0Cfb2rHQcr-STfG_bNWpzfoj4Dy46U0Lw@mail.gmail.com>
-Subject: Re: [PATCH] thermal: core: Move initial num_trips assignment before memcpy()
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, rafael@kernel.org, rui.zhang@intel.com, 
-	lukasz.luba@arm.com, keescook@chromium.org, gustavoars@kernel.org, 
-	morbo@google.com, justinstitt@google.com, stanislaw.gruszka@linux.intel.com, 
-	linux-pm@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	llvm@lists.linux.dev, patches@lists.linux.dev
+Date: Tue, 27 Feb 2024 12:21:25 +0100
+Message-ID: <CAJZ5v0j1vzUuNNVihQghiN_ZbEWwxZh9u+Jf1EpBwLJpXry7nA@mail.gmail.com>
+Subject: Re: [PATCH v2.1 2/9] thermal: core: Add flags to struct thermal_trip
+To: Linux PM <linux-pm@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Lukasz Luba <lukasz.luba@arm.com>, LKML <linux-kernel@vger.kernel.org>, 
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>, 
+	netdev@vger.kernel.org, Ido Schimmel <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>, 
+	Miri Korenblit <miriam.rachel.korenblit@intel.com>, linux-wireless@vger.kernel.org, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 27, 2024 at 11:14=E2=80=AFAM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
+On Thu, Feb 22, 2024 at 8:48=E2=80=AFPM Rafael J. Wysocki <rjw@rjwysocki.ne=
+t> wrote:
 >
-> On 27/02/2024 01:54, Nathan Chancellor wrote:
-> > When booting a CONFIG_FORTIFY_SOURCE=3Dy kernel compiled with a toolcha=
-in
-> > that supports __counted_by() (such as clang-18 and newer), there is a
-> > panic on boot:
-> >
-> >    [    2.913770] memcpy: detected buffer overflow: 72 byte write of bu=
-ffer size 0
-> >    [    2.920834] WARNING: CPU: 2 PID: 1 at lib/string_helpers.c:1027 _=
-_fortify_report+0x5c/0x74
-> >    ...
-> >    [    3.039208] Call trace:
-> >    [    3.041643]  __fortify_report+0x5c/0x74
-> >    [    3.045469]  __fortify_panic+0x18/0x20
-> >    [    3.049209]  thermal_zone_device_register_with_trips+0x4c8/0x4f8
-> >
-> > This panic occurs because trips is counted by num_trips but num_trips i=
-s
-> > assigned after the call to memcpy(), so the fortify checks think the
-> > buffer size is zero because tz was allocated with kzalloc().
-> >
-> > Move the num_trips assignment before the memcpy() to resolve the panic
-> > and ensure that the fortify checks work properly.
-> >
-> > Fixes: 9b0a62758665 ("thermal: core: Store zone trips table in struct t=
-hermal_zone_device")
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > ---
-> >   drivers/thermal/thermal_core.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_c=
-ore.c
-> > index bb21f78b4bfa..1eabc8ebe27d 100644
-> > --- a/drivers/thermal/thermal_core.c
-> > +++ b/drivers/thermal/thermal_core.c
-> > @@ -1354,8 +1354,8 @@ thermal_zone_device_register_with_trips(const cha=
-r *type,
-> >
-> >       tz->device.class =3D thermal_class;
-> >       tz->devdata =3D devdata;
-> > -     memcpy(tz->trips, trips, num_trips * sizeof(*trips));
-> >       tz->num_trips =3D num_trips;
-> > +     memcpy(tz->trips, trips, num_trips * sizeof(*trips));
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 >
-> IIUC, clang-18 is used and supports __counted_by().
+> In order to allow thermal zone creators to specify the writability of
+> trip point temperature and hysteresis on a per-trip basis, add a flags
+> field to struct thermal_trip and define flags to represent the desired
+> trip properties.
 >
-> Is it possible sizeof(*trips) returns already the real trips array size
-> and we are multiplying it again by num_trips ?
+> Also make thermal_zone_device_register_with_trips() set the
+> THERMAL_TRIP_FLAG_RW_TEMP flag for all trips covered by the writable
+> trips mask passed to it and modify the thermal sysfs code to look at
+> the trip flags instead of using the writable trips mask directly or
+> checking the presence of the .set_trip_hyst() zone callback.
 >
-> While with an older compiler, __counted_by() does nothing and we have to
-> multiply by num_trips ?
+> Additionally, make trip_point_temp_store() and trip_point_hyst_store()
+> fail with an error code if the trip passed to one of them has
+> THERMAL_TRIP_FLAG_RW_TEMP or THERMAL_TRIP_FLAG_RW_HYST,
+> respectively, clear in its flags.
 >
-> IOW, the array size arithmetic is different depending if we have
-> _counted_by supported or not ?
+> No intentional functional impact.
+>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-IIUC it is just the instrumentation using the current value of
-tz->num_trips (which is 0 before the initialization).
+AFAICS this patch addresses all of the review comments and because the
+rest of the series (depending on it) has been approved, I'm applying
+the whole series including this patch.
+
+> ---
+>
+> v2 -> v2.1:
+>    * Don't add redundant checks in 3 places (Daniel).
+>    * Define THERMAL_TRIP_FLAG_RW as the combination of the _RW_ trip flag=
+s (Daniel).
+>
+> v1 -> v2:
+>    * Rename trip flags (Stanislaw).
+>
+> ---
+>  drivers/thermal/thermal_core.c  |    9 ++++++++-
+>  drivers/thermal/thermal_core.h  |    2 +-
+>  drivers/thermal/thermal_sysfs.c |   18 +++++++++---------
+>  include/linux/thermal.h         |    8 ++++++++
+>  4 files changed, 26 insertions(+), 11 deletions(-)
+>
+> Index: linux-pm/include/linux/thermal.h
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- linux-pm.orig/include/linux/thermal.h
+> +++ linux-pm/include/linux/thermal.h
+> @@ -64,15 +64,23 @@ enum thermal_notify_event {
+>   * @threshold: trip crossing notification threshold miliCelsius
+>   * @type: trip point type
+>   * @priv: pointer to driver data associated with this trip
+> + * @flags: flags representing binary properties of the trip
+>   */
+>  struct thermal_trip {
+>         int temperature;
+>         int hysteresis;
+>         int threshold;
+>         enum thermal_trip_type type;
+> +       u8 flags;
+>         void *priv;
+>  };
+>
+> +#define THERMAL_TRIP_FLAG_RW_TEMP      BIT(0)
+> +#define THERMAL_TRIP_FLAG_RW_HYST      BIT(1)
+> +
+> +#define THERMAL_TRIP_FLAG_RW   (THERMAL_TRIP_FLAG_RW_TEMP | \
+> +                                THERMAL_TRIP_FLAG_RW_HYST)
+> +
+>  struct thermal_zone_device_ops {
+>         int (*bind) (struct thermal_zone_device *,
+>                      struct thermal_cooling_device *);
+> Index: linux-pm/drivers/thermal/thermal_core.c
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- linux-pm.orig/drivers/thermal/thermal_core.c
+> +++ linux-pm/drivers/thermal/thermal_core.c
+> @@ -1278,6 +1278,7 @@ thermal_zone_device_register_with_trips(
+>                                         int passive_delay, int polling_de=
+lay)
+>  {
+>         struct thermal_zone_device *tz;
+> +       struct thermal_trip *trip;
+>         int id;
+>         int result;
+>         struct thermal_governor *governor;
+> @@ -1356,13 +1357,19 @@ thermal_zone_device_register_with_trips(
+>         tz->devdata =3D devdata;
+>         memcpy(tz->trips, trips, num_trips * sizeof(*trips));
+>         tz->num_trips =3D num_trips;
+> +       for_each_trip(tz, trip) {
+> +               if (mask & 1)
+> +                       trip->flags |=3D THERMAL_TRIP_FLAG_RW_TEMP;
+> +
+> +               mask >>=3D 1;
+> +       }
+>
+>         thermal_set_delay_jiffies(&tz->passive_delay_jiffies, passive_del=
+ay);
+>         thermal_set_delay_jiffies(&tz->polling_delay_jiffies, polling_del=
+ay);
+>
+>         /* sys I/F */
+>         /* Add nodes that are always present via .groups */
+> -       result =3D thermal_zone_create_device_groups(tz, mask);
+> +       result =3D thermal_zone_create_device_groups(tz);
+>         if (result)
+>                 goto remove_id;
+>
+> Index: linux-pm/drivers/thermal/thermal_core.h
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- linux-pm.orig/drivers/thermal/thermal_core.h
+> +++ linux-pm/drivers/thermal/thermal_core.h
+> @@ -131,7 +131,7 @@ void thermal_zone_trip_updated(struct th
+>  int __thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp);
+>
+>  /* sysfs I/F */
+> -int thermal_zone_create_device_groups(struct thermal_zone_device *, int)=
+;
+> +int thermal_zone_create_device_groups(struct thermal_zone_device *tz);
+>  void thermal_zone_destroy_device_groups(struct thermal_zone_device *);
+>  void thermal_cooling_device_setup_sysfs(struct thermal_cooling_device *)=
+;
+>  void thermal_cooling_device_destroy_sysfs(struct thermal_cooling_device =
+*cdev);
+> Index: linux-pm/drivers/thermal/thermal_sysfs.c
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- linux-pm.orig/drivers/thermal/thermal_sysfs.c
+> +++ linux-pm/drivers/thermal/thermal_sysfs.c
+> @@ -392,17 +392,16 @@ static const struct attribute_group *the
+>  /**
+>   * create_trip_attrs() - create attributes for trip points
+>   * @tz:                the thermal zone device
+> - * @mask:      Writeable trip point bitmap.
+>   *
+>   * helper function to instantiate sysfs entries for every trip
+>   * point and its properties of a struct thermal_zone_device.
+>   *
+>   * Return: 0 on success, the proper error value otherwise.
+>   */
+> -static int create_trip_attrs(struct thermal_zone_device *tz, int mask)
+> +static int create_trip_attrs(struct thermal_zone_device *tz)
+>  {
+> +       const struct thermal_trip *trip;
+>         struct attribute **attrs;
+> -       int indx;
+>
+>         /* This function works only for zones with at least one trip */
+>         if (tz->num_trips <=3D 0)
+> @@ -437,7 +436,9 @@ static int create_trip_attrs(struct ther
+>                 return -ENOMEM;
+>         }
+>
+> -       for (indx =3D 0; indx < tz->num_trips; indx++) {
+> +       for_each_trip(tz, trip) {
+> +               int indx =3D thermal_zone_trip_id(tz, trip);
+> +
+>                 /* create trip type attribute */
+>                 snprintf(tz->trip_type_attrs[indx].name, THERMAL_NAME_LEN=
+GTH,
+>                          "trip_point_%d_type", indx);
+> @@ -458,7 +459,7 @@ static int create_trip_attrs(struct ther
+>                                                 tz->trip_temp_attrs[indx]=
+.name;
+>                 tz->trip_temp_attrs[indx].attr.attr.mode =3D S_IRUGO;
+>                 tz->trip_temp_attrs[indx].attr.show =3D trip_point_temp_s=
+how;
+> -               if (mask & (1 << indx)) {
+> +               if (trip->flags & THERMAL_TRIP_FLAG_RW_TEMP) {
+>                         tz->trip_temp_attrs[indx].attr.attr.mode |=3D S_I=
+WUSR;
+>                         tz->trip_temp_attrs[indx].attr.store =3D
+>                                                         trip_point_temp_s=
+tore;
+> @@ -473,7 +474,7 @@ static int create_trip_attrs(struct ther
+>                                         tz->trip_hyst_attrs[indx].name;
+>                 tz->trip_hyst_attrs[indx].attr.attr.mode =3D S_IRUGO;
+>                 tz->trip_hyst_attrs[indx].attr.show =3D trip_point_hyst_s=
+how;
+> -               if (tz->ops.set_trip_hyst) {
+> +               if (trip->flags & THERMAL_TRIP_FLAG_RW_HYST) {
+>                         tz->trip_hyst_attrs[indx].attr.attr.mode |=3D S_I=
+WUSR;
+>                         tz->trip_hyst_attrs[indx].attr.store =3D
+>                                         trip_point_hyst_store;
+> @@ -505,8 +506,7 @@ static void destroy_trip_attrs(struct th
+>         kfree(tz->trips_attribute_group.attrs);
+>  }
+>
+> -int thermal_zone_create_device_groups(struct thermal_zone_device *tz,
+> -                                     int mask)
+> +int thermal_zone_create_device_groups(struct thermal_zone_device *tz)
+>  {
+>         const struct attribute_group **groups;
+>         int i, size, result;
+> @@ -522,7 +522,7 @@ int thermal_zone_create_device_groups(st
+>                 groups[i] =3D thermal_zone_attribute_groups[i];
+>
+>         if (tz->num_trips) {
+> -               result =3D create_trip_attrs(tz, mask);
+> +               result =3D create_trip_attrs(tz);
+>                 if (result) {
+>                         kfree(groups);
+>
+>
+>
+>
+>
 
