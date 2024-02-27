@@ -1,110 +1,154 @@
-Return-Path: <linux-pm+bounces-4469-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4470-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEEC186A061
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 20:41:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4962186A0AB
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 21:11:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75D8A28A553
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 19:41:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE1B11F25424
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 20:11:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AE196A010;
-	Tue, 27 Feb 2024 19:41:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B95A714A0A0;
+	Tue, 27 Feb 2024 20:11:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HwqSkhkf"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="ZRm1OEfe"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BF2B51C5D;
-	Tue, 27 Feb 2024 19:41:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 107591D6A8
+	for <linux-pm@vger.kernel.org>; Tue, 27 Feb 2024 20:11:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709062894; cv=none; b=qY6XfwXSbRxekNCiD+Xc2NyPJiW0mp0u3AjyOvjQir7w/dFG1SLNO73bpj9IczG7jzcekfPBVYY0Gv9cCJL2QpjYl2ZXSzz2mvswsM8hG0st+ZMkZDx/2BhWhWhGJJ795KnpSS8TNrIIRfEPhSK5xzukGbqYCBv9GDmMQtvPhTw=
+	t=1709064700; cv=none; b=AAOaqoSR+5jh3Mc/KcWWErFJceo+qV/qHgllCjLkvzBMUcOJz8NkVq0/bu1v/nGcm+Jt5Fheyo7JK9nPObt/xsOTNlzXwS3yYX+Fwpweu0JLE1YScTBJI/UdgzGcGiiL9HZBFKMKV3D52ojPugizpwvBkMLc5H3RoyuZOU0z/7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709062894; c=relaxed/simple;
-	bh=k+e5j/RZ38n+f/g3s3klnPj+vtf9R3Ifx3kc3Cj6uwc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kFrokQgulMej7Djb7ncvpzS5L6Y22QAofnVcWWY73q7mx8tWkRhbYM5HEM3VIHqGnlciH8BW1ywHVoHqyChh2g5n9/a+elXE0mbIMXs1Z/EBKmyxkjuaWy4wEgRtp+cgN1qXX4jmL4WqLlQGErz9Eu+RDAVs8PAMTOfediXQTuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HwqSkhkf; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709062892; x=1740598892;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=k+e5j/RZ38n+f/g3s3klnPj+vtf9R3Ifx3kc3Cj6uwc=;
-  b=HwqSkhkfAgL5q8dNk9YTl5eJ0c3rcO136lzSAYB7WGASOpi8+HxaNr01
-   iBQQfNKsUq1ABJmikHrztxg0Es3p7+CaI7S0/8tIHgOb0TnaeNxFkgL/a
-   u6swa47Xzh05Vm0XymaJ1Qeg/1UAoHmEZlIBPU+Zgeg8EMiiZHu+BbSoA
-   5O8rMpfnq1V93pE4Dx5kgh9KvypXv7x6D1MuqipSvYFvrZyrgO9cydR0x
-   DYl55K/aj02lVZ7RgmnMBlUyyGMp8497zPxhR29lvZQ1Di5o5Ryp50dzI
-   Tc6os9ZoOCP6iy3qiNPLsX0rElIzUrO1aG1TuxqWJAaN2TYUyRvOtMnAh
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10996"; a="3290611"
-X-IronPort-AV: E=Sophos;i="6.06,188,1705392000"; 
-   d="scan'208";a="3290611"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2024 11:41:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,188,1705392000"; 
-   d="scan'208";a="7130747"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.14])
-  by fmviesa010.fm.intel.com with ESMTP; 27 Feb 2024 11:41:29 -0800
-From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To: rafael@kernel.org,
-	daniel.lezcano@linaro.org,
-	lukasz.luba@arm.com
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] thermal: int340x: processor_thermal: Add Lunar Lake-M PCI ID
-Date: Tue, 27 Feb 2024 11:41:12 -0800
-Message-Id: <20240227194112.1289979-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.40.1
+	s=arc-20240116; t=1709064700; c=relaxed/simple;
+	bh=QKinL78kEX4bqUVHZlw0I+WcbQu+KGNKXhQzKQRdtj8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BX4lm58vrkeDbbrOQfJ5wRzQUPA6mJD8hTOLy3O5z7oUrvYS8jvUL6Wut8Lr7uBYrxa/UPauGyilRdTgy+UoB8cWjHZcTJ8oJsTQPqKCXNP/n+HFCAJ/gp5MfFvLMnNsfewhICbcHwolY3ukGynk2ykk+hU8WRdu4vyGGTa3y1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=ZRm1OEfe; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1709064697;
+	bh=QKinL78kEX4bqUVHZlw0I+WcbQu+KGNKXhQzKQRdtj8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZRm1OEfe0r5l7Z4T8WMuaZPFG4fn8MrjHOHQ8elioXANIDHn3EhoJ1EFykbxXgF6W
+	 NHbzLT58Tdwdy1EZglhXtviKeXaOSX7fNilspjrT4Vy7J18O1Ft8LFs4d8IxpvEjBC
+	 wEnDLjY38t1nhSPxtC2Toe8bpZOmv5/kU2IXJGnyu1aZ2KeTN0rH8aqta3qYSwqJ5P
+	 iLFd7YbHGBqMmyIMdqNbddkfRzsQaLXa9kBduIeRawNGUDvvKVEjzOhHw0oOssUDCk
+	 x1yVL16AJA0S+vbQvjBZGUERprbid3L01yLp//iB87/ljZ8QLB5lHOAR+TAqQ87QFN
+	 NFN/7vsHBXugA==
+Received: from mercury (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sre)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 56A623781FE3;
+	Tue, 27 Feb 2024 20:11:37 +0000 (UTC)
+Received: by mercury (Postfix, from userid 1000)
+	id C30BF10606FE; Tue, 27 Feb 2024 21:11:36 +0100 (CET)
+Date: Tue, 27 Feb 2024 21:11:36 +0100
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: "Sicelo A. Mhlongo" <absicsz@gmail.com>
+Cc: linux-pm@vger.kernel.org, maemo-leste@lists.dyne.org, pali@kernel.org
+Subject: Re: [PATCH] power: supply: bq2415x_charger: report online status
+Message-ID: <6slfmvqmtawwjlsobcfod6ewcjjbzmylz3owsdamdi4dod55wr@iiox5rzjj5ht>
+References: <20240226194432.2174095-1-absicsz@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="dakrgprgaxsm6kyf"
+Content-Disposition: inline
+In-Reply-To: <20240226194432.2174095-1-absicsz@gmail.com>
 
-Add Lunar Lake-M PCI ID for processor thermal device.
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- drivers/thermal/intel/int340x_thermal/processor_thermal_device.h | 1 +
- .../thermal/intel/int340x_thermal/processor_thermal_device_pci.c | 1 +
- 2 files changed, 2 insertions(+)
+--dakrgprgaxsm6kyf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-index 95c6013a33fb..674f3c85dfbc 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-@@ -25,6 +25,7 @@
- #define PCI_DEVICE_ID_INTEL_HSB_THERMAL	0x0A03
- #define PCI_DEVICE_ID_INTEL_ICL_THERMAL	0x8a03
- #define PCI_DEVICE_ID_INTEL_JSL_THERMAL	0x4E03
-+#define PCI_DEVICE_ID_INTEL_LNLM_THERMAL	0x641D
- #define PCI_DEVICE_ID_INTEL_MTLP_THERMAL	0x7D03
- #define PCI_DEVICE_ID_INTEL_RPL_THERMAL	0xA71D
- #define PCI_DEVICE_ID_INTEL_SKL_THERMAL	0x1903
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-index d7495571dd5d..4e1dfd283651 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-@@ -407,6 +407,7 @@ static SIMPLE_DEV_PM_OPS(proc_thermal_pci_pm, proc_thermal_pci_suspend,
- static const struct pci_device_id proc_thermal_pci_ids[] = {
- 	{ PCI_DEVICE_DATA(INTEL, ADL_THERMAL, PROC_THERMAL_FEATURE_RAPL |
- 	  PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_WT_REQ) },
-+	{ PCI_DEVICE_DATA(INTEL, LNLM_THERMAL, PROC_THERMAL_FEATURE_RAPL) },
- 	{ PCI_DEVICE_DATA(INTEL, MTLP_THERMAL, PROC_THERMAL_FEATURE_RAPL |
- 	  PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_DLVR |
- 	  PROC_THERMAL_FEATURE_WT_HINT | PROC_THERMAL_FEATURE_POWER_FLOOR) },
--- 
-2.43.0
+Hi,
 
+On Mon, Feb 26, 2024 at 09:44:32PM +0200, Sicelo A. Mhlongo wrote:
+> Provide the Online property. This chip does not have specific flags to
+> indicate the presence of an input voltage, but this can be inferred from
+> the reported charging status.
+
+The datasheet suggests, that you can get the status from the fault
+bits:
+
+011 - Poor input source or VBUS < UVLO
+
+Greetings,
+
+-- Sebastian
+
+>=20
+> Signed-off-by: Sicelo A. Mhlongo <absicsz@gmail.com>
+> ---
+>  drivers/power/supply/bq2415x_charger.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>=20
+> diff --git a/drivers/power/supply/bq2415x_charger.c b/drivers/power/suppl=
+y/bq2415x_charger.c
+> index 6a4798a62588..5b47a1d0a51a 100644
+> --- a/drivers/power/supply/bq2415x_charger.c
+> +++ b/drivers/power/supply/bq2415x_charger.c
+> @@ -991,6 +991,7 @@ static enum power_supply_property bq2415x_power_suppl=
+y_props[] =3D {
+>  	/* TODO: maybe add more power supply properties */
+>  	POWER_SUPPLY_PROP_STATUS,
+>  	POWER_SUPPLY_PROP_MODEL_NAME,
+> +	POWER_SUPPLY_PROP_ONLINE,
+>  };
+> =20
+>  static int bq2415x_power_supply_get_property(struct power_supply *psy,
+> @@ -1017,6 +1018,14 @@ static int bq2415x_power_supply_get_property(struc=
+t power_supply *psy,
+>  	case POWER_SUPPLY_PROP_MODEL_NAME:
+>  		val->strval =3D bq->model;
+>  		break;
+> +	case POWER_SUPPLY_PROP_ONLINE:
+> +		ret =3D bq2415x_exec_command(bq, BQ2415X_CHARGE_STATUS);
+> +		/* Charger is Online when Charging or Full are reported. It is
+> +		 * also likely online for the Unknown/Fault state too, but
+> +		 * there is no way to be absolutely sure.
+> +		 */
+> +		val->intval =3D (ret =3D=3D 1 || ret =3D=3D 2);
+> +		break;
+>  	default:
+>  		return -EINVAL;
+>  	}
+> --=20
+> 2.43.0
+>=20
+
+--dakrgprgaxsm6kyf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmXeQfQACgkQ2O7X88g7
++prsqRAAgQn4+IU1MJJRPtWx5O7m/aToxEmTGht4lJLLDNES9p+Iz5E6Kwq09HEO
+0h/yrF/XEWyC6YQaFq8MMrB+2NPtPTgl5Y/c/1LLmkL6IA8o8Gf0/EO3WE6UIHi3
+9w5Z2dDvknLnoxxJ2ZJH8AIld6s1bL49xID/1EQEnkfQRRnPKf7lq1GpNuop3iEB
+TTWPI4DdVwNL0QbnmW8sjyH19xeXhqmsq6i0OgqYzPQOmE3EhO/7Ec/Sn+Qlahq0
+N8e3YcessvcrAZAlSkvJlS7bmNCHI5jbDjs2Lvp6tH+38y8cYaaJQkuqGa2/b0I/
+kkAfgd4oUMUmlkMiIE0FRVHHhkFYxIyrkfvFWKf+2R8KW8QiwHM9FBKkD2vl5vYa
+BAumbN/Vfw4+yvZ+CJECrj8f9DSMIOXb2QDyX5Q6QjKe+MTgWohJoPn06TJRH6Sw
+D2z5qKWddVrVv900kYOv1d55G0H+nXFYAMfk3TVSZdG/S84kZtbkxNHLJ40BklpL
+5pzBrIxLDWZv5K8aO5w9TSQATbQoYvPokg0mdbIRtUaGZ2G7cU6UQ0bF8gM36rWn
+l0pVEuW8/Gy9dp25ABFfCB6R6MFSMI2kfYm8T5BaJA+U5PyrGnXdUNIB+K6Eflwc
+kZ4uTTbDRh7ZRKWsg5Z8qEYsOxEOqJ8QsVoXbMrnqUsqv1KyyM4=
+=I+/y
+-----END PGP SIGNATURE-----
+
+--dakrgprgaxsm6kyf--
 
