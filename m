@@ -1,144 +1,200 @@
-Return-Path: <linux-pm+bounces-4446-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4447-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A88A869C02
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 17:25:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A5B7869BA5
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 17:10:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7F755B2B368
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 16:06:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 175E1282982
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 16:10:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D848014690A;
-	Tue, 27 Feb 2024 16:06:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53C5D1474AB;
+	Tue, 27 Feb 2024 16:10:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="afoiQ37/"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Kiy+ndZe"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 494CF1468FF;
-	Tue, 27 Feb 2024 16:06:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC9EC146E8D;
+	Tue, 27 Feb 2024 16:10:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709050005; cv=none; b=N0AEPcs4KLGHuNBb8hYtyYIZKcqvP70q25IeShPn+FMAxLmd8dc6aTlAUJvCZ8ILHVlbDzLkoB+doEFo9EZ48Hyv9X4sHkllu3a0NDctaF616aTmw8q1WMLNyDlxn077y4aYQ49LFUP/3MW8SFZyrDj/nqY+mVRBtiqEnfd+aRE=
+	t=1709050203; cv=none; b=SFa1e78FdgUXLSWVBwRBT0srbCv0BH+pbr1KnmMAUzJNH2UzCflOhvwsqiZXONHgpeRPdd+MiN62zn72566nBaxUIsNDNAULNfAoxdtRX0KdGebZIu4D34jPVU2Q+hXY2t45F6vtkBBAp+WDf+s+mI3bMe+41qJ2LfL9H5zzuNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709050005; c=relaxed/simple;
-	bh=A4aXiTDmIEAp8TItElIIbGiHyG8htDtJ8aMRi/aK0Hc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=aVy3OGcZPXJ7Kh95zGEzqyktoOVaNPRoeEUVKvDtdwsaUkMqOwIS44mwQ6yflht7P/ge0G1oQAYOTFA758Ks0lP0V9oUApiTm6vSKTKwAVD8UBw2x5u6+bRjdmijN9fhOvxVAvCSBWa+7ODaB20q46B9Oarl9Cn4q7hTB9MtKoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=afoiQ37/; arc=none smtp.client-ip=205.220.180.131
+	s=arc-20240116; t=1709050203; c=relaxed/simple;
+	bh=s43zmuKBRFXWcfjaRTyVKFsDV6KAbShwjjA1KIWLInU=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=V/UNjV6hjBr1LdrgBP+urKRJdXbglaAy/QCcXz5wDM66MD1VmNDviKqIeFuoPY6i3v7OHYpTbj1Chqak6aT+HOmOZf70M/Tl813duPWuPMVcrKv2YEa+CJMNeFOB2nGzBH+2QRYz6JLD+pnZvrCWuYEqUHdpvErIBXC4zegUvI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Kiy+ndZe; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41RBKdbx006642;
-	Tue, 27 Feb 2024 16:06:36 GMT
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41REcbd3032078;
+	Tue, 27 Feb 2024 16:09:53 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=1GJRhGjod38oTbcKKelMDEYZhj6mr/kVO4Bxvb6vSzg=; b=af
-	oiQ37/yfdjvpNl65qrgUYhpwy4ysiymztSLtKJHsyVDAhcX58F7boIhsacwGWBMX
-	iw5ylBKftlrcYj+r8RxFTmR/baDgIaLHq+RL/hgXfDSKjWLtOqJgQeeSfyVFVJPu
-	9DjpkPgPeffenTswOm8L7pAkVF7cLWCVGts+u8vMsDEaxzTps6L6AqLvTmrEJIMS
-	4KSCu3k9OA7f+JLWIOOT3gHxoaccz/nC8aKyuD7Mi9SWrp+0T2fQx3TwBmF5Eapv
-	4Uhe6qdxTkTQm/uuP0xrkil8FE8zTQuKO0zBIFwm0LwP9pNvHN5TRzw7Lss94qb7
-	UfDesFhZvv6Gx5t6YDEg==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wh64h1vag-1
+	from:to:cc:subject:date:message-id:mime-version:content-type; s=
+	qcppdkim1; bh=W5cStkw2N0yXySR6E2ojMZNdsHwBF2F9TtvVX4tdNoI=; b=Ki
+	y+ndZewDiCfentwLV5U5trwW42iIV3jfTpzHv6x0MTJ5Pab5aPbvTnNGSwYCCxQM
+	P+dOGoI3PG0iYeeODEhL5K07cptyJQAY8+M/rUifyB1xW2EKzteAPbD2KRX5C18y
+	qZtEVTH1eWOcyNlAnb09T//SyPMvwpPxudDlVipJJ4MKvVD8z80cVPgQjoO2mFYG
+	+hbs548pHcytOBdCROFdU3Ripv6YDd4h3rGluNmBWMmZyX5gnUIPJMYRSzLMf8Dv
+	q3mw+6Hni4chMGoPuv/VzfCtb9HvM0rrzfo7YXWfqaYOemZR+2gITcFU1PpFGaeT
+	QvgDs60VfBz8K788/aQQ==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wh85qsjtv-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 27 Feb 2024 16:06:35 +0000 (GMT)
+	Tue, 27 Feb 2024 16:09:53 +0000 (GMT)
 Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41RG6Y6o000700
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41RG9p0L017287
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 27 Feb 2024 16:06:34 GMT
-Received: from [10.216.55.24] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 27 Feb
- 2024 08:06:30 -0800
-Message-ID: <6962061f-d0c9-f3d3-ca1a-222f63653800@quicinc.com>
-Date: Tue, 27 Feb 2024 21:36:19 +0530
+	Tue, 27 Feb 2024 16:09:51 GMT
+Received: from hu-priyjain-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Tue, 27 Feb 2024 08:09:48 -0800
+From: Priyansh Jain <quic_priyjain@quicinc.com>
+To: Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath
+	<thara.gopinath@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad
+ Dybcio" <konrad.dybcio@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC: <quic_manafm@quicinc.com>, <quic_priyjain@quicinc.com>
+Subject: [PATCH v3] thermal/drivers/tsens: Add suspend to RAM support for tsens
+Date: Tue, 27 Feb 2024 21:39:28 +0530
+Message-ID: <20240227160928.2671-1-quic_priyjain@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] thermal/drivers/tsens: Add suspend to RAM support for
- tsens
-Content-Language: en-US
-To: Amit Kucheria <amitk@kernel.org>
-CC: Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thara Gopinath
-	<thara.gopinath@gmail.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Rafael J
- . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_manafm@quicinc.com>
-References: <20240122100726.16993-1-quic_priyjain@quicinc.com>
- <548e2f24-a51e-4593-9463-09506488c70e@linaro.org>
- <f415a8cd-4cae-d7c3-60fc-674b3e660f6b@quicinc.com>
- <aeae2e69-8407-4d90-9d16-27798e2f3248@linaro.org>
- <be69e0a6-fdc8-c24b-9beb-adaac4a97776@quicinc.com>
- <CAHLCerNx4KxzmQF8HmTTFr+W7xn5vubA=Jcg4Kwyk=cCJ4w+Wg@mail.gmail.com>
-From: Priyansh Jain <quic_priyjain@quicinc.com>
-In-Reply-To: <CAHLCerNx4KxzmQF8HmTTFr+W7xn5vubA=Jcg4Kwyk=cCJ4w+Wg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01b.na.qualcomm.com (10.47.209.197)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: SrrKB6G30vMhWkgpKqSuOTta7Y85ecr4
-X-Proofpoint-GUID: SrrKB6G30vMhWkgpKqSuOTta7Y85ecr4
+X-Proofpoint-ORIG-GUID: ZuJQTu5RyW5vI437EFPTCjqewwfDqb3K
+X-Proofpoint-GUID: ZuJQTu5RyW5vI437EFPTCjqewwfDqb3K
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-02-27_01,2024-02-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
- bulkscore=0 spamscore=0 lowpriorityscore=0 impostorscore=0 malwarescore=0
- mlxlogscore=584 priorityscore=1501 adultscore=0 phishscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2402120000
- definitions=main-2402270124
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ priorityscore=1501 phishscore=0 malwarescore=0 clxscore=1015
+ mlxlogscore=956 lowpriorityscore=0 spamscore=0 suspectscore=0 bulkscore=0
+ mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2402120000 definitions=main-2402270124
 
+As part of suspend to RAM, tsens hardware will be turned off.
+While resume callback, re-initialize tsens hardware.
 
+Signed-off-by: Priyansh Jain <quic_priyjain@quicinc.com>
+---
+V2 -> V3: Remove suspend callback & interrupt enablement part from
+resume callback.
+V1 -> V2: Update commit text to explain the necessity of this patch
 
-On 1/28/2024 1:41 AM, Amit Kucheria wrote:
-> On Wed, Jan 24, 2024 at 8:55 PM Priyansh Jain <quic_priyjain@quicinc.com> wrote:
->>
->>
->>
->> On 1/24/2024 6:04 PM, Konrad Dybcio wrote:
->>>
->>>
->>> On 1/24/24 11:42, Priyansh Jain wrote:
-> 
->>>>
->>>> As part of suspend to RAM, tsens hardware will be turned off and it
->>>> cannot generate any interrupt.Also system doesn't want to abort
->>>> suspend to RAM due to tsens interrupts since system is already going
->>>> into lowest
->>>> power state. Hence disabling tsens interrupt during suspend to RAM
->>>> callback.
->>>
->>> Is that a hardware limitation, or a software design choice? I'm not
->>> sure I want my phone to have thermal notifications disabled when
->>> it's suspended.
->>
->>> Konrad
->>
->> As part of suspend to RAM , entire SOC will be off, this mode (suspend
->> to RAM) is not intended for Mobile product. Tsens interrupts are not
->> disabled as part of suspend to idle(suspend mode for mobile).
-> 
-> You should hide the callbacks behind the CONFIG_SUSPEND Kconfig option
-> so that it only gets enabled when S2R is enabled.
+ drivers/thermal/qcom/tsens-v2.c |  1 +
+ drivers/thermal/qcom/tsens.c    | 40 +++++++++++++++++++++++++++++++++
+ drivers/thermal/qcom/tsens.h    |  6 +++++
+ 3 files changed, 47 insertions(+)
 
-Yes i will take care of this in next version.
+diff --git a/drivers/thermal/qcom/tsens-v2.c b/drivers/thermal/qcom/tsens-v2.c
+index 29a61d2d6ca3..0cb7301eca6e 100644
+--- a/drivers/thermal/qcom/tsens-v2.c
++++ b/drivers/thermal/qcom/tsens-v2.c
+@@ -107,6 +107,7 @@ static const struct reg_field tsens_v2_regfields[MAX_REGFIELDS] = {
+ static const struct tsens_ops ops_generic_v2 = {
+ 	.init		= init_common,
+ 	.get_temp	= get_temp_tsens_valid,
++	.resume		= tsens_resume_common,
+ };
+ 
+ struct tsens_plat_data data_tsens_v2 = {
+diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+index 6d7c16ccb44d..396c1cd71351 100644
+--- a/drivers/thermal/qcom/tsens.c
++++ b/drivers/thermal/qcom/tsens.c
+@@ -17,6 +17,7 @@
+ #include <linux/pm.h>
+ #include <linux/regmap.h>
+ #include <linux/slab.h>
++#include <linux/suspend.h>
+ #include <linux/thermal.h>
+ #include "../thermal_hwmon.h"
+ #include "tsens.h"
+@@ -1193,6 +1194,45 @@ static int tsens_register_irq(struct tsens_priv *priv, char *irqname,
+ 	return ret;
+ }
+ 
++#ifdef CONFIG_SUSPEND
++static int tsens_reinit(struct tsens_priv *priv)
++{
++	unsigned long flags;
++
++	spin_lock_irqsave(&priv->ul_lock, flags);
++
++	/* in VER_0 TSENS need to be explicitly enabled */
++	if (tsens_version(priv) == VER_0)
++		regmap_field_write(priv->rf[TSENS_EN], 1);
++
++	/*
++	 * Re-enable the watchdog, unmask the bark.
++	 * Disable cycle completion monitoring
++	 */
++	if (priv->feat->has_watchdog) {
++		regmap_field_write(priv->rf[WDOG_BARK_MASK], 0);
++		regmap_field_write(priv->rf[CC_MON_MASK], 1);
++	}
++
++	/* Re-enable interrupts */
++	if (tsens_version(priv) >= VER_0_1)
++		tsens_enable_irq(priv);
++
++	spin_unlock_irqrestore(&priv->ul_lock, flags);
++
++	return 0;
++}
++
++int tsens_resume_common(struct tsens_priv *priv)
++{
++	if (pm_suspend_target_state == PM_SUSPEND_MEM)
++		tsens_reinit(priv);
++
++	return 0;
++}
++
++#endif /* !CONFIG_SUSPEND */
++
+ static int tsens_register(struct tsens_priv *priv)
+ {
+ 	int i, ret;
+diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
+index cb637fa289ca..7a147d9d8544 100644
+--- a/drivers/thermal/qcom/tsens.h
++++ b/drivers/thermal/qcom/tsens.h
+@@ -635,6 +635,12 @@ int init_common(struct tsens_priv *priv);
+ int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp);
+ int get_temp_common(const struct tsens_sensor *s, int *temp);
+ 
++#ifdef CONFIG_SUSPEND
++int tsens_resume_common(struct tsens_priv *priv);
++#else
++#define tsens_resume_common		NULL
++#endif
++
+ /* TSENS target */
+ extern struct tsens_plat_data data_8960;
+ 
+-- 
+2.17.1
 
-Priyansh
 
