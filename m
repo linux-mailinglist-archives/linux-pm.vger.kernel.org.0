@@ -1,141 +1,115 @@
-Return-Path: <linux-pm+bounces-4421-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4422-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46EC28687AA
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 04:19:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FC368687B8
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 04:20:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EFB571F2302A
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 03:19:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5464B26E7D
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 03:20:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3CD11B27D;
-	Tue, 27 Feb 2024 03:19:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56D001F61D;
+	Tue, 27 Feb 2024 03:20:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ZBA3rHCJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GGZalQiN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F0761EB31;
-	Tue, 27 Feb 2024 03:19:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C82DE1B7E9;
+	Tue, 27 Feb 2024 03:20:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709003957; cv=none; b=JCZQnyb2dq/k0ObnRO1FQOSigxm+icxnW8pZYR4DezmgsUfypntqLKTM5YQ0XVlWg0qGIiiUizO7Ij9sdT6oqsGJdTHf215NELcFmrJJyUDpQYjj4Pc17oKyl4PNG4Xeihq+xNxWQo5VM0ub+PVv2KM3dQ86BDTZko9xGDTppEs=
+	t=1709004031; cv=none; b=IxOTh+BGCwLXRjyeSUUJ+fwuC9FS+tvqptP0Z0GB66+ezn9s+klu1NofDh7doMEljRFM7pxAg7rb655uPrPDDKw5iQHFpq9E9pAUTYBRg8d5zsZGzlcmqMYhBzRG6YvGqIQmOvS+wXVGrN4ISPHCSi3eS1OtpWsTIvkrJ2J1rXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709003957; c=relaxed/simple;
-	bh=HyQeAkfIsrXp7lnK7bPc8oR0V4wM6K6OMlQPcGXMiCA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=bMsCJnmZ6ayBj6psaR+ijZew/WlshXS6p57HzgymN8azXpgOPEI1Vw/l/pWXwJKJe5SPkR0sBIWsPIaaMecc+vZhOQCksyLmHV/kHEdHWTus1KdIymPhkc53soKf80x+pj83FgmEWo/RThRFnTOxmXMwgQEOHjwWUqjFylluGnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ZBA3rHCJ; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41QNsnxr009857;
-	Tue, 27 Feb 2024 03:19:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=y2+n+K4VEk1Ekg1azTwyrDXlJqc1pengbDN8GywlNTw=; b=ZB
-	A3rHCJaWDsBiegF2zvodsukg1pD1JG4gPWKXNA3srNI2ikI5wRk7yRFRWelAVHIM
-	HqcYH9wkb8lC0wd5Vy5y4KUTtg8Nafx8UaboGI8VUWW3rdlRzl9eTpapvwyGwiEb
-	DNRmO1CXDGLmgnJIlIxQlyjjHun/Maoa5l4pv3XdLt7aILg5uPIVQl7FKqmktppm
-	CBf7wX/rHXyZ0UTTA6l3eOXaKlEZeAGCloZ+TrsT1H/EKUd83PdspvRhTRxX52EI
-	Ndldz8e+1CBAtUmTjaVd/sX5iEr8gfOnrixvEYDBOyTJODcUIPXS5XfC0w696rsN
-	BKLYER30F4DanIvfav5g==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wgkxq2r7k-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 27 Feb 2024 03:19:08 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41R3J7ae006121
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 27 Feb 2024 03:19:07 GMT
-Received: from [10.110.56.192] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Mon, 26 Feb
- 2024 19:19:06 -0800
-Message-ID: <adb2956b-c600-4e86-8c56-87ceb70162d6@quicinc.com>
-Date: Mon, 26 Feb 2024 19:19:05 -0800
+	s=arc-20240116; t=1709004031; c=relaxed/simple;
+	bh=aEWeFJ2eAgzcvr+OaHdaIiM7TBOw2JHpdO912FAxBrQ=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=HiDNt3fnVXuGP2LZk9qZX6eq0d0c0aHWyi4s/80M34OXbJbLQ0J+BReyCNw8eAKY9rCvr6VjJ7pN8M4WAekOtB54cMsOofMp24ivlAhmBNBf5UmI1QFYq+WU5u3l5DwZNV0a4VpiDqu6rL8hyOpmG68YqCbm5Pz0yNEydiltP6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GGZalQiN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 601C6C433F1;
+	Tue, 27 Feb 2024 03:20:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709004030;
+	bh=aEWeFJ2eAgzcvr+OaHdaIiM7TBOw2JHpdO912FAxBrQ=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=GGZalQiNOWNgvr31MEFJ81Scx/q8IuKaZAqiPFZE+SD8pSdQWwG3CioqZpDlRQUAD
+	 jKvVifURv7BOpc25WdOU3fYy6BfTMtetonGpoamgfDO3hXxtvjNyuDx94vkioJxfvV
+	 MubNjVgf5u85jr4mrAuCzosl1CeEkeDYgrDKshVma4vowdYyZfX9/uNolq5oS00HY6
+	 VdQ/8vtg8n+7bDwLjb5y8Yg2i9Qutge32EjMjVf5A2q9l0zWeu9yL5HgzRZ4UWdsvX
+	 1U/1FgMqGQhy/VrktEoQPhkUCFsQrCXfoN9l9KW3KzU1jxRXAX9mECe7VQa53IR0gn
+	 sUUzlKI2AvVrA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3DB28D88FB2;
+	Tue, 27 Feb 2024 03:20:30 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] pmdomain: qcom: rpmhpd: Fix enabled_corner aggregation
-Content-Language: en-US
-To: <quic_bjorande@quicinc.com>, Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ulf Hansson
-	<ulf.hansson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Johan Hovold
-	<johan+linaro@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Johan Hovold <johan@kernel.org>,
-        <stable@vger.kernel.org>
-References: <20240226-rpmhpd-enable-corner-fix-v1-1-68c004cec48c@quicinc.com>
-From: Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20240226-rpmhpd-enable-corner-fix-v1-1-68c004cec48c@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: qZ-77PHJpcQJTzmczVJLxZopCVLGS0C9
-X-Proofpoint-ORIG-GUID: qZ-77PHJpcQJTzmczVJLxZopCVLGS0C9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-26_11,2024-02-26_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 lowpriorityscore=0 mlxlogscore=999 suspectscore=0 adultscore=0
- spamscore=0 clxscore=1011 malwarescore=0 impostorscore=0 phishscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2402120000 definitions=main-2402270025
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v4 00/39] Add support for sam9x7 SoC family
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <170900403024.25082.9031028983461362329.git-patchwork-notify@kernel.org>
+Date: Tue, 27 Feb 2024 03:20:30 +0000
+References: <20240223171342.669133-1-varshini.rajendran@microchip.com>
+In-Reply-To: <20240223171342.669133-1-varshini.rajendran@microchip.com>
+To: Varshini Rajendran <varshini.rajendran@microchip.com>
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ conor+dt@kernel.org, nicolas.ferre@microchip.com,
+ alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev,
+ mturquette@baylibre.com, sboyd@kernel.org, herbert@gondor.apana.org.au,
+ davem@davemloft.net, andi.shyti@kernel.org, tglx@linutronix.de,
+ tudor.ambarus@linaro.org, miquel.raynal@bootlin.com, richard@nod.at,
+ vigneshr@ti.com, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ linus.walleij@linaro.org, sre@kernel.org, u.kleine-koenig@pengutronix.de,
+ p.zabel@pengutronix.de, olivia@selenic.com, radu_nicolae.pirea@upb.ro,
+ richard.genoud@gmail.com, gregkh@linuxfoundation.org, jirislaby@kernel.org,
+ lgirdwood@gmail.com, broonie@kernel.org, wim@linux-watchdog.org,
+ linux@roeck-us.net, linux@armlinux.org.uk, andrei.simion@microchip.com,
+ mihai.sain@microchip.com, andre.przywara@arm.com, neil.armstrong@linaro.org,
+ tony@atomide.com, durai.manickamkr@microchip.com, geert+renesas@glider.be,
+ arnd@arndb.de, Jason@zx2c4.com, rdunlap@infradead.org, rientjes@google.com,
+ vbabka@suse.cz, mripard@kernel.org, codrin.ciubotariu@microchip.com,
+ eugen.hristev@collabora.com, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-mtd@lists.infradead.org,
+ netdev@vger.kernel.org, linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+ alsa-devel@alsa-project.org, linux-sound@vger.kernel.org,
+ linux-watchdog@vger.kernel.org
+
+Hello:
+
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Fri, 23 Feb 2024 22:43:42 +0530 you wrote:
+> This patch series adds support for the new SoC family - sam9x7.
+>  - The device tree, configs and drivers are added
+>  - Clock driver for sam9x7 is added
+>  - Support for basic peripherals is added
+>  - Target board SAM9X75 Curiosity is added
+> 
+>  Changes in v4:
+> 
+> [...]
+
+Here is the summary with links:
+  - [v4,01/39] dt-bindings: net: cdns,macb: add sam9x7 ethernet interface
+    https://git.kernel.org/netdev/net-next/c/5c237967e632
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-
-On 2/26/2024 5:49 PM, Bjorn Andersson via B4 Relay wrote:
-> From: Bjorn Andersson <quic_bjorande@quicinc.com>
-> 
-> Commit 'e3e56c050ab6 ("soc: qcom: rpmhpd: Make power_on actually enable
-> the domain")' aimed to make sure that a power-domain that is being
-> enabled without any particular performance-state requested will at least
-> turn the rail on, to avoid filling DeviceTree with otherwise unnecessary
-> required-opps properties.
-> 
-> But in the event that aggregation happens on a disabled power-domain, with
-> an enabled peer without performance-state, both the local and peer
-> corner are 0. The peer's enabled_corner is not considered, with the
-> result that the underlying (shared) resource is disabled.
-> 
-> One case where this can be observed is when the display stack keeps mmcx
-> enabled (but without a particular performance-state vote) in order to
-> access registers and sync_state happens in the rpmhpd driver. As mmcx_ao
-> is flushed the state of the peer (mmcx) is not considered and mmcx_ao
-> ends up turning off "mmcx.lvl" underneath mmcx. This has been observed
-> several times, but has been painted over in DeviceTree by adding an
-> explicit vote for the lowest non-disabled performance-state.
-> 
-> Fixes: e3e56c050ab6 ("soc: qcom: rpmhpd: Make power_on actually enable the domain")
-> Reported-by: Johan Hovold <johan@kernel.org>
-> Closes: https://lore.kernel.org/linux-arm-msm/ZdMwZa98L23mu3u6@hovoldconsulting.com/
-> Cc:  <stable@vger.kernel.org>
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
-> This issue is the root cause of a display regression on SC8280XP boards,
-> resulting in the system often resetting during boot. It was exposed by
-> the refactoring of the DisplayPort driver in v6.8-rc1.
-> ---
->   drivers/pmdomain/qcom/rpmhpd.c | 7 +++++--
->   1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
 
