@@ -1,135 +1,132 @@
-Return-Path: <linux-pm+bounces-4419-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4420-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61672868697
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 03:08:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA37E86869C
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 03:12:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 927CB1C21CF2
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 02:08:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9274D28854A
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 02:12:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CA9FEADA;
-	Tue, 27 Feb 2024 02:08:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E48AD107A9;
+	Tue, 27 Feb 2024 02:12:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="VN3fDdh0"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lAwWueSj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D007417BB5
-	for <linux-pm@vger.kernel.org>; Tue, 27 Feb 2024 02:08:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CCB337E
+	for <linux-pm@vger.kernel.org>; Tue, 27 Feb 2024 02:12:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708999697; cv=none; b=fZjln4IxvICajHGIikHk/azhAfcNzJ/KEq4WLjgAblQWfSzUMXmi5U+MN7iyuELiRmwlG/AXcDhri+CNT8b98W0vRO+ATIIHHxqSUo1Mjbysxf96AwSM6a37FCzVhx2SfV4p9eP2T6EUdVqjfnhEP1wEHAMZQCrPij+J4w0BdK8=
+	t=1708999933; cv=none; b=gR9bJbqRtDeHtk9wUEvh+os3dP9Rh9YDvLK+rsDlRWXTn/QeNffQFArWl9PMUca4TED8Se1NH1qUbDoihAfcIP20gJTq0INkQN4osC082qEzufg1BoUp9+DA8qj8jItyKOQooSd+pS9ky+vLprI3MF3IpGD3r3RcYFdeYdJCL2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708999697; c=relaxed/simple;
-	bh=1nrHMmEG51Sj437E4s1EkfyuxGl2jRLjyHs/cGUfhXM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IuzAfuNsnb2XHo+eyDlGvFR0VtL0Ml5GSAvwv+eTvkHdyIQ5LQNbCyndcN5F8rz7+bm8JGpOr4TYDBsd80sqLNxMKBVqttbW69L/Lh4xTC7vqKJU1+DGGLlMeR2e3DAGELRHOpYG3a/xGgyblbnso0UeMhGt4tDreYWHlifCB1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=VN3fDdh0; arc=none smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-5ce07cf1e5dso2960362a12.2
-        for <linux-pm@vger.kernel.org>; Mon, 26 Feb 2024 18:08:15 -0800 (PST)
+	s=arc-20240116; t=1708999933; c=relaxed/simple;
+	bh=Z56/LI8VZmdz98CuUjLKRxqM+/e9GrRj/1Z7Ht5aUfw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=k1tOAXWQ/ZMssrvw+u4XqHzz8m0b/bBMrvRy3EHnsv+XFFTNeikAcWffEmuMcX0MAGCta1Euntt///mHHK3LUSmzswtjXVUV5EXRumAyGRbv/v2OJlYZBIv5IzsREoypFltL+/NuSLHfBwkcW7bt90eCFxGuHART0scMYXlHNQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lAwWueSj; arc=none smtp.client-ip=209.85.219.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-dcd94fb9e4dso4068836276.2
+        for <linux-pm@vger.kernel.org>; Mon, 26 Feb 2024 18:12:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1708999695; x=1709604495; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oVkpTbipxCiUrmv2gBFC6axIfIqg3FWn8ARyZarMPgo=;
-        b=VN3fDdh0y5kZtNXMiVduELns1/LtGi0eSX7gEYeiZJ45KXPE9TRJg+vqINyXbqLYDh
-         6Gdt2zD00qOTn439iZfqo6Cq7A30wkr755wXL8M326ysJUmslnHeUvGPQWN6P9tyRw9v
-         shuuA/mFvrsuO82KKvuAgR89tD7FkSEsreLrE=
+        d=linaro.org; s=google; t=1708999930; x=1709604730; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tkk2Ni6/yhyMeaZGa7IIqv+Yfz58c68ZVLrD2RbHJZ4=;
+        b=lAwWueSjV4zfBBmTtNJxigVRZQ+zhyUyZvljhuzxtHCNg/vfHzo2m6gKWLG0THEA8W
+         Kh8Sl5OVoPOcHbiae2DMkkmWL/G7efTrOJkH0yg2YO8bCItELs4e4WG6CPcqmBODBUGp
+         7wX3V0t+jkyYsCcpO6qxCShm4Dz+SjzArJ46rsWDCuEiPpYbjpnbwgryfNMiju9DNuFx
+         J6Vvucq1r7nlOvR4jATY+3gzXQXPNG8c709UBhkyFHlo1o7HWX+/TLwBx61z9Mjhoxjw
+         pa7muU7hrNQEpckhdeYvy3XNB5t63nusm4WVctz2egTxZDEcHb/5UPIKF2MjGejB0qnk
+         F3YQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708999695; x=1709604495;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oVkpTbipxCiUrmv2gBFC6axIfIqg3FWn8ARyZarMPgo=;
-        b=C3kRCRNWY84Ru9m+2zJxhMwJ0qkz4uKavYl9id/eS3/lr83FuoanOGfcvzA31x9N0t
-         0qV4LSYnK77AN3JyprgedUxE7gF063+RRpEcReqdcqvGbHe2VD3W3GZTnuu330olHW9p
-         vvaB8Jx98uHS2yOczgSmQ+Cz5lnFG/HlpE3zFKpimLrUY5nMxZ78kH4nbEJvN92fYEO3
-         +LV2oGCKzwpqK68Qds+NLJHvyNOVo9NpWQXoG9Pppek0Ge2KHOyMgvpc9aEoQ/F+KpDH
-         gPIS7OaChsQu2u0awlQGoGPfV/sVqCCgmtwocQF3zUS4Ezk/Ajs3ggcutNBzVcqTNhYu
-         qlZA==
-X-Forwarded-Encrypted: i=1; AJvYcCUaSbm/1vzJqEcU8yEQHOG+CMVUySY2EpM0U79LshGPK6zBDrobu6RYUfqOTVhiwkr2vRRIL0eVAz5D0imHhwUuO3LxbL+mcQg=
-X-Gm-Message-State: AOJu0YwvpKfjIZ2UoOlHIsaHNOvndr7IOggazamDbPDWVBFngJfyTIaj
-	F1kFJxglf7SWticYmQi8XrNYFtzbpZhEDhejIrLjFs47dRV0O1qDdC4XWOa4dQ==
-X-Google-Smtp-Source: AGHT+IF6zdQ/2mc8pHy3ltuh8A68wKo1/k8qw2couBJUhs2wfECHjSq4AtVGKGBQE7knMNxjo75dzg==
-X-Received: by 2002:a17:90b:124d:b0:299:32ee:a426 with SMTP id gx13-20020a17090b124d00b0029932eea426mr5747343pjb.32.1708999695238;
-        Mon, 26 Feb 2024 18:08:15 -0800 (PST)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id s62-20020a17090a2f4400b002992f49922csm5774240pjd.25.2024.02.26.18.08.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Feb 2024 18:08:14 -0800 (PST)
-Date: Mon, 26 Feb 2024 18:08:14 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
-	lukasz.luba@arm.com, gustavoars@kernel.org, morbo@google.com,
-	justinstitt@google.com, stanislaw.gruszka@linux.intel.com,
-	linux-pm@vger.kernel.org, linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH] thermal: core: Move initial num_trips assignment before
- memcpy()
-Message-ID: <202402261806.A8340C71D@keescook>
-References: <20240226-thermal-fix-fortify-panic-num_trips-v1-1-accc12a341d7@kernel.org>
+        d=1e100.net; s=20230601; t=1708999930; x=1709604730;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tkk2Ni6/yhyMeaZGa7IIqv+Yfz58c68ZVLrD2RbHJZ4=;
+        b=K6cTCMEmNw678geTtEXsbSyOJVh6WWyBIa40YnP7xOoAtVV25vrBxu7dHwcfZ5wz7P
+         s3UhxVCP5Saib2ss9BS3+UUDpkFet78fOMiIG1FT4C04iJq2KZavQuVpyCsZksY9gAtE
+         Jxe4qoYcMUkRO6bNnRjP/DKN4Qgbro7HVUm4/jPC26u05RTb6hJUw+tUQI8Nh4PJlQ9O
+         VyqpcmB7rCDRzfJ6PSW+qmRo0UxnGHsyeVrdq1NAydkqizlG5pew6QCqt3slzGUmEfBv
+         H3aTMeSUWylEiY9bpTpJ/ag0y1cXrLvNAb6N+rwfjm9JhrWV6rFW3+NEz4c3sA9attDy
+         QFiA==
+X-Forwarded-Encrypted: i=1; AJvYcCU5IwJ4WeVY/MmiCvITdTA1eAcyBLsuiKS6a9ihkMvXEm/tIYlhB1IU+TA6s6hUB4JbY4A7Eo1oAQOYes2cZSO7goChpZPgf2Y=
+X-Gm-Message-State: AOJu0YzLt88Y82gvBVNKUW5TKgVq9qrBMB6dzR1mm1mU1vy8k+aGFDQN
+	wgh+M2wygoe3O1dBPMaFqM/l1AJ0qz6KpUFUAYgQTQoxdIlwoOKen62qf7Q/tLncMR+kTfcWs9D
+	6kyYFvWztvdB0D3uQl4anhHuixTbJ9H+7reVW9g==
+X-Google-Smtp-Source: AGHT+IFxwZo4jdNC6Y1qg8jo3OFzprpy0HeWCrowjlAGstZGCPHgOw7rD/34/+prPDnHsvSDlgsCDFtxPaz0GjLwWbM=
+X-Received: by 2002:a25:9a05:0:b0:dcd:5635:5c11 with SMTP id
+ x5-20020a259a05000000b00dcd56355c11mr940809ybn.45.1708999930374; Mon, 26 Feb
+ 2024 18:12:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240226-thermal-fix-fortify-panic-num_trips-v1-1-accc12a341d7@kernel.org>
+References: <20240226-rpmhpd-enable-corner-fix-v1-1-68c004cec48c@quicinc.com>
+In-Reply-To: <20240226-rpmhpd-enable-corner-fix-v1-1-68c004cec48c@quicinc.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Tue, 27 Feb 2024 04:11:59 +0200
+Message-ID: <CAA8EJppya80cFev=ZKCJrj8=+5jexDYyr5uZOSHBWK65gRJofA@mail.gmail.com>
+Subject: Re: [PATCH] pmdomain: qcom: rpmhpd: Fix enabled_corner aggregation
+To: quic_bjorande@quicinc.com
+Cc: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Stephen Boyd <swboyd@chromium.org>, 
+	Johan Hovold <johan+linaro@kernel.org>, linux-arm-msm@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Johan Hovold <johan@kernel.org>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Feb 26, 2024 at 05:54:58PM -0700, Nathan Chancellor wrote:
-> When booting a CONFIG_FORTIFY_SOURCE=y kernel compiled with a toolchain
-> that supports __counted_by() (such as clang-18 and newer), there is a
-> panic on boot:
-> 
->   [    2.913770] memcpy: detected buffer overflow: 72 byte write of buffer size 0
-
-Yay, the "better details" output is working. :)
-
->   [    2.920834] WARNING: CPU: 2 PID: 1 at lib/string_helpers.c:1027 __fortify_report+0x5c/0x74
->   ...
->   [    3.039208] Call trace:
->   [    3.041643]  __fortify_report+0x5c/0x74
->   [    3.045469]  __fortify_panic+0x18/0x20
->   [    3.049209]  thermal_zone_device_register_with_trips+0x4c8/0x4f8
-> 
-> This panic occurs because trips is counted by num_trips but num_trips is
-> assigned after the call to memcpy(), so the fortify checks think the
-> buffer size is zero because tz was allocated with kzalloc().
-> 
-> Move the num_trips assignment before the memcpy() to resolve the panic
-> and ensure that the fortify checks work properly.
-> 
-> Fixes: 9b0a62758665 ("thermal: core: Store zone trips table in struct thermal_zone_device")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+On Tue, 27 Feb 2024 at 03:45, Bjorn Andersson via B4 Relay
+<devnull+quic_bjorande.quicinc.com@kernel.org> wrote:
+>
+> From: Bjorn Andersson <quic_bjorande@quicinc.com>
+>
+> Commit 'e3e56c050ab6 ("soc: qcom: rpmhpd: Make power_on actually enable
+> the domain")' aimed to make sure that a power-domain that is being
+> enabled without any particular performance-state requested will at least
+> turn the rail on, to avoid filling DeviceTree with otherwise unnecessary
+> required-opps properties.
+>
+> But in the event that aggregation happens on a disabled power-domain, with
+> an enabled peer without performance-state, both the local and peer
+> corner are 0. The peer's enabled_corner is not considered, with the
+> result that the underlying (shared) resource is disabled.
+>
+> One case where this can be observed is when the display stack keeps mmcx
+> enabled (but without a particular performance-state vote) in order to
+> access registers and sync_state happens in the rpmhpd driver. As mmcx_ao
+> is flushed the state of the peer (mmcx) is not considered and mmcx_ao
+> ends up turning off "mmcx.lvl" underneath mmcx. This has been observed
+> several times, but has been painted over in DeviceTree by adding an
+> explicit vote for the lowest non-disabled performance-state.
+>
+> Fixes: e3e56c050ab6 ("soc: qcom: rpmhpd: Make power_on actually enable the domain")
+> Reported-by: Johan Hovold <johan@kernel.org>
+> Closes: https://lore.kernel.org/linux-arm-msm/ZdMwZa98L23mu3u6@hovoldconsulting.com/
+> Cc:  <stable@vger.kernel.org>
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 > ---
->  drivers/thermal/thermal_core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index bb21f78b4bfa..1eabc8ebe27d 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -1354,8 +1354,8 @@ thermal_zone_device_register_with_trips(const char *type,
->  
->  	tz->device.class = thermal_class;
->  	tz->devdata = devdata;
-> -	memcpy(tz->trips, trips, num_trips * sizeof(*trips));
->  	tz->num_trips = num_trips;
-> +	memcpy(tz->trips, trips, num_trips * sizeof(*trips));
+> This issue is the root cause of a display regression on SC8280XP boards,
+> resulting in the system often resetting during boot. It was exposed by
+> the refactoring of the DisplayPort driver in v6.8-rc1.
+> ---
+>  drivers/pmdomain/qcom/rpmhpd.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 
-Looks good to me; thanks for catching this!
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Tested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Probably once this lands we can drop explicit required-opps properties.
 
 -- 
-Kees Cook
+With best wishes
+Dmitry
 
