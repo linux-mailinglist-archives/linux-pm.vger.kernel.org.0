@@ -1,181 +1,120 @@
-Return-Path: <linux-pm+bounces-4475-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4476-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35D9786A1BF
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 22:34:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBC5A86A1C2
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 22:35:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 04096B2DAF7
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 21:30:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 099E21C27AD3
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 21:35:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2A1514F99C;
-	Tue, 27 Feb 2024 21:28:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 945A314A0A0;
+	Tue, 27 Feb 2024 21:35:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="MViJut8W"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fJCSGHPF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14245151CCE
-	for <linux-pm@vger.kernel.org>; Tue, 27 Feb 2024 21:28:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA05E779F2
+	for <linux-pm@vger.kernel.org>; Tue, 27 Feb 2024 21:35:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709069287; cv=none; b=CyLLJzPcwZb+HscjE7Mn+jQJN8wCX9sgNUO3xq8zo0cvzvAvgilWaEGmUR4J4fslnAJxWAUosvMWTAfHyfsdcmqfHUCW5mRbE9vmSHlo6QnYubOt6o15FqwEnsp/faWBOTeA3L5/PLFO/cRvuwJDpwxONUcpy0R629bsgM0F4v8=
+	t=1709069730; cv=none; b=hkd6crthYiO7DS8zjs3iyaR8ltRoxzwzNSMJv4zjVltcqeeLZE/DWYs0ZUe0Q10GBN0ud+FLM01oXnTSzSmCT4L/1hu6cslzdGfGVHdzqUgsVeCd4++Z+AYalzfu5G8qLcRhsnMLoaxrzfeVxnziMNkjPwKqzDkg9K0koCVNnLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709069287; c=relaxed/simple;
-	bh=ldVgS1aR0z42eyCtxT/QNicwlMS2zhb2zcTkrKdh6Qw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=K1MLzyW0XxJqaanZJor+Tdv3yn+RR5xaAmlhyUj2vE+AX3tkedaB5/wVOFFd+twVoM3khA+px31atyIZ98U/+dBmeiJ4HD7u5U3cq0WAiFxaFjKysNU2gTySdB2VTGx/YooWLGTcMAUVATscjHkFMsuAifx8PgDD9hDqWT/Qh8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=MViJut8W; arc=none smtp.client-ip=209.85.166.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-365b5050622so331015ab.0
-        for <linux-pm@vger.kernel.org>; Tue, 27 Feb 2024 13:28:05 -0800 (PST)
+	s=arc-20240116; t=1709069730; c=relaxed/simple;
+	bh=csIT1XHR4cYuY2ZsSpnmCH15cMwRUEP3bJuDCjtIZM0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aDaydBqder3u7FnlGqdOCjUwjxa4BftMbd+f87gAAGSrfdpSVJFnVJEdc5wwav64333C6j3iPi5vkAp77yuCKMX3GYNzhIVLyrsG9ZcP9PNCvolci7Mb2N88hyY/JFw6gVTOJb7xWSosLCOKhz8eFBM4QOeb+uyxYhgvF1WIToA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fJCSGHPF; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-33d36736d4eso2994843f8f.1
+        for <linux-pm@vger.kernel.org>; Tue, 27 Feb 2024 13:35:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1709069285; x=1709674085; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=B6cYCiTKgel5L8zLDPQBA3bSl0Hw58QwImvNAKCqvVA=;
-        b=MViJut8W/ornDe2lYZvhFAcoW4XTLadRYSGrAzk1xMFpQJqWdiZi05CrOjSZGRKd7/
-         Itl0S4wwERn3857Miz9Q8TVq0jCa21hao69+bRPOkBYe/eXOGISt/c2MwqIA0ZBkohrX
-         bJtnaVQa69nYcmQHAvtc5Azgw3014HN+7mfCU=
+        d=gmail.com; s=20230601; t=1709069727; x=1709674527; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VbumYuQMoHK6ac8bBReSFLjXDGsDbGcW6OsZV5tI8TY=;
+        b=fJCSGHPFXxTL6//LyJm8cYnlD5vnNxtkbu5+paiPnemRgS6tlmY2onR/FJYj3q4xr1
+         K6CqG7k6PtQHV1vK7e4mNS0WHWms9Td6/J6rTFoKMXaj8uQ55VGc5Zfk1YGeKpMUv70X
+         wVwF3X8xHIQg17pyaD48MIYJfkuNCCoIZpBxQv0bVrmWAAmSglY6diebDLmBkr0ElmGP
+         ENuxuLKUeptP77l3y59WmB+Rwv6FfQjci+nVG6JLarAPOPaEjfBSBXzqPyr8ub1x9VvD
+         osRvWVhEDuHTzc0tZWX98CAejpm249N0Bh+fLDaBLxjDLdobHAY/BFW5gu+2ZRklM395
+         qXfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709069285; x=1709674085;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B6cYCiTKgel5L8zLDPQBA3bSl0Hw58QwImvNAKCqvVA=;
-        b=jW8qsb6eRyAcFns9IGmob8fpEj2Td7+wwHVje+58N16XXyNOEOIyn1Ac2KPW3McivT
-         Fn28MEq5ZrdW3ivxfIDlemueIYyhFqhqRmBoCIjX+oUOZ6qtXdAJLVGxv6CU6yOOot4i
-         qqWOymIPOB0NVpkde+FKbGx82pSRoXOdvBFBhT6MH21DRGlOPNJn+lR7nQoQzytjpXb/
-         ha4IPK1tV6a6gJ3/7GCikGPJDz2Yf6xZfrfRjb9gmSY6jg+Urj+PlTGkJREYVjiNO/Zx
-         Huo00+JP3FOgCLLUjoHGJ50CNYgmuUVc3hXFTTemURn0AWmudXOGXHp1f9Xm28rSl+Jc
-         aT4w==
-X-Forwarded-Encrypted: i=1; AJvYcCUK8NEFxporgdNYK480G2iUXDN3Y7WyPynSR8yIksQIcBypzSU8Ay3G3x5q2p9vF4pSVYk+/buDAnU9Aix/sJyLmT/awcn7694=
-X-Gm-Message-State: AOJu0YwFHE+TuE3DUB5hMXQQ95PPAPWgBc4Km8SWaoGxUazEq5xNDPwO
-	xBPq3acUeoTda8520rx7FVnkUCxbaOtIANO6HpE2/ufFTdA3+uoZwfcYzHkeYpg=
-X-Google-Smtp-Source: AGHT+IHiPn6i00reN7SlNcYrxsFiS4rLTfePpGy1sBB48MvWIB3eHpdkyqm4V+OCSNxz+D31bA113g==
-X-Received: by 2002:a6b:7a4a:0:b0:7c7:9c4b:90e6 with SMTP id k10-20020a6b7a4a000000b007c79c4b90e6mr10237659iop.1.1709069285100;
-        Tue, 27 Feb 2024 13:28:05 -0800 (PST)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id x20-20020a056638249400b004747c4f663dsm1661363jat.0.2024.02.27.13.28.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Feb 2024 13:28:03 -0800 (PST)
-Message-ID: <a4b957de-90d1-4779-b6a5-c6a9c1b005cc@linuxfoundation.org>
-Date: Tue, 27 Feb 2024 14:28:02 -0700
+        d=1e100.net; s=20230601; t=1709069727; x=1709674527;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VbumYuQMoHK6ac8bBReSFLjXDGsDbGcW6OsZV5tI8TY=;
+        b=NUbtP5nlXuhjojQbTaOfUmfMohPRd/Djrv2A0uuxVmn5zXX0xJNIZNY5ngKN74O6o6
+         4iQuS3u8LuVYzGROFhj5mFSlZQN2zGHmPdp3RpWnpgtUPU1kNVLdjXU8RgrjJN0zyUVO
+         fidHBYCIqwcrs/rBKz2LD9vcsbc3WwThXCDcyywOt3hEQdHA/r4yKRWAo9Hdx2S1QN+2
+         gFlJ5FN6yRc8XHnzcy3lqru8e6k/RrmpeiH6VKQU8cUsghDv00CrePaTVLWnJ9rugNSL
+         jpurF5u6kTiYzDWOl8xDuo1VsOhbNGktTMcH0y7Kms7E0IvoNY4q3OtzjB5qwNpKy6aF
+         AiOw==
+X-Gm-Message-State: AOJu0Yyj6rkIXoReFxJHfo+Sw8s0BS9COWOGHnYBJIF/P0UUPWJSRQwu
+	pW/CV6uAVZqKBYV/iwuuj+YaUr0AuDnYf4oyiAER34t4jCvoBqhd
+X-Google-Smtp-Source: AGHT+IEOA94dL1RXTSjAibvXUkmZzcmyLg5PsZZ+Az1vrQEo9s28UFECy0cFD6c3oZ+Z8VQuY/Fccw==
+X-Received: by 2002:adf:fd42:0:b0:33d:1b69:fbbe with SMTP id h2-20020adffd42000000b0033d1b69fbbemr7803967wrs.29.1709069726961;
+        Tue, 27 Feb 2024 13:35:26 -0800 (PST)
+Received: from tp440p.steeds.sam ([2602:fbf6:10:a::2])
+        by smtp.gmail.com with ESMTPSA id b14-20020a05600003ce00b0033dd06e628asm9117941wrg.27.2024.02.27.13.35.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Feb 2024 13:35:26 -0800 (PST)
+Date: Tue, 27 Feb 2024 23:34:54 +0200
+From: Sicelo <absicsz@gmail.com>
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: linux-pm@vger.kernel.org, maemo-leste@lists.dyne.org, pali@kernel.org
+Subject: Re: [PATCH] power: supply: bq2415x_charger: report online status
+Message-ID: <Zd5VflcLb3Es1xiJ@tp440p.steeds.sam>
+References: <20240226194432.2174095-1-absicsz@gmail.com>
+ <6slfmvqmtawwjlsobcfod6ewcjjbzmylz3owsdamdi4dod55wr@iiox5rzjj5ht>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RESEND PATCH] selftests/overlayfs: fix compilation error in
- overlayfs
-Content-Language: en-US
-To: Andrei Vagin <avagin@google.com>
-Cc: Meng Li <li.meng@amd.com>, Huang Rui <ray.huang@amd.com>,
- linux-pm@vger.kernel.org, Nathan Fontenot <nathan.fontenot@amd.com>,
- Deepak Sharma <deepak.sharma@amd.com>,
- Alex Deucher <alexander.deucher@amd.com>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Perry Yuan <Perry.Yuan@amd.com>, Xiaojian Du <Xiaojian.Du@amd.com>,
- Viresh Kumar <viresh.kumar@linaro.org>, Borislav Petkov <bp@alien8.de>,
- linux-kernel@vger.kernel.org,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240227074204.3573450-1-li.meng@amd.com>
- <2aaa2a61-f753-4434-8c92-886fc4bb9aef@linuxfoundation.org>
- <CAEWA0a6D1YQtCuW1FswyGXXWNTrmyerNS3zzcqBPpyQ-GtOopA@mail.gmail.com>
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <CAEWA0a6D1YQtCuW1FswyGXXWNTrmyerNS3zzcqBPpyQ-GtOopA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6slfmvqmtawwjlsobcfod6ewcjjbzmylz3owsdamdi4dod55wr@iiox5rzjj5ht>
 
-On 2/27/24 14:20, Andrei Vagin wrote:
-> On Tue, Feb 27, 2024 at 8:41 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
->>
->> On 2/27/24 00:42, Meng Li wrote:
->>> make -C tools/testing/selftests, compiling dev_in_maps fail.
->>> In file included from dev_in_maps.c:10:
->>> /usr/include/x86_64-linux-gnu/sys/mount.h:35:3: error: expected identifier before numeric constant
->>>      35 |   MS_RDONLY = 1,                /* Mount read-only.  */
->>>         |   ^~~~~~~~~
->>>
->>> That sys/mount.h has to be included before linux/mount.h.
->>>
->>> Signed-off-by: Meng Li <li.meng@amd.com>
->>> ---
->>>    tools/testing/selftests/filesystems/overlayfs/dev_in_maps.c | 2 +-
->>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>
->> I don't see this problem when I build it on my system when
->> I run:
->>
->> make -C tools/testing/selftests
->> or
->> make -C tools/testing/selftests/filesystems/overlayfs
->>
->> Are you running this after doing headers_install?
-> 
-> It depends on libc headers. It can work with one libc and doesn't work
-> with another one. I have seen many times when linux headers conflicted
-> with libc headers. The only reliable way to avoid this sort of issues is
-> to include just one linux or libc header.
-> 
-> In this case, we can do something like this:
-> 
-> diff --git a/tools/testing/selftests/filesystems/overlayfs/dev_in_maps.c
-> b/tools/testing/selftests/filesystems/overlayfs/dev_in_maps.c
-> index e19ab0e85709..f1ba82e52192 100644
-> --- a/tools/testing/selftests/filesystems/overlayfs/dev_in_maps.c
-> +++ b/tools/testing/selftests/filesystems/overlayfs/dev_in_maps.c
-> @@ -10,7 +10,6 @@
->   #include <linux/mount.h>
->   #include <sys/syscall.h>
->   #include <sys/stat.h>
-> -#include <sys/mount.h>
->   #include <sys/mman.h>
->   #include <sched.h>
->   #include <fcntl.h>
-> @@ -40,6 +39,14 @@ static int sys_move_mount(int from_dfd, const char
-> *from_pathname,
->          return syscall(__NR_move_mount, from_dfd, from_pathname,
-> to_dfd, to_pathname, flags);
->   }
-> 
-> +static int sys_mount(const char *source, const char *target,
-> +                    const char *filesystemtype, unsigned long mountflags,
-> +                    const void *data)
-> +{
-> +       return syscall(__NR_mount, source, target, filesystemtype,
-> mountflags, data);
-> +}
-> +
-> +
->   static long get_file_dev_and_inode(void *addr, struct statx *stx)
->   {
->          char buf[4096];
-> @@ -167,7 +174,7 @@ int main(int argc, char **argv)
->                  return 1;
->          }
-> 
-> -       if (mount(NULL, "/", NULL, MS_SLAVE | MS_REC, NULL) == -1) {
-> +       if (sys_mount(NULL, "/", NULL, MS_SLAVE | MS_REC, NULL) == -1) {
->                  pr_perror("mount");
->                  return 1;
->          }
-> 
+Hi Sebastian
 
+On Tue, Feb 27, 2024 at 09:11:36PM +0100, Sebastian Reichel wrote:
+> Hi,
+> 
+> On Mon, Feb 26, 2024 at 09:44:32PM +0200, Sicelo A. Mhlongo wrote:
+> > Provide the Online property. This chip does not have specific flags to
+> > indicate the presence of an input voltage, but this can be inferred from
+> > the reported charging status.
+> 
+> The datasheet suggests, that you can get the status from the fault
+> bits:
+> 
+> 011 - Poor input source or VBUS < UVLO
+> 
+Absolutely, yes. This particular state, which is a fault condition, clearly
+indicates VBUS is present.
 
-This is definitely better solution to this problem than reordering
-the includes only find another problem down the road.
+However, when there are no faults at all, then those bits always read
+`000`. On a running system, one can check this by connecting and
+disconnecting a charger (Nokia N900 used in my tests) while watching
+/sys/class/power_supply/bq24150a-0/registers. Only bit 4 changes state.
+In other words, the fault bits do not appear to be enough to determine
+the presence of an input voltage.
 
-thanks,
--- Shuah
+However, looking at them more closely seems to suggest I should respin the
+patch to also report VBUS online if a fault is reported instead of only
+during charging and charge full states.
 
+Please let me know if this sounds correct, or if I misunderstood your
+reply.
+
+Sincerely
+Sicelo
 
