@@ -1,152 +1,127 @@
-Return-Path: <linux-pm+bounces-4435-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4436-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBFBC868BF4
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 10:15:46 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93DA3868CC1
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 10:58:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 288231C22FD8
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 09:15:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 23140B220EA
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 09:58:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25250135A7B;
-	Tue, 27 Feb 2024 09:15:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="oAPOt3Uo"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A1E5137C20;
+	Tue, 27 Feb 2024 09:58:06 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9227135A77;
-	Tue, 27 Feb 2024 09:15:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04A1D13699A;
+	Tue, 27 Feb 2024 09:58:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709025340; cv=none; b=YS8Mwhb1DTX/MvAt2aJuxKtUup5sF0zVOutvxICzRNqX9qfEoeh0civR0M/aGtZn4e8VyfdC6LoikmG2eOILSXrJRLjeqSLzQhQZisJGfIfYBUBVrsqlK8gcIxEMKGTpWFLFkRafvpgnkZU3G+UO5/u6WIi0ba/8aZVsoDhYxDM=
+	t=1709027886; cv=none; b=jE/KFdYjY/OcnipLgV87H+NViCZEXicRVVVhJduFgpr1a8EFMo2CBAG1wKeSwKNGinw87FhVeMYHKz4liEbrSltgASY6peqPfYTqj/gQCsFeJYSks/2FF49lBlTupv2J4hrEYtOabxAOtkqHLmZTBj4VT+KwI4PWodHTaaaRzMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709025340; c=relaxed/simple;
-	bh=d6n/XiSO0cqCTIB38U7027rr36u9/kKHZKWwKIAn5f0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MjyPmmS/zdtMhMXiqGEPD94O82wGcavUXYFNs0jetR8xRGMbpwHugyPKZKcqHhKT5NNjcf9groEXj35gYyhyfifOy/jjP7HEuHgjy9lsG7saV+/AKyxsqd0LKv2ZAxlOm0ma7+uyT9NRnS2dSmqDuQGkKnzz5fln9Vpkq+5Vo9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=oAPOt3Uo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0D64C433F1;
-	Tue, 27 Feb 2024 09:15:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1709025339;
-	bh=d6n/XiSO0cqCTIB38U7027rr36u9/kKHZKWwKIAn5f0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oAPOt3UosWKHdRV2DfFQKDnaqshe2zGhBOK9awT/1gZAwyb5dub6FgRg+tb0VQpsX
-	 zeeqh/6SHrGlGh0Gg3Wmw0iQPGBBIiZD1Z/NRpO2BG8XaliI43ICg8h7zCrxEavDE0
-	 8DeKrPDG+uo32HXHWDLyIXCu3kdyNJSsq2qx2KeU=
-Date: Tue, 27 Feb 2024 10:15:36 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Guan-Yu Lin <guanyulin@google.com>
-Cc: Florian Fainelli <f.fainelli@gmail.com>, rafael@kernel.org,
-	pavel@ucw.cz, len.brown@intel.com,
-	andriy.shevchenko@linux.intel.com, rdunlap@infradead.org,
-	james@equiv.tech, broonie@kernel.org, james.clark@arm.com,
-	masahiroy@kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3] PM / core: conditionally skip system pm in
- device/driver model
-Message-ID: <2024022749-campus-multiply-d657@gregkh>
-References: <20240223143833.1509961-1-guanyulin@google.com>
- <a299118d-eeec-40b4-9a3d-48dc40f34e12@gmail.com>
- <CAOuDEK3wP6zhEwgUn5zSedtwTYVFaJeBfeXkSg897EhpGP9=ig@mail.gmail.com>
- <3208c5b9-5286-48d1-81ab-cc3b2bc4303e@gmail.com>
- <CAOuDEK39Bdru5wAbxW-g2c=POgRxZwdQzPO5uNXP96AfSyA6pw@mail.gmail.com>
+	s=arc-20240116; t=1709027886; c=relaxed/simple;
+	bh=S024RKU4/uf+ZQYZb/1K/aCmcUdsqW1xY1/WsWufW5o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=a2i0Id+s1UOsknc6G9mB13vWiuETNGXE3B+zprJlaRmTXBqnaabSyY6qEX/L2Sdf6HsqpyqWTPeJlB036SgJn4qv6WCLji9c4eernnZba10zpfBrbHBU9X0H5WxhUxXsmO926rbQvd3uQ2dfhhB/X19HsBK//YYah+4XlwCrjAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D1BF4DA7;
+	Tue, 27 Feb 2024 01:58:42 -0800 (PST)
+Received: from [10.57.10.173] (unknown [10.57.10.173])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2C6AC3F762;
+	Tue, 27 Feb 2024 01:58:02 -0800 (PST)
+Message-ID: <260488a3-2e4b-43bd-a818-c15558e71077@arm.com>
+Date: Tue, 27 Feb 2024 09:58:19 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOuDEK39Bdru5wAbxW-g2c=POgRxZwdQzPO5uNXP96AfSyA6pw@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] thermal: core: Move initial num_trips assignment before
+ memcpy()
+Content-Language: en-US
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: rui.zhang@intel.com, keescook@chromium.org, gustavoars@kernel.org,
+ morbo@google.com, justinstitt@google.com, stanislaw.gruszka@linux.intel.com,
+ linux-pm@vger.kernel.org, linux-hardening@vger.kernel.org,
+ llvm@lists.linux.dev, patches@lists.linux.dev, rafael@kernel.org,
+ daniel.lezcano@linaro.org
+References: <20240226-thermal-fix-fortify-panic-num_trips-v1-1-accc12a341d7@kernel.org>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20240226-thermal-fix-fortify-panic-num_trips-v1-1-accc12a341d7@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Feb 27, 2024 at 04:56:00PM +0800, Guan-Yu Lin wrote:
-> On Tue, Feb 27, 2024 at 2:40 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
-> >
-> > On 2/26/24 02:28, Guan-Yu Lin wrote:
-> > > On Sat, Feb 24, 2024 at 2:20 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
-> > >>
-> > >> On 2/23/24 06:38, Guan-Yu Lin wrote:
-> > >>> In systems with a main processor and a co-processor, asynchronous
-> > >>> controller management can lead to conflicts.  One example is the main
-> > >>> processor attempting to suspend a device while the co-processor is
-> > >>> actively using it. To address this, we introduce a new sysfs entry
-> > >>> called "conditional_skip". This entry allows the system to selectively
-> > >>> skip certain device power management state transitions. To use this
-> > >>> feature, set the value in "conditional_skip" to indicate the type of
-> > >>> state transition you want to avoid.  Please review /Documentation/ABI/
-> > >>> testing/sysfs-devices-power for more detailed information.
-> > >>
-> > >> This looks like a poor way of dealing with a lack of adequate resource
-> > >> tracking from Linux on behalf of the co-processor(s) and I really do not
-> > >> understand how someone is supposed to use that in a way that works.
-> > >>
-> > >> Cannot you use a HW maintained spinlock between your host processor and
-> > >> the co-processor such that they can each claim exclusive access to the
-> > >> hardware and you can busy-wait until one or the other is done using the
-> > >> device? How is your partitioning between host processor owned blocks and
-> > >> co-processor(s) owned blocks? Is it static or is it dynamic?
-> > >> --
-> > >> Florian
-> > >>
-> > >
-> > > This patch enables devices to selectively participate in system power
-> > > transitions. This is crucial when multiple processors, managed by
-> > > different operating system kernels, share the same controller. One
-> > > processor shouldn't enforce the same power transition procedures on
-> > > the controller – another processor might be using it at that moment.
-> > > While a spinlock is necessary for synchronizing controller access, we
-> > > still need to add the flexibility to dynamically customize power
-> > > transition behavior for each device. And that's what this patch is
-> > > trying to do.
-> > > In our use case, the host processor and co-processor are managed by
-> > > separate operating system kernels. This arrangement is static.
-> >
-> > OK, so now the question is whether the peripheral is entirely visible to
-> > Linux, or is it entirely owned by the co-processor, or is there a
-> > combination of both and the usage of the said device driver is dynamic
-> > between Linux and your co-processor?
-> >
-> > A sysfs entry does not seem like the appropriate way to described which
-> > states need to be skipped and which ones can remain under control of
-> > Linux, you would have to use your firmware's description for that (ACPI,
-> > Device Tree, etc.) such that you have a more comprehensive solution that
-> > can span a bigger scope.
-> > --
-> > Florian
-> >
+Hi Nathan,
+
+On 2/27/24 00:54, Nathan Chancellor wrote:
+> When booting a CONFIG_FORTIFY_SOURCE=y kernel compiled with a toolchain
+> that supports __counted_by() (such as clang-18 and newer), there is a
+> panic on boot:
 > 
-> We anticipate that control of the peripheral (e.g., controller) will
-> be shared between operating system kernels. Each kernel will need its
-> own driver for peripheral communication. To accommodate different
-> tasks, the operating system managing the peripheral can change
-> dynamically at runtime.
+>    [    2.913770] memcpy: detected buffer overflow: 72 byte write of buffer size 0
+>    [    2.920834] WARNING: CPU: 2 PID: 1 at lib/string_helpers.c:1027 __fortify_report+0x5c/0x74
+>    ...
+>    [    3.039208] Call trace:
+>    [    3.041643]  __fortify_report+0x5c/0x74
+>    [    3.045469]  __fortify_panic+0x18/0x20
+>    [    3.049209]  thermal_zone_device_register_with_trips+0x4c8/0x4f8
+> 
+> This panic occurs because trips is counted by num_trips but num_trips is
+> assigned after the call to memcpy(), so the fortify checks think the
+> buffer size is zero because tz was allocated with kzalloc().
 
-That sounds like a nightmare of control and handling, how are you going
-to do any of that?  Where is the code for that?
+I don't know this tool (yet), but this description doesn't help to
+understand it better.
 
-> We dynamically select the operating system kernel controlling the
-> target peripheral based on the task at hand, which looks more like a
-> software behavior rather than hardware behavior to me. I agree that we
-> might need a firmware description for "whether another operating
-> system exists for this peripheral", but we also need to store the
-> information about "whether another operating system is actively using
-> this peripheral". To me, the latter one looks more like a sysfs entry
-> rather than a firmware description as it's not determined statically.
+In the memcpy() the 'num_trips' is used not 'tz->num_trips' and
+'num_trips' is set in the function argument.
 
-So you want to download different firmware to the device depending on
-"something".  What is going to control that "something"?  Is that coming
-from the kernel, or from userspace?  If userspace, why is any of this an
-issue and just load whatever firmware you decide at that point in time?
-Why does the kernel care?
+> 
+> Move the num_trips assignment before the memcpy() to resolve the panic
+> and ensure that the fortify checks work properly.
 
-confused,
+I don't see how this change can impact the code not this tool.
 
-greg k-h
+> 
+> Fixes: 9b0a62758665 ("thermal: core: Store zone trips table in struct thermal_zone_device")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>   drivers/thermal/thermal_core.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index bb21f78b4bfa..1eabc8ebe27d 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -1354,8 +1354,8 @@ thermal_zone_device_register_with_trips(const char *type,
+>   
+>   	tz->device.class = thermal_class;
+>   	tz->devdata = devdata;
+> -	memcpy(tz->trips, trips, num_trips * sizeof(*trips));
+>   	tz->num_trips = num_trips;
+> +	memcpy(tz->trips, trips, num_trips * sizeof(*trips));
+>   
+>   	thermal_set_delay_jiffies(&tz->passive_delay_jiffies, passive_delay);
+>   	thermal_set_delay_jiffies(&tz->polling_delay_jiffies, polling_delay);
+> 
+> ---
+> base-commit: a85739c8c6894c3b9ff860e79e91db44cb59bd63
+> change-id: 20240226-thermal-fix-fortify-panic-num_trips-5f94094fb963
+> 
+> Best regards,
+
+Maybe it reports different issue. There is some corner case when the
+num_trips is 0. It's called from
+thermal_tripless_zone_device_register().
+Does your code is triggered from that function?
+(you've cut the call stack so I cannot see this there)
+
+Regards,
+Lukasz
 
