@@ -1,151 +1,188 @@
-Return-Path: <linux-pm+bounces-4430-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4431-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA632868A0C
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 08:42:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2574868A3E
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 08:53:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 61957B22A9D
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 07:42:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 293381F23435
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 07:53:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FD8054FA3;
-	Tue, 27 Feb 2024 07:42:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0648956459;
+	Tue, 27 Feb 2024 07:52:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="CliRplUO"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="U4Is6RTm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2074.outbound.protection.outlook.com [40.107.100.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BEB45467C;
-	Tue, 27 Feb 2024 07:42:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.100.74
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709019747; cv=fail; b=Ky8hQ6t2XOnRW21tlsl9gAVNWlOXc9352ojfEgk1q8QNiU6M7iDiqrUNKb7N9KdZF1e21Tvm5ZGL3N9ys0lr5DtXGOmiCrVfG/yzkng+pUA23U6HvK39CalQzkw9QWnp2HW9b3+nT4ShdoUBkoHkFeeU6XeppLNd9WZ92n3fn0k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709019747; c=relaxed/simple;
-	bh=G4Tc+7Zb3w+pmvhaBq+QwaDIX9/OWcq55Yha3Uk8pl4=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=H5YP2O1DwcW5MWbEIWKyUYCSay0TzkT63d3ssPj0YGysJ1BZIB3G/U194YsPYkYkyULOTVmU5SD2sD3xas78dCKoveIiwDo8ZD8FcG+V0v/4+7Ebh2PRVJPBEUphfEsryLORp2Kka5JaLatJYAH7Pl4Zq38dYEEgNg+6oROXHF4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=CliRplUO; arc=fail smtp.client-ip=40.107.100.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bHkk5LTyRuXf09dGx1HdyEJq19cJPhkDi3PGGrZ2MaaMgFKBPA8bCOah0PBF2oJMnWV5+yt99w569NV6/lBRFLgblrZlwUPcxstlEA2C30rAzt92zQZqoiSd/UoWIMtXbDEqQum/RNP9WLRVgKc3Pf3pe2T0fbJAi+HkuAQ5LqLI94FCXtBEGgyHOkV8CcIdMSbo8eVl2KAd/ttAVEMVge4iLdxUYhn8/WtsDJo09XEGAjeHvulTtFkfOSeY9D0dzJfPitzIl7U4aNvm2Cx8APYykf2b8kI2YlSEywyH+eIqtsVdu+UOTzXGncsxiikLmE5UUX1Bagh03xAzXe3euw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bHn3iXH7UVdNTmCEfhrVhu0TnsY4LxYdcTCsJr0bNbg=;
- b=BqkDRh0FKK2JKhhuWEmfF8k+4GQtJZYGsvezKjhFUpbiXS+o3b9e0nTmpDW0R73r4+22Vk0oOXzl1Yb9hWVQZ+tTC1vNlBklcTJWPKZI8tur4sOiIrYBXZYOobTBA3n8uNR4rNnDU6Fn9ZqX4HvLzh5OSzzxNM1IHSkQOBXbjFXEqbMEkIhfJOsSkHi+T0a6wQ3gZvr618mOAGbLrBeB2q/lsfB2mBUWQbt/hYWxHPMFuQfAnrp/HMLk2hL7cbb3/aSEHg7E7C7RTPc7i68+uBBK6DCixQi343W4FlsEAlL2/49hvHz0SFLPt1GelZD0W5KKaSOCS3nzzL41HIdCEQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bHn3iXH7UVdNTmCEfhrVhu0TnsY4LxYdcTCsJr0bNbg=;
- b=CliRplUO6ymxyWtY7phlpqyc9PWeS/BIzqfkRqiPEKpmGCUJ1SU9iUQR60kGbOImPJ35owWruANKwyorVltojk8WD2thqJ8WxYYvjvK+7F5CJFfSt9L5SL5Y/+ZkpoiWoGFMpidQ6G8/7ZQzhk9TR5PTxiuDKvGFsKa33Hl+Zpw=
-Received: from CY5PR19CA0010.namprd19.prod.outlook.com (2603:10b6:930:15::14)
- by CH3PR12MB8536.namprd12.prod.outlook.com (2603:10b6:610:15e::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.36; Tue, 27 Feb
- 2024 07:42:22 +0000
-Received: from CY4PEPF0000EE34.namprd05.prod.outlook.com
- (2603:10b6:930:15:cafe::77) by CY5PR19CA0010.outlook.office365.com
- (2603:10b6:930:15::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.49 via Frontend
- Transport; Tue, 27 Feb 2024 07:42:22 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000EE34.mail.protection.outlook.com (10.167.242.40) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7292.25 via Frontend Transport; Tue, 27 Feb 2024 07:42:22 +0000
-Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 27 Feb
- 2024 01:42:18 -0600
-From: Meng Li <li.meng@amd.com>
-To: Shuah Khan <skhan@linuxfoundation.org>, Andrei Vagin <avagin@google.com>,
-	Huang Rui <ray.huang@amd.com>, <linux-pm@vger.kernel.org>
-CC: Nathan Fontenot <nathan.fontenot@amd.com>, Deepak Sharma
-	<deepak.sharma@amd.com>, Alex Deucher <alexander.deucher@amd.com>, "Mario
- Limonciello" <mario.limonciello@amd.com>, Perry Yuan <Perry.Yuan@amd.com>,
-	Xiaojian Du <Xiaojian.Du@amd.com>, Viresh Kumar <viresh.kumar@linaro.org>,
-	Borislav Petkov <bp@alien8.de>, <linux-kernel@vger.kernel.org>, Meng Li
-	<li.meng@amd.com>
-Subject: [RESEND PATCH] selftests/overlayfs: fix compilation error in overlayfs
-Date: Tue, 27 Feb 2024 15:42:04 +0800
-Message-ID: <20240227074204.3573450-1-li.meng@amd.com>
-X-Mailer: git-send-email 2.34.1
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC2D554FA6;
+	Tue, 27 Feb 2024 07:52:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709020375; cv=none; b=CiybxGFQMIQCFASwpKlB+3Dob+Ra3d4gXZL23K+dGKWoOu04hDX7E/DZzefnx7+MTK6xkFb/dVWcc1m3UaeEzulhvGZwZyqUfAu+pQHE5WlCOC9h1XcEC4na0t6fhn+ajSbeLvFBtfnvJSq+OJJ3Dx1ZLxdFmTmIpRG6Re3S8Q0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709020375; c=relaxed/simple;
+	bh=d10zgy4neqJ3ueg8XosuA6C9v5ZcqlEmDmszYPd2sbA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=k6b2wZANw5evKj18uxPL16HHr2jFMpB8W/qCUWAmKLc2Xbys/CqpdC01el/CV2EgrG8UcAsMl2XflIIP0RksAgt8pUAUSUGV9aCLfPGpZFUSPzF7XnVk+ZHX13brE0EtWTd8SugksT5IygqeUCBEnBLSUgCvtwJCfMZZQIcOK88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=U4Is6RTm; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Message-ID:Date:MIME-Version:Subject:From:
+	Content-Type; bh=q49RmB2IAyp4hUQXDCmAUSmSnBjebnDcngrqPkKrLcI=;
+	b=U4Is6RTmWrIlT64AZWufkJFalusLdotPc7BZ/JNnkOYQ0Le41r11iu7ZJE/58t
+	jpJSEnBb6xW06nGbqCYJMALUFroBQUVAWZfZEMuU6zc17JHg6oehimPHXxqbfJtw
+	z7r8vd+vrg6ggrWKIUNbMylSfR8pzpd7XdvMpatxNY+x4=
+Received: from [192.168.198.19] (unknown [175.2.16.90])
+	by gzga-smtp-mta-g1-0 (Coremail) with SMTP id _____wD3f8x+lN1lIsQ4AA--.10558S2;
+	Tue, 27 Feb 2024 15:51:41 +0800 (CST)
+Message-ID: <3399d2af-3d42-4ac1-9b74-8475bec25f7f@163.com>
+Date: Tue, 27 Feb 2024 15:51:25 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] PM: hibernate: Fix level3 translation fault in
+ swsusp_save()
+Content-Language: en-US
+To: Mike Rapoport <rppt@kernel.org>, David Hildenbrand <david@redhat.com>
+Cc: rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
+ keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
+ akpm@linux-foundation.org, ardb@kernel.org, wangkefeng.wang@huawei.com,
+ catalin.marinas@arm.com, will@kernel.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+ Yaxiong Tian <tianyaxiong@kylinos.cn>, xiongxin <xiongxin@kylinos.cn>
+References: <20240226034225.48689-1-13327272236@163.com>
+ <8d70939f-ca14-4167-9647-b8f44ddcbb98@redhat.com>
+ <ZdxWcG2XCqBum3_R@kernel.org>
+From: Yaxiong Tian <13327272236@163.com>
+In-Reply-To: <ZdxWcG2XCqBum3_R@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE34:EE_|CH3PR12MB8536:EE_
-X-MS-Office365-Filtering-Correlation-Id: d663f08b-7cc7-4e15-fb2c-08dc3767a255
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	W2+tmlgpiqu6bdWi0Nl4AIHGbPkuH5F1zX/nJv4LkZ/LSIM6X4NgudGfq9xpHkCKC0Vx/m+tto5og6DD56yoXJolQR6S9aGlYb2mQjiP4y1/GtXiGeBFSgFxxcexhs0i20aq26ZbpRFzOnmT17YxEaunTNJsI8JqnNirgppFcMfEfXrnLlLzBdaInmKpg6BuQVJMaQxUxNKrvHRrbZ5lcVg4D32cIXTsxz9jGp+MzBcObbbldia8QULPfYXfp1erybUHjfdgsXTMvC7XIwbQKsiLoYHSQIrySJ+zK35VmJE+ii4qeZlfzsRzycnXE8gtuLSUZ/s5zDrEpKpNJnjOLuNj+CahMns//mwk/wAy/oD/pXBrbpwK2BKRFsym3qcjoeBKO2dsVprwie/sm3ZcdH7UnfuuxHyJpV3luu45XVFqfbXXDorkS6RO8LfLiU4JSOOt1g3QOwlXmHqJLJ4t8mbCrAbWyfauuJ0HYGwh7Qp1GlsesRCXBIX0W+6Nn6alfkzPz/+X1XkCMiUGDQXtWKuEi1dUzAJTiLh4rv1cEbNGyQLJCbrdEThseHsn7fHHYQxF5+pP732jgJXW8k5cSbFmxUvt2DX11tnmVsWiOUXC2vS9yzDJXRk+pFZY64WvsctGPWYzlx2SJgkoPeNQlTybzhxT3u9+JEmxCwrOepjurAG4pZiT17Q9KNGjpTjp8xNOBun7AE9JxFhTx63acqpFkl7+SOj2dURFFNv/llBsWQ6Ej4XzATf3+2pV0fQN
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(82310400014)(36860700004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2024 07:42:22.3532
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d663f08b-7cc7-4e15-fb2c-08dc3767a255
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000EE34.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8536
+X-CM-TRANSID:_____wD3f8x+lN1lIsQ4AA--.10558S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxtr1UJF4DWFy5Aw47uF1xZrb_yoWxXr1DpF
+	4UGF1DKws7AF17Ar48tFW5ur18Xw4avanxJr1UJws7JF17Cr15Xr1UKryYgFyDtw4rArsF
+	qFZ8tw4FyFn8GaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07juD73UUUUU=
+X-CM-SenderInfo: jprtjjaxsxjjitw6il2tof0z/1tbiRQ6RJWXAkomgpwAAsG
 
-make -C tools/testing/selftests, compiling dev_in_maps fail.
-In file included from dev_in_maps.c:10:
-/usr/include/x86_64-linux-gnu/sys/mount.h:35:3: error: expected identifier before numeric constant
-   35 |   MS_RDONLY = 1,                /* Mount read-only.  */
-      |   ^~~~~~~~~
 
-That sys/mount.h has to be included before linux/mount.h.
-
-Signed-off-by: Meng Li <li.meng@amd.com>
----
- tools/testing/selftests/filesystems/overlayfs/dev_in_maps.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/filesystems/overlayfs/dev_in_maps.c b/tools/testing/selftests/filesystems/overlayfs/dev_in_maps.c
-index e19ab0e85709..871a0923c06e 100644
---- a/tools/testing/selftests/filesystems/overlayfs/dev_in_maps.c
-+++ b/tools/testing/selftests/filesystems/overlayfs/dev_in_maps.c
-@@ -7,11 +7,11 @@
- 
- #include <linux/unistd.h>
- #include <linux/types.h>
--#include <linux/mount.h>
- #include <sys/syscall.h>
- #include <sys/stat.h>
- #include <sys/mount.h>
- #include <sys/mman.h>
-+#include <linux/mount.h>
- #include <sched.h>
- #include <fcntl.h>
- 
--- 
-2.34.1
+在 2024/2/26 17:14, Mike Rapoport 写道:
+> On Mon, Feb 26, 2024 at 09:37:06AM +0100, David Hildenbrand wrote:
+>> On 26.02.24 04:42, Yaxiong Tian wrote:
+>>> From: Yaxiong Tian <tianyaxiong@kylinos.cn>
+>>>
+>>> On ARM64 machines using UEFI, if the linear map is not set (can_set_direct_map()
+>>> return false), swsusp_save() will fail due to can't finding the map table
+>>> under the nomap memory.such as:
+> can_set_direct_map() has nothing to do with presence or absence of the
+> linear map.
+>
+> Do you mean that kernel_page_present() presumes that a page is present when
+> can_set_direct_map() returns false even for NOMAP ranges?
+Yes， in swsusp_save()->copy_data_pages()->page_is_saveable(),
+kernel_page_present() presumes that a page is present when 
+can_set_direct_map()
+returns false even for NOMAP ranges.So NOMAP pages will saved in 
+after,and then
+cause level3 translation fault in this pages.
+>>> [   48.532162] Unable to handle kernel paging request at virtual address ffffff8000000000
+>>> [   48.532162] Mem abort info:
+>>> [   48.532162]   ESR = 0x0000000096000007
+>>> [   48.532162]   EC = 0x25: DABT (current EL), IL = 32 bits
+>>> [   48.532162]   SET = 0, FnV = 0
+>>> [   48.532162]   EA = 0, S1PTW = 0
+>>> [   48.532162]   FSC = 0x07: level 3 translation fault
+>>> [   48.532162] Data abort info:
+>>> [   48.532162]   ISV = 0, ISS = 0x00000007, ISS2 = 0x00000000
+>>> [   48.532162]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+>>> [   48.532162]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+>>> [   48.532162] swapper pgtable: 4k pages, 39-bit VAs, pgdp=00000000eeb0b000
+>>> [   48.532162] [ffffff8000000000] pgd=180000217fff9803, p4d=180000217fff9803, pud=180000217fff9803, pmd=180000217fff8803, pte=0000000000000000
+>>> [   48.532162] Internal error: Oops: 0000000096000007 [#1] SMP
+>>> [   48.532162] Internal error: Oops: 0000000096000007 [#1] SMP
+>>> [   48.532162] Modules linked in: xt_multiport ipt_REJECT nf_reject_ipv4 xt_conntrack nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 libcrc32c iptable_filter bpfilter rfkill at803x snd_hda_codec_hdmi snd_hda_intel snd_intel_dspcfg dwmac_generic stmmac_platform snd_hda_codec stmmac joydev pcs_xpcs snd_hda_core phylink ppdev lp parport ramoops reed_solomon ip_tables x_tables nls_iso8859_1 vfat multipath linear amdgpu amdxcp drm_exec gpu_sched drm_buddy hid_generic usbhid hid radeon video drm_suballoc_helper drm_ttm_helper ttm i2c_algo_bit drm_display_helper cec drm_kms_helper drm
+>>> [   48.532162] CPU: 0 PID: 3663 Comm: systemd-sleep Not tainted 6.6.2+ #76
+>>> [   48.532162] Source Version: 4e22ed63a0a48e7a7cff9b98b7806d8d4add7dc0
+>>> [   48.532162] Hardware name: Greatwall GW-XXXXXX-XXX/GW-XXXXXX-XXX, BIOS KunLun BIOS V4.0 01/19/2021
+>>> [   48.532162] pstate: 600003c5 (nZCv DAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>>> [   48.532162] pc : swsusp_save+0x280/0x538
+>>> [   48.532162] lr : swsusp_save+0x280/0x538
+>>> [   48.532162] sp : ffffffa034a3fa40
+>>> [   48.532162] x29: ffffffa034a3fa40 x28: ffffff8000001000 x27: 0000000000000000
+>>> [   48.532162] x26: ffffff8001400000 x25: ffffffc08113e248 x24: 0000000000000000
+>>> [   48.532162] x23: 0000000000080000 x22: ffffffc08113e280 x21: 00000000000c69f2
+>>> [   48.532162] x20: ffffff8000000000 x19: ffffffc081ae2500 x18: 0000000000000000
+>>> [   48.532162] x17: 6666662074736420 x16: 3030303030303030 x15: 3038666666666666
+>>> [   48.532162] x14: 0000000000000b69 x13: ffffff9f89088530 x12: 00000000ffffffea
+>>> [   48.532162] x11: 00000000ffff7fff x10: 00000000ffff7fff x9 : ffffffc08193f0d0
+>>> [   48.532162] x8 : 00000000000bffe8 x7 : c0000000ffff7fff x6 : 0000000000000001
+>>> [   48.532162] x5 : ffffffa0fff09dc8 x4 : 0000000000000000 x3 : 0000000000000027
+>>> [   48.532162] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 000000000000004e
+>>> [   48.532162] Call trace:
+>>> [   48.532162]  swsusp_save+0x280/0x538
+>>> [   48.532162]  swsusp_arch_suspend+0x148/0x190
+>>> [   48.532162]  hibernation_snapshot+0x240/0x39c
+>>> [   48.532162]  hibernate+0xc4/0x378
+>>> [   48.532162]  state_store+0xf0/0x10c
+>>> [   48.532162]  kobj_attr_store+0x14/0x24
+>>>
+>>> QEMU ARM64 using UEFI also has the problem by setting can_set_direct_map()
+>>> return false.
+> Huh?
+> Why would you do that?
+I discovered this problem when upgrading from 5.4 to 6.6 using the 5.4 
+configuration.
+So I using latest linux-next code,find the problem still exist.To rule 
+out the effects
+of a particular machine，I also use qemu to check it.
+>
+>>> Since the NOMAP regions are now marked as PageReserved(), pfn walkers
+>>> and the rest of core mm will treat them as unusable memory. So this
+>>> regions should not saved in hibernation.
+>>>
+>>> This problem may cause by changes to pfn_valid() logic in commit
+>>> a7d9f306ba70 ("arm64: drop pfn_valid_within() and simplify pfn_valid()").
+>>>
+>>> So to fix it, we add pfn_is_map_memory() check in saveable_page(). It
+>>> make such regisons don't save in hibernation.
+>>>
+>>> Fixes: a7d9f306ba70 ("arm64: drop pfn_valid_within() and simplify pfn_valid()")
+>>> Co-developed-by: xiongxin <xiongxin@kylinos.cn>
+>>> Signed-off-by: xiongxin <xiongxin@kylinos.cn>
+>>> Signed-off-by: Yaxiong Tian <tianyaxiong@kylinos.cn>
+>>> ---
+>>>    kernel/power/snapshot.c | 2 +-
+>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+>>> index 0f12e0a97e43..a06e3b1869d2 100644
+>>> --- a/kernel/power/snapshot.c
+>>> +++ b/kernel/power/snapshot.c
+>>> @@ -1400,7 +1400,7 @@ static struct page *saveable_page(struct zone *zone, unsigned long pfn)
+>>>    		return NULL;
+>>>    	if (PageReserved(page)
+>>> -	    && (!kernel_page_present(page) || pfn_is_nosave(pfn)))
+>>> +	    && (!kernel_page_present(page) || pfn_is_nosave(pfn) || !pfn_is_map_memory(pfn)))
+> I think adding the check for !pfn_is_map_memory() to arm64::pfn_is_nosave()
+> is the best way to fix this.
+Thinks, I also think this is the best modification.
+>>>    		return NULL;
+>>>    	if (page_is_guard(page))
+>> On top of which tree does this apply?
+>>
+>> All occurrences of pfn_is_map_memory() are in arch/arm64, how does this
+>> compile on other architectures?
+>>
+>> -- 
+>> Cheers,
+>>
+>> David / dhildenb
+>>
 
 
