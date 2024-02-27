@@ -1,196 +1,192 @@
-Return-Path: <linux-pm+bounces-4444-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4445-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71D34869A83
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 16:36:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 440B2869A8B
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 16:37:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 964D31C23515
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 15:36:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C0FC31F237D7
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 15:37:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFB1F145B0D;
-	Tue, 27 Feb 2024 15:36:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDF8D145B2A;
+	Tue, 27 Feb 2024 15:37:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="uDKjm25n"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Q4lcmzsZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6433214534C;
-	Tue, 27 Feb 2024 15:36:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.40
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709048202; cv=fail; b=towPv9J9gHzPi/tNJ460kQQV7JOmeB3Ccf+Az37caTnYpR2t6wbtHuSf+wfUGcoSEtVLafd0W5sJugIGbW4FkhJsdgVWauaZ2C5ay4SQXf0A6TtncdpPlhO4KmsQdOA32PfshKRfFJ2C2qPs9TeezzzsX9jtUSXRTg6R6Sp1ZHc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709048202; c=relaxed/simple;
-	bh=PcCtbggSoMDEcQOVP8lJ+9Snj3UKd1r6LG/bcEnJPBI=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=maqT+r5iZPKKVyz03zZgUWEOch+khAnfZ6OShkKUqMDSX4IeA9yxQcNnsB6HU7SZVriTuqYmRDYmrC9E538zdEUHbeurq9e3XApmszuUqW8tlGovI7jWWZYItJ2kyNwoMajU26Rry8qKW6ECyKNj9uTYF19UyxAXJPe5twJAwu0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=uDKjm25n; arc=fail smtp.client-ip=40.107.236.40
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KX7dzAeMdHXXTxk+k4Aj9WvwpT5IbB1DUouk+akAJoQCF87k987TBtxqrhA7Zl8l/eZ45q/avZqCYjgw9ih2Xm90jq/jB6js+fU8iZXVadtoAThKzUckjep77QBB11K3Qke0yf8l3RtLWDb+Wrcxez7KAZb/aFOXLimUfybDzYKAm8HMN8XT5sPKuZCwIseyTNfN6YSGV9skQSMa2TGk1IceFkbiDC5VJGQl5GJKcnbbbgYxVnmvSlXgHRsOuaKCE+ECsL/THHXmvO93GzQu2APR8LBJn2M0dm+3tqSlpnMyEbMNLJo75Q3OxrMYIGiQXkAvAMXNViEEcLoHahY7OQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hhdG5P+enhd9fsvVuqNHsAKATySyARznzDQgeibv1tA=;
- b=Yr2PV96XX/wJfPnFCSgl5P0jSVpkURJjH7Y1/E8e4KnJly8VGqmuziRpsnk0B1kcqkATPQYlMq+1XLF9RROb+CbOCrFV6+m1gUomaEv/tbdBUCxmOvC2C9QXvRbPXxbPZBv8QMUk03oEROdH7NM9i3VCwMmvEadUDWouhvS1rzE1ShrGvFkaVp4jM4U45new1UdxQyCMUVI4sZ3cMWGiZEFQgycb0Z/Ylp2VzQVpBkXjcVifdCFps2k2++IkFuaMMl2vHGGueX9PpJxNRaoXiWkrP9R6U6h2yC5cMrfQ5FFFS6eYKwlEgf50+NNz72fOZuxOyoulZLBvKfCdXaRoZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hhdG5P+enhd9fsvVuqNHsAKATySyARznzDQgeibv1tA=;
- b=uDKjm25n9+ldwiUf8LS7gkc/X6+Lqo5CtidXvqsiAFBjV8EMnQEflA7FiXZGvtNKV/1HhW/RiXU9GIYRvBLf7OiNwFMxgkIKUPY/RU+sxRuACedLSYKvm5sw5LDWYtlGRdcGI0nhgAkJLYwltmeQWMelEkaWofMAjwHbeXIqpqA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by DS7PR12MB8289.namprd12.prod.outlook.com (2603:10b6:8:d8::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7316.36; Tue, 27 Feb 2024 15:36:37 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::a1d0:2930:8c24:1ee1]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::a1d0:2930:8c24:1ee1%4]) with mapi id 15.20.7316.035; Tue, 27 Feb 2024
- 15:36:37 +0000
-Message-ID: <f1964180-458f-4c22-90f6-bda2aee5dbf8@amd.com>
-Date: Tue, 27 Feb 2024 09:36:34 -0600
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpufreq: amd-pstate: adjust min/max limit perf
-Content-Language: en-US
-To: Meng Li <li.meng@amd.com>, "Rafael J . Wysocki"
- <rafael.j.wysocki@intel.com>, Huang Rui <ray.huang@amd.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
- linux-acpi@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
- linux-kselftest@vger.kernel.org, Nathan Fontenot <nathan.fontenot@amd.com>,
- Deepak Sharma <deepak.sharma@amd.com>,
- Alex Deucher <alexander.deucher@amd.com>,
- Shimmer Huang <shimmer.huang@amd.com>, Perry Yuan <Perry.Yuan@amd.com>,
- Xiaojian Du <Xiaojian.Du@amd.com>, Viresh Kumar <viresh.kumar@linaro.org>,
- Borislav Petkov <bp@alien8.de>
-References: <20240227073924.3573398-1-li.meng@amd.com>
-From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <20240227073924.3573398-1-li.meng@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN7PR04CA0221.namprd04.prod.outlook.com
- (2603:10b6:806:127::16) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBE8B145B0D
+	for <linux-pm@vger.kernel.org>; Tue, 27 Feb 2024 15:37:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709048261; cv=none; b=OQOlqoxHqqabeR2P/UnQgPUG4NnqVNGXYNEZyramiQJmAu+Gxh+WYkeL9wyA+pPyTFCMWQDT9O6SsZnUFtS+eV7KYw+DFVbBDdbNDgNrkAvQgeLc3Si/l9M0tcX6zhA341HsjydrPxXhseUfCwunMQwrb+gm86yfDlJJ9eNuFms=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709048261; c=relaxed/simple;
+	bh=WrNAavq49JnUtL9z1fXa8kbbV9Ll1HlVFnPdARwhMTY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ednyjsm5I3u2pb8brwRVfZaGZAsHdLrUEhvIXbMJPU2fKa4YsyxLB948aADvL/maF5lsawJ6dL3KnOzzhAzAAu/5bN3CqM272msZ2Wp9RFX6JSnPEORS2qahD60eSKBjAd2FmAIh1r4unrpQ/QBopifZ4tb9CrBqudqctfX40wg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Q4lcmzsZ; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-33d2b354c72so3212065f8f.1
+        for <linux-pm@vger.kernel.org>; Tue, 27 Feb 2024 07:37:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1709048258; x=1709653058; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=f011dxj9zX/OM++lF4k76GO0m8hQN5ggQ81URSsSTBQ=;
+        b=Q4lcmzsZg0Wfj89MmgWRwJxBhAAxcXHY0VDeWTjn+A2ZS91Bb3dtJdSIlt6AEIEVQy
+         TppnKGk4Q9u2f0e/T2MhaeQMrh9+oeXoJA0G5HnKDEIerJvQmrYXOzlH+WMbnImBVrfW
+         5EarXBPS5I+Tas/UmXsWp4uZCVmxbdPapWJNkFnz+qPpGwDz/5hZHoSqyfk6hQDUqkC1
+         saDu2bN2q3O5picG9ZCe+rShRRbXDr6WdebGJoD5Iapt+SiWZJ7aSissS7hpIJmQN1J3
+         +pUxPHNagthwOfGZxvwNrlPjlnDaXWAMDYl/Ujm6MbLhSkceLHszAWXXOpsesEX+G3hc
+         MBog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709048258; x=1709653058;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f011dxj9zX/OM++lF4k76GO0m8hQN5ggQ81URSsSTBQ=;
+        b=wC6ldJ2NSAiAxl0BYpv7T32POjNjSfFdOU/GqDU0VK87z/WYvTjQ+aC6FHBv+K9M3j
+         HYxfCDYhu8xBrUMhroH0JFOEFyJf6RaAXYX0qU5NRttjfq5ZPxfZL9By9HvyWJ/XFK7n
+         Wyc39mBUQsxJVZjCIGXlSJVGpdWXrrDOw5lOnDtLf+BrEKNVoNe49aEP/SrhDa0Fa4wT
+         nJAKhK/w5UB5WM6u8eajPgCSAeWsFqA6NRr2X2VPsmdGVmigYqi2OpHBGhvVQ11ORX2y
+         Wue//iFI/HpIHKxbd2RfAjaOp8+RaE8CaLLLTjs17g5MAkTZ8lq/MxB1iVz6LQhswb/B
+         QIVw==
+X-Forwarded-Encrypted: i=1; AJvYcCXbv2Q/+Ipr5z6CKnNZNdE1ZnRFFMaH9au4a4Cd6UPEtU+AQAtxXo/BVAHYp/daIovJol2TXZSjJ/CJLizk7/J+N7Kj0F6ccT4=
+X-Gm-Message-State: AOJu0YyjkYcutk0bLMt2KD4by407ttdAlca66HvZm6eKB29Bbh7l6PCU
+	mzRw3TbMNbJ1G2AXsD/N8q6hEM8F1y539fLtSqUEDaPwaIEgFhoev9wz2uYiXAc=
+X-Google-Smtp-Source: AGHT+IEZ9Q2DpyJ+09LMJ9SXPvNjO+kk0h+b3Ur06pLLqMWUNExCixaGNE9ytC+Nwv3uhK01GyCZbQ==
+X-Received: by 2002:adf:f150:0:b0:33d:1469:d254 with SMTP id y16-20020adff150000000b0033d1469d254mr3099982wro.70.1709048258133;
+        Tue, 27 Feb 2024 07:37:38 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id t9-20020adfeb89000000b0033dbeb2eb4dsm11549365wrn.110.2024.02.27.07.37.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Feb 2024 07:37:37 -0800 (PST)
+Message-ID: <f81af0ae-7458-47d3-90ae-71d5217ee7dd@linaro.org>
+Date: Tue, 27 Feb 2024 16:37:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DS7PR12MB8289:EE_
-X-MS-Office365-Filtering-Correlation-Id: 838d68bf-5516-41da-42b2-08dc37a9e2de
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	eD4n9rN81DfqDIEnMpeWBPpkcDY4sdlW9mP2aYY/VxZ9Df93qe6ZXoLCieXt/hHAdpk5G6UnP2ow9/YoL5R6+9NIVmq+bizoDMcvqmQ+/cQqowoKRUZB/gUAudCfQh3e0TaPQJjSkYFgLW+yooNLkX4+CLPAmRDLdh+mVKk9P+u4eByTcfWTy4W1X5iWBBWyCeRmkKbqMw2E93fqOcDOQu6D1q+aoo2KhPpxlhjwDX1YaZ87Yx1PmW/orXNP7zaZx5lD6Sqz50QLWaSsUhFA5/p459PS5sYMaY6yvOuWHD03a9W+7T6u6J47iEnZILGoaaHiYnm8PBdnDIP/8I9wTWMeU57GPy4xBakrK82OtHN/ws2aaD6gkj26XBMLgwX1a18AukWOM3Wb1/OAYCUePgi6bDoIa+miG9JJGceVvklBN1XNjN/XR2xuYF7fkbVzo6EjPPDtMTkgDzm3modtzmEdnyiJHp78bAH6vNp9dwu2CH6DQo65hP2YHJaUuNHlClL7NE8jq6az+CxXLkrENEEcZQzhlQF15s1sV9E0752ZnAFOkrTbFSKK5aSAKVExQQ6+NVoxk6/lDXXJC4BBL0dNXZ3YplW59EetPvz73QyQY4oBt5MpwCH9lomPwUD1zp+r/HkwxUcUAiz2P03apg==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?OFpoK1dIQTlNZnVnRVhielFobkpDMjlLZ0VZM2JTY3BiNGZxUnU2RXB3SUd5?=
- =?utf-8?B?dUtUa3VBd2lENExGdDF5Tk5KNXRHQWE1V1VBVkdaUTRnTkxRbFJVaGIvS0lX?=
- =?utf-8?B?Rm50SWlzdlFOTkRyTlVYZmtURngxU2NDOEl5aHM5UkhVQmd3b3lKV1h6ZFBy?=
- =?utf-8?B?OGRacEVGY3pmcm1iQ3hISElxTVlyWEdpZEF5MlYxS1J6OTNlNUpReEdpdk5x?=
- =?utf-8?B?ckpTRWwvRSs1M2M0M2pwbS9CdjFON0MySWh6NTR0U1lPcERTOEJ4b2twcnNB?=
- =?utf-8?B?QW0wVnQ4WXNBa0Rtb2JFell6UCt4eVBiOUZzNU1uaytvWEkwR29HTmNjUENm?=
- =?utf-8?B?eFBXaWhmNUhzZkJNR2VHbWJYNFpCeVJobnR1YldMdDNDNTAzeHo0enlRREZ2?=
- =?utf-8?B?TFlrZ0E1WEx1TlZmaTNOR1lya1BoQXA5cThzV3hLcGZ5TUtnVlp4dHBMUXp4?=
- =?utf-8?B?U1ZIdHg2YkFLOU55SXU5WGFxbnR6MWVQV3Z0T3luNGdqV2NXYnB4RFprZzh5?=
- =?utf-8?B?NllNNnJkNlp6aTBscEhTaG5tdUhDeHNubGNHb3A1bU1ZR1FFT0NmU0xSdDVV?=
- =?utf-8?B?OU55L3RSblhMMUF4LzI3UUpvYlpwZllCLy92OTFoVHJ6TVliOXo5eUpZNHli?=
- =?utf-8?B?Z0JIRHRkN2drTy8rb0I1V1hsS01lUFdieWpMbEw1V2VIenhXN3NvOU9UendE?=
- =?utf-8?B?U1hJZFRhdnZQbjhOOENLWXhKY2VSZ2kydDMweE8yZzhRNDNRK0ZiYXpUUUY5?=
- =?utf-8?B?QzRBRTdkMGhRQnd0eGh1aGQxUGc0WVAwNUsxVmJSS2lGSmVOdmltaDVXeE96?=
- =?utf-8?B?VkpxR0NrUG04YkF2blpVR3UreElkcENwemkyTVNUT0VoWk55RmJjaG9JM0Ft?=
- =?utf-8?B?NVVaais5RHQ1cnhmUVpUMnlYUVJDQ09OZ010cWl2SFVRbUZIL3l6ekVLSmJm?=
- =?utf-8?B?WE5SSURwRTRyeFJQU3VOMDVzbFg3cVZGcnRHS213TjlVTlhNNCsrbjNIL1Rv?=
- =?utf-8?B?a0pPVG8zalRrZko4cy9JeVZwWC9ab2oyQk1Sb1hvaXFxajI1dlZlbWRkVjhN?=
- =?utf-8?B?eTVLbk9yZ2ZPUlNINFZjdUxncUlJMUxicHJIblpER3RaMGNQRkxKVlVua0ZK?=
- =?utf-8?B?MVp5a0h4L0xiQUtZVy9KYm91cThrU0N4TFROQ3NQYUVPaVlVeUgydEtyVDZT?=
- =?utf-8?B?cEhEWGh6b2VBUXJsdFU0bEpuZXM1SVptMVp6Q0pjb0tUSW0xeFhmZ2JKZWJO?=
- =?utf-8?B?SW95SUdCTmdDbENFcHdaUXVQZnVhYk0yaUlQTm1pNisrdnQ5R29uTlhUczVr?=
- =?utf-8?B?K3prMjhHbGhaaWdCV0xnbWpnTWZRZHhleEpZRTR3dTUvdGJqZVF2MXdKVlA3?=
- =?utf-8?B?VG90dlAwOVVadTNqa1ZLM2MrVWpzTnNua0dYY3cxVmVhWE5NaHZUaGhhY1JV?=
- =?utf-8?B?ZmRkMU12ZTNZWFM2azRyVmN1R01mUVoxODJEb3dhK1VTZnMzRThOdWFUMTdG?=
- =?utf-8?B?T3RpeWMyY3FwNTFDTUtVUnR5cjluaUlTVXhTSW1sZDFLV0JnOVVwWVZobG1o?=
- =?utf-8?B?T1N4ZFVVUmhQVkN4ZHlwRlRmSVh1UHA2UnNETU9oWmoxV2ZyWWtZYTM2RlZr?=
- =?utf-8?B?dFdhb3BqZUxMVmo4T3dFbUQvL1hISHFiaFdqUlVWd0xVWWJQVG9uYUZ3WFpR?=
- =?utf-8?B?aVF3bGsyb1pnRGRWbjRxNFhOVWV4QXpzckZ2clpHVlh2N09UM3JvZTBMdVM5?=
- =?utf-8?B?bWpjMU9wMXkvNUMvbm81ODZlenhRZ0dWVmdXSk1ldGFDZ094QXZvY3JTZkQv?=
- =?utf-8?B?NnpPTXVRWWs3UHFNbTNrYVdYVEtNemM2ZXpsZitkdWw1V0JmbHVLYUZ6eG9s?=
- =?utf-8?B?RVp5eW1Sbms3OG9SbWlwWWxyREVHdyt1V1VJMm9saFg5MjBLeDNkbFg4dGR6?=
- =?utf-8?B?VUdNRGJPTXJwN0JIaDd5RFJPOE83cVcrQWhWc2pqZXpXTTMrMzhmbFIxQlRv?=
- =?utf-8?B?TnQ0MVRHUG4raWpDUThGOHdMVGw0S3l5Wktva0ZROHV1V1NXcVQ1cXBHcnpw?=
- =?utf-8?B?UllyM1hMTlpaQndYVGdLTE9mdjQyUTh1amdtRjYxazZhUjdmREtqUkpGSUlF?=
- =?utf-8?Q?sSZWVMdz0aPdrJjK6laLTcECa?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 838d68bf-5516-41da-42b2-08dc37a9e2de
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2024 15:36:37.6400
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 77FanXQQMeB3187hML3K0CYGRChwQ95UjBEoounWYIiyEjZ2nrnvVveMd11lyO6t5Ie6Ebb/UibY76zVfpkNgg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8289
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] thermal: core: Move initial num_trips assignment before
+ memcpy()
+Content-Language: en-US
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, rui.zhang@intel.com,
+ lukasz.luba@arm.com, keescook@chromium.org, gustavoars@kernel.org,
+ morbo@google.com, justinstitt@google.com, stanislaw.gruszka@linux.intel.com,
+ linux-pm@vger.kernel.org, linux-hardening@vger.kernel.org,
+ llvm@lists.linux.dev, patches@lists.linux.dev
+References: <20240226-thermal-fix-fortify-panic-num_trips-v1-1-accc12a341d7@kernel.org>
+ <6a6be01d-3453-4268-8b2e-0279cc20835d@linaro.org>
+ <CAJZ5v0h87k6xoi-9V0Cfb2rHQcr-STfG_bNWpzfoj4Dy46U0Lw@mail.gmail.com>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0h87k6xoi-9V0Cfb2rHQcr-STfG_bNWpzfoj4Dy46U0Lw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 2/27/2024 01:39, Meng Li wrote:
-> The min/max limit perf values calculated based on frequency
-> may exceed the reasonable range of perf(highest perf, lowest perf).
+On 27/02/2024 12:09, Rafael J. Wysocki wrote:
+> On Tue, Feb 27, 2024 at 11:14 AM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>> On 27/02/2024 01:54, Nathan Chancellor wrote:
+>>> When booting a CONFIG_FORTIFY_SOURCE=y kernel compiled with a toolchain
+>>> that supports __counted_by() (such as clang-18 and newer), there is a
+>>> panic on boot:
+>>>
+>>>     [    2.913770] memcpy: detected buffer overflow: 72 byte write of buffer size 0
+>>>     [    2.920834] WARNING: CPU: 2 PID: 1 at lib/string_helpers.c:1027 __fortify_report+0x5c/0x74
+>>>     ...
+>>>     [    3.039208] Call trace:
+>>>     [    3.041643]  __fortify_report+0x5c/0x74
+>>>     [    3.045469]  __fortify_panic+0x18/0x20
+>>>     [    3.049209]  thermal_zone_device_register_with_trips+0x4c8/0x4f8
+>>>
+>>> This panic occurs because trips is counted by num_trips but num_trips is
+>>> assigned after the call to memcpy(), so the fortify checks think the
+>>> buffer size is zero because tz was allocated with kzalloc().
+>>>
+>>> Move the num_trips assignment before the memcpy() to resolve the panic
+>>> and ensure that the fortify checks work properly.
+>>>
+>>> Fixes: 9b0a62758665 ("thermal: core: Store zone trips table in struct thermal_zone_device")
+>>> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+>>> ---
+>>>    drivers/thermal/thermal_core.c | 2 +-
+>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+>>> index bb21f78b4bfa..1eabc8ebe27d 100644
+>>> --- a/drivers/thermal/thermal_core.c
+>>> +++ b/drivers/thermal/thermal_core.c
+>>> @@ -1354,8 +1354,8 @@ thermal_zone_device_register_with_trips(const char *type,
+>>>
+>>>        tz->device.class = thermal_class;
+>>>        tz->devdata = devdata;
+>>> -     memcpy(tz->trips, trips, num_trips * sizeof(*trips));
+>>>        tz->num_trips = num_trips;
+>>> +     memcpy(tz->trips, trips, num_trips * sizeof(*trips));
+>>
+>> IIUC, clang-18 is used and supports __counted_by().
+>>
+>> Is it possible sizeof(*trips) returns already the real trips array size
+>> and we are multiplying it again by num_trips ?
+>>
+>> While with an older compiler, __counted_by() does nothing and we have to
+>> multiply by num_trips ?
+>>
+>> IOW, the array size arithmetic is different depending if we have
+>> _counted_by supported or not ?
 > 
-> Signed-off-by: Meng Li <li.meng@amd.com>
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->   drivers/cpufreq/amd-pstate.c | 15 ++++++++++++++-
->   1 file changed, 14 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index aa5e57e27d2b..2015c9fcc3c9 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -484,12 +484,19 @@ static int amd_pstate_verify(struct cpufreq_policy_data *policy)
->   
->   static int amd_pstate_update_min_max_limit(struct cpufreq_policy *policy)
->   {
-> -	u32 max_limit_perf, min_limit_perf;
-> +	u32 max_limit_perf, min_limit_perf, lowest_perf;
->   	struct amd_cpudata *cpudata = policy->driver_data;
->   
->   	max_limit_perf = div_u64(policy->max * cpudata->highest_perf, cpudata->max_freq);
->   	min_limit_perf = div_u64(policy->min * cpudata->highest_perf, cpudata->max_freq);
->   
-> +	lowest_perf = READ_ONCE(cpudata->lowest_perf);
-> +	if (min_limit_perf < lowest_perf)
-> +		min_limit_perf = lowest_perf;
-> +
-> +	if (max_limit_perf < min_limit_perf)
-> +		max_limit_perf = min_limit_perf;
-> +
->   	WRITE_ONCE(cpudata->max_limit_perf, max_limit_perf);
->   	WRITE_ONCE(cpudata->min_limit_perf, min_limit_perf);
->   	WRITE_ONCE(cpudata->max_limit_freq, policy->max);
-> @@ -1387,6 +1394,12 @@ static void amd_pstate_epp_update_limit(struct cpufreq_policy *policy)
->   	max_limit_perf = div_u64(policy->max * cpudata->highest_perf, cpudata->max_freq);
->   	min_limit_perf = div_u64(policy->min * cpudata->highest_perf, cpudata->max_freq);
->   
-> +	if (min_limit_perf < min_perf)
-> +		min_limit_perf = min_perf;
-> +
-> +	if (max_limit_perf < min_limit_perf)
-> +		max_limit_perf = min_limit_perf;
-> +
->   	WRITE_ONCE(cpudata->max_limit_perf, max_limit_perf);
->   	WRITE_ONCE(cpudata->min_limit_perf, min_limit_perf);
->   
+> IIUC it is just the instrumentation using the current value of
+> tz->num_trips (which is 0 before the initialization).
+
+Right, but I am wondering if
+
+	memcpy(tz->trips, trips, num_trips * sizeof(*trips));
+
+	is still correct with __counted_by because:
+
+  (1) if the compiler supports it:
+
+	sizeof(*trips) == 24 bytes * num_trips
+
+	then:
+
+	memcpy(tz->trips, trips, num_trips * sizeof(*trips));
+
+	memcpy(tz->trips, trips, num_trips * 24 * num_trips);
+
+	==> memory size = 24 * num_trips^2
+
+  (2) if the compiler does not support it:
+
+	sizeof(*trips) == 24 bytes
+
+	then:
+
+	memcpy(tz->trips, trips, num_trips * sizeof(*trips));
+
+	memcpy(tz->trips, trips, num_trips * 24);
+
+	==> memory size = 24 * num_trips
+
+Or did I misunderstand __counted_by ?
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
 
