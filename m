@@ -1,192 +1,121 @@
-Return-Path: <linux-pm+bounces-4462-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4465-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E40E1869E6C
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 18:57:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF23C869EEA
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 19:20:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 59D011F29B4D
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 17:57:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A5FE1C27F59
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 18:20:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8A4A4F1E6;
-	Tue, 27 Feb 2024 17:57:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 771A6149E0B;
+	Tue, 27 Feb 2024 18:17:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BVO7+eVq"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="DXFGhH+D"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2992147A7D;
-	Tue, 27 Feb 2024 17:57:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0655F14900A;
+	Tue, 27 Feb 2024 18:17:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709056633; cv=none; b=s5AESyYtwic2okJbtwVy593txJO4U3T1L/W9mUMXC9fr68sD2tHwFfPsGjkVZ64wPJvbiEBugKSod79b77oVnWR1/7Z50i0PDYUj3j1RucXewm5gwRrnN4KqFY0JIxzWdLRDpS1jx91ur8oiyk+BtR7Ipwujx9g4hAYuknD62Rc=
+	t=1709057848; cv=none; b=N9xYvX/dx8O7/jzJ1nGDYPyDq2+YC/x+X1UfoZXHXdDO9bB+H3oFkMmBFs2DWVklFfBmgkceJCroy7WbcogtMgJLdJqll3hiPogfZTtKqqonrz5gqMeM70wVOSScaNgNO62MD3uPdXPI5x/uIsMQaAhfHxRRFNKxLW5YQ4Umw9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709056633; c=relaxed/simple;
-	bh=MCV2xfyzVsZTimxMp1nsJm3TnteiwzapMqfslGtknNo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=vEntb3hHV7iK6plALTH2ArugTA4f9TbmRAhFotQ+aZWcFBUI7PjSptKDLG4/ZsZDwhiemdcegLuk0m5Fx0L4tw39AsrBnCk/KkNgNte5gRhxv1j4MZPcg4SHIlMyqALMraZTqWZUzVLrdwjZkGoxinM7I7hmjd0PhKzmLEjmo1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BVO7+eVq; arc=none smtp.client-ip=209.85.160.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-21e9589d4ffso2834746fac.1;
-        Tue, 27 Feb 2024 09:57:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709056631; x=1709661431; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2rvZtLZAsJQqV2EI/YljUxB6c8BBNJcwxJ+IMwUn94I=;
-        b=BVO7+eVq6zI07L3H1rM9b/tBAYjlSp5dcD/R/wfhKHcU8rfuD1ri8KXdMkmWjq5Yfx
-         yfwhnRwiFK35Ip1x0IVVPe7d5zo7zChMU1Au9Y4u4bD0cvWEEnSPeAa+xob1On4cFJeD
-         tYfd5z0o+5NnFadeEGcbcH/kIISy3G/pHMV0df76jgkVq4l/+Kkn4JeVtrHZ6XBqC7DV
-         oMxNCX4ledSno73kC/KpWKoZKCQ+z5Ji1QePCvUbBafTZirH16dVSPtSj5l5B1CALrx7
-         Wn3ZoT8x4BUYjMq/4pT7Myvgadh6WcYUML/50q1OXdmapBq+fZ41+mn6ueETezn6M630
-         9haQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709056631; x=1709661431;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2rvZtLZAsJQqV2EI/YljUxB6c8BBNJcwxJ+IMwUn94I=;
-        b=eLNflhP+KdvWDojd3QfBmNlCr6qk2I6xCwq5czfhK6W+gPQc7DwALgDmmAyyCmeAXo
-         B6nXer0H4rlrT9JKo7/gPUGRxKaShuJ6kwK6uNXVan8rOkXAiVQ5+Yo3iPgteGYBIJB/
-         fXru7LU/gfjqqfRBukIkbrYrIYoms1mVqi3SlOrn1d+u1D/cTuuFZMj06LgUZyC/HjBv
-         0gaVoc2xv49SqO/B9pOci4KNGMaEHH14GcNjkzgVdeNFqomDGXBJxWxgKVhQkxT098gz
-         mMf/vQd2fFWIjHMLehMv22nYTsEyq1Ft+rEFS+AU2OhvxbdilPMEoNRGhVOEN152KP5o
-         CE4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUoxmcCQTn5KsGcWHWEx21icY4/u4+ap6DysJB71E4UsCmNoCnJcp9cCVeXxhDAGzi16aZ8l4//yH9IMx/UBDauYe+In5520dGtXDaxO/68F3hanSobtbh357LjuVy2iRz0vENpLog=
-X-Gm-Message-State: AOJu0Yy7Y8KMIGprMCu+ls3no9p84CNI4X/gzXzfI4vT6ZLry+doR/ox
-	2dMiY5ywMt8gKAbKcDYJqmURRlKqLkyrFG93ofyb3W8Uw8rJmPIRxDFar80xIDo=
-X-Google-Smtp-Source: AGHT+IFGPd6I2/K6HlI1TytR7mWgfa8jok7atWE5+pWx/yt+JF49ojwwLtAkLyTTuVdMPe1wvNEoWQ==
-X-Received: by 2002:a05:6871:793:b0:21e:a63c:658d with SMTP id o19-20020a056871079300b0021ea63c658dmr9980599oap.21.1709056630836;
-        Tue, 27 Feb 2024 09:57:10 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id bj25-20020a05620a191900b007873306737fsm3807919qkb.87.2024.02.27.09.57.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Feb 2024 09:57:10 -0800 (PST)
-Message-ID: <7292dc5c-dff0-45f0-99b1-f1687451b23f@gmail.com>
-Date: Tue, 27 Feb 2024 09:57:05 -0800
+	s=arc-20240116; t=1709057848; c=relaxed/simple;
+	bh=soFbcjoCMKHiXlrF0ZQPg4FHkybdwxlXBqaSN5M+K2Q=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ar6AvSYoPurJVYF8yYr+5AeQ4M3M+tJLtq0ZbMO/xIdGeM/ze7LOU0+FXm8IdLYjAGFaZdQMv7RhonpXfcZF8REQY94NuZOxuj4TAT72RHpPL7VoYvh0fKRrbe7Hn9tGpm/AIuFm7CyivtxBU2eInvtd797IP9YOF+DQYiOv7u0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=DXFGhH+D; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41REtsiv000632;
+	Tue, 27 Feb 2024 18:17:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=qcppdkim1; bh=Ys14KMU
+	3oPL3LFpr7OW5dhv3rtV7a6GsUM3wxhdIW0k=; b=DXFGhH+D6S1kxFJI9PODwv8
+	1s1XKIsI5H9BTq2zg2cwdNj7VJfQBCYZscWyQItG5pRjTUNlUD131q3IfMvm1Kyl
+	7LmxSowCAdkTk/v3JZgFigwEUgyXbb0WhZaWXfGxyxKKyuihYkbxHwt2qc68nNy/
+	yUH+N2AH4jGjbVuu41UlFb+0xA0DY/ov0sAMNNsWso5zJGeZsch2bej7MhpnIC00
+	8swAC48k5ifvU0uM8QQDdOgGCUMY/xVN44oOOCxwGm0xtzT0Eqqfl+afoHG5zivz
+	+kurhrDtLh662/StlV57DKPYJEYqyns8SPn13w43rS9IzcPJ8S3YYP+vWTXiW2w=
+	=
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wh8auhwng-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 27 Feb 2024 18:17:15 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41RIGsSd010056
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 27 Feb 2024 18:16:54 GMT
+Received: from hu-sibis-blr.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Tue, 27 Feb 2024 10:16:50 -0800
+From: Sibi Sankar <quic_sibis@quicinc.com>
+To: <sudeep.holla@arm.com>, <cristian.marussi@arm.com>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <morten.rasmussen@arm.com>,
+        <dietmar.eggemann@arm.com>, <lukasz.luba@arm.com>,
+        <pierre.gondois@arm.com>
+CC: <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_mdtipton@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, Sibi Sankar <quic_sibis@quicinc.com>
+Subject: [PATCH V3 0/2] firmware: arm_scmi: Register and handle limits change notification
+Date: Tue, 27 Feb 2024 23:46:30 +0530
+Message-ID: <20240227181632.659133-1-quic_sibis@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] PM / core: conditionally skip system pm in
- device/driver model
-Content-Language: en-US
-To: Guan-Yu Lin <guanyulin@google.com>
-Cc: rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
- gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
- rdunlap@infradead.org, james@equiv.tech, broonie@kernel.org,
- james.clark@arm.com, masahiroy@kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20240223143833.1509961-1-guanyulin@google.com>
- <a299118d-eeec-40b4-9a3d-48dc40f34e12@gmail.com>
- <CAOuDEK3wP6zhEwgUn5zSedtwTYVFaJeBfeXkSg897EhpGP9=ig@mail.gmail.com>
- <3208c5b9-5286-48d1-81ab-cc3b2bc4303e@gmail.com>
- <CAOuDEK39Bdru5wAbxW-g2c=POgRxZwdQzPO5uNXP96AfSyA6pw@mail.gmail.com>
-From: Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <CAOuDEK39Bdru5wAbxW-g2c=POgRxZwdQzPO5uNXP96AfSyA6pw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 07iWVyjgIa2u2zJb_dWB6XGTugUnQELX
+X-Proofpoint-GUID: 07iWVyjgIa2u2zJb_dWB6XGTugUnQELX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-27_05,2024-02-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 bulkscore=0 suspectscore=0 phishscore=0 malwarescore=0
+ mlxscore=0 lowpriorityscore=0 adultscore=0 mlxlogscore=753 clxscore=1015
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2402120000 definitions=main-2402270142
 
-On 2/27/24 00:56, Guan-Yu Lin wrote:
-> On Tue, Feb 27, 2024 at 2:40 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
->>
->> On 2/26/24 02:28, Guan-Yu Lin wrote:
->>> On Sat, Feb 24, 2024 at 2:20 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
->>>>
->>>> On 2/23/24 06:38, Guan-Yu Lin wrote:
->>>>> In systems with a main processor and a co-processor, asynchronous
->>>>> controller management can lead to conflicts.  One example is the main
->>>>> processor attempting to suspend a device while the co-processor is
->>>>> actively using it. To address this, we introduce a new sysfs entry
->>>>> called "conditional_skip". This entry allows the system to selectively
->>>>> skip certain device power management state transitions. To use this
->>>>> feature, set the value in "conditional_skip" to indicate the type of
->>>>> state transition you want to avoid.  Please review /Documentation/ABI/
->>>>> testing/sysfs-devices-power for more detailed information.
->>>>
->>>> This looks like a poor way of dealing with a lack of adequate resource
->>>> tracking from Linux on behalf of the co-processor(s) and I really do not
->>>> understand how someone is supposed to use that in a way that works.
->>>>
->>>> Cannot you use a HW maintained spinlock between your host processor and
->>>> the co-processor such that they can each claim exclusive access to the
->>>> hardware and you can busy-wait until one or the other is done using the
->>>> device? How is your partitioning between host processor owned blocks and
->>>> co-processor(s) owned blocks? Is it static or is it dynamic?
->>>> --
->>>> Florian
->>>>
->>>
->>> This patch enables devices to selectively participate in system power
->>> transitions. This is crucial when multiple processors, managed by
->>> different operating system kernels, share the same controller. One
->>> processor shouldn't enforce the same power transition procedures on
->>> the controller – another processor might be using it at that moment.
->>> While a spinlock is necessary for synchronizing controller access, we
->>> still need to add the flexibility to dynamically customize power
->>> transition behavior for each device. And that's what this patch is
->>> trying to do.
->>> In our use case, the host processor and co-processor are managed by
->>> separate operating system kernels. This arrangement is static.
->>
->> OK, so now the question is whether the peripheral is entirely visible to
->> Linux, or is it entirely owned by the co-processor, or is there a
->> combination of both and the usage of the said device driver is dynamic
->> between Linux and your co-processor?
->>
->> A sysfs entry does not seem like the appropriate way to described which
->> states need to be skipped and which ones can remain under control of
->> Linux, you would have to use your firmware's description for that (ACPI,
->> Device Tree, etc.) such that you have a more comprehensive solution that
->> can span a bigger scope.
->> --
->> Florian
->>
-> 
-> We anticipate that control of the peripheral (e.g., controller) will
-> be shared between operating system kernels. Each kernel will need its
-> own driver for peripheral communication. To accommodate different
-> tasks, the operating system managing the peripheral can change
-> dynamically at runtime.
+This series registers for scmi limits change notifications to determine
+the throttled frequency and apply HW pressure.
 
-OK, that seems like this ought to be resolved at various layer other 
-than just user-space, starting possibly with an 
-overarching/reconciliation layer between the various operating systems?
+V3:
+* Sanitize range_max received from the notifier. [Pierre]
+* Drop patches 1/2 from v2. [Cristian]
+* Update commit message in patch 2.
 
-> 
-> We dynamically select the operating system kernel controlling the
-> target peripheral based on the task at hand, which looks more like a
-> software behavior rather than hardware behavior to me. I agree that we
-> might need a firmware description for "whether another operating
-> system exists for this peripheral", but we also need to store the
-> information about "whether another operating system is actively using
-> this peripheral". To me, the latter one looks more like a sysfs entry
-> rather than a firmware description as it's not determined statically.
+V2:
+* Rename opp_xlate -> freq_xlate [Viresh]
+* Export cpufreq_update_pressure and use it directly [Lukasz]
 
-I can understand why moving this sort of decisions to user-space might 
-sound appealing, but it also seems like if the peripheral is going to be 
-"stolen" away from Linux, then maybe Linux should not be managing it at 
-all, e.g.: unbind the device from its driver, and then rebind it when 
-Linux needs to use it. You would have to write your drivers such that 
-they can skip the peripheral's initialization if you need to preserve 
-state from the previous agent after an ownership change for instance?
+Depends on:
+HW pressure v5: https://patchwork.kernel.org/project/linux-arm-msm/cover/20240220145947.1107937-1-vincent.guittot@linaro.org/
+boost frequency support: https://patchwork.kernel.org/project/linux-arm-msm/cover/20240227173434.650334-1-quic_sibis@quicinc.com/
 
-I do not think you are painting a full picture of your use case, 
-hopefully not intentionally but at first glance it sounds like you need 
-a combination of kernel-level changes to your drivers, and possibly more.
+Sibi Sankar (2):
+  cpufreq: Export cpufreq_update_pressure
+  cpufreq: scmi: Register for limit change notifications
 
-Seems like more details need to be provided about the overall intended 
-use cases such that people can guide you with a fuller picture of the 
-use cases.
+ drivers/cpufreq/cpufreq.c      |  3 ++-
+ drivers/cpufreq/scmi-cpufreq.c | 29 ++++++++++++++++++++++++++++-
+ include/linux/cpufreq.h        |  2 ++
+ 3 files changed, 32 insertions(+), 2 deletions(-)
+
 -- 
-Florian
+2.34.1
 
 
