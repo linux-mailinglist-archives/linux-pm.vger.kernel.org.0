@@ -1,54 +1,56 @@
-Return-Path: <linux-pm+bounces-4477-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4478-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78C4886A1EB
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 22:50:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90D3686A2D2
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 23:52:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19E3C2815BA
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 21:50:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 03055B276AB
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Feb 2024 22:51:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FAB614F97C;
-	Tue, 27 Feb 2024 21:49:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69A6155E4E;
+	Tue, 27 Feb 2024 22:51:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XZSHRPpK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kmYYcYq5"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CEDF4DA0C;
-	Tue, 27 Feb 2024 21:49:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C91055E49;
+	Tue, 27 Feb 2024 22:51:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709070559; cv=none; b=N+E5JiTnkFfpoYF7p8EDbRgxPFMrQjUaaDYddyHgSWwUmFSAqk6Kz4E/+cCuXTZoVBoh5Nin1P2MoBdbhXy7NJTF+goQD87lNmNfTQi8OH90tnqf7p0nqrcoVOhAMOFbb8p4KwEv5dtUj6Ks1Hx5z0z7BK9DYLZ1QSVcgCF7XV8=
+	t=1709074282; cv=none; b=riDJ1peOkqJ8TAqGjV78K9kQD8kgageRHz6vc2/i+u2GSY0OihASH0P7B5PmFH0UqlZqlXuFjOTA2Gqts86UX0LLU+iZ6TfGkXyGdWaSROK2x2Elpigudr3h2ezQk1HywY7/7wga3LrPGnaZGN7+KN7CNZnFxOG6ymWwCgXJSZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709070559; c=relaxed/simple;
-	bh=yywVcx58lrrC7hHOpkaIRUe4Yk4DkQzzbNNNfM6vqFY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kNUJpiaXlnOdvbcBnAG8Bdh5Y8BPB+PgNHVW+vKMSHUkKMKcqIyRAud8zZDvgEN0Sta7QYIK2tb0xwjMn3nz6cBE/HFunSar6bb3iXitghBK7VAjvMfKZMA3tycdvNeBum6H7hmzUwViqHwRuU0JRNjxdB6SWz3xfVSb9L51IZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XZSHRPpK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D647C433C7;
-	Tue, 27 Feb 2024 21:49:18 +0000 (UTC)
+	s=arc-20240116; t=1709074282; c=relaxed/simple;
+	bh=yWbzOPecXpXnHuJdheVvqTksk+sgim3cqqMa0mksMAg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=nY8blwP+JjIwB5bnB8+Oc84kmUjYQLu8OJFlhCrytBHxW/zwNwiD7JVnmvZtDg5eWaUkuBcblWr+aLbOXAO7oxYap0GiKBgWzM3Q4cCNPxS73ahlPym6wn6/HhIQFGQtiEroi/u79ldUgLEjegepV2pXlEIH1fe8tv+KTKdqg20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kmYYcYq5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89BA6C433F1;
+	Tue, 27 Feb 2024 22:51:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709070558;
-	bh=yywVcx58lrrC7hHOpkaIRUe4Yk4DkQzzbNNNfM6vqFY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XZSHRPpKfn5/vZqio3VM3gkYjvWmTck2Guj3yKg81q13RX8x57TLLrBK11fT3Y57F
-	 HPer7Hv+g1q06tyrUfGCLeI62kN2yeDZaaoseMfVxOUFgsm/jHZUOBin82vcBEhfbK
-	 0BRqDc+Okz+o91UkDdFTsAenAY5s3N4FgerMY0mMu0oILuABh4VLwOkkafA1Ovimln
-	 /nXlIcjzF6a3zxHN/sjBmrQBod7UQPwVLv4zNlqYu0JRit6q0VyWv50faLbuS0q8Wh
-	 x+53hXmF1vgPrljVowyIs3m+F2v/SNDbX5SGAKTE31etL4SG1wjWnVFHLdI7Xf3aes
-	 pDrMH7+TCVqtg==
-Date: Tue, 27 Feb 2024 14:49:16 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: "Ricardo B. Marliere" <ricardo@marliere.net>
-Cc: sre@kernel.org, linux-pm@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH] power: supply: core: Fix power_supply_init_attrs() stub
-Message-ID: <20240227214916.GA3699076@dev-arch.thelio-3990X>
-References: <20240227-fix-power_supply_init_attrs-stub-v1-1-43365e68d4b3@kernel.org>
- <mlfrfarnnv3i4xwgqd3pavpwxjktkqf2afidoc4ogdq3634jah@kposnyo6725z>
+	s=k20201202; t=1709074281;
+	bh=yWbzOPecXpXnHuJdheVvqTksk+sgim3cqqMa0mksMAg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=kmYYcYq5lpiPIbtqSejM4nrgrAeLOj3D57/vta8OZN+24gtwNtss58YKvkr023cD1
+	 zeb86oO+JhkMe3ysc0U6oE7/murc6OFeviDtlpbwyyBIikRFzfHYWgyT0T6GP9400M
+	 5dF+umqGrCZmWPp4AP7ojNjw0xZsf7eC8gym6HWYnHEgkdHQZfG4rdeliTzEE5udaP
+	 8vNHxg9KrI99ntHtfeI+p3dzX42vCxAOT2yj1bfLUOn9oSFsQmrtgLAlmgMQU1/PJz
+	 iMxvoJi3zGKM8Qsd51E+65MORBgFMyRTAN7xHKwti9/kpGZ1mSll1jmYs5boFaViWo
+	 teGXe1At7fYNw==
+Date: Tue, 27 Feb 2024 16:51:20 -0600
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Mathias De Weerdt <mathias.de.weerdt@gmail.com>
+Cc: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+	ben.chuang@genesyslogic.com.tw, johnsonm@danlj.org,
+	linux-pci@vger.kernel.org, linux-mmc@vger.kernel.org,
+	linux-pm@vger.kernel.org, "Maciej W. Rozycki" <macro@orcam.me.uk>
+Subject: Re: Bug Report: Delayed Wake from Suspend with Genesys Logic GL9755
+ SD Host Controller
+Message-ID: <20240227225120.GA242292@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -58,78 +60,151 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <mlfrfarnnv3i4xwgqd3pavpwxjktkqf2afidoc4ogdq3634jah@kposnyo6725z>
+In-Reply-To: <CAKfmkPJUSVZgGSrD4qNnxHDK7zE-S119L-HR2asDSGhnsCEU6Q@mail.gmail.com>
 
-On Tue, Feb 27, 2024 at 05:39:55PM -0300, Ricardo B. Marliere wrote:
-> Hi Nathan,
+On Mon, Feb 26, 2024 at 06:33:11PM +0100, Mathias De Weerdt wrote:
+> Hi Ilpo
 > 
-> On 27 Feb 13:34, Nathan Chancellor wrote:
-> > When building without CONFIG_SYSFS, there is an error because of a
-> > recent refactoring that failed to update the stub of
-> > power_supply_init_attrs():
-> > 
-> >   drivers/power/supply/power_supply_core.c: In function 'power_supply_class_init':
-> >   drivers/power/supply/power_supply_core.c:1630:9: error: too few arguments to function 'power_supply_init_attrs'
-> >    1630 |         power_supply_init_attrs();
-> >         |         ^~~~~~~~~~~~~~~~~~~~~~~
-> >   In file included from drivers/power/supply/power_supply_core.c:25:
-> >   drivers/power/supply/power_supply.h:25:20: note: declared here
-> >      25 | static inline void power_supply_init_attrs(struct device_type *dev_type) {}
-> >         |                    ^~~~~~~~~~~~~~~~~~~~~~~
-> > 
-> > Update the stub function to take no parameters like the rest of the
-> > refactoring, which resolves the build error.
-> > 
-> > Fixes: 7b46b60944d7 ("power: supply: core: constify the struct device_type usage")
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > ---
-> >  drivers/power/supply/power_supply.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > 
-> > ────────────────────────────────────────────────────────────────────────────────
-> > modified: drivers/power/supply/power_supply.h
-> > ────────────────────────────────────────────────────────────────────────────────
-> > @ drivers/power/supply/power_supply.h:25 @ extern int power_supply_uevent(const struct device *dev, struct kobj_uevent_env
-> > 
-> > #else
-> > 
-> > static inline void power_supply_init_attrs(struct device_type *dev_type) {}
-> > static inline void power_supply_init_attrs(void) {}
-> 
-> I've missed that #else in my building test. Thanks for catching it.
-> 
-> Reviewed-by: Ricardo B. Marliere <ricardo@marliere.net>
+> That worked! I can now wake almost instantly from suspension.
 
-Thanks a lot for the quick feedback and no worries, it is hard to test
-to catch these without doing a lot of build tests.
+Thanks for testing this!
 
-Unfortunately, I caught another problem with that change that is
-independent of this one:
+I assume the sdhci_pci device (the SD card reader) worked before
+suspend but does not work after wakeup, right?  If so, we still need
+to fix the card reader.
 
-  ld.lld: error: undefined symbol: power_supply_attr_group
-  >>> referenced by power_supply_core.c
-  >>>               drivers/power/supply/power_supply_core.o:(power_supply_attr_groups) in archive vmlinux.a
-  >>> did you mean: power_supply_attr_groups
-  >>> defined in: vmlinux.a(drivers/power/supply/power_supply_core.o)
+Your dmesg log at [1] shows:
 
-It looks like power_supply_attr_groups refers to power_supply_attr_group
-but power_supply_attr_group is declared extern without a definition with
-CONFIG_SYSFS=n. It is not immediately obvious to me what the fix is.
+  [  181.568485] pcieport 0000:00:1c.6: broken device, retraining non-functional downstream link at 2.5GT/s
+  [  182.568501] pcieport 0000:00:1c.6: retraining failed
+  [  183.801823] pcieport 0000:00:1c.6: broken device, retraining non-functional downstream link at 2.5GT/s
+  [  184.801799] pcieport 0000:00:1c.6: retraining failed
+  ...
+  [  251.188524] sdhci-pci 0000:2f:00.0: not ready 65535ms after resume; giving up
+  [  251.188680] sdhci-pci 0000:2f:00.0: Unable to change power state from D3cold to D0, device inaccessible
+  [  251.252837] mmc0: enable PCI MSI failed, error=-22
+  [  251.352851] mmc0: Reset 0x1 never completed.
+  [  251.352852] mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
+  [  251.352854] mmc0: sdhci: Sys addr:  0xffffffff | Version:  0x0000ffff
 
-Cheers,
-Nathan
+I found a report at [2] with the same symptom of "sdhci-pci ... Unable
+to change power state from D3cold to D0, device inaccessible".  That
+one turned out to be a Linux problem with restoring the ASPM L1
+substates configuration after resume.  But I don't *think* that's what
+you're seeing because:
 
-> > #define power_supply_uevent NULL
-> > 
-> > #endif /* CONFIG_SYSFS */
-> > 
+  - 4ff116d0d5fd ("PCI/ASPM: Save L1 PM Substates Capability for
+    suspend/resume") appeared in v6.1 and added the L1SS restore
+
+  - a7152be79b62 ("Revert "PCI/ASPM: Save L1 PM Substates Capability
+    for suspend/resume"") appeared in v6.2 and reverted 4ff116d0d5fd
+
+  - you're running a 6.7.6-arch1-1 kernel, and v6.7.6 doesn't appear
+    to have the L1SS restore code from 4ff116d0d5fd
+
+But to make double sure, could you try manually disabling ASPM before
+suspending by running these commands as root and collecting all the
+output (use "script" or similar):
+
+  ROOT=00:1c.6
+  SD=2f:00.0
+
+  lspci -s$ROOT -vvxxxx
+  lspci -s$SD   -vvxxxx
+
+  setpci -s$SD   CAP_EXP+0x10.w=0x0000:0x0003
+  setpci -s$ROOT CAP_EXP+0x10.w=0x0000:0x0003 
+
+  lspci -s$ROOT -vvxxxx
+  lspci -s$SD   -vvxxxx
+
+Then suspend, resume, and see if we still complain about putting the
+sdhci-pci device in D0.
+
+I expect the card reader probably will still not work, and if that's
+the case, maybe something is wrong with power control for the 2f:00.0
+sdhci-pci device, possibly a BIOS bug, e.g., BIOS knows how to put
+2f:00.0 in D3cold, but doesn't know how to return it to D0.
+
+It's possible a BIOS update could fix this, but it would be good to
+know what machine and BIOS version this is so we could try to work
+around this in Linux.
+
+The dmesg log doesn't include the earliest boot messages, so I don't
+know what machine this is or the BIOS version, etc.  There should be a
+complete boot-time log in /var/log/dmesg or similar.
+
+[1] https://lore.kernel.org/r/CAKfmkPK+T0887-uQORxOzbcz-ZxBY+wKLYPRoiQiUfNhffQBEg@mail.gmail.com
+[2] https://bugzilla.kernel.org/show_bug.cgi?id=216782
+
+> On Mon, 26 Feb 2024 at 12:49, Ilpo Järvinen
+> <ilpo.jarvinen@linux.intel.com> wrote:
+> >
+> > On Mon, 26 Feb 2024, Mathias De Weerdt wrote:
+> >
+> > > Hi Bjorn
+> > >
+> > > This has indeed never worked. I have even tried plenty of older
+> > > kernels and now also the latest mainline.
+> > >
+> > > I collected the data you requested on the following kernel (Latest
+> > > mainline as of yesterday)
+> > > Linux core-arch 6.8.0-rc5-1-mainline #1 SMP PREEMPT_DYNAMIC Sun, 25
+> > > Feb 2024 21:59:28 +0000 x86_64 GNU/Linux
+> > >
+> > > After booting the laptop I put it to sleep and woke it up and
+> > > collected the dmesg and lspci logs. (They have been attached)
+> > >
+> > > Thanks for your quick response.
+> > > If you need anything else please let me know.
+> > >
+> > > Kinds regards
+> > > Mathias
+> > >
+> > > On Mon, 26 Feb 2024 at 00:31, Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > >
+> > > > On Sun, Feb 25, 2024 at 11:38:35PM +0100, Mathias De Weerdt wrote:
+> > > > > Hi
+> > > > >
+> > > > > I am writing to report a potential bug in the Linux kernel related to
+> > > > > waking from suspend on a system(Laptop) with a Genesys Logic GL9755 SD
+> > > > > Host Controller. Below are the details of the issue:
+> > > >
+> > > > Hi Mathias, thanks very much for this report.  A few questions below.
+> > > >
+> > > > > Issue Description:
+> > > > > After suspending the system, waking it up takes an extended amount of
+> > > > > time, typically 1 to 2 minutes. The delay occurs consistently and is
+> > > > > observed in the dmesg logs.
+> > > > >
+> > > > >
+> > > > > System Information:
+> > > > > - OS: Arch Linux x86_64
+> > > > > - Kernel: 6.7.5-arch1-1 and 6.7.6-arch1-1
+> > > > > - SD Host Controller: Genesys Logic GL9755 SD Host Controller (PCI ID:
+> > > > > 17a0:9755)
+> > > > >
+> > > > > Observed Logs (dmesg):
+> > > > > [ 642.483972] sdhci-pci 0000:2f:00.0: not ready 1023ms after resume; waiting
+> > > > > [ 643.537370] sdhci-pci 0000:2f:00.0: not ready 2047ms after resume; waiting
+> > > > > [ 645.724028] sdhci-pci 0000:2f:00.0: not ready 4095ms after resume; waiting
+> > > > > [ 649.990655] sdhci-pci 0000:2f:00.0: not ready 8191ms after resume; waiting
+> > > > > [ 658.310658] sdhci-pci 0000:2f:00.0: not ready 16383ms after resume; waiting
+> > > > > [ 675.590673] sdhci-pci 0000:2f:00.0: not ready 32767ms after resume; waiting
+> > > > > [ 709.723965] sdhci-pci 0000:2f:00.0: not ready 65535ms after resume; giving up
+> > > > > [ 709.724183] sdhci-pci 0000:2f:00.0: Unable to change power state
+> > > > > from D3cold to D0, device inaccessible
+> >
+> > Hi Mathias,
+> >
+> > In your dmesg, there's the Target Speed quirk triggering. Please try these
+> > two patches, they should fix the logic bug that causes the long delay you
+> > see:
+> >
+> > https://lore.kernel.org/linux-pci/alpine.DEB.2.21.2402092125070.2376@angie.orcam.me.uk/T/#t
+> >
+> > (They won't help to the link not coming up issue though).
+> >
 > > --
-> > base-commit: 3da8d71754d3c1aa0b72d74c8a324a4bc7fab473
-> > change-id: 20240227-fix-power_supply_init_attrs-stub-7be5328b4e72
-> > 
-> > Best regards,
-> > - 
-> > Nathan Chancellor <nathan@kernel.org>
-> > 
+> >  i.
 
