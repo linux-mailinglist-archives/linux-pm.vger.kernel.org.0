@@ -1,134 +1,178 @@
-Return-Path: <linux-pm+bounces-4511-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4512-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9636986B2B0
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 16:06:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E5F886B2D1
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 16:11:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 217BBB276CC
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 15:06:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F050CB292D5
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 15:11:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEA7315AADD;
-	Wed, 28 Feb 2024 15:06:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C759515B98B;
+	Wed, 28 Feb 2024 15:11:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="cuJtgoZc"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xV4slubV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3826D158D95;
-	Wed, 28 Feb 2024 15:06:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9821415B97E
+	for <linux-pm@vger.kernel.org>; Wed, 28 Feb 2024 15:11:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709132779; cv=none; b=C01H/oor52q5IogfNAT2a6EVWDnS/AR9wBdhpgzKY47xaMuSTm2WYVA+Q89zHsnrLt8+oLgsSuyFTlfN8QkO53lpsSruu+mfZoD6u+P6yl22VTZtRULqbgyTnKKrmVpX31DQuHSxLTv+iC3TRg9akPQ/VmqChjmkxto5Okglyks=
+	t=1709133107; cv=none; b=jtDdnRR+YuhvP1amKEVVf4oWsCBIWXEKnaI5jG1k6q9A9Uo/o5lIEuzwNcS3IYu6I4bG8Oi91CdYeIfln8w+BOHUPI9JCHNhjOOzUXsr4Bh5tE+iAggLVWJGspqRu4YaWxauJCafRMErVenP95KhX2zLncVPPJlUG/7WuyXLSgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709132779; c=relaxed/simple;
-	bh=Nhhx092QbZ4h8cC+srBIa9hfIgVvSLuTFr4ASjJywqg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=BiyW72Zax6n5sk/Ay1aDzDIBZTanQc7OCXePkHAUioQ9s+ljAnQLeNWY2sMwUUo9nXMv+ip46zZshuZlAX6CwmyqSpi8dzVR/dzXxsE/SKfN3aJlgX2XOXm+oVjYIgBIeG3rejhgS6NQG7PoWMpXI3il/eNqyXPdtFW4RFs1db0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=cuJtgoZc; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41S97PuM023466;
-	Wed, 28 Feb 2024 15:06:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=HamPLu5eUOVkk8MAjs6EMRDM7eqBMUeCObTL/0iqx0w=; b=cu
-	JtgoZczs/l0XVkHmUJLkGhgF1xM3rsq8E9B3Z9v0UR1RKaysxeoRU37xww3swwbS
-	VmIbjWSraHGBzCHKbUM6lGNXJHGdiTTYKNccFCx9iqwIWtbTgSfv5iYmp29DCLGg
-	XQKeAsnZSjVll90ap6RzE/xZSvZptS9mF9kHZa093i9Dv6/EBgxzL72wOcEGsYyA
-	YdCD9oPRCfhcwgywuF60FpRR4HZY7Jo1EWKd8eF8F/HxTUQu2dkBlixVmyngjCjD
-	lmYM6anaE0bg28C0F2DrdEc9teOBbFTqS9Eul1xFwZwHL0Uf2xsbMMXFvaf5bemw
-	qtG5/wldFK6KZ3vO27oA==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3whw3f1etd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 28 Feb 2024 15:06:11 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41SF6B96020991
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 28 Feb 2024 15:06:11 GMT
-Received: from [10.216.40.135] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 28 Feb
- 2024 07:06:03 -0800
-Message-ID: <e7241633-d92f-2ab0-a318-60769c12ed50@quicinc.com>
-Date: Wed, 28 Feb 2024 20:36:00 +0530
+	s=arc-20240116; t=1709133107; c=relaxed/simple;
+	bh=t8C6Kf4/GjWuIxApgLQFxQKbi5II3ReLIV37q1i/a5Y=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=drDPblb8lRD2SCubKbUOBE/4dhgP20eSwT9r7zH8v16Sj2A4cRqkmxwx370iy6TMBfVbC/LNHQ/ifuoF0qY5BvBlPYxU6u3L43Pbhf4E366fdTraSprcC5e9WtuSXdD1sJS3oUVIj8k4YgxmeVJaA8oeAUoWPANAHaZxJgXkYHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xV4slubV; arc=none smtp.client-ip=209.85.208.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2d220e39907so86830121fa.1
+        for <linux-pm@vger.kernel.org>; Wed, 28 Feb 2024 07:11:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1709133103; x=1709737903; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LtE+UgD0QskHrQJXqL71ZDAEvdhVjPCJCqkXaGVdmTI=;
+        b=xV4slubVVz/OnMJkujQp57v1AoJbTKWPtupzi9To1nLhIH/iRTQm7bzpJznNE0nvkP
+         11q/gZbdf7PTnEBbEBG2KNdoctxxY+0i8qYylVwJ6iH6NirinmiZdACh+CEYd0EBP28r
+         6VOVGdPazerN+f/s1tZuQ8j5sdRFC2ngQSyA8XeiI4pBIhpZRem6DLukK9Ck0e8/8YlP
+         xZEZ+Oc1wRqkFTZBU2MzKK8ua98VtNNV95LzQjmjnvAhZAuiDObJ1vduyPmdj65unV9O
+         QhshzbDCaCel9NjigShda2J7HENUpjuaNRRxkrzYNa8gtDlfomWcNkuGQcH9GttvQTy0
+         t8Sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709133103; x=1709737903;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LtE+UgD0QskHrQJXqL71ZDAEvdhVjPCJCqkXaGVdmTI=;
+        b=jFhWov5avp7Cp2d/2U9ywCGFOAaPjG2jI3XyHhd/y81pKH/zy+VAbc1Sk2b52v2eup
+         5vMXdxhnRfXNNAxg94H1Tfb/O7RSqFwak+VFtxtdWA/lA7YJlkmPKWQI9eY8LUnWw8cs
+         YARGyrQqe6gigR4DFQiew4zrp9LTpz8SOQ1D3q8NBexm2gGjv8P+0FUr9+97juFMaKqL
+         6J/uyu/5TFPAaUcFbdrTZF4yxuoN74U1LEaPnX+SdpXcaz5Zfx76LXS3HDOu4RwGmr0t
+         dMT0DqWFP0nPyS1egCySYwQNeGHPbz6d0u0SrgKlYi1jD2G8egOcWfPhAlBoFHll7JeE
+         1IeQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVcpMQgGaTxMUU0T+IVM6jzyT5Ao6NdmxGEFsgGUv5+MpT5FtyIZeomUGO3ZJdNEwe4qgfr1hcMx55Z71eTltmORdjYRdW/m2U=
+X-Gm-Message-State: AOJu0Yyc63yVwX9Z9gTWMkDh2fgAYXfHOzcgTPafXKWNETDXvz8KxtkN
+	1U5Ip87OXgb8hmF13aE2364uhU3S46qYycE1SaA3z2PBp4CfJWCWuzLta68EKkQ=
+X-Google-Smtp-Source: AGHT+IFjY2DdxE3YaQu9B/2dyU4BKjLYmqLA9+zox9Fix3aI+88/D2kZyxgGrpvERvBgjO5Eq0TSHw==
+X-Received: by 2002:a2e:84d5:0:b0:2d2:2ce1:1196 with SMTP id q21-20020a2e84d5000000b002d22ce11196mr8197892ljh.53.1709133103567;
+        Wed, 28 Feb 2024 07:11:43 -0800 (PST)
+Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
+        by smtp.gmail.com with ESMTPSA id k2-20020a2ea282000000b002d10daeb6dasm1652560lja.126.2024.02.28.07.11.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Feb 2024 07:11:43 -0800 (PST)
+From: Ulf Hansson <ulf.hansson@linaro.org>
+To: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	linux-pm@vger.kernel.org
+Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Maulik Shah <quic_mkshah@quicinc.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] cpuidle: psci: Drop superfluous wrappers psci_dt_attach|detach_cpu()
+Date: Wed, 28 Feb 2024 16:11:39 +0100
+Message-Id: <20240228151139.2650258-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 0/3] Add support for the IPQ5321 SoC
-Content-Language: en-US
-To: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring
-	<robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, Ilia Lin <ilia.lin@kernel.org>,
-        "Rafael
- J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-CC: <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-References: <20240228-ipq5321-sku-support-v1-0-14e4d4715f4b@quicinc.com>
-From: Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <20240228-ipq5321-sku-support-v1-0-14e4d4715f4b@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 9uDMigNbzYUPGiGJlvBZrDgbc1Zc9rfj
-X-Proofpoint-GUID: 9uDMigNbzYUPGiGJlvBZrDgbc1Zc9rfj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-28_07,2024-02-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=829 spamscore=0
- suspectscore=0 adultscore=0 impostorscore=0 priorityscore=1501 bulkscore=0
- mlxscore=0 clxscore=1011 malwarescore=0 phishscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2402120000
- definitions=main-2402280119
+Content-Transfer-Encoding: 8bit
 
+To simplify the code, let's drop psci_dt_attach|detach_cpu() and use the
+common dt_idle_attach|detach_cpu() directly instead.
 
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
+ drivers/cpuidle/cpuidle-psci-domain.c |  1 +
+ drivers/cpuidle/cpuidle-psci.c        |  5 +++--
+ drivers/cpuidle/cpuidle-psci.h        | 20 --------------------
+ 3 files changed, 4 insertions(+), 22 deletions(-)
 
-On 2/28/2024 8:21 PM, Kathiravan Thirumoorthy wrote:
-> IPQ5321 SoC belong to IPQ5332 family. Add the SoC ID and the cpufreq
-> support. Maximum cpufreq for IPQ5321 is 1.1GHZ, which is determined
-> based on the eFuse.
-> 
-> Signed-off-by: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+index b88af1262f1a..2b47811d986f 100644
+--- a/drivers/cpuidle/cpuidle-psci-domain.c
++++ b/drivers/cpuidle/cpuidle-psci-domain.c
+@@ -20,6 +20,7 @@
+ #include <linux/string.h>
+ 
+ #include "cpuidle-psci.h"
++#include "dt_idle_genpd.h"
+ 
+ struct psci_pd_provider {
+ 	struct list_head link;
+diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
+index bf68920d038a..782030a27703 100644
+--- a/drivers/cpuidle/cpuidle-psci.c
++++ b/drivers/cpuidle/cpuidle-psci.c
+@@ -28,6 +28,7 @@
+ 
+ #include "cpuidle-psci.h"
+ #include "dt_idle_states.h"
++#include "dt_idle_genpd.h"
+ 
+ struct psci_cpuidle_data {
+ 	u32 *psci_states;
+@@ -224,7 +225,7 @@ static int psci_dt_cpu_init_topology(struct cpuidle_driver *drv,
+ 	if (IS_ENABLED(CONFIG_PREEMPT_RT))
+ 		return 0;
+ 
+-	data->dev = psci_dt_attach_cpu(cpu);
++	data->dev = dt_idle_attach_cpu(cpu, "psci");
+ 	if (IS_ERR_OR_NULL(data->dev))
+ 		return PTR_ERR_OR_ZERO(data->dev);
+ 
+@@ -311,7 +312,7 @@ static void psci_cpu_deinit_idle(int cpu)
+ {
+ 	struct psci_cpuidle_data *data = per_cpu_ptr(&psci_cpuidle_data, cpu);
+ 
+-	psci_dt_detach_cpu(data->dev);
++	dt_idle_detach_cpu(data->dev);
+ 	psci_cpuidle_use_cpuhp = false;
+ }
+ 
+diff --git a/drivers/cpuidle/cpuidle-psci.h b/drivers/cpuidle/cpuidle-psci.h
+index 4e132640ed64..ef004ec7a7c5 100644
+--- a/drivers/cpuidle/cpuidle-psci.h
++++ b/drivers/cpuidle/cpuidle-psci.h
+@@ -3,29 +3,9 @@
+ #ifndef __CPUIDLE_PSCI_H
+ #define __CPUIDLE_PSCI_H
+ 
+-struct device;
+ struct device_node;
+ 
+ void psci_set_domain_state(u32 state);
+ int psci_dt_parse_state_node(struct device_node *np, u32 *state);
+ 
+-#ifdef CONFIG_ARM_PSCI_CPUIDLE_DOMAIN
+-
+-#include "dt_idle_genpd.h"
+-
+-static inline struct device *psci_dt_attach_cpu(int cpu)
+-{
+-	return dt_idle_attach_cpu(cpu, "psci");
+-}
+-
+-static inline void psci_dt_detach_cpu(struct device *dev)
+-{
+-	dt_idle_detach_cpu(dev);
+-}
+-
+-#else
+-static inline struct device *psci_dt_attach_cpu(int cpu) { return NULL; }
+-static inline void psci_dt_detach_cpu(struct device *dev) { }
+-#endif
+-
+ #endif /* __CPUIDLE_PSCI_H */
+-- 
+2.34.1
 
-Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
-
-for the series..
-
--Mukesh
-
-> ---
-> Kathiravan Thirumoorthy (3):
->        dt-bindings: arm: qcom,ids: Add SoC ID for IPQ5321
->        soc: qcom: socinfo: Add SoC ID for IPQ5321
->        cpufreq: qcom-nvmem: add support for IPQ5321
-> 
->   drivers/cpufreq/qcom-cpufreq-nvmem.c | 1 +
->   drivers/soc/qcom/socinfo.c           | 1 +
->   include/dt-bindings/arm/qcom,ids.h   | 1 +
->   3 files changed, 3 insertions(+)
-> ---
-> base-commit: 20af1ca418d2c0b11bc2a1fe8c0c88f67bcc2a7e
-> change-id: 20240228-ipq5321-sku-support-bd07056d5e01
-> 
-> Best regards,
 
