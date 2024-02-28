@@ -1,165 +1,126 @@
-Return-Path: <linux-pm+bounces-4516-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4517-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3190F86B3AB
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 16:49:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D06586B3C9
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 16:53:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DFA11289E2A
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 15:49:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 15CD41F2D7DD
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 15:53:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4623915CD7D;
-	Wed, 28 Feb 2024 15:49:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 387E115D5A9;
+	Wed, 28 Feb 2024 15:53:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=trvn.ru header.i=@trvn.ru header.b="VhUxaeXu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fH/VpNsC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA7C915B990;
-	Wed, 28 Feb 2024 15:49:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.87.146.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDCE615CD6E;
+	Wed, 28 Feb 2024 15:53:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709135374; cv=none; b=UIJWFoa0bEJzRhaaLjlY4sQKykAutPQ6DEKUIvWBdjJD+n3y46lBsFgAVXweH+bLE4BdksY8beRq8lHjHZZz1Jc7IBQ6L0QpeRAycrF8dE6nr1X1/ZJ/yp9xpRT9BIwffbKPTGRb9I8klO+7oqD14esci7s6b8TUhUI/tR8vHjs=
+	t=1709135630; cv=none; b=Rc0iRWJ8YCDxdaHLxX9hgYK8K709KlFkfOAISTfaQjH7oN0+j8Ij4fEv1EilEi6MSwi4eAwJTo7vzhjbjwYAn5/h2Z9unKzPvj8adcZHinh4IYDYY5ItE9k3IfBE6lPv5WCfIYGIvsaoZWw0fzwfPXH1SqQepR4YS1/KJpNy6T0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709135374; c=relaxed/simple;
-	bh=TXDkaVmG4OI79+ODTlB7W6xh7e9pcZZeRG8zXY6AXzw=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=ie+cRsjsouoBCaTcsL9NE4tWHjPWAqNTB/kz1dATcQqxXQt4IBUhNXsl4UdDVuM45MVdyixKpPSgdrFAsBc1uo3QZz7S9nhBiaFeIfxDR3Im5MEyOc7Uwiz3SlnQ76rUFA2bwvplPM52zJpvEPEYwgI/34tyf9JwB3wUimfFFX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=trvn.ru; spf=pass smtp.mailfrom=trvn.ru; dkim=pass (2048-bit key) header.d=trvn.ru header.i=@trvn.ru header.b=VhUxaeXu; arc=none smtp.client-ip=194.87.146.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=trvn.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trvn.ru
-Received: from authenticated-user (box.trvn.ru [194.87.146.52])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-	(No client certificate requested)
-	by box.trvn.ru (Postfix) with ESMTPSA id 17F9C401B2;
-	Wed, 28 Feb 2024 20:49:20 +0500 (+05)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-	t=1709135361; bh=TXDkaVmG4OI79+ODTlB7W6xh7e9pcZZeRG8zXY6AXzw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=VhUxaeXulzylqIHcBOnJNwY4jOYMTJXvIftsBCqCYyH6bJYpqGMkNdixEF8ywO1gd
-	 YBXJs4cXAbTUzHbceGHR7lQaNudEBrUJT0i4ObkYrLbtcDxHWusSt3gzfB5Ao2m2w6
-	 SS32hXdQrrBzOIrfcMZV9JvV+7FTIlQIf7RwMg7TAko/xdQzOtcPG0qKy7vJSYSIhB
-	 a7eWrk3WbM+XGAZgA4diXytBhRufxWHFsLFioElwvPQlNH8FOYEXObh3vXfjFNQNJk
-	 b4Qb3rzba0t924LGfS6qCqPm7tceRPbeCial2GrvwJEfqh27O5Qdxw9kzRgzOnUUh3
-	 ipJ4nfXO16Y7w==
+	s=arc-20240116; t=1709135630; c=relaxed/simple;
+	bh=vxRLRVprDDB/c/3M41BNMbhxG1UwYXmCdbjUbmB3KKE=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=N9Wr/wmzXUbn8xDF9Uds8NtC7iTGnjmBuOuTOtXQX0ugoeRjV7PBjhdjyNXpsuLa91uqToBkLDkAqehOi2OFTWKgSPvRZ2mtn/PRVqb4oU54k7tLY/DgghAzgw0VwOZFXs+MSs489mwhE8zxum4BwtJzHm4oo/Q3KyVWaaGHA7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fH/VpNsC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1C4CC433F1;
+	Wed, 28 Feb 2024 15:53:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709135629;
+	bh=vxRLRVprDDB/c/3M41BNMbhxG1UwYXmCdbjUbmB3KKE=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=fH/VpNsCC6yrehn5cwmf2mjsgU1Ga7kLFvddPlrtSi5Jr4CqpQYnnimGO6HSWNh3O
+	 P1sksEi+taf0EXpKgvTWOTnRbkQja9l+bSOOMPcaOGxOgSq88KAUk6A8OE94ZgekUk
+	 PKdQLGs/2dsH+cPT3ecRVpohSJXMsiWDkMudBu1wj0oL9BuvtO87S4FKrMnmaXAGxp
+	 SG4Uzyv1B5O67FmVmHVGx4IRrSCy5EQ9LvQB1aqs1ZQfSHMSBrY3mVj+nFOJNScIHn
+	 h/H6FZUVqL4iXcGgFr9D757QehRG1OTvDYME//d5Zi8AqSrdF6Nofkun3/EW0W2f+w
+	 hJcYB3olR0OOg==
+From: Mark Brown <broonie@kernel.org>
+To: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
+ conor+dt@kernel.org, nicolas.ferre@microchip.com, 
+ alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev, 
+ mturquette@baylibre.com, sboyd@kernel.org, herbert@gondor.apana.org.au, 
+ davem@davemloft.net, andi.shyti@kernel.org, tglx@linutronix.de, 
+ tudor.ambarus@linaro.org, miquel.raynal@bootlin.com, richard@nod.at, 
+ vigneshr@ti.com, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+ linus.walleij@linaro.org, sre@kernel.org, u.kleine-koenig@pengutronix.de, 
+ p.zabel@pengutronix.de, olivia@selenic.com, radu_nicolae.pirea@upb.ro, 
+ richard.genoud@gmail.com, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
+ lgirdwood@gmail.com, wim@linux-watchdog.org, linux@roeck-us.net, 
+ linux@armlinux.org.uk, andrei.simion@microchip.com, 
+ mihai.sain@microchip.com, andre.przywara@arm.com, neil.armstrong@linaro.org, 
+ tony@atomide.com, durai.manickamkr@microchip.com, geert+renesas@glider.be, 
+ arnd@arndb.de, Jason@zx2c4.com, rdunlap@infradead.org, rientjes@google.com, 
+ vbabka@suse.cz, mripard@kernel.org, codrin.ciubotariu@microchip.com, 
+ eugen.hristev@collabora.com, devicetree@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org, 
+ linux-i2c@vger.kernel.org, linux-mtd@lists.infradead.org, 
+ netdev@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org, 
+ linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org, 
+ linux-serial@vger.kernel.org, alsa-devel@alsa-project.org, 
+ linux-sound@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+ Varshini Rajendran <varshini.rajendran@microchip.com>
+In-Reply-To: <20240223171342.669133-1-varshini.rajendran@microchip.com>
+References: <20240223171342.669133-1-varshini.rajendran@microchip.com>
+Subject: Re: (subset) [PATCH v4 00/39] Add support for sam9x7 SoC family
+Message-Id: <170913561744.333382.15677696645878162142.b4-ty@kernel.org>
+Date: Wed, 28 Feb 2024 15:53:37 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Wed, 28 Feb 2024 20:49:18 +0500
-From: Nikita Travkin <nikita@trvn.ru>
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: Sebastian Reichel <sebastian.reichel@collabora.com>, =?UTF-8?Q?Ilpo_J?=
- =?UTF-8?Q?=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, Rob Herring
- <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
- cros-qcom-dts-watchers@chromium.org, Andy Gross <agross@kernel.org>, Bjorn
- Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>,
- Rob Herring <robh@kernel.org>, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] power: supply: Add Acer Aspire 1 embedded
- controller driver
-In-Reply-To: <edec3bee-8604-49a9-8e2f-6c21e852ef6c@redhat.com>
-References: <20240220-aspire1-ec-v3-0-02cb139a4931@trvn.ru>
- <20240220-aspire1-ec-v3-2-02cb139a4931@trvn.ru>
- <qoidm5wujjbeoc2hlraky26wuwmuaxi2atyl6ehovhvffdbfeh@g5gunqdei45m>
- <7c429d2110dbac68d0c82c8fb8bfb742@trvn.ru>
- <edec3bee-8604-49a9-8e2f-6c21e852ef6c@redhat.com>
-Message-ID: <c6d3d9841fe5a754e78adaf95522b434@trvn.ru>
-X-Sender: nikita@trvn.ru
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-a684c
 
-Hans de Goede писал(а) 26.02.2024 15:59:
-> Hi,
+On Fri, 23 Feb 2024 22:43:42 +0530, Varshini Rajendran wrote:
+> This patch series adds support for the new SoC family - sam9x7.
+>  - The device tree, configs and drivers are added
+>  - Clock driver for sam9x7 is added
+>  - Support for basic peripherals is added
+>  - Target board SAM9X75 Curiosity is added
 > 
-> +Ilpo (fellow pdx86 maintainer)
+>  Changes in v4:
+>  --------------
 > 
-> On 2/23/24 15:32, Nikita Travkin wrote:
->> Sebastian Reichel писал(а) 22.02.2024 04:41:
->>> Hi,
->>>
->>> On Tue, Feb 20, 2024 at 04:57:13PM +0500, Nikita Travkin wrote:
->>>> Acer Aspire 1 is a Snapdragon 7c based laptop. It uses an embedded
->>>> controller to control the charging and battery management, as well as to
->>>> perform a set of misc functions.
->>>>
->>>> Unfortunately, while all this functionality is implemented in ACPI, it's
->>>> currently not possible to use ACPI to boot Linux on such Qualcomm
->>>> devices. To allow Linux to still support the features provided by EC,
->>>> this driver reimplments the relevant ACPI parts. This allows us to boot
->>>> the laptop with Device Tree and retain all the features.
->>>>
->>>> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
->>>> ---
->>>>  drivers/power/supply/Kconfig           |  14 +
->>>>  drivers/power/supply/Makefile          |   1 +
->>>>  drivers/power/supply/acer-aspire1-ec.c | 453 +++++++++++++++++++++++++++++++++
->>>
->>> I think this belongs into drivers/platform, as it handles all bits of
->>> the EC.
->>>
->>
->> Hm, I initially submitted it to power/supply following the c630 driver,
->> but I think you're right... Though I'm not sure where in platform/ I'd
->> put this driver... (+CC Hans)
->>
->> Seems like most of the things live in platform/x86 but there is no i.e.
->> platform/arm64...
->>
->> Hans, (as a maintainer for most things in platform/) what do you think
->> would be the best place to put this (and at least two more I'd expect)
->> driver in inside platform/? And can we handle it through the
->> platform-driver-x86 list?
-> 
-> I guess that adding a drivers/platform/aarch64 map for this makes
-> sense, with some comments in the Makefile and in the Kconfig
-> help explaining that this is for PC/laptop style EC drivers,
-> which combine multiple logical functions in one, only!
-> 
-> Assuming that we are only going to use this for such EC drivers,
-> using the platform-driver-x86 mailinglist for this makes sense
-> since that is where are the people are with knowledge of e.g.
-> userspace APIs for various typical EC functionalities.
-> 
-> It might even make sense to also use:
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git
-> 
-> As git tree for this and send pull-reqs to Linus for this
-> together with the other pdx86 for the same reasons.
-> 
-> I would be open to that as long as this is strictly limited to
-> EC (like) drivers.
+> [...]
 
-Yes, I believe the EC are the only "boad-specific" drivers we need for
-the Windows-on-Arm devices as of today. I expect at least two more EC
-drivers to be added later.
+Applied to
 
-Then I will re-target this series to platform-driver-x86:
-
-- Will add a new drivers/platform/aarch64/ dir with a Makefile and Kconfig
-  that would explicitly note it's only for EC-like drivers. Will update
-  the "X86 PLATFORM DRIVERS" entry in MAINTAINERS. (Or should I add a new
-  entry?)
-- Will add this driver there, also updating per the last Sebastian's
-  comments.
-- Will also move the dt binding to a new bindings/platform/ dir.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
-Nikita
 
-> 
-> Ilpo, what do you think about this ?
-> 
-> Regards,
-> 
-> Hans
-> 
+[16/39] spi: dt-bindings: atmel,at91rm9200-spi: remove 9x60 compatible from list
+        commit: 666db8fd4265f938795004838d2a9335ce7b9da1
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
