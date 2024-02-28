@@ -1,40 +1,63 @@
-Return-Path: <linux-pm+bounces-4501-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4502-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EC3D86AA36
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 09:40:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DD0386AA98
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 09:58:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B52CA28325B
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 08:40:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8FBE8287B27
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 08:58:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 671642C85D;
-	Wed, 28 Feb 2024 08:40:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA2802D607;
+	Wed, 28 Feb 2024 08:58:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="pn3BXlWU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09019250E0;
-	Wed, 28 Feb 2024 08:40:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE42F2D056;
+	Wed, 28 Feb 2024 08:58:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709109654; cv=none; b=eDvEth33BE7GFYNfqmslP8eJu+LI8wq8jZ5hrefzmsHyFcLWYodfAerOf2pFr2YF3ME2O9LSjXDlLdip7PAqsMhdFEN7IQcpGIDdLd9E3e0PK4o1Zf9ewKyLlr8lwzMFlXn8AL8u2CRZyG6/YmH+hG73sC7lH8c6tY7K0yGbI3Q=
+	t=1709110717; cv=none; b=MexnUWODZJ7hJYSp/wQwNuAoHlAcVTmEsOek/kyMpZnoD00rNWRekr8OmLXMKwXHPePwWI6l7P9Nk3dgAE6Xi9cEcGNUzngTm3EY3EmK/fSG7+RXCS3eD5CPKl/rmDG+ah4VmKgKvDKRWJtHxHMkb5PUGCPxw3cQFHne9nlsY58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709109654; c=relaxed/simple;
-	bh=WwgjU44tVUA8AEoqcZgtgfLaS9tkTahfdO6/GuC5sNk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i8w8H36Ve9T2Y3RXC5ktBjk9QZG8nZxP+L7/3EeZCKhPh9Crt7lLmIhrrjVxlsiOa91DIsIH7YF0gmHvHPpOWFFOCgSuhyjrgzle/7iRbOr+MBC4jpCYP8esSVHsUvrBEJdF+6w3ZlVQOPXN2XUXXQIsK4UhXsKLhYdx4WzWZVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0AA2EC15;
-	Wed, 28 Feb 2024 00:41:31 -0800 (PST)
-Received: from [10.57.11.244] (unknown [10.57.11.244])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 130723F6C4;
-	Wed, 28 Feb 2024 00:40:49 -0800 (PST)
-Message-ID: <3ed4ad69-1229-4834-95b7-9397364ea401@arm.com>
-Date: Wed, 28 Feb 2024 08:41:07 +0000
+	s=arc-20240116; t=1709110717; c=relaxed/simple;
+	bh=pLxQnlIYQRFIqzP2dygI2ETILFtthWcncOGTSYn9w4A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=IO+qyqWcpx1teHx/83sa2J2gNM8soIrwzvwPTxxqQzG2jD93ju1W9lgl1w8iPBFdfrF1UorcY80fQUMf5NdfJN4Ojx8pepnuSkRlZfeTXaGtfjMwbR8xvsLD5TnI5ft4JpuGJhLyHiQwFCB9Ybv9vnNf4YYxujGizaGEPpeArEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=pn3BXlWU; arc=none smtp.client-ip=198.47.23.249
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 41S8wGXZ102099;
+	Wed, 28 Feb 2024 02:58:16 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1709110696;
+	bh=zRcCiO8CqojQK0c4Re3HNYJ/sU9ZKURFUS1XX0WG8kQ=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=pn3BXlWUfuCHrH7o+y/Mf/mETlFrdYHKRymO6U+/mmgRHF3yOpKR9ChZuegmXvkcm
+	 +/LYITnB0fvFUxcBIxxQ4P0MkCiOFs8e4bhg4pquDrIKfRypAGJIxs7EMtUWayTJS4
+	 fcGtLxuDdgiOxSevMwJdcbHfCbWwNaSZt1DYpNuU=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 41S8wGfh116555
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Wed, 28 Feb 2024 02:58:16 -0600
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 28
+ Feb 2024 02:58:16 -0600
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 28 Feb 2024 02:58:16 -0600
+Received: from [172.24.227.68] (dhruva.dhcp.ti.com [172.24.227.68])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 41S8wBb5090151;
+	Wed, 28 Feb 2024 02:58:12 -0600
+Message-ID: <b3056b8a-d59c-4edb-ba81-848b08313c54@ti.com>
+Date: Wed, 28 Feb 2024 14:28:11 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,46 +65,111 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] thermal: core: Move initial num_trips assignment before
- memcpy()
+Subject: Re: [PATCH] PM: wakeirq: fix wake irq warning in system suspend stage
 Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, rui.zhang@intel.com,
- gustavoars@kernel.org, morbo@google.com, justinstitt@google.com,
- stanislaw.gruszka@linux.intel.com, linux-pm@vger.kernel.org,
- linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
- patches@lists.linux.dev, Daniel Lezcano <daniel.lezcano@linaro.org>
-References: <20240226-thermal-fix-fortify-panic-num_trips-v1-1-accc12a341d7@kernel.org>
- <6a6be01d-3453-4268-8b2e-0279cc20835d@linaro.org>
- <CAJZ5v0h87k6xoi-9V0Cfb2rHQcr-STfG_bNWpzfoj4Dy46U0Lw@mail.gmail.com>
- <f81af0ae-7458-47d3-90ae-71d5217ee7dd@linaro.org>
- <202402270816.0EA3349A76@keescook>
- <bbc65508-eb0e-4d63-921b-85d242cc556f@linaro.org>
- <202402270852.E46A5268@keescook>
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <202402270852.E46A5268@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To: =?UTF-8?B?UWluZ2xpYW5nIExpICjpu47mmbTkuq4p?= <Qingliang.Li@mediatek.com>,
+        "johan+linaro@kernel.org" <johan+linaro@kernel.org>,
+        "pavel@ucw.cz"
+	<pavel@ucw.cz>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "tony@atomide.com" <tony@atomide.com>,
+        "len.brown@intel.com"
+	<len.brown@intel.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "angelogioacchino.delregno@collabora.com"
+	<angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?B?QXhlIFlhbmcgKOadqOejiik=?= <Axe.Yang@mediatek.com>
+CC: "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org"
+	<linux-mediatek@lists.infradead.org>,
+        "linux-pm@vger.kernel.org"
+	<linux-pm@vger.kernel.org>
+References: <20240228020040.25815-1-qingliang.li@mediatek.com>
+ <1390e743-2216-4435-b2ef-7d92a55605b1@ti.com>
+ <0c1e972cf506b22cb1de73c8509bf2b917c0806b.camel@mediatek.com>
+From: Dhruva Gole <d-gole@ti.com>
+In-Reply-To: <0c1e972cf506b22cb1de73c8509bf2b917c0806b.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Hi Nathan and Kees,
+Hello,
 
-On 2/27/24 17:00, Kees Cook wrote:
-> On Tue, Feb 27, 2024 at 05:47:44PM +0100, Daniel Lezcano wrote:
->> Ok my misunderstanding was I thought sizeof() was calling _bdos under the
->> hood, so when calling sizeof(flex_array), it was returning the computed size
->> inferring from the __counted_by field.
+On 28/02/24 14:03, Qingliang Li (黎晴亮) wrote:
+> On Wed, 2024-02-28 at 11:34 +0530, Dhruva Gole wrote:
+>>   	
+>> External email : Please do not click links or open attachments until
+>> you have verified the sender or the content.
+>>   Hi,
+>>
+>> On 28/02/24 07:30, Qingliang Li wrote:
+>>> When driver registers the wake irq with reverse enable ordering,
+>>> the wake irq will be re-enabled when entering system suspend,
+>> triggering
+>>> an 'Unbalanced enable for IRQ xxx' warning. The wake irq will be
+>>> enabled in both dev_pm_enable_wake_irq_complete() and
+>> dev_pm_arm_wake_irq()
+>>>
+>>> To fix this issue, complete the setting of
+>> WAKE_IRQ_DEDICATED_ENABLED flag
+>>> in dev_pm_enable_wake_irq_complete() to avoid redundant irq
+>> enablement.
+>>
+>>
+>> Just trying to understand, why not in dev_pm_arm_wake_irq ?
+>> Is it cuz it's called much after dev_pm_enable_wake_irq_complete ?
+>> Not sure what's the exact call order, but I am assuming
+>> dev_pm_enable_wake_irq_complete is more of a runtime thing and
+>> dev_pm_arm_wake_irq happens finally at system suspend?
 > 
-> Yeah, sizeof() has a very limited scope. __builtin_object_size() has
-> more flexibility (via the 2nd argument, "type"), but it was still
-> compile-time only. __builtin_dynamic_object_size() was added to bring
-> runtime evaluations into the mix (initially to support the alloc_size
-> attribute, and now includes the counted_by attribute too).
+> You are right, the involvement of 'dev_pm_enable_wake_irq_complete' is
+> due to the driver selecting 'pm_runtime_force_suspend' as the callback
+> function for system suspend. In this scenario, the call sequence during
+> system suspend is as follows:
+> dpm_suspend_start -> dpm_run_callback -> pm_runtime_force_suspend ->
+> dev_pm_enable_wake_irq_check/complete
+> suspend_enter -> dpm_suspend_noirq -> dev_pm_arm_wake_irq
+
+OK this is what I expected, thanks for clarifying!
+
 > 
+> Based on the above, if the driver (i) chooses pm_runtime_force_suspend
+> as the system suspend callback function and (ii) registers wake irq
+> with reverse enable ordering, the wake irq will be enabled twice during
+> system suspend.
 
-Thanks for your earlier emails explaining these stuff.
-Do you have maybe some presentation about those features
-for the kernel (ideally w/ a video from some conference)?
+Yep, makes sense
 
-Regards,
-Lukasz
+> 
+>>
+>>>
+>>> Fixes: 8527beb12087 ("PM: sleep: wakeirq: fix wake irq arming")
+>>> Signed-off-by: Qingliang Li <qingliang.li@mediatek.com>
+>>> ---
+>>
+>> $subject: Most recent convention used for this file is:
+>> "PM: sleep: wakeirq:  ..."
+> 
+> I'm sorry, but what is the problem with the description of the "Fixed"
+> field? I didn't get your point and I wrote it according to the previous
+> patches.
+
+I am not talking about your "Fixed", I am taking about the subject line
+of the patch.
+You've used "PM: wakeirq: fix wake ..."
+
+Instead use
+"PM: sleep: wakeirq: fix wake ..."
+
+No strong objections here, it's just a nit.
+
+[..snip..]
+
+-- 
+Thanks and Regards,
+Dhruva Gole
 
