@@ -1,168 +1,144 @@
-Return-Path: <linux-pm+bounces-4489-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4490-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BA5F86A7D8
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 06:16:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAB3486A831
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 07:05:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D650C28A6BA
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 05:16:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 764FE28280D
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 06:05:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6AD420B29;
-	Wed, 28 Feb 2024 05:16:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DC8221373;
+	Wed, 28 Feb 2024 06:05:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="bECaupkN"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="GtWFzRk9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BB351CFB9;
-	Wed, 28 Feb 2024 05:16:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C8C21362;
+	Wed, 28 Feb 2024 06:04:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709097399; cv=none; b=JVWkW0tOIyS58zyGctCeWs0ioo+ryD3p07gUrN3FjDlJlwilAGifsi9XT92SAHRAV17mIuQnJqVUOyrGAZVgwsi11k7CQY5gIS48KAX7H2gltSVrftzubs7jqLYJVop+EiCzSn8FZXcs0xtoeGio7Mrdf2qmcM8NAukQCZRyS4k=
+	t=1709100300; cv=none; b=F1DbAe2XN6zCVzZXBLXdsCKJcKVL1IvZ6dvYBDFVZXGJHonennnroRJhh91if78LAjU8veSsGf38H736SGbqhQ6+B+FvkW2sogSKldcmBq6wApkYn2v13e5wQM+szqmyn7EFZ8v3FkaPpp0/kPao+tjoRwzXLk9+XDXhFvi1Hp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709097399; c=relaxed/simple;
-	bh=qVPI7MS8YA9gXSchO0CmniNyttnD4M8hU6is0NV2gVA=;
+	s=arc-20240116; t=1709100300; c=relaxed/simple;
+	bh=Bx/72HQNWWv+7pa7o40RHu5kyjc1ZrMEMUJaH4AtW+0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=VVeJJHb/0mxy8XxFVC6iV37uEwhsTznN79TwGb4E49xPcSWsoohc0TmRy2x56KavgIEX7zGQ8Q1cP6GeAKBRGEdcnSLLUAFIFrBuwDfw8boRUu3GpCnRP+A7nAdJ4MIcRd1S/6I8OqwOxuLdYWEcmIMJcBC2WY1jCx00LU0PVAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=bECaupkN; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41S5Frmw026872;
-	Wed, 28 Feb 2024 05:16:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=/9RHLZnaI5kQOKkS+s/I6Cq7yy4FExCSWCAd3lilZeU=; b=bE
-	CaupkNR9ToiS2pNuTdpPvnTi7g2eBcGAoqATCDNKj1eXq6QWCLyVCxP400ma+Uvs
-	aAJRZJy9AlLWMnmXDoAUuArVzg5tSR0WhOtDCUW2opipiZGKdgVxZLL9Xtq21N4P
-	M62jmrffuZmsQatQ1wypZZkGIughep3M3kHLmfT3u/X2qOnaM5kcNBaDAr/vgPZD
-	WlYZb6NDJtzURTsnlzOPcYXIsLpU207dZjXiEINfLb5oSmGiLVLVgabd9FXUCjPE
-	ZjSgeqC/E66yzoUUwjWNZLUYdHt/p+NErFSnqRXc/Bvajt5SttEVnWUgGwcFt+m4
-	Ev3VryajnpvpV+0GOZDg==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3whkd5hd7a-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 28 Feb 2024 05:16:27 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41S5GQDN015500
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 28 Feb 2024 05:16:26 GMT
-Received: from [10.131.33.37] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 27 Feb
- 2024 21:16:22 -0800
-Message-ID: <377c1b4f-9357-112c-009c-fd6a757665b9@quicinc.com>
-Date: Wed, 28 Feb 2024 10:46:19 +0530
+	 In-Reply-To:Content-Type; b=rERwsHzDGWTT6LAWoga2KLH2Bos7ihARgRolraHKTZ707z713WsmqLwLhOIQUMh3g/mWOgHogAOzWU6OPo3oJTRZw7E4/tkYkDqb98rS+bLkDmhTpS2LDkZVw3ReRMr0Dal5PdFLCdI9C0NSb6Z9FrxgPoSDSA70nxyIa5LJiNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=GtWFzRk9; arc=none smtp.client-ip=198.47.23.249
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 41S64T3S055457;
+	Wed, 28 Feb 2024 00:04:29 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1709100269;
+	bh=dlFX39e4Le6PT/fbfEe1U4Pxl4yfCvn/ID1DA6HRvSk=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=GtWFzRk9RjdIo1EqAe+uxMjXXCgkL8SCURhE2rKK+g1fRXleQnQYwFIpfgvGQjBC7
+	 E4YStneUeimUG2Z806Dq+VReRykRKQ2bCMOQyMvRzo9F9uQJnNVkunBWGjLSjWhSqf
+	 XfxroEYiojgz8po2EUSuERBof8qZdyF5Fy3xBOVE=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 41S64Taw097518
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Wed, 28 Feb 2024 00:04:29 -0600
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 28
+ Feb 2024 00:04:28 -0600
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 28 Feb 2024 00:04:28 -0600
+Received: from [172.24.227.68] (dhruva.dhcp.ti.com [172.24.227.68])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 41S64O8F115774;
+	Wed, 28 Feb 2024 00:04:25 -0600
+Message-ID: <1390e743-2216-4435-b2ef-7d92a55605b1@ti.com>
+Date: Wed, 28 Feb 2024 11:34:23 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V3 1/2] cpufreq: Export cpufreq_update_pressure
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] PM: wakeirq: fix wake irq warning in system suspend stage
+To: Qingliang Li <qingliang.li@mediatek.com>,
+        "Rafael J . Wysocki"
+	<rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Len Brown
+	<len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>,
+        Johan Hovold
+	<johan+linaro@kernel.org>,
+        Tony Lindgren <tony@atomide.com>, Dhruva Gole
+	<d-gole@ti.com>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+References: <20240228020040.25815-1-qingliang.li@mediatek.com>
 Content-Language: en-US
-To: Trilok Soni <quic_tsoni@quicinc.com>, <sudeep.holla@arm.com>,
-        <cristian.marussi@arm.com>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <morten.rasmussen@arm.com>,
-        <dietmar.eggemann@arm.com>, <lukasz.luba@arm.com>,
-        <pierre.gondois@arm.com>
-CC: <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_mdtipton@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>
-References: <20240227181632.659133-1-quic_sibis@quicinc.com>
- <20240227181632.659133-2-quic_sibis@quicinc.com>
- <2b68e15b-71ce-cf3b-a42d-e3e18aeb5ef2@quicinc.com>
-From: Sibi Sankar <quic_sibis@quicinc.com>
-In-Reply-To: <2b68e15b-71ce-cf3b-a42d-e3e18aeb5ef2@quicinc.com>
+From: Dhruva Gole <d-gole@ti.com>
+In-Reply-To: <20240228020040.25815-1-qingliang.li@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: SxTHXxlkderglM5sa5Nx4xDX2AyDh07j
-X-Proofpoint-ORIG-GUID: SxTHXxlkderglM5sa5Nx4xDX2AyDh07j
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-28_04,2024-02-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- lowpriorityscore=0 mlxscore=0 mlxlogscore=999 malwarescore=0
- suspectscore=0 bulkscore=0 spamscore=0 adultscore=0 phishscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2402120000 definitions=main-2402280038
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
+Hi,
 
-
-On 2/28/24 01:02, Trilok Soni wrote:
-> On 2/27/2024 10:16 AM, Sibi Sankar wrote:
->> The SCMI cpufreq driver doesn't require any additional signal
->> smoothing provided by arch_update_hw_pressure interface, export
->> cpufreq_update_pressure so that it can be called upon directly
->> instead.
->>
->> Suggested-by: Lukasz Luba <lukasz.luba@arm.com>
->> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
->> ---
->>   drivers/cpufreq/cpufreq.c | 3 ++-
->>   include/linux/cpufreq.h   | 2 ++
->>   2 files changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
->> index 76002aa3d12d..bdec2dfd77eb 100644
->> --- a/drivers/cpufreq/cpufreq.c
->> +++ b/drivers/cpufreq/cpufreq.c
->> @@ -2573,7 +2573,7 @@ DEFINE_PER_CPU(unsigned long, cpufreq_pressure);
->>    *
->>    * Update the value of cpufreq pressure for all @cpus in the policy.
->>    */
->> -static void cpufreq_update_pressure(struct cpufreq_policy *policy)
->> +void cpufreq_update_pressure(struct cpufreq_policy *policy)
->>   {
->>   	unsigned long max_capacity, capped_freq, pressure;
->>   	u32 max_freq;
->> @@ -2598,6 +2598,7 @@ static void cpufreq_update_pressure(struct cpufreq_policy *policy)
->>   	for_each_cpu(cpu, policy->related_cpus)
->>   		WRITE_ONCE(per_cpu(cpufreq_pressure, cpu), pressure);
->>   }
->> +EXPORT_SYMBOL(cpufreq_update_pressure);
+On 28/02/24 07:30, Qingliang Li wrote:
+> When driver registers the wake irq with reverse enable ordering,
+> the wake irq will be re-enabled when entering system suspend, triggering
+> an 'Unbalanced enable for IRQ xxx' warning. The wake irq will be
+> enabled in both dev_pm_enable_wake_irq_complete() and dev_pm_arm_wake_irq()
 > 
-> EXPORT_SYMBOL_GPL please. Other symbols in this file are _GPL as well.
+> To fix this issue, complete the setting of WAKE_IRQ_DEDICATED_ENABLED flag
+> in dev_pm_enable_wake_irq_complete() to avoid redundant irq enablement.
 
-Hey Trilok,
 
-Thanks for catching this. Will fix it in the re-spin.
-
--Sibi
+Just trying to understand, why not in dev_pm_arm_wake_irq ?
+Is it cuz it's called much after dev_pm_enable_wake_irq_complete ?
+Not sure what's the exact call order, but I am assuming
+dev_pm_enable_wake_irq_complete is more of a runtime thing and
+dev_pm_arm_wake_irq happens finally at system suspend?
 
 > 
->>   
->>   /**
->>    * cpufreq_set_policy - Modify cpufreq policy parameters.
->> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
->> index 414bfc976b30..957bf8e4ca0d 100644
->> --- a/include/linux/cpufreq.h
->> +++ b/include/linux/cpufreq.h
->> @@ -241,6 +241,7 @@ struct kobject *get_governor_parent_kobj(struct cpufreq_policy *policy);
->>   void cpufreq_enable_fast_switch(struct cpufreq_policy *policy);
->>   void cpufreq_disable_fast_switch(struct cpufreq_policy *policy);
->>   bool has_target_index(void);
->> +void cpufreq_update_pressure(struct cpufreq_policy *policy);
->>   
->>   DECLARE_PER_CPU(unsigned long, cpufreq_pressure);
->>   static inline unsigned long cpufreq_get_pressure(int cpu)
->> @@ -270,6 +271,7 @@ static inline bool cpufreq_supports_freq_invariance(void)
->>   }
->>   static inline void disable_cpufreq(void) { }
->>   static inline void cpufreq_update_limits(unsigned int cpu) { }
->> +static inline void cpufreq_update_pressure(struct cpufreq_policy *policy) { }
->>   static inline unsigned long cpufreq_get_pressure(int cpu)
->>   {
->>   	return 0;
+> Fixes: 8527beb12087 ("PM: sleep: wakeirq: fix wake irq arming")
+> Signed-off-by: Qingliang Li <qingliang.li@mediatek.com>
+> ---
+
+$subject: Most recent convention used for this file is:
+"PM: sleep: wakeirq:  ..."
+
+>   drivers/base/power/wakeirq.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/base/power/wakeirq.c b/drivers/base/power/wakeirq.c
+> index 42171f766dcb..5a5a9e978e85 100644
+> --- a/drivers/base/power/wakeirq.c
+> +++ b/drivers/base/power/wakeirq.c
+> @@ -313,8 +313,10 @@ void dev_pm_enable_wake_irq_complete(struct device *dev)
+>   		return;
+>   
+>   	if (wirq->status & WAKE_IRQ_DEDICATED_MANAGED &&
+> -	    wirq->status & WAKE_IRQ_DEDICATED_REVERSE)
+> +	    wirq->status & WAKE_IRQ_DEDICATED_REVERSE) {
+>   		enable_irq(wirq->irq);
+> +		wirq->status |= WAKE_IRQ_DEDICATED_ENABLED;
+> +	}
+
+But this does make sense to make sure status is updated,
+You can pick my R-by.
+
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
+
+-- 
+Thanks and Regards,
+Dhruva Gole
 
