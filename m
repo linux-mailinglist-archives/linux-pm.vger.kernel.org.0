@@ -1,104 +1,218 @@
-Return-Path: <linux-pm+bounces-4519-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4520-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 091B986B559
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 17:57:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8C4986B56B
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 18:01:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C58A1F257AE
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 16:56:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35FD2286000
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 17:01:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6DB1208D5;
-	Wed, 28 Feb 2024 16:56:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB8CE3FB82;
+	Wed, 28 Feb 2024 17:01:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QB3r/qRI"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="lpwxnPBr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 833866EF10;
-	Wed, 28 Feb 2024 16:56:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EACFD208D7;
+	Wed, 28 Feb 2024 17:01:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709139414; cv=none; b=AO9r6dvSAPHnY77flnajr7nEd8Ihii6wlz/bL8muV0Kfm01k1BKtiLx51DtRNsl539dyNpMPS+vXZvsI1z+QQqPoymnXvkGb7cKOl8BT4Y6Zn2I6awCxNXLZuTcL/QpYNhv4exTXaPZati0nukhmngR95vjnvdZHIb1CsjePvE4=
+	t=1709139673; cv=none; b=UcpFLYGKL2CR8q7duBgdCiJF695k1uLxxEXGJowgCoFEz0kir6oNpaJQHt76eYbH2Y4cf9RpX5qQBA8HWjda/Xqpjpdp8IWmQ9fkewpKjP1PyahYv/2lEy/PTQ7fU5iiBfn7KuY5GI9GTpSMfgDtOtt4GNSPAA+l19TWv0tejKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709139414; c=relaxed/simple;
-	bh=j8GW5PM05J1eAob6plV8ZY09tWLXwx3VfJvudI3zpx0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CeXZkFt1pczSsIvS+we5M3kKEkpfwZwVT7Tpdy5X/Eq29l6e1T7drYG6qhVlyCrqgT077A6+QwduBZkB1w1t4Hg1KhlROtMYf634jFSd7l+1ALtIum79oEKFQ2gqgYyzPFCYV97uZTC+j8sTF/oLRtqkGv5VcgYkciOCF+6k0L4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QB3r/qRI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3549AC43399;
-	Wed, 28 Feb 2024 16:56:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709139413;
-	bh=j8GW5PM05J1eAob6plV8ZY09tWLXwx3VfJvudI3zpx0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QB3r/qRIx/u9gXVXlbY/IYNL+g/tdiv0GzEOVBTyiHegvQDwBaTaGjm7ZE9xY89+6
-	 f/G6zZzL13nXctyCJdnlEZ82fh/dKtLCwe/VWu05aGyZQfgk1KlNjakwk4rCEaG4CB
-	 h0ovQZ0b016/rxeNkJVs1xgKwPvghpQdKPozy1fYsurBDtoKprTzYUS8yTNUZy5ere
-	 bwk9XgA3aSqr6Yb1M7CM5DRbTw6dK6xsxZp/EcW0kaPikflydMFjZvDb+YsnlS/AvQ
-	 BpJn++NEwa0OIGTeU4W+Jo4t14JZYPnCMy2GmIQbOzY1GGGZ6GzxYrw3bGT08Ryy+w
-	 3C5lLT+c6ioKg==
-Date: Wed, 28 Feb 2024 09:56:51 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Lukasz Luba <lukasz.luba@arm.com>
-Cc: Kees Cook <keescook@chromium.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>, rui.zhang@intel.com,
-	gustavoars@kernel.org, morbo@google.com, justinstitt@google.com,
-	stanislaw.gruszka@linux.intel.com, linux-pm@vger.kernel.org,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev, Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: Re: [PATCH] thermal: core: Move initial num_trips assignment before
- memcpy()
-Message-ID: <20240228165651.GA2158263@dev-arch.thelio-3990X>
-References: <20240226-thermal-fix-fortify-panic-num_trips-v1-1-accc12a341d7@kernel.org>
- <6a6be01d-3453-4268-8b2e-0279cc20835d@linaro.org>
- <CAJZ5v0h87k6xoi-9V0Cfb2rHQcr-STfG_bNWpzfoj4Dy46U0Lw@mail.gmail.com>
- <f81af0ae-7458-47d3-90ae-71d5217ee7dd@linaro.org>
- <202402270816.0EA3349A76@keescook>
- <bbc65508-eb0e-4d63-921b-85d242cc556f@linaro.org>
- <202402270852.E46A5268@keescook>
- <3ed4ad69-1229-4834-95b7-9397364ea401@arm.com>
+	s=arc-20240116; t=1709139673; c=relaxed/simple;
+	bh=byrBJK1PNV5TLon9imE4YeO9CVPH8UfV/Eu8yZXb18g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=o1jEYIlyUkRMZkBYsbpxH5xX+AddPJ070sbaWDAn/fhBP4yi7a7xX41LUbk5oPIl1Nj2NQCOX8DyKpJYF8g0stiHlPLRd7T2ZFwkQiYoTHW6W7hlZHMNWT8Vkp++HLyYmgNh4D5kyvLm1jC6aFtRMh2K/UaQnFTcYcH371WWGos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=lpwxnPBr; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41S97P1b023466;
+	Wed, 28 Feb 2024 17:00:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=kDrZQYUzq9AttFHiMFzCFe22kthPai9X0iD964whZFM=; b=lp
+	wxnPBrR2WWOP0b3A25+YALReYorWG1W4XOxo+rG0R9yoa3Fy+l+JCYqMXdq9HXX5
+	qJaPWjGYram+Q6LpshVAN125fP3sbfAXpG1WviUiWIl3dLii3gJiKA7v4Os45j8q
+	VQDeM7tVMkZ+3J7Y4P0GpPI5xyxFV6MiEe08uvh5J9cQ4T5kR/PvB/akohQcDeSl
+	VdJKrPaJlKAHtGG1r+ZwEIZ3bbl0Bpb2hVzNGgqKJx10MnOqFbEZCLbKqzEj2dLZ
+	t+/IbnRpXhDQOiIHJ7S8ODWPrIkvQpNiTyeztZ/eYLjFylPBp+ejoD8zzsjhlIsP
+	ae+r2KXEeqtfsQl0H8mQ==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3whw3f1tvu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 28 Feb 2024 17:00:58 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41SH0vaf030707
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 28 Feb 2024 17:00:57 GMT
+Received: from [10.131.33.37] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 28 Feb
+ 2024 09:00:53 -0800
+Message-ID: <2608b2d8-f3b0-b4f5-f8e4-1f2242043ded@quicinc.com>
+Date: Wed, 28 Feb 2024 22:30:50 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3ed4ad69-1229-4834-95b7-9397364ea401@arm.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V3 2/2] cpufreq: scmi: Register for limit change
+ notifications
+Content-Language: en-US
+To: Lukasz Luba <lukasz.luba@arm.com>
+CC: <linux-arm-kernel@lists.infradead.org>, <pierre.gondois@arm.com>,
+        <dietmar.eggemann@arm.com>, <morten.rasmussen@arm.com>,
+        <viresh.kumar@linaro.org>, <rafael@kernel.org>,
+        <cristian.marussi@arm.com>, <sudeep.holla@arm.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_mdtipton@quicinc.com>, <linux-arm-msm@vger.kernel.org>
+References: <20240227181632.659133-1-quic_sibis@quicinc.com>
+ <20240227181632.659133-3-quic_sibis@quicinc.com>
+ <f8bfc666-c216-44d5-a63b-99f04ff3b8ef@arm.com>
+From: Sibi Sankar <quic_sibis@quicinc.com>
+In-Reply-To: <f8bfc666-c216-44d5-a63b-99f04ff3b8ef@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Agk_FTkjIhwQNOGXeoMtaveUuzBaBums
+X-Proofpoint-GUID: Agk_FTkjIhwQNOGXeoMtaveUuzBaBums
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-28_08,2024-02-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
+ suspectscore=0 adultscore=0 impostorscore=0 priorityscore=1501 bulkscore=0
+ mlxscore=0 clxscore=1015 malwarescore=0 phishscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2402120000
+ definitions=main-2402280133
 
-On Wed, Feb 28, 2024 at 08:41:07AM +0000, Lukasz Luba wrote:
-> Hi Nathan and Kees,
+
+
+On 2/28/24 18:54, Lukasz Luba wrote:
 > 
-> On 2/27/24 17:00, Kees Cook wrote:
-> > On Tue, Feb 27, 2024 at 05:47:44PM +0100, Daniel Lezcano wrote:
-> > > Ok my misunderstanding was I thought sizeof() was calling _bdos under the
-> > > hood, so when calling sizeof(flex_array), it was returning the computed size
-> > > inferring from the __counted_by field.
-> > 
-> > Yeah, sizeof() has a very limited scope. __builtin_object_size() has
-> > more flexibility (via the 2nd argument, "type"), but it was still
-> > compile-time only. __builtin_dynamic_object_size() was added to bring
-> > runtime evaluations into the mix (initially to support the alloc_size
-> > attribute, and now includes the counted_by attribute too).
-> > 
 > 
-> Thanks for your earlier emails explaining these stuff.
-> Do you have maybe some presentation about those features
-> for the kernel (ideally w/ a video from some conference)?
+> On 2/27/24 18:16, Sibi Sankar wrote:
+>> Register for limit change notifications if supported and use the 
+>> throttled
+>> frequency from the notification to apply HW pressure.
 
-I think Kees's 2022 and 2023 talks at LPC are a good place to start:
+Lukasz,
 
-https://youtu.be/tQwv79i02ks?si=Nj9hpvmQwPB4K3Y4&t=452
-https://youtu.be/OEFFqhP5sts?si=u6RnOP641S8FkouD&t=614
+Thanks for taking time to review the series!
 
-https://outflux.net/slides/2022/lpc/features.pdf
-https://outflux.net/slides/2023/lpc/features.pdf
+>>
+>> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+>> ---
+>>
+>> v3:
+>> * Sanitize range_max received from the notifier. [Pierre]
+>> * Update commit message.
+>>
+>>   drivers/cpufreq/scmi-cpufreq.c | 29 ++++++++++++++++++++++++++++-
+>>   1 file changed, 28 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/cpufreq/scmi-cpufreq.c 
+>> b/drivers/cpufreq/scmi-cpufreq.c
+>> index 76a0ddbd9d24..78b87b72962d 100644
+>> --- a/drivers/cpufreq/scmi-cpufreq.c
+>> +++ b/drivers/cpufreq/scmi-cpufreq.c
+>> @@ -25,9 +25,13 @@ struct scmi_data {
+>>       int domain_id;
+>>       int nr_opp;
+>>       struct device *cpu_dev;
+>> +    struct cpufreq_policy *policy;
+>>       cpumask_var_t opp_shared_cpus;
+>> +    struct notifier_block limit_notify_nb;
+>>   };
+>> +const struct scmi_handle *handle;
+>> +static struct scmi_device *scmi_dev;
+>>   static struct scmi_protocol_handle *ph;
+>>   static const struct scmi_perf_proto_ops *perf_ops;
+>>   static struct cpufreq_driver scmi_cpufreq_driver;
+>> @@ -151,6 +155,20 @@ static struct freq_attr *scmi_cpufreq_hw_attr[] = {
+>>       NULL,
+>>   };
+>> +static int scmi_limit_notify_cb(struct notifier_block *nb, unsigned 
+>> long event, void *data)
+>> +{
+>> +    struct scmi_data *priv = container_of(nb, struct scmi_data, 
+>> limit_notify_nb);
+>> +    struct scmi_perf_limits_report *limit_notify = data;
+>> +    struct cpufreq_policy *policy = priv->policy;
+>> +
+>> +    policy->max = clamp(limit_notify->range_max_freq/HZ_PER_KHZ, 
+>> policy->cpuinfo.min_freq,
+>> +                policy->cpuinfo.max_freq);
+> 
+> Please take the division operation out of this clamp() call, somewhere
+> above. Currently it 'blurs' these stuff, while it's important convertion
+> to khz. You can call it e.g.:
+> 
+> limit_freq_khz = limit_notify->range_max_freq / HZ_PER_KHZ;
+> 
+> then use in clamp(limit_freq_khz, ...)
 
-Cheers,
-Nathan
+ack
+
+> 
+>> +
+>> +    cpufreq_update_pressure(policy);
+>> +
+>> +    return NOTIFY_OK;
+>> +}
+>> +
+>>   static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+>>   {
+>>       int ret, nr_opp, domain;
+>> @@ -269,6 +287,15 @@ static int scmi_cpufreq_init(struct 
+>> cpufreq_policy *policy)
+>>           }
+>>       }
+>> +    priv->limit_notify_nb.notifier_call = scmi_limit_notify_cb;
+>> +    ret = handle->notify_ops->devm_event_notifier_register(scmi_dev, 
+>> SCMI_PROTOCOL_PERF,
+>> +                            SCMI_EVENT_PERFORMANCE_LIMITS_CHANGED,
+>> +                            &domain,
+>> +                            &priv->limit_notify_nb);
+>> +    if (ret)
+>> +        dev_warn(cpu_dev,
+>> +             "failed to register for limits change notifier for 
+>> domain %d\n", domain);
+>> +
+>>       priv->policy = policy;
+>>       return 0;
+>> @@ -342,8 +369,8 @@ static int scmi_cpufreq_probe(struct scmi_device 
+>> *sdev)
+>>   {
+>>       int ret;
+>>       struct device *dev = &sdev->dev;
+>> -    const struct scmi_handle *handle;
+> 
+> It should be a compilation error...
+> 
+>> +    scmi_dev = sdev;
+>>       handle = sdev->handle;
+> 
+> due to usage here, wasn't it?
+
+Not really, isn't it getting the first initialization here?
+Are there any compiler options that I need to turn on to
+catch these?
+
+-Sibi
+
+> 
+>>       if (!handle)
 
