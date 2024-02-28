@@ -1,130 +1,268 @@
-Return-Path: <linux-pm+bounces-4491-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4493-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A24486A838
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 07:07:44 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF3C786A864
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 07:36:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE9741F27A23
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 06:07:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5932FB243E0
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 06:35:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEB7821373;
-	Wed, 28 Feb 2024 06:07:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C6B52231A;
+	Wed, 28 Feb 2024 06:35:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="cEThuSc4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fkbjHbxt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A48DD224D4;
-	Wed, 28 Feb 2024 06:07:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C8921370;
+	Wed, 28 Feb 2024 06:35:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709100461; cv=none; b=WTROVQ1hBLNaY9UrS/jUVEm6bCbXgpoHoyHLW3YEcRcXctYuZ4ugEDw/QPRg30P9mbEgocWgG1uaK7vRdKz+hFICcXloJTQvdqZK19R0PD4TrPrRtIqXAverkiY35fWG3YNy1lms73BEbEl8BhsoWmRDheGZu9tST+QyfYDy4bE=
+	t=1709102153; cv=none; b=STmmSub2N6Duc60UiXsIl+r0EJs+14or78LTYwnRUzJ2AaXeU6uAboQrDUhvyFfG36KhKxbMxwks5HfBqsVzJTLG/COxYFDAQ1WWlIAgX8VgRnlmpbaKjUmyhlLbRhfRP0OBSOUrTHVqmLq76MzeVi2USqaAhfnSutu3d5aFTt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709100461; c=relaxed/simple;
-	bh=pxc2ZZ/jk0gXN4weRBL2NBBmdZRdQq6VWS7o4nzzuj4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s3bs31Qb2wmNf/hV/EWRYbDGCcKaxuYfBcMqpurtgWii0W476UbMRYivvtK+Q+uqq5XN9mGoQ5tfu4l6TfXLNMHjhW6gg+UF88MI78h50//dl8lGMKrm4mw8xbphz5DqGKxP8zGJ4cnonBEo/u8f2i81NT8hRTJwwZh3pw/p5iA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=cEThuSc4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA456C433F1;
-	Wed, 28 Feb 2024 06:07:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1709100461;
-	bh=pxc2ZZ/jk0gXN4weRBL2NBBmdZRdQq6VWS7o4nzzuj4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cEThuSc4bNSWeaQNmhTxul4sBIUSAjOLhwLIVZQ8rDxznqlEh7qxDnkWdPuHKXjX3
-	 IzSDFNUcOLoqHSTBWL+gKNhteNEdU+KP/9Kz96z730FiC25sRVPDxac7huK+zXSFAb
-	 cZfZ9xC+hPN94H+ZZGzItK60eCzrPL+m17Kv7Bgg=
-Date: Wed, 28 Feb 2024 07:07:38 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Qingliang Li <qingliang.li@mediatek.com>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-	Len Brown <len.brown@intel.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Johan Hovold <johan+linaro@kernel.org>,
-	Tony Lindgren <tony@atomide.com>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] PM: wakeirq: fix wake irq warning in system suspend stage
-Message-ID: <2024022829-ripple-quintet-a097@gregkh>
-References: <20240228020040.25815-1-qingliang.li@mediatek.com>
+	s=arc-20240116; t=1709102153; c=relaxed/simple;
+	bh=x6drcCr1B6Nl/uiuGMm6nPfzeOk2YaM0OWqlCk2DH3M=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Mm0eK4S9XeQeFBJmym0olKqqmYxfSxhAFHtEZfQRhLT5vGEII5Y4PCkyPBsQwweUiDnCO+dpQdgXkHC3jVOlGbwNObSX5kb0XyanUjogBCF+W5t28gVZr55NQBR1TvJ1lSPqe38ial4QE8I7h8+jihSxe7pwD80W2xfGwGbmf/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fkbjHbxt; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709102151; x=1740638151;
+  h=date:from:to:cc:subject:message-id;
+  bh=x6drcCr1B6Nl/uiuGMm6nPfzeOk2YaM0OWqlCk2DH3M=;
+  b=fkbjHbxtyH2JdhR+xjQW6VkNBkce4+pmuU0y/ZHrgD3JHFBeimxKZhRk
+   xI6N0WBf6mLga2D7JzNPBtcMXPBE03K3J2cLTwdcQGx6b8O8kxCyTUJu7
+   iiPE4JU/m4Cfd95sZGZxPHTVMLNZDDome6nHSXfTiKKNt8E5SEcsU9nRY
+   RvK9IM0yqoRZFNZkfjklW20e167bwvP0Ok2WASJgSuF+9nyracvmzKwCe
+   LvQq2IS/cq5yUrgUDwkBRkowSSzGE3svkSX2IOCSoLWq3KYBrxM38v/az
+   qNNvRmvp1lOVoDGV38VgmiYpcocF3x+Uk0I+GZ622Q9AAFA8s4N+HyXCK
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10996"; a="7269839"
+X-IronPort-AV: E=Sophos;i="6.06,190,1705392000"; 
+   d="scan'208";a="7269839"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2024 22:35:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,190,1705392000"; 
+   d="scan'208";a="7260296"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by fmviesa009.fm.intel.com with ESMTP; 27 Feb 2024 22:35:48 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rfDWc-000Bqp-1C;
+	Wed, 28 Feb 2024 06:35:00 +0000
+Date: Wed, 28 Feb 2024 14:33:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 6679a56f7233bf666be864868076a302b53282df
+Message-ID: <202402281446.wuO3QI7y-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240228020040.25815-1-qingliang.li@mediatek.com>
 
-On Wed, Feb 28, 2024 at 10:00:40AM +0800, Qingliang Li wrote:
-> When driver registers the wake irq with reverse enable ordering,
-> the wake irq will be re-enabled when entering system suspend, triggering
-> an 'Unbalanced enable for IRQ xxx' warning. The wake irq will be
-> enabled in both dev_pm_enable_wake_irq_complete() and dev_pm_arm_wake_irq()
-> 
-> To fix this issue, complete the setting of WAKE_IRQ_DEDICATED_ENABLED flag
-> in dev_pm_enable_wake_irq_complete() to avoid redundant irq enablement.
-> 
-> Fixes: 8527beb12087 ("PM: sleep: wakeirq: fix wake irq arming")
-> Signed-off-by: Qingliang Li <qingliang.li@mediatek.com>
-> ---
->  drivers/base/power/wakeirq.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/base/power/wakeirq.c b/drivers/base/power/wakeirq.c
-> index 42171f766dcb..5a5a9e978e85 100644
-> --- a/drivers/base/power/wakeirq.c
-> +++ b/drivers/base/power/wakeirq.c
-> @@ -313,8 +313,10 @@ void dev_pm_enable_wake_irq_complete(struct device *dev)
->  		return;
->  
->  	if (wirq->status & WAKE_IRQ_DEDICATED_MANAGED &&
-> -	    wirq->status & WAKE_IRQ_DEDICATED_REVERSE)
-> +	    wirq->status & WAKE_IRQ_DEDICATED_REVERSE) {
->  		enable_irq(wirq->irq);
-> +		wirq->status |= WAKE_IRQ_DEDICATED_ENABLED;
-> +	}
->  }
->  
->  /**
-> -- 
-> 2.25.1
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 6679a56f7233bf666be864868076a302b53282df  Merge branch 'acpi-scan' into bleeding-edge
 
-Hi,
+elapsed time: 748m
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+configs tested: 178
+configs skipped: 3
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                          axs101_defconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20240228   gcc  
+arc                   randconfig-002-20240228   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   clang
+arm                              allyesconfig   gcc  
+arm                       aspeed_g4_defconfig   clang
+arm                                 defconfig   clang
+arm                      footbridge_defconfig   clang
+arm                            mmp2_defconfig   gcc  
+arm                   randconfig-001-20240228   clang
+arm                   randconfig-002-20240228   clang
+arm                   randconfig-003-20240228   clang
+arm                   randconfig-004-20240228   gcc  
+arm                         socfpga_defconfig   gcc  
+arm                       versatile_defconfig   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240228   clang
+arm64                 randconfig-002-20240228   gcc  
+arm64                 randconfig-003-20240228   gcc  
+arm64                 randconfig-004-20240228   clang
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240228   gcc  
+csky                  randconfig-002-20240228   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20240228   clang
+hexagon               randconfig-002-20240228   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20240228   clang
+i386         buildonly-randconfig-002-20240228   clang
+i386         buildonly-randconfig-003-20240228   clang
+i386         buildonly-randconfig-004-20240228   clang
+i386         buildonly-randconfig-005-20240228   gcc  
+i386         buildonly-randconfig-006-20240228   clang
+i386                                defconfig   clang
+i386                  randconfig-001-20240228   clang
+i386                  randconfig-002-20240228   clang
+i386                  randconfig-003-20240228   gcc  
+i386                  randconfig-004-20240228   clang
+i386                  randconfig-005-20240228   clang
+i386                  randconfig-006-20240228   gcc  
+i386                  randconfig-011-20240228   clang
+i386                  randconfig-012-20240228   clang
+i386                  randconfig-013-20240228   gcc  
+i386                  randconfig-014-20240228   gcc  
+i386                  randconfig-015-20240228   gcc  
+i386                  randconfig-016-20240228   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20240228   gcc  
+loongarch             randconfig-002-20240228   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                     loongson1c_defconfig   gcc  
+mips                  maltasmvp_eva_defconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240228   gcc  
+nios2                 randconfig-002-20240228   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20240228   gcc  
+parisc                randconfig-002-20240228   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                         ps3_defconfig   gcc  
+powerpc               randconfig-001-20240228   clang
+powerpc               randconfig-002-20240228   clang
+powerpc               randconfig-003-20240228   gcc  
+powerpc                        warp_defconfig   gcc  
+powerpc64                        alldefconfig   clang
+powerpc64             randconfig-001-20240228   clang
+powerpc64             randconfig-002-20240228   clang
+powerpc64             randconfig-003-20240228   gcc  
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+riscv                 randconfig-001-20240228   clang
+riscv                 randconfig-002-20240228   clang
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+s390                  randconfig-001-20240228   clang
+s390                  randconfig-002-20240228   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                        dreamcast_defconfig   gcc  
+sh                        edosk7760_defconfig   gcc  
+sh                    randconfig-001-20240228   gcc  
+sh                    randconfig-002-20240228   gcc  
+sh                           se7712_defconfig   gcc  
+sh                           se7724_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20240228   gcc  
+sparc64               randconfig-002-20240228   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20240228   clang
+um                    randconfig-002-20240228   clang
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-001-20240228   gcc  
+x86_64       buildonly-randconfig-002-20240228   clang
+x86_64       buildonly-randconfig-003-20240228   clang
+x86_64       buildonly-randconfig-004-20240228   gcc  
+x86_64       buildonly-randconfig-005-20240228   gcc  
+x86_64       buildonly-randconfig-006-20240228   clang
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20240228   clang
+x86_64                randconfig-002-20240228   gcc  
+x86_64                randconfig-003-20240228   gcc  
+x86_64                randconfig-004-20240228   gcc  
+x86_64                randconfig-005-20240228   gcc  
+x86_64                randconfig-006-20240228   clang
+x86_64                randconfig-011-20240228   clang
+x86_64                randconfig-012-20240228   clang
+x86_64                randconfig-013-20240228   clang
+x86_64                randconfig-014-20240228   gcc  
+x86_64                randconfig-015-20240228   gcc  
+x86_64                randconfig-016-20240228   gcc  
+x86_64                randconfig-071-20240228   gcc  
+x86_64                randconfig-072-20240228   clang
+x86_64                randconfig-073-20240228   gcc  
+x86_64                randconfig-074-20240228   gcc  
+x86_64                randconfig-075-20240228   clang
+x86_64                randconfig-076-20240228   clang
+x86_64                          rhel-8.3-rust   clang
+xtensa                            allnoconfig   gcc  
+xtensa                randconfig-001-20240228   gcc  
+xtensa                randconfig-002-20240228   gcc  
 
-- You have marked a patch with a "Fixes:" tag for a commit that is in an
-  older released kernel, yet you do not have a cc: stable line in the
-  signed-off-by area at all, which means that the patch will not be
-  applied to any older kernel releases.  To properly fix this, please
-  follow the documented rules in the
-  Documentation/process/stable-kernel-rules.rst file for how to resolve
-  this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
