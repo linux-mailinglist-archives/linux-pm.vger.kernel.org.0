@@ -1,164 +1,208 @@
-Return-Path: <linux-pm+bounces-4481-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4482-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68FF386A46A
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 01:27:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE8FF86A50A
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 02:31:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D1B41C23DB5
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 00:27:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A1421F2527B
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 01:31:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCE8236F;
-	Wed, 28 Feb 2024 00:27:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10580184F;
+	Wed, 28 Feb 2024 01:31:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b="qLatxXAR"
+	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="UN4j956t"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 249B5184F;
-	Wed, 28 Feb 2024 00:27:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.89.224.132
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40626111E
+	for <linux-pm@vger.kernel.org>; Wed, 28 Feb 2024 01:31:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709080040; cv=none; b=nD+CKlV6SRuvNgTzTCASVffGHqn805ssjP7ryJ29XV8HuM4Jc8lGSjmnfpOOluy5r0Tk2wm4haq0C7LE62pupTBSfXMAAXyozsAJSWEB7pX0lBmH47pwp1NEHbzt1t2SbsoIqgN13EbRi0ktRJsKxLyJGhUU4W9vhkc2yi4R9vc=
+	t=1709083905; cv=none; b=NpaMOTG+AHgZEN64N3uiY+W+tqgaHechEueR3ociquRajzYBLvuj0U0tuRRCFpXD/Mx3PtvWdA86yRF5GOtcj2mYnGDo0/Proo545r5CZRx5zVohkp76YbNkpS2FBcC7oxC4EojEwyqajwN/mv12zc6flc8Z/ZLXuwl/bWP71cY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709080040; c=relaxed/simple;
-	bh=7XWXtmzTlOCcFSUL2YGPZAMO9WtMq3nsMLlRvvddB/4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Fuom7tO8+lyatzxzgkVoVI9wXFkgGOQoPY0h8liUo/1q/t608RJSNpWOf8+vDEgLVy+2zPY2D7qY/wOw3M4IfrnoNFzbjLbmoO+7zn43W/WRCLIv6Jw4c3PrTVw3K6a9Dlw+TnXlV431Dv5mFN0dAzg3P6Nz9bLvt0XfUWdEU5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com; spf=pass smtp.mailfrom=salutedevices.com; dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b=qLatxXAR; arc=none smtp.client-ip=45.89.224.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=salutedevices.com
-Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
-	by mx1.sberdevices.ru (Postfix) with ESMTP id 8814D120031;
-	Wed, 28 Feb 2024 03:27:05 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 8814D120031
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salutedevices.com;
-	s=mail; t=1709080025;
-	bh=WFSesTI6AKgWxIyZBgA4VNH7+YIxoCmy6FNQCkaJmb8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:From;
-	b=qLatxXAR7X400BA7yaSZOrZmgm+u/ztJ9pmTDuq1aWYlIaFhx4RHUzNm34Hn6N123
-	 J5r/Yp1/TUxsLcoIts/B87901veNCOud1mqfa+skmLc2DFccMlynrXmoxMiCzjqpLt
-	 7W8GUIA3LZrvC7hvMPkaCumqFnNmXjpRez5vlLIkvS9nEdDlHx6YUwvK2Gn1nXrbHb
-	 6D7FSaAI0Cqp7qKt3ACruZAQWJFjqTnEU1yEb3fzaBl7ONsRHrfm1+SEc3pLGPor64
-	 eOQcEzSdFyXqSNArd2DPIWd72YvRUPsj/kzBKOVIq8qxYeyQFExUjB6sn9Prff3+eU
-	 bOu79fQjKuyHw==
-Received: from smtp.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mx1.sberdevices.ru (Postfix) with ESMTPS;
-	Wed, 28 Feb 2024 03:27:05 +0300 (MSK)
-Received: from [192.168.1.143] (100.64.160.123) by
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Wed, 28 Feb 2024 03:27:04 +0300
-Message-ID: <4cc76f3a-dc64-4146-b8d6-761386a4abde@salutedevices.com>
-Date: Wed, 28 Feb 2024 03:27:04 +0300
+	s=arc-20240116; t=1709083905; c=relaxed/simple;
+	bh=lo90qNmEf2u/iKz2SPriQEoHzazmFcIyRZTw7xyiU2s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J7AKyZ1t6ZWsARjZAo/4pllGmgOhzhjFCxZvm4bcrkX/J2akWjgL6S/Q4f5+yTStBHoZa6ifor8ej1r+Zfe5JV+XR4MgW03Twj/yZazKbYL6n+smiCKJNC+Ne9YbWNOEg3OLYxGQpnMX76eMseDa155y7NgGsoqbms8p/9UOPbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=UN4j956t; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1dc1ff3ba1aso42006605ad.3
+        for <linux-pm@vger.kernel.org>; Tue, 27 Feb 2024 17:31:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709083902; x=1709688702;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from
+         :dkim-signature:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HrvqkdOUAXPRhxSLjfLE8T4KzZHXLHd2ZvsCtEeb2W4=;
+        b=Ntx+xwaZnZ87nMZ0ZafzMPO/WR0fqPvQBWIETffyEvPbsYxpcn8J7p62+wj9ipnCLL
+         kwq8WZ2wvfgDXZvPjmDmZoQftZUg+MpyaqLbRdnMDHkBinolotuUYtkCYw5YNZOtfA3w
+         OWqNg7VHBhuyngY+qcWt5kcDf/SVd2T3WX3F/3h5Gge6QnB7kTlkuhevx10GfH+t1mZe
+         tGj6//2vdzrzqTdbEZTzA7OthB/5e7w/WhF+8AKckG8s6XGz/YqsYD0Mjxlcl2e9Q103
+         GgM5TP1l79tlRXcNyed68wiXhcPvasOXvhLWVoTo7Y6RgVsODcynS7hcMUu0iztL+SwB
+         5l8A==
+X-Forwarded-Encrypted: i=1; AJvYcCVOmPr8AOdEgPlTUKk0wGjpPLBuDhlVOsssMZhAOTjxOQ5nCfcKpD2HNUKWexmxCQZ/QWFCgFiG4yp+U2cZPDvwHSBdWqnc9vg=
+X-Gm-Message-State: AOJu0YwIFXcftAykcQGJNQiwX7OaDSxCniq97ZYwx/ZbiBvz5jXuP/fu
+	Zvj40YlRzu6oEOi/AUbRscGz5xPaHot5maNgOf3CgQL30Rvttx66j5iUmTww158=
+X-Google-Smtp-Source: AGHT+IEyhBuVjDaYfkmmyL/b3b4soBpFWL1neiM/GIphVzN5x9pPCCYM5ZaqutqQTAmxhKKjL7RJuA==
+X-Received: by 2002:a17:902:ec87:b0:1db:47bb:65d6 with SMTP id x7-20020a170902ec8700b001db47bb65d6mr12693389plg.58.1709083902347;
+        Tue, 27 Feb 2024 17:31:42 -0800 (PST)
+Received: from mail.marliere.net ([24.199.118.162])
+        by smtp.gmail.com with ESMTPSA id y19-20020a170902e19300b001dbcf653024sm2130472pla.293.2024.02.27.17.31.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Feb 2024 17:31:41 -0800 (PST)
+Date: Tue, 27 Feb 2024 22:31:35 -0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
+	s=2024; t=1709083900;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HrvqkdOUAXPRhxSLjfLE8T4KzZHXLHd2ZvsCtEeb2W4=;
+	b=UN4j956tYV+3UxhnrfjQKBSIWcqqodQ/4TbtsbAujYm7PtTC3RTOGzVtXRLFvWmrHWBn7F
+	hTywx4osz/h/xLIf1Jctsrr84J2svOoBRfHqa7733wnwNp6JJ9Tbh1Glj1vXGZ1jQXLLNm
+	+uvTnIQCHUk4H400IpveMJklTHE/e7EZnHUeEU37EP5vYbeey/6Wgj5s7V525gMtNI4fDj
+	nNJTxJyGNTj0TMUVGRyJfBJghc+WolGZW6d4hJBEdFPciQfvC+DRp0MjszbM6aHObzpjjZ
+	AgF3m255PY2mn5dZZtUHsMX1UbJb9gM3C9fumRQ/wfZ4YtNC61lmcQmvNjrnJA==
+Authentication-Results: ORIGINATING;
+	auth=pass smtp.auth=ricardo@marliere.net smtp.mailfrom=ricardo@marliere.net
+From: "Ricardo B. Marliere" <ricardo@marliere.net>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: sre@kernel.org, linux-pm@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH] power: supply: core: Fix power_supply_init_attrs() stub
+Message-ID: <xhy64utzqccidzklge4oztj663ctcd7dyepi4c7ltu6ekgzek4@yex53vr72vi7>
+References: <20240227-fix-power_supply_init_attrs-stub-v1-1-43365e68d4b3@kernel.org>
+ <mlfrfarnnv3i4xwgqd3pavpwxjktkqf2afidoc4ogdq3634jah@kposnyo6725z>
+ <20240227214916.GA3699076@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] devm-helpers: Add resource managed version of mutex
- init
-Content-Language: en-US
-To: <andy.shevchenko@gmail.com>, =?UTF-8?Q?Marek_Beh=C3=BAn?=
-	<kabel@kernel.org>
-CC: <linux-kernel@vger.kernel.org>, Hans de Goede <hdegoede@redhat.com>, Matti
- Vaittinen <mazziesaccount@gmail.com>, Linus Walleij
-	<linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Lucas De
- Marchi <lucas.demarchi@intel.com>, Oded Gabbay <ogabbay@kernel.org>,
-	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, Maarten
- Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
-	<mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie
-	<airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Aleksandr Mezin
-	<mezin.alexander@gmail.com>, Jean Delvare <jdelvare@suse.com>, Guenter Roeck
-	<linux@roeck-us.net>, Pavel Machek <pavel@ucw.cz>, Lee Jones
-	<lee@kernel.org>, Sebastian Reichel <sre@kernel.org>, Matthias Brugger
-	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, <linux-gpio@vger.kernel.org>,
-	<intel-xe@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
-	<linux-hwmon@vger.kernel.org>, <linux-leds@vger.kernel.org>,
-	<linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, "kernel@salutedevices.com"
-	<kernel@salutedevices.com>
-References: <20240222145838.12916-1-kabel@kernel.org>
- <Zde_s8iecR2ArKjC@surfacebook.localdomain> <20240223132641.3e2ba16c@dellmb>
-From: George Stark <gnstark@salutedevices.com>
-In-Reply-To: <20240223132641.3e2ba16c@dellmb>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
-X-KSMG-Rule-ID: 10
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 183791 [Feb 27 2024]
-X-KSMG-AntiSpam-Version: 6.1.0.3
-X-KSMG-AntiSpam-Envelope-From: gnstark@salutedevices.com
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 7 0.3.7 6d6bf5bd8eea7373134f756a2fd73e9456bb7d1a, {Tracking_uf_ne_domains}, {Tracking_urls_end_caps}, {Tracking_from_domain_doesnt_match_to}, d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;smtp.sberdevices.ru:5.0.1,7.1.1;100.64.160.123:7.1.2;salutedevices.com:7.1.1;lore.kernel.org:7.1.1, FromAlignment: s, ApMailHostAddress: 100.64.160.123
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean, bases: 2024/02/27 23:49:00
-X-KSMG-LinksScanning: Clean, bases: 2024/02/27 23:49:00
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2024/02/27 18:14:00 #23853308
-X-KSMG-AntiVirus-Status: Clean, skipped
+In-Reply-To: <20240227214916.GA3699076@dev-arch.thelio-3990X>
 
-
-On 2/23/24 15:26, Marek Behún wrote:
-> On Thu, 22 Feb 2024 23:42:11 +0200
-> andy.shevchenko@gmail.com wrote:
+On 27 Feb 14:49, Nathan Chancellor wrote:
+> On Tue, Feb 27, 2024 at 05:39:55PM -0300, Ricardo B. Marliere wrote:
+> > Hi Nathan,
+> > 
+> > On 27 Feb 13:34, Nathan Chancellor wrote:
+> > > When building without CONFIG_SYSFS, there is an error because of a
+> > > recent refactoring that failed to update the stub of
+> > > power_supply_init_attrs():
+> > > 
+> > >   drivers/power/supply/power_supply_core.c: In function 'power_supply_class_init':
+> > >   drivers/power/supply/power_supply_core.c:1630:9: error: too few arguments to function 'power_supply_init_attrs'
+> > >    1630 |         power_supply_init_attrs();
+> > >         |         ^~~~~~~~~~~~~~~~~~~~~~~
+> > >   In file included from drivers/power/supply/power_supply_core.c:25:
+> > >   drivers/power/supply/power_supply.h:25:20: note: declared here
+> > >      25 | static inline void power_supply_init_attrs(struct device_type *dev_type) {}
+> > >         |                    ^~~~~~~~~~~~~~~~~~~~~~~
+> > > 
+> > > Update the stub function to take no parameters like the rest of the
+> > > refactoring, which resolves the build error.
+> > > 
+> > > Fixes: 7b46b60944d7 ("power: supply: core: constify the struct device_type usage")
+> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > > ---
+> > >  drivers/power/supply/power_supply.h | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > 
+> > > ────────────────────────────────────────────────────────────────────────────────
+> > > modified: drivers/power/supply/power_supply.h
+> > > ────────────────────────────────────────────────────────────────────────────────
+> > > @ drivers/power/supply/power_supply.h:25 @ extern int power_supply_uevent(const struct device *dev, struct kobj_uevent_env
+> > > 
+> > > #else
+> > > 
+> > > static inline void power_supply_init_attrs(struct device_type *dev_type) {}
+> > > static inline void power_supply_init_attrs(void) {}
+> > 
+> > I've missed that #else in my building test. Thanks for catching it.
+> > 
+> > Reviewed-by: Ricardo B. Marliere <ricardo@marliere.net>
 > 
->> Thu, Feb 22, 2024 at 03:58:37PM +0100, Marek Behún kirjoitti:
->>> A few drivers are doing resource-managed mutex initialization by
->>> implementing ad-hoc one-liner mutex dropping functions and using them
->>> with devm_add_action_or_reset(). Help drivers avoid these repeated
->>> one-liners by adding managed version of mutex initialization.
->>>
->>> Use the new function devm_mutex_init() in the following drivers:
->>>    drivers/gpio/gpio-pisosr.c
->>>    drivers/gpio/gpio-sim.c
->>>    drivers/gpu/drm/xe/xe_hwmon.c
->>>    drivers/hwmon/nzxt-smart2.c
->>>    drivers/leds/leds-is31fl319x.c
->>>    drivers/power/supply/mt6370-charger.c
->>>    drivers/power/supply/rt9467-charger.c
->>
->> Pardon me, but why?
->>
->> https://lore.kernel.org/linux-leds/20231214173614.2820929-1-gnstark@salutedevices.com/
->>
->> Can you cooperate, folks, instead of doing something independently?
-
-Hello Andy
-
-Thanks for pointing to my patch series
+> Thanks a lot for the quick feedback and no worries, it is hard to test
+> to catch these without doing a lot of build tests.
 > 
-> Thanks Andy for pointing to George's patch series.
+> Unfortunately, I caught another problem with that change that is
+> independent of this one:
 > 
-> I can drop the mutex_init() part and add just the debugfs part.
-
-Hello Marek
-
-I started to propose devm_mutex_init in December 2023. We tried to put 
-it in devm-helpers.h firstly then we came to conclusion that 
-linux/mutex.h would be a better place for it. Now I'm waiting for this 
-series [1] to be merged because my patch depends on it. I'll let you 
-know when I have an update.
-
-[1] 
-https://lore.kernel.org/lkml/20240222150540.79981-2-longman@redhat.com/T/
+>   ld.lld: error: undefined symbol: power_supply_attr_group
+>   >>> referenced by power_supply_core.c
+>   >>>               drivers/power/supply/power_supply_core.o:(power_supply_attr_groups) in archive vmlinux.a
+>   >>> did you mean: power_supply_attr_groups
+>   >>> defined in: vmlinux.a(drivers/power/supply/power_supply_core.o)
 > 
-> Marek
+> It looks like power_supply_attr_groups refers to power_supply_attr_group
+> but power_supply_attr_group is declared extern without a definition with
+> CONFIG_SYSFS=n. It is not immediately obvious to me what the fix is.
 
--- 
-Best regards
-George
+Ah, indeed. I was able to build with the patch below. The problem is
+that power_supply_attr_group is needed in power_supply_core.c but
+defined in power_supply_sysfs.c, which is only targeted with
+CONFIG_SYSFS=y. This was needed in order to make power_supply_dev_type
+constant [1]. I will see if there is a better way of fixing it and send
+a proper patch tomorrow.
+
+Best regards,
+-	Ricardo.
+
+---
+[1] https://lore.kernel.org/all/20240224-device_cleanup-power-v2-1-465ff94b896c@marliere.net/
+
+
+diff --git a/drivers/power/supply/power_supply.h b/drivers/power/supply/power_supply.h
+index 232fdd8c1212..ef9f1b2e87d5 100644
+--- a/drivers/power/supply/power_supply.h
++++ b/drivers/power/supply/power_supply.h
+@@ -13,16 +13,16 @@ struct device;
+ struct device_type;
+ struct power_supply;
+ 
+-extern const struct attribute_group power_supply_attr_group;
+-
+ #ifdef CONFIG_SYSFS
+ 
+ extern void power_supply_init_attrs(void);
+ extern int power_supply_uevent(const struct device *dev, struct kobj_uevent_env *env);
++extern const struct attribute_group power_supply_attr_group;
+ 
+ #else
+ 
+-static inline void power_supply_init_attrs(struct device_type *dev_type) {}
++static inline void power_supply_init_attrs(void) {}
++static struct attribute_group power_supply_attr_group;
+ #define power_supply_uevent NULL
+ 
+ #endif /* CONFIG_SYSFS */
+
+
+
+> 
+> Cheers,
+> Nathan
+> 
+> > > #define power_supply_uevent NULL
+> > > 
+> > > #endif /* CONFIG_SYSFS */
+> > > 
+> > > --
+> > > base-commit: 3da8d71754d3c1aa0b72d74c8a324a4bc7fab473
+> > > change-id: 20240227-fix-power_supply_init_attrs-stub-7be5328b4e72
+> > > 
+> > > Best regards,
+> > > - 
+> > > Nathan Chancellor <nathan@kernel.org>
+> > > 
 
