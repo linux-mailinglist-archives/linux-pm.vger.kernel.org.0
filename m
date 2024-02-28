@@ -1,113 +1,164 @@
-Return-Path: <linux-pm+bounces-4480-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4481-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F97686A42C
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 01:02:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68FF386A46A
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 01:27:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9FD181F27B8E
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 00:02:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D1B41C23DB5
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 00:27:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ED081D6AA;
-	Wed, 28 Feb 2024 00:00:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCE8236F;
+	Wed, 28 Feb 2024 00:27:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="JT7nXI+s"
+	dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b="qLatxXAR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB27F41C8B
-	for <linux-pm@vger.kernel.org>; Wed, 28 Feb 2024 00:00:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 249B5184F;
+	Wed, 28 Feb 2024 00:27:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.89.224.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709078424; cv=none; b=mVyPTYQzaI79sox8mPXEoJE5hDkZE8OtMWHQJFT3O+M+cw0km4P5dyUjET3fTkIFAGtvody1n6HAxaS3A31b+dEIqC+Ow9IbzHM4vYglPzN9QynMHBu10Lu22jwYdk3gAdWH8n5lymaB31UMLU9Lo4Y/A2TniEHUhNPYB0OFDm4=
+	t=1709080040; cv=none; b=nD+CKlV6SRuvNgTzTCASVffGHqn805ssjP7ryJ29XV8HuM4Jc8lGSjmnfpOOluy5r0Tk2wm4haq0C7LE62pupTBSfXMAAXyozsAJSWEB7pX0lBmH47pwp1NEHbzt1t2SbsoIqgN13EbRi0ktRJsKxLyJGhUU4W9vhkc2yi4R9vc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709078424; c=relaxed/simple;
-	bh=RTbudAlLPl6Dq2xCqMevfXMdWNKynhSvpt8BFgxf7Hw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Sv9xtVL1sceMTE27tLt7zEJ3JxzVnMEp2D5DRPfuSzxKNxovscxT/7Gu/U/CgnuKWhmadIS4uIIAYAhCH8rn2w6F0HzluhTa/M0zSrqOaeXfvtuVuCW4xD2G649WFX2FZo/EaYzB80rmGN6O2Cn3Zkwap8AHx/6b2Ss4MCexaRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=JT7nXI+s; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1709078420;
-	bh=RTbudAlLPl6Dq2xCqMevfXMdWNKynhSvpt8BFgxf7Hw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JT7nXI+sD9t5mDC0R5V7LbtqhgLMN0Yb8R5ro4ZgDbS9c6keJY8JaBYVm+K98svKQ
-	 o6H5TQLzUvk72zCmau3LtTR/XyHqMkK6lPMQTG23zk21ikc7HXSyH5wfOIPBtqS4AH
-	 2WfGoGdFUJZvXeILYcYwbDPJBHHbcByyDpWniuq4S9onA2kYltAdb7FOQvG8iG3WlI
-	 v9GSKj5SIXL3jVedk2Ww2v5Qx3HUs2nAlGhpe1AyKKiDnd0W/lATsdG0akjxXI5Y1f
-	 jDN40vUN9sMSy6rrZXz9RqMxa/48hf8AQuMMfmSjc+q0XVLQSauhAa8NPUsrxv8ngz
-	 yeZlh4sPKf58w==
-Received: from mercury (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	s=arc-20240116; t=1709080040; c=relaxed/simple;
+	bh=7XWXtmzTlOCcFSUL2YGPZAMO9WtMq3nsMLlRvvddB/4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Fuom7tO8+lyatzxzgkVoVI9wXFkgGOQoPY0h8liUo/1q/t608RJSNpWOf8+vDEgLVy+2zPY2D7qY/wOw3M4IfrnoNFzbjLbmoO+7zn43W/WRCLIv6Jw4c3PrTVw3K6a9Dlw+TnXlV431Dv5mFN0dAzg3P6Nz9bLvt0XfUWdEU5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com; spf=pass smtp.mailfrom=salutedevices.com; dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b=qLatxXAR; arc=none smtp.client-ip=45.89.224.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=salutedevices.com
+Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
+	by mx1.sberdevices.ru (Postfix) with ESMTP id 8814D120031;
+	Wed, 28 Feb 2024 03:27:05 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 8814D120031
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salutedevices.com;
+	s=mail; t=1709080025;
+	bh=WFSesTI6AKgWxIyZBgA4VNH7+YIxoCmy6FNQCkaJmb8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:From;
+	b=qLatxXAR7X400BA7yaSZOrZmgm+u/ztJ9pmTDuq1aWYlIaFhx4RHUzNm34Hn6N123
+	 J5r/Yp1/TUxsLcoIts/B87901veNCOud1mqfa+skmLc2DFccMlynrXmoxMiCzjqpLt
+	 7W8GUIA3LZrvC7hvMPkaCumqFnNmXjpRez5vlLIkvS9nEdDlHx6YUwvK2Gn1nXrbHb
+	 6D7FSaAI0Cqp7qKt3ACruZAQWJFjqTnEU1yEb3fzaBl7ONsRHrfm1+SEc3pLGPor64
+	 eOQcEzSdFyXqSNArd2DPIWd72YvRUPsj/kzBKOVIq8qxYeyQFExUjB6sn9Prff3+eU
+	 bOu79fQjKuyHw==
+Received: from smtp.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	(Authenticated sender: sre)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id A93843780629;
-	Wed, 28 Feb 2024 00:00:20 +0000 (UTC)
-Received: by mercury (Postfix, from userid 1000)
-	id 1299D10606FC; Wed, 28 Feb 2024 01:00:20 +0100 (CET)
-Date: Wed, 28 Feb 2024 01:00:20 +0100
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Sicelo <absicsz@gmail.com>
-Cc: linux-pm@vger.kernel.org, maemo-leste@lists.dyne.org, pali@kernel.org
-Subject: Re: [PATCH] power: supply: bq2415x_charger: report online status
-Message-ID: <5l3e3bkultb24kawad4vh3j4c6lo77i6hftumo234qgtwbk4jr@z7kbnrcgbdel>
-References: <20240226194432.2174095-1-absicsz@gmail.com>
- <6slfmvqmtawwjlsobcfod6ewcjjbzmylz3owsdamdi4dod55wr@iiox5rzjj5ht>
- <Zd5VflcLb3Es1xiJ@tp440p.steeds.sam>
+	by mx1.sberdevices.ru (Postfix) with ESMTPS;
+	Wed, 28 Feb 2024 03:27:05 +0300 (MSK)
+Received: from [192.168.1.143] (100.64.160.123) by
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Wed, 28 Feb 2024 03:27:04 +0300
+Message-ID: <4cc76f3a-dc64-4146-b8d6-761386a4abde@salutedevices.com>
+Date: Wed, 28 Feb 2024 03:27:04 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zd5VflcLb3Es1xiJ@tp440p.steeds.sam>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] devm-helpers: Add resource managed version of mutex
+ init
+Content-Language: en-US
+To: <andy.shevchenko@gmail.com>, =?UTF-8?Q?Marek_Beh=C3=BAn?=
+	<kabel@kernel.org>
+CC: <linux-kernel@vger.kernel.org>, Hans de Goede <hdegoede@redhat.com>, Matti
+ Vaittinen <mazziesaccount@gmail.com>, Linus Walleij
+	<linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Lucas De
+ Marchi <lucas.demarchi@intel.com>, Oded Gabbay <ogabbay@kernel.org>,
+	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, Maarten
+ Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
+	<mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie
+	<airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Aleksandr Mezin
+	<mezin.alexander@gmail.com>, Jean Delvare <jdelvare@suse.com>, Guenter Roeck
+	<linux@roeck-us.net>, Pavel Machek <pavel@ucw.cz>, Lee Jones
+	<lee@kernel.org>, Sebastian Reichel <sre@kernel.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, <linux-gpio@vger.kernel.org>,
+	<intel-xe@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
+	<linux-hwmon@vger.kernel.org>, <linux-leds@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, "kernel@salutedevices.com"
+	<kernel@salutedevices.com>
+References: <20240222145838.12916-1-kabel@kernel.org>
+ <Zde_s8iecR2ArKjC@surfacebook.localdomain> <20240223132641.3e2ba16c@dellmb>
+From: George Stark <gnstark@salutedevices.com>
+In-Reply-To: <20240223132641.3e2ba16c@dellmb>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 183791 [Feb 27 2024]
+X-KSMG-AntiSpam-Version: 6.1.0.3
+X-KSMG-AntiSpam-Envelope-From: gnstark@salutedevices.com
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 7 0.3.7 6d6bf5bd8eea7373134f756a2fd73e9456bb7d1a, {Tracking_uf_ne_domains}, {Tracking_urls_end_caps}, {Tracking_from_domain_doesnt_match_to}, d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;smtp.sberdevices.ru:5.0.1,7.1.1;100.64.160.123:7.1.2;salutedevices.com:7.1.1;lore.kernel.org:7.1.1, FromAlignment: s, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean, bases: 2024/02/27 23:49:00
+X-KSMG-LinksScanning: Clean, bases: 2024/02/27 23:49:00
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2024/02/27 18:14:00 #23853308
+X-KSMG-AntiVirus-Status: Clean, skipped
 
-Hi,
 
-On Tue, Feb 27, 2024 at 11:34:54PM +0200, Sicelo wrote:
-> On Tue, Feb 27, 2024 at 09:11:36PM +0100, Sebastian Reichel wrote:
-> > On Mon, Feb 26, 2024 at 09:44:32PM +0200, Sicelo A. Mhlongo wrote:
-> > > Provide the Online property. This chip does not have specific flags to
-> > > indicate the presence of an input voltage, but this can be inferred from
-> > > the reported charging status.
-> > 
-> > The datasheet suggests, that you can get the status from the fault
-> > bits:
-> > 
-> > 011 - Poor input source or VBUS < UVLO
-> > 
-> Absolutely, yes. This particular state, which is a fault condition, clearly
-> indicates VBUS is present.
+On 2/23/24 15:26, Marek Behún wrote:
+> On Thu, 22 Feb 2024 23:42:11 +0200
+> andy.shevchenko@gmail.com wrote:
+> 
+>> Thu, Feb 22, 2024 at 03:58:37PM +0100, Marek Behún kirjoitti:
+>>> A few drivers are doing resource-managed mutex initialization by
+>>> implementing ad-hoc one-liner mutex dropping functions and using them
+>>> with devm_add_action_or_reset(). Help drivers avoid these repeated
+>>> one-liners by adding managed version of mutex initialization.
+>>>
+>>> Use the new function devm_mutex_init() in the following drivers:
+>>>    drivers/gpio/gpio-pisosr.c
+>>>    drivers/gpio/gpio-sim.c
+>>>    drivers/gpu/drm/xe/xe_hwmon.c
+>>>    drivers/hwmon/nzxt-smart2.c
+>>>    drivers/leds/leds-is31fl319x.c
+>>>    drivers/power/supply/mt6370-charger.c
+>>>    drivers/power/supply/rt9467-charger.c
+>>
+>> Pardon me, but why?
+>>
+>> https://lore.kernel.org/linux-leds/20231214173614.2820929-1-gnstark@salutedevices.com/
+>>
+>> Can you cooperate, folks, instead of doing something independently?
 
-I assumed this might be set for a disconnected charger, considering
-that no input source is a poor input source / 0V is < UVLO.
+Hello Andy
 
-> However, when there are no faults at all, then those bits always read
-> `000`. On a running system, one can check this by connecting and
-> disconnecting a charger (Nokia N900 used in my tests) while watching
-> /sys/class/power_supply/bq24150a-0/registers. Only bit 4 changes state.
-> In other words, the fault bits do not appear to be enough to determine
-> the presence of an input voltage.
+Thanks for pointing to my patch series
+> 
+> Thanks Andy for pointing to George's patch series.
+> 
+> I can drop the mutex_init() part and add just the debugfs part.
 
-Ok.
+Hello Marek
 
-> However, looking at them more closely seems to suggest I should respin the
-> patch to also report VBUS online if a fault is reported instead of only
-> during charging and charge full states.
+I started to propose devm_mutex_init in December 2023. We tried to put 
+it in devm-helpers.h firstly then we came to conclusion that 
+linux/mutex.h would be a better place for it. Now I'm waiting for this 
+series [1] to be merged because my patch depends on it. I'll let you 
+know when I have an update.
 
-Right, so you can just check for BQ2415X_CHARGE_STATUS != 0.
+[1] 
+https://lore.kernel.org/lkml/20240222150540.79981-2-longman@redhat.com/T/
+> 
+> Marek
 
-> Please let me know if this sounds correct, or if I misunderstood your
-> reply.
-
-Greetings,
-
--- Sebastian
+-- 
+Best regards
+George
 
