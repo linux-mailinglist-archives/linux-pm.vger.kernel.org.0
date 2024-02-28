@@ -1,111 +1,119 @@
-Return-Path: <linux-pm+bounces-4497-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4498-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7187E86A8F5
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 08:28:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC83D86A9E2
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 09:28:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D95D2878CC
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 07:28:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F0C021C229CE
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 08:28:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F98325605;
-	Wed, 28 Feb 2024 07:28:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB3822CCA7;
+	Wed, 28 Feb 2024 08:28:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="QuQdgyyD"
+	dkim=pass (1024-bit key) header.d=maquefel.me header.i=@maquefel.me header.b="EalO3ZTM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
+Received: from forward501a.mail.yandex.net (forward501a.mail.yandex.net [178.154.239.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53BC225561;
-	Wed, 28 Feb 2024 07:28:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.118
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29EAE2C842;
+	Wed, 28 Feb 2024 08:28:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709105297; cv=none; b=q6JVCIR7qj773YwmO9mWeSu9ls3lac20usTmlTEn73dkiYWWU7+NtQqVtKtUBYSiQAFr8HnYNjQoKxyc2tmsjj2dOoKIhpj0PjY/xwhKflo6WWitEq5r8KVWCJg3rH9JXa4YUOR2isHMPz8UnEbh6tKdbAK1/nHGtAmEcZRnFdE=
+	t=1709108928; cv=none; b=p7n6Q4/bj5Epbu/Gpo2xybAjoIH8/m4FBG0lDVDP8R3ci8QPDnQV8kYVYlq+hvSE9F31RcYFKWuypxMykdiK6NEC8eftIT+eAwKEW473AsT7czqZAPARjswycb04RPQOOtAMyNIYqmRpk7NSe81EmQ5bkGmMhTedQBTqRP2fHj0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709105297; c=relaxed/simple;
-	bh=ePqKn8ziKMdqjuoJwILjLschlxQ28phSyMpacK99zsk=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Cc:Content-Type; b=R+zoNofABUkg5ffcbXiBff9AOgjUMGO+vBY0nfpoB4aUgck//GYNY2lguJc4Vdj42+dobGaZSGa9qjatKUhSV7IFo/rKNc4phP0JPZvjCK/mN1BM5y4nK/A+fuiSGoVtvbnS4UxVj4IAM5PxzTo/iakyAmDMu0ycwdHzsv3IFF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=QuQdgyyD; arc=none smtp.client-ip=115.124.30.118
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1709105292; h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type;
-	bh=tTdDg6Bgbx6mgt0LyKK65ZbQOISSRCoKbVfK76KQnng=;
-	b=QuQdgyyDa1UTktdRQa8IjR1u0ZntwQSgWDKijq2KIMWJDwvzLnapzrsN+eWQ0qJjezn8J4awpaVKTor/8I1jURk5PS8OXpWp9CKJqBT0Ht+joddCbXZb2muZbfThDPEyLa/CkyuZGgeYmWEd4dmO2+WYalycC3vaIfgeQstVzdo=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=herongguang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0W1P1iM4_1709105290;
-Received: from 30.221.96.233(mailfrom:herongguang@linux.alibaba.com fp:SMTPD_---0W1P1iM4_1709105290)
-          by smtp.aliyun-inc.com;
-          Wed, 28 Feb 2024 15:28:11 +0800
-Message-ID: <64137e23-e374-4129-8e3c-dcd7606364d4@linux.alibaba.com>
-Date: Wed, 28 Feb 2024 15:28:08 +0800
+	s=arc-20240116; t=1709108928; c=relaxed/simple;
+	bh=5C6vD/fRuXGe615n6PpX9VIOEIZkOgWqNNFadbqmy4M=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=KR25EONeFJRXlMbm6own874XiOPOzSDXw3ZTFIfzn5HUca4cEO9ydIRC/v495/2AfayPp25dI/9h+qaQiZYrLbUlVcikg09RErBJZQy0GNwXPy2o3vk0OJWSZQ4DCPc7uUUaA/Wue8jdItUxE1PVIVKDPGDhHWi1u6fJkbUEvlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maquefel.me; spf=pass smtp.mailfrom=maquefel.me; dkim=pass (1024-bit key) header.d=maquefel.me header.i=@maquefel.me header.b=EalO3ZTM; arc=none smtp.client-ip=178.154.239.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maquefel.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=maquefel.me
+Received: from mail-nwsmtp-smtp-production-main-18.iva.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-18.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:8c9b:0:640:8c33:0])
+	by forward501a.mail.yandex.net (Yandex) with ESMTPS id 7184B61680;
+	Wed, 28 Feb 2024 11:23:10 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-18.iva.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id 2NUOVYANd8c0-nNSnKwOK;
+	Wed, 28 Feb 2024 11:23:08 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail;
+	t=1709108588; bh=5C6vD/fRuXGe615n6PpX9VIOEIZkOgWqNNFadbqmy4M=;
+	h=References:Date:In-Reply-To:Cc:To:From:Subject:Message-ID;
+	b=EalO3ZTMGKQby2mNKqzwTBWhRSR2vOdtx+YGi+0dATxHc9Ne404mREzk3ONsmowJQ
+	 Sbt6ELQEiXojAyllpQkuQc6yuKN4UbpwNHkcrWbSfpHM6co896dWu7EcWBkPxvOZZi
+	 FlkHZDOUFmF5J3w7ul6ZRoH0jf1AGJ+fqIZrkwaY=
+Authentication-Results: mail-nwsmtp-smtp-production-main-18.iva.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
+Message-ID: <154df7fd17dd05fdb6ba21d5f4d84ecfdb476091.camel@maquefel.me>
+Subject: Re: [PATCH v8 00/38] ep93xx device tree conversion
+From: Nikita Shubin <nikita.shubin@maquefel.me>
+To: Mark Brown <broonie@kernel.org>
+Cc: Hartley Sweeten <hsweeten@visionengravers.com>, Alexander Sverdlin
+ <alexander.sverdlin@gmail.com>, Russell King <linux@armlinux.org.uk>,
+ Lukasz Majewski <lukma@denx.de>, Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Sebastian Reichel <sre@kernel.org>, Rob Herring
+ <robh+dt@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+ Vinod Koul <vkoul@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Guenter Roeck <linux@roeck-us.net>, Thierry Reding
+ <thierry.reding@gmail.com>, Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?=
+ <u.kleine-koenig@pengutronix.de>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
+ Abeni <pabeni@redhat.com>,  Miquel Raynal <miquel.raynal@bootlin.com>,
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
+ Damien Le Moal <dlemoal@kernel.org>, Sergey Shtylyov <s.shtylyov@omp.ru>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Liam Girdwood
+ <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai
+ <tiwai@suse.com>, Ralf Baechle <ralf@linux-mips.org>, "Wu, Aaron"
+ <Aaron.Wu@analog.com>, Lee Jones <lee@kernel.org>, Olof Johansson
+ <olof@lixom.net>,  Niklas Cassel <cassel@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-pm@vger.kernel.org,  devicetree@vger.kernel.org,
+ dmaengine@vger.kernel.org,  linux-watchdog@vger.kernel.org,
+ linux-pwm@vger.kernel.org,  linux-spi@vger.kernel.org,
+ netdev@vger.kernel.org, linux-mtd@lists.infradead.org, 
+ linux-ide@vger.kernel.org, linux-input@vger.kernel.org, 
+ linux-sound@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, Bartosz
+ Golaszewski <bartosz.golaszewski@linaro.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski@linaro.org>, Andy Shevchenko
+ <andriy.shevchenko@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>, Andy
+ Shevchenko <andy.shevchenko@gmail.com>
+Date: Wed, 28 Feb 2024 11:23:02 +0300
+In-Reply-To: <168fd3d7-d1e9-467e-bdd0-36c12aa81b68@sirena.org.uk>
+References: <20240226-ep93xx-v8-0-3136dca7238f@maquefel.me>
+	 <168fd3d7-d1e9-467e-bdd0-36c12aa81b68@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: jacob.jun.pan@linux.intel.com, lenb@kernel.org, rafael@kernel.org
-From: He Rongguang <herongguang@linux.alibaba.com>
-Subject: [PATCH] x86/cstate: fix mwait hint target cstate calc
-Cc: linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
- herongguang@linux.alibaba.com, shannon.zhao@linux.alibaba.com
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-According to x86 manual (Intel SDM Vol 2, Table 4-11. MWAIT Hints
-Register (EAX) and AMD manual Vol 3, MWAIT), mwait hint[7:4] adds 1 is
-the corresponding cstate, and 0xF means C0, so fix the handling of
-0xF -> C0.
+Hello Mark!
 
-Intel: "Value of 0 means C1; 1 means C2 and so on
-Value of 01111B means C0".
+On Mon, 2024-02-26 at 13:34 +0000, Mark Brown wrote:
+> On Mon, Feb 26, 2024 at 10:29:56AM +0300, Nikita Shubin via B4 Relay
+> wrote:
+>=20
+> > The goal is to receive ACKs for all patches in series to merge it
+> > via Arnd branch.
+>=20
+> What are the actual dependencies here?
 
-AMD: "The processor C-state is EAX[7:4]+1, so to request C0 is to place
-the value F in EAX[7:4] and to request C1 is to place the value 0 in
-EAX[7:4].".
+More than a half of patches makes device drivers incompatible with
+"platform" approach, this is intentionally cause we don't want any
+leftovers - ep93xx should be fully converted to dt or left as is.
 
-Signed-off-by: He Rongguang <herongguang@linux.alibaba.com>
----
-  arch/x86/kernel/acpi/cstate.c | 4 ++--
-  drivers/idle/intel_idle.c     | 3 ++-
-  2 files changed, 4 insertions(+), 3 deletions(-)
+Currently only 4 patches that require review/ack left:
 
-diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
-index 401808b47af3..f3ffd0a3a012 100644
---- a/arch/x86/kernel/acpi/cstate.c
-+++ b/arch/x86/kernel/acpi/cstate.c
-@@ -131,8 +131,8 @@ static long acpi_processor_ffh_cstate_probe_cpu(void 
-*_cx)
-         cpuid(CPUID_MWAIT_LEAF, &eax, &ebx, &ecx, &edx);
-
-         /* Check whether this particular cx_type (in CST) is supported 
-or not */
--       cstate_type = ((cx->address >> MWAIT_SUBSTATE_SIZE) &
--                       MWAIT_CSTATE_MASK) + 1;
-+       cstate_type = (((cx->address >> MWAIT_SUBSTATE_SIZE) &
-+                       MWAIT_CSTATE_MASK) + 1) & MWAIT_CSTATE_MASK;
-         edx_part = edx >> (cstate_type * MWAIT_SUBSTATE_SIZE);
-         num_cstate_subtype = edx_part & MWAIT_SUBSTATE_MASK;
-
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index bcf1198e8991..e486027f8b07 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -1934,7 +1934,8 @@ static void __init spr_idle_state_table_update(void)
-
-  static bool __init intel_idle_verify_cstate(unsigned int mwait_hint)
-  {
--       unsigned int mwait_cstate = MWAIT_HINT2CSTATE(mwait_hint) + 1;
-+       unsigned int mwait_cstate = (MWAIT_HINT2CSTATE(mwait_hint) + 1) &
-+                                       MWAIT_CSTATE_MASK;
-         unsigned int num_substates = (mwait_substates >> mwait_cstate * 
-4) &
-                                         MWAIT_SUBSTATE_MASK;
-
---
-2.43.0
+- ARM: ep93xx: add regmap aux_dev
+- clk: ep93xx: add DT support for Cirrus EP93xx
+- dma: cirrus: Convert to DT for Cirrus EP93xx
+- dma: cirrus: remove platform code
 
