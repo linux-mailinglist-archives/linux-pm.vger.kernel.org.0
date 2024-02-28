@@ -1,115 +1,105 @@
-Return-Path: <linux-pm+bounces-4483-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4484-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD27786A642
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 03:01:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB4E686A64F
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 03:06:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B0C61F2EE11
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 02:01:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C7AE285B3D
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Feb 2024 02:06:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69F714405;
-	Wed, 28 Feb 2024 02:00:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="se3mPeBI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BD7963BF;
+	Wed, 28 Feb 2024 02:06:26 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 754AB2107;
-	Wed, 28 Feb 2024 02:00:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3A364A1A;
+	Wed, 28 Feb 2024 02:06:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709085653; cv=none; b=JEU+Ykrk98pUDp4+CyAH/DDl5tqcDooJnRHSLvCa/CRUJQpYiHYyrYXnp/geRkHNkYjUW4xOvOl5Z1Dsa+FjjI+YFc2nioVLdhtdNL8HTcHPhtgb96UK+nKgHkmMF5v9Lw57Oeu35XRwP3dd9Rgq53Xu/3W55YQga6H1toXTTIU=
+	t=1709085986; cv=none; b=ixqP3XYWZVrdWzkBkGONwJRTHccSmh2Rtctf9NuzTm+qVQqATgosf/8JJDxUUS1VwhWRp5F1KEtVLk7Ahz18p+DE/AcSHTRH4Jipg3tmRsA5uiHVhgFHGEAj8IHE2avc8uxI6DAgmE3f9HG8NLGv2eR/YOSj4bASLFvIsupwUos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709085653; c=relaxed/simple;
-	bh=KxH+FSKqPnen96UL7oC2xIPLR9KE5bLwWqMqNe1vbh4=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Ropg1tOCKwVZ/p+0Ngesf5efHlc7bw1t2eJCZvN0Py0g5yBpHrZOyaqt1kLE44cijDPj7GnVX8i9Tz6IJckYAeXPjyDiQZ/2ME9B7iAs8p6Q/akJ9BYOpozGEs7qlyyAP1rh23kykQMuHmM2e0lltKfXaW9f5/JyZh92vmpDquE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=se3mPeBI; arc=none smtp.client-ip=210.61.82.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 2f72af6ad5dd11ee935d6952f98a51a9-20240228
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=ps+ctjgSHlaJ48jdpOUAWUiCS3YICM9/AZhDjh4oT8Q=;
-	b=se3mPeBIF+PqBgOAxPuFZkNwfjcE8pqrOpefA1S7oaRR6MrD2V8ghgdm6q36NWfIcH6M1qbuvQ3ihY2SEpCmf8RNdzt/CuKrST/mnsusTngh4tV+Fqf9UgAqrvQI12zPllEghGwV2Nx9h0D2KVGjIz+FaxxYNW2JBdGOWlqb/1I=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.37,REQID:bcae47ab-630f-484c-8287-b5ed9edab26c,IP:0,U
-	RL:0,TC:0,Content:0,EDM:-30,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:-30
-X-CID-META: VersionHash:6f543d0,CLOUDID:95876484-8d4f-477b-89d2-1e3bdbef96d1,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:2,IP:nil,UR
-	L:11|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:
-	1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
-X-UUID: 2f72af6ad5dd11ee935d6952f98a51a9-20240228
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-	(envelope-from <qingliang.li@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 386241137; Wed, 28 Feb 2024 10:00:45 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 28 Feb 2024 10:00:44 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 28 Feb 2024 10:00:43 +0800
-From: Qingliang Li <qingliang.li@mediatek.com>
-To: "Rafael J . Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, Len
- Brown <len.brown@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, Johan Hovold
-	<johan+linaro@kernel.org>, Tony Lindgren <tony@atomide.com>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
-	Qingliang Li <qingliang.li@mediatek.com>
-Subject: [PATCH] PM: wakeirq: fix wake irq warning in system suspend stage
-Date: Wed, 28 Feb 2024 10:00:40 +0800
-Message-ID: <20240228020040.25815-1-qingliang.li@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1709085986; c=relaxed/simple;
+	bh=tU4y3J8zVMd5QfhtV8M5FVK9IAtu0tz/78Ppn6PVxNQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=LnT5FnB+FabrdbAFaHAjvr33CrGTJu1u/yqsu3ldh5rlWQ65xfYhQxyH1f2qDbLfSq5y2ZaYu00Y4QFjgq7A4U48IQ/7zEcz/998a5C0pcJmYkCHPMIIrUlmxF1GwHjt4GtOTGMIK1a21wzlBmLcCfqEuV0qz0Fver5kzkvmSA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4TkyNJ0r5HzNls1;
+	Wed, 28 Feb 2024 10:04:48 +0800 (CST)
+Received: from dggpeml500019.china.huawei.com (unknown [7.185.36.137])
+	by mail.maildlp.com (Postfix) with ESMTPS id 513F3140499;
+	Wed, 28 Feb 2024 10:06:18 +0800 (CST)
+Received: from [10.67.121.58] (10.67.121.58) by dggpeml500019.china.huawei.com
+ (7.185.36.137) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Wed, 28 Feb
+ 2024 10:06:17 +0800
+Message-ID: <91118802-eb8c-6225-3610-05e16270b3c4@hisilicon.com>
+Date: Wed, 28 Feb 2024 10:06:17 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH 0/2] Fix per-policy boost behavior
+To: Sibi Sankar <quic_sibis@quicinc.com>
+CC: <sudeep.holla@arm.com>, <cristian.marussi@arm.com>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+	<quic_rgottimu@quicinc.com>, <linux-arm-kernel@lists.infradead.org>,
+	<asahi@lists.linux.dev>, <linux-pm@vger.kernel.org>,
+	<dietmar.eggemann@arm.com>, <marcan@marcan.st>, <sven@svenpeter.dev>,
+	<alyssa@rosenzweig.io>, <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+	<xuwei5@hisilicon.com>
+References: <20240227165309.620422-1-quic_sibis@quicinc.com>
+From: Jie Zhan <zhanjie9@hisilicon.com>
+In-Reply-To: <20240227165309.620422-1-quic_sibis@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500019.china.huawei.com (7.185.36.137)
 
-When driver registers the wake irq with reverse enable ordering,
-the wake irq will be re-enabled when entering system suspend, triggering
-an 'Unbalanced enable for IRQ xxx' warning. The wake irq will be
-enabled in both dev_pm_enable_wake_irq_complete() and dev_pm_arm_wake_irq()
+Hi Sibi,
 
-To fix this issue, complete the setting of WAKE_IRQ_DEDICATED_ENABLED flag
-in dev_pm_enable_wake_irq_complete() to avoid redundant irq enablement.
+Thanks for pointing this issue out.
 
-Fixes: 8527beb12087 ("PM: sleep: wakeirq: fix wake irq arming")
-Signed-off-by: Qingliang Li <qingliang.li@mediatek.com>
----
- drivers/base/power/wakeirq.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+However, I can't clearly see how the existing code fails.
 
-diff --git a/drivers/base/power/wakeirq.c b/drivers/base/power/wakeirq.c
-index 42171f766dcb..5a5a9e978e85 100644
---- a/drivers/base/power/wakeirq.c
-+++ b/drivers/base/power/wakeirq.c
-@@ -313,8 +313,10 @@ void dev_pm_enable_wake_irq_complete(struct device *dev)
- 		return;
- 
- 	if (wirq->status & WAKE_IRQ_DEDICATED_MANAGED &&
--	    wirq->status & WAKE_IRQ_DEDICATED_REVERSE)
-+	    wirq->status & WAKE_IRQ_DEDICATED_REVERSE) {
- 		enable_irq(wirq->irq);
-+		wirq->status |= WAKE_IRQ_DEDICATED_ENABLED;
-+	}
- }
- 
- /**
--- 
-2.25.1
+cpufreq_frequency_table_cpuinfo() checks cpufreq_boost_enabled(),
+and that should be already set in cpufreq_boost_trigger_state() before
+calling cpufreq_boost_set_sw(), so presumably cpufreq_boost_set_sw()
+is supposed to work as expected.
+
+Can you explain this a bit further?
+
+Cheers,
+Jie
+
+On 28/02/2024 00:53, Sibi Sankar wrote:
+> Fix per-policy boost behavior by incorporating per-policy boost flag
+> in the policy->max calculation and setting the correct per-policy
+> boost_enabled value on devices that use cpufreq_enable_boost_support().
+>
+> Logs reported-by Dietmar Eggemann [1]:
+>
+> [1] https://lore.kernel.org/lkml/265e5f2c-9b45-420f-89b1-44369aeb8418@arm.com/
+>
+> Sibi Sankar (2):
+>    cpufreq: Fix per-policy boost behavior on SoCs using
+>      cpufreq_boost_set_sw
+>    cpufreq: apple-soc: Align per-policy and global boost flags
+>
+>   drivers/cpufreq/apple-soc-cpufreq.c |  1 +
+>   drivers/cpufreq/cpufreq.c           | 15 +++++++++------
+>   drivers/cpufreq/freq_table.c        |  2 +-
+>   3 files changed, 11 insertions(+), 7 deletions(-)
+>
 
 
