@@ -1,270 +1,185 @@
-Return-Path: <linux-pm+bounces-4540-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4541-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6AD086C42A
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 09:49:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B684C86C43F
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 09:54:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E24A41C22420
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 08:49:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A806FB233A1
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 08:54:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F00553E2B;
-	Thu, 29 Feb 2024 08:49:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B82A54BFA;
+	Thu, 29 Feb 2024 08:54:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lEHOE7zJ"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="PmLKteDr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 366845381A;
-	Thu, 29 Feb 2024 08:49:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71D0A53E30;
+	Thu, 29 Feb 2024 08:53:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709196565; cv=none; b=ULAEIpwaqJu/5nbhq2gF+TJT+KJ0ICt7o2bbQKC96O9JrXT1yYEmsyi0/n8kUFAHVG7BUrbzQobeF/WUPr4fW5c5+2h8cCfb/1IZpK/1sT4KwQGkItL/GTmV4sTjd0PsWJRszCcMCnMKIY4VMO6LwJ0VyTrfoN/K6crEj+vpF/I=
+	t=1709196841; cv=none; b=PaKMVhjuqN8Hdi6SPe/A6bs1T6T+ri0EH3QqAWE4MyFtsf61WD/R0F/UTg3/1DgJzP4pCUjhfr16o5sweO74F063wFp+Giw08SNjxy1rZlYSjNE+UXUrmQf3ysey+EMp60np0s316BHnPLrNFQF6GgaLmRO0VCBPGhLrQid1TLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709196565; c=relaxed/simple;
-	bh=kyo2omPMQl2GqV3p3xdk284ZhNs90r2SudbQEqH7GYc=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=j6cc7WmRoS7ZTsyCrz9kaXn6Ajib8SUSlvziYttGUcdgtnUiKrwSw9PcoypQtalsfgOfitKGa4etifBMiEcW+TJ7FfFuWAHDbov6dIWWOG9jDmXAcSkXjNIzT2jYOZBDxOgryDgwW58GgU9e8xQ2k4+eCTZUFHgbtaj/wlpUGZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lEHOE7zJ; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709196563; x=1740732563;
-  h=date:from:to:cc:subject:message-id;
-  bh=kyo2omPMQl2GqV3p3xdk284ZhNs90r2SudbQEqH7GYc=;
-  b=lEHOE7zJSg5P97siXlTAmpZBV8xn4jblUOjlnuVJExQUW34/BJ4o0Qf7
-   Q9vS2J+pTS7OHAFzoEpc15cwohKlqyPSBzViihM09jU6sruzVUvK4u1Ik
-   0dsivyswEM+iyNw00vERusqUd64iMg90xR6oGBrtLX2qSLQfhfs0DQaUx
-   iIGxmPV5s19Ech0l/1doH8ZNfH/jX5HZjGaGAnfFswF4Q+vw76nQSM/9L
-   RhjhrwLOEphfchMpfuZAS1/lQhj2g9C6dbRIChepm/OZ4ero4tD+0mMtf
-   euMRJjpGkRUCC6ZC3v+GXRttHA3LP9WN+CzGTJGmJwuOnOloner0n39Uc
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10998"; a="3816501"
-X-IronPort-AV: E=Sophos;i="6.06,192,1705392000"; 
-   d="scan'208";a="3816501"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Feb 2024 00:49:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,192,1705392000"; 
-   d="scan'208";a="7620734"
-Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 29 Feb 2024 00:49:21 -0800
-Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rfc6P-000CmZ-1b;
-	Thu, 29 Feb 2024 08:49:17 +0000
-Date: Thu, 29 Feb 2024 16:49:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 939eb8fef483f8cfbdc0ccb822c174934a49f9d4
-Message-ID: <202402291611.hpZBnF4P-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1709196841; c=relaxed/simple;
+	bh=JFVXTAAuvueZGJ1qbFCAT1FQwjUtEjK+lf3R2RaGBnI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=C9d7BxCZwa8Nd95wCVsMDp8nvDRnZzIMDDWPRFTaGw9DOmLCgi6v8dL6zZfPUNQwHsy2XzRfNaHwsYpgPuNsus1uU6M0vqUePCeyQQq4dOeyYP6Zw9QYdQuAlsQTpn3bld7HH4qdb8H3Uoye6Zjxj24fCRRe342VPPD7XLTyeoA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=PmLKteDr; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41T6iDHP004522;
+	Thu, 29 Feb 2024 08:53:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=MBa7Nsq5ot2JW4JB8W984X8OIbqaIdGF/tU6QV5+1so=; b=Pm
+	LKteDrBhWD5tVSrdZnW3aTCRA45QXMIY+s5xCvEDMJlsPYOWzPRDkR0NZ2ubBVV0
+	yS7wtCl7NhyzgaM2gPHo8zuFQj1TCpk7ZQvkPW6A8bVY5Tm83p/vpoWDteFqsw1w
+	U4cqpQHHMxv6OqJX6p530zPD8t1Hx7RjQmI/GnBAZu/gh1SqFWKdVmYUltCj7qKq
+	cxGMcXdgQimAZa0F5P3hE6Wxu5VI1s175Un9BrvJQfTwN9WEH+WKGuOf+q9q25Wd
+	YOMVCY+7f1mqqz7rKayTvq5rZpKlNAN4DEgN4wnwgrYyvJVxuE2hE2KZCIUB3yoi
+	FGlj+g5PW74QkwaE/WPw==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wjmwn8b7m-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 29 Feb 2024 08:53:54 +0000 (GMT)
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+	by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41T8rrxB014238
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 29 Feb 2024 08:53:54 GMT
+Received: from [10.216.40.135] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Thu, 29 Feb
+ 2024 00:53:50 -0800
+Message-ID: <8b7b34b8-8b92-4475-fe6a-8a7340590fb2@quicinc.com>
+Date: Thu, 29 Feb 2024 14:23:43 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] cpufreq: Don't unregister cpufreq cooling on CPU hotplug
+Content-Language: en-US
+To: Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki"
+	<rafael@kernel.org>
+CC: <linux-pm@vger.kernel.org>, Vincent Guittot <vincent.guittot@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Manaf Meethalavalappu Pallikunhi
+	<quic_manafm@quicinc.com>,
+        Roman Stratiienko <r.stratiienko@gmail.com>,
+        <linux-kernel@vger.kernel.org>
+References: <1333a397b93e0e15cb7cb358e21a289bc7d71a63.1709193295.git.viresh.kumar@linaro.org>
+From: Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <1333a397b93e0e15cb7cb358e21a289bc7d71a63.1709193295.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: H-3rVEc9b13FTWj-hwiPT42z-elOBFAP
+X-Proofpoint-ORIG-GUID: H-3rVEc9b13FTWj-hwiPT42z-elOBFAP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-29_01,2024-02-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ mlxlogscore=872 phishscore=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 clxscore=1011 bulkscore=0 adultscore=0 lowpriorityscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2402120000 definitions=main-2402290068
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 939eb8fef483f8cfbdc0ccb822c174934a49f9d4  Merge branch 'thermal-intel' into bleeding-edge
 
-elapsed time: 727m
 
-configs tested: 180
-configs skipped: 3
+On 2/29/2024 1:42 PM, Viresh Kumar wrote:
+> Offlining a CPU and bringing it back online is a common operation and it
+> happens frequently during system suspend/resume, where the non-boot CPUs
+> are hotplugged out during suspend and brought back at resume.
+> 
+> The cpufreq core already tries to make this path as fast as possible as
+> the changes are only temporary in nature and full cleanup of resources
+> isn't required in this case. For example the drivers can implement
+> online()/offline() callbacks to avoid a lot of tear down of resources.
+> 
+> On similar lines, there is no need to unregister the cpufreq cooling
+> device during suspend / resume, but only while the policy is getting
+> removed.
+> 
+> Moreover, unregistering the cpufreq cooling device is resulting in an
+> unwanted outcome, where the system suspend is eventually aborted in the
+> process.  Currently, during system suspend the cpufreq core unregisters
+> the cooling device, which in turn removes a kobject using device_del()
+> and that generates a notification to the userspace via uevent broadcast.
+> This causes system suspend to abort in some setups.
+> 
+> This was also earlier reported (indirectly) by Roman [1]. Maybe there is
+> another way around to fixing that problem properly, but this change
+> makes sense anyways.
+> 
+> Move the registering and unregistering of the cooling device to policy
+> creation and removal times onlyy.
+> 
+> Reported-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+> Reported-by: Roman Stratiienko <r.stratiienko@gmail.com>
+> Link: https://patchwork.kernel.org/project/linux-pm/patch/20220710164026.541466-1-r.stratiienko@gmail.com/ [1]
+> Tested-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>   drivers/cpufreq/cpufreq.c | 17 +++++++++++------
+>   1 file changed, 11 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 44db4f59c4cc..4133c606dacb 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1571,7 +1571,8 @@ static int cpufreq_online(unsigned int cpu)
+>   	if (cpufreq_driver->ready)
+>   		cpufreq_driver->ready(policy);
+>   
+> -	if (cpufreq_thermal_control_enabled(cpufreq_driver))
+> +	/* Register cpufreq cooling only for a new policy */
+> +	if (new_policy && cpufreq_thermal_control_enabled(cpufreq_driver))
+>   		policy->cdev = of_cpufreq_cooling_register(policy);
+>   
+>   	pr_debug("initialization complete\n");
+> @@ -1655,11 +1656,6 @@ static void __cpufreq_offline(unsigned int cpu, struct cpufreq_policy *policy)
+>   	else
+>   		policy->last_policy = policy->policy;
+>   
+> -	if (cpufreq_thermal_control_enabled(cpufreq_driver)) {
+> -		cpufreq_cooling_unregister(policy->cdev);
+> -		policy->cdev = NULL;
+> -	}
+> -
+>   	if (has_target())
+>   		cpufreq_exit_governor(policy);
+>   
+> @@ -1720,6 +1716,15 @@ static void cpufreq_remove_dev(struct device *dev, struct subsys_interface *sif)
+>   		return;
+>   	}
+>   
+> +	/*
+> +	 * Unregister cpufreq cooling once all the CPUs of the policy are
+> +	 * removed.
+> +	 */
+> +	if (cpufreq_thermal_control_enabled(cpufreq_driver)) {
+> +		cpufreq_cooling_unregister(policy->cdev);
+> +		policy->cdev = NULL;
+> +	}
+> +
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Looks fine than other solution..
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                     haps_hs_smp_defconfig   gcc  
-arc                   randconfig-001-20240229   gcc  
-arc                   randconfig-002-20240229   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                        mvebu_v7_defconfig   clang
-arm                             mxs_defconfig   clang
-arm                             pxa_defconfig   gcc  
-arm                   randconfig-001-20240229   gcc  
-arm                   randconfig-002-20240229   gcc  
-arm                   randconfig-003-20240229   clang
-arm                   randconfig-004-20240229   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240229   clang
-arm64                 randconfig-002-20240229   gcc  
-arm64                 randconfig-003-20240229   clang
-arm64                 randconfig-004-20240229   clang
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240229   gcc  
-csky                  randconfig-002-20240229   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240229   clang
-hexagon               randconfig-002-20240229   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240229   clang
-i386         buildonly-randconfig-002-20240229   gcc  
-i386         buildonly-randconfig-003-20240229   gcc  
-i386         buildonly-randconfig-004-20240229   clang
-i386         buildonly-randconfig-005-20240229   gcc  
-i386         buildonly-randconfig-006-20240229   gcc  
-i386                                defconfig   clang
-i386                  randconfig-001-20240229   clang
-i386                  randconfig-002-20240229   gcc  
-i386                  randconfig-003-20240229   clang
-i386                  randconfig-004-20240229   gcc  
-i386                  randconfig-005-20240229   gcc  
-i386                  randconfig-006-20240229   gcc  
-i386                  randconfig-011-20240229   gcc  
-i386                  randconfig-012-20240229   gcc  
-i386                  randconfig-013-20240229   clang
-i386                  randconfig-014-20240229   clang
-i386                  randconfig-015-20240229   clang
-i386                  randconfig-016-20240229   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240229   gcc  
-loongarch             randconfig-002-20240229   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-microblaze                      mmu_defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                            gpr_defconfig   clang
-mips                        omega2p_defconfig   clang
-mips                           rs90_defconfig   gcc  
-mips                         rt305x_defconfig   clang
-mips                           xway_defconfig   clang
-nios2                            alldefconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240229   gcc  
-nios2                 randconfig-002-20240229   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-openrisc                    or1ksim_defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240229   gcc  
-parisc                randconfig-002-20240229   gcc  
-parisc64                            defconfig   gcc  
-powerpc                     akebono_defconfig   clang
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                        cell_defconfig   gcc  
-powerpc               randconfig-001-20240229   clang
-powerpc               randconfig-002-20240229   gcc  
-powerpc               randconfig-003-20240229   clang
-powerpc                     stx_gp3_defconfig   clang
-powerpc64             randconfig-001-20240229   gcc  
-powerpc64             randconfig-002-20240229   clang
-powerpc64             randconfig-003-20240229   clang
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                    nommu_k210_defconfig   clang
-riscv                 randconfig-001-20240229   clang
-riscv                 randconfig-002-20240229   clang
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-001-20240229   clang
-s390                  randconfig-002-20240229   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                        dreamcast_defconfig   gcc  
-sh                    randconfig-001-20240229   gcc  
-sh                    randconfig-002-20240229   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240229   gcc  
-sparc64               randconfig-002-20240229   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20240229   gcc  
-um                    randconfig-002-20240229   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240229   gcc  
-x86_64       buildonly-randconfig-002-20240229   clang
-x86_64       buildonly-randconfig-003-20240229   gcc  
-x86_64       buildonly-randconfig-004-20240229   gcc  
-x86_64       buildonly-randconfig-005-20240229   gcc  
-x86_64       buildonly-randconfig-006-20240229   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240229   clang
-x86_64                randconfig-002-20240229   clang
-x86_64                randconfig-003-20240229   clang
-x86_64                randconfig-004-20240229   clang
-x86_64                randconfig-005-20240229   clang
-x86_64                randconfig-006-20240229   clang
-x86_64                randconfig-011-20240229   gcc  
-x86_64                randconfig-012-20240229   gcc  
-x86_64                randconfig-013-20240229   gcc  
-x86_64                randconfig-014-20240229   gcc  
-x86_64                randconfig-015-20240229   gcc  
-x86_64                randconfig-016-20240229   gcc  
-x86_64                randconfig-071-20240229   clang
-x86_64                randconfig-072-20240229   clang
-x86_64                randconfig-073-20240229   clang
-x86_64                randconfig-074-20240229   clang
-x86_64                randconfig-075-20240229   gcc  
-x86_64                randconfig-076-20240229   clang
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-xtensa                randconfig-001-20240229   gcc  
-xtensa                randconfig-002-20240229   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-Mukesh
+>   	/* We did light-weight exit earlier, do full tear down now */
+>   	if (cpufreq_driver->offline)
+>   		cpufreq_driver->exit(policy);
 
