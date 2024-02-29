@@ -1,134 +1,128 @@
-Return-Path: <linux-pm+bounces-4574-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4575-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 773F586D30E
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 20:26:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8662386D336
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 20:31:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7D88EB21214
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 19:26:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B85071C210FB
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 19:31:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F39A413774B;
-	Thu, 29 Feb 2024 19:26:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5FA313C9E6;
+	Thu, 29 Feb 2024 19:31:34 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B00E1350C9;
-	Thu, 29 Feb 2024 19:26:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A9B1134434;
+	Thu, 29 Feb 2024 19:31:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709234774; cv=none; b=OnHX6E5TDjgwRilDv4IIrQ3meBXmfR7t2IL5sCaEKrJoHIx61qUb6Ok3pK6SL/SijvfalfW5dYEdMLaWSfb623cczKqBtDfH7/2zoAIhNfpyHSa4XZdu3Gw2w6Oo1DnTVsLWxZGPCitoxKntep1TV1KgFhHFOMyDuaCQ46yiRTA=
+	t=1709235094; cv=none; b=rDEFNbGswC3EBmVqy2wuvWuaHC8PlDZ6UWDGUwJE/H+1c9NiTdD+g5Kf8nCEV3qDd5KKFdp2vck9d02CfCZPmjXz3uOvry5hHuVLMN02/GOE3kr/OI4ki+fqvUjU1iob1WVFWQ/0cvpAFuUl+VSuq3OY4jf4gd7h+6FXVUj9Ar8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709234774; c=relaxed/simple;
-	bh=CDs+Duuit9PD7/A5RsuZL8XM9F0qhGpY7SYwSBEzlVw=;
+	s=arc-20240116; t=1709235094; c=relaxed/simple;
+	bh=njFwzLd3O52eEHT6q0dizalujYRQxu7MHu33B3xG37M=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pQKka1kh0hfff4Ay5PmZ1ZwfTq1HmIqSZ7DGAOAMOeD+KQSX7gwIYqn5ToFqyOHp+NbNTTtU32CRhsM02h9wAfV3ufbgx+HfFr3l4fisKmZQfuQE3Tlkk5s9gIMbTtWPJX7G17M0xJhC4b9Ab8eSnHWqEM9tVbE+MhxUGG2zBwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.53
+	 To:Cc:Content-Type; b=la0MaT/u3liZ7z31t3QT9y8HFexAeyEaygWTx69Y/ekKQ9qWLbrhAK8CvrxuFTEu6ayfH63KRg16oMnLko0K4+7f9JHSMNslZHovcIKgUuadzKF6+Jc7ZkFMGthsqtDJ2SAUPMb7EaSzdnvyxguhFLgfBjz3pOrVYpN+F1RboKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6e447c39525so253348a34.0;
-        Thu, 29 Feb 2024 11:26:13 -0800 (PST)
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-6e447c39525so254035a34.0;
+        Thu, 29 Feb 2024 11:31:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709234772; x=1709839572;
+        d=1e100.net; s=20230601; t=1709235092; x=1709839892;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4rhpKQ+eX1EBSDrTVD9HPgkSZTA4wQdaIQcskZLuqPY=;
-        b=V5HTwvzK9LUbFkfPwqCs0UybG8LJb75bzGbfO2wg0FRlMKAtmpPLma6rhpDy2eHZxL
-         W6VdNj3EvHimaiOqusknstTveDJ5KzLP8rQ5vN3D8sVxqTKu3vjzmOjcnKGws7oPgNcc
-         g8kCGEYoBb96z3ICNsKt4BNZ8KfzWoIupvfqHNqzmfFeWVWLskzOf1xz89qaJz6vdDmx
-         QXqmxH4dQmGmO1beF9z5wlY/rQm7O1W/92lC586rSUHMc3rfkhgu66Ra+N98EE6DlybH
-         jK4orHE/ucWLayBV0UdnX0YyWc3XhNG7oykf0P5B01cI+Kiljd6hcQ2+1/3llDc4/XCx
-         spqg==
-X-Forwarded-Encrypted: i=1; AJvYcCWdCYyRBVkbVFu8nUleb3oLOMIDt+Fij2lLU+Lf2xdLyJBXluftux6TjRacOT4oU7nbLAoKeIiO3kBQ1cNh0khiGbA4zsXMQGXVR1WGLMtPAPB2rc9pc3JLaosS0uTC2qyQi3Xq6OU=
-X-Gm-Message-State: AOJu0YxfbPlajFRbTkpbABnARwdATFX7D5cF963TaiM6ISptrkZmlFgQ
-	Z/aW3m6gn4gJsjOX7H6HiqNFseQsXkxyrHT1ASfaulNpIrmgL24jVQ3zHtD5xKEKmUxGD3nm5i/
-	AHUnoAx1JuTdfIH4fdlL2pyYpKEY=
-X-Google-Smtp-Source: AGHT+IHrZscDx64lfBlx2DuEDGUOJc9YfwEmOQEtRyeSj3fvgLNPG6NkD26cQXPOO6wlNsTi5qc0PZYCL5ooULkXhZI=
-X-Received: by 2002:a4a:d091:0:b0:5a0:4216:c5f0 with SMTP id
- i17-20020a4ad091000000b005a04216c5f0mr3006435oor.0.1709234772617; Thu, 29 Feb
- 2024 11:26:12 -0800 (PST)
+        bh=4ETKftWBVy6GzKkutN2GcCGR5cKv1VIm/ZISCNpvf9s=;
+        b=hbex2avBQN5FU2dLnTmtpsxc8FstanMwpTMEGU9b/60T0rXeRMQi5NIPPORt424HZX
+         eGpgWcd8tHv2Kny01G8NLxuZA+PqwZloYplHfqt30B/4YiMQXNM0KIKmhiiqw8ulxX2b
+         BSTfY1cGQ9E5NYJpfX4OtruL4EQCnwhAScQsWDiX+dNElEl/PlpAxRq2pMEc9jy7/II6
+         hdpSLej3xdwskqM0gRZ2xcgT8008oGEgZqdzCbJDUdqNCo3a/UfMbah94Ocz4B6Xb3vi
+         keea8QB0oYhgLExvzZnrhNRhO8UlCs6DeVO/lSKZpPXs5dIdoeITCHM6Q1lkHWY7hzr+
+         9JAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWxfZYpMDBUEaX6yuRnqIGaeLOJ6mVQvc8ctmt6xymS2ptXOPtJSwT1GkR2tui/luLjFLNZbsQNSU27LLF2gwZ+Ld42/mkVZ3zPtSmjuT0EkVQ/XA5Gzv5z/WBbWqdoXxH3Hi4vgH0=
+X-Gm-Message-State: AOJu0YzzxvLDzB42aNcbriWdjvEuSgQd+Z17pRgyUh/2Y8T0EUy0xOU5
+	KuW5eW5NVlzrbQ2dg3hNRLWV3YAhYeOpNocdekLVUrY+FeQdodk3Nw2k3XAgtJ92Nw4Fa+gAKNe
+	d4L5F6nG9tnDHpfceWFGcPcVzxoc=
+X-Google-Smtp-Source: AGHT+IGmr8Ws2ZZbxr8S3XY9PtvJNcuSafyT8K4yK9nszYjX3GohlNi6UZMc36dkoILMAHC9DHOnJq0GkmPsY/Iw+do=
+X-Received: by 2002:a05:6820:352:b0:5a0:6ef3:ed8e with SMTP id
+ m18-20020a056820035200b005a06ef3ed8emr3073771ooe.1.1709235092242; Thu, 29 Feb
+ 2024 11:31:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240222233947.sl435tvhhpe5iqzw@airbuntu> <20240227233452.405852-1-qyousef@layalina.io>
-In-Reply-To: <20240227233452.405852-1-qyousef@layalina.io>
+References: <20240228020040.25815-1-qingliang.li@mediatek.com>
+ <1390e743-2216-4435-b2ef-7d92a55605b1@ti.com> <0c1e972cf506b22cb1de73c8509bf2b917c0806b.camel@mediatek.com>
+In-Reply-To: <0c1e972cf506b22cb1de73c8509bf2b917c0806b.camel@mediatek.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 29 Feb 2024 20:26:01 +0100
-Message-ID: <CAJZ5v0hdZc2Usfa8m_DrVr6ZnzqZOUd60grGySz-EkyMgtzNjA@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: Honour transition_latency over transition_delay_us
-To: Qais Yousef <qyousef@layalina.io>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Ingo Molnar <mingo@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Pierre Gondois <Pierre.Gondois@arm.com>
+Date: Thu, 29 Feb 2024 20:31:20 +0100
+Message-ID: <CAJZ5v0hPBbri9Y+VPqA8iisWg+fyZXouLnP=DQLN4j+W0pq6Pg@mail.gmail.com>
+Subject: Re: [PATCH] PM: wakeirq: fix wake irq warning in system suspend stage
+To: =?UTF-8?B?UWluZ2xpYW5nIExpICjpu47mmbTkuq4p?= <Qingliang.Li@mediatek.com>
+Cc: "johan+linaro@kernel.org" <johan+linaro@kernel.org>, "d-gole@ti.com" <d-gole@ti.com>, 
+	"pavel@ucw.cz" <pavel@ucw.cz>, "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
+	"tony@atomide.com" <tony@atomide.com>, "len.brown@intel.com" <len.brown@intel.com>, 
+	"rafael@kernel.org" <rafael@kernel.org>, "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>, 
+	"angelogioacchino.delregno@collabora.com" <angelogioacchino.delregno@collabora.com>, 
+	=?UTF-8?B?QXhlIFlhbmcgKOadqOejiik=?= <Axe.Yang@mediatek.com>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>, 
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 28, 2024 at 12:35=E2=80=AFAM Qais Yousef <qyousef@layalina.io> =
-wrote:
+On Wed, Feb 28, 2024 at 9:33=E2=80=AFAM Qingliang Li (=E9=BB=8E=E6=99=B4=E4=
+=BA=AE)
+<Qingliang.Li@mediatek.com> wrote:
 >
-> Some platforms like Arm's Juno can have a high transition latency that
-> can be larger than the 2ms cap introduced. If a driver report
-> a transition_latency that is higher than the cap, then use it as-is.
+> On Wed, 2024-02-28 at 11:34 +0530, Dhruva Gole wrote:
+> >
+> > External email : Please do not click links or open attachments until
+> > you have verified the sender or the content.
+> >  Hi,
+> >
+> > On 28/02/24 07:30, Qingliang Li wrote:
+> > > When driver registers the wake irq with reverse enable ordering,
+> > > the wake irq will be re-enabled when entering system suspend,
+> > triggering
+> > > an 'Unbalanced enable for IRQ xxx' warning. The wake irq will be
+> > > enabled in both dev_pm_enable_wake_irq_complete() and
+> > dev_pm_arm_wake_irq()
+> > >
+> > > To fix this issue, complete the setting of
+> > WAKE_IRQ_DEDICATED_ENABLED flag
+> > > in dev_pm_enable_wake_irq_complete() to avoid redundant irq
+> > enablement.
+> >
+> >
+> > Just trying to understand, why not in dev_pm_arm_wake_irq ?
+> > Is it cuz it's called much after dev_pm_enable_wake_irq_complete ?
+> > Not sure what's the exact call order, but I am assuming
+> > dev_pm_enable_wake_irq_complete is more of a runtime thing and
+> > dev_pm_arm_wake_irq happens finally at system suspend?
 >
-> Update comment s/10/2/ to reflect the new cap of 2ms.
+> You are right, the involvement of 'dev_pm_enable_wake_irq_complete' is
+> due to the driver selecting 'pm_runtime_force_suspend' as the callback
+> function for system suspend. In this scenario, the call sequence during
+> system suspend is as follows:
+> dpm_suspend_start -> dpm_run_callback -> pm_runtime_force_suspend ->
+> dev_pm_enable_wake_irq_check/complete
+> suspend_enter -> dpm_suspend_noirq -> dev_pm_arm_wake_irq
 >
-> Reported-by: Pierre Gondois <pierre.gondois@arm.com>
-> Signed-off-by: Qais Yousef <qyousef@layalina.io>
-> ---
->  drivers/cpufreq/cpufreq.c | 13 +++++++++++--
->  1 file changed, 11 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 66cef33c4ec7..926a51cb7e52 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -576,8 +576,17 @@ unsigned int cpufreq_policy_transition_delay_us(stru=
-ct cpufreq_policy *policy)
->
->         latency =3D policy->cpuinfo.transition_latency / NSEC_PER_USEC;
->         if (latency) {
-> +               unsigned int max_delay_us =3D 2 * MSEC_PER_SEC;
-> +
-> +               /*
-> +                * If the platform already has high transition_latency, u=
-se it
-> +                * as-is.
-> +                */
-> +               if (latency > max_delay_us)
-> +                       return latency;
-> +
->                 /*
-> -                * For platforms that can change the frequency very fast =
-(< 10
-> +                * For platforms that can change the frequency very fast =
-(< 2
->                  * us), the above formula gives a decent transition delay=
-. But
->                  * for platforms where transition_latency is in milliseco=
-nds, it
->                  * ends up giving unrealistic values.
-> @@ -586,7 +595,7 @@ unsigned int cpufreq_policy_transition_delay_us(struc=
-t cpufreq_policy *policy)
->                  * a reasonable amount of time after which we should reev=
-aluate
->                  * the frequency.
->                  */
-> -               return min(latency * LATENCY_MULTIPLIER, (unsigned int)(2=
- * MSEC_PER_SEC));
-> +               return min(latency * LATENCY_MULTIPLIER, max_delay_us);
->         }
->
->         return LATENCY_MULTIPLIER;
-> --
+> Based on the above, if the driver (i) chooses pm_runtime_force_suspend
+> as the system suspend callback function and (ii) registers wake irq
+> with reverse enable ordering, the wake irq will be enabled twice during
+> system suspend.
 
-Applied as 6.9 material, thanks!
+It would be good to put the above information into the patch
+changelog, as it actually explains the problem.
+
+Thanks!
 
