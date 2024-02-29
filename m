@@ -1,119 +1,187 @@
-Return-Path: <linux-pm+bounces-4544-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4545-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C075986C5D1
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 10:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4978A86C638
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 10:59:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C60228B7F4
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 09:43:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 040C628438B
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 09:59:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E3B961677;
-	Thu, 29 Feb 2024 09:43:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cr0nGGfQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EA2E6281E;
+	Thu, 29 Feb 2024 09:59:27 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21DBD612CE;
-	Thu, 29 Feb 2024 09:43:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEA3C4778B;
+	Thu, 29 Feb 2024 09:59:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709199791; cv=none; b=VeGg7lwFHJiF4Iof8GM/jgLwSD7kC36+a650IN5xiC7saoYgSy/yN87jlpyvonxcazVvxCWNox3T6m+qAGFjgqYF8VVhK7XKAo5MHVTBbNlaCekHWDvWFE0s3V6Ue8YgzMVX6jj/qCtiHEWlu1MDZ8/a3EyyOk/KrEtfTw4HAXU=
+	t=1709200767; cv=none; b=t7eaQsQwOJdMFUvC1ij+FyLDKvLbvvEGmkAmt6Pdz0XA3Y1Sc/DPjvG1HHwZfN0tIM4rV5OJTmtd0uTFU8s5zgbfyh3AkPJIIqn44TLIAiL2Lptn8yaDflS7EfeAhH/31Ih2oSIRrvcKmZyty83o3nn4lgD8lZButus236wVMCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709199791; c=relaxed/simple;
-	bh=aDbHWCEN87gifEkin69igfn4UnaUalbm7Xpzz7Tjuw4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GidAiNcg8fvKSQwsYP9mGe7GJmLDEqQpXvGC/E53ASWYTy2hYf0IRSCNlF+sbB5QeUl8wlgpyfMGkrfT4ENmaepHJN1nRWA/OyVZrjNeFpe/0nl/S6Pnb3wI/KXzBRbmWkcvpQX03s3z/VZbrz3LyvTGoE/R3XtRIlLdga3c6V4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cr0nGGfQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1605BC43390;
-	Thu, 29 Feb 2024 09:43:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709199790;
-	bh=aDbHWCEN87gifEkin69igfn4UnaUalbm7Xpzz7Tjuw4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cr0nGGfQcPJzRlpgBOWurWE1FlP0/lVOeyoJ0y+JMWFPkBi7Z8r358ncafvax+LcU
-	 Utr4eykovmyPVLbRrMd9NNaM5I2CsGLModtc7FUdwAqEqrde8pi5ztd3SWRrtB7q2n
-	 yFcYOJo7yRqY5TEgHSWuwo52+FQvMzf/Px27hOyrwc90xeLmHZ8loRRFRRfZFIgy8H
-	 6nplNOpn0Z+LhIHagrRGsVo3ANvtj8700A0dL9clQp1aeAWYxzr+8tRSUX5W6L9bWb
-	 vZzJ+9zg/s/2116gI22aOiKJiQCK8U4Z3pzPLfAI3O2e7nwXPGiAhbLXW8C5yO/cnj
-	 iqjhmV+h7jGzw==
-Date: Thu, 29 Feb 2024 11:42:23 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Yaxiong Tian <13327272236@163.com>
-Cc: David Hildenbrand <david@redhat.com>, rafael@kernel.org, pavel@ucw.cz,
-	len.brown@intel.com, keescook@chromium.org, tony.luck@intel.com,
-	gpiccoli@igalia.com, akpm@linux-foundation.org, ardb@kernel.org,
-	wangkefeng.wang@huawei.com, catalin.marinas@arm.com,
-	will@kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-	Yaxiong Tian <tianyaxiong@kylinos.cn>,
-	xiongxin <xiongxin@kylinos.cn>
-Subject: Re: [PATCH] PM: hibernate: Fix level3 translation fault in
- swsusp_save()
-Message-ID: <ZeBRfxQ8WTEVzpfL@kernel.org>
-References: <20240226034225.48689-1-13327272236@163.com>
- <8d70939f-ca14-4167-9647-b8f44ddcbb98@redhat.com>
- <ZdxWcG2XCqBum3_R@kernel.org>
- <3399d2af-3d42-4ac1-9b74-8475bec25f7f@163.com>
+	s=arc-20240116; t=1709200767; c=relaxed/simple;
+	bh=LomPs8yZabTBRuijVP1x/mNDGcz7vRh2TwpwQn7qTaE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SalbO/JLdOAzHU+JIKN36oxhYOyoNfHYf7ZOesAtM8eytNoJ+WgUFIu0E/MYqrpXGxun6u+2A7uyMIBTjjfENTvivltZGGvkMa/8fNsiH501KS8q/dixT0XCz4b9UE7PIUWysvCjHwFCcAWOyTcc9ZMInamBFWW1hB0E7mPkg4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 578EA1FB;
+	Thu, 29 Feb 2024 02:00:02 -0800 (PST)
+Received: from [10.57.12.184] (unknown [10.57.12.184])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B1633F762;
+	Thu, 29 Feb 2024 01:59:21 -0800 (PST)
+Message-ID: <64c6a1bc-92f2-4f44-ab10-cbd2473746f3@arm.com>
+Date: Thu, 29 Feb 2024 09:59:38 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V3 2/2] cpufreq: scmi: Register for limit change
+ notifications
+Content-Language: en-US
+To: Sibi Sankar <quic_sibis@quicinc.com>
+Cc: linux-arm-kernel@lists.infradead.org, pierre.gondois@arm.com,
+ dietmar.eggemann@arm.com, morten.rasmussen@arm.com, viresh.kumar@linaro.org,
+ rafael@kernel.org, cristian.marussi@arm.com, sudeep.holla@arm.com,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ quic_mdtipton@quicinc.com, linux-arm-msm@vger.kernel.org
+References: <20240227181632.659133-1-quic_sibis@quicinc.com>
+ <20240227181632.659133-3-quic_sibis@quicinc.com>
+ <f8bfc666-c216-44d5-a63b-99f04ff3b8ef@arm.com>
+ <2608b2d8-f3b0-b4f5-f8e4-1f2242043ded@quicinc.com>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <2608b2d8-f3b0-b4f5-f8e4-1f2242043ded@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <3399d2af-3d42-4ac1-9b74-8475bec25f7f@163.com>
 
-On Tue, Feb 27, 2024 at 03:51:25PM +0800, Yaxiong Tian wrote:
+
+
+On 2/28/24 17:00, Sibi Sankar wrote:
 > 
-> 在 2024/2/26 17:14, Mike Rapoport 写道:
-> > On Mon, Feb 26, 2024 at 09:37:06AM +0100, David Hildenbrand wrote:
-> > > On 26.02.24 04:42, Yaxiong Tian wrote:
-> > > > From: Yaxiong Tian <tianyaxiong@kylinos.cn>
-> > > > 
-> > > > On ARM64 machines using UEFI, if the linear map is not set (can_set_direct_map()
-> > > > return false), swsusp_save() will fail due to can't finding the map table
-> > > > under the nomap memory.such as:
-> > can_set_direct_map() has nothing to do with presence or absence of the
-> > linear map.
-> > 
-> > Do you mean that kernel_page_present() presumes that a page is present when
-> > can_set_direct_map() returns false even for NOMAP ranges?
-> Yes， in swsusp_save()->copy_data_pages()->page_is_saveable(),
-> kernel_page_present() presumes that a page is present when
-> can_set_direct_map()
-> returns false even for NOMAP ranges.So NOMAP pages will saved in after,and
-> then
-> cause level3 translation fault in this pages.
+> 
+> On 2/28/24 18:54, Lukasz Luba wrote:
+>>
+>>
+>> On 2/27/24 18:16, Sibi Sankar wrote:
+>>> Register for limit change notifications if supported and use the 
+>>> throttled
+>>> frequency from the notification to apply HW pressure.
+> 
+> Lukasz,
+> 
+> Thanks for taking time to review the series!
+> 
+>>>
+>>> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+>>> ---
+>>>
+>>> v3:
+>>> * Sanitize range_max received from the notifier. [Pierre]
+>>> * Update commit message.
+>>>
+>>>   drivers/cpufreq/scmi-cpufreq.c | 29 ++++++++++++++++++++++++++++-
+>>>   1 file changed, 28 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/cpufreq/scmi-cpufreq.c 
+>>> b/drivers/cpufreq/scmi-cpufreq.c
+>>> index 76a0ddbd9d24..78b87b72962d 100644
+>>> --- a/drivers/cpufreq/scmi-cpufreq.c
+>>> +++ b/drivers/cpufreq/scmi-cpufreq.c
+>>> @@ -25,9 +25,13 @@ struct scmi_data {
+>>>       int domain_id;
+>>>       int nr_opp;
+>>>       struct device *cpu_dev;
+>>> +    struct cpufreq_policy *policy;
+>>>       cpumask_var_t opp_shared_cpus;
+>>> +    struct notifier_block limit_notify_nb;
+>>>   };
+>>> +const struct scmi_handle *handle;
 
-So this should be the description of the problem in the changelog rather
-than saying "if the linear map is not set (can_set_direct_map() return
-false)"
+I've missed this bit here.
 
-> > > > QEMU ARM64 using UEFI also has the problem by setting can_set_direct_map()
-> > > > return false.
-> >
-> > Huh?
-> > Why would you do that?
-> >
-> I discovered this problem when upgrading from 5.4 to 6.6 using the 5.4
-> configuration.
-> So I using latest linux-next code,find the problem still exist.To rule out
-> the effects
-> of a particular machine，I also use qemu to check it.
+>>> +static struct scmi_device *scmi_dev;
+>>>   static struct scmi_protocol_handle *ph;
+>>>   static const struct scmi_perf_proto_ops *perf_ops;
+>>>   static struct cpufreq_driver scmi_cpufreq_driver;
+>>> @@ -151,6 +155,20 @@ static struct freq_attr *scmi_cpufreq_hw_attr[] = {
+>>>       NULL,
+>>>   };
+>>> +static int scmi_limit_notify_cb(struct notifier_block *nb, unsigned 
+>>> long event, void *data)
+>>> +{
+>>> +    struct scmi_data *priv = container_of(nb, struct scmi_data, 
+>>> limit_notify_nb);
+>>> +    struct scmi_perf_limits_report *limit_notify = data;
+>>> +    struct cpufreq_policy *policy = priv->policy;
+>>> +
+>>> +    policy->max = clamp(limit_notify->range_max_freq/HZ_PER_KHZ, 
+>>> policy->cpuinfo.min_freq,
+>>> +                policy->cpuinfo.max_freq);
+>>
+>> Please take the division operation out of this clamp() call, somewhere
+>> above. Currently it 'blurs' these stuff, while it's important convertion
+>> to khz. You can call it e.g.:
+>>
+>> limit_freq_khz = limit_notify->range_max_freq / HZ_PER_KHZ;
+>>
+>> then use in clamp(limit_freq_khz, ...)
+> 
+> ack
+> 
+>>
+>>> +
+>>> +    cpufreq_update_pressure(policy);
+>>> +
+>>> +    return NOTIFY_OK;
+>>> +}
+>>> +
+>>>   static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+>>>   {
+>>>       int ret, nr_opp, domain;
+>>> @@ -269,6 +287,15 @@ static int scmi_cpufreq_init(struct 
+>>> cpufreq_policy *policy)
+>>>           }
+>>>       }
+>>> +    priv->limit_notify_nb.notifier_call = scmi_limit_notify_cb;
+>>> +    ret = handle->notify_ops->devm_event_notifier_register(scmi_dev, 
+>>> SCMI_PROTOCOL_PERF,
+>>> +                            SCMI_EVENT_PERFORMANCE_LIMITS_CHANGED,
+>>> +                            &domain,
+>>> +                            &priv->limit_notify_nb);
+>>> +    if (ret)
+>>> +        dev_warn(cpu_dev,
+>>> +             "failed to register for limits change notifier for 
+>>> domain %d\n", domain);
+>>> +
+>>>       priv->policy = policy;
+>>>       return 0;
+>>> @@ -342,8 +369,8 @@ static int scmi_cpufreq_probe(struct scmi_device 
+>>> *sdev)
+>>>   {
+>>>       int ret;
+>>>       struct device *dev = &sdev->dev;
+>>> -    const struct scmi_handle *handle;
+>>
+>> It should be a compilation error...
+>>
+>>> +    scmi_dev = sdev;
+>>>       handle = sdev->handle;
+>>
+>> due to usage here, wasn't it?
+> 
+> Not really, isn't it getting the first initialization here?
+> Are there any compiler options that I need to turn on to
+> catch these?
 
-I believe this can be reproduced if you boot with rodata=off and then
-a better description would be something like
+Yes, you're right, my apologies for confusion.
+I couldn't apply the series due issues in two patch sets
+in your dependency list.
 
-	This issue can be reproduced in QEMU when booting with rodata=off
-
--- 
-Sincerely yours,
-Mike.
+Now when I have been manually applying the changes I spotted it.
 
