@@ -1,103 +1,143 @@
-Return-Path: <linux-pm+bounces-4572-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4573-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A19E086D2F3
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 20:17:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95CA886D304
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 20:24:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 587E01F245E5
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 19:17:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E51E0B22311
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 19:24:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80618134439;
-	Thu, 29 Feb 2024 19:17:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 246E8136994;
+	Thu, 29 Feb 2024 19:23:37 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13E167828A;
-	Thu, 29 Feb 2024 19:17:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 983FC2E3E1;
+	Thu, 29 Feb 2024 19:23:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709234244; cv=none; b=Ty+mzYyDDBXEbEEU4ed/mxWIcWOVRzxOtdWbGzQQy6HCmToxOJvwrlPXMObomqIrKA91D7MM6+Llb/gvULPlbHPK2l8mrrPSX/+EfzobCdGIqe8BOEU1D7VDRGQ2Nw6Xv4Pwkfjoc5FOlb7G+YAw2TCOgldN4E/qzI1eaLc4Sro=
+	t=1709234617; cv=none; b=i5kLBKAY5SX7cuhB3C2yXICaRj2n7Yk5aIU46m9aYKJh514eZ8CzOWtTx5smUrWwgRvaj39ACPGEthO++e93Vx/N8OUn0yTmFrASWGsjKQfOn0Ikfukl8V4D87BekvlaBg1H+YCAWU5JPEb9ihnVoXY96EUQgfLO0AJNCC7llv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709234244; c=relaxed/simple;
-	bh=FBZleihRz//Gl+B2DFY+Ko0MRtXnH634JYwkpERaJM8=;
+	s=arc-20240116; t=1709234617; c=relaxed/simple;
+	bh=NS5lvKFQMunOW+vtSdt7RNYSiDnH4Z9HphPa0V7EW9o=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fyhmU8ZuOYiVE64IvN3TLj71yO/iXYzBUndAUuLLm5uIHQLgDZQZ3lmlFSoriI6sf62Y6gt3i+5kYZKh6V1TKpzaRvOfA9OOsV7YOFajk7DmvpHmSZkIr+wpdaiPX6ZnlIlWrmZ/fas91t+heHkGkwF7CiN/8v7rpY0zwQ8wFmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.51
+	 To:Cc:Content-Type; b=Q6hNjgaxn3VeEByrP1mi+MZmYuHipRyBuGFJ5V/q0uU5aPhPEUCZK1tZ8+GXVur7VhYJXTu6lGJDIb5CI8ve25I0YiN5gycv5j0xETCc5aj7EPQWMDtvhSsIciLffldGANPp1SHxa159eVqZ2Pzbri35zvu/miklBbV6EiQeBrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-6e4857d93ebso319717a34.0;
-        Thu, 29 Feb 2024 11:17:22 -0800 (PST)
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6e45f7c63f4so174351a34.1;
+        Thu, 29 Feb 2024 11:23:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709234242; x=1709839042;
+        d=1e100.net; s=20230601; t=1709234614; x=1709839414;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Y4kpkILx+rl+5M6wPy0kCyBMrKJ22BL2YvhP99fGIT4=;
-        b=ffRJ+fLRnj8w41JPom5XetUZowX34+8pRD4pRDLuvRrGdnNk33IphLmqd5pttKVxSF
-         fLbkzAsMGC4b0oiFLF6LkNP90B4b6UNy7qykST+6CW9Y/OLOtyh1Wfv3Lc2ZkTBIBBMP
-         wc6/GOLRg28aZJa7hTaxbev+hNQA3oYxDo1os/vQlLRdZK9dKk4WANN8pzW8MzD+tP37
-         tzyQIGTS3jxw96bTrHus/9xT6wdjgJ1PzzIrzk0Wo5wcFxKWLMuhvi51J59ZwHPY39rg
-         ptCQqN5FVbIjDphlZDPEI2k6pOjwPhfJX5+sSyIpYOQzecYMDVN010HBUM65AgxEcAgF
-         YO2w==
-X-Forwarded-Encrypted: i=1; AJvYcCXsoaU0oZObLYUGRXB6jikOnl5bcSvw/6TCc+WNYDEJ19e5I/xEz6Hoq1zIz5NFuW6TOuGd0dBjja1oD8D3OjUX9+h2sgQvLQx3wj8KiQjuwFVUZJqS22Q/6ecxNWxPg8gaSh0vpEIdBIbXXfCYQmuIKnBugp2W2SALHfljoBeyOiw=
-X-Gm-Message-State: AOJu0YwcDFR+L83cDc4bQoOQyv2WwvDgQejnFKf6F2JmAW6fql4GQGjv
-	Yct4FsRw3oBfv7R93Lj8N2jrD/Zf7l6qFXm6k000i4p8gFpQyS+ciRhEVdK9bqGWzQvjxSjZkIA
-	oNjpeH/iPGmiA/thcPoYPzQKBQjc=
-X-Google-Smtp-Source: AGHT+IET15oeZ9A4Gl+g3bcOmsjvaP/3t9x/x3o3O+8cGgdoAH1s+bxhozrHbmv7trCPELLedqDj5+QwUra+XDo4tCQ=
-X-Received: by 2002:a4a:625e:0:b0:5a0:4d78:975d with SMTP id
- y30-20020a4a625e000000b005a04d78975dmr3185438oog.1.1709234242209; Thu, 29 Feb
- 2024 11:17:22 -0800 (PST)
+        bh=g6NaLatfJwhBBr41fUTowNr9UwPZsNeg9XIMkONoPug=;
+        b=pew2mhRbBhq7UfxYz7QBo4nMg+Mxv6W7kqOx57ER4Sj3Ff/MJFlj3NVGM6yTvWLei+
+         uBYb9QhiWh+atUwVlnDiKBeqLMd/CkrS3oH2SxUZCWl+XW139N/lPg24tiZQQedvljsz
+         ueVnA89PmzzDejMwXL0tPPZpyI3Dl3iQCM1WwZQ00hM/e2N5GuPNn68DsgS5QIbOaNyS
+         BzMp/npQ6IPdfnvKAYdTGzOkmq1hZ0q0fQdnznP9rGXc71j3Cqffav5JOyGK/oMxWfcj
+         IuoiIaL5nb0rllcJq0y7fubQ31Vxs61ZOKLsLYlK2LbCixPSB4H3AqR9DeTXDsJwCsSe
+         JNgg==
+X-Forwarded-Encrypted: i=1; AJvYcCWrPFhCUzC7jZSUCCVMyh48kHNG8K5zLl36Avb35mEAGsreVZI97ddxbc7Y0pZ7UytMQC8ncnt1ElWMqFIQQyzn6lnQVP2Mf0AxO6hS7vlbODeKkE1agCInVTsX41/EIdJr0vZHUYsGhzBDm4Mi0PgkJ6T8u3fVST+uXc+ZEGU=
+X-Gm-Message-State: AOJu0YwKdjkpDIiLaemgt8HQJ1H2CTdcF/nCS7g1ggJZhxnKFG05hj47
+	U7Il9cg7STFxTD32l1GxGlo7bkaChJIHWPUcyXR3556vn8kkuRc7RkS6LG6ydtsbv6BczI8fIpS
+	PrQPHSAuebO98SL1tm/E9CWzvL3Y=
+X-Google-Smtp-Source: AGHT+IFQvMsUReVhmZCvjt+VFT+sy7+vvELvnQ0LsSe8RZiBYiJkUTGj2VHnPsyJPeoQc6rs8cwJvOz6Ko0bpTGnYsQ=
+X-Received: by 2002:a4a:a543:0:b0:5a0:ec66:b56b with SMTP id
+ s3-20020a4aa543000000b005a0ec66b56bmr2200040oom.0.1709234614722; Thu, 29 Feb
+ 2024 11:23:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240225130057.42633-1-s921975628@gmail.com>
-In-Reply-To: <20240225130057.42633-1-s921975628@gmail.com>
+References: <20240227091351.1144757-1-quic_kshivnan@quicinc.com>
+In-Reply-To: <20240227091351.1144757-1-quic_kshivnan@quicinc.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 29 Feb 2024 20:17:11 +0100
-Message-ID: <CAJZ5v0hAcR1oWYJX2oADdyY14dxC_ohS5hOxuAx3D_1rCSesUg@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: PM: Fix runtime_pm.rst markdown syntax
-To: Yiwei Lin <s921975628@gmail.com>
-Cc: rafael@kernel.org, corbet@lwn.net, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Date: Thu, 29 Feb 2024 20:23:23 +0100
+Message-ID: <CAJZ5v0i_XYYxJpg9VFyFOj2VfEVeAknuLs=c6sRyVSj9qs+Hmw@mail.gmail.com>
+Subject: Re: [PATCH v2] cpufreq: Limit resolving a frequency to policy min/max
+To: Shivnandan Kumar <quic_kshivnan@quicinc.com>
+Cc: rafael@kernel.org, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Vincent Donnefort <vincent.donnefort@arm.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com, 
+	quic_namajain@quicinc.com, quic_rgottimu@quicinc.com, 
+	kernel <kernel@quicinc.com>, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Feb 25, 2024 at 4:46=E2=80=AFPM Yiwei Lin <s921975628@gmail.com> wr=
-ote:
+On Tue, Feb 27, 2024 at 10:15=E2=80=AFAM Shivnandan Kumar
+<quic_kshivnan@quicinc.com> wrote:
 >
-> The '7. Generic subsystem callbacks' should be
-> a section title, but the markdown syntax now is wrong to show
-> this as expected. Fix it so we can to link the chapter
-> at docs.kernel.org correctly.
+> Resolving a frequency to an efficient one should not transgress policy->m=
+ax
+> (which can be set for thermal reason) and policy->min. Currently there is
+> possibility where scaling_cur_freq can exceed scaling_max_freq when
+> scaling_max_freq is inefficient frequency. Add additional check to ensure
+> that resolving a frequency will respect policy->min/max.
 >
-> Signed-off-by: Yiwei Lin <s921975628@gmail.com>
+> Cc: <stable@vger.kernel.org>
+> Fixes: 1f39fa0dccff ("cpufreq: Introducing CPUFREQ_RELATION_E")
+> Signed-off-by: Shivnandan Kumar <quic_kshivnan@quicinc.com>
+> --
+>
+> Changes in v2:
+> -rename function name from cpufreq_table_index_is_in_limits to cpufreq_is=
+_in_limits
+> -remove redundant outer parenthesis in return statement
+> -Make comment single line
+>
+> --
 > ---
->  Documentation/power/runtime_pm.rst | 1 +
->  1 file changed, 1 insertion(+)
+>  include/linux/cpufreq.h | 16 +++++++++++++++-
+>  1 file changed, 15 insertions(+), 1 deletion(-)
 >
-> diff --git a/Documentation/power/runtime_pm.rst b/Documentation/power/run=
-time_pm.rst
-> index 65b86e487..82bc76d3d 100644
-> --- a/Documentation/power/runtime_pm.rst
-> +++ b/Documentation/power/runtime_pm.rst
-> @@ -730,6 +730,7 @@ out the following operations:
->      for it, respectively.
+> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> index afda5f24d3dd..7741244dee6e 100644
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -1021,6 +1021,19 @@ static inline int cpufreq_table_find_index_c(struc=
+t cpufreq_policy *policy,
+>                                                    efficiencies);
+>  }
 >
->  7. Generic subsystem callbacks
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
+> +static inline bool cpufreq_is_in_limits(struct cpufreq_policy *policy,
+> +                                                   int idx)
+> +{
+> +       unsigned int freq;
+> +
+> +       if (idx < 0)
+> +               return false;
+> +
+> +       freq =3D policy->freq_table[idx].frequency;
+> +
+> +       return freq =3D=3D clamp_val(freq, policy->min, policy->max);
+> +}
+> +
+>  static inline int cpufreq_frequency_table_target(struct cpufreq_policy *=
+policy,
+>                                                  unsigned int target_freq=
+,
+>                                                  unsigned int relation)
+> @@ -1054,7 +1067,8 @@ static inline int cpufreq_frequency_table_target(st=
+ruct cpufreq_policy *policy,
+>                 return 0;
+>         }
 >
->  Subsystems may wish to conserve code space by using the set of generic p=
-ower
->  management callbacks provided by the PM core, defined in
+> -       if (idx < 0 && efficiencies) {
+> +       /* Limit frequency index to honor policy->min/max */
+> +       if (!cpufreq_is_in_limits(policy, idx) && efficiencies) {
+>                 efficiencies =3D false;
+>                 goto retry;
+>         }
 > --
 
-Applied as 6.9 material (with changelog edits), thanks!
+Applied (with a whitespace adjustment and changelog edits) as 6.9
+material, thanks!
 
