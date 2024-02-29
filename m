@@ -1,230 +1,119 @@
-Return-Path: <linux-pm+bounces-4543-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4544-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70D7486C47F
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 10:08:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C075986C5D1
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 10:43:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94C191C20DE5
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 09:08:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C60228B7F4
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 09:43:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F11C57312;
-	Thu, 29 Feb 2024 09:08:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E3B961677;
+	Thu, 29 Feb 2024 09:43:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pgm6ujn4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cr0nGGfQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEF3A5730D
-	for <linux-pm@vger.kernel.org>; Thu, 29 Feb 2024 09:08:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21DBD612CE;
+	Thu, 29 Feb 2024 09:43:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709197694; cv=none; b=UPMwn8slRnBhJkELcWduz92B2AgjiGoRKRqGxjjRrSNQ86haKzGSNwaiqZYsj6Pg6614vQKQP9fIVufTsOeN0UO+DvM4X+7LBkaJHEtHnmV9lpg2iMU9rtkHDtv5H1NViGs8h0xyMp693qbmrna5RDLoWVpfW3mJ1Xe9iRSkpFo=
+	t=1709199791; cv=none; b=VeGg7lwFHJiF4Iof8GM/jgLwSD7kC36+a650IN5xiC7saoYgSy/yN87jlpyvonxcazVvxCWNox3T6m+qAGFjgqYF8VVhK7XKAo5MHVTBbNlaCekHWDvWFE0s3V6Ue8YgzMVX6jj/qCtiHEWlu1MDZ8/a3EyyOk/KrEtfTw4HAXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709197694; c=relaxed/simple;
-	bh=l46nLxdSX68XgH8CZU5Rl2axE2hrdul4SJ2CI/R14vI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=D1UD17jpin4bLR4Y7eXScwkzGH9X8eiRXmRz2ULPHm6943eWuHKbfQCenCrdeRQGea5NguYnwLI3vftmHAkaCPbw8slASfRTeSGxrbwqDBCC0EB3CTYhkmvQDJDkPKHpfyFOopgYySj+kWVP1LaGDI4Pjm3b3zHeKBXDDX1keyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pgm6ujn4; arc=none smtp.client-ip=209.85.160.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-428405a0205so233821cf.1
-        for <linux-pm@vger.kernel.org>; Thu, 29 Feb 2024 01:08:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709197692; x=1709802492; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k/bglfg8iaZ/rtcaw/aGcp7YxohzYTHpnKNEq43joN8=;
-        b=pgm6ujn4ETswDqt+7XSjqpBgxNu0OYqvXXJaDv543M9NAi9TeSIK5Z+E7aooZByXBA
-         kWhZkk/Gqb4wDwhWGNRqa/BuL/fzsQGA5tADdiNCyIhsI5yLHBmxgVnaqFwZ2o70TAok
-         VXz2Oz4AB8U4wwEPXsgO0YMwAXCarQC/liUJMWXASV+O/WtzPZTcM/VVARE0XbAOrEFv
-         H+U9EVfU3bcRZrw9+ZjHNLXUOgBmf7ZKnD53eUOERIwhnBWn3nxwhcmDBShcqsKP1zMr
-         0SFZZVlLSctezljcKldMyMr8Tb7YsYUK9epiY7wwVVSSjSJ3N3UqjxjdZutdG8EESrIq
-         ShUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709197692; x=1709802492;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=k/bglfg8iaZ/rtcaw/aGcp7YxohzYTHpnKNEq43joN8=;
-        b=j4c1lWqDi4mr7QSSZWnukj9QNXvvBClIBhcgAywcweqtKWLlI8w6/p3KhAtXRvePMW
-         35OcRD+yakVUWTrXj1ctVuT8hM8gNfwmQfhnd6oT9h8TVBi+jUcJDfSFkay7B0pm3g9b
-         FfwIkBJIIfRU+cT4sFauXXwOZ17vxnyU8gC0aDOCNhmCu7Nm1nUfcmuFQuRlzKGBjldV
-         vCjpYR+75Xn4LNEJCTmeNSZUG6IoRsUi8VA1qCXRrcb33oru/UJAMFLc0DyKO0qC5h3U
-         m8F+MbPoKLmZSuiZW2jD8QUQunGau9i1tCFFoNzEfZ+2CCeeiopyyf9hgkjdasHcshnd
-         QqyA==
-X-Forwarded-Encrypted: i=1; AJvYcCXO07VYuXfLfffq7i8Zz42oMs3cIS9DT8K/5I5BbWH71GtMBPuKweOuaQ6ex/OvuR1VQ26hGJZGq39Q/du73iVz846dXWJrBec=
-X-Gm-Message-State: AOJu0Yydlzcx1m9U8vp8XgcWp86sBpCYL1cBpJ47JBtvJS4u0jwi7sR8
-	uSWQA0+CscT9x2myPR2VJ6sNS7P/GH1XLhUmmba0hZ8QyBEuksggAMP5iJr6Z+LMadKiwvBIW7f
-	w5CDa2HZkUblM/PQYMH/OjdxhP6ynWRmO0fa2
-X-Google-Smtp-Source: AGHT+IEWAaS+o9scYAENznVavc+PcUbOTVQl9bOg949Fz0km2uV3Q+uIr4IOPmFLnlCxM9Z0t2tEDPhGwIkar5J/3bM=
-X-Received: by 2002:ac8:5fc4:0:b0:42e:b6c3:3e71 with SMTP id
- k4-20020ac85fc4000000b0042eb6c33e71mr179293qta.28.1709197691505; Thu, 29 Feb
- 2024 01:08:11 -0800 (PST)
+	s=arc-20240116; t=1709199791; c=relaxed/simple;
+	bh=aDbHWCEN87gifEkin69igfn4UnaUalbm7Xpzz7Tjuw4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GidAiNcg8fvKSQwsYP9mGe7GJmLDEqQpXvGC/E53ASWYTy2hYf0IRSCNlF+sbB5QeUl8wlgpyfMGkrfT4ENmaepHJN1nRWA/OyVZrjNeFpe/0nl/S6Pnb3wI/KXzBRbmWkcvpQX03s3z/VZbrz3LyvTGoE/R3XtRIlLdga3c6V4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cr0nGGfQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1605BC43390;
+	Thu, 29 Feb 2024 09:43:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709199790;
+	bh=aDbHWCEN87gifEkin69igfn4UnaUalbm7Xpzz7Tjuw4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cr0nGGfQcPJzRlpgBOWurWE1FlP0/lVOeyoJ0y+JMWFPkBi7Z8r358ncafvax+LcU
+	 Utr4eykovmyPVLbRrMd9NNaM5I2CsGLModtc7FUdwAqEqrde8pi5ztd3SWRrtB7q2n
+	 yFcYOJo7yRqY5TEgHSWuwo52+FQvMzf/Px27hOyrwc90xeLmHZ8loRRFRRfZFIgy8H
+	 6nplNOpn0Z+LhIHagrRGsVo3ANvtj8700A0dL9clQp1aeAWYxzr+8tRSUX5W6L9bWb
+	 vZzJ+9zg/s/2116gI22aOiKJiQCK8U4Z3pzPLfAI3O2e7nwXPGiAhbLXW8C5yO/cnj
+	 iqjhmV+h7jGzw==
+Date: Thu, 29 Feb 2024 11:42:23 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: Yaxiong Tian <13327272236@163.com>
+Cc: David Hildenbrand <david@redhat.com>, rafael@kernel.org, pavel@ucw.cz,
+	len.brown@intel.com, keescook@chromium.org, tony.luck@intel.com,
+	gpiccoli@igalia.com, akpm@linux-foundation.org, ardb@kernel.org,
+	wangkefeng.wang@huawei.com, catalin.marinas@arm.com,
+	will@kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+	Yaxiong Tian <tianyaxiong@kylinos.cn>,
+	xiongxin <xiongxin@kylinos.cn>
+Subject: Re: [PATCH] PM: hibernate: Fix level3 translation fault in
+ swsusp_save()
+Message-ID: <ZeBRfxQ8WTEVzpfL@kernel.org>
+References: <20240226034225.48689-1-13327272236@163.com>
+ <8d70939f-ca14-4167-9647-b8f44ddcbb98@redhat.com>
+ <ZdxWcG2XCqBum3_R@kernel.org>
+ <3399d2af-3d42-4ac1-9b74-8475bec25f7f@163.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240223143833.1509961-1-guanyulin@google.com>
- <a299118d-eeec-40b4-9a3d-48dc40f34e12@gmail.com> <CAOuDEK3wP6zhEwgUn5zSedtwTYVFaJeBfeXkSg897EhpGP9=ig@mail.gmail.com>
- <3208c5b9-5286-48d1-81ab-cc3b2bc4303e@gmail.com> <CAOuDEK39Bdru5wAbxW-g2c=POgRxZwdQzPO5uNXP96AfSyA6pw@mail.gmail.com>
- <7292dc5c-dff0-45f0-99b1-f1687451b23f@gmail.com>
-In-Reply-To: <7292dc5c-dff0-45f0-99b1-f1687451b23f@gmail.com>
-From: Guan-Yu Lin <guanyulin@google.com>
-Date: Thu, 29 Feb 2024 17:08:00 +0800
-Message-ID: <CAOuDEK2OtAO7GqPzWkdC=SARkuHYGzqW4iPdFfMx8dyw4Cy+Lg@mail.gmail.com>
-Subject: Re: [PATCH v3] PM / core: conditionally skip system pm in
- device/driver model
-To: Florian Fainelli <f.fainelli@gmail.com>
-Cc: rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com, 
-	gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com, 
-	rdunlap@infradead.org, james@equiv.tech, broonie@kernel.org, 
-	james.clark@arm.com, masahiroy@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3399d2af-3d42-4ac1-9b74-8475bec25f7f@163.com>
 
-On Wed, Feb 28, 2024 at 1:57=E2=80=AFAM Florian Fainelli <f.fainelli@gmail.=
-com> wrote:
->
-> On 2/27/24 00:56, Guan-Yu Lin wrote:
-> > On Tue, Feb 27, 2024 at 2:40=E2=80=AFAM Florian Fainelli <f.fainelli@gm=
-ail.com> wrote:
-> >>
-> >> On 2/26/24 02:28, Guan-Yu Lin wrote:
-> >>> On Sat, Feb 24, 2024 at 2:20=E2=80=AFAM Florian Fainelli <f.fainelli@=
-gmail.com> wrote:
-> >>>>
-> >>>> On 2/23/24 06:38, Guan-Yu Lin wrote:
-> >>>>> In systems with a main processor and a co-processor, asynchronous
-> >>>>> controller management can lead to conflicts.  One example is the ma=
-in
-> >>>>> processor attempting to suspend a device while the co-processor is
-> >>>>> actively using it. To address this, we introduce a new sysfs entry
-> >>>>> called "conditional_skip". This entry allows the system to selectiv=
-ely
-> >>>>> skip certain device power management state transitions. To use this
-> >>>>> feature, set the value in "conditional_skip" to indicate the type o=
-f
-> >>>>> state transition you want to avoid.  Please review /Documentation/A=
-BI/
-> >>>>> testing/sysfs-devices-power for more detailed information.
-> >>>>
-> >>>> This looks like a poor way of dealing with a lack of adequate resour=
-ce
-> >>>> tracking from Linux on behalf of the co-processor(s) and I really do=
- not
-> >>>> understand how someone is supposed to use that in a way that works.
-> >>>>
-> >>>> Cannot you use a HW maintained spinlock between your host processor =
-and
-> >>>> the co-processor such that they can each claim exclusive access to t=
-he
-> >>>> hardware and you can busy-wait until one or the other is done using =
-the
-> >>>> device? How is your partitioning between host processor owned blocks=
- and
-> >>>> co-processor(s) owned blocks? Is it static or is it dynamic?
-> >>>> --
-> >>>> Florian
-> >>>>
-> >>>
-> >>> This patch enables devices to selectively participate in system power
-> >>> transitions. This is crucial when multiple processors, managed by
-> >>> different operating system kernels, share the same controller. One
-> >>> processor shouldn't enforce the same power transition procedures on
-> >>> the controller =E2=80=93 another processor might be using it at that =
-moment.
-> >>> While a spinlock is necessary for synchronizing controller access, we
-> >>> still need to add the flexibility to dynamically customize power
-> >>> transition behavior for each device. And that's what this patch is
-> >>> trying to do.
-> >>> In our use case, the host processor and co-processor are managed by
-> >>> separate operating system kernels. This arrangement is static.
-> >>
-> >> OK, so now the question is whether the peripheral is entirely visible =
-to
-> >> Linux, or is it entirely owned by the co-processor, or is there a
-> >> combination of both and the usage of the said device driver is dynamic
-> >> between Linux and your co-processor?
-> >>
-> >> A sysfs entry does not seem like the appropriate way to described whic=
-h
-> >> states need to be skipped and which ones can remain under control of
-> >> Linux, you would have to use your firmware's description for that (ACP=
-I,
-> >> Device Tree, etc.) such that you have a more comprehensive solution th=
-at
-> >> can span a bigger scope.
-> >> --
-> >> Florian
-> >>
+On Tue, Feb 27, 2024 at 03:51:25PM +0800, Yaxiong Tian wrote:
+> 
+> 在 2024/2/26 17:14, Mike Rapoport 写道:
+> > On Mon, Feb 26, 2024 at 09:37:06AM +0100, David Hildenbrand wrote:
+> > > On 26.02.24 04:42, Yaxiong Tian wrote:
+> > > > From: Yaxiong Tian <tianyaxiong@kylinos.cn>
+> > > > 
+> > > > On ARM64 machines using UEFI, if the linear map is not set (can_set_direct_map()
+> > > > return false), swsusp_save() will fail due to can't finding the map table
+> > > > under the nomap memory.such as:
+> > can_set_direct_map() has nothing to do with presence or absence of the
+> > linear map.
+> > 
+> > Do you mean that kernel_page_present() presumes that a page is present when
+> > can_set_direct_map() returns false even for NOMAP ranges?
+> Yes， in swsusp_save()->copy_data_pages()->page_is_saveable(),
+> kernel_page_present() presumes that a page is present when
+> can_set_direct_map()
+> returns false even for NOMAP ranges.So NOMAP pages will saved in after,and
+> then
+> cause level3 translation fault in this pages.
+
+So this should be the description of the problem in the changelog rather
+than saying "if the linear map is not set (can_set_direct_map() return
+false)"
+
+> > > > QEMU ARM64 using UEFI also has the problem by setting can_set_direct_map()
+> > > > return false.
 > >
-> > We anticipate that control of the peripheral (e.g., controller) will
-> > be shared between operating system kernels. Each kernel will need its
-> > own driver for peripheral communication. To accommodate different
-> > tasks, the operating system managing the peripheral can change
-> > dynamically at runtime.
->
-> OK, that seems like this ought to be resolved at various layer other
-> than just user-space, starting possibly with an
-> overarching/reconciliation layer between the various operating systems?
->
-
-We achieve cooperation between operating system kernels by assigning
-interrupts to corresponding kernels, and only one kernel could write
-commands to the peripheral.
-
+> > Huh?
+> > Why would you do that?
 > >
-> > We dynamically select the operating system kernel controlling the
-> > target peripheral based on the task at hand, which looks more like a
-> > software behavior rather than hardware behavior to me. I agree that we
-> > might need a firmware description for "whether another operating
-> > system exists for this peripheral", but we also need to store the
-> > information about "whether another operating system is actively using
-> > this peripheral". To me, the latter one looks more like a sysfs entry
-> > rather than a firmware description as it's not determined statically.
->
-> I can understand why moving this sort of decisions to user-space might
-> sound appealing, but it also seems like if the peripheral is going to be
-> "stolen" away from Linux, then maybe Linux should not be managing it at
-> all, e.g.: unbind the device from its driver, and then rebind it when
-> Linux needs to use it. You would have to write your drivers such that
-> they can skip the peripheral's initialization if you need to preserve
-> state from the previous agent after an ownership change for instance?
->
-> I do not think you are painting a full picture of your use case,
-> hopefully not intentionally but at first glance it sounds like you need
-> a combination of kernel-level changes to your drivers, and possibly more.
->
-> Seems like more details need to be provided about the overall intended
-> use cases such that people can guide you with a fuller picture of the
-> use cases.
-> --
-> Florian
->
+> I discovered this problem when upgrading from 5.4 to 6.6 using the 5.4
+> configuration.
+> So I using latest linux-next code,find the problem still exist.To rule out
+> the effects
+> of a particular machine，I also use qemu to check it.
 
-Let me introduce the scenario of our real-world use case. The
-peripheral (controller) can issue multiple interrupts, which are
-handled respectively by two operating system kernels (Linux and a
-non-Linux). In addition, only one kernel can issue commands to the
-peripheral. Although we have successfully distributed control of this
-peripheral between the kernels, Linux's system power management still
-applies power transition rules to the entire peripheral without
-awareness of the other kernel's activity. In other words, the Linux
-kernel has partial responsibility for the peripheral's functionality,
-but its power management decisions affect the entire peripheral. This
-can potentially interfere with the non-Linux kernel's operations.
+I believe this can be reproduced if you boot with rodata=off and then
+a better description would be something like
 
-We want to introduce a mechanism that allows the Linux kernel to make
-power transitions for the peripheral based on whether the other
-operating system kernel is actively using it. To achieve this, we
-propose this patch that adds a sysfs attribute, providing the Linux
-kernel with the necessary information.
+	This issue can be reproduced in QEMU when booting with rodata=off
+
+-- 
+Sincerely yours,
+Mike.
 
