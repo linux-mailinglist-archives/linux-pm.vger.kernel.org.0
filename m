@@ -1,40 +1,75 @@
-Return-Path: <linux-pm+bounces-4554-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4555-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7CA986CB29
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 15:15:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21A3C86CBD9
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 15:45:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E234B23142
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 14:15:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A4B841F24968
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 14:45:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09251133987;
-	Thu, 29 Feb 2024 14:15:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83C6613774B;
+	Thu, 29 Feb 2024 14:45:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BleKG34n"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E111D12FB0B;
-	Thu, 29 Feb 2024 14:15:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3AF682860
+	for <linux-pm@vger.kernel.org>; Thu, 29 Feb 2024 14:45:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709216105; cv=none; b=aLJ0vpDLSAXOQNZ3jJJbE8595OKPuENxN+D/XPDw+UsWU/KJNJDsLwEEGLVTWJUqja8WDVdqtBWZIr97OoHH0HKi4dSyfwZNYpb6KHubklYEjdQkdF4QNaJvDi8euEf4vBssaZ9Nhr/q3g5OIEiSNDaBD6DPCTaGtJ0U2tzj4Gc=
+	t=1709217943; cv=none; b=LrVhA/yeP684KBWM48Mni11bCI2r1GG/wNNHkEpaghnZDfysBrM9N0AHOi0CAD8jwdzVNssIUCk5jQHC8z44wB010sV7h6cIAoNfCOLEHQ/FWL/qdUiiA1VVf1DLnDOeEeM4a1X5tpqe/zpsC4ATd0m1nEEY4Wq0jD69bfk+/cY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709216105; c=relaxed/simple;
-	bh=SOJeGxTl0P3bQbsHku67aZnJjprqw3J887nhw1Gl0x4=;
+	s=arc-20240116; t=1709217943; c=relaxed/simple;
+	bh=6VnpAmaoDcPutVN/PqtfE7fdytNiJklJLvizwuJAaIM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C/s+QDiZwoAEBTL4gefs/k+7twNLLbL/yIS8ZwHl0N1u3+UlPugTo73zJkQ1Q2zYKitHEue8mOY89tKoFiJXmyZEHU+qrFX2/2FJo1M0+xL4E+woCaEWe+BfoCanS+DcQQta9fbQB4tldNwLZVgXeXBVdQIzTZC0P4+8m0GkJWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F36AA1FB;
-	Thu, 29 Feb 2024 06:15:41 -0800 (PST)
-Received: from [10.57.13.21] (unknown [10.57.13.21])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CF16A3F6C4;
-	Thu, 29 Feb 2024 06:15:00 -0800 (PST)
-Message-ID: <66ca73cc-8bdd-453a-951c-5e0166340edd@arm.com>
-Date: Thu, 29 Feb 2024 14:15:17 +0000
+	 In-Reply-To:Content-Type; b=PFghfuoE3vyY9S82d6CzoRwAewr9692Kj5aLDJ6QyiuF7mlElv4HsqK8VSHCqqKAch5fJcYBE5zk+A7QrY0Vk0SRN74RtDAP6YYC4IsOjL1X5SLCZmYzfXvKygPhUPKL2qBQydPjZWPBR/Thk4AtXdi1WIYTCIkwSmWEwdgA9XI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BleKG34n; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a3f3d0d2787so155151366b.3
+        for <linux-pm@vger.kernel.org>; Thu, 29 Feb 2024 06:45:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1709217940; x=1709822740; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=WW8oQB8lo//9ugJGin5no1j/t9PUWgCBKHxevE7i6FI=;
+        b=BleKG34nVxFpULpt5YFXjbjUy0yos1W3upRJHFz/DMPzXIiR0Y3m1BvnzURA+Ka/Jg
+         tEvA7n/w34OuGl8YckRBG3Cl73Z1/XBt1R7pZNkJ1mObWgP59hSLzrdCH0I17DJQj3r3
+         r41WlYFECH6ZtHQmy3LMDRBYgDucmuPxyzAmlHsCqwSD6yWf6rKjNnPlQYee8rU9LdXG
+         VuCCa5S+dYdR1gSaOvX1MD2rr+0cmhOkcfhpqb27JoEzCEgAnRMbrCpPi+p4CH9Tv0Zn
+         i4j3NiDD8/QJr2N6xN7mS1FWVYzZKwu30X58M4KMO5/9Nu9weMdorZPaDSM4pg8Zt1xy
+         9qdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709217940; x=1709822740;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WW8oQB8lo//9ugJGin5no1j/t9PUWgCBKHxevE7i6FI=;
+        b=kK3v0Zsp7VWeQ2qd684W7GFcIzeOXPrHN1DNRlfEixFeCP1vAMQe58YcNemaYBRz04
+         83zUUqb0x2iM2WKyt1CKaUwWF2ihREcj3IQPZYWFH05mgfYe6HtWnFdRZpyHRcRcoUee
+         KAY2JU5Q9RmoID738//h/ddFv1nYRx3ZUhD5YvVnFzJHEs9fmSfkCtMlCTnjUltyNMs0
+         UPThjbQYBpf70dpUGPhr7uwJWfpJHDAq14YisLWAe2inuKgNMtNkQAvGQ1uLHHMMPibG
+         xm8b+BnF4YU87pgLhGDQaq2p5au0H5ofZti/Ob1J/E1NH4dkfpiGOyCEV5P4b/ytftH2
+         HO/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWQL0PqHRjm2exhtKDX8Grn80km1m7Os4rC/WyhwJftXe1Fr3SrHAqdyMr3paMVKHy80tl1KYgMiEYqYNLlfQYYbDvQWN2f6tM=
+X-Gm-Message-State: AOJu0YzIrfGVuCyaFXrp6JBvRgGOIrNPbpLQvZLCwQSTdn6imFTTjTU1
+	iohuK3GWtQnDKWH3xcRYyIsexZVy3ffTuOuMPjI9tr8o2/FOOF2Gy5jroKSmqQA=
+X-Google-Smtp-Source: AGHT+IEAAZnxGbif1QLnoBACxGfPh5C+ZdfvCCXjgTGrXlcr7kwnoYYUYSBnHg2BYM0OWhw+1dOcNA==
+X-Received: by 2002:a17:906:40d6:b0:a43:396b:c7b1 with SMTP id a22-20020a17090640d600b00a43396bc7b1mr1693660ejk.6.1709217940188;
+        Thu, 29 Feb 2024 06:45:40 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.222.97])
+        by smtp.gmail.com with ESMTPSA id l20-20020a170906079400b00a3d83cff358sm748102ejc.70.2024.02.29.06.45.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Feb 2024 06:45:39 -0800 (PST)
+Message-ID: <8199abdc-0b9b-4f73-8c80-6eecdc57f09a@linaro.org>
+Date: Thu, 29 Feb 2024 15:45:38 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,189 +77,78 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V3 2/2] cpufreq: scmi: Register for limit change
- notifications
+Subject: Re: [PATCH 1/3] dt-bindings: arm: qcom,ids: Add SoC ID for IPQ5321
+To: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Ilia Lin <ilia.lin@kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20240228-ipq5321-sku-support-v1-0-14e4d4715f4b@quicinc.com>
+ <20240228-ipq5321-sku-support-v1-1-14e4d4715f4b@quicinc.com>
 Content-Language: en-US
-To: Cristian Marussi <cristian.marussi@arm.com>,
- Sibi Sankar <quic_sibis@quicinc.com>
-Cc: sudeep.holla@arm.com, linux-arm-kernel@lists.infradead.org,
- pierre.gondois@arm.com, dietmar.eggemann@arm.com, morten.rasmussen@arm.com,
- viresh.kumar@linaro.org, rafael@kernel.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, quic_mdtipton@quicinc.com,
- linux-arm-msm@vger.kernel.org
-References: <20240227181632.659133-1-quic_sibis@quicinc.com>
- <20240227181632.659133-3-quic_sibis@quicinc.com>
- <f8bfc666-c216-44d5-a63b-99f04ff3b8ef@arm.com>
- <2608b2d8-f3b0-b4f5-f8e4-1f2242043ded@quicinc.com>
- <64c6a1bc-92f2-4f44-ab10-cbd2473746f3@arm.com>
- <18c249b2-ce8c-435b-8d65-a1770a1f294e@arm.com> <ZeBqW04f8V4dHphn@pluto>
- <7c82b316-89d9-470d-b46d-f86e81e2add3@arm.com> <ZeB0iCr9GpfUiOEg@pluto>
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <ZeB0iCr9GpfUiOEg@pluto>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240228-ipq5321-sku-support-v1-1-14e4d4715f4b@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-
-
-On 2/29/24 12:11, Cristian Marussi wrote:
-> On Thu, Feb 29, 2024 at 11:45:41AM +0000, Lukasz Luba wrote:
->>
->>
->> On 2/29/24 11:28, Cristian Marussi wrote:
->>> On Thu, Feb 29, 2024 at 10:22:39AM +0000, Lukasz Luba wrote:
->>>>
->>>>
->>>> On 2/29/24 09:59, Lukasz Luba wrote:
->>>>>
->>>>>
->>>>> On 2/28/24 17:00, Sibi Sankar wrote:
->>>>>>
->>>>>>
->>>>>> On 2/28/24 18:54, Lukasz Luba wrote:
->>>>>>>
->>>>>>>
->>>>>>> On 2/27/24 18:16, Sibi Sankar wrote:
->>>>>>>> Register for limit change notifications if supported and use
->>>>>>>> the throttled
->>>>>>>> frequency from the notification to apply HW pressure.
->>>>>>
->>>>>> Lukasz,
->>>>>>
->>>>>> Thanks for taking time to review the series!
->>>>>>
->>>>>>>>
->>>>>>>> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
->>>>>>>> ---
->>>>>>>>
->>>>>>>> v3:
->>>>>>>> * Sanitize range_max received from the notifier. [Pierre]
->>>>>>>> * Update commit message.
->>>>>>>>
->>>>>>>> ï¿½ drivers/cpufreq/scmi-cpufreq.c | 29 ++++++++++++++++++++++++++++-
->>>>>>>> ï¿½ 1 file changed, 28 insertions(+), 1 deletion(-)
->>>>>>>>
->>>>>>>> diff --git a/drivers/cpufreq/scmi-cpufreq.c
->>>>>>>> b/drivers/cpufreq/scmi-cpufreq.c
->>>>>>>> index 76a0ddbd9d24..78b87b72962d 100644
->>>>>>>> --- a/drivers/cpufreq/scmi-cpufreq.c
->>>>>>>> +++ b/drivers/cpufreq/scmi-cpufreq.c
->>>>>>>> @@ -25,9 +25,13 @@ struct scmi_data {
->>>>>>>> ï¿½ï¿½ï¿½ï¿½ï¿½ int domain_id;
->>>>>>>> ï¿½ï¿½ï¿½ï¿½ï¿½ int nr_opp;
->>>>>>>> ï¿½ï¿½ï¿½ï¿½ï¿½ struct device *cpu_dev;
->>>>>>>> +ï¿½ï¿½ï¿½ struct cpufreq_policy *policy;
->>>>>>>> ï¿½ï¿½ï¿½ï¿½ï¿½ cpumask_var_t opp_shared_cpus;
->>>>>>>> +ï¿½ï¿½ï¿½ struct notifier_block limit_notify_nb;
->>>>>>>> ï¿½ };
->>>>>>>> +const struct scmi_handle *handle;
->>>>>
->>>>> I've missed this bit here.
->>>>
->>>> So for this change we actually have to ask Cristian or Sudeep
->>>> because I'm not sure if we have only one 'handle' instance
->>>> for all cpufreq devices.
->>>>
->>>> If we have different 'handle' we cannot move it to the
->>>> global single pointer.
->>>>
->>>> Sudeep, Cristian what do you think?
->>>
->>> I was just replying noticing this :D .... since SCMI drivers can be
->>> probed multiple times IF you defined multiple scmi top nodes in your DT
->>> containing the same protocol nodes, they receive a distinct sdev/handle/ph
->>> for each probe...so any attempt to globalize these wont work...BUT...
->>>
->>> ...this is a bit of a weird setup BUT it is not against the spec and it can
->>> be used to parallelize more the SCMI accesses to disjont set of resources
->>> within the same protocol (a long story here...) AND this type of setup is
->>> something that it is already used by some other colleagues of Sibi working
->>> on a different line of products (AFAIK)...
->>>
->>> So, for these reasons, usually, all the other SCMI drivers have per-instance
->>> non-global references to handle/sdev/ph....
->>>
->>> ...having said that, thought, looking at the structure of CPUFReq
->>> drivers, I am not sure that they can stand such a similar setup
->>> where multiple instances of this same driver are probed
->>>
->>> .... indeed the existent *ph refs above is already global....so it wont already
->>> work anyway in case of multiple instances now...
->>>
->>> ...and if I look at how CPUFreq expects the signature of scmi_cpufreq_get_rate()
->>> to be annd how it is implemented now using the global *ph reference, it is
->>> clearly already not working cleanly on a multi-instance setup...
->>>
->>> ...now...I can imagine how to (maybe) fix the above removing the globals and
->>> fixing this, BUT the question, more generally, is CPUFreq supposed to work at all in
->>> this multi-probed mode of operation ?
->>> Does it even make sense to be able to support this in CPUFREQ ?
->>>
->>> (as an example in cpufreq,c there is static global cpufreq_driver
->>>    pointing to the arch-specific configured driver BUT that also holds
->>>    some .driver_data AND that cleraly wont be instance specific if you
->>>    probe multiple times and register with CPUFreq multiple times...)
->>>
->>>    More questions than answers here :D
->>>
->>
->> Thanks Cristian for instant response. Yes, indeed now we have more
->> questions :) (which is good). But that's good description of the
->> situation.
->>
->> So lets consider a few option what we could do now:
->> 1. Let Sibi add another global state the 'handle' but add
->>     a BUG_ON() or WARN_ON() in the probe path if the next
->>     'handle' instance is different than already set in global.
->>     This would simply mean that we don't support (yet)
->>     such configuration in a platform. As you said, we
->>     already have the *ph global, so maybe such platforms
->>     with multiple instances for this particular cpufreq and
->>     performance protocol don't exist yet.
+On 28/02/2024 15:51, Kathiravan Thirumoorthy wrote:
+> Add the ID for the Qualcomm IPQ5321 SoC.
 > 
-> Yes this is the quickst way (and a WARN_ON() is better I'd say) but there
-> are similar issues of "unicity" currently already with another vendor SCMI
-> drivers and custom protocol currently under review, so I was thinking to
-> add a new common mechanism in SCMI to handle this ... not thought about
-> this really in depth and I want to chat with Sudeep about this...
-> 
->> 2. Ask Sibi to wait with this change, till we refactor the
->>     exiting driver such that it could support easily those
->>     multiple instances. Then pick up this patch set.
->>     Although, we would also like to have those notifications from our
->>     Juno SCP reference FW, so the feature is useful.
->> 3. Ask Sibi to refactor his patch to somehow get the 'handle'
->>     in different way, using exiting code and not introduce this global.
->>
-> 
->> IHMO we could do this in steps: 1. and then 2. When
->> we create some mock platform to test this refactoring we can
->> start cleaning it.
->>
-> 
-> Both of these options really beg an answer to my original previous q
-> question...if we somehow enable this multi-probe support in the
-> scmi-cpufreq.c driver by avoiding glbals refs, does this work at all in
-> the context of CPUFreq ?
+> Signed-off-by: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+> ---
+>  include/dt-bindings/arm/qcom,ids.h | 1 +
 
-I don't know yet.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> 
-> ...or it is just that CPUFreq cannot handle such a configuration (and
-> maybe dont want to) and so the only solution here is just 1. at first and
-> then a common refined mechanism (as mentioned above) to ensure this "unicity"
-> of the probes for some drivers ?
+Best regards,
+Krzysztof
 
-This sounds reasonable.
-
-> 
-> I'm not familiar enough to grasp if this "multi-probed" mode of operation is
-> allowed/supported by CPUFreq and, more important, if it makes any sense
-> at all to be a supported mode...
-> 
-
-OK, let me check some stuff in the code and think for a while on that.
-Thanks Cristian!
-
-Sibi, please give me a few days. In the meantime you can continue
-on the 'boost' patch set probably.
 
