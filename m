@@ -1,128 +1,152 @@
-Return-Path: <linux-pm+bounces-4534-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4535-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4175486C0EA
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 07:41:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 077A286C133
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 07:46:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A9C3281EFD
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 06:41:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B53A72838CF
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Feb 2024 06:46:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F18A54439F;
-	Thu, 29 Feb 2024 06:39:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FBE245C04;
+	Thu, 29 Feb 2024 06:45:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WGqpO2vF"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="elo/ByeJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F594437C
-	for <linux-pm@vger.kernel.org>; Thu, 29 Feb 2024 06:39:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B94C3446B3;
+	Thu, 29 Feb 2024 06:45:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709188763; cv=none; b=arGFU85qK8ZoAUC0Id//jAhcN5hCuSZaX0t0w53BJ8cn2ph2n0YBpnT1J8CvFlGt2FiO7B+gDr0GZ4je0BeG9nbNDRhadkit1XNEdYfTr3lywgwpTy5wJdawAUfE78x5ri7aBCxxYdRmE3ZQ546tZyT9da4c0H8oKAd7GFA3k14=
+	t=1709189125; cv=none; b=c1yWNiV7OAAlUl6vlTqTN/22ie0wVdr2zQFEA9YCIikcIxMcT+HRQ/Q937WwBpr/sLhnrBem5WbE39sPnrVzeuVT2vDFgkbUT3/drRNrO8me4JE7rOBi5aGnmX38aferWIFgJXKYMhIXDiT1d+wWm529IaKSjBjNuDlan0hoJTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709188763; c=relaxed/simple;
-	bh=OM/s904yc29HtImh1rNRjz12mWecBv07XSIaCWcYSEE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BiaC/KM6AQ882pACBpDQC7iaWE/vg+/TweKzX+BjLHUJfW2mvaALDye1ct6iwDpjtLluQj/KZ5Pk3Xf2b7o8LBOaOzlHI1+/tUf8FoN1qpgNARIPKjBYah4L379CSUh44zQnIfYJaBHoCihBBbyaHtDG/bBHoqBjnixHBrltpW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WGqpO2vF; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2d269b2ff48so5562611fa.3
-        for <linux-pm@vger.kernel.org>; Wed, 28 Feb 2024 22:39:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709188760; x=1709793560; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jHMm4UdW0d89mI3h3z5wKSWAYwxrpZ0h0BhS5GnBb/I=;
-        b=WGqpO2vF6Ojd0DcvZg9JzCrGRzwXMrFJaP/2U3JYVQJr90q652b2bDbShp+HKMz/bm
-         7NZR2DDl4mF4Zk1HMseHGkhHrETnmzndR0meKj8p9I7Yzzx6fuY2lEPHP5xrcJTXs0Of
-         efn2gWE70RHQgBcvR/w8jqGenbttFRgcQJDOeTZDVsWXaPX9y8mkk13bBSXSLcnrMxoy
-         23vFaJzkbrRS+n0Pp3/xC4Zc/buy0D61hnjZM4HD++gFncgxJ/RQ1LIIw4mcJx4SOVFh
-         YAohkhqRyw7SX6w40SohkUQrNmQm6NjCe++PxI4VQSMZ7RkaRo50ipZTgL258qrM23Vt
-         rNTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709188760; x=1709793560;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jHMm4UdW0d89mI3h3z5wKSWAYwxrpZ0h0BhS5GnBb/I=;
-        b=WAHwVdHHWH6CGW7wmMf9fTf+3U1MMKLW4KCr8QxNjnloG5ODA+u/mBjQVsC97LTL1L
-         0YQdtaVPfDAvISeyCz4Bg0L1tbq+i8TvjM8ecAMDzAei+oiycrL3FEOscxbCQT1ajI9I
-         c3/mC/GLsd8hUx+QM1JiwlwT3Dbq4P/4nBZjLMLQg+mLndLsYN+7zxrGrbuI7gmz//BK
-         Wg3saLCivTnZ+TUGiJy53X5ncxSca7pKbzovWt3Krzjudx5XtMSV/54kojJUqOj77p64
-         yDUVFV04E20zJ1pFDRHVX9RxHa0YjzPHItMBMDNGWmYU8goaSEROJzEtdYR8URH7lDnH
-         UDag==
-X-Forwarded-Encrypted: i=1; AJvYcCVhaTZxaPaZrV3IIUc9TpEFvOCzyKVBebezvUkeVws361bgZRTBHWmaUMPM7LQhswH1641r8HzvP9aDXKsFPaEmXaks6fY90ys=
-X-Gm-Message-State: AOJu0Yzt5Jli8m0v5LpW5ysIDFYABgly3DzzMrHDFu5gK0ZK/U1uj89N
-	BVjlfuJAZs5jmJvW4s69Wwb4WDIzEtluw8fQK1mCZeHIHiYdMYKL
-X-Google-Smtp-Source: AGHT+IHIU5I7mObYF53Xb25ZokNRk93jDajC5ODl+dttj+yKI7Eug9elGGWiStKFu7xas0tsV/mlfw==
-X-Received: by 2002:a2e:91cd:0:b0:2d2:2fe9:2896 with SMTP id u13-20020a2e91cd000000b002d22fe92896mr609041ljg.42.1709188759907;
-        Wed, 28 Feb 2024 22:39:19 -0800 (PST)
-Received: from tpt440p.steeds.sam ([69.63.64.50])
-        by smtp.gmail.com with ESMTPSA id x2-20020a2e8382000000b002d0b6eafa8csm110740ljg.39.2024.02.28.22.39.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Feb 2024 22:39:19 -0800 (PST)
-From: "Sicelo A. Mhlongo" <absicsz@gmail.com>
-To: Sebastian Reichel <sebastian.reichel@collabora.com>,
-	linux-pm@vger.kernel.org
-Cc: maemo-leste@lists.dyne.org,
-	pali@kernel.org,
-	"Sicelo A. Mhlongo" <absicsz@gmail.com>
-Subject: [PATCH v3] power: supply: bq2415x_charger: report online status
-Date: Thu, 29 Feb 2024 08:37:21 +0200
-Message-ID: <20240229063721.2592069-2-absicsz@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1709189125; c=relaxed/simple;
+	bh=0buapzlXS8Ejb7a/3Ux3/lyjLsR/FLcFCfrhtlks/tU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=sxEvfG2Vqmy0BhEfbZ0oH5jvT3MXYxr2MMwaNqM8LsGPaJYfjanAWCDNiKzLUEm9QjbT8bfXX3oJEXa7MS4dIcXryGQzLmkOy2xi3IV8QN2Phf0MlRj1ysZtlTKWWA8ial/3mDfwWAgO0HIHinJMpk04FO0Rw3w0S8dlz1omGr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=elo/ByeJ; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41T62Plr015559;
+	Thu, 29 Feb 2024 06:45:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:date:subject:mime-version:content-type
+	:content-transfer-encoding:message-id:to:cc; s=qcppdkim1; bh=emc
+	n0d2LH07w89hcfQ+HA5r9ZWQUNqouPMcNxEHPBB8=; b=elo/ByeJupaMlKELTh4
+	t6f2i8E30mKBpVoKUEZA62qXVvPl0LVp9KUZ+1Q09r96h+DBGje3+318b1npk0Mt
+	xcLBrmKMAiza6d6A5azgh7SlQxE6A1uZhzyt2HuafSHcyUXN/c0bV2cBA1LrGSJS
+	Fbwe7OpIjBXWwopk57Buy47FjsUM/PLCJfsmV8CdXYgSYgs7ZnYwjvBbDCed00z4
+	o3umJ7JVqw8hwPX7cbyiEnT4+GWP+baZJr6rRUGZ9u9l4lHX+Gmd5hKmhK9IUmKq
+	OCNFyw4PktM0WC99rFD6Z4QJ3jZ7LAHotuJmqyP+MR1Pmpsg5e2PZIO5ktTVMrgm
+	O5g==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wjm9mg2xx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 29 Feb 2024 06:45:08 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41T6j6gU005435
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 29 Feb 2024 06:45:06 GMT
+Received: from hu-mkshah-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Wed, 28 Feb 2024 22:45:02 -0800
+From: Maulik Shah <quic_mkshah@quicinc.com>
+Date: Thu, 29 Feb 2024 12:14:59 +0530
+Subject: [PATCH v2] PM: suspend: Set mem_sleep_current during kernel
+ command line setup
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20240229-suspend_ops_late_init-v2-1-34852c61a5fa@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIAOon4GUC/4WNQQ6CMBBFr0JmbU1bRIIr72EIKWUqk2iLHSAa0
+ rtbuYDL95L//gaMkZDhUmwQcSWm4DPoQwF2NP6OgobMoKU+Sa0awQtP6IcuTNw9zIwdeZqFrl0
+ ve1X1BhHydoro6L13b23mkXgO8bPfrOpn/xVXJZQ4l6W0pqma2pnrayFL3h5teEKbUvoCbD7iE
+ LwAAAA=
+To: Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi
+	<lpieralisi@kernel.org>, <andersson@kernel.org>,
+        <ulf.hansson@linaro.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Sudeep Holla <Sudeep.Holla@arm.com>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <quic_lsrao@quicinc.com>, <stable@vger.kernel.org>,
+        Maulik Shah
+	<quic_mkshah@quicinc.com>
+X-Mailer: b4 0.12.5-dev-2aabd
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1709189102; l=1510;
+ i=quic_mkshah@quicinc.com; s=20240109; h=from:subject:message-id;
+ bh=0buapzlXS8Ejb7a/3Ux3/lyjLsR/FLcFCfrhtlks/tU=;
+ b=WWcHkAudwd4SllibZe3KiNF+5OlTg+CorqCafl88Xb10qD5gu73SIPuDLX/G7i4dzhCejW1rl
+ gCqKo4QakZGBYg1eDJbm4ci+XfsDEWoMYGzmqnH4tOGkOl5+5fgAtex
+X-Developer-Key: i=quic_mkshah@quicinc.com; a=ed25519;
+ pk=bd9h5FIIliUddIk8p3BlQWBlzKEQ/YW5V+fe759hTWQ=
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: MCNXFFn5pYu6e0fJ6Ok17OiI1CT3bNnd
+X-Proofpoint-ORIG-GUID: MCNXFFn5pYu6e0fJ6Ok17OiI1CT3bNnd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-28_08,2024-02-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
+ lowpriorityscore=0 impostorscore=0 malwarescore=0 clxscore=1011
+ adultscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=999 suspectscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2402120000 definitions=main-2402290051
 
-Provide the Online property. This chip does not have specific flags to
-indicate the presence of an input voltage, but this is implied by all valid
-charging states. Fault states also only occur when VBUS is present, so set
-Online true for those as well.
+psci_init_system_suspend() invokes suspend_set_ops() very early during
+bootup even before kernel command line for mem_sleep_default is setup.
+This leads to kernel command line mem_sleep_default=s2idle not working
+as mem_sleep_current gets changed to deep via suspend_set_ops() and never
+changes back to s2idle.
 
-Signed-off-by: Sicelo A. Mhlongo <absicsz@gmail.com>
+Set mem_sleep_current along with mem_sleep_default during kernel command
+line setup as default suspend mode.
+
+Fixes: faf7ec4a92c0 ("drivers: firmware: psci: add system suspend support")
+CC: stable@vger.kernel.org # 5.4+
+Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
 ---
- drivers/power/supply/bq2415x_charger.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Changes in v2:
+- Set mem_sleep_current during mem_sleep_default kernel command line setup
+- Update commit message accordingly
+- Retain Fixes: tag
+- Link to v1: https://lore.kernel.org/r/20240219-suspend_ops_late_init-v1-1-6330ca9597fa@quicinc.com
+---
+ kernel/power/suspend.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/power/supply/bq2415x_charger.c b/drivers/power/supply/bq2415x_charger.c
-index 6a4798a62588..7b93ba20348a 100644
---- a/drivers/power/supply/bq2415x_charger.c
-+++ b/drivers/power/supply/bq2415x_charger.c
-@@ -991,6 +991,7 @@ static enum power_supply_property bq2415x_power_supply_props[] = {
- 	/* TODO: maybe add more power supply properties */
- 	POWER_SUPPLY_PROP_STATUS,
- 	POWER_SUPPLY_PROP_MODEL_NAME,
-+	POWER_SUPPLY_PROP_ONLINE,
- };
+diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+index 742eb26618cc..e3ae93bbcb9b 100644
+--- a/kernel/power/suspend.c
++++ b/kernel/power/suspend.c
+@@ -192,6 +192,7 @@ static int __init mem_sleep_default_setup(char *str)
+ 		if (mem_sleep_labels[state] &&
+ 		    !strcmp(str, mem_sleep_labels[state])) {
+ 			mem_sleep_default = state;
++			mem_sleep_current = state;
+ 			break;
+ 		}
  
- static int bq2415x_power_supply_get_property(struct power_supply *psy,
-@@ -1017,6 +1018,16 @@ static int bq2415x_power_supply_get_property(struct power_supply *psy,
- 	case POWER_SUPPLY_PROP_MODEL_NAME:
- 		val->strval = bq->model;
- 		break;
-+	case POWER_SUPPLY_PROP_ONLINE:
-+		/* VBUS is present for all charging and fault states,
-+		 * except the 'Ready' state.
-+		 */
-+		ret = bq2415x_exec_command(bq, BQ2415X_CHARGE_STATUS);
-+		if (ret < 0)
-+			return ret;
-+		else
-+			val->intval = ret > 0;
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
+
+---
+base-commit: d37e1e4c52bc60578969f391fb81f947c3e83118
+change-id: 20240219-suspend_ops_late_init-27fb0b15baee
+
+Best regards,
 -- 
-2.43.0
+Maulik Shah <quic_mkshah@quicinc.com>
 
 
