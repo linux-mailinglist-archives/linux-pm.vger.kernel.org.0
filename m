@@ -1,178 +1,98 @@
-Return-Path: <linux-pm+bounces-4608-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4610-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2636286EB69
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Mar 2024 22:51:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F4E986EC14
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Mar 2024 23:59:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3ADEF1C20BD9
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Mar 2024 21:51:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4031C1F24452
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Mar 2024 22:59:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39C5D22098;
-	Fri,  1 Mar 2024 21:51:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UpcZkPhC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3315C5EE76;
+	Fri,  1 Mar 2024 22:59:00 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10D5B3FE0;
-	Fri,  1 Mar 2024 21:51:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1598C5EE68;
+	Fri,  1 Mar 2024 22:58:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709329910; cv=none; b=NNCnjTLsdlEF0CRf0Rn7+6nGY/7rFp4BJPoza3DxodjFvCJwITJX2YQHMuaygHlukB4uT+D0xPxGp7yvdFBIhrdNMf4OpZUyYjGP+CunCLzUEm2tl/Tfs5pcJOE7BfasbmbHaWDr5sHroeHEuj61V30ANb4YJcpRPqLCfRJh/PI=
+	t=1709333940; cv=none; b=M3ijNDkJSFd7r5KSEIwyrktayLU9sRuVdKN9mIyM7GSVkpwV6FwN4oLk4LQDekI2BZvKpotM59+JXCCTkrVK1oaiNcEpguL6f/1k5ihInsXCnHUARphQo9FjNjeSwUf6uEMnlQBz03uRVl4em9jVaqmEODzoF3sdrXY+TRrtdxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709329910; c=relaxed/simple;
-	bh=IueVPBeP1TnMrc4rxWgtET8MjwCyLuhSfCa0rJmhkSw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=Zl+Dq5zVLHh0XTziN2DTdtWlEf7CgeJtf/yV11Ad/ygdKATXaW+jfOHgHfcwdR1tDii9qdqp9XGB5erS5GpmXFhBWCoMmfFNW9oFc6yKXkTauKaBtLx9b27SX1kNb8HiZBmvxeXhZLDpQxefzqS4o6DWVbdmVDUnDOGcTsE9Xh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UpcZkPhC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8E4BC433F1;
-	Fri,  1 Mar 2024 21:51:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709329909;
-	bh=IueVPBeP1TnMrc4rxWgtET8MjwCyLuhSfCa0rJmhkSw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=UpcZkPhCQzpCOzRujQNpkoFvMCp/vXmEOuMXhP39z8GTJJxyyFthBIM0PDhrBXo0s
-	 pu+65CHZnqXdTkj4kQ1VxeY1fLW5pOzxQKSr575R79rpNrgPSg0TqzWsfv/oV3rTIF
-	 7JnzU0aG9xWz6D4pH/BtvLtv67a7bq0B4AXm9CyEwQdXl3XtgbHDo61RZM2Ya7+dHZ
-	 o5y4NCdS5x33DBmUi3AHodxMBCBCragd6yx5c7UBGZcsxgvufS9rhGY47JRS8QBFzM
-	 6JiL5j5pkhW57KrJ9ByTgQhko+AuRxhJU9AqjunfMJm7s/ajVvRyJwX5G/j4UHSuLA
-	 sosPD4sESvv9w==
-Date: Fri, 1 Mar 2024 15:51:48 -0600
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: Re: Dell XPS 13 9360: Two PCI devices with disabled power management
- by default
-Message-ID: <20240301215148.GA409221@bhelgaas>
+	s=arc-20240116; t=1709333940; c=relaxed/simple;
+	bh=sUNQXNzk7A9AAczsx1WMa7txCzYIhocc+2J70qriY6Y=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=KCY6Hi2IzOcrUQlC0R28wUY23cofhRxVUgQaz0QU3MMnuyH8BB3y94bn33aePQ54k4QEybI/3JWEm1GEtalks/NovioXNIZRds6xDO25MT2iUD7IzrNnjDi+zHb4jBZYv9G4rgrMLgo9OLGofg7dI8Jl5F2PjuU/gapOpxapxIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CF31C43390;
+	Fri,  1 Mar 2024 22:58:59 +0000 (UTC)
+Received: by mercury (Postfix, from userid 1000)
+	id C5E5210633B9; Fri,  1 Mar 2024 23:58:56 +0100 (CET)
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: [PATCH 0/2] power: supply: core: class cleanups
+Date: Fri, 01 Mar 2024 23:58:25 +0100
+Message-Id: <20240301-psy-class-cleanup-v1-0-aebe8c4b6b08@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b1861a8e-27a4-4493-9f4c-2a6cf3575c4b@molgen.mpg.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJFd4mUC/x2MywqAIBAAfyX2nKA9qV+JDotutRAmLkUh/XvSZ
+ WAOMwmEIpPAWCSIdLHw4bOYsgC7oV9JscsOla4aXWujgjzK7iiSSejPoDrqemNcO7SIkLsQaeH
+ 7f07z+37yQ9fPYwAAAA==
+To: Linus Walleij <linus.walleij@linaro.org>, 
+ "Ricardo B. Marliere" <ricardo@marliere.net>, 
+ Sebastian Reichel <sre@kernel.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Sebastian Reichel <sebastian.reichel@collabora.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=983;
+ i=sebastian.reichel@collabora.com; h=from:subject:message-id;
+ bh=sUNQXNzk7A9AAczsx1WMa7txCzYIhocc+2J70qriY6Y=;
+ b=owEBbQKS/ZANAwAKAdju1/PIO/qaAcsmYgBl4l2mMtNMnw/BcD4dXzRYXDs4StwkHxeBcH7Zr
+ Lg7LDjEnfmJAjMEAAEKAB0WIQTvZg0HRj+Lcmp5VBPY7tfzyDv6mgUCZeJdpgAKCRDY7tfzyDv6
+ mtV7D/9eG8lLNklmAPl615dGtgGA3CbvHXyMuIyLhoZKoU1iatSzpxYOmKLkcI8aTbOwFXb6oC8
+ MpbHbq/ZGEqUVx+PJLZH9FIo7zYjsmCH5mOzVRG+mTFMBjAyUrrRmTdmWx+ikq035RgC4ETf3A+
+ 8uql3k9CKhmXHW04Q9CwRBSBN0vqjRHFERZI0/iCgpkAMMqgSqQvDHplRMMh55vCo+3edb/GVH8
+ UKT9FWHeJ0vWzs1B2q6VKw57CE8/WMGiBTSlKQllJHsJuwxZWspT95gKmY8j/p9Wbq2YJbLP2w1
+ l8IuubGoDoL1EhRv5A426AU3vzhd98OD2qT7W2bw3JrwfHlnwGT19HF1/sSjO3T5goXMivIBeaB
+ unneyS/LIQv4KK2Z741C5MYur1wPu3viujAzN/MKcEsnQzjdc9k+cz9h87Tfct2Q9DIvye74pUp
+ 3u1U5V3K0OPLrCL74bGkgCQLPZewFup7EHCFWfqEg1F6QjnydCZVvUrCMpvVaO3znwyWbO+fgl6
+ +yh3HI8XnSyq78VwdjobPRXKMeR8va7o1KsolRnhjj7lXO41xeOU4ykAqqye8zZWXEerVaPOrPJ
+ usXM+uPIluX0eZke4keaGtebKD2UWIThbjroz4gYNaFCl9FvXiyvZ6rvlp/0nZkKWWq5JZY7SlM
+ NljyWLjtYrFZeqg==
+X-Developer-Key: i=sebastian.reichel@collabora.com; a=openpgp;
+ fpr=EF660D07463F8B726A795413D8EED7F3C83BFA9A
 
-On Fri, Mar 01, 2024 at 12:32:12PM +0100, Paul Menzel wrote:
-> Dear Linux folks,
-> 
-> 
-> I noticed on the Dell XPS 13 9360 some devices do not have power management
-> enabled by default. From PowerTOP:
-> 
->        Bad           Runtime PM for PCI Device Intel Corporation Sunrise
-> Point-LP PCI Express Root Port #1
->        Bad          Runtime PM for PCI Device Intel Corporation Sunrise
-> Point-LP LPC Controller
+I noticed some further possible cleanups when reviewing
+and applying Ricardo's patch to make power_supply_class
+constant.
 
-I don't know what this "Bad" is based on, so I don't know where to
-look for something Linux might be doing.  I don't see any code that
-mentions 9d10 or 9d58 Device IDs in relation to power.
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+---
+Sebastian Reichel (2):
+      power: supply: core: add power_supply_for_each_device()
+      power: supply: core: simplify power_supply_class_init
 
-> These are the two devices below:
-> 
-> 1.    00:1c.0 PCI bridge [0604]: Intel Corporation Sunrise Point-LP PCI
-> Express Root Port #1 [8086:9d10] (rev f1)
-> 2.    00:1f.0 ISA bridge [0601]: Intel Corporation Sunrise Point-LP LPC
-> Controller [8086:9d58] (rev 21)
-> 
->     $ sudo dmesg | grep -e 9d10 -e 9d58
->     [    0.200876] pci 0000:00:1c.0: [8086:9d10] type 01 class 0x060400 PCIe
-> Root Port
->     [    0.202637] pci 0000:00:1f.0: [8086:9d58] type 00 class 0x060100
-> conventional PCI endpoi
-> 
-> Is that a decision made by the system manufacturer or should the Linux
-> kernel enable power management by default?
+ drivers/power/supply/ab8500_btemp.c      |  3 +--
+ drivers/power/supply/ab8500_chargalg.c   |  3 +--
+ drivers/power/supply/ab8500_charger.c    |  3 +--
+ drivers/power/supply/ab8500_fg.c         |  3 +--
+ drivers/power/supply/apm_power.c         |  3 +--
+ drivers/power/supply/power_supply_core.c | 43 +++++++++++++-------------------
+ include/linux/power_supply.h             |  3 +--
+ 7 files changed, 23 insertions(+), 38 deletions(-)
+---
+base-commit: 71c2cc5cbf686c2397f43cbcb51a31589bdcee7b
+change-id: 20240301-psy-class-cleanup-6e6711d595aa
 
-The complete dmesg log might have a clue.  I try to encourage quirks
-to log a breadcrumb when they disable features to workaround a bug or
-something.  But code like pci_bridge_d3_possible() is not structured
-that way and doesn't leave clues like that.
+Best regards,
+-- 
+Sebastian Reichel <sebastian.reichel@collabora.com>
 
-But possibly the dmesg log and "sudo lspci -vv" output would enable us
-to figure something out.
-
-Bjorn
-
-> $ lspci -tvnn
-> -[0000:00]-+-00.0  Intel Corporation Xeon E3-1200 v6/7th Gen Core Processor
-> Host Bridge/DRAM Registers [8086:5904]
->            +-02.0  Intel Corporation HD Graphics 620 [8086:5916]
->            +-04.0  Intel Corporation Xeon E3-1200 v5/E3-1500 v5/6th Gen Core
-> Processor Thermal Subsystem [8086:1903]
->            +-14.0  Intel Corporation Sunrise Point-LP USB 3.0 xHCI
-> Controller [8086:9d2f]
->            +-14.2  Intel Corporation Sunrise Point-LP Thermal subsystem
-> [8086:9d31]
->            +-15.0  Intel Corporation Sunrise Point-LP Serial IO I2C
-> Controller #0 [8086:9d60]
->            +-15.1  Intel Corporation Sunrise Point-LP Serial IO I2C
-> Controller #1 [8086:9d61]
->            +-16.0  Intel Corporation Sunrise Point-LP CSME HECI #1
-> [8086:9d3a]
->            +-1c.0-[01-39]----00.0-[02-39]--+-00.0-[03]--
->            |                               +-01.0-[04-38]--
->            |                               \-02.0-[39]----00.0  Intel
-> Corporation DSL6340 USB 3.1 Controller [Alpine Ridge] [8086:15b5]
->            +-1c.4-[3a]----00.0  Qualcomm Atheros QCA6174 802.11ac Wireless
-> Network Adapter [168c:003e]
->            +-1d.0-[3b]----00.0  SK hynix PC300 NVMe Solid State Drive 512GB
-> [1c5c:1284]
->            +-1f.0  Intel Corporation Sunrise Point-LP LPC Controller
-> [8086:9d58]
->            +-1f.2  Intel Corporation Sunrise Point-LP PMC [8086:9d21]
->            +-1f.3  Intel Corporation Sunrise Point-LP HD Audio [8086:9d71]
->            \-1f.4  Intel Corporation Sunrise Point-LP SMBus [8086:9d23]
-> $ lspci -nn
-> 00:00.0 Host bridge [0600]: Intel Corporation Xeon E3-1200 v6/7th Gen Core
-> Processor Host Bridge/DRAM Registers [8086:5904] (rev 02)
-> 00:02.0 VGA compatible controller [0300]: Intel Corporation HD Graphics 620
-> [8086:5916] (rev 02)
-> 00:04.0 Signal processing controller [1180]: Intel Corporation Xeon E3-1200
-> v5/E3-1500 v5/6th Gen Core Processor Thermal Subsystem [8086:1903] (rev 02)
-> 00:14.0 USB controller [0c03]: Intel Corporation Sunrise Point-LP USB 3.0
-> xHCI Controller [8086:9d2f] (rev 21)
-> 00:14.2 Signal processing controller [1180]: Intel Corporation Sunrise
-> Point-LP Thermal subsystem [8086:9d31] (rev 21)
-> 00:15.0 Signal processing controller [1180]: Intel Corporation Sunrise
-> Point-LP Serial IO I2C Controller #0 [8086:9d60] (rev 21)
-> 00:15.1 Signal processing controller [1180]: Intel Corporation Sunrise
-> Point-LP Serial IO I2C Controller #1 [8086:9d61] (rev 21)
-> 00:16.0 Communication controller [0780]: Intel Corporation Sunrise Point-LP
-> CSME HECI #1 [8086:9d3a] (rev 21)
-> 00:1c.0 PCI bridge [0604]: Intel Corporation Sunrise Point-LP PCI Express
-> Root Port #1 [8086:9d10] (rev f1)
-> 00:1c.4 PCI bridge [0604]: Intel Corporation Sunrise Point-LP PCI Express
-> Root Port #5 [8086:9d14] (rev f1)
-> 00:1d.0 PCI bridge [0604]: Intel Corporation Sunrise Point-LP PCI Express
-> Root Port #9 [8086:9d18] (rev f1)
-> 00:1f.0 ISA bridge [0601]: Intel Corporation Sunrise Point-LP LPC Controller
-> [8086:9d58] (rev 21)
-> 00:1f.2 Memory controller [0580]: Intel Corporation Sunrise Point-LP PMC
-> [8086:9d21] (rev 21)
-> 00:1f.3 Audio device [0403]: Intel Corporation Sunrise Point-LP HD Audio
-> [8086:9d71] (rev 21)
-> 00:1f.4 SMBus [0c05]: Intel Corporation Sunrise Point-LP SMBus [8086:9d23]
-> (rev 21)
-> 01:00.0 PCI bridge [0604]: Intel Corporation DSL6340 Thunderbolt 3 Bridge
-> [Alpine Ridge 2C 2015] [8086:1576]
-> 02:00.0 PCI bridge [0604]: Intel Corporation DSL6340 Thunderbolt 3 Bridge
-> [Alpine Ridge 2C 2015] [8086:1576]
-> 02:01.0 PCI bridge [0604]: Intel Corporation DSL6340 Thunderbolt 3 Bridge
-> [Alpine Ridge 2C 2015] [8086:1576]
-> 02:02.0 PCI bridge [0604]: Intel Corporation DSL6340 Thunderbolt 3 Bridge
-> [Alpine Ridge 2C 2015] [8086:1576]
-> 39:00.0 USB controller [0c03]: Intel Corporation DSL6340 USB 3.1 Controller
-> [Alpine Ridge] [8086:15b5]
-> 3a:00.0 Network controller [0280]: Qualcomm Atheros QCA6174 802.11ac
-> Wireless Network Adapter [168c:003e] (rev 32)
-> 3b:00.0 Non-Volatile memory controller [0108]: SK hynix PC300 NVMe Solid
-> State Drive 512GB [1c5c:1284]
 
