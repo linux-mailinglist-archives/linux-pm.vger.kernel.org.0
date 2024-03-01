@@ -1,128 +1,86 @@
-Return-Path: <linux-pm+bounces-4585-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4586-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3673286DB41
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Mar 2024 06:51:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23D4986DD42
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Mar 2024 09:40:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6788B1C214A4
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Mar 2024 05:51:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4C23289E69
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Mar 2024 08:40:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C00EC51037;
-	Fri,  1 Mar 2024 05:50:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3439369DF8;
+	Fri,  1 Mar 2024 08:40:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="KaB+2CkX"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="HTEBLvZM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E77BE5102B;
-	Fri,  1 Mar 2024 05:50:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 025346997D;
+	Fri,  1 Mar 2024 08:40:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709272259; cv=none; b=CdCpDIokjkyJX4aGCwFt6jh8rgbpnpIzK6tS4ySHgjle0TRE5jbH7CVEPIfvswOCUD1f+VYkvjIomU6eaht4Uxfs9Y9S5JzzC8cA2FJ3Rd8AWOGHU6GVgpLvWMGpIsZ+WPEqSsrOL0hRT2T16FDbbDkudp0oNM2UR/UpW5w4CC0=
+	t=1709282430; cv=none; b=Pq9gpSVT5X7n5OFxElQOQRI4mMbenS4gaZrqMCFKuhHXeS3jebG0FOP+MRyuI07vTzkOpaptAqHMUhFQFL7SnYtiYeec4gDOTf0BiYFER88ZJxwnlzxkQTgfozagsDecjMMhn7pjNfgsF2/pQ4wgs+XWH42BD901hwwg1ad2pd0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709272259; c=relaxed/simple;
-	bh=cy8RvHTQeOlKoMUvyR4FX+JMJkf0W5FUeBWmR+7NzR8=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V1YdQCwHQMl31N3EAOrMdsdw+6OFA4M661aOHE+z5XnqICwDl32aDLdZAxiXH2Q0KUxROH9aG8mKTqhUeWJfjvWu/X1u46qicT4GrDWfDKlesM0gBh9brb8lL1TKhB5I/2tee6Lqc/Gs8D8LGY8QRS/inGxiuBap+3bh/UmRJ34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=KaB+2CkX; arc=none smtp.client-ip=198.47.23.248
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 4215oilY022069;
-	Thu, 29 Feb 2024 23:50:44 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1709272244;
-	bh=l/IHIBNQJg2GWl1+ZS5pYPMdeQurLluEVUepeTAXvHo=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=KaB+2CkXuTLYb2EyCmjhLUOc8TMiVsV19V9k4dXsRxaVZ/+1kJEkTcOgIdUlxmsuM
-	 8onmuJ1MwgGheZBXd7nvdCSbSgg0L4EINRBkTl9pvBhiJjhw3xq1L9SfT+8g58MYYW
-	 drKHhYFKjWYTPIgxXbKvljIgx0tnaU/1FcwQzsZo=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 4215oiPr079739
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 29 Feb 2024 23:50:44 -0600
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 29
- Feb 2024 23:50:44 -0600
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 29 Feb 2024 23:50:44 -0600
-Received: from localhost (dhruva.dhcp.ti.com [172.24.227.68])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4215ohEY032418;
-	Thu, 29 Feb 2024 23:50:43 -0600
-Date: Fri, 1 Mar 2024 11:20:42 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: Viresh Kumar <viresh.kumar@linaro.org>
-CC: "Rafael J. Wysocki" <rafael@kernel.org>, <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Daniel Lezcano
-	<daniel.lezcano@linaro.org>,
-        Manaf Meethalavalappu Pallikunhi
-	<quic_manafm@quicinc.com>,
-        Roman Stratiienko <r.stratiienko@gmail.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] cpufreq: Don't unregister cpufreq cooling on CPU hotplug
-Message-ID: <20240301055042.p4jaa4v3tshlbwnb@dhruva>
-References: <1333a397b93e0e15cb7cb358e21a289bc7d71a63.1709193295.git.viresh.kumar@linaro.org>
+	s=arc-20240116; t=1709282430; c=relaxed/simple;
+	bh=JpANkCjtetYRdF5bevCopBm1xT0VWZ4TSa3drrOENZo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=nEGjxr5ImZlJexoKT+CVzA3jZNyP7A39K53Z1CKgDDMc6LI4ddAr7491SYly0dS8QST/TgGySzWFvqgVxzgTBqhU2c3qVzWtRJboz++zQ7MJINrXGBnMyO7DAXAgvmljsImvg95h3wD6zeKhMjAMe8kRp9gsirJg00YDkGCmshw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=HTEBLvZM; arc=none smtp.client-ip=115.124.30.113
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1709282419; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=/fhMqxBCkmmn8CH6FRiUPSq20rCPOyTNVQl0VCwCg98=;
+	b=HTEBLvZMpm15fEpSEOj7Iez298xUmJH8SlSBwNfdgmz9VdNsz8AMCVRqBn3/W4q9g0cDxkOrLcvWrnAg8vYg40JU6O3VL2JUqk0zz7MeeHBIKtpYKQES71TxVrz9qlObMPI3NJUw0BsyAR+WSay0WnvPHslgJ67azXwAvEfsb+A=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0W1a.nJe_1709282417;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0W1a.nJe_1709282417)
+          by smtp.aliyun-inc.com;
+          Fri, 01 Mar 2024 16:40:18 +0800
+From: Yang Li <yang.lee@linux.alibaba.com>
+To: daniel.lezcano@kernel.org,
+	rafael@kernel.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Yang Li <yang.lee@linux.alibaba.com>
+Subject: [PATCH -next] powercap: dtpm: Fix kernel-doc for dtpm_create_hierarchy function
+Date: Fri,  1 Mar 2024 16:18:02 +0800
+Message-Id: <20240301081802.114308-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1333a397b93e0e15cb7cb358e21a289bc7d71a63.1709193295.git.viresh.kumar@linaro.org>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
 
-Hi,
+The existing comment block above the dtpm_create_hierarchy function
+does not conform to the kernel-doc standard. This patch fixes the
+documentation to match the expected kernel-doc format, which includes
+a structured documentation header with param and return value.
 
-On Feb 29, 2024 at 13:42:07 +0530, Viresh Kumar wrote:
-> Offlining a CPU and bringing it back online is a common operation and it
-> happens frequently during system suspend/resume, where the non-boot CPUs
-> are hotplugged out during suspend and brought back at resume.
-> 
-> The cpufreq core already tries to make this path as fast as possible as
-> the changes are only temporary in nature and full cleanup of resources
-> isn't required in this case. For example the drivers can implement
-> online()/offline() callbacks to avoid a lot of tear down of resources.
-> 
-> On similar lines, there is no need to unregister the cpufreq cooling
-> device during suspend / resume, but only while the policy is getting
-> removed.
-> 
-> Moreover, unregistering the cpufreq cooling device is resulting in an
-> unwanted outcome, where the system suspend is eventually aborted in the
-> process.  Currently, during system suspend the cpufreq core unregisters
-> the cooling device, which in turn removes a kobject using device_del()
-> and that generates a notification to the userspace via uevent broadcast.
-> This causes system suspend to abort in some setups.
-> 
-> This was also earlier reported (indirectly) by Roman [1]. Maybe there is
-> another way around to fixing that problem properly, but this change
-> makes sense anyways.
-> 
-> Move the registering and unregistering of the cooling device to policy
-> creation and removal times onlyy.
-> 
-> Reported-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-> Reported-by: Roman Stratiienko <r.stratiienko@gmail.com>
-> Link: https://patchwork.kernel.org/project/linux-pm/patch/20220710164026.541466-1-r.stratiienko@gmail.com/ [1]
-> Tested-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/powercap/dtpm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Makes sense to me,
-
-Reviewed-by: Dhruva Gole <d-gole@ti.com>
-
+diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
+index ce920f17f45f..f390665743c4 100644
+--- a/drivers/powercap/dtpm.c
++++ b/drivers/powercap/dtpm.c
+@@ -522,7 +522,7 @@ static int dtpm_for_each_child(const struct dtpm_node *hierarchy,
+ 
+ /**
+  * dtpm_create_hierarchy - Create the dtpm hierarchy
+- * @hierarchy: An array of struct dtpm_node describing the hierarchy
++ * @dtpm_match_table: Pointer to the array of device ID structures
+  *
+  * The function is called by the platform specific code with the
+  * description of the different node in the hierarchy. It creates the
 -- 
-Best regards,
-Dhruva Gole <d-gole@ti.com>
+2.20.1.7.g153144c
+
 
