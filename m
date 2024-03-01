@@ -1,89 +1,75 @@
-Return-Path: <linux-pm+bounces-4606-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4607-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87A1986EA70
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Mar 2024 21:41:43 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED81A86EB67
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Mar 2024 22:50:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C1D0289CC9
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Mar 2024 20:41:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 71DB0B260FB
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Mar 2024 21:50:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A73C3D0D9;
-	Fri,  1 Mar 2024 20:41:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC53F58ABA;
+	Fri,  1 Mar 2024 21:50:29 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F31763CF7C;
-	Fri,  1 Mar 2024 20:41:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF8DC58AA6;
+	Fri,  1 Mar 2024 21:50:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709325699; cv=none; b=Bp+ZDhiioaS49xChyaC+yLh5xnOCDzI83KAvYXbuXVvPKnp/0fsOatQgMeg3BAattCJkMpvq+6kiKaRt9TwqEZV2N+x1cboWRtqCGQcNuBBn+VHsMj3BWM2A2s6PWB//YAFCS3jyQJBSNyMg7wD5ICyfVixDThlgtnF4+krkDck=
+	t=1709329829; cv=none; b=ON7+vzN5I+O4AkavdwVm531tII6cxdJXz1Lv2iwqd1lYjVhzwxkKaOgbxeZ65d/x/UV91cPCBopj9v3JdPQi0f/B6qN7Qk/S5f3cdhCxSYc2Ylt0HFhs6+LzxlA9Kmh11WUaZUFGGJZTVaQtz8om/Qnm0LtyQ4Kx0yUwkXGjJSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709325699; c=relaxed/simple;
-	bh=cfUFUNDFLKj6pTLAvi8PLB+KfVR9xMknj8C7OD/5rtY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KPBGT5UU8VhkRQecvX/U6Z2sqhtlNGYFICVb5RTpLAaGxv7XpZd39OR810//9uoLT2STP3Dhsw1lujsCSJvVSgugi9cmX7qEfAQ/PkZGmnY/Gnrqh0vJcwXp1BcPPSWFYGsWyTvKAVtPFtCoZ21RuQYI2MM0NC3JRx9uZPeZARw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5a10f19d4a0so36417eaf.0;
-        Fri, 01 Mar 2024 12:41:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709325697; x=1709930497;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cfUFUNDFLKj6pTLAvi8PLB+KfVR9xMknj8C7OD/5rtY=;
-        b=CXZj5e3BL5IjMDd16BYuwgzOquGkc5j3/hEYXMjU8UVCqdN2BgSnI5jAKOxjGn0aXd
-         bbHYH9tNUQakmLxfvlZDMnYA7nHXIYiDiYHpNEZQaz6xJ37yQetTUBjhmmabfZcFNT/R
-         0q7693yxPvGiip0Ctayufr+h8Ar/GQEgQN9gb0N1qadJqZEDXAdR45QPW8I4R18FxNNm
-         blQKrGZZCXahxHTuMYgHK7we1ZfkAyT5Xd7vcCE81jvJoGZMjg648JfBGrG9n+gSZHRx
-         wf56BJ1v6E2U+LAH6Fwp1z4DfaVRR+umG49Nz74xVHCeXD0MDWcmGd7T25YXViVawedf
-         FFSA==
-X-Forwarded-Encrypted: i=1; AJvYcCUVb0Yks+gtGIFju//LH3/jFAt1sAHlzP9edXRoq2G+0x3NfVFkTs/KxSd3ekgSg6qA5mx9fXcOKr/1rEL4zX3Ir+qWFRNABfDR5L8bieJ+1ixqvzbaZ/Du4DgJDm+hoN2M3x3wWlU=
-X-Gm-Message-State: AOJu0Yyuytc57ZfOZygikU0ycXDRnU2uiTe/wecX4fCcJ9slPtGxx+UK
-	yYmCDRSmMcawO5uKlOInV37l/itphPLiCeJQZ/3oc5Oz2XajzwoFWdHgUrqJn8EDlvUJZ4xQPIJ
-	ocVs6qIHowDTkj1p8DScl6CHUmrc=
-X-Google-Smtp-Source: AGHT+IHhGXCmW/U10NQlHOn/42JTQG4z0M4mbLYQYhuN7kdIqltd7/jAa2xyselcJB3OX438AoakO3jq5tkhTNwsG+I=
-X-Received: by 2002:a05:6870:8dc9:b0:21f:9eaa:3f1 with SMTP id
- lq9-20020a0568708dc900b0021f9eaa03f1mr2927772oab.5.1709325697043; Fri, 01 Mar
- 2024 12:41:37 -0800 (PST)
+	s=arc-20240116; t=1709329829; c=relaxed/simple;
+	bh=HDD0YdAntBqh6zTcDVRYRSlUPcXbImGl1KPnu2ZtboU=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=RBVTdoCzq7racLbUuN91pSNHtlujGCe/m2m2bwdVz34jlHikkpfZB89+IeeqtWANXcf1fTPt10do9B+TxkKdCOa5oj05lot4WHEw+7KaBjY+dij5h3xBJBE+OPXQR0Ea2qqstAaDeoZJ+C5UY6uSuuZQPRi/Z2QNtKpNfmwcWCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C008C433C7;
+	Fri,  1 Mar 2024 21:50:29 +0000 (UTC)
+Received: by mercury (Postfix, from userid 1000)
+	id 988FF10633B9; Fri,  1 Mar 2024 22:50:26 +0100 (CET)
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Linus Walleij <linus.walleij@linaro.org>, 
+ Sebastian Reichel <sre@kernel.org>, 
+ "Ricardo B. Marliere" <ricardo@marliere.net>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+In-Reply-To: <20240301-class_cleanup-power-v1-1-97e0b7bf9c94@marliere.net>
+References: <20240301-class_cleanup-power-v1-1-97e0b7bf9c94@marliere.net>
+Subject: Re: [PATCH] power: supply: core: make power_supply_class constant
+Message-Id: <170932982660.281458.3124950180863553573.b4-ty@collabora.com>
+Date: Fri, 01 Mar 2024 22:50:26 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240301081802.114308-1-yang.lee@linux.alibaba.com> <df67c46b-26a3-44da-8404-1bf445cb6efb@infradead.org>
-In-Reply-To: <df67c46b-26a3-44da-8404-1bf445cb6efb@infradead.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 1 Mar 2024 21:41:25 +0100
-Message-ID: <CAJZ5v0hXjoukVi-Ft71wDfPttAbutX8iomKuzmr21cpKx444BA@mail.gmail.com>
-Subject: Re: [PATCH -next] powercap: dtpm: Fix kernel-doc for
- dtpm_create_hierarchy function
-To: Randy Dunlap <rdunlap@infradead.org>, Yang Li <yang.lee@linux.alibaba.com>
-Cc: daniel.lezcano@kernel.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13.0
 
-On Fri, Mar 1, 2024 at 8:24=E2=80=AFPM Randy Dunlap <rdunlap@infradead.org>=
- wrote:
->
->
->
-> On 3/1/24 00:18, Yang Li wrote:
-> > The existing comment block above the dtpm_create_hierarchy function
-> > does not conform to the kernel-doc standard. This patch fixes the
-> > documentation to match the expected kernel-doc format, which includes
-> > a structured documentation header with param and return value.
-> >
-> > Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
->
-> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+
+On Fri, 01 Mar 2024 14:46:15 -0300, Ricardo B. Marliere wrote:
+> Since commit 43a7206b0963 ("driver core: class: make class_register() take
+> a const *"), the driver core allows for struct class to be in read-only
+> memory, so move the power_supply_class structure to be declared at build
+> time placing it into read-only memory, instead of having to be dynamically
+> allocated at boot time.
+> 
+> 
+> [...]
 
 Applied, thanks!
+
+[1/1] power: supply: core: make power_supply_class constant
+      commit: 71c2cc5cbf686c2397f43cbcb51a31589bdcee7b
+
+Best regards,
+-- 
+Sebastian Reichel <sebastian.reichel@collabora.com>
+
 
