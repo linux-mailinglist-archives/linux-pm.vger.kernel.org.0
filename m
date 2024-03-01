@@ -1,102 +1,106 @@
-Return-Path: <linux-pm+bounces-4602-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4603-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F52686E975
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Mar 2024 20:25:13 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1D3186EA0A
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Mar 2024 21:04:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CEEFA1C24BD4
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Mar 2024 19:25:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A5434B22A98
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Mar 2024 20:04:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A28E3A1D7;
-	Fri,  1 Mar 2024 19:24:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 079FA3BB29;
+	Fri,  1 Mar 2024 20:04:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="MlKMqM1A"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="q+jbGsF2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F28225623;
-	Fri,  1 Mar 2024 19:24:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 690783BB27
+	for <linux-pm@vger.kernel.org>; Fri,  1 Mar 2024 20:04:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709321080; cv=none; b=nJLeW3r4GoRzPzbXm5JyasaszJoTJbeTYRpLu9uPX8Sf5qK0N+C8DrXIgXps9+eQkcKTJdbfvABhN2skAedsvMHdqeqzNadshjff2fUK1DKLNM34qhY7irsPELYd2l7Hd5bR3fEcR0OzSI2pqi9QnTz7fiHK9IsDumZMWtvOsgU=
+	t=1709323478; cv=none; b=IerpoCJYtVqlNkNhFk+6W3n0swvimwm5jwwwnLhnh0d2M17n9h6fJftsLZ/mJL8HgNXMqJCqvbWW9OvWQsAj6BQBhronfdW/M8wc90JmH/TM+kWLoSdn+ySW+/kIOn7ScOEYHjdZmClSS2pQn/YySfs/rVhKf+vq7P7FCxT+TXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709321080; c=relaxed/simple;
-	bh=U7Zc0jq6K4qFO334zIUMtRqbn5pmAPrPPZHfTnCwR2I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lSO9JgOOswRcWTh5Uo10AufCgIIagpSXM5zfLRuJC7hDU4ul7y6eU7FMIhyCVHcGK6nwVyYhZa5q8EEMbGyufaMhxjwKFV5T+h6jH67j5UkQf+PNPVa11O9VTefo72N0m+tMcx2ubWO+4jRnR7bvTe5RfB8y/1//zNYZcvZQ+kE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=MlKMqM1A; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=bZHkpnTkZV3pyVK5JanyWDiipM0alfudJxvxB4RV0Is=; b=MlKMqM1AsKtHCzF4YS3XbVnlcs
-	2eCoFYfTCLiLK+3xmgkHcGXAIAVYlmr284BZ7ajOlUHLaZSFKjglSp5cBhDZO/zL9OQ+tuGWC+Myr
-	btPtQsE07GW5kIBwO3Kr0R99OE2PiFGucd6f5roo9kYFgMy/8S50hKGYErUMH3tlpbbGQpHPeDB2V
-	E1vBCkgrKX57GV9Wx5Mb7GkutMeAlDQwJZb2yanA5eMW4XUaTC/HpbZwhpkrZRRJWByTiKyfhfa7b
-	Zt6dKdmTU8YQklpmf/jmn5lYaJS/6e+CEkt9k7aDXw8N5d1aAfqTOauTQXaxjLj1IfBcCLa+GEKTE
-	qL+LS3jQ==;
-Received: from [50.53.50.0] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rg8Ul-00000001hrn-49nA;
-	Fri, 01 Mar 2024 19:24:36 +0000
-Message-ID: <df67c46b-26a3-44da-8404-1bf445cb6efb@infradead.org>
-Date: Fri, 1 Mar 2024 11:24:33 -0800
+	s=arc-20240116; t=1709323478; c=relaxed/simple;
+	bh=R5oeZu3MZmiPdNeeqv6OukFHlLZcN450keDyMqO0GUE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UTyTThnlDMVgL8FbhEx4IMCk8A23WohbszmZz5DJKDA5bTDx8Ufr1ytSEtDW08voGBKpphIO8H0sf0Ehl+A9ovp0eDs65TtBOoJFNQPSIanI1+eMISF+TPK5sNPIkbCEUjcZAhIDgDz0m1bL+wsexXwHW2LizMjMQQdLVSiPiVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=q+jbGsF2; arc=none smtp.client-ip=209.85.219.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-dcc84ae94c1so2479865276.1
+        for <linux-pm@vger.kernel.org>; Fri, 01 Mar 2024 12:04:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1709323476; x=1709928276; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R5oeZu3MZmiPdNeeqv6OukFHlLZcN450keDyMqO0GUE=;
+        b=q+jbGsF2wPZ/JXhAMrFupjx4zeMCBrYX0gGhEnp47NcOAJHs7Lfz7xbfWt4+Mi/1QW
+         kV5YwDpagkG9an0ZCVjv9KwgIu9dt3lSF7E/JRwpAwG4ja4g2WgtRBzKj3UUrR2kvsrr
+         YujdrgJ7lnRj+76sXJ9TgqZPsgxbl1oH0VYqCh6/+cj8GdkF9M0vRvKL3hIkpXzFYLgS
+         tCKjCJimqLla7UbybJhiND1UHnhZcERUXakcQ0widCo4DvWFVY7LwPA0Hzn+ATnJtldV
+         BXnSc5hSMmcTxf1IN8bYNrYvc2SGBQshLDsv+aGubwoWGWfpm4XhK87twh8G1DBgqM9M
+         Vu7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709323476; x=1709928276;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R5oeZu3MZmiPdNeeqv6OukFHlLZcN450keDyMqO0GUE=;
+        b=AM4QcdXGybI+NnZgDrGRc4tfLTSpYd5bXIzL1gf1DsC0VglBIn+rGY0pbyQjfuyG8Y
+         KQ1AncQ82pLNoCBarbVWHwVUWV5m36YKVP+awAmfeIdc0AJdAD+Rj618kuG4xGrrCyhR
+         tpyH5ljogHpj9TDZCzz7EFsFUNuoS81Swe0yh/p+fl37zChXZUUXlmld+ZgCZrDeu4FJ
+         l5ov7T9z046LVeXVTx74ts5G69I6YVhMhbw/iLqWkoS+f6WyawicHelelG4FHvys3gA6
+         wfKNMsNv23hByirYcts/7f3kNq6NdhUeemfvvBhnv631tPwuOEAGaF85Vt9XzMNBFTyJ
+         qLQA==
+X-Forwarded-Encrypted: i=1; AJvYcCWsZRvvmyX6fVVe5ToSJzAyZaPWm0EB2SlCBIw/Vv5siau/ydxkylC93vjRbcr6U4JbC5Tt1w3OlV4oozGACtMgR/pG4av9YrQ=
+X-Gm-Message-State: AOJu0Ywf3ly3WJ8I89wE4IXtds8SY57AXB1VI5tOMvbzYAxvHqZ2NxLi
+	TN2pBNAPjhNyEquB8/zBK3ZMhf6x+0eGwDBQrGFvqv+a2jvYM7KvsTAgkBavOthGt9Y8XTHyflZ
+	meObFY3F1Z3dNFebadddwxlFAQhGTqQYBH8cf4g==
+X-Google-Smtp-Source: AGHT+IEERwKVobzxEtEm7cJ4e3nbLqrW6YJjiZfXhLITgygWG31PEVgI4ANxEKFA5swXszNxIZzpyt7dNzDPzhJ+Oqs=
+X-Received: by 2002:a25:83c1:0:b0:dcf:2cfe:c82e with SMTP id
+ v1-20020a2583c1000000b00dcf2cfec82emr2513188ybm.55.1709323476391; Fri, 01 Mar
+ 2024 12:04:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH -next] powercap: dtpm: Fix kernel-doc for
- dtpm_create_hierarchy function
-Content-Language: en-US
-To: Yang Li <yang.lee@linux.alibaba.com>, daniel.lezcano@kernel.org,
- rafael@kernel.org
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240301081802.114308-1-yang.lee@linux.alibaba.com>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20240301081802.114308-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240301-class_cleanup-power-v1-1-97e0b7bf9c94@marliere.net>
+In-Reply-To: <20240301-class_cleanup-power-v1-1-97e0b7bf9c94@marliere.net>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Fri, 1 Mar 2024 21:04:25 +0100
+Message-ID: <CACRpkdbVUUTh+VA0Tjp6Y=L5nx-p6YKuJ5XjWYTm_Q_Kfmz9ig@mail.gmail.com>
+Subject: Re: [PATCH] power: supply: core: make power_supply_class constant
+To: "Ricardo B. Marliere" <ricardo@marliere.net>
+Cc: Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Mar 1, 2024 at 6:46=E2=80=AFPM Ricardo B. Marliere <ricardo@marlier=
+e.net> wrote:
 
+> Since commit 43a7206b0963 ("driver core: class: make class_register() tak=
+e
+> a const *"), the driver core allows for struct class to be in read-only
+> memory, so move the power_supply_class structure to be declared at build
+> time placing it into read-only memory, instead of having to be dynamicall=
+y
+> allocated at boot time.
+>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
 
-On 3/1/24 00:18, Yang Li wrote:
-> The existing comment block above the dtpm_create_hierarchy function
-> does not conform to the kernel-doc standard. This patch fixes the
-> documentation to match the expected kernel-doc format, which includes
-> a structured documentation header with param and return value.
-> 
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+Looks good!
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-Thanks.
-
-> ---
->  drivers/powercap/dtpm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
-> index ce920f17f45f..f390665743c4 100644
-> --- a/drivers/powercap/dtpm.c
-> +++ b/drivers/powercap/dtpm.c
-> @@ -522,7 +522,7 @@ static int dtpm_for_each_child(const struct dtpm_node *hierarchy,
->  
->  /**
->   * dtpm_create_hierarchy - Create the dtpm hierarchy
-> - * @hierarchy: An array of struct dtpm_node describing the hierarchy
-> + * @dtpm_match_table: Pointer to the array of device ID structures
->   *
->   * The function is called by the platform specific code with the
->   * description of the different node in the hierarchy. It creates the
-
--- 
-#Randy
+Yours,
+Linus Walleij
 
