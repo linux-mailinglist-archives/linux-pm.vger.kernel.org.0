@@ -1,124 +1,139 @@
-Return-Path: <linux-pm+bounces-4589-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4590-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64D6A86DEAF
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Mar 2024 10:56:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9BD486DECF
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Mar 2024 11:04:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 201D8287D08
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Mar 2024 09:56:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7A235B2224F
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Mar 2024 10:04:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FD4D6A8CE;
-	Fri,  1 Mar 2024 09:56:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABFA26EB6D;
+	Fri,  1 Mar 2024 10:02:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="esHeHjXV"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="b209a22p"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78F836A8B9
-	for <linux-pm@vger.kernel.org>; Fri,  1 Mar 2024 09:56:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A046B6BB2C;
+	Fri,  1 Mar 2024 10:02:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.118
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709286989; cv=none; b=kDc0No7uHemYjPy+0H+N7wR7QIlo8Iul+OvaSsEc1+wrBv3JINmsjNIfa/2Y3Q1VK7YKhfNSYTCnzv0zp7JdoTadyOcDIsCHgSAGTdaSjFMi/4V1FK91UT5DWlmbOOGmYw64MJWSxYhs5dm1VdFuSCYWkxN4eEGxObiXrz+Y9xY=
+	t=1709287352; cv=none; b=CJNhzoOrjFGsdNeohpljnoD70bThOSXUIPmf8uuaT9Lwef39veAZhuTw4qtJz0tzP8Z8+SIO2PJOGIoj/B4sVVkQ/zdAj9GImEVoAUJOpZwXjF23cFKTbUTgiKU4qoCdFAsAQlt4pr7/rc/K4n4tudtYe8Cp4drTuUkCo/4Ohvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709286989; c=relaxed/simple;
-	bh=18S77KXqW9B4dMKuNYPGTI7+MDToDmytBAg7uEmV2FU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=k+BBlZd9TFAkE8c5LwCUZCQMlW1oOH3n0tVPSJ96MXq+/O69yvSqDGTWrn/YYTWQ20eYTp6aw1j2H2ita778Zk3QwbSggoiNRXChkQraaI28YGp/rwQHnWH4VZr/ADx992SokW1MNGvLS84KQoW4m+6lE4WdLhfnVef5MpRaqgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=esHeHjXV; arc=none smtp.client-ip=209.85.208.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2d28051376eso22635051fa.0
-        for <linux-pm@vger.kernel.org>; Fri, 01 Mar 2024 01:56:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709286985; x=1709891785; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VkH3dZexrgeoLVbHTxNag0IKuqLj3ZDSeXVaWdmYMB4=;
-        b=esHeHjXVLkxuYULK8vcdvXvxv2F7/hzg5RBmX1JLSxBVcAmA2Cl1OPbmI4CHuHPtyr
-         lPAA7z6ovWbw9ny8umQidO3VKizxq5pL9GfcJDPZr2NcATOThAEI0V1GZ1N+9sToom65
-         SdFR0bKoVVnNKxxBS/k0csn7MNnrn0eRkJsEUApNAL/bivCxpM0bn6lSeCZWUt8SsZG4
-         142ST2RwUzbh0HKcmKJA7pEiKfEJaUXwJWDPmmMei0bwoVxf/CsXvzgEn39x4tZA5tuJ
-         jeyLXgIX+RNlftDkQe+PzLR+8qkWLQSydMcpibOnrtv9fENuFxsMgV3z566tCTePPavL
-         rk1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709286985; x=1709891785;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VkH3dZexrgeoLVbHTxNag0IKuqLj3ZDSeXVaWdmYMB4=;
-        b=upsvBlLWpcWfhAZ6dCdfHiDKIjWC2ZL5H3oXzBNzxUcbfQb/jsuu3qmjwcPInhclxL
-         DAsZpOwcGHY+OiFyA9/R6odyWnrsL9H1Juj4DuNg+dUbHMKahhwYAX7RYuGG3r5XuYXg
-         lX8xRuxH445A/UJQpcc+0FgrPmoUFI9pMZgoA0AzW+feG/v2IazScbJqcy+r5zHX0CpX
-         O9vUPz4iplNVwSeOEkdJQX2PDFaJOv9xoeafQEAh2zrEb9juOqOPczzc6hRKeH5SqaD3
-         2m43ajXAW/V9UFCJOzPUVgqxl4qoSOes5IeS6ggibRfDlUO9SzfEAFrFsJTwr1tRqi14
-         mnfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU9Ur+X3xz4YjFwk0yiVMVAQGBiGW0AcUq7buruR1ULB3dlW3ikcwUM4Lq4Dn5ijVUuY28ovQFHjbZcNqXaagHg2MKI0eYUSic=
-X-Gm-Message-State: AOJu0YxMUtwwbjEeoxpA0G5giFdMw3xKEBciY8vkff1POtDHQqJMMew8
-	Pg61gd+8kWhnrdZt97M8LUgA/aAvAyMERZ7dFgyXuGFx0hrrGJy7TRY8xVmOwdA=
-X-Google-Smtp-Source: AGHT+IF5nLUsEK/GcU+i4clsC9SpRItPO0y27bMdAQSTFmJjQXi6Pjl+T6nj+mStxcIQL7zVO61Bzw==
-X-Received: by 2002:a2e:808d:0:b0:2d2:a8b3:a20e with SMTP id i13-20020a2e808d000000b002d2a8b3a20emr765752ljg.53.1709286985354;
-        Fri, 01 Mar 2024 01:56:25 -0800 (PST)
-Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id b22-20020a2e9896000000b002d2607e6d29sm530333ljj.70.2024.03.01.01.56.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Mar 2024 01:56:24 -0800 (PST)
-From: Ulf Hansson <ulf.hansson@linaro.org>
-To: Linus <torvalds@linux-foundation.org>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] pmdomain fixes for v6.8-rc7
-Date: Fri,  1 Mar 2024 10:56:23 +0100
-Message-Id: <20240301095623.3659989-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1709287352; c=relaxed/simple;
+	bh=OvOYYUCG3c7ssoi05Zx92UGrIZ2K40dKEFbz8G9tN80=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=g9bYtIsKB3JUFOo9+OwiZ0uGhGF4LRe8heC/nTEFRtM1AHrs4ZTxV86DapbMiBSWiR7kpyCSvRzhjpV6GVqgkPOsy6FON+xUXSMWewcNn+rfrmIof8xDNq7MEi1j4tJ9dXa6uzcEIa3QD69xR38KlizbRU4RA0KulFqrvvuPEi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=b209a22p; arc=none smtp.client-ip=115.124.30.118
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1709287347; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=quGYQwGPPF3DG0ZofAGuxpdgXr8KP41ZYuJMaGRU+c8=;
+	b=b209a22p+frS3JszGTklJvmQ9vMA62107JwBBOaJ1q67xhS7dOL8PZ5A5Za7lGInfn91IpmcWcG1LIJvZqH9S3CKyqRiFBg8uvu60glzWm7S2Mj0atYjYwRoVMwnsvxkkMJet1bF8Bon9vVKmYkTuYv074eCAnP00t3bqa4zReA=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=herongguang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0W1bSknU_1709287345;
+Received: from 30.221.97.202(mailfrom:herongguang@linux.alibaba.com fp:SMTPD_---0W1bSknU_1709287345)
+          by smtp.aliyun-inc.com;
+          Fri, 01 Mar 2024 18:02:26 +0800
+Message-ID: <cdb0f30e-b1d5-49ba-8730-740e9c06c87c@linux.alibaba.com>
+Date: Fri, 1 Mar 2024 18:02:26 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] x86/cstate: fix mwait hint target cstate calc
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: jacob.jun.pan@linux.intel.com, lenb@kernel.org, linux-pm@vger.kernel.org,
+ linux-acpi@vger.kernel.org, shannon.zhao@linux.alibaba.com
+References: <64137e23-e374-4129-8e3c-dcd7606364d4@linux.alibaba.com>
+ <CAJZ5v0hG7vpWd9-pdeuNZDpDQ13MuwzgPkFnyG7TuQ=DRAMo6Q@mail.gmail.com>
+From: He Rongguang <herongguang@linux.alibaba.com>
+In-Reply-To: <CAJZ5v0hG7vpWd9-pdeuNZDpDQ13MuwzgPkFnyG7TuQ=DRAMo6Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Hi Linus,
+在 2024/3/1 1:22, Rafael J. Wysocki 写道:
+> On Wed, Feb 28, 2024 at 8:28 AM He Rongguang
+> <herongguang@linux.alibaba.com> wrote:
+>>
+>> According to x86 manual (Intel SDM Vol 2, Table 4-11. MWAIT Hints
+>> Register (EAX) and AMD manual Vol 3, MWAIT), mwait hint[7:4] adds 1 is
+>> the corresponding cstate, and 0xF means C0, so fix the handling of
+>> 0xF -> C0.
+>>
+>> Intel: "Value of 0 means C1; 1 means C2 and so on
+>> Value of 01111B means C0".
+>>
+>> AMD: "The processor C-state is EAX[7:4]+1, so to request C0 is to place
+>> the value F in EAX[7:4] and to request C1 is to place the value 0 in
+>> EAX[7:4].".
+> 
+> Yes, 0x0F is defined to correspond to C0.  However, the value in
+> question is never equal to 0x0F in any of the functions modified by
+> this patch.
+> 
+> What's the purpose of the modification, then?
+> 
 
-Here's a PR with a couple of pmdomain fixes intended for v6.8-rc7. Details about
-the highlights are as usual found in the signed tag.
+Hi, this is found when I tweak ACPI cstate table qemu presenting to VM.
 
-Please pull this in!
+Usually, ACPI cstate table only contains C1+, but nothing prevents ACPI 
+firmware from presenting a cstate (maybe C1+) but using a mwait address 
+C0 (i.e., 0xF in ACPI FFH MWAIT hint address). And if this is the case, 
+Linux erroneously treat this cstate as C16, while actually this should 
+be legal C0 state.
 
-Kind regards
-Ulf Hansson
+As I think ACPI firmware is out of Linux kernel scope, so I think it’s 
+better for Linux kernel to implement here referring to spec, how do you 
+think? :)
 
 
-The following changes since commit 841c35169323cd833294798e58b9bf63fa4fa1de:
+>> Signed-off-by: He Rongguang <herongguang@linux.alibaba.com>
+>> ---
+>>    arch/x86/kernel/acpi/cstate.c | 4 ++--
+>>    drivers/idle/intel_idle.c     | 3 ++-
+>>    2 files changed, 4 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
+>> index 401808b47af3..f3ffd0a3a012 100644
+>> --- a/arch/x86/kernel/acpi/cstate.c
+>> +++ b/arch/x86/kernel/acpi/cstate.c
+>> @@ -131,8 +131,8 @@ static long acpi_processor_ffh_cstate_probe_cpu(void
+>> *_cx)
+>>           cpuid(CPUID_MWAIT_LEAF, &eax, &ebx, &ecx, &edx);
+>>
+>>           /* Check whether this particular cx_type (in CST) is supported
+>> or not */
+>> -       cstate_type = ((cx->address >> MWAIT_SUBSTATE_SIZE) &
+>> -                       MWAIT_CSTATE_MASK) + 1;
+>> +       cstate_type = (((cx->address >> MWAIT_SUBSTATE_SIZE) &
+>> +                       MWAIT_CSTATE_MASK) + 1) & MWAIT_CSTATE_MASK;
+>>           edx_part = edx >> (cstate_type * MWAIT_SUBSTATE_SIZE);
+>>           num_cstate_subtype = edx_part & MWAIT_SUBSTATE_MASK;
+>>
+>> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+>> index bcf1198e8991..e486027f8b07 100644
+>> --- a/drivers/idle/intel_idle.c
+>> +++ b/drivers/idle/intel_idle.c
+>> @@ -1934,7 +1934,8 @@ static void __init spr_idle_state_table_update(void)
+>>
+>>    static bool __init intel_idle_verify_cstate(unsigned int mwait_hint)
+>>    {
+>> -       unsigned int mwait_cstate = MWAIT_HINT2CSTATE(mwait_hint) + 1;
+>> +       unsigned int mwait_cstate = (MWAIT_HINT2CSTATE(mwait_hint) + 1) &
+>> +                                       MWAIT_CSTATE_MASK;
+>>           unsigned int num_substates = (mwait_substates >> mwait_cstate *
+>> 4) &
+>>                                           MWAIT_SUBSTATE_MASK;
+>>
+>> --
 
-  Linux 6.8-rc4 (2024-02-11 12:18:13 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.8-rc4
-
-for you to fetch changes up to 2a93c6cbd5a703d44c414a3c3945a87ce11430ba:
-
-  pmdomain: qcom: rpmhpd: Fix enabled_corner aggregation (2024-02-28 16:31:45 +0100)
-
-----------------------------------------------------------------
-Providers:
- - qcom: Fix enabled_corner aggregation for rpmhpd
- - arm: Fix NULL dereference on scmi_perf_domain removal
-
-----------------------------------------------------------------
-Bjorn Andersson (1):
-      pmdomain: qcom: rpmhpd: Fix enabled_corner aggregation
-
-Cristian Marussi (1):
-      pmdomain: arm: Fix NULL dereference on scmi_perf_domain removal
-
- drivers/pmdomain/arm/scmi_perf_domain.c | 3 +++
- drivers/pmdomain/qcom/rpmhpd.c          | 7 +++++--
- 2 files changed, 8 insertions(+), 2 deletions(-)
 
