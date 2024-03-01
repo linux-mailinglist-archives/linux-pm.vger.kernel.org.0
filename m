@@ -1,298 +1,129 @@
-Return-Path: <linux-pm+bounces-4583-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4584-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 345EE86DB28
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Mar 2024 06:31:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12D7686DB39
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Mar 2024 06:44:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 575D31C20C76
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Mar 2024 05:31:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3FB391C22327
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Mar 2024 05:44:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA98D50A60;
-	Fri,  1 Mar 2024 05:31:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A0735102B;
+	Fri,  1 Mar 2024 05:44:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ll+regE5"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="iYMwGkDD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1776026ADB;
-	Fri,  1 Mar 2024 05:31:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2FAE2AEEE;
+	Fri,  1 Mar 2024 05:44:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709271101; cv=none; b=tpMyQnD/MT82xuKXsTdUhkwg7g2WTWrovK1bA4h0AI86f6apkrWsCVAg4iZceTalrIigFSLJ2Ahxr4mXP1nwv0FZYWBubi1RUJVSiKRwO1G8mkVpKWLJt9SsdngT2DUouB1I6MsC0zVWqXCuj5TcDVd2WtzSMSW6zD+Vmc2HYwI=
+	t=1709271868; cv=none; b=M2f8ZEz/z52inu26tQSslaeacck7aC30LyCL6lmPrcqRON8X/c3BFQfAX+UGdIhFC0ltNCIwfAcuFVlUr90wTpthySin2nqKzZzE7GfC70D7/lCxq4+MWo4AJ586KWBwpxd1W9eaUsI2OPtPVpNaTsrtMdkqRk9etBnHd9jYkWA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709271101; c=relaxed/simple;
-	bh=Y/WXlWdTXXfNiXf5ygoSZ1f7zGTgMIxmvMfEgQaCags=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=DZjNn0bnY+nc/6DNjHUBMvSJmz6NlGck2NHVZ0h0y+GOMr0JZCvnX+pqYGGIhDkRZ9IAVEW1Uu+h+K4CuiXlRPOj8w6oc/zXw4wwrbhYR1IqFcykgqSEvy9wBTocspq29gB4pU0tTOAZaWMfItch+ep70MdC/tsbOTduJYV5mMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ll+regE5; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4215KSKs005706;
-	Fri, 1 Mar 2024 05:31:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=yB1VJm2hOJUD0UuBaAKGnWCuyafuiIJJntQs+g3WvVA=; b=ll
-	+regE5MxXb+iv9UOSg3SrtQd2JZGeWRK+cTGmL9SL6EjTVU76By2vm21vHGatjFz
-	KfwWKbl8C3Qy8pkt7N4eXh1ZrOqiaZ0dzn27Z4i5JzNMOwNl6y56UnXNkysg1jfL
-	pmKg4sgFKCwYo2iT4FOda3fTFBfq/g8/gRt2zba2C+ewmN/xWN7kKEek8+rbMEnT
-	9Dwgk5gsTlTPhlAvAH8LPSNFMVuXQwvVVsXEXj8z3xYFScXE4otwhl2Mw8acRbVs
-	uXLl8pcmuziNvSrNgSs7IQW1KgHMRlgnImF6fDSbSRDJ2qhJYHYsDQQAfXT/B6B5
-	IOav246T/RQkO47bTWwQ==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wk5brrec5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 01 Mar 2024 05:31:27 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4215VQD5008730
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 1 Mar 2024 05:31:26 GMT
-Received: from [10.131.33.37] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Thu, 29 Feb
- 2024 21:31:22 -0800
-Message-ID: <08018d07-79cf-cebd-aba5-214afbc5001d@quicinc.com>
-Date: Fri, 1 Mar 2024 11:01:19 +0530
+	s=arc-20240116; t=1709271868; c=relaxed/simple;
+	bh=x0RYsqPoQe7Py7qVG6iE+FyNJ5qnSlT7pe837V0tbtg=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rCr3crl0o7B4rKCmAc5VB6l8oMl/zrxej7OkgmxFOFwZjOeHyXNkYiwHJz1RIaandCb8LWUZWz4DoIVDKiE2YiuGYEOtJUcHYljSQubRmGd9uoXKUO+n/fsaZQ4c/cHlkO07PXG5LP0iA/yeSerPBmFDun00z9Cnu978yvKECgo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=iYMwGkDD; arc=none smtp.client-ip=198.47.19.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 4215hxqf081979;
+	Thu, 29 Feb 2024 23:43:59 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1709271839;
+	bh=Ax8wDou/i0Ij3YdyTyGYeuq8MJb/3HgD1UFnkReb0vA=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=iYMwGkDDnBLEOok5A1DLYm8QBUlSlEI69ZCXBqPYkERZyxZJGEqCLXeThETm0acrm
+	 pWQtSiYS0VTngf5sydy6PdTYzK4jb4+8GGv+8tb77nyqSxqj2FraN+P6icjPK+u7yS
+	 kEecdkAYGy5xqWSYwXlgBC06lsmMKrnuE2gsH0iY=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 4215hxWV065949
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 29 Feb 2024 23:43:59 -0600
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 29
+ Feb 2024 23:43:59 -0600
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 29 Feb 2024 23:43:59 -0600
+Received: from localhost (dhruva.dhcp.ti.com [172.24.227.68])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4215hwno059467;
+	Thu, 29 Feb 2024 23:43:58 -0600
+Date: Fri, 1 Mar 2024 11:13:57 +0530
+From: Dhruva Gole <d-gole@ti.com>
+To: Maulik Shah <quic_mkshah@quicinc.com>
+CC: Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi
+	<lpieralisi@kernel.org>, <andersson@kernel.org>,
+        <ulf.hansson@linaro.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Sudeep Holla <Sudeep.Holla@arm.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-pm@vger.kernel.org>, <quic_lsrao@quicinc.com>,
+        <stable@vger.kernel.org>
+Subject: Re: [PATCH v2] PM: suspend: Set mem_sleep_current during kernel
+ command line setup
+Message-ID: <20240301054357.hgbvbcywbxclebus@dhruva>
+References: <20240229-suspend_ops_late_init-v2-1-34852c61a5fa@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V3 2/2] cpufreq: scmi: Register for limit change
- notifications
-Content-Language: en-US
-To: Lukasz Luba <lukasz.luba@arm.com>,
-        Cristian Marussi
-	<cristian.marussi@arm.com>
-CC: <sudeep.holla@arm.com>, <linux-arm-kernel@lists.infradead.org>,
-        <pierre.gondois@arm.com>, <dietmar.eggemann@arm.com>,
-        <morten.rasmussen@arm.com>, <viresh.kumar@linaro.org>,
-        <rafael@kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_mdtipton@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>
-References: <20240227181632.659133-1-quic_sibis@quicinc.com>
- <20240227181632.659133-3-quic_sibis@quicinc.com>
- <f8bfc666-c216-44d5-a63b-99f04ff3b8ef@arm.com>
- <2608b2d8-f3b0-b4f5-f8e4-1f2242043ded@quicinc.com>
- <64c6a1bc-92f2-4f44-ab10-cbd2473746f3@arm.com>
- <18c249b2-ce8c-435b-8d65-a1770a1f294e@arm.com> <ZeBqW04f8V4dHphn@pluto>
- <7c82b316-89d9-470d-b46d-f86e81e2add3@arm.com> <ZeB0iCr9GpfUiOEg@pluto>
- <66ca73cc-8bdd-453a-951c-5e0166340edd@arm.com>
-From: Sibi Sankar <quic_sibis@quicinc.com>
-In-Reply-To: <66ca73cc-8bdd-453a-951c-5e0166340edd@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: JTiHW5wWJNNYXA4P757PcCEeffN7Jshm
-X-Proofpoint-ORIG-GUID: JTiHW5wWJNNYXA4P757PcCEeffN7Jshm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-01_02,2024-02-29_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=999 malwarescore=0 suspectscore=0 priorityscore=1501
- bulkscore=0 clxscore=1015 spamscore=0 mlxscore=0 impostorscore=0
- adultscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2402120000 definitions=main-2403010043
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20240229-suspend_ops_late_init-v2-1-34852c61a5fa@quicinc.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
+Hi,
 
+On Feb 29, 2024 at 12:14:59 +0530, Maulik Shah wrote:
+> psci_init_system_suspend() invokes suspend_set_ops() very early during
+> bootup even before kernel command line for mem_sleep_default is setup.
+> This leads to kernel command line mem_sleep_default=s2idle not working
+> as mem_sleep_current gets changed to deep via suspend_set_ops() and never
+> changes back to s2idle.
+> 
+> Set mem_sleep_current along with mem_sleep_default during kernel command
+> line setup as default suspend mode.
+> 
+> Fixes: faf7ec4a92c0 ("drivers: firmware: psci: add system suspend support")
+> CC: stable@vger.kernel.org # 5.4+
+> Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
+> ---
+> Changes in v2:
+> - Set mem_sleep_current during mem_sleep_default kernel command line setup
+> - Update commit message accordingly
+> - Retain Fixes: tag
+> - Link to v1: https://lore.kernel.org/r/20240219-suspend_ops_late_init-v1-1-6330ca9597fa@quicinc.com
+> ---
+>  kernel/power/suspend.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> index 742eb26618cc..e3ae93bbcb9b 100644
+> --- a/kernel/power/suspend.c
+> +++ b/kernel/power/suspend.c
+> @@ -192,6 +192,7 @@ static int __init mem_sleep_default_setup(char *str)
+>  		if (mem_sleep_labels[state] &&
+>  		    !strcmp(str, mem_sleep_labels[state])) {
+>  			mem_sleep_default = state;
+> +			mem_sleep_current = state;
 
-On 2/29/24 19:45, Lukasz Luba wrote:
-> 
-> 
-> On 2/29/24 12:11, Cristian Marussi wrote:
->> On Thu, Feb 29, 2024 at 11:45:41AM +0000, Lukasz Luba wrote:
->>>
->>>
->>> On 2/29/24 11:28, Cristian Marussi wrote:
->>>> On Thu, Feb 29, 2024 at 10:22:39AM +0000, Lukasz Luba wrote:
->>>>>
->>>>>
->>>>> On 2/29/24 09:59, Lukasz Luba wrote:
->>>>>>
->>>>>>
->>>>>> On 2/28/24 17:00, Sibi Sankar wrote:
->>>>>>>
->>>>>>>
->>>>>>> On 2/28/24 18:54, Lukasz Luba wrote:
->>>>>>>>
->>>>>>>>
->>>>>>>> On 2/27/24 18:16, Sibi Sankar wrote:
->>>>>>>>> Register for limit change notifications if supported and use
->>>>>>>>> the throttled
->>>>>>>>> frequency from the notification to apply HW pressure.
->>>>>>>
->>>>>>> Lukasz,
->>>>>>>
->>>>>>> Thanks for taking time to review the series!
->>>>>>>
->>>>>>>>>
->>>>>>>>> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
->>>>>>>>> ---
->>>>>>>>>
->>>>>>>>> v3:
->>>>>>>>> * Sanitize range_max received from the notifier. [Pierre]
->>>>>>>>> * Update commit message.
->>>>>>>>>
->>>>>>>>> ï¿½ drivers/cpufreq/scmi-cpufreq.c | 29 
->>>>>>>>> ++++++++++++++++++++++++++++-
->>>>>>>>> ï¿½ 1 file changed, 28 insertions(+), 1 deletion(-)
->>>>>>>>>
->>>>>>>>> diff --git a/drivers/cpufreq/scmi-cpufreq.c
->>>>>>>>> b/drivers/cpufreq/scmi-cpufreq.c
->>>>>>>>> index 76a0ddbd9d24..78b87b72962d 100644
->>>>>>>>> --- a/drivers/cpufreq/scmi-cpufreq.c
->>>>>>>>> +++ b/drivers/cpufreq/scmi-cpufreq.c
->>>>>>>>> @@ -25,9 +25,13 @@ struct scmi_data {
->>>>>>>>> ï¿½ï¿½ï¿½ï¿½ï¿½ int domain_id;
->>>>>>>>> ï¿½ï¿½ï¿½ï¿½ï¿½ int nr_opp;
->>>>>>>>> ï¿½ï¿½ï¿½ï¿½ï¿½ struct device *cpu_dev;
->>>>>>>>> +ï¿½ï¿½ï¿½ struct cpufreq_policy *policy;
->>>>>>>>> ï¿½ï¿½ï¿½ï¿½ï¿½ cpumask_var_t opp_shared_cpus;
->>>>>>>>> +ï¿½ï¿½ï¿½ struct notifier_block limit_notify_nb;
->>>>>>>>> ï¿½ };
->>>>>>>>> +const struct scmi_handle *handle;
->>>>>>
->>>>>> I've missed this bit here.
->>>>>
->>>>> So for this change we actually have to ask Cristian or Sudeep
->>>>> because I'm not sure if we have only one 'handle' instance
->>>>> for all cpufreq devices.
->>>>>
->>>>> If we have different 'handle' we cannot move it to the
->>>>> global single pointer.
->>>>>
->>>>> Sudeep, Cristian what do you think?
->>>>
->>>> I was just replying noticing this :D .... since SCMI drivers can be
->>>> probed multiple times IF you defined multiple scmi top nodes in your DT
->>>> containing the same protocol nodes, they receive a distinct 
->>>> sdev/handle/ph
->>>> for each probe...so any attempt to globalize these wont work...BUT...
->>>>
->>>> ...this is a bit of a weird setup BUT it is not against the spec and 
->>>> it can
->>>> be used to parallelize more the SCMI accesses to disjont set of 
->>>> resources
->>>> within the same protocol (a long story here...) AND this type of 
->>>> setup is
->>>> something that it is already used by some other colleagues of Sibi 
->>>> working
->>>> on a different line of products (AFAIK)...
->>>>
->>>> So, for these reasons, usually, all the other SCMI drivers have 
->>>> per-instance
->>>> non-global references to handle/sdev/ph....
->>>>
->>>> ...having said that, thought, looking at the structure of CPUFReq
->>>> drivers, I am not sure that they can stand such a similar setup
->>>> where multiple instances of this same driver are probed
->>>>
->>>> .... indeed the existent *ph refs above is already global....so it 
->>>> wont already
->>>> work anyway in case of multiple instances now...
->>>>
->>>> ...and if I look at how CPUFreq expects the signature of 
->>>> scmi_cpufreq_get_rate()
->>>> to be annd how it is implemented now using the global *ph reference, 
->>>> it is
->>>> clearly already not working cleanly on a multi-instance setup...
->>>>
->>>> ...now...I can imagine how to (maybe) fix the above removing the 
->>>> globals and
->>>> fixing this, BUT the question, more generally, is CPUFreq supposed 
->>>> to work at all in
->>>> this multi-probed mode of operation ?
->>>> Does it even make sense to be able to support this in CPUFREQ ?
->>>>
->>>> (as an example in cpufreq,c there is static global cpufreq_driver
->>>>    pointing to the arch-specific configured driver BUT that also holds
->>>>    some .driver_data AND that cleraly wont be instance specific if you
->>>>    probe multiple times and register with CPUFreq multiple times...)
->>>>
->>>>    More questions than answers here :D
->>>>
->>>
->>> Thanks Cristian for instant response. Yes, indeed now we have more
->>> questions :) (which is good). But that's good description of the
->>> situation.
->>>
->>> So lets consider a few option what we could do now:
->>> 1. Let Sibi add another global state the 'handle' but add
->>>     a BUG_ON() or WARN_ON() in the probe path if the next
->>>     'handle' instance is different than already set in global.
->>>     This would simply mean that we don't support (yet)
->>>     such configuration in a platform. As you said, we
->>>     already have the *ph global, so maybe such platforms
->>>     with multiple instances for this particular cpufreq and
->>>     performance protocol don't exist yet.
->>
->> Yes this is the quickst way (and a WARN_ON() is better I'd say) but there
->> are similar issues of "unicity" currently already with another vendor 
->> SCMI
->> drivers and custom protocol currently under review, so I was thinking to
->> add a new common mechanism in SCMI to handle this ... not thought about
->> this really in depth and I want to chat with Sudeep about this...
->>
->>> 2. Ask Sibi to wait with this change, till we refactor the
->>>     exiting driver such that it could support easily those
->>>     multiple instances. Then pick up this patch set.
->>>     Although, we would also like to have those notifications from our
->>>     Juno SCP reference FW, so the feature is useful.
->>> 3. Ask Sibi to refactor his patch to somehow get the 'handle'
->>>     in different way, using exiting code and not introduce this global.
->>>
->>
->>> IHMO we could do this in steps: 1. and then 2. When
->>> we create some mock platform to test this refactoring we can
->>> start cleaning it.
+I could've missed this patch. Please CC people who are involved in
+the previous discussions :)
 
-I should be able to volunteer a platform to test against when
-we have things ready.
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
 
->>>
->>
->> Both of these options really beg an answer to my original previous q
->> question...if we somehow enable this multi-probe support in the
->> scmi-cpufreq.c driver by avoiding glbals refs, does this work at all in
->> the context of CPUFreq ?
-> 
-> I don't know yet.
-> 
->>
->> ...or it is just that CPUFreq cannot handle such a configuration (and
->> maybe dont want to) and so the only solution here is just 1. at first and
->> then a common refined mechanism (as mentioned above) to ensure this 
->> "unicity"
->> of the probes for some drivers ?
-> 
-> This sounds reasonable.
-> 
->>
->> I'm not familiar enough to grasp if this "multi-probed" mode of 
->> operation is
->> allowed/supported by CPUFreq and, more important, if it makes any sense
->> at all to be a supported mode...
->>
-> 
-> OK, let me check some stuff in the code and think for a while on that.
-> Thanks Cristian!
-> 
-> Sibi, please give me a few days. In the meantime you can continue
-> on the 'boost' patch set probably.
-
-sure, thanks. I've plenty things to send out so no hurry ;)
-
--Sibi
-
+-- 
+Best regards,
+Dhruva Gole <d-gole@ti.com>
 
