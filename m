@@ -1,108 +1,125 @@
-Return-Path: <linux-pm+bounces-4619-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4620-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8742E86F130
-	for <lists+linux-pm@lfdr.de>; Sat,  2 Mar 2024 17:22:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6E5386F27D
+	for <lists+linux-pm@lfdr.de>; Sat,  2 Mar 2024 22:11:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B9E091C210C7
-	for <lists+linux-pm@lfdr.de>; Sat,  2 Mar 2024 16:22:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0ED7CB2167C
+	for <lists+linux-pm@lfdr.de>; Sat,  2 Mar 2024 21:11:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2602918643;
-	Sat,  2 Mar 2024 16:22:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B362940C03;
+	Sat,  2 Mar 2024 21:11:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cBjk/7RJ"
+	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="QBJYi2pf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 609D25231;
-	Sat,  2 Mar 2024 16:22:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1D3E40BFA;
+	Sat,  2 Mar 2024 21:11:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709396546; cv=none; b=ptL4GICEpJ4uUW+xTfYKwsfJbowHqEw5AO+4IHs8Xi2nbe7QFh3LWbFd63s/xvtIByIerSeB7vN6ImTU8TOm0e9DLeWBOQ0LlbOlW612H1+sukLhfaQdgYmDIuvwqDdEMO1q11lFaf/PpXKXrEIcugobSmucsGg7LtECfsQ0ELQ=
+	t=1709413911; cv=none; b=g00gz9j0tZFs6dEHkq63XLttaZh9shcd494A+HRMLGts65ovPwEkF/z7bTn01XdUR6T5VFfbvzsUj64TopcmsbCyFIRUEKpP7VG+W9HvGsij0A14dgPpZVJ/O5Rjf/0ynMSbOAFJasfDNkT+WjWUnAjlcBYTYq3VXYCJ1QzA/YE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709396546; c=relaxed/simple;
-	bh=O7Metv/cKZxMqHAr7xMIKgbBm2eQl686+CzdtJnXHdE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aIee1cQxjyfw52R8vm2KQ3LJ67Ns+SeeguzTUJa01E6Md61yvmnzdwxD6ezzd688DIrVPuALY2XhyLQTaf5kU+UewGA436jdqN3HgNzGAQeqeGGA1CcZaopiiQqMsNVQfev6OGlVCKh7mxHinDEJ8smBbILkybTGAEeaTDhVlgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cBjk/7RJ; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709396544; x=1740932544;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=O7Metv/cKZxMqHAr7xMIKgbBm2eQl686+CzdtJnXHdE=;
-  b=cBjk/7RJ8SY5LQPIiDjBNk9IS8KZfBLEE7M+PTI9ocxzl5kZneRrggnP
-   BV/VtWMUybOZRA6Z3bKdHHAIHelR54yh7dsjR08dWbd+0s6wCJ7xCnGYm
-   Xz1RrORt94qSqYxplwNzM0tYpEjKDQqiLF7A/NfzYy6iamEKZ0/xG8g+m
-   +aPpxNnqgmmz8s1L8ZotOMKi3bteVb6RdEw8MEL7ytZ3yYmM+iNKiqu2v
-   peKPHiMrfSEIwrEV/fbUae9A99njRYTUe7pKE5I2Hg2SrrBM9J1U64wiW
-   xBB/gfP+pLvbN9UTjrDdWCZxE2yPwaFWB8aS+TqdjwHk65IOVm2m3Bkfa
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11001"; a="4508976"
-X-IronPort-AV: E=Sophos;i="6.06,199,1705392000"; 
-   d="scan'208";a="4508976"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2024 08:22:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,199,1705392000"; 
-   d="scan'208";a="8596834"
-Received: from avandeve-mobl1.amr.corp.intel.com (HELO [10.125.99.137]) ([10.125.99.137])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2024 08:22:23 -0800
-Message-ID: <d6275e31-9ceb-4d8c-9018-e30857c31bba@linux.intel.com>
-Date: Sat, 2 Mar 2024 08:22:19 -0800
+	s=arc-20240116; t=1709413911; c=relaxed/simple;
+	bh=+nKuWcSkrCgulQpup8ts4ihyRWO8OA4cRuW4ej5DjjA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mnSCbEacgjMB7bVcS8eXaBJjsGlgG/vsM0vcD+lzE2nYZAhlbdsh7dpj73e4aPkMHXQiTTEkCUsbHSRnQVeQB5dVK9RS92myTUqz31qUNXfbbO6uxoZSAH5Nm/ja9s9//LwLdVVurgIgSRrvVsBQKGYj399oRNA9ZHa5u2AQt3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=QBJYi2pf; arc=none smtp.client-ip=209.85.166.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-7c83788bfabso33665339f.1;
+        Sat, 02 Mar 2024 13:11:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709413909; x=1710018709;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:dkim-signature:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=02ZLstAgwjx9+b3U1+SFQSp/H2Y/sSK2Rqk64E1/jYo=;
+        b=aan3X3tyvX7LqCI7TBBgvV+UgMMrAncgzci/rF2LjTlRWIkKzOOtwt/MOqm2WPRI5w
+         BQMAiARDbThBvZ1J9k1QYUx6pQtklLQgI//Xlp0+7NC59xE2vQLgRr7ckxm1AEhhfMuW
+         mpZqtkgPtZnWI9OJheLnjokQFwtnF0fgmXjQrHXgmIAI9ma6iTU7o1d71AbGrLwM4yUc
+         h957hhA7piW28NrSe8NcPkLDsGb/VlGefDc0CDUjuwxGdLyFuiYj1QuzG7aiwtfO/YoB
+         XMTLi2EA/sv1OJYzAgKzBh47Q4vt7dhO/zMsIwVCPZ9gxf7tOMFgIhSqDmcXISSTcpTt
+         UimA==
+X-Forwarded-Encrypted: i=1; AJvYcCV9cUFW0dFWUImDHr+dSzr97iX4omDTD+b9y/BYGjvJz7mg3N1xqCKiuJ7nAh+VMacelWsjfLklCA94A8SgeWDekbxagA/8IGWjv9r1YtM6DGSRMWq8zie3m40XI7+kQLsHpN/R4S4=
+X-Gm-Message-State: AOJu0YzNB6w5O1R4hR4JRj0+0srr0dqFhkQEYpd+jm8Tfx3P1/m2VBGH
+	fFZBccAI5R+CU9TfF6c8tSQBqLSf88em7aE62rg6HVC/HsdGfEHH
+X-Google-Smtp-Source: AGHT+IHTF2N0RUAaLJM8YxDxWnQmOFYXVA6wPUgWp1BVnzjesXNEDELPo5a0PLLV62C3T5tuAREwkQ==
+X-Received: by 2002:a5e:db4d:0:b0:7c8:2702:404 with SMTP id r13-20020a5edb4d000000b007c827020404mr4389717iop.16.1709413908980;
+        Sat, 02 Mar 2024 13:11:48 -0800 (PST)
+Received: from mail.marliere.net ([24.199.118.162])
+        by smtp.gmail.com with ESMTPSA id t4-20020a6b0904000000b007c7dde97be9sm1552642ioi.50.2024.03.02.13.11.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Mar 2024 13:11:48 -0800 (PST)
+Date: Sat, 2 Mar 2024 18:11:48 -0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
+	s=2024; t=1709413907;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=02ZLstAgwjx9+b3U1+SFQSp/H2Y/sSK2Rqk64E1/jYo=;
+	b=QBJYi2pfH2Df2n1JHPMszibTUg3VIN47AMNfhIvd7dW3h1hQXREKAhItHUZlt5V1UE+QLz
+	+OJ9GTyKYPpW642MvXZTgUSevxAks21pDgQZF0SeR2Fll1eXrqCO8QsykyfHtexdWEtqXD
+	JZLV44eJ0bjWBOIq+lhzkyd7QjADkGyIPt3LhvzjYZp/Ux2OXOkG/jfyrODfVce+q9hbxq
+	nF5gLvj4pW06Bh1bxtUNvfVOGUQZkJdc4eJA4DldQnQ+/EnZfurHYekvFDikjJmfoWQCsR
+	lk1fs6x85fVU74uR4Fl/CSiSlSs9vtSJ7/7SlfpyzestGCsNRTIHTBRCoxnk3Q==
+Authentication-Results: ORIGINATING;
+	auth=pass smtp.auth=ricardo@marliere.net smtp.mailfrom=ricardo@marliere.net
+From: "Ricardo B. Marliere" <ricardo@marliere.net>
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>, 
+	Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] power: supply: core: class cleanups
+Message-ID: <pbcgp4e2q5qdid4xmyslpkidlxmhhtal64binfwxi7ktl66lwb@w6skhb5yoq4x>
+References: <20240301-psy-class-cleanup-v1-0-aebe8c4b6b08@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Dell XPS 13 9360: Two PCI devices with disabled power management
- by default
-To: Paul Menzel <pmenzel@molgen.mpg.de>, Bjorn Helgaas <helgaas@kernel.org>
-Cc: Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20240301215148.GA409221@bhelgaas>
- <eeccc05b-3341-4bc5-bdc7-27cd9e6eb104@molgen.mpg.de>
-Content-Language: en-US
-From: Arjan van de Ven <arjan@linux.intel.com>
-In-Reply-To: <eeccc05b-3341-4bc5-bdc7-27cd9e6eb104@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240301-psy-class-cleanup-v1-0-aebe8c4b6b08@collabora.com>
 
-On 3/2/2024 8:19 AM, Paul Menzel wrote:
-> [Cc: +Arjan]
-> 
-> Dear Bjorn,
-> 
-> 
-> Thank you for your reply.
-> 
-> Am 01.03.24 um 22:51 schrieb Bjorn Helgaas:
->> On Fri, Mar 01, 2024 at 12:32:12PM +0100, Paul Menzel wrote:
-> 
->>> I noticed on the Dell XPS 13 9360 some devices do not have power management
->>> enabled by default. From PowerTOP:
->>>
->>>         Bad           Runtime PM for PCI Device Intel Corporation Sunrise Point-LP PCI Express Root Port #1
->>>         Bad           Runtime PM for PCI Device Intel Corporation Sunrise Point-LP LPC Controller
->>
->> I don't know what this "Bad" is based on, so I don't know where to
->> look for something Linux might be doing.  I don't see any code that
->> mentions 9d10 or 9d58 Device IDs in relation to power.
-> 
-> Turns out that PowerTOP marks all devices as *Bad* where `power/control` differs from `auto`. In this case these are set to `on`, which should be good from a power 
-> management perspective.
+On  1 Mar 23:58, Sebastian Reichel wrote:
+> I noticed some further possible cleanups when reviewing
+> and applying Ricardo's patch to make power_supply_class
+> constant.
 
-ok just fixed this in powertop git
+Good one!
 
-thanks for the report!
+Reviewed-by: Ricardo B. Marliere <ricardo@marliere.net>
+
+Thank you,
+-	Ricardo.
 
 
+> 
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+> Sebastian Reichel (2):
+>       power: supply: core: add power_supply_for_each_device()
+>       power: supply: core: simplify power_supply_class_init
+> 
+>  drivers/power/supply/ab8500_btemp.c      |  3 +--
+>  drivers/power/supply/ab8500_chargalg.c   |  3 +--
+>  drivers/power/supply/ab8500_charger.c    |  3 +--
+>  drivers/power/supply/ab8500_fg.c         |  3 +--
+>  drivers/power/supply/apm_power.c         |  3 +--
+>  drivers/power/supply/power_supply_core.c | 43 +++++++++++++-------------------
+>  include/linux/power_supply.h             |  3 +--
+>  7 files changed, 23 insertions(+), 38 deletions(-)
+> ---
+> base-commit: 71c2cc5cbf686c2397f43cbcb51a31589bdcee7b
+> change-id: 20240301-psy-class-cleanup-6e6711d595aa
+> 
+> Best regards,
+> -- 
+> Sebastian Reichel <sebastian.reichel@collabora.com>
+> 
 
