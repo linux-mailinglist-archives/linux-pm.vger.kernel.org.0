@@ -1,47 +1,76 @@
-Return-Path: <linux-pm+bounces-4627-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4628-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EDD386F5E4
-	for <lists+linux-pm@lfdr.de>; Sun,  3 Mar 2024 16:31:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83F4A86F60E
+	for <lists+linux-pm@lfdr.de>; Sun,  3 Mar 2024 17:29:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D07841C217E2
-	for <lists+linux-pm@lfdr.de>; Sun,  3 Mar 2024 15:31:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9CCE01C2183F
+	for <lists+linux-pm@lfdr.de>; Sun,  3 Mar 2024 16:29:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72BE567E76;
-	Sun,  3 Mar 2024 15:31:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F80F6BB39;
+	Sun,  3 Mar 2024 16:29:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="ed4xwleR"
+	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="cTeivo62"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47DB367A1D;
-	Sun,  3 Mar 2024 15:31:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A0286BB46;
+	Sun,  3 Mar 2024 16:29:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709479893; cv=none; b=cEFgVdzYyjdIxLg0U0OLypbebUSeZSydgbadap10l3oKIdTrw9BJK20dsbhJLv/VyQxei/4MyODjXZd4FNLblyOjeUw29od55EV4aV3l6K2QVU/ksZG3H8PY/in50ucx1R1wNLILotz+xSDPZcPANVip2GTpI/YlMQzIHAECClg=
+	t=1709483348; cv=none; b=jxBMpGvPnTKO4DCW72NHBUejGnA9EgdKV5oq2ZW9iZxl95QthjwmUOZaLYM4FovXCwSqlCA6sa/pDjT445tvWg+caWNWx4ws/aMq2MsL0ZDU38ilCM6sWFgzVtBEHAPX+LEzLun135604P80NjZmzOT3V4JGxhjSFILSUjpozL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709479893; c=relaxed/simple;
-	bh=uSL4zHrRtxegcQPlUUbn7PFzXuC2VWmGYlhL0gi2nWI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=FiB9BYX8qHMrL0Wr64N1d4KRrWs+Y5Z0vtgdUy2WjvKK783BrscenvWt4fgwe0GSxcvOhAU3u2Xblp7tcMEqMyC9+G9nFlSEoKuKkMgwydoYEhb1mO9PDhymjmnQQ5GUWCBbljXOA0zkMS//sCtV67rLXOjMz/f3yGHn0v/rq4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=ed4xwleR; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1709479880;
-	bh=uSL4zHrRtxegcQPlUUbn7PFzXuC2VWmGYlhL0gi2nWI=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=ed4xwleRDJ84ipdoh3Z5HFWfQdsX7BXILqmE7GG3jjRPQF5lr5BJLJ8h9hXVYMpFh
-	 n5rCJakdPL+CXQNS2Ddo8FIoqce9Rt2qcrpM2kwN5fBhzz9ToQbcj+rMJDbKaa81wo
-	 /BnGmzZNRpUiT5R+i3N4dsoZADLCu9LEYLTciopg=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Sun, 03 Mar 2024 16:31:16 +0100
-Subject: [PATCH v2 4/4] power: supply: test-power: implement
- charge_behaviour property
+	s=arc-20240116; t=1709483348; c=relaxed/simple;
+	bh=w/BV0vxxw3KqhEV/ene3cVxbTcqtHuugUeJbU+hKcuM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=T/9JFnmGEfZ5mraG3/elxvpN1yqgMx08LjVb8nlUPTzI7uuDD/klW1yrLbrfKMWkRQCpl6uYSErZ0sL7+/Q4j0iU26fvvYjXlfhS+sflSpgUTdC1o6x9JALnc8vACRu+W/fa4f/e2e1UALoiUmmsOHx2/mdfPVZbl7DmangZryk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=cTeivo62; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-5dbd519bde6so3249594a12.1;
+        Sun, 03 Mar 2024 08:29:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709483345; x=1710088145;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:dkim-signature:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F0bcl/GfiCCy6TWoeivaTyJR3kIJe2T31n6M+X38t/A=;
+        b=N2YxCVsWYyuR1KVyvT5oIWYnaZXVof8nRyuJS0sLGpEl4mm5XSPbgAuQw4i5FjEtLY
+         M8L35AF/sf0t0rToR1dKn9v/z5uG9ZqDgiVHHYplH5sXJBCIfMxPZqbXtYqkpci5civA
+         DAvD4bc6FpV97AYFFLtPzetRMmrw/mZ6dPIcCOpbYenZEc2ULvougnbtxPio9dBxzbpD
+         wzJnYZoy8+Tb3YgvXQCjs8pZg/FX/CJRjSndhmGd3mQQz9h8PQkyu39zahMvHWn3ZcN9
+         F+PfFwquIeDIVN5CCYSOocvgW2l1w53eidL0GUrfWIl+JRGpnP+9zxHgSMHHvKRDdj9S
+         Gq9g==
+X-Forwarded-Encrypted: i=1; AJvYcCWxHKdsgopmo0zFFBrrWigpxlTJS4dIRlyGLtsPqtSOe9OkRVZWq5nxGDxmN4Tt8iz9JVRVnw6MwOuOor3SpDXoi3qyNEXWrufzYCjfwhnZhj2X1fWged15tqnCxQ0+XbOC9WQJ9iw=
+X-Gm-Message-State: AOJu0Yx7scZK7vAU3XL/JnR9+yERF60lBMHeivD//6MQUCCQ6az6zEJb
+	6wvarAThy+6VxhfWbdipSOW6Olqv1iRqtHs4tuJ3DstqWc7WfCoR
+X-Google-Smtp-Source: AGHT+IH06c6cCQP4rfsOwRqoFzKUEfn8p7DX9qLNCPbxb2OkUf7d3Eiy/5eo7sRG2xgp/ehGVCcXZA==
+X-Received: by 2002:a05:6a20:3d94:b0:1a0:dc0a:31be with SMTP id s20-20020a056a203d9400b001a0dc0a31bemr5470619pzi.27.1709483344651;
+        Sun, 03 Mar 2024 08:29:04 -0800 (PST)
+Received: from mail.marliere.net ([24.199.118.162])
+        by smtp.gmail.com with ESMTPSA id p11-20020a056a000b4b00b006e57bd16fdfsm5815478pfo.205.2024.03.03.08.29.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Mar 2024 08:29:04 -0800 (PST)
+From: "Ricardo B. Marliere" <ricardo@marliere.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
+	s=2024; t=1709483342;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=F0bcl/GfiCCy6TWoeivaTyJR3kIJe2T31n6M+X38t/A=;
+	b=cTeivo62217tGW5K+B2c3eK/690OPV2w6EBt0CFm6rtWY1pgSwPuUPgHB29cvozqO/y7lN
+	Uqbuz7Mk83MzBgCocjvC8y9QOdSkGXEH/qlX96uQdqRxCMu6/EuhXGLhPOJ0D6sIq9iCvJ
+	qx3ebH4ECrQKW+UEpI2vggqNMJAwQo/4RKBsjbMq9R4e6ycsdYy4rYnYH4bH8nO03PdQJJ
+	VT302iN/Dh8pOrUoHHHO4f5gMmectlkj2+sAasK4LX+eQZGDYci5E+Ky0Dza43B+zafwLm
+	ncqZXUGKG2D7UsYcqO0GzEdPG2nHk+st2br01jM+4fgtrg4JH5oiDGoLzyzQpQ==
+Authentication-Results: ORIGINATING;
+	auth=pass smtp.auth=ricardo@marliere.net smtp.mailfrom=ricardo@marliere.net
+Date: Sun, 03 Mar 2024 13:28:55 -0300
+Subject: [PATCH] power: supply: move power_supply_attr_groups definition
+ back to core
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -49,104 +78,112 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240303-power_supply-charge_behaviour_prop-v2-4-8ebb0a7c2409@weissschuh.net>
-References: <20240303-power_supply-charge_behaviour_prop-v2-0-8ebb0a7c2409@weissschuh.net>
-In-Reply-To: <20240303-power_supply-charge_behaviour_prop-v2-0-8ebb0a7c2409@weissschuh.net>
-To: Sebastian Reichel <sre@kernel.org>, Hans de Goede <hdegoede@redhat.com>, 
- Konrad Dybcio <konradybcio@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Sebastian Reichel <sebastian.reichel@collabora.com>, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1709479879; l=2814;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=uSL4zHrRtxegcQPlUUbn7PFzXuC2VWmGYlhL0gi2nWI=;
- b=VBPfUTlYlMVvpfwyZ0EUwuk/b6rXS/LCIf/SFUH7VkqycelzdsFR+rB3puZy85hSyhQdRcEHX
- b2cl1z5dlIZBXQoCn83KJOKyjXaF5VEoPX0BgPmTT2e4elka/XJ+MfL
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240303-class_cleanup-power-v1-1-6a3abb5b15ad@marliere.net>
+X-B4-Tracking: v=1; b=H4sIAEal5GUC/x3MTQqAIBBA4avErBNMy6CrRITYVANh4tAPiHdPW
+ n6L9xIwRkKGoUoQ8Sam0xc0dQVut35DQUsxKKlaqaUW7rDMszvQ+iuIcD4YRY+qk60xSq8OShk
+ irvT+13HK+QN7DL/jZQAAAA==
+To: Sebastian Reichel <sre@kernel.org>
+Cc: Sebastian Reichel <sebastian.reichel@collabora.com>, 
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kernel test robot <lkp@intel.com>, 
+ "Ricardo B. Marliere" <ricardo@marliere.net>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3227; i=ricardo@marliere.net;
+ h=from:subject:message-id; bh=w/BV0vxxw3KqhEV/ene3cVxbTcqtHuugUeJbU+hKcuM=;
+ b=owEBbQKS/ZANAwAKAckLinxjhlimAcsmYgBl5KVJOhdHR17GY6viPoIccRxLeZzXxuXxmHke6
+ 6wBen6jByaJAjMEAAEKAB0WIQQDCo6eQk7jwGVXh+HJC4p8Y4ZYpgUCZeSlSQAKCRDJC4p8Y4ZY
+ pqgVD/4q6QSnHSHTQyfOp7Fm+aJZESOS69yfD23cp57rfybZdCXZCEfVlj0pzuANVVsZOvwJXWE
+ /HZ57VCJTu0GBB2+XFlWGdEU71yZ2jXdxmXVXmToPFFel3YV4DvQYAd8TfmgmppZ3s4bQ7fUyR5
+ ijGS06d5tzxBo2PIYGoLVliuWrTAp8ucGQH4D3328ULTChXX5BbCAuGPjgkFrdmGOQ9mbLmVRIR
+ RPCdNHr6uNX+EqiU7mVAm3QXH4B8GP2rgO7wn2i4FtLP/qq8COMpkUOQwxyLs3kPgpZGZd+Zj8I
+ fIWxGZlmK8xrWADojv8iRG2p++9C9G43Rza99pdZVfhJyD12P6XeYnAQLjAcSPR/7pTs+50W4QX
+ sjltO5sCNDil0gK6w98JNG5liGHZ5uoJWiy74JM6vKrlBvy+KQ+fFidbDO5NdrkNh/OMjD21fbF
+ v8srogXfVYvOI4u2x0BRuUy1IkKyUzHv5PYHdMNHU1R5ekzl1tJzxTXxOZPz2G8OINW1WKhBMNJ
+ I/eEQnC88vGy1d22D2cvDzHFCQDY4ldHxD6R4yD/8niRAKKaGpOIgYa31SS+XCAKG+3gDvandpW
+ Fo4t8Nf10NmIOSd+83DWUEMas1QHJ4Q/zZQvBLiXeC0OTVAvmp0yO2amWIKPt6L5uShyKcB8y2w
+ E5unY8EOYL03neg==
+X-Developer-Key: i=ricardo@marliere.net; a=openpgp;
+ fpr=030A8E9E424EE3C0655787E1C90B8A7C638658A6
 
-To validate the special formatting of the "charge_behaviour" sysfs
-property add it to the example driver.
+As reported by the kernel test robot, 'power_supply_attr_group' is defined
+but not used when CONFIG_SYSFS is not set. Sebastian suggested that the
+correct fix implemented by this patch, instead of my attempt in commit
+ea4367c40c79 ("power: supply: core: move power_supply_attr_group into #ifdef
+block"), is to define power_supply_attr_groups in power_supply_sysfs.c and
+expose it in the power_supply.h header. For the case where CONFIG_SYSFS=n,
+define it as NULL.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+Suggested-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Fixes: ea4367c40c79 ("power: supply: core: move power_supply_attr_group into #ifdef block")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202403021518.SUQzk3oA-lkp@intel.com/
+Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
 ---
- drivers/power/supply/test_power.c | 31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ drivers/power/supply/power_supply.h       | 4 ++--
+ drivers/power/supply/power_supply_core.c  | 1 -
+ drivers/power/supply/power_supply_sysfs.c | 7 ++++++-
+ 3 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply/test_power.c
-index 0d0a77584c5d..1dfbaabb8086 100644
---- a/drivers/power/supply/test_power.c
-+++ b/drivers/power/supply/test_power.c
-@@ -35,6 +35,8 @@ static int battery_capacity		= 50;
- static int battery_voltage		= 3300;
- static int battery_charge_counter	= -1000;
- static int battery_current		= -1600;
-+static enum power_supply_charge_behaviour battery_charge_behaviour =
-+	POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO;
+diff --git a/drivers/power/supply/power_supply.h b/drivers/power/supply/power_supply.h
+index 06749a534db4..3cbafc58bdad 100644
+--- a/drivers/power/supply/power_supply.h
++++ b/drivers/power/supply/power_supply.h
+@@ -17,12 +17,12 @@ struct power_supply;
  
- static bool module_initialized;
+ extern void power_supply_init_attrs(void);
+ extern int power_supply_uevent(const struct device *dev, struct kobj_uevent_env *env);
+-extern const struct attribute_group power_supply_attr_group;
++extern const struct attribute_group *power_supply_attr_groups[];
  
-@@ -123,6 +125,9 @@ static int test_power_get_battery_property(struct power_supply *psy,
- 	case POWER_SUPPLY_PROP_CURRENT_NOW:
- 		val->intval = battery_current;
- 		break;
-+	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
-+		val->intval = battery_charge_behaviour;
-+		break;
- 	default:
- 		pr_info("%s: some properties deliberately report errors.\n",
- 			__func__);
-@@ -131,6 +136,26 @@ static int test_power_get_battery_property(struct power_supply *psy,
+ #else
+ 
+ static inline void power_supply_init_attrs(void) {}
+-static const struct attribute_group power_supply_attr_group;
++#define power_supply_attr_groups NULL
+ #define power_supply_uevent NULL
+ 
+ #endif /* CONFIG_SYSFS */
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index 4f27f17f8741..0a716cc0f164 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -34,7 +34,6 @@ EXPORT_SYMBOL_GPL(power_supply_class);
+ 
+ static BLOCKING_NOTIFIER_HEAD(power_supply_notifier);
+ 
+-__ATTRIBUTE_GROUPS(power_supply_attr);
+ static const struct device_type power_supply_dev_type = {
+ 	.name = "power_supply",
+ 	.groups = power_supply_attr_groups,
+diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+index edb240450e38..bf725cbb0d86 100644
+--- a/drivers/power/supply/power_supply_sysfs.c
++++ b/drivers/power/supply/power_supply_sysfs.c
+@@ -389,11 +389,16 @@ static umode_t power_supply_attr_is_visible(struct kobject *kobj,
  	return 0;
  }
  
-+static int test_power_battery_property_is_writeable(struct power_supply *psy,
-+						    enum power_supply_property psp)
-+{
-+	return psp == POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR;
-+}
-+
-+static int test_power_set_battery_property(struct power_supply *psy,
-+					   enum power_supply_property psp,
-+					   const union power_supply_propval *val)
-+{
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
-+		battery_charge_behaviour = val->intval;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+	return 0;
-+}
-+
- static enum power_supply_property test_power_ac_props[] = {
- 	POWER_SUPPLY_PROP_ONLINE,
- };
-@@ -156,6 +181,7 @@ static enum power_supply_property test_power_battery_props[] = {
- 	POWER_SUPPLY_PROP_VOLTAGE_NOW,
- 	POWER_SUPPLY_PROP_CURRENT_AVG,
- 	POWER_SUPPLY_PROP_CURRENT_NOW,
-+	POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
+-const struct attribute_group power_supply_attr_group = {
++static const struct attribute_group power_supply_attr_group = {
+ 	.attrs = __power_supply_attrs,
+ 	.is_visible = power_supply_attr_is_visible,
  };
  
- static char *test_power_ac_supplied_to[] = {
-@@ -178,6 +204,11 @@ static const struct power_supply_desc test_power_desc[] = {
- 		.properties = test_power_battery_props,
- 		.num_properties = ARRAY_SIZE(test_power_battery_props),
- 		.get_property = test_power_get_battery_property,
-+		.set_property = test_power_set_battery_property,
-+		.property_is_writeable = test_power_battery_property_is_writeable,
-+		.charge_behaviours = BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO)
-+				   | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE)
-+				   | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE),
- 	},
- 	[TEST_USB] = {
- 		.name = "test_usb",
++const struct attribute_group *power_supply_attr_groups[] = {
++	&power_supply_attr_group,
++	NULL
++};
++
+ void power_supply_init_attrs(void)
+ {
+ 	int i;
 
+---
+base-commit: 71c2cc5cbf686c2397f43cbcb51a31589bdcee7b
+change-id: 20240303-class_cleanup-power-7e25046623fc
+
+Best regards,
 -- 
-2.44.0
+Ricardo B. Marliere <ricardo@marliere.net>
 
 
