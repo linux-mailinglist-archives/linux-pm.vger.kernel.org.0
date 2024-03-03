@@ -1,76 +1,76 @@
-Return-Path: <linux-pm+bounces-4628-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4629-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83F4A86F60E
-	for <lists+linux-pm@lfdr.de>; Sun,  3 Mar 2024 17:29:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A47186F613
+	for <lists+linux-pm@lfdr.de>; Sun,  3 Mar 2024 17:31:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9CCE01C2183F
-	for <lists+linux-pm@lfdr.de>; Sun,  3 Mar 2024 16:29:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0AD6A2858B7
+	for <lists+linux-pm@lfdr.de>; Sun,  3 Mar 2024 16:31:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F80F6BB39;
-	Sun,  3 Mar 2024 16:29:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E89651E86F;
+	Sun,  3 Mar 2024 16:30:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="cTeivo62"
+	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="FNkJAU6c"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A0286BB46;
-	Sun,  3 Mar 2024 16:29:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49EB11E499;
+	Sun,  3 Mar 2024 16:30:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709483348; cv=none; b=jxBMpGvPnTKO4DCW72NHBUejGnA9EgdKV5oq2ZW9iZxl95QthjwmUOZaLYM4FovXCwSqlCA6sa/pDjT445tvWg+caWNWx4ws/aMq2MsL0ZDU38ilCM6sWFgzVtBEHAPX+LEzLun135604P80NjZmzOT3V4JGxhjSFILSUjpozL8=
+	t=1709483457; cv=none; b=gdeuwQIkZ4Mcn/PbZBq7oqBII4akPZawQlAbz7k6DNvOX8rXjh3ZMjl3yZS2N9d/SELA3JesTaibLmAGwlGQXC+l4VAxc3jtcIQU7Jrh2Y5PbAi7mrGl6ba+e3tAmfoTnRdtF/MGyNujEYRgAh+5JCB3tN+c0nbLAZTBZnPfv7Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709483348; c=relaxed/simple;
-	bh=w/BV0vxxw3KqhEV/ene3cVxbTcqtHuugUeJbU+hKcuM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=T/9JFnmGEfZ5mraG3/elxvpN1yqgMx08LjVb8nlUPTzI7uuDD/klW1yrLbrfKMWkRQCpl6uYSErZ0sL7+/Q4j0iU26fvvYjXlfhS+sflSpgUTdC1o6x9JALnc8vACRu+W/fa4f/e2e1UALoiUmmsOHx2/mdfPVZbl7DmangZryk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=cTeivo62; arc=none smtp.client-ip=209.85.215.179
+	s=arc-20240116; t=1709483457; c=relaxed/simple;
+	bh=NKt+UkOLuWhi5aE3dgCRuciCjstns0KT4TDC+oezDI4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=V8itK3AvhTB6HO4FBm0QfcBtK58Sr9JX/jUOe4dGAejnXFO+isoU/Qz2laEq4pH8OCxfd23Q+t6CaWF/JoGit0//j1KmO9K9dBkDHFjYAcL5N4QHjXtNHn4YMZavFJZXVfTYlb6tjyPIGt+s6gN6NdEicNWqD1+LvyqEklEBrYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=FNkJAU6c; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-5dbd519bde6so3249594a12.1;
-        Sun, 03 Mar 2024 08:29:05 -0800 (PST)
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-299c11b250fso2390968a91.2;
+        Sun, 03 Mar 2024 08:30:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709483345; x=1710088145;
+        d=1e100.net; s=20230601; t=1709483455; x=1710088255;
         h=cc:to:message-id:content-transfer-encoding:mime-version:subject
          :date:dkim-signature:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=F0bcl/GfiCCy6TWoeivaTyJR3kIJe2T31n6M+X38t/A=;
-        b=N2YxCVsWYyuR1KVyvT5oIWYnaZXVof8nRyuJS0sLGpEl4mm5XSPbgAuQw4i5FjEtLY
-         M8L35AF/sf0t0rToR1dKn9v/z5uG9ZqDgiVHHYplH5sXJBCIfMxPZqbXtYqkpci5civA
-         DAvD4bc6FpV97AYFFLtPzetRMmrw/mZ6dPIcCOpbYenZEc2ULvougnbtxPio9dBxzbpD
-         wzJnYZoy8+Tb3YgvXQCjs8pZg/FX/CJRjSndhmGd3mQQz9h8PQkyu39zahMvHWn3ZcN9
-         F+PfFwquIeDIVN5CCYSOocvgW2l1w53eidL0GUrfWIl+JRGpnP+9zxHgSMHHvKRDdj9S
-         Gq9g==
-X-Forwarded-Encrypted: i=1; AJvYcCWxHKdsgopmo0zFFBrrWigpxlTJS4dIRlyGLtsPqtSOe9OkRVZWq5nxGDxmN4Tt8iz9JVRVnw6MwOuOor3SpDXoi3qyNEXWrufzYCjfwhnZhj2X1fWged15tqnCxQ0+XbOC9WQJ9iw=
-X-Gm-Message-State: AOJu0Yx7scZK7vAU3XL/JnR9+yERF60lBMHeivD//6MQUCCQ6az6zEJb
-	6wvarAThy+6VxhfWbdipSOW6Olqv1iRqtHs4tuJ3DstqWc7WfCoR
-X-Google-Smtp-Source: AGHT+IH06c6cCQP4rfsOwRqoFzKUEfn8p7DX9qLNCPbxb2OkUf7d3Eiy/5eo7sRG2xgp/ehGVCcXZA==
-X-Received: by 2002:a05:6a20:3d94:b0:1a0:dc0a:31be with SMTP id s20-20020a056a203d9400b001a0dc0a31bemr5470619pzi.27.1709483344651;
-        Sun, 03 Mar 2024 08:29:04 -0800 (PST)
+        bh=8FudLchqKx/rVDy9QMtMuyPGoJ1btkQ3n6JRM3X8NW0=;
+        b=hGkTU9MW59ymPIkkcfmHw2+jiOdAn3r8HNLUuftpUJLVckKqmv6xC1K+bLfxIajksl
+         6dVYcA5slnD3MczF0JtbpIGTD6fByLOOsaFtapgLjfSAPOrqZmtdqdROL4GAzxMXxbaJ
+         iFv/fH3kWiKYKKW7eRjpGeSQYdyeURlQoR23Y7Y+JbxES0NyA9LURFy3Cr0vrnfZf1Z7
+         oiIRPh2LDlgFBQbtFEO5seo2oSRN5EyuuJDW/FyQWlezGLgj47nqN22AwJYud2BKJG9r
+         W204Hrs/fWyCcD68JkoJjChihvq1i5NrSeE4Mz/eAAhjjWKSHaeSboC41gkwN2095jvJ
+         6fVg==
+X-Forwarded-Encrypted: i=1; AJvYcCXOrjmXSspTxdeLf8gQ9CjOyJ/jCJxFIS6s2nwj0zLHsZSfhJW8QOIHH+QJ7J1ivCDV+pWaQODQ2d1nfZ5XVvsxEFt/aDGkvMDMUF8IsJ/O7ifJ1aXwi/WlhunbI3B9QiSmYe7lRHI=
+X-Gm-Message-State: AOJu0YzW0pM8CY2Hth5HT+nPXsWWe/4m7POzOCK6Xv0mKCkWM3HL2qf7
+	zR4BzHG69w17YJOG7nfWXnppOYANFhDmGZFdyKg0qD2YZiMeQChL43bGvsIYQ1E2Kw==
+X-Google-Smtp-Source: AGHT+IFfsraSJiYxxD7h8AAkHiPbpRT5NV/8jX+OiHJ/GTJM1YgZ6YtWpyE7QtlkHbFBcvYX0CIiTQ==
+X-Received: by 2002:a17:90a:ad43:b0:29a:b73c:4978 with SMTP id w3-20020a17090aad4300b0029ab73c4978mr4943322pjv.33.1709483455514;
+        Sun, 03 Mar 2024 08:30:55 -0800 (PST)
 Received: from mail.marliere.net ([24.199.118.162])
-        by smtp.gmail.com with ESMTPSA id p11-20020a056a000b4b00b006e57bd16fdfsm5815478pfo.205.2024.03.03.08.29.03
+        by smtp.gmail.com with ESMTPSA id pw15-20020a17090b278f00b0029930881068sm8601230pjb.49.2024.03.03.08.30.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Mar 2024 08:29:04 -0800 (PST)
+        Sun, 03 Mar 2024 08:30:55 -0800 (PST)
 From: "Ricardo B. Marliere" <ricardo@marliere.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
-	s=2024; t=1709483342;
+	s=2024; t=1709483453;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=F0bcl/GfiCCy6TWoeivaTyJR3kIJe2T31n6M+X38t/A=;
-	b=cTeivo62217tGW5K+B2c3eK/690OPV2w6EBt0CFm6rtWY1pgSwPuUPgHB29cvozqO/y7lN
-	Uqbuz7Mk83MzBgCocjvC8y9QOdSkGXEH/qlX96uQdqRxCMu6/EuhXGLhPOJ0D6sIq9iCvJ
-	qx3ebH4ECrQKW+UEpI2vggqNMJAwQo/4RKBsjbMq9R4e6ycsdYy4rYnYH4bH8nO03PdQJJ
-	VT302iN/Dh8pOrUoHHHO4f5gMmectlkj2+sAasK4LX+eQZGDYci5E+Ky0Dza43B+zafwLm
-	ncqZXUGKG2D7UsYcqO0GzEdPG2nHk+st2br01jM+4fgtrg4JH5oiDGoLzyzQpQ==
+	bh=8FudLchqKx/rVDy9QMtMuyPGoJ1btkQ3n6JRM3X8NW0=;
+	b=FNkJAU6cP6z0455cLJO8FRlwX16t77UKt6lEbD59tlHVl/YIwqhOqlf3YkaGgtf7oKIwdd
+	5tzENCd0MOR5qB44XR7PH/QmIfgJVsdoJSaTlgwFNGW2N8oscpSjnN/g06t33+w+DvSyiE
+	M0b+2lRG88sX1Z3CZs+Ad8+erylVO8d6bfFgSn1i97L4fjTpm2arEjG7wAKOS3QLGmq6qv
+	ko5rxEKtnBjH2vIgi2L2wSvK4t2az44EHxtELgFuc48WCnoofRDgKPUSN3NMzB5M0M0A4R
+	UAPXHQtGGcUkk5fWLhGEX9FYlRprgZl94JCjB5Apnz/GOfd4gJtIUm52St0giA==
 Authentication-Results: ORIGINATING;
 	auth=pass smtp.auth=ricardo@marliere.net smtp.mailfrom=ricardo@marliere.net
-Date: Sun, 03 Mar 2024 13:28:55 -0300
-Subject: [PATCH] power: supply: move power_supply_attr_groups definition
- back to core
+Date: Sun, 03 Mar 2024 13:30:50 -0300
+Subject: [PATCH v2] power: supply: move power_supply_attr_groups definition
+ back to sysfs
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -79,29 +79,30 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240303-class_cleanup-power-v1-1-6a3abb5b15ad@marliere.net>
-X-B4-Tracking: v=1; b=H4sIAEal5GUC/x3MTQqAIBBA4avErBNMy6CrRITYVANh4tAPiHdPW
- n6L9xIwRkKGoUoQ8Sam0xc0dQVut35DQUsxKKlaqaUW7rDMszvQ+iuIcD4YRY+qk60xSq8OShk
- irvT+13HK+QN7DL/jZQAAAA==
+Message-Id: <20240303-class_cleanup-power-v2-1-e248b7128519@marliere.net>
+X-B4-Tracking: v=1; b=H4sIALml5GUC/32NWw6CMBBFt0Lm25o+ABO/3IchZiiDTIKlmSJqC
+ Hu3sgA/z0nuuSskEqYE52IFoYUTTyGDPRTgBwx3UtxlBqttqZ12yo+Y0s2PhOEZVZxeJOpEttJ
+ lXVvXe8jLKNTze69em8wDp3mSz36ymJ/931uMMqpGh21btabC7vJAGZmEjoFmaLZt+wItcmoSu
+ QAAAA==
 To: Sebastian Reichel <sre@kernel.org>
 Cc: Sebastian Reichel <sebastian.reichel@collabora.com>, 
  linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
  kernel test robot <lkp@intel.com>, 
  "Ricardo B. Marliere" <ricardo@marliere.net>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3227; i=ricardo@marliere.net;
- h=from:subject:message-id; bh=w/BV0vxxw3KqhEV/ene3cVxbTcqtHuugUeJbU+hKcuM=;
- b=owEBbQKS/ZANAwAKAckLinxjhlimAcsmYgBl5KVJOhdHR17GY6viPoIccRxLeZzXxuXxmHke6
- 6wBen6jByaJAjMEAAEKAB0WIQQDCo6eQk7jwGVXh+HJC4p8Y4ZYpgUCZeSlSQAKCRDJC4p8Y4ZY
- pqgVD/4q6QSnHSHTQyfOp7Fm+aJZESOS69yfD23cp57rfybZdCXZCEfVlj0pzuANVVsZOvwJXWE
- /HZ57VCJTu0GBB2+XFlWGdEU71yZ2jXdxmXVXmToPFFel3YV4DvQYAd8TfmgmppZ3s4bQ7fUyR5
- ijGS06d5tzxBo2PIYGoLVliuWrTAp8ucGQH4D3328ULTChXX5BbCAuGPjgkFrdmGOQ9mbLmVRIR
- RPCdNHr6uNX+EqiU7mVAm3QXH4B8GP2rgO7wn2i4FtLP/qq8COMpkUOQwxyLs3kPgpZGZd+Zj8I
- fIWxGZlmK8xrWADojv8iRG2p++9C9G43Rza99pdZVfhJyD12P6XeYnAQLjAcSPR/7pTs+50W4QX
- sjltO5sCNDil0gK6w98JNG5liGHZ5uoJWiy74JM6vKrlBvy+KQ+fFidbDO5NdrkNh/OMjD21fbF
- v8srogXfVYvOI4u2x0BRuUy1IkKyUzHv5PYHdMNHU1R5ekzl1tJzxTXxOZPz2G8OINW1WKhBMNJ
- I/eEQnC88vGy1d22D2cvDzHFCQDY4ldHxD6R4yD/8niRAKKaGpOIgYa31SS+XCAKG+3gDvandpW
- Fo4t8Nf10NmIOSd+83DWUEMas1QHJ4Q/zZQvBLiXeC0OTVAvmp0yO2amWIKPt6L5uShyKcB8y2w
- E5unY8EOYL03neg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3379; i=ricardo@marliere.net;
+ h=from:subject:message-id; bh=NKt+UkOLuWhi5aE3dgCRuciCjstns0KT4TDC+oezDI4=;
+ b=owEBbQKS/ZANAwAKAckLinxjhlimAcsmYgBl5KW6AuKCP9OO95O9JKXM0jbTw9DDlZgi/jBkT
+ c5XdnVsKveJAjMEAAEKAB0WIQQDCo6eQk7jwGVXh+HJC4p8Y4ZYpgUCZeSlugAKCRDJC4p8Y4ZY
+ pqlUD/9UsTNQUj+XrgDjY0aF+/Yl0B+eq0VtRXym6azmv9ZfCA07H2x3D5wf3iAzZlq6sKYsuNM
+ 87MFrLpggeH005gVV3m2jX6iROOwcvjVITE4/pAQK4fkVEaUoSaPCHOoNVn9rv45h+50sGDryc9
+ e7cBXlK2rAuUgGSkhTOSlzjFaIXmLjSmFh7vVMoaKB9hMPndg6QVEhWnXx6hUfrzr7Gpa9Z0GbF
+ JmrR1yfWQujtV3iydhtoORdfLowjbKu7R/HTLpGXFdCczaucfUuuviDe12n544nVbt/zcsSh1wl
+ 1VckqgXALiGISwdM83AlLV5BtMW8D5ilATDZr334CQYGk6khsdlt/em3ELCUwHXTTQ91w18wn+c
+ Mhd50XmEooV3YJkfE9IePfc2mWU4KEAEGx/cCNytCrlRy7SztqVLi8qXjaA1WLYNdy9qq84MK8I
+ i2GnmARB1nLbfOyS3DEv89C5Dt6roNBt/FEfImLPTNVpoAGwj+8YzB27WfaNmrfutSfZLwlaGdG
+ FtQMExajnY6Nwiv+1aQ8cpJq3fhIkckwSGrTEJcwAfSDUyOKmObo444W2CPKxkNUrXHeixLQy35
+ R7BWSb2VmpYQtE9X59KRhBeHPgI7EYbpzcBBcFq/RJYJYNxX/llVrH0NTwvYjqzoPsfCOmzMCsk
+ ncHLAnGfi3/iQAA==
 X-Developer-Key: i=ricardo@marliere.net; a=openpgp;
  fpr=030A8E9E424EE3C0655787E1C90B8A7C638658A6
 
@@ -118,6 +119,10 @@ Fixes: ea4367c40c79 ("power: supply: core: move power_supply_attr_group into #if
 Reported-by: kernel test robot <lkp@intel.com>
 Closes: https://lore.kernel.org/oe-kbuild-all/202403021518.SUQzk3oA-lkp@intel.com/
 Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
+---
+Changes in v2:
+- Fixed typo in commit title
+- Link to v1: https://lore.kernel.org/r/20240303-class_cleanup-power-v1-1-6a3abb5b15ad@marliere.net
 ---
  drivers/power/supply/power_supply.h       | 4 ++--
  drivers/power/supply/power_supply_core.c  | 1 -
