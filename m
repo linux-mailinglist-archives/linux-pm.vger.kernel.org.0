@@ -1,125 +1,116 @@
-Return-Path: <linux-pm+bounces-4631-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4632-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66AD386F9E9
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Mar 2024 07:14:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0AF9586FA65
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Mar 2024 08:01:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 201BB28153C
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Mar 2024 06:14:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B3A161F21912
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Mar 2024 07:01:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4980BBE4C;
-	Mon,  4 Mar 2024 06:14:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70C07B667;
+	Mon,  4 Mar 2024 07:01:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="hRj648vQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="g16hHZIQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25558DDAB;
-	Mon,  4 Mar 2024 06:14:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBE0913AED
+	for <linux-pm@vger.kernel.org>; Mon,  4 Mar 2024 07:01:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709532854; cv=none; b=eLctLWN6vdlWF6urRmv4x47Z57dqpCNfLBVK9ALjF5UasZFoqehwYfTIRy70tsLbMMXNjEMOsEm1vnwQOqF9XfzTgCgUKxzvPs7Iesgqhqxwb/4+DpsUeTYCtBAxZytYnwvJon8yM9/s2up1mqO7wSdPmt5mf4zwNDJ03bQVEhQ=
+	t=1709535663; cv=none; b=bBTKmSfPcpR7SLnbRzpNY2x25VGObPuH4BdjOMoCukFlJuxdkDhljhuHKfbcXf4mRf+ti3DqAFc8T2+rtg+imOGYV3KKsLXixqlPz8N/KxBJ4vi+oFKGtlToZZlHfGfEDrPQ90dBpxoppe/M9WQaTb19ONuvsGgv8R/Rqoep6wU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709532854; c=relaxed/simple;
-	bh=GVrSxTRoMoV/uU/Lb3y9z9tOXaZgZRfgXcw2rhOhs4o=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=lDbFlIPO15Y1+BduuOcYsnLGiokq7+Qs83cNUKCxEpp8ywzSqwLhg8u+0I6o3MZuFq+lrklP9UuZdJxuWtL4ECB2cTgXzlG42V64/wm8x/2jkd2IHG9Lq+x1eP+BE/+ORvln2I+pO81YV+ojwPRJchrvEgGZ9Ovp488JsYwLRhw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=hRj648vQ; arc=none smtp.client-ip=115.124.30.113
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1709532847; h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type;
-	bh=Y3fZ+6vBH41DEF8Tx5lK1ddq74UM+m/DasdXXyNUDG8=;
-	b=hRj648vQBg0rzXXepkUty8Sjd6mX51ieqH3bXy+Vqbz603hJxci3WwDqWftTvSH3K804OpgKE/MUQP+zPO2zAsA/DPLzWzcBLlWqYrHqJ3gpWdTbiJ/ZpXTBav2XvRbmt2tKy8XsJHauVLNEv2vtw+i4rWM3Z7d2cPVleDm9pgk=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R441e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=herongguang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0W1k7gsm_1709532846;
-Received: from 30.221.98.44(mailfrom:herongguang@linux.alibaba.com fp:SMTPD_---0W1k7gsm_1709532846)
-          by smtp.aliyun-inc.com;
-          Mon, 04 Mar 2024 14:14:07 +0800
-Message-ID: <07b62879-2445-4b0d-880a-be01a44820f8@linux.alibaba.com>
-Date: Mon, 4 Mar 2024 14:14:06 +0800
+	s=arc-20240116; t=1709535663; c=relaxed/simple;
+	bh=upBZ3X4KyzBhefJvfJWbA3FwdXqEK3kl16bErZwbfYY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NYsU5STH7o6ZFuHhjblerV0kFptDmR84trk2zjlMqkhCzuHiFkJ9l/dsXEcpIGRBPIuk9Z1EFgdLs+1oQ6f6zVJQUGBwSERYjByPcrScyqC68kNABJk/SefsRf+JPbTOF4q+EMJo737+ZMlDwOqmu38EiIQwrI+HVBiNzWtnWyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=g16hHZIQ; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1dd178fc492so2991085ad.2
+        for <linux-pm@vger.kernel.org>; Sun, 03 Mar 2024 23:01:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1709535661; x=1710140461; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4gERSIBQAtMeYIzaUm04+6jDxHIyp8hzEX/WUtLzEWU=;
+        b=g16hHZIQDA4PqYQXY7Kbd8IzvSji9ISNB6ubabcWDg1arkEdJD43ZflBq1Xlt9soDV
+         e1RhBYdbSYxHUo6aVdTsmApVsOkkDl6AK7gc7tXIek9XHl13ntFgGIq3svtt1lMYuj3B
+         EyGIcCIBdsWquCXRqZo+jOqVbKagmryu0OKKq9eXEUr1+Xie/O17ETCffAhknhZ43YXc
+         AYi9wwpFIroGMESjvOyckZsK8HF8ZYTCU8zS1GgNKu6ASE9qhTvYUZYGt47Z2sJNDJOe
+         Pa48LqJx+NfuDGBPtqNLicpolsAkPiuC5z/3BYPdbHXyWepgvp7PdPtTW7ukpGf+gynq
+         JqCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709535661; x=1710140461;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4gERSIBQAtMeYIzaUm04+6jDxHIyp8hzEX/WUtLzEWU=;
+        b=mBZhXhKnZEGTbIUoIbWdQGB2BQo5u0+61UavBHUH//wnGZqWjSDGAvfsntWfoyC2gu
+         UBidGlyw1lUwWpXMyI7tlvibGwYdTLVaXlGtGNzECv0xtDFeMSX/K8zbrQPhF3hjPDB9
+         vEIyrDHj6RbENLhRRu/JEcrvtki4cbSz53u+20JQJtDFZeO04nFLHDtOkJf7Aau0mLcn
+         lb1q5vv4P1l5piG4kFjJaXOMDfvlTzMASXz3DFZCzleXcwb0hC+ZGs0vyhPrag7/I8Kj
+         5zxpLLnoBomFqITq0TXuIfMcP96OevPC1r7fdQx/mPONqJIjkHL5r2R7ZP989ZmI8xv4
+         P9Mw==
+X-Forwarded-Encrypted: i=1; AJvYcCUFqBQCoPGNad978Rrl+YNOa+Gqu6o+pc16sR1RPw8o1Mm+QIC2toJHtxsSHcd27FjHDdT3E992DmHaNVxlWii4TmdyXm9js/A=
+X-Gm-Message-State: AOJu0YxcJb9bUjy/qyFghlMnVhnJspS03pSKrcq2wzf4wUnz45vXPX3v
+	uu4+KnHKIDAl1jUYZ5scG4TrfUCXDYm7EwQu/TWWzCrE3Tz5MUkBNaqoX2HFOz0=
+X-Google-Smtp-Source: AGHT+IEkpf0f5HD53mpwoT/e2x1p6+nsLCC+7Oq38TcI/bj0FDtTuR+h843J2e7GJbLWWhkRw6bwyw==
+X-Received: by 2002:a17:902:ec83:b0:1db:f952:eebf with SMTP id x3-20020a170902ec8300b001dbf952eebfmr8764554plg.44.1709535661270;
+        Sun, 03 Mar 2024 23:01:01 -0800 (PST)
+Received: from localhost ([122.172.85.206])
+        by smtp.gmail.com with ESMTPSA id n4-20020a170902968400b001db8145a1a2sm7715773plp.274.2024.03.03.23.01.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Mar 2024 23:01:00 -0800 (PST)
+Date: Mon, 4 Mar 2024 12:30:58 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Pierre Gondois <pierre.gondois@arm.com>
+Cc: linux-kernel@vger.kernel.org,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Christian Loehle <christian.loehle@arm.com>,
+	Ionela Voinescu <ionela.voinescu@arm.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 0/3]  scmi-cpufreq: Set transition_delay_us
+Message-ID: <20240304070058.kfqg3ypssn5x6k7s@vireshk-i7>
+References: <20240222135702.2005635-1-pierre.gondois@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: jacob.jun.pan@linux.intel.com, lenb@kernel.org,
- "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
- herongguang@linux.alibaba.com, shannon.zhao@linux.alibaba.com
-From: He Rongguang <herongguang@linux.alibaba.com>
-Subject: [PATCH v2] x86/cstate: fix mwait hint target cstate calc
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240222135702.2005635-1-pierre.gondois@arm.com>
 
-According to x86 spec ([1] and [2]), mwait hint_address[7:4] adds 1 is
-the corresponding cstate, and 0xF means C0.
+On 22-02-24, 14:56, Pierre Gondois wrote:
+> policy's fields definitions:
+> `transition_delay_us`:
+> The minimum amount of time between two consecutive freq. requests
+> for one policy.
+> `transition_latency`:
+> Delta between freq. change request and effective freq. change on
+> the hardware.
+> 
+> cpufreq_policy_transition_delay_us() uses the `transition_delay_us`
+> value if available. Otherwise a value is induced from the policy's
+> `transition_latency`.
+> 
+> The scmi-cpufreq driver doesn't populate the `transition_delay_us`.
+> Values matching the definition are available through the SCMI
+> specification.
+> Add support to fetch these values and use them in the scmi-cpufreq
+> driver.
 
-ACPI cstate table usually only contains C1+, but nothing prevents ACPI
-firmware from presenting a cstate (maybe C1+) but using a mwait address C0
-(i.e., 0xF in ACPI FFH MWAIT hint address). And if this is the case, Linux
-erroneously treat this cstate as C16, while actually this should be legal
-C0 state instead of C16, according to spec.
+How do we merge this series ? I can only pick the last commit.
 
-Since ACPI firmware is out of Linux kernel scope, fix kernel handling of
-0xF ->(to) C0 in this situation. This is found when tweak ACPI cstate
-table qemu presenting to VM.
-
-Also fix intel_idle case by the way for kernel code consistency.
-
-[1]. Intel SDM Vol 2, Table 4-11. MWAIT Hints
-Register (EAX): "Value of 0 means C1; 1 means C2 and so on
-Value of 01111B means C0".
-
-[2]. AMD manual Vol 3, MWAIT: "The processor C-state is EAX[7:4]+1, so to
-request C0 is to place the value F in EAX[7:4] and to request C1 is to
-place the value 0 in EAX[7:4].".
-
-Signed-off-by: He Rongguang <herongguang@linux.alibaba.com>
----
-V1 -> V2: Amend commit message according to Rafael.
-
-  arch/x86/kernel/acpi/cstate.c | 4 ++--
-  drivers/idle/intel_idle.c     | 3 ++-
-  2 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
-index 401808b47af3..f3ffd0a3a012 100644
---- a/arch/x86/kernel/acpi/cstate.c
-+++ b/arch/x86/kernel/acpi/cstate.c
-@@ -131,8 +131,8 @@ static long acpi_processor_ffh_cstate_probe_cpu(void 
-*_cx)
-         cpuid(CPUID_MWAIT_LEAF, &eax, &ebx, &ecx, &edx);
-
-         /* Check whether this particular cx_type (in CST) is supported 
-or not */
--       cstate_type = ((cx->address >> MWAIT_SUBSTATE_SIZE) &
--                       MWAIT_CSTATE_MASK) + 1;
-+       cstate_type = (((cx->address >> MWAIT_SUBSTATE_SIZE) &
-+                       MWAIT_CSTATE_MASK) + 1) & MWAIT_CSTATE_MASK;
-         edx_part = edx >> (cstate_type * MWAIT_SUBSTATE_SIZE);
-         num_cstate_subtype = edx_part & MWAIT_SUBSTATE_MASK;
-
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index bcf1198e8991..e486027f8b07 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -1934,7 +1934,8 @@ static void __init spr_idle_state_table_update(void)
-
-  static bool __init intel_idle_verify_cstate(unsigned int mwait_hint)
-  {
--       unsigned int mwait_cstate = MWAIT_HINT2CSTATE(mwait_hint) + 1;
-+       unsigned int mwait_cstate = (MWAIT_HINT2CSTATE(mwait_hint) + 1) &
-+                                       MWAIT_CSTATE_MASK;
-         unsigned int num_substates = (mwait_substates >> mwait_cstate * 
-4) &
-                                         MWAIT_SUBSTATE_MASK;
-
---
-2.43.0
+-- 
+viresh
 
