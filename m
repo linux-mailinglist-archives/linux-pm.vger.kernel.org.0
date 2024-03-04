@@ -1,135 +1,113 @@
-Return-Path: <linux-pm+bounces-4649-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4650-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66F8C8700D1
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Mar 2024 12:53:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96DB287054A
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Mar 2024 16:20:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 98EC01C21946
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Mar 2024 11:53:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E1181F26578
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Mar 2024 15:20:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 631F63C468;
-	Mon,  4 Mar 2024 11:53:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA5934778C;
+	Mon,  4 Mar 2024 15:19:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="Vn9lOqZY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MA+XVt8b"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91F5A3BB5E;
-	Mon,  4 Mar 2024 11:53:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1A1E14ABC;
+	Mon,  4 Mar 2024 15:19:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709553186; cv=none; b=SKZ0gh3gVNyp+C1SJjtFJuPTIOyFQGXJyQbs9GqgbrM46YRCdqIBFB3HVAqp4igrajSXgvncC7+YpwnkpLGcaD/7RMerW0Yu8kRFAr4cjHYnZktsCYj3F/CC4rAPYKVLvu2Tb0YhruTDwT76j1Fl3KDzr+CGGi9/IEbPFqCGdfo=
+	t=1709565546; cv=none; b=mD6ycauGWBuvBXKpbfpL6dcPFSA6PiUNaOT8S1TowAxx6Typ/T3jkcLoq8XqBjnLO89N7zH6n7flR+uVQYfZ3kwnvFNdx/yd3HcDpdDisWjFweMDv/w1MSynUTZKFj3RJTc/63YYzUwnyRSs3sUGFhJ6ADdaK3+pO86c7xndv1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709553186; c=relaxed/simple;
-	bh=8Q0hpRNs1YcIFywA2qZbL+uykvSJlC+R25zWdO3lxgE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=epyJMs7u91etIaYzGcbg9yAYZTMCNInmICNMrtDKxKOtJo/IT0hd90W9UjAdeRHE7561/Gp3xFDTwhIQRHfa9xZOqJbTOhp0cXXE5tORcO/VpGF4M43irnu1jBj7k2NJFdhTNgPnWrI8wynY8dQ4Tuoi78CWWZERCKj0yXtOv3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=Vn9lOqZY; arc=none smtp.client-ip=198.47.19.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 424BqrOD100923;
-	Mon, 4 Mar 2024 05:52:53 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1709553173;
-	bh=gBe33nm2iOAnPbCyUfzD2Hk51P4hdFpUREFEEjcPNzk=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=Vn9lOqZYtSBGFSxODoIrKX8g/KWj9EKUrnd6uGI0kcDhj5yYNbFhJlUQB0WrEuRN9
-	 S5hSrh6g14JhCpL1N7H34EHesCX5/Che8RFoMy+FCGARjC1u5sggeOx6RxKjo0Je1w
-	 w/X7otyWs4A+Jbb7kYIacuce1v+pqKZ7f7uCjldM=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 424BqrhG068851
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Mon, 4 Mar 2024 05:52:53 -0600
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 4
- Mar 2024 05:52:52 -0600
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 4 Mar 2024 05:52:53 -0600
-Received: from [172.24.227.68] (dhruva.dhcp.ti.com [172.24.227.68])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 424Bqnu3025627;
-	Mon, 4 Mar 2024 05:52:50 -0600
-Message-ID: <f2dbd3ea-233a-4ce9-a483-92397462f87f@ti.com>
-Date: Mon, 4 Mar 2024 17:22:49 +0530
+	s=arc-20240116; t=1709565546; c=relaxed/simple;
+	bh=QR5PaUloC2glE+RawDBmkFXBJ+lOR6RPDaFaRyQRbV0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Cy1P5ONKOd0Uxjq2vIngSHKuqB8pZxDT48Hf+gsWGWUxRfIn5jnN0kwIbsOe2di5+mZfzbsXdWzi9YqiiSKruEe1JfhF4ROKHi0QJMh97xAQWBz5qIxxFR+7hA5uAcyd8FSC8hvmpvOWph1umssS9SW9zbBTDFVvRay0ADPxDcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MA+XVt8b; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A508C433C7;
+	Mon,  4 Mar 2024 15:19:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709565546;
+	bh=QR5PaUloC2glE+RawDBmkFXBJ+lOR6RPDaFaRyQRbV0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MA+XVt8bw4FeD+KfDJ6Gb8c1VkRZlvxZ95p7aFH1YyRpPYlCDdexNW6rHwG+cLsw4
+	 UWwG/OwbkC4K4xFL7eylA0Jyg9tdoN4OvrJL0z6GUncK5M4fAbR5picEBJvwWmKA8F
+	 fvQedPfnkSU6GKqp0QgBgH+S+ecLFl0GexCrnWRC/Hb2rgGtZLQWVp8/oVs9U9wtnM
+	 5Jq/sCf4hW8H36C/0LXkMU7ZPOEP3sqiC7vIXuDz1MtdatmCDhEegbFA98U8GAIFaL
+	 Bu1RZ7QpF7g/2ur3CH1cDYligyLpg+9/HoUXdCkCdW1uo0gT+0dX5JRjzbnmLxEwv+
+	 LKqmHv4f64bEQ==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1rhA5y-000000001Jq-1OB2;
+	Mon, 04 Mar 2024 16:19:14 +0100
+Date: Mon, 4 Mar 2024 16:19:14 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Qingliang Li <qingliang.li@mediatek.com>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+	Len Brown <len.brown@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Tony Lindgren <tony@atomide.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, Dhruva Gole <d-gole@ti.com>
+Subject: Re: [PATCH v2] PM: sleep: wakeirq: fix wake irq warning in system
+ suspend
+Message-ID: <ZeXmcl4ngEm1RccW@hovoldconsulting.com>
+References: <20240301092657.15528-1-qingliang.li@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] OPP: debugfs: Fix warning around icc_get_name()
-Content-Language: en-US
-To: Viresh Kumar <viresh.kumar@linaro.org>, Viresh Kumar <vireshk@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>
-CC: <linux-pm@vger.kernel.org>, Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        kernel test robot <lkp@intel.com>, <linux-kernel@vger.kernel.org>
-References: <ab75239d2280e506e5b9386b8aeb9edf97cd3294.1709551295.git.viresh.kumar@linaro.org>
- <0275dc46489419f34765c6ed389c0e9d6245fd31.1709551295.git.viresh.kumar@linaro.org>
-From: Dhruva Gole <d-gole@ti.com>
-In-Reply-To: <0275dc46489419f34765c6ed389c0e9d6245fd31.1709551295.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240301092657.15528-1-qingliang.li@mediatek.com>
 
-Hi,
-
-On 04/03/24 16:52, Viresh Kumar wrote:
-> If the kernel isn't built with interconnect support, icc_get_name()
-> returns NULL and we get following warning:
+On Fri, Mar 01, 2024 at 05:26:57PM +0800, Qingliang Li wrote:
+> When driver uses pm_runtime_force_suspend() as the system suspend callback
+> function and registers the wake irq with reverse enable ordering, the wake
+> irq will be re-enabled when entering system suspend, triggering an
+> 'Unbalanced enable for IRQ xxx' warning. In this scenario, the call
+> sequence during system suspend is as follows:
+>   suspend_devices_and_enter()
+>     -> dpm_suspend_start()
+>       -> dpm_run_callback()
+>         -> pm_runtime_force_suspend()
+>           -> dev_pm_enable_wake_irq_check()
+>           -> dev_pm_enable_wake_irq_complete()
 > 
-> drivers/opp/debugfs.c: In function 'bw_name_read':
-> drivers/opp/debugfs.c:43:42: error: '%.62s' directive argument is null [-Werror=format-overflow=]
->           i = scnprintf(buf, sizeof(buf), "%.62s\n", icc_get_name(path));
+>     -> suspend_enter()
+>       -> dpm_suspend_noirq()
+>         -> device_wakeup_arm_wake_irqs()
+>           -> dev_pm_arm_wake_irq()
 > 
-> Fix it.
+> To fix this issue, complete the setting of WAKE_IRQ_DEDICATED_ENABLED flag
+> in dev_pm_enable_wake_irq_complete() to avoid redundant irq enablement.
 > 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202402141313.81ltVF5g-lkp@intel.com/
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
+> Reviewed-by: Dhruva Gole <d-gole@ti.com>
+> Signed-off-by: Qingliang Li <qingliang.li@mediatek.com>
 
-Do we not need this:
+Thanks for the fix. Looks correct to me:
 
-Fixes: 0430b1d5704b0 ("opp: Expose bandwidth information via debugfs")
+Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
 
-?
+I think you should add back the Fixes tag from v1 and CC stable as well:
 
->   drivers/opp/debugfs.c | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
-> index 27c3748347af..a9ebfdf0b6a1 100644
-> --- a/drivers/opp/debugfs.c
-> +++ b/drivers/opp/debugfs.c
-> @@ -37,10 +37,12 @@ static ssize_t bw_name_read(struct file *fp, char __user *userbuf,
->   			    size_t count, loff_t *ppos)
->   {
->   	struct icc_path *path = fp->private_data;
-> +	const char *name = icc_get_name(path);
->   	char buf[64];
-> -	int i;
-> +	int i = 0;
->   
-> -	i = scnprintf(buf, sizeof(buf), "%.62s\n", icc_get_name(path));
-> +	if (name)
-> +		i = scnprintf(buf, sizeof(buf), "%.62s\n", name);
+Fixes: 8527beb12087 ("PM: sleep: wakeirq: fix wake irq arming")
+Cc: stable@vger.kernel.org      # 5.16
 
-Reviewed-by: Dhruva Gole <d-gole@ti.com>
+Note that WAKE_IRQ_DEDICATED_REVERSE was added in 5.16 by commit
+259714100d98 ("PM / wakeirq: support enabling wake-up irq after
+runtime_suspend called") so no need to try to backport any further than
+that.
 
->   
->   	return simple_read_from_buffer(userbuf, count, ppos, buf, i);
->   }
-
--- 
-Thanks and Regards,
-Dhruva Gole
+Johan
 
