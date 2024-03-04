@@ -1,133 +1,162 @@
-Return-Path: <linux-pm+bounces-4646-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4647-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CA25870056
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Mar 2024 12:23:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A1D1870083
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Mar 2024 12:38:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E7721C23455
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Mar 2024 11:23:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C1AF1C20D76
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Mar 2024 11:38:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7780D39AF6;
-	Mon,  4 Mar 2024 11:22:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4202C39FFC;
+	Mon,  4 Mar 2024 11:38:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="d4HGey8N"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="mv2YUw+4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 054903984B
-	for <linux-pm@vger.kernel.org>; Mon,  4 Mar 2024 11:22:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2327839FCD;
+	Mon,  4 Mar 2024 11:38:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709551368; cv=none; b=g5RkRVKbGAp8XUrkTCmbOhqa4iXh4QKe19oXZ0iprF1UBrbraqVyvYL6pXJ+bmmyyarFZQ5/7upDpstdTv0l3gaS7fY7V1ATIJSdzi1g0rt9cfWHv0hpMZaYzdLLRR/8r0cXgKcqkSsXO1OLMddIDIpGL4mzN+gOvBZLyJG/M6s=
+	t=1709552323; cv=none; b=un2pJst/vYi43m6PFPFfgRBJBurqDwoyZPOJufc1FjSQvIS7UMhjIivv+w/y3LHclIigMJI/hbFjfW6QpXH7FO548nSNQ7k+Y6ptA2d5kTHwbohWDXr/MHERynhb5INbTzQcWTgvKRWKMNSI6lsQvU7gDF/Lw6J/pT50CczJkW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709551368; c=relaxed/simple;
-	bh=Am+c6dBF6BHH2/RgeyDCuH3cl4jzRaTZllBvX4joDU4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fVox+TfLJD7olk7FW6ucmSFyptoH17jfQ8FTdqpBZ9YtI3veY4+CSsZ91dv8TQRhCRBX2e0B5+Ru2Ut4gK2mUrGVaC6KXY2oi+DXtvo19i0y075gL1gkg7bc69gBovmQQiokHZtDYBVLN3rhJ1UP05BkHDQXjOwnJ0a2AXD96wc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=d4HGey8N; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1dcab44747bso34884315ad.1
-        for <linux-pm@vger.kernel.org>; Mon, 04 Mar 2024 03:22:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709551366; x=1710156166; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0o2qbRz2LsYMldaZB2Fall4oN2xIZEAZu8iTzW+0lNA=;
-        b=d4HGey8N+RGJYYXIsf1LaNUWUyVqK0xKAYAV6olhhD1fzviqRu1nR4cG7lkpWm74ob
-         EqyuV9WuZNDlcVlTEkWzRmdGRCDI+7hr5RBjAl3/5+UlsaO8+B1wC+msVbmzjvGSFUVS
-         twfv/wd0t5Koy5gzg6SThA6SZGH0vlHNZAoivQHlF85XtG4IMyD5Nti7iD3UZb3gsGiI
-         zAGAgetOvA9Z6fNsCovyH8j0gvwGMav0lsC94uoLppQwCoUDnhWvIc4Y7ZBOkRoO/aCh
-         coG2AUVujbilniFtEZ17IHy2CZBazl8po/hKgOpJmVPn42mAkSXXhoOKC3EojeLtJpIX
-         o2bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709551366; x=1710156166;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0o2qbRz2LsYMldaZB2Fall4oN2xIZEAZu8iTzW+0lNA=;
-        b=uflLe2dnGMYFn+RVw3lD4xFdBMVOqfyjEBPkzKAS10Yv9Q19+K0iye1unUPfm04I1q
-         HPdhDID/6XOQvAYfiTRvm3ED28nm1fFlTsSJXrjUPGLWHISV+GGGGy05qxydx5BVyvV9
-         6sKD+cG22R3JTK4zOCw+XQhvQNEbDG3slJEpDsFZaFv/CmKLA87dl4igZnwqgshRud7Q
-         wtIGAfJ/gAzE0TWSCWu/iOPnacn1tZ1e/2mcc7xYK4XAJXLzOyOwUdb0boFwWfcLm7ro
-         rck7XETIM8Edi8tN4iy12HypVwfkDhNu8a7z8koS3T3rd1tyJu/dYZ4hflCY/YyjNE02
-         szHA==
-X-Forwarded-Encrypted: i=1; AJvYcCXCr3SMcD4ZcIL9unfYmzhcL2RdbiAKRLQzmkTFU7HBFZYAlzu46+pj74ChQMAOU4eAFoGv8WUXiudqAhZhtWSMLyyNWG7gpEw=
-X-Gm-Message-State: AOJu0Yx9W4ETnrm3zXN0QQ51aSjRVY+BxN8U1Mm59bfZr0aad1aVx3Ox
-	NOeN7MeWId3ObH1YJnfXhiPVBYdlGslHXZHVeokRZItkEX6ySescTk5g/T3O19E=
-X-Google-Smtp-Source: AGHT+IHz7bqsB9Ws8NUy0LKb8krVg7wj1/42xJsEwwY/wamQqVtxqvyzRSdaS0/cjmA8YPFhGCsXCA==
-X-Received: by 2002:a17:902:e78c:b0:1dc:fc86:2e7a with SMTP id cp12-20020a170902e78c00b001dcfc862e7amr5384513plb.59.1709551366086;
-        Mon, 04 Mar 2024 03:22:46 -0800 (PST)
-Received: from localhost ([122.172.85.206])
-        by smtp.gmail.com with ESMTPSA id e5-20020a17090301c500b001dc11f90512sm8225480plh.126.2024.03.04.03.22.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Mar 2024 03:22:45 -0800 (PST)
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Viresh Kumar <vireshk@kernel.org>,
-	Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>,
-	linux-pm@vger.kernel.org,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Dhruva Gole <d-gole@ti.com>,
-	kernel test robot <lkp@intel.com>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] OPP: debugfs: Fix warning around icc_get_name()
-Date: Mon,  4 Mar 2024 16:52:39 +0530
-Message-Id: <0275dc46489419f34765c6ed389c0e9d6245fd31.1709551295.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
-In-Reply-To: <ab75239d2280e506e5b9386b8aeb9edf97cd3294.1709551295.git.viresh.kumar@linaro.org>
-References: <ab75239d2280e506e5b9386b8aeb9edf97cd3294.1709551295.git.viresh.kumar@linaro.org>
+	s=arc-20240116; t=1709552323; c=relaxed/simple;
+	bh=VTI8cpKT89AjD7F82RNNEo0NCDm0D0CNEsGK6u1avrw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=OCvLPC9C8fKT3jFpSvpTO9facK6QIM7kEHcmEFbmihzrUfn67mKnuF5XtGYfJ5jvRaHa2bePTbxQ5nvnoeeDO9FwKPk3Kmg1mUZl6p4Onkjfekrm+sD9HBCDPOSqrOJ7+cbhO7JShC55oI/yflOqVRRniMoF3WK0+9tu/LMh0E4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=mv2YUw+4; arc=none smtp.client-ip=198.47.23.249
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 424BcXTn071681;
+	Mon, 4 Mar 2024 05:38:33 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1709552313;
+	bh=76/4WhOAicWnxPVZ9BJChYRJakkI9NozKgJ1A3tDjCQ=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=mv2YUw+4GQRFX+KNg4Ov+jjHUwx5mEEhKjMpJ03buJEQxzKyqfNR1lieGPc9YwFsl
+	 N/qlbNopw1RrJSdWPS83V5Ei7ZYPlo7iq8Kd38NTuTSpGGkb7/J/2Xza/mrt9Od2fJ
+	 Fuap9AikDQo9kB5PBLk+LQobveVCi6FrtD1cj/vc=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 424BcXum047097
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 4 Mar 2024 05:38:33 -0600
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 4
+ Mar 2024 05:38:33 -0600
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 4 Mar 2024 05:38:33 -0600
+Received: from [172.24.227.68] (dhruva.dhcp.ti.com [172.24.227.68])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 424BcTaT008408;
+	Mon, 4 Mar 2024 05:38:30 -0600
+Message-ID: <66af18e0-56eb-401f-900d-a83f6e52c603@ti.com>
+Date: Mon, 4 Mar 2024 17:08:29 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V2 1/2] OPP: debugfs: Fix warning with W=1 builds
+Content-Language: en-US
+To: Viresh Kumar <viresh.kumar@linaro.org>, Viresh Kumar <vireshk@kernel.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>
+CC: <linux-pm@vger.kernel.org>, Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        kernel test robot <lkp@intel.com>, <linux-kernel@vger.kernel.org>,
+        Dhruva Gole <d-gole@ti.com>
+References: <ab75239d2280e506e5b9386b8aeb9edf97cd3294.1709551295.git.viresh.kumar@linaro.org>
+From: Dhruva Gole <d-gole@ti.com>
+In-Reply-To: <ab75239d2280e506e5b9386b8aeb9edf97cd3294.1709551295.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-If the kernel isn't built with interconnect support, icc_get_name()
-returns NULL and we get following warning:
+Hi,
 
-drivers/opp/debugfs.c: In function 'bw_name_read':
-drivers/opp/debugfs.c:43:42: error: '%.62s' directive argument is null [-Werror=format-overflow=]
-         i = scnprintf(buf, sizeof(buf), "%.62s\n", icc_get_name(path));
+On 04/03/24 16:52, Viresh Kumar wrote:
+> We currently get the following warning:
+> 
+> debugfs.c:105:54: error: '%d' directive output may be truncated writing between 1 and 11 bytes into a region of size 8 [-Werror=format-truncation=]
+>                   snprintf(name, sizeof(name), "supply-%d", i);
+>                                                        ^~
+> debugfs.c:105:46: note: directive argument in the range [-2147483644, 2147483646]
+>                   snprintf(name, sizeof(name), "supply-%d", i);
+>                                                ^~~~~~~~~~~
+> debugfs.c:105:17: note: 'snprintf' output between 9 and 19 bytes into a destination of size 15
+>                   snprintf(name, sizeof(name), "supply-%d", i);
+> 
+> Fix this and another potential issues it by allocating larger arrays.
 
-Fix it.
+Just to keep in mind while applying maybe: s/another/other
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202402141313.81ltVF5g-lkp@intel.com/
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/opp/debugfs.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+> Use the exact string format to allocate the arrays without getting into
+> these issues again.
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202402141313.81ltVF5g-lkp@intel.com/
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+> V2: Use string name while allocating memory for the array to fix potential
+> issues later on.
+> 
+>   drivers/opp/debugfs.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
+> index ec030b19164a..27c3748347af 100644
+> --- a/drivers/opp/debugfs.c
+> +++ b/drivers/opp/debugfs.c
+> @@ -56,11 +56,11 @@ static void opp_debug_create_bw(struct dev_pm_opp *opp,
+>   				struct dentry *pdentry)
+>   {
+>   	struct dentry *d;
+> -	char name[20];
+> +	char name[] = "icc-path-XXXXXXXXXX"; /* Integers can take 10 chars max */
 
-diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
-index 27c3748347af..a9ebfdf0b6a1 100644
---- a/drivers/opp/debugfs.c
-+++ b/drivers/opp/debugfs.c
-@@ -37,10 +37,12 @@ static ssize_t bw_name_read(struct file *fp, char __user *userbuf,
- 			    size_t count, loff_t *ppos)
- {
- 	struct icc_path *path = fp->private_data;
-+	const char *name = icc_get_name(path);
- 	char buf[64];
--	int i;
-+	int i = 0;
- 
--	i = scnprintf(buf, sizeof(buf), "%.62s\n", icc_get_name(path));
-+	if (name)
-+		i = scnprintf(buf, sizeof(buf), "%.62s\n", name);
- 
- 	return simple_read_from_buffer(userbuf, count, ppos, buf, i);
- }
+LGTM!
+
+>   	int i;
+>   
+>   	for (i = 0; i < opp_table->path_count; i++) {
+> -		snprintf(name, sizeof(name), "icc-path-%.1d", i);
+> +		snprintf(name, sizeof(name), "icc-path-%d", i);
+>   
+>   		/* Create per-path directory */
+>   		d = debugfs_create_dir(name, pdentry);
+> @@ -78,7 +78,7 @@ static void opp_debug_create_clks(struct dev_pm_opp *opp,
+>   				  struct opp_table *opp_table,
+>   				  struct dentry *pdentry)
+>   {
+> -	char name[12];
+> +	char name[] = "rate_hz_XXXXXXXXXX"; /* Integers can take 10 chars max */
+>   	int i;
+>   
+>   	if (opp_table->clk_count == 1) {
+> @@ -100,7 +100,7 @@ static void opp_debug_create_supplies(struct dev_pm_opp *opp,
+>   	int i;
+>   
+>   	for (i = 0; i < opp_table->regulator_count; i++) {
+> -		char name[15];
+> +		char name[] = "supply-XXXXXXXXXX"; /* Integers can take 10 chars max */
+
+Feels like a better solution to me than the previous revision, thanks!
+
+
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
+
+>   
+>   		snprintf(name, sizeof(name), "supply-%d", i);
+>   
+
 -- 
-2.31.1.272.g89b43f80a514
-
+Thanks and Regards,
+Dhruva Gole
 
