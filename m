@@ -1,305 +1,190 @@
-Return-Path: <linux-pm+bounces-4656-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4657-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6D13870B5B
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Mar 2024 21:18:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F295F870BBA
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Mar 2024 21:44:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E86331C21B58
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Mar 2024 20:18:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 230FF1C21FF2
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Mar 2024 20:44:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9F3D7C098;
-	Mon,  4 Mar 2024 20:17:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D0D9101C5;
+	Mon,  4 Mar 2024 20:44:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b="ltV3spUD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 007EA2C840;
-	Mon,  4 Mar 2024 20:17:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from ixit.cz (ip-89-177-23-149.bb.vodafone.cz [89.177.23.149])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E825779DD;
+	Mon,  4 Mar 2024 20:44:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.177.23.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709583449; cv=none; b=H9skxixbhDi04ii4VhbAu21gxaTSGd4GrzUYU51ioU8m7BT9oSOi1zOzU2w7w06ImbErxuZ5ocrAQSs0c13AEulkB8RBkwwzKJwdRSb2odpq670sY42c8FO7jYcZf/SfZ4tum02XUG8RahEtv4INSV8GVm3PaClPy7GYoFOEbVs=
+	t=1709585065; cv=none; b=NKXPr67f4bUWuUnLz6d8Oyvn88VCIGntRFYsF85x+7VDf5BIu+fq7hhX+fKMEfh6RbT+N3v9w0PiUQ078IkhafOSVGpeycaPZWXjrl4fBXkf2aw2oMgEHF/jfhU9UKWHNyQqQyynH/99xYzPP3kKiaZ6S4dVBEyvlK9//leJPzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709583449; c=relaxed/simple;
-	bh=clDidIhiTcDaNyPWQCdL6Rs1LruWiA738NpcAJs2/80=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fgNLZu8K7xoGjYp/tflv6lZkmF24UHRtcmOXv7yglnIcT2xzOW8yBU23blOtOqvVqfZzzAdsa4zjj+KfQGu+YqHAmgK7Y9iujimwd3o2MPv+yJEi0bco1OeABPPMVIFkBSD4lsQn0DTQ+RZP7UJWShe9/X4ZUdLcXlidjWgLnok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 41B2C1576;
-	Mon,  4 Mar 2024 12:17:54 -0800 (PST)
-Received: from e133047.arm.com (unknown [10.57.95.7])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C84B13F738;
-	Mon,  4 Mar 2024 12:17:13 -0800 (PST)
-From: Christian Loehle <christian.loehle@arm.com>
-To: linux-kernel@vger.kernel.org
-Cc: peterz@infradead.org,
-	juri.lelli@redhat.com,
-	mingo@redhat.com,
-	rafael@kernel.org,
-	dietmar.eggemann@arm.com,
-	vschneid@redhat.com,
-	vincent.guittot@linaro.org,
-	Johannes.Thumshirn@wdc.com,
-	adrian.hunter@intel.com,
-	ulf.hansson@linaro.org,
-	andres@anarazel.de,
-	asml.silence@gmail.com,
-	linux-pm@vger.kernel.org,
-	linux-block@vger.kernel.org,
-	io-uring@vger.kernel.org,
-	Christian Loehle <christian.loehle@arm.com>
-Subject: [RFC PATCH 2/2] cpufreq/schedutil: Remove iowait boost
-Date: Mon,  4 Mar 2024 20:16:25 +0000
-Message-Id: <20240304201625.100619-3-christian.loehle@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240304201625.100619-1-christian.loehle@arm.com>
-References: <20240304201625.100619-1-christian.loehle@arm.com>
+	s=arc-20240116; t=1709585065; c=relaxed/simple;
+	bh=eAtThA93+pvXHiAHOt627BHvIYo8wc/buI8bL6xbOVA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WbgKUiaYKkupuRiOfWR6V57QYz6hKcn0S334Q0WwRsThhrX7umS8cAGu9DXeHvvLws2PKTZ6+FH8VCMXunPGXmI65o3KL45VIOKfYNSB8ozJsIZ1I6PxecwKegk2GNyVxbvB+J0XHLqWvh5D3lTjSRasptOiqDEl2aG5tPd3mmE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ixit.cz; spf=pass smtp.mailfrom=ixit.cz; dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b=ltV3spUD; arc=none smtp.client-ip=89.177.23.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ixit.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ixit.cz
+Received: from [10.112.121.202] (unknown [193.96.224.60])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by ixit.cz (Postfix) with ESMTPSA id B4DE21652A8;
+	Mon,  4 Mar 2024 21:34:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+	t=1709584469;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=xSv7FO4krn/1nTgTEYERV+QXlt7BH0RFzJSZuFaXIH4=;
+	b=ltV3spUDGBn42+xZXoIYafBljCSDJC2K28fWCCCYRrOmWMiKK2692i7fz3oxl2r/Eljlmd
+	c3f5iefcpgWLTBUZukSFXmGV9eafrZmRcv8jCBRvtrU5KZluCuLokn88bK0PTR0+w3Mgs1
+	wjek/fVt98R8czcQ3OLFsrDN1Kuv43M=
+Message-ID: <eb21360c-9a08-4cb7-a25d-83679aa87ead@ixit.cz>
+Date: Mon, 4 Mar 2024 21:34:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH] dt-bindings: opp: switch inner and outer min/maxItems
+ rules for opp-hz
+Content-Language: en-US
+To: Rob Herring <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+ Stephen Boyd <sboyd@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Manivannan Sadhasivam <mani@kernel.org>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20231229191038.247258-1-david@ixit.cz>
+ <2c9e91c7-8588-4260-8f5d-22c822019f62@linaro.org>
+ <20240102235815.GA3700567-robh@kernel.org>
+ <20240130170625.GA1847581-robh@kernel.org>
+From: David Heidelberg <david@ixit.cz>
+Autocrypt: addr=david@ixit.cz; keydata=
+ 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
+In-Reply-To: <20240130170625.GA1847581-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The previous commit provides a new cpu_util_cfs_boost_io interface for
-schedutil which uses the io boosted utilization of the per-task
-tracking strategy. Schedutil iowait boosting is therefore no longer
-necessary so remove it.
+On 30/01/2024 18:06, Rob Herring wrote:
+> On Tue, Jan 02, 2024 at 04:58:15PM -0700, Rob Herring wrote:
+>> On Sat, Dec 30, 2023 at 03:17:21PM +0100, Krzysztof Kozlowski wrote:
+>>> On 29/12/2023 20:10, David Heidelberg wrote:
+>>>> Fixes issue as:
+>>>> ```
+>>> Drop, it's not RST, but commit msg.
+>>>
+>>>> arch/arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dtb: opp-table: opp-200000000:opp-hz:0: [200000000, 0, 0, 150000000, 0, 0, 0, 0, 300000000] is too long
+>>>> ```
+>>>>
+>>>> Fixes: 3cb16ad69bef ("dt-bindings: opp: accept array of frequencies")
+>>>>
+>>>> Signed-off-by: David Heidelberg <david@ixit.cz>
+>>>> ---
+>>>>   Documentation/devicetree/bindings/opp/opp-v2-base.yaml | 5 ++---
+>>>>   1 file changed, 2 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+>>>> index e2f8f7af3cf4..86d3aa0eb435 100644
+>>>> --- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+>>>> +++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+>>>> @@ -55,10 +55,9 @@ patternProperties:
+>>>>             to relate the values to their clocks or the order in which the clocks
+>>>>             need to be configured and that is left for the implementation
+>>>>             specific binding.
+>>>> -        minItems: 1
+>>>> -        maxItems: 32
+>>>>           items:
+>>>> -          maxItems: 1
+>>>> +          minItems: 1
+>>>> +          maxItems: 32
+>>> This does not look like correct fix. The original code looked fine -
+>>> only one item is allowed in each sub-element (array).
+>> This one is special being 64-bit values so we have an exception in
+>> property-units.yaml. The constraints here don't get used in decoding the
+>> dtb and the default way of 1 outer element is used.
+>>
+>> It doesn't look like opp-hz needs to be a matrix as it is really just an
+>> array. Perhaps it should just be changed to an array type.
+>> Alternatively, adding 'items: { maxItems: 1 }' to the definition in
+>> property-units.yaml fixes the issue as well.
+>>
+>> Though we can fix this, I'm looking into if we have other cases where we
+>> need this to work as-is. There's probably some room for improvement in
+>> how matrix dimensions are handled.
+> I've made some improvements on matrix dimensions, but this one is still
+> an issue. Can you respin this dropping 'items: {maxItems: 1}'. I'm going
+> to change the definition in property-units.yaml to uint64-array.
 
-Signed-off-by: Christian Loehle <christian.loehle@arm.com>
----
- kernel/sched/cpufreq_schedutil.c | 152 +------------------------------
- 1 file changed, 5 insertions(+), 147 deletions(-)
+Keeping the rest of my changes still generates warnings (today dt-schema 
+git) even with `maxItems` dropped.
 
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index cd0ca3cbd212..ed9fc88a74fc 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -6,8 +6,6 @@
-  * Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-  */
- 
--#define IOWAIT_BOOST_MIN	(SCHED_CAPACITY_SCALE / 8)
--
- struct sugov_tunables {
- 	struct gov_attr_set	attr_set;
- 	unsigned int		rate_limit_us;
-@@ -42,10 +40,6 @@ struct sugov_cpu {
- 	struct sugov_policy	*sg_policy;
- 	unsigned int		cpu;
- 
--	bool			iowait_boost_pending;
--	unsigned int		iowait_boost;
--	u64			last_update;
--
- 	unsigned long		util;
- 	unsigned long		bw_min;
- 
-@@ -195,141 +189,17 @@ unsigned long sugov_effective_cpu_perf(int cpu, unsigned long actual,
- 	return max(min, max);
- }
- 
--static void sugov_get_util(struct sugov_cpu *sg_cpu, unsigned long boost)
-+static void sugov_get_util(struct sugov_cpu *sg_cpu)
- {
- 	unsigned long min, max, util = cpu_util_cfs_boost(sg_cpu->cpu);
- 	unsigned long io_boost = cpu_util_io_boost(sg_cpu->cpu);
- 
--	/*
--	 * XXX: This already includes io boost now, makes little sense with
--	 * sugov iowait boost on top
--	 */
- 	util = max(util, io_boost);
- 	util = effective_cpu_util(sg_cpu->cpu, util, &min, &max);
--	util = max(util, boost);
- 	sg_cpu->bw_min = min;
- 	sg_cpu->util = sugov_effective_cpu_perf(sg_cpu->cpu, util, min, max);
- }
- 
--/**
-- * sugov_iowait_reset() - Reset the IO boost status of a CPU.
-- * @sg_cpu: the sugov data for the CPU to boost
-- * @time: the update time from the caller
-- * @set_iowait_boost: true if an IO boost has been requested
-- *
-- * The IO wait boost of a task is disabled after a tick since the last update
-- * of a CPU. If a new IO wait boost is requested after more then a tick, then
-- * we enable the boost starting from IOWAIT_BOOST_MIN, which improves energy
-- * efficiency by ignoring sporadic wakeups from IO.
-- */
--static bool sugov_iowait_reset(struct sugov_cpu *sg_cpu, u64 time,
--			       bool set_iowait_boost)
--{
--	s64 delta_ns = time - sg_cpu->last_update;
--
--	/* Reset boost only if a tick has elapsed since last request */
--	if (delta_ns <= TICK_NSEC)
--		return false;
--
--	sg_cpu->iowait_boost = set_iowait_boost ? IOWAIT_BOOST_MIN : 0;
--	sg_cpu->iowait_boost_pending = set_iowait_boost;
--
--	return true;
--}
--
--/**
-- * sugov_iowait_boost() - Updates the IO boost status of a CPU.
-- * @sg_cpu: the sugov data for the CPU to boost
-- * @time: the update time from the caller
-- * @flags: SCHED_CPUFREQ_IOWAIT if the task is waking up after an IO wait
-- *
-- * Each time a task wakes up after an IO operation, the CPU utilization can be
-- * boosted to a certain utilization which doubles at each "frequent and
-- * successive" wakeup from IO, ranging from IOWAIT_BOOST_MIN to the utilization
-- * of the maximum OPP.
-- *
-- * To keep doubling, an IO boost has to be requested at least once per tick,
-- * otherwise we restart from the utilization of the minimum OPP.
-- */
--static void sugov_iowait_boost(struct sugov_cpu *sg_cpu, u64 time,
--			       unsigned int flags)
--{
--	bool set_iowait_boost = flags & SCHED_CPUFREQ_IOWAIT;
--
--	/* Reset boost if the CPU appears to have been idle enough */
--	if (sg_cpu->iowait_boost &&
--	    sugov_iowait_reset(sg_cpu, time, set_iowait_boost))
--		return;
--
--	/* Boost only tasks waking up after IO */
--	if (!set_iowait_boost)
--		return;
--
--	/* Ensure boost doubles only one time at each request */
--	if (sg_cpu->iowait_boost_pending)
--		return;
--	sg_cpu->iowait_boost_pending = true;
--
--	/* Double the boost at each request */
--	if (sg_cpu->iowait_boost) {
--		sg_cpu->iowait_boost =
--			min_t(unsigned int, sg_cpu->iowait_boost << 1, SCHED_CAPACITY_SCALE);
--		return;
--	}
--
--	/* First wakeup after IO: start with minimum boost */
--	sg_cpu->iowait_boost = IOWAIT_BOOST_MIN;
--}
--
--/**
-- * sugov_iowait_apply() - Apply the IO boost to a CPU.
-- * @sg_cpu: the sugov data for the cpu to boost
-- * @time: the update time from the caller
-- * @max_cap: the max CPU capacity
-- *
-- * A CPU running a task which woken up after an IO operation can have its
-- * utilization boosted to speed up the completion of those IO operations.
-- * The IO boost value is increased each time a task wakes up from IO, in
-- * sugov_iowait_apply(), and it's instead decreased by this function,
-- * each time an increase has not been requested (!iowait_boost_pending).
-- *
-- * A CPU which also appears to have been idle for at least one tick has also
-- * its IO boost utilization reset.
-- *
-- * This mechanism is designed to boost high frequently IO waiting tasks, while
-- * being more conservative on tasks which does sporadic IO operations.
-- */
--static unsigned long sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time,
--			       unsigned long max_cap)
--{
--	/* No boost currently required */
--	if (!sg_cpu->iowait_boost)
--		return 0;
--
--	/* Reset boost if the CPU appears to have been idle enough */
--	if (sugov_iowait_reset(sg_cpu, time, false))
--		return 0;
--
--	if (!sg_cpu->iowait_boost_pending) {
--		/*
--		 * No boost pending; reduce the boost value.
--		 */
--		sg_cpu->iowait_boost >>= 1;
--		if (sg_cpu->iowait_boost < IOWAIT_BOOST_MIN) {
--			sg_cpu->iowait_boost = 0;
--			return 0;
--		}
--	}
--
--	sg_cpu->iowait_boost_pending = false;
--
--	/*
--	 * sg_cpu->util is already in capacity scale; convert iowait_boost
--	 * into the same scale so we can compare.
--	 */
--	return (sg_cpu->iowait_boost * max_cap) >> SCHED_CAPACITY_SHIFT;
--}
--
- #ifdef CONFIG_NO_HZ_COMMON
- static bool sugov_cpu_is_busy(struct sugov_cpu *sg_cpu)
- {
-@@ -357,18 +227,12 @@ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
- 					      u64 time, unsigned long max_cap,
- 					      unsigned int flags)
- {
--	unsigned long boost;
--
--	sugov_iowait_boost(sg_cpu, time, flags);
--	sg_cpu->last_update = time;
--
- 	ignore_dl_rate_limit(sg_cpu);
- 
- 	if (!sugov_should_update_freq(sg_cpu->sg_policy, time))
- 		return false;
- 
--	boost = sugov_iowait_apply(sg_cpu, time, max_cap);
--	sugov_get_util(sg_cpu, boost);
-+	sugov_get_util(sg_cpu);
- 
- 	return true;
- }
-@@ -458,7 +322,7 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
- 	sg_cpu->sg_policy->last_freq_update_time = time;
- }
- 
--static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
-+static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu)
- {
- 	struct sugov_policy *sg_policy = sg_cpu->sg_policy;
- 	struct cpufreq_policy *policy = sg_policy->policy;
-@@ -469,11 +333,8 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
- 
- 	for_each_cpu(j, policy->cpus) {
- 		struct sugov_cpu *j_sg_cpu = &per_cpu(sugov_cpu, j);
--		unsigned long boost;
--
--		boost = sugov_iowait_apply(j_sg_cpu, time, max_cap);
--		sugov_get_util(j_sg_cpu, boost);
- 
-+		sugov_get_util(j_sg_cpu);
- 		util = max(j_sg_cpu->util, util);
- 	}
- 
-@@ -489,13 +350,10 @@ sugov_update_shared(struct update_util_data *hook, u64 time, unsigned int flags)
- 
- 	raw_spin_lock(&sg_policy->update_lock);
- 
--	sugov_iowait_boost(sg_cpu, time, flags);
--	sg_cpu->last_update = time;
--
- 	ignore_dl_rate_limit(sg_cpu);
- 
- 	if (sugov_should_update_freq(sg_policy, time)) {
--		next_f = sugov_next_freq_shared(sg_cpu, time);
-+		next_f = sugov_next_freq_shared(sg_cpu);
- 
- 		if (!sugov_update_next_freq(sg_policy, time, next_f))
- 			goto unlock;
+The only working scenario is when I do only the dropping of `items: 
+{maxItems: 1}` from the original code.
+
+Is it the standalone change of just dropping this what did you desired? 
+If yes, I have the patch prepared.
+
+David
+
+>
+> Rob
+
 -- 
-2.34.1
+David Heidelberg
 
 
