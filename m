@@ -1,162 +1,91 @@
-Return-Path: <linux-pm+bounces-4647-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4648-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A1D1870083
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Mar 2024 12:38:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43979870090
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Mar 2024 12:42:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C1AF1C20D76
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Mar 2024 11:38:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D7B911F26AF6
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Mar 2024 11:42:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4202C39FFC;
-	Mon,  4 Mar 2024 11:38:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="mv2YUw+4"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A31DF3A1C1;
+	Mon,  4 Mar 2024 11:42:50 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2327839FCD;
-	Mon,  4 Mar 2024 11:38:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D62639FEE;
+	Mon,  4 Mar 2024 11:42:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709552323; cv=none; b=un2pJst/vYi43m6PFPFfgRBJBurqDwoyZPOJufc1FjSQvIS7UMhjIivv+w/y3LHclIigMJI/hbFjfW6QpXH7FO548nSNQ7k+Y6ptA2d5kTHwbohWDXr/MHERynhb5INbTzQcWTgvKRWKMNSI6lsQvU7gDF/Lw6J/pT50CczJkW8=
+	t=1709552570; cv=none; b=KoskiX1+vla202dQeST8ajhlJ5spex8w1BuL1pLimOLqMf9TRjIfw7Fj1s5O1KDYkmZ5azG3IAubaFY4ll4XFjLOC5HYYUeZN2pa2eE0s/IabNO5u3+BGBUQy6v8HMTbCfUkRU9jJG/FXS+T+ZEYjm4ACUaPnuTHVwlvVrwJRqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709552323; c=relaxed/simple;
-	bh=VTI8cpKT89AjD7F82RNNEo0NCDm0D0CNEsGK6u1avrw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=OCvLPC9C8fKT3jFpSvpTO9facK6QIM7kEHcmEFbmihzrUfn67mKnuF5XtGYfJ5jvRaHa2bePTbxQ5nvnoeeDO9FwKPk3Kmg1mUZl6p4Onkjfekrm+sD9HBCDPOSqrOJ7+cbhO7JShC55oI/yflOqVRRniMoF3WK0+9tu/LMh0E4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=mv2YUw+4; arc=none smtp.client-ip=198.47.23.249
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 424BcXTn071681;
-	Mon, 4 Mar 2024 05:38:33 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1709552313;
-	bh=76/4WhOAicWnxPVZ9BJChYRJakkI9NozKgJ1A3tDjCQ=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=mv2YUw+4GQRFX+KNg4Ov+jjHUwx5mEEhKjMpJ03buJEQxzKyqfNR1lieGPc9YwFsl
-	 N/qlbNopw1RrJSdWPS83V5Ei7ZYPlo7iq8Kd38NTuTSpGGkb7/J/2Xza/mrt9Od2fJ
-	 Fuap9AikDQo9kB5PBLk+LQobveVCi6FrtD1cj/vc=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 424BcXum047097
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Mon, 4 Mar 2024 05:38:33 -0600
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 4
- Mar 2024 05:38:33 -0600
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 4 Mar 2024 05:38:33 -0600
-Received: from [172.24.227.68] (dhruva.dhcp.ti.com [172.24.227.68])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 424BcTaT008408;
-	Mon, 4 Mar 2024 05:38:30 -0600
-Message-ID: <66af18e0-56eb-401f-900d-a83f6e52c603@ti.com>
-Date: Mon, 4 Mar 2024 17:08:29 +0530
+	s=arc-20240116; t=1709552570; c=relaxed/simple;
+	bh=dnzxzWXhjTBIQHDxWLCiIj/FNQoDuoU0e9AQhpZ82os=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cAoBl0eHhwgWNre7kqlhaOGkki/I8mPn0cQh7/ylxlT0jmZxKKHaSJUcqfzae2UbkfmERYxvpgaWKNLilE5jS6Gv+HptO2tHEhOCLJBvTCPAp8kCe3bkfxVr1494hv/gNuH/9akh/QiLxpJ5EIbMWQgHy3RE4nN0kl/NbfPABmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A77D51FB;
+	Mon,  4 Mar 2024 03:43:24 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 47FF73F738;
+	Mon,  4 Mar 2024 03:42:46 -0800 (PST)
+Date: Mon, 4 Mar 2024 11:42:43 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Pierre Gondois <pierre.gondois@arm.com>, linux-kernel@vger.kernel.org,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Christian Loehle <christian.loehle@arm.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Ionela Voinescu <ionela.voinescu@arm.com>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 0/3]  scmi-cpufreq: Set transition_delay_us
+Message-ID: <ZeWzs_g6FvQlHQN7@bogus>
+References: <20240222135702.2005635-1-pierre.gondois@arm.com>
+ <20240304070058.kfqg3ypssn5x6k7s@vireshk-i7>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2 1/2] OPP: debugfs: Fix warning with W=1 builds
-Content-Language: en-US
-To: Viresh Kumar <viresh.kumar@linaro.org>, Viresh Kumar <vireshk@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>
-CC: <linux-pm@vger.kernel.org>, Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        kernel test robot <lkp@intel.com>, <linux-kernel@vger.kernel.org>,
-        Dhruva Gole <d-gole@ti.com>
-References: <ab75239d2280e506e5b9386b8aeb9edf97cd3294.1709551295.git.viresh.kumar@linaro.org>
-From: Dhruva Gole <d-gole@ti.com>
-In-Reply-To: <ab75239d2280e506e5b9386b8aeb9edf97cd3294.1709551295.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240304070058.kfqg3ypssn5x6k7s@vireshk-i7>
 
-Hi,
+On Mon, Mar 04, 2024 at 12:30:58PM +0530, Viresh Kumar wrote:
+> On 22-02-24, 14:56, Pierre Gondois wrote:
+> > policy's fields definitions:
+> > `transition_delay_us`:
+> > The minimum amount of time between two consecutive freq. requests
+> > for one policy.
+> > `transition_latency`:
+> > Delta between freq. change request and effective freq. change on
+> > the hardware.
+> >
+> > cpufreq_policy_transition_delay_us() uses the `transition_delay_us`
+> > value if available. Otherwise a value is induced from the policy's
+> > `transition_latency`.
+> >
+> > The scmi-cpufreq driver doesn't populate the `transition_delay_us`.
+> > Values matching the definition are available through the SCMI
+> > specification.
+> > Add support to fetch these values and use them in the scmi-cpufreq
+> > driver.
+>
+> How do we merge this series ? I can only pick the last commit.
 
-On 04/03/24 16:52, Viresh Kumar wrote:
-> We currently get the following warning:
-> 
-> debugfs.c:105:54: error: '%d' directive output may be truncated writing between 1 and 11 bytes into a region of size 8 [-Werror=format-truncation=]
->                   snprintf(name, sizeof(name), "supply-%d", i);
->                                                        ^~
-> debugfs.c:105:46: note: directive argument in the range [-2147483644, 2147483646]
->                   snprintf(name, sizeof(name), "supply-%d", i);
->                                                ^~~~~~~~~~~
-> debugfs.c:105:17: note: 'snprintf' output between 9 and 19 bytes into a destination of size 15
->                   snprintf(name, sizeof(name), "supply-%d", i);
-> 
-> Fix this and another potential issues it by allocating larger arrays.
+I have sent my PR for v6.9 already and was deferring this to v6.10
+The changes look good to me. If it doesn't conflict much with -next
+SCMI content, then I am happy to ack and you can take all of them
+together. Otherwise we can revisit strategy at -rc1. Thoughts ?
 
-Just to keep in mind while applying maybe: s/another/other
-
-> Use the exact string format to allocate the arrays without getting into
-> these issues again.
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202402141313.81ltVF5g-lkp@intel.com/
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
-> V2: Use string name while allocating memory for the array to fix potential
-> issues later on.
-> 
->   drivers/opp/debugfs.c | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
-> index ec030b19164a..27c3748347af 100644
-> --- a/drivers/opp/debugfs.c
-> +++ b/drivers/opp/debugfs.c
-> @@ -56,11 +56,11 @@ static void opp_debug_create_bw(struct dev_pm_opp *opp,
->   				struct dentry *pdentry)
->   {
->   	struct dentry *d;
-> -	char name[20];
-> +	char name[] = "icc-path-XXXXXXXXXX"; /* Integers can take 10 chars max */
-
-LGTM!
-
->   	int i;
->   
->   	for (i = 0; i < opp_table->path_count; i++) {
-> -		snprintf(name, sizeof(name), "icc-path-%.1d", i);
-> +		snprintf(name, sizeof(name), "icc-path-%d", i);
->   
->   		/* Create per-path directory */
->   		d = debugfs_create_dir(name, pdentry);
-> @@ -78,7 +78,7 @@ static void opp_debug_create_clks(struct dev_pm_opp *opp,
->   				  struct opp_table *opp_table,
->   				  struct dentry *pdentry)
->   {
-> -	char name[12];
-> +	char name[] = "rate_hz_XXXXXXXXXX"; /* Integers can take 10 chars max */
->   	int i;
->   
->   	if (opp_table->clk_count == 1) {
-> @@ -100,7 +100,7 @@ static void opp_debug_create_supplies(struct dev_pm_opp *opp,
->   	int i;
->   
->   	for (i = 0; i < opp_table->regulator_count; i++) {
-> -		char name[15];
-> +		char name[] = "supply-XXXXXXXXXX"; /* Integers can take 10 chars max */
-
-Feels like a better solution to me than the previous revision, thanks!
-
-
-Reviewed-by: Dhruva Gole <d-gole@ti.com>
-
->   
->   		snprintf(name, sizeof(name), "supply-%d", i);
->   
-
--- 
-Thanks and Regards,
-Dhruva Gole
+--
+Regards,
+Sudeep
 
