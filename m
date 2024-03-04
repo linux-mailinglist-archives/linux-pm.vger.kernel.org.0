@@ -1,111 +1,103 @@
-Return-Path: <linux-pm+bounces-4643-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4644-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2309086FFAE
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Mar 2024 12:01:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F7F186FFBB
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Mar 2024 12:03:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 548DC1C227D8
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Mar 2024 11:01:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B903281034
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Mar 2024 11:03:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B44CC381D5;
-	Mon,  4 Mar 2024 11:01:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C684C376FD;
+	Mon,  4 Mar 2024 11:03:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=smtpcorp.com header.i=@smtpcorp.com header.b="uxjo5PHz";
-	dkim=pass (2048-bit key) header.d=asem.it header.i=@asem.it header.b="OHEsCi0S"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UVlrbSZ1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from e2i652.smtp2go.com (e2i652.smtp2go.com [103.2.142.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3334381D0
-	for <linux-pm@vger.kernel.org>; Mon,  4 Mar 2024 11:01:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.2.142.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57FE8B654
+	for <linux-pm@vger.kernel.org>; Mon,  4 Mar 2024 11:03:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709550081; cv=none; b=R+sT8qqz9PV2eEON1H9SXCsfwnsD6f+L3clAAMSdObNAAUmV5uVQ8WsdIMbnlUvBD0Lpytn1tJ1jVCuJzpHHnNDqoL0svlEsIJNSEaO9ID99UZqFb1iQotrALw8cI1JQ5bsJrzQ0LZw4xdmI6prH5wQ6i3sUiEJjfLvUPyTddoc=
+	t=1709550226; cv=none; b=GMuqKkgupIwamMyX5POzRZbHFkwsKkuQpDeQ08uacS2PAOX/uC627VO+uujR3n8ecE07l2YbxuMcYEKX0JvJQJTBG8yWUy+pJVdBLxbTJffCNXsUMSBHmiRU/Ht2EyYcM4ktyb7HZzMXvjP9Gp/ZaqvSFDZ49OxWRzQvjSZ6Qbc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709550081; c=relaxed/simple;
-	bh=rBFiQEB8z/lHUfa+VHj4uIsM/ByrCz1KLthEmNo8hYw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=muuz3DMz0sfUJoiqkQWqV+OVXRSl+TP0W7TnJMKSJlyf80ttBof54uxtlmPaj+P6m2ypD/Yr0bR38RG6wRRaAkOTzXcKwN4P2AIVQbZl2KPNNY/t//wIMpS+LkO3ar0cdBdHV7NxoeD0Esw05xN6l6J1hvPAGYLTS1o+huc83Xo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=asem.it; spf=pass smtp.mailfrom=em1174574.asem.it; dkim=pass (2048-bit key) header.d=smtpcorp.com header.i=@smtpcorp.com header.b=uxjo5PHz; dkim=pass (2048-bit key) header.d=asem.it header.i=@asem.it header.b=OHEsCi0S; arc=none smtp.client-ip=103.2.142.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=asem.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=em1174574.asem.it
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=smtpcorp.com; s=a1-4; h=Feedback-ID:X-Smtpcorp-Track:Message-Id:Date:
-	Subject:To:From:Reply-To:Sender:List-Unsubscribe;
-	bh=pxSNbisWh19U3rdQiiYOgslG+MwHDfuy5ghPqFpWc4E=; b=uxjo5PHzQQ6hHClIT+/VSJLGYZ
-	6XuUkkyFpPrmZ0imjnXuxFOFLiOyZGSu257yieJ0/SqiOAzr9hEcQB25VKy/tr0nx9soGsEL3r93b
-	J2RnLZzYk1US8X4rNFrfmb++gXltmhx9untwgiuUzaFzixsWE11DIKb3mFQf47o/SjQhelvqtiHJ1
-	SRrzAOWnRvsId0SMMLnEkKrRsBLh8At00rBBoVq9FwkpafI5CUi/EAG5gwDQHP+DjRZISGYe+Yl/Q
-	i6Bw44lJ1+XGCRtFG6g4voVRvTW9WaPHgXjWA7aUq2x+fBNjvHGu+connrca96EtiKfhWjhVZwbdp
-	eHUq85UQ==;
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=asem.it;
- i=@asem.it; q=dns/txt; s=s1174574; t=1709550078; h=from : subject : to
- : message-id : date; bh=pxSNbisWh19U3rdQiiYOgslG+MwHDfuy5ghPqFpWc4E=;
- b=OHEsCi0SItXAZdUdnOP8WdZP0OHDnCODC2n0nWVg4W2JeQU9cKqfZa6yioy5lSEZl9s1b
- YSMGuMwff4Za8/epCyhg1N7DFjw74jtk62erJtvX4DhxtJMC5VMYXClxnXHG+Csx10HEONK
- +nTuektSQPgcUH7UzNIDBKWPJg2XXubHNsLLjTOxOyKMZsfajTVSPQX4pAhLg8FpWJQTAe0
- UZ9Q/UBg8ySSHjskcbMGiJVXqMVgrld9IYCSBnfMjEBIMmkW4t6KDOOoNrbVsAgivYet2u4
- ExswCagmdS8tFM7VDkU8DkBxcI4i8/q92+9aqPpeCL9zXBb/06bM5BfE7cwA==
-Received: from [10.45.79.71] (helo=SmtpCorp) by smtpcorp.com with esmtpsa
- (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
- (Exim 4.94.2-S2G) (envelope-from <f.suligoi@asem.it>)
- id 1rh64J-qt4GTh-Gc; Mon, 04 Mar 2024 11:01:15 +0000
-Received: from [10.86.249.198] (helo=asas054.asem.intra)
- by smtpcorp.com with esmtpa (Exim 4.96.1-S2G)
- (envelope-from <f.suligoi@asem.it>) id 1rh64I-Dv15V4-0A;
- Mon, 04 Mar 2024 11:01:14 +0000
-Received: from flavio-x.asem.intra ([172.16.18.47]) by asas054.asem.intra with
- Microsoft SMTPSVC(10.0.14393.4169); Mon, 4 Mar 2024 12:01:12 +0100
-From: Flavio Suligoi <f.suligoi@asem.it>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- Flavio Suligoi <f.suligoi@asem.it>
-Subject: [PATCH] thermal: core: remove superfluous line in comment
-Date: Mon,  4 Mar 2024 12:00:22 +0100
-Message-Id: <20240304110022.2421632-1-f.suligoi@asem.it>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1709550226; c=relaxed/simple;
+	bh=Cgn+AbUmEAUkw7Gtthr0yt0NYWx7rqcOh+VRv3isIy8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sNDDhcob0b9PxJXJE4AQf9Cf0Bq1FYAhcnatC1WUo+l/O1Oa0rBkZlE2LSA2ZnJ1wJThkMNNKBqggj9S8aRguohzc74BonlprihHok3uD5tyMiySfPR+VfJ6nwPpnxNrTkUCiRTUYKt2C7L4Ds2erDtC3Qvp/egjEhethWXIBys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UVlrbSZ1; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6e59bbdd8c7so3481067b3a.3
+        for <linux-pm@vger.kernel.org>; Mon, 04 Mar 2024 03:03:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1709550225; x=1710155025; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=uRCimQwiaMy/3k7Ta7kTx3HHC9SAus7Ndnzb5kkMHD0=;
+        b=UVlrbSZ1O3X16VEi1JHckwrjDdm0LX+xFXgz8nGoPIa1DpQH9KaZ1n3LOXwR0APPP0
+         G52Oul5bQr0PYx4Y/6gIe9dTqiHjH12B0FpwgddBVXiwwHhqzBVSMbw0ZPxdhkNQhsa7
+         pAg99heaozZG93DiFfHgTfsg7ntxBrR0Lhaoub/wIiAkoCK4RWKLdkHid+oXdpwv7PIH
+         5GA5XHLJ2y4hKluvN2tDUsL0lsVwNf+TCJpLNXb73sQL/OOGiVM/1zOejJ/xcDhM8vvV
+         lS8sSYSVFVwE/Frpd4Cd7vzpL71MMYMj349parDCc19Wi6Ka0JkglUQar/JlS70nqFXj
+         f1EA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709550225; x=1710155025;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uRCimQwiaMy/3k7Ta7kTx3HHC9SAus7Ndnzb5kkMHD0=;
+        b=hf/ABQUHfRocnaXE02kQECxWDC0GTyFx7BUVqiT/hwVhctbnnRMKR8vUU0t3Zw/5rp
+         e1shIUtmEsm/DZ6htVz4e9slwI3ZJdxgh5mnEStiH53I3QQY2nReVKpQVk66/sq+I0Ua
+         yHtOhciQ0EpWnscaDJeqLUxiqKCYQDrdRyR4PshM6A68m3YSgpNpdEkSJDZewgwvBqFW
+         Pldh3izKfHeG2F3w0dWUAtQWE8w+3NOoU299F2A2WuQ/lbRhP08zGxC1MelRsrTXeZm4
+         acFpR6D7awZ9wvrLOCHV7okkcyJLq3tqsQF94T/JM+y5xlIDqFWcRQLQXBNapbL39vu1
+         6f8A==
+X-Forwarded-Encrypted: i=1; AJvYcCUkgksWqL1DaIpuYaloxPWUgvrDTQbN+oYsZZCf0xlo+88v9y2yIpi+6rZqbPp5ddzomEmP68PSAtk40amBy8P3+hY2QX6YFxE=
+X-Gm-Message-State: AOJu0YxDdqh0zTCW+l2Sck+LwaxMDGe4I5QrdHily19iWnlR8TOv6e7o
+	252Rnuv+pQpPlkSmkw1LFwzL3xE4qMGD88IhDNh/3U191G+IKOZHgkwLWSnmQ/E=
+X-Google-Smtp-Source: AGHT+IFHnmY9rsYiBuXaQPJyCeTKsOqjxrv1/2WHgvsre2aqcSomXoz0h9mLcg2wzjoF7OHK2UyQ7g==
+X-Received: by 2002:a05:6a00:852:b0:6e6:24d0:a171 with SMTP id q18-20020a056a00085200b006e624d0a171mr2452853pfk.27.1709550224498;
+        Mon, 04 Mar 2024 03:03:44 -0800 (PST)
+Received: from localhost ([122.172.85.206])
+        by smtp.gmail.com with ESMTPSA id w189-20020a6262c6000000b006e629bd793esm923045pfb.108.2024.03.04.03.03.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Mar 2024 03:03:44 -0800 (PST)
+Date: Mon, 4 Mar 2024 16:33:41 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Sibi Sankar <quic_sibis@quicinc.com>
+Cc: sudeep.holla@arm.com, cristian.marussi@arm.com, rafael@kernel.org,
+	morten.rasmussen@arm.com, dietmar.eggemann@arm.com,
+	lukasz.luba@arm.com, sboyd@kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, quic_mdtipton@quicinc.com,
+	linux-arm-msm@vger.kernel.org, nm@ti.com
+Subject: Re: [PATCH V2 3/3] cpufreq: scmi: Enable boost support
+Message-ID: <20240304110341.vd6w4mbcq6uwrpif@vireshk-i7>
+References: <20240227173434.650334-1-quic_sibis@quicinc.com>
+ <20240227173434.650334-4-quic_sibis@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-OriginalArrivalTime: 04 Mar 2024 11:01:12.0413 (UTC)
- FILETIME=[4529D0D0:01DA6E23]
-X-Smtpcorp-Track: 1rh64mDv15V40j.5bn79EblHWlet
-Feedback-ID: 1174574m:1174574aXfMg4B:1174574sD5JYLEGfq
-X-Report-Abuse: Please forward a copy of this message, including all headers,
- to <abuse-report@smtp2go.com>
+In-Reply-To: <20240227173434.650334-4-quic_sibis@quicinc.com>
 
-The first and the third lines of the comment of function:
+On 27-02-24, 23:04, Sibi Sankar wrote:
+> +	priv->policy = policy;
 
-thermal_zone_device_set_polling()
+Did I miss applying something ? Dropped the commit now.
 
-belong to the same sentences, so they have to be joined together.
+drivers/cpufreq/scmi-cpufreq.c:272:6: error: ‘struct scmi_data’ has no member named ‘policy’
 
-Signed-off-by: Flavio Suligoi <f.suligoi@asem.it>
----
- drivers/thermal/thermal_core.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index f7a7d43809e7..34a31bc72023 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -273,7 +273,6 @@ static int __init thermal_register_governors(void)
- 
- /*
-  * Zone update section: main control loop applied to each zone while monitoring
-- *
-  * in polling mode. The monitoring is done using a workqueue.
-  * Same update may be done on a zone by calling thermal_zone_device_update().
-  *
 -- 
-2.34.1
-
+viresh
 
