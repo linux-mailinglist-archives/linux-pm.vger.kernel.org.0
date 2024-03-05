@@ -1,176 +1,90 @@
-Return-Path: <linux-pm+bounces-4684-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4685-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F77A872054
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 14:37:05 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 739288721F4
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 15:50:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0B871F23691
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 13:37:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 038DDB26EB0
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 14:50:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B93AC85C7B;
-	Tue,  5 Mar 2024 13:36:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE372126F03;
+	Tue,  5 Mar 2024 14:50:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="AyWl/pU1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aroaaLoX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55ADB5821B
-	for <linux-pm@vger.kernel.org>; Tue,  5 Mar 2024 13:36:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2ADB86ACB;
+	Tue,  5 Mar 2024 14:50:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709645815; cv=none; b=jM8uFqDTYlSm9oCoI1IL9sPMyqxxm06vRONbTKD+Q9+MfEQtJFM94COFcfQ1utZ5oionmLIrEmOju5e9Z9JQc0H4XE6bC+2YbKUkxB6Ms/QJj6wThhtxUKW1soGk4rC2yIBe+Lcz7rk6Ue9lOlCZKOkTYEq5JkiFpMuqO5iwj+k=
+	t=1709650238; cv=none; b=Ym0HVoDo73he6keRDVfZLYGfx8RuMxepDC7HZbyvEVxdD/p0yJrDhhwKGv58PJZ/DwqrJ0MR1zaIZe8KUxKO06i4NTC+d4k1KuBUG0asYCNeiwc5WtDefu7yzbi4MerrpWb+3KNYXt35NYw2IYw/tfEJuetN//ePbpP+FJxkSMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709645815; c=relaxed/simple;
-	bh=nQfK6V2xWgqSLI9E0BBwgQAFWw3SBgmC1BgXmzftNdE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uaLwYxm60rzZJxUEOINITZ8Lr+hR9fIxnJIzWciT9nV6cl+YRqsbODmFfkqzfewbWNQ2dMlF8WASKA9B1DY9EzSYWebQ0mV2beuQin4Fdp8xbcsG9Nkn1eWgzFdmP1fzgRasCJQJNDxYrjAdea29XMtVZYGAjHqt5JeAHMIXf0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=AyWl/pU1; arc=none smtp.client-ip=185.125.188.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 68F7A41192
-	for <linux-pm@vger.kernel.org>; Tue,  5 Mar 2024 13:36:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1709645809;
-	bh=0402VVh+GEeRN2UVZuJPSy+RAbWSxhwA40pSMz4rtJQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type;
-	b=AyWl/pU1w2FgKtAJXHaV3E39wJu3X/crmMsukfFa76BVcFurwG78B+ItnZWnjGUUJ
-	 Rg9fEnYC0PokG9mP8IXXVD6ghJ5EfgUC6bcC33ZJvTkCC6A1eb2oHcVtDfkY/o1KGj
-	 OWXjZB+1yawCu2KhWF6CkKDZ7GocNLT6c3r2H2rxUoiLsr9/2wlN8aFJWFLWhrMtNW
-	 LAYb93N3yF0iqkPg8L6oOJf6mrxL5lhl0h5t3LXH1/MKYDmjSP22T8iqPGQWLNAjbI
-	 YR/PS5FCYGjGPNXbvPzTPGpu3Y/Xuk3EC5UR7kut3tsJy8dvZeVqKmgD/86e4a8X9/
-	 w8aCy/lVXtHHg==
-Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-5c670f70a37so5688635a12.2
-        for <linux-pm@vger.kernel.org>; Tue, 05 Mar 2024 05:36:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709645808; x=1710250608;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0402VVh+GEeRN2UVZuJPSy+RAbWSxhwA40pSMz4rtJQ=;
-        b=KaeF59b6JQhO7vBIvQ8D7xthuOfT9ElA+IpjKw92BEq0HJnheoXQWbMfnorJ4UEPGm
-         R8rCSjw1rkWRYsxfS4y69IsBkxJ6WNAWCmfoykEmOirHhMxsLr9DAhKFOo8o6ogXAUVN
-         Q6ufsqZQVxHd/OlGF+nZzzENzaaG8esIG4e3fOw5rRhf7mYAyKn2FNEhkPvpTSauXuZv
-         1BRKsejEruCTHMoO2YyCoTmiCBfAhghyNvRu94yfDURKHcVPQG/yfsIZoeNqu1msvMfu
-         lb3ksobprxTa/yN6i+Ucu3Mgn6xVy95bSD9Mz8/TTwZUyNRs8k3TBZPDglAQigxEEPHL
-         NuYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW85t7d+3QKn5s4s5xwpuynV3pzI0LxG418qyXITeEAGTm0PvBpYcDM0gJTkV5B1sBG0FzJfhogOgwZisSj6NTqhFFkU5i8AeA=
-X-Gm-Message-State: AOJu0YxItVx4wv3jWu2wHBYNL+IDdr52jTct3rMr3D/jPmM6YYy2z2OR
-	Lbw0dW8EGsB9c+WYWcx5FjoLmemSMyPz0h+y5kN6NTQbtSIsq3lGuuJkTD765bQxOEFcEU+M2dA
-	vGgprsrjG1MtcYK2o/a0OAVzQ0tGp8459wc/XogqEbFx7+8kgQ6dznPxiN6BZaKU8VMfm4WExqn
-	sLVlBRRmUCggeA/I74oklmhRIOczrxFUJKdfmC1p9w++n306o=
-X-Received: by 2002:a05:6a20:af87:b0:1a1:4487:ee25 with SMTP id ds7-20020a056a20af8700b001a14487ee25mr1501417pzb.49.1709645808124;
-        Tue, 05 Mar 2024 05:36:48 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEOP//ufniFPMkZx0twz+0xxIGTYOpse5o4+VGR1RjmYtquYB3hCwcIfz/sDtZDINGIz76nhkwZK3Ux85NQF40=
-X-Received: by 2002:a05:6a20:af87:b0:1a1:4487:ee25 with SMTP id
- ds7-20020a056a20af8700b001a14487ee25mr1501407pzb.49.1709645807855; Tue, 05
- Mar 2024 05:36:47 -0800 (PST)
+	s=arc-20240116; t=1709650238; c=relaxed/simple;
+	bh=VXWAauPjX6FDLOS5GEMcjByztQdG+D2U02KicMz1li0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QnRMB61nUmdpKo+BM6rdfS6M4elWFfQYzOXai7inDSDUMLONNyTHtEGlCVE2sxmRNh26RBYAMGSsRBihP4dCfzZUAPNTw2hzcEeFA8uCQ2FRpiBufuruNWETQSXH4qHVQ4ixMgdTArEZZi7D4spQuoHoAY8hkC1oLJRVewrGC4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aroaaLoX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEC40C433F1;
+	Tue,  5 Mar 2024 14:50:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709650238;
+	bh=VXWAauPjX6FDLOS5GEMcjByztQdG+D2U02KicMz1li0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aroaaLoXlsoirx9FFY8ogRP7Q7XTLn/uH+JxdK6t/5yhLYKoRFZg8/J1VqSyDN9Ap
+	 3ZtVk+2EufojdutiFWwBzH5etqr05XbkzKTkSX/DbRHW4VwFEvOCLSjVp0ziZv/hyL
+	 Zw8Xhd+RnK1lTj8hrd6ZGYCbq5D5iQTLdkqLJo0P+bMh68p8knppuXSZaK0uyp4Dxm
+	 m5ptUVVJYmVZinsZiODsWmN4YT2qVCkBnnSkpBXiBp/EXJE+M7n6lexqKrmdwoHszS
+	 rZExK6O8qtNvqh++NWqFI5pw6WD7k2JHeKT2BdghRVFHP3Ku/psAsrqsU1EQrpq0zj
+	 QGhdxX8eMIyvg==
+Date: Tue, 5 Mar 2024 08:50:36 -0600
+From: Rob Herring <robh@kernel.org>
+To: David Heidelberg <david@ixit.cz>
+Cc: Stephen Boyd <sboyd@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	devicetree@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	linux-kernel@vger.kernel.org, Viresh Kumar <vireshk@kernel.org>,
+	linux-pm@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+	Nishanth Menon <nm@ti.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>
+Subject: Re: [PATCH] dt-bindings: opp: drop maxItems from inner items
+Message-ID: <170965023541.3333583.1849336475733290366.robh@kernel.org>
+References: <20240304234328.382467-1-david@ixit.cz>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <5761426.DvuYhMxLoT@kreacher>
-In-Reply-To: <5761426.DvuYhMxLoT@kreacher>
-From: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date: Tue, 5 Mar 2024 21:36:36 +0800
-Message-ID: <CAAd53p774TjJkdtRxxUo8b--LvznTBMgGPdpA=yjGxu8eBgmKw@mail.gmail.com>
-Subject: Re: [PATCH v1] PM: runtime: PCI: Drain runtime-idle callbacks before
- driver removal
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Linux PCI <linux-pci@vger.kernel.org>, Bjorn Helgaas <helgaas@kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Ricky Wu <ricky_wu@realtek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240304234328.382467-1-david@ixit.cz>
 
-On Tue, Mar 5, 2024 at 6:45=E2=80=AFPM Rafael J. Wysocki <rjw@rjwysocki.net=
-> wrote:
->
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> A race condition between the .runtime_idle() callback and the .remove()
-> callback in the rtsx_pcr PCI driver leads to a kernel crash due to an
-> unhandled page fault [1].
->
-> The problem is that rtsx_pci_runtime_idle() is not expected to be
-> running after pm_runtime_get_sync() has been called, but the latter
-> doesn't really guarantee that.  It only guarantees that the suspend
-> and resume callbacks will not be running when it returns.
->
-> However, if a .runtime_idle() callback is already running when
-> pm_runtime_get_sync() is called, the latter will notice that the
-> runtime PM status of the device is RPM_ACTIVE and it will return right
-> away without waiting for the former to complete.  In fact, it cannot
-> wait for .runtime_idle() to complete because it may be called from that
-> callback (it arguably does not make much sense to do that, but it is not
-> strictly prohibited).
->
-> Thus in general, whoever is providing a .runtime_idle() callback, they
-> need to protect it from running in parallel with whatever code runs
-> after pm_runtime_get_sync().  [Note that .runtime_idle() will not start
-> after pm_runtime_get_sync() has returned, but it may continue running
-> then if it has started earlier already.]
->
-> One way to address that race condition is to call pm_runtime_barrier()
-> after pm_runtime_get_sync() (not before it, because a nonzero value of
-> the runtime PM usage counter is necessary to prevent runtime PM
-> callbacks from being invoked) to wait for the runtime-idle callback to
-> complete should it be running at that point.  A suitable place for
-> doing that is in pci_device_remove() which calls pm_runtime_get_sync()
-> before removing the driver, so it may as well call pm_runtime_barrier()
-> subsequently, which will prevent the race in question from occurring,
-> not just in the rtsx_pcr driver, but in any PCI drivers providing
-> runtime-idle callbacks.
->
-> Link: https://lore.kernel.org/lkml/20240229062201.49500-1-kai.heng.feng@c=
-anonical.com/ # [1]
-> Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> Tested-by: Ricky Wu <ricky_wu@realtek.com>
-> Cc: All applicable <stable@vger.kernel.org>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Thanks for the debugging and patch.
-Acked-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-
+On Tue, 05 Mar 2024 00:43:06 +0100, David Heidelberg wrote:
+> With recent changes within matrix dimensions calculation,
+> dropping maxItems: 1 provides a warning-free run.
+> 
+> Fixes warning such as:
+> arch/arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dtb: opp-table: opp-200000000:opp-hz:0: [200000000, 0, 0, 150000000, 0, 0, 0, 0, 300000000] is too long
+> 
+> Fixes: 3cb16ad69bef ("dt-bindings: opp: accept array of frequencies")
+> Suggested-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: David Heidelberg <david@ixit.cz>
 > ---
->  drivers/pci/pci-driver.c |    7 +++++++
->  1 file changed, 7 insertions(+)
->
-> Index: linux-pm/drivers/pci/pci-driver.c
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> --- linux-pm.orig/drivers/pci/pci-driver.c
-> +++ linux-pm/drivers/pci/pci-driver.c
-> @@ -473,6 +473,13 @@ static void pci_device_remove(struct dev
->
->         if (drv->remove) {
->                 pm_runtime_get_sync(dev);
-> +               /*
-> +                * If the driver provides a .runtime_idle() callback and =
-it has
-> +                * started to run already, it may continue to run in para=
-llel
-> +                * with the code below, so wait until all of the runtime =
-PM
-> +                * activity has completed.
-> +                */
-> +               pm_runtime_barrier(dev);
->                 drv->remove(pci_dev);
->                 pm_runtime_put_noidle(dev);
->         }
->
->
->
+>  follow-up of https://lore.kernel.org/lkml/20231229191038.247258-1-david@ixit.cz/T/
+> 
+>  Documentation/devicetree/bindings/opp/opp-v2-base.yaml | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+
+Acked-by: Rob Herring <robh@kernel.org>
+
 
