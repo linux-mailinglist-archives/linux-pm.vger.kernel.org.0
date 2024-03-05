@@ -1,123 +1,84 @@
-Return-Path: <linux-pm+bounces-4677-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4679-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA44A871E23
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 12:41:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DE67871E3C
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 12:47:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C2991F234E2
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 11:41:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4FC821C23ABD
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 11:46:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78AFA57326;
-	Tue,  5 Mar 2024 11:41:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61BBD58138;
+	Tue,  5 Mar 2024 11:46:39 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F363B29CE9;
-	Tue,  5 Mar 2024 11:41:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CD865676D;
+	Tue,  5 Mar 2024 11:46:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709638890; cv=none; b=CrB9zHIEk4lV5712Q85AHhMpJFo18O30S2b5jbiCm/PiZzoTA15/P1TKqC0mfqxpdNp/tPTc6f2nsYMlUWuaPK7c+lOiCyll8Dn9AwhK0Ix3qCd8rRql/+bMNWFordi661KwPEhUi/qRDSb7N7n1m2nHwcQc9m5KcGkDQQc/CqU=
+	t=1709639199; cv=none; b=cY+KVBysX8JL0gmMqUX18yRBVCS4RTJoOaM3RZTxwQKZTyFDe9VPYmadSHeRxj+bZCm4BY/LMqHHKPvCs+TrSCurtYTYoQUpPzHr31YBPYP0l6CBJ95b6IxIhoUSxK0V478yZSznxfUSLu9FuCTuNSptjyJw6XYRBURsu8PLf/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709638890; c=relaxed/simple;
-	bh=tQtogeCkIHDDEnVG1cGYdwDp0nwyyUrX6V4UtNFlljQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Eu8H5Xj9Tm3uzt6x2H/gh7+T5phvegR6TQOyv8nTOawwfrdFd7Kc9rEZdwsenk/SIHHpIaTB5e96+z0mXckZc7nFV7Wg6SCI/ESagwBVjIFiTzQeyQWbRFghX8Qa19lkx2OtPxIo6jm+Epef9Q2metJmLd2EvDwkiUcsjgKeZZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5a1358e7e16so546546eaf.0;
-        Tue, 05 Mar 2024 03:41:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709638888; x=1710243688;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=y0v7RjgmO/yDuWlF3/kTo+sHgoivtGNOWfDVn+nq/Ik=;
-        b=ZRvN+1LQyPgl/8G8Kuj1r/r2YNcHSJhcB0y5tLWTB3iuTSAd28FpmBSijRbnE0OyBb
-         9xn6QZUChw/uFHgIBT76FC7P/JXVasxJEsd35XYibMCywksjuZQZOg87MLanWr3uB78o
-         bYUU8VAzLK/HIk8+j+Q9tTkWzDB94Rz/lhfm1CZsKfJbYTyDjkUavsKRCSuL8ntx1DRV
-         nq3XqzNedeKfIgdHpQs3is3C6NeFPaV41osKNdBPd63UUlXc2VQcRBYciVqpfQB4WTdm
-         oChirUimjYkYTC4//wCifazBzMx/tgUx/ljJdkN1SAevGcOPRBHXh8k00GrNCqjCN9ey
-         p6Ng==
-X-Forwarded-Encrypted: i=1; AJvYcCXKPeG4ejE+i0QV48l/dy2iDLUuQf1SJKjTl9uEVEX6IoY4mM3XiEadKOlklWni4YCYPdHstfrwHDWEwiMDYeTDYhuCNz9aOXqHDtv1qrIeqce4H5BfKXl9V9XWvKbqEzf9472CdB4=
-X-Gm-Message-State: AOJu0YyHxC+xvHeWchKMx+HnOlQWVyMpcs4V/HfaN+UbhiWApTbxYAgv
-	4ISJJd+ky3YjdIP4qcnlTuwfA9MIQiyCBr7QYUWhDzX1TFDulVOcnYl8cLAZBfEBj+rQVAnXmZI
-	e0tQ7j65yx0GPWgeM5FIGH2Wn2+4=
-X-Google-Smtp-Source: AGHT+IHF4dBKyk4hRdjM6vf7T079M6yi9lKk8JmaNs0S9UveuRzmmaiok7o5fr454KPibdMqlJlfLpZYpB8AMdLmm0k=
-X-Received: by 2002:a4a:d4d4:0:b0:5a1:31a1:7f75 with SMTP id
- r20-20020a4ad4d4000000b005a131a17f75mr154574oos.1.1709638888053; Tue, 05 Mar
- 2024 03:41:28 -0800 (PST)
+	s=arc-20240116; t=1709639199; c=relaxed/simple;
+	bh=K+s3gas02e9E4iUjXjT/64GP8DZNwtmwcELjrkLGz0k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JRfcq1hb3Byljld32AhZ7oZY7FRNo5abWCRdsyCjRuNk01jxuoiv5HdOy7DE/r/d0Tyk3Mz0A5jSlyi9mN+VpC3gpt+jjx8eltCc6bprPeH7jI5k7ZgPsvek9UUHLXjqw/N7skaNkAW8SXhBIFB6dpChlW9wqIRUnubi//MSgCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 40D631FB;
+	Tue,  5 Mar 2024 03:47:13 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EDE4D3F762;
+	Tue,  5 Mar 2024 03:46:34 -0800 (PST)
+Date: Tue, 5 Mar 2024 11:46:32 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Pierre Gondois <pierre.gondois@arm.com>
+Cc: linux-kernel@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Christian Loehle <christian.loehle@arm.com>,
+	Ionela Voinescu <ionela.voinescu@arm.com>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 2/3] firmware: arm_scmi: Populate fast channel rate_limit
+Message-ID: <ZecGGJrgJ2857FYW@bogus>
+References: <20240222135702.2005635-1-pierre.gondois@arm.com>
+ <20240222135702.2005635-3-pierre.gondois@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240301092657.15528-1-qingliang.li@mediatek.com> <ZeXmcl4ngEm1RccW@hovoldconsulting.com>
-In-Reply-To: <ZeXmcl4ngEm1RccW@hovoldconsulting.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 5 Mar 2024 12:41:16 +0100
-Message-ID: <CAJZ5v0ifq_ZsrQnq3b4LSUJxAVMO55=m7tL+L3nNP7ixBb9yHA@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: sleep: wakeirq: fix wake irq warning in system suspend
-To: Johan Hovold <johan@kernel.org>, Qingliang Li <qingliang.li@mediatek.com>
-Cc: Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Johan Hovold <johan+linaro@kernel.org>, Tony Lindgren <tony@atomide.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, Dhruva Gole <d-gole@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240222135702.2005635-3-pierre.gondois@arm.com>
 
-On Mon, Mar 4, 2024 at 4:19=E2=80=AFPM Johan Hovold <johan@kernel.org> wrot=
-e:
+On Thu, Feb 22, 2024 at 02:57:00PM +0100, Pierre Gondois wrote:
+> Arm SCMI spec. v3.2, s4.5.3.12 PERFORMANCE_DESCRIBE_FASTCHANNEL
+> defines a per-domain rate_limit for performance requests:
+> """
+> Rate Limit in microseconds, indicating the minimum time
+> required between successive requests. A value of 0
+> indicates that this field is not applicable or supported
+> on the platform.
+> """"
+> The field is first defined in SCMI v2.0.
+> 
+> Add support to fetch this value and advertise it through
+> a fast_switch_rate_limit() callback.
 >
-> On Fri, Mar 01, 2024 at 05:26:57PM +0800, Qingliang Li wrote:
-> > When driver uses pm_runtime_force_suspend() as the system suspend callb=
-ack
-> > function and registers the wake irq with reverse enable ordering, the w=
-ake
-> > irq will be re-enabled when entering system suspend, triggering an
-> > 'Unbalanced enable for IRQ xxx' warning. In this scenario, the call
-> > sequence during system suspend is as follows:
-> >   suspend_devices_and_enter()
-> >     -> dpm_suspend_start()
-> >       -> dpm_run_callback()
-> >         -> pm_runtime_force_suspend()
-> >           -> dev_pm_enable_wake_irq_check()
-> >           -> dev_pm_enable_wake_irq_complete()
-> >
-> >     -> suspend_enter()
-> >       -> dpm_suspend_noirq()
-> >         -> device_wakeup_arm_wake_irqs()
-> >           -> dev_pm_arm_wake_irq()
-> >
-> > To fix this issue, complete the setting of WAKE_IRQ_DEDICATED_ENABLED f=
-lag
-> > in dev_pm_enable_wake_irq_complete() to avoid redundant irq enablement.
-> >
-> > Reviewed-by: Dhruva Gole <d-gole@ti.com>
-> > Signed-off-by: Qingliang Li <qingliang.li@mediatek.com>
->
-> Thanks for the fix. Looks correct to me:
->
-> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
->
-> I think you should add back the Fixes tag from v1 and CC stable as well:
->
-> Fixes: 8527beb12087 ("PM: sleep: wakeirq: fix wake irq arming")
-> Cc: stable@vger.kernel.org      # 5.16
->
-> Note that WAKE_IRQ_DEDICATED_REVERSE was added in 5.16 by commit
-> 259714100d98 ("PM / wakeirq: support enabling wake-up irq after
-> runtime_suspend called") so no need to try to backport any further than
-> that.
 
-Applied as 6.9 material, tags added as suggested above.
+I did a quick check and these changes doesn't conflict with -next SCMI
+content. So if Viresh is happy to pick them up for v6.9,
 
-Thanks!
+Acked-by: Sudeep Holla <sudeep.holla@arm.com>
+
+-- 
+Regards,
+Sudeep
 
