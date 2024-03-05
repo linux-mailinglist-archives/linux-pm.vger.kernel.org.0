@@ -1,90 +1,126 @@
-Return-Path: <linux-pm+bounces-4685-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4686-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 739288721F4
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 15:50:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FE6287222B
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 15:58:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 038DDB26EB0
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 14:50:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E88011F21970
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 14:58:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE372126F03;
-	Tue,  5 Mar 2024 14:50:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC78A126F07;
+	Tue,  5 Mar 2024 14:58:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aroaaLoX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wrc1E3ar"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2ADB86ACB;
-	Tue,  5 Mar 2024 14:50:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2069585954;
+	Tue,  5 Mar 2024 14:58:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709650238; cv=none; b=Ym0HVoDo73he6keRDVfZLYGfx8RuMxepDC7HZbyvEVxdD/p0yJrDhhwKGv58PJZ/DwqrJ0MR1zaIZe8KUxKO06i4NTC+d4k1KuBUG0asYCNeiwc5WtDefu7yzbi4MerrpWb+3KNYXt35NYw2IYw/tfEJuetN//ePbpP+FJxkSMg=
+	t=1709650709; cv=none; b=noY2jQtL0098/zfu5pr1o8UU6RFe2sqF4upmwzmADASrEwLtdM0GAdLAIosX/tSBnvOVzVFR26u2b0GSR2lbOdGasFDHWIOMT/fLtkrYzfVlARxYLJVSO5ToH/niPoeKNL82KVancK+qK4EUYaS+yiRCFIeRkV9jeaHjHyxWAU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709650238; c=relaxed/simple;
-	bh=VXWAauPjX6FDLOS5GEMcjByztQdG+D2U02KicMz1li0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QnRMB61nUmdpKo+BM6rdfS6M4elWFfQYzOXai7inDSDUMLONNyTHtEGlCVE2sxmRNh26RBYAMGSsRBihP4dCfzZUAPNTw2hzcEeFA8uCQ2FRpiBufuruNWETQSXH4qHVQ4ixMgdTArEZZi7D4spQuoHoAY8hkC1oLJRVewrGC4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aroaaLoX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEC40C433F1;
-	Tue,  5 Mar 2024 14:50:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709650238;
-	bh=VXWAauPjX6FDLOS5GEMcjByztQdG+D2U02KicMz1li0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aroaaLoXlsoirx9FFY8ogRP7Q7XTLn/uH+JxdK6t/5yhLYKoRFZg8/J1VqSyDN9Ap
-	 3ZtVk+2EufojdutiFWwBzH5etqr05XbkzKTkSX/DbRHW4VwFEvOCLSjVp0ziZv/hyL
-	 Zw8Xhd+RnK1lTj8hrd6ZGYCbq5D5iQTLdkqLJo0P+bMh68p8knppuXSZaK0uyp4Dxm
-	 m5ptUVVJYmVZinsZiODsWmN4YT2qVCkBnnSkpBXiBp/EXJE+M7n6lexqKrmdwoHszS
-	 rZExK6O8qtNvqh++NWqFI5pw6WD7k2JHeKT2BdghRVFHP3Ku/psAsrqsU1EQrpq0zj
-	 QGhdxX8eMIyvg==
-Date: Tue, 5 Mar 2024 08:50:36 -0600
-From: Rob Herring <robh@kernel.org>
-To: David Heidelberg <david@ixit.cz>
-Cc: Stephen Boyd <sboyd@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	devicetree@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	linux-kernel@vger.kernel.org, Viresh Kumar <vireshk@kernel.org>,
-	linux-pm@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-	Nishanth Menon <nm@ti.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>
-Subject: Re: [PATCH] dt-bindings: opp: drop maxItems from inner items
-Message-ID: <170965023541.3333583.1849336475733290366.robh@kernel.org>
-References: <20240304234328.382467-1-david@ixit.cz>
+	s=arc-20240116; t=1709650709; c=relaxed/simple;
+	bh=eDrl3N91i6VSsVPwRQLCSDjE2WRbc/dlF+GNZC+fUHM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=SMrNIIeu77zV0elfYq/yEKG5QVnEyfAjx/8R268UdKAlpmfz5niEebmANb39tiKGTJA3LmyM55KHE9v1lsfT+uqv7bnPnL+L8ZU26+yne30RXSH69eb2rkzaUacInPn+XHEg2U9VlkEJ1MSuH64QehA5VLAesBQwQwryHoirDQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wrc1E3ar; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709650708; x=1741186708;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=eDrl3N91i6VSsVPwRQLCSDjE2WRbc/dlF+GNZC+fUHM=;
+  b=Wrc1E3arKi3kKCDADDOpIyO8b1GFvTiw+cRzYvt7L10BAQ4D+dIVULYH
+   UXXIlFSo5031AQsk03LShjU+4UwoB07mHbaeyrl8Qb2j+DtYDfapDR7cw
+   htikCss9vPqrCrCWhfI8HCgRJ3es+72TqH16NsQjMBIWM6rYkTpOGgunE
+   +tFNSsq9Hj5aitTHYhzeouwTOxFoufYi1CYUEPdvthV3k1Nimq6jBjFHb
+   meF5V4bJ4jpNcBPXgK769Jdiki9Y1ptRB2eJLBY/+cBmdDwvXJGgKQCgG
+   /zbXpKwAY3OvytJDWpYqmKsujZ4I1GIiO7696YBHuaXsE5GZkLvnqkL08
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11003"; a="7149805"
+X-IronPort-AV: E=Sophos;i="6.06,205,1705392000"; 
+   d="scan'208";a="7149805"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2024 06:58:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,205,1705392000"; 
+   d="scan'208";a="9345361"
+Received: from spandruv-desk.jf.intel.com (HELO spandruv-desk.amr.corp.intel.com) ([10.54.75.14])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2024 06:58:27 -0800
+Message-ID: <ea2f6883e29453e9bdb134a183a0747ec06971f1.camel@linux.intel.com>
+Subject: Re: [PATCH v1] thermal: intel: int340x_thermal: Use thermal zone
+ accessor functions
+From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM
+ <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>,  Lukasz Luba <lukasz.luba@arm.com>, Daniel Lezcano
+ <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Stanislaw
+ Gruszka <stanislaw.gruszka@linux.intel.com>
+Date: Tue, 05 Mar 2024 06:58:26 -0800
+In-Reply-To: <2724753.mvXUDI8C0e@kreacher>
+References: <2724753.mvXUDI8C0e@kreacher>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-3.fc36) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240304234328.382467-1-david@ixit.cz>
 
+On Tue, 2024-03-05 at 12:32 +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>=20
+> Make int340x_thermal use the dedicated accessor functions for the
+> thermal zone device object address and the thermal zone type string.
+>=20
+> This is requisite for future thermal core improvements.
+>=20
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+ Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-On Tue, 05 Mar 2024 00:43:06 +0100, David Heidelberg wrote:
-> With recent changes within matrix dimensions calculation,
-> dropping maxItems: 1 provides a warning-free run.
-> 
-> Fixes warning such as:
-> arch/arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dtb: opp-table: opp-200000000:opp-hz:0: [200000000, 0, 0, 150000000, 0, 0, 0, 0, 300000000] is too long
-> 
-> Fixes: 3cb16ad69bef ("dt-bindings: opp: accept array of frequencies")
-> Suggested-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: David Heidelberg <david@ixit.cz>
 > ---
->  follow-up of https://lore.kernel.org/lkml/20231229191038.247258-1-david@ixit.cz/T/
-> 
->  Documentation/devicetree/bindings/opp/opp-v2-base.yaml | 2 --
->  1 file changed, 2 deletions(-)
-> 
-
-Acked-by: Rob Herring <robh@kernel.org>
+> =C2=A0drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c |=C2=
+=A0=C2=A0=C2=A0 3
+> ++-
+> =C2=A01 file changed, 2 insertions(+), 1 deletion(-)
+>=20
+> Index: linux-
+> pm/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- linux-
+> pm.orig/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+> +++ linux-
+> pm/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+> @@ -58,7 +58,8 @@ static int int340x_thermal_set_trip_temp
+> =C2=A0
+> =C2=A0static void int340x_thermal_critical(struct thermal_zone_device
+> *zone)
+> =C2=A0{
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dev_dbg(&zone->device, "%s: cr=
+itical temperature reached\n",
+> zone->type);
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dev_dbg(thermal_zone_device(zo=
+ne), "%s: critical temperature
+> reached\n",
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0thermal_zone_device_type(zone));
+> =C2=A0}
+> =C2=A0
+> =C2=A0static inline void *int_to_trip_priv(int i)
+>=20
+>=20
+>=20
 
 
