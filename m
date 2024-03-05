@@ -1,153 +1,182 @@
-Return-Path: <linux-pm+bounces-4693-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4694-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBD258728C1
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 21:30:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B932D872A7C
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 23:57:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97CF228D33A
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 20:30:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD3481C215C6
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 22:57:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2F7113AEE;
-	Tue,  5 Mar 2024 20:30:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A32A12D204;
+	Tue,  5 Mar 2024 22:57:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="DVSzHtou"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A911134BD;
-	Tue,  5 Mar 2024 20:30:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A24DE12CD8B;
+	Tue,  5 Mar 2024 22:57:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709670653; cv=none; b=IzlgGRqKiV73cbMlbeDnp50g3o+yr1gHgiqYn7x59QOFcEicMJ3mMlX1TlxzZyBfxpyIKUOvtlXcxudoZC5PSXSqqU5DO/pC/w4RUOoGO6cZ38xhXEJnRRDWk8ID302mSS4zV5SeRu7MyzPH8is53GZRDkXrY4A2CZvZ+3kxHUk=
+	t=1709679430; cv=none; b=Kaoe/JQTEZ6rBLAIS7Jp9i9CgXOf5x0Jb85DiOxORu1P2f+py3Sk7jYViLLsEqUSwtPnahraST5+YQsvYl2DWP15Oc1ph8MDGaxt0QV0KjQUu1++3OzIZrQ06XTqHr307y7DBP0jKi3DC2IZzqTdwd+wDAuysbsRv2fD+COEYDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709670653; c=relaxed/simple;
-	bh=9C0XflL22G4FK2Xp6NX+RZBZfi99BNGkE22VoiRQ7Y8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I8C0n4HuuIGnXrIwCVCCZNQVgQX97mgMYQLjXiOEfzCPGFQtNmfxBL+rvxOeHL/AlyHpLnEekUQn2RM5KOzY2p6CrQBuLAFtZUrLx05n0Yn6YrV99d9Kc0Vo7kidzNfkLKpGHzNms8aIDN0j5U5//8wY7mWQTPnwECGmMryV5zk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-3be110bbff9so1723566b6e.1;
-        Tue, 05 Mar 2024 12:30:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709670651; x=1710275451;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+1KHeO8d/Gx1dKaGWO1Y1rxOFe+zyynKCQIDZAb8tjE=;
-        b=mHfAihX8FsTGdnp4YRu/NprxzAYxeCgjz+Fg+S725ohQLK2bL8qT2rYboAno0NaDxB
-         C9Lx+gdOG5Z3A2f9YFfv20t+aR9vqm76GijlvznhHyxMAUxmfjN6b2RmhFyaNAuK33eL
-         /7b/VjdBQpe1dVqJ08t+xOTLmUBWP1eodnwFI+X/TVQl7dVZihuP/gtLXl3Aq1rhdvXg
-         tsj302nA1ooPSixmtYVtpzE6c1qunrmx25pkQSV8Lbe43j0HJhGyItEhpQWCdmeDC7kR
-         tDFTaLjm72nM9Qz1DskwlwfhlU1jFYJTpJkMeZZLzs5mYUl91Sc4Ek72YaYeWECO2NTF
-         gKRQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVvjUbjouSIAiTxQOOT+oRrDa3CdbOfrpKxKM4OukpKCgZ4P47DD5oRlh338lwbir3nW/GilL53H/SqxwghzGkKFZqKfv4eZkbshs+Q7akmiy/pA9EvOWkPznbuuJtPQFg93wXL
-X-Gm-Message-State: AOJu0YxjgYMMyFEisWfRHN+CU6W1snuiD1qCErEyBknRYRBuvIN7qtoM
-	sXlErJ3sQckWRkYbb81p8C+s0ZQtsRug17312gzPmuot3+m5db/7SxndfpGc97hQIte0792+kS5
-	LXzT6LnkDTeXFpfzQ1lCoCfqTwpI=
-X-Google-Smtp-Source: AGHT+IFlK4rv3fufHWWSM3/MUJ7IkPU7hUKs/lwzuEKN4nZbZ89nwuLN+wACA45JZBAgOuxYVxZjx7pP2r1JfdsD+e4=
-X-Received: by 2002:a05:6871:58b:b0:220:fc89:d8ca with SMTP id
- u11-20020a056871058b00b00220fc89d8camr1720192oan.0.1709670651360; Tue, 05 Mar
- 2024 12:30:51 -0800 (PST)
+	s=arc-20240116; t=1709679430; c=relaxed/simple;
+	bh=rp0gPK4EeOuHqGO2Gs1iRSOyAflr2XcSUE/rs3uBvrM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Jb0geP/Zvz2Yode57gVHCtj87QIkFA3d4zMiRzEwqhPp/t4wVQjhAkM6NgYWVSzFr4r8Bxv4kGRpkXc+rrrB6/7uUUEJL8DUnkdo5+jHU5lr/VQp25wMw/YYU0c1rO51ybixSpgYdZ5kiolzPYf8zImPtxcNaIrFwnTuIFyCWUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=DVSzHtou; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 425MnQX7011485;
+	Tue, 5 Mar 2024 22:57:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version:content-type; s=
+	qcppdkim1; bh=am3hGTNnk/zo+P481rb5C0LwEy/0ZM20GvqbwO7vWOI=; b=DV
+	SzHtou+wwlQknpvBycjXn+leUNsQsiKPVeF8uoNHubWg5FsYbWEdYl5MXBruGz+6
+	Wi2eCCxvTv+S54TCnLZ80De12TWMcr2F3yPKoNzf0c5s7DFpDqGh3ptKjJdIa3UC
+	nPdQcH53nxChP0Et0IZqdGyP9rUuQE+AgHjRxX0HDTyAoSKb3nn5qS735eZPBm6/
+	+wmRooeVEtqzjLsU32Hdt0rXvcZa8CsBzl13AoRdREx2wx0aSoXf30RFT0QtsHiS
+	F2bJXiL5qj3gym3a9Ep9yQeW1PagMnsPsOvrwAL3H5BaFZ/ViRjqGFz6b5upg3ht
+	WkEQEQvBQlEN4+SgVRMw==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wp2uwsdbh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 05 Mar 2024 22:57:04 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 425Mv3a1006479
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 5 Mar 2024 22:57:03 GMT
+Received: from hu-mdtipton-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Tue, 5 Mar 2024 14:57:03 -0800
+From: Mike Tipton <quic_mdtipton@quicinc.com>
+To: <djakov@kernel.org>
+CC: <robdclark@chromium.org>, <quic_rlaggysh@quicinc.com>,
+        <quic_okukatla@quicinc.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Mike Tipton <quic_mdtipton@quicinc.com>
+Subject: [PATCH] interconnect: Don't access req_list while it's being manipulated
+Date: Tue, 5 Mar 2024 14:56:52 -0800
+Message-ID: <20240305225652.22872-1-quic_mdtipton@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <07b62879-2445-4b0d-880a-be01a44820f8@linux.alibaba.com>
-In-Reply-To: <07b62879-2445-4b0d-880a-be01a44820f8@linux.alibaba.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 5 Mar 2024 21:30:40 +0100
-Message-ID: <CAJZ5v0iggVOU4_o2qwe92e37r35ovLMGypvLqNevgydEdfNJEw@mail.gmail.com>
-Subject: Re: [PATCH v2] x86/cstate: fix mwait hint target cstate calc
-To: He Rongguang <herongguang@linux.alibaba.com>
-Cc: jacob.jun.pan@linux.intel.com, lenb@kernel.org, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	shannon.zhao@linux.alibaba.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 14Gq446lONzfmA0m4rJDC1Y8R6zE_rhK
+X-Proofpoint-ORIG-GUID: 14Gq446lONzfmA0m4rJDC1Y8R6zE_rhK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-05_18,2024-03-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ lowpriorityscore=0 phishscore=0 spamscore=0 suspectscore=0
+ priorityscore=1501 clxscore=1011 mlxlogscore=999 impostorscore=0
+ mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2402120000 definitions=main-2403050183
 
-On Mon, Mar 4, 2024 at 7:14=E2=80=AFAM He Rongguang
-<herongguang@linux.alibaba.com> wrote:
->
-> According to x86 spec ([1] and [2]), mwait hint_address[7:4] adds 1 is
-> the corresponding cstate, and 0xF means C0.
->
-> ACPI cstate table usually only contains C1+, but nothing prevents ACPI
-> firmware from presenting a cstate (maybe C1+) but using a mwait address C=
-0
-> (i.e., 0xF in ACPI FFH MWAIT hint address). And if this is the case, Linu=
-x
-> erroneously treat this cstate as C16, while actually this should be legal
-> C0 state instead of C16, according to spec.
->
-> Since ACPI firmware is out of Linux kernel scope, fix kernel handling of
-> 0xF ->(to) C0 in this situation. This is found when tweak ACPI cstate
-> table qemu presenting to VM.
->
-> Also fix intel_idle case by the way for kernel code consistency.
->
-> [1]. Intel SDM Vol 2, Table 4-11. MWAIT Hints
-> Register (EAX): "Value of 0 means C1; 1 means C2 and so on
-> Value of 01111B means C0".
->
-> [2]. AMD manual Vol 3, MWAIT: "The processor C-state is EAX[7:4]+1, so to
-> request C0 is to place the value F in EAX[7:4] and to request C1 is to
-> place the value 0 in EAX[7:4].".
->
-> Signed-off-by: He Rongguang <herongguang@linux.alibaba.com>
-> ---
-> V1 -> V2: Amend commit message according to Rafael.
->
->   arch/x86/kernel/acpi/cstate.c | 4 ++--
->   drivers/idle/intel_idle.c     | 3 ++-
->   2 files changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.=
-c
-> index 401808b47af3..f3ffd0a3a012 100644
-> --- a/arch/x86/kernel/acpi/cstate.c
-> +++ b/arch/x86/kernel/acpi/cstate.c
-> @@ -131,8 +131,8 @@ static long acpi_processor_ffh_cstate_probe_cpu(void
-> *_cx)
->          cpuid(CPUID_MWAIT_LEAF, &eax, &ebx, &ecx, &edx);
->
->          /* Check whether this particular cx_type (in CST) is supported
-> or not */
-> -       cstate_type =3D ((cx->address >> MWAIT_SUBSTATE_SIZE) &
-> -                       MWAIT_CSTATE_MASK) + 1;
-> +       cstate_type =3D (((cx->address >> MWAIT_SUBSTATE_SIZE) &
-> +                       MWAIT_CSTATE_MASK) + 1) & MWAIT_CSTATE_MASK;
->          edx_part =3D edx >> (cstate_type * MWAIT_SUBSTATE_SIZE);
->          num_cstate_subtype =3D edx_part & MWAIT_SUBSTATE_MASK;
->
-> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-> index bcf1198e8991..e486027f8b07 100644
-> --- a/drivers/idle/intel_idle.c
-> +++ b/drivers/idle/intel_idle.c
-> @@ -1934,7 +1934,8 @@ static void __init spr_idle_state_table_update(void=
-)
->
->   static bool __init intel_idle_verify_cstate(unsigned int mwait_hint)
->   {
-> -       unsigned int mwait_cstate =3D MWAIT_HINT2CSTATE(mwait_hint) + 1;
-> +       unsigned int mwait_cstate =3D (MWAIT_HINT2CSTATE(mwait_hint) + 1)=
- &
-> +                                       MWAIT_CSTATE_MASK;
->          unsigned int num_substates =3D (mwait_substates >> mwait_cstate =
-*
-> 4) &
->                                          MWAIT_SUBSTATE_MASK;
->
-> --
+The icc_lock mutex was split into separate icc_lock and icc_bw_lock
+mutexes in [1] to avoid lockdep splats. However, this didn't adequately
+protect access to icc_node::req_list.
 
-Applied as 6.9 material with some edits in the subject and changelog.
+The icc_set_bw() function will eventually iterate over req_list while
+only holding icc_bw_lock, but req_list can be modified while only
+holding icc_lock. This causes races between icc_set_bw(), of_icc_get(),
+and icc_put().
 
-Also, your email client mangles white space, so please consider using
-a different one for sending patches.
+Example A:
 
-Thanks!
+  CPU0                               CPU1
+  ----                               ----
+  icc_set_bw(path_a)
+    mutex_lock(&icc_bw_lock);
+                                     icc_put(path_b)
+                                       mutex_lock(&icc_lock);
+    aggregate_requests()
+      hlist_for_each_entry(r, ...
+                                       hlist_del(...
+        <r = invalid pointer>
+
+Example B:
+
+  CPU0                               CPU1
+  ----                               ----
+  icc_set_bw(path_a)
+    mutex_lock(&icc_bw_lock);
+                                     path_b = of_icc_get()
+                                       of_icc_get_by_index()
+                                         mutex_lock(&icc_lock);
+                                         path_find()
+                                           path_init()
+    aggregate_requests()
+      hlist_for_each_entry(r, ...
+                                             hlist_add_head(...
+        <r = invalid pointer>
+
+Fix this by ensuring icc_bw_lock is always held before manipulating
+icc_node::req_list. The additional places icc_bw_lock is held don't
+perform any memory allocations, so we should still be safe from the
+original lockdep splats that motivated the separate locks.
+
+[1] commit af42269c3523 ("interconnect: Fix locking for runpm vs reclaim")
+
+Signed-off-by: Mike Tipton <quic_mdtipton@quicinc.com>
+Fixes: af42269c3523 ("interconnect: Fix locking for runpm vs reclaim")
+---
+ drivers/interconnect/core.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+index 5d1010cafed8..7e9b996b47c8 100644
+--- a/drivers/interconnect/core.c
++++ b/drivers/interconnect/core.c
+@@ -176,6 +176,8 @@ static struct icc_path *path_init(struct device *dev, struct icc_node *dst,
+ 
+ 	path->num_nodes = num_nodes;
+ 
++	mutex_lock(&icc_bw_lock);
++
+ 	for (i = num_nodes - 1; i >= 0; i--) {
+ 		node->provider->users++;
+ 		hlist_add_head(&path->reqs[i].req_node, &node->req_list);
+@@ -186,6 +188,8 @@ static struct icc_path *path_init(struct device *dev, struct icc_node *dst,
+ 		node = node->reverse;
+ 	}
+ 
++	mutex_unlock(&icc_bw_lock);
++
+ 	return path;
+ }
+ 
+@@ -792,12 +796,16 @@ void icc_put(struct icc_path *path)
+ 		pr_err("%s: error (%d)\n", __func__, ret);
+ 
+ 	mutex_lock(&icc_lock);
++	mutex_lock(&icc_bw_lock);
++
+ 	for (i = 0; i < path->num_nodes; i++) {
+ 		node = path->reqs[i].node;
+ 		hlist_del(&path->reqs[i].req_node);
+ 		if (!WARN_ON(!node->provider->users))
+ 			node->provider->users--;
+ 	}
++
++	mutex_unlock(&icc_bw_lock);
+ 	mutex_unlock(&icc_lock);
+ 
+ 	kfree_const(path->name);
+-- 
+2.17.1
+
 
