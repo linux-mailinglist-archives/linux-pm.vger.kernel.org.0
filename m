@@ -1,126 +1,95 @@
-Return-Path: <linux-pm+bounces-4686-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4687-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FE6287222B
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 15:58:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E6D687226C
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 16:08:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E88011F21970
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 14:58:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C26961F22A2E
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 15:08:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC78A126F07;
-	Tue,  5 Mar 2024 14:58:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23313126F11;
+	Tue,  5 Mar 2024 15:08:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wrc1E3ar"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l9oahAMa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2069585954;
-	Tue,  5 Mar 2024 14:58:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BA554683
+	for <linux-pm@vger.kernel.org>; Tue,  5 Mar 2024 15:08:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709650709; cv=none; b=noY2jQtL0098/zfu5pr1o8UU6RFe2sqF4upmwzmADASrEwLtdM0GAdLAIosX/tSBnvOVzVFR26u2b0GSR2lbOdGasFDHWIOMT/fLtkrYzfVlARxYLJVSO5ToH/niPoeKNL82KVancK+qK4EUYaS+yiRCFIeRkV9jeaHjHyxWAU8=
+	t=1709651295; cv=none; b=jAKyijHBZjr7UhAqW8A+Rd7i5jsVFJLsjtmXXr0T7Rx9Fbrd9QmXqXJxbhBlPa2pEExej0HwF3XxNdD3n/JYfEqjduX/tOrXxHmh7iKjbE3hmg50+rt1FeL0NmGZqq1spee3SzXqX3IPoeZ2CbDXNZXlnwjJ8Px4kx3C3yZfvvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709650709; c=relaxed/simple;
-	bh=eDrl3N91i6VSsVPwRQLCSDjE2WRbc/dlF+GNZC+fUHM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=SMrNIIeu77zV0elfYq/yEKG5QVnEyfAjx/8R268UdKAlpmfz5niEebmANb39tiKGTJA3LmyM55KHE9v1lsfT+uqv7bnPnL+L8ZU26+yne30RXSH69eb2rkzaUacInPn+XHEg2U9VlkEJ1MSuH64QehA5VLAesBQwQwryHoirDQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wrc1E3ar; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709650708; x=1741186708;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=eDrl3N91i6VSsVPwRQLCSDjE2WRbc/dlF+GNZC+fUHM=;
-  b=Wrc1E3arKi3kKCDADDOpIyO8b1GFvTiw+cRzYvt7L10BAQ4D+dIVULYH
-   UXXIlFSo5031AQsk03LShjU+4UwoB07mHbaeyrl8Qb2j+DtYDfapDR7cw
-   htikCss9vPqrCrCWhfI8HCgRJ3es+72TqH16NsQjMBIWM6rYkTpOGgunE
-   +tFNSsq9Hj5aitTHYhzeouwTOxFoufYi1CYUEPdvthV3k1Nimq6jBjFHb
-   meF5V4bJ4jpNcBPXgK769Jdiki9Y1ptRB2eJLBY/+cBmdDwvXJGgKQCgG
-   /zbXpKwAY3OvytJDWpYqmKsujZ4I1GIiO7696YBHuaXsE5GZkLvnqkL08
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11003"; a="7149805"
-X-IronPort-AV: E=Sophos;i="6.06,205,1705392000"; 
-   d="scan'208";a="7149805"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2024 06:58:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,205,1705392000"; 
-   d="scan'208";a="9345361"
-Received: from spandruv-desk.jf.intel.com (HELO spandruv-desk.amr.corp.intel.com) ([10.54.75.14])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2024 06:58:27 -0800
-Message-ID: <ea2f6883e29453e9bdb134a183a0747ec06971f1.camel@linux.intel.com>
-Subject: Re: [PATCH v1] thermal: intel: int340x_thermal: Use thermal zone
- accessor functions
-From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM
- <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>,  Lukasz Luba <lukasz.luba@arm.com>, Daniel Lezcano
- <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Stanislaw
- Gruszka <stanislaw.gruszka@linux.intel.com>
-Date: Tue, 05 Mar 2024 06:58:26 -0800
-In-Reply-To: <2724753.mvXUDI8C0e@kreacher>
-References: <2724753.mvXUDI8C0e@kreacher>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-3.fc36) 
+	s=arc-20240116; t=1709651295; c=relaxed/simple;
+	bh=ihFVVpOGjc9809fB5ocH4j682iFEx5PpDhNAo/vJhus=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=uyXQY8g3iBA+NV+Xrz4DMp0kgMpSPg/W+XjQ+GfULJvA/j40je9jEc7UEEncg5YAWQ54KioahjVUlbPbGL2NoXwyDjn9spEn9sN5kU+sTLjAW9PMYm2D/vS41w0LWQqc2bqVD5g87ZuqhOOBdTS3yLMlV9kGUct/H4NY0EMLbb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l9oahAMa; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a4515f8e13cso314350766b.3
+        for <linux-pm@vger.kernel.org>; Tue, 05 Mar 2024 07:08:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709651291; x=1710256091; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ihFVVpOGjc9809fB5ocH4j682iFEx5PpDhNAo/vJhus=;
+        b=l9oahAMah6F9yUkX+mt1QF/3hKNQEYN00FTm2ORBYG9Q1+ngD654GO8h9RnWKDFDU9
+         zeGWvxfb72lLKh5cQHSFJbYjN2Ex1saDvT9vgVP7wDHqLc1di19AQ0VMnRsyxQoAcI/x
+         E1HniNhKLJQmeCs/EX8J8e9OlfyDl2CaRXqtgCsJDWces7mRzCVVxJm/nE11qoal70JW
+         7m3fXjlZG3mZu2ZUfn8TnbvlycQX1QeUFLzlXqwNfXLQBgkE/raXLb9CJFF8G9hNaZGg
+         Po51R592nmu+C+5w1TlYWTI0Lisgd1Ixoz8UGFPT4hfwb1CLLmaKvcWWDj1IhTg4Ch46
+         Xdqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709651291; x=1710256091;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ihFVVpOGjc9809fB5ocH4j682iFEx5PpDhNAo/vJhus=;
+        b=wiEUkkHZo1bnYS1FV3TTgaDSHcxKG3gQwo7Rztyj3xLjEkhAJF0OlCtUxzIScP29Lz
+         AUylVSLOvdOQusbg9ZnwU8jp4VY8quUeGlOE+iN60qqQM+vto8xQsk6Ni99KYA6GrW8U
+         sFGnwPaNX4p0TOfRxPNz67+VOdXtz6MDxraRHYPKGDLPzE+D5yHB7ZeJoio1smBNGfhR
+         2xn9uLf3oTeUGSrNSrPeC+L38Md4f3hf7WCHRbDmETbExuDuEOerhBFOJiyO0+Fro6Xn
+         ndunC8rN7CTKx8PNew6bqMhT4K+iHBoz2qirm5qdUig/UioWd0em/v9IZuI8O2Ow8h5D
+         j2jg==
+X-Gm-Message-State: AOJu0YwQ/hegIMepjrTsYrJWobVCPPaykx6b8eWV1QgYatDgkJfdQ6Vs
+	DQpjl1HmLN5KK77W4297wEl0Hqh419Ut3GrmdAjG9e1SkWo1z1Klgi9RVDbExw0uGn/D3XDugIc
+	pPMLbePjP1ySoSeEXQuEdo+Km13uGQObe
+X-Google-Smtp-Source: AGHT+IE/s/ExAK2Rak6tnbw0O5F8zeN6bizSE1WnvFqvv2bVxse1tdVWHt6FgwxLz/ZrWg9xPUexSTG4e2Axr0SFNBI=
+X-Received: by 2002:a17:907:1708:b0:a44:7e16:ae8c with SMTP id
+ le8-20020a170907170800b00a447e16ae8cmr9021693ejc.43.1709651291425; Tue, 05
+ Mar 2024 07:08:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+From: Patryk <pbiel7@gmail.com>
+Date: Tue, 5 Mar 2024 16:08:00 +0100
+Message-ID: <CA+DkFDYxxXgBR=_u8a7dOUb5tFae0-Zst5eEiF4=pAid45sneQ@mail.gmail.com>
+Subject: How to notify the kernel about upcoming power loss?
+To: linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 2024-03-05 at 12:32 +0100, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->=20
-> Make int340x_thermal use the dedicated accessor functions for the
-> thermal zone device object address and the thermal zone type string.
->=20
-> This is requisite for future thermal core improvements.
->=20
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
- Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Hi
+I've got a question - what's the path or designed way to notify the
+kernel that there will be unexpected power loss so that the kernel can
+handle as much as possible before complete shutdown?
+Let me show some background - we have a SoM which has a lot of
+components. On the SoM we have a PSU which operates on 24V voltage. We
+would like to monitor the PSU's voltage and when we detect that the
+voltage has dropped from 24V to 12V this is highly likely an
+unexpected power loss/cut, therefore we would like to inform the
+Kernel (in particular mmc subsystem) that the power loss is coming.
+I can imagine something like this - we have a driver that does voltage
+measurements or waits for an external interrupt (triggered when PSU's
+voltage drops from 24V to 12V) and then calls some functions that will
+allow the Kernel to do some cleanups, but the question is what are
+these functions? Are there any?
 
-> ---
-> =C2=A0drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c |=C2=
-=A0=C2=A0=C2=A0 3
-> ++-
-> =C2=A01 file changed, 2 insertions(+), 1 deletion(-)
->=20
-> Index: linux-
-> pm/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> --- linux-
-> pm.orig/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-> +++ linux-
-> pm/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-> @@ -58,7 +58,8 @@ static int int340x_thermal_set_trip_temp
-> =C2=A0
-> =C2=A0static void int340x_thermal_critical(struct thermal_zone_device
-> *zone)
-> =C2=A0{
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dev_dbg(&zone->device, "%s: cr=
-itical temperature reached\n",
-> zone->type);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dev_dbg(thermal_zone_device(zo=
-ne), "%s: critical temperature
-> reached\n",
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0thermal_zone_device_type(zone));
-> =C2=A0}
-> =C2=A0
-> =C2=A0static inline void *int_to_trip_priv(int i)
->=20
->=20
->=20
-
+BR
+Patryk
 
