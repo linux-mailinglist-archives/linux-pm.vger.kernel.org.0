@@ -1,83 +1,106 @@
-Return-Path: <linux-pm+bounces-4680-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4681-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E135F871E3E
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 12:47:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E414871EED
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 13:20:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F2FE1C23BB2
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 11:47:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4DA131F21EF6
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 12:20:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FDD056758;
-	Tue,  5 Mar 2024 11:47:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85EC55A4C9;
+	Tue,  5 Mar 2024 12:19:59 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF11929CE9;
-	Tue,  5 Mar 2024 11:47:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C2A95491A;
+	Tue,  5 Mar 2024 12:19:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709639253; cv=none; b=DVs9+G5agyV8xaHME1xrifpEUv0bxliJRQALRxGYqJy1GzQquzzByTldWuka4l9hNqoWhqkBv7BxSooFY7aOY34BDfaKd+fK3QZguVe2xQTDQ0M2i34UTDcRzbovYgtaz0msu2zkmImc5lLXyNlrk3BPgqOCj1BHXBs5rciI944=
+	t=1709641199; cv=none; b=KhDuQvm/Nvu7WKB65ueSgNmiEUFw90VnAIVDeEnClvBZNz+9YLfP30w2Oh8F/pefzCO35SwKlyYwgkuU36a2ZLosTLf9AcawlZXcqzuKdf+jc3ho+43MUbdEiM4bS0WH0oj9dszjmRNE+f9UoJ4hkgyLawuwnkBAmq/PNvdn7Ws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709639253; c=relaxed/simple;
-	bh=RzzONS9JF/9i7RLpwuLhp0vGWEUJd7jicbO418cKucg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fLqWczE3i6lIvcoMcRs9db3Lqz9U9OTAcvgitos8IQ7cYrOhAyGiNFFGqL//BeXRKg8+1Pe9nGfEYl1iu4dr731NNwsLIc1Jxk5hi6fDSJoUSOYziRe5b8xFRPWOTrc04CM+iu9wqyanraAZVgKy17j/NyuOjoVxqwV9aMi+GgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B4B621FB;
-	Tue,  5 Mar 2024 03:48:07 -0800 (PST)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6E94A3F762;
-	Tue,  5 Mar 2024 03:47:29 -0800 (PST)
-Date: Tue, 5 Mar 2024 11:47:26 +0000
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Pierre Gondois <pierre.gondois@arm.com>
-Cc: linux-kernel@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	Christian Loehle <christian.loehle@arm.com>,
-	Ionela Voinescu <ionela.voinescu@arm.com>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 1/3] firmware: arm_scmi: Populate perf commands rate_limit
-Message-ID: <ZecGTjbCcDD6UaqB@bogus>
-References: <20240222135702.2005635-1-pierre.gondois@arm.com>
- <20240222135702.2005635-2-pierre.gondois@arm.com>
+	s=arc-20240116; t=1709641199; c=relaxed/simple;
+	bh=t7G6/MWaKhUpkJGYR2nv7zyPxCl67C3iIy4Q5igOeyU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hk0SpiSZn0lkuNUCUEti8wmdZl1fiiYmKGqma6+mHVThuFb8rNhHeAOpDhvh697t8tg4XIkSUx8/xdGAMM5D6tLLE5J5swlni1FQyxq3MAhK4erqgBXFDMFgsvqvE9AQnepJ0c6h9CbnOJShIOWbs4mJr7VCj5BRr/C1U46Wr0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-6e4ea48972cso647206a34.0;
+        Tue, 05 Mar 2024 04:19:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709641197; x=1710245997;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=USUd0ct6oWtFiJJKkDLxwnqmJJ4eaIKl5+V8V0LyqG8=;
+        b=F9lh8mKUEwDSyCrd3sHkefWNrXIG67tksjkv4OwfuVEEuRBWGrDyKmZSj6AImBa0qk
+         Q+nIqOCENudPMJwf+kuyLyPtuhoEJ5AnYInzei1koI/hg64xWIlzLS78me4O43FRqoVN
+         LD/lxJcgf/OFy3WYgyQ3XGal6XcVdVJbeW5OO9GhA8SNqnDxQrdusM3Nyn60m7DbuoDL
+         edy9WTMrKM1Iwp0vv8rdpu56erkgKfTwXKtJwtXmgX3/XIq8Lcjor6BLuxbSVUlNGGbd
+         afsVUnaqsaxZCFDbv96JgpBXzoM7mlxTcsRZfCVFKz+SaPPWcgs3GBreYf0VAekb+yq/
+         MLlg==
+X-Forwarded-Encrypted: i=1; AJvYcCXu+kncpmG8mRr4WAC7tSZVqlUWWztZ+Njmr+KVsBPEvHwsfArLiNjUaD8O0XHxCAV/sVjpRaDRo2WkXQsCZTQCqCghiSaFiVmuMixhikUwAAQYSOWcnyn8w4Jo3EyBUnP6FFWvY0A=
+X-Gm-Message-State: AOJu0YzC6gUpYRasrx42mDkQk2YikqPtygW/1eWq8JsUq62RWJhSkX17
+	pNtrHfWnB504P9baIXQQAEuM20CcJNO1Ss8al0+LsOV8AlQk/rx+UGa5aqfqY/yStH8IZV+ghlF
+	qgiZ5PQkMLJ4HJI64EYeSBiE0nfA=
+X-Google-Smtp-Source: AGHT+IFcXSd1Q4b/7ORXmqWybZddPHIog/msNO6Xl1S/GfqeTG5omlz/dqSzQKJjfBAqNq+eFNVtjb5DgXhaLttYqso=
+X-Received: by 2002:a05:6820:1c10:b0:5a1:4b90:19ab with SMTP id
+ cl16-20020a0568201c1000b005a14b9019abmr281109oob.0.1709641196934; Tue, 05 Mar
+ 2024 04:19:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240222135702.2005635-2-pierre.gondois@arm.com>
+References: <20240304110022.2421632-1-f.suligoi@asem.it>
+In-Reply-To: <20240304110022.2421632-1-f.suligoi@asem.it>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 5 Mar 2024 13:19:45 +0100
+Message-ID: <CAJZ5v0iff7siAAxzp_n4yTb5yzDBwH=iYUi4Zf8s5Cxmvyw+VQ@mail.gmail.com>
+Subject: Re: [PATCH] thermal: core: remove superfluous line in comment
+To: Flavio Suligoi <f.suligoi@asem.it>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 22, 2024 at 02:56:59PM +0100, Pierre Gondois wrote:
-> Arm SCMI spec. v3.2, s4.5.3.4 PERFORMANCE_DOMAIN_ATTRIBUTES
-> defines a per-domain rate_limit for performance requests:
-> """
-> Rate Limit in microseconds, indicating the minimum time
-> required between successive requests. A value of 0
-> indicates that this field is not supported by the
-> platform. This field does not apply to FastChannels.
-> """"
-> The field is first defined in SCMI v1.0.
-> 
-> Add support to fetch this value and advertise it through
-> a rate_limit_get() callback.
+On Mon, Mar 4, 2024 at 12:01=E2=80=AFPM Flavio Suligoi <f.suligoi@asem.it> =
+wrote:
+>
+> The first and the third lines of the comment of function:
+>
+> thermal_zone_device_set_polling()
+>
+> belong to the same sentences, so they have to be joined together.
+>
+> Signed-off-by: Flavio Suligoi <f.suligoi@asem.it>
+> ---
+>  drivers/thermal/thermal_core.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_cor=
+e.c
+> index f7a7d43809e7..34a31bc72023 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -273,7 +273,6 @@ static int __init thermal_register_governors(void)
+>
+>  /*
+>   * Zone update section: main control loop applied to each zone while mon=
+itoring
+> - *
+>   * in polling mode. The monitoring is done using a workqueue.
+>   * Same update may be done on a zone by calling thermal_zone_device_upda=
+te().
+>   *
+> --
 
-Similarly,
-
-Acked-by: Sudeep Holla <sudeep.holla@arm.com>
-
-
--- 
-Regards,
-Sudeep
+Applied as 6.9 material with some edits in the subject and changelog, thank=
+s!
 
