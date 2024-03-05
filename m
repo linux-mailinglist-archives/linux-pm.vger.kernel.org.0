@@ -1,145 +1,221 @@
-Return-Path: <linux-pm+bounces-4673-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4674-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF9EC8715AD
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 07:10:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14A8C87182A
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 09:23:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F6DCB212BB
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 06:09:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 38BD01C2140B
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 08:23:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 822FE7B3E7;
-	Tue,  5 Mar 2024 06:09:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74BA07F476;
+	Tue,  5 Mar 2024 08:23:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qflZbLNR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N+I0qLaF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8B016167A
-	for <linux-pm@vger.kernel.org>; Tue,  5 Mar 2024 06:09:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5685F9EB;
+	Tue,  5 Mar 2024 08:23:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709618995; cv=none; b=o2R6dHeRiEyTWM5nzZZETH4eihvibT1/DQCIrDBbOD+K0nIrTLceCH9TOmAFuy2II4eicITR+CO2xOg1niXhslgh+TUezlLgLXy1i74QlzQfRrbCy0gWvL2Sfc9rr5Ist1IEh5H+KEVzEgvaJwFqtEskpF5xVZpdYCnLg7b3Hr0=
+	t=1709627011; cv=none; b=ge3cBwucr6q5tEj94r8Q4Bw+Xt0WHZBCjwb1uHU2ATG5AGwmpC0kV19uEmumJG5LKTMYstgkNsMx02Wo7dKWUXoc+yoUOUZ0zvrm+N9hHBNRFhO/WJimfH/JKt1pARezl7ncq33XeEjgofKimQ4RYiDBHgr7/IHIit27kfI6hGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709618995; c=relaxed/simple;
-	bh=TNBK9fUwJLsaAImw1Jf5Q46P/Y3QQThaMK9QPXp0nsk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fNMTeqRoBl99400KEtGR0LwQP6jpu0sLpP3Qcn0MVTD+oPev1pDmAhId8rwQg6j7B0rhh+slEC2linCBxdjUb5OtbpyowOjOs7C2I7cZYyrNu5GsiRsKnP+GF/Lsn3MW9l1z4uZRohjiuI2pPQaxsAZZuWlHFH8Fg6kOAyl/7hE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qflZbLNR; arc=none smtp.client-ip=209.85.161.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-5a142375987so135331eaf.3
-        for <linux-pm@vger.kernel.org>; Mon, 04 Mar 2024 22:09:53 -0800 (PST)
+	s=arc-20240116; t=1709627011; c=relaxed/simple;
+	bh=l1DPh8I9/0GRMz+a/czF69K1K5RvZU+Lc7FpDQBLt1c=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=KR7leg8bnovTFgdZ1qh8BEQviaZoAqm5V2j9Nz8qJ3t7rxhG6fnUVfERZzYckxjgNDgnJfUjizH7nF93lcRWrOYneVW94dVk/AeWNNjU0FL5ARCcnRCscCaboDExAkR2sI4GLIsNbo/JtkyF5T0iIOsu96jy9S8VKR2KagiqUHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N+I0qLaF; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6da9c834646so4864715b3a.3;
+        Tue, 05 Mar 2024 00:23:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709618993; x=1710223793; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/BDLkvHSjKn2xGeDzvhFh1c2vd6PQCy331MBE5g4t/8=;
-        b=qflZbLNRn5UYMHmzoq7FzxVgibF+WGlXxko2jmmO98SAzngob3DLY/V6urUs0ZEjww
-         Ji0FhgZ+MgTscwNqUf5PenfKLThxAYfKdGqovEWjDkFRfVa8oMuDLLgYPfX9ysfydJKy
-         gohgmc9UoZsEMU95OgZPvJ2aQOD5Sw9lmYBZs/tSzjEFH3VxILcTaGQaeR9pagZZ3eAU
-         HEh6J8FA6SxfZj2LEcOdO0JFLXKesszHQNtonJPWlqXoKyUQTNpR2ROdtGLZxJtBp+SL
-         5aDMgO/+hVW+PAvEjrqMv+XKbX3vZXbvgCeGHJV/lr8modOMd/eW5B3WTX/od30JnR+M
-         1rtA==
+        d=gmail.com; s=20230601; t=1709627009; x=1710231809; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1g27t8FIKz+8joX7Ftwg5jvloiAU4fC8Iy9tYf6ghx8=;
+        b=N+I0qLaFiUFeVcfZc6kMiWs6Z2KIxEa2TPDbhfltC92nWfRT5QxwwV3y0EMY4XwNj9
+         Awjm55wkUR6nPpWmtEfoZJvyuDmRIL2U8fzrdIIqrn6QZWwtUqCLUW7FrvegzgSiPiES
+         rCDq4KDDzQsMpaXISVKShqQO0q1N7sKGAMoPUwaooDrgK+umlyeP2fS/MXLTdKIURoEI
+         bn3NsYevYhAXLsvdcP2Ae02y2n8ixB54NHMagdqtnGlz1ljKGG1gmcufiT/oT22AY+qu
+         y44sdnZ8MGEioExtOa+8gc1DNe39MnjL29v5xCITXkYS1Vn67BPzHV1o64jkx3EDU/vY
+         iw0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709618993; x=1710223793;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/BDLkvHSjKn2xGeDzvhFh1c2vd6PQCy331MBE5g4t/8=;
-        b=xDXJno6QU/gdUJeVaTWNCVeXiNptXohgSK7ykx1AuIGMVzUNdQmingBVMmMdVHAXYH
-         kNYszonkT7eei+/tmp8ZMeQ8j0+xSS3IXvT1gLsp5cQnHorYWDno+C8oBiGxQi/i1MVp
-         7mASm++0id5jTSznerGh+bfPnHaEjhVhagd8x455a8dB33xpmoj40Vi2nnJEWn9phW1j
-         vHIaOOAN0S2oSxfapQ9RYfmir6aB8X8lPMUUWjPzSdC+f3kcHepHtE2PMpjxJ/1joqRy
-         8KtCuDjKSixEN/Gk5msYKFX8s/dDe+PiICR36G6BEpG6SVAA7XGuFRqvtydb/LxfJkcT
-         lNEA==
-X-Forwarded-Encrypted: i=1; AJvYcCW5OV96G1z0VZhYWittQz+dPd9n8soqwe1OuLX96ETklVFh+ndpOYUVCyhZcU7U2kVwkuoK4fTfYGCcUxEHJjGAJOAwBMNdwrc=
-X-Gm-Message-State: AOJu0YwkkXY352aLePSsWkb78kE7kfs3v2xvnkbR/CLn5ebzHemdSW97
-	M9D0gX2LvLSIMKRnhi0J8/tcIgnfX6Z+SPf3uoK2MjVYtmWPTyJw9qLaV6XqLac=
-X-Google-Smtp-Source: AGHT+IEIWFOfaFbEh9f6ob6ornvM/SZDefnANJC8LnnWZLbBx3Vndoh0MwTSPcdNEYdKAsuDpqmoSQ==
-X-Received: by 2002:a05:6359:458d:b0:17a:e9db:bc10 with SMTP id no13-20020a056359458d00b0017ae9dbbc10mr974302rwb.20.1709618992856;
-        Mon, 04 Mar 2024 22:09:52 -0800 (PST)
-Received: from localhost ([122.172.85.206])
-        by smtp.gmail.com with ESMTPSA id c11-20020a63da0b000000b005bd980cca56sm8302545pgh.29.2024.03.04.22.09.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Mar 2024 22:09:51 -0800 (PST)
-Date: Tue, 5 Mar 2024 11:39:49 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Dhruva Gole <d-gole@ti.com>
-Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 1/2] OPP: debugfs: Fix warning with W=1 builds
-Message-ID: <20240305060949.pjzb54zkcelt5xgz@vireshk-i7>
-References: <ab75239d2280e506e5b9386b8aeb9edf97cd3294.1709551295.git.viresh.kumar@linaro.org>
- <66af18e0-56eb-401f-900d-a83f6e52c603@ti.com>
+        d=1e100.net; s=20230601; t=1709627009; x=1710231809;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1g27t8FIKz+8joX7Ftwg5jvloiAU4fC8Iy9tYf6ghx8=;
+        b=ZRKKdEMq2hIPnP7y4lzJqNpYUB5FU17eWSxd7aUtkE1x06By9jI/5i87eN4OLqlOC/
+         JYokUCoeiNO21RVnT8Vj11vEwPPi1mcuru5OChJ3lXMVITYAlD8ZzZJDw363hJWvQW8C
+         lUbmT4ILqiVYJ2shDh9woLAG64Ic55aZi62lXrx343N8PwuNbwK1ygIjF4CrLWcvqjG5
+         bSofJalRixub1yT8rVWAasswRnNURd2S9LIdMTIBUBPc/5GwdCqj5Lthrxx90ZSzJkZ3
+         vJILlGuXlr3pEOXreZg/WMgXSjj+79y6EXlUyZIyg108cpZaMWrBk3yH1aX+PsU+Sw7Z
+         qh4w==
+X-Forwarded-Encrypted: i=1; AJvYcCXPL2MrPBls1+nTMWlg+TEJf/IvMYp/M93BjDPcR8OGsLDSKs5+ClpVnYP/SJ96HnbPllne/T1VER1RdG9yl3DvOE3HLbDdHN5WUDEX7RdC0YOH6/xDk/MJ9AMlq2Gjezr5msMR4Kt3e5ECWqdn7/ZOByiuAoP+8MigE+hipXWSBBAu
+X-Gm-Message-State: AOJu0YyGb9GDEQjnEXN/B2bydicUxxuH30ATxIGCDLObcsebPj6JKIbW
+	tgUrRIjqIj02oXKI9GLraqjZtfmOjp2MXUYMMlmxwdGCsTU0yPpk
+X-Google-Smtp-Source: AGHT+IF9SKk6a4cMNQbrF4DFhdgx+5PiAEPa+d1ZvTRbePz3trVKCB/TlEEpEu54Ag6zLp5U1oxZjA==
+X-Received: by 2002:a05:6a20:d486:b0:1a0:efd0:b183 with SMTP id im6-20020a056a20d48600b001a0efd0b183mr1640050pzb.44.1709627008927;
+        Tue, 05 Mar 2024 00:23:28 -0800 (PST)
+Received: from [192.168.0.13] ([172.92.174.232])
+        by smtp.gmail.com with ESMTPSA id u18-20020a170902e5d200b001dd02f4c2casm4781542plf.164.2024.03.05.00.23.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Mar 2024 00:23:28 -0800 (PST)
+Subject: Re: [PATCH v4 1/3] riscv: dts: starfive: Enable axp15060 pmic for
+ cpufreq
+To: Mason Huo <mason.huo@starfivetech.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Emil Renner Berthing <kernel@esmil.dk>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
+Cc: Shengyu Qu <wiagn233@outlook.com>, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-riscv@lists.infradead.org
+References: <20230606105656.124355-1-mason.huo@starfivetech.com>
+ <20230606105656.124355-2-mason.huo@starfivetech.com>
+From: Bo Gan <ganboing@gmail.com>
+Message-ID: <c8b6e960-2459-130f-e4e4-7c9c2ebaa6d3@gmail.com>
+Date: Tue, 5 Mar 2024 00:23:25 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <66af18e0-56eb-401f-900d-a83f6e52c603@ti.com>
+In-Reply-To: <20230606105656.124355-2-mason.huo@starfivetech.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-On 04-03-24, 17:08, Dhruva Gole wrote:
-> Hi,
+On 6/6/23 3:56 AM, Mason Huo wrote:
+> The VisionFive 2 board has an embedded pmic axp15060,
+> which supports the cpu DVFS through the dcdc2 regulator.
+> This patch enables axp15060 pmic and configs the dcdc2.
 > 
-> On 04/03/24 16:52, Viresh Kumar wrote:
-> > We currently get the following warning:
-> > 
-> > debugfs.c:105:54: error: '%d' directive output may be truncated writing between 1 and 11 bytes into a region of size 8 [-Werror=format-truncation=]
-> >                   snprintf(name, sizeof(name), "supply-%d", i);
-> >                                                        ^~
-> > debugfs.c:105:46: note: directive argument in the range [-2147483644, 2147483646]
-> >                   snprintf(name, sizeof(name), "supply-%d", i);
-> >                                                ^~~~~~~~~~~
-> > debugfs.c:105:17: note: 'snprintf' output between 9 and 19 bytes into a destination of size 15
-> >                   snprintf(name, sizeof(name), "supply-%d", i);
-> > 
-> > Fix this and another potential issues it by allocating larger arrays.
+> Signed-off-by: Mason Huo <mason.huo@starfivetech.com>
+> ---
+>   .../starfive/jh7110-starfive-visionfive-2.dtsi  | 17 +++++++++++++++++
+>   1 file changed, 17 insertions(+)
 > 
-> Just to keep in mind while applying maybe: s/another/other
-> 
-> > Use the exact string format to allocate the arrays without getting into
-> > these issues again.
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Closes: https://lore.kernel.org/oe-kbuild-all/202402141313.81ltVF5g-lkp@intel.com/
-> > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > ---
-> > V2: Use string name while allocating memory for the array to fix potential
-> > issues later on.
-> > 
-> >   drivers/opp/debugfs.c | 8 ++++----
-> >   1 file changed, 4 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
-> > index ec030b19164a..27c3748347af 100644
-> > --- a/drivers/opp/debugfs.c
-> > +++ b/drivers/opp/debugfs.c
-> > @@ -56,11 +56,11 @@ static void opp_debug_create_bw(struct dev_pm_opp *opp,
-> >   				struct dentry *pdentry)
-> >   {
-> >   	struct dentry *d;
-> > -	char name[20];
-> > +	char name[] = "icc-path-XXXXXXXXXX"; /* Integers can take 10 chars max */
+> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+> index 2a6d81609284..9714da5550d7 100644
+> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+> @@ -114,6 +114,23 @@ &i2c5 {
+>   	pinctrl-names = "default";
+>   	pinctrl-0 = <&i2c5_pins>;
+>   	status = "okay";
+> +
+> +	axp15060: pmic@36 {
+> +		compatible = "x-powers,axp15060";
+> +		reg = <0x36>;
+> +		interrupts = <0>;
+> +		interrupt-controller;
 
-Integers can take 11 chars max, I forgot the negative symbol. Added
-space for another byte and pushed the changes.
+This appears to be wrong. I'm working on a private tree of OpenSBI, where I validate
+all PLIC SYS/AON/STG CRG/SYSCON/IOMUX, and other devices... register reads/writes.
+Looks like this `interrupts = <0>` will cause the kernel code (my vanilla 6.6 tree)
+to enable interrupt 0 on PLIC, which is wrong. Of course, you won't see this problem
+if you run upstream OpenSBI, where all writes to PLIC are permitted. I assume PLIC
+will ignore this request to enable irq 0. Still, this is wrong. Can someone from
+Starfive take this issue? Attaching the backtrace here:
 
-> Feels like a better solution to me than the previous revision, thanks!
+# This line is from my OpenSBI
+jh7110_virt_plic_write: U7 refusing to enable interrupt 0
+# After this, I'll inject a memory access (write) fault to S mode
+
+# Below is from Linux
+Oops - store (or AMO) access fault [#1]
+Modules linked in:
+CPU: 0 PID: 62 Comm: kworker/u9:2 Not tainted 6.6.0-gc3eb9993b167 #14
+Hardware name: StarFive VisionFive 2 v1.3B (DT)
+Workqueue: events_unbound deferred_probe_work_func
+epc : plic_irq_enable+0xd2/0x15e
+  ra : plic_irq_enable+0xa8/0x15e
+epc : ffffffff804650bc ra : ffffffff80465092 sp : ffffffc8003f34c0
+  gp : ffffffff816d2290 tp : ffffffd802411f80 t0 : ffffffc8003f3010
+  t1 : 0000000000000001 t2 : 0000000000000003 s0 : ffffffc8003f3530
+  s1 : ffffffd801eaee30 a0 : ffffffd8bff835b0 a1 : 000000000000001e
+  a2 : 0000000000000004 a3 : ffffffd801eaee00 a4 : 000000000000001e
+  a5 : ffffffc804002100 a6 : 0000000000000000 a7 : 00000000000007ad
+  s2 : ffffffff80ede5a0 s3 : 0000000000000001 s4 : 000000000000ffff
+  s5 : 00000000ffffffff s6 : 0000000000000000 s7 : 000000000000001f
+  s8 : ffffffff81707af0 s9 : ffffffff80eda688 s10: ffffffd801eaee00
+  s11: ffffffd8bff835a0 t3 : ffffffff816d3420 t4 : 0000000000000002
+  t5 : 0000000000000000 t6 : 0000000000000000
+status: 0000000200000100 badaddr: ffffffc804002100 cause: 0000000000000007
+[<ffffffff804650bc>] plic_irq_enable+0xd2/0x15e
+[<ffffffff800649e6>] irq_enable+0x2c/0x64
+[<ffffffff80064a76>] __irq_startup+0x58/0x60
+[<ffffffff80064ada>] irq_startup+0x5c/0x14e
+[<ffffffff800621f4>] __setup_irq+0x582/0x644
+[<ffffffff80062368>] request_threaded_irq+0xb2/0x154
+[<ffffffff8055571a>] regmap_add_irq_chip_fwnode+0x6fe/0x8f2
+[<ffffffff80555944>] regmap_add_irq_chip+0x36/0x4a
+[<ffffffff8055cb1e>] axp20x_device_probe+0x36/0x114
+[<ffffffff8055cce6>] axp20x_i2c_probe+0x6c/0xa0
+[<ffffffff8063a8f0>] i2c_device_probe+0x11c/0x23e
+[<ffffffff80533464>] really_probe+0x86/0x23e
+[<ffffffff80533678>] __driver_probe_device+0x5c/0xda
+[<ffffffff80533722>] driver_probe_device+0x2c/0xf8
+[<ffffffff8053385c>] __device_attach_driver+0x6e/0xd0
+[<ffffffff80531a2c>] bus_for_each_drv+0x5a/0x9a
+[<ffffffff80533ba0>] __device_attach+0x78/0x116
+[<ffffffff80533db6>] device_initial_probe+0xe/0x16
+[<ffffffff80532722>] bus_probe_device+0x86/0x88
+[<ffffffff8053034a>] device_add+0x3b2/0x552
+[<ffffffff80530500>] device_register+0x16/0x20
+[<ffffffff8063bb54>] i2c_new_client_device+0x14e/0x214
+[<ffffffff8063d9ae>] of_i2c_register_devices+0xa2/0xf8
+[<ffffffff8063c246>] i2c_register_adapter+0x130/0x32e
+[<ffffffff8063c49e>] __i2c_add_numbered_adapter+0x5a/0x86
+[<ffffffff8063c55a>] i2c_add_adapter+0x90/0xb4
+[<ffffffff8063c62e>] i2c_add_numbered_adapter+0x22/0x2a
+[<ffffffff8063fd34>] i2c_dw_probe_master+0x288/0x304
+[<ffffffff806409c4>] dw_i2c_plat_probe+0x288/0x37e
+[<ffffffff80535946>] platform_probe+0x4e/0xa6
+[<ffffffff80533464>] really_probe+0x86/0x23e
+[<ffffffff80533678>] __driver_probe_device+0x5c/0xda
+[<ffffffff80533722>] driver_probe_device+0x2c/0xf8
+[<ffffffff8053385c>] __device_attach_driver+0x6e/0xd0
+[<ffffffff80531a2c>] bus_for_each_drv+0x5a/0x9a
+[<ffffffff80533ba0>] __device_attach+0x78/0x116
+[<ffffffff80533db6>] device_initial_probe+0xe/0x16
+[<ffffffff80532722>] bus_probe_device+0x86/0x88
+[<ffffffff80532b86>] deferred_probe_work_func+0x70/0xa6
+[<ffffffff800238c2>] process_one_work+0x14a/0x23a
+[<ffffffff80024760>] worker_thread+0x314/0x450
+[<ffffffff8002be5a>] kthread+0x9a/0xae
+[<ffffffff8000248a>] ret_from_fork+0xa/0x1c
+Code: 97ba 000f 0140 4398 000f 08a0 9bbb 0179 ebb3 00eb (a023) 0177
+---[ end trace 0000000000000000 ]---
+
+
+> +		#interrupt-cells = <1>;
+> +
+> +		regulators {
+> +			vdd_cpu: dcdc2 {
+> +				regulator-always-on;
+> +				regulator-min-microvolt = <500000>;
+> +				regulator-max-microvolt = <1540000>;
+> +				regulator-name = "vdd-cpu";
+> +			};
+> +		};
+> +	};
+>   };
+>   
+>   &i2c6 {
 > 
-> 
-> Reviewed-by: Dhruva Gole <d-gole@ti.com>
 
-Thanks.
-
--- 
-viresh
+Bo
 
