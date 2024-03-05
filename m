@@ -1,126 +1,279 @@
-Return-Path: <linux-pm+bounces-4670-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4671-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AF568714C9
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 05:35:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8984871525
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 06:08:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B3A352825D9
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 04:35:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57B071F233DA
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 05:08:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 129BC38398;
-	Tue,  5 Mar 2024 04:35:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B55FF44C77;
+	Tue,  5 Mar 2024 05:08:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QbzjnGw+"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="WFSRQuJK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64F0029437
-	for <linux-pm@vger.kernel.org>; Tue,  5 Mar 2024 04:35:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C32731F60A
+	for <linux-pm@vger.kernel.org>; Tue,  5 Mar 2024 05:08:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709613309; cv=none; b=VamprJpI1cgyPbIp3SfQKfv4RZhpOpiqbEI8D0jogupS9lfeNwpJ/m29PhGf04roW7dwPHUHi/3aH7QWqq/BLRY5IQkxeiJyMTdy8qyjoblZIixaFG2CEFo4O55YExILPIoLIsoyZHcIb6E4BahP83N3wnQrE2AyArcwDpTnQBI=
+	t=1709615288; cv=none; b=WYuFeuLmZve7XyMrIvrK/PUAtSVWUUrIqjFHit8xtyMZtV/4S2nR+ULfduhbQ5S6bdpqoreYFCVYEZRhBS9jFl3nuA288lUzroFeBwtfTPh01V8Ljh45ZrE0+U4fCrft7h0KXfM00NyAJHsmI3YrBUOCS2gdgHaKS51e6C8nODE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709613309; c=relaxed/simple;
-	bh=SyVpWR0YqhOvs/OxGe0jMoDi7DFJpkAA1b348TIrzyU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UdodJAyUI5uxa6wy75gzJ8OG/79oqEesE7KKExSz9+0XcqvH0zZP5mji8tlNLFNWDazSRmbY6kZLMO3optRN9cH2M4yR0lnBRcHtJibAsU0bttUe3hCc4wnfx/XIg5LH+V4SEWt3FJVsOQcBFhZ2LQlDkOVra2kwv/Uq4ndkQfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QbzjnGw+; arc=none smtp.client-ip=209.85.167.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3c1a172e46bso4131981b6e.3
-        for <linux-pm@vger.kernel.org>; Mon, 04 Mar 2024 20:35:07 -0800 (PST)
+	s=arc-20240116; t=1709615288; c=relaxed/simple;
+	bh=U42aJrRf+V+B4/noLr0FjlbaekdOKpWeF6tfCHj4yvc=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=dovIZLBHM7W0pAEXIh6pw41XWLN+kGExMjJI6qhWQFmJjXaJgxYMv0v4t9HHWEBz1brc9zZPh3FU+CcijaWkZIIdcSabLUvPgVEBzCxfJbRt9Tlkp+bigi70Z+e6mg4ExlkvYr4s6p90wUhg8ZO73EQo5UpHwdnB8wOs6QST7YU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=WFSRQuJK; arc=none smtp.client-ip=209.85.167.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-3c1ea425a0fso1079832b6e.3
+        for <linux-pm@vger.kernel.org>; Mon, 04 Mar 2024 21:08:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709613306; x=1710218106; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4vjRQzniHRafe2ZwDDGF6wB4iwR2l8xzXGYmTAavCjw=;
-        b=QbzjnGw+2IQNNqEDwdgZ6gcn47fHe1I1vHUf5l5XfrZqMvpuCmN/AnuTBkMkU+5Ki5
-         fYgQVg1KbAIZSSi7JNg6o5HA9GFKr+NvbHRgKJTdk7Ks7YzJ2/aAVFJ/oIPoXfrqdydM
-         esWpS8KxZjvTCmFOMaJnCPyjOzihVr2840Gz0LNgjGRMzSw+BjDFL0fTjd/WsBIkV14A
-         9l3RK21AfRg5Mw3IITMqmApMoSBIG+D3AXYMZ1vC4XqmgLQkStjVM3XIBfiYsLEFclV/
-         Rmpr4wi2C4X2sd3kPjzms/2dykqlnwdIWiuYDhPICoyTaT1F4KpzyrpuIPU5UHnt5Tyc
-         7FFg==
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1709615286; x=1710220086; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=a23bikeIy9nfY4pkRhr2gbFTUN7GP3RNj8UazfRIHh0=;
+        b=WFSRQuJKix2TmmlMWbVWb1aI1YAIbmUGJhtEhzbv9PYmtr15l5sLDMuz1DtyHLacBH
+         b+JOK5/Tn+ANY/MrHYyhadewfKXKoiOevT9D10cSc9JiDPzztheieSdhyr77LUHUb+lH
+         7JKTMHeDVHg60iX3qbiek4/SjTLKhzTTfHbCnXR7BD+5NISDx8vND1iyldzpgTN0cU4i
+         v0ruA2pzeCR/njncelRTug2FSG22bJQs9eVxfcJR7xRjve6z6qjlchwFtTyshqcJ5YCG
+         DoDgMtTT8Q1FDv+Ffall7JEvvm7LrN5yLbgg7Vs3+D28wQXaHzQgYcDmdh4grkf6zQiU
+         VJJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709613306; x=1710218106;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4vjRQzniHRafe2ZwDDGF6wB4iwR2l8xzXGYmTAavCjw=;
-        b=prPcZTQhvK3zWFOWvDgj1xEDunzh084yXZT7LX2HmSjIN+93m32tf3xKGoHzAo7zBf
-         JC9UriVc1ePaO+rOmutzVvx/E4bY6ozA5xkmz4F7Jf5GRgkZ00lclmHIxbOxd+GvZDVp
-         F9tKJtmQHoy/3V/NIbcxoDO5/dnS8nA73oI2c/N8qS79F67IrpI5+TGxPLAo3nQe2Wxt
-         +fDrbSAy7LDMXO4dfJaDEu0idj1nnB8c0mxnGozHRGpntzSlNI4h1Z9LfbipJiTIqnHn
-         CK1lrN/4q9tqm3XFPmatjaNjkEm9defKXENmJHeMEYJldQ58woww9T1ZPEgx9Al6KmxE
-         WqUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWFUyfC9F+HEEaaflfgsWVYM7F0B2FWnTmLoH10cfKDqZgpyHWxKlSeOhXc81vQ3QK/NkKXT33PosX2ayxXWRojJkdcsXS3Zas=
-X-Gm-Message-State: AOJu0YxtCptkGzh26TDsg9uGltbl+QaVvFkNZ/gQCN1K5dpJPl9SoeJi
-	9HGC5WoAHmPpKFCaR049L78utV2STNy1UElCV2CyGdhXbYQLhQczLh2Q1XHkh+M=
-X-Google-Smtp-Source: AGHT+IH1YAIyReoRbQYzHs76JwvjyUSpZA7Q97zMfBJJnoNqb6U2Bvgox8NitSny3i+OrmCHQknUpg==
-X-Received: by 2002:a05:6808:f8e:b0:3c1:ef91:c8e6 with SMTP id o14-20020a0568080f8e00b003c1ef91c8e6mr890197oiw.11.1709613306564;
-        Mon, 04 Mar 2024 20:35:06 -0800 (PST)
-Received: from localhost ([122.172.85.206])
-        by smtp.gmail.com with ESMTPSA id ei30-20020a056a0080de00b006e5359e621csm8029647pfb.182.2024.03.04.20.35.05
+        d=1e100.net; s=20230601; t=1709615286; x=1710220086;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a23bikeIy9nfY4pkRhr2gbFTUN7GP3RNj8UazfRIHh0=;
+        b=wc81kv4zG1rhkw/fCobP+xVeD3pxkZSsYK0xfcar0Ji6oy6Luf3O+rIoOJGAdJVFwG
+         iMUt7uT2VifS/e6l1O+N7MNHqqlcGfFs7IOUs5Ik2L+PeAXrlMB3ChL29Ogl19a84VnD
+         Q6Yba/47UklXXfN6oZaDsfLOoAZSe7cxdgPaK7vYZg0P6Pznwik9eNVDa2UhM08hfhFX
+         olUfLiRZt5Glmh9XKi/xkNwM9tfgtrxEscUQ0l0H/leZjPhFt+hNxdP8KixIAFEf0RlD
+         UtzdY/MN05ZL74OwCD+wLNJ/iwE0ut+yCx3iXOB4MG//Mar9F6fCBXCTdClTcdRrz6fQ
+         cMYg==
+X-Forwarded-Encrypted: i=1; AJvYcCXxFjE+N2rMqYf+Q5frOamJEJCWwvddPB7pARMjJ/z+tNIpJCK0fj7Qc4aOZGTtd1Y8DQGAeM47651SX0bFQISZr8LNOjiMHNU=
+X-Gm-Message-State: AOJu0YykTCLD5Cpx1/5x7XKN987vD1CuT7Shz++7DZPBi3G1vdHuLyus
+	j1/M7SbnguKE6pwQV1WIpxUVn2ATZbjiWPs3c6On6znNHtMCyY/l1CMK96Mt3U8=
+X-Google-Smtp-Source: AGHT+IH6NuSWgIYtJk7ktjFf+6ZhADWUv0wM+I5H1ZQ1RGnlGlG+iyQHhynR+lLM/vxz4gRGQ+wdXQ==
+X-Received: by 2002:a05:6808:4da:b0:3c1:5c93:7e55 with SMTP id a26-20020a05680804da00b003c15c937e55mr754742oie.19.1709615285827;
+        Mon, 04 Mar 2024 21:08:05 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id f7-20020a056a00238700b006e5bd2fa867sm6229062pfc.46.2024.03.04.21.08.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Mar 2024 20:35:06 -0800 (PST)
-Date: Tue, 5 Mar 2024 10:05:03 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
-Cc: Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Ilia Lin <ilia.lin@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 3/3] cpufreq: qcom-nvmem: add support for IPQ5321
-Message-ID: <20240305043503.tgy5ahl243or7lm5@vireshk-i7>
-References: <20240228-ipq5321-sku-support-v1-0-14e4d4715f4b@quicinc.com>
- <20240228-ipq5321-sku-support-v1-3-14e4d4715f4b@quicinc.com>
- <20240304071222.cx3s37mphddk23bv@vireshk-i7>
+        Mon, 04 Mar 2024 21:08:05 -0800 (PST)
+Message-ID: <65e6a8b5.050a0220.1ed3a.7348@mx.google.com>
+Date: Mon, 04 Mar 2024 21:08:05 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240304071222.cx3s37mphddk23bv@vireshk-i7>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v6.8-rc7-146-gd720e67268b7
+X-Kernelci-Report-Type: test
+Subject: pm/testing baseline: 46 runs,
+ 7 regressions (v6.8-rc7-146-gd720e67268b7)
+To: rafael@kernel.org, linux-pm@vger.kernel.org,
+ kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On 04-03-24, 12:42, Viresh Kumar wrote:
-> On 28-02-24, 20:21, Kathiravan Thirumoorthy wrote:
-> > Like all other SoCs in IPQ5332 family, cpufreq for IPQ5321 is also
-> > determined by the eFuse, with the maximum limit of 1.1GHz. Add support
-> > for the same.
-> > 
-> > Signed-off-by: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
-> > ---
-> >  drivers/cpufreq/qcom-cpufreq-nvmem.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> > index ea05d9d67490..0a46b5d49d32 100644
-> > --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> > +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> > @@ -191,6 +191,7 @@ static int qcom_cpufreq_kryo_name_version(struct device *cpu_dev,
-> >  	case QCOM_ID_IPQ5312:
-> >  	case QCOM_ID_IPQ5302:
-> >  	case QCOM_ID_IPQ5300:
-> > +	case QCOM_ID_IPQ5321:
-> >  	case QCOM_ID_IPQ9514:
-> >  	case QCOM_ID_IPQ9550:
-> >  	case QCOM_ID_IPQ9554:
-> 
-> Applied. Thanks.
+pm/testing baseline: 46 runs, 7 regressions (v6.8-rc7-146-gd720e67268b7)
 
-Dropped since the previous commit it required too. Can we get the
-necessary acks for me to pick those ?
+Regressions Summary
+-------------------
 
--- 
-viresh
+platform               | arch  | lab         | compiler | defconfig | regre=
+ssions
+-----------------------+-------+-------------+----------+-----------+------=
+------
+kontron-kbox-a-230-ls  | arm64 | lab-kontron | gcc-10   | defconfig | 5    =
+      =
+
+kontron-sl28-var3-ads2 | arm64 | lab-kontron | gcc-10   | defconfig | 2    =
+      =
+
+
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.8-rc7=
+-146-gd720e67268b7/plan/baseline/
+
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v6.8-rc7-146-gd720e67268b7
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      d720e67268b76a4e663ac8df7c6e9c397d0cdc6a =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform               | arch  | lab         | compiler | defconfig | regre=
+ssions
+-----------------------+-------+-------------+----------+-----------+------=
+------
+kontron-kbox-a-230-ls  | arm64 | lab-kontron | gcc-10   | defconfig | 5    =
+      =
+
+
+  Details:     https://kernelci.org/test/plan/id/65e69e77ed04f27eed4c431c
+
+  Results:     90 PASS, 5 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.8-rc7-146-gd720e=
+67268b7/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.t=
+xt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.8-rc7-146-gd720e=
+67268b7/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/65e69e77ed04f27eed4c4323
+        failing since 41 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
+4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
+
+    2024-03-05T04:23:56.611626  + <8>[   20.227980] <LAVA_SIGNAL_ENDRUN 0_d=
+mesg 438719_1.5.2.4.1>
+    2024-03-05T04:23:56.611938  set +x
+    2024-03-05T04:23:56.717118  / # #
+    2024-03-05T04:23:56.819435  export SHELL=3D/bin/sh
+    2024-03-05T04:23:56.820151  #
+    2024-03-05T04:23:56.921533  / # export SHELL=3D/bin/sh. /lava-438719/en=
+vironment
+    2024-03-05T04:23:56.922281  =
+
+    2024-03-05T04:23:57.023607  / # . /lava-438719/environment/lava-438719/=
+bin/lava-test-runner /lava-438719/1
+    2024-03-05T04:23:57.024743  =
+
+    2024-03-05T04:23:57.043329  / # /lava-438719/bin/lava-test-runner /lava=
+-438719/1 =
+
+    ... (17 line(s) more)  =
+
+
+  * baseline.bootrr.fsl_enetc-enetc2-probed: https://kernelci.org/test/case=
+/id/65e69e77ed04f27eed4c4327
+        failing since 41 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
+4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
+
+    2024-03-05T04:23:59.194550  /lava-438719/1/../bin/lava-test-case
+    2024-03-05T04:23:59.194975  <8>[   22.798391] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc2-probed RESULT=3Dfail>
+    2024-03-05T04:23:59.195273  /lava-438719/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/65=
+e69e77ed04f27eed4c4329
+        failing since 41 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
+4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
+
+    2024-03-05T04:24:00.253219  /lava-438719/1/../bin/lava-test-case
+    2024-03-05T04:24:00.253715  <8>[   23.837062] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>
+    2024-03-05T04:24:00.254044  /lava-438719/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
+/id/65e69e77ed04f27eed4c432e
+        failing since 41 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
+4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
+
+    2024-03-05T04:24:01.327648  /lava-438719/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.fsl_enetc-enetc1-probed: https://kernelci.org/test/case=
+/id/65e69e77ed04f27eed4c432f
+        failing since 41 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
+4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
+
+    2024-03-05T04:24:01.330810  <8>[   24.948661] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>
+    2024-03-05T04:24:02.388489  /lava-438719/1/../bin/lava-test-case
+    2024-03-05T04:24:02.388956  <8>[   25.969957] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc1-probed RESULT=3Dfail>
+    2024-03-05T04:24:02.389249  /lava-438719/1/../bin/lava-test-case   =
+
+ =
+
+
+
+platform               | arch  | lab         | compiler | defconfig | regre=
+ssions
+-----------------------+-------+-------------+----------+-----------+------=
+------
+kontron-sl28-var3-ads2 | arm64 | lab-kontron | gcc-10   | defconfig | 2    =
+      =
+
+
+  Details:     https://kernelci.org/test/plan/id/65e69e7642b92a12e74c4310
+
+  Results:     101 PASS, 2 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.8-rc7-146-gd720e=
+67268b7/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-sl28-var3-ads2.=
+txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.8-rc7-146-gd720e=
+67268b7/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-sl28-var3-ads2.=
+html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/65e69e7642b92a12e74c4317
+        failing since 41 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
+4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
+
+    2024-03-05T04:23:58.245485  / # #
+    2024-03-05T04:23:58.347237  export SHELL=3D/bin/sh
+    2024-03-05T04:23:58.347524  #
+    2024-03-05T04:23:58.448139  / # export SHELL=3D/bin/sh. /lava-438717/en=
+vironment
+    2024-03-05T04:23:58.448444  =
+
+    2024-03-05T04:23:58.549387  / # . /lava-438717/environment/lava-438717/=
+bin/lava-test-runner /lava-438717/1
+    2024-03-05T04:23:58.550624  =
+
+    2024-03-05T04:23:58.557690  / # /lava-438717/bin/lava-test-runner /lava=
+-438717/1
+    2024-03-05T04:23:58.623627  + export 'TESTRUN_ID=3D1_bootrr'
+    2024-03-05T04:23:58.624069  + <8>[   20.991632] <LAVA_SIGNAL_STARTRUN 1=
+_bootrr 438717_1.5.2.4.5> =
+
+    ... (11 line(s) more)  =
+
+
+  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
+/id/65e69e7642b92a12e74c432a
+        failing since 41 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
+4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
+
+    2024-03-05T04:24:01.053324  /lava-438717/1/../bin/lava-test-case
+    2024-03-05T04:24:01.053735  <8>[   23.414013] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>
+    2024-03-05T04:24:01.054078  /lava-438717/1/../bin/lava-test-case   =
+
+ =20
 
