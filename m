@@ -1,108 +1,123 @@
-Return-Path: <linux-pm+bounces-4676-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4677-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3629871DE4
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 12:33:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA44A871E23
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 12:41:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79287284BA2
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 11:33:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C2991F234E2
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 11:41:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F6D45A4CC;
-	Tue,  5 Mar 2024 11:32:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="sPUzEEsY"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78AFA57326;
+	Tue,  5 Mar 2024 11:41:30 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24A585A4CA;
-	Tue,  5 Mar 2024 11:32:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F363B29CE9;
+	Tue,  5 Mar 2024 11:41:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709638334; cv=none; b=EZaNl6wrd/EzLtBK6LrUrHv+PtZrln728VRk4vZu7hTe9vP5dl4XyJH89EEHkSpnsu+mgTGoJjHILKD8NzCQCqAagh+1NMzCVFUGiI34WOlQBePmbN7FOsMIYMy3fiLmuWwQ2I/WZF/SyYKmcqU2tgtbi8Vupmefh9hWbpzXrQo=
+	t=1709638890; cv=none; b=CrB9zHIEk4lV5712Q85AHhMpJFo18O30S2b5jbiCm/PiZzoTA15/P1TKqC0mfqxpdNp/tPTc6f2nsYMlUWuaPK7c+lOiCyll8Dn9AwhK0Ix3qCd8rRql/+bMNWFordi661KwPEhUi/qRDSb7N7n1m2nHwcQc9m5KcGkDQQc/CqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709638334; c=relaxed/simple;
-	bh=8bl4HrCXQqQhmGUX17Z5ko4AOGeK9Ujk1PJ+PZmCZhc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=AiMLaK4hypASa+QwCqGT3/UW7RleRPT9Kec4vcU3X0UTQrnzyhvux4NoV+tPFCLwLqwqTQHeuN/qrKo7fj22PTyatvXSGhXAGTXD0mSDIhNIac9Sw9YTlmog6AgL1+iDcswh37Mbp5QHdQ8YSzsMlSxYfkvTLSZVQCOu5gKZdHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=sPUzEEsY reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id 759bb0c3c76c11ab; Tue, 5 Mar 2024 12:32:09 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 5633266AA28;
-	Tue,  5 Mar 2024 12:32:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1709638329;
-	bh=8bl4HrCXQqQhmGUX17Z5ko4AOGeK9Ujk1PJ+PZmCZhc=;
-	h=From:To:Cc:Subject:Date;
-	b=sPUzEEsY0iWNzokEocriV84S79KM71+LSCm8wZsHRxw+BG7f0pcKvlt0NLEwKaQg9
-	 Vlb0n4coN0F/tBxHF8BC/Z+0fVB9zMCiP0H86xympHYc10Vl8zWO56kkSJGH7IOPck
-	 MPNm+X+OS4rw+eReWTx9VCwQiSP5gxU4k28FqbDl4+CG0QVQpA8AAlWE/e9tldmQAH
-	 58z8kuOv7Bj0cUbVn/J7YQN3SrjLyBw4a7jN60tejWR96KJadMpksN2bRX4/gj1FrK
-	 +6n1rWpLLKGtIsbeNzjeDcrVe+tuEhBfBMnWTmzWnkduwKpYdf6ESzKTTH1H6NITBP
-	 wgn+vRQTEcZ+w==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Subject:
- [PATCH v1] thermal: intel: int340x_thermal: Use thermal zone accessor
- functions
-Date: Tue, 05 Mar 2024 12:32:09 +0100
-Message-ID: <2724753.mvXUDI8C0e@kreacher>
+	s=arc-20240116; t=1709638890; c=relaxed/simple;
+	bh=tQtogeCkIHDDEnVG1cGYdwDp0nwyyUrX6V4UtNFlljQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Eu8H5Xj9Tm3uzt6x2H/gh7+T5phvegR6TQOyv8nTOawwfrdFd7Kc9rEZdwsenk/SIHHpIaTB5e96+z0mXckZc7nFV7Wg6SCI/ESagwBVjIFiTzQeyQWbRFghX8Qa19lkx2OtPxIo6jm+Epef9Q2metJmLd2EvDwkiUcsjgKeZZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5a1358e7e16so546546eaf.0;
+        Tue, 05 Mar 2024 03:41:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709638888; x=1710243688;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=y0v7RjgmO/yDuWlF3/kTo+sHgoivtGNOWfDVn+nq/Ik=;
+        b=ZRvN+1LQyPgl/8G8Kuj1r/r2YNcHSJhcB0y5tLWTB3iuTSAd28FpmBSijRbnE0OyBb
+         9xn6QZUChw/uFHgIBT76FC7P/JXVasxJEsd35XYibMCywksjuZQZOg87MLanWr3uB78o
+         bYUU8VAzLK/HIk8+j+Q9tTkWzDB94Rz/lhfm1CZsKfJbYTyDjkUavsKRCSuL8ntx1DRV
+         nq3XqzNedeKfIgdHpQs3is3C6NeFPaV41osKNdBPd63UUlXc2VQcRBYciVqpfQB4WTdm
+         oChirUimjYkYTC4//wCifazBzMx/tgUx/ljJdkN1SAevGcOPRBHXh8k00GrNCqjCN9ey
+         p6Ng==
+X-Forwarded-Encrypted: i=1; AJvYcCXKPeG4ejE+i0QV48l/dy2iDLUuQf1SJKjTl9uEVEX6IoY4mM3XiEadKOlklWni4YCYPdHstfrwHDWEwiMDYeTDYhuCNz9aOXqHDtv1qrIeqce4H5BfKXl9V9XWvKbqEzf9472CdB4=
+X-Gm-Message-State: AOJu0YyHxC+xvHeWchKMx+HnOlQWVyMpcs4V/HfaN+UbhiWApTbxYAgv
+	4ISJJd+ky3YjdIP4qcnlTuwfA9MIQiyCBr7QYUWhDzX1TFDulVOcnYl8cLAZBfEBj+rQVAnXmZI
+	e0tQ7j65yx0GPWgeM5FIGH2Wn2+4=
+X-Google-Smtp-Source: AGHT+IHF4dBKyk4hRdjM6vf7T079M6yi9lKk8JmaNs0S9UveuRzmmaiok7o5fr454KPibdMqlJlfLpZYpB8AMdLmm0k=
+X-Received: by 2002:a4a:d4d4:0:b0:5a1:31a1:7f75 with SMTP id
+ r20-20020a4ad4d4000000b005a131a17f75mr154574oos.1.1709638888053; Tue, 05 Mar
+ 2024 03:41:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <20240301092657.15528-1-qingliang.li@mediatek.com> <ZeXmcl4ngEm1RccW@hovoldconsulting.com>
+In-Reply-To: <ZeXmcl4ngEm1RccW@hovoldconsulting.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 5 Mar 2024 12:41:16 +0100
+Message-ID: <CAJZ5v0ifq_ZsrQnq3b4LSUJxAVMO55=m7tL+L3nNP7ixBb9yHA@mail.gmail.com>
+Subject: Re: [PATCH v2] PM: sleep: wakeirq: fix wake irq warning in system suspend
+To: Johan Hovold <johan@kernel.org>, Qingliang Li <qingliang.li@mediatek.com>
+Cc: Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	Johan Hovold <johan+linaro@kernel.org>, Tony Lindgren <tony@atomide.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-mediatek@lists.infradead.org, Dhruva Gole <d-gole@ti.com>
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrheelgddviecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeekpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhho
- sehlihhnrghrohdrohhrghdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=8 Fuz1=8 Fuz2=8
+Content-Transfer-Encoding: quoted-printable
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Mon, Mar 4, 2024 at 4:19=E2=80=AFPM Johan Hovold <johan@kernel.org> wrot=
+e:
+>
+> On Fri, Mar 01, 2024 at 05:26:57PM +0800, Qingliang Li wrote:
+> > When driver uses pm_runtime_force_suspend() as the system suspend callb=
+ack
+> > function and registers the wake irq with reverse enable ordering, the w=
+ake
+> > irq will be re-enabled when entering system suspend, triggering an
+> > 'Unbalanced enable for IRQ xxx' warning. In this scenario, the call
+> > sequence during system suspend is as follows:
+> >   suspend_devices_and_enter()
+> >     -> dpm_suspend_start()
+> >       -> dpm_run_callback()
+> >         -> pm_runtime_force_suspend()
+> >           -> dev_pm_enable_wake_irq_check()
+> >           -> dev_pm_enable_wake_irq_complete()
+> >
+> >     -> suspend_enter()
+> >       -> dpm_suspend_noirq()
+> >         -> device_wakeup_arm_wake_irqs()
+> >           -> dev_pm_arm_wake_irq()
+> >
+> > To fix this issue, complete the setting of WAKE_IRQ_DEDICATED_ENABLED f=
+lag
+> > in dev_pm_enable_wake_irq_complete() to avoid redundant irq enablement.
+> >
+> > Reviewed-by: Dhruva Gole <d-gole@ti.com>
+> > Signed-off-by: Qingliang Li <qingliang.li@mediatek.com>
+>
+> Thanks for the fix. Looks correct to me:
+>
+> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+>
+> I think you should add back the Fixes tag from v1 and CC stable as well:
+>
+> Fixes: 8527beb12087 ("PM: sleep: wakeirq: fix wake irq arming")
+> Cc: stable@vger.kernel.org      # 5.16
+>
+> Note that WAKE_IRQ_DEDICATED_REVERSE was added in 5.16 by commit
+> 259714100d98 ("PM / wakeirq: support enabling wake-up irq after
+> runtime_suspend called") so no need to try to backport any further than
+> that.
 
-Make int340x_thermal use the dedicated accessor functions for the
-thermal zone device object address and the thermal zone type string.
+Applied as 6.9 material, tags added as suggested above.
 
-This is requisite for future thermal core improvements.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-Index: linux-pm/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-+++ linux-pm/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-@@ -58,7 +58,8 @@ static int int340x_thermal_set_trip_temp
- 
- static void int340x_thermal_critical(struct thermal_zone_device *zone)
- {
--	dev_dbg(&zone->device, "%s: critical temperature reached\n", zone->type);
-+	dev_dbg(thermal_zone_device(zone), "%s: critical temperature reached\n",
-+		thermal_zone_device_type(zone));
- }
- 
- static inline void *int_to_trip_priv(int i)
-
-
-
+Thanks!
 
