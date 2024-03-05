@@ -1,128 +1,253 @@
-Return-Path: <linux-pm+bounces-4667-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4668-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2084C871192
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 01:20:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 033658713AC
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 03:36:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF62C28159D
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 00:20:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 851E21F233E3
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Mar 2024 02:36:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BEB5EDE;
-	Tue,  5 Mar 2024 00:20:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C7CE26AD6;
+	Tue,  5 Mar 2024 02:36:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CB6Kle6J"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4CB338F;
-	Tue,  5 Mar 2024 00:20:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C1522940B;
+	Tue,  5 Mar 2024 02:36:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709598009; cv=none; b=dmtf132D2qTG54L2rbJ1MWcKAcfIFN+rRH9jRcfMefnAQ1QbGA9UrmpFpVKxhYfMgHXPocxsF3GFwHFLsRrw/ncQCDHfRbRz/94raECYTQDAXpslzQb9ZozgRwdPSS9Q56Jb1rxGj1g02k79o0NLZVE5dDwcR/FVLb2p68mn42s=
+	t=1709606192; cv=none; b=GaEYRnetPJl9BEdYYNsbyY1nmqEw7mhccWg8WFskwR+li8C4xzmrYKOejTcLXqIm2PqMTwQOzMHlX08Hta3jLai4UzB7qe9SEl8BkSZInMaEIib96kV7ao20zQO9/EqtGQE3b4cELzCeI4+uTOy54saCKXOhfHOCJosT4ybTQ5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709598009; c=relaxed/simple;
-	bh=n2iJRsp0wDisq9D8A56Nk0XQND53SVEzey0fC0b0eoA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TfyIH01cLm9EnldVxllm24xxqtzdl/FJV0C1WdP71Lgyj9wdSCustdc1UYZZIMs1xfGFT4Hlm5udhfx9K64mRqrPB23BtQa0Y2wTtpD/imqUKhLbwjajjOVPh80Ht3r4tiinLH86FUYt5Srw1lpBhP6cQIMNE/eyF2lBtfGhlVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=acm.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1d944e8f367so34723125ad.0;
-        Mon, 04 Mar 2024 16:20:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709598007; x=1710202807;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cThLIQ7kVxrLe0hSQIUMvSBEyZArR8R8aoZjQ4ZGD9Y=;
-        b=was2wiNeEz3ikHkDbBksGf5yMmRdYmVqVM4mu7xJlO4oPr6IefrML0XBo3xdlJ8hD/
-         lFTMEU3VQV+fKnr+MDM3Ne4aWsf7O1s6TfH8A4jKZzHr/ZDSDKH2zpr9emaFNqkNUxe2
-         fTFIBa6SuCPQ8ZDxBtds1LuOACLJZeeqMxNKL8d9KkY1AwYkgNkVxDB1H1MO5snhknb7
-         zGwoUtCcvXFt3G0WGoPRZ6P25fnNZ4TGp4GG4SEUtGJZxi58fAryhDEf5QctkvFuklxY
-         LYRJCp9TdjfvV1t71viqA96ZSc9NuJpKxbPnd/S3VSY4P1OAwUy8n13H9OdiucA2l3Dx
-         Y03Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWo5yZ2rqTsNvmWjDrXOE3bp+6qWFBFUTDTKCLUG6dJlKUyKPPodDg6g1fcFEfFnpMM106QVBNdsDFPnBTdB5EVLf3xhNZszHhjCXhQHaeyqRyGRpjCBGLb6izavl/+fj4i7clEkrYqhulxSvJVSsr3+W9shsUYR0N4SoJBZGZBAzpluy9JT06UJ9n2ucHlCQKMRXhJjBRajvSGMyNl
-X-Gm-Message-State: AOJu0YxWKbf4rfs9qmSbZJ8rwm7NLQwvIB/HkbPYbpK4ApFE1eLM3c5+
-	I0raVJn8zAHcuJTOlSObgFuoY7k5P2/tacZqqlfsly/2sVb0/MzVKslNXvLk
-X-Google-Smtp-Source: AGHT+IGBK4qsXJ6u6xsgg6YtuRQ4ARl1MW9KjGEbxUYd3grb5H4MLJb1AFN9dYWTVfSXWKh/RmLRuw==
-X-Received: by 2002:a17:902:d50b:b0:1dc:d773:ac with SMTP id b11-20020a170902d50b00b001dcd77300acmr381569plg.7.1709598006843;
-        Mon, 04 Mar 2024 16:20:06 -0800 (PST)
-Received: from ?IPV6:2620:0:1000:8411:9ba8:35e8:4ec5:44d1? ([2620:0:1000:8411:9ba8:35e8:4ec5:44d1])
-        by smtp.gmail.com with ESMTPSA id b6-20020a170902d50600b001dd0d07b3d8sm3298602plg.201.2024.03.04.16.20.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Mar 2024 16:20:06 -0800 (PST)
-Message-ID: <86f0af00-8765-4481-9245-1819fb2c6379@acm.org>
-Date: Mon, 4 Mar 2024 16:20:03 -0800
+	s=arc-20240116; t=1709606192; c=relaxed/simple;
+	bh=LAwYljtRi1FPnDXNI5/J+izNx7eKL4fd55Q07EFq9Bo=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=YineXb0xdybKj7RFQaU0cVh7IFDy6Za1Y33Yd1TRn9EX8iGEuxsVBrU/1RqNDrZw/xhDpqXY++a2hT7HIMTv6gVrKmks0STI1VcLv5hwNX/xvN0gAHXDhqamkWsOO0D4faJlPfwbifjMekKgUcSoOCsyPDr0W4xg4pJ8+N7YZgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CB6Kle6J; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709606191; x=1741142191;
+  h=date:from:to:cc:subject:message-id;
+  bh=LAwYljtRi1FPnDXNI5/J+izNx7eKL4fd55Q07EFq9Bo=;
+  b=CB6Kle6Jbobc9fRCemvDw3RzqshhKMJC8NYRyj12tpUxp+bP25Pux50V
+   xWbFYytTjKx4cuAizsaI87SbQte6vcJ3XO+KT0okxib4ITVi/aDzu0mND
+   WfVrcdjz8Kh1LcgDlL4rQlmXEpQTjlzbQeduoZE5jp1vXexjLetZwqc7w
+   czsFEyaJBF7VJpq28Jkj8oYYZNYfBM5CGaakI3CcaVmPlaNdkSO34UlzU
+   1nXjEP/bvW0U19Bg5j/niqG9qJNwO+eaGcg9Q3l/+065ccD7NasGIepBw
+   eOrcXzos2ua3TGt2/pcPXCYVZwyfiwji40pdJRnIt+IVMn824X7WrcwLy
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11003"; a="3989153"
+X-IronPort-AV: E=Sophos;i="6.06,205,1705392000"; 
+   d="scan'208";a="3989153"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2024 18:36:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,205,1705392000"; 
+   d="scan'208";a="9794323"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 04 Mar 2024 18:36:28 -0800
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rhKfJ-0002vQ-1I;
+	Tue, 05 Mar 2024 02:36:25 +0000
+Date: Tue, 05 Mar 2024 10:35:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 986a2147e8166b63f17447835bfbbd6aaffc79bf
+Message-ID: <202403051053.F145OplB-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 0/2] Introduce per-task io utilization boost
-Content-Language: en-US
-To: Christian Loehle <christian.loehle@arm.com>, linux-kernel@vger.kernel.org
-Cc: peterz@infradead.org, juri.lelli@redhat.com, mingo@redhat.com,
- rafael@kernel.org, dietmar.eggemann@arm.com, vschneid@redhat.com,
- vincent.guittot@linaro.org, Johannes.Thumshirn@wdc.com,
- adrian.hunter@intel.com, ulf.hansson@linaro.org, andres@anarazel.de,
- asml.silence@gmail.com, linux-pm@vger.kernel.org,
- linux-block@vger.kernel.org, io-uring@vger.kernel.org,
- Qais Yousef <qyousef@layalina.io>
-References: <20240304201625.100619-1-christian.loehle@arm.com>
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20240304201625.100619-1-christian.loehle@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 3/4/24 12:16, Christian Loehle wrote:
-> Pixel 6 ufs Android 14 (7 runs for because device showed some variance)
-> [6605, 6622, 6633, 6652, 6690, 6697, 6754] sugov mainline
-> [7141, 7173, 7198, 7220, 7280, 7427, 7452] per-task tracking
-> [2390, 2392, 2406, 2437, 2464, 2487, 2813] sugov no iowait boost
-> [7812, 7837, 7837, 7851, 7900, 7959, 7980] performance governor
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 986a2147e8166b63f17447835bfbbd6aaffc79bf  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
 
-Variance of performance results for Pixel devices can be reduced greatly
-by disabling devfreq scaling, e.g. as follows (this may cause thermal
-issues if the system load is high enough):
+elapsed time: 857m
 
-      for d in $(adb shell echo /sys/class/devfreq/*); do
-	adb shell "cat $d/available_frequencies |
-		tr ' ' '\n' |
-		sort -n |
-		case $devfreq in
-			min) head -n1;;
-			max) tail -n1;;
-		esac > $d/min_freq"
-     done
+configs tested: 163
+configs skipped: 3
 
-> Showcasing some different IO scenarios, again all random read,
-> median out of 5 runs, all on rk3399 with NVMe.
-> e.g. io_uring6x4 means 6 threads with 4 iodepth each, results can be
-> obtained using:
-> fio --minimal --time_based --name=test --filename=/dev/nvme0n1 --runtime=30 --rw=randread --bs=4k --ioengine=io_uring --iodepth=4 --numjobs=6 --group_reporting | cut -d \; -f 8
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-So buffered I/O was used during this test? Shouldn't direct I/O be used
-for this kind of tests (--buffered=0)? Additionally, which I/O scheduler
-was configured? I recommend --ioscheduler=none for this kind of tests.
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20240305   gcc  
+arc                   randconfig-002-20240305   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   clang
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm                   randconfig-001-20240305   clang
+arm                   randconfig-002-20240305   gcc  
+arm                   randconfig-003-20240305   clang
+arm                   randconfig-004-20240305   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240305   gcc  
+arm64                 randconfig-002-20240305   clang
+arm64                 randconfig-003-20240305   gcc  
+arm64                 randconfig-004-20240305   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240305   gcc  
+csky                  randconfig-002-20240305   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20240305   clang
+hexagon               randconfig-002-20240305   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20240305   clang
+i386         buildonly-randconfig-002-20240305   gcc  
+i386         buildonly-randconfig-003-20240305   gcc  
+i386         buildonly-randconfig-004-20240305   clang
+i386         buildonly-randconfig-005-20240305   clang
+i386         buildonly-randconfig-006-20240305   gcc  
+i386                                defconfig   clang
+i386                  randconfig-001-20240305   clang
+i386                  randconfig-002-20240305   gcc  
+i386                  randconfig-003-20240305   clang
+i386                  randconfig-004-20240305   gcc  
+i386                  randconfig-005-20240305   gcc  
+i386                  randconfig-006-20240305   gcc  
+i386                  randconfig-011-20240305   gcc  
+i386                  randconfig-012-20240305   gcc  
+i386                  randconfig-013-20240305   gcc  
+i386                  randconfig-014-20240305   gcc  
+i386                  randconfig-015-20240305   clang
+i386                  randconfig-016-20240305   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20240305   gcc  
+loongarch             randconfig-002-20240305   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240305   gcc  
+nios2                 randconfig-002-20240305   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20240305   gcc  
+parisc                randconfig-002-20240305   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc               randconfig-001-20240305   gcc  
+powerpc               randconfig-002-20240305   gcc  
+powerpc               randconfig-003-20240305   gcc  
+powerpc64             randconfig-001-20240305   clang
+powerpc64             randconfig-002-20240305   clang
+powerpc64             randconfig-003-20240305   gcc  
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+riscv                 randconfig-001-20240305   clang
+riscv                 randconfig-002-20240305   gcc  
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+s390                  randconfig-001-20240305   gcc  
+s390                  randconfig-002-20240305   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                    randconfig-001-20240305   gcc  
+sh                    randconfig-002-20240305   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20240305   gcc  
+sparc64               randconfig-002-20240305   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20240305   gcc  
+um                    randconfig-002-20240305   gcc  
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-001-20240305   clang
+x86_64       buildonly-randconfig-002-20240305   clang
+x86_64       buildonly-randconfig-003-20240305   clang
+x86_64       buildonly-randconfig-004-20240305   clang
+x86_64       buildonly-randconfig-005-20240305   clang
+x86_64       buildonly-randconfig-006-20240305   gcc  
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20240305   clang
+x86_64                randconfig-002-20240305   clang
+x86_64                randconfig-003-20240305   gcc  
+x86_64                randconfig-004-20240305   clang
+x86_64                randconfig-005-20240305   clang
+x86_64                randconfig-006-20240305   gcc  
+x86_64                randconfig-011-20240305   gcc  
+x86_64                randconfig-012-20240305   gcc  
+x86_64                randconfig-013-20240305   clang
+x86_64                randconfig-014-20240305   gcc  
+x86_64                randconfig-015-20240305   clang
+x86_64                randconfig-016-20240305   clang
+x86_64                randconfig-071-20240305   gcc  
+x86_64                randconfig-072-20240305   gcc  
+x86_64                randconfig-073-20240305   clang
+x86_64                randconfig-074-20240305   clang
+x86_64                randconfig-075-20240305   gcc  
+x86_64                randconfig-076-20240305   clang
+x86_64                          rhel-8.3-rust   clang
+xtensa                            allnoconfig   gcc  
+xtensa                randconfig-001-20240305   gcc  
+xtensa                randconfig-002-20240305   gcc  
 
-> - Higher cap is not always beneficial, we might place the task away
-> from the CPU where the interrupt handler is running, making it run
-> on an unboosted CPU which may have a bigger impact than the difference
-> between the CPU's capacity the task moved to. (Of course the boost will
-> then be reverted again, but a ping-pong every interval is possible).
-
-In the above I see "the interrupt handler". Does this mean that the NVMe
-controller in the test setup only supports one completion interrupt for
-all completion queues instead of one completion interrupt per completion
-queue? There are already Android phones and developer boards available
-that support the latter, namely the boards equipped with a UFSHCI 4.0 
-controller.
-
-Thanks,
-
-Bart.
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
