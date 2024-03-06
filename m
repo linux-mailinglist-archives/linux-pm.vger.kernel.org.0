@@ -1,132 +1,74 @@
-Return-Path: <linux-pm+bounces-4701-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4702-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBEDE872BD2
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 01:39:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CB67B872C61
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 02:56:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6FA7028A618
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 00:39:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78BE028250B
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 01:56:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F2B81870;
-	Wed,  6 Mar 2024 00:39:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 997E37460;
+	Wed,  6 Mar 2024 01:56:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="yuY25cTV"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="xFRfuKbt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0896A6FAD;
-	Wed,  6 Mar 2024 00:39:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432382CA7;
+	Wed,  6 Mar 2024 01:56:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.118
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709685578; cv=none; b=DMP2mpacRLoZvd9cE0iy5IbL/h23g4/WYjI23MwJsqs/JxHsa9gr3W4ufYsXAEPB/8yDIAyfweoZUybOScKOwwMDfKm9fiyzkEH8tuwDbX8v6gRxG1QoyQdJRHsid5WxKNB8YpUBypwQ8Ivk0Gw7EjbxB4Oe4oiG/3r1EekU4a8=
+	t=1709690185; cv=none; b=IgKTvwJZh5Hs1xqTB+4YkLG2377SBCmTmodv1QkiPuPvYNmyIYxY2WeYO2JjTXEedjBSqAA8CiW7T5KTGDAYLVj5pwyUVAi1LcS6h/PIBgyP5/a0UNWOQ8ivrsW3bl2acSVljjubJwqOtoqZQbeZmF6LIwRhP9m2M4Z8NoltGqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709685578; c=relaxed/simple;
-	bh=bOWzR8XghyOe5aPHPUVDP6xFazsPPhArmXtjefaKB08=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pwO9orKN3BP+8XaHat3et4fnBTbQ9ap2nxZRGMTlBqQQK9gme4o5jpNmW10SzYilsIIoiZ/3Jcsh4bs5xXlNQSI35rbj4gLft/903tIf+5lSoMebFoVvA5v4+UKB7pkqiNNzuDTbdwGUg4A6NSpX7dptf+iue8KdSjk+8TSdIeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=yuY25cTV; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1709685575;
-	bh=bOWzR8XghyOe5aPHPUVDP6xFazsPPhArmXtjefaKB08=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=yuY25cTVwO7esko/gQb3NvL0qOEjt+bfU8JcFtxOyRhFHh6+FPMzZN/SwWVL5hu8P
-	 8m7fT6MBmcOmHuVJ1If7gTJEJK1XCj1qtEf9QsWmGovrpNOKvVjLVl1nsSft9XXvXJ
-	 XxR1S3x13Q/Zw4U7aO6muOf/fav/vk0U58fOzhON21k0Vurx2djdfZdzThrdOeg2ao
-	 ZekyvzIkKin1UAAa5ionPvfA6pfkIHLT2QMUEdZpUIQb8kR974TpksCdva5oYCpWUi
-	 hfR4wqIwnMhHSqVuSSsE7H9NyiXbVAZEz1kZlgmdtsFbIYyWtQVlE+Fd32ZEsBUm97
-	 m6/BP6hO/o/mw==
-Received: from mercury (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: sre)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 2D12B3781FDF;
-	Wed,  6 Mar 2024 00:39:35 +0000 (UTC)
-Received: by mercury (Postfix, from userid 1000)
-	id 98E8D1061BCB; Wed,  6 Mar 2024 01:39:34 +0100 (CET)
-Date: Wed, 6 Mar 2024 01:39:34 +0100
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Hans de Goede <hdegoede@redhat.com>, 
-	Konrad Dybcio <konradybcio@kernel.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] power: supply: test-power: implement
- charge_behaviour property
-Message-ID: <v5cblrwp3ubum3cciiwqazeivkwws2phkocxsdwa7v3hpwxuf4@bea76hsomovd>
-References: <20240303-power_supply-charge_behaviour_prop-v2-0-8ebb0a7c2409@weissschuh.net>
- <20240303-power_supply-charge_behaviour_prop-v2-4-8ebb0a7c2409@weissschuh.net>
+	s=arc-20240116; t=1709690185; c=relaxed/simple;
+	bh=8sk0HCcX1wc5hSCINxbdUaIw9fDpH3qWBaqAEXYOXtg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BE0RdD1Zp/Kep1Y7hlcFnkLoXC0l5VuqpdK/xt8RgNk0Eam+PPCdr5ShaywnIbQaNs17cDrT4dYEP8ZsgDW24nKqFcWsP/JkM4QaIQpjxH8dcOfasRKFRjBxmhh08QqjC/aatVhlIqtEa6Yg1Hke0YaKYRNe+4VFLC+PHCkoBaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=xFRfuKbt; arc=none smtp.client-ip=115.124.30.118
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1709690174; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=qkIKMCtwc/WmcYRCMjAIo122MYBcIAn7tcIWndOwawQ=;
+	b=xFRfuKbtcFTFksMjThLVHNRWBzswEI0lBZxLpECAZwK+uKxApzomrCJgPeToVUev5VVt4/6/TOBLgeVx1VZre4RzcEuNBQ/z0a6rJ/e420apE5b8sru2mQFyuZmHMFlvQpjZ3NDg5nlY6w4SwWOdEt//IUiFsqr3ysl60nGzlIs=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=herongguang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0W1vbkGI_1709690172;
+Received: from 30.221.99.67(mailfrom:herongguang@linux.alibaba.com fp:SMTPD_---0W1vbkGI_1709690172)
+          by smtp.aliyun-inc.com;
+          Wed, 06 Mar 2024 09:56:13 +0800
+Message-ID: <3d2d3f01-7af6-484f-947f-c0b1caa2974b@linux.alibaba.com>
+Date: Wed, 6 Mar 2024 09:56:12 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="bdnqhngrcjnbq5uu"
-Content-Disposition: inline
-In-Reply-To: <20240303-power_supply-charge_behaviour_prop-v2-4-8ebb0a7c2409@weissschuh.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] x86/cstate: fix mwait hint target cstate calc
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: jacob.jun.pan@linux.intel.com, lenb@kernel.org, linux-pm@vger.kernel.org,
+ linux-acpi@vger.kernel.org, shannon.zhao@linux.alibaba.com
+References: <07b62879-2445-4b0d-880a-be01a44820f8@linux.alibaba.com>
+ <CAJZ5v0iggVOU4_o2qwe92e37r35ovLMGypvLqNevgydEdfNJEw@mail.gmail.com>
+From: He Rongguang <herongguang@linux.alibaba.com>
+In-Reply-To: <CAJZ5v0iggVOU4_o2qwe92e37r35ovLMGypvLqNevgydEdfNJEw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+在 2024/3/6 4:30, Rafael J. Wysocki 写道:
 
 
---bdnqhngrcjnbq5uu
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Also, your email client mangles white space, so please consider using
+> a different one for sending patches.
+> 
+> Thanks!
 
-Hi,
-
-On Sun, Mar 03, 2024 at 04:31:16PM +0100, Thomas Wei=DFschuh wrote:
-> To validate the special formatting of the "charge_behaviour" sysfs
-> property add it to the example driver.
->=20
-> Signed-off-by: Thomas Wei=DFschuh <linux@weissschuh.net>
-> ---
-
-Thanks for your patch.
-
->  drivers/power/supply/test_power.c | 31 +++++++++++++++++++++++++++++++
->  1 file changed, 31 insertions(+)
->=20
-
-[...]
-
-> +static int test_power_set_battery_property(struct power_supply *psy,
-> +					   enum power_supply_property psp,
-> +					   const union power_supply_propval *val)
-> +{
-> +	switch (psp) {
-> +	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
-> +		battery_charge_behaviour =3D val->intval;
-> +		break;
-
-This should check if user supplied val->intval is valid, otherwise
-LGTM.
-
--- Sebastian
-
---bdnqhngrcjnbq5uu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmXnuz0ACgkQ2O7X88g7
-+prxlw/+MZ7eBwygN9cFXZWBZu9B0eFeUfDek+fFVvWShalFLghtMR2ltdjagntC
-hZv5MCqSKPkONEsZ9H9R9K0H0vlArdN1UL5/R9yll9vE6ym+Vohu0VocoxxjQFMy
-W+ecSgV3mdeBe/OMIlgW9IKndo+VUQW4jDwLhTvj4FlNRaqEEQqa4uX+UlCACq3k
-UFSriJqcAkGwHyXtS7/dLRfDSK8nebUgerf6puohc0MIYYCNrqJsEVNb1UMPBdy4
-mTEjE/VIpU8VmbK31AfFvlcIEsTZcOJG/YcgN2Yje6GSleEYl/bAXdRQk30XQiTm
-zUFNcfv5vK4bxmCuBOSFi+8PlW24A5e/oPTKDHWe01SWaYJFj6iUOi+Pnm4DOsAA
-P7Ktr26rHFvq796UrAbEPyJL22+m17uS/mKrUKuoQTD9P1eNHE7RnRbBuq+SffzI
-wyG7BdFWFFH0fPlK5oL3yKn7tPF4J5DF00ro6PjHkkiMQpVPCV7HU9g6Awjy2MuG
-JHxA488cO4D9O3/NORGI5OtRi/rmAKXio4Cw4G2h6CBzuJnXWb0aHrmyk0VyTNwB
-gfBRMm6xmNYhpmJK3/XbbWvglgRelD/t3BV0US2mmHRntZbAFCZaiW/wxK0F0mMo
-F8qnlHjdNsjmBnlxjYMNPG3DfB39HZqxoRDfb/MgcmlgRmrWzso=
-=D3ng
------END PGP SIGNATURE-----
-
---bdnqhngrcjnbq5uu--
+Ok, it turns out it is in Windows Terminal that copy will change tab to 
+white space, I will pay attention to this from the moment, thanks for 
+your reminder.
 
