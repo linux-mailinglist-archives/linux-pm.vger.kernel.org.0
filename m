@@ -1,145 +1,170 @@
-Return-Path: <linux-pm+bounces-4738-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4739-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C50387378D
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 14:16:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46AB687382C
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 14:55:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C62D1F21909
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 13:16:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C87371F26A7C
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 13:55:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37BAA13172A;
-	Wed,  6 Mar 2024 13:16:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6733313174F;
+	Wed,  6 Mar 2024 13:55:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LJrVSAl1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aVIko+LR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89BF6130E54
-	for <linux-pm@vger.kernel.org>; Wed,  6 Mar 2024 13:16:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26E4E13174A;
+	Wed,  6 Mar 2024 13:55:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709730986; cv=none; b=A52hlwy3Zm0PD/tG18DeM0izIsRC48m+YAXq5E9JSKZtsrmgVv5Y0NcQ4nJLltzyaNdzt+103ZqbrD0v8ZF+c0zLqkaeB6QIxXQU5w1q68/rQRybFCawxfJLZjyMVa/Dld02tBQ31a3EN9ONgUjclNnWtxY4OgnI88UJTSMQBKk=
+	t=1709733349; cv=none; b=oiX9LTI+7ZLUejir9YQTZjEZLpgnGjuvH17jhkQROrk/SOoG4oDrUFSsiRvqZdAQktb39NZBZvsupQk810u2l97sb0ZVRCVlu1iDYMSwzGR6N1BQxhxtEzB+3YEo0xySX3ioTU+4ExTwqIm+NN2qPKlTUvkZbGWbedfdZl1vfOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709730986; c=relaxed/simple;
-	bh=4KnoU94TnfwFDb1O7Z/od2GBF5TkOczm5tUXOhwWFjU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=A6kseeEL6wxZ7CDe30YPAJ0tJmsgb9n3fDPokDR7HZ0ifDeSsQs1jfyH2WW2B/2/EeQ1e9IQRycMrw5ZrJA2o0Gi485VDH0TKYfrzDtXOwvaMbwsa2VZJxt0fBPFhhkZMqQvOU4G2mNjFS27WXM5xGQwy0ihBi19LRutJILt6lc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LJrVSAl1; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-412e784060cso5024975e9.1
-        for <linux-pm@vger.kernel.org>; Wed, 06 Mar 2024 05:16:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709730983; x=1710335783; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iNWCmGU0euBopVepxGM3Nd7XayHAv0ZdAnMZWAHMpN0=;
-        b=LJrVSAl1UaRDlHR/wdbxToX8j/xxO/zwtnMZUYnTGF53ngw7mAtajymYN8UG8AbbHn
-         HYGOpAWkTGBCe+F+nRFGlp5NmtV+lBlBu5nLwOxZ7KKFLGKZid3a93K8pE4BsO7gbVym
-         3xk1ex1c8RqtUP+PBPS28Mne+MHaSpsnFHptuaaPxqs0LeEuQjJJb2ascbXJZcdxd2dX
-         agPMSY/Si1YGgA210bvIhO5aQ/xIVgckUwltALNBkKcd03zAD3o+4jUJ5qxb2Egn+nKu
-         sDpdJYLcQhOmFL12GuAYoFKz5onLdIK0MXuPrsRj6+FHn0EO9YK64X4UWJezDV8neA2Z
-         +KZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709730983; x=1710335783;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iNWCmGU0euBopVepxGM3Nd7XayHAv0ZdAnMZWAHMpN0=;
-        b=Lmxqs0oMIUjpG3vSPCvjAJDTy7Jte2/zlNKgTjgWZBObf1y3BnnhFfJI382bEJaiLN
-         Q2pnD5kwb8iVEjUn7Gq6xLRoctKoG+kYwl1D9P4Nkl4E0Zrqa+YMx01bdfVfJKYDN9Qq
-         w2ZirIR5EQutGhEnMnIFPg2tDf8VWm+6esUu6ROo2xVNAFgm34dwHMrGRf69/ATUs8XZ
-         DEqkXWokVMf+9egINGkmlhqG0JGcwEcPpzW/gkq9Z8umWLzFNERkj5CjAr7djmCqM9/S
-         INDByVs9aqIDI/kxqhPFvUnS+ssDsvDVjY0Z8DiVwrTa8X7allo+fabjEHaioY/+MQJN
-         BIDw==
-X-Forwarded-Encrypted: i=1; AJvYcCWCLBvTONv97U+23LtAHBJexkJeHPtexFV3MMIDvAT4zCwqG1DKTzL2XTT1NqDmlwNATtldatkHP8QslKtr1lY5RgXln5+pIjE=
-X-Gm-Message-State: AOJu0YyVpTu+8OI5C3wf2OijEgUtDG15bzJpPYNtOlM8IFcWnGotxdzU
-	AqEagiO2wZSvnPfXNJIEOX3JUtrg0vUWWz+1ajiRQfvAv2Vq8T316xopC2YM1sw=
-X-Google-Smtp-Source: AGHT+IFUmR2cPTKEVyoLCm5s9d0JeSzjzUdeCnOHv9dFLTph1+f/7ipkDOjdXEL7DbWwMvmNNiqxJQ==
-X-Received: by 2002:a05:600c:4ec9:b0:412:ee33:db93 with SMTP id g9-20020a05600c4ec900b00412ee33db93mr4354403wmq.3.1709730982876;
-        Wed, 06 Mar 2024 05:16:22 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id t16-20020a05600c451000b00412ee12d4absm4669691wmo.31.2024.03.06.05.16.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Mar 2024 05:16:22 -0800 (PST)
-Message-ID: <0e7f32aa-b2c3-43d0-8ebe-7118cb6e0edf@linaro.org>
-Date: Wed, 6 Mar 2024 14:16:21 +0100
+	s=arc-20240116; t=1709733349; c=relaxed/simple;
+	bh=jLiY1VyOnlLZFwOuXhMvVv7YYk/BquLiS8Ez9vTbB7E=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ohoqcj8oNEEUbhhjsXT79L2i9nMiMGYkRuqvbjcEu5JZaNEYW9U3r6hidSYpRZWPSOTENO/+y4UUR05zLdGXp6zvCHVgv2fbOMBgDzwaZLy6cOIFVLG0JirZWFQq3EtaO4PdY6i48H+0tRmDkxJ99KEbItM7hLmFN/u9NWIKDVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aVIko+LR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95DB4C433C7;
+	Wed,  6 Mar 2024 13:55:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709733348;
+	bh=jLiY1VyOnlLZFwOuXhMvVv7YYk/BquLiS8Ez9vTbB7E=;
+	h=From:To:Cc:Subject:Date:From;
+	b=aVIko+LRnJWRKTsU6ERuKAewIihmA9wCBTzehUj8BL7QCKMIDGKDC0BoXsjghJ0sH
+	 yb6XEEiwcZdoZtn9lCMTZ44hPPuVWz7OnzLAPbnAQqM8D+8KrOZNix6cuQ94p57sDg
+	 hcFna7PQf17xKVoXvrRgkdtL4Vu9djlEOl52Klm8ie5zorLPhmNmWxIqJe8sAWn+vg
+	 tK7FCrfCX5ekWAJsLeRHWrdZDhLFLP/Sk7AeZvbr+SP1H7vMVD67uolo4EDn+BTGp2
+	 uWL1m09Fh7eZz64UuVn72W6wycdAs8Y/1nEtFfyRZJLYWzO22rjOCXUta+r3QvHR24
+	 CdJrIQgxX4Uhw==
+From: Georgi Djakov <djakov@kernel.org>
+To: gregkh@linuxfoundation.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	djakov@kernel.org
+Subject: [GIT PULL] interconnect changes for 6.9
+Date: Wed,  6 Mar 2024 15:55:16 +0200
+Message-Id: <20240306135516.510557-1-djakov@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] thermal/core: Fix trip point crossing events ordering
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: rjw@rjwysocki.net, linux-kernel@vger.kernel.org,
- Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
- "open list:THERMAL" <linux-pm@vger.kernel.org>
-References: <20240306085428.88011-1-daniel.lezcano@linaro.org>
- <CAJZ5v0jAn2F-GH=fguX0+3bG38vyAxfufadtFiBUfg=EjTBh6Q@mail.gmail.com>
- <14651d5b-0f67-4bff-b699-2cd1601b4fb2@linaro.org>
- <CAJZ5v0j6At1DuQYjjbA-fw9Z-jJPhXSVSz=_uLa3KfNMJowYbA@mail.gmail.com>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0j6At1DuQYjjbA-fw9Z-jJPhXSVSz=_uLa3KfNMJowYbA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 06/03/2024 13:53, Rafael J. Wysocki wrote:
-> On Wed, Mar 6, 2024 at 1:43 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->>
->> On 06/03/2024 13:02, Rafael J. Wysocki wrote:
->>
->> [ ... ]
->>
->>>> +#define for_each_trip_reverse(__tz, __trip)    \
->>>> +       for (__trip = &__tz->trips[__tz->num_trips - 1]; __trip >= __tz->trips ; __trip--)
->>>> +
->>>>    void __thermal_zone_set_trips(struct thermal_zone_device *tz);
->>>>    int thermal_zone_trip_id(const struct thermal_zone_device *tz,
->>>>                            const struct thermal_trip *trip);
->>>> --
->>>
->>> Generally speaking, this is a matter of getting alignment on the
->>> expectations between the kernel and user space.
->>>
->>> It looks like user space expects to get the notifications in the order
->>> of either growing or falling temperatures, depending on the direction
->>> of the temperature change.  Ordering the trips in the kernel is not
->>> practical, but the notifications can be ordered in principle.  Is this
->>> what you'd like to do?
->>
->> Yes
->>
->>> Or can user space be bothered with recognizing that it may get the
->>> notifications for different trips out of order?
->>
->> IMO it is a bad information if the trip points events are coming
->> unordered. The temperature signal is a time related measurements, the
->> userspace should receive thermal information from this signal in the
->> right order. It sounds strange to track the temperature signal in the
->> kernel, then scramble the information, pass it to the userspace and
->> except it to apply some kind of logic to unscramble it.
-> 
-> So the notifications can be ordered before sending them out, as long
-> as they are produced by a single __thermal_zone_device_update() call.
-> 
-> I guess you also would like the thermal_debug_tz_trip_up/down() calls
-> to be ordered, wouldn't you?
+Hello Greg,
 
-Right
+This is the pull request with interconnect changes for the v6.9-rc1 merge
+window. It contains new drivers and clean-ups. As always, the summary is
+in the signed tag.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+All patches have been in linux-next for a week with no reported issues.
+Please pull into char-misc-next when possible.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Thanks,
+Georgi
 
+The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
+
+  Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.9-rc1
+
+for you to fetch changes up to d1c16491134c726a78dd6936034f117acdc57185:
+
+  Merge branch 'icc-sm7150' into icc-next (2024-02-29 22:43:01 +0200)
+
+----------------------------------------------------------------
+interconnect changes for 6.9
+
+This pull request contains the interconnect changes for the 6.9-rc1 merge
+window. The highlights are below:
+
+Core changes:
+- Constify the of_phandle_args in xlate functions.
+
+Driver changes:
+- New interconnect driver for the MSM8909 platform.
+- New interconnect driver for the SM7150 platform.
+- Clean-up and removal of unused resources in drivers.
+- Constify some pointers to structs.
+
+Signed-off-by: Georgi Djakov <djakov@kernel.org>
+
+----------------------------------------------------------------
+Adam Skladowski (2):
+      dt-bindings: interconnect: Add Qualcomm MSM8909 DT bindings
+      interconnect: qcom: Add MSM8909 interconnect provider driver
+
+Danila Tikhonov (2):
+      dt-bindings: interconnect: Add Qualcomm SM7150 DT bindings
+      interconnect: qcom: Add SM7150 driver support
+
+Georgi Djakov (3):
+      Merge branch 'icc-msm8909' into icc-next
+      Merge branch 'icc-cleanup' into icc-next
+      Merge branch 'icc-sm7150' into icc-next
+
+Jeffrey Hugo (1):
+      dt-bindings: interconnect: qcom,rpmh: Fix bouncing @codeaurora address
+
+Konrad Dybcio (3):
+      interconnect: qcom: sm8550: Remove bogus per-RSC BCMs and nodes
+      dt-bindings: interconnect: Remove bogus interconnect nodes
+      interconnect: qcom: x1e80100: Remove bogus per-RSC BCMs and nodes
+
+Krzysztof Kozlowski (7):
+      interconnect: qcom: msm8909: constify pointer to qcom_icc_node
+      interconnect: qcom: sa8775p: constify pointer to qcom_icc_node
+      interconnect: qcom: sm8250: constify pointer to qcom_icc_node
+      interconnect: qcom: sm6115: constify pointer to qcom_icc_node
+      interconnect: qcom: sa8775p: constify pointer to qcom_icc_bcm
+      interconnect: qcom: x1e80100: constify pointer to qcom_icc_bcm
+      interconnect: constify of_phandle_args in xlate
+
+ Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml   |    3 +
+ Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml  |    2 +-
+ .../devicetree/bindings/interconnect/qcom,sm7150-rpmh.yaml     |   84 +
+ drivers/interconnect/core.c                                    |    4 +-
+ drivers/interconnect/qcom/Kconfig                              |   18 +
+ drivers/interconnect/qcom/Makefile                             |    4 +
+ drivers/interconnect/qcom/icc-common.c                         |    3 +-
+ drivers/interconnect/qcom/icc-common.h                         |    3 +-
+ drivers/interconnect/qcom/msm8909.c                            | 1329 ++++++
+ drivers/interconnect/qcom/sa8775p.c                            |   56 +-
+ drivers/interconnect/qcom/sm6115.c                             |   12 +-
+ drivers/interconnect/qcom/sm7150.c                             | 1754 ++++++++
+ drivers/interconnect/qcom/sm7150.h                             |  140 +
+ drivers/interconnect/qcom/sm8250.c                             |    2 +-
+ drivers/interconnect/qcom/sm8550.c                             |  574 ---
+ drivers/interconnect/qcom/sm8550.h                             |  284 +-
+ drivers/interconnect/qcom/x1e80100.c                           |  327 +-
+ drivers/interconnect/samsung/exynos.c                          |    2 +-
+ drivers/memory/tegra/mc.c                                      |    2 +-
+ drivers/memory/tegra/tegra124-emc.c                            |    2 +-
+ drivers/memory/tegra/tegra124.c                                |    2 +-
+ drivers/memory/tegra/tegra186-emc.c                            |    2 +-
+ drivers/memory/tegra/tegra20-emc.c                             |    2 +-
+ drivers/memory/tegra/tegra20.c                                 |    2 +-
+ drivers/memory/tegra/tegra30-emc.c                             |    2 +-
+ drivers/memory/tegra/tegra30.c                                 |    2 +-
+ include/dt-bindings/interconnect/qcom,msm8909.h                |   93 +
+ include/dt-bindings/interconnect/qcom,sm7150-rpmh.h            |  150 +
+ include/dt-bindings/interconnect/qcom,x1e80100-rpmh.h          |   24 -
+ include/linux/interconnect-provider.h                          |   11 +-
+ include/soc/tegra/mc.h                                         |    7 +-
+ 31 files changed, 3764 insertions(+), 1138 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm7150-rpmh.yaml
+ create mode 100644 drivers/interconnect/qcom/msm8909.c
+ create mode 100644 drivers/interconnect/qcom/sm7150.c
+ create mode 100644 drivers/interconnect/qcom/sm7150.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,msm8909.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,sm7150-rpmh.h
 
