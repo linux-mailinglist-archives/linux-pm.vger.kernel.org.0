@@ -1,106 +1,111 @@
-Return-Path: <linux-pm+bounces-4748-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4750-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76602873E4C
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 19:14:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D7F8874043
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 20:20:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3156F280CD1
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 18:14:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4999E2868BD
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 19:20:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E5DB13E7F5;
-	Wed,  6 Mar 2024 18:12:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ECF513F004;
+	Wed,  6 Mar 2024 19:20:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U7y99w7c"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="Q/3BsQRb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 525A513D309;
-	Wed,  6 Mar 2024 18:12:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DFAC13EFE8;
+	Wed,  6 Mar 2024 19:20:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709748779; cv=none; b=u8itYV7IK3SwwP63/hS8EIEe8DAOohLMlzN/0CyN/zHvwVt4SYslUrTe238NasNwwebavRc8Lq7LbIM8fDd8gIIW4NG+rbtNgJk5Z6Kc3CaXDBusmZh4u7GP0+HtFa99QVqY5B8XZpwh+6TIf68nopXY5pmoyqXEgcgQMyfDPeM=
+	t=1709752840; cv=none; b=ksKtct/lJoDt2+UkmmP4nZsTwBuOMrLlD0O/KxF3UFg0qX9ncqCfGjiIRO+1ZaTghV0c7zzUEreQh1wi1219OYUx2Y7JHryAbqSKy9uZ+2GS/2q62zYyxeKioa1elExr+3VuOEZpCerxJMylTcqiUUWHveVcBqjy2RkPfE1BEaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709748779; c=relaxed/simple;
-	bh=oDl9i8wVopENg8HbcqfcwU5Qsqz8CfV8yBnuXQyY7cU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=djjFT8AYhRwJkXvAm8p/R2vyF/zyyZie6W5GcY0TxqaXFvPhrRVW/RvKyNS71FbbjsbygTyzbvRwl5mH3AbtBq1JQOYL8EbnDTJ5DyVrkPnE/xxLFYKd7vR4H449ylopwGpCFVeXAXL67Lq8JqwCCJzB8ZR8jeicPPKXcRm6UX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U7y99w7c; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39FADC433C7;
-	Wed,  6 Mar 2024 18:12:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709748778;
-	bh=oDl9i8wVopENg8HbcqfcwU5Qsqz8CfV8yBnuXQyY7cU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=U7y99w7cc7rbC2VCe02xdhPhernanjr5yhjHnseoyF/dhziSp3uG1eyhZL+qr0dKd
-	 M5/BiuOIqv5fgRssDLurOQQLyr0aZjUAFof6Wn1tRf4mHb6+uISC4N9TAFQn0JtkMv
-	 UP4CqsMBDvJYkU7jHkaY5A+leEqisiCqwbrpG1A1n4CrYmFRkl358dAu9/KWxb4was
-	 VJyodc8l/xwSA2qw4kBIplFevpjYoE0270EEhodtqLVvcogVEwnOKaCPrDFmZvbuYB
-	 CXE5LFgD/vPqR6Uk+2Hj9Ho9MB+VwMSKP82xDzfEX0/eaMeaVQneJfKFgb1imeV1Iv
-	 GNMfkgW3FXViQ==
-Date: Wed, 6 Mar 2024 18:12:53 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Niklas =?iso-8859-1?Q?S=F6derlund?= <niklas.soderlund@ragnatech.se>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, Duy Nguyen <duy.nguyen.rh@renesas.com>
-Subject: Re: [PATCH 1/2] dt-bindings: thermal: rcar-gen3-thermal: Add
- r8a779h0 support
-Message-ID: <20240306-discover-outshoot-2e0716d5d3ce@spud>
-References: <cover.1709722342.git.geert+renesas@glider.be>
- <b3d135f8b63b9fe2d0f0aa2e48c8a2211b2e947e.1709722342.git.geert+renesas@glider.be>
+	s=arc-20240116; t=1709752840; c=relaxed/simple;
+	bh=4fMhiw3tE5WZcMRLKuvfLPC66ljmwpev+Ytbx/U5IgE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=XAseM0iREhSDnQGjjMw8N6KxNu7bQFYZYarEko39L5LcMqiNx7hxS9V4vXQk2rB7joXJqb8xwz9z1YpHEquDO57hLLPVteQGvuQuYoGMtN70xAJn2bHRWgy49esRMIzr/auujazKfVKqbPdjBEBrRYpmwB2fP8zSTMH/NigzyXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=Q/3BsQRb; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
+ id 9ce8f26884046da2; Wed, 6 Mar 2024 20:20:30 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 0A4E366AB8D;
+	Wed,  6 Mar 2024 20:20:30 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1709752830;
+	bh=4fMhiw3tE5WZcMRLKuvfLPC66ljmwpev+Ytbx/U5IgE=;
+	h=From:To:Cc:Subject:Date;
+	b=Q/3BsQRbhGChIMmpAwxcFOXMrGCyIpHpVpjGKr287BkQfpRkfiB8xLz8VZZxqnbFW
+	 2y+BnfUW49NXbl6ZoTv5aDlVg90lGuOM3d1eTXOI+nbIVQqobPxbHR3DauEQskHi4e
+	 X/dbTuYUhqSIEr7Kh6N9PMkffp34zJxjG0SMhtEOvNMX1m2h9wr+UKf4sz4mMjfa4Z
+	 Yhi2kMS17FjTlSV3CxkpkjSTVNoAxwYZJSDC94YoFzgSHuiQg/y1+inf+SENYeUmBF
+	 +ETjL6bFJ9DYYcwQG2ZCxhqrLkYndCTN3a25JfSxQJvcP3Vx/Z3hhcpEGPmHvvbF9U
+	 K83VKxA6OZD3Q==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Lukasz Luba <lukasz.luba@arm.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v1 0/2] thermal: More separation between the core and drivers
+Date: Wed, 06 Mar 2024 20:14:15 +0100
+Message-ID: <4558384.LvFx2qVVIh@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="42iu+UqCSUQQDnvJ"
-Content-Disposition: inline
-In-Reply-To: <b3d135f8b63b9fe2d0f0aa2e48c8a2211b2e947e.1709722342.git.geert+renesas@glider.be>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledriedugdduudelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgeffhfdujeelhfdtgeffkeetudfhtefhhfeiteethfekvefgvdfgfeeikeeigfehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehsthgr
+ nhhishhlrgifrdhgrhhushiikhgrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
+
+Hi Everyone,
+
+This series is for the next kernel development cycle and I'm sending it
+mostly due to the discussion regarding the ordering of trip crossing
+notifications:
+
+https://lore.kernel.org/linux-pm/20240306085428.88011-1-daniel.lezcano@linaro.org/
+
+because the solution of the ordering problem I have in the works is
+based on it.
+
+Still, please review it and/or test it if you can and let me know if you
+discover any problems related to it (I'm not seeing any issues with it now).
+
+Patch [1/2] is based on the observation that the threshold field in struct
+thermal_trip really should be core-internal and to make that happen it
+introduces a wrapper structure around struct thermal_trip for internal
+use in the core.
+
+Patch [2/2] moves the definition of the new structure and the struct
+thermal_zone_device one to a local header file in the core to enforce
+more separation between the core and drivers.
+
+The patches are not expected to introduce any observable differences in
+behavior, so please let me know if you see any of that.
+
+They are based on the thermal material currently in linux-next and I'm
+going to create a separate test git branch with them.
+
+Thanks!
 
 
---42iu+UqCSUQQDnvJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 06, 2024 at 11:56:02AM +0100, Geert Uytterhoeven wrote:
-> From: Duy Nguyen <duy.nguyen.rh@renesas.com>
->=20
-> Document support for the Thermal Sensor/Chip Internal Voltage
-> Monitor/Core Voltage Monitor (THS/CIVM/CVM) on the Renesas R-Car V4M
-> (R8A779H0) SoC.
->=20
-> Just like on other R-Car Gen4 SoCs, interrupts are not routed to the
-> INTC-AP (GIC) but to the Error Control Module (ECM).
->=20
-> Signed-off-by: Duy Nguyen <duy.nguyen.rh@renesas.com>
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-
-
---42iu+UqCSUQQDnvJ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZeiyJQAKCRB4tDGHoIJi
-0pBaAP4jB17YQumW0L2miIINAAmjpdyZcV+hNwFRGq9Tj2fZrwEA0yoGS1zRmMgA
-Nh50LHjtU4c/tX4ZJ8fJKLAiFa9PNAA=
-=AuLQ
------END PGP SIGNATURE-----
-
---42iu+UqCSUQQDnvJ--
 
