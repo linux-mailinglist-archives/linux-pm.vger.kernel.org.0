@@ -1,381 +1,235 @@
-Return-Path: <linux-pm+bounces-4724-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4725-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 630A08733E2
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 11:19:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3CA787346D
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 11:38:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 831C11C2208F
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 10:19:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 48AB2B3108B
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 10:28:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F01F25FDC4;
-	Wed,  6 Mar 2024 10:18:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89B325FDB3;
+	Wed,  6 Mar 2024 10:26:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="2c8uZed6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vl1VzYsz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2072.outbound.protection.outlook.com [40.107.244.72])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5BA85E206;
-	Wed,  6 Mar 2024 10:18:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.72
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709720308; cv=fail; b=lbf1nZ5fbFoqDnkVIiP+7rZOjCZL9PJBslRwL9/1JD6nuxKtRQGcSrsZuXbal+w/nfiTm6f43CYM/U61TCw/yOEyjO7asHs+ghPboXGrutD/HP0eEPoH3wlHDSYaF8TW+U/UaYgX9rvfdW+lD/OncZGZN90ZS/YeIUxTV3iKNjw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709720308; c=relaxed/simple;
-	bh=4RhJjRsGlLgEmpaJoIYbG1pC5zTit8Rvkng5onsUIKE=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=ex4x24r7xfmI2TxDJvaY/wQ72s0s3Sc3P4anZNYDo0xQum3+crmL18xrgUw6GXlDYCgXZHCFDb12817XQk80bToLTEqdwvrmDtZdRA3p38PtkzkWfHjhDTMOSk9k9fpdqwHYlpnxNmVwPlET5wDFmeNQM04//kGOZMcnGeEMxQY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=2c8uZed6; arc=fail smtp.client-ip=40.107.244.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bdZFAhU/s9wAzoSQMH3qgZx0ZdlgK6tfujoDTwPR1MrvKvqhCp+FihTJBxgpf/sPUkkNJkaBcH7Rf7OMKn+8NHQ3quSF3y+1GENf6vnr54AuCxiRyMRPVwGD16De2hiI+l+CY62993GX1CU2QiLTY/u3VX4+Hjke/MT/S+59VTd5t/Tsb2Ngz/D7+7R/w1d0om4hamRg6xdPzpb7kdih0tQo1cEW23qoAFmBt6Cu4AtZxV3t+Z5lgmrFSCaxIXXyBZcaNeptXXWIF9VFK3akL9uaSG2fvl80iOZihi8dUaFb1N28r8NGWlZLec2HpqKPkswYIsTCwdoIkPlBW2kKUw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=271HAeafWP9n7OZDlZqDB10ArtHBR7BySMK7MnftyN4=;
- b=DR2/GVm4EsuedIhSGDZH0SkducrmH/hrEDmArF1H3ekfMyts8jmgFA2/+ZXLUZ8xmrgcnumDnZ6CxnOtsS8THWJIerG2FQeUrdspNN9GE1V43rxYIgmsgfy/2cGWIaSwoEEWh+GuNrBvaeB+AWVLU5mrP1U+GlrEbT+5X8DaLsWEF6XPzWrO9y/Nv+AjdIh9DzdcbE0k2b5qhz49xomlIR0f2pMtcniNSoteIeFFI+VFc5fqVWMC8noHUkB9lS3304RXdMCiGGU97QE7RzQyTtHrfrHnkYz33XaR1jp9FCwThBmGfg0Fh8jrf/WIZabfO5WFvlFIpTKLsbcy/QJ3xw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=271HAeafWP9n7OZDlZqDB10ArtHBR7BySMK7MnftyN4=;
- b=2c8uZed6X40co24R5EwumD14bTnJtnslLSDpC+6Wu9eUWKXvDg2vTWSE4GT6tqP2XzrMrPBM5fGeXOCQKJED2l6sd3fatcqUQkxr/7WKIbhwJkSFu9yB6azocAwgeJmw00gKgnQPXcS6pQZqc4gB36LjDYgst+ehO5z/DjDPlUs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MW2PR12MB2379.namprd12.prod.outlook.com (2603:10b6:907:9::24)
- by SJ1PR12MB6146.namprd12.prod.outlook.com (2603:10b6:a03:45b::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7339.34; Wed, 6 Mar
- 2024 10:18:23 +0000
-Received: from MW2PR12MB2379.namprd12.prod.outlook.com
- ([fe80::3150:d50f:7411:e6bb]) by MW2PR12MB2379.namprd12.prod.outlook.com
- ([fe80::3150:d50f:7411:e6bb%5]) with mapi id 15.20.7339.035; Wed, 6 Mar 2024
- 10:18:23 +0000
-Message-ID: <bf7b4e37-51cf-50d6-dc8e-626f29b5bdd8@amd.com>
-Date: Wed, 6 Mar 2024 15:48:00 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [RFC PATCH 00/14] Introducing TIF_NOTIFY_IPI flag
-Content-Language: en-US
-To: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: linux-kernel@vger.kernel.org, "Gautham R. Shenoy"
- <gautham.shenoy@amd.com>, Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Russell King <linux@armlinux.org.uk>,
- Guo Ren <guoren@kernel.org>, Michal Simek <monstr@monstr.eu>,
- Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>,
- Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
- Stafford Horne <shorne@gmail.com>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
- Nicholas Piggin <npiggin@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
- "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
- Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- "David S. Miller" <davem@davemloft.net>, Thomas Gleixner
- <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>, Daniel Bristot de Oliveira
- <bristot@redhat.com>, Valentin Schneider <vschneid@redhat.com>,
- Al Viro <viro@zeniv.linux.org.uk>, Linus Walleij <linus.walleij@linaro.org>,
- Ard Biesheuvel <ardb@kernel.org>, Andrew Donnellan <ajd@linux.ibm.com>,
- Nicholas Miehlbradt <nicholas@linux.ibm.com>,
- Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>,
- Josh Poimboeuf <jpoimboe@kernel.org>,
- "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Tony Battersby <tonyb@cybernetics.com>, Brian Gerst <brgerst@gmail.com>,
- Tim Chen <tim.c.chen@linux.intel.com>, David Vernet <void@manifault.com>,
- x86@kernel.org, linux-alpha@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
- linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-pm@vger.kernel.org,
- Julia Lawall <julia.lawall@inria.fr>
-References: <20240220171457.703-1-kprateek.nayak@amd.com>
- <CAKfTPtBqPVQ5bo8HTZ=sPCUTYr48qtH61A8Z1dwCT434O7cSyQ@mail.gmail.com>
-From: K Prateek Nayak <kprateek.nayak@amd.com>
-In-Reply-To: <CAKfTPtBqPVQ5bo8HTZ=sPCUTYr48qtH61A8Z1dwCT434O7cSyQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0192.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:be::16) To MW2PR12MB2379.namprd12.prod.outlook.com
- (2603:10b6:907:9::24)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C6385FDA0;
+	Wed,  6 Mar 2024 10:26:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709720783; cv=none; b=XWCBuI/RcyOcfYFb3+ajO1lPl/RPeNvgXGLaWPnwofwZZhgUX6JNCX5TponPVmcGsrWsYt4oGEhJqjgDF+umAJIF8vRY72fkV8Q47FaZCk+qY31DKKx4OpPkVIChg6aLI/Sq99mRlnESzKZw/aQzSZQnRNjH7CxglA2NNnaxLjQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709720783; c=relaxed/simple;
+	bh=u2SSRHuQm/xCIhGXXwH0Qm+yS653HHK60z9FAswcoSU=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Mxo+Gqv2Dd1wdepDQqNO4AmStoZXQs8cq1JcLgCYab4XntfA0Zkj3BWgBiCFAj9+JEpLNf5e8zp7Ufep4OdKac0sGh5DJiv9dg2HWC2Jy1ZeD3TzXboxmsHuU6fkBjBDLofJqwus7HJeOISC8DmiGIfLLFbCDkHuI0MRIsiMFvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vl1VzYsz; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709720781; x=1741256781;
+  h=date:from:to:cc:subject:message-id;
+  bh=u2SSRHuQm/xCIhGXXwH0Qm+yS653HHK60z9FAswcoSU=;
+  b=Vl1VzYsz13Kv4afiuIX/auJAg61IO4U/uaSrvB1M+c5qW5tdo762rPJ8
+   r3rOaJNt/Lsn/F6fIOtXMdfsFVYvPTz/WqRDBVWj11rRzhnkPjjMCj/Ls
+   wpMkflNCOHU+8RHfmgS1vtwYlXpCig3k46hf5ScNKRA2r/Pe2k6k8R85S
+   lWbgZe5YprHlavERE3ANvBeLXdrfr9nVB3Fm8P4cQJEqNU7TS4jjJ77qw
+   3ZTzQmuL7KVUgmNzml7ugwZvuwP3P2HxhuZdl4LZJUn1UQei3X3qgglrQ
+   uASvWhXnR5ItIYqv283OhOfPkfDsVme3lcTW9kaANST4Kahi7D8PF9Pil
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11004"; a="4495406"
+X-IronPort-AV: E=Sophos;i="6.06,208,1705392000"; 
+   d="scan'208";a="4495406"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2024 02:26:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,208,1705392000"; 
+   d="scan'208";a="14273264"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 06 Mar 2024 02:26:19 -0800
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rhoTY-00048X-36;
+	Wed, 06 Mar 2024 10:26:16 +0000
+Date: Wed, 06 Mar 2024 18:25:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ c1f2f2f23c6357a634b9614d8ca13e3dbd8aa60c
+Message-ID: <202403061825.UPcHfcNY-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW2PR12MB2379:EE_|SJ1PR12MB6146:EE_
-X-MS-Office365-Filtering-Correlation-Id: 404a825b-adf7-4eaf-2334-08dc3dc6c0e3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	JgNXHZzeqgyRXeP6T7vOLSRet2PVzH3+BMYJsAjRNrIhVZ4Ww5kMc0LnEvULhmwpxW0cG8HCAW58pXI0vnRfHXPzZlXL1PjghOf8vCXAcm44EiLi99vzUEbP5Frv+tNQAd0lVMClSGsuoRnlH/eTVjiNJ+YWJWDakjeZIxpyIXAbN2PaFPONYV8jRSvZsirs/S9w/bIDgpfjI9qWDPyraVOQtUFwGWk6SC48z5MEUvJ1kS9ox5FT/HIGRcjNEyX3pnPVEanIMA7l/xqqZJkqAYOglO2k8DkMJXWK2/lSZqI4ibcJchpGSVGcoVQcKiFulvLJhuyG9C4sDXaI5WtIaeBKCMuIod9QNz7sKjUXmHjq+Y3T8XVAwXbLMLeBF2e7H/C7pMnP0QJjFHKdZ23Ucwk9788kxEnpngjam8UZK0XSoNouG9sT33Kxhs6t+wDNNhlYd/cwjAafMDM2seU4xwtArw+z/7YlKpssMLJX+21de9WACozWIVPhnWCAuEs39II4BCrf4fuCLgL7p/HqLqFEHH0V5UkxWPNmo7lXOPd2KEuBTKU9gHEKJP1qIm7KDCaZv07eeWDJFnnpN7b4nlAf1/WfD+xkQqjRQzGxjGlDVfyI0jysX8iAJetpPQ7a
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB2379.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Z3FBK1lmZHNCcDlqTFhha3ZjdHVSdzhaLzlqaE9seFJjdHNzeWZVK0RkTGwx?=
- =?utf-8?B?MkdQaFA3NVpXSkN1OGJOeVpwR09wYzNyQi9zRFVMNUtNVjdwTU50YzZrS1Nw?=
- =?utf-8?B?UlYzcytxTDR2QlpJc0hScFM3R0dHcW00c002am0zejF6bFBVWE5rWlZUR3VY?=
- =?utf-8?B?MlE0MHIvZTZ1TisybXR3cnZiV2xsRlcvWS9IN2gyaCtyc296cHMrUEM4c21F?=
- =?utf-8?B?OFpLdHpZVzlpcDlvTmRrUkhkN01ncmg0Nmh1NFQzdGVvUWhtd0NFYjBZS0Fw?=
- =?utf-8?B?SStyVHpMbXlNUjFyZDNrUmtvU3RWRXFSTk1ISlYvSHFqZVZuejBPK2N1anRW?=
- =?utf-8?B?eVA0d3dpaERLY2NyZWVERlppZTFEMElEQTBBSUtFb2dCSzBtV0J5dmgxZ05S?=
- =?utf-8?B?S2ZBaVFPSzhKTkJhRllRSjdzc2s2bDBrSGMyMkFILy9iZkRGeE1VWDRnU2RV?=
- =?utf-8?B?VEkrNm8velBPblFOV25XajFjUGsreXQxYWZ2b1Rza3RtK3E3SzNtSlM3Zks3?=
- =?utf-8?B?SjdFY3M1Z0lEL3pXbkxhOERtazV0TWcxYmhGVVl2aXE3YW81WlcybkhGNk95?=
- =?utf-8?B?YzVKUS8xK05UbHRnNDRxN2I2QzZTVWlmTkJmeEl1dnJZYmpMMmhVSWlQbHJk?=
- =?utf-8?B?dXB4RFdYQlZNRzdiWWFsdThBSWVteTFhYVB5L040RzcwZnNMTWo0YmJiR0FP?=
- =?utf-8?B?UHc2TlhhT3QzVUhHVVR6Rml4bnE2QWpBcjZINjdLeDhFdzA2TjNpVWV3RXJl?=
- =?utf-8?B?eE5jb0p3YXByTkpaL3NaenhhSG1EbDc5Q1JlZXN5S2crMDFUS1lEWmMwdmV0?=
- =?utf-8?B?Tjd0dGlFd3dxc0x4czdJU3NKSTA0Z3NKZmxwSncxeDBuYmhmcFEzRVU5eUZz?=
- =?utf-8?B?bHh3WmZDQ3FJd3RpMnE5TVh2Ri9rcVBpWStSUFQ5Ti93ajdSb2F0WjdEUWpi?=
- =?utf-8?B?M2NmQnRwekRzRXlaY2gwRWdtMEN5eXNIOVgrTDZxMVlSRlJqaERxbW40R3ov?=
- =?utf-8?B?QXFML2lMVVRTN3NoVk1RZFdYSTJDT3pXRlI3eG12djIvS3hXczh0L1JZcWor?=
- =?utf-8?B?Rm9zZ0dhcFlndHVyL3VEWU1VNHhScmZsRUFEL2JJSHZTN0ovREdVWkFKdE1i?=
- =?utf-8?B?WHd2Z29VQkFoVFJuNlVDS28wMXhadTBObkNqK1JUNnRFWDZxcHE4Wm1NU0Jh?=
- =?utf-8?B?aUh6dkdmUXpGR01neVp1SDFvVVQrZVBUbUdkZkxYS25PMVlheE1FekhIVENp?=
- =?utf-8?B?Mzk4RWF4bVA1aFNoQmNydVlQRTFmenRZMTMvbzRYVnRjWDd4QUlaTjlaRGtx?=
- =?utf-8?B?RUVGbG5ESHRYeVhTVkw0VE1GQ3RwUzFSaEYvQ3BCbTBmRVV0S3VwdXArcTdr?=
- =?utf-8?B?TGNxbU55dysvQmZ4ejZ3MEc0ZncvUmsyWnpNNnBFVWpKTDVSclh0WTBKYWdG?=
- =?utf-8?B?cEVITC81bFpyaW5MMkxsajdZRTJtSlExSHVURHhzTDdqLzluRW96NmNZaHVo?=
- =?utf-8?B?RzVDOUZFa3c2dlY4TFVTV3BOaEVpVUVTUDJySmcrTFhadTViZkxzVnZERGdM?=
- =?utf-8?B?ZWNxWElxNWVYd1NDbUpCV2tYUG14SWI0dG1VcGVmQmticDRDblhvZVVRK2RE?=
- =?utf-8?B?cWdqYnByeXVTYlBrTTJTQXRleTI4dnhEaHpUZSthbStzSWU0ckNYK0xYdVpv?=
- =?utf-8?B?dTAwRERodWpGZlY2UzNqWW1LejdpTVhyRFBCQ0FUQjJaUy9seUc5RCtrLzgw?=
- =?utf-8?B?bENaVCtOV285cGRFakkxVXR1NlRrWUVXZFlUbWdQaFZpbXNzTHk3VjNWcGMr?=
- =?utf-8?B?YjMwZmlBYkFSb0NuUmdxSVhFa1BJckJPWWNwR2w4cGREaHBzZFkzVFo5NENH?=
- =?utf-8?B?NDloSTkrR3BlbXpINzhyc0plR2hNOWg0bUVvdllQL1RlMUlSV3VXWlZobC9i?=
- =?utf-8?B?SERwNEI3dmVaaXErREFWL2tXcU9XZjJyYnhHNE9zN2FqbVlsamRmdUdzQktL?=
- =?utf-8?B?NUlsbll3bUNkY1JvSU4zcTBJRnVqRGV0RjZSTDJkQUFBWFZYM3I5TVVTaTBo?=
- =?utf-8?B?ZzVYeGtLTmVoZmUvcHNMdEJxQXA1MHVDcDlnUi9Qamg0N2NhYm5tbXBFcTZL?=
- =?utf-8?Q?GSYAXrRfmKXHExTDyYI5tZPko?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 404a825b-adf7-4eaf-2334-08dc3dc6c0e3
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB2379.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Mar 2024 10:18:23.1766
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: c+MbiJnl6k0arshKYqL5YUo5amx69vThIYAgOi+z6rR54wa3qW1yFPzYt4Jch8A+HpehTn+GiXM8swO87ahncQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6146
 
-Hello Vincent,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: c1f2f2f23c6357a634b9614d8ca13e3dbd8aa60c  Merge branch 'thermal-intel' into bleeding-edge
 
-Thank you for taking a look at the series.
+elapsed time: 794m
 
-On 3/6/2024 3:29 PM, Vincent Guittot wrote:
-> Hi Prateek,
-> 
-> Adding Julia who could be interested in this patchset. Your patchset
-> should trigger idle load balance instead of newly idle load balance
-> now when the polling is used. This was one reason for not migrating
-> task in idle CPU
+configs tested: 145
+configs skipped: 3
 
-Thank you.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> 
-> On Tue, 20 Feb 2024 at 18:15, K Prateek Nayak <kprateek.nayak@amd.com> wrote:
->>
->> Hello everyone,
->>
->> [..snip..]
->>
->>
->> Skipping newidle_balance()
->> ==========================
->>
->> In an earlier attempt to solve the challenge of the long IRQ disabled
->> section, newidle_balance() was skipped when a CPU waking up from idle
->> was found to have no runnable tasks, and was transitioning back to
->> idle [2]. Tim [3] and David [4] had pointed out that newidle_balance()
->> may be viable for CPUs that are idling with tick enabled, where the
->> newidle_balance() has the opportunity to pull tasks onto the idle CPU.
->>
->> Vincent [5] pointed out a case where the idle load kick will fail to
->> run on an idle CPU since the IPI handler launching the ILB will check
->> for need_resched(). In such cases, the idle CPU relies on
->> newidle_balance() to pull tasks towards itself.
-> 
-> Calling newidle_balance() instead of the normal idle load balance
-> prevents the CPU to pull tasks from other groups
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20240306   gcc  
+arc                   randconfig-002-20240306   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   clang
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm                   randconfig-001-20240306   gcc  
+arm                   randconfig-002-20240306   clang
+arm                   randconfig-003-20240306   clang
+arm                   randconfig-004-20240306   clang
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240306   gcc  
+arm64                 randconfig-002-20240306   clang
+arm64                 randconfig-003-20240306   gcc  
+arm64                 randconfig-004-20240306   clang
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240306   gcc  
+csky                  randconfig-002-20240306   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20240306   clang
+hexagon               randconfig-002-20240306   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20240306   clang
+i386         buildonly-randconfig-002-20240306   clang
+i386         buildonly-randconfig-003-20240306   gcc  
+i386         buildonly-randconfig-004-20240306   clang
+i386         buildonly-randconfig-005-20240306   clang
+i386         buildonly-randconfig-006-20240306   gcc  
+i386                                defconfig   clang
+i386                  randconfig-001-20240306   gcc  
+i386                  randconfig-002-20240306   clang
+i386                  randconfig-003-20240306   clang
+i386                  randconfig-004-20240306   clang
+i386                  randconfig-005-20240306   gcc  
+i386                  randconfig-006-20240306   clang
+i386                  randconfig-011-20240306   clang
+i386                  randconfig-012-20240306   clang
+i386                  randconfig-013-20240306   gcc  
+i386                  randconfig-014-20240306   gcc  
+i386                  randconfig-015-20240306   clang
+i386                  randconfig-016-20240306   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20240306   gcc  
+loongarch             randconfig-002-20240306   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240306   gcc  
+nios2                 randconfig-002-20240306   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20240306   gcc  
+parisc                randconfig-002-20240306   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc               randconfig-001-20240306   gcc  
+powerpc               randconfig-002-20240306   gcc  
+powerpc               randconfig-003-20240306   clang
+powerpc64             randconfig-001-20240306   gcc  
+powerpc64             randconfig-002-20240306   clang
+powerpc64             randconfig-003-20240306   clang
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+riscv                 randconfig-001-20240306   clang
+riscv                 randconfig-002-20240306   gcc  
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+s390                  randconfig-001-20240306   clang
+s390                  randconfig-002-20240306   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                    randconfig-001-20240306   gcc  
+sh                    randconfig-002-20240306   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20240306   gcc  
+sparc64               randconfig-002-20240306   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20240306   gcc  
+um                    randconfig-002-20240306   clang
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-001-20240306   clang
+x86_64       buildonly-randconfig-002-20240306   clang
+x86_64       buildonly-randconfig-003-20240306   clang
+x86_64       buildonly-randconfig-004-20240306   clang
+x86_64       buildonly-randconfig-005-20240306   gcc  
+x86_64       buildonly-randconfig-006-20240306   clang
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20240306   clang
+x86_64                          rhel-8.3-rust   clang
+xtensa                            allnoconfig   gcc  
+xtensa                randconfig-002-20240306   gcc  
 
-Thank you for the correction.
-
-> 
->>
->> Using an alternate flag instead of NEED_RESCHED to indicate a pending
->> IPI was suggested as the correct approach to solve this problem on the
->> same thread.
->>
->>
->> Proposed solution: TIF_NOTIFY_IPI
->> =================================
->>
->> Instead of reusing TIF_NEED_RESCHED bit to pull an TIF_POLLING CPU out
->> of idle, TIF_NOTIFY_IPI is a newly introduced flag that
->> call_function_single_prep_ipi() sets on a target TIF_POLLING CPU to
->> indicate a pending IPI, which the idle CPU promises to process soon.
->>
->> On architectures that do not support the TIF_NOTIFY_IPI flag (this
->> series only adds support for x86 and ARM processors for now),
-> 
-> I'm surprised that you are mentioning ARM processors because they
-> don't use TIF_POLLING.
-
-Yup I just realised that after Linus Walleij pointed it out on the
-thread.
-
-> 
->> call_function_single_prep_ipi() will fallback to setting
->> TIF_NEED_RESCHED bit to pull the TIF_POLLING CPU out of idle.
->>
->> Since the pending IPI handlers are processed before the call to
->> schedule_idle() in do_idle(), schedule_idle() will only be called if the
->> IPI handler have woken / migrated a new task on the idle CPU and has set
->> TIF_NEED_RESCHED bit to indicate the same. This avoids running into the
->> long IRQ disabled section in schedule_idle() unnecessarily, and any
->> need_resched() check within a call function will accurately notify if a
->> task is waiting for CPU time on the CPU handling the IPI.
->>
->> Following is the crude visualization of how the situation changes with
->> the newly introduced TIF_NOTIFY_IPI flag:
->> --
->> CPU0                                                    CPU1
->> ====                                                    ====
->>                                                         do_idle() {
->>                                                                 __current_set_polling();
->>                                                                 ...
->>                                                                 monitor(addr);
->>                                                                 if (!need_resched_or_ipi())
->>                                                                         mwait() {
->>                                                                         /* Waiting */
->> smp_call_function_single(CPU1, func, wait = 1) {                                ...
->>         ...                                                                     ...
->>         set_nr_if_polling(CPU1) {                                               ...
->>                 /* Realizes CPU1 is polling */                                  ...
->>                 try_cmpxchg(addr,                                               ...
->>                             &val,                                               ...
->>                             val | _TIF_NOTIFY_IPI);                             ...
->>         } /* Does not send an IPI */                                            ...
->>         ...                                                             } /* mwait exit due to write at addr */
->>         csd_lock_wait() {                                       ...
->>         /* Waiting */                                           preempt_fold_need_resched(); /* fold if NEED_RESCHED */
->>                 ...                                             __current_clr_polling();
->>                 ...                                             flush_smp_call_function_queue() {
->>                 ...                                                     func(); /* Will set NEED_RESCHED if sched_ttwu_pending() */
->>         } /* End of wait */                                     }
->> }                                                               if (need_resched()) {
->>                                                                         schedule_idle();
->> smp_call_function_single(CPU1, func, wait = 1) {                }
->>         ...                                                     ... /* IRQs remain enabled */
->>         arch_send_call_function_single_ipi(CPU1); ----------->  /* Processes the IPI */
->> --
->>
->> Results
->> =======
->>
->> With the TIF_NOTIFY_IPI, the time taken to complete a fixed set of IPIs
->> using ipistorm improves drastically. Following are the numbers from the
->> same dual socket 3rd Generation EPYC system (2 x 64C/128T) (boost on,
->> C2 disabled) running ipistorm between CPU8 and CPU16:
->>
->> cmdline: insmod ipistorm.ko numipi=100000 single=1 offset=8 cpulist=8 wait=1
->>
->>   ==================================================================
->>   Test          : ipistorm (modified)
->>   Units         : Normalized runtime
->>   Interpretation: Lower is better
->>   Statistic     : AMean
->>   ==================================================================
->>   kernel:                               time [pct imp]
->>   tip:sched/core                        1.00 [0.00]
->>   tip:sched/core + revert               0.81 [19.36]
->>   tip:sched/core + TIF_NOTIFY_IPI       0.20 [80.99]
->>
->> Same experiment was repeated on an dual socket ARM server (2 x 64C)
->> which too saw a significant improvement in the ipistorm performance:
-> 
-> Could you share more details about this ARM server ? Could it be an Arm64 one ?
-> I was not expecting any change for arm/arm64 which are not using TIF_POLLING
-
-I looked at the lscpu output and it said It was an "aarch64" server with
-model name "Neoverse-N1". Let me go back and test it once again just to
-be sure I did not catch a one off behavior (Might be a while since I
-have limited access to this machine) I'll also add a debug
-WARN_ON_ONCE() to see if "TIF_NOTIF_IPI" is being set.
-
-> 
-> 
->>
->>   ==================================================================
->>   Test          : ipistorm (modified)
->>   Units         : Normalized runtime
->>   Interpretation: Lower is better
->>   Statistic     : AMean
->>   ==================================================================
->>   kernel:                               time [pct imp]
->>   tip:sched/core                        1.00 [0.00]
->>   tip:sched/core + TIF_NOTIFY_IPI       0.41 [59.29]
->>
->> netperf and tbench results with the patch match the results on tip on
->> the dual socket 3rd Generation AMD system (2 x 64C/128T). Additionally,
->> hackbench, stream, and schbench too were tested, with results from the
->> patched kernel matching that of the tip.
->>
->>
->> Future Work
->> ===========
->>
->> Evaluate impact of newidle_balance() when scheduler tick hits an idle
->> CPU. The call to newidle_balance() will be skipped with the
-> 
-> But it should call the normal idle load balance instead
-
-Yup, but the frequency of normal idle balance will be lower than the
-frequency at which a newidle balance is being triggered currently if
-tick is not disabled right? Please correct me if I'm wrong. 
-
-> 
->> TIF_NOTIFY_IPI solution similar to [2]. Counter argument for the case is
->> that if the idle state did not set the TIF_POLLING bit, the idle CPU
->> would not have called schedule_idle() unless the IPI handler set the
->> NEED_RESCHED bit.
->>
->>
->> Links
->> =====
->>
->> [1] https://github.com/antonblanchard/ipistorm
->> [2] https://lore.kernel.org/lkml/20240119084548.2788-1-kprateek.nayak@amd.com/
->> [3] https://lore.kernel.org/lkml/b4f5ac150685456cf45a342e3bb1f28cdd557a53.camel@linux.intel.com/
->> [4] https://lore.kernel.org/lkml/20240123211756.GA221793@maniforge/
->> [5] https://lore.kernel.org/lkml/CAKfTPtC446Lo9CATPp7PExdkLhHQFoBuY-JMGC7agOHY4hs-Pw@mail.gmail.com/
->>
->> This series is based on tip:sched/core at tag "sched-core-2024-01-08".
->> [..snip..]
->>
- 
---
-Thanks and Regards,
-Prateek
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
