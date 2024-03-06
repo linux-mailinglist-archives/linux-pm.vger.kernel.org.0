@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-4697-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4696-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAF51872BB6
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9F4D872BB5
 	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 01:24:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F15931C218CF
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1679F285B5C
 	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 00:24:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FF988BF1;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0243D79C1;
 	Wed,  6 Mar 2024 00:24:30 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E71C363CF;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D99134C8F;
 	Wed,  6 Mar 2024 00:24:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709684670; cv=none; b=av/p9Ydwv/+H84MF9PMNZpaZ36n3cGa0aLkGulL2TyhI0ND6wITmDiGFbB1KL1SbMDlKpEo03QiUs1K7M5hCjpmAL52vwg18ha8j9DG0oAYxfi8AvGu20jtSCTRKAxzV8cWKu7/XvwvmRgy5g7mugTA1oZvk1PgcU+FwF/UUKss=
+	t=1709684669; cv=none; b=madoYIjwM5Ns513n9u9exq4B5qF2SupC0Rv6p1oD/5EbRNCzOR0vSn478OwvN8GOiZeMnrdpXgZBb5JhTP7b/rGgwmLOpZKylWX5/yubzV5RldDZVxtMKg3SrmTJCxmuf2PQKT5hU4CojOGFTEXzE58HkRRG4JQwTyouDrkhkYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709684670; c=relaxed/simple;
-	bh=TgRBiYCHdeXZfja/DASlXzVoEa/qu2KTviAC5jDbs34=;
+	s=arc-20240116; t=1709684669; c=relaxed/simple;
+	bh=oYvNC2/mFtZnu/1sU9+I8+QsRe1+61Q3hKfBaUiqz8U=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=IqKBAfuFKmh3dE0MpseZdXBfvLd2l8hrnwm1VeG89xcYwGUeeUWOcP+eBgYxGcRcD/chx22/qcARJcrZuzgMZgXzbVpeNrgyZfNvulXtD1IZa8E11bVmStbeHEXJtw+XuORayzPKy8zKIEzFeJjW8Y7roStiimBYp2V/hT62vgo=
+	 MIME-Version:Content-Type; b=dLQwHCAixodNvy5E0k4tJP0pDH6VZcjXo7D5cdtFixvdQWNh23miyGrpsQEZYjqouvTIRMlJPAhwb7C23jrqo7N5tosyLKIs+bToLhBo48fIm/HYuKWZgsIH6n4rDL0hwuqk9zkiUzmQdtmmSrqWnPuC0NEL573RqEUnBV3GnSA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56957C43390;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B29EC433F1;
 	Wed,  6 Mar 2024 00:24:29 +0000 (UTC)
 Received: by mercury (Postfix, from userid 1000)
-	id 3A95F1061BCB; Wed,  6 Mar 2024 01:24:26 +0100 (CET)
+	id 3DF9F1060B14; Wed,  6 Mar 2024 01:24:26 +0100 (CET)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Linus Walleij <linus.walleij@linaro.org>, 
- "Ricardo B. Marliere" <ricardo@marliere.net>, 
- Sebastian Reichel <sre@kernel.org>, 
- Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20240301-psy-class-cleanup-v1-0-aebe8c4b6b08@collabora.com>
-References: <20240301-psy-class-cleanup-v1-0-aebe8c4b6b08@collabora.com>
-Subject: Re: [PATCH 0/2] power: supply: core: class cleanups
-Message-Id: <170968466618.645753.8043316178585971724.b4-ty@collabora.com>
+To: Sebastian Reichel <sre@kernel.org>, 
+ "Ricardo B. Marliere" <ricardo@marliere.net>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kernel test robot <lkp@intel.com>
+In-Reply-To: <20240303-class_cleanup-power-v2-1-e248b7128519@marliere.net>
+References: <20240303-class_cleanup-power-v2-1-e248b7128519@marliere.net>
+Subject: Re: [PATCH v2] power: supply: move power_supply_attr_groups
+ definition back to sysfs
+Message-Id: <170968466622.645753.4432514364980212313.b4-ty@collabora.com>
 Date: Wed, 06 Mar 2024 01:24:26 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -53,19 +53,21 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13.0
 
 
-On Fri, 01 Mar 2024 23:58:25 +0100, Sebastian Reichel wrote:
-> I noticed some further possible cleanups when reviewing
-> and applying Ricardo's patch to make power_supply_class
-> constant.
+On Sun, 03 Mar 2024 13:30:50 -0300, Ricardo B. Marliere wrote:
+> As reported by the kernel test robot, 'power_supply_attr_group' is defined
+> but not used when CONFIG_SYSFS is not set. Sebastian suggested that the
+> correct fix implemented by this patch, instead of my attempt in commit
+> ea4367c40c79 ("power: supply: core: move power_supply_attr_group into #ifdef
+> block"), is to define power_supply_attr_groups in power_supply_sysfs.c and
+> expose it in the power_supply.h header. For the case where CONFIG_SYSFS=n,
+> define it as NULL.
 > 
-> 
+> [...]
 
 Applied, thanks!
 
-[1/2] power: supply: core: add power_supply_for_each_device()
-      commit: 68ade0976df7979eac5f1d46320ff798f5043af6
-[2/2] power: supply: core: simplify power_supply_class_init
-      commit: ea1ec769d1f01a9900127e83e63dfdd77d096c8a
+[1/1] power: supply: move power_supply_attr_groups definition back to sysfs
+      commit: f107e6b82392a4d64507e219c57235d3fe09e9d7
 
 Best regards,
 -- 
