@@ -1,235 +1,171 @@
-Return-Path: <linux-pm+bounces-4725-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4726-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3CA787346D
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 11:38:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96BF487342A
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 11:28:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 48AB2B3108B
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 10:28:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24A361F21FB0
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 10:28:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89B325FDB3;
-	Wed,  6 Mar 2024 10:26:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 814025FDC8;
+	Wed,  6 Mar 2024 10:27:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vl1VzYsz"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oN5oJ808"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C6385FDA0;
-	Wed,  6 Mar 2024 10:26:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF1065FDA3
+	for <linux-pm@vger.kernel.org>; Wed,  6 Mar 2024 10:26:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709720783; cv=none; b=XWCBuI/RcyOcfYFb3+ajO1lPl/RPeNvgXGLaWPnwofwZZhgUX6JNCX5TponPVmcGsrWsYt4oGEhJqjgDF+umAJIF8vRY72fkV8Q47FaZCk+qY31DKKx4OpPkVIChg6aLI/Sq99mRlnESzKZw/aQzSZQnRNjH7CxglA2NNnaxLjQ=
+	t=1709720821; cv=none; b=IapnsvUXpgchKDC9r3j+KuqTXwsVxqwz+308eJlJT1+xekW8esE7gZySxMpAUEKL2H2FqSkieJBsIWST2UGhESeqIpc/ksQRg3Xu3cnScy8vwfErpToV+PI9qStVGdbE+8tnvquLJ2saBiWbx5vEF+vviC7EXGmlOgJ7ih726NE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709720783; c=relaxed/simple;
-	bh=u2SSRHuQm/xCIhGXXwH0Qm+yS653HHK60z9FAswcoSU=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Mxo+Gqv2Dd1wdepDQqNO4AmStoZXQs8cq1JcLgCYab4XntfA0Zkj3BWgBiCFAj9+JEpLNf5e8zp7Ufep4OdKac0sGh5DJiv9dg2HWC2Jy1ZeD3TzXboxmsHuU6fkBjBDLofJqwus7HJeOISC8DmiGIfLLFbCDkHuI0MRIsiMFvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vl1VzYsz; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709720781; x=1741256781;
-  h=date:from:to:cc:subject:message-id;
-  bh=u2SSRHuQm/xCIhGXXwH0Qm+yS653HHK60z9FAswcoSU=;
-  b=Vl1VzYsz13Kv4afiuIX/auJAg61IO4U/uaSrvB1M+c5qW5tdo762rPJ8
-   r3rOaJNt/Lsn/F6fIOtXMdfsFVYvPTz/WqRDBVWj11rRzhnkPjjMCj/Ls
-   wpMkflNCOHU+8RHfmgS1vtwYlXpCig3k46hf5ScNKRA2r/Pe2k6k8R85S
-   lWbgZe5YprHlavERE3ANvBeLXdrfr9nVB3Fm8P4cQJEqNU7TS4jjJ77qw
-   3ZTzQmuL7KVUgmNzml7ugwZvuwP3P2HxhuZdl4LZJUn1UQei3X3qgglrQ
-   uASvWhXnR5ItIYqv283OhOfPkfDsVme3lcTW9kaANST4Kahi7D8PF9Pil
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11004"; a="4495406"
-X-IronPort-AV: E=Sophos;i="6.06,208,1705392000"; 
-   d="scan'208";a="4495406"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2024 02:26:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,208,1705392000"; 
-   d="scan'208";a="14273264"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 06 Mar 2024 02:26:19 -0800
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rhoTY-00048X-36;
-	Wed, 06 Mar 2024 10:26:16 +0000
-Date: Wed, 06 Mar 2024 18:25:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- c1f2f2f23c6357a634b9614d8ca13e3dbd8aa60c
-Message-ID: <202403061825.UPcHfcNY-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1709720821; c=relaxed/simple;
+	bh=+vgV13prNibuaI8yJvc8H0LTr+jXEu2xgV5VNrpuQF8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lZz4/3LgjQTSSraTEKILGudHKfzwBReMA+YBNRJOdW7r3H4WErpyMZP0UoZM985wcHtQ4lFoktDU9dQ5fPhvl1JrRiel4o2gWFEcE77WOB2c4wOeCPDwDPvJfug8S2MdW4hFGeGq23LyqwXJtQjziA4HcGovQ7aCnfYd2lOxAOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oN5oJ808; arc=none smtp.client-ip=209.85.128.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-609d9ce5bdeso5420427b3.2
+        for <linux-pm@vger.kernel.org>; Wed, 06 Mar 2024 02:26:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1709720818; x=1710325618; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ytLZrm+K6B+y/qgp5MHdxGITQKkVAxUSbIjux0E6L/o=;
+        b=oN5oJ808iICMorKCwFTwyczdhXGAC57PI6iH2LKpD1Tlvy129B08MNVi1zwd48JeLF
+         p5uYMzxpMGVC9uPLi90mDeXqwc+q76/n85tqwvmGjnpQM1TV4J5kN0FIlxGvuwoNVMHW
+         8hjxIV8zt3jSDCU4DxhiQvODDpSIbuaddO25nTM2ny7y53Thyg2pnDERV5QZZQLeadom
+         DTv91Ltf7etfF66LYQCcXMrjn+Lp/yQtcs7S/7DaPhg9y4OZz6qub++Hs3dtHW/SRHZ1
+         XcwNqMpJwdCubEUFpTPbuz6YNEZP3nvTqms0cZ+0NT/pfnzGY5Bm3ZFVIOlE+YmlxpCJ
+         0oMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709720818; x=1710325618;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ytLZrm+K6B+y/qgp5MHdxGITQKkVAxUSbIjux0E6L/o=;
+        b=W9TNhdv6EelveZe/jI9AeN5wZXhrEXzgybT2PJDhiy0blvKW2rlDIrD3hqbDS4Ksg3
+         nMneWeLobig6sup5na62wOXEj7mwYXwzak+9lwp8yj5BLnNCaFDcRDvHXMvQ7r2ZHouR
+         uP085kRxczAlrmaU6uT3rmdzfh2jpDM+wdVIQFo33efozH0l/TBfcUdSz2vz8xeBbdcV
+         wnh3gFOZ95gmZoJpNP/rlSumDZVXMGnhN2MqIeSKkPDVsFblnwmK3fCcYTesKkaS17aC
+         CdCVtgmdapMpJVNvviH/3AjZJjn7LS+1tzRUjJMch5pmSIn7GeT3PjpuLCrdg1iHTKkq
+         cNfg==
+X-Forwarded-Encrypted: i=1; AJvYcCW8kokzKnJiPT4uLBSnYDdjZyKAeA1UIENsTh8vWERkEy4wS+LDyUa0W7ESZlV1F+7f19JU6wclF6WxlxZouPu6QEtuXm7/iPQ=
+X-Gm-Message-State: AOJu0YwT7xiiN2oM2Kpr1kPG0T4jh1auDjSD0b8YhUA+d0fiyvu5HT1s
+	yiUxsVNJ4iuBXG/DPiv+2AMjYJ+Jpls7zyrFIIgqQa19QjBPvTnyD+ev7yjFYJIDzIMolk+m2ej
+	CWcgo+KEp49JSsE0s/LxnAv+hSI8T0eVdxRUNaZ/+DA3kAP3G
+X-Google-Smtp-Source: AGHT+IGS7yLn0/eVgFjRnv/iZx/978VY/xjm7oyt5HwHDPzF8udJwLRjyV3fMbxW//ZVV7Ou5p0GzrEFijVuBzAKylA=
+X-Received: by 2002:a25:ac68:0:b0:dca:e4fd:b6d5 with SMTP id
+ r40-20020a25ac68000000b00dcae4fdb6d5mr12184178ybd.27.1709720818600; Wed, 06
+ Mar 2024 02:26:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <77f150522096d55c6da0ff983db61e0cf6309344.1709317289.git.geert+renesas@glider.be>
+In-Reply-To: <77f150522096d55c6da0ff983db61e0cf6309344.1709317289.git.geert+renesas@glider.be>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Wed, 6 Mar 2024 11:26:22 +0100
+Message-ID: <CAPDyKFpA-dqrcao6yzxVJP368XWuZYC2gtUbS9FZJNWzYH_HnA@mail.gmail.com>
+Subject: Re: [PATCH] pmdomain: renesas: rcar-gen4-sysc: Reduce atomic delays
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, linux-renesas-soc@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: c1f2f2f23c6357a634b9614d8ca13e3dbd8aa60c  Merge branch 'thermal-intel' into bleeding-edge
+On Fri, 1 Mar 2024 at 19:23, Geert Uytterhoeven <geert+renesas@glider.be> w=
+rote:
+>
+> The delays used with the various atomic polling loops are already at the
+> maximum value of ~10=C2=B5s, as documented for read_poll_timeout_atomic()=
+.
+> Hence reduce the delays from 10 to 1 =C2=B5s.  Increase PDRESR_RETRIES
+> accordingly, to retain the old (generous) timeout value.
+>
+> Measurements on R-Car V3U, S4, V4H, and V4M show that the first three
+> polling loops rarely (never?) loop, so the actual delay does not matter.
+> The fourth loop (for SYSCISCR in rcar_gen4_sysc_power()) typically ran
+> for one or two cycles with the old delay.  With the reduced delay, it
+> typically runs for two to 17 cycles, and finishes earlier than before,
+> which can reduce loop time up to a factor of three.
+>
+> While at it, rename the SYSCISR_{TIMEOUT,DELAY_US} definitions to
+> SYSCISCR_{TIMEOUT,DELAY_US}, to match the register name they apply to.
+>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-elapsed time: 794m
+Applied for next, thanks!
 
-configs tested: 145
-configs skipped: 3
+Kind regards
+Uffe
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20240306   gcc  
-arc                   randconfig-002-20240306   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                   randconfig-001-20240306   gcc  
-arm                   randconfig-002-20240306   clang
-arm                   randconfig-003-20240306   clang
-arm                   randconfig-004-20240306   clang
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240306   gcc  
-arm64                 randconfig-002-20240306   clang
-arm64                 randconfig-003-20240306   gcc  
-arm64                 randconfig-004-20240306   clang
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240306   gcc  
-csky                  randconfig-002-20240306   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240306   clang
-hexagon               randconfig-002-20240306   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240306   clang
-i386         buildonly-randconfig-002-20240306   clang
-i386         buildonly-randconfig-003-20240306   gcc  
-i386         buildonly-randconfig-004-20240306   clang
-i386         buildonly-randconfig-005-20240306   clang
-i386         buildonly-randconfig-006-20240306   gcc  
-i386                                defconfig   clang
-i386                  randconfig-001-20240306   gcc  
-i386                  randconfig-002-20240306   clang
-i386                  randconfig-003-20240306   clang
-i386                  randconfig-004-20240306   clang
-i386                  randconfig-005-20240306   gcc  
-i386                  randconfig-006-20240306   clang
-i386                  randconfig-011-20240306   clang
-i386                  randconfig-012-20240306   clang
-i386                  randconfig-013-20240306   gcc  
-i386                  randconfig-014-20240306   gcc  
-i386                  randconfig-015-20240306   clang
-i386                  randconfig-016-20240306   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240306   gcc  
-loongarch             randconfig-002-20240306   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240306   gcc  
-nios2                 randconfig-002-20240306   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240306   gcc  
-parisc                randconfig-002-20240306   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc               randconfig-001-20240306   gcc  
-powerpc               randconfig-002-20240306   gcc  
-powerpc               randconfig-003-20240306   clang
-powerpc64             randconfig-001-20240306   gcc  
-powerpc64             randconfig-002-20240306   clang
-powerpc64             randconfig-003-20240306   clang
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                 randconfig-001-20240306   clang
-riscv                 randconfig-002-20240306   gcc  
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-001-20240306   clang
-s390                  randconfig-002-20240306   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                    randconfig-001-20240306   gcc  
-sh                    randconfig-002-20240306   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240306   gcc  
-sparc64               randconfig-002-20240306   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20240306   gcc  
-um                    randconfig-002-20240306   clang
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240306   clang
-x86_64       buildonly-randconfig-002-20240306   clang
-x86_64       buildonly-randconfig-003-20240306   clang
-x86_64       buildonly-randconfig-004-20240306   clang
-x86_64       buildonly-randconfig-005-20240306   gcc  
-x86_64       buildonly-randconfig-006-20240306   clang
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240306   clang
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-xtensa                randconfig-002-20240306   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  drivers/pmdomain/renesas/rcar-gen4-sysc.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/pmdomain/renesas/rcar-gen4-sysc.c b/drivers/pmdomain=
+/renesas/rcar-gen4-sysc.c
+> index 728248659a97e8cc..66409cff2083fcd8 100644
+> --- a/drivers/pmdomain/renesas/rcar-gen4-sysc.c
+> +++ b/drivers/pmdomain/renesas/rcar-gen4-sysc.c
+> @@ -50,13 +50,13 @@
+>  #define SYSCSR_BUSY            GENMASK(1, 0)   /* All bit sets is not bu=
+sy */
+>
+>  #define SYSCSR_TIMEOUT         10000
+> -#define SYSCSR_DELAY_US                10
+> +#define SYSCSR_DELAY_US                1
+>
+> -#define PDRESR_RETRIES         1000
+> -#define PDRESR_DELAY_US                10
+> +#define PDRESR_RETRIES         10000
+> +#define PDRESR_DELAY_US                1
+>
+> -#define SYSCISR_TIMEOUT                10000
+> -#define SYSCISR_DELAY_US       10
+> +#define SYSCISCR_TIMEOUT       10000
+> +#define SYSCISCR_DELAY_US      1
+>
+>  #define RCAR_GEN4_PD_ALWAYS_ON 64
+>  #define NUM_DOMAINS_EACH_REG   BITS_PER_TYPE(u32)
+> @@ -97,7 +97,7 @@ static int clear_irq_flags(unsigned int reg_idx, unsign=
+ed int isr_mask)
+>
+>         ret =3D readl_poll_timeout_atomic(rcar_gen4_sysc_base + SYSCISCR(=
+reg_idx),
+>                                         val, !(val & isr_mask),
+> -                                       SYSCISR_DELAY_US, SYSCISR_TIMEOUT=
+);
+> +                                       SYSCISCR_DELAY_US, SYSCISCR_TIMEO=
+UT);
+>         if (ret < 0) {
+>                 pr_err("\n %s : Can not clear IRQ flags in SYSCISCR", __f=
+unc__);
+>                 return -EIO;
+> @@ -157,7 +157,7 @@ static int rcar_gen4_sysc_power(u8 pdr, bool on)
+>         /* Wait until the power shutoff or resume request has completed *=
+ */
+>         ret =3D readl_poll_timeout_atomic(rcar_gen4_sysc_base + SYSCISCR(=
+reg_idx),
+>                                         val, (val & isr_mask),
+> -                                       SYSCISR_DELAY_US, SYSCISR_TIMEOUT=
+);
+> +                                       SYSCISCR_DELAY_US, SYSCISCR_TIMEO=
+UT);
+>         if (ret < 0) {
+>                 ret =3D -EIO;
+>                 goto out;
+> --
+> 2.34.1
+>
 
