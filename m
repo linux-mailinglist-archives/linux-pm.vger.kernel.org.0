@@ -1,321 +1,281 @@
-Return-Path: <linux-pm+bounces-4749-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4752-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5FD1874042
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 20:20:44 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94F6C87406C
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 20:32:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E92AD1C21357
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 19:20:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A9734B22049
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 19:32:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4722513E7FD;
-	Wed,  6 Mar 2024 19:20:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D282E13F010;
+	Wed,  6 Mar 2024 19:32:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="tEte1exK"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="RYtIIVdI"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BA2060250;
-	Wed,  6 Mar 2024 19:20:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D396133425;
+	Wed,  6 Mar 2024 19:32:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709752840; cv=none; b=QlcRo3xZL19lAbDlGA7fUd+v0Zl2SYFehFZIZCqBca4wH3ocKh0EMzlOBHkO7fbm5xj1AydqUm6LRGJxFoIW3dpz+b+opqJ8rFmyJvYRlQt/xWApQsYnobWnokC/gAbQ3SwZ/bddmjIbRW4xzzJBnxv+fUW8tBhhnm2gturLnfg=
+	t=1709753554; cv=none; b=tpnnXqr+4nwMGlTLawjodyQWdKbmikFLeOQIRr+tX1eD5ncDBZKwfkGQw2CjFuaKqrapZMKAOPXXpd5/xPP4U92IIr238O1Y5tZkgZh5bpHdjAHsFqZVqJ2f7vyYL/9fSnpnmLU7EUZEYDtTPCHv1za+Q5G6qa6MCtpNAEb6yyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709752840; c=relaxed/simple;
-	bh=GHbobq419Ih+F338dLgWdrJacDChFzu2eS+bGwQCBGM=;
+	s=arc-20240116; t=1709753554; c=relaxed/simple;
+	bh=J8LrJmXXin5ZmB2UdR8/rbJ2RaY0YRW3LuLK1SaEaGk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ha6IAzq1PE74OPSTiJrHDnqk4jRL25Xqgkv7B4XVA2bRytHR4z4a9Yr7Tl9FYl3WyWMLpTlG/l2OTfgATeXEjdvjZSqO3TIhrhhOEcHAvcOU231YKJpazVbGOwALX1ZvPyyMqLANU9jOY512udU08HMHAwX0bzCYgOlqd5lhQnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=tEte1exK reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+	 MIME-Version:Content-Type; b=rdkS293XLzsmZpKBers6M5S++sZlfq/skTxa4+OCsjYVHGWwzKybKuKBqGKMC4h9YmZyevn7GxQYWqYcv5qNxM2i+wLHWTocgiAQg/JhQnZcHuMtV5/MNya6riWOlNLcgcxjqZmVkYgiE2hT9eHmAJm09ZbxKCzv7PXg/zhycPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=RYtIIVdI reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id 9ada5770544cb8ac; Wed, 6 Mar 2024 20:20:29 +0100
+ id 288d8298a4b950b2; Wed, 6 Mar 2024 20:32:30 +0100
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 6D4BD66AB8D;
-	Wed,  6 Mar 2024 20:20:28 +0100 (CET)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id EB0D866AB79;
+	Wed,  6 Mar 2024 20:32:29 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1709752828;
-	bh=GHbobq419Ih+F338dLgWdrJacDChFzu2eS+bGwQCBGM=;
+	s=dkim; t=1709753550;
+	bh=J8LrJmXXin5ZmB2UdR8/rbJ2RaY0YRW3LuLK1SaEaGk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=tEte1exKB0xkydkBp6XjO6fHUAeimNhPprXhXeJCNvupSqu5z68TvosJwpuY3l7KF
-	 ioW+iCZG1Os15/viiKlv2D3TPLxmG8zqUqfKfQS2gC8GeA1JzfSEPnqIPkSvZvu12Q
-	 bAD53NDGM8jN0K7coxfKZn5f5AmHfmFd/GNx/yYCh9Xxc+LhYbII82ivwuKfiQm9oy
-	 3c37C93oyNA9DSkq3DEILv2gERfJNjZhp5vnvXOK1l8NJGfnUHudj2w/Vh98MEeHvR
-	 uOhHCbGWf/QLO62SCW9FlwzF79wYJlWZv7PfAP2DAxObhA9KnCx+riOGtb4WGMJn9R
-	 xcskI2RjNMhSw==
+	b=RYtIIVdIfdVsRVTemnTv59TqL4JeT79IsynbOYgMKKidOiAtlk1k0IMOffJluYnnj
+	 QxFOJQYL+04H4gJON1bSBjYzUVnAjlxbtZ5v97w8SawBKWnZs6Ka4vTp16XStCT0Zf
+	 AWHUMSVAbQUiz8iHWKPgYYvQFSbNslt72rrog/pb7bTG2pN0JrHoKiMeTFWAH5bNov
+	 drYggXEqcfne553aDHx4csdrk7cUrbVcIDb72wmCtg2aSGE88ZMdRSAs6kCv6YauMP
+	 3V9ysIN7XZtiEKQBpV17ucquLMD7qM8Y5OxS3qrGkfdsfQmtevDnXqGyuxAoxtmi69
+	 kOnuUJ1hGCzmQ==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Lukasz Luba <lukasz.luba@arm.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Subject:
- [PATCH v1 2/2] thermal: core: Make struct thermal_zone_device definition
- internal
-Date: Wed, 06 Mar 2024 20:20:21 +0100
-Message-ID: <2933825.e9J7NaK4W3@kreacher>
-In-Reply-To: <4558384.LvFx2qVVIh@kreacher>
-References: <4558384.LvFx2qVVIh@kreacher>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-kernel@vger.kernel.org,
+ Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+ "open list:THERMAL" <linux-pm@vger.kernel.org>
+Subject: Re: [RFC PATCH] thermal/core: Fix trip point crossing events ordering
+Date: Wed, 06 Mar 2024 20:32:29 +0100
+Message-ID: <2266782.iZASKD2KPV@kreacher>
+In-Reply-To: <3bb7c6cf-f7a8-4059-ad8e-02e09c2a44b1@linaro.org>
+References:
+ <20240306085428.88011-1-daniel.lezcano@linaro.org>
+ <CAJZ5v0gWhNqTGpoOH01scCdC51cEnt_8_T5ccqZC6yXPDv9QcA@mail.gmail.com>
+ <3bb7c6cf-f7a8-4059-ad8e-02e09c2a44b1@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 195.136.19.94
 X-CLIENT-HOSTNAME: 195.136.19.94
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledriedugdduvddtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepjedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepshhtrghnihhslhgrfidrghhruhhsiihkrgeslhhi
- nhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledriedugdduvddvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtqhertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepkeeileehffelfefggfdtjedvkeettdejfeevueegfedvhffgudeuteeigfeileetnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtgho
+ mhdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Wednesday, March 6, 2024 4:55:51 PM CET Daniel Lezcano wrote:
+> On 06/03/2024 16:41, Rafael J. Wysocki wrote:
+> > On Wed, Mar 6, 2024 at 2:16=E2=80=AFPM Daniel Lezcano <daniel.lezcano@l=
+inaro.org> wrote:
+> >>
+> >> On 06/03/2024 13:53, Rafael J. Wysocki wrote:
+> >>> On Wed, Mar 6, 2024 at 1:43=E2=80=AFPM Daniel Lezcano <daniel.lezcano=
+@linaro.org> wrote:
+> >>>>
+> >>>> On 06/03/2024 13:02, Rafael J. Wysocki wrote:
+> >>>>
+> >>>> [ ... ]
+> >>>>
+> >>>>>> +#define for_each_trip_reverse(__tz, __trip)    \
+> >>>>>> +       for (__trip =3D &__tz->trips[__tz->num_trips - 1]; __trip =
+>=3D __tz->trips ; __trip--)
+> >>>>>> +
+> >>>>>>     void __thermal_zone_set_trips(struct thermal_zone_device *tz);
+> >>>>>>     int thermal_zone_trip_id(const struct thermal_zone_device *tz,
+> >>>>>>                             const struct thermal_trip *trip);
+> >>>>>> --
+> >>>>>
+> >>>>> Generally speaking, this is a matter of getting alignment on the
+> >>>>> expectations between the kernel and user space.
+> >>>>>
+> >>>>> It looks like user space expects to get the notifications in the or=
+der
+> >>>>> of either growing or falling temperatures, depending on the directi=
+on
+> >>>>> of the temperature change.  Ordering the trips in the kernel is not
+> >>>>> practical, but the notifications can be ordered in principle.  Is t=
+his
+> >>>>> what you'd like to do?
+> >>>>
+> >>>> Yes
+> >>>>
+> >>>>> Or can user space be bothered with recognizing that it may get the
+> >>>>> notifications for different trips out of order?
+> >>>>
+> >>>> IMO it is a bad information if the trip points events are coming
+> >>>> unordered. The temperature signal is a time related measurements, the
+> >>>> userspace should receive thermal information from this signal in the
+> >>>> right order. It sounds strange to track the temperature signal in the
+> >>>> kernel, then scramble the information, pass it to the userspace and
+> >>>> except it to apply some kind of logic to unscramble it.
+> >>>
+> >>> So the notifications can be ordered before sending them out, as long
+> >>> as they are produced by a single __thermal_zone_device_update() call.
+> >>>
+> >>> I guess you also would like the thermal_debug_tz_trip_up/down() calls
+> >>> to be ordered, wouldn't you?
+> >>
+> >> Right
+> >=20
+> > I have an idea how to do this, but it is based on a couple of patches
+> > that I've been working on in the meantime.
+> >=20
+> > Let me post these patches first and then I'll send a prototype patch
+> > addressing this on top of them.
+>=20
+> That is awesome, thanks !
 
-Move the definitions of struct thermal_trip_desc and struct
-thermal_zone_device to an internal header file in the thermal core,
-as they don't need to be accessible to any code other than the thermal
-core and so they don't need to be present in a global header.
+Anytime!
 
-No intentional function impact.
+Now that I've posted this series:
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/thermal_core.h  |   85 +++++++++++++++++++++++++++++++++++++++
- drivers/thermal/thermal_trace.h |    2 
- include/linux/thermal.h         |   87 ----------------------------------------
- 3 files changed, 89 insertions(+), 85 deletions(-)
+https://lore.kernel.org/linux-pm/4558384.LvFx2qVVIh@kreacher/
 
-Index: linux-pm/drivers/thermal/thermal_core.h
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_core.h
-+++ linux-pm/drivers/thermal/thermal_core.h
-@@ -15,6 +15,91 @@
- #include "thermal_netlink.h"
- #include "thermal_debugfs.h"
- 
-+struct thermal_trip_desc {
-+	struct thermal_trip trip;
-+	int threshold;
-+};
-+
-+/**
-+ * struct thermal_zone_device - structure for a thermal zone
-+ * @id:		unique id number for each thermal zone
-+ * @type:	the thermal zone device type
-+ * @device:	&struct device for this thermal zone
-+ * @removal:	removal completion
-+ * @trip_temp_attrs:	attributes for trip points for sysfs: trip temperature
-+ * @trip_type_attrs:	attributes for trip points for sysfs: trip type
-+ * @trip_hyst_attrs:	attributes for trip points for sysfs: trip hysteresis
-+ * @mode:		current mode of this thermal zone
-+ * @devdata:	private pointer for device private data
-+ * @num_trips:	number of trip points the thermal zone supports
-+ * @passive_delay_jiffies: number of jiffies to wait between polls when
-+ *			performing passive cooling.
-+ * @polling_delay_jiffies: number of jiffies to wait between polls when
-+ *			checking whether trip points have been crossed (0 for
-+ *			interrupt driven systems)
-+ * @temperature:	current temperature.  This is only for core code,
-+ *			drivers should use thermal_zone_get_temp() to get the
-+ *			current temperature
-+ * @last_temperature:	previous temperature read
-+ * @emul_temperature:	emulated temperature when using CONFIG_THERMAL_EMULATION
-+ * @passive:		1 if you've crossed a passive trip point, 0 otherwise.
-+ * @prev_low_trip:	the low current temperature if you've crossed a passive
-+			trip point.
-+ * @prev_high_trip:	the above current temperature if you've crossed a
-+			passive trip point.
-+ * @need_update:	if equals 1, thermal_zone_device_update needs to be invoked.
-+ * @ops:	operations this &thermal_zone_device supports
-+ * @tzp:	thermal zone parameters
-+ * @governor:	pointer to the governor for this thermal zone
-+ * @governor_data:	private pointer for governor data
-+ * @thermal_instances:	list of &struct thermal_instance of this thermal zone
-+ * @ida:	&struct ida to generate unique id for this zone's cooling
-+ *		devices
-+ * @lock:	lock to protect thermal_instances list
-+ * @node:	node in thermal_tz_list (in thermal_core.c)
-+ * @poll_queue:	delayed work for polling
-+ * @notify_event: Last notification event
-+ * @suspended: thermal zone suspend indicator
-+ * @trips:	array of struct thermal_trip objects
-+ */
-+struct thermal_zone_device {
-+	int id;
-+	char type[THERMAL_NAME_LENGTH];
-+	struct device device;
-+	struct completion removal;
-+	struct attribute_group trips_attribute_group;
-+	struct thermal_attr *trip_temp_attrs;
-+	struct thermal_attr *trip_type_attrs;
-+	struct thermal_attr *trip_hyst_attrs;
-+	enum thermal_device_mode mode;
-+	void *devdata;
-+	int num_trips;
-+	unsigned long passive_delay_jiffies;
-+	unsigned long polling_delay_jiffies;
-+	int temperature;
-+	int last_temperature;
-+	int emul_temperature;
-+	int passive;
-+	int prev_low_trip;
-+	int prev_high_trip;
-+	atomic_t need_update;
-+	struct thermal_zone_device_ops ops;
-+	struct thermal_zone_params *tzp;
-+	struct thermal_governor *governor;
-+	void *governor_data;
-+	struct list_head thermal_instances;
-+	struct ida ida;
-+	struct mutex lock;
-+	struct list_head node;
-+	struct delayed_work poll_queue;
-+	enum thermal_notify_event notify_event;
-+	bool suspended;
-+#ifdef CONFIG_THERMAL_DEBUGFS
-+	struct thermal_debugfs *debugfs;
-+#endif
-+	struct thermal_trip_desc trips[] __counted_by(num_trips);
-+};
-+
- /* Default Thermal Governor */
- #if defined(CONFIG_THERMAL_DEFAULT_GOV_STEP_WISE)
- #define DEFAULT_THERMAL_GOVERNOR       "step_wise"
-Index: linux-pm/include/linux/thermal.h
-===================================================================
---- linux-pm.orig/include/linux/thermal.h
-+++ linux-pm/include/linux/thermal.h
-@@ -73,17 +73,14 @@ struct thermal_trip {
- 	void *priv;
- };
- 
--struct thermal_trip_desc {
--	struct thermal_trip trip;
--	int threshold;
--};
--
- #define THERMAL_TRIP_FLAG_RW_TEMP	BIT(0)
- #define THERMAL_TRIP_FLAG_RW_HYST	BIT(1)
- 
- #define THERMAL_TRIP_FLAG_RW	(THERMAL_TRIP_FLAG_RW_TEMP | \
- 				 THERMAL_TRIP_FLAG_RW_HYST)
- 
-+struct thermal_zone_device;
-+
- struct thermal_zone_device_ops {
- 	int (*bind) (struct thermal_zone_device *,
- 		     struct thermal_cooling_device *);
-@@ -130,86 +127,6 @@ struct thermal_cooling_device {
- };
- 
- /**
-- * struct thermal_zone_device - structure for a thermal zone
-- * @id:		unique id number for each thermal zone
-- * @type:	the thermal zone device type
-- * @device:	&struct device for this thermal zone
-- * @removal:	removal completion
-- * @trip_temp_attrs:	attributes for trip points for sysfs: trip temperature
-- * @trip_type_attrs:	attributes for trip points for sysfs: trip type
-- * @trip_hyst_attrs:	attributes for trip points for sysfs: trip hysteresis
-- * @mode:		current mode of this thermal zone
-- * @devdata:	private pointer for device private data
-- * @num_trips:	number of trip points the thermal zone supports
-- * @passive_delay_jiffies: number of jiffies to wait between polls when
-- *			performing passive cooling.
-- * @polling_delay_jiffies: number of jiffies to wait between polls when
-- *			checking whether trip points have been crossed (0 for
-- *			interrupt driven systems)
-- * @temperature:	current temperature.  This is only for core code,
-- *			drivers should use thermal_zone_get_temp() to get the
-- *			current temperature
-- * @last_temperature:	previous temperature read
-- * @emul_temperature:	emulated temperature when using CONFIG_THERMAL_EMULATION
-- * @passive:		1 if you've crossed a passive trip point, 0 otherwise.
-- * @prev_low_trip:	the low current temperature if you've crossed a passive
--			trip point.
-- * @prev_high_trip:	the above current temperature if you've crossed a
--			passive trip point.
-- * @need_update:	if equals 1, thermal_zone_device_update needs to be invoked.
-- * @ops:	operations this &thermal_zone_device supports
-- * @tzp:	thermal zone parameters
-- * @governor:	pointer to the governor for this thermal zone
-- * @governor_data:	private pointer for governor data
-- * @thermal_instances:	list of &struct thermal_instance of this thermal zone
-- * @ida:	&struct ida to generate unique id for this zone's cooling
-- *		devices
-- * @lock:	lock to protect thermal_instances list
-- * @node:	node in thermal_tz_list (in thermal_core.c)
-- * @poll_queue:	delayed work for polling
-- * @notify_event: Last notification event
-- * @suspended: thermal zone suspend indicator
-- * @trips:	array of struct thermal_trip objects
-- */
--struct thermal_zone_device {
--	int id;
--	char type[THERMAL_NAME_LENGTH];
--	struct device device;
--	struct completion removal;
--	struct attribute_group trips_attribute_group;
--	struct thermal_attr *trip_temp_attrs;
--	struct thermal_attr *trip_type_attrs;
--	struct thermal_attr *trip_hyst_attrs;
--	enum thermal_device_mode mode;
--	void *devdata;
--	int num_trips;
--	unsigned long passive_delay_jiffies;
--	unsigned long polling_delay_jiffies;
--	int temperature;
--	int last_temperature;
--	int emul_temperature;
--	int passive;
--	int prev_low_trip;
--	int prev_high_trip;
--	atomic_t need_update;
--	struct thermal_zone_device_ops ops;
--	struct thermal_zone_params *tzp;
--	struct thermal_governor *governor;
--	void *governor_data;
--	struct list_head thermal_instances;
--	struct ida ida;
--	struct mutex lock;
--	struct list_head node;
--	struct delayed_work poll_queue;
--	enum thermal_notify_event notify_event;
--	bool suspended;
--#ifdef CONFIG_THERMAL_DEBUGFS
--	struct thermal_debugfs *debugfs;
--#endif
--	struct thermal_trip_desc trips[] __counted_by(num_trips);
--};
--
--/**
-  * struct thermal_governor - structure that holds thermal governor information
-  * @name:	name of the governor
-  * @bind_to_tz: callback called when binding to a thermal zone.  If it
-Index: linux-pm/drivers/thermal/thermal_trace.h
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_trace.h
-+++ linux-pm/drivers/thermal/thermal_trace.h
-@@ -9,6 +9,8 @@
+I can append the patch below that is based on it.
+
+The idea is really straightforward: Instead of sending the notifications
+and recording the stats right away, create two lists of trips for which
+they need to be send, sort them and then send the notifications etc in
+the right order.  I want to avoid explicit memory allocations that can
+fail in principle, which is why lists are used.
+
+The reason why two lists are used is in case the trips are updated and
+that's why they appear to be crossed (which may not depend on the actual
+temperature change).
+
+One caveat is that the lists are sorted by trip thresholds (because they
+are the real values take into account in the code), but user space may
+expect them to be sorted by trip temperatures instead.  That can be changed.
+
+=2D--
+ drivers/thermal/thermal_core.c |   39 +++++++++++++++++++++++++++++++++---=
+=2D--
+ drivers/thermal/thermal_core.h |    1 +
+ 2 files changed, 34 insertions(+), 6 deletions(-)
+
+Index: linux-pm/drivers/thermal/thermal_core.c
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=2D-- linux-pm.orig/drivers/thermal/thermal_core.c
++++ linux-pm/drivers/thermal/thermal_core.c
+@@ -15,6 +15,7 @@
+ #include <linux/slab.h>
+ #include <linux/kdev_t.h>
+ #include <linux/idr.h>
++#include <linux/list_sort.h>
  #include <linux/thermal.h>
- #include <linux/tracepoint.h>
- 
-+#include "thermal_core.h"
+ #include <linux/reboot.h>
+ #include <linux/string.h>
+@@ -361,7 +362,9 @@ static void handle_critical_trips(struct
+ }
+=20
+ static void handle_thermal_trip(struct thermal_zone_device *tz,
+=2D				struct thermal_trip_desc *td)
++				struct thermal_trip_desc *td,
++				struct list_head *way_up_list,
++				struct list_head *way_down_list)
+ {
+ 	const struct thermal_trip *trip =3D &td->trip;
+=20
+@@ -382,8 +385,7 @@ static void handle_thermal_trip(struct t
+ 		 * the threshold and the trip temperature will be equal.
+ 		 */
+ 		if (tz->temperature >=3D trip->temperature) {
+=2D			thermal_notify_tz_trip_up(tz, trip);
+=2D			thermal_debug_tz_trip_up(tz, trip);
++			list_add_tail(&td->notify_list_node, way_up_list);
+ 			td->threshold =3D trip->temperature - trip->hysteresis;
+ 		} else {
+ 			td->threshold =3D trip->temperature;
+@@ -400,8 +402,7 @@ static void handle_thermal_trip(struct t
+ 		 * the trip.
+ 		 */
+ 		if (tz->temperature < trip->temperature - trip->hysteresis) {
+=2D			thermal_notify_tz_trip_down(tz, trip);
+=2D			thermal_debug_tz_trip_down(tz, trip);
++			list_add(&td->notify_list_node, way_down_list);
+ 			td->threshold =3D trip->temperature;
+ 		} else {
+ 			td->threshold =3D trip->temperature - trip->hysteresis;
+@@ -457,10 +458,24 @@ static void thermal_zone_device_init(str
+ 		pos->initialized =3D false;
+ }
+=20
++static int thermal_trip_notify_cmp(void *ascending, const struct list_head=
+ *a,
++				   const struct list_head *b)
++{
++	struct thermal_trip_desc *tda =3D container_of(a, struct thermal_trip_des=
+c,
++						     notify_list_node);
++	struct thermal_trip_desc *tdb =3D container_of(b, struct thermal_trip_des=
+c,
++						     notify_list_node);
++	int ret =3D tdb->threshold - tda->threshold;
 +
- TRACE_DEFINE_ENUM(THERMAL_TRIP_CRITICAL);
- TRACE_DEFINE_ENUM(THERMAL_TRIP_HOT);
- TRACE_DEFINE_ENUM(THERMAL_TRIP_PASSIVE);
++	return ascending ? ret : -ret;
++}
++
+ void __thermal_zone_device_update(struct thermal_zone_device *tz,
+ 				  enum thermal_notify_event event)
+ {
+ 	struct thermal_trip_desc *td;
++	LIST_HEAD(way_down_list);
++	LIST_HEAD(way_up_list);
+=20
+ 	if (tz->suspended)
+ 		return;
+@@ -475,7 +490,19 @@ void __thermal_zone_device_update(struct
+ 	tz->notify_event =3D event;
+=20
+ 	for_each_trip_desc(tz, td)
+=2D		handle_thermal_trip(tz, td);
++		handle_thermal_trip(tz, td, &way_up_list, &way_down_list);
++
++	list_sort((void *)true, &way_up_list, thermal_trip_notify_cmp);
++	list_for_each_entry(td, &way_up_list, notify_list_node) {
++		thermal_notify_tz_trip_up(tz, &td->trip);
++		thermal_debug_tz_trip_up(tz, &td->trip);
++	}
++
++	list_sort(NULL, &way_down_list, thermal_trip_notify_cmp);
++	list_for_each_entry(td, &way_down_list, notify_list_node) {
++		thermal_notify_tz_trip_down(tz, &td->trip);
++		thermal_debug_tz_trip_down(tz, &td->trip);
++	}
+=20
+ 	monitor_thermal_zone(tz);
+ }
+Index: linux-pm/drivers/thermal/thermal_core.h
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=2D-- linux-pm.orig/drivers/thermal/thermal_core.h
++++ linux-pm/drivers/thermal/thermal_core.h
+@@ -17,6 +17,7 @@
+=20
+ struct thermal_trip_desc {
+ 	struct thermal_trip trip;
++	struct list_head notify_list_node;
+ 	int threshold;
+ };
+=20
 
 
 
