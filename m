@@ -1,281 +1,132 @@
-Return-Path: <linux-pm+bounces-4742-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4743-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9125873A02
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 16:00:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A66FB873AEF
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 16:41:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 18E361C20985
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 15:00:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 60F52281209
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 15:41:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F356113443C;
-	Wed,  6 Mar 2024 15:00:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="ChN9PY7S"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A469A1353F5;
+	Wed,  6 Mar 2024 15:41:29 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D91013442A
-	for <linux-pm@vger.kernel.org>; Wed,  6 Mar 2024 15:00:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16EC81350DE;
+	Wed,  6 Mar 2024 15:41:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709737226; cv=none; b=IWJ2TBoAIL8S/L7jgB9S0/gc0eOL8wQ2omT33SgNjJn/MO04VAPlOad6/G39NLTBTyPImDhTEObGvORTUY/BWUFwjL/ocSAhbzTscg2Ax9SBSYesDKTXdXwMkxhj39OdDmwQKGlGPj3jQISuu+4XStV+Q+WMOXZEhW3aGkbHdLM=
+	t=1709739689; cv=none; b=V2FFgpFb3EamQR94p0aIZsEyx+LWSRJJy7WZ/BjmvEuAHidpzKKu5izv182RB7wxx5suQNLP1oIOhZ930irKHHqiagN1V1P4fQf9umzXaht7dNUlcQiatGLlS67g1lp3XUIdJRHyu6Cxv7SsBOCu+c82yAB4ONjtbWwCo2TgWbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709737226; c=relaxed/simple;
-	bh=TUGQ4gPbF0KXPGsqGWfvnJ5L+GYoxxQAI4VF7MHBnKw=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=ijFqnGcXaquooFAcATGiGS11Pz26ZNjKFyyy6H9gnTjIEJYh3PwA7RTm1ehmwlLTDsmnQLxBh/nwRU77iL5F0XOVNFSTwNqXqTlJwVjEW5qRAiEOvvF6yIefVgq5wZ74hUAQsldG6dxKmC2mel4yzmpCLEnbqq62f9tz8nPrYpo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=ChN9PY7S; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-5dbcfa0eb5dso6398091a12.3
-        for <linux-pm@vger.kernel.org>; Wed, 06 Mar 2024 07:00:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1709737224; x=1710342024; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y71OVdkIze1FX79HKIiba0z9GCviagtoytFb7K2n3y0=;
-        b=ChN9PY7SbpJlAA1Dv5Wo+gBpw44ey3bvH99vPQjuq4eDEgPmddggbmvBy2gYIA6bwg
-         Zubqm3NbqDkiPQK4dqyze7d9eUZ5XwGmR8uimPc6BGHDm+Kr/+JFqUdnsF8dnZD2ri5N
-         3/BLiqzm01yBeugpH1NVOuRYrzm83bm1XpfTy6H63+mBkEX7BHaldBH2urRhNiFVB8MF
-         iVrDR7TTyYB09HsBhszYt5uGHkQ2qu9p6VedcUbCEne2blqTaNcViIfLjpC6uUc8wKfe
-         eheoRSLkaGks+Gab8RQ4Jlb6wPpbZNMyRhySP4squWZavSIi4Tt9FgLERaJzo+AZvvAk
-         Ghbw==
+	s=arc-20240116; t=1709739689; c=relaxed/simple;
+	bh=Y7msQX6hlYEAcec3lwddke08WECZzCMsCX5OZt0uRMk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=L5ATDBCZgELWOCtPwf/5eDbvDc71bhKSolAQTQQ+Ta1fzR/yrR6TXfJZc+3/KeRO2+AJNPIU1X12jtJAk6IYWIJ8EiaZvcMIwLKjQwpDFeWR4ZAuqj2u02cCT/7t1YTnxKPJBEB9mCpDfjje1W3Z4Vs1vN7TgxT2XHonK18ADQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-220ce420472so1342646fac.1;
+        Wed, 06 Mar 2024 07:41:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709737224; x=1710342024;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y71OVdkIze1FX79HKIiba0z9GCviagtoytFb7K2n3y0=;
-        b=h2zd9jK8D2HJLoyTE43SJAs6oZWkuAe6wNxr4yeTpJ/cj4oRxKiu6J0xkfGqNNsYcS
-         XG/4zvzlguWGDnRlcfCdnwk+qTihDiE9zV+ntHAt/vYxQ652AYIDz+eFF69oiF1Yg6i5
-         zpvyGx/FsxosZ2agI3vNSca3SNrw1oQNw31EzsyeArMz0IrLX2hchgpFx8nQ0OP6Ss2J
-         a6gBxOY+R20/TRPxyvf/gySw3EGc1K6mqNAdyuTibYNEyXMVeA/3cE+atRl0OU5lT1Pl
-         4M+hJpg33zcTZlNOkd6kzfIb2eBV8/7gloj3C0MZdI2Oof2C4l2jksg+UrmR0cIt+xBR
-         sjXA==
-X-Forwarded-Encrypted: i=1; AJvYcCVs1pPedL6sKccxlLWvvj44J5hO0eObGAmhmpFSwMuqTOipC675E8YIOnzvpS9zVJxvNr2fQ9OQBPLbwPKP2JIeppKC6lVpSLc=
-X-Gm-Message-State: AOJu0YwLmg6PnZyKGQ3WgxdJDt9LvCMpGEpceaOA/CRvaVoun37UswRm
-	X0ZRqlMgEdCNK5njSDv3lsG8zJ39+M8IB2n62lAWC2IEbBecz1jcUVjlktNa8LM=
-X-Google-Smtp-Source: AGHT+IGW6gPv9qmLoZ+/9am/Utg1YTMNPHqMro41mg8hEnVqlWPJE4VPZW5dow7Qth8VY602HkBSEg==
-X-Received: by 2002:a17:90a:9a98:b0:29a:6cf0:57a3 with SMTP id e24-20020a17090a9a9800b0029a6cf057a3mr12141547pjp.8.1709737223210;
-        Wed, 06 Mar 2024 07:00:23 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id sk6-20020a17090b2dc600b0029abe1c3f26sm13960613pjb.1.2024.03.06.07.00.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Mar 2024 07:00:22 -0800 (PST)
-Message-ID: <65e88506.170a0220.52e36.9472@mx.google.com>
-Date: Wed, 06 Mar 2024 07:00:22 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        d=1e100.net; s=20230601; t=1709739687; x=1710344487;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=F78bIbT0P37zvvyz4bkiHFYqGTllW22ypORx2SaQJ08=;
+        b=UyRnSiGnjgTU8k5S0PMbO1X7XCXFTNe3BHnJzOEi2JQbraIQ/TDuW+7a3udysvy7Xl
+         FM+RbTe5IoDHNH8QnGXMCxdS80+ZpogBc1XlGvk6wQ4dEgu27IR0ddPmJ2N8ouguVRXC
+         BtcXLCozoe5fbMv8WOeonoyt7HKNo70EfB1atXiv9ynrCApr0FnsC/Ta3DU7bilssPCe
+         9Qo7pEqeXIKlFEMhAWvg5Wp9h99G+MielNXgDxDN4wSbRReYBMc34Jj3p9sLXiTLj0je
+         MYGVj3KNyRJd/5Tb5+q9CQvDciEx5lJr3BTw9Gk87qAGiephErr9+JizPK8FA8JwB++z
+         wEYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVe/6aNLvgiSnot/CRQESyraExU4VPt3FtbRSR/mCHEDCpLvkLaIN1BUcxPeNtgxzLwTeVZl+ZAlc/soksmDLQoa7Mkt3DnIK68hdzEjabEV9zt/h0zd37bQnnI5zdUUdqKBl9eK28=
+X-Gm-Message-State: AOJu0Ywkei9dNQJqc9Yop7YmzKMwKeZzai37K1fHKcDSfeE80yCsMC2q
+	yt/9kKmbxPlyNDgIRT+aLlogzyL0b8DG8ciJQ8IfR9m+97xjBpuPOVd4HeQ97xAbJ1/txZg2MSR
+	qjaZ0zNiosI7/6a+GdHfOcqaoElE=
+X-Google-Smtp-Source: AGHT+IFmX+FQzpiDkvtWMX+QyHRjkNUKTg7pvgNraTk/YCQSp6p6U0VDsiDoRLbacWLsDzNW6Z0MGbrQGOSywv4RJ6U=
+X-Received: by 2002:a05:6871:60a:b0:221:16e3:8f22 with SMTP id
+ w10-20020a056871060a00b0022116e38f22mr3798613oan.5.1709739687157; Wed, 06 Mar
+ 2024 07:41:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240306085428.88011-1-daniel.lezcano@linaro.org>
+ <CAJZ5v0jAn2F-GH=fguX0+3bG38vyAxfufadtFiBUfg=EjTBh6Q@mail.gmail.com>
+ <14651d5b-0f67-4bff-b699-2cd1601b4fb2@linaro.org> <CAJZ5v0j6At1DuQYjjbA-fw9Z-jJPhXSVSz=_uLa3KfNMJowYbA@mail.gmail.com>
+ <0e7f32aa-b2c3-43d0-8ebe-7118cb6e0edf@linaro.org>
+In-Reply-To: <0e7f32aa-b2c3-43d0-8ebe-7118cb6e0edf@linaro.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 6 Mar 2024 16:41:15 +0100
+Message-ID: <CAJZ5v0gWhNqTGpoOH01scCdC51cEnt_8_T5ccqZC6yXPDv9QcA@mail.gmail.com>
+Subject: Re: [RFC PATCH] thermal/core: Fix trip point crossing events ordering
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, rjw@rjwysocki.net, linux-kernel@vger.kernel.org, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
+	"open list:THERMAL" <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v6.8-rc7-157-g6959ac1fa147
-X-Kernelci-Report-Type: test
-Subject: pm/testing baseline: 32 runs,
- 7 regressions (v6.8-rc7-157-g6959ac1fa147)
-To: rafael@kernel.org, linux-pm@vger.kernel.org,
- kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
 
-pm/testing baseline: 32 runs, 7 regressions (v6.8-rc7-157-g6959ac1fa147)
+On Wed, Mar 6, 2024 at 2:16=E2=80=AFPM Daniel Lezcano <daniel.lezcano@linar=
+o.org> wrote:
+>
+> On 06/03/2024 13:53, Rafael J. Wysocki wrote:
+> > On Wed, Mar 6, 2024 at 1:43=E2=80=AFPM Daniel Lezcano <daniel.lezcano@l=
+inaro.org> wrote:
+> >>
+> >> On 06/03/2024 13:02, Rafael J. Wysocki wrote:
+> >>
+> >> [ ... ]
+> >>
+> >>>> +#define for_each_trip_reverse(__tz, __trip)    \
+> >>>> +       for (__trip =3D &__tz->trips[__tz->num_trips - 1]; __trip >=
+=3D __tz->trips ; __trip--)
+> >>>> +
+> >>>>    void __thermal_zone_set_trips(struct thermal_zone_device *tz);
+> >>>>    int thermal_zone_trip_id(const struct thermal_zone_device *tz,
+> >>>>                            const struct thermal_trip *trip);
+> >>>> --
+> >>>
+> >>> Generally speaking, this is a matter of getting alignment on the
+> >>> expectations between the kernel and user space.
+> >>>
+> >>> It looks like user space expects to get the notifications in the orde=
+r
+> >>> of either growing or falling temperatures, depending on the direction
+> >>> of the temperature change.  Ordering the trips in the kernel is not
+> >>> practical, but the notifications can be ordered in principle.  Is thi=
+s
+> >>> what you'd like to do?
+> >>
+> >> Yes
+> >>
+> >>> Or can user space be bothered with recognizing that it may get the
+> >>> notifications for different trips out of order?
+> >>
+> >> IMO it is a bad information if the trip points events are coming
+> >> unordered. The temperature signal is a time related measurements, the
+> >> userspace should receive thermal information from this signal in the
+> >> right order. It sounds strange to track the temperature signal in the
+> >> kernel, then scramble the information, pass it to the userspace and
+> >> except it to apply some kind of logic to unscramble it.
+> >
+> > So the notifications can be ordered before sending them out, as long
+> > as they are produced by a single __thermal_zone_device_update() call.
+> >
+> > I guess you also would like the thermal_debug_tz_trip_up/down() calls
+> > to be ordered, wouldn't you?
+>
+> Right
 
-Regressions Summary
--------------------
+I have an idea how to do this, but it is based on a couple of patches
+that I've been working on in the meantime.
 
-platform               | arch  | lab         | compiler | defconfig | regre=
-ssions
------------------------+-------+-------------+----------+-----------+------=
-------
-kontron-kbox-a-230-ls  | arm64 | lab-kontron | gcc-10   | defconfig | 5    =
-      =
-
-kontron-sl28-var3-ads2 | arm64 | lab-kontron | gcc-10   | defconfig | 2    =
-      =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.8-rc7=
--157-g6959ac1fa147/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v6.8-rc7-157-g6959ac1fa147
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      6959ac1fa14728d2428e11fb2bf8125f131fe7b3 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform               | arch  | lab         | compiler | defconfig | regre=
-ssions
------------------------+-------+-------------+----------+-----------+------=
-------
-kontron-kbox-a-230-ls  | arm64 | lab-kontron | gcc-10   | defconfig | 5    =
-      =
-
-
-  Details:     https://kernelci.org/test/plan/id/65e87939c58c6c58504c42de
-
-  Results:     90 PASS, 5 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.8-rc7-157-g6959a=
-c1fa147/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.t=
-xt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.8-rc7-157-g6959a=
-c1fa147/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.h=
-tml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/65e87939c58c6c58504c42e5
-        failing since 42 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
-4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
-
-    2024-03-06T14:09:47.172436  / # #
-    2024-03-06T14:09:47.274735  export SHELL=3D/bin/sh
-    2024-03-06T14:09:47.275493  #
-    2024-03-06T14:09:47.377029  / # export SHELL=3D/bin/sh. /lava-439483/en=
-vironment
-    2024-03-06T14:09:47.377792  =
-
-    2024-03-06T14:09:47.479278  / # . /lava-439483/environment/lava-439483/=
-bin/lava-test-runner /lava-439483/1
-    2024-03-06T14:09:47.480484  =
-
-    2024-03-06T14:09:47.498866  / # /lava-439483/bin/lava-test-runner /lava=
--439483/1
-    2024-03-06T14:09:47.543108  + export 'TESTRUN_ID=3D1_bootrr'
-    2024-03-06T14:09:47.543557  + <8>[   20.720486] <LAVA_SIGNAL_STARTRUN 1=
-_bootrr 439483_1.5.2.4.5> =
-
-    ... (16 line(s) more)  =
-
-
-  * baseline.bootrr.fsl_enetc-enetc2-probed: https://kernelci.org/test/case=
-/id/65e87939c58c6c58504c42e9
-        failing since 42 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
-4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
-
-    2024-03-06T14:09:49.649382  /lava-439483/1/../bin/lava-test-case
-    2024-03-06T14:09:49.649814  <8>[   22.827800] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dfsl_enetc-enetc2-probed RESULT=3Dfail>
-    2024-03-06T14:09:49.650148  /lava-439483/1/../bin/lava-test-case   =
-
-
-  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/65=
-e87939c58c6c58504c42eb
-        failing since 42 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
-4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
-
-    2024-03-06T14:09:50.710213  /lava-439483/1/../bin/lava-test-case
-    2024-03-06T14:09:50.710662  <8>[   23.868182] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>
-    2024-03-06T14:09:50.710935  /lava-439483/1/../bin/lava-test-case
-    2024-03-06T14:09:50.711156  <8>[   23.884919] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dleds-gpio-driver-present RESULT=3Dpass>   =
-
-
-  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
-/id/65e87939c58c6c58504c42f0
-        failing since 42 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
-4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
-
-    2024-03-06T14:09:51.788996  /lava-439483/1/../bin/lava-test-case   =
-
-
-  * baseline.bootrr.fsl_enetc-enetc1-probed: https://kernelci.org/test/case=
-/id/65e87939c58c6c58504c42f1
-        failing since 42 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
-4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
-
-    2024-03-06T14:09:51.792338  <8>[   24.984744] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>
-    2024-03-06T14:09:52.850476  /lava-439483/1/../bin/lava-test-case
-    2024-03-06T14:09:52.850976  <8>[   26.006482] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dfsl_enetc-enetc1-probed RESULT=3Dfail>
-    2024-03-06T14:09:52.851321  /lava-439483/1/../bin/lava-test-case   =
-
- =
-
-
-
-platform               | arch  | lab         | compiler | defconfig | regre=
-ssions
------------------------+-------+-------------+----------+-----------+------=
-------
-kontron-sl28-var3-ads2 | arm64 | lab-kontron | gcc-10   | defconfig | 2    =
-      =
-
-
-  Details:     https://kernelci.org/test/plan/id/65e87926f17899fc3d4c43c4
-
-  Results:     101 PASS, 2 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.8-rc7-157-g6959a=
-c1fa147/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-sl28-var3-ads2.=
-txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.8-rc7-157-g6959a=
-c1fa147/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-sl28-var3-ads2.=
-html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/65e87926f17899fc3d4c43cb
-        failing since 42 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
-4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
-
-    2024-03-06T14:09:15.534868  / # #
-    2024-03-06T14:09:15.636621  export SHELL=3D/bin/sh
-    2024-03-06T14:09:15.637234  #
-    2024-03-06T14:09:15.738425  / # export SHELL=3D/bin/sh. /lava-439486/en=
-vironment
-    2024-03-06T14:09:15.738745  =
-
-    2024-03-06T14:09:15.839631  / # . /lava-439486/environment/lava-439486/=
-bin/lava-test-runner /lava-439486/1
-    2024-03-06T14:09:15.840164  =
-
-    2024-03-06T14:09:15.846534  / # /lava-439486/bin/lava-test-runner /lava=
--439486/1
-    2024-03-06T14:09:15.912610  + export 'TESTRUN_ID=3D1_bootrr'
-    2024-03-06T14:09:15.912803  + <8>[   21.093421] <LAVA_SIGNAL_STARTRUN 1=
-_bootrr 439486_1.5.2.4.5> =
-
-    ... (11 line(s) more)  =
-
-
-  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
-/id/65e87926f17899fc3d4c43de
-        failing since 42 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
-4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
-
-    2024-03-06T14:09:18.339911  /lava-439486/1/../bin/lava-test-case
-    2024-03-06T14:09:18.340344  <8>[   23.511411] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>
-    2024-03-06T14:09:18.340671  /lava-439486/1/../bin/lava-test-case   =
-
- =20
+Let me post these patches first and then I'll send a prototype patch
+addressing this on top of them.
 
