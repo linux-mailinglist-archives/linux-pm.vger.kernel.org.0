@@ -1,158 +1,103 @@
-Return-Path: <linux-pm+bounces-4728-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4729-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D8778734CB
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 11:49:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FF3F873516
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 11:57:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F63D1C21324
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 10:49:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF3CB283CE6
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 10:57:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEE3C605B7;
-	Wed,  6 Mar 2024 10:49:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ADC1768FB;
+	Wed,  6 Mar 2024 10:56:17 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01C4E5FBB7;
-	Wed,  6 Mar 2024 10:49:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from andre.telenet-ops.be (andre.telenet-ops.be [195.130.132.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E3C5779F3
+	for <linux-pm@vger.kernel.org>; Wed,  6 Mar 2024 10:56:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709722170; cv=none; b=EaWyxRva73VOV1mq4GLWX3kl3jnE5rD1zi/g7mTHmfsX6xSKPi52r98n9dD79sVSmNGQlNHfJA3yZirwjOMGuAHZeAWiHBdUV73dzurd/f4zbz3ce7vRXF8xI2xXvnOu62GAtn7EAHX6AxjVbMeZjhFpA+hc0Ng2Bt2ZE7xq+eE=
+	t=1709722577; cv=none; b=HOL+4HbrrxxijnTViVLiqP2TAS1Kx8kzfW1OQm3NPmc7tJMpEw53Y08hCzGSNVNKqPbRlcnBiuxVhTRXrSSnVm1f+zboJ69aJBRJ5lrFN0hqKIPiHBJ1MMz3dF4b/pw+eCHbu2+N+796scnFNdjJNsW0F7b40bQA0T1p2s0f9Os=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709722170; c=relaxed/simple;
-	bh=tQdJcE5Yp1cHqnDbMCItQBYZ7I5dYkfnQ07VTUZueJY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jisGl+eoKIZlrYCP2FJ26+lBLK1yyC5WDueUvxS9TaYwtFM798dMBRZ4bSZ0jXt6SYCdMIFAqXtWNbk3V6Y2zEK0ZRNFuZ/BIz6+RCZxDduabLO++sb2NO/GO8A+GX0hz8KSX20rridCZh/tN/waUyB42puJSXNt/sp/hfLgIRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 34CE31FB;
-	Wed,  6 Mar 2024 02:50:05 -0800 (PST)
-Received: from [10.57.95.153] (unknown [10.57.95.153])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 56E5F3F738;
-	Wed,  6 Mar 2024 02:49:24 -0800 (PST)
-Message-ID: <2784c093-eea1-4b73-87da-1a45f14013c8@arm.com>
-Date: Wed, 6 Mar 2024 10:49:22 +0000
+	s=arc-20240116; t=1709722577; c=relaxed/simple;
+	bh=R3erhEeRIRNulXdqkQaA5cMsANU952jlAheSgP10iDs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Zq6zIeFzIehlSeThWTLfUdl0mYRur1XXQzq5wLBx4gYK9YNUutu3Hh4/ktYUvDMAtobpz1Bo6ciq/h7K4DLIIUSQxVOPb0PL9RQlOOFLiv3xFpKTLFrSw560Q7fQRQI0S+KO1JCTqdcegT0O+FhrU8sl3KyUJDHRj3+1UYfJGxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([84.195.187.55])
+	by andre.telenet-ops.be with bizsmtp
+	id vNw42B00M1C8whw01Nw4GA; Wed, 06 Mar 2024 11:56:06 +0100
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1rhowB-002Y8j-1k;
+	Wed, 06 Mar 2024 11:56:04 +0100
+Received: from geert by rox.of.borg with local (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1rhowO-00EMJd-7X;
+	Wed, 06 Mar 2024 11:56:04 +0100
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: linux-renesas-soc@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH 0/2] thermal/drivers/rcar_gen3: Add support for R-Car V4M
+Date: Wed,  6 Mar 2024 11:56:01 +0100
+Message-Id: <cover.1709722342.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 0/2] Introduce per-task io utilization boost
-To: Bart Van Assche <bvanassche@acm.org>, linux-kernel@vger.kernel.org
-Cc: peterz@infradead.org, juri.lelli@redhat.com, mingo@redhat.com,
- rafael@kernel.org, dietmar.eggemann@arm.com, vschneid@redhat.com,
- vincent.guittot@linaro.org, Johannes.Thumshirn@wdc.com,
- adrian.hunter@intel.com, ulf.hansson@linaro.org, andres@anarazel.de,
- asml.silence@gmail.com, linux-pm@vger.kernel.org,
- linux-block@vger.kernel.org, io-uring@vger.kernel.org,
- Qais Yousef <qyousef@layalina.io>
-References: <20240304201625.100619-1-christian.loehle@arm.com>
- <86f0af00-8765-4481-9245-1819fb2c6379@acm.org>
- <0dc6a839-2922-40ac-8854-2884196da9b9@arm.com>
- <c5b7fc1f-f233-4d25-952b-539607c2a0cc@acm.org>
-Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <c5b7fc1f-f233-4d25-952b-539607c2a0cc@acm.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Bart,
+	Hi all,
 
-On 05/03/2024 18:36, Bart Van Assche wrote:
-> On 3/5/24 01:13, Christian Loehle wrote:
->> On 05/03/2024 00:20, Bart Van Assche wrote:
->>> On 3/4/24 12:16, Christian Loehle wrote:
->>>> - Higher cap is not always beneficial, we might place the task away
->>>> from the CPU where the interrupt handler is running, making it run
->>>> on an unboosted CPU which may have a bigger impact than the difference
->>>> between the CPU's capacity the task moved to. (Of course the boost will
->>>> then be reverted again, but a ping-pong every interval is possible).
->>>
->>> In the above I see "the interrupt handler". Does this mean that the NVMe
->>> controller in the test setup only supports one completion interrupt for
->>> all completion queues instead of one completion interrupt per completion
->>> queue? There are already Android phones and developer boards available
->>> that support the latter, namely the boards equipped with a UFSHCI 4.0 controller.
->>
->> No, both NVMe test setups have one completion interrupt per completion queue,
->> so this caveat doesn't affect them, higher capacity CPU is strictly better.
->> The UFS and both mmc setups (eMMC with CQE and sdcard) only have one completion
->> interrupt (on CPU0 on my setup).
-> 
-> I think that measurements should be provided in the cover letter for the
-> two types of storage controllers: one series of measurements for a
-> storage controller with a single completion interrupt and a second
-> series of measurements for storage controllers with one completion
-> interrupt per CPU.
+This patch series adds support for the Thermal Sensor/Chip Internal
+Voltage Monitor/Core Voltage Monitor (THS/CIVM/CVM) on the Renesas R-Car
+V4M (R8A779H0) SoC.
 
-Of the same type of storage controller? Or what is missing for you in
-the cover letter exactly (ufs/emmc: single completion interrupt,
-nvme: one completion interrupt per CPU).
+It has been tested on the Renesas Gray Hawk Single development board,
+with an R-Car V4M SoC that has unfortunately no calibration values
+fused.
 
-> 
->> FWIW you do gain an additional ~20% (in my specific setup) if you move the ufshcd
->> interrupt to a big CPU, too. Similarly for the mmc.
->> Unfortunately the infrastructure is far from being there for the scheduler to move the
->> interrupt to the same performance domain as the task, which is often optimal both in
->> terms of throughput and in terms of power.
->> I'll go looking for a stable testing platform with UFS as you mentioned, benefits of this
->> patch will of course be greatly increased.
-> 
-> I'm not sure whether making the completion interrupt follow the workload
-> is a good solution. I'm concerned that this would increase energy
-> consumption by keeping the big cores active longer than necessary. I
-> like this solution better (improves storage performance on at least
-> devices with a UFSHCI 3.0 controller): "[PATCH v2 0/2] sched: blk:
-> Handle HMP systems when completing IO"
-> (https://lore.kernel.org/linux-block/20240223155749.2958009-1-qyousef@layalina.io/).
+Thanks for your comments!
 
-That patch is good, don't get me wrong, but you still lose out by running everything
-up to blk_mq_complete_request() on (potentially) a LITTlE (that might be run on a low OPP),
-while having a big CPU available at a high OPP anyway ("for free").
-It is only adjacent to the series but I've done some measurements (Pixel6 again, same device
-as cover letter, Base is Android 6.6 mainline kernel (so without my series, but I somewhat forced
-the effects by task pinning), Applied is with both of sched: blk: Handle HMP systems when completing IO):
+Duy Nguyen (1):
+  dt-bindings: thermal: rcar-gen3-thermal: Add r8a779h0 support
 
-Pretty numbers (IOPS):
-Base irq@CPU0 median: 6969
-Base irq@CPU6 median: 8407 (+20.6%)
-Applied irq@CPU0 median: 7144 (+2.5%)
-Applied irq@CPU6 median: 8288 (18.9%)
+Geert Uytterhoeven (1):
+  thermal/drivers/rcar_gen3: Add support for R-Car V4M
 
-This is with psyncx1 4K Random Read again, of course anything with queue depth
-takes advantage of batch completions to significantly reduce irq pressure.
+ .../devicetree/bindings/thermal/rcar-gen3-thermal.yaml        | 2 ++
+ drivers/thermal/rcar_gen3_thermal.c                           | 4 ++++
+ 2 files changed, 6 insertions(+)
 
-Not so pretty numbers and full list commands used:
+-- 
+2.34.1
 
-w/o patch:
-irq on CPU0 (default):
-psyncx1: 7000 6969 7025 6954 6964
-io_uring4x128: 28766 28280 28339 28310 28349
-irq on CPU6:
-psyncx1: 8342 8492 8355 8407 8532
-io_uring4x128: 28641 28356 25908 25787 25853
+Gr{oetje,eeting}s,
 
-with patch:
-irq on CPU0:
-psyncx1: 7672 7144 7301 6976 6889
-io_uring4x128: 28266 26314 27648 24482 25301
-irq on CPU6:
-psyncx1: 8208 8401 8351 8221 8288
-io_uring4x128: 25603 25438 25453 25514 25402
+						Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-for i in $(seq 0 4); do taskset c0 /data/local/tmp/fio_aosp_build --name=test --rw=randread --bs=4k --runtime=30 --time_based --filename=/dev/block/sda --minimal | awk -F ";" '{print $8}'; sleep 30; done
-
-for i in $(seq 0 4); do taskset c0 /data/local/tmp/fio_aosp_build --name=test --rw=randread --bs=4k --runtime=30 --time_based --filename=/dev/block/sda --ioengine=io_uring --iodepth=128 --numjobs=4 --group_reporting --minimal | awk -F ";" '{print $8}'; sleep 30; done
-
-echo 6 > /proc/irq/296/smp_affinity_list
-
-
-Kind Regards,
-Christian
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
 
