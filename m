@@ -1,65 +1,65 @@
-Return-Path: <linux-pm+bounces-4699-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4700-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EBCD872BBB
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 01:25:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30C8D872BC0
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 01:28:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 558F51F26728
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 00:25:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D922F287D8C
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 00:28:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA33AEC4;
-	Wed,  6 Mar 2024 00:25:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07143CA64;
+	Wed,  6 Mar 2024 00:28:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="z9waI/aa"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="vlOKi4bX"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43342DF4D;
-	Wed,  6 Mar 2024 00:25:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 564EACA4E;
+	Wed,  6 Mar 2024 00:27:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709684752; cv=none; b=MiDriiEvE8As2nhuwSp1qENbpDT8egusPkQ0tn0oUbjch2YyKol0s66Cwt42M2khnJorY9ycIUUNyFAYnAbe9Tl4Wtc1+47KnNF97kl84j4VH4QClPPZHYd9QLydQB+uSHsY25lKkjs6bW3pVFkPBYo9LOibvBYc7LTuMwD117w=
+	t=1709684880; cv=none; b=eDfeZ6py5YFqX+iFz2aC5eUQ6CDSmU9cbgxMBy4M4jYOU/OuSE8/SKwy8nZCdYVhibYsxfkkkfasn/9F3tcx5LJTBlja0UEZUIOQiZ3MLqcf92RAqEnzclf29LSuWJ/PkfEH/0m5YRoDS6C6ejMGZJRUlk9FSec5MX4+U5t8Qu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709684752; c=relaxed/simple;
-	bh=y3SWIYE88WzhAqHUUhuAX/Pu4nWd6aqaVAOpv3JN3pc=;
+	s=arc-20240116; t=1709684880; c=relaxed/simple;
+	bh=k11LZFsC5298nOaoJTy8dJCFgrLbplXVatnkKG4GOi4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ls1BCdXsYp1l3mRFP/ajO5eaAD4m+AeLN0RQDOcGMfFGvt6bTX0+ACUqrqSiDHKV6iN0v6jj7gBkMwb7fR4CrMXgK+PhQp0XPxofjNbF4ZCYq13mBClExTINi+OcK2AHwgcFlNWYJpVfMbc/QYXFsY7A8wrApyO71Hz3sykbReI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=z9waI/aa; arc=none smtp.client-ip=46.235.227.194
+	 Content-Type:Content-Disposition:In-Reply-To; b=bDJupDvZ10KhVlZakLOTM5TMV8Z728lbmaOfp/zMC9EwwYlJPnKxsOL7sD6dVvcEsaANvYElLvXDq9RpUyIBkqwVGimHAQyZjElSMFoHGJzHxPsUOz/gGAJ0V18ifWkgFxSnbrSQbshHKkFVR9RxieUJ9WWkRq5zOnzVOUXWkYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=vlOKi4bX; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1709684749;
-	bh=y3SWIYE88WzhAqHUUhuAX/Pu4nWd6aqaVAOpv3JN3pc=;
+	s=mail; t=1709684877;
+	bh=k11LZFsC5298nOaoJTy8dJCFgrLbplXVatnkKG4GOi4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=z9waI/aaz67x/3gsw1EMNChQ8+UutKOGQUFYCUo2RBgmeChp36q8boE8WAj5Lnk3o
-	 ndLdJAD++inxSZRi0pTc7+r9fn4Lx3NEPMoUzNo48kOkWuadO5JlcF4wHAoyIeczJp
-	 Dkfhpwnp++5vKtXwt+NR18IM7z6kVy7tWEA5f9RJQhoBuSZ60vmo9m644RDMXLDu7l
-	 aEUNsmY+WeHe1qlSkRggZOsIyxZ6FXTeq0DJBZXDWOfTC+aXIDRMf5elBuvZsaaw/J
-	 XdcEnBPMePYSiiSk4J7F8M4ymS/QxdqRph/MbmvN0byxfLMDx8jI5AcDZcBDWGyW7l
-	 LYAzFaVgUjd6w==
+	b=vlOKi4bXdKzm1/F5K7XaHXfE08SHA9Y+1fFsmJkzQ5FbYdDdtu5okVBaXVFecwGlH
+	 nKTttlTt5gzE8gTiaapAP9V2o7VlQzDMaPox7ttmYwXkHAUhDuQUfEBo+C7JhmCPOv
+	 R4mJHRuZ7JW2vtZLkGthX5G5Nff7SZd+8FIjoBvJ6cLp+KBB6etwj8xCbFtbXd31wl
+	 /5jvEV08qjo7egWhwQ9cuwlxxThBcEI1dsZKHAz30iKIZ++8s6kefWVUXKGSc3zPuy
+	 EAt6pvuNqMA39ugVUe9ChMBzX4PF3EZPvxQfshZid9tBrKlEcbAeBmF1JWhNJt7DnP
+	 WgCsbu+CLqXyg==
 Received: from mercury (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(No client certificate requested)
 	(Authenticated sender: sre)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 8321D3780C21;
-	Wed,  6 Mar 2024 00:25:49 +0000 (UTC)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 9C8513780C21;
+	Wed,  6 Mar 2024 00:27:57 +0000 (UTC)
 Received: by mercury (Postfix, from userid 1000)
-	id 0D04E1061BCB; Wed,  6 Mar 2024 01:25:49 +0100 (CET)
-Date: Wed, 6 Mar 2024 01:25:48 +0100
+	id ECDDA1061BCB; Wed,  6 Mar 2024 01:27:56 +0100 (CET)
+Date: Wed, 6 Mar 2024 01:27:56 +0100
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
 To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
 Cc: Hans de Goede <hdegoede@redhat.com>, 
 	Konrad Dybcio <konradybcio@kernel.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] power: supply: core: ease special formatting
- implementations
-Message-ID: <642pog5hxkmycr4qeymb45or27akilry3g564mq5hykzsw77la@saanb24r5ren>
+Subject: Re: [PATCH v2 3/4] power: supply: core: fix charge_behaviour
+ formatting
+Message-ID: <i6uuefpyklm76a3yxablaoltdqs6vjxea5mbaxfscr554im64d@nd22ixtydjnz>
 References: <20240303-power_supply-charge_behaviour_prop-v2-0-8ebb0a7c2409@weissschuh.net>
- <20240303-power_supply-charge_behaviour_prop-v2-2-8ebb0a7c2409@weissschuh.net>
+ <20240303-power_supply-charge_behaviour_prop-v2-3-8ebb0a7c2409@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -67,96 +67,130 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="wbgq7n6h3qopvjfr"
+	protocol="application/pgp-signature"; boundary="ay7zuea2b2je44zo"
 Content-Disposition: inline
-In-Reply-To: <20240303-power_supply-charge_behaviour_prop-v2-2-8ebb0a7c2409@weissschuh.net>
+In-Reply-To: <20240303-power_supply-charge_behaviour_prop-v2-3-8ebb0a7c2409@weissschuh.net>
 
 
---wbgq7n6h3qopvjfr
+--ay7zuea2b2je44zo
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Sun, Mar 03, 2024 at 04:31:14PM +0100, Thomas Wei=DFschuh wrote:
-> By moving the conditional into the default-branch of the switch new
-> additions to the switch won't have to bypass the conditional.
+On Sun, Mar 03, 2024 at 04:31:15PM +0100, Thomas Wei=DFschuh wrote:
+> This property is documented to have a special format which exposes all
+> available behaviours and the currently active one at the same time.
+> For this special format some helpers are provided.
 >=20
-> This makes it easier to implement those special cases like the upcoming
-> change to the formatting of "charge_behaviour".
+> However the default property logic in power_supply_sysfs.c is not using
+> the helper and the default logic only prints the currently active
+> behaviour.
 >=20
-> Suggested-by: Hans de Goede <hdegoede@redhat.com>
-> Link: https://lore.kernel.org/lkml/53082075-852f-4698-b354-ed30e7fd2683@r=
-edhat.com/
+> Adjust power_supply_sysfs.c to follow the documented format.
+>=20
+> There are currently two in-tree drivers exposing charge behaviours:
+> thinkpad_acpi and mm8013.
+> thinkpad_acpi is not affected by the change, as it directly uses the
+> helpers and does not use the power_supply_sysfs.c logic.
+>=20
+> As mm8013 does not set implement desc->charge_behaviours.
+> the new logic will preserve the simple output format in this case.
+>=20
+> Fixes: 1b0b6cc8030d ("power: supply: add charge_behaviour attributes")
 > Signed-off-by: Thomas Wei=DFschuh <linux@weissschuh.net>
 > ---
 
-Thanks, queued.
+Thanks, I also queued this one, but reworked the commit message and
+removed the Fixes tag considering we have only thinkpad_acpi using
+this feature in-tree.
 
 -- Sebastian
 
->  drivers/power/supply/power_supply_sysfs.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
+>  drivers/power/supply/power_supply_sysfs.c | 20 ++++++++++++++++++++
+>  include/linux/power_supply.h              |  1 +
+>  2 files changed, 21 insertions(+)
 >=20
 > diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/su=
 pply/power_supply_sysfs.c
-> index 977611e16373..10fec411794b 100644
+> index 10fec411794b..a20aa0156b0a 100644
 > --- a/drivers/power/supply/power_supply_sysfs.c
 > +++ b/drivers/power/supply/power_supply_sysfs.c
-> @@ -298,11 +298,6 @@ static ssize_t power_supply_show_property(struct dev=
+> @@ -271,6 +271,23 @@ static ssize_t power_supply_show_usb_type(struct dev=
 ice *dev,
->  		}
->  	}
+>  	return count;
+>  }
 > =20
-> -	if (ps_attr->text_values_len > 0 &&
-> -	    value.intval < ps_attr->text_values_len && value.intval >=3D 0) {
-> -		return sysfs_emit(buf, "%s\n", ps_attr->text_values[value.intval]);
-> -	}
-> -
->  	switch (psp) {
->  	case POWER_SUPPLY_PROP_USB_TYPE:
+> +static ssize_t power_supply_show_charge_behaviour(struct device *dev,
+> +						  struct power_supply *psy,
+> +						  union power_supply_propval *value,
+> +						  char *buf)
+> +{
+> +	int ret;
+> +
+> +	ret =3D power_supply_get_property(psy,
+> +					POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
+> +					value);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return power_supply_charge_behaviour_show(dev, psy->desc->charge_behavi=
+ours,
+> +						  value->intval, buf);
+> +}
+> +
+>  static ssize_t power_supply_show_property(struct device *dev,
+>  					  struct device_attribute *attr,
+>  					  char *buf) {
+> @@ -303,6 +320,9 @@ static ssize_t power_supply_show_property(struct devi=
+ce *dev,
 >  		ret =3D power_supply_show_usb_type(dev, psy->desc,
-> @@ -312,7 +307,12 @@ static ssize_t power_supply_show_property(struct dev=
-ice *dev,
+>  						&value, buf);
+>  		break;
+> +	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
+> +		ret =3D power_supply_show_charge_behaviour(dev, psy, &value, buf);
+> +		break;
+>  	case POWER_SUPPLY_PROP_MODEL_NAME ... POWER_SUPPLY_PROP_SERIAL_NUMBER:
 >  		ret =3D sysfs_emit(buf, "%s\n", value.strval);
 >  		break;
->  	default:
-> -		ret =3D sysfs_emit(buf, "%d\n", value.intval);
-> +		if (ps_attr->text_values_len > 0 &&
-> +				value.intval < ps_attr->text_values_len && value.intval >=3D 0) {
-> +			ret =3D sysfs_emit(buf, "%s\n", ps_attr->text_values[value.intval]);
-> +		} else {
-> +			ret =3D sysfs_emit(buf, "%d\n", value.intval);
-> +		}
->  	}
-> =20
->  	return ret;
+> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+> index c0992a77feea..a50ee69503bf 100644
+> --- a/include/linux/power_supply.h
+> +++ b/include/linux/power_supply.h
+> @@ -242,6 +242,7 @@ struct power_supply_config {
+>  struct power_supply_desc {
+>  	const char *name;
+>  	enum power_supply_type type;
+> +	u8 charge_behaviours;
+>  	const enum power_supply_usb_type *usb_types;
+>  	size_t num_usb_types;
+>  	const enum power_supply_property *properties;
 >=20
 > --=20
 > 2.44.0
 >=20
 >=20
 
---wbgq7n6h3qopvjfr
+--ay7zuea2b2je44zo
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmXnuAwACgkQ2O7X88g7
-+pq+ng//ZbD5cTzdIz+ii87TGWXQ5PHEpsjtjjwHapDP42/zrQwfD9jCxefJ12L0
-7CuFEe3ipeg6qpvsdpSsbwzM1HLrJRoQZ5YTq+AgdNYNTA5Dc/IFONQxgQ5dva2u
-hLy6wN4Sii6FbQN4VyELlF0JKRD+4+Siafs4l8QABHxfQ8/hVcZq+Sx0kMMbihFO
-rCigeqPcO4PzTh0wWqEijcBmubc/Ok1dwE9fKKJjSSA3WEdUKLNV8hTcP7PE3rnf
-ZcQPVQQmj54z/yTYm14aifdfc9Olx4Y2nyiAj1f4MQ4/gA+O/ZdDUJYCeLHswbrR
-Q5Nuwrq2FdQyvznhfTRXqPMKqe8qEFa7gStz1aawbIt6wvWlwFslenyHwfylnqq8
-5unwIGwoF/rvWqLIJHIaCuvW2Xh0RVNDJT99EwlVlR99XbteV9Eow7p53Js9biGR
-wHO9jVhP7vCJsTnWzdhBcM33fl5px1DW+xhegGxP7o1M2XQLnuzWnfZzCXlcH241
-41fKUoBT5bPhDer9adOzV0iTb3bwXWnLFpKP5YbzW+vKCjwedIuKoep3yl2lRnGD
-GszD9dA0ZqqJQ+Y5joeO4XXCL4EXOuO4HpqLZ2DdKv4mIcEHXedPPjSO5ZlI7NVG
-C0PAeFb0cu4aZwKDHtwJ3UFOMiFFTcG1uQ/i5mMrWJiQ+Twz25I=
-=k3fx
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmXnuIwACgkQ2O7X88g7
++prsjBAAozoM+Y5uwaJir4SIezvh+7Ce09WwO2aqku7awJ5T+OX1S/LKeTGtO/9p
+NIMxecb+hkj5Dl3B3LEKoEPxONlYz6N2uprpvGT4wxuskoeG8OzmSHjyo889mRej
+oyEcwnZ3/fOD5eBNe5h2AS5jeoYIR+w9w+YncqdqHeblwQ+OrWH5C7kBnEj0V06G
+QHZQwgBQKaP40eQc9zLVhP0XSAMm2VwOuwCOf30aDYzzQ7zS16FFDr7B0imLK8w5
+blJGfxiz6ROHzQzmaCMqFBElVk7BMoVfpfDcXjcfnXlDG+MuFHYgAh2XMwPFLi8D
+B8ed6Of+JmRWEjzLSzXjOm5iLgo74BUagyCT5hCWreyfrEn6WJ9w9q60vreA4C0s
+XyKbFu4nvW5R86BRi2GHQ2Lv81/mR6tIoduPwA5N/VweA6N2S6dhMYW1p0yx3963
+pFxBEfc9zZv8EP7NwHX9eeIldqAq2DdSaWTVg8rdZwCxWNoF4RbVVLCBhb77ZpPp
+kqg1ZLqy/0meTfFSbS1b7u5f/v7CzKcSKkcQf9fzCL/y3fwA83DfFPDDFIf6NyP4
+8tgDDi+Rtd2wpMtPn3UXqdhqVI5CurRXcVyT6ZN3bXjBYgsVbSvcVEKtu+mvAF8S
+VluB+fPYvwCa39Yswz0s4vxPBuavaMFZWgl8LyG8MEMf/Wc+djo=
+=3YCK
 -----END PGP SIGNATURE-----
 
---wbgq7n6h3qopvjfr--
+--ay7zuea2b2je44zo--
 
