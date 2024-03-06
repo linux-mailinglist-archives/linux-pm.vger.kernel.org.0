@@ -1,190 +1,145 @@
-Return-Path: <linux-pm+bounces-4753-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4754-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B8F387408E
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 20:37:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71176874189
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 21:49:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D84A92832A9
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 19:37:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C3C11C20CA1
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 20:49:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 335BD13F445;
-	Wed,  6 Mar 2024 19:37:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 760A314A83;
+	Wed,  6 Mar 2024 20:49:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="pefVynv8"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="f7RMqKbX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF3DA1386A3;
-	Wed,  6 Mar 2024 19:37:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A653FCA4E
+	for <linux-pm@vger.kernel.org>; Wed,  6 Mar 2024 20:49:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709753834; cv=none; b=D+49U+6Jl6lrGS3ljnjkaYx4bubtLtPY2CwMmu0nTHGoxjZkXG17e+c1v8Cc2PrdFGJk1D3uczAlmlSugvgleYydN5ubhj9ukjpVSCycF9W0H0+KXr7BSSmH+nOUVTTP6r4X/GONN0xUoMW13Qra1YwLibXkj+WcodVdHKG0KpA=
+	t=1709758146; cv=none; b=ldwDHoVMWHUMyXJYmZjDLP1VDSK02Oc2idHuw2q8Mv6PxdpNKHT3y85FQK42waG0VkkZaamDzEJk3rZ+JtkMdqlIfKdk6h9tzC77wZkQH2TAvVDJdmkbRVVfUHClDuktSg8J7dVe+FapBrH+OE/tJnHX22ys6QzL8uGD/FKgOj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709753834; c=relaxed/simple;
-	bh=xLUEqkI4LpMh0mVULwiRUGKtpy7yUL3zf46szV7+d0Y=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=lMKlX+LzAWPZ00z0fr6ICT2VJ6wiGBptU2j7/5mKHA80IaOQqmZxNiu1hjchKCkY/bwE6F11/fFJr/tFrIPmJR7aty8THZc3MWMk9kdCrfNPTomM5S/jibDUuwN3uJ327Ebb7GIPR/BGlVF1SJkwc3h0USQXR5Gg4Y8q+prtQWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=pefVynv8; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1709753827;
-	bh=xLUEqkI4LpMh0mVULwiRUGKtpy7yUL3zf46szV7+d0Y=;
-	h=From:Date:Subject:To:Cc:From;
-	b=pefVynv88NHSPhb2g1ZtD1+Smq2DyjExzOiNv557oMp5UzEfHx11gdDCvj7ELwDlv
-	 jGQfN8H4NOdkjV4G19iQi8UHkJhINdhIqSCMLTdIFq75wBCHRo4Ls+0m2LlTKxJBEN
-	 Fv9BzPep4Md7KGEIBkZWKAYiRJnAjM1Gon3QPOuU=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Wed, 06 Mar 2024 20:37:04 +0100
-Subject: [PATCH v3] power: supply: test-power: implement charge_behaviour
- property
+	s=arc-20240116; t=1709758146; c=relaxed/simple;
+	bh=u0NUGzaBwJJBDPDk+I8V2n/hSdIaXHnoyk2XhQl0fYk=;
+	h=Content-Type:Message-ID:Date:MIME-Version:To:Cc:From:Subject; b=Q4Xv7BVHNJdm9oHG496vU7alnQEGjo6N1TtHBXk6wDJMlozrgM6CgntOk5ZF9aDVqpnsYCnujSoTAvDpJb6vLQetbQOK78xd2P3fUQtwAuOm2s8pvJbJy8Gqbg1pUtveIj7LwfA2QshbKIPZtjvYRRfg7/mqH6R3nZNWqFUeJSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=f7RMqKbX; arc=none smtp.client-ip=209.85.161.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5a1358e7e16so45399eaf.0
+        for <linux-pm@vger.kernel.org>; Wed, 06 Mar 2024 12:49:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1709758144; x=1710362944; darn=vger.kernel.org;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lh7llgd/JQCb1eSfK1/AyRPT+0hSRouCKpBQqLhFMy4=;
+        b=f7RMqKbXketNJuB3shvhxAYuIQt1p/W9KEofFfFoXNtGMEvwcLKlbA/y8B7qFAP0mz
+         Uaq6FeF/hmPRJQ4Mlypercfkb2NAAdGlsQ16zjf6MbKKyAGJOqwZhpUdUC2HsHktbiHc
+         /B3tqGI01Wih4X5zjSHgQdwyyerh1/5oOxK/c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709758144; x=1710362944;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Lh7llgd/JQCb1eSfK1/AyRPT+0hSRouCKpBQqLhFMy4=;
+        b=OOdh/v2PkgrvKokI2atalGTG60SKyazfWlOuXbHoj2j2cUBt0coopgCWqk3pzpui8t
+         w3Av7SlMky1YIFHouOdGXFbeCgQTrl+045VtPzRK/fGnUray2JI1O73PGnhv1e83uEDM
+         bWXhDbbgrgeT5+MU7lTALZ71/9te7FbjC1oza/ac9xJPIbGorHKddbo+fp/91fa8u7A6
+         Rup98bxyKCNTtKA/lv1nLD3e5Il2sWIXbqtbUkBeSM2KJwdwv1mVIwGon8hWpc2Co5Ln
+         Mu08Ue+n0f9eL0vVa8Br5/3ykhm6orYU1exUo4xCk6neOIS4uOOB9ibIa67EDyh0l+AH
+         LiXA==
+X-Forwarded-Encrypted: i=1; AJvYcCUcWcJZ37/Sxb/3fLLQznOfPAEC9lOrFCrtvuNTrZ1eN4ABobzjgt/gigL6pTlX74Od0Gaqgo8zSYiipBhsod9Z8ei1ruIEo2M=
+X-Gm-Message-State: AOJu0YzQE/VmwMAZhpXbZijYgyzLG8s85EeUN2FH/LsXqj6ho1kuZcw+
+	iKiaI/JwMMWMaObRh4De7n/E0WlfFIOmn+sg7WFxvWZSTKXPDChsLXa8ilumCRM=
+X-Google-Smtp-Source: AGHT+IFVGZQR8U86VJz5P43E6DGSqdoAEwPbFVdw+UeJSKUHFVIrSm4jUdmSmlkCdRuRVJE+M+tXdw==
+X-Received: by 2002:a4a:9296:0:b0:5a1:31a1:7f75 with SMTP id i22-20020a4a9296000000b005a131a17f75mr125515ooh.1.1709758143774;
+        Wed, 06 Mar 2024 12:49:03 -0800 (PST)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id ce4-20020a056820218400b005a163045e17sm649619oob.26.2024.03.06.12.49.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Mar 2024 12:49:02 -0800 (PST)
+Content-Type: multipart/mixed; boundary="------------dyrB9Dj0dIFy7kqQK25HEesI"
+Message-ID: <6eeb5f78-a38d-4f00-abca-db417d08d6fe@linuxfoundation.org>
+Date: Wed, 6 Mar 2024 13:49:01 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240306-power_supply-charge_behaviour_prop-v3-1-d04cf1f5f0af@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIAN/F6GUC/43NQQ6DIBAF0Ks0rEszoqXSVe/RNAZxFJJGCCjWG
- O9edNNFNy7/ZP77CwnoDQZyPy3EYzTB2D6F/HwiSsu+Q2qalAkDloNggjo7oa/C6Nx7punFd1j
- VqGU0dvSV89bRDJRqG8El55wkyHlszWcfeb5S1iYM1s/7Zsy268YXwKA4wseMAgUuGShxLVvBH
- xOaEILSo770OJBtI7Kfm0N+yGXJLbGuQd5Uqok/d13XL2FZwl4xAQAA
-To: Sebastian Reichel <sre@kernel.org>, Hans de Goede <hdegoede@redhat.com>, 
- Konrad Dybcio <konradybcio@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Sebastian Reichel <sebastian.reichel@collabora.com>, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1709753826; l=4455;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=xLUEqkI4LpMh0mVULwiRUGKtpy7yUL3zf46szV7+d0Y=;
- b=XM1O/iQ3VKSppJ/Zg38R1HM0bv/0AImI+miKd+LnML8hFdvSBJui9EDdjQR0BH82fLhaLSd7Y
- oIE1qZ01d+oCCp5OGpKAF8gkNHz3O1bx6LYgvw/ed3FqJyRTbU7lhI9
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: shuah <shuah@kernel.org>, skhan@linuxfoundation.org,
+ Linux PM <linux-pm@vger.kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Thomas Renninger <trenn@suse.de>
+From: Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] cpupower update for Linux 6.9-rc1
 
-To validate the special formatting of the "charge_behaviour" sysfs
-property add it to the example driver.
+This is a multi-part message in MIME format.
+--------------dyrB9Dj0dIFy7kqQK25HEesI
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
-The original submission of the charge_behaviour property did not
-implement proper formatting in the default formatting handler in
-power_supply_sysfs.c.
+Hi Rafael,
 
-At that time it was not a problem because the only provider of the UAPI,
-thinkpad_acpi, did its own formatting.
+Please pull the following cpupower fixes update for Linux 6.9-rc1.
 
-Now there is an in-tree driver, mm8013, and out-of-tree driver which use
-the normal power-supply properties and are affected by the wrong
-formatting.
-In this revision the handling of CHARGE_BEHAVIOUR in mm8013 is dropped
-as it is not the correct API for it to use.
-That change was not tested by me as I don't have the hardware.
----
-Changes in v3:
-- Drop already applied patches
-- Validate value in test_power_set_battery_property
-- Link to v2: https://lore.kernel.org/r/20240303-power_supply-charge_behaviour_prop-v2-0-8ebb0a7c2409@weissschuh.net
+This cpupower update for Linux 6.9-rc1 consists of a single fix
+to a typo in cpupower-frequency-info.1 man page.
 
-Changes in v2:
-- Simplify the backwards-compatibility logic (adds a preparatory patch)
-- Extend test-power to also handle writing of charge_behaviour
-- Drop incorrect CHARGE_BEHAVIOUR from mm8013 driver
-- Replace special CHARGE_BEHAVIOUR_AVAILABLE property with bitmask in
-  struct power_supply_desc
-- Link to v1: https://lore.kernel.org/r/20240204-power_supply-charge_behaviour_prop-v1-0-06a20c958f96@weissschuh.net
----
- drivers/power/supply/test_power.c | 36 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+diff is included.
 
-diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply/test_power.c
-index 0d0a77584c5d..442ceb7795e1 100644
---- a/drivers/power/supply/test_power.c
-+++ b/drivers/power/supply/test_power.c
-@@ -35,6 +35,8 @@ static int battery_capacity		= 50;
- static int battery_voltage		= 3300;
- static int battery_charge_counter	= -1000;
- static int battery_current		= -1600;
-+static enum power_supply_charge_behaviour battery_charge_behaviour =
-+	POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO;
- 
- static bool module_initialized;
- 
-@@ -123,6 +125,9 @@ static int test_power_get_battery_property(struct power_supply *psy,
- 	case POWER_SUPPLY_PROP_CURRENT_NOW:
- 		val->intval = battery_current;
- 		break;
-+	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
-+		val->intval = battery_charge_behaviour;
-+		break;
- 	default:
- 		pr_info("%s: some properties deliberately report errors.\n",
- 			__func__);
-@@ -131,6 +136,31 @@ static int test_power_get_battery_property(struct power_supply *psy,
- 	return 0;
- }
- 
-+static int test_power_battery_property_is_writeable(struct power_supply *psy,
-+						    enum power_supply_property psp)
-+{
-+	return psp == POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR;
-+}
-+
-+static int test_power_set_battery_property(struct power_supply *psy,
-+					   enum power_supply_property psp,
-+					   const union power_supply_propval *val)
-+{
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
-+		if (val->intval < 0 ||
-+		    val->intval >= BITS_PER_TYPE(typeof(psy->desc->charge_behaviours)) ||
-+		    !(BIT(val->intval) & psy->desc->charge_behaviours)) {
-+			return -EINVAL;
-+		}
-+		battery_charge_behaviour = val->intval;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+	return 0;
-+}
-+
- static enum power_supply_property test_power_ac_props[] = {
- 	POWER_SUPPLY_PROP_ONLINE,
- };
-@@ -156,6 +186,7 @@ static enum power_supply_property test_power_battery_props[] = {
- 	POWER_SUPPLY_PROP_VOLTAGE_NOW,
- 	POWER_SUPPLY_PROP_CURRENT_AVG,
- 	POWER_SUPPLY_PROP_CURRENT_NOW,
-+	POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
- };
- 
- static char *test_power_ac_supplied_to[] = {
-@@ -178,6 +209,11 @@ static const struct power_supply_desc test_power_desc[] = {
- 		.properties = test_power_battery_props,
- 		.num_properties = ARRAY_SIZE(test_power_battery_props),
- 		.get_property = test_power_get_battery_property,
-+		.set_property = test_power_set_battery_property,
-+		.property_is_writeable = test_power_battery_property_is_writeable,
-+		.charge_behaviours = BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO)
-+				   | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE)
-+				   | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE),
- 	},
- 	[TEST_USB] = {
- 		.name = "test_usb",
+thanks,
+-- Shuah
 
----
-base-commit: 4e61f1e9d58fb0765f59f47d4d1f318b36c14d95
-change-id: 20230929-power_supply-charge_behaviour_prop-10ccfd96a666
+----------------------------------------------------------------
+The following changes since commit b401b621758e46812da61fa58a67c3fd8d91de0d:
 
-Best regards,
--- 
-Thomas Weißschuh <linux@weissschuh.net>
+   Linux 6.8-rc5 (2024-02-18 12:56:25 -0800)
 
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux tags/linux-cpupower-6.9-rc1
+
+for you to fetch changes up to a114d9f1f2cf4896d838ab0a9c30a75411736829:
+
+   Fix cpupower-frequency-info.1 man page typo (2024-03-06 09:27:57 -0700)
+
+----------------------------------------------------------------
+linux-cpupower-6.9-rc1
+
+This cpupower update for Linux 6.9-rc1 consists of a single fix
+to a typo in cpupower-frequency-info.1 man page.
+
+----------------------------------------------------------------
+Jan Kratochvil (1):
+       Fix cpupower-frequency-info.1 man page typo
+
+  tools/power/cpupower/man/cpupower-frequency-info.1 | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+----------------------------------------------------------------
+--------------dyrB9Dj0dIFy7kqQK25HEesI
+Content-Type: text/x-patch; charset=UTF-8; name="linux-cpupower-6.9-rc1.diff"
+Content-Disposition: attachment; filename="linux-cpupower-6.9-rc1.diff"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL21hbi9jcHVwb3dlci1mcmVxdWVu
+Y3ktaW5mby4xIGIvdG9vbHMvcG93ZXIvY3B1cG93ZXIvbWFuL2NwdXBvd2VyLWZyZXF1ZW5j
+eS1pbmZvLjEKaW5kZXggZGQ1NDViNDk5NDgwLi40N2ZkZDcyMTg3NDggMTAwNjQ0Ci0tLSBh
+L3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL21hbi9jcHVwb3dlci1mcmVxdWVuY3ktaW5mby4xCisr
+KyBiL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL21hbi9jcHVwb3dlci1mcmVxdWVuY3ktaW5mby4x
+CkBAIC0zMiw3ICszMiw3IEBAIEdldHMgdGhlIGN1cnJlbnRseSB1c2VkIGNwdWZyZXEgcG9s
+aWN5LgogXGZCXC1nXGZSIFxmQlwtXC1nb3Zlcm5vcnNcZlIKIERldGVybWluZXMgYXZhaWxh
+YmxlIGNwdWZyZXEgZ292ZXJub3JzLgogLlRQICAKLVxmQlwtYVxmUiBcZkJcLVwtcmVsYXRl
+ZFwtY3B1c1xmUgorXGZCXC1yXGZSIFxmQlwtXC1yZWxhdGVkXC1jcHVzXGZSCiBEZXRlcm1p
+bmVzIHdoaWNoIENQVXMgcnVuIGF0IHRoZSBzYW1lIGhhcmR3YXJlIGZyZXF1ZW5jeS4KIC5U
+UCAgCiBcZkJcLWFcZlIgXGZCXC1cLWFmZmVjdGVkXC1jcHVzXGZSCg==
+
+--------------dyrB9Dj0dIFy7kqQK25HEesI--
 
