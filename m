@@ -1,132 +1,167 @@
-Return-Path: <linux-pm+bounces-4715-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4716-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B73B8872FAC
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 08:32:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 453F7872FF8
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 08:53:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71E042885EA
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 07:32:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C16C11F260E0
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 07:53:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 882BD5D746;
-	Wed,  6 Mar 2024 07:31:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3F115CDD2;
+	Wed,  6 Mar 2024 07:53:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="WzILONoW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HPw4toV/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECA735C91C;
-	Wed,  6 Mar 2024 07:31:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E5DD1B948;
+	Wed,  6 Mar 2024 07:53:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709710266; cv=none; b=kWcyNBNWsaCm3Tf+XPNaw7+i8s5fb6tk9nAwSRAZ+K4KzWvYQfI5JJ70NzpO2jpEMe+USwbPm7AHzwGqDTvgsesx4DcXCG3JnqgttRmBa7eNvuBEFs2eY4TzQKsVyLsWiQnf/GXC2pvuhtJV3CnggocLza9VTg8X5U8dHCmbACM=
+	t=1709711603; cv=none; b=nWOBJTLmxPQOxilEkcODyFsLaQUk4xvEcYjyiz6yn2SSjbrWHVT1ASavVWJaPzPxLCUMdcBeDYasP0WpfqBjxlAwH0vKCdEr69v68ULlzBPmwSN0EkfDuVdT/hap5jmcKkduogN9NbYMfPkvOlhaxQOcKdzXtZ8sje+JgkSiWUI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709710266; c=relaxed/simple;
-	bh=SNSEkGY4kQ3s9M8b7X9I+IIVDxto5d7ri1uoIzQCEFI=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TXPBmuMwuVNP0qz+MS3r9tMIWFT4ahVVodtJcbXFnoy37Xz04I4PzFL3WYILvBas2hyu1+KxVBFgyCKr7KuzcOIWsyC2VR6VnPRWfHTEKwOaIw+kq04LO8SWqST2XEO9rn//6ikNVjQEObzcTyxkH9s4nr37GAHfyaXUWk1Se/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=WzILONoW; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42677nLi030225;
-	Wed, 6 Mar 2024 07:31:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-type; s=qcppdkim1; bh=6rAJW/h3885Nr/rnSGzJ
-	8U/YAZnDo33NgvDYU1YLb8I=; b=WzILONoWir410R/V0jlcvGJlvfW1nCUNf4PZ
-	bDaH0mCToDJB8GALIZPGQZbRl4owFbfosv6OzwgiYSDppA95VFwVvO6khCUh/lay
-	WoFaRm7YWo4JCBlTrsyLcvu6Saf8BlP3rTqT94aPu6unV97xOnA9tALh/tFos3Xo
-	K0Ao/DdeY661FendvPnl1xKH05EaIgXKV/8LZQE2rMXCSL8Nq7XwVgc5eLZlcvs9
-	62BRyWReohHm4JMLk40NFbZKYe6m3wELlfoLvgRUwpCmB8PoZ4xsrDHtW5G0N+qW
-	8TyIVaDDpVK2YH2GgZDNqaGdPGH22rKPWNLm2dsXo35FkSij1g==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wpktpr1pc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 06 Mar 2024 07:31:01 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4267V0ae003911
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 6 Mar 2024 07:31:00 GMT
-Received: from hu-okukatla-hyd.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Tue, 5 Mar 2024 23:30:55 -0800
-From: Odelu Kukatla <quic_okukatla@quicinc.com>
-To: Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>, Rob Herring
-	<robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC: Kees Cook <keescook@chromium.org>, <cros-qcom-dts-watchers@chromium.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>, <quic_rlaggysh@quicinc.com>,
-        <quic_mdtipton@quicinc.com>
-Subject: [PATCH v3 4/4] arm64: dts: qcom: sc7280: Add clocks for QOS configuration
-Date: Wed, 6 Mar 2024 13:00:16 +0530
-Message-ID: <20240306073016.2163-5-quic_okukatla@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20240306073016.2163-1-quic_okukatla@quicinc.com>
-References: <20240306073016.2163-1-quic_okukatla@quicinc.com>
+	s=arc-20240116; t=1709711603; c=relaxed/simple;
+	bh=0GhOpeI1TUJBDP7ekLlYqS9Gc0595hYONcODQ1n4X10=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=L1kJvI9aBDE4oEzT6mBAtDn2sZJRly5XoeMlmFcv3qcGvXRml51Uw9jZL/oD2ypbTtDU0cirbJQ8BoOOOZEHBbEvP6zVizgUipbn0/x0LYp884sFAAmN/vEK0outp9QWicu/ygIwbP1NAeJF9i+JE/Xfp/0/EoCN4iDXSyiOv2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HPw4toV/; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-412f5e905e2so2368475e9.3;
+        Tue, 05 Mar 2024 23:53:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709711600; x=1710316400; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=n8xbyCoDN1A4ZxIHGpA7D3Gz61UaZom+rI834unCodc=;
+        b=HPw4toV/EnsKAyNhzGkLDDQZqld2iQyky05o6/B49WA4QVzbIiWdxXX/VUo27EngER
+         IbGj+IOjjw8LWjccQYfx2s8aFRcmtSD0eBJFQWSpuk4F81uUJWrgSQ4g3/YU37cMh7o2
+         DUHOqH/He1q1WQvOnMXnZ+NOVMdriGa1VRSTvKyEgNB4hYx9RLr4S0MH0bKssYRCaZx4
+         sw/n5SqihzUXQN2vIBkR+koVvNSJghwWBjqrkpD1hxw5jojmp+cp5Fv61KHOhgLTjlcN
+         vtEGFBEX9PHG2NVzSJzRf2qe+OuRymQzuzyM6hY4LcynifMWo3sb+Mi/NcGgS9TOssjd
+         VSZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709711600; x=1710316400;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=n8xbyCoDN1A4ZxIHGpA7D3Gz61UaZom+rI834unCodc=;
+        b=tiYsaIcHopITVyMxg7x/iaTMA9Wg62xJ5oc7KxhoE6M4xZwby9geFoGBzFexIa57j/
+         N/b954n8gSQ8jBzq3q/ygbY3Mn0oQfwCN0DSfwjKK6uwrlvKQhlLW7kjwk5XwNEGO+19
+         ybBLqs9VOEwKhm10/eLDxsxPEOQ4Gx1FPs2K/rkb2/X993Fkgf6IY2ma6DAw3PoT9u/a
+         5rf+O9FGVmZetwnv5Nigy9zGE3uNU3kxJX0Iymvz/vp97LxjClbVNpAoPfsVjK/VH6Em
+         iLl/+JLG3yBwUjwdWCc6nifVG6q0jSDCKeSIhWBG63Xs5IE4WoFMiZsswUPnFZTmmxcG
+         wWoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWCTjMaYn72WS4jx2vtrF9PMDNOcb9Nrr7E6dN0Xc/4l1m6+Y7Q4i7g/qUBRLT61mx/D8WpQKzTdpBATzw0RIM13ojltPevxMpPvQRcmnirlrT27ZzRJ4y8qDsR51zD4p66ZyMsgRD8w/p9D4/vlpNqKNXhv5QLXwA/JcNucaIUtRFE
+X-Gm-Message-State: AOJu0YyjRStaYx4a7/gOHtGvU4jSJMcU+/T3p8nFNoDCmwfPKUahuaMP
+	ZrzMOPT6vP1yAKlZh9FxvhQTxLjAT9hDov5ClRZdRvxzk4lfjjQN
+X-Google-Smtp-Source: AGHT+IHE4tunHSfTvCO0XcCNXdyOUOoeW8fufiu1ndQaL+PQkZdPibobAf6MEdsXLauFCAe1K6O3HQ==
+X-Received: by 2002:a5d:4a4a:0:b0:33a:eb10:e9e8 with SMTP id v10-20020a5d4a4a000000b0033aeb10e9e8mr8876149wrs.43.1709711600184;
+        Tue, 05 Mar 2024 23:53:20 -0800 (PST)
+Received: from ?IPV6:2001:861:3385:e20:6384:4cf:52c5:3194? ([2001:861:3385:e20:6384:4cf:52c5:3194])
+        by smtp.gmail.com with ESMTPSA id ch14-20020a5d5d0e000000b0033e18421618sm15237270wrb.17.2024.03.05.23.53.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Mar 2024 23:53:20 -0800 (PST)
+Message-ID: <0b5c5487-86e2-421e-a4ee-70b164244fb0@gmail.com>
+Date: Wed, 6 Mar 2024 08:53:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: h82VgwHg5JhEsd0D82HAq4ROj_Ih23wi
-X-Proofpoint-ORIG-GUID: h82VgwHg5JhEsd0D82HAq4ROj_Ih23wi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-06_04,2024-03-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 phishscore=0 adultscore=0 bulkscore=0 spamscore=0
- clxscore=1015 mlxlogscore=999 mlxscore=0 suspectscore=0 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2402120000 definitions=main-2403060058
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] dt-bindings: thermal: convert st,stih407-thermal
+ to DT schema
+To: Rob Herring <robh@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Patrice Chotard <patrice.chotard@foss.st.com>, Lee Jones <lee@kernel.org>,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20240301-thermal-v2-0-1b32752029ec@gmail.com>
+ <20240301-thermal-v2-1-1b32752029ec@gmail.com>
+ <20240304184032.GA865748-robh@kernel.org>
+Content-Language: en-US, fr
+From: =?UTF-8?Q?Rapha=C3=ABl_Gallais-Pou?= <rgallaispou@gmail.com>
+In-Reply-To: <20240304184032.GA865748-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Add handles for required clocks to be enabled for configuring
-QoS on sc7280.
 
-Signed-off-by: Odelu Kukatla <quic_okukatla@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 7e7f0f0fb41b..e1d8fb6afae8 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -2129,6 +2129,8 @@
- 			reg = <0 0x016e0000 0 0x1c080>;
- 			#interconnect-cells = <2>;
- 			qcom,bcm-voters = <&apps_bcm_voter>;
-+			clocks = <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
-+				<&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>;
- 		};
- 
- 		aggre2_noc: interconnect@1700000 {
-@@ -2136,6 +2138,7 @@
- 			compatible = "qcom,sc7280-aggre2-noc";
- 			#interconnect-cells = <2>;
- 			qcom,bcm-voters = <&apps_bcm_voter>;
-+			clocks = <&rpmhcc RPMH_IPA_CLK>;
- 		};
- 
- 		mmss_noc: interconnect@1740000 {
--- 
-2.17.1
+Le 04/03/2024 à 19:40, Rob Herring a écrit :
+> On Fri, Mar 01, 2024 at 06:47:28PM +0100, Raphael Gallais-Pou wrote:
+>> 'st,passive_colling_temp' does not appear in the device-tree, and 'reg'
+>> is missing in the device description.
+>>
+>> Convert st,stih407-thermal binding to DT schema format in order to clean
+>> unused 'st,passive_cooling_temp' and add missing 'reg' property.
+>>
+>> Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
 
+
+Hi Rob,
+
+...
+
+>> +  interrupts:
+>> +    description:
+>> +      For thermal sensors for which no interrupt has been defined, a polling
+>> +      delay of 1000ms will be used to read the temperature from device.
+> 
+> maxItems: 1
+
+Ack.
+> 
+>> +
+>> +  '#thermal-sensor-cells': true
+> 
+> const: 1
+> 
+> Also, not in the original binding, so please state in the commit msg
+> why you are adding it.
+
+I have mixed feeling regarding the value. Wouldn't this better be 
+'const: 0' ?
+
+In the thermal-sensor binding it is specified that it should be 0 for 
+single sensor nodes, which is our case.
+
+> 
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - clocks
+>> +  - clock-names
+>> +
+>> +unevaluatedProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>> +    temperature-sensor@91a0000 {
+>> +        compatible = "st,stih407-thermal";
+>> +        reg = <0x91a0000 0x28>;
+>> +        clock-names = "thermal";
+>> +        clocks = <&CLK_SYSIN>;
+>> +        interrupts = <GIC_SPI 205 IRQ_TYPE_EDGE_RISING>;
+>> +        #thermal-sensor-cells = <0>;
+
+If I misunderstand something and the value must be 1 then I will also 
+change the value here and in the dt patches of the serie.
+
+Regards,
+Raphaël
+>> +    };
+>> +...
 
