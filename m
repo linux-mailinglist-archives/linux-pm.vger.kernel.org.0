@@ -1,74 +1,63 @@
-Return-Path: <linux-pm+bounces-4716-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4717-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 453F7872FF8
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 08:53:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7B89873027
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 09:00:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C16C11F260E0
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 07:53:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 635ACB2169B
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Mar 2024 08:00:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3F115CDD2;
-	Wed,  6 Mar 2024 07:53:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A12B5CDF2;
+	Wed,  6 Mar 2024 08:00:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HPw4toV/"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Re0hK8ek"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E5DD1B948;
-	Wed,  6 Mar 2024 07:53:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D18065BAFD;
+	Wed,  6 Mar 2024 08:00:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709711603; cv=none; b=nWOBJTLmxPQOxilEkcODyFsLaQUk4xvEcYjyiz6yn2SSjbrWHVT1ASavVWJaPzPxLCUMdcBeDYasP0WpfqBjxlAwH0vKCdEr69v68ULlzBPmwSN0EkfDuVdT/hap5jmcKkduogN9NbYMfPkvOlhaxQOcKdzXtZ8sje+JgkSiWUI=
+	t=1709712019; cv=none; b=hdstks46I7o0KHf7Hu2dqlS2TpSVwTk2JTWGheRJ4UFUJlNZbI0O6iav02GWl5mhQGZEJPu9EnmM04OrIkF2OghUcfYEncWUEtZrEoiO5pjOcgia8kL2jwkKB+eaFo/TEqp7stdy7Jn0urtgf7inOYn2Nzk3lYkq/OuiYzgp+gc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709711603; c=relaxed/simple;
-	bh=0GhOpeI1TUJBDP7ekLlYqS9Gc0595hYONcODQ1n4X10=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=L1kJvI9aBDE4oEzT6mBAtDn2sZJRly5XoeMlmFcv3qcGvXRml51Uw9jZL/oD2ypbTtDU0cirbJQ8BoOOOZEHBbEvP6zVizgUipbn0/x0LYp884sFAAmN/vEK0outp9QWicu/ygIwbP1NAeJF9i+JE/Xfp/0/EoCN4iDXSyiOv2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HPw4toV/; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-412f5e905e2so2368475e9.3;
-        Tue, 05 Mar 2024 23:53:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709711600; x=1710316400; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n8xbyCoDN1A4ZxIHGpA7D3Gz61UaZom+rI834unCodc=;
-        b=HPw4toV/EnsKAyNhzGkLDDQZqld2iQyky05o6/B49WA4QVzbIiWdxXX/VUo27EngER
-         IbGj+IOjjw8LWjccQYfx2s8aFRcmtSD0eBJFQWSpuk4F81uUJWrgSQ4g3/YU37cMh7o2
-         DUHOqH/He1q1WQvOnMXnZ+NOVMdriGa1VRSTvKyEgNB4hYx9RLr4S0MH0bKssYRCaZx4
-         sw/n5SqihzUXQN2vIBkR+koVvNSJghwWBjqrkpD1hxw5jojmp+cp5Fv61KHOhgLTjlcN
-         vtEGFBEX9PHG2NVzSJzRf2qe+OuRymQzuzyM6hY4LcynifMWo3sb+Mi/NcGgS9TOssjd
-         VSZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709711600; x=1710316400;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n8xbyCoDN1A4ZxIHGpA7D3Gz61UaZom+rI834unCodc=;
-        b=tiYsaIcHopITVyMxg7x/iaTMA9Wg62xJ5oc7KxhoE6M4xZwby9geFoGBzFexIa57j/
-         N/b954n8gSQ8jBzq3q/ygbY3Mn0oQfwCN0DSfwjKK6uwrlvKQhlLW7kjwk5XwNEGO+19
-         ybBLqs9VOEwKhm10/eLDxsxPEOQ4Gx1FPs2K/rkb2/X993Fkgf6IY2ma6DAw3PoT9u/a
-         5rf+O9FGVmZetwnv5Nigy9zGE3uNU3kxJX0Iymvz/vp97LxjClbVNpAoPfsVjK/VH6Em
-         iLl/+JLG3yBwUjwdWCc6nifVG6q0jSDCKeSIhWBG63Xs5IE4WoFMiZsswUPnFZTmmxcG
-         wWoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWCTjMaYn72WS4jx2vtrF9PMDNOcb9Nrr7E6dN0Xc/4l1m6+Y7Q4i7g/qUBRLT61mx/D8WpQKzTdpBATzw0RIM13ojltPevxMpPvQRcmnirlrT27ZzRJ4y8qDsR51zD4p66ZyMsgRD8w/p9D4/vlpNqKNXhv5QLXwA/JcNucaIUtRFE
-X-Gm-Message-State: AOJu0YyjRStaYx4a7/gOHtGvU4jSJMcU+/T3p8nFNoDCmwfPKUahuaMP
-	ZrzMOPT6vP1yAKlZh9FxvhQTxLjAT9hDov5ClRZdRvxzk4lfjjQN
-X-Google-Smtp-Source: AGHT+IHE4tunHSfTvCO0XcCNXdyOUOoeW8fufiu1ndQaL+PQkZdPibobAf6MEdsXLauFCAe1K6O3HQ==
-X-Received: by 2002:a5d:4a4a:0:b0:33a:eb10:e9e8 with SMTP id v10-20020a5d4a4a000000b0033aeb10e9e8mr8876149wrs.43.1709711600184;
-        Tue, 05 Mar 2024 23:53:20 -0800 (PST)
-Received: from ?IPV6:2001:861:3385:e20:6384:4cf:52c5:3194? ([2001:861:3385:e20:6384:4cf:52c5:3194])
-        by smtp.gmail.com with ESMTPSA id ch14-20020a5d5d0e000000b0033e18421618sm15237270wrb.17.2024.03.05.23.53.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Mar 2024 23:53:20 -0800 (PST)
-Message-ID: <0b5c5487-86e2-421e-a4ee-70b164244fb0@gmail.com>
-Date: Wed, 6 Mar 2024 08:53:19 +0100
+	s=arc-20240116; t=1709712019; c=relaxed/simple;
+	bh=HElGcLHEHp4emzZmxDRo6iAECLg7ba1o1U0dZwSc2H0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=uj2MOnpgXJ/Bau2IrBLLO9CMxOMtUzzfJVAVKi1qgmym/5swClFLv4IhCVCtmFljyJ36i+Y4llllGENIEUK/0ePMKr5U6jsThajYwkHqRA4yhGpITWFSFqnSl9AW/2dN0G7UcB7kuotmyf74Kl8ssuMNKAMsYUQRkwKUXXo8tzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Re0hK8ek; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4266l7Nj001513;
+	Wed, 6 Mar 2024 08:00:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=9hGGdIZDRPYpQ51Vqfi3qcIUoqbqMZ4LFqy+LyC/LFI=; b=Re
+	0hK8ek0B+UpW8W/647OGS10Cy3PjCRELhH7CAz7oziNqMkGXGq5w/jqCKJIQPCu4
+	Vj/fwjsuxWsXMbdXe6SdqbiEMv+Ip4t1OhLoiep2WcC0OKGCv5smj+hg1KbGB4Iu
+	s26ngOWLVQazdjzUSRli+KBZn3WsWp0tlkwHuuASmGquO21B4+V3Ni74ifUoAggc
+	nHY/MHatYyPCFM1hy5wMHiyvTnsQx4h6+V6zFGl20NedC7Xf3AY1TK69/kb4jri4
+	xAI32bjceX6cT6oweqU9BSPBaWtHJkCb2Sxku2TcgeFwe3LWdeQBnhpzk6EP+O1G
+	JxOKRR8Juhqz18ewDKqA==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wpjy3r782-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 06 Mar 2024 08:00:13 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42680BBp030811
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 6 Mar 2024 08:00:11 GMT
+Received: from [10.216.40.128] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 6 Mar
+ 2024 00:00:06 -0800
+Message-ID: <d20c9b08-4f9a-43d0-91ad-b971fdd19422@quicinc.com>
+Date: Wed, 6 Mar 2024 13:30:03 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -76,92 +65,84 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: thermal: convert st,stih407-thermal
- to DT schema
-To: Rob Herring <robh@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Patrice Chotard <patrice.chotard@foss.st.com>, Lee Jones <lee@kernel.org>,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20240301-thermal-v2-0-1b32752029ec@gmail.com>
- <20240301-thermal-v2-1-1b32752029ec@gmail.com>
- <20240304184032.GA865748-robh@kernel.org>
-Content-Language: en-US, fr
-From: =?UTF-8?Q?Rapha=C3=ABl_Gallais-Pou?= <rgallaispou@gmail.com>
-In-Reply-To: <20240304184032.GA865748-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 3/3] cpufreq: qcom-nvmem: add support for IPQ5321
+Content-Language: en-US
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Viresh Kumar
+	<viresh.kumar@linaro.org>
+CC: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio
+	<konrad.dybcio@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof
+ Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>, Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki"
+	<rafael@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+References: <20240228-ipq5321-sku-support-v1-0-14e4d4715f4b@quicinc.com>
+ <20240228-ipq5321-sku-support-v1-3-14e4d4715f4b@quicinc.com>
+ <20240304071222.cx3s37mphddk23bv@vireshk-i7>
+ <20240305043503.tgy5ahl243or7lm5@vireshk-i7>
+ <c82e4053-4cef-4010-a734-4dc537574201@quicinc.com>
+ <87e0aa08-9176-495d-b799-c2ddb53c8a23@linaro.org>
+From: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+In-Reply-To: <87e0aa08-9176-495d-b799-c2ddb53c8a23@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ImTypgyjNnk-rApP2iuZX1daci22E_CK
+X-Proofpoint-ORIG-GUID: ImTypgyjNnk-rApP2iuZX1daci22E_CK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-06_04,2024-03-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
+ adultscore=0 priorityscore=1501 lowpriorityscore=0 mlxlogscore=960
+ suspectscore=0 phishscore=0 malwarescore=0 mlxscore=0 spamscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2402120000 definitions=main-2403060062
 
 
 
-Le 04/03/2024 à 19:40, Rob Herring a écrit :
-> On Fri, Mar 01, 2024 at 06:47:28PM +0100, Raphael Gallais-Pou wrote:
->> 'st,passive_colling_temp' does not appear in the device-tree, and 'reg'
->> is missing in the device description.
+On 3/6/2024 12:52 PM, Krzysztof Kozlowski wrote:
+> On 06/03/2024 05:40, Kathiravan Thirumoorthy wrote:
+>>>>
+>>>> Applied. Thanks.
+>>>
+>>> Dropped since the previous commit it required too. Can we get the
+>>> necessary acks for me to pick those ?
+>>>
 >>
->> Convert st,stih407-thermal binding to DT schema format in order to clean
->> unused 'st,passive_cooling_temp' and add missing 'reg' property.
+>> Sorry for not mentioning the dependencies.
 >>
->> Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
-
-
-Hi Rob,
-
-...
-
->> +  interrupts:
->> +    description:
->> +      For thermal sensors for which no interrupt has been defined, a polling
->> +      delay of 1000ms will be used to read the temperature from device.
+>> patch 1/3 and 2/3 are already has the R-b and A-b tags. But typically
 > 
-> maxItems: 1
+>  From whom? Not from Qualcomm SoC maintainers.
 
-Ack.
-> 
->> +
->> +  '#thermal-sensor-cells': true
-> 
-> const: 1
-> 
-> Also, not in the original binding, so please state in the commit msg
-> why you are adding it.
 
-I have mixed feeling regarding the value. Wouldn't this better be 
-'const: 0' ?
+Does the "necessary acks" refers for to the acks from Qualcomm SoC 
+maintainers? Sorry, I wasn't aware of that. That's why I mentioned 
+"Sorry, I'm not sure on this..." couple of lines below.
 
-In the thermal-sensor binding it is specified that it should be 0 for 
-single sensor nodes, which is our case.
 
 > 
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - clocks
->> +  - clock-names
->> +
->> +unevaluatedProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->> +    temperature-sensor@91a0000 {
->> +        compatible = "st,stih407-thermal";
->> +        reg = <0x91a0000 0x28>;
->> +        clock-names = "thermal";
->> +        clocks = <&CLK_SYSIN>;
->> +        interrupts = <GIC_SPI 205 IRQ_TYPE_EDGE_RISING>;
->> +        #thermal-sensor-cells = <0>;
+>> those patches will go via qcom tree. Do you want to pick it via your
+>> tree? Sorry, I'm not sure on this...
+> 
+> Your cover letter or patch changelog should clearly document
+> dependencies, so maintainers could understand what to do with this patch.
 
-If I misunderstand something and the value must be 1 then I will also 
-change the value here and in the dt patches of the serie.
 
-Regards,
-Raphaël
->> +    };
->> +...
+Understood. Will take care in future.
+
+
+> 
+> Best regards,
+> Krzysztof
+> 
 
