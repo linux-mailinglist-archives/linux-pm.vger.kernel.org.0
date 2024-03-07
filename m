@@ -1,189 +1,428 @@
-Return-Path: <linux-pm+bounces-4769-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4770-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98A27874E56
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Mar 2024 12:55:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A59BC874FA5
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Mar 2024 14:10:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 25E1D1F2864A
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Mar 2024 11:55:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C98A91C21D73
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Mar 2024 13:10:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 055CB12839C;
-	Thu,  7 Mar 2024 11:54:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 286D512BEBA;
+	Thu,  7 Mar 2024 13:10:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="X3UhcUky"
+	dkim=pass (2048-bit key) header.d=xiaomi-corp-partner-google-com.20230601.gappssmtp.com header.i=@xiaomi-corp-partner-google-com.20230601.gappssmtp.com header.b="2+965/Aq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78515129A61
-	for <linux-pm@vger.kernel.org>; Thu,  7 Mar 2024 11:54:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1839712BEA8
+	for <linux-pm@vger.kernel.org>; Thu,  7 Mar 2024 13:10:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709812477; cv=none; b=qyOKlaMprhdAr7Qq5fQsnWPnxo2rU0LemfsIXTRHqDgjwYm4imXf2s0i3ksywI9MC1A6ydW2vPy6rGr8u8/FvWfuUQKz1RWgJcNMrwrl6IcXEhcuadVisWL00oPEKcEIJ1M0jAiXpaB0DKAUx5ptddQS4zrEQ1gjJ1bChC95Qk4=
+	t=1709817003; cv=none; b=J4ysdojKwg5wa6HbGN+nv7XIzNwtIO78lZ69GG72G37jPUWYFEpIX3b0JKoxn8HN68mQrAvODD86wGNVcLqdVhU4pUa4fNbwnzOp8+sQD5NRhj9Exk28kHVIGs3q1P/HGZUqatd5zC179pD2AzfX9kIqu0Cg12bzoYNXt546Q2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709812477; c=relaxed/simple;
-	bh=S+OOB+GK6VFrLU913soTUn1itPxHtbfjSIr8cNPFaSs=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
-	 Content-Type:References; b=Dm1BEukqe6zcv6GWycLxGdGKOFTf+heMMaZRuM54T4TyEVt82z1PEAuzIxPGAjfo7L8MRWwOKFpfcBG6tGkGpWOnwgO6R/nGiM1y0FslWPBS51BQsRT6zIbBqUrAkzYVktr12FBZS5qt0DXuRhPGCyjjywP12pzZKKNTL+/h/rc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=X3UhcUky; arc=none smtp.client-ip=203.254.224.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20240307115427epoutp014602dbbc4cb83059e3508b77ca917f36~6eWFbAxX92752027520epoutp01H
-	for <linux-pm@vger.kernel.org>; Thu,  7 Mar 2024 11:54:27 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20240307115427epoutp014602dbbc4cb83059e3508b77ca917f36~6eWFbAxX92752027520epoutp01H
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1709812467;
-	bh=S+OOB+GK6VFrLU913soTUn1itPxHtbfjSIr8cNPFaSs=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-	b=X3UhcUkyX80pkHsHAEJRyj7zhb+q855DKIx+31ZXPs9w3nLzshOEj4/e8I/bpTezF
-	 haCg3ESDGQnXeAuSv0xzC95wNsE0y8IMXRObpIa0xj5K3DImzhiN542uHzc4suvsXj
-	 xzOqaoTZYqZCvEUNyAyKKaVgwyTy+2nixucktkJo=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-	epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-	20240307115426epcas1p4cbca85f882d1daff4f2bc0c8469a9925~6eWEZNKax0713107131epcas1p4j;
-	Thu,  7 Mar 2024 11:54:26 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.36.134]) by
-	epsnrtp4.localdomain (Postfix) with ESMTP id 4Tr74x4l5Qz4x9Pv; Thu,  7 Mar
-	2024 11:54:25 +0000 (GMT)
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-	epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-	89.D0.10211.1FAA9E56; Thu,  7 Mar 2024 20:54:25 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-	20240307115424epcas1p3dae7021656de57990d7b9c84b06229bd~6eWCse3-00080400804epcas1p3B;
-	Thu,  7 Mar 2024 11:54:24 +0000 (GMT)
-Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20240307115424epsmtrp27a490503a98e3f1df497644f7709d732~6eWCrvFlE0263602636epsmtrp2X;
-	Thu,  7 Mar 2024 11:54:24 +0000 (GMT)
-X-AuditID: b6c32a38-6d3fd700000027e3-3c-65e9aaf134ec
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
-	DB.23.18939.0FAA9E56; Thu,  7 Mar 2024 20:54:24 +0900 (KST)
-Received: from cw00choi03 (unknown [10.113.111.106]) by epsmtip1.samsung.com
-	(KnoxPortal) with ESMTPA id
-	20240307115424epsmtip1801a154e2cadb80324364524bbc607d7~6eWCVpCVq0677806778epsmtip19;
-	Thu,  7 Mar 2024 11:54:24 +0000 (GMT)
-From: "Chanwoo Choi" <cw00.choi@samsung.com>
-To: =?utf-8?Q?'Uwe_Kleine-K=C3=B6nig'?= <u.kleine-koenig@pengutronix.de>,
-	"'MyungJoo Ham'" <myungjoo.ham@samsung.com>, "'Kyungmin Park'"
-	<kyungmin.park@samsung.com>
-Cc: "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>, "'Alim
-	Akhtar'" <alim.akhtar@samsung.com>, <linux-pm@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <linux-samsung-soc@vger.kernel.org>,
- <kernel@pengutronix.de>, "'Matthias Brugger'" <matthias.bgg@gmail.com>,
-	"'AngeloGioacchino Del Regno'" <angelogioacchino.delregno@collabora.com>,
-	<linux-mediatek@lists.infradead.org>, "'Chen-Yu Tsai'" <wens@csie.org>,
-	"'Jernej	Skrabec'" <jernej.skrabec@gmail.com>, "'Samuel Holland'"
-	<samuel@sholland.org>, <linux-sunxi@lists.linux.dev>
-In-Reply-To: <cover.1709587301.git.u.kleine-koenig@pengutronix.de>
-Subject: RE: [PATCH 0/5] PM / devfreq: Convert to platform remove callback
- returning void
-Date: Thu, 7 Mar 2024 20:54:24 +0900
-Message-ID: <002101da7086$32fe0dd0$98fa2970$@samsung.com>
+	s=arc-20240116; t=1709817003; c=relaxed/simple;
+	bh=By3cGhdC6Ek63DjTTZSwLllLsXv/77TrQJZbdEEzLYU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=V8ncy0vzI8ngtUIiC/ad5I6V3MXjs6PBGq+0epZC+n6YmbjaaAtuqi8hqgDr6n5CiEdHMcyqmUz0i2KU5Y8qk8ponegGrq9Fxecu6f8b+9ZW5MIbaOk49FcpRZRvrGcvQchUETjpeTVxV+8tV0puFUgUDQ7lc3i8ippMjfNCGfw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xiaomi.corp-partner.google.com; spf=pass smtp.mailfrom=xiaomi.corp-partner.google.com; dkim=pass (2048-bit key) header.d=xiaomi-corp-partner-google-com.20230601.gappssmtp.com header.i=@xiaomi-corp-partner-google-com.20230601.gappssmtp.com header.b=2+965/Aq; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xiaomi.corp-partner.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xiaomi.corp-partner.google.com
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6e5eb3dd2f8so643352b3a.2
+        for <linux-pm@vger.kernel.org>; Thu, 07 Mar 2024 05:10:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=xiaomi-corp-partner-google-com.20230601.gappssmtp.com; s=20230601; t=1709817000; x=1710421800; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mnPsGhWcK7NFH4mKOZ23/7kGcLmNyPxLIO+SQUxEhbo=;
+        b=2+965/AqUB4oWcJKZqcWXa/u2Nm6FAC2g7xJkxrNtK1GGjelm7tF8Gx2YprUCfxl0o
+         CUqrVJEj4HzvrBzOgQEATrXxLs9h15uEKsgzgRVlxtWSMisO+y56i/Ea05KeGv1SOwE3
+         DUOOJrq0f1y9m3Lt1+6o7GRt17l0RSf6Yoa4Z5vVeS/XHXkKjY8/dWWHKoADDd3mxwDT
+         4y1wSun9JIwNB3UCWxSxRatjDy5RASfDrtf/1LN5kctJIzes0BKuDsbyQoPn94yas1WY
+         Oj5+ughjQSMqSvuq8gfjO5lpoB0iqUFOey/LeWgsnycuULz+Z3h55DWuQk2gzN74KcL0
+         S72Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709817000; x=1710421800;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mnPsGhWcK7NFH4mKOZ23/7kGcLmNyPxLIO+SQUxEhbo=;
+        b=g2SWEZffaugDzFr0WapHLtb0BFc+O6/Bgjkgs6XO0ncMSMUZCEdfMqwxfbyqlWRRzc
+         MeCWK8jw7XDnz1IOemlCd/9tC8bivRZtqxoaRiGzzQSUQiL2uMQ5tq7e3e17CmFCyT5j
+         jcz7bCaZP/1Pwdx5J78Cy05IQTJZa0rME5ueoTfSOGtwHTRCWfULaJAGwdQomUfBi25H
+         C73X2dq+1tSCgC5GHqO8XDOm5dT4//yCHYNlr0yJD13QT4sz78kxu/AtQPdXVavwLZwJ
+         +KYd/jHz3NJDBklzqAU1RTnOATt9K8AlZCh52VjHSF4xPJ/VRx6t4qCsgzJqsd+FMnWo
+         Thvg==
+X-Forwarded-Encrypted: i=1; AJvYcCVOsoaDEBUn3Den1ZB9wdTSggmqo9U4ZJlgD+9UqoJ9r4j1VGOs6j1BOLzr31Mp+TyuCk27QjQ3uWX0AROs9+d1hOErpQfQdvg=
+X-Gm-Message-State: AOJu0Yz+tcrG9Q1rpW0HtukCnO/GRfQU5xTw+rEI9GgwFnApDmRH5hHJ
+	bD/tF5zKDKPpf9Mh7jKW+iailI40WnL86iMMj4Sf2agowOMvyJkrtZu0ES9z3Ls=
+X-Google-Smtp-Source: AGHT+IH5g2LoGNMlP35/AQokX1c+JtQ0Hu5i0oGBdjI07gwUW7p/2+zzP0ltxVfEdLjj0jrMQx6emA==
+X-Received: by 2002:a05:6a20:3d08:b0:1a1:6faf:96b2 with SMTP id y8-20020a056a203d0800b001a16faf96b2mr2060628pzi.47.1709817000246;
+        Thu, 07 Mar 2024 05:10:00 -0800 (PST)
+Received: from xuyingfeng-OptiPlex-7080.mioffice.cn ([2408:8607:1b00:8:b27b:25ff:fe2a:187f])
+        by smtp.gmail.com with ESMTPSA id z17-20020aa79911000000b006e64ee44f51sm2882842pff.71.2024.03.07.05.09.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Mar 2024 05:09:59 -0800 (PST)
+From: Rumeng Wang <wangrumeng@xiaomi.corp-partner.google.com>
+To: djakov@kernel.org
+Cc: fengqi@xiaomi.com,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	tkjos@google.com,
+	wangrumeng@xiaomi.corp-partner.google.com,
+	xuyingfeng@xiaomi.com,
+	liuzhengliang@xiaomi.com
+Subject: [PATCH] interconnect:Replace mutex with rt_mutex for icc_lock
+Date: Thu,  7 Mar 2024 21:09:44 +0800
+Message-ID: <20240307130944.10682-1-wangrumeng@xiaomi.corp-partner.google.com>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQFzxRFSFHCd7QkDGmNm1eZX/JQK7QIZjy18sei1t8A=
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrJJsWRmVeSWpSXmKPExsWy7bCmnu7HVS9TDZYvUrB4MG8bm8WllRIW
-	z+evY7RYNXUni8Xe11vZLc42vWG32PT4GqvF5eaLjBafe48wWsw4v4/JYsq+XWwWTS3GFrcb
-	V7BZPH/UyWZxe+JkRoufh84zOQh47Li7hNFjw6PVrB47Z91l97hzbQ+bx+Yl9R4vNs9k9Oj/
-	a+DRt2UVo8err3MZPT5vkgvgisq2yUhNTEktUkjNS85PycxLt1XyDo53jjc1MzDUNbS0MFdS
-	yEvMTbVVcvEJ0HXLzAF6REmhLDGnFCgUkFhcrKRvZ1OUX1qSqpCRX1xiq5RakJJTYFqgV5yY
-	W1yal66Xl1piZWhgYGQKVJiQnbFj1RTmgi6piq5XUQ2MayW7GDk5JARMJG5+72LqYuTiEBLY
-	wShx7slUFgjnE6PEh8Y5THDO5QeHmGBaLk2/D2YLCexklDizKBGi6CWjREvfBqB2Dg42AR2J
-	BT9CQeIiAiuA4hPOsYM0MAtsYJH4+CAXxOYUcJJYc6uJDcQWFoiWaOifAmazCKhI3Jh+iRnE
-	5hWwlNh/dh87hC0ocXLmExaIOdoSyxa+ZoY4SEHi59NlrCC2iICVxPctL6FqRCRmd7Yxgxwh
-	IfCFQ+L4ob1sEA0uEn9ezmWEsIUlXh3fwg5hS0l8fgdSA9IwmVHi4uvXUN3rGSU2rmyBWmcs
-	sX/pZCaQN5kFNCXW79KH2MYn8e5rDytIWEKAV6KjTQiiWhkYcnehIScpsbi9kw2ixENi1jKX
-	CYyKs5C8NgvJa7OQvDALYdcCRpZVjGKpBcW56anFhgUm8MhOzs/dxAhO41oWOxjnvv2gd4iR
-	iYPxEKMEB7OSCC+LxctUId6UxMqq1KL8+KLSnNTiQ4ymwMCeyCwlmpwPzCR5JfGGJpYGJmZG
-	xiYWhmaGSuK8Z66UpQoJpCeWpGanphakFsH0MXFwSjUwhe/JDLO/XP3sX8W6V0wOYv/Xh3rM
-	jJjrt+/EreqDpx5dY419wmz3Q9+k2KZ9t6nz04MJZ9YvXx48tcZzacbkt5qdPSIvrNI85h85
-	/UXozf1zAaVPNi+V7NkVd+DqX4VvD+9f+sj4cPGhvb175qxTvzp9lcqMberXd4ova/6T8Sr4
-	5QQ1je56udmyqbf0eTr79zoGc7Zv/Sc6RyvrYdUHh8X6nVxJx8Mm2v7cm+5/+czBxZk71Let
-	WTuDiym7TyXJJ7BMZdnp+8qmFx8d88/kiPp86O3dF/EWmZUN7ToMGz+qn5l278KpbnWJoy5n
-	X71tEVvpy576c9v/0KgtTste/dIp2ebdnatXemp/1EaWPfFKLMUZiYZazEXFiQCRPAmGbAQA
-	AA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrIIsWRmVeSWpSXmKPExsWy7bCSnO6HVS9TDZrvyVo8mLeNzeLSSgmL
-	5/PXMVqsmrqTxWLv663sFmeb3rBbbHp8jdXicvNFRovPvUcYLWac38dkMWXfLjaLphZji9uN
-	K9gsnj/qZLO4PXEyo8XPQ+eZHAQ8dtxdwuix4dFqVo+ds+6ye9y5tofNY/OSeo8Xm2cyevT/
-	NfDo27KK0ePV17mMHp83yQVwRXHZpKTmZJalFunbJXBlrJj7k6WgU7hizWKTBsZ3/F2MnBwS
-	AiYSl6bfZ+pi5OIQEtjOKHF33iVGiISkxLSLR5m7GDmAbGGJw4eLIWqeM0rMu97MAhJnE9CR
-	WPAjFCQuIrCCUeLLkxXMIA6zwC4WiUsrzjNDdExmlOi//RtsKqeAk8SaW01sILawQKTE/PO9
-	7CA2i4CKxI3pl5hBbF4BS4n9Z/exQ9iCEidnPmEBsZkFtCWe3nwKZy9b+JoZ4lIFiZ9Pl7GC
-	2CICVhLft7yEqhGRmN3ZxjyBUXgWklGzkIyahWTULCQtCxhZVjGKphYU56bnJhcY6hUn5haX
-	5qXrJefnbmIEx7JW0A7GZev/6h1iZOJgPMQowcGsJMLLYvEyVYg3JbGyKrUoP76oNCe1+BCj
-	NAeLkjivck5nipBAemJJanZqakFqEUyWiYNTqoEpq9Hg6/oJvg4SVj8ZdnUp1ChNq/WWVb22
-	I9duhdlz79yDV64md+15wPjEZsK7VFHdU+Y7Rf+0nX/eO+EcxxHeCre7QsofpD59tfV2Wd/n
-	sFCxSsn48sOMJ6r8Eu7bn6x57Tz98+Ome7n3njx6vuCyjckcK+/Q+Y1SznFCN7d6RWlHHEpW
-	DGOZXmizvVM8QXxf5NT3r98IXnzF/t9Fryjwm25yQE3izkrnJZwax1ruLPVdF2YbfYFp00Xz
-	iKtMguX1sf6WOXUcklme82e9Orb4xRadKm0lHoO7bkFb1JwCv0xddUAgOPGc+uR3E/wWvSrg
-	WflIrct99sqn6ba2hxLNOYX2a/YoqObsSNQ6Wa3EUpyRaKjFXFScCAD6dlbgVAMAAA==
-X-CMS-MailID: 20240307115424epcas1p3dae7021656de57990d7b9c84b06229bd
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20240304212922epcas1p3f9a8c4fdf976f6d6266e3129bfcfb00c
-References: <CGME20240304212922epcas1p3f9a8c4fdf976f6d6266e3129bfcfb00c@epcas1p3.samsung.com>
-	<cover.1709587301.git.u.kleine-koenig@pengutronix.de>
+Content-Transfer-Encoding: 8bit
 
+From: wangrumeng <wangrumeng@xiaomi.corp-partner.google.com>
 
+Replace existing mutex with rt_mutex to prevent priority inversion
+between clients, which can cause unacceptable delays in some cases.
 
-> -----Original Message-----
-> From: Uwe Kleine-K=C3=B6nig=20<u.kleine-koenig=40pengutronix.de>=0D=0A>=
-=20Sent:=20Tuesday,=20March=205,=202024=206:29=20AM=0D=0A>=20To:=20Chanwoo=
-=20Choi=20<cw00.choi=40samsung.com>;=20MyungJoo=20Ham=0D=0A>=20<myungjoo.ha=
-m=40samsung.com>;=20Kyungmin=20Park=20<kyungmin.park=40samsung.com>=0D=0A>=
-=20Cc:=20Krzysztof=20Kozlowski=20<krzysztof.kozlowski=40linaro.org>;=20Alim=
-=20Akhtar=0D=0A>=20<alim.akhtar=40samsung.com>;=20linux-pm=40vger.kernel.or=
-g;=20linux-arm-=0D=0A>=20kernel=40lists.infradead.org;=20linux-samsung-soc=
-=40vger.kernel.org;=0D=0A>=20kernel=40pengutronix.de;=20Matthias=20Brugger=
-=20<matthias.bgg=40gmail.com>;=0D=0A>=20AngeloGioacchino=20Del=20Regno=20<a=
-ngelogioacchino.delregno=40collabora.com>;=20linux-=0D=0A>=20mediatek=40lis=
-ts.infradead.org;=20Chen-Yu=20Tsai=20<wens=40csie.org>;=20Jernej=20Skrabec=
-=0D=0A>=20<jernej.skrabec=40gmail.com>;=20Samuel=20Holland=20<samuel=40shol=
-land.org>;=20linux-=0D=0A>=20sunxi=40lists.linux.dev=0D=0A>=20Subject:=20=
-=5BPATCH=200/5=5D=20PM=20/=20devfreq:=20Convert=20to=20platform=20remove=20=
-callback=0D=0A>=20returning=20void=0D=0A>=20=0D=0A>=20Hello,=0D=0A>=20=0D=
-=0A>=20this=20series=20converts=20all=20drivers=20below=20drivers/devfreq=
-=20to=20struct=0D=0A>=20platform_driver::remove_new().=20See=20commit=205c5=
-a7680e67b=20(=22platform:=20Provide=20a=0D=0A>=20remove=20callback=20that=
-=20returns=20no=20value=22)=20for=20an=20extended=20explanation=20and=20the=
-=0D=0A>=20eventual=20goal.=0D=0A>=20=0D=0A>=20All=20conversations=20are=20t=
-rivial,=20because=20their=20.remove()=20callbacks=20returned=0D=0A>=20zero=
-=20unconditionally.=0D=0A>=20=0D=0A>=20There=20are=20no=20interdependencies=
-=20between=20these=20patches,=20so=20they=20could=20be=20picked=0D=0A>=20up=
-=20individually.=20But=20I'd=20hope=20that=20they=20get=20picked=20up=20all=
-=20together=20by=20the=0D=0A>=20devfreq=20maintainers.=0D=0A>=20=0D=0A>=20B=
-est=20regards=0D=0A>=20Uwe=0D=0A>=20=0D=0A>=20Uwe=20Kleine-K=C3=B6nig=20(5)=
-:=0D=0A>=20=20=20PM=20/=20devfreq:=20exynos-nocp:=20Convert=20to=20platform=
-=20remove=20callback=20returning=0D=0A>=20void=0D=0A>=20=20=20PM=20/=20devf=
-req:=20exynos-ppmu:=20Convert=20to=20platform=20remove=20callback=20returni=
-ng=0D=0A>=20void=0D=0A>=20=20=20PM=20/=20devfreq:=20mtk-cci:=20Convert=20to=
-=20platform=20remove=20callback=20returning=20void=0D=0A>=20=20=20PM=20/=20=
-devfreq:=20rk3399_dmc:=20Convert=20to=20platform=20remove=20callback=20retu=
-rning=0D=0A>=20void=0D=0A>=20=20=20PM=20/=20devfreq:=20sun8i-a33-mbus:=20Co=
-nvert=20to=20platform=20remove=20callback=20returning=0D=0A>=20void=0D=0A>=
-=20=0D=0A>=20=20drivers/devfreq/event/exynos-nocp.c=20=7C=206=20++----=0D=
-=0A>=20drivers/devfreq/event/exynos-ppmu.c=20=7C=206=20++----=0D=0A>=20=20d=
-rivers/devfreq/mtk-cci-devfreq.c=20=20=20=7C=206=20++----=0D=0A>=20=20drive=
-rs/devfreq/rk3399_dmc.c=20=20=20=20=20=20=20=20=7C=206=20++----=0D=0A>=20=
-=20drivers/devfreq/sun8i-a33-mbus.c=20=20=20=20=7C=206=20++----=0D=0A>=20=
-=205=20files=20changed,=2010=20insertions(+),=2020=20deletions(-)=0D=0A>=20=
-=0D=0A>=20base-commit:=2067908bf6954b7635d33760ff6dfc189fc26ccc89=0D=0A>=20=
---=0D=0A>=202.43.0=0D=0A>=20=0D=0A=0D=0AApplied=20it.=20Thanks.=0D=0A=0D=0A=
-Best=20Regards,=0D=0AChanwoo=20Choi=0D=0A=0D=0A=0D=0A
+Here are the reasons for the modification:
+We execute test scripts on Xiaomi phones. Each test will have 5 rounds, and each round of testing will involve continuously entering and exiting 30 applications. Every time an application enters or exits, it will grab a trace to count the frame loss situation.
+We tested it four times using the Google solution, which is icc_set_bw use mutex.
+Every time the test is conducted, there will be frame loss caused by the icc_set_bw D state issue.
+The recurrence probability of the iccset_bw D state problem is 5/600
+We tested it three times using the Xiaomi solution, which is icc_set_bw use rt_mutex.
+Every time there is a test, even if there is a frame loss, it is not caused by the icc_set_bw D state issue.
+The recurrence probability of the iccset_bw D state problem is 0/450
+Of course, the above tests still have their limitations, as they only tested the application in and out scenarios, without testing any other scenarios. However, based on the current results, modifying mutex to rt_mutex has a significant optimization effect on frame loss.
+
+Signed-off-by: wangrumeng <wangrumeng@xiaomi.corp-partner.google.com>
+---
+ drivers/interconnect/core.c | 86 ++++++++++++++++---------------------
+ 1 file changed, 37 insertions(+), 49 deletions(-)
+
+diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+index 50bac2d79d9b..1fe0ee4b5ecc 100644
+--- a/drivers/interconnect/core.c
++++ b/drivers/interconnect/core.c
+@@ -13,7 +13,7 @@
+ #include <linux/interconnect.h>
+ #include <linux/interconnect-provider.h>
+ #include <linux/list.h>
+-#include <linux/mutex.h>
++#include <linux/rt_mutex.h>
+ #include <linux/slab.h>
+ #include <linux/of.h>
+ #include <linux/overflow.h>
+@@ -27,8 +27,7 @@ static DEFINE_IDR(icc_idr);
+ static LIST_HEAD(icc_providers);
+ static int providers_count;
+ static bool synced_state;
+-static DEFINE_MUTEX(icc_lock);
+-static DEFINE_MUTEX(icc_bw_lock);
++static DEFINE_RT_MUTEX(icc_lock);
+ static struct dentry *icc_debugfs_dir;
+ 
+ static void icc_summary_show_one(struct seq_file *s, struct icc_node *n)
+@@ -47,7 +46,7 @@ static int icc_summary_show(struct seq_file *s, void *data)
+ 	seq_puts(s, " node                                  tag          avg         peak\n");
+ 	seq_puts(s, "--------------------------------------------------------------------\n");
+ 
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 
+ 	list_for_each_entry(provider, &icc_providers, provider_list) {
+ 		struct icc_node *n;
+@@ -73,7 +72,7 @@ static int icc_summary_show(struct seq_file *s, void *data)
+ 		}
+ 	}
+ 
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ 
+ 	return 0;
+ }
+@@ -104,7 +103,7 @@ static int icc_graph_show(struct seq_file *s, void *data)
+ 	int i;
+ 
+ 	seq_puts(s, "digraph {\n\trankdir = LR\n\tnode [shape = record]\n");
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 
+ 	/* draw providers as cluster subgraphs */
+ 	cluster_index = 0;
+@@ -136,7 +135,7 @@ static int icc_graph_show(struct seq_file *s, void *data)
+ 					icc_graph_show_link(s, 1, n,
+ 							    n->links[i]);
+ 
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ 	seq_puts(s, "}");
+ 
+ 	return 0;
+@@ -377,7 +376,7 @@ struct icc_node_data *of_icc_get_from_provider(struct of_phandle_args *spec)
+ 	if (!spec)
+ 		return ERR_PTR(-EINVAL);
+ 
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 	list_for_each_entry(provider, &icc_providers, provider_list) {
+ 		if (provider->dev->of_node == spec->np) {
+ 			if (provider->xlate_extended) {
+@@ -393,7 +392,7 @@ struct icc_node_data *of_icc_get_from_provider(struct of_phandle_args *spec)
+ 			}
+ 		}
+ 	}
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ 
+ 	if (!node)
+ 		return ERR_PTR(-EINVAL);
+@@ -508,9 +507,9 @@ struct icc_path *of_icc_get_by_index(struct device *dev, int idx)
+ 		return ERR_CAST(dst_data);
+ 	}
+ 
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 	path = path_find(dev, src_data->node, dst_data->node);
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ 	if (IS_ERR(path)) {
+ 		dev_err(dev, "%s: invalid path=%ld\n", __func__, PTR_ERR(path));
+ 		goto free_icc_data;
+@@ -598,7 +597,7 @@ struct icc_path *icc_get(struct device *dev, const char *src, const char *dst)
+ 	struct icc_node *src_node, *dst_node;
+ 	struct icc_path *path = ERR_PTR(-EPROBE_DEFER);
+ 
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 
+ 	src_node = node_find_by_name(src);
+ 	if (!src_node) {
+@@ -624,7 +623,7 @@ struct icc_path *icc_get(struct device *dev, const char *src, const char *dst)
+ 		path = ERR_PTR(-ENOMEM);
+ 	}
+ out:
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ 	return path;
+ }
+ 
+@@ -643,12 +642,12 @@ void icc_set_tag(struct icc_path *path, u32 tag)
+ 	if (!path)
+ 		return;
+ 
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 
+ 	for (i = 0; i < path->num_nodes; i++)
+ 		path->reqs[i].tag = tag;
+ 
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ }
+ EXPORT_SYMBOL_GPL(icc_set_tag);
+ 
+@@ -698,7 +697,7 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
+ 	if (WARN_ON(IS_ERR(path) || !path->num_nodes))
+ 		return -EINVAL;
+ 
+-	mutex_lock(&icc_bw_lock);
++	rt_mutex_lock(&icc_lock);
+ 
+ 	old_avg = path->reqs[0].avg_bw;
+ 	old_peak = path->reqs[0].peak_bw;
+@@ -730,7 +729,7 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
+ 		apply_constraints(path);
+ 	}
+ 
+-	mutex_unlock(&icc_bw_lock);
++	rt_mutex_unlock(&icc_lock);
+ 
+ 	trace_icc_set_bw_end(path, ret);
+ 
+@@ -748,12 +747,12 @@ static int __icc_enable(struct icc_path *path, bool enable)
+ 	if (WARN_ON(IS_ERR(path) || !path->num_nodes))
+ 		return -EINVAL;
+ 
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 
+ 	for (i = 0; i < path->num_nodes; i++)
+ 		path->reqs[i].enabled = enable;
+ 
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ 
+ 	return icc_set_bw(path, path->reqs[0].avg_bw,
+ 			  path->reqs[0].peak_bw);
+@@ -791,14 +790,14 @@ void icc_put(struct icc_path *path)
+ 	if (ret)
+ 		pr_err("%s: error (%d)\n", __func__, ret);
+ 
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 	for (i = 0; i < path->num_nodes; i++) {
+ 		node = path->reqs[i].node;
+ 		hlist_del(&path->reqs[i].req_node);
+ 		if (!WARN_ON(!node->provider->users))
+ 			node->provider->users--;
+ 	}
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ 
+ 	kfree_const(path->name);
+ 	kfree(path);
+@@ -840,11 +839,11 @@ struct icc_node *icc_node_create(int id)
+ {
+ 	struct icc_node *node;
+ 
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 
+ 	node = icc_node_create_nolock(id);
+ 
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ 
+ 	return node;
+ }
+@@ -858,7 +857,7 @@ void icc_node_destroy(int id)
+ {
+ 	struct icc_node *node;
+ 
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 
+ 	node = node_find(id);
+ 	if (node) {
+@@ -866,7 +865,7 @@ void icc_node_destroy(int id)
+ 		WARN_ON(!hlist_empty(&node->req_list));
+ 	}
+ 
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ 
+ 	if (!node)
+ 		return;
+@@ -898,7 +897,7 @@ int icc_link_create(struct icc_node *node, const int dst_id)
+ 	if (!node->provider)
+ 		return -EINVAL;
+ 
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 
+ 	dst = node_find(dst_id);
+ 	if (!dst) {
+@@ -922,7 +921,7 @@ int icc_link_create(struct icc_node *node, const int dst_id)
+ 	node->links[node->num_links++] = dst;
+ 
+ out:
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ 
+ 	return ret;
+ }
+@@ -938,8 +937,7 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
+ 	if (WARN_ON(node->provider))
+ 		return;
+ 
+-	mutex_lock(&icc_lock);
+-	mutex_lock(&icc_bw_lock);
++	rt_mutex_lock(&icc_lock);
+ 
+ 	node->provider = provider;
+ 	list_add_tail(&node->node_list, &provider->nodes);
+@@ -968,8 +966,7 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
+ 	node->avg_bw = 0;
+ 	node->peak_bw = 0;
+ 
+-	mutex_unlock(&icc_bw_lock);
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ }
+ EXPORT_SYMBOL_GPL(icc_node_add);
+ 
+@@ -979,11 +976,11 @@ EXPORT_SYMBOL_GPL(icc_node_add);
+  */
+ void icc_node_del(struct icc_node *node)
+ {
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 
+ 	list_del(&node->node_list);
+ 
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ }
+ EXPORT_SYMBOL_GPL(icc_node_del);
+ 
+@@ -1034,9 +1031,9 @@ int icc_provider_register(struct icc_provider *provider)
+ 	if (WARN_ON(!provider->xlate && !provider->xlate_extended))
+ 		return -EINVAL;
+ 
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 	list_add_tail(&provider->provider_list, &icc_providers);
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ 
+ 	dev_dbg(provider->dev, "interconnect provider registered\n");
+ 
+@@ -1050,11 +1047,11 @@ EXPORT_SYMBOL_GPL(icc_provider_register);
+  */
+ void icc_provider_deregister(struct icc_provider *provider)
+ {
+-	mutex_lock(&icc_lock);
++	rt_mutex_lock(&icc_lock);
+ 	WARN_ON(provider->users);
+ 
+ 	list_del(&provider->provider_list);
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ }
+ EXPORT_SYMBOL_GPL(icc_provider_deregister);
+ 
+@@ -1093,8 +1090,7 @@ void icc_sync_state(struct device *dev)
+ 	if (count < providers_count)
+ 		return;
+ 
+-	mutex_lock(&icc_lock);
+-	mutex_lock(&icc_bw_lock);
++	rt_mutex_lock(&icc_lock);
+ 	synced_state = true;
+ 	list_for_each_entry(p, &icc_providers, provider_list) {
+ 		dev_dbg(p->dev, "interconnect provider is in synced state\n");
+@@ -1107,21 +1103,13 @@ void icc_sync_state(struct device *dev)
+ 			}
+ 		}
+ 	}
+-	mutex_unlock(&icc_bw_lock);
+-	mutex_unlock(&icc_lock);
++	rt_mutex_unlock(&icc_lock);
+ }
+ EXPORT_SYMBOL_GPL(icc_sync_state);
+ 
+ static int __init icc_init(void)
+ {
+-	struct device_node *root;
+-
+-	/* Teach lockdep about lock ordering wrt. shrinker: */
+-	fs_reclaim_acquire(GFP_KERNEL);
+-	might_lock(&icc_bw_lock);
+-	fs_reclaim_release(GFP_KERNEL);
+-
+-	root = of_find_node_by_path("/");
++	struct device_node *root = of_find_node_by_path("/");
+ 
+ 	providers_count = of_count_icc_providers(root);
+ 	of_node_put(root);
+-- 
+2.43.2
+
 
