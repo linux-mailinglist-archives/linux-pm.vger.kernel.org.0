@@ -1,177 +1,276 @@
-Return-Path: <linux-pm+bounces-4773-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4774-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B43DE8759E9
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Mar 2024 23:06:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24339875A2B
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Mar 2024 23:20:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 413A91F22ED6
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Mar 2024 22:06:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8C7AEB216BC
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Mar 2024 22:20:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09E1213A260;
-	Thu,  7 Mar 2024 22:06:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4E7813E7E8;
+	Thu,  7 Mar 2024 22:20:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="kWAIt/jr"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="nnFBp+2F"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89E0C130AD0;
-	Thu,  7 Mar 2024 22:06:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE8A13E7D5;
+	Thu,  7 Mar 2024 22:20:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709849166; cv=none; b=JSuM/DXvw2KSyB5RwABfgXXzYuKIgYu2wDqKT5cUid1qmyB+p1O+ywS/3myWXj/5L62mCV3YHHNaUIuk1VhYRNzgLF0KY6QcyWDElNRhIHSxRCciMbiOdjOMRdMkVy80zE+63j5RGU3r7dAOahVrA4WdJSn9NAUIO0LZg8BXVPA=
+	t=1709850045; cv=none; b=E9bHEAXKD1KPEwUd1AiyFUqCWUdiZxCzvQIC6K279L7fImvUokBgD7hKDETywQUApM5WkXSIs8lWx9FuWb96b0DlwPnoeuCUfVavyZjs8yjXHKXuNNIc/xA9pJLu1dQlvA56MMXhHkaIk0/54yBFIYX2fiMpcjN2lwosbjjF4kw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709849166; c=relaxed/simple;
-	bh=OhHJ41vSOTMo2bLACgKWhLDz7+2yE1z6/TA3Fn3DXUk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=rUIpT5UjGavH8uuMyitRQZMQO6lCYbqWrkZ4C0jzOyrVGG5404zuh0z/sh9i2zOJ/jGNsqwlWTU+L1Z79WLt2YyjNbFCkJP8mFRtMSFtYHNU0ghRN7CrfD+lcmkSnKK0g1RDrSnoCcAHpFmimAc1Jn+97/rblEfhrgLF0a046Kc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=kWAIt/jr; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1709849161;
-	bh=OhHJ41vSOTMo2bLACgKWhLDz7+2yE1z6/TA3Fn3DXUk=;
-	h=From:Date:Subject:To:Cc:From;
-	b=kWAIt/jr9o4MOnRMCXoICYinsb6YSTG9cm/Plim3+otNta5XVB36sskdeW3OEUNbx
-	 B/rrNm+U7kpuIK7EejeMlPEuZfxqydBAehqBn4Pjwm/k9imOIMTMgnH7pPxY7d/lq7
-	 RAxCeGazTNy808CBIsvHOHyxTIvn4oqpL5eFTPPnDtHkzFkZ2TKVAg1+URApmtrFBX
-	 Ke4IWXfD6LV0hdQ/ZYIokfn+m0KdnmO23MFvzz+FsDVr8whW6JGtzwRXT7Gt6FY0V1
-	 p5t2XHsR0U/WVAMoP0X7O10QhkDIl7SJXq0i6SAYYYtentWpA0XjSU3ck+Gg0h2I6H
-	 gI7A4j+SbgpIg==
-Received: from [192.168.1.3] (zone.collabora.co.uk [167.235.23.81])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nfraprado)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id CA24637804B2;
-	Thu,  7 Mar 2024 22:06:00 +0000 (UTC)
-From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-Date: Thu, 07 Mar 2024 17:05:10 -0500
-Subject: [PATCH] power: supply: sbs-battery: Handle unsupported
- PROP_TIME_TO_EMPTY_NOW
+	s=arc-20240116; t=1709850045; c=relaxed/simple;
+	bh=euN6uPY1w19nOJ53WO0te5FrAb+DgOrEI+3EeaafPW8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bbxzXc+swwabxXZYs9zKiFehRfG5Zd8G+95DVVim94arFqAIu4A7LyZ9JTyu+d1fqfcw+gnWU5gdms7/4IBYxKJKpzsKrKsPRRrfdzlSGWytocmefRX2i82lAYEiNCM14xITPzQ5VDeeXhebKrtgmJBgTN3hK2E5NN6XvKO9Lx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=nnFBp+2F; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CED16C433C7;
+	Thu,  7 Mar 2024 22:20:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1709850045;
+	bh=euN6uPY1w19nOJ53WO0te5FrAb+DgOrEI+3EeaafPW8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nnFBp+2Fxc9tr/I7DoGuks82dlPkN/TrT7G4vg81YqEwO02qFNe3atQbgI9erKW41
+	 244heT/71/ZcPOFxDhXShKRVQLBERrxOmg+WsShgWb7UFfATp80ePtqjmsixKXhajG
+	 eLfa5uYXDDAeKTIyh5SWBxamrTXKSJGpfgm8MIuY=
+Date: Thu, 7 Mar 2024 22:20:42 +0000
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Vimal Kumar <vimal.kumar32@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+	Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, chinmoyghosh2001@gmail.com,
+	badolevishal1116@gmail.com, mintupatel89@gmail.com
+Subject: Re: [PATCH v5] PM / sleep: Mechanism to find source aborting kernel
+ suspend transition
+Message-ID: <2024030729-easiest-brewing-2b31@gregkh>
+References: <20240210055243.8508-1-vimal.kumar32@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240307-sbs-time-empty-now-error-v1-1-18d0f8702330@collabora.com>
-X-B4-Tracking: v=1; b=H4sIABU66mUC/x3MOQqAQAxA0atIagNjRhC8ili4RE3hjCTignh3B
- 8tX/P+AsQob1NkDyoeYxJBQ5BkMSxdmRhmTgRyVzrsKrTfcZWXkddtvDPFEVo2KnqgfXFWOfiJ
- I+aY8yfWvm/Z9P13wf55qAAAA
-To: Sebastian Reichel <sre@kernel.org>
-Cc: kernel@collabora.com, linux-pm@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-X-Mailer: b4 0.13.0
+In-Reply-To: <20240210055243.8508-1-vimal.kumar32@gmail.com>
 
-Despite the RunTimeToEmpty() (0x11) function being defined in the SBS
-specification as required, it seems that not all batteries implement it.
-On platforms with such batteries, reading the property will cause an
-error to be printed:
+On Sat, Feb 10, 2024 at 11:22:41AM +0530, Vimal Kumar wrote:
+> Sometimes kernel suspend transitions can be aborted unconditionally by
+> manipulating pm_abort_suspend value using "hard" wakeup triggers or
+> through "pm_system_wakeup()".
+> 
+> There is no way to trace the source path of module or subsystem which
+> aborted the suspend transitions. This change will create a list of
+> wakeup sources aborting suspend in progress through "hard" events as
+> well as subsytems aborting suspend using "pm_system_wakeup()".
+> 
+> Example: Existing suspend failure logs:
+> [  349.708359] PM: Some devices failed to suspend, or early wake event detected
+> [  350.327842] PM: suspend exit
+> 
+> Suspend failure logs with this change:
+> [  518.761835] PM: Some devices failed to suspend, or early wake event detected
+> [  519.486939] PM: wakeup source or subsystem uart_suspend_port aborted suspend
+> [  519.500594] PM: suspend exit
+> 
+> Here we can clearly identify the module triggerring abort suspend.
+> 
+> Co-developed-by: Chinmoy Ghosh <chinmoyghosh2001@gmail.com>
+> Signed-off-by: Chinmoy Ghosh <chinmoyghosh2001@gmail.com>
+> Co-developed-by: Mintu Patel <mintupatel89@gmail.com>
+> Signed-off-by: Mintu Patel <mintupatel89@gmail.com>
+> Co-developed-by: Vishal Badole <badolevishal1116@gmail.com>
+> Signed-off-by: Vishal Badole <badolevishal1116@gmail.com>
+> Signed-off-by: Vimal Kumar <vimal.kumar32@gmail.com>
+> ---
+> Changes in v5:
+> - Removed CONFIG_PM_DEBUG
+> - Moved conditional directives to .h file
+> - Used spin_lock instead of raw_spin_lock
+> ---
+>  drivers/base/power/power.h  | 14 ++++++
+>  drivers/base/power/wakeup.c | 86 ++++++++++++++++++++++++++++++++++++-
+>  2 files changed, 99 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/base/power/power.h b/drivers/base/power/power.h
+> index 922ed457db19..ace190358eb3 100644
+> --- a/drivers/base/power/power.h
+> +++ b/drivers/base/power/power.h
+> @@ -168,3 +168,17 @@ static inline void device_pm_init(struct device *dev)
+> 	device_pm_sleep_init(dev);
+> 	pm_runtime_init(dev);
+>  }
+> +
+> +#ifdef CONFIG_DEBUG_INFO
+> +
+> +static inline char *pm_abort_suspend_source_name(void)
+> +{
+> +	char *source_name = kasprintf(GFP_ATOMIC, "%pS", __builtin_return_address(0));
 
-power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+This is a cool hack, but no error checking?
 
-This not only pollutes the log, distracting from real problems on the
-device, but also prevents the uevent file from being read since it
-contains all properties, including the faulty one.
+> +	return source_name;
+> +}
+> +
+> +#else
+> +
+> +	static inline char *pm_abort_suspend_source_name(void) { return NULL; }
 
-The following table summarizes the findings for a handful of platforms:
+Odd indentation, why?
 
-Platform                                Status  Manufacturer    Model
-------------------------------------------------------------------------
-mt8186-corsola-steelix-sku131072        OK      BYD             L22B3PG0
-mt8195-cherry-tomato-r2                 NOT OK  PANASON         AP16L5J
-mt8192-asurada-spherion-r0              NOT OK  PANASON         AP15O5L
-mt8183-kukui-jacuzzi-juniper-sku16      NOT OK  LGC KT0         AP16L8J
-mt8173-elm-hana                         OK      Sunwoda         L18D3PG1
-sc7180-trogdor-lazor-limozeen-nots-r5   NOT OK  Murata          AP18C4K
-sc7180-trogdor-kingoftown               NOT OK  333-AC-0D-A     GG02047XL
-rk3399-gru-kevin                        OK      SDI             4352D51
+> +
+> +#endif /* CONFIG_DEBUG_INFO�*/
+> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+> index a917219feea6..aae9a5329bcb 100644
+> --- a/drivers/base/power/wakeup.c
+> +++ b/drivers/base/power/wakeup.c
+> @@ -73,6 +73,14 @@ static struct wakeup_source deleted_ws = {
+> 
+>  static DEFINE_IDA(wakeup_ida);
+> 
+> +static DEFINE_SPINLOCK(pm_abort_suspend_list_lock);
+> +
+> +struct pm_abort_suspend_source {
+> +	struct list_head list;
+> +	char *source_triggering_abort_suspend;
+> +};
+> +static LIST_HEAD(pm_abort_suspend_list);
+> +
+>  /**
+>   * wakeup_source_create - Create a struct wakeup_source object.
+>   * @name: Name of the new wakeup source.
+> @@ -575,6 +583,52 @@ static void wakeup_source_activate(struct wakeup_source *ws)
+> 	trace_wakeup_source_activate(ws->name, cec);
+>  }
+> 
+> +/**
+> + * pm_abort_suspend_list_clear - Clear pm_abort_suspend_list.
+> + *
+> + * The pm_abort_suspend_list will be cleared when system PM exits.
+> + */
+> +static void pm_abort_suspend_list_clear(void)
+> +{
+> +	unsigned long flags;
+> +	struct pm_abort_suspend_source *info, *tmp;
+> +
+> +	spin_lock_irqsave(&pm_abort_suspend_list_lock, flags);
+> +	list_for_each_entry_safe(info, tmp, &pm_abort_suspend_list, list) {
+> +		list_del(&info->list);
+> +		kfree(info);
+> +	}
+> +	spin_unlock_irqrestore(&pm_abort_suspend_list_lock, flags);
+> +}
+> +
+> +/**
+> + * pm_abort_suspend_source_add - Update pm_abort_suspend_list
+> + * @source_name: Wakeup_source or function aborting suspend transitions.
+> + *
+> + * Add the source name responsible for updating the abort_suspend flag in the
+> + * pm_abort_suspend_list.
+> + */
+> +static void pm_abort_suspend_source_add(const char *source_name)
+> +{
+> +	unsigned long flags;
+> +	struct pm_abort_suspend_source *info;
+> +
+> +	info = kmalloc(sizeof(*info), GFP_ATOMIC);
+> +	if (!info)
+> +		return;
+> +
+> +	INIT_LIST_HEAD(&info->list);
+> +	info->source_triggering_abort_suspend = kstrdup(source_name, GFP_ATOMIC);
+> +	if (!info->source_triggering_abort_suspend) {
+> +		kfree(info);
+> +		return;
+> +	}
+> +
+> +	spin_lock_irqsave(&pm_abort_suspend_list_lock, flags);
+> +	list_add_tail(&info->list, &pm_abort_suspend_list);
+> +	spin_unlock_irqrestore(&pm_abort_suspend_list_lock, flags);
+> +}
+> +
+>  /**
+>   * wakeup_source_report_event - Report wakeup event using the given source.
+>   * @ws: Wakeup source to report the event for.
+> @@ -590,8 +644,11 @@ static void wakeup_source_report_event(struct wakeup_source *ws, bool hard)
+> 	if (!ws->active)
+> 		wakeup_source_activate(ws);
+> 
+> -	if (hard)
+> +	if (hard) {
+> +		if (pm_suspend_target_state != PM_SUSPEND_ON)
 
-Identify during probe, based on the battery model, if this is one of the
-quirky batteries, and if so, don't register the
-POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW property.
+Why is this state special?
 
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
- drivers/power/supply/sbs-battery.c | 45 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+> +			pm_abort_suspend_source_add(ws->name);
+> 		pm_system_wakeup();
+> +	}
+>  }
+> 
+>  /**
+> @@ -893,12 +950,39 @@ bool pm_wakeup_pending(void)
+> 		pm_print_active_wakeup_sources();
+> 	}
+> 
+> +	if (atomic_read(&pm_abort_suspend) > 0) {
+> +		struct pm_abort_suspend_source *info;
+> +
+> +		spin_lock_irqsave(&pm_abort_suspend_list_lock, flags);
+> +		list_for_each_entry(info, &pm_abort_suspend_list, list) {
+> +			pm_pr_dbg("wakeup source or subsystem %s aborted suspend\n",
+> +					info->source_triggering_abort_suspend);
 
-diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
-index a6c204c08232..85ff331cf87a 100644
---- a/drivers/power/supply/sbs-battery.c
-+++ b/drivers/power/supply/sbs-battery.c
-@@ -1112,6 +1112,49 @@ static const struct power_supply_desc sbs_default_desc = {
- 	.external_power_changed = sbs_external_power_changed,
- };
- 
-+static const char * const unsupported_time_to_empty_now_models[] = {
-+	"AP16L5J", "AP15O5L", "AP16L8J", "AP18C4K", "GG02047XL"
-+};
-+
-+static void sbs_remove_unsupported_properties(struct power_supply_config *psy_cfg,
-+					      struct power_supply_desc *sbs_desc)
-+{
-+	enum power_supply_property *new_properties;
-+	struct sbs_info *chip = psy_cfg->drv_data;
-+	bool missing_time_to_empty_now = false;
-+	const char *model_name;
-+	unsigned int new_num_properties;
-+	unsigned int i = 0, j = 0;
-+
-+	model_name = sbs_get_constant_string(chip, POWER_SUPPLY_PROP_MODEL_NAME);
-+	if (IS_ERR(model_name))
-+		return;
-+
-+	for (i = 0; i < ARRAY_SIZE(unsupported_time_to_empty_now_models); i++) {
-+		if (!strcmp(model_name, unsupported_time_to_empty_now_models[i])) {
-+			missing_time_to_empty_now = true;
-+			break;
-+		}
-+	}
-+
-+	if (!missing_time_to_empty_now)
-+		return;
-+
-+	new_num_properties = ARRAY_SIZE(sbs_properties) - 1;
-+	new_properties = devm_kzalloc(&chip->client->dev, new_num_properties * sizeof(sbs_properties[0]), GFP_KERNEL);
-+
-+	for (i = 0; i < sbs_desc->num_properties; i++) {
-+		if (sbs_desc->properties[i] == POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW)
-+			continue;
-+
-+		new_properties[j] = sbs_desc->properties[i];
-+		j++;
-+	}
-+
-+	sbs_desc->properties = new_properties;
-+	sbs_desc->num_properties = new_num_properties;
-+};
-+
- static int sbs_probe(struct i2c_client *client)
- {
- 	struct sbs_info *chip;
-@@ -1210,6 +1253,8 @@ static int sbs_probe(struct i2c_client *client)
- 	if (rc)
- 		return rc;
- 
-+	sbs_remove_unsupported_properties(&psy_cfg, sbs_desc);
-+
- 	chip->power_supply = devm_power_supply_register(&client->dev, sbs_desc,
- 						   &psy_cfg);
- 	if (IS_ERR(chip->power_supply))
+You should put the %s in quotes or something to make it obvious this is
+a function name.
 
----
-base-commit: 11afac187274a6177a7ac82997f8691c0f469e41
-change-id: 20240307-sbs-time-empty-now-error-322bc074d3f2
+> +		}
+> +		spin_unlock_irqrestore(&pm_abort_suspend_list_lock, flags);
+> +		pm_abort_suspend_list_clear();
 
-Best regards,
--- 
-Nícolas F. R. A. Prado <nfraprado@collabora.com>
+You just raced between printing the list and deleting it, why drop a
+lock just to grab it again?  Why does this have to be a separate
+function at all?
 
+> +	}
+> +
+> 	return ret || atomic_read(&pm_abort_suspend) > 0;
+>  }
+>  EXPORT_SYMBOL_GPL(pm_wakeup_pending);
+> 
+>  void pm_system_wakeup(void)
+>  {
+> +
+> +	if (pm_suspend_target_state != PM_SUSPEND_ON) {
+> +		char *source_name = pm_abort_suspend_source_name();
+> +
+> +		if (!source_name) {
+> +			pm_pr_dbg("Some wakeup source or subsystem aborted suspend\n");
+
+So if the config option is disabled, you will just get this message?
+That's not going to be very helpful.  Or are you going to get it again
+as you already get that today?
+
+And why are you relying on CONFIG_DEBUG_INFO, where is that documented?
+
+> +			goto exit;
+> +		}
+> +
+> +		if (strcmp(source_name, "pm_wakeup_ws_event"))
+
+You are relying on a function name here, that is not going to go well
+over time.  What happens if they get out of sync?  What will keep that
+in sync?  What documents this?  How is this going to be maintained
+properly over time?
+
+What is going to use this new kernel log message?
+
+thanks,
+
+greg k-h
 
