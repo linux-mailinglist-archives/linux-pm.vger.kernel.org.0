@@ -1,92 +1,99 @@
-Return-Path: <linux-pm+bounces-4788-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4789-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11C9E8762B8
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Mar 2024 12:07:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FFC0876458
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Mar 2024 13:31:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 42D7B1C211FE
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Mar 2024 11:07:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B95391F20F88
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Mar 2024 12:31:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2730F55E4F;
-	Fri,  8 Mar 2024 11:06:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="UQkr6lrk"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24894817;
+	Fri,  8 Mar 2024 12:31:53 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FE4E55794;
-	Fri,  8 Mar 2024 11:06:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30C9E17EF;
+	Fri,  8 Mar 2024 12:31:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709896019; cv=none; b=YXYWT86X/2UwHCGbJ7got9JBi3nZ4NHsF6TxEPS02TUbCB67bQ9TtOUGwXGOr1Lh2fTdu4fZ2Hn1cFvT6MzT6VKzCWqIwRY9/PpZ46GfAfxUAo8S43AVIKnBZQ+BAsolyBgOsr6r2uN8ztj5eXabDel0MAQ2JHKNzpvopdZpGU8=
+	t=1709901113; cv=none; b=TWAn0UsByrCF4M6JHfMZFWm+XFbVUhhJ/yF8EKAB50xhs6Bo0/+0wnPsjioEJMsV4fh34WnrlNwMpg6wakFlz1ghooaSe2Ze1HIcQfkUBVsfnkm5hAgiDKSFLG7UFCCHQegIHh1o7pN+CLRqDuBXi+axlwLRp6ML/DuVCVoK98I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709896019; c=relaxed/simple;
-	bh=pc96kTjeHyJOxzJAi5zGl8BN9tRRP9Rz2uvIYxGZGKM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D+omBaSImzTRnjpOkZQ/YxVBrRSEYzKb/OPnSE4kHUl9j1mxWTY48IgZSrfSanIbl85AH2VOr58lFPXBqHpVHhvIUppk7CLjMFWgaU3xIouVLxtkVXMDYkPa30/iiSsAi2xDwsMvtQIDaLuO4m6L31UeDLDDC1icv/Fac8s1qyo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=UQkr6lrk; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id F2171240004;
-	Fri,  8 Mar 2024 11:06:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709896014;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RHOOcTFio23d7bm8Wr7cdw51uo9YXpicRkSrd+GIRrc=;
-	b=UQkr6lrko6Gm8/773ZrwzIlSqPd2WV2F4OMyqgCd1LBqwi1UgVNwbEFvp1ho+SwfIELAPj
-	u9xSY/Uaej8yNKpfkQiqyWG2cjz6PgnIqrWM98VD167XSazSUSI1UrV3aDEZqIwZQRj+PK
-	Jki7jc+w+kGcOdhc/vXpPQx0o5kbFa8cumucBfZGN/mCbEFyjNFpXcE7v+p4ZoNXso4ThK
-	Th4ehp2DAOgXHddMTSiAgR4e7yMD3eb8pqkp/1G9turKImS/6bNNVvhQ3r8IAGDPw20qWD
-	LTg514C9RoyhPAGNViJpo5jZkRhpwS4YEGPUXOqAHT//52OK55DZRrEQH5Exgw==
-Date: Fri, 8 Mar 2024 12:06:53 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-	Len Brown <len.brown@intel.com>, John Stultz <jstultz@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Stephen Boyd <sboyd@kernel.org>,
-	"Ricardo B. Marliere" <ricardo@marliere.net>
-Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1709901113; c=relaxed/simple;
+	bh=7wC84AYFOmapT7dzQoGkHlDqzNSWk22jBdSheuL8DfY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Ou8hHxrMrrQ16p1pni+XT6PvTEvVj815jPzDaIHvXogGxh5XqOvhkzuyYZ/58VN3wmn/EnCD268ENkzrupMX9AMIODg5/paN+SAUU8GA0YIgwnZkyvSWigQ7J53nW+2GQ+xrkXyGAVGOf4QJVJRLMQDyzG8ezzvsOXHw9Vsanog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4148BC15;
+	Fri,  8 Mar 2024 04:32:27 -0800 (PST)
+Received: from e129166.arm.com (unknown [10.57.10.181])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5B30F3F73F;
+	Fri,  8 Mar 2024 04:31:49 -0800 (PST)
+From: Lukasz Luba <lukasz.luba@arm.com>
+To: linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] rtc: class: make rtc_class constant
-Message-ID: <170989597159.2150728.7175155089515338956.b4-ty@bootlin.com>
-References: <20240305-class_cleanup-abelloni-v1-1-944c026137c8@marliere.net>
+	rafael@kernel.org
+Cc: lukasz.luba@arm.com,
+	poshao.chen@mediatek.com
+Subject: [PATCH] PM: EM: Force device drivers to provide power in uW
+Date: Fri,  8 Mar 2024 12:32:03 +0000
+Message-Id: <20240308123203.196644-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240305-class_cleanup-abelloni-v1-1-944c026137c8@marliere.net>
-X-GND-Sasl: alexandre.belloni@bootlin.com
+Content-Transfer-Encoding: 8bit
 
-On Tue, 05 Mar 2024 15:22:28 -0300, Ricardo B. Marliere wrote:
-> Since commit 43a7206b0963 ("driver core: class: make class_register() take
-> a const *"), the driver core allows for struct class to be in read-only
-> memory, so move the rtc_class structure to be declared at build time
-> placing it into read-only memory, instead of having to be dynamically
-> allocated at boot time.
-> 
-> 
-> [...]
+The EM only supports power in uW. Make sure that it is not possible to
+register some downstream driver which doesn't provide power in uW.
+The only exception is artificial EM, but that EM is ignored by the rest of
+kernel frameworks (thermal, powercap, etc).
 
-Applied, thanks!
+Reported-by: PoShao Chen <poshao.chen@mediatek.com>
+Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+---
 
-[1/1] rtc: class: make rtc_class constant
-      https://git.kernel.org/abelloni/c/6b6ca096115e
+Hi all,
 
-Best regards,
+The was an issue reported recently that the EM could be used with
+not aligned drivers which provide milli-Watts. This patch prevents such
+drivers to register EM (although there are no such in upstream).
 
+Regards,
+Lukasz
+
+ kernel/power/energy_model.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+index b686ac0345bd9..9e1c9aa399ea9 100644
+--- a/kernel/power/energy_model.c
++++ b/kernel/power/energy_model.c
+@@ -612,6 +612,17 @@ int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
+ 	else if (cb->get_cost)
+ 		flags |= EM_PERF_DOMAIN_ARTIFICIAL;
+ 
++	/*
++	 * EM only supports uW (exception is artificial EM).
++	 * Therefore, check and force the drivers to provide
++	 * power in uW.
++	 */
++	if (!microwatts && !(flags & EM_PERF_DOMAIN_ARTIFICIAL)) {
++		dev_err(dev, "EM: only supports uW power values\n");
++		ret = -EINVAL;
++		goto unlock;
++	}
++
+ 	ret = em_create_pd(dev, nr_states, cb, cpus, flags);
+ 	if (ret)
+ 		goto unlock;
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
+
 
