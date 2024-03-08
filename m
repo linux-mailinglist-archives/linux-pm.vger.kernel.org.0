@@ -1,150 +1,130 @@
-Return-Path: <linux-pm+bounces-4798-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4799-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6C94876C05
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Mar 2024 21:51:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C1B3876CA8
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Mar 2024 23:08:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6916B283520
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Mar 2024 20:51:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4CD521C20E8D
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Mar 2024 22:08:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBE985E07B;
-	Fri,  8 Mar 2024 20:51:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFE025FDBD;
+	Fri,  8 Mar 2024 22:08:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="Cyqj3pH0"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="W7epss16"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79FEE1EF1E;
-	Fri,  8 Mar 2024 20:51:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.143.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6179F5E3A5
+	for <linux-pm@vger.kernel.org>; Fri,  8 Mar 2024 22:08:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709931066; cv=none; b=aGJ7RRXzbO7qzJV0GKepJqi+3kNkfdq/DAtVuEvTBFWfr9dpPQSK2aTB8XJBZHIwUcUxksJcSsnZZ2Yh2ZB9o+Pfwef8yhFT4w2jJzawmOefjtowTz832Wfe73OiN0+tVxxJpH4dO5UfdDDROxaU0Tl4f5TW4bDUnAQDgeXGvjw=
+	t=1709935714; cv=none; b=tuSZQlXyW6wdfV/3lYN7vh7UFBYWoD6yeoCkaLT4me0cLagcKLCJ3T+5QON+C/WS1v1LhHpY5qbQKasprDxu5Hc1G+cc1zmSe1qXgJ91RLH39ciG7UezSKHwAi2b42so+Fd6+o6zWFFDULdRf7zCgtH0grBDDqD+zuqqDX83WRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709931066; c=relaxed/simple;
-	bh=vtY+SJLzuQ886tO3RilWGHvnlozVn7rpCpvs+8G8tZo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Ei30OAGwEJM2hLQGv93q2gYNHe9MLBJ0HdkUdo62Z0+kOgh6eM7O4daZQrWYP0TTrvbwmwQB94/K1m/8j9ohq5Rb9EOmCUtBP0gUsyQ6Fl+pOM0NSMPtK1vP5v741hFHaX7LRzTpctv2hua6mIk3zRc/FDYxMFgVPORXdGzqOEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=Cyqj3pH0; arc=none smtp.client-ip=148.163.143.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hpe.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
-Received: from pps.filterd (m0134423.ppops.net [127.0.0.1])
-	by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 428ImR43014453;
-	Fri, 8 Mar 2024 20:50:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pps0720;
- bh=oG87MoMYaG+G4FieFFonOB5EHz7PptoAErze3BHJIwE=;
- b=Cyqj3pH0xopbdBtnBxuleSm5v1P3nMRbRxRoXCPi9w0+pwqy3OZ6n5IAa+isiwXrTKHw
- vJHnNR6l2yQ1Ve0Qoe7P8H2xJdtgpp1vgBa81e8KNIivKQWKMSVNkuoPmlpU7jM/H15Z
- T132xponLHLcW1rjRowyLL/oomAgzPuHDmMYgcVPdRJna4wy3nPJjvLETYuRhPKCXNvO
- zJ7SLVObz/KPFF5trvKWNGueXeSmp2Vl1OOzeooahYtSKppmY5jQy4ovi4fAznLACtPv
- yum6QOTnfbClFZIGGUd3AoelHWOwJnMwU21mBU/O3PEurz20px4OQQ9r87lfiJwb5gjS 4g== 
-Received: from p1lg14881.it.hpe.com ([16.230.97.202])
-	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3wr5jktc6h-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 08 Mar 2024 20:50:46 +0000
-Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by p1lg14881.it.hpe.com (Postfix) with ESMTPS id 83EEC8059CB;
-	Fri,  8 Mar 2024 20:50:45 +0000 (UTC)
-Received: from dog.eag.rdlabs.hpecorp.net (unknown [16.231.227.36])
-	by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id 290768014DB;
-	Fri,  8 Mar 2024 20:50:45 +0000 (UTC)
-Received: by dog.eag.rdlabs.hpecorp.net (Postfix, from userid 605001)
-	id A352330000A0D; Fri,  8 Mar 2024 14:50:44 -0600 (CST)
-From: Justin Ernst <justin.ernst@hpe.com>
-To: Len Brown <lenb@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Justin Ernst <justin.ernst@hpe.com>
-Subject: [PATCH] tools/power/turbostat: Fix uncore frequency file string
-Date: Fri,  8 Mar 2024 14:49:57 -0600
-Message-Id: <20240308204957.2007212-1-justin.ernst@hpe.com>
-X-Mailer: git-send-email 2.26.2
+	s=arc-20240116; t=1709935714; c=relaxed/simple;
+	bh=6hqLrE2kGzcpPPlaLbbol8vDLZeqtCffaioj6zahxA8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Am/GhVT9gY/sgFGl8A2sDfW61+kkKTLPluQoCwlXcG2H5fdBgTrnq5ClPnRzifH8IMcQluKvZqYkL1Gclys83Y6wI5dlRfDFkPSfP3z4OwxgFkzk3S3Q6CuS1D/+t3Sw91623DFqtzYr44cAg0lM2jZrUyvzXKVyhU47L/T1aw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=W7epss16; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5131c48055cso2965752e87.1
+        for <linux-pm@vger.kernel.org>; Fri, 08 Mar 2024 14:08:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1709935710; x=1710540510; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=444788bR8YBECKjRiKnANVI+jwd9C5/5ss16HCbJeCs=;
+        b=W7epss16OhMlSxauvCOCN3QjqlDzgzdrYthPdAIi58ucs4cZQd+BHwMgUElrUyB3Hc
+         gExBPBHj05CUly/jPcZ848GB8cM8TOssgswcE0C4h8890xFhJdMl1YScRplnHwMor19b
+         +7lJRHm3ERoLD6lUXaD7WFhiKAj7yUmde8I0seTiz+jCr2YDQXeMnUOQf7bfCt85y4mv
+         il9FK2d4Q36bgpvocxPLrIM8mYETklD+XKU2dR5lGo9ZKmR/rwCf5f0eRhJgpZnhHP4b
+         GPDeQq0HBx7NTVY3/NgLCxyof3XFGhxxAslGIHJR7iQN0a4tLnRH1Hd9iz4YSNkOO6SV
+         Lzag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709935710; x=1710540510;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=444788bR8YBECKjRiKnANVI+jwd9C5/5ss16HCbJeCs=;
+        b=rhvm7HwkC7zUhy19kFq/cSC+W8e2A1Ea6dq19Bp4fYWDYp8153kgosfhQXP12ihnpB
+         ifzutzzZ53cNALXOUfVTGJYz+wZTrxMLwKWC8sVceocG9zkfeVTyijSRFT3X2r/xQG5T
+         zeJkt1v+99UStEYp7uvA6feF6+m7FYopQac9MPUkPnPOOyXyaQAW/4V/cc53I1j8Kijy
+         wHVjxKutuXJh7wi6VexmZNB29Bj9V3uNeEfGQE+jaUu/ryh3+bmko+qZ5uT6BQEIO3dT
+         RNeIqJtaY5SC28WBN7JOoVGw/2jt3mHyScADNuhV/iuE/NPJS7qbE1mqIM3/TVPYZaSg
+         HOUw==
+X-Forwarded-Encrypted: i=1; AJvYcCUq0v9DyXj6wTl2SOmWOQSmOz9oE1psb1RoEiU0sgt0VAlTSjdHJZcFPdoAw7y/r7vNXOQG7V+rzKkK+iwKE/Oc2/DSuv23jq4=
+X-Gm-Message-State: AOJu0Yw77gA+tidckYLjFRsw9SnJzK+PoNI8nfy7TtdsBS6DA9yTUOex
+	vx7q+Yoxu5goYEsdKYY+qDGrAZKZ7AqDrOiIf4pN473GcISizc7OyeOtceTblt8=
+X-Google-Smtp-Source: AGHT+IGfdV0sn6fso7vz9UOJkRQBSyomE8U61mJRksNWd2WuskneuQ8WFl+tp7BYBYK96WxWaFtgLQ==
+X-Received: by 2002:ac2:5bd0:0:b0:512:d575:4745 with SMTP id u16-20020ac25bd0000000b00512d5754745mr222889lfn.1.1709935710464;
+        Fri, 08 Mar 2024 14:08:30 -0800 (PST)
+Received: from [10.167.154.1] (078088045141.garwolin.vectranet.pl. [78.88.45.141])
+        by smtp.gmail.com with ESMTPSA id a14-20020a056512020e00b005130ff68b87sm78241lfo.109.2024.03.08.14.08.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Mar 2024 14:08:30 -0800 (PST)
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 0/3] QCM2290 LMH
+Date: Fri, 08 Mar 2024 23:08:19 +0100
+Message-Id: <20240308-topic-rb1_lmh-v1-0-50c60ffe1130@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: FLfWcM5C0A-_FpItH3KrMNt39-CpGJJu
-X-Proofpoint-ORIG-GUID: FLfWcM5C0A-_FpItH3KrMNt39-CpGJJu
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-08_08,2024-03-06_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 adultscore=0 clxscore=1011 priorityscore=1501
- lowpriorityscore=0 mlxscore=0 spamscore=0 suspectscore=0 mlxlogscore=999
- phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2403080164
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFOM62UC/x2N0QrCMAwAf2Xk2UDa9UH9FRFpu8wGajdSFWHs3
+ xd8vIPjNuiswh2uwwbKX+myNAN3GiCX2J6MMhmDJx9opDO+l1UyanKP+iromOYQKI8XH8GaFDt
+ j0thysap9ajW5Ks/y+09u930/AGbD0iJ0AAAA
+To: Bjorn Andersson <andersson@kernel.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Thara Gopinath <thara.gopinath@gmail.com>, Amit Kucheria <amitk@kernel.org>
+Cc: Marijn Suijten <marijn.suijten@somainline.org>, 
+ linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>, stable@vger.kernel.org, 
+ Loic Poulain <loic.poulain@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1709935708; l=807;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=6hqLrE2kGzcpPPlaLbbol8vDLZeqtCffaioj6zahxA8=;
+ b=a0axESlwZwu80bUuECyc07XfWyvUNwVbZgVKdTsfIs74EWLuM+j4lhtnGG5ZoJ8T/oa+7Ed8C
+ WEN6GC92xCXDcwyiBqcfRG8tfAjyqhBfZEsuaXPDebvLzxH5pT/XrdR
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
-Running turbostat on a 16 socket HPE Scale-up Compute 3200 (SapphireRapids) fails with:
-turbostat: /sys/devices/system/cpu/intel_uncore_frequency/package_010_die_00/current_freq_khz: open failed: No such file or directory
+Wire up LMH on QCM2290 and fix a bad bug while at it.
 
-We observe the sysfs uncore frequency directories named:
-...
-package_09_die_00/
-package_10_die_00/
-package_11_die_00/
-...
-package_15_die_00/
+P1-2 for thermal, P3 for qcom
 
-The culprit is an incorrect sprintf format string "package_0%d_die_0%d" used
-with each instance of reading uncore frequency files. uncore-frequency-common.c
-creates the sysfs directory with the format "package_%02d_die_%02d". Once the
-package value reaches double digits, the formats diverge.
-
-Change each instance of "package_0%d_die_0%d" to "package_%02d_die_%02d".
-
-Signed-off-by: Justin Ernst <justin.ernst@hpe.com>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- tools/power/x86/turbostat/turbostat.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Konrad Dybcio (2):
+      dt-bindings: thermal: lmh: Add QCM2290 compatible
+      thermal: qcom: lmh: Check for SCM avaiability at probe
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 7a334377f92b..2a15a23cb726 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -2599,7 +2599,7 @@ unsigned long long get_uncore_mhz(int package, int die)
- {
- 	char path[128];
- 
--	sprintf(path, "/sys/devices/system/cpu/intel_uncore_frequency/package_0%d_die_0%d/current_freq_khz", package,
-+	sprintf(path, "/sys/devices/system/cpu/intel_uncore_frequency/package_%02d_die_%02d/current_freq_khz", package,
- 		die);
- 
- 	return (snapshot_sysfs_counter(path) / 1000);
-@@ -4589,20 +4589,20 @@ static void probe_intel_uncore_frequency(void)
- 		for (j = 0; j < topo.num_die; ++j) {
- 			int k, l;
- 
--			sprintf(path, "/sys/devices/system/cpu/intel_uncore_frequency/package_0%d_die_0%d/min_freq_khz",
-+			sprintf(path, "/sys/devices/system/cpu/intel_uncore_frequency/package_%02d_die_%02d/min_freq_khz",
- 				i, j);
- 			k = read_sysfs_int(path);
--			sprintf(path, "/sys/devices/system/cpu/intel_uncore_frequency/package_0%d_die_0%d/max_freq_khz",
-+			sprintf(path, "/sys/devices/system/cpu/intel_uncore_frequency/package_%02d_die_%02d/max_freq_khz",
- 				i, j);
- 			l = read_sysfs_int(path);
- 			fprintf(outf, "Uncore Frequency pkg%d die%d: %d - %d MHz ", i, j, k / 1000, l / 1000);
- 
- 			sprintf(path,
--				"/sys/devices/system/cpu/intel_uncore_frequency/package_0%d_die_0%d/initial_min_freq_khz",
-+				"/sys/devices/system/cpu/intel_uncore_frequency/package_%02d_die_%02d/initial_min_freq_khz",
- 				i, j);
- 			k = read_sysfs_int(path);
- 			sprintf(path,
--				"/sys/devices/system/cpu/intel_uncore_frequency/package_0%d_die_0%d/initial_max_freq_khz",
-+				"/sys/devices/system/cpu/intel_uncore_frequency/package_%02d_die_%02d/initial_max_freq_khz",
- 				i, j);
- 			l = read_sysfs_int(path);
- 			fprintf(outf, "(%d - %d MHz)\n", k / 1000, l / 1000);
+Loic Poulain (1):
+      arm64: dts: qcom: qcm2290: Add LMH node
+
+ Documentation/devicetree/bindings/thermal/qcom-lmh.yaml | 13 +++++++++----
+ arch/arm64/boot/dts/qcom/qcm2290.dtsi                   | 14 +++++++++++++-
+ drivers/thermal/qcom/lmh.c                              |  3 +++
+ 3 files changed, 25 insertions(+), 5 deletions(-)
+---
+base-commit: 8ffc8b1bbd505e27e2c8439d326b6059c906c9dd
+change-id: 20240308-topic-rb1_lmh-1e0f440c392a
+
+Best regards,
 -- 
-2.26.2
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
 
