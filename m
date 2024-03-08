@@ -1,166 +1,107 @@
-Return-Path: <linux-pm+bounces-4777-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4778-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B33AC875B5D
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Mar 2024 01:00:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2729875E1D
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Mar 2024 08:02:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E57E31C20D1A
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Mar 2024 00:00:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 395A01F23201
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Mar 2024 07:02:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8319B12E61;
-	Fri,  8 Mar 2024 00:00:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 497074EB3B;
+	Fri,  8 Mar 2024 07:02:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u76TEF7q"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="XPXwAzt4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59838A2A;
-	Fri,  8 Mar 2024 00:00:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D16834E1DC;
+	Fri,  8 Mar 2024 07:02:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709856047; cv=none; b=nEfK0rE1TSX53eG7c8ImmdtAcd917+U+/yOuL2y/uCoWrAJGrelMQSofYxzg+NOmVju37nlXneowCQ3TNl2sEr5NDLOmukUYlkVBglAf00EBoT8KoXFSWtF8EeH/kLaVdXznxFSSDOEiKVNdQU7frTC5mypTL0AMwxj8/nQ7+1c=
+	t=1709881373; cv=none; b=l4bbQfDVB3u2wHPaamYgsDavSnKH9FCB4DN+y3fspFX9EGAKYTiN+WH8r4qSR2y6qad9OJCzkHINe0Y7CMtpgHfAlMFgMuKE1GNCDPybBZ2b6oTaCa4Y/IU3fXwdZ6zKmk2cH881TuWC0MfFqs16Y9STziBLMK/scm4Hxtgf0MQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709856047; c=relaxed/simple;
-	bh=yR/e48Pc+suYhx1b+nutwrcjLsHghjjeWmizES3kOJc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=lUwXN4+xip6yH4Vg7VRP6u12rd+B8lRZE8aFwj0pBF/G7aLcaL2kIL4w42WPXCbrLgcERrcaoY8SlWdNZ/mW62t8XVFnr5czMCIthMh6BXj0qScEtyuba0P7wkZQH8eYVQFe+Run228mYQOdIse5wfWycyv97Uxb6fwo9N+aXAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u76TEF7q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ACFBC433F1;
-	Fri,  8 Mar 2024 00:00:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709856045;
-	bh=yR/e48Pc+suYhx1b+nutwrcjLsHghjjeWmizES3kOJc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=u76TEF7qloryJyegAGaXSgrQVz+arxecm/2CuYk8k/pu9oBl6Ww7oEbRGsD/dZdVN
-	 rMM0hZrmruNRR6zdCLQvqRcNRTPFBAPoNyChysNPTb2PF+VeqVHx2Bqa2bJPPAX5EZ
-	 zjU6+au2xC2AC2sRo9vNgViMzOpgciH1XujysJ4BBC5VeMr7w2N51CJs4KrTF/8Dx5
-	 RtU9RHwC59JpTHB5t+9vis5yt1IP0nTXy3hx6dhYS5H98Tohgx9s2L6JlKXh0XmdRj
-	 aJ5U+EX0PO7LP3Tunk5tEP4HQuKGyjNwxN3IQ7XdM8irNLDloSRaRGykpj11I9Ojxm
-	 Cqh6SHocXEbrg==
-Date: Thu, 7 Mar 2024 18:00:43 -0600
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pci@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-	Oliver O'Halloran <oohall@gmail.com>,
-	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: Re: [PATCH v3] PCI/AER: Block runtime suspend when handling errors
-Message-ID: <20240308000043.GA662251@bhelgaas>
+	s=arc-20240116; t=1709881373; c=relaxed/simple;
+	bh=PAoomouKbOdQvIndHg/4IvzufyezdIjPnsSPwvJBt1c=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=QtW2E5lhxLtlWKQcQu8rp7ZVBQPIn8P3JT2OmPa+74UQMFYiFmhbz5ged8Tv5y1BMMsvXt8A/GbSQGlv8rSM78RfHzX4GFrhHHGDcSb4Q6DLA9i/ujuqazZKUpKhZ2MkEKsTfyBWUNDc8YuAGTtaUBR/4ogJr5h8KVsFHgXY1ME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=XPXwAzt4; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: dc880b94dd1911eeb8927bc1f75efef4-20240308
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=3eAw1MxLJ/Z1C/F1OCuVuEQ3bEvjcOElWxZRU5ARRak=;
+	b=XPXwAzt4pz0BM4rqsG0CkBudjsPIJeagw03r4YscMRSxx/haN5Vb3JThuJmJi1eDD0DXAmVVOni+lWKhOkh9ra8isgSFj/NWTCfWcsq95jIf94HnRpauI35L8G7oUVvbULDXTFLpVQfnvAvOgrN/XZsNbeL9a1J21t+IIJyI5VY=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.37,REQID:53a474fa-9a44-49d8-8091-d614da0a7632,IP:0,U
+	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-5
+X-CID-META: VersionHash:6f543d0,CLOUDID:ec99a8ff-c16b-4159-a099-3b9d0558e447,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
+	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: dc880b94dd1911eeb8927bc1f75efef4-20240308
+Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw01.mediatek.com
+	(envelope-from <poshao.chen@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1202741839; Fri, 08 Mar 2024 15:02:43 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 8 Mar 2024 15:02:42 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Fri, 8 Mar 2024 15:02:42 +0800
+From: PoShao Chen <poshao.chen@mediatek.com>
+To: <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+CC: <lukasz.luba@arm.com>, <dietmar.eggemann@arm.com>, <rafael@kernel.org>,
+	<mingo@kernel.org>, <rafael.j.wysocki@intel.com>, <rui.zhang@intel.com>,
+	<vincent.guittot@linaro.org>, <daniel.lezcano@linaro.org>,
+	<viresh.kumar@linaro.org>, <amit.kachhap@gmail.com>,
+	<clive.lin@mediatek.com>, <ccj.yeh@mediatek.com>,
+	<ching-hao.hsu@mediatek.com>, <poshao.chen@mediatek.com>
+Subject: [PATCH 1/2] PM: EM: Add macro em_is_microwatts()
+Date: Fri, 8 Mar 2024 14:59:21 +0800
+Message-ID: <20240308065922.10329-1-poshao.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240212120135.146068-1-stanislaw.gruszka@linux.intel.com>
+Content-Type: text/plain
 
-On Mon, Feb 12, 2024 at 01:01:35PM +0100, Stanislaw Gruszka wrote:
-> PM runtime can be done simultaneously with AER error handling.
-> Avoid that by using pm_runtime_get_sync() before and pm_runtime_put()
-> after reset in pcie_do_recovery() for all recovering devices.
-> 
-> pm_runtime_get_sync() will increase dev->power.usage_count counter
-> to prevent any possible future request to runtime suspend a device.
-> It will also resume a device, if it was previously in D3hot state.
-> 
-> I tested with igc device by doing simultaneous aer_inject and
-> rpm suspend/resume via /sys/bus/pci/devices/PCI_ID/power/control
-> and can reproduce:
-> 
-> igc 0000:02:00.0: not ready 65535ms after bus reset; giving up
-> pcieport 0000:00:1c.2: AER: Root Port link has been reset (-25)
-> pcieport 0000:00:1c.2: AER: subordinate device reset failed
-> pcieport 0000:00:1c.2: AER: device recovery failed
-> igc 0000:02:00.0: Unable to change power state from D3hot to D0, device inaccessible
-> 
-> The problem disappears when applied this patch.
-> 
-> Cc: stable@vger.kernel.org
-> Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> Acked-by: Rafael J. Wysocki <rafael@kernel.org>
-> Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+This patch adds a new macro, em_is_microwatts(), which checks if
+the EM_PERF_DOMAIN_MICROWATTS flag is set for a given Energy Model.
+This macro enables other parts of the kernel, such as cooling
+devices, to easily determine the unit of power used by the Energy
+Model and to perform the necessary conversions if the values
+are provided in microwatts.
 
-Applied to pci/aer for v6.9, thanks!
+Signed-off-by: PoShao Chen <poshao.chen@mediatek.com>
+---
+ include/linux/energy_model.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-> ---
->  drivers/pci/pcie/err.c | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
-> 
-> RFC -> v1:
->  add runtime callbacks to pcie_do_recovery(), this covers DPC case
->  as well as case of recovering multiple devices under same port.
-> 
-> v1 -> v2:
->  - add R-b, A-b, cc-stable tags
->  - tweak commit message
-> 
-> v2 -> v3:
->  - fix mangled commit message
-> 
-> diff --git a/drivers/pci/pcie/err.c b/drivers/pci/pcie/err.c
-> index 59c90d04a609..705893b5f7b0 100644
-> --- a/drivers/pci/pcie/err.c
-> +++ b/drivers/pci/pcie/err.c
-> @@ -13,6 +13,7 @@
->  #define dev_fmt(fmt) "AER: " fmt
->  
->  #include <linux/pci.h>
-> +#include <linux/pm_runtime.h>
->  #include <linux/module.h>
->  #include <linux/kernel.h>
->  #include <linux/errno.h>
-> @@ -85,6 +86,18 @@ static int report_error_detected(struct pci_dev *dev,
->  	return 0;
->  }
->  
-> +static int pci_pm_runtime_get_sync(struct pci_dev *pdev, void *data)
-> +{
-> +	pm_runtime_get_sync(&pdev->dev);
-> +	return 0;
-> +}
-> +
-> +static int pci_pm_runtime_put(struct pci_dev *pdev, void *data)
-> +{
-> +	pm_runtime_put(&pdev->dev);
-> +	return 0;
-> +}
-> +
->  static int report_frozen_detected(struct pci_dev *dev, void *data)
->  {
->  	return report_error_detected(dev, pci_channel_io_frozen, data);
-> @@ -207,6 +220,8 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
->  	else
->  		bridge = pci_upstream_bridge(dev);
->  
-> +	pci_walk_bridge(bridge, pci_pm_runtime_get_sync, NULL);
-> +
->  	pci_dbg(bridge, "broadcast error_detected message\n");
->  	if (state == pci_channel_io_frozen) {
->  		pci_walk_bridge(bridge, report_frozen_detected, &status);
-> @@ -251,10 +266,15 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
->  		pcie_clear_device_status(dev);
->  		pci_aer_clear_nonfatal_status(dev);
->  	}
-> +
-> +	pci_walk_bridge(bridge, pci_pm_runtime_put, NULL);
-> +
->  	pci_info(bridge, "device recovery successful\n");
->  	return status;
->  
->  failed:
-> +	pci_walk_bridge(bridge, pci_pm_runtime_put, NULL);
-> +
->  	pci_uevent_ers(bridge, PCI_ERS_RESULT_DISCONNECT);
->  
->  	/* TODO: Should kernel panic here? */
-> -- 
-> 2.34.1
-> 
+diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+index 770755df852f..68145b4368d1 100644
+--- a/include/linux/energy_model.h
++++ b/include/linux/energy_model.h
+@@ -92,6 +92,7 @@ struct em_perf_domain {
+ 
+ #define em_span_cpus(em) (to_cpumask((em)->cpus))
+ #define em_is_artificial(em) ((em)->flags & EM_PERF_DOMAIN_ARTIFICIAL)
++#define em_is_microwatts(em) ((em)->flags & EM_PERF_DOMAIN_MICROWATTS)
+ 
+ #ifdef CONFIG_ENERGY_MODEL
+ /*
+-- 
+2.18.0
+
 
