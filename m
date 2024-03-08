@@ -1,166 +1,117 @@
-Return-Path: <linux-pm+bounces-4780-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4781-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F80B875FFE
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Mar 2024 09:46:13 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07374876031
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Mar 2024 09:52:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF1A82851D9
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Mar 2024 08:46:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8BAFDB227FB
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Mar 2024 08:52:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0480352F80;
-	Fri,  8 Mar 2024 08:44:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C3A7524AD;
+	Fri,  8 Mar 2024 08:51:54 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B39452F6B;
-	Fri,  8 Mar 2024 08:44:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FB0C210E7
+	for <linux-pm@vger.kernel.org>; Fri,  8 Mar 2024 08:51:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709887481; cv=none; b=ltgqxfdBVxHy5xkPk3a5kJRp7BHMh5erof3NxpIptz5FAfkghb1uTGRZY5aeAqM9dQRm2JTFUBNiR6r00IlYucUfXGs3sCLAI6kIpU3p0un8IScFNg52Ps7dYAecIMgqlf8+d6u5nucmhnpTnXoR1DwkQl+YWnfoWKecFv9HN7k=
+	t=1709887914; cv=none; b=XPKCwQ3A6O729UISDsEBrVDNMzE+h5inkZH43RQIkjdEyR2068jvaU9KHRfdHW2lmPpa0zUMNMdqB+L2q48tDGoEuBXHc03kbq09mSA3Fkqutksc/XrCOvemOV4biXjyQ2g2uyxx+EOy/5aPbtqceWwe2FnUYFdbDnF+e8oQo7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709887481; c=relaxed/simple;
-	bh=14VPe0pUD24RgR8UUeJpMDtadw2Rx3IIZ/obF0bI/aU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ejnkSnFfjBc13XHcdJAm/tOjRRmoR0ydlxCJjBXD/khwFAe/KiJ/I3lMjTgxxJmuBjm7er8M7MBiPHDhUPs7gaJ99AqUm0fOXOdfTlA6QxcBlw6bZmmBAr1CAInFR9cOWx0EyDaZVeIZRFn677LNuD8fXqDIY7a6JnF7niuVd+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5D274C15;
-	Fri,  8 Mar 2024 00:45:10 -0800 (PST)
-Received: from [10.57.10.181] (unknown [10.57.10.181])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 79A893F762;
-	Fri,  8 Mar 2024 00:44:30 -0800 (PST)
-Message-ID: <3a11f361-4bb5-4a17-b07d-aac549264cc8@arm.com>
-Date: Fri, 8 Mar 2024 08:44:49 +0000
+	s=arc-20240116; t=1709887914; c=relaxed/simple;
+	bh=fAr/1KB3617mo1ngm0neer59sygqeqbk+SM1BcwFDt8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GaLLG6LbgrsFVnd+9d6qcfJm7FTcb08p916OOsPQphrihepPZcdA8ccM4610QpTYeU369y29m3B14/ZgNXQJlbJRk/ToYm4OYi/XDGtV8I8jOzWZZax75g65efwV1cHWbiAl8eQ7S5cPyaobkmR7zJ8VwbqzeHHokjYmuqqojRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1riVxG-0006wd-I5; Fri, 08 Mar 2024 09:51:50 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1riVxG-0056NW-5X; Fri, 08 Mar 2024 09:51:50 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1riVxG-00245x-0J;
+	Fri, 08 Mar 2024 09:51:50 +0100
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-pm@vger.kernel.org,
+	kernel@pengutronix.de
+Subject: [PATCH] powercap: intel_rapl: Convert to platform remove callback returning void
+Date: Fri,  8 Mar 2024 09:51:14 +0100
+Message-ID:  <98afe4627bcfbddedfa36fb5631bb47913f5fa94.1709886922.git.u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] thermal: cooling: Fix unneeded conversions in
- cpufreq_cooling and devfreq_cooling
-Content-Language: en-US
-To: PoShao Chen <poshao.chen@mediatek.com>
-Cc: dietmar.eggemann@arm.com, rafael@kernel.org, mingo@kernel.org,
- rafael.j.wysocki@intel.com, rui.zhang@intel.com, vincent.guittot@linaro.org,
- daniel.lezcano@linaro.org, viresh.kumar@linaro.org, amit.kachhap@gmail.com,
- clive.lin@mediatek.com, ccj.yeh@mediatek.com, ching-hao.hsu@mediatek.com,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20240308065922.10329-1-poshao.chen@mediatek.com>
- <20240308065922.10329-2-poshao.chen@mediatek.com>
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20240308065922.10329-2-poshao.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1845; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=fAr/1KB3617mo1ngm0neer59sygqeqbk+SM1BcwFDt8=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBl6tGGddnQAkd6yGxnMFJMK1HXc4ZtkavKeLQba L64w3fBhjiJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZerRhgAKCRCPgPtYfRL+ TnWkB/4hvEPTer+lkRC3Z0NhryaXnJ76mrqDXdoGfYyChUkQ+U+r5eBq+SRTdpHxIa3H4k9R52L p+QL0ut0Fo2f7zYs81/abOVcAGnV/iPlASece0bZAsu55MsabvjQJRY5T5JOkYmF6ytmhXTBJ3e fhWVLYFCG7NSLeYUthWffWGEZchsW/o+T+FDzo21L4QEMf8h1RCDPUF8t1lT7cChyJA2ZAyaAsg Zr++KNXesWwhTIUYkjjfp2W3IVDB/4bwgYDbPbqE4FkwuOI+VsGIDQpUo2EIs5jYk8rzE4Rx4h7 VOKMMGaw0hqlIL+IXAQgfoLf6mJsrQ2P11t0qr4k7pCgoEr0
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-Hi PoShao,
+The .remove() callback for a platform driver returns an int which makes
+many driver authors wrongly assume it's possible to do error handling by
+returning an error code. However the value returned is ignored (apart
+from emitting a warning) and this typically results in resource leaks.
 
-On 3/8/24 06:59, PoShao Chen wrote:
-> Fix the incorrect division of power values by MICROWATT_PER_MILLIWATT for
-> non-microwatt units in the Energy Model (EM) by adding an
-> em_is_microwatts() check. This ensures that power values are only converted
-> when the EM specifies microwatts, allowing for accurate interpretation of
-> power according to the unit defined by the EM.
-> 
-> Signed-off-by: PoShao Chen <poshao.chen@mediatek.com>
-> ---
->   drivers/thermal/cpufreq_cooling.c |  6 ++++--
->   drivers/thermal/devfreq_cooling.c | 12 ++++++++----
->   2 files changed, 12 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
-> index 9d1b1459700d..5324b9766843 100644
-> --- a/drivers/thermal/cpufreq_cooling.c
-> +++ b/drivers/thermal/cpufreq_cooling.c
-> @@ -120,7 +120,8 @@ static u32 cpu_freq_to_power(struct cpufreq_cooling_device *cpufreq_cdev,
->   	}
->   
->   	power_mw = table[i + 1].power;
-> -	power_mw /= MICROWATT_PER_MILLIWATT;
-> +	if (em_is_microwatts(cpufreq_cdev->em))
-> +		power_mw /= MICROWATT_PER_MILLIWATT;
->   	rcu_read_unlock();
->   
->   	return power_mw;
-> @@ -139,7 +140,8 @@ static u32 cpu_power_to_freq(struct cpufreq_cooling_device *cpufreq_cdev,
->   	for (i = cpufreq_cdev->max_level; i > 0; i--) {
->   		/* Convert EM power to milli-Watts to make safe comparison */
->   		em_power_mw = table[i].power;
-> -		em_power_mw /= MICROWATT_PER_MILLIWATT;
-> +		if (em_is_microwatts(cpufreq_cdev->em))
-> +			em_power_mw /= MICROWATT_PER_MILLIWATT;
->   		if (power >= em_power_mw)
->   			break;
->   	}
-> diff --git a/drivers/thermal/devfreq_cooling.c b/drivers/thermal/devfreq_cooling.c
-> index 50dec24e967a..c28e0c4a63d6 100644
-> --- a/drivers/thermal/devfreq_cooling.c
-> +++ b/drivers/thermal/devfreq_cooling.c
-> @@ -222,7 +222,8 @@ static int devfreq_cooling_get_requested_power(struct thermal_cooling_device *cd
->   			dfc->res_util = table[state].power;
->   			rcu_read_unlock();
->   
-> -			dfc->res_util /= MICROWATT_PER_MILLIWATT;
-> +			if (em_is_microwatts(dfc->em_pd))
-> +				dfc->res_util /= MICROWATT_PER_MILLIWATT;
->   
->   			dfc->res_util *= SCALE_ERROR_MITIGATION;
->   
-> @@ -247,7 +248,8 @@ static int devfreq_cooling_get_requested_power(struct thermal_cooling_device *cd
->   		*power = table[perf_idx].power;
->   		rcu_read_unlock();
->   
-> -		*power /= MICROWATT_PER_MILLIWATT;
-> +		if (em_is_microwatts(dfc->em_pd))
-> +			*power /= MICROWATT_PER_MILLIWATT;
->   		/* Scale power for utilization */
->   		*power *= status.busy_time;
->   		*power >>= 10;
-> @@ -279,7 +281,8 @@ static int devfreq_cooling_state2power(struct thermal_cooling_device *cdev,
->   	*power = table[perf_idx].power;
->   	rcu_read_unlock();
->   
-> -	*power /= MICROWATT_PER_MILLIWATT;
-> +	if (em_is_microwatts(dfc->em_pd))
-> +		*power /= MICROWATT_PER_MILLIWATT;
->   
->   	return 0;
->   }
-> @@ -321,7 +324,8 @@ static int devfreq_cooling_power2state(struct thermal_cooling_device *cdev,
->   	for (i = dfc->max_state; i > 0; i--) {
->   		/* Convert EM power to milli-Watts to make safe comparison */
->   		em_power_mw = table[i].power;
-> -		em_power_mw /= MICROWATT_PER_MILLIWATT;
-> +		if (em_is_microwatts(dfc->em_pd))
-> +			em_power_mw /= MICROWATT_PER_MILLIWATT;
->   		if (est_power >= em_power_mw)
->   			break;
->   	}
+To improve here there is a quest to make the remove callback return
+void. In the first step of this quest all drivers are converted to
+.remove_new(), which already returns void. Eventually after all drivers
+are converted, .remove_new() will be renamed to .remove().
 
-Thanks for the patches and reporting this!
+Trivially convert this driver from always returning zero in the remove
+callback to the void returning variant.
 
-I have checked the commit which introduced the micro-Watts.
-All the drivers where aligned to register the new uW values, also
-your mediatek-cpufreq-hw.c
-ae6ccaa650380d243
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/powercap/intel_rapl_msr.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-I have also check current upstream and all drivers there provide
-the uW to the em_dev_register_perf_domain().
+diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_rapl_msr.c
+index b4b6930cacb0..35cb152fa9aa 100644
+--- a/drivers/powercap/intel_rapl_msr.c
++++ b/drivers/powercap/intel_rapl_msr.c
+@@ -197,11 +197,10 @@ static int rapl_msr_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static int rapl_msr_remove(struct platform_device *pdev)
++static void rapl_msr_remove(struct platform_device *pdev)
+ {
+ 	cpuhp_remove_state(rapl_msr_priv->pcap_rapl_online);
+ 	powercap_unregister_control_type(rapl_msr_priv->control_type);
+-	return 0;
+ }
+ 
+ static const struct platform_device_id rapl_msr_ids[] = {
+@@ -212,7 +211,7 @@ MODULE_DEVICE_TABLE(platform, rapl_msr_ids);
+ 
+ static struct platform_driver intel_rapl_msr_driver = {
+ 	.probe = rapl_msr_probe,
+-	.remove = rapl_msr_remove,
++	.remove_new = rapl_msr_remove,
+ 	.id_table = rapl_msr_ids,
+ 	.driver = {
+ 		.name = "intel_rapl_msr",
 
-Is it some out-of-tree kernel driver, which shows this issue?
+base-commit: 8ffc8b1bbd505e27e2c8439d326b6059c906c9dd
+-- 
+2.43.0
 
-I would need to check all places and force actually to provide the
-uW to the EM registration function. It's pointless to try to support
-mW just because the flag in the registration wasn't set by some
-downstream driver.
-
-Let me re-write that bit in the EM...
-
-Regards,
-Lukasz
 
