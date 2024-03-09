@@ -1,105 +1,112 @@
-Return-Path: <linux-pm+bounces-4803-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4804-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CCEE876D4E
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Mar 2024 23:45:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AFC6877080
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Mar 2024 11:41:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C05F1F2250F
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Mar 2024 22:45:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C811E1F21598
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Mar 2024 10:41:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73ED915AF;
-	Fri,  8 Mar 2024 22:45:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 224DD2D03C;
+	Sat,  9 Mar 2024 10:41:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RFLV3qf5"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="T+stfkch"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D19A93FBB5
-	for <linux-pm@vger.kernel.org>; Fri,  8 Mar 2024 22:45:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 659EB2C6A3
+	for <linux-pm@vger.kernel.org>; Sat,  9 Mar 2024 10:41:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709937903; cv=none; b=D8y30207iDkSA93P3X2VDL4Q3GqQOMckHl+Cm6ELtw/3Cb62uCHQgDy3Q0ZsUT1f+cdCiT8cRLR0XUMyZZ5fUGtgAzSeCpeEvhWgteniUEAcjwgMl3G0iXlpJ4lUmCslEFdb1X7bc643gEy5DfAdXBNGbwZo8RXphpEIWMBDxOM=
+	t=1709980864; cv=none; b=BqdQX4GhkFIuY4zzYEADu2120Dj8F8Sn5mcZMz+p/i0HxcmcTjs+trFtOHVoT3o5n5rgCUULBmWvyWqi93f35K3Y8NIbCdKqYOQcbsJnYRflSqMGU5nNLBSKnz1+GzdABDq6Du7r7Do1bJr23QOphpxDelwZaPAYuo40camMwVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709937903; c=relaxed/simple;
-	bh=KZRGbBNF0GTtJzvOMXF5VklG5k9DvU5JzIOJGPDdwQI=;
-	h=Date:Message-Id:Mime-Version:Subject:From:To:Cc:Content-Type; b=nWlFK22DD2bhAXjmkgNIbvinW46JqOTNj2VsUD08P7GL9IxFXpEGBwSPAYOplrZ6ZUF4u+bqctT1MHbSrqGBdKLatJbwhdf5/n8hM6Ust3OBk36ovix1xdKLv8nnt6v4jC/YnbCLv1xAoZSpLfz/G2kd9RVqth3hEm8UBgIJLiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--saravanak.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RFLV3qf5; arc=none smtp.client-ip=209.85.219.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--saravanak.bounces.google.com
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dcbfe1a42a4so4596785276.2
-        for <linux-pm@vger.kernel.org>; Fri, 08 Mar 2024 14:45:01 -0800 (PST)
+	s=arc-20240116; t=1709980864; c=relaxed/simple;
+	bh=Dh9V2PfB348Arae8187yykw+A7d4pAIxQgkMlEODmIY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=egGiZjvuekCZsKXJdnMLesKhjM3kpxr/YoAqbGF7B7XbD2t9oaLnbKzFbVo3Tw8ccw0tYMTUbf4eF1lgQvwF5Gvy/p1thxaHdtO1qyExdfDZFoptQdgC5aJJpj2kiDMwWWyxPzkCiPzRzy+xU3AOgz64WQ1HX1OkrTiEap4n9k8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=T+stfkch; arc=none smtp.client-ip=209.85.219.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-db4364ecd6aso1903154276.2
+        for <linux-pm@vger.kernel.org>; Sat, 09 Mar 2024 02:41:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709937901; x=1710542701; darn=vger.kernel.org;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=IiMp4Q84ZRHG2huJ3D03WkrKLgdFSmD9U9ReR7uCK6U=;
-        b=RFLV3qf5sNxacB65Ib0q1PqL8+KAYXKGUgu879ZIcdJ0qVLrQl70VUI0FMxg1c4MdX
-         QEZWlqoBgF5rzKlo0bBXekOUJGCFfDI1yF+x0Agp5HXF+gjIkiC4m0LTPziwaC3FFXfQ
-         bAq0a8ceovtmA8MQv7yNtdzhTukpnLVLitUK24sub4LMQLhOQSTbg/iGfGbq6GD5RD2n
-         l7YrxZc4cWrw1At1W3odrUYEF8jUC0BiLhTmjAdKWSTNYYNUiDgFYWgiy0iv1urSwUAj
-         4yW1QEjk35psTJxtTv2ExH5TDSoHIb6HxDkXe/yt5bBdjEjJCds4yzFgCF3zX+fLtajR
-         EcAw==
+        d=linaro.org; s=google; t=1709980861; x=1710585661; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/zwcDfLfy6H/xwTNg7xVsc+HCBPAWPPDyK8ncs4w+gs=;
+        b=T+stfkchbw3OzdhVTmml7wBSaHenkNjauK1L1qMQKhTAvvGdhPD7hBCiyo5MdNF/pE
+         10bEQswQKQ+p1NQbdguDlUAOYKU19ywyp5araFn/nZJLZoYe7teiKXkl/AatHLWzAdjr
+         kbTwfhptcVhnmySU3No7yrH2gAb1hsaEEuqSYUd4CVTukpXM4CIUkoCrMpkxVVAVdrGY
+         xUDEt6VXUPJOXM+fot8W3bHdCAZ4gjUhzIFBI/rkTy+puCfc46n5qIk32BB07ePWmvs9
+         uzWYwUH0rzHUVO3EdPGceDh9Za/BqBv58TAr4ZUzxMgO+D6JvXp2iqVUFGtSpMu6NGB4
+         JtGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709937901; x=1710542701;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IiMp4Q84ZRHG2huJ3D03WkrKLgdFSmD9U9ReR7uCK6U=;
-        b=kfczeZsCMw+acycBI9wjAeSh27IEBaHydvag9BC459RAPLidBA2S7WKT4q/jb9g7Zp
-         USBQjB/iNwp2vtl0+VMxOZDZZh+GL8gQ+IDVce6Hg0nco+raD/GrUkZvZEUMteMc9Dtp
-         qwNHpVqmvyw6Osqiwg9If94uOtmgRKo4QrVx1HFhVRtOzatuSxS44JwNdDEMYCnFxPtx
-         cKFfX+0huLfJ7vFp82uMHqc8iZOp6NB22Y+nvgXH5a1UWG8Wm6dTaNRVrQ2MrAUFL4GF
-         KKljkaMI0Y0qu2WT/FGMMH/8wLYn9Ob5tdiBmKcrRucxsCcuVf2kIHK+4mh18fC4lxK4
-         V4rA==
-X-Forwarded-Encrypted: i=1; AJvYcCWim/K89cPTLuraTMdan03HQejLIBV3PMqWOyHRm7j9LQ3Qn9R4CRCSh9mR+ddK1+4y6vJcfgMlm+JCJ0IkZGvEG85OJu7R2Jo=
-X-Gm-Message-State: AOJu0Yyf/wzrrIWL9BONZdK0VZYPyOBSjb/L3kqVLEXCjvP3yltfSRk6
-	QIIp1a3wBo4cyJk7coXhCwhegJ1d69aBrVBte7OhCmYGiJAWhyZNd+dPTyaTRlTDQsh96MkpzSX
-	LHpC8uBqJFZKdIQ==
-X-Google-Smtp-Source: AGHT+IG/emX2/VZdtlMuRgEiAhbEydXKKDZZNEwpuRFiPRm8SORpqs38ydYiV9bQtRKmc6lUxN4XqNmkfzHamhE=
-X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:b307:13b8:5743:15a9])
- (user=saravanak job=sendgmr) by 2002:a05:6902:102b:b0:dcc:e1a6:aca9 with SMTP
- id x11-20020a056902102b00b00dcce1a6aca9mr96836ybt.9.1709937900881; Fri, 08
- Mar 2024 14:45:00 -0800 (PST)
-Date: Fri,  8 Mar 2024 14:44:50 -0800
-Message-Id: <20240308224450.2327415-1-saravanak@google.com>
+        d=1e100.net; s=20230601; t=1709980861; x=1710585661;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/zwcDfLfy6H/xwTNg7xVsc+HCBPAWPPDyK8ncs4w+gs=;
+        b=BQQ5lJORB98pQ8RV7xe27h/J15rDh0qxIOcj6lMEo9vYfUHdrgJ5FeSGP0rxNrLiON
+         ov1rJ9/ge/ZK0orrHZZMULkY5dTJLuy6DBEy0QsHm43VRZ5wnKsZ/Ot2ISw9l+lAe4X8
+         42MFL017/NGzMPPNDrsC6ucO8Zx0AgTvpm/z6PcSIeH3COvvujujDBakpjjdtf3ngO/v
+         SCU5nck64xeSe474m5p0Y9XG68bg6zbuYs8JdVgfjqYgU+5QZS1AyD/MMk4ghwwECq9g
+         2GpOqQuPXjy5DdLLOLkQzH2AKF+3D5yTgrhmgeFp8swacZi2QX6UbLvMWiK5FByWckmx
+         FPBw==
+X-Forwarded-Encrypted: i=1; AJvYcCXEn85Tdiuv6vDzWAQkushx+s8oLXOh8dSd6g+g7yc0uVyTDPZhnZD442zHhb/UsXThgzJXtj0ITBSIgsTR2LuhX4mFD5i8B4I=
+X-Gm-Message-State: AOJu0YwGS04Jv9ai6dMWJ+Koe7qTNqXZFXG9uBBLGxJuMKH7NcB2Y2kI
+	55SxzBPDsnCm5URT3YryDFns0abPZAWYDEDE24Igo2RMHcKQ76gVU0g5eBJFfTKQsfKcwETTEUD
+	qPAf9+0tDTclqTbkIoFYefNpJVzFl5XgGg7ySsg==
+X-Google-Smtp-Source: AGHT+IHwQwkSLfesKtrPrMGKJ4Q2PnQLBph1lGKkzbnH0SpIFTbRZI4HlaMD+5FNweFu/bH2N/hGy0XTcTcPw+znj1M=
+X-Received: by 2002:a25:b325:0:b0:dcf:f535:dad6 with SMTP id
+ l37-20020a25b325000000b00dcff535dad6mr667006ybj.56.1709980861366; Sat, 09 Mar
+ 2024 02:41:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.44.0.278.ge034bb2e1d-goog
-Subject: [PATCH] Documentation: power: Fix typo in suspend and interrupts doc
-From: Saravana Kannan <saravanak@google.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Cc: Saravana Kannan <saravanak@google.com>, kernel-team@android.com, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+MIME-Version: 1.0
+References: <20240308-topic-rb1_lmh-v1-0-50c60ffe1130@linaro.org> <20240308-topic-rb1_lmh-v1-2-50c60ffe1130@linaro.org>
+In-Reply-To: <20240308-topic-rb1_lmh-v1-2-50c60ffe1130@linaro.org>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Sat, 9 Mar 2024 12:40:50 +0200
+Message-ID: <CAA8EJpq9bOkv9Ha5wjOjHGdPT7AqTZWnA2SpLNGB99YXP2OmQw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] thermal: qcom: lmh: Check for SCM avaiability at probe
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: Bjorn Andersson <andersson@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Thara Gopinath <thara.gopinath@gmail.com>, Amit Kucheria <amitk@kernel.org>, 
+	Marijn Suijten <marijn.suijten@somainline.org>, linux-arm-msm@vger.kernel.org, 
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Typos are bad. Fix them.
+On Sat, 9 Mar 2024 at 00:08, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>
+> Up until now, the necessary scm availability check has not been
+> performed, leading to possible null pointer dereferences (which did
+> happen for me on RB1).
+>
+> Fix that.
+>
+> Fixes: 53bca371cdf7 ("thermal/drivers/qcom: Add support for LMh driver")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  drivers/thermal/qcom/lmh.c | 3 +++
+>  1 file changed, 3 insertions(+)
 
-Signed-off-by: Saravana Kannan <saravanak@google.com>
----
- Documentation/power/suspend-and-interrupts.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-diff --git a/Documentation/power/suspend-and-interrupts.rst b/Documentation/power/suspend-and-interrupts.rst
-index dfbace2f4600..f588feeecad0 100644
---- a/Documentation/power/suspend-and-interrupts.rst
-+++ b/Documentation/power/suspend-and-interrupts.rst
-@@ -78,7 +78,7 @@ handling the given IRQ as a system wakeup interrupt line and disable_irq_wake()
- turns that logic off.
- 
- Calling enable_irq_wake() causes suspend_device_irqs() to treat the given IRQ
--in a special way.  Namely, the IRQ remains enabled, by on the first interrupt
-+in a special way.  Namely, the IRQ remains enabled, but on the first interrupt
- it will be disabled, marked as pending and "suspended" so that it will be
- re-enabled by resume_device_irqs() during the subsequent system resume.  Also
- the PM core is notified about the event which causes the system suspend in
+
+
 -- 
-2.44.0.278.ge034bb2e1d-goog
-
+With best wishes
+Dmitry
 
