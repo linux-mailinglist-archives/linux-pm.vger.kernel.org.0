@@ -1,103 +1,114 @@
-Return-Path: <linux-pm+bounces-4814-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4815-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EE2A87777F
-	for <lists+linux-pm@lfdr.de>; Sun, 10 Mar 2024 16:33:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED8C5877A69
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Mar 2024 05:39:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E75528205D
-	for <lists+linux-pm@lfdr.de>; Sun, 10 Mar 2024 15:33:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 952F51F21C85
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Mar 2024 04:39:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20442374D1;
-	Sun, 10 Mar 2024 15:33:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24F1C63AE;
+	Mon, 11 Mar 2024 04:39:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UbFuYLzJ"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="Jvc38W8i"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE40222618
-	for <linux-pm@vger.kernel.org>; Sun, 10 Mar 2024 15:33:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ADD47462;
+	Mon, 11 Mar 2024 04:39:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710084795; cv=none; b=uj7DPQ5iHT0VLjIKb6n5eSNCCcfwJzYu0kfPQS09ZbT/KVpemqXUtu9GLcdRPCUS0O69Re/WMlRaKyZiJlv/tg+GJwTKBIkdW77eb70mXTDDczkf63UZILAqy6sqfPj2T9ZkTjjoX8cMFbadjm+7eo0KYlGNapMmv1KAsWt2eAk=
+	t=1710131982; cv=none; b=SzLcznAIYXRdmq4lwmTCXsvEp4AOW8URpBXCrxtaCEuUb2sRtPF2Xh4BlZ+GPzTPllLBxaea5iNbF/hgiFhKt60Zr3hM1gccPXETFSwkQLsgEgOUUKHgTR+mACA/tI65LiOmolm9ZkPMJph1UF4hOIQaBJf69GF/nNbaUMynX+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710084795; c=relaxed/simple;
-	bh=OXfDOaw05wCDN3RwbK0FTmatV1N8wRVQipDT9Ftn4so=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=KRnGIR5ipYm1jLisAk3gnbWp3BblSD9v47oESeflBp4FceDqSYIngxq+AVwA3NTI7Z8dVhL/7CK/QTh4rOPmg2HZ3eAoOC3+2X2/9RxzATK+O8YyNKi9Cfm6p+HCLFbQvbStWMBsMyoynNiEXIbfzd0e/QhdGLJJ6QS/lhvr4I4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UbFuYLzJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5CBD0C433B1
-	for <linux-pm@vger.kernel.org>; Sun, 10 Mar 2024 15:33:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710084794;
-	bh=OXfDOaw05wCDN3RwbK0FTmatV1N8wRVQipDT9Ftn4so=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=UbFuYLzJujbANAtLOGotLFKsZEA34gGe8uHjEvohCYAX2UrDRIeJT/N/5Sd6OxKWd
-	 FByzElVO/HsllqC2axJtZ30UAuIdvslOcpaueRs4CaJ86CxKxZRa2x5n13ZupfFfri
-	 9H6kZyoe1zkFWE2afLxYEYE6c8w3wMqG409EZeh89uJpd86GRiksNvP4cW8w9B07fo
-	 UhZs+p3LD5heQaIFkIf4UYbSJAxIAfv/Ji0wJBk2LKioI0Kqj0slmpanp1e2CJC0dK
-	 3IxvJMZNUe03bUUssYIis2q8m7E8Lj7Ywd3Pke23JVbcGNFk3CaiAmiApeWk617sST
-	 dPAQmWkXd+1tQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 4D065C53BD2; Sun, 10 Mar 2024 15:33:14 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 218171] amd-pstate not loading on zen2 threadripper 3960x
- (trx40
-Date: Sun, 10 Mar 2024 15:33:13 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: vishalrao@gmail.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: ANSWERED
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218171-137361-8nASCd0NPa@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218171-137361@https.bugzilla.kernel.org/>
-References: <bug-218171-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1710131982; c=relaxed/simple;
+	bh=4Ibi4H07VxgPlyDobBtS4MyrMdnJ8VwUnqQ3QlPghtc=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XfwhqT/xUFn4RpUJlJndqiWqbPuO0y/Dssh5nYQZBKj2VBrrlfKk09xciAAdZFRSViyJIAuzgqpWhELZfP2i5ET29we8CB/HqmxcDp6MudiZ3FuFo/MfKcYpOSFvyrR+xwIWp1wm/xNpy+zundx2J5Cc9ieNUNpydA2Jz9CWDIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=Jvc38W8i; arc=none smtp.client-ip=198.47.23.249
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 42B4dTCr003622;
+	Sun, 10 Mar 2024 23:39:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1710131969;
+	bh=a6RuBo2ZSc5PPvT8dADMxZcpKorsZU59gBI/y+TA4+M=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=Jvc38W8iNSFtaGZZVkpQfyUl2Ni14H9BeFDO5Pnwn3/01QHDeA0v9f3b/hhlx69kh
+	 FLYkRX/hAWOR6yN9pnPdCpoRHoc8k9J7Zjs+XebvcTS3kBWFsL6BvveG9SlvQj20xT
+	 Jikedaf68KYIdcwgP+SRQQrh1tLJ4OleRYMG7HMY=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 42B4dT80056249
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Sun, 10 Mar 2024 23:39:29 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Sun, 10
+ Mar 2024 23:39:29 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Sun, 10 Mar 2024 23:39:29 -0500
+Received: from localhost (dhruva.dhcp.ti.com [172.24.227.68])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 42B4dSX3024733;
+	Sun, 10 Mar 2024 23:39:28 -0500
+Date: Mon, 11 Mar 2024 10:09:27 +0530
+From: Dhruva Gole <d-gole@ti.com>
+To: Saravana Kannan <saravanak@google.com>
+CC: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, <kernel-team@android.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] Documentation: power: Fix typo in suspend and interrupts
+ doc
+Message-ID: <20240311043927.il77znubaymo3rhd@dhruva>
+References: <20240308224450.2327415-1-saravanak@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20240308224450.2327415-1-saravanak@google.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218171
+On Mar 08, 2024 at 14:44:50 -0800, Saravana Kannan wrote:
+> Typos are bad. Fix them.
 
---- Comment #45 from Vishal Rao (vishalrao@gmail.com) ---
-Hello,
+Maybe a little more description that you s/by/but would've also made
+things more clear?
 
-Is this the right place to request this bugfix be backported to the 6.8 ser=
-ies?
+> 
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> ---
+>  Documentation/power/suspend-and-interrupts.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/power/suspend-and-interrupts.rst b/Documentation/power/suspend-and-interrupts.rst
+> index dfbace2f4600..f588feeecad0 100644
+> --- a/Documentation/power/suspend-and-interrupts.rst
+> +++ b/Documentation/power/suspend-and-interrupts.rst
+> @@ -78,7 +78,7 @@ handling the given IRQ as a system wakeup interrupt line and disable_irq_wake()
+>  turns that logic off.
+>  
+>  Calling enable_irq_wake() causes suspend_device_irqs() to treat the given IRQ
+> -in a special way.  Namely, the IRQ remains enabled, by on the first interrupt
+> +in a special way.  Namely, the IRQ remains enabled, but on the first interrupt
+>  it will be disabled, marked as pending and "suspended" so that it will be
+>  re-enabled by resume_device_irqs() during the subsequent system resume.  Also
+>  the PM core is notified about the event which causes the system suspend in
+> -- 
 
-Phoronix says it's coming to 6.9 here:
-https://www.phoronix.com/news/AMD-P-State-TRX40-Linux-6.9
+Anyway, changes LGTM!
 
-I've filed a wishlist bug report to ubuntu for the 24.04 LTS release which =
-will
-carry 6.8 to start with, apparently:
-https://bugs.launchpad.net/ubuntu/+source/linux/+bug/2056686
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
 
-Regards.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
+-- 
+Best regards,
+Dhruva Gole <d-gole@ti.com>
 
