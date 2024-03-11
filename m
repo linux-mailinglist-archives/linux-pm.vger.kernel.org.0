@@ -1,184 +1,99 @@
-Return-Path: <linux-pm+bounces-4827-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4828-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F885878297
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Mar 2024 15:59:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E8DD08783B1
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Mar 2024 16:32:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A37741C215BE
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Mar 2024 14:59:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 264D61C21B15
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Mar 2024 15:32:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C429D3F8C3;
-	Mon, 11 Mar 2024 14:56:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="RkK6CGw9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1736744C9B;
+	Mon, 11 Mar 2024 15:22:08 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DB5F4642B
-	for <linux-pm@vger.kernel.org>; Mon, 11 Mar 2024 14:56:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0E3A42073;
+	Mon, 11 Mar 2024 15:22:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710169010; cv=none; b=dHKE+iEvCliUbsgZvl3WD1Qi4LUqKD2TpO5Ee6GxJ/KD9nPVzfhzygdWw8AiX5io0nU+F5luy55D7v7dldE3EXm3Cu2eGAmYkQ7naK3mJpJh+r4PqO1/B1ViVjV5UVU2l4uDKJmfL23yS6JgT6hs1LuP3O69dS6np1rPs3T2Mww=
+	t=1710170528; cv=none; b=NVMKcUrZA2Q67G316731xgwsEVgFWlk53DD80Xs35+InBM4YCHt7b1ugybpp451YbXkFyErYiOUt8QZ4FDw1bC6avOWNdB5hvLG8ypr4BR2BVS+bHiaN6znAlrEjSjBo4dOsRqbsQKGu4B8L9xGodLGpV5u/wT2Ju56Q1N0YVXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710169010; c=relaxed/simple;
-	bh=uu83XHZpqS5kO/WOuCT5FQLzPQ3U0FfXQvrF8UheWmg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=MzKvy5D4oGNqgcnIdkhnF/b1dP2hJOLnBdlCg4PgPAkvk9nDcLRDXukeszA0Hg6Z3ixZMaCv7InFsUK166gTHFn1zs79kvxjgKH6GoqKB1pc/ivPKBMrM8o5u9Ry/Z09QeOluDqZA+W5Q8jBw6gSB9Ri/ekawruqSXu+PaHvlhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=RkK6CGw9; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20240311145640euoutp017ef67782c54820a8a0052814a9b20a0b~7vaUi7_Is1897818978euoutp01N
-	for <linux-pm@vger.kernel.org>; Mon, 11 Mar 2024 14:56:40 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20240311145640euoutp017ef67782c54820a8a0052814a9b20a0b~7vaUi7_Is1897818978euoutp01N
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1710169000;
-	bh=uOPd2AwFVdGKb+UngFBePmqdQoXqrn4uH0VfBRH90zo=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=RkK6CGw91isXmWz7NCu8mBBKkjgSkwvNssUVCy4UD5IWlcL5wiZ8INxSBdHX/FOt1
-	 dBQJgS7aUF7xggzbGH8OLf/ZfH/g7REWyRbxGoh+i0HRzFBL+d9xbcFJd9ZOMH16Sx
-	 ZmwWHl16SWC9r2IbG2f3k+UwJw2z/NswDvDL4A1A=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-	20240311145639eucas1p1c2f9d8b6e5fa1c36088b4babf0c0056d~7vaUBXqwo2427124271eucas1p1k;
-	Mon, 11 Mar 2024 14:56:39 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-	eusmges1new.samsung.com (EUCPMTA) with SMTP id B8.01.09539.7AB1FE56; Mon, 11
-	Mar 2024 14:56:39 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20240311145639eucas1p2dee661847c8c8a29dcba021d800ca73a~7vaTYZ1MU1472714727eucas1p25;
-	Mon, 11 Mar 2024 14:56:39 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20240311145639eusmtrp290064aef32d0f8802d12f1e81dc11274~7vaTXWamJ1058210582eusmtrp2d;
-	Mon, 11 Mar 2024 14:56:39 +0000 (GMT)
-X-AuditID: cbfec7f2-515ff70000002543-61-65ef1ba733ca
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-	eusmgms2.samsung.com (EUCPMTA) with SMTP id BC.6F.10702.7AB1FE56; Mon, 11
-	Mar 2024 14:56:39 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20240311145638eusmtip1ea6702de7106114eb7a6c1426ce239d7~7vaSRcF-G3139931399eusmtip1A;
-	Mon, 11 Mar 2024 14:56:37 +0000 (GMT)
-Message-ID: <8abb1a69-6cbd-4a36-ab1d-d269cdafa391@samsung.com>
-Date: Mon, 11 Mar 2024 15:56:37 +0100
+	s=arc-20240116; t=1710170528; c=relaxed/simple;
+	bh=IEbrELXNPCnsnk0tlcdplu6+a2MvOyBflK48xsJAEOk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qDE1uMKTt5ZK8L/fgppgA/ir5zJGp4CO0DTS/Hx1HVUI4ECa4L7C2+p4aCAJizCBtzZ/qslovbC4s8SUhyPUC46o3ZdFICpa9yNQQnAqsoaesAorT4tUrIMA151zHcbpLG/i/NPMrLZHQCaEYAybbI1Ocd9dVG0y8Bndo/aPw+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 399F3C433C7;
+	Mon, 11 Mar 2024 15:22:03 +0000 (UTC)
+Date: Mon, 11 Mar 2024 15:22:00 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: Mark Rutland <mark.rutland@arm.com>,
+	"Christoph Lameter (Ampere)" <cl@linux.com>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <vireshk@kernel.org>, Will Deacon <will@kernel.org>,
+	Jonathan.Cameron@huawei.com, Matteo.Carlini@arm.com,
+	Valentin.Schneider@arm.com, akpm@linux-foundation.org,
+	anshuman.khandual@arm.com, Eric Mackay <eric.mackay@oracle.com>,
+	dave.kleikamp@oracle.com, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	linux@armlinux.org.uk, robin.murphy@arm.com,
+	vanshikonda@os.amperecomputing.com, yang@os.amperecomputing.com,
+	Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH v3] ARM64: Dynamically allocate cpumasks and increase
+ supported CPUs to 512
+Message-ID: <Ze8hmCbN7_GDRMVS@arm.com>
+References: <37099a57-b655-3b3a-56d0-5f7fbd49d7db@gentwo.org>
+ <CGME20240308140130eucas1p1259c805a0b6491ce2f69c6fca0264b1f@eucas1p1.samsung.com>
+ <c1f2902d-cefc-4122-9b86-d1d32911f590@samsung.com>
+ <ZesmAO1jJfEjTwxd@arm.com>
+ <f160a532-1d31-41a7-b8ae-de8575c395e9@samsung.com>
+ <e3952dc0-ec28-e7c7-e858-c47f146c93de@linux.com>
+ <Ze71H4AdY786nSvn@FVFF77S0Q05N>
+ <8abb1a69-6cbd-4a36-ab1d-d269cdafa391@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] ARM64: Dynamically allocate cpumasks and increase
- supported CPUs to 512
-Content-Language: en-US
-To: Mark Rutland <mark.rutland@arm.com>, "Christoph Lameter (Ampere)"
-	<cl@linux.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, "linux-pm@vger.kernel.org"
-	<linux-pm@vger.kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Viresh
-	Kumar <vireshk@kernel.org>, Will Deacon <will@kernel.org>,
-	Jonathan.Cameron@huawei.com, Matteo.Carlini@arm.com,
-	Valentin.Schneider@arm.com, akpm@linux-foundation.org,
-	anshuman.khandual@arm.com, Eric Mackay <eric.mackay@oracle.com>,
-	dave.kleikamp@oracle.com, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, linux@armlinux.org.uk,
-	robin.murphy@arm.com, vanshikonda@os.amperecomputing.com,
-	yang@os.amperecomputing.com, Nishanth Menon <nm@ti.com>, Stephen Boyd
-	<sboyd@kernel.org>
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <Ze71H4AdY786nSvn@FVFF77S0Q05N>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupnk+LIzCtJLcpLzFFi42LZduzned3l0u9TDV7OMraYs34Nm8W+E8kW
-	75f1MFpc//aG0eLAs0vMFk//LWO3WLXwGpvFpsfXWC0u75rDZnFvzX9Wi8+9RxgtDk3dy2ix
-	9PpFJovfy74zWbz5cZbJYu6XqcwWBz88YbX4d20ji8X2+T+ZLV7eusNisfnBMTaLljumFr1L
-	TrI7iHusmbeG0ePytYvMHi1H3rJ6bFrVyeax6dMkdo8TM36zeDy5Mp3JY/OSeo+PT2+xeHRf
-	vsHucfzGdiaPz5vkAniiuGxSUnMyy1KL9O0SuDLmN1xiLvjKW/Gs8xlbA+MS7i5GTg4JAROJ
-	rx9WMXUxcnEICaxglNg9cxEbhPOFUWLV7G+sEM5nRonWIwuYYFrOztvKDGILCSxnlPh4nwei
-	6COjxI5pRxlBErwCdhJfd90As1kEVCVOPVjLDhEXlDg58wkLiC0qIC9x/9YMsLiwQKLEq+0L
-	wIYyC4hL3HoyH2yZiECYxO7zn8HuYxZYyyrR+eYN2FA2AUOJrrddbCA2p4COxJxP/SwQzfIS
-	29/OYQZpkBBo45LoXfUc6mwXiRsfLjJC2MISr45vYYewZST+75zPBNHQziix4Pd9KGcCo0TD
-	81tQHdYSd879AlrHAbRCU2L9Ln2IsKPEq7717CBhCQE+iRtvBSGO4JOYtG06M0SYV6KjTQii
-	Wk1i1vF1cGsPXrjEPIFRaRZSuMxC8v8sJO/MQti7gJFlFaN4amlxbnpqsWFearlecWJucWle
-	ul5yfu4mRmCaPf3v+KcdjHNffdQ7xMjEwXiIUYKDWUmE97XO21Qh3pTEyqrUovz4otKc1OJD
-	jNIcLErivKop8qlCAumJJanZqakFqUUwWSYOTqkGJhNdZ4742F8h58z+xYuofzh1Mu3kes49
-	Gbq8WXe/sirPNao9HR0R3Tppna1kpdp2jt9JH838jb7MMFgnwPsnZNex/4c/+F5O3Tbx6sTG
-	KxLmU0RexGj8ijj1UOrG3E2swoKceoHBXsVLdKbHSXCWLhbvNzy2d0eakXQp3/LWCbezrM5V
-	26qz84X+nubJu2tJhPPTtIl3ix6dT/di2PlmSvm6rB35J8Wfux5pNQ6pinnw6U1Zofxj5aab
-	Sg6JJ2K/X5z61idQPiQ7dEbUTLUvPy1/aOzaHh1wrlLw4ou+nPqgD8FtmRVZub9VI0KXTy8M
-	2f3717NzbNFiiosntp2euTC25PzUOv07Fl83KXD5KbEUZyQaajEXFScCAAm8wP4iBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEKsWRmVeSWpSXmKPExsVy+t/xu7rLpd+nGrRMZrOYs34Nm8W+E8kW
-	75f1MFpc//aG0eLAs0vMFk//LWO3WLXwGpvFpsfXWC0u75rDZnFvzX9Wi8+9RxgtDk3dy2ix
-	9PpFJovfy74zWbz5cZbJYu6XqcwWBz88YbX4d20ji8X2+T+ZLV7eusNisfnBMTaLljumFr1L
-	TrI7iHusmbeG0ePytYvMHi1H3rJ6bFrVyeax6dMkdo8TM36zeDy5Mp3JY/OSeo+PT2+xeHRf
-	vsHucfzGdiaPz5vkAnii9GyK8ktLUhUy8otLbJWiDS2M9AwtLfSMTCz1DI3NY62MTJX07WxS
-	UnMyy1KL9O0S9DLmN1xiLvjKW/Gs8xlbA+MS7i5GTg4JAROJs/O2MncxcnEICSxllOhetYcR
-	IiEjcXJaAyuELSzx51oXG0TRe0aJvVNusIMkeAXsJL7uugHWwCKgKnHqwVqouKDEyZlPWEBs
-	UQF5ifu3ZoDFhQUSJV5tX8AMYjMLiEvcejKfCcQWEQiTeHmiiwlkAbPAWlaJprPPoE56zSSx
-	+ep3sA1sAoYSXW9BzuDk4BTQkZjzqZ8FYpKZRNfWLkYIW15i+9s5zBMYhWYhOWQWkoWzkLTM
-	QtKygJFlFaNIamlxbnpusZFecWJucWleul5yfu4mRmBi2Xbs55YdjCtffdQ7xMjEwXiIUYKD
-	WUmE97XO21Qh3pTEyqrUovz4otKc1OJDjKbA0JjILCWanA9MbXkl8YZmBqaGJmaWBqaWZsZK
-	4ryeBR2JQgLpiSWp2ampBalFMH1MHJxSDUydd9+kau6+wWGxWFX3XuaMbiNxn7zSEK5zdxvN
-	pVX9GITnCdrMFTne8Ptl/cMNXvp9gW/dJr7dUJ8Wv79y37nlUbUraySfFvy9/JZ9b9Plnw7v
-	/Cunb7s/d/php6cTIhm+G4UXK84wafsZLz3VMvzu3PPn2KV/XxIpncc3eZPAzGXe/St+188V
-	zH470dbvbvCOn5rHu/gt502/rcSnpSzFenrq5Sd5S3TWK2XnqU77smLJvSU/gxQ6D7Kd59W6
-	wbkru0D1aLZuyqLVOZ/3vH1x+qjF6wtKny5F3L+afPiis/AdB1fno1yy275tzl13wfSvedub
-	Vzw9pVwFV4q/LHBL2e27ze5xa3PpOvkbrx4kKrEUZyQaajEXFScCAAeoS561AwAA
-X-CMS-MailID: 20240311145639eucas1p2dee661847c8c8a29dcba021d800ca73a
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20240308140130eucas1p1259c805a0b6491ce2f69c6fca0264b1f
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20240308140130eucas1p1259c805a0b6491ce2f69c6fca0264b1f
-References: <37099a57-b655-3b3a-56d0-5f7fbd49d7db@gentwo.org>
-	<CGME20240308140130eucas1p1259c805a0b6491ce2f69c6fca0264b1f@eucas1p1.samsung.com>
-	<c1f2902d-cefc-4122-9b86-d1d32911f590@samsung.com>
-	<ZesmAO1jJfEjTwxd@arm.com>
-	<f160a532-1d31-41a7-b8ae-de8575c395e9@samsung.com>
-	<e3952dc0-ec28-e7c7-e858-c47f146c93de@linux.com>
-	<Ze71H4AdY786nSvn@FVFF77S0Q05N>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8abb1a69-6cbd-4a36-ab1d-d269cdafa391@samsung.com>
 
-On 11.03.2024 13:12, Mark Rutland wrote:
-> On Fri, Mar 08, 2024 at 09:08:59AM -0800, Christoph Lameter (Ampere) wrote:
->> On Fri, 8 Mar 2024, Marek Szyprowski wrote:
->>>>> It looks that cpufreq-dt and/or opp drivers needs some adjustments
->>>>> related with this change.
->>>> That's strange. Is this with defconfig? I wonder whether NR_CPUS being
->>>> larger caused the issue with this specific code. Otherwise
->>>> CPUMASK_OFFSTACK may not work that well on arm64.
->> cpumask handling must use the accessor functions provided in
->> include/linux/cpumask.h for declaring and accessing cpumasks. It is likely
->> related to the driver opencoding one of the accessors.
-> I took a look at both the OPP code and the cpufreq-dt code and it looks like
-> those are doign the right thing w.r.t. cpumask manipulation (i.e. they only use
-> the cpumask accessors, and use the cpumask_var_*() functions to dynamically
-> allocate/free cpumasks). Maybe I've missed something, but superficially those
-> look right.
->
-> Marek, can you try reverting this commit and trying defconfig + NR_CPUS=512?
+On Mon, Mar 11, 2024 at 03:56:37PM +0100, Marek Szyprowski wrote:
+> On 11.03.2024 13:12, Mark Rutland wrote:
+> > On Fri, Mar 08, 2024 at 09:08:59AM -0800, Christoph Lameter (Ampere) wrote:
+> >> On Fri, 8 Mar 2024, Marek Szyprowski wrote:
+> >>>>> It looks that cpufreq-dt and/or opp drivers needs some adjustments
+> >>>>> related with this change.
+> >>>> That's strange. Is this with defconfig? I wonder whether NR_CPUS being
+> >>>> larger caused the issue with this specific code. Otherwise
+> >>>> CPUMASK_OFFSTACK may not work that well on arm64.
+> >> cpumask handling must use the accessor functions provided in
+> >> include/linux/cpumask.h for declaring and accessing cpumasks. It is likely
+> >> related to the driver opencoding one of the accessors.
+> > I took a look at both the OPP code and the cpufreq-dt code and it looks like
+> > those are doign the right thing w.r.t. cpumask manipulation (i.e. they only use
+> > the cpumask accessors, and use the cpumask_var_*() functions to dynamically
+> > allocate/free cpumasks). Maybe I've missed something, but superficially those
+> > look right.
+> >
+> > Marek, can you try reverting this commit and trying defconfig + NR_CPUS=512?
+> 
+> Yes, with $subject reverted and CONFIG_NR_CPUS=512 everything works 
+> fine, so it must be something else broken.
 
-Yes, with $subject reverted and CONFIG_NR_CPUS=512 everything works 
-fine, so it must be something else broken.
+Thanks for confirming. Would you mind testing the problematic commit
+with CONFIG_DEBUG_PER_CPU_MAPS enabled? If it doesn't show anything
+obvious that can be fixed quickly, I'll revert the commit and queue it
+again after -rc1 for 6.10 (I haven't sent 6.9 the pull request yet).
 
-> That'll have CPUMASK_OFFSTACK=n, and:
->
-> * If that blows up, we know the problem is independent of CPUMASK_OFFSTACK, and
->    has something to do with large cpumasks (either a driver bug, or elsewhere).
->
-> * If that doesn't blow up, it suggests the problem is related to
->    CPUMASK_OFFSTACK rather than with large cpumasks specifically.
->
-> Either way, we probably need to revert this patch for now, as this won't have
-> enough time to soak in linux-next in time for v6.9.
-
-Best regards
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+Catalin
 
