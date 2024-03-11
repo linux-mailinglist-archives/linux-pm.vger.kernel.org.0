@@ -1,127 +1,107 @@
-Return-Path: <linux-pm+bounces-4818-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4819-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE92E877A8E
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Mar 2024 06:25:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E461C877A90
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Mar 2024 06:27:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5AD05281784
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Mar 2024 05:25:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B3F71C2125B
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Mar 2024 05:27:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E6D57489;
-	Mon, 11 Mar 2024 05:25:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 163A48C15;
+	Mon, 11 Mar 2024 05:27:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Y/RgJSd2"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="FUjoOWE7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 769E28BFD
-	for <linux-pm@vger.kernel.org>; Mon, 11 Mar 2024 05:25:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1C7EE54C;
+	Mon, 11 Mar 2024 05:27:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710134732; cv=none; b=d7fecUVHWrgBQTn5axpGYGEWevM+ddaqnIjAoMnS7xAH+WO8ccsjRzRiRI+VGXPoIpqWVU76XqQUkqfmJbFlBqV+J05ODXHgNGGL6c+yLxUzIVccURDNVSCtJLKnl9wwE2ROQfYGX97KlSYg//ZRUDFWfChccpQ+eN+oaZd80s4=
+	t=1710134852; cv=none; b=fBp8fdEyEvbn99Jkj24EmbldUzFMumAjDGGhs2+g1ueppmjeWV8wcWqEOQQ4CaO/+Hk1TGDaxt/ttnWe1flNGj8rmHRZILJuIUH0D8F6Kk57LBTaedBLwF8BBM8Pt+riuPWSng0aAD4RDsHZysP9AS9mGs5NSPUmdZdj7NRRTlE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710134732; c=relaxed/simple;
-	bh=oWvKKB48HSv8bIHM5usdlGltNl8GujtxLiRAYYZmcm0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=lWhd1mWa4gm6E8Xn7OKSieyLgRfUCcorFMbol2akHipPZCSzXXzWUHTyCyO+dRxbtlb9N7G8h31mfhXgEOj2qcKuaLMpH4yRi6zg6jZpWcRHYvtYDbvX0CCZoh2O8NA8/AZJhHKV0MrbPcBxePnp+5id0oCcbF1gfqoNrldS1v4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Y/RgJSd2; arc=none smtp.client-ip=209.85.167.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-3c2313de2ceso1441825b6e.1
-        for <linux-pm@vger.kernel.org>; Sun, 10 Mar 2024 22:25:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1710134729; x=1710739529; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bNFuT0sJM+B9kbfVNo+KAuAEh9qFiMLegcXGaC2IXP0=;
-        b=Y/RgJSd2lUp3ksGWUHpCeiI7+6T7Fktju6e37VfptZTza1Ro/KGPsTK2UYW0LxqiOY
-         1yB3XhjLdzgdCJ8IV+6wgBJIAzvKeM16egs1KvZ5GKCnXf1tAXq6nuaZmU85tq+pgBrO
-         InT787oWoL9dCr1TZUgHWybLGL77KTfb84GOZ7cjcnysni5H2SXrgNXPngGxWMsb77hw
-         PBkCtNc63DVO4+nccvcD8mNcN5Vd1LCmFxbNGMo3c5XcmA5hcYndSxpdSYxxBepdbMZr
-         TdnzW4i/k8YGrWGGzndEYGYsTauUWbtIWPdDewqDInjxn2UR9NZQDWY3xW+PkTZoK8C7
-         SE5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710134729; x=1710739529;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bNFuT0sJM+B9kbfVNo+KAuAEh9qFiMLegcXGaC2IXP0=;
-        b=Bvm20QVdA6dWsrEKwrYkBo4CuIwPeMoHvCPNFzr0CaZTfg2Lk3AX8YS4kXQRYNNubJ
-         bgatfFvSrLnGgMAXODms48GMndZ8SYEWjymClB2Daf5ZsbvhiUNbVs3XeySw5E7uQ+pa
-         v6UtLRm82THApP0Ic25il7YPjvsmidxZSItKN+/WmYtAImRqMd9wyjAwbJTmoe8vlNkv
-         6m0ujEsteYHNOS1278Wj3DE1QRO9KXxzR8ZvqOrKssECainTSiHNhvXUU4sJJ+VDtz0d
-         sZyYKYacrfDtUCg4EyGLDG1CSpTWiNOBcFM27vdgeSTOdKBI1zqtRqrYxJsGo7RZeZeC
-         t39w==
-X-Gm-Message-State: AOJu0YxMU/XbPYUEt8fa+351831F6YYnQKsJACcY5ztyhUTtY3HgxVao
-	Wu0Jtb3kBJ8pjg7Ojt+3BbESXeo4h+VwqFHpeFMO98h5Pe6Fd5Qe1hbr5uu8mgk0Pu0Tp6YRMi+
-	1
-X-Google-Smtp-Source: AGHT+IFzY+mjW2Vu8N+w5bBfwoxehbHQXSNt8E263/BSPWzrsAb8ob8itlnJZMNspabD0j+Vx+3zsQ==
-X-Received: by 2002:a05:6808:209f:b0:3c2:500b:5562 with SMTP id s31-20020a056808209f00b003c2500b5562mr511424oiw.29.1710134729296;
-        Sun, 10 Mar 2024 22:25:29 -0700 (PDT)
-Received: from localhost ([122.172.85.206])
-        by smtp.gmail.com with ESMTPSA id gx10-20020a056a001e0a00b006e46047fe04sm3409101pfb.204.2024.03.10.22.25.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Mar 2024 22:25:28 -0700 (PDT)
-Date: Mon, 11 Mar 2024 10:55:25 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>
-Subject: [GIT PULL] OPP updates for 6.9
-Message-ID: <20240311052525.x232vfpvqlmm6x2e@vireshk-i7>
+	s=arc-20240116; t=1710134852; c=relaxed/simple;
+	bh=Lj1Ko0OaD1ZRf1I5oKT78KNZ+mBUf0V0V06Nyns5m5k=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HRrax13gjfu9Wn/lR65PGGN4B94rtKqDPxbWW1Uzl5t2aUhNn/riSQKWRft+NoxMTfLy9755D5hkzA8rcS5uku8b02zdEbANfALn9iHit8UWJFPOqflYhUwjjWzKqW+sqJ9wpgiuCHLvqcldix6LJQKVhGJEgGhTh/0nNHc49WU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=FUjoOWE7; arc=none smtp.client-ip=198.47.23.248
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 42B5QrOV119765;
+	Mon, 11 Mar 2024 00:26:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1710134813;
+	bh=/QS4flGaV72pHQT1zN8FWRnbbRvdTfxPqlBeYm8/pq8=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=FUjoOWE7KLA08lIzNTyvuuNwKDC8S1x6U2Er8yPUg9q0msDJ2kkm6uzsXA5uJKBsq
+	 2k8gKKf0LWcu2WyhHfNGOhbntjoNmrelrfIRW+6mygkpnSqhUG6HY8EDZVNgPb+UH1
+	 BxVVjoBKjDgjcV9pu9XpCI1dlesUADx6O1W67a58=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 42B5QrZn108507
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 11 Mar 2024 00:26:53 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 11
+ Mar 2024 00:26:52 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 11 Mar 2024 00:26:52 -0500
+Received: from localhost (dhruva.dhcp.ti.com [172.24.227.68])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 42B5QpPg086960;
+	Mon, 11 Mar 2024 00:26:52 -0500
+Date: Mon, 11 Mar 2024 10:56:51 +0530
+From: Dhruva Gole <d-gole@ti.com>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+CC: Sibi Sankar <quic_sibis@quicinc.com>, <dietmar.eggemann@arm.com>,
+        <rafael@kernel.org>, <xuwei5@hisilicon.com>, <zhanjie9@hisilicon.com>,
+        <sudeep.holla@arm.com>, <cristian.marussi@arm.com>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <quic_rgottimu@quicinc.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH V2] cpufreq: Fix per-policy boost behavior on SoCs using
+ cpufreq_boost_set_sw
+Message-ID: <20240311052651.uedxt2wvywqlrsac@dhruva>
+References: <20240308103630.383371-1-quic_sibis@quicinc.com>
+ <20240311045044.7vvzbsx5nqs5a2lr@vireshk-i7>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
+In-Reply-To: <20240311045044.7vvzbsx5nqs5a2lr@vireshk-i7>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Hi Rafael,
+Hi,
 
-The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
+On Mar 11, 2024 at 10:20:44 +0530, Viresh Kumar wrote:
+> On 08-03-24, 16:06, Sibi Sankar wrote:
+> > +		/* Let the per-policy boost flag mirror the cpufreq_driver boost during init */
+> > +		if (cpufreq_driver->boost_enabled)
+> > +			policy->boost_enabled = policy_has_boost_freq(policy) ? true : false;
+> 
+> Can be written as:
+> 
+> policy->boost_enabled = cpufreq_boost_enabled() && policy_has_boost_freq(policy);
 
-  Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
+I would like to recommend the same.
 
-are available in the Git repository at:
+> 
+> Reviewed-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/opp-updates-6.9
-
-for you to fetch changes up to 13c8cf339e1a7a3d3e48fdebbb882b3a5a90f708:
-
-  dt-bindings: opp: drop maxItems from inner items (2024-03-11 10:39:24 +0530)
-
-----------------------------------------------------------------
-OPP updates for 6.9
-
-- Fix couple of warnings related to W=1 builds. (Viresh Kumar).
-- Move Move dev_pm_opp_{init|free}_cpufreq_table() to pm_opp.h (Viresh Kumar).
-- Extend dev_pm_opp_data with turbo support (Sibi Sankar).
-- dt-bindings: drop maxItems from inner items (David Heidelberg).
-
-----------------------------------------------------------------
-David Heidelberg (1):
-      dt-bindings: opp: drop maxItems from inner items
-
-Sibi Sankar (1):
-      OPP: Extend dev_pm_opp_data with turbo support
-
-Viresh Kumar (3):
-      cpufreq: Move dev_pm_opp_{init|free}_cpufreq_table() to pm_opp.h
-      OPP: debugfs: Fix warning with W=1 builds
-      OPP: debugfs: Fix warning around icc_get_name()
-
- Documentation/devicetree/bindings/opp/opp-v2-base.yaml |  2 --
- drivers/opp/core.c                                     |  1 +
- drivers/opp/debugfs.c                                  | 14 ++++++++------
- include/linux/cpufreq.h                                | 20 --------------------
- include/linux/pm_opp.h                                 | 18 ++++++++++++++++++
- 5 files changed, 27 insertions(+), 28 deletions(-)
-
+Rest looks fine,
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
 
 -- 
-viresh
+Best regards,
+Dhruva Gole <d-gole@ti.com>
 
