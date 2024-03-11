@@ -1,140 +1,108 @@
-Return-Path: <linux-pm+bounces-4820-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4821-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCBD9877AA5
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Mar 2024 06:36:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71108877AC2
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Mar 2024 06:49:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 980BE280ECE
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Mar 2024 05:36:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9CB321C2135D
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Mar 2024 05:49:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6F536AB9;
-	Mon, 11 Mar 2024 05:36:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0B11B647;
+	Mon, 11 Mar 2024 05:49:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="jnaEBVz0"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iMRGqWdV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC71DF9CC;
-	Mon, 11 Mar 2024 05:36:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34FCD747F
+	for <linux-pm@vger.kernel.org>; Mon, 11 Mar 2024 05:49:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710135381; cv=none; b=UpYKIHOp6bKtmh3IrFe6F8i1aAnz75gwL4oGB/sW+yNBdFycOfBP7AVRsqWH5FQQRJnbXfQiM1f0zTEmCtGmn3awyIcgGfZ57rZHWkAzWDXl+8RRH57mP98N9JGgKxAGj1zgAB2mWP2C5HIzHKJCw5QUZDjLO+QleI6QucAbEKA=
+	t=1710136148; cv=none; b=q7T/ggd3S9hIrgQwlvnG8+JzugXvsGdDm1eeIalpNaSNRz43vGp74OKA/p3DEQrWAj7pb+/L/E3duGurdjyf2Y09SBRqcQOqI+bexu0aG7UlFRFvBj/4yVOwPQbyROwvwQL2jFpkxL+UIlyQaLfl3E4a6opEgAJ8FxQLznitJ5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710135381; c=relaxed/simple;
-	bh=3s7VpcFiH+fbWcBakEtyV9bW10w7EJ7btYuoFKhJ59g=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AY29lDjfg+n94uvu6a3+DLBvQ5rCjuP77v1N7DSBVW7D2M2tcC3tzcyoR9RcTz+VMFf9WjWiWRGW28Iy3Xd/cvB2T0l1ZnWv+AnWw44iA0Ke9dGv2VbNKSQe50VdGaTMuRnCCb2m41lM1LLoR/2cJ1KcSnm2OE6ffIpT0SuXjMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=jnaEBVz0; arc=none smtp.client-ip=198.47.19.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 42B5ZtFf123009;
-	Mon, 11 Mar 2024 00:35:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1710135355;
-	bh=qGe6oJXNsXPQ21VUg3fd7qbxMx8WX1t9u9eCGiXOklc=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=jnaEBVz0LJhLvdiC5pJFJUxUL4uxRuAuhD+0tFww04vPDowNMazSxq9rLx9ANZx2T
-	 7ziQgt9TQoyu0HBkEDpzWRCL/aADbiHD+1A4Kxy/X+dJarFq6DjlY4liGH5IWQXC+G
-	 SnrxZOaI0zR9I5YJjy43Ef6bAkuAh0pUMpdP1VHs=
-Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 42B5Ztmw023170
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Mon, 11 Mar 2024 00:35:55 -0500
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 11
- Mar 2024 00:35:55 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 11 Mar 2024 00:35:55 -0500
-Received: from localhost (dhruva.dhcp.ti.com [172.24.227.68])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 42B5Zsl4127577;
-	Mon, 11 Mar 2024 00:35:54 -0500
-Date: Mon, 11 Mar 2024 11:05:54 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: Sibi Sankar <quic_sibis@quicinc.com>
-CC: <sudeep.holla@arm.com>, <cristian.marussi@arm.com>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <morten.rasmussen@arm.com>,
-        <dietmar.eggemann@arm.com>, <lukasz.luba@arm.com>, <sboyd@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_mdtipton@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <nm@ti.com>
+	s=arc-20240116; t=1710136148; c=relaxed/simple;
+	bh=iJq8I4665B6tXtRy7Ozf48bVxsc7zHGXEtSdRs+nb6M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AWWWZIIej8SwxlWzjbwThcdKhdQJ+72Q2ZBvJikjFAr8TrXwgbs957e85D50HKm8MkTScLZ1+fxe5IAQQagnlU+dHOf0ASEWm1miFQSrut0dKUELNkay4j0a4FtykW8dgMfjEYUkiVzTaWOOi7nwK19g2U0eKrz8clQqHdoD460=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iMRGqWdV; arc=none smtp.client-ip=209.85.210.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-6dc8b280155so2974686a34.0
+        for <linux-pm@vger.kernel.org>; Sun, 10 Mar 2024 22:49:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1710136146; x=1710740946; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+4QvIE9VzTbAgKqsifgCBQZyOLX6yUspxfOa9hY1WXE=;
+        b=iMRGqWdVcy0+N1qlpZ2WivZ2VZ3Chl5g3eF1SPHb9+L+kZUDhuR1lfUF6hIfZvDgaf
+         /BKCO0YfpLRhvOAGoiCGv1VFtLjoVV5QPhgd+HPoBmn0HlShdxYTPWNV0TwQ/YchbwBv
+         rKexnq22fW8CDo0R/o41w9ahPTTY2Razcb/ubJJ0FsDFuiVBlujBjwlHN76FoYySdDwO
+         PZghcv32SrOUo++viRCDg3/UwEzBLA451crUPp4Zfq9+iHoA+CZT7WaEOU77vQvznIXN
+         +H1TqNN/4GW7uUHsUnXKOjhM1xzyTFr+NGHqI0dGh9mSWuHbrBYG9HdZILrgPGlGzU1p
+         SHSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710136146; x=1710740946;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+4QvIE9VzTbAgKqsifgCBQZyOLX6yUspxfOa9hY1WXE=;
+        b=mCrcBKB7hCdw8f11/PqlwrK3Uqj+NVd+5/rRcf3xeO9Pm29CqB0rn67lULcFgpLE4R
+         mmJgUe1QeOd4OakLCPMON/ysnrfX+ZlVBxxJSay2tE9+M1hPqn9D0oXIvLXbzvZM2rtb
+         Xm/ZkFNeMa/bmchwk4hB2C+LMjiVYjJLfU/jDAdaSX42ynho3mEgq3QPvGXU2MakJfQo
+         fFSZlVFNxHeoIcCwO1/+U8SgHW3RLLl46oToZ3nazabYbqUIbUX4qApxP2DWyoTiXPTd
+         lf9A/VPWv8WN/zMN6Limsl9cF+7uDfZGDFsoXPLrQAt/CUL7YVi7sOxfGYVUmz8kIte/
+         jXgg==
+X-Forwarded-Encrypted: i=1; AJvYcCUYSTJYk+U+Y81oLis15XDIsAkcw1JlPpyWAx2EXN/N9ELWWLKLAQxGFI5zYp5ct8s9nB5aPbOpPICCMB40+EOz6DMUhUSYvtU=
+X-Gm-Message-State: AOJu0YwTwityeSkrStxpOCFnoP6b67GC83eNb8r5/OznRaQBWJBJLlkt
+	z6f5F7M8VRxYbDHIPFsSTkXU3mzoRAAqSROr+b3jeA4OO3WghCYQd/EfXJIvWPg=
+X-Google-Smtp-Source: AGHT+IGTc9RR/qldDCyHa084mMYBDLDFRMOSdRBDHjzvzzZDmDR9cw7Gtzb+pxkEKOvPNI9IDP9zGg==
+X-Received: by 2002:a9d:618f:0:b0:6e4:767d:a085 with SMTP id g15-20020a9d618f000000b006e4767da085mr4576973otk.24.1710136146150;
+        Sun, 10 Mar 2024 22:49:06 -0700 (PDT)
+Received: from localhost ([122.172.85.206])
+        by smtp.gmail.com with ESMTPSA id d1-20020a654241000000b005cfb6e7b0c7sm2960190pgq.39.2024.03.10.22.49.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Mar 2024 22:49:05 -0700 (PDT)
+Date: Mon, 11 Mar 2024 11:19:03 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Dhruva Gole <d-gole@ti.com>
+Cc: Sibi Sankar <quic_sibis@quicinc.com>, sudeep.holla@arm.com,
+	cristian.marussi@arm.com, rafael@kernel.org,
+	morten.rasmussen@arm.com, dietmar.eggemann@arm.com,
+	lukasz.luba@arm.com, sboyd@kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, quic_mdtipton@quicinc.com,
+	linux-arm-msm@vger.kernel.org, nm@ti.com
 Subject: Re: [PATCH V3 1/2] firmware: arm_scmi: Add support for marking
  certain frequencies as boost
-Message-ID: <20240311053554.36j2rq3wgtswwoom@dhruva>
+Message-ID: <20240311054903.x5khrkseslgyjn2z@vireshk-i7>
 References: <20240308104410.385631-1-quic_sibis@quicinc.com>
  <20240308104410.385631-2-quic_sibis@quicinc.com>
+ <20240311053554.36j2rq3wgtswwoom@dhruva>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240308104410.385631-2-quic_sibis@quicinc.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <20240311053554.36j2rq3wgtswwoom@dhruva>
 
-On Mar 08, 2024 at 16:14:09 +0530, Sibi Sankar wrote:
-> All opps above the sustained level/frequency are treated as boost, so mark
-
-I know that we use the terms boost and turbo interchangeably however I
-would suggest to avoid confusion that we say "treated as turbo" just
-because the variable is called turbo.
-
-> them accordingly.
+On 11-03-24, 11:05, Dhruva Gole wrote:
+> > +		if (freq > sustained_freq)
+> > +			data.turbo = true;
 > 
-> Suggested-by: Sudeep Holla <sudeep.holla@arm.com>
-> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
-> ---
->  drivers/firmware/arm_scmi/perf.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/firmware/arm_scmi/perf.c b/drivers/firmware/arm_scmi/perf.c
-> index 8e832d1ad825..64d9a90bf443 100644
-> --- a/drivers/firmware/arm_scmi/perf.c
-> +++ b/drivers/firmware/arm_scmi/perf.c
-> @@ -857,7 +857,7 @@ static int scmi_dvfs_device_opps_add(const struct scmi_protocol_handle *ph,
->  				     struct device *dev, u32 domain)
->  {
->  	int idx, ret;
-> -	unsigned long freq;
-> +	unsigned long freq, sustained_freq;
->  	struct dev_pm_opp_data data = {};
->  	struct perf_dom_info *dom;
->  
-> @@ -865,12 +865,18 @@ static int scmi_dvfs_device_opps_add(const struct scmi_protocol_handle *ph,
->  	if (IS_ERR(dom))
->  		return PTR_ERR(dom);
->  
-> +	sustained_freq = dom->sustained_freq_khz * 1000UL;
-> +
->  	for (idx = 0; idx < dom->opp_count; idx++) {
->  		if (!dom->level_indexing_mode)
->  			freq = dom->opp[idx].perf * dom->mult_factor;
->  		else
->  			freq = dom->opp[idx].indicative_freq * dom->mult_factor;
->  
-> +		/* All opps above the sustained level/frequency are treated as boost */
+> It's simple enough that we can write it as
+> data.turbo = (freq > sustained_freq_khz*1000) ? true : false;
 
-Same here, would be better to say "turbo" than boost.
+Or:
 
-> +		if (freq > sustained_freq)
-> +			data.turbo = true;
-
-It's simple enough that we can write it as
-data.turbo = (freq > sustained_freq_khz*1000) ? true : false;
-
-We can avoid an additional variable and all the other code changes.
-
+data.turbo = freq > sustained_freq_khz * 1000;
 
 -- 
-Best regards,
-Dhruva Gole <d-gole@ti.com>
+viresh
 
