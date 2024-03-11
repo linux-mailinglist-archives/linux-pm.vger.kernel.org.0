@@ -1,149 +1,163 @@
-Return-Path: <linux-pm+bounces-4824-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4825-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82C39877DA4
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Mar 2024 11:10:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF7CD877F30
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Mar 2024 12:40:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 79FE4B20A08
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Mar 2024 10:09:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4DD63284483
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Mar 2024 11:40:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87F5518643;
-	Mon, 11 Mar 2024 10:09:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6B613B78E;
+	Mon, 11 Mar 2024 11:40:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aRbSefV+"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="M8LR92PT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDD3E224D7
-	for <linux-pm@vger.kernel.org>; Mon, 11 Mar 2024 10:09:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E38993AC08
+	for <linux-pm@vger.kernel.org>; Mon, 11 Mar 2024 11:40:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710151792; cv=none; b=CT0Wi50XBshBt1eYPW89YxmGnYIyIo+apJ49c0bcTTxwvPGbLXdmWv/w6v0VIog+rUMNq9m8QCUprieNstuPI7JPA9LfkrMrsZ/aySRJ/al7HLij+2aTZ2w+H3/qtoAgCKso55zijbzKLZ/4cuFVa3TTPm1wbDqb1uvkRhzV7dQ=
+	t=1710157248; cv=none; b=luDdhbjljb/qEsWf+Idh1s9vsEMXIJwLB93e1DqCUZWZaK/AO8hsXk9cz5+8EpciUT9s4QRiK4/DtH/gvcB4BcaHh9/GBSgh7DvCpHa00heJ3PeRd4weMwxk1YwzluGO0i8e8DHnqhabyrbRjf2nVEc64ToPdMQIkeQMNA2nOQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710151792; c=relaxed/simple;
-	bh=deriJDVZUDDw9mTvK5raeTb6M8wQFbpDU1A9sfSRl5M=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Fd9IQle1wosegt/T4Be1d1O1UC+g6wnewg9pVOjdvYa7ONzVDKiWwJN3717Rr3dh475EHGXMdHWYdj7zGcTG0Za06EiHODm5A66+ESGhVMs9Fa6MvTsKJa6tU5SVpa1T55tDtl0cuQixp5U5iWM5FCzAdXfD14iCx2bfHNA+7k8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=aRbSefV+; arc=none smtp.client-ip=209.85.166.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-364f791a428so21251255ab.3
-        for <linux-pm@vger.kernel.org>; Mon, 11 Mar 2024 03:09:50 -0700 (PDT)
+	s=arc-20240116; t=1710157248; c=relaxed/simple;
+	bh=kiSPAvLuBmKLwnLz0szwtesbk3eIGqsOaJTrvrVAQog=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U8+cwAPnEU3YNmXyHAPXrdZCeEViU389A1KbiIiSptrPhvozYXjGxEHSCfE1WmGXuiS2rdj7doZk8RUDQekZ8Ejs/V3gyf9GzpgvET7OaHjISAoeRXLETJze3/jJcA8Q57vV+6Lfh5NGJuNKjaTUv/XbplBD5x0V4x2oBLRPyN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=M8LR92PT; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a36126ee41eso561757566b.2
+        for <linux-pm@vger.kernel.org>; Mon, 11 Mar 2024 04:40:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1710151790; x=1710756590; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xOQUSgHU4OS9Zt/s174fpifwFiTMKB/qAl225bv2M6c=;
-        b=aRbSefV+QHHozC2pCeEtWHYGRbH353gOJw8dXrH+EwVDz4RfvdaedobLTHZTk0K6iw
-         tlzTqlilNrJRXdFmsgbOpWPzlVvOePIhYwYr70hXYzM9YjDzdsOD39wuGaigdT5NRMwX
-         RIfpXz2Jx0Qk2hpugxzTlq6S1A5cxLNyeNiXDF0cUudHlzaaRmajEZtgSPZz+ySMMb2/
-         cp/yfwxbgOVUhmlLpTzKI0MYJ3cUQzc5/3avKD+PWQ3pSiv8lEuJgBaNgntHCL7xy3DI
-         sU8bq8Cl7yGWfRM9DheE0Ysqt8koeMXACog7TfXDXKa9/GWcmYo8jbaRtKJy+BcfEc17
-         anfA==
+        d=google.com; s=20230601; t=1710157245; x=1710762045; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SkjzeE4dZ9o2SQlL4u86zxDCBSGbNgJrdX2fu89HmnA=;
+        b=M8LR92PTl1nKoEAFkOa/pPA6Qn6d4AuMXrJ51bSy5FQD5l7nx/YFX7doFHrxEcCotg
+         SC85tsPlYoZwzROsyX3AIW0bm5ySmSuJd8FkFWdkqdXsgm9PEq1a1juxoocnSyzsGWI7
+         Spcti+cYPBdJ7mPtLyqbsoXSHLtH0C8Ij1DJtFuPCBFXpTWh3Ot8be0PhN8tB+zvgrV5
+         Ty7kYE3w31aaAyYaG6E1tHPcML8/Y/tuzKMzRuzR4/x+O/ueiOKtADpAjSnKnY8kbmyv
+         rmc5utuOnx+TqFnARz52yZu9Yb4HhloSYJHOi6Et1NRmMlJ/EFQ84g0DXFYkj/Glu7rO
+         lbig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710151790; x=1710756590;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xOQUSgHU4OS9Zt/s174fpifwFiTMKB/qAl225bv2M6c=;
-        b=Pl/FfC9MCfGlRjmtDj4HDrp1oCC3V2G6YcvdP2vwc45hR80OE8bQkLKXFcJmafBNeP
-         nm8lZbsz/Vkm0/xXC3qBCYNiMLWajaPVDQISBn+aBl5twW0A8heeT7eC3vS1XCmk2Dvz
-         RkyZchxCV3bLG7NpHA1K71hYeZmhRFRhx94ll6+AmFzNo962VpgrHKRoaaiM4P/i98tq
-         xQCrD6RQm0JX4Vh4ZBbsP54Nd3cq9k1eZPB0yLJjTmV+250wNxpa3nA4ycJ+VtEJUMrD
-         JlYdPf8Jwn4TRe255U5BioI4iaX7wI8m+JeL6DsyWTI5kvZ7Caep1psJYxDE38x+yMXL
-         u0zg==
-X-Gm-Message-State: AOJu0YwltnU8EHdJMlhAvWhh1EYSDRh65JiNKWfev3qOGw4rHhnFJOzn
-	t6yatUzluTO2scdizcG9P5UxTU2My1ROigFkkFdBqOBmD0rwsu00lDANXiyKwUw=
-X-Google-Smtp-Source: AGHT+IEeKdW0dxln432Jz9PG2qo3xxN9ShAyTsvYY9tymSpH0cn5LrXNAd186acoAZrhCaJYSZeKEg==
-X-Received: by 2002:a92:cd84:0:b0:365:25c0:c82d with SMTP id r4-20020a92cd84000000b0036525c0c82dmr9643132ilb.28.1710151789721;
-        Mon, 11 Mar 2024 03:09:49 -0700 (PDT)
-Received: from localhost ([122.172.85.206])
-        by smtp.gmail.com with ESMTPSA id fd29-20020a056a002e9d00b006e580678dfbsm4033141pfb.193.2024.03.11.03.09.48
+        d=1e100.net; s=20230601; t=1710157245; x=1710762045;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SkjzeE4dZ9o2SQlL4u86zxDCBSGbNgJrdX2fu89HmnA=;
+        b=TvgBNVwOk3fNDoJ09QgWKUp/BiFdHNTOgPaWudG1CUKWdz+XEN+6SFpu6d2kM9O68v
+         BqKyOGSnTeJYMtu7UE8vQjdGXPKn55aevGeijgXL9xRuBDyvNQtt0ec2Pqjx88cz0kzK
+         +Rq77BD2ZvxevPmoHZKGWwG2QCq5aVKfi/3lwG4+SWUjuBeFbAhbEPpNbiOqZzm0BGQN
+         TjHqgslxD3FiJos6GEwq4LRTuzKFs6jHPcMuoAwcQiRbm2+/rwKwmCABgb3TUc6mpr7w
+         mGW8rm3k6CWt5tCcZhdOydyz1iDTLi5hO1vE0EoILFrbrrubprv3qoi/UD31rjx+MEpj
+         WtDA==
+X-Forwarded-Encrypted: i=1; AJvYcCW5z5QBPNLJLfCn0SqX2NaSqVLggBrR4E+Y8G/HBVksBdA9M3baLm4YY7RIwwjF/WVFrxDAm5gGf8IlAK4Xq4po4Hx+1pydxnk=
+X-Gm-Message-State: AOJu0YzSgGVv7AN1bYvN5IWlwTew3YjrBAdSl6vGV9YFYUmRvIxiMX3o
+	IKf9GHmELSO+K30G9bFDEU1ho9CzjvcBbp8smRoMBP3puUzmhAFgoKlfp7qXyw==
+X-Google-Smtp-Source: AGHT+IFvD3eTrXBRLNqxixAkOQniNH0dO7QajxVi2chqo/onElzZKCzE2Xbnm3EEkgu3u6XSOdsOrQ==
+X-Received: by 2002:a17:907:a805:b0:a45:ed7f:266a with SMTP id vo5-20020a170907a80500b00a45ed7f266amr3709882ejc.0.1710157245065;
+        Mon, 11 Mar 2024 04:40:45 -0700 (PDT)
+Received: from google.com (64.227.90.34.bc.googleusercontent.com. [34.90.227.64])
+        by smtp.gmail.com with ESMTPSA id d4-20020a1709064c4400b00a44dca5f9c1sm2770444ejw.100.2024.03.11.04.40.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Mar 2024 03:09:49 -0700 (PDT)
-Date: Mon, 11 Mar 2024 15:39:47 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>
-Subject: [GIT PULL] cpufreq/arm updates for 6.9
-Message-ID: <20240311100947.mfbotbjngjvirg7m@vireshk-i7>
+        Mon, 11 Mar 2024 04:40:44 -0700 (PDT)
+Date: Mon, 11 Mar 2024 11:40:41 +0000
+From: Quentin Perret <qperret@google.com>
+To: Marc Zyngier <maz@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
+	David Dai <davidai@google.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Masami Hiramatsu <mhiramat@google.com>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Pavan Kondeti <quic_pkondeti@quicinc.com>,
+	Gupta Pankaj <pankaj.gupta@amd.com>, Mel Gorman <mgorman@suse.de>,
+	kernel-team@android.com, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] dt-bindings: cpufreq: add virtual cpufreq device
+Message-ID: <Ze7tuWsJJMaBLNcf@google.com>
+References: <20240127004321.1902477-1-davidai@google.com>
+ <20240127004321.1902477-2-davidai@google.com>
+ <20240131170608.GA1441369-robh@kernel.org>
+ <CAGETcx8S0oS67oMZsPKk6_MGAtygoHEf_LN1gbcNDEBqRJ4PPg@mail.gmail.com>
+ <20240202155352.GA37864-robh@kernel.org>
+ <86a5og7cl7.wl-maz@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <86a5og7cl7.wl-maz@kernel.org>
 
-Hi Rafael,
+On Sunday 04 Feb 2024 at 10:23:00 (+0000), Marc Zyngier wrote:
+> Well, I've said it before, and I'll say it again: the use of
+> *frequencies* makes no sense. It is a lie (it doesn't describe any
+> hardware, physical nor virtual), and doesn't reflect the way the
+> emulated cpufreq controller behaves either (since it scales everything
+> back to what the host can potentially do)
+> 
+> The closest abstraction we have to this is the unit-less capacity. And
+> *that* reflects the way the emulated cpufreq controller works while
+> avoiding lying to the guest about some arbitrary frequency.
+> 
+> In practice, this changes nothing to either the code or the behaviour.
+> But it changes the binding.
 
-The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
+Apologies all for jumping late into this, but for what it's worth,
+regardless of the unit of the binding, Linux will shove that into
+cpufreq's 'frequency table' anyway, which as the name suggests is very
+much assuming frequencies :/ -- see how struct cpufreq_frequency_table
+explicitely requires KHz. The worst part is that this even ends up
+being reported to _userspace_ as frequencies in sysfs via cpufreq's
+scaling_available_frequencies file, even when they're really not...
 
-  Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
+In the case of SCMI for example, IIRC the firmware can optionally (and
+in practice I think it does for all older implementations of the spec
+least) report unit-less operating points to the driver, which will then
+happily pretend these are KHz values when reporting that into PM_OPP and
+cpufreq -- see how scmi_dvfs_device_opps_add() simply multiplies the
+level's 'perf' member by 1000 when populating PM_OPP (which is then
+propagated to cpufreq's freq_table'). And a small extract from the SCMI
+spec:
 
-are available in the Git repository at:
+    "Certain platforms use IMPLEMENTATION DEFINED indices to identify
+     performance levels. Level Indexing Mode is used to describe such
+     platform behavior. The level indices associated with performance
+     levels are neither guaranteed to be contiguous nor required to be
+     on a linear scale."
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufreq-arm-updates-6.9
+Not nice, but unfortunately the core cpufreq framework has way too much
+historical dependencies on things being frequencies to really change it
+now, so we're pretty much stuck with that :(
 
-for you to fetch changes up to ad2a91086e288c9ab1d74eee57edabe08bd90471:
+So, while I do agree with the sentiment that this is a non-ideal place
+to be, 'faking' frequencies is how we've addressed this so far in Linux,
+so I'm personally not too fussed about David's usage of a freq-based DT
+binding in this particular instance. On the plus side that allows to
+re-use all of PM_OPP and cpufreq infrastructure as-is, so that's cool.
 
-  cpufreq: scmi: Set transition_delay_us (2024-03-06 10:54:24 +0530)
+I guess we could make the argument that Linux's approach to handling
+frequencies shouldn't influence this given that the binding should be OS
+agnostic, but I can easily see how another OS could still make use of
+that binding (and in fact requiring that this other OS can deal with
+unitless frequencies is most likely going to be a bigger problem), so
+I'd be inclined to think this isn't a major problem either.
 
-----------------------------------------------------------------
-ARM cpufreq updates for 6.9
-
-- General enhancements / cleanups to cpufreq drivers (tianyu2, Nícolas
-  F. R. A. Prado, Erick Archer, Arnd Bergmann, Anastasia Belova).
-- Update cpufreq-dt-platdev to block/approve devices (Richard Acayan).
-- scmi: get transition delay from firmware (Pierre Gondois).
-
-----------------------------------------------------------------
-Anastasia Belova (1):
-      cpufreq: brcmstb-avs-cpufreq: add check for cpufreq_cpu_get's return value
-
-Arnd Bergmann (1):
-      cpufreq: qcom-hw: add CONFIG_COMMON_CLK dependency
-
-Erick Archer (1):
-      Documentation: power: Use kcalloc() instead of kzalloc()
-
-Nícolas F. R. A. Prado (2):
-      cpufreq: mediatek-hw: Wait for CPU supplies before probing
-      cpufreq: mediatek-hw: Don't error out if supply is not found
-
-Pierre Gondois (3):
-      firmware: arm_scmi: Populate perf commands rate_limit
-      firmware: arm_scmi: Populate fast channel rate_limit
-      cpufreq: scmi: Set transition_delay_us
-
-Richard Acayan (1):
-      cpufreq: dt-platdev: block SDM670 in cpufreq-dt-platdev
-
-tianyu2 (1):
-      cpufreq: imx6: use regmap to read ocotp register
-
- Documentation/power/opp.rst                    |  2 +-
- Documentation/translations/zh_CN/power/opp.rst |  2 +-
- drivers/cpufreq/Kconfig.arm                    |  1 +
- drivers/cpufreq/brcmstb-avs-cpufreq.c          |  2 ++
- drivers/cpufreq/cpufreq-dt-platdev.c           |  1 +
- drivers/cpufreq/imx6q-cpufreq.c                | 45 +++++++++++++++------------------------------
- drivers/cpufreq/mediatek-cpufreq-hw.c          | 19 ++++++++++++++++++-
- drivers/cpufreq/scmi-cpufreq.c                 | 26 ++++++++++++++++++++++++++
- drivers/firmware/arm_scmi/driver.c             |  5 ++++-
- drivers/firmware/arm_scmi/perf.c               | 53 +++++++++++++++++++++++++++++++++++++++++++++++++----
- drivers/firmware/arm_scmi/powercap.c           | 12 ++++++++----
- drivers/firmware/arm_scmi/protocols.h          |  4 +++-
- include/linux/scmi_protocol.h                  |  8 ++++++++
- 13 files changed, 137 insertions(+), 43 deletions(-)
-
--- 
-viresh
+Thanks,
+Quentin
 
