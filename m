@@ -1,218 +1,148 @@
-Return-Path: <linux-pm+bounces-4829-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4830-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9641987841A
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Mar 2024 16:46:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3236A87843E
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Mar 2024 16:54:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B3A4A1C21AEB
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Mar 2024 15:46:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F203283608
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Mar 2024 15:54:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 382CA44C7C;
-	Mon, 11 Mar 2024 15:46:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KS/07v87"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38F6F44C69;
+	Mon, 11 Mar 2024 15:54:44 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34AB744C6A
-	for <linux-pm@vger.kernel.org>; Mon, 11 Mar 2024 15:46:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9E324207B
+	for <linux-pm@vger.kernel.org>; Mon, 11 Mar 2024 15:54:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710171970; cv=none; b=Ag2JNtZCu5g6IbmTlVqjOr4UCOCM7OsYY3rKo7nlwhdcZpQ9vSOCeULW4Iy36GPvtTx2tMbTqWlNreo93egq5vu8w+zvPoMYGBh05CaAqfup3kM54Q+gu/lgotJ1UZFvcMz0Bo36+xqwSNJEjVkaJrIFFamKl+fFeQmgTY6NoEs=
+	t=1710172484; cv=none; b=I9gzQmJe8hnTWAFMbb3YsiTlOjqSQV9cEFq6YchZryioB/w7MHUyEZgymN6EfczuiO7abpm7G4QLMcxMlSFbUXktGFuISbYDjSBz042BiLM89zsqEEpKaUdAiakzfkIRpAZ8T+R5+DopYXUGoNe67MS/0RD6ogpePR6UAVf8IrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710171970; c=relaxed/simple;
-	bh=gFDUuj57lYr4wG8krVTq8NkfsBL43/jiGP8AhQV7/DQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dysluN0pKkI0iX5rqCgYCZLItm2koN/QdsQYQOTSdvPaY3YQzmg3A2Q0wC68ewt2unl95vmbgC85JFii90PWGEauAoAzVSfqrYgVli1LZUV2HY5QZN9s4Yc8aWHYLwxagAoMOzcjkPCPdoN3DoFOKs/YrbC4w4jDSaYAzmihPXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KS/07v87; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-512e39226efso4411498e87.0
-        for <linux-pm@vger.kernel.org>; Mon, 11 Mar 2024 08:46:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1710171966; x=1710776766; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FUYX9uojUp5ax4gJj/GFoNZKgIJDaBka6QZETxo7B58=;
-        b=KS/07v87cYTpm/t7Nw+c9hSe9R+/PeY9WBpNoy+Pz/Q2YYLpDmJ5V8tLwv7leUdvtP
-         FPyanVTn4Z5+wdyC4wPc3xpUIrprDnBJGfpxaOHzdd/6jRla6qa1kopfHo90vfAWEwgd
-         MAfiboOg1ymSMKfyndoMmyAyvj2BjAw5JwEW6xpC/TDfwG4jpqliwItZQo52MTUzLh/x
-         UOOLSlJVJoBPrS51yYOoA7VvDG/FNDBJA7FCCkY324YGbYbWewWkkwLmTxAp0evITZBd
-         Gc6zB+qk5fNP0dRLK3GrnCODStrtnCVoc8QjBeKXQTws/g7q/A6BEXGgRmMYXm5GqYA6
-         BiWQ==
+	s=arc-20240116; t=1710172484; c=relaxed/simple;
+	bh=xgJpmZGA4JcmgK1X6a5qdEJSyepkykRu0nJC5ej6JNs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=K2BUMzxKx6Lw4UCtW4DHzjT5Fq1QKZN06JSyV5woiPRi309LofY3zT9U6f6t7gDixhyb/We4I70JdlJBaf4cqT5ndrUeIOy3mNsMTMcC/9wF/2um47lNXTpsGWnZ0F9v6q+oFXKwuZHPWMNLOBJQ7GtLRQJqOIQgkS8cO2jvCmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-221a1722824so195000fac.1
+        for <linux-pm@vger.kernel.org>; Mon, 11 Mar 2024 08:54:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710171966; x=1710776766;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FUYX9uojUp5ax4gJj/GFoNZKgIJDaBka6QZETxo7B58=;
-        b=W5turcCNb3WncMncoa2VpkhwPTv9nKwFvMZFleH8ZDP5TnXMpjrJY5XJkoKEWt1cWS
-         0wJ60ndfkDuajBgCEcbJ1tejKwWRkgKgQwfi9wVy/ipv5D05zhBE30+I8V2/dKWJpoQ8
-         a3oLcXlgySrlxcV+EnLcHbHvA9l/cAifoZzJM8K7prYJsYwwUXtpHZ4u3PBNkVQTepPK
-         02801Lx+Tl8tFLd5h/2HxCgiOnLm5QhrdJB7+uxgH6jHGGTGvQpUXkFuXiHGhxE5Lmuh
-         T4z6ZznFqDAwQw7PIvTvy/DC0iiRZayPHs4Lc5lXjNvFVY9SShfuJNJo3e3FjmuiwWGG
-         ZB1w==
-X-Forwarded-Encrypted: i=1; AJvYcCWRGvtA1ZOoniWQNLaM32aBoK62/URKnPtMlNAphnKeHoLO3dI8XWdnDDUrqW7jAfeSG2lpFvOnaras87k2meJ+Gso/IedhmjA=
-X-Gm-Message-State: AOJu0YwxjjIfBGzs+sjnYjTqh9kKVWX3hwv1jCA+TpBCpTO8tDGDMxzp
-	kNaz8w8UuZSfNjCTxQhKk6ivdvk5mkkntrEZYmyGQWmpgCnaUHQSJB4uMGF9xjg=
-X-Google-Smtp-Source: AGHT+IEeuLmyBO0IoJnRxGN0zIrcN/c5KYRHmU2IUoV8gW/Levqp24JcR5bSBb/CjJ9TNJswcTmDjA==
-X-Received: by 2002:a05:6512:31c7:b0:512:e00b:8da4 with SMTP id j7-20020a05651231c700b00512e00b8da4mr6101963lfe.53.1710171966223;
-        Mon, 11 Mar 2024 08:46:06 -0700 (PDT)
-Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id f17-20020a05651232d100b005131544fc6fsm1154454lfg.291.2024.03.11.08.46.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Mar 2024 08:46:05 -0700 (PDT)
-From: Ulf Hansson <ulf.hansson@linaro.org>
-To: Linus <torvalds@linux-foundation.org>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] pmdomain updates for v6.9
-Date: Mon, 11 Mar 2024 16:46:04 +0100
-Message-Id: <20240311154604.3069122-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1710172482; x=1710777282;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Bzlc33JxxMXWXsKP/nCGNv7ry1zewhAipk0+b85M4Fk=;
+        b=XLgSlGaM4vzYk9tgfuKLFWzlQt6pFefW/N3SewP8cLO+YI6lzSiUJZAdw9t9AkgPm9
+         rJZ7FFPzOiSSw8Z8cmbOEJItzG8dMCpSzRc4OshJGy+upvh+lzEEVCSQobJrVXlzQMcE
+         /hp7GlcbLeJjpK7a6iiTJyHQl0yemoWmdWRIXYFgFwLo1/dxAZpRrGnWF63jBYKfr5de
+         s+DQfbwojcf9+fR+jSyAr6TLN1lUrEeakYBA2cJJE1qfYjB3eKne/Irm4+Wit22utDvS
+         MS5bOT8Kwhfh0F0b08BdXwwgTpm7Bpquhm+xP2rfa1TFTuJD63XFLuV7eiK29c18f2HM
+         5wag==
+X-Forwarded-Encrypted: i=1; AJvYcCWWWuk40Nk8LPBVTVLunzZvrPhDLjyWVoDcmFk61C1Xilt8kpFkbpy93qHiwp58FMJJUmAGHY6AxhUQt1GVbprz5fV2Y5mFdfY=
+X-Gm-Message-State: AOJu0Yz/qSjBWdEvPVR9axv7m5p2/br+yv9vp12O93ROg6t7/X8RBKDu
+	339nQmRXpshAje4U81B/HsBka/yvzOEdvH3AfAdyVQRjfmfb8V7GmJec+AwzTsEGJi3gtvGCbXg
+	thGQfUhPyk3Le8tP224JlJ+Q4ldk=
+X-Google-Smtp-Source: AGHT+IHPcPY1yuYmkfIFoSfDzBw7swH6LkWHddDRnDZq5LgX67FS6Q8MzT8QySSapB8IueSnojRHKQPZUY+nX+qatKE=
+X-Received: by 2002:a05:6871:58e:b0:221:4a4e:7943 with SMTP id
+ u14-20020a056871058e00b002214a4e7943mr7171362oan.2.1710172481608; Mon, 11 Mar
+ 2024 08:54:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240311100947.mfbotbjngjvirg7m@vireshk-i7>
+In-Reply-To: <20240311100947.mfbotbjngjvirg7m@vireshk-i7>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 11 Mar 2024 16:54:30 +0100
+Message-ID: <CAJZ5v0h_fnUwiPcuiDaX1Fr0BqmNO1GnjPUwvpMTZ093dogwVA@mail.gmail.com>
+Subject: Re: [GIT PULL] cpufreq/arm updates for 6.9
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Linus,
+Hi Viresh,
 
-Here's the pull-request with pmdomain updates for v6.9. Details about the
-highlights are as usual found in the signed tag.
+On Mon, Mar 11, 2024 at 11:09=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.=
+org> wrote:
+>
+> Hi Rafael,
+>
+> The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd3=
+3d:
+>
+>   Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufr=
+eq-arm-updates-6.9
+>
+> for you to fetch changes up to ad2a91086e288c9ab1d74eee57edabe08bd90471:
+>
+>   cpufreq: scmi: Set transition_delay_us (2024-03-06 10:54:24 +0530)
+>
+> ----------------------------------------------------------------
+> ARM cpufreq updates for 6.9
+>
+> - General enhancements / cleanups to cpufreq drivers (tianyu2, N=C3=ADcol=
+as
+>   F. R. A. Prado, Erick Archer, Arnd Bergmann, Anastasia Belova).
+> - Update cpufreq-dt-platdev to block/approve devices (Richard Acayan).
+> - scmi: get transition delay from firmware (Pierre Gondois).
+>
+> ----------------------------------------------------------------
+> Anastasia Belova (1):
+>       cpufreq: brcmstb-avs-cpufreq: add check for cpufreq_cpu_get's retur=
+n value
+>
+> Arnd Bergmann (1):
+>       cpufreq: qcom-hw: add CONFIG_COMMON_CLK dependency
+>
+> Erick Archer (1):
+>       Documentation: power: Use kcalloc() instead of kzalloc()
+>
+> N=C3=ADcolas F. R. A. Prado (2):
+>       cpufreq: mediatek-hw: Wait for CPU supplies before probing
+>       cpufreq: mediatek-hw: Don't error out if supply is not found
+>
+> Pierre Gondois (3):
+>       firmware: arm_scmi: Populate perf commands rate_limit
+>       firmware: arm_scmi: Populate fast channel rate_limit
+>       cpufreq: scmi: Set transition_delay_us
+>
+> Richard Acayan (1):
+>       cpufreq: dt-platdev: block SDM670 in cpufreq-dt-platdev
+>
+> tianyu2 (1):
+>       cpufreq: imx6: use regmap to read ocotp register
+>
+>  Documentation/power/opp.rst                    |  2 +-
+>  Documentation/translations/zh_CN/power/opp.rst |  2 +-
+>  drivers/cpufreq/Kconfig.arm                    |  1 +
+>  drivers/cpufreq/brcmstb-avs-cpufreq.c          |  2 ++
+>  drivers/cpufreq/cpufreq-dt-platdev.c           |  1 +
+>  drivers/cpufreq/imx6q-cpufreq.c                | 45 +++++++++++++++-----=
+-------------------------
+>  drivers/cpufreq/mediatek-cpufreq-hw.c          | 19 ++++++++++++++++++-
+>  drivers/cpufreq/scmi-cpufreq.c                 | 26 ++++++++++++++++++++=
+++++++
+>  drivers/firmware/arm_scmi/driver.c             |  5 ++++-
+>  drivers/firmware/arm_scmi/perf.c               | 53 ++++++++++++++++++++=
++++++++++++++++++++++++++++++----
+>  drivers/firmware/arm_scmi/powercap.c           | 12 ++++++++----
+>  drivers/firmware/arm_scmi/protocols.h          |  4 +++-
+>  include/linux/scmi_protocol.h                  |  8 ++++++++
+>  13 files changed, 137 insertions(+), 43 deletions(-)
+>
+> --
 
-Please note that, there are a couple remoteproc drivers and a media driver
-changed here as well, ack-ed of course. Potentially those may cause some merge
-conflicts, but just let me know if there are some issues.
-
-Please pull this in!
-
-Kind regards
-Ulf Hansson
-
-
-The following changes since commit 2a93c6cbd5a703d44c414a3c3945a87ce11430ba:
-
-  pmdomain: qcom: rpmhpd: Fix enabled_corner aggregation (2024-02-28 16:31:45 +0100)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.9
-
-for you to fetch changes up to ccabbb6768fc72d6cb0223324925c93658d91e63:
-
-  pmdomain: renesas: rcar-gen4-sysc: Reduce atomic delays (2024-03-06 11:25:27 +0100)
-
-----------------------------------------------------------------
-Core:
- - Log a message when unused PM domains gets disabled
- - Scale down parent/child performance states in the reverse order
-
-Providers:
- - qcom: rpmpd: Add power domains support for MSM8974, MSM8974PRO, PMA8084
-   and PM8841
- - renesas: rcar-gen4-sysc: Reduce atomic delays
- - renesas: rcar-sysc: Adjust the waiting time to cover the worst case
- - renesas: r8a779h0-sysc: Add support for the r8a779h0 PM domains
- - imx: imx8mp-blk-ctrl: Add the fdcc clock to the hdmimix domains
- - imx: imx8mp-blk-ctrl: Error out if domains are missing in DT
-
-Improve support for multiple PM domains:
- - Add two helper functions to attach/detach multiple PM domains
- - Convert a couple of drivers to use the new helper functions
-
-----------------------------------------------------------------
-Adam Ford (2):
-      dt-bindings: soc: imx: add missing clock and power-domains to imx8mp-hdmi-blk-ctrl
-      pmdomain: imx8mp-blk-ctrl: imx8mp_blk: Add fdcc clock to hdmimix domain
-
-Dien Pham (1):
-      pmdomain: renesas: Adjust the waiting time to cover the worst case
-
-Duy Nguyen (3):
-      dt-bindings: power: renesas,rcar-sysc: Document R-Car V4M support
-      dt-bindings: power: Add r8a779h0 SYSC power domain definitions
-      pmdomain: renesas: r8a779h0-sysc: Add r8a779h0 support
-
-Geert Uytterhoeven (2):
-      pmdomain: renesas: rcar-gen4-sysc: Remove unneeded includes
-      pmdomain: renesas: rcar-gen4-sysc: Reduce atomic delays
-
-Konrad Dybcio (2):
-      pmdomain: qcom: rpmpd: Keep one RPM handle for all RPMPDs
-      pmdomain: core: Print a message when unused power domains are disabled
-
-Krzysztof Kozlowski (2):
-      pmdomain: core: constify of_phandle_args in xlate
-      pmdomain: core: constify of_phandle_args in add device and subdomain
-
-Kunwu Chan (1):
-      pmdomain: ti: Add a null pointer check to the omap_prm_domain_init
-
-Luca Weiss (3):
-      dt-bindings: power: rpmpd: Add MSM8974 power domains
-      pmdomain: qcom: rpmpd: Add MSM8974+PM8841 power domains
-      pmdomain: qcom: rpmpd: Add MSM8974PRO+PMA8084 power domains
-
-Marek Vasut (1):
-      pmdomain: imx8mp-blk-ctrl: Error out if domains are missing in DT
-
-Markus Elfring (1):
-      pmdomain: mediatek: Use devm_platform_ioremap_resource() in init_scp()
-
-Stephan Gerhold (1):
-      pmdomain: core: Scale down parent/child performance states in reverse order
-
-Ulf Hansson (8):
-      pmdomain: Merge branch dt into next
-      pmdomain: Merge branch fixes into next
-      PM: domains: Add helper functions to attach/detach multiple PM domains
-      remoteproc: imx_dsp_rproc: Convert to dev_pm_domain_attach|detach_list()
-      remoteproc: imx_rproc: Convert to dev_pm_domain_attach|detach_list()
-      remoteproc: qcom_q6v5_adsp: Convert to dev_pm_domain_attach|detach_list()
-      media: venus: Convert to dev_pm_domain_attach|detach_list() for vcodec
-      pmdomain: Merge branch fixes into next
-
- .../devicetree/bindings/power/qcom,rpmpd.yaml      |   2 +
- .../bindings/power/renesas,rcar-sysc.yaml          |   1 +
- .../bindings/soc/imx/fsl,imx8mp-hdmi-blk-ctrl.yaml |  22 +--
- drivers/base/power/common.c                        | 134 +++++++++++++++++
- drivers/media/platform/qcom/venus/core.c           |  12 +-
- drivers/media/platform/qcom/venus/core.h           |   7 +-
- drivers/media/platform/qcom/venus/pm_helpers.c     |  48 +++----
- drivers/pmdomain/core.c                            | 141 +++++++++++-------
- drivers/pmdomain/imx/imx8m-blk-ctrl.c              |   9 +-
- drivers/pmdomain/imx/imx8mp-blk-ctrl.c             |  19 +--
- drivers/pmdomain/imx/scu-pd.c                      |   2 +-
- drivers/pmdomain/mediatek/mtk-scpsys.c             |   4 +-
- drivers/pmdomain/qcom/rpmpd.c                      |  96 ++++++++++++-
- drivers/pmdomain/renesas/Kconfig                   |   4 +
- drivers/pmdomain/renesas/Makefile                  |   1 +
- drivers/pmdomain/renesas/r8a779a0-sysc.c           |  12 --
- drivers/pmdomain/renesas/r8a779f0-sysc.c           |  12 --
- drivers/pmdomain/renesas/r8a779g0-sysc.c           |  12 --
- drivers/pmdomain/renesas/r8a779h0-sysc.c           |  54 +++++++
- drivers/pmdomain/renesas/rcar-gen4-sysc.c          |  17 ++-
- drivers/pmdomain/renesas/rcar-gen4-sysc.h          |   1 +
- drivers/pmdomain/renesas/rcar-sysc.c               |   4 +-
- drivers/pmdomain/tegra/powergate-bpmp.c            |   2 +-
- drivers/pmdomain/ti/omap_prm.c                     |   2 +
- drivers/pmdomain/ti/ti_sci_pm_domains.c            |   2 +-
- drivers/pmdomain/xilinx/zynqmp-pm-domains.c        |   2 +-
- drivers/remoteproc/imx_dsp_rproc.c                 |  82 ++---------
- drivers/remoteproc/imx_rproc.c                     |  73 ++--------
- drivers/remoteproc/qcom_q6v5_adsp.c                | 160 ++++++++++-----------
- include/dt-bindings/power/qcom-rpmpd.h             |   7 +
- include/dt-bindings/power/renesas,r8a779h0-sysc.h  |  49 +++++++
- include/linux/pm_domain.h                          |  60 ++++++--
- 32 files changed, 644 insertions(+), 409 deletions(-)
- create mode 100644 drivers/pmdomain/renesas/r8a779h0-sysc.c
- create mode 100644 include/dt-bindings/power/renesas,r8a779h0-sysc.h
+Pulled and added to the pm branch in linux-pm.git, thanks!
 
