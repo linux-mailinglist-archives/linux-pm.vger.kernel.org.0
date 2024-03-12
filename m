@@ -1,146 +1,127 @@
-Return-Path: <linux-pm+bounces-4841-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4842-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C36D7878FE8
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Mar 2024 09:45:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD13E879156
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Mar 2024 10:49:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 63DD7B211B8
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Mar 2024 08:45:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67B83282163
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Mar 2024 09:49:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E399077A1B;
-	Tue, 12 Mar 2024 08:45:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67E737828F;
+	Tue, 12 Mar 2024 09:48:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ZyngT2Ap"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0918577A0E;
-	Tue, 12 Mar 2024 08:45:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAB4D7826B;
+	Tue, 12 Mar 2024 09:47:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710233139; cv=none; b=UD/dMQTAjEikFviFALDA1o78TYK+Izhn981Vf49vH55R+XBVFhZKf+JriZNkzNPNfhOVCA3L/4xoYkEQf6UATgdF5648NpEN4sZRJgXxr42hNVx5b3sYiLaRaYnV1sxvMoIgyUul56du5gIL3UXHn0tgXuLDgs6eBnUVmnsYIH4=
+	t=1710236880; cv=none; b=hyWcc7VtVfR0HMcunWXtGMPxmGzHzVM8hRALe1HuHg+7Ry7wpV0HEpY2aRwXF/vVTvtTc/V5LBXEJlHMh9n2AMwA74egQzpISXEy5J3XlmB9sNSv6qIkoHMCCH3xubDCKb6nrynzulL9p4uOkT4UOLF5wrNzDWokL/J+IvoAJuI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710233139; c=relaxed/simple;
-	bh=sh38yJG3tCaBIyKt3Moq30fT1P7GQyX2mpE8GaX4Wzo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ntfx0MeqHSgr3tJt7BbEk2mVbXFWFBHv0w0Qap38YW0rPybeCCp6Kp/msP/FjRI6aYz2IoW3gMk+YcgUe+vXVUhRv/qUMHS9nnKlDBbTnXhd1dclt7wd4MDgcNeWKG8DXbOJuatfvY9a1TySW5BPYfAVNPyauGhr1rfOl6Pxkc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 772891007;
-	Tue, 12 Mar 2024 01:46:14 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BC9F73F73F;
-	Tue, 12 Mar 2024 01:45:33 -0700 (PDT)
-Date: Tue, 12 Mar 2024 09:44:52 +0100
-From: Beata Michalska <beata.michalska@arm.com>
-To: Vanshidhar Konda <vanshikonda@os.amperecomputing.com>
-Cc: "lihuisong (C)" <lihuisong@huawei.com>,
-	Ionela Voinescu <ionela.voinescu@arm.com>,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, rafael@kernel.org,
-	sumitg@nvidia.com, zengheng4@huawei.com,
-	yang@os.amperecomputing.com, will@kernel.org, sudeep.holla@arm.com,
-	liuyonglong@huawei.com, zhanjie9@hisilicon.com,
-	linux-acpi@vger.kernel.org
-Subject: Re: Re: [PATCH v1 2/3] arm64: idle: Cache AMU counters before
- entering idle
-Message-ID: <ZfAWBPEnjcv1xS0J@arm.com>
-References: <20240229162520.970986-1-vanshikonda@os.amperecomputing.com>
- <20240229162520.970986-3-vanshikonda@os.amperecomputing.com>
- <3ed907bf-9526-3a46-41b9-8a0c747122f1@huawei.com>
- <ghmdr7gksgdedikslax2wdxfzzifu3drviuhifbshhvgksmxjr@7giez2rzppil>
+	s=arc-20240116; t=1710236880; c=relaxed/simple;
+	bh=6v0caSEmR/LW+2CLvMAdGxJ1CbcQQPnew73q91mOjmA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RKk06ciKKaNnCdyhwGKnJM/lT6VDfDe42hCg+rA3qXJZQ0D+rhiK2Y3A+SL6/nlTN2LcsnlfudB8DXvKgSVtxs35qfLzjM/lK7oEXStZBl/XSg1u4FSQeyyK+kvsWLYng2CCrKXfm+F2r9xKk5oG03eHCSY1vYIh8tkxPYAIIVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ZyngT2Ap; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42C8DcNW015337;
+	Tue, 12 Mar 2024 09:47:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=qcppdkim1; bh=GS8a44E
+	ElKT1iKb4VOxwYSGBj1195LrzjcOpeKyOEEU=; b=ZyngT2ApdQdSLberTbOXPwM
+	YH0NaT7OFsFeDq7N6W30Gtf0nwAyS6kbuOXUqQrLVhOQL5mDcfvOzRclPbGGUNfP
+	EX9FtV6a90/CvNigKBnbd4NhaMMnpU0QmKig1IGmRkouFYrjCmqIx7cDJRZi5JzR
+	/t72U/o8QrOdEI6DLOl+YpSyGWlG2TwT8boQir0AuLrUqj478b0fEbylOr7LlA2X
+	e4yGVmOhobLpKA52JcDepIhxOyu8mTBTSMW2h4i2fluJQ4LIU5d2qdZkVmShYTvZ
+	og4cv3TIcaEFNRfMwdz/wmkxmaK1BRSXGXKELivkkfLh0T3ZTlqOOFsnudC16Xw=
+	=
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wte5d0sa3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 12 Mar 2024 09:47:47 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42C9lkjf024150
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 12 Mar 2024 09:47:46 GMT
+Received: from hu-sibis-blr.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Tue, 12 Mar 2024 02:47:41 -0700
+From: Sibi Sankar <quic_sibis@quicinc.com>
+To: <sudeep.holla@arm.com>, <cristian.marussi@arm.com>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <morten.rasmussen@arm.com>,
+        <dietmar.eggemann@arm.com>, <lukasz.luba@arm.com>, <sboyd@kernel.org>,
+        <d-gole@ti.com>
+CC: <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_mdtipton@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <nm@ti.com>,
+        Sibi Sankar
+	<quic_sibis@quicinc.com>
+Subject: [PATCH V4 0/2] cpufreq: scmi: Add boost frequency support
+Date: Tue, 12 Mar 2024 15:17:24 +0530
+Message-ID: <20240312094726.3438322-1-quic_sibis@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ghmdr7gksgdedikslax2wdxfzzifu3drviuhifbshhvgksmxjr@7giez2rzppil>
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: oLbu48V99Eu6XMJNSOURVjCRJ_8wUKfl
+X-Proofpoint-GUID: oLbu48V99Eu6XMJNSOURVjCRJ_8wUKfl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-12_08,2024-03-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 impostorscore=0 phishscore=0 suspectscore=0 mlxlogscore=999
+ malwarescore=0 clxscore=1011 lowpriorityscore=0 bulkscore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2402120000 definitions=main-2403120074
 
-On Mon, Mar 11, 2024 at 11:27:27AM -0700, Vanshidhar Konda wrote:
-> On Thu, Mar 07, 2024 at 11:17:26AM +0800, lihuisong (C) wrote:
-> > 
-> > 在 2024/3/1 0:25, Vanshidhar Konda 写道:
-> > > AMU counters do not increment while a CPU is in idle. Saving the value
-> > > of the core and constant counters prior to invoking WFI allows FIE to
-> > > compute the frequency of a CPU that is idle.
-> > > 
-> > > Signed-off-by: Vanshidhar Konda <vanshikonda@os.amperecomputing.com>
-> > > ---
-> > >  arch/arm64/kernel/idle.c     | 10 ++++++++++
-> > >  arch/arm64/kernel/topology.c | 14 ++++++++------
-> > >  2 files changed, 18 insertions(+), 6 deletions(-)
-> > > 
-> > > diff --git a/arch/arm64/kernel/idle.c b/arch/arm64/kernel/idle.c
-> > > index 05cfb347ec26..5ed2e57188a8 100644
-> > > --- a/arch/arm64/kernel/idle.c
-> > > +++ b/arch/arm64/kernel/idle.c
-> > > @@ -26,6 +26,16 @@ void __cpuidle cpu_do_idle(void)
-> > >  	arm_cpuidle_save_irq_context(&context);
-> > > +#ifdef CONFIG_ARM64_AMU_EXTN
-> > > +	/* Update the AMU counters before entering WFI. The cached AMU counter
-> > > +	 * value is used to determine CPU frequency while the CPU is idle
-> > > +	 * without needing to wake up the CPU.
-> > > +	 */
-> > > +
-> > > +	if (cpu_has_amu_feat(smp_processor_id()))
-> > > +		update_freq_counters_refs();
-> > > +#endif
-> > The below point I has mentioned in [1].
-> > This is just for the WFI state.
-> > What about other deeper idle states, like retention and power down?
-> > The path to enter idle state is different for them. We should do this
-> > for all idle states.
-> > 
-> 
-> Yes. That makes sense. I'll account for them in the next version of the
-> patch. I'll work on the next version of the patch based on the updated
-> patch from @Beata.
-> 
-This should now be covered by [1]
+This series adds provision to mark dynamic opps as turbo capable and adds
+boost frequency support to the scmi cpufreq driver.
 
----
-[1]https://lore.kernel.org/all/20240312083431.3239989-4-beata.michalska@arm.com/
+V4:
+* Pickup Rbs
+* Use turbo and simplify setting turbo. [Dhruva/Viresh]
+* Update commit message of patch 2 with more info. [Sudeep]
 
----
-BR
-Beata
+V3:
+* Don't set per-policy boost flags from the cpufreq driver. [Viresh]
+* Drop patch 1 since Viresh already pulled it in.
+* Drop depends on bug link. [Viresh]
 
-> Thanks,
-> Vanshi
-> 
-> > > +
-> > >  	dsb(sy);
-> > >  	wfi();
-> > > diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-> > > index db8d14525cf4..8905eb0c681f 100644
-> > > --- a/arch/arm64/kernel/topology.c
-> > > +++ b/arch/arm64/kernel/topology.c
-> > > @@ -240,13 +240,15 @@ unsigned int arch_freq_get_on_cpu(int cpu)
-> > >  	} while (read_seqcount_retry(&cpu_sample->seq, seq));
-> > >  	/*
-> > > -	 * Bail on invalid count and when the last update was too long ago,
-> > > -	 * which covers idle and NOHZ full CPUs.
-> > > +	 * Bail on invalid count and when the last update was too long ago.
-> > > +	 * This covers idle, NOHZ full and isolated CPUs.
-> > > +	 *
-> > > +	 * Idle CPUs don't need to be measured because AMU counters stop
-> > > +	 * incrementing during WFI/WFE.
-> > >  	 */
-> > > -	if (!delta_const_cnt || ((jiffies - last) > MAX_SAMPLE_AGE)) {
-> > > -		if (!(housekeeping_cpu(cpu, HK_TYPE_TICK) && idle_cpu(cpu)))
-> > > -			goto fallback;
-> > > -	}
-> > > +	if (!delta_const_cnt ||
-> > > +	    ((jiffies - last) > MAX_SAMPLE_AGE && !idle_cpu(cpu)))
-> > > +		goto fallback;
-> > >  	/*
-> > >  	 * CPU frequency = reference perf (in Hz) * (/\ delivered) / (/\ reference)
-> > [1] https://lore.kernel.org/linux-arm-kernel/20231212072617.14756-1-lihuisong@huawei.com/
-> > 
+V2:
+* Document boost flag. [Lukasz]
+* Remove sustained_freq check. [Pierre]
+* simplify sustained_freq_khz calculation. [Sudeep]
+* fix default per-policy state. [Dietmar]
+* fix typo in commit message in patch 3.
+
+Sibi Sankar (2):
+  firmware: arm_scmi: Add support for marking certain frequencies as
+    turbo
+  cpufreq: scmi: Enable boost support
+
+ drivers/cpufreq/scmi-cpufreq.c   | 20 +++++++++++++++++++-
+ drivers/firmware/arm_scmi/perf.c |  3 +++
+ 2 files changed, 22 insertions(+), 1 deletion(-)
+
+-- 
+2.34.1
+
 
