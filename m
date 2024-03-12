@@ -1,59 +1,60 @@
-Return-Path: <linux-pm+bounces-4851-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4852-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FD54879581
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Mar 2024 15:00:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E2A0879778
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Mar 2024 16:24:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 13972B232F2
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Mar 2024 14:00:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A25B282948
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Mar 2024 15:24:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 603AC7AE4B;
-	Tue, 12 Mar 2024 14:00:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 303687C0AE;
+	Tue, 12 Mar 2024 15:24:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="BOeLFV7H"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sxa/mtLK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FC777A700;
-	Tue, 12 Mar 2024 14:00:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA5AE7BB08;
+	Tue, 12 Mar 2024 15:24:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710252012; cv=none; b=gsaWdj/sO3p8o5Qk6xbPUOasbzOMYxo0RxmJBAWlH8263dc/V1QM4h9LrcVvhxaiQRtRbdS4bYVABSR2hCqAU6UDQhi7taD//Cd0e/4nQZ6iNNlc3YV/ECM0ARtjHkzKcfq0GOEnwPklZ03RwZ7eY0nM+KHMQhFidlX7BA1YU0k=
+	t=1710257074; cv=none; b=WRd6g+LBLqQlOm9MuJkzfbA08WsfSEkAlEPHMKT1dXgOlcLpsQ440fMRvlwfIoHvTYy00QnSSp89NfIV9bfcg1baMxr7qDyLsZ73ozWtssGfO+2RlCXGzhC3X3h4W1lO/LFCUZlPz+qpKvq264FH0UXFjFs4Q2ngb6YY0ZakK+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710252012; c=relaxed/simple;
-	bh=HMH0aJ/yhL4TtEL6UtwH+nkbeX43Qv6MTp6+ytOSTDE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mnonVG8RwsQnOske36AoAzE/rI/SxAgBNQDjzBzpdtkX31V1PWTU0El2EvUcmCuja8xeOVlTYnYqWeSSync2c4rQ9eOxgUazuObhyJsjkHW193nJ/kBJxJAStuIMDDH0uwPrdcV4DPjA7oKLPlKtPLo07Zx4oDaoxqADV65fVpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=BOeLFV7H; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=Pmgtt4mh52E0ERFpZQ40Zoz9sGIFhtqH6Ihl0RxJeMs=; b=BOeLFV7H7h+EF4VfHWTOf+BQRx
-	ynSXjJYPgpTj/CXyGDQQqQ5Qsv/8KHJ0vqSaOhjfWgKd0/M/BKk/k16aciKflY9M3RLdUUwcyQtXc
-	PFOaLY8d1Dn+et+lAzKpNciAb1D+uB9DinhWwwI9LspSwWWiL2O1h1uUSbzqiRnbe1b1tYFyKijDV
-	PmhtSMTk/j7jaNu3tpU7LS269lAaHrcS15y5JeBuslsfiNvcszqCJveYThFZiL4JglBp0KvZzB6tF
-	l1Mgy7GlMCtGloklTRIB/lPjCPLvFh4EQ2izHayipJZ4JO3iiBqAqau7uQfI6YP7Jt8BjFta6a8it
-	GlsV5iZw==;
-Received: from [2001:8b0:10b:1::ebe] (helo=i7.infradead.org)
-	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rk2fh-00000009V5O-3rT4;
-	Tue, 12 Mar 2024 14:00:02 +0000
-Received: from dwoodhou by i7.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rk2fg-000000033N9-3I8x;
-	Tue, 12 Mar 2024 14:00:00 +0000
-From: David Woodhouse <dwmw2@infradead.org>
-To: linux-arm-kernel@lists.infradead.org,
-	kvm@vger.kernel.org
-Cc: Paolo Bonzini <pbonzini@redhat.com>,
+	s=arc-20240116; t=1710257074; c=relaxed/simple;
+	bh=nqKmQTSmr2KuGua3AdiEOFKyMoOcoM2xLn6yrACNOR4=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UPQTdGFALdpOtiIJ94XA9/oTbs5N0UDIbyvYX/Fy9Jm1FsTQg+ArZO2VTX8Lf1BakDyCD1+1u5YWGUrbw1MA8Qcv7yrQv+lop7LqR4l5zJVFtNz2VamlbLoOkL0OsIS4pn/x8wuW3aGSQDkzXcdti8sDn1dXYVOcS4X2vLnWWFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sxa/mtLK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67C3BC433F1;
+	Tue, 12 Mar 2024 15:24:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710257073;
+	bh=nqKmQTSmr2KuGua3AdiEOFKyMoOcoM2xLn6yrACNOR4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=sxa/mtLKCqHRQ47Z3IGh8g9wEghLqDd4mEdsnmIZ8+rKVeNnIOe7nLGAm8nDyfpfj
+	 9KxyWcia6zoGbsG0CtfaZAKs7CFMwLVbGzY4t9ApEYLyUI08BKL131Efsf5saBdez6
+	 rHerJrF3Zq92BkXrsRTgoXJH099pAxBbqeRbXZRXepBR0iRLuBYDuXi57aDpIDf5Nk
+	 LfxsBtnoRnotjh3fEOqOxOuK2VwGVlBhw7FExY/kO9fzAbb0z0JF+68a0SzxECKKkL
+	 LkwIwhgvT/op/wvS116Vy2CGPWSBUv7lp5r9crmuinVWb4keHgw0k87cRWbQlixRKK
+	 EISGo5xgHdODA==
+Received: from [209.214.232.173] (helo=wait-a-minute.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1rk3zS-00Blz8-6P;
+	Tue, 12 Mar 2024 15:24:30 +0000
+Date: Tue, 12 Mar 2024 15:24:23 +0000
+Message-ID: <87wmq7pj6g.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: David Woodhouse <dwmw2@infradead.org>
+Cc: linux-arm-kernel@lists.infradead.org,
+	kvm@vger.kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
 	Jonathan Corbet <corbet@lwn.net>,
-	Marc Zyngier <maz@kernel.org>,
 	Oliver Upton <oliver.upton@linux.dev>,
 	James Morse <james.morse@arm.com>,
 	Suzuki K Poulose <suzuki.poulose@arm.com>,
@@ -72,153 +73,53 @@ Cc: Paolo Bonzini <pbonzini@redhat.com>,
 	linux-kernel@vger.kernel.org,
 	kvmarm@lists.linux.dev,
 	linux-pm@vger.kernel.org
-Subject: [RFC PATCH 2/2] arm64: Use SYSTEM_OFF2 PSCI call to power off for hibernate
-Date: Tue, 12 Mar 2024 13:51:29 +0000
-Message-ID: <20240312135958.727765-3-dwmw2@infradead.org>
-X-Mailer: git-send-email 2.44.0
+Subject: Re: [RFC PATCH 0/2] Add PSCI v1.3 SYSTEM_OFF2 support for hibernation
 In-Reply-To: <20240312135958.727765-1-dwmw2@infradead.org>
 References: <20240312135958.727765-1-dwmw2@infradead.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: David Woodhouse <dwmw2@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 209.214.232.173
+X-SA-Exim-Rcpt-To: dwmw2@infradead.org, linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org, pbonzini@redhat.com, corbet@lwn.net, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com, lpieralisi@kernel.org, rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz, dwmw@amazon.co.uk, smostafa@google.com, jean-philippe@linaro.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, linux-pm@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-From: David Woodhouse <dwmw@amazon.co.uk>
+On Tue, 12 Mar 2024 13:51:27 +0000,
+David Woodhouse <dwmw2@infradead.org> wrote:
+> 
+> The upcoming PSCI v1.3 specification adds support for a SYSTEM_OFF2
 
-The PSCI v1.3 specification (alpha) adds support for a SYSTEM_OFF2
-function which is analogous to ACPI S4 state. This will allow hosting
-environments to determine that a guest is hibernated rather than just
-powered off, and handle that state appropriately on subsequent launches.
+Pointer to the spec? Crucially, this is in the Alpha state, meaning
+that it is still subject to change [1].
 
-Since commit 60c0d45a7f7a ("efi/arm64: use UEFI for system reset and
-poweroff") the EFI shutdown method is deliberately preferred over PSCI
-or other methods. So register a SYS_OFF_MODE_POWER_OFF handler which
-*only* handles the hibernation, leaving the original PSCI SYSTEM_OFF as
-a last resort via the legacy pm_power_off function pointer.
+> function which is analogous to ACPI S4 state. This will allow hosting 
+> environments to determine that a guest is hibernated rather than just 
+> powered off, and ensure that they preserve the virtual environment 
+> appropriately to allow the guest to resume safely (or bump the 
+> hardware_signature in the FACS to trigger a clean reboot instead).
+> 
+> This adds support for it to KVM, and to the guest hibernate code.
+> 
+> Strictly, we should perhaps also allow the guest to detect PSCI v1.3, 
+> but when v1.1 was added in commit 512865d83fd9 it was done 
+> unconditionally, which seems wrong. Shouldn't we have a way for 
+> userspace to control what gets exposed, rather than silently changing 
+> the guest behaviour with newer host kernels? Should I add a 
+> KVM_CAP_ARM_PSCI_VERSION?
 
-The hibernation code already exports a system_entering_hibernation()
-function which is be used by the higher-priority handler to check for
-hibernation. That existing function just returns the value of a static
-boolean variable from hibernate.c, which was previously only set in the
-hibernation_platform_enter() code path. Set the same flag in the simpler
-code path around the call to kernel_power_off() too.
+Do you mean something like 85bd0ba1ff98?
 
-An alternative way to hook SYSTEM_OFF2 into the hibernation code would
-be to register a platform_hibernation_ops structure with an ->enter()
-method which makes the new SYSTEM_OFF2 call. But that would have the
-unwanted side-effect of making hibernation take a completely different
-code path in hibernation_platform_enter(), invoking a lot of special dpm
-callbacks.
+	M.
 
-Another option might be to add a new SYS_OFF_MODE_HIBERNATE mode, with
-fallback to SYS_OFF_MODE_POWER_OFF. Or to use the sys_off_data to
-indicate whether the power off is for hibernation.
+[1] https://documentation-service.arm.com/static/65e59325837c4d065f6556a6
 
-But this version works and is relatively simple.
-
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
----
- drivers/firmware/psci/psci.c | 35 +++++++++++++++++++++++++++++++++++
- kernel/power/hibernate.c     |  5 ++++-
- 2 files changed, 39 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-index d9629ff87861..69d2f6969438 100644
---- a/drivers/firmware/psci/psci.c
-+++ b/drivers/firmware/psci/psci.c
-@@ -78,6 +78,7 @@ struct psci_0_1_function_ids get_psci_0_1_function_ids(void)
- 
- static u32 psci_cpu_suspend_feature;
- static bool psci_system_reset2_supported;
-+static bool psci_system_off2_supported;
- 
- static inline bool psci_has_ext_power_state(void)
- {
-@@ -333,6 +334,28 @@ static void psci_sys_poweroff(void)
- 	invoke_psci_fn(PSCI_0_2_FN_SYSTEM_OFF, 0, 0, 0);
- }
- 
-+#ifdef CONFIG_HIBERNATION
-+static int psci_sys_hibernate(struct sys_off_data *data)
-+{
-+	if (system_entering_hibernation())
-+		invoke_psci_fn(PSCI_FN_NATIVE(1_3, SYSTEM_OFF2),
-+			       PSCI_1_3_HIBERNATE_TYPE_OFF, 0, 0);
-+	return NOTIFY_DONE;
-+}
-+
-+static int __init psci_hibernate_init(void)
-+{
-+	if (psci_system_off2_supported) {
-+		/* Higher priority than EFI shutdown, but only for hibernate */
-+		register_sys_off_handler(SYS_OFF_MODE_POWER_OFF,
-+					 SYS_OFF_PRIO_FIRMWARE + 2,
-+					 psci_sys_hibernate, NULL);
-+	}
-+	return 0;
-+}
-+subsys_initcall(psci_hibernate_init);
-+#endif
-+
- static int psci_features(u32 psci_func_id)
- {
- 	return invoke_psci_fn(PSCI_1_0_FN_PSCI_FEATURES,
-@@ -364,6 +387,7 @@ static const struct {
- 	PSCI_ID_NATIVE(1_1, SYSTEM_RESET2),
- 	PSCI_ID(1_1, MEM_PROTECT),
- 	PSCI_ID_NATIVE(1_1, MEM_PROTECT_CHECK_RANGE),
-+	PSCI_ID_NATIVE(1_3, SYSTEM_OFF2),
- };
- 
- static int psci_debugfs_read(struct seq_file *s, void *data)
-@@ -523,6 +547,16 @@ static void __init psci_init_system_reset2(void)
- 		psci_system_reset2_supported = true;
- }
- 
-+static void __init psci_init_system_off2(void)
-+{
-+	int ret;
-+
-+	ret = psci_features(PSCI_FN_NATIVE(1_3, SYSTEM_OFF2));
-+
-+	if (ret != PSCI_RET_NOT_SUPPORTED)
-+		psci_system_off2_supported = true;
-+}
-+
- static void __init psci_init_system_suspend(void)
- {
- 	int ret;
-@@ -653,6 +687,7 @@ static int __init psci_probe(void)
- 		psci_init_cpu_suspend();
- 		psci_init_system_suspend();
- 		psci_init_system_reset2();
-+		psci_init_system_off2();
- 		kvm_init_hyp_services();
- 	}
- 
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index 4b0b7cf2e019..ac87b3cb670c 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -676,8 +676,11 @@ static void power_down(void)
- 		}
- 		fallthrough;
- 	case HIBERNATION_SHUTDOWN:
--		if (kernel_can_power_off())
-+		if (kernel_can_power_off()) {
-+			entering_platform_hibernation = true;
- 			kernel_power_off();
-+			entering_platform_hibernation = false;
-+		}
- 		break;
- 	}
- 	kernel_halt();
 -- 
-2.44.0
-
+Without deviation from the norm, progress is not possible.
 
