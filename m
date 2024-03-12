@@ -1,124 +1,122 @@
-Return-Path: <linux-pm+bounces-4848-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4850-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10EC18793D0
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Mar 2024 13:10:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B138A87957E
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Mar 2024 15:00:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BBFF21F2265D
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Mar 2024 12:10:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 64D651F22209
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Mar 2024 14:00:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FCAA79DD9;
-	Tue, 12 Mar 2024 12:10:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 481A57AE42;
+	Tue, 12 Mar 2024 14:00:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="CLetRgdt"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="OkBA9tac"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 479A079DB7;
-	Tue, 12 Mar 2024 12:10:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FC2F79B96;
+	Tue, 12 Mar 2024 14:00:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710245409; cv=none; b=GUKSGPA/wXUUhmY8rnLP3zyKrSrO4x0lexas5zDaCuvitTXhqIV8rBZbAaTUcf+PgzTPlxdrR5/vc8Z7LPyOotGZth3E9gUxy19L+Z1XxJGqEUKbUNvqoo1X5dsmU2w5vqMuwlt+FzduLvdX27IwwT+Qb+qZHhpDrDRZEo8jeek=
+	t=1710252012; cv=none; b=CG+OA/gCOk9Y4Lrgb41g6fFo6RW/MUHeyixZnx57h5mLWNo6Lnvpf6LpttZ7o2ZMrPanYGE5C3dGi7Gah8IyMokjDYTz/LgERlFoc3ZGYwejg7a8E5ruXmu6hgGznn4hcp/EIjSbARxEQqmCHhUYyVEfDrJcTCWTXKUOxhzw+AI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710245409; c=relaxed/simple;
-	bh=J4zrMDxZt2mY8Udzz7B1aFiT7+U5KtBZSVCQ3MaLmpo=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VizAA2Kh/XbiOts0cpRhIQoq+u1zIe3qPx4Z8GjS3frunopVOQxBIV4IdXP5QwGpHvmmmrE6KHxHyHDRTNvp1LIdMU0Lw0VHUaMOTDDMNn8B19baZOaCfxC3DE2Hm2Z0BN2eomDjkCOhupax5+7+DkiFpP5IvH6RX2hQlx5hCAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=CLetRgdt; arc=none smtp.client-ip=198.47.19.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 42CC9s6B012541;
-	Tue, 12 Mar 2024 07:09:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1710245394;
-	bh=jFq7cp9kr/StC4iPZ08B/XrH/vo+1Llvr7u+BugBMVo=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=CLetRgdtEPCY0LQU4SzmoVPWu+qih/PoJn2kqxT058qKg1IjM0MC+5s1Ay3lIGVZG
-	 rrtJhZXj3kZ8b7UZpHlqvHDOTiITKKfEqvFV1JjHdf6B2fyvmb37JvDto0kCPiXBvX
-	 8iaZZ7lx02/P5vrrsD+lT+ULXcdcC+6KibUaFgBM=
-Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
-	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 42CC9sA5130325
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 12 Mar 2024 07:09:54 -0500
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 12
- Mar 2024 07:09:54 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 12 Mar 2024 07:09:54 -0500
-Received: from localhost (dhruva.dhcp.ti.com [172.24.227.68])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 42CC9rsn097251;
-	Tue, 12 Mar 2024 07:09:54 -0500
-Date: Tue, 12 Mar 2024 17:39:53 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: Sibi Sankar <quic_sibis@quicinc.com>
-CC: <sudeep.holla@arm.com>, <cristian.marussi@arm.com>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <morten.rasmussen@arm.com>,
-        <dietmar.eggemann@arm.com>, <lukasz.luba@arm.com>, <sboyd@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_mdtipton@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <nm@ti.com>
-Subject: Re: [PATCH V4 1/2] firmware: arm_scmi: Add support for marking
- certain frequencies as turbo
-Message-ID: <20240312120953.u6lfmgw33rcosjwl@dhruva>
-References: <20240312094726.3438322-1-quic_sibis@quicinc.com>
- <20240312094726.3438322-2-quic_sibis@quicinc.com>
+	s=arc-20240116; t=1710252012; c=relaxed/simple;
+	bh=3HWKckNpAQ8AY3aLQCp6UBNnYrtUMUkbdHYWXQt4TtY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EXKnbQkZdfDQa5Q+QosiooOvkBHHsaXk4gHObh88EjcaL63XAh+nf05iOrg82xJvumblJP+NexwHErHeRncRTOd4gCV4LzMRWhzQjO/YItMlwEpAnr5t2AaeHtLVBqL7/70nykPPmAm4+Ius6JID23wJLeW6xlZ251g8aiO+GT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=OkBA9tac; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=jQe08bY6cMcC0sBvnFpiFQcBV697YeZ0n6MJqTOrObA=; b=OkBA9tacW41yqQUpfP1Hzcplt8
+	xtAww7kN00Sx5K7o7fgoszyFLXs+91r6SQIcCn/Jv7GQY566BTvYHRHPtNF2MhyqQwf3NwcdyXnof
+	1kiFoNaj9RN1c8qgyvTRK0GfX1iOqV7ATqTE1fcfzWHm4XpEVQW3OgYVZs1sDw4eEr5hj5JY5ePht
+	Ag8x2K6WMsl29tDBbHuPrqFnyqhcmv7vIHk74dqsDUPYbiBvQifpSoh098LUkq+al5F5TLrJTjdk9
+	mA81FeGfnVhdKHCOfllPPrMnySBa6SwGeF1e+mDU4w+TbV12/54iDj1Vncdv5ZiSJ9HlIvmEGeo2a
+	hyB9wd0A==;
+Received: from [2001:8b0:10b:1::ebe] (helo=i7.infradead.org)
+	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rk2fh-00000009V5K-3oqy;
+	Tue, 12 Mar 2024 14:00:02 +0000
+Received: from dwoodhou by i7.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rk2fg-000000033N2-2oJe;
+	Tue, 12 Mar 2024 14:00:00 +0000
+From: David Woodhouse <dwmw2@infradead.org>
+To: linux-arm-kernel@lists.infradead.org,
+	kvm@vger.kernel.org
+Cc: Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <len.brown@intel.com>,
+	Pavel Machek <pavel@ucw.cz>,
+	David Woodhouse <dwmw@amazon.co.uk>,
+	Mostafa Saleh <smostafa@google.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-pm@vger.kernel.org
+Subject: [RFC PATCH 0/2] Add PSCI v1.3 SYSTEM_OFF2 support for hibernation
+Date: Tue, 12 Mar 2024 13:51:27 +0000
+Message-ID: <20240312135958.727765-1-dwmw2@infradead.org>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20240312094726.3438322-2-quic_sibis@quicinc.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
+Sender: David Woodhouse <dwmw2@infradead.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
 
-On Mar 12, 2024 at 15:17:25 +0530, Sibi Sankar wrote:
-> All opps above the sustained frequency are treated as turbo, so mark them
-> accordingly.
-> 
-> Suggested-by: Sudeep Holla <sudeep.holla@arm.com>
-> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
-> ---
-> 
-> v4:
-> * Pickup Rbs
-> * Use turbo and simplify setting turbo. [Dhruva/Viresh]
-> 
->  drivers/firmware/arm_scmi/perf.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/firmware/arm_scmi/perf.c b/drivers/firmware/arm_scmi/perf.c
-> index 8e832d1ad825..345fff167b52 100644
-> --- a/drivers/firmware/arm_scmi/perf.c
-> +++ b/drivers/firmware/arm_scmi/perf.c
-> @@ -871,6 +871,9 @@ static int scmi_dvfs_device_opps_add(const struct scmi_protocol_handle *ph,
->  		else
->  			freq = dom->opp[idx].indicative_freq * dom->mult_factor;
->  
-> +		/* All OPPs above the sustained frequency are treated as turbo */
-> +		data.turbo = freq > dom->sustained_freq_khz * 1000;
-> +
+The upcoming PSCI v1.3 specification adds support for a SYSTEM_OFF2 
+function which is analogous to ACPI S4 state. This will allow hosting 
+environments to determine that a guest is hibernated rather than just 
+powered off, and ensure that they preserve the virtual environment 
+appropriately to allow the guest to resume safely (or bump the 
+hardware_signature in the FACS to trigger a clean reboot instead).
 
-Reviewed-by: Dhruva Gole <d-gole@ti.com>
+This adds support for it to KVM, and to the guest hibernate code.
 
->  		data.level = dom->opp[idx].perf;
->  		data.freq = freq;
->  
-> -- 
-> 2.34.1
-> 
+Strictly, we should perhaps also allow the guest to detect PSCI v1.3, 
+but when v1.1 was added in commit 512865d83fd9 it was done 
+unconditionally, which seems wrong. Shouldn't we have a way for 
+userspace to control what gets exposed, rather than silently changing 
+the guest behaviour with newer host kernels? Should I add a 
+KVM_CAP_ARM_PSCI_VERSION?
 
--- 
-Best regards,
-Dhruva Gole <d-gole@ti.com>
+For the guest side, this adds a new SYS_OFF_MODE_POWER_OFF with higher 
+priority than the EFI one, but which *only* triggers when there's a 
+hibernation in progress. That seemed like the simplest option, but see 
+the commit message for alternative possilities. I told Rafael I'd post a 
+straw man for bikeshedding, and here it is.
+
+ Documentation/virt/kvm/api.rst       | 11 +++++++++++
+ arch/arm64/include/asm/kvm_host.h    |  2 ++
+ arch/arm64/include/uapi/asm/kvm.h    |  6 ++++++
+ arch/arm64/kvm/arm.c                 |  5 +++++
+ arch/arm64/kvm/hyp/nvhe/psci-relay.c |  2 ++
+ arch/arm64/kvm/psci.c                | 37 ++++++++++++++++++++++++++++++++++++
+ drivers/firmware/psci/psci.c         | 35 ++++++++++++++++++++++++++++++++++
+ include/uapi/linux/kvm.h             |  1 +
+ include/uapi/linux/psci.h            |  5 +++++
+ kernel/power/hibernate.c             |  5 ++++-
+ 10 files changed, 108 insertions(+), 1 deletion(-)
+
 
