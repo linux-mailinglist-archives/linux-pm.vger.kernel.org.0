@@ -1,122 +1,106 @@
-Return-Path: <linux-pm+bounces-4901-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4902-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8453B87B243
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Mar 2024 20:49:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D73B487B2B4
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Mar 2024 21:15:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3AC7328BA6E
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Mar 2024 19:49:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BA0ACB23806
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Mar 2024 19:52:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D5DF487A7;
-	Wed, 13 Mar 2024 19:49:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43678482D4;
+	Wed, 13 Mar 2024 19:52:43 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0DC350243;
-	Wed, 13 Mar 2024 19:49:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBE7C818;
+	Wed, 13 Mar 2024 19:52:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710359392; cv=none; b=ApG+wKeE5pS0C11yOW7yVx/36sbMiqp9HFx5Vll2yTO3jZOkrUnTeOhBLT9KPiLe1fOswkHkeqNwUjHJEe71KXtUwNwjLIskw8SO5bzgDWdfX2Qm6JSX0WLUcpbJNmwB2Im0N3gBYSJIQC1s1ZoeWfiaaWuN0exlP+cY2ofCTNA=
+	t=1710359563; cv=none; b=bfkfZT+tZQsNcS7yyiPdjryUSesA1X31IcxdYYyf5V2gi47rdw7nKNUMc1L/wDbxJEJjZW36/ZHgWF6sVglSCNX1wa9xMSoK5sxNeowmYt/IHRPm4sGztRp8Zdj/wtmmwBacQHQE4E755q7vBXg9+dNVTb68weOcqLa/NEqbMgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710359392; c=relaxed/simple;
-	bh=J9t0dvhtaq5ykc0MBVleUBfd953s0rO/2H9+VspMBH4=;
+	s=arc-20240116; t=1710359563; c=relaxed/simple;
+	bh=3YzoVlwIF1iieFyYn1mdafpqQtsXqd13TNxdyyO8++o=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eTa/mjyV4ac04wPi15lT5tN4lQsEnA3Wnt0DzuuKyiEv1sKf/tkoEPLLXsR5zAHqatMalDrRSLBlZHXF41yG+iAgjWKkQHWgf/6uNjZ6gUIqHc4hOh37kTqX+gFFC6F6OqPQ0EnAdKaq/Rg1g/21AZC0n30pq5OMi9tQAr9dmnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.49
+	 To:Cc:Content-Type; b=rxPlq9TZr0ywfFlU+Lnj8mJ62iBAt6FzGQPdPkUrL5EXPSn3KO88XNr48bZ69AwIqDPEMRWN+w4YIsxYekbcHNladXNOjCjQ+wY3XRk/tMeHyZiZz9ULyDQNq7oyVTSYidZj7FC/hVSC7o7VYBCjthxODkj5dTpY0/d3OHIfaXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-221d4c52759so51442fac.1;
-        Wed, 13 Mar 2024 12:49:50 -0700 (PDT)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-220ce420472so64833fac.1;
+        Wed, 13 Mar 2024 12:52:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710359390; x=1710964190;
+        d=1e100.net; s=20230601; t=1710359561; x=1710964361;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sjGBA/d4OBZ6FVZbofQlr6HlcymtZvvTx/Uzs1a81RI=;
-        b=a+X5mjYR7mdrqK0x9mhYyZ6YTletpWT1t75V8Gb1RJ7DzI9fnaMCdaVihW0OOf6wy0
-         MSVCOGEQA8H4MwcDAQkaHXzgLQ8qi7a+9m7j6r5Mz+3zBUSJcOXNxeBxCNbfckWjSb6D
-         f/CIKkYpSjj0URH0NmzXctIs9NSX//6MQ/2UcpqPK1FrsK5ALD3EGF4x42snWaOjBI5i
-         gyXq2mvuys3WZkxmIORynF5Z8mhu4qS46QHU7Ogk7365BATJMgfxKufaRJvWzn2KwmRv
-         bCR0Ysz3OXlbuls6cKuVHSVRFIFNqiCyW0ZEMrt2ZezDD0M0AdsOQKybrNUN5FsAo9n1
-         88Kg==
-X-Forwarded-Encrypted: i=1; AJvYcCUm94Hae+1IuXLrDw9mVUaX63nxUoxM9czxXEhlKRIOjIcmgk+QnwO36ChfT3iikB9zTMv+VRfdc68FmpfKNeDHj9bHwLGWaz0=
-X-Gm-Message-State: AOJu0YxZ/MycFL78eD9TMH4BGxcPnmjCg/hXAoRA6SzLTqnbDtKcgxEf
-	J1ByI9d25UHnFUkckHOeOcy01XE030AnhpbUIxEjLf99/xRX0uHSJFkUOpwQtF10B4de7c9/HGj
-	K5UQUr6lVxEqBrK2lnnI4p/yu2WA=
-X-Google-Smtp-Source: AGHT+IEwMtjXjulYgdDRBLTxRdDgps4cI9pevbf8tvNGisNi01lvylI3qvdXLHtqq6bmzo2afAfreOYXQd73ZN2JscM=
-X-Received: by 2002:a05:6871:2895:b0:221:3b96:4e84 with SMTP id
- bq21-20020a056871289500b002213b964e84mr5988986oac.5.1710359389709; Wed, 13
- Mar 2024 12:49:49 -0700 (PDT)
+        bh=zsyYxxDckIJsGNwJdIcBtryvdcdG19TdU6Mr0Ia8P1I=;
+        b=GnmaBG91JKqvVun/Wj0Gujr300fJxN8qWAEdjOkQDAjKBKXa5/2e0WdjR9hIWaG7/T
+         hHTN2kPmvqtOVJ4r9mD6fm7DPjPCH4g31/c30U1Ap+58rcgdgmw6R5omLraAHMO/v3i0
+         QJXZmKZ0M4m6D+F3imCk5N3zjB29PwZPrU+1zwVPbRgxczqPn2xGS6lPZKV6zIUmJgWc
+         ZSjNNFpwH71G+PowbVx4CN+XdvcT3Ff8HbfQv+mMa6gqbD36VgXRpewY3KSK9Sji32pi
+         C7b3Z4/IQ7Bt+udYDyiSFtGmGdt0FE99l0iz+pazolKmipBwO8ojTNiKN4VTj61eMIz1
+         OeAg==
+X-Forwarded-Encrypted: i=1; AJvYcCXmzpi+dgqGXqK+boeZq0XnILdyQLggBDCwerAnncaaPI+E715nQU8/TGeJEzRIqvnJ0D5Q0t4goalps/baeqDkFPh3zb7hsWVd01vFcBhJnYHD4cDX8LGsg6/c7DZnDR63DUSWtg4=
+X-Gm-Message-State: AOJu0Yw1WRCuFEI8LR+V+70rkRJvRnnYf8LBluQu3NOmpACmOtO+OzFC
+	nEkKiZZQsWD6YXonbH1YkG6GwDLzuQZDdz4ixkrOM4m5W5s9NibCcHtSR27xIQwB5OOqzhRltZg
+	e1pib8dzJMpJ2ZFbIlZkLWvgGUH0=
+X-Google-Smtp-Source: AGHT+IFFi8nzhAb8uM1LSe/79phBF1NaxMX14wQLkupvPGA94MBnJn0aLn6QlcT0KEarEt5KsA5p/KryJ4YyhfBZj1A=
+X-Received: by 2002:a05:6870:37d1:b0:221:bdc9:6a1d with SMTP id
+ p17-20020a05687037d100b00221bdc96a1dmr2805997oai.2.1710359560806; Wed, 13 Mar
+ 2024 12:52:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240308123203.196644-1-lukasz.luba@arm.com>
-In-Reply-To: <20240308123203.196644-1-lukasz.luba@arm.com>
+References: <20240308224450.2327415-1-saravanak@google.com>
+In-Reply-To: <20240308224450.2327415-1-saravanak@google.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 13 Mar 2024 20:49:38 +0100
-Message-ID: <CAJZ5v0g_UcJzRy2-16kjOZpOyB=-FsdgH63LJBzmHRhsARYjVA@mail.gmail.com>
-Subject: Re: [PATCH] PM: EM: Force device drivers to provide power in uW
-To: Lukasz Luba <lukasz.luba@arm.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, rafael@kernel.org, 
-	poshao.chen@mediatek.com
+Date: Wed, 13 Mar 2024 20:52:29 +0100
+Message-ID: <CAJZ5v0gn+FdDxsAtQj5d2CmBi+GpB0ATq+5QimGLAiovwOHCGQ@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: power: Fix typo in suspend and interrupts doc
+To: Saravana Kannan <saravanak@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
+	kernel-team@android.com, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 8, 2024 at 1:31=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> wr=
-ote:
+On Fri, Mar 8, 2024 at 11:45=E2=80=AFPM Saravana Kannan <saravanak@google.c=
+om> wrote:
 >
-> The EM only supports power in uW. Make sure that it is not possible to
-> register some downstream driver which doesn't provide power in uW.
-> The only exception is artificial EM, but that EM is ignored by the rest o=
-f
-> kernel frameworks (thermal, powercap, etc).
+> Typos are bad. Fix them.
 >
-> Reported-by: PoShao Chen <poshao.chen@mediatek.com>
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
 > ---
+>  Documentation/power/suspend-and-interrupts.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> Hi all,
+> diff --git a/Documentation/power/suspend-and-interrupts.rst b/Documentati=
+on/power/suspend-and-interrupts.rst
+> index dfbace2f4600..f588feeecad0 100644
+> --- a/Documentation/power/suspend-and-interrupts.rst
+> +++ b/Documentation/power/suspend-and-interrupts.rst
+> @@ -78,7 +78,7 @@ handling the given IRQ as a system wakeup interrupt lin=
+e and disable_irq_wake()
+>  turns that logic off.
 >
-> The was an issue reported recently that the EM could be used with
-> not aligned drivers which provide milli-Watts. This patch prevents such
-> drivers to register EM (although there are no such in upstream).
->
-> Regards,
-> Lukasz
->
->  kernel/power/energy_model.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
->
-> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-> index b686ac0345bd9..9e1c9aa399ea9 100644
-> --- a/kernel/power/energy_model.c
-> +++ b/kernel/power/energy_model.c
-> @@ -612,6 +612,17 @@ int em_dev_register_perf_domain(struct device *dev, =
-unsigned int nr_states,
->         else if (cb->get_cost)
->                 flags |=3D EM_PERF_DOMAIN_ARTIFICIAL;
->
-> +       /*
-> +        * EM only supports uW (exception is artificial EM).
-> +        * Therefore, check and force the drivers to provide
-> +        * power in uW.
-> +        */
-> +       if (!microwatts && !(flags & EM_PERF_DOMAIN_ARTIFICIAL)) {
-> +               dev_err(dev, "EM: only supports uW power values\n");
-> +               ret =3D -EINVAL;
-> +               goto unlock;
-> +       }
-> +
->         ret =3D em_create_pd(dev, nr_states, cb, cpus, flags);
->         if (ret)
->                 goto unlock;
+>  Calling enable_irq_wake() causes suspend_device_irqs() to treat the give=
+n IRQ
+> -in a special way.  Namely, the IRQ remains enabled, by on the first inte=
+rrupt
+> +in a special way.  Namely, the IRQ remains enabled, but on the first int=
+errupt
+>  it will be disabled, marked as pending and "suspended" so that it will b=
+e
+>  re-enabled by resume_device_irqs() during the subsequent system resume. =
+ Also
+>  the PM core is notified about the event which causes the system suspend =
+in
 > --
 
 Applied as 6.9-rc material, thanks!
