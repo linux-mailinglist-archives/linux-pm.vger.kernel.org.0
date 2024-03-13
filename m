@@ -1,143 +1,179 @@
-Return-Path: <linux-pm+bounces-4863-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4864-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD49C879C72
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Mar 2024 20:56:50 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B114987A224
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Mar 2024 04:58:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D33531C2288A
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Mar 2024 19:56:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67AF4282E53
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Mar 2024 03:58:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76BCB142642;
-	Tue, 12 Mar 2024 19:56:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="QZI1LJ2R"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D24BF10A3E;
+	Wed, 13 Mar 2024 03:57:49 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEE2714264A
-	for <linux-pm@vger.kernel.org>; Tue, 12 Mar 2024 19:56:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 030E711193;
+	Wed, 13 Mar 2024 03:57:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710273405; cv=none; b=uDwZS+J5Nxt543UvgRLac2o6qPj1WFU0BWfQtKLTjswj7WppCSKksswtyBgkeEPRZVFwkHixwpVPuRbS6Z1QUIcJ7BpK7DDc2AJADxn8lxzz/Bw1CuL1tOHlPpv3qzQAYHnx58f6rUmKBfSetCJ0tfK9L7DmHk2xf8Q9mS9jBmE=
+	t=1710302269; cv=none; b=DH4QVK2mh+f60C+Z+L6b2a6JKByRNR2ZXhWV6JQqkWMstd+dm5NbZEa789pB2qyR2gCef3TRFPEDoscOX4Q0BrkOdp2kt9sdC4rMuuTRxMd1JHdSEmKptA4JlafzY+XN8S9E2AOpM0ZBE3yh0YwcI+ZpZLXhz8Epx2gJmJaOByg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710273405; c=relaxed/simple;
-	bh=NfuMaH7Y/8CSMgzfmLwCZoP8iZSzw8HM7XZf9JY3qEA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Nnvg2qYshxHpoB3e8H8IbNb6f/GBsjuxWgvauQeLSQV73MjMFgCc5s0PAiPvha0SB3OV5dCbCK5aXL1q1A+06WqSx+vJ4NXxUmljtjI8EOWsh/+bjFMW1W93pmicr9VxXcg3T/JLwJfYFmnEOzU3ETcigx9JOkZTwgoBISqRn1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=QZI1LJ2R; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1dd611d5645so1525345ad.1
-        for <linux-pm@vger.kernel.org>; Tue, 12 Mar 2024 12:56:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1710273403; x=1710878203; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vxEx3iDsM3WrZG2Ndd+J9E+wXDu/hB2Os8/24Q1t3OY=;
-        b=QZI1LJ2REYGo1Bsc+3/Zqq2HkKct0LVwKXwjvtRUVdoTYpnvFrLuLNk5jJaNBmF8hP
-         KgG7HxYJuYs1yT5N46OP5XurGkntOyZ+8UVrpWeNxRGEbFpLnV95CD91uYzN3tNv2xX2
-         +E50mP7/BOglB3SmJVyEH/o7VpJ1OXjbGXeXM2oa6f04MrW69uFJWgL0H6enqnkCSVj/
-         ApcqOgCuz+BFQQTLt6oRG/ryyK6ZygjUHNVZ1keJVcmndWfHEZ09gggSeZgokmXR8vi9
-         Rxkapb02l9ucsKxnRass5RMvSHXbto/4tsRUyyluvKsNX1xCrgnB5G0Gcq94FOIrQRc0
-         CICg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710273403; x=1710878203;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vxEx3iDsM3WrZG2Ndd+J9E+wXDu/hB2Os8/24Q1t3OY=;
-        b=pMcry3fI/cFYZOAYeErCZ9PfnhlEhpvegJ1OSAqILph4PZLRggw5XG/fvyZUK2bOne
-         8TK6IG7B08mvwq5lfxQi7bJzB+r2j1aq27jfaNImAyzjBJ6JG/O0cmr6ELnNHkXVVR6q
-         cJxYa0I4BO/ry/KXJ+yarUHsAjQ/9KvhCAxIDzC4e9LK8te67SENq4m8rQDVjspUhzZD
-         MJ/O5Jhcwk2Wolxef0ms69HlHn3TX1BhxtKuLBHljkZ/Rlc3Yg+9JkJwapv9VlLKrKbV
-         yzuE9CpgmEZkWqDU3t/QnPS0ZWjuTy6e4vC4lNYszSX3JoaGzVylmR8RhSm9/8zPUM5X
-         1RDA==
-X-Forwarded-Encrypted: i=1; AJvYcCVzfCbusous9Uhf4Sgo8aVQGlJEFxs5+kb9cVG1w2xMKrcvQry4He0Ycxbr3Ox0C4LlOLMx1C4RxGjS41WKtiGa9iUE8WpQy7M=
-X-Gm-Message-State: AOJu0YyPu+wikad+3VhxoopqqXbem1aLGv1/8O5oj7Pmqi2pRJpVJgzU
-	zQ+riDRCGXv0539aTls+AVN++s0PMvYC4FzQFT8DwiETOQ6XdCEqaqhMi8HOHSNZkPTjcFzjV4l
-	y
-X-Google-Smtp-Source: AGHT+IFpt7ff6HNFHc9Yq78Z63OwKzFZJ801dFotJRAscTaClrr1h/Au36ogZQmQ69SY/YT0n6oNpQ==
-X-Received: by 2002:a17:90a:e54f:b0:29b:c49b:eb13 with SMTP id ei15-20020a17090ae54f00b0029bc49beb13mr628731pjb.24.1710273403142;
-        Tue, 12 Mar 2024 12:56:43 -0700 (PDT)
-Received: from sw06.internal.sifive.com ([4.53.31.132])
-        by smtp.gmail.com with ESMTPSA id hi23-20020a17090b30d700b0029bed0e75dbsm4708774pjb.17.2024.03.12.12.56.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Mar 2024 12:56:42 -0700 (PDT)
-From: Samuel Holland <samuel.holland@sifive.com>
-To: Palmer Dabbelt <palmer@dabbelt.com>,
-	linux-riscv@lists.infradead.org
-Cc: Samuel Holland <samuel.holland@sifive.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Andrew Jones <ajones@ventanamicro.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Ley Foon Tan <leyfoon.tan@starfivetech.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Pavel Machek <pavel@ucw.cz>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Sia Jee Heng <jeeheng.sia@starfivetech.com>,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH] riscv: Do not save the scratch CSR during suspend
-Date: Tue, 12 Mar 2024 12:56:38 -0700
-Message-ID: <20240312195641.1830521-1-samuel.holland@sifive.com>
-X-Mailer: git-send-email 2.43.1
+	s=arc-20240116; t=1710302269; c=relaxed/simple;
+	bh=xn9BaF+vY4E9A1GdYxDTCZbaTQ/pZd2l44gxSKuHeGE=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:CC:References:
+	 In-Reply-To:Content-Type; b=eAIbWN2VZ7HgmKvyZ+uoXO6uMtVTmeU+it+KgUo79ZWv023Er8bAukkOlwbosLYsPoVIbW1lqDhRXWfH4DYgIWNp8rXx6eZD3/ZgPIXlk1Vd5ej8GRV+V0mKij0PgYT5yc8SIqfrcCNcOUnTeJKyLN/mnQZAl7DcJbckt2tbXDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.234])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4TvcB70xxZz1xqfx;
+	Wed, 13 Mar 2024 11:55:59 +0800 (CST)
+Received: from canpemm500008.china.huawei.com (unknown [7.192.105.151])
+	by mail.maildlp.com (Postfix) with ESMTPS id 2010B1400FD;
+	Wed, 13 Mar 2024 11:57:44 +0800 (CST)
+Received: from [10.67.111.115] (10.67.111.115) by
+ canpemm500008.china.huawei.com (7.192.105.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Wed, 13 Mar 2024 11:57:43 +0800
+Message-ID: <8bfcacb1-b97a-8c54-7e41-f66df8ac32fd@huawei.com>
+Date: Wed, 13 Mar 2024 11:57:43 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+From: Yipeng Zou <zouyipeng@huawei.com>
+Subject: Re: [PATCH V3] cpufreq: Fix per-policy boost behavior on SoCs using
+ cpufreq_boost_set_sw
+To: Sibi Sankar <quic_sibis@quicinc.com>, <dietmar.eggemann@arm.com>,
+	<rafael@kernel.org>, <viresh.kumar@linaro.org>, <xuwei5@hisilicon.com>,
+	<zhanjie9@hisilicon.com>
+CC: <sudeep.holla@arm.com>, <cristian.marussi@arm.com>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+	<quic_rgottimu@quicinc.com>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-pm@vger.kernel.org>, <d-gole@ti.com>
+References: <20240312103723.3469762-1-quic_sibis@quicinc.com>
+Content-Language: en-US
+In-Reply-To: <20240312103723.3469762-1-quic_sibis@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500008.china.huawei.com (7.192.105.151)
 
-While the processor is executing kernel code, the value of the scratch
-CSR is always zero, so there is no need to save the value. Continue to
-write the CSR during the resume flow, so we do not rely on firmware to
-initialize it.
+Hi,
 
-Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
----
+Oh, I just catch this issue too recently.
 
- arch/riscv/include/asm/suspend.h | 1 -
- arch/riscv/kernel/suspend.c      | 3 +--
- 2 files changed, 1 insertion(+), 3 deletions(-)
+Also test this patch on my board and it's works fine to me.
 
-diff --git a/arch/riscv/include/asm/suspend.h b/arch/riscv/include/asm/suspend.h
-index 491296a335d0..6569eefacf38 100644
---- a/arch/riscv/include/asm/suspend.h
-+++ b/arch/riscv/include/asm/suspend.h
-@@ -13,7 +13,6 @@ struct suspend_context {
- 	/* Saved and restored by low-level functions */
- 	struct pt_regs regs;
- 	/* Saved and restored by high-level functions */
--	unsigned long scratch;
- 	unsigned long envcfg;
- 	unsigned long tvec;
- 	unsigned long ie;
-diff --git a/arch/riscv/kernel/suspend.c b/arch/riscv/kernel/suspend.c
-index 299795341e8a..3d306d8a253d 100644
---- a/arch/riscv/kernel/suspend.c
-+++ b/arch/riscv/kernel/suspend.c
-@@ -14,7 +14,6 @@
- 
- void suspend_save_csrs(struct suspend_context *context)
- {
--	context->scratch = csr_read(CSR_SCRATCH);
- 	if (riscv_cpu_has_extension_unlikely(smp_processor_id(), RISCV_ISA_EXT_XLINUXENVCFG))
- 		context->envcfg = csr_read(CSR_ENVCFG);
- 	context->tvec = csr_read(CSR_TVEC);
-@@ -37,7 +36,7 @@ void suspend_save_csrs(struct suspend_context *context)
- 
- void suspend_restore_csrs(struct suspend_context *context)
- {
--	csr_write(CSR_SCRATCH, context->scratch);
-+	csr_write(CSR_SCRATCH, 0);
- 	if (riscv_cpu_has_extension_unlikely(smp_processor_id(), RISCV_ISA_EXT_XLINUXENVCFG))
- 		csr_write(CSR_ENVCFG, context->envcfg);
- 	csr_write(CSR_TVEC, context->tvec);
+Tested-by:Yipeng Zou <zouyipeng@huawei.com> <mailto:zouyipeng@huawei.com>
+
+Reviewed-by: Yipeng Zou <zouyipeng@huawei.com> <mailto:zouyipeng@huawei.com>
+
+在 2024/3/12 18:37, Sibi Sankar 写道:
+> In the existing code, per-policy flags doesn't have any impact i.e.
+> if cpufreq_driver boost is enabled and one or more of the per-policy
+> boost is disabled, the cpufreq driver will behave as if boost is
+> enabled. Fix this by incorporating per-policy boost flag in the policy->max
+> calculus used in cpufreq_frequency_table_cpuinfo and setting the default
+> per-policy boost to mirror the cpufreq_driver boost flag.
+>
+> Fixes: 218a06a79d9a ("cpufreq: Support per-policy performance boost")
+> Reported-by: Dietmar Eggemann<dietmar.eggemann@arm.com>
+> Reviewed-by: Viresh Kumar<viresh.kumar@linaro.org>
+> Reviewed-by: Dhruva Gole<d-gole@ti.com>
+> Signed-off-by: Sibi Sankar<quic_sibis@quicinc.com>
+> ---
+>
+> v3:
+> * Pickup Rbs.
+> * Simplify per-policy boost setting. [Viresh]
+>
+> v2:
+> * Enable per-policy boost flag in the core instead. [Viresh]
+> * Add more details regarding the bug. [Viresh]
+> * Drop cover-letter and patch 2.
+>
+> Logs reported-by Dietmar Eggemann:
+> https://lore.kernel.org/lkml/265e5f2c-9b45-420f-89b1-44369aeb8418@arm.com/
+>
+>   drivers/cpufreq/cpufreq.c    | 18 ++++++++++++------
+>   drivers/cpufreq/freq_table.c |  2 +-
+>   2 files changed, 13 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index f6f8d7f450e7..66e10a19d76a 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -653,14 +653,16 @@ static ssize_t store_local_boost(struct cpufreq_policy *policy,
+>   	if (policy->boost_enabled == enable)
+>   		return count;
+>   
+> +	policy->boost_enabled = enable;
+> +
+>   	cpus_read_lock();
+>   	ret = cpufreq_driver->set_boost(policy, enable);
+>   	cpus_read_unlock();
+>   
+> -	if (ret)
+> +	if (ret) {
+> +		policy->boost_enabled = !policy->boost_enabled;
+>   		return ret;
+> -
+> -	policy->boost_enabled = enable;
+> +	}
+>   
+>   	return count;
+>   }
+> @@ -1428,6 +1430,9 @@ static int cpufreq_online(unsigned int cpu)
+>   			goto out_free_policy;
+>   		}
+>   
+> +		/* Let the per-policy boost flag mirror the cpufreq_driver boost during init */
+> +		policy->boost_enabled = cpufreq_boost_enabled() && policy_has_boost_freq(policy);
+> +
+>   		/*
+>   		 * The initialization has succeeded and the policy is online.
+>   		 * If there is a problem with its frequency table, take it
+> @@ -2769,11 +2774,12 @@ int cpufreq_boost_trigger_state(int state)
+>   
+>   	cpus_read_lock();
+>   	for_each_active_policy(policy) {
+> +		policy->boost_enabled = state;
+>   		ret = cpufreq_driver->set_boost(policy, state);
+> -		if (ret)
+> +		if (ret) {
+> +			policy->boost_enabled = !policy->boost_enabled;
+>   			goto err_reset_state;
+> -
+> -		policy->boost_enabled = state;
+> +		}
+>   	}
+>   	cpus_read_unlock();
+>   
+> diff --git a/drivers/cpufreq/freq_table.c b/drivers/cpufreq/freq_table.c
+> index c4d4643b6ca6..c17dc51a5a02 100644
+> --- a/drivers/cpufreq/freq_table.c
+> +++ b/drivers/cpufreq/freq_table.c
+> @@ -40,7 +40,7 @@ int cpufreq_frequency_table_cpuinfo(struct cpufreq_policy *policy,
+>   	cpufreq_for_each_valid_entry(pos, table) {
+>   		freq = pos->frequency;
+>   
+> -		if (!cpufreq_boost_enabled()
+> +		if ((!cpufreq_boost_enabled() || !policy->boost_enabled)
+>   		    && (pos->flags & CPUFREQ_BOOST_FREQ))
+>   			continue;
+>   
+
 -- 
-2.43.1
+Regards,
+Yipeng Zou
 
 
