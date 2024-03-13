@@ -1,192 +1,203 @@
-Return-Path: <linux-pm+bounces-4886-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4887-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E028E87A997
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Mar 2024 15:37:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A40387A9DD
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Mar 2024 15:59:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 57904B23687
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Mar 2024 14:37:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5C08B1C21D79
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Mar 2024 14:59:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBF5F3FE4;
-	Wed, 13 Mar 2024 14:36:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B44041740;
+	Wed, 13 Mar 2024 14:59:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=natalenko.name header.i=@natalenko.name header.b="rnTAli7W"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from prime.voidband.net (prime.voidband.net [199.247.17.104])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FBEF43153;
-	Wed, 13 Mar 2024 14:36:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22C126119;
+	Wed, 13 Mar 2024 14:59:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.247.17.104
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710340579; cv=none; b=uOZlfeX2uOPMFAdg5cZvV+COYL9urWbrcDtjzi0fCm2qayZmCMk/vzuc18cCMEqz+9KqEES3LGk4yQONrs0Nq+4rYU6Lh/uVXjdXo2YAmAhyI1qIjmb0lbXQk3bahyKEBmKCQBsDtqhLreTICOo9MPzP0Omii8u99CfN+Bf28TM=
+	t=1710341958; cv=none; b=ET6gCExg72jOWTEfo3nTLPj5wMYLuMRKFaqpSrb04hcsV5ciPk9a2T3nnB2ioU8GipnR9fzXKqV1qp6JalyOCba3aIEXdUv38fPZiY8DlmEHeN682tYGAvQtvI2eUGgiIGGzIxY/zpOPfJtAHIHPTkhQsZ0HG4PyfK1KGRqMTbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710340579; c=relaxed/simple;
-	bh=4kSzgAPS7b/6Qy1T/egELO1W8cCxPyzCB5Q1Lg4QaMg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Q0sm555HRzleukaVCfxuQoFPIjI/ublbtirGPgtD1ifolbK6SXY6DIftsfHjUwSbr+0wxj5y1aRxvBCXhCD90orDa3zxoUwhKHnQqmO1q6NZA60Z0PK0Qbk+oFybiF2yLTXYlaDY9vVFFV6cDwM0+ikAao6LhUtJEgrkLuq8Vik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-220ce420472so2020689fac.1;
-        Wed, 13 Mar 2024 07:36:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710340577; x=1710945377;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pZ/CrXQS2qKyBuyyZ5fVt7Tba0YRofaW6XNtwA1CrZ8=;
-        b=At77UDB6BvJhJyeWPTaTPx0Z6Wm2idEuuvnsDnwLrdXVh/GQHr50BsrrI5ui1lZyc8
-         Iw3kGJK5G2IRLv0ygy6iQUZ30SWlUqO35fBdbJkiLEhJ/o0lN7EHN0eADmh9zngqw7Jl
-         uLNWusqlqA2yMqgMpGoLiXQmTU+RAKu8/95doV+i+e/iJqfn1FWMp9EWby6xTq4DTLGv
-         UDlcv540Ihyphexv7EaCivPaPpruHh1/rAYBHPBmm+jXMty5eY+sErYhi0pSZlff7M+H
-         E6yXVxxKKcOt/x/ghV+DBbwrOzocRb5g+W0zvLsDZxWMy9nGxo7F1wnfFx5CZl2pYxJn
-         p5ag==
-X-Forwarded-Encrypted: i=1; AJvYcCU3DBJUgIDjWVoz3ahsBnodKC4AIMIzy5EnFAXZjvoKyxd4DQ82Btbw4snjm0cQQhaD3TnNdxwQ14oA/oQC17O9X3z3nIQaJwX8DBFZPC2977uZBHHQ/DznQU5L6yv+6EiZyT7qsfI=
-X-Gm-Message-State: AOJu0YxDtyKopF+8+jKgH2g3qGW8K3w4T64vApTOkiTNAa37UgnMuSK+
-	wHvYtdV+I/quNxwI0yfdqn6zE7yjL0N8qY1HzgJIqB2R+BfhwYHWLV7zaggSw3Sn8AsZgRdi/tI
-	NSeAQBwCau71B4j+s1nH8LWYeBpc=
-X-Google-Smtp-Source: AGHT+IGRTbUgJg5jv7tmdyyZlPs9zAb0SbQS9bjKIAxVdawQ+PEILrXDZWItUu1HzlmpTODLRIqLKHapDaN6Et3CeCg=
-X-Received: by 2002:a05:6871:3325:b0:221:cb1b:cc05 with SMTP id
- nf37-20020a056871332500b00221cb1bcc05mr2134168oac.0.1710340577247; Wed, 13
- Mar 2024 07:36:17 -0700 (PDT)
+	s=arc-20240116; t=1710341958; c=relaxed/simple;
+	bh=Oq5ehj0jgtkb/PT5kiTlAvv5HCm7BnWN2D7UlVXc1po=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Q6weYxyNvYONH1oodBFEQuBkHnFXr0aILnyrE/3vM5znYyZog2kXq3YC1pZVf1nIhd9SohEBFOBfLwTinXMSBkC8L1rj0/406o6IpFTNsrHq6hbbdmGeFi9TgjkKoqdIM4juRTrc8MkZ1jvQmXPtcwsHelZSXUheDd4HAlacQaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=natalenko.name; spf=pass smtp.mailfrom=natalenko.name; dkim=pass (1024-bit key) header.d=natalenko.name header.i=@natalenko.name header.b=rnTAli7W; arc=none smtp.client-ip=199.247.17.104
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=natalenko.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=natalenko.name
+Received: from spock.localnet (unknown [94.142.239.106])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by prime.voidband.net (Postfix) with ESMTPSA id 1A917635B049;
+	Wed, 13 Mar 2024 15:49:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+	s=dkim-20170712; t=1710341350;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8iwfkBYf3yJiDaRw2lxcFE7exRFkrA4jEAyCuZ8fP2A=;
+	b=rnTAli7WrlY35E48+oZ1f4A/GguMmiD+kSf16h6wUZdwtv1ztTKx+DS7Tb9Ebr2542K5IU
+	nm+65NJ863HCfnC73H0poAoptFskFChwk+deECjDvOd7qqgz2tSBDb0C496TeOff9coT2N
+	/27yHnC8EokEQCvNOUx7tJ/dG6RmZJI=
+From: Oleksandr Natalenko <oleksandr@natalenko.name>
+To: rafael.j.wysocki@intel.com, Mario.Limonciello@amd.com,
+ viresh.kumar@linaro.org, Ray.Huang@amd.com, gautham.shenoy@amd.com,
+ Borislav.Petkov@amd.com, Perry Yuan <perry.yuan@amd.com>
+Cc: Alexander.Deucher@amd.com, Xinmei.Huang@amd.com, Xiaojian.Du@amd.com,
+ Li.Meng@amd.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 0/7] AMD Pstate Driver Core Performance Boost
+Date: Wed, 13 Mar 2024 15:48:58 +0100
+Message-ID: <2721197.mvXUDI8C0e@natalenko.name>
+In-Reply-To: <cover.1710322310.git.perry.yuan@amd.com>
+References: <cover.1710322310.git.perry.yuan@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <8f00bf23-47cb-4656-a326-6d8d1d0d10d6@linaro.org>
-In-Reply-To: <8f00bf23-47cb-4656-a326-6d8d1d0d10d6@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 13 Mar 2024 15:36:05 +0100
-Message-ID: <CAJZ5v0iSxZMPnCf3MSJMSLXhkfEmDWNVv2eq3PXSivZaYtLMFQ@mail.gmail.com>
-Subject: Re: [GIT PULL] Thermal material for v6.9-rc1
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
-	Frank Wunderlich <frank-w@public-files.de>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Fabio Estevam <festevam@denx.de>, Martin Botka <martin.botka@somainline.org>, 
-	Mark Brown <broonie@kernel.org>, Peng Fan <peng.fan@nxp.com>, 
-	Konrad Dybcio <konrad.dybcio@somainline.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux PM mailing list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="nextPart12395831.O9o76ZdvQC";
+ micalg="pgp-sha256"; protocol="application/pgp-signature"
+
+--nextPart12395831.O9o76ZdvQC
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
+From: Oleksandr Natalenko <oleksandr@natalenko.name>
+Subject: Re: [PATCH v4 0/7] AMD Pstate Driver Core Performance Boost
+Date: Wed, 13 Mar 2024 15:48:58 +0100
+Message-ID: <2721197.mvXUDI8C0e@natalenko.name>
+In-Reply-To: <cover.1710322310.git.perry.yuan@amd.com>
+References: <cover.1710322310.git.perry.yuan@amd.com>
+MIME-Version: 1.0
 
-Hi Daniel,
+On st=C5=99eda 13. b=C5=99ezna 2024 11:04:37, CET Perry Yuan wrote:
+>=20
+> Hi all,
+> The patchset series add core performance boost feature for AMD pstate
+> driver including passisve ,guide and active mode support.
+>=20
+> User can change core frequency boost control with a new sysfs entry:
+>=20
+> "/sys/devices/system/cpu/amd_pstate/cpb_boost"
+>=20
+> The legancy boost interface has been removed due to the function
+> conflict with new cpb_boost which can support all modes.
+>=20
+> 1). enable core boost:
+> $ sudo bash -c "echo 0 > /sys/devices/system/cpu/amd_pstate/cpb_boost"
+> $ lscpu -ae
+> CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE    MAXMHZ   MINMHZ      MHZ
+>   0    0      0    0 0:0:0:0          yes 4201.0000 400.0000 2983.578
+>   1    0      0    1 1:1:1:0          yes 4201.0000 400.0000 2983.578
+>   2    0      0    2 2:2:2:0          yes 4201.0000 400.0000 2583.855
+>   3    0      0    3 3:3:3:0          yes 4201.0000 400.0000 2983.578
+>   4    0      0    4 4:4:4:0          yes 4201.0000 400.0000 2983.578
+>=20
+> 2). disabble core boost:
+> $ sudo bash -c "echo 1 > /sys/devices/system/cpu/amd_pstate/cpb_boost"
+> $ lscpu -ae
+>    0    0      0    0 0:0:0:0          yes 5759.0000 400.0000 2983.578
+>   1    0      0    1 1:1:1:0          yes 5759.0000 400.0000 2983.578
+>   2    0      0    2 2:2:2:0          yes 5759.0000 400.0000 2983.578
+>   3    0      0    3 3:3:3:0          yes 5759.0000 400.0000 2983.578
+>   4    0      0    4 4:4:4:0          yes 5759.0000 400.0000 2983.578
+>=20
+>=20
+> The patches have been tested with the AMD 7950X processor and many users
+> would like to get core boost control enabled for power saving.
+>=20
+> If you would like to test this patchset, it needs to apply the patchset
+> based on below one latest version patchset.=20
+> https://lore.kernel.org/lkml/20240208102122.GAZcSrIkbPJfIExdF6@fat_crate.=
+local/
+>=20
+>=20
+> Perry.
+>=20
+>=20
+> Changes from v3:
+>  * rebased to linux-pm/bleeding-edge v6.8
+>  * rename global to amd_pstate_global_params(Oleksandr Natalenko)
 
-On Wed, Mar 13, 2024 at 3:06=E2=80=AFPM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
->
-> Hi Rafael,
->
-> The following changes since commit dcb497ec993265dfc5fffa60b486c1ad353e9a=
-d5:
->
->    Merge branches 'thermal-core' and 'thermal-intel' (2024-03-07
-> 21:05:12 +0100)
->
-> are available in the Git repository at:
->
->
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
-> tags/thermal-v6.9-rc1
->
-> for you to fetch changes up to 1828c1c17bb2adf3a3f26abc69cb3fe971eac0e4:
->
->    thermal/drivers/rcar_gen3: Add support for R-Car V4M (2024-03-11
-> 17:14:46 +0100)
->
-> ----------------------------------------------------------------
-> - Fix memory leak in the error path at probe time in the Mediatek LVTS
->    driver (Christophe Jaillet)
->
-> - Fix control buffer enablement regression on Meditek MT7896 (Frank
->    Wunderlich)
->
-> - Drop spaces before TABs in different places: thermal-of, ST drivers
->    and Makefile (Geert Uytterhoeven)
->
-> - Adjust DT binding for NXP as fsl,tmu-range min/maxItems can vary
->    among several SoC versions (Fabio Estevam)
->
-> - Add support for H616 THS controller for the Sun8i platforms. Note
->    that this change relies on another change in the SoC specific code
->    which is included in this branch (Martin Botka)
->
-> - Don't fail probe due to zone registration failure because there is
->    no trip points defined in the DT (Mark Brown)
->
-> - Support variable TMU array size for new platforms (Peng Fan)
->
-> - Adjust the DT binding for thermal-of and make the polling time not
->    required and assume it is zero when not found in the DT (Konrad
->    Dybcio)
->
-> - Add r8a779h0 support in both the DT and the driver (Geert Uytterhoeven)
->
-> ----------------------------------------------------------------
-> Andre Przywara (3):
->        soc: sunxi: sram: export register 0 for THS on H616
->        thermal/drivers/sun8i: Explain unknown H6 register value
->        thermal/drivers/sun8i: Add SRAM register access code
->
-> Christophe JAILLET (1):
->        thermal/drivers/mediatek/lvts_thermal: Fix a memory leak in an
-> error handling path
->
-> Duy Nguyen (1):
->        dt-bindings: thermal: rcar-gen3-thermal: Add r8a779h0 support
->
-> Fabio Estevam (1):
->        dt-bindings: thermal: qoriq-thermal: Adjust fsl,tmu-range
-> min/maxItems
->
-> Frank Wunderlich (1):
->        thermal/drivers/mediatek: Fix control buffer enablement on MT7896
->
-> Geert Uytterhoeven (2):
->        thermal: Drop spaces before TABs
->        thermal/drivers/rcar_gen3: Add support for R-Car V4M
->
-> Konrad Dybcio (2):
->        dt-bindings: thermal-zones: Don't require polling-delay(-passive)
->        thermal/of: Assume polling-delay(-passive) 0 when absent
->
-> Maksim Kiselev (1):
->        thermal/drivers/sun8i: Extend H6 calibration to support 4 sensors
->
-> Mark Brown (1):
->        thermal/drivers/sun8i: Don't fail probe due to zone registration
-> failure
->
-> Martin Botka (2):
->        dt-bindings: thermal: sun8i: Add H616 THS controller
->        thermal/drivers/sun8i: Add support for H616 THS controller
->
-> Peng Fan (1):
->        thermal/drivers/qoriq: Fix getting tmu range
->
->   .../bindings/thermal/allwinner,sun8i-a83t-ths.yaml |  34 +++--
->   .../devicetree/bindings/thermal/qoriq-thermal.yaml |   3 +-
->   .../bindings/thermal/rcar-gen3-thermal.yaml        |   2 +
->   .../devicetree/bindings/thermal/thermal-zones.yaml |   2 -
->   drivers/soc/sunxi/sunxi_sram.c                     |  22 ++++
->   drivers/thermal/Makefile                           |   2 +-
->   drivers/thermal/mediatek/auxadc_thermal.c          |   3 +
->   drivers/thermal/mediatek/lvts_thermal.c            |   4 +-
->   drivers/thermal/qoriq_thermal.c                    |  12 +-
->   drivers/thermal/rcar_gen3_thermal.c                |   4 +
->   drivers/thermal/st/st_thermal.h                    |  18 +--
->   drivers/thermal/st/st_thermal_memmap.c             |   2 +-
->   drivers/thermal/sun8i_thermal.c                    | 139
-> +++++++++++++++++----
->   drivers/thermal/thermal_of.c                       |  14 ++-
->   14 files changed, 203 insertions(+), 58 deletions(-)
->
-> --
+Would appreciate being in Cc: then.
 
-Pulled, thanks!
+>  * remove comments for boot_supported in amd_pstate.h
+>  * fix the compiler warning for amd-pstate-ut.ko
+>  * use for_each_online_cpu in cpb_boost_store which fix the null pointer
+>    error during testing=20
+>  * fix the max frequency value to be KHz when cpb boost disabled(Gautham =
+R. Shenoy)
+>=20
+> Changes from v2:
+>  * move global struct to amd-pstate.h
+>  * fix the amd-pstate-ut with new cpb control interface
+>=20
+> Changes from v1:
+>  * drop suspend/resume fix patch 6/7 because of the fix should be in
+>    another fix series instead of CPB feature
+>  * move the set_boost remove patch to the last(Mario)
+>  * Fix commit info with "Closes:" (Mario)
+>  * simplified global.cpb_supported initialization(Mario)
+>  * Add guide mode support for CPB control
+>  * Fixed some Doc typos and add guide mode info to Doc as well.
+>=20
+> v1: https://lore.kernel.org/all/cover.1706255676.git.perry.yuan@amd.com/
+> v2: https://lore.kernel.org/lkml/cover.1707047943.git.perry.yuan@amd.com/
+> v3: https://lore.kernel.org/lkml/cover.1707297581.git.perry.yuan@amd.com/
+>=20
+> Perry Yuan (7):
+>   cpufreq: amd-pstate: initialize new core precision boost state
+>   cpufreq: amd-pstate: implement cpb_boost sysfs entry for boost control
+>   cpufreq: amd-pstate: fix max_perf calculation for amd_get_max_freq()
+>   cpufreq: amd-pstate: fix the MSR highest perf will be reset issue
+>     while cpb boost off
+>   Documentation: cpufreq: amd-pstate: introduce the new cpu boost
+>     control method
+>   cpufreq: amd-pstate: remove legacy set_boost callback for passive mode
+>   cpufreq: amd-pstate-ut: support new cpb boost control interface
+>=20
+>  Documentation/admin-guide/pm/amd-pstate.rst |  11 ++
+>  drivers/cpufreq/amd-pstate-ut.c             |   2 +-
+>  drivers/cpufreq/amd-pstate.c                | 157 +++++++++++++++-----
+>  include/linux/amd-pstate.h                  |  16 +-
+>  4 files changed, 149 insertions(+), 37 deletions(-)
+>=20
+>=20
+
+
+=2D-=20
+Oleksandr Natalenko (post-factum)
+--nextPart12395831.O9o76ZdvQC
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEZUOOw5ESFLHZZtOKil/iNcg8M0sFAmXxvNoACgkQil/iNcg8
+M0vVbBAAjuIVAWC5tJ9yDAmxbzbCwI/34/400d1rFGcEP2vrRUA51G5yCK7YWOGz
+3N2SXE4B24N+9upXbIkyBjHQSZu402PdalldNasFl/nFsAQrdJxvoBKLvx3WTC78
+NHkFCZMaRy9wMrB8JyA63hjoh30BYDcxHHfL/1axm24Q0HEvc9Ab5cnAE6i3SH9x
+0d2Jey91hs4lwYm/5VP/VLlaV03DiXjuLZpO0lpi0SoDu3i2gLsazSijFz/NEJqB
+LTjEd7hmpK0L8PiZRAiMv1G5HdAP/X5Qujd7+dY/Hmf1WUrypr42hnQQajfaFMvS
+ctfMbUtRZ9PQd85nZXhmljPxKyONAdX+6Qi4oU+skWO5YHuuKrJqofLln27OEDPK
+uY590jH+maYu5I0dKnqaIPt5H+4T5J2G8h0QB/imKYIebmRqFBHYXOHtC3ygUt7z
+MbAgIerB47Jcjawri2GN1OclbSUOQ3jj64RR7thODrlfwphUAsSKIIbiNHGpPIob
+1UU3n6ZWQr4sO2K2vq4kl3ZThQHPWHf59v6m2Au3jaxQMkEGE2tjOLaujwDRAP4j
+yEHZRfg2+Vg3in+Vq57mJV3ZgivGdCIE+vjAA1d0r+/q+7FXAIPte0M7ZCO5Rd8d
+bUckmx8FTuKMfXPtA5GybH5UlVohqtXuNBDjQjOztKtvYWOO0Kw=
+=f6Gb
+-----END PGP SIGNATURE-----
+
+--nextPart12395831.O9o76ZdvQC--
+
+
+
 
