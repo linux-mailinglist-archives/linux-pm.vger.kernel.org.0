@@ -1,182 +1,178 @@
-Return-Path: <linux-pm+bounces-4903-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4904-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67B0687B265
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Mar 2024 20:58:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A65D87B2B9
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Mar 2024 21:18:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2DB71F2659E
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Mar 2024 19:58:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E9461C26AB8
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Mar 2024 20:18:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56FC44C60C;
-	Wed, 13 Mar 2024 19:58:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 987744D599;
+	Wed, 13 Mar 2024 20:18:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="K0zbkg18"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 326AA20DDB;
-	Wed, 13 Mar 2024 19:58:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DBCF4CDE0
+	for <linux-pm@vger.kernel.org>; Wed, 13 Mar 2024 20:18:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710359898; cv=none; b=ImeV9DvLjNvLogHLRbtuM7rC4SodVDX5svar8zu9BUVC6R6bVBaeivJxAH4SSnAhs4xlm9Y+piUG4PyuYFmtx6c8dzjXyr4vl9CDZj6K4l0NH/Ux3URsBaLq2bYp3sNZRwMJSihLFp2spVWTIs1Nd2dbXbyPYkSEARhiGcKmGUg=
+	t=1710361131; cv=none; b=B9taVA6YoxlT6HEmLfJxptiGbZ0cBxYjd1ft2mIxigI7exaGQN0vFLVJEEvrCE2dVyTI5s25tBMT/2vzWCoBBgUC3q1mWpJxqLfzoaWUF3LkLcrAndeVhGcDJ1UAU4LLh0e0YDhyBpfNdbgxer5NO28m459FjuYmfipl6LcTMAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710359898; c=relaxed/simple;
-	bh=hhFq5IpzNKqt3vASlinqD/E0HbWm7PiMwUPQBESAj5I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TCwFzEsWezUjZH8fv04mi0bJZBH6+tuzneg2tUh/d9TyV63k2DOr3bljkaDqkByp17tATkVqlzrzLVRxisB6dFboc/TNdYJxoPuNVRuk+C1jrVxEtITX8GRAJKRJmsO+Rf5OoVdTi0oYB2QBuyO81qja0QHlhcHenGrbeeta6iY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-2219edd959dso74895fac.0;
-        Wed, 13 Mar 2024 12:58:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710359895; x=1710964695;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NdP8F+x5j1lSl9Kjac5VCWtp2OKa5wXezFE2irQlxPY=;
-        b=a0Z04Dna8Gtl25EDeNATVlB59ubX0/tiAtYJlvgryvdokzvYz+eWuu+Z9AX4maeHoK
-         jOIQpFnt/SAADin7E6OCoqIzxTlwJ2vKMZUfcTeyUhbQc2UNv4sKPiQbIjYRhwRkf+Iq
-         pImL6fA8hCJkeInpdxDF+kq/Of+7MyvmC4rDAAleU/4teFrM9I/jhx+YmVUZ1Ov0uPWZ
-         OTkxVbL5o1AFBDm5vW5rM3V6MaCbb68z8ZWMDpqt8/bh+QzF6RVJv3FAq02mRqbmoQAi
-         gUcnhlL/5wZY6imdqWV4Zmz+nieWoBfYdTzwfk+5X2K9BrFb//AkSzOcg3uObKM+USwk
-         oHLg==
-X-Forwarded-Encrypted: i=1; AJvYcCVJZEg3ArUTE8aNv3QGGlmHEXzhlSuQQLiZ+3SZLyn8QoCs099nrjdYacb7++GoQJGzRlV4QwYEsXa1BU3ZPKM+Bdf5tR76AXu4Qo4aDJF8bkxs40D2QLu1unVCdxTU+lPpobspiwSJ/qAajyCcXbFV34wd/XsAcQBWKWaWgMXu0PFLuwmy
-X-Gm-Message-State: AOJu0Yx0LO+PUL8p6GQBHCHiWemX9Dni2XD+cDFgBaGbgaVPmNFVYaI4
-	c+6loQSWCa6RUZKrxT+Ds7TSuFF/bYOfigKdBRa2JCJ631axKYFExYNUVnLT2k1YdsF3MbCgzlo
-	vjI8rMg0NY/Aa2Xwt9+rM9UvWMl8=
-X-Google-Smtp-Source: AGHT+IEWlkP/2kfvt3B2rhZO97HkoSPYHA2GD7sErHQcZOV/0GMkTwiKtB++GlXS5E0yL2Z77yUf5VdyVQXQhFtovPU=
-X-Received: by 2002:a05:6871:3325:b0:221:cb1b:cc05 with SMTP id
- nf37-20020a056871332500b00221cb1bcc05mr3047428oac.0.1710359895299; Wed, 13
- Mar 2024 12:58:15 -0700 (PDT)
+	s=arc-20240116; t=1710361131; c=relaxed/simple;
+	bh=NvLdP9RWPjWCCTlUHc3YLyOuTC8sFH9u5xL8Cr0OUIQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=q0mo+09BeTvUBXiN/UlxMoRlPA2YAcCML4o76IKF2PSIfLJT86pBlXbreVtDJsyDQ/OL1L0PlhZZT7xH2W1J2vURUAp45MxqaC+Ffc8+xQj4LtVVyR7Pib828GVUYmlNybCT81xIGmr1EsXVwczbDC0SHtoDqFQrU7JVZTssFj4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=K0zbkg18; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20240313201846euoutp024391567560232d86545cd477d142e3cf~8bGILSgkd0813808138euoutp02-
+	for <linux-pm@vger.kernel.org>; Wed, 13 Mar 2024 20:18:46 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20240313201846euoutp024391567560232d86545cd477d142e3cf~8bGILSgkd0813808138euoutp02-
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1710361126;
+	bh=oNMo5LEc3usABFxyA4oBiAOdQqLn4DzF/mzFI1Dkuig=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=K0zbkg18tB0CpWdzx0CHu4MNFCxAUD7yQA+L55lkjjpFLoB0Jh0VGkZiiZmRmwBPM
+	 EVIeke+gRGaCEvup9UIvYA5Sw8T3Al4h7ZitDexkaafl4bsUP+wXRGoqTd2WwznaOA
+	 I4yBwmi9uBWpmYU6VTiWO+zfRA+cIbPz3aGn4q2A=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+	20240313201845eucas1p29a8e72e12de4cf9e9e15198eb3523dfb~8bGHWWEYM0441804418eucas1p2a;
+	Wed, 13 Mar 2024 20:18:45 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+	eusmges3new.samsung.com (EUCPMTA) with SMTP id B5.6A.09552.52A02F56; Wed, 13
+	Mar 2024 20:18:45 +0000 (GMT)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20240313201845eucas1p2f042dd14bd3cff23e28b594b330667b0~8bGG5f_5s0441704417eucas1p2l;
+	Wed, 13 Mar 2024 20:18:45 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+	eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20240313201845eusmtrp199f3fba23e4afad6c843d5c77536f68d~8bGG4xH-M2912729127eusmtrp1I;
+	Wed, 13 Mar 2024 20:18:45 +0000 (GMT)
+X-AuditID: cbfec7f5-83dff70000002550-6a-65f20a25250d
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+	eusmgms2.samsung.com (EUCPMTA) with SMTP id 28.7A.10702.52A02F56; Wed, 13
+	Mar 2024 20:18:45 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20240313201844eusmtip1a39b10b1af3da014b0243a17ea407c5c~8bGFwrYTu2660926609eusmtip18;
+	Wed, 13 Mar 2024 20:18:44 +0000 (GMT)
+Message-ID: <e8533ce6-8771-400c-93b6-829a51c38b74@samsung.com>
+Date: Wed, 13 Mar 2024 21:18:43 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240312103723.3469762-1-quic_sibis@quicinc.com>
-In-Reply-To: <20240312103723.3469762-1-quic_sibis@quicinc.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 13 Mar 2024 20:58:04 +0100
-Message-ID: <CAJZ5v0iLvq_4mNTTNw9eXZL4rG25jpRuWAKvY_7HZvLDRmGZNw@mail.gmail.com>
-Subject: Re: [PATCH V3] cpufreq: Fix per-policy boost behavior on SoCs using cpufreq_boost_set_sw
-To: Sibi Sankar <quic_sibis@quicinc.com>
-Cc: dietmar.eggemann@arm.com, rafael@kernel.org, viresh.kumar@linaro.org, 
-	xuwei5@hisilicon.com, zhanjie9@hisilicon.com, sudeep.holla@arm.com, 
-	cristian.marussi@arm.com, linux-kernel@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, quic_rgottimu@quicinc.com, 
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, d-gole@ti.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] ARM64: Dynamically allocate cpumasks and increase
+ supported CPUs to 512
+Content-Language: en-US
+To: "Christoph Lameter (Ampere)" <cl@linux.com>
+Cc: Sudeep Holla <sudeep.holla@arm.com>, Catalin Marinas
+	<catalin.marinas@arm.com>, Mark Rutland <mark.rutland@arm.com>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, "Rafael J. Wysocki"
+	<rafael@kernel.org>, Viresh Kumar <vireshk@kernel.org>, Will Deacon
+	<will@kernel.org>, Jonathan.Cameron@huawei.com, Matteo.Carlini@arm.com,
+	Valentin.Schneider@arm.com, akpm@linux-foundation.org,
+	anshuman.khandual@arm.com, Eric Mackay <eric.mackay@oracle.com>,
+	dave.kleikamp@oracle.com, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, linux@armlinux.org.uk,
+	robin.murphy@arm.com, vanshikonda@os.amperecomputing.com,
+	yang@os.amperecomputing.com, Nishanth Menon <nm@ti.com>, Stephen Boyd
+	<sboyd@kernel.org>
+From: Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <173078dd-3743-2d39-a9ea-015ea5be48f8@linux.com>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Sf1CTZRzved93715m815fqD2hQq4oqRMko3sIgTqxXi//gKtD67poyBtw
+	AXobI+TIdrlDILEFEmNNwYPAm0tqonAUniAxGCkMOFxjBjTQ+DFyoOggKbY3i/++nx/fH5/n
+	HgpnTpKBVEZ2DifPlmVKSRFxqcvTty1ENM9tv+eMRPpGI4kudx9Af9YfB+jG4ixAV24N4Ghy
+	pV6IDGeGSWRyDgvQYKueRL8Z/xaghdJOgDoq2gD69oYVQ8v19zE0++Aahk7drcBR+50JAVoZ
+	/oFADZYWAjVXe3A0ZXcQ6MJYF4nUjkhUWtcjfA2yxtNGwA4OW3FW3ekSsCZDMcma5suEbLd2
+	mWAnhiox9kLdZ6x70k6wXwzahKzZ1oyxC6aghMffE+1M5TIzcjl5eOyHonS9xUoeqqDyGq4u
+	ABVoJkuAHwXpl6FBU4iXABHF0GcBdP8yQfDgLoB6bSXGgwUAh8ZuCR+1nKszC3mhAcBqfa+A
+	B24Au6xLmNclpmOhcabFVxN0CJwdWRTy/AbYU+Xd4Uc9QQfDUbvWx/vTMjjdXIN7a5yWQPtE
+	ta83gA6HFbVFvptw2iOA3395TOAVSDoClrhKfCn86BhYO36a4JuD4dGL3/gSQfqECGqmilcF
+	ahXEQ7WT5SP4w2lz079xNsHe8uME7z8GYM3yKMYDDYCq23bAu6Kh4/oS6R2E06GwsTWcp1+H
+	0ycahfz89dDm2sDfsB6WXarEeVoMiwoZ3v0c1JnP/7e2vX8A1wCpbs2z6NbE161Jo/t/bw0g
+	DEDCKRVZaZxiRzb3SZhClqVQZqeFHTiYZQKrH7d3xXyvBZyddod1AIwCHQBSuDRAfGSLm2PE
+	qbLD+Zz8YLJcmckpOsBGipBKxCGpwRxDp8lyuI857hAnf6RilF+gCttzOeCnczFbQnO6Y2ku
+	2db0cOBMpLhMvjX/ZmWRbowqmJ9h7rRb3rpYpezNc1WBr/qfv9b3o/XF2s0expbUVqDdtC/F
+	cTVha9DhuODlOP8/djr6bW+Mv70nbeqkJf78O2xStfDpWtGE8qn3Jeacwt25kNHWN43XlUar
+	4j+dJI841B/s63yJSfy1ydYTlbj/zdChvIyo+59ThqWfyzWqGEY3WvVKwdF358vlga5TfyVs
+	i3ggmfva2Ze0bi4oLi96rynd+dh31/dvLt6lHW9rbbduT7qpzdz9pIgS72IM6sR1z+41TOeO
+	JINnon5PCSRNMxtf9QQvzj0sHsnn6Csf7bhtSemUEop0WcQLuFwh+wdUzi2PJwQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrOKsWRmVeSWpSXmKPExsVy+t/xu7qqXJ9SDZ4tFLKYs34Nm8W+E8kW
+	75f1MFpc//aG0eLAs0vMFk//LWO3WLXwGpvFpsfXWC0u75rDZnFvzX9Wi8+9RxgtDk3dy2ix
+	9PpFJovfy74zWbz5cZbJYu6XqcwWBz88YbX4d20ji8XyUztYLLbP/8ls8fLWHRaLzQ+OsVm0
+	3DG16F1ykt1BwmPNvDWMHpevXWT2aDnyltVj06pONo9Nnyaxe5yY8ZvF48mV6Uwem5fUe3x8
+	eovFo/vyDXaP4ze2M3l83iQXwBOlZ1OUX1qSqpCRX1xiqxRtaGGkZ2hpoWdkYqlnaGwea2Vk
+	qqRvZ5OSmpNZllqkb5eglzHn1EW2gqkcFcsPf2ZsYNzO1sXIySEhYCKxeslx9i5GLg4hgaWM
+	EnOPX2GFSMhInJzWAGULS/y51sUGUfSeUeLm311gCV4BO4k1r3cwgdgsAqoSb25/Y4eIC0qc
+	nPmEBcQWFZCXuH9rBlhcWCBR4tX2BcwgNrOAuMStJ/PBekUE9CWmLu5gAVnALPCbVWLqlx0s
+	ENseM0vs3X+UEaSKTcBQouttF9jdnAK2EosfzmOBmGQm0bW1ixHClpdo3jqbeQKj0Cwkh8xC
+	snAWkpZZSFoWMLKsYhRJLS3OTc8tNtIrTswtLs1L10vOz93ECEwx24793LKDceWrj3qHGJk4
+	GA8xSnAwK4nw1il+TBXiTUmsrEotyo8vKs1JLT7EaAoMjYnMUqLJ+cAkl1cSb2hmYGpoYmZp
+	YGppZqwkzutZ0JEoJJCeWJKanZpakFoE08fEwSnVwMS4PO5qRXtYlDxvnf32CWcuB3VsTwjj
+	P2Un4TGF8fVi/ZB8yQ2ZM8zX3EuO2Xd26d8VflMiph5wuL0yjEmZ7dvZ1H7+t12FstcqNHUe
+	JxzatvH21IYFF5q4vKZpWU6Icvz06NDFfx/ey/FzzP288wb/g/u6M9kOvtG6+P/8xzwmjj3s
+	a3n2reSVnHf6Sdu3y6t8Dlx5XdX0VeJ93elJv3LflH6Q4i2+7fuqxuOOxb1JV3JPLTORPSJ0
+	+vzzRo+CVyt2p/+sZny7XifeIOJqZMmdVll9/Yv6q/qPZXuaHvscKOv3coed5YqE/Ysf9wZ+
+	vHBTSdfd8vDXzLSA2l1cqS2xOZcFhNepyx/923r53K4UJZbijERDLeai4kQAWu2UZLoDAAA=
+X-CMS-MailID: 20240313201845eucas1p2f042dd14bd3cff23e28b594b330667b0
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20240308140130eucas1p1259c805a0b6491ce2f69c6fca0264b1f
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20240308140130eucas1p1259c805a0b6491ce2f69c6fca0264b1f
+References: <37099a57-b655-3b3a-56d0-5f7fbd49d7db@gentwo.org>
+	<CGME20240308140130eucas1p1259c805a0b6491ce2f69c6fca0264b1f@eucas1p1.samsung.com>
+	<c1f2902d-cefc-4122-9b86-d1d32911f590@samsung.com>
+	<Ze9TsQ-qVCZMazfI@arm.com> <9352f410-9dad-ac89-181a-b3cfc86176b8@linux.com>
+	<bf1757ca-6d41-87e7-53dd-56146eef5693@linux.com> <ZfCXJRJSMK4tt_Cm@arm.com>
+	<ZfG5oyrgGOkpHYD6@bogus> <432c1980-b00f-4b07-9e24-0bec52ccb5d6@samsung.com>
+	<173078dd-3743-2d39-a9ea-015ea5be48f8@linux.com>
 
-On Tue, Mar 12, 2024 at 11:37=E2=80=AFAM Sibi Sankar <quic_sibis@quicinc.co=
-m> wrote:
+On 13.03.2024 17:39, Christoph Lameter (Ampere) wrote:
+> On Wed, 13 Mar 2024, Marek Szyprowski wrote:
 >
-> In the existing code, per-policy flags doesn't have any impact i.e.
-> if cpufreq_driver boost is enabled and one or more of the per-policy
-> boost is disabled, the cpufreq driver will behave as if boost is
-> enabled. Fix this by incorporating per-policy boost flag in the policy->m=
-ax
-> calculus used in cpufreq_frequency_table_cpuinfo and setting the default
-> per-policy boost to mirror the cpufreq_driver boost flag.
+>>> I did try to trigger this on FVP by adding OPPs + some hacks to add 
+>>> dummy
+>>> clock provider to successfully probe this driver. I couldn't hit the 
+>>> issue
+>>> reported 🙁. It could be that with the hardware clock/regulator 
+>>> drivers, it
+>>> take a different path in OPP core.
+>>
+>> I can fully reproduce this issue on Khadas VIM3 and Odroid-N2 boards.
+>> Both Meson A311D SoC based.
 >
-> Fixes: 218a06a79d9a ("cpufreq: Support per-policy performance boost")
-> Reported-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> Reviewed-by: Viresh Kumar <viresh.kumar@linaro.org>
-> Reviewed-by: Dhruva Gole <d-gole@ti.com>
-> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
-> ---
+> Hmm... Would it trigger on Orangepi5plus? With some effort I can get 
+> that board up at home.
 >
-> v3:
-> * Pickup Rbs.
-> * Simplify per-policy boost setting. [Viresh]
+> Could you reboot with some memory diagnostics so that we are sure that 
+> nothing gets corrupted?
 >
-> v2:
-> * Enable per-policy boost flag in the core instead. [Viresh]
-> * Add more details regarding the bug. [Viresh]
-> * Drop cover-letter and patch 2.
->
-> Logs reported-by Dietmar Eggemann:
-> https://lore.kernel.org/lkml/265e5f2c-9b45-420f-89b1-44369aeb8418@arm.com=
-/
->
->  drivers/cpufreq/cpufreq.c    | 18 ++++++++++++------
->  drivers/cpufreq/freq_table.c |  2 +-
->  2 files changed, 13 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index f6f8d7f450e7..66e10a19d76a 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -653,14 +653,16 @@ static ssize_t store_local_boost(struct cpufreq_pol=
-icy *policy,
->         if (policy->boost_enabled =3D=3D enable)
->                 return count;
->
-> +       policy->boost_enabled =3D enable;
-> +
->         cpus_read_lock();
->         ret =3D cpufreq_driver->set_boost(policy, enable);
->         cpus_read_unlock();
->
-> -       if (ret)
-> +       if (ret) {
-> +               policy->boost_enabled =3D !policy->boost_enabled;
->                 return ret;
-> -
-> -       policy->boost_enabled =3D enable;
-> +       }
->
->         return count;
->  }
-> @@ -1428,6 +1430,9 @@ static int cpufreq_online(unsigned int cpu)
->                         goto out_free_policy;
->                 }
->
-> +               /* Let the per-policy boost flag mirror the cpufreq_drive=
-r boost during init */
-> +               policy->boost_enabled =3D cpufreq_boost_enabled() && poli=
-cy_has_boost_freq(policy);
-> +
->                 /*
->                  * The initialization has succeeded and the policy is onl=
-ine.
->                  * If there is a problem with its frequency table, take i=
-t
-> @@ -2769,11 +2774,12 @@ int cpufreq_boost_trigger_state(int state)
->
->         cpus_read_lock();
->         for_each_active_policy(policy) {
-> +               policy->boost_enabled =3D state;
->                 ret =3D cpufreq_driver->set_boost(policy, state);
-> -               if (ret)
-> +               if (ret) {
-> +                       policy->boost_enabled =3D !policy->boost_enabled;
->                         goto err_reset_state;
-> -
-> -               policy->boost_enabled =3D state;
-> +               }
->         }
->         cpus_read_unlock();
->
-> diff --git a/drivers/cpufreq/freq_table.c b/drivers/cpufreq/freq_table.c
-> index c4d4643b6ca6..c17dc51a5a02 100644
-> --- a/drivers/cpufreq/freq_table.c
-> +++ b/drivers/cpufreq/freq_table.c
-> @@ -40,7 +40,7 @@ int cpufreq_frequency_table_cpuinfo(struct cpufreq_poli=
-cy *policy,
->         cpufreq_for_each_valid_entry(pos, table) {
->                 freq =3D pos->frequency;
->
-> -               if (!cpufreq_boost_enabled()
-> +               if ((!cpufreq_boost_enabled() || !policy->boost_enabled)
->                     && (pos->flags & CPUFREQ_BOOST_FREQ))
->                         continue;
->
-> --
+> F.e. specify a command line parameter "slub_debug" to enable 
+> redzoning. That way we may see potential memory corruption.
 
-Applied as 6.9-rc material, thanks!
+I've added CONFIG_SLUB_DEBUG_ON=y to my .config, but I got no reports 
+for any potential memory corruption.
+
+
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
 
