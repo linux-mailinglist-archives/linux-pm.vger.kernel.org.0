@@ -1,88 +1,73 @@
-Return-Path: <linux-pm+bounces-4880-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4881-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50B3087A58A
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Mar 2024 11:06:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A07287A7B5
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Mar 2024 13:41:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 81C1A1C20C1F
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Mar 2024 10:06:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 286D51F23F58
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Mar 2024 12:41:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 383DB383BD;
-	Wed, 13 Mar 2024 10:05:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE0783D9E;
+	Wed, 13 Mar 2024 12:41:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="QEGyuIAy"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=smtpcorp.com header.i=@smtpcorp.com header.b="lb6k9V7S";
+	dkim=pass (2048-bit key) header.d=asem.it header.i=@asem.it header.b="AzXrXVSx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+Received: from e2i652.smtp2go.com (e2i652.smtp2go.com [103.2.142.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94E3F3DBB2;
-	Wed, 13 Mar 2024 10:05:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.40
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710324327; cv=fail; b=dmuiwcSxSHpl+WSRWwD9NLtyzcjSQDprgehcm16UnpeDse8UY+u6/Iq+F3jBdDOQfqIxZ6lZRQoLG5ceMLEmj4+xCgjlsjgPdySu3CdieeMsPCkNthVHxT3AdE9OnrIT0i1Iu4EUZdXil4zGMUToXs2M4kFJd2ZZCR+U9W40fCw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710324327; c=relaxed/simple;
-	bh=G02pH48d8Db06kvsEBrKMIuPJnL8wLDz6Y2MuwmFRDA=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=q2gviyhDs/emSx5cBR2lZ8XTV/oNMgCV8yyhsPR7DyFVvq3F8kHwq9dAn46v3T6fYQTTyEvpR3ocFjl/pdleEacx2ha49QEt4tmVHJLzAb/ixWaHG+r/VAfzdqkD4PqoyCC3sp1wFawVaK0rqwpoX1UMhgrWr8iYP7dIzZOpVls=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=QEGyuIAy; arc=fail smtp.client-ip=40.107.236.40
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=f3Qg1CUCGH1d8xnXjTXgHOEo0yOfBQjmxO6km2fYvrsVtZyU3KhpZDybLkldNqNF+20NPXwT8KSxUacAjc8ocReN4I6Q2ThE9293ItXBq0ksyhvVh0tDNaFIHg+V1QHiD5HvOiw3OdGXXFFdFwYU0w5vi6AIjAsH54ntXbq0BCtNS42TbiN+miKQyE0g38XJQQUryS6YJjKVlPxuZzRz1VUgG8KWKdTRgmA/tEirb0Zj36bBezI/eTl1D7FHTI28EB8Eh5SCGg8Zbew4gAIXclRsS5eL8wMhdNrgACe/hHlYSZkVlE1rlaahLXZS8dwmgAnAUo9kWFlFnT7OkUBSfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Y1sLe1zptm6M7KMO+14mkYFferByd7hCOhOYHL7G7mY=;
- b=hXu2VXh5FkugJBiOSU/MI4Kohmx4FSMdvyLgL0ztlv+QEhx5F0KHYd2vLeOOfYPfPWQj+hLdAnvvpXkCtgU64DYcYlrFr9+wenR66an9VwLuYpNVbW4VVydfC0VYKD3uBfR+7gVTmB9V0tfMvCOa9X4fkJd88NqxIyUyo70L9WIZd+V34ZKiXCKGUNF5lGD1k1cGRQhuMxEkJedpSnKaYBDJTi34t5DyWI4erK+C2YkCkM19sC+tFEAX+Lza33ipqYgOCGEP/One28R4fhvE4Lj9g+gPM5JVaLI7Tc5Sd2hJ1XS/OOygo2rD3HUZ53nlT3Nao8GrAYjLCScGLat3ng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Y1sLe1zptm6M7KMO+14mkYFferByd7hCOhOYHL7G7mY=;
- b=QEGyuIAy9isScqbr1W2ns40qYHDj1BP1emxo+twvMIj57os4QwjDrqEMslHUp84nbR4XUcgDmaQ2UWLol1lBIgeWn1d7eNcTWJMLBqs+4gVsPnM2MizF+zzlc5W4YUP4GXbDuvKBNDUNYCRRbJq4Fpz1Y7AEWa2JC0K/IyyyPvI=
-Received: from MW3PR06CA0008.namprd06.prod.outlook.com (2603:10b6:303:2a::13)
- by DS0PR12MB9348.namprd12.prod.outlook.com (2603:10b6:8:1a0::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7362.36; Wed, 13 Mar
- 2024 10:05:21 +0000
-Received: from CO1PEPF000066E8.namprd05.prod.outlook.com
- (2603:10b6:303:2a:cafe::8b) by MW3PR06CA0008.outlook.office365.com
- (2603:10b6:303:2a::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.19 via Frontend
- Transport; Wed, 13 Mar 2024 10:05:21 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1PEPF000066E8.mail.protection.outlook.com (10.167.249.6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7386.12 via Frontend Transport; Wed, 13 Mar 2024 10:05:21 +0000
-Received: from pyuan-Chachani-VN.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Wed, 13 Mar 2024 05:05:17 -0500
-From: Perry Yuan <perry.yuan@amd.com>
-To: <rafael.j.wysocki@intel.com>, <Mario.Limonciello@amd.com>,
-	<viresh.kumar@linaro.org>, <Ray.Huang@amd.com>, <gautham.shenoy@amd.com>,
-	<Borislav.Petkov@amd.com>
-CC: <Alexander.Deucher@amd.com>, <Xinmei.Huang@amd.com>,
-	<Xiaojian.Du@amd.com>, <Li.Meng@amd.com>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 7/7] cpufreq: amd-pstate-ut: support new cpb boost control interface
-Date: Wed, 13 Mar 2024 18:04:44 +0800
-Message-ID: <1932134a71717f9c4156d7755d40af6f63dc98b1.1710322310.git.perry.yuan@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D536815D1
+	for <linux-pm@vger.kernel.org>; Wed, 13 Mar 2024 12:41:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.2.142.140
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1710333699; cv=none; b=W1ZHuvzQmwm20h0MIbdNtHRUQ0sz5j5mqGHxFzLrqBparKga4IQaf4zf0pt7I4p5PCOgHC89JaBUl245ekDsa4t2GVl8tW1xB6Gf6dzSsU3s37YZLc0BrA6tuZazfiOT/dGz/q3gr9HHNwEfsnF7z9JmAPVRDxY+zFcUbLQQAnU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1710333699; c=relaxed/simple;
+	bh=C6Ei12qFq1dwjt7LRGxmcGnHjiV+5QZTSZmgID4wPsI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=miM9D9RPYBe2MSVGYsOb9Uwhko3hkMrLaXaHZSZYjYp7bjvylapmmNixKUXVCgsaieFSqaUgcV7yxVyAj8biuUIXJvPMaLG50jbRKDbGYmUcDKxiIQdgRgnl9xIGIkQkDoSrSOW2X/eoBT/TI6ujg2LU+xdeue1yVPKH3llnHbw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=asem.it; spf=pass smtp.mailfrom=em1174574.asem.it; dkim=pass (2048-bit key) header.d=smtpcorp.com header.i=@smtpcorp.com header.b=lb6k9V7S; dkim=pass (2048-bit key) header.d=asem.it header.i=@asem.it header.b=AzXrXVSx; arc=none smtp.client-ip=103.2.142.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=asem.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=em1174574.asem.it
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=smtpcorp.com; s=a1-4; h=Feedback-ID:X-Smtpcorp-Track:Message-Id:Date:
+	Subject:To:From:Reply-To:Sender:List-Unsubscribe;
+	bh=JVz+0/1IvynSUvZNYS9ttPNeUmoE4X67mo1kcxJZITE=; b=lb6k9V7SAG9XZ3D9UYvQV/UEXE
+	z4U0sk9d7qCrMHqK4AUCiwoU3JVXp2RZByk3hW6NzHvmdy0tmmfAOebrlD41VYAwY5W2P0OutBhgK
+	x/+zXxdXqXHfTeB6xrJwQwDMlP/NekPX4pvLpeGZhd3/GFzMQ8pUd0NhjVg1eBezM6FNqcSAqm7XF
+	e7FOhn7i2rQyvLN6fwcg4wEVs70Wq0ajZZR9K74u7YTzZhoNwJZK5x6Z5tp+Ye1CVqR1jceSHX5s3
+	LO4IGGXJje6KhVRgqlh3PgnsCdb6QzZi/4WS+QK3wR7UfpV/cPWqBPzj5HzvVHWm7FNaMjX8qSjGC
+	ebZFsmWQ==;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=asem.it;
+ i=@asem.it; q=dns/txt; s=s1174574; t=1710333697; h=from : subject : to
+ : message-id : date; bh=JVz+0/1IvynSUvZNYS9ttPNeUmoE4X67mo1kcxJZITE=;
+ b=AzXrXVSxh3gqD8eSaS/0ARaeFJhyqGjCvNkScImyKE4rIKRcZ9yrtlfk1pwWUAkwAG+II
+ +rmdIxzfyf+LQbrqAgkTS7RmCYTnAGnR/qjPNRkHhmdGYRHzzJGHmJ6d2QHQjmeumaHZsrt
+ qk7BBDId3n5yDo6X/PvpnOxiYzuKIProQ9wTcFFnFLTb8sVRoUe5v4v/1VJ7vTZs3KWMJuJ
+ XGKpBZSbOl5eCoMhBP96zPKrSQ0G3PTWM7VE/Ot1QZ5lM02l2+XalQScEeIYUFtS7IqPLQp
+ Tg/EjfLx457qFKoKNGcu8x0J25VVr8G31LbNu6dh3rzjqdnpHAJie+Zv1b7w==
+Received: from [10.45.79.71] (helo=SmtpCorp) by smtpcorp.com with esmtpsa
+ (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+ (Exim 4.94.2-S2G) (envelope-from <f.suligoi@asem.it>)
+ id 1rkNvK-qt4DT6-JC; Wed, 13 Mar 2024 12:41:34 +0000
+Received: from [10.86.249.198] (helo=asas054.asem.intra)
+ by smtpcorp.com with esmtpa (Exim 4.96.1-S2G)
+ (envelope-from <f.suligoi@asem.it>) id 1rkNvJ-DuzQp3-0d;
+ Wed, 13 Mar 2024 12:41:33 +0000
+Received: from flavio-x.asem.intra ([172.16.18.47]) by asas054.asem.intra with
+ Microsoft SMTPSVC(10.0.14393.4169); Wed, 13 Mar 2024 13:41:31 +0100
+From: Flavio Suligoi <f.suligoi@asem.it>
+To: "Rafael J . Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Flavio Suligoi <f.suligoi@asem.it>
+Subject: [PATCH] thermal: qoriq: remove redundant TMTMIR_DEFAULT
+Date: Wed, 13 Mar 2024 13:41:17 +0100
+Message-Id: <20240313124117.3224601-1-f.suligoi@asem.it>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1710322310.git.perry.yuan@amd.com>
-References: <cover.1710322310.git.perry.yuan@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -90,54 +75,35 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000066E8:EE_|DS0PR12MB9348:EE_
-X-MS-Office365-Filtering-Correlation-Id: b18f8761-2501-4bcd-36ca-08dc434517e3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	zoUjMm1ppxIoNvhM7DjqKICK3lSoKQOEmct0/W+k+25oOaPY4Ez4YZpf8zNt2qpn1HmeakL+E2EGvsKW9DVXevwmW77eUFG97MXWTVLql93pag5sz6D5j8Vru5L2qSlbEPbFZAanmggbimtCeoXQvL7O65QCesfsab3uJW80MUV+7m9nHOQTlTFKnW3LA6rbKMGrOCf3qb0zQMHwS5WBVBxl3sNnSTuiV1qJRkeGOQEwzO+28SHq+RB9dsSTrYPwZnJ3j91wQoSU0zuJ7jWoYCrQmQThm+CkUFbWgKfZ5k6ElYBbNhHOKYikckSw4GNVqhLaVJ8gdJiZfyUnotWaIYjR4LaKLwQpwgw3gNDmZqjIOWV7QZSWIvpOw42q6VWQvcjtYvgDB2jcuNQPkc+j5d1xcSSUag0Q6rs1KONqkT0TP3aFl9c6f5l/pFpu4TzzH3CnCS+zOFWaP0jXNaC07fy+7Y/OlxmeJIivBOMR/OTzT/F6Gfyjd0Ci8DWyk0RuP45RTNfR1iGhO15w91PdzjiWwG8FFmj5Ynm0jQSAeGEreoClBunHZH+ikD51/BhHKsKjSTEstLxa4bIk8Bu5r/Ezg9a5ip9RCpGUwNAQYWHFx7SpNMcR/Kj2h90k9aiz7OMumSHGzTLZPc6z1FCUawok4y5J00Bc9m2zHt62ezNAw5xAiUZW73PzEXbfjXMVVAJhZVZT0/kLwon9mFw2fYM9wZLIFth/5uOHHEj4eot4wsVc5b3XE6rFioJDtACQ
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(376005)(36860700004)(1800799015)(82310400014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2024 10:05:21.0776
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b18f8761-2501-4bcd-36ca-08dc434517e3
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CO1PEPF000066E8.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB9348
+X-OriginalArrivalTime: 13 Mar 2024 12:41:31.0735 (UTC)
+ FILETIME=[C6AD3670:01DA7543]
+X-Smtpcorp-Track: 1rkNvJDIzQp30d.8l784HLT242bb
+Feedback-ID: 1174574m:1174574aXfMg4B:1174574sdazqNa4wD
+X-Report-Abuse: Please forward a copy of this message, including all headers,
+ to <abuse-report@smtp2go.com>
 
-As the new CPB boost control is enabled, pstate unit test needs to remove
-legacy `boost_supported` check and start to use new CPB boost control
-interface `global.cpb_boost`.
+The definition of TMTMIR_DEFAULT is repeated two times in the code.
+The first time is useless.
+It makes more sense to leave this definition after the correspondent
+REGS_TMTMIR register definition:
 
-Signed-off-by: Perry Yuan <perry.yuan@amd.com>
+Signed-off-by: Flavio Suligoi <f.suligoi@asem.it>
 ---
- drivers/cpufreq/amd-pstate-ut.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/thermal/qoriq_thermal.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/cpufreq/amd-pstate-ut.c b/drivers/cpufreq/amd-pstate-ut.c
-index f04ae67dda37..b3601b0e6dd3 100644
---- a/drivers/cpufreq/amd-pstate-ut.c
-+++ b/drivers/cpufreq/amd-pstate-ut.c
-@@ -226,7 +226,7 @@ static void amd_pstate_ut_check_freq(u32 index)
- 			goto skip_test;
- 		}
- 
--		if (cpudata->boost_supported) {
-+		if (amd_pstate_global_params.cpb_boost) {
- 			if ((policy->max == cpudata->max_freq) ||
- 					(policy->max == cpudata->nominal_freq))
- 				amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_PASS;
+diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
+index ccc2eea7f9f5..c29ed179c12d 100644
+--- a/drivers/thermal/qoriq_thermal.c
++++ b/drivers/thermal/qoriq_thermal.c
+@@ -20,7 +20,6 @@
+ #define TMR_ME			0x80000000
+ #define TMR_ALPF		0x0c000000
+ #define TMR_ALPF_V2		0x03000000
+-#define TMTMIR_DEFAULT	0x0000000f
+ #define TIER_DISABLE	0x0
+ #define TEUMR0_V2		0x51009c00
+ #define TMSARA_V2		0xe
 -- 
 2.34.1
 
