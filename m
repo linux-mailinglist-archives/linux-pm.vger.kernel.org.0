@@ -1,162 +1,205 @@
-Return-Path: <linux-pm+bounces-4883-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4884-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8138787A8A5
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Mar 2024 14:45:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FBAB87A905
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Mar 2024 15:06:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC3631F24689
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Mar 2024 13:45:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52B1B1C219D1
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Mar 2024 14:06:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F04241208;
-	Wed, 13 Mar 2024 13:45:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EF144502C;
+	Wed, 13 Mar 2024 14:06:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=asem.it header.i=@asem.it header.b="ixhrg9BL"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qwALjHVr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2080.outbound.protection.outlook.com [40.107.244.80])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04CD343ADB;
-	Wed, 13 Mar 2024 13:45:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.80
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710337508; cv=fail; b=XnN5NNwgCXcCLM061HGzO9BHXIIFAJeESeYBlxFfbiyU1KwCyAckAJycJdAb956WO9KvuceH4kH8d+Kp5GzyYFn5L0lW3JL+VtBS6ChmuvctiJl6oIUfp0coyNS5UTU+H0D755Mn4uWtR3lRp7wyhNoq1W6gSeixLkfg7GuIPJI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710337508; c=relaxed/simple;
-	bh=CePFEcr/bImfeuQRPbfNHL59trhBJDXMCG8dHCpzkpw=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=dHXE8q/pc2e3mGsAXopOC1bjmQKB0BAVLbV6OubnRlz26uPk77ND9rEfwNigDQzs3GucyWyiYwq4jfukJSlkhu4WYRSz3TsCb/NwTmUk6VgFIV6xp7Fwc0SskWi2/TsjqA5C2E/iMKxLhoE4ytKMQWDQQJ9JrrITQPlvo6IxMq4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=asem.it; spf=pass smtp.mailfrom=asem.it; dkim=pass (2048-bit key) header.d=asem.it header.i=@asem.it header.b=ixhrg9BL; arc=fail smtp.client-ip=40.107.244.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=asem.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=asem.it
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kF4CXove8RnqHaKgUFYVpuDo6qp5dkycyUdpvgx5ZI56WFz2aJaKoRdDSAgLaZxPXq2NkYv25M6ok777WOeu0vybO46MHIvvaXx4H14XNcMptTCWKCDeBwel+jUXNyBoQyz6MrZG4iiRlmRqdCMDT8Z8kX/w2Br3xrjTu9QdSB7oRaIGkT6JuChEF6PTzLIU6Bw2A0HCW0XxT6Lu4O5yl7orByWi6ACs3f7ODlz7MxoF+UoMNI9YLSJ6LyWtx4rhfLhiEQ3LeZh5XsVtYcJYpGmOrzy5wAZXeX7ip7TQ1rFHfJSqRRjxNpFVBQJ9a7V1FErMDkVIrZiAi96USLcdDA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CePFEcr/bImfeuQRPbfNHL59trhBJDXMCG8dHCpzkpw=;
- b=IhdPDY7iWtO5/fJdttgAVqOIoWm+LvxRgbZiE6Un7Dye5hW/4VCnDmXvjFAU+s3y6HgsCQD7e04jIwew1gF/Sz/kjo15/Ti+O686ZDlyV3mn5pOJEP0wYtOG15j68iMNYQtsySD4JHeQC33nDsAmwuXi8xQuJj9t3dA23oRAa6SNwQm+ShCJvm+L6OBAT8wX2eKSmw0xvIgliHxpuRaNdXYlUwpwcjQjoOwXObGNJPrdlIzqqcfa5jCTHdvoBmhXOO/4nOIL0ge/LKKJfeRLFQLFWDDRQyGJSeDJB0dC8KAioNsHVh2XCfb3pwMw1NxqrUI1XVZmh3305es+c2JGaw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=asem.it; dmarc=pass action=none header.from=asem.it; dkim=pass
- header.d=asem.it; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=asem.it; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CePFEcr/bImfeuQRPbfNHL59trhBJDXMCG8dHCpzkpw=;
- b=ixhrg9BL8YrcIUy+yv5ntp5uoyXQdoiRtKSXcJd99XJPewytnw/TFdeo3FQrunnNTHoz/HN8rFHyfvQHM1MxQexki3GqSItbAAF/U6ZqJzEAUGkfV83/gFVg33RjIRjrmbFSfezdYXJDlQl0fSVGsmbywNukrOZOcfcp4bfNbwLitfF4bryKhxwJLsucHykXAlZEUgTRw/ZoMTwRrbwPT9SX4NeGqUZHsX9xH8+Wwtd6GEGXcyEAP46VGa6bwHCSnsOGuQvM8kXcEvjNa9F49xnC48RF2mX1Smn720gHYUAV9CDOaaKcDbVKO+9U5tnRsarr0Z8ZWCSaGefaT6kE5g==
-Received: from PH0PR22MB3789.namprd22.prod.outlook.com (2603:10b6:510:29c::11)
- by IA2PR22MB5529.namprd22.prod.outlook.com (2603:10b6:208:4ba::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7362.36; Wed, 13 Mar
- 2024 13:45:03 +0000
-Received: from PH0PR22MB3789.namprd22.prod.outlook.com
- ([fe80::35ce:ff48:fa8b:d4a7]) by PH0PR22MB3789.namprd22.prod.outlook.com
- ([fe80::35ce:ff48:fa8b:d4a7%7]) with mapi id 15.20.7362.035; Wed, 13 Mar 2024
- 13:45:02 +0000
-From: FLAVIO SULIGOI <f.suligoi@asem.it>
-To: FLAVIO SULIGOI <f.suligoi@asem.it>, "Rafael J . Wysocki"
-	<rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui
-	<rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>
-CC: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: EXTERNAL: [PATCH] thermal: qoriq: remove redundant TMTMIR_DEFAULT
-Thread-Topic: EXTERNAL: [PATCH] thermal: qoriq: remove redundant
- TMTMIR_DEFAULT
-Thread-Index: AQHadUPN3hgfncjQXkGCBoWLv468qLE1rieQ
-Date: Wed, 13 Mar 2024 13:45:02 +0000
-Message-ID:
- <PH0PR22MB378914E9CAE71BDB53E95D4BF92A2@PH0PR22MB3789.namprd22.prod.outlook.com>
-References: <20240313124117.3224601-1-f.suligoi@asem.it>
-In-Reply-To: <20240313124117.3224601-1-f.suligoi@asem.it>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=asem.it;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR22MB3789:EE_|IA2PR22MB5529:EE_
-x-ms-office365-filtering-correlation-id: 64716df4-03c5-41c8-2eb1-08dc4363c861
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- S1vqBeY0iMoqjNCCVhg56LDMIHH7halhPcz//O2yT+0m6SoQWWeHEfes5y/9YiLcyUksqjrAwxuoPn/KHv46h7fQ+L5/Q/EBze9beuscF2pPgF/JfulpY3mNzo+imCLr+1pCBZFM9/Qax56sYnnLNo5ztWH3wZhYOi5AHdetR0hWMeB+Hktc5npHMybKjk25Awqo2HNSWZny8jgJ7/iKzLoMqjwK9exm1eksWmb3oJLAteTSZxMVQ2N+aE2g28sliCkebm3l3BS96Vud9nLRGyQDx1QPSvHGCwITsuq5/IVPn2QqSbZzUuf5qT07GsffI9wB1pG4MUgDp8hUxGS+F9u/ifS0wdHTtwWkqSP27l0TxtXDQOyPKhXGPsxS0EEUge1mcNTcIJUnIzxd5244Mf3Lr+1Szk7U3mSq46GyZ4IeiAJb/XeUD9GKLKnGIRg2vf+ukXcSv16smQnBW6Ufg2rHO2KNpJzhoSjZvKiZjGqsK45s7Bg7McdY5OVY4iZ5E0IZbEh0R2xqXUiMQ8p3P5nIDOsBzkHSRMqlt+OLOtaocECzQ5iTQrH/KcToooN4Cwi1twCO6wbBNY6200/j34PeTOx3TrUrTJWHv7pj05LpXpzAI1PP2RM/kX/1kW60d/bc0QodKALXhrH6zvIVQ3qfKHezHY6sjUWcA1n6Qz1Nln+/mqUX0+uR1YW6ivzXuCv1wDFJtzKxYDSUa6PEKg==
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR22MB3789.namprd22.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(376005)(38070700009);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?hv6rjQoAPD6L+bGPjm/Sd5pHn9rZjK+PVjrHjqtt1SNvdoGhBt/enrHd1nww?=
- =?us-ascii?Q?vycgHHdCyaoGFLy5z+FjKk/WYrP3uPNJsAlx0tHDjE8EEUZXZJ9gVnD2zs6g?=
- =?us-ascii?Q?tBRMXu4ErFaH8u9Vu3/EKRV6CqPlP4oMUh5G+Ky89M9NOklSU66jmAs0UPEZ?=
- =?us-ascii?Q?rwQOHV4Xf22b6yeYtQgP2HV/d8N/E1YwIhi47uEuGEN+yh7WGWpGZ6xwOjVM?=
- =?us-ascii?Q?pVWQrcgJYhN6/UMC4ZzTmYEiZKH0UXq9/DoJasTswWdjNOSX/vR320KzaL/9?=
- =?us-ascii?Q?+f1Nz5sxgdieYqImNE8M3aLTjGGfRbb/CjgyaQLVxRMB5cxMKxMkStAlGlbe?=
- =?us-ascii?Q?Tgd6BY6OxuEpDV6W09Yl/vQjBiZ41GqrMZlASqIr4SXe3YO7sGXr4HT3vllo?=
- =?us-ascii?Q?o9DfgN0uvrXm+kPC7nJviCBh6EQTO4qAVoHE8UJzarTkVMneCMCu3C9VLtrl?=
- =?us-ascii?Q?0BTfAWlnkGY2S2KdQ2p0h0tZfvhcVtb4Fz8dXWjG/XET7UopnVLtpJ9Blr5V?=
- =?us-ascii?Q?DEvjjyiIju7fes3H9OdfLsx7cNIOZ4yIznWEsjZjPk9jTbwkIAuG8soqHP44?=
- =?us-ascii?Q?189TNf365H8XqdbBnZZtzfd7wfafiA9FVfdC+8zlF4XP0kSEFVokzMzSskFt?=
- =?us-ascii?Q?rivZsD5K6yYBBaDFjm7uudmeAUMmTFMC6dZ1cXRc1MzAJ4uy54vrsI4wDRpt?=
- =?us-ascii?Q?ocUylbBgD2DWLUzaeaVQm6qqztvXxifZVWoz1wQqaw9fzMqRQvXYwXx3DEqX?=
- =?us-ascii?Q?8QU3As6W3/y1KFL2MwOFg5EzjlZ/ANVKfWTegWfMRo4LIMs1HdXiiI1dp4PS?=
- =?us-ascii?Q?O+wwQCyckdQhJ9VMcD7bSqKvTbt9Nf7xfkUs+scQ2XaD+hwzImLjKN8y1yZk?=
- =?us-ascii?Q?x4D/HON93M4XnHP+I3DsSCzbEhl6+eKs/PcbOEyQD/OICIe+wZBWpXpbXBuL?=
- =?us-ascii?Q?qU/evDNWw348RZS40kjhZsAv/FhfVsL8dKlkPP1o8NOlPtpgQSazaFTLyajw?=
- =?us-ascii?Q?snTT1+hbHQ6yrOI3LTRhPNvmgEOb6NxVd2AhR48tSPYhdlb4uYrWpIVtnr9c?=
- =?us-ascii?Q?Hm/DclWKPlxC/cyL74DeShbcMpJ1JD3EoB/bVdMKWv4ZR4lUDOBXPSQ/hhlq?=
- =?us-ascii?Q?Ieg8WtL6VcvQwZQPYuTtMQguLLS4OWmcgITDvO0XZY4c0yxijbH2sOxlOhFl?=
- =?us-ascii?Q?3hMlxxNb/j+u+GJuZZKwavm6AMNw7uNt9hbddddyGwjbfunzQwiqDK+XqL/0?=
- =?us-ascii?Q?Gxo7jHzSZOorTJ/o0lKNHjeGOk02BEIfmq+nv+bKEy77YHKj6RcZecHwrrKC?=
- =?us-ascii?Q?Uap85++IxqQgRJCK3SdyNffYl9FbLOTy6rYjvjn/fdBzl2IBYZxKREv1VoyO?=
- =?us-ascii?Q?81YqyncWuDlrZKkNR6WtjLd1J7/Yaumo5+ceb12ln/0Fj4dqgr518+YeMp5w?=
- =?us-ascii?Q?nJm2EeKe7YquWSLLYjOI8jgEmMZZCQBspNto07R6FjutC4qFe+/R9Ldf934C?=
- =?us-ascii?Q?xl9VB7HriK3YOIsIOZSILRSrBy3rJcwrF45fWM4IehWomp/l92moWC8IIRWS?=
- =?us-ascii?Q?qv/ZLa8yCUTpso/wSHsEQOlymkVRUsUmKRGYeevHz1e6h4JiZPdHiv4job+F?=
- =?us-ascii?Q?Fs8nUhKHOMKyAkrkmY2pjOI=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBDD341C7F
+	for <linux-pm@vger.kernel.org>; Wed, 13 Mar 2024 14:06:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1710338789; cv=none; b=QiLE4QyTkK9WGYihhRHp3hLZ7F6+jnutzEylnkPgyo0D7haitTxUyTZFBjg0fXlVRiN7DaulKAVaUw4D0oGJfyeTcFTL5bH8x8fprDI1OMF+moOggacy0SAqn42JUGM0Rwftj+gO8k0PLCW7Spo1GsCfs7p5VCgfOJV62LHSgrs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1710338789; c=relaxed/simple;
+	bh=dILn5Hndi6QvLrMyB/RNVJCWfu6T1Nm7fN4fplsjkac=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=L6ISArykk+mfvyKY/pRuDekvEooOg8D7w6c1j0CJUixmh4oPG5ikAzYSwclypIqmthEU5kijR/N35IXp/0Y/4QB/3Un5TSvyWqoa6CBQpUsXglWcSGfP7rb4HI6ytFEQ4xvhGCXve4Q00AydMCQUiKd6rmADpGWfIOeFSAiFfkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qwALjHVr; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-33e9def4a6dso2376402f8f.2
+        for <linux-pm@vger.kernel.org>; Wed, 13 Mar 2024 07:06:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1710338785; x=1710943585; darn=vger.kernel.org;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q0SucWULpAR7kwQjBV+IjlaMrkGCCyLEbqf0BnsbnwA=;
+        b=qwALjHVrl7rClkS1P6C/sPcJbtFpjgXzBMFBwBUcnigGbaW7XFU8LZqNQkO7pNeiV5
+         P2d+zQAQd8J38ui+iYSrhqrsT3bl4q4b5BV7dd66Da3N4DjmZY0oDwFaKBgFX56GOoef
+         /+uVj0UQ29COQCrrD+mP2IBvS0a/sdXHr6i7+sYaUlIlYdYzOduUX3lyopam/A6lvDJ3
+         KbBhnCLnKTbo946GJWO/t2UH6ANkj0MKDtxYrToS50ZVNdr+vDHXLTMLQWv00XegRqq6
+         /QyKg/qoDjrGcUatzUyZcrNlTozTTQygTGaF49g8zp6ta1K52wHJiUC4ayYd1yI9vDRv
+         6YNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710338785; x=1710943585;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=q0SucWULpAR7kwQjBV+IjlaMrkGCCyLEbqf0BnsbnwA=;
+        b=FimIYUFwq1On1yb+RGTecQ7ioAL0KG/LGZ0OwYiAL3QGW0wUSgvY6Ldf/VSJ7eCgg5
+         PSfY34rblk1FFOuk6+/HZlQ/pgdXvRjkMqfP/qYIAC5vlLy+a2JdJpmRUIbGmF9o9QxA
+         VGgzXnu2CURf3Lp9IqXonUsaLg86aDib3WkdsPl5BpP27KBQv2pu1d/qcEwkYt3qELiB
+         K24RomNhYVKUcfgJz1EHq8IVUwmfHIWBYxHAdXohOjGQfrydplbSjfWbcG6/USAw05n0
+         p5cHHrgE/C95Mfmwxy5LuFN4VdPMRWH2VfFDA0N6yvsjx8AbEX6LlwlttPZX7W6mkQAu
+         KSRg==
+X-Forwarded-Encrypted: i=1; AJvYcCUT3ROsn85X8lCrEwvqcv7ZNtu4049OR2/aqjsqezyjXBmfKjB1DiF8Mo/VsSODIeDVzRIMPk1hweZ61I3lTV7ogR4TgNiIohw=
+X-Gm-Message-State: AOJu0YwwFVEIh0HmhuU+i7YEAy+7r/LjrbzMvJkIXktZIpu1Cm8hksr/
+	bSL1BZcY430kCBgVirMgoDDYlsqZus7P8V0nHOLSe5YX6rv4fGA3dK5OcyR3kM0=
+X-Google-Smtp-Source: AGHT+IHaK9tAlmweFTo+WHnVjQsXoGvjan+LgRuk7V5ZXDrSOlyqkZoO2eO4gJVT1XnMmiEzTFMFng==
+X-Received: by 2002:adf:ffc7:0:b0:33e:12a2:297f with SMTP id x7-20020adfffc7000000b0033e12a2297fmr1805870wrs.41.1710338785078;
+        Wed, 13 Mar 2024 07:06:25 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id bj26-20020a0560001e1a00b0033b66c2d61esm1993293wrb.48.2024.03.13.07.06.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Mar 2024 07:06:24 -0700 (PDT)
+Message-ID: <8f00bf23-47cb-4656-a326-6d8d1d0d10d6@linaro.org>
+Date: Wed, 13 Mar 2024 15:06:23 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: asem.it
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR22MB3789.namprd22.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 64716df4-03c5-41c8-2eb1-08dc4363c861
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Mar 2024 13:45:02.2295
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 855b093e-7340-45c7-9f0c-96150415893e
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: e8LfEMfMYwjvXSJLPJBmFgsaZsM9Q71NmVhyn/iTPjvrsW5woUpcT+cA4fClCDVBfTynB8QPHz4h0pyw3JBKfiyIIt759X7y5fAbZjXyac0pRyKvkGZBFqtgXLV7+adi
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA2PR22MB5529
-
-Hi all,
-
-...
-> The definition of TMTMIR_DEFAULT is repeated two times in the code.
-> The first time is useless.
-> It makes more sense to leave this definition after the correspondent
-> REGS_TMTMIR register definition:
->=20
-> Signed-off-by: Flavio Suligoi <f.suligoi@asem.it>
-
-there are also other double macro definitions, such as:
-
-TMR_DISABLE
-TMR_ME
-TMR_ALPF
-TIER_DISABLE
-
-Would you like me to put some order?
-
-regards,
-Flavio
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+ Frank Wunderlich <frank-w@public-files.de>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ Fabio Estevam <festevam@denx.de>, Martin Botka
+ <martin.botka@somainline.org>, Mark Brown <broonie@kernel.org>,
+ Peng Fan <peng.fan@nxp.com>, Konrad Dybcio <konrad.dybcio@somainline.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux PM mailing list <linux-pm@vger.kernel.org>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [GIT PULL] Thermal material for v6.9-rc1
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
+Hi Rafael,
 
+The following changes since commit dcb497ec993265dfc5fffa60b486c1ad353e9ad5:
+
+   Merge branches 'thermal-core' and 'thermal-intel' (2024-03-07 
+21:05:12 +0100)
+
+are available in the Git repository at:
+
+ 
+ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
+tags/thermal-v6.9-rc1
+
+for you to fetch changes up to 1828c1c17bb2adf3a3f26abc69cb3fe971eac0e4:
+
+   thermal/drivers/rcar_gen3: Add support for R-Car V4M (2024-03-11 
+17:14:46 +0100)
+
+----------------------------------------------------------------
+- Fix memory leak in the error path at probe time in the Mediatek LVTS
+   driver (Christophe Jaillet)
+
+- Fix control buffer enablement regression on Meditek MT7896 (Frank
+   Wunderlich)
+
+- Drop spaces before TABs in different places: thermal-of, ST drivers
+   and Makefile (Geert Uytterhoeven)
+
+- Adjust DT binding for NXP as fsl,tmu-range min/maxItems can vary
+   among several SoC versions (Fabio Estevam)
+
+- Add support for H616 THS controller for the Sun8i platforms. Note
+   that this change relies on another change in the SoC specific code
+   which is included in this branch (Martin Botka)
+
+- Don't fail probe due to zone registration failure because there is
+   no trip points defined in the DT (Mark Brown)
+
+- Support variable TMU array size for new platforms (Peng Fan)
+
+- Adjust the DT binding for thermal-of and make the polling time not
+   required and assume it is zero when not found in the DT (Konrad
+   Dybcio)
+
+- Add r8a779h0 support in both the DT and the driver (Geert Uytterhoeven)
+
+----------------------------------------------------------------
+Andre Przywara (3):
+       soc: sunxi: sram: export register 0 for THS on H616
+       thermal/drivers/sun8i: Explain unknown H6 register value
+       thermal/drivers/sun8i: Add SRAM register access code
+
+Christophe JAILLET (1):
+       thermal/drivers/mediatek/lvts_thermal: Fix a memory leak in an 
+error handling path
+
+Duy Nguyen (1):
+       dt-bindings: thermal: rcar-gen3-thermal: Add r8a779h0 support
+
+Fabio Estevam (1):
+       dt-bindings: thermal: qoriq-thermal: Adjust fsl,tmu-range 
+min/maxItems
+
+Frank Wunderlich (1):
+       thermal/drivers/mediatek: Fix control buffer enablement on MT7896
+
+Geert Uytterhoeven (2):
+       thermal: Drop spaces before TABs
+       thermal/drivers/rcar_gen3: Add support for R-Car V4M
+
+Konrad Dybcio (2):
+       dt-bindings: thermal-zones: Don't require polling-delay(-passive)
+       thermal/of: Assume polling-delay(-passive) 0 when absent
+
+Maksim Kiselev (1):
+       thermal/drivers/sun8i: Extend H6 calibration to support 4 sensors
+
+Mark Brown (1):
+       thermal/drivers/sun8i: Don't fail probe due to zone registration 
+failure
+
+Martin Botka (2):
+       dt-bindings: thermal: sun8i: Add H616 THS controller
+       thermal/drivers/sun8i: Add support for H616 THS controller
+
+Peng Fan (1):
+       thermal/drivers/qoriq: Fix getting tmu range
+
+  .../bindings/thermal/allwinner,sun8i-a83t-ths.yaml |  34 +++--
+  .../devicetree/bindings/thermal/qoriq-thermal.yaml |   3 +-
+  .../bindings/thermal/rcar-gen3-thermal.yaml        |   2 +
+  .../devicetree/bindings/thermal/thermal-zones.yaml |   2 -
+  drivers/soc/sunxi/sunxi_sram.c                     |  22 ++++
+  drivers/thermal/Makefile                           |   2 +-
+  drivers/thermal/mediatek/auxadc_thermal.c          |   3 +
+  drivers/thermal/mediatek/lvts_thermal.c            |   4 +-
+  drivers/thermal/qoriq_thermal.c                    |  12 +-
+  drivers/thermal/rcar_gen3_thermal.c                |   4 +
+  drivers/thermal/st/st_thermal.h                    |  18 +--
+  drivers/thermal/st/st_thermal_memmap.c             |   2 +-
+  drivers/thermal/sun8i_thermal.c                    | 139 
++++++++++++++++++----
+  drivers/thermal/thermal_of.c                       |  14 ++-
+  14 files changed, 203 insertions(+), 58 deletions(-)
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
