@@ -1,182 +1,93 @@
-Return-Path: <linux-pm+bounces-4916-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4917-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09A7D87B95F
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 09:36:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C12A87B969
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 09:40:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5E4D2827D7
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 08:36:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C121DB20E54
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 08:39:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9B6B6BB30;
-	Thu, 14 Mar 2024 08:36:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="h76hchDn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BD0F6BB24;
+	Thu, 14 Mar 2024 08:39:53 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F37DD6A8DE
-	for <linux-pm@vger.kernel.org>; Thu, 14 Mar 2024 08:36:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DA7F433D4;
+	Thu, 14 Mar 2024 08:39:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710405376; cv=none; b=XGj4rFmxKjlLFOg6StX0xX0gcYJl9UiQ31UF/Itsmwx+CkKg2cOkFIZeh2YcIAOY7LY7Bz7ULvpSyz53glJQ8jS0e7s957t99iGoNRXhzgiovfN4T/blOp5k7/fXHMh7ycA84BBexONNjhEQppd4YjlA4dwHaw94bMUaJxp4lgc=
+	t=1710405593; cv=none; b=TX2A8ajYxbyf4oXP4RuL4BR0g4oFXSwQRpeDGy8CbJG293S9H92Pmmt88AncSe1WXKRyiut+77r9mYosNFdUG2gDe43J4VdvAO8q8t+fBA9L6hF29cbasb17vTEl45rx3xeI1o8G7DqUL3/PO6GOlXOYlCz4WjGKcZWqE7/wVV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710405376; c=relaxed/simple;
-	bh=fjbWlaQOikwKMnwZOz8/d8vqFrfC7KHDtintYgjI3K0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QEAOm/odypT26Fk/jQyWLJJPYadgilyTuIrUQZgypj8yw8nO/vH3umT3FdWA/9Mh1ohjE3BU9MinGcUeD6+Sv1UkiDOYqziNexXqeSStVx4SF0B7cNoBejtkcdPXOWMhOggs/7Oj5PglnT71vQVIo/hv33K3Rt+G5A8fMDAEnNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=h76hchDn; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-513c53ed3d8so1008647e87.3
-        for <linux-pm@vger.kernel.org>; Thu, 14 Mar 2024 01:36:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1710405373; x=1711010173; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hj/WaHxD/qNMmrcRTKT2ci5bqw6SYan4groqkVU9P0E=;
-        b=h76hchDnBKjjXkxRbAf1ymo1yYHVSGX/vE5MYuYOw/LniQcDQCsHBv5h9OvllF71Yq
-         NwsveUquZ3Lz2pJ+58CjYnVtCVsXJSYEJbgbk/DKKR2EEWdbTEteLP2QwXkfyL8CQLmv
-         sbXVxkEhyEZsst7mAocG1EI/ziw8bjZQhSF6UKUfZN+x8vOdq4PvD/+xYiOvtnVN5qFG
-         VKwdo2i3UmB/dKfeUgwdN95BuQEt00ML0u4WzwcF6wVvJq7MqEXJVG1IAtGMd3EqAwJG
-         MdQYvJVMTtNQKUu/PD3flCkCgfbLfJwdW9A/Ze+S/Cfx6IDENUPFLRLLd0edcUQET22G
-         6KLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710405373; x=1711010173;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hj/WaHxD/qNMmrcRTKT2ci5bqw6SYan4groqkVU9P0E=;
-        b=GSdV74zxWym7EdMpTCl28CJNcTlAeKsRK5mcYEO0l2qb/plUTtMhKXWSS1prDsgv3U
-         vDNuRk/bD9N33rrjZNju2EX2nRpPVUyzWH9MmKmGXGif7bywCFWWgVJs3NcaogmQ113T
-         961is4Z4bYf6Lnc1xiKQYhOLtFJHtaRdQabdeXqvfZw4DM/IoDC/u5t+ZtbxGVAA8upg
-         ItHADpRCz5hsc6j9WxDunqq/REb2MUQuuDfGpLulZcYDpGXL2XTVDgU9GIRZXUykJfd/
-         aZXx7BjCzS95M9Xa1R17zFFtzjs2ieZfd/yaaS0einimqSDxLxsvLOC/uWk5kyj0xf/S
-         q2KQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX8Ox34YsyCRHB4oqbX3sg98VvUoW6gcf1FC9fO7oUzEJsojfRYixC1U7/YENmCwuQtxfGet3XFBOM2c4Ag8hSQXZoIMTudbJ8=
-X-Gm-Message-State: AOJu0YzYO9SbGcMPri7CkxrnHd3JV5FmU4TtFB5PeZ5tYvmsoPJRxZp3
-	FZNoHf/ApFsaPyEahD5P10A+U2I3wjXqs0NnR0s/1Q1d8Hfz4Ftzryn1YrxLanE=
-X-Google-Smtp-Source: AGHT+IHg2phWpA6wr0Ec2JY5vMTzDKNCDe3uQE5/b2ulf3w4ZnDGpniqfyMBM8L5ZJNhTuBmWoDrLg==
-X-Received: by 2002:a19:ae17:0:b0:513:cd2e:ceb1 with SMTP id f23-20020a19ae17000000b00513cd2eceb1mr619712lfc.48.1710405373003;
-        Thu, 14 Mar 2024 01:36:13 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.222.97])
-        by smtp.gmail.com with ESMTPSA id n23-20020a05600c3b9700b00412d4c8b743sm1709942wms.30.2024.03.14.01.36.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Mar 2024 01:36:12 -0700 (PDT)
-Message-ID: <75fd6970-f3a0-4eec-957c-3d8f6a553e0f@linaro.org>
-Date: Thu, 14 Mar 2024 09:36:08 +0100
+	s=arc-20240116; t=1710405593; c=relaxed/simple;
+	bh=Pxk9h0+NJJSQGNZfBddW8VXxiAc/KVW3MLayKN9JI9A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uF4nqXJWX4BMXOlFTDmj3YBMBNmqPuVeD5bxLMEmsU6GlgfrjEyUTJ1uxQ/tHvc/hQUHJrecvI86SMy/14DCwhYGniiOS0EuYtjqo1yWNKPYtIQSqcya1gVB4HbuUoGjGPomzJte+9cAuZbIfXVJ/iWgMaqBC6ATUlCm3tUhq60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F403C433F1;
+	Thu, 14 Mar 2024 08:39:48 +0000 (UTC)
+Date: Thu, 14 Mar 2024 08:39:46 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	"Christoph Lameter (Ampere)" <cl@linux.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <vireshk@kernel.org>, Will Deacon <will@kernel.org>,
+	Jonathan.Cameron@huawei.com, Matteo.Carlini@arm.com,
+	Valentin.Schneider@arm.com, akpm@linux-foundation.org,
+	anshuman.khandual@arm.com, Eric Mackay <eric.mackay@oracle.com>,
+	dave.kleikamp@oracle.com, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	robin.murphy@arm.com, vanshikonda@os.amperecomputing.com,
+	yang@os.amperecomputing.com, Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH v3] ARM64: Dynamically allocate cpumasks and increase
+ supported CPUs to 512
+Message-ID: <ZfK30r8M6zx2aWU6@arm.com>
+References: <37099a57-b655-3b3a-56d0-5f7fbd49d7db@gentwo.org>
+ <CGME20240308140130eucas1p1259c805a0b6491ce2f69c6fca0264b1f@eucas1p1.samsung.com>
+ <c1f2902d-cefc-4122-9b86-d1d32911f590@samsung.com>
+ <Ze9TsQ-qVCZMazfI@arm.com>
+ <9352f410-9dad-ac89-181a-b3cfc86176b8@linux.com>
+ <bf1757ca-6d41-87e7-53dd-56146eef5693@linux.com>
+ <ZfCXJRJSMK4tt_Cm@arm.com>
+ <ZfG5oyrgGOkpHYD6@bogus>
+ <432c1980-b00f-4b07-9e24-0bec52ccb5d6@samsung.com>
+ <ZfHevcKpcb6i1fn5@shell.armlinux.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/3] dt-bindings: iio: adc: Add support for QCOM PMIC5
- Gen3 ADC
-Content-Language: en-US
-To: Jishnu Prakash <quic_jprakash@quicinc.com>, jic23@kernel.org,
- robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- andersson@kernel.org, konrad.dybcio@linaro.org, lee@kernel.org,
- andriy.shevchenko@linux.intel.com, daniel.lezcano@linaro.org,
- dmitry.baryshkov@linaro.org
-Cc: lars@metafoo.de, luca@z3ntu.xyz, marijn.suijten@somainline.org,
- agross@kernel.org, sboyd@kernel.org, rafael@kernel.org, rui.zhang@intel.com,
- lukasz.luba@arm.com, linus.walleij@linaro.org, quic_subbaram@quicinc.com,
- quic_collinsd@quicinc.com, quic_amelende@quicinc.com,
- quic_kamalw@quicinc.com, kernel@quicinc.com, linux-kernel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-arm-msm-owner@vger.kernel.org,
- linux-iio@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, cros-qcom-dts-watchers@chromium.org
-References: <20231231171237.3322376-1-quic_jprakash@quicinc.com>
- <20231231171237.3322376-3-quic_jprakash@quicinc.com>
- <3f812ffa-ec33-448e-b72a-ce698618a8c1@linaro.org>
- <13f2b558-a50d-44d3-85de-38e230212732@quicinc.com>
- <f52b2d5e-b2b4-48ae-a6a6-fc00c89662d2@linaro.org>
- <0b9e807d-e0ca-411c-9a2b-3d804bdf168c@quicinc.com>
- <d3dc9a41-4738-4634-9a98-fefcf418f552@linaro.org>
- <1537d42f-fe61-48c2-9ee2-1066db71a19e@quicinc.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <1537d42f-fe61-48c2-9ee2-1066db71a19e@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZfHevcKpcb6i1fn5@shell.armlinux.org.uk>
 
-On 14/03/2024 09:28, Jishnu Prakash wrote:
+On Wed, Mar 13, 2024 at 05:13:33PM +0000, Russell King wrote:
+> So, I wonder whether what you're seeing is a latent bug which is
+> being tickled by the presence of the CPU masks being off-stack
+> changing the kernel timing.
 > 
-> followed by updating maxItems back to 1 for all the earlier existing 
-> compatibles, using if:then: conditions, like the below example?
-> 
->    - if:
->        properties:
->          compatible:
->            contains:
->              const: qcom,spmi-adc5
-> 
->      then:
->        properties:
->          reg:
->            maxItems: 1
->          interrupts:
->            maxItems: 1
-> 
-> 
-> If this is acceptable, I'll add ADC5 Gen3 bindings in the same file with 
-> changes like the above, else I'll add them in a new file after first 
-> creating a common schema file as you suggested.
+> I would suggest the printk debug approach may help here to see when
+> the OPPs are begun to be parsed, when they're created etc and their
+> timing relationship to being used. Given the suspicion, it's possible
+> that the mere addition of printk() may "fix" the problem, which again
+> would be another semi-useful data point.
 
-Please refer to existing files how it is done:
-https://elixir.bootlin.com/linux/v6.8/source/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml#L132
+It might be an init order problem. Passing "initcall_debug" on the
+cmdline might help a bit.
 
+It would also be useful in dev_pm_opp_set_config(), in the WARN_ON
+block, to print opp_table->opp_list.next to get an idea whether it looks
+like a valid pointer or memory corruption.
 
-Best regards,
-Krzysztof
-
+-- 
+Catalin
 
