@@ -1,117 +1,108 @@
-Return-Path: <linux-pm+bounces-4936-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4937-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40A3A87BE3C
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 15:01:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CF5587BE55
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 15:04:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D4E97B20E3A
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 14:01:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BBCB1285046
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 14:04:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A214C6F070;
-	Thu, 14 Mar 2024 14:01:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9BF96F523;
+	Thu, 14 Mar 2024 14:04:44 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3115C6EB73;
-	Thu, 14 Mar 2024 14:01:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 651066EB74;
+	Thu, 14 Mar 2024 14:04:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710424911; cv=none; b=gYkYRj8slvAQepHyOg3LPcztDpa0+CjnznOf8f+S1xgsM++ocs9YNqNIOlvxlBZZoWJwlmxb+rxgPw0xB4rrknKup3JACgyrqswhhObABSyp8KMN61eRDuWiU+k6yGpMU4pbq08E4gtfm2hj7RXsW7EC6PWZtbEc5jVdg2SeL+w=
+	t=1710425084; cv=none; b=T96qrrYPm2eD+UChNDnCJikMz+o4iSvcpaf2ALm74xksg8MOvE9ejGwG+ULjbrjwsjvIy415rLcgmfmb6+o0ebH5iOuMUdotDgvOXge15IQMEiMAMEUYHsLo90qoU6kfhqgeastdClohk95kFz+7yA9S+S6Nx1lJPPKCUvjiNoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710424911; c=relaxed/simple;
-	bh=26IvTvQg8Q1DCffM7XYqhRz02vATkODwSLqGA4wHP1I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Xqxp6agzEg0DmylYT9CrAh02wL5rbFZ94TtdFUxh+BCt3p4nparkaEBfETQ3OBSwAP/pE0ZoOC/8CMEabnwE1pjnA2saIxHbRorH7wfgw08ZWnh7tCEfv6FcjxdL43hmCktRlo5A+Fj8iD+BpyYFsV8WY941c/jENCzzJlhZJZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5a46ad0d981so39491eaf.1;
-        Thu, 14 Mar 2024 07:01:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710424909; x=1711029709;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nlUOEVdCSeBaOUnlZslF3hthRjVOvINmoadUntekmTA=;
-        b=uDmmcDMxOa8z8gsB7teoQvAwNl3CQVl9SJsZK5ZV+snqPDoSrPV5KMk3z9DWzh2gJa
-         r4YxdH3CLldyov2W0QutB7Jhjm6yeEgmgnfmaHwwpAXpfF6Sy1/MspdZO01dDAyifsQL
-         2bX2VjlElJL2lkhQPBRBjfLP1SA6KM+RxdnJBPlrusfAFfWy0dTv4X1/rH/iYAawptlQ
-         aNwDNruKCIjh2On+a/G/vCd6ClN6Hg2c2c1Qzy2aJDqOqcC0DuzduUjD1WDkoZfLRTq/
-         CRH8nrON+mYDuR7S0uIZPtdcvYRaI+l4SjncXDCA1Z3QKJqaL2pqaFbBwT/rHVDCVgUa
-         Gg1A==
-X-Forwarded-Encrypted: i=1; AJvYcCW1ScvB5m8yIoB6hUdE/4QtoFEeDpUbMCbcknGPx6nrMKNITECPG9CpqcUQscQ+7NdnXiPpl5lqyLxMsA1QEkNb+ekxHfPiHJUQ/WqwgUyDLZjFtg54ZPuxoAZzEgfkpG7HcUmZH2U=
-X-Gm-Message-State: AOJu0YzqBhcLfrz70LtNBYC4LNGEMm7GfjzDOymbe5CwAzeMOlqfWew+
-	9l0gW3fxQt16IE1qP33q6P+qS7WZ6wbQn7Zbs8/0tBv3PfS9lJWpglemwSprHwSBkPFNnSFaqR1
-	Bs1Y+TrbKygYTSpWVMzeew5N9dv8=
-X-Google-Smtp-Source: AGHT+IHgkJcz+tkEM2LlBM12CUpHuGpPaw+WbJZ9d5/mHiTfNKztnU4wt3pT0Ity3gbnnDlYPANT7N4C9ObuOS2h6RQ=
-X-Received: by 2002:a05:6870:9209:b0:222:4480:6577 with SMTP id
- e9-20020a056870920900b0022244806577mr1953757oaf.0.1710424909035; Thu, 14 Mar
- 2024 07:01:49 -0700 (PDT)
+	s=arc-20240116; t=1710425084; c=relaxed/simple;
+	bh=f53euNbOld+RaF4OHr1drOxSEZS1nlFkdLHaIZnNffM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=e9y6M7Nxfd612HW6Axl1ty9KoppF2JsmKL1k8j0XIiOZVAq09GTQ5esUF5onjXGNmIvZSfPbWQcNK3Fus5q06oR/GE+Y4vB7MvJNfpyMcH2qHuwbO1ZAuV8sWGtYOvZdWw0F9GbB92xxtcenzCr7veTfffM/MIf/+KwCvsJXg3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B06E21007;
+	Thu, 14 Mar 2024 07:05:16 -0700 (PDT)
+Received: from e129166.arm.com (unknown [10.57.13.158])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D51443F762;
+	Thu, 14 Mar 2024 07:04:37 -0700 (PDT)
+From: Lukasz Luba <lukasz.luba@arm.com>
+To: linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Cc: lukasz.luba@arm.com,
+	dietmar.eggemann@arm.com,
+	linux-arm-kernel@lists.infradead.org,
+	sboyd@kernel.org,
+	nm@ti.com,
+	linux-samsung-soc@vger.kernel.org,
+	daniel.lezcano@linaro.org,
+	rafael@kernel.org,
+	viresh.kumar@linaro.org,
+	krzysztof.kozlowski@linaro.org,
+	alim.akhtar@samsung.com,
+	m.szyprowski@samsung.com,
+	mhiramat@kernel.org
+Subject: [PATCH 0/4] Update Energy Model after chip binning adjusted voltages
+Date: Thu, 14 Mar 2024 14:04:17 +0000
+Message-Id: <20240314140421.3563571-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240314075429.1164810-1-d-gole@ti.com>
-In-Reply-To: <20240314075429.1164810-1-d-gole@ti.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 14 Mar 2024 15:01:36 +0100
-Message-ID: <CAJZ5v0iUt+tudMV-rJ80GR6iNQVv06+054h0UyNgpEOUF6QLRQ@mail.gmail.com>
-Subject: Re: [PATCH] PM: wakeup: Add a missing return case in init_wakeup
-To: Dhruva Gole <d-gole@ti.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Tony Lindgren <tony@atomide.com>, theo.lebrun@bootlin.com, 
-	Sibi Sankar <quic_sibis@quicinc.com>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Ulf Hansson <ulf.hansson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Mar 14, 2024 at 8:55=E2=80=AFAM Dhruva Gole <d-gole@ti.com> wrote:
->
-> The device_wakeup_disable call can return an error if no dev exists
-> however this was being ignored. Catch this return value and propagate it
-> onward in device_init_wakeup.
+Hi all,
 
-Why does this matter to the callers of device_init_wakeup()?
+This is a follow-up patch aiming to add EM modification due to chip binning.
+The first RFC and the discussion can be found here [1].
 
->
-> Signed-off-by: Dhruva Gole <d-gole@ti.com>
-> ---
->  include/linux/pm_wakeup.h | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
-> index 6eb9adaef52b..64c7db35e693 100644
-> --- a/include/linux/pm_wakeup.h
-> +++ b/include/linux/pm_wakeup.h
-> @@ -232,14 +232,15 @@ static inline void pm_wakeup_hard_event(struct devi=
-ce *dev)
->   */
->  static inline int device_init_wakeup(struct device *dev, bool enable)
->  {
-> +       int ret;
->         if (enable) {
->                 device_set_wakeup_capable(dev, true);
-> -               return device_wakeup_enable(dev);
-> +               ret =3D device_wakeup_enable(dev);
->         } else {
-> -               device_wakeup_disable(dev);
-> +               ret =3D device_wakeup_disable(dev);
->                 device_set_wakeup_capable(dev, false);
-> -               return 0;
->         }
-> +       return ret;
->  }
->
->  #endif /* _LINUX_PM_WAKEUP_H */
->
-> base-commit: 9bb9b28d0568991b1d63e66fe75afa5f97ad1156
-> --
-> 2.34.1
->
+It uses Exynos chip driver code as a 1st user. The EM framework has been
+extended to handle this use case easily, when the voltage has been changed
+after setup. On my Odroid-xu4 in some OPPs I can observe ~20% power difference.
+According to that data in driver tables it could be up to ~29%.
+
+This chip binning is applicable to a lot of SoCs, so the EM framework should
+make it easy to update. It uses the existing OPP and DT information to
+re-calculate the new power values.
+
+
+Changes:
+v2:
+- exported the OPP calculation function from the OPP/OF so it can be
+  used from EM fwk (Viresh)
+- refactored EM updating function to re-use common code
+- added new EM function which can be used by chip device drivers which
+  modify the voltage in OPPs
+v1 is at [1]
+
+Regards,
+Lukasz Luba
+
+[1] https://lore.kernel.org/lkml/20231220110339.1065505-1-lukasz.luba@arm.com/
+
+Lukasz Luba (4):
+  OPP: OF: Export dev_opp_pm_calc_power() for usage from EM
+  PM: EM: Change the em_adjust_new_capacity() to re-use code
+  PM: EM: Add em_dev_update_chip_binning()
+  soc: samsung: exynos-asv: Update Energy Model after adjusting voltage
+
+ drivers/opp/of.c                 |  17 +++--
+ drivers/soc/samsung/exynos-asv.c |  11 +++-
+ include/linux/energy_model.h     |   5 ++
+ include/linux/pm_opp.h           |   8 +++
+ kernel/power/energy_model.c      | 109 +++++++++++++++++++++++++------
+ 5 files changed, 125 insertions(+), 25 deletions(-)
+
+-- 
+2.25.1
+
 
