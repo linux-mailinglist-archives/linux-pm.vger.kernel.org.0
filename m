@@ -1,160 +1,137 @@
-Return-Path: <linux-pm+bounces-4944-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4945-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF10087BF88
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 16:05:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9101E87BFBB
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 16:19:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A3E7285E94
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 15:05:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 465311F2292B
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 15:19:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDE8371738;
-	Thu, 14 Mar 2024 15:05:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C3127175F;
+	Thu, 14 Mar 2024 15:18:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m54Z+OUk"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="cKqm6Dlt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B8DA6FE08;
-	Thu, 14 Mar 2024 15:05:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9A7F71756;
+	Thu, 14 Mar 2024 15:18:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710428740; cv=none; b=K6w+cYit3HXgPfxTLP0JAtTo1qlmfQtrKvjek2B80yg7+fKtq7ftPYPvLONZFWIkh6T16Fc5Di9KBwBoq80Ml6ie1uhrNOtK5UAeezPzL14K791L7HxymwFyyIYwxPt26ZuQm3hslxe00J7MKtZcuOmk6wN7cZIiDfEu+6M75Kg=
+	t=1710429539; cv=none; b=iNZyAdodlEY4q0dG3tOZOOCfXTOi/Oh3jqnvhfgr1LtWMk5UGztqB7g4XCCuiT5MQmdPzP+gkwUmq0RtskdKCXIw5aOljBFofJ/97lUsMWIARdHJHH6sG032x4NqFng2TMRkzq1bdUwJYnEKfDzDu5Hpiez/yFnF0vF23rwyUYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710428740; c=relaxed/simple;
-	bh=NppUhHd3UgH8/N6Ittb4n65yRyxO8UlaIeClkqFgfuI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Bw8szJEp/XmvTpGgFE+mhC/T8AVqhsdiDHG1uBst7e2hSebFUzjBFrjA4ZlQb2g4ofeamrc9BZLCZyj5lREtJfjUjHRxT4HT+gwopu42OFMiVPjGKE4Lh5DvrqREGjcNOEuzzuA3GNZK8MIqIibgGSv4DmT9WomVZI8YOi+BhoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m54Z+OUk; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710428739; x=1741964739;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=NppUhHd3UgH8/N6Ittb4n65yRyxO8UlaIeClkqFgfuI=;
-  b=m54Z+OUkXcZs/Ss4Q2JktgT3mjlVpAUVZ5WPdU8V6iJVdAi3i51YCeIG
-   AaTKDC3qriSGSz66UdipmPf1Ncjx8gVn0kit+gimez7z6H2CTDfHHqptf
-   RpZ9eJEwuyG7IM1VvY4/oZ4UwnjxUgAkHuYir74JaY9BNIp/OOv2GZAXs
-   OI+7OJO61qVQdHdrJMDGTx0DlQplqrojG669Pb1Q2oXf9eZD9FPJdBrDT
-   ZVroVDLN7TzwymUkONcaplhlD3DoemMeLkfxrhnFUyvUudg/R2sAWY2XA
-   Kfxhgz24d2OeC1vLlUnZDz6PySfNK7x9ZuPQUuqNMeoGTSBnQagWdX61p
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11012"; a="9065364"
-X-IronPort-AV: E=Sophos;i="6.07,125,1708416000"; 
-   d="scan'208";a="9065364"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2024 08:05:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,125,1708416000"; 
-   d="scan'208";a="12249529"
-Received: from laallen-mobl.amr.corp.intel.com (HELO [10.209.21.198]) ([10.209.21.198])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2024 08:05:34 -0700
-Message-ID: <70261e2a-b87e-462e-964e-95a51ecde978@intel.com>
-Date: Thu, 14 Mar 2024 08:05:35 -0700
+	s=arc-20240116; t=1710429539; c=relaxed/simple;
+	bh=2gPuGuSwHEgxxlhC0HKPR+AsCZzffsRJG9HPOwmtpwk=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RyA8Pdh6ejw7G9+5YUs85EhA+Z+07QtNADU3QzgU2o8itGJkzIg3+oVOVVILmJvF19v+wjLYAJbWhSMsHZYVQpDdDpoJtDIGw0T5kCYTMIvsPAgl8LCMaYyWMmatKHcidzt3EZgAptuPFAhVdG5lSN7Tl7ouB26WohdooEzQQqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=cKqm6Dlt; arc=none smtp.client-ip=198.47.19.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 42EFIloZ080670;
+	Thu, 14 Mar 2024 10:18:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1710429527;
+	bh=dZtjpTkxFeJ4o3KgsKAHW2BQ1L5sEaAioYu3UbO/7gk=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=cKqm6Dlt8pbTZajws9LTUK3j7QF5+YSZwJBTvnkPE1wqtB7zTAERaGgmOSZEQxFxV
+	 38x6GiCN0C+XqqR15qn2vVZ5YLWuWmcHTU1hbvNuDBRKlr3GdL/WwnRLEiLJU9uPvv
+	 363G2QWvXwexikc6vsILlyzfYVjp4aPKYLv7EpTw=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 42EFIlIC053234
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 14 Mar 2024 10:18:47 -0500
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 14
+ Mar 2024 10:18:47 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 14 Mar 2024 10:18:47 -0500
+Received: from localhost (dhruva.dhcp.ti.com [172.24.227.68])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 42EFIk4a044918;
+	Thu, 14 Mar 2024 10:18:47 -0500
+Date: Thu, 14 Mar 2024 20:48:46 +0530
+From: Dhruva Gole <d-gole@ti.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+CC: Tony Lindgren <tony@atomide.com>, <theo.lebrun@bootlin.com>,
+        Sibi Sankar
+	<quic_sibis@quicinc.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Ulf Hansson
+	<ulf.hansson@linaro.org>
+Subject: Re: [PATCH] PM: wakeup: Add a missing return case in init_wakeup
+Message-ID: <20240314151846.u3r3eaklrl3hf7pi@dhruva>
+References: <20240314075429.1164810-1-d-gole@ti.com>
+ <CAJZ5v0iUt+tudMV-rJ80GR6iNQVv06+054h0UyNgpEOUF6QLRQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] x86/pm: Fix false positive kmemleak report in
- msr_build_context().
-Content-Language: en-US
-To: Anton Altaparmakov <anton@tuxera.com>,
- "Rafael J . Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
- Chen Yu <yu.c.chen@intel.com>
-Cc: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
- Catalin Marinas <catalin.marinas@arm.com>, linux-mm@kvack.org,
- Matthieu Baerts <matthieu.baerts@tessares.net>,
- Mat Martineau <mathew.j.martineau@linux.intel.com>,
- "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
- Ingo Molnar <mingo@kernel.org>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20240314142656.17699-1-anton@tuxera.com>
-From: Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
- oAiUXvGAOxPDsB/P6UEOISPpLl5IuYsSwAeZGkdQ5g6m1xq7AlDJQZddhr/1DC/nMVa/2BoY
- 2UnKuZuSBu7lgOE193+7Uks3416N2hTkyKUSNkduyoZ9F5twiBhxPJwPtn/wnch6n5RsoXsb
- ygOEDxLEsSk/7eyFycjE+btUtAWZtx+HseyaGfqkZK0Z9bT1lsaHecmB203xShwCPT49Blxz
- VOab8668QpaEOdLGhtvrVYVK7x4skyT3nGWcgDCl5/Vp3TWA4K+IofwvXzX2ON/Mj7aQwf5W
- iC+3nWC7q0uxKwwsddJ0Nu+dpA/UORQWa1NiAftEoSpk5+nUUi0WE+5DRm0H+TXKBWMGNCFn
- c6+EKg5zQaa8KqymHcOrSXNPmzJuXvDQ8uj2J8XuzCZfK4uy1+YdIr0yyEMI7mdh4KX50LO1
- pmowEqDh7dLShTOif/7UtQYrzYq9cPnjU2ZW4qd5Qz2joSGTG9eCXLz5PRe5SqHxv6ljk8mb
- ApNuY7bOXO/A7T2j5RwXIlcmssqIjBcxsRRoIbpCwWWGjkYjzYCjgsNFL6rt4OL11OUF37wL
- QcTl7fbCGv53KfKPdYD5hcbguLKi/aCccJK18ZwNjFhqr4MliQARAQABzUVEYXZpZCBDaHJp
- c3RvcGhlciBIYW5zZW4gKEludGVsIFdvcmsgQWRkcmVzcykgPGRhdmUuaGFuc2VuQGludGVs
- LmNvbT7CwXgEEwECACIFAlQ+9J0CGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJEGg1
- lTBwyZKwLZUP/0dnbhDc229u2u6WtK1s1cSd9WsflGXGagkR6liJ4um3XCfYWDHvIdkHYC1t
- MNcVHFBwmQkawxsYvgO8kXT3SaFZe4ISfB4K4CL2qp4JO+nJdlFUbZI7cz/Td9z8nHjMcWYF
- IQuTsWOLs/LBMTs+ANumibtw6UkiGVD3dfHJAOPNApjVr+M0P/lVmTeP8w0uVcd2syiaU5jB
- aht9CYATn+ytFGWZnBEEQFnqcibIaOrmoBLu2b3fKJEd8Jp7NHDSIdrvrMjYynmc6sZKUqH2
- I1qOevaa8jUg7wlLJAWGfIqnu85kkqrVOkbNbk4TPub7VOqA6qG5GCNEIv6ZY7HLYd/vAkVY
- E8Plzq/NwLAuOWxvGrOl7OPuwVeR4hBDfcrNb990MFPpjGgACzAZyjdmYoMu8j3/MAEW4P0z
- F5+EYJAOZ+z212y1pchNNauehORXgjrNKsZwxwKpPY9qb84E3O9KYpwfATsqOoQ6tTgr+1BR
- CCwP712H+E9U5HJ0iibN/CDZFVPL1bRerHziuwuQuvE0qWg0+0SChFe9oq0KAwEkVs6ZDMB2
- P16MieEEQ6StQRlvy2YBv80L1TMl3T90Bo1UUn6ARXEpcbFE0/aORH/jEXcRteb+vuik5UGY
- 5TsyLYdPur3TXm7XDBdmmyQVJjnJKYK9AQxj95KlXLVO38lczsFNBFRjzmoBEACyAxbvUEhd
- GDGNg0JhDdezyTdN8C9BFsdxyTLnSH31NRiyp1QtuxvcqGZjb2trDVuCbIzRrgMZLVgo3upr
- MIOx1CXEgmn23Zhh0EpdVHM8IKx9Z7V0r+rrpRWFE8/wQZngKYVi49PGoZj50ZEifEJ5qn/H
- Nsp2+Y+bTUjDdgWMATg9DiFMyv8fvoqgNsNyrrZTnSgoLzdxr89FGHZCoSoAK8gfgFHuO54B
- lI8QOfPDG9WDPJ66HCodjTlBEr/Cwq6GruxS5i2Y33YVqxvFvDa1tUtl+iJ2SWKS9kCai2DR
- 3BwVONJEYSDQaven/EHMlY1q8Vln3lGPsS11vSUK3QcNJjmrgYxH5KsVsf6PNRj9mp8Z1kIG
- qjRx08+nnyStWC0gZH6NrYyS9rpqH3j+hA2WcI7De51L4Rv9pFwzp161mvtc6eC/GxaiUGuH
- BNAVP0PY0fqvIC68p3rLIAW3f97uv4ce2RSQ7LbsPsimOeCo/5vgS6YQsj83E+AipPr09Caj
- 0hloj+hFoqiticNpmsxdWKoOsV0PftcQvBCCYuhKbZV9s5hjt9qn8CE86A5g5KqDf83Fxqm/
- vXKgHNFHE5zgXGZnrmaf6resQzbvJHO0Fb0CcIohzrpPaL3YepcLDoCCgElGMGQjdCcSQ+Ci
- FCRl0Bvyj1YZUql+ZkptgGjikQARAQABwsFfBBgBAgAJBQJUY85qAhsMAAoJEGg1lTBwyZKw
- l4IQAIKHs/9po4spZDFyfDjunimEhVHqlUt7ggR1Hsl/tkvTSze8pI1P6dGp2XW6AnH1iayn
- yRcoyT0ZJ+Zmm4xAH1zqKjWplzqdb/dO28qk0bPso8+1oPO8oDhLm1+tY+cOvufXkBTm+whm
- +AyNTjaCRt6aSMnA/QHVGSJ8grrTJCoACVNhnXg/R0g90g8iV8Q+IBZyDkG0tBThaDdw1B2l
- asInUTeb9EiVfL/Zjdg5VWiF9LL7iS+9hTeVdR09vThQ/DhVbCNxVk+DtyBHsjOKifrVsYep
- WpRGBIAu3bK8eXtyvrw1igWTNs2wazJ71+0z2jMzbclKAyRHKU9JdN6Hkkgr2nPb561yjcB8
- sIq1pFXKyO+nKy6SZYxOvHxCcjk2fkw6UmPU6/j/nQlj2lfOAgNVKuDLothIxzi8pndB8Jju
- KktE5HJqUUMXePkAYIxEQ0mMc8Po7tuXdejgPMwgP7x65xtfEqI0RuzbUioFltsp1jUaRwQZ
- MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
- hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
- vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
-In-Reply-To: <20240314142656.17699-1-anton@tuxera.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0iUt+tudMV-rJ80GR6iNQVv06+054h0UyNgpEOUF6QLRQ@mail.gmail.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On 3/14/24 07:26, Anton Altaparmakov wrote:
->  /* image of the saved processor state */
->  struct saved_context {
-> -	/*
-> -	 * On x86_32, all segment registers except gs are saved at kernel
-> -	 * entry in pt_regs.
-> -	 */
-> -	u16 gs;
->  	unsigned long cr0, cr2, cr3, cr4;
->  	u64 misc_enable;
->  	struct saved_msrs saved_msrs;
-> @@ -27,6 +22,11 @@ struct saved_context {
->  	unsigned long tr;
->  	unsigned long safety;
->  	unsigned long return_address;
-> +	/*
-> +	 * On x86_32, all segment registers except gs are saved at kernel
-> +	 * entry in pt_regs.
-> +	 */
-> +	u16 gs;
->  	bool misc_enable_saved;
->  } __attribute__((packed));
+Hi,
 
-Isn't this just kinda poking at the symptoms?  This seems to be
-basically the exact same bug as b0b592cf08, just with a different source
-of unaligned structure members.
+On Mar 14, 2024 at 15:01:36 +0100, Rafael J. Wysocki wrote:
+> On Thu, Mar 14, 2024 at 8:55 AM Dhruva Gole <d-gole@ti.com> wrote:
+> >
+> > The device_wakeup_disable call can return an error if no dev exists
+> > however this was being ignored. Catch this return value and propagate it
+> > onward in device_init_wakeup.
+> 
+> Why does this matter to the callers of device_init_wakeup()?
 
-There's nothing to keep folks from reintroducing these kinds of issues
-and evidently no way to detect when they happen without lengthy reproducers.
+If atall !dev->power.can_wakeup then the caller should know something is
+funny right?
+
+> 
+> >
+> > Signed-off-by: Dhruva Gole <d-gole@ti.com>
+> > ---
+> >  include/linux/pm_wakeup.h | 7 ++++---
+> >  1 file changed, 4 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
+> > index 6eb9adaef52b..64c7db35e693 100644
+> > --- a/include/linux/pm_wakeup.h
+> > +++ b/include/linux/pm_wakeup.h
+> > @@ -232,14 +232,15 @@ static inline void pm_wakeup_hard_event(struct device *dev)
+> >   */
+> >  static inline int device_init_wakeup(struct device *dev, bool enable)
+> >  {
+> > +       int ret;
+> >         if (enable) {
+> >                 device_set_wakeup_capable(dev, true);
+> > -               return device_wakeup_enable(dev);
+> > +               ret = device_wakeup_enable(dev);
+> >         } else {
+> > -               device_wakeup_disable(dev);
+> > +               ret = device_wakeup_disable(dev);
+> >                 device_set_wakeup_capable(dev, false);
+> > -               return 0;
+> >         }
+> > +       return ret;
+> >  }
+> >
+> >  #endif /* _LINUX_PM_WAKEUP_H */
+> >
+> > base-commit: 9bb9b28d0568991b1d63e66fe75afa5f97ad1156
+> > --
+> > 2.34.1
+> >
+
+-- 
+Best regards,
+Dhruva Gole <d-gole@ti.com>
 
