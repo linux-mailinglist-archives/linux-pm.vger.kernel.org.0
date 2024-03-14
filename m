@@ -1,197 +1,162 @@
-Return-Path: <linux-pm+bounces-4932-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4933-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA3EE87BCC3
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 13:28:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 440CD87BD14
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 13:56:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 68F6B1F22956
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 12:28:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E2B1E28456A
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 12:56:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EB3D6F52A;
-	Thu, 14 Mar 2024 12:28:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F22A5A0FD;
+	Thu, 14 Mar 2024 12:56:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="MEkMQYs0"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="R/p4zuCW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C8626F507
-	for <linux-pm@vger.kernel.org>; Thu, 14 Mar 2024 12:28:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78DB958ACF
+	for <linux-pm@vger.kernel.org>; Thu, 14 Mar 2024 12:56:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710419329; cv=none; b=jVQCOqFE31LozjtjffkW8a83E6P9i9sPVhQLHjR1V40PfNglpgFaJERuYyi5esH/69hns52lUDa4gRv5DHulf5cUmep4sI84PtwgMEyZUfCMmlX8XJxvwjOeYswgAxl8Bgqsfi1gz5rsFisnVTp+aEDOE3XQMfnvcNuUsXPvAGE=
+	t=1710420995; cv=none; b=X9nIlPyhRR1Uf6HuAZFF53wBB6BY+aDJpGLCzo1mnZepGMtTm4hujORa5c+Yn9gV6XgY/zlAn6FuyumzyvS8DfzYhCMXa5+tSbyAU1IpneFRKRCXaHlzWzjwV+YyFa1w6ab9qsjTNh2R3wGHtkbS4syIHXTXKLANqguLHe53jTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710419329; c=relaxed/simple;
-	bh=QdQfhYEro/NY6bBHiGnSatWRYO56g6kjIIj/lZtSvEw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=Fgohc64/CzxRfqHdDZRwgeMQPF0DTTa143B3jFLhLxHvQtUsnNnAbVRPCp4VMFpsQ1Mm6Ijo4nT/QbpEOEG7cL9iLmd2GzS7smQziQ7BdcbIQ8TcEqIQFHAdHtvZiit97RFLBxaFu7utSuxLnNtl/BOIdxXdkZKcnSKyr0i6PuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=MEkMQYs0; arc=none smtp.client-ip=210.118.77.12
+	s=arc-20240116; t=1710420995; c=relaxed/simple;
+	bh=9Y/+hw0hgw9ADsFQLz0LPL3cLz0NNDauGYrral+Dtro=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 References; b=NpNlyqjVpvUkXbwTIq4cjOcmoi+TcSSPFYhPk3KcTI6RB2Ur1ycVREB2vYcJDmYHXCNe0DBESp2rVGAWKRAbD5W5KeCELng0lPOdrKk1WrH/MjxkQ94N8MZhCIZh8gesWXoPO86hgBut85jF+8mFa/NIGX8OciKtvz27glCUSy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=R/p4zuCW; arc=none smtp.client-ip=210.118.77.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20240314122844euoutp0261220802b4324deca7c22bbf7ace99cc~8oVBBK2Oq0256202562euoutp02W
-	for <linux-pm@vger.kernel.org>; Thu, 14 Mar 2024 12:28:44 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20240314122844euoutp0261220802b4324deca7c22bbf7ace99cc~8oVBBK2Oq0256202562euoutp02W
+	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20240314125629euoutp014cfa15de0e55627223a19c36be7f87b1~8otPQ7ceC0747607476euoutp01I
+	for <linux-pm@vger.kernel.org>; Thu, 14 Mar 2024 12:56:29 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20240314125629euoutp014cfa15de0e55627223a19c36be7f87b1~8otPQ7ceC0747607476euoutp01I
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1710419324;
-	bh=1kh7I+S2C9P5Kz44btTniuxhDXte7vdYgTUP0g8alRo=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=MEkMQYs0BTGf/LyJr9ZWVWx+0XeRk8vUBmaTXr4XIc27UMyIPlHTGnT3gPWCtBMio
-	 UmEgyFEuq4vhQERxUBljnlC9VxdPpaFOzmAB8epoXYkuj8UsPhOaLlFlnBCyU+pomz
-	 HYt9cZhA3VdypUYvy/XENaZS5eF7nuBkqKiuwLsM=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-	20240314122844eucas1p1165738a2ef81c5182ae5085ca199fc3a~8oVAidxed0475704757eucas1p1b;
-	Thu, 14 Mar 2024 12:28:44 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-	eusmges1new.samsung.com (EUCPMTA) with SMTP id 2A.71.09539.B7DE2F56; Thu, 14
-	Mar 2024 12:28:43 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20240314122843eucas1p231a57588b81f9eb3d53129c0f68bc43c~8oVAHGC6o2694326943eucas1p2f;
-	Thu, 14 Mar 2024 12:28:43 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20240314122843eusmtrp2b6faf98297797ce5e8847bb9b0e4eb1e~8oVAF7IDi2786227862eusmtrp2p;
-	Thu, 14 Mar 2024 12:28:43 +0000 (GMT)
-X-AuditID: cbfec7f2-52bff70000002543-0c-65f2ed7bcb7f
+	s=mail20170921; t=1710420989;
+	bh=AtiIPD1nd1BTHIsx1dMEytn/tsBihsCy+dwOY7jQpBY=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=R/p4zuCWtTO6I2S2SBVnoJM4D/03rroyRNjc6VN1uUfQYoV9rcRtFkqbqNIVLKN2E
+	 yST+G/UfoOeOU8ynRiUXYXFs4KrDKfJUi1GBYlX3rrYQr7n/hhpXrgCaKU79D6rnQf
+	 s2iu5gvtOGEOh+p/VydajeBDAGzE7WKyeSuAobgI=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+	20240314125628eucas1p2e3ad48e936d6c53ce89ca5f2e02d474c~8otOyC5e32014220142eucas1p2m;
+	Thu, 14 Mar 2024 12:56:28 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+	eusmges2new.samsung.com (EUCPMTA) with SMTP id 46.99.09814.CF3F2F56; Thu, 14
+	Mar 2024 12:56:28 +0000 (GMT)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+	20240314125628eucas1p161af377a50fd957f445397bc1404978b~8otOP51sB1264712647eucas1p1m;
+	Thu, 14 Mar 2024 12:56:28 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+	eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20240314125628eusmtrp157bb9d209f9df74e3c1ff96e3a790aaf~8otOPJAlG1799517995eusmtrp1O;
+	Thu, 14 Mar 2024 12:56:28 +0000 (GMT)
+X-AuditID: cbfec7f4-727ff70000002656-24-65f2f3fc65a2
 Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-	eusmgms2.samsung.com (EUCPMTA) with SMTP id CB.EE.10702.B7DE2F56; Thu, 14
-	Mar 2024 12:28:43 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+	eusmgms1.samsung.com (EUCPMTA) with SMTP id D2.FA.09146.BF3F2F56; Thu, 14
+	Mar 2024 12:56:27 +0000 (GMT)
+Received: from AMDC4653.digital.local (unknown [106.120.51.32]) by
 	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20240314122841eusmtip1e6cbf991d35b9407fd86a548d6f9b99f~8oU_l5CfA2959929599eusmtip1X;
-	Thu, 14 Mar 2024 12:28:41 +0000 (GMT)
-Message-ID: <a210104f-a3af-4554-b734-097cfa77a470@samsung.com>
-Date: Thu, 14 Mar 2024 13:28:40 +0100
+	20240314125627eusmtip12f547f04dc25f77ebf9f2ed838088094~8otNdUPBP2067620676eusmtip1f;
+	Thu, 14 Mar 2024 12:56:27 +0000 (GMT)
+From: Marek Szyprowski <m.szyprowski@samsung.com>
+To: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>, "Rafael J. Wysocki"
+	<rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, Stephan Gerhold
+	<stephan@gerhold.net>, Catalin Marinas <catalin.marinas@arm.com>, Russell
+	King <linux@armlinux.org.uk>, Christoph Lameter <cl@gentwo.org>, Mark
+	Rutland <mark.rutland@arm.com>, Sudeep Holla <sudeep.holla@arm.com>, Will
+	Deacon <will@kernel.org>, stable@vger.kernel.org
+Subject: [PATCH] cpufreq: dt: always allocate zeroed cpumask
+Date: Thu, 14 Mar 2024 13:54:57 +0100
+Message-Id: <20240314125457.186678-1-m.szyprowski@samsung.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] ARM64: Dynamically allocate cpumasks and increase
- supported CPUs to 512
-Content-Language: en-US
-To: Catalin Marinas <catalin.marinas@arm.com>, "Russell King (Oracle)"
-	<linux@armlinux.org.uk>
-Cc: Sudeep Holla <sudeep.holla@arm.com>, "Christoph Lameter (Ampere)"
-	<cl@linux.com>, Mark Rutland <mark.rutland@arm.com>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, "Rafael J. Wysocki"
-	<rafael@kernel.org>, Viresh Kumar <vireshk@kernel.org>, Will Deacon
-	<will@kernel.org>, Jonathan.Cameron@huawei.com, Matteo.Carlini@arm.com,
-	Valentin.Schneider@arm.com, akpm@linux-foundation.org,
-	anshuman.khandual@arm.com, Eric Mackay <eric.mackay@oracle.com>,
-	dave.kleikamp@oracle.com, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, robin.murphy@arm.com,
-	vanshikonda@os.amperecomputing.com, yang@os.amperecomputing.com, Nishanth
-	Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <ZfK30r8M6zx2aWU6@arm.com>
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SbUxTVxj29N7elkr1Utl65jaaNTLdFnEsNjvEhcy4H9cxE0kWZjY3aOSK
-	hlJJS93UbUKGwjqryIJAhfIRhK5rYBSk2Aw2OtLyIQypq9BUwFEQquhaEBBIHe3FjX/PeT7O
-	874nh4sJfiS2co/Ls2iFXCoTEzy8xfa0f+eZGT/9dmsgDpU1GAnU3nUEPa69ANCd+YcA/T45
-	iKGJQC0HGaqcBDKNO9nIYSkj0IjxGRvNajoBsha1AXTtzi0WWq5dYKGHi30sVD5XhKGOfzxs
-	FHA24qiupxVH5oqnGJp2uXHUNGYjUK5bgjQ13Zz3IWXUGQHlcN7CqNzOGTZlMnxPUCZ/IYfq
-	KlnGKc/tYhbVVHOW8k24cOoHxxCHsg+ZWdSsKepg+Ke891Jp2fGTtGJXfArv2FWNA8s8t/mr
-	e/6fsWzwS7gahHEhuRvezM9jqwGPKyD1AI79ZmUHBQE5B+DckzVhFsDiVhv2PLFcdBlnTHUA
-	TkyJGJMPwGsd11lBgU/Gw6qSsVAAJ6Ph8PkhDsNHwO5STyj8AimCo66SEL+FlEKvuTLkx0gh
-	dHkqQvdEkilw9MplLFiAkX+zYfMDOxEUCDIWqmfUIRxGbocXHvUTTFgEv7t+NRSApJoHqydd
-	ODP2B7BtoJvD4C3Qa29ew6/AZzeCbcFAHoCVy6NrhwIAs++7AOPaA939S6sV3NWKN2CDZRdD
-	74Xeiw2cIA3JTXBoJoIZYhMsbCnGGJoP888LGPfrUGuv/6+2Y2AQKwBi7bp30a7bX7tuHe3/
-	vZUANwAhrVJmpNHKWDn9ZYxSmqFUydNijpzIMIHVf9sbsPtbQbnXF2MFLC6wAsjFxJH8b1/z
-	0QJ+qvTUaVpxIlmhktFKK3iZi4uF/OhUES0g06RZdDpNZ9KK5yqLG7Y1m1VeXZvkK9vco5ny
-	VNzmpedWSlWaLF17gtvAM2ZiXQOu06Xl+4RHq3Yn7xg+sKJNfLCR3NCcZIkOyPJS9BcTa+qc
-	kVnfHEiH3VHeBNWrhfqv95v+gPfPxtmiDjeKCnwVZYLeqb3pSZIwXfzGQlNRb/LdP1cGd0b3
-	jc9+viRczNNr9fLwg9skJ033zuF0zuJP+XP74qf55s7kQ/V9bxks/vF6h8om65OgHPmCe3i+
-	LX8lblFy6UbLSxFPREfrX1y4+0XjX+06TP145HCJ6tGcY8+Szvxh2qXJm5+M6Oart3M+7uzn
-	ez9qyhlMLH1XaEloH/hVwJ4+tX+DpQfIzryz4zMxrjwmjX0TUyil/wL/3Kl6JgQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrKKsWRmVeSWpSXmKPExsVy+t/xu7rVbz+lGvT1SlvMWb+GzWLfiWSL
-	98t6GC2uf3vDaHHg2SVmi6f/lrFbrFp4jc1i0+NrrBaXd81hs7i35j+rxefeI4wWh6buZbRY
-	ev0ik8XvZd+ZLN78OMtkMffLVGaLgx+esFr8u7aRxWL5qR0sFtvn/2S2eHnrDovF5gfH2Cxa
-	7pha9C45ye4g4bFm3hpGj8vXLjJ7tBx5y+qxaVUnm8emT5PYPU7M+M3i8eTKdCaPzUvqPT4+
-	vcXi0X35BrvH8RvbmTw+b5IL4InSsynKLy1JVcjILy6xVYo2tDDSM7S00DMysdQzNDaPtTIy
-	VdK3s0lJzcksSy3St0vQy5jde5m5oJW/4uGn1cwNjBt4uhg5OSQETCR+T53I0sXIxSEksJRR
-	Ys3xu2wQCRmJk9MaWCFsYYk/17rYIIreM0pse3eKESTBK2AnsXDGA2YQm0VAVeJm2w12iLig
-	xMmZT1hAbFEBeYn7t2aAxYUFEiVebV8AVs8sIC5x68l8JhBbRCBBYu4/CJtZ4BmrxOGZwSC2
-	kMA3Zombbw1BbDYBQ4mut11gx3EKqEv0vDvHBlFvJtG1tYsRwpaXaN46m3kCo9AsJGfMQrJu
-	FpKWWUhaFjCyrGIUSS0tzk3PLTbSK07MLS7NS9dLzs/dxAhML9uO/dyyg3Hlq496hxiZOBgP
-	MUpwMCuJ8NYpfkwV4k1JrKxKLcqPLyrNSS0+xGgKDIuJzFKiyfnABJdXEm9oZmBqaGJmaWBq
-	aWasJM7rWdCRKCSQnliSmp2aWpBaBNPHxMEp1cAkmbHyI4NlWvfl5YdUvh235T3V0XVPzbrw
-	TppT5yKu4I/Ln6WdYO/Nkv75/pKn3i0R3ejafUxbz6d9K8zfvWRDb0EX03o7r4gfb2VEdmf5
-	Bn9fHml04ha32OQHU2Q8Pmz8pnxon7XC/pCt9XfmOby7+0dZYYv54pt/IsxsXlpcv+c+/e0U
-	3VOrpwXUygtlssuvWJrScH2zkMPi31pFEz/M8xCpnHAxv3rb9alP+4rkPzzfdW9NyebznAq+
-	9/xZ5atcTBYuZPbftDbqzcGmAA+ulXJLX+zPWLE3WNb2UsGnv4ci9nZmMk3q/n/bac8m0Xuv
-	Hh5rONuzveT91OnPtMKu8dxcc9/hZnJMzO6c/R/U85VYijMSDbWYi4oTAab48Y+4AwAA
-X-CMS-MailID: 20240314122843eucas1p231a57588b81f9eb3d53129c0f68bc43c
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrNKsWRmVeSWpSXmKPExsWy7djP87p/Pn9KNdj8Sc7i/bIeRovlc+Yy
+	WWx6fI3V4vKuOWwW99b8Z7X43HuE0eLQ1L2MFmuP3GW3WHr9IpPF3C9TmS0WbHzEaHFjronF
+	8lM7WCw2fvWwaLlj6sDvsWbeGkaPy9cuMnvsP1zk0bbA3mPTqk42j02fJrF73Lm2h81j85J6
+	j74tqxg9Pm+SC+CK4rJJSc3JLEst0rdL4MpYvGk3S0ETV8W/43/YGhj3cHQxcnJICJhIdF34
+	wNzFyMUhJLCCUeL37TOsEM4XRolL0zawQDifGSUubz7PBNNyctMJqMRyRolVU18ywbV8uNHD
+	BlLFJmAo0fW2C8wWESiT6P17CKyIWWAZs8Sse0+BNnJwCAvYSKztCQOpYRFQlZi95iNYPa+A
+	nUTzhVWMENvkJfYfPMsMEReUODnzCQuIzQwUb946mxmi5geHxMvFQSAjJQRcJL68YYEIC0u8
+	Or6FHcKWkTg9uQfsaAmBdkaJBb/vM0E4ExglGp7fglpmLXHn3C82kEHMApoS63fpQ4QdJf7e
+	f8ACMZ9P4sZbQYgT+CQmbZvODBHmlehoE4KoVpOYdXwd3NqDFy5BlXhIHL8kDhIWEoiVODPr
+	MMsERoVZSP6aheSvWQgnLGBkXsUonlpanJueWmyUl1quV5yYW1yal66XnJ+7iRGY3k7/O/5l
+	B+PyVx/1DjEycTAeYpTgYFYS4a1T/JgqxJuSWFmVWpQfX1Sak1p8iFGag0VJnFc1RT5VSCA9
+	sSQ1OzW1ILUIJsvEwSnVwJTyUnetpBmbEKeOSbXi4jvWt6z+8ymf0Kl3q/uSOFX88rlIbxWO
+	u/mW01/LcpdLGpx5a8FU2X3ErGijUPefloaSba8/HG+afv5bmcvPP0+YTr1KzfXMienaVV3h
+	sEB2oVxEvsq9q8r509nMorJzV+hKFJ6R+Xt0t04J7x63R4u2qoeun7t6Bm+qcsxB2R/ZX2+q
+	3Fmml9l825V1zq8pK3O+lpteKtqaoSwk/onxn3XnrtnsTnnXnz9YbvnC+oWWylP+C9v552ub
+	fo8p7TBTW2o2N4FlGcPcO435H1QXaK7r6Np+5NDxymh1n/SmiWHm/O/uFP5pS/O2OfHgydZP
+	QRpdM9W101fOmNgWWHtaWomlOCPRUIu5qDgRABqRgGreAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEIsWRmVeSWpSXmKPExsVy+t/xu7q/P39KNbj9ydLi/bIeRovlc+Yy
+	WWx6fI3V4vKuOWwW99b8Z7X43HuE0eLQ1L2MFmuP3GW3WHr9IpPF3C9TmS0WbHzEaHFjronF
+	8lM7WCw2fvWwaLlj6sDvsWbeGkaPy9cuMnvsP1zk0bbA3mPTqk42j02fJrF73Lm2h81j85J6
+	j74tqxg9Pm+SC+CK0rMpyi8tSVXIyC8usVWKNrQw0jO0tNAzMrHUMzQ2j7UyMlXSt7NJSc3J
+	LEst0rdL0MtYvGk3S0ETV8W/43/YGhj3cHQxcnJICJhInNx0ggXEFhJYyijR/9MbIi4jcXJa
+	AyuELSzx51oXWxcjF1DNJ0aJAydfMoEk2AQMJbregiQ4OUQEqiT+NKxmAiliFtjALHHh3Hb2
+	LkYODmEBG4m1PWEgNSwCqhKz13wEq+cVsJNovrCKEWKBvMT+g2eZIeKCEidnPgE7iBko3rx1
+	NvMERr5ZSFKzkKQWMDKtYhRJLS3OTc8tNtQrTswtLs1L10vOz93ECIysbcd+bt7BOO/VR71D
+	jEwcjIcYJTiYlUR46xQ/pgrxpiRWVqUW5ccXleakFh9iNAW6byKzlGhyPjC280riDc0MTA1N
+	zCwNTC3NjJXEeT0LOhKFBNITS1KzU1MLUotg+pg4OKUamFw/7E4v/uWZdV5549zwmvN8lR33
+	S+52fEn7ZP1bZ4l00qZn3f9za94Xf56jcqr7/KyMsPBZFoceStyo7VjsttjnfEPK3EO9yxI1
+	zoi4nG6VCVVezMOcfPbmwRN+wv8ydx98b/Uj4NKlyMtz4j5zr4sWvP9X/aqdTOaBMn1h4W99
+	v2Mt/qdo/bz9Im7j4eZz0vEnfBM7BWXavvAcdDa873uJ929W4tbE31+3bJK5sfvA0aKX4RuN
+	H+2q3STGIxTDbe35VUw62CCi+ymHuAaDuW1ym3YuwyZjlboL250ez/PoyHP0uyX7m8l2NtvN
+	r1aN86LNV3dKpe+1jNfQe81o7juFaS4nX0tZzMUPRdtXKrEUZyQaajEXFScCAG0BSGY1AwAA
+X-CMS-MailID: 20240314125628eucas1p161af377a50fd957f445397bc1404978b
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20240308140130eucas1p1259c805a0b6491ce2f69c6fca0264b1f
+X-RootMTR: 20240314125628eucas1p161af377a50fd957f445397bc1404978b
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20240308140130eucas1p1259c805a0b6491ce2f69c6fca0264b1f
-References: <37099a57-b655-3b3a-56d0-5f7fbd49d7db@gentwo.org>
-	<CGME20240308140130eucas1p1259c805a0b6491ce2f69c6fca0264b1f@eucas1p1.samsung.com>
-	<c1f2902d-cefc-4122-9b86-d1d32911f590@samsung.com>
-	<Ze9TsQ-qVCZMazfI@arm.com> <9352f410-9dad-ac89-181a-b3cfc86176b8@linux.com>
-	<bf1757ca-6d41-87e7-53dd-56146eef5693@linux.com> <ZfCXJRJSMK4tt_Cm@arm.com>
-	<ZfG5oyrgGOkpHYD6@bogus> <432c1980-b00f-4b07-9e24-0bec52ccb5d6@samsung.com>
-	<ZfHevcKpcb6i1fn5@shell.armlinux.org.uk> <ZfK30r8M6zx2aWU6@arm.com>
+X-CMS-RootMailID: 20240314125628eucas1p161af377a50fd957f445397bc1404978b
+References: <CGME20240314125628eucas1p161af377a50fd957f445397bc1404978b@eucas1p1.samsung.com>
 
-Dear All,
+Commit 0499a78369ad ("ARM64: Dynamically allocate cpumasks and increase
+supported CPUs to 512") changed the handling of cpumasks on ARM 64bit,
+what resulted in the strange issues and warnings during cpufreq-dt
+initialization on some big.LITTLE platforms.
 
-On 14.03.2024 09:39, Catalin Marinas wrote:
-> On Wed, Mar 13, 2024 at 05:13:33PM +0000, Russell King wrote:
->> So, I wonder whether what you're seeing is a latent bug which is
->> being tickled by the presence of the CPU masks being off-stack
->> changing the kernel timing.
->>
->> I would suggest the printk debug approach may help here to see when
->> the OPPs are begun to be parsed, when they're created etc and their
->> timing relationship to being used. Given the suspicion, it's possible
->> that the mere addition of printk() may "fix" the problem, which again
->> would be another semi-useful data point.
-> It might be an init order problem. Passing "initcall_debug" on the
-> cmdline might help a bit.
->
-> It would also be useful in dev_pm_opp_set_config(), in the WARN_ON
-> block, to print opp_table->opp_list.next to get an idea whether it looks
-> like a valid pointer or memory corruption.
+This was caused by mixing OPPs between big and LITTLE cores, because
+OPP-sharing information between big and LITTLE cores is computed on
+cpumask, which in turn was not zeroed on allocation. Fix this by
+switching to zalloc_cpumask_var() call.
 
-I've finally found some time to do the step-by-step printk-based 
-debugging of this issue and finally found what's broken!
-
-Here is the fix:
+Fixes: dc279ac6e5b4 ("cpufreq: dt: Refactor initialization to handle probe deferral properly")
+CC: stable@vger.kernel.org # v5.10+
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+---
+ drivers/cpufreq/cpufreq-dt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/cpufreq/cpufreq-dt.c b/drivers/cpufreq/cpufreq-dt.c
 index 8bd6e5e8f121..2d83bbc65dd0 100644
 --- a/drivers/cpufreq/cpufreq-dt.c
 +++ b/drivers/cpufreq/cpufreq-dt.c
-@@ -208,7 +208,7 @@ static int dt_cpufreq_early_init(struct device *dev, 
-int cpu)
-         if (!priv)
-                 return -ENOMEM;
-
--       if (!alloc_cpumask_var(&priv->cpus, GFP_KERNEL))
-+       if (!zalloc_cpumask_var(&priv->cpus, GFP_KERNEL))
-                 return -ENOMEM;
-
-         cpumask_set_cpu(cpu, priv->cpus);
-
-
-It is really surprising that this didn't blow up for anyone else so 
-far... This means that the $subject patch is fine.
-
-I will send a proper patch fixing this issue in a few minutes.
-
-Best regards
+@@ -208,7 +208,7 @@ static int dt_cpufreq_early_init(struct device *dev, int cpu)
+ 	if (!priv)
+ 		return -ENOMEM;
+ 
+-	if (!alloc_cpumask_var(&priv->cpus, GFP_KERNEL))
++	if (!zalloc_cpumask_var(&priv->cpus, GFP_KERNEL))
+ 		return -ENOMEM;
+ 
+ 	cpumask_set_cpu(cpu, priv->cpus);
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+2.34.1
 
 
