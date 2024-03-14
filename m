@@ -1,61 +1,38 @@
-Return-Path: <linux-pm+bounces-4934-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4935-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BDAB87BD70
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 14:17:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D37A787BE2D
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 14:58:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A0EEBB2184B
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 13:17:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1116A1C21818
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 13:58:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEE985A4C0;
-	Thu, 14 Mar 2024 13:17:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="ho7CTE2Z"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EF2F6EB66;
+	Thu, 14 Mar 2024 13:58:02 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16BE03D0D5;
-	Thu, 14 Mar 2024 13:17:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32D3E59149;
+	Thu, 14 Mar 2024 13:58:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710422245; cv=none; b=QqlMMDtmhU9TUvu+vvXvaQrfL8oyvd3XHNVrQUrsT8ehliLOJa+wZ4LXyMhoMh6g+rze490g8yVT0Qdvv3vbjmR+EpUfqHl8AUWJ0/SDGgMq1snNkVnfOZfcFMppyDLaRlon3NZewXqzzemTS0PoCPeDttz23MoIUNq1hif+k58=
+	t=1710424682; cv=none; b=TbGwcL0q063y80KBTeH46II8wRNNWPFPyjyYivvpwT5ZrvTBx2sYZZsfhJXQtpmXXKxr9tNPCAxCefpx+l9TCa7g0zDmdOvTrz/H1NbSFYPfmHeyTJPsZnH2BAi9TSw1bEyYUbC6RmzVgsQvvUe0GIEmZ6lBMkzstSYsSD2jD/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710422245; c=relaxed/simple;
-	bh=8om1TSfZV/lD1t30d/Govum8U1wXvG3FbuXdIOkj6mA=;
+	s=arc-20240116; t=1710424682; c=relaxed/simple;
+	bh=dN4BV68IDf8HGWh30bz2lvsC1qhK7iq0GQPEZC4iLFE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rymCzcRpiVvJfEbcyNghy6uGiHW414vAhny0f9BPYX8bqY1lbtDm6CUhmm3orAEzAciZu4urvjeh4M7ql7XzXsIH4kF9FItrLEpYhR0LoxXW5iUPx/vgMZXhlygBYM+uhWzkUOeRV1nOrimcWHWEHA92d2BqW9olL2Qk4dI+W9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=ho7CTE2Z; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=clrW0RwMW19aCCVUBe+aDaa6Xr2fikUQUzGV0E47Ik8=; b=ho7CTE2Zq1/DvHgOQchZ4l3JtQ
-	k5ID2n2/S4kvmPPE9WrMgxAyc9pWgcLyPizYsqSRtd8W80gi8AYct3bRILrT6ln668Tj9Q8FWDx3G
-	uEh81hiCaDn+Kr+6bcuNb1RRA9E0Rs2P51cwzTON2R++WbCGz+BSSutYfuA4BjFKr7/houpCIGZmz
-	Q1km00FJT9ueKsGXmjsYD9euNplW3zJK4EkHBw5g5tQmR0YA21vrtJxeVxuiP0G9UdTakINVDCKR/
-	iMmP0znPoqK9WArfjueEljzbfOI+lNl4mY7UMH924GL2vKcYY7lNEZ7Ekj2uCbUneYA9wSFamyc+E
-	jgzW8UBQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:51784)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1rkkxM-0000Vg-2h;
-	Thu, 14 Mar 2024 13:17:12 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1rkkxE-0005Tc-6M; Thu, 14 Mar 2024 13:17:04 +0000
-Date: Thu, 14 Mar 2024 13:17:04 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+	 Content-Type:Content-Disposition:In-Reply-To; b=t7UBXf5jkDX1z3p6ZFRFOLSQC6iYgHNfJUqrYh5HS2Y8CQBWe69/K7IwOGdu8nEYwLnVQXSQ9G9uY41ZG9kQdGIE9I6UtLZ8ksD4iS4DYRmZrN4tkmly+fosgb6bY+a/gb3wikTY0Hvocgc1hnIGCwW9roJObUUZ+b23NM2lS6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6083BC433F1;
+	Thu, 14 Mar 2024 13:57:57 +0000 (UTC)
+Date: Thu, 14 Mar 2024 13:57:54 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
 To: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
+Cc: "Russell King (Oracle)" <linux@armlinux.org.uk>,
 	Sudeep Holla <sudeep.holla@arm.com>,
 	"Christoph Lameter (Ampere)" <cl@linux.com>,
 	Mark Rutland <mark.rutland@arm.com>,
@@ -72,7 +49,7 @@ Cc: Catalin Marinas <catalin.marinas@arm.com>,
 	Stephen Boyd <sboyd@kernel.org>
 Subject: Re: [PATCH v3] ARM64: Dynamically allocate cpumasks and increase
  supported CPUs to 512
-Message-ID: <ZfL40N6HYzEQaEj1@shell.armlinux.org.uk>
+Message-ID: <ZfMCYl7GffVcLEUN@arm.com>
 References: <c1f2902d-cefc-4122-9b86-d1d32911f590@samsung.com>
  <Ze9TsQ-qVCZMazfI@arm.com>
  <9352f410-9dad-ac89-181a-b3cfc86176b8@linux.com>
@@ -93,11 +70,8 @@ Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 In-Reply-To: <a210104f-a3af-4554-b734-097cfa77a470@samsung.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
 On Thu, Mar 14, 2024 at 01:28:40PM +0100, Marek Szyprowski wrote:
-> Dear All,
-> 
 > On 14.03.2024 09:39, Catalin Marinas wrote:
 > > On Wed, Mar 13, 2024 at 05:13:33PM +0000, Russell King wrote:
 > >> So, I wonder whether what you're seeing is a latent bug which is
@@ -139,11 +113,13 @@ On Thu, Mar 14, 2024 at 01:28:40PM +0100, Marek Szyprowski wrote:
 > 
 > It is really surprising that this didn't blow up for anyone else so 
 > far... This means that the $subject patch is fine.
+> 
+> I will send a proper patch fixing this issue in a few minutes.
 
-Wow. I guess we've been lucky with that allocation hitting memory
-containing zeros. Well done at tracking it down!
+Nice. Many thanks for tracking this down. I'll revert the revert of the
+CPUMASK_OFFSTACK in the second part of the merging window (I already
+sent the pull request).
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Catalin
 
