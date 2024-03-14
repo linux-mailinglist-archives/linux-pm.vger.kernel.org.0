@@ -1,69 +1,79 @@
-Return-Path: <linux-pm+bounces-4952-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4953-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18C2B87C206
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 18:19:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54DD287C27D
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 19:21:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 576C2B214C1
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 17:19:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E66B2856D5
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 18:21:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2618D745C9;
-	Thu, 14 Mar 2024 17:18:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B0D776026;
+	Thu, 14 Mar 2024 18:20:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="acpUAXme"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from gentwo.org (gentwo.org [62.72.0.81])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7BEB1EA6F;
-	Thu, 14 Mar 2024 17:18:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.72.0.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 444C67581D;
+	Thu, 14 Mar 2024 18:20:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710436737; cv=none; b=rrYwZetTUsmxUS8zCrK8IxwkB18kK60E7bdnAErJFgg2Ms/OdcHgHvMiWBbJjoguwTGlkHrjjFNOziTbgieeQZRW2CG/7FTzQXXwhp564BriDESZoFzgk8wKbvwzhOISDtu1KJM0xfuTUAAGCwICXhcnvjY2VL01j4VRMarGuVs=
+	t=1710440434; cv=none; b=LTpQrziw5KUuP9I5tRAKgEqcqr6HeKPW5PXzeXUzqQVuMyDYN+8VIr4CIiiUYBy9BJFG1yAD4UEcyWDjYc5J7YQJiIOMkmyraKnGAX/mu1bNz6CPWj4jEW66SOC/nCyLFWbtL8bER4EvFp1Isx3+VQK2H+xhzV3t3HOcvO2T2fk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710436737; c=relaxed/simple;
-	bh=ScgJkxs9uD7S5VVXNIUGoytyYxjXodh1C85TtwT2BVo=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=W5/hCKlAlnXwea4UBvceFcCbyQWnGqAg157o7B3zUO67hGdhl6rMkWdi76CCU378KgLEV7JN0WIf8glEFwPaiDotJt/NgHYXjO4NjTv/nKOpMnUc1WUzriJqOkVxuL2MGFJmWpztZdp1qpnYK25aw1NzfGrqEJKA+b3m2eYUCN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com; spf=fail smtp.mailfrom=linux.com; arc=none smtp.client-ip=62.72.0.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.com
-Received: by gentwo.org (Postfix, from userid 1003)
-	id F365F40AB2; Thu, 14 Mar 2024 10:18:53 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-	by gentwo.org (Postfix) with ESMTP id F152540AAD;
-	Thu, 14 Mar 2024 10:18:53 -0700 (PDT)
-Date: Thu, 14 Mar 2024 10:18:53 -0700 (PDT)
-From: "Christoph Lameter (Ampere)" <cl@linux.com>
-To: Marek Szyprowski <m.szyprowski@samsung.com>
-cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-    linux-arm-kernel@lists.infradead.org, 
-    "Rafael J. Wysocki" <rafael@kernel.org>, 
-    Viresh Kumar <viresh.kumar@linaro.org>, 
-    Stephan Gerhold <stephan@gerhold.net>, 
-    Catalin Marinas <catalin.marinas@arm.com>, 
-    Russell King <linux@armlinux.org.uk>, Mark Rutland <mark.rutland@arm.com>, 
-    Sudeep Holla <sudeep.holla@arm.com>, Will Deacon <will@kernel.org>, 
-    stable@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: dt: always allocate zeroed cpumask
-In-Reply-To: <20240314125457.186678-1-m.szyprowski@samsung.com>
-Message-ID: <9aea1694-d54b-2f48-bd67-fb5ab12d347c@linux.com>
-References: <CGME20240314125628eucas1p161af377a50fd957f445397bc1404978b@eucas1p1.samsung.com> <20240314125457.186678-1-m.szyprowski@samsung.com>
+	s=arc-20240116; t=1710440434; c=relaxed/simple;
+	bh=L80vniTzXf8c2SqXHXwT3toW1K6rBS+VAnyFtEwQNWM=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=PIhoIc9XEnmOLKV8qrit+tSML5DTgRnUdgB6rc5RWJ/1g9oALr/UOkgYv6xXnS+/34pW3epMtn/daIgUK25ZsZLqCdqmiSQtmYqNddLqn5HneHlBALsdpoaqaGKZbYWPlvA0734aHbll1kW9haumoD6kSKQ2+w5owFqw+o+cR3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=acpUAXme; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D690FC433A6;
+	Thu, 14 Mar 2024 18:20:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710440433;
+	bh=L80vniTzXf8c2SqXHXwT3toW1K6rBS+VAnyFtEwQNWM=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=acpUAXmehg3/OWU+chOiSdjCRSaZBVge+ND3jN9Tlvabea/d4DWbEEhf9/z+rnIln
+	 SChy7mymRoX8tpWqEbIoyzP6g9cazzCZzNWz3ibhGPQUPtS/ZpcKwH4iTuCc0YiscN
+	 yuYQmNW6mBOyUUn9mkxXjoqXsTBhGlVF/O3BxO7JRovUgx4btnHVx7PFRFrjwzIeKE
+	 wg3yDRTR6m75iArbb2CRzqnyTh8MlsDJTKetiOYPLsh8QSqaq1n89NGN21yvib4kXZ
+	 lHvn2eNXL6XhMYKssvFbyXXeBB7eHS6G7hlAsN8FozhqbQi9vRoI8Ye9LdYDJ+mUOF
+	 2la0KPx1YsWnw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CEDBFD84BAA;
+	Thu, 14 Mar 2024 18:20:33 +0000 (UTC)
+Subject: Re: [GIT PULL] power-supply changes for 6.9
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <yzrnq4aybdxv5pilsrn7bsntj66odx3dhvkfocyjdmctxlcy5a@a43bag4p33ju>
+References: <yzrnq4aybdxv5pilsrn7bsntj66odx3dhvkfocyjdmctxlcy5a@a43bag4p33ju>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <yzrnq4aybdxv5pilsrn7bsntj66odx3dhvkfocyjdmctxlcy5a@a43bag4p33ju>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.9
+X-PR-Tracked-Commit-Id: 4e61f1e9d58fb0765f59f47d4d1f318b36c14d95
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 44f89c6d3c54761114b2bc0509144e3e5ced40b0
+Message-Id: <171044043384.24196.15359986125767166280.pr-tracker-bot@kernel.org>
+Date: Thu, 14 Mar 2024 18:20:33 +0000
+To: Sebastian Reichel <sre@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
 
-On Thu, 14 Mar 2024, Marek Szyprowski wrote:
+The pull request you sent on Wed, 13 Mar 2024 23:13:39 +0100:
 
-> -	if (!alloc_cpumask_var(&priv->cpus, GFP_KERNEL))
-> +	if (!zalloc_cpumask_var(&priv->cpus, GFP_KERNEL))
-> 		return -ENOMEM;
+> https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.9
 
-Reviewed-by: Christoph Lameter (Ampere) <cl@linux.com>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/44f89c6d3c54761114b2bc0509144e3e5ced40b0
 
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
