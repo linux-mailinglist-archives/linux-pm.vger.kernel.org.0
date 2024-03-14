@@ -1,222 +1,143 @@
-Return-Path: <linux-pm+bounces-4955-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4956-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8112887C552
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 23:46:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDE1B87C5DA
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Mar 2024 00:21:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E42A11F216FC
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 22:46:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 980DF282521
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 23:21:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 136E7A20;
-	Thu, 14 Mar 2024 22:46:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 680AAFC09;
+	Thu, 14 Mar 2024 23:21:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=peacevolution.org header.i=@peacevolution.org header.b="NYFgkKuB"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="UZlgFMr3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from a.peacevolution.org (a.peacevolution.org [206.189.193.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D96E66119;
-	Thu, 14 Mar 2024 22:46:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.193.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE599FC0B
+	for <linux-pm@vger.kernel.org>; Thu, 14 Mar 2024 23:21:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710456363; cv=none; b=gUaWi3LOIGKrpOOon2Vag2p4w1gKCGZz+FKxi3R4hHyOZ3ekITy8oUNtoKTzoQDMm2soAOLymrfHdXrCMIf7qXHcMLdkWnMEu5nKu6qhxSZg+3mMNatlrO1KESy0WbKAlf9TKdAK/snIInq1cQz9DPjd9QK5An3vHLHgRYJXdBo=
+	t=1710458480; cv=none; b=JqGTghAXLVMdfn7w+/Og7aovJCuHDM1FF+NjILJ6tn1hKJbVpGCJ9l07w6bEh8yzFsCnb8W+dKg4+3KrAotk8YCBvAFDoY+ukzEi9ZRkiih0n70XN7FowdRF9sPoEq6ukJYl8mhjDfxijBeFuWwBRe2MDN21D94T4xlLltJSYnw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710456363; c=relaxed/simple;
-	bh=FtGcGGcCml3K6BfZXA29w4dWx4FPAxqXCh+2Kd5cs8E=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qURshCbGxgcZcoI/hPa72W1VgXy1NM8ftcOjETD54QuKozwcaw1lqPPpD+8o0VxdtJtYaDESxPpwYADYST1/2GIfXs4MljNAt9yA4OE2X4aoJ985mMk/WhrMs5iFhhJl6M+VYW4mVOgCY/W4l0RAaF+O5MMFSgZHeyEBeceT/zs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=peacevolution.org; spf=pass smtp.mailfrom=peacevolution.org; dkim=pass (1024-bit key) header.d=peacevolution.org header.i=@peacevolution.org header.b=NYFgkKuB; arc=none smtp.client-ip=206.189.193.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=peacevolution.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=peacevolution.org
-Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
-	by a.peacevolution.org (Postfix) with ESMTPA id 74F2047565;
-	Thu, 14 Mar 2024 22:39:55 +0000 (UTC)
-Date: Thu, 14 Mar 2024 18:39:52 -0400
-From: Aren <aren@peacevolution.org>
-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Hans de Goede <j.w.r.degoede@gmail.com>, 
-	Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, Chen-Yu Tsai <wens@csie.org>, 
-	Quentin Schulz <quentin.schulz@bootlin.com>, Sebastian Reichel <sre@kernel.org>
-Subject: Re: [PATCH v2 5/5] power: supply: axp20x_usb_power: set input
- current limit in probe
-Message-ID: <jzmibxh5avq4oxbldzayi754s6ir3e5zcphh4sfwzrl72j4msa@qersxklkpmtx>
-References: <20240130203714.3020464-1-aren@peacevolution.org>
- <20240130203714.3020464-6-aren@peacevolution.org>
- <6nf7h3nc4q7fwrnm4spmgv2sdkczowkfpietcv2tyv4mixkq3b@svxgzkdqnzlq>
- <hlnzivsmt66icz4bsayv5wtlgbktq355m4qxj532lg4lgeimju@jammw2y6zpha>
- <uktr265th6h4btay765p33zgihuzgafu25rz7npwfm3ojhq2tm@wvrymmf3xtxy>
+	s=arc-20240116; t=1710458480; c=relaxed/simple;
+	bh=1nZ1koHEL3nJ3Z4WOjyBj9l6GAQC4q9nTZpHJxmXIvk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=L4N6fQ9S6cNIS8xQM4H6uguem1FDZrwBw6fRmJN6FD9AIpH77vr1gUGvpWtgjew5scnn1Dz21OTUTS7Pf2AH6S5pqRAk0K29tLg/9sNFVbghwJJj2zLAb2PwjYfyaGH91xtT/RkCx8mcYg3NmuDIzQrDOKHW3Hv1bTeCIlISaJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=UZlgFMr3; arc=none smtp.client-ip=209.85.167.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-3c3747e7f8cso309352b6e.0
+        for <linux-pm@vger.kernel.org>; Thu, 14 Mar 2024 16:21:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1710458476; x=1711063276; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JYkkAOiHkqIfOBWqACZEdL7PfJhzMKheJAaNem7Ve48=;
+        b=UZlgFMr3Z+3EWLUE501NMd5nrNWGj5MPXd/ZJEfZlHiBQ+RjxydfbqPWdStUbTLFIy
+         PiVphh6dbnjSzskoB+pVoJsV4zHlmrpCK1L5CtZgrMAYowFZNAekdsU0h2+lPIMcJPIv
+         zyRu3D39pk0V4lQJiehfjyc7bpnSTfDG4gzA0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710458476; x=1711063276;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JYkkAOiHkqIfOBWqACZEdL7PfJhzMKheJAaNem7Ve48=;
+        b=ZoyboXAZ1juFeScDnD+QfCg84xoxEFDg2Eo5bi7GdzR1ORbzxjQrK74p3Bq0gMPmnO
+         2QatLuRxBW49BWXqNqEpX41Ce/xJ8zfF0OeQgwpCQaevBACLNgCVXK+hv1AzQCmPtT17
+         k0hPrEA8Wac5zrduN19FIxNupwvoZlZL5EuEv4k+6LLZkgFTr4gtbIbIgrHmXz20HT/C
+         WopA8Ruu63VcQWFfN9m4Bp/JiQC00PR9abudVIRqQUkDNKmtn9bDvq1iNXFuFeBReqR7
+         5ARvz4CuV1tPP3nUKIVRfqDJnQnxj3L3FGEMRvzRrvvI3FW95xT36idyjgVm2w6TRJru
+         87Pg==
+X-Forwarded-Encrypted: i=1; AJvYcCXT+gXsF80vlhb9H9+3RvEMyzr89Hm7nj387mSjDqtXPEBy0VQPzGtkcEIvdBB615+30SsQsrWIB2Hz3eCgby/p3EjcjtqV8L8=
+X-Gm-Message-State: AOJu0YygJbntdOb3+2dtHpobI+qSZLyQjPBnFjS9aOWHFWxm8u2jbDiB
+	TdXbGwdAxHCvMNGZJOek3q9qw5AYPPob/Deh3YmYR2RCHsRcgk9de6Z4FQodG0Arl2UMTxGkjqc
+	=
+X-Google-Smtp-Source: AGHT+IFdjCwHvZ2ZuFIrl1kgu/hZJRWCF0X0HfP73NcmwLwXlJXG0r8BLcM4Gq/PtQkeWw0G2rwU6w==
+X-Received: by 2002:a05:6808:b08:b0:3c2:1d16:c389 with SMTP id s8-20020a0568080b0800b003c21d16c389mr2884435oij.19.1710458476577;
+        Thu, 14 Mar 2024 16:21:16 -0700 (PDT)
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com. [209.85.160.177])
+        by smtp.gmail.com with ESMTPSA id ju7-20020a05622aa04700b0042f420962cdsm1293154qtb.94.2024.03.14.16.21.15
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Mar 2024 16:21:15 -0700 (PDT)
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-42ef8193ae6so66351cf.1
+        for <linux-pm@vger.kernel.org>; Thu, 14 Mar 2024 16:21:15 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXiyvyrpn45J+oq39awtCuklaUaVIPb4LluxPln4vWDSlUIPswD78vouFHknEr6VYNEALR6EsZbw6EWRbSLsvw0BAMRaF6KnN8=
+X-Received: by 2002:ac8:6618:0:b0:42e:ef12:8025 with SMTP id
+ c24-20020ac86618000000b0042eef128025mr64373qtp.25.1710458474993; Thu, 14 Mar
+ 2024 16:21:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <uktr265th6h4btay765p33zgihuzgafu25rz7npwfm3ojhq2tm@wvrymmf3xtxy>
-X-Spamd-Bar: /
-Authentication-Results: auth=pass smtp.auth=aren@peacevolution.org smtp.mailfrom=aren@peacevolution.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=peacevolution.org;
-	s=dkim; t=1710455996;
-	h=from:subject:date:message-id:to:mime-version:content-type:content-transfer-encoding:in-reply-to:references;
-	bh=s5tG6UJiIsvtLfOlvkeSJg725lkDm4PeKTH/iA/Un+E=;
-	b=NYFgkKuBDiWweYalediKlaNJBzUswQ4mYAiuRUgGDy4Orxf6jQ88JGzwQ/hljAdddkBeru
-	iyY59M+viwlMGKe9wxtyBLK6RhZBYgbEiCotOrZcwMfJ0QcFxHzX2KuVik6UfVRxOGim85
-	XJq5Ts4eZzTVLH76Smm03DbIvDrNWgw=
+References: <20230703085555.30285-1-quic_mkshah@quicinc.com> <20230703085555.30285-4-quic_mkshah@quicinc.com>
+In-Reply-To: <20230703085555.30285-4-quic_mkshah@quicinc.com>
+From: Doug Anderson <dianders@chromium.org>
+Date: Thu, 14 Mar 2024 16:20:59 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XWH+Eoa9XjDns--NSDTZHeUwTdrX_r_QZhSPpbZNwz+w@mail.gmail.com>
+Message-ID: <CAD=FV=XWH+Eoa9XjDns--NSDTZHeUwTdrX_r_QZhSPpbZNwz+w@mail.gmail.com>
+Subject: Re: [RESEND v4 3/3] arm64: dts: qcom: sc7280: Add power-domains for
+ cpuidle states
+To: Maulik Shah <quic_mkshah@quicinc.com>
+Cc: andersson@kernel.org, ulf.hansson@linaro.org, swboyd@chromium.org, 
+	wingers@google.com, daniel.lezcano@linaro.org, rafael@kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, sudeep.holla@arm.com, jwerner@chromium.org, 
+	quic_lsrao@quicinc.com, quic_rjendra@quicinc.com, devicetree@vger.kernel.org, 
+	Abhinav Kumar <quic_abhinavk@quicinc.com>, Jessica Zhang <quic_jesszhan@quicinc.com>, 
+	Rob Clark <robdclark@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Feb 11, 2024 at 12:27:12AM +0100, Ondřej Jirman wrote:
-> On Tue, Jan 30, 2024 at 11:20:29PM -0500, Aren wrote:
-> > On Tue, Jan 30, 2024 at 10:13:06PM +0100, Ondřej Jirman wrote:
-> > > On Tue, Jan 30, 2024 at 03:28:01PM -0500, Aren Moynihan wrote:
-> > > > Unfortunately BC 1.2 detection doesn't seem to be performed without a
-> > > > battery, at least I wasn't able to trigger it.
-> > > >
-> > > > This will be worth revising once we have a driver that can provide a
-> > > > signal that USB-PD is in progress and/or finished, but until then I'd
-> > > > prefer not take on that complexity.
-> > > 
-> > > This patch adds complexity and will lead to hard to debug issues for some
-> > > people. It certainly did cause issues for me, when I had similar patch in
-> > > my tree a while ago, forcing me to drop it.
-> > > 
-> > > There are other situations you're not considering. Like battery being
-> > > very discharged and unable to provide power, while still being detected
-> > > and BC1.2 running correctly and successfully when the device is powered
-> > > up by being plugged into DCP port (only option of powerup in such a 
-> > > scenario).
-> > 
-> > Oh you're right, I overlooked the case where the battery is very low, in
-> > which case bc detection should still be performed (I think, I haven't
-> > tested it). This issue this patch is trying to fix doesn't apply in that
-> > case, so it should be simple enough to check if the pmic has detected a
-> > battery and skip setting the current limit if it has.
-> >
-> > > Battery is detected at 2.2V and certainly it will not provide any power
-> > > if OCV of the battery is anywhere below 3V. See "9.4.5 Battery detection"
-> > > in AXP803 datasheet. So you have about 1V range of possible battery voltage
-> > > where BC1.2 will work, but you'll force lower the correctly detected current
-> > > limit and break boot, because 2.5W is too low for the boot time power surge.
-> > > 
-> > > The phone will just randomly die halfthrough boot for apparently no reason,
-> > > despite being connected to DCP.
-> > > 
-> > > And also forget Pinephone, there may also be batteryless SBCs using this PMIC
-> > > with battery as an option (similar to Quartz64-A - Rockchip SBC, but exactly
-> > > this setup with battery capable PMIC in the power path on a normal SBC, with
-> > > battery being optional), where this patch will break boot on them, too. I'm
-> > > quite confident PMIC relaxing the limit without a battery is meant for such use
-> > > cases.
-> > 
-> > Perhaps it would be better to read the limit from the device tree, that
-> > way it could be set higher for a specific board if it needs to draw that
-> > much current and be able to boot without a battery? It seems sketchy to
-> > default to a current limit significantly higher than what the usb power
-> > supply is required to support.
-> 
-> But is there really an issue? The board may not be using USB power supply.
-> It may simply have a barrel jack, like Quartz64-A does. And it will still
-> create an issue if you make the new behavior "opt-out" via DT. You can make
-> it opt-in if you like.
+Hi,
 
-The axp20x_ac_power driver is used for the barrel jack, so this patch
-shouldn't change how those devices behave. There are only a few boards
-that are expected to boot/operate with only usb power, which should be
-the only ones that need special attention.
+On Mon, Jul 3, 2023 at 1:56=E2=80=AFAM Maulik Shah <quic_mkshah@quicinc.com=
+> wrote:
+>
+> Add power-domains for cpuidle states to use psci os-initiated idle states=
+.
+>
+> Cc: devicetree@vger.kernel.org
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sc7280.dtsi | 98 +++++++++++++++++++++-------
+>  1 file changed, 73 insertions(+), 25 deletions(-)
 
-> Also in Pinephone case, you'll not really have a case where the battery has
-> < 2V not loaded. That's not going to happen. PMIC will shut off at 3V battery
-> voltage when loaded. It will not discharge further, and after shutoff battery
-> voltage will jump to 3.4V or so, and it will not drop below 2V after that, ever.
-> So the battery will pretty much always be detected as long as it's present.
+FWIW, I dug up an old sc7280-herobrine board to test some other change
+and found it no longer booted. :( I bisected it and this is the change
+that breaks it. Specifically, I can make mainline boot with:
 
-The most likely case I can think of is if someone intentionally tries to
-boot the device without the battery. I suspect it's also possible for a
-battery to degrade to the point where it won't hold a charge.
+git revert --no-edit db5d137e81bc # arm64: dts: qcom: sc7280: Update
+domain-idle-states for cluster sleep
+git revert --no-edit 7925ca85e956 # arm64: dts: qcom: sc7280: Add
+power-domains for cpuidle states
 
-> What actual problem have you seen that this patch is trying to solve?
+(I get an ath11k crash after that, but that's easy to hack out since I
+don't need WiFi)
 
-The problem, in theory, is that the pmic ignores the USB BC
-specification and sets the current limit to 3A instead of 500mA. In
-practice (as long as the power supply is implemented properly) if this
-is too much power, it should just cause the power supply to shut off.
-I'm not sure how likely / what the risks of a power supply cutting
-corners are.
+I suppose the two options here are to either:
 
-I find it surprising that the hardware/driver takes a lot of care to
-figure out what the proper current is and stick to that, except when
-there isn't a battery.
+1. Track the problem down and figure out why the breaks boot and then
+fix it. I'm personally not going to track this down, but if someone
+wants me to test a patch I can do that.
 
-The point of this patch (after a revision) should be to make it explicit
-when and why this driver ignores the USB BC specification. And to reduce
-the cases where it does, if possible.
+2. Delete all the herobrine dts files.
 
-With the goal of making it explicit what cases ignore the spec, I would
-prefer to have an opt-out mechanism. I compiled what I believe to be a
-full list of devices that use this driver with usb bc enabled (detailed
-notes below), and there's only a handful of them. It shouldn't be too
-difficult to out-out the boards that need it.
+So far we've been keeping the herobrine dts files alive because I
+thought some graphics folks (Rob, Abhinav, Jessica, for instance) were
+still using it. ...but Rob says he hasn't booted his in a while. No
+idea if Abhinav and Jessica are using theirs. Any opinions? Is
+herobrine hardware support near and dear to anyone these days?
 
-> 
-> Thank you and kind regards,
-> 	o.
 
-Sorry it took me a while to respond, I haven't had much time to work on
-this in the past few weeks.
-
-Regards
- - Aren
-
-p.s. the notes on what devices use this functionality:
-
-These devices include the axp803 or axp81x dtsi:
-$ rg -l 'include "axp(803|81x).dtsi"'
- - sun50i-a100-allwinner-perf1.dts
- - sun50i-a64-amarula-relic.dts
- - sun50i-a64-bananapi-m64.dts
- - sun50i-a64-nanopi-a64.dts
- - sun50i-a64-olinuxino.dts
- - sun50i-a64-orangepi-win.dts
- - sun50i-a64-pine64.dts
- - sun50i-a64-pinebook.dts
- - sun50i-a64-pinephone.dtsi
- - sun50i-a64-pinetab.dts
- - sun50i-a64-sopine.dtsi
- - sun50i-a64-teres-i.dts
- - sun8i-a83t-allwinner-h8homlet-v2.dts
- - sun8i-a83t-bananapi-m3.dts
- - sun8i-a83t-cubietruck-plus.dts
- - sun8i-a83t-tbs-a711.dts
-
-Out of those only these enable usb_power_supply:
-$ rg -l 'include "axp(803|81x).dtsi"' | xargs rg -l 'usb_power_supply'
- - sun50i-a64-bananapi-m64.dts
- - sun50i-a64-pinetab.dts
- - sun50i-a64-pinephone.dtsi
- - sun8i-a83t-tbs-a711.dts
- - sun8i-a83t-cubietruck-plus.dts
- - sun8i-a83t-bananapi-m3.dts
-
-sun50i-a64-bananapi-m64.dts: The barrel jack is connected to acin, so
-will be unaffected. Banannapi docs say it's not possible to power over
-usb, but schematic suggests it should work. Probably needs to opt-out of
-the lower current limit.
-
-sun50i-a64-pinetab.dts: unclear if charging is supported via usb, vbus
-is connected through a component listed as "NC/0R". Regardless device
-has barrel jack and battery for power, shouldn't need to run exclusively
-from usb.
-
-sun50i-a64-pinephone.dtsi: is typically booted with a battery connected,
-shouldn't need to run exclusively from usb.
-
-sun8i-a83t-tbs-a711.dts: has an internal battery, shouldn't need to run
-exclusively from usb.
-
-sun8i-a83t-cubietruck-plus.dts and sun8i-a83t-bananapi-m3.dts: Both
-appear to support being powered over usb and a barrel jack. These will
-need to opt-out to be able to run from usb.
+-Doug
 
