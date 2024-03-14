@@ -1,162 +1,149 @@
-Return-Path: <linux-pm+bounces-4933-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4934-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 440CD87BD14
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 13:56:43 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BDAB87BD70
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 14:17:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E2B1E28456A
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 12:56:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A0EEBB2184B
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 13:17:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F22A5A0FD;
-	Thu, 14 Mar 2024 12:56:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEE985A4C0;
+	Thu, 14 Mar 2024 13:17:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="R/p4zuCW"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="ho7CTE2Z"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78DB958ACF
-	for <linux-pm@vger.kernel.org>; Thu, 14 Mar 2024 12:56:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16BE03D0D5;
+	Thu, 14 Mar 2024 13:17:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710420995; cv=none; b=X9nIlPyhRR1Uf6HuAZFF53wBB6BY+aDJpGLCzo1mnZepGMtTm4hujORa5c+Yn9gV6XgY/zlAn6FuyumzyvS8DfzYhCMXa5+tSbyAU1IpneFRKRCXaHlzWzjwV+YyFa1w6ab9qsjTNh2R3wGHtkbS4syIHXTXKLANqguLHe53jTw=
+	t=1710422245; cv=none; b=QqlMMDtmhU9TUvu+vvXvaQrfL8oyvd3XHNVrQUrsT8ehliLOJa+wZ4LXyMhoMh6g+rze490g8yVT0Qdvv3vbjmR+EpUfqHl8AUWJ0/SDGgMq1snNkVnfOZfcFMppyDLaRlon3NZewXqzzemTS0PoCPeDttz23MoIUNq1hif+k58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710420995; c=relaxed/simple;
-	bh=9Y/+hw0hgw9ADsFQLz0LPL3cLz0NNDauGYrral+Dtro=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
-	 References; b=NpNlyqjVpvUkXbwTIq4cjOcmoi+TcSSPFYhPk3KcTI6RB2Ur1ycVREB2vYcJDmYHXCNe0DBESp2rVGAWKRAbD5W5KeCELng0lPOdrKk1WrH/MjxkQ94N8MZhCIZh8gesWXoPO86hgBut85jF+8mFa/NIGX8OciKtvz27glCUSy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=R/p4zuCW; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20240314125629euoutp014cfa15de0e55627223a19c36be7f87b1~8otPQ7ceC0747607476euoutp01I
-	for <linux-pm@vger.kernel.org>; Thu, 14 Mar 2024 12:56:29 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20240314125629euoutp014cfa15de0e55627223a19c36be7f87b1~8otPQ7ceC0747607476euoutp01I
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1710420989;
-	bh=AtiIPD1nd1BTHIsx1dMEytn/tsBihsCy+dwOY7jQpBY=;
-	h=From:To:Cc:Subject:Date:References:From;
-	b=R/p4zuCWtTO6I2S2SBVnoJM4D/03rroyRNjc6VN1uUfQYoV9rcRtFkqbqNIVLKN2E
-	 yST+G/UfoOeOU8ynRiUXYXFs4KrDKfJUi1GBYlX3rrYQr7n/hhpXrgCaKU79D6rnQf
-	 s2iu5gvtOGEOh+p/VydajeBDAGzE7WKyeSuAobgI=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-	20240314125628eucas1p2e3ad48e936d6c53ce89ca5f2e02d474c~8otOyC5e32014220142eucas1p2m;
-	Thu, 14 Mar 2024 12:56:28 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-	eusmges2new.samsung.com (EUCPMTA) with SMTP id 46.99.09814.CF3F2F56; Thu, 14
-	Mar 2024 12:56:28 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20240314125628eucas1p161af377a50fd957f445397bc1404978b~8otOP51sB1264712647eucas1p1m;
-	Thu, 14 Mar 2024 12:56:28 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-	eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20240314125628eusmtrp157bb9d209f9df74e3c1ff96e3a790aaf~8otOPJAlG1799517995eusmtrp1O;
-	Thu, 14 Mar 2024 12:56:28 +0000 (GMT)
-X-AuditID: cbfec7f4-727ff70000002656-24-65f2f3fc65a2
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-	eusmgms1.samsung.com (EUCPMTA) with SMTP id D2.FA.09146.BF3F2F56; Thu, 14
-	Mar 2024 12:56:27 +0000 (GMT)
-Received: from AMDC4653.digital.local (unknown [106.120.51.32]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20240314125627eusmtip12f547f04dc25f77ebf9f2ed838088094~8otNdUPBP2067620676eusmtip1f;
-	Thu, 14 Mar 2024 12:56:27 +0000 (GMT)
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-To: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>, "Rafael J. Wysocki"
-	<rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, Stephan Gerhold
-	<stephan@gerhold.net>, Catalin Marinas <catalin.marinas@arm.com>, Russell
-	King <linux@armlinux.org.uk>, Christoph Lameter <cl@gentwo.org>, Mark
-	Rutland <mark.rutland@arm.com>, Sudeep Holla <sudeep.holla@arm.com>, Will
-	Deacon <will@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH] cpufreq: dt: always allocate zeroed cpumask
-Date: Thu, 14 Mar 2024 13:54:57 +0100
-Message-Id: <20240314125457.186678-1-m.szyprowski@samsung.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1710422245; c=relaxed/simple;
+	bh=8om1TSfZV/lD1t30d/Govum8U1wXvG3FbuXdIOkj6mA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rymCzcRpiVvJfEbcyNghy6uGiHW414vAhny0f9BPYX8bqY1lbtDm6CUhmm3orAEzAciZu4urvjeh4M7ql7XzXsIH4kF9FItrLEpYhR0LoxXW5iUPx/vgMZXhlygBYM+uhWzkUOeRV1nOrimcWHWEHA92d2BqW9olL2Qk4dI+W9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=ho7CTE2Z; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=clrW0RwMW19aCCVUBe+aDaa6Xr2fikUQUzGV0E47Ik8=; b=ho7CTE2Zq1/DvHgOQchZ4l3JtQ
+	k5ID2n2/S4kvmPPE9WrMgxAyc9pWgcLyPizYsqSRtd8W80gi8AYct3bRILrT6ln668Tj9Q8FWDx3G
+	uEh81hiCaDn+Kr+6bcuNb1RRA9E0Rs2P51cwzTON2R++WbCGz+BSSutYfuA4BjFKr7/houpCIGZmz
+	Q1km00FJT9ueKsGXmjsYD9euNplW3zJK4EkHBw5g5tQmR0YA21vrtJxeVxuiP0G9UdTakINVDCKR/
+	iMmP0znPoqK9WArfjueEljzbfOI+lNl4mY7UMH924GL2vKcYY7lNEZ7Ekj2uCbUneYA9wSFamyc+E
+	jgzW8UBQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:51784)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1rkkxM-0000Vg-2h;
+	Thu, 14 Mar 2024 13:17:12 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1rkkxE-0005Tc-6M; Thu, 14 Mar 2024 13:17:04 +0000
+Date: Thu, 14 Mar 2024 13:17:04 +0000
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	"Christoph Lameter (Ampere)" <cl@linux.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <vireshk@kernel.org>, Will Deacon <will@kernel.org>,
+	Jonathan.Cameron@huawei.com, Matteo.Carlini@arm.com,
+	Valentin.Schneider@arm.com, akpm@linux-foundation.org,
+	anshuman.khandual@arm.com, Eric Mackay <eric.mackay@oracle.com>,
+	dave.kleikamp@oracle.com, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	robin.murphy@arm.com, vanshikonda@os.amperecomputing.com,
+	yang@os.amperecomputing.com, Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH v3] ARM64: Dynamically allocate cpumasks and increase
+ supported CPUs to 512
+Message-ID: <ZfL40N6HYzEQaEj1@shell.armlinux.org.uk>
+References: <c1f2902d-cefc-4122-9b86-d1d32911f590@samsung.com>
+ <Ze9TsQ-qVCZMazfI@arm.com>
+ <9352f410-9dad-ac89-181a-b3cfc86176b8@linux.com>
+ <bf1757ca-6d41-87e7-53dd-56146eef5693@linux.com>
+ <ZfCXJRJSMK4tt_Cm@arm.com>
+ <ZfG5oyrgGOkpHYD6@bogus>
+ <432c1980-b00f-4b07-9e24-0bec52ccb5d6@samsung.com>
+ <ZfHevcKpcb6i1fn5@shell.armlinux.org.uk>
+ <ZfK30r8M6zx2aWU6@arm.com>
+ <a210104f-a3af-4554-b734-097cfa77a470@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrNKsWRmVeSWpSXmKPExsWy7djP87p/Pn9KNdj8Sc7i/bIeRovlc+Yy
-	WWx6fI3V4vKuOWwW99b8Z7X43HuE0eLQ1L2MFmuP3GW3WHr9IpPF3C9TmS0WbHzEaHFjronF
-	8lM7WCw2fvWwaLlj6sDvsWbeGkaPy9cuMnvsP1zk0bbA3mPTqk42j02fJrF73Lm2h81j85J6
-	j74tqxg9Pm+SC+CK4rJJSc3JLEst0rdL4MpYvGk3S0ETV8W/43/YGhj3cHQxcnJICJhIdF34
-	wNzFyMUhJLCCUeL37TOsEM4XRolL0zawQDifGSUubz7PBNNyctMJqMRyRolVU18ywbV8uNHD
-	BlLFJmAo0fW2C8wWESiT6P17CKyIWWAZs8Sse0+BNnJwCAvYSKztCQOpYRFQlZi95iNYPa+A
-	nUTzhVWMENvkJfYfPMsMEReUODnzCQuIzQwUb946mxmi5geHxMvFQSAjJQRcJL68YYEIC0u8
-	Or6FHcKWkTg9uQfsaAmBdkaJBb/vM0E4ExglGp7fglpmLXHn3C82kEHMApoS63fpQ4QdJf7e
-	f8ACMZ9P4sZbQYgT+CQmbZvODBHmlehoE4KoVpOYdXwd3NqDFy5BlXhIHL8kDhIWEoiVODPr
-	MMsERoVZSP6aheSvWQgnLGBkXsUonlpanJueWmyUl1quV5yYW1yal66XnJ+7iRGY3k7/O/5l
-	B+PyVx/1DjEycTAeYpTgYFYS4a1T/JgqxJuSWFmVWpQfX1Sak1p8iFGag0VJnFc1RT5VSCA9
-	sSQ1OzW1ILUIJsvEwSnVwJTyUnetpBmbEKeOSbXi4jvWt6z+8ymf0Kl3q/uSOFX88rlIbxWO
-	u/mW01/LcpdLGpx5a8FU2X3ErGijUPefloaSba8/HG+afv5bmcvPP0+YTr1KzfXMienaVV3h
-	sEB2oVxEvsq9q8r509nMorJzV+hKFJ6R+Xt0t04J7x63R4u2qoeun7t6Bm+qcsxB2R/ZX2+q
-	3Fmml9l825V1zq8pK3O+lpteKtqaoSwk/onxn3XnrtnsTnnXnz9YbvnC+oWWylP+C9v552ub
-	fo8p7TBTW2o2N4FlGcPcO435H1QXaK7r6Np+5NDxymh1n/SmiWHm/O/uFP5pS/O2OfHgydZP
-	QRpdM9W101fOmNgWWHtaWomlOCPRUIu5qDgRABqRgGreAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEIsWRmVeSWpSXmKPExsVy+t/xu7q/P39KNbj9ydLi/bIeRovlc+Yy
-	WWx6fI3V4vKuOWwW99b8Z7X43HuE0eLQ1L2MFmuP3GW3WHr9IpPF3C9TmS0WbHzEaHFjronF
-	8lM7WCw2fvWwaLlj6sDvsWbeGkaPy9cuMnvsP1zk0bbA3mPTqk42j02fJrF73Lm2h81j85J6
-	j74tqxg9Pm+SC+CK0rMpyi8tSVXIyC8usVWKNrQw0jO0tNAzMrHUMzQ2j7UyMlXSt7NJSc3J
-	LEst0rdL0MtYvGk3S0ETV8W/43/YGhj3cHQxcnJICJhInNx0ggXEFhJYyijR/9MbIi4jcXJa
-	AyuELSzx51oXWxcjF1DNJ0aJAydfMoEk2AQMJbregiQ4OUQEqiT+NKxmAiliFtjALHHh3Hb2
-	LkYODmEBG4m1PWEgNSwCqhKz13wEq+cVsJNovrCKEWKBvMT+g2eZIeKCEidnPgE7iBko3rx1
-	NvMERr5ZSFKzkKQWMDKtYhRJLS3OTc8tNtQrTswtLs1L10vOz93ECIysbcd+bt7BOO/VR71D
-	jEwcjIcYJTiYlUR46xQ/pgrxpiRWVqUW5ccXleakFh9iNAW6byKzlGhyPjC280riDc0MTA1N
-	zCwNTC3NjJXEeT0LOhKFBNITS1KzU1MLUotg+pg4OKUamFw/7E4v/uWZdV5549zwmvN8lR33
-	S+52fEn7ZP1bZ4l00qZn3f9za94Xf56jcqr7/KyMsPBZFoceStyo7VjsttjnfEPK3EO9yxI1
-	zoi4nG6VCVVezMOcfPbmwRN+wv8ydx98b/Uj4NKlyMtz4j5zr4sWvP9X/aqdTOaBMn1h4W99
-	v2Mt/qdo/bz9Im7j4eZz0vEnfBM7BWXavvAcdDa873uJ929W4tbE31+3bJK5sfvA0aKX4RuN
-	H+2q3STGIxTDbe35VUw62CCi+ymHuAaDuW1ym3YuwyZjlboL250ez/PoyHP0uyX7m8l2NtvN
-	r1aN86LNV3dKpe+1jNfQe81o7juFaS4nX0tZzMUPRdtXKrEUZyQaajEXFScCAG0BSGY1AwAA
-X-CMS-MailID: 20240314125628eucas1p161af377a50fd957f445397bc1404978b
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20240314125628eucas1p161af377a50fd957f445397bc1404978b
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20240314125628eucas1p161af377a50fd957f445397bc1404978b
-References: <CGME20240314125628eucas1p161af377a50fd957f445397bc1404978b@eucas1p1.samsung.com>
+In-Reply-To: <a210104f-a3af-4554-b734-097cfa77a470@samsung.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-Commit 0499a78369ad ("ARM64: Dynamically allocate cpumasks and increase
-supported CPUs to 512") changed the handling of cpumasks on ARM 64bit,
-what resulted in the strange issues and warnings during cpufreq-dt
-initialization on some big.LITTLE platforms.
+On Thu, Mar 14, 2024 at 01:28:40PM +0100, Marek Szyprowski wrote:
+> Dear All,
+> 
+> On 14.03.2024 09:39, Catalin Marinas wrote:
+> > On Wed, Mar 13, 2024 at 05:13:33PM +0000, Russell King wrote:
+> >> So, I wonder whether what you're seeing is a latent bug which is
+> >> being tickled by the presence of the CPU masks being off-stack
+> >> changing the kernel timing.
+> >>
+> >> I would suggest the printk debug approach may help here to see when
+> >> the OPPs are begun to be parsed, when they're created etc and their
+> >> timing relationship to being used. Given the suspicion, it's possible
+> >> that the mere addition of printk() may "fix" the problem, which again
+> >> would be another semi-useful data point.
+> > It might be an init order problem. Passing "initcall_debug" on the
+> > cmdline might help a bit.
+> >
+> > It would also be useful in dev_pm_opp_set_config(), in the WARN_ON
+> > block, to print opp_table->opp_list.next to get an idea whether it looks
+> > like a valid pointer or memory corruption.
+> 
+> I've finally found some time to do the step-by-step printk-based 
+> debugging of this issue and finally found what's broken!
+> 
+> Here is the fix:
+> 
+> diff --git a/drivers/cpufreq/cpufreq-dt.c b/drivers/cpufreq/cpufreq-dt.c
+> index 8bd6e5e8f121..2d83bbc65dd0 100644
+> --- a/drivers/cpufreq/cpufreq-dt.c
+> +++ b/drivers/cpufreq/cpufreq-dt.c
+> @@ -208,7 +208,7 @@ static int dt_cpufreq_early_init(struct device *dev, 
+> int cpu)
+>          if (!priv)
+>                  return -ENOMEM;
+> 
+> -       if (!alloc_cpumask_var(&priv->cpus, GFP_KERNEL))
+> +       if (!zalloc_cpumask_var(&priv->cpus, GFP_KERNEL))
+>                  return -ENOMEM;
+> 
+>          cpumask_set_cpu(cpu, priv->cpus);
+> 
+> 
+> It is really surprising that this didn't blow up for anyone else so 
+> far... This means that the $subject patch is fine.
 
-This was caused by mixing OPPs between big and LITTLE cores, because
-OPP-sharing information between big and LITTLE cores is computed on
-cpumask, which in turn was not zeroed on allocation. Fix this by
-switching to zalloc_cpumask_var() call.
+Wow. I guess we've been lucky with that allocation hitting memory
+containing zeros. Well done at tracking it down!
 
-Fixes: dc279ac6e5b4 ("cpufreq: dt: Refactor initialization to handle probe deferral properly")
-CC: stable@vger.kernel.org # v5.10+
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
----
- drivers/cpufreq/cpufreq-dt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/cpufreq/cpufreq-dt.c b/drivers/cpufreq/cpufreq-dt.c
-index 8bd6e5e8f121..2d83bbc65dd0 100644
---- a/drivers/cpufreq/cpufreq-dt.c
-+++ b/drivers/cpufreq/cpufreq-dt.c
-@@ -208,7 +208,7 @@ static int dt_cpufreq_early_init(struct device *dev, int cpu)
- 	if (!priv)
- 		return -ENOMEM;
- 
--	if (!alloc_cpumask_var(&priv->cpus, GFP_KERNEL))
-+	if (!zalloc_cpumask_var(&priv->cpus, GFP_KERNEL))
- 		return -ENOMEM;
- 
- 	cpumask_set_cpu(cpu, priv->cpus);
 -- 
-2.34.1
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
