@@ -1,218 +1,86 @@
-Return-Path: <linux-pm+bounces-4950-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4951-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC19887C1A0
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 17:58:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6072287C1BD
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 18:01:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF27A1C21AA9
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 16:58:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1CD28283C93
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 17:01:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B0207443B;
-	Thu, 14 Mar 2024 16:58:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Upxp6VnM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F11AD7316C;
+	Thu, 14 Mar 2024 17:01:09 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from gentwo.org (gentwo.org [62.72.0.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6584D1EB34;
-	Thu, 14 Mar 2024 16:58:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F5FDF53;
+	Thu, 14 Mar 2024 17:01:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.72.0.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710435486; cv=none; b=Vcs77zsqIn9OruxtzeUdAOrJhUYLw+iYoFLIzWGw/W1n/H2zKqN5I1yG9u5alCNlf3pNPTfHuREtZOlBEzJS0fzW7a9v20Ko9xJfnrzJbAb1Is7iRYCAwb5GtlzMLZLZdG1Fn3cHee7QZ7COTyOrYZxE6RDu4X1820poWEiZfbI=
+	t=1710435669; cv=none; b=Z7EW4qShg/lMDZ+5fBcTzjvlIpuiJUSXrPgAuyna1PdDdZevQmiEkPUe8bapmN+t1tTHK9xhoEPkQeWWIVMNOiTF5gnEe3o7sj7zIaJVgAt2bI9xtTT18QqlxFulbIK16LBeeyLzFJi8mbXJJkD1TCoIfTT/AMiJhH2oPbBkvVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710435486; c=relaxed/simple;
-	bh=fcf8GvnNI2NlxwWa/BLBUBs674hhRLyrkoAa66D2RKo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nE9Dvb4jlx6h5vXrX4A9HOeg58e+rGh2c7tkkgerxTH4oqbOienOHOVPcy/KYUA6XDZf6V+m6gCBjqy5QTyf7NcGJc9/rDTvrPmiASibu9GsfnMNXtwivmFvh9LqXtIIbs5WA4+yEvd/cAiOkfmsi8qZbL7NfrNIwdhyRUBBxTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Upxp6VnM; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710435484; x=1741971484;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fcf8GvnNI2NlxwWa/BLBUBs674hhRLyrkoAa66D2RKo=;
-  b=Upxp6VnMtVVIh5OrjLy1m4x53O33vUT82Px9mA1yIg4XVcMfwTQJFixh
-   7LgJMYtNRqx/gFI4UZaFZANBwyUZ2125tyWFO/h/8aNJY3Ssz6Q5mTtSq
-   z2Rj4kEpS4nJkn25okzKvdQv4rbbJF9HCHjqQ9B/Jb64bwio9XG/KBlJp
-   J699SnKSz1nj/E2RkWAJaF9YVeUpsaCsOXlpHs5uHkESF9K3aOaQpXess
-   FCsbM8DPR2tGCmMJCjBmNp+30GvOQOM0FuzvdY/0Dl1c7H5pm+EbBsxtB
-   SWZno7PLV95EK9E7rTZWvtAMKbMAY13rhlzTtvMhwYJfdAqn3LBycbVbu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11013"; a="22731667"
-X-IronPort-AV: E=Sophos;i="6.07,126,1708416000"; 
-   d="scan'208";a="22731667"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2024 09:58:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,126,1708416000"; 
-   d="scan'208";a="16952403"
-Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.209.72.214])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2024 09:57:59 -0700
-Date: Thu, 14 Mar 2024 09:57:57 -0700
-From: Alison Schofield <alison.schofield@intel.com>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
-	Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
-	linux-block@vger.kernel.org, linux-cxl@vger.kernel.org,
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-	intel-xe@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-	freedreno@lists.freedesktop.org, virtualization@lists.linux.dev,
-	linux-rdma@vger.kernel.org, linux-pm@vger.kernel.org,
-	iommu@lists.linux.dev, linux-tegra@vger.kernel.org,
-	netdev@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-	ath11k@lists.infradead.org, ath12k@lists.infradead.org,
-	brcm80211@lists.linux.dev, brcm80211-dev-list.pdl@broadcom.com,
-	linux-usb@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-	linux-nfs@vger.kernel.org, ocfs2-devel@lists.linux.dev,
-	linux-cifs@vger.kernel.org, linux-xfs@vger.kernel.org,
-	linux-edac@vger.kernel.org, selinux@vger.kernel.org,
-	linux-btrfs@vger.kernel.org, linux-erofs@lists.ozlabs.org,
-	linux-f2fs-devel@lists.sourceforge.net, linux-hwmon@vger.kernel.org,
-	io-uring@vger.kernel.org, linux-sound@vger.kernel.org,
-	bpf@vger.kernel.org, linux-wpan@vger.kernel.org,
-	dev@openvswitch.org, linux-s390@vger.kernel.org,
-	tipc-discussion@lists.sourceforge.net,
-	Julia Lawall <Julia.Lawall@inria.fr>
-Subject: Re: [FYI][PATCH] tracing/treewide: Remove second parameter of
- __assign_str()
-Message-ID: <ZfMslbCmCtyEaEWN@aschofie-mobl2>
-References: <20240223125634.2888c973@gandalf.local.home>
+	s=arc-20240116; t=1710435669; c=relaxed/simple;
+	bh=+/9AxFGa0W6Y9R5mfC2f2mSSAFoTOTJWGLqKpWY3otM=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=TH4Kdnla81SDuB1v1O60bpNHOxRN+TWdYXHz6e3mDfAvTDBrwNPke3A9l2Sn5/HB1tzCHVC8aeTwdT5Ck1SDuhUuw0zKcDxbdg+VtrngTg6WrBOzwKsKtwrrGlitc/WIcATloQODTMSzlP4wVGvfH1o+CeszkGsGmyT6qAv2S6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com; spf=fail smtp.mailfrom=linux.com; arc=none smtp.client-ip=62.72.0.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.com
+Received: by gentwo.org (Postfix, from userid 1003)
+	id 08A9040AB2; Thu, 14 Mar 2024 10:01:01 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+	by gentwo.org (Postfix) with ESMTP id 0604D40AAD;
+	Thu, 14 Mar 2024 10:01:01 -0700 (PDT)
+Date: Thu, 14 Mar 2024 10:01:01 -0700 (PDT)
+From: "Christoph Lameter (Ampere)" <cl@linux.com>
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+cc: Marek Szyprowski <m.szyprowski@samsung.com>, 
+    Catalin Marinas <catalin.marinas@arm.com>, 
+    Sudeep Holla <sudeep.holla@arm.com>, Mark Rutland <mark.rutland@arm.com>, 
+    "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
+    "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <vireshk@kernel.org>, 
+    Will Deacon <will@kernel.org>, Jonathan.Cameron@huawei.com, 
+    Matteo.Carlini@arm.com, Valentin.Schneider@arm.com, 
+    akpm@linux-foundation.org, anshuman.khandual@arm.com, 
+    Eric Mackay <eric.mackay@oracle.com>, dave.kleikamp@oracle.com, 
+    linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+    linux-mm@kvack.org, robin.murphy@arm.com, 
+    vanshikonda@os.amperecomputing.com, yang@os.amperecomputing.com, 
+    Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH v3] ARM64: Dynamically allocate cpumasks and increase
+ supported CPUs to 512
+In-Reply-To: <ZfL40N6HYzEQaEj1@shell.armlinux.org.uk>
+Message-ID: <ec8f9afa-ea35-9a73-7238-b29d4a32dacb@linux.com>
+References: <c1f2902d-cefc-4122-9b86-d1d32911f590@samsung.com> <Ze9TsQ-qVCZMazfI@arm.com> <9352f410-9dad-ac89-181a-b3cfc86176b8@linux.com> <bf1757ca-6d41-87e7-53dd-56146eef5693@linux.com> <ZfCXJRJSMK4tt_Cm@arm.com> <ZfG5oyrgGOkpHYD6@bogus>
+ <432c1980-b00f-4b07-9e24-0bec52ccb5d6@samsung.com> <ZfHevcKpcb6i1fn5@shell.armlinux.org.uk> <ZfK30r8M6zx2aWU6@arm.com> <a210104f-a3af-4554-b734-097cfa77a470@samsung.com> <ZfL40N6HYzEQaEj1@shell.armlinux.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240223125634.2888c973@gandalf.local.home>
+Content-Type: text/plain; format=flowed; charset=US-ASCII
 
-On Fri, Feb 23, 2024 at 12:56:34PM -0500, Steven Rostedt wrote:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> 
-> [
->    This is a treewide change. I will likely re-create this patch again in
->    the second week of the merge window of v6.9 and submit it then. Hoping
->    to keep the conflicts that it will cause to a minimum.
-> ]
-> 
-> With the rework of how the __string() handles dynamic strings where it
-> saves off the source string in field in the helper structure[1], the
-> assignment of that value to the trace event field is stored in the helper
-> value and does not need to be passed in again.
-> 
-> This means that with:
-> 
->   __string(field, mystring)
-> 
-> Which use to be assigned with __assign_str(field, mystring), no longer
-> needs the second parameter and it is unused. With this, __assign_str()
-> will now only get a single parameter.
-> 
-> There's over 700 users of __assign_str() and because coccinelle does not
-> handle the TRACE_EVENT() macro I ended up using the following sed script:
-> 
->   git grep -l __assign_str | while read a ; do
->       sed -e 's/\(__assign_str([^,]*[^ ,]\) *,[^;]*/\1)/' $a > /tmp/test-file;
->       mv /tmp/test-file $a;
->   done
-> 
-> I then searched for __assign_str() that did not end with ';' as those
-> were multi line assignments that the sed script above would fail to catch.
-> 
-> Note, the same updates will need to be done for:
-> 
->   __assign_str_len()
->   __assign_rel_str()
->   __assign_rel_str_len()
->   __assign_bitmask()
->   __assign_rel_bitmask()
->   __assign_cpumask()
->   __assign_rel_cpumask()
-> 
-> [1] https://lore.kernel.org/linux-trace-kernel/20240222211442.634192653@goodmis.org/
-> 
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> ---
->  arch/arm64/kernel/trace-events-emulation.h    |   2 +-
->  arch/powerpc/include/asm/trace.h              |   4 +-
->  arch/x86/kvm/trace.h                          |   2 +-
->  drivers/base/regmap/trace.h                   |  18 +--
->  drivers/base/trace.h                          |   2 +-
->  drivers/block/rnbd/rnbd-srv-trace.h           |  12 +-
->  drivers/cxl/core/trace.h                      |  24 ++--
+On Thu, 14 Mar 2024, Russell King (Oracle) wrote:
 
-snip to CXL
+>> It is really surprising that this didn't blow up for anyone else so
+>> far... This means that the $subject patch is fine.
+>
+> Wow. I guess we've been lucky with that allocation hitting memory
+> containing zeros. Well done at tracking it down!
 
+It would have blown up with slub_debug because that includes poisoning the 
+contents of all allocations via the slab allocator. Why did that not 
+occur? We should have seen a backtrace with data in registers etc showing 
+poisoning values for an unitialized object.
 
-> diff --git a/drivers/cxl/core/trace.h b/drivers/cxl/core/trace.h
-> index bdf117a33744..07ba4e033347 100644
-> --- a/drivers/cxl/core/trace.h
-> +++ b/drivers/cxl/core/trace.h
+Note that this was indeed triggered by OFFSTACK because 
+(z)alloc_cpumask_var() only generates a kmalloc allocation if that option 
+is set.
 
-snip to poison
-
-> @@ -668,8 +668,8 @@ TRACE_EVENT(cxl_poison,
->  	    ),
->  
->  	TP_fast_assign(
-> -		__assign_str(memdev, dev_name(&cxlmd->dev));
-> -		__assign_str(host, dev_name(cxlmd->dev.parent));
-> +		__assign_str(memdev);
-> +		__assign_str(host);
-
-I think I get that the above changes work because the TP_STRUCT__entry for
-these did:
-	__string(memdev, dev_name(&cxlmd->dev))
-	__string(host, dev_name(cxlmd->dev.parent))
-
->  		__entry->serial = cxlmd->cxlds->serial;
->  		__entry->overflow_ts = cxl_poison_overflow(flags, overflow_ts);
->  		__entry->dpa = cxl_poison_record_dpa(record);
-> @@ -678,12 +678,12 @@ TRACE_EVENT(cxl_poison,
->  		__entry->trace_type = trace_type;
->  		__entry->flags = flags;
->  		if (region) {
-> -			__assign_str(region, dev_name(&region->dev));
-> +			__assign_str(region);
->  			memcpy(__entry->uuid, &region->params.uuid, 16);
->  			__entry->hpa = cxl_trace_hpa(region, cxlmd,
->  						     __entry->dpa);
->  		} else {
-> -			__assign_str(region, "");
-> +			__assign_str(region);
->  			memset(__entry->uuid, 0, 16);
->  			__entry->hpa = ULLONG_MAX;
-
-For the above 2, there was no helper in TP_STRUCT__entry. A recently
-posted patch is fixing that up to be __string(region, NULL) See [1],
-with the actual assignment still happening in TP_fast_assign.
-
-Does that assign logic need to move to the TP_STRUCT__entry definition
-when you merge these changes? I'm not clear how much logic is able to be
-included, ie like 'C' style code in the TP_STRUCT__entry.
-
-[1]
-https://lore.kernel.org/linux-cxl/20240314044301.2108650-1-alison.schofield@intel.com/
-
-Thanks for helping,
-Alison
-
-
->  		}
-
-
+The config option was never set before my patch was applied on ARM64.
 
 
