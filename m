@@ -1,137 +1,97 @@
-Return-Path: <linux-pm+bounces-4945-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4946-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9101E87BFBB
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 16:19:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37AE787C031
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 16:30:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 465311F2292B
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 15:19:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E7297281E14
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 15:30:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C3127175F;
-	Thu, 14 Mar 2024 15:18:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="cKqm6Dlt"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63A1171B4E;
+	Thu, 14 Mar 2024 15:29:50 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9A7F71756;
-	Thu, 14 Mar 2024 15:18:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E467571B4F;
+	Thu, 14 Mar 2024 15:29:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710429539; cv=none; b=iNZyAdodlEY4q0dG3tOZOOCfXTOi/Oh3jqnvhfgr1LtWMk5UGztqB7g4XCCuiT5MQmdPzP+gkwUmq0RtskdKCXIw5aOljBFofJ/97lUsMWIARdHJHH6sG032x4NqFng2TMRkzq1bdUwJYnEKfDzDu5Hpiez/yFnF0vF23rwyUYk=
+	t=1710430190; cv=none; b=JU2SFbYCfHyiilh+tNQuv3/SIC72VcFAtMDzkgehtVaup6FYWEv2f4KQxcQO7JaBUlmL5nlAdl80bstB1MAFlhq4IXLmHDSQGF9j/6+kx1utNQzDrkrddi3QbdvUD1g6uAMa1N27CwgVLx8tziDZPkZSuMyIkdzJRsV8txS+0uY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710429539; c=relaxed/simple;
-	bh=2gPuGuSwHEgxxlhC0HKPR+AsCZzffsRJG9HPOwmtpwk=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RyA8Pdh6ejw7G9+5YUs85EhA+Z+07QtNADU3QzgU2o8itGJkzIg3+oVOVVILmJvF19v+wjLYAJbWhSMsHZYVQpDdDpoJtDIGw0T5kCYTMIvsPAgl8LCMaYyWMmatKHcidzt3EZgAptuPFAhVdG5lSN7Tl7ouB26WohdooEzQQqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=cKqm6Dlt; arc=none smtp.client-ip=198.47.19.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 42EFIloZ080670;
-	Thu, 14 Mar 2024 10:18:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1710429527;
-	bh=dZtjpTkxFeJ4o3KgsKAHW2BQ1L5sEaAioYu3UbO/7gk=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=cKqm6Dlt8pbTZajws9LTUK3j7QF5+YSZwJBTvnkPE1wqtB7zTAERaGgmOSZEQxFxV
-	 38x6GiCN0C+XqqR15qn2vVZ5YLWuWmcHTU1hbvNuDBRKlr3GdL/WwnRLEiLJU9uPvv
-	 363G2QWvXwexikc6vsILlyzfYVjp4aPKYLv7EpTw=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 42EFIlIC053234
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 14 Mar 2024 10:18:47 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 14
- Mar 2024 10:18:47 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 14 Mar 2024 10:18:47 -0500
-Received: from localhost (dhruva.dhcp.ti.com [172.24.227.68])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 42EFIk4a044918;
-	Thu, 14 Mar 2024 10:18:47 -0500
-Date: Thu, 14 Mar 2024 20:48:46 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: Tony Lindgren <tony@atomide.com>, <theo.lebrun@bootlin.com>,
-        Sibi Sankar
-	<quic_sibis@quicinc.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Ulf Hansson
-	<ulf.hansson@linaro.org>
-Subject: Re: [PATCH] PM: wakeup: Add a missing return case in init_wakeup
-Message-ID: <20240314151846.u3r3eaklrl3hf7pi@dhruva>
-References: <20240314075429.1164810-1-d-gole@ti.com>
- <CAJZ5v0iUt+tudMV-rJ80GR6iNQVv06+054h0UyNgpEOUF6QLRQ@mail.gmail.com>
+	s=arc-20240116; t=1710430190; c=relaxed/simple;
+	bh=sz4vtJtgjtxGimNuodR5Dts8e41V2G0abFSVNiYfOig=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YuTDITw3ZzUAGMIe78Qs0EUOgWrU7RDlNblxGdy766wXZKVn+k4I7g4q2cA0mk28a8XRr+HHwy8e56rQlzleqGIyOORRcnIkCCmsGymUuShZQOVgjQZgEKrPwa0YfRypRzTk4RO7igXI6Edx3gwhl8NVvfpZwudGJzF07S7Uk4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-221d4c52759so92285fac.1;
+        Thu, 14 Mar 2024 08:29:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710430188; x=1711034988;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sz4vtJtgjtxGimNuodR5Dts8e41V2G0abFSVNiYfOig=;
+        b=iTh112JXa3u+Utr0j1CTf/n5InCwSNN8pfXbetQmyaqpS0OWZYZYeVknKZWmvFjNrT
+         Zv77EqHFEvPrhTNy0AYfGOuVeOJIxyrBFEqTweeLAYetu8KDk/zBeWd08sf21MKcimPR
+         oQorpqWVL4Bpn+jf42Jti62HngOoa/G7adg48aqjx//9YUbj3yaJl4oIUyv8/f8fhG/X
+         IdkRvG+q3MGf7qugdGvgp6a1RQdp4kWQdD7K+odV7dHc4U0m7YtpTBMLsmE6AkqTmLho
+         I04TTPiLedsVjgaq5r7hSp5OMCjp8EdnxOBvfuzR8FZHra3Vjuv5obqeiHFk1pIRqOsR
+         CvYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVCveDBQRAALR1y7VK/YFlk0aWTibIDUOQgZTKjG1Hft7bB/4klXkV8a+YlXEoRC0fviFrzr8n2B8djluT2UqiBQVwumNXqXnqczk7Y0dccaksQj4Q4DfIuZV1BSNvsevNSpiaO2XI=
+X-Gm-Message-State: AOJu0YzmYisNGvYpzVegzejQRBOCi97dYj/A4GldUx/K4GOg0XYaMaUJ
+	sNOyhKIfeGT7boi/tAdQoLWxzaKmaGoSKofZOB85+tEeF1hJw+pzoHEh4JF93PbdwDdePabAmUP
+	11rFiGB5Asi+OeOKu8Cq6ho+X+GQ=
+X-Google-Smtp-Source: AGHT+IGw1wzCrd+KShFy8gIzPHGgdEgl6nALTcZHtfMqpjOxXMESDUNLraIbxUslw88qM0F+kZ+0mj1dkWxYreVQGI0=
+X-Received: by 2002:a05:6871:5b11:b0:221:a151:7f3d with SMTP id
+ op17-20020a0568715b1100b00221a1517f3dmr2177153oac.2.1710430187943; Thu, 14
+ Mar 2024 08:29:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0iUt+tudMV-rJ80GR6iNQVv06+054h0UyNgpEOUF6QLRQ@mail.gmail.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20240314075429.1164810-1-d-gole@ti.com> <CAJZ5v0iUt+tudMV-rJ80GR6iNQVv06+054h0UyNgpEOUF6QLRQ@mail.gmail.com>
+ <20240314151846.u3r3eaklrl3hf7pi@dhruva>
+In-Reply-To: <20240314151846.u3r3eaklrl3hf7pi@dhruva>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 14 Mar 2024 16:29:36 +0100
+Message-ID: <CAJZ5v0gwkKa+AYgOwydzsKjo=_M56t88PwVo7R+fe-53abAdVw@mail.gmail.com>
+Subject: Re: [PATCH] PM: wakeup: Add a missing return case in init_wakeup
+To: Dhruva Gole <d-gole@ti.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Tony Lindgren <tony@atomide.com>, theo.lebrun@bootlin.com, 
+	Sibi Sankar <quic_sibis@quicinc.com>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Ulf Hansson <ulf.hansson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Thu, Mar 14, 2024 at 4:18=E2=80=AFPM Dhruva Gole <d-gole@ti.com> wrote:
+>
+> Hi,
+>
+> On Mar 14, 2024 at 15:01:36 +0100, Rafael J. Wysocki wrote:
+> > On Thu, Mar 14, 2024 at 8:55=E2=80=AFAM Dhruva Gole <d-gole@ti.com> wro=
+te:
+> > >
+> > > The device_wakeup_disable call can return an error if no dev exists
+> > > however this was being ignored. Catch this return value and propagate=
+ it
+> > > onward in device_init_wakeup.
+> >
+> > Why does this matter to the callers of device_init_wakeup()?
+>
+> If atall !dev->power.can_wakeup then the caller should know something is
+> funny right?
 
-On Mar 14, 2024 at 15:01:36 +0100, Rafael J. Wysocki wrote:
-> On Thu, Mar 14, 2024 at 8:55 AM Dhruva Gole <d-gole@ti.com> wrote:
-> >
-> > The device_wakeup_disable call can return an error if no dev exists
-> > however this was being ignored. Catch this return value and propagate it
-> > onward in device_init_wakeup.
-> 
-> Why does this matter to the callers of device_init_wakeup()?
+What would the caller do with this information?
 
-If atall !dev->power.can_wakeup then the caller should know something is
-funny right?
-
-> 
-> >
-> > Signed-off-by: Dhruva Gole <d-gole@ti.com>
-> > ---
-> >  include/linux/pm_wakeup.h | 7 ++++---
-> >  1 file changed, 4 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
-> > index 6eb9adaef52b..64c7db35e693 100644
-> > --- a/include/linux/pm_wakeup.h
-> > +++ b/include/linux/pm_wakeup.h
-> > @@ -232,14 +232,15 @@ static inline void pm_wakeup_hard_event(struct device *dev)
-> >   */
-> >  static inline int device_init_wakeup(struct device *dev, bool enable)
-> >  {
-> > +       int ret;
-> >         if (enable) {
-> >                 device_set_wakeup_capable(dev, true);
-> > -               return device_wakeup_enable(dev);
-> > +               ret = device_wakeup_enable(dev);
-> >         } else {
-> > -               device_wakeup_disable(dev);
-> > +               ret = device_wakeup_disable(dev);
-> >                 device_set_wakeup_capable(dev, false);
-> > -               return 0;
-> >         }
-> > +       return ret;
-> >  }
-> >
-> >  #endif /* _LINUX_PM_WAKEUP_H */
-> >
-> > base-commit: 9bb9b28d0568991b1d63e66fe75afa5f97ad1156
-> > --
-> > 2.34.1
-> >
-
--- 
-Best regards,
-Dhruva Gole <d-gole@ti.com>
+They attempted to disable wakeup on a device that doesn't exist or is
+not wake-capable, and so what?
 
