@@ -1,116 +1,110 @@
-Return-Path: <linux-pm+bounces-4930-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4931-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA21187BBEA
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 12:27:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 600D987BC65
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 12:57:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 842FC2840F6
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 11:27:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 146201F21F6B
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 11:57:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33A036EB66;
-	Thu, 14 Mar 2024 11:27:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Vq1Q3vey"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAE5F6F06C;
+	Thu, 14 Mar 2024 11:57:54 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 350FB6EB5D;
-	Thu, 14 Mar 2024 11:27:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9812F6CDB5;
+	Thu, 14 Mar 2024 11:57:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710415652; cv=none; b=nAg/XOAwRqav9pDRE3waLfcwjoKy46lLa02Bytb4m8s+vHGEBC7hsCrFEP0x/9HGiq2s5HhhKoloX6L+AjMzFJFzQpWHZmnHJTh3/bCjPO7D8A2DsckU4KxLw2azHa5eWL283meEg2Uird+fVDpyIBYBwP0rpGKZpb/FHe2270E=
+	t=1710417474; cv=none; b=isL4bTB5893L6FFQKca5c+4LlPTSZMkvJDTwspwG4mNnGHZBj9xoQPM8Pd7+AMoeBnJHDuKrRswrBKFbE7CHlO+KE/iZrsQRXNsTsVFRu6hGFz9hGAOgPieinW051NfhSFcn7eV1J0biU89Jbm3HEkuIlW3k2vzTXRqgDejuU6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710415652; c=relaxed/simple;
-	bh=GqRRN7Gy1wji1RHe+Tu4TFLSTVMzkG2q5lTvefIyzRU=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=KTR2/dLO0c2n2T8Getk+QriEDsnsht05s4wVnD5gkcimpaB0yXrQl+AfMHJXkcYn9hltoesenpxiDjQWZrH1nN7TAXgcZw5fZQYowJTUJYGwBekScX/lNgZtapcztEi4leEjYoYNLNV8/K4k+pFVcLxWKhAs0C4dq0M5qLtq6a4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Vq1Q3vey; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-	:MIME-Version:Message-ID:References:In-Reply-To:Subject:CC:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=GqRRN7Gy1wji1RHe+Tu4TFLSTVMzkG2q5lTvefIyzRU=; b=Vq1Q3veyZarK0LuaADg8Zj8zER
-	U8eljUtoa10X4GQuCrkZcJwRveL8E3n5jSlW0CpsRjgOWvRis/JdLIh+G/nU5Muk/hxb6I4HR6jGE
-	iiwJmjL75qSAoJUhe0PpRdn1P4uALnBHIp2TpJ4aF9NXWoyAZBSUjJLPRJSbftPVQj0GDzjAFfplY
-	7lVlbe7+vZ70HrHdLIQLPbrMrAeibCHzTQDe/rQlVP8JfSfTCY2ZYs1lG8XYa7rfJPjmQ2dhrVYi/
-	ciCo3hrXXufTSlrAB/NbPZ++eD2jCWHMKnNvk+KgdtLqqhc8XrSQ2OUor3a1eUTVJvqgmvLjh8UZ/
-	Lz0Hsgyg==;
-Received: from [31.94.26.231] (helo=[127.0.0.1])
-	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rkjF0-0000000ASlo-3aMq;
-	Thu, 14 Mar 2024 11:27:19 +0000
-Date: Thu, 14 Mar 2024 12:27:14 +0100
-From: David Woodhouse <dwmw2@infradead.org>
-To: Sudeep Holla <sudeep.holla@arm.com>
-CC: linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
- Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
- Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,
- James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>,
- Zenghui Yu <yuzenghui@huawei.com>, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@ucw.cz>, Mostafa Saleh <smostafa@google.com>,
- Jean-Philippe Brucker <jean-philippe@linaro.org>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
- linux-pm@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BRFC_PATCH_2/2=5D_arm64=3A_Use_SYSTEM=5FO?= =?US-ASCII?Q?FF2_PSCI_call_to_power_off_for_hibernate?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <ZfLa1_TWArT7tCtb@bogus>
-References: <20240312135958.727765-1-dwmw2@infradead.org> <20240312135958.727765-3-dwmw2@infradead.org> <ZfB7c9ifUiZR6gy1@bogus> <520ce28050c29cca754493f0595d4a64d45796ee.camel@infradead.org> <ZfHHlBgSNr8Qm22D@bogus> <ZfLa1_TWArT7tCtb@bogus>
-Message-ID: <5A0D0B83-F898-4B5B-893F-7953847ED5CD@infradead.org>
+	s=arc-20240116; t=1710417474; c=relaxed/simple;
+	bh=uVbNBR9AVHWckYq4Saa5wfB0njDgPv2cq2V2E6uxF0I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GybsoLuN0aYMCjV//dYdzezHoJy12xe52eTXzewsDL7A5imkNlWu1REHSck9v8enraqy9wsiVpA30dcPhyxAUa7Nub4EeogtTGQ/kcTOwU5tbTetknsNz636yZcj3/x+iUME5T71N59sxXu2V84XPIRIuwogdA8HiBruYbNKARY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A23111007;
+	Thu, 14 Mar 2024 04:58:27 -0700 (PDT)
+Received: from [10.57.13.158] (unknown [10.57.13.158])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 98D843F73F;
+	Thu, 14 Mar 2024 04:57:50 -0700 (PDT)
+Message-ID: <1135db48-6430-4a36-b75a-2f0ededd4612@arm.com>
+Date: Thu, 14 Mar 2024 11:57:48 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] PM: EM: Force device drivers to provide power in uW
+Content-Language: en-US
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ poshao.chen@mediatek.com
+References: <20240308123203.196644-1-lukasz.luba@arm.com>
+ <CAJZ5v0g_UcJzRy2-16kjOZpOyB=-FsdgH63LJBzmHRhsARYjVA@mail.gmail.com>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAJZ5v0g_UcJzRy2-16kjOZpOyB=-FsdgH63LJBzmHRhsARYjVA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 14 March 2024 12:09:11 CET, Sudeep Holla <sudeep=2Eholla@arm=2Ecom> wrot=
-e:
->On Wed, Mar 13, 2024 at 03:34:44PM +0000, Sudeep Holla wrote:
->> On Tue, Mar 12, 2024 at 04:36:05PM +0000, David Woodhouse wrote:
->> > On Tue, 2024-03-12 at 15:57 +0000, Sudeep Holla wrote:
->> > > Looked briefly at register_sys_off_handler and it should be OK to c=
-all
->> > > it from psci_init_system_off2() below=2E Any particular reason for =
-having
->> > > separate initcall to do this ? We can even eliminate the need for
->> > > psci_init_system_off2 if it can be called from there=2E What am I m=
-issing ?
->> >
->> > My first attempt did that=2E I don't think we can kmalloc that early:
->> >
+
+
+On 3/13/24 19:49, Rafael J. Wysocki wrote:
+> On Fri, Mar 8, 2024 at 1:31 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
 >>
->> That was was initial guess=2E But a quick hack on my setup and running =
-it on
->> the FVP model didn't complain=2E I think either I messed up or somethin=
-g else
->> wrong, I must check on some h/w=2E Anyways sorry for the noise and than=
-ks for
->> the response=2E
+>> The EM only supports power in uW. Make sure that it is not possible to
+>> register some downstream driver which doesn't provide power in uW.
+>> The only exception is artificial EM, but that EM is ignored by the rest of
+>> kernel frameworks (thermal, powercap, etc).
 >>
->
->OK, it was indeed giving -ENOMEM which in my hack didn't get propogated
->properly =F0=9F=99=81=2E I assume you have some configs that is resulting=
- in the
->crash instead of -ENOMEM as I see in my setup(FVP as well as hardware)=2E
->
->Sorry for the noise=2E
+>> Reported-by: PoShao Chen <poshao.chen@mediatek.com>
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>>
+>> Hi all,
+>>
+>> The was an issue reported recently that the EM could be used with
+>> not aligned drivers which provide milli-Watts. This patch prevents such
+>> drivers to register EM (although there are no such in upstream).
+>>
+>> Regards,
+>> Lukasz
+>>
+>>   kernel/power/energy_model.c | 11 +++++++++++
+>>   1 file changed, 11 insertions(+)
+>>
+>> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+>> index b686ac0345bd9..9e1c9aa399ea9 100644
+>> --- a/kernel/power/energy_model.c
+>> +++ b/kernel/power/energy_model.c
+>> @@ -612,6 +612,17 @@ int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
+>>          else if (cb->get_cost)
+>>                  flags |= EM_PERF_DOMAIN_ARTIFICIAL;
+>>
+>> +       /*
+>> +        * EM only supports uW (exception is artificial EM).
+>> +        * Therefore, check and force the drivers to provide
+>> +        * power in uW.
+>> +        */
+>> +       if (!microwatts && !(flags & EM_PERF_DOMAIN_ARTIFICIAL)) {
+>> +               dev_err(dev, "EM: only supports uW power values\n");
+>> +               ret = -EINVAL;
+>> +               goto unlock;
+>> +       }
+>> +
+>>          ret = em_create_pd(dev, nr_states, cb, cpus, flags);
+>>          if (ret)
+>>                  goto unlock;
+>> --
+> 
+> Applied as 6.9-rc material, thanks!
 
-Fairly stock Fedora config, with a few tweaks=2E
-http://david=2Ewoodhou=2Ese/arm-hibernate-config
-
-I note kmalloc_trace() is in the backtrace=2E
-
+Thank you Rafael!
 
