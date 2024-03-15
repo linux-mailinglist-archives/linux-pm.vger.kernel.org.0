@@ -1,225 +1,132 @@
-Return-Path: <linux-pm+bounces-4982-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4983-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5318487CC06
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Mar 2024 12:13:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CAFC87CD0E
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Mar 2024 13:11:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BECEFB221F5
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Mar 2024 11:13:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5DF9B1C218ED
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Mar 2024 12:11:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02BDF1B7E2;
-	Fri, 15 Mar 2024 11:11:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Jj6eITN9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A596B1BF44;
+	Fri, 15 Mar 2024 12:11:26 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FA201CA8B;
-	Fri, 15 Mar 2024 11:11:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B3F11AAD0;
+	Fri, 15 Mar 2024 12:11:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710501118; cv=none; b=pVk9m3mFkUaOK3DCLnbGRZ7/DVMMJdAVYSqgl+yex6rorGWP7V1MRLEv9DTaaDT/s1v3XBotaWwqO4r3VQZPWF+vOGFE3LH48MuHCWiffpvjucdk9hTwMUfXgLKuyHhoNYgTNtYfN82JVMlxJ+uUw/vnV6BUPKR2MNHONOcv+ow=
+	t=1710504686; cv=none; b=kKWu0YNQ05XDGvRXFMg658h8ozR9nm0n9Kh3G5uo0cU+nEN07/vCi12kP9fStgTsZ+2Prh6OH38B7Fd0XSqlgEODjrRMhQsy+7odN/ZVSQ5ABONXf1SAZqZ64s8Q+nHyHuiSDBhusKbotrbMZgE6K1s5bTzwrWxKU+qCeOxpgCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710501118; c=relaxed/simple;
-	bh=c9eDdMrKl056YGymza5L9S9Pn3xL4m/t4iyVlX04qmQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NLU0Yn7+DuzlWkMnOq/UZAVwOBpEBsy7omt2XNkJeI+rHNuHVLx0YhvSUtAAEy0qbH0l6HVVSTawyy2YirWc9FCDhQtWphnKOXZRwLXW7p1yrYyVy5RPDvsQzXIy9HkX/ufnzeOEkzdIRklIAS7PSWDIhQKo8iXkrjRMmggoxJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Jj6eITN9; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42F9vS0b021333;
-	Fri, 15 Mar 2024 11:11:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding:content-type; s=
-	qcppdkim1; bh=vJl3dvcJIhlAU4N3mv5fA7wSeRtwykn2KSHZ5dN1QWQ=; b=Jj
-	6eITN90xyq9OcePZL51OVHGfuXkpY6pZszC6SopjKUH09QyaNVYqRyrZ0DeDtWAZ
-	gm3MXf53kHwmanVEn7JkMtzp5H7gVUNgey/MecBal8TOAB/nVed6QkrroIKuRGY9
-	drN2K1wFlq26AdR4ZfANGi3fLp2ijPTQxXBz1f+ycCvMV3DZgXxYCk/ZpO9EW+vH
-	B+m0ir+6oLIF6V0DBBpdeaqkbbv+D+SHDu1YNMQMR87/sq6qt0sN26nd2P55869j
-	zAQPddsMJOv1FfP2j5WXsGJC2fn1p50eql5HENqgKoID6ZzyJ+UktaYSuYnMKpqP
-	3mxpa56EzWL+9Nd4+Z8g==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wva0612pr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 15 Mar 2024 11:11:49 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42FBBmxm009034
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 15 Mar 2024 11:11:48 GMT
-Received: from hu-jkona-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Fri, 15 Mar 2024 04:11:41 -0700
-From: Jagadeesh Kona <quic_jkona@quicinc.com>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman
-	<khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>, Pavel Machek
-	<pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad
- Dybcio" <konrad.dybcio@linaro.org>,
-        Michael Turquette
-	<mturquette@baylibre.com>,
-        Andy Gross <agross@kernel.org>, Stephen Boyd
-	<sboyd@kernel.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        "Vikash Garodia" <quic_vgarodia@quicinc.com>,
-        Bryan O'Donoghue
-	<bryan.odonoghue@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abel Vesa
-	<abel.vesa@linaro.org>, Taniya Das <quic_tdas@quicinc.com>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, Jagadeesh Kona <quic_jkona@quicinc.com>,
-        "Imran
- Shaik" <quic_imrashai@quicinc.com>,
-        Ajit Pandey <quic_ajipan@quicinc.com>
-Subject: [PATCH V5 5/5] venus: pm_helpers: Use dev_pm_genpd_set_hwmode to switch GDSC mode on V6
-Date: Fri, 15 Mar 2024 16:40:46 +0530
-Message-ID: <20240315111046.22136-6-quic_jkona@quicinc.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240315111046.22136-1-quic_jkona@quicinc.com>
-References: <20240315111046.22136-1-quic_jkona@quicinc.com>
+	s=arc-20240116; t=1710504686; c=relaxed/simple;
+	bh=Wfc9oP0R64W5zCTmqNzrzXKvNhkgw76Rey6GJ7FbITw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Z+A/sMp41eRdl8utARqahH2opp0TA6vkcmYEQpltyQ2ND5J83d5LKqoaO4/STJlPdq9sYuBIwb7Q5Y+/DX4jtTuR4IzndlUHkJLCHLf3+VJkX+je96UNAgRnYwalzjajlPnTgjwx6BddenQ0/39k8bgszUZIUB9ITgm4V0sPdGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-6e677ec9508so105979a34.1;
+        Fri, 15 Mar 2024 05:11:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710504684; x=1711109484;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Wfc9oP0R64W5zCTmqNzrzXKvNhkgw76Rey6GJ7FbITw=;
+        b=Ro/K4vJNUP9A9LcaioIl9wSHgdwSHq9Ma9vrLza1vQc1JDr4TLEa5IPdohwaQRYjCO
+         5ATqpu1tLXdMgLzbxIE8fLtmDEI4ZGLKG3stcDzQ8Ns9hmnggEMNW0Ksvzv+p8SnBrQu
+         SK0+Zg5LV8YWCUfEllWa4EYqw9iEBd2tz/RQcJPMPmzry7Iws7yFpJ31I3ohUPGvfmhs
+         l7IdIYvC2kRQTJXFjy10HCM9+rRN2sZcCL0kaFN/IzfY7WmdaZo7aW/6wGfkoT2IUvlR
+         e9zhUkFy2sHmSgHeB+giF2ZL4x3Hs0+/85BU+ROw+F06UvgejLbrzFPdhUWHeK8h0OSj
+         PgwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWSHWTY8CbTEFyHqvu/KAAAOLewiNrXlfGtibOoeTkpXzex2PMq01/zWxbEHclTOyyjd+kp+5IUaGKy03K6mjr0ydQKtDkkvxOp3YHBQw5UazY5G9kkJi58ktoVHODdq931P6rzisE=
+X-Gm-Message-State: AOJu0Yxyl5rR9AkYZd+u+BP3HamnPEdYDL6PqA9CQ74sHMUAZr0JZ76s
+	VyV9sth+yP2n2r6r1ThhOweHoVCCvg3n7pZGPD2mmkOWz7AiwaOyjbnu7lWGef6/MNh/LReho+s
+	xG/ccQtRkzkOfvufOqWRDvd1P/9c=
+X-Google-Smtp-Source: AGHT+IHrL8H9SwN9jXgTuYfrExgOVrNcC3Bt0Zm4s+VN3I18sBdqrTjq+NUAfpZkvB8k2ddt4TZR9nTK++wk+D70UPg=
+X-Received: by 2002:a05:6871:b28:b0:222:8a9d:d935 with SMTP id
+ fq40-20020a0568710b2800b002228a9dd935mr1213647oab.3.1710504683918; Fri, 15
+ Mar 2024 05:11:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: oTzWPm6MT2jplZWYjsvdEltD4g60SVgC
-X-Proofpoint-ORIG-GUID: oTzWPm6MT2jplZWYjsvdEltD4g60SVgC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-14_13,2024-03-13_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- spamscore=0 phishscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0
- clxscore=1015 priorityscore=1501 mlxscore=0 adultscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2403140001
- definitions=main-2403150091
+References: <20240314075429.1164810-1-d-gole@ti.com> <CAJZ5v0iUt+tudMV-rJ80GR6iNQVv06+054h0UyNgpEOUF6QLRQ@mail.gmail.com>
+ <20240314151846.u3r3eaklrl3hf7pi@dhruva> <CAJZ5v0gwkKa+AYgOwydzsKjo=_M56t88PwVo7R+fe-53abAdVw@mail.gmail.com>
+ <20240315051828.su2qx57ecyhv3up3@dhruva>
+In-Reply-To: <20240315051828.su2qx57ecyhv3up3@dhruva>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 15 Mar 2024 13:11:11 +0100
+Message-ID: <CAJZ5v0jbHwiZemtNAoM-jmgB_58VqmKUkqv4P7qrPkxWzBzMyQ@mail.gmail.com>
+Subject: Re: [PATCH] PM: wakeup: Add a missing return case in init_wakeup
+To: Dhruva Gole <d-gole@ti.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Tony Lindgren <tony@atomide.com>, theo.lebrun@bootlin.com, 
+	Sibi Sankar <quic_sibis@quicinc.com>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Ulf Hansson <ulf.hansson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The Venus driver requires vcodec GDSC to be ON in SW mode for clock
-operations and move it back to HW mode to gain power benefits. Earlier,
-as there is no interface to switch the GDSC mode from GenPD framework,
-the GDSC is moved to HW control mode as part of GDSC enable callback and
-venus driver is writing to its POWER_CONTROL register to keep the GDSC ON
-from SW whereever required. But the POWER_CONTROL register addresses
-are not constant and can vary across the variants.
+On Fri, Mar 15, 2024 at 6:18=E2=80=AFAM Dhruva Gole <d-gole@ti.com> wrote:
+>
+> On Mar 14, 2024 at 16:29:36 +0100, Rafael J. Wysocki wrote:
+> > On Thu, Mar 14, 2024 at 4:18=E2=80=AFPM Dhruva Gole <d-gole@ti.com> wro=
+te:
+> > >
+> > > Hi,
+> > >
+> > > On Mar 14, 2024 at 15:01:36 +0100, Rafael J. Wysocki wrote:
+> > > > On Thu, Mar 14, 2024 at 8:55=E2=80=AFAM Dhruva Gole <d-gole@ti.com>=
+ wrote:
+> > > > >
+> > > > > The device_wakeup_disable call can return an error if no dev exis=
+ts
+> > > > > however this was being ignored. Catch this return value and propa=
+gate it
+> > > > > onward in device_init_wakeup.
+> > > >
+> > > > Why does this matter to the callers of device_init_wakeup()?
+> > >
+> > > If atall !dev->power.can_wakeup then the caller should know something=
+ is
+> > > funny right?
+> >
+> > What would the caller do with this information?
+> >
+> > They attempted to disable wakeup on a device that doesn't exist or is
+> > not wake-capable, and so what?
+>
+> Using drivers/char/hw_random/xgene-rng.c as an example, we can atleast
+> print a warning or something to make the user aware of an unclean state.
+>
+> Is the argument here that if the caller can't do anything meaningful
+> then what's the point of returning any error?
+>
+> If so, then my preference would be just to propagate as much information
+> upward from the stack whether the caller can make use of that error and
+> in what way is upto the caller, if nothing else then even a warn or
+> error print is still useful piece of information.
 
-Also as per the HW recommendation, the GDSC mode switching needs to be
-controlled from respective GDSC register and this is a uniform approach
-across all the targets. Hence use dev_pm_genpd_set_hwmode() API which
-controls GDSC mode switching using its respective GDSC register.
+I'm not making a general argument, just talking about this particular case.
 
-In venus V6 variants, the vcodec gdsc gets enabled in SW mode by default
-with new HW_CTRL_TRIGGER flag and there is no need to switch it to SW
-mode again after enable, hence add check to avoid switching gdsc to SW mode
-again after gdsc enable. Similarly add check to avoid switching GDSC to HW
-mode before disabling the GDSC, so GDSC gets enabled in SW mode in the next
-enable.
+The only error code returned by device_wakeup_disable() is -EINVAL and
+it is returned when nothing had to be done because it was not
+applicable to the argument passed by the caller.
 
-Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
- .../media/platform/qcom/venus/pm_helpers.c    | 39 +++++++++++--------
- 1 file changed, 23 insertions(+), 16 deletions(-)
+Quite frankly, I don't see why any caller of device_init_wakeup()
+passing false as its second argument would be interested in handling
+that error.
 
-diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
-index 502822059498..4ce76ce6dd4d 100644
---- a/drivers/media/platform/qcom/venus/pm_helpers.c
-+++ b/drivers/media/platform/qcom/venus/pm_helpers.c
-@@ -412,10 +412,9 @@ static int vcodec_control_v4(struct venus_core *core, u32 coreid, bool enable)
- 	u32 val;
- 	int ret;
- 
--	if (IS_V6(core)) {
--		ctrl = core->wrapper_base + WRAPPER_CORE_POWER_CONTROL_V6;
--		stat = core->wrapper_base + WRAPPER_CORE_POWER_STATUS_V6;
--	} else if (coreid == VIDC_CORE_ID_1) {
-+	if (IS_V6(core))
-+		return dev_pm_genpd_set_hwmode(core->pmdomains->pd_devs[coreid], !enable);
-+	else if (coreid == VIDC_CORE_ID_1) {
- 		ctrl = core->wrapper_base + WRAPPER_VCODEC0_MMCC_POWER_CONTROL;
- 		stat = core->wrapper_base + WRAPPER_VCODEC0_MMCC_POWER_STATUS;
- 	} else {
-@@ -451,9 +450,11 @@ static int poweroff_coreid(struct venus_core *core, unsigned int coreid_mask)
- 
- 		vcodec_clks_disable(core, core->vcodec0_clks);
- 
--		ret = vcodec_control_v4(core, VIDC_CORE_ID_1, false);
--		if (ret)
--			return ret;
-+		if (!IS_V6(core)) {
-+			ret = vcodec_control_v4(core, VIDC_CORE_ID_1, false);
-+			if (ret)
-+				return ret;
-+		}
- 
- 		ret = pm_runtime_put_sync(core->pmdomains->pd_devs[1]);
- 		if (ret < 0)
-@@ -467,9 +468,11 @@ static int poweroff_coreid(struct venus_core *core, unsigned int coreid_mask)
- 
- 		vcodec_clks_disable(core, core->vcodec1_clks);
- 
--		ret = vcodec_control_v4(core, VIDC_CORE_ID_2, false);
--		if (ret)
--			return ret;
-+		if (!IS_V6(core)) {
-+			ret = vcodec_control_v4(core, VIDC_CORE_ID_2, false);
-+			if (ret)
-+				return ret;
-+		}
- 
- 		ret = pm_runtime_put_sync(core->pmdomains->pd_devs[2]);
- 		if (ret < 0)
-@@ -488,9 +491,11 @@ static int poweron_coreid(struct venus_core *core, unsigned int coreid_mask)
- 		if (ret < 0)
- 			return ret;
- 
--		ret = vcodec_control_v4(core, VIDC_CORE_ID_1, true);
--		if (ret)
--			return ret;
-+		if (!IS_V6(core)) {
-+			ret = vcodec_control_v4(core, VIDC_CORE_ID_1, true);
-+			if (ret)
-+				return ret;
-+		}
- 
- 		ret = vcodec_clks_enable(core, core->vcodec0_clks);
- 		if (ret)
-@@ -506,9 +511,11 @@ static int poweron_coreid(struct venus_core *core, unsigned int coreid_mask)
- 		if (ret < 0)
- 			return ret;
- 
--		ret = vcodec_control_v4(core, VIDC_CORE_ID_2, true);
--		if (ret)
--			return ret;
-+		if (!IS_V6(core)) {
-+			ret = vcodec_control_v4(core, VIDC_CORE_ID_2, true);
-+			if (ret)
-+				return ret;
-+		}
- 
- 		ret = vcodec_clks_enable(core, core->vcodec1_clks);
- 		if (ret)
--- 
-2.43.0
+> However if it's useless to return anything from device_wakeup_disable
+> then we might as well make that function a void or something and avoid
+> any confusion as to if there's any point in returning error at that
+> point.
 
+That would work for me.
 
