@@ -1,81 +1,85 @@
-Return-Path: <linux-pm+bounces-4970-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4971-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAE0987C885
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Mar 2024 06:29:01 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD8E087C89B
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Mar 2024 06:50:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA426282A08
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Mar 2024 05:28:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0BB62B213D6
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Mar 2024 05:50:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5AE1F9DE;
-	Fri, 15 Mar 2024 05:28:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3741D52F;
+	Fri, 15 Mar 2024 05:50:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="fQb/pU1N"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wmkDciih"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1353DF51;
-	Fri, 15 Mar 2024 05:28:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B055FBE8
+	for <linux-pm@vger.kernel.org>; Fri, 15 Mar 2024 05:50:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710480534; cv=none; b=sERd+RqRE/PlxOUYD4YjlIelBGoAYs9uYs0PBLhQaCmZ/jKBLpzeOg1K0NSS2YQsmzi+gImDB/oCfLQstva0D9PlDpSYJCw2kgds8tN3RcSK0DevekAK9atXjzFpmGOtENajNkn2nytsg6JKRi5QVgetHZCYJPPFLeSHUejPsH8=
+	t=1710481829; cv=none; b=IFJdd1KXtbikIbWdsBEdZQ3fYsutlz/dosP2EHyn6lxwpgWZQ/l2ePFiP3psbvu9a8/X0MlWXpZltvmw8tqON0KWMGjAYc9adROquklOMkGpCPXYpDzPZ+eNWOX9jIQHYjgrDZyFLGXdsyZCp6b5rU4Yaa4dU6BLqWnA/qh4xj0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710480534; c=relaxed/simple;
-	bh=/xPxAzCyhJN43wEXC0maiJE/UWoPU0LwRgLXzSrXbZA=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K/i/J7v91wjHeseCwSJ/84NKg6t4e+kF5NZqXPNcW2Jd0eH36Sjz73zZ6h7u1ei6PJVFFiMPE6z0Wgv5oMZ16OInkTjgRqwB9fm4YbzwbhWqbGeQT7TkttFN1W8jI/f7ksn7QJxcCfsJa3ehTKAa0okEJ0/L9or0FchRrXl0mXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=fQb/pU1N; arc=none smtp.client-ip=198.47.23.249
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 42F5Rwhl009845;
-	Fri, 15 Mar 2024 00:27:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1710480478;
-	bh=/6G2n4e8p7C1eVE+gmMKGmm9QowQsFFL9iknvi5QMHI=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=fQb/pU1NAsoTLsgzpPTYk2XWYXulJ99R6WCw3e34GECDrhUBQ6BO49OWv5qEJGnjA
-	 SpQtQ5nSGo3YFBtNzRyvsu7DhL90Kc2PkXerMTJ9y0PLuKclkcg/wkWxdvSc/jYCjC
-	 et51MitlsDTSiRv1gYorkmu0FUDm0MjMG9kM8MCo=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 42F5Rw58005758
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 15 Mar 2024 00:27:58 -0500
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 15
- Mar 2024 00:27:57 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 15 Mar 2024 00:27:58 -0500
-Received: from localhost (dhruva.dhcp.ti.com [172.24.227.68])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 42F5RvAV037118;
-	Fri, 15 Mar 2024 00:27:57 -0500
-Date: Fri, 15 Mar 2024 10:57:56 +0530
-From: Dhruva Gole <d-gole@ti.com>
+	s=arc-20240116; t=1710481829; c=relaxed/simple;
+	bh=Naq9CDfVLJcnya6EOl3vtZ0oDKB1UwOPAMZ9XUdYhW8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gbwJz0xEAPhshi9QIFL8Rgkf6dn5Jp659JXIYd5M7EeErMD2/q70wUkCFncG2xZvlhkNC4DUrKXnHqlOdmAmPWbihZ8Q7TQGHyQRXud/6tXhbHjRfZkqyT02Zg9uNnEGAEvnGJbZTI5+yXzwFLHEL/AaNu8G1MjycXA2pgXyG54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wmkDciih; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-5ce2aada130so1460023a12.1
+        for <linux-pm@vger.kernel.org>; Thu, 14 Mar 2024 22:50:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1710481827; x=1711086627; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VmeqZQFsfILznkSe1TDD/d0MuJKx0Lhu/2GiKczhwds=;
+        b=wmkDciihrW5uRQUtYyPQUML0MbOxl3cE4UMXLoxK+4OjAURzdiICFc7eyjTehN6NbL
+         Vn1aNfWoAnALHvCy26hWFDGZ7d+V1qx/i80w2WLhv8A5CIeuTngMHORKOrlVEdGshCD9
+         rbPuKbpexGMMJB0/tEyCHsl+YwPHRyP7J+XA+LeSwSk2AXvLk3bqdIhjKpCDxYz2770E
+         3CK65OGZdd+ekC/VqPfHBsA0y1mgwVgqA3/3pjuRhvityKjMRbmJxaouRd5My8mFGJ+P
+         iZgBLL/tuxedrVUoTVf+FKTDdpoRqety1tapZ9hBOTOFF4778Fc60NIhcd3xUWS8TA54
+         IhEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710481827; x=1711086627;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VmeqZQFsfILznkSe1TDD/d0MuJKx0Lhu/2GiKczhwds=;
+        b=UiL7QQN9/67UBm7e3Z5662CCxtH6HtCmh4F4rNfHcR5FPlnJeqoJk7QKiCknDUozxP
+         gpD2F17df71lLeyhzhGsnZ+boUmjJ61F7WA8FlkEagxj4fskc4LlfAbDjwIxNjjk5xVo
+         X4ajlXZsxiCmCgSEaPL7mgOCSoH9Z9J8T/7sjuYWfpFTWFC2NH92ifS4Nzxlc+iV5iVB
+         j7FnxVNpYuSNmS5Y75BZ2Fxq8ur7wyshl/h8oDnIbs+rd0dtz1fQJ73aJ7B8FSPo/toq
+         XU4CJbIU4My5FZWUiKoe/zqqQaqhvasVMA9Z/6341NN1WFB9QqDxB1awbljX+qoPk/Bk
+         rDWw==
+X-Gm-Message-State: AOJu0YwPMHyeKDBdAz47u765b0LMuJV58277yvbeJmo5hHC3ZGSimg4x
+	kXW7sCqj8cSIOk+OohdIF6uC6XzT0gYOjpQNRKKBoGmBBg3ziEB3dsjlXNkZUdg=
+X-Google-Smtp-Source: AGHT+IGfYH1h68xEMnxaFPv1hFUKOr5YSQLITq8lOAM9Fw+k62f3AwJ0HdbWBTJZFkUgfCmfapPMfg==
+X-Received: by 2002:a05:6a20:9d94:b0:1a3:2f5e:6126 with SMTP id mu20-20020a056a209d9400b001a32f5e6126mr4304199pzb.22.1710481826596;
+        Thu, 14 Mar 2024 22:50:26 -0700 (PDT)
+Received: from localhost ([122.172.85.206])
+        by smtp.gmail.com with ESMTPSA id le13-20020a170902fb0d00b001dcc2951c02sm2823712plb.286.2024.03.14.22.50.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Mar 2024 22:50:26 -0700 (PDT)
+Date: Fri, 15 Mar 2024 11:20:24 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
 To: Marek Szyprowski <m.szyprowski@samsung.com>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-arm-kernel@lists.infradead.org>,
-        "Rafael J.
- Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Stephan
- Gerhold <stephan@gerhold.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Christoph Lameter <cl@gentwo.org>,
-        Mark
- Rutland <mark.rutland@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>, Will
- Deacon <will@kernel.org>,
-        <stable@vger.kernel.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Stephan Gerhold <stephan@gerhold.net>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Christoph Lameter <cl@gentwo.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Sudeep Holla <sudeep.holla@arm.com>, Will Deacon <will@kernel.org>,
+	stable@vger.kernel.org
 Subject: Re: [PATCH] cpufreq: dt: always allocate zeroed cpumask
-Message-ID: <20240315052756.5w4zizrod3w7kzzn@dhruva>
+Message-ID: <20240315055024.bm7vvznq3nzhfsno@vireshk-i7>
 References: <CGME20240314125628eucas1p161af377a50fd957f445397bc1404978b@eucas1p1.samsung.com>
  <20240314125457.186678-1-m.szyprowski@samsung.com>
 Precedence: bulk
@@ -84,12 +88,11 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20240314125457.186678-1-m.szyprowski@samsung.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On Mar 14, 2024 at 13:54:57 +0100, Marek Szyprowski wrote:
+On 14-03-24, 13:54, Marek Szyprowski wrote:
 > Commit 0499a78369ad ("ARM64: Dynamically allocate cpumasks and increase
 > supported CPUs to 512") changed the handling of cpumasks on ARM 64bit,
 > what resulted in the strange issues and warnings during cpufreq-dt
@@ -118,13 +121,11 @@ On Mar 14, 2024 at 13:54:57 +0100, Marek Szyprowski wrote:
 > -	if (!alloc_cpumask_var(&priv->cpus, GFP_KERNEL))
 > +	if (!zalloc_cpumask_var(&priv->cpus, GFP_KERNEL))
 >  		return -ENOMEM;
+>  
+>  	cpumask_set_cpu(cpu, priv->cpus);
 
-Good catch!
-
-Reviewed-by: Dhruva Gole <d-gole@ti.com>
-
+Applied. Thanks.
 
 -- 
-Best regards,
-Dhruva
+viresh
 
