@@ -1,83 +1,89 @@
-Return-Path: <linux-pm+bounces-4972-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4973-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6CEC87C8A0
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Mar 2024 06:51:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D056A87C8AA
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Mar 2024 06:53:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D8EAAB21FB5
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Mar 2024 05:51:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8AAD4282FD9
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Mar 2024 05:53:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96A94D52F;
-	Fri, 15 Mar 2024 05:50:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D38512E75;
+	Fri, 15 Mar 2024 05:53:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fFCJlLyI"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="ADeBF+Ez"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E49E1400B
-	for <linux-pm@vger.kernel.org>; Fri, 15 Mar 2024 05:50:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C50812E6A
+	for <linux-pm@vger.kernel.org>; Fri, 15 Mar 2024 05:53:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710481858; cv=none; b=cugAZSL1sMhY9rE51A9dfE4IgQU2xpvbxl5s0fZeGIh1U/DFAZg/0saYn9MOeBMvCgFNz1HEQWrsBq+nmqbELOw+f3sBUsdNCXgO+W++KHyCZVVHE9J8wU2iLThtinkWk0+BTalDd3Fk2FUzZaZsC0XyGmJqkvZmow/gtm9i/wY=
+	t=1710482015; cv=none; b=BOR7ZFakU9gFaOpMRsPBzaAG2llQFhAyXb+OIgwGZ5Dy3cVsbQrb5Qq1kLT0UyRf75wqPFd2DYf8LxWG/OhrPaEmO+dlLRYajsvJOEStaH57PefoA49ue5666FRu8wCTEkNXVlD1G3ahpHTEXLAxZt9XseTg+YSa0iahaBZu5zE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710481858; c=relaxed/simple;
-	bh=YLMCpkGftwnRvP6OHcJwPra4ldTcLEUhhhD1EiB/Hpw=;
+	s=arc-20240116; t=1710482015; c=relaxed/simple;
+	bh=UDhwVLvrhKZ4zV83WNvEmS1n7Q5RwVHTSzv7hrkimAk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C9wGf0JtHHa38y0XxQdh4eaCgx+pgFbBM9q3RLs+1LvtmMw3r/E1sAGM7y32jvQUpKXEbnK1ISSVWED+AliV4llDGUQfYys98+u+qWq7idFd9slFqsz2NDQIHKDzGByhwZvANK3uCGDGz95kD91F5NuLAgNqpgHMS/BgGusJu44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fFCJlLyI; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6e6b54a28ebso1829352b3a.2
-        for <linux-pm@vger.kernel.org>; Thu, 14 Mar 2024 22:50:56 -0700 (PDT)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Iud1DpSDv8r16FkFYPOIEXQcuocqq+n4PyfrzLUD5Lrihi4z6GmpqccptL739bF8s/lPi6SsQJpufLohKAZBXiNhvaIGq8xW8mgDt3cQ7Qqi0avghSVDoGYxh907t1vdBmd3MddiizkYuU+a5Hl6G37gApIqFlJzBga2Vo9ieu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=ADeBF+Ez; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1dc09556599so13327165ad.1
+        for <linux-pm@vger.kernel.org>; Thu, 14 Mar 2024 22:53:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1710481856; x=1711086656; darn=vger.kernel.org;
+        d=ventanamicro.com; s=google; t=1710482013; x=1711086813; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=doJoUmDIAXOFTyNTaIXiWO8CVSFB4RTU/SEwZDIiXeg=;
-        b=fFCJlLyI9y2LbcNd29RzxR/ogw28Z/Y0e1QleKdDYTw9L2ksNU3eOgrPRogFnCnQev
-         77M7CQIccKCGKwKZE0KkE9jD2sraUeAYCL5ECTpwbC2NXEIh1H4ilFClgYlnPK3uLYZ5
-         jaJ5kcrtBU+qXWjq7Ipc4GRC6jBX7N63XG8IJ3yNSgRRguLp9dBckI0CNWR7VeayaNfu
-         G/QjmpAD4vt3BrFVHF63/Gi3ByC2Lxxc5SGm9Uzj5I94oP+KG5LGzEj4jalU4FS9zA/u
-         yLTotKm3JPv0yU5d7BHUZjBOZuaws9TaGn8OS2GRniPxljn16dQjQKvU31RfmLNb6By5
-         u+tQ==
+        bh=6143Xt6B1fDIKqVroZrZ1l3ARGTZuJpSXXKGYmPvAls=;
+        b=ADeBF+EzvihhgqCzjtlhJAWGFXdOcayNCcFl51JfItK8YNAuKa+3+UN9+I4JPNa6pO
+         vYJyTE25aWD7L2oobBVuSaB5gMTeCfBGNyVVc5BqhUR06SkUvF3yE5c683YmWV9Q9cSS
+         r3rQT9L0Av74zCK98nSRpqO25sintcjT0nR3oJaPLh/485r/FN8uooyZEhmw02Ly1wcc
+         yFOfD+8qHR0W40TIFU8Q2dBKCwfK+P3MDEllkqkA9pScG2jQhObB9Tjty4DE+3xVccEW
+         E6aedSjyuRE+GjXhIllxuSFuI7wC1NkmI6Ck94937CBJE/3SwKMjS0QmAYx2JF5dJ9M3
+         D35g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710481856; x=1711086656;
+        d=1e100.net; s=20230601; t=1710482013; x=1711086813;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=doJoUmDIAXOFTyNTaIXiWO8CVSFB4RTU/SEwZDIiXeg=;
-        b=Mxp3M+lN/ZM4tiuph/+h32aXvAWfJLxKVkG2PTqf9g0/Q58hhvBDjPejiAmmnCIcH7
-         e6OMfwbc51HEZ7V6UkUsyNiChHx7XdOR/CXhIcira+P2kkvrQMygZddmAbMCbHSjHgy1
-         15K71RiQJvO9P9cWHN6lRu8kR5cQQeKjTJTYRrjbEtjo0Kqn5F46118oP9vMpUcVuA+z
-         lk6KlJh0I/zPqKzzhGRc5EgZ+wW8yIoxvblgOBGroySgbYSw+D8dnPD0IlCX3XZB6+YV
-         I5W82eL+NPkngun3ii7YWKvhu6sZ6ixX2vnkuhbtFhNOfgsdiQILohNvAUDjSs2pXhbk
-         VEOg==
-X-Forwarded-Encrypted: i=1; AJvYcCU6+VeGggA9AuO3RKbZNvvdwY5cwpefGTT08DheQHZPMYvtfbwDq+5yQTdlIhj0VufonilYVqVm0TQwQtyJRM2QcpE7G95rbwQ=
-X-Gm-Message-State: AOJu0YxinUiG69/+i9nAfwb6ZtH/Ehs4ogD9p+RnlNrfyAjZsy4v43qM
-	Z+scOuevqbY5LK1wB5FIMKvtMcbrmVTG7JkFihOD0aSBpaAF1T4mUGtuSfhyaY0=
-X-Google-Smtp-Source: AGHT+IF8TBbL8ijQ19uOHux5h2xhr4W6B21SMrX6Qo49YKppD/YPhBVhbmfkzvgyqyFW6yizrp9NlQ==
-X-Received: by 2002:a05:6a20:8e02:b0:1a3:13e5:5200 with SMTP id y2-20020a056a208e0200b001a313e55200mr4910274pzj.14.1710481856364;
-        Thu, 14 Mar 2024 22:50:56 -0700 (PDT)
-Received: from localhost ([122.172.85.206])
-        by smtp.gmail.com with ESMTPSA id l23-20020a17090a3f1700b0029bce05b7dfsm2166577pjc.32.2024.03.14.22.50.55
+        bh=6143Xt6B1fDIKqVroZrZ1l3ARGTZuJpSXXKGYmPvAls=;
+        b=uSK4FfjjvXJblnzosTaACaTOd7lUhN2D9JMCqcNnhkJBHg+lm57ztlEqyFXahgZ+ti
+         NsCSqd4yixL9AdFyHBLnm61yPnxdxJmYgC1Pz+wpy8jrSy1KodnNzg87ahEZBWsg1kpW
+         JYcmjLoDaOVtTGO3xQqGSSMK5DLi28dd2CpntXt7fKyxM/9bF7q8A9rzYOy3r2bjcqrr
+         blppf/y/hudoliKVAZb7dOuV4MzjlYhUX5C3fULkUKS7w1MoeXyLlEw1Fgb9Og3boHEH
+         HPGpKp21v8kNpXidZBP1kNrgL8xLYTyOuc2dMCAyUR8Ai6F7FZ97W2Zp/7aA5n1RpcAp
+         Y/ZA==
+X-Gm-Message-State: AOJu0Yx3IKfOz2+l2TaXupbZZ8BQ3duBuhME9f2j5D3aV3lBTudTBM7f
+	X4NzEw+8rirL8GF3Ryql4GYmt1xmkkGUQQtPJ/b2/zP7gO4axuR2vu+I7ngtYxg=
+X-Google-Smtp-Source: AGHT+IFdhVX1m34Rty2PqcdB9AWHBwlmpI+1s+YRgrPY8LLbB4ruxR0YBRVt2iLRDYdvkYdiR1xfvw==
+X-Received: by 2002:a17:902:f706:b0:1dd:8df3:1727 with SMTP id h6-20020a170902f70600b001dd8df31727mr2720117plo.44.1710482012859;
+        Thu, 14 Mar 2024 22:53:32 -0700 (PDT)
+Received: from sunil-laptop ([106.51.184.12])
+        by smtp.gmail.com with ESMTPSA id u11-20020a170903124b00b001dcbffec642sm2804203plh.133.2024.03.14.22.53.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Mar 2024 22:50:55 -0700 (PDT)
-Date: Fri, 15 Mar 2024 11:20:54 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Sibi Sankar <quic_sibis@quicinc.com>
-Cc: sudeep.holla@arm.com, cristian.marussi@arm.com, rafael@kernel.org,
-	morten.rasmussen@arm.com, dietmar.eggemann@arm.com,
-	lukasz.luba@arm.com, sboyd@kernel.org, d-gole@ti.com,
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, quic_mdtipton@quicinc.com,
-	linux-arm-msm@vger.kernel.org, nm@ti.com
-Subject: Re: [PATCH V4 0/2] cpufreq: scmi: Add boost frequency support
-Message-ID: <20240315055054.wbhi7456j4ph7mbn@vireshk-i7>
-References: <20240312094726.3438322-1-quic_sibis@quicinc.com>
+        Thu, 14 Mar 2024 22:53:32 -0700 (PDT)
+Date: Fri, 15 Mar 2024 11:23:23 +0530
+From: Sunil V L <sunilvl@ventanamicro.com>
+To: Drew Fustini <drew@pdp7.com>
+Cc: linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Len Brown <lenb@kernel.org>,
+	Anup Patel <anup@brainfault.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Atish Kumar Patra <atishp@rivosinc.com>
+Subject: Re: [PATCH v3 -next 0/3] RISC-V: ACPI: Add LPI support
+Message-ID: <ZfPiU5aSw0jML3S1@sunil-laptop>
+References: <20240118062930.245937-1-sunilvl@ventanamicro.com>
+ <ZfO5oiVSVSmlP8eL@x1>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -86,14 +92,51 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240312094726.3438322-1-quic_sibis@quicinc.com>
+In-Reply-To: <ZfO5oiVSVSmlP8eL@x1>
 
-On 12-03-24, 15:17, Sibi Sankar wrote:
-> This series adds provision to mark dynamic opps as turbo capable and adds
-> boost frequency support to the scmi cpufreq driver.
+Hi Drew,
 
-Applied. Thanks.
+On Thu, Mar 14, 2024 at 07:59:46PM -0700, Drew Fustini wrote:
+> On Thu, Jan 18, 2024 at 11:59:27AM +0530, Sunil V L wrote:
+> > This series adds support for Low Power Idle (LPI) on ACPI based
+> > platforms. 
+> > 
+> > LPI is described in the ACPI spec [1]. RISC-V FFH spec required to
+> > enable this is available at [2].
+> 
+> I'm interested in trying out this series. Might you be able to provide
+> some guidance on how to setup a test environment?
+> 
+> Are there specific branches of qemu and edk2 that I should use?
+> 
+1) You need LPI objects in the platform. I have added dummy objects for
+testing this for qemu virt machine. Please use below branch.
 
--- 
-viresh
+https://github.com/vlsunil/qemu/tree/lpi_exp
+
+Since interrupt controllers are not merged yet in linux, we need to boot
+without any IO devices and use only polling based console and ram disk.
+Above qemu branch disables IO devices as well.
+
+2) Enable below config options while building linux kernel.
+RISCV_SBI_V01
+HVC_RISCV_SBI
+
+3) Use upstream EDK2 (RiscVVirt)
+
+4) Boot:
+qemu-system-riscv64 \
+ -M virt,pflash0=pflash0,pflash1=pflash1 \
+ -m 2G -smp 8 \
+ -serial mon:stdio \
+ -blockdev node-name=pflash0,driver=file,read-only=on,filename=RISCV_VIRT_CODE.fd \
+ -blockdev node-name=pflash1,driver=file,filename=RISCV_VIRT_VARS.fd \
+ -kernel arch/riscv/boot/Image \
+ -initrd buildroot/output/images/rootfs.cpio \
+ -append "root=/dev/ram ro console=hvc earlycon=sbi"
+
+Feel free to ping me if you have any difficulties.
+
+Thanks!
+Sunil
 
