@@ -1,187 +1,110 @@
-Return-Path: <linux-pm+bounces-4957-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4958-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0056287C68A
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Mar 2024 00:39:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7653887C7C4
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Mar 2024 03:59:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C6AF1F214FC
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Mar 2024 23:39:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 30FC32829E9
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Mar 2024 02:59:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECCF910940;
-	Thu, 14 Mar 2024 23:39:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC6948BF1;
+	Fri, 15 Mar 2024 02:59:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="H6QikYBW"
+	dkim=pass (2048-bit key) header.d=pdp7-com.20230601.gappssmtp.com header.i=@pdp7-com.20230601.gappssmtp.com header.b="R/EVY4VR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B5EA11185;
-	Thu, 14 Mar 2024 23:39:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FD5BD26B
+	for <linux-pm@vger.kernel.org>; Fri, 15 Mar 2024 02:59:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710459584; cv=none; b=QpuFjHyQkISOst9mtxRX6paGihAvgWHjonQMzpHexvLq8BbumUypwDAHbVHZyjHYvv4s9h6dSwuRHb4WuRTzJXLCpOoGSUINEDIz/VqXUR41ty1cc0m6sJKOUfWvKYsVyRj2qNPs3mkD6CZZNVAonJaYK9OPkX4oo57mm8TopJ4=
+	t=1710471590; cv=none; b=sJC5eC/hkaGADjDeQ7oW08x93yvrI2dxVcC4/d06WWPsiTReoL8Ym7ItK5wTqBXM7pzOgxczVVsWBNPnzT5Zbfkf3+sGs6i5QzWuJnP/wbXnnSQ0ghDleJGpw+avEw4s1c7uxe3PGj8WufE7VEXLbBhZw+71kXe1PSL43cCXOrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710459584; c=relaxed/simple;
-	bh=5wJ0QPO5pEtrf+2wTjqJLoRgXaQfZ+wsh5hqDRQ/8oA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=QgI7xFd/sTfaXNdUUbryiPbk9xCWAc8KYTCJRyOvKx7Kz8TDaLI/mFd+owR9lUt2IVkHTwgPSoYZWhBtj3ylrAmCVm/r3wVYfpoonuDMaPKn4p6kHspc3o25uOFE4OPcywEKlE3ib+2Sz+lUyPlberZWDlfe1RjQUxFUQ+K4hj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=H6QikYBW; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42EMl74u024573;
-	Thu, 14 Mar 2024 23:39:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=fZYnzVj/nareEdnr5n/qOHTEyx46QdBEfBsFABzo1fA=; b=H6
-	QikYBWKWj6IQG01aF7Rx1sfqyKdcRB2/mSyobt/FK86CQyksQV/yc6C9MMhwCdRj
-	CQRZtUV2sUowdAJ08RbbLCII86M4XikxWXiCs1oaFsmJ2vVeU7/aTlfxeXYgtzRC
-	9vw5w7K4wuRTT1un8UIFlORH9IwtLQ8buYCxjezJA07d+HfxRImOZArhm0t/9tJ8
-	FlGnCSVXtzYFwqjtA8Mzh6L2Rk8FqF/9x4HeQy2wi3947CcU1zzt1GNc3ZhrRV5H
-	gRgowp8watjrGW1AsNKIByWkZtWhecWdlIF0Vj0ERh9Qvuv5tdiWdgiGdT4Wfv/B
-	zgZZNyzXngI08Ynmqngw==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wv9yt03mm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 14 Mar 2024 23:39:34 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42ENdXGB003969
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 14 Mar 2024 23:39:33 GMT
-Received: from [10.110.35.191] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Thu, 14 Mar
- 2024 16:39:28 -0700
-Message-ID: <f638e848-36c5-4cea-c2c8-841a003b1863@quicinc.com>
-Date: Thu, 14 Mar 2024 16:39:26 -0700
+	s=arc-20240116; t=1710471590; c=relaxed/simple;
+	bh=Gi6bYkUhl40PWspGJBH44VCyXQYToNIWB6h8WhyMJBw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BLuhY/hCfAh5cey51WhBkEUyWer1eBfaXvQvRGUbLpgivU2XzyRSUeipvw0JordSPyn1pScmPaXEPva7ZsTh0WLgUrvfMEncvQMCCOqdaejWvsjdJA3AGJpxUNQfZtOsh94+YmqtaldNRyazAA662H1c6XMhHrim3frsia6x0hU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pdp7.com; spf=none smtp.mailfrom=pdp7.com; dkim=pass (2048-bit key) header.d=pdp7-com.20230601.gappssmtp.com header.i=@pdp7-com.20230601.gappssmtp.com header.b=R/EVY4VR; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pdp7.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=pdp7.com
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-5e4f79007ffso1088795a12.2
+        for <linux-pm@vger.kernel.org>; Thu, 14 Mar 2024 19:59:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pdp7-com.20230601.gappssmtp.com; s=20230601; t=1710471589; x=1711076389; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DF3u6fUKhDyXy3K2gFHmZ27anukGMBI1JFmpHSdBQdY=;
+        b=R/EVY4VRFul6Eut1Bifc+7CmzHFnJppkp34RnIOoiS3P/dRoY2y/0I9C0BDA4sVpVj
+         HVNOHL6meawiwM6tVp02Via/+JqD7LQyZ0kqaYMDDpBjrCloV+f8T9Y0Y9QPqMXIcYUR
+         3t9Erp3Ijc5ZeYtiwwupcZPbknL3JiZY4mTVS1/5jUEf9+Pmtgpnh2g7nVKuoUoE/ILp
+         SDP/iv6BcIRvzuz7iDSTQCVq5Decko86e+RbJgOuBYHPddzVMciMMcmSqCCSDie+0V+u
+         asbx69iBKUWHLZg0vYMRXxeoqAkY3PScndkVX7VyOERZ9nWDuuk2cUdgoF6g2FRWT4R9
+         rWCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710471589; x=1711076389;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DF3u6fUKhDyXy3K2gFHmZ27anukGMBI1JFmpHSdBQdY=;
+        b=M2OsCkT5ea3mjuHr1UXAbKLp/AiggDRvsS06iJVffTj8+aOQDEiqgH4y6ZlCnDl3gK
+         volIM5QrDB2t6+hav0XqvnNrJznspfq29Ecu5d2kHgM+rT9EBmSVjV/b+ufIrX3DnS7j
+         8lThzHBwm9ZqZvcQFhH1bYAQaHpTpyoKaqd55mJZqSa4tPZo/D9rcxny2qYapO7RxeW9
+         UFyK7x79DZlO1wjnRIrdvG2XKwFhPdU0BupYoGXGnqfSTcCsqScRTeBRsbCacTMPUbew
+         JCMJezu28JT4h1PPkgSgbFAFcKy3oa2cA2JXIXMMdTuX4aD0UfKgmVsIkTeEqzRcA1Rl
+         S1pw==
+X-Gm-Message-State: AOJu0YxybGjXfUVp4SMuiE5lAs7Ksw3CgyuFrYKIUUAZrfu0qDi9jOHc
+	BFZ2iYeEmHIjAU22D/LoHNaaCUNHUb8QXlyV272k8SjSsAdCOUfMlZYTlNMkmzc=
+X-Google-Smtp-Source: AGHT+IFCcd+8CehiYUMhG/6taZofm4Zmag/eB0icU74TL0kdsU7vlKVvJ1lw2qGnNTk4BdQ6IicmvA==
+X-Received: by 2002:a17:902:cecf:b0:1dd:d412:906c with SMTP id d15-20020a170902cecf00b001ddd412906cmr4971466plg.12.1710471588778;
+        Thu, 14 Mar 2024 19:59:48 -0700 (PDT)
+Received: from x1 ([2601:1c2:1800:a790:ff9e:11a8:fac0:d063])
+        by smtp.gmail.com with ESMTPSA id cp5-20020a170902e78500b001def18c0cfdsm112750plb.300.2024.03.14.19.59.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Mar 2024 19:59:48 -0700 (PDT)
+Date: Thu, 14 Mar 2024 19:59:46 -0700
+From: Drew Fustini <drew@pdp7.com>
+To: Sunil V L <sunilvl@ventanamicro.com>
+Cc: linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Len Brown <lenb@kernel.org>,
+	Anup Patel <anup@brainfault.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Atish Kumar Patra <atishp@rivosinc.com>
+Subject: Re: [PATCH v3 -next 0/3] RISC-V: ACPI: Add LPI support
+Message-ID: <ZfO5oiVSVSmlP8eL@x1>
+References: <20240118062930.245937-1-sunilvl@ventanamicro.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [RESEND v4 3/3] arm64: dts: qcom: sc7280: Add power-domains for
- cpuidle states
-Content-Language: en-US
-To: Doug Anderson <dianders@chromium.org>,
-        Maulik Shah
-	<quic_mkshah@quicinc.com>
-CC: <andersson@kernel.org>, <ulf.hansson@linaro.org>, <swboyd@chromium.org>,
-        <wingers@google.com>, <daniel.lezcano@linaro.org>, <rafael@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <sudeep.holla@arm.com>,
-        <jwerner@chromium.org>, <quic_lsrao@quicinc.com>,
-        <quic_rjendra@quicinc.com>, <devicetree@vger.kernel.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        "Rob
- Clark" <robdclark@chromium.org>
-References: <20230703085555.30285-1-quic_mkshah@quicinc.com>
- <20230703085555.30285-4-quic_mkshah@quicinc.com>
- <CAD=FV=XWH+Eoa9XjDns--NSDTZHeUwTdrX_r_QZhSPpbZNwz+w@mail.gmail.com>
-From: Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <CAD=FV=XWH+Eoa9XjDns--NSDTZHeUwTdrX_r_QZhSPpbZNwz+w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: F0EtSGQkIOWOteAUJFml1iye4a_kKci2
-X-Proofpoint-GUID: F0EtSGQkIOWOteAUJFml1iye4a_kKci2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-14_13,2024-03-13_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1011
- suspectscore=0 mlxlogscore=999 phishscore=0 priorityscore=1501
- impostorscore=0 adultscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2403140001 definitions=main-2403140182
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240118062930.245937-1-sunilvl@ventanamicro.com>
 
-Hi Doug
-
-On 3/14/2024 4:20 PM, Doug Anderson wrote:
-> Hi,
+On Thu, Jan 18, 2024 at 11:59:27AM +0530, Sunil V L wrote:
+> This series adds support for Low Power Idle (LPI) on ACPI based
+> platforms. 
 > 
-> On Mon, Jul 3, 2023 at 1:56 AM Maulik Shah <quic_mkshah@quicinc.com> wrote:
->>
->> Add power-domains for cpuidle states to use psci os-initiated idle states.
->>
->> Cc: devicetree@vger.kernel.org
->> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
->> Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
->> ---
->>   arch/arm64/boot/dts/qcom/sc7280.dtsi | 98 +++++++++++++++++++++-------
->>   1 file changed, 73 insertions(+), 25 deletions(-)
-> 
-> FWIW, I dug up an old sc7280-herobrine board to test some other change
-> and found it no longer booted. :( I bisected it and this is the change
-> that breaks it. Specifically, I can make mainline boot with:
-> 
-> git revert --no-edit db5d137e81bc # arm64: dts: qcom: sc7280: Update
-> domain-idle-states for cluster sleep
-> git revert --no-edit 7925ca85e956 # arm64: dts: qcom: sc7280: Add
-> power-domains for cpuidle states
-> 
+> LPI is described in the ACPI spec [1]. RISC-V FFH spec required to
+> enable this is available at [2].
 
-We noticed that some variants of sc7280 herobrine boards didnt boot but 
-some did atleast till linux 6.8 rc-6. I have not tested linux 6.9 rc-1 yet.
+I'm interested in trying out this series. Might you be able to provide
+some guidance on how to setup a test environment?
 
-We did not narrow down which change broke some of the boards, I can go 
-back and confirm if its this one next week.
+Are there specific branches of qemu and edk2 that I should use?
 
-> (I get an ath11k crash after that, but that's easy to hack out since I
-> don't need WiFi)
-> 
-
-hmm, wifi worked alright on 6.8 rc-6 for us.
-
-> I suppose the two options here are to either:
-> 
-> 1. Track the problem down and figure out why the breaks boot and then
-> fix it. I'm personally not going to track this down, but if someone
-> wants me to test a patch I can do that.
-> 
-
-Can Maulik help us do that?
-
-> 2. Delete all the herobrine dts files.
-> 
-> So far we've been keeping the herobrine dts files alive because I
-> thought some graphics folks (Rob, Abhinav, Jessica, for instance) were
-> still using it. ...but Rob says he hasn't booted his in a while. No
-> idea if Abhinav and Jessica are using theirs. Any opinions? Is
-> herobrine hardware support near and dear to anyone these days?
-> 
-
-Yes, so we have been using sc7280 herobrine devices even till the last 
-cycle and quite a bit of feature development was actually done on that.
-
-It was the only device having eDP other than sc8280xp till x1e80100 
-landed last cycle.
-
-I do want to start using sc8280xp as well because from the experience we 
-got, it has more visibility in terms of users. So that will address my 
-eDP concern.
-
-But, the nice thing about chromebooks is we really like to use them for 
-IGT development / CI debug as CrOS provides a nice environment to 
-cros-deploy IGT.
-
-We can continue to use sc7180 for IGT development but if we want to 
-debug issues with eDP + IGT, sc7280 is a really useful platform for that.
-
-sc8280xp or x1e80100 is not a CrOS supported device. So we will have to 
-develop and test IGT directly on the device (which is a bit of a pain) 
-unless someone has a better way of "cross-compilation" for IGT on 
-non-CrOS images.
-
-
-> 
-> -Doug
+thanks,
+drew
 
