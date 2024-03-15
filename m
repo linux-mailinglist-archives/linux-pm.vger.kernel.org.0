@@ -1,89 +1,75 @@
-Return-Path: <linux-pm+bounces-4973-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4974-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D056A87C8AA
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Mar 2024 06:53:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D370B87C8AD
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Mar 2024 06:54:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8AAD4282FD9
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Mar 2024 05:53:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 62F221F216A4
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Mar 2024 05:54:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D38512E75;
-	Fri, 15 Mar 2024 05:53:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 008D3846B;
+	Fri, 15 Mar 2024 05:54:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="ADeBF+Ez"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SA3c/wUO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C50812E6A
-	for <linux-pm@vger.kernel.org>; Fri, 15 Mar 2024 05:53:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73A0712E6A
+	for <linux-pm@vger.kernel.org>; Fri, 15 Mar 2024 05:54:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710482015; cv=none; b=BOR7ZFakU9gFaOpMRsPBzaAG2llQFhAyXb+OIgwGZ5Dy3cVsbQrb5Qq1kLT0UyRf75wqPFd2DYf8LxWG/OhrPaEmO+dlLRYajsvJOEStaH57PefoA49ue5666FRu8wCTEkNXVlD1G3ahpHTEXLAxZt9XseTg+YSa0iahaBZu5zE=
+	t=1710482071; cv=none; b=Yd/74d/Lgamt5oLvodd5A19wl73kTO0Fr5I3wsFfCcqca//PZiS+0Ytg4YJRV9f9lZUSnYa45g02GL/k+tI1vj86sx+DbI63Az+JLEbuiSVPS4SDzXMxRPlpT+ULUBdq1RaTuWzjCxzJuwCyqVd/949q29Tnaxs20Zyx1S2JVUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710482015; c=relaxed/simple;
-	bh=UDhwVLvrhKZ4zV83WNvEmS1n7Q5RwVHTSzv7hrkimAk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Iud1DpSDv8r16FkFYPOIEXQcuocqq+n4PyfrzLUD5Lrihi4z6GmpqccptL739bF8s/lPi6SsQJpufLohKAZBXiNhvaIGq8xW8mgDt3cQ7Qqi0avghSVDoGYxh907t1vdBmd3MddiizkYuU+a5Hl6G37gApIqFlJzBga2Vo9ieu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=ADeBF+Ez; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1dc09556599so13327165ad.1
-        for <linux-pm@vger.kernel.org>; Thu, 14 Mar 2024 22:53:33 -0700 (PDT)
+	s=arc-20240116; t=1710482071; c=relaxed/simple;
+	bh=nEA6y8haCvw37b55C9tYHXmMOxluqE1/UzReyaDvFvk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=TjQ6Ky1SkKwedHwfmzb2vN+ArQ11wcw2yaKDOYkUlOopOAZvJks2T2VRJzHqyx6euiRphkjDAphIAWmQ/U6dyoQE4OqFFQG/L6XpyFDG1+VPpjEslIQ5T4weWV3IR/yvS427LckXpaPKT5ELym31yNjMVzvyr9RIOgN1BWG+P5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SA3c/wUO; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-6e6f69e850bso464813b3a.0
+        for <linux-pm@vger.kernel.org>; Thu, 14 Mar 2024 22:54:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1710482013; x=1711086813; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6143Xt6B1fDIKqVroZrZ1l3ARGTZuJpSXXKGYmPvAls=;
-        b=ADeBF+EzvihhgqCzjtlhJAWGFXdOcayNCcFl51JfItK8YNAuKa+3+UN9+I4JPNa6pO
-         vYJyTE25aWD7L2oobBVuSaB5gMTeCfBGNyVVc5BqhUR06SkUvF3yE5c683YmWV9Q9cSS
-         r3rQT9L0Av74zCK98nSRpqO25sintcjT0nR3oJaPLh/485r/FN8uooyZEhmw02Ly1wcc
-         yFOfD+8qHR0W40TIFU8Q2dBKCwfK+P3MDEllkqkA9pScG2jQhObB9Tjty4DE+3xVccEW
-         E6aedSjyuRE+GjXhIllxuSFuI7wC1NkmI6Ck94937CBJE/3SwKMjS0QmAYx2JF5dJ9M3
-         D35g==
+        d=linaro.org; s=google; t=1710482070; x=1711086870; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=76SlF0xlwG/ttgCEeBEYmklKqILSlmcGAmW1iD+D9j0=;
+        b=SA3c/wUO2PsaE0EjPiumhYBEpow0lWB1xvYS6NCYAbbHxsmoPuwKeLbPOlQGO0HyLG
+         z1822I1wlds6oo30Jxllcg0DHLM0/yPevJERoGkJnzdC0g9BxXRo/JeUdp7V84YlLGDX
+         jo18MzFfKALL80NsXruudyqqpTK9ipG8KQCAUy5srqx1j/VUh9elpWJUWsz9Ec0+dlCQ
+         nItrcIFenUQ+J4BsMtsxuRTrcDOKgIyo2DOuxSEjKnA0sE30nkE/Unc1UEv3gP7EegXF
+         OZEmN2+0JWj07ORdFwsoiuylC727H87V8snRyXa23WTFrP97YSEzbIdBbtitfIjQwuHs
+         9MpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710482013; x=1711086813;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6143Xt6B1fDIKqVroZrZ1l3ARGTZuJpSXXKGYmPvAls=;
-        b=uSK4FfjjvXJblnzosTaACaTOd7lUhN2D9JMCqcNnhkJBHg+lm57ztlEqyFXahgZ+ti
-         NsCSqd4yixL9AdFyHBLnm61yPnxdxJmYgC1Pz+wpy8jrSy1KodnNzg87ahEZBWsg1kpW
-         JYcmjLoDaOVtTGO3xQqGSSMK5DLi28dd2CpntXt7fKyxM/9bF7q8A9rzYOy3r2bjcqrr
-         blppf/y/hudoliKVAZb7dOuV4MzjlYhUX5C3fULkUKS7w1MoeXyLlEw1Fgb9Og3boHEH
-         HPGpKp21v8kNpXidZBP1kNrgL8xLYTyOuc2dMCAyUR8Ai6F7FZ97W2Zp/7aA5n1RpcAp
-         Y/ZA==
-X-Gm-Message-State: AOJu0Yx3IKfOz2+l2TaXupbZZ8BQ3duBuhME9f2j5D3aV3lBTudTBM7f
-	X4NzEw+8rirL8GF3Ryql4GYmt1xmkkGUQQtPJ/b2/zP7gO4axuR2vu+I7ngtYxg=
-X-Google-Smtp-Source: AGHT+IFdhVX1m34Rty2PqcdB9AWHBwlmpI+1s+YRgrPY8LLbB4ruxR0YBRVt2iLRDYdvkYdiR1xfvw==
-X-Received: by 2002:a17:902:f706:b0:1dd:8df3:1727 with SMTP id h6-20020a170902f70600b001dd8df31727mr2720117plo.44.1710482012859;
-        Thu, 14 Mar 2024 22:53:32 -0700 (PDT)
-Received: from sunil-laptop ([106.51.184.12])
-        by smtp.gmail.com with ESMTPSA id u11-20020a170903124b00b001dcbffec642sm2804203plh.133.2024.03.14.22.53.27
+        d=1e100.net; s=20230601; t=1710482070; x=1711086870;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=76SlF0xlwG/ttgCEeBEYmklKqILSlmcGAmW1iD+D9j0=;
+        b=oXDBJTmBeT5OEUAjBl2TJNzotQRVUshS0NBQYxrg/kAy6OSLhwY1ci01gFiqyeeP9W
+         5AmwVYCyDEfXMEjbzgXoswYIkjkJPbuxhHAEg3D2TPmf7bjDRTMlhJRXd7dhBKGe53nb
+         Oc7pFYnUjkm0dHshFT1n2DA2AEmKgAAdmWSWUYgbOTPTZemAHsnBvv1hEnEv70Q445ak
+         SKwWdcK8V2xJFhIiCK3GZUqNCNmRTNWvRTA+8FyL7KgFzp7yUEybSwGXcEWHzTNvwNuy
+         rT7UXdr3uh7V+RCg4S2QCx//7m199BgYX1QwbYoUEQdSe9VIv4PWaOMokDQSkS0RpTdt
+         TAOg==
+X-Gm-Message-State: AOJu0YwxapsEqq7gbYP7ZouYAg7HAwjPWyFCLz3NINc6DJSQEUD6NSDE
+	Btw5ruYoPfNVCsEfmIO5UU2MZLJ92yp9TNJx0KLt283Hq2wz2AroeQ5bfis57WU=
+X-Google-Smtp-Source: AGHT+IHqhBNjD8wsZ3Va4MoIqhWFTNuO6DrS8mFfGk+r+dui7aVPW3TR13uTFwLU5ot7GS7nyK+X+g==
+X-Received: by 2002:a05:6a00:23c6:b0:6e5:e7c5:9120 with SMTP id g6-20020a056a0023c600b006e5e7c59120mr4312504pfc.19.1710482069620;
+        Thu, 14 Mar 2024 22:54:29 -0700 (PDT)
+Received: from localhost ([122.172.85.206])
+        by smtp.gmail.com with ESMTPSA id p19-20020a62ab13000000b006e6c0f8ce1bsm2559369pff.47.2024.03.14.22.54.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Mar 2024 22:53:32 -0700 (PDT)
-Date: Fri, 15 Mar 2024 11:23:23 +0530
-From: Sunil V L <sunilvl@ventanamicro.com>
-To: Drew Fustini <drew@pdp7.com>
-Cc: linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Len Brown <lenb@kernel.org>,
-	Anup Patel <anup@brainfault.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Andrew Jones <ajones@ventanamicro.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Atish Kumar Patra <atishp@rivosinc.com>
-Subject: Re: [PATCH v3 -next 0/3] RISC-V: ACPI: Add LPI support
-Message-ID: <ZfPiU5aSw0jML3S1@sunil-laptop>
-References: <20240118062930.245937-1-sunilvl@ventanamicro.com>
- <ZfO5oiVSVSmlP8eL@x1>
+        Thu, 14 Mar 2024 22:54:29 -0700 (PDT)
+Date: Fri, 15 Mar 2024 11:24:27 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>
+Subject: [GIT PULL] More cpufreq/arm updates for 6.9
+Message-ID: <20240315055427.lvhpxvojegoqrcvy@vireshk-i7>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -92,51 +78,54 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZfO5oiVSVSmlP8eL@x1>
 
-Hi Drew,
+Hi Rafael,
 
-On Thu, Mar 14, 2024 at 07:59:46PM -0700, Drew Fustini wrote:
-> On Thu, Jan 18, 2024 at 11:59:27AM +0530, Sunil V L wrote:
-> > This series adds support for Low Power Idle (LPI) on ACPI based
-> > platforms. 
-> > 
-> > LPI is described in the ACPI spec [1]. RISC-V FFH spec required to
-> > enable this is available at [2].
-> 
-> I'm interested in trying out this series. Might you be able to provide
-> some guidance on how to setup a test environment?
-> 
-> Are there specific branches of qemu and edk2 that I should use?
-> 
-1) You need LPI objects in the platform. I have added dummy objects for
-testing this for qemu virt machine. Please use below branch.
+The following changes since commit abb3f9717a67a2666b2bc2f19543a657e3d4ad63:
 
-https://github.com/vlsunil/qemu/tree/lpi_exp
+  OPP: Extend dev_pm_opp_data with turbo support (2024-03-11 10:39:24 +0530)
 
-Since interrupt controllers are not merged yet in linux, we need to boot
-without any IO devices and use only polling based console and ram disk.
-Above qemu branch disables IO devices as well.
+are available in the Git repository at:
 
-2) Enable below config options while building linux kernel.
-RISCV_SBI_V01
-HVC_RISCV_SBI
+  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufreq-arm-updates-6.9-2
 
-3) Use upstream EDK2 (RiscVVirt)
+for you to fetch changes up to a8e949d41c72a0a860b1c3571d6b274e9b77b6bb:
 
-4) Boot:
-qemu-system-riscv64 \
- -M virt,pflash0=pflash0,pflash1=pflash1 \
- -m 2G -smp 8 \
- -serial mon:stdio \
- -blockdev node-name=pflash0,driver=file,read-only=on,filename=RISCV_VIRT_CODE.fd \
- -blockdev node-name=pflash1,driver=file,filename=RISCV_VIRT_VARS.fd \
- -kernel arch/riscv/boot/Image \
- -initrd buildroot/output/images/rootfs.cpio \
- -append "root=/dev/ram ro console=hvc earlycon=sbi"
+  cpufreq: scmi: Enable boost support (2024-03-15 11:19:27 +0530)
 
-Feel free to ping me if you have any difficulties.
+----------------------------------------------------------------
+ARM cpufreq updates for 6.9
 
-Thanks!
-Sunil
+- zero initialize a cpumask (Marek Szyprowski).
+- Boost support for scmi cpufreq driver (Sibi Sankar).
+
+----------------------------------------------------------------
+Marek Szyprowski (1):
+      cpufreq: dt: always allocate zeroed cpumask
+
+Sibi Sankar (2):
+      firmware: arm_scmi: Add support for marking certain frequencies as turbo
+      cpufreq: scmi: Enable boost support
+
+Viresh Kumar (1):
+      Merge branch 'opp/boost-data' into cpufreq/arm/linux-next
+
+ Documentation/power/opp.rst                    |  2 +-
+ Documentation/translations/zh_CN/power/opp.rst |  2 +-
+ drivers/cpufreq/Kconfig.arm                    |  1 +
+ drivers/cpufreq/brcmstb-avs-cpufreq.c          |  2 ++
+ drivers/cpufreq/cpufreq-dt-platdev.c           |  1 +
+ drivers/cpufreq/cpufreq-dt.c                   |  2 +-
+ drivers/cpufreq/imx6q-cpufreq.c                | 45 +++++++++++++++------------------------------
+ drivers/cpufreq/mediatek-cpufreq-hw.c          | 19 ++++++++++++++++++-
+ drivers/cpufreq/scmi-cpufreq.c                 | 46 +++++++++++++++++++++++++++++++++++++++++++++-
+ drivers/firmware/arm_scmi/driver.c             |  5 ++++-
+ drivers/firmware/arm_scmi/perf.c               | 56 ++++++++++++++++++++++++++++++++++++++++++++++++++++----
+ drivers/firmware/arm_scmi/powercap.c           | 12 ++++++++----
+ drivers/firmware/arm_scmi/protocols.h          |  4 +++-
+ include/linux/scmi_protocol.h                  |  8 ++++++++
+ 14 files changed, 160 insertions(+), 45 deletions(-)
+
+-- 
+viresh
 
