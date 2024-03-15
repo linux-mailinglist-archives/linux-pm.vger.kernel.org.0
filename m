@@ -1,158 +1,145 @@
-Return-Path: <linux-pm+bounces-4991-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4992-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70AAA87D13F
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Mar 2024 17:36:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EE9387D284
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Mar 2024 18:12:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 34B2DB231D2
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Mar 2024 16:36:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5055E1C20A16
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Mar 2024 17:12:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99BB31E4A1;
-	Fri, 15 Mar 2024 16:36:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7A653EA97;
+	Fri, 15 Mar 2024 17:12:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mOtSs5Dh"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="mcvYeFXS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 220A51B7EA;
-	Fri, 15 Mar 2024 16:36:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95227482D7
+	for <linux-pm@vger.kernel.org>; Fri, 15 Mar 2024 17:12:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710520583; cv=none; b=ozqqRojh9zPm3GZPMP3jlz+968dE9zW/FB+ls2Y4f7m9IxDoyy+IBqcNjXJZjTfIhuahkTAnj6Fw8uVuCVPjCyYoWjqN0r0UMQqYJe17Vib/nGuwWOV9WOS073Gd5hBri9CSIZi3lK2cnbXLc5WyGyqVNVRoh8JTxuGp1uN81TU=
+	t=1710522751; cv=none; b=L8CedP8Zi2Ir42nM4u9aaZvM32Y/tY0r07IZTO6L9tEb815WswOXVuiwTgaxztsPDu87pVVaX+X2PM58ViQuJ/kq/Il15Ht76mY80LpWSGDl5w1EVIEEWfeC9px3OQO4wXc6xKDnm2vlUKonjbIVw/0+GD7x6mIFhXy7a5Y7rRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710520583; c=relaxed/simple;
-	bh=Fa9Ztd/K1MwNoFLIeksl2r8/Q4sGwApcc9Q86oCxLK4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jagav95BoYKOTgTKGD9mz4dAgef5+6RYDETYoUwoz8IlaZmQcBLdsE76JuDuqpC+sFxHWFJVURTLOBZEIU+A46yO+hKuchKxrbY7PHVkScP+KnThanB6EhvAplZSK5qm5w3DVEmX/qNpt1yRcEF0A353bgDVgR7GcjTLc3r5bs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mOtSs5Dh; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710520581; x=1742056581;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Fa9Ztd/K1MwNoFLIeksl2r8/Q4sGwApcc9Q86oCxLK4=;
-  b=mOtSs5Dh8fWjNKHX23gEYsFPUt9dfh93djy1pZvYSIHwGrfeTJp3fBNb
-   yU74Anc6vOdND8zd8cMxmHvJIzNjeDErUBsIWZsuFkDMnWfHaKlOdpv/3
-   XceZ0uddTH6wIGO8IjG97yecnUE33zk2wMFGHnDJM9m0vtcqlheRx34FT
-   NUTZNoWAGxDb8UXI5+V76SchEmb1TzCRWjyfOxWMUtpBT9UZ/fjLFyf92
-   FcreEjV/3zoQXO0pu5w7Pt2ZZGz61fS3fWMXa43WpNJajACeUqfkfoe1f
-   TAl0dnRILOkgS038ZMWgOMR6/LZvk6CRdq90slVdc9se6cNqUnDyp0ZYQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11014"; a="5257660"
-X-IronPort-AV: E=Sophos;i="6.07,128,1708416000"; 
-   d="scan'208";a="5257660"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2024 09:36:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,128,1708416000"; 
-   d="scan'208";a="35852964"
-Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 15 Mar 2024 09:36:17 -0700
-Received: from kbuild by b21307750695 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rlAXW-000Ecq-0w;
-	Fri, 15 Mar 2024 16:36:14 +0000
-Date: Sat, 16 Mar 2024 00:36:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, lukasz.luba@arm.com,
-	dietmar.eggemann@arm.com, linux-arm-kernel@lists.infradead.org,
-	sboyd@kernel.org, nm@ti.com, linux-samsung-soc@vger.kernel.org,
-	daniel.lezcano@linaro.org, rafael@kernel.org,
-	viresh.kumar@linaro.org, krzysztof.kozlowski@linaro.org,
-	alim.akhtar@samsung.com, m.szyprowski@samsung.com,
-	mhiramat@kernel.org
-Subject: Re: [PATCH 3/4] PM: EM: Add em_dev_update_chip_binning()
-Message-ID: <202403160033.Kh6R75dh-lkp@intel.com>
-References: <20240314140421.3563571-4-lukasz.luba@arm.com>
+	s=arc-20240116; t=1710522751; c=relaxed/simple;
+	bh=kWzlo4AaZeWtEkzCy8TJZmtsYDqVVCm/XwSPAebW3DI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OJ6Uqq24QJ+IgwSMoDh7/wPqKrujEhOTCBk5PmYow9SHX339eKzU9rsbDoabOFWi1ZH1v1tlsyOy7P+q0eF+cHbzE5O1KwJ9TBO4rn055ZDLoU50XZQ0HWatKz3ncboMtiX2L4EFr9qLeoHOiPCZYzSN2gx8R1qpqJJhK8B7Gn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=mcvYeFXS; arc=none smtp.client-ip=209.85.160.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-430b6e9936aso2994281cf.3
+        for <linux-pm@vger.kernel.org>; Fri, 15 Mar 2024 10:12:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1710522748; x=1711127548; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YBgzsheMyMt2wDXPPT0VYLjrPGEmgjQ97XLNs9yUYLg=;
+        b=mcvYeFXSE6MZxzpuKV/zc1qk1DMAFtYtxUcE0LgQR+i3HQivAiBG16+lNCCcJv7P12
+         CeuH68DWGw3nDflzUI+X+ov/e1yvx+WjtC1r9Xd9e3C1FIspjNOAGC1OeRS700g0oDoB
+         brU+HeBeIdrHYY9xwzseILBibCrNzKSi+OUXU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710522748; x=1711127548;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YBgzsheMyMt2wDXPPT0VYLjrPGEmgjQ97XLNs9yUYLg=;
+        b=dFHI3c/O9bntC3plHsckGT50+dLLhSfn4Het+fDgSEfONOmKfvGqzwq7xoRuYCqeUh
+         pmOexa4WYgvmtJ7x0FxAcoXZMtxRmrlOwhODhv7IgbH4QoGpX1IUQvsJyOZ3s1MF2jLc
+         5RIjEep5orapC5VnxECwn5HwnHrF1OKijsLo2dBKjQq1XI/5n5m9UdjQngUBk4qVH1wE
+         eqF6MNWzQ93zi79fyShY4cD4Igeph5NHtCniM93YHWkOFEaWMpPK5fB4aMwbjlDNhh1u
+         M5oZo1tUVP4bWMGkwQSt3tlYyDhZVlu5Y+YoYMph4B20PnjHkH/aCGDejXtRTMhAkbS2
+         H49g==
+X-Forwarded-Encrypted: i=1; AJvYcCU6u64YWEtMODaspHW1VJ5+qBL2sXkCSZbnVCaDpKiadRXu2ozYbqVriTwk8C423ITf5uENdC2Qr8v6ZgvKICNzWKtibr1Yj/g=
+X-Gm-Message-State: AOJu0YzjTg/xvOdtOKAnGiCSHAbpoxBG873Z7VHs9qHtGi49e1wunOZ+
+	L7l6BEhRrReDaCHc0jz4EgN6tS+o72ew/Dlmbt/siLf4dAwoUn1A/q0EoJHYOtdWEPE4pZMUnUI
+	=
+X-Google-Smtp-Source: AGHT+IERa600I06iAf/xFfzU38LOfUlXor4Us6idxt/e9PK1zQyu9hvx+G0C/1q3WzSKTtcpxlTWqg==
+X-Received: by 2002:ac8:5c10:0:b0:42e:57b7:b239 with SMTP id i16-20020ac85c10000000b0042e57b7b239mr6176310qti.20.1710522748544;
+        Fri, 15 Mar 2024 10:12:28 -0700 (PDT)
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com. [209.85.160.176])
+        by smtp.gmail.com with ESMTPSA id u18-20020ac87512000000b0042f09265a34sm2145532qtq.91.2024.03.15.10.12.28
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Mar 2024 10:12:28 -0700 (PDT)
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-428405a0205so7781cf.1
+        for <linux-pm@vger.kernel.org>; Fri, 15 Mar 2024 10:12:28 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVnhvVLhzyNF8ShXrjpIspDXVXxqJCTFz3LUPVHJZs/Dqu+QCcpmdOK8GanHwFMAvv0St7PEqpnvauxT6M9jO7llm5w5OsaO+o=
+X-Received: by 2002:a05:622a:1706:b0:42f:a3c:2d53 with SMTP id
+ h6-20020a05622a170600b0042f0a3c2d53mr822108qtk.20.1710522747755; Fri, 15 Mar
+ 2024 10:12:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240314140421.3563571-4-lukasz.luba@arm.com>
+References: <20230703085555.30285-1-quic_mkshah@quicinc.com>
+ <20230703085555.30285-4-quic_mkshah@quicinc.com> <CAD=FV=XWH+Eoa9XjDns--NSDTZHeUwTdrX_r_QZhSPpbZNwz+w@mail.gmail.com>
+ <20240315152431.sckqhc6ri63blf2g@bogus>
+In-Reply-To: <20240315152431.sckqhc6ri63blf2g@bogus>
+From: Doug Anderson <dianders@chromium.org>
+Date: Fri, 15 Mar 2024 10:12:12 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UD1nuxryvWH=Mi7E+QzMoa7xCHebY0DtZCAVmEW3ZeAg@mail.gmail.com>
+Message-ID: <CAD=FV=UD1nuxryvWH=Mi7E+QzMoa7xCHebY0DtZCAVmEW3ZeAg@mail.gmail.com>
+Subject: Re: [RESEND v4 3/3] arm64: dts: qcom: sc7280: Add power-domains for
+ cpuidle states
+To: Sudeep Holla <sudeep.holla@arm.com>
+Cc: Maulik Shah <quic_mkshah@quicinc.com>, andersson@kernel.org, ulf.hansson@linaro.org, 
+	swboyd@chromium.org, wingers@google.com, daniel.lezcano@linaro.org, 
+	rafael@kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, jwerner@chromium.org, 
+	quic_lsrao@quicinc.com, quic_rjendra@quicinc.com, devicetree@vger.kernel.org, 
+	Abhinav Kumar <quic_abhinavk@quicinc.com>, Jessica Zhang <quic_jesszhan@quicinc.com>, 
+	Rob Clark <robdclark@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Lukasz,
+Hi,
 
-kernel test robot noticed the following build warnings:
+On Fri, Mar 15, 2024 at 8:24=E2=80=AFAM Sudeep Holla <sudeep.holla@arm.com>=
+ wrote:
+>
+> On Thu, Mar 14, 2024 at 04:20:59PM -0700, Doug Anderson wrote:
+> > Hi,
+> >
+> > On Mon, Jul 3, 2023 at 1:56=E2=80=AFAM Maulik Shah <quic_mkshah@quicinc=
+.com> wrote:
+> > >
+> > > Add power-domains for cpuidle states to use psci os-initiated idle st=
+ates.
+> > >
+> > > Cc: devicetree@vger.kernel.org
+> > > Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > > Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
+> > > ---
+> > >  arch/arm64/boot/dts/qcom/sc7280.dtsi | 98 +++++++++++++++++++++-----=
+--
+> > >  1 file changed, 73 insertions(+), 25 deletions(-)
+> >
+> > FWIW, I dug up an old sc7280-herobrine board to test some other change
+> > and found it no longer booted. :( I bisected it and this is the change
+> > that breaks it. Specifically, I can make mainline boot with:
+> >
+> > git revert --no-edit db5d137e81bc # arm64: dts: qcom: sc7280: Update
+> > domain-idle-states for cluster sleep
+> > git revert --no-edit 7925ca85e956 # arm64: dts: qcom: sc7280: Add
+> > power-domains for cpuidle states
+> >
+>
+> IIRC, this could be issue with psci firmware. There were some known
+> issues which were discussed few years back but I am not aware of the
+> details and if/how it is applicable here.
+>
+> Not sure if you are getting any logs during the boot, if you do have
+> worth look at logs related to PSCI/OSI/Idle/...
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on linus/master next-20240315]
-[cannot apply to krzk/for-next clk/clk-next soc/for-next rafael-pm/acpi-bus rafael-pm/devprop v6.8]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Given that the new firmware fixes it I'm going to say it's not worth
+looking into any longer.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lukasz-Luba/OPP-OF-Export-dev_opp_pm_calc_power-for-usage-from-EM/20240314-220719
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20240314140421.3563571-4-lukasz.luba%40arm.com
-patch subject: [PATCH 3/4] PM: EM: Add em_dev_update_chip_binning()
-config: i386-randconfig-141-20240315 (https://download.01.org/0day-ci/archive/20240316/202403160033.Kh6R75dh-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240316/202403160033.Kh6R75dh-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403160033.Kh6R75dh-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> kernel/power/energy_model.c:824:52: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-     824 |                 dev_warn(dev, "Couldn't find Energy Model %d\n", ret);
-         |                                                                  ^~~
-   include/linux/dev_printk.h:146:70: note: expanded from macro 'dev_warn'
-     146 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                             ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                                     ^~~~~~~~~~~
-   kernel/power/energy_model.c:817:12: note: initialize the variable 'ret' to silence this warning
-     817 |         int i, ret;
-         |                   ^
-         |                    = 0
-   1 warning generated.
-
-
-vim +/ret +824 kernel/power/energy_model.c
-
-   800	
-   801	/**
-   802	 * em_dev_update_chip_binning() - Update Energy Model with new values after
-   803	 *			the new voltage information is present in the OPPs.
-   804	 * @dev		: Device for which the Energy Model has to be updated.
-   805	 *
-   806	 * This function allows to update easily the EM with new values available in
-   807	 * the OPP framework and DT. It can be used after the chip has been properly
-   808	 * verified by device drivers and the voltages adjusted for the 'chip binning'.
-   809	 * It uses the "dynamic-power-coefficient" DT property to calculate the power
-   810	 * values for EM. For power calculation it uses the new adjusted voltage
-   811	 * values known for OPPs, which might be changed after boot.
-   812	 */
-   813	int em_dev_update_chip_binning(struct device *dev)
-   814	{
-   815		struct em_perf_table __rcu *em_table;
-   816		struct em_perf_domain *pd;
-   817		int i, ret;
-   818	
-   819		if (IS_ERR_OR_NULL(dev))
-   820			return -EINVAL;
-   821	
-   822		pd = em_pd_get(dev);
-   823		if (!pd) {
- > 824			dev_warn(dev, "Couldn't find Energy Model %d\n", ret);
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-Doug
 
