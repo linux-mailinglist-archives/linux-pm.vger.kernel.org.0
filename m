@@ -1,145 +1,163 @@
-Return-Path: <linux-pm+bounces-5041-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5042-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 217E687E994
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 13:50:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1CD187EA4D
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 14:48:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9A18FB21D36
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 12:50:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB7811C21810
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 13:48:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80FAA2EAE6;
-	Mon, 18 Mar 2024 12:50:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAD13481DC;
+	Mon, 18 Mar 2024 13:47:59 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2167364B8;
-	Mon, 18 Mar 2024 12:50:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16419249EB;
+	Mon, 18 Mar 2024 13:47:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710766212; cv=none; b=MGDFOdrflqgPFqOp452o/Ahpc2dwlxtaKAeQC7sZX2KnAl6+Vl5rXg6+GlE6R0puDnKdCk+3j2Dikonv+vL7LwfI+BREco+hZPxU1jblkw22uaAOM/xNr17rAaOVJ4YOcYhc452iRYona7c6a9S23ibDkgTm2PeUZTZ+17ugcU4=
+	t=1710769679; cv=none; b=lRE97jMpWVeBPYCGJyB6h3r7CyNIPhfmPynMR8QSHvbCsy2PEB71AwqtYobiNbfOf0T6fHJFXEOCq9B/WJXppgZIlB4jQYmox7n/JBUZi/PB5ibN7zlyoOUhHffWQvMSnPWXyssKr18DJL8FI1FUpWpdKzbLRbvOtfi6WNBA4R4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710766212; c=relaxed/simple;
-	bh=PQqpjSAlS/Y82hZ+pfu3DKlvh/6H4paTGGcF2JvLae4=;
+	s=arc-20240116; t=1710769679; c=relaxed/simple;
+	bh=5Skdb5Ea92mVl7TGZULbUxUWfzAoFJQETlY3oyw2PcI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=A3I0ZTTzXUx8HrHJdfqow5mSWGuP/T/Ugiqj03STWFRdOFlODs8/LdV0tyQpiiK9mTCk+ys9sZtgMZ+MxbveOE0HJcnmhqZh0dTjvngYhtMJ+Q83ynOCvZVK7e0gHaSS7qba+Jj+l2zqp++vf3n+xOK/NBJX+tXVpX2ACEVQKCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.169
+	 To:Cc:Content-Type; b=cNG3xDEjnb4IfXY1Fxr71oqnDYsgire8/alSc0m8Xxo2SaUhIX2NSBcX/8EZfwxc8xE8/aOYv3SXBPtGB+PWp2WW1OFwo+HRq77IsL8V3l8nhnHXAH4wVkIIsJNr/15ussFQ+lKp2mk/xQtbAAQ5JRcqbLAJrDhQQOLhTWekeqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-3c383516de2so443597b6e.0;
-        Mon, 18 Mar 2024 05:50:10 -0700 (PDT)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-2219edd959dso969639fac.0;
+        Mon, 18 Mar 2024 06:47:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710766210; x=1711371010;
+        d=1e100.net; s=20230601; t=1710769677; x=1711374477;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=igexqaivqyyWW/fKHDjv4jwYg+bZZIex5aTWy4MekxE=;
-        b=RLa7nx64zBLKPQLsA02E4F4psNH8j/VJF7jK9eoMaSEt/m7eyzqCwTpspIOacbJx7U
-         F+6N7YfAXff6bqd8az2qCaeWi7gKcDHSjFplicJmnC8vWVpaxDQn7oKChzhdNU0onq3Y
-         aU7JUu+VUpajXxE/IvvK5zdpFaLFce0znEeS47PwiydgRtMYCOLIo8Bq040F+z9+7JIo
-         Oodl42sBft/qn9FSrYncUVlMnD0KcwtiFzp0qLFV12JBxLh7PkT0/9EaHSPkor9vNwYL
-         tDn6YC/wluzg2K1fTJcfCHJmVfxp10g0puWVFRmi4kcxP937jfwNtkQOVucv+w9XiqVa
-         Zgeg==
-X-Forwarded-Encrypted: i=1; AJvYcCVyJ6vnXgCylb9ZMOo5uRoZ1MDYecoFFZ+zuo1njR05mBEuOGwT8sy8JZBsV3Afd4dlvx8tBLRh8ah7DgHhKA8fkwP8W73LJYD5AZ6JRHvfn+kgKqw70zF/r68fAoQqhNukM4ARvqE=
-X-Gm-Message-State: AOJu0Yy9LlrqC58EyuZDFFu7jCrEVlq4Wo5qlzxIZBP2EIk327wtnmpx
-	UC/Ef/f57OzxhZZGl9onrLR+uEecgMLZd4rSvnxhooEbMTL4j3jkX7Inzb0fnS7leBFrilYF9Xb
-	3Vc/sd2i4oe1CvVGWUbTrlu4XWls=
-X-Google-Smtp-Source: AGHT+IG/IZWhVg5Kt120gzG2Vxc/QXlTFcc7T6H4eSZ0pYKqkAFSesRo9RvMl6YITb2sPJZabPcqbppaaLC2AeBHzZI=
+        bh=tOakJZuItJeZn6wLR+x/UlhCnYwyTT+eEj3X3hD9lPo=;
+        b=hK9mIBJGDuErwrG6h33ESMIxKFU3Jfv8zS/59wp+qWOHsFp0yV2Ih5UF8V9ryozADq
+         RarpZE+PNqXInXFn8sJ/LHfx/2U6s7UKWlX0ZI83kc0lmXa+iq41lOfMWMnp5hVvgPb5
+         /mrwMLJYvwq5iuOoZn42H+CR4lgR9XQDfVZTpAy7tlsE6syLKUz5+12GjQE7wbR8pAkG
+         D4uLiVhsId0zJvH4c/8npaoqJBriWFeCmPLeVGLWJQy9e4LpCPZNXDutbj/tmrzJvShI
+         iqwUw/yPUPcPUU5qYRYZsG1yZ04/nVSm+OvB18zqU2GPA4u1rMQLIxoe5uubxL4NW9A4
+         8Z4w==
+X-Forwarded-Encrypted: i=1; AJvYcCX3B8x1MyHL8lsWcjJAz/GiOCuztLouuZj/IrA5+Ikf5i+bDOeN06lQl7iCphBeSFYHzrCBQQAMHqL2ExqsGjrrbAjsuRqqkqGbLCf/qKi1ULrpsXY459WZGWPghqRoFi9ci3F6g+/bL2bLIJCHWk9eN8fZjEbx8xcmHO6tBrWmRj0=
+X-Gm-Message-State: AOJu0YytJxCISTGERBgLXtlSL80lL28KepO1A3leBxLHCflnQv8Iubqs
+	VrcyS+L8RfUvzVi0L4b9hRADYRsZy6CV6dHBjiNgwoNC8cle5BH/beFR3wLhad6XxxoW5hXAq1C
+	S2IkzGb+fXrVfOUno/b/iygCW/Pg=
+X-Google-Smtp-Source: AGHT+IFoSB4pNMjT9eDWxlv9et7vQdUvZO/ohJsDwLmjTJ7nGFl6EeMS2OOdzuevk8LMxXSz61oACRUuzh5y2kPvKi4=
 X-Received: by 2002:a05:6871:58a4:b0:221:cb1b:cc05 with SMTP id
- ok36-20020a05687158a400b00221cb1bcc05mr13027339oac.0.1710766210135; Mon, 18
- Mar 2024 05:50:10 -0700 (PDT)
+ ok36-20020a05687158a400b00221cb1bcc05mr13208337oac.0.1710769677154; Mon, 18
+ Mar 2024 06:47:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1710754409.git.perry.yuan@amd.com>
-In-Reply-To: <cover.1710754409.git.perry.yuan@amd.com>
+References: <20240318055054.1564696-1-d-gole@ti.com> <20240318055054.1564696-2-d-gole@ti.com>
+In-Reply-To: <20240318055054.1564696-2-d-gole@ti.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 18 Mar 2024 13:49:55 +0100
-Message-ID: <CAJZ5v0iQnJCVX0kHNxtOWLcnTXRRjR1HZ6m4CFhKZcQVp1SbEA@mail.gmail.com>
-Subject: Re: [PATCH v8 0/8] AMD Pstate Fixes And Enhancements
-To: Perry Yuan <perry.yuan@amd.com>, mario.limonciello@amd.com, gautham.shenoy@amd.com
-Cc: rafael.j.wysocki@intel.com, viresh.kumar@linaro.org, Ray.Huang@amd.com, 
-	Borislav.Petkov@amd.com, Alexander.Deucher@amd.com, Xinmei.Huang@amd.com, 
-	Xiaojian.Du@amd.com, Li.Meng@amd.com, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+Date: Mon, 18 Mar 2024 14:47:45 +0100
+Message-ID: <CAJZ5v0giafbnGFHgT7pZm+o6KzKznxVDJvc04K6XvP1ShG2YKw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] PM: wakeup: make device_wakeup_disable return void
+To: Dhruva Gole <d-gole@ti.com>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Tony Lindgren <tony@atomide.com>, 
+	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	theo.lebrun@bootlin.com, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 18, 2024 at 10:48=E2=80=AFAM Perry Yuan <perry.yuan@amd.com> wr=
-ote:
+On Mon, Mar 18, 2024 at 6:55=E2=80=AFAM Dhruva Gole <d-gole@ti.com> wrote:
 >
-> The patch series adds some fixes and enhancements to the AMD pstate
-> driver.
-> It enables CPPC v2 for certain processors in the family 17H, as
-> requested
-> by TR40 processor users who expect improved performance and lower system
-> temperature.
+> The device_wakeup_disable call only returns an error if no dev exists
+> however there's not much a user can do at that point.
+> Rather make this function return void.
 >
-> Additionally, it fixes the initialization of nominal_freq for each
-> cpudata
-> and changes latency and delay values to be read from platform firmware
-> firstly
-> for more accurate timing.
+> Signed-off-by: Dhruva Gole <d-gole@ti.com>
+> ---
+>  drivers/base/power/wakeup.c | 11 +++++++----
+>  include/linux/pm_wakeup.h   |  5 ++---
+>  2 files changed, 9 insertions(+), 7 deletions(-)
 >
-> A new quirk is also added for legacy processors that lack CPPC
-> capabilities which caused the pstate driver to fail loading.
+> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+> index a917219feea6..752b417e8129 100644
+> --- a/drivers/base/power/wakeup.c
+> +++ b/drivers/base/power/wakeup.c
+> @@ -451,16 +451,15 @@ static struct wakeup_source *device_wakeup_detach(s=
+truct device *dev)
+>   * Detach the @dev's wakeup source object from it, unregister this wakeu=
+p source
+>   * object and destroy it.
+>   */
+> -int device_wakeup_disable(struct device *dev)
+> +void device_wakeup_disable(struct device *dev)
+>  {
+>         struct wakeup_source *ws;
 >
-> Testing done with one APU system while cpb boost on:
+>         if (!dev || !dev->power.can_wakeup)
+> -               return -EINVAL;
+> +               return;
 >
-> amd_pstate_lowest_nonlinear_freq:1701000
-> amd_pstate_max_freq:3501000
-> cpuinfo_max_freq:3501000
-> cpuinfo_min_freq:400000
-> scaling_cur_freq:3084836
-> scaling_max_freq:3501000
-> scaling_min_freq:400000
+>         ws =3D device_wakeup_detach(dev);
+>         wakeup_source_unregister(ws);
+> -       return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(device_wakeup_disable);
 >
-> analyzing CPU 6:
->   driver: amd-pstate-epp
->   CPUs which run at the same hardware frequency: 6
->   CPUs which need to have their frequency coordinated by software: 6
->   maximum transition latency:  Cannot determine or is not supported.
->   hardware limits: 400 MHz - 3.50 GHz
->   available cpufreq governors: performance powersave
->   current policy: frequency should be within 400 MHz and 3.50 GHz.
->                   The governor "powersave" may decide which speed to use
->                   within this range.
->   current CPU frequency: Unable to call hardware
->   current CPU frequency: 3.50 GHz (asserted by call to kernel)
->   boost state support:
->     Supported: yes
->     Active: yes
->     AMD PSTATE Highest Performance: 255. Maximum Frequency: 3.50 GHz.
->     AMD PSTATE Nominal Performance: 204. Nominal Frequency: 2.80 GHz.
->     AMD PSTATE Lowest Non-linear Performance: 124. Lowest Non-linear Freq=
-uency: 1.70 GHz.
->     AMD PSTATE Lowest Performance: 30. Lowest Frequency: 400 MHz.
+> @@ -502,7 +501,11 @@ EXPORT_SYMBOL_GPL(device_set_wakeup_capable);
+>   */
+>  int device_set_wakeup_enable(struct device *dev, bool enable)
+>  {
+> -       return enable ? device_wakeup_enable(dev) : device_wakeup_disable=
+(dev);
+> +       if (enable)
+> +               return device_wakeup_enable(dev);
+> +
+> +       device_wakeup_disable(dev);
+> +       return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(device_set_wakeup_enable);
 >
-> If someone would like to test this patchset, it would need to apply
-> another patchset on top of this in case of some unexpected issue found.
->
-> https://lore.kernel.org/lkml/cover.1707297581.git.perry.yuan@amd.com/
-> It implements the amd pstate cpb boost feature
-> the below patch link is old version, please apply the latest version
-> while you start the testing work.
->
-> I would greatly appreciate any feedbacks.
+> diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
+> index 6eb9adaef52b..428803eed798 100644
+> --- a/include/linux/pm_wakeup.h
+> +++ b/include/linux/pm_wakeup.h
+> @@ -107,7 +107,7 @@ extern void wakeup_sources_read_unlock(int idx);
+>  extern struct wakeup_source *wakeup_sources_walk_start(void);
+>  extern struct wakeup_source *wakeup_sources_walk_next(struct wakeup_sour=
+ce *ws);
+>  extern int device_wakeup_enable(struct device *dev);
+> -extern int device_wakeup_disable(struct device *dev);
+> +extern void device_wakeup_disable(struct device *dev);
 
-There are missing changelogs and S-o-b tags in a few messages in this serie=
-s.
+This change will introduce a build error in sdhci-pci-core.c AFAICS,
+so you need to modify this file in the same patch to avoid bisection
+breakage.
 
-Overall, I would like someone, preferably at AMD, to take
-responsibility for the amd-pstate driver, review patches modifying it
-and ACK the approved ones.
-
-Huang Rui, who is listed in MAINTAINERS as the official maintainer of
-it, does not seem to be interested in it any more.
-
-Can this be addressed, please?
+>  extern void device_set_wakeup_capable(struct device *dev, bool capable);
+>  extern int device_set_wakeup_enable(struct device *dev, bool enable);
+>  extern void __pm_stay_awake(struct wakeup_source *ws);
+> @@ -154,10 +154,9 @@ static inline int device_wakeup_enable(struct device=
+ *dev)
+>         return 0;
+>  }
+>
+> -static inline int device_wakeup_disable(struct device *dev)
+> +static inline void device_wakeup_disable(struct device *dev)
+>  {
+>         dev->power.should_wakeup =3D false;
+> -       return 0;
+>  }
+>
+>  static inline int device_set_wakeup_enable(struct device *dev, bool enab=
+le)
+> --
+> 2.34.1
+>
 
