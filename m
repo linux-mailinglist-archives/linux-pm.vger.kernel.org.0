@@ -1,131 +1,111 @@
-Return-Path: <linux-pm+bounces-5058-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5059-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A38E687EE33
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 17:57:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E4F887EE72
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 18:09:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C44DE1C221A3
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 16:57:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3F0891C20F0D
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 17:09:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1D8954BE7;
-	Mon, 18 Mar 2024 16:57:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K2K3MjRQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D7AE54FA8;
+	Mon, 18 Mar 2024 17:08:58 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88CED38F96;
-	Mon, 18 Mar 2024 16:57:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D56D854F8F;
+	Mon, 18 Mar 2024 17:08:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710781026; cv=none; b=DjQjDFMouAiTH5YkLGP1kjm7KDmk5svEcmyH5eZi3+B7KbmEioSByAGXXYp1ALGWt+O/d1vi+Al/HkqO0Y7bgaAJU0V5SxECMnGfVyNkztRuucDOI1CxSmCI2FKPUxBUzzIQqPxC3D+CXtv+d/dWtINy5/J+/XrZ3NvpjN+Wc8c=
+	t=1710781738; cv=none; b=jrg5vkmgNqKoYNswJHJq7Zm821DWJnA6NXHDjqT3ZX3ZE1ug+t3Ijve7N8nySrIoylepM1McWPPQ8EhkNXOUXHHqvyIdR4K5d4s6ApVoDzABdZ7cukvkFf4/0QSbYM2+YOW9x/pjtA2YIIR1E4gR2vKqX8ghkA9bdY2DJRo4gKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710781026; c=relaxed/simple;
-	bh=ACEAxDulSpAl5CvzyquQ2Fyq+IxD/YQAwg/steyISSE=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ndzObaCQDTaGSwPNhdmGGW7AQREhcx3ArjXPx5tZhzc8oi9/e9cnacNRLfAOr/xTDuHte69TpcjQepyt5ozludsSmt8luFW7rb7e2b6MMsAz0By2ZevxRY7tRser+rNUhNRGoaKQf2sccEy48NaeUYEGSjLBCHpzqSQ0wXRfCLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K2K3MjRQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C825C433C7;
-	Mon, 18 Mar 2024 16:57:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710781026;
-	bh=ACEAxDulSpAl5CvzyquQ2Fyq+IxD/YQAwg/steyISSE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=K2K3MjRQsAxYRhiuVZoKeQjCmOY3DKwAf4XgxYpHVel83SYbS2T62gKVc2Le5iM5e
-	 vzNYzG+D+wdAX9lcqB1Os8yYkAg6QRNy4BPiaERel+qoX1rIkfIM9+1wyQrQjo0FR5
-	 UsRR/NNu/nUH/5v35Jufm5pFujLDlifp81HZ6Ny6MTJMhMAUJohyYQBj4efIFtL+AW
-	 am6l1hguWkRREYax8xvMGBKa8/osdsd1RKWMSueeJvVWMoFpXyEZDkIAhSFIMSg5fU
-	 xiSyDl0TPyBGJ7km8VX82BcORYsMu2xYP3SybVda+fYHDj1w040bUxp1ckQ8Qocr7D
-	 8xmowg1ahZkig==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1rmGII-00DKXR-L6;
-	Mon, 18 Mar 2024 16:57:02 +0000
-Date: Mon, 18 Mar 2024 16:57:02 +0000
-Message-ID: <86wmpzzdep.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: linux-arm-kernel@lists.infradead.org,
-	kvm@vger.kernel.org,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <len.brown@intel.com>,
-	Pavel Machek <pavel@ucw.cz>,
-	David Woodhouse <dwmw@amazon.co.uk>,
-	Mostafa Saleh <smostafa@google.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kvmarm@lists.linux.dev,
-	linux-pm@vger.kernel.org
-Subject: Re: [RFC PATCH v2 0/4] arm64: Add PSCI v1.3 SYSTEM_OFF2 support for hibernation
-In-Reply-To: <20240318164646.1010092-1-dwmw2@infradead.org>
-References: <20240318164646.1010092-1-dwmw2@infradead.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1710781738; c=relaxed/simple;
+	bh=QwHWQ9oVAKrUXIiDOCxt+dC+IBc22Hj8eUU9ks1tmGw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HbQRmVgDR2Nql+gSiAxynZlIPmYm0NFawBkUMC2s2Y8fmGhICxbfOWe/vEmf9P0BAMCZ+jq4QM9JEKO22ta3BoY+P/DSbcqGfSc4mZaBHEjLbGh/BsH9MBrRSDUV8tGTZYwg4bJvvIFWaqOaVErvTeBYCe8ZRsHpEIGzIv0G3+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-221b9142995so525913fac.1;
+        Mon, 18 Mar 2024 10:08:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710781736; x=1711386536;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QwHWQ9oVAKrUXIiDOCxt+dC+IBc22Hj8eUU9ks1tmGw=;
+        b=qanlWHQgAwhm4UzeZG1ztlFrRnwJllDTU162hcWORirEfYaBwkGWMPMMVWQVWRmvrM
+         2aM56pqE718MhFNE9zZpll0XUBrAseiAdoiMn3n7oU4us2Hmgcuy2EDChI63jo8rjrV+
+         e2oAHmaO4Pi4epuA/GMpNj8RSiedRLL3Y2yibn6DaJpjD7owDjEOxVOjIjc7bvUrAvYy
+         +ll/Co8PYdwbYj4NJFWlo6MR9X01MZQ6s23pHqUT90zmY/6Dt9ZcRO5dX/0bOxKPEBT1
+         2WD9nXxVoLaBnIjStMgphFEEw4y9skFdopgGTRU/v5qRTh7HojzigLYA33sBkffjpYNC
+         dMew==
+X-Forwarded-Encrypted: i=1; AJvYcCVp9ctzUUrjZW9rmfzkSyC9NLexWzwXNyoqjo2/9BHnCHqBGiuR8OLTsKQBoHYA0QpCZQ56doRixLBPGzXDCjpIkhzb+DHSteto0k59yS24oF60MTu7NKjlyn7KoTZst9r9Uei7iLoHdqFcMdF3ytRQlA+TaHa6I7W/C/z7EcUdzMJ537j9XKhSqf1sVfCGlOmkO8CGwfDdD8Nb573K
+X-Gm-Message-State: AOJu0YxHcQg9/HYJsa/1AOG+m42BSeOGLvVQxRo/faa4YO7XDD/e7QWw
+	jzyzYx+HhORSDuYJFnoAaTxrLu3qdW59hIjC6rSAl9jEdEGT34+KEh3W0vZkrj2vWIsvb1khk/F
+	n7LcnaxwP0agde6zooz+b3S6kOKI=
+X-Google-Smtp-Source: AGHT+IFU7ySp2yA6a3YBxEXR8mYGdkkkJdvrmABYe/2rvHFZsvnVOljrXQU7zyXiegNEzdjFq+wOCy/iFGzXd3MpLKs=
+X-Received: by 2002:a05:6871:5b14:b0:220:bd4d:674d with SMTP id
+ op20-20020a0568715b1400b00220bd4d674dmr12937170oac.5.1710781735835; Mon, 18
+ Mar 2024 10:08:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: dwmw2@infradead.org, linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org, pbonzini@redhat.com, corbet@lwn.net, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com, lpieralisi@kernel.org, rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz, dwmw@amazon.co.uk, smostafa@google.com, jean-philippe@linaro.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, linux-pm@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+References: <20240304201625.100619-1-christian.loehle@arm.com>
+ <20240304201625.100619-3-christian.loehle@arm.com> <CAJZ5v0gMni0QJTBJXoVOav=kOtQ9W--NyXAgq+dXA+m-bciG8w@mail.gmail.com>
+ <5060c335-e90a-430f-bca5-c0ee46a49249@arm.com>
+In-Reply-To: <5060c335-e90a-430f-bca5-c0ee46a49249@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 18 Mar 2024 18:08:44 +0100
+Message-ID: <CAJZ5v0janPrWRkjcLkFeP9gmTC-nVRF-NQCh6CTET6ENy-_knQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/2] cpufreq/schedutil: Remove iowait boost
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-kernel@vger.kernel.org, peterz@infradead.org, 
+	juri.lelli@redhat.com, mingo@redhat.com, dietmar.eggemann@arm.com, 
+	vschneid@redhat.com, vincent.guittot@linaro.org, Johannes.Thumshirn@wdc.com, 
+	adrian.hunter@intel.com, ulf.hansson@linaro.org, andres@anarazel.de, 
+	asml.silence@gmail.com, linux-pm@vger.kernel.org, linux-block@vger.kernel.org, 
+	io-uring@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 18 Mar 2024 16:14:22 +0000,
-David Woodhouse <dwmw2@infradead.org> wrote:
-> 
-> The PSCI v1.3 spec (https://developer.arm.com/documentation/den0022, 
-> currently in Alpha state, hence 'RFC') adds support for a SYSTEM_OFF2 
-> function enabling a HIBERNATE_OFF state which is analogous to ACPI S4. 
-> This will allow hosting environments to determine that a guest is 
-> hibernated rather than just powered off, and ensure that they preserve 
-> the virtual environment appropriately to allow the guest to resume 
-> safely (or bump the hardware_signature in the FACS to trigger a clean 
-> reboot instead).
-> 
-> This adds support for it to KVM, exactly the same way as the existing 
-> support for SYSTEM_RESET2 as added in commits d43583b890e7 ("KVM: arm64: 
-> Expose PSCI SYSTEM_RESET2 call to the guest") and 34739fd95fab ("KVM: 
-> arm64: Indicate SYSTEM_RESET2 in kvm_run::system_event flags field").
-> 
-> Back then, KVM was unconditionally bumped to expose PSCI v1.1. This 
-> means that a kernel upgrade causes guest visible behaviour changes 
-> without any explicit opt-in from the VMM, which is... unconventional. In 
-> some cases, a PSCI update isn't just about new optional calls; PSCI v1.2 
-> for example adds a new permitted error return from the existing CPU_ON 
-> function.
-> 
-> There *is* a way for a VMM to opt *out* of newer PSCI versions... by 
-> setting a per-vCPU "special" register that actually ends up setting the 
-> PSCI version KVM-wide. Quite why this isn't just a simple KVM_CAP, I 
-> have no idea.
+On Mon, Mar 18, 2024 at 5:40=E2=80=AFPM Christian Loehle
+<christian.loehle@arm.com> wrote:
+>
+> On 18/03/2024 14:07, Rafael J. Wysocki wrote:
+> > On Mon, Mar 4, 2024 at 9:17=E2=80=AFPM Christian Loehle
+> > <christian.loehle@arm.com> wrote:
+> >>
+> >> The previous commit provides a new cpu_util_cfs_boost_io interface for
+> >> schedutil which uses the io boosted utilization of the per-task
+> >> tracking strategy. Schedutil iowait boosting is therefore no longer
+> >> necessary so remove it.
+> >
+> > I'm wondering about the cases when schedutil is used without EAS.
+> >
+> > Are they still going to be handled as before after this change?
+>
+> Well they should still get boosted (under the new conditions) and accordi=
+ng
+> to my tests that does work.
 
-Because the expectations are that the VMM can blindly save/restore the
-guest's state, including the PSCI version, and restore that blindly.
-KVM CAPs are just a really bad design pattern for this sort of things.
+OK
 
-	M.
+> Anything in particular you're worried about?
 
--- 
-Without deviation from the norm, progress is not possible.
+It is not particularly clear to me how exactly the boost is taken into
+account without EAS.
+
+> So in terms of throughput I see similar results with EAS and CAS+sugov.
+> I'm happy including numbers in the cover letter for future versions, too.
+> So far my intuition was that nobody would care enough to include them
+> (as long as it generally still works).
+
+Well, IMV clear understanding of the changes is more important.
 
