@@ -1,121 +1,143 @@
-Return-Path: <linux-pm+bounces-5016-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5018-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED9A787E392
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 07:07:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E80AD87E3E4
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 08:09:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A3B651F21CB0
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 06:07:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 235C41C20D11
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 07:09:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC4B122325;
-	Mon, 18 Mar 2024 06:06:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00D4522337;
+	Mon, 18 Mar 2024 07:09:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="eyXT3Kgj"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="YSB4ad8t"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 215CC2231A;
-	Mon, 18 Mar 2024 06:06:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E33661CA89;
+	Mon, 18 Mar 2024 07:09:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710742012; cv=none; b=PWAIrCaObAcmhHjCG5z8MEsO+dHvuxFj/Vdbjjhvb0IxyLhfS81tjQ/dE/q+l2BjvhkgEq5m2J8FMcrZU6GaxGCTGLxDZ6Z5q8LbPYWaO+x+qhLtJ7pwBfEhfo2DIifZ3rzlxgOaZgLRGX9ofm0TJLNOoiR7Vo5DkpkuRM2EgTo=
+	t=1710745771; cv=none; b=DNBbtI3J41DcqyrsNLUFNQ/4wK5GEBDw6parujusd4sPKv71xDJAEJ3u+59PG2Pkejoj6l0XXxrouyWecjS7ChV052JV5Icx0YSBImf50LyJMC8rE5W7yEBxXsXj64gO1SyTL73HVI8WvPFuUs2CEu/meRhV847LrM7XubgKRhg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710742012; c=relaxed/simple;
-	bh=/8870Dm7p0rzChEjvnJzeI0cna0UOQm4+Lk6NWHpQ4w=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jsDffqke07ZT3Z3SJq3D3cBeJfYK0Frcu7rqLQA1ixKkRhLAD5GkFrjrHUeHE6mvkv5qdffGZGUTf1Hy7bTYRyokZl0l6+u9B4wxTNVMZOZFUGsWs6dqX0jHvk5fdGmioAB7H0Kh2vwwd8+yd6ni0AUCR+2/Vc28w95e0MQCBQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=eyXT3Kgj; arc=none smtp.client-ip=198.47.23.248
+	s=arc-20240116; t=1710745771; c=relaxed/simple;
+	bh=uuwFTLvyMNqlpKTyNz8SdpNe0H6SFIIuVGNRpJwqqGc=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YcR1UTTBG77dSKEY9RwEyxbdza8G8TaWfkFQKETB8I541JIVsVK6sQg+GRNOcYH7mUTbbkOgJPeWbK5IIZg8zygD1iVJEZf9K7ENjmgDSCePzCuI9qxu8Xd1xcBGzcnZubrgRjD5xEeBelK/MVEXCt1/sM/EUYsMfUkWPyAgyvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=YSB4ad8t; arc=none smtp.client-ip=198.47.19.142
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 42I5tjdm053565;
-	Mon, 18 Mar 2024 00:55:45 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 42I63EYF085045;
+	Mon, 18 Mar 2024 01:03:14 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1710741345;
-	bh=ZnWHo1ylR1YM6vl9GkHOqIy0gOs+L02Pz8cQsQr87ao=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=eyXT3KgjturL8Km09bHGM9ezo7KnEBaoezEJ0Jo7OH5z+LPxmT++bxf91VRHPw4VW
-	 mVzTL7oWoGdvHOrHUhYb7YLDnc0xYJt3e+JxN7v+OT3l/cI6n3iCA4WX54MosAt/1x
-	 S0bQIDCqevLWHIIMB5uJgeSRjkDU4+8MFFsaNOBs=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 42I5tjIt086260
+	s=ti-com-17Q1; t=1710741794;
+	bh=eb0Ccz7HpZ5APiazpAPXMBC/gybVlUfHgyxFsx8OJ5c=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=YSB4ad8t69Xt6z8Q9rUY7EPVPxlrBq3REXebtcGlwp2Xm9RDgJhWweHPSkviZerXB
+	 sECEHphpbqVd6gYcEzGnykTJsRuqoFIEyjiUgvEoZmz51wvOS+gqLTJH9eanEIJrXb
+	 51pd1marzgijpu8vVM65WjCMxGNME2Yx2hb6+A9o=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 42I63EkG002963
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Mon, 18 Mar 2024 00:55:45 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+	Mon, 18 Mar 2024 01:03:14 -0500
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 18
- Mar 2024 00:55:45 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ Mar 2024 01:03:14 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 18 Mar 2024 00:55:45 -0500
-Received: from dhruva.dhcp.ti.com (dhruva.dhcp.ti.com [172.24.227.68])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 42I5tKiH082113;
-	Mon, 18 Mar 2024 00:55:41 -0500
+ Frontend Transport; Mon, 18 Mar 2024 01:03:14 -0500
+Received: from localhost (dhruva.dhcp.ti.com [172.24.227.68])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 42I63DLB033059;
+	Mon, 18 Mar 2024 01:03:14 -0500
+Date: Mon, 18 Mar 2024 11:33:12 +0530
 From: Dhruva Gole <d-gole@ti.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki"
-	<rafael@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>
-CC: Tony Lindgren <tony@atomide.com>, Len Brown <len.brown@intel.com>,
-        Pavel
- Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>, <theo.lebrun@bootlin.com>,
-        Dhruva
- Gole <d-gole@ti.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>
-Subject: [PATCH 3/3] mmc: sdhci-pci: Use device_set_wakeup_enable for en/disable wakeups
-Date: Mon, 18 Mar 2024 11:20:54 +0530
-Message-ID: <20240318055054.1564696-4-d-gole@ti.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240318055054.1564696-1-d-gole@ti.com>
-References: <20240318055054.1564696-1-d-gole@ti.com>
+To: Jagadeesh Kona <quic_jkona@quicinc.com>
+CC: "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman
+	<khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>, Pavel Machek
+	<pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad
+ Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette
+	<mturquette@baylibre.com>,
+        Andy Gross <agross@kernel.org>, Stephen Boyd
+	<sboyd@kernel.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash
+ Garodia <quic_vgarodia@quicinc.com>,
+        "Bryan O'Donoghue"
+	<bryan.odonoghue@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abel Vesa
+	<abel.vesa@linaro.org>, Taniya Das <quic_tdas@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, Imran Shaik <quic_imrashai@quicinc.com>,
+        Ajit
+ Pandey <quic_ajipan@quicinc.com>
+Subject: Re: [PATCH V5 1/5] PM: domains: Allow devices attached to genpd to
+ be managed by HW
+Message-ID: <20240318060312.z5pk4roz6uqhwosc@dhruva>
+References: <20240315111046.22136-1-quic_jkona@quicinc.com>
+ <20240315111046.22136-2-quic_jkona@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20240315111046.22136-2-quic_jkona@quicinc.com>
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-There exists device_set_wakeup_enable for wrapping device_wakeup_enable
-and device_wakeup_disable. Use that instead to avoid confusion in
-returning from a void vs int function.
+On Mar 15, 2024 at 16:40:42 +0530, Jagadeesh Kona wrote:
+> From: Ulf Hansson <ulf.hansson@linaro.org>
+> 
+> Some power-domains may be capable of relying on the HW to control the power
+> for a device that's hooked up to it. Typically, for these kinds of
+> configurations the consumer driver should be able to change the behavior of
+> power domain at runtime, control the power domain in SW mode for certain
+> configurations and handover the control to HW mode for other usecases.
+> 
+> To allow a consumer driver to change the behaviour of the PM domain for its
+> device, let's provide a new function, dev_pm_genpd_set_hwmode(). Moreover,
+> let's add a corresponding optional genpd callback, ->set_hwmode_dev(),
+> which the genpd provider should implement if it can support switching
+> between HW controlled mode and SW controlled mode. Similarly, add the
+> dev_pm_genpd_get_hwmode() to allow consumers to read the current mode and
+> its corresponding optional genpd callback, ->get_hwmode_dev(), which the
+> genpd provider can also implement to synchronize the initial HW mode
+> state in genpd_add_device() by reading back the mode from the hardware.
+> 
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  drivers/pmdomain/core.c   | 64 +++++++++++++++++++++++++++++++++++++++
+>  include/linux/pm_domain.h | 17 +++++++++++
+>  2 files changed, 81 insertions(+)
+> 
 
-Signed-off-by: Dhruva Gole <d-gole@ti.com>
----
+LGTM!
 
-I do not have the hardware to test out this driver, hence requesting
-someone to review/ test it if atall you suspect that this change can
-break existing functionality.
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
 
- drivers/mmc/host/sdhci-pci-core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/mmc/host/sdhci-pci-core.c b/drivers/mmc/host/sdhci-pci-core.c
-index 025b31aa712c..db614389a5fc 100644
---- a/drivers/mmc/host/sdhci-pci-core.c
-+++ b/drivers/mmc/host/sdhci-pci-core.c
-@@ -61,9 +61,9 @@ static int sdhci_pci_init_wakeup(struct sdhci_pci_chip *chip)
- 	}
- 
- 	if ((pm_flags & MMC_PM_KEEP_POWER) && (pm_flags & MMC_PM_WAKE_SDIO_IRQ))
--		return device_wakeup_enable(&chip->pdev->dev);
-+		return device_set_wakeup_enable(&chip->pdev->dev, true);
- 	else if (!cap_cd_wake)
--		return device_wakeup_disable(&chip->pdev->dev);
-+		return device_set_wakeup_enable(&chip->pdev->dev, false);
- 
- 	return 0;
- }
 -- 
-2.34.1
-
+Best regards,
+Dhruva
 
