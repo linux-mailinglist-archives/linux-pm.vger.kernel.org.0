@@ -1,463 +1,152 @@
-Return-Path: <linux-pm+bounces-5085-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5086-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4B7987F241
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 22:35:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB1B087F326
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 23:36:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DAF6A1C2128D
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 21:35:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 922B11F21F27
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 22:36:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D20825A11B;
-	Mon, 18 Mar 2024 21:34:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E87B15A7A1;
+	Mon, 18 Mar 2024 22:36:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=pobox.com header.i=@pobox.com header.b="VaDHW9Nt";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b="aPEKY8mf"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eVag+b1G"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from pb-smtp20.pobox.com (pb-smtp20.pobox.com [173.228.157.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f201.google.com (mail-il1-f201.google.com [209.85.166.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C2DA59B59;
-	Mon, 18 Mar 2024 21:34:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=173.228.157.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 565725A4DC
+	for <linux-pm@vger.kernel.org>; Mon, 18 Mar 2024 22:36:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710797684; cv=none; b=ULj+K2EeOM52RWDXFhO27NjbdnCs6XC+evJ5bupz49VjBJaVhlX1WtkYWtWCx8Xs6Kfs5sdp4lwSnqkYp3VmDj5Izbeqxw2LOFxSawi7dWUIVD+TqB6dkQiKL0HQDJy7JOh8l1HpGyBQBEhdoX3o/Sm3JsY+0Gww1iRt0OxrrXw=
+	t=1710801374; cv=none; b=I7VpvmMdFrvMS6CEqHDuuL7MvyWCVpXb/xYqF4cZxnxj+gLYT79vypWKQIGkx6X0YOYvnQPVpj3kU9pCCcayITo+OZm1fIlgBYIMn6K2XRMsShstdzeD8jg+A5ivnKURueIHwq+r97cE67IrMUA9G/ycWzUwQpUpqNGE+8VLehY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710797684; c=relaxed/simple;
-	bh=X2sRkyjakE0VEnTnqSb6o38pWZf+n5FfGmDjclnooxc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JpItjZFdl4LVZ+yDBFBYSnLNPpFegUOi7a/hnVxb4HQoFJE7HLEQx7WtB2cTG1AS6mkhc3uF786h7oLaNjHu8TYAEzUaEIFj1RTaocFJW6m7afAlHW4x5LQV83KdYC1teLmGfSitS5WH7xt2oQuClNIYZIS4Mf+RyMBlfoAt2z8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fluxnic.net; spf=pass smtp.mailfrom=fluxnic.net; dkim=pass (1024-bit key) header.d=pobox.com header.i=@pobox.com header.b=VaDHW9Nt; dkim=fail (1024-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b=aPEKY8mf reason="signature verification failed"; arc=none smtp.client-ip=173.228.157.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fluxnic.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fluxnic.net
-Received: from pb-smtp20.pobox.com (unknown [127.0.0.1])
-	by pb-smtp20.pobox.com (Postfix) with ESMTP id 83E7D235ED;
-	Mon, 18 Mar 2024 17:34:42 -0400 (EDT)
-	(envelope-from nico@fluxnic.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=from:to:cc
-	:subject:date:message-id:in-reply-to:references:mime-version
-	:content-transfer-encoding; s=sasl; bh=X2sRkyjakE0VEnTnqSb6o38pW
-	Zf+n5FfGmDjclnooxc=; b=VaDHW9NtGMN1+1+DrZJCpIkawXgF/ABEzxgtTRUiY
-	vZJfKWB97b13pNjufrNJbHl3PEdGxXwD8oztUvcXROShEeTRBfr9UW7BOrGcVzxQ
-	q+/tXzbBqYLdnx9Mqe55aqQZBIROoNZLLrkRUw2PyG91MC/xmjL4Too3+1xgNuDL
-	wA=
-Received: from pb-smtp20.sea.icgroup.com (unknown [127.0.0.1])
-	by pb-smtp20.pobox.com (Postfix) with ESMTP id 7A03B235EC;
-	Mon, 18 Mar 2024 17:34:42 -0400 (EDT)
-	(envelope-from nico@fluxnic.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=fluxnic.net;
- h=from:to:cc:subject:date:message-id:in-reply-to:references:mime-version:content-transfer-encoding; s=2016-12.pbsmtp; bh=biv2CycJifyejMyHV8LrosOmw/5LZ/RLDnuSuMaU8TY=; b=aPEKY8mftOLrs1AjQVirtdckqclSxv+MuIPA/fnsCuvAR+wvYe2FvIwkL1HihGmqyIHNLU9eZfqqlmG4l7nCfH3/dLyIESCqU7NmwQCIO3y66+NCO7Gf3F36bnOEQqVM61QwQO4tT/wQ9GJd56cUYjPv5Wcum1U/UiMuF1E99lM=
-Received: from yoda.fluxnic.net (unknown [24.201.101.36])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by pb-smtp20.pobox.com (Postfix) with ESMTPSA id 652AB235E8;
-	Mon, 18 Mar 2024 17:34:38 -0400 (EDT)
-	(envelope-from nico@fluxnic.net)
-Received: from xanadu.lan (OpenWrt.lan [192.168.1.1])
-	by yoda.fluxnic.net (Postfix) with ESMTPSA id 0FE60BE2BB0;
-	Mon, 18 Mar 2024 17:24:51 -0400 (EDT)
-From: Nicolas Pitre <nico@fluxnic.net>
-To: Daniel Lezcano <daniel.lezcano@linaro.org>,
-	linux-pm@vger.kernel.org,
-	linux-mediatek@lists.infradead.org,
-	devicetree@vger.kernel.org
-Cc: Nicolas Pitre <npitre@baylibre.com>
-Subject: [PATCH v2 13/13] arm64: dts: mediatek: mt8188: add default thermal zones
-Date: Mon, 18 Mar 2024 17:22:15 -0400
-Message-ID: <20240318212428.3843952-14-nico@fluxnic.net>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240318212428.3843952-1-nico@fluxnic.net>
-References: <20240318212428.3843952-1-nico@fluxnic.net>
+	s=arc-20240116; t=1710801374; c=relaxed/simple;
+	bh=idLQG0Kr6yCd5IwGaKvpKO3VhPnelbfggT+hRhuZhCo=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=NTOXj0Px9MvVRTV38deKe4kFiPLU8k2oMDfkNlZgHu25PvKaikhqD4zcJS9QDFTeIpWWK6bDloNRWZXoaFmjQskK6cb+V4uCh4V8yv03hvwImV2JCTXgxq7I0awnT5aKM7FFVcbgyzZ+OKObFxnGPRqnuNodPE9+TqwOkCSiyhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eVag+b1G; arc=none smtp.client-ip=209.85.166.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com
+Received: by mail-il1-f201.google.com with SMTP id e9e14a558f8ab-36848e95617so3225645ab.1
+        for <linux-pm@vger.kernel.org>; Mon, 18 Mar 2024 15:36:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1710801371; x=1711406171; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=QFNImd0Mua9KCTvHqQYaKAK0qurjGIisgRUAJ+l3grg=;
+        b=eVag+b1GKJedkBBNZlW2rtvYKXx0NRe6cJhBMa4jzvNFb1SREmsHKCh+jcMPbeUtR7
+         0YGlY+dp4NaFUaV8KSFYznAqYZVRhgaIqw2TGqlGQUW8DHWAozSIxApdcQXuUNQymxvp
+         hWgx6DQBVkrVl10KtK59PCu38Gqvoh19nCuNJuY4dTcFLhBvgCFVJXj4nFJp0TgEWbAD
+         L26tR9aWqW3zXvYRgnYq6/k/Gu8x15BdUqnGbQVBIctHXey2Oli26+uc27bpHsZjzdSU
+         MvUc7QUNU4cRqJ0f0+Qs/kwAcEDZS93A47JQVu88dS5CYzRoKEWDTCXVtBsN7y0FNVtW
+         3qGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710801371; x=1711406171;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QFNImd0Mua9KCTvHqQYaKAK0qurjGIisgRUAJ+l3grg=;
+        b=OV6hI1DcEoQ3ny3xXCfNCt84PXxvIuzg/GUuGD1LGpRTfPEdA22ovxQr3Jz1Sq3d1P
+         bR9G9RYBvyTKYASFptyejsIGG/OJjA1miUvq6wNph9MrsDkvWVp5f1AV5p91FfMisWmG
+         jqMwAvIxSe/qhlvbc/AuKYc2YH8GsMYmMsQaPB4Q/Yv1oYmp0n+K5rMfbymySIVQB7Cv
+         DlCF7FrutISbX8eFNgM7+wgws4b7unlxY4kiFvArxrBSULluB34HneL366WLo16JawEb
+         xhlICNAIGTWMnlR54d6l87ZRahXmhP7ywa4gcJF2zf4LcPrmHVFAaXQUsXAc0C0THVDJ
+         bYnA==
+X-Gm-Message-State: AOJu0YwxvEJmXIBrUqM5RwiC6XEyTZX8S6GqwJEs0U6gtWh8hJDFSJW7
+	R8m72XOmfbXdv9r6yBO3vK4S38yjlaskx+xTPyy+oM0Epro29lP6T+bXR+rmQ3uH4wA6DE8acQU
+	8ti8ISA85DW+Ma0DvapYPOg==
+X-Google-Smtp-Source: AGHT+IETbi8KX4eWggvtR8wvzN+qPch/c/mKDS3lve+lL8DnNm4inZBonEvIJPIsNh8alSISBfzToKCHwe7G/+Esfg==
+X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
+ (user=justinstitt job=sendgmr) by 2002:a92:d68e:0:b0:366:a780:5cb2 with SMTP
+ id p14-20020a92d68e000000b00366a7805cb2mr8306iln.2.1710801371403; Mon, 18 Mar
+ 2024 15:36:11 -0700 (PDT)
+Date: Mon, 18 Mar 2024 22:36:10 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Pobox-Relay-ID:
- 528EAE3A-E56F-11EE-A361-F515D2CDFF5E-78420484!pb-smtp20.pobox.com
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIANnB+GUC/zWO2wqDMBBEf0X2uQu5gaW/UoqEda0LbRo2QRTx3
+ xsEXwbOcGBmh8IqXODR7aC8SJFfamBvHdAc05tRxsbgjAvG2zuWqonyhqPKwlqwzqzf+EFJlc/ 0wazD1UbKcsGgTSC0vekNWQ5u8tBmsvIk63nh+TqOP7za5QuSAAAA
+X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1710801370; l=2621;
+ i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
+ bh=idLQG0Kr6yCd5IwGaKvpKO3VhPnelbfggT+hRhuZhCo=; b=+HXAnO3jukdE7ZFNa382FaAh2WDE9BnHodEf/wlzTo0fxNc6RJaEx+xFSV5aC0t4hXJSjrzfF
+ 7wkRpBum/gAB2Evhh4ej0JRMWcC31tyDBUFqUe/bafGVYiWfQDB5PQ1
+X-Mailer: b4 0.12.3
+Message-ID: <20240318-strncpy-drivers-thermal-intel-int340x_thermal-acpi_thermal_rel-c-v1-1-08839fbf737a@google.com>
+Subject: [PATCH] thermal: intel: int340x_thermal: replace deprecated strncpy
+ with strscpy
+From: Justin Stitt <justinstitt@google.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-hardening@vger.kernel.org, Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-From: Nicolas Pitre <npitre@baylibre.com>
+strncpy() is deprecated for use on NUL-terminated destination strings
+[1] and as such we should prefer more robust and less ambiguous string
+interfaces.
 
-Inspired by the vendor kernel but adapted to the upstream thermal
-driver version.
+psvt->limit.string can only be 8 bytes so let's use the appropriate size
+macro ACPI_LIMIT_STR_MAX_LEN.
 
-Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
+Neither psvt->limit.string or psvt_user[i].limit.string requires the
+NUL-padding behavior that strncpy() provides as they have both been
+filled with NUL-bytes prior to the string operation.
+|	memset(&psvt->limit, 0, sizeof(u64));
+and
+| 	psvt_user = kzalloc(psvt_len, GFP_KERNEL);
+
+Let's use `strscpy` [2] due to the fact that it guarantees
+NUL-termination on the destination buffer without unnecessarily
+NUL-padding.
+
+Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
+Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
+Link: https://github.com/KSPP/linux/issues/90
+Cc: linux-hardening@vger.kernel.org
+Signed-off-by: Justin Stitt <justinstitt@google.com>
 ---
- arch/arm64/boot/dts/mediatek/mt8188.dtsi | 348 +++++++++++++++++++++++
- 1 file changed, 348 insertions(+)
+Note: build-tested only.
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8188.dtsi b/arch/arm64/boot/d=
-ts/mediatek/mt8188.dtsi
-index 5a3c58a77c..ea90ad4baa 100644
---- a/arch/arm64/boot/dts/mediatek/mt8188.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8188.dtsi
-@@ -12,6 +12,8 @@
- #include <dt-bindings/pinctrl/mediatek,mt8188-pinfunc.h>
- #include <dt-bindings/power/mediatek,mt8188-power.h>
- #include <dt-bindings/reset/mt8188-resets.h>
-+#include <dt-bindings/thermal/thermal.h>
-+#include <dt-bindings/thermal/mediatek,lvts-thermal.h>
-=20
- / {
- 	compatible =3D "mediatek,mt8188";
-@@ -311,6 +313,352 @@ psci {
- 		method =3D "smc";
- 	};
-=20
-+	thermal_zones: thermal-zones {
-+		cluster0-thermal {
-+			polling-delay =3D <1000>;
-+			polling-delay-passive =3D <250>;
-+			thermal-sensors =3D <&lvts_mcu MT8188_MCU_TS1_0>;
-+
-+			trips {
-+				cluster0_alert: trip-alert {
-+					temperature =3D <85000>;
-+					hysteresis =3D <2000>;
-+					type =3D "passive";
-+				};
-+
-+				cluster0_crit: trip-crit {
-+					temperature =3D <100000>;
-+					hysteresis =3D <2000>;
-+					type =3D "critical";
-+				};
-+			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip =3D <&cluster0_alert>;
-+					cooling-device =3D <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&cpu4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&cpu5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
-+		};
-+
-+		cluster1-thermal {
-+			polling-delay =3D <1000>;
-+			polling-delay-passive =3D <250>;
-+			thermal-sensors =3D <&lvts_mcu MT8188_MCU_TS1_1>;
-+
-+			trips {
-+				cluster1_alert: trip-alert {
-+					temperature =3D <85000>;
-+					hysteresis =3D <2000>;
-+					type =3D "passive";
-+				};
-+
-+				cluster1_crit: trip-crit {
-+					temperature =3D <100000>;
-+					hysteresis =3D <2000>;
-+					type =3D "critical";
-+				};
-+			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip =3D <&cluster1_alert>;
-+					cooling-device =3D <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&cpu4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&cpu5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
-+		};
-+
-+		cluster2-thermal {
-+			polling-delay =3D <1000>;
-+			polling-delay-passive =3D <250>;
-+			thermal-sensors =3D <&lvts_mcu MT8188_MCU_TS1_2>;
-+
-+			trips {
-+				cluster2_alert: trip-alert {
-+					temperature =3D <85000>;
-+					hysteresis =3D <2000>;
-+					type =3D "passive";
-+				};
-+
-+				cluster2_crit: trip-crit {
-+					temperature =3D <100000>;
-+					hysteresis =3D <2000>;
-+					type =3D "critical";
-+				};
-+			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip =3D <&cluster2_alert>;
-+					cooling-device =3D <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&cpu4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&cpu5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
-+		};
-+
-+		cluster3-thermal {
-+			polling-delay =3D <1000>;
-+			polling-delay-passive =3D <250>;
-+			thermal-sensors =3D <&lvts_mcu MT8188_MCU_TS1_3>;
-+
-+			trips {
-+				cluster3_alert: trip-alert {
-+					temperature =3D <85000>;
-+					hysteresis =3D <2000>;
-+					type =3D "passive";
-+				};
-+
-+				cluster3_crit: trip-crit {
-+					temperature =3D <100000>;
-+					hysteresis =3D <2000>;
-+					type =3D "critical";
-+				};
-+			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip =3D <&cluster3_alert>;
-+					cooling-device =3D <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&cpu4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&cpu5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
-+		};
-+
-+		cpu_big0-thermal {
-+			polling-delay =3D <1000>;
-+			polling-delay-passive =3D <250>;
-+			thermal-sensors =3D <&lvts_mcu MT8188_MCU_TS2_0>;
-+
-+			trips {
-+				cpu_big0_alert: trip-alert {
-+					temperature =3D <85000>;
-+					hysteresis =3D <2000>;
-+					type =3D "passive";
-+				};
-+
-+				cpu_big0_crit: trip-crit {
-+					temperature =3D <100000>;
-+					hysteresis =3D <2000>;
-+					type =3D "critical";
-+				};
-+			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip =3D <&cpu_big0_alert>;
-+					cooling-device =3D <&cpu6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&cpu7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
-+		};
-+
-+		cpu_big1-thermal {
-+			polling-delay =3D <1000>;
-+			polling-delay-passive =3D <250>;
-+			thermal-sensors =3D <&lvts_mcu MT8188_MCU_TS2_1>;
-+
-+			trips {
-+				cpu_big1_alert: trip-alert {
-+					temperature =3D <85000>;
-+					hysteresis =3D <2000>;
-+					type =3D "passive";
-+				};
-+
-+				cpu_big1_crit: trip-crit {
-+					temperature =3D <100000>;
-+					hysteresis =3D <2000>;
-+					type =3D "critical";
-+				};
-+			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip =3D <&cpu_big1_alert>;
-+					cooling-device =3D <&cpu6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+							 <&cpu7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
-+		};
-+
-+		apu-thermal {
-+			polling-delay =3D <1000>;
-+			polling-delay-passive =3D <250>;
-+			thermal-sensors =3D <&lvts_ap MT8188_AP_TS3_1>;
-+
-+			trips {
-+				apu_alert: trip-alert {
-+					temperature =3D <85000>;
-+					hysteresis =3D <2000>;
-+					type =3D "passive";
-+				};
-+
-+				apu_crit: trip-crit {
-+					temperature =3D <100000>;
-+					hysteresis =3D <2000>;
-+					type =3D "critical";
-+				};
-+			};
-+		};
-+
-+		gpu1-thermal {
-+			polling-delay =3D <1000>;
-+			polling-delay-passive =3D <250>;
-+			thermal-sensors =3D <&lvts_ap MT8188_AP_TS4_0>;
-+
-+			trips {
-+				gpu1_alert: trip-alert {
-+					temperature =3D <85000>;
-+					hysteresis =3D <2000>;
-+					type =3D "passive";
-+				};
-+
-+				gpu1_crit: trip-crit {
-+					temperature =3D <100000>;
-+					hysteresis =3D <2000>;
-+					type =3D "critical";
-+				};
-+			};
-+		};
-+
-+		gpu2-thermal {
-+			polling-delay =3D <1000>;
-+			polling-delay-passive =3D <250>;
-+			thermal-sensors =3D <&lvts_ap MT8188_AP_TS4_1>;
-+
-+			trips {
-+				gpu2_alert: trip-alert {
-+					temperature =3D <85000>;
-+					hysteresis =3D <2000>;
-+					type =3D "passive";
-+				};
-+
-+				gpu2_crit: trip-crit {
-+					temperature =3D <100000>;
-+					hysteresis =3D <2000>;
-+					type =3D "critical";
-+				};
-+			};
-+		};
-+
-+		soc1-thermal {
-+			polling-delay =3D <1000>;
-+			polling-delay-passive =3D <250>;
-+			thermal-sensors =3D <&lvts_ap MT8188_AP_TS4_2>;
-+
-+			trips {
-+				soc1_alert: trip-alert {
-+					temperature =3D <85000>;
-+					hysteresis =3D <2000>;
-+					type =3D "passive";
-+				};
-+
-+				soc1_crit: trip-crit {
-+					temperature =3D <100000>;
-+					hysteresis =3D <2000>;
-+					type =3D "critical";
-+				};
-+			};
-+		};
-+
-+		soc2-thermal {
-+			polling-delay =3D <1000>;
-+			polling-delay-passive =3D <250>;
-+			thermal-sensors =3D <&lvts_ap MT8188_AP_TS5_0>;
-+
-+			trips {
-+				soc2_alert: trip-alert {
-+					temperature =3D <85000>;
-+					hysteresis =3D <2000>;
-+					type =3D "passive";
-+				};
-+
-+				soc2_crit: trip-crit {
-+					temperature =3D <100000>;
-+					hysteresis =3D <2000>;
-+					type =3D "critical";
-+				};
-+			};
-+		};
-+
-+		soc3-thermal {
-+			polling-delay =3D <1000>;
-+			polling-delay-passive =3D <250>;
-+			thermal-sensors =3D <&lvts_ap MT8188_AP_TS5_1>;
-+
-+			trips {
-+				soc3_alert: trip-alert {
-+					temperature =3D <85000>;
-+					hysteresis =3D <2000>;
-+					type =3D "passive";
-+				};
-+
-+				soc3_crit: trip-crit {
-+					temperature =3D <100000>;
-+					hysteresis =3D <2000>;
-+					type =3D "critical";
-+				};
-+			};
-+		};
-+
-+		cam1-thermal {
-+			polling-delay =3D <1000>;
-+			polling-delay-passive =3D <250>;
-+			thermal-sensors =3D <&lvts_ap MT8188_AP_TS6_0>;
-+
-+			trips {
-+				cam1_alert: trip-alert {
-+					temperature =3D <85000>;
-+					hysteresis =3D <2000>;
-+					type =3D "passive";
-+				};
-+
-+				cam1_crit: trip-crit {
-+					temperature =3D <100000>;
-+					hysteresis =3D <2000>;
-+					type =3D "critical";
-+				};
-+			};
-+		};
-+
-+		cam21-thermal {
-+			polling-delay =3D <1000>;
-+			polling-delay-passive =3D <250>;
-+			thermal-sensors =3D <&lvts_ap MT8188_AP_TS6_1>;
-+
-+			trips {
-+				cam2_alert: trip-alert {
-+					temperature =3D <85000>;
-+					hysteresis =3D <2000>;
-+					type =3D "passive";
-+				};
-+
-+				cam2_crit: trip-crit {
-+					temperature =3D <100000>;
-+					hysteresis =3D <2000>;
-+					type =3D "critical";
-+				};
-+			};
-+		};
-+	};
-+
- 	timer: timer {
- 		compatible =3D "arm,armv8-timer";
- 		interrupt-parent =3D <&gic>;
---=20
-2.44.0
+Found with: $ rg "strncpy\("
+---
+ drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
+index dc519a665c18..4b4a4d63e61f 100644
+--- a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
++++ b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
+@@ -309,7 +309,7 @@ static int acpi_parse_psvt(acpi_handle handle, int *psvt_count, struct psvt **ps
+ 
+ 		if (knob->type == ACPI_TYPE_STRING) {
+ 			memset(&psvt->limit, 0, sizeof(u64));
+-			strncpy(psvt->limit.string, psvt_ptr->limit.str_ptr, knob->string.length);
++			strscpy(psvt->limit.string, psvt_ptr->limit.str_ptr, ACPI_LIMIT_STR_MAX_LEN);
+ 		} else {
+ 			psvt->limit.integer = psvt_ptr->limit.integer;
+ 		}
+@@ -468,7 +468,7 @@ static int fill_psvt(char __user *ubuf)
+ 		psvt_user[i].unlimit_coeff = psvts[i].unlimit_coeff;
+ 		psvt_user[i].control_knob_type = psvts[i].control_knob_type;
+ 		if (psvt_user[i].control_knob_type == ACPI_TYPE_STRING)
+-			strncpy(psvt_user[i].limit.string, psvts[i].limit.string,
++			strscpy(psvt_user[i].limit.string, psvts[i].limit.string,
+ 				ACPI_LIMIT_STR_MAX_LEN);
+ 		else
+ 			psvt_user[i].limit.integer = psvts[i].limit.integer;
+
+---
+base-commit: bf3a69c6861ff4dc7892d895c87074af7bc1c400
+change-id: 20240318-strncpy-drivers-thermal-intel-int340x_thermal-acpi_thermal_rel-c-17070c1e42f3
+
+Best regards,
+--
+Justin Stitt <justinstitt@google.com>
 
 
