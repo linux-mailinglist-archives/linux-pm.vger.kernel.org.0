@@ -1,37 +1,38 @@
-Return-Path: <linux-pm+bounces-5001-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5002-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1C3687E17D
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 02:13:04 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EC4687E180
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 02:13:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EAD831C20C95
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 01:13:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 902B81C20C2A
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 01:13:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6DF2134AA;
-	Mon, 18 Mar 2024 01:12:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9446117545;
+	Mon, 18 Mar 2024 01:13:01 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E14D1096F;
-	Mon, 18 Mar 2024 01:12:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E70591643D;
+	Mon, 18 Mar 2024 01:12:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710724379; cv=none; b=OqAA82uQaYo4E84fl3xMGLvyPVUHBHDOsv8l3J8dFQWIN8kuNawrzQhEpxPCxTJRaHL6WUshRkuE3jYY5sz/KtrPU9JFa0q/btLYrSeVIw592QA4s1hzT2g6uTTYHoxjNXyUXY/A3WiFXTsdGbueL3dJOvYjbzHhwish1MvafeA=
+	t=1710724381; cv=none; b=RiTVZ54MAR9CZsIelm7opR5VoPah2nHIv7oRB57FC56jnDvxdmeNi9G5pHome3fUW255/DgTYjRTIKsgow+qxujmp0w01/hQCK6czrKDiM1tXhn+D7kCJezD3jI+7Z//cMv6I3UOpD89E8Xtbxji5tRB7ueK2FGe9etfYAyIu/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710724379; c=relaxed/simple;
-	bh=YQHNZw/+pDkOrdqc3nY+J/aL9vD2b94hh83lMstt3/4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=aYEuyEC4NdE7U2c32ldCaPb0X+GTk2SToxbgRP5xRKobY1tVwRfilJYEAK1DXF2j8ioFJQL1bv/Pb6x0FswWDFOmfKUxfB0Nwb6KjTFeKerrxKVy4maEd5N+tPL3q761b0Mx0OgCYHMmPxEaGQC8gqk+WigBCiaz97fWdUzS7FQ=
+	s=arc-20240116; t=1710724381; c=relaxed/simple;
+	bh=/G51sJ1Ifv054jfwisKVsOOLUq4t4F7Vg+QvQBQyD7I=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=aPeZV/hksE21DbFFB7BJr2dGpzKK9xTR4fRSRjfqRvDf5D6b9TFiqKQ2a6MIwiQqz1MogMPZh/M0JA4mGzJveCL0Cg/LiJBYpmH/vgKu5J1WEf1ytTbaawEBpZMRpuEVGSjNGWeeUS5ag12I9FR1plt3XGOVdx5Bw9jDUivP56U=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CF18A12FC;
-	Sun, 17 Mar 2024 18:13:30 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D9097143D;
+	Sun, 17 Mar 2024 18:13:33 -0700 (PDT)
 Received: from localhost.localdomain (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 50DA33F23F;
-	Sun, 17 Mar 2024 18:12:53 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5D9393F23F;
+	Sun, 17 Mar 2024 18:12:56 -0700 (PDT)
 From: Andre Przywara <andre.przywara@arm.com>
 To: Yangtao Li <tiny.windzz@gmail.com>,
 	Viresh Kumar <vireshk@kernel.org>,
@@ -43,21 +44,23 @@ To: Yangtao Li <tiny.windzz@gmail.com>,
 	Chen-Yu Tsai <wens@csie.org>,
 	Jernej Skrabec <jernej.skrabec@gmail.com>,
 	Samuel Holland <samuel@sholland.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>
 Cc: linux-pm@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-sunxi@lists.linux.dev,
 	linux-arm-kernel@lists.infradead.org,
 	Brandon Cheo Fusi <fusibrandon13@gmail.com>,
 	Martin Botka <martin.botka@somainline.org>,
-	Martin Botka <martin.botka1@gmail.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Sudeep Holla <sudeep.holla@arm.com>
-Subject: [PATCH v2 0/8] cpufreq: sun50i: Add Allwinner H616 support
-Date: Mon, 18 Mar 2024 01:12:20 +0000
-Message-Id: <20240318011228.2626-1-andre.przywara@arm.com>
+	Martin Botka <martin.botka1@gmail.com>
+Subject: [PATCH v2 1/8] firmware: smccc: Export revision soc_id function
+Date: Mon, 18 Mar 2024 01:12:21 +0000
+Message-Id: <20240318011228.2626-2-andre.przywara@arm.com>
 X-Mailer: git-send-email 2.35.8
+In-Reply-To: <20240318011228.2626-1-andre.przywara@arm.com>
+References: <20240318011228.2626-1-andre.przywara@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -66,73 +69,35 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This series adds cpufreq support for the Allwinner H616 SoC.
-This v2 is quite some rework compared to Martin's original series from
-about half a year ago[1].
+From: Martin Botka <martin.botka@somainline.org>
 
-The various H616 chips are rated into different speedbins at the factory,
-the bin index is then burned into the efuses. This is very similar to the
-H6, though the location of the speedbin fuse and its encoding differs.
-Also the die revision has a say here, we can derive this from the SoC ID,
-already provided by TF-A through the SMCCC SoC ID interface.
-On top of that not all chips are qualified to reach the full 1.5GHz,
-and the BSP kernel describes different OPPs for each speedbin. This
-requires to add support for the opp-supported-hw DT property, to be able
-to describe those requirements properly.
+The "SoC ID revision" as provided via the SMCCC SOCID interface can be
+valuable information for drivers, when certain functionality depends
+on a die revision, for instance.
+One example is the sun50i-cpufreq-nvmem driver, which needs this
+information to determine the speed bin of the SoC.
 
-Patch 1/8 exports the SoC ID function, so that we can call it from our
-driver. Patch 2/8 blocks the affected SoCs from the generic DT cpufreq
-driver, patch 3/8 adds the DT binding documentation.
-Patch 4/8 refactors the existing speedbin determination for the H6, to
-be able to plug in the H616 version later more easily.
-Patch 5/8 adds support for the opp-supported-hw property. This is done
-in a generic way, so it's usable for other SoCs as well, and the code
-will figure out if the current DT requires use of this feature.
-Patch 6/8 then eventually adds the H616 bits to the driver, and ties
-that to the new compatible string.
-Patch 7/8 add the CPU OPP table as a .dtsi to the DT directory, the
-values in there were taken from the BSP source.
-Patch 8/8 then enables the OPPs for all boards we have DTs for.
+Export the arm_smccc_get_soc_id_revision() function so that it can be
+called by any driver.
 
-Please have a look, especially patch 5/8 might need some discussion.
-This is based on v6.8, with the THS series on top, which should reach
-mainline in the next days. I plan to send a rebased version after -rc1,
-but wanted to start the discussion early.
+Signed-off-by: Martin Botka <martin.botka@somainline.org>
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+---
+ drivers/firmware/smccc/smccc.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Cheers,
-Andre
-
-[1] https://lore.kernel.org/linux-sunxi/20230904-cpufreq-h616-v1-0-b8842e525c43@somainline.org/T/#u
-
-Andre Przywara (2):
-  cpufreq: sun50i: Add support for opp_supported_hw
-  arm64: dts: allwinner: h616: enable DVFS for all boards
-
-Brandon Cheo Fusi (1):
-  cpufreq: sun50i: Refactor speed bin decoding
-
-Martin Botka (5):
-  firmware: smccc: Export revision soc_id function
-  cpufreq: dt-platdev: Blocklist Allwinner H616/618 SoCs
-  dt-bindings: opp: Describe H616 OPPs and opp-supported-hw
-  cpufreq: sun50i: Add H616 support
-  arm64: dts: allwinner: h616: Add CPU OPPs table
-
- .../allwinner,sun50i-h6-operating-points.yaml |  89 +++++----
- .../sun50i-h616-bigtreetech-cb1.dtsi          |   5 +
- .../dts/allwinner/sun50i-h616-cpu-opp.dtsi    | 138 +++++++++++++
- .../allwinner/sun50i-h616-orangepi-zero2.dts  |   5 +
- .../dts/allwinner/sun50i-h616-x96-mate.dts    |   5 +
- .../arm64/boot/dts/allwinner/sun50i-h616.dtsi |   4 +
- .../allwinner/sun50i-h618-orangepi-zero2w.dts |   5 +
- .../allwinner/sun50i-h618-orangepi-zero3.dts  |   5 +
- .../sun50i-h618-transpeed-8k618-t.dts         |   5 +
- drivers/cpufreq/cpufreq-dt-platdev.c          |   3 +
- drivers/cpufreq/sun50i-cpufreq-nvmem.c        | 189 +++++++++++++++---
- drivers/firmware/smccc/smccc.c                |   1 +
- 12 files changed, 379 insertions(+), 75 deletions(-)
- create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h616-cpu-opp.dtsi
-
+diff --git a/drivers/firmware/smccc/smccc.c b/drivers/firmware/smccc/smccc.c
+index db818f9dcb8ee..d670635914ecb 100644
+--- a/drivers/firmware/smccc/smccc.c
++++ b/drivers/firmware/smccc/smccc.c
+@@ -69,6 +69,7 @@ s32 arm_smccc_get_soc_id_revision(void)
+ {
+ 	return smccc_soc_id_revision;
+ }
++EXPORT_SYMBOL_GPL(arm_smccc_get_soc_id_revision);
+ 
+ static int __init smccc_devices_init(void)
+ {
 -- 
 2.35.8
 
