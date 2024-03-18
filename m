@@ -1,163 +1,152 @@
-Return-Path: <linux-pm+bounces-5051-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5057-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56F1387EBF4
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 16:19:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 251BA87EDDE
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 17:48:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EC4A8B20C0F
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 15:19:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1F182827A2
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 16:48:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 607AD4EB5D;
-	Mon, 18 Mar 2024 15:19:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D653355C28;
+	Mon, 18 Mar 2024 16:47:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="DDpHEA37"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="eLDnx06l"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 632F04F1E3;
-	Mon, 18 Mar 2024 15:19:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82DBF2C6B7;
+	Mon, 18 Mar 2024 16:47:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710775181; cv=none; b=HzBMgg2iww/XVw2Mt7PpNf9Y+EfV7ixXlS4Gjf1zXRf7g0BPh6A4Cv9VJUfpZzhzfviRNwptIc4rAyDJsntlBK+MyYkbw74c+a/CHGTB4aC+1lXLYFwDPwl+puethenMSQrz96q95s5e5h+SFAoK/XSnQdLIj5bXN0Q9vC2/tfk=
+	t=1710780432; cv=none; b=LR/FPDQouCwEJTjACCSoDgQAMgasn4ha2bFSAGAthKsHIjpXMqPzhdH8aOlUaPYcuKyCj28XS6VUUh3dIwfpuNTUlXmV5fFE7AbLRWfb6Ql2Px9XHPsKdCOBZk3Pcz9FMwrnIbMke39yOyZeLWcQXDaH03O5zT4tOGp85qXv8c8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710775181; c=relaxed/simple;
-	bh=T+1c5Voa9wbuk82qx7Y34egGfh1pJlqoVUfmJFJTlGU=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a5zWT0lzHqgR3LU94w5NtEx4sR1gbjn3+akObPyWc9xN6y9J2pUXMbzgJPkdghEhKllFB3hYBm/Qwq0Cy2P8+XWkOmP9UBjRYd8pvc4xCXSd7dvGdmZJ4/uVpzfW1cHXwNIxBMjfGj5lV56IUpvpTJ7IunNUaejkjRnUw8gwmIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=DDpHEA37; arc=none smtp.client-ip=198.47.19.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 42IFJRTe095056;
-	Mon, 18 Mar 2024 10:19:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1710775167;
-	bh=toWyhbxvvkbbZKZQvW5MzxVDodxPwYT4N7QorbVGF+U=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=DDpHEA371pnTqG2oaKZbQ1VKxjNWFU71Km/Z9ML+iKzJ1kch7LDr+/0C1KXF45daf
-	 NuswVTs5mW8Z57Dsry/wOJcpc6dfeWl5P9MqwiL6IWU6HKCyqL3l8KL659K+MSXWRJ
-	 Fu5xCJBX7MehXAPVkyfJJF9Cx2IptBQzbVEKv5Vs=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 42IFJRqk111282
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Mon, 18 Mar 2024 10:19:27 -0500
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 18
- Mar 2024 10:19:27 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 18 Mar 2024 10:19:26 -0500
-Received: from localhost (dhruva.dhcp.ti.com [172.24.227.68])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 42IFJQQK098058;
-	Mon, 18 Mar 2024 10:19:26 -0500
-Date: Mon, 18 Mar 2024 20:49:25 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: Ulf Hansson <ulf.hansson@linaro.org>,
-        Adrian Hunter
-	<adrian.hunter@intel.com>,
-        Tony Lindgren <tony@atomide.com>, Len Brown
-	<len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>, <theo.lebrun@bootlin.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>
-Subject: Re: [PATCH 1/3] PM: wakeup: make device_wakeup_disable return void
-Message-ID: <20240318151925.l5fcnbr7qcww7diw@dhruva>
-References: <20240318055054.1564696-1-d-gole@ti.com>
- <20240318055054.1564696-2-d-gole@ti.com>
- <CAJZ5v0giafbnGFHgT7pZm+o6KzKznxVDJvc04K6XvP1ShG2YKw@mail.gmail.com>
+	s=arc-20240116; t=1710780432; c=relaxed/simple;
+	bh=b0h1VbEHFh9qD1o7D7bZULRZA5Hxn9NGATbuk1naP50=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=B/rM5H822taZQ/ZirrPD44VYfrG2alnxjQ82ySQlEcmxmTe97o7GGTA/+cb39wO+P/GlTqNwXTLEwHzDKUP2e6tn7Nj3yTrj5b/Sq1/sfBOM2K7imXv1Ao+VHrJ8ANbVSEhDIE/e4nATiBDD3I4Clbk92Fk3sOchYLf84ivfJeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=eLDnx06l; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=PepfWuDb0qWcSY62ic0M/q/leQ8EAPZZpQYANiCR9/0=; b=eLDnx06lB1n0d9bn85UZrkkWTI
+	hE3cwCH64vBWVmVAyRNCovdc7I04JyPFUnR+MMxag37V6dpdmF02pjb1JzAulwnek4W1vfUQnJVZU
+	lq6arc45Z3h/rVIxLnfp7GwgAHE73Uzc7YScPvMI9hTiQh/nSoQsjFn0cyKV86XzlRgO6i2d750VN
+	S6znG4zO08OV+32EV1CNXFl16h/mn/Ttz2/2pVrRNUVThXNlcJ14AtSvKyzRnmJKkHlz454dfswdB
+	EBiCgdPegSNpUlq2u/fYp3TK2zVpc4zFB1+8UJzBsUBXUli6ab8pWKsabG40DS7M0SQczFoy4D3xW
+	Axl4yGkQ==;
+Received: from [2001:8b0:10b:1::ebe] (helo=i7.infradead.org)
+	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rmG8Z-0000000CjyA-1kHI;
+	Mon, 18 Mar 2024 16:46:59 +0000
+Received: from dwoodhou by i7.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rmG8W-00000004F1A-0SES;
+	Mon, 18 Mar 2024 16:46:56 +0000
+From: David Woodhouse <dwmw2@infradead.org>
+To: linux-arm-kernel@lists.infradead.org,
+	kvm@vger.kernel.org
+Cc: Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <len.brown@intel.com>,
+	Pavel Machek <pavel@ucw.cz>,
+	David Woodhouse <dwmw@amazon.co.uk>,
+	Mostafa Saleh <smostafa@google.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-pm@vger.kernel.org
+Subject: [RFC PATCH v2 0/4] arm64: Add PSCI v1.3 SYSTEM_OFF2 support for hibernation
+Date: Mon, 18 Mar 2024 16:14:22 +0000
+Message-ID: <20240318164646.1010092-1-dwmw2@infradead.org>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0giafbnGFHgT7pZm+o6KzKznxVDJvc04K6XvP1ShG2YKw@mail.gmail.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Sender: David Woodhouse <dwmw2@infradead.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
 
-On Mar 18, 2024 at 14:47:45 +0100, Rafael J. Wysocki wrote:
-> On Mon, Mar 18, 2024 at 6:55 AM Dhruva Gole <d-gole@ti.com> wrote:
-> >
-> > The device_wakeup_disable call only returns an error if no dev exists
-> > however there's not much a user can do at that point.
-> > Rather make this function return void.
-> >
-> > Signed-off-by: Dhruva Gole <d-gole@ti.com>
-> > ---
-> >  drivers/base/power/wakeup.c | 11 +++++++----
-> >  include/linux/pm_wakeup.h   |  5 ++---
-> >  2 files changed, 9 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-> > index a917219feea6..752b417e8129 100644
-> > --- a/drivers/base/power/wakeup.c
-> > +++ b/drivers/base/power/wakeup.c
-> > @@ -451,16 +451,15 @@ static struct wakeup_source *device_wakeup_detach(struct device *dev)
-> >   * Detach the @dev's wakeup source object from it, unregister this wakeup source
-> >   * object and destroy it.
-> >   */
-> > -int device_wakeup_disable(struct device *dev)
-> > +void device_wakeup_disable(struct device *dev)
-> >  {
-> >         struct wakeup_source *ws;
-> >
-> >         if (!dev || !dev->power.can_wakeup)
-> > -               return -EINVAL;
-> > +               return;
-> >
-> >         ws = device_wakeup_detach(dev);
-> >         wakeup_source_unregister(ws);
-> > -       return 0;
-> >  }
-> >  EXPORT_SYMBOL_GPL(device_wakeup_disable);
-> >
-> > @@ -502,7 +501,11 @@ EXPORT_SYMBOL_GPL(device_set_wakeup_capable);
-> >   */
-> >  int device_set_wakeup_enable(struct device *dev, bool enable)
-> >  {
-> > -       return enable ? device_wakeup_enable(dev) : device_wakeup_disable(dev);
-> > +       if (enable)
-> > +               return device_wakeup_enable(dev);
-> > +
-> > +       device_wakeup_disable(dev);
-> > +       return 0;
-> >  }
-> >  EXPORT_SYMBOL_GPL(device_set_wakeup_enable);
-> >
-> > diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
-> > index 6eb9adaef52b..428803eed798 100644
-> > --- a/include/linux/pm_wakeup.h
-> > +++ b/include/linux/pm_wakeup.h
-> > @@ -107,7 +107,7 @@ extern void wakeup_sources_read_unlock(int idx);
-> >  extern struct wakeup_source *wakeup_sources_walk_start(void);
-> >  extern struct wakeup_source *wakeup_sources_walk_next(struct wakeup_source *ws);
-> >  extern int device_wakeup_enable(struct device *dev);
-> > -extern int device_wakeup_disable(struct device *dev);
-> > +extern void device_wakeup_disable(struct device *dev);
-> 
-> This change will introduce a build error in sdhci-pci-core.c AFAICS,
-> so you need to modify this file in the same patch to avoid bisection
-> breakage.
+The PSCI v1.3 spec (https://developer.arm.com/documentation/den0022, 
+currently in Alpha state, hence 'RFC') adds support for a SYSTEM_OFF2 
+function enabling a HIBERNATE_OFF state which is analogous to ACPI S4. 
+This will allow hosting environments to determine that a guest is 
+hibernated rather than just powered off, and ensure that they preserve 
+the virtual environment appropriately to allow the guest to resume 
+safely (or bump the hardware_signature in the FACS to trigger a clean 
+reboot instead).
 
-Alright, I have respinned the series and fixed up the first patch
-itself.
+This adds support for it to KVM, exactly the same way as the existing 
+support for SYSTEM_RESET2 as added in commits d43583b890e7 ("KVM: arm64: 
+Expose PSCI SYSTEM_RESET2 call to the guest") and 34739fd95fab ("KVM: 
+arm64: Indicate SYSTEM_RESET2 in kvm_run::system_event flags field").
 
-Thanks!
+Back then, KVM was unconditionally bumped to expose PSCI v1.1. This 
+means that a kernel upgrade causes guest visible behaviour changes 
+without any explicit opt-in from the VMM, which is... unconventional. In 
+some cases, a PSCI update isn't just about new optional calls; PSCI v1.2 
+for example adds a new permitted error return from the existing CPU_ON 
+function.
 
+There *is* a way for a VMM to opt *out* of newer PSCI versions... by 
+setting a per-vCPU "special" register that actually ends up setting the 
+PSCI version KVM-wide. Quite why this isn't just a simple KVM_CAP, I 
+have no idea. There *is* a KVM_CAP_ARM_PSCI_0_2 but that's just for 0.1 
+vs. 0.2+, not the specific v0.2+ version that's exposed.
 
--- 
-Best regards,
-Dhruva Gole <d-gole@ti.com>
+Since the SYSTEM_OFF2 call is optional and discoverable through the 
+PSCI_FEATURES call, I'm electing not to touch the PSCI versioning 
+awfulness at all. Like the existing SYSTEM_RESET2, there's a KVM_CAP to 
+enable it explicitly (as it's an optional call even in v1.3), and like 
+the existing SYSTEM_RESET2 it doesn't depend on the advertised PSCI 
+version.
+
+For the guest side, add a new SYS_OFF_MODE_POWER_OFF handler with higher 
+priority than the EFI one, but which *only* triggers when there's a 
+hibernation in progress. There are other ways to do this (see the commit
+message for more details) but this seemed like the simplest.
+
+Version 2 of the patch series splits out the psci.h definitions into a 
+separate commit (a dependency for both the guest and KVM side), and adds 
+definitions for the other new functions added in v1.3. It also moves the 
+pKVM psci-relay support to a separate commit; although in arch/arm64/kvm 
+that's actually about the *guest* side of SYSTEM_OFF2 (i.e. using it
+from the host kernel, relayed through nVHE).
+
+David Woodhouse (4):
+      firmware/psci: Add definitions for PSCI v1.3 specification (ALPHA)
+      KVM: arm64: Add PSCI SYSTEM_OFF2 function for hibernation
+      KVM: arm64: nvhe: Pass through PSCI v1.3 SYSTEM_OFF2 call
+      arm64: Use SYSTEM_OFF2 PSCI call to power off for hibernate
+
+ Documentation/virt/kvm/api.rst       | 11 +++++++++++
+ arch/arm64/include/asm/kvm_host.h    |  2 ++
+ arch/arm64/include/uapi/asm/kvm.h    |  6 ++++++
+ arch/arm64/kvm/arm.c                 |  5 +++++
+ arch/arm64/kvm/hyp/nvhe/psci-relay.c |  2 ++
+ arch/arm64/kvm/psci.c                | 37 ++++++++++++++++++++++++++++++++++++
+ drivers/firmware/psci/psci.c         | 35 ++++++++++++++++++++++++++++++++++
+ include/uapi/linux/kvm.h             |  1 +
+ include/uapi/linux/psci.h            | 20 +++++++++++++++++++
+ kernel/power/hibernate.c             |  5 ++++-
+ 10 files changed, 123 insertions(+), 1 deletion(-)
+
 
