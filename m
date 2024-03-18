@@ -1,62 +1,62 @@
-Return-Path: <linux-pm+bounces-5018-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5014-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E80AD87E3E4
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 08:09:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8048A87E38C
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 07:06:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 235C41C20D11
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 07:09:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13AEF2818D5
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 06:06:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00D4522337;
-	Mon, 18 Mar 2024 07:09:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B963E22F19;
+	Mon, 18 Mar 2024 06:05:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="YSB4ad8t"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="fYM4gLlY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E33661CA89;
-	Mon, 18 Mar 2024 07:09:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E94FD28E11;
+	Mon, 18 Mar 2024 06:05:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710745771; cv=none; b=DNBbtI3J41DcqyrsNLUFNQ/4wK5GEBDw6parujusd4sPKv71xDJAEJ3u+59PG2Pkejoj6l0XXxrouyWecjS7ChV052JV5Icx0YSBImf50LyJMC8rE5W7yEBxXsXj64gO1SyTL73HVI8WvPFuUs2CEu/meRhV847LrM7XubgKRhg=
+	t=1710741940; cv=none; b=mjxw8RSiv6bfkGJ/WORepVuA+aTo9vIrsdEMF6jQDo3wlvlBEQs6uidl4VN3wBkzCUwz6q5nL1BZm0TwPYUvuMGKdnGtOTJnIS2aWVBeR4VgfEn6jobvzxxNFWeJBDLsWmFoAxvqNIWS1uupUiQb3Gnqx+jev2LkpnGdXQOJWac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710745771; c=relaxed/simple;
-	bh=uuwFTLvyMNqlpKTyNz8SdpNe0H6SFIIuVGNRpJwqqGc=;
+	s=arc-20240116; t=1710741940; c=relaxed/simple;
+	bh=k+1F4DGdkmIP5BKndrQeSdoViUYt0iKqzHFCr1rNXyE=;
 	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YcR1UTTBG77dSKEY9RwEyxbdza8G8TaWfkFQKETB8I541JIVsVK6sQg+GRNOcYH7mUTbbkOgJPeWbK5IIZg8zygD1iVJEZf9K7ENjmgDSCePzCuI9qxu8Xd1xcBGzcnZubrgRjD5xEeBelK/MVEXCt1/sM/EUYsMfUkWPyAgyvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=YSB4ad8t; arc=none smtp.client-ip=198.47.19.142
+	 Content-Type:Content-Disposition:In-Reply-To; b=PTvfQfc/v87KyHZMYu7VLntHws1IvVBDsC3EIpptVG4l8XW9brrrASBE2RqukbSz/gN6Peo0sPPqImgIB1/RDWtY1/JXroWNkU8R8AfmNoyEBoks7DOs/upQrQdj2u6YQNhHIYh1PNLYOcuqifkj7p/qzQH2WZm+Rp06BBMHylo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=fYM4gLlY; arc=none smtp.client-ip=198.47.19.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 42I63EYF085045;
-	Mon, 18 Mar 2024 01:03:14 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 42I65ICW118987;
+	Mon, 18 Mar 2024 01:05:18 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1710741794;
-	bh=eb0Ccz7HpZ5APiazpAPXMBC/gybVlUfHgyxFsx8OJ5c=;
+	s=ti-com-17Q1; t=1710741919;
+	bh=fV9zpmrpCZiHMRmbkTtXXxqdU1tu4LBt/7BJp3jTS+0=;
 	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=YSB4ad8t69Xt6z8Q9rUY7EPVPxlrBq3REXebtcGlwp2Xm9RDgJhWweHPSkviZerXB
-	 sECEHphpbqVd6gYcEzGnykTJsRuqoFIEyjiUgvEoZmz51wvOS+gqLTJH9eanEIJrXb
-	 51pd1marzgijpu8vVM65WjCMxGNME2Yx2hb6+A9o=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 42I63EkG002963
+	b=fYM4gLlYWsh3CUC9Kco8/NZIZufuOsaLtV032G5E499q00xPWdJOYVR2D0vI4WQSY
+	 KUkBBgb8uq0PKlbsakTJiQQdj37O8gnsL6ZwkJrkzU/nFi0cshM9iCNkJjq1Jdzr5g
+	 rp91az2dtMZmApqTzgtB3RA7j9MkKhWUmS1gj+Ig=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 42I65IpT024513
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Mon, 18 Mar 2024 01:03:14 -0500
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+	Mon, 18 Mar 2024 01:05:18 -0500
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 18
- Mar 2024 01:03:14 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ Mar 2024 01:05:18 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 18 Mar 2024 01:03:14 -0500
+ Frontend Transport; Mon, 18 Mar 2024 01:05:18 -0500
 Received: from localhost (dhruva.dhcp.ti.com [172.24.227.68])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 42I63DLB033059;
-	Mon, 18 Mar 2024 01:03:14 -0500
-Date: Mon, 18 Mar 2024 11:33:12 +0530
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 42I65HB3095934;
+	Mon, 18 Mar 2024 01:05:18 -0500
+Date: Mon, 18 Mar 2024 11:35:17 +0530
 From: Dhruva Gole <d-gole@ti.com>
 To: Jagadeesh Kona <quic_jkona@quicinc.com>
 CC: "Rafael J . Wysocki" <rafael@kernel.org>,
@@ -88,11 +88,11 @@ CC: "Rafael J . Wysocki" <rafael@kernel.org>,
         <linux-pm@vger.kernel.org>, Imran Shaik <quic_imrashai@quicinc.com>,
         Ajit
  Pandey <quic_ajipan@quicinc.com>
-Subject: Re: [PATCH V5 1/5] PM: domains: Allow devices attached to genpd to
- be managed by HW
-Message-ID: <20240318060312.z5pk4roz6uqhwosc@dhruva>
+Subject: Re: [PATCH V5 2/5] PM: domains: Add the domain HW-managed mode to
+ the summary
+Message-ID: <20240318060517.d3cq4thijjp55xd6@dhruva>
 References: <20240315111046.22136-1-quic_jkona@quicinc.com>
- <20240315111046.22136-2-quic_jkona@quicinc.com>
+ <20240315111046.22136-3-quic_jkona@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -101,43 +101,71 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20240315111046.22136-2-quic_jkona@quicinc.com>
+In-Reply-To: <20240315111046.22136-3-quic_jkona@quicinc.com>
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On Mar 15, 2024 at 16:40:42 +0530, Jagadeesh Kona wrote:
-> From: Ulf Hansson <ulf.hansson@linaro.org>
+On Mar 15, 2024 at 16:40:43 +0530, Jagadeesh Kona wrote:
+> From: Abel Vesa <abel.vesa@linaro.org>
 > 
-> Some power-domains may be capable of relying on the HW to control the power
-> for a device that's hooked up to it. Typically, for these kinds of
-> configurations the consumer driver should be able to change the behavior of
-> power domain at runtime, control the power domain in SW mode for certain
-> configurations and handover the control to HW mode for other usecases.
+> Now that genpd supports dynamically switching the control for an
+> attached device between hardware- and software-mode,  let's add this
+> information to the genpd summary in debugfs.
+
+"under managed by column" would be good to add as well
+
 > 
-> To allow a consumer driver to change the behaviour of the PM domain for its
-> device, let's provide a new function, dev_pm_genpd_set_hwmode(). Moreover,
-> let's add a corresponding optional genpd callback, ->set_hwmode_dev(),
-> which the genpd provider should implement if it can support switching
-> between HW controlled mode and SW controlled mode. Similarly, add the
-> dev_pm_genpd_get_hwmode() to allow consumers to read the current mode and
-> its corresponding optional genpd callback, ->get_hwmode_dev(), which the
-> genpd provider can also implement to synchronize the initial HW mode
-> state in genpd_add_device() by reading back the mode from the hardware.
-> 
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Suggested-by: Taniya Das <quic_tdas@quicinc.com>
 > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 > Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
 > ---
->  drivers/pmdomain/core.c   | 64 +++++++++++++++++++++++++++++++++++++++
->  include/linux/pm_domain.h | 17 +++++++++++
->  2 files changed, 81 insertions(+)
+>  drivers/pmdomain/core.c | 14 ++++++++++++--
+>  1 file changed, 12 insertions(+), 2 deletions(-)
 > 
+> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+> index 70d8634dd9e8..18a101215c9c 100644
+> --- a/drivers/pmdomain/core.c
+> +++ b/drivers/pmdomain/core.c
+> @@ -3173,6 +3173,15 @@ static void rtpm_status_str(struct seq_file *s, struct device *dev)
+>  	seq_printf(s, "%-25s  ", p);
+>  }
+>  
+> +static void mode_status_str(struct seq_file *s, struct device *dev)
+> +{
+> +	struct generic_pm_domain_data *gpd_data;
+> +
+> +	gpd_data = to_gpd_data(dev->power.subsys_data->domain_data);
+> +
+> +	seq_printf(s, "%20s", gpd_data->hw_mode ? "HW" : "SW");
+> +}
+> +
+>  static void perf_status_str(struct seq_file *s, struct device *dev)
+>  {
+>  	struct generic_pm_domain_data *gpd_data;
+> @@ -3231,6 +3240,7 @@ static int genpd_summary_one(struct seq_file *s,
+>  		seq_printf(s, "\n    %-50s  ", kobj_path);
+>  		rtpm_status_str(s, pm_data->dev);
+>  		perf_status_str(s, pm_data->dev);
+> +		mode_status_str(s, pm_data->dev);
+>  		kfree(kobj_path);
+>  	}
+>  
+> @@ -3247,8 +3257,8 @@ static int summary_show(struct seq_file *s, void *data)
+>  	int ret = 0;
+>  
+>  	seq_puts(s, "domain                          status          children                           performance\n");
+> -	seq_puts(s, "    /device                                             runtime status\n");
+> -	seq_puts(s, "----------------------------------------------------------------------------------------------\n");
+> +	seq_puts(s, "    /device                                             runtime status                           managed by\n");
+> +	seq_puts(s, "------------------------------------------------------------------------------------------------------------\n");
 
-LGTM!
+LGTM,
 
 Reviewed-by: Dhruva Gole <d-gole@ti.com>
 
 -- 
 Best regards,
-Dhruva
+Dhruva Gole <d-gole@ti.com>
 
