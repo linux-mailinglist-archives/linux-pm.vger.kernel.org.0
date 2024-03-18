@@ -1,69 +1,68 @@
-Return-Path: <linux-pm+bounces-5038-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5039-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2FDE87E95E
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 13:36:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B39B87E962
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 13:37:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A33CAB21358
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 12:36:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A79451F22973
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Mar 2024 12:37:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82C9D1E532;
-	Mon, 18 Mar 2024 12:36:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4929820322;
+	Mon, 18 Mar 2024 12:37:07 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E96891E4BE;
-	Mon, 18 Mar 2024 12:35:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE6C9381A4;
+	Mon, 18 Mar 2024 12:37:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710765360; cv=none; b=Ra15hp24rjBo8nZxICfEJFaQcwZjUuzEjzh77ZmpcCQ6DEo+c1iTpNF80XLOESKaKQiUHTzpfWLp7t25f31D69SoSY0Epm/7wbxo5elh1I5ih/C5G9VnD9c1dhS4HEtJ+K1/1nget80EkOOI/OQT7UIMWrvWE2/lS6V8uKMb37E=
+	t=1710765427; cv=none; b=S8Z5UG2DOzDDBhNw6B0Vk3w7no8V0Evg9wac0zsgAJk/AlRGQpoZIvC3kiOGqoyNXWrUhylnIFhZOwpz4QG+DRqThg4Fa4o8S7R6DmuAFm8pO90nZygiQY9DBTvELxd5yGOmU7n+6JuLPfrXy1RcBgmSR4ue56Df6aN30hCWQPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710765360; c=relaxed/simple;
-	bh=xfZo1SesS+n+5OMh9DO2aODGB6aFCGGu3zN7BKHgJ9A=;
+	s=arc-20240116; t=1710765427; c=relaxed/simple;
+	bh=cIGQbqXwEkpHmSUSGwv0CkWp+CTN18AGAOKkRrvubDk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iptHj5Rc21IHvuveCLQw4wJ5p7zRNHiL0p5mDJYk3BeB4PK/MVkRcJSNbPUF3KfxxZOjkUodr/s2qVnLxZe7LdactBENSlcdfnKBm7n5OZqjttQN2fN6n+NH+BwY0xWbqYFuJlWzrSXj/K4/AQ2WXYcFMDePeh9AChJDEFTk4wg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.51
+	 To:Cc:Content-Type; b=jrsKckGc9N/YMn9uEO5D4GLG4EDHIn7HBrNWWDKKX2GcTsKAWX4/DABSVgEQxiIdwQJkqIek2ri+/1ByR5mAaVBQJL2q0DsnQNGCVYdZRRcpGG7d0d49sz+1ZbR45C0Vex67FAQor3wEoqljt9xjCaNL04PjlmHeYVh6aRaG3y4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-22271941060so614069fac.1;
-        Mon, 18 Mar 2024 05:35:58 -0700 (PDT)
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-6e67ad4c2e3so69649a34.1;
+        Mon, 18 Mar 2024 05:37:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710765358; x=1711370158;
+        d=1e100.net; s=20230601; t=1710765425; x=1711370225;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=s/fmEPoe+d05t3iTfkNMO20tkvfZOlaVp/MVUPaENYY=;
-        b=DpaacBI0E7+RGI7z7Ny00h3gs98mCjnSFQO2QUIlmBYWidFlNDAvKwJEhCiRcnU89R
-         9zIquom3P52jEAC+Wo+yWERtPBQtpMdihWI2yact8smLTb9+nyVcOTDO/fTBXPcyQE8X
-         BPxQ6PxAlDce1fZF/SeGo6v74YDDtNJzPEj5JDfM0jmK3ge8yiv3IwpGXIzjrDRADzoW
-         uENmc3vSLNEMujuorABPC8zPvc/3tberofzqcI/pDS2NafxpjesakupcVVoscNnOFhsy
-         ScHthpBQ0eY1BFilESqoItCqO2qz3hmEUOGXBOJdcP931y3ezs42zrgENeJKb6DO2zWG
-         okRw==
-X-Forwarded-Encrypted: i=1; AJvYcCU8Fq6zsGfJAu01SJcbHMhSKS4nK/WB+vA4XzKzdhxR0FkQ7G6MnL5b9FbTaVZn4BFbYwj0GCI54klLc1iTmcYJo9PyBNJBNEk8gqL/4VN0lZ8vTP0X3eveSy92X7A6y7CWUSiOd5g=
-X-Gm-Message-State: AOJu0Yz+Q6yX3SQCzA3L1JGiVPCAeLLpEsez169Yh/dPH+oOnkZ8V/3f
-	28Da733xPcsSq+Ue53nqgCJzRYYGTLLJ7LVCZslc4nPS3gRW+6qMWLRilnX0glCQIgjdluemVDb
-	L3ailGItINYOaNX6GAALI6oDg3HI=
-X-Google-Smtp-Source: AGHT+IGt1IQTgrgPRFdEc6cJl7fmMEA9CjFeY3dk+apwbZTEoquOgW6mazdL6/9ocuWf0ETIZpd2J+4NH9eNOxAn0+g=
-X-Received: by 2002:a05:6870:3117:b0:222:bfb4:1ead with SMTP id
- v23-20020a056870311700b00222bfb41eadmr4235974oaa.4.1710765357941; Mon, 18 Mar
- 2024 05:35:57 -0700 (PDT)
+        bh=7qjbJ8yR4itgbNq8Q11dnfj4BFgBdhtIsr7EAZiZBAk=;
+        b=VChGQlUtT7ueHW4E+7jBJjtAfQPQtSy8DHaEBSN+UOcNQf+63/95lBZjDAxW6mXAcc
+         BG93bsurnjlqBvL2XdGBuPIB2VnQjRFkamiwoKWanH0+G2jIrZ6ZikfwqtM5mwUwxa4L
+         bESpAvovxQoaPCvqbkBDwOo9tTwRl0g3JxX8Z17xb1OMj1184epGDaYJNQqVxNQ4UAUj
+         psG5NiNy/DlRxiUOzmaE0l9CHwzbFjbV0sGSK9o//qKY8O8kQenVCOhBS7fuS1W//xUQ
+         y+93cVRFYhSru8Gr/nrpL3ZWYVaL+2apySHg/GWYujA76Fp9FJvJFUSbDk5uZRJiUHpP
+         UV4g==
+X-Forwarded-Encrypted: i=1; AJvYcCUPyf9ov53mLbOSuPBIQw4gLoZPsb5I3jpoft8jgyER/0TYQOYYX8UjHSEbaRLnLGiKXCKuNbEE8fU/Z91rMK6U39rvGMmE9jLxRABMNYR/ZxOwB9FWMSpk6IDgLP7mhzoG189e6s4=
+X-Gm-Message-State: AOJu0YzfV+6rA7JMcHeAIfhGfTBwwvxrBYkKsDlEk8TIGyFPMeRIYobi
+	xF1YqsZ3wNX57DBK8h6L9LYv9xyiLeBvhC4cOQVP0XA4zwicZ/sSc59ObSDtKP90he+l4VskSfL
+	ZzSW86TYc385SAAJUvRk4B+wyUR8=
+X-Google-Smtp-Source: AGHT+IFAzXsV1FntoE35q7hpj2BcpxEpjp5RM1YnJQza6EzBR3vaHweTUIT9Fuc4N7kiUujvpMGNZfMBCclG9gksKA0=
+X-Received: by 2002:a05:6820:2c10:b0:5a4:7790:61b4 with SMTP id
+ dw16-20020a0568202c1000b005a4779061b4mr6980768oob.0.1710765424769; Mon, 18
+ Mar 2024 05:37:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1710754409.git.perry.yuan@amd.com> <b9a60328afad40581eeef694937cebd6158f1f2d.1710754409.git.perry.yuan@amd.com>
-In-Reply-To: <b9a60328afad40581eeef694937cebd6158f1f2d.1710754409.git.perry.yuan@amd.com>
+References: <cover.1710754409.git.perry.yuan@amd.com> <d9fe75ae9ba3893061c01fcaccd93f2915b09a35.1710754409.git.perry.yuan@amd.com>
+In-Reply-To: <d9fe75ae9ba3893061c01fcaccd93f2915b09a35.1710754409.git.perry.yuan@amd.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 18 Mar 2024 13:35:42 +0100
-Message-ID: <CAJZ5v0ghYCDv2-e0UKXEjSFFbHQ2ingRc1aJco4dSJUknFLadQ@mail.gmail.com>
-Subject: Re: [PATCH v8 2/8] cpufreq: amd-pstate: Document the units for freq
- variables in amd_cpudata
+Date: Mon, 18 Mar 2024 13:36:49 +0100
+Message-ID: <CAJZ5v0hJjkUoEGC2wVXs3_TZpc99HFPfi7yX7rO16ykwRxk+DA@mail.gmail.com>
+Subject: Re: [PATCH v8 4/8] cpufreq: amd-pstate: Remove amd_get_{min,max,nominal,lowest_nonlinear}_freq()
 To: Perry Yuan <perry.yuan@amd.com>
 Cc: rafael.j.wysocki@intel.com, Mario.Limonciello@amd.com, 
 	viresh.kumar@linaro.org, Ray.Huang@amd.com, gautham.shenoy@amd.com, 
@@ -77,52 +76,112 @@ On Mon, Mar 18, 2024 at 10:49=E2=80=AFAM Perry Yuan <perry.yuan@amd.com> wr=
 ote:
 >
 > From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-
-No changelog.
-
+>
+> amd_get_{min,max,nominal,lowest_nonlinear}_freq() functions merely
+> return cpudata->{min,max,nominal,lowest_nonlinear}_freq values.
+>
+> There is no loss in readability in replacing their invocations by
+> accesses to the corresponding members of cpudata.
+>
+> Do so and remove these helper functions.
+>
 > Signed-off-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
 
 Sender sign-off missing (when sending somebody else's patch, you need
 to add your S-o-b tag to it).
 
 > ---
->  include/linux/amd-pstate.h | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
+>  drivers/cpufreq/amd-pstate.c | 40 +++++++++---------------------------
+>  1 file changed, 10 insertions(+), 30 deletions(-)
 >
-> diff --git a/include/linux/amd-pstate.h b/include/linux/amd-pstate.h
-> index 212f377d615b..ab7e82533718 100644
-> --- a/include/linux/amd-pstate.h
-> +++ b/include/linux/amd-pstate.h
-> @@ -51,15 +51,15 @@ struct amd_aperf_mperf {
->   *               priority.
->   * @min_limit_perf: Cached value of the perf corresponding to policy->mi=
-n
->   * @max_limit_perf: Cached value of the perf corresponding to policy->ma=
-x
-> - * @min_limit_freq: Cached value of policy->min
-> - * @max_limit_freq: Cached value of policy->max
-> - * @max_freq: the frequency that mapped to highest_perf
-> - * @min_freq: the frequency that mapped to lowest_perf
-> - * @nominal_freq: the frequency that mapped to nominal_perf
-> - * @lowest_nonlinear_freq: the frequency that mapped to lowest_nonlinear=
-_perf
-> + * @min_limit_freq: Cached value of policy->min (in khz)
-> + * @max_limit_freq: Cached value of policy->max (in khz)
-> + * @max_freq: the frequency (in khz) that mapped to highest_perf
-> + * @min_freq: the frequency (in khz) that mapped to lowest_perf
-> + * @nominal_freq: the frequency (in khz) that mapped to nominal_perf
-> + * @lowest_nonlinear_freq: the frequency (in khz) that mapped to lowest_=
-nonlinear_perf
->   * @cur: Difference of Aperf/Mperf/tsc count between last and current sa=
-mple
->   * @prev: Last Aperf/Mperf/tsc count value read from register
-> - * @freq: current cpu frequency value
-> + * @freq: current cpu frequency value (in khz)
->   * @boost_supported: check whether the Processor or SBIOS supports boost=
- mode
->   * @hw_prefcore: check whether HW supports preferred core featue.
->   *               Only when hw_prefcore and early prefcore param are true=
-,
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index ba1baa6733e6..132330b4942f 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -604,26 +604,6 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
+>         cpufreq_cpu_put(policy);
+>  }
+>
+> -static int amd_get_min_freq(struct amd_cpudata *cpudata)
+> -{
+> -       return READ_ONCE(cpudata->min_freq);
+> -}
+> -
+> -static int amd_get_max_freq(struct amd_cpudata *cpudata)
+> -{
+> -       return READ_ONCE(cpudata->max_freq);
+> -}
+> -
+> -static int amd_get_nominal_freq(struct amd_cpudata *cpudata)
+> -{
+> -       return READ_ONCE(cpudata->nominal_freq);
+> -}
+> -
+> -static int amd_get_lowest_nonlinear_freq(struct amd_cpudata *cpudata)
+> -{
+> -       return READ_ONCE(cpudata->lowest_nonlinear_freq);
+> -}
+> -
+>  static int amd_pstate_set_boost(struct cpufreq_policy *policy, int state=
+)
+>  {
+>         struct amd_cpudata *cpudata =3D policy->driver_data;
+> @@ -854,10 +834,10 @@ static int amd_pstate_cpu_init(struct cpufreq_polic=
+y *policy)
+>         if (ret)
+>                 goto free_cpudata1;
+>
+> -       min_freq =3D amd_get_min_freq(cpudata);
+> -       max_freq =3D amd_get_max_freq(cpudata);
+> -       nominal_freq =3D amd_get_nominal_freq(cpudata);
+> -       lowest_nonlinear_freq =3D amd_get_lowest_nonlinear_freq(cpudata);
+> +       min_freq =3D READ_ONCE(cpudata->min_freq);
+> +       max_freq =3D READ_ONCE(cpudata->max_freq);
+> +       nominal_freq =3D READ_ONCE(cpudata->nominal_freq);
+> +       lowest_nonlinear_freq =3D READ_ONCE(cpudata->lowest_nonlinear_fre=
+q);
+>
+>         if (min_freq < 0 || max_freq < 0 || min_freq > max_freq) {
+>                 dev_err(dev, "min_freq(%d) or max_freq(%d) value is incor=
+rect\n",
+> @@ -960,7 +940,7 @@ static ssize_t show_amd_pstate_max_freq(struct cpufre=
+q_policy *policy,
+>         int max_freq;
+>         struct amd_cpudata *cpudata =3D policy->driver_data;
+>
+> -       max_freq =3D amd_get_max_freq(cpudata);
+> +       max_freq =3D READ_ONCE(cpudata->max_freq);
+>         if (max_freq < 0)
+>                 return max_freq;
+>
+> @@ -973,7 +953,7 @@ static ssize_t show_amd_pstate_lowest_nonlinear_freq(=
+struct cpufreq_policy *poli
+>         int freq;
+>         struct amd_cpudata *cpudata =3D policy->driver_data;
+>
+> -       freq =3D amd_get_lowest_nonlinear_freq(cpudata);
+> +       freq =3D READ_ONCE(cpudata->lowest_nonlinear_freq);
+>         if (freq < 0)
+>                 return freq;
+>
+> @@ -1315,10 +1295,10 @@ static int amd_pstate_epp_cpu_init(struct cpufreq=
+_policy *policy)
+>         if (ret)
+>                 goto free_cpudata1;
+>
+> -       min_freq =3D amd_get_min_freq(cpudata);
+> -       max_freq =3D amd_get_max_freq(cpudata);
+> -       nominal_freq =3D amd_get_nominal_freq(cpudata);
+> -       lowest_nonlinear_freq =3D amd_get_lowest_nonlinear_freq(cpudata);
+> +       min_freq =3D READ_ONCE(cpudata->min_freq);
+> +       max_freq =3D READ_ONCE(cpudata->max_freq);
+> +       nominal_freq =3D READ_ONCE(cpudata->nominal_freq);
+> +       lowest_nonlinear_freq =3D READ_ONCE(cpudata->lowest_nonlinear_fre=
+q);
+>         if (min_freq < 0 || max_freq < 0 || min_freq > max_freq) {
+>                 dev_err(dev, "min_freq(%d) or max_freq(%d) value is incor=
+rect\n",
+>                                 min_freq, max_freq);
 > --
 > 2.34.1
 >
