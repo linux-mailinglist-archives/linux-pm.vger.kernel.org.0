@@ -1,54 +1,55 @@
-Return-Path: <linux-pm+bounces-5113-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5114-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0C6187FDE4
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 13:57:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9C4987FDEB
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 13:59:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C810283445
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 12:57:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 475CB1F228F3
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 12:59:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94E473D988;
-	Tue, 19 Mar 2024 12:57:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D15493FBB9;
+	Tue, 19 Mar 2024 12:58:46 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26B4633981;
-	Tue, 19 Mar 2024 12:57:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C5D53C08E;
+	Tue, 19 Mar 2024 12:58:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710853024; cv=none; b=ichqMknOoRWGN1aVok97ma2RoeKNbCto6LRhvCECMpmrToOtNZNiOlGCd2b0E1T3/eL28MVrzJC4GVecUFJSKyYRY/CgCz2+HFVGDRmIydgNE1hFE2WZO+3h4UIsUP58JHJo9jGB2sM0lKq9IdVy+CLx4pFGqbrcXXVao8EGSS0=
+	t=1710853126; cv=none; b=kEdoQOrwHPhjPw8Jfg9nYXCMm/SSx+pWeguduR52ilw54cYYbhXKgB3cK0aazAIszMs01ZYfh4k/6TTwYSg38g3c729uJ4GN47VnTMm1OdGB3JQKMWbobR0826gahrKVdGDimeYNROGBhXaGjOuL47qUG/sUtCpjaplME+jcXlQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710853024; c=relaxed/simple;
-	bh=aSfk12ZNC2aNib7t4Nxall7keaBK9D68QLM8bit25BI=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=Owomlf4LuahJPNZoI6/N/pfqf12oWVKdd6lGueXEvSED/9ganvVKvwslYqtykL9BSawSsjqSAEuw/jLuj99BEde13vfCt7FIV39AVh8VDXip7fiUQNhiOiWBaRfhugHRG23HqnqIFhSuvHue/UZ/FhrKDobckm4lJlvxmkhCVM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.48
+	s=arc-20240116; t=1710853126; c=relaxed/simple;
+	bh=bDGVu2ht54DNJY9D61w97Glx7t+GS1mjdPbvuhX2RKU=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=p27TdvpHt6IHt+Ql+jBf9WrExB5BLyV0UIcc4BMxl7+c90YBT6JhtrQcOoJVqzO6kWH5MF2b659FrLkJ2XQq7PibEU9qPYZ6DIFPcIab0NdtVSv8PEKNautCo6gG/KpAIz8imYObKA2Etmsj2B3zJHXnbSZUiw9OoyTggoo2zdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5a4e0859b65so11141eaf.0;
-        Tue, 19 Mar 2024 05:57:02 -0700 (PDT)
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-5a4e0859b65so11494eaf.0;
+        Tue, 19 Mar 2024 05:58:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710853022; x=1711457822;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xrj+Mt4U3wrpxTx1LRg8WME9pASH7mdtf+hRrVD3zVk=;
-        b=RwOfkVYfKZ7rgoEq0oEWMHtMA0l7CPkTaeXKMUV0SIgp9OIi6KwwOOlKF40VkLV2Av
-         L7IDOqxWROpXMTqBCw51/A7uKneWs7Lh96TknX207k47PPAJxrxQ7SVuSJ76EqqCuMHe
-         3cazPzmb0AXJW1qFcjHsmj+KqOKmSTb8b/wju0bj7lJi64kvabxNfbNqzWZbdf6WxzQn
-         ZernRQs4/6Ocl3c0ut0MIqljYpDpY42pxYrcoo3xXQvPvJLhuvHPDoxdqdgpL+mZkDPD
-         rF4oIBPP5DZA2o/vlXwY/zr3sXymo+cOrTtKtWP9VJ+xU4YxRAp9vAFXbIovv9W+g9A5
-         rBKA==
-X-Forwarded-Encrypted: i=1; AJvYcCXTC5+MwoldrrwWVulqwmTKyph3UIgM+ra4mZABSy2lWWsNT/n9IaXw5Y9Tl83YcFM9Xcf20uz+FziDNb1VUbya3rCsl4aHYEw1Bmm24BDrbs3xABoaLJ8qibFKmkvNqGmKtEj+gE0=
-X-Gm-Message-State: AOJu0YwJbZTlHNHVGUVPPMsUmEOdOCRkUBoTH+GnzqtL+0UixljLTE92
-	4JnGO+MYMehZ+tTfkBKONTV6EYYihiNV+g0Xc8SmXtY8XOo8atORlNdqMIXveMrvB5GREtO+l7T
-	CoNT6GHvL71WXKHcR1+FmabjrlzqdpNjjMu8=
-X-Google-Smtp-Source: AGHT+IF8bfM4Rz54Mt6OBW3mcF/C6DrIiYAWJme3QWHlB/fRqsPE1nkTuiRvYUjbum8eMWZWhDZfTvRy6RuVeKPuE3s=
-X-Received: by 2002:a05:6870:888c:b0:221:cb1b:cc05 with SMTP id
- m12-20020a056870888c00b00221cb1bcc05mr2340095oam.0.1710853022246; Tue, 19 Mar
- 2024 05:57:02 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1710853124; x=1711457924;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kVedSuy1YaJHE6kqXfvwlKhYz6NEiCNUxLQc9igH1PY=;
+        b=Bu+U2HQ+YJXGlSOG0w94ed3+OMs31Z8DyzMinPDk2OJpwxItR3yI+yHqrZrzk9LZwv
+         q6eIXdprLeW8v195s1naIzxuhPtO2DmL8i2cpU6Js5vhNRAQuvir21e9DJUjHugjwuJA
+         +IKmY6WUcppxxXz5Z8ADbB4PDGNKgmSkCFoIBzjt0SAxWO2h+up7x7qRFX7esJPAh9U2
+         ySlFsVPAVRweCRvyMHag2oYyRRC3vSZTOY5OM3IOgfcEpxqhikA5cPvfXeNC19XpOm6F
+         7y16djEvJ7iC0uFC/q/prMQ8ePW1WmkUWKQLeHk52ao5bhPDAEcGJEDL8f+jegZLg+Th
+         mGoA==
+X-Forwarded-Encrypted: i=1; AJvYcCUAK/EEKS5qAL9Af1gkUqTnJnCzXkgimgtPwxRzSWNxPVPhFaxq86J1kLLFr0TLn02L0dOwM0h2dydF9czbe3JpHfquLslYJ4VOBg6P
+X-Gm-Message-State: AOJu0YxqwenieNYrafrrlf7bbRBadRDMOti/e7SqE8WS+jgj6Fr3WYtZ
+	LiGYN19HBQZKFxFHW/SMk/z+TqI9GIciTwIj92bqpvKPxQdSY5Kd2zNozoATqUutyRfqq+fvG5H
+	hdQdoenGtd2Ocr6uXfOFaT2y2W3U=
+X-Google-Smtp-Source: AGHT+IHUaNKZWYRgiZaX9fAuFEFaoobcM3pxAzz8lLMeRycqVfpgjD+vzJ9MAn8uUJNY3yQv1dX8DHno4IbptehmE+c=
+X-Received: by 2002:a05:6820:b95:b0:5a4:7790:61b4 with SMTP id
+ eg21-20020a0568200b9500b005a4779061b4mr2110542oob.0.1710853124158; Tue, 19
+ Mar 2024 05:58:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -56,59 +57,91 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 19 Mar 2024 13:56:51 +0100
-Message-ID: <CAJZ5v0hMT+x=axU2BKz5XHYwdYZzdSm-itYvYD0K16T5NUnuyw@mail.gmail.com>
-Subject: [GIT PULL] More ACPI updates for v6.9-rc1
+Date: Tue, 19 Mar 2024 13:58:32 +0100
+Message-ID: <CAJZ5v0jjQ90P=+oQKdA2VY-8r0QAXjXfq50UMRDs6=XbcJ7R_A@mail.gmail.com>
+Subject: [GIT PULL] More power management updates for v6.9-rc1
 To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: ACPI Devel Maling List <linux-acpi@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
 Hi Linus,
 
 Please pull from the tag
 
  git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- acpi-6.9-rc1-2
+ pm-6.9-rc1-2
 
-with top-most commit a873add22a46beec0291c5a40194a90eb92ba3da
+with top-most commit a6d6590917ec352270bd3e3c040240aab31f2e90
 
- Merge branch 'acpi-docs'
+ Merge branches 'pm-em', 'pm-powercap' and 'pm-sleep'
 
-on top of commit 943446795909929f261565cebafb3b56d66cc513
+on top of commit 07abb19a9b201c11e4367e8a428be7235b6dbd0d
 
- Merge tag 'acpi-6.9-rc1' of
+ Merge tag 'pm-6.9-rc1' of
 git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
 
-to receive more ACPI updates for 6.9-rc1.
+to receive more power management updates for 6.9-rc1.
 
-These update ACPI documentation and kerneldoc comments.
+These update the Energy Model to make it prevent errors due to power
+unit mismatches, fix a typo in power management documentation,
+convert one driver to using a platform remove callback returning void,
+address two cpufreq issues (one in the core and one in the DT driver),
+and enable boost support in the SCMI cpufreq driver.
 
 Specifics:
 
- - Add markup to generate links from footnotes in the ACPI enumeration
-   document (Chris Packham).
+ - Modify the Energy Model code to bail out and complain if the unit of
+   power is not uW to prevent errors due to unit mismatches (Lukasz Luba).
 
- - Update the handle_eject_request() kerneldoc comment to document the
-   arguments of the function and improve kerneldoc comments for ACPI
-   suspend and hibernation functions (Yang Li).
+ - Make the intel_rapl platform driver use a remove callback returning
+   void (Uwe Kleine-K=C3=B6nig).
+
+ - Fix typo in the suspend and interrupts document (Saravana Kannan).
+
+ - Make per-policy boost flags actually take effect on platforms using
+   cpufreq_boost_set_sw() (Sibi Sankar).
+
+ - Enable boost support in the SCMI cpufreq driver (Sibi Sankar).
+
+ - Make the DT cpufreq driver use zalloc_cpumask_var() for allocating
+   cpumasks to avoid using uninitialized memory (Marek Szyprowski).
 
 Thanks!
 
 
 ---------------
 
-Chris Packham (1):
-      ACPI: docs: enumeration: Make footnotes links
+Lukasz Luba (1):
+      PM: EM: Force device drivers to provide power in uW
 
-Yang Li (2):
-      ACPI: Document handle_eject_request() arguments
-      ACPI: PM: Improve kerneldoc comments for suspend and hibernation functions
+Marek Szyprowski (1):
+      cpufreq: dt: always allocate zeroed cpumask
+
+Saravana Kannan (1):
+      Documentation: power: Fix typo in suspend and interrupts doc
+
+Sibi Sankar (3):
+      cpufreq: Fix per-policy boost behavior on SoCs using
+cpufreq_boost_set_sw()
+      firmware: arm_scmi: Add support for marking certain frequencies as tu=
+rbo
+      cpufreq: scmi: Enable boost support
+
+Uwe Kleine-K=C3=B6nig (1):
+      powercap: intel_rapl: Convert to platform remove callback returning v=
+oid
 
 ---------------
 
- Documentation/firmware-guide/acpi/enumeration.rst | 12 ++++++------
- drivers/acpi/dock.c                               |  2 ++
- drivers/acpi/sleep.c                              | 24 +++++++++++++----------
- 3 files changed, 22 insertions(+), 16 deletions(-)
+ Documentation/power/suspend-and-interrupts.rst |  2 +-
+ drivers/cpufreq/cpufreq-dt.c                   |  2 +-
+ drivers/cpufreq/cpufreq.c                      | 18 ++++++++++++------
+ drivers/cpufreq/freq_table.c                   |  2 +-
+ drivers/cpufreq/scmi-cpufreq.c                 | 20 +++++++++++++++++++-
+ drivers/firmware/arm_scmi/perf.c               |  3 +++
+ drivers/powercap/intel_rapl_msr.c              |  5 ++---
+ kernel/power/energy_model.c                    | 11 +++++++++++
+ 8 files changed, 50 insertions(+), 13 deletions(-)
 
