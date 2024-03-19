@@ -1,297 +1,180 @@
-Return-Path: <linux-pm+bounces-5111-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5112-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 434E087FD2F
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 12:51:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8063387FDD9
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 13:55:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E932F283B19
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 11:51:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 55E58B21140
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 12:55:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56BAF7F470;
-	Tue, 19 Mar 2024 11:51:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="ezTBku7R"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A57C3C062;
+	Tue, 19 Mar 2024 12:55:06 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 861251CD13;
-	Tue, 19 Mar 2024 11:51:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A5983A1B9;
+	Tue, 19 Mar 2024 12:55:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710849109; cv=none; b=dV1tD2PivFol0JKA30j4wG0wRi8XDwGxdkRrFiPtCIWCFQHX++0x5TSOsoTcSacYpepuBqPv4wlZqbhCkaY/B411ClUowc9RGEQwSibCYbEiVwIztHgBpoCIG2x3GHQP73U3dCQ+DjpeoBJz5NSfsZko65ze6fFXq168A9h/rh8=
+	t=1710852905; cv=none; b=Bp1Inxu3yp4pAmVWhdLmWC/GBPCku5FNEYMh7AYfB5D/7DJSBHsR1tgNx3+sdlhYiQQZ886KOOM5RH1ArKVDTXcDXQY0CwciUDLQ0X3zBGJ0Uo1LdzPjbdH3AE782SzLoo3Zix5Xmc7ERFfbJ886Rp0E+LTGW3dIALoUwEXCodQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710849109; c=relaxed/simple;
-	bh=Df4vHxdh+4U1Qaa3doL7VH2D+wCYvn+z/z5WgDx5Mxg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SunfMeV9Lbl+wH1/esIQZLUuZLpRgfo6KJ763SZTwQhzQu1lPpVcQlFWSxzlauJaAzK3Zm9qdRoqEQN+asVDTgmk28aVOg/coWqTADFqMveVkB/EAxGmQ3EeuMirgOQ96Us4blmoXSB3gkUmIkOB42Y4GMLitAGWFpwZwv/iH3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=ezTBku7R; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1710849105;
-	bh=Df4vHxdh+4U1Qaa3doL7VH2D+wCYvn+z/z5WgDx5Mxg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ezTBku7RM0wYyNfhIG/FwOjUHX+6RTtQDvga3J5wxpV6T9gGOwaubkIUaQuxBdt5d
-	 m9bnqGm0A4KXLwgblKYWhR4LocvTkXOvrzVKHHQcVpBwMBdL4YTgqRDLKcPwoRVbPV
-	 uv0/XJB/bFf2NlGPbmE2zQIByViTYYKo4ON03JPYH3I1CV0g6/cJriA80ynb9LbgIZ
-	 PfxFB17vJ/nLdpq1tfvdPT2YwkdGt/PgnOjlWVF3SPQYHR63z9k1Y0dKgWD/Eui20f
-	 rEiSxjjqA7e7IK45ahf8BV3out9O/JgoIjlWy8fEEWi1b7Jm/6Ml9KVKvpLpdgYzsr
-	 V0WgK8mzTC3qQ==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 6E532378203E;
-	Tue, 19 Mar 2024 11:51:45 +0000 (UTC)
-Message-ID: <b5ef97d6-083d-41ac-8781-662e4c862a15@collabora.com>
-Date: Tue, 19 Mar 2024 12:51:44 +0100
+	s=arc-20240116; t=1710852905; c=relaxed/simple;
+	bh=Xi3/8H7AtZy593o0zTJ2QBjsf5/ZS6dt9hp+LeefQjw=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=iAkWwohEDuBpFE1j4y8dUUm60YUIkJjsESVlN3iYKUPmE7Gjdz001c/5ChL/P3g5U5iVXr1OW+LWaXnK2eBA/FjJROmCKqR15Q6A1sYKaRajerKlbFulWsuIQKZz228f561/wSBEHPK6Tj6FdvA0OmOn87YK5DUWiEHJly5rt7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5a4930d9c48so903376eaf.1;
+        Tue, 19 Mar 2024 05:55:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710852903; x=1711457703;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FItAIc+unigztXlSaF2FIfikzP4jYYgdXVJjLkQFdr4=;
+        b=F8ew6fX08SC/QupbOaJYtd3KcsNMQ/5fjr+HDcmIWXovcdaXpJT2Ox3qVMJgMV1UhA
+         QR8zf9gloVW9d2esH7ZD3qbKhYu8T03z8pCDiNgs468Y5Gct16AzsVws6Ijqyy4jY+Nz
+         Sn+iqp1oxuxoynBN6AifyvVqveSERSauSFFpu2SW4KDCy6aikF3NqIK2WlbWa9XFEaD2
+         R7fnkE49AFr3Y33O+u2bseCLkeag/WGbQkZJkozE8aYCXQbwUlz7mgmFUzjv/q1pSMzO
+         CaEjaqxsP+8mH53KlZ9KbPJKL+bSPZjS2M9qxhHZm6S9aTlB8/ixZ28uLseDHQRYuaYW
+         eZGQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXqXKDrVlhjzYeD55eD/aTP6XMX4uu7Q7eUMsZKldj3PGf87tw5IyLVx9PNXK+gu5q6OTwd2/HT+iJBQz1eMsv+hTMRAqKnoeyn30+j
+X-Gm-Message-State: AOJu0Yy/LcWCfGbt/m/bGHu/AoZpgCf8U0IxiTIv4xfufeR/Kb41G3Me
+	BrgQNyl7mNEvJFBtB/SGPYhis4V5B4415Uj2zJZJsrJSmN1k7DEuvncH8EShce2l2UqemGXmA6k
+	lB53WIn5O1bn4+5Bb8wZjGVZADxI=
+X-Google-Smtp-Source: AGHT+IETY1Srkw0/ICfLWOLO3fBd+t2GRbhCo9SgbCpO2e2KDScbk7XoVD3j2M6m2n9/sX/P7gMoQCSzqAZaRIo7AGQ=
+X-Received: by 2002:a05:6820:26c1:b0:5a4:6e23:e335 with SMTP id
+ da1-20020a05682026c100b005a46e23e335mr9943829oob.0.1710852903395; Tue, 19 Mar
+ 2024 05:55:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 12/13] thermal/drivers/mediatek/lvts_thermal: add
- MT8188 support
-Content-Language: en-US
-To: Nicolas Pitre <nico@fluxnic.net>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org,
- linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
-Cc: Nicolas Pitre <npitre@baylibre.com>
-References: <20240318212428.3843952-1-nico@fluxnic.net>
- <20240318212428.3843952-13-nico@fluxnic.net>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20240318212428.3843952-13-nico@fluxnic.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 19 Mar 2024 13:54:52 +0100
+Message-ID: <CAJZ5v0gf1UYSyEYKTpsaNFuaL4gEgzGm2715qKoSKKQA233+qA@mail.gmail.com>
+Subject: [GIT PULL] More thermal control updates for v6.9-rc1
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Il 18/03/24 22:22, Nicolas Pitre ha scritto:
-> From: Nicolas Pitre <npitre@baylibre.com>
-> 
-> Various values extracted from the vendor's kernel driver.
-> 
-> Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
-> ---
->   arch/arm64/boot/dts/mediatek/mt8188.dtsi |  35 ++++++++
->   drivers/thermal/mediatek/lvts_thermal.c  | 102 +++++++++++++++++++++++
->   2 files changed, 137 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8188.dtsi b/arch/arm64/boot/dts/mediatek/mt8188.dtsi
-> index b4315c9214..5a3c58a77c 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8188.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8188.dtsi
-> @@ -11,6 +11,7 @@
->   #include <dt-bindings/phy/phy.h>
->   #include <dt-bindings/pinctrl/mediatek,mt8188-pinfunc.h>
->   #include <dt-bindings/power/mediatek,mt8188-power.h>
-> +#include <dt-bindings/reset/mt8188-resets.h>
->   
->   / {
->   	compatible = "mediatek,mt8188";
-> @@ -357,6 +358,7 @@ infracfg_ao: syscon@10001000 {
->   			compatible = "mediatek,mt8188-infracfg-ao", "syscon";
->   			reg = <0 0x10001000 0 0x1000>;
->   			#clock-cells = <1>;
-> +			#reset-cells = <1>;
->   		};
->   
->   		pericfg: syscon@10003000 {
-> @@ -491,6 +493,17 @@ spi0: spi@1100a000 {
->   			status = "disabled";
->   		};
->   
-> +		lvts_ap: thermal-sensor@1100b000 {
-> +			compatible = "mediatek,mt8188-lvts-ap";
-> +			reg = <0 0x1100b000 0 0x1000>;
+Hi Linus,
 
-iospace clashing with SVS. NAK.
+Please pull from the tag
 
-> +			interrupts = <GIC_SPI 200 IRQ_TYPE_LEVEL_HIGH 0>;
-> +			clocks = <&infracfg_ao CLK_INFRA_AO_THERM>;
-> +			resets = <&infracfg_ao MT8188_INFRA_RST1_THERMAL_CTRL_RST>;
-> +			nvmem-cells = <&lvts_efuse_data1>;
-> +			nvmem-cell-names = "lvts_calib_data1";
-> +			#thermal-sensor-cells = <1>;
-> +		};
-> +
->   		spi1: spi@11010000 {
->   			compatible = "mediatek,mt8188-spi-ipm", "mediatek,spi-ipm";
->   			#address-cells = <1>;
-> @@ -604,6 +617,17 @@ mmc1: mmc@11240000 {
->   			status = "disabled";
->   		};
->   
-> +		lvts_mcu: thermal-sensor@11278000 {
-> +			compatible = "mediatek,mt8188-lvts-mcu";
-> +			reg = <0 0x11278000 0 0x1000>;
-> +			interrupts = <GIC_SPI 202 IRQ_TYPE_LEVEL_HIGH 0>;
-> +			clocks = <&infracfg_ao CLK_INFRA_AO_THERM>;
-> +			resets = <&infracfg_ao MT8188_INFRA_RST1_THERMAL_MCU_RST>;
-> +			nvmem-cells = <&lvts_efuse_data1>;
-> +			nvmem-cell-names = "lvts_calib_data1";
-> +			#thermal-sensor-cells = <1>;
-> +		};
-> +
->   		i2c0: i2c@11280000 {
->   			compatible = "mediatek,mt8188-i2c";
->   			reg = <0 0x11280000 0 0x1000>,
-> @@ -827,6 +851,17 @@ imp_iic_wrap_en: clock-controller@11ec2000 {
->   			#clock-cells = <1>;
->   		};
->   
-> +		efuse: efuse@11f20000 {
-> +			compatible = "mediatek,mt8188-efuse", "mediatek,efuse";
-> +			reg = <0 0x11f20000 0 0x1000>;
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +
-> +			lvts_efuse_data1: lvts1-calib@1ac {
-> +				reg = <0x1ac 0x40>;
-> +			};
-> +		};
-> +
->   		mfgcfg: clock-controller@13fbf000 {
->   			compatible = "mediatek,mt8188-mfgcfg";
->   			reg = <0 0x13fbf000 0 0x1000>;
-> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-> index a23a93fc82..46882df640 100644
-> --- a/drivers/thermal/mediatek/lvts_thermal.c
-> +++ b/drivers/thermal/mediatek/lvts_thermal.c
-> @@ -1448,6 +1448,90 @@ static const struct lvts_ctrl_data mt8186_lvts_data_ctrl[] = {
->   	}
->   };
->   
-> +static const struct lvts_ctrl_data mt8188_lvts_mcu_data_ctrl[] = {
-> +	{
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8188_MCU_TS1_0,
-> +			  .cal_offsets = { 22, 23, 24 } },
-> +			{ .dt_id = MT8188_MCU_TS1_1,
-> +			  .cal_offsets = { 25, 26, 27 } },
-> +			{ .dt_id = MT8188_MCU_TS1_2,
-> +			  .cal_offsets = { 28, 29, 30 } },
-> +			{ .dt_id = MT8188_MCU_TS1_3,
-> +			  .cal_offsets = { 31, 32, 33 } },
-> +		},
-> +		VALID_SENSOR_MAP(1, 1, 1, 1),
-> +		.offset = 0x0,
-> +		.hw_tshut_temp = 117000,
-> +		.mode = LVTS_MSR_FILTERED_MODE,
-> +	},
-> +	{
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8188_MCU_TS2_0,
-> +			  .cal_offsets = { 34, 35, 36 } },
-> +			{ .dt_id = MT8188_MCU_TS2_1,
-> +			  .cal_offsets = { 37, 38, 39 } },
-> +		},
-> +		VALID_SENSOR_MAP(1, 1, 0, 0),
-> +		.offset = 0x100,
-> +		.hw_tshut_temp = 117000,
-> +		.mode = LVTS_MSR_FILTERED_MODE,
-> +	}
-> +};
-> +
-> +static const struct lvts_ctrl_data mt8188_lvts_ap_data_ctrl[] = {
-> +	{
-> +		.lvts_sensor = {
-> +
-> +			{ /* unused */ },
-> +			{ .dt_id = MT8188_AP_TS3_1,
-> +			  .cal_offsets = { 40, 41, 42 } },
-> +		},
-> +		VALID_SENSOR_MAP(0, 1, 0, 0),
-> +		.offset = 0x0,
-> +		.hw_tshut_temp = 117000,
-> +		.mode = LVTS_MSR_FILTERED_MODE,
-> +	},
-> +	{
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8188_AP_TS4_0,
-> +			  .cal_offsets = { 43, 44, 45 } },
-> +			{ .dt_id = MT8188_AP_TS4_1,
-> +			  .cal_offsets = { 46, 47, 48 } },
-> +			{ .dt_id = MT8188_AP_TS4_2,
-> +			  .cal_offsets = { 49, 50, 51 } },
-> +		},
-> +		VALID_SENSOR_MAP(1, 1, 1, 0),
-> +		.offset = 0x100,
-> +		.hw_tshut_temp = 117000,
-> +		.mode = LVTS_MSR_FILTERED_MODE,
-> +	},
-> +	{
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8188_AP_TS5_0,
-> +			  .cal_offsets = { 52, 53, 54 } },
-> +			{ .dt_id = MT8188_AP_TS5_1,
-> +			  .cal_offsets = { 55, 56, 57 } },
-> +		},
-> +		VALID_SENSOR_MAP(1, 1, 0, 0),
-> +		.offset = 0x200,
-> +		.hw_tshut_temp = 117000,
-> +		.mode = LVTS_MSR_FILTERED_MODE,
-> +	},
-> +	{
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8188_AP_TS6_0,
-> +			  .cal_offsets = { 58, 59, 60 } },
-> +			{ .dt_id = MT8188_AP_TS6_1,
-> +			  .cal_offsets = { 61, 62, 63 } },
-> +		},
-> +		VALID_SENSOR_MAP(1, 1, 0, 0),
-> +		.offset = 0x300,
-> +		.hw_tshut_temp = 117000,
-> +		.mode = LVTS_MSR_FILTERED_MODE,
-> +	}
-> +};
-> +
->   static const struct lvts_ctrl_data mt8192_lvts_mcu_data_ctrl[] = {
->   	{
->   		.lvts_sensor = {
-> @@ -1645,6 +1729,22 @@ static const struct lvts_data mt8186_lvts_data = {
->   	.gt_calib_bit_offset = 24,
->   };
->   
-> +static const struct lvts_data mt8188_lvts_mcu_data = {
-> +	.lvts_ctrl	= mt8188_lvts_mcu_data_ctrl,
-> +	.num_lvts_ctrl	= ARRAY_SIZE(mt8188_lvts_mcu_data_ctrl),
-> +	.temp_factor	= -250460,
-> +	.temp_offset	= 250460,
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ thermal-6.9-rc1-2
 
-This is LVTS_COEFF_{A,B}_MT8195: please use the definitions that are already there.
+with top-most commit 4e7193acdecd53e79e341b0f6ab7b19596266f35
 
-Regards,
-Angelo
+ Merge tag 'thermal-v6.9-rc1' of
+ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux
 
-> +	.gt_calib_bit_offset = 20,
-> +};
-> +
-> +static const struct lvts_data mt8188_lvts_ap_data = {
-> +	.lvts_ctrl	= mt8188_lvts_ap_data_ctrl,
-> +	.num_lvts_ctrl	= ARRAY_SIZE(mt8188_lvts_ap_data_ctrl),
-> +	.temp_factor	= -250460,
-> +	.temp_offset	= 250460,
-> +	.gt_calib_bit_offset = 20,
-> +};
-> +
->   static const struct lvts_data mt8192_lvts_mcu_data = {
->   	.lvts_ctrl	= mt8192_lvts_mcu_data_ctrl,
->   	.num_lvts_ctrl	= ARRAY_SIZE(mt8192_lvts_mcu_data_ctrl),
-> @@ -1676,6 +1776,8 @@ static const struct lvts_data mt8195_lvts_ap_data = {
->   static const struct of_device_id lvts_of_match[] = {
->   	{ .compatible = "mediatek,mt7988-lvts-ap", .data = &mt7988_lvts_ap_data },
->   	{ .compatible = "mediatek,mt8186-lvts", .data = &mt8186_lvts_data },
-> +	{ .compatible = "mediatek,mt8188-lvts-mcu", .data = &mt8188_lvts_mcu_data },
-> +	{ .compatible = "mediatek,mt8188-lvts-ap", .data = &mt8188_lvts_ap_data },
->   	{ .compatible = "mediatek,mt8192-lvts-mcu", .data = &mt8192_lvts_mcu_data },
->   	{ .compatible = "mediatek,mt8192-lvts-ap", .data = &mt8192_lvts_ap_data },
->   	{ .compatible = "mediatek,mt8195-lvts-mcu", .data = &mt8195_lvts_mcu_data },
+on top of commit 259f7d5e2baf87fcbb4fabc46526c9c47fed1914
+
+ Merge tag 'thermal-6.9-rc1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+
+to receive more thermal control updates for 6.9-rc1.
+
+These update thermal drivers for ARM platforms by adding new hardware
+support (r8a779h0, H616 THS), addressing issues (Mediatek LVTS, Mediatek
+MT7896, thermal-of) and cleaning up code.
+
+Specifics:
+
+ - Fix memory leak in the error path at probe time in the Mediatek LVTS
+   driver (Christophe Jaillet).
+
+ - Fix control buffer enablement regression on Mediatek MT7896 (Frank
+   Wunderlich).
+
+ - Drop spaces before TABs in different places: thermal-of, ST drivers
+   and Makefile (Geert Uytterhoeven).
+
+ - Adjust DT binding for NXP as fsl,tmu-range min/maxItems can vary
+   among several SoC versions (Fabio Estevam).
+
+ - Add support for the H616 THS controller on Sun8i platforms (Martin
+   Botka).
+
+ - Don't fail probe due to zone registration failure because there is
+   no trip points defined in the DT (Mark Brown).
+
+ - Support variable TMU array size for new platforms (Peng Fan).
+
+ - Adjust the DT binding for thermal-of and make the polling time not
+   required and assume it is zero when not found in the DT (Konrad
+   Dybcio).
+
+ - Add r8a779h0 support in both the DT and the rcar_gen3 driver (Geert
+   Uytterhoeven).
+
+Thanks!
 
 
+---------------
+
+Andre Przywara (3):
+      soc: sunxi: sram: export register 0 for THS on H616
+      thermal/drivers/sun8i: Explain unknown H6 register value
+      thermal/drivers/sun8i: Add SRAM register access code
+
+Christophe JAILLET (1):
+      thermal/drivers/mediatek/lvts_thermal: Fix a memory leak in an
+error handling path
+
+Duy Nguyen (1):
+      dt-bindings: thermal: rcar-gen3-thermal: Add r8a779h0 support
+
+Fabio Estevam (1):
+      dt-bindings: thermal: qoriq-thermal: Adjust fsl,tmu-range min/maxItems
+
+Frank Wunderlich (1):
+      thermal/drivers/mediatek: Fix control buffer enablement on MT7896
+
+Geert Uytterhoeven (2):
+      thermal: Drop spaces before TABs
+      thermal/drivers/rcar_gen3: Add support for R-Car V4M
+
+Konrad Dybcio (2):
+      dt-bindings: thermal-zones: Don't require polling-delay(-passive)
+      thermal/of: Assume polling-delay(-passive) 0 when absent
+
+Maksim Kiselev (1):
+      thermal/drivers/sun8i: Extend H6 calibration to support 4 sensors
+
+Mark Brown (1):
+      thermal/drivers/sun8i: Don't fail probe due to zone registration failure
+
+Martin Botka (2):
+      dt-bindings: thermal: sun8i: Add H616 THS controller
+      thermal/drivers/sun8i: Add support for H616 THS controller
+
+Peng Fan (1):
+      thermal/drivers/qoriq: Fix getting tmu range
+
+---------------
+
+ .../bindings/thermal/allwinner,sun8i-a83t-ths.yaml |  34 +++--
+ .../devicetree/bindings/thermal/qoriq-thermal.yaml |   3 +-
+ .../bindings/thermal/rcar-gen3-thermal.yaml        |   2 +
+ .../devicetree/bindings/thermal/thermal-zones.yaml |   2 -
+ drivers/soc/sunxi/sunxi_sram.c                     |  22 ++++
+ drivers/thermal/Makefile                           |   2 +-
+ drivers/thermal/mediatek/auxadc_thermal.c          |   3 +
+ drivers/thermal/mediatek/lvts_thermal.c            |   4 +-
+ drivers/thermal/qoriq_thermal.c                    |  12 +-
+ drivers/thermal/rcar_gen3_thermal.c                |   4 +
+ drivers/thermal/st/st_thermal.h                    |  18 +--
+ drivers/thermal/st/st_thermal_memmap.c             |   2 +-
+ drivers/thermal/sun8i_thermal.c                    | 139 +++++++++++++++++----
+ drivers/thermal/thermal_of.c                       |  14 ++-
+ 14 files changed, 203 insertions(+), 58 deletions(-)
 
