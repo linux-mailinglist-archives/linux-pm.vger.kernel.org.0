@@ -1,155 +1,138 @@
-Return-Path: <linux-pm+bounces-5105-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5106-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60B0387FD07
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 12:39:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB45587FD0D
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 12:40:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 925731C21DC2
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 11:39:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 932402819D3
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 11:40:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD05F7EF07;
-	Tue, 19 Mar 2024 11:39:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B220D7F47D;
+	Tue, 19 Mar 2024 11:40:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kOFTWEOz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 330D11CD13;
-	Tue, 19 Mar 2024 11:39:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8903E7F477;
+	Tue, 19 Mar 2024 11:40:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710848374; cv=none; b=gbktZ1Cq7o582/w/6e3sGFUS/KMBhXcr4Fwm9QjI6DNgSbeI3hag5xRvPtFTftQCwagqNwQ0TFJC4NQLLWyy869/dzLEDSrzNOLKZTG9pcGph0RAruDxfT43pTmNPLsOTHGajf1RQJj0wzW97foWiJSySW0qF5lbPftWzCXnAD8=
+	t=1710848423; cv=none; b=JVyMM6ewzvXCWz/2AUOMDjtlGkvyJsMa4Uz2IFl7xOFmI6fP1+i26pl0B4KIqKxzEpPlzzdFYhVB2xGKTaKVGeaRPPjqxRexacC918mncQkvwmeEU+mSSDq00LvUgwxudWL2fmaUx8eLPnrPHwQa7an+dzdDQpcbfdjLBz/TNes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710848374; c=relaxed/simple;
-	bh=vojRu5Rt8UyQxGZBpl02LUieDOrevQoQb1W9TGD1xVQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=llcabuvunPE4K25xl88rL7LauSQ3h7EVBRgEtZnbHoEyeAbYKqPGF3lIM3bFPJJSi46BJc+sZ5/rhVHhAMfo4IHaoHSCYmt6T8pWr/7m/nRTYHjGRFoD5hh3Fupw2S1Q7S7th/N9oqOV3/Pl/ufyNUXePAtvC2cYIfDASYqXC9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-5a46ad0d981so1201508eaf.1;
-        Tue, 19 Mar 2024 04:39:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710848372; x=1711453172;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fGDMdE/ubpMSGXQdDQ2jOzVWvsK6WIp+rG4bdzH3AV8=;
-        b=TMzdexX1XYjzjQ/30A5VK5ToZ4+tsT6c4GLnFe/ScTDy2VKKMkuXT0VuvS/UH1sONC
-         uYFfmZzjNh1OGdy1yTBYQJy5A0wJ7fJUnRRPlOweTP0S67eaqUqDAiMIKjhC80C6vijX
-         y41LvQwvss5wkVuWpw2tz8MxhdDEKSS5o9GbfNCnDJ2deno/xeHUIUf47aQRxk8xPWnE
-         ST7PWHSpn3zreP0d9km1H/21NH5oLEE91m6VEp61HWBB/h+DaMd32LY9ItKyc4hxAkmi
-         ezE+hZU6pYmOqJfCLbY+E7GZHj1EzHKHpDVpuf9w677EM1JHjwuO040EKJwUelJEpjDC
-         iy8w==
-X-Forwarded-Encrypted: i=1; AJvYcCUh/qnDbNThdUe+55KxkoETcBGGT4sKZHy8c5zd+A+2G6o6ApgA9gkIl49387H53WNEJsWjqYexUmfsvy7OklNPpuEGPZDsbAL60RJlXpVMxEwelbnxVgkx832grIqjtIR3p2t9zScMSsUYCkZ1gBLkFpabo/U6FkS61cyfNVZpN3w3gfR21rM=
-X-Gm-Message-State: AOJu0Yw3AmnDFPERLdbreZQZ1L9hJxedN/9ztWhhBQTqC7KPB3tpq2K2
-	fy3pR50l9s885jkYMvNmwV6s8MCbhgHGuls4rjuGAGZ1fPnXrqfEWrEFTqLjqrfw5rC+Rum4M6K
-	8HQ3Oi+NCrlXmi/FBVSvrlyMJWWs=
-X-Google-Smtp-Source: AGHT+IGHZCsOkNMXpc8xdHuAUf+zixo9CgVbeU12ShhxJpSf+PUXcFlR5MZ54F+q9rYGC8+OAMRFvhgllN6VNMvyUtI=
-X-Received: by 2002:a05:6870:8a08:b0:229:848e:b7ea with SMTP id
- p8-20020a0568708a0800b00229848eb7eamr1177280oaq.4.1710848372151; Tue, 19 Mar
- 2024 04:39:32 -0700 (PDT)
+	s=arc-20240116; t=1710848423; c=relaxed/simple;
+	bh=QCABlmmQRWtKI06jZoMFlB5Yrgasl+VafkEPPnZ6XrY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Xxh/+K4h/Jb2VhxOU5WgFhgEqPKYTj5IoNVPsVXwZcCARvIhy2J7SmA/m5zodUqMgSnB7dWxbg6YiQrr3WQ1K3+nEIA3LAItOWh3gz6y+8DlrCGikQX8XdlPly82UhRrm8J/4KnNUsGj05B61AsJYjK/UBUuC5LQa3OO7Mc+eiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kOFTWEOz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2287FC433C7;
+	Tue, 19 Mar 2024 11:40:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710848423;
+	bh=QCABlmmQRWtKI06jZoMFlB5Yrgasl+VafkEPPnZ6XrY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=kOFTWEOzUnCMkQtyxvj+LkfkJxx4r05vJHBoolV6B9rpwTeHHLgGu3ITGBHg2ZHLg
+	 Q7t1PWIE0dTEo2CquMjRyfzt1ipnGVbgdk0M2BA6ZuW7+Jxhc0Wv4YsgZiqcn9vYVt
+	 t+McN7YdZ7NFvsks+UDQSmZevVTdPVHUCuOzLdeb5ndUWRiJ6h9/HMBlGEVF6OiZ2e
+	 p6E9TyUzYW2Tcne1nMQSeDtffk8QUseLaf3e/JSq95AHkiMFxiuNYdEco/VdXhOUxI
+	 H6B8dd3D4gy9g6DiHI8E/eY++Wg58fWajyE7gWayOfPjSKipfsEwkSDADH8qzuvSsQ
+	 wZ76FrDFs2BJw==
+Message-ID: <7a529bd6-abac-42d0-980e-3b1b5c46946f@kernel.org>
+Date: Tue, 19 Mar 2024 12:40:20 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240318-strncpy-drivers-thermal-intel-int340x_thermal-acpi_thermal_rel-c-v1-1-08839fbf737a@google.com>
-In-Reply-To: <20240318-strncpy-drivers-thermal-intel-int340x_thermal-acpi_thermal_rel-c-v1-1-08839fbf737a@google.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 19 Mar 2024 12:39:20 +0100
-Message-ID: <CAJZ5v0j=cYbqyfi6y45hnu+Y_tvMGYb9p6d=kpsOA0AsxBoy3g@mail.gmail.com>
-Subject: Re: [PATCH] thermal: intel: int340x_thermal: replace deprecated
- strncpy with strscpy
-To: Justin Stitt <justinstitt@google.com>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 01/13] thermal/drivers/mediatek/lvts_thermal: retrieve
+ all calibration bytes
+Content-Language: en-US
+To: Nicolas Pitre <nico@fluxnic.net>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org,
+ linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
+Cc: Nicolas Pitre <npitre@baylibre.com>
+References: <20240318212428.3843952-1-nico@fluxnic.net>
+ <20240318212428.3843952-2-nico@fluxnic.net>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@kernel.org>
+In-Reply-To: <20240318212428.3843952-2-nico@fluxnic.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Mar 18, 2024 at 11:36=E2=80=AFPM Justin Stitt <justinstitt@google.c=
-om> wrote:
->
-> strncpy() is deprecated for use on NUL-terminated destination strings
-> [1] and as such we should prefer more robust and less ambiguous string
-> interfaces.
->
-> psvt->limit.string can only be 8 bytes so let's use the appropriate size
-> macro ACPI_LIMIT_STR_MAX_LEN.
->
-> Neither psvt->limit.string or psvt_user[i].limit.string requires the
-> NUL-padding behavior that strncpy() provides as they have both been
-> filled with NUL-bytes prior to the string operation.
-> |       memset(&psvt->limit, 0, sizeof(u64));
-> and
-> |       psvt_user =3D kzalloc(psvt_len, GFP_KERNEL);
->
-> Let's use `strscpy` [2] due to the fact that it guarantees
-> NUL-termination on the destination buffer without unnecessarily
-> NUL-padding.
->
-> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strn=
-cpy-on-nul-terminated-strings [1]
-> Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.h=
-tml [2]
-> Link: https://github.com/KSPP/linux/issues/90
-> Cc: linux-hardening@vger.kernel.org
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
+Il 18/03/24 22:22, Nicolas Pitre ha scritto:
+> From: Nicolas Pitre <npitre@baylibre.com>
+> 
+> Calibration values are 24-bit wide. Those values so far appear to span
+> only 16 bits but let's not push our luck.
+> 
 
-Srinivas, any objections?
+I wonder how much feedback you got on v1 - I didn't even look and will not lose
+time with that - but regardless, if you don't add the right people to the Cc field,
+I really don't think that you'll ever get your patches reviewed (and probably also
+not accepted).
 
+That -- especially if you don't even Cc all the relevant maintainers...!
+
+Please read:
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html
+
+P.S.:
+scripts/get_maintainer.pl lvts-8186-8188-patches.patch
+
+"Rafael J. Wysocki" <rafael@kernel.org> (supporter:THERMAL)
+Daniel Lezcano <daniel.lezcano@linaro.org> (supporter:THERMAL,commit_signer:21/22=95%)
+Zhang Rui <rui.zhang@intel.com> (reviewer:THERMAL)
+Lukasz Luba <lukasz.luba@arm.com> (reviewer:THERMAL)
+Rob Herring <robh@kernel.org> (maintainer:OPEN FIRMWARE AND FLATTENED DEVICE TREE 
+BINDINGS)
+Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org> (maintainer:OPEN FIRMWARE 
+AND FLATTENED DEVICE TREE BINDINGS)
+Conor Dooley <conor+dt@kernel.org> (maintainer:OPEN FIRMWARE AND FLATTENED DEVICE 
+TREE BINDINGS)
+Matthias Brugger <matthias.bgg@gmail.com> (maintainer:ARM/Mediatek SoC 
+support,commit_signer:4/22=18%)
+AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> 
+(maintainer:ARM/Mediatek SoC support,commit_signer:13/22=59%)
+Alexandre Mergnat <amergnat@baylibre.com> (commit_signer:11/22=50%)
+"Nícolas F. R. A. Prado" <nfraprado@collabora.com> 
+(commit_signer:10/22=45%,authored:7/22=32%,added_lines:128/453=28%,removed_lines:45/98=46%)
+Balsam CHIHI <bchihi@baylibre.com> 
+(authored:4/22=18%,added_lines:235/453=52%,removed_lines:22/98=22%,in file)
+Chen-Yu Tsai <wenst@chromium.org> (authored:2/22=9%)
+Minjie Du <duminjie@vivo.com> (authored:2/22=9%)
+Frank Wunderlich <frank-w@public-files.de> 
+(authored:2/22=9%,added_lines:72/453=16%,removed_lines:17/98=17%)
+linux-pm@vger.kernel.org (open list:THERMAL)
+devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
+linux-kernel@vger.kernel.org (open list)
+linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC support)
+linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC support)
+
+
+> Found while looking at the original Mediatek driver code.
+> 
+> Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
 > ---
-> Note: build-tested only.
->
-> Found with: $ rg "strncpy\("
-> ---
->  drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c b/d=
-rivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
-> index dc519a665c18..4b4a4d63e61f 100644
-> --- a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
-> +++ b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
-> @@ -309,7 +309,7 @@ static int acpi_parse_psvt(acpi_handle handle, int *p=
-svt_count, struct psvt **ps
->
->                 if (knob->type =3D=3D ACPI_TYPE_STRING) {
->                         memset(&psvt->limit, 0, sizeof(u64));
-> -                       strncpy(psvt->limit.string, psvt_ptr->limit.str_p=
-tr, knob->string.length);
-> +                       strscpy(psvt->limit.string, psvt_ptr->limit.str_p=
-tr, ACPI_LIMIT_STR_MAX_LEN);
->                 } else {
->                         psvt->limit.integer =3D psvt_ptr->limit.integer;
->                 }
-> @@ -468,7 +468,7 @@ static int fill_psvt(char __user *ubuf)
->                 psvt_user[i].unlimit_coeff =3D psvts[i].unlimit_coeff;
->                 psvt_user[i].control_knob_type =3D psvts[i].control_knob_=
-type;
->                 if (psvt_user[i].control_knob_type =3D=3D ACPI_TYPE_STRIN=
-G)
-> -                       strncpy(psvt_user[i].limit.string, psvts[i].limit=
-.string,
-> +                       strscpy(psvt_user[i].limit.string, psvts[i].limit=
-.string,
->                                 ACPI_LIMIT_STR_MAX_LEN);
->                 else
->                         psvt_user[i].limit.integer =3D psvts[i].limit.int=
-eger;
->
-> ---
-> base-commit: bf3a69c6861ff4dc7892d895c87074af7bc1c400
-> change-id: 20240318-strncpy-drivers-thermal-intel-int340x_thermal-acpi_th=
-ermal_rel-c-17070c1e42f3
->
-> Best regards,
-> --
-> Justin Stitt <justinstitt@google.com>
->
+>   drivers/thermal/mediatek/lvts_thermal.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+> index 98d9c80bd4..8aa6a8675b 100644
+> --- a/drivers/thermal/mediatek/lvts_thermal.c
+> +++ b/drivers/thermal/mediatek/lvts_thermal.c
+> @@ -679,7 +679,7 @@ static int lvts_calibration_init(struct device *dev, struct lvts_ctrl *lvts_ctrl
+>   
+>   	for (i = 0; i < lvts_ctrl_data->num_lvts_sensor; i++)
+>   		memcpy(&lvts_ctrl->calibration[i],
+> -		       efuse_calibration + lvts_ctrl_data->cal_offset[i], 2);
+> +		       efuse_calibration + lvts_ctrl_data->cal_offset[i], 3);
+>   
+>   	return 0;
+>   }
+
 
