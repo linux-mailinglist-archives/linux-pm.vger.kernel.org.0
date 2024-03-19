@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-5108-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5109-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 787F987FD24
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 12:48:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA2AB87FD27
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 12:49:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 97005B21C3B
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 11:48:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8092C283AC6
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 11:49:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D7767F470;
-	Tue, 19 Mar 2024 11:47:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B1DA7F465;
+	Tue, 19 Mar 2024 11:48:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Amh5jQdj"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="WkKFOnex"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF6337F46A;
-	Tue, 19 Mar 2024 11:47:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF7FC7CF24;
+	Tue, 19 Mar 2024 11:48:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710848868; cv=none; b=MiL/PSO8W61coOrYBeVxNhsvq7GiPyQW60NrA2xk+ET3Wjs659zRA2/Fn36ubXX2ZopbuPB0e9IX+ckvLTtVxHKjSKdaJ+UJYCvOIpT6cbiw4PEA9uQXhP3MDjv9D2XxFoxbinfmmzpVh6G6zEkSQmduotNrfgO3A8RzXuUDNQE=
+	t=1710848937; cv=none; b=hKACCM2ROMgGNwAa5LQE0fUp8eLEFN8JCZd73wXrIboDmFONKniAUwk29CBTksrIMK2g4IQ8ofltHefJi5Qzwhq3+BZWHshQy+G1b01HGgRtCbDQ0mSy4osf6AmmetFviBngGmjC2P7ChpC17CQg6R0P7PEgwRnrAPmtOFz7dkg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710848868; c=relaxed/simple;
-	bh=qP5gXkLN9BbD+xAGyMSyZHGa30YnfxKKydf78AcNovs=;
+	s=arc-20240116; t=1710848937; c=relaxed/simple;
+	bh=e3xf9w9fguza9YlfKc8c4gwJVjizSFUCZqmpN2WsxJI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZoWTJiitMKGNJAlOemuRunVsLzaYCFF4vecDblFHzZXGE3FRahaX8FPn1mikbsukEpP12QvVsLeydwK9II/6JjeIbbjQObOCDKcQGSym4zX+oQ5rPgtcxGn4RuUG9D6nypdGD4zzZt5hOBZbnckLflTWdEKeSg6ptvjpoGc4vRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Amh5jQdj; arc=none smtp.client-ip=46.235.227.194
+	 In-Reply-To:Content-Type; b=eskfWMxR/5j1fHswUywRDX3u8cuUT/L+NKqEYVvRr51nlti1U5JZMK1T+wWTkVdR+7bNfJaKshO8oTRypNkWwVaC7I+5jlMq7NuyGLDbvsus/2rUdzAd03uHIjNazrA/8hRFU1k9XlNqdETVvvpzDc9QaRsGoq8PR/+xPR5Vtm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=WkKFOnex; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1710848865;
-	bh=qP5gXkLN9BbD+xAGyMSyZHGa30YnfxKKydf78AcNovs=;
+	s=mail; t=1710848934;
+	bh=e3xf9w9fguza9YlfKc8c4gwJVjizSFUCZqmpN2WsxJI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Amh5jQdjBcqhcjs7kG7HE2t/lX8p12H9abwdZrLqx/uRR1MOoV+lS1U0ShGDaqHi0
-	 P41UQP4qdmLFVglubo0f48fGH587hCJNRM2U5j2j6z8Su6Gx4w+qfPrsh/mTiOOYGM
-	 HUmll1+xjDg3c6D1PxSdOi4Esv5K+5QkIK05gQoUIaRa8V0RmYFnA1ZJso1FkGJb3P
-	 vZnccgM5Q9r16A9479VmQZLhd17XiZ1D6O0sYQRwUV7k2V1TD1wmAK9U/arAfheueS
-	 AcuKJFF+QK5+GvzK/NAC+CBamuk3I7RoXn5WNpIn0DxcFMOnfOCZDpKq38clt7FPwr
-	 eM9F/W55w/a7w==
+	b=WkKFOnexS6Vv6gCTko3Pvzmq5P6rqfcMlhDhF8OqqzRt/O+jMc9ETk0Y8Xxu34DFj
+	 Gps4yKKvF1OCudhtzBwzUuRq3RYtpzz/Rg9o31N91Pqj8rfi1x1eReMK/8yCpKULy1
+	 C+pv/ln8SlUPe7lIDw0sCxBkxBI4OgjpYhR+09JCatsuBwix5pp7hV+Uz6Eo2qjofr
+	 qbKX6/zZlq1iPihK6T8d5FJh6LKozX8GvkQZGsVmBVLcCKauI2XYEa1TcmkjMquIbv
+	 rX/5HPIsYVoB4vBBZuI7KLOByex/xGA/zFY4ysKyTmcySs+Ely4v44Gb0dQxGcsOpj
+	 uxpvl1QZk338Q==
 Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 94C1C378203E;
-	Tue, 19 Mar 2024 11:47:44 +0000 (UTC)
-Message-ID: <2752f476-db91-46a5-a32f-458b7067063d@collabora.com>
-Date: Tue, 19 Mar 2024 12:47:43 +0100
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 0D309378203E;
+	Tue, 19 Mar 2024 11:48:53 +0000 (UTC)
+Message-ID: <6c5e8e8c-3d00-468b-b5c3-d09838b670eb@collabora.com>
+Date: Tue, 19 Mar 2024 12:48:53 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -57,88 +57,141 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 06/13] arm64: dts: mediatek: mt8186: add lvts
- definitions
+Subject: Re: [PATCH v2 07/13] thermal/drivers/mediatek/lvts_thermal: add
+ MT8186 support
 Content-Language: en-US
 To: Nicolas Pitre <nico@fluxnic.net>,
  Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org,
  linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
 Cc: Nicolas Pitre <npitre@baylibre.com>
 References: <20240318212428.3843952-1-nico@fluxnic.net>
- <20240318212428.3843952-7-nico@fluxnic.net>
+ <20240318212428.3843952-8-nico@fluxnic.net>
 From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20240318212428.3843952-7-nico@fluxnic.net>
+In-Reply-To: <20240318212428.3843952-8-nico@fluxnic.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 Il 18/03/24 22:22, Nicolas Pitre ha scritto:
 > From: Nicolas Pitre <npitre@baylibre.com>
 > 
-> Values extracted from vendor source tree.
+> Various values extracted from the vendor's kernel driver.
 > 
 > Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
 > ---
->   arch/arm64/boot/dts/mediatek/mt8186.dtsi | 20 ++++++++++++++++++++
->   1 file changed, 20 insertions(+)
+>   drivers/thermal/mediatek/lvts_thermal.c | 67 +++++++++++++++++++++++++
+>   1 file changed, 67 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8186.dtsi b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-> index 2fec6fd1c1..7b7a517a41 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-> @@ -1355,6 +1355,18 @@ spi0: spi@1100a000 {
->   			status = "disabled";
->   		};
->   
-> +		lvts: lvts@1100b000 {
+> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+> index ed1888fb24..e923d22c17 100644
+> --- a/drivers/thermal/mediatek/lvts_thermal.c
+> +++ b/drivers/thermal/mediatek/lvts_thermal.c
+> @@ -80,6 +80,8 @@
+>   #define LVTS_SENSOR_MAX				4
+>   #define LVTS_GOLDEN_TEMP_MAX		62
+>   #define LVTS_GOLDEN_TEMP_DEFAULT	50
+> +#define LVTS_COEFF_A_MT8186			-204650
+> +#define LVTS_COEFF_B_MT8186			204650
 
-This is not generic and LVTS ain't special.
-
-thermal-sensor@1100b000
-
-Also, please use the correct length - you're clashing with the SVS iospace.
-
-> +			compatible = "mediatek,mt8186-lvts";
-> +			#thermal-sensor-cells = <1>;
-> +			reg = <0 0x1100b000 0 0x1000>;
-> +			interrupts = <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH 0>;
-> +			clocks = <&infracfg_ao CLK_INFRA_AO_THERM>;
-> +			clock-names = "lvts_clk";
-> +			resets = <&infracfg_ao MT8186_INFRA_THERMAL_CTRL_RST>;
-> +			nvmem-cells = <&lvts_e_data1 &lvts_e_data2>;
-> +			nvmem-cell-names = "e_data1","e_data2";
-> +		};
-> +
->   		pwm0: pwm@1100e000 {
->   			compatible = "mediatek,mt8186-disp-pwm", "mediatek,mt8183-disp-pwm";
->   			reg = <0 0x1100e000 0 0x1000>;
-> @@ -1668,6 +1680,14 @@ efuse: efuse@11cb0000 {
->   			#address-cells = <1>;
->   			#size-cells = <1>;
->   
-> +			lvts_e_data1: data1 {
-
-Please always run `make dtbs_check`
+You don't need this definition, as you can reuse the MT7988 one.
 
 Regards,
 Angelo
 
-> +				reg = <0x1cc 0x14>;
-> +			};
+>   #define LVTS_COEFF_A_MT8195			-250460
+>   #define LVTS_COEFF_B_MT8195			250460
+>   #define LVTS_COEFF_A_MT7988			-204650
+> @@ -92,6 +94,7 @@
+>   #define LVTS_MSR_READ_WAIT_US		(LVTS_MSR_READ_TIMEOUT_US / 2)
+>   
+>   #define LVTS_HW_SHUTDOWN_MT7988		105000
+> +#define LVTS_HW_SHUTDOWN_MT8186		105000
+>   #define LVTS_HW_SHUTDOWN_MT8192		105000
+>   #define LVTS_HW_SHUTDOWN_MT8195		105000
+>   
+> @@ -1377,6 +1380,62 @@ static int lvts_resume(struct device *dev)
+>   	return 0;
+>   }
+>   
+> +/*
+> + * The MT8186 calibration data is stored as packed 3-byte little-endian
+> + * values using a weird layout that makes sense only when viewed as a 32-bit
+> + * hexadecimal word dump. Let's suppose SxBy where x = sensor number and
+> + * y = byte number where the LSB is y=0. We then have:
+> + *
+> + *   [S0B2-S0B1-S0B0-S1B2] [S1B1-S1B0-S2B2-S2B1] [S2B0-S3B2-S3B1-S3B0]
+> + *
+> + * However, when considering a byte stream, those appear as follows:
+> + *
+> + *   [S1B2] [S0B0[ [S0B1] [S0B2] [S2B1] [S2B2] [S1B0] [S1B1] [S3B0] [S3B1] [S3B2] [S2B0]
+> + *
+> + * Hence the rather confusing offsets provided below.
+> + */
+> +static const struct lvts_ctrl_data mt8186_lvts_data_ctrl[] = {
+> +	{
+> +		.lvts_sensor = {
+> +			{ .dt_id = MT8186_TS1_0,
+> +			  .cal_offsets = { 5, 6, 7 } },
+> +			{ .dt_id = MT8186_TS1_1,
+> +			  .cal_offsets = { 10, 11, 4 } },
+> +			{ .dt_id = MT8186_TS1_2,
+> +			  .cal_offsets = { 15, 8, 9 } },
+> +			{ .dt_id = MT8186_TS1_3,
+> +			  .cal_offsets = { 12, 13, 14 } }
+> +		},
+> +		.num_lvts_sensor = 4,
+> +		.offset = 0x0,
+> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8186,
+> +	},
+> +	{
+> +		.lvts_sensor = {
+> +			{ .dt_id = MT8186_TS2_0,
+> +			  .cal_offsets = { 22, 23, 16 } },
+> +			{ .dt_id = MT8186_TS2_1,
+> +			  .cal_offsets = { 27, 20, 21 } }
+> +		},
+> +		.num_lvts_sensor = 2,
+> +		.offset = 0x100,
+> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8186,
+> +	},
+> +	{
+> +		.lvts_sensor = {
+> +			{ .dt_id = MT8186_TS3_0,
+> +			  .cal_offsets = { 29, 30, 31 } },
+> +			{ .dt_id = MT8186_TS3_1,
+> +			  .cal_offsets = { 34, 35, 28 } },
+> +			{ .dt_id = MT8186_TS3_2,
+> +			  .cal_offsets = { 39, 32, 33 } }
+> +		},
+> +		.num_lvts_sensor = 3,
+> +		.offset = 0x200,
+> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8186,
+> +	}
+> +};
 > +
-> +			lvts_e_data2: data1-1 {
-> +				reg = <0x2f8 0x14>;
-> +			};
+>   static const struct lvts_ctrl_data mt8192_lvts_mcu_data_ctrl[] = {
+>   	{
+>   		.lvts_sensor = {
+> @@ -1565,6 +1624,13 @@ static const struct lvts_data mt7988_lvts_ap_data = {
+>   	.temp_offset	= LVTS_COEFF_B_MT7988,
+>   };
+>   
+> +static const struct lvts_data mt8186_lvts_data = {
+> +	.lvts_ctrl	= mt8186_lvts_data_ctrl,
+> +	.num_lvts_ctrl	= ARRAY_SIZE(mt8186_lvts_data_ctrl),
+> +	.temp_factor	= LVTS_COEFF_A_MT8186,
+> +	.temp_offset	= LVTS_COEFF_B_MT8186,
+> +};
 > +
->   			gpu_speedbin: gpu-speedbin@59c {
->   				reg = <0x59c 0x4>;
->   				bits = <0 3>;
-
--- 
-AngeloGioacchino Del Regno
-Senior Software Engineer
-
-Collabora Ltd.
-Platinum Building, St John's Innovation Park, Cambridge CB4 0DS, UK
-Registered in England & Wales, no. 5513718
+>   static const struct lvts_data mt8192_lvts_mcu_data = {
+>   	.lvts_ctrl	= mt8192_lvts_mcu_data_ctrl,
+>   	.num_lvts_ctrl	= ARRAY_SIZE(mt8192_lvts_mcu_data_ctrl),
+> @@ -1591,6 +1657,7 @@ static const struct lvts_data mt8195_lvts_ap_data = {
+>   
+>   static const struct of_device_id lvts_of_match[] = {
+>   	{ .compatible = "mediatek,mt7988-lvts-ap", .data = &mt7988_lvts_ap_data },
+> +	{ .compatible = "mediatek,mt8186-lvts", .data = &mt8186_lvts_data },
+>   	{ .compatible = "mediatek,mt8192-lvts-mcu", .data = &mt8192_lvts_mcu_data },
+>   	{ .compatible = "mediatek,mt8192-lvts-ap", .data = &mt8192_lvts_ap_data },
+>   	{ .compatible = "mediatek,mt8195-lvts-mcu", .data = &mt8195_lvts_mcu_data },
 
 
