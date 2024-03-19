@@ -1,66 +1,71 @@
-Return-Path: <linux-pm+bounces-5088-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5089-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6596687F592
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 03:49:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1FC387F5AC
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 03:50:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 20386282C05
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 02:49:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 995191F21DAC
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 02:50:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD2B87BB0F;
-	Tue, 19 Mar 2024 02:48:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8DBC7E57C;
+	Tue, 19 Mar 2024 02:49:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g1QBqrHJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mUeDGdX/"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8188D7BAFD;
-	Tue, 19 Mar 2024 02:48:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 880697E572;
+	Tue, 19 Mar 2024 02:49:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710816534; cv=none; b=OTf+oX5q4ZfA/RiwEuXXQrXaU6uDvT6yL9vmaw47202m6a5LHc3wDBrTMfOUmCtNPVslt+upOujcRKTmxs03A9cxybXDh98rGX5m5zTX0MUWEbVvJB1nw/3tlAVZbOua2mRznQ4hB9IARKh0ckfi/KGHWGaOj67tRCn+cHGlNG4=
+	t=1710816542; cv=none; b=Tclwbv2t7purSFM54l20f/UvH0OmhsVlPpE189kKMbyyZhecLH4ij46xdq6RNMAaL9zmCxBjeqfQ9yKQMAiI+6NptHnvDHXreTKG84OUWjiR0QZu+yQkimU3X4ifjOM/reIDWAvtQEfnJ4vrww1WoAuv1AY30gq0TisGYex0/UA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710816534; c=relaxed/simple;
-	bh=KaweszFIYhSU0mfWgLFa8HYlsUy3gXUKrPRhZAchwXY=;
+	s=arc-20240116; t=1710816542; c=relaxed/simple;
+	bh=duyIFh111GdgY8uZhIwil5LxGThPSh0MWa2ewQJ7/Yw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HagO0o+DXKS8nTWg8SxAr/x420QsWgkBdd90AhwKD2TRsq6bf/H3Ir3B9RIYOq+oxTvQyVChQZiUNDpCtur2NKX6CEm4CjTnwDyWifkLttEVULBLXXM4OpdwKe8TzmE3ue7W1s6DOwEHb5BzFa8Kxc5ree3tc4JvcVWSqU26twI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g1QBqrHJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17F25C43399;
-	Tue, 19 Mar 2024 02:48:53 +0000 (UTC)
+	 MIME-Version:Content-Type; b=pP9Qoz8lSnkJUmP3lBGBMSI87gferyFyGXXIZLFr2L6YtHbntpqvPxaCPe+fd+ef83eSFJPjlKb/pUqE5xnUHFfMyu+JZWJlyQIAtyy8kFMXabZJMven6A1TA6nHfI3fF3CunFj91P1X4hyy/zyuPNHCZzPT3GGDH88jw1v8Klo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mUeDGdX/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8B76C43399;
+	Tue, 19 Mar 2024 02:49:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710816534;
-	bh=KaweszFIYhSU0mfWgLFa8HYlsUy3gXUKrPRhZAchwXY=;
+	s=k20201202; t=1710816542;
+	bh=duyIFh111GdgY8uZhIwil5LxGThPSh0MWa2ewQJ7/Yw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=g1QBqrHJUU+jVPIB3GZFd6L/nSrrshNnkyg7sYmqIG75AKXa7GpOpqPbZhajqQCoE
-	 j923KQdj+SwXcRkp1nhbXgV6rcXn3Yn8sN3Hj9PPqQuH1ctIGha5A4Qh2eNnR2AAuW
-	 5Qgx5+yBpoE+VVpBAcSProc56Y91DRecJfEd+YI8zSCp3y4jrxqATo7ezIUJiqkFZm
-	 BTnbtb50PPfzUQdODI/WIwrMmeNRhxOZiMYCfNVB+daf+LgiGfF6h8WvFag6A9UCsK
-	 isbDPR+D/HECs12pvqPd8TA6Z7zND2Ix5beg/n5R7Wcxysp64yTm7yzYY6P9lsY9Bz
-	 9VrADH2tzsg2g==
+	b=mUeDGdX/hQcftX6GXGW+/Al/Q1MKvq9Dp2QePCbjF9SdlaTC4uf85IOFJHIhJYnNW
+	 eyvK3cGo/FP5KRhsR4COq2aiTsbcFINiEQxrsWY20A655RFXGWmtGrSLYpR5NU/7Du
+	 tpoRSqYvQ80uacKoZeEa4ieqRsGEOnh+P4kMuFo2neMiov1ugr6GfSiA7Lptpz1pON
+	 o/XXq3W2NzT2bor2VNvJs5zLjbn5kTlfkIHji1ebk8Opj5XpIHPKR885q6sK5POqJD
+	 Y/TU7veb59xUnHtbOQuaH5OsV2XD0c2HoBpW6qYO4lfOyNWhlGgOgNpRXL0fgaOpVL
+	 RpwJa8ODI1pAw==
 From: Bjorn Andersson <andersson@kernel.org>
-To: bryan.odonoghue@linaro.org,
-	konrad.dybcio@linaro.org,
-	gregkh@linuxfoundation.org,
-	robh@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org,
-	dmitry.baryshkov@linaro.org,
-	Danila Tikhonov <danila@jiaxyga.com>
-Cc: linux-arm-msm@vger.kernel.org,
-	linux-usb@vger.kernel.org,
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thara Gopinath <thara.gopinath@gmail.com>,
+	Amit Kucheria <amitk@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: Marijn Suijten <marijn.suijten@somainline.org>,
+	linux-arm-msm@vger.kernel.org,
+	linux-pm@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: Re: (subset) [PATCH v2 0/2] arm64: dts: qcom: pm6150: Add typec support for PM6150
-Date: Mon, 18 Mar 2024 21:48:26 -0500
-Message-ID: <171081652653.198276.7754636791518335777.b4-ty@kernel.org>
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	stable@vger.kernel.org,
+	Loic Poulain <loic.poulain@linaro.org>
+Subject: Re: (subset) [PATCH v2 0/3] QCM2290 LMH
+Date: Mon, 18 Mar 2024 21:48:33 -0500
+Message-ID: <171081652641.198276.6279515600086976748.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240220202147.228911-1-danila@jiaxyga.com>
-References: <20240220202147.228911-1-danila@jiaxyga.com>
+In-Reply-To: <20240308-topic-rb1_lmh-v2-0-bac3914b0fe3@linaro.org>
+References: <20240308-topic-rb1_lmh-v2-0-bac3914b0fe3@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -71,27 +76,17 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 
-On Tue, 20 Feb 2024 23:21:45 +0300, Danila Tikhonov wrote:
-> This series adds typec support for PM6150. Was tested on SM7150
-> (xiaomi-surya).
+On Sat, 09 Mar 2024 14:15:01 +0100, Konrad Dybcio wrote:
+> Wire up LMH on QCM2290 and fix a bad bug while at it.
 > 
-> Changes in v2:
-> - Drop the patch 1 (from v1), since it has already been applied:
-> [1/3] dt-bindings: regulator: qcom,usb-vbus-regulator: Add PM6150
-> compatible (commit <ec29a4d9b7c7>)
-> - Add Reviewed-by: Krzysztof for patch 1
-> - Add Reviewed-by: Dmitry for patch 2
-> - Fix typo in commit msg for patch 2 (Quacomm/Qualcomm)
-> - Fix IRQ flags in patch 2 according PM8150B (Bryan && Dmitry)
-> - Link to v1:
-> https://lore.kernel.org/all/20240217163201.32989-1-danila@jiaxyga.com/
+> P1-2 for thermal, P3 for qcom
 > 
-> [...]
+> 
 
 Applied, thanks!
 
-[2/2] arm64: dts: qcom: pm6150: define USB-C related blocks
-      commit: 601feafa7dad3a1de094ea524b6c2e1315a738d2
+[3/3] arm64: dts: qcom: qcm2290: Add LMH node
+      commit: 7d6d561fa934594faf359f6fffee0e2dd59f8110
 
 Best regards,
 -- 
