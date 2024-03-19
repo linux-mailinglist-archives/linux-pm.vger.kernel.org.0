@@ -1,126 +1,93 @@
-Return-Path: <linux-pm+bounces-5121-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5122-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 475BC87FF32
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 14:58:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA589880089
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 16:27:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DD45AB25BF6
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 13:58:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 187FC1C21F96
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 15:27:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D51C181AB5;
-	Tue, 19 Mar 2024 13:58:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D815F657B8;
+	Tue, 19 Mar 2024 15:27:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KcekTvEt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0EB480612;
-	Tue, 19 Mar 2024 13:58:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 396BF651B4;
+	Tue, 19 Mar 2024 15:27:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710856713; cv=none; b=GtLw2R20a1ENkRXD6U/XCPcpdNY81NocKvbOCooKYK4Qs76zLox4PNDjnNzNe1dOPEP9eUveKC7EwkVCvGTZsro8RVmSfMHeosNJjdAYRYhRFImlVjDiJ5NLu33axPK3FyWo9oB+6l+oQoLXQovz8ERUvuZIxlaxu0x4WsSr12w=
+	t=1710862059; cv=none; b=h1eXTuGUz9tetBy2bolEnbFAyaD0kH/kWEOPNsvCKPucJHzEJ6BxKA7Ta9AtEv9Vgv5CrbJHNwkz03h71fDT+6k/VGMlgIOhpY7jO9xkw/P2iWJLdpmJOtn0YREezpEsGGs+kcneBPnoYplvEZZVUwxxPbd3JIN3Ui8FwLB8UoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710856713; c=relaxed/simple;
-	bh=326Hw1hWsSH5t0M5mX/zPteXPCm3CkE3FAEzEbcG674=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Pjcnu7j6BqSxN+GqsGWindum19CLf5iIH8pG6BZ9DtATYf/f4T86oGn8vUJbT7UQaoMigifpHnfmNLKg3/9mFeNJeWBueRa3n9th+7c4dPHPx7aomGkH/ScCp9k4ctUovDlTfzhYmJsiszjmoXDFC7k1RMaF7UIqoFcyOE2dxd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C11FE106F;
-	Tue, 19 Mar 2024 06:59:03 -0700 (PDT)
-Received: from [10.1.30.38] (e133047.arm.com [10.1.30.38])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9AF7D3F762;
-	Tue, 19 Mar 2024 06:58:25 -0700 (PDT)
-Message-ID: <16a23fcc-9909-49ca-a692-cafca24c8a5b@arm.com>
-Date: Tue, 19 Mar 2024 13:58:23 +0000
+	s=arc-20240116; t=1710862059; c=relaxed/simple;
+	bh=n5W6hY689G6fb/okE511uWTa1J8EvWhtvc736cSxTMU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KsvTB3cvR9P4LNm1eHc0vWQGGLWUNm5U//oHDpSz3Maa5YQUKjj6AOHiBRL0tt9fUOdJa/aRd+mnzhG9fUfudY+b3I3jBQMJIGRaFbCwCRSEORqZWwgLkRskrZ0/vyz7Q0Yfaa8NBHKC7Phn2nGiHV9a+1VJmbvMIvyW4qZ975w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KcekTvEt; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Tue, 19 Mar 2024 08:27:27 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1710862055;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qa04ZO95bEt6l7q9Fxc06bsvgy78kYNrNvf8c5ShOPs=;
+	b=KcekTvEt/t5Xe2qQEK6B2kzY2AtN522FVRzSdysknuqahexV4/+FizlLCfyW2sqsyMQssS
+	C7SxBUH1qDZ+BNsY2+Ac+AiN4DenSxwve3/MD0IOmMXvIT436tVvGNeCeBwsQoy64Pu4Dw
+	aBSi1dV7iJFz/+LOtQ1fqYbUqF3ryQU=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Oliver Upton <oliver.upton@linux.dev>
+To: David Woodhouse <dwmw2@infradead.org>
+Cc: linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+	David Woodhouse <dwmw@amazon.co.uk>,
+	Mostafa Saleh <smostafa@google.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-pm@vger.kernel.org
+Subject: Re: [RFC PATCH v3 0/5] Add PSCI v1.3 SYSTEM_OFF2 support for
+ hibernation
+Message-ID: <Zfmu3wnFbIGQZD-j@linux.dev>
+References: <20240319130957.1050637-1-dwmw2@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 2/2] cpufreq/schedutil: Remove iowait boost
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-kernel@vger.kernel.org, peterz@infradead.org,
- juri.lelli@redhat.com, mingo@redhat.com, dietmar.eggemann@arm.com,
- vschneid@redhat.com, vincent.guittot@linaro.org, Johannes.Thumshirn@wdc.com,
- adrian.hunter@intel.com, ulf.hansson@linaro.org, andres@anarazel.de,
- asml.silence@gmail.com, linux-pm@vger.kernel.org,
- linux-block@vger.kernel.org, io-uring@vger.kernel.org
-References: <20240304201625.100619-1-christian.loehle@arm.com>
- <20240304201625.100619-3-christian.loehle@arm.com>
- <CAJZ5v0gMni0QJTBJXoVOav=kOtQ9W--NyXAgq+dXA+m-bciG8w@mail.gmail.com>
- <5060c335-e90a-430f-bca5-c0ee46a49249@arm.com>
- <CAJZ5v0janPrWRkjcLkFeP9gmTC-nVRF-NQCh6CTET6ENy-_knQ@mail.gmail.com>
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <CAJZ5v0janPrWRkjcLkFeP9gmTC-nVRF-NQCh6CTET6ENy-_knQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240319130957.1050637-1-dwmw2@infradead.org>
+X-Migadu-Flow: FLOW_OUT
 
-On 18/03/2024 17:08, Rafael J. Wysocki wrote:
-> On Mon, Mar 18, 2024 at 5:40 PM Christian Loehle
-> <christian.loehle@arm.com> wrote:
->>
->> On 18/03/2024 14:07, Rafael J. Wysocki wrote:
->>> On Mon, Mar 4, 2024 at 9:17 PM Christian Loehle
->>> <christian.loehle@arm.com> wrote:
->>>>
->>>> The previous commit provides a new cpu_util_cfs_boost_io interface for
->>>> schedutil which uses the io boosted utilization of the per-task
->>>> tracking strategy. Schedutil iowait boosting is therefore no longer
->>>> necessary so remove it.
->>>
->>> I'm wondering about the cases when schedutil is used without EAS.
->>>
->>> Are they still going to be handled as before after this change?
->>
->> Well they should still get boosted (under the new conditions) and according
->> to my tests that does work.
-> 
-> OK
-> 
->> Anything in particular you're worried about?
-> 
-> It is not particularly clear to me how exactly the boost is taken into
-> account without EAS.
+On Tue, Mar 19, 2024 at 12:59:01PM +0000, David Woodhouse wrote:
+> David Woodhouse (5):
+>       firmware/psci: Add definitions for PSCI v1.3 specification (ALPHA)
+>       KVM: arm64: Add support for PSCI v1.2 and v1.3
+>       KVM: arm64: Add PSCI v1.3 SYSTEM_OFF2 function for hibernation
+>       KVM: arm64: nvhe: Pass through PSCI v1.3 SYSTEM_OFF2 call
+>       arm64: Use SYSTEM_OFF2 PSCI call to power off for hibernate
 
-So a quick rundown for now, I'll try to include something along the lines in
-future versions then, too.
-Every task_struct carries an io_boost_level in the range of [0..8] with it.
-The boost is in units of utilization (w.r.t SCHED_CAPACITY_SCALE, independent
-of CPU the task might be currently enqueued on).
-The boost is taken into account for:
-1. sugov frequency selection with
-io_boost = cpu_util_io_boost(sg_cpu->cpu);
-util = max(util, io_boost);
+If we're going down the route of having this PSCI call live in KVM, it
+really deserves a test. I think you can just pile on the existing
+psci_test selftest.
 
-The io boost of all tasks enqueued on the rq will be max-aggregated with the
-util here. (See cfs_rq->io_boost_tasks).
-
-2. Task placement, for EAS in feec();
-Otherwise select_idle_sibling() / select_idle_capacity() to ensure the CPU
-satisfies the requested io_boost of the task to be enqueued.
-
-Determining the io_boost_level is a bit more involved than with sugov's
-implementation and happens in dequeue_io_boost(), hopefully that part
-is reasonably understandable from the code.
-
-Hope that helps.
-
-Kind Regards,
-Christian
-
-
-> 
->> So in terms of throughput I see similar results with EAS and CAS+sugov.
->> I'm happy including numbers in the cover letter for future versions, too.
->> So far my intuition was that nobody would care enough to include them
->> (as long as it generally still works).
-> 
-> Well, IMV clear understanding of the changes is more important.
-
+-- 
+Thanks,
+Oliver
 
