@@ -1,48 +1,55 @@
-Return-Path: <linux-pm+bounces-5106-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5107-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB45587FD0D
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 12:40:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97DD087FD1D
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 12:45:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 932402819D3
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 11:40:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4EABB1F22BBC
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Mar 2024 11:45:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B220D7F47D;
-	Tue, 19 Mar 2024 11:40:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F30B87EF18;
+	Tue, 19 Mar 2024 11:45:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kOFTWEOz"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="qk9MpCnK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8903E7F477;
-	Tue, 19 Mar 2024 11:40:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F33B1CD13;
+	Tue, 19 Mar 2024 11:45:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710848423; cv=none; b=JVyMM6ewzvXCWz/2AUOMDjtlGkvyJsMa4Uz2IFl7xOFmI6fP1+i26pl0B4KIqKxzEpPlzzdFYhVB2xGKTaKVGeaRPPjqxRexacC918mncQkvwmeEU+mSSDq00LvUgwxudWL2fmaUx8eLPnrPHwQa7an+dzdDQpcbfdjLBz/TNes=
+	t=1710848739; cv=none; b=ag+M9QhDiizE49ScM20JfQfgRGgJQkvbxeEUBW0lkMj2khSgZ/pNtKm+NiaSP9SyWB5TwNi2MsylUhICipokD1F6zvFPum21+Q3uvOiL1GjDs3wMGhu8g0a+jgteuVxBGnVjwiFn3YwQ6Rx2zdn6cmS9ChuMOYYf33Sw8P+kpOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710848423; c=relaxed/simple;
-	bh=QCABlmmQRWtKI06jZoMFlB5Yrgasl+VafkEPPnZ6XrY=;
+	s=arc-20240116; t=1710848739; c=relaxed/simple;
+	bh=SIo2d1ljVYB5EMmdSQcrmw9C1nugoNVXDIRv6Tk/p3s=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Xxh/+K4h/Jb2VhxOU5WgFhgEqPKYTj5IoNVPsVXwZcCARvIhy2J7SmA/m5zodUqMgSnB7dWxbg6YiQrr3WQ1K3+nEIA3LAItOWh3gz6y+8DlrCGikQX8XdlPly82UhRrm8J/4KnNUsGj05B61AsJYjK/UBUuC5LQa3OO7Mc+eiQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kOFTWEOz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2287FC433C7;
-	Tue, 19 Mar 2024 11:40:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710848423;
-	bh=QCABlmmQRWtKI06jZoMFlB5Yrgasl+VafkEPPnZ6XrY=;
+	 In-Reply-To:Content-Type; b=Y93CXhECApuwgu7QdvobCiD+ZmCbXfv3975wx+sKacrh+SSxZj6dBhabX+RhfAfsrdONKhb97j7n6Ni8ZWP4eOX2tsxqrIwwYBH5A8IsMvZrYnma+E1IQIKI55n51xbuVtzBcXc2sB1mStr/V0O8I2lGlx5rGxg7op+sCHw0JOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=qk9MpCnK; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1710848736;
+	bh=SIo2d1ljVYB5EMmdSQcrmw9C1nugoNVXDIRv6Tk/p3s=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=kOFTWEOzUnCMkQtyxvj+LkfkJxx4r05vJHBoolV6B9rpwTeHHLgGu3ITGBHg2ZHLg
-	 Q7t1PWIE0dTEo2CquMjRyfzt1ipnGVbgdk0M2BA6ZuW7+Jxhc0Wv4YsgZiqcn9vYVt
-	 t+McN7YdZ7NFvsks+UDQSmZevVTdPVHUCuOzLdeb5ndUWRiJ6h9/HMBlGEVF6OiZ2e
-	 p6E9TyUzYW2Tcne1nMQSeDtffk8QUseLaf3e/JSq95AHkiMFxiuNYdEco/VdXhOUxI
-	 H6B8dd3D4gy9g6DiHI8E/eY++Wg58fWajyE7gWayOfPjSKipfsEwkSDADH8qzuvSsQ
-	 wZ76FrDFs2BJw==
-Message-ID: <7a529bd6-abac-42d0-980e-3b1b5c46946f@kernel.org>
-Date: Tue, 19 Mar 2024 12:40:20 +0100
+	b=qk9MpCnKMMB7IwU4BQ0fW+qn96/bc1NLexm35yovBUEN3LyEZEnvErwVu/uM5syqQ
+	 cHwBiHPvrWYfDyqqHg/JW6cX3UJLcDa34FiiFbcbsNHZGw5MlkZpd/w7zatRDeVm6x
+	 nZWQBzljQ3BSn6x1aMLWxWf1GkorwYyRAsJ45CADoNncaobz4rKabiWOQQpja4tXRE
+	 9z+B85KTssxywHVTXaWK+tNXDFjJXycjM32U4/va4jny6sckcmA+jy69mKw4vAHj8H
+	 iCbXM3sCD+/kdA/kvJVP0VsotfkylH9cSFRSXmVWJpKvwaW78G16oCgDrw7j++cnpp
+	 d7qtmXHCbGpsA==
+Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 0E785378203E;
+	Tue, 19 Mar 2024 11:45:36 +0000 (UTC)
+Message-ID: <9d79cd4b-b26c-46ea-9173-2df88f4abaa2@collabora.com>
+Date: Tue, 19 Mar 2024 12:45:35 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,89 +57,85 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 01/13] thermal/drivers/mediatek/lvts_thermal: retrieve
- all calibration bytes
+Subject: Re: [PATCH v2 05/13] dt-bindings: thermal: mediatek: Add LVTS thermal
+ controller definition for MT8186
 Content-Language: en-US
 To: Nicolas Pitre <nico@fluxnic.net>,
  Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org,
  linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
 Cc: Nicolas Pitre <npitre@baylibre.com>
 References: <20240318212428.3843952-1-nico@fluxnic.net>
- <20240318212428.3843952-2-nico@fluxnic.net>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@kernel.org>
-In-Reply-To: <20240318212428.3843952-2-nico@fluxnic.net>
+ <20240318212428.3843952-6-nico@fluxnic.net>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20240318212428.3843952-6-nico@fluxnic.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
 Il 18/03/24 22:22, Nicolas Pitre ha scritto:
 > From: Nicolas Pitre <npitre@baylibre.com>
 > 
-> Calibration values are 24-bit wide. Those values so far appear to span
-> only 16 bits but let's not push our luck.
-> 
-
-I wonder how much feedback you got on v1 - I didn't even look and will not lose
-time with that - but regardless, if you don't add the right people to the Cc field,
-I really don't think that you'll ever get your patches reviewed (and probably also
-not accepted).
-
-That -- especially if you don't even Cc all the relevant maintainers...!
-
-Please read:
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html
-
-P.S.:
-scripts/get_maintainer.pl lvts-8186-8188-patches.patch
-
-"Rafael J. Wysocki" <rafael@kernel.org> (supporter:THERMAL)
-Daniel Lezcano <daniel.lezcano@linaro.org> (supporter:THERMAL,commit_signer:21/22=95%)
-Zhang Rui <rui.zhang@intel.com> (reviewer:THERMAL)
-Lukasz Luba <lukasz.luba@arm.com> (reviewer:THERMAL)
-Rob Herring <robh@kernel.org> (maintainer:OPEN FIRMWARE AND FLATTENED DEVICE TREE 
-BINDINGS)
-Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org> (maintainer:OPEN FIRMWARE 
-AND FLATTENED DEVICE TREE BINDINGS)
-Conor Dooley <conor+dt@kernel.org> (maintainer:OPEN FIRMWARE AND FLATTENED DEVICE 
-TREE BINDINGS)
-Matthias Brugger <matthias.bgg@gmail.com> (maintainer:ARM/Mediatek SoC 
-support,commit_signer:4/22=18%)
-AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> 
-(maintainer:ARM/Mediatek SoC support,commit_signer:13/22=59%)
-Alexandre Mergnat <amergnat@baylibre.com> (commit_signer:11/22=50%)
-"Nícolas F. R. A. Prado" <nfraprado@collabora.com> 
-(commit_signer:10/22=45%,authored:7/22=32%,added_lines:128/453=28%,removed_lines:45/98=46%)
-Balsam CHIHI <bchihi@baylibre.com> 
-(authored:4/22=18%,added_lines:235/453=52%,removed_lines:22/98=22%,in file)
-Chen-Yu Tsai <wenst@chromium.org> (authored:2/22=9%)
-Minjie Du <duminjie@vivo.com> (authored:2/22=9%)
-Frank Wunderlich <frank-w@public-files.de> 
-(authored:2/22=9%,added_lines:72/453=16%,removed_lines:17/98=17%)
-linux-pm@vger.kernel.org (open list:THERMAL)
-devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
-linux-kernel@vger.kernel.org (open list)
-linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC support)
-linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC support)
-
-
-> Found while looking at the original Mediatek driver code.
+> Add LVTS thermal controller definition for MT8186.
 > 
 > Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
 > ---
->   drivers/thermal/mediatek/lvts_thermal.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>   .../bindings/thermal/mediatek,lvts-thermal.yaml        |  2 ++
+>   include/dt-bindings/thermal/mediatek,lvts-thermal.h    | 10 ++++++++++
+>   2 files changed, 12 insertions(+)
 > 
-> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-> index 98d9c80bd4..8aa6a8675b 100644
-> --- a/drivers/thermal/mediatek/lvts_thermal.c
-> +++ b/drivers/thermal/mediatek/lvts_thermal.c
-> @@ -679,7 +679,7 @@ static int lvts_calibration_init(struct device *dev, struct lvts_ctrl *lvts_ctrl
+> diff --git a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+> index e6665af52e..4173bae530 100644
+> --- a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+> @@ -19,6 +19,7 @@ properties:
+>     compatible:
+>       enum:
+>         - mediatek,mt7988-lvts-ap
+> +      - mediatek,mt8186-lvts
+>         - mediatek,mt8192-lvts-ap
+>         - mediatek,mt8192-lvts-mcu
+>         - mediatek,mt8195-lvts-ap
+> @@ -75,6 +76,7 @@ allOf:
+>           compatible:
+>             contains:
+>               enum:
+> +              - mediatek,mt8186-lvts
+>                 - mediatek,mt8195-lvts-ap
+>                 - mediatek,mt8195-lvts-mcu
+>       then:
+> diff --git a/include/dt-bindings/thermal/mediatek,lvts-thermal.h b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+> index 997e2f5512..3197ca6087 100644
+> --- a/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+> +++ b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+> @@ -16,6 +16,16 @@
+>   #define MT7988_ETHWARP_0	6
+>   #define MT7988_ETHWARP_1	7
 >   
->   	for (i = 0; i < lvts_ctrl_data->num_lvts_sensor; i++)
->   		memcpy(&lvts_ctrl->calibration[i],
-> -		       efuse_calibration + lvts_ctrl_data->cal_offset[i], 2);
-> +		       efuse_calibration + lvts_ctrl_data->cal_offset[i], 3);
->   
->   	return 0;
->   }
+> +#define MT8186_TS1_0		0
+
+TSx_y makes no sense: the LVTS sensors are SoC internal and will never change
+what they actually measure.
+
+This comment was repeated on literally all of the definitions that you can
+currently see in this file - and I'm repeating that again: please follow what
+was already done for all SoCs in this binding and use a meaningful name.
+
+#define SOC_{LVTS_INSTANCE(ap/mcu)}_SENSINGPOINT	0
+.....							n+1
+
+Regards,
+Angelo
+
+> +#define MT8186_TS1_1		1
+> +#define MT8186_TS1_2		2
+> +#define MT8186_TS1_3		3
+> +#define MT8186_TS2_0		4
+> +#define MT8186_TS2_1		5
+> +#define MT8186_TS3_0		6
+> +#define MT8186_TS3_1		7
+> +#define MT8186_TS3_2		8
+> +
+>   #define MT8195_MCU_BIG_CPU0     0
+>   #define MT8195_MCU_BIG_CPU1     1
+>   #define MT8195_MCU_BIG_CPU2     2
 
 
