@@ -1,319 +1,130 @@
-Return-Path: <linux-pm+bounces-5137-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5138-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDC63880964
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Mar 2024 03:06:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B2F5880A19
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Mar 2024 04:21:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4A12F1F2481B
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Mar 2024 02:06:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8175E1C21FBD
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Mar 2024 03:21:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 022797464;
-	Wed, 20 Mar 2024 02:05:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5268101F1;
+	Wed, 20 Mar 2024 03:21:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VeMfMQhy"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="G0rDXsb+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E79AA79D0
-	for <linux-pm@vger.kernel.org>; Wed, 20 Mar 2024 02:05:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E6010A26
+	for <linux-pm@vger.kernel.org>; Wed, 20 Mar 2024 03:21:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710900356; cv=none; b=dHtDxpACnjRXpUDAAw2TdyOb+VDshFT+8gB1yyp/FroDUmlMhnnmqO8ScOPxM5zRWVfRF2Mnsqg4yWYpMmlkmZzXxXVhkcwfZh/peIUaGT6HljILAb3nPl1Lzff08gAtJs4dIB3bnCyOh8beIN/iWpGe69Tht+y1xUftwcyVVW4=
+	t=1710904863; cv=none; b=YbPHxYfdMO2irHonufm5NiFokLBJyiy8LUTtxW8yvWFuC/r5+d0Clnkx9WnQ5hG/aG0/2vab1hJIcA4tXXd2HKi9MMhaaSlLL0ltupP3lCDcyqAaPIiDFyXpFEp7vV9ze5SqutN0XV+1iItDcqrd3C/4zmvPg+Bujy1jC5dhYgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710900356; c=relaxed/simple;
-	bh=vaa+2ijoVtcb7E9zbnqicdNU3+R9K/2vv81NGhoGNJQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Lp5AB60jGtrD42X+G/pqVHnvfcMu8diyeH82IkGYjSMURu1JTxeLwvax9ulP9nqzWKbZlZbJXtQ14gR6LMwIKeFtPqN4EZLdIpjoye5AMekTg6fa/Rkr7rEf5Z51RKyHwGZKcn8PQ5BTxBfR4aNS72kBem1WGzQNouNkurXO2js=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VeMfMQhy; arc=none smtp.client-ip=209.85.221.44
+	s=arc-20240116; t=1710904863; c=relaxed/simple;
+	bh=P+Zkz/NOWOsgVlncUTyNmvXcTlE9NnXrsFiBq9pCUv4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PNhrMUieKE6vzMr5c+Ml5k/1d+fSIaKQCZi+aSf44WNEDc5djhLsiaoEsQ2cRn6iCYUBq9wYYXcdWLgQ6cwTsckeZVGvmjnraqR8Me5WaHMqKDg/NqsGbpgyMXnmnnvNLK1atJ/i2N/SMBeG7gFllY1oo62qw4Ett7ccYrfkqKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=G0rDXsb+; arc=none smtp.client-ip=209.85.160.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3417a3151c4so1985651f8f.3
-        for <linux-pm@vger.kernel.org>; Tue, 19 Mar 2024 19:05:54 -0700 (PDT)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-22195b3a8fbso4511397fac.3
+        for <linux-pm@vger.kernel.org>; Tue, 19 Mar 2024 20:21:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1710900353; x=1711505153; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8onlL6eaVMOKsrmQglnPXgtQA9k3jRb7PbaPmYQjRaA=;
-        b=VeMfMQhyd1flff19ahd//yu2uFX5lOoIBkB3kbvVDYBqagSSdFXYj/v1gdrPiZfloG
-         FD2u3PfLTlkBaDb0FBaA722yjgfB9ENmAK+6vZo7I27GP4/T5kp8UqV9qqJlzWy+mWn4
-         AKtvNVlTtL6t2XDhHXUmZjwwVkvvD9jfjGF9lozY/GegaztbztDYg2sLOMleUrJvIEyr
-         3r20lpldv/XgARSDDIP5E5E8a6ZPBskZ1YxBPS95abD60ERKvtFc2zYt2JOxu/XSgCpO
-         OohigjPAGGYBawXB1mOAFDUc87Gtnqzf0+ME2LI/Ig2zY5RL6uQMv8N/SIB4C7W+pd1b
-         OOEw==
+        d=linaro.org; s=google; t=1710904860; x=1711509660; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=o4P//duYekxql85fsXRWTB88tD2kAUJ1b3yRQNxznTM=;
+        b=G0rDXsb+nnyNVMah+5vN0hFi+6hfWke8yQ1q9G5UNpAEAUUhX38zmgYTPxFFhHRpNU
+         ttX5BaihaFfw+rH0NbboHBbWRdmpxO6avCv5o9uBZw79HwXpjdpTA91E+h7nA4IBMggK
+         76hd7s57uVZLWZYH1tU2t75sgBr/lCFjcsXjM5O2Lw5mSygTpQE6nhqCUSwUP4J5cOWE
+         lRPRPjEofRNgfXKoxzWCIt0oNpxxhAkr6Up5h2UrsQXU1dsg9ZUcD8T8dsKB5EWe64Qg
+         j8B3/gKxVRqYTyvfFXKbfqmEAm3+LVwe0G0kW8hlt4R2PiMXWvPn3Tbl/DdnxduAhhFg
+         jhfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710900353; x=1711505153;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8onlL6eaVMOKsrmQglnPXgtQA9k3jRb7PbaPmYQjRaA=;
-        b=quoIij03bf4u9x5LZUpRAeQ2emirIXaDG560Un/ljiNbleVkLFzoqcTNqOg+lr+3RG
-         kfCVgNK8Nf69At30mzMHzzEe1ybyGNyWt6ECTooqnDzvxKupxmGcBlz2FIM59funAxGv
-         2b0V8OSlY5pAQ5wzLJL94/cAUnmWk+akee33V91ODspMccwmzUlYUETsMg+VqFvGeeUA
-         /ssp5g8OTgDDFgtkVlyq8JFJgWwT6YNWWKC1NBpOJbdC/DQKTArvOVPpxVo3T2V7+08X
-         LrvAKVLRZLrZLMkEeOzhC7AN4s5Igm7z35JrmR1kgw7HIdNscmofChLZGa81lJ/Um3w1
-         rubg==
-X-Forwarded-Encrypted: i=1; AJvYcCUzQrF1ppjX7EPraJJbZ9tCU6fq4lhVHi+FNNzaSGpqkgfa4sj/9kBXGYw8fc9YoyqSdrqCCigJrs4ayWuOSP0QPDsRjiH3fGY=
-X-Gm-Message-State: AOJu0YyV3jwKQQXTojv8A0ndFXkU5Rgn7UskTtWJpuqiMt6KlIFgpsLX
-	Lhstt54T+4SC28aJDDIBjFC3+atfQqKsF+KBHGH9bo/ZxWqom/qTfDapINq2hIM=
-X-Google-Smtp-Source: AGHT+IE68IgbQV2m5xaeAAIsPInh5pDFP6u6jfPE18/dwJApj36Y7blQSDKqq5/s9aU2fs3UkSbn8Q==
-X-Received: by 2002:adf:f292:0:b0:33d:1eea:4346 with SMTP id k18-20020adff292000000b0033d1eea4346mr10012461wro.37.1710900353298;
-        Tue, 19 Mar 2024 19:05:53 -0700 (PDT)
-Received: from localhost.localdomain ([2a02:c7c:7213:c700:e992:6869:474c:a63f])
-        by smtp.gmail.com with ESMTPSA id u14-20020a056000038e00b0033e34c53354sm9209295wrf.56.2024.03.19.19.05.52
+        d=1e100.net; s=20230601; t=1710904860; x=1711509660;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o4P//duYekxql85fsXRWTB88tD2kAUJ1b3yRQNxznTM=;
+        b=a1vPb113yDVHx9NSMXjlQwhp3fq5PhYoDI7mPvjjSluZAluN+8SD8pxYtEFwXUIsVW
+         iACpkMpJQNnX7hChbxYW8Nwe0ha80Lar3h4N4IsJzvOUf1qAMy4WMC1dfabqhYfmgeJW
+         Q2HB8eyk0VsAad/+xAsrJV3TJoW02ZjrBY1sg3v0u03w6ZZhWd9kwXAWf1vPVxXvALWW
+         Gqm1X3yjvLYXpX++unATSgFI9RN++RAtw0sm1sa+rbMaL87dv7saGF61cxI11TYemUMD
+         TO1Mmwt/h+VkxoCAij472Ibk8GeYJR/ij7iX+bLh/u8PtTgTWkGovQp100kpNo5cx6ov
+         pB6A==
+X-Forwarded-Encrypted: i=1; AJvYcCVciaJ+rFLDZ0S/5uhAqO6HDOjSynQQszd6k6silkkTyjQ86M4a8Vx+bIEOEnmpXDWVswt+/8QzlVVV1eLYnQAMZmVe9sJqIfg=
+X-Gm-Message-State: AOJu0Yw/L/j8mQ4f+3VG7KlykB60J9FvAwjqDOuxKBJvch3GVFsHlXXV
+	alewrt0N1HxIos9Wcf45beMaGFI03R1WrWMK14NXJsyk3xA5LgNcD+uNg0/VHRs=
+X-Google-Smtp-Source: AGHT+IHbL+Bh9CUX9P3VLguZSd1oALL1RLaIYp2Dzz7vCxIzDX/QpNrzopRTUMNJ3l7QFS1qhsmagQ==
+X-Received: by 2002:a05:6870:c1d2:b0:220:94b4:2074 with SMTP id i18-20020a056870c1d200b0022094b42074mr19107005oad.37.1710904860544;
+        Tue, 19 Mar 2024 20:21:00 -0700 (PDT)
+Received: from localhost ([122.172.85.206])
+        by smtp.gmail.com with ESMTPSA id 4-20020a056a00070400b006e71d70c795sm5416714pfl.96.2024.03.19.20.20.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Mar 2024 19:05:52 -0700 (PDT)
-From: Alexey Klimov <alexey.klimov@linaro.org>
-To: sre@kernel.org,
-	robh@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	peter.griffin@linaro.org,
-	robh+dt@kernel.org
-Cc: conor+dt@kernel.org,
-	linux-samsung-soc@vger.kernel.org,
-	semen.protsenko@linaro.org,
-	linux-kernel@vger.kernel.org,
-	klimov.linux@gmail.com,
-	kernel-team@android.com,
-	tudor.ambarus@linaro.org,
-	andre.draszik@linaro.org,
-	saravanak@google.com,
-	willmcvicker@google.com,
-	alexey.klimov@linaro.org,
-	alim.akhtar@samsung.com,
-	linux-arm-kernel@lists.infradead.org,
-	elder@linaro.org
-Subject: [PATCH 3/3] power: reset: add new gs101-poweroff driver
-Date: Wed, 20 Mar 2024 02:05:49 +0000
-Message-ID: <20240320020549.71810-3-alexey.klimov@linaro.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240320020549.71810-1-alexey.klimov@linaro.org>
-References: <20240320020549.71810-1-alexey.klimov@linaro.org>
+        Tue, 19 Mar 2024 20:21:00 -0700 (PDT)
+Date: Wed, 20 Mar 2024 08:50:56 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Xuewen Yan <xuewen.yan@unisoc.com>
+Cc: rafael@kernel.org, ke.wang@unisoc.com, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, xuewen.yan94@gmail.com,
+	di.shen@unisoc.com
+Subject: Re: [PATCH] cpufreq: Use a smaller freq for the policy->max when
+ verify
+Message-ID: <20240320032056.2noz6lu3k2utcpid@vireshk-i7>
+References: <20240319080153.3263-1-xuewen.yan@unisoc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240319080153.3263-1-xuewen.yan@unisoc.com>
 
-The driver allows switching off the Google gs101 SoC (Pixel6 family of
-mobile phones). The syscon-poweroff cannot be used since gs101 requires
-smc-based regmap i.e. a write to PMU register done from EL3 is required.
-Additionally the power off write should be performed when power button
-is not pressed.
+On 19-03-24, 16:01, Xuewen Yan wrote:
+> When driver use the cpufreq_frequency_table_verify() as the
+> cpufreq_driver->verify's callback. It may cause the policy->max
+> bigger than the freq_qos's max freq.
+> 
+> Just as follow:
+> 
+> unisoc:/sys/devices/system/cpu/cpufreq/policy0 # cat scaling_available_frequencies
+> 614400 768000 988000 1228800 1469000 1586000 1690000 1833000 2002000 2093000
+> 
+> unisoc:/sys/devices/system/cpu/cpufreq/policy0 # echo 1900000 > scaling_max_freq
+> unisoc:/sys/devices/system/cpu/cpufreq/policy0 # echo 1900000 > scaling_min_freq
+> unisoc:/sys/devices/system/cpu/cpufreq/policy0 # cat scaling_max_freq
+> 2002000
+> unisoc:/sys/devices/system/cpu/cpufreq/policy0 # cat scaling_min_freq
+> 2002000
+> 
+> When user set the qos_min and qos_max as the same value, and the value
+> is not in the freq-table, the above scenario will occur.
+> 
+> This is because in cpufreq_frequency_table_verify() func, when it can not
+> find the freq in table, it will change the policy->max to be a bigger freq,
+> as above, because there is no 1.9G in the freq-table, the policy->max would
+> be set to 2.002G. As a result, the cpufreq_policy->max is bigger than the
+> user's qos_max. This is unreasonable.
+> 
+> So use a smaller freq when can not find the freq in fre-table, to prevent
 
-When USB charging cable is connected then this leads to a reboot of
-a device initiated by bootloader/firmware.
+                                                      freq-table
 
-Signed-off-by: Alexey Klimov <alexey.klimov@linaro.org>
----
- drivers/power/reset/Kconfig          |   7 ++
- drivers/power/reset/Makefile         |   1 +
- drivers/power/reset/gs101-poweroff.c | 157 +++++++++++++++++++++++++++
- 3 files changed, 165 insertions(+)
- create mode 100644 drivers/power/reset/gs101-poweroff.c
+> the policy->max exceed the qos's max freq.
+> 
+> Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
+> ---
+>  drivers/cpufreq/freq_table.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-index fece990af4a7..e7323b3b4a61 100644
---- a/drivers/power/reset/Kconfig
-+++ b/drivers/power/reset/Kconfig
-@@ -100,6 +100,13 @@ config POWER_RESET_GPIO_RESTART
- 	  If your board needs a GPIO high/low to restart, say Y and
- 	  create a binding in your devicetree.
- 
-+config POWER_RESET_GS101_POWEROFF
-+	tristate "GS101 power-off driver"
-+	depends on ARCH_EXYNOS || COMPILE_TEST
-+	help
-+	  This driver supports turning off the Google Tensor Pixel6 GS101 phones.
-+	  Select this if you're building a kernel with Google Tensor SoC support.
-+
- config POWER_RESET_HISI
- 	bool "Hisilicon power-off driver"
- 	depends on ARCH_HISI
-diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
-index a95d1bd275d1..7065b7e4ce77 100644
---- a/drivers/power/reset/Makefile
-+++ b/drivers/power/reset/Makefile
-@@ -10,6 +10,7 @@ obj-$(CONFIG_POWER_RESET_BRCMSTB) += brcmstb-reboot.o
- obj-$(CONFIG_POWER_RESET_GEMINI_POWEROFF) += gemini-poweroff.o
- obj-$(CONFIG_POWER_RESET_GPIO) += gpio-poweroff.o
- obj-$(CONFIG_POWER_RESET_GPIO_RESTART) += gpio-restart.o
-+obj-$(CONFIG_POWER_RESET_GS101_POWEROFF) += gs101-poweroff.o
- obj-$(CONFIG_POWER_RESET_HISI) += hisi-reboot.o
- obj-$(CONFIG_POWER_RESET_LINKSTATION) += linkstation-poweroff.o
- obj-$(CONFIG_POWER_RESET_MSM) += msm-poweroff.o
-diff --git a/drivers/power/reset/gs101-poweroff.c b/drivers/power/reset/gs101-poweroff.c
-new file mode 100644
-index 000000000000..2be903de16a1
---- /dev/null
-+++ b/drivers/power/reset/gs101-poweroff.c
-@@ -0,0 +1,157 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * GS101 Poweroff Driver
-+ *
-+ * Copyright (c) 2024, Linaro Ltd.
-+ * Author: Alexey Klimov <alexey.klimov@linaro.org>
-+ */
-+
-+#include <linux/delay.h>
-+#include <linux/devm-helpers.h>
-+#include <linux/input.h>
-+#include <linux/io.h>
-+#include <linux/keyboard.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/soc/samsung/exynos-pmu.h>
-+
-+#define shwork_to_poweroff(x)		\
-+	container_of(x, struct gs101_poweroff, shutdown_work)
-+
-+#define keyboard_nb_to_poweroff(x)	\
-+	container_of(x, struct gs101_poweroff, keyboard_nb)
-+
-+struct gs101_poweroff {
-+	struct notifier_block keyboard_nb;
-+	bool power_key_pressed;
-+	struct work_struct shutdown_work;
-+	struct regmap *map;
-+	u32 offset;
-+	u32 mask;
-+};
-+
-+static struct gs101_poweroff *gs101_poweroff_ctx;
-+
-+static void gs101_shutdown_work_fn(struct work_struct *work)
-+{
-+	struct gs101_poweroff *gs101 = shwork_to_poweroff(work);
-+
-+	while (1) {
-+		/* wait for power button release */
-+		if (!gs101->power_key_pressed) {
-+			/* Issue the poweroff */
-+			regmap_update_bits(gs101->map,
-+					   gs101->offset,
-+					   gs101->mask, 0);
-+		} else {
-+			/*
-+			 * if power button is not released,
-+			 * wait and check TA again
-+			 */
-+			pr_info("power key is not released.\n");
-+		}
-+		mdelay(1000);
-+	}
-+}
-+
-+static int gs101_keyboard_notifier_call(struct notifier_block *nb,
-+					unsigned long code, void *_param)
-+{
-+	struct keyboard_notifier_param *param = _param;
-+
-+	if (param->value == KEY_POWER) {
-+		struct gs101_poweroff *gs101 = keyboard_nb_to_poweroff(nb);
-+
-+		gs101->power_key_pressed = param->down;
-+	}
-+
-+	return NOTIFY_OK;
-+}
-+
-+static void gs101_poweroff(void)
-+{
-+	schedule_work(&gs101_poweroff_ctx->shutdown_work);
-+}
-+
-+static int gs101_poweroff_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct gs101_poweroff *gs101;
-+	int ret;
-+
-+	gs101 = devm_kzalloc(dev, sizeof(*gs101), GFP_KERNEL);
-+	if (!gs101)
-+		return -ENOMEM;
-+
-+	gs101->map = exynos_get_pmu_regmap_by_phandle(dev->of_node,
-+						      "samsung,syscon-phandle");
-+	if (IS_ERR(gs101->map))
-+		return PTR_ERR(gs101->map);
-+
-+	if (of_property_read_u32(dev->of_node, "offset", &gs101->offset)) {
-+		dev_err(dev, "unable to read 'offset' from DT\n");
-+		return -EINVAL;
-+	}
-+
-+	if (of_property_read_u32(dev->of_node, "mask", &gs101->mask)) {
-+		dev_err(dev, "unable to read 'mask' from DT\n");
-+		return -EINVAL;
-+	}
-+
-+	gs101->keyboard_nb.notifier_call = gs101_keyboard_notifier_call;
-+	ret = register_keyboard_notifier(&gs101->keyboard_nb);
-+	if (ret) {
-+		dev_err(dev, "failed to register keyboard notifier: %i\n", ret);
-+		return ret;
-+	}
-+
-+	ret = devm_work_autocancel(dev, &gs101->shutdown_work,
-+				   gs101_shutdown_work_fn);
-+	if (ret) {
-+		dev_err(dev, "failed to register gs101 shutdown_work: %i\n", ret);
-+		unregister_keyboard_notifier(&gs101->keyboard_nb);
-+		return ret;
-+	}
-+
-+	gs101_poweroff_ctx = gs101;
-+	platform_set_drvdata(pdev, gs101);
-+
-+	/*
-+	 * At this point there is a chance that psci_sys_poweroff already
-+	 * registered as pm_power_off hook but unfortunately it cannot power
-+	 * off the gs101 SoC hence we are rewriting it here just as is.
-+	 */
-+	pm_power_off = gs101_poweroff;
-+
-+	return 0;
-+}
-+
-+static void gs101_poweroff_remove(struct platform_device *pdev)
-+{
-+	struct gs101_poweroff *gs101 = platform_get_drvdata(pdev);
-+
-+	if (pm_power_off == gs101_poweroff)
-+		pm_power_off = NULL;
-+
-+	unregister_keyboard_notifier(&gs101->keyboard_nb);
-+}
-+
-+static const struct of_device_id gs101_poweroff_of_match[] = {
-+	{ .compatible = "google,gs101-poweroff" },
-+	{}
-+};
-+
-+static struct platform_driver gs101_poweroff_driver = {
-+	.probe = gs101_poweroff_probe,
-+	.remove_new = gs101_poweroff_remove,
-+	.driver = {
-+		.name = "gs101-poweroff",
-+		.of_match_table = gs101_poweroff_of_match,
-+	},
-+};
-+
-+module_platform_driver(gs101_poweroff_driver);
-+MODULE_AUTHOR("Alexey Klimov <alexey.klimov@linaro.org>");
-+MODULE_DESCRIPTION("Google GS101 poweroff driver");
-+MODULE_LICENSE("GPL v2");
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+
 -- 
-2.43.0
-
+viresh
 
