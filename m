@@ -1,220 +1,164 @@
-Return-Path: <linux-pm+bounces-5147-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5148-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46A95881102
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Mar 2024 12:32:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44B7D8811DE
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Mar 2024 13:48:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2858B1C2211A
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Mar 2024 11:32:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03B461C20C35
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Mar 2024 12:48:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDA8B3D970;
-	Wed, 20 Mar 2024 11:32:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="BhLT9UaF"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B7FD3FE36;
+	Wed, 20 Mar 2024 12:47:47 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2041.outbound.protection.outlook.com [40.107.94.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5D453D995;
-	Wed, 20 Mar 2024 11:32:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710934352; cv=fail; b=ST/YiACaNNcImUsJlSLiEadXl062dEAuBQ5jnQyKq9LZ/kj7GP8aql0b8y3DsjIMNuslJzcR6d/GMcFgOVj2JDeXIn1HGvC2HNfsTEMpATvhOKUyF6ekGpI+3qA00NnZZgFr7UUH1dlAP8qXrveJA32RuP7oClABMWaVfjn7ais=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710934352; c=relaxed/simple;
-	bh=HtRaMtsVeiEqVGPvyWIcfRWwVH+Tx/4Jg0H1W9lvrnM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=qyqSaZzPjrgeP4pLBJIvFJJYu07QlqYusm8/fazoy/u3eP5A87DlG8eGN4XgLIzHtIVY9zPZAd6MB9Ar+PjQSrsgOSIGA77H440+Or7+N69CE825omIQbZAetrWrH0Pbm+7SzmfKTyTDz5UBioHP3tw8FjqLLelSuVcn3+E4IrE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=BhLT9UaF; arc=fail smtp.client-ip=40.107.94.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SpWIG7UtuAw+Vaz1/DkFqkfJsvSawp/CntiFRUaA59M+rbzfbvOm41zSx6MaM5ZFyAACmYSBJd2UL843RACRNblkgpMuPIWnHatGW1BqUA7MlS+j+AeFPoamSP57ZpciW2UWtMZG/EpEiZmLg89ugq3EBQxoG1XWv4q2mmS38/f+627XrqyI4VjbAJweg1aCfy2OFqABvmH7IfdD9ZoJNcR8tX23wJgI4zbM1pyRHzJ2ODINH9CodnzZulpONDPQ8RyU+XU+PZytpuwgZQRMSH1XC5mmxljKhYELOuJ1j2+Gp+hdG+p8eoTPIy6XYgEc4CL9rWCbTH20DySvZYKk2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/Sko9nWyIv2iq8QErvZ7LyTgzKDZoVRooGGAFzTZ/oI=;
- b=SSLuGPEG0uvRF1DM7D4vrfOmVyxvoOcxukOjRI1Y83yEsZIW1sF6sb6w6gNh02H8sENU1khWK5Dt1sd7yb782YR0fSUhua1rfTUVZrYBKg0MvxeI7vPVOPJjmrpmJqaFFsA2FwbOmbDk9me2BpoRNygyvV/nziG7cXvDjPGXYVxZ7eIZHnIRkfVOPBDZv1fa3IR8Ba/NGsrmIZsvmx01BucBMFAobuiw8VdnPsk2mWW4NsxVWSiuFfmM38SgN+UhFBhlNgnHOYST8tqxwQP1VpDxMhDRWf+fB4H0ZTdbc95uCvGX/NiSVXZpoJPcFyO60neDiqdx7GVnugwXT0lUTA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/Sko9nWyIv2iq8QErvZ7LyTgzKDZoVRooGGAFzTZ/oI=;
- b=BhLT9UaFm5ICI8OhM699m9dld5YqQKbOvrk8E8IxZEfgiHz0RlCgmuOWeBog02cLmgGQTiI6+IBzAn8v7y9AvgZ/dRm+5tb4AL5h2KM6lxilBrMD99WSfl0craB7/nxn2GztJ3gVOj8W0rSW2enqEqaaWQ2Wlv0+InCz8NKNqoQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS7PR12MB8252.namprd12.prod.outlook.com (2603:10b6:8:ee::7) by
- IA1PR12MB9032.namprd12.prod.outlook.com (2603:10b6:208:3f3::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.27; Wed, 20 Mar
- 2024 11:32:28 +0000
-Received: from DS7PR12MB8252.namprd12.prod.outlook.com
- ([fe80::d725:ec0f:5755:769b]) by DS7PR12MB8252.namprd12.prod.outlook.com
- ([fe80::d725:ec0f:5755:769b%3]) with mapi id 15.20.7386.025; Wed, 20 Mar 2024
- 11:32:28 +0000
-Date: Wed, 20 Mar 2024 17:02:16 +0530
-From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-To: Perry Yuan <perry.yuan@amd.com>
-Cc: rafael.j.wysocki@intel.com, Mario.Limonciello@amd.com,
-	viresh.kumar@linaro.org, Ray.Huang@amd.com, Borislav.Petkov@amd.com,
-	Alexander.Deucher@amd.com, Xinmei.Huang@amd.com,
-	oleksandr@natalenko.name, Xiaojian.Du@amd.com, Li.Meng@amd.com,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 2/6] cpufreq: amd-pstate: initialize new core
- precision boost state
-Message-ID: <ZfrJQF4z9i/yj1bp@BLR-5CG11610CF.amd.com>
-References: <cover.1710754236.git.perry.yuan@amd.com>
- <f43f48b02d42a651028f0c4690caa6e953e8bf45.1710754236.git.perry.yuan@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f43f48b02d42a651028f0c4690caa6e953e8bf45.1710754236.git.perry.yuan@amd.com>
-X-ClientProxiedBy: PN3PR01CA0183.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:be::8) To DS7PR12MB8252.namprd12.prod.outlook.com
- (2603:10b6:8:ee::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D19A1EB27;
+	Wed, 20 Mar 2024 12:47:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1710938867; cv=none; b=bbQYPfWGiR3b/9iUNaZjWAgOTv+Z/fGvZarlEqaOdtvcIfpFwnYgnWFNb+3aWGNTaPiJnHz9Nm6Wl+ANdDLfy6xfhy8PdmiY1o00hVguIHspzKQJZDMO6JUo5z3sh5FdsiROtu0k7RXr+nI+K0MGwsPr3qRcHtJBOJMcGFVcgI4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1710938867; c=relaxed/simple;
+	bh=eDKg1s4LoJxiPClNE6HW4bWaPrh8ra5gSJ/WhFJuGtc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hZBAt1ycUhvkVgYOvu8sJhI01DDpDYy8Zx1x20U4hGCyZavrOYQvd/hCX2ay9OldG7ZjQmeUaHDsM5tOzSW4EZ4cA1ceg1d2YQWPeNN4ULPBFbK1IjQ2UtSl5t4BceJmmU/tWA/9OVMzu3Gct/cXZhC+ybD+HkkYYT+7PZ+C//E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-60fff981e2aso45532547b3.3;
+        Wed, 20 Mar 2024 05:47:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710938864; x=1711543664;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BJ75aoLiK92aC4Nz1f8lbyWjM0XES8QsbLWv1hRuxrw=;
+        b=AUUuSrQvhBCNldDLAmYfsL24cJXdFlBq8wOeZeN3di9pfHtreQIQEIJK/A9WIxoo5j
+         b0T04AA6cu0ajGXUttQlkWQkaTKWDQdyVpRmNlA8ow0PnNGioRM6vTqdNxP8Z4vFR+vS
+         pgVKY1CswreyKoth2hVGklYy0G8pcCHRH/axXruBVGJ6QPFfyvx3M1M5RI06fUBDF+iJ
+         2D+meT9W9D8cIvJJqqjRmTX5aGTSah1H4SIupXSGDdpmrczQhyQzWKhrwGnM5SZLJCNG
+         q8SD3Rnf2kIy3U+um889HqtuhMDU65PiVNkF1uAIP3ra3LRvqV7veiJ7cjS5Ty/zw5V2
+         oeoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW0Fl+OBy1hl/XPnPAfYVDaZ+7rBBuwrpeGZufWBRtgDO79/biJGE7cgOY5BM9O+CPybeM+t83VjGDRfsxrB7BL+0XzWdKR3cM8ztCFj58PaKdk9ZB+h3ei9jIZW2pmVOIkqO8UVQwV0m2aKw==
+X-Gm-Message-State: AOJu0YxsQcTYGiAtKchF5VpzNoXbsC2KcSOJ2f7wiKYU3lUkPoACmDuv
+	VZh+drJhhquwb6/iz78UIDRBE7P1iQPMG66OSdb/x6qJnXdwmDJ619Qxpx7xySE=
+X-Google-Smtp-Source: AGHT+IHf2HBxw4Arq4senB3vGum1WrK4K6PE47636JtIrseeFYZZpK3MazymCrEURW5CxK2kwBWDHQ==
+X-Received: by 2002:a0d:d403:0:b0:60a:16f:4c94 with SMTP id w3-20020a0dd403000000b0060a016f4c94mr16084355ywd.17.1710938863590;
+        Wed, 20 Mar 2024 05:47:43 -0700 (PDT)
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
+        by smtp.gmail.com with ESMTPSA id dg20-20020a05690c0fd400b00609f3d27022sm2744013ywb.113.2024.03.20.05.47.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Mar 2024 05:47:43 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-60cbcd04de9so64135927b3.2;
+        Wed, 20 Mar 2024 05:47:43 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV2ELZUGMmMfMMgh362jZ2pgyt0LuAaCygjBR1a+oeE+uUUQFedPU2KH9KHvkSLj+rAbn5H9iIlxcic9BLrkjoYGWwsXMCZ9bkvT0Pd9odSh/Wgp+a6tY6DVFJ3ixoMCY3dijfoI2FQJix/Jw==
+X-Received: by 2002:a81:9e0f:0:b0:608:b6d1:c334 with SMTP id
+ m15-20020a819e0f000000b00608b6d1c334mr15716079ywj.52.1710938863026; Wed, 20
+ Mar 2024 05:47:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB8252:EE_|IA1PR12MB9032:EE_
-X-MS-Office365-Filtering-Correlation-Id: 90088bf6-7f15-46cd-4e93-08dc48d16c22
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	Ak0/31AHD91dvANefzBvuUvvXDRgRg84WbD04MsDFvlo3GXJhEA37nSwBZZbkivTiGXA3s12eQEYc1JNmIKeEWEnvyGI1O2pC6e8Vpp/a2gJGw3oCTfceRiz9S6qqJzxcLCexK03QrP2x1eD2THB8xqJmjVfX0m8X/+i5Aw0qeKwfZ16/FkW8n0o/t17b9cX5CO0VsyvPNCNw2GFaNHg2GW+AxSTbQNKpz3O5p9EXdrDN9AyAh2XlZ4547yxf4WUkKuOjA49cxLjIJHys1dX3fzyg5z4t7fQi7TY2997GFJqsmZZeoJmYFFsSI+718Od9ioQC69YHj3GZk498Tq35UWfvtN37qjNjKM9hbMYwr6iefdUr1dYentRxTjxZXgwJiyk3Q8osXrcpNgNSFaazGxt0zwqjFNdssWqkmrcMmqQFOxFpKuA+WnbEslJ7FrnkfExkhQJ9DRC1D28VWgRyIkBoa1bYKiVtmYYdbcRGDv71iIltSR+l+Lxjpin3J7AxMvuvjjVmngIjCb+Px6QdJJ7RMP8rvSArhbk6mCakDPj51JpufKaNpcdgNNBWp5ZJeCwlyGqJfzoS90WC8pEoduB/F24MsQScwOEG02AL/M=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB8252.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(376005)(366007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?zy0CKkO0A6Gq7funjKcjfl84UEE7fU/dB0NOuAEEILoDr1cpptfJDra+3wv9?=
- =?us-ascii?Q?aWS343MOmK37ipmkxZPMUF+a8f9AKy7F4dWw9+yNfb757tBOL0beNYSrhScb?=
- =?us-ascii?Q?gIzKZri00bSM/7x6V/t7RalqIUAqezs7LGzzG6CtrRL/d1gpJQXPpJ3HdsQR?=
- =?us-ascii?Q?CW1J4mK+wyMNF5FUMXFi394ImhKdU/geiwYndHtu/ytT0urddKfec6IPOWnK?=
- =?us-ascii?Q?mjit2Q4HrHsNi/uTfciTzcgraHYLTbqY1htXkl6mrwOcEsxjvLbxoTxalAQw?=
- =?us-ascii?Q?smCmFy0+Od43rbjys9BGh1dndyM8ROfMrqiLO90DYEhckTZ0bPCqkjZKSdiM?=
- =?us-ascii?Q?hx8zv+t0rcsmrWdZrG1wwCRUMwEcwdCdewmSUt7fqjG50ExDmODJBPxB/YMN?=
- =?us-ascii?Q?bbOsVZorvGH3JTKX20LdZYuBPlbHTyuWtHQFYldjFUQpvPsi61lGFjSYP7YC?=
- =?us-ascii?Q?WUwxmIcv+6e8qw9TWEE0+C5T71jOWaNX1twvxUAqMPHvo7iC40mRGVUcSAi8?=
- =?us-ascii?Q?qzhIfKc7Z+4BMqR3V6gibzEJGnOf81RIzXXCl4pmON9b6fLhknfM4AkRxbMA?=
- =?us-ascii?Q?Ol6kYiJ8grfsT4wwFb/UVSActVBb1+9zA+FnEr0bH87ghpVYDQYX5qVa0Ced?=
- =?us-ascii?Q?6lPBPNfqkLvVGmil8iJr7DfPnjwJzlU5ZulYan0s7MPm9S2q2H5KYKLPHOFK?=
- =?us-ascii?Q?Z2F6Ds8lq2mbk3X9vndZj3aIyaa9XN2N3HUjE6dtejN4uPhCEq6TtvZe0YtY?=
- =?us-ascii?Q?qEUbSxRzP3t5v5HfW4xFQaa38RIYFz2XSptcl63+GQgqTdUd1n967o4SDVnH?=
- =?us-ascii?Q?SIrGPwFLPTO/z4zCnopO7h/JbTSpsOMXR2MJxcvx5uF7aFEEacfjUS/s1DJX?=
- =?us-ascii?Q?aTir7/iYcn/xAEU9OUwdmyUpZodL9RKbxOafSXWOX9tNnSrwEjpRZsv7+DZE?=
- =?us-ascii?Q?/MtU8o/w7qUQnCvV7P51gbJq114GgLs5Qh+kOj6rimT4B5eQ1p7aftpOUiG8?=
- =?us-ascii?Q?dASsUvA6JdVJ7cZ/DDXzNfim9bh+nqjm3KbIZYCxUTQdFkXF3mVKI1t6FEo+?=
- =?us-ascii?Q?/9ezQeMwNIEwZk/GtpNIHJ6X+B0rK3MBtbdjpCk9t0M7V+hvxKF9yDyQ0mEl?=
- =?us-ascii?Q?YZwlzcP0pskuOHjX0FdzDCBgQv5OlKANn2ro7rH8Krw4WxwavU+TZzosq9SB?=
- =?us-ascii?Q?Hn/RjF7+COtktuARvU7ROkiJAO+53Rc0aFU+xeQea3qwzC69LAgoHpU6vv3K?=
- =?us-ascii?Q?ST0ojg3iF1cninvRcu37tcx4OhQQrdIKzommwpO8/LPNST1YocH2zZaZ3Jx0?=
- =?us-ascii?Q?KsiSP05aa/4wBMATgyGVHvNhuopNSmVM7Pg9jX5mD+CQ8a6eMCzHpCCm8tYS?=
- =?us-ascii?Q?sRWSOCII8dwnHqaTyfv7/jZCArSKhMQSUA1NiSMtSZXsbX9PWWQRyzYSBHfy?=
- =?us-ascii?Q?SwD6ViCeny6Jk6KLP7RUQB+erMixFn/mR1gfh9vg3jmi1hrIXN7ipRvsenyk?=
- =?us-ascii?Q?zMZvPT0P+xRyN6PLFyOH70HUlaAwn52W4jKJeZp97HqaB3YY9xe+uKNgG/dw?=
- =?us-ascii?Q?evGQfQ8CTTuChNOen3pR85wmx+Q3PBpS9Cr8R/GF?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 90088bf6-7f15-46cd-4e93-08dc48d16c22
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB8252.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2024 11:32:28.0996
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GC+u7afqAK4tPVCAjvPbOVFARp4Sk4A3Wq54uEZOOoINN2LdrIU47eGeeqImc3LIl1UYxWJPk+13fhJTVpFtAQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB9032
+References: <20240307110216.2962918-1-niklas.soderlund+renesas@ragnatech.se> <20240307110216.2962918-2-niklas.soderlund+renesas@ragnatech.se>
+In-Reply-To: <20240307110216.2962918-2-niklas.soderlund+renesas@ragnatech.se>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 20 Mar 2024 13:47:30 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVdZeWTX=Ge+hMKt-yQcvQnqJc_chV1c31A+6v4ZwnggA@mail.gmail.com>
+Message-ID: <CAMuHMdVdZeWTX=Ge+hMKt-yQcvQnqJc_chV1c31A+6v4ZwnggA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] thermal: rcar_gen3: Move Tj_T storage to shared
+ private data
+To: =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, linux-renesas-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello Perry,
+Hi Niklas,
 
-On Mon, Mar 18, 2024 at 06:11:09PM +0800, Perry Yuan wrote:
-> From: Perry Yuan <Perry.Yuan@amd.com>
-> 
-> Add gloal global_params to represent current CPU Performance Boost(cpb)
-      ^^^^^^
-      global ? 
+On Thu, Mar 7, 2024 at 12:03=E2=80=AFPM Niklas S=C3=B6derlund
+<niklas.soderlund+renesas@ragnatech.se> wrote:
+> The calculated Tj_T constant is calculated from the PTAT data either
+> read from the first TSC zone on the device if calibration data is fused,
+> or from fallback values in the driver itself. The value calculated is
+> shared among all TSC zones.
+>
+> Move the Tj_T constant to the shared private data structure instead of
+> duplicating it in each TSC private data. This requires adding a pointer
+> to the shared data to the TSC private data structure. This back pointer
+> make it easier to curter rework the temperature conversion logic.
+>
+> Signed-off-by: Niklas S=C3=B6derlund <niklas.soderlund+renesas@ragnatech.=
+se>
 
-> state for cpu frequency scaling, both active and passive modes all can
-> support CPU cores frequency boosting control which is based on the BIOS
-> setting, while BIOS turn on the "Core Performance Boost", it will
-> allow OS control each core highest perf limitation from OS side.
+Thanks for your patch!
 
-Could we reword this portion along the lines of the following:
-
-"The active, guided and passive modes of the amd-pstate driver can
-support frequency boost control when the "Core Performance Boost"
-(CPB) feature is enabled in the BIOS.  When enabled in BIOS, the user
-has an option at runtime to allow/disallow the cores from operating in
-the boost frequency range.
-
-Add an amd_pstate_global_params object to record whether CPB is
-enabled in BIOS, and if it has been activated by the user."
-
-> 
-> If core performance boost is disabled while a core is in a boosted P-state,
-> the core transitions to the highest performance non-boosted P-state,
-> that is the same as the nominal frequency limit.
-
-> 
-> Reported-by: Artem S. Tashkinov" <aros@gmx.com>
-> Cc: Oleksandr Natalenko <oleksandr@natalenko.name>
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217931
-> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
-> ---
->  drivers/cpufreq/amd-pstate.c | 39 +++++++++++++++++++++++++++---------
->  include/linux/amd-pstate.h   | 13 ++++++++++++
->  2 files changed, 42 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 59a2db225d98..81787f83c906 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -68,6 +68,8 @@ static int cppc_state = AMD_PSTATE_UNDEFINED;
->  static bool cppc_enabled;
->  static bool amd_pstate_prefcore = true;
->  static struct quirk_entry *quirks;
-> +struct amd_pstate_global_params amd_pstate_global_params;
-> +EXPORT_SYMBOL_GPL(amd_pstate_global_params);
->  
->  /*
->   * AMD Energy Preference Performance (EPP)
-
-[..snip..]
-
-> diff --git a/include/linux/amd-pstate.h b/include/linux/amd-pstate.h
-> index 6b832153a126..c5e41de65f70 100644
-> --- a/include/linux/amd-pstate.h
-> +++ b/include/linux/amd-pstate.h
-> @@ -134,4 +134,17 @@ struct quirk_entry {
->  	u32 lowest_freq;
+> --- a/drivers/thermal/rcar_gen3_thermal.c
+> +++ b/drivers/thermal/rcar_gen3_thermal.c
+> @@ -81,10 +81,10 @@ struct rcar_thermal_info {
 >  };
->  
-> +/**
-> + * struct amd_pstate_global_params - Global parameters, mostly tunable via sysfs.
-> + * @cpb_boost:		Whether or not to use boost CPU P-states.
-> + * @cpb_supported:	Whether or not CPU boost P-states are available
-> + *			based on the MSR_K7_HWCR bit[25] state
-> + */
-> +struct amd_pstate_global_params {
-> +	bool cpb_boost;
-> +	bool cpb_supported;
-> +};
-> +
-> +extern struct amd_pstate_global_params amd_pstate_global_params;
+>
+>  struct rcar_gen3_thermal_tsc {
+> +       struct rcar_gen3_thermal_priv *priv;
 
-Will this be used in multiple files ? If no, it is better to define
-this in amd-pstate.c
+I had hoped you could do without this, but I couldn't find a better way.
+Even the contents of &priv->ops are copied (twice!) inside the thermal
+core, so you can't go through that...
 
-Otherwise, I have no other issues with the patch.
+>         void __iomem *base;
+>         struct thermal_zone_device *zone;
+>         struct equation_coefs coef;
+> -       int tj_t;
+>         int thcode[3];
+>  };
+>
+> @@ -92,6 +92,7 @@ struct rcar_gen3_thermal_priv {
+>         struct rcar_gen3_thermal_tsc *tscs[TSC_MAX_NUM];
+>         struct thermal_zone_device_ops ops;
+>         unsigned int num_tscs;
+> +       int tj_t;
 
---
-Thanks and Regards
-gautham.
+Insert below ptat[3], as tj_t is calculated from ptat[3], and to better
+approach reverse Christmas-tree ordering?
+
+>         int ptat[3];
+>         const struct rcar_thermal_info *info;
+>  };
+> @@ -146,15 +147,15 @@ static void rcar_gen3_thermal_calc_coefs(struct rca=
+r_gen3_thermal_priv *priv,
+>          * Division is not scaled in BSP and if scaled it might overflow
+>          * the dividend (4095 * 4095 << 14 > INT_MAX) so keep it unscaled
+>          */
+> -       tsc->tj_t =3D (FIXPT_INT((priv->ptat[1] - priv->ptat[2]) * (ths_t=
+j_1 - TJ_3))
+> -                    / (priv->ptat[0] - priv->ptat[2])) + FIXPT_INT(TJ_3)=
+;
+> +       priv->tj_t =3D (FIXPT_INT((priv->ptat[1] - priv->ptat[2]) * (ths_=
+tj_1 - TJ_3))
+> +                     / (priv->ptat[0] - priv->ptat[2])) + FIXPT_INT(TJ_3=
+);
+
+Please move the calculation of priv->tj_t to rcar_gen3_thermal_probe()
+or rcar_gen3_thermal_read_fuses(), so it is no longer done multiple
+times.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
