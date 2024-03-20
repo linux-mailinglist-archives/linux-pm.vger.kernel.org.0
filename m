@@ -1,132 +1,124 @@
-Return-Path: <linux-pm+bounces-5166-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5168-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8E5388192C
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Mar 2024 22:34:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3363881949
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Mar 2024 22:52:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6FF591F221EB
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Mar 2024 21:34:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3460C1F2232A
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Mar 2024 21:52:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9657F85C69;
-	Wed, 20 Mar 2024 21:33:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D36785C42;
+	Wed, 20 Mar 2024 21:52:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NueZmtsN"
+	dkim=pass (1024-bit key) header.d=pobox.com header.i=@pobox.com header.b="PuC7LEMR";
+	dkim=pass (1024-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b="mSTdvtuz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pb-smtp1.pobox.com (pb-smtp1.pobox.com [64.147.108.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D947385295;
-	Wed, 20 Mar 2024 21:33:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9252C33062;
+	Wed, 20 Mar 2024 21:52:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.108.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710970438; cv=none; b=ebi8F6Y2eczxjDngjekn4cKSoj+gzTiEb2XCh2z7Rph2omlO14grwfu9ZLrkrRbwoMWFjWh6nuVXnFMLwLWuLlCePco1V7B2O2ju5f0wI63RS2qcd9yOaXHg2Z7U/tceCBjF+m3+eC8MUHBxo5+v7o2x6z325rtoMGvsgqMQz6w=
+	t=1710971548; cv=none; b=lesAzpvny6FqiWYCFyhL2GYOKWbwFaGXKpsbgtY6xgGtuSCzicDYIq9Veyiy/4Hd+MxeL8GvRyzzjWNSgMd30Osmbwp+ZTmpa8CEdnPmQBYGNyvl1/xKl7/iiXHq6k9Z9Y+VdG3XitKDoZ/JgC9qrEfJzZVuryR1/+7Oc6g/9HY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710970438; c=relaxed/simple;
-	bh=s5E1qvSYEd/GOc4QJBEGVXbenNJCECzx/wZu8bTdnTM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=B/RD1CAmtbUkHIELEjHB+93gdf0amND33knapE2FEBgluAIUxic9ZigRwB2FDjm+2N7V3Y2a7fcVc42UC6F1NQjrBo87hgGPQMWtSXBGWHdrRrUPnpyWhqEVF210FqgGrn7dK1Ek1sSKiteLMlPWplwIlcBv1RiTNl9CLf3CGjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NueZmtsN; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-33d90dfe73cso201765f8f.0;
-        Wed, 20 Mar 2024 14:33:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710970435; x=1711575235; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zO2E2GClWBnOraTMVHKXlSY8ldIuEQRndWqb5IE+w6c=;
-        b=NueZmtsNvZNDo2HEGPWFwtpLDA4b9ljtwOrsmIGclXkxxJOcsgJXi74t65g7ukXvTo
-         FyHzmWfi4LzTzpODOkQUa7fcxHdI23WDo2Jgpp27IxWEiU+A5EoFN4tjHjNce4clvjEu
-         bMafXOQUAr+EpWo9g2PsS/bnKeMIk6JeCxy9fI1/S91v4Am4aQmEG0biHWbC5YB0iLvo
-         xjDDTq0eL+BaErdsMj9r8a6APq/EyC2GQxBMOMTBv78lJ1xdorpeNSEVvlPqrm3tIiO4
-         Jxma5r6wDRLUCwqw9ISWZKezkxWSZu2uHiiA8C2MJvX6EYxO3AaexaxTTTbYueJYrq57
-         CQyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710970435; x=1711575235;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zO2E2GClWBnOraTMVHKXlSY8ldIuEQRndWqb5IE+w6c=;
-        b=FT4bq1ZquAEvcBicdbkIKBVE6TpXutuGqyVVfB5nwAaXc821AfLmM5LGhSuuU1Q4Yt
-         6j4tZgKsUBLbXEUeDDybmOCoggCQzDnCCkY9Uw9zBHjnilwO3MiGHoPYkdbq53sIIH3W
-         caPFi9eFve1dLvkFRwR90u9h2DYtdzerrr3AJP+1j4Jr9jidTCvVHAPvMPZa7eIyh6i6
-         4obfgiblJmpM75Z9VNypmW0wGMunulBCZ7Pg3p6/KcNzLD1iSyocppkkMe3z3GB6+8wh
-         M7ZPnkQka/4yeJibEaZ+82X4sdMGAymzZuM4dRVZbFBTesXA9HYK9fRQtpIgsgJT1OwN
-         L0Zw==
-X-Forwarded-Encrypted: i=1; AJvYcCVxuM/MzLtlMa1HcLCU+w8jRHZpDoGHjxkqz2OjPvMOTM0XztONwytTOtQcyGZg0ADBaB5D5P7ACsM+T/ortpCz+LwGNzKIPAtISOYLbPyNf8JZorZvcFv7pScux3O+QY1iKq71DQcdyw==
-X-Gm-Message-State: AOJu0YzNIhAD7iUGhmHCvPSBYQ5SE6OSyVvg1prdJ2LK9Ub5ZluSKZop
-	o5LH44lwg1LzKbdgvqfWyX6VTWkj/QhWSspOhaibW6hF7lW+cIgOE0YYjL9aHgU=
-X-Google-Smtp-Source: AGHT+IF+yCzfTSAs0Xl9quHvnFnE2sf/uloR005a1iCcsM2w0FKXj7jsilFC2RcBCO19mN7UBryDrQ==
-X-Received: by 2002:adf:e6c9:0:b0:33e:5970:e045 with SMTP id y9-20020adfe6c9000000b0033e5970e045mr730314wrm.21.1710970435237;
-        Wed, 20 Mar 2024 14:33:55 -0700 (PDT)
-Received: from localhost ([2001:861:3385:e20:6384:4cf:52c5:3194])
-        by smtp.gmail.com with ESMTPSA id a5-20020a5d4d45000000b0033e03a6b1ecsm15547567wru.18.2024.03.20.14.33.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Mar 2024 14:33:55 -0700 (PDT)
-From: Raphael Gallais-Pou <rgallaispou@gmail.com>
-Date: Wed, 20 Mar 2024 22:33:49 +0100
-Subject: [PATCH v3 2/2] ARM: dts: st: add thermal property on stih410.dtsi
- and stih418.dtsi
+	s=arc-20240116; t=1710971548; c=relaxed/simple;
+	bh=e2r3a9OUT67BeS0KOQ2laDNvlxbwQEjUIU2HcUwGQBc=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=YPxyho6O5Bte5ysvonh7PLa6uDLn6DOzj3lRBtDlv4QBtu8Rl73A5aR+3oXuylGZmT0T+69h4BWVIgE0ZYAx/ljxLuelUlQjEpmCWvmWZiioB+zni/Kd2Dlf4W3mO+kPxFPKR4x2S0tvbEfIBzNJBOX+yCqG+hsCDIiS+vvuoeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fluxnic.net; spf=pass smtp.mailfrom=fluxnic.net; dkim=pass (1024-bit key) header.d=pobox.com header.i=@pobox.com header.b=PuC7LEMR; dkim=pass (1024-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b=mSTdvtuz; arc=none smtp.client-ip=64.147.108.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fluxnic.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fluxnic.net
+Received: from pb-smtp1.pobox.com (unknown [127.0.0.1])
+	by pb-smtp1.pobox.com (Postfix) with ESMTP id C4A5D1E7E88;
+	Wed, 20 Mar 2024 17:52:17 -0400 (EDT)
+	(envelope-from nico@fluxnic.net)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=date:from
+	:to:cc:subject:in-reply-to:message-id:references:mime-version
+	:content-type; s=sasl; bh=e2r3a9OUT67BeS0KOQ2laDNvlxbwQEjUIU2HcU
+	wGQBc=; b=PuC7LEMRVEoziVdJVWuQuIavcZMrcthhG23/wPYxLyCiLNURdfzvdF
+	UPHHM5r6mOiaHMhwFr9MmsFzuNQJXY4hjhjskXq5PVLfmFa1uMThZ+Zjq6EbTpP5
+	b504Bc5TwfDiiRr/ENVf+0pHRXvmD9IZlRCKm57xWqROZAxB2RFLw=
+Received: from pb-smtp1.nyi.icgroup.com (unknown [127.0.0.1])
+	by pb-smtp1.pobox.com (Postfix) with ESMTP id B73A81E7E86;
+	Wed, 20 Mar 2024 17:52:17 -0400 (EDT)
+	(envelope-from nico@fluxnic.net)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=fluxnic.net;
+ h=date:from:to:cc:subject:in-reply-to:message-id:references:mime-version:content-type; s=2016-12.pbsmtp; bh=e2r3a9OUT67BeS0KOQ2laDNvlxbwQEjUIU2HcUwGQBc=; b=mSTdvtuz0uwoVvK/km4jnKpaAAXB1iriSgCSK6dwLOO6hLCCLjo9dP5e9JfejrSx+BuudkEB0OTDWjMiq+YH/mZUzdbV5jCcStAtyH1dHjQaG5CCJVuUxv+VA1ilxR/1qmjM74vB3B4GR+E6ojueD4bM0DrW307bKbyOO6AFdEU=
+Received: from yoda.fluxnic.net (unknown [24.201.101.36])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by pb-smtp1.pobox.com (Postfix) with ESMTPSA id 34BA51E7E85;
+	Wed, 20 Mar 2024 17:52:17 -0400 (EDT)
+	(envelope-from nico@fluxnic.net)
+Received: from xanadu (unknown [IPv6:fd17:d3d3:663b:0:9696:df8a:e3:af35])
+	by yoda.fluxnic.net (Postfix) with ESMTPSA id 251E6BEA1E6;
+	Wed, 20 Mar 2024 17:52:16 -0400 (EDT)
+Date: Wed, 20 Mar 2024 17:52:15 -0400 (EDT)
+From: Nicolas Pitre <nico@fluxnic.net>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+cc: Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org, 
+    linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 08/13] arm64: dts: mediatek: mt8186: add default
+ thermal zones
+In-Reply-To: <34e75ebd-b01c-430a-a051-47489492c189@collabora.com>
+Message-ID: <ron9o4o3-qror-o1o9-3911-7189925o1os2@syhkavp.arg>
+References: <20240318212428.3843952-1-nico@fluxnic.net> <20240318212428.3843952-9-nico@fluxnic.net> <34e75ebd-b01c-430a-a051-47489492c189@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240320-thermal-v3-2-700296694c4a@gmail.com>
-References: <20240320-thermal-v3-0-700296694c4a@gmail.com>
-In-Reply-To: <20240320-thermal-v3-0-700296694c4a@gmail.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Patrice Chotard <patrice.chotard@foss.st.com>, Lee Jones <lee@kernel.org>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-X-Mailer: b4 0.13.0
+Content-Type: text/plain; charset=US-ASCII
+X-Pobox-Relay-ID:
+ 1E7B3744-E704-11EE-83FE-78DCEB2EC81B-78420484!pb-smtp1.pobox.com
 
-"#thermal-sensor-cells" is required and missing in thermal nodes.
-Add it.
+On Tue, 19 Mar 2024, AngeloGioacchino Del Regno wrote:
 
-Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
----
- arch/arm/boot/dts/st/stih410.dtsi | 1 +
- arch/arm/boot/dts/st/stih418.dtsi | 1 +
- 2 files changed, 2 insertions(+)
+> Il 18/03/24 22:22, Nicolas Pitre ha scritto:
+> > From: Nicolas Pitre <npitre@baylibre.com>
+> > 
+> > Inspired by the vendor kernel but adapted to the upstream thermal
+> > driver version.
+> > 
+> > Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
+> > ---
+> >   arch/arm64/boot/dts/mediatek/mt8186.dtsi | 236 +++++++++++++++++++++++
+> >   1 file changed, 236 insertions(+)
+> > 
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+> > b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+> > index 7b7a517a41..9865926459 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+> > @@ -13,6 +13,8 @@
+> >   #include <dt-bindings/power/mt8186-power.h>
+> >   #include <dt-bindings/phy/phy.h>
+> >   #include <dt-bindings/reset/mt8186-resets.h>
+> > +#include <dt-bindings/thermal/thermal.h>
+> > +#include <dt-bindings/thermal/mediatek,lvts-thermal.h>
+> >     / {
+> >   	compatible = "mediatek,mt8186";
+> > @@ -2115,4 +2117,238 @@ larb19: smi@1c10f000 {
+> >   			power-domains = <&spm MT8186_POWER_DOMAIN_IPE>;
+> >   		};
+> >   	};
+> > +
+> > +	thermal_zones: thermal-zones {
+> > +		cluster0-thermal {
+> 
+> Please use the names that are expected by the SVS driver.
 
-diff --git a/arch/arm/boot/dts/st/stih410.dtsi b/arch/arm/boot/dts/st/stih410.dtsi
-index 29e95e9d3229..a69231854f78 100644
---- a/arch/arm/boot/dts/st/stih410.dtsi
-+++ b/arch/arm/boot/dts/st/stih410.dtsi
-@@ -270,6 +270,7 @@ thermal@91a0000 {
- 			clock-names = "thermal";
- 			clocks = <&clk_sysin>;
- 			interrupts = <GIC_SPI 205 IRQ_TYPE_EDGE_RISING>;
-+			#thermal-sensor-cells = <0>;
- 		};
- 
- 		cec@94a087c {
-diff --git a/arch/arm/boot/dts/st/stih418.dtsi b/arch/arm/boot/dts/st/stih418.dtsi
-index b35b9b7a7ccc..0f0db988a907 100644
---- a/arch/arm/boot/dts/st/stih418.dtsi
-+++ b/arch/arm/boot/dts/st/stih418.dtsi
-@@ -113,6 +113,7 @@ thermal@91a0000 {
- 			clock-names = "thermal";
- 			clocks = <&clk_sysin>;
- 			interrupts = <GIC_SPI 205 IRQ_TYPE_EDGE_RISING>;
-+			#thermal-sensor-cells = <0>;
- 		};
- 	};
- };
+And what would those be in this case?
 
--- 
-2.44.0
+I've used the names that were suggested here:
 
+https://lore.kernel.org/all/20240111223020.3593558-1-nico@fluxnic.net/T/#m05936e84a2efe5c431bad39c24d66c246fb8ca38
+
+
+Nicolas
 
