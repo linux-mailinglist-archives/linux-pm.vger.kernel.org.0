@@ -1,74 +1,55 @@
-Return-Path: <linux-pm+bounces-5177-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5178-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59CF988550C
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 08:41:50 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6485A8855D3
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 09:34:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B8FAFB2141C
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 07:41:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 29F38282B5F
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 08:34:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A941957873;
-	Thu, 21 Mar 2024 07:41:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9E3956B76;
+	Thu, 21 Mar 2024 08:33:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="N5AxPga9"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="pRVpFsJf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E105756471
-	for <linux-pm@vger.kernel.org>; Thu, 21 Mar 2024 07:41:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0F025646D;
+	Thu, 21 Mar 2024 08:33:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711006900; cv=none; b=pwngyj2kEmIgyeA3XUE//ERIqF4B0nGeAZ3BesFSgNxbpQT+9ymngmnwouNg2WSXX4SQKXetnYbvAKE86elQbHvBmaPwOsxLeyY9oj7iPyrGq2Xdve2YN6DIryqi19TiwgnIP/uSq48s52dNHd1vnKdhnqpbjXD7E/qrTWxUaNM=
+	t=1711009984; cv=none; b=CFH3/PPPEdQrp7nMv5Yi+L2GLCECAFgngWzfn8eFVPkQJI0gmOgjtCE5zxfW8JiN3AkyYJWx6o2ZpCjb9E56PIUlKLrDRXQglL2yyO0zSCTeHemkJucEnfA7148VPa+PvDokOYTKLPBnyca/CBOmGcx6jmjFFfrEvtu6fpQGhIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711006900; c=relaxed/simple;
-	bh=ZjvYkiPniDLKvd3IOO0taf4+cmPABw3dktFjvWfPUmk=;
+	s=arc-20240116; t=1711009984; c=relaxed/simple;
+	bh=OYKB5vkSZXRayTHG8PtislSXGdVPY2nozhkEeUlG9QQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kJSYdcev+kyq44Sr2NkW1m/1gQHruTK+ob4bKpnSXUjbo44SXRyoZdHaA1qwVeNfKmhW+r+OvgIJG+PZ+MIZ3mQt2NqY+bTE2oF/rGVzcRw88hMZDkYL63X2BgPRMlbPNiioqhDzAKU0f75HLEEpBoBTebeGsTDpfLVpZsKotUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=N5AxPga9; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-566e869f631so596894a12.0
-        for <linux-pm@vger.kernel.org>; Thu, 21 Mar 2024 00:41:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711006897; x=1711611697; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=/7Clldskam2+iS1I7UhNAgf9sol4zHdM8NPMJCJgRPE=;
-        b=N5AxPga9uvTY4fme6l9xOW1MdoDVuiOFsFG+JNMUSb5ikaIJwvbMbDy1tFNMreMfiM
-         I/uuhqclOKEkMoWmvCxU8SViWfMCZP11Klze5N40AmP6rCq9KryQufjYK9YmXiRkYfqd
-         N0RfmlELBHemtjhQ6VgsQ3lHX3wrSxaa3UrQby2WJqnz7dHyGpwYxjXyId70Z/ya6tGx
-         GYVFOqHB8ubdls4rm41omoZXZGHcB2RGkC48kq/wgjiY95liTUFQgCGmz33v6nSIRzM+
-         wefHadP8KpWV6PodYazJv2Ro8RFBKfxBt9ZUEvnjkWijxcuhpsXv5/HDnlq93vnbCPXJ
-         MvgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711006897; x=1711611697;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/7Clldskam2+iS1I7UhNAgf9sol4zHdM8NPMJCJgRPE=;
-        b=NxRk5x8dMYmsC/nkMcrbj4Wdap3l0KZJHi1i46ESjUWBH5o+GLeYIvSnuj1djPPVTq
-         CEUb71WNJE1N75+1Bb2qe3d9fji7G1WK1dCbThZVGRtxloKHB/9KRGnY0epv8pMwnIJE
-         FgeSYXy+Z46SnQN4WWgDsU/goTWcrK5IK1+qw9lYywcqoVKJaLaQ85YvpHxShPZDXURL
-         WZJC8b24baz8EV/YlAbA+uOoosykn7scSbHRqe4az/OrgL3WBXjD/vDBU4RjYGX8nWCb
-         AwohFnMg6f7fzRTEShb9VE5xoLtOh8y7Yh4mrmBIdGgcmk1mMF0/dPGVnUw6+Qa0V5on
-         KyJQ==
-X-Gm-Message-State: AOJu0Yz6427cAq/XPFgoWo3cOwSSdc+3m4pO1yXBQJx/6rhHl8HZzjtK
-	/y5TvoMWifaeNeoTPTlmRu5WemDGcssvj1UsCJ4dQpof8TbogfVfuhMjBsji7dA=
-X-Google-Smtp-Source: AGHT+IH3QDN2hR617Ukdv2SjzK8RJBXbowCCdPy40MnxquZ6g4Rr59LcTeRyj+P48t9ClukEWCIeMw==
-X-Received: by 2002:a05:6402:914:b0:56b:7da8:7ecd with SMTP id g20-20020a056402091400b0056b7da87ecdmr6936958edz.29.1711006897209;
-        Thu, 21 Mar 2024 00:41:37 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.222.97])
-        by smtp.gmail.com with ESMTPSA id v6-20020aa7d9c6000000b0056b8261517fsm3543657eds.3.2024.03.21.00.41.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Mar 2024 00:41:36 -0700 (PDT)
-Message-ID: <c4da9080-a91e-4b4e-8e93-01a5b24e3f18@linaro.org>
-Date: Thu, 21 Mar 2024 08:41:34 +0100
+	 In-Reply-To:Content-Type; b=qVCLeR+k8LKUeiR9NCGL2tWE5Z+Lu+ijWEYOxkifQvWgvOgnMLZHYMYqjmML8VznZmqklLYuU0gMlUpulaaagGLONZLOSaT9wiN5LCi9SqmK9XHKj25cdq+bY6z6we/Kcept67L3eUvgwKos0/tEoYPizNIDD5FmaWITf7RyRcs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=pRVpFsJf; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1711009978;
+	bh=OYKB5vkSZXRayTHG8PtislSXGdVPY2nozhkEeUlG9QQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=pRVpFsJfZOThpCw6XP29z0mkjKLuJ7HyW4QHRzz/4T/O8APO5WDuCyUwY2xlIRUo7
+	 0anoEjGURQ8gsGJJJM5XjGS0klQkLjMqUUcMrAj4Vh5TcTIjsConOef3dDVUhkabYI
+	 vXx+8L2hAbgqkYEI84ybHrJEwvqrMKRu58GirLcfar6EpedIyhFlfY2+QpmzbuAE34
+	 VYayZtNT3DbO1Tf2IP+u6eB+nIv+ea1V9h6dkBDrK1GxG1aNxTVzI23t6MKGoGTZVG
+	 cdiV8lI4ladherX3oAX22vNEzllAlz+tGh/rMsZ8c4TNi25ooZ3pZX+mp66AuNEzOX
+	 2Erhd6lsIE2ag==
+Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id DE95537820EF;
+	Thu, 21 Mar 2024 08:32:57 +0000 (UTC)
+Message-ID: <0b5d8e55-216f-4456-b28b-8aec47b4105e@collabora.com>
+Date: Thu, 21 Mar 2024 09:32:57 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -76,87 +57,75 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] dt-bindings: thermal: convert st,stih407-thermal
- to DT schema
-To: Raphael Gallais-Pou <rgallaispou@gmail.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Patrice Chotard <patrice.chotard@foss.st.com>, Lee Jones <lee@kernel.org>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20240320-thermal-v3-0-700296694c4a@gmail.com>
- <20240320-thermal-v3-1-700296694c4a@gmail.com>
+Subject: Re: [PATCH v2 08/13] arm64: dts: mediatek: mt8186: add default
+ thermal zones
+To: Nicolas Pitre <nico@fluxnic.net>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org,
+ linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
+References: <20240318212428.3843952-1-nico@fluxnic.net>
+ <20240318212428.3843952-9-nico@fluxnic.net>
+ <34e75ebd-b01c-430a-a051-47489492c189@collabora.com>
+ <ron9o4o3-qror-o1o9-3911-7189925o1os2@syhkavp.arg>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Content-Language: en-US
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240320-thermal-v3-1-700296694c4a@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <ron9o4o3-qror-o1o9-3911-7189925o1os2@syhkavp.arg>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 20/03/2024 22:33, Raphael Gallais-Pou wrote:
-> 'st,passive_colling_temp' does not appear in the device-tree, 'reg' and
-> '#thermal-sensor-cells' are also missing in the device description.
+Il 20/03/24 22:52, Nicolas Pitre ha scritto:
+> On Tue, 19 Mar 2024, AngeloGioacchino Del Regno wrote:
 > 
-> Convert st,stih407-thermal binding to DT schema format in order to clean
-> unused 'st,passive_cooling_temp' and add missing properties.
+>> Il 18/03/24 22:22, Nicolas Pitre ha scritto:
+>>> From: Nicolas Pitre <npitre@baylibre.com>
+>>>
+>>> Inspired by the vendor kernel but adapted to the upstream thermal
+>>> driver version.
+>>>
+>>> Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
+>>> ---
+>>>    arch/arm64/boot/dts/mediatek/mt8186.dtsi | 236 +++++++++++++++++++++++
+>>>    1 file changed, 236 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+>>> b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+>>> index 7b7a517a41..9865926459 100644
+>>> --- a/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+>>> +++ b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+>>> @@ -13,6 +13,8 @@
+>>>    #include <dt-bindings/power/mt8186-power.h>
+>>>    #include <dt-bindings/phy/phy.h>
+>>>    #include <dt-bindings/reset/mt8186-resets.h>
+>>> +#include <dt-bindings/thermal/thermal.h>
+>>> +#include <dt-bindings/thermal/mediatek,lvts-thermal.h>
+>>>      / {
+>>>    	compatible = "mediatek,mt8186";
+>>> @@ -2115,4 +2117,238 @@ larb19: smi@1c10f000 {
+>>>    			power-domains = <&spm MT8186_POWER_DOMAIN_IPE>;
+>>>    		};
+>>>    	};
+>>> +
+>>> +	thermal_zones: thermal-zones {
+>>> +		cluster0-thermal {
+>>
+>> Please use the names that are expected by the SVS driver.
 > 
-> Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
-> ---
-> Changes in v3:
->   - Specify const value for '#thermal-sensor-cells'
->   - Add 'maxItems' for 'interrupts' property
->   - Change commit log accordingly
+> And what would those be in this case?
+> 
+> I've used the names that were suggested here:
+> 
+> https://lore.kernel.org/all/20240111223020.3593558-1-nico@fluxnic.net/T/#m05936e84a2efe5c431bad39c24d66c246fb8ca38
+> 
+> 
 
+It's always the ".tzone_name" member of svs_(socmodel)_banks.pdata, with -thermal
+suffix (drivers/soc/mediatek/mtk-svs.c).
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Making it shorter for you....
+performance CPUs:            cpu-big-thermal
+low-power CPUs:              cpu-little-thermal
+Cache Coherent Interconnect: cci-thermal
+...and GPU is obviously      gpu-thermal
 
-Best regards,
-Krzysztof
-
+Cheers,
+Angelo
 
