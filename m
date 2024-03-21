@@ -1,166 +1,125 @@
-Return-Path: <linux-pm+bounces-5189-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5190-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B78E7885B13
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 15:44:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60D8C885C90
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 16:51:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C4511C21986
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 14:44:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 14DC91F22894
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 15:51:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A603D85943;
-	Thu, 21 Mar 2024 14:44:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFE978626C;
+	Thu, 21 Mar 2024 15:51:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=trvn.ru header.i=@trvn.ru header.b="UaOftfse"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="oBKDKkH3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 777391E53F;
-	Thu, 21 Mar 2024 14:44:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.87.146.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72F651E879;
+	Thu, 21 Mar 2024 15:51:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711032285; cv=none; b=iCotV9aeoTOXX39OdIuzftpvzHDGUMRe7u1LVwOY0xdC/wA2QpIqXFrEAmreSBTcHkANYSK7+0wb3t/L/tTPOXpA/ps+MxJBAvopuIPdRxMoeORgB+IF11cWMaYVKaOFzkvWbJ90jjb9tenAvlHZ944snp/6ikgiiwyjMR2Clp4=
+	t=1711036267; cv=none; b=RUN/U7OXRfQjungU32Wted7uMEoVwa/oAb5SAYIIgj8VPYHSKZvtZq6o3t+7VS++xkyO7bBoTqsjBwDILb5IssHx2W4nmCjhSL3brE+qaCeToN9HnBOpJcmoKQWdMEBV5nsMY642pW5wRJ98z8UY5Gpx9IN2SQ+/zTJwKgEbUsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711032285; c=relaxed/simple;
-	bh=W52VFO6+JoxAJcY1nLZaHrx+1XLbKPfE+RhNuXYMyCY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=JKE+PxnUt5cYkjqR4CGTI6fNRuV5sDTzrnbWN5leyyY2pNeMHapDfFSpBxDxUCCn/Krj8yVHKyCk7kIC9UOQPs+Cf1DMiILy2bPuosP/PjlAUGNJBX9UA+8pL+c8OA8fuOlsW9z7rezHB4DYV5qlpzbugdld20oU3az7rGScJs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=trvn.ru; spf=pass smtp.mailfrom=trvn.ru; dkim=pass (2048-bit key) header.d=trvn.ru header.i=@trvn.ru header.b=UaOftfse; arc=none smtp.client-ip=194.87.146.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=trvn.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trvn.ru
-Received: from authenticated-user (box.trvn.ru [194.87.146.52])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-	(No client certificate requested)
-	by box.trvn.ru (Postfix) with ESMTPSA id 0FEF7401B8;
-	Thu, 21 Mar 2024 19:44:32 +0500 (+05)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-	t=1711032273; bh=W52VFO6+JoxAJcY1nLZaHrx+1XLbKPfE+RhNuXYMyCY=;
-	h=From:Date:Subject:To:Cc:From;
-	b=UaOftfseQHH5gfPllLsKaUKfRyro7UlsT52/OPWeX5fk+y34RlT8P3ZePCS+CKZRj
-	 dVv+WAKoid5anohBTEg5ZQe3MlYZteMBi3j8Pa6l7L7MovwkGJSa7XBUXPnnEzTj9L
-	 r1qfuxTB70fScs2vHHL3xR8d9T1Rds1Vm+lky1Hw1UUEpB1nLW205AgUJVs33jcQ1t
-	 +6+P5KNXPFgazMjhlQCKy2LVfmBFCN/xJwVKJDi2LjQoKwzvBOaFtQCHWUE0sOUYR0
-	 CMo5sZ9VGC72NY6xsNpls8WSI5VW0I7kUFV2ngOVTF1V4VOfhGNLgl/9aJR/k0rJ0J
-	 FwlvF5yHXVjvg==
-From: Nikita Travkin <nikita@trvn.ru>
-Date: Thu, 21 Mar 2024 19:44:13 +0500
-Subject: [PATCH] thermal: gov_power_allocator: Allow binding without
- cooling devices
+	s=arc-20240116; t=1711036267; c=relaxed/simple;
+	bh=NcoABh9qQqWyHeyP/BJpH8RDi7iEiqb/AKOW3kyJ7Hk=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=enr9cjIK/XHfqpvKswRRpQZG8xQaFAXHEQpTtLhRfI0zPRd7J2x2s7NWFT1zbZQIacZl0nNe9OFLcIy6rD8Ec2JyOB8CoNDst2JFXAf4EAyZvWwa4mQcZOc8XWsLlBwG+ioWRBMmDgoEa8YNkC9V1wAnOohvaf8fOlJvjjCdzms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=oBKDKkH3; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42LFOW30010746;
+	Thu, 21 Mar 2024 15:50:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	date:from:to:cc:subject:message-id:references:mime-version
+	:content-type:in-reply-to; s=qcppdkim1; bh=FRj4LVlZr5NDfUAqAPS+X
+	NAuH+YYahtbNBB1SbEdMAM=; b=oBKDKkH38UMpT2lFxBJvGBHAI7ipNAdSu7t7d
+	xYezGRKPqmIGRvI9X+rvP5942Kq9O6LQ7V5NpoaxzaMH53PFRZP2Yvf34mUpiL8F
+	Mb+MCyUa2LCAU2UtYIA9BzaVVRcbq21eqd0V6XCaC7Aw22UgNWhOidTKpSgCuBkn
+	iYygFm7MNNdAOcuLjMZA4HSHMyZFqyXVVYxMgIo7NSC8VtcjqcxkfMuWnEpJsr2G
+	CW01W4OGJbcKRHzS5ma7EdsfzsLU64Jc5MN5d8MdMAdeqIWqbmn/sOQNQVhem/SO
+	U5RAwycD/5U8avMp2SDcN/u+OLLEuKVpxlDTtm6sMkosKlNfA==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3x0f1nhd6w-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 21 Mar 2024 15:50:58 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42LFovDG006831
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 21 Mar 2024 15:50:57 GMT
+Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Thu, 21 Mar 2024 08:50:53 -0700
+Date: Thu, 21 Mar 2024 21:20:49 +0530
+From: Varadarajan Narayanan <quic_varada@quicinc.com>
+To: Rob Herring <robh@kernel.org>
+CC: <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>, <djakov@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: interconnect: Add Qualcomm IPQ9574
+ support
+Message-ID: <ZfxXWaNzJoai6VpV@hu-varada-blr.qualcomm.com>
+References: <20240321043149.2739204-1-quic_varada@quicinc.com>
+ <20240321043149.2739204-2-quic_varada@quicinc.com>
+ <20240321143549.GA1679970-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240321-gpa-no-cooling-devs-v1-1-5c9e0ef2062e@trvn.ru>
-X-B4-Tracking: v=1; b=H4sIAL1H/GUC/x3MQQqAIBBA0avErBuwsci6SrQInWwgNBQiCO+et
- HyL/1/InIQzzM0LiW/JEkNF1zZgjy14RnHVQIp6palDf20YItoYTwkeHd8Z7TgxazJG0wC1vBL
- v8vzXZS3lA2efe/BlAAAA
-To: Lukasz Luba <lukasz.luba@arm.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>
-Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Nikita Travkin <nikita@trvn.ru>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3118; i=nikita@trvn.ru;
- h=from:subject:message-id; bh=W52VFO6+JoxAJcY1nLZaHrx+1XLbKPfE+RhNuXYMyCY=;
- b=owEBbQKS/ZANAwAIAUMc7O4oGb91AcsmYgBl/EfOdmOMHxpTbs4VadDGYduboR6lXbm5aVPLU
- d36f6ZXZs6JAjMEAAEIAB0WIQTAhK9UUj+qg34uxUdDHOzuKBm/dQUCZfxHzgAKCRBDHOzuKBm/
- dYaiD/9NB6CUpKVlW+cza/WT7F1ywt8KRiuCT8sKxzGPwzwtZcwFdTPx+kvA8UdlQrtxfjAEJ2l
- pVw5trNqTe+mtmp96XCjMmReWz4OkX6yOKlnf4vBFqDjmTHykpXz5uvqWPqK+v/CcAZBk0ZZgYR
- nTbuTwVs+rT9rfvY9a4e8h3QIn1UaUAsJzSCN2tfqTQpZQPxispxYW9dbvrtPVYqxipRWWi7hNo
- nUfWJEhwfK3aofkc9ZU74fsg8PD9JdZYIYoZISBP15SUOpSe+UOSdYqMdD0ibLUDqYXzlFWNDDe
- YA15Bg/iXRoqa54moUovawv/6aMe+g0YTGyruk5ld4Wpek1vWcOBExCpOCha2xyLJ+RNihQKdzE
- tExxd3PCFRbHmtYpGs39n/2Pf6PS9NSdGMRX4pViXz6mtd7CpueDNVvV74WuWmEhHUTcn6WGqR9
- fljGjozsBcYwHFV55Dpm81YQ5MS5ZEmqMJTRgmkGpMS1gNwFrTQD9WSaSwS6PdsZBB8OvGVhEeO
- iGe5wD6wKiE6drdYexIZurbXA2jtJfKZ2eEMgoBu3OtNwZSk9pqqO1jgCBuZUFl3ArU3kpo2c3a
- uegg1OdUmwQiuv9mR8QKhUdWp+McY1N5nbAsSkFI4RfMhtBLElgTadKG+s1ZxwVWgnZ0ouHNjHy
- s2rc6BJQ5AGwyXQ==
-X-Developer-Key: i=nikita@trvn.ru; a=openpgp;
- fpr=C084AF54523FAA837E2EC547431CECEE2819BF75
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20240321143549.GA1679970-robh@kernel.org>
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: S01h8yhEomAX6KFUw1hiZzgJAvomdgE-
+X-Proofpoint-ORIG-GUID: S01h8yhEomAX6KFUw1hiZzgJAvomdgE-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-21_10,2024-03-21_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ bulkscore=0 mlxlogscore=999 adultscore=0 malwarescore=0 spamscore=0
+ suspectscore=0 clxscore=1015 lowpriorityscore=0 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2403140001 definitions=main-2403210115
 
-Commit e83747c2f8e3 ("thermal: gov_power_allocator: Set up trip points earlier")
-added a check that would fail binding the governer if there is no
-cooling devices bound to the thermal zone. Unfortunately this causes
-issues in cases when the TZ is bound to the governer before the cooling
-devices are attached to it. (I.e. when the tz is registered using
-thermal_zone_device_register_with_trips().)
+On Thu, Mar 21, 2024 at 09:35:49AM -0500, Rob Herring wrote:
+> On Thu, Mar 21, 2024 at 10:01:48AM +0530, Varadarajan Narayanan wrote:
+> > Add master/slave ids for Qualcomm IPQ9574 Network-On-Chip
+> > interfaces. This will be used by the gcc-ipq9574 driver
+> > that will for providing interconnect services using the
+> > icc-clk framework.
+> >
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > ---
+> >  .../dt-bindings/interconnect/qcom,ipq9574.h   | 62 +++++++++++++++++++
+> >  1 file changed, 62 insertions(+)
+> >  create mode 100644 include/dt-bindings/interconnect/qcom,ipq9574.h
+> >
+> > diff --git a/include/dt-bindings/interconnect/qcom,ipq9574.h b/include/dt-bindings/interconnect/qcom,ipq9574.h
+> > new file mode 100644
+> > index 000000000000..96f79a86e8d2
+> > --- /dev/null
+> > +++ b/include/dt-bindings/interconnect/qcom,ipq9574.h
+> > @@ -0,0 +1,62 @@
+> > +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
+>
+> Where did you come up with GPL-2.0+? Every other qcom interconnect
+> header is GPL-2.0-only. Is your employer okay with GPLv3 AND after?
 
-Additionally, the documentation across gov_power_allocator suggests it's
-intended to allow it to be bound to thermal zones without cooling
-devices (and thus without passive/active trip points), however the same
-change added a check for the trip point to be present, causing those TZ
-to fail probing.
+Oops. Will fix it in the next version.
 
-Those changes cause all thermal zones to fail on some devices (such as
-sc7180-acer-aspire1) and prevent the kernel from controlling the cpu/gpu
-frequency based on the temperature, as well as losing all the other
-"informational" thermal zones if power_allocator is set as default.
-
-This commit partially reverts the referenced one by dropping the trip
-point check and by allowing the TZ to probe even if no actor buffer was
-allocated to allow those TZ to probe again.
-
-Fixes: e83747c2f8e3 ("thermal: gov_power_allocator: Set up trip points earlier")
-Signed-off-by: Nikita Travkin <nikita@trvn.ru>
----
-I've noticed that all thermal zones fail probing with -EINVAL on my
-sc7180 based Acer Aspire 1 since 6.8. This commit allows me to bring
-them back.
----
- drivers/thermal/gov_power_allocator.c | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-index 1b17dc4c219c..4f2d7f3b7508 100644
---- a/drivers/thermal/gov_power_allocator.c
-+++ b/drivers/thermal/gov_power_allocator.c
-@@ -679,11 +679,6 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
- 		return -ENOMEM;
- 
- 	get_governor_trips(tz, params);
--	if (!params->trip_max) {
--		dev_warn(&tz->device, "power_allocator: missing trip_max\n");
--		kfree(params);
--		return -EINVAL;
--	}
- 
- 	ret = check_power_actors(tz, params);
- 	if (ret < 0) {
-@@ -693,7 +688,7 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
- 	}
- 
- 	ret = allocate_actors_buffer(params, ret);
--	if (ret) {
-+	if (ret && ret != -EINVAL) {
- 		dev_warn(&tz->device, "power_allocator: allocation failed\n");
- 		kfree(params);
- 		return ret;
-@@ -714,9 +709,10 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
- 	else
- 		params->sustainable_power = tz->tzp->sustainable_power;
- 
--	estimate_pid_constants(tz, tz->tzp->sustainable_power,
--			       params->trip_switch_on,
--			       params->trip_max->temperature);
-+	if (params->trip_max)
-+		estimate_pid_constants(tz, tz->tzp->sustainable_power,
-+				       params->trip_switch_on,
-+				       params->trip_max->temperature);
- 
- 	reset_pid_controller(params);
- 
-
----
-base-commit: e7528c088874326d3060a46f572252be43755a86
-change-id: 20240321-gpa-no-cooling-devs-c79ee3288325
-
-Best regards,
--- 
-Nikita Travkin <nikita@trvn.ru>
-
+Thanks
+Varada
 
