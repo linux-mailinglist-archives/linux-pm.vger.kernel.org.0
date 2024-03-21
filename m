@@ -1,64 +1,64 @@
-Return-Path: <linux-pm+bounces-5198-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5197-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CCF8886114
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 20:34:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F40DB886111
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 20:34:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F1B85B21BE2
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 19:34:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AAD57283280
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 19:34:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57C70134CFE;
-	Thu, 21 Mar 2024 19:34:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 230E213474E;
+	Thu, 21 Mar 2024 19:34:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="YN19dssV"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="xwbGjCgW"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F50D134412;
-	Thu, 21 Mar 2024 19:34:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA0E713443A;
+	Thu, 21 Mar 2024 19:34:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711049666; cv=none; b=j4ZLJIlDA6O/d5+u9g3NSIVeiviqqeoldpvaSdRAP4lUnVBXtKarG/t4kUYm17YljK+GMtP+8h1rhMPbZkirXChuu9rYGmAHi8mIvw6o2O9x8aPfA3k6wiiJ86W9tkNt/Jp+TuMsxVIhS+ItntyoNWoRx+jqLT/iG8WEupV3PFk=
+	t=1711049665; cv=none; b=aSGKAlPguILxiZnaC+9LdpmXCSR8yu2mG/0MgT0RKVemlsPW94cKG4V53Yn4I9PuAJ6Xu2ueC0RKVbtBImuXcMU0jyTBq3LqafIWoKuQqORqkPt02SvQzmXFSvRKNMmAn3q7hlNmdkQ68dM8Skl/Rdr0zHTZuG3GUNLyveRS90I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711049666; c=relaxed/simple;
-	bh=i1usLfR5NyS2UrfhcopXRBbPH/6dK9UVT3GxquuQz0g=;
+	s=arc-20240116; t=1711049665; c=relaxed/simple;
+	bh=l6YDlruBqXA8oEDE4wbX76JTpsadDA/nfSwXgD/rC4E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GugJK7TEEAE+JVLouompv2tyGOVvq2B84bKNfPjW6hMxqSewlR06UVxnyW/uqGG+QIvc2nSer577+uTYvNKjqVPqASR+EuioUG/53m66zSgkH84E6aJrkmBRX3+POVNZmzphEbSZrUqJtjvnY8LuzeuRss3HREcACePqY2Sdu90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=YN19dssV reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+	 MIME-Version:Content-Type; b=mkeqDiPcIWi3sAIsk7NjF1FwffYG2kqan9leJ2GT1b3hbrjltgNWyEVVw9z6d94/RPKNVvvE7ooNzV9vwGKF3BluUMDm8vIjMfp8Rt4mI7IRpzCC7r7EBF0p/DRHpRlc7nF/aGkUs1+yR8ymeLb/Py4tMsjKFDOGQhxgOF4Gma4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=xwbGjCgW reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id 9e9f95f3a11f2a70; Thu, 21 Mar 2024 20:34:16 +0100
+ id f7c8c0852ae75439; Thu, 21 Mar 2024 20:34:14 +0100
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id D73B166B8E0;
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 2024066B8D7;
 	Thu, 21 Mar 2024 20:34:14 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1711049655;
-	bh=i1usLfR5NyS2UrfhcopXRBbPH/6dK9UVT3GxquuQz0g=;
+	s=dkim; t=1711049654;
+	bh=l6YDlruBqXA8oEDE4wbX76JTpsadDA/nfSwXgD/rC4E=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=YN19dssVABiz1hrNArxlVwcB5BiXpiVrzzQiuuF+M0AuK9Qs+QSHhhHkCkBMIuh06
-	 3UY9MapSIWXSTLqdObOA8daYJEJAStGyOmwJ8aKbMZHy5Wlkkt1uQ3MZg/mH7m3JO5
-	 v4JelW4lO99qhon1ZhBEoEcltmMn4+XDFjtDjOUu1mEvE2HD0Rg6JNpgUll1qW6N73
-	 5mPCYuW4neAiIxVCqixoeuCTqEBOyvN+pXyym/PU0VhfUB7ob15ycOl3gOsfRy/SOe
-	 k7svObfEBJbqAjZpScV+5f9bjohVrtubMycHJAfcxd5eAu3TgRkiyjNHlp62v7l1fJ
-	 sDWN8hrzwlRlA==
+	b=xwbGjCgWtStGSGXa2pWQwHeAgmPpL+j9fTpy2z0Y67PSJ7PJg/liA0tEmeZHf/AqK
+	 Hfv+zVcp4zh0iPbMKgkzZ078HaAey/pv0BEJyqpkC2HlVVSY2ak7w3LVF/WpsfPXtT
+	 NPYgzJXZsWXJkPuL+QSUzmodj7jHCji9R6ny7gV0plPsJnoFpKsjBuAd8qzC0Z7Bf2
+	 xGev1HRK2YbAGhXb5iz8mFIakHaO5uxd4DI5PO5YkYtcJOv7oJLDYYm697IhGwLWNZ
+	 eNIavXBTsAHxTNyiIEu2sDxPS8hjLHllJhpY7XOO5k/G+Ikcjpx4x9YdanmAalxeMh
+	 0vF6VgIATZI0A==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>,
  Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 Subject:
- [PATCH v1 3/5] cpufreq: intel_pstate: Wait for canceled delayed work to
- complete
-Date: Thu, 21 Mar 2024 20:32:02 +0100
-Message-ID: <4885534.GXAFRqVoOG@kreacher>
+ [PATCH v1 4/5] cpufreq: intel_pstate: Get rid of unnecessary READ_ONCE()
+ annotations
+Date: Thu, 21 Mar 2024 20:33:02 +0100
+Message-ID: <2184891.irdbgypaU6@kreacher>
 In-Reply-To: <12409658.O9o76ZdvQC@kreacher>
 References: <12409658.O9o76ZdvQC@kreacher>
 Precedence: bulk
@@ -77,42 +77,64 @@ X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Make intel_pstate_disable_hwp_interrupt() wait for canceled delayed work
-to complete to avoid leftover work items running when it returns which
-may be during driver unregistration and may confuse things going forward.
+Drop a redundant check involving READ_ONCE() from notify_hwp_interrupt()
+and make it check hwp_active without READ_ONCE() which is not necessary,
+because that variable is only set once during the early initialization of
+the driver.
+
+In order to make that clear, annotate hwp_active with __ro_after_init.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/cpufreq/intel_pstate.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/cpufreq/intel_pstate.c |   14 +++-----------
+ 1 file changed, 3 insertions(+), 11 deletions(-)
 
 Index: linux-pm/drivers/cpufreq/intel_pstate.c
 ===================================================================
 --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
 +++ linux-pm/drivers/cpufreq/intel_pstate.c
-@@ -1682,6 +1682,8 @@ ack_intr:
+@@ -292,7 +292,7 @@ struct pstate_funcs {
  
- static void intel_pstate_disable_hwp_interrupt(struct cpudata *cpudata)
- {
-+	bool cancel_work;
-+
- 	if (!boot_cpu_has(X86_FEATURE_HWP_NOTIFY))
+ static struct pstate_funcs pstate_funcs __read_mostly;
+ 
+-static int hwp_active __read_mostly;
++static bool hwp_active __ro_after_init;
+ static int hwp_mode_bdw __read_mostly;
+ static bool per_cpu_limits __read_mostly;
+ static bool hwp_boost __read_mostly;
+@@ -1640,7 +1640,7 @@ void notify_hwp_interrupt(void)
+ 	unsigned long flags;
+ 	u64 value;
+ 
+-	if (!READ_ONCE(hwp_active) || !boot_cpu_has(X86_FEATURE_HWP_NOTIFY))
++	if (!hwp_active || !boot_cpu_has(X86_FEATURE_HWP_NOTIFY))
  		return;
  
-@@ -1689,9 +1691,11 @@ static void intel_pstate_disable_hwp_int
- 	wrmsrl_on_cpu(cpudata->cpu, MSR_HWP_INTERRUPT, 0x00);
+ 	rdmsrl_safe(MSR_HWP_STATUS, &value);
+@@ -1653,14 +1653,6 @@ void notify_hwp_interrupt(void)
+ 		goto ack_intr;
  
- 	spin_lock_irq(&hwp_notify_lock);
--	if (cpumask_test_and_clear_cpu(cpudata->cpu, &hwp_intr_enable_mask))
--		cancel_delayed_work(&cpudata->hwp_notify_work);
-+	cancel_work = cpumask_test_and_clear_cpu(cpudata->cpu, &hwp_intr_enable_mask);
- 	spin_unlock_irq(&hwp_notify_lock);
-+
-+	if (cancel_work)
-+		cancel_delayed_work_sync(&cpudata->hwp_notify_work);
- }
- 
- static void intel_pstate_enable_hwp_interrupt(struct cpudata *cpudata)
+ 	/*
+-	 * Currently we never free all_cpu_data. And we can't reach here
+-	 * without this allocated. But for safety for future changes, added
+-	 * check.
+-	 */
+-	if (unlikely(!READ_ONCE(all_cpu_data)))
+-		goto ack_intr;
+-
+-	/*
+ 	 * The free is done during cleanup, when cpufreq registry is failed.
+ 	 * We wouldn't be here if it fails on init or switch status. But for
+ 	 * future changes, added check.
+@@ -3464,7 +3456,7 @@ static int __init intel_pstate_init(void
+ 		 * deal with it.
+ 		 */
+ 		if ((!no_hwp && boot_cpu_has(X86_FEATURE_HWP_EPP)) || hwp_forced) {
+-			WRITE_ONCE(hwp_active, 1);
++			hwp_active = true;
+ 			hwp_mode_bdw = id->driver_data;
+ 			intel_pstate.attr = hwp_cpufreq_attrs;
+ 			intel_cpufreq.attr = hwp_cpufreq_attrs;
 
 
 
