@@ -1,176 +1,116 @@
-Return-Path: <linux-pm+bounces-5170-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5171-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39091881B68
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 04:09:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2D7A881BE9
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 05:32:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B7EDA1F218EC
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 03:09:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D6691C21690
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 04:32:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87B78BA28;
-	Thu, 21 Mar 2024 03:09:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32BFA1BDF4;
+	Thu, 21 Mar 2024 04:32:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Vfmsk8Jt"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="V3135EqZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F997462
-	for <linux-pm@vger.kernel.org>; Thu, 21 Mar 2024 03:09:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 697AA6FB9;
+	Thu, 21 Mar 2024 04:32:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710990569; cv=none; b=jnZLLTAU3/UJ+J6m7re3zy+0JFrIkjBt9YwYgqBfSMj+LkH1P0JB4cUxRWS9NI/KZRv2NrRmwHRhgOhrlcAO1tCXDv1DZDK0DAs5spW8nDf5H9jHpOLtw7AQ1st3HH4bBp0wVuh0X7H6eICZGfGW9cK/50W8jpSR4vd7o24tXoI=
+	t=1710995558; cv=none; b=OsIScjcng2HQb/0ARGKqht2bGdPpS2iUHAa6As22oQ26z/aYVpAaLXZcTk2VQPb4hBu2XL20Rk8dahP2yGjIkHT/ZFB48YIBoxDwYwER2kbKgPwk6m/8NRJh2DhnshLEFfpbLX6IZBD+2rrLm2Zd0/ec8sYI8TRWguurowQTKAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710990569; c=relaxed/simple;
-	bh=FkzYpBJteeqdIUyppcVF9bTPAo5a25hyFgWuRcXW8/U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NgS8S+9ovGo+e4Q6KmG44lfazyafEwysVv3Vpi2crnxUKv6HxOblPenLcryj8BeJvveCKK7devCJ6+lUB5GYasL58fzN/P+A3lkiAfZt2oMCR1CAElg1JJi0ROCLd8CA4wLTH0wWSyssFKf1WC6vyDfEazcZLm4BhOGWjT2anw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Vfmsk8Jt; arc=none smtp.client-ip=209.85.210.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6e677008501so267868a34.1
-        for <linux-pm@vger.kernel.org>; Wed, 20 Mar 2024 20:09:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1710990567; x=1711595367; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Iw4MaM5+26FIFeV25IT9vHlMrg0yjNPt8G+THE0Fuao=;
-        b=Vfmsk8Jt3iKMfVyVnds7fTnOUWP+Nh+VJ9HwC4b++92mpd7kfRDU97X+WBvwQq5CSR
-         H0WuqFwe5deMqHPtYHhFZePmFy2umZPA8IWMHlEdK6uuaZvBbm8ysKFL2KLQuf7Phrgc
-         reDDaqCLeX12g2isCb4B/0EKvATqBhqJhTq3+SUj3zqfZsZty90cFd3CkgLFbfQ3oN40
-         rRm37/nR18+IxC/UMrySWneRvwlaxtgHQ4qxUxJIfNLVWHXFTMkVtXwHiIK5wHQ6Cub4
-         TyI9GLKhuMXcH5Q7UmIGw70i08QH302u3J4Syllj4biTTX8B9E3CvcBcAob2tLNLkBzL
-         lJFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710990567; x=1711595367;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Iw4MaM5+26FIFeV25IT9vHlMrg0yjNPt8G+THE0Fuao=;
-        b=cBQhx6oiRGmvhFVVdUQ2Eml6aK40WsWo1YZUSa6fOZWLjaZ/rprm1k1kDLu709ZhM4
-         elsAKI3aI+gpGeQOaAkfTiF1Tzuy1pN6i34gipBZhTuvkk1HSn0ljy6PMnxDuBoFnMy4
-         JepXPeuqntdth8XSfmLpKHXyFDoZBvJ8lxASlUDiBKhq6LqRYLPC38dYzokb/dJ7lyb6
-         +iDYmj+I8kjFVNm71bUm/pRrCedkicmyGTIfu7ZIm4FzK3+ZElNa+6wzXucLfbfdqAHz
-         y0VuR2r0qBm9djEOxru0i0pe7UBcAtKP2SGopB+qmevAamtMJF0VDTyE9Apn/IzIaP93
-         FRoA==
-X-Forwarded-Encrypted: i=1; AJvYcCUUk9Fn5ZuFzCs1w+jwpQQqZGJuGo2MYrTHowmaPYjPHCyZMjfty/qGDbKww5Pwns+S+xnIqD0oeMO8VV/+J0aaivXxDJkeBBs=
-X-Gm-Message-State: AOJu0YydcI94qhSg8kDB+eIXeI7RaIkmbzibSp7C/fdMO2xquBr6Mnhl
-	m/Afj9smvWiJ6UevviJFIjzbAi3ptxdUaWJCLi3G8GnSL4+5BHGwmXyqGGKai1s=
-X-Google-Smtp-Source: AGHT+IGIbn5EcLAYZDaoUG505+Amf/scsMEzE64kDpE2ctwVRmiHQCrFAMGnLRo1k63RMX+6aqG0JQ==
-X-Received: by 2002:a05:6870:4141:b0:221:c887:dc6b with SMTP id r1-20020a056870414100b00221c887dc6bmr8224433oad.6.1710990566510;
-        Wed, 20 Mar 2024 20:09:26 -0700 (PDT)
-Received: from localhost ([122.172.85.206])
-        by smtp.gmail.com with ESMTPSA id y15-20020aa793cf000000b006e6b9a963a5sm12395995pff.131.2024.03.20.20.09.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Mar 2024 20:09:25 -0700 (PDT)
-Date: Thu, 21 Mar 2024 08:39:23 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Andre Przywara <andre.przywara@arm.com>
-Cc: Rob Herring <robh@kernel.org>, Yangtao Li <tiny.windzz@gmail.com>,
-	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-sunxi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	Brandon Cheo Fusi <fusibrandon13@gmail.com>,
-	Martin Botka <martin.botka@somainline.org>,
-	Martin Botka <martin.botka1@gmail.com>
-Subject: Re: [PATCH v2 3/8] dt-bindings: opp: Describe H616 OPPs and
- opp-supported-hw
-Message-ID: <20240321030923.4sf3lifbmnvvidaa@vireshk-i7>
-References: <20240318011228.2626-1-andre.przywara@arm.com>
- <20240318011228.2626-4-andre.przywara@arm.com>
- <20240320150228.GA1705913-robh@kernel.org>
- <20240320153738.3e2410bf@donnerap.manchester.arm.com>
+	s=arc-20240116; t=1710995558; c=relaxed/simple;
+	bh=Og0wY5UlzS70CHhhOINPsqOxTR2TotlCmUAEXCZNn90=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nDVamSFbqeGbK4+EwRpEp40GtWWV1rKZ9/RRB86dxUaBt1u6tL999iD7kCpq/y2yAkQr02/yNbFFtYcmIHiAXfkxLl3xt2+kvyiy1Pv5Urlls1GS9suFNBR5l0/tRJOftcX++crXNNYHLj7e1raPKqyWKSEbzmW45RRZgdU3eWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=V3135EqZ; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42L2Ve1o024624;
+	Thu, 21 Mar 2024 04:32:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=qcppdkim1; bh=Aq6opX9
+	ZfKnMeslz2hJCg1tfG66b+q7ZXbIy3T/bUBg=; b=V3135EqZniO51MR/ZKUBCzM
+	PaORUt1vsQY2s53dSPCX6EDWT2Cd0hB4PZh4vzrFOKIufQeL/gkmbP9EBywaMi1T
+	4u6gxQHIhR94Oki2rDvibSbEyeMWo1pkIt9T6DL5HWEIFicAYz+osKWaUbTccswn
+	8L2nHaG/tURbxS5odl9X08WaQy/lm64P0gXxSgHPlPNuGyqnOL0kK2eHJdZkCOH5
+	Hrl6wGwsEHuX4d21McVb2w30JS5EduPGadQu02ef545yQPHIrtpOMFba6+lfzVet
+	cAThU74owNgcE7dyAnkO97jYlkZSkh8CQ2G9ibSnvl7zqo08FX2oofBi55A3hgg=
+	=
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3x0c67g66y-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 21 Mar 2024 04:32:31 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42L4WU1p028817
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 21 Mar 2024 04:32:30 GMT
+Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Wed, 20 Mar 2024 21:32:25 -0700
+From: Varadarajan Narayanan <quic_varada@quicinc.com>
+To: <andersson@kernel.org>, <konrad.dybcio@linaro.org>, <robh@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>, <djakov@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>
+CC: Varadarajan Narayanan <quic_varada@quicinc.com>
+Subject: [PATCH 0/2] Add interconnect driver for IPQ9574 SoC
+Date: Thu, 21 Mar 2024 10:01:47 +0530
+Message-ID: <20240321043149.2739204-1-quic_varada@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240320153738.3e2410bf@donnerap.manchester.arm.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: pfZfUli-0J_ceVpu3I7RDYAqHcSg7x_d
+X-Proofpoint-ORIG-GUID: pfZfUli-0J_ceVpu3I7RDYAqHcSg7x_d
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-21_01,2024-03-18_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ mlxlogscore=999 lowpriorityscore=0 clxscore=1011 priorityscore=1501
+ phishscore=0 impostorscore=0 spamscore=0 suspectscore=0 bulkscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2403140001 definitions=main-2403210028
 
-On 20-03-24, 15:37, Andre Przywara wrote:
-> On Wed, 20 Mar 2024 10:02:28 -0500
-> Rob Herring <robh@kernel.org> wrote:
-> > On Mon, Mar 18, 2024 at 01:12:23AM +0000, Andre Przywara wrote:
-> > > From: Martin Botka <martin.botka@somainline.org>
-> > > -        opp-1080000000 {
-> > > +        opp-792000000-l {
-> > >              clock-latency-ns = <244144>; /* 8 32k periods */
-> > > -            opp-hz = /bits/ 64 <1080000000>;
-> > > +            opp-hz = /bits/ 64 <792000000>;
-> > >  
-> > > -            opp-microvolt-speed0 = <1060000>;
-> > > -            opp-microvolt-speed1 = <880000>;
-> > > -            opp-microvolt-speed2 = <840000>;
-> > > +            opp-microvolt = <900000>;
-> > > +            opp-supported-hw = <0x02>;
-> > >          };
-> > >  
-> > > -        opp-1320000000 {
-> > > +        opp-792000000-h {
-> > >              clock-latency-ns = <244144>; /* 8 32k periods */
-> > > -            opp-hz = /bits/ 64 <1320000000>;
-> > > +            opp-hz = /bits/ 64 <792000000>;
-> > >  
-> > > -            opp-microvolt-speed0 = <1160000>;
-> > > -            opp-microvolt-speed1 = <940000>;
-> > > -            opp-microvolt-speed2 = <900000>;
-> > > +            opp-microvolt = <940000>;
-> > > +            opp-supported-hw = <0x10>;  
-> > 
-> > So far, we've avoided multiple entries for a single frequency. I think 
-> > it would be good to maintain that.
-> 
-> Fair, I wasn't super happy with that either, but it still seemed better
-> than the alternatives.
-> 
-> > Couldn't you just do:
-> > 
-> > opp-supported-hw = <0>, <0x10>, <0x02>;
-> > 
-> > Where the index corresponds to speed0, speed1, speed2.
-> > 
-> > If not, then I don't understand how multiple entries of opp-supported-hw 
-> > are supposed to work.
-> 
-> If I got this correctly, multiple cells in opp-supported-hw are to
-> describe various levels of hierarchy for a chip version, so like silicon
-> mask, metal layer revision, bin, I guess? The binding doc speaks of "cuts,
-> substrate and process", not really sure what that means exactly.
+MSM platforms manage NoC related clocks and scaling from RPM.
+However, in IPQ SoCs, RPM is not involved in managing NoC
+related clocks and there is no NoC scaling.
 
-Right. That basically translates to hardware versions the OPP will be parsed
-for.
+However, there is a requirement to enable some NoC interface
+clocks for the accessing the peripherals present in the
+system. Hence add a minimalistic interconnect driver that
+establishes a path from the processor/memory to those peripherals
+and vice versa.
 
-> I think currently we cannot easily combine microvolt suffixes and
-> opp-supported-hw in one OPP node?
+Varadarajan Narayanan (2):
+  dt-bindings: interconnect: Add Qualcomm IPQ9574 support
+  clk: qcom: add IPQ9574 interconnect clocks support
 
-It should be fine.
-
-> I think it bails out if one
-> microvolt-speed<x> property is missing, but I have to double check.
-> But IIRC v1 of this series somehow pulled that off, so we can maybe bring
-> it back? To end up with:
-> 	opp-792 {
-> 		opp-hz = <792000000>;
-> 		opp-microvolt-speed1 = <900000>;
-> 		opp-microvolt-speed4 = <940000>;
-> 		opp-supported-hw = <0x12>;
-> 	};
-
-That's what I thought too while reading your email.. Just populate the OPP for
-both 0x10 and 0x02 versions and let the speedN thing get you the right voltage.
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi         |  2 +
+ drivers/clk/qcom/gcc-ipq9574.c                | 75 ++++++++++++++++++-
+ .../dt-bindings/interconnect/qcom,ipq9574.h   | 62 +++++++++++++++
+ 3 files changed, 138 insertions(+), 1 deletion(-)
+ create mode 100644 include/dt-bindings/interconnect/qcom,ipq9574.h
 
 -- 
-viresh
+2.34.1
+
 
