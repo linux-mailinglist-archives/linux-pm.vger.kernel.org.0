@@ -1,108 +1,104 @@
-Return-Path: <linux-pm+bounces-5196-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5202-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA70A886110
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 20:34:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B10788614C
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 20:52:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3DC1283ADE
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 19:34:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6CB271C21717
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 19:52:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98E33134423;
-	Thu, 21 Mar 2024 19:34:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72381134428;
+	Thu, 21 Mar 2024 19:52:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="htCm/ieb"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="qNIH0Hs0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from 008.lax.mailroute.net (008.lax.mailroute.net [199.89.1.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA0A513442F;
-	Thu, 21 Mar 2024 19:34:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B73A013441C;
+	Thu, 21 Mar 2024 19:52:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711049664; cv=none; b=pjyYd4xvsZKFxRnA3+jbIaMzlmdh8XQ55zv66wzJwx42UgNOrH77XhLM7UrmT4CIreU1F3qkjlYV0PqkGyefREZTaiPO+U3jNy/d9X2Dr9hFL3vFYcngbR/VCZ6b+lzCnJEITrrLqozkqPq7CkBPMkg+bINRZlpY4VWEdpOrgKo=
+	t=1711050758; cv=none; b=hXefctsERmg/rGDyIKgzQwEmT5ao/aFovphGLwvbltkayWXAG4rJRCM9elGHW4BtlJeP+V3iKtBnKBo9LYdzgQS6IkDPVqzlZTsEVZBPMW+/txRGkRBIKRq3WtBf4x1U8FanB/qmQonhWHsonyP0/UT4r751n8SzWQ3G8/vL7O8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711049664; c=relaxed/simple;
-	bh=HdVPAGPeWYrzxVmTi5wEQzoohLlmdDTL9D8CQkDRM7E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=D8gzRz0Y/XNug7q3oWmytUOaGuYVkI6usIe/FAhkM81JXcWvKqcFMxtNFWKTcn5fqCzsJp1QrRV47O19TZoPap3Fx6rh1/Qfki6tQnHproLDJV+r2g3hCSm2keD0167Nl360sXu8bfWk+Y2lZV7RjQw0nTlRSMTw0A2A8fRcx7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=htCm/ieb reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id b53c8d51296cc07e; Thu, 21 Mar 2024 20:34:13 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
+	s=arc-20240116; t=1711050758; c=relaxed/simple;
+	bh=x9bF2GlKwBQBROkfQn8ZkL7g6dXhyRklXjeoJ7+o78Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=digEmqud/333ip89ZWFL+akeJYEsI6svcZK1rTirFmnTYZ3UPUt1J+gIBiwzd4uhtgDaT3Hn7SeKnAz2x1E+KFjnJSAHNC8l9IxmVFXK/eeJR0+sNlpHwRW6uXHJIU8mLJmvIhXhmeAQIzNqOZaLBospZWYBwGoHOkIO8+P9Kv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=qNIH0Hs0; arc=none smtp.client-ip=199.89.1.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by 008.lax.mailroute.net (Postfix) with ESMTP id 4V0x2648xpz6Cnk8t;
+	Thu, 21 Mar 2024 19:52:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:references:content-language:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1711050744; x=1713642745; bh=x9bF2GlKwBQBROkfQn8ZkL7g
+	6dXhyRklXjeoJ7+o78Q=; b=qNIH0Hs0SVRamEYXBAlL3R8NxsWmvf0F4PHIjKf0
+	F60nOEwPPcs2nTqPPLGPAeHFPtUzTP6Gn/OMprkUlSoJNy9qyrZ8EQP9EEbKbDE3
+	fzs1DTU8ZQ9+lUVJySklU4z4ygGuvWVyGt7wdARk8OSbRif15zuiBgLWp7TybU3x
+	SHFhiEEKk5utahJQerMtwOg/siqOA/ra7Dv0RUUsykNAop28QxZ9yiN9XwThYUNR
+	h3/qESF2JBeIi/VOWiSVka58EbJP8YElNcTrBbA1FAAuHrVOAPItSZZSCv//fA+1
+	VJc9C1fmGJfgByVbHanmDRv0f5BxU3hZK8bUKEbHUhHPUA==
+X-Virus-Scanned: by MailRoute
+Received: from 008.lax.mailroute.net ([127.0.0.1])
+ by localhost (008.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id daY4BxjVFOom; Thu, 21 Mar 2024 19:52:24 +0000 (UTC)
+Received: from [100.96.154.173] (unknown [104.132.1.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 3ABDC66B8D7;
-	Thu, 21 Mar 2024 20:34:13 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1711049653;
-	bh=HdVPAGPeWYrzxVmTi5wEQzoohLlmdDTL9D8CQkDRM7E=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=htCm/iebY6c7itmQkuu390V9w8w59432s5iVHp6krlEAT/0lyEro8X3TiM5pu8tvV
-	 Ofcoo8At1dQzYdcYgTK13kD4J4TuGpCz8nZkxc/4PVDPeFGt6Eg3kg5Qgp4ihrFTyo
-	 fmVKe8S2P9jt9EQQiL+qXfsg64ROKSwmagJTipp2SWckQ0assnWlonqcfbCna14rMh
-	 ZzrnfpIJqEEl8DRZu7bqpexJL6FWOh2mGxX2hQWuxN3uTuXL58XqPW7uGouGcD5vbh
-	 CIiLrHMaAcrB7Od3FPe1GxZDYaJK4y/r8fFBM+ILpFFP7TONBxsV4WzBqIW28GPbzb
-	 hO6QzOhh7uosg==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject:
- [PATCH v1 5/5] cpufreq: intel_pstate: Use __ro_after_init for three variables
-Date: Thu, 21 Mar 2024 20:34:06 +0100
-Message-ID: <2935621.e9J7NaK4W3@kreacher>
-In-Reply-To: <12409658.O9o76ZdvQC@kreacher>
-References: <12409658.O9o76ZdvQC@kreacher>
+	(Authenticated sender: bvanassche@acm.org)
+	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4V0x1w433Qz6Cnk8s;
+	Thu, 21 Mar 2024 19:52:20 +0000 (UTC)
+Message-ID: <2ed2dadc-bdc4-4a21-8aca-a2aac0c6479a@acm.org>
+Date: Thu, 21 Mar 2024 12:52:19 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrleejgdeihecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeefpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 0/2] Introduce per-task io utilization boost
+Content-Language: en-US
+To: Christian Loehle <christian.loehle@arm.com>,
+ Qais Yousef <qyousef@layalina.io>
+Cc: linux-kernel@vger.kernel.org, peterz@infradead.org,
+ juri.lelli@redhat.com, mingo@redhat.com, rafael@kernel.org,
+ dietmar.eggemann@arm.com, vschneid@redhat.com, vincent.guittot@linaro.org,
+ Johannes.Thumshirn@wdc.com, adrian.hunter@intel.com, ulf.hansson@linaro.org,
+ andres@anarazel.de, asml.silence@gmail.com, linux-pm@vger.kernel.org,
+ linux-block@vger.kernel.org, io-uring@vger.kernel.org,
+ linux-mmc@vger.kernel.org
+References: <20240304201625.100619-1-christian.loehle@arm.com>
+ <86f0af00-8765-4481-9245-1819fb2c6379@acm.org>
+ <0dc6a839-2922-40ac-8854-2884196da9b9@arm.com>
+ <c5b7fc1f-f233-4d25-952b-539607c2a0cc@acm.org>
+ <2784c093-eea1-4b73-87da-1a45f14013c8@arm.com>
+ <20240321123935.zqscwi2aom7lfhts@airbuntu>
+ <1ff973fc-66a4-446e-8590-ec655c686c90@arm.com>
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <1ff973fc-66a4-446e-8590-ec655c686c90@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 3/21/24 10:57, Christian Loehle wrote:
+> In the long-term it looks like for UFS the problem will disappear as we are
+> expected to get one queue/hardirq per CPU (as Bart mentioned), on NVMe that
+> is already the case.
 
-There are at least 3 variables in intel_pstate that do not get updated
-after they have been initialized, so annotate them with __ro_after_init.
+Why the focus on storage controllers with a single completion interrupt?
+It probably won't take long (one year?) until all new high-end
+smartphones may have support for multiple completion interrupts.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/cpufreq/intel_pstate.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Thanks,
 
-Index: linux-pm/drivers/cpufreq/intel_pstate.c
-===================================================================
---- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-+++ linux-pm/drivers/cpufreq/intel_pstate.c
-@@ -293,10 +293,10 @@ struct pstate_funcs {
- static struct pstate_funcs pstate_funcs __read_mostly;
- 
- static bool hwp_active __ro_after_init;
--static int hwp_mode_bdw __read_mostly;
--static bool per_cpu_limits __read_mostly;
-+static int hwp_mode_bdw __ro_after_init;
-+static bool per_cpu_limits __ro_after_init;
-+static bool hwp_forced __ro_after_init;
- static bool hwp_boost __read_mostly;
--static bool hwp_forced __read_mostly;
- 
- static struct cpufreq_driver *intel_pstate_driver __read_mostly;
- 
-
-
+Bart.
 
 
