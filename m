@@ -1,218 +1,215 @@
-Return-Path: <linux-pm+bounces-5185-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5186-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF0F0885836
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 12:24:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC4F888593B
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 13:39:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E9E51C21BA4
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 11:24:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 821C128221B
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 12:39:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F7DC57867;
-	Thu, 21 Mar 2024 11:23:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E19AA83CB8;
+	Thu, 21 Mar 2024 12:39:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="T93ozBM6"
+	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="MDPFzU9Y"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2080.outbound.protection.outlook.com [40.107.244.80])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3598F58228
-	for <linux-pm@vger.kernel.org>; Thu, 21 Mar 2024 11:23:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.80
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711020239; cv=fail; b=XBxC4iQCT7bw5byFtqM1sHYZrUT/XJWXY1VsI0x/7c52MJZsK17fFzgRMqcTMtM2cxk0/QdJvYwsXS0DbChQxqezCrKkqZ7CPOml37uQmQZehISfZ0ityu7HCUVrmahwgZ4kq3UdrPrvGMdSZlQoiXwOnBiz8DCdpSb8XYCUUwM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711020239; c=relaxed/simple;
-	bh=qLfPY5nCOSpWZonTQtJMnpecWcTWwobG1KXIRvKQRYI=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RsBxaK7JhylZNOvkvtfxF8/Dj1l4eBwV2mXp4qKHQYSCzo47ZctBYgwOgjoKJaQkLKoJWPoV52YH1w1Vf6QT/aQXae7CLxL4SVta49JzZhT7DZzAEOeQf9ulNFSgbTql8PN5g0th3gH3C/p2zGlvaMIGD8bTGdXpzmFxKaY+hZc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=T93ozBM6; arc=fail smtp.client-ip=40.107.244.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d5shiViTRzO7r7KJaU1DiKGa7ExjPVfU2wlJi7T68J3WpkJE9c0Si8g1MejLWjq4nUZgMb/iMbK0TGHh4tcN2WIZ/L9H9pI/6Wip/0IPtMLxPBmQc++3OKkErPecLQmDqMIYQFTtGIKWKZjqi9aKYi3O8qrSmO3vWfsqEfxZRaLOTgfvz/mqYvW6X4jT7dvMG4xs+G84jbycc0hxkbqUW4W5nyalD4QwOGRMGGeMjopxVwz6vukYcsYE+ftDB6/VQXtawXDRXtM1CYhhuPlPVJtoPsl6B9foB5+47NeMK1PAJLDh1dbnA1v01AM7AnoR3njDC7M1eiKqdKk5IXG+cw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oEHznbmDEl0K89+HxrJqo5Cbyrcy3k+sjhJWqjPTTs0=;
- b=g7JT5AMko3ezk/V29Jcl76EUkcsTpFqzF1dzo+eDPnYQpltpozgtYWu9ylUXAGLqcCasDYS+tm3UrNONN4/0+duXOnhLn1Ig1Hkpkriqba5tm1eUZ6jPLhDzI1cpXwIXp1a3cOXSnMvL4iIep+o9bIyWy/LHpNlZGZ5Ec755f2uYS1NPznkwwzviXAnqNi9RowjfwjIAEr6F2hc4IiVkfUOctDmyK5FDc9hdvHydJAF94eq0qb3AfvEv1bG5Dv5TKZYmoSDa8cKJ0dYRsQ+Ifh9oJ/4pc2ZV1YJXB8c2hhsGXTVAIOl/25GwpE9YJEBEz9W5c390YApZKBIYvY26wQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oEHznbmDEl0K89+HxrJqo5Cbyrcy3k+sjhJWqjPTTs0=;
- b=T93ozBM6+iFChgkEsDIMBvtRYei6manEuY2FeNvQMMu3eqaE5ewt3+2WGsbinzP2vIZaY+Y4VGfxrMD823NR5wHQLCWyeEjxvBjjV2JfUqSYReuOyWSEO2NWjQzkVZvNW5f1h7JLaqJGx9bxfieQJHbiiR27vSOZWS9Dyjwg/pA=
-Received: from CH2PR04CA0004.namprd04.prod.outlook.com (2603:10b6:610:52::14)
- by BL3PR12MB6643.namprd12.prod.outlook.com (2603:10b6:208:38f::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.31; Thu, 21 Mar
- 2024 11:23:51 +0000
-Received: from CH2PEPF00000144.namprd02.prod.outlook.com
- (2603:10b6:610:52:cafe::25) by CH2PR04CA0004.outlook.office365.com
- (2603:10b6:610:52::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.20 via Frontend
- Transport; Thu, 21 Mar 2024 11:23:51 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CH2PEPF00000144.mail.protection.outlook.com (10.167.244.101) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7409.10 via Frontend Transport; Thu, 21 Mar 2024 11:23:51 +0000
-Received: from jenkins-amdgpu-2666v3.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 21 Mar 2024 06:23:45 -0500
-From: Xiaojian Du <Xiaojian.Du@amd.com>
-To: <linux-pm@vger.kernel.org>, <Perry.Yuan@amd.com>, <rafael@kernel.org>,
-	<Ray.Huang@amd.com>
-CC: <Li.Meng@amd.com>, <Shimmer.Huang@amd.com>, <Mario.Limonciello@amd.com>,
-	<Borislav.Petkov@amd.com>, Xiaojian Du <Xiaojian.Du@amd.com>
-Subject: [PATCH] cpufreq: amd-pstate: change cpu freq transition delay for some models
-Date: Thu, 21 Mar 2024 19:23:30 +0800
-Message-ID: <20240321112330.832204-1-Xiaojian.Du@amd.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4B0A83CAE
+	for <linux-pm@vger.kernel.org>; Thu, 21 Mar 2024 12:39:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711024780; cv=none; b=vD0DOdFCbNXLA6+NGFvFUKxcfXu1kFzh5DMv9DhUiI+zu6pqK2bGkyeWqEO8/ezIhJKVGaZHDvCl4pK4kqfAwjpjh7B8pJqdfda3qlxl2jWME1C2vTB5USscP/TuZY7XW33mppxueODI88PKzYQflulEgB9IC+DHeRUD24P/q1A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711024780; c=relaxed/simple;
+	bh=Kmu3zbPUyay6XlM8mJYmGLdGinxyCQPn1imK7hIxqtg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pbBa90RaIhpVsBapeDuHlDkmMpq3ExK+u7u3DUqWxlCDDZBOoB/rloM0zNoh9fbkcBmFuxL7ayVSq/+UR+JykIaaJrI4fvMHR9w8Kf3UVlRPRdnPg37b81Allm20G48CYm5mOE/tJEpvy+sZRAdmkj6JQDD5b9Rdi3DD9k1cLYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=MDPFzU9Y; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-41477452178so2019765e9.3
+        for <linux-pm@vger.kernel.org>; Thu, 21 Mar 2024 05:39:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1711024777; x=1711629577; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zNZ7vhsdbmv3tsfRVkzmFnvT+rAuDkFFXFyABvgWN9Y=;
+        b=MDPFzU9YaM+C6XhbqR3xXXjhLmOsVF9+I887J+A/xBplZIuDh6mFQqFEB3iD37Lt4p
+         uYM0JyS5Bfsbl5TVOjvIcGhwwhE8F2FDcN+5fgSwjG81XD9jPhAtPfS7wWhXFf6aHo79
+         7bSB0SfICDUTq9bEz5UVNl/XbdRWWoxc1Cv2WJtLjkCGaMRRTDCuyprUx7foY+3ApO3X
+         7kL7J6csWopnhUouhNMHLhBoaIojUZwwaz9BUVZwcvgdF+8wCJ+ZC8JABLa7Iv6M7n9w
+         dXsh5VVj1IrCpNC43Nw2VGRlZGC3wXFXU4XOn1H8sJ+EPEAIiA8pv1pN9vvf7uI6Uf+J
+         ot5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711024777; x=1711629577;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zNZ7vhsdbmv3tsfRVkzmFnvT+rAuDkFFXFyABvgWN9Y=;
+        b=qUUyEceynxst6M6Jtd/fq9XsBMrP79/K4MXo6rF1FMNFhbPoxYmxSEXthkamKAu72n
+         ktXGXsvwCKqeU4zcF3ffap9zbezl44QBUKE6dzsEI7VfCHshBMXfuX0Ln1AoTwPeZVED
+         hWxBd2P6mhc1UXdki8rebvIit2lUkjHBS9g0OXWMki0xbZhdP+3+J31g8aPGEwAGeFmT
+         6LowrEEm6r9GWNbYl7WHpQtA92fBR/LvO7j4H4oAVq/28rG6HFxy7DlDeULryl1BYr2/
+         ox55vb+OUyvXkqka5EMpZmGTJDZi4HjPJrlpp+Zzx8MnDyNkG95b21MRxX+QhGibGeIL
+         F3JQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUz5mwy4ctcVnK8sSRCpHld/5/dNqe5HgI1kzhVTyKUpJLgp/8eYQbVFQIWDdVz2b9YjOS+TCooawcwnnf7nVheFh6LlTVFDeE=
+X-Gm-Message-State: AOJu0Yy1OKVcqvEvrcwxI0ATqdzwwfwRqFX6Z1GmA5eYW3W5etM+YaH3
+	CCtLUnzej5ZhXepSUmjg+RS524C2h9eZonM45ZMuiB/PXRRlF8f3fGQP3Z5wzkM=
+X-Google-Smtp-Source: AGHT+IGt57g28ARi2T1iW4asSHhR0gQbNaXQuJ3XP+Q0+k/8e4PFX+HjmNPJHcwMpW1JipVFYQAjyA==
+X-Received: by 2002:a05:600c:4254:b0:414:5e91:124f with SMTP id r20-20020a05600c425400b004145e91124fmr1979948wmm.23.1711024777073;
+        Thu, 21 Mar 2024 05:39:37 -0700 (PDT)
+Received: from airbuntu (host81-157-90-255.range81-157.btcentralplus.com. [81.157.90.255])
+        by smtp.gmail.com with ESMTPSA id h13-20020a05600c314d00b004146d736fcdsm4938670wmo.36.2024.03.21.05.39.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Mar 2024 05:39:36 -0700 (PDT)
+Date: Thu, 21 Mar 2024 12:39:35 +0000
+From: Qais Yousef <qyousef@layalina.io>
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: Bart Van Assche <bvanassche@acm.org>, linux-kernel@vger.kernel.org,
+	peterz@infradead.org, juri.lelli@redhat.com, mingo@redhat.com,
+	rafael@kernel.org, dietmar.eggemann@arm.com, vschneid@redhat.com,
+	vincent.guittot@linaro.org, Johannes.Thumshirn@wdc.com,
+	adrian.hunter@intel.com, ulf.hansson@linaro.org, andres@anarazel.de,
+	asml.silence@gmail.com, linux-pm@vger.kernel.org,
+	linux-block@vger.kernel.org, io-uring@vger.kernel.org
+Subject: Re: [RFC PATCH 0/2] Introduce per-task io utilization boost
+Message-ID: <20240321123935.zqscwi2aom7lfhts@airbuntu>
+References: <20240304201625.100619-1-christian.loehle@arm.com>
+ <86f0af00-8765-4481-9245-1819fb2c6379@acm.org>
+ <0dc6a839-2922-40ac-8854-2884196da9b9@arm.com>
+ <c5b7fc1f-f233-4d25-952b-539607c2a0cc@acm.org>
+ <2784c093-eea1-4b73-87da-1a45f14013c8@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PEPF00000144:EE_|BL3PR12MB6643:EE_
-X-MS-Office365-Filtering-Correlation-Id: 001ab551-9b1b-444b-8362-08dc499962a3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	3Fsj+I7MpMy6SPywfd1iCLKo2j3ih/KWvFh/1OOoAVAEReTNtwwfszJOSaDEHKuwAOIGAppmoLeqY8bb2w3Kylgn4gvsap5uXElXE1bmuYXzGu2LrsFnsrEGKLmZwyJZp8AtQz372C8NH932O765sfZKVlNzryx2KMEuvqIdWEwuc9eK/Fm4cJNaorzQhspsUB1gfF4naySFYa6+SyXlzbewwbULLaZ15o+ZW+ziaLHvuCZYeEKqHt+W4VPzRKfB3C+E573yyRxyQ1moElKDEqm9wRQMxLse+WSDNyRPrWSYdIEhLy6cpjzohM2TyJvMRF7WgfW4a0luGW6SPszO/9UGeQhtllXIjHjsEOxcJNeTfqcRfdLhG0LedCAibTivZNbHLj8aGR12T8UOuP6nkFCAuh72v3BMopBRekc+o7KpULONQ7wpq6qiu0kfd+QCg5dh2or1ErMSmGnszk1I9KUIf/DOAeuRovjpvrHkYnkmBhcMgZPuz9/Wgr4QVAIa1w8qrw5ec9U/tEs5PuH5Da0H5ZOWet7yU+soJknuYJMJX9jdkcS+IDUmJje720FQFBvtoyq7D3RJZoGPJnv9qyD1p2X/3ppY8vDWuJfruFv34285IANDxZi3TCIuLfuw6P2MNU5zTvvHSgkCHMLhVDe7jLdYCif1NDcM7HYIYE1X3Tl3ComFC9WfVCk4jGkQgTI/urmK1dsiOFmlZNBUmwyxbsUSl5LIyQxRj4tdd7BotzI3qPJZOOcVqigaoDuR
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(36860700004)(82310400014)(376005)(1800799015);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2024 11:23:51.2849
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 001ab551-9b1b-444b-8362-08dc499962a3
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CH2PEPF00000144.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6643
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2784c093-eea1-4b73-87da-1a45f14013c8@arm.com>
 
-In AMD Phoenix(ZEN4) APU, one new power management unit -- MPCCX is
-added to control the CPU frequency clock, it supports to adjust CPU core
-clock more quickly and more presicely according to CPU work loading.
-This patch will reduce the CPU clock transition delay value to coordinate
-with this new pm unit for Phoenix APU, and this change will only be
-effective in the *passive mode* of AMD pstate driver.
+(Thanks for the CC Bart)
 
-Some test results on AMD 7840HS(Phoenix) APU:
+On 03/06/24 10:49, Christian Loehle wrote:
+> Hi Bart,
+> 
+> On 05/03/2024 18:36, Bart Van Assche wrote:
+> > On 3/5/24 01:13, Christian Loehle wrote:
+> >> On 05/03/2024 00:20, Bart Van Assche wrote:
+> >>> On 3/4/24 12:16, Christian Loehle wrote:
+> >>>> - Higher cap is not always beneficial, we might place the task away
+> >>>> from the CPU where the interrupt handler is running, making it run
+> >>>> on an unboosted CPU which may have a bigger impact than the difference
+> >>>> between the CPU's capacity the task moved to. (Of course the boost will
+> >>>> then be reverted again, but a ping-pong every interval is possible).
+> >>>
+> >>> In the above I see "the interrupt handler". Does this mean that the NVMe
+> >>> controller in the test setup only supports one completion interrupt for
+> >>> all completion queues instead of one completion interrupt per completion
+> >>> queue? There are already Android phones and developer boards available
+> >>> that support the latter, namely the boards equipped with a UFSHCI 4.0 controller.
+> >>
+> >> No, both NVMe test setups have one completion interrupt per completion queue,
+> >> so this caveat doesn't affect them, higher capacity CPU is strictly better.
+> >> The UFS and both mmc setups (eMMC with CQE and sdcard) only have one completion
+> >> interrupt (on CPU0 on my setup).
+> > 
+> > I think that measurements should be provided in the cover letter for the
+> > two types of storage controllers: one series of measurements for a
+> > storage controller with a single completion interrupt and a second
+> > series of measurements for storage controllers with one completion
+> > interrupt per CPU.
+> 
+> Of the same type of storage controller? Or what is missing for you in
+> the cover letter exactly (ufs/emmc: single completion interrupt,
+> nvme: one completion interrupt per CPU).
+> 
+> > 
+> >> FWIW you do gain an additional ~20% (in my specific setup) if you move the ufshcd
+> >> interrupt to a big CPU, too. Similarly for the mmc.
+> >> Unfortunately the infrastructure is far from being there for the scheduler to move the
+> >> interrupt to the same performance domain as the task, which is often optimal both in
+> >> terms of throughput and in terms of power.
+> >> I'll go looking for a stable testing platform with UFS as you mentioned, benefits of this
+> >> patch will of course be greatly increased.
+> > 
+> > I'm not sure whether making the completion interrupt follow the workload
+> > is a good solution. I'm concerned that this would increase energy
+> > consumption by keeping the big cores active longer than necessary. I
+> > like this solution better (improves storage performance on at least
+> > devices with a UFSHCI 3.0 controller): "[PATCH v2 0/2] sched: blk:
+> > Handle HMP systems when completing IO"
+> > (https://lore.kernel.org/linux-block/20240223155749.2958009-1-qyousef@layalina.io/).
+> 
+> That patch is good, don't get me wrong, but you still lose out by running everything
+> up to blk_mq_complete_request() on (potentially) a LITTlE (that might be run on a low OPP),
+> while having a big CPU available at a high OPP anyway ("for free").
+> It is only adjacent to the series but I've done some measurements (Pixel6 again, same device
+> as cover letter, Base is Android 6.6 mainline kernel (so without my series, but I somewhat forced
+> the effects by task pinning), Applied is with both of sched: blk: Handle HMP systems when completing IO):
 
-1. Tbench
-(Energy less is better, Throughput more is better,
-PPW--Performance per Watt more is better)
-============= =================== ============== =============== ============== =============== ============== =============== ===============
- Trans Delay   Tbench              governor:schedutil, 3-iterations average
-============= =================== ============== =============== ============== =============== ============== =============== ===============
- 1000us        Clients             1              2               4              8              12             16              32
-               Energy/Joules       2010           2804            8768           17171          16170          15132           15027
-               Throughput/(MB/s)   114            259             1041           3010           3135           4851            4605
-               PPW                 0.0567         0.0923          0.1187         0.1752         0.1938         0.3205          0.3064
- 600us         Clients             1              2               4              8              12             16              32
-               Energy/Joules       2115  (5.22%)  2388  (-14.84%) 10700(22.03%)  16716 (-2.65%) 15939 (-1.43%) 15053 (-0.52%)  15083 (0.37% )
-               Throughput/(MB/s)   122   (7.02%)  234   (-9.65% ) 1188 (14.12%)  3003  (-0.23%) 3143  (0.26% ) 4842  (-0.19%)  4603  (-0.04%)
-               PPW                 0.0576(1.59%)  0.0979(6.07%  ) 0.111(-6.49%)  0.1796(2.51% ) 0.1971(1.70% ) 0.3216(0.34% )  0.3051(-0.42%)
-============= =================== ============== ================ ============= =============== ============== =============== ===============
+So you want the hardirq to move to the big core? Unlike softirq, there will be
+a single hardirq for the controller (to my limited knowledge), so if there are
+multiple requests I'm not sure we can easily match which one relates to which
+before it triggers. So we can end up waking up the wrong core.
 
-2.Dbench
-(Energy less is better, Throughput more is better,
-PPW--Performance per Watt more is better)
-============= =================== ============== =============== ============== =============== ============== =============== ===============
- Trans Delay   Dbench              governor:schedutil, 3-iterations average
-============= =================== ============== =============== ============== =============== ============== =============== ===============
- 1000us        Clients             1             2               4              8               12             16              32
-               Energy/Joules       4890          3779            3567           5157            5611           6500            8163
-               Throughput/(MB/s)   327           167             220            577             775            938             1397
-               PPW                 0.0668        0.0441          0.0616         0.1118          0.1381         0.1443          0.1711
- 600us         Clients             1             2               4              8               12             16              32
-               Energy/Joules       4915  (0.51%) 4912  (29.98%)  3506  (-1.71%) 4907  (-4.85% ) 5011 (-10.69%) 5672  (-12.74%) 8141  (-0.27%)
-               Throughput/(MB/s)   348   (6.42%) 284   (70.06%)  220   (0.00% ) 518   (-10.23%) 712  (-8.13% ) 854   (-8.96% ) 1475  (5.58% )
-               PPW                 0.0708(5.99%) 0.0578(31.07%)  0.0627(1.79% ) 0.1055(-5.64% ) 0.142(2.82%  ) 0.1505(4.30%  ) 0.1811(5.84% )
-============= =================== ============== =============== ============== =============== ============== =============== ===============
+Generally this should be a userspace policy. If there's a scenario where the
+throughput is that important they can easily move the hardirq to the big core
+unconditionally and move it back again once this high throughput scenario is no
+longer important.
 
-3.Hackbench(less time is better)
-============= =========================== ==========================
-  hackbench     governor:schedutil
-============= =========================== ==========================
-  Trans Delay   Process Mode Ave time(s)  Thread Mode Ave time(s)
-  1000us        14.484                      14.484
-  600us         14.418(-0.46%)              15.41(+6.39%)
-============= =========================== ==========================
+Or where you describing a different problem?
 
-4.Perf_sched_bench(less time is better)
-============= =================== ============== ============== ============== =============== =============== =============
- Trans Delay  perf_sched_bench    governor:schedutil
-============= =================== ============== ============== ============== =============== =============== =============
-  1000us        Groups             1             2              4              8               12              24
-                AveTime(s)        1.64          2.851          5.878          11.636          16.093          26.395
-  600us         Groups             1             2              4              8               12              24
-                AveTime(s)        1.69(3.05%)   2.845(-0.21%)  5.843(-0.60%)  11.576(-0.52%)  16.092(-0.01%)  26.32(-0.28%)
-============= =================== ============== ============== ============== =============== =============== =============
+Glad to see your series by the way :-) I'll get a chance to review it over the
+weekend hopefully.
 
-5.Sysbench(higher is better)
-============= ================== ============== ================= ============== ================ =============== =================
-  Sysbench    governor:schedutil
-============= ================== ============== ================= ============== ================ =============== =================
-  1000us      Thread             1               2                4              8                12               24
-              Ave events         6020.98         12273.39         24119.82       46171.57         47074.37         47831.72
-  600us       Thread             1               2                4              8                12               24
-              Ave events         6154.82(2.22%)  12271.63(-0.01%) 24392.5(1.13%) 46117.64(-0.12%) 46852.19(-0.47%) 47678.92(-0.32%)
-============= =================== ============== ================= ============== ================ =============== ================
 
-In conclusion, for AMD Phoenix APU, a shorter transition delay
-of cpu clock will make a quite positive effect to improve PPW on Dbench test,
-in the meanwhile , keep stable performance on Tbench,
-Hackbench, Perf_sched_bench and Sysbench.
+Cheers
 
-Signed-off-by: Xiaojian Du <Xiaojian.Du@amd.com>
----
- drivers/cpufreq/amd-pstate.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+--
+Qais Yousef
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 1f6186475715..107dc2778d37 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -744,7 +744,15 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
- 	}
- 
- 	policy->cpuinfo.transition_latency = AMD_PSTATE_TRANSITION_LATENCY;
--	policy->transition_delay_us = AMD_PSTATE_TRANSITION_DELAY;
-+
-+	if (boot_cpu_data.x86 == 0x19) {
-+		switch (boot_cpu_data.x86_model) {
-+		case 0x70 ... 0x7f:
-+			policy->transition_delay_us = 600;
-+			break;
-+		}
-+	} else
-+		policy->transition_delay_us = AMD_PSTATE_TRANSITION_DELAY;
- 
- 	policy->min = min_freq;
- 	policy->max = max_freq;
--- 
-2.34.1
-
+> 
+> Pretty numbers (IOPS):
+> Base irq@CPU0 median: 6969
+> Base irq@CPU6 median: 8407 (+20.6%)
+> Applied irq@CPU0 median: 7144 (+2.5%)
+> Applied irq@CPU6 median: 8288 (18.9%)
+> 
+> This is with psyncx1 4K Random Read again, of course anything with queue depth
+> takes advantage of batch completions to significantly reduce irq pressure.
+> 
+> Not so pretty numbers and full list commands used:
+> 
+> w/o patch:
+> irq on CPU0 (default):
+> psyncx1: 7000 6969 7025 6954 6964
+> io_uring4x128: 28766 28280 28339 28310 28349
+> irq on CPU6:
+> psyncx1: 8342 8492 8355 8407 8532
+> io_uring4x128: 28641 28356 25908 25787 25853
+> 
+> with patch:
+> irq on CPU0:
+> psyncx1: 7672 7144 7301 6976 6889
+> io_uring4x128: 28266 26314 27648 24482 25301
+> irq on CPU6:
+> psyncx1: 8208 8401 8351 8221 8288
+> io_uring4x128: 25603 25438 25453 25514 25402
+> 
+> 
+> for i in $(seq 0 4); do taskset c0 /data/local/tmp/fio_aosp_build --name=test --rw=randread --bs=4k --runtime=30 --time_based --filename=/dev/block/sda --minimal | awk -F ";" '{print $8}'; sleep 30; done
+> 
+> for i in $(seq 0 4); do taskset c0 /data/local/tmp/fio_aosp_build --name=test --rw=randread --bs=4k --runtime=30 --time_based --filename=/dev/block/sda --ioengine=io_uring --iodepth=128 --numjobs=4 --group_reporting --minimal | awk -F ";" '{print $8}'; sleep 30; done
+> 
+> echo 6 > /proc/irq/296/smp_affinity_list
+> 
+> 
+> Kind Regards,
+> Christian
 
