@@ -1,63 +1,74 @@
-Return-Path: <linux-pm+bounces-5202-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5203-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B10788614C
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 20:52:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 522A288641C
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 00:51:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6CB271C21717
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 19:52:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 08CDA284217
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Mar 2024 23:51:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72381134428;
-	Thu, 21 Mar 2024 19:52:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BED11DFD2;
+	Thu, 21 Mar 2024 23:51:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="qNIH0Hs0"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="DP54qrRT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from 008.lax.mailroute.net (008.lax.mailroute.net [199.89.1.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B73A013441C;
-	Thu, 21 Mar 2024 19:52:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D74881DFCF
+	for <linux-pm@vger.kernel.org>; Thu, 21 Mar 2024 23:51:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711050758; cv=none; b=hXefctsERmg/rGDyIKgzQwEmT5ao/aFovphGLwvbltkayWXAG4rJRCM9elGHW4BtlJeP+V3iKtBnKBo9LYdzgQS6IkDPVqzlZTsEVZBPMW+/txRGkRBIKRq3WtBf4x1U8FanB/qmQonhWHsonyP0/UT4r751n8SzWQ3G8/vL7O8=
+	t=1711065097; cv=none; b=gi5G+61W6LvrbqNPmjSMHTD1D37Jfnjx4SLKTYyl3gInHukiPkKH+Qen1iq/9MhGQA86rfuJfP+xcusvmJmUpr1NQ78p5lrvigI86bsB+F4tjTfKRY0npM28kUwgm5s0X9KBA/irUkxo+NTNOqt2A/BR+pHJ9SZcxatVA4Bp1vs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711050758; c=relaxed/simple;
-	bh=x9bF2GlKwBQBROkfQn8ZkL7g6dXhyRklXjeoJ7+o78Q=;
+	s=arc-20240116; t=1711065097; c=relaxed/simple;
+	bh=xW80rWOlFHvVSoFt0FE2CMnMtCrSafEX4MbK88/mY5c=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=digEmqud/333ip89ZWFL+akeJYEsI6svcZK1rTirFmnTYZ3UPUt1J+gIBiwzd4uhtgDaT3Hn7SeKnAz2x1E+KFjnJSAHNC8l9IxmVFXK/eeJR0+sNlpHwRW6uXHJIU8mLJmvIhXhmeAQIzNqOZaLBospZWYBwGoHOkIO8+P9Kv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=qNIH0Hs0; arc=none smtp.client-ip=199.89.1.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 008.lax.mailroute.net (Postfix) with ESMTP id 4V0x2648xpz6Cnk8t;
-	Thu, 21 Mar 2024 19:52:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:references:content-language:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1711050744; x=1713642745; bh=x9bF2GlKwBQBROkfQn8ZkL7g
-	6dXhyRklXjeoJ7+o78Q=; b=qNIH0Hs0SVRamEYXBAlL3R8NxsWmvf0F4PHIjKf0
-	F60nOEwPPcs2nTqPPLGPAeHFPtUzTP6Gn/OMprkUlSoJNy9qyrZ8EQP9EEbKbDE3
-	fzs1DTU8ZQ9+lUVJySklU4z4ygGuvWVyGt7wdARk8OSbRif15zuiBgLWp7TybU3x
-	SHFhiEEKk5utahJQerMtwOg/siqOA/ra7Dv0RUUsykNAop28QxZ9yiN9XwThYUNR
-	h3/qESF2JBeIi/VOWiSVka58EbJP8YElNcTrBbA1FAAuHrVOAPItSZZSCv//fA+1
-	VJc9C1fmGJfgByVbHanmDRv0f5BxU3hZK8bUKEbHUhHPUA==
-X-Virus-Scanned: by MailRoute
-Received: from 008.lax.mailroute.net ([127.0.0.1])
- by localhost (008.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id daY4BxjVFOom; Thu, 21 Mar 2024 19:52:24 +0000 (UTC)
-Received: from [100.96.154.173] (unknown [104.132.1.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4V0x1w433Qz6Cnk8s;
-	Thu, 21 Mar 2024 19:52:20 +0000 (UTC)
-Message-ID: <2ed2dadc-bdc4-4a21-8aca-a2aac0c6479a@acm.org>
-Date: Thu, 21 Mar 2024 12:52:19 -0700
+	 In-Reply-To:Content-Type; b=V/73YEXOKsT5/tOcDWA3hMBn5pJsQDdKpQQbCsrnESqdgAkyc8+gBW8WaDDR0jstl22N7OCd7oXSVaYAoaMUctI+Twqz8Z5vwgbx0HxWEQggQjNbe/0eGfxwhARtsM3LADmtD4P7sLnETfoA/0l0G3+xcgKap2BRl9YqQF8m5WY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=DP54qrRT; arc=none smtp.client-ip=209.85.166.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-7cf01066448so61102039f.1
+        for <linux-pm@vger.kernel.org>; Thu, 21 Mar 2024 16:51:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1711065093; x=1711669893; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZNqlzzs3C3okF1Ihs4S4kvN5WrFgjE+GlyvdPE0dOGo=;
+        b=DP54qrRTYYqyASdalC9kq72lU1wWtpzCs0Ru7p2AHu1ONctSNu140YEjzlXpuGOnuI
+         D1zDB17CJXnYj6A+WEcunVteD1yJHvk8HWstDZ3ZU/u3jhLJnkE7rU2ZkuxpB+6EcX8O
+         AQGon8LDmL3+iO54Z85lNqRzZVMUbyu6Zz/2OsQYp60Ex/8TUCDPf+kFIEa5stLAvRWG
+         OxrcMw4NCAEtwAYHcOnjmwD+FcyhDXx1RQMt9RYhSY7pRrfc3jblIjmVvsxZr9sj2mTE
+         kyWH9a/wlYrFivg5+IyRnw/4er9qQZqFB3T1nxeO2EiERw0hP+Gf7o256gW7LmshCoAL
+         fHjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711065093; x=1711669893;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZNqlzzs3C3okF1Ihs4S4kvN5WrFgjE+GlyvdPE0dOGo=;
+        b=WgNLNTOKEY5bDx4I4ZKJfPb6SrWNOSwW1mbaQSBjjILHCFkhQ5nZqOZ5121D+CVwTf
+         h0Nv4PavNUpE+PYHcJuXh5GO9jmD9qg3oVO12iaVX41jsq4tY7Ty072c7VFxwen4DSEs
+         44OPBbQ/PwKtWYcZqv2nMXgT+FtxK12TK930SR5YCdmup3qheC+j8PyaduMW3iL1axf4
+         tV+Zi3R2wvWI2reezGHjCVaP9pS6Y+sOUKwhtIf33qbd+I6C1F6gfyk+cUJxX7xdU6ir
+         HY0wyxqyXX9RQ9hWFHLhnTljIu3BUOJ6kwxqLzmgs/25PqDWY0o8hJlTTM1kTDZMmja6
+         5qjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX3Pd8PII/rgAevjkmjiYy20kRmP1mXcCeUvS7i2YrfD/6bf8ANDNJ9K+gHBtVLRDFny2It59a6SbWYVD82uZLaO+j/Wn24Xw0=
+X-Gm-Message-State: AOJu0Yxm/Gw2beGSkdGnYmsVdtHy3BX9MWziQACDdJ8WZu1yoFJct+cL
+	4oCfLLf1oTXbxQiJu8np73qLNvs8BhQ2JquxKqpNXD6b03xb+NwdFfO93NouoF8=
+X-Google-Smtp-Source: AGHT+IG8c+yACk8/X3Es/Xp0PMdBsSuZwh0qwYwidFyL/zRGltJfSOCF3y2cOWM1wkvDI9gGTrG31A==
+X-Received: by 2002:a92:dcce:0:b0:366:40dc:4d99 with SMTP id b14-20020a92dcce000000b0036640dc4d99mr986208ilr.30.1711065092945;
+        Thu, 21 Mar 2024 16:51:32 -0700 (PDT)
+Received: from [100.64.0.1] ([136.226.86.189])
+        by smtp.gmail.com with ESMTPSA id t5-20020a92cc45000000b00366b66af14asm237709ilq.17.2024.03.21.16.51.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Mar 2024 16:51:32 -0700 (PDT)
+Message-ID: <3010bb57-c13f-494a-9e8c-0ae6393b1eee@sifive.com>
+Date: Thu, 21 Mar 2024 18:51:31 -0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -65,40 +76,92 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 0/2] Introduce per-task io utilization boost
+Subject: Re: [PATCH] riscv: Do not save the scratch CSR during suspend
 Content-Language: en-US
-To: Christian Loehle <christian.loehle@arm.com>,
- Qais Yousef <qyousef@layalina.io>
-Cc: linux-kernel@vger.kernel.org, peterz@infradead.org,
- juri.lelli@redhat.com, mingo@redhat.com, rafael@kernel.org,
- dietmar.eggemann@arm.com, vschneid@redhat.com, vincent.guittot@linaro.org,
- Johannes.Thumshirn@wdc.com, adrian.hunter@intel.com, ulf.hansson@linaro.org,
- andres@anarazel.de, asml.silence@gmail.com, linux-pm@vger.kernel.org,
- linux-block@vger.kernel.org, io-uring@vger.kernel.org,
- linux-mmc@vger.kernel.org
-References: <20240304201625.100619-1-christian.loehle@arm.com>
- <86f0af00-8765-4481-9245-1819fb2c6379@acm.org>
- <0dc6a839-2922-40ac-8854-2884196da9b9@arm.com>
- <c5b7fc1f-f233-4d25-952b-539607c2a0cc@acm.org>
- <2784c093-eea1-4b73-87da-1a45f14013c8@arm.com>
- <20240321123935.zqscwi2aom7lfhts@airbuntu>
- <1ff973fc-66a4-446e-8590-ec655c686c90@arm.com>
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <1ff973fc-66a4-446e-8590-ec655c686c90@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To: JeeHeng Sia <jeeheng.sia@starfivetech.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>,
+ "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
+Cc: Albert Ou <aou@eecs.berkeley.edu>, Andrew Jones
+ <ajones@ventanamicro.com>, Conor Dooley <conor.dooley@microchip.com>,
+ Leyfoon Tan <leyfoon.tan@starfivetech.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Pavel Machek <pavel@ucw.cz>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+References: <20240312195641.1830521-1-samuel.holland@sifive.com>
+ <BJSPR01MB0561EC63D6654543D1266AD79C28A@BJSPR01MB0561.CHNPR01.prod.partner.outlook.cn>
+From: Samuel Holland <samuel.holland@sifive.com>
+In-Reply-To: <BJSPR01MB0561EC63D6654543D1266AD79C28A@BJSPR01MB0561.CHNPR01.prod.partner.outlook.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 3/21/24 10:57, Christian Loehle wrote:
-> In the long-term it looks like for UFS the problem will disappear as we are
-> expected to get one queue/hardirq per CPU (as Bart mentioned), on NVMe that
-> is already the case.
+On 2024-03-14 11:55 PM, JeeHeng Sia wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Samuel Holland <samuel.holland@sifive.com>
+>> Sent: Wednesday, March 13, 2024 3:57 AM
+>> To: Palmer Dabbelt <palmer@dabbelt.com>; linux-riscv@lists.infradead.org
+>> Cc: Samuel Holland <samuel.holland@sifive.com>; Albert Ou <aou@eecs.berkeley.edu>; Andrew Jones <ajones@ventanamicro.com>;
+>> Conor Dooley <conor.dooley@microchip.com>; Leyfoon Tan <leyfoon.tan@starfivetech.com>; Paul Walmsley
+>> <paul.walmsley@sifive.com>; Pavel Machek <pavel@ucw.cz>; Rafael J. Wysocki <rafael@kernel.org>; JeeHeng Sia
+>> <jeeheng.sia@starfivetech.com>; linux-kernel@vger.kernel.org; linux-pm@vger.kernel.org
+>> Subject: [PATCH] riscv: Do not save the scratch CSR during suspend
+>>
+>> While the processor is executing kernel code, the value of the scratch
+>> CSR is always zero, so there is no need to save the value. Continue to
+>> write the CSR during the resume flow, so we do not rely on firmware to
+>> initialize it.
+>>
+>> Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
+>> ---
+>>
+>>  arch/riscv/include/asm/suspend.h | 1 -
+>>  arch/riscv/kernel/suspend.c      | 3 +--
+>>  2 files changed, 1 insertion(+), 3 deletions(-)
+>>
+>> diff --git a/arch/riscv/include/asm/suspend.h b/arch/riscv/include/asm/suspend.h
+>> index 491296a335d0..6569eefacf38 100644
+>> --- a/arch/riscv/include/asm/suspend.h
+>> +++ b/arch/riscv/include/asm/suspend.h
+>> @@ -13,7 +13,6 @@ struct suspend_context {
+>>  	/* Saved and restored by low-level functions */
+>>  	struct pt_regs regs;
+>>  	/* Saved and restored by high-level functions */
+>> -	unsigned long scratch;
+>>  	unsigned long envcfg;
+>>  	unsigned long tvec;
+>>  	unsigned long ie;
+>> diff --git a/arch/riscv/kernel/suspend.c b/arch/riscv/kernel/suspend.c
+>> index 299795341e8a..3d306d8a253d 100644
+>> --- a/arch/riscv/kernel/suspend.c
+>> +++ b/arch/riscv/kernel/suspend.c
+>> @@ -14,7 +14,6 @@
+>>
+>>  void suspend_save_csrs(struct suspend_context *context)
+>>  {
+>> -	context->scratch = csr_read(CSR_SCRATCH);
+>>  	if (riscv_cpu_has_extension_unlikely(smp_processor_id(), RISCV_ISA_EXT_XLINUXENVCFG))
+>>  		context->envcfg = csr_read(CSR_ENVCFG);
+>>  	context->tvec = csr_read(CSR_TVEC);
+>> @@ -37,7 +36,7 @@ void suspend_save_csrs(struct suspend_context *context)
+>>
+>>  void suspend_restore_csrs(struct suspend_context *context)
+>>  {
+>> -	csr_write(CSR_SCRATCH, context->scratch);
+>> +	csr_write(CSR_SCRATCH, 0);
+> If the register is always zero, do we need to explicitly write zero to the register during resume?
 
-Why the focus on storage controllers with a single completion interrupt?
-It probably won't take long (one year?) until all new high-end
-smartphones may have support for multiple completion interrupts.
+The register contains zero while executing in the kernel. While executing in
+userspace, the value is nonzero. The value is checked at the beginning of
+handle_exception(). We must ensure the value is zero before enabling interrupts,
+or we might incorrectly think the interrupt was entered from userspace.
 
-Thanks,
+We don't know what the value will be when the hart comes out of non-retentive
+suspend. Per the SBI HSM specification, Table 6: "All other registers remain in
+an undefined state."
 
-Bart.
+Regards,
+Samuel
 
 
