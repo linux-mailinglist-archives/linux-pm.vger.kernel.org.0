@@ -1,54 +1,54 @@
-Return-Path: <linux-pm+bounces-5240-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5241-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FF3988702A
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 17:02:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 026D2887045
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 17:05:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B9A9E1F22925
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 16:02:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 34A871C229CF
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 16:05:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB16556751;
-	Fri, 22 Mar 2024 16:02:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC03256B69;
+	Fri, 22 Mar 2024 16:05:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jmV2lbD8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sNV5udq8"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8652A55C26;
-	Fri, 22 Mar 2024 16:02:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A0C481A0;
+	Fri, 22 Mar 2024 16:05:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711123336; cv=none; b=KWu4diiDc996oYNK0XhntUbwrSlXfLlp7CoyNHgtz3xLRO10EnK69PcnFO8J5R9grl097zzEG/otSD3d1t2kR4Xo0PA62zYcDW24M+f53TGLyOrJui/vOf6rlhLH6iM/fLMCyvxYhKOJ/4n770j6ZFa8vvRz0w8B/IA87CtBt4Y=
+	t=1711123504; cv=none; b=V8zh2l468MrefuaVWcFwh7Fi4/7nWfyH34LmEVO9+UJcf7BX90vSxaaS6A4riqZ4AZoq4eA1PzebtdAaAvrba+TcXzxcwT+60xpaor9waB3jvgEouxO5x46s9y75WEgA9jtT8x9YR6yFw5TPkrWwu72JcwUvHFrdBAS+R3KsZUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711123336; c=relaxed/simple;
-	bh=aoF4dmwFvyElelkcyMu8PBXHligJrfzMuWeep9NvMbE=;
+	s=arc-20240116; t=1711123504; c=relaxed/simple;
+	bh=pU676GFAED0poswPTfyBT5GkBYVJPMcwY8WVLXctuBo=;
 	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=o++SgCsi1gVOqrHHhuslc+4blCyIZ/pJESI3B9ed5GLVh8AqZeJEGSP84Y/EpayIofmsSgbimmEmUWEouizamzLhBxcqfFCjKRhs4TKX0BaalchySLSq9kzQPvYXjCWPiBvXDN6kKImCMSa6I6Fg9VTqKM2DHcAEoeL+e2AFdx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jmV2lbD8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 029EEC43390;
-	Fri, 22 Mar 2024 16:02:16 +0000 (UTC)
+	 MIME-Version:Content-Type; b=llepuJcltc85HmnRM+2Pw6DPBho6lpVE8WU1BNeYAd7aSIlnA3UinSbcKRZkuFDipDg5IL/uERKkSNuaV+vHX/8UhOBn404OsufXkM6gieIEf1CwU0/r+twCS1xFd84teuz9rz0XrmvzYo6F/MQuuEdsIt+UXz9qCj0B0r9u0yM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sNV5udq8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C2BBC433C7;
+	Fri, 22 Mar 2024 16:05:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711123336;
-	bh=aoF4dmwFvyElelkcyMu8PBXHligJrfzMuWeep9NvMbE=;
+	s=k20201202; t=1711123503;
+	bh=pU676GFAED0poswPTfyBT5GkBYVJPMcwY8WVLXctuBo=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=jmV2lbD8c9m4XS0wNhC398FxSmiqjv7s7Bi+bn9P468s7vuNLU2ruoJ3MPBccLCWs
-	 rgwR/pvDFZf1bWj6jd0Dhd4gZ+9bGE3/APLKNs/Iz9t5EVO+9zTe7NInnlSLFwKNSZ
-	 2W8bmvrhS3UOcgseDjzYAtGUKnv56maI6uA8aFjAG2gdnlMhDvIwIH4t4hM/J6SJzU
-	 r/BuncZ/jwB6zYWPobFYoj5YxFXNaz7o1HU+Ndw1WKVgcghEDT7KTWf77RYOFGopG3
-	 QJC8nmcK+OiFRLvPxkAuADC7fJND5aBOwvL6kB9t1Cb8eXSZLedn73exd+6T3u8RJ0
-	 lp62WtpQCKA6Q==
+	b=sNV5udq8Io5AIDHW9FgD7zcq57bDQSVadRUpGCrWONB22OGzkpZipbImWpeB4GZlD
+	 kIaCue/uKQ6cPGNWS+pem1hsXnnu1Y+dAoFmmun/ovE2woh43rxfRhc66DfLXpH4pJ
+	 bJ8NLeyGS/86ktSd8VUHIeoui2v/QUkPnj3imj31nRsGZkCreFuRxBc/xEHZXPc26r
+	 B8WZjQggLOqQZMNHYsYBESo/vGsbO2qRUzYRxyPNEgHk4ksylUcUKGLbiVmt950RnS
+	 yXyXt08sPngMk8DxTrrAW24Q6/xqGxR82yRfBu/+1sEy9sNJF5g6QvaqFTHob2DnFC
+	 FXbLYZNpUamEQ==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
 	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.95)
 	(envelope-from <maz@kernel.org>)
-	id 1rnhLR-00EYDl-8X;
-	Fri, 22 Mar 2024 16:02:13 +0000
-Date: Fri, 22 Mar 2024 16:02:12 +0000
-Message-ID: <86jzluz24b.wl-maz@kernel.org>
+	id 1rnhO8-00EYGR-P1;
+	Fri, 22 Mar 2024 16:05:00 +0000
+Date: Fri, 22 Mar 2024 16:05:00 +0000
+Message-ID: <86il1ez1zn.wl-maz@kernel.org>
 From: Marc Zyngier <maz@kernel.org>
 To: David Woodhouse <dwmw2@infradead.org>
 Cc: linux-arm-kernel@lists.infradead.org,
@@ -73,10 +73,10 @@ Cc: linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	kvmarm@lists.linux.dev,
 	linux-pm@vger.kernel.org
-Subject: Re: [RFC PATCH v3 5/5] arm64: Use SYSTEM_OFF2 PSCI call to power off for hibernate
-In-Reply-To: <20240319130957.1050637-6-dwmw2@infradead.org>
+Subject: Re: [RFC PATCH v3 2/5] KVM: arm64: Add support for PSCI v1.2 and v1.3
+In-Reply-To: <20240319130957.1050637-3-dwmw2@infradead.org>
 References: <20240319130957.1050637-1-dwmw2@infradead.org>
-	<20240319130957.1050637-6-dwmw2@infradead.org>
+	<20240319130957.1050637-3-dwmw2@infradead.org>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.1
  (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -92,25 +92,78 @@ X-SA-Exim-Rcpt-To: dwmw2@infradead.org, linux-arm-kernel@lists.infradead.org, kv
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Tue, 19 Mar 2024 12:59:06 +0000,
+On Tue, 19 Mar 2024 12:59:03 +0000,
 David Woodhouse <dwmw2@infradead.org> wrote:
+> 
+> From: David Woodhouse <dwmw@amazon.co.uk>
+> 
+> Since the v1.3 specification is still in Alpha, only default to v1.2
+> unless userspace explicitly requests v1.3 for now.
+> 
+> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+> ---
+>  arch/arm64/kvm/hypercalls.c | 2 ++
+>  arch/arm64/kvm/psci.c       | 6 +++++-
+>  include/kvm/arm_psci.h      | 4 +++-
+>  3 files changed, 10 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
+> index 5763d979d8ca..9c6267ca2b82 100644
+> --- a/arch/arm64/kvm/hypercalls.c
+> +++ b/arch/arm64/kvm/hypercalls.c
+> @@ -575,6 +575,8 @@ int kvm_arm_set_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+>  		case KVM_ARM_PSCI_0_2:
+>  		case KVM_ARM_PSCI_1_0:
+>  		case KVM_ARM_PSCI_1_1:
+> +		case KVM_ARM_PSCI_1_2:
+> +		case KVM_ARM_PSCI_1_3:
+>  			if (!wants_02)
+>  				return -EINVAL;
+>  			vcpu->kvm->arch.psci_version = val;
+> diff --git a/arch/arm64/kvm/psci.c b/arch/arm64/kvm/psci.c
+> index 1f69b667332b..f689ef3f2f10 100644
+> --- a/arch/arm64/kvm/psci.c
+> +++ b/arch/arm64/kvm/psci.c
+> @@ -322,7 +322,7 @@ static int kvm_psci_1_x_call(struct kvm_vcpu *vcpu, u32 minor)
+>  
+>  	switch(psci_fn) {
+>  	case PSCI_0_2_FN_PSCI_VERSION:
+> -		val = minor == 0 ? KVM_ARM_PSCI_1_0 : KVM_ARM_PSCI_1_1;
+> +		val = PSCI_VERSION(1, minor);
+>  		break;
+>  	case PSCI_1_0_FN_PSCI_FEATURES:
+>  		arg = smccc_get_arg1(vcpu);
+> @@ -449,6 +449,10 @@ int kvm_psci_call(struct kvm_vcpu *vcpu)
+>  	}
+>  
+>  	switch (version) {
+> +	case KVM_ARM_PSCI_1_3:
+> +		return kvm_psci_1_x_call(vcpu, 3);
+> +	case KVM_ARM_PSCI_1_2:
+> +		return kvm_psci_1_x_call(vcpu, 2);
+>  	case KVM_ARM_PSCI_1_1:
+>  		return kvm_psci_1_x_call(vcpu, 1);
+>  	case KVM_ARM_PSCI_1_0:
+> diff --git a/include/kvm/arm_psci.h b/include/kvm/arm_psci.h
+> index e8fb624013d1..ebd7d9a12790 100644
+> --- a/include/kvm/arm_psci.h
+> +++ b/include/kvm/arm_psci.h
+> @@ -14,8 +14,10 @@
+>  #define KVM_ARM_PSCI_0_2	PSCI_VERSION(0, 2)
+>  #define KVM_ARM_PSCI_1_0	PSCI_VERSION(1, 0)
+>  #define KVM_ARM_PSCI_1_1	PSCI_VERSION(1, 1)
+> +#define KVM_ARM_PSCI_1_2	PSCI_VERSION(1, 2)
+> +#define KVM_ARM_PSCI_1_3	PSCI_VERSION(1, 3)
+>  
+> -#define KVM_ARM_PSCI_LATEST	KVM_ARM_PSCI_1_1
+> +#define KVM_ARM_PSCI_LATEST	KVM_ARM_PSCI_1_2 /* v1.3 is still Alpha */
+>  
+>  static inline int kvm_psci_version(struct kvm_vcpu *vcpu)
+>  {
 
-[...]
-
-> +static void __init psci_init_system_off2(void)
-> +{
-> +	int ret;
-> +
-> +	ret = psci_features(PSCI_FN_NATIVE(1_3, SYSTEM_OFF2));
-> +
-> +	if (ret != PSCI_RET_NOT_SUPPORTED)
-> +		psci_system_off2_supported = true;
-
-It'd be worth considering the (slightly broken) case where SYSTEM_OFF2
-is supported, but HIBERNATE_OFF is not set in the response, as the
-spec doesn't say that this bit is mandatory (it seems legal to
-implement SYSTEM_OFF2 without any hibernate type, making it similar to
-SYSTEM_OFF).
+Consider making the visibility of v1.2/1.3 to userspace and guest the
+last patch in the series, so that there is no transient support for
+some oddball PSCI version with no feature (keeps bisection clean).
 
 Thanks,
 
