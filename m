@@ -1,358 +1,276 @@
-Return-Path: <linux-pm+bounces-5252-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5253-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A747E8872A2
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 19:09:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4331F88736A
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 19:53:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D762287957
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 18:09:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0192283747
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 18:53:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AB1C626CC;
-	Fri, 22 Mar 2024 18:09:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="i2M4bAgB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65FE6745C0;
+	Fri, 22 Mar 2024 18:53:41 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E49095FBB0
-	for <linux-pm@vger.kernel.org>; Fri, 22 Mar 2024 18:09:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7D5D74407;
+	Fri, 22 Mar 2024 18:53:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711130952; cv=none; b=OR3DHaXlXovcUkMSfhtysCjML5UO6VzKpPpwOU/tvMqCq+IX2nvUBv/WysF/TnNFoHL8mb54pJYViZXAOxZCGE5ytkyx+0zesRYvfjW+ouwCQRKJa5YZ/s5PTealAi+CGde9N0s+URZ56F9Dvp6imvmUyxewVvPKLGlIFCmfZgE=
+	t=1711133621; cv=none; b=doptbeJHyqnBlXt8H8WQ+busEPM3L20lQ3ez15Wg5MYVNisLKAJb0M4rmsofVkkxPbDA/uDgg6OBGRAfTxvxTGxe8H1PkDXV40d6d5S1tPKg2NmTtApRsHHjyt1xtg6Ic6mDkgtcLytSpgcfzxqirfqB09w8/h+uW0x+0+Rj6kk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711130952; c=relaxed/simple;
-	bh=V9qH8Hqz75lvC7fcWia7IDuZ4H/IPMayPvgEtvd7OTs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LT4ABkjfYy4RM8oxFrzqXtNV+Neyd2L2qTmWJi9Aqjw9h8bpuP4S84UWI8NYS3JzHHLtNfmxEx7dCTKlzB3aRS968lLHwtvCuhayUEkZ1FmyMjq9gZEH8Bl8qBM5CtgJP/3eyDryumXAF1KkbPTMhzagZTpxzYuAbdlaLJecKb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=i2M4bAgB; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-5d42e7ab8a9so1205722a12.3
-        for <linux-pm@vger.kernel.org>; Fri, 22 Mar 2024 11:09:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711130949; x=1711735749; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zIDjLYOAoTtitEy2EbjJ+uIGL56wEX/Yq/x0rNRFB3U=;
-        b=i2M4bAgBNQxkmaX8jGphlRkkWXonoOaEDsSYqkW2jk+rT/WX3E1vhkb2kVARZlp5JJ
-         rCb1v2VRXuqjy+ech3mE0VMYbou2ueaZjI53AbialqLjR0fIQJUWDbXwOuASbVIeMzny
-         GSJGCGUgCHv5Cms28rh07Hko6oC47VjscajjOD1Gayn/ElZOeJwm2tjRmAcjKkmPyj1l
-         Eij4vNKs1cmwe4XzJCxcOgvK9+s/GREzXZAW6a0LrFgzZ/KQHtlW4lj6Ij/aGZtYo/ft
-         vFgwp4TytamQA2NzA5Pg+PsLTowGBVjt/9JAu04mczq6TVkDTu2VLaQQa5y98uwwZzYS
-         fC7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711130949; x=1711735749;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zIDjLYOAoTtitEy2EbjJ+uIGL56wEX/Yq/x0rNRFB3U=;
-        b=hujorE8LL6VX8KaqaakVIPbdxgHwKncZz2zGmofPsCJ8TSfagnoeutX1NDNAmonRHo
-         Q00j5dfbbuppJEUC+I0hVwy4JJjiRcGm/CFVERusIkHWz9rKS5WBVYyAzYF4l7XG58v6
-         qEhNX5aRZCMOP19spvFXC9XESp+aHuXCX30HF14VlxQ7WZ+ewx6kURjZWLz2cTMM3vY6
-         02EmEMSXY2f1iSorJiqNtC7c+C4SiUUYn/2Mt+aBr3UxfY9O62UDLcyISQhZDQVlyUw0
-         EwCYV28dKMEmBHnUzZmBbVD6pDL5UyIUmxdBgqfmro1BXPQgAXoESyqw2+R4Mn+MuCfg
-         M+0A==
-X-Forwarded-Encrypted: i=1; AJvYcCVYyt9gEkdbGPhVuey8NsNTz5ZKpFklJ5DTgGfiSWYGwzwGje8+twMHCiqA96/b0Yl0QL3wUDYJfLI9lgVd+rWLSIJTdUrNj40=
-X-Gm-Message-State: AOJu0YyLEaGMz53JDfeTQ2M98CngsQVbLX+yUjfE82lf5Jg1VhPpitEv
-	Hrwiuk8dhlPItj/ec799HiBS6DH4/4UNKx5hG6t2DveqmTKMvFPKl71m+7ZzntdnsgHKssyffPP
-	5tno7XhANrD5Ys2istseZviSXPbWJkF6GergBCw==
-X-Google-Smtp-Source: AGHT+IGvJlKqALa9BjwZx4qwm/OSmLcvHiP8qUMTEcDuG2KQ4oqXk1Hb1cBcfDxOS0fa1yC5aZyttjpfCb1shzfhtG4=
-X-Received: by 2002:a17:90b:37ce:b0:29b:c0a5:1143 with SMTP id
- nc14-20020a17090b37ce00b0029bc0a51143mr430917pjb.29.1711130949112; Fri, 22
- Mar 2024 11:09:09 -0700 (PDT)
+	s=arc-20240116; t=1711133621; c=relaxed/simple;
+	bh=82RQYANYJuMNTPGQtKxqLwhxuDAzIWGQjTW9EV+4+ZU=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hBjDL9TNQ2+rJrPEdlXzeWkxPF/Le6azpM9YTsUxfkVhf898oCy99X/gMOVjaartQm9urUFn0cweyjBzGmLtxkryI38OMxddWQHnl3DTQWROWXX0mMjegnKfDOi6bfu1RIH6Fouii0rE7Q8TatONa8Y1cnrn+I8SlaQtffFSEag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4V1Wfp02xRz6K62w;
+	Sat, 23 Mar 2024 02:52:50 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 2A1251400CF;
+	Sat, 23 Mar 2024 02:53:29 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Fri, 22 Mar
+ 2024 18:53:28 +0000
+Date: Fri, 22 Mar 2024 18:53:27 +0000
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+CC: Russell King <rmk+kernel@armlinux.org.uk>, <linux-pm@vger.kernel.org>,
+	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-riscv@lists.infradead.org>,
+	<kvmarm@lists.linux.dev>, <x86@kernel.org>,
+	<acpica-devel@lists.linuxfoundation.org>, <linux-csky@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-ia64@vger.kernel.org>,
+	<linux-parisc@vger.kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>, <jianyong.wu@arm.com>,
+	<justin.he@arm.com>, James Morse <james.morse@arm.com>
+Subject: Re: [PATCH RFC v4 02/15] ACPI: processor: Register all CPUs from
+ acpi_processor_get_info()
+Message-ID: <20240322185327.00002416@Huawei.com>
+In-Reply-To: <CAJZ5v0iiJpUWq5GMSnKFWQTzn_bdwoQz9m=hDaXNg4Lj_ePF4g@mail.gmail.com>
+References: <Zbp5xzmFhKDAgHws@shell.armlinux.org.uk>
+	<E1rVDmU-0027YP-Jz@rmk-PC.armlinux.org.uk>
+	<CAJZ5v0iiJpUWq5GMSnKFWQTzn_bdwoQz9m=hDaXNg4Lj_ePF4g@mail.gmail.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240304201625.100619-1-christian.loehle@arm.com>
-In-Reply-To: <20240304201625.100619-1-christian.loehle@arm.com>
-From: Vincent Guittot <vincent.guittot@linaro.org>
-Date: Fri, 22 Mar 2024 19:08:57 +0100
-Message-ID: <CAKfTPtDcTXBosFpu6vYW_cXLGwnqJqYCUW19XyxRmAc233irqA@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/2] Introduce per-task io utilization boost
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: linux-kernel@vger.kernel.org, peterz@infradead.org, juri.lelli@redhat.com, 
-	mingo@redhat.com, rafael@kernel.org, dietmar.eggemann@arm.com, 
-	vschneid@redhat.com, Johannes.Thumshirn@wdc.com, adrian.hunter@intel.com, 
-	ulf.hansson@linaro.org, andres@anarazel.de, asml.silence@gmail.com, 
-	linux-pm@vger.kernel.org, linux-block@vger.kernel.org, 
-	io-uring@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-Hi Christian,
+On Thu, 15 Feb 2024 20:22:29 +0100
+"Rafael J. Wysocki" <rafael@kernel.org> wrote:
 
-On Mon, 4 Mar 2024 at 21:17, Christian Loehle <christian.loehle@arm.com> wrote:
->
-> There is a feature inside of both schedutil and intel_pstate called
-> iowait boosting which tries to prevent selecting a low frequency
-> during IO workloads when it impacts throughput.
-> The feature is implemented by checking for task wakeups that have
-> the in_iowait flag set and boost the CPU of the rq accordingly
-> (implemented through cpufreq_update_util(rq, SCHED_CPUFREQ_IOWAIT)).
->
-> The necessity of the feature is argued with the potentially low
-> utilization of a task being frequently in_iowait (i.e. most of the
-> time not enqueued on any rq and cannot build up utilization).
->
-> The RFC focuses on the schedutil implementation.
-> intel_pstate frequency selection isn't touched for now, suggestions are
-> very welcome.
-> Current schedutil iowait boosting has several issues:
-> 1. Boosting happens even in scenarios where it doesn't improve
-> throughput. [1]
-> 2. The boost is not accounted for in EAS: a) feec() will only consider
->  the actual utilization for task placement, but another CPU might be
->  more energy-efficient at that capacity than the boosted one.)
->  b) When placing a non-IO task while a CPU is boosted compute_energy()
->  will not consider the (potentially 'free') boosted capacity, but the
->  one it would have without the boost (since the boost is only applied
->  in sugov).
-> 3. Actual IO heavy workloads are hardly distinguished from infrequent
-> in_iowait wakeups.
-> 4. The boost isn't associated with a task, it therefore isn't considered
-> for task placement, potentially missing out on higher capacity CPUs on
-> heterogeneous CPU topologies.
-> 5. The boost isn't associated with a task, it therefore lingers on the
-> rq even after the responsible task has migrated / stopped.
-> 6. The boost isn't associated with a task, it therefore needs to ramp
-> up again when migrated.
-> 7. Since schedutil doesn't know which task is getting woken up,
-> multiple unrelated in_iowait tasks might lead to boosting.
->
-> We attempt to mitigate all of the above by reworking the way the
-> iowait boosting (io boosting from here on) works in two major ways:
-> - Carry the boost in task_struct, so it is a per-task attribute and
-> behaves similar to utilization of the task in some ways.
-> - Employ a counting-based tracking strategy that only boosts as long
-> as it sees benefits and returns to no boosting dynamically.
+> On Wed, Jan 31, 2024 at 5:50=E2=80=AFPM Russell King <rmk+kernel@armlinux=
+.org.uk> wrote:
+> >
+> > From: James Morse <james.morse@arm.com>
+> >
+> > To allow ACPI to skip the call to arch_register_cpu() when the _STA
+> > value indicates the CPU can't be brought online right now, move the
+> > arch_register_cpu() call into acpi_processor_get_info().
+> >
+> > Systems can still be booted with 'acpi=3Doff', or not include an
+> > ACPI description at all. For these, the CPUs continue to be
+> > registered by cpu_dev_register_generic().
+> >
+> > This moves the CPU register logic back to a subsys_initcall(),
+> > while the memory nodes will have been registered earlier.
+> >
+> > Signed-off-by: James Morse <james.morse@arm.com>
+> > Reviewed-by: Gavin Shan <gshan@redhat.com>
+> > Tested-by: Miguel Luis <miguel.luis@oracle.com>
+> > Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
+> > Tested-by: Jianyong Wu <jianyong.wu@arm.com>
+> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> > ---
+> > Changes since RFC v2:
+> >  * Fixup comment in acpi_processor_get_info() (Gavin Shan)
+> >  * Add comment in cpu_dev_register_generic() (Gavin Shan)
+> > ---
+> >  drivers/acpi/acpi_processor.c | 12 ++++++++++++
+> >  drivers/base/cpu.c            |  6 +++++-
+> >  2 files changed, 17 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processo=
+r.c
+> > index cf7c1cca69dd..a68c475cdea5 100644
+> > --- a/drivers/acpi/acpi_processor.c
+> > +++ b/drivers/acpi/acpi_processor.c
+> > @@ -314,6 +314,18 @@ static int acpi_processor_get_info(struct acpi_dev=
+ice *device)
+> >                         cpufreq_add_device("acpi-cpufreq");
+> >         }
+> >
+> > +       /*
+> > +        * Register CPUs that are present. get_cpu_device() is used to =
+skip
+> > +        * duplicate CPU descriptions from firmware.
+> > +        */
+> > +       if (!invalid_logical_cpuid(pr->id) && cpu_present(pr->id) &&
+> > +           !get_cpu_device(pr->id)) {
+> > +               int ret =3D arch_register_cpu(pr->id);
+> > +
+> > +               if (ret)
+> > +                       return ret;
+> > +       }
+> > +
+> >         /*
+> >          *  Extra Processor objects may be enumerated on MP systems with
+> >          *  less than the max # of CPUs. They should be ignored _iff =20
+>=20
+> This is interesting, because right below there is the following code:
+>=20
+>     if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
+>         int ret =3D acpi_processor_hotadd_init(pr);
+>=20
+>         if (ret)
+>             return ret;
+>     }
+>=20
+> and acpi_processor_hotadd_init() essentially calls arch_register_cpu()
+> with some extra things around it (more about that below).
+>=20
+> I do realize that acpi_processor_hotadd_init() is defined under
+> CONFIG_ACPI_HOTPLUG_CPU, so for the sake of the argument let's
+> consider an architecture where CONFIG_ACPI_HOTPLUG_CPU is set.
+>=20
+> So why are the two conditionals that almost contradict each other both
+> needed?  It looks like the new code could be combined with
+> acpi_processor_hotadd_init() to do the right thing in all cases.
 
-Thanks for working on improving IO boosting. I have started to read
-your patchset and have few comments about your proposal:
+I jumped on to the end of this series to look at this as the two legs
+look more similar at that point. I'll figure out how to drive
+any changes through the series once the end goal is clear.
 
-The main one is that the io boosting decision should remain a cpufreq
-governor decision and so the io boosting value should be applied by
-the governor like in sugov_effective_cpu_perf() as an example instead
-of everywhere in the scheduler code.
+To make testing easy I made the acpi_process_make_enabled() look as
+much like acpi_process_make_present() as possible.
 
-Then, the algorithm to track the right interval bucket and the mapping
-of intervals into utilization really looks like a policy which has
-been defined with heuristics and as a result further seems to be a
-governor decision
+>=20
+> Now, acpi_processor_hotadd_init() does some extra things that look
+> like they should be done by the new code too.
+>=20
+> 1. It checks invalid_phys_cpuid() which appears to be a good idea to me.
 
-Finally adding some atomic operation in the fast path is not really desirable
+Indeed that is sensible. Not sure there is a path to here where it fails,
+but defense in depth is good.
 
-I will continue to review your patchset
+>=20
+> 2. It uses locking around arch_register_cpu() which doesn't seem
+> unreasonable either.
 
->
-> Note that some the issues (1, 3) can be solved by using a
-> counting-based strategy on a per-rq basis, i.e. in sugov entirely.
-> Experiments with Android in particular showed that such a strategy
-> (which necessarily needs longer intervals to be reasonably stable)
-> is too prone to migrations to be useful generally.
-> We therefore consider the additional complexity of such a per-task
-> based approach like proposed to be worth it.
->
-> We require a minimum of 1000 iowait wakeups per second to start
-> boosting.
-> This isn't too far off from what sugov currently does, since it resets
-> the boost if it hasn't seen an iowait wakeup for TICK_NSEC.
-> For CONFIG_HZ=1000 we are on par, for anything below we are stricter.
-> We justify this by the small possible improvement by boosting in the
-> first place with 'rare' few iowait wakeups.
->
-> When IO even leads to a task being in iowait isn't as straightforward
-> to explain.
-> Of course if the issued IO can be served by the page cache (e.g. on
-> reads because the pages are contained, on writes because they can be
-> marked dirty and the writeback takes care of it later) the actual
-> issuing task is usually not in iowait.
-> We consider this the good case, since whenever the scheduler and a
-> potential userspace / kernel switch is in the critical path for IO
-> there is possibly overhead impacting throughput.
-> We therefore focus on random read from here on, because (on synchronous
-> IO [3]) this will lead to the task being set in iowait for every IO.
-> This is where iowait boosting shows its biggest throughput improvement.
-> From here on IOPS (IO operations per second) and iowait wakeups may
-> therefore be used interchangeably.
->
-> Performance:
-> Throughput for random read tries to be on par with the sugov
-> implementation of iowait boosting for reasonably long-lived workloads.
-> See the following table for some results, values are in IOPS, the
-> tests are ran for 30s with pauses in-between, results are sorted.
->
-> nvme on rk3399
-> [3588, 3590, 3597, 3632, 3745] sugov mainline
-> [3581, 3751, 3770, 3771, 3885] per-task tracking
-> [2592, 2639, 2701, 2717, 2784] sugov no iowait boost
-> [3218, 3451, 3598, 3848, 3921] performance governor
->
-> emmc with cqe on rk3399
-> [4146, 4155, 4159, 4161, 4193] sugov mainline
-> [2848, 3217, 4375, 4380, 4454] per-task tracking
-> [2510, 2665, 3093, 3101, 3105] sugov no iowait boost
-> [4690, 4803, 4860, 4976, 5069] performance governor
->
-> sd card on rk3399
-> [1777, 1780, 1806, 1827, 1850] sugov mainline
-> [1470, 1476, 1507, 1534, 1586] per-task tracking
-> [1356, 1372, 1373, 1377, 1416] sugov no iowait boost
-> [1861, 1890, 1901, 1905, 1908] performance governor
->
-> Pixel 6 ufs Android 14 (7 runs for because device showed some variance)
-> [6605, 6622, 6633, 6652, 6690, 6697, 6754] sugov mainline
-> [7141, 7173, 7198, 7220, 7280, 7427, 7452] per-task tracking
-> [2390, 2392, 2406, 2437, 2464, 2487, 2813] sugov no iowait boost
-> [7812, 7837, 7837, 7851, 7900, 7959, 7980] performance governor
->
-> Apple M1 apple-nvme
-> [27421, 28331, 28515, 28699, 29529] sugov mainline
-> [27274, 27344, 27345, 27384, 27930] per-task tracking
-> [14480, 14512, 14625, 14872, 14967] sugov no iowait boost
-> [31595, 32085, 32386, 32465, 32643] performance governor
->
-> Showcasing some different IO scenarios, again all random read,
-> median out of 5 runs, all on rk3399 with NVMe.
-> e.g. io_uring6x4 means 6 threads with 4 iodepth each, results can be
-> obtained using:
-> fio --minimal --time_based --name=test --filename=/dev/nvme0n1 --runtime=30 --rw=randread --bs=4k --ioengine=io_uring --iodepth=4 --numjobs=6 --group_reporting | cut -d \; -f 8
->
-> +---------------+----------------+-------------------+----------------+-------------+-----------+
-> |               | Sugov mainline | Per-task tracking | Sugov no boost | Performance | Powersave |
-> +---------------+----------------+-------------------+----------------+-------------+-----------+
-> |       psyncx1 |           4073 |              3793 |           2979 |        4190 |      2788 |
-> +---------------+----------------+-------------------+----------------+-------------+-----------+
-> |       psyncx4 |          13921 |             13503 |          10635 |       13931 |     10225 |
-> +---------------+----------------+-------------------+----------------+-------------+-----------+
-> |       psyncx6 |          18473 |             17866 |          15902 |       19080 |     15789 |
-> +---------------+----------------+-------------------+----------------+-------------+-----------+
-> |       psyncx8 |          22498 |             21242 |          19867 |       22650 |     18837 |
-> +---------------+----------------+-------------------+----------------+-------------+-----------+
-> |      psyncx10 |          24801 |             23552 |          23658 |       25096 |     21474 |
-> +---------------+----------------+-------------------+----------------+-------------+-----------+
-> |      psyncx12 |          26743 |             25377 |          26372 |       26663 |     23613 |
-> +---------------+----------------+-------------------+----------------+-------------+-----------+
-> |     libaio1x1 |           4054 |              3542 |           2776 |        4055 |      2780 |
-> +---------------+----------------+-------------------+----------------+-------------+-----------+
-> |   libaio1x128 |           3959 |              3516 |           2758 |        3590 |      2560 |
-> +---------------+----------------+-------------------+----------------+-------------+-----------+
-> |   libaio4x128 |          13451 |             12517 |          10313 |       13403 |      9994 |
-> +---------------+----------------+-------------------+----------------+-------------+-----------+
-> |     libaio6x1 |          18394 |             17432 |          15340 |       18954 |     15251 |
-> +---------------+----------------+-------------------+----------------+-------------+-----------+
-> |     libaio6x4 |          18329 |             17100 |          15238 |       18623 |     15270 |
-> +---------------+----------------+-------------------+----------------+-------------+-----------+
-> |   libaio6x128 |          18066 |             16964 |          15139 |       18577 |     15192 |
-> +---------------+----------------+-------------------+----------------+-------------+-----------+
-> |   io_uring1x1 |           4043 |              3548 |           2810 |        4039 |      2689 |
-> +---------------+----------------+-------------------+----------------+-------------+-----------+
-> |  io_uring4x64 |          35790 |             32814 |          35983 |       34934 |     33254 |
-> +---------------+----------------+-------------------+----------------+-------------+-----------+
-> | io_uring1x128 |          32651 |             30427 |          32429 |       33232 |      9973 |
-> +---------------+----------------+-------------------+----------------+-------------+-----------+
-> | io_uring2x128 |          34928 |             32595 |          34922 |       33726 |     18790 |
-> +---------------+----------------+-------------------+----------------+-------------+-----------+
-> | io_uring4x128 |          34414 |             32173 |          34932 |       33332 |     33005 |
-> +---------------+----------------+-------------------+----------------+-------------+-----------+
-> |   io_uring6x4 |          31578 |             29260 |          31714 |       31399 |     31784 |
-> +---------------+----------------+-------------------+----------------+-------------+-----------+
-> | io_uring6x128 |          34480 |             32634 |          34973 |       33390 |     36452 |
-> +---------------+----------------+-------------------+----------------+-------------+-----------+
->
-> Based on the above we can basically categorize these into the following
-> three:
-> a) boost is useful
-> b) boost irrelevant (util dominates)
-> c) boost is energy-inefficient (boost dominates)
->
-> The aim of the patch 1/2 is to boost as much as necessary for a) while
-> boosting little for c) (thus saving energy).
->
-> Energy-savings:
-> Regarding sugov iowait boosting problem 1 mentioned earlier,
-> some improvement can be seen:
-> Tested on rk3399 (LLLL)(bb) with an NVMe, 30s runtime
-> CPU0 perf domain spans 0-3 with 400MHz to 1400MHz
-> CPU4 perf domain spans 4-5 with 400MHz to 1800MHz
->
-> io_uring6x128:
-> Sugov iowait boost:
-> Average frequency for CPU0 : 1.180 GHz
-> Average frequency for CPU4 : 1.504 GHz
-> Per-task tracking:
-> Average frequency for CPU0 : 1.070 GHz
-> Average frequency for CPU4 : 1.211 GHz
->
-> io_uring12x128:
-> Sugov iowait boost:
-> Average frequency for CPU0 : 1.324 GHz
-> Average frequency for CPU4 : 1.444 GHz
-> Per-task tracking:
-> Average frequency for CPU0 : 1.260 GHz
-> Average frequency for CPU4 : 1.062 GHz
-> (In both cases actually 400MHz on both perf domains is optimal, more
-> fine-tuning could get us closer [2])
->
-> [1]
-> There are many scenarios when it doesn't, so let's start with
-> explaining when it does:
-> Boosting improves throughput if there is frequent IO to a device from
-> one or few origins, such that the device is likely idle when the task
-> is enqueued on the rq and reducing this time cuts down on the storage
-> device idle time.
-> This might not be true (and boosting doesn't help) if:
-> - The storage device uses the idle time to actually commit the IO to
-> persistent storage or do other management activity (this can be
-> observed with e.g. writes to flash-based storage, which will usually
-> write to cache and flush the cache when idle or necessary).
-> - The device is under thermal pressure and needs idle time to cool off
-> (not uncommon for e.g. nvme devices).
-> Furthermore the assumption (the device being idle while task is
-> enqueued) is false altogether if:
-> - Other tasks use the same storage device.
-> - The task uses asynchronous IO with iodepth > 1 like io_uring, the
-> in_iowait is then just to fill the queue on the host again.
-> - The task just sets in_iowait to signal it is waiting on io to not
-> appear as system idle, it might not send any io at all (cf with
-> the various occurrences of in_iowait, io_mutex_lock and io_schedule*).
->
-> [3]
-> Unfortunately even for asynchronous IO iowait may be set, in the case
-> of io_uring this is specifically for the iowait boost to trigger, see
-> commit ("8a796565cec3 io_uring: Use io_schedule* in cqring wait")
-> which is why the energy-savings are so significant here, as io_uring
-> load on the CPU is minimal.
->
-> Problems encountered:
-> - Higher cap is not always beneficial, we might place the task away
-> from the CPU where the interrupt handler is running, making it run
-> on an unboosted CPU which may have a bigger impact than the difference
-> between the CPU's capacity the task moved to. (Of course the boost will
-> then be reverted again, but a ping-pong every interval is possible).
-> - [2] tracking and scaling can be improved (io_uring12x128 still shows
-> boosting): Unfortunately tracking purely per-task shows some limits.
-> One task might show more iowaits per second when boosted, but overall
-> throughput doesn't increase => there is still some boost.
-> The task throughput improvement is somewhat limited though,
-> so by fine-tuning the thresholds there could be mitigations.
->
-> Christian Loehle (2):
->   sched/fair: Introduce per-task io util boost
->   cpufreq/schedutil: Remove iowait boost
->
->  include/linux/sched.h            |  15 +++
->  kernel/sched/cpufreq_schedutil.c | 150 ++--------------------------
->  kernel/sched/fair.c              | 165 +++++++++++++++++++++++++++++--
->  kernel/sched/sched.h             |   4 +-
->  4 files changed, 182 insertions(+), 152 deletions(-)
->
-> --
-> 2.34.1
->
+Seems reasonable, though exactly what this protecting is unclear to me
+- is the arch_register_cpu() and/or the acpi_map_cpu().
+Whilst it would be nice to be sure, appears harmless, so let us
+take it for consistency if nothing else.
+
+The cpu_maps_update_begin()/end() calls though aren't necessary as
+we aren't touching the cpu_present or cpu_online masks.
+
+
+>=20
+> 3. It calls acpi_map_cpu() and I'm not sure why this is not done by
+> the new code.
+
+Doesn't exist except on x86 and longarch as Russell mentioned. So let's
+see what it does (on x86)  So we are into the realm of interfaces that
+look generic but really aren't :(  I particularly like the
+generic_processor_info() which isn't particularly generic.
+
+1. cpu =3D acpi_register_lapic()
+
+Docs say: Register a local apic and generates a logic cpu number
+
+2. generic_processor_info() in arch/x86/kernel/acpi/acpi.c
+
+Checks against nr_cpus_ids - maybe that bit is useful
+
+Allocate_logical_cpuid().
+Digging in, it seems to do similar to setting __cpu_logical_map on arm64.
+That's done in acpi_map_gic_cpu_interface, which happens when MADT is
+parsed and I believe it's one of the the things we need to do whether
+or not the CPU is enabled at boot. So already done.
+
+acpi_processor_set_pdc() -- configure _PDC support (which I'd never heard
+of before now).  Deprecated in ACPI 3.0. Given we are using stuff only added
+in 6.5 we can probably skip that even if it would be harmless.
+
+acpi_map_cpu2node() -- evalulate _PXM and set __apicid_to_node[]
+entry. That is only used from x86 code. Not sure what equivalent would be.
+Also numa_set_node(cpu, nid);  Which again sounds a lot more generic than
+it is. Load of x86 specific stuff + set_cpu_numa_node() which is generic
+and for ARM64 (and anything using CONFIG_GENERIC_ARCH_NUMA) is called
+by numa_store_cpu_info() either from early_map_cpu_to_node() or smp_prepare=
+_cpus()
+which is called for_each_possible_cpu() and hence has already been done.
+
+So conclusion on this one is there doesn't seem to be anything to do.
+We could provide a __weak function or an ARM64 specific one that does
+nothing or gate it on an appropriate config variable.  However, given
+I presume 'future' ARM64 support for CPU hotplug will want to do something
+in these calls, perhaps a better bet is to pass a bool into the function
+to indicate these should be skipped if present is not changing.
+
+Having done that, we end up with code that is messy enough we are
+better off keeping them as separate functions, though they may
+look a little more similar than in this version.
+
+There is a final thing in here you didn't mention
+setting pr->flags.need_hotplug_init
+which causes extra stuff to occur in processor_driver.c
+The extra stuff doesn't seem to be necessary for the enable case
+despite being needed for change of present status.
+I haven't figured this bit out yet (I need to mess around on x86
+to understand what goes wrong if you don't use that flag).
+
+
+>=20
+> The only thing that can be dropped from it is the _STA check AFAICS,
+> because acpi_processor_add() won't even be called if the CPU is not
+> present (and not enabled after the first patch).
+>=20
+> So why does the code not do 1 - 3 above?
+I agree with 1 and 2, reasoning for 3 given above.
+
+>=20
+> > diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
+> > index 47de0f140ba6..13d052bf13f4 100644
+> > --- a/drivers/base/cpu.c
+> > +++ b/drivers/base/cpu.c
+> > @@ -553,7 +553,11 @@ static void __init cpu_dev_register_generic(void)
+> >  {
+> >         int i, ret;
+> >
+> > -       if (!IS_ENABLED(CONFIG_GENERIC_CPU_DEVICES))
+> > +       /*
+> > +        * When ACPI is enabled, CPUs are registered via
+> > +        * acpi_processor_get_info().
+> > +        */
+> > +       if (!IS_ENABLED(CONFIG_GENERIC_CPU_DEVICES) || !acpi_disabled)
+> >                 return; =20
+>=20
+> Honestly, this looks like a quick hack to me and it absolutely
+> requires an ACK from the x86 maintainers to go anywhere.
+Will address this separately.
+
+>=20
+> >
+> >         for_each_present_cpu(i) {
+> > -- =20
+
 
