@@ -1,45 +1,44 @@
-Return-Path: <linux-pm+bounces-5249-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5250-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEAFE887191
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 18:05:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A6C08871A4
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 18:08:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 43DA0B20FD1
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 17:05:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B94A1C21ACD
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 17:08:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE1765D752;
-	Fri, 22 Mar 2024 17:05:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC7C85DF24;
+	Fri, 22 Mar 2024 17:08:40 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B83975FDC4;
-	Fri, 22 Mar 2024 17:05:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 428D857875;
+	Fri, 22 Mar 2024 17:08:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711127124; cv=none; b=OJRwkBZ3mmg+dmVXTdXzoCE3KeSEvYAEKs5INFuR3X1FkzsywOtof6pK4KN+bDlzfllAQMq8zFj1Eb0yPR1++q7XyCNIgmP9A690kOkrfoSXCc8NqciBk64EUDAp9laTpxWthO7vtQEN6HAX5ZQmNTdHq/JcD4csgr7F9cR1IYE=
+	t=1711127320; cv=none; b=ftHfNboG47kg00f89smO0E7uUA+Zn8fbC/2EOGOwNBMzhXjmSPI4K7LDOsAZMta1LpOZ1bUI8fO5M/goKCYrGoztVx/ku92N2RwuX6yYPRnTCBSmR92NvSuQth2GxzlvL81iVSjO3dD1oIM7lPVxOBf98AL3bCZ1bur0d6jb2tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711127124; c=relaxed/simple;
-	bh=cKFHXx0uwG7dElAjjFikSr5g3gCGM6PF0iXhuZRVtLw=;
+	s=arc-20240116; t=1711127320; c=relaxed/simple;
+	bh=rUMg9wwIpGTFQYHeRWFvoWGZrl4+3gIHbAdaODaQlcc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WVtA+PavwOPAqehs6rT6xwi/RCMZjFjY54tIG5yYO9LTrceuXxocmDy1QfWacMqz56DqPIkB99PszwXgICI9oDcODRTnD/+z9MTR1pLnyidVBh88u+RiMf1GJx7WiNtz6/xTppE1yrK7gzbtT8IOXlbkUNeVVNSY0QVUDPvk9Bs=
+	 Content-Type:Content-Disposition:In-Reply-To; b=WiUEvTyvYR+nSUNToUsdapfl6NOBVJ6TgG9UFuC88kRbJF+sOXJ38LwFgDBQ9Hhcn32+IfYjN+ml50L7gR8XdKR+9yBAE3fMfn2BEQDzpwWCchXcwcRjWRuJcIvABrbSX5cuEQ5DVaIPnVxNxzDDk8LFrS3oSc4E2vrwjNsukz8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 44C32FEC;
-	Fri, 22 Mar 2024 10:05:53 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D7CD7FEC;
+	Fri, 22 Mar 2024 10:09:12 -0700 (PDT)
 Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 34BE73F67D;
-	Fri, 22 Mar 2024 10:05:16 -0700 (PDT)
-Date: Fri, 22 Mar 2024 17:05:13 +0000
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C69BE3F67D;
+	Fri, 22 Mar 2024 10:08:35 -0700 (PDT)
+Date: Fri, 22 Mar 2024 17:08:33 +0000
 From: Sudeep Holla <sudeep.holla@arm.com>
-To: Marc Zyngier <maz@kernel.org>
-Cc: David Woodhouse <dwmw2@infradead.org>,
-	linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
+To: David Woodhouse <dwmw2@infradead.org>
+Cc: Marc Zyngier <maz@kernel.org>, linux-arm-kernel@lists.infradead.org,
+	kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
 	Sudeep Holla <sudeep.holla@arm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
 	Jonathan Corbet <corbet@lwn.net>,
 	Oliver Upton <oliver.upton@linux.dev>,
 	James Morse <james.morse@arm.com>,
@@ -56,72 +55,52 @@ Cc: David Woodhouse <dwmw2@infradead.org>,
 	kvmarm@lists.linux.dev, linux-pm@vger.kernel.org
 Subject: Re: [RFC PATCH v3 5/5] arm64: Use SYSTEM_OFF2 PSCI call to power off
  for hibernate
-Message-ID: <Zf26Sac6qqQpjAzN@bogus>
+Message-ID: <Zf27EW6x5GvKYGjM@bogus>
 References: <20240319130957.1050637-1-dwmw2@infradead.org>
  <20240319130957.1050637-6-dwmw2@infradead.org>
  <86jzluz24b.wl-maz@kernel.org>
  <9efb39597fa7b36b6c4202ab73fae6610194e45e.camel@infradead.org>
  <86edc2z0hs.wl-maz@kernel.org>
+ <12bc0c787fc20e1a3f5dc2588a2712d996ac6d38.camel@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <86edc2z0hs.wl-maz@kernel.org>
+In-Reply-To: <12bc0c787fc20e1a3f5dc2588a2712d996ac6d38.camel@infradead.org>
 
-On Fri, Mar 22, 2024 at 04:37:19PM +0000, Marc Zyngier wrote:
-> On Fri, 22 Mar 2024 16:12:44 +0000,
-> David Woodhouse <dwmw2@infradead.org> wrote:
+On Fri, Mar 22, 2024 at 04:55:04PM +0000, David Woodhouse wrote:
+> On Fri, 2024-03-22 at 16:37 +0000, Marc Zyngier wrote:
 > > 
-> > On Fri, 2024-03-22 at 16:02 +0000, Marc Zyngier wrote:
-> > > On Tue, 19 Mar 2024 12:59:06 +0000,
-> > > David Woodhouse <dwmw2@infradead.org> wrote:
-> > > 
-> > > [...]
-> > > 
-> > > > +static void __init psci_init_system_off2(void)
-> > > > +{
-> > > > +       int ret;
-> > > > +
-> > > > +       ret = psci_features(PSCI_FN_NATIVE(1_3, SYSTEM_OFF2));
-> > > > +
-> > > > +       if (ret != PSCI_RET_NOT_SUPPORTED)
-> > > > +               psci_system_off2_supported = true;
-> > > 
-> > > It'd be worth considering the (slightly broken) case where SYSTEM_OFF2
-> > > is supported, but HIBERNATE_OFF is not set in the response, as the
-> > > spec doesn't say that this bit is mandatory (it seems legal to
-> > > implement SYSTEM_OFF2 without any hibernate type, making it similar to
-> > > SYSTEM_OFF).
+> > I agree that nothing really breaks, but I also hold the view that
+> > broken firmware implementations should be given the finger, specially
+> > given that you have done this work *ahead* of the spec. I would really
+> > like this to fail immediately on these and not even try to suspend.
 > > 
-> > Such is not my understanding. If SYSTEM_OFF2 is supported, then
-> > HIBERNATE_OFF *is* mandatory.
-> > 
-> > The next update to the spec is turning the PSCI_FEATURES response into
-> > a *bitmap* of the available features, and I believe it will mandate
-> > that bit zero is set.
+> > With that in mind, if doesn't really matter whether HIBERNATE_OFF is
+> > mandatory or not. We really should check for it and pretend it doesn't
+> > exist if the correct flag isn't set.
+> 
+> Ack.
+> 
+> I'll rename that variable to 'psci_system_off2_hibernate_supported' then.
+> 
+> static void __init psci_init_system_off2(void)
+> {
+> 	int ret;
+> 
+> 	ret = psci_features(PSCI_FN_NATIVE(1_3, SYSTEM_OFF2));
+> 	if (ret < 0)
+> 		return;
+>
+> 	if (ret & (1 << PSCI_1_3_HIBERNATE_TYPE_OFF))
+> 		psci_system_off2_hibernate_supported = true;
+>
 
-Correct, but we add a extra check as well to be sure even if it is mandated
-unless the spec relaxes in a way that psci_features(SYSTEM_OFF2) need not
-return the mandatory types in the bitmask which I doubt.
-
-Something like:
-	if (ret != PSCI_RET_NOT_SUPPORTED &&
-		(ret & BIT(PSCI_1_3_HIBERNATE_TYPE_OFF)))
-		psci_system_off2_supported = true;
-
-This will ensure the firmware will not randomly set bit[0]=0 if in the
-future it support some newer types as well.
-
-I understand the kernel is not conformance test for the spec but in
-practice especially for such features and PSCI spec in particular, kernel
-has become defacto conformance for firmware developers which is sad.
-It some feature works in the kernel, the firmware is assumed to be
-conformant to the spec w.r.t the feature.
+Ah OK, you have already agreed to do this, please ignore my response then.
 
 --
 Regards,
