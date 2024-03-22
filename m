@@ -1,174 +1,169 @@
-Return-Path: <linux-pm+bounces-5220-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5221-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D86FD8869CD
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 10:58:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72A238869E0
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 11:03:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 07AA91C21C75
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 09:58:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F117628566D
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 10:03:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97009224FA;
-	Fri, 22 Mar 2024 09:58:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EE9F383B4;
+	Fri, 22 Mar 2024 10:03:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nci4RWRX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N8cWfxpB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACC3B20DDB;
-	Fri, 22 Mar 2024 09:58:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8835D24A0D;
+	Fri, 22 Mar 2024 10:03:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711101493; cv=none; b=NWQLefymoUr3lkYygRpUGCQluC2F1qndpWnfkoDAna67P6zc0fLRlyoWf21lld9B55KB2GAUFjfexwAHV93RXp97lcBHvB/fHclYwGY7qSpQtKNZP+HnP1ve2ieZ+SJlEHxfZKAKE+Qk7POoq1ePeRN2qoRlfuGaB5V3olKOZdM=
+	t=1711101787; cv=none; b=ofGe/io8sZOAoboVChMZqrJQw8CJp1KxxhClBpDL/VQkPR4kUjOgGxPfR8WdcjKPGHhAZ0B5lTZtbUT4uMW3I+6g8NEZwbKWWwp7qt3JgvsDLr/8fB7AQSiiMP2prxUDYKRcXyR2lmTyowaxq7gS7ZbHwOSQYAI1jTzSoc6WNq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711101493; c=relaxed/simple;
-	bh=mZTyWVFeEOx3cqGMfXq4zUTy9aeTI1cR1TIk16D5slo=;
+	s=arc-20240116; t=1711101787; c=relaxed/simple;
+	bh=SrReY5iepclyQRLfL9xUjmut2TW0t7HyjKa/FmYIh+M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q09ll9BfkEfOKpD8pdoBs5jNjN76RrpnimzIScFlQX0m+UDA+ejI2/f3pmpTVUFOHQnaTiENTj8BCFPq4yvG+/0njETDqMe+UTf8+vGlA1rRc2/43l8bt/sp0AM9AaKBcXNIMxeXzq4nqujasYardu+kgWYYOtNSwKN5VdzvjAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nci4RWRX; arc=none smtp.client-ip=209.85.128.45
+	 Content-Type:Content-Disposition:In-Reply-To; b=hTifuf3QqP2qZvEpPBrmQyeCqXeb0uZdttF7XLC/vCHx1YjktJwD54ZnFsBBh5PqnsGaVsH85vsKJYv86i0fmC9rissejFt3xDSGkqrNvJ/kAfmecZaHvuz0fkJ2dLzW7VQIaItq1WuhsjCsyQlc7QKXoBW0YVllLnICJNgCYg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N8cWfxpB; arc=none smtp.client-ip=209.85.221.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4146a1ac117so11558615e9.0;
-        Fri, 22 Mar 2024 02:58:11 -0700 (PDT)
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-33fd8a2a407so1044591f8f.2;
+        Fri, 22 Mar 2024 03:03:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711101490; x=1711706290; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xGqEICCDmfISMN2Tgs6OomSyhnoxbbHxoKPcMA5U3Ds=;
-        b=Nci4RWRX/RWHJ51etY9g5hgxnnk3wT4B1W37BR8FlFgmbMB8aOQc1rwZyozy9Si3jr
-         1FKC+gc4Ps8KUjyxmagx05m6Gc4y70GU8cnSyI2Ifj0hYEjfLRT6iEzqWSuJKZvh9Em5
-         Aut2r1gPnwGYzd3NGfOkuAKoMCbyA2ny3aNsLmIZdO9e5a5qILG+CTmqVPnFhpWJVHWT
-         5GavHYDxPLPvpzwklZX0MpoSn79lg7eT/iHvFcdxDQsDITKZxgYb4jr6XrmOggNy5Umt
-         V3pjX3iBv+wPv8AvXGsMTl8NAK6lgaEv3PYBMfiILronSV4DlRTruhn92x7zOHiWjcpv
-         393A==
+        d=gmail.com; s=20230601; t=1711101784; x=1711706584; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DcwNtDxsn4iutaQGAJ+vxh8SXtvPdgtKbGJ3VpVPuo0=;
+        b=N8cWfxpBBJIVXQLzqg2AnAty+FrS4MehDcwyFJOb9Tn8Ng8jGCNMwrx9HP80YUOqps
+         5CcQ1ZxKztyyWa0e8keoffiODE04J0kqvccLGdfBrRQ1p1WElQN4xegyMOYgVG8L5slb
+         D4HaIUFW/hHv5r4JJvzyFQBFBRFniJjY2YwZefTvaPRTtMD0zfBn8PDc2d4oYelIr/aG
+         gqQwkf6j3+/mADjqqVDKZYNQFPUyJj1phYI1+WirzU17lD6eLBVRTNWXv+jO0KkfL+rV
+         orlETYPmYP79zIXsBUTTW4Yd4gbSz9KmJaSUEBPxmoGkRfmpIk/DM2pdsz3tmwjRwiH+
+         CEAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711101490; x=1711706290;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xGqEICCDmfISMN2Tgs6OomSyhnoxbbHxoKPcMA5U3Ds=;
-        b=G2nBnjqRNrMFZN8EFdz0wMV/hvHELz0VuqFwg98tz5hZOslXMSdd6MMhIoKbLGxs5g
-         84X6W/OuubUTpC2ODGCetNhE5bDR04VE0MB07V2OIXwdghpF9OlR3WHF10AAdycjnq/7
-         qcQ8+01AZp/bbe623LEmzcaf8dHTvpRSAWAWMVzeeR93AgTuIHsIZoIyUynMF8/xxpjp
-         fWfCnny5dP6ChTisqpeT725DVDehXL+aEFxNpBWY99ITgRCalEkp58VYPXaLes/Zs0md
-         zVPqcqKBT24wxE9b5i9ToZlqfJmaUG5mUsHX6WRuVIuUgg9ZNJIyTQyY/qDPzheGgRzr
-         OJEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX19XW8Yx1cd2dJ7ENbiiDTSBT02i0AQ+vzSo4xyJTanHFD5ncItx2G9PHXVLYwv1wa5C7ehObjsHwSP8vkteMaLtsm3gWcTPeg2vd7dOAr5vBs55gXwsKiwvBVyoj+fqem6gDt6tOY53xSevVwUZ/1FmDkTTlpBzqbCTlZKDI=
-X-Gm-Message-State: AOJu0Yznzkv9akcoY8vG0ONTxLQW5L0aDogbVv9qfcn8v54VgaT1j0JQ
-	kC0cwkk3NgIG71RzR3HXUBs3ETtcCZUsZNUjwmDLRDFJmtAeTgC9
-X-Google-Smtp-Source: AGHT+IGVBpsURgy95iJG0WVZSv0I6xzHthi5Am+OVL/2gfunyQBb0t2g50DRG1kF8q/B9Ag+0WfCPQ==
-X-Received: by 2002:a05:600c:3507:b0:414:76df:41d6 with SMTP id h7-20020a05600c350700b0041476df41d6mr1401787wmq.13.1711101489520;
-        Fri, 22 Mar 2024 02:58:09 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1711101784; x=1711706584;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DcwNtDxsn4iutaQGAJ+vxh8SXtvPdgtKbGJ3VpVPuo0=;
+        b=Qz61au3Gd06X+hZpvp8VNRkX3QA2mwZbwZX0Rbjn8/j/Lf18OuChd0lRqoalecMcw9
+         vONM291N7v2Dd8VEIAhPu9X6KniR2Qrqx0a5MPBCZXqsgvpFOUlBE31AgOwgpKRz6332
+         R8/W+OZwRVSufuiG9fyC3arJ+n5iV65/sPuCTQ0nZTqK1iGfvZd24G2kolpavkSn87BN
+         2IliZW7Jh1PcONG44ypWIp1p6b4DpnbYtZUz1uSrufjO45gb5L5kon2II39Cx+W9P7E7
+         dA6NVfWj/+sqxpwVOYlH4g65ERwcnpryJKcJ/roiJnglOXeaeYcVJBOGH/4PwIjAnIua
+         QSlA==
+X-Forwarded-Encrypted: i=1; AJvYcCXfqt8a2bM04L/hU0cKZG8wm90XRbKMQPTv4jHbc7vukVTY1Ld2sd4qn2q+iBIJVl5SsM23d3giynmiyS6LIhqhoaTYiL7vVlIYPhfX+eHXR9yUWTFN09+L46rtq6J68YYWe+I6Cdtbfi4r4zIAXwCwTuHgrSpNxPulnc3XGBA=
+X-Gm-Message-State: AOJu0YwId3HKmPw5ilPc4ZdovLaIGYn7tHhNnmxnr2P13Y5j1+iZu2YD
+	NCrVuVj08l52jztqb+NyghocXVFYfgFL8oHR+rgfT4Kk6x9bxrkE
+X-Google-Smtp-Source: AGHT+IE2ICqUa/rZAmBl7E/hfsVmtG+zHnF5G3wg6d4I4m2ox/W1hTACC7I2VKaC/5R6C4CsFBXSlg==
+X-Received: by 2002:a05:6000:e92:b0:33e:c7e3:b1bb with SMTP id dz18-20020a0560000e9200b0033ec7e3b1bbmr1139362wrb.16.1711101783349;
+        Fri, 22 Mar 2024 03:03:03 -0700 (PDT)
 Received: from gmail.com (1F2EF04C.nat.pool.telekom.hu. [31.46.240.76])
-        by smtp.gmail.com with ESMTPSA id fm5-20020a05600c0c0500b004146c769c79sm8087715wmb.0.2024.03.22.02.58.08
+        by smtp.gmail.com with ESMTPSA id w17-20020adfcd11000000b0033e786abf84sm1695832wrm.54.2024.03.22.03.03.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Mar 2024 02:58:09 -0700 (PDT)
+        Fri, 22 Mar 2024 03:03:02 -0700 (PDT)
 Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date: Fri, 22 Mar 2024 10:58:06 +0100
+Date: Fri, 22 Mar 2024 11:03:00 +0100
 From: Ingo Molnar <mingo@kernel.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Anton Altaparmakov <anton@tuxera.com>
 Cc: Dave Hansen <dave.hansen@intel.com>,
-	Anton Altaparmakov <anton@tuxera.com>, Pavel Machek <pavel@ucw.cz>,
-	Thomas Gleixner <tglx@linutronix.de>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>, Thomas Gleixner <tglx@linutronix.de>,
 	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"x86@kernel.org" <x86@kernel.org>,
 	"H . Peter Anvin" <hpa@zytor.com>, Chen Yu <yu.c.chen@intel.com>,
 	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-	Catalin Marinas <catalin.marinas@arm.com>, linux-mm@kvack.org,
-	Matthieu Baerts <matthieu.baerts@tessares.net>,
-	Mat Martineau <mathew.j.martineau@linux.intel.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Linux Memory Management <linux-mm@kvack.org>,
 	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	Linux Kernel <linux-kernel@vger.kernel.org>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>
 Subject: Re: [PATCH] x86/pm: Fix false positive kmemleak report in
  msr_build_context().
-Message-ID: <Zf1WLscQHk9+w+Z+@gmail.com>
+Message-ID: <Zf1XVPicqdJ3VBcl@gmail.com>
 References: <20240314142656.17699-1-anton@tuxera.com>
  <70261e2a-b87e-462e-964e-95a51ecde978@intel.com>
- <CAJZ5v0hdA2PUc8cmJtCNxW-nzHdWV+pxnTEeVu_7YHsHZTmFLw@mail.gmail.com>
+ <653BCAC0-8A79-400F-B496-23A2FA169786@tuxera.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0hdA2PUc8cmJtCNxW-nzHdWV+pxnTEeVu_7YHsHZTmFLw@mail.gmail.com>
+In-Reply-To: <653BCAC0-8A79-400F-B496-23A2FA169786@tuxera.com>
 
 
-* Rafael J. Wysocki <rafael@kernel.org> wrote:
+* Anton Altaparmakov <anton@tuxera.com> wrote:
 
-> On Thu, Mar 14, 2024 at 4:05 PM Dave Hansen <dave.hansen@intel.com> wrote:
-> >
+> Hi Dave,
+> 
+> > On 14 Mar 2024, at 15:05, Dave Hansen <dave.hansen@intel.com> wrote:
+> > 
 > > On 3/14/24 07:26, Anton Altaparmakov wrote:
-> > >  /* image of the saved processor state */
-> > >  struct saved_context {
-> > > -     /*
-> > > -      * On x86_32, all segment registers except gs are saved at kernel
-> > > -      * entry in pt_regs.
-> > > -      */
-> > > -     u16 gs;
-> > >       unsigned long cr0, cr2, cr3, cr4;
-> > >       u64 misc_enable;
-> > >       struct saved_msrs saved_msrs;
-> > > @@ -27,6 +22,11 @@ struct saved_context {
-> > >       unsigned long tr;
-> > >       unsigned long safety;
-> > >       unsigned long return_address;
-> > > +     /*
-> > > +      * On x86_32, all segment registers except gs are saved at kernel
-> > > +      * entry in pt_regs.
-> > > +      */
-> > > +     u16 gs;
-> > >       bool misc_enable_saved;
-> > >  } __attribute__((packed));
-> >
+> >> /* image of the saved processor state */
+> >> struct saved_context {
+> >> - /*
+> >> - * On x86_32, all segment registers except gs are saved at kernel
+> >> - * entry in pt_regs.
+> >> - */
+> >> - u16 gs;
+> >> unsigned long cr0, cr2, cr3, cr4;
+> >> u64 misc_enable;
+> >> struct saved_msrs saved_msrs;
+> >> @@ -27,6 +22,11 @@ struct saved_context {
+> >> unsigned long tr;
+> >> unsigned long safety;
+> >> unsigned long return_address;
+> >> + /*
+> >> + * On x86_32, all segment registers except gs are saved at kernel
+> >> + * entry in pt_regs.
+> >> + */
+> >> + u16 gs;
+> >> bool misc_enable_saved;
+> >> } __attribute__((packed));
+> > 
 > > Isn't this just kinda poking at the symptoms?  This seems to be
 > > basically the exact same bug as b0b592cf08, just with a different source
 > > of unaligned structure members.
-> >
+> 
+> Yes, that is exactly the same bug.  That's how we figured out the solution in fact - it is totally the same problem with another struct member...
+> 
 > > There's nothing to keep folks from reintroducing these kinds of issues
 > > and evidently no way to detect when they happen without lengthy reproducers.
 > 
-> This change is fine with me FWIW,
+> Correct.  But short of adding asserts / documentation that pointers must be aligned or kmemleak won't work or fixing kmemleak (which I expect is not tractical as it would become a lot slower if nothing else) not sure what else can be done.
+> 
+> Given I cannot see any alternative to fixing the kmemleak failures I think it is worth applying this fix.
+> 
+> Unless you have better ideas how to fix this issue?
+> 
+> What I can say is that we run a lot of tests with our CI and applying 
+> this fix we do not see any kmemleak issues any more whilst without it we 
+> see hundreds of the above - from a single, simple test run consisting of 
+> 416 individual test cases on kernel 5.10 x86 with kmemleak enabled we got 
+> 20 failures due to this which is quite a lot.  With this fix applied we 
+> get zero kmemleak related failures.
 
-thx, I've added your:
+I turned this tidbit into the following paragraph in the commit:
 
-    Acked-by: "Rafael J. Wysocki" <rafael@kernel.org>
+    Testing:
+    
+    We run a lot of tests with our CI, and after applying this fix we do not
+    see any kmemleak issues any more whilst without it we see hundreds of
+    the above report. From a single, simple test run consisting of 416 individual test
+    cases on kernel 5.10 x86 with kmemleak enabled we got 20 failures due to this,
+    which is quite a lot. With this fix applied we get zero kmemleak related failures.
 
-> but I agree that making it for kmemleak reasons feels kind of misguided.
-
-Yeah, so it's a workaround, but kmemleak is also a useful debugging 
-facility that is finding memory leaks that static checkers are missing.
-
-The fact that we don't have an easy way to prevent these problems from 
-being introduced is I think properly counterbalanced by the facts that:
-
-  1) Only kmemleak users are inconvenienced by the false positives.
-
-  2) kmemleak users & maintainers have created the patch. There was no 
-     pressure on us x86 maintainers other than to apply a root-cause 
-     analyzed patch.
-
-  2) Over a timespan of ~10 years only 2 such alignment problems were 
-     introduced, and they were fixed by the kmemleak folks. I think that's 
-     a fair price to pay for a useful facility.
-
-Ie. I don't think there's any long-term maintenance burder concern.
-
-So I've applied this workaround to x86/urgent, with a change to the title 
-to make sure this isn't understood as a real bug in the PM code, but a 
-workaround:
-
-   37fb408c99af x86/pm: Work around false positive kmemleak report in msr_build_context()
-
-... lemme know if you feel strongly about this. :-)
+Describing the impact of a fix in a changelog is always helpful.
 
 Thanks,
 
