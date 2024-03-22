@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-5244-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5245-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE7E488709F
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 17:12:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 564F08870AD
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 17:15:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F2AE61C21984
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 16:12:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C4BE11F24833
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 16:15:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E28156B7A;
-	Fri, 22 Mar 2024 16:12:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CAF95A4E9;
+	Fri, 22 Mar 2024 16:14:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ulGq9vIZ"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="vjTvgsHF"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98E1C50249;
-	Fri, 22 Mar 2024 16:12:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3120959173;
+	Fri, 22 Mar 2024 16:14:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711123971; cv=none; b=CJJDaNoCP/fSaKXMlvpH7cfzzyzTwd+JiD+Yd/3TvpzXN6pGLu/1kXfxjCNlChioGDKJ545jip5ZyCzlp+Jtoe7ouZa2JKL20FQkM4XL2AdgfJCVBrr2bg2O1kai9ATaEV2zfpUqxfzGEubHhgWHfFYn3HLQntOw7oyoD9g6rSo=
+	t=1711124098; cv=none; b=C8CWwxa7etsIljYytBBkaSpH2aow+il9WcD6LTxyZ8Xpi/PI7Y1FurpkRb+K3gcvfCAOap5zshfhGdZh7f4AmerSt6tBH2sspxN6Yd9+hOucHiTH6gfriVnPy0PLJodFS2jVYIYUenyGQZA4fVj1+LgkNRVBX/iV2kdV+iIdcx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711123971; c=relaxed/simple;
-	bh=xTpZfYn5sWY9ztZ2MRpC7W/LSHR5aBjtwqLciBJYbfY=;
+	s=arc-20240116; t=1711124098; c=relaxed/simple;
+	bh=cIchYI+woRPd+SapoC8kJwnS8JEOkR6rxO/tCu5kbHA=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=dmhnhoBVOLHknfgfOGC19vPCj0YzRKANGmNCI4NkHOpMQNtNWb9lta8J5CiohoNYHN0dBmbN8+L4PyjnWP1uvVkSBWJ2WRmsaEziXEe876SuI+P1M+zJSr8jSxicsWsIXIZgNt6ZQfqYj1CqYqTU+1fFq/ypOjgZtXQ62wWye6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ulGq9vIZ; arc=none smtp.client-ip=90.155.50.34
+	 Content-Type:MIME-Version; b=acW5S+XfC6Om7r5jFgjWcZDykuaSsMRous6TjQOj+MqGOdRkHPedMoKkKINKVimwaXEgrgbcHkeITMbScT2nMdnmtT26XnJ3Hgyf/P05g2Q7YhED1CN36Kq7lFK1g4nKnXrpM9tSk7nfh/5bZ24gU/F8FqO5tkZBbmh7Kpqeq10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=vjTvgsHF; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
 	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=xTpZfYn5sWY9ztZ2MRpC7W/LSHR5aBjtwqLciBJYbfY=; b=ulGq9vIZTB/kPm/8p43hhCZCkl
-	Ou5qAdyE/xSET6JIgue6GnqJtXUciX+XcYnyvCjBPafc6CjcFAET9gQq9hBCw7YgWO1cbfNw5ujfR
-	9QkfHc/68ZK7wPqxjFjhzXlphN7SjnNPJ+UFcCkk8ZW+iV5t1K5monYqY35WMqs45EwQMCDigVEOX
-	1cSFD1ILqueGBttbI7xYY5l+mP88GWij7QbebaH2AW1tsGMl67k3SMOeprwuRaH7SJRwQ7nOQ8RIh
-	mYyWQGjE9lynRDwwH2FbpMCtTXhzMs3bhW7Ps4txHOxRK4Ium8cOc23/MWHSUXdFMTq/1rS0g8FTz
-	YwqwMMhA==;
+	bh=cIchYI+woRPd+SapoC8kJwnS8JEOkR6rxO/tCu5kbHA=; b=vjTvgsHFUbdg11RV3f1v4wUnzN
+	tWgi9T2NoAMewXrNlnj8vuWC0b0BzT++SrUFr9gjtn5gZuoYkE/9adDTbRg61VxIBNMHXJpavguE9
+	LJhonC5iWA55okdJApe8c7HYPaa+L9ePRg+KW33S7S5lkPVx1U/bSfAltUSUezT/svKvH1gcsRLJN
+	aHnTxDqSyNCLKkWW8guxwwIAScf5HxkQjnXHFJGxzEaq6cgUnmRQ3dj1nBnA157QzIcGX9xyMecLX
+	vPWBYhzLdxyR4XyASmg6xfRTxBsV5ovoP7Rnovl+VpmG19JVDWrh0VgUgS7Wm/a8vfyw/gOgmNgAo
+	gQTlR+Ng==;
 Received: from [2001:8b0:10b:5:244c:6ee0:3d43:8a85] (helo=u3832b3a9db3152.ant.amazon.com)
 	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rnhVc-00000009la5-3hVl;
-	Fri, 22 Mar 2024 16:12:44 +0000
-Message-ID: <9efb39597fa7b36b6c4202ab73fae6610194e45e.camel@infradead.org>
-Subject: Re: [RFC PATCH v3 5/5] arm64: Use SYSTEM_OFF2 PSCI call to power
- off for hibernate
+	id 1rnhXi-00000009ljZ-1rDa;
+	Fri, 22 Mar 2024 16:14:54 +0000
+Message-ID: <d71212e2514a9c4287b9f2eb32de43cb79a85a96.camel@infradead.org>
+Subject: Re: [RFC PATCH v3 2/5] KVM: arm64: Add support for PSCI v1.2 and
+ v1.3
 From: David Woodhouse <dwmw2@infradead.org>
 To: Marc Zyngier <maz@kernel.org>
 Cc: linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org, Paolo Bonzini
@@ -61,13 +61,13 @@ Cc: linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org, Paolo Bonzini
  <smostafa@google.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>, 
  linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
  kvmarm@lists.linux.dev,  linux-pm@vger.kernel.org
-Date: Fri, 22 Mar 2024 16:12:44 +0000
-In-Reply-To: <86jzluz24b.wl-maz@kernel.org>
+Date: Fri, 22 Mar 2024 16:14:53 +0000
+In-Reply-To: <86il1ez1zn.wl-maz@kernel.org>
 References: <20240319130957.1050637-1-dwmw2@infradead.org>
-	 <20240319130957.1050637-6-dwmw2@infradead.org>
-	 <86jzluz24b.wl-maz@kernel.org>
+	 <20240319130957.1050637-3-dwmw2@infradead.org>
+	 <86il1ez1zn.wl-maz@kernel.org>
 Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-QJwNlpakDv+46NsnA37x"
+	boundary="=-tbBqGbZ9Fo446pytCtw5"
 User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -78,47 +78,22 @@ MIME-Version: 1.0
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
 
---=-QJwNlpakDv+46NsnA37x
+--=-tbBqGbZ9Fo446pytCtw5
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2024-03-22 at 16:02 +0000, Marc Zyngier wrote:
-> On Tue, 19 Mar 2024 12:59:06 +0000,
-> David Woodhouse <dwmw2@infradead.org> wrote:
+On Fri, 2024-03-22 at 16:05 +0000, Marc Zyngier wrote:
 >=20
-> [...]
->=20
-> > +static void __init psci_init_system_off2(void)
-> > +{
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int ret;
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =3D psci_features(PSCI_F=
-N_NATIVE(1_3, SYSTEM_OFF2));
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (ret !=3D PSCI_RET_NOT_SU=
-PPORTED)
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0psci_system_off2_supported =3D true;
->=20
-> It'd be worth considering the (slightly broken) case where SYSTEM_OFF2
-> is supported, but HIBERNATE_OFF is not set in the response, as the
-> spec doesn't say that this bit is mandatory (it seems legal to
-> implement SYSTEM_OFF2 without any hibernate type, making it similar to
-> SYSTEM_OFF).
+> Consider making the visibility of v1.2/1.3 to userspace and guest the
+> last patch in the series, so that there is no transient support for
+> some oddball PSCI version with no feature (keeps bisection clean).
 
-Such is not my understanding. If SYSTEM_OFF2 is supported, then
-HIBERNATE_OFF *is* mandatory.
+Ack. I think I can just reorder the patches and that will Just Work,
+and the check for 'minor >=3D 3' will be tautologically false until the
+later patch which adds v1.3 support for real. Will do that and test
+that it does indeed build that way.
 
-The next update to the spec is turning the PSCI_FEATURES response into
-a *bitmap* of the available features, and I believe it will mandate
-that bit zero is set.
-
-And if for whatever reason that SYSTEM_OFF2/HIBERNATE_OFF call
-*doesn't* work, Linux will end up doing a 'real' poweroff, first
-through EFI and then finally as a last resort with a PSCI SYSTEM_OFF.
-So it would be OK to have false positives in the detection.
-
---=-QJwNlpakDv+46NsnA37x
+--=-tbBqGbZ9Fo446pytCtw5
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -210,25 +185,25 @@ IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
 dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
 NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
 xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwMzIyMTYxMjQ0WjAvBgkqhkiG9w0BCQQxIgQghP83vqVc
-pKHgEWjfNHTWlV7NSgT6GrxahqiKpGZyDrQwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwMzIyMTYxNDUzWjAvBgkqhkiG9w0BCQQxIgQgXVLNjJbd
+s9rHq6ydOiQ79WljHoRvu9z8+tPecF6we18wgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
 BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
 A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
 dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
 DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
 MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
 Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgCF83Cn5voiBXZzSFRndzQ2lj3J7Pj/b8Gm
-MYHWtpPabyNZak2t0F/xRrAY1YZLxssWV4NRVpl/57rX1RE80bXCsj86S0xYeDVrPSvJISU2P0NE
-Am8esP/aiiJSvPTzMxrhcJOJxsuP2Ce/YOxkqC0pmYEB1MAcOzb3xflK96wJM6+P7a3Yh1/Pqcmh
-y0H/XWHRDsAsNxrCV/A65ANHsFHdZhWiFO2kjuplfR8l/9hRLzBw8F7J2c1TVTzSRs7S9OX6u69a
-Y13zR0PZlDuC0MSF0BcHR0itlamWz+QTbS5kXJ8ZHYyxhHuqlDN2cZFt42yqrVsE4jk4K02upyY7
-hms7iqDjzk+aoHakJphx5sAD4sRbES+EvJC7HTWF/Y7XOJ2ejBzh6vIHmnkMm18qUXFV6p5cyKil
-kV3zCECaH7M5lBHf1yuPPiAhIjrQhNRrzAPKmotZVaQ7O4Y/bTlF0LMK25MjZOsUs4zTBMMzSbPk
-9cqi3GV96rE7djUlMvu8w4OA0zreFzkilm+ssrHw76k3npN7VeoMIABZ3uh6Sh6B61VUJ9LB7spH
-kw8WTcBoVsqpgkJlqNaX2UEBY1er4V7+ISYi2nITxCc+IU+ypdc/awE3bDNPlHo/n4R4RjBsGkG7
-2JUBxeE+u7kLaGHHOWmQhA61nhULdPPwllUGP0D9VgAAAAAAAA==
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgCOukHmUY/icB97F1R8KQrfy7i0RQRdX39/
+HHLFuKNV9JWhy1822RvoZ0uvRQwWvlIX8ssGdJX28Nk35rI6uU92jDUAqOTtGxK2qAKlbhAYD/gk
+ZCO7UepQ88MCYD0L6udt/092zFBQawLOJd4iuyyKiDMQP1VIUAxcsxeRHBBPbV7I3Wml7GxUoiNZ
+cLSZibJ/zA84ajWJubBJ1KqKF5EIiqjRrxtunEerfyqYUDVVftZevAwbgV9Vby0y9dZzL3V8Xnjg
+OpT6pidEsL1wL2kP5uXd46FrwSlE0wClLc/3zoC96UQsw4q8sc42FgPzNxo/mIYYPFbdP8gk9tL8
+RLPX6NzD+5Ri1dnPuNxMS0Z9kj4jpEetqCjWLt8LMADxEJPbOIihBm1xptOfwhjzRdrdzGC7PfaO
+BlFH/RCnG6v24TQPPX7iCbGiE9wXbzNQozdEYhD2nGxPvFDtahYdCpk8qAbXRD+eGVYkAKQVmXHG
+tYneCIZI3X7v0ZsIoUPm6vxexsDH9puG+5dFGRamxUUPPQXHeimQjZGLqd9eY/Q+wHkip5HqftYL
+FHwZrWwvP0Xr1EC8z//145UeH1rT/W5zf/vHZJyHTITD2ZhtzNhQF2B3PVzpy1nR3azsxORYpn2r
+vb+CCYryaZFClLe2GBi9CPgEjfXWKO529dnbY2INCgAAAAAAAA==
 
 
---=-QJwNlpakDv+46NsnA37x--
+--=-tbBqGbZ9Fo446pytCtw5--
 
