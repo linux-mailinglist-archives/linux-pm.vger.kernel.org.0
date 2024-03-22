@@ -1,137 +1,203 @@
-Return-Path: <linux-pm+bounces-5238-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5239-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7711886BFF
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 13:25:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E6D3886C3D
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 13:38:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6771F1F2519D
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 12:25:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C9026283D0E
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 12:38:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D05123FE46;
-	Fri, 22 Mar 2024 12:25:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8261040C09;
+	Fri, 22 Mar 2024 12:38:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QD75jSUP"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="hW8+VDeD";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="0QV366OT";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="glSoNJHf";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="G/cKCy92"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2942B3FE2D
-	for <linux-pm@vger.kernel.org>; Fri, 22 Mar 2024 12:25:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B72551E4A2;
+	Fri, 22 Mar 2024 12:38:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711110320; cv=none; b=BmHSJmaFoEC3tNzfv9x6k8+kKj++dynO6uLNKs7w8nCoYQ7D48jC2nXVIZuxYYp7BDc27Jsk8YDx12KbgQ2LY73fw1RAn95iUCSOApociVgy4mGWm7xdLcALrmsVkn7Z77zSmuNC/9chNJEqFsYdRBB1oEBbAksKK8fJwOYBHHw=
+	t=1711111093; cv=none; b=SV51nlyf3mIGZ3SYXn6Z5/dmNi8BH/MXnGWcZq8A6z+Cx4o4CU9wX5bs+868lajsL5/kg0yXoS79TkmZwE13kqeoBqmuN6ZQ+X215OczrMXi1X19uXsNYpekf9vDwbK0IfMlXGBQVFZCm4jhtKKpkWsjEDvKjS4izshB+gL3pBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711110320; c=relaxed/simple;
-	bh=ZEnIxGQIqrPER/t8ApwexaX5resinISqhwzMF02gDuo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=llohlTdDrSoXvA4LQbzz5wK2jufw9hr4Bs75Ft31NJ2ohh6zHNa3y/uQ8ncSGt5tmJzbHer37Uyz5cs1uOAYS1Gdo2OEDFAlNIfUWhZgay0nUuommsYPTTw8hYtAr+W7imR15hZUxsCzzEhBr/3w5b4vDAvvUZZ8T6PSlR/TdHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QD75jSUP; arc=none smtp.client-ip=209.85.219.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6928a5e2479so13453126d6.0
-        for <linux-pm@vger.kernel.org>; Fri, 22 Mar 2024 05:25:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711110318; x=1711715118; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jBLDXQz7Tm/l5pS6UUf5eGUMWwFYBh+cuJFlCxTgaWc=;
-        b=QD75jSUPqIdWfpc5O6dL2nFUl8rQyo1c+FcP8ipJjfOC/DLTjJs4yravwFdziZWD1Z
-         /T0Iqc4b5HWXT9vBJE/DBOYSZFyuxhnBx72hi/Piwr5aaIkIGfXcIYA1hUBQI237re6p
-         WfWiCTrTnrGR93xN6iUW3DEpymmwVqf/SayDYNOr4aYOMmVuTS38ti/H11019kXq1ruz
-         ZUz0WSr2hIHoO+kydEKf7ntyd+tXZ6hLbLehbU8/mMJ12i6PCj0PIMVHLTBPf+JNkuxr
-         FHYpsNs1czAuScX9eIeaG1a1g8MUMaHqGkBO6T/uOPlLU0mwbxf3bcHYDU9V8vM5eGvx
-         jv/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711110318; x=1711715118;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jBLDXQz7Tm/l5pS6UUf5eGUMWwFYBh+cuJFlCxTgaWc=;
-        b=ZKdMml8JZVg8aTmhibLgNqAzBstEzAzHG3KHzxSCuSJ4hEwFQuIFx00Z1BuSVAJsA9
-         T7zq4Dhu0jhLBwR501Q6DzDhBu8Gorj7omrRblXNfOaEbQSOLDaD2CF2GzMqBtVU46ur
-         MH0nwlqjaNq7/409/KRngXJj9AxamzSX+bBT2xTHQ/1HzzpH/+9TasrdeWHykRa2aow2
-         Cdhv2tcVXVUd9V/BTjnOIu5nem6Lsh+m2Dy8v/EdUMWOy2rfjrZb7lC4S5sRKt/uM2EI
-         ErtPrfF6hbbcVWuiuhXbab56usfAUSOwhrCyfXyDEyyBFdDDv57msNjSLFTTH+IBMhMp
-         xgNA==
-X-Forwarded-Encrypted: i=1; AJvYcCVkjmSNQxz+/RbTr24lGK1RsXUoeZJ0XVibrACilfolp+cGSDdKaUcUUPbeSOBH+1h5s8KELDzmLTOSJamoJlEg74+yfC6borY=
-X-Gm-Message-State: AOJu0YzXjx3EPiR9Edz7CpiSPmrTIb2k4EX8JbFGcuaO+d2YrITX6YRY
-	1kzEAQPunmqxuRSBCwn6j0Z90/xIhAX11DYTQn6g+QTs4PSPCgfXvIMn6q7mmIfOfTaG3O5f4Zh
-	9Cue94zEUbiksMvXM47zdIxrBlgVziVRieOChYcBAgApvYPv4Rgc=
-X-Google-Smtp-Source: AGHT+IGIExSUNDd4r7jVV65H6zHX9xhOASVzk/Kf4IvYae9WrM2l7rC7eu20JTysrN3EznovSYV/NmWRKgOzkgIigyE=
-X-Received: by 2002:a05:6214:2a87:b0:696:1ffd:a32c with SMTP id
- jr7-20020a0562142a8700b006961ffda32cmr2045115qvb.31.1711110318092; Fri, 22
- Mar 2024 05:25:18 -0700 (PDT)
+	s=arc-20240116; t=1711111093; c=relaxed/simple;
+	bh=15tjurI1jexSxmci0pNrPX6/+b+J8UZRC6bvVYb0kfU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=RbbK9GbHm0o/85CxsiQDdbnIWlP71m/f2fx2LMasMJPxRX4upCO9exECV+ydX9T56PvOLJs/XRZK5Z1KMKMNmjwjoeBYOhpsGK9fzcPar/3UZnVBwDmHAhHHD0hAnKT9xl8ftNbvrgFMrUHZET24b/LSrIIQIUEsOIPr9SIUfRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=hW8+VDeD; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=0QV366OT; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=glSoNJHf; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=G/cKCy92; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 184BC20B4A;
+	Fri, 22 Mar 2024 12:38:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1711111084; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QnJLtx+GDoU+PN93+arvr4wqI3/TSA8DCa2s94Jv5C0=;
+	b=hW8+VDeDoIYsl+z+JmHKDCTliFTYdEavOw6yQj4UEjMIP0Fksh46J8a/zSfkcm5fOMW5VC
+	BTd7G3R3piMzzo8QLVwqPd7+BSPWC1xoUHDDik5gr7Y6pQcSDVC/Z9aNUtPBh+DohiY3sN
+	aRGExamMqWib5Q9Mruz+7qs0bzBHXJo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1711111084;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QnJLtx+GDoU+PN93+arvr4wqI3/TSA8DCa2s94Jv5C0=;
+	b=0QV366OTz5PmJ292Fku/6U8g0cXBa3VpQ8pbFEzmsKVjd05bos8bE7pW4lAEzetcCcPkDP
+	iPsgeV4B+yU/D1Bw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1711111083; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QnJLtx+GDoU+PN93+arvr4wqI3/TSA8DCa2s94Jv5C0=;
+	b=glSoNJHf0nVCDsQYo+u5QGLLI12D8ABqxYSp6twS4uEJlHBH/wEp8okUvuTjSOqu88Z1NM
+	ooNzbzyPAhCspc0iUdieNqFqBbc1Ht4FgX1YdFghsrUMyWTbghwVKk8eJTPSOfjjE6ny0j
+	PFWfS6DHBwPNzjKOFNc2So4SE1oEwJM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1711111083;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QnJLtx+GDoU+PN93+arvr4wqI3/TSA8DCa2s94Jv5C0=;
+	b=G/cKCy92vNPyf+4nFoLo9Z5DzYNxspg8cZHxcJM+AaLLhi+uqaTcGxtRleUhld21OxsB+z
+	CM6laCjgYxxjXoDw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id E550A13688;
+	Fri, 22 Mar 2024 12:38:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id W1ZsNqp7/WXnAgAAD6G6ig
+	(envelope-from <trenn@suse.de>); Fri, 22 Mar 2024 12:38:02 +0000
+From: Thomas Renninger <trenn@suse.de>
+To: Len Brown <lenb@kernel.org>, Justin Ernst <justin.ernst@hpe.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Justin Ernst <justin.ernst@hpe.com>
+Subject: Re: [PATCH] tools/power/turbostat: Fix uncore frequency file string
+Date: Fri, 22 Mar 2024 13:38:02 +0100
+Message-ID: <1980117.DIVbhacDa7@work.fritz.box>
+In-Reply-To: <20240308204957.2007212-1-justin.ernst@hpe.com>
+References: <20240308204957.2007212-1-justin.ernst@hpe.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240320020549.71810-1-alexey.klimov@linaro.org>
- <20240320020549.71810-3-alexey.klimov@linaro.org> <4d5b2da7-2a45-4a9f-8a96-a6840d2751a2@linaro.org>
-In-Reply-To: <4d5b2da7-2a45-4a9f-8a96-a6840d2751a2@linaro.org>
-From: Peter Griffin <peter.griffin@linaro.org>
-Date: Fri, 22 Mar 2024 12:25:06 +0000
-Message-ID: <CADrjBPrthH4cKBpDeGV8u2ydErCJuqbdBhFQs+62k7bfPyJNvA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] power: reset: add new gs101-poweroff driver
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Alexey Klimov <alexey.klimov@linaro.org>, sre@kernel.org, robh@kernel.org, 
-	krzysztof.kozlowski+dt@linaro.org, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, robh+dt@kernel.org, conor+dt@kernel.org, 
-	linux-samsung-soc@vger.kernel.org, semen.protsenko@linaro.org, 
-	linux-kernel@vger.kernel.org, klimov.linux@gmail.com, kernel-team@android.com, 
-	tudor.ambarus@linaro.org, andre.draszik@linaro.org, saravanak@google.com, 
-	willmcvicker@google.com, alim.akhtar@samsung.com, 
-	linux-arm-kernel@lists.infradead.org, elder@linaro.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="nextPart7509112.W097sEU6C4";
+ micalg="pgp-sha256"; protocol="application/pgp-signature"
+X-Spam-Score: -8.61
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-8.61 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	 MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 DWL_DNSWL_MED(-2.00)[suse.de:dkim];
+	 RCPT_COUNT_FIVE(0.00)[5];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 DKIM_TRACE(0.00)[suse.de:+];
+	 MX_GOOD(-0.01)[];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[hpe.com:email,suse.de:dkim,suse.de:email];
+	 SIGNED_PGP(-2.00)[];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+,1:+,2:~];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 RCVD_TLS_ALL(0.00)[];
+	 BAYES_HAM(-3.00)[99.99%];
+	 RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from]
+X-Spam-Level: 
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=glSoNJHf;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b="G/cKCy92"
+X-Rspamd-Queue-Id: 184BC20B4A
 
-Hi Krzysztof,
+--nextPart7509112.W097sEU6C4
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"; protected-headers="v1"
+From: Thomas Renninger <trenn@suse.de>
+To: Len Brown <lenb@kernel.org>, Justin Ernst <justin.ernst@hpe.com>
+Date: Fri, 22 Mar 2024 13:38:02 +0100
+Message-ID: <1980117.DIVbhacDa7@work.fritz.box>
+In-Reply-To: <20240308204957.2007212-1-justin.ernst@hpe.com>
+References: <20240308204957.2007212-1-justin.ernst@hpe.com>
+MIME-Version: 1.0
 
-Thanks for your review feedback!
+On Freitag, 8. M=E4rz 2024 21:49:57 CET Justin Ernst wrote:
+> Running turbostat on a 16 socket HPE Scale-up Compute 3200 (SapphireRapid=
+s)
+> fails with: turbostat:
+> /sys/devices/system/cpu/intel_uncore_frequency/package_010_die_00/current=
+_f
+> req_khz: open failed: No such file or directory
+>=20
+> We observe the sysfs uncore frequency directories named:
+> ...
+> package_09_die_00/
+> package_10_die_00/
+> package_11_die_00/
+> ...
+> package_15_die_00/
+>=20
+> The culprit is an incorrect sprintf format string "package_0%d_die_0%d" u=
+sed
+> with each instance of reading uncore frequency files.
+> uncore-frequency-common.c creates the sysfs directory with the format
+> "package_%02d_die_%02d". Once the package value reaches double digits, the
+> formats diverge.
+Yep, currently in:
+drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.c
+line 238.
 
-On Wed, 20 Mar 2024 at 07:20, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 20/03/2024 03:05, Alexey Klimov wrote:
-> > +
-> > +     ret = devm_work_autocancel(dev, &gs101->shutdown_work,
-> > +                                gs101_shutdown_work_fn);
-> > +     if (ret) {
-> > +             dev_err(dev, "failed to register gs101 shutdown_work: %i\n", ret);
-> > +             unregister_keyboard_notifier(&gs101->keyboard_nb);
-> > +             return ret;
-> > +     }
-> > +
-> > +     gs101_poweroff_ctx = gs101;
-> > +     platform_set_drvdata(pdev, gs101);
-> > +
-> > +     /*
-> > +      * At this point there is a chance that psci_sys_poweroff already
-> > +      * registered as pm_power_off hook but unfortunately it cannot power
-> > +      * off the gs101 SoC hence we are rewriting it here just as is.
-> > +      */
-> > +     pm_power_off = gs101_poweroff;
->
-> So that's a duplicated syscon power off driver. Why syscon does not
-> work? syscon_node_to_regmap() does not return correct regmap?
+Looks like the proper bugfix.
+=20
+> Change each instance of "package_0%d_die_0%d" to "package_%02d_die_%02d".
+>=20
+> Signed-off-by: Justin Ernst <justin.ernst@hpe.com>
 
-Yes, for gs101 the regmap handling PMU registers is now created by
-exynos-pmu driver and is obtained using
-exynos_get_pmu_regmap_by_phandle() API. That was required due to the
-SMC call required to write to these registers from Linux.
+Reviewed-by: Thomas Renninger <trenn@suse.de>
 
-> If so,
-> this should be fixed instead of copying the driver with basically only
-> one difference.
+       Thomas
+--nextPart7509112.W097sEU6C4
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
 
-Are you suggesting we should add some API to syscon.c that allows
-regmaps created in other drivers like exynos-pmu.c or altera-sysmgr.c
-to be registered in the syscon_list?
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
+iQEzBAABCAAdFiEEo0EXulPW3gW/5bAoTxjWwdl3vVUFAmX9e6oACgkQTxjWwdl3
+vVXxNwf5AWawwcrw7oZOe5MpqLkq3TLMdUCnB2ZyDdYQvL/53El5phMTS1giob/S
+xdppK7m50CrbWVw3rugnrN/ljgQ1FAhLzmL2yfJ16WO3LtQxUttNfFWFLg/4Ug4n
+MCdeKa8FamtxQu4CTLijPjx1LWcCSISxjCrFMb4Fvuz5EkVZfj1F2sOV8A/shpfK
+hPS23mywWpC5UwFEh0i3kKLil0QexN3oF3A5xj2byqfQr8TOMrKAC8Lm8JkAD9si
+EFueVsnoVzJLMqW4D8q80rQByjau3GHGHn9q+8o4hEmfNXu821Dv/SZUu72xnydC
+6dk3bBfCNR3w8UYTjf/JNv24LdkG5w==
+=nD7I
+-----END PGP SIGNATURE-----
 
-Peter
+--nextPart7509112.W097sEU6C4--
+
+
+
 
