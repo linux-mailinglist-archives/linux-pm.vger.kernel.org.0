@@ -1,226 +1,358 @@
-Return-Path: <linux-pm+bounces-5251-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5252-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D7768871E9
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 18:33:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A747E8872A2
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 19:09:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E8F31C20C1A
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 17:33:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D762287957
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 18:09:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD8385FBB9;
-	Fri, 22 Mar 2024 17:33:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AB1C626CC;
+	Fri, 22 Mar 2024 18:09:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="hDV+Gsar"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="i2M4bAgB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52FBD47793;
-	Fri, 22 Mar 2024 17:33:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E49095FBB0
+	for <linux-pm@vger.kernel.org>; Fri, 22 Mar 2024 18:09:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711128817; cv=none; b=Q6bN/t/qArh5crq+1x/EXTowaEHnSxjLntVm029A0zrPy91OFBayYtOwI3tkmHq4qAOnh/CDJBdK+M5xzeodI8FBqHBZLxAT5mxz7wwaERFTXWWI7HxRlXt12zEq5EUhEavVTOcxXJn+PqMX2veEcbzRj6JLiqOBKhcF+QxYgJI=
+	t=1711130952; cv=none; b=OR3DHaXlXovcUkMSfhtysCjML5UO6VzKpPpwOU/tvMqCq+IX2nvUBv/WysF/TnNFoHL8mb54pJYViZXAOxZCGE5ytkyx+0zesRYvfjW+ouwCQRKJa5YZ/s5PTealAi+CGde9N0s+URZ56F9Dvp6imvmUyxewVvPKLGlIFCmfZgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711128817; c=relaxed/simple;
-	bh=q7JrrZOo5+hDRmBzvN6hqsChrFOx8TL6QdxH1nPbXi0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UIFHwWitNLhGwzaJmE8fPWOCACMK1AGHTBBeI3M0iTlLuH18lTaN6RgvYmq2hxNmPpnheVQixCtEZe7QewSoIwZbhMtBzip5FBSx1pN88yDpO5x1r38bDiFrLsGKPz5stTDY6gsteWAQyOq8UtSJwLGXu2kBQsyktAWWtLIEKp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=hDV+Gsar; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=q7JrrZOo5+hDRmBzvN6hqsChrFOx8TL6QdxH1nPbXi0=; b=hDV+GsarAMswANiPSzZVSI6aya
-	3ZGnTr9/kRt8YK+k5u7fXM1I9HxHEyvYkPrjveia29W/ffSUzXlOI2O2hJ4NMZ9DDyiqzxy0cMxop
-	eevJS3SbIidU4rhMhe5Fl8gBQBT+HAL1/SerEAbZWc+o1xKVOBUr3uIq/sKO91CJZ6FRbWf+Rdzdx
-	JHGGRvxATaAEOGD13Ywo/wTtWVdLZFWwF61Dn+7xozDrcplLtBORsSV1xQd5jdY96G5/a+slvU38C
-	48A3syXLzPpDftPk/xdWIJBVpwMXyA9KOnFWJ+daVeWtyNvLK8aabiQdgIW3TkL/8yCFeZmGHXVph
-	OGfOtF4w==;
-Received: from [2001:8b0:10b:5:244c:6ee0:3d43:8a85] (helo=u3832b3a9db3152.ant.amazon.com)
-	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rnili-00000009uux-0lzX;
-	Fri, 22 Mar 2024 17:33:26 +0000
-Message-ID: <66fd33e9d113669cdeb46a008bd69acff1d1aa74.camel@infradead.org>
-Subject: Re: [RFC PATCH v3 0/5] Add PSCI v1.3 SYSTEM_OFF2 support for
- hibernation
-From: David Woodhouse <dwmw2@infradead.org>
-To: Marc Zyngier <maz@kernel.org>
-Cc: Oliver Upton <oliver.upton@linux.dev>, 
- linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org, Paolo Bonzini
- <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, James Morse
- <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui
- Yu <yuzenghui@huawei.com>, Catalin Marinas <catalin.marinas@arm.com>, Will
- Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Lorenzo
- Pieralisi <lpieralisi@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, Mostafa Saleh
- <smostafa@google.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>, 
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- kvmarm@lists.linux.dev,  linux-pm@vger.kernel.org
-Date: Fri, 22 Mar 2024 17:33:25 +0000
-In-Reply-To: <86frwiz1rs.wl-maz@kernel.org>
-References: <20240319130957.1050637-1-dwmw2@infradead.org>
-	 <Zfmu3wnFbIGQZD-j@linux.dev>
-	 <9e7a6e0f9c290a4b84c5bcc8cf3d4aba3cae2be5.camel@infradead.org>
-	 <Zfnpj2FShq05QZpf@linux.dev>
-	 <248ec30e7b5c8a42d184f029c1cc9b664656b356.camel@infradead.org>
-	 <86frwiz1rs.wl-maz@kernel.org>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-4348LFrQyy97fOemnDcW"
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1711130952; c=relaxed/simple;
+	bh=V9qH8Hqz75lvC7fcWia7IDuZ4H/IPMayPvgEtvd7OTs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LT4ABkjfYy4RM8oxFrzqXtNV+Neyd2L2qTmWJi9Aqjw9h8bpuP4S84UWI8NYS3JzHHLtNfmxEx7dCTKlzB3aRS968lLHwtvCuhayUEkZ1FmyMjq9gZEH8Bl8qBM5CtgJP/3eyDryumXAF1KkbPTMhzagZTpxzYuAbdlaLJecKb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=i2M4bAgB; arc=none smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-5d42e7ab8a9so1205722a12.3
+        for <linux-pm@vger.kernel.org>; Fri, 22 Mar 2024 11:09:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1711130949; x=1711735749; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zIDjLYOAoTtitEy2EbjJ+uIGL56wEX/Yq/x0rNRFB3U=;
+        b=i2M4bAgBNQxkmaX8jGphlRkkWXonoOaEDsSYqkW2jk+rT/WX3E1vhkb2kVARZlp5JJ
+         rCb1v2VRXuqjy+ech3mE0VMYbou2ueaZjI53AbialqLjR0fIQJUWDbXwOuASbVIeMzny
+         GSJGCGUgCHv5Cms28rh07Hko6oC47VjscajjOD1Gayn/ElZOeJwm2tjRmAcjKkmPyj1l
+         Eij4vNKs1cmwe4XzJCxcOgvK9+s/GREzXZAW6a0LrFgzZ/KQHtlW4lj6Ij/aGZtYo/ft
+         vFgwp4TytamQA2NzA5Pg+PsLTowGBVjt/9JAu04mczq6TVkDTu2VLaQQa5y98uwwZzYS
+         fC7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711130949; x=1711735749;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zIDjLYOAoTtitEy2EbjJ+uIGL56wEX/Yq/x0rNRFB3U=;
+        b=hujorE8LL6VX8KaqaakVIPbdxgHwKncZz2zGmofPsCJ8TSfagnoeutX1NDNAmonRHo
+         Q00j5dfbbuppJEUC+I0hVwy4JJjiRcGm/CFVERusIkHWz9rKS5WBVYyAzYF4l7XG58v6
+         qEhNX5aRZCMOP19spvFXC9XESp+aHuXCX30HF14VlxQ7WZ+ewx6kURjZWLz2cTMM3vY6
+         02EmEMSXY2f1iSorJiqNtC7c+C4SiUUYn/2Mt+aBr3UxfY9O62UDLcyISQhZDQVlyUw0
+         EwCYV28dKMEmBHnUzZmBbVD6pDL5UyIUmxdBgqfmro1BXPQgAXoESyqw2+R4Mn+MuCfg
+         M+0A==
+X-Forwarded-Encrypted: i=1; AJvYcCVYyt9gEkdbGPhVuey8NsNTz5ZKpFklJ5DTgGfiSWYGwzwGje8+twMHCiqA96/b0Yl0QL3wUDYJfLI9lgVd+rWLSIJTdUrNj40=
+X-Gm-Message-State: AOJu0YyLEaGMz53JDfeTQ2M98CngsQVbLX+yUjfE82lf5Jg1VhPpitEv
+	Hrwiuk8dhlPItj/ec799HiBS6DH4/4UNKx5hG6t2DveqmTKMvFPKl71m+7ZzntdnsgHKssyffPP
+	5tno7XhANrD5Ys2istseZviSXPbWJkF6GergBCw==
+X-Google-Smtp-Source: AGHT+IGvJlKqALa9BjwZx4qwm/OSmLcvHiP8qUMTEcDuG2KQ4oqXk1Hb1cBcfDxOS0fa1yC5aZyttjpfCb1shzfhtG4=
+X-Received: by 2002:a17:90b:37ce:b0:29b:c0a5:1143 with SMTP id
+ nc14-20020a17090b37ce00b0029bc0a51143mr430917pjb.29.1711130949112; Fri, 22
+ Mar 2024 11:09:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
-
-
---=-4348LFrQyy97fOemnDcW
+References: <20240304201625.100619-1-christian.loehle@arm.com>
+In-Reply-To: <20240304201625.100619-1-christian.loehle@arm.com>
+From: Vincent Guittot <vincent.guittot@linaro.org>
+Date: Fri, 22 Mar 2024 19:08:57 +0100
+Message-ID: <CAKfTPtDcTXBosFpu6vYW_cXLGwnqJqYCUW19XyxRmAc233irqA@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/2] Introduce per-task io utilization boost
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: linux-kernel@vger.kernel.org, peterz@infradead.org, juri.lelli@redhat.com, 
+	mingo@redhat.com, rafael@kernel.org, dietmar.eggemann@arm.com, 
+	vschneid@redhat.com, Johannes.Thumshirn@wdc.com, adrian.hunter@intel.com, 
+	ulf.hansson@linaro.org, andres@anarazel.de, asml.silence@gmail.com, 
+	linux-pm@vger.kernel.org, linux-block@vger.kernel.org, 
+	io-uring@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2024-03-22 at 16:09 +0000, Marc Zyngier wrote:
->=20
-> > Marc, I think I've also addressed your feedback? Is there anything else
-> > to do other than wait for the spec to be published?
->=20
-> Other than the couple of minor nits I mentioned in replies to the
-> individual patches, this looks good to me.
+Hi Christian,
 
-I believe I've handled all that. And also Sudeep's implicit nudge to
-use BIT() instead of manually shifting (1<<PSCI_1_3_HIBERNATE_TYPE_OFF).
+On Mon, 4 Mar 2024 at 21:17, Christian Loehle <christian.loehle@arm.com> wrote:
+>
+> There is a feature inside of both schedutil and intel_pstate called
+> iowait boosting which tries to prevent selecting a low frequency
+> during IO workloads when it impacts throughput.
+> The feature is implemented by checking for task wakeups that have
+> the in_iowait flag set and boost the CPU of the rq accordingly
+> (implemented through cpufreq_update_util(rq, SCHED_CPUFREQ_IOWAIT)).
+>
+> The necessity of the feature is argued with the potentially low
+> utilization of a task being frequently in_iowait (i.e. most of the
+> time not enqueued on any rq and cannot build up utilization).
+>
+> The RFC focuses on the schedutil implementation.
+> intel_pstate frequency selection isn't touched for now, suggestions are
+> very welcome.
+> Current schedutil iowait boosting has several issues:
+> 1. Boosting happens even in scenarios where it doesn't improve
+> throughput. [1]
+> 2. The boost is not accounted for in EAS: a) feec() will only consider
+>  the actual utilization for task placement, but another CPU might be
+>  more energy-efficient at that capacity than the boosted one.)
+>  b) When placing a non-IO task while a CPU is boosted compute_energy()
+>  will not consider the (potentially 'free') boosted capacity, but the
+>  one it would have without the boost (since the boost is only applied
+>  in sugov).
+> 3. Actual IO heavy workloads are hardly distinguished from infrequent
+> in_iowait wakeups.
+> 4. The boost isn't associated with a task, it therefore isn't considered
+> for task placement, potentially missing out on higher capacity CPUs on
+> heterogeneous CPU topologies.
+> 5. The boost isn't associated with a task, it therefore lingers on the
+> rq even after the responsible task has migrated / stopped.
+> 6. The boost isn't associated with a task, it therefore needs to ramp
+> up again when migrated.
+> 7. Since schedutil doesn't know which task is getting woken up,
+> multiple unrelated in_iowait tasks might lead to boosting.
+>
+> We attempt to mitigate all of the above by reworking the way the
+> iowait boosting (io boosting from here on) works in two major ways:
+> - Carry the boost in task_struct, so it is a per-task attribute and
+> behaves similar to utilization of the task in some ways.
+> - Employ a counting-based tracking strategy that only boosts as long
+> as it sees benefits and returns to no boosting dynamically.
 
-Rebased onto 6.8 and pushed to
-https://git.infradead.org/users/dwmw2/linux.git/shortlog/refs/heads/psci-hi=
-bernate-6.8
+Thanks for working on improving IO boosting. I have started to read
+your patchset and have few comments about your proposal:
 
-> > Shall I post a v4 with PSCI v1.3 as default and the self-test? Would
-> > you apply that into a branch ready for merging when the spec is ready,
-> > or should I just wait and repost it all then?
->=20
-> I think this can wait for the final spec. I assume that you are
-> directly tracking this anyway, so we don't need to poll for the spec
-> update.
+The main one is that the io boosting decision should remain a cpufreq
+governor decision and so the io boosting value should be applied by
+the governor like in sugov_effective_cpu_perf() as an example instead
+of everywhere in the scheduler code.
 
-Indeed, will post again when the spec is published. Thanks.
+Then, the algorithm to track the right interval bucket and the mapping
+of intervals into utilization really looks like a policy which has
+been defined with heuristics and as a result further seems to be a
+governor decision
 
---=-4348LFrQyy97fOemnDcW
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
+Finally adding some atomic operation in the fast path is not really desirable
 
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
-ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
-EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
-FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
-aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
-EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
-VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
-aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
-ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
-QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
-rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
-ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
-U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
-DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
-BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
-dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
-BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
-QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
-CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
-xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
-IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
-kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
-eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
-KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
-1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
-OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
-x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
-5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
-DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
-VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
-UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
-MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
-ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
-oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
-SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
-xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
-RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
-bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
-NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
-KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
-5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
-C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
-gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
-VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
-MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
-by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
-b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
-BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
-QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
-c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
-AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
-qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
-v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
-Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
-tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
-Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
-YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
-ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
-IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
-ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
-GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
-h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
-9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
-P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
-2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
-BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
-7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
-lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
-lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
-AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
-Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
-FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
-BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
-cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
-aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
-LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
-BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
-cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
-Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
-lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
-WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
-hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
-IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
-dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
-NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
-xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwMzIyMTczMzI1WjAvBgkqhkiG9w0BCQQxIgQgr30gcu5A
-XM04pBs2LzfEtzWH1hHwcK89alPrbvcB+T0wgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
-A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
-dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
-DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
-MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
-Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgAGlSyjJ73U0nQa8i6tMFLpOZoMe5NiUhcg
-BUceMEQ9CLMTuBKNmV+ILAvQWLQngvwJ7ksICWqqr/8PFYDyqk6WpbmmThq3pEQvpJP6Ra2PcU8B
-26SRfTI9pJgZg3Gz/bChL9lIiTvACYEYo+wtsMAAfwEX4LT613Ch0NNnqFInPcoWY8y/LyvySwwv
-6aT1WsP5/i3hOMJny4EFU2GexDHO7TWDi2Kt0Q2f+trd57S8HV4r3oc8rUFF8AGpC+X3uXySY+bB
-89xQC/oaiJ6FrkO2cA30Jvkcu7qZYmT3J54WiNTkL2tvkbbi4w2hPmhMI7Ok+fKAbBmpAuQl1JgY
-FHWekwUtV6q1KXn9CjV95izX//fsBXqlFUlCM0xqpBfxjcN70QlqMSZVBNTuM2dCFWulJcDsObnU
-2F8bHCRyM4l/3m96Hj6629KkWfUdVV5lu7B/Iec2GU1WVsyHmyqTl54lkCuv8z9a/t21jYcLZBPL
-t+N5IxsVoMiS47NcH+wt+hnacRRcnoae4Q9iBpxl+BkOLLtyJXmJ0m8JIiF2T5Ni2RKDqRicbRWg
-JKqNzzP6STvxK5YuyMVvwX+kFES1ebPDq5JS3ueYdbNRJsMbj5PRjQ/3XXcqt5cJ9y4EcdT6pIXW
-Sfpzyr+DcM+y1nyIaOXwm9QEi3ruQQiJiuqETUQQaQAAAAAAAA==
+I will continue to review your patchset
 
-
---=-4348LFrQyy97fOemnDcW--
+>
+> Note that some the issues (1, 3) can be solved by using a
+> counting-based strategy on a per-rq basis, i.e. in sugov entirely.
+> Experiments with Android in particular showed that such a strategy
+> (which necessarily needs longer intervals to be reasonably stable)
+> is too prone to migrations to be useful generally.
+> We therefore consider the additional complexity of such a per-task
+> based approach like proposed to be worth it.
+>
+> We require a minimum of 1000 iowait wakeups per second to start
+> boosting.
+> This isn't too far off from what sugov currently does, since it resets
+> the boost if it hasn't seen an iowait wakeup for TICK_NSEC.
+> For CONFIG_HZ=1000 we are on par, for anything below we are stricter.
+> We justify this by the small possible improvement by boosting in the
+> first place with 'rare' few iowait wakeups.
+>
+> When IO even leads to a task being in iowait isn't as straightforward
+> to explain.
+> Of course if the issued IO can be served by the page cache (e.g. on
+> reads because the pages are contained, on writes because they can be
+> marked dirty and the writeback takes care of it later) the actual
+> issuing task is usually not in iowait.
+> We consider this the good case, since whenever the scheduler and a
+> potential userspace / kernel switch is in the critical path for IO
+> there is possibly overhead impacting throughput.
+> We therefore focus on random read from here on, because (on synchronous
+> IO [3]) this will lead to the task being set in iowait for every IO.
+> This is where iowait boosting shows its biggest throughput improvement.
+> From here on IOPS (IO operations per second) and iowait wakeups may
+> therefore be used interchangeably.
+>
+> Performance:
+> Throughput for random read tries to be on par with the sugov
+> implementation of iowait boosting for reasonably long-lived workloads.
+> See the following table for some results, values are in IOPS, the
+> tests are ran for 30s with pauses in-between, results are sorted.
+>
+> nvme on rk3399
+> [3588, 3590, 3597, 3632, 3745] sugov mainline
+> [3581, 3751, 3770, 3771, 3885] per-task tracking
+> [2592, 2639, 2701, 2717, 2784] sugov no iowait boost
+> [3218, 3451, 3598, 3848, 3921] performance governor
+>
+> emmc with cqe on rk3399
+> [4146, 4155, 4159, 4161, 4193] sugov mainline
+> [2848, 3217, 4375, 4380, 4454] per-task tracking
+> [2510, 2665, 3093, 3101, 3105] sugov no iowait boost
+> [4690, 4803, 4860, 4976, 5069] performance governor
+>
+> sd card on rk3399
+> [1777, 1780, 1806, 1827, 1850] sugov mainline
+> [1470, 1476, 1507, 1534, 1586] per-task tracking
+> [1356, 1372, 1373, 1377, 1416] sugov no iowait boost
+> [1861, 1890, 1901, 1905, 1908] performance governor
+>
+> Pixel 6 ufs Android 14 (7 runs for because device showed some variance)
+> [6605, 6622, 6633, 6652, 6690, 6697, 6754] sugov mainline
+> [7141, 7173, 7198, 7220, 7280, 7427, 7452] per-task tracking
+> [2390, 2392, 2406, 2437, 2464, 2487, 2813] sugov no iowait boost
+> [7812, 7837, 7837, 7851, 7900, 7959, 7980] performance governor
+>
+> Apple M1 apple-nvme
+> [27421, 28331, 28515, 28699, 29529] sugov mainline
+> [27274, 27344, 27345, 27384, 27930] per-task tracking
+> [14480, 14512, 14625, 14872, 14967] sugov no iowait boost
+> [31595, 32085, 32386, 32465, 32643] performance governor
+>
+> Showcasing some different IO scenarios, again all random read,
+> median out of 5 runs, all on rk3399 with NVMe.
+> e.g. io_uring6x4 means 6 threads with 4 iodepth each, results can be
+> obtained using:
+> fio --minimal --time_based --name=test --filename=/dev/nvme0n1 --runtime=30 --rw=randread --bs=4k --ioengine=io_uring --iodepth=4 --numjobs=6 --group_reporting | cut -d \; -f 8
+>
+> +---------------+----------------+-------------------+----------------+-------------+-----------+
+> |               | Sugov mainline | Per-task tracking | Sugov no boost | Performance | Powersave |
+> +---------------+----------------+-------------------+----------------+-------------+-----------+
+> |       psyncx1 |           4073 |              3793 |           2979 |        4190 |      2788 |
+> +---------------+----------------+-------------------+----------------+-------------+-----------+
+> |       psyncx4 |          13921 |             13503 |          10635 |       13931 |     10225 |
+> +---------------+----------------+-------------------+----------------+-------------+-----------+
+> |       psyncx6 |          18473 |             17866 |          15902 |       19080 |     15789 |
+> +---------------+----------------+-------------------+----------------+-------------+-----------+
+> |       psyncx8 |          22498 |             21242 |          19867 |       22650 |     18837 |
+> +---------------+----------------+-------------------+----------------+-------------+-----------+
+> |      psyncx10 |          24801 |             23552 |          23658 |       25096 |     21474 |
+> +---------------+----------------+-------------------+----------------+-------------+-----------+
+> |      psyncx12 |          26743 |             25377 |          26372 |       26663 |     23613 |
+> +---------------+----------------+-------------------+----------------+-------------+-----------+
+> |     libaio1x1 |           4054 |              3542 |           2776 |        4055 |      2780 |
+> +---------------+----------------+-------------------+----------------+-------------+-----------+
+> |   libaio1x128 |           3959 |              3516 |           2758 |        3590 |      2560 |
+> +---------------+----------------+-------------------+----------------+-------------+-----------+
+> |   libaio4x128 |          13451 |             12517 |          10313 |       13403 |      9994 |
+> +---------------+----------------+-------------------+----------------+-------------+-----------+
+> |     libaio6x1 |          18394 |             17432 |          15340 |       18954 |     15251 |
+> +---------------+----------------+-------------------+----------------+-------------+-----------+
+> |     libaio6x4 |          18329 |             17100 |          15238 |       18623 |     15270 |
+> +---------------+----------------+-------------------+----------------+-------------+-----------+
+> |   libaio6x128 |          18066 |             16964 |          15139 |       18577 |     15192 |
+> +---------------+----------------+-------------------+----------------+-------------+-----------+
+> |   io_uring1x1 |           4043 |              3548 |           2810 |        4039 |      2689 |
+> +---------------+----------------+-------------------+----------------+-------------+-----------+
+> |  io_uring4x64 |          35790 |             32814 |          35983 |       34934 |     33254 |
+> +---------------+----------------+-------------------+----------------+-------------+-----------+
+> | io_uring1x128 |          32651 |             30427 |          32429 |       33232 |      9973 |
+> +---------------+----------------+-------------------+----------------+-------------+-----------+
+> | io_uring2x128 |          34928 |             32595 |          34922 |       33726 |     18790 |
+> +---------------+----------------+-------------------+----------------+-------------+-----------+
+> | io_uring4x128 |          34414 |             32173 |          34932 |       33332 |     33005 |
+> +---------------+----------------+-------------------+----------------+-------------+-----------+
+> |   io_uring6x4 |          31578 |             29260 |          31714 |       31399 |     31784 |
+> +---------------+----------------+-------------------+----------------+-------------+-----------+
+> | io_uring6x128 |          34480 |             32634 |          34973 |       33390 |     36452 |
+> +---------------+----------------+-------------------+----------------+-------------+-----------+
+>
+> Based on the above we can basically categorize these into the following
+> three:
+> a) boost is useful
+> b) boost irrelevant (util dominates)
+> c) boost is energy-inefficient (boost dominates)
+>
+> The aim of the patch 1/2 is to boost as much as necessary for a) while
+> boosting little for c) (thus saving energy).
+>
+> Energy-savings:
+> Regarding sugov iowait boosting problem 1 mentioned earlier,
+> some improvement can be seen:
+> Tested on rk3399 (LLLL)(bb) with an NVMe, 30s runtime
+> CPU0 perf domain spans 0-3 with 400MHz to 1400MHz
+> CPU4 perf domain spans 4-5 with 400MHz to 1800MHz
+>
+> io_uring6x128:
+> Sugov iowait boost:
+> Average frequency for CPU0 : 1.180 GHz
+> Average frequency for CPU4 : 1.504 GHz
+> Per-task tracking:
+> Average frequency for CPU0 : 1.070 GHz
+> Average frequency for CPU4 : 1.211 GHz
+>
+> io_uring12x128:
+> Sugov iowait boost:
+> Average frequency for CPU0 : 1.324 GHz
+> Average frequency for CPU4 : 1.444 GHz
+> Per-task tracking:
+> Average frequency for CPU0 : 1.260 GHz
+> Average frequency for CPU4 : 1.062 GHz
+> (In both cases actually 400MHz on both perf domains is optimal, more
+> fine-tuning could get us closer [2])
+>
+> [1]
+> There are many scenarios when it doesn't, so let's start with
+> explaining when it does:
+> Boosting improves throughput if there is frequent IO to a device from
+> one or few origins, such that the device is likely idle when the task
+> is enqueued on the rq and reducing this time cuts down on the storage
+> device idle time.
+> This might not be true (and boosting doesn't help) if:
+> - The storage device uses the idle time to actually commit the IO to
+> persistent storage or do other management activity (this can be
+> observed with e.g. writes to flash-based storage, which will usually
+> write to cache and flush the cache when idle or necessary).
+> - The device is under thermal pressure and needs idle time to cool off
+> (not uncommon for e.g. nvme devices).
+> Furthermore the assumption (the device being idle while task is
+> enqueued) is false altogether if:
+> - Other tasks use the same storage device.
+> - The task uses asynchronous IO with iodepth > 1 like io_uring, the
+> in_iowait is then just to fill the queue on the host again.
+> - The task just sets in_iowait to signal it is waiting on io to not
+> appear as system idle, it might not send any io at all (cf with
+> the various occurrences of in_iowait, io_mutex_lock and io_schedule*).
+>
+> [3]
+> Unfortunately even for asynchronous IO iowait may be set, in the case
+> of io_uring this is specifically for the iowait boost to trigger, see
+> commit ("8a796565cec3 io_uring: Use io_schedule* in cqring wait")
+> which is why the energy-savings are so significant here, as io_uring
+> load on the CPU is minimal.
+>
+> Problems encountered:
+> - Higher cap is not always beneficial, we might place the task away
+> from the CPU where the interrupt handler is running, making it run
+> on an unboosted CPU which may have a bigger impact than the difference
+> between the CPU's capacity the task moved to. (Of course the boost will
+> then be reverted again, but a ping-pong every interval is possible).
+> - [2] tracking and scaling can be improved (io_uring12x128 still shows
+> boosting): Unfortunately tracking purely per-task shows some limits.
+> One task might show more iowaits per second when boosted, but overall
+> throughput doesn't increase => there is still some boost.
+> The task throughput improvement is somewhat limited though,
+> so by fine-tuning the thresholds there could be mitigations.
+>
+> Christian Loehle (2):
+>   sched/fair: Introduce per-task io util boost
+>   cpufreq/schedutil: Remove iowait boost
+>
+>  include/linux/sched.h            |  15 +++
+>  kernel/sched/cpufreq_schedutil.c | 150 ++--------------------------
+>  kernel/sched/fair.c              | 165 +++++++++++++++++++++++++++++--
+>  kernel/sched/sched.h             |   4 +-
+>  4 files changed, 182 insertions(+), 152 deletions(-)
+>
+> --
+> 2.34.1
+>
 
