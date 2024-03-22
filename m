@@ -1,116 +1,117 @@
-Return-Path: <linux-pm+bounces-5236-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5237-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C52D886B10
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 12:10:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3836C886B56
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 12:34:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C917FB21DA2
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 11:10:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6A7241C21BBF
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 11:34:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBFEA3EA74;
-	Fri, 22 Mar 2024 11:09:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF1563F9CB;
+	Fri, 22 Mar 2024 11:34:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fUDSHomL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6796740872;
-	Fri, 22 Mar 2024 11:09:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB6983F8FB;
+	Fri, 22 Mar 2024 11:34:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711105752; cv=none; b=Pn03bbjf0R9S9NxrmYOzUTXv5xg6WcdtR+9cb04lZzhC4vUBFI2FXiwT0QlPdGCel3AEymVD/NMNC4L7emvcF3jpj6JD/qabQCzsqIbeYT0S1vSg3RIlSrxFs0yovkThT5bUQRJJstgGHSdezZtuZKkMEw8ZkgrQ2IIrjevhiOw=
+	t=1711107266; cv=none; b=VmdCczSbk64dOVn3k1ItCUoZcpomQhJ00i5cKMDUEE86uGjrZsZnuO4dvcYfdtDWdPmgUwQFzKLQyMFuIDxcNcNxYDLB+jfm8kGaxJZRLp4/pyjFzlFXc9mFhOD0GV9KJ6rVl+QZhhNtxG8zK6EXtb6t0DIR1diZUPSZWautPqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711105752; c=relaxed/simple;
-	bh=mzHk+OCGnE2cjK/GID6NafKHM6xvW+nmtg17CRUaB+w=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=d5jK35DHdLfVDk6CV0BALIV8COgJE/kzCeJVhiO4X5j7vaNxZF4XaPg6CSPZStFpN6iygZk5CPriY8SeqvTyAgen/r5izm0QvLE7R1g7K5BIyH0/UEmWrJ4VM9wIl+mLsPODfDVD5njicCRzDY+g8tTtsDXH/RFDztgf/h4dPnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F38331063;
-	Fri, 22 Mar 2024 04:09:44 -0700 (PDT)
-Received: from e129166.arm.com (unknown [10.57.71.57])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 763B63F64C;
-	Fri, 22 Mar 2024 04:09:08 -0700 (PDT)
-From: Lukasz Luba <lukasz.luba@arm.com>
-To: linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1711107266; c=relaxed/simple;
+	bh=OdYK8KD02d6UmxwIIam/r9XyRmX3DuDRyGM+jv+Hc2g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ipeum4vcE18EmvO3iFIoWGLcXoCQ45e2pUgL5GCr864cjEdegKVqR1nLvtqzdbs0x69QE457ycQ8DT1CxA0ozxRI06lE2bwIP6s5fPXwUF/WD4O0ZhMxb1h6YFyk7y1JD07ZjeQB9BcdyLYbsL+J5QqomjWx+4IJe+QTBMNx7Bs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fUDSHomL; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711107265; x=1742643265;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OdYK8KD02d6UmxwIIam/r9XyRmX3DuDRyGM+jv+Hc2g=;
+  b=fUDSHomLUzynr9rbREoLELXJpe0jIZb/wreoyu0RgdgmmjTuFm/OnzwS
+   qPerlpUlfCqIFbpXI1F/vRjvlSteuRlaWB/95Fl+swRhlM+CR85KjTt9G
+   gALMJTlHe0zheyOZ+5vHJ2Hav3iIZ7qyh0KhB/GEpmPFYXoibnuT8MNhK
+   Byl5HvZ7H583NR6IPDSOkms+IKhAyut/xuF00aNSPvy8R+W0hiYKBsIfJ
+   80xB9VaW4N2f1fJQlTBu0nNG6bvBXydUYMtD3yJBzeyA99ShlBPoK34B1
+   L6q5qeaBpAEjDh5N+ud+t1EiCpAMWZmxX0c49J6TOtE2uMROITtkemaai
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11020"; a="6089699"
+X-IronPort-AV: E=Sophos;i="6.07,145,1708416000"; 
+   d="scan'208";a="6089699"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2024 04:34:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,145,1708416000"; 
+   d="scan'208";a="52313988"
+Received: from lkp-server01.sh.intel.com (HELO b21307750695) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 22 Mar 2024 04:34:21 -0700
+Received: from kbuild by b21307750695 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rndAA-000KGx-1D;
+	Fri, 22 Mar 2024 11:34:18 +0000
+Date: Fri, 22 Mar 2024 19:33:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Varadarajan Narayanan <quic_varada@quicinc.com>, andersson@kernel.org,
+	konrad.dybcio@linaro.org, robh@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	mturquette@baylibre.com, sboyd@kernel.org, djakov@kernel.org,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
 	linux-pm@vger.kernel.org
-Cc: lukasz.luba@arm.com,
-	dietmar.eggemann@arm.com,
-	linux-arm-kernel@lists.infradead.org,
-	sboyd@kernel.org,
-	nm@ti.com,
-	linux-samsung-soc@vger.kernel.org,
-	daniel.lezcano@linaro.org,
-	rafael@kernel.org,
-	viresh.kumar@linaro.org,
-	krzysztof.kozlowski@linaro.org,
-	alim.akhtar@samsung.com,
-	m.szyprowski@samsung.com,
-	mhiramat@kernel.org
-Subject: [RESEND][PATCH v2 4/4] soc: samsung: exynos-asv: Update Energy Model after adjusting voltage
-Date: Fri, 22 Mar 2024 11:08:50 +0000
-Message-Id: <20240322110850.77086-5-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240322110850.77086-1-lukasz.luba@arm.com>
-References: <20240322110850.77086-1-lukasz.luba@arm.com>
+Cc: oe-kbuild-all@lists.linux.dev,
+	Varadarajan Narayanan <quic_varada@quicinc.com>
+Subject: Re: [PATCH 2/2] clk: qcom: add IPQ9574 interconnect clocks support
+Message-ID: <202403221944.SAbczEhw-lkp@intel.com>
+References: <20240321043149.2739204-3-quic_varada@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240321043149.2739204-3-quic_varada@quicinc.com>
 
-When the voltage for OPPs is adjusted there is a need to also update
-Energy Model framework. The EM data contains power values which depend
-on voltage values. The EM structure is used for thermal (IPA governor)
-and in scheduler task placement (EAS) so it should reflect the real HW
-model as best as possible to operate properly.
+Hi Varadarajan,
 
-Based on data on Exynos5422 ASV tables the maximum power difference might
-be ~29%. An Odroid-XU4 (with a random sample SoC in this chip lottery)
-showed power difference for some OPPs ~20%. Therefore, it's worth to
-update the EM.
+kernel test robot noticed the following build errors:
 
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
----
- drivers/soc/samsung/exynos-asv.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on clk/clk-next linus/master v6.8 next-20240322]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/drivers/soc/samsung/exynos-asv.c b/drivers/soc/samsung/exynos-asv.c
-index d60af8acc3916..bd6bb2cab2cd8 100644
---- a/drivers/soc/samsung/exynos-asv.c
-+++ b/drivers/soc/samsung/exynos-asv.c
-@@ -11,6 +11,7 @@
- 
- #include <linux/cpu.h>
- #include <linux/device.h>
-+#include <linux/energy_model.h>
- #include <linux/errno.h>
- #include <linux/of.h>
- #include <linux/pm_opp.h>
-@@ -97,9 +98,17 @@ static int exynos_asv_update_opps(struct exynos_asv *asv)
- 			last_opp_table = opp_table;
- 
- 			ret = exynos_asv_update_cpu_opps(asv, cpu);
--			if (ret < 0)
-+			if (!ret) {
-+				/*
-+				 * When the voltage for OPPs successfully
-+				 * changed, update the EM power values to
-+				 * reflect the reality and not use stale data
-+				 */
-+				em_dev_update_chip_binning(cpu);
-+			} else {
- 				dev_err(asv->dev, "Couldn't udate OPPs for cpu%d\n",
- 					cpuid);
-+			}
- 		}
- 
- 		dev_pm_opp_put_opp_table(opp_table);
+url:    https://github.com/intel-lab-lkp/linux/commits/Varadarajan-Narayanan/dt-bindings-interconnect-Add-Qualcomm-IPQ9574-support/20240321-123508
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20240321043149.2739204-3-quic_varada%40quicinc.com
+patch subject: [PATCH 2/2] clk: qcom: add IPQ9574 interconnect clocks support
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20240322/202403221944.SAbczEhw-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240322/202403221944.SAbczEhw-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403221944.SAbczEhw-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   alpha-linux-ld: drivers/clk/qcom/gcc-ipq9574.o: in function `gcc_ipq9574_probe':
+>> (.text+0x1a0): undefined reference to `icc_clk_register'
+>> alpha-linux-ld: (.text+0x1ac): undefined reference to `icc_clk_register'
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
