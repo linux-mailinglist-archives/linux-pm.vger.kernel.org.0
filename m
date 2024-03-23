@@ -1,276 +1,168 @@
-Return-Path: <linux-pm+bounces-5253-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5254-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4331F88736A
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 19:53:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00AEE887618
+	for <lists+linux-pm@lfdr.de>; Sat, 23 Mar 2024 01:29:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0192283747
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Mar 2024 18:53:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2522F1C21730
+	for <lists+linux-pm@lfdr.de>; Sat, 23 Mar 2024 00:29:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65FE6745C0;
-	Fri, 22 Mar 2024 18:53:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F0F8372;
+	Sat, 23 Mar 2024 00:29:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LbwIbGNJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7D5D74407;
-	Fri, 22 Mar 2024 18:53:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A7853209
+	for <linux-pm@vger.kernel.org>; Sat, 23 Mar 2024 00:29:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711133621; cv=none; b=doptbeJHyqnBlXt8H8WQ+busEPM3L20lQ3ez15Wg5MYVNisLKAJb0M4rmsofVkkxPbDA/uDgg6OBGRAfTxvxTGxe8H1PkDXV40d6d5S1tPKg2NmTtApRsHHjyt1xtg6Ic6mDkgtcLytSpgcfzxqirfqB09w8/h+uW0x+0+Rj6kk=
+	t=1711153747; cv=none; b=A2AgtBpVht91CWVDwqs//oop3Bfr5DXeca704EilSwSsKSxJjESplmJXllJrO4i8948m3nvJXEpN4eIdOVD+C3OBaWu2nAhrBfr8Y58PVeg0ltVHJieLK8lZQvGTXeWkCYM+CBy2qJIHpWsES+dl7w/rOcm3pQCtTVvifZ97948=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711133621; c=relaxed/simple;
-	bh=82RQYANYJuMNTPGQtKxqLwhxuDAzIWGQjTW9EV+4+ZU=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hBjDL9TNQ2+rJrPEdlXzeWkxPF/Le6azpM9YTsUxfkVhf898oCy99X/gMOVjaartQm9urUFn0cweyjBzGmLtxkryI38OMxddWQHnl3DTQWROWXX0mMjegnKfDOi6bfu1RIH6Fouii0rE7Q8TatONa8Y1cnrn+I8SlaQtffFSEag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4V1Wfp02xRz6K62w;
-	Sat, 23 Mar 2024 02:52:50 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 2A1251400CF;
-	Sat, 23 Mar 2024 02:53:29 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Fri, 22 Mar
- 2024 18:53:28 +0000
-Date: Fri, 22 Mar 2024 18:53:27 +0000
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: Russell King <rmk+kernel@armlinux.org.uk>, <linux-pm@vger.kernel.org>,
-	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-riscv@lists.infradead.org>,
-	<kvmarm@lists.linux.dev>, <x86@kernel.org>,
-	<acpica-devel@lists.linuxfoundation.org>, <linux-csky@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-ia64@vger.kernel.org>,
-	<linux-parisc@vger.kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>, <jianyong.wu@arm.com>,
-	<justin.he@arm.com>, James Morse <james.morse@arm.com>
-Subject: Re: [PATCH RFC v4 02/15] ACPI: processor: Register all CPUs from
- acpi_processor_get_info()
-Message-ID: <20240322185327.00002416@Huawei.com>
-In-Reply-To: <CAJZ5v0iiJpUWq5GMSnKFWQTzn_bdwoQz9m=hDaXNg4Lj_ePF4g@mail.gmail.com>
-References: <Zbp5xzmFhKDAgHws@shell.armlinux.org.uk>
-	<E1rVDmU-0027YP-Jz@rmk-PC.armlinux.org.uk>
-	<CAJZ5v0iiJpUWq5GMSnKFWQTzn_bdwoQz9m=hDaXNg4Lj_ePF4g@mail.gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1711153747; c=relaxed/simple;
+	bh=cu2BNWH6WbgOzz3G19ecvxyJwG3OxcG4EYlK0MMkNkk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=gEutd4pcxV2WgYac1x7mymxu2Gp1zdHSiSQsibZ46xz15wdx7R+SE/E+eWbH5+aBxf8+f6STb9JwtODAj3WPwvVbTBsJsOZ5+rqC21B0v28xhKKO4zAVbKp4UqlIE3RYQZE4mtA/sTOWgxB+in1TDpb45nYOiO9J8/3w3OuQQNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LbwIbGNJ; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a4644bde1d4so368297566b.3
+        for <linux-pm@vger.kernel.org>; Fri, 22 Mar 2024 17:29:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1711153744; x=1711758544; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pZHRO2qwwFdcHjxfusuWGefIdyNkghgxbZHMsP8YFAY=;
+        b=LbwIbGNJWYjMDwJgWRKksv731Ki+VWEKBih6W145nIdPX9/iYzj6KRz9IWoeJqo2lJ
+         80Xd7wCAz2pTW6w/7+uyfu/oUxIB3EcfUt+Ie49bXkdRb/ZHO4Z5QLhgLp+5wCXl8L7T
+         Y2dME5jDf1H2Ks26yj1zBi5kI7AobYyFp2AHvypp6vCwLTqJi+crfx3HZDC+EfRqwWuz
+         HEDfmRgJAn68OXS6x5nq+blucy/V43RS4Q77CKfuQ5mKJVolTGrZNA/8bFRWyO9Dmcp8
+         aPZU290dsL9wYmDDJ2+TffCiwR9PqZ2ib6PIlOUXeiFOQJR/Lfp7bZBr9Q+zue0lIG8z
+         3H1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711153744; x=1711758544;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pZHRO2qwwFdcHjxfusuWGefIdyNkghgxbZHMsP8YFAY=;
+        b=g82BKtPaX+hvcXT6bdXPfRYe6pQUHX1z+6jM+ZzHS0VaC7jKOK9ineTdq2jNd/GnC2
+         8BoaJ/cMGRB0BVVGo2iaFdxAR0/WFAiI+2/Zm8TcVKvvZFZalOmQjZXtlqiOb8u5sQ3R
+         7zeOgi33sZZtgB7bxzsuM4ppoU2/vVxve4CazZnFESAaYAbKoz53lZ5+Ec7VCxNUnOTp
+         fGi7xrXQbPwk7HWpFxJp2L5rbB2544mr8sCXYcbCTCRsdFko+OZr84RiG7rMCpAKyjcG
+         RuYuBKA6SivWSnFw5VBwUYVbXKwYvg1eWMMxOmWx5RIqhZQonhVd7Pp29RwDFRNT+jcf
+         F+fQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUaG+gv7CMckTgjXErlEqwbj+l/dZuxaHHV5p/RvRGyw1+u/JJCC1ZnKAebNl4CzpGDpIZpqOCe7u4SD8rXrCBtF1FV6WNFANY=
+X-Gm-Message-State: AOJu0Yw4Lxu/ZFYVv29TiYtVM0RZJvhdkn161USxXXws9pUT/4HLj36J
+	0msW58opnOgwjjmWlwlObRCLaQdsTsy4xiKMOz0G5dPgoZS2xM83+ncvFk7wYiA=
+X-Google-Smtp-Source: AGHT+IH80VKvG83Knpz7MvFUfHZwOkOG78oP7VguNp6EmF3SNCJdMugJ+coJOJkRZRWKNvRHv5kSkw==
+X-Received: by 2002:a17:906:f8c7:b0:a47:669:e2e9 with SMTP id lh7-20020a170906f8c700b00a470669e2e9mr614073ejb.77.1711153743797;
+        Fri, 22 Mar 2024 17:29:03 -0700 (PDT)
+Received: from [192.168.92.47] (078088045141.garwolin.vectranet.pl. [78.88.45.141])
+        by smtp.gmail.com with ESMTPSA id e10-20020a170906504a00b00a4735e440e1sm351242ejk.97.2024.03.22.17.29.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Mar 2024 17:29:03 -0700 (PDT)
+Message-ID: <4b37a6e5-f917-4ead-9678-554a0d8f4660@linaro.org>
+Date: Sat, 23 Mar 2024 01:29:00 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] clk: qcom: add IPQ9574 interconnect clocks support
+Content-Language: en-US
+To: Varadarajan Narayanan <quic_varada@quicinc.com>, andersson@kernel.org,
+ robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ mturquette@baylibre.com, sboyd@kernel.org, djakov@kernel.org,
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20240321043149.2739204-1-quic_varada@quicinc.com>
+ <20240321043149.2739204-3-quic_varada@quicinc.com>
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <20240321043149.2739204-3-quic_varada@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, 15 Feb 2024 20:22:29 +0100
-"Rafael J. Wysocki" <rafael@kernel.org> wrote:
+On 21.03.2024 05:31, Varadarajan Narayanan wrote:
+> Unlike MSM platforms that manage NoC related clocks and scaling
+> from RPM, IPQ SoCs dont involve RPM in managing NoC related
+> clocks and there is no NoC scaling.
+> 
+> However, there is a requirement to enable some NoC interface
+> clocks for accessing the peripheral controllers present on
+> these NoCs.
+> 
+> Hence adding a minimalistic interconnect driver that can enable
+> the relevant clocks. This is similar to msm8996-cbf's usage of
+> icc-clk framework.
+> 
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
 
-> On Wed, Jan 31, 2024 at 5:50=E2=80=AFPM Russell King <rmk+kernel@armlinux=
-.org.uk> wrote:
-> >
-> > From: James Morse <james.morse@arm.com>
-> >
-> > To allow ACPI to skip the call to arch_register_cpu() when the _STA
-> > value indicates the CPU can't be brought online right now, move the
-> > arch_register_cpu() call into acpi_processor_get_info().
-> >
-> > Systems can still be booted with 'acpi=3Doff', or not include an
-> > ACPI description at all. For these, the CPUs continue to be
-> > registered by cpu_dev_register_generic().
-> >
-> > This moves the CPU register logic back to a subsys_initcall(),
-> > while the memory nodes will have been registered earlier.
-> >
-> > Signed-off-by: James Morse <james.morse@arm.com>
-> > Reviewed-by: Gavin Shan <gshan@redhat.com>
-> > Tested-by: Miguel Luis <miguel.luis@oracle.com>
-> > Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
-> > Tested-by: Jianyong Wu <jianyong.wu@arm.com>
-> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> > ---
-> > Changes since RFC v2:
-> >  * Fixup comment in acpi_processor_get_info() (Gavin Shan)
-> >  * Add comment in cpu_dev_register_generic() (Gavin Shan)
-> > ---
-> >  drivers/acpi/acpi_processor.c | 12 ++++++++++++
-> >  drivers/base/cpu.c            |  6 +++++-
-> >  2 files changed, 17 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processo=
-r.c
-> > index cf7c1cca69dd..a68c475cdea5 100644
-> > --- a/drivers/acpi/acpi_processor.c
-> > +++ b/drivers/acpi/acpi_processor.c
-> > @@ -314,6 +314,18 @@ static int acpi_processor_get_info(struct acpi_dev=
-ice *device)
-> >                         cpufreq_add_device("acpi-cpufreq");
-> >         }
-> >
-> > +       /*
-> > +        * Register CPUs that are present. get_cpu_device() is used to =
-skip
-> > +        * duplicate CPU descriptions from firmware.
-> > +        */
-> > +       if (!invalid_logical_cpuid(pr->id) && cpu_present(pr->id) &&
-> > +           !get_cpu_device(pr->id)) {
-> > +               int ret =3D arch_register_cpu(pr->id);
-> > +
-> > +               if (ret)
-> > +                       return ret;
-> > +       }
-> > +
-> >         /*
-> >          *  Extra Processor objects may be enumerated on MP systems with
-> >          *  less than the max # of CPUs. They should be ignored _iff =20
->=20
-> This is interesting, because right below there is the following code:
->=20
->     if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
->         int ret =3D acpi_processor_hotadd_init(pr);
->=20
->         if (ret)
->             return ret;
->     }
->=20
-> and acpi_processor_hotadd_init() essentially calls arch_register_cpu()
-> with some extra things around it (more about that below).
->=20
-> I do realize that acpi_processor_hotadd_init() is defined under
-> CONFIG_ACPI_HOTPLUG_CPU, so for the sake of the argument let's
-> consider an architecture where CONFIG_ACPI_HOTPLUG_CPU is set.
->=20
-> So why are the two conditionals that almost contradict each other both
-> needed?  It looks like the new code could be combined with
-> acpi_processor_hotadd_init() to do the right thing in all cases.
+[...]
 
-I jumped on to the end of this series to look at this as the two legs
-look more similar at that point. I'll figure out how to drive
-any changes through the series once the end goal is clear.
+> @@ -9,9 +9,16 @@
+>  #include <linux/of.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/regmap.h>
+> +#if IS_ENABLED(CONFIG_INTERCONNECT)
 
-To make testing easy I made the acpi_process_make_enabled() look as
-much like acpi_process_make_present() as possible.
+This is bad practice, especially given the reasoning for your changes.
 
->=20
-> Now, acpi_processor_hotadd_init() does some extra things that look
-> like they should be done by the new code too.
->=20
-> 1. It checks invalid_phys_cpuid() which appears to be a good idea to me.
+It's best if you add a dependency on interconnect to this driver,
+otherwise things will go into uncountable EPROBE_DEFERs if there are
+nodes consuming icc handles, but the supplier never registers.
 
-Indeed that is sensible. Not sure there is a path to here where it fails,
-but defense in depth is good.
+[...]
 
->=20
-> 2. It uses locking around arch_register_cpu() which doesn't seem
-> unreasonable either.
+>  
+>  static int gcc_ipq9574_probe(struct platform_device *pdev)
 
-Seems reasonable, though exactly what this protecting is unclear to me
-- is the arch_register_cpu() and/or the acpi_map_cpu().
-Whilst it would be nice to be sure, appears harmless, so let us
-take it for consistency if nothing else.
+..and that approach could save the probe func from the absolute mess it
+has become with this patch
 
-The cpu_maps_update_begin()/end() calls though aren't necessary as
-we aren't touching the cpu_present or cpu_online masks.
-
-
->=20
-> 3. It calls acpi_map_cpu() and I'm not sure why this is not done by
-> the new code.
-
-Doesn't exist except on x86 and longarch as Russell mentioned. So let's
-see what it does (on x86)  So we are into the realm of interfaces that
-look generic but really aren't :(  I particularly like the
-generic_processor_info() which isn't particularly generic.
-
-1. cpu =3D acpi_register_lapic()
-
-Docs say: Register a local apic and generates a logic cpu number
-
-2. generic_processor_info() in arch/x86/kernel/acpi/acpi.c
-
-Checks against nr_cpus_ids - maybe that bit is useful
-
-Allocate_logical_cpuid().
-Digging in, it seems to do similar to setting __cpu_logical_map on arm64.
-That's done in acpi_map_gic_cpu_interface, which happens when MADT is
-parsed and I believe it's one of the the things we need to do whether
-or not the CPU is enabled at boot. So already done.
-
-acpi_processor_set_pdc() -- configure _PDC support (which I'd never heard
-of before now).  Deprecated in ACPI 3.0. Given we are using stuff only added
-in 6.5 we can probably skip that even if it would be harmless.
-
-acpi_map_cpu2node() -- evalulate _PXM and set __apicid_to_node[]
-entry. That is only used from x86 code. Not sure what equivalent would be.
-Also numa_set_node(cpu, nid);  Which again sounds a lot more generic than
-it is. Load of x86 specific stuff + set_cpu_numa_node() which is generic
-and for ARM64 (and anything using CONFIG_GENERIC_ARCH_NUMA) is called
-by numa_store_cpu_info() either from early_map_cpu_to_node() or smp_prepare=
-_cpus()
-which is called for_each_possible_cpu() and hence has already been done.
-
-So conclusion on this one is there doesn't seem to be anything to do.
-We could provide a __weak function or an ARM64 specific one that does
-nothing or gate it on an appropriate config variable.  However, given
-I presume 'future' ARM64 support for CPU hotplug will want to do something
-in these calls, perhaps a better bet is to pass a bool into the function
-to indicate these should be skipped if present is not changing.
-
-Having done that, we end up with code that is messy enough we are
-better off keeping them as separate functions, though they may
-look a little more similar than in this version.
-
-There is a final thing in here you didn't mention
-setting pr->flags.need_hotplug_init
-which causes extra stuff to occur in processor_driver.c
-The extra stuff doesn't seem to be necessary for the enable case
-despite being needed for change of present status.
-I haven't figured this bit out yet (I need to mess around on x86
-to understand what goes wrong if you don't use that flag).
-
-
->=20
-> The only thing that can be dropped from it is the _STA check AFAICS,
-> because acpi_processor_add() won't even be called if the CPU is not
-> present (and not enabled after the first patch).
->=20
-> So why does the code not do 1 - 3 above?
-I agree with 1 and 2, reasoning for 3 given above.
-
->=20
-> > diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
-> > index 47de0f140ba6..13d052bf13f4 100644
-> > --- a/drivers/base/cpu.c
-> > +++ b/drivers/base/cpu.c
-> > @@ -553,7 +553,11 @@ static void __init cpu_dev_register_generic(void)
-> >  {
-> >         int i, ret;
-> >
-> > -       if (!IS_ENABLED(CONFIG_GENERIC_CPU_DEVICES))
-> > +       /*
-> > +        * When ACPI is enabled, CPUs are registered via
-> > +        * acpi_processor_get_info().
-> > +        */
-> > +       if (!IS_ENABLED(CONFIG_GENERIC_CPU_DEVICES) || !acpi_disabled)
-> >                 return; =20
->=20
-> Honestly, this looks like a quick hack to me and it absolutely
-> requires an ACK from the x86 maintainers to go anywhere.
-Will address this separately.
-
->=20
-> >
-> >         for_each_present_cpu(i) {
-> > -- =20
-
+Konrad
 
