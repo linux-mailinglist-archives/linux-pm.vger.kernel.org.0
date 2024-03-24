@@ -1,321 +1,764 @@
-Return-Path: <linux-pm+bounces-5256-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5257-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 393EF887A7C
-	for <lists+linux-pm@lfdr.de>; Sat, 23 Mar 2024 22:36:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA997887B56
+	for <lists+linux-pm@lfdr.de>; Sun, 24 Mar 2024 03:02:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5C8131C211C0
-	for <lists+linux-pm@lfdr.de>; Sat, 23 Mar 2024 21:36:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 131421F21FD3
+	for <lists+linux-pm@lfdr.de>; Sun, 24 Mar 2024 02:02:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0BDC59B52;
-	Sat, 23 Mar 2024 21:36:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D9DF1A38EE;
+	Sun, 24 Mar 2024 02:02:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=peacevolution.org header.i=@peacevolution.org header.b="GVghcTCk"
+	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="bNNuvTyW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from a.peacevolution.org (a.peacevolution.org [206.189.193.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20DC563D;
-	Sat, 23 Mar 2024 21:36:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.193.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FC0E15BF
+	for <linux-pm@vger.kernel.org>; Sun, 24 Mar 2024 02:02:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711229782; cv=none; b=s70cIqWi87a2ZqGWErJnAFpMkCsX7keH4GogpuMxLPkmosPV0n0WObGw9AqqWASnLKNT9YQ6/CclBef7/1Ao2YJ/SSkS9W/pkLkY29LLhTcZTaslFblSHqhwnThaL53i8naApIxej7sOrWx/H9tTc4YsZQfAUDyfu5+4feYABtM=
+	t=1711245731; cv=none; b=A08AvwODlce1BHTsefQRO18t1tgsE/IDcVyoFSDnSsTRM/PV6XLhxlWOGhG0tB63eVrT7wParhDQm74yUB9MvtQNeCue1OovMraksJI6+MkmUuPBncaDFXF25CvJnfLgc8RaWe2J+f6F2nrbTXxcu6kp2SEj0fsCi4zWK6/c6BM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711229782; c=relaxed/simple;
-	bh=SOjwEita4xleHBrq6ZggCrx3xzRmKXFreSfxXqMtNdM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QxgkwTTCFrg5/GOiewm6T0wcJfZwhEWAFIXhp2rqMGU0osU/CYpdbqb1Nmr5+s9TqNxQ17muXAdPGFrId/2XQAD4+VrSFXFkk1/GMZ/5j99tGGeqJj2OlOZf6R5N/8gFWSmaqhhsOdxORcoWN8xOoVtFm84knPvIP/VX3BcC818=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=peacevolution.org; spf=pass smtp.mailfrom=peacevolution.org; dkim=pass (1024-bit key) header.d=peacevolution.org header.i=@peacevolution.org header.b=GVghcTCk; arc=none smtp.client-ip=206.189.193.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=peacevolution.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=peacevolution.org
-Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
-	by a.peacevolution.org (Postfix) with ESMTPA id 84F384624A;
-	Sat, 23 Mar 2024 21:36:12 +0000 (UTC)
-Date: Sat, 23 Mar 2024 17:36:10 -0400
-From: Aren <aren@peacevolution.org>
-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Hans de Goede <j.w.r.degoede@gmail.com>, Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, 
-	Chen-Yu Tsai <wens@csie.org>, Quentin Schulz <quentin.schulz@bootlin.com>, 
-	Sebastian Reichel <sre@kernel.org>
-Subject: Re: [PATCH v2 5/5] power: supply: axp20x_usb_power: set input
- current limit in probe
-Message-ID: <5ulz6dcy5rqumj44hmka5ljdvx3tfvsqdpdsz3npcttb7ckf7j@53lxdl5koolz>
-References: <20240130203714.3020464-1-aren@peacevolution.org>
- <20240130203714.3020464-6-aren@peacevolution.org>
- <6nf7h3nc4q7fwrnm4spmgv2sdkczowkfpietcv2tyv4mixkq3b@svxgzkdqnzlq>
- <hlnzivsmt66icz4bsayv5wtlgbktq355m4qxj532lg4lgeimju@jammw2y6zpha>
- <uktr265th6h4btay765p33zgihuzgafu25rz7npwfm3ojhq2tm@wvrymmf3xtxy>
- <jzmibxh5avq4oxbldzayi754s6ir3e5zcphh4sfwzrl72j4msa@qersxklkpmtx>
- <73j4grggnygltxrw6l44w53bjdc2e52c5m2ld5s6dg2q4plmrf@oicpllrnw53c>
+	s=arc-20240116; t=1711245731; c=relaxed/simple;
+	bh=LcrTVl6yGlEYdH8V01BCaZoaA0Q1/k9QeLX7Swe0GEg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=h6eb6B3zdJyvc5SBbZrNVvzNjZIIHeWeJvWccH3BybuzBMh0NOmiMH3E0KVAc9gRDCJRP7qv+GOJ7GDLBJfZk98Gxptw2Wram3XIYXIsHtp5+zFVy3gEW5ixE9FpJ9SaOQ1fmdeYlskE9IeLPKrQRl9WJZLMjvogjjGCF3LYhEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=bNNuvTyW; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-33ececeb19eso1975328f8f.3
+        for <linux-pm@vger.kernel.org>; Sat, 23 Mar 2024 19:02:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1711245725; x=1711850525; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=I6AD1ORG9ciub/kWKco/mYe1SbK4P1Y/eCXm0V1AD8E=;
+        b=bNNuvTyWNT2kOonl/xl/MUVFf0iGt/9wG0ngN/p6elM0IoJHfkXUOBtAEpzHDkLODK
+         QC7MAT/bdb6TNofxhFPJHHd63cLnlIiIEghLvOFpymdjLma9ID+S9RDlvs8SG7chEr1e
+         CDL/hA5QT1j26Haw3ooGoez5rE9JEkneUcNor/NRQOpkweDTnYTRrUbmSGMLGUpo1MwQ
+         rF5quDYNNSYaVKAuCCDcngeKnJyQJ4kMN6dXPyWX+alJZc5F0k3E9UssR+trhFZ4pSvc
+         sPXb31yWJJ0l0wKklkAL+lNjXD8Yij0Mqtosv0/bWLArbO8AnyMXvCSmPz3NLeNXpZvP
+         BjUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711245725; x=1711850525;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=I6AD1ORG9ciub/kWKco/mYe1SbK4P1Y/eCXm0V1AD8E=;
+        b=bT8sRVqNhvPsEAR8okli/ddm3XHGNBjJwlF9dAcB+1/CEdwzXwtbOWUwM2Taf5kyGt
+         sNkYzMvolK7c8WLSu/vL1y1KOxcCZz7ICCblYCPMWnVt8mjg1drTgR+1P+vgzjV9UzBy
+         djaLAllK4Lz+5/FzooPbpspuOPI2d5bRCRKiXNSsklEWJEsf7ZVs1OV4ZbCxsG8paBqp
+         zXOFXJ3HN6coUwM+zBjnDtiqi7MHH/2BhEknHudOboIlDYr4RO48wKNY6REcJe5tzdQ/
+         Xe8XN8g4pSLE1xujWsaiwWMw89Fvg5K0PCNFhOaJ9xGwpvY7T6+Wk3WXaIrY5gu5Gnvb
+         HS9A==
+X-Forwarded-Encrypted: i=1; AJvYcCXrhbLMz+885MYIYsOJHfo611RINrCozUl9pqPAHLL+9Z+boeJJ2epqC22ltMI3DC27/4nGKQ82ugNaUYxw+yRkyc/g0F4yyLQ=
+X-Gm-Message-State: AOJu0YxNpSFo4sNW59YX0HQtPxu7RO4N4yuYq7M2zV5rYsmQsqdJoZ6J
+	5Tnxo4j70h33TU+bllWGxLYRdswPErqWUl3911HFzjmcOfq1i6H+kf59PHGmtSY=
+X-Google-Smtp-Source: AGHT+IEMB2qOz2PYuzKHH5qGsO9DHzdWPBEfuIaeWWPnw0+89bOvMV0OvFv9ZvfFCH3TDf6hsNA5wQ==
+X-Received: by 2002:a5d:604a:0:b0:33e:6366:5f33 with SMTP id j10-20020a5d604a000000b0033e63665f33mr2109940wrt.9.1711245725535;
+        Sat, 23 Mar 2024 19:02:05 -0700 (PDT)
+Received: from airbuntu.. (host81-157-90-255.range81-157.btcentralplus.com. [81.157.90.255])
+        by smtp.gmail.com with ESMTPSA id m9-20020a5d4a09000000b00341bdecdae3sm3474973wrq.117.2024.03.23.19.02.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Mar 2024 19:02:05 -0700 (PDT)
+From: Qais Yousef <qyousef@layalina.io>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Juri Lelli <juri.lelli@redhat.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Daniel Bristot de Oliveira <bristot@redhat.com>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Christian Loehle <christian.loehle@arm.com>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Qais Yousef <qyousef@layalina.io>
+Subject: [RFC PATCH] sched: Consolidate cpufreq updates
+Date: Sun, 24 Mar 2024 02:01:39 +0000
+Message-Id: <20240324020139.1032473-1-qyousef@layalina.io>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <73j4grggnygltxrw6l44w53bjdc2e52c5m2ld5s6dg2q4plmrf@oicpllrnw53c>
-X-Spamd-Bar: /
-Authentication-Results: auth=pass smtp.auth=aren@peacevolution.org smtp.mailfrom=aren@peacevolution.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=peacevolution.org;
-	s=dkim; t=1711229773;
-	h=from:subject:date:message-id:to:cc:mime-version:content-type:content-transfer-encoding:in-reply-to:references;
-	bh=DH6u5hueJXghx+HTd5Xf1afUfgYNMoexe68mmON4jws=;
-	b=GVghcTCk0wtMbNT5AyGT91Flb0R6u0J3HHtcsA0B8hPDDQB65eicZE7x3o/kK/6tfKSiI8
-	FT/bD6Q7dlWQNaRg+TQ+sDiW2PH7IblaN0n/Cf1LumAYbefTZkFDN3Cn4/aVvUXEsiwGF2
-	ChAZXPAGDbnmJCuBLjkKko3bMGy98Nk=
 
-Hi Ondřej,
+Improve the interaction with cpufreq governors by making the
+cpufreq_update_util() calls more intentional.
 
-On Wed, Mar 20, 2024 at 01:12:31AM +0100, Ondřej Jirman wrote:
-> Hi Aren,
-> 
-> On Thu, Mar 14, 2024 at 06:39:52PM -0400, Aren wrote:
-> > > Also in Pinephone case, you'll not really have a case where the battery has
-> > > < 2V not loaded. That's not going to happen. PMIC will shut off at 3V battery
-> > > voltage when loaded. It will not discharge further, and after shutoff battery
-> > > voltage will jump to 3.4V or so, and it will not drop below 2V after that, ever.
-> > > So the battery will pretty much always be detected as long as it's present.
-> > 
-> > The most likely case I can think of is if someone intentionally tries to
-> > boot the device without the battery. I suspect it's also possible for a
-> > battery to degrade to the point where it won't hold a charge.
-> 
-> Yes, that's my usecase that I'd like to preserve. Pinephone has removable
-> battery and using it without battery is quite reasonable. It works fine
-> currently for me and this patch will break this if there's no opt out. And
-> there's no opt out other than patching and re-building the kernel.
-> 
-> > > What actual problem have you seen that this patch is trying to solve?
-> > 
-> > The problem, in theory, is that the pmic ignores the USB BC
-> > specification and sets the current limit to 3A instead of 500mA. In
-> > practice (as long as the power supply is implemented properly) if this
-> > is too much power, it should just cause the power supply to shut off.
-> > I'm not sure how likely / what the risks of a power supply cutting
-> > corners are.
-> 
-> Pinephone with no battery takes between 0.5-1A from VBUS. Even under full
-> load, it's not enough to damage even a USB 3.0 SDP port. It's only a
-> slight problem for unprotected USB 2.0 SDP ports. On protected 2.0 ports
-> or ports with overdesigned output power, it will either shut down due
-> to brownout, or just work.
-> 
-> It's not enough to overload any actual USB charger.
-> 
-> In any case, people wanting to run Pinephone without a battery probably
-> will not do so from a USB 2.0 computer port. Maybe for FEL USB mode, for
-> development or flashing, but at that stage the power consumption is still
-> very low, well below 2.5W.
-> 
-> > I find it surprising that the hardware/driver takes a lot of care to
-> > figure out what the proper current is and stick to that, except when
-> > there isn't a battery.
-> 
-> It seems to have apparent purpose documented in the datasheet:
-> 
->   https://megous.com/dl/tmp/78d4c0771fc6d2c8.png
-> 
-> "If Battery not present, and this bit is 0,the VBUS current limit set to 3A,
-> for the F/W update in factory"
-> 
-> You can also get rid of the issue by writing 1 to:
-> 
->   "REG 2DH: BC Module VBUS Control and Status Register" bit 6
-> 
-> in the bootloader very early on before enabling BC. That should fix the issue,
-> too in a more proper way than forcing 500mA limit halfway during boot, when
-> BC1.2 detection might have detected something higher earlier on and the boot
-> success depends on the higher value.
+At the moment we send them when load is updated for CFS, bandwidth for
+DL and at enqueue/dequeue for RT. But this can lead to too many updates
+sent in a short period of time and potentially be ignored at a critical
+moment due to the rate_limit_us in schedutil.
 
-I agree this is a better way of handling this, I made an attempt
-previously to get USB BC working without a battery connected, but I was
-has having problems with USB BC hanging. Based on what you describe
-below, I now suspect that had to do with leaving dead battery detection
-enabled (0x2E bit 6). I'll take a look through the code again to see if
-I can get it working.
+For example, simultaneous task enqueue on the CPU where 2nd task is
+bigger and requires higher freq. The trigger to cpufreq_update_util() by
+the first task will lead to dropping the 2nd request until tick. Or
+another CPU in the same policy triggers a freq update shortly after.
 
-Thanks
- - Aren
+Updates at enqueue for RT are not strictly required. Though they do help
+to reduce the delay for switching the frequency and the potential
+observation of lower frequency during this delay. But current logic
+doesn't intentionally (at least to my understanding) try to speed up the
+request.
 
-> > battery. The datasheet says that register 0x2D bit 6 is used to indicate
-> > first power on status. According to it, if that bit is 0 and the battery
-> > is not detected, it will set the input current limit to 3A, however
-> > setting that bit to 1 doesn't to prevent the pmic from setting the
-> > current limit to 3A.
-> 
-> Actually it does (I made a quick test with Pinephone with no battery being
-> plugged to the PC's USB port and executing a test program over FEL that talks to
-> the PMIC):
-> 
-> PMIC registers: (initial values post-powerup with no battery)
-> 
-> 2c: 0    - BC disabled by default, something has to enable it
-> 2d: b0   - bit 6 not set (*not* first boot bit)
-> 2e: 40
-> 2f: 0
-> 30: 1
-> 31: 3
-> 32: 43
-> 33: c5
-> 34: 45
-> 35: 68   - initially 3A limit
-> 36: 59
-> 37: 0
-> 38: a5
-> 39: 1f
-> 3a: 80
-> 
-> changed values
-> 
-> 2c: 5    - test program enables BC
-> 2e: 0    - disable DB detection (otherwise with no battery DB detection will
->            prolong BC detection result by 45minutes or whatever is the timeout)
-> 	   see DBP_Timeout_CTL(DBP Hardware Timeout Control)
-> 2f: 10
-> 30: 2a
-> 35: 38   - test program sets 1.5A limit
-> 36: 8
-> 
-> ... about 400 ms later
-> 
-> 2c: 1    - BC complete
-> 2f: 30   - BC result = SDP (matches reality)
-> 35: 68   - 3A VBUS limit set by PMIC itself
-> 
-> 
-> Another run with 2d.6 bit set:
-> 
-> (initial values omitted, same as above)
-> 
-> 
-> changed values
-> 
-> 2c: 5   - enable BC
-> 2d: f0  - bit 6 set (*not* first boot)
-> 2e: 0
-> 2f: 10
-> 30: 2a
-> 35: 38   - test program sets 1.5A limit
-> 36: 8
-> 
-> ... after about 400 ms
-> 
-> 2c: 1   - BC complete
-> 2f: 30  - BC result = SDP
-> 35: 18  - 500mA VBUS limit set by PMIC itself
-> 
-> 
-> So the detection works with no battery inserted. PMIC's BC correcly detects
-> regular USB 2.0 data port and configures a correct limit in about 400ms
-> after cable plug in. So I don't see a problem with the HW, that you're
-> describing in the commit message.
-> 
-> The proper way to handle this issue is to fix whichever component is configuring
-> the BC detection initially (it's disabled by default, apparently), to properly
-> set the first boot bit before enabling BC. IMO, that place should be the
-> platform firmware. Then the detection will work from the get go and proper limit
-> will be always set correctly and will match the USB charger, and there will be
-> no need for any kernel hacks.
-> 
-> Pretty much what platform FW should do is to:
-> 
-> - set "not first boot bit" in 0x2d register
-> - check if battery is present
->   - if not clear 0x2e register
->   - otherwise configure DBD in 0x2e
-> - configure DCP/CDP current limit to 1.5A or 2A (1.5A maybe safer)
-> - configure VBUS Vhold to 4.5V (Pinephone needs this for powered USB dock to
->   work with in general with arbitrary chargers, and it will overload weaker
->   USB PSU's less)
-> - configure BC detection and start it
-> 
-> My usecase of using Pinephone without battery will still work, too, and will
-> not be broken by this patch.
-> 
-> > The point of this patch (after a revision) should be to make it explicit
-> > when and why this driver ignores the USB BC specification. And to reduce
-> > the cases where it does, if possible.
-> 
-> The kernel has no business forcing the limit to some fixed low value that
-> has no relationship to the last BC detection result and breaks boot in
-> the exact scenario this patch is targetting (no battery -> too high current
-> limit).
-> 
-> This doesn't make any sense to me.
-> 
-> kind regards,
-> 	o.
-> 
-> > With the goal of making it explicit what cases ignore the spec, I would
-> > prefer to have an opt-out mechanism. I compiled what I believe to be a
-> > full list of devices that use this driver with usb bc enabled (detailed
-> > notes below), and there's only a handful of them. It shouldn't be too
-> > difficult to out-out the boards that need it.
-> > 
-> > > 
-> > > Thank you and kind regards,
-> > > 	o.
-> > 
-> > Sorry it took me a while to respond, I haven't had much time to work on
-> > this in the past few weeks.
-> > 
-> > Regards
-> >  - Aren
-> > 
-> > p.s. the notes on what devices use this functionality:
-> > 
-> > These devices include the axp803 or axp81x dtsi:
-> > $ rg -l 'include "axp(803|81x).dtsi"'
-> >  - sun50i-a100-allwinner-perf1.dts
-> >  - sun50i-a64-amarula-relic.dts
-> >  - sun50i-a64-bananapi-m64.dts
-> >  - sun50i-a64-nanopi-a64.dts
-> >  - sun50i-a64-olinuxino.dts
-> >  - sun50i-a64-orangepi-win.dts
-> >  - sun50i-a64-pine64.dts
-> >  - sun50i-a64-pinebook.dts
-> >  - sun50i-a64-pinephone.dtsi
-> >  - sun50i-a64-pinetab.dts
-> >  - sun50i-a64-sopine.dtsi
-> >  - sun50i-a64-teres-i.dts
-> >  - sun8i-a83t-allwinner-h8homlet-v2.dts
-> >  - sun8i-a83t-bananapi-m3.dts
-> >  - sun8i-a83t-cubietruck-plus.dts
-> >  - sun8i-a83t-tbs-a711.dts
-> > 
-> > Out of those only these enable usb_power_supply:
-> > $ rg -l 'include "axp(803|81x).dtsi"' | xargs rg -l 'usb_power_supply'
-> >  - sun50i-a64-bananapi-m64.dts
-> >  - sun50i-a64-pinetab.dts
-> >  - sun50i-a64-pinephone.dtsi
-> >  - sun8i-a83t-tbs-a711.dts
-> >  - sun8i-a83t-cubietruck-plus.dts
-> >  - sun8i-a83t-bananapi-m3.dts
-> > 
-> > sun50i-a64-bananapi-m64.dts: The barrel jack is connected to acin, so
-> > will be unaffected. Banannapi docs say it's not possible to power over
-> > usb, but schematic suggests it should work. Probably needs to opt-out of
-> > the lower current limit.
-> > 
-> > sun50i-a64-pinetab.dts: unclear if charging is supported via usb, vbus
-> > is connected through a component listed as "NC/0R". Regardless device
-> > has barrel jack and battery for power, shouldn't need to run exclusively
-> > from usb.
-> > 
-> > sun50i-a64-pinephone.dtsi: is typically booted with a battery connected,
-> > shouldn't need to run exclusively from usb.
-> > 
-> > sun8i-a83t-tbs-a711.dts: has an internal battery, shouldn't need to run
-> > exclusively from usb.
-> > 
-> > sun8i-a83t-cubietruck-plus.dts and sun8i-a83t-bananapi-m3.dts: Both
-> > appear to support being powered over usb and a barrel jack. These will
-> > need to opt-out to be able to run from usb.
+To help reduce the amount of cpufreq updates and make them more
+purposeful, consolidate them into these locations:
+
+1. context_switch()
+2. task_tick_fair()
+3. {attach, detach}_entity_load_avg()
+4. update_blocked_averages()
+
+The update at context switch should help guarantee that DL and RT get
+the right frequency straightaway when they're RUNNING. As mentioned
+though the update will happen slightly after enqueue_task(); though in
+an ideal world these tasks should be RUNNING ASAP and this additional
+delay should be negligible. For fair tasks we need to make sure we send
+a single update for every decay for the root cfs_rq. Any changes to the
+rq will be deferred until the next task is ready to run, or we hit TICK.
+But we are guaranteed the task is running at a level that meets its
+requirements after enqueue.
+
+To guarantee RT and DL tasks updates are never missed, we add a new
+SCHED_CPUFREQ_FORCE_UPDATE to ignore the rate_limit_us. If we are
+already running at the right freq, the governor will end up doing
+nothing, but we eliminate the risk of the task ending up accidentally
+running at the wrong freq due to rate_limit_us.
+
+Similarly for iowait boost. We also handle a case of a boost reset
+prematurely by adding a guard against TICK_NSEC in sugov_iowait_apply()
+in similar fashion to sugov_iowait_reset().
+
+The new SCHED_CPUFREQ_FORCE_UPDATE should not impact the rate limit
+time stamps otherwise we can end up delaying updates for normal
+requests.
+
+We also teach sugov to ignore cpufreq updates from its sugov workers. It
+doesn't make sense for the kworker that applies the frequency update
+(which is a DL task) to trigger a frequency update itself.
+
+There's room for an optimization that I haven't pursued yet (but plan to
+follow up with in the future) which is not to do an update for RT/DL if
+the frequency level is already the same. sugov currently already handles
+this, but since we force ignoring rate limit now, it would be ideal not
+to force too many frequency updates in a row if there's not much to do.
+We need to compare uclamp_min values for RT and bandwidth values for DL
+between next and prev tasks.
+
+The update at task_tick_fair will guarantee that the governor will
+follow any updates to load for tasks/CPU or due to new enqueues/dequeues
+to the rq. Since DL and RT always run at constant frequencies and have
+no load tracking, this is only required for fair tasks.
+
+The update at attach/detach_entity_load_avg() will ensure we adapt to
+big changes when tasks are added/removed from cgroups.
+
+The update at update_blocked_averages() will ensure we decay frequency
+as the CPU becomes idle for long enough.
+
+I am contemplating to make all updates except for CFS at context switch
+a forced updates. I'd welcome thoughts. Context switch should be our
+major drive for frequency change, and the other operations should be
+treated as out-of-line updates that must be honoured and not be
+accidentally dropped by rate limit. Contemplating the impact on shared
+policies if we go down that route too. Thoughts would be appreciated.
+
+To make sure governors that don't register a cpufreq_update_util()
+handler aren't impacted, we protect the call with a static key to ensure
+that it is only active when the current governor makes use of it.
+
+Results of `perf stat --repeat 10 perf bench sched pipe` on AMD 3900X to
+verify any potential overhead because of the addition at context switch
+
+Before:
+-------
+
+	Performance counter stats for 'perf bench sched pipe' (10 runs):
+
+		 16,839.74 msec task-clock:u              #    1.158 CPUs utilized            ( +-  0.52% )
+			 0      context-switches:u        #    0.000 /sec
+			 0      cpu-migrations:u          #    0.000 /sec
+		     1,390      page-faults:u             #   83.903 /sec                     ( +-  0.06% )
+	       333,773,107      cycles:u                  #    0.020 GHz                      ( +-  0.70% )  (83.72%)
+		67,050,466      stalled-cycles-frontend:u #   19.94% frontend cycles idle     ( +-  2.99% )  (83.23%)
+		37,763,775      stalled-cycles-backend:u  #   11.23% backend cycles idle      ( +-  2.18% )  (83.09%)
+		84,456,137      instructions:u            #    0.25  insn per cycle
+							  #    0.83  stalled cycles per insn  ( +-  0.02% )  (83.01%)
+		34,097,544      branches:u                #    2.058 M/sec                    ( +-  0.02% )  (83.52%)
+		 8,038,902      branch-misses:u           #   23.59% of all branches          ( +-  0.03% )  (83.44%)
+
+		   14.5464 +- 0.0758 seconds time elapsed  ( +-  0.52% )
+
+After:
+-------
+
+	Performance counter stats for 'perf bench sched pipe' (10 runs):
+
+		 16,219.58 msec task-clock:u              #    1.130 CPUs utilized            ( +-  0.80% )
+			 0      context-switches:u        #    0.000 /sec
+			 0      cpu-migrations:u          #    0.000 /sec
+		     1,391      page-faults:u             #   85.163 /sec                     ( +-  0.06% )
+	       342,768,312      cycles:u                  #    0.021 GHz                      ( +-  0.63% )  (83.36%)
+		66,231,208      stalled-cycles-frontend:u #   18.91% frontend cycles idle     ( +-  2.34% )  (83.95%)
+		39,055,410      stalled-cycles-backend:u  #   11.15% backend cycles idle      ( +-  1.80% )  (82.73%)
+		84,475,662      instructions:u            #    0.24  insn per cycle
+							  #    0.82  stalled cycles per insn  ( +-  0.02% )  (83.05%)
+		34,067,160      branches:u                #    2.086 M/sec                    ( +-  0.02% )  (83.67%)
+		 8,042,888      branch-misses:u           #   23.60% of all branches          ( +-  0.07% )  (83.25%)
+
+		    14.358 +- 0.116 seconds time elapsed  ( +-  0.81% )
+
+Note worthy that we still have the following race condition on systems
+that have shared policy:
+
+* CPUs with shared policy can end up sending simultaneous cpufreq
+  updates requests where the 2nd one will be unlucky and get blocked by
+  the rate_limit_us (schedutil).
+
+We can potentially address this limitation later, but it is out of the
+scope of this patch.
+
+Signed-off-by: Qais Yousef <qyousef@layalina.io>
+---
+ include/linux/sched/cpufreq.h    |  3 +-
+ kernel/sched/core.c              | 51 +++++++++++++++++++++++
+ kernel/sched/cpufreq.c           |  5 +++
+ kernel/sched/cpufreq_schedutil.c | 71 +++++++++++++++++++++++++-------
+ kernel/sched/deadline.c          |  4 --
+ kernel/sched/fair.c              | 53 ++++--------------------
+ kernel/sched/rt.c                |  8 +---
+ kernel/sched/sched.h             | 10 +++++
+ 8 files changed, 133 insertions(+), 72 deletions(-)
+
+diff --git a/include/linux/sched/cpufreq.h b/include/linux/sched/cpufreq.h
+index bdd31ab93bc5..2d0a45aba16f 100644
+--- a/include/linux/sched/cpufreq.h
++++ b/include/linux/sched/cpufreq.h
+@@ -8,7 +8,8 @@
+  * Interface between cpufreq drivers and the scheduler:
+  */
+ 
+-#define SCHED_CPUFREQ_IOWAIT	(1U << 0)
++#define SCHED_CPUFREQ_IOWAIT		(1U << 0)
++#define SCHED_CPUFREQ_FORCE_UPDATE	(1U << 1) /* ignore transition_delay_us */
+ 
+ #ifdef CONFIG_CPU_FREQ
+ struct cpufreq_policy;
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 929fce69f555..563cb61dbf79 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -5134,6 +5134,52 @@ static inline void balance_callbacks(struct rq *rq, struct balance_callback *hea
+ 
+ #endif
+ 
++static inline void update_cpufreq_ctx_switch(struct rq *rq)
++{
++#ifdef CONFIG_CPU_FREQ
++	unsigned int flags = 0;
++
++	if (!static_branch_likely(&cpufreq_update_enabled))
++		return;
++
++#ifdef CONFIG_SMP
++	if (unlikely(current->sched_class == &stop_sched_class))
++		return;
++#endif
++
++	if (unlikely(current->sched_class == &idle_sched_class))
++		return;
++
++	if (unlikely(task_has_idle_policy(current)))
++		return;
++
++	if (likely(fair_policy(current->policy))) {
++
++		if (unlikely(current->in_iowait)) {
++			flags |= SCHED_CPUFREQ_IOWAIT | SCHED_CPUFREQ_FORCE_UPDATE;
++			goto force_update;
++		}
++
++#ifdef CONFIG_SMP
++		/*
++		 * Allow cpufreq updates once for every update_load_avg() decay.
++		 */
++		if (unlikely(rq->cfs.decayed)) {
++			rq->cfs.decayed = false;
++			goto force_update;
++		}
++#endif
++		return;
++	}
++
++	/* RT and DL should always send a freq update */
++	flags |= SCHED_CPUFREQ_FORCE_UPDATE;
++
++force_update:
++	cpufreq_update_util(rq, flags);
++#endif
++}
++
+ static inline void
+ prepare_lock_switch(struct rq *rq, struct task_struct *next, struct rq_flags *rf)
+ {
+@@ -5160,6 +5206,11 @@ static inline void finish_lock_switch(struct rq *rq)
+ 	 */
+ 	spin_acquire(&__rq_lockp(rq)->dep_map, 0, 0, _THIS_IP_);
+ 	__balance_callbacks(rq);
++	/*
++	 * Request freq update after __balance_callbacks to take into account
++	 * any changes to rq.
++	 */
++	update_cpufreq_ctx_switch(rq);
+ 	raw_spin_rq_unlock_irq(rq);
+ }
+ 
+diff --git a/kernel/sched/cpufreq.c b/kernel/sched/cpufreq.c
+index 5252fb191fae..369eb2c8c6ae 100644
+--- a/kernel/sched/cpufreq.c
++++ b/kernel/sched/cpufreq.c
+@@ -8,6 +8,8 @@
+ 
+ DEFINE_PER_CPU(struct update_util_data __rcu *, cpufreq_update_util_data);
+ 
++DEFINE_STATIC_KEY_FALSE(cpufreq_update_enabled);
++
+ /**
+  * cpufreq_add_update_util_hook - Populate the CPU's update_util_data pointer.
+  * @cpu: The CPU to set the pointer for.
+@@ -33,6 +35,8 @@ void cpufreq_add_update_util_hook(int cpu, struct update_util_data *data,
+ 	if (WARN_ON(!data || !func))
+ 		return;
+ 
++	static_branch_enable(&cpufreq_update_enabled);
++
+ 	if (WARN_ON(per_cpu(cpufreq_update_util_data, cpu)))
+ 		return;
+ 
+@@ -54,6 +58,7 @@ EXPORT_SYMBOL_GPL(cpufreq_add_update_util_hook);
+ void cpufreq_remove_update_util_hook(int cpu)
+ {
+ 	rcu_assign_pointer(per_cpu(cpufreq_update_util_data, cpu), NULL);
++	static_branch_disable(&cpufreq_update_enabled);
+ }
+ EXPORT_SYMBOL_GPL(cpufreq_remove_update_util_hook);
+ 
+diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+index eece6244f9d2..2f83ac898c34 100644
+--- a/kernel/sched/cpufreq_schedutil.c
++++ b/kernel/sched/cpufreq_schedutil.c
+@@ -59,7 +59,8 @@ static DEFINE_PER_CPU(struct sugov_cpu, sugov_cpu);
+ 
+ /************************ Governor internals ***********************/
+ 
+-static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time)
++static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time,
++				     unsigned int flags)
+ {
+ 	s64 delta_ns;
+ 
+@@ -87,13 +88,16 @@ static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time)
+ 		return true;
+ 	}
+ 
++	if (unlikely(flags & SCHED_CPUFREQ_FORCE_UPDATE))
++		return true;
++
+ 	delta_ns = time - sg_policy->last_freq_update_time;
+ 
+ 	return delta_ns >= sg_policy->freq_update_delay_ns;
+ }
+ 
+ static bool sugov_update_next_freq(struct sugov_policy *sg_policy, u64 time,
+-				   unsigned int next_freq)
++				   unsigned int next_freq, unsigned int flags)
+ {
+ 	if (sg_policy->need_freq_update)
+ 		sg_policy->need_freq_update = cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);
+@@ -101,7 +105,9 @@ static bool sugov_update_next_freq(struct sugov_policy *sg_policy, u64 time,
+ 		return false;
+ 
+ 	sg_policy->next_freq = next_freq;
+-	sg_policy->last_freq_update_time = time;
++
++	if (!unlikely(flags & SCHED_CPUFREQ_FORCE_UPDATE))
++		sg_policy->last_freq_update_time = time;
+ 
+ 	return true;
+ }
+@@ -249,9 +255,10 @@ static void sugov_iowait_boost(struct sugov_cpu *sg_cpu, u64 time,
+ 			       unsigned int flags)
+ {
+ 	bool set_iowait_boost = flags & SCHED_CPUFREQ_IOWAIT;
++	bool forced_update = flags & SCHED_CPUFREQ_FORCE_UPDATE;
+ 
+ 	/* Reset boost if the CPU appears to have been idle enough */
+-	if (sg_cpu->iowait_boost &&
++	if (sg_cpu->iowait_boost && !forced_update &&
+ 	    sugov_iowait_reset(sg_cpu, time, set_iowait_boost))
+ 		return;
+ 
+@@ -294,17 +301,29 @@ static void sugov_iowait_boost(struct sugov_cpu *sg_cpu, u64 time,
+  * being more conservative on tasks which does sporadic IO operations.
+  */
+ static unsigned long sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time,
+-			       unsigned long max_cap)
++			       unsigned long max_cap, unsigned int flags)
+ {
++	bool forced_update = flags & SCHED_CPUFREQ_FORCE_UPDATE;
++	s64 delta_ns = time - sg_cpu->last_update;
++
+ 	/* No boost currently required */
+ 	if (!sg_cpu->iowait_boost)
+ 		return 0;
+ 
++	if (forced_update)
++		goto apply_boost;
++
+ 	/* Reset boost if the CPU appears to have been idle enough */
+ 	if (sugov_iowait_reset(sg_cpu, time, false))
+ 		return 0;
+ 
+ 	if (!sg_cpu->iowait_boost_pending) {
++		/*
++		 * Reduce boost only if a tick has elapsed since last request.
++		 */
++		if (delta_ns <= TICK_NSEC)
++			goto apply_boost;
++
+ 		/*
+ 		 * No boost pending; reduce the boost value.
+ 		 */
+@@ -315,6 +334,7 @@ static unsigned long sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time,
+ 		}
+ 	}
+ 
++apply_boost:
+ 	sg_cpu->iowait_boost_pending = false;
+ 
+ 	/*
+@@ -351,17 +371,28 @@ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
+ 					      u64 time, unsigned long max_cap,
+ 					      unsigned int flags)
+ {
++	bool forced_update = flags & SCHED_CPUFREQ_FORCE_UPDATE;
++	struct sugov_policy *sg_policy = sg_cpu->sg_policy;
++	bool iowait_boost = flags & SCHED_CPUFREQ_IOWAIT;
+ 	unsigned long boost;
+ 
++	/*
++	 * Forced updates are initiated by iowait and RT/DL tasks. If the
++	 * latter, verify that it's not our worker thread that is initiating
++	 * this forced update.
++	 */
++	if (forced_update && !iowait_boost && current == sg_policy->thread)
++		return false;
++
+ 	sugov_iowait_boost(sg_cpu, time, flags);
+ 	sg_cpu->last_update = time;
+ 
+ 	ignore_dl_rate_limit(sg_cpu);
+ 
+-	if (!sugov_should_update_freq(sg_cpu->sg_policy, time))
++	if (!sugov_should_update_freq(sg_cpu->sg_policy, time, flags))
+ 		return false;
+ 
+-	boost = sugov_iowait_apply(sg_cpu, time, max_cap);
++	boost = sugov_iowait_apply(sg_cpu, time, max_cap, flags);
+ 	sugov_get_util(sg_cpu, boost);
+ 
+ 	return true;
+@@ -397,7 +428,7 @@ static void sugov_update_single_freq(struct update_util_data *hook, u64 time,
+ 		sg_policy->cached_raw_freq = cached_freq;
+ 	}
+ 
+-	if (!sugov_update_next_freq(sg_policy, time, next_f))
++	if (!sugov_update_next_freq(sg_policy, time, next_f, flags))
+ 		return;
+ 
+ 	/*
+@@ -449,10 +480,12 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
+ 	cpufreq_driver_adjust_perf(sg_cpu->cpu, sg_cpu->bw_min,
+ 				   sg_cpu->util, max_cap);
+ 
+-	sg_cpu->sg_policy->last_freq_update_time = time;
++	if (!unlikely(flags & SCHED_CPUFREQ_FORCE_UPDATE))
++		sg_cpu->sg_policy->last_freq_update_time = time;
+ }
+ 
+-static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
++static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time,
++					   unsigned int flags)
+ {
+ 	struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+ 	struct cpufreq_policy *policy = sg_policy->policy;
+@@ -465,7 +498,7 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
+ 		struct sugov_cpu *j_sg_cpu = &per_cpu(sugov_cpu, j);
+ 		unsigned long boost;
+ 
+-		boost = sugov_iowait_apply(j_sg_cpu, time, max_cap);
++		boost = sugov_iowait_apply(j_sg_cpu, time, max_cap, flags);
+ 		sugov_get_util(j_sg_cpu, boost);
+ 
+ 		util = max(j_sg_cpu->util, util);
+@@ -478,9 +511,19 @@ static void
+ sugov_update_shared(struct update_util_data *hook, u64 time, unsigned int flags)
+ {
+ 	struct sugov_cpu *sg_cpu = container_of(hook, struct sugov_cpu, update_util);
++	bool forced_update = flags & SCHED_CPUFREQ_FORCE_UPDATE;
+ 	struct sugov_policy *sg_policy = sg_cpu->sg_policy;
++	bool iowait_boost = flags & SCHED_CPUFREQ_IOWAIT;
+ 	unsigned int next_f;
+ 
++	/*
++	 * Forced updates are initiated by iowait and RT/DL tasks. If the
++	 * latter, verify that it's not our worker thread that is initiating
++	 * this forced update.
++	 */
++	if (forced_update && !iowait_boost && current == sg_policy->thread)
++		return;
++
+ 	raw_spin_lock(&sg_policy->update_lock);
+ 
+ 	sugov_iowait_boost(sg_cpu, time, flags);
+@@ -488,10 +531,10 @@ sugov_update_shared(struct update_util_data *hook, u64 time, unsigned int flags)
+ 
+ 	ignore_dl_rate_limit(sg_cpu);
+ 
+-	if (sugov_should_update_freq(sg_policy, time)) {
+-		next_f = sugov_next_freq_shared(sg_cpu, time);
++	if (sugov_should_update_freq(sg_policy, time, flags)) {
++		next_f = sugov_next_freq_shared(sg_cpu, time, flags);
+ 
+-		if (!sugov_update_next_freq(sg_policy, time, next_f))
++		if (!sugov_update_next_freq(sg_policy, time, next_f, flags))
+ 			goto unlock;
+ 
+ 		if (sg_policy->policy->fast_switch_enabled)
+diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+index a04a436af8cc..02c9c2488091 100644
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@ -252,8 +252,6 @@ void __add_running_bw(u64 dl_bw, struct dl_rq *dl_rq)
+ 	dl_rq->running_bw += dl_bw;
+ 	SCHED_WARN_ON(dl_rq->running_bw < old); /* overflow */
+ 	SCHED_WARN_ON(dl_rq->running_bw > dl_rq->this_bw);
+-	/* kick cpufreq (see the comment in kernel/sched/sched.h). */
+-	cpufreq_update_util(rq_of_dl_rq(dl_rq), 0);
+ }
+ 
+ static inline
+@@ -266,8 +264,6 @@ void __sub_running_bw(u64 dl_bw, struct dl_rq *dl_rq)
+ 	SCHED_WARN_ON(dl_rq->running_bw > old); /* underflow */
+ 	if (dl_rq->running_bw > old)
+ 		dl_rq->running_bw = 0;
+-	/* kick cpufreq (see the comment in kernel/sched/sched.h). */
+-	cpufreq_update_util(rq_of_dl_rq(dl_rq), 0);
+ }
+ 
+ static inline
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index c8e50fbac345..a0692e308d2d 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -3982,29 +3982,6 @@ static inline void update_cfs_group(struct sched_entity *se)
+ }
+ #endif /* CONFIG_FAIR_GROUP_SCHED */
+ 
+-static inline void cfs_rq_util_change(struct cfs_rq *cfs_rq, int flags)
+-{
+-	struct rq *rq = rq_of(cfs_rq);
+-
+-	if (&rq->cfs == cfs_rq) {
+-		/*
+-		 * There are a few boundary cases this might miss but it should
+-		 * get called often enough that that should (hopefully) not be
+-		 * a real problem.
+-		 *
+-		 * It will not get called when we go idle, because the idle
+-		 * thread is a different class (!fair), nor will the utilization
+-		 * number include things like RT tasks.
+-		 *
+-		 * As is, the util number is not freq-invariant (we'd have to
+-		 * implement arch_scale_freq_capacity() for that).
+-		 *
+-		 * See cpu_util_cfs().
+-		 */
+-		cpufreq_update_util(rq, flags);
+-	}
+-}
+-
+ #ifdef CONFIG_SMP
+ static inline bool load_avg_is_decayed(struct sched_avg *sa)
+ {
+@@ -4682,7 +4659,7 @@ static void attach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
+ 
+ 	add_tg_cfs_propagate(cfs_rq, se->avg.load_sum);
+ 
+-	cfs_rq_util_change(cfs_rq, 0);
++	cpufreq_update_util(rq_of(cfs_rq), 0);
+ 
+ 	trace_pelt_cfs_tp(cfs_rq);
+ }
+@@ -4712,7 +4689,7 @@ static void detach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
+ 
+ 	add_tg_cfs_propagate(cfs_rq, -se->avg.load_sum);
+ 
+-	cfs_rq_util_change(cfs_rq, 0);
++	cpufreq_update_util(rq_of(cfs_rq), 0);
+ 
+ 	trace_pelt_cfs_tp(cfs_rq);
+ }
+@@ -4729,7 +4706,6 @@ static void detach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
+ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+ {
+ 	u64 now = cfs_rq_clock_pelt(cfs_rq);
+-	int decayed;
+ 
+ 	/*
+ 	 * Track task load average for carrying it to new CPU after migrated, and
+@@ -4738,8 +4714,8 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
+ 	if (se->avg.last_update_time && !(flags & SKIP_AGE_LOAD))
+ 		__update_load_avg_se(now, cfs_rq, se);
+ 
+-	decayed  = update_cfs_rq_load_avg(now, cfs_rq);
+-	decayed |= propagate_entity_load_avg(se);
++	cfs_rq->decayed  = update_cfs_rq_load_avg(now, cfs_rq);
++	cfs_rq->decayed |= propagate_entity_load_avg(se);
+ 
+ 	if (!se->avg.last_update_time && (flags & DO_ATTACH)) {
+ 
+@@ -4760,11 +4736,8 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
+ 		 */
+ 		detach_entity_load_avg(cfs_rq, se);
+ 		update_tg_load_avg(cfs_rq);
+-	} else if (decayed) {
+-		cfs_rq_util_change(cfs_rq, 0);
+-
+-		if (flags & UPDATE_TG)
+-			update_tg_load_avg(cfs_rq);
++	} else if (cfs_rq->decayed && (flags & UPDATE_TG)) {
++		update_tg_load_avg(cfs_rq);
+ 	}
+ }
+ 
+@@ -5126,7 +5099,6 @@ static inline bool cfs_rq_is_decayed(struct cfs_rq *cfs_rq)
+ 
+ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se, int not_used1)
+ {
+-	cfs_rq_util_change(cfs_rq, 0);
+ }
+ 
+ static inline void remove_entity_load_avg(struct sched_entity *se) {}
+@@ -6716,14 +6688,6 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
+ 	 */
+ 	util_est_enqueue(&rq->cfs, p);
+ 
+-	/*
+-	 * If in_iowait is set, the code below may not trigger any cpufreq
+-	 * utilization updates, so do it here explicitly with the IOWAIT flag
+-	 * passed.
+-	 */
+-	if (p->in_iowait)
+-		cpufreq_update_util(rq, SCHED_CPUFREQ_IOWAIT);
+-
+ 	for_each_sched_entity(se) {
+ 		if (se->on_rq)
+ 			break;
+@@ -9282,10 +9246,6 @@ static bool __update_blocked_others(struct rq *rq, bool *done)
+ 	unsigned long thermal_pressure;
+ 	bool decayed;
+ 
+-	/*
+-	 * update_load_avg() can call cpufreq_update_util(). Make sure that RT,
+-	 * DL and IRQ signals have been updated before updating CFS.
+-	 */
+ 	curr_class = rq->curr->sched_class;
+ 
+ 	thermal_pressure = arch_scale_thermal_pressure(cpu_of(rq));
+@@ -12623,6 +12583,7 @@ static void task_tick_fair(struct rq *rq, struct task_struct *curr, int queued)
+ 
+ 	update_misfit_status(curr, rq);
+ 	update_overutilized_status(task_rq(curr));
++	cpufreq_update_util(rq, 0);
+ 
+ 	task_tick_core(rq, curr);
+ }
+diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+index 3261b067b67e..fe6d8b0ffa95 100644
+--- a/kernel/sched/rt.c
++++ b/kernel/sched/rt.c
+@@ -556,11 +556,8 @@ static void sched_rt_rq_dequeue(struct rt_rq *rt_rq)
+ 
+ 	rt_se = rt_rq->tg->rt_se[cpu];
+ 
+-	if (!rt_se) {
++	if (!rt_se)
+ 		dequeue_top_rt_rq(rt_rq, rt_rq->rt_nr_running);
+-		/* Kick cpufreq (see the comment in kernel/sched/sched.h). */
+-		cpufreq_update_util(rq_of_rt_rq(rt_rq), 0);
+-	}
+ 	else if (on_rt_rq(rt_se))
+ 		dequeue_rt_entity(rt_se, 0);
+ }
+@@ -1065,9 +1062,6 @@ enqueue_top_rt_rq(struct rt_rq *rt_rq)
+ 		add_nr_running(rq, rt_rq->rt_nr_running);
+ 		rt_rq->rt_queued = 1;
+ 	}
+-
+-	/* Kick cpufreq (see the comment in kernel/sched/sched.h). */
+-	cpufreq_update_util(rq, 0);
+ }
+ 
+ #if defined CONFIG_SMP
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 41024c1c49b4..6a6de92448d1 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -618,6 +618,11 @@ struct cfs_rq {
+ 		unsigned long	runnable_avg;
+ 	} removed;
+ 
++	/*
++	 * Store whether last update_load_avg() has decayed
++	 */
++	bool			decayed;
++
+ #ifdef CONFIG_FAIR_GROUP_SCHED
+ 	u64			last_update_tg_load_avg;
+ 	unsigned long		tg_load_avg_contrib;
+@@ -2961,6 +2966,8 @@ static inline u64 irq_time_read(int cpu)
+ #ifdef CONFIG_CPU_FREQ
+ DECLARE_PER_CPU(struct update_util_data __rcu *, cpufreq_update_util_data);
+ 
++DECLARE_STATIC_KEY_FALSE(cpufreq_update_enabled);
++
+ /**
+  * cpufreq_update_util - Take a note about CPU utilization changes.
+  * @rq: Runqueue to carry out the update for.
+@@ -2987,6 +2994,9 @@ static inline void cpufreq_update_util(struct rq *rq, unsigned int flags)
+ {
+ 	struct update_util_data *data;
+ 
++	if (!static_branch_likely(&cpufreq_update_enabled))
++		return;
++
+ 	data = rcu_dereference_sched(*per_cpu_ptr(&cpufreq_update_util_data,
+ 						  cpu_of(rq)));
+ 	if (data)
+-- 
+2.34.1
+
 
