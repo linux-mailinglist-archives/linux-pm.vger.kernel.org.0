@@ -1,83 +1,82 @@
-Return-Path: <linux-pm+bounces-5266-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5267-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EADF887EC3
-	for <lists+linux-pm@lfdr.de>; Sun, 24 Mar 2024 20:58:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF7B9887ECC
+	for <lists+linux-pm@lfdr.de>; Sun, 24 Mar 2024 21:08:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A3B01B20D31
-	for <lists+linux-pm@lfdr.de>; Sun, 24 Mar 2024 19:57:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 952D2281265
+	for <lists+linux-pm@lfdr.de>; Sun, 24 Mar 2024 20:08:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC2C5DDDF;
-	Sun, 24 Mar 2024 19:57:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EF83F9EB;
+	Sun, 24 Mar 2024 20:08:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="maprH2J4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D6o2WGmj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C82310A3C;
-	Sun, 24 Mar 2024 19:57:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85AFDD2FA;
+	Sun, 24 Mar 2024 20:08:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711310269; cv=none; b=SDF8lpoXYFMzXXrw8pYU31DrOmruzeC9YVVih6qIf8fTk8G+QA/zzgoAeRg4Odw838jsDGI+Avj31tg7lgSxyOKs3j6HIueNeAataXy1do4zMuGW6t2L0GGqCz2kf332yXbHV57/XxeGlOPHsLBqj+v1PoYbYqP8LlTK7lkDElU=
+	t=1711310890; cv=none; b=j9nS+kiD8oGCrEK5acPYfKetegRTa8YOmwF9df6kUNrOXY7QvdhkSYIyAoNWxOOU3xVdjUwVp/+xvyhFCdlYRW/h/MfPFRXlWHRAifBwba2L8LwAMX5mSLFNEnjC4+TKk8pmOgYMMsoaQN8YnjHI8dVAukob2QyX/e1TJKF9dR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711310269; c=relaxed/simple;
-	bh=lg3kSg+bqI7JQzEKtAQoAr21sTsP2afkIOflNBDtQVI=;
+	s=arc-20240116; t=1711310890; c=relaxed/simple;
+	bh=96pBEhq+UMIcGdJgoSW6NpmKLHH1fy9LSh6o40sLCNI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=c6ExOi05/gdw/mLXrxCuyuu62fFKPM8tLn27yUmaLogVSc5aWBLZlo6Bjv8AkhSS1WaxqRwWpFbcNFkua7wrgd9SP2Z0RnU894IanhcSWvBt1553m8F9qL+UjApdiZyJ3l6lWRVOfHKsP+XxYeexOc++VX70b8ZXjj5CZMq+g+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=maprH2J4; arc=none smtp.client-ip=209.85.218.46
+	 To:Cc:Content-Type; b=ZiqAwsiNw5Q2HBODWHsMbRduX7zAjSZjGEcuy+demXFi+4p2AT2qc1PPUZQIg2t0kUc6otxHl9nxgarv/vMO/uWEztk1tYz7W3VSfoaN8PXa/hik4oSbQyMMyFj+009qac0quEmdyEfbk8+VprxhByZkJEuqOgN1UJfePDtltCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D6o2WGmj; arc=none smtp.client-ip=209.85.218.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a450bedffdfso422126666b.3;
-        Sun, 24 Mar 2024 12:57:47 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a47385a4379so326453266b.0;
+        Sun, 24 Mar 2024 13:08:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711310266; x=1711915066; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711310887; x=1711915687; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=x4IPlP6THkrkzdSIlJOyjo59Thug/31oXQ6SWrMV7JI=;
-        b=maprH2J4tllBSXMqOSb6mn5VIkZgzohxfz9OkpaDdSf9SyVWnaONF5Iol8LMaRytxz
-         zGpZL6kzZ7REfQ2SqdKdStzHo2hVODTwFR9JZtEzHeN21DDywC83rAU3kwZugQiUzxK/
-         FfMSUfm3C4sRYV3jxzpSZ77uUqQdIoslf1KdKPAA8XGhedi/+Iqg12m2SGBSYVTLRyI+
-         JCAV1vHoASTj5U5UQSUbawDOXH8lGrkOexam6SONLiLO5ElC/yVxsLCRf1qCNPNzfU/E
-         0oll6sTsCj0ARTch8o7a75u/dYvakbcXUohMadDRWRtTNv+GmG/59LzdxRLmuq2bNbTx
-         jrsg==
+        bh=UmJuo1f1enZJCrEBjhO66Mb9UFer5++BcZ4gFBXYotU=;
+        b=D6o2WGmj4O7IqhZzdyMvwp50iAvaq0Ml9c3qigWddT9AqewskPJlbDRLFFuxwOdOYX
+         Oa8A4Z3kPhDhBztSNuPmq7LZcCYjHj4Ms7N4jEMiKcu5GW3CDTrjVGeMTJ9AhB7eEDI6
+         oB+3tkAItCYdL9wlQErEkBFUMdqd5/8yZcq+2p0kBZbtwd+acdoZNvzLEYHsnWNm/xvi
+         oHXSVVFPCRbJb0BEh13PkqgIO8vcX2j/sSdcboPqAs+KojsBXHeVEGZlSQh1QowaOpUq
+         NlwoqaytmC2XZqn5XRl+pFiO2pJDANGXczOU3ehJUJJpmTzcXwXPPccUwrbvS96SeLW6
+         OqCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711310266; x=1711915066;
+        d=1e100.net; s=20230601; t=1711310887; x=1711915687;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=x4IPlP6THkrkzdSIlJOyjo59Thug/31oXQ6SWrMV7JI=;
-        b=J/rmVcVGCezNDlLoagIMzupjtLhX2NhU/jP3abXcy8GV8Fz41F2RahHrW28WhjUGBO
-         clxCnLl2FJV7h6bSuCLm68PvrEPsva1gdfHffl0FfJZuKZuDGwZa4WwhQkMBN0L6KHxL
-         jLtXEcaeAFFNWd0JliXMHjg1JMmO8ztGGiFLy21V4vnHRL37nwxbOWzOGPfRUZXdXGyh
-         GOlFO18Swbr3naZGan5AD/jH6qVcqM6FhBlGFY/Dm2fBLGI7uP1t0GuWPBF7JZufNH4T
-         SkdTgOanZCIslsRH14Uj5pmzm7dWo7O6Xc0O70a1yCpRnFAvpV0Sc5QnFTtcI0xIbVTe
-         Xpcw==
-X-Forwarded-Encrypted: i=1; AJvYcCXHRchXKjVDjgtKT0N5iu4Jz0EJjSlNAa6z7XH/nje+XscnUoEAsmsCKk4XLfIslQ0eCpatSehf3LPG9eksN/YpJyjfYM45ENdN4DVpBC2suIwZs+SRSKfcfjygIGK4g41jt/nju6kOYYhMlfRqdl4tFUmLokGss6Gn5igx9wQ/B4ZkoW4BY7+qxDV2U7HMSSA8uZhtFG06zqJWFccQsXXh/pVdhd9QZg==
-X-Gm-Message-State: AOJu0YweUNTxfiXFgG/CEONTA8f3wPDEWilvcfLooQ3urpUWykiPWHR4
-	b9DRhYz9YZHtpVCOM6v7sQqJkPgINqERDt9cI17uiRzPc9ecvDhJaj+SFDZnHwyL2Jjl8AGJ0Km
-	3BvMbGcz0OxCOg8Sicg9+YIstifjM2d3CYRA=
-X-Google-Smtp-Source: AGHT+IEFjPMkPi7I5EWm+abAes/bngmSQZQVeOkjRaOnuFzJaLMLEr25KfKquHTPuZGLqrLP1se8F+n2HwEI/ky/5PA=
-X-Received: by 2002:a17:906:2688:b0:a46:8c40:7a3a with SMTP id
- t8-20020a170906268800b00a468c407a3amr3489936ejc.26.1711310266196; Sun, 24 Mar
- 2024 12:57:46 -0700 (PDT)
+        bh=UmJuo1f1enZJCrEBjhO66Mb9UFer5++BcZ4gFBXYotU=;
+        b=RLbN3cCZmylTzc1LmFGYvv6/XnDalSsvFywSoU5nAnloBRVhYyttahRNdSb1Xp7Yup
+         zoohaerbZwcPRPzTIjcIuJQ7X8eklMIPuJ/NUNPKe/KKXJgbNOWh20bax1ap9KxoOTc4
+         1GsQd9+8lBJDJhn2ks6ALpcvbr+z3yfaY7XdlLRp+5fXiSmgXa1cso/2uFiqndC2Zzwi
+         /G8v69ZegDdIdwDetzIeQkGrZgR/AO6XZANTOQY9FcOc4h4/YxI1KA3m4JpjOY8/YNTR
+         qaUjz4SWz6fDWGzJyKICHmCi71gRk2PPBcHdriNPWeO4QYHiCNx0Kma/RSELv5rB5tYH
+         CfIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXPQbnc83ikRzz04/qGpyn3dajISsN25kIPllLZWABM6pcMEKAl2hSYTJEGzwUNQ5230CiIQFzEGJrLaFT8R/x3c3YxtNTeAO/8J6SaTbB+n2NEBNCFUxSfOqqqvlgknOrklUfDpkAZ+s7eLmrm20WP1xRMKwJRPL3IMbalON8U8fy6QWMAaF8BewX3BoPdQepKx5/NFRrHtJixj+zVqYtEBecGT4ctQg==
+X-Gm-Message-State: AOJu0YxhQFXo9/7sdO4zLv3o7qlh8jYkODSxVTPAUlacFbsnNjkOzr0G
+	DlNh8T8v+zx2F+3tCTp3TpK3lFf1tf3PnEl0q1gy9S1moc893pCw1swd1U4s8cor1FIigtU/I2p
+	0X4+NnjFQXvC2ScjkLadhuiIlbk4=
+X-Google-Smtp-Source: AGHT+IGnHV9dklcqVjCC1K2N4WzMD7czh4HdYnDtDZE91j3Ir4r4I4Of+bw2uITII3fwJ5TLUOHvwIlNRDLusYb9N2M=
+X-Received: by 2002:a17:907:bb92:b0:a4a:378a:a8db with SMTP id
+ xo18-20020a170907bb9200b00a4a378aa8dbmr315442ejc.15.1711310886695; Sun, 24
+ Mar 2024 13:08:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240324150107.976025-1-hpa@redhat.com> <20240324150107.976025-3-hpa@redhat.com>
-In-Reply-To: <20240324150107.976025-3-hpa@redhat.com>
+References: <20240324150107.976025-1-hpa@redhat.com> <20240324150107.976025-4-hpa@redhat.com>
+In-Reply-To: <20240324150107.976025-4-hpa@redhat.com>
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Sun, 24 Mar 2024 21:57:08 +0200
-Message-ID: <CAHp75VdosbYNKU90QWt+6SU_i5dWC94=xZy0GXiKvoQeDF30wg@mail.gmail.com>
-Subject: Re: [PATCH v5 RESEND 2/6] leds: rgb: leds-ktd202x: Get device
- properties through fwnode to support ACPI
+Date: Sun, 24 Mar 2024 22:07:30 +0200
+Message-ID: <CAHp75Vcu69i4zk=Feewz89BCGvHKn295m1nwm94-eJ3+BSSdAw@mail.gmail.com>
+Subject: Re: [PATCH v5 RESEND 3/6] leds: core: Add led_mc_set_brightness() function
 To: Kate Hsuan <hpa@redhat.com>
 Cc: Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org, 
 	platform-driver-x86@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>, 
@@ -89,59 +88,60 @@ Content-Transfer-Encoding: quoted-printable
 
 On Sun, Mar 24, 2024 at 5:02=E2=80=AFPM Kate Hsuan <hpa@redhat.com> wrote:
 >
-> This LED controller also installed on a Xiaomi pad2 and it is a x86
-> platform. The original driver is based on device tree and can't be
+> From: Hans de Goede <hdegoede@redhat.com>
+>
+> Add a new led_mc_set_brightness() function for in kernel color/brightness
+> changing of multi-color LEDs.
+>
+> led-class-multicolor can be build as a module and led_mc_set_brightness()
+> will have builtin callers, so put led_mc_set_brightness() inside led-core
 
-the device
+the builtin
 
-> used for this ACPI based system. This patch migrated the driver to
-> use fwnode to access the properties. Moreover, the fwnode API
-> supports device tree so this work won't effect the original
-
-affect
-
-> implementations.
+> instead, just like how led_set_brightness() is part of the core and not
+> of the led-class object.
+>
+> This also adds a new LED_MULTI_COLOR led_classdev flag to allow
+> led_mc_set_brightness() to verify that it is operating on a multi-color
+> LED classdev, avoiding casting the passed in LED classdev to a multi-colo=
+r
+> LED classdev, when it actually is not a multi-color LED.
 
 ...
 
-> +       fwnode_for_each_available_child_node(fwnode, child) {
-> +               num_channels++;
+> +/*
+> + * This is a led-core function because just like led_set_brightness()
+> + * it is used in kernel by e.g. triggers.
+
+in the kernel
+
+> + */
+
+...
+
+> +       if (!(led_cdev->flags & LED_MULTI_COLOR)) {
+> +               dev_err_once(led_cdev->dev, "%s: error not a multi-color =
+LED\n",  __func__);
+
+Not sure how __func__ helps here.
+
+> +               return;
 > +       }
+> +
+> +       mcled_cdev =3D lcdev_to_mccdev(led_cdev);
+> +       if (num_colors !=3D mcled_cdev->num_colors) {
+> +               dev_err_once(led_cdev->dev, "%s: error num_colors mismatc=
+h %d !=3D %d\n",
 
-{} are not needed.
+Should be '...%u !=3D %u...'.
 
->         if (!num_channels || num_channels > chip->num_leds)
->                 return -EINVAL;
+> +                            __func__, num_colors, mcled_cdev->num_colors=
+);
 
-...
+Ditto about __func__.
 
-> +static int ktd202x_add_led(struct ktd202x *chip,
-> +                          struct fwnode_handle *fwnode_color,
-
-Can it be simply fwnode? (Originally it was np, so I assume there is
-no name collision)
-
-...
-
-> +       count =3D device_get_child_node_count(dev);
->         if (!count || count > chip->num_leds)
->                 return -EINVAL;
-
-> +       fwnode =3D dev_fwnode(chip->dev);
-
-Why not dev?
-
-> +       if (!fwnode)
-> +               return -ENODEV;
-
-This is dead code. Please remove these three lines.
-
-...
-
-> +       .id_table =3D ktd202x_id,
-
-Seems to me that you may split the I=C2=B2C ID table addition into a separa=
-te change.
+> +               return;
+> +       }
 
 --=20
 With Best Regards,
