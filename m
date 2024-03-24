@@ -1,110 +1,142 @@
-Return-Path: <linux-pm+bounces-5264-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5265-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBC5E887D5F
-	for <lists+linux-pm@lfdr.de>; Sun, 24 Mar 2024 16:03:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E64FC887EB7
+	for <lists+linux-pm@lfdr.de>; Sun, 24 Mar 2024 20:30:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 735A5B20EB4
-	for <lists+linux-pm@lfdr.de>; Sun, 24 Mar 2024 15:03:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96D2B28119B
+	for <lists+linux-pm@lfdr.de>; Sun, 24 Mar 2024 19:30:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF7C718635;
-	Sun, 24 Mar 2024 15:02:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AA76DDD8;
+	Sun, 24 Mar 2024 19:30:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KPJEilN6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kF4GX2qS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49FFB18622
-	for <linux-pm@vger.kernel.org>; Sun, 24 Mar 2024 15:02:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69C3417FE;
+	Sun, 24 Mar 2024 19:30:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711292570; cv=none; b=qEYmEQKg3ZimApkeYYyDaVPCY+PK2KZL+8kPP924gV4S/HGopmjCDShnb+otE4D3znYjO/vTcoi1ZqYfRhE8rJrgEaKYVpgLgfR+WSt8xCu8S8jU6gDE3c45ssf21PnXzAY4VPMCtgGuIvgkqfNBmPBDf36/lRJo9qiq17oL71k=
+	t=1711308624; cv=none; b=irMa+0ZpLhyv0n1tqOjkCURphlrtgbSjUetSF3V7hxL1ivFckXNXwCMGs1QPXGV0uuQmCTZ42+lX6henJJLFq67U0FQPxqUbKWAx1iFs46F2E5r5+yH/L276t7K/IiCIBJKAiZl2hmAKZpM/GB0T/1JVXuX9FMjqLTJyL8FhdS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711292570; c=relaxed/simple;
-	bh=iSR4eVTv9vBjTyoy0u2zQ1BJB3q/2JhCssOVrTNtf8o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bdwrIuULKdvl8sfKNlqPQ7AuNCVgzHOkA0JqqXFlohrIMkkCV0M70JymBsU3FvdH/1JT2DFgKJEou/Q79IyuPHcRCALCp/aNutpxgjHMs1orNlLl4NHQ1wd2DFlYclVNrdoewY3t9yc9tUEiC7Io/4QtlN1jFFSSBvURIu1onU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KPJEilN6; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1711292568;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Y5liH5XREjRdtzIi3oVOZVrr4OfiHuxXZ9yg0sczK48=;
-	b=KPJEilN6xmQEbzlXjLPQwlpLQYFjOEppaAbxW3/qpyOHiUWMFwNWkz58QQ6int153gLFqg
-	xgYJGjmmXhfoYxD6CQSLQYZhDjbFPRqKg376jDteXAwxaNUX/FuThAzvJX/bbH+nFrCXHa
-	8/Ql/cZNG5woBViL54gYayTONydjj5c=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-113-uNinFOgkNkGnMUXaPTkbPQ-1; Sun, 24 Mar 2024 11:02:45 -0400
-X-MC-Unique: uNinFOgkNkGnMUXaPTkbPQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 86BD980F7E3;
-	Sun, 24 Mar 2024 15:02:44 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.39.192.75])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id E9B2E40C6DAE;
-	Sun, 24 Mar 2024 15:02:38 +0000 (UTC)
-From: Kate Hsuan <hpa@redhat.com>
-To: Pavel Machek <pavel@ucw.cz>,
-	Lee Jones <lee@kernel.org>,
-	linux-leds@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org,
-	Hans de Goede <hdegoede@redhat.com>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	=?UTF-8?q?Andr=C3=A9=20Apitzsch?= <git@apitzsch.eu>,
-	linux-kernel@vger.kernel.org,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Sebastian Reichel <sre@kernel.org>,
-	linux-pm@vger.kernel.org
-Cc: Kate Hsuan <hpa@redhat.com>
-Subject: [PATCH v5 RESEND 6/6] platform: x86-android-tablets: others: Set the LED trigger to charging_red_full_green for Xiaomi pad2
-Date: Sun, 24 Mar 2024 23:01:07 +0800
-Message-ID: <20240324150107.976025-7-hpa@redhat.com>
-In-Reply-To: <20240324150107.976025-1-hpa@redhat.com>
-References: <20240324150107.976025-1-hpa@redhat.com>
+	s=arc-20240116; t=1711308624; c=relaxed/simple;
+	bh=9JVp+Rj+fbdr7YQZptepVTD5AWS2MAQ13njt1pYVYc4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Lkb0JvwVKlw7ICR+/M8UQMA5NUAdyKnnAyzGjPM/SQk3oQtexLAFV8i1z3SPbjywrMoDxgzRwhTxmCMTFpvoS052kuWrPbbx8lDvx5yQs8dUHYViPK5UYf835STjP5liqxu8S/4MA+p8WO7GpvYACve8bZOngKyObmZvesy/db0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kF4GX2qS; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-56c01c2e124so1007081a12.0;
+        Sun, 24 Mar 2024 12:30:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711308621; x=1711913421; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2rTChliJMZK8soNYxput2Hi8KO23ddICHEdCndF6BfU=;
+        b=kF4GX2qSPm+JXwrK5muDe0iLVmAk2fctDHrL5wnpR3lL0Ptagk3cfkylosL+HNJIyL
+         MsPVIs8q/l5GOmsn6A+5K0LU+/QZPiomcMXVM1baDJqpW3QIJGxm8hneTHwO7GWB90HD
+         EdHc8nDQekuEaz/7MaFxYmQ7ZT2oZdXxy4tWiRkVAXtrkA2+FR2i0SrJ8CYG5LF9d3s9
+         2YCuZbkaoVq6oCkr/nKYRn0RBYFmok+NvDuScgiXEhL7/fePJQlKiMsjaOuGhdLQJKm6
+         EKD+s+OElVn5+Cox0WhqwsYA7wXtwFXiNdpAZQCK6SV58lu/rNmGA4yHP5MiiuUpmUpl
+         2GwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711308621; x=1711913421;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2rTChliJMZK8soNYxput2Hi8KO23ddICHEdCndF6BfU=;
+        b=D8jCbQaWvkbyfaLj0WdynTLe5rDOvaQaXaZjSzCyMVtSEsnb68O7YfpCGx9Os7V13F
+         wTnPk/W3SjDsOUwL0JccmnVGx3ILr0uvSiohO63r4fM+lrWtN857vkjJwnsq8dMrRac4
+         XipbocX+fXg4sMN/hsFbVrhXQAKJNTNYa3xEcz0k2NRrPOkTAGIe22hosgbKTztz/nqZ
+         +Eyvi/jR7+wlo0j+QyTVxul20qOxckzYUfIaJ9JCiuEVz/xkmmKkfOoj6ceoWwTsbWtI
+         atwF2u92REmDR56AZQnzC16X6/zQ0dzWN7sdfiEiAqNf1xJP0S5P7o7MV43xa2Ia6sbQ
+         d0Xg==
+X-Forwarded-Encrypted: i=1; AJvYcCXqDYVfk/4nZ8nSky9r6M90kNfFs8y5T/mucDp+5vbEZDKu93CzxWFWuR+E1cVF1KwAiKA/BT7ihhTNWfgFi5OrekDIps6E1QXKmZjjKOyWtQo3kfcIUcHOm9jnnQ/T7/baLMTbT0v5f5LY4+3R8hi3wkiGhVlsnB/os0OhSqKNOyBjhPvCUvqovotr8Fq1Sgkw+N+T+HK2DK1/0+dlSqPPDpBG6lPuhQ==
+X-Gm-Message-State: AOJu0YzUjQ1J9QtUQP7v6ndfxu7CFtDC7jWIe+ZIYYnK6dcP08CISszD
+	Ng1tXUPTjpdCOR64R2pmFR/Ie9lK6gw8lmQiyxJkUe4Kw7/vOxGkmazc3gSVt/9Zzb326CNv3OR
+	9f5R+WA96xIyqa7ceYzJVn/ZGedM=
+X-Google-Smtp-Source: AGHT+IHlvPHxHR/LChJhWp2xtw82rzCuvf5U6H2FoCrEMWhWpvhgGSK+T83OcsGp/6PAmbFrYP2Y5VCUu5FhTr+oDtQ=
+X-Received: by 2002:a17:907:7d90:b0:a47:4fe1:cf99 with SMTP id
+ oz16-20020a1709077d9000b00a474fe1cf99mr2112508ejc.21.1711308620634; Sun, 24
+ Mar 2024 12:30:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
+References: <20240324150107.976025-1-hpa@redhat.com> <20240324150107.976025-2-hpa@redhat.com>
+In-Reply-To: <20240324150107.976025-2-hpa@redhat.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Sun, 24 Mar 2024 21:29:43 +0200
+Message-ID: <CAHp75Ve5201KNdjvDZYq_unHTKp9wZXPWZXDgStP8y+XjtnWWg@mail.gmail.com>
+Subject: Re: [PATCH v5 RESEND 1/6] platform: x86-android-tablets: other: Add
+ swnode for Xiaomi pad2 indicator LED
+To: Kate Hsuan <hpa@redhat.com>
+Cc: Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org, 
+	platform-driver-x86@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>, 
+	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	=?UTF-8?Q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>, 
+	linux-kernel@vger.kernel.org, Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Set the default trigger to bq27520-0-charging-red-full-green. The LED
-will show red when the battery is charging. The LED will show green
-when the battery status is full.
+On Sun, Mar 24, 2024 at 5:02=E2=80=AFPM Kate Hsuan <hpa@redhat.com> wrote:
+>
+> There is a KTD2026 LED controller to manage the indicator LED for Xiaomi
+> pad2. The ACPI for it is not properly made so the kernel can't get
+> a correct description of it.
+>
+> This work add a description for this RGB LED controller and also set a
 
-Signed-off-by: Kate Hsuan <hpa@redhat.com>
----
- drivers/platform/x86/x86-android-tablets/other.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+adds
+sets
 
-diff --git a/drivers/platform/x86/x86-android-tablets/other.c b/drivers/platform/x86/x86-android-tablets/other.c
-index 1012a158f7b7..eccfea7b01c0 100644
---- a/drivers/platform/x86/x86-android-tablets/other.c
-+++ b/drivers/platform/x86/x86-android-tablets/other.c
-@@ -610,7 +610,7 @@ static const struct property_entry ktd2026_rgb_led_props[] = {
- 	PROPERTY_ENTRY_U32("reg", 0),
- 	PROPERTY_ENTRY_U32("color", LED_COLOR_ID_RGB),
- 	PROPERTY_ENTRY_STRING("function", "indicator"),
--	PROPERTY_ENTRY_STRING("linux,default-trigger", "bq27520-0-charging"),
-+	PROPERTY_ENTRY_STRING("linux,default-trigger", "bq27520-0-charging-red-full-green"),
- 	{ }
- };
- 
--- 
-2.44.0
+> trigger to indicate the chaging event (bq27520-0-charging). When it is
 
+charging
+
+> charging, the indicator LED will be turn on.
+
+turned
+
+...
+
+> +/* main fwnode for ktd2026 */
+> +static const struct software_node ktd2026_node =3D {
+> +       .name =3D "ktd2026"
+
+Leave a comma, this is not a terminator.
+
+> +};
+
+When I asked about the name I relied on the fact that you have an idea
+how it works. So, assuming my understanding is correct, this platform
+may not have more than a single LED of this type. Dunno if we need a
+comment about this.
+
+...
+
+> +static int __init xiaomi_mipad2_init(void)
+> +{
+> +       return software_node_register_node_group(ktd2026_node_group);
+> +}
+> +
+> +static void xiaomi_mipad2_exit(void)
+
+__exit ?
+
+> +{
+> +       software_node_unregister_node_group(ktd2026_node_group);
+> +}
+
+--=20
+With Best Regards,
+Andy Shevchenko
 
