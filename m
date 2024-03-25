@@ -1,181 +1,145 @@
-Return-Path: <linux-pm+bounces-5328-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5329-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C1EE88A89C
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 17:14:04 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C57588AF0C
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 19:54:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F55A3426A3
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 16:12:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4E7DBC45221
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 16:15:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1636E1422D8;
-	Mon, 25 Mar 2024 14:01:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2D701474A7;
+	Mon, 25 Mar 2024 14:09:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NbuS3/n5"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="QRUuEYaJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C750412DDB2;
-	Mon, 25 Mar 2024 14:01:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D3F146D6A
+	for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 14:09:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711375304; cv=none; b=ZRtXmcciNCS6rTE4+Dp2hAWOhgP6aO8dKR4eY9xnVLqK6Oikp0p9l1QPt9F2tFUq9lxFb1brKYmTSGjGpcDFapCyKCjFbwJD18UbF0BHu8NwXCtSXSrTkucXkmykacDx68nF9j5PR29H/ztert6NV+jOfCPY2ljTvw/mO8wSqmg=
+	t=1711375767; cv=none; b=oa8WnwO2kwOCNtL71JWtmUh6564/q339qJHzEZ1L8bPPHF5wou2TEI96NLd0sHtm9MBOAdXWIYxSfkPO3VOTdnzp2y9xihFShzs5DlU9RN/YtbogiFpQ0J9RLqHfPWUIPUrBApZXD0r++elmu4ZMefe1WeDTVHZNBC2Jnxd5aWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711375304; c=relaxed/simple;
-	bh=DO7jBH35/9WDTi4g3mhk+XjVvY8I/yCvQNhtDF49C3Y=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=BW4lmgHytmqsEvliqe6HJC15ItSC8JJA89rZ4J0fksHMaWc2uMTWKFFNpqBjFsgVKeD/KOCjL7HsdeeP06V/VfySFjv4g8ZD4JJQ65acUQeU+l5sR8vlCVsrQZSOI5p+s/GeJeq5FUpLi+LTfcSEcFTCcFVIHyJKDMMh1EJvRiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NbuS3/n5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90712C433C7;
-	Mon, 25 Mar 2024 14:01:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711375303;
-	bh=DO7jBH35/9WDTi4g3mhk+XjVvY8I/yCvQNhtDF49C3Y=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-	b=NbuS3/n5VaJ3t+uqiUn8hjAphJOP6TrrhjpklOG7s+HEHCvy+brGcrw7drMMfhZyH
-	 3NGmYhv2ffnscuPpXBo2fsDUb03qsxtnR1/FQ6wb0zgJfel0YhFBQ+JF9R7SOnU6EP
-	 rhJZtHgrpC+fOTyOCGBhe67ss7mHyEk2OlLi+PsonIHbkbrFvjFYP1dGy8JeuSe86Z
-	 geJjzBaFG0ReAmT1PJGivL5pbXtJwPjdTNwxlAc2Dpx1oksqaeXxkDFCyzQCn6hc8C
-	 9OrnK3dCRXAjTI010gcSTZoSSRkD68anC+i37dBeW7KnyCoIepm8mkxtLZlnt6GAht
-	 xBjBjIDOXz4MQ==
-From: Kalle Valo <kvalo@kernel.org>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Marcel Holtmann <marcel@holtmann.org>,  Luiz Augusto von Dentz
- <luiz.dentz@gmail.com>,  "David S . Miller" <davem@davemloft.net>,  Eric
- Dumazet <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>,  Paolo
- Abeni <pabeni@redhat.com>,  Rob Herring <robh@kernel.org>,  Krzysztof
- Kozlowski <krzysztof.kozlowski+dt@linaro.org>,  Conor Dooley
- <conor+dt@kernel.org>,  Bjorn Andersson <andersson@kernel.org>,  Konrad
- Dybcio <konrad.dybcio@linaro.org>,  Liam Girdwood <lgirdwood@gmail.com>,
-  Mark Brown <broonie@kernel.org>,  Catalin Marinas
- <catalin.marinas@arm.com>,  Will Deacon <will@kernel.org>,  Bjorn Helgaas
- <bhelgaas@google.com>,  Saravana Kannan <saravanak@google.com>,  Geert
- Uytterhoeven <geert+renesas@glider.be>,  Arnd Bergmann <arnd@arndb.de>,
-  Neil Armstrong <neil.armstrong@linaro.org>,  Marek Szyprowski
- <m.szyprowski@samsung.com>,  Alex Elder <elder@linaro.org>,  Srini
- Kandagatla <srinivas.kandagatla@linaro.org>,  Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>,  Abel Vesa <abel.vesa@linaro.org>,
-  Manivannan Sadhasivam <mani@kernel.org>,  Lukas Wunner <lukas@wunner.de>,
-  Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-  linux-bluetooth@vger.kernel.org,  netdev@vger.kernel.org,
-  devicetree@vger.kernel.org,  linux-kernel@vger.kernel.org,
-  linux-wireless@vger.kernel.org,  linux-arm-msm@vger.kernel.org,
-  linux-arm-kernel@lists.infradead.org,  linux-pci@vger.kernel.org,
-  linux-pm@vger.kernel.org,  Bartosz Golaszewski
- <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH v6 05/16] dt-bindings: net: wireless: describe the
- ath12k PCI module
-References: <20240325131624.26023-1-brgl@bgdev.pl>
-	<20240325131624.26023-6-brgl@bgdev.pl>
-Date: Mon, 25 Mar 2024 16:01:33 +0200
-In-Reply-To: <20240325131624.26023-6-brgl@bgdev.pl> (Bartosz Golaszewski's
-	message of "Mon, 25 Mar 2024 14:16:13 +0100")
-Message-ID: <87msqm8l6q.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+	s=arc-20240116; t=1711375767; c=relaxed/simple;
+	bh=Q186ZwCP59wb65acR46Ym/x35a2ynPh5L0W6/TiLR8U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=utznHyzdfsl+QmwB1HfZ6aDWxWJzva3VDJ4Zo6zMbG5TrL8byfa1M/I8iUmBEayYwY3Ivtxp5U2tlRoPMSbF/JGkwAw52JUknAfIBCtniKNNwvQT3GKGuZwBM8Cma8NCyoAv5on/eBMUq61545MpLrwdT5raoxLEmEVV2KOSRro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=QRUuEYaJ; arc=none smtp.client-ip=209.85.208.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2d228a132acso61164661fa.0
+        for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 07:09:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1711375764; x=1711980564; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CfuObMCkrCoZSR2Wc4+k3mUI6EGOtW5n3H7jAAQzsO8=;
+        b=QRUuEYaJWrnftGnBemS05m1T5cXGEomfYiCsWFZXCjdNRXCcZmsL7BZLlhWiRCN2vu
+         Q1tHYVdnJgNpynusyfNkbWelCltqFsu9g5EqJ/ZRlLbYnpPEKEvdEdzcOKfvKrIEfOkA
+         1EjcBYVy51FpDVJX6F7TGkFVcvqn3unil0+D6Cat2FVJprbQGuoJhR8reNm33dp7amG6
+         JDgQkuWJgVtyK+r+2xxDneepDbxQKIqJSLbXjJ8Zs2Hyz2hvKGhEs5C+QcwZTAxHCNBp
+         j+2JWTB6vMEWp6de1QHco2cs55wikJo0Pd0PqTKnLqE2F1AjU6nGBEDCzDasSbDML0/8
+         j7QA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711375764; x=1711980564;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CfuObMCkrCoZSR2Wc4+k3mUI6EGOtW5n3H7jAAQzsO8=;
+        b=DhE9V7okMQQ7+CGGVP/S99TuPIkfoTy0v4gDZ7YkQJAywfO+VAyhVNgdx17AGuO6Em
+         NkTEqutJPRloThMQQVMh+G9vkGiYrgpd+iPMyY+dGqzV+RhjMeF9NQE/ECYzp9Qb8t/5
+         Vv9d3MLZD0XbgRFOxzWK8ipV998qupzN5lrcF0sG1n0yGRiIdCy+DbN9J7xUYhHuAz3m
+         /64UZ8RZJojmjIfUnF63AKAdFmjnCNVYVMvh+sCoQ/n8OmHPpoRaK4eEuH+Imlb/c6O2
+         4WxITAE9dYnOVgrAggBZuvIAHb/zPN3YcY9xW72nK3SUSQtj5X1GmMCoWaz+Z7JHIGUe
+         jBuQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXNiTJIG6gMDAkKt9sL/9GShroVlFrdaNhFXjqQidnDulUPow4qaUSq9ChHt1zLryfFz8P139Jb6YHjt9SoDYWFFtEPUc3pDX8=
+X-Gm-Message-State: AOJu0Ywuebn8E2QZswuYNQ0k9SySsY6DCYnBw2h7H6X4ogvx4OfnbIxh
+	o3DvM4THPHWt6WOYNFulUhPfGKZUkAjrThmjCv+crxbNNEKbO7kv2vGiULHo6V5UmLRs9rUC/BG
+	hRW4Yv5issJ/y/CkSRh+YIZ5Ed8yKVsIJNjMQSA==
+X-Google-Smtp-Source: AGHT+IEvJFLfJKGkEqnYgSEId2a/oSfTm8lmiWB7lZbWVsuHFW1Kj1Md8cKVyFWUl5FdFvxVvX1pTsDznN8+aT1HRMo=
+X-Received: by 2002:a2e:a590:0:b0:2d4:62b7:4c7b with SMTP id
+ m16-20020a2ea590000000b002d462b74c7bmr5582449ljp.51.1711375763943; Mon, 25
+ Mar 2024 07:09:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20240325131624.26023-1-brgl@bgdev.pl> <20240325131624.26023-5-brgl@bgdev.pl>
+ <87r0fy8lde.fsf@kernel.org>
+In-Reply-To: <87r0fy8lde.fsf@kernel.org>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Mon, 25 Mar 2024 15:09:12 +0100
+Message-ID: <CAMRc=Mc2Tc8oHr5NVo=aHAADkJtGCDAVvJs+7V-19m2zGi-vbw@mail.gmail.com>
+Subject: Re: [PATCH v6 04/16] dt-bindings: net: wireless: qcom,ath11k:
+ describe the ath11k on QCA6390
+To: Kalle Valo <kvalo@kernel.org>
+Cc: Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Saravana Kannan <saravanak@google.com>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Arnd Bergmann <arnd@arndb.de>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Marek Szyprowski <m.szyprowski@samsung.com>, 
+	Alex Elder <elder@linaro.org>, Srini Kandagatla <srinivas.kandagatla@linaro.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Abel Vesa <abel.vesa@linaro.org>, 
+	Manivannan Sadhasivam <mani@kernel.org>, Lukas Wunner <lukas@wunner.de>, 
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, linux-bluetooth@vger.kernel.org, 
+	netdev@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Bartosz Golaszewski <brgl@bgdev.pl> writes:
-
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Mon, Mar 25, 2024 at 2:57=E2=80=AFPM Kalle Valo <kvalo@kernel.org> wrote=
+:
 >
-> Add device-tree bindings for the ATH12K module found in the WCN7850
-> package.
+> Bartosz Golaszewski <brgl@bgdev.pl> writes:
 >
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
->  .../bindings/net/wireless/qcom,ath12k.yaml    | 100 ++++++++++++++++++
->  1 file changed, 100 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/wireless/qcom,ath12k.yaml
+> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >
+> > Add a PCI compatible for the ATH11K module on QCA6390 and describe the
+> > power inputs from the PMU that it consumes.
+> >
+> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 >
-> diff --git a/Documentation/devicetree/bindings/net/wireless/qcom,ath12k.yaml b/Documentation/devicetree/bindings/net/wireless/qcom,ath12k.yaml
-> new file mode 100644
-> index 000000000000..c0aad4815953
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/wireless/qcom,ath12k.yaml
-> @@ -0,0 +1,100 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (c) 2024 Linaro Limited
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/wireless/qcom,ath12k.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Technologies ath12k wireless devices (PCIe)
-> +
-> +maintainers:
-> +  - Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> [...]
+>
+> > +allOf:
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            const: pci17cb,1101
+> > +    then:
+> > +      required:
+> > +        - vddrfacmn-supply
+> > +        - vddaon-supply
+> > +        - vddwlcx-supply
+> > +        - vddwlmx-supply
+> > +        - vddrfa0p8-supply
+> > +        - vddrfa1p2-supply
+> > +        - vddrfa1p7-supply
+> > +        - vddpcie0p9-supply
+> > +        - vddpcie1p8-supply
+>
+> I don't know DT well enough to know what the "required:" above means,
+> but does this take into account that there are normal "plug&play" type
+> of QCA6390 boards as well which don't need any DT settings?
+>
 
-IMHO it would be better to have just driver maintainers listed here.
+Do they require a DT node though for some reason?
 
-> +  - Jeff Johnson <quic_jjohnson@quicinc.com>
-> +  - Kalle Valo <kvalo@kernel.org>
-> +
-> +description:
-> +  Qualcomm Technologies IEEE 802.11ax PCIe devices.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - pci17cb,1107  # WCN7850
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  vddaon-supply:
-> +    description: VDD_AON supply regulator handle
-> +
-> +  vddwlcx-supply:
-> +    description: VDD_WLCX supply regulator handle
-> +
-> +  vddwlmx-supply:
-> +    description: VDD_WLMX supply regulator handle
-> +
-> +  vddrfacmn-supply:
-> +    description: VDD_RFA_CMN supply regulator handle
-> +
-> +  vddrfa0p8-supply:
-> +    description: VDD_RFA_0P8 supply regulator handle
-> +
-> +  vddrfa1p2-supply:
-> +    description: VDD_RFA_1P2 supply regulator handle
-> +
-> +  vddrfa1p8-supply:
-> +    description: VDD_RFA_1P8 supply regulator handle
-> +
-> +  vddpcie0p9-supply:
-> +    description: VDD_PCIE_0P9 supply regulator handle
-> +
-> +  vddpcie1p8-supply:
-> +    description: VDD_PCIE_1P8 supply regulator handle
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - vddaon-supply
-> +  - vddwlcx-supply
-> +  - vddwlmx-supply
-> +  - vddrfacmn-supply
-> +  - vddrfa0p8-supply
-> +  - vddrfa1p2-supply
-> +  - vddrfa1p8-supply
-> +  - vddpcie0p9-supply
-> +  - vddpcie1p8-supply
-
-Same comment here as in patch 4. There are also ath12k PCI devices which
-don't need DT at all. I don't know if that should be reflected in the
-bindings doc but I want to point out this.
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Bart
 
