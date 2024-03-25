@@ -1,125 +1,123 @@
-Return-Path: <linux-pm+bounces-5326-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5327-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3C4488A83D
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 17:05:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26B4988A86D
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 17:10:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 83C681F3A074
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 16:05:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 579011C61AAF
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 16:10:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8490886270;
-	Mon, 25 Mar 2024 13:47:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7777813C9B8;
+	Mon, 25 Mar 2024 13:57:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hnnR4KZK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xl/hE/zs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5A918625E
-	for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 13:47:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B80284D33;
+	Mon, 25 Mar 2024 13:57:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711374458; cv=none; b=olebygTklQEOzcJ6FrlI9XvkGu64BrSYSUDXqilX7Oo7qIYUnujZh17CjiGnjKmxtcT/R69RWvBkmQf5Q/wugGi+hQKiENqEeoHTDW8DW3bE1TG3dVyHdrNgIr0nxUkqaWxvveTsMCgtOqirvftaHfc5+8c6liBPHl0bD27O0Lw=
+	t=1711375063; cv=none; b=Wqc2L3+1NjOdoi9de+hY3+eZo6NlvoETtdwpcLQbZ61NVzNlEybntI+3mvxcM4g/4YWzbrBsK7pK03lTYrg3shd8gfmi9JXIWsrX7B4SiI9Q5khjPD6kx6Ns4GnjJwyEsAKdP1O4iho4Xzj6M3kXO7VQ8HhrxaVLV2Y95GuD1pw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711374458; c=relaxed/simple;
-	bh=SuIRM/3Q6w7TaZkKYsx/rzdQjJe9T75LpZogkG5lMpk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d0tLv64oxk+1N2yq8573/3JiYUVNRrCd/dutSpHuWQ7xeuVmQZ5oWwpHq3Uj7ksIq9GEi/MJqnNvjzNzzdr/qwJH6Tr8nmyajPgXNKb5NoVVwyR0Emh7Vv+PqL77XtYfi10K9rFYmlXgntK8d8LOiHEYT06NMGnD2zyvMfmE9xM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hnnR4KZK; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-33ecb04e018so3063430f8f.1
-        for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 06:47:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711374455; x=1711979255; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ak1tU1hAMrwRs+LPSBUwIgy4Aqmw1ipgIVU8IK0CaAk=;
-        b=hnnR4KZKGmHRorXH8S4KGSwsp1MNYyxNTnSJFbArZ0Udh7blkQ0NmCKyrbQjN7Lb3V
-         4lxqNWqPlVSa5mcDZQXTs0CRVA3/GCVpoY3yWHI/e62FJ5qKz+YjBaH78lhym6/0xM1o
-         Tp1vecAGxqPAoudAARS0QEFHQncQS2w0iFhgEsiC6SqcRKr67z/wW3Uk0xJ3AjyBzIxe
-         pMhR6PZbHWCddJO7W8kCj4K3gGSjhBlWxwuxgbpgITPuIoF1J/ACzP/5Q8x3PzG5ra4H
-         +lSmbDL41Z/bSeo/2L7wWOGIxbDxjSmnUnDT5Oy7TV4OWy2J9zBoUu0rmhDXbTIG6INv
-         Rf3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711374455; x=1711979255;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ak1tU1hAMrwRs+LPSBUwIgy4Aqmw1ipgIVU8IK0CaAk=;
-        b=VrMD95K0UbjJosOuHhneeMgo+3vFifuEgXeLIRTpMCMhRow2J76gkJ1PQpbTprQp6t
-         YgZgl0LiQMZyaoLWhNVbeWWG526BOou1UrYBk4Cfrd0bQ6k/pf8b7Aq6yaMcitpKPhJU
-         5UbP0vQ61zBRIPRpZk1RlIvpWUGhRUMhQhS4kRWYt4jA4CTEmYAemGLI7jbTAGu03zb/
-         WvKshQEgG6q6GS7n+An3tMyLrzma5XY6/7D7FGfs9RErwy1YjsZ/CiP0F15hdkvMFpe0
-         3YbX9jWnWwLO6tiOE4jay9ai9Gk9suxIBaLzPR83yLRo6+bZGwfNJOZQvMoh4h6J/zN+
-         s/VA==
-X-Forwarded-Encrypted: i=1; AJvYcCX/lGN6v/pWAO1gmIbwGq0buuDwUAEYfj7xreQSyCs7GBP8OfSYYzQO70apt2dYmVnlIswjMTPu9LuXTM4NRcSTU0zWCWaw4LA=
-X-Gm-Message-State: AOJu0YwrzQ+RQGbhZTZJ0y70F0fRCAsT/ExcBAv5Rpni7PMJR0VJ5kq5
-	Q9SN8cjZXWG1SuDRdOA1ICVbUSjL+JVVas6L/hZuC+95YHjXxJYMEI1vIUinwaA=
-X-Google-Smtp-Source: AGHT+IF7KdIGQlqGnlG2Se4SlU0THQwzSCPNQgRzsRuSHRDL4SNJc7TBiOopCAeuLAKnQhCBUsp9Tw==
-X-Received: by 2002:a05:6000:4c9:b0:33e:c070:686c with SMTP id h9-20020a05600004c900b0033ec070686cmr4717780wri.45.1711374454950;
-        Mon, 25 Mar 2024 06:47:34 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id e7-20020a5d5947000000b0033f20497d4asm9590291wri.5.2024.03.25.06.47.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Mar 2024 06:47:34 -0700 (PDT)
-Message-ID: <1f028df8-435a-43cb-b776-0c2141f1c374@linaro.org>
-Date: Mon, 25 Mar 2024 14:47:34 +0100
+	s=arc-20240116; t=1711375063; c=relaxed/simple;
+	bh=0IIk7fdt/ij7Y30RYxIc4VnrAUsxe7XFLjeK+gaFxHc=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=t/TU1UMryzQj19zrZU+2Y8RpMt1V0+ApAkudlbCJZo6YGG8H4BEfFtJDG0PX8o3yIM8Jt0CqwvILbV2goJP2vjTXr695ifJCZgfhURDrMr3t9CQXkIJqVDtRr99Mk+pEwEIBpEytjWfs2o9MYDgusB5GX+Fb2JFuoemVFCOVhfY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xl/hE/zs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5954C433F1;
+	Mon, 25 Mar 2024 13:57:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711375062;
+	bh=0IIk7fdt/ij7Y30RYxIc4VnrAUsxe7XFLjeK+gaFxHc=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+	b=Xl/hE/zsFcn+ly77x4fZ3ZW5Fcq/0aXBJM4eWJY7Soms+8FR0uHNz51ckpxVOF84p
+	 XROI8xNa4rDlaggLK+yGMSwjivxoa7IL293/w3IBlduPatwoyIzsiCY+o31fKTCTf7
+	 LdsZtzzLHEsGhtGiDNrpCBnUwdKhDUagvU2KAQbB/of3CkNv/XRwhhcnpzdGBwhbx7
+	 YVk/AnxOuf0W1U1b3ScunsyArv4+T7QDY/8OVTTSIKI71d7el/27SmZM1IzlRUp1wC
+	 kCV8SVX+NJS5erHEexMcfI/snqTblbuWstFTOT9d2ZHpnCKT3ITU2NwnhhGX46rico
+	 CKbAyFpjQJBAA==
+From: Kalle Valo <kvalo@kernel.org>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Marcel Holtmann <marcel@holtmann.org>,  Luiz Augusto von Dentz
+ <luiz.dentz@gmail.com>,  "David S . Miller" <davem@davemloft.net>,  Eric
+ Dumazet <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>,  Paolo
+ Abeni <pabeni@redhat.com>,  Rob Herring <robh@kernel.org>,  Krzysztof
+ Kozlowski <krzysztof.kozlowski+dt@linaro.org>,  Conor Dooley
+ <conor+dt@kernel.org>,  Bjorn Andersson <andersson@kernel.org>,  Konrad
+ Dybcio <konrad.dybcio@linaro.org>,  Liam Girdwood <lgirdwood@gmail.com>,
+  Mark Brown <broonie@kernel.org>,  Catalin Marinas
+ <catalin.marinas@arm.com>,  Will Deacon <will@kernel.org>,  Bjorn Helgaas
+ <bhelgaas@google.com>,  Saravana Kannan <saravanak@google.com>,  Geert
+ Uytterhoeven <geert+renesas@glider.be>,  Arnd Bergmann <arnd@arndb.de>,
+  Neil Armstrong <neil.armstrong@linaro.org>,  Marek Szyprowski
+ <m.szyprowski@samsung.com>,  Alex Elder <elder@linaro.org>,  Srini
+ Kandagatla <srinivas.kandagatla@linaro.org>,  Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>,  Abel Vesa <abel.vesa@linaro.org>,
+  Manivannan Sadhasivam <mani@kernel.org>,  Lukas Wunner <lukas@wunner.de>,
+  Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+  linux-bluetooth@vger.kernel.org,  netdev@vger.kernel.org,
+  devicetree@vger.kernel.org,  linux-kernel@vger.kernel.org,
+  linux-wireless@vger.kernel.org,  linux-arm-msm@vger.kernel.org,
+  linux-arm-kernel@lists.infradead.org,  linux-pci@vger.kernel.org,
+  linux-pm@vger.kernel.org,  Bartosz Golaszewski
+ <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH v6 04/16] dt-bindings: net: wireless: qcom,ath11k:
+ describe the ath11k on QCA6390
+References: <20240325131624.26023-1-brgl@bgdev.pl>
+	<20240325131624.26023-5-brgl@bgdev.pl>
+Date: Mon, 25 Mar 2024 15:57:33 +0200
+In-Reply-To: <20240325131624.26023-5-brgl@bgdev.pl> (Bartosz Golaszewski's
+	message of "Mon, 25 Mar 2024 14:16:12 +0100")
+Message-ID: <87r0fy8lde.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/3] thermal: More separation between the core and
- drivers
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-References: <2331888.ElGaqSPkdT@kreacher>
- <42ffcfb8-33fd-4ea5-bfac-fa8c78cd1cd4@linaro.org>
- <2273843.iZASKD2KPV@kreacher>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <2273843.iZASKD2KPV@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On 25/03/2024 14:39, Rafael J. Wysocki wrote:
-> Hi Daniel,
-> 
-> On Monday, March 25, 2024 2:33:27 PM CET Daniel Lezcano wrote:
->>
->> Hi Rafael,
->>
->> thank you for this series.
->>
->> It has been reported a regression with commit cf3986f8c01d3. I'm
->> investigating and confirming it. If it is the case a revert may impact
->> this series.
-> 
-> Sure.
-> 
-> Can you please give me a pointer to a BZ or e-mail thread where this is
-> being handled?
+Bartosz Golaszewski <brgl@bgdev.pl> writes:
 
-That has been reported to me directly. In a moment, I'll start a thread
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>
+> Add a PCI compatible for the ATH11K module on QCA6390 and describe the
+> power inputs from the PMU that it consumes.
+>
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
+[...]
+
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: pci17cb,1101
+> +    then:
+> +      required:
+> +        - vddrfacmn-supply
+> +        - vddaon-supply
+> +        - vddwlcx-supply
+> +        - vddwlmx-supply
+> +        - vddrfa0p8-supply
+> +        - vddrfa1p2-supply
+> +        - vddrfa1p7-supply
+> +        - vddpcie0p9-supply
+> +        - vddpcie1p8-supply
+
+I don't know DT well enough to know what the "required:" above means,
+but does this take into account that there are normal "plug&play" type
+of QCA6390 boards as well which don't need any DT settings?
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
