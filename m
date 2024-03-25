@@ -1,132 +1,194 @@
-Return-Path: <linux-pm+bounces-5355-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5356-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6484388AE76
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 19:35:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A1B988AF8A
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 20:13:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8FF3A1C6111E
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 18:35:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 196021FA2020
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 19:13:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E5EE1292D2;
-	Mon, 25 Mar 2024 18:17:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 719A314A9D;
+	Mon, 25 Mar 2024 19:13:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="dMEbxDLv"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sIYy5YVi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EFC4128836;
-	Mon, 25 Mar 2024 18:17:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FDC312E47
+	for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 19:13:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711390638; cv=none; b=Nbmba2qX2f7kNdgSiHjwatxmIvHnVGvIaBSgwVvHRhk6cDYbbkq18MxOUxj9tUa798HRmzPKcuQcgXEEXGLhwwOzqoDTnEeW92uBEwXnecOcFxWKQMmos50S+ZcmJipGuxYcasl7Fp1s3jrNwwclf6fqK7YqjasPYwxz5gHKi3k=
+	t=1711394024; cv=none; b=Fi+IlFiEVHr6q/F0HhPrwCIQ4xdpuJcFAvg5BQEmCoGbVsLRx79krg8y0Gf56ntjFhcgQnzPhbPpleNWlkgFLkR2UTbZE9IsiphPPZkVKQ5tE4zXqnLE3K/CJjJ/QYQq3WvgbjrmUuuYZFReU9SMne46Gft2myVa/XfeWZtL2fs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711390638; c=relaxed/simple;
-	bh=bt605nCebDtgxsxpVybVsIf1PZRWEuFTtQ9mjuWYnLk=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bXVWLJkfOi2IHf4ZA3OhgvLuKkDniUIZtxUDAMn1kM3XXl7JZ/vTf2wKG8en0DazTJOyjFCSoPnG2FHmsXEjW/65i9Ns5uromzr955aVI9nWMLJvLBvR8K93j4rVqLP9vGasdnjXdllCax9sAu4KK4uh2onGQZdYiqPZDGjMHWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=dMEbxDLv; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42PIBeq9003315;
-	Mon, 25 Mar 2024 18:17:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-type; s=qcppdkim1; bh=H0txKNlY/ulNqwjtmNUw
-	yFVi7rSzw1l52qKD0CZVQL8=; b=dMEbxDLvy+3OpxvZojATkhhY27jZuvj9njS8
-	wZtGizMdcxnNRZcElO3p+ewW9VGcQEXolUp+svMCp2EHluspDyGCD2w1KXjhVynt
-	x48/9xpgCcSsvmWohN4l17t3Lh0TKtb141EtMKw/fjSdZC4V7PUCgEm41XinL632
-	/I8iAW95umi9JkOQ32MgcKU2STS9OerY20ZlYg64SiNWxy7w6lbP7B9i0ooElMq8
-	dYOEOWePDRHTPsv+8g5jbmHRfFc/r80qVukmh9ZMpgs1Ssr36+uEsus+TojXWMWu
-	V//6wde8HcuGRiC7BVppNwFpLB5UDbvHzgJKBj1RQQDWi/0RqQ==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3x34c2ska7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 25 Mar 2024 18:17:12 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42PIHBta028653
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 25 Mar 2024 18:17:11 GMT
-Received: from hu-okukatla-hyd.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Mon, 25 Mar 2024 11:17:07 -0700
-From: Odelu Kukatla <quic_okukatla@quicinc.com>
-To: Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>, Rob Herring
-	<robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC: Kees Cook <keescook@chromium.org>, <cros-qcom-dts-watchers@chromium.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>, <quic_rlaggysh@quicinc.com>,
-        <quic_mdtipton@quicinc.com>
-Subject: [PATCH v4 4/4] arm64: dts: qcom: sc7280: Add clocks for QOS configuration
-Date: Mon, 25 Mar 2024 23:46:28 +0530
-Message-ID: <20240325181628.9407-5-quic_okukatla@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20240325181628.9407-1-quic_okukatla@quicinc.com>
-References: <20240325181628.9407-1-quic_okukatla@quicinc.com>
+	s=arc-20240116; t=1711394024; c=relaxed/simple;
+	bh=swZpm+FOboZ7NHTMfD+QKXlE30Z5OvwnQEYIKKKGXww=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OQqES51+QQofdbscDY/TS4U0IC3M7n2oH5nfn5LLUHTT6tdFreR+1rOHrSBbpy4qLdoz/5fi6K1x7A00fmCb1unRAktUIP2UUvSNKH6+PcYWuqZqkYcsO3zT9haEFl9ckf06LkB+MFYl7jmsonNTFbr2GF3WpaKIUvyCliOrpLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sIYy5YVi; arc=none smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-56845954ffeso6567024a12.2
+        for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 12:13:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1711394021; x=1711998821; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=nbzmB+zL0vc7kuIehiH4vjEBMbTsMZOL2LB5BPg0ugg=;
+        b=sIYy5YViqKWOvjyvc2u0wJQTQnl/azBOnLl02Uyneg4B4OlicTBmvG2dJpwQCLbw3W
+         fVFv8AumdWtd/zyBm8AmMrFEL4sWAZxl3CDV2KFZ/xNPKf7JvKruGFKKfIfOaN5+5hAR
+         VFTVONPJm6JkDOWTNbjLG5dmt6v5NNtHtzJqBZ3pODkQIMM8LarTRCZfBbf0lS0CnoJ2
+         cSN+bjlTUZ2NMtjl/fCvxUv9pGic5VCIKek4O06+JsGKF4Rrl+BM71YYEl0U1Sa2FMgk
+         T733poCn7fw40NcLYQySivxsClkexLbaIfz5Y9WV1w589UN5M0MpZ+ElZ+KsBmHPRnwZ
+         dnvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711394021; x=1711998821;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nbzmB+zL0vc7kuIehiH4vjEBMbTsMZOL2LB5BPg0ugg=;
+        b=e+c1V0VqGShBnk5inHkvryUDS9grKisJNy+d3jAGiNaW+VJllDMIoTRiEj6Cy7M/Zv
+         JckiPZDvQEsDW5FIvrOD0WIxQ3rDu0abal20ZmkdLnZ74c8PXpkZiXffjMEaA5NS3euc
+         tjD+LYhlGw+Z2wSjwbJ+icXeQqM0146oNBhafdXWF09SgIS3RzQWJ2T68cp9/jBeXUcL
+         qd+cFY5JN38mDJmENvQHjjNMPQPNt3DaRUgYdr160ASwbVioLgml5C3z8I+psPFMu7MY
+         vBNvdn6FTcwdW5X03CTf+LH8tF49XvyALq9xn8dKCZF4Rvavtv7yeeFrvSXl952oJpcq
+         PAvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX0OBdTxcMYqxy2L/7uLmB1H3g0VxuS5HHvWhDKY/gk5dNFTToDI0jhKDga+g1uuNy2mib1Ua4mqUhQ48UiHyYoKHxCnPzePyc=
+X-Gm-Message-State: AOJu0YwohyYVzTaua9/WreVw+PyvCEzKG222Pxu+MB2Zv7t/FTsI28Po
+	Gy1++XUMbIsQPgZLx6sLJx+gGao6EG5OPbs7BOdB+SeGjKG+euCVcxIlHS6TLy4=
+X-Google-Smtp-Source: AGHT+IErnMv9U3X+pdCW9pSyAie/zQ5UpaM78VwNlo874bKymPS21a812lPQqez66q3x0vtFb7RmPQ==
+X-Received: by 2002:a17:906:5d2:b0:a46:af60:7c72 with SMTP id t18-20020a17090605d200b00a46af607c72mr5353869ejt.54.1711394020607;
+        Mon, 25 Mar 2024 12:13:40 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.222.44])
+        by smtp.gmail.com with ESMTPSA id y4-20020a1709060a8400b00a46bec6da9fsm3325673ejf.203.2024.03.25.12.13.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Mar 2024 12:13:40 -0700 (PDT)
+Message-ID: <0c4c7bb6-3f94-4996-8d13-8214ee3debe8@linaro.org>
+Date: Mon, 25 Mar 2024 20:13:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: swI1NVnYdfpNkupkF5WqmpiWdWn-OUpv
-X-Proofpoint-ORIG-GUID: swI1NVnYdfpNkupkF5WqmpiWdWn-OUpv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-25_16,2024-03-21_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 mlxscore=0 malwarescore=0 lowpriorityscore=0
- adultscore=0 impostorscore=0 mlxlogscore=999 suspectscore=0 spamscore=0
- phishscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2403210001 definitions=main-2403250107
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] power: reset: add new gs101-poweroff driver
+To: Peter Griffin <peter.griffin@linaro.org>
+Cc: Alexey Klimov <alexey.klimov@linaro.org>, sre@kernel.org,
+ robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org, robh+dt@kernel.org,
+ conor+dt@kernel.org, linux-samsung-soc@vger.kernel.org,
+ semen.protsenko@linaro.org, linux-kernel@vger.kernel.org,
+ klimov.linux@gmail.com, kernel-team@android.com, tudor.ambarus@linaro.org,
+ andre.draszik@linaro.org, saravanak@google.com, willmcvicker@google.com,
+ alim.akhtar@samsung.com, linux-arm-kernel@lists.infradead.org,
+ elder@linaro.org
+References: <20240320020549.71810-1-alexey.klimov@linaro.org>
+ <20240320020549.71810-3-alexey.klimov@linaro.org>
+ <4d5b2da7-2a45-4a9f-8a96-a6840d2751a2@linaro.org>
+ <CADrjBPrthH4cKBpDeGV8u2ydErCJuqbdBhFQs+62k7bfPyJNvA@mail.gmail.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <CADrjBPrthH4cKBpDeGV8u2ydErCJuqbdBhFQs+62k7bfPyJNvA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add handles for required clocks to be enabled for configuring
-QoS on sc7280.
+On 22/03/2024 13:25, Peter Griffin wrote:
+> Hi Krzysztof,
+> 
+> Thanks for your review feedback!
+> 
+> On Wed, 20 Mar 2024 at 07:20, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 20/03/2024 03:05, Alexey Klimov wrote:
+>>> +
+>>> +     ret = devm_work_autocancel(dev, &gs101->shutdown_work,
+>>> +                                gs101_shutdown_work_fn);
+>>> +     if (ret) {
+>>> +             dev_err(dev, "failed to register gs101 shutdown_work: %i\n", ret);
+>>> +             unregister_keyboard_notifier(&gs101->keyboard_nb);
+>>> +             return ret;
+>>> +     }
+>>> +
+>>> +     gs101_poweroff_ctx = gs101;
+>>> +     platform_set_drvdata(pdev, gs101);
+>>> +
+>>> +     /*
+>>> +      * At this point there is a chance that psci_sys_poweroff already
+>>> +      * registered as pm_power_off hook but unfortunately it cannot power
+>>> +      * off the gs101 SoC hence we are rewriting it here just as is.
+>>> +      */
+>>> +     pm_power_off = gs101_poweroff;
+>>
+>> So that's a duplicated syscon power off driver. Why syscon does not
+>> work? syscon_node_to_regmap() does not return correct regmap?
+> 
+> Yes, for gs101 the regmap handling PMU registers is now created by
+> exynos-pmu driver and is obtained using
+> exynos_get_pmu_regmap_by_phandle() API. That was required due to the
+> SMC call required to write to these registers from Linux.
+> 
+>> If so,
+>> this should be fixed instead of copying the driver with basically only
+>> one difference.
+> 
+> Are you suggesting we should add some API to syscon.c that allows
+> regmaps created in other drivers like exynos-pmu.c or altera-sysmgr.c
+> to be registered in the syscon_list?
 
-Signed-off-by: Odelu Kukatla <quic_okukatla@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 3 +++
- 1 file changed, 3 insertions(+)
+Yes, I think this could work.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 41f51d326111..981f66a88967 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -2129,6 +2129,8 @@
- 			reg = <0 0x016e0000 0 0x1c080>;
- 			#interconnect-cells = <2>;
- 			qcom,bcm-voters = <&apps_bcm_voter>;
-+			clocks = <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
-+				 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>;
- 		};
- 
- 		aggre2_noc: interconnect@1700000 {
-@@ -2136,6 +2138,7 @@
- 			compatible = "qcom,sc7280-aggre2-noc";
- 			#interconnect-cells = <2>;
- 			qcom,bcm-voters = <&apps_bcm_voter>;
-+			clocks = <&rpmhcc RPMH_IPA_CLK>;
- 		};
- 
- 		mmss_noc: interconnect@1740000 {
--- 
-2.17.1
+Best regards,
+Krzysztof
 
 
