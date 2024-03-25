@@ -1,72 +1,72 @@
-Return-Path: <linux-pm+bounces-5321-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5322-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8339688A76C
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 16:46:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06FE788A77B
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 16:47:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E8211F659E6
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 15:46:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C19D3064E4
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 15:47:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 409EE15E20A;
-	Mon, 25 Mar 2024 13:17:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E433115FA66;
+	Mon, 25 Mar 2024 13:17:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="TCWRUUf9"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="r1BtkEeS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 311FE148831
-	for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 13:17:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E03D6158A31
+	for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 13:17:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711372646; cv=none; b=dHO/ai6Z/6HCprvGTBNeEVlPuMGHLKZnTQOPjBIuVDMOGey6JZTUfh7E2uO/WZCQXA/btdNX9Ig4knUWwN1ciXghDJfJyZSLsT+U8BW9CI5U7ygZjK3JBYXcWvN5T8sNpA5z7qzSc3EODMzn5n1vnFPZBGiXEoq67ukAVMQU034=
+	t=1711372648; cv=none; b=lWn4DpOoWu3E9Yb1/ceqaH1HvNCUCn63UmoRbeX9MPuH7KeAFl5ijz7lWH8rFW1rsbHqFRy97gZGvIJaKXaqULlnsTX6097I1NdbDPvPwxEH6nQdelzw5p870obBHB1IpvBN3134Bn6eNAMD6KSrnPeUxN5oU9eiQAxONm6cmHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711372646; c=relaxed/simple;
-	bh=Zu9qHogsjwwvS76RuRykV3Cyl3hZFd1eYZO5KYwA5Tk=;
+	s=arc-20240116; t=1711372648; c=relaxed/simple;
+	bh=nYwGcUeSu2lOGz0Fbu3qFb7BX7DjJR5EiBYQwBjfl1E=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=tLhkW4BWzjjBLxCGaf67ET39AMyCdPtt129TVQwK2Z7nuBD2PS2cxbVWCoLTwNm4hC4WhpIoHk9DUVRGC8nRIb4zeXXxNJf0NNTVLMaFTYNZChudACbkhHVyPEMjZQvyMrQaYLntZVnpUzHR9h+zU7br3F8D3vU+b098VWNDebg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=TCWRUUf9; arc=none smtp.client-ip=209.85.128.50
+	 MIME-Version; b=TP4y6uPwHs5VHxUgAQf3jqtgFhKSGm9HTJfRzyo/TWYnYPyaZa4hg8aKipCTiU6RrZzKUmZETnm4gJGu9dB2Px1znaESql6wV3z9xp+k/6HVrrj+jpIUEcBVXCSJ9uUgawbXfwn8pGE6BGkG0T53oLRjcYs+DEMoe1TN8bRdueA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=r1BtkEeS; arc=none smtp.client-ip=209.85.221.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4148a6cc488so5047085e9.3
-        for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 06:17:21 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-33fd12a06fdso3073551f8f.1
+        for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 06:17:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1711372639; x=1711977439; darn=vger.kernel.org;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1711372641; x=1711977441; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=z6NUiX8vyJKElOCOKE+vXKfTmxYyyFPuN3p6ttUZMX0=;
-        b=TCWRUUf91blGzGPBYGy/yjX5PRskP+/zJqpZTQMfiy7HNicgd7NPsBdnKxu50in0xM
-         7VBEitn9ksoyhXgNWJPWUdwp+xQoJes2pXwWyYkmyLmj8CgZBvcY3ay/dkewrGtVgz/2
-         fAy2RnnJEEQHS3UdXD1lP/g+0LloI3vCehN/721VVU40zHS/Ix7pJlGH43N2VY4s3mHf
-         fPo6ZFp9r/xmlPNStVvIe9ojVHsc78VUmuFSDd8Y41VoOrV/UPM+Pynh1mkZqGI5U2tH
-         +1B2DiQdlR2wz8d/vU+p+QRsUrSREIIvWhTOk2LDoMwJ8Psa7uSHDlShbUKHXSZzqtvq
-         Ql/Q==
+        bh=5q7lk+2TIXEIJZSxUoCWXqCmqzprQnmyhj7L+zSgmo8=;
+        b=r1BtkEeSlKjiSt2MUfvytWTnMY2jEy7RElifeZbH0pqf9X8qlWyTdVVIN4jrWMvUPG
+         fb9JJ6tdASUESlHb/67kPDQrqEspug01Gwf7tXhYcHFTZXP0BhXmYNuvIJrNeztWlNJc
+         003smVOaGc5Fsw9/3fjC/snNanXrI9feA5GTVO4B0+QpR7/AmdOCMjPlFilU1oeTo9rA
+         AoEdB2KFiVyIsitGH8JXhzcNF16PJ0+Otf1yYpunc5G9kKziu6KqhZZRWdB3OXP9gO6u
+         ej3AqfSXBMOrqRRelOFxhpzl8O2Y8LdzpZFrm+XfZaSFVZGOg+0e5aS0ywR35SQAqzwR
+         AdIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711372639; x=1711977439;
+        d=1e100.net; s=20230601; t=1711372641; x=1711977441;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=z6NUiX8vyJKElOCOKE+vXKfTmxYyyFPuN3p6ttUZMX0=;
-        b=bgJcsLYh+yI2UNlI50svQMBhdfHS/sT1cbUEZe3OFsQW2AtDGtP+Jq6QsAVzhEsMd7
-         yjbBw8lWUkRMaJMZMISkWgXbDHU4lh9riWuN/4xXm6jQOzOKUJXkR38jI0uszwFVuMnQ
-         bA7rxFj/qf2YrTworkYrAV0rwNbLbjT0HHbFF0ACb5Q8wm+JBFbEMkhf9Pf2fDEY45A2
-         utpvklhtyuGd4eRBXwkvIyq08AzVSs+yt7DrX4u96mPefV5+2In36t1XXJN++CutwUlo
-         YLqOzuIaGM7izPIx/I/wTQtYRqn0pIuM8cJC2NRuSNH831LpE2KgA1awg4oJcj50j4K8
-         pHFw==
-X-Forwarded-Encrypted: i=1; AJvYcCXZNDJhl85EVfz1GtqHulIyBWM/TeDJsuchK+3vUoD9zlpm7yYxbskh/yjQL8YLoYc+jGyr1+ZYrCukzXyNkWMV48YA52l2szs=
-X-Gm-Message-State: AOJu0YyAhH3BfTEfBrwd/gCO1tV5IJFjioU456pBr+tEBhqPDC2mGBV/
-	jWFR6al8lTQ78TIBNMpPX1L3Ixi4bThpdIUbpM1pkur4Gye3TJnBJK4e6sI2fZo=
-X-Google-Smtp-Source: AGHT+IGplibW2rPlAAjnQL9sObEnEZwVK6gcoiaHcEbAGyGcbuZT+b3GNUpQhb2YKD5liRnzXnHTNw==
-X-Received: by 2002:a05:600c:3113:b0:413:ee55:8bba with SMTP id g19-20020a05600c311300b00413ee558bbamr6671288wmo.4.1711372639502;
-        Mon, 25 Mar 2024 06:17:19 -0700 (PDT)
+        bh=5q7lk+2TIXEIJZSxUoCWXqCmqzprQnmyhj7L+zSgmo8=;
+        b=hzTzz3aINwW+RchUoD2SNtAlQ1F92Wa6i1CFV1H02YwZHh8LcdoYUdlUXSiQhWtfxA
+         lLB+7hsfKoci7edpCXGHZw8VtXftCdXTXbnDRDk8YKFe9Jp7KO1yj8aBEwxi2hbB2CfC
+         Kr4gIkqjY6eO56KMPLcuRx9oHs1VfNdI2wgjC0N9dKZUbk6xHxLcutjrAANzIxFdO8qM
+         khNgCkRliVGYDR2TV2E3Hc7E8siFd9q2TARk4MTTyX6W9C2Wg6k/G4JYV5xHc8hd1zfD
+         tJXxTt8RzI7EerAtpwe3kr4FEPDYpkll0jKjR6I+/LspYnRGFLzwxmYmSn5YwiPgJh8Q
+         xQCw==
+X-Forwarded-Encrypted: i=1; AJvYcCUGbWzG3qlrihPPaQOl12XkUnJb7KZ1c3E3njug6p+8bmDjgdoXJAVY0y7LBlThfm28pY60Z6L9JpBamjrTYYSw0SF8Pqtnmy4=
+X-Gm-Message-State: AOJu0YyX5DAnjWugJba33H/l/15TRtTAdJ06LDkAGuopwtEEMh+dkr9H
+	4H/t4Vn3CBiaH8O8Ohmzv6GakW/plgWCQi1kdYrGPRhKHRgFBv23STT11i1qTpM=
+X-Google-Smtp-Source: AGHT+IEWAleZxrehHkAeog/CpCY+3Uky4Inx/OcRTu69F57KovJSV1TsaOT5odfmaMTbK0CJCnSfiQ==
+X-Received: by 2002:a5d:6986:0:b0:341:bdbf:ce0f with SMTP id g6-20020a5d6986000000b00341bdbfce0fmr4644057wru.34.1711372640881;
+        Mon, 25 Mar 2024 06:17:20 -0700 (PDT)
 Received: from brgl-uxlite.home ([2a01:cb1d:75a:e000:861d:8b72:a859:4ce9])
-        by smtp.gmail.com with ESMTPSA id p11-20020a056000018b00b0033e75e5f280sm9485245wrx.113.2024.03.25.06.17.18
+        by smtp.gmail.com with ESMTPSA id p11-20020a056000018b00b0033e75e5f280sm9485245wrx.113.2024.03.25.06.17.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Mar 2024 06:17:19 -0700 (PDT)
+        Mon, 25 Mar 2024 06:17:20 -0700 (PDT)
 From: Bartosz Golaszewski <brgl@bgdev.pl>
 To: Marcel Holtmann <marcel@holtmann.org>,
 	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
@@ -108,9 +108,9 @@ Cc: linux-bluetooth@vger.kernel.org,
 	linux-pci@vger.kernel.org,
 	linux-pm@vger.kernel.org,
 	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH v6 15/16] Bluetooth: qca: use the power sequencer for QCA6390
-Date: Mon, 25 Mar 2024 14:16:23 +0100
-Message-Id: <20240325131624.26023-16-brgl@bgdev.pl>
+Subject: [PATCH v6 16/16] PCI/pwrctl: add a PCI power control driver for power sequenced devices
+Date: Mon, 25 Mar 2024 14:16:24 +0100
+Message-Id: <20240325131624.26023-17-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20240325131624.26023-1-brgl@bgdev.pl>
 References: <20240325131624.26023-1-brgl@bgdev.pl>
@@ -124,154 +124,141 @@ Content-Transfer-Encoding: 8bit
 
 From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Use the pwrseq subsystem's consumer API to run the power-up sequence for
-the Bluetooth module of the QCA6390 package.
+Add a PCI power control driver that's capable of correctly powering up
+devices using the power sequencing subsystem. The first user of this
+driver is the ath11k module on QCA6390.
 
 Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 ---
- drivers/bluetooth/hci_qca.c | 74 +++++++++++++++++++++++++++++--------
- 1 file changed, 59 insertions(+), 15 deletions(-)
+ drivers/pci/pwrctl/Kconfig             |  9 +++
+ drivers/pci/pwrctl/Makefile            |  2 +
+ drivers/pci/pwrctl/pci-pwrctl-pwrseq.c | 89 ++++++++++++++++++++++++++
+ 3 files changed, 100 insertions(+)
+ create mode 100644 drivers/pci/pwrctl/pci-pwrctl-pwrseq.c
 
-diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-index 8a60ad7acd70..d31dcea650c1 100644
---- a/drivers/bluetooth/hci_qca.c
-+++ b/drivers/bluetooth/hci_qca.c
-@@ -29,6 +29,7 @@
- #include <linux/of.h>
- #include <linux/acpi.h>
- #include <linux/platform_device.h>
+diff --git a/drivers/pci/pwrctl/Kconfig b/drivers/pci/pwrctl/Kconfig
+index 96195395af69..eb126225eb9f 100644
+--- a/drivers/pci/pwrctl/Kconfig
++++ b/drivers/pci/pwrctl/Kconfig
+@@ -5,4 +5,13 @@ menu "PCI Power control drivers"
+ config PCI_PWRCTL
+ 	tristate
+ 
++config PCI_PWRCTL_PWRSEQ
++	tristate "PCI Power Control driver using the Power Sequencing subsystem"
++	select POWER_SEQUENCING
++	select PCI_PWRCTL
++	default m if (ATH11K_PCI && ARCH_QCOM)
++	help
++	  Enable support for the PCI power control driver for device
++	  drivers using the Power Sequencing subsystem.
++
+ endmenu
+diff --git a/drivers/pci/pwrctl/Makefile b/drivers/pci/pwrctl/Makefile
+index 52ae0640ef7b..d308aae4800c 100644
+--- a/drivers/pci/pwrctl/Makefile
++++ b/drivers/pci/pwrctl/Makefile
+@@ -2,3 +2,5 @@
+ 
+ obj-$(CONFIG_PCI_PWRCTL)		+= pci-pwrctl-core.o
+ pci-pwrctl-core-y			:= core.o
++
++obj-$(CONFIG_PCI_PWRCTL_PWRSEQ)		+= pci-pwrctl-pwrseq.o
+diff --git a/drivers/pci/pwrctl/pci-pwrctl-pwrseq.c b/drivers/pci/pwrctl/pci-pwrctl-pwrseq.c
+new file mode 100644
+index 000000000000..c7a113a76c0c
+--- /dev/null
++++ b/drivers/pci/pwrctl/pci-pwrctl-pwrseq.c
+@@ -0,0 +1,89 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2024 Linaro Ltd.
++ */
++
++#include <linux/device.h>
++#include <linux/mod_devicetable.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/pci-pwrctl.h>
++#include <linux/platform_device.h>
 +#include <linux/pwrseq/consumer.h>
- #include <linux/regulator/consumer.h>
- #include <linux/serdev.h>
- #include <linux/mutex.h>
-@@ -215,6 +216,7 @@ struct qca_power {
- 	struct regulator_bulk_data *vreg_bulk;
- 	int num_vregs;
- 	bool vregs_on;
++#include <linux/slab.h>
++#include <linux/types.h>
++
++struct pci_pwrctl_pwrseq_data {
++	struct pci_pwrctl ctx;
 +	struct pwrseq_desc *pwrseq;
- };
- 
- struct qca_serdev {
-@@ -1682,6 +1684,27 @@ static bool qca_wakeup(struct hci_dev *hdev)
- 	return wakeup;
- }
- 
-+static int qca_port_reopen(struct hci_uart *hu)
++};
++
++static void devm_pci_pwrctl_pwrseq_power_off(void *data)
 +{
++	struct pwrseq_desc *pwrseq = data;
++
++	pwrseq_power_off(pwrseq);
++}
++
++static int pci_pwrctl_pwrseq_probe(struct platform_device *pdev)
++{
++	struct pci_pwrctl_pwrseq_data *data;
++	struct device *dev = &pdev->dev;
 +	int ret;
 +
-+	/* Now the device is in ready state to communicate with host.
-+	 * To sync host with device we need to reopen port.
-+	 * Without this, we will have RTS and CTS synchronization
-+	 * issues.
-+	 */
-+	serdev_device_close(hu->serdev);
-+	ret = serdev_device_open(hu->serdev);
-+	if (ret) {
-+		bt_dev_err(hu->hdev, "failed to open port");
-+		return ret;
-+	}
++	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
 +
-+	hci_uart_set_flow_control(hu, false);
++	data->pwrseq = devm_pwrseq_get(dev, of_device_get_match_data(dev));
++	if (IS_ERR(data->pwrseq))
++		return dev_err_probe(dev, PTR_ERR(data->pwrseq),
++				     "Failed to get the power sequencer\n");
++
++	ret = pwrseq_power_on(data->pwrseq);
++	if (ret)
++		return dev_err_probe(dev, ret,
++				     "Failed to power-on the device\n");
++
++	ret = devm_add_action_or_reset(dev, devm_pci_pwrctl_pwrseq_power_off,
++				       data->pwrseq);
++	if (ret)
++		return ret;
++
++	data->ctx.dev = dev;
++
++	ret = devm_pci_pwrctl_device_set_ready(dev, &data->ctx);
++	if (ret)
++		return dev_err_probe(dev, ret,
++				     "Failed to register the pwrctl wrapper\n");
 +
 +	return 0;
 +}
 +
- static int qca_regulator_init(struct hci_uart *hu)
- {
- 	enum qca_btsoc_type soc_type = qca_soc_type(hu);
-@@ -1750,21 +1773,7 @@ static int qca_regulator_init(struct hci_uart *hu)
- 		break;
- 	}
- 
--	/* Now the device is in ready state to communicate with host.
--	 * To sync host with device we need to reopen port.
--	 * Without this, we will have RTS and CTS synchronization
--	 * issues.
--	 */
--	serdev_device_close(hu->serdev);
--	ret = serdev_device_open(hu->serdev);
--	if (ret) {
--		bt_dev_err(hu->hdev, "failed to open port");
--		return ret;
--	}
--
--	hci_uart_set_flow_control(hu, false);
--
--	return 0;
-+	return qca_port_reopen(hu);
- }
- 
- static int qca_power_on(struct hci_dev *hdev)
-@@ -1792,6 +1801,17 @@ static int qca_power_on(struct hci_dev *hdev)
- 		ret = qca_regulator_init(hu);
- 		break;
- 
-+	case QCA_QCA6390:
-+		qcadev = serdev_device_get_drvdata(hu->serdev);
-+		ret = pwrseq_power_on(qcadev->bt_power->pwrseq);
-+		if (ret)
-+			return ret;
++static const struct of_device_id pci_pwrctl_pwrseq_of_match[] = {
++	{
++		/* ATH11K in QCA6390 package. */
++		.compatible = "pci17cb,1101",
++		.data = "wlan",
++	},
++	{
++		/* ATH12K in WCN7850 package. */
++		.compatible = "pci17cb,1107",
++		.data = "wlan",
++	},
++	{ }
++};
++MODULE_DEVICE_TABLE(of, pci_pwrctl_pwrseq_of_match);
 +
-+		ret = qca_port_reopen(hu);
-+		if (ret)
-+			return ret;
-+		break;
++static struct platform_driver pci_pwrctl_pwrseq_driver = {
++	.driver = {
++		.name = "pci-pwrctl-pwrseq",
++		.of_match_table = pci_pwrctl_pwrseq_of_match,
++	},
++	.probe = pci_pwrctl_pwrseq_probe,
++};
++module_platform_driver(pci_pwrctl_pwrseq_driver);
 +
- 	default:
- 		qcadev = serdev_device_get_drvdata(hu->serdev);
- 		if (qcadev->bt_en) {
-@@ -2170,6 +2190,10 @@ static void qca_power_shutdown(struct hci_uart *hu)
- 		}
- 		break;
- 
-+	case QCA_QCA6390:
-+		pwrseq_power_off(qcadev->bt_power->pwrseq);
-+		break;
-+
- 	default:
- 		gpiod_set_value_cansleep(qcadev->bt_en, 0);
- 	}
-@@ -2308,12 +2332,25 @@ static int qca_serdev_probe(struct serdev_device *serdev)
- 	case QCA_WCN6750:
- 	case QCA_WCN6855:
- 	case QCA_WCN7850:
-+	case QCA_QCA6390:
- 		qcadev->bt_power = devm_kzalloc(&serdev->dev,
- 						sizeof(struct qca_power),
- 						GFP_KERNEL);
- 		if (!qcadev->bt_power)
- 			return -ENOMEM;
-+		break;
-+	default:
-+		break;
-+	}
- 
-+	switch (qcadev->btsoc_type) {
-+	case QCA_WCN3988:
-+	case QCA_WCN3990:
-+	case QCA_WCN3991:
-+	case QCA_WCN3998:
-+	case QCA_WCN6750:
-+	case QCA_WCN6855:
-+	case QCA_WCN7850:
- 		qcadev->bt_power->dev = &serdev->dev;
- 		err = qca_init_regulators(qcadev->bt_power, data->vregs,
- 					  data->num_vregs);
-@@ -2354,6 +2391,13 @@ static int qca_serdev_probe(struct serdev_device *serdev)
- 		}
- 		break;
- 
-+	case QCA_QCA6390:
-+		qcadev->bt_power->pwrseq = devm_pwrseq_get(&serdev->dev,
-+							   "bluetooth");
-+		if (IS_ERR(qcadev->bt_power->pwrseq))
-+			return PTR_ERR(qcadev->bt_power->pwrseq);
-+		fallthrough;
-+
- 	default:
- 		qcadev->bt_en = devm_gpiod_get_optional(&serdev->dev, "enable",
- 					       GPIOD_OUT_LOW);
++MODULE_AUTHOR("Bartosz Golaszewski <bartosz.golaszewski@linaro.org>");
++MODULE_DESCRIPTION("Generic PCI Power Control module for power sequenced devices");
++MODULE_LICENSE("GPL");
 -- 
 2.40.1
 
