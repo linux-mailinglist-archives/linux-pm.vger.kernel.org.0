@@ -1,178 +1,123 @@
-Return-Path: <linux-pm+bounces-5338-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5339-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06C7C88B460
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 23:42:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E880A88ABD1
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 18:34:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 50F42B41ED0
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 17:29:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 87E171F62B7F
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 17:34:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74C6312FB2D;
-	Mon, 25 Mar 2024 16:23:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCD25145FEC;
+	Mon, 25 Mar 2024 16:31:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="bNg693gY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HGmn/RET"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D33D50A75
-	for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 16:23:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDB71145FE7;
+	Mon, 25 Mar 2024 16:31:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711383830; cv=none; b=HctyHCjQ4f/gAxFx5RIFPDkMoMJisLCvlSVGCnFv1kpUbUC2C8Kzz8YER22SGp+Q6+uLOKE1/kyuvC9TDtLQ36g51lmjRwUkQKWUds3lZk9ttL4NTNmI97AcUM08GukWniGO3RuE3xSlm2yzxg4FpxtMMotIL/vpRh9g/sinbkU=
+	t=1711384309; cv=none; b=jnImbsno4kaPJrQUqfQYb2Lfcwe23m11bt0q9n1gbcXEjXdVWP0gtauTFWKmfMmOisIPIurr33b8Cwz2MkqWhvMXj3Ijt9S1t3DKCgLfaOcwJWr75mcxQV8tifvaLAoSD2PJniRD20DJ2KRcWtH8+Csqr+uODPL4ylusRxDOWuI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711383830; c=relaxed/simple;
-	bh=YFrRYJmE2c0Njd/WjfccaQYzVP23csJig+MqZX6xV88=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SMRFEG959RM1gzg/8vh46iBG9s5NU4y7lNr0WVxfL5JzQX8JY+dHn0nKMP6EVIJz6TU/Mt5e6IWGn374IjjXWp5Bjajy4uk8f6GVJhNKpfzzXfG9WRHYbFg3vmNr2u3iOLsCIW3l4Qt+JPc8O54HdiY7B6cqjuRme5wE/ZXgi/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=bNg693gY; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-513cf9bacf1so6166391e87.0
-        for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 09:23:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1711383826; x=1711988626; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rFcfwD2v6qpH4vAhBOADFCJxvrI715+cznBhJwreFCA=;
-        b=bNg693gYe+XqMbXPLwytAj1DW4TWOdFgIkYynhGZ5jLpywIn73CoqucTs3oAz8BXmi
-         k/Ivm6vwfw2fk13UUlQTvpD+XOJqmL2smuv253/e4EYqGUVC/F5E55gbZGVSFIV6c4T+
-         IVRcHRt10DBkqxd5bu307cFUdzzSJqs/CYXplnrB6BT3w61HjpmbKzV8QK9aDcLsxUpA
-         tSUOE5VIYP4vR+gbt0xhK1NDwyiYNMC2LIPd8ySb9bAaD2IfUqEJAYyc9Nmbc5bbHsfZ
-         nR/Q3Rp3A50GLOyCF5d4juoXyxED0bdEXlmhBJf0CX1jnARlkRekA2F/tTDZ8zCtahKJ
-         urXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711383826; x=1711988626;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rFcfwD2v6qpH4vAhBOADFCJxvrI715+cznBhJwreFCA=;
-        b=fMwdLv9bTf5ACIhVrJBxbUDf5qnEM4IDS2kv1ItURdUXypmwYHcV/aiP9UPW12Ccq3
-         iP3Zb7eNhih3lvWVLFZCLE9OvsiOj4qO53S47hOa12DII2vcVFFgFCPSmdpTmottK7BY
-         C9gDbpLtAgonFC7TF5QW9njqFIP1RnI9UyTjHY30abu8CWiuFHlKFqld8MENE4azQuQV
-         W+cDnyX2jn7vB9x+P6VqEIkiT4pVtBsMGgs/PwvzSkNDGHfnM/Mo1I3qF+0FowM7QNqU
-         AnPFo6ZF1p4LpNQyFl8TbsMYU1trYDsWzrUT9TitP4mom3rq0svfnD8Xi8t/D6XRQv9J
-         L6Hw==
-X-Forwarded-Encrypted: i=1; AJvYcCXB1NcJ9SIqHshffLf/D+lp2rrKBxO+2S/iJM8j1Ao+Ixb68Q/MiYGR8ko3l7KsskE4Xs/uWH62QtVOj3/A+4upUMz3cuhuWEA=
-X-Gm-Message-State: AOJu0Yx9+kV4H3hSqOl+Pao0RXqbqDeNYVnliXNF6BxueCsWaJsT0haq
-	9edzV7prA8SqtbncYpeHAPfMMaq+FSSFS1b8+TF9K83aDaBE+cUrOYSH9e94ki1e/3f0jUVqoxh
-	bv2iMtYrx8W5QEPS/aMPFi7D4QEc7iQyI0kUc1g==
-X-Google-Smtp-Source: AGHT+IH4j5PPquST9xGKo8St/ikKbO6tk+Yedi+DAtFkCTZT5UC4mlTlEQkIXAn9mq4Oivrt7Ob9WJnK0Bj5SKvyufE=
-X-Received: by 2002:a2e:8085:0:b0:2d4:ffe:c55e with SMTP id
- i5-20020a2e8085000000b002d40ffec55emr4716403ljg.25.1711383826136; Mon, 25 Mar
- 2024 09:23:46 -0700 (PDT)
+	s=arc-20240116; t=1711384309; c=relaxed/simple;
+	bh=J6kX6hIi3srqIc3d27UOrwKWtKhvzO16N5KYIadUfQ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lqo7jz9tPLYIP3m/0leNioPg7WhALSmCo8Cx4JieKTsVVPfEMffuocZZS7HqkHLBGz6KTOVl1JD4lAVDlf8uFRWA/sma5bX1jaCZsNwNb+dgM3B88WqTSncqXehbgmG+gRRPm4X6Fwe4P/f5p/1zd+o2+sbM8CqoO4yHqua2o8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HGmn/RET; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711384308; x=1742920308;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=J6kX6hIi3srqIc3d27UOrwKWtKhvzO16N5KYIadUfQ8=;
+  b=HGmn/RETqqLs0uFGchxojOJlycuOmbbLaGpsTDxcF13jopDA91rEzt/X
+   7ke4wpHs9496Q+GuZeqKjB3SFjzKFHxkOS35ztAYzvX9aqYTdJ2fhIjyu
+   TS4y/qYnyjxd0EuHd9EHMwezK4Ynb+M0V0esl6QFndXuyL6NUrd6XkOJ/
+   efNhjhYADe1tC4kqxwVTsfzpYCvZ/KwjV8xpR3fLqi+5Cvaug8/H8N5qo
+   ZQ7GggljOepFIEc/cp1KsWXlKNBUwciNOUQHpsvip2w4Xqz4C6wz+P9EW
+   6XqMKFkvoEstYZuM44o6a+8AD1ztSInG0DcaS77G7MDtouVFf126LAxRm
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11024"; a="17028592"
+X-IronPort-AV: E=Sophos;i="6.07,153,1708416000"; 
+   d="scan'208";a="17028592"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2024 09:31:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11024"; a="914848517"
+X-IronPort-AV: E=Sophos;i="6.07,153,1708416000"; 
+   d="scan'208";a="914848517"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2024 09:31:44 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@intel.com>)
+	id 1ronEb-0000000G2xE-2Yez;
+	Mon, 25 Mar 2024 18:31:41 +0200
+Date: Mon, 25 Mar 2024 18:31:41 +0200
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Hans de Goede <hdegoede@redhat.com>
+Cc: Kate Hsuan <hpa@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+	Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	=?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>,
+	linux-kernel@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v5 1/6] platform: x86-android-tablets: other: Add swnode
+ for Xiaomi pad2 indicator LED
+Message-ID: <ZgGm7eDBQtwH37ya@smile.fi.intel.com>
+References: <20240322033736.9344-1-hpa@redhat.com>
+ <20240322033736.9344-2-hpa@redhat.com>
+ <bb7536be-9bed-4557-b111-6409ebfe48f4@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240325131624.26023-1-brgl@bgdev.pl> <20240325131624.26023-5-brgl@bgdev.pl>
- <87r0fy8lde.fsf@kernel.org> <CAMRc=Mc2Tc8oHr5NVo=aHAADkJtGCDAVvJs+7V-19m2zGi-vbw@mail.gmail.com>
- <87frwe8jiu.fsf@kernel.org>
-In-Reply-To: <87frwe8jiu.fsf@kernel.org>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Mon, 25 Mar 2024 17:23:35 +0100
-Message-ID: <CAMRc=MdCv+vTMZML-wzRQqZZavquV3DABYM4KYw-HwqS47sTyw@mail.gmail.com>
-Subject: Re: [PATCH v6 04/16] dt-bindings: net: wireless: qcom,ath11k:
- describe the ath11k on QCA6390
-To: Kalle Valo <kvalo@kernel.org>
-Cc: Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Saravana Kannan <saravanak@google.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Arnd Bergmann <arnd@arndb.de>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Alex Elder <elder@linaro.org>, Srini Kandagatla <srinivas.kandagatla@linaro.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Abel Vesa <abel.vesa@linaro.org>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Lukas Wunner <lukas@wunner.de>, 
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, linux-bluetooth@vger.kernel.org, 
-	netdev@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, ath11k@lists.infradead.org, 
-	Johan Hovold <johan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bb7536be-9bed-4557-b111-6409ebfe48f4@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Mon, Mar 25, 2024 at 3:37=E2=80=AFPM Kalle Valo <kvalo@kernel.org> wrote=
-:
->
-> Bartosz Golaszewski <brgl@bgdev.pl> writes:
->
-> > On Mon, Mar 25, 2024 at 2:57=E2=80=AFPM Kalle Valo <kvalo@kernel.org> w=
-rote:
-> >
-> >>
-> >> Bartosz Golaszewski <brgl@bgdev.pl> writes:
-> >>
-> >> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> >> >
-> >> > Add a PCI compatible for the ATH11K module on QCA6390 and describe t=
-he
-> >> > power inputs from the PMU that it consumes.
-> >> >
-> >> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> >>
-> >> [...]
-> >>
-> >> > +allOf:
-> >> > +  - if:
-> >> > +      properties:
-> >> > +        compatible:
-> >> > +          contains:
-> >> > +            const: pci17cb,1101
-> >> > +    then:
-> >> > +      required:
-> >> > +        - vddrfacmn-supply
-> >> > +        - vddaon-supply
-> >> > +        - vddwlcx-supply
-> >> > +        - vddwlmx-supply
-> >> > +        - vddrfa0p8-supply
-> >> > +        - vddrfa1p2-supply
-> >> > +        - vddrfa1p7-supply
-> >> > +        - vddpcie0p9-supply
-> >> > +        - vddpcie1p8-supply
-> >>
-> >> I don't know DT well enough to know what the "required:" above means,
-> >> but does this take into account that there are normal "plug&play" type
-> >> of QCA6390 boards as well which don't need any DT settings?
-> >
-> > Do they require a DT node though for some reason?
->
-> You can attach the device to any PCI slot, connect the WLAN antenna and
-> it just works without DT nodes. I'm trying to make sure here that basic
-> setup still works.
->
+On Mon, Mar 25, 2024 at 04:02:54PM +0100, Hans de Goede wrote:
+> On 3/22/24 4:37 AM, Kate Hsuan wrote:
+> > There is a KTD2026 LED controller to manage the indicator LED for Xiaomi
+> > pad2. The ACPI for it is not properly made so the kernel can't get
+> > a correct description of it.
+> > 
+> > This work add a description for this RGB LED controller and also set a
+> > trigger to indicate the chaging event (bq27520-0-charging). When it is
+> > charging, the indicator LED will be turn on.
+> > 
+> > Signed-off-by: Kate Hsuan <hpa@redhat.com>
+> 
+> Thank you for your patch, I've applied this patch to my review-hans 
+> branch:
+> https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+> 
+> I will also merge [PATCH v5 6/6] platform: x86-android-tablets:
+> others: Set the LED trigger to charging_red_full_green for Xiaomi pad2"
+> 
+> Once the new power_supply trigger patch this relies on has been
+> accepted.
+> 
+> Once I've run some tests on this branch the patches there will be
+> added to the platform-drivers-x86/for-next branch and eventually
+> will be included in the pdx86 pull-request to Linus for the next
+> merge-window.
 
-Sure, definitely. I there's no DT node, then the binding doesn't apply
-and the driver (the platform part of it) will not probe.
+I believe I have commented on the "RESEND" version.
 
-> Adding also Johan and ath11k list. For example, I don't know what's the
-> plan with Lenovo X13s, will it use this framework? I guess in theory we
-> could have devices which use qcom,ath11k-calibration-variant from DT but
-> not any of these supply properties?
->
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Good point. I will receive the X13s in a month from now. I do plan on
-upstreaming correct support for WLAN and BT for it as well.
 
-I guess we can always relax the requirements once a valid use-case appears?
-
-Bart
-
-> --
-> https://patchwork.kernel.org/project/linux-wireless/list/
->
-> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpa=
-tches
 
