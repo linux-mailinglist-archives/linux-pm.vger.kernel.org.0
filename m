@@ -1,380 +1,260 @@
-Return-Path: <linux-pm+bounces-5281-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5272-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74AED889EE6
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 13:19:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC95A889D3A
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 12:39:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2FDB5B42434
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 12:09:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D6B4AB3AF1D
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 11:03:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A5294DA0E;
-	Mon, 25 Mar 2024 07:31:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7947153827;
+	Mon, 25 Mar 2024 06:16:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="gi52Qiak"
+	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="f+W+83Kz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2046.outbound.protection.outlook.com [40.107.93.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C9A1158D6F;
-	Mon, 25 Mar 2024 02:45:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711334714; cv=fail; b=RLY9Fcr+Aaos+vsPdAS+Z80u0eXgFNAoT5qn2vhPAeEOYbflLmsiQTShXUx/fiy0iH+7iYc5IxktEHib7QCt4oMF/YSB7ySaPh7KCo6CofCfmd+b6RNUs/IfPG0mON36yLRXt09BlUb1btdh2VpHhKFfI3apcifpEsqqF1P6oeU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711334714; c=relaxed/simple;
-	bh=NwH2O43t/snPvttdpiRHWCDdXMclWeFpxDL6Pg1vlOM=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=a6lCXD5lEMySRatLlw6GzASfexT+E3Lk3FUeghjCl9eA84UlHvSNyqwfPiWfDDCel+l2KNZZvXo1gmc86stCwwJTYtWXwXjzsUMTjULLP5NKaVvsxWM/NAqhcgsJ09lK3nVPpCQXSL0KZu1Mz76aB8g247kzsZnF0jmlTHMf3hU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=gi52Qiak; arc=fail smtp.client-ip=40.107.93.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UVdVGnjCmm6UMhiY+f6HhGhvIdN+2Yl9cC/pfrz1HtHtf/ueIU89FwdD9+vtJK8J7WLZEGWOhLd7Le+S/B2WV2ZB/zY/FhmX64Rgd8CWe5CYZeqyrJN1WwBzXUD+myHmnfCeON3F/R0FyTrIy+WVk0Xbn7E8eDYHLNc8kck5moVBrxYkd2oVKNfxzDnkgeQjdi6tJWqsl/HHFbqiqhImWoipzGNCUGPr/qiOiQF3xt2gTSgDv2DUzjH05C15UKiakXyaBk3nRoxZzGw8EBhcnnDNHM5jc+AeoP748kNaANV3DvM2a+4CI56gEQFeNE4WpGWDJoIfmSzwHo5o4awoXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=flMclZhDAGIH2wQzRHQcJMrRUvLUrjncOiqByEc0Zx4=;
- b=Mex94stF/jkVGVuYQdqCkwy6Eg4+gqU7tf/RJKFcYxF5uYtcidlbJTuc37v7b1CEomI9BvldkfZr0fYx0Xmf24uuOkj8x5koKmrMTeHdxgsM+2wM6Xwb6KKUISeDCvd2CR1m3nwZQ79gEizLySRlDb4nBPA++YvqvMKo8y5Bt8rvBtOuvalPf62O3i0abqsw94t2e4kAML8QV9Z1bjVHAlyzsfgTaw7ItXLXtqBUM1R0S/FkEkyCruT2NonQaqOXIuSNJgYXE35Y0U8xjERW4bYRDWDhl4UzO6jHzv9duwNqjn7n9tYfFUmhTsJ6NKLzMCkpluweO9cOE+aVynsKKw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=flMclZhDAGIH2wQzRHQcJMrRUvLUrjncOiqByEc0Zx4=;
- b=gi52QiakFtX6lETZPexqZNMrlZbAPRSHyDK+ZIjcWmUqiRpSdO67h21ofRkTkM37oFFick8Icu3gJgMYn7iQ7MudMp1lwXyjCgq3r52VCGZpcfhSTY4t4Ryf/bjaO958ehR2gfZg2u97xUfEbyQ4hDpu4aGCYJGFq38lhedtzQM=
-Received: from DM4PR12MB6351.namprd12.prod.outlook.com (2603:10b6:8:a2::6) by
- SA1PR12MB6848.namprd12.prod.outlook.com (2603:10b6:806:25f::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7409.31; Mon, 25 Mar 2024 02:45:05 +0000
-Received: from DM4PR12MB6351.namprd12.prod.outlook.com
- ([fe80::3c13:5719:7068:2510]) by DM4PR12MB6351.namprd12.prod.outlook.com
- ([fe80::3c13:5719:7068:2510%3]) with mapi id 15.20.7409.028; Mon, 25 Mar 2024
- 02:45:05 +0000
-From: "Meng, Li (Jassmine)" <Li.Meng@amd.com>
-To: "Yuan, Perry" <Perry.Yuan@amd.com>, "rafael.j.wysocki@intel.com"
-	<rafael.j.wysocki@intel.com>, "Limonciello, Mario"
-	<Mario.Limonciello@amd.com>, "viresh.kumar@linaro.org"
-	<viresh.kumar@linaro.org>, "Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>,
-	"Petkov, Borislav" <Borislav.Petkov@amd.com>, "Huang, Ray"
-	<Ray.Huang@amd.com>
-CC: "Deucher, Alexander" <Alexander.Deucher@amd.com>, "Huang, Shimmer"
-	<Shimmer.Huang@amd.com>, "oleksandr@natalenko.name"
-	<oleksandr@natalenko.name>, "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v9 3/8] cpufreq: amd-pstate: Unify computation of
- {max,min,nominal,lowest_nonlinear}_freq
-Thread-Topic: [PATCH v9 3/8] cpufreq: amd-pstate: Unify computation of
- {max,min,nominal,lowest_nonlinear}_freq
-Thread-Index: AQHaedeL/Hxpmwm2r0WP6cjAfni8wbFHySVg
-Date: Mon, 25 Mar 2024 02:45:05 +0000
-Message-ID:
- <DM4PR12MB6351C2321B5CC581B158ADBFF7362@DM4PR12MB6351.namprd12.prod.outlook.com>
-References: <cover.1710836407.git.perry.yuan@amd.com>
- <a30932a44090a025c73ea0fc81fe0d998e9b6dae.1710836407.git.perry.yuan@amd.com>
-In-Reply-To:
- <a30932a44090a025c73ea0fc81fe0d998e9b6dae.1710836407.git.perry.yuan@amd.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=22d420be-691d-4716-b468-9d08038866f4;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2024-03-25T02:44:53Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR12MB6351:EE_|SA1PR12MB6848:EE_
-x-ms-office365-filtering-correlation-id: 2041b0a5-26d4-4215-cd99-08dc4c7593a2
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- NMcOspEQKtOEV/PfzmdS3zpOJh/Aagt0/ZxVD/tNG/42DbSiiUgFjv1VcQyQI/9yElxiYHCDr3P37JbJPIOpW5IrXjE6LDNdiZ4QTjqwQm3aX//a7P4IQO9THv6E77TPqHSHUDbA0+75VMFAS+/ggg394kwYMEL3jYIRRde13jne7OZ5LrUymNdl/oXSX/G/OhBEAnh/7x7rAphq4P+6z7em4IEwkxfFLaAxtJLJHDd5E/LNQoUMpYSHsFVLqPe4IlXBBZb9KwX95bm14pYGuBLyXap5oz/8fFKc+n98UoyACKR9P9cvdZCRiwsL6Bq1QfvwWgJnGzgMPZZLcMJ+vPBvxzfvALnPHNvcVsjGjHM2LpNZj3gI53UUMRqcOgLk9cUuB104+TxEij2leyaKBXtUYXALJmT9JcvhJahPErkGld9icrjFtWsWIuZwCmVS6vvSuIenw9XnKApeM4ZnO/uk9kFmZ7MLWhcecdtGxkapWNKDsiRN+Hdq8sncGKzGW1tjx/Zw+bKS+PWlmuB3wDmxeC5lSlYisiQxyA8TjoljN5raTfNncl9NjynVgYcM1svwamHTnrkGfDkHh+6zlS1CDMEUUQY8Cj3gRsGRwrK7vc9WX5nG0n0diK6jBLFE0XLqebUTcnAmlGdXRLiJuV29u2A98cTu+/8yfe9ydORiEk24dpq0/zwT90q+R2aaLJomPjx1jJpGemkYK6Mvx6WXwaolGqDhkD0epIiurd4=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6351.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(376005)(366007)(38070700009)(921011);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?wbDkUfj4f3zljmXl1DsNhz6S6tC/vi8zqlR0eOIJGPMmtYILb4tDZOio6pRF?=
- =?us-ascii?Q?oeWY/7MFqcWZOdDaK0jSG07z7/sI/lXebxBZcF31oJLZoXU8RAQnWz/phspC?=
- =?us-ascii?Q?nFn0J3KpR0LR0m7BomJ9HP6iO+xQBTtGLq6UNXMBdks+7r+L9wDpFFEaghXr?=
- =?us-ascii?Q?uNSVYCNWjlBQxRTdMTIOHDzQoupxtf02cwg5xVvKIvU8iQjqlOtvk7bVefOz?=
- =?us-ascii?Q?DHudhmg1dCOt8Y/S8Vwzqa94eU1tvpL7UArYyNc3McEQJ63g//Tk2s2qTZ3Y?=
- =?us-ascii?Q?c7riclZDIUIraaJIY53hSBOR24UrdhguWZyzMcuzCgdlt7b+Z0llfgfgVfO2?=
- =?us-ascii?Q?MWx95qauuggjQinSesnselIuOhL/wpJQ5KxlqUTB16SdShBLBbXC0PlgFICQ?=
- =?us-ascii?Q?Ym843uTPlKFAIt/6Z9yhJevvPciKlS9IkiIx1UHYU6H5gIRmqHHvFIeCKp/i?=
- =?us-ascii?Q?wNfGuoUwWOqqT75WgnwxSwy9XkIzmxs1rZTr3o07tj0qVe3BcYf2A4v60xsT?=
- =?us-ascii?Q?eJIMIHxpDpQjXj2kAWEzYrYtw3O4bSHpJfmeXCRr0oqfmCVZw/UOCfKvkhN0?=
- =?us-ascii?Q?QKrsH0nAXcG6k0+heyxsJe+uyQIJDS1InmQ8vWhp/DSFgLaGe3VC75N55Ys2?=
- =?us-ascii?Q?uaf45SnqHcYBFCPrd8UeqBkYXAyDXJJIONHbGz36ZzyNvPnIXHkuA+qsJ9TQ?=
- =?us-ascii?Q?v1Bpq/XrXr/MJ1SQUMZVoO0AHvuq9wN4vGsszK3Sm5VQqCLOoOqYRX6PNXRg?=
- =?us-ascii?Q?4GAk5HoKQh0FuDIGi6Is8hRygG4TQ+5Zv6iUCNVFJH/1HbD7hQqm3VMSoWko?=
- =?us-ascii?Q?Jq3CkJ39xQ1Y/Jp3fHejaiWU/WPKhcVzCafjrSadWpgJzGHPg7/OEMB8ANT8?=
- =?us-ascii?Q?g7Sxmp/awbW4u1sjPfdACV8yp37LFkHmq0JAM0CazJZ2Rq50milYz7SY79uv?=
- =?us-ascii?Q?eCSu9bcpkkvFH5lf0ypYo4ayuaJTP+pPjjysYG09hC8WuL6+q8LWML0qaECm?=
- =?us-ascii?Q?/fmP5vYoWQAO+MQDD1pi5lZIaro4Lbbyu0e+owBKz2SGHYiKtZMdH7PC2Xnq?=
- =?us-ascii?Q?PHfRw+UcYqmzSCXS/qslFIB71bJt/zlC0GWsRULhRq9iuLHd7qltTG90cykZ?=
- =?us-ascii?Q?PAKgb4TKytsxsCEs3EAoLJPlK0vAIdx03JA8aS5t2SQ+0WTD57+soX4A3OQB?=
- =?us-ascii?Q?2pNRlbWLNYxmfAshS8gSQWjALz74ByCqtItzOqcHSNhcBx7fxUtu3TWQzA1L?=
- =?us-ascii?Q?quRsDJTv4HB1gXUQ+xeZlH/Yc4+5MctquRbsIa5FA3FEu05eq89fhBA8j5JT?=
- =?us-ascii?Q?zq9JxdGmxqTZyGFoNSX3flkMJ/ZFjf88l5cHpEpacrOxVs+J71HGLpai0Cu+?=
- =?us-ascii?Q?wsBBVsMwftgtMLHV/0DnkitOwu2xfi5E956tau5qSHeO+GK0c+Uj6LiOYUeb?=
- =?us-ascii?Q?TQYk0V5iR9TvAIFByxrZjf/IFBf3n+3W2f7qtbeF/gEjidg/7M1gN+0sbk+k?=
- =?us-ascii?Q?a7ktFFroN5fgRknhovIt3QReDrLZcqG4rkaNWarDKqxQiS8NfEuU23Vc05TI?=
- =?us-ascii?Q?WyO+5p9+CVLHBLdhQlA=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6B1A16B45A
+	for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 02:53:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711335195; cv=none; b=tbz2MUUaCRJqB46cSeXXYSVcvk99wNCC/vBAbrcpc8kBoZ4IOJA8gFK0KNHgKwZTjSteIUkspa6opBvuE8kwlSnlxaUAcnO4Dufzr9+jBlS5forP5+foUsZkzu7a+fYUQOrixl0MRm01JYrwBGX8UDwil2zTU6B1MBVsbNGw9jc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711335195; c=relaxed/simple;
+	bh=Iwy35WEKGQaZWaKUprvpCF3gybVRdIbsl3SsAExl21c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Dde5srmqZrumkHoNne1TeRbmVTf8o0UlXhHcMsq0YxXY8Wcx9eYTKwuVvqb9N1ljFKXwiTVy/Y1fjJ7SnMDXlQK+6cjmnJhUv9HqEzVMbM3LHlqOO+mMxemsLnADl5/7Yj89EsUkLyh151NrXcNl/CpFOkWwi4bHBjc3bWukBDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=f+W+83Kz; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-34175878e30so2770747f8f.3
+        for <linux-pm@vger.kernel.org>; Sun, 24 Mar 2024 19:53:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1711335190; x=1711939990; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IQSoGNn9foRvk9xNgJy3vvfi1aDXWec9jix0W40tVdQ=;
+        b=f+W+83KzVcFgOnBIYaWOsLNSTXRgX51IOnmNuCNUJmS/2G7HN6h2q2KVBH81do868A
+         TOmAPiVO1AGVIF62bokjqbMA/KLKbR5PYslQgnzkLoBBrjOuTdHNvSWnQazK4Hu0Yvns
+         Tgwss8zuyfX7MPLtdKvSiwV9nP1+OIHceTc3cb2Zzno9rzb7PiCmTQDEqp8SatcPatLe
+         CtYkuXTESqoTwsnpSystKMCNBRpN0TOalAu965meiWNZ4LQOQYKTuDC298uBvHsaDBbJ
+         AHLPidWzdNIvUmy/EQMM3MW4rgPgcms49zh+u9gUAd6q9bOZ+fD/Unisf8TQb+TUEe1d
+         m3cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711335190; x=1711939990;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IQSoGNn9foRvk9xNgJy3vvfi1aDXWec9jix0W40tVdQ=;
+        b=w4meX/WriS3u/SF8zQmpTVkdeXGLXxyGhMIRN+sgKZC+I7gwUCN+fD/zOSeaaZotDm
+         lkqLWqqDoVMSOgyp9Hp4WNsYgV8nwnwqFfIUwJ1y3sqB7oNJ4xbDKXOmmEd3zrtaZF5Z
+         1z9+ZcfWNkPVcvqXDzlEN4ha6vdnkdhOm4el8035StP44x2v1aDDAImy+zizQ07xCkUZ
+         y15IVfUOEAaS0IA6wLd2RlDQOLJ/SF/OlvT6kWf2qIvkR8i1aspPKq5NC1HT8Xt5+/Vs
+         V489FKqEEqUH+DA3XhN1mOF7BooXt1+tqEdc7jnbXV4p16OLw/bT+FW2K4YsfkLXuCae
+         A1QQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVLWYDosQoZh1JO363DVZzIY1/NytsQamoxOztcwDVoxTsyOuoVJcbfTJbEob0QrGtdVSo7sXeAcHENdoU5IPLrZqxbMjrRzYM=
+X-Gm-Message-State: AOJu0Yw6r9ziC4S5AY0w0C4v4tULPdXo3yn5+naq2pqyXruwFFvfOh35
+	jrisb7uSQ6yxu4RMGrLsYAr0dm1a2ibEUiUXb0KEl57rCfoprIFSOrhpwiRHokM=
+X-Google-Smtp-Source: AGHT+IG59/Ky716HurdeTVFpnSrvFsweZy84YJGoZ4Hi4NSc7jmRa3TENi3PZTobj8KmtDnOKAn23Q==
+X-Received: by 2002:a05:6000:d8c:b0:33e:7ae6:6f4a with SMTP id dv12-20020a0560000d8c00b0033e7ae66f4amr4380793wrb.23.1711335190261;
+        Sun, 24 Mar 2024 19:53:10 -0700 (PDT)
+Received: from airbuntu (host81-157-90-255.range81-157.btcentralplus.com. [81.157.90.255])
+        by smtp.gmail.com with ESMTPSA id t15-20020a5d690f000000b0033e95bf4796sm8123808wru.27.2024.03.24.19.53.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Mar 2024 19:53:09 -0700 (PDT)
+Date: Mon, 25 Mar 2024 02:53:08 +0000
+From: Qais Yousef <qyousef@layalina.io>
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: Bart Van Assche <bvanassche@acm.org>, linux-kernel@vger.kernel.org,
+	peterz@infradead.org, juri.lelli@redhat.com, mingo@redhat.com,
+	rafael@kernel.org, dietmar.eggemann@arm.com, vschneid@redhat.com,
+	vincent.guittot@linaro.org, Johannes.Thumshirn@wdc.com,
+	adrian.hunter@intel.com, ulf.hansson@linaro.org, andres@anarazel.de,
+	asml.silence@gmail.com, linux-pm@vger.kernel.org,
+	linux-block@vger.kernel.org, io-uring@vger.kernel.org,
+	linux-mmc@vger.kernel.org
+Subject: Re: [RFC PATCH 0/2] Introduce per-task io utilization boost
+Message-ID: <20240325025308.6uqkhpyba6moxntl@airbuntu>
+References: <20240304201625.100619-1-christian.loehle@arm.com>
+ <86f0af00-8765-4481-9245-1819fb2c6379@acm.org>
+ <0dc6a839-2922-40ac-8854-2884196da9b9@arm.com>
+ <c5b7fc1f-f233-4d25-952b-539607c2a0cc@acm.org>
+ <2784c093-eea1-4b73-87da-1a45f14013c8@arm.com>
+ <20240321123935.zqscwi2aom7lfhts@airbuntu>
+ <1ff973fc-66a4-446e-8590-ec655c686c90@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6351.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2041b0a5-26d4-4215-cd99-08dc4c7593a2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Mar 2024 02:45:05.1438
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4D8JTe87FgosjC2YR7Pq/1BAstGm7RI5vACkW+0pOIUd4oUcHuCMHYQ58T+FyEmdHQ3PqeRdevBskJH4lr3f0g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6848
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1ff973fc-66a4-446e-8590-ec655c686c90@arm.com>
 
-[AMD Official Use Only - General]
+On 03/21/24 17:57, Christian Loehle wrote:
 
-> -----Original Message-----
-> From: Yuan, Perry <Perry.Yuan@amd.com>
-> Sent: Tuesday, March 19, 2024 4:29 PM
-> To: rafael.j.wysocki@intel.com; Limonciello, Mario
-> <Mario.Limonciello@amd.com>; viresh.kumar@linaro.org; Shenoy, Gautham
-> Ranjal <gautham.shenoy@amd.com>; Petkov, Borislav
-> <Borislav.Petkov@amd.com>; Huang, Ray <Ray.Huang@amd.com>
-> Cc: Deucher, Alexander <Alexander.Deucher@amd.com>; Huang, Shimmer
-> <Shimmer.Huang@amd.com>; oleksandr@natalenko.name; Du, Xiaojian
-> <Xiaojian.Du@amd.com>; Meng, Li (Jassmine) <Li.Meng@amd.com>; linux-
-> pm@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: [PATCH v9 3/8] cpufreq: amd-pstate: Unify computation of
-> {max,min,nominal,lowest_nonlinear}_freq
->
-> Currently the amd_get_{min, max, nominal, lowest_nonlinear}_freq()
-> helpers computes the values of min_freq, max_freq, nominal_freq and
-> lowest_nominal_freq respectively afresh from cppc_get_perf_caps(). This i=
-s
-> not necessary as there are fields in cpudata to cache these values.
->
-> To simplify this, add a single helper function named
-> amd_pstate_init_freq() which computes all these frequencies at once, and
-> caches it in cpudata.
->
-> Use the cached values everywhere else in the code.
->
-> Co-developed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-> Signed-off-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-> Signed-off-by: Perry Yuan <perry.yuan@amd.com>
-> ---
->  drivers/cpufreq/amd-pstate.c | 126 ++++++++++++++++-------------------
->  1 file changed, 59 insertions(+), 67 deletions(-)
->
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 2015c9fcc3c9..ba1baa6733e6 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -606,74 +606,22 @@ static void amd_pstate_adjust_perf(unsigned int
-> cpu,
->
->  static int amd_get_min_freq(struct amd_cpudata *cpudata)  {
-> -     struct cppc_perf_caps cppc_perf;
-> -
-> -     int ret =3D cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
-> -     if (ret)
-> -             return ret;
-> -
-> -     /* Switch to khz */
-> -     return cppc_perf.lowest_freq * 1000;
-> +     return READ_ONCE(cpudata->min_freq);
->  }
->
->  static int amd_get_max_freq(struct amd_cpudata *cpudata)  {
-> -     struct cppc_perf_caps cppc_perf;
-> -     u32 max_perf, max_freq, nominal_freq, nominal_perf;
-> -     u64 boost_ratio;
-> -
-> -     int ret =3D cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
-> -     if (ret)
-> -             return ret;
-> -
-> -     nominal_freq =3D cppc_perf.nominal_freq;
-> -     nominal_perf =3D READ_ONCE(cpudata->nominal_perf);
-> -     max_perf =3D READ_ONCE(cpudata->highest_perf);
-> -
-> -     boost_ratio =3D div_u64(max_perf << SCHED_CAPACITY_SHIFT,
-> -                           nominal_perf);
-> -
-> -     max_freq =3D nominal_freq * boost_ratio >> SCHED_CAPACITY_SHIFT;
-> -
-> -     /* Switch to khz */
-> -     return max_freq * 1000;
-> +     return READ_ONCE(cpudata->max_freq);
->  }
->
->  static int amd_get_nominal_freq(struct amd_cpudata *cpudata)  {
-> -     struct cppc_perf_caps cppc_perf;
-> -
-> -     int ret =3D cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
-> -     if (ret)
-> -             return ret;
-> -
-> -     /* Switch to khz */
-> -     return cppc_perf.nominal_freq * 1000;
-> +     return READ_ONCE(cpudata->nominal_freq);
->  }
->
->  static int amd_get_lowest_nonlinear_freq(struct amd_cpudata *cpudata)  {
-> -     struct cppc_perf_caps cppc_perf;
-> -     u32 lowest_nonlinear_freq, lowest_nonlinear_perf,
-> -         nominal_freq, nominal_perf;
-> -     u64 lowest_nonlinear_ratio;
-> -
-> -     int ret =3D cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
-> -     if (ret)
-> -             return ret;
-> -
-> -     nominal_freq =3D cppc_perf.nominal_freq;
-> -     nominal_perf =3D READ_ONCE(cpudata->nominal_perf);
-> -
-> -     lowest_nonlinear_perf =3D cppc_perf.lowest_nonlinear_perf;
-> -
-> -     lowest_nonlinear_ratio =3D div_u64(lowest_nonlinear_perf <<
-> SCHED_CAPACITY_SHIFT,
-> -                                      nominal_perf);
-> -
-> -     lowest_nonlinear_freq =3D nominal_freq * lowest_nonlinear_ratio >>
-> SCHED_CAPACITY_SHIFT;
-> -
-> -     /* Switch to khz */
-> -     return lowest_nonlinear_freq * 1000;
-> +     return READ_ONCE(cpudata->lowest_nonlinear_freq);
->  }
->
->  static int amd_pstate_set_boost(struct cpufreq_policy *policy, int state=
-)
-> @@ -828,6 +776,53 @@ static void amd_pstate_update_limits(unsigned int
-> cpu)
->       mutex_unlock(&amd_pstate_driver_lock);
->  }
->
-> +/**
-> + * amd_pstate_init_freq: Initialize the max_freq, min_freq,
-> + *                       nominal_freq and lowest_nonlinear_freq for
-> + *                       the @cpudata object.
-> + *
-> + *  Requires: highest_perf, lowest_perf, nominal_perf and
-> + *            lowest_nonlinear_perf members of @cpudata to be
-> + *            initialized.
-> + *
-> + *  Returns 0 on success, non-zero value on failure.
-> + */
-> +static int amd_pstate_init_freq(struct amd_cpudata *cpudata) {
-> +     int ret;
-> +     u32 min_freq;
-> +     u32 highest_perf, max_freq;
-> +     u32 nominal_perf, nominal_freq;
-> +     u32 lowest_nonlinear_perf, lowest_nonlinear_freq;
-> +     u32 boost_ratio, lowest_nonlinear_ratio;
-> +     struct cppc_perf_caps cppc_perf;
-> +
-> +
-> +     ret =3D cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
-> +     if (ret)
-> +             return ret;
-> +
-> +     min_freq =3D cppc_perf.lowest_freq * 1000;
-> +     nominal_freq =3D cppc_perf.nominal_freq * 1000;
-> +     nominal_perf =3D READ_ONCE(cpudata->nominal_perf);
-> +
-> +     highest_perf =3D READ_ONCE(cpudata->highest_perf);
-> +     boost_ratio =3D div_u64(highest_perf << SCHED_CAPACITY_SHIFT,
-> nominal_perf);
-> +     max_freq =3D nominal_freq * boost_ratio >> SCHED_CAPACITY_SHIFT;
-> +
-> +     lowest_nonlinear_perf =3D READ_ONCE(cpudata-
-> >lowest_nonlinear_perf);
-> +     lowest_nonlinear_ratio =3D div_u64(lowest_nonlinear_perf <<
-> SCHED_CAPACITY_SHIFT,
-> +                                      nominal_perf);
-> +     lowest_nonlinear_freq =3D nominal_freq * lowest_nonlinear_ratio >>
-> +SCHED_CAPACITY_SHIFT;
-> +
-> +     WRITE_ONCE(cpudata->min_freq, min_freq);
-> +     WRITE_ONCE(cpudata->lowest_nonlinear_freq,
-> lowest_nonlinear_freq);
-> +     WRITE_ONCE(cpudata->nominal_freq, nominal_freq);
-> +     WRITE_ONCE(cpudata->max_freq, max_freq);
-> +
-> +     return 0;
-> +}
-> +
->  static int amd_pstate_cpu_init(struct cpufreq_policy *policy)  {
->       int min_freq, max_freq, nominal_freq, lowest_nonlinear_freq, ret;
-> @@ -855,6 +850,10 @@ static int amd_pstate_cpu_init(struct cpufreq_policy
-> *policy)
->       if (ret)
->               goto free_cpudata1;
->
-> +     ret =3D amd_pstate_init_freq(cpudata);
-> +     if (ret)
-> +             goto free_cpudata1;
-> +
->       min_freq =3D amd_get_min_freq(cpudata);
->       max_freq =3D amd_get_max_freq(cpudata);
->       nominal_freq =3D amd_get_nominal_freq(cpudata); @@ -896,13
-> +895,8 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
->               goto free_cpudata2;
->       }
->
-> -     /* Initial processor data capability frequencies */
-> -     cpudata->max_freq =3D max_freq;
-> -     cpudata->min_freq =3D min_freq;
->       cpudata->max_limit_freq =3D max_freq;
->       cpudata->min_limit_freq =3D min_freq;
-> -     cpudata->nominal_freq =3D nominal_freq;
-> -     cpudata->lowest_nonlinear_freq =3D lowest_nonlinear_freq;
->
->       policy->driver_data =3D cpudata;
->
-> @@ -1317,6 +1311,10 @@ static int amd_pstate_epp_cpu_init(struct
-> cpufreq_policy *policy)
->       if (ret)
->               goto free_cpudata1;
->
-> +     ret =3D amd_pstate_init_freq(cpudata);
-> +     if (ret)
-> +             goto free_cpudata1;
-> +
->       min_freq =3D amd_get_min_freq(cpudata);
->       max_freq =3D amd_get_max_freq(cpudata);
->       nominal_freq =3D amd_get_nominal_freq(cpudata); @@ -1333,12
-> +1331,6 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy
-> *policy)
->       /* It will be updated by governor */
->       policy->cur =3D policy->cpuinfo.min_freq;
->
-> -     /* Initial processor data capability frequencies */
-> -     cpudata->max_freq =3D max_freq;
-> -     cpudata->min_freq =3D min_freq;
-> -     cpudata->nominal_freq =3D nominal_freq;
-> -     cpudata->lowest_nonlinear_freq =3D lowest_nonlinear_freq;
-> -
->       policy->driver_data =3D cpudata;
->
->       cpudata->epp_cached =3D amd_pstate_get_epp(cpudata, 0);
-> --
-> 2.34.1
-[Meng, Li (Jassmine)]
-Reviewed-by: Li Meng < li.meng@amd.com>
+> > So you want the hardirq to move to the big core? Unlike softirq, there will be
+> > a single hardirq for the controller (to my limited knowledge), so if there are
+> > multiple requests I'm not sure we can easily match which one relates to which
+> > before it triggers. So we can end up waking up the wrong core.
+> 
+> It would be beneficial to move the hardirq to a big core if the IO task
+> is using it anyway.
+> I'm not sure I actually want to. There are quite a few pitfalls (like you
 
+I'm actually against it. I think it's too much complexity for not necessasrily
+a big gain. FWIW, one of the design request to get per task iowait boost so
+that we can *disable* it. It wastes power when only a handful of tasks actually
+care about perf.
+
+Caring where the hardirq run for perf is unlikely a problem in practice.
+Softirq should follow the requester already when it matters.
+
+> mentioned) that the scheduler really shouldn't be concerned about.
+> Moving the hardirq, if implemented in the kernel, would have to be done by the
+> host controller driver anyway, which would explode this series.
+> (host controller drivers are quite fragmented e.g. on mmc)
+> 
+> The fact that having a higher capacity CPU available ("running faster") for an
+> IO task doesn't (always) imply higher throughput because of the hardirq staying
+> on some LITTLE CPU is bothering (for this series), though.
+> 
+> > 
+> > Generally this should be a userspace policy. If there's a scenario where the
+> > throughput is that important they can easily move the hardirq to the big core
+> > unconditionally and move it back again once this high throughput scenario is no
+> > longer important.
+> 
+> It also feels wrong to let this be a userspace policy, as the hardirq must be
+> migrated to the perf domain of the task, which userspace isn't aware of.
+> Unless you expect userspace to do
+
+irq balancer is a userspace policy. For kernel to make an automatic decision
+there are a lot of ifs must be present. Again, I don't see on such system
+maximizing throughput is a concern. And userspace can fix the problem simply
+- they know after all when the throughput really matters to the point where the
+hardirq runs is a bottleneck. In practice, I don't think it is a bottleneck.
+But this is my handwavy judgement. The experts know better. And note, I mean
+use cases that are not benchmarks ;-)
+
+> CPU_affinity_task=big_perf_domain_0 && hardirq_affinity=big_perf_domain_0
+> but then you could just as well ask them to set performance governor for
+> big_perf_domain_0 (or uclamp_min=1024) and need neither this series nor
+> any iowait boosting.
+> 
+> Furthermore you can't generally expect userspace to know if their IO will lead
+> to any interrupt at all, much less which one. They ideally don't even know if
+> the file IO they are doing is backed by any physical storage in the first place.
+> (Or even further, that they are doing file IO at all, they might just be
+> e.g. page-faulting.)
+
+The way I see it, it's like gigabit networking. The hardirq will matter once
+you reach such high throughput scenarios. Which are corner cases and not the
+norm?
+
+> 
+> > 
+> > Or where you describing a different problem?
+> 
+> That is the problem I mentioned in the series and Bart and I were discussing.
+> It's a problem of the series as in "the numbers aren't that impressive".
+> Current iowait boosting on embedded/mobile systems will perform quite well by
+> chance, as the (low util) task will often be on the same perf domain the hardirq
+> will be run on. As can be seen in the cover letter the benefit of running the
+> task on a (2xLITTLE capacity) big CPU therefore are practically non-existent,
+> for tri-gear systems where big CPU is more like 10xLITTLE capacity the benefit
+> will be much greater.
+> I just wanted to point this out. We might just acknowledge the problem and say
+> "don't care" about the potential performance benefits of those scenarios that
+> would require hardirq moving.
+
+I thought the softirq does the bulk of the work. hardirq being such
+a bottleneck is (naively maybe) a red flag for me that it's doing too much than
+a simple interrupt servicing.
+
+You don't boost when the task is sleeping, right? I think this is likely
+a cause of the problem where softirq is not running as fast - where before the
+series the CPU will be iowait boosted regardless the task is blocked or not.
+
+> In the long-term it looks like for UFS the problem will disappear as we are
+> expected to get one queue/hardirq per CPU (as Bart mentioned), on NVMe that
+> is already the case.
+> 
+> I CC'd Uffe and Adrian for mmc, to my knowledge the only subsystem where
+> 'fast' (let's say >10K IOPS) devices are common, but only one queue/hardirq
+> is available (and it doesn't look like this is changing anytime soon).
+> I would also love to hear what Bart or other UFS folks think about it.
+> Furthermore if I forgot any storage subsystem with the same behavior in that
+> regards do tell me.
+> 
+> Lastly, you could consider the IO workload:
+> IO task being in iowait very frequently [1] with just a single IO inflight [2]
+> and only very little time being spent on the CPU in-between iowaits[3],
+> therefore the interrupt handler being on the critical path for IO throughput
+> to a non-negligible degree, to be niche, but it's precisely the use-case where
+> iowait boosting shows it's biggest benefit.
+> 
+> Sorry for the abomination of a sentence, see footnotes for the reasons.
+> 
+> [1] If sugov doesn't see significantly more than 1 iowait per TICK_NSEC it
+> won't apply any significant boost currently.
+
+I CCed you to a patch where I fix this. I've been sleeping on it for too long.
+Maybe I should have split this fix out of the consolidation patch.
+
+> [2] If the storage devices has enough in-flight requests to serve, iowait
+> boosting is unnecessary/wasteful, see cover letter.
+> [3] If the task actually uses the CPU in-between iowaits, it will build up
+> utilization, iowait boosting benefit diminishes.
+
+The current mechanism is very aggressive. It needs to evolve for sure.
+
+> 
+> > 
+> > Glad to see your series by the way :-) I'll get a chance to review it over the
+> > weekend hopefully.
+> 
+> Thank you!
+> Apologies for not CCing you in the first place, I am curious about your opinion
+> on the concept!
+
+I actually had a patch that implements iowait boost per-task (on top of my
+remove uclamp max aggregation series) where I did actually take the extra step
+to remove iowait from intel_pstate. Can share the patches if you think you'll
+find them useful.
+
+Just want to note that this mechanism can end up waste power and this is an
+important direction to consider. It's not about perf only (which matters too).
+
+> 
+> FWIW I did mess up a last-minute, what was supposed to be, cosmetic change that
+> only received a quick smoke test, so 1/2 needs the following:
+> 
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 4aaf64023b03..2b6f521be658 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -6824,7 +6824,7 @@ static void dequeue_io_boost(struct cfs_rq *cfs_rq, struct task_struct *p)
+>         } else if (p->io_boost_curr_ios < p->io_boost_threshold_down) {
+>                 /* Reduce boost */
+>                 if (p->io_boost_level > 1)
+> -                       io_boost_scale_interval(p, true);
+> +                       io_boost_scale_interval(p, false);
+>                 else
+>                         p->io_boost_level = 0;
+>         } else if (p->io_boost_level == IO_BOOST_LEVELS) {
+> 
+> 
+> I'll probably send a v2 rebased on 6.9 when it's out anyway, but so far the
+> changes are mostly cosmetic and addressing Bart's comments about the benchmark
+> numbers in the cover letter.
+
+I didn't spend a lot of time on the series, but I can see a number of problems.
+Let us discuss them first and plan a future direction. No need to v2 if it's
+just for this fix IMO.
 
