@@ -1,121 +1,137 @@
-Return-Path: <linux-pm+bounces-5285-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5286-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBBA088A636
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 16:19:58 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67A3288A3BF
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 15:10:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6B7A3B28480
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 13:59:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 57ECABE696A
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 14:07:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DD241598F6;
-	Mon, 25 Mar 2024 10:37:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9049218C9EB;
+	Mon, 25 Mar 2024 10:49:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fTN4Rt79"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="BX+gcc2Z"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 053C41836E8;
-	Mon, 25 Mar 2024 09:38:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6889224DB;
+	Mon, 25 Mar 2024 10:21:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711359491; cv=none; b=Up61atS5TAskIRsqvff/ZuCf2TVeq/UFNOKrmMvxc2hwuNwvFEvhWKqPRL6aF0JaTg54NnP6uTwnqkEzoXNnmWSj2GwUqzke73y5oDdrhVqgZrnaB+x9y01V1hzcLgNcpucA30CgDX8qbMVOpqDr9aXSDjcBQL1m4LkAdxcKJvA=
+	t=1711362064; cv=none; b=eYXrBFauFp3MkQPF0qDceQSnHcCPysLGIfjV3OuNCEIDzIx+4wtYin/y6cJ8eFP/5lhEShafWbzSp+R4UO7ArHT4K7hDLUxsx67ju8Y4a6I6hwGTAOtNyzkpzwqlrzjw5UXbWyS5okX53K0zCgIlN5rT5kwUiTCUvladbnRbJec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711359491; c=relaxed/simple;
-	bh=LYP5Vsr+Zdn9vmu5oX47MSKUEjdDr89roznGdVIV8NQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FvE8n63QKlC4X19OCKq+ohz1noDfmu/woh3TXv1TKZTuqshE3faFJZlguICzP4FPMww14C8S/K7LemuIjX4AWSAOWtC4ikYheTv1Adrh4JiBU+sptBNMvhny0HHrdZGDBxA0IJfQCwWz2G+gQQtPU0rObCN+C08l8YXOKzHeY/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fTN4Rt79; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C3BCC43399;
-	Mon, 25 Mar 2024 09:38:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711359490;
-	bh=LYP5Vsr+Zdn9vmu5oX47MSKUEjdDr89roznGdVIV8NQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fTN4Rt79eQEh52TaxQ9rjiVbMydp1wnV9526o8VNh1Ii+/xtIoPqzDnXQsfw0rxTL
-	 mvMKcIb0wVzFAgG8lCfBr8SoWJtnCPLE8J34W6f6ovMEy4bMtFfLrrS8e9hrdSv5D+
-	 juoxqHH7QCQm1276XDdfOWC6P3ZoPn5B3WO7IhT4UR+neTTpQC6BSp6iaD7AbYeQ72
-	 lW9HdUUMtGlLMuSbZhaFUs6a63NlPwxrVyMgH6wXJXgJk0qVCbNLk+ziK02qF5oNXC
-	 SSAFzzJA1sgWWU3vuXqF96QuvsDkrv6+3yziAo0edcIhLqB2s2JdDKTY84v0lZa+Jn
-	 0FPiuR1GVs0fw==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1rogmW-000000006zS-1WeW;
-	Mon, 25 Mar 2024 10:38:17 +0100
-Date: Mon, 25 Mar 2024 10:38:16 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc: Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Taniya Das <quic_tdas@quicinc.com>,
-	Johan Hovold <johan+linaro@kernel.org>,
-	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v4 3/8] clk: qcom: gpucc-sc8280xp: Add external supply
- for GX gdsc
-Message-ID: <ZgFGCGgbY-4Xd_2k@hovoldconsulting.com>
-References: <20240125-sa8295p-gpu-v4-0-7011c2a63037@quicinc.com>
- <20240125-sa8295p-gpu-v4-3-7011c2a63037@quicinc.com>
+	s=arc-20240116; t=1711362064; c=relaxed/simple;
+	bh=fcnh9KN2bWNwKxwz0u8fBtorPz/wfJtgWjD0gXneYto=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OSJMJMCVPeWgNhd7jzfwwHCP1qoH2eVDkvC0WINim9FQ8HOT0gnksHuQPaVoIZxpafaBWj1x7FVahEwcPYu6hBjkHP7+BGfFQmqMeNXCz0sXHQ+92Mi7LaYWuWuFP7uspstm437rJgeK+w6BzrEprkLepyHJNjpDhF5W7qaUwoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=BX+gcc2Z; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42P9TTFd019743;
+	Mon, 25 Mar 2024 10:20:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=qcppdkim1; bh=IcffQD5
+	r/DCrkWeuEoMCS5WgcaSsE7f+GLTUFJRqYog=; b=BX+gcc2ZxDLZ1lJ6qKK9u1M
+	oYXXjd0vyyjvaANhdsZiNKfsPuVhJAMnGknLDAH3Z7fnpjii1AboPm3U/KZGxvnX
+	GZuR5gSYA17Rso/9/aj8h3Cs61wtRgMp/fX63cSvM/Pa1VtATZzUKv7dRPDPsBFT
+	qLjh7FlsjZvHDOb6Ivy4HVtjo9jFKLZ/OqtYKLScx0SWDTVJmzbNbtPHoZd5dWZ9
+	VWwpQQz10dxifi8CJCrlQBkSRuTJVFw/WzRr3agzJOh6MyFCMv4ZKtQuYmxVUdpX
+	F6A7rOXm7xav6G9CnQrLN+cwcWfa9y+wYKKoZHUr1dUjefC6pXw1pHjpqUpVc1A=
+	=
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3x2yrurwdn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 25 Mar 2024 10:20:57 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42PAKuYx030905
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 25 Mar 2024 10:20:56 GMT
+Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Mon, 25 Mar 2024 03:20:51 -0700
+From: Varadarajan Narayanan <quic_varada@quicinc.com>
+To: <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>, <robh@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <djakov@kernel.org>, <quic_anusha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>
+CC: Varadarajan Narayanan <quic_varada@quicinc.com>
+Subject: [PATCH v2 0/4] Add interconnect driver for IPQ9574 SoC
+Date: Mon, 25 Mar 2024 15:50:32 +0530
+Message-ID: <20240325102036.95484-1-quic_varada@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240125-sa8295p-gpu-v4-3-7011c2a63037@quicinc.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: A7_2uxPqxX1NkPPuf_jbPdHk9eI1Olpn
+X-Proofpoint-GUID: A7_2uxPqxX1NkPPuf_jbPdHk9eI1Olpn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-25_08,2024-03-21_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ mlxlogscore=999 mlxscore=0 suspectscore=0 clxscore=1015 priorityscore=1501
+ lowpriorityscore=0 phishscore=0 malwarescore=0 bulkscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2403210001
+ definitions=main-2403250057
 
-On Thu, Jan 25, 2024 at 01:05:09PM -0800, Bjorn Andersson wrote:
-> On SA8295P and SA8540P the GFX rail is powered by a dedicated external
-> regulator, instead of the rpmh-controlled "gfx.lvl".
-> 
-> Define the "vdd-gfx" as the supply regulator for the GDSC, to cause the
-> gdsc logic to look for, and control, this external power supply.
-> 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
->  drivers/clk/qcom/gpucc-sc8280xp.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/clk/qcom/gpucc-sc8280xp.c b/drivers/clk/qcom/gpucc-sc8280xp.c
-> index 8e147ee294ee..e2b3bc000c71 100644
-> --- a/drivers/clk/qcom/gpucc-sc8280xp.c
-> +++ b/drivers/clk/qcom/gpucc-sc8280xp.c
-> @@ -399,6 +399,7 @@ static struct gdsc gx_gdsc = {
->  	},
->  	.pwrsts = PWRSTS_OFF_ON,
->  	.flags = CLAMP_IO | RETAIN_FF_ENABLE,
-> +	.supply = "vdd-gfx",
+MSM platforms manage NoC related clocks and scaling from RPM.
+However, in IPQ SoCs, RPM is not involved in managing NoC
+related clocks and there is no NoC scaling.
 
-This change now triggers warnings on SC8280XP which does not have this
-supply:
+However, there is a requirement to enable some NoC interface
+clocks for the accessing the peripherals present in the
+system. Hence add a minimalistic interconnect driver that
+establishes a path from the processor/memory to those peripherals
+and vice versa.
 
-	gpu_cc-sc8280xp 3d90000.clock-controller: supply vdd-gfx not found, using dummy regulator
+---
+v2:
+qcom,ipq9574.h
+	Fix license identifier
+	Rename macros
+qcom,ipq9574-gcc.yaml
+	Include interconnect-cells
+gcc-ipq9574.c
+	Update commit log
+	Remove IS_ENABLED(CONFIG_INTERCONNECT) and auto select it from Kconfig
+ipq9574.dtsi
+	Moved to separate patch
+	Include interconnect-cells to clock controller node
+drivers/clk/qcom/Kconfig:
+	Auto select CONFIG_INTERCONNECT & CONFIG_INTERCONNECT_CLK
 
-I've sent a change to start treating this optional supply as truly
-optional here (even if it has not shown up in lore yet):
+Varadarajan Narayanan (4):
+  dt-bindings: clock: Add interconnect-cells
+  dt-bindings: interconnect: Add Qualcomm IPQ9574 support
+  clk: qcom: add IPQ9574 interconnect clocks support
+  arm64: dts: qcom: ipq9574: Add icc provider ability to gcc
 
-	https://lore.kernel.org/r/20240325081957.10946-1-johan+linaro@kernel.org
+ .../bindings/clock/qcom,ipq9574-gcc.yaml      |  3 +
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi         |  2 +
+ drivers/clk/qcom/Kconfig                      |  2 +
+ drivers/clk/qcom/gcc-ipq9574.c                | 65 ++++++++++++++++++-
+ .../dt-bindings/interconnect/qcom,ipq9574.h   | 62 ++++++++++++++++++
+ 5 files changed, 133 insertions(+), 1 deletion(-)
+ create mode 100644 include/dt-bindings/interconnect/qcom,ipq9574.h
 
-But why are we still using the same compatible string for sc8280xp and
-sa8540p and sa8295p if they differ in such a way?
+-- 
+2.34.1
 
-Shouldn't these structures be different for the two classes of SoCs,
-which would avoid such issues and which would allow us to continue to
-warn if the supply is missing on a sa8540p derivative platforms where it
-appears to be required.
-
-Johan
 
