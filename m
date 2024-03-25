@@ -1,145 +1,126 @@
-Return-Path: <linux-pm+bounces-5329-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5330-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C57588AF0C
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 19:54:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8082088A95A
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 17:30:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4E7DBC45221
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 16:15:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B26B21C644B6
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 16:30:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2D701474A7;
-	Mon, 25 Mar 2024 14:09:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A61A212C55E;
+	Mon, 25 Mar 2024 14:33:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="QRUuEYaJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qwGTfZ4S"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D3F146D6A
-	for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 14:09:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60EA612C55D;
+	Mon, 25 Mar 2024 14:33:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711375767; cv=none; b=oa8WnwO2kwOCNtL71JWtmUh6564/q339qJHzEZ1L8bPPHF5wou2TEI96NLd0sHtm9MBOAdXWIYxSfkPO3VOTdnzp2y9xihFShzs5DlU9RN/YtbogiFpQ0J9RLqHfPWUIPUrBApZXD0r++elmu4ZMefe1WeDTVHZNBC2Jnxd5aWQ=
+	t=1711377233; cv=none; b=R292hLSvKxzJN6UVcsrAay7BaxOkTzO7g21MaC79QO0s7ug409dRCbepK71qXXcVeEwsJ1tQODj9gy/Cx1M8FLnMPjf2SOltLNulc7l1dmAdPCyU8DA6HG/0LVNKP7AWIKdlwnCHPZYWmJHm3bXSzr7G88rGydll64Ybek45B1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711375767; c=relaxed/simple;
-	bh=Q186ZwCP59wb65acR46Ym/x35a2ynPh5L0W6/TiLR8U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=utznHyzdfsl+QmwB1HfZ6aDWxWJzva3VDJ4Zo6zMbG5TrL8byfa1M/I8iUmBEayYwY3Ivtxp5U2tlRoPMSbF/JGkwAw52JUknAfIBCtniKNNwvQT3GKGuZwBM8Cma8NCyoAv5on/eBMUq61545MpLrwdT5raoxLEmEVV2KOSRro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=QRUuEYaJ; arc=none smtp.client-ip=209.85.208.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2d228a132acso61164661fa.0
-        for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 07:09:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1711375764; x=1711980564; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CfuObMCkrCoZSR2Wc4+k3mUI6EGOtW5n3H7jAAQzsO8=;
-        b=QRUuEYaJWrnftGnBemS05m1T5cXGEomfYiCsWFZXCjdNRXCcZmsL7BZLlhWiRCN2vu
-         Q1tHYVdnJgNpynusyfNkbWelCltqFsu9g5EqJ/ZRlLbYnpPEKEvdEdzcOKfvKrIEfOkA
-         1EjcBYVy51FpDVJX6F7TGkFVcvqn3unil0+D6Cat2FVJprbQGuoJhR8reNm33dp7amG6
-         JDgQkuWJgVtyK+r+2xxDneepDbxQKIqJSLbXjJ8Zs2Hyz2hvKGhEs5C+QcwZTAxHCNBp
-         j+2JWTB6vMEWp6de1QHco2cs55wikJo0Pd0PqTKnLqE2F1AjU6nGBEDCzDasSbDML0/8
-         j7QA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711375764; x=1711980564;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CfuObMCkrCoZSR2Wc4+k3mUI6EGOtW5n3H7jAAQzsO8=;
-        b=DhE9V7okMQQ7+CGGVP/S99TuPIkfoTy0v4gDZ7YkQJAywfO+VAyhVNgdx17AGuO6Em
-         NkTEqutJPRloThMQQVMh+G9vkGiYrgpd+iPMyY+dGqzV+RhjMeF9NQE/ECYzp9Qb8t/5
-         Vv9d3MLZD0XbgRFOxzWK8ipV998qupzN5lrcF0sG1n0yGRiIdCy+DbN9J7xUYhHuAz3m
-         /64UZ8RZJojmjIfUnF63AKAdFmjnCNVYVMvh+sCoQ/n8OmHPpoRaK4eEuH+Imlb/c6O2
-         4WxITAE9dYnOVgrAggBZuvIAHb/zPN3YcY9xW72nK3SUSQtj5X1GmMCoWaz+Z7JHIGUe
-         jBuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXNiTJIG6gMDAkKt9sL/9GShroVlFrdaNhFXjqQidnDulUPow4qaUSq9ChHt1zLryfFz8P139Jb6YHjt9SoDYWFFtEPUc3pDX8=
-X-Gm-Message-State: AOJu0Ywuebn8E2QZswuYNQ0k9SySsY6DCYnBw2h7H6X4ogvx4OfnbIxh
-	o3DvM4THPHWt6WOYNFulUhPfGKZUkAjrThmjCv+crxbNNEKbO7kv2vGiULHo6V5UmLRs9rUC/BG
-	hRW4Yv5issJ/y/CkSRh+YIZ5Ed8yKVsIJNjMQSA==
-X-Google-Smtp-Source: AGHT+IEvJFLfJKGkEqnYgSEId2a/oSfTm8lmiWB7lZbWVsuHFW1Kj1Md8cKVyFWUl5FdFvxVvX1pTsDznN8+aT1HRMo=
-X-Received: by 2002:a2e:a590:0:b0:2d4:62b7:4c7b with SMTP id
- m16-20020a2ea590000000b002d462b74c7bmr5582449ljp.51.1711375763943; Mon, 25
- Mar 2024 07:09:23 -0700 (PDT)
+	s=arc-20240116; t=1711377233; c=relaxed/simple;
+	bh=I8gGjUabBFBdinEZ8w3xLeRQEfRy+mHaSAx/ueiu+40=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BPDnTgyZ+zD/h3SbirmDL4jk9SA4VKL3TvsKuCAcDfAvhSxCfQXTwDxGVkrKFOKv7IgpgnKc7pdaDkPR99oeJ1FVx42OQVxyiJuZtUNDLaaOU0nImgZPH3mlVt+g42uOvdFsMQBiDhLBjwyXejzy8Fg1nPYbHxydqjti1HhncaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qwGTfZ4S; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCA51C433C7;
+	Mon, 25 Mar 2024 14:33:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711377232;
+	bh=I8gGjUabBFBdinEZ8w3xLeRQEfRy+mHaSAx/ueiu+40=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qwGTfZ4ShLOkmcP2SDowGUP24PHw40nxwQ0YvPPEMQoc9ATkG5gM8iZxzfOnu5sRD
+	 UwSN8WIBhDTUqSGcf70UElmHWw4r+uQJbXCj6GVa/HUOSTqZ8SjItI/TLZfjLKFYVb
+	 jVgHhwDEcWppwKLrXjpTUcw8+6wmFPrumLvMm0dZewht8np1+OcS0EZkB/G30kbtZi
+	 95N5Z7T58ICVBDySFjaI2c6LS4Jvr4xorat/fbqwktT0ORUOJWzGrCuKqnZhZZS7CT
+	 muoF2CaxPRzjQFv+XRluV81Q5NVeAVQYqFGBhKcsDxvfwURItxgT/oQf5PN7eSCw5l
+	 J6x8GepzXZ4bg==
+Date: Mon, 25 Mar 2024 14:33:43 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Marcel Holtmann <marcel@holtmann.org>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, Kalle Valo <kvalo@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	Saravana Kannan <saravanak@google.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Alex Elder <elder@linaro.org>,
+	Srini Kandagatla <srinivas.kandagatla@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Abel Vesa <abel.vesa@linaro.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Lukas Wunner <lukas@wunner.de>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-wireless@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH v6 01/16] regulator: dt-bindings: describe the PMU module
+ of the QCA6390 package
+Message-ID: <4d8d55a8-fcf2-47b6-ac0e-2bbb99bb895a@sirena.org.uk>
+References: <20240325131624.26023-1-brgl@bgdev.pl>
+ <20240325131624.26023-2-brgl@bgdev.pl>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240325131624.26023-1-brgl@bgdev.pl> <20240325131624.26023-5-brgl@bgdev.pl>
- <87r0fy8lde.fsf@kernel.org>
-In-Reply-To: <87r0fy8lde.fsf@kernel.org>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Mon, 25 Mar 2024 15:09:12 +0100
-Message-ID: <CAMRc=Mc2Tc8oHr5NVo=aHAADkJtGCDAVvJs+7V-19m2zGi-vbw@mail.gmail.com>
-Subject: Re: [PATCH v6 04/16] dt-bindings: net: wireless: qcom,ath11k:
- describe the ath11k on QCA6390
-To: Kalle Valo <kvalo@kernel.org>
-Cc: Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Saravana Kannan <saravanak@google.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Arnd Bergmann <arnd@arndb.de>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Alex Elder <elder@linaro.org>, Srini Kandagatla <srinivas.kandagatla@linaro.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Abel Vesa <abel.vesa@linaro.org>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Lukas Wunner <lukas@wunner.de>, 
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, linux-bluetooth@vger.kernel.org, 
-	netdev@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Cru5I7A758SJZEDj"
+Content-Disposition: inline
+In-Reply-To: <20240325131624.26023-2-brgl@bgdev.pl>
+X-Cookie: Evil isn't all bad.
+
+
+--Cru5I7A758SJZEDj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 25, 2024 at 2:57=E2=80=AFPM Kalle Valo <kvalo@kernel.org> wrote=
-:
->
-> Bartosz Golaszewski <brgl@bgdev.pl> writes:
->
-> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> >
-> > Add a PCI compatible for the ATH11K module on QCA6390 and describe the
-> > power inputs from the PMU that it consumes.
-> >
-> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->
-> [...]
->
-> > +allOf:
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            const: pci17cb,1101
-> > +    then:
-> > +      required:
-> > +        - vddrfacmn-supply
-> > +        - vddaon-supply
-> > +        - vddwlcx-supply
-> > +        - vddwlmx-supply
-> > +        - vddrfa0p8-supply
-> > +        - vddrfa1p2-supply
-> > +        - vddrfa1p7-supply
-> > +        - vddpcie0p9-supply
-> > +        - vddpcie1p8-supply
->
-> I don't know DT well enough to know what the "required:" above means,
-> but does this take into account that there are normal "plug&play" type
-> of QCA6390 boards as well which don't need any DT settings?
->
+On Mon, Mar 25, 2024 at 02:16:09PM +0100, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>=20
+> The QCA6390 package contains discreet modules for WLAN and Bluetooth. They
+> are powered by the Power Management Unit (PMU) that takes inputs from the
+> host and provides LDO outputs. This document describes this module.
 
-Do they require a DT node though for some reason?
+Acked-by: Mark Brown <broonie@kernel.org>
 
-Bart
+--Cru5I7A758SJZEDj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYBi0YACgkQJNaLcl1U
+h9AdIwf/SWJguM6qR3+2+NfBzS3BClbo5tKAaN7frc+HgiFkmcN+TDdydwp+qfxf
+t33nHRvZIdzfbxrYkACIlOO6o55gf1Cahrrsb9l0Lp4MzBxcC/oKnrQbqIxldiJ9
+LYcYPT+9yhvRkPTkiqIpbJG9WMJwdNVPILl1NEIQBdMA6UNmC7xbBEUh4BRD8qbi
+v8qSPzhQj/7O3MTfD+/d1JrH9fVXUY1roL37PiDSW0XkQo6oIyTa2oEKjEibyPig
+amlwRcPUhjelQwkhTc8jH/fH1DmXkkK/Uw04Y77VKP5dhUdPo4hDVUJTAoOp/rmt
+l5q8gRzt2QPqjhuQmXVXBsXA1PoApw==
+=yWUc
+-----END PGP SIGNATURE-----
+
+--Cru5I7A758SJZEDj--
 
