@@ -1,90 +1,233 @@
-Return-Path: <linux-pm+bounces-5298-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5299-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CF0488A9CF
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 17:42:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7941288A6BB
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 16:34:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3BE9BB61BAF
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 15:31:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E4C981F3FA70
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 15:34:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99E7013E3E0;
-	Mon, 25 Mar 2024 12:52:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F18D12AADF;
+	Mon, 25 Mar 2024 12:58:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="xv7KEm+A"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 578341758F;
-	Mon, 25 Mar 2024 12:52:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B424412AAE0;
+	Mon, 25 Mar 2024 12:58:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711371145; cv=none; b=FEMUJ+T1Ll4CmLgO4jQ6Q1LFPBny18mhgxcPgMtelfNwvxL7v7msYBKqC2y71QVvKMG4h6RnpxAZEyGZIBoVMdxbbyZU4RoN3Co8Y0EzCQ2Dl2b5F54itTpeiuHl3Zm1RFNpF9rEqR3GitDg895Pk7FXASuNfTwNPEziRBFvelc=
+	t=1711371523; cv=none; b=Snnx61DwjeBSJdV617qpL+BsDN6Ag4YDSvmBwZBahaDImPNoCUjblKpOMsy/7LX6DjIoUJVNel50KyFHuyddSUEP/8R5L+ZnM8baBNuSdonlT8/wGds0dNY3K20afjhlVvFJMRyOO3Xoa3Z3dHWbnrDaf7NFGgyH0jdUeqP+1uQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711371145; c=relaxed/simple;
-	bh=ExUUsC+CqMjF+l/I8M6xKudiZbcZcqHRiPeAkaD7Bko=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bo1u9xAAGUJD5D8rBO1LNSasLPSGd74Ns0AlppLFzPAoAk04vbJiebK/AObKrFk57YYj3O4wLhgXePX9u8+i0JdRvhJTKjZTI9S5mv7K9riNI/M5Ad9Jo6LrHqJ57feLNbw9dPXP4lrITx38pMAqpPp9cp22/094BnFCBgx5aLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7162F1FB;
-	Mon, 25 Mar 2024 05:52:56 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C48633F67D;
-	Mon, 25 Mar 2024 05:52:20 -0700 (PDT)
-Date: Mon, 25 Mar 2024 12:52:18 +0000
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Liviu Dudau <liviu.dudau@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Amit Kucheria <amit.kucheria@linaro.org>, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, Rob Herring <robh@kernel.org>
-Subject: Re: (subset) [PATCH 2/2] arm64: dts: juno: fix thermal zone node
- names
-Message-ID: <ZgFzgr1KtuFIeVux@bogus>
-References: <20240103142051.111717-1-krzysztof.kozlowski@linaro.org>
- <20240103142051.111717-2-krzysztof.kozlowski@linaro.org>
- <171136466536.36729.15243854495211929982.b4-ty@linaro.org>
+	s=arc-20240116; t=1711371523; c=relaxed/simple;
+	bh=X0mMoXhySmQx0Svx/wLI3xWB9TsLJ77ZgdxeEJbZWZU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iZTv3xL5Pq1JM6H/DFT/BmcbBBBVb+B6BBBpSllZm7C15oya8X0Sr+6V8r/Taig0DIaTl2Sm0HanuOxikY/AHMggGCMMGjZ+A8VSAHGLnJzpZhi2wTqfqTrK+h35ehtA57PmG6VZ2uG9bwr5VVEB2T1/QXGZR08F0vh8IurU7qU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=xv7KEm+A; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1711371520;
+	bh=X0mMoXhySmQx0Svx/wLI3xWB9TsLJ77ZgdxeEJbZWZU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=xv7KEm+Au+NvqUEIVp5Kt3xA6YbT8CgSn1tEZAaqSg7sFnGoo/qu7VDPA7Ehhj5yE
+	 GOfOetZKsTrzK33PRqHFGqBGSzagefv/NWCj/+pdhY72Nphg5hFmYwdT6BSrwr/4jN
+	 e4oe4rC6hCF+QcsJR2Bprk5iQgXJC8Kd/2uIJsfcNQmJayAfyHPJ08aTK+7SU55Uyk
+	 VrUuFuca67b7GUrHiJALDvxfKS7JeCg9W5R2i4/Lial+MlUoocGIStJXV9x2DAWRvX
+	 gKbzChLT5SHIJfAsn9M0dGX6APN3c1SLL4uJtP9yzxxWicsI/CoRFu33bvYHpFet2p
+	 vbjnF/+Uujdqw==
+Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 5E55A378107C;
+	Mon, 25 Mar 2024 12:58:39 +0000 (UTC)
+Message-ID: <0e125862-c7f3-4aa0-89d6-ef458654bebb@collabora.com>
+Date: Mon, 25 Mar 2024 13:58:38 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <171136466536.36729.15243854495211929982.b4-ty@linaro.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] soc: mediatek: pm-domains: add smi_larb_reset
+ function when power on
+To: "yu-chang.lee" <yu-chang.lee@mediatek.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ Project_Global_Chrome_Upstream_Group@mediatek.com, mandyjh.liu@mediatek.com,
+ fan.chen@mediatek.com, xiufeng.li@mediatek.com
+References: <20240325121908.3958-1-yu-chang.lee@mediatek.com>
+ <20240325121908.3958-2-yu-chang.lee@mediatek.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <20240325121908.3958-2-yu-chang.lee@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Mar 25, 2024 at 12:05:14PM +0100, Krzysztof Kozlowski wrote:
+Il 25/03/24 13:19, yu-chang.lee ha scritto:
+> This patch avoid mtcmos power glitch from happening by set and clear
+> smi larb reset.
 > 
-> On Wed, 03 Jan 2024 15:20:51 +0100, Krzysztof Kozlowski wrote:
-> > Linux kernel uses thermal zone node name during registering thermal
-> > zones and has a hard-coded limit of 20 characters, including terminating
-> > NUL byte.  Exceeding the limit will cause failure to configure thermal
-> > zone.
-> > 
-> > 
+> Signed-off-by: yu-chang.lee <yu-chang.lee@mediatek.com>
+> ---
+>   drivers/pmdomain/mediatek/mt8188-pm-domains.h | 28 +++++++++
+>   drivers/pmdomain/mediatek/mtk-pm-domains.c    | 59 +++++++++++++++++++
+>   drivers/pmdomain/mediatek/mtk-pm-domains.h    | 12 ++++
+>   3 files changed, 99 insertions(+)
 > 
-> Applied, thanks!
-> 
-> This was waiting on the lists for some time and no one picked it up, so... let
-> me know if I should drop it from my tree.
->
+> diff --git a/drivers/pmdomain/mediatek/mt8188-pm-domains.h b/drivers/pmdomain/mediatek/mt8188-pm-domains.h
+> index 06834ab6597c..7bbba4d56a77 100644
+> --- a/drivers/pmdomain/mediatek/mt8188-pm-domains.h
+> +++ b/drivers/pmdomain/mediatek/mt8188-pm-domains.h
+> @@ -573,6 +573,18 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
+>   		.pwr_sta2nd_offs = 0x170,
+>   		.sram_pdn_bits = BIT(8),
+>   		.sram_pdn_ack_bits = BIT(12),
+> +		.reset_smi = {
+> +			SMI_RESET_WR(MT8188_SMI_LARB10_RESET,
+> +				     MT8188_SMI_LARB10_RESET_ADDR),
+> +			SMI_RESET_WR(MT8188_SMI_LARB11A_RESET,
+> +				     MT8188_SMI_LARB11A_RESET_ADDR),
+> +			SMI_RESET_WR(MT8188_SMI_LARB11C_RESET,
+> +				     MT8188_SMI_LARB11C_RESET_ADDR),
+> +			SMI_RESET_WR(MT8188_SMI_LARB11B_RESET,
+> +				     MT8188_SMI_LARB11B_RESET_ADDR),
+> +			SMI_RESET_WR(MT8188_SMI_LARB15_RESET,
+> +				     MT8188_SMI_LARB15_RESET_ADDR),
+> +		},
+>   		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
+>   	},
+>   	[MT8188_POWER_DOMAIN_IPE] = {
+> @@ -583,6 +595,10 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
+>   		.pwr_sta2nd_offs = 0x170,
+>   		.sram_pdn_bits = BIT(8),
+>   		.sram_pdn_ack_bits = BIT(12),
+> +		.reset_smi = {
+> +			SMI_RESET_WR(MT8188_SMI_LARB12_RESET,
+> +				     MT8188_SMI_LARB12_RESET_ADDR),
+> +		},
+>   		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
+>   	},
+>   	[MT8188_POWER_DOMAIN_CAM_VCORE] = {
+> @@ -660,6 +676,12 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
+>   		.pwr_sta2nd_offs = 0x170,
+>   		.sram_pdn_bits = BIT(8),
+>   		.sram_pdn_ack_bits = BIT(12),
+> +		.reset_smi = {
+> +			SMI_RESET_WR(MT8188_SMI_LARB16A_RESET,
+> +				     MT8188_SMI_LARB16A_RESET_ADDR),
+> +			SMI_RESET_WR(MT8188_SMI_LARB17A_RESET,
+> +				     MT8188_SMI_LARB17A_RESET_ADDR),
+> +		},
+>   		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
+>   	},
+>   	[MT8188_POWER_DOMAIN_CAM_SUBB] = {
+> @@ -670,6 +692,12 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
+>   		.pwr_sta2nd_offs = 0x170,
+>   		.sram_pdn_bits = BIT(8),
+>   		.sram_pdn_ack_bits = BIT(12),
+> +		.reset_smi = {
+> +			SMI_RESET_WR(MT8188_SMI_LARB16B_RESET,
+> +				     MT8188_SMI_LARB16B_RESET_ADDR),
+> +			SMI_RESET_WR(MT8188_SMI_LARB17B_RESET,
+> +				     MT8188_SMI_LARB17B_RESET_ADDR),
+> +		},
+>   		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
+>   	},
+>   };
+> diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.c b/drivers/pmdomain/mediatek/mtk-pm-domains.c
+> index e274e3315fe7..9ab6fa105c8c 100644
+> --- a/drivers/pmdomain/mediatek/mtk-pm-domains.c
+> +++ b/drivers/pmdomain/mediatek/mtk-pm-domains.c
+> @@ -48,6 +48,8 @@ struct scpsys_domain {
+>   	struct regmap *infracfg_nao;
+>   	struct regmap *infracfg;
+>   	struct regmap *smi;
+> +	struct regmap **larb;
+> +	int num_larb;
+>   	struct regulator *supply;
+>   };
+>   
+> @@ -230,6 +232,39 @@ static int scpsys_regulator_disable(struct regulator *supply)
+>   	return supply ? regulator_disable(supply) : 0;
+>   }
+>   
+> +static int _scpsys_smi_larb_reset(const struct smi_reset_data bpd,
+> +				  struct regmap *regmap)
+> +{
+> +	int ret;
+> +	u32 mask = bpd.smi_reset_mask;
+> +
+> +	if (!mask)
+> +		return 0;
+> +
+> +	ret = regmap_set_bits(regmap, bpd.smi_reset_addr, mask);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_clear_bits(regmap, bpd.smi_reset_addr, mask);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static int scpsys_smi_larb_reset(struct scpsys_domain *pd)
+> +{
+> +	int ret, i;
+> +
+> +	for (i = 0; i < pd->num_larb; i++) {
+> +		ret = _scpsys_smi_larb_reset(pd->data->reset_smi[i], pd->larb[i]);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>   static int scpsys_power_on(struct generic_pm_domain *genpd)
+>   {
+>   	struct scpsys_domain *pd = container_of(genpd, struct scpsys_domain, genpd);
+> @@ -279,6 +314,10 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
+>   	if (ret < 0)
+>   		goto err_disable_subsys_clks;
+>   
+> +	ret = scpsys_smi_larb_reset(pd);
+> +	if (ret < 0)
+> +		goto err_disable_subsys_clks;
+> +
+>   	ret = scpsys_bus_protect_disable(pd);
+>   	if (ret < 0)
+>   		goto err_disable_sram;
+> @@ -355,6 +394,7 @@ generic_pm_domain *scpsys_add_one_domain(struct scpsys *scpsys, struct device_no
+>   	struct scpsys_domain *pd;
+>   	struct device_node *root_node = scpsys->dev->of_node;
+>   	struct device_node *smi_node;
+> +	struct device_node *larb_node;
+>   	struct property *prop;
+>   	const char *clk_name;
+>   	int i, ret, num_clks;
+> @@ -418,6 +458,25 @@ generic_pm_domain *scpsys_add_one_domain(struct scpsys *scpsys, struct device_no
+>   			return ERR_CAST(pd->smi);
+>   	}
+>   
+> +	pd->num_larb = of_count_phandle_with_args(node, "mediatek,larb", NULL);
 
-Sorry for that, must have slipped through when I was off. Thanks for picking
-it up. If not too late, feel free to add
+You must update bindings/power/mediatek,power-controller.yaml to allow the
+mediatek,larb property in the power controller binding, otherwise this will
+be unusable. Please do so.
 
-Acked-by: Sudeep Holla <sudeep.holla@arm.com>
+Cheers,
+Angelo
 
--- 
-Regards,
-Sudeep
 
