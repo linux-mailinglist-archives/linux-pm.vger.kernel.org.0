@@ -1,72 +1,72 @@
-Return-Path: <linux-pm+bounces-5315-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5316-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40EB788A743
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 16:44:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FCF188A744
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 16:44:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D37C2A8E9A
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 15:44:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 707FF1C3DF70
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 15:44:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5768314F9C7;
-	Mon, 25 Mar 2024 13:17:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 635BD127B46;
+	Mon, 25 Mar 2024 13:17:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="t5zCXSyX"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="cUbS4nGT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65C27149E08
-	for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 13:17:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F5B14B09B
+	for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 13:17:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711372636; cv=none; b=YoZxTPXlTqVQTFrVeaQA21qVSZ5Jq4odd+NkGfd8bo1gcP7AGvmL0lZIcXPh/JPNIhMNT/RtJ4c0JRd1pOXVYht5DrDbG1vX1wcCkChzZrRfqFK+m20/t+Wj+nKYZM7PGp0pclvH5kTx7khGIn8VQX12NJvH/CCXlbMDs/BRVYI=
+	t=1711372637; cv=none; b=dsChzNLhun2yqSYtwUoKH3ZTiohvfHDxIvMdJd5MFvsHMVSujAwYcenAZe+R1wo5g2XNtzxD+ZdRw5vkc+Q2Z0G3NTkKgdLJ994nHz+TBWu7rltE4gP11XY68QVCunbrYEQ5ajKzS/CKnnLZkcARCHQCkB0iZrdU/dUlvIoymrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711372636; c=relaxed/simple;
-	bh=c5P5lscsnbWC5EHjzQG5JSjk93ahAtvYSeOqjGvj/7s=;
+	s=arc-20240116; t=1711372637; c=relaxed/simple;
+	bh=iWQpZyVUYNR0FgdTLJWWfXolJLly1aZ0q2sdWcfiADU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=MHO74ntXV1xox2I+myf0qGm3mlk11AEuBMW8K8c7c73poE1AbcWCzIu8M2X7FnD9gKMybRLrE4MgRUFDv7qJWb3HJHaVFHpluTmUWkRLUj7VKRq6W1aSsDnnOh35iNc4weqfAyR9CttSNY6kPGimzRfd60OBa6OxErF1XNyihBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=t5zCXSyX; arc=none smtp.client-ip=209.85.221.53
+	 MIME-Version; b=thpCrRcCfW6cN18euRkDfYZ9LxVd4UgKc4u3gapUYzK26gSlRwatRvj9LeRHfwvTrLWwGmz+44rPwiwZr06uVmRzSpbTCrKEYULNQnFJOXPeKxT3yy2Vpe6dYQPOKzchyUgKmnRELvdW/48ygtILnmDgPzpLqdwNMVnXAuwGj48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=cUbS4nGT; arc=none smtp.client-ip=209.85.221.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3417a3151c4so3952542f8f.3
-        for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 06:17:11 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-34175878e3cso3089631f8f.0
+        for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 06:17:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1711372630; x=1711977430; darn=vger.kernel.org;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1711372632; x=1711977432; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Y3Qk/DJ4ryR6XkF1VG+aVefQinCL6xUnkD758p4/AkE=;
-        b=t5zCXSyXeXoyqRCnzuwJ7sWki2ClRtRSnEvkPMJz+mBBX5GTs8b5Gs/6LsCPO32r4M
-         xvQOOLzeV60BnuKO7rzLH4h8Ue4xQ9LVLQz1vplTepcSFFNZ0NPMos9l3GcDVrpeCw43
-         WFHYCIIY2quw3xk2XXTJz58KhPjgXnDsr+pt/Jp+lLtNpEFptqlj7//mMFC2+UI24Wj7
-         JCnCUv0Fh50RetJAsPbDrT/ZPoPLjQ8kCoT3VsP5/klT1ApaEnhgiqtAavVhw5Yw2gYU
-         ZiyHk/6lf8PedEa7uynzqFakJJLNsMNQaOKXzsMjNlj2mbGhikG/P7EGEXTiLBOonlf5
-         adKg==
+        bh=VPKtETY44L+sLLhmL3uaX4nFnllKG+8eyvkbzTNtgX4=;
+        b=cUbS4nGT0+lfRnrunIb/YNFs5x5KjLBB5tZj58rqQZ7yj/oqsNqHDCkLnoS6eAcE3p
+         gsyW+n+o3iwItVVdhcFdeenW8F1X5Zt3O/JWzE37VCVkAFHXC8C8FnbosWgnOOP9C+01
+         mhG2DfaImEHlzrhbgbnliOF2Xe6PQzer30VhTpSvo9gydkqSBz3w+wqTbWeyNBwgkeqb
+         VaocQURcHNwf9IiMy9cyCF2mMu3uwlcIcd9bFMW6hIMA32tf9SVptNUb0H6rESyOwQHK
+         OXHdbOdnZFO0PnOCjWAH0Z2FaSVX1LU9+/EefNDKZsGMxv6Kqlm9cqyHLPM6gPRaOHty
+         Mzhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711372630; x=1711977430;
+        d=1e100.net; s=20230601; t=1711372632; x=1711977432;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Y3Qk/DJ4ryR6XkF1VG+aVefQinCL6xUnkD758p4/AkE=;
-        b=frvUEUPOm0N62a3i6hM4FL8bcqCH6EoM2tjWCNO3VeJYe3T5o2HP3Q6hOEe+hn46DQ
-         TY4vmQLVMYP7GtrAOwIdb4ngeuXQUprYEZjIrtPo5KIYhfgX+WTV4S0AcgrKmYAccA0G
-         4MePocbJHBhJyB5YV4I5cab4VRESlUF9uo3qyJ0cb45TNnllDTXBUgsE9Liu+BYwdmJr
-         2LLW4uK8YOUhCK+JIW4KRYczbazstqiPAoM3P1JsL+7jTfG65yOeZMXOTPS7iO+zEDsW
-         2Z0jS77q6sdvjwhJ7jbyKOX7Tlkv7VJWAnWELsyqHHSAc2ubqMQagVa0PY43gu+yUEN/
-         PQYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV6Op19uJzCA9vdap82pfy1ePn0gMP2gRjg/z4ZvWhQFgrhWSkS1r5AgvA4PwX6i+GeAF4zEVbzBNuqua4tkJFYe3r4jqbmgOc=
-X-Gm-Message-State: AOJu0YwbmB1B640MPp8UxmHskr5JXOjbQPqddz7eRIIaa2FKs7h8sBbq
-	WtJaFFjfF5zdba3att0qEnCXlziYXZD0rnWtAS/nDmY81y8e4TcMkL1IeEcCEBs=
-X-Google-Smtp-Source: AGHT+IEM3mk7LpxC1e488PCakNoryx3p0VkwguQJKJ4VUTxIHuAPloCmFrFt9hJMR52EAvFfq4y+Pg==
-X-Received: by 2002:a5d:604e:0:b0:33e:bfd0:335c with SMTP id j14-20020a5d604e000000b0033ebfd0335cmr6384163wrt.51.1711372630645;
-        Mon, 25 Mar 2024 06:17:10 -0700 (PDT)
+        bh=VPKtETY44L+sLLhmL3uaX4nFnllKG+8eyvkbzTNtgX4=;
+        b=j5KwVh1UXR1kAWcFU3YTEqlt8eYyOs72+aj380rhWv3TpB5QSokBBUqVp/g68lADpD
+         2R02WKJQc5wY+0e/m37w5JuToZx28ZjN+5HpphH8Fu66l1iTabrP4w64m0QabLj3EbsA
+         OZjzvzALm3o6BNZE9NumdKz9cKHasIuzMtUf37Mfs9yqvstyZPqJzC1BS9UFghVk9qJc
+         AIi4UvpALVe7mtWIl+JCMV27TacFdOXOC5fm+rwpWnu3TXIn3El19GPnf6A/MoSxHp5R
+         B86m53IJaPnV8Oxdn7e614WUip/bP3pKnUc4vc+qD835xdRWMtgQkoo+gwtLKhtx2Em9
+         WqtA==
+X-Forwarded-Encrypted: i=1; AJvYcCUO9arv4NrBm7R9XRn9lRXs1DNOJh6qfSjZ2I0utL19DEKSnfcQgGcqAq/qegAQhuBrX905vvxf3rqzc0yHixzEkyW46AdnyFA=
+X-Gm-Message-State: AOJu0YzuKV/BEPcz+1ltqVnthZSfc0rIyQuqeBegDISAuk8ZYMG1wo4T
+	vf+JSjnXPUGXb90Gj398GfvsGypNWDF0GZKPys/QZHBTmy85ArNQZbke+EMKkX4=
+X-Google-Smtp-Source: AGHT+IE8S1Cqc4BSl1gj1NJjC/8Phc5hQVnSu5kD3rjt0a7CtT1C9cZCCiVYJzGQ4RLrhpqJ51Qh5g==
+X-Received: by 2002:a5d:4bd1:0:b0:33d:b2d7:6264 with SMTP id l17-20020a5d4bd1000000b0033db2d76264mr4900718wrt.51.1711372632066;
+        Mon, 25 Mar 2024 06:17:12 -0700 (PDT)
 Received: from brgl-uxlite.home ([2a01:cb1d:75a:e000:861d:8b72:a859:4ce9])
-        by smtp.gmail.com with ESMTPSA id p11-20020a056000018b00b0033e75e5f280sm9485245wrx.113.2024.03.25.06.17.09
+        by smtp.gmail.com with ESMTPSA id p11-20020a056000018b00b0033e75e5f280sm9485245wrx.113.2024.03.25.06.17.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Mar 2024 06:17:10 -0700 (PDT)
+        Mon, 25 Mar 2024 06:17:11 -0700 (PDT)
 From: Bartosz Golaszewski <brgl@bgdev.pl>
 To: Marcel Holtmann <marcel@holtmann.org>,
 	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
@@ -108,9 +108,9 @@ Cc: linux-bluetooth@vger.kernel.org,
 	linux-pci@vger.kernel.org,
 	linux-pm@vger.kernel.org,
 	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH v6 09/16] PCI: hold the rescan mutex when scanning for the first time
-Date: Mon, 25 Mar 2024 14:16:17 +0100
-Message-Id: <20240325131624.26023-10-brgl@bgdev.pl>
+Subject: [PATCH v6 10/16] PCI/pwrctl: reuse the OF node for power controlled devices
+Date: Mon, 25 Mar 2024 14:16:18 +0100
+Message-Id: <20240325131624.26023-11-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20240325131624.26023-1-brgl@bgdev.pl>
 References: <20240325131624.26023-1-brgl@bgdev.pl>
@@ -124,30 +124,63 @@ Content-Transfer-Encoding: 8bit
 
 From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-With the introduction of PCI device power control drivers that will be
-able to trigger the port rescan when probing, we need to hold the rescan
-mutex during the initial pci_host_probe() too or the two could get in
-each other's way.
+With PCI power control we deal with two struct device objects bound to
+two different drivers but consuming the same OF node. We must not bind
+the pinctrl twice. To that end: before setting the OF node of the newly
+instantiated PCI device, check if a platform device consuming the same
+OF node doesn't already exist on the platform bus and - if so - mark the
+PCI device as reusing the OF node.
 
 Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 ---
- drivers/pci/probe.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/pci/of.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-index 1325fbae2f28..1802900328a0 100644
---- a/drivers/pci/probe.c
-+++ b/drivers/pci/probe.c
-@@ -3066,7 +3066,9 @@ int pci_host_probe(struct pci_host_bridge *bridge)
- 	struct pci_bus *bus, *child;
- 	int ret;
+diff --git a/drivers/pci/of.c b/drivers/pci/of.c
+index 51e3dd0ea5ab..b908fe1ae951 100644
+--- a/drivers/pci/of.c
++++ b/drivers/pci/of.c
+@@ -6,6 +6,7 @@
+  */
+ #define pr_fmt(fmt)	"PCI: OF: " fmt
  
-+	pci_lock_rescan_remove();
- 	ret = pci_scan_root_bus_bridge(bridge);
-+	pci_unlock_rescan_remove();
- 	if (ret < 0) {
- 		dev_err(bridge->dev.parent, "Scanning root bridge failed");
- 		return ret;
++#include <linux/cleanup.h>
+ #include <linux/irqdomain.h>
+ #include <linux/kernel.h>
+ #include <linux/pci.h>
+@@ -13,6 +14,7 @@
+ #include <linux/of_irq.h>
+ #include <linux/of_address.h>
+ #include <linux/of_pci.h>
++#include <linux/platform_device.h>
+ #include "pci.h"
+ 
+ #ifdef CONFIG_PCI
+@@ -25,16 +27,20 @@
+  */
+ int pci_set_of_node(struct pci_dev *dev)
+ {
+-	struct device_node *node;
+-
+ 	if (!dev->bus->dev.of_node)
+ 		return 0;
+ 
+-	node = of_pci_find_child_device(dev->bus->dev.of_node, dev->devfn);
++	struct device_node *node __free(device_node) =
++		of_pci_find_child_device(dev->bus->dev.of_node, dev->devfn);
+ 	if (!node)
+ 		return 0;
+ 
+-	device_set_node(&dev->dev, of_fwnode_handle(node));
++	struct device *pdev __free(put_device) =
++		bus_find_device_by_of_node(&platform_bus_type, node);
++	if (pdev)
++		dev->bus->dev.of_node_reused = true;
++
++	device_set_node(&dev->dev, of_fwnode_handle(no_free_ptr(node)));
+ 	return 0;
+ }
+ 
 -- 
 2.40.1
 
