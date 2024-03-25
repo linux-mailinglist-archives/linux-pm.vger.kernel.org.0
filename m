@@ -1,71 +1,59 @@
-Return-Path: <linux-pm+bounces-5324-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5325-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A30A688B1A2
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 21:37:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B33D388A894
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 17:13:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4A245BA2D65
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 16:00:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EF3D4BA458F
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 16:01:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 667F350A62;
-	Mon, 25 Mar 2024 13:39:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A21E12D205;
+	Mon, 25 Mar 2024 13:41:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="s+9yOuex"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="JJ3hPJMo"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17ED91E48B;
-	Mon, 25 Mar 2024 13:39:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3138712C7F9
+	for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 13:41:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711373997; cv=none; b=DBlhpLRPO+tfr3IFqi53YU3D+HL0nKiO5RRvXDW3VehN3aMrKrdVr/DCugbG2ddl/NViHJTZ/wsObFeULHqsUJdvpzT2uljMJvU+B4dTJdbd++Tp3INaXQX/ChTKic8GNI4pQc5QmzQ2f8/rhl42+xlz6ObnLAyIM8iWWVMWENI=
+	t=1711374089; cv=none; b=XKNkH9d0hfCmcg8c8+KXWefoZLnxQcjwMYMRZZTbTT4Pw1jbsdCKB8Bfrit1I8SAFKtFcE98PpP4OUGJhYSrghEeL19Yo5IF5iNVG9pfFwJKbeOYDInnP78rRdDmorhII+AwWpRq64S1mgcMOQBHuzUbpquqPvk+p64LyV3kv74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711373997; c=relaxed/simple;
-	bh=GGkkPKJZOQgHady8Q8BsE8Bd6pcJ/SxDxnNj+XHeUGI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PBJcRpelckrGRQ+XL2FSbZphUBbZEEgDJ1cjmsJ4fX3sKZqIa8CIX7FQqRrHrXr4gV4DJnH1/3sEZR0mQUpQVA/F9t2Y+njrsnFkfI/7M0h2WlLpE6JJaJBPH1FphPWOzH10529w/CxOU02b8Lsg/P172zKr1tLRszDfuuv5yoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=s+9yOuex reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+	s=arc-20240116; t=1711374089; c=relaxed/simple;
+	bh=Rh/0V0Re0AlKg1SRNSIIQFYBQLLc8Sw+ef0xo16ynXA=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hqWC+3s8g8AIHpryZuzINss3W5RuySj6yU7+QTx9nVMwcHsHXSCDfuRcfM+0CnykaZlxH3Xy/19r4j0Xm56HxCPwNjbf9niH0hjdDFirUxdlHj23SY6ud5N6RJazSKKqOFJcs6qY3oZxjcxKNOZh1fuBDrfKQc/qgAYVC8oTRe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=JJ3hPJMo; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id 512e0bec2d2c89bd; Mon, 25 Mar 2024 14:39:52 +0100
+ id 06833220b7904a2a; Mon, 25 Mar 2024 14:41:25 +0100
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 6950B66BCC7;
-	Mon, 25 Mar 2024 14:39:52 +0100 (CET)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id C595F66BCD6
+	for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 14:41:24 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1711373992;
-	bh=GGkkPKJZOQgHady8Q8BsE8Bd6pcJ/SxDxnNj+XHeUGI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=s+9yOuexQPBUoRaEQnGqmICEkfUjShMR6bh6xsZ2u8sJHbGCwuGnexVbhEvq2VvvQ
-	 p8NtqeTRBDev97LjaXL8JGZCypAZ2hOf/SLcbk0Awy5dc2eiJn7jQTYpT5Pji2wKDV
-	 7o7CpZr9Bo3naXssxJv1mQ6ywOwpJ3VeHPBSvlU/fmoWp9UB6YbNLqlSyGamxDB6sU
-	 LaFOis4jFbhD38o/Qj8FBTVUAe7QF4eJULkfi7Pqp3hGb0eeXTm7IbbmRilwH2HKmH
-	 8lAYFc8VDrs9tVZxDiImZfPsG2TrizcRAL0jlw2H2QVRMEjHYqFs4vaAKNqVU0/Rij
-	 bC77DpClLiOVA==
+	s=dkim; t=1711374085;
+	bh=Rh/0V0Re0AlKg1SRNSIIQFYBQLLc8Sw+ef0xo16ynXA=;
+	h=From:To:Subject:Date;
+	b=JJ3hPJMoZINCb1huGRrRs7+5f6f838O5LWi7KWeMymSS9Z2h1eBC3Z/dGq5TZv+62
+	 73xqEBVDMpf7LGIAUgNagCmxHbkO848yeoql7SSzEZXd2S4dT7vaakcdkPfJhJwRA5
+	 l2OTRVCTunVUIefoeAAium0GXEJfeXHgXYOcV9gXj8VDS3B0TApTXamomFnL8lfKGq
+	 0oolFyzbWRebpoCnqz2F8zx1BWZ235Epmsic8fIFt9bvJkB7v4OngGdkZmibUsk9Ec
+	 Q8b4QpbznKJbGi48W+6hozrKjJtiy2IwfsVB2yWaBC29nVlWOyiflMnokHhMBeqpZI
+	 BSUWWYpece34Q==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Subject:
- Re: [PATCH v2 0/3] thermal: More separation between the core and drivers
-Date: Mon, 25 Mar 2024 14:39:51 +0100
-Message-ID: <2273843.iZASKD2KPV@kreacher>
-In-Reply-To: <42ffcfb8-33fd-4ea5-bfac-fa8c78cd1cd4@linaro.org>
-References:
- <2331888.ElGaqSPkdT@kreacher>
- <42ffcfb8-33fd-4ea5-bfac-fa8c78cd1cd4@linaro.org>
+To: Linux PM <linux-pm@vger.kernel.org>
+Subject: [CfP] Power Management and Thermal Control MC (LPC 2024)
+Date: Mon, 25 Mar 2024 14:41:24 +0100
+Message-ID: <1974187.PYKUYFuaPT@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,60 +65,26 @@ Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 195.136.19.94
 X-CLIENT-HOSTNAME: 195.136.19.94
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledruddutddgfedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepfeduudeutdeugfelffduieegiedtueefledvjeegffdttefhhffhtefhleejgfetnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgr
- nhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepshhtrghnihhslhgrfidrghhruhhsiihkrgeslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledruddutddgfeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpefhgedtffejheekgeeljeevvedtuefgffeiieejuddutdekgfejvdehueejjeetvdenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=1 Fuz1=1 Fuz2=1
 
-Hi Daniel,
+Hi Everyone,
 
-On Monday, March 25, 2024 2:33:27 PM CET Daniel Lezcano wrote:
-> 
-> Hi Rafael,
-> 
-> thank you for this series.
-> 
-> It has been reported a regression with commit cf3986f8c01d3. I'm 
-> investigating and confirming it. If it is the case a revert may impact 
-> this series.
+My original attempt to send this CfP to linux-pm apparently has been
+blocked as "suspected spam", which was not very helpful, so below is a
+summary of it.  Everyone who has been on the CC list of the original
+message has received (I think), so I'm just sending this to the list.
 
-Sure.
+I'm looking for topics to be discussed in the Power Management and
+Thermal Control micro-conference at the LPC 2024, so if you have any,
+please let me know (the conference is taking place in Vienna, Austria
+in September).
 
-Can you please give me a pointer to a BZ or e-mail thread where this is
-being handled?
+Please note that LPC topics need to be about work in progress or
+future developments, work that has been completed already is not
+suitable.
 
-Thank you!
-
-
-> 
-> On 25/03/2024 14:10, Rafael J. Wysocki wrote:
-> > Hi Everyone,
-> > 
-> > This is an update of
-> > 
-> > https://lore.kernel.org/linux-pm/4558384.LvFx2qVVIh@kreacher/
-> > 
-> > which is a resend of the series with one extra patch added.  That extra patch
-> > is related to
-> > 
-> > https://lore.kernel.org/linux-pm/20240306085428.88011-1-daniel.lezcano@linaro.org/
-> > 
-> > The original description of the first two patches still applies:
-> > 
-> >> Patch [1/2] is based on the observation that the threshold field in struct
-> >> thermal_trip really should be core-internal and to make that happen it
-> >> introduces a wrapper structure around struct thermal_trip for internal
-> >> use in the core.
-> >>
-> >> Patch [2/2] moves the definition of the new structure and the struct
-> >> thermal_zone_device one to a local header file in the core to enforce
-> >> more separation between the core and drivers.
-> >>
-> >> The patches are not expected to introduce any observable differences in
-> >> behavior, so please let me know if you see any of that.
-> > 
-> 
-> 
-
+Thanks!
 
 
 
