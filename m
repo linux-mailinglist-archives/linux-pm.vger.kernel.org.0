@@ -1,91 +1,125 @@
-Return-Path: <linux-pm+bounces-5325-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5326-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B33D388A894
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 17:13:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3C4488A83D
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 17:05:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EF3D4BA458F
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 16:01:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 83C681F3A074
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 16:05:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A21E12D205;
-	Mon, 25 Mar 2024 13:41:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8490886270;
+	Mon, 25 Mar 2024 13:47:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="JJ3hPJMo"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hnnR4KZK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3138712C7F9
-	for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 13:41:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5A918625E
+	for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 13:47:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711374089; cv=none; b=XKNkH9d0hfCmcg8c8+KXWefoZLnxQcjwMYMRZZTbTT4Pw1jbsdCKB8Bfrit1I8SAFKtFcE98PpP4OUGJhYSrghEeL19Yo5IF5iNVG9pfFwJKbeOYDInnP78rRdDmorhII+AwWpRq64S1mgcMOQBHuzUbpquqPvk+p64LyV3kv74=
+	t=1711374458; cv=none; b=olebygTklQEOzcJ6FrlI9XvkGu64BrSYSUDXqilX7Oo7qIYUnujZh17CjiGnjKmxtcT/R69RWvBkmQf5Q/wugGi+hQKiENqEeoHTDW8DW3bE1TG3dVyHdrNgIr0nxUkqaWxvveTsMCgtOqirvftaHfc5+8c6liBPHl0bD27O0Lw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711374089; c=relaxed/simple;
-	bh=Rh/0V0Re0AlKg1SRNSIIQFYBQLLc8Sw+ef0xo16ynXA=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hqWC+3s8g8AIHpryZuzINss3W5RuySj6yU7+QTx9nVMwcHsHXSCDfuRcfM+0CnykaZlxH3Xy/19r4j0Xm56HxCPwNjbf9niH0hjdDFirUxdlHj23SY6ud5N6RJazSKKqOFJcs6qY3oZxjcxKNOZh1fuBDrfKQc/qgAYVC8oTRe8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=JJ3hPJMo; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id 06833220b7904a2a; Mon, 25 Mar 2024 14:41:25 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id C595F66BCD6
-	for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 14:41:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1711374085;
-	bh=Rh/0V0Re0AlKg1SRNSIIQFYBQLLc8Sw+ef0xo16ynXA=;
-	h=From:To:Subject:Date;
-	b=JJ3hPJMoZINCb1huGRrRs7+5f6f838O5LWi7KWeMymSS9Z2h1eBC3Z/dGq5TZv+62
-	 73xqEBVDMpf7LGIAUgNagCmxHbkO848yeoql7SSzEZXd2S4dT7vaakcdkPfJhJwRA5
-	 l2OTRVCTunVUIefoeAAium0GXEJfeXHgXYOcV9gXj8VDS3B0TApTXamomFnL8lfKGq
-	 0oolFyzbWRebpoCnqz2F8zx1BWZ235Epmsic8fIFt9bvJkB7v4OngGdkZmibUsk9Ec
-	 Q8b4QpbznKJbGi48W+6hozrKjJtiy2IwfsVB2yWaBC29nVlWOyiflMnokHhMBeqpZI
-	 BSUWWYpece34Q==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Subject: [CfP] Power Management and Thermal Control MC (LPC 2024)
-Date: Mon, 25 Mar 2024 14:41:24 +0100
-Message-ID: <1974187.PYKUYFuaPT@kreacher>
+	s=arc-20240116; t=1711374458; c=relaxed/simple;
+	bh=SuIRM/3Q6w7TaZkKYsx/rzdQjJe9T75LpZogkG5lMpk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=d0tLv64oxk+1N2yq8573/3JiYUVNRrCd/dutSpHuWQ7xeuVmQZ5oWwpHq3Uj7ksIq9GEi/MJqnNvjzNzzdr/qwJH6Tr8nmyajPgXNKb5NoVVwyR0Emh7Vv+PqL77XtYfi10K9rFYmlXgntK8d8LOiHEYT06NMGnD2zyvMfmE9xM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hnnR4KZK; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-33ecb04e018so3063430f8f.1
+        for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 06:47:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1711374455; x=1711979255; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ak1tU1hAMrwRs+LPSBUwIgy4Aqmw1ipgIVU8IK0CaAk=;
+        b=hnnR4KZKGmHRorXH8S4KGSwsp1MNYyxNTnSJFbArZ0Udh7blkQ0NmCKyrbQjN7Lb3V
+         4lxqNWqPlVSa5mcDZQXTs0CRVA3/GCVpoY3yWHI/e62FJ5qKz+YjBaH78lhym6/0xM1o
+         Tp1vecAGxqPAoudAARS0QEFHQncQS2w0iFhgEsiC6SqcRKr67z/wW3Uk0xJ3AjyBzIxe
+         pMhR6PZbHWCddJO7W8kCj4K3gGSjhBlWxwuxgbpgITPuIoF1J/ACzP/5Q8x3PzG5ra4H
+         +lSmbDL41Z/bSeo/2L7wWOGIxbDxjSmnUnDT5Oy7TV4OWy2J9zBoUu0rmhDXbTIG6INv
+         Rf3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711374455; x=1711979255;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ak1tU1hAMrwRs+LPSBUwIgy4Aqmw1ipgIVU8IK0CaAk=;
+        b=VrMD95K0UbjJosOuHhneeMgo+3vFifuEgXeLIRTpMCMhRow2J76gkJ1PQpbTprQp6t
+         YgZgl0LiQMZyaoLWhNVbeWWG526BOou1UrYBk4Cfrd0bQ6k/pf8b7Aq6yaMcitpKPhJU
+         5UbP0vQ61zBRIPRpZk1RlIvpWUGhRUMhQhS4kRWYt4jA4CTEmYAemGLI7jbTAGu03zb/
+         WvKshQEgG6q6GS7n+An3tMyLrzma5XY6/7D7FGfs9RErwy1YjsZ/CiP0F15hdkvMFpe0
+         3YbX9jWnWwLO6tiOE4jay9ai9Gk9suxIBaLzPR83yLRo6+bZGwfNJOZQvMoh4h6J/zN+
+         s/VA==
+X-Forwarded-Encrypted: i=1; AJvYcCX/lGN6v/pWAO1gmIbwGq0buuDwUAEYfj7xreQSyCs7GBP8OfSYYzQO70apt2dYmVnlIswjMTPu9LuXTM4NRcSTU0zWCWaw4LA=
+X-Gm-Message-State: AOJu0YwrzQ+RQGbhZTZJ0y70F0fRCAsT/ExcBAv5Rpni7PMJR0VJ5kq5
+	Q9SN8cjZXWG1SuDRdOA1ICVbUSjL+JVVas6L/hZuC+95YHjXxJYMEI1vIUinwaA=
+X-Google-Smtp-Source: AGHT+IF7KdIGQlqGnlG2Se4SlU0THQwzSCPNQgRzsRuSHRDL4SNJc7TBiOopCAeuLAKnQhCBUsp9Tw==
+X-Received: by 2002:a05:6000:4c9:b0:33e:c070:686c with SMTP id h9-20020a05600004c900b0033ec070686cmr4717780wri.45.1711374454950;
+        Mon, 25 Mar 2024 06:47:34 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id e7-20020a5d5947000000b0033f20497d4asm9590291wri.5.2024.03.25.06.47.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Mar 2024 06:47:34 -0700 (PDT)
+Message-ID: <1f028df8-435a-43cb-b776-0c2141f1c374@linaro.org>
+Date: Mon, 25 Mar 2024 14:47:34 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledruddutddgfeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpefhgedtffejheekgeeljeevvedtuefgffeiieejuddutdekgfejvdehueejjeetvdenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=1 Fuz1=1 Fuz2=1
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/3] thermal: More separation between the core and
+ drivers
+Content-Language: en-US
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+References: <2331888.ElGaqSPkdT@kreacher>
+ <42ffcfb8-33fd-4ea5-bfac-fa8c78cd1cd4@linaro.org>
+ <2273843.iZASKD2KPV@kreacher>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <2273843.iZASKD2KPV@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Everyone,
+On 25/03/2024 14:39, Rafael J. Wysocki wrote:
+> Hi Daniel,
+> 
+> On Monday, March 25, 2024 2:33:27 PM CET Daniel Lezcano wrote:
+>>
+>> Hi Rafael,
+>>
+>> thank you for this series.
+>>
+>> It has been reported a regression with commit cf3986f8c01d3. I'm
+>> investigating and confirming it. If it is the case a revert may impact
+>> this series.
+> 
+> Sure.
+> 
+> Can you please give me a pointer to a BZ or e-mail thread where this is
+> being handled?
 
-My original attempt to send this CfP to linux-pm apparently has been
-blocked as "suspected spam", which was not very helpful, so below is a
-summary of it.  Everyone who has been on the CC list of the original
-message has received (I think), so I'm just sending this to the list.
-
-I'm looking for topics to be discussed in the Power Management and
-Thermal Control micro-conference at the LPC 2024, so if you have any,
-please let me know (the conference is taking place in Vienna, Austria
-in September).
-
-Please note that LPC topics need to be about work in progress or
-future developments, work that has been completed already is not
-suitable.
-
-Thanks!
+That has been reported to me directly. In a moment, I'll start a thread
 
 
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
 
