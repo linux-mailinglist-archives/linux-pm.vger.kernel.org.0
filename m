@@ -1,96 +1,124 @@
-Return-Path: <linux-pm+bounces-5293-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5296-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51C5788A59E
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 16:01:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1276488A5DA
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 16:08:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82C471C3BAC6
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 15:01:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 43B711C39871
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 15:08:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E37614D714;
-	Mon, 25 Mar 2024 12:11:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12148147C62;
+	Mon, 25 Mar 2024 12:21:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="gpHywCdi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 942095D731;
-	Mon, 25 Mar 2024 12:06:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E87D146D40;
+	Mon, 25 Mar 2024 12:19:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711368387; cv=none; b=amN3wMMKBM6R7th5n2yqIs7xKudbaP/lPS2NJ6+05zXzdRQDp2V9fISJoalpEYyA/4kRmPIlrTg5TozilRXHQnMnc2sq6kufB7h2OQ6qk1XYqjINN8CdBgVGEU5V5zoVvem5mxoSesjA2fad/h/Z/8CuNfyuHU+UKdhNRDrk0T0=
+	t=1711369165; cv=none; b=Pvo7uhRrKf3MoKDUHKF1eLUWd3muCG/ircSsFUj3Sbjo3Dl1c6r9mnhzIhpjSLMF27nTAPajvhbCzSLpJCT29ohUBVexh9Q/1kZQwwJMpG+SFI0qdXheiYf+rHrVevFKgJx6UkpsQ2dfN+qzgK7QWOynrv/7fCzIpBYaRnUubxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711368387; c=relaxed/simple;
-	bh=yPtmna4ptGgXfkbENYERn+NKzVLez4o/N3DCc/GmLKI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=h72srGKs/T4g7uwvsBa8cWauYTkJoEsvPUqtLGVWP/voNF6jNcFcOXWb13JclTySmn/7BljPaz8umAXfbRgEM/SI+3KI/dW6hVrFDnh4JxAg9v3xo5OHDBPr4rL9iW/BFX/Ngu0MsUtbNuk+W8Kiqu8McWKbelaNkm/9SUnXTGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 347BF1FB;
-	Mon, 25 Mar 2024 05:06:55 -0700 (PDT)
-Received: from [10.1.25.33] (e133047.arm.com [10.1.25.33])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 330623F67D;
-	Mon, 25 Mar 2024 05:06:18 -0700 (PDT)
-Message-ID: <de1eba3c-2453-4c5c-bd80-dd7d7b33f60d@arm.com>
-Date: Mon, 25 Mar 2024 12:06:16 +0000
+	s=arc-20240116; t=1711369165; c=relaxed/simple;
+	bh=GIZSh66U6z+v0FZReaLZ5gUmsUuxR/pzA9kedxsUGSk=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gRqqP5uUkirFoEbHc7dhwTkF/SYH91bgAZp7XuycjGl8OqIE6wSoEbM2xK2UGjpgGD0/JCw/JEy6SRrn9R/eqCpoxMa82zflhttny7pZNPg6FPhU9Hggq/7OKZ+kP0GvnKP33NFEvdGUmSZePoVHxe6JEWK8tu7j60O8uJeUPlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=gpHywCdi; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: e5dd499eeaa111eeb8927bc1f75efef4-20240325
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=lmpuo9I0bbZzu8NWnzQ5XfVCX4DjRHWuUIyZfU8/iiM=;
+	b=gpHywCdiRo2Ru6odRRrjEEEzxmAXxLRLDQtrrgIWXORUu+skFjGiNFvxEX60TyyiznLF4cACZRUQcVeS6vFuXmtceP6qGDg1mrcJJE1FtFve3rrNIfjlC/mwaWEazyXoOmGdSXWSVLgJwNY+AjCoofV6hVogTDoldn4U/1sYOhE=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.37,REQID:bbb19d4c-fd55-4fbb-9d95-1ec1d7888c50,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6f543d0,CLOUDID:e8466885-8d4f-477b-89d2-1e3bdbef96d1,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
+	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
+X-UUID: e5dd499eeaa111eeb8927bc1f75efef4-20240325
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+	(envelope-from <yu-chang.lee@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 335187936; Mon, 25 Mar 2024 20:19:16 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ MTKMBS14N2.mediatek.inc (172.21.101.76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Mon, 25 Mar 2024 20:19:14 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Mon, 25 Mar 2024 20:19:14 +0800
+From: yu-chang.lee <yu-chang.lee@mediatek.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>,
+	<mandyjh.liu@mediatek.com>, <fan.chen@mediatek.com>,
+	<xiufeng.li@mediatek.com>, <yu-chang.lee@mediatek.com>
+Subject: [PATCH 0/2] soc: mediatek: pm-domains: solve power domain glitch issue
+Date: Mon, 25 Mar 2024 20:19:06 +0800
+Message-ID: <20240325121908.3958-1-yu-chang.lee@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 0/2] Introduce per-task io utilization boost
-Content-Language: en-US
-To: Bart Van Assche <bvanassche@acm.org>, Qais Yousef <qyousef@layalina.io>
-Cc: linux-kernel@vger.kernel.org, peterz@infradead.org,
- juri.lelli@redhat.com, mingo@redhat.com, rafael@kernel.org,
- dietmar.eggemann@arm.com, vschneid@redhat.com, vincent.guittot@linaro.org,
- Johannes.Thumshirn@wdc.com, adrian.hunter@intel.com, ulf.hansson@linaro.org,
- andres@anarazel.de, asml.silence@gmail.com, linux-pm@vger.kernel.org,
- linux-block@vger.kernel.org, io-uring@vger.kernel.org,
- linux-mmc@vger.kernel.org
-References: <20240304201625.100619-1-christian.loehle@arm.com>
- <86f0af00-8765-4481-9245-1819fb2c6379@acm.org>
- <0dc6a839-2922-40ac-8854-2884196da9b9@arm.com>
- <c5b7fc1f-f233-4d25-952b-539607c2a0cc@acm.org>
- <2784c093-eea1-4b73-87da-1a45f14013c8@arm.com>
- <20240321123935.zqscwi2aom7lfhts@airbuntu>
- <1ff973fc-66a4-446e-8590-ec655c686c90@arm.com>
- <2ed2dadc-bdc4-4a21-8aca-a2aac0c6479a@acm.org>
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <2ed2dadc-bdc4-4a21-8aca-a2aac0c6479a@acm.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-AS-Result: No-10--7.339100-8.000000
+X-TMASE-MatchedRID: u0D5i0POlXiYvtVftxNfQUvrB8UvzFr4BdebOqawiLuCsBeCv8CM/Sse
+	9qdFFe49mI8EBZ3uTGtSzpXv5ekotFrgS5K/qcaqDko+EYiDQxFQCOsAlaxN7w6QlBHhBZuwkwm
+	4GnFKyckb7ifYusSVqcMHFIKAT3DiXSJ4c3nT+QcZXJLztZviXLLiLKO9VZOiXCmcAC8DBrOekk
+	V1yzofFtYn7aUb4In+oFW8SPM0GkIfE8yM4pjsDwtuKBGekqUpOlxBO2IcOBYegoblg+i7rGCnQ
+	UssYJ15MlFYtzBbKQ1vcglu/p3CKKy2KbCWZSoB
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--7.339100-8.000000
+X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-SNTS-SMTP:
+	9765538F42BCE3697C87BD1816866E3CD6EB2C80F0C481004623D67ED9900FF22000:8
+X-MTK: N
 
-On 21/03/2024 19:52, Bart Van Assche wrote:
-> On 3/21/24 10:57, Christian Loehle wrote:
->> In the long-term it looks like for UFS the problem will disappear as we are
->> expected to get one queue/hardirq per CPU (as Bart mentioned), on NVMe that
->> is already the case.
-> 
-> Why the focus on storage controllers with a single completion interrupt?
-> It probably won't take long (one year?) until all new high-end
-> smartphones may have support for multiple completion interrupts.
-> 
-> Thanks,
-> 
-> Bart.
-> 
+Hi,
 
-Apart from going to "This patch shows significant performance improvements on
-hardware that runs mainline today" to "This patch will have significant
-performance improvements on devices running mainline in a couple years"
-nothing in particular.
-I'm fine with leaving it with having acknowledged the problem.
-Maybe I would just gate the task placement on the task having been in
-UFS (with multiple completion interrupts) or NVMe submission recently to
-avoid regressions to current behavior in future versions. I did have that
-already at some point, although it was a bit hacky.
-Anyway, thank you for your input on that, it is what I wanted to hear!
+This series aims to solve power-off failures and occasional SMI hang issues that
+occur during camera stress tests. The issue arises because, when MTCMOS powers on
+or off, signal glitches are sometimes produced. This is fairly normal, but the 
+software must address it to avoid mistaking the glitch for a transaction signal.
 
-Kind Regards,
-Christian
+The solutions in these patches can be summarized as follows:
+
+1. Disable the sub-common port after turning off the Larb CG and before turning 
+   off the Larb MTCMOS.
+2. Use CLAMP to disable/enable the SMI common port.
+3. Implement an AXI reset.
+For previous discussion on the direction of the code modifications, please refer
+to: https://lore.kernel.org/linux-arm-kernel/c476cc48-17ec-4e14-98d8-35bdffb5d296@collabora.com/
+
+
+yu-chang.lee (2):
+  soc: mediatek: pm-domains: add smi_larb_reset function when power on
+  soc: mediatek: pm-domains: support smi clamp protection
+
+ drivers/pmdomain/mediatek/mt8188-pm-domains.h |  69 +++++-
+ drivers/pmdomain/mediatek/mtk-pm-domains.c    | 206 +++++++++++++++---
+ drivers/pmdomain/mediatek/mtk-pm-domains.h    |  13 ++
+ 3 files changed, 255 insertions(+), 33 deletions(-)
+
+-- 
+2.18.0
+
 
