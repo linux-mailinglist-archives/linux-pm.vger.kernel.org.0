@@ -1,165 +1,90 @@
-Return-Path: <linux-pm+bounces-5297-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5298-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 304F588A5E5
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 16:10:38 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CF0488A9CF
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 17:42:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 62C671C3B4EC
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 15:10:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3BE9BB61BAF
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 15:31:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C49B5A7B9;
-	Mon, 25 Mar 2024 12:24:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99E7013E3E0;
+	Mon, 25 Mar 2024 12:52:25 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C654A5A10E;
-	Mon, 25 Mar 2024 12:24:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 578341758F;
+	Mon, 25 Mar 2024 12:52:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711369451; cv=none; b=IP9Cqcok2yKSLv9HmCqxF4KEDE49zGXx3aGeqvYzuNLREc8e05cZ3cC19HNLA8M17/zTYdgbstKEPRbV1YRPkzAa9n7fJsBPLIPLOHMtetijeTdlC04vCjcQ/9S4UjH3JEKWCie6O9z2LyQ8ywT2rN79Hl+13HzJTyyq+JwDAxw=
+	t=1711371145; cv=none; b=FEMUJ+T1Ll4CmLgO4jQ6Q1LFPBny18mhgxcPgMtelfNwvxL7v7msYBKqC2y71QVvKMG4h6RnpxAZEyGZIBoVMdxbbyZU4RoN3Co8Y0EzCQ2Dl2b5F54itTpeiuHl3Zm1RFNpF9rEqR3GitDg895Pk7FXASuNfTwNPEziRBFvelc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711369451; c=relaxed/simple;
-	bh=WLZLZRzN8/OLDT6OPOMADL/GkziHijAZbwkxBipU9Is=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gM2dkmBJj/zT37+Mv9BgwZzy3AgLGXJjo+/EHJ1njkdzKL9MOroSYJ6THD4tTjnpSZjgcYJtFtD9MpC5Rbve8isuoLmwg7oUReqKEu3wYCESL9ZgFqvbOjeFAFKdBLvtVJnLnMRBdtFo9M8M4jZrQbWGzeliDHqht6wrCIc97ek=
+	s=arc-20240116; t=1711371145; c=relaxed/simple;
+	bh=ExUUsC+CqMjF+l/I8M6xKudiZbcZcqHRiPeAkaD7Bko=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Bo1u9xAAGUJD5D8rBO1LNSasLPSGd74Ns0AlppLFzPAoAk04vbJiebK/AObKrFk57YYj3O4wLhgXePX9u8+i0JdRvhJTKjZTI9S5mv7K9riNI/M5Ad9Jo6LrHqJ57feLNbw9dPXP4lrITx38pMAqpPp9cp22/094BnFCBgx5aLE=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A2DD01FB;
-	Mon, 25 Mar 2024 05:24:41 -0700 (PDT)
-Received: from [10.1.25.33] (e133047.arm.com [10.1.25.33])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B245F3F67D;
-	Mon, 25 Mar 2024 05:24:04 -0700 (PDT)
-Message-ID: <92ecab7f-6e35-4e23-a8b7-097a9c26f551@arm.com>
-Date: Mon, 25 Mar 2024 12:24:02 +0000
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7162F1FB;
+	Mon, 25 Mar 2024 05:52:56 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C48633F67D;
+	Mon, 25 Mar 2024 05:52:20 -0700 (PDT)
+Date: Mon, 25 Mar 2024 12:52:18 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Liviu Dudau <liviu.dudau@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Amit Kucheria <amit.kucheria@linaro.org>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, Rob Herring <robh@kernel.org>
+Subject: Re: (subset) [PATCH 2/2] arm64: dts: juno: fix thermal zone node
+ names
+Message-ID: <ZgFzgr1KtuFIeVux@bogus>
+References: <20240103142051.111717-1-krzysztof.kozlowski@linaro.org>
+ <20240103142051.111717-2-krzysztof.kozlowski@linaro.org>
+ <171136466536.36729.15243854495211929982.b4-ty@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 0/2] Introduce per-task io utilization boost
-Content-Language: en-US
-To: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: linux-kernel@vger.kernel.org, peterz@infradead.org,
- juri.lelli@redhat.com, mingo@redhat.com, rafael@kernel.org,
- dietmar.eggemann@arm.com, vschneid@redhat.com, Johannes.Thumshirn@wdc.com,
- adrian.hunter@intel.com, ulf.hansson@linaro.org, andres@anarazel.de,
- asml.silence@gmail.com, linux-pm@vger.kernel.org,
- linux-block@vger.kernel.org, io-uring@vger.kernel.org
-References: <20240304201625.100619-1-christian.loehle@arm.com>
- <CAKfTPtDcTXBosFpu6vYW_cXLGwnqJqYCUW19XyxRmAc233irqA@mail.gmail.com>
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <CAKfTPtDcTXBosFpu6vYW_cXLGwnqJqYCUW19XyxRmAc233irqA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <171136466536.36729.15243854495211929982.b4-ty@linaro.org>
 
-On 22/03/2024 18:08, Vincent Guittot wrote:
-> Hi Christian,
-Hi Vincent,
-thanks for taking a look.
-
+On Mon, Mar 25, 2024 at 12:05:14PM +0100, Krzysztof Kozlowski wrote:
 > 
-> On Mon, 4 Mar 2024 at 21:17, Christian Loehle <christian.loehle@arm.com> wrote:
->>
->> There is a feature inside of both schedutil and intel_pstate called
->> iowait boosting which tries to prevent selecting a low frequency
->> during IO workloads when it impacts throughput.
->> The feature is implemented by checking for task wakeups that have
->> the in_iowait flag set and boost the CPU of the rq accordingly
->> (implemented through cpufreq_update_util(rq, SCHED_CPUFREQ_IOWAIT)).
->>
->> The necessity of the feature is argued with the potentially low
->> utilization of a task being frequently in_iowait (i.e. most of the
->> time not enqueued on any rq and cannot build up utilization).
->>
->> The RFC focuses on the schedutil implementation.
->> intel_pstate frequency selection isn't touched for now, suggestions are
->> very welcome.
->> Current schedutil iowait boosting has several issues:
->> 1. Boosting happens even in scenarios where it doesn't improve
->> throughput. [1]
->> 2. The boost is not accounted for in EAS: a) feec() will only consider
->>  the actual utilization for task placement, but another CPU might be
->>  more energy-efficient at that capacity than the boosted one.)
->>  b) When placing a non-IO task while a CPU is boosted compute_energy()
->>  will not consider the (potentially 'free') boosted capacity, but the
->>  one it would have without the boost (since the boost is only applied
->>  in sugov).
->> 3. Actual IO heavy workloads are hardly distinguished from infrequent
->> in_iowait wakeups.
->> 4. The boost isn't associated with a task, it therefore isn't considered
->> for task placement, potentially missing out on higher capacity CPUs on
->> heterogeneous CPU topologies.
->> 5. The boost isn't associated with a task, it therefore lingers on the
->> rq even after the responsible task has migrated / stopped.
->> 6. The boost isn't associated with a task, it therefore needs to ramp
->> up again when migrated.
->> 7. Since schedutil doesn't know which task is getting woken up,
->> multiple unrelated in_iowait tasks might lead to boosting.
->>
->> We attempt to mitigate all of the above by reworking the way the
->> iowait boosting (io boosting from here on) works in two major ways:
->> - Carry the boost in task_struct, so it is a per-task attribute and
->> behaves similar to utilization of the task in some ways.
->> - Employ a counting-based tracking strategy that only boosts as long
->> as it sees benefits and returns to no boosting dynamically.
+> On Wed, 03 Jan 2024 15:20:51 +0100, Krzysztof Kozlowski wrote:
+> > Linux kernel uses thermal zone node name during registering thermal
+> > zones and has a hard-coded limit of 20 characters, including terminating
+> > NUL byte.  Exceeding the limit will cause failure to configure thermal
+> > zone.
+> > 
+> > 
 > 
-> Thanks for working on improving IO boosting. I have started to read
-> your patchset and have few comments about your proposal:
+> Applied, thanks!
 > 
-> The main one is that the io boosting decision should remain a cpufreq
-> governor decision and so the io boosting value should be applied by
-> the governor like in sugov_effective_cpu_perf() as an example instead
-> of everywhere in the scheduler code
-Having it move into the scheduler is to enable it for EAS (e.g. boosting
-a LITTLE to it's highest OPP often being much less energy-efficient than
-having a higher cap CPU at a lower OPP) and to enable higher capacities
-reachable on other CPUs, too.
-I guess for you the first one is the more interesting one.
+> This was waiting on the lists for some time and no one picked it up, so... let
+> me know if I should drop it from my tree.
+>
 
-> 
-> Then, the algorithm to track the right interval bucket and the mapping
-> of intervals into utilization really looks like a policy which has
-> been defined with heuristics and as a result further seems to be a
-> governor decision
+Sorry for that, must have slipped through when I was off. Thanks for picking
+it up. If not too late, feel free to add
 
-I did have a comparable thing as a governor decision, but the entire
-"Test if util boost increases iowaits seen per interval and only boost
-accordingly" really only works if the interval is long enough, my proposed
-starting length of 25ms really being the lower limit for the storage devices
-we want to cover (IO latency not being constant and therefore iowaits per
-interval being somewhat noisy).
-Given that the IO tasks will be enqueued/dequeued very frequently it just
-isn't credible to expect them to land on the same CPU for many intervals,
-unless your system is very bare-bones and idle, but even on an idle Android
-I see any interval above 50ms to be unusable and not provide any throughput
-improvement.
-The idea of tracking the iowaits I do find the best option in this vague and
-noisy environment of "iowait wakeups" and definitely worth having, so that's
-why I opted for it being in the scheduler code, but I'd love to hear your
-thoughts/alternatives.
-I'd also like an improvement on the definition of iowait or some more separate
-flag for boostable IO, the entire "boost on any iowait wakeup" is groping in
-the dark which I'm trying to combat, but it's somewhat out of scope here.
+Acked-by: Sudeep Holla <sudeep.holla@arm.com>
 
-> 
-> Finally adding some atomic operation in the fast path is not really desirable
-Agreed, I'll look into it, for now I wanted as much feedback on the two major
-changes:
-- iowait boost now per-task
-- boosting based upon iowaits seen per interval
-
-> 
-> I will continue to review your patchset
-
-Thank you, looking forward to seeing your review.
-
->>[snip]
-Kind Regards,
-Christian
+-- 
+Regards,
+Sudeep
 
