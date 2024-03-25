@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-5299-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5300-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7941288A6BB
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 16:34:26 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 238C188B17C
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 21:34:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E4C981F3FA70
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 15:34:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 36C96BE4D96
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Mar 2024 15:36:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F18D12AADF;
-	Mon, 25 Mar 2024 12:58:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 088976EB49;
+	Mon, 25 Mar 2024 13:05:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="xv7KEm+A"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="I83YE3RX"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B424412AAE0;
-	Mon, 25 Mar 2024 12:58:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED7006E61B;
+	Mon, 25 Mar 2024 13:05:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711371523; cv=none; b=Snnx61DwjeBSJdV617qpL+BsDN6Ag4YDSvmBwZBahaDImPNoCUjblKpOMsy/7LX6DjIoUJVNel50KyFHuyddSUEP/8R5L+ZnM8baBNuSdonlT8/wGds0dNY3K20afjhlVvFJMRyOO3Xoa3Z3dHWbnrDaf7NFGgyH0jdUeqP+1uQ=
+	t=1711371955; cv=none; b=pkan0xnPBoA5vfb+u1pVHrWnJRtKSg4J2y8akutBJ5LskPikZhu/lO6WOKHwfyRUx/BCQbsFj/BEFcGryeSMpxInZN99L84wAySoHomPDz2Ntzdp2bH52FSE4Be482mYj567fEqEZL5oqmAhpAYbzWiIk9uRCP0fzxmQsjryoUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711371523; c=relaxed/simple;
-	bh=X0mMoXhySmQx0Svx/wLI3xWB9TsLJ77ZgdxeEJbZWZU=;
+	s=arc-20240116; t=1711371955; c=relaxed/simple;
+	bh=pnXYYeoKbGCaZlwTSVSSXwb+6bzzDJZJVhySWWjSWS4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iZTv3xL5Pq1JM6H/DFT/BmcbBBBVb+B6BBBpSllZm7C15oya8X0Sr+6V8r/Taig0DIaTl2Sm0HanuOxikY/AHMggGCMMGjZ+A8VSAHGLnJzpZhi2wTqfqTrK+h35ehtA57PmG6VZ2uG9bwr5VVEB2T1/QXGZR08F0vh8IurU7qU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=xv7KEm+A; arc=none smtp.client-ip=46.235.227.194
+	 In-Reply-To:Content-Type; b=sYCsCR6bseYtW1WYmyT5Cdd+kjWapuk3mncjjQ7YySiWd9bt73O0hxdDlZABrAG8PrbB0qQSeiSGVyMTbq25LHFp30W9LPmq5Ndv94pFVE//YshME1CBRM0ZHcJwB5PRjxQux0xnYMZUtlPA75DheCt82GVGayvjpUnddGYFXLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=I83YE3RX; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1711371520;
-	bh=X0mMoXhySmQx0Svx/wLI3xWB9TsLJ77ZgdxeEJbZWZU=;
+	s=mail; t=1711371949;
+	bh=pnXYYeoKbGCaZlwTSVSSXwb+6bzzDJZJVhySWWjSWS4=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=xv7KEm+Au+NvqUEIVp5Kt3xA6YbT8CgSn1tEZAaqSg7sFnGoo/qu7VDPA7Ehhj5yE
-	 GOfOetZKsTrzK33PRqHFGqBGSzagefv/NWCj/+pdhY72Nphg5hFmYwdT6BSrwr/4jN
-	 e4oe4rC6hCF+QcsJR2Bprk5iQgXJC8Kd/2uIJsfcNQmJayAfyHPJ08aTK+7SU55Uyk
-	 VrUuFuca67b7GUrHiJALDvxfKS7JeCg9W5R2i4/Lial+MlUoocGIStJXV9x2DAWRvX
-	 gKbzChLT5SHIJfAsn9M0dGX6APN3c1SLL4uJtP9yzxxWicsI/CoRFu33bvYHpFet2p
-	 vbjnF/+Uujdqw==
+	b=I83YE3RXwci3ILQ2uIgKKUVMxvdVZIO4W6iI2rtYca4AOYj/CFQyPnCzMLulWAtLE
+	 alPFIlByK/LOg67oqx9q/Ryq4EOOneHVdKHtb6DIE92Yz07mDAOsE44ME/mzbajB4P
+	 Q/caBaghnk8X/bJ5jfPbwXbBXgrrli+8HgPoghioaaDuiKAN0SskYfVQwP1Enwvngj
+	 psQ9EG9bjRr1IJAiSbkUcXrFgSyv70W+nzn0UmwEusLA0kGKBEHlHZq9pknj4AypJ7
+	 343TPtJ4AA4RnurXLInC2IMx3WdQRUatv3PTsR25CpGJHz+GVx1rolTIUFQ+wqwtlO
+	 +C/VylFZzLJ+Q==
 Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 5E55A378107C;
-	Mon, 25 Mar 2024 12:58:39 +0000 (UTC)
-Message-ID: <0e125862-c7f3-4aa0-89d6-ef458654bebb@collabora.com>
-Date: Mon, 25 Mar 2024 13:58:38 +0100
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id EA978378209A;
+	Mon, 25 Mar 2024 13:05:48 +0000 (UTC)
+Message-ID: <a6f54fdf-f0a9-4edc-9054-50d5204a6898@collabora.com>
+Date: Mon, 25 Mar 2024 14:05:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -57,8 +57,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] soc: mediatek: pm-domains: add smi_larb_reset
- function when power on
+Subject: Re: [PATCH 2/2] soc: mediatek: pm-domains: support smi clamp
+ protection
 To: "yu-chang.lee" <yu-chang.lee@mediatek.com>,
  Ulf Hansson <ulf.hansson@linaro.org>,
  Matthias Brugger <matthias.bgg@gmail.com>
@@ -67,167 +67,365 @@ Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
  Project_Global_Chrome_Upstream_Group@mediatek.com, mandyjh.liu@mediatek.com,
  fan.chen@mediatek.com, xiufeng.li@mediatek.com
 References: <20240325121908.3958-1-yu-chang.lee@mediatek.com>
- <20240325121908.3958-2-yu-chang.lee@mediatek.com>
+ <20240325121908.3958-3-yu-chang.lee@mediatek.com>
 From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Content-Language: en-US
-In-Reply-To: <20240325121908.3958-2-yu-chang.lee@mediatek.com>
+In-Reply-To: <20240325121908.3958-3-yu-chang.lee@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 Il 25/03/24 13:19, yu-chang.lee ha scritto:
-> This patch avoid mtcmos power glitch from happening by set and clear
-> smi larb reset.
+> In order to avoid power glitch, this patch use smi clamp
+> to disable/enable smi common port.
 > 
 > Signed-off-by: yu-chang.lee <yu-chang.lee@mediatek.com>
 > ---
->   drivers/pmdomain/mediatek/mt8188-pm-domains.h | 28 +++++++++
->   drivers/pmdomain/mediatek/mtk-pm-domains.c    | 59 +++++++++++++++++++
->   drivers/pmdomain/mediatek/mtk-pm-domains.h    | 12 ++++
->   3 files changed, 99 insertions(+)
+>   drivers/pmdomain/mediatek/mt8188-pm-domains.h |  41 ++++-
+>   drivers/pmdomain/mediatek/mtk-pm-domains.c    | 147 ++++++++++++++----
+>   drivers/pmdomain/mediatek/mtk-pm-domains.h    |   1 +
+>   3 files changed, 156 insertions(+), 33 deletions(-)
 > 
 > diff --git a/drivers/pmdomain/mediatek/mt8188-pm-domains.h b/drivers/pmdomain/mediatek/mt8188-pm-domains.h
-> index 06834ab6597c..7bbba4d56a77 100644
+> index 7bbba4d56a77..39f057dca92c 100644
 > --- a/drivers/pmdomain/mediatek/mt8188-pm-domains.h
 > +++ b/drivers/pmdomain/mediatek/mt8188-pm-domains.h
 > @@ -573,6 +573,18 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
 >   		.pwr_sta2nd_offs = 0x170,
 >   		.sram_pdn_bits = BIT(8),
 >   		.sram_pdn_ack_bits = BIT(12),
-> +		.reset_smi = {
-> +			SMI_RESET_WR(MT8188_SMI_LARB10_RESET,
-> +				     MT8188_SMI_LARB10_RESET_ADDR),
-> +			SMI_RESET_WR(MT8188_SMI_LARB11A_RESET,
-> +				     MT8188_SMI_LARB11A_RESET_ADDR),
-> +			SMI_RESET_WR(MT8188_SMI_LARB11C_RESET,
-> +				     MT8188_SMI_LARB11C_RESET_ADDR),
-> +			SMI_RESET_WR(MT8188_SMI_LARB11B_RESET,
-> +				     MT8188_SMI_LARB11B_RESET_ADDR),
-> +			SMI_RESET_WR(MT8188_SMI_LARB15_RESET,
-> +				     MT8188_SMI_LARB15_RESET_ADDR),
+> +		.bp_cfg = {
+> +			BUS_PROT_WR(SMI,
+> +				    MT8188_SMI_COMMON_SMI_CLAMP_DIP_TO_VDO0,
+> +				    MT8188_SMI_COMMON_CLAMP_EN_SET,
+> +				    MT8188_SMI_COMMON_CLAMP_EN_CLR,
+> +				    MT8188_SMI_COMMON_CLAMP_EN_STA),
+> +			BUS_PROT_WR(SMI,
+> +				    MT8188_SMI_COMMON_SMI_CLAMP_DIP_TO_VPP1,
+> +				    MT8188_SMI_COMMON_CLAMP_EN_SET,
+> +				    MT8188_SMI_COMMON_CLAMP_EN_CLR,
+> +				    MT8188_SMI_COMMON_CLAMP_EN_STA),
 > +		},
->   		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
+>   		.reset_smi = {
+>   			SMI_RESET_WR(MT8188_SMI_LARB10_RESET,
+>   				     MT8188_SMI_LARB10_RESET_ADDR),
+> @@ -585,7 +597,7 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
+>   			SMI_RESET_WR(MT8188_SMI_LARB15_RESET,
+>   				     MT8188_SMI_LARB15_RESET_ADDR),
+>   		},
+> -		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
+> +		.caps = MTK_SCPD_KEEP_DEFAULT_OFF | MTK_SCPD_CLAMP_PROTECTION,
 >   	},
 >   	[MT8188_POWER_DOMAIN_IPE] = {
-> @@ -583,6 +595,10 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
+>   		.name = "ipe",
+> @@ -595,11 +607,18 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
 >   		.pwr_sta2nd_offs = 0x170,
 >   		.sram_pdn_bits = BIT(8),
 >   		.sram_pdn_ack_bits = BIT(12),
-> +		.reset_smi = {
-> +			SMI_RESET_WR(MT8188_SMI_LARB12_RESET,
-> +				     MT8188_SMI_LARB12_RESET_ADDR),
+> +		.bp_cfg = {
+> +			BUS_PROT_WR(SMI,
+> +				    MT8188_SMI_COMMON_SMI_CLAMP_IPE_TO_VPP1,
+> +				    MT8188_SMI_COMMON_CLAMP_EN_SET,
+> +				    MT8188_SMI_COMMON_CLAMP_EN_CLR,
+> +				    MT8188_SMI_COMMON_CLAMP_EN_STA),
 > +		},
->   		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
+>   		.reset_smi = {
+>   			SMI_RESET_WR(MT8188_SMI_LARB12_RESET,
+>   				     MT8188_SMI_LARB12_RESET_ADDR),
+>   		},
+> -		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
+> +		.caps = MTK_SCPD_KEEP_DEFAULT_OFF | MTK_SCPD_CLAMP_PROTECTION,
 >   	},
 >   	[MT8188_POWER_DOMAIN_CAM_VCORE] = {
-> @@ -660,6 +676,12 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
+>   		.name = "cam_vcore",
+> @@ -676,13 +695,20 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
 >   		.pwr_sta2nd_offs = 0x170,
 >   		.sram_pdn_bits = BIT(8),
 >   		.sram_pdn_ack_bits = BIT(12),
-> +		.reset_smi = {
-> +			SMI_RESET_WR(MT8188_SMI_LARB16A_RESET,
-> +				     MT8188_SMI_LARB16A_RESET_ADDR),
-> +			SMI_RESET_WR(MT8188_SMI_LARB17A_RESET,
-> +				     MT8188_SMI_LARB17A_RESET_ADDR),
+> +		.bp_cfg = {
+> +			BUS_PROT_WR(SMI,
+> +				    MT8188_SMI_COMMON_SMI_CLAMP_IPE_TO_VPP1,
+> +				    MT8188_SMI_COMMON_CLAMP_EN_SET,
+> +				    MT8188_SMI_COMMON_CLAMP_EN_CLR,
+> +				    MT8188_SMI_COMMON_CLAMP_EN_STA),
 > +		},
->   		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
+>   		.reset_smi = {
+>   			SMI_RESET_WR(MT8188_SMI_LARB16A_RESET,
+>   				     MT8188_SMI_LARB16A_RESET_ADDR),
+>   			SMI_RESET_WR(MT8188_SMI_LARB17A_RESET,
+>   				     MT8188_SMI_LARB17A_RESET_ADDR),
+>   		},
+> -		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
+> +		.caps = MTK_SCPD_KEEP_DEFAULT_OFF | MTK_SCPD_CLAMP_PROTECTION,
 >   	},
 >   	[MT8188_POWER_DOMAIN_CAM_SUBB] = {
-> @@ -670,6 +692,12 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
+>   		.name = "cam_subb",
+> @@ -692,13 +718,20 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
 >   		.pwr_sta2nd_offs = 0x170,
 >   		.sram_pdn_bits = BIT(8),
 >   		.sram_pdn_ack_bits = BIT(12),
-> +		.reset_smi = {
-> +			SMI_RESET_WR(MT8188_SMI_LARB16B_RESET,
-> +				     MT8188_SMI_LARB16B_RESET_ADDR),
-> +			SMI_RESET_WR(MT8188_SMI_LARB17B_RESET,
-> +				     MT8188_SMI_LARB17B_RESET_ADDR),
+> +		.bp_cfg = {
+> +			BUS_PROT_WR(SMI,
+> +				    MT8188_SMI_COMMON_SMI_CLAMP_CAM_SUBB_TO_VDO0,
+> +				    MT8188_SMI_COMMON_CLAMP_EN_SET,
+> +				    MT8188_SMI_COMMON_CLAMP_EN_CLR,
+> +				    MT8188_SMI_COMMON_CLAMP_EN_STA),
 > +		},
->   		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
+>   		.reset_smi = {
+>   			SMI_RESET_WR(MT8188_SMI_LARB16B_RESET,
+>   				     MT8188_SMI_LARB16B_RESET_ADDR),
+>   			SMI_RESET_WR(MT8188_SMI_LARB17B_RESET,
+>   				     MT8188_SMI_LARB17B_RESET_ADDR),
+>   		},
+> -		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
+> +		.caps = MTK_SCPD_KEEP_DEFAULT_OFF | MTK_SCPD_CLAMP_PROTECTION,
 >   	},
 >   };
+>   
 > diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.c b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> index e274e3315fe7..9ab6fa105c8c 100644
+> index 9ab6fa105c8c..3c797e136c0e 100644
 > --- a/drivers/pmdomain/mediatek/mtk-pm-domains.c
 > +++ b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> @@ -48,6 +48,8 @@ struct scpsys_domain {
+> @@ -47,9 +47,10 @@ struct scpsys_domain {
+>   	struct clk_bulk_data *subsys_clks;
 >   	struct regmap *infracfg_nao;
 >   	struct regmap *infracfg;
->   	struct regmap *smi;
-> +	struct regmap **larb;
-> +	int num_larb;
+> -	struct regmap *smi;
+> +	struct regmap **smi;
+>   	struct regmap **larb;
+>   	int num_larb;
+> +	int num_smi;
 >   	struct regulator *supply;
 >   };
 >   
-> @@ -230,6 +232,39 @@ static int scpsys_regulator_disable(struct regulator *supply)
->   	return supply ? regulator_disable(supply) : 0;
+> @@ -122,29 +123,19 @@ static int scpsys_sram_disable(struct scpsys_domain *pd)
+>   					MTK_POLL_TIMEOUT);
 >   }
 >   
-> +static int _scpsys_smi_larb_reset(const struct smi_reset_data bpd,
-> +				  struct regmap *regmap)
+> -static struct regmap *scpsys_bus_protect_get_regmap(struct scpsys_domain *pd,
+> -						    const struct scpsys_bus_prot_data *bpd)
+> -{
+> -	if (bpd->flags & BUS_PROT_COMPONENT_SMI)
+> -		return pd->smi;
+> -	else
+> -		return pd->infracfg;
+> -}
+> -
+>   static struct regmap *scpsys_bus_protect_get_sta_regmap(struct scpsys_domain *pd,
+>   							const struct scpsys_bus_prot_data *bpd)
+>   {
+>   	if (bpd->flags & BUS_PROT_STA_COMPONENT_INFRA_NAO)
+>   		return pd->infracfg_nao;
+>   	else
+> -		return scpsys_bus_protect_get_regmap(pd, bpd);
+> +		return pd->infracfg;
+>   }
+>   
+>   static int scpsys_bus_protect_clear(struct scpsys_domain *pd,
+> -				    const struct scpsys_bus_prot_data *bpd)
+> +				    const struct scpsys_bus_prot_data *bpd,
+> +					struct regmap *sta_regmap, struct regmap *regmap)
+>   {
+> -	struct regmap *sta_regmap = scpsys_bus_protect_get_sta_regmap(pd, bpd);
+> -	struct regmap *regmap = scpsys_bus_protect_get_regmap(pd, bpd);
+>   	u32 sta_mask = bpd->bus_prot_sta_mask;
+>   	u32 expected_ack;
+>   	u32 val;
+> @@ -165,10 +156,9 @@ static int scpsys_bus_protect_clear(struct scpsys_domain *pd,
+>   }
+>   
+>   static int scpsys_bus_protect_set(struct scpsys_domain *pd,
+> -				  const struct scpsys_bus_prot_data *bpd)
+> +				  const struct scpsys_bus_prot_data *bpd,
+> +				  struct regmap *sta_regmap, struct regmap *regmap)
+>   {
+> -	struct regmap *sta_regmap = scpsys_bus_protect_get_sta_regmap(pd, bpd);
+> -	struct regmap *regmap = scpsys_bus_protect_get_regmap(pd, bpd);
+>   	u32 sta_mask = bpd->bus_prot_sta_mask;
+>   	u32 val;
+>   
+> @@ -182,19 +172,32 @@ static int scpsys_bus_protect_set(struct scpsys_domain *pd,
+>   					MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
+>   }
+>   
+> -static int scpsys_bus_protect_enable(struct scpsys_domain *pd)
+> +static int _scpsys_clamp_bus_protection_enable(struct scpsys_domain *pd, bool is_smi)
+>   {
+> +	int smi_count = 0;
+> +
+>   	for (int i = 0; i < SPM_MAX_BUS_PROT_DATA; i++) {
+>   		const struct scpsys_bus_prot_data *bpd = &pd->data->bp_cfg[i];
+> +		struct regmap *sta_regmap, *regmap;
+> +		bool is_smi = bpd->flags & BUS_PROT_COMPONENT_SMI;
+>   		int ret;
+>   
+>   		if (!bpd->bus_prot_set_clr_mask)
+>   			break;
+>   
+> +		if (is_smi) {
+> +			sta_regmap = pd->smi[smi_count];
+> +			regmap = pd->smi[smi_count];
+> +			smi_count++;
+> +		} else {
+> +			sta_regmap = scpsys_bus_protect_get_sta_regmap(pd, bpd);
+> +			regmap = pd->infracfg;
+> +		}
+> +
+>   		if (bpd->flags & BUS_PROT_INVERTED)
+> -			ret = scpsys_bus_protect_clear(pd, bpd);
+> +			ret = scpsys_bus_protect_clear(pd, bpd, sta_regmap, regmap);
+>   		else
+> -			ret = scpsys_bus_protect_set(pd, bpd);
+> +			ret = scpsys_bus_protect_set(pd, bpd, sta_regmap, regmap);
+>   		if (ret)
+>   			return ret;
+>   	}
+> @@ -202,19 +205,32 @@ static int scpsys_bus_protect_enable(struct scpsys_domain *pd)
+>   	return 0;
+>   }
+>   
+> -static int scpsys_bus_protect_disable(struct scpsys_domain *pd)
+> +static int _scpsys_clamp_bus_protection_disable(struct scpsys_domain *pd, bool is_smi)
+>   {
+> +	int smi_count = pd->num_smi - 1;
+> +
+>   	for (int i = SPM_MAX_BUS_PROT_DATA - 1; i >= 0; i--) {
+>   		const struct scpsys_bus_prot_data *bpd = &pd->data->bp_cfg[i];
+> +		struct regmap *sta_regmap, *regmap;
+> +		bool is_smi = bpd->flags & BUS_PROT_COMPONENT_SMI;
+>   		int ret;
+>   
+>   		if (!bpd->bus_prot_set_clr_mask)
+>   			continue;
+>   
+> +		if (is_smi) {
+> +			sta_regmap = pd->smi[smi_count];
+> +			regmap = pd->smi[smi_count];
+> +			smi_count--;
+> +		} else {
+> +			sta_regmap = scpsys_bus_protect_get_sta_regmap(pd, bpd);
+> +			regmap = pd->infracfg;
+> +		}
+> +
+>   		if (bpd->flags & BUS_PROT_INVERTED)
+> -			ret = scpsys_bus_protect_set(pd, bpd);
+> +			ret = scpsys_bus_protect_set(pd, bpd, sta_regmap, regmap);
+>   		else
+> -			ret = scpsys_bus_protect_clear(pd, bpd);
+> +			ret = scpsys_bus_protect_clear(pd, bpd, sta_regmap, regmap);
+>   		if (ret)
+>   			return ret;
+>   	}
+> @@ -222,6 +238,50 @@ static int scpsys_bus_protect_disable(struct scpsys_domain *pd)
+>   	return 0;
+>   }
+>   
+> +static int scpsys_clamp_protection(struct scpsys_domain *pd)
 > +{
 > +	int ret;
-> +	u32 mask = bpd.smi_reset_mask;
 > +
-> +	if (!mask)
-> +		return 0;
-> +
-> +	ret = regmap_set_bits(regmap, bpd.smi_reset_addr, mask);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regmap_clear_bits(regmap, bpd.smi_reset_addr, mask);
+
+You can directly call _scpsys_clamp_bus_protection_enable(), no need for a helper.
+
+> +	ret = _scpsys_clamp_bus_protection_enable(pd, true);
 > +	if (ret)
 > +		return ret;
 > +
 > +	return 0;
 > +}
 > +
-> +static int scpsys_smi_larb_reset(struct scpsys_domain *pd)
+> +static int scpsys_clamp_protection_disable(struct scpsys_domain *pd)
 > +{
-> +	int ret, i;
+> +	int ret;
 > +
-> +	for (i = 0; i < pd->num_larb; i++) {
-> +		ret = _scpsys_smi_larb_reset(pd->data->reset_smi[i], pd->larb[i]);
+> +	ret = _scpsys_clamp_bus_protection_disable(pd, true);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static int scpsys_bus_protect_enable(struct scpsys_domain *pd)
+
+Unused function, please remove.
+
+> +{
+> +	int ret;
+> +
+> +	ret = _scpsys_clamp_bus_protection_enable(pd, false);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static int scpsys_bus_protect_disable(struct scpsys_domain *pd)
+> +{
+
+Unused function, please remove.
+
+> +	int ret;
+> +
+> +	ret = _scpsys_clamp_bus_protection_disable(pd, false);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+>   static int scpsys_regulator_enable(struct regulator *supply)
+>   {
+>   	return supply ? regulator_enable(supply) : 0;
+> @@ -272,6 +332,12 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
+>   	bool tmp;
+>   	int ret;
+>   
+> +	if (MTK_SCPD_CAPS(pd, MTK_SCPD_CLAMP_PROTECTION)) {
+> +		ret = scpsys_clamp_protection(pd);
+
+		ret = scpsys_clamp_bus_protection_enable(pd, true);
+
 > +		if (ret)
 > +			return ret;
 > +	}
 > +
-> +	return 0;
-> +}
-> +
->   static int scpsys_power_on(struct generic_pm_domain *genpd)
->   {
->   	struct scpsys_domain *pd = container_of(genpd, struct scpsys_domain, genpd);
-> @@ -279,6 +314,10 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
+>   	ret = scpsys_regulator_enable(pd->supply);
+>   	if (ret)
+>   		return ret;
+> @@ -318,6 +384,12 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
 >   	if (ret < 0)
 >   		goto err_disable_subsys_clks;
 >   
-> +	ret = scpsys_smi_larb_reset(pd);
-> +	if (ret < 0)
-> +		goto err_disable_subsys_clks;
+> +	if (MTK_SCPD_CAPS(pd, MTK_SCPD_CLAMP_PROTECTION)) {
+> +		ret = scpsys_clamp_protection_disable(pd);
+
+		ret = scpsys_clamp_bus_protection_disable(pd, true);
+
+> +		if (ret)
+> +			return ret;
+> +	}
 > +
 >   	ret = scpsys_bus_protect_disable(pd);
 >   	if (ret < 0)
 >   		goto err_disable_sram;
-> @@ -355,6 +394,7 @@ generic_pm_domain *scpsys_add_one_domain(struct scpsys *scpsys, struct device_no
->   	struct scpsys_domain *pd;
->   	struct device_node *root_node = scpsys->dev->of_node;
->   	struct device_node *smi_node;
-> +	struct device_node *larb_node;
->   	struct property *prop;
->   	const char *clk_name;
->   	int i, ret, num_clks;
-> @@ -418,6 +458,25 @@ generic_pm_domain *scpsys_add_one_domain(struct scpsys *scpsys, struct device_no
->   			return ERR_CAST(pd->smi);
->   	}
+> @@ -353,6 +425,12 @@ static int scpsys_power_off(struct generic_pm_domain *genpd)
+>   	bool tmp;
+>   	int ret;
 >   
-> +	pd->num_larb = of_count_phandle_with_args(node, "mediatek,larb", NULL);
+> +	if (MTK_SCPD_CAPS(pd, MTK_SCPD_CLAMP_PROTECTION)) {
+> +		ret = scpsys_clamp_protection(pd);
 
-You must update bindings/power/mediatek,power-controller.yaml to allow the
-mediatek,larb property in the power controller binding, otherwise this will
-be unusable. Please do so.
+ret = scpsys_clamp_bus_protection_enable(pd, true);
 
-Cheers,
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+>   	ret = scpsys_bus_protect_enable(pd);
+>   	if (ret < 0)
+>   		return ret;
+
+Regards,
 Angelo
+
 
 
