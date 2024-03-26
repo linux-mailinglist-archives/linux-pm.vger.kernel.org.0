@@ -1,159 +1,197 @@
-Return-Path: <linux-pm+bounces-5425-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5426-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 055C888C1D3
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 13:15:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1445688C1F2
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 13:21:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE3772E51D0
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 12:15:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3827D1C3BD30
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 12:21:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E99DF7442E;
-	Tue, 26 Mar 2024 12:14:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B453C7175A;
+	Tue, 26 Mar 2024 12:21:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pIYJgrRF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CbjX0r/Y"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC91870CDA
-	for <linux-pm@vger.kernel.org>; Tue, 26 Mar 2024 12:14:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A3397174B;
+	Tue, 26 Mar 2024 12:21:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711455291; cv=none; b=CJ2QR5EZFDIIdSmGS7dAt92OEiuTkPRs+CR8oe1EQ3ETEj7+9ar9WEdxh/taSoeOJYOciUi16Mbjuf+tpg8ejjp3+QlFfn4IHB3WWkp8poCbJ+McwTeXBfjFn98TE1XRUVN6PnFgecsX9LYoco3BifJPAb5dpIHUoZSpbQn8a4c=
+	t=1711455686; cv=none; b=sTP7Z4mMxW6vTXII82CewT2aaS4iC0CovpKhybSUvvOKWlybmw1qQe84pq7r82myHvNktwsHIp7khQgasG6vS1AfFepCYf/537exmAm4ZYAWo1RzhU2pA03aoJFa+AwCnFD6D4F1onGJIDOqA5h15ISu4gUxCnIeHqmK5p2qoWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711455291; c=relaxed/simple;
-	bh=Q980Wm0cMTo8Wm9GVWKTvh9VMcoK7LrvCzMR64/C1rU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=ebUFW0/f29F0L28TtuEZHEPTu9iQVMQ6ioi4CgFJBl5HCBBIzGqSDW5/7fnHDLbFzo0ZaP9aA4WEVL6k7xiyO0NWDagu3er3bPXokfNHo2OtnkIfwCNci0Ncydd4sLus/83iq5vLpw2k95M1gY6XVnnl6HO4AgER7Pk9ovf/rPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pIYJgrRF; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a45f257b81fso631622266b.0
-        for <linux-pm@vger.kernel.org>; Tue, 26 Mar 2024 05:14:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711455287; x=1712060087; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=v1JyxA+L59DQfA0AppaNDeY8zaF5HDriocWZcx6YS6s=;
-        b=pIYJgrRFHUSJH01ShLedHNt8dJPj7VWHA4X6aqyokzLhmsfoSiFigOMHH75MJvwu5z
-         UTu0SqQgChh/qQbzX4fOlh1/YvuYmGT4PN8nR+r/qJZWQCfPWxmzRyge3ooFUMbNRo2d
-         wLRMytD8tEc622Z9ELcViHQivjcHGIFgVy9r2BHkikj4XR6nYUg1hzPdS+f+Ta+KrNud
-         M5iAHzgA1xqcefRvQuDadh8v5NHUHV1gYwuhyXzdQ2gPQn4nRpWfnuitwawPJKthEPEm
-         A3VYNg4TCHqB++N3NZff1upjuDeMogqqgwcZ4GAQd7Mkwcg3MFZDRDZ6+UD93SFLI9vr
-         l11w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711455287; x=1712060087;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=v1JyxA+L59DQfA0AppaNDeY8zaF5HDriocWZcx6YS6s=;
-        b=Q+5lpcAKnLRE+B8xvfO34jJSj3OplR3y1sqGLzm8D1/BJDU8wpI84ntPbAZVP67Tb3
-         5lxm8TsWZvw0z7xnUosHHhPHZHRvih8b8neBlYerOh+Dyq0F4tinPMBvkucl0ztCClU/
-         DE3oiOotlcL4eIm5RsmEmrD/8Z11tjeJ4DFRUSSGIFj5O/VH8coAKk+w1WK5ftffxOqd
-         IsJCGlBdsuHejXFxpjdJMMV6aLmq8K953vu4BbXco4Y4rmejtqg0HoGFGAtd5Jbk9CcK
-         PYj2gV1s5ZYjoTMt56QiQTPowi5zUCOXtbRVLj9ThsBafglmZXP29q5LTBSapwpg14jY
-         yoEw==
-X-Forwarded-Encrypted: i=1; AJvYcCWL+spNdhoIPCBSTjZaY6eV94HsthfK4GbBHkxvIWRTAyPo+igL5X/L+qoZzV8Cw3yTfvueh8S76BJs41MF6/rtRywEqMjkRvg=
-X-Gm-Message-State: AOJu0YyQggFuBU0ufjvXCrus0u4/qUi0YdFsQIkC19qhnJklx6L5yQBH
-	UuAVcZGS/yVMzKvQSR6aEW/arJ0FXZN8MEBdqrF0eagpDorjP4CRQH9Tgl8PufM=
-X-Google-Smtp-Source: AGHT+IGir3p7KlKZdNMvoOyeFpZuGWN3orNft6UPZxWKnTjtHE9JutEtlSlSX9v7HwZM6zmzXAlnEQ==
-X-Received: by 2002:a17:906:c287:b0:a4a:3912:9ebe with SMTP id r7-20020a170906c28700b00a4a39129ebemr3905919ejz.27.1711455287114;
-        Tue, 26 Mar 2024 05:14:47 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.222.44])
-        by smtp.gmail.com with ESMTPSA id k1-20020a170906a38100b00a4644397aa9sm4167766ejz.67.2024.03.26.05.14.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Mar 2024 05:14:46 -0700 (PDT)
-Message-ID: <8543ac83-969d-457d-a4f8-96ac7738b1af@linaro.org>
-Date: Tue, 26 Mar 2024 13:14:44 +0100
+	s=arc-20240116; t=1711455686; c=relaxed/simple;
+	bh=5pFOehu23RiUY0BYXzSTBk2aotPMSZ0Omiv/vhmPVTY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=L5yQyFhurFFKP32JgU6tacpZY1AjKsm9TJHi68tl8xhd/myYSdwltGMHcsgaWzsJu9kncTVf+8vBbmLkUPw7zOW4Q1Ww4Aj/Jp716N1UKrW8D5Ym3ymQHp1ozAS/c0MAGL+GgYfZNE51SqzpijRnMGxfpXfUtUNqORfgu66wjME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CbjX0r/Y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15F70C43399;
+	Tue, 26 Mar 2024 12:21:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711455686;
+	bh=5pFOehu23RiUY0BYXzSTBk2aotPMSZ0Omiv/vhmPVTY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=CbjX0r/YOTkJvv3GDIkOKz+upCe1NGNNDaQ65PF6+1tOCzAgC24UxPSql+7rwL5Wb
+	 DeANhU0XuyJmDHnZJBB9WfwMfrLknoF4JnyWhNNNsUszcT3/XJpTJlKClr1tu+dlAp
+	 ObKjBKGTCSVzVRzVUpJv7tQeoxHKfOHja4v5B1ajvXfFxYqH//O6sPGJQVyrdhWr5+
+	 MXhpWaWgPTyurFUeM4io8KViKwQVi5J2gs9L61ZaaFeVrPJRX+sMI/kBoQdV70LE9m
+	 Yq1hvmZCz6iXLJ+TUfKtlpmutTd4nGfPRQ+w+TEPDk3zQqU5bU7wbmmGgLHg08aN+2
+	 KuoodPthZT4Mw==
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-5a48320f0f3so776270eaf.1;
+        Tue, 26 Mar 2024 05:21:26 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWz40F9eaboEh9Ie+JGSj8M5VcK5eRNPlZZqd3TH5L2eoq27DqC8M/46ymYci3MMyg8IxPguMCHxZQIOby8XIkJpK3op7bWOQ7kt0aHoluvw5xU9vBIqR9bZwJc4XyEc/EuSwZrdUA=
+X-Gm-Message-State: AOJu0YwuTwJdDWKZUqR2+nv0qaz1DSrKn5zxZgSQ//NKrunYTv8NBemH
+	Q0JKDYLQ4zrTbMnbfFs9HkCj/YpkpGNAVI5LJ/XgVb5L3bGhrjNAqwU19HyOOJdlg46bDOmHKG3
+	vpMbhN3FxLITY5ZdoHtLckGwYIws=
+X-Google-Smtp-Source: AGHT+IEK57tP/VjSYirhPAhG/Ufy9aEFvsV0mjUGELZEVKAiXgwO+z2LIM7XmmQJ+Yc3Jo5405DIQ+lcUn3r1t7eVrM=
+X-Received: by 2002:a4a:6c19:0:b0:5a4:7790:61b4 with SMTP id
+ q25-20020a4a6c19000000b005a4779061b4mr8128005ooc.0.1711455685354; Tue, 26 Mar
+ 2024 05:21:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/3] dt-bindings: interconnect: Add Qualcomm IPQ9574
- support
-To: Varadarajan Narayanan <quic_varada@quicinc.com>, andersson@kernel.org,
- konrad.dybcio@linaro.org, mturquette@baylibre.com, sboyd@kernel.org,
- robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- djakov@kernel.org, quic_anusha@quicinc.com, linux-arm-msm@vger.kernel.org,
- linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20240326121312.1702701-1-quic_varada@quicinc.com>
- <20240326121312.1702701-2-quic_varada@quicinc.com>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240326121312.1702701-2-quic_varada@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240325222424.4179635-1-daniel.lezcano@linaro.org> <fbef883e-23f8-41b9-852b-c52d18816559@notapiano>
+In-Reply-To: <fbef883e-23f8-41b9-852b-c52d18816559@notapiano>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 26 Mar 2024 13:21:14 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0g5wZvKgh7HGa0NSrVQ=E-WeC1v0Av0h08-mQC9t7HQ3Q@mail.gmail.com>
+Message-ID: <CAJZ5v0g5wZvKgh7HGa0NSrVQ=E-WeC1v0Av0h08-mQC9t7HQ3Q@mail.gmail.com>
+Subject: Re: [PATCH] Revert "thermal: core: Don't update trip points inside
+ the hysteresis range"
+To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, "open list:THERMAL" <linux-pm@vger.kernel.org>, 
+	open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 26/03/2024 13:13, Varadarajan Narayanan wrote:
-> Add interconnect-cells to clock provider so that it can be
-> used as icc provider.
-> 
-> Add master/slave ids for Qualcomm IPQ9574 Network-On-Chip
-> interfaces. This will be used by the gcc-ipq9574 driver
-> that will for providing interconnect services using the
-> icc-clk framework.
-> 
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
-> v3:
+On Tue, Mar 26, 2024 at 12:29=E2=80=AFAM N=C3=ADcolas F. R. A. Prado
+<nfraprado@collabora.com> wrote:
+>
+> On Mon, Mar 25, 2024 at 11:24:24PM +0100, Daniel Lezcano wrote:
+> > It has been reported the commit cf3986f8c01d3 introduced a regression
+> > when the temperature is wavering in the hysteresis region. The
+> > mitigation stops leading to an uncontrolled temperature increase until
+> > reaching the critical trip point.
+> >
+> > Here what happens:
+> >
+> >  * 'throttle' is when the current temperature is greater than the trip
+> >    point temperature
+> >  * 'target' is the mitigation level
+> >  * 'passive' is positive when there is a mitigation, zero otherwise
+> >  * these values are computed in the step_wise governor
+> >
+> > Configuration:
+> >
+> >  trip point 1: temp=3D95=C2=B0C, hyst=3D5=C2=B0C (passive)
+> >  trip point 2: temp=3D115=C2=B0C, hyst=3D0=C2=B0C (critical)
+> >  governor: step_wise
+> >
+> > 1. The temperature crosses the way up the trip point 1 at 95=C2=B0C
+> >
+> >    - trend=3Draising
+> >    - throttle=3D1, target=3D1
+> >    - passive=3D1
+> >    - set_trips: low=3D90=C2=B0C, high=3D115=C2=B0C
+> >
+> > 2. The temperature decreases but stays in the hysteresis region at
+> >    93=C2=B0C
+> >
+> >    - trend=3Ddropping
+> >    - throttle=3D0, target=3D0
+> >    - passive=3D1
+> >
+> >    Before cf3986f8c01d3
+> >    - set_trips: low=3D90=C2=B0C, high=3D95=C2=B0C
+> >
+> >    After cf3986f8c01d3
+> >    - set_trips: low=3D90=C2=B0C, high=3D115=C2=B0C
+> >
+> > 3. The temperature increases a bit but stays in the hysteresis region
+> >    at 94=C2=B0C (so below the trip point 1 temp 95=C2=B0C)
+> >
+> >    - trend=3Draising
+> >    - throttle=3D0, target=3D0
+> >    - passive=3D1
+> >
+> >    Before cf3986f8c01d3
+> >    - set_trips: low=3D90=C2=B0C, high=3D95=C2=B0C
+> >
+> >    After cf3986f8c01d3
+> >    - set_trips: low=3D90=C2=B0C, high=3D115=C2=B0C
+> >
+> > 4. The temperature decreases but stays in the hysteresis region at
+> >    93=C2=B0C
+> >
+> >    - trend=3Ddropping
+> >    - throttle=3D0, target=3DTHERMAL_NO_TARGET
+> >    - passive=3D0
+> >
+> >    Before cf3986f8c01d3
+> >    - set_trips: low=3D90=C2=B0C, high=3D95=C2=B0C
+> >
+> >    After cf3986f8c01d3
+> >    - set_trips: low=3D90=C2=B0C, high=3D115=C2=B0C
+> >
+> > At this point, the 'passive' value is zero, there is no mitigation,
+> > the temperature is in the hysteresis region, the next trip point is
+> > 115=C2=B0C. As 'passive' is zero, the timer to monitor the thermal zone=
+ is
+> > disabled. Consequently if the temperature continues to increase, no
+> > mitigation will happen and it will reach the 115=C2=B0C trip point and
+> > reboot.
+> >
+> > Before the optimization, the high boundary would have been 95=C2=B0C, t=
+hus
+> > triggering the mitigation again and rearming the polling timer.
+> >
+> > The optimization make sense but given the current implementation of
+> > the step_wise governor collaborating via this 'passive' flag with the
+> > core framework it can not work.
+> >
+> > From a higher perspective it seems like there is a problem between the
+> > governor which sets a variable to be used by the core framework. That
+> > sounds akward and it would make much more sense if the core framework
+> > controls the governor and not the opposite. But as the devil hides in
+> > the details, there are some subtilities to be addressed before.
+> >
+> > Elaborating those would be out of the scope this changelog. So let's
+> > stay simple and revert the change first to fixup all broken mobile
+> > platforms.
+> >
+> > This reverts commit cf3986f8c01d355490d0ac6024391b989a9d1e9d.
+> >
+> > This revert applies on top of v6.9-rc1.
+> >
+> > Fixes: cf3986f8c01d3 ("thermal: core: Don't update trip points inside t=
+he hysteresis range")
+> > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> > Reported-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+> > Cc: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+>
+> As mentioned in the commit, the issue is elsewhere, but given the origina=
+l
+> commit was an optimization to prevent unnecessary trip point updates, and=
+ that
+> it seems to have caused a regression, sounds reasonable to revert at leas=
+t while
+> a proper fix isn't found.
+>
+> Acked-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+>
+> Only thing is you might want to add a cc: stable tag to guarantee it is
+> backported (AFAIR Fixes: doesn't guarantee backport), even more so given =
+there
+> are conflicts.
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+Applied as 6.9-rc material, thanks!
 
