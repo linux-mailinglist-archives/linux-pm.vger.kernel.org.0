@@ -1,142 +1,163 @@
-Return-Path: <linux-pm+bounces-5435-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5436-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DB6188CA40
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 18:07:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBEDD88CB71
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 19:01:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19A223218AC
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 17:07:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 76C7D1F82804
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 18:01:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1572B1CF8D;
-	Tue, 26 Mar 2024 17:05:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f8Z0eTCE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AFC7208A7;
+	Tue, 26 Mar 2024 18:01:03 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C90111C694;
-	Tue, 26 Mar 2024 17:05:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97C2A1F934;
+	Tue, 26 Mar 2024 18:01:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711472752; cv=none; b=GyTTmL/ZwEL3V8OzRpBT4PaRsxKJKthSslR01kpBQDSQnNVSsdbzGV/jNvD8wf4rTPHKLnYx5pF0451uE9DM3O6aNBkQCLB5zqdiatXrtYzCdM6u59QXx8SRdCSwGbxibjo9tYuJx6wU7l6FFjPWDKV517wLl+xmT7l0MJRGZRo=
+	t=1711476063; cv=none; b=KutLV6XD2bjdWAKIMnXBarBjL8RIeaYcsNIZnkyo/t8MyhacOJcW35Ciy2T4uUH1NVBpG6hGG+mm950JGSLT1NjSP6JzKWJR6zC0aPjsIJ7Ej1nlYSC+PBlqJpEB6Nu5xeDv+FNFGiMJUPT/Mnlw/QsvDT8dENL/tLfCGgm6XdE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711472752; c=relaxed/simple;
-	bh=71bc6Icg2W+tsc/KrncHz55w8fQK/AdKxcY+zxw842I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DYQgTcG3yMFa4SlGZnU3TJJPpf5FSc9rarbIcpWhdtGk8+sEjQaqQrTRLZCpaFA6pVkZcuiaY3s1eIAT+/hqufIua+Oe6bPll1tWgeHEmGTljbehsLmpTdSI3p/H6esehtMYkwLQSHRb5/Ml7envCt/2rjcmnow9KgmL33oZDqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f8Z0eTCE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 378A0C433F1;
-	Tue, 26 Mar 2024 17:05:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711472751;
-	bh=71bc6Icg2W+tsc/KrncHz55w8fQK/AdKxcY+zxw842I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=f8Z0eTCE91cnVLMjLsMZ5XnbXj46lolCBrEa2MuMCeOGKl2oNVv8YsfvE+OcWzfiR
-	 2zZEvqlWd85/5mlWV+X3+eev3YcTeIbNtOytfIp97MmTfdvIP4a8oe/9oP5jsqhEih
-	 KrEshn1lL9OneLTXy5A3ktgc7q0v/8hHhC+hUFQCQe22on3BOwFw+XtA/vv/IvGayB
-	 hftb7+vs2AaKRqiZXmwNOIiE5v8kPXZX7paNsjz/IcH0HAfnNg+xjjp2EiWvbaYZEf
-	 Myua/CeRUH2RRkxwg1P1O6ahhk60xu6EUI2aj/SxXWACo5VfjhGitiA4EGDc9nzM2I
-	 xLIGc7N/yvZgQ==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1rpAFK-000000006pW-44Tm;
-	Tue, 26 Mar 2024 18:05:59 +0100
-Date: Tue, 26 Mar 2024 18:05:58 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Kalle Valo <kvalo@kernel.org>, Marcel Holtmann <marcel@holtmann.org>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Saravana Kannan <saravanak@google.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Alex Elder <elder@linaro.org>,
-	Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Abel Vesa <abel.vesa@linaro.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Lukas Wunner <lukas@wunner.de>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-wireless@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+	s=arc-20240116; t=1711476063; c=relaxed/simple;
+	bh=J+s6fDz4tfmoWA+aY/9bdkTwSJ8H/Gq1EfnRBneA0OE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UMA/7D1NMbN0l4prWX56+q6FT+cOCs0UceNZrK191ke62BqPrZpQnjJ5fV9F0hR7zVkq1065hlHSelfPpKaAwrwlW6cBOw3y8vNdYAD4jmiIIOug/YLGvHGx8JdasNl3H9Y40cbachc5C/Lkhh56SXDo1ahSHxFC0Z6+IUmJv4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8981D2F4;
+	Tue, 26 Mar 2024 11:01:34 -0700 (PDT)
+Received: from e133047.arm.com (unknown [10.57.81.230])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8ECD23F64C;
+	Tue, 26 Mar 2024 11:00:59 -0700 (PDT)
+From: Christian Loehle <christian.loehle@arm.com>
+To: linux-kernel@vger.kernel.org
+Cc: vincent.guittot@linaro.org,
+	qyousef@layalina.io,
+	mingo@redhat.com,
+	rafael@kernel.org,
+	dietmar.eggemann@arm.com,
 	linux-pm@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	ath11k@lists.infradead.org
-Subject: Re: [PATCH v6 04/16] dt-bindings: net: wireless: qcom,ath11k:
- describe the ath11k on QCA6390
-Message-ID: <ZgMAdvEADhJ8TXa9@hovoldconsulting.com>
-References: <20240325131624.26023-1-brgl@bgdev.pl>
- <20240325131624.26023-5-brgl@bgdev.pl>
- <87r0fy8lde.fsf@kernel.org>
- <CAMRc=Mc2Tc8oHr5NVo=aHAADkJtGCDAVvJs+7V-19m2zGi-vbw@mail.gmail.com>
- <87frwe8jiu.fsf@kernel.org>
- <CAMRc=MdCv+vTMZML-wzRQqZZavquV3DABYM4KYw-HwqS47sTyw@mail.gmail.com>
- <874jct10yf.fsf@kernel.org>
- <CAMRc=Me5ef_kFDz0SyGZb4S+2Ma4i=Fek_tzwj+bYD4DGSV4mA@mail.gmail.com>
+	Christian Loehle <christian.loehle@arm.com>
+Subject: [PATCH] sched/uclamp: Fix iowait boost UCLAMP_MAX escape
+Date: Tue, 26 Mar 2024 18:00:54 +0000
+Message-Id: <20240326180054.487388-1-christian.loehle@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMRc=Me5ef_kFDz0SyGZb4S+2Ma4i=Fek_tzwj+bYD4DGSV4mA@mail.gmail.com>
 
-On Tue, Mar 26, 2024 at 05:32:55PM +0100, Bartosz Golaszewski wrote:
-> On Tue, Mar 26, 2024 at 4:12 PM Kalle Valo <kvalo@kernel.org> wrote:
+A task, regardless of UCLAMP_MAX value, was previously allowed to
+build up the sg_cpu->iowait boost up to SCHED_CAPACITY_SCALE when
+enqueued. Since the boost was only uclamped when applied this led
+to sugov iowait boosting the rq while the task is dequeued.
 
-> > >> Adding also Johan and ath11k list. For example, I don't know what's the
-> > >> plan with Lenovo X13s, will it use this framework? I guess in theory we
-> > >> could have devices which use qcom,ath11k-calibration-variant from DT but
-> > >> not any of these supply properties?
-> > >
-> > > Good point. I will receive the X13s in a month from now. I do plan on
-> > > upstreaming correct support for WLAN and BT for it as well.
-> > >
-> > > I guess we can always relax the requirements once a valid use-case appears?
-> >
-> > I think we have such cases already now:
-> >
-> > $ git grep ath11k-calibration-variant -- arch
-> > arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts:     qcom,ath11k-calibration-variant = "Fairphone_5";
-> > arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts:                     qcom,ath11k-calibration-variant = "LE_X13S";
-> >
-> > But please do check that. I'm no DT expert :)
-> 
-> You're thinking about making the required: field depend on the value
-> of qcom,ath11k-calibration-variant? Am I getting this right?
+The fix introduced by
+commit d37aee9018e6 ("sched/uclamp: Fix iowait boost escaping uclamp restriction")
+added the uclamp check before the boost is applied. Unfortunately
+that is insufficient, as the iowait_boost may be built up purely by
+a task with UCLAMP_MAX task, but since this task is in_iowait often,
+the clamps are no longer active during the in_iowait periods.
+So another task (let's say with low utilization) may immediately
+receive the iowait_boost value previously built up under UCLAMP_MAX
+restrictions.
 
-No, I think Kalle is worried about requiring the supply properties for
-certain PCI device ids, in case we have existing or future devicetrees
-with those ids that did not specify them or that need not specify them
-(e.g. any PC modules).
+The issue is less prevalent than the above might suggest, since if
+the dequeuing of the UCLAMP_MAX set task will turn the cpu idle the
+previous UCLAMP_MAX value is preserved by uclamp_idle_value().
+Nonetheless anything being enqueued on the rq during the in_iowait
+phase will falsely receive the iowait_boost.
 
-Currently we only have the X13s controller in mainline being described
-by a PCIe endpoint node in DT, but it has a different id ("pci17cb,1103"
-instead of "pci17cb,1101" which you are adding here).
+Can be observed with a basic single-threaded benchmark running with
+UCLAMP_MAX of 0, the iowait_boost is then triggered by the occasional
+kworker.
 
-The Fairphone controller is apparently not a PCI device at all.
+Fixes: 982d9cdc22c9 ("sched/cpufreq, sched/uclamp: Add clamps for FAIR and RT tasks")
+Signed-off-by: Christian Loehle <christian.loehle@arm.com>
+---
+ kernel/sched/cpufreq_schedutil.c | 36 +++++++++++++++++++++++++-------
+ 1 file changed, 28 insertions(+), 8 deletions(-)
 
-Johan
+diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+index eece6244f9d2..bfd79762b28d 100644
+--- a/kernel/sched/cpufreq_schedutil.c
++++ b/kernel/sched/cpufreq_schedutil.c
+@@ -205,6 +205,25 @@ static void sugov_get_util(struct sugov_cpu *sg_cpu, unsigned long boost)
+ 	sg_cpu->util = sugov_effective_cpu_perf(sg_cpu->cpu, util, min, max);
+ }
+ 
++/**
++ * sugov_iowait_clamp() - Clamp the boost with UCLAMP_MAX
++ * @sg_cpu: the sugov data for the CPU
++ * @boost: the requested new boost
++ *
++ * Clamps the iowait boost according to the rq's UCLAMP_MAX restriction.
++ */
++static void sugov_iowait_clamp(struct sugov_cpu *sg_cpu, unsigned int boost)
++{
++#if CONFIG_UCLAMP_TASK
++	unsigned int boost_scaled = (boost *
++		arch_scale_cpu_capacity(sg_cpu->cpu)) >> SCHED_CAPACITY_SHIFT;
++
++	if (uclamp_rq_get(cpu_rq(sg_cpu->cpu), UCLAMP_MAX) < boost_scaled)
++		return;
++#endif
++	sg_cpu->iowait_boost = boost;
++	sg_cpu->iowait_boost_pending = true;
++}
+ /**
+  * sugov_iowait_reset() - Reset the IO boost status of a CPU.
+  * @sg_cpu: the sugov data for the CPU to boost
+@@ -225,8 +244,8 @@ static bool sugov_iowait_reset(struct sugov_cpu *sg_cpu, u64 time,
+ 	if (delta_ns <= TICK_NSEC)
+ 		return false;
+ 
+-	sg_cpu->iowait_boost = set_iowait_boost ? IOWAIT_BOOST_MIN : 0;
+-	sg_cpu->iowait_boost_pending = set_iowait_boost;
++	if (set_iowait_boost)
++		sugov_iowait_clamp(sg_cpu, IOWAIT_BOOST_MIN);
+ 
+ 	return true;
+ }
+@@ -249,6 +268,7 @@ static void sugov_iowait_boost(struct sugov_cpu *sg_cpu, u64 time,
+ 			       unsigned int flags)
+ {
+ 	bool set_iowait_boost = flags & SCHED_CPUFREQ_IOWAIT;
++	unsigned int iowait_boost;
+ 
+ 	/* Reset boost if the CPU appears to have been idle enough */
+ 	if (sg_cpu->iowait_boost &&
+@@ -262,17 +282,17 @@ static void sugov_iowait_boost(struct sugov_cpu *sg_cpu, u64 time,
+ 	/* Ensure boost doubles only one time at each request */
+ 	if (sg_cpu->iowait_boost_pending)
+ 		return;
+-	sg_cpu->iowait_boost_pending = true;
+ 
+ 	/* Double the boost at each request */
+ 	if (sg_cpu->iowait_boost) {
+-		sg_cpu->iowait_boost =
+-			min_t(unsigned int, sg_cpu->iowait_boost << 1, SCHED_CAPACITY_SCALE);
+-		return;
++		iowait_boost = min_t(unsigned int, sg_cpu->iowait_boost << 1,
++				SCHED_CAPACITY_SCALE);
++	} else {
++		/* First wakeup after IO: start with minimum boost */
++		iowait_boost = IOWAIT_BOOST_MIN;
+ 	}
+ 
+-	/* First wakeup after IO: start with minimum boost */
+-	sg_cpu->iowait_boost = IOWAIT_BOOST_MIN;
++	sugov_iowait_clamp(sg_cpu, iowait_boost);
+ }
+ 
+ /**
+-- 
+2.34.1
+
 
