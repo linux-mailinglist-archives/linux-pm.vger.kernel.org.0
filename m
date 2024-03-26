@@ -1,40 +1,75 @@
-Return-Path: <linux-pm+bounces-5402-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5403-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EACE388BEE8
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 11:10:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A33FF88BF31
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 11:20:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5DD9EB26039
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 10:10:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 597432E4F72
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 10:20:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B27D86BFC0;
-	Tue, 26 Mar 2024 10:09:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDED16BFA3;
+	Tue, 26 Mar 2024 10:20:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="m/uPSkYp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1B7B5C911;
-	Tue, 26 Mar 2024 10:09:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 574A16027D
+	for <linux-pm@vger.kernel.org>; Tue, 26 Mar 2024 10:20:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711447752; cv=none; b=ghHrl6udP13ri9aRvEixaMbj3m6TYEoxM6ZP4+6TCLJFTvpPKNMJOEDLTNCgEc8FLGGjX4qUp64tEMCa6vbMAYiAUpTJ7J3cCQTG8x9+S17WY9jRJv5oZwpviJjJRkS4op8A8Nj3Xi2aR8esTpadIMqJCntarGOqtRDw3chObEA=
+	t=1711448403; cv=none; b=q5lB78k5jfagEd1HonvCidF6oYUbq+Bc9rakpJ2IIaJJjieHfjckdTEOmsOL/Lq+RjDIihcalxrSrMTGGWj5NR5ZH0QdB3z5rlc7EfbFa0rXJR1Lz8pvOL1KroH5v9ZK1ey/4/xa+TLN3uvxv0Lcz4FavjP8/WCg8uWxLMg9bPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711447752; c=relaxed/simple;
-	bh=0qqyjsoUJJgOhHL/bgPaKR1WiY++FeUVJ10GLBY70VU=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=dx2B60yOjviZtGgALVud1lI348Jn14SrEIZ7XMauujzAK5wHN4JnpMT9AFLo7qiPjMUZ36uu+KPrvHQpJmd1KTkJelTpdH+e3uCLVMSlgwTCJHY/OkxfoaTv2btYqj/LnuOy3bZFEo4wQqY+90Rs+UzEmFf54NNOAfKJPwmupRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6A093339;
-	Tue, 26 Mar 2024 03:09:43 -0700 (PDT)
-Received: from [10.57.15.246] (unknown [10.57.15.246])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 807503F64C;
-	Tue, 26 Mar 2024 03:09:07 -0700 (PDT)
-Message-ID: <eb9f48f6-cca8-405b-82a2-352893a79f14@arm.com>
-Date: Tue, 26 Mar 2024 11:09:05 +0100
+	s=arc-20240116; t=1711448403; c=relaxed/simple;
+	bh=q5om1klt5Vblib09/KLSBK+RA4M8EjI0aAy/3rvo75o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=d6VDTr6CJQGESI2UoJAZzxNoGDIDusfiIgYfnMKpRn1MNl/70aKFIZh1dI9Cr24J97qe0S5ZWAEtgvBXn2On3VObFLehGxFaNivezK2O/KDaF9rzDwye9MNp9j7gZwwx6NV9h9QhECdXOpEAH6U9WUG2sDjN34Y7fqBihn+Zfnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=m/uPSkYp; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a4702457ccbso682425566b.3
+        for <linux-pm@vger.kernel.org>; Tue, 26 Mar 2024 03:20:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1711448400; x=1712053200; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=4RCPWhIUFPUN1OPlIQTyF7klcOBcvyvE4uNRkcfrCSQ=;
+        b=m/uPSkYpd3PoAGbjfXQT1+aFC1ynEXuKdz3dWrFZ9tcJD7lKi93f1OAmq+CIgAjRFs
+         fGV/CZ0/ijqRixzIvWBO80H/Puo25Q+dvSCx8wqJ13OXDckMJT7iQw2sunMCnRxHR/+P
+         fY2mia8inJeZ7gu2ba9Xqw2NyPhsBrtoX2uwsA7Vw3qmtWya/QIiJG66pWudELZz6pl7
+         Wz+b80CjWF1I1nt6cHSuy+cxwSOUShIHqNIYcjkVKh2eUQl0P/qNpJ6z77RwrDoNEN4p
+         mS9JAqNVdjjYM2gSHOU9cwut83Afbf70gbzn0GPhEknk+wucBh9vZ2cyJRIXhh4wv9pm
+         bdRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711448400; x=1712053200;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4RCPWhIUFPUN1OPlIQTyF7klcOBcvyvE4uNRkcfrCSQ=;
+        b=vZacy70RtCRzTHUGrQI78j6nBDj/NqbapkHFrPTCyxY73H0luilPKjfmZ4xYQaHQmz
+         NYsjv6H4iEdZnCjW+IFZiB14pwI73NkQtktVxPYpW2Ab3dpkHrLw0/TQUcuUlWo72uYn
+         3cUethfyXqOG25sqrAemEE8KuClVGmrF2bkAT5/1rP439iIAIzL1wwKWmuMrbvkiXivq
+         0fEMZwbeSV9ikeBD3OSbgEMSSWMoQrVhPAtxbY5jYBOklDSmCse43oktWWZQ/DhWlpBa
+         xydtZ2EryQo+d5OeV0AmTw9rAoKRwdj++HcHLr5gEbCU3QI7e44HG4NNcO93tl6+Uf+z
+         DO4g==
+X-Forwarded-Encrypted: i=1; AJvYcCX4c5w7Ah8I2nS4lLaDMrSThToD+KSrDF5tO40SvIVQsOwDIKwpvo4zJcAmtj1YedJQvERN+l2k8YMpTRWQJiWiC4zn9vpYU6s=
+X-Gm-Message-State: AOJu0YzyPkxOVXMVdaQqxlma0ZUZFZTmtD9B57HYuIWHfjR4iuAdrAeQ
+	K3u8WFnQhvQI6zCJw8KOvWvnxwZ/jHuUrfHATbzaUX3luuMXd/Nv88AN5sA9Lko=
+X-Google-Smtp-Source: AGHT+IHqJmTV9fx0c6gDzeZ28VWO2ncjlRQQumCuqoIhZLOLhIufmQoAWrHWUAlkSONRG/VAPLaC/A==
+X-Received: by 2002:a17:906:2a10:b0:a46:e8c1:11ac with SMTP id j16-20020a1709062a1000b00a46e8c111acmr5996035eje.18.1711448399658;
+        Tue, 26 Mar 2024 03:19:59 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.222.44])
+        by smtp.gmail.com with ESMTPSA id wk15-20020a170907054f00b00a4a3600d2absm2067438ejb.172.2024.03.26.03.19.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Mar 2024 03:19:59 -0700 (PDT)
+Message-ID: <dc3e2cb4-f631-4611-8814-0dc04c5502f0@linaro.org>
+Date: Tue, 26 Mar 2024 11:19:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,112 +77,119 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Subject: Re: [RESEND][PATCH v2 3/4] PM: EM: Add em_dev_update_chip_binning()
-To: Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org, sboyd@kernel.org, nm@ti.com,
- linux-samsung-soc@vger.kernel.org, daniel.lezcano@linaro.org,
- rafael@kernel.org, viresh.kumar@linaro.org, krzysztof.kozlowski@linaro.org,
- alim.akhtar@samsung.com, m.szyprowski@samsung.com, mhiramat@kernel.org
-References: <20240322110850.77086-1-lukasz.luba@arm.com>
- <20240322110850.77086-4-lukasz.luba@arm.com>
+Subject: Re: [PATCH v9 00/38] ep93xx device tree conversion
+To: nikita.shubin@maquefel.me, Hartley Sweeten
+ <hsweeten@visionengravers.com>,
+ Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+ Russell King <linux@armlinux.org.uk>, Lukasz Majewski <lukma@denx.de>,
+ Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
+ <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
+ <linux@roeck-us.net>, Thierry Reding <thierry.reding@gmail.com>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+ Mark Brown <broonie@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Miquel Raynal <miquel.raynal@bootlin.com>,
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
+ Damien Le Moal <dlemoal@kernel.org>, Sergey Shtylyov <s.shtylyov@omp.ru>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
+ Takashi Iwai <tiwai@suse.com>, Ralf Baechle <ralf@linux-mips.org>,
+ "Wu, Aaron" <Aaron.Wu@analog.com>, Lee Jones <lee@kernel.org>,
+ Olof Johansson <olof@lixom.net>, Niklas Cassel <cassel@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ dmaengine@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
+ netdev@vger.kernel.org, linux-mtd@lists.infradead.org,
+ linux-ide@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-sound@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Andrew Lunn <andrew@lunn.ch>, Andy Shevchenko <andy.shevchenko@gmail.com>
+References: <20240326-ep93xx-v9-0-156e2ae5dfc8@maquefel.me>
 Content-Language: en-US
-In-Reply-To: <20240322110850.77086-4-lukasz.luba@arm.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240326-ep93xx-v9-0-156e2ae5dfc8@maquefel.me>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 22/03/2024 12:08, Lukasz Luba wrote:
+On 26/03/2024 10:18, Nikita Shubin via B4 Relay wrote:
+> The goal is to recieve ACKs for all patches in series to merge it via Arnd branch.
+> 
+> Some changes since last version (v8):
+> 
+> - Most important, fixed bug in Device Tree resulting in CS4271 not working by Alexander Sverdlin.
+> - added #interrupt-cells to gpio nodes with interrupts-controller
+> - fixed some EOF in dtsi files
+> - fixed identation and type in ep93xx-keypad thanks to Andy Shevchenko
+> 
+> Stephen Boyd, Vinod Koul PLEASE! give some comments on following, couse i hadn't one for a couple of iterations already:
+> 
+> Following patches require attention from Stephen Boyd, as they were converted to aux_dev as suggested:
+> 
+> - ARM: ep93xx: add regmap aux_dev
+> - clk: ep93xx: add DT support for Cirrus EP93xx
+> 
+> Following patches require attention from Vinod Koul:
+> 
+> - dma: cirrus: Convert to DT for Cirrus EP93xx
+> - dma: cirrus: remove platform code
 
-> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-> index 6960dd7393b2d..f7f7ae34ec552 100644
-> --- a/kernel/power/energy_model.c
-> +++ b/kernel/power/energy_model.c
-> @@ -808,3 +808,54 @@ static void em_update_workfn(struct work_struct *work)
->  {
->  	em_check_capacity_update();
->  }
-> +
-> +/**
-> + * em_dev_update_chip_binning() - Update Energy Model with new values after
+A lot of this could have been already merged if you split it... Just
+saying...
 
-s/with new values// ... IMHO this should be obvious ?
-
-> + *			the new voltage information is present in the OPPs.
-> + * @dev		: Device for which the Energy Model has to be updated.
-> + *
-> + * This function allows to update easily the EM with new values available in
-> + * the OPP framework and DT. It can be used after the chip has been properly
-> + * verified by device drivers and the voltages adjusted for the 'chip binning'.
-> + * It uses the "dynamic-power-coefficient" DT property to calculate the power
-> + * values for EM. For power calculation it uses the new adjusted voltage
-> + * values known for OPPs, which might be changed after boot.
-
-The last two sentences describe what dev_pm_opp_calc_power() is doing.
-Maybe this can be made clearer here?
-
-> + */
-> +int em_dev_update_chip_binning(struct device *dev)
-
-This is the old dev_pm_opp_of_update_em() right?
-
-> +{
-> +	struct em_perf_table __rcu *em_table;
-> +	struct em_perf_domain *pd;
-> +	int i, ret;
-> +
-> +	if (IS_ERR_OR_NULL(dev))
-> +		return -EINVAL;
-
-When do you use if '(IS_ERR_OR_NULL(dev))' and when 'if(!dev)' for EM
-interface functions?
-
-> +	pd = em_pd_get(dev);
-> +	if (!pd) {
-> +		dev_warn(dev, "Couldn't find Energy Model\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	em_table = em_table_dup(pd);
-> +	if (!em_table) {
-> +		dev_warn(dev, "EM: allocation failed\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	/* Update power values which might change due to new voltage in OPPs */
-> +	for (i = 0; i < pd->nr_perf_states; i++) {
-> +		unsigned long freq = em_table->state[i].frequency;
-> +		unsigned long power;
-> +
-> +		ret = dev_pm_opp_calc_power(dev, &power, &freq);
-> +		if (ret) {
-> +			em_table_free(em_table);
-> +			return ret;
-> +		}
-> +
-> +		em_table->state[i].power = power;
-> +	}
-> +
-> +	return em_recalc_and_update(dev, pd, em_table);
-> +}
-> +EXPORT_SYMBOL_GPL(em_dev_update_chip_binning);
-
-In the previous version of 'chip-binning' you were using the new EM
-interface em_dev_compute_costs() (1) which is now replaced by
-em_recalc_and_update() -> em_compute_costs().
-
-https://lkml.kernel.org/r/20231220110339.1065505-2-lukasz.luba@arm.com
-
-Which leaves (1) still unused.
-
-That was why my concern back then that we shouldn't introduce EM
-interfaces without a user:
-
-https://lkml.kernel.org/r/8fc499cf-fca1-4465-bff7-a93dfd36f3c8@arm.com
-
-What happens now with em_dev_compute_costs()?
-
-
-
+Best regards,
+Krzysztof
 
 
