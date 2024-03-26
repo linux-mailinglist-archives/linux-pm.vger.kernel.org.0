@@ -1,180 +1,153 @@
-Return-Path: <linux-pm+bounces-5401-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5402-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E792488BECD
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 11:08:01 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EACE388BEE8
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 11:10:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9CA312E702F
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 10:08:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5DD9EB26039
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 10:10:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3CE460ED0;
-	Tue, 26 Mar 2024 10:07:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="CsMZArFr";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="frTN7S43"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B27D86BFC0;
+	Tue, 26 Mar 2024 10:09:12 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fout1-smtp.messagingengine.com (fout1-smtp.messagingengine.com [103.168.172.144])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F167482D3;
-	Tue, 26 Mar 2024 10:07:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1B7B5C911;
+	Tue, 26 Mar 2024 10:09:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711447650; cv=none; b=fuHntQz3unp+EL4vCnLAdokTATqntMGUNDfIj8IlE5gNSTpjM2vKnKiQo0M4Qf4CFDMgSOFRLwP/IgsRBz3PROsZQ03zaGxnmG4F0Nj0Vy/GqJKdd4lLFn3166NL2HPhVVxqf7ZzAdwWTA+vNcZ13g8eMql2fXhYEMTwA6AuLeI=
+	t=1711447752; cv=none; b=ghHrl6udP13ri9aRvEixaMbj3m6TYEoxM6ZP4+6TCLJFTvpPKNMJOEDLTNCgEc8FLGGjX4qUp64tEMCa6vbMAYiAUpTJ7J3cCQTG8x9+S17WY9jRJv5oZwpviJjJRkS4op8A8Nj3Xi2aR8esTpadIMqJCntarGOqtRDw3chObEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711447650; c=relaxed/simple;
-	bh=MtysH8+9HAmIANTQD0du5b+w4USbcY1NMUiynk3OwAk=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=Mpu34LPmg4s54nKgdDWmp9G11Iwb1sr9DGv8QW3znLITl+cV0g6YfTV18cHX5TgDdf1MtN6I2jxKBIgH9p/hJ6N9Q6845lIMmvKEYXLir6rTBSedClYGRqyM0rDwtL8GtZk0ljQYj0Qy11kKdNmAEUY0IACbZKKy2jS3lgJDMqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=CsMZArFr; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=frTN7S43; arc=none smtp.client-ip=103.168.172.144
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.nyi.internal (Postfix) with ESMTP id 9DCAE13800CE;
-	Tue, 26 Mar 2024 06:07:27 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 26 Mar 2024 06:07:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1711447647; x=1711534047; bh=LwutBSd20d
-	Y9F2mV05mJEYeO4BD3EduCXGrjUsQ79Ro=; b=CsMZArFrjB454eFa2IaUgiH3xK
-	0MRTkkqFo2vmNw4bOoDWENLwQkM3ABomud1mKU3TT9evCNdjbblBJOSQqIcd5qMC
-	6rxMjSd2Fg/t0pCvummOAbK/x22/mwRxZ2GarBGBCSUzMHdF1Kn4BCGCyzkA7IPj
-	DCVXOtwz5wHUpTcZWC2LJgmy1dVyDnIbjesxEvUdlH56pCjfHtOG3tp5a7T73dJd
-	4EJ9ok6hgtYma2lsbIYeQJyyUZ9ZWZlotYsMBidNO90HeZhVKdmvq4fDhOBkMR0v
-	IfQ1V1fcXLCx8zI4yS3xotKhuOYmXx3TQVPzmNZ/RDQyy46iAL+baxNHSGZQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1711447647; x=1711534047; bh=LwutBSd20dY9F2mV05mJEYeO4BD3
-	EduCXGrjUsQ79Ro=; b=frTN7S438NzNyONuwLxfeFnIrPXFXA5syP9EOLb4QFFO
-	OHXWLUu1w9sK0l0+os7Ly1LDnynSV38+WBHpcJSKwQus3WHNh/oe2bm4T1ixx6Iw
-	Vdkc+07CpeUU6tak7ucAsifjM77y+nw6K+JhUNY0rKcL3KYp5pvPEhHPZ6cAAPy+
-	sXUvk6xm6f1FSg+JC1ngdkTF09KlV0k6MJ6D/qWUHk6PC+Bdg7yzqndqBkPP07dP
-	tlkKsfarE7zhGeeztF00a5AiLQlNZTp6n8YErdZb621M2+btJSpzZKlHCFnbeA1A
-	ZaHqHRDr3vqM/BslddYfTj3OmI9HXV8IPlppssiThw==
-X-ME-Sender: <xms:X54CZslcRnEP8GQqOaqL2qFWoFk9x1LPeHsVTk2ZA3juxTIfs-FtxQ>
-    <xme:X54CZr0zlJGpEZUXQBxe5hNUXeOym6EpVoRLM92PTRuVRWQCiESxQa3YO-Dt8rF3P
-    GGGgTc7Q_uZBVhom8c>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledruddufedguddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:X54CZqotMrL3f26Han1MXzsLZ6KFBuU6P-LHv6tDRNhUu7pjHOn0_A>
-    <xmx:X54CZomZ_73Aybk-QGJuQSC4MHfMyq46bXjEts8s0c8MwFGNIfiaDw>
-    <xmx:X54CZq05VR5SBrlbuzXA8hPvvFY4g9qiVCv1UuyN8Yug5tlZx66mMg>
-    <xmx:X54CZvuYfS6YqCeoa10rL6eI_TpBy1NkhVrlPrGsUlF14gwbB5bReA>
-    <xmx:X54CZrLUz0t1F7r_4oYTrTmhGasFsvpMgLDMeUxrzv7ZH85wfoBiRQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 717EEB6008D; Tue, 26 Mar 2024 06:07:27 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-328-gc998c829b7-fm-20240325.002-gc998c829
+	s=arc-20240116; t=1711447752; c=relaxed/simple;
+	bh=0qqyjsoUJJgOhHL/bgPaKR1WiY++FeUVJ10GLBY70VU=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=dx2B60yOjviZtGgALVud1lI348Jn14SrEIZ7XMauujzAK5wHN4JnpMT9AFLo7qiPjMUZ36uu+KPrvHQpJmd1KTkJelTpdH+e3uCLVMSlgwTCJHY/OkxfoaTv2btYqj/LnuOy3bZFEo4wQqY+90Rs+UzEmFf54NNOAfKJPwmupRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6A093339;
+	Tue, 26 Mar 2024 03:09:43 -0700 (PDT)
+Received: from [10.57.15.246] (unknown [10.57.15.246])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 807503F64C;
+	Tue, 26 Mar 2024 03:09:07 -0700 (PDT)
+Message-ID: <eb9f48f6-cca8-405b-82a2-352893a79f14@arm.com>
+Date: Tue, 26 Mar 2024 11:09:05 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <66e1da99-5cf4-4506-b0bf-4bdf04959f41@app.fastmail.com>
-In-Reply-To: <20240326-ep93xx-v9-0-156e2ae5dfc8@maquefel.me>
-References: <20240326-ep93xx-v9-0-156e2ae5dfc8@maquefel.me>
-Date: Tue, 26 Mar 2024 11:07:06 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Nikita Shubin" <nikita.shubin@maquefel.me>,
- "Hartley Sweeten" <hsweeten@visionengravers.com>,
- "Alexander Sverdlin" <alexander.sverdlin@gmail.com>,
- "Russell King" <linux@armlinux.org.uk>,
- "Lukasz Majewski" <lukma@denx.de>,
- "Linus Walleij" <linus.walleij@linaro.org>,
- "Bartosz Golaszewski" <brgl@bgdev.pl>,
- "Andy Shevchenko" <andy@kernel.org>,
- "Michael Turquette" <mturquette@baylibre.com>,
- "Stephen Boyd" <sboyd@kernel.org>, "Sebastian Reichel" <sre@kernel.org>,
- "Rob Herring" <robh+dt@kernel.org>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
- "Conor Dooley" <conor+dt@kernel.org>, "Vinod Koul" <vkoul@kernel.org>,
- "Wim Van Sebroeck" <wim@linux-watchdog.org>,
- "Guenter Roeck" <linux@roeck-us.net>,
- "Thierry Reding" <thierry.reding@gmail.com>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
- "Mark Brown" <broonie@kernel.org>,
- "David S . Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>,
- "Miquel Raynal" <miquel.raynal@bootlin.com>,
- "Richard Weinberger" <richard@nod.at>,
- "Vignesh Raghavendra" <vigneshr@ti.com>,
- "Damien Le Moal" <dlemoal@kernel.org>,
- "Sergey Shtylyov" <s.shtylyov@omp.ru>,
- "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
- "Liam Girdwood" <lgirdwood@gmail.com>,
- "Jaroslav Kysela" <perex@perex.cz>, "Takashi Iwai" <tiwai@suse.com>,
- "Ralf Baechle" <ralf@linux-mips.org>, "Aaron Wu" <Aaron.Wu@analog.com>,
- "Lee Jones" <lee@kernel.org>, "Olof Johansson" <olof@lixom.net>,
- "Niklas Cassel" <cassel@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
- linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
- linux-watchdog@vger.kernel.org, linux-pwm@vger.kernel.org,
- linux-spi@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
- linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
- linux-input@vger.kernel.org, linux-sound@vger.kernel.org,
- "Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
- "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
- "Andrew Lunn" <andrew@lunn.ch>, "Andy Shevchenko" <andy.shevchenko@gmail.com>
-Subject: Re: [PATCH v9 00/38] ep93xx device tree conversion
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+From: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Subject: Re: [RESEND][PATCH v2 3/4] PM: EM: Add em_dev_update_chip_binning()
+To: Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org, sboyd@kernel.org, nm@ti.com,
+ linux-samsung-soc@vger.kernel.org, daniel.lezcano@linaro.org,
+ rafael@kernel.org, viresh.kumar@linaro.org, krzysztof.kozlowski@linaro.org,
+ alim.akhtar@samsung.com, m.szyprowski@samsung.com, mhiramat@kernel.org
+References: <20240322110850.77086-1-lukasz.luba@arm.com>
+ <20240322110850.77086-4-lukasz.luba@arm.com>
+Content-Language: en-US
+In-Reply-To: <20240322110850.77086-4-lukasz.luba@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Mar 26, 2024, at 10:18, Nikita Shubin via B4 Relay wrote:
-> The goal is to recieve ACKs for all patches in series to merge it via 
-> Arnd branch.
+On 22/03/2024 12:08, Lukasz Luba wrote:
 
-Thank you for the continued updates, I really hope we can merge
-it all for 6.10. I've looked through it again and I'm pretty much
-ready to just merge it, though I admit that the process is not
-working out that great, and it would probably have been quicker
-to add DT support to drivers individually through the subsystem
-trees.
+> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+> index 6960dd7393b2d..f7f7ae34ec552 100644
+> --- a/kernel/power/energy_model.c
+> +++ b/kernel/power/energy_model.c
+> @@ -808,3 +808,54 @@ static void em_update_workfn(struct work_struct *work)
+>  {
+>  	em_check_capacity_update();
+>  }
+> +
+> +/**
+> + * em_dev_update_chip_binning() - Update Energy Model with new values after
 
-> Stephen Boyd, Vinod Koul PLEASE! give some comments on following, couse 
-> i hadn't one for a couple of iterations already:
->
-> Following patches require attention from Stephen Boyd, as they were 
-> converted to aux_dev as suggested:
->
-> - ARM: ep93xx: add regmap aux_dev
-> - clk: ep93xx: add DT support for Cirrus EP93xx
->
-> Following patches require attention from Vinod Koul:
->
-> - dma: cirrus: Convert to DT for Cirrus EP93xx
-> - dma: cirrus: remove platform code
+s/with new values// ... IMHO this should be obvious ?
 
-I suspect that Stephen and Vinod may be missing this, as reviewing
-a 38 patch series tends to be a lot of work, and they may have
-missed that they are on the critical path here. I certainly
-tend to just ignore an entire thread when it looks like I'm not
-immediately going to be reviewing it all and other people are
-likely to have more comments first, so I'm not blaming them.
+> + *			the new voltage information is present in the OPPs.
+> + * @dev		: Device for which the Energy Model has to be updated.
+> + *
+> + * This function allows to update easily the EM with new values available in
+> + * the OPP framework and DT. It can be used after the chip has been properly
+> + * verified by device drivers and the voltages adjusted for the 'chip binning'.
+> + * It uses the "dynamic-power-coefficient" DT property to calculate the power
+> + * values for EM. For power calculation it uses the new adjusted voltage
+> + * values known for OPPs, which might be changed after boot.
 
-To better catch their attention, I would suggest you repost the
-two smaller sets of patches as a separate series, with only the
-relevant people on Cc. Please also include the respective
-bindings when you send send these patches to Stephen and
-Vinod.
+The last two sentences describe what dev_pm_opp_calc_power() is doing.
+Maybe this can be made clearer here?
 
-      Arnd
+> + */
+> +int em_dev_update_chip_binning(struct device *dev)
+
+This is the old dev_pm_opp_of_update_em() right?
+
+> +{
+> +	struct em_perf_table __rcu *em_table;
+> +	struct em_perf_domain *pd;
+> +	int i, ret;
+> +
+> +	if (IS_ERR_OR_NULL(dev))
+> +		return -EINVAL;
+
+When do you use if '(IS_ERR_OR_NULL(dev))' and when 'if(!dev)' for EM
+interface functions?
+
+> +	pd = em_pd_get(dev);
+> +	if (!pd) {
+> +		dev_warn(dev, "Couldn't find Energy Model\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	em_table = em_table_dup(pd);
+> +	if (!em_table) {
+> +		dev_warn(dev, "EM: allocation failed\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	/* Update power values which might change due to new voltage in OPPs */
+> +	for (i = 0; i < pd->nr_perf_states; i++) {
+> +		unsigned long freq = em_table->state[i].frequency;
+> +		unsigned long power;
+> +
+> +		ret = dev_pm_opp_calc_power(dev, &power, &freq);
+> +		if (ret) {
+> +			em_table_free(em_table);
+> +			return ret;
+> +		}
+> +
+> +		em_table->state[i].power = power;
+> +	}
+> +
+> +	return em_recalc_and_update(dev, pd, em_table);
+> +}
+> +EXPORT_SYMBOL_GPL(em_dev_update_chip_binning);
+
+In the previous version of 'chip-binning' you were using the new EM
+interface em_dev_compute_costs() (1) which is now replaced by
+em_recalc_and_update() -> em_compute_costs().
+
+https://lkml.kernel.org/r/20231220110339.1065505-2-lukasz.luba@arm.com
+
+Which leaves (1) still unused.
+
+That was why my concern back then that we shouldn't introduce EM
+interfaces without a user:
+
+https://lkml.kernel.org/r/8fc499cf-fca1-4465-bff7-a93dfd36f3c8@arm.com
+
+What happens now with em_dev_compute_costs()?
+
+
+
+
 
