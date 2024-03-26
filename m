@@ -1,194 +1,281 @@
-Return-Path: <linux-pm+bounces-5383-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5385-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5142588BB37
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 08:30:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FB2488BB7F
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 08:41:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC6EE1F35133
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 07:30:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DAF9D1F37B30
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 07:41:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3612F130E30;
-	Tue, 26 Mar 2024 07:30:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27BB51311B9;
+	Tue, 26 Mar 2024 07:41:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gzWsWrn8"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="lY14P7Gk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF468130A66
-	for <linux-pm@vger.kernel.org>; Tue, 26 Mar 2024 07:30:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC8AB130AEC;
+	Tue, 26 Mar 2024 07:41:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711438215; cv=none; b=TmeqrgyUkujJ4gcAfYSnOmgMRkE/MO8NJo72Ks91ZqF/zrDAuJjwZ0Yz3D+B/bgVhXsSlekMcVEYtwnciUthYkpyx12TBqUDw92lPYEPhGDajs1z1Sg5nDlzJqp618AX4cugkR/RA9Ks9qd685xFtSMSGAC4Fa01b1lnZxDkhfE=
+	t=1711438870; cv=none; b=g6lBDb776i1JSP31TWXXay4X7jF5dApfjl0KAHjoifp/uAMNMWX4coCip0QjzOwac8eADE9Rq+Lcu633C7W52DyF80I0OM6QexAcKoGyzqyancEJT7UC0sbiZPGXaXHqYmNP8zr39erwhWYYSfkYjVLwUU4T5T56JvkzXgFWZy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711438215; c=relaxed/simple;
-	bh=qlXHSjD4oRu6T1ULa+mNDp9G2uRL5HO5IKVjGUSBBEE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZvBBwAuvVs0c0WVsM3N86raOe/FKYTGO+SOePO3EUOCxkUE6Y3Eb6LxPIom7/Nw3qiSQc9ewYBJCWuhiniVhyW4PTQaRBSZwi+Q3ecSIbRW5CB3SkpW49Bnr9JIN0ogcg20NB7JsemoRpH2d0E34NRLUby+WscI0mGeZ4MlWm1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gzWsWrn8; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-56c147205b9so2631064a12.0
-        for <linux-pm@vger.kernel.org>; Tue, 26 Mar 2024 00:30:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711438211; x=1712043011; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=NS0LFbGO6Diz+O55zW1kIhPFuGDQKse20XAQBsjLplY=;
-        b=gzWsWrn8dAydMAjU7M5cDpcTBdcnHaVjoRdketV9VXwlSsGTNdQIkXLPdc4CEpb+7f
-         sHmRPLiArI51m4RlbuIjbwDb4vQ49AXZK28cTkQ+FbE8Ta9flaCfHb2gyWVbI5/gmqL5
-         RxLekNHaBbwq7/zmwTaWnCUwg5oNL1SxgFBiQ+oJdnxloqbPJyk/0EArPNIbtvagRrOG
-         une/vVqWHx4gyrNATboIKL03rAqhUd9Rh4E1ZOQtxxj0tOrbcIyOREf4wp1zm3O1LM1b
-         Fuaw4wyNd1bHBPI5RhGTuuJT8ueh4sdL6lvMsyJJV/cLgBM3AauOthFrcxR2usx8SpOn
-         BJ7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711438211; x=1712043011;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NS0LFbGO6Diz+O55zW1kIhPFuGDQKse20XAQBsjLplY=;
-        b=csxWg8g8p0Ibp/NqEZShKuizbmM7j+E9LXusKOcDGSIEFwceADG09uQPB4NQpa5skR
-         ieQuLIgkrBwbjnwGLiVLUr3IH2xVOITgTEdDja7RkpOtBOtaikqirzbTMKTcxL6l3h6m
-         tqcMRCKOo5oijlj00+pqoZeyjPVnrTMSPeIZRurhIg2f7rD88hwRrIQY6QUjzeaIkgRB
-         YeK7vAjT7IykSRpCIPfyTcudojQGwvVjjvvT2rmBo4t5E9n3mQAX11xKv4e/Hk6HybaP
-         eBlnf3Nmezb42zLiyUYynbiqfvnMxY+TPK82vG2oo9oIer6VIQ3t1AzfoYLq+gQbPr1x
-         Og7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUc4YpUkWOqv/N4r1Uwm8s5lrikzM3Buxo7wjtM0TsZfNRuSJdH5X133wwmu3GzPJZggo8o3hDB+io1F6k3ZXm9iXVj52b2on4=
-X-Gm-Message-State: AOJu0YztV1v+eYtRkDTO2tRTqBn720FDFsegWZxRda2nbccEw2hNy7Dj
-	rrbLkKKlijr2hRT9N4HF0q3dH6fLixN84H/YkFRr6NUj8pAWwNgs0xR9hEr/df4=
-X-Google-Smtp-Source: AGHT+IHiCRE6k1Cpx73jh67er/H6/gp+YnVuWHmlblCeMCWF2i9jddFGIkvdgtlrEQ0uNnrlDzqI/A==
-X-Received: by 2002:a50:9343:0:b0:566:59a2:7a10 with SMTP id n3-20020a509343000000b0056659a27a10mr696876eda.1.1711438211145;
-        Tue, 26 Mar 2024 00:30:11 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.222.44])
-        by smtp.gmail.com with ESMTPSA id r1-20020aa7cb81000000b0056c052f9fafsm2969290edt.53.2024.03.26.00.30.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Mar 2024 00:30:10 -0700 (PDT)
-Message-ID: <a259fa95-bfc3-4959-a159-8683df473e66@linaro.org>
-Date: Tue, 26 Mar 2024 08:30:08 +0100
+	s=arc-20240116; t=1711438870; c=relaxed/simple;
+	bh=cr6d1YtaJMJnXA7T6RQPG8txmgH0XsljQTSlGhmTlZM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fiTw/12TvfaF35bEQw90fYsRQW6Uyv1HidvujAr35m4PxkJ6AA1PM0rHGFvByNA0ib8n2GwM+GMmQax/I83Oil624jeulX1ekDdFYvRj5kxElAwdLkEL4cX5lpwgd1EtKD9S7BcB/YBv+h7U1sqwCgbxSkqfjljWSPSLihba8TM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=lY14P7Gk; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42Q3JY9R000843;
+	Tue, 26 Mar 2024 07:40:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version:content-type; s=
+	qcppdkim1; bh=44iY2+07TJVazyktNEyLb6flAPduNQ6U/meDDbnqBlo=; b=lY
+	14P7Gke4Sg9s53Gb38QDGjmyno1zgegsIiF3WFWpU/KqTZahI7d5q0iNAdb5OS18
+	9k6W5Vy4xKCk9sjoIfscynBlqAVww7Y/0ioyTWUXHAfWKSu5/AZoGiWPlqPdfemI
+	XNJoxxunZjrPbvmbfJtNtur0kfx+MywC49fqI3/EpeAlVKMG/ZO/zvOGKmJe3o2s
+	sQuh1kxHUp4SsIMy6bG4cIKKGAuxtH19AFuWa3ciARZ8TvdCEAtG0naz4ogSP4hi
+	45wma6vCXpEhB9T4yfVqlM010Pa+V3obXUuyVIYO5TlD1QsX4AIT9tQQaenz4Q4J
+	08dqnX/YVS4SKs4IVMsA==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3x38amakp4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 26 Mar 2024 07:40:58 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42Q7evFZ013826
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 26 Mar 2024 07:40:57 GMT
+Received: from hu-priyjain-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Tue, 26 Mar 2024 00:40:53 -0700
+From: Priyansh Jain <quic_priyjain@quicinc.com>
+To: Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath
+	<thara.gopinath@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad
+ Dybcio" <konrad.dybcio@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC: <quic_manafm@quicinc.com>, <quic_priyjain@quicinc.com>
+Subject: [PATCH v4] thermal/drivers/tsens: Add suspend to RAM support for tsens
+Date: Tue, 26 Mar 2024 13:10:33 +0530
+Message-ID: <20240326074033.17002-1-quic_priyjain@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/4] dt-bindings: interconnect: add clock property to
- enable QOS on SC7280
-To: Odelu Kukatla <quic_okukatla@quicinc.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>, Georgi Djakov <djakov@kernel.org>,
- Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>, cros-qcom-dts-watchers@chromium.org,
- "Gustavo A . R . Silva" <gustavoars@kernel.org>,
- linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hardening@vger.kernel.org, quic_rlaggysh@quicinc.com,
- quic_mdtipton@quicinc.com
-References: <20240325181628.9407-1-quic_okukatla@quicinc.com>
- <20240325181628.9407-4-quic_okukatla@quicinc.com>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240325181628.9407-4-quic_okukatla@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: j_hoVeNHJz2ryj3Hv4SFRn1lnsDHh3bV
+X-Proofpoint-GUID: j_hoVeNHJz2ryj3Hv4SFRn1lnsDHh3bV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-26_04,2024-03-21_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
+ suspectscore=0 adultscore=0 bulkscore=0 priorityscore=1501 mlxscore=0
+ clxscore=1015 mlxlogscore=999 lowpriorityscore=0 impostorscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2403210001 definitions=main-2403260051
 
-On 25/03/2024 19:16, Odelu Kukatla wrote:
-> Added clock property to enable clocks required for accessing
-> qos registers.
-> 
-> Signed-off-by: Odelu Kukatla <quic_okukatla@quicinc.com>
-> ---
->  .../bindings/interconnect/qcom,sc7280-rpmh.yaml    | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sc7280-rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,sc7280-rpmh.yaml
-> index b135597d9489..950ecdd5252e 100644
-> --- a/Documentation/devicetree/bindings/interconnect/qcom,sc7280-rpmh.yaml
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,sc7280-rpmh.yaml
-> @@ -35,6 +35,10 @@ properties:
->    reg:
->      maxItems: 1
->  
-> +  clocks:
-> +    minItems: 1
-> +    maxItems: 2
+As part of suspend to RAM, tsens hardware will be turned off.
+While resume callback, re-initialize tsens hardware.
 
-Why is this flexible? Nothing in commit msg explains that. I gave the
-same talk twice, gave there examples, yet it is not enough...
+Signed-off-by: Priyansh Jain <quic_priyjain@quicinc.com>
+---
+V3 -> V4: Make tsens_reinit function specific to tsens v2. Add
+NULL resume callback support for platform whose versions < ver_2_x
+in tsens ops.
+V2 -> V3: Remove suspend callback & interrupt enablement part from
+resume callback.
+V1 -> V2: Update commit text to explain the necessity of this patch
 
-https://elixir.bootlin.com/linux/v6.8/source/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml#L132
+ drivers/thermal/qcom/tsens-v0_1.c |  6 +++++
+ drivers/thermal/qcom/tsens-v1.c   |  3 +++
+ drivers/thermal/qcom/tsens-v2.c   |  1 +
+ drivers/thermal/qcom/tsens.c      | 37 +++++++++++++++++++++++++++++++
+ drivers/thermal/qcom/tsens.h      |  5 +++++
+ 5 files changed, 52 insertions(+)
 
-> +
->  required:
->    - compatible
->  
-> @@ -57,6 +61,7 @@ unevaluatedProperties: false
->  
->  examples:
->    - |
-> +    #include <dt-bindings/clock/qcom,gcc-sc7280.h>
->      interconnect {
->          compatible = "qcom,sc7280-clk-virt";
->          #interconnect-cells = <2>;
-> @@ -69,3 +74,12 @@ examples:
->          #interconnect-cells = <2>;
->          qcom,bcm-voters = <&apps_bcm_voter>;
-
-If all devices have clocks, then you could add them here. It seems not
-all of them have clocks...
-
-Best regards,
-Krzysztof
+diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
+index 32d2d3e33287..7ed85379247b 100644
+--- a/drivers/thermal/qcom/tsens-v0_1.c
++++ b/drivers/thermal/qcom/tsens-v0_1.c
+@@ -329,6 +329,7 @@ static const struct tsens_ops ops_8226 = {
+ 	.init		= init_8226,
+ 	.calibrate	= tsens_calibrate_common,
+ 	.get_temp	= get_temp_common,
++	.resume		= NULL,
+ };
+ 
+ struct tsens_plat_data data_8226 = {
+@@ -342,6 +343,7 @@ static const struct tsens_ops ops_8909 = {
+ 	.init		= init_8909,
+ 	.calibrate	= tsens_calibrate_common,
+ 	.get_temp	= get_temp_common,
++	.resume		= NULL,
+ };
+ 
+ struct tsens_plat_data data_8909 = {
+@@ -355,6 +357,7 @@ static const struct tsens_ops ops_8916 = {
+ 	.init		= init_common,
+ 	.calibrate	= calibrate_8916,
+ 	.get_temp	= get_temp_common,
++	.resume		= NULL,
+ };
+ 
+ struct tsens_plat_data data_8916 = {
+@@ -370,6 +373,7 @@ static const struct tsens_ops ops_8939 = {
+ 	.init		= init_8939,
+ 	.calibrate	= tsens_calibrate_common,
+ 	.get_temp	= get_temp_common,
++	.resume		= NULL,
+ };
+ 
+ struct tsens_plat_data data_8939 = {
+@@ -385,6 +389,7 @@ static const struct tsens_ops ops_8974 = {
+ 	.init		= init_common,
+ 	.calibrate	= calibrate_8974,
+ 	.get_temp	= get_temp_common,
++	.resume		= NULL,
+ };
+ 
+ struct tsens_plat_data data_8974 = {
+@@ -398,6 +403,7 @@ static const struct tsens_ops ops_9607 = {
+ 	.init		= init_9607,
+ 	.calibrate	= tsens_calibrate_common,
+ 	.get_temp	= get_temp_common,
++	.resume		= NULL,
+ };
+ 
+ struct tsens_plat_data data_9607 = {
+diff --git a/drivers/thermal/qcom/tsens-v1.c b/drivers/thermal/qcom/tsens-v1.c
+index dc1c4ae2d8b0..770bf0917026 100644
+--- a/drivers/thermal/qcom/tsens-v1.c
++++ b/drivers/thermal/qcom/tsens-v1.c
+@@ -154,6 +154,7 @@ static const struct tsens_ops ops_generic_v1 = {
+ 	.init		= init_common,
+ 	.calibrate	= calibrate_v1,
+ 	.get_temp	= get_temp_tsens_valid,
++	.resume		= NULL,
+ };
+ 
+ struct tsens_plat_data data_tsens_v1 = {
+@@ -166,6 +167,7 @@ static const struct tsens_ops ops_8956 = {
+ 	.init		= init_8956,
+ 	.calibrate	= tsens_calibrate_common,
+ 	.get_temp	= get_temp_tsens_valid,
++	.resume		= NULL,
+ };
+ 
+ struct tsens_plat_data data_8956 = {
+@@ -179,6 +181,7 @@ static const struct tsens_ops ops_8976 = {
+ 	.init		= init_common,
+ 	.calibrate	= tsens_calibrate_common,
+ 	.get_temp	= get_temp_tsens_valid,
++	.resume		= NULL,
+ };
+ 
+ struct tsens_plat_data data_8976 = {
+diff --git a/drivers/thermal/qcom/tsens-v2.c b/drivers/thermal/qcom/tsens-v2.c
+index 29a61d2d6ca3..0cb7301eca6e 100644
+--- a/drivers/thermal/qcom/tsens-v2.c
++++ b/drivers/thermal/qcom/tsens-v2.c
+@@ -107,6 +107,7 @@ static const struct reg_field tsens_v2_regfields[MAX_REGFIELDS] = {
+ static const struct tsens_ops ops_generic_v2 = {
+ 	.init		= init_common,
+ 	.get_temp	= get_temp_tsens_valid,
++	.resume		= tsens_resume_common,
+ };
+ 
+ struct tsens_plat_data data_tsens_v2 = {
+diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+index 6d7c16ccb44d..0ff588cb53b2 100644
+--- a/drivers/thermal/qcom/tsens.c
++++ b/drivers/thermal/qcom/tsens.c
+@@ -17,6 +17,7 @@
+ #include <linux/pm.h>
+ #include <linux/regmap.h>
+ #include <linux/slab.h>
++#include <linux/suspend.h>
+ #include <linux/thermal.h>
+ #include "../thermal_hwmon.h"
+ #include "tsens.h"
+@@ -1193,6 +1194,42 @@ static int tsens_register_irq(struct tsens_priv *priv, char *irqname,
+ 	return ret;
+ }
+ 
++#ifdef CONFIG_SUSPEND
++static int tsens_reinit(struct tsens_priv *priv)
++{
++	unsigned long flags;
++
++	spin_lock_irqsave(&priv->ul_lock, flags);
++
++	if (tsens_version(priv) >= VER_2_X) {
++		/*
++		 * Re-enable the watchdog, unmask the bark.
++		 * Disable cycle completion monitoring
++		 */
++		if (priv->feat->has_watchdog) {
++			regmap_field_write(priv->rf[WDOG_BARK_MASK], 0);
++			regmap_field_write(priv->rf[CC_MON_MASK], 1);
++		}
++
++		/* Re-enable interrupts */
++		tsens_enable_irq(priv);
++	}
++
++	spin_unlock_irqrestore(&priv->ul_lock, flags);
++
++	return 0;
++}
++
++int tsens_resume_common(struct tsens_priv *priv)
++{
++	if (pm_suspend_target_state == PM_SUSPEND_MEM)
++		tsens_reinit(priv);
++
++	return 0;
++}
++
++#endif /* !CONFIG_SUSPEND */
++
+ static int tsens_register(struct tsens_priv *priv)
+ {
+ 	int i, ret;
+diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
+index cb637fa289ca..cab39de045b1 100644
+--- a/drivers/thermal/qcom/tsens.h
++++ b/drivers/thermal/qcom/tsens.h
+@@ -634,6 +634,11 @@ void compute_intercept_slope(struct tsens_priv *priv, u32 *pt1, u32 *pt2, u32 mo
+ int init_common(struct tsens_priv *priv);
+ int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp);
+ int get_temp_common(const struct tsens_sensor *s, int *temp);
++#ifdef CONFIG_SUSPEND
++int tsens_resume_common(struct tsens_priv *priv);
++#else
++#define tsens_resume_common            NULL
++#endif
+ 
+ /* TSENS target */
+ extern struct tsens_plat_data data_8960;
+-- 
+2.17.1
 
 
