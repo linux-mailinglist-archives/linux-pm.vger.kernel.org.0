@@ -1,272 +1,167 @@
-Return-Path: <linux-pm+bounces-5382-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5384-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B97588BAEA
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 08:04:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56E3E88BB3B
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 08:30:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8410C1F3A920
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 07:04:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C4A02B21D10
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 07:30:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5098112AADB;
-	Tue, 26 Mar 2024 07:04:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CDC8130AD3;
+	Tue, 26 Mar 2024 07:30:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="V48D904S"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="KDadHnYj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2111.outbound.protection.outlook.com [40.107.223.111])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41E2974BEB;
-	Tue, 26 Mar 2024 07:03:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.111
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711436641; cv=fail; b=tWXLyf7eCa7lBU0Gl9RwyFWgemNYo2mlgtemFznpjzkT+Lo0S7FHhtC2xHJkQwBJS5CK7Hs9DZYg6fVAO0dj8Ue4tS6jTo2nhTPg66/UGmqn3CrKU8bcnq6nU/6WhPIiWOGPm5q8EYnq0zQtn8s9jOqHgMp/iQhzGev7lYaThzo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711436641; c=relaxed/simple;
-	bh=lBFdegKlOTlM1EJuMChaOYyKN2Xr8Nw/6n1nl9Ykh1o=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=DjlR736ndvYm4FTCkdA0JjizY7WbO/Qe/CblJA45oOAKkEEHsNUneCsipZeJwN0DNTTnC6RG/Hj/jI7L9CZTOsxM83ry3GN7bxnymJx0j2CrT/nTHjYI46D1MyxuHZFviz3+NxgSlIidy0FoXTGN+jNDIrpc561feNkFeZsoDpY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=V48D904S; arc=fail smtp.client-ip=40.107.223.111
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lSJB/U3mTSyBRADDHVmZscYHdjf1PAIbpeYjhdV3Uof6T1lCruQ6MGyF2HwKXa0mdiyKYRMfOO62SHqETod3oshCQG8F70yW5e+Lds65NeVCZ370JZbB4c/hXeu1wtQwX+JyetpJ8YH2m+6HrzseQs82+hdii0VkUrNvQZqU74Gsc33R9N8VzlSpXJeRJQl0Pp1FFZGmvaNIOCtj9hzP7tMVsYyVgkoO7yXw6hItJZcupVyJz71DlT/dMOglkEgt+qwJ6D1Sh6WaHL6Q7uxPd/mlMi9CorRWyCfrevU7GQmApdccqntmDySME6TCZfn4NY/XgcP6rxs2u3FvklTkjA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mkwv+VHYfgo0FKo+NvajvBFg+NZapIcP1AM9XVm8LZI=;
- b=VE0z/Im3Lr/4+ahC5ig3ReYFfDiK7dDkEyHO2jsbXRYCNrFKs5+/+W2hw80wy1jL1/bYd0iWGeC7Pe+C2udTRh1Dcjpg2c8sIA/IgRqWJMTFTan4cboDyGYNe2eOixoqs8PLrY6uaZ+AEQ0TrykBRm3e/KOnUxepiTA9Q07n9XbqbHQtQ3AerVNH+YoNNC/XT5RvX+ccwKcTsb2+PXX8KnPo2bhXiuLHHd8LM2KwAex0g0XkKun/SUrGiNlyU3XCrqwMlrIwXdfaGtAJoVJ4DGWYebeOSwquJ66e7RliRl+8GLbck2r2KdRB+zGSHsGxofHb3P3RD7iPD/Tt6+Lpyw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mkwv+VHYfgo0FKo+NvajvBFg+NZapIcP1AM9XVm8LZI=;
- b=V48D904SgSdhOd8bbUepbBOqQDWQAo9nz/9VSGMGGGupj9hR+UN8nk/0OsP2IZWERXDlw1pFc5kfrUj70GV5rF6MEnIo7grLrYtm3qIqUDXZ+MsU/zPm9634OkJ3Jj9DyEm9ymyyDx1/9JeHyfP/7JpKf+o8qui1ZMgzLbS2bM4=
-Received: from CYYPR12MB8655.namprd12.prod.outlook.com (2603:10b6:930:c4::19)
- by DS7PR12MB6021.namprd12.prod.outlook.com (2603:10b6:8:87::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7409.31; Tue, 26 Mar 2024 07:03:57 +0000
-Received: from CYYPR12MB8655.namprd12.prod.outlook.com
- ([fe80::64d2:3c49:7c63:1749]) by CYYPR12MB8655.namprd12.prod.outlook.com
- ([fe80::64d2:3c49:7c63:1749%4]) with mapi id 15.20.7409.031; Tue, 26 Mar 2024
- 07:03:56 +0000
-From: "Yuan, Perry" <Perry.Yuan@amd.com>
-To: "Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>
-CC: "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>, "Limonciello,
- Mario" <Mario.Limonciello@amd.com>, "viresh.kumar@linaro.org"
-	<viresh.kumar@linaro.org>, "Huang, Ray" <Ray.Huang@amd.com>, "Petkov,
- Borislav" <Borislav.Petkov@amd.com>, "Deucher, Alexander"
-	<Alexander.Deucher@amd.com>, "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-	"oleksandr@natalenko.name" <oleksandr@natalenko.name>, "Du, Xiaojian"
-	<Xiaojian.Du@amd.com>, "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v6 2/6] cpufreq: amd-pstate: initialize new core precision
- boost state
-Thread-Topic: [PATCH v6 2/6] cpufreq: amd-pstate: initialize new core
- precision boost state
-Thread-Index: AQHaeR0AhHEA5t4b40SQV4IgRB7JvbFAgksAgAkiAGA=
-Date: Tue, 26 Mar 2024 07:03:56 +0000
-Message-ID:
- <CYYPR12MB8655837DD1E6707D5B6991159C352@CYYPR12MB8655.namprd12.prod.outlook.com>
-References: <cover.1710754236.git.perry.yuan@amd.com>
- <f43f48b02d42a651028f0c4690caa6e953e8bf45.1710754236.git.perry.yuan@amd.com>
- <ZfrJQF4z9i/yj1bp@BLR-5CG11610CF.amd.com>
-In-Reply-To: <ZfrJQF4z9i/yj1bp@BLR-5CG11610CF.amd.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=321139b1-f89a-4e87-a96a-e46e4b694d5d;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2024-03-26T07:00:18Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CYYPR12MB8655:EE_|DS7PR12MB6021:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- fU+iHIWCd6Cb3Pq9Zn8DT/AK5Ed60bJQFGhVWiqInylkf6wlauf4vrYF2nRWceFAuA7D2sqG3FjYPCscNR2U2UQ+neYY172uv/0yXRnPm4sl1ksiKbyzlTYd1J8DZGzU97Ew+EttzLSiy1DFAwsPNLLLoN4Av6NNeim7+C95vU9y2NbDcDT/IS0WRwkW6XbEBCedjtzCNW8kEp1ODdGZUjD5k/CqE2B8rFrcM9Ybbq/oTC6g/4NVTtKJZvaLe0Cz7BtQmVba8ddDRZ02aOMrF2C3V95kRgyfFAiHWsqAe2C2Ipb+84EuBRu3Rb4/Zkh6laIx3g+LFJShnFhcyajZ0JkyeVQ9Ohn//r1xttApsobrTOD5s5WRDMgWbpSdiqkfQYvJp+Fg65pkKb+qrv7ChXsobfufVIAcqVzjz2H7mIQm0llacaBFZgFROmq6idQxa1YNpMUoPLsq2X/+TMhpj41GWN4fRZSk2jvIp9uAFgLPiJkIljI+IN4cgRmMna7n1V6rVe6+ttzgp8o3sNrxmGuxCPBXt7wVgtkA08+q4fN4rD/G2zk4u6DyMYT6REKtl1G7OsbA49xcPvC9CY0pMFKWjJ3tpYZSWILH+i1m930=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CYYPR12MB8655.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(1800799015);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?gN8ZZLup0pnMVZ1vrHS3GSZfYB1ynKng4KZj3qW4shDtXa+tAr/nLvj//XgP?=
- =?us-ascii?Q?6EU89kbEHiLVjIj1KIF3HUDCvC8MKeRcLnuC1P62chjqqaak+GXl/ueZJ+Mp?=
- =?us-ascii?Q?FM7MYMJ5mmL8jLcKN2/ev1UnvgxkTY0g+aAM90eJ/rgJVDhJiqPI1vknAFQu?=
- =?us-ascii?Q?8wRyrSYxaKwIcP7nNa3FaPSohhW1CjoyszOrMpGaY7g0bzSktQDNcXTq/t0M?=
- =?us-ascii?Q?/PK0Sh6yB+NQunnzTCrRQQs8eylZyiqMYCEKMDpfjinrnFoBFDIItqnIOIj3?=
- =?us-ascii?Q?gUQMSuoXmkS/kgLLSYQRd2VFvpHsJa6CIhKcU5UOTlrJzZelgfvr3JzZLBe0?=
- =?us-ascii?Q?UiTaNbZ6GnU22itzf5O6u7Ov3QVinl2GOcngdQZDTkt5ZzkqYJW5/UYucScX?=
- =?us-ascii?Q?EFFRcNTgl14M7fe1E3SuVbU0IKw+j5uI+1x0Hi1qsY7a6LtieM5o7gI00G30?=
- =?us-ascii?Q?9A/7Ee2YwGVdYgRkaKSiiwil3vfCCAo4kJku2zNOXxUHAlW3EMS8vvPXM+8x?=
- =?us-ascii?Q?DDpHJmR+8F8lnMtJmLxEamD7bIWKlE4WEkRg/8JjnXE2JJW27ReliDdstps2?=
- =?us-ascii?Q?atT/6evoGvWuGOCvuueQm2OtS/guhgDU8vFoya28Q9XmgSjFo/TC21Z9gkkU?=
- =?us-ascii?Q?OAgxRfZd1TXbH8MINLKHv57FGQOb7U4gMsVGY8LSpAEQXLu0QI2Kux2qDQUC?=
- =?us-ascii?Q?aWIXWJtVYhTBkPLKwSvxq+08wBsgXkjeaveDzhNastZ46xRax5KsEWN8ewWS?=
- =?us-ascii?Q?L+sLAvj3O/GX4NoswMMRCzXgLe0kGS44HCQKsj1g5zOXanmnCLZvOZMqb1MM?=
- =?us-ascii?Q?gzyZ4EdFLftBGdOR2PqOtx1VLI8jMsMh6Wrm7rik1EYjYzJTtue/IPPTpxli?=
- =?us-ascii?Q?um0J53oWjiNaRm3E7ymhCxcj2rY5XWYAyVvukUL2mejpj74LzYx3YObfyftf?=
- =?us-ascii?Q?kMsKDhqQ5u+o5DpYDn0JZsVjVBhpRCYBGZSOVMxh6ACh1OD90vZt5Yf4j54Z?=
- =?us-ascii?Q?oAXN0aze8DIy2RxeR99OA7yLAD3l/2EEuxe21LpFBsLJnJCEO/XSDl8zctyk?=
- =?us-ascii?Q?DRIHtBE6jfUSUlLgbH+B5wsLbHCTXP00QTbdNzqtnIKd3TTLrHu7cuz+hSc/?=
- =?us-ascii?Q?eL6FJo0GRH5oLo1A9mM945umxrCYfP2iKkYg/mmyHRsrZCl+E4l6pp0/20aq?=
- =?us-ascii?Q?EXcYg/cOUo3J2rZYTbII0PtiQlKKK07cn4lP8NWNmpfaTwOJZK12qZALpcIl?=
- =?us-ascii?Q?skomjI+/b4dhIL/PRTkD+0lXdrKaeuz4fD/6HQnDAdGRSWHH33MA9ggkKcGO?=
- =?us-ascii?Q?6D+SH4FIACILoGGMgHbybf896VcJO6o6NhBZX1EMt+a/C97r1dMgNBmO8I0T?=
- =?us-ascii?Q?F+GHkfqcRpj+wTcdxb++KwjZUQWd6BOVBalvZFWOXpLTh788tpZz4NwjyHrV?=
- =?us-ascii?Q?+7OzcHkfeifbebmhgZKQi5zygmWKzflEbTJMV/OND9jxJYo841P+9IsetZYD?=
- =?us-ascii?Q?V7I7Y91wWz5n+JA4j9L20OvbphPdFNYSwn5QH1KFf+HxlnFpTsAjVjzvYOqV?=
- =?us-ascii?Q?Rg/jLiRsjAx2EEVEFMA=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5920A130A65;
+	Tue, 26 Mar 2024 07:30:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711438221; cv=none; b=HDQCmNF5Bz8mevPfAeWICnmMBlhYPEkyjNR3s7n/wU5hFesmXp1lPBZTuiDL6x42cUQ2SifVXvSsQ0IiCyOK7LWMCKJypjML67bZYzUpy0TQC/mUb31LEYgRHhxo0zvJxfOUM+Z7AbAp/ITjasRtsozyCdTdRdSNDQ3cQOuUMUc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711438221; c=relaxed/simple;
+	bh=CRjcQUa1O1VQEkrYah3aU2Dfmn8ieNgrULDmwX0FhP0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=ErHi+er5u/5KTNEylCe8aTZIyMEjN5RFliAHD1OMqlXw/a7Lb2xf5sjlgxM/WHJirZaidvl5G2Qa8s7oIEAdWCtakpJTJ7aYiV9SKJx/cqiSM2RsO1snCUi8nzcotJ23yrp/9ypzpnqfgaIb93ZjkRUWnUeetkNSpGnkzVcK+F0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=KDadHnYj; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42Q5k0G7010711;
+	Tue, 26 Mar 2024 07:30:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=OQDARmuA9qghqlPbUPmWsGdH3pMdroUx/3+mtg0evH0=; b=KD
+	adHnYjqGppY7eCZWWLDkLQUWgcAsYiC8AIcYjjWh5QPXO7C6ymazrSC8S0ELzbi/
+	fdn6sVCmFncM8RDVKRarC62/ETS3ufa2Uf6saP3Rt5ZvPVO5XDKwDLSZee7uEiqf
+	WkJQ/PPBkDed8Ft1ZFZ6UBkLgzZV/FjAF0j222U2lIKzaMMQHcAPHH8Ubx4oAG3t
+	sPykcp0IcTue+Cy+U5VtRwmsEUk6boEINgBGAR08EUnRYpxyDUfi/0JN9f1Q9r5d
+	TU/pvJyYx+9q0gdz8NMIA9UKLtACthIGbn0JGy+ovcRcr1I5slHdzCKCjA4hHgLt
+	ZoyFv1UWCA3tbItmzKQw==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3x3rghrake-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 26 Mar 2024 07:30:09 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42Q7U8qE003245
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 26 Mar 2024 07:30:08 GMT
+Received: from [10.218.47.125] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 26 Mar
+ 2024 00:30:05 -0700
+Message-ID: <b0e7ce76-486a-727a-4ef4-d08f38be8408@quicinc.com>
+Date: Tue, 26 Mar 2024 12:59:54 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CYYPR12MB8655.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c75bf112-f887-428a-1a91-08dc4d62e7b1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Mar 2024 07:03:56.8568
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: WEajUJdmY/VrpN0Ym945LwGvstsoeMW8KymfbeIW9AQ7ypyLMIKF8QFsDwbAA46O3f/Hjx1dJeXjxR4uNs4Eog==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6021
-
-[AMD Official Use Only - General]
-
-Hi Gautham,
-
-
-> -----Original Message-----
-> From: Shenoy, Gautham Ranjal <gautham.shenoy@amd.com>
-> Sent: Wednesday, March 20, 2024 7:32 PM
-> To: Yuan, Perry <Perry.Yuan@amd.com>
-> Cc: rafael.j.wysocki@intel.com; Limonciello, Mario
-> <Mario.Limonciello@amd.com>; viresh.kumar@linaro.org; Huang, Ray
-> <Ray.Huang@amd.com>; Petkov, Borislav <Borislav.Petkov@amd.com>; Deucher,
-> Alexander <Alexander.Deucher@amd.com>; Huang, Shimmer
-> <Shimmer.Huang@amd.com>; oleksandr@natalenko.name; Du, Xiaojian
-> <Xiaojian.Du@amd.com>; Meng, Li (Jassmine) <Li.Meng@amd.com>; linux-
-> pm@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: Re: [PATCH v6 2/6] cpufreq: amd-pstate: initialize new core prec=
-ision
-> boost state
->
-> Hello Perry,
->
-> On Mon, Mar 18, 2024 at 06:11:09PM +0800, Perry Yuan wrote:
-> > From: Perry Yuan <Perry.Yuan@amd.com>
-> >
-> > Add gloal global_params to represent current CPU Performance
-> > Boost(cpb)
->       ^^^^^^
->       global ?
-
-Typo will be fixed in v7.
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v3] thermal/drivers/tsens: Add suspend to RAM support for
+ tsens
+To: Amit Kucheria <amitk@kernel.org>
+CC: Thara Gopinath <thara.gopinath@gmail.com>,
+        Bjorn Andersson
+	<andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Rafael J .
+ Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_manafm@quicinc.com>
+References: <20240227160928.2671-1-quic_priyjain@quicinc.com>
+ <CAHLCerModb=01WX=q6XU0XO8dr5EaSQ5RaBoFLFc_=vpOGAgaw@mail.gmail.com>
+ <06ab4347-3ed0-432a-cc36-49837d8a28de@quicinc.com>
+ <CAHLCerPnyT56WukNqX6_4gM7siczYBpSsb7XM_eW=vb5dBwceA@mail.gmail.com>
+Content-Language: en-US
+From: Priyansh Jain <quic_priyjain@quicinc.com>
+In-Reply-To: <CAHLCerPnyT56WukNqX6_4gM7siczYBpSsb7XM_eW=vb5dBwceA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: mFW-xWMYQRRI7meO7VJnxmielf6eQJfM
+X-Proofpoint-ORIG-GUID: mFW-xWMYQRRI7meO7VJnxmielf6eQJfM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-26_04,2024-03-21_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
+ clxscore=1015 phishscore=0 suspectscore=0 bulkscore=0 mlxlogscore=991
+ impostorscore=0 malwarescore=0 lowpriorityscore=0 priorityscore=1501
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2403210001 definitions=main-2403260050
 
 
->
-> > state for cpu frequency scaling, both active and passive modes all can
-> > support CPU cores frequency boosting control which is based on the
-> > BIOS setting, while BIOS turn on the "Core Performance Boost", it will
-> > allow OS control each core highest perf limitation from OS side.
->
-> Could we reword this portion along the lines of the following:
->
-> "The active, guided and passive modes of the amd-pstate driver can suppor=
-t
-> frequency boost control when the "Core Performance Boost"
-> (CPB) feature is enabled in the BIOS.  When enabled in BIOS, the user has=
- an
-> option at runtime to allow/disallow the cores from operating in the boost
-> frequency range.
->
-> Add an amd_pstate_global_params object to record whether CPB is enabled i=
-n
-> BIOS, and if it has been activated by the user."
 
-Sure, will revise the description in v7.
+On 3/21/2024 6:21 PM, Amit Kucheria wrote:
+> On Tue, Mar 19, 2024 at 4:19 PM Priyansh Jain <quic_priyjain@quicinc.com> wrote:
+>>
+>>
+>>
+>> On 3/17/2024 1:37 AM, Amit Kucheria wrote:
+>>> On Tue, Feb 27, 2024 at 9:40 PM Priyansh Jain <quic_priyjain@quicinc.com> wrote:
+>>>>
+>>>> As part of suspend to RAM, tsens hardware will be turned off.
+>>>> While resume callback, re-initialize tsens hardware.
+>>>>
+>>>> Signed-off-by: Priyansh Jain <quic_priyjain@quicinc.com>
+>>>> ---
+>>>> V2 -> V3: Remove suspend callback & interrupt enablement part from
+>>>> resume callback.
+>>>> V1 -> V2: Update commit text to explain the necessity of this patch
+>>>>
+>>>>    drivers/thermal/qcom/tsens-v2.c |  1 +
+>>>>    drivers/thermal/qcom/tsens.c    | 40 +++++++++++++++++++++++++++++++++
+>>>>    drivers/thermal/qcom/tsens.h    |  6 +++++
+>>>>    3 files changed, 47 insertions(+)
+>>>>
+>>>> diff --git a/drivers/thermal/qcom/tsens-v2.c b/drivers/thermal/qcom/tsens-v2.c
+>>>> index 29a61d2d6ca3..0cb7301eca6e 100644
+>>>> --- a/drivers/thermal/qcom/tsens-v2.c
+>>>> +++ b/drivers/thermal/qcom/tsens-v2.c
+>>>> @@ -107,6 +107,7 @@ static const struct reg_field tsens_v2_regfields[MAX_REGFIELDS] = {
+>>>>    static const struct tsens_ops ops_generic_v2 = {
+>>>>           .init           = init_common,
+>>>>           .get_temp       = get_temp_tsens_valid,
+>>>> +       .resume         = tsens_resume_common,
+>>>>    };
+>>>
+>>> Please add resume callbacks for the other tsens hardware too and make
+>>> sure that your reinit function handles them too.
+>>>
+>> We have discussed internally on this and we think that if someone wants
+>> to extend the support (and do the validation) of one of those old
+>> platforms they can add the resume ops for that platform. There are many
+>> versions of tsens hardware so we are bit skeptical to add reinit support
+>> for all these platforms with any validations(since S2R mode is not
+>> enabled for all these older platforms so it is not possible to validate).
+> 
+> Then why does tsens_reinit refer to tsens_version(priv) >= VER_0_1
+> when re-enabling the irq?
+> 
+> Perhaps we should explicitly disable platforms that are not validated
+> for this functionality (.resume = NULL) and have the reinit function
+> only work for validated platforms (tsens_version >= VER_2_X)?
+> 
+Sure i will update tsens_reinit to handle only tsens_version >= VER_2_X 
+in next patch. Also will add (.resume = NULL ) for all the platforms for 
+which this functionality is not validated in next patch.
 
->
-> >
-> > If core performance boost is disabled while a core is in a boosted
-> > P-state, the core transitions to the highest performance non-boosted
-> > P-state, that is the same as the nominal frequency limit.
->
-> >
-> > Reported-by: Artem S. Tashkinov" <aros@gmx.com>
-> > Cc: Oleksandr Natalenko <oleksandr@natalenko.name>
-> > Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D217931
-> > Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
-> > ---
-> >  drivers/cpufreq/amd-pstate.c | 39 +++++++++++++++++++++++++++---------
-> >  include/linux/amd-pstate.h   | 13 ++++++++++++
-> >  2 files changed, 42 insertions(+), 10 deletions(-)
-> >
-> > diff --git a/drivers/cpufreq/amd-pstate.c
-> > b/drivers/cpufreq/amd-pstate.c index 59a2db225d98..81787f83c906
-> 100644
-> > --- a/drivers/cpufreq/amd-pstate.c
-> > +++ b/drivers/cpufreq/amd-pstate.c
-> > @@ -68,6 +68,8 @@ static int cppc_state =3D AMD_PSTATE_UNDEFINED;
-> > static bool cppc_enabled;  static bool amd_pstate_prefcore =3D true;
-> > static struct quirk_entry *quirks;
-> > +struct amd_pstate_global_params amd_pstate_global_params;
-> > +EXPORT_SYMBOL_GPL(amd_pstate_global_params);
-> >
-> >  /*
-> >   * AMD Energy Preference Performance (EPP)
->
-> [..snip..]
->
-> > diff --git a/include/linux/amd-pstate.h b/include/linux/amd-pstate.h
-> > index 6b832153a126..c5e41de65f70 100644
-> > --- a/include/linux/amd-pstate.h
-> > +++ b/include/linux/amd-pstate.h
-> > @@ -134,4 +134,17 @@ struct quirk_entry {
-> >     u32 lowest_freq;
-> >  };
-> >
-> > +/**
-> > + * struct amd_pstate_global_params - Global parameters, mostly tunable=
- via
-> sysfs.
-> > + * @cpb_boost:             Whether or not to use boost CPU P-states.
-> > + * @cpb_supported: Whether or not CPU boost P-states are available
-> > + *                 based on the MSR_K7_HWCR bit[25] state
-> > + */
-> > +struct amd_pstate_global_params {
-> > +   bool cpb_boost;
-> > +   bool cpb_supported;
-> > +};
-> > +
-> > +extern struct amd_pstate_global_params amd_pstate_global_params;
->
-> Will this be used in multiple files ? If no, it is better to define this =
-in amd-pstate.c
+Regards,
+Priyansh
 
-Yes, the var will be used by amd-pstate-ut.c which can detect the CPB state=
- for unit testing.
-So we need to expose this
-
-
->
-> Otherwise, I have no other issues with the patch.
-
-Thanks for the review,
-
-Perry.
-
->
-> --
-> Thanks and Regards
-> gautham.
+> Regards,
+> Amit
 
