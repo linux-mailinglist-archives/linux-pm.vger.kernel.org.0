@@ -1,105 +1,136 @@
-Return-Path: <linux-pm+bounces-5445-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5449-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3923388CE0E
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 21:15:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C038C88CF54
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 21:46:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E452D1F65777
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 20:15:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED6451C31412
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 20:46:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2D6013D523;
-	Tue, 26 Mar 2024 20:14:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36CF2811F9;
+	Tue, 26 Mar 2024 20:46:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xOqibT+o"
+	dkim=pass (2048-bit key) header.d=gerhold.net header.i=@gerhold.net header.b="dpsh2hHz";
+	dkim=permerror (0-bit key) header.d=gerhold.net header.i=@gerhold.net header.b="YdNIjf+M"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.167])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E377613D2B2
-	for <linux-pm@vger.kernel.org>; Tue, 26 Mar 2024 20:14:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711484097; cv=none; b=FSOLHWTmVw4jmqKLyGh4h+82L98M+/k6v1gp7VpXZXsQ0lDO8A2j8ASofkYR0CFhWtxCF19C3qvz3w6g84B0+RJRJfaF3ikVpyTpq5e786Fe3/u1og/c1UsGADOy/qMxvhx/eBQuAO7FDb0NHZ7QqLurop1Vj1/2WvHeeKPWqSA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711484097; c=relaxed/simple;
-	bh=yjbveC3/sVvc0YuwNullMml87tRF1pHPon8KDzUdJq0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=edxveVy+yYM1lb7H5fcNsk5woCWlXE/WF8tFVvVyyNcy9puBVUw3h2hif+4q5XZXhuoYh68Syhm2/R4I1qnbe+YaAb/AyVLpeoAdyzzLKqE/dVyuPOoYNDOIWVkQWSDYkBu0k2SrcB2o4iUAKuEvIYtIHObT2A1z9HFPBR9VPmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xOqibT+o; arc=none smtp.client-ip=209.85.219.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-ddaebc9d6c9so2036428276.0
-        for <linux-pm@vger.kernel.org>; Tue, 26 Mar 2024 13:14:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711484094; x=1712088894; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FmPgefE26rhr79NqXAgIqb/l9m7Ev6xlwT5t75HGYd8=;
-        b=xOqibT+o+0KGb+IHjBavY+bFV2qymYgZPOt/0BZ5Akk90DsTPY953v6LH/Db37J06K
-         E+jvbKNfMh0YtydRaDGDkVr0XtpZZojiyb73JgKe5Ubw08bKFAm0N8PGPgpvnsHJleCk
-         cGLsNPEzMxPbC7QStH03NQ37t2nwD+Y8Snj+JLuekgYB44uqWzMjW3IkEQJ9kJh67HW3
-         dXOHxpVxZYwZ6nSqFqX7XXmWb6769EEsaCJEZ3FCADEsPrBQANnEj/le0yS+A7pl1v9q
-         t/T0xoChks1YKNKQdC/SprfhGcygZcdDw80L3udAF40YkQXLUdTjC4XF/h1jI+HAQwov
-         J3uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711484094; x=1712088894;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FmPgefE26rhr79NqXAgIqb/l9m7Ev6xlwT5t75HGYd8=;
-        b=B2P2xKNwaWdRH0N7fLNV+mYZfUjcaeJJJu1csMH/bPYZV+qfEBmLHK8XHGPQ8hgWTb
-         0bFh3Z4Scbw+L2iU/S/N2399P7J5m0rcazFVACzQNVzWkpwb555yM2h4hoW91qlxQhOu
-         Oi7k1482JxPCpOHttYWw3UA1j/lw2eRLlBPjJLQhiXINgTPQSQ9q1LpDPUJo7raORaqR
-         yxQ/Sm5BhcVi7cjUCQlpUb/jXayef6CNiEgJHCu5JQdtdXLSqq/zy9nHaQ4yAGlBlZ1a
-         GhIwpE+NItV3SHy1G5hDWL5S6TOFZjEgBA1UcUnXn2Q/MTuomPMvdJqj4fuhB6fq2q0G
-         xwVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWpKe0+PnXoA2L86bBz1p4HcOybYu+mHd21qu+eAyyx/D9c5yGYPhYKWPXUvsYlnB06HEmByJcSsbJajl+QioN0GXkfgAEIMl0=
-X-Gm-Message-State: AOJu0YwbwCnukShg1GJDvb2G1pjBQ3USfBF+megRC8cAi2+DBxm+wXaY
-	LKMxxTxDEmd3Q6at7BsnZ9VVolPhEZrTVWapPODkJujWkKZidTrJIy7N4A8l+Ccy6HQeXIbG/MA
-	HwhzMZebsJMm4Fs5347J3joJ652KV19cX8N6PwA==
-X-Google-Smtp-Source: AGHT+IEgqefmBkcJJP+48bvWirN9imUigtJZiRJWcEvqUkXtLAjkJ0dlr5Paor1wjIVn1yDprWfj9TE7zMxuEes/6vU=
-X-Received: by 2002:a25:ef52:0:b0:dcc:eb38:199c with SMTP id
- w18-20020a25ef52000000b00dcceb38199cmr790117ybm.56.1711484093804; Tue, 26 Mar
- 2024 13:14:53 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C32E773503;
+	Tue, 26 Mar 2024 20:46:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.167
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711485987; cv=pass; b=bYH+5zlWNLRYVlc3u2HMrr6R47k0Tk3IIsPLivHeKI/jioxpdZdm0xvnAHEX4o5fodqwulT2mUQJzmc3N6qT3gesS86H66JSXv3n3GxU8u9yvKOt9BpnK0mhv/uOhQ1oqVZULoZgo+1VmdNXSEYXrmWDHrEUxM1bCs/Np1DdGwM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711485987; c=relaxed/simple;
+	bh=f2x2X4qvlZRc+1fqK+Zk/v7NWSHCzkhs3R7wilhmoQc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QI+qRqXvbJfI/p5K5/C/Xumm9ttBvN43+1aw8qYNiP61/VCgLCW9wyBNnsL1bRfbLQ1B/aOHn8DwcSq9EtQ5y9ruX5EQbDt1dNtjWzn/AG9G5/sN9Ak//JHFhv6MWgRvjm+B0kzwaapVpI7+NQbJQw1ube85aPyyg5JU9BFso5k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gerhold.net; spf=none smtp.mailfrom=gerhold.net; dkim=pass (2048-bit key) header.d=gerhold.net header.i=@gerhold.net header.b=dpsh2hHz; dkim=permerror (0-bit key) header.d=gerhold.net header.i=@gerhold.net header.b=YdNIjf+M; arc=pass smtp.client-ip=81.169.146.167
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gerhold.net
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=gerhold.net
+ARC-Seal: i=1; a=rsa-sha256; t=1711484180; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=Atkyc6ACEe+EM/2p3Rc0z/26sVqD7x66Rrricb0henj4pr7JFXjG8ZBZsxP/56zTiP
+    7byUSx3aaP/sulLgURtVXs1Pvo+EE8JgchfEOqqlKIO9MS+TLpq3LWYFLlaUg7WO+mSJ
+    ObHw6FaGxoY48aIc5FiaOwFoR+pdPw+dN4cg7tYF6fYL3vuNrDHwaMRVv8AG47qS6Cp2
+    KYUJuN2B1QwiJCNXc/N3wacCi0j5GoMJ83ao3Dp8nwEHTZydETQbRl4K6L7qzo+HGcN1
+    gJKDPQqqGXVz62n1wwZZxMUYGOABHD8vDvwyxdV0epgebJsPD9lSWj6+hplvSAOriwxd
+    3UxQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1711484180;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=Pbom/uplsGQjVCcQowzS3UwrKwYpIwAR/UOVLRl7SJs=;
+    b=PwLSQaKbKPnYNh0Ei6LdxQIoRPMrvCwSeqCTSm3Ok9P07wNLl7TaKUshOgOOBgPYpf
+    raTvabH3jVeM+QlP83Ft9lp7FGzGGIBjUaTpX7JLh6C+xBUmzlIW1gjoRyp0e461bxpK
+    WUrdQwGPE+bDGsIUtP1ccNiVn1ylHcbNX0pupRIApxKu7X++K6cxbSPzgU7fvzzo1cyD
+    K/uZekgL+ZomtCqYfWvbvILO6OM9zx7SU5QRoQY2+HhS4sTYvxqNJkMJkdal0p0c1AEU
+    WEXVEw7XGt+Qf4VmQsAaRqrzMkJFLbl3i4fHWv43dD4RLs49SUdYPbxTTLlH2kuAoImv
+    CBDA==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1711484180;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=Pbom/uplsGQjVCcQowzS3UwrKwYpIwAR/UOVLRl7SJs=;
+    b=dpsh2hHzzYwEStfBd0eC8EquDB7MosbB2zrqQWkWOrhXGkBP9m8Pu5tvv1cdQcnzx5
+    h29RaXrZt19hXPvrEjMh8MFQN+4ReLJWaOTliRUCoaVQaJnBitbAQ2a/FASJ97Y2fnQS
+    aQAhG/U830zz19s+n+rL1xCqUZgpd7THg0CSB6fvDCn5QKjYJYqXRubaEXlM9DWWFy4K
+    k02XqdObt+6fH/Q39QvEfKI6NVhbi8ADqog1/keiupn4IdBEL6+p7czdluqnEkIMDiTL
+    hnn/VolPRpOZw5ZyKSYwX4k1Oi0QjYhKeGxCHIOFNEouH7X1TkWr6Fce1ZwFoAa2foLW
+    efrQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1711484180;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=Pbom/uplsGQjVCcQowzS3UwrKwYpIwAR/UOVLRl7SJs=;
+    b=YdNIjf+MWeX1Ouuq+NRWddixxoIVOkITHjvgG34moF9/kooZ/fLeTClpe8Xs/Izdc6
+    fZbTMQafjR9hh5sRAUDg==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA8piJ1A=="
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 50.3.2 SBL|AUTH)
+    with ESMTPSA id Raf12502QKGKL9I
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Tue, 26 Mar 2024 21:16:20 +0100 (CET)
+Date: Tue, 26 Mar 2024 21:16:14 +0100
+From: Stephan Gerhold <stephan@gerhold.net>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+	Georgi Djakov <djakov@kernel.org>, Shawn Guo <shawn.guo@linaro.org>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] interconnect: qcom: qcm2290: Fix mas_snoc_bimc QoS
+ port assignment
+Message-ID: <ZgMs_xZVzWH5uK-v@gerhold.net>
+References: <20240326-topic-rpm_icc_qos_cleanup-v1-0-357e736792be@linaro.org>
+ <20240326-topic-rpm_icc_qos_cleanup-v1-2-357e736792be@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240326-topic-rpm_icc_qos_cleanup-v1-0-357e736792be@linaro.org> <20240326-topic-rpm_icc_qos_cleanup-v1-3-357e736792be@linaro.org>
-In-Reply-To: <20240326-topic-rpm_icc_qos_cleanup-v1-3-357e736792be@linaro.org>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Tue, 26 Mar 2024 22:14:43 +0200
-Message-ID: <CAA8EJppT5P+CPZg-=8jyxebFHoOUCAGK7tm-_u0zB275ZjHaAA@mail.gmail.com>
-Subject: Re: [PATCH 3/4] interconnect: qcom: icc-rpm: Make simple functions
- return void
-To: Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: Bjorn Andersson <andersson@kernel.org>, Georgi Djakov <djakov@kernel.org>, 
-	Shawn Guo <shawn.guo@linaro.org>, Marijn Suijten <marijn.suijten@somainline.org>, 
-	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240326-topic-rpm_icc_qos_cleanup-v1-2-357e736792be@linaro.org>
+Content-Transfer-Encoding: 7bit
 
-On Tue, 26 Mar 2024 at 21:43, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
-> Register accesses can't just randomly fail. Change the return type of
-> functions that only do that to void.
->
+On Tue, Mar 26, 2024 at 08:42:33PM +0100, Konrad Dybcio wrote:
+> The value was wrong, resulting in misprogramming of the hardware.
+> Fix it.
+> 
+> Fixes: 1a14b1ac3935 ("interconnect: qcom: Add QCM2290 driver support")
 > Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
->  drivers/interconnect/qcom/icc-rpm.c | 110 +++++++++++++++---------------------
->  1 file changed, 47 insertions(+), 63 deletions(-)
+>  drivers/interconnect/qcom/qcm2290.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/interconnect/qcom/qcm2290.c b/drivers/interconnect/qcom/qcm2290.c
+> index 96735800b13c..ba4cc08684d6 100644
+> --- a/drivers/interconnect/qcom/qcm2290.c
+> +++ b/drivers/interconnect/qcom/qcm2290.c
+> @@ -164,7 +164,7 @@ static struct qcom_icc_node mas_snoc_bimc = {
+>  	.name = "mas_snoc_bimc",
+>  	.buswidth = 16,
+>  	.qos.ap_owned = true,
+> -	.qos.qos_port = 2,
+> +	.qos.qos_port = 6,
+>  	.qos.qos_mode = NOC_QOS_MODE_BYPASS,
+>  	.mas_rpm_id = 164,
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+The mas_rpm_id is also wrong, I think it should be = 3. This looks
+wrongly copy pasted from BIMC_NRT. The qos_port on the other hand was
+copied from BIMC_RT. I wonder how that happened. :')
 
-
-
-
--- 
-With best wishes
-Dmitry
+Thanks,
+Stephan
 
