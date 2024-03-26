@@ -1,75 +1,75 @@
-Return-Path: <linux-pm+bounces-5452-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5453-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E44588CFC1
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 22:12:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88D1D88D01D
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 22:32:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CCAB0B24880
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 21:12:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F303323CA9
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 21:32:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F32BD13D602;
-	Tue, 26 Mar 2024 21:12:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0659C13D896;
+	Tue, 26 Mar 2024 21:32:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="C0ueIFGU"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pEh+Bz04"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24A8D13D2B2
-	for <linux-pm@vger.kernel.org>; Tue, 26 Mar 2024 21:12:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1F2D13D62E
+	for <linux-pm@vger.kernel.org>; Tue, 26 Mar 2024 21:32:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711487542; cv=none; b=kjuSWfNWxlrDnDPBKGR/yBWqGhxxYlXcUOIuhUKPPJ4AEBIYHZRI3hIm/Mks3J2VbKmkQBS+TnI9xeRgxHwLqSvZdbZuDUud0TRQcYYwNfkmF3aG0Tr3WBvP2qHfhmoh7Be1HiCV1rUCkbGYSHZg82qpMBsq5+kRTe4kzk0MLQo=
+	t=1711488749; cv=none; b=NJzMdBcbhs0ISGxlgFEoDqTBllCw2hDsFzu3+oEyQ4tuBX1p60Di85d/oWJq30fsx6w6ZU3q6RLzXB6hqy6CXkztpHbFqBkez3ba1PqfMx12sDPK1lk184sND3Viyyv45CbMDp47afunmgUbqzzWc3Lf6KnGDF311UeFO7As8DU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711487542; c=relaxed/simple;
-	bh=0F+X70AWDarLptOn48RiTTiG3E2O6A30qLqNPJ7uOUQ=;
+	s=arc-20240116; t=1711488749; c=relaxed/simple;
+	bh=1dm40cDdeMpgpRTjQv0KN9TR6MPwebnR1YooLNmkU0E=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dzHcnEszkh/LJ/6ZABWhsm0Vyn4eHrlLj2+Izxfs0qbT3QH6rxy+BZ4zwauVGnc3ce4iByKkfQkNuVhaQhWTyOsl5o8UOwu/2c6IHN76yoAB2eUzQ63QB1PMzR4iUN7XTsNCFVG5s1PydCrazON7Nfr1GpOeKM/H5UrcfS98E+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=C0ueIFGU; arc=none smtp.client-ip=209.85.218.52
+	 In-Reply-To:Content-Type; b=HlBhA8v95mdcSeyIKsNDmjYdfrR84yhLDYeeskU6pqrm/Tgm2NkhHaTlXhE2VUf80UsZH1qTuodjS/PhN4I66hSZ0TnR5jOHRmD5gIjq0XsnBi5U36u2DvurX27IwtFC+PBrbwMAL4kjtDkxIMh69DQTA9Y2JW5h25ZqwvcGH/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pEh+Bz04; arc=none smtp.client-ip=209.85.208.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a2f22bfb4e6so793193066b.0
-        for <linux-pm@vger.kernel.org>; Tue, 26 Mar 2024 14:12:20 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-56bf6418434so4561161a12.0
+        for <linux-pm@vger.kernel.org>; Tue, 26 Mar 2024 14:32:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711487539; x=1712092339; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1711488745; x=1712093545; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Esfbc3Ag4sk4mR5JiEPjgl2V8thBIUnXRFUq7g9Wfhk=;
-        b=C0ueIFGUMKh0JS3zSge+kT1jYbUoTfGWe0X+nnVnbZVg27tkURonrQ7EYUntfkfkaY
-         r1RMgLBeyyawRZ1jSxhbT9nvca3qTcYHxBaEigDq6uIgjq9FuGbeC5QWLmUcZWKCTpL4
-         nYw0SJddg+Z3vqhXL7djb2qjMkFbtT5ksHO7MMEARDE18zqbOGDU+HPqWaI/pQgGlFwP
-         jez36wVMRzJLlZ19xPBBL9QBuRPGx9FOzcZsoteV/s6UXdUUk9pDJ2q4u1YxaXs93jqC
-         wDELRBbvJOoXKfBUcmCOLb+kpb0wwWFEiSYmJx0NwwpzrWP5wTt1NkJwtngD5ZlebUsq
-         Mgpg==
+        bh=5V+UiNTGgTTrT1uOZTo3eDRM/tjDWB5U2T/YBxyC/vc=;
+        b=pEh+Bz044mN8wxZlMGbUAsCo9/gX8rE9mvoPJ5tgp+KbORhVzlKelV0frkBSx8GtoR
+         LHNw2r9c+HC21VHKX1mZ5ZwI74uVM6NaBGbBb8fon7BZDOv4Jz6DhsX1G+BEaVTvSgeb
+         +ljbZA1WX3yt4V+7XZl3B8Ls+azg3NBXr/2CvW+okSNoTw1edudYruxjg+A4+rHPFakR
+         hexin7ZPXk7C3U4FrVGYsg6DNNvJQ46xikQYeIJTZv5SAgKV7ppobw7Ck3x0hASEe+dj
+         xhGQfdOKhr7TzxQis1RX3qxWf3pVxsV7652hnziVZC8yNMb1EnHfaKB+erM3CvwsD4HI
+         illg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711487539; x=1712092339;
+        d=1e100.net; s=20230601; t=1711488745; x=1712093545;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Esfbc3Ag4sk4mR5JiEPjgl2V8thBIUnXRFUq7g9Wfhk=;
-        b=bLW3PPYLaQaiqiOzkC1mNuTXzhTeyNr8TafbIG9eZCXViZVzERYe+bM8oOWnOZLirF
-         snCT6V5SwopK+E3/WBIU8pAKMSMXQ3+FW2v5tG9bAC6/SyEkeMicQweLwT15oLGCqyWW
-         UlOcolwCfaGYz8l1+y6AujymSRB7iMIh5THQDne7alJ67QGXam4vSWvzpyFYq1+0eDW3
-         DBf4qXN6XTbq0gclTtLmVgM2bLeQax/yNXziczzq+ZnhDhlyhF2XH5+fAWpvzcnx6Nm5
-         7v0ca8vhWlwMFicY37vJ13pDExcQarwQosx+kEtiXugDFOgYuRAUqgCz7y8iGbgoZUPl
-         dh3A==
-X-Forwarded-Encrypted: i=1; AJvYcCWU4Ts/B32x6XxuS8kiMv8KAFRdd5UlTEddcuIrMg+l5Txdfvx8PfpyP7HW6FSNTK0SBy3dLskdvUaKXkBrRd0w5X3kXqa/QaQ=
-X-Gm-Message-State: AOJu0YwGS58Uesur/HU46SdL0oX3YrvB6XPTUfJA/MLMWx184uGfZL5Q
-	P+IZ4l2X66Pi2C7/6qhMD1Ojd4hBxRBsHbJk9+z9dAcX0rKvVpGRnEUlfqZVZBY=
-X-Google-Smtp-Source: AGHT+IFhPdAh4ot4NumYAC6S676xljYyytiKnFIYNPBSdI9pf8Rc4hlPwytEGQYHqeAnOZJ1cyUVxQ==
-X-Received: by 2002:a17:906:398f:b0:a47:3526:2e0f with SMTP id h15-20020a170906398f00b00a4735262e0fmr7584171eje.75.1711487539223;
-        Tue, 26 Mar 2024 14:12:19 -0700 (PDT)
+        bh=5V+UiNTGgTTrT1uOZTo3eDRM/tjDWB5U2T/YBxyC/vc=;
+        b=CBfWv2NhVHRf4QXlE/LhSWp84WLgEsMXY/LGz2uErkseWRprS6+xOqpgO8LTMSSD3z
+         rEud9j7GNSBCHpNY7/hlzN7KnGHG/tVyMV4aXQ1zCdqc6o6oLauWHKCmYo5OADvk5ESn
+         18q3LS+OfbZUXHQsNidI1SZhNcsFnP4HprimUdR4c11TL0JeDym2VnKp/jTt0Jx8MReS
+         AUUpSe6ER2UM49EubUgrQWJhoP041JZN26Do9hoyVBgMb6heK26nNuMBpPb80t4T9iXk
+         a/OQT0gqW12EE9601eDyXlKGtXLG0eHkZZLtC+qQdsNbLoYxFj95YKE/C6wwT0DVhs1o
+         5ezw==
+X-Forwarded-Encrypted: i=1; AJvYcCUAiG3XOEHFErzsapeWh3rlDAiDvrJi1AqHs22X6HEKwmlyyFIWVvdrnqH2P0x76pUsY5ScOFvMPNrWsE2A4UtsD0Oq1ZuOCiE=
+X-Gm-Message-State: AOJu0Yz2T/WFC4UmcTIoEzsFCdj2LYfVUaqjLi/vxQuDwrEvYvv/GLJj
+	E7fBjjKwv48FV8RubWYBfH2PaBRTMp7UEoYLm9Y+1GIWCRw1M7cBXPSXGAAKxzE=
+X-Google-Smtp-Source: AGHT+IE1hkUVGjcL3n033Amye66iyg4mLT7F/pL/r9rm59ZY9BIJ01gdQm8uJOeoRJaN//19FrHAIA==
+X-Received: by 2002:a17:906:c046:b0:a4d:f56a:199c with SMTP id bm6-20020a170906c04600b00a4df56a199cmr700957ejb.4.1711488745010;
+        Tue, 26 Mar 2024 14:32:25 -0700 (PDT)
 Received: from [192.168.92.47] (078088045141.garwolin.vectranet.pl. [78.88.45.141])
-        by smtp.gmail.com with ESMTPSA id z23-20020a170906271700b00a473766cfeasm4630496ejc.217.2024.03.26.14.12.17
+        by smtp.gmail.com with ESMTPSA id m10-20020a170906234a00b00a46ee3c31afsm4582471eja.154.2024.03.26.14.32.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Mar 2024 14:12:18 -0700 (PDT)
-Message-ID: <1e138728-f78e-4bfe-b59b-297e599759ab@linaro.org>
-Date: Tue, 26 Mar 2024 22:12:16 +0100
+        Tue, 26 Mar 2024 14:32:24 -0700 (PDT)
+Message-ID: <64d2d15a-f5f2-4bdc-8f43-a7e8dd108ace@linaro.org>
+Date: Tue, 26 Mar 2024 22:32:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,8 +77,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/4] interconnect: qcom: icc-rpm: Remodel how QoS settings
- are stored
+Subject: Re: [PATCH 2/4] interconnect: qcom: qcm2290: Fix mas_snoc_bimc QoS
+ port assignment
 To: Stephan Gerhold <stephan@gerhold.net>
 Cc: Bjorn Andersson <andersson@kernel.org>, Georgi Djakov
  <djakov@kernel.org>, Shawn Guo <shawn.guo@linaro.org>,
@@ -86,8 +86,8 @@ Cc: Bjorn Andersson <andersson@kernel.org>, Georgi Djakov
  linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20240326-topic-rpm_icc_qos_cleanup-v1-0-357e736792be@linaro.org>
- <20240326-topic-rpm_icc_qos_cleanup-v1-4-357e736792be@linaro.org>
- <ZgM2naP4mGLKwbCV@gerhold.net>
+ <20240326-topic-rpm_icc_qos_cleanup-v1-2-357e736792be@linaro.org>
+ <ZgMs_xZVzWH5uK-v@gerhold.net>
 Content-Language: en-US
 From: Konrad Dybcio <konrad.dybcio@linaro.org>
 Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
@@ -125,51 +125,40 @@ Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
  nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
  izWDgYvmBE8=
-In-Reply-To: <ZgM2naP4mGLKwbCV@gerhold.net>
+In-Reply-To: <ZgMs_xZVzWH5uK-v@gerhold.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 26.03.2024 9:57 PM, Stephan Gerhold wrote:
-> On Tue, Mar 26, 2024 at 08:42:35PM +0100, Konrad Dybcio wrote:
->> Currently, the QoS settings are stored in the node data, even though
->> they're a property of the bus/provider instead. Moreover, they are only
->> needed during the probe step, so they can be easily moved into struct
->> qcom_icc_desc.
+On 26.03.2024 9:16 PM, Stephan Gerhold wrote:
+> On Tue, Mar 26, 2024 at 08:42:33PM +0100, Konrad Dybcio wrote:
+>> The value was wrong, resulting in misprogramming of the hardware.
+>> Fix it.
 >>
->> Reshuffle things around to make it anywhere near readable & comparable
->> with a reference. As a nice bonus, a lot of bytes are shaved off and
->> a few miliseconds are shaved off here and there.
->>
->> As an example, bloat-o-meter reports this on sm6115.o:
->> Total: Before=14799, After=13263, chg -10.38%
->>
+>> Fixes: 1a14b1ac3935 ("interconnect: qcom: Add QCM2290 driver support")
 >> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 >> ---
-
-[...]
-
-
-> Nitpick: Why is the u16 const when the other (non-pointer) members are
-> not? The u16 also feels a bit like overkill here. The struct would have
-> exactly the same size with a full unsigned int because of padding.
-
-That's just my brain performing premature (and as you can see invalid)
-optimizations.. I can change it to u32
-
+>>  drivers/interconnect/qcom/qcm2290.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/interconnect/qcom/qcm2290.c b/drivers/interconnect/qcom/qcm2290.c
+>> index 96735800b13c..ba4cc08684d6 100644
+>> --- a/drivers/interconnect/qcom/qcm2290.c
+>> +++ b/drivers/interconnect/qcom/qcm2290.c
+>> @@ -164,7 +164,7 @@ static struct qcom_icc_node mas_snoc_bimc = {
+>>  	.name = "mas_snoc_bimc",
+>>  	.buswidth = 16,
+>>  	.qos.ap_owned = true,
+>> -	.qos.qos_port = 2,
+>> +	.qos.qos_port = 6,
+>>  	.qos.qos_mode = NOC_QOS_MODE_BYPASS,
+>>  	.mas_rpm_id = 164,
 > 
-> Alternatively, you could consider using an empty last entry as sentinel
-> instead of adding the count (i.e. with NOC_QOS_MODE_INVALID = 0). Not
-> sure what is cleaner here.
+> The mas_rpm_id is also wrong, I think it should be = 3. This looks
+> wrongly copy pasted from BIMC_NRT. The qos_port on the other hand was
+> copied from BIMC_RT. I wonder how that happened. :')
 
-Nah, let's keep the counter
-
-> 
-> I haven't looked closely at the actual conversion of the definitions in
-> the drivers. What is the chance that you made an accidental mistake in
-> there? Or was it scripted? :D
-
-By hand. After this change, it should hopefully be very easy and
-convenient to check against downstream.
+Looks like you're right ;) I'll submit it in a separate series, preferably
+after this one..
 
 Konrad
 
