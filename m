@@ -1,142 +1,129 @@
-Return-Path: <linux-pm+bounces-5432-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5433-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8595388C5AC
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 15:49:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4665788C66E
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 16:12:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C1031F61EB3
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 14:49:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0182A2C7FC4
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 15:12:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56DE8763E6;
-	Tue, 26 Mar 2024 14:49:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC2C313C803;
+	Tue, 26 Mar 2024 15:12:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OnsBfmYQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A32BED9;
-	Tue, 26 Mar 2024 14:49:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AF32762F7;
+	Tue, 26 Mar 2024 15:12:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711464567; cv=none; b=W5aRuY4FA+MFSwww+a9KSGBm6rjqxF/qS+LJFKNBU4hSPwhPIFxU2Jq1/l2LG5AczpGnyOXcEwvCrz/Q3NaPNqAwMPJKDzDYJJ1da4uSW1XH+h3VH+mdRZ4O2ERbQ09krA9hqDHEy8zJZYxtmOTIYcpbBICCxe2Qt3z18yuixBI=
+	t=1711465969; cv=none; b=laRkC1630F4hMHLH7/SamR0l5EP4a2epN23kHVbt4FkxGS7B9TA+qX0Er5pEUo5o0/RNnB9DtdXQxnAB/bjANHYS0yHGKTISTh4fTykok/hI70wZw9lNPVJZ2k75NCj0nV1L8Mf54fpWS1ZzxBvsL9PSI5EtDO/jSKBV/mcNTIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711464567; c=relaxed/simple;
-	bh=NjGYoZS9MYNf6KYedY89CIBd6GNJTkqJoAov7a2XKRo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PKa2GUP2mvNfmdnlyNeLbfnsCask9NEB4lp/RWBjl2d0U9X7MSBPz3S8LBcMRCJLBPg2ZLxsqT1391GskXnP9fC6P3xxTX/6E6DPlfevlCTKnIJjxYKl4YICDrwonkiLmXmCzDJBct5JO5U+vELkj+9bAOiu2XeEv2qMEhP4aN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=fail smtp.mailfrom=kernel.org; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=kernel.org
-X-CSE-ConnectionGUID: u4/HncuNQveTDgvADY/MsQ==
-X-CSE-MsgGUID: xKfSFc0eQ3Cp9nnBEl04Pw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="28999055"
-X-IronPort-AV: E=Sophos;i="6.07,156,1708416000"; 
-   d="scan'208";a="28999055"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 07:49:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="914882408"
-X-IronPort-AV: E=Sophos;i="6.07,156,1708416000"; 
-   d="scan'208";a="914882408"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 07:49:12 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andy@kernel.org>)
-	id 1rp86t-0000000GKYj-43J8;
-	Tue, 26 Mar 2024 16:49:07 +0200
-Date: Tue, 26 Mar 2024 16:49:07 +0200
-From: Andy Shevchenko <andy@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: nikita.shubin@maquefel.me,
-	Hartley Sweeten <hsweeten@visionengravers.com>,
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Lukasz Majewski <lukma@denx.de>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Sebastian Reichel <sre@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Mark Brown <broonie@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Sergey Shtylyov <s.shtylyov@omp.ru>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Ralf Baechle <ralf@linux-mips.org>,
-	"Wu, Aaron" <Aaron.Wu@analog.com>, Lee Jones <lee@kernel.org>,
-	Olof Johansson <olof@lixom.net>, Niklas Cassel <cassel@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
-	netdev@vger.kernel.org, linux-mtd@lists.infradead.org,
-	linux-ide@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-sound@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH v9 00/38] ep93xx device tree conversion
-Message-ID: <ZgLgY11N8dkpTZJB@smile.fi.intel.com>
-References: <20240326-ep93xx-v9-0-156e2ae5dfc8@maquefel.me>
- <dc3e2cb4-f631-4611-8814-0dc04c5502f0@linaro.org>
+	s=arc-20240116; t=1711465969; c=relaxed/simple;
+	bh=ikOFR/1UVd3fugnFnAzk4C55A/EtnmPKtVt0ZnsoBy4=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=AfPN7K5GX/FTcqwqobMo2TcFe0ai5goSoTaREoo8l1zfC6TiXKya/sWsnrMlB9fRRECjAecw2f1HSyFXLxU80L70Mwkdq2Jpn/Yg5eGOTNvomGn2QXMorma3br4hy6WvDe74kgYVC49HfXCCGFAROJwV4TJ7K+X45ikoVkXj4m4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OnsBfmYQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27B32C433C7;
+	Tue, 26 Mar 2024 15:12:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711465968;
+	bh=ikOFR/1UVd3fugnFnAzk4C55A/EtnmPKtVt0ZnsoBy4=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+	b=OnsBfmYQ3kUcVfwdwLlABczD8xqZdTvhAxEk92k45DN6zQl3R3V8BxEPB52RsIOJU
+	 stjQT1G1rdii90U9qXs98IyMNHaaDTCEQRCjheQiJfv7GsfcP7WTfAP4YJC9bTC3E2
+	 U4oFUkXDi460w83MY86vMBZHhUlFJ0pfP1iQycDWwr8EXMRByqPpmCcdVUZhE/Einj
+	 E6YlO5SgsJNklcUdUcS8LDVPeYonQPsEUDpnoUl37oHfn/onPcn2ao3QZ3HiUzlsRv
+	 MzSCIzTfANfgo2cPdqYHxv5qhQzfesdvGwwYarZJxx3Kfgylj7B1kLIkeyxpS7QNck
+	 r6RdCdboYcXKQ==
+From: Kalle Valo <kvalo@kernel.org>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Marcel Holtmann <marcel@holtmann.org>,  Luiz Augusto von Dentz
+ <luiz.dentz@gmail.com>,  "David S . Miller" <davem@davemloft.net>,  Eric
+ Dumazet <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>,  Paolo
+ Abeni <pabeni@redhat.com>,  Rob Herring <robh@kernel.org>,  Krzysztof
+ Kozlowski <krzysztof.kozlowski+dt@linaro.org>,  Conor Dooley
+ <conor+dt@kernel.org>,  Bjorn Andersson <andersson@kernel.org>,  Konrad
+ Dybcio <konrad.dybcio@linaro.org>,  Liam Girdwood <lgirdwood@gmail.com>,
+  Mark Brown <broonie@kernel.org>,  Catalin Marinas
+ <catalin.marinas@arm.com>,  Will Deacon <will@kernel.org>,  Bjorn Helgaas
+ <bhelgaas@google.com>,  Saravana Kannan <saravanak@google.com>,  Geert
+ Uytterhoeven <geert+renesas@glider.be>,  Arnd Bergmann <arnd@arndb.de>,
+  Neil Armstrong <neil.armstrong@linaro.org>,  Marek Szyprowski
+ <m.szyprowski@samsung.com>,  Alex Elder <elder@linaro.org>,  Srini
+ Kandagatla <srinivas.kandagatla@linaro.org>,  Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>,  Abel Vesa <abel.vesa@linaro.org>,
+  Manivannan Sadhasivam <mani@kernel.org>,  Lukas Wunner <lukas@wunner.de>,
+  Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+  linux-bluetooth@vger.kernel.org,  netdev@vger.kernel.org,
+  devicetree@vger.kernel.org,  linux-kernel@vger.kernel.org,
+  linux-wireless@vger.kernel.org,  linux-arm-msm@vger.kernel.org,
+  linux-arm-kernel@lists.infradead.org,  linux-pci@vger.kernel.org,
+  linux-pm@vger.kernel.org,  Bartosz Golaszewski
+ <bartosz.golaszewski@linaro.org>,  ath11k@lists.infradead.org,  Johan
+ Hovold <johan@kernel.org>
+Subject: Re: [PATCH v6 04/16] dt-bindings: net: wireless: qcom,ath11k:
+ describe the ath11k on QCA6390
+References: <20240325131624.26023-1-brgl@bgdev.pl>
+	<20240325131624.26023-5-brgl@bgdev.pl> <87r0fy8lde.fsf@kernel.org>
+	<CAMRc=Mc2Tc8oHr5NVo=aHAADkJtGCDAVvJs+7V-19m2zGi-vbw@mail.gmail.com>
+	<87frwe8jiu.fsf@kernel.org>
+	<CAMRc=MdCv+vTMZML-wzRQqZZavquV3DABYM4KYw-HwqS47sTyw@mail.gmail.com>
+Date: Tue, 26 Mar 2024 17:12:40 +0200
+In-Reply-To: <CAMRc=MdCv+vTMZML-wzRQqZZavquV3DABYM4KYw-HwqS47sTyw@mail.gmail.com>
+	(Bartosz Golaszewski's message of "Mon, 25 Mar 2024 17:23:35 +0100")
+Message-ID: <874jct10yf.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dc3e2cb4-f631-4611-8814-0dc04c5502f0@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain
 
-On Tue, Mar 26, 2024 at 11:19:54AM +0100, Krzysztof Kozlowski wrote:
-> On 26/03/2024 10:18, Nikita Shubin via B4 Relay wrote:
-> > The goal is to recieve ACKs for all patches in series to merge it via Arnd branch.
-> > 
-> > Some changes since last version (v8):
-> > 
-> > - Most important, fixed bug in Device Tree resulting in CS4271 not working by Alexander Sverdlin.
-> > - added #interrupt-cells to gpio nodes with interrupts-controller
-> > - fixed some EOF in dtsi files
-> > - fixed identation and type in ep93xx-keypad thanks to Andy Shevchenko
-> > 
-> > Stephen Boyd, Vinod Koul PLEASE! give some comments on following, couse i hadn't one for a couple of iterations already:
-> > 
-> > Following patches require attention from Stephen Boyd, as they were converted to aux_dev as suggested:
-> > 
-> > - ARM: ep93xx: add regmap aux_dev
-> > - clk: ep93xx: add DT support for Cirrus EP93xx
-> > 
-> > Following patches require attention from Vinod Koul:
-> > 
-> > - dma: cirrus: Convert to DT for Cirrus EP93xx
-> > - dma: cirrus: remove platform code
-> 
-> A lot of this could have been already merged if you split it... Just
-> saying...
+Bartosz Golaszewski <brgl@bgdev.pl> writes:
 
-But you able to apply DT schema patches if you wish.
-Just doing? :-)
+>> >> I don't know DT well enough to know what the "required:" above means,
+>> >> but does this take into account that there are normal "plug&play" type
+>> >> of QCA6390 boards as well which don't need any DT settings?
+>> >
+>> > Do they require a DT node though for some reason?
+>>
+>> You can attach the device to any PCI slot, connect the WLAN antenna and
+>> it just works without DT nodes. I'm trying to make sure here that basic
+>> setup still works.
+>>
+>
+> Sure, definitely. I there's no DT node, then the binding doesn't apply
+> and the driver (the platform part of it) will not probe.
+>
+>> Adding also Johan and ath11k list. For example, I don't know what's the
+>> plan with Lenovo X13s, will it use this framework? I guess in theory we
+>> could have devices which use qcom,ath11k-calibration-variant from DT but
+>> not any of these supply properties?
+>>
+>
+> Good point. I will receive the X13s in a month from now. I do plan on
+> upstreaming correct support for WLAN and BT for it as well.
+>
+> I guess we can always relax the requirements once a valid use-case appears?
+
+I think we have such cases already now:
+
+$ git grep ath11k-calibration-variant -- arch
+arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts:     qcom,ath11k-calibration-variant = "Fairphone_5";
+arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts:                     qcom,ath11k-calibration-variant = "LE_X13S";
+
+But please do check that. I'm no DT expert :)
 
 -- 
-With Best Regards,
-Andy Shevchenko
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
