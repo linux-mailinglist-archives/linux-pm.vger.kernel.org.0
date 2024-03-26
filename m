@@ -1,281 +1,215 @@
-Return-Path: <linux-pm+bounces-5385-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5386-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FB2488BB7F
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 08:41:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 654EA88BB97
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 08:46:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DAF9D1F37B30
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 07:41:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 890B11C31CCA
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 07:46:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27BB51311B9;
-	Tue, 26 Mar 2024 07:41:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28E8613175C;
+	Tue, 26 Mar 2024 07:46:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="lY14P7Gk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gsLpowMR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC8AB130AEC;
-	Tue, 26 Mar 2024 07:41:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 476781804F;
+	Tue, 26 Mar 2024 07:46:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711438870; cv=none; b=g6lBDb776i1JSP31TWXXay4X7jF5dApfjl0KAHjoifp/uAMNMWX4coCip0QjzOwac8eADE9Rq+Lcu633C7W52DyF80I0OM6QexAcKoGyzqyancEJT7UC0sbiZPGXaXHqYmNP8zr39erwhWYYSfkYjVLwUU4T5T56JvkzXgFWZy8=
+	t=1711439175; cv=none; b=IxMcUCKqk+QIFovUlSeYdIKMscA/dIgsKmO2BmsQYGmVTveUpNayy6sGG4AbHLVl2PCMQH5+5CPOPf5pTqBNwe8w0HqbDnxzAdgX+e4AqEDdpyvvuxbqVcHFQydMltD5tA47hxxAsAyLmYH+yhRnXeZccalRRqO1Kd1xcy/1REs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711438870; c=relaxed/simple;
-	bh=cr6d1YtaJMJnXA7T6RQPG8txmgH0XsljQTSlGhmTlZM=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fiTw/12TvfaF35bEQw90fYsRQW6Uyv1HidvujAr35m4PxkJ6AA1PM0rHGFvByNA0ib8n2GwM+GMmQax/I83Oil624jeulX1ekDdFYvRj5kxElAwdLkEL4cX5lpwgd1EtKD9S7BcB/YBv+h7U1sqwCgbxSkqfjljWSPSLihba8TM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=lY14P7Gk; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42Q3JY9R000843;
-	Tue, 26 Mar 2024 07:40:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:mime-version:content-type; s=
-	qcppdkim1; bh=44iY2+07TJVazyktNEyLb6flAPduNQ6U/meDDbnqBlo=; b=lY
-	14P7Gke4Sg9s53Gb38QDGjmyno1zgegsIiF3WFWpU/KqTZahI7d5q0iNAdb5OS18
-	9k6W5Vy4xKCk9sjoIfscynBlqAVww7Y/0ioyTWUXHAfWKSu5/AZoGiWPlqPdfemI
-	XNJoxxunZjrPbvmbfJtNtur0kfx+MywC49fqI3/EpeAlVKMG/ZO/zvOGKmJe3o2s
-	sQuh1kxHUp4SsIMy6bG4cIKKGAuxtH19AFuWa3ciARZ8TvdCEAtG0naz4ogSP4hi
-	45wma6vCXpEhB9T4yfVqlM010Pa+V3obXUuyVIYO5TlD1QsX4AIT9tQQaenz4Q4J
-	08dqnX/YVS4SKs4IVMsA==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3x38amakp4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 26 Mar 2024 07:40:58 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42Q7evFZ013826
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 26 Mar 2024 07:40:57 GMT
-Received: from hu-priyjain-hyd.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Tue, 26 Mar 2024 00:40:53 -0700
-From: Priyansh Jain <quic_priyjain@quicinc.com>
-To: Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath
-	<thara.gopinath@gmail.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad
- Dybcio" <konrad.dybcio@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC: <quic_manafm@quicinc.com>, <quic_priyjain@quicinc.com>
-Subject: [PATCH v4] thermal/drivers/tsens: Add suspend to RAM support for tsens
-Date: Tue, 26 Mar 2024 13:10:33 +0530
-Message-ID: <20240326074033.17002-1-quic_priyjain@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1711439175; c=relaxed/simple;
+	bh=9nbuupSTwnqhgE67/6uv0FOLeTMTUSay5mBf80zherM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e3UlDHyMj6Kj3uHDmTNW+a3UP5Wm6bJxjQQjZO2CdE+Fim7u5MNfG37GdGii/UgkiUdh6BfKkmd/NPTDtJs84tk3NEmrCqyZ+Fpl+aEBiJ79MI8eEgz4HCn4ygMwB+bIJZ9VMh2T6nICgXqmbtYSPIdk7PbfVcW1wLisUAsX6E8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gsLpowMR; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-563cb3ba9daso5360323a12.3;
+        Tue, 26 Mar 2024 00:46:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711439171; x=1712043971; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cs2IwigS62lW2NUemYpoxv0KHk0e1rYE/O58ogrWzrM=;
+        b=gsLpowMRH3b18jXTudj2fu78Gwju8x4FREaOkDHP82qoXt3IKM8DaRk8k7j0qwJ4wP
+         lw/7bT+n2BkoFmjzOrqYroUS2R7XGVI1FxE67spJUv9Wm11h8Iql6Zuslu92vFLAXnSf
+         ngnb74DcHVb7jsHHR8HqJfLDkZ9ZwCqIhFAvHcKMt1uZZ4Cz6XW4hrggATrNR8bmWFh+
+         9iXVv1GKOwOxgXTDeNosufmRtdT0H7S9HDj6/Oo9SINX2zYOEjr+EaSuqdF5bi35lrWC
+         YhrtXCSRz+vXNQyyYyEr+rs2r+vrg8D8McfG6csRdBLoZZUxc2emmK1oieTndPj6nk9i
+         aR8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711439171; x=1712043971;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Cs2IwigS62lW2NUemYpoxv0KHk0e1rYE/O58ogrWzrM=;
+        b=l+uJ9JeR0+AkQt+xZ716scprp23L4/nBr25vSvGFmIYLWx/F5tfMEP/XlS0U50eVYw
+         HHmo10POf+ief2eEiHi13L+QaAsMrD+IIZ2XjP96iEXND+K8uiMcqsdFSmq79jZBBxP5
+         EYkT+FmaS0VCG7biKySnBRYy5F/sI1mQbkwvdgRHJ1N51fYhycJ1nI2+JmMTMdQ/d64G
+         6/R6ZWdYE8QUDvG2CxJcgX9+Fjn9oaAQB95WdmPe93vBiVQvTC2nYA3VIUuoHty6HKZO
+         hne3NuWDZRPT0O+6WiZ7bumlGveZyO40cnAqlO1VlHZtwtdZLAvxiCvIKs8I6ahYg4e3
+         nm8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXl0idTZjMbD2xWEVUcl98V7Kbc8XMNzRXmXoH/SaTOjpjjxlabiyYpaPLywLRWLaIj3pUzNQzfu9f/PyscCw+dvN3FjVS9dzjJua+DtLiRKzHgrcyMVv2KPwx22/M3bp3R8XjRz2IL0VQUDmzWuNgTJ6UTD2Gtd6wrwfzffTFG1hCm
+X-Gm-Message-State: AOJu0YwFcAGLIKILlxrejxvCYJ95NA1vGZ1z1fU7lIA8Id8SyiuMQfJe
+	FI/uIj5nmqx7pVKhPXzIJI9+NgDeFEfAxUlMph4KQtIBUjRIeVRR
+X-Google-Smtp-Source: AGHT+IGrIlCSSn2r2+Hg+P0/A4xj4OXP7apyF3284aGBI7zxVjMxD5nzUTRKGklIY7bvBEYmSkW8Iw==
+X-Received: by 2002:a50:8ac9:0:b0:568:a420:7d80 with SMTP id k9-20020a508ac9000000b00568a4207d80mr6923066edk.27.1711439171189;
+        Tue, 26 Mar 2024 00:46:11 -0700 (PDT)
+Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation (net-188-217-49-82.cust.vodafonedsl.it. [188.217.49.82])
+        by smtp.gmail.com with ESMTPSA id dh16-20020a0564021d3000b0056c1c4b870asm1167067edb.16.2024.03.26.00.46.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Mar 2024 00:46:10 -0700 (PDT)
+Date: Tue, 26 Mar 2024 08:46:07 +0100
+From: Tommaso Merciai <tomm.merciai@gmail.com>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Adam Ford <aford173@gmail.com>, linux-arm-kernel@lists.infradead.org,
+	marex@denx.de, alexander.stein@ew.tq-group.com,
+	frieder.schrempf@kontron.de,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>, Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Liu Ying <victor.liu@nxp.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Lucas Stach <l.stach@pengutronix.de>,
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH V8 00/12] soc: imx8mp: Add support for HDMI
+Message-ID: <ZgJ9P3Wx2A2n9Gt+@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+References: <20240203165307.7806-1-aford173@gmail.com>
+ <ZgHxSHDAt7ytqDC1@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+ <20240325220338.GE23988@pendragon.ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: j_hoVeNHJz2ryj3Hv4SFRn1lnsDHh3bV
-X-Proofpoint-GUID: j_hoVeNHJz2ryj3Hv4SFRn1lnsDHh3bV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-26_04,2024-03-21_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
- suspectscore=0 adultscore=0 bulkscore=0 priorityscore=1501 mlxscore=0
- clxscore=1015 mlxlogscore=999 lowpriorityscore=0 impostorscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2403210001 definitions=main-2403260051
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240325220338.GE23988@pendragon.ideasonboard.com>
 
-As part of suspend to RAM, tsens hardware will be turned off.
-While resume callback, re-initialize tsens hardware.
+Hi Laurent,
 
-Signed-off-by: Priyansh Jain <quic_priyjain@quicinc.com>
----
-V3 -> V4: Make tsens_reinit function specific to tsens v2. Add
-NULL resume callback support for platform whose versions < ver_2_x
-in tsens ops.
-V2 -> V3: Remove suspend callback & interrupt enablement part from
-resume callback.
-V1 -> V2: Update commit text to explain the necessity of this patch
+On Tue, Mar 26, 2024 at 12:03:38AM +0200, Laurent Pinchart wrote:
+> Hi Tommaso,
+> 
+> On Mon, Mar 25, 2024 at 10:48:56PM +0100, Tommaso Merciai wrote:
+> > Hi Adam, Lucas,
+> > Thanks for this series.
+> > 
+> > This series make HDMI work on evk.
+> > All is working properly on my side.
+> > 
+> > Tested on: Linux imx8mp-lpddr4-evk 6.9.0-rc1.
+> > Hope this help.
+> > 
+> > Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
+> 
+> The DRM side has been merged already. The only missing patches are for
+> the PHY, and the latest version can be found in
+> https://lore.kernel.org/linux-phy/20240227220444.77566-1-aford173@gmail.com/.
+> You can test that series and send a Tested-by tag. I'm crossing my
+> fingers and hoping it will be merged in v6.10.
+(same here :) )
 
- drivers/thermal/qcom/tsens-v0_1.c |  6 +++++
- drivers/thermal/qcom/tsens-v1.c   |  3 +++
- drivers/thermal/qcom/tsens-v2.c   |  1 +
- drivers/thermal/qcom/tsens.c      | 37 +++++++++++++++++++++++++++++++
- drivers/thermal/qcom/tsens.h      |  5 +++++
- 5 files changed, 52 insertions(+)
+Thanks for sharing! :)
 
-diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
-index 32d2d3e33287..7ed85379247b 100644
---- a/drivers/thermal/qcom/tsens-v0_1.c
-+++ b/drivers/thermal/qcom/tsens-v0_1.c
-@@ -329,6 +329,7 @@ static const struct tsens_ops ops_8226 = {
- 	.init		= init_8226,
- 	.calibrate	= tsens_calibrate_common,
- 	.get_temp	= get_temp_common,
-+	.resume		= NULL,
- };
- 
- struct tsens_plat_data data_8226 = {
-@@ -342,6 +343,7 @@ static const struct tsens_ops ops_8909 = {
- 	.init		= init_8909,
- 	.calibrate	= tsens_calibrate_common,
- 	.get_temp	= get_temp_common,
-+	.resume		= NULL,
- };
- 
- struct tsens_plat_data data_8909 = {
-@@ -355,6 +357,7 @@ static const struct tsens_ops ops_8916 = {
- 	.init		= init_common,
- 	.calibrate	= calibrate_8916,
- 	.get_temp	= get_temp_common,
-+	.resume		= NULL,
- };
- 
- struct tsens_plat_data data_8916 = {
-@@ -370,6 +373,7 @@ static const struct tsens_ops ops_8939 = {
- 	.init		= init_8939,
- 	.calibrate	= tsens_calibrate_common,
- 	.get_temp	= get_temp_common,
-+	.resume		= NULL,
- };
- 
- struct tsens_plat_data data_8939 = {
-@@ -385,6 +389,7 @@ static const struct tsens_ops ops_8974 = {
- 	.init		= init_common,
- 	.calibrate	= calibrate_8974,
- 	.get_temp	= get_temp_common,
-+	.resume		= NULL,
- };
- 
- struct tsens_plat_data data_8974 = {
-@@ -398,6 +403,7 @@ static const struct tsens_ops ops_9607 = {
- 	.init		= init_9607,
- 	.calibrate	= tsens_calibrate_common,
- 	.get_temp	= get_temp_common,
-+	.resume		= NULL,
- };
- 
- struct tsens_plat_data data_9607 = {
-diff --git a/drivers/thermal/qcom/tsens-v1.c b/drivers/thermal/qcom/tsens-v1.c
-index dc1c4ae2d8b0..770bf0917026 100644
---- a/drivers/thermal/qcom/tsens-v1.c
-+++ b/drivers/thermal/qcom/tsens-v1.c
-@@ -154,6 +154,7 @@ static const struct tsens_ops ops_generic_v1 = {
- 	.init		= init_common,
- 	.calibrate	= calibrate_v1,
- 	.get_temp	= get_temp_tsens_valid,
-+	.resume		= NULL,
- };
- 
- struct tsens_plat_data data_tsens_v1 = {
-@@ -166,6 +167,7 @@ static const struct tsens_ops ops_8956 = {
- 	.init		= init_8956,
- 	.calibrate	= tsens_calibrate_common,
- 	.get_temp	= get_temp_tsens_valid,
-+	.resume		= NULL,
- };
- 
- struct tsens_plat_data data_8956 = {
-@@ -179,6 +181,7 @@ static const struct tsens_ops ops_8976 = {
- 	.init		= init_common,
- 	.calibrate	= tsens_calibrate_common,
- 	.get_temp	= get_temp_tsens_valid,
-+	.resume		= NULL,
- };
- 
- struct tsens_plat_data data_8976 = {
-diff --git a/drivers/thermal/qcom/tsens-v2.c b/drivers/thermal/qcom/tsens-v2.c
-index 29a61d2d6ca3..0cb7301eca6e 100644
---- a/drivers/thermal/qcom/tsens-v2.c
-+++ b/drivers/thermal/qcom/tsens-v2.c
-@@ -107,6 +107,7 @@ static const struct reg_field tsens_v2_regfields[MAX_REGFIELDS] = {
- static const struct tsens_ops ops_generic_v2 = {
- 	.init		= init_common,
- 	.get_temp	= get_temp_tsens_valid,
-+	.resume		= tsens_resume_common,
- };
- 
- struct tsens_plat_data data_tsens_v2 = {
-diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index 6d7c16ccb44d..0ff588cb53b2 100644
---- a/drivers/thermal/qcom/tsens.c
-+++ b/drivers/thermal/qcom/tsens.c
-@@ -17,6 +17,7 @@
- #include <linux/pm.h>
- #include <linux/regmap.h>
- #include <linux/slab.h>
-+#include <linux/suspend.h>
- #include <linux/thermal.h>
- #include "../thermal_hwmon.h"
- #include "tsens.h"
-@@ -1193,6 +1194,42 @@ static int tsens_register_irq(struct tsens_priv *priv, char *irqname,
- 	return ret;
- }
- 
-+#ifdef CONFIG_SUSPEND
-+static int tsens_reinit(struct tsens_priv *priv)
-+{
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&priv->ul_lock, flags);
-+
-+	if (tsens_version(priv) >= VER_2_X) {
-+		/*
-+		 * Re-enable the watchdog, unmask the bark.
-+		 * Disable cycle completion monitoring
-+		 */
-+		if (priv->feat->has_watchdog) {
-+			regmap_field_write(priv->rf[WDOG_BARK_MASK], 0);
-+			regmap_field_write(priv->rf[CC_MON_MASK], 1);
-+		}
-+
-+		/* Re-enable interrupts */
-+		tsens_enable_irq(priv);
-+	}
-+
-+	spin_unlock_irqrestore(&priv->ul_lock, flags);
-+
-+	return 0;
-+}
-+
-+int tsens_resume_common(struct tsens_priv *priv)
-+{
-+	if (pm_suspend_target_state == PM_SUSPEND_MEM)
-+		tsens_reinit(priv);
-+
-+	return 0;
-+}
-+
-+#endif /* !CONFIG_SUSPEND */
-+
- static int tsens_register(struct tsens_priv *priv)
- {
- 	int i, ret;
-diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
-index cb637fa289ca..cab39de045b1 100644
---- a/drivers/thermal/qcom/tsens.h
-+++ b/drivers/thermal/qcom/tsens.h
-@@ -634,6 +634,11 @@ void compute_intercept_slope(struct tsens_priv *priv, u32 *pt1, u32 *pt2, u32 mo
- int init_common(struct tsens_priv *priv);
- int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp);
- int get_temp_common(const struct tsens_sensor *s, int *temp);
-+#ifdef CONFIG_SUSPEND
-+int tsens_resume_common(struct tsens_priv *priv);
-+#else
-+#define tsens_resume_common            NULL
-+#endif
- 
- /* TSENS target */
- extern struct tsens_plat_data data_8960;
--- 
-2.17.1
+To be honest I test all this series rebasing my alvium next branch on top of media_stage/master (6.9.0-rc1)
+All is working properly on my side.
+I found v8 into the commit msg here: https://patches.linaro.org/project/linux-pm/patch/20240203165307.7806-9-aford173@gmail.com/
+then I'm thinking this is the latest.
 
+I'm going to switch to your suggestion that looks more recent :)
+
+Thanks again,
+Tommaso
+
+> 
+> > On Sat, Feb 03, 2024 at 10:52:40AM -0600, Adam Ford wrote:
+> > > The i.MX8M Plus has an HDMI controller, but it depends on two
+> > > other systems, the Parallel Video Interface (PVI) and the
+> > > HDMI PHY from Samsung. The LCDIF controller generates the display
+> > > and routes it to the PVI which converts passes the parallel video
+> > > to the HDMI bridge.  The HDMI system has a corresponding power
+> > > domain controller whose driver was partially written, but the
+> > > device tree for it was never applied, so some changes to the
+> > > power domain should be harmless because they've not really been
+> > > used yet.
+> > > 
+> > > This series is adapted from multiple series from Lucas Stach with
+> > > edits and suggestions from feedback from various series, but it
+> > > since it's difficult to use and test them independently,
+> > > I merged them into on unified series.  The version history is a
+> > > bit ambiguous since different components were submitted at different
+> > > times and had different amount of retries.  In an effort to merge them
+> > > I used the highest version attempt.
+> > > 
+> > > Adam Ford (3):
+> > >   dt-bindings: soc: imx: add missing clock and power-domains to
+> > >     imx8mp-hdmi-blk-ctrl
+> > >   pmdomain: imx8mp-blk-ctrl: imx8mp_blk: Add fdcc clock to hdmimix
+> > >     domain
+> > >   arm64: defconfig: Enable DRM_IMX8MP_DW_HDMI_BRIDGE as module
+> > > 
+> > > Lucas Stach (9):
+> > >   dt-bindings: phy: add binding for the i.MX8MP HDMI PHY
+> > >   phy: freescale: add Samsung HDMI PHY
+> > >   arm64: dts: imx8mp: add HDMI power-domains
+> > >   arm64: dts: imx8mp: add HDMI irqsteer
+> > >   dt-bindings: display: imx: add binding for i.MX8MP HDMI PVI
+> > >   drm/bridge: imx: add driver for HDMI TX Parallel Video Interface
+> > >   dt-bindings: display: imx: add binding for i.MX8MP HDMI TX
+> > >   drm/bridge: imx: add bridge wrapper driver for i.MX8MP DWC HDMI
+> > >   arm64: dts: imx8mp: add HDMI display pipeline
+> > > 
+> > >  .../display/bridge/fsl,imx8mp-hdmi-tx.yaml    |  102 ++
+> > >  .../display/imx/fsl,imx8mp-hdmi-pvi.yaml      |   84 ++
+> > >  .../bindings/phy/fsl,imx8mp-hdmi-phy.yaml     |   62 +
+> > >  .../soc/imx/fsl,imx8mp-hdmi-blk-ctrl.yaml     |   22 +-
+> > >  arch/arm64/boot/dts/freescale/imx8mp.dtsi     |  145 +++
+> > >  arch/arm64/configs/defconfig                  |    1 +
+> > >  drivers/gpu/drm/bridge/imx/Kconfig            |   18 +
+> > >  drivers/gpu/drm/bridge/imx/Makefile           |    2 +
+> > >  drivers/gpu/drm/bridge/imx/imx8mp-hdmi-pvi.c  |  207 ++++
+> > >  drivers/gpu/drm/bridge/imx/imx8mp-hdmi-tx.c   |  154 +++
+> > >  drivers/phy/freescale/Kconfig                 |    6 +
+> > >  drivers/phy/freescale/Makefile                |    1 +
+> > >  drivers/phy/freescale/phy-fsl-samsung-hdmi.c  | 1075 +++++++++++++++++
+> > >  drivers/pmdomain/imx/imx8mp-blk-ctrl.c        |   10 +-
+> > >  14 files changed, 1876 insertions(+), 13 deletions(-)
+> > >  create mode 100644 Documentation/devicetree/bindings/display/bridge/fsl,imx8mp-hdmi-tx.yaml
+> > >  create mode 100644 Documentation/devicetree/bindings/display/imx/fsl,imx8mp-hdmi-pvi.yaml
+> > >  create mode 100644 Documentation/devicetree/bindings/phy/fsl,imx8mp-hdmi-phy.yaml
+> > >  create mode 100644 drivers/gpu/drm/bridge/imx/imx8mp-hdmi-pvi.c
+> > >  create mode 100644 drivers/gpu/drm/bridge/imx/imx8mp-hdmi-tx.c
+> > >  create mode 100644 drivers/phy/freescale/phy-fsl-samsung-hdmi.c
+> 
+> -- 
+> Regards,
+> 
+> Laurent Pinchart
 
