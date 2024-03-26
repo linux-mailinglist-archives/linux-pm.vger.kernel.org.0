@@ -1,197 +1,307 @@
-Return-Path: <linux-pm+bounces-5426-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5427-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1445688C1F2
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 13:21:32 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C903488C24F
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 13:37:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3827D1C3BD30
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 12:21:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 20F01B24CE1
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 12:37:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B453C7175A;
-	Tue, 26 Mar 2024 12:21:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A2CA6EB4E;
+	Tue, 26 Mar 2024 12:37:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CbjX0r/Y"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LJSKatIt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A3397174B;
-	Tue, 26 Mar 2024 12:21:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A4DE6CDA6
+	for <linux-pm@vger.kernel.org>; Tue, 26 Mar 2024 12:37:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711455686; cv=none; b=sTP7Z4mMxW6vTXII82CewT2aaS4iC0CovpKhybSUvvOKWlybmw1qQe84pq7r82myHvNktwsHIp7khQgasG6vS1AfFepCYf/537exmAm4ZYAWo1RzhU2pA03aoJFa+AwCnFD6D4F1onGJIDOqA5h15ISu4gUxCnIeHqmK5p2qoWk=
+	t=1711456656; cv=none; b=DqF4yBiVQh4I8H63ENpmXVr0ryGBufuKXWED3ca+qVE6C0Ixd8lY5L9M1SztSJcYZ0QXNXBqozIs6f+wvp6gMXgAyun1ghwE30SPHD6XSFGGzB64Bsue3W5/QAVpT2Fp2nMGqnfC1u+9m7TX2mloBpU3etuE7QqrzrPxHNGkLW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711455686; c=relaxed/simple;
-	bh=5pFOehu23RiUY0BYXzSTBk2aotPMSZ0Omiv/vhmPVTY=;
+	s=arc-20240116; t=1711456656; c=relaxed/simple;
+	bh=aZna8YAluKUCCQIMbM5gnPGbSv5NGDwb7irWEMgmhI8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=L5yQyFhurFFKP32JgU6tacpZY1AjKsm9TJHi68tl8xhd/myYSdwltGMHcsgaWzsJu9kncTVf+8vBbmLkUPw7zOW4Q1Ww4Aj/Jp716N1UKrW8D5Ym3ymQHp1ozAS/c0MAGL+GgYfZNE51SqzpijRnMGxfpXfUtUNqORfgu66wjME=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CbjX0r/Y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15F70C43399;
-	Tue, 26 Mar 2024 12:21:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711455686;
-	bh=5pFOehu23RiUY0BYXzSTBk2aotPMSZ0Omiv/vhmPVTY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=CbjX0r/YOTkJvv3GDIkOKz+upCe1NGNNDaQ65PF6+1tOCzAgC24UxPSql+7rwL5Wb
-	 DeANhU0XuyJmDHnZJBB9WfwMfrLknoF4JnyWhNNNsUszcT3/XJpTJlKClr1tu+dlAp
-	 ObKjBKGTCSVzVRzVUpJv7tQeoxHKfOHja4v5B1ajvXfFxYqH//O6sPGJQVyrdhWr5+
-	 MXhpWaWgPTyurFUeM4io8KViKwQVi5J2gs9L61ZaaFeVrPJRX+sMI/kBoQdV70LE9m
-	 Yq1hvmZCz6iXLJ+TUfKtlpmutTd4nGfPRQ+w+TEPDk3zQqU5bU7wbmmGgLHg08aN+2
-	 KuoodPthZT4Mw==
-Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-5a48320f0f3so776270eaf.1;
-        Tue, 26 Mar 2024 05:21:26 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWz40F9eaboEh9Ie+JGSj8M5VcK5eRNPlZZqd3TH5L2eoq27DqC8M/46ymYci3MMyg8IxPguMCHxZQIOby8XIkJpK3op7bWOQ7kt0aHoluvw5xU9vBIqR9bZwJc4XyEc/EuSwZrdUA=
-X-Gm-Message-State: AOJu0YwuTwJdDWKZUqR2+nv0qaz1DSrKn5zxZgSQ//NKrunYTv8NBemH
-	Q0JKDYLQ4zrTbMnbfFs9HkCj/YpkpGNAVI5LJ/XgVb5L3bGhrjNAqwU19HyOOJdlg46bDOmHKG3
-	vpMbhN3FxLITY5ZdoHtLckGwYIws=
-X-Google-Smtp-Source: AGHT+IEK57tP/VjSYirhPAhG/Ufy9aEFvsV0mjUGELZEVKAiXgwO+z2LIM7XmmQJ+Yc3Jo5405DIQ+lcUn3r1t7eVrM=
-X-Received: by 2002:a4a:6c19:0:b0:5a4:7790:61b4 with SMTP id
- q25-20020a4a6c19000000b005a4779061b4mr8128005ooc.0.1711455685354; Tue, 26 Mar
- 2024 05:21:25 -0700 (PDT)
+	 To:Cc:Content-Type; b=P/p6N2TcX92BIBuJKWmDt5ckPhn7qKe43DDaoyAtxga8HxXV0WsqmrEASs8uO5Nh+AoBdqigyCLlN/VKQae3w2iimtdOZ/cbyT6tcrWftgG+rfNZksYj89zWULD/PNukhW7mF/tdOEf0dRK06vUontTilqExDHqLJqduM0lyu/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LJSKatIt; arc=none smtp.client-ip=209.85.219.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-dcc73148611so6033490276.3
+        for <linux-pm@vger.kernel.org>; Tue, 26 Mar 2024 05:37:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1711456651; x=1712061451; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dx8c0fzZpQ3t1HiVdbx5VhvTuw+jHpnajVV7Jh7hCH4=;
+        b=LJSKatItsQLN7YHPDFGJhhXI4gqLbCrrqu/mQtzkGHkl8Pjq+mzJqp1D287Dk6dynA
+         oV/eKFXS4ZR77jirL1MPV51dYZiNXUwQg7VTvcSHoucYzX1tAY1Z90CiAtuLHTWJ3WQk
+         sOKEzWaqCpQs9s26D2IydBh84bWjorqarZ7W6UflUbpe3Rb33xcIPqrDPjA/OLXto3jc
+         jZR5y22T2T8YoYikUWX9L58NERBZBI9MSREOEuN12sqHgoTw3VQi1wlU1HldL7w+U5bl
+         5WqktPfgOHYglRao42BJ1sVlKi0N/ELBoSES7qE90/wUO4XCl2z/k27Q+DsyrJe3Rgsu
+         Rw7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711456651; x=1712061451;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Dx8c0fzZpQ3t1HiVdbx5VhvTuw+jHpnajVV7Jh7hCH4=;
+        b=FTtprUrpEUvzCgJQY6DbnZixTDPt1Lbkycvzle3J6QOeB9x5Z9BdQE7sxfqMtEXSGh
+         x8a11lznJjm69Vl/E/vEkp8T7lVEi99Q1aQJvz6NpczqkGY9tOhKqKGAlUM2dtGxsqiJ
+         KIKvivYC/cwumnVkQEZTlX7VCuklcSxujUa3xFb5qK/2T1cZyd5F8kzyc7F0gJcjhiFv
+         run6CuRHzR0OM1NCfUKBZQPyO+QmYRpYUaELd4zcRtU/jCkkbRnu3cZ36i2yG6M+a1nW
+         SsnY23+2VXrrzdSgeIIB7oTre4s7LQ26iWUXTMgL8Fy2TmyTOKv10hCtK+QJX9If6MCq
+         poBg==
+X-Forwarded-Encrypted: i=1; AJvYcCXMJkXzrY17vSJk3stRapNxPC1YS6kUYSp8j6GKmwnAEesbFZp6Gk8zPROe9HCiEl6mTwPxJRTaQ2sdFgUTo7wY3lYVBBtuyr4=
+X-Gm-Message-State: AOJu0Yxu9TuQzTlRwBq5861NZYBsrfvvJgT6gbfR5C2544yPyKTCA8/v
+	xZ5VrPlCwKzExyIBJHrXR/JWruv4eyLIUkheSFD1dkXShL2CvlDrIF6yLfwnSmJU9edSYU/sUme
+	9ld6njPpChVuwAYvhlKQutCDXF2/fPZcj3Rx1ag==
+X-Google-Smtp-Source: AGHT+IHpG7/sHyh3c2zBPRtS76P8iuvz7AvVhRoJ/V1dq27C+XzkkwfvynwUMJxq+rlJ+gQeMJqbdkJYeim6vTxWmQk=
+X-Received: by 2002:a25:361c:0:b0:dda:a7a9:7b59 with SMTP id
+ d28-20020a25361c000000b00ddaa7a97b59mr906996yba.50.1711456651465; Tue, 26 Mar
+ 2024 05:37:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240325222424.4179635-1-daniel.lezcano@linaro.org> <fbef883e-23f8-41b9-852b-c52d18816559@notapiano>
-In-Reply-To: <fbef883e-23f8-41b9-852b-c52d18816559@notapiano>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 26 Mar 2024 13:21:14 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0g5wZvKgh7HGa0NSrVQ=E-WeC1v0Av0h08-mQC9t7HQ3Q@mail.gmail.com>
-Message-ID: <CAJZ5v0g5wZvKgh7HGa0NSrVQ=E-WeC1v0Av0h08-mQC9t7HQ3Q@mail.gmail.com>
-Subject: Re: [PATCH] Revert "thermal: core: Don't update trip points inside
- the hysteresis range"
-To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, "open list:THERMAL" <linux-pm@vger.kernel.org>, 
-	open list <linux-kernel@vger.kernel.org>
+References: <20240326121312.1702701-1-quic_varada@quicinc.com> <20240326121312.1702701-3-quic_varada@quicinc.com>
+In-Reply-To: <20240326121312.1702701-3-quic_varada@quicinc.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Tue, 26 Mar 2024 14:37:20 +0200
+Message-ID: <CAA8EJpq5ng2K_Y481FbsjSXCaGM5_2+xkwWqFzfzXv2ZOBpMgw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] clk: qcom: add IPQ9574 interconnect clocks support
+To: Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc: andersson@kernel.org, konrad.dybcio@linaro.org, mturquette@baylibre.com, 
+	sboyd@kernel.org, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
+	conor+dt@kernel.org, djakov@kernel.org, quic_anusha@quicinc.com, 
+	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 26, 2024 at 12:29=E2=80=AFAM N=C3=ADcolas F. R. A. Prado
-<nfraprado@collabora.com> wrote:
+On Tue, 26 Mar 2024 at 14:14, Varadarajan Narayanan
+<quic_varada@quicinc.com> wrote:
 >
-> On Mon, Mar 25, 2024 at 11:24:24PM +0100, Daniel Lezcano wrote:
-> > It has been reported the commit cf3986f8c01d3 introduced a regression
-> > when the temperature is wavering in the hysteresis region. The
-> > mitigation stops leading to an uncontrolled temperature increase until
-> > reaching the critical trip point.
-> >
-> > Here what happens:
-> >
-> >  * 'throttle' is when the current temperature is greater than the trip
-> >    point temperature
-> >  * 'target' is the mitigation level
-> >  * 'passive' is positive when there is a mitigation, zero otherwise
-> >  * these values are computed in the step_wise governor
-> >
-> > Configuration:
-> >
-> >  trip point 1: temp=3D95=C2=B0C, hyst=3D5=C2=B0C (passive)
-> >  trip point 2: temp=3D115=C2=B0C, hyst=3D0=C2=B0C (critical)
-> >  governor: step_wise
-> >
-> > 1. The temperature crosses the way up the trip point 1 at 95=C2=B0C
-> >
-> >    - trend=3Draising
-> >    - throttle=3D1, target=3D1
-> >    - passive=3D1
-> >    - set_trips: low=3D90=C2=B0C, high=3D115=C2=B0C
-> >
-> > 2. The temperature decreases but stays in the hysteresis region at
-> >    93=C2=B0C
-> >
-> >    - trend=3Ddropping
-> >    - throttle=3D0, target=3D0
-> >    - passive=3D1
-> >
-> >    Before cf3986f8c01d3
-> >    - set_trips: low=3D90=C2=B0C, high=3D95=C2=B0C
-> >
-> >    After cf3986f8c01d3
-> >    - set_trips: low=3D90=C2=B0C, high=3D115=C2=B0C
-> >
-> > 3. The temperature increases a bit but stays in the hysteresis region
-> >    at 94=C2=B0C (so below the trip point 1 temp 95=C2=B0C)
-> >
-> >    - trend=3Draising
-> >    - throttle=3D0, target=3D0
-> >    - passive=3D1
-> >
-> >    Before cf3986f8c01d3
-> >    - set_trips: low=3D90=C2=B0C, high=3D95=C2=B0C
-> >
-> >    After cf3986f8c01d3
-> >    - set_trips: low=3D90=C2=B0C, high=3D115=C2=B0C
-> >
-> > 4. The temperature decreases but stays in the hysteresis region at
-> >    93=C2=B0C
-> >
-> >    - trend=3Ddropping
-> >    - throttle=3D0, target=3DTHERMAL_NO_TARGET
-> >    - passive=3D0
-> >
-> >    Before cf3986f8c01d3
-> >    - set_trips: low=3D90=C2=B0C, high=3D95=C2=B0C
-> >
-> >    After cf3986f8c01d3
-> >    - set_trips: low=3D90=C2=B0C, high=3D115=C2=B0C
-> >
-> > At this point, the 'passive' value is zero, there is no mitigation,
-> > the temperature is in the hysteresis region, the next trip point is
-> > 115=C2=B0C. As 'passive' is zero, the timer to monitor the thermal zone=
- is
-> > disabled. Consequently if the temperature continues to increase, no
-> > mitigation will happen and it will reach the 115=C2=B0C trip point and
-> > reboot.
-> >
-> > Before the optimization, the high boundary would have been 95=C2=B0C, t=
-hus
-> > triggering the mitigation again and rearming the polling timer.
-> >
-> > The optimization make sense but given the current implementation of
-> > the step_wise governor collaborating via this 'passive' flag with the
-> > core framework it can not work.
-> >
-> > From a higher perspective it seems like there is a problem between the
-> > governor which sets a variable to be used by the core framework. That
-> > sounds akward and it would make much more sense if the core framework
-> > controls the governor and not the opposite. But as the devil hides in
-> > the details, there are some subtilities to be addressed before.
-> >
-> > Elaborating those would be out of the scope this changelog. So let's
-> > stay simple and revert the change first to fixup all broken mobile
-> > platforms.
-> >
-> > This reverts commit cf3986f8c01d355490d0ac6024391b989a9d1e9d.
-> >
-> > This revert applies on top of v6.9-rc1.
-> >
-> > Fixes: cf3986f8c01d3 ("thermal: core: Don't update trip points inside t=
-he hysteresis range")
-> > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > Reported-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-> > Cc: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+> Unlike MSM platforms that manage NoC related clocks and scaling
+> from RPM, IPQ SoCs dont involve RPM in managing NoC related
+> clocks and there is no NoC scaling.
 >
-> As mentioned in the commit, the issue is elsewhere, but given the origina=
-l
-> commit was an optimization to prevent unnecessary trip point updates, and=
- that
-> it seems to have caused a regression, sounds reasonable to revert at leas=
-t while
-> a proper fix isn't found.
+> However, there is a requirement to enable some NoC interface
+> clocks for accessing the peripheral controllers present on
+> these NoCs. Though exposing these as normal clocks would work,
+> having a minimalistic interconnect driver to handle these clocks
+> would make it consistent with other Qualcomm platforms resulting
+> in common code paths. This is similar to msm8996-cbf's usage of
+> icc-clk framework.
 >
-> Acked-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
+> v3: Use indexed identifiers here to avoid confusion
+>     Fix error messages and move to common.c
+> v2: Move DTS to separate patch
+>     Update commit log
+>     Auto select CONFIG_INTERCONNECT & CONFIG_INTERCONNECT_CLK to fix build error
+> ---
+>  drivers/clk/qcom/Kconfig       |  2 ++
+>  drivers/clk/qcom/common.c      | 30 ++++++++++++++++
+>  drivers/clk/qcom/common.h      |  2 ++
+>  drivers/clk/qcom/gcc-ipq9574.c | 64 +++++++++++++++++++++++++++++++++-
+>  4 files changed, 97 insertions(+), 1 deletion(-)
 >
-> Only thing is you might want to add a cc: stable tag to guarantee it is
-> backported (AFAIR Fixes: doesn't guarantee backport), even more so given =
-there
-> are conflicts.
+> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+> index 8ab08e7b5b6c..af73a0b396eb 100644
+> --- a/drivers/clk/qcom/Kconfig
+> +++ b/drivers/clk/qcom/Kconfig
+> @@ -243,6 +243,8 @@ config IPQ_GCC_8074
+>
+>  config IPQ_GCC_9574
+>         tristate "IPQ9574 Global Clock Controller"
+> +       select INTERCONNECT
+> +       select INTERCONNECT_CLK
+>         help
+>           Support for global clock controller on ipq9574 devices.
+>           Say Y if you want to use peripheral devices such as UART, SPI,
+> diff --git a/drivers/clk/qcom/common.c b/drivers/clk/qcom/common.c
+> index 75f09e6e057e..b18d38509de5 100644
+> --- a/drivers/clk/qcom/common.c
+> +++ b/drivers/clk/qcom/common.c
+> @@ -8,6 +8,8 @@
+>  #include <linux/regmap.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/clk-provider.h>
+> +#include <linux/interconnect-clk.h>
+> +#include <linux/interconnect-provider.h>
+>  #include <linux/reset-controller.h>
+>  #include <linux/of.h>
+>
+> @@ -337,4 +339,32 @@ int qcom_cc_probe_by_index(struct platform_device *pdev, int index,
+>  }
+>  EXPORT_SYMBOL_GPL(qcom_cc_probe_by_index);
+>
+> +int qcom_cc_icc_register(struct device *dev, struct clk_regmap *clks[],
+> +                        int *noc_clks, int count, unsigned int first_id)
+> +{
+> +       struct icc_provider *provider;
+> +       struct icc_clk_data *icd;
+> +       int i;
+> +
+> +       icd = devm_kcalloc(dev, count, sizeof(*icd), GFP_KERNEL);
+> +       if (IS_ERR_OR_NULL(icd))
 
-Applied as 6.9-rc material, thanks!
+Can devm_kcalloc return ERR?
+
+> +               return dev_err_probe(dev, PTR_ERR(icd),
+> +                                    "malloc for clock data failed\n");
+
+So, this becomes dev_err_prove(dev, 0, "..."). returning 0. Not the
+expected result for the error case.
+
+> +
+> +       for (i = 0; i < count; i++) {
+> +               icd[i].clk = clks[noc_clks[i]]->hw.clk;
+> +               if (IS_ERR_OR_NULL(icd[i].clk))
+> +                       return dev_err_probe(dev, -ENOENT,
+> +                                            "%d clock not found\n", noc_clks[i]);
+
+This is even better. Potential NULL pointer exception, then useless
+ERR_OR_NULL  and finally API abuse.
+Please use clk_hw_get_clk(), it is there for you.
+
+> +               icd[i].name = clk_hw_get_name(&clks[noc_clks[i]]->hw);
+> +       }
+> +
+> +       provider = icc_clk_register(dev, first_id, count, icd);
+> +       if (IS_ERR_OR_NULL(provider))
+> +               return dev_err_probe(dev, PTR_ERR(provider),
+> +                                    "icc_clk_register failed\n");
+> +
+> +       return 0;
+> +}
+> +
+>  MODULE_LICENSE("GPL v2");
+> diff --git a/drivers/clk/qcom/common.h b/drivers/clk/qcom/common.h
+> index 9c8f7b798d9f..4fce5e229fc1 100644
+> --- a/drivers/clk/qcom/common.h
+> +++ b/drivers/clk/qcom/common.h
+> @@ -65,5 +65,7 @@ extern int qcom_cc_probe(struct platform_device *pdev,
+>                          const struct qcom_cc_desc *desc);
+>  extern int qcom_cc_probe_by_index(struct platform_device *pdev, int index,
+>                                   const struct qcom_cc_desc *desc);
+> +int qcom_cc_icc_register(struct device *dev, struct clk_regmap *clks[],
+> +                        int *noc_clks, int count, unsigned int first_id);
+
+Add this function to the qcom_cc_probe() call stream. Change it to
+pass an array of clk_hw instead of passing indices.
+
+>
+>  #endif
+> diff --git a/drivers/clk/qcom/gcc-ipq9574.c b/drivers/clk/qcom/gcc-ipq9574.c
+> index 0a3f846695b8..c63c44b6740f 100644
+> --- a/drivers/clk/qcom/gcc-ipq9574.c
+> +++ b/drivers/clk/qcom/gcc-ipq9574.c
+> @@ -12,6 +12,7 @@
+>
+>  #include <dt-bindings/clock/qcom,ipq9574-gcc.h>
+>  #include <dt-bindings/reset/qcom,ipq9574-gcc.h>
+> +#include <dt-bindings/interconnect/qcom,ipq9574.h>
+>
+>  #include "clk-alpha-pll.h"
+>  #include "clk-branch.h"
+> @@ -4301,6 +4302,56 @@ static const struct qcom_reset_map gcc_ipq9574_resets[] = {
+>         [GCC_WCSS_Q6_TBU_BCR] = { 0x12054, 0 },
+>  };
+>
+> +#define IPQ_APPS_ID                    9574    /* some unique value */
+> +
+> +enum {
+> +       ICC_ANOC_PCIE0,
+> +       ICC_SNOC_PCIE0,
+> +       ICC_ANOC_PCIE1,
+> +       ICC_SNOC_PCIE1,
+> +       ICC_ANOC_PCIE2,
+> +       ICC_SNOC_PCIE2,
+> +       ICC_ANOC_PCIE3,
+> +       ICC_SNOC_PCIE3,
+> +       ICC_SNOC_USB,
+> +       ICC_ANOC_USB_AXI,
+> +       ICC_NSSNOC_NSSCC,
+> +       ICC_NSSNOC_SNOC_0,
+> +       ICC_NSSNOC_SNOC_1,
+> +       ICC_NSSNOC_PCNOC_1,
+> +       ICC_NSSNOC_QOSGEN_REF,
+> +       ICC_NSSNOC_TIMEOUT_REF,
+> +       ICC_NSSNOC_XO_DCD,
+> +       ICC_NSSNOC_ATB,
+> +       ICC_MEM_NOC_NSSNOC,
+> +       ICC_NSSNOC_MEMNOC,
+> +       ICC_NSSNOC_MEM_NOC_1,
+> +};
+> +
+> +static int noc_clks[] = {
+> +       [ICC_ANOC_PCIE0] = GCC_ANOC_PCIE0_1LANE_M_CLK,
+> +       [ICC_SNOC_PCIE0] = GCC_SNOC_PCIE0_1LANE_S_CLK,
+> +       [ICC_ANOC_PCIE1] = GCC_ANOC_PCIE1_1LANE_M_CLK,
+> +       [ICC_SNOC_PCIE1] = GCC_SNOC_PCIE1_1LANE_S_CLK,
+> +       [ICC_ANOC_PCIE2] = GCC_ANOC_PCIE2_2LANE_M_CLK,
+> +       [ICC_SNOC_PCIE2] = GCC_SNOC_PCIE2_2LANE_S_CLK,
+> +       [ICC_ANOC_PCIE3] = GCC_ANOC_PCIE3_2LANE_M_CLK,
+> +       [ICC_SNOC_PCIE3] = GCC_SNOC_PCIE3_2LANE_S_CLK,
+> +       [ICC_SNOC_USB] = GCC_SNOC_USB_CLK,
+> +       [ICC_ANOC_USB_AXI] = GCC_ANOC_USB_AXI_CLK,
+> +       [ICC_NSSNOC_NSSCC] = GCC_NSSNOC_NSSCC_CLK,
+> +       [ICC_NSSNOC_SNOC_0] = GCC_NSSNOC_SNOC_CLK,
+> +       [ICC_NSSNOC_SNOC_1] = GCC_NSSNOC_SNOC_1_CLK,
+> +       [ICC_NSSNOC_PCNOC_1] = GCC_NSSNOC_PCNOC_1_CLK,
+> +       [ICC_NSSNOC_QOSGEN_REF] = GCC_NSSNOC_QOSGEN_REF_CLK,
+> +       [ICC_NSSNOC_TIMEOUT_REF] = GCC_NSSNOC_TIMEOUT_REF_CLK,
+> +       [ICC_NSSNOC_XO_DCD] = GCC_NSSNOC_XO_DCD_CLK,
+> +       [ICC_NSSNOC_ATB] = GCC_NSSNOC_ATB_CLK,
+> +       [ICC_MEM_NOC_NSSNOC] = GCC_MEM_NOC_NSSNOC_CLK,
+> +       [ICC_NSSNOC_MEMNOC] = GCC_NSSNOC_MEMNOC_CLK,
+> +       [ICC_NSSNOC_MEM_NOC_1] = GCC_NSSNOC_MEM_NOC_1_CLK,
+> +};
+> +
+>  static const struct of_device_id gcc_ipq9574_match_table[] = {
+>         { .compatible = "qcom,ipq9574-gcc" },
+>         { }
+> @@ -4327,7 +4378,18 @@ static const struct qcom_cc_desc gcc_ipq9574_desc = {
+>
+>  static int gcc_ipq9574_probe(struct platform_device *pdev)
+>  {
+> -       return qcom_cc_probe(pdev, &gcc_ipq9574_desc);
+> +       int ret;
+> +
+> +       ret = qcom_cc_probe(pdev, &gcc_ipq9574_desc);
+> +       if (ret)
+> +               return dev_err_probe(&pdev->dev, ret, "clock probe failed\n");
+> +
+> +       ret = qcom_cc_icc_register(&pdev->dev, gcc_ipq9574_clks, noc_clks,
+> +                                  ARRAY_SIZE(noc_clks), IPQ_APPS_ID);
+> +       if (ret)
+> +               return dev_err_probe(&pdev->dev, ret, "interconnect register failed\n");
+
+So, even if we had a useful message from the called function, it has
+become overridden with the useless "failed" message. Please don't do
+that.
+
+> +
+> +       return 0;
+>  }
+>
+>  static struct platform_driver gcc_ipq9574_driver = {
+> --
+> 2.34.1
+>
+>
+
+
+-- 
+With best wishes
+Dmitry
 
