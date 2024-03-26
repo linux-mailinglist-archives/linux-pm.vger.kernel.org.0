@@ -1,169 +1,93 @@
-Return-Path: <linux-pm+bounces-5388-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5389-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFC9E88BC2B
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 09:20:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 593C588BC66
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 09:30:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E643D1C29CCF
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 08:20:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B1A81C3046B
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 08:30:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B23A5130AC8;
-	Tue, 26 Mar 2024 08:20:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QTn0d5LV"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7410C135A7E;
+	Tue, 26 Mar 2024 08:28:44 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5D3321A0D;
-	Tue, 26 Mar 2024 08:20:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 341FE1353E1;
+	Tue, 26 Mar 2024 08:28:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711441237; cv=none; b=Ks4yghedtOOOs41jm0bJME2jlfVhqj1iiAWuu51KwXyBLOd7tNRVnQ7YlvpV3WX3RfW7nDpS95ERDs2rRGHXrD7zEUL3CUgKc7jaYwK61hE1zT46JT7FB/2dmVwDQWqcLah6KbopikEhXq9ua8nq6S3J3fFZRN9wqiRJBgnqxw4=
+	t=1711441724; cv=none; b=BPE42KZ3MIXZF1CVYGjsnNmtRskhwdge3fCpCx8LNDgRChXpMHFotGIWy3WAJrVbrMC7FoKgAej1IZ12nszX7PUFe9QqN5AK7EWguzqpEL3DkDft+etHCT3aLeQ410B6zIROvsVA9tAeFoGF1r08jHpBBpuYrHo0aTW00iEnyW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711441237; c=relaxed/simple;
-	bh=AVjAfchceJJVbN2BKP2n1Bdxxx/whXq07FVw0FG8hfg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mR2LeFAOjQCQbWiRieBUeqBo4LNNjuutR/2MASx9wMt53jpdNsqiKZrR5ForhXFqeuP9mFt66r/NB1lbI8sJxvAKBvZrHi1AMEU70lounyGkK9iAB6wbcV9NLV6n41h4RjkqdsWoRlFMobztKc8IZ8evoY/Rk8h+NpEYcJQrSZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QTn0d5LV; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-341d730bdfcso464399f8f.1;
-        Tue, 26 Mar 2024 01:20:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711441234; x=1712046034; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aHZKQFm/uRfn0WbsxRlg4KlgchvunMLU0uCQHGFlP3c=;
-        b=QTn0d5LVQLcxMt8h9hfHMUj0/YgzyHyc3a/LtZVB8uwpiFdy1ivmYrOMRm4v9BmNvU
-         6MFcOCoOxBdAfYImrQT8syKub/ZIm8f8ga9vugZXf+2FoNE8ByodwVxWgOYLnUw0t22j
-         ausiQcUVZvCxO1rSFdR/FyKE/3uSYv1OoEOgsEYtoFFqRxisGE2tu1nzDG8a8OmtiG5v
-         HsRfkUNoRn2fmWZF0/OEFa8je/FGuXE6UGn1cQW0fWjcBH4qNZTT+1yoRGqxp8ihxvr3
-         iyzslpeQsquRfDt22SRJxOMq+ntlFjghI7kBUbFWqNZ6tvsdyCcUmJo2llwgAxNelu+G
-         y41A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711441234; x=1712046034;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aHZKQFm/uRfn0WbsxRlg4KlgchvunMLU0uCQHGFlP3c=;
-        b=mg163J2TiiVjhO9L1Nc2DXL6zhLBna5ZSYmbuydeOwbxYsmOFBfaq7Gk6D4tPwsHlN
-         9ODqe4qGzF3XQKn0M2TF/+PBka5fkI4VMMbfx/WIWUseWHtLaWFnm3FTqz5pxUldoZsC
-         gUojSQ181wnQpwcm4m0lMkHxFnlG3HixWHkDNDcGeyigmxNMFnn5nFy85Xz/IumOQXtF
-         /VDhSTwOStecuHWsqdJFEdOmog5zmpYkOtL8rDlfjECXHLmtih57Zx0OK6XclYCDLSyC
-         CxSDEJOwDnYss/0P3Mvm1V06ffNpPiHbzny86jTSdNNhLZARncF+ePsa3f/qpOI9Yvzi
-         d3Aw==
-X-Forwarded-Encrypted: i=1; AJvYcCUzWqWF05gboMaYXREkmECiyZWMjetK0s8GFKH0YReZUF63ZB7ZEwsb0YGrH/AwBen+mKCGFr0XxyJia18v8cm5pcuSSGhmP8JT+91oVd0v774OUzVBRnV9Qfjw2eZSUFNIadptZss=
-X-Gm-Message-State: AOJu0YzcfYCDNFOFrIJOR7KehQRIZwcYYqsd3OoqDrKTqL1h+25ua8az
-	A8prf+VWRYBDXPNPhfti2Z6BGq5v5CgRw2cHZjFOl2ZXS0MX7CrO
-X-Google-Smtp-Source: AGHT+IHThHT0QtWmLc/pbNlZ0GvywR/kmYzxL3c7VbYxmyKAbnkMvykMMlSJhU3ZSQhLji1f6euVNw==
-X-Received: by 2002:a5d:6342:0:b0:341:bfe4:80cc with SMTP id b2-20020a5d6342000000b00341bfe480ccmr5939148wrw.9.1711441234043;
-        Tue, 26 Mar 2024 01:20:34 -0700 (PDT)
-Received: from gmail.com (1F2EF63C.nat.pool.telekom.hu. [31.46.246.60])
-        by smtp.gmail.com with ESMTPSA id m9-20020a5d4a09000000b00341bdecdae3sm9359997wrq.117.2024.03.26.01.20.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Mar 2024 01:20:33 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date: Tue, 26 Mar 2024 09:20:31 +0100
-From: Ingo Molnar <mingo@kernel.org>
-To: Qais Yousef <qyousef@layalina.io>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Daniel Bristot de Oliveira <bristot@redhat.com>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Christian Loehle <christian.loehle@arm.com>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] sched: Consolidate cpufreq updates
-Message-ID: <ZgKFT5b423hfQdl9@gmail.com>
-References: <20240324020139.1032473-1-qyousef@layalina.io>
+	s=arc-20240116; t=1711441724; c=relaxed/simple;
+	bh=DI13yHG2DTqEW7LMLFYsUMuHh6LIv0PK0NVoglFctCM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WT1jiVusyuAnl6ZVYBzIae/FRsyAeq6TaZ1+Vta7RWBCCFzef1QcgmQBRS69/C3ecdDRqLT4mq0BHiQbNjRrd6VrU74lWVJpc797EIzC4+4QgMRL12A9jzNvvDbZgA6iRIRxFg7rWg8JiLvjzQkuvZb8fIZPZkOBUhc3H8XWAWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 003DF2F4;
+	Tue, 26 Mar 2024 01:29:09 -0700 (PDT)
+Received: from [10.57.71.219] (unknown [10.57.71.219])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 432A43F7C5;
+	Tue, 26 Mar 2024 01:28:33 -0700 (PDT)
+Message-ID: <6801486a-46d9-4af9-a4fb-4d25f55a22bc@arm.com>
+Date: Tue, 26 Mar 2024 08:28:31 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240324020139.1032473-1-qyousef@layalina.io>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RESEND][PATCH v2 4/4] soc: samsung: exynos-asv: Update Energy
+ Model after adjusting voltage
+Content-Language: en-US
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: dietmar.eggemann@arm.com, linux-arm-kernel@lists.infradead.org,
+ sboyd@kernel.org, nm@ti.com, linux-samsung-soc@vger.kernel.org,
+ daniel.lezcano@linaro.org, rafael@kernel.org, viresh.kumar@linaro.org,
+ alim.akhtar@samsung.com, m.szyprowski@samsung.com, mhiramat@kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20240322110850.77086-1-lukasz.luba@arm.com>
+ <20240322110850.77086-5-lukasz.luba@arm.com>
+ <637a6390-6e38-49a4-abf5-b0d2b2a31093@linaro.org>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <637a6390-6e38-49a4-abf5-b0d2b2a31093@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
-* Qais Yousef <qyousef@layalina.io> wrote:
 
-> Results of `perf stat --repeat 10 perf bench sched pipe` on AMD 3900X to
-> verify any potential overhead because of the addition at context switch
+On 3/25/24 19:17, Krzysztof Kozlowski wrote:
+> On 22/03/2024 12:08, Lukasz Luba wrote:
+>> When the voltage for OPPs is adjusted there is a need to also update
+>> Energy Model framework. The EM data contains power values which depend
+>> on voltage values. The EM structure is used for thermal (IPA governor)
+>> and in scheduler task placement (EAS) so it should reflect the real HW
+>> model as best as possible to operate properly.
+>>
+>> Based on data on Exynos5422 ASV tables the maximum power difference might
+>> be ~29%. An Odroid-XU4 (with a random sample SoC in this chip lottery)
+>> showed power difference for some OPPs ~20%. Therefore, it's worth to
+>> update the EM.
+>>
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>>   drivers/soc/samsung/exynos-asv.c | 11 ++++++++++-
+>>   1 file changed, 10 insertions(+), 1 deletion(-)
 > 
-> Before:
-> -------
+> I assume there is dependency, even though cover letter did not mention
+> it, so:
 > 
-> 	Performance counter stats for 'perf bench sched pipe' (10 runs):
-> 
-> 		 16,839.74 msec task-clock:u              #    1.158 CPUs utilized            ( +-  0.52% )
-> 			 0      context-switches:u        #    0.000 /sec
-> 			 0      cpu-migrations:u          #    0.000 /sec
-> 		     1,390      page-faults:u             #   83.903 /sec                     ( +-  0.06% )
-> 	       333,773,107      cycles:u                  #    0.020 GHz                      ( +-  0.70% )  (83.72%)
-> 		67,050,466      stalled-cycles-frontend:u #   19.94% frontend cycles idle     ( +-  2.99% )  (83.23%)
-> 		37,763,775      stalled-cycles-backend:u  #   11.23% backend cycles idle      ( +-  2.18% )  (83.09%)
-> 		84,456,137      instructions:u            #    0.25  insn per cycle
-> 							  #    0.83  stalled cycles per insn  ( +-  0.02% )  (83.01%)
-> 		34,097,544      branches:u                #    2.058 M/sec                    ( +-  0.02% )  (83.52%)
-> 		 8,038,902      branch-misses:u           #   23.59% of all branches          ( +-  0.03% )  (83.44%)
-> 
-> 		   14.5464 +- 0.0758 seconds time elapsed  ( +-  0.52% )
-> 
-> After:
-> -------
-> 
-> 	Performance counter stats for 'perf bench sched pipe' (10 runs):
-> 
-> 		 16,219.58 msec task-clock:u              #    1.130 CPUs utilized            ( +-  0.80% )
-> 			 0      context-switches:u        #    0.000 /sec
-> 			 0      cpu-migrations:u          #    0.000 /sec
-> 		     1,391      page-faults:u             #   85.163 /sec                     ( +-  0.06% )
-> 	       342,768,312      cycles:u                  #    0.021 GHz                      ( +-  0.63% )  (83.36%)
-> 		66,231,208      stalled-cycles-frontend:u #   18.91% frontend cycles idle     ( +-  2.34% )  (83.95%)
-> 		39,055,410      stalled-cycles-backend:u  #   11.15% backend cycles idle      ( +-  1.80% )  (82.73%)
-> 		84,475,662      instructions:u            #    0.24  insn per cycle
-> 							  #    0.82  stalled cycles per insn  ( +-  0.02% )  (83.05%)
-> 		34,067,160      branches:u                #    2.086 M/sec                    ( +-  0.02% )  (83.67%)
-> 		 8,042,888      branch-misses:u           #   23.60% of all branches          ( +-  0.07% )  (83.25%)
-> 
-> 		    14.358 +- 0.116 seconds time elapsed  ( +-  0.81% )
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Noise caused by too many counters & the vagaries of multi-CPU scheduling is 
-drowning out any results here.
+Thanks Krzysztof for the review. Yes, it touches driver in your tree
+indeed. Hopefully it can goes smoothly via Rafael's tree with your
+tag.
 
-I'd suggest somethig like this to measure same-CPU context-switching 
-overhead:
-
-    taskset 1 perf stat --repeat 10 -e cycles,instructions,task-clock perf bench sched pipe
-
-... and make sure the cpufreq governor is at 'performance' first:
-
-    for ((cpu=0; cpu < $(nproc); cpu++)); do echo performance > /sys/devices/system/cpu/cpu$cpu/cpufreq/scaling_governor; done
-
-With that approach you should much, much lower noise levels even with just 
-3 runs:
-
- Performance counter stats for 'perf bench sched pipe' (3 runs):
-
-    51,616,501,297      cycles                           #    3.188 GHz                         ( +-  0.05% )
-    37,523,641,203      instructions                     #    0.73  insn per cycle              ( +-  0.08% )
-         16,191.01 msec task-clock                       #    0.999 CPUs utilized               ( +-  0.04% )
-
-          16.20511 +- 0.00578 seconds time elapsed  ( +-  0.04% )
-
-Thanks,
-
-	Ingo
+Regards,
+Lukasz
 
