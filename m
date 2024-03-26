@@ -1,75 +1,75 @@
-Return-Path: <linux-pm+bounces-5380-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5381-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C2B088BA6B
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 07:29:40 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C78C88BAB7
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 07:49:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3C332C170F
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 06:29:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A931E1C2ABD3
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 06:49:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F28C7130A62;
-	Tue, 26 Mar 2024 06:29:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACB1D1272A8;
+	Tue, 26 Mar 2024 06:49:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PvJiQP3Y"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eA9Gv87i"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA317132C1A
-	for <linux-pm@vger.kernel.org>; Tue, 26 Mar 2024 06:29:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD691839E4
+	for <linux-pm@vger.kernel.org>; Tue, 26 Mar 2024 06:49:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711434566; cv=none; b=WoKg7sVEUVBb0+F2qqg8pWdgO78Cau+KtHdMD+bkxqHjHOIk+7X9JGHGWKPQdb55D/DFcyB2bOkBm9xYNHSA+TN5V1LJnaBWrLcUOCZK3wKwglasVWCAtMuuKj54AzdvKngHY+rxH7xj6yr9XwQ/6rq77VXx6cAdxAJZAr6Ltw0=
+	t=1711435746; cv=none; b=Q58uAzg3prdLo6G+WTiPlsLx9WOEW5Ub9bTH5k+wo+nKtcNOi3TdFsGXdC+8jVIy/QDELKf8dbxxK1akPPEKtORYleovzL3tl+Q3GF/ciM933jza9qZn1YXojEMbmytCPqoA18vNOKMeqOmv9wi7NxqO+bUGpAdqEAuEFS8XIvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711434566; c=relaxed/simple;
-	bh=SR9YNar3/X3F4Y7T5Iev7JOeoTFsIajhJNRqCU0l+tc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dbsFC+pqh+ZWICh+RDmgXXla4u3YjcHgrLcw66yaF6Dnv21xUQ7ahp2uWeTBc4MNfkTxP366WxdrthFJwPDjPtmPc0mEW6lqvfOf9Ln3AWo8IinnP0hkQS1cth4joNxdX3MZMp8JchKFiNOtdjWvlMnw2Kf3Fck8QVuSGHbSgqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PvJiQP3Y; arc=none smtp.client-ip=209.85.208.49
+	s=arc-20240116; t=1711435746; c=relaxed/simple;
+	bh=4z8CNuxZF+EbhibvsjobQPSaP23qIU/OMbJa5lhTJxY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=NIEjh1Tn1KDHtR/3jKTcXOPSm1PlOKPQxMe+gTSvMhSzb01aRIvzv7mV6NgElj6kSw11CFhIqAFtPr0WBlAGfrAgvu9rT3Y8OwGH3+lwt06+0ZWSVsqip+SxkLZU8HeSAyKgzoxT8Gl5mc3/AVEH0vye1rqy7OLDPXlgVOqBcQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=eA9Gv87i; arc=none smtp.client-ip=209.85.218.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5688eaf1165so7033003a12.1
-        for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 23:29:22 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a474c4faf5eso249185166b.2
+        for <linux-pm@vger.kernel.org>; Mon, 25 Mar 2024 23:49:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711434560; x=1712039360; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1711435743; x=1712040543; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=5QDBHaSC5fntPQdx5nI9UDxMCD9F3a8euvISqTDLhTk=;
-        b=PvJiQP3YbGwbuoAej92Vu/nUGx2B7zPW3Pjuid3x9lOyeLvWuK9dxA9N9dfUUrEnL6
-         286cgmGkNNGNmsg76xa/iGbZ+iDMymmZ5xPb8alIhhlrtApYktwXf6iKgT4Mog9oFIov
-         qr+htwfi4X+9Iqi0GYb25eP1i5T6giUK1OltbGxaCZVZGw/FvPBGDfD0ZFy0fg75OAb5
-         uxmPxnXWGvRsgCqB2b6HN0EJjnrOCtwmo/dwJDp/XYk9eoTew7lE0NPyAow1MEauCgeN
-         c41EfBQQDi4d9yeDw9/J0WltaG4/aSuNHSegfS/3OgjDNhmhAJd3EU6Bbv14abe+A0Ee
-         rHtw==
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=SjZZMbwclW2RM4llsuZ/F96yEzw71Y4QNde8YV+Mfhg=;
+        b=eA9Gv87iTP7z5IaFO1E5Naj1hR2D1+/lREcQ/8dCCfJdr6tZDccvOBMOgyuDB9Woo4
+         Qn8LjlEwXCq12tNnsgq/nKw8OIWUzw8iH3s+mr9gMLJCxzAbPOux0FAQKMzurnRGA1HI
+         T/6G+A+Sj4OnMNUVDPfTyD+7Hs8uysbm8oe114jq63GDJ9itBhPRFUew4hnz+wauteoJ
+         ASq+tF84JfNB1ZJi6M7lYQY4jR3PIbdMRnRAldDxFLXtnvzAiDQ1MkqUnYhdIEfOcY8y
+         PbpoGsll68evkK1deXCnwisvRrsouy6LpgolclANlxtQNyfjaDxbsaPk2zBHwsS+HYjJ
+         XJ/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711434560; x=1712039360;
+        d=1e100.net; s=20230601; t=1711435743; x=1712040543;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5QDBHaSC5fntPQdx5nI9UDxMCD9F3a8euvISqTDLhTk=;
-        b=q4wPDi9fHBWTZfs7Ctlh2uhRvaY1vAQjdKuQj51VtHX4VgRxtAnfVkBpRcxpbr/Pu4
-         hrAMioC9yYgboj/uVS+r0ahRusEo/501UpCuVnlZ4ut2EkrYGM3R7/f5Lzre0n+eoull
-         gE1uAtT4YxvYzFWE5Q+SDBfjxEtUoezUng5CAjOvbeMmewgslZXUGDCzDJZ+XvavsI0k
-         izCua4CDmQ0/lm4/4GBTEHrlqTONO9rPZOcGb1jr7E5cxM85w8SoXKwmTYP8yF805aVr
-         Zl+KhLNY7So84J5TaIWYeJhPeJjmzkfTgiasEx8r/2d8JOkJJlBtZLZHTIKKEG/L/2fp
-         XasA==
-X-Forwarded-Encrypted: i=1; AJvYcCXy9A/BhQy5ab/esZHIiCsXCdSUHe8v7ewAdMWBk8fYl+LfaXpa1R1UREl46C16bTsgCiV5ZQm5KWUcETeR5ZtmGb9ZVqMOx4Y=
-X-Gm-Message-State: AOJu0YxCLEyM3EtuXtFNsj/4BdhbAD7E2NwEknsqftO5ee2nyN948CZ+
-	r/LKjjyF6NSZsbCT5RYdQ8RfAY3ldU07zgHXUyu+OcVcus2lJSbuJIKTN8DF3Ts=
-X-Google-Smtp-Source: AGHT+IHS+Py7F4eCiITse8lcGWhLrhntEwe1W757/7QYsqErqTxDqZZZwsaVh7yrPgaOIa8FUDlqxg==
-X-Received: by 2002:a50:9b58:0:b0:566:2aff:2d38 with SMTP id a24-20020a509b58000000b005662aff2d38mr5980629edj.26.1711434559971;
-        Mon, 25 Mar 2024 23:29:19 -0700 (PDT)
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SjZZMbwclW2RM4llsuZ/F96yEzw71Y4QNde8YV+Mfhg=;
+        b=AhihHddgaC0aFG4qaCpZU0DSJpaxFFIqtt5igW5OIEM6OKrsZ/+5hNoSLuWb71MChF
+         o/W7XZM+CKUrbMsx/gaOrFjQyIr/48lqE7Gr9lHnyOzdSs4VysiHr25HDPD29qhUD8xR
+         sIlTSOokEze/sYN+oMXTazQaS7N/SNZp4540zWR9m3l6/C+JN2AGsRR7aeurd+5+ZIVL
+         3tVbvy+oIPTh5VBckFKkOQHSfoD8Mtk3WJtQFOEhlyaYqZ4hF7PB9wsywTLYJhGWeDPU
+         zSijKkJGbBblWit/+xWqo5SvbziXhe+1axW6cLH8Y3LPmO9gi46BGy0UpAUzcoHz6s5z
+         Ozkw==
+X-Forwarded-Encrypted: i=1; AJvYcCVXYYcXRWh7pqwD/GKPM6NBaF2d0ylU238nHzRxnXd7f+cLo4C+Dz2QoGhlv/MHMhI2DNAplPs+b/BLLvBiQyU5UF39ZxhUh/0=
+X-Gm-Message-State: AOJu0YwDug6fX1+Y4hM3scyHhFz4NryjSzfacjuz8XjKTy0v2g7J5NXK
+	70Cy9kp9z2MZfQcx3vTz+SR9BfvoPhEEtzQnmcPPPkw8IbiVJsudZad49PpJlOQ=
+X-Google-Smtp-Source: AGHT+IGO5Z+38RnkSulDrn3IgvQJsJjVKutciWZnr+gkd1ZrfCmDK6bp+JwRqg9vkIfXktNxfNs98g==
+X-Received: by 2002:a17:907:8694:b0:a47:4d61:de44 with SMTP id qa20-20020a170907869400b00a474d61de44mr5429055ejc.55.1711435743062;
+        Mon, 25 Mar 2024 23:49:03 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.222.44])
-        by smtp.gmail.com with ESMTPSA id fk26-20020a056402399a00b0056c2bd89354sm219887edb.14.2024.03.25.23.29.18
+        by smtp.gmail.com with ESMTPSA id b17-20020a170906709100b00a46a9c38b16sm3843189ejk.138.2024.03.25.23.49.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Mar 2024 23:29:19 -0700 (PDT)
-Message-ID: <68dbebe0-acaa-40f0-9a5c-fd49d265ae08@linaro.org>
-Date: Tue, 26 Mar 2024 07:29:17 +0100
+        Mon, 25 Mar 2024 23:49:02 -0700 (PDT)
+Message-ID: <4e7ff99f-f362-4d58-b2f0-ca2dc1fe4b55@linaro.org>
+Date: Tue, 26 Mar 2024 07:49:00 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,25 +77,16 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/3] QCM2290 LMH
-To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>
-Cc: Konrad Dybcio <konrad.dybcio@linaro.org>,
- Bjorn Andersson <andersson@kernel.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
- Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
- Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Thara Gopinath
- <thara.gopinath@gmail.com>, Amit Kucheria <amitk@kernel.org>,
- Marijn Suijten <marijn.suijten@somainline.org>,
- linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, stable@vger.kernel.org,
- Loic Poulain <loic.poulain@linaro.org>
-References: <20240308-topic-rb1_lmh-v2-0-bac3914b0fe3@linaro.org>
- <d8ed4e6c-549f-4c04-b38a-2d788df8b707@notapiano>
- <dbe90a1c-bac2-4176-8eba-7ad96a182313@linaro.org>
- <8e0cc005-0b3a-4475-bfe4-82ec46d918a5@notapiano>
+Subject: Re: [PATCH v2 2/4] dt-bindings: interconnect: Add Qualcomm IPQ9574
+ support
+To: Varadarajan Narayanan <quic_varada@quicinc.com>, andersson@kernel.org,
+ konrad.dybcio@linaro.org, mturquette@baylibre.com, sboyd@kernel.org,
+ robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ djakov@kernel.org, quic_anusha@quicinc.com, linux-arm-msm@vger.kernel.org,
+ linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20240325102036.95484-1-quic_varada@quicinc.com>
+ <20240325102036.95484-3-quic_varada@quicinc.com>
 Content-Language: en-US
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
@@ -142,112 +133,49 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <8e0cc005-0b3a-4475-bfe4-82ec46d918a5@notapiano>
+In-Reply-To: <20240325102036.95484-3-quic_varada@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 26/03/2024 00:01, Nícolas F. R. A. Prado wrote:
-> On Mon, Mar 25, 2024 at 08:59:55PM +0100, Krzysztof Kozlowski wrote:
->> On 20/03/2024 20:08, Nícolas F. R. A. Prado wrote:
->>>> Loic Poulain (1):
->>>>       arm64: dts: qcom: qcm2290: Add LMH node
->>>>
->>>>  Documentation/devicetree/bindings/thermal/qcom-lmh.yaml | 12 ++++++++----
->>>>  arch/arm64/boot/dts/qcom/qcm2290.dtsi                   | 14 +++++++++++++-
->>>>  drivers/thermal/qcom/lmh.c                              |  3 +++
->>>>  3 files changed, 24 insertions(+), 5 deletions(-)
->>>
->>> Hi,
->>>
->>> I've started tracking the results of 'make dtbs_check' on linux-next, and I've
->>> noticed that on today's next, next-20240320, there's a new warning coming from
->>> this. The reason is that the DT change has landed, but the binding has not,
->>> since it goes through a separate tree. I thought the binding was supposed to
->>> always land before the driver and DT that make use of it, but looking through
->>
->> There is no such rule. Of course new binding should be documented in
->> earlier or the same kernel release cycle as users get in, but it's not a
->> requirement.
+On 25/03/2024 11:20, Varadarajan Narayanan wrote:
+> Add master/slave ids for Qualcomm IPQ9574 Network-On-Chip
+> interfaces. This will be used by the gcc-ipq9574 driver
+> that will for providing interconnect services using the
+> icc-clk framework.
 > 
-> So, after giving the documentation a second look, I found this:
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
+> v2: Rename master slave macros
+>     Fix license identifier
+
+Both patches should be squashed. Header is parts of bindings and your
+previous patch adds the interconnects, doesn't it?
+
+
+> ---
+>  .../dt-bindings/interconnect/qcom,ipq9574.h   | 62 +++++++++++++++++++
+>  1 file changed, 62 insertions(+)
+>  create mode 100644 include/dt-bindings/interconnect/qcom,ipq9574.h
 > 
-> "For new platforms, or additions to existing ones, make dtbs_check should not
-> add any new warnings."
-> 
-> Source: https://www.kernel.org/doc/html/latest/process/maintainer-soc.html#validating-devicetree-files
+> diff --git a/include/dt-bindings/interconnect/qcom,ipq9574.h b/include/dt-bindings/interconnect/qcom,ipq9574.h
+> new file mode 100644
+> index 000000000000..b7b32aa6bbb1
+> --- /dev/null
+> +++ b/include/dt-bindings/interconnect/qcom,ipq9574.h
+> @@ -0,0 +1,62 @@
+> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+> +#ifndef INTERCONNECT_QCOM_IPQ9574_H
+> +#define INTERCONNECT_QCOM_IPQ9574_H
+> +
+> +#define IPQ_APPS_ID			9574	/* some unique value */
 
-It's just "should"...
+Why random unique values are bindings? Why this cannot be 0? Please
+explain how this is used by DTS and driver.
 
-> 
-> What is not clear there is what the reference point is: is it on linux-next?
-> Mainline release?
+> +#define IPQ_NSS_ID			(IPQ_APPS_ID * 2)
 
-Does it matter? There was never a new warning introduced by this
-patchset. The patchset itself is correct. No new warnings.
+This does not seem right.
 
-> 
-> As Konrad pointed out it's tricky (and maybe not worth it) to guarantee this for
-> linux-next. But for mainline release it seems feasible (and IMO the target, as
-> after that stability guarantees should apply).
-
-I don't believe in such guarantees. Different maintainers apply patches
-differently, especially bindings, so this is beyond our control. Often
-also beyond SoC maintainer control.
-
-> 
->>
->>
->>> the dt-binding documentation pages I couldn't find anything confirming or
->>> denying that.
->>>
->>> I expect this to happen again in the future, which is why I'm reaching out to
->>> understand better how to deal with this kind of situation.
->>
->> Deal as what to do? Are you asking in terms of maintenance of some
->> subsystem or sending some patches? In this particular case here, I don't
->> think there is anything on your side to deal with.
-> 
-> I'm asking what's the most helpful way to you the maintainers for me to report
-> these failures in the future.
-
-The most effective way is LKP-like or Rob's-bot-like automated replies
-to original email threads, by testing the original patchset on
-linux-next. But Rob's bot is actually doing it, just on different base.
-
-Other reports, like for cases when only parts of patch is applied, could
-be also useful but I am afraid you will generate way too much of them.
-Binding is supposed to go via subsystem, DTS via SoC, so basically 90%
-of patchsets might have some sort of delays resulting in dtbs_check
-false positive warnings.
-
-For my SoC I check my trees, mainline and next, and keep adding list of
-exceptions for expected issues. What's useful for Qualcomm? Konrad,
-Bjorn, any thoughts?
-
-Have in mind that expected warnings can be for entire cycle when dealing
-with technical debt, because DTS goes N+1.
-
-> 
-> Rob has already automated running dtbs_check for patches coming into the mailing
-> list. And I have set up KernelCI to run dtbs_check on linux-next in order to
-> catch any issues that might slip through, or happen during integration of the
-> trees, etc.
-> 
-> Now, if we agree that dtbs_check regressions on linux-next are acceptable, at
-> least ones like this, where the issue is just synchronization between
-
-Yes and no. True regressions are not acceptable. Expected intermediate
-regressions as a result of patchset being applying, but not yet fully
-applied, are OK. Expected regressions for intra-cycle-work are also OK.
-
-> maintainers, then I can simply not report them in the future. But we should
-> have some point where dtbs_check should not regress, and mainline release seems
-> the reasonable choice, because if we don't then dtbs_check warnings would just
-> keep growing forever.
-
-I invite therefore to my session:
-https://eoss24.sched.com/event/1aBEf?iframe=no
-We'll see if they keep growing :)
 
 Best regards,
 Krzysztof
