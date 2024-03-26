@@ -1,215 +1,160 @@
-Return-Path: <linux-pm+bounces-5386-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5387-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 654EA88BB97
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 08:46:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D7AF88BC04
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 09:11:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 890B11C31CCA
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 07:46:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 581B22970B0
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 08:11:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28E8613175C;
-	Tue, 26 Mar 2024 07:46:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BFA4133424;
+	Tue, 26 Mar 2024 08:11:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gsLpowMR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sJWLaQVr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 476781804F;
-	Tue, 26 Mar 2024 07:46:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20FEF18C38;
+	Tue, 26 Mar 2024 08:11:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711439175; cv=none; b=IxMcUCKqk+QIFovUlSeYdIKMscA/dIgsKmO2BmsQYGmVTveUpNayy6sGG4AbHLVl2PCMQH5+5CPOPf5pTqBNwe8w0HqbDnxzAdgX+e4AqEDdpyvvuxbqVcHFQydMltD5tA47hxxAsAyLmYH+yhRnXeZccalRRqO1Kd1xcy/1REs=
+	t=1711440670; cv=none; b=mCao3r+ICnaeWiYyqrn71CHPzSWWqYhhx+BFqqlfdxkdDwhHOklE1iTQVwHR1B39e3k5mhRcntZyMuZohEj7QYZHB4ImFDn/V21JURDF2N0c6Lp8SNVAh1HKINXMhZt2DMhbhKIdJv0OugnP2wZabSXhiDvJg4hBqb4OFQ7dwy4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711439175; c=relaxed/simple;
-	bh=9nbuupSTwnqhgE67/6uv0FOLeTMTUSay5mBf80zherM=;
+	s=arc-20240116; t=1711440670; c=relaxed/simple;
+	bh=qgPYrZ/NPDwrw9n8R5vjfsAIwZpztvwYlvGEZ1/cqwk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e3UlDHyMj6Kj3uHDmTNW+a3UP5Wm6bJxjQQjZO2CdE+Fim7u5MNfG37GdGii/UgkiUdh6BfKkmd/NPTDtJs84tk3NEmrCqyZ+Fpl+aEBiJ79MI8eEgz4HCn4ygMwB+bIJZ9VMh2T6nICgXqmbtYSPIdk7PbfVcW1wLisUAsX6E8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gsLpowMR; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-563cb3ba9daso5360323a12.3;
-        Tue, 26 Mar 2024 00:46:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711439171; x=1712043971; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cs2IwigS62lW2NUemYpoxv0KHk0e1rYE/O58ogrWzrM=;
-        b=gsLpowMRH3b18jXTudj2fu78Gwju8x4FREaOkDHP82qoXt3IKM8DaRk8k7j0qwJ4wP
-         lw/7bT+n2BkoFmjzOrqYroUS2R7XGVI1FxE67spJUv9Wm11h8Iql6Zuslu92vFLAXnSf
-         ngnb74DcHVb7jsHHR8HqJfLDkZ9ZwCqIhFAvHcKMt1uZZ4Cz6XW4hrggATrNR8bmWFh+
-         9iXVv1GKOwOxgXTDeNosufmRtdT0H7S9HDj6/Oo9SINX2zYOEjr+EaSuqdF5bi35lrWC
-         YhrtXCSRz+vXNQyyYyEr+rs2r+vrg8D8McfG6csRdBLoZZUxc2emmK1oieTndPj6nk9i
-         aR8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711439171; x=1712043971;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Cs2IwigS62lW2NUemYpoxv0KHk0e1rYE/O58ogrWzrM=;
-        b=l+uJ9JeR0+AkQt+xZ716scprp23L4/nBr25vSvGFmIYLWx/F5tfMEP/XlS0U50eVYw
-         HHmo10POf+ief2eEiHi13L+QaAsMrD+IIZ2XjP96iEXND+K8uiMcqsdFSmq79jZBBxP5
-         EYkT+FmaS0VCG7biKySnBRYy5F/sI1mQbkwvdgRHJ1N51fYhycJ1nI2+JmMTMdQ/d64G
-         6/R6ZWdYE8QUDvG2CxJcgX9+Fjn9oaAQB95WdmPe93vBiVQvTC2nYA3VIUuoHty6HKZO
-         hne3NuWDZRPT0O+6WiZ7bumlGveZyO40cnAqlO1VlHZtwtdZLAvxiCvIKs8I6ahYg4e3
-         nm8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXl0idTZjMbD2xWEVUcl98V7Kbc8XMNzRXmXoH/SaTOjpjjxlabiyYpaPLywLRWLaIj3pUzNQzfu9f/PyscCw+dvN3FjVS9dzjJua+DtLiRKzHgrcyMVv2KPwx22/M3bp3R8XjRz2IL0VQUDmzWuNgTJ6UTD2Gtd6wrwfzffTFG1hCm
-X-Gm-Message-State: AOJu0YwFcAGLIKILlxrejxvCYJ95NA1vGZ1z1fU7lIA8Id8SyiuMQfJe
-	FI/uIj5nmqx7pVKhPXzIJI9+NgDeFEfAxUlMph4KQtIBUjRIeVRR
-X-Google-Smtp-Source: AGHT+IGrIlCSSn2r2+Hg+P0/A4xj4OXP7apyF3284aGBI7zxVjMxD5nzUTRKGklIY7bvBEYmSkW8Iw==
-X-Received: by 2002:a50:8ac9:0:b0:568:a420:7d80 with SMTP id k9-20020a508ac9000000b00568a4207d80mr6923066edk.27.1711439171189;
-        Tue, 26 Mar 2024 00:46:11 -0700 (PDT)
-Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation (net-188-217-49-82.cust.vodafonedsl.it. [188.217.49.82])
-        by smtp.gmail.com with ESMTPSA id dh16-20020a0564021d3000b0056c1c4b870asm1167067edb.16.2024.03.26.00.46.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Mar 2024 00:46:10 -0700 (PDT)
-Date: Tue, 26 Mar 2024 08:46:07 +0100
-From: Tommaso Merciai <tomm.merciai@gmail.com>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Adam Ford <aford173@gmail.com>, linux-arm-kernel@lists.infradead.org,
-	marex@denx.de, alexander.stein@ew.tq-group.com,
-	frieder.schrempf@kontron.de,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Robert Foss <rfoss@kernel.org>, Jonas Karlman <jonas@kwiboo.se>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Rob Herring <robh+dt@kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=NG/FvRiOnM/tp0nL8UZO09SsUKws9rSqGBUw8pt/iXXrcdsArP2t3fR+qYh2NQrVvehU81SLE4MYa8vqhTvCH+zPP/tsk6gfy1IEvajX3IB85fOL2bHuvPbpHjzHT0/WMr4Qheo1f441JjLCucNNyQVF2UDlBZmFGRPB+kbKh1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sJWLaQVr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9209BC433F1;
+	Tue, 26 Mar 2024 08:11:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711440669;
+	bh=qgPYrZ/NPDwrw9n8R5vjfsAIwZpztvwYlvGEZ1/cqwk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sJWLaQVrmHkXdPfZu2CLehPVBt1a3A07VW9D2hHdhmdx1dfdxfVkVKCTg3D62osKG
+	 covenVtPafFo/IsLWh5g6/g3y4hUOYHVaYVuutRm+dDNWvFegJiXJkyb9LPukcVk1u
+	 m2VKGv9L+iOGqzN1zqikyJWB7X2H+66W3diLGpPYXcd955q0ivSrK5+w1rrysq8ScW
+	 jQgegNSKueMZQeTO9BeBWfCCjyuJE8rYmEQ3DowcaWuUvoIMe1slI1gbwfkLgkTh5p
+	 0SWFa6/UJfRQdfXuO3A8YQwEULv6J+4OPmMdm50N29USGF6PCDE72cs+NvDxnyRPel
+	 LHLk7KAb/beXQ==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1rp1tr-000000005vk-2JeX;
+	Tue, 26 Mar 2024 09:11:16 +0100
+Date: Tue, 26 Mar 2024 09:11:15 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Kalle Valo <kvalo@kernel.org>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>,
+	Marcel Holtmann <marcel@holtmann.org>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
 	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Liu Ying <victor.liu@nxp.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Lucas Stach <l.stach@pengutronix.de>,
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH V8 00/12] soc: imx8mp: Add support for HDMI
-Message-ID: <ZgJ9P3Wx2A2n9Gt+@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
-References: <20240203165307.7806-1-aford173@gmail.com>
- <ZgHxSHDAt7ytqDC1@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
- <20240325220338.GE23988@pendragon.ideasonboard.com>
+	Will Deacon <will@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	Saravana Kannan <saravanak@google.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Alex Elder <elder@linaro.org>,
+	Srini Kandagatla <srinivas.kandagatla@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Abel Vesa <abel.vesa@linaro.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Lukas Wunner <lukas@wunner.de>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-wireless@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	ath11k@lists.infradead.org
+Subject: Re: [PATCH v6 04/16] dt-bindings: net: wireless: qcom,ath11k:
+ describe the ath11k on QCA6390
+Message-ID: <ZgKDI4Es11aN5nx7@hovoldconsulting.com>
+References: <20240325131624.26023-1-brgl@bgdev.pl>
+ <20240325131624.26023-5-brgl@bgdev.pl>
+ <87r0fy8lde.fsf@kernel.org>
+ <CAMRc=Mc2Tc8oHr5NVo=aHAADkJtGCDAVvJs+7V-19m2zGi-vbw@mail.gmail.com>
+ <87frwe8jiu.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240325220338.GE23988@pendragon.ideasonboard.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87frwe8jiu.fsf@kernel.org>
 
-Hi Laurent,
-
-On Tue, Mar 26, 2024 at 12:03:38AM +0200, Laurent Pinchart wrote:
-> Hi Tommaso,
+On Mon, Mar 25, 2024 at 04:37:29PM +0200, Kalle Valo wrote:
+> Bartosz Golaszewski <brgl@bgdev.pl> writes:
+> > On Mon, Mar 25, 2024 at 2:57 PM Kalle Valo <kvalo@kernel.org> wrote:
+> >> Bartosz Golaszewski <brgl@bgdev.pl> writes:
+> >> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >> >
+> >> > Add a PCI compatible for the ATH11K module on QCA6390 and describe the
+> >> > power inputs from the PMU that it consumes.
+> >> >
+> >> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >>
+> >> [...]
+> >>
+> >> > +allOf:
+> >> > +  - if:
+> >> > +      properties:
+> >> > +        compatible:
+> >> > +          contains:
+> >> > +            const: pci17cb,1101
+> >> > +    then:
+> >> > +      required:
+> >> > +        - vddrfacmn-supply
+> >> > +        - vddaon-supply
+> >> > +        - vddwlcx-supply
+> >> > +        - vddwlmx-supply
+> >> > +        - vddrfa0p8-supply
+> >> > +        - vddrfa1p2-supply
+> >> > +        - vddrfa1p7-supply
+> >> > +        - vddpcie0p9-supply
+> >> > +        - vddpcie1p8-supply
+> >>
+> >> I don't know DT well enough to know what the "required:" above means,
+> >> but does this take into account that there are normal "plug&play" type
+> >> of QCA6390 boards as well which don't need any DT settings?
+> >
+> > Do they require a DT node though for some reason?
 > 
-> On Mon, Mar 25, 2024 at 10:48:56PM +0100, Tommaso Merciai wrote:
-> > Hi Adam, Lucas,
-> > Thanks for this series.
-> > 
-> > This series make HDMI work on evk.
-> > All is working properly on my side.
-> > 
-> > Tested on: Linux imx8mp-lpddr4-evk 6.9.0-rc1.
-> > Hope this help.
-> > 
-> > Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
+> You can attach the device to any PCI slot, connect the WLAN antenna and
+> it just works without DT nodes. I'm trying to make sure here that basic
+> setup still works.
 > 
-> The DRM side has been merged already. The only missing patches are for
-> the PHY, and the latest version can be found in
-> https://lore.kernel.org/linux-phy/20240227220444.77566-1-aford173@gmail.com/.
-> You can test that series and send a Tested-by tag. I'm crossing my
-> fingers and hoping it will be merged in v6.10.
-(same here :) )
+> Adding also Johan and ath11k list. For example, I don't know what's the
+> plan with Lenovo X13s, will it use this framework? I guess in theory we
+> could have devices which use qcom,ath11k-calibration-variant from DT but
+> not any of these supply properties?
 
-Thanks for sharing! :)
+In theory we could, but at least the WCN6855 in the X13s has a similar
+set of supplies and enable gpios which are currently not fully described
+in the devicetree as there has been no support for doing so thus far.
+Instead we rely on the bootloader to enable the module.
 
-To be honest I test all this series rebasing my alvium next branch on top of media_stage/master (6.9.0-rc1)
-All is working properly on my side.
-I found v8 into the commit msg here: https://patches.linaro.org/project/linux-pm/patch/20240203165307.7806-9-aford173@gmail.com/
-then I'm thinking this is the latest.
+I haven't had time to look at the latest attempt on adding support for
+handling such resources, but eventually we'll need to address this in
+some way.
 
-I'm going to switch to your suggestion that looks more recent :)
-
-Thanks again,
-Tommaso
-
-> 
-> > On Sat, Feb 03, 2024 at 10:52:40AM -0600, Adam Ford wrote:
-> > > The i.MX8M Plus has an HDMI controller, but it depends on two
-> > > other systems, the Parallel Video Interface (PVI) and the
-> > > HDMI PHY from Samsung. The LCDIF controller generates the display
-> > > and routes it to the PVI which converts passes the parallel video
-> > > to the HDMI bridge.  The HDMI system has a corresponding power
-> > > domain controller whose driver was partially written, but the
-> > > device tree for it was never applied, so some changes to the
-> > > power domain should be harmless because they've not really been
-> > > used yet.
-> > > 
-> > > This series is adapted from multiple series from Lucas Stach with
-> > > edits and suggestions from feedback from various series, but it
-> > > since it's difficult to use and test them independently,
-> > > I merged them into on unified series.  The version history is a
-> > > bit ambiguous since different components were submitted at different
-> > > times and had different amount of retries.  In an effort to merge them
-> > > I used the highest version attempt.
-> > > 
-> > > Adam Ford (3):
-> > >   dt-bindings: soc: imx: add missing clock and power-domains to
-> > >     imx8mp-hdmi-blk-ctrl
-> > >   pmdomain: imx8mp-blk-ctrl: imx8mp_blk: Add fdcc clock to hdmimix
-> > >     domain
-> > >   arm64: defconfig: Enable DRM_IMX8MP_DW_HDMI_BRIDGE as module
-> > > 
-> > > Lucas Stach (9):
-> > >   dt-bindings: phy: add binding for the i.MX8MP HDMI PHY
-> > >   phy: freescale: add Samsung HDMI PHY
-> > >   arm64: dts: imx8mp: add HDMI power-domains
-> > >   arm64: dts: imx8mp: add HDMI irqsteer
-> > >   dt-bindings: display: imx: add binding for i.MX8MP HDMI PVI
-> > >   drm/bridge: imx: add driver for HDMI TX Parallel Video Interface
-> > >   dt-bindings: display: imx: add binding for i.MX8MP HDMI TX
-> > >   drm/bridge: imx: add bridge wrapper driver for i.MX8MP DWC HDMI
-> > >   arm64: dts: imx8mp: add HDMI display pipeline
-> > > 
-> > >  .../display/bridge/fsl,imx8mp-hdmi-tx.yaml    |  102 ++
-> > >  .../display/imx/fsl,imx8mp-hdmi-pvi.yaml      |   84 ++
-> > >  .../bindings/phy/fsl,imx8mp-hdmi-phy.yaml     |   62 +
-> > >  .../soc/imx/fsl,imx8mp-hdmi-blk-ctrl.yaml     |   22 +-
-> > >  arch/arm64/boot/dts/freescale/imx8mp.dtsi     |  145 +++
-> > >  arch/arm64/configs/defconfig                  |    1 +
-> > >  drivers/gpu/drm/bridge/imx/Kconfig            |   18 +
-> > >  drivers/gpu/drm/bridge/imx/Makefile           |    2 +
-> > >  drivers/gpu/drm/bridge/imx/imx8mp-hdmi-pvi.c  |  207 ++++
-> > >  drivers/gpu/drm/bridge/imx/imx8mp-hdmi-tx.c   |  154 +++
-> > >  drivers/phy/freescale/Kconfig                 |    6 +
-> > >  drivers/phy/freescale/Makefile                |    1 +
-> > >  drivers/phy/freescale/phy-fsl-samsung-hdmi.c  | 1075 +++++++++++++++++
-> > >  drivers/pmdomain/imx/imx8mp-blk-ctrl.c        |   10 +-
-> > >  14 files changed, 1876 insertions(+), 13 deletions(-)
-> > >  create mode 100644 Documentation/devicetree/bindings/display/bridge/fsl,imx8mp-hdmi-tx.yaml
-> > >  create mode 100644 Documentation/devicetree/bindings/display/imx/fsl,imx8mp-hdmi-pvi.yaml
-> > >  create mode 100644 Documentation/devicetree/bindings/phy/fsl,imx8mp-hdmi-phy.yaml
-> > >  create mode 100644 drivers/gpu/drm/bridge/imx/imx8mp-hdmi-pvi.c
-> > >  create mode 100644 drivers/gpu/drm/bridge/imx/imx8mp-hdmi-tx.c
-> > >  create mode 100644 drivers/phy/freescale/phy-fsl-samsung-hdmi.c
-> 
-> -- 
-> Regards,
-> 
-> Laurent Pinchart
+Johan
 
