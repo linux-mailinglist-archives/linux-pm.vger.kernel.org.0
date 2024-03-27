@@ -1,145 +1,136 @@
-Return-Path: <linux-pm+bounces-5510-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5511-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E816E88E6BD
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 15:43:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5381F88E6CA
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 15:43:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24DF41C2E260
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 14:43:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 77A301C2DE67
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 14:43:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3CD713B784;
-	Wed, 27 Mar 2024 13:25:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A546112FF8B;
+	Wed, 27 Mar 2024 13:30:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="vjI3iv3S"
+	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="oiCi1rHS";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="BUj7tqJL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from flow3-smtp.messagingengine.com (flow3-smtp.messagingengine.com [103.168.172.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E2BC13B789;
-	Wed, 27 Mar 2024 13:25:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4137AE541;
+	Wed, 27 Mar 2024 13:30:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711545910; cv=none; b=LPqWnLzv/5p1lPWagJ0z5Om9nvRg7Yupdu1cyyqTqEVlW/ipnKZxXyIrXhRPzlKTVsqdjldbQHIhgAmuZwXZAuSQUimS5o8gochk0bpzJQ3LI6h7xhCe0JkAUEHlV/11KdyID5MnCVw+cv+e/ohJdIcO6B4NHf8KDZh6OqhqhvI=
+	t=1711546243; cv=none; b=eo33NfJOHjn4IEY0byCtZHIO5hn9pkY+fJ7iGP9xJZmtA6HrLXNI2LwHc/N3KqxKb/PonQLIK7yCYMDu+wVseQc9drRhuSqdHlJ3/3qR8eOcE0C08Tx7ZZnbtw0ym3TkNgBETcYvZstPliVxqMqgx+RzUn27ES8zf/5vsVv+a/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711545910; c=relaxed/simple;
-	bh=Cz7QopLpKY1lJfT11gW+g8rJalblsCQCrjKTS6EERLQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O9wKtSlM1C/xu0AOoUFEUUCgPUTVGP2DFoza9ZCPiUFFQBII90GXUYtn4kxiWD7PlBtpvxFwPWq7WnXS2w0u0i4K9ymhPszLkSsAxqBb6pCZS1yiNRB9ULGw52GTFF+0kBp+uTdvDVc9s/Nn5lmk8dPSx4P8KwOZhXZGZmrYtOM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=vjI3iv3S; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1711545906;
-	bh=Cz7QopLpKY1lJfT11gW+g8rJalblsCQCrjKTS6EERLQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vjI3iv3SkHQ+aK9ljmBZsrE9r3Yr7xxy8m9Mh+IFXtBIdJC8c7h3rga9qvmeh/kI1
-	 so8XlfhrvQ+uM1sod+nVt/9WtIzVDR5uzqSoiAhC/8MHPCCCTBYd5Ym0gEbKLwUs/t
-	 ovWGXE8fX87ze1UMhQDDVQpd55TpzB5QYGv7gUgTzEcBW/0zzWvh8ffWiZ7091njXR
-	 0wMvw0xpVRcr8P7NDuqlyNpc9QARhBpC4DgeaHEHILAwGnREOW/W/N/tpb2cM0eW1d
-	 QU92FbEJnuGSHoow9r2a6+avvwdnXsRaKEIJfb4L3cL8IVbyKYjdwGVDVIJdV73gR1
-	 FvLPfQXjWXbpA==
-Received: from mercury (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: sre)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id AA69637809CE;
-	Wed, 27 Mar 2024 13:25:06 +0000 (UTC)
-Received: by mercury (Postfix, from userid 1000)
-	id 47EF810608D9; Wed, 27 Mar 2024 14:25:06 +0100 (CET)
-Date: Wed, 27 Mar 2024 14:25:06 +0100
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: Konrad Dybcio <konradybcio@kernel.org>, 
-	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] power: supply: test-power: implement charge_behaviour
- property
-Message-ID: <daactalkmzucga47cmncjkgnxyppouqnrj3vtsz34d5edrkmzu@p32ylpv3nqwx>
-References: <20240306-power_supply-charge_behaviour_prop-v3-1-d04cf1f5f0af@weissschuh.net>
- <171148264419.185695.14027540198251584096.b4-ty@collabora.com>
- <6f0761a6-5f49-42e2-9b79-3e04c9d259a4@redhat.com>
- <9fe3d7a6-3b34-4c96-bd9f-510b41f9ab0d@redhat.com>
+	s=arc-20240116; t=1711546243; c=relaxed/simple;
+	bh=BY4/vtZK3LCqDKwLcxu72esODdQEavH43eahGm3T92A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=QBqTIBbQz1wDYh6CxEWC0aAqdROoT5kAsdR6985u3S15tlHpLQnUrLzou+UNRJkX4v0hc9F8Okh9RFiMYVAXMFHVz9rsvuXjElyNkD8+kGjMihh7yrGswK8i4wNEVODWP7uCB4YLoZvJs6GPx4ahWgyiyChxQrINAEmsbh1NBLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=oiCi1rHS; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=BUj7tqJL; arc=none smtp.client-ip=103.168.172.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailflow.nyi.internal (Postfix) with ESMTP id E992920045A;
+	Wed, 27 Mar 2024 09:30:38 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Wed, 27 Mar 2024 09:30:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm1; t=1711546238; x=1711549838; bh=Av
+	rN8vzInwuou1Yn+WkfazvX6KbksJ8KKKruaCxebd8=; b=oiCi1rHSjn0nUPkn0d
+	Q/0jHs/QEaCM6BlaBDdTcyJrTgAEkESp3GzdT6byywIkXLtECDQq47xTIUIqdHEd
+	pcvsCWWQFT5vRI0MYg+9TyfJfG4Vijw5O+VXZIbGO6xwaAkTpi8SAPN7P4Ut5qRk
+	1N9GttqnaQToAikDdkAmJ2mRVeZIFLv9BvpJ/yDrtrDMV8C8gw9ZavCY6Sp7kWrW
+	SYIFUG9FwbYS5LtoDjwBnaEag/BRZ5/HBSjZa3duEOWDT939wTGTOl+bTCLaWCC1
+	9CttTV99u+FaTDtKrMLSamWTpekqNuOYZCa4pOjciJKpu/oo5xEcw/G2KuXOkaN3
+	meqw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm2; t=1711546238; x=1711549838; bh=AvrN8vzInwuou
+	1Yn+WkfazvX6KbksJ8KKKruaCxebd8=; b=BUj7tqJLSx70lmFSD/M+mTQl0vbWX
+	AMmcspOy4PLo4Qu2/QzqtsN6/ScH9rLYvwu2SSn10AXu+ogIAvdFkoqBFZs+U/eo
+	r5uWwDtVWzp880OUoqc2YMB5FXIksDHD9K39sKWmoKVK0f8ZR2xwAMd0hreh6uOE
+	/+HiUIVsfwh9WoelTjDYyKGDRL28rlGhPy1nGxOKNX1vSEJFeb1V8eUquICPUVRU
+	yqBkWiMvli1vg1g+mnuLhSANZZUCGZUABAUfs/vpQVUUQqNrlwkjP1k8njeF1iDa
+	l4b7R23ooxEHNKczUxp3guLDXEF6oiixVQV8ER4e+F1VI0aX8id2rqUNQ==
+X-ME-Sender: <xms:fh8EZt7AVOXJ7lVxt9UUuyjcWJqEBAe0BGq9X04ro-cAYVzPCdr1mg>
+    <xme:fh8EZq6u-2LZ_9mzgbCnC1QnFKvTnfj_nzTtzSMdqdbFR-WN8sXt_54FVaTa7x3al
+    3amqfi7YJA2AIjEG6E>
+X-ME-Received: <xmr:fh8EZkcM4idubRJF5zTbP696JRgbLPq9ei1ZZ3vFMAF0ZdbG1e0dh7jNEtCpyrjJjX9wf9TVeISKvve2mLn65tsnzPCFrvFLzAr0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudduiedgvdekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofggtgfgsehtkeertdertdejnecuhfhrohhmpefpihhklhgr
+    shcuufpnuggvrhhluhhnugcuoehnihhklhgrshdrshhouggvrhhluhhnugdorhgvnhgvsh
+    grshesrhgrghhnrghtvggthhdrshgvqeenucggtffrrghtthgvrhhnpeehudelteetkefg
+    ffefudefuedvjeeivdekhfevieefgeffheeltddvvefhfeetgeenucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehnihhklhgrshdrshhouggvrhhl
+    uhhnugdorhgvnhgvshgrshesrhgrghhnrghtvggthhdrshgv
+X-ME-Proxy: <xmx:fh8EZmJwnjq8XjyqQXhp5o6brTppBwuSBgBirTM_quXe0QF2g4150Q>
+    <xmx:fh8EZhKqCSFwQRNrfjP3exNHwU5dn1IHl5vHlnF3S64L9wHiDwQevg>
+    <xmx:fh8EZvwxaKXQwtwbKx3g9EPCzEjRIJ0oFmpstBaEEyUVrf_SBzmPiw>
+    <xmx:fh8EZtJBMxmMZ65YSYH5x7vzh1jrPoWrZ3XFVrubRTkIMkXpvAKy8w>
+    <xmx:fh8EZo-UWExgxYR91e7RImJ0MCDjFTCRzv6J-dozlM_wSipqzSWHqHIqQLE>
+Feedback-ID: i80c9496c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 27 Mar 2024 09:30:36 -0400 (EDT)
+From: =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	linux-pm@vger.kernel.org
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>,
+	linux-renesas-soc@vger.kernel.org,
+	=?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH v2 0/2] thermal: rcar_gen3: Use temperature approximation from datasheet
+Date: Wed, 27 Mar 2024 14:30:11 +0100
+Message-ID: <20240327133013.3982199-1-niklas.soderlund+renesas@ragnatech.se>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="giotfuwncs36wkgs"
-Content-Disposition: inline
-In-Reply-To: <9fe3d7a6-3b34-4c96-bd9f-510b41f9ab0d@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+Hello,
 
---giotfuwncs36wkgs
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+When the driver was first added the temperature approximation was
+reversed engineered from an out-of-tree driver as the datasheets of the
+time did not contain this information. Recent datasheets, both Gen3 and
+Gen4, now contains this information.
 
-Hello Hans,
+This series changes the temperature approximation formula to match
+what's described in the datasheets. It has been tested on both Gen3 and
+Gen4 with minimal changes in temperatures reported.
 
-On Wed, Mar 27, 2024 at 11:44:41AM +0100, Hans de Goede wrote:
-> On 3/27/24 11:36 AM, Hans de Goede wrote:
-> > On 3/26/24 8:50 PM, Sebastian Reichel wrote:
-> >> On Wed, 06 Mar 2024 20:37:04 +0100, Thomas Wei=DFschuh wrote:
-> >>> To validate the special formatting of the "charge_behaviour" sysfs
-> >>> property add it to the example driver.
-> >>
-> >> Applied, thanks!
-> >>
-> >> [1/1] power: supply: test-power: implement charge_behaviour property
-> >>       commit: 070c1470ae24317e7b19bd3882b300b6d69922a4
-> >=20
-> > Does this mean that you've also applied patches 1-3 of:
-> > "[PATCH v2 0/4] power: supply: core: align charge_behaviour format with=
- docs" ?
-> >=20
-> > Because this is a new version of 4/4 of that series and I think
-> > that the new test may depend on the fixes from patches 1-3
-> > of that series (which I'm reviewing now).
->=20
-> Ok, I have some not entirely trivial comments on patch 3/4 of that series.
-> I guess you (Sebastian) could address those while merging, or wait for
-> a v3 of the series.
+Patch 1 is a cleanup making the scope of a constant more clear. Patch 
+2 is the real work changing the approximation formula.
 
-I can't. Patches 1-3 are already in 6.9-rc1. It looks you did not
-get my replies, but they certainly have been captured by lore and
-obviously Thomas got them since he send a v3 with just the last
-patch:
+Compared to v1 patch 3/3 have been squashed intro v2 patch 2/2. This is 
+due to a suggestion from Geert where the precision in approximation 
+could be increased while removing the need for the changed done in v1 
+3/3, thanks Geert!
 
-https://lore.kernel.org/all/20240303-power_supply-charge_behaviour_prop-v2-=
-0-8ebb0a7c2409@weissschuh.net/
+See individual patches for detailed changelog.
 
-Anyways, I think your suggestions for further simplifications in
-patch 3 are sensible. They just require doing an extra patch now
-instead of being squashed.
+Niklas Söderlund (2):
+  thermal: rcar_gen3: Move Tj_T storage to shared private data
+  thermal: rcar_gen3: Update temperature approximation calculation
 
-Greetings,
+ drivers/thermal/rcar_gen3_thermal.c | 165 +++++++++++++++-------------
+ 1 file changed, 88 insertions(+), 77 deletions(-)
 
--- Sebastian
+-- 
+2.44.0
 
---giotfuwncs36wkgs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmYEHioACgkQ2O7X88g7
-+pqQnw//To7k/fV34WTlIy3RJYrPP9jiW3FUJc9rqM+qICHvpglsyhiIh//Zcl9G
-9CbZJ0xRXnS36ynoZhG5qsgAT3Uk4nTVN55xe/gUBMRRZoSPvoV+1L16fA+jEmpX
-5OtcGotIn9Vk/J3EGrwmFn4OdnSNKV0ek8w/k8aE5W2rPeIrMddNOqxm35t4mgZ4
-llaBFDrFGe8pg1MBo/h2mJkgo/62T/C5vOYe93uqtfkkwreTOBYzAkp9wJodXrmf
-kq7NaSVCr92WKoYbczmSH2OV5n2YaHO1IMVWs1OJYz+EAitFP+LcttYhICBsKyhr
-KMCD7jTQLggM/zIeW/gtUo6L+NsFc85ufmAo14fQYYRWnQQCv7pCLA7d7qyHLSO3
-6oVKk2s3Af8UslRWPu3kQG+Kg5gR8F2IENI89s57lfwwt0qiV65EPAzJIiENplRt
-fBn1rXhw5W/Jo7txIUGYvp4ggP0OYwA0hQbPhbS5qg0uNLsAHW/h/oAJleKi7qMv
-HASgR7dfXZFxQ0RQRheKgfVe1qfJpUnYt/YpJPFXP9AGV9Pqc/prIMG2Lb5LdHEt
-UTvr2nK2sK3tpZuRAzJ8lmVOVltOiUlZbfX8T7x0KqsK2q/JYeo0fjBkHCrp4R4q
-JsmXFtYXbmXuTXD47SuBqCjO1MdTAC8A7sM1DJrmq7i17qSocrk=
-=E25x
------END PGP SIGNATURE-----
-
---giotfuwncs36wkgs--
 
