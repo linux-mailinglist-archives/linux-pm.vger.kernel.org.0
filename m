@@ -1,115 +1,147 @@
-Return-Path: <linux-pm+bounces-5531-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5532-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20FA588EE46
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 19:30:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9ACE88EEA9
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 19:56:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CEAE528D0CD
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 18:30:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C94041C2A16B
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 18:56:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 946391386A5;
-	Wed, 27 Mar 2024 18:30:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD81F14F138;
+	Wed, 27 Mar 2024 18:56:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="CYUc2OW0"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="VV+0VnhV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5C8114A634;
-	Wed, 27 Mar 2024 18:30:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37E314D6FF
+	for <linux-pm@vger.kernel.org>; Wed, 27 Mar 2024 18:56:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711564217; cv=none; b=aMknRbYVNJuxgLqJzkngK5rQD+nmqf9uOnBk2Vh+BqxE7xjnKEr/8/hWsXNV3RctLqK5RkdVyySRD0e8OOd+i9/ObOWyQQKCA7iIki9KUeR/LMJaz4yL2TNXxvBqjkZ/sAFLS7cWx1J56zHXqHgD8oPtTQ4EmbuP3ecdTWefWYE=
+	t=1711565765; cv=none; b=G4xsA8ogjOw0FySKk6FGSIfCGYUofN8Cg+oxuO7VIOWWAL1WEuZDs7gOFOTt1eClaDWlGlIEm7FqvP8hMIGtGSFt+0LczaxysG6MXEiN2UyU7NeZvunC+rolQx4gCgsZO5mMFtP3mVHcatDsvbp8b0o09U6dSie8WGYLkNJmJ0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711564217; c=relaxed/simple;
-	bh=0TKqOpubxbHl9foZydLNsR931Tn1b4JgToZMrqb2qYs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=txzPtDk7tjgDTW9gj2yeq++Vdfi0mjJ3OsK6NHQ3SxGUMiEnuVVh7NDk2NalNQmfCMMLa2W0vuc8xrYiw0J7I4FUDN1Ez+grQUBxCYTt3aW0GE0EL1XfIDB5mXdogysWoLy0QRw1b+9MLAGslESbiTJuQ3S1W6gg2A62oXX+EDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=CYUc2OW0; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1711564204;
-	bh=0TKqOpubxbHl9foZydLNsR931Tn1b4JgToZMrqb2qYs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CYUc2OW0X6Rl8GYW+v3Qev0z/IAJwmRzWttL8z3UOja0Y0it2bav0/a2Hmr5szkJG
-	 SAd6/uJ5hNiSQGp/cqyQtCArmS7SPCyYbHYJRR15hzprGrkWjNt8pPQEauq0WjRrYC
-	 CJRAJEW8V1IfZNvGFRn/GwO2eXtp45iLAMxn7V8Q=
-Date: Wed, 27 Mar 2024 19:30:03 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: Sebastian Reichel <sebastian.reichel@collabora.com>, 
-	Konrad Dybcio <konradybcio@kernel.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] power: supply: test-power: implement charge_behaviour
- property
-Message-ID: <8661d581-838d-4bcd-96df-2ae4b7572c82@t-8ch.de>
-References: <20240306-power_supply-charge_behaviour_prop-v3-1-d04cf1f5f0af@weissschuh.net>
- <171148264419.185695.14027540198251584096.b4-ty@collabora.com>
- <6f0761a6-5f49-42e2-9b79-3e04c9d259a4@redhat.com>
- <9fe3d7a6-3b34-4c96-bd9f-510b41f9ab0d@redhat.com>
- <daactalkmzucga47cmncjkgnxyppouqnrj3vtsz34d5edrkmzu@p32ylpv3nqwx>
- <2e4f42b3-fe64-43f2-a55b-c745a6903ddc@redhat.com>
+	s=arc-20240116; t=1711565765; c=relaxed/simple;
+	bh=H/eTOCcjo9aN7qQPdq07jhsvhHbGanS8AyyyYf4Umi4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OQBh6UtTDQTfY7VzzH4w95JGnMwiNfmlM5lGg81hS+P9GomKaGJfUxmATxp8jshFLWAiK9EinQ8bah0zXwfioqiYL7ea+ySRw4G+ypDhwg0DWWaLvAUYq4/EA/NGuLK1Aig/GwPq5PedY3VZY/tMmYE4iyeonaEUCsaGr9Bc3T4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=VV+0VnhV; arc=none smtp.client-ip=209.85.208.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2d094bc2244so1042671fa.1
+        for <linux-pm@vger.kernel.org>; Wed, 27 Mar 2024 11:56:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1711565762; x=1712170562; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H/eTOCcjo9aN7qQPdq07jhsvhHbGanS8AyyyYf4Umi4=;
+        b=VV+0VnhVEki3ILwm72RPkCOxQjmcPyNa5rlAf+qZ438dgZs/xKJxeiQoGEQFJuioUx
+         Vbq6R5nNIlf+nucsCHFBGLM+zFicFajoPs2T/pbSHbYu53+e6BUPCLudWwwD6Rh0qDdh
+         UjWAQjJBP4arE5fOXwBcifFWLwxNak/p2DWXpGYSu2QhPEZhRjLJe8Iy50TttYq4OHd0
+         0jLYXTf6PPoLqMPVa+mZXoF9j7AebRY3eRxNXu8utctAhs4jdAuR5B/1FxO8zDXSq6x3
+         bE9Zn0QoIuRDVF9lB5roTPOXQBynJ3tDJa58OcvPzoTagZZJMlxjsrjqGM9S10RItQQ4
+         J1oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711565762; x=1712170562;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H/eTOCcjo9aN7qQPdq07jhsvhHbGanS8AyyyYf4Umi4=;
+        b=BNltGkq73nbnGgkRE0HmL+8shXg6vFYKRC1fNMqnyJa5UmOxYGqwbZl7orSK11DwfO
+         6KlkC8N/p9N0abXCuUtg3V1axopIUIIO2xc7dr9kNOuL9SmQde+S3VOEu3/dF5N/HwsF
+         RTcp/BWfd1En3K8KYgfJ+k/vxA5HdPDsNUJue/17z1WkIIhH/d/P0cDI57bxt3oU6sRN
+         Gz2XpNC+r30CbAhsJv1w1G5gsogoDrs3ktqvLINcnj9zH7BnUgeY++MCswsZT3ODdesD
+         9aAH/hnvD/fIQCGbU4z5pAn47LFkb2TLRbtx2s1Ebk8ojvhbQ5ABFeSI3HE6KAc2M2/0
+         LYug==
+X-Forwarded-Encrypted: i=1; AJvYcCUDcSo5NJd8lEjpss5g8CPSMOEWbOp+q2HUdgqMN815WbnsfNTK7sIkgp+4HhW/sLLhlcXG17AsdvZgRdK1x28E1BFJPPlU/Ig=
+X-Gm-Message-State: AOJu0Yx7tm5aoPj7FmoMhPAJN/S8qkBVdgVRSz6BLsQ9nn7CyfWN0mDD
+	z2PA2wR0H10rbC7Hdyv88NiGnzfOSpl+WFshT46vg4a2yRoV9OE9vxHGawMZ+QKeLifHSf4DxT3
+	Z3bi+kPkoHOxtH3ufi+8+fdN+cJce0DR1LFAuuQ==
+X-Google-Smtp-Source: AGHT+IFfaQnTAbP7+beuXcrrsmTHRVPtnb/RHBukbiOBMqcY0DDZ63uCDR3FE1XKpIsOQEkleMW2WlpbTNeUExk8xKY=
+X-Received: by 2002:ac2:4648:0:b0:515:9ae1:9a6e with SMTP id
+ s8-20020ac24648000000b005159ae19a6emr206133lfo.67.1711565762008; Wed, 27 Mar
+ 2024 11:56:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2e4f42b3-fe64-43f2-a55b-c745a6903ddc@redhat.com>
+References: <20240325131624.26023-1-brgl@bgdev.pl> <20240325131624.26023-2-brgl@bgdev.pl>
+ <af9def4e-c6d6-49d9-a457-68c40492587a@linaro.org>
+In-Reply-To: <af9def4e-c6d6-49d9-a457-68c40492587a@linaro.org>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Wed, 27 Mar 2024 19:55:50 +0100
+Message-ID: <CAMRc=Mdw9Ox5EC6=GdR_1kzWcfhpdbz1Hu3e7+GY9-wqTh2fhQ@mail.gmail.com>
+Subject: Re: [PATCH v6 01/16] regulator: dt-bindings: describe the PMU module
+ of the QCA6390 package
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Kalle Valo <kvalo@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konrad.dybcio@linaro.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Mark Brown <broonie@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Saravana Kannan <saravanak@google.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Arnd Bergmann <arnd@arndb.de>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Marek Szyprowski <m.szyprowski@samsung.com>, Alex Elder <elder@linaro.org>, 
+	Srini Kandagatla <srinivas.kandagatla@linaro.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Abel Vesa <abel.vesa@linaro.org>, 
+	Manivannan Sadhasivam <mani@kernel.org>, Lukas Wunner <lukas@wunner.de>, 
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, linux-bluetooth@vger.kernel.org, 
+	netdev@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Wed, Mar 27, 2024 at 7:17=E2=80=AFPM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 25/03/2024 14:16, Bartosz Golaszewski wrote:
+> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >
+> > The QCA6390 package contains discreet modules for WLAN and Bluetooth. T=
+hey
+> > are powered by the Power Management Unit (PMU) that takes inputs from t=
+he
+> > host and provides LDO outputs. This document describes this module.
+> >
+> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>
+> Can you start using b4?
+>
+> This is a friendly reminder during the review process.
+>
+> It looks like you received a tag and forgot to add it.
+>
+> If you do not know the process, here is a short explanation:
+> Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+> versions, under or above your Signed-off-by tag. Tag is "received", when
+> provided in a message replied to you on the mailing list. Tools like b4
+> can help here. However, there's no need to repost patches *only* to add
+> the tags. The upstream maintainer will do that for tags received on the
+> version they apply.
+>
+> https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/su=
+bmitting-patches.rst#L577
+>
+> If a tag was not added on purpose, please state why and what changed.
+>
 
-On 2024-03-27 14:34:00+0100, Hans de Goede wrote:
-> On 3/27/24 2:25 PM, Sebastian Reichel wrote:
-> > Hello Hans,
-> > 
-> > On Wed, Mar 27, 2024 at 11:44:41AM +0100, Hans de Goede wrote:
-> >> On 3/27/24 11:36 AM, Hans de Goede wrote:
-> >>> On 3/26/24 8:50 PM, Sebastian Reichel wrote:
-> >>>> On Wed, 06 Mar 2024 20:37:04 +0100, Thomas Weißschuh wrote:
-> >>>>> To validate the special formatting of the "charge_behaviour" sysfs
-> >>>>> property add it to the example driver.
-> >>>>
-> >>>> Applied, thanks!
-> >>>>
-> >>>> [1/1] power: supply: test-power: implement charge_behaviour property
-> >>>>       commit: 070c1470ae24317e7b19bd3882b300b6d69922a4
-> >>>
-> >>> Does this mean that you've also applied patches 1-3 of:
-> >>> "[PATCH v2 0/4] power: supply: core: align charge_behaviour format with docs" ?
-> >>>
-> >>> Because this is a new version of 4/4 of that series and I think
-> >>> that the new test may depend on the fixes from patches 1-3
-> >>> of that series (which I'm reviewing now).
-> >>
-> >> Ok, I have some not entirely trivial comments on patch 3/4 of that series.
-> >> I guess you (Sebastian) could address those while merging, or wait for
-> >> a v3 of the series.
-> > 
-> > I can't. Patches 1-3 are already in 6.9-rc1. It looks you did not
-> > get my replies, but they certainly have been captured by lore and
-> > obviously Thomas got them since he send a v3 with just the last
-> > patch:
-> > 
-> > https://lore.kernel.org/all/20240303-power_supply-charge_behaviour_prop-v2-0-8ebb0a7c2409@weissschuh.net/
-> > 
-> > Anyways, I think your suggestions for further simplifications in
-> > patch 3 are sensible. They just require doing an extra patch now
-> > instead of being squashed.
-> 
-> Ah I see that is fine too :)
-> 
-> Thomas, can you do a follow-up patch with the simplifications
-> which I suggested in my review of patch v2 3/4 ?
+As per the first sentence of the cover letter: I dropped review tags
+from the patches that changed significantly while keeping them for
+those that didn't. If there's a way to let your automation know about
+this, please let me know/point me in the right direction because I
+don't know about it.
 
-Will do!
-
-
-Thomas
+Bart
 
