@@ -1,175 +1,106 @@
-Return-Path: <linux-pm+bounces-5507-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5508-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14E8588E3E8
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 14:49:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87BC788E5F8
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 15:30:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BFA501F2EE6E
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 13:49:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B853293504
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 14:30:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E274185F2F;
-	Wed, 27 Mar 2024 12:25:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m0z86vyf"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8197F137C40;
+	Wed, 27 Mar 2024 12:55:41 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47444185F2A;
-	Wed, 27 Mar 2024 12:25:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF8EC12F37F;
+	Wed, 27 Mar 2024 12:55:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711542342; cv=none; b=bH5f+RXmE7XTibPGEM7vag7wIbJ5wb7kWJ9M5ffD0xJD4LOkYaZPi3IuKDk4/vAxdhun0XsnYmWxwLJtNunul8GKI8Wep0VGDTyGKbkBS8ohzLNUlpIFMzLLp4dDx1p1LzGr2LyMBjhMY8oOHtMt3RQyxSUPh4HRFt1BI2pQz0U=
+	t=1711544141; cv=none; b=K6E2oLhunFnQvbQNSRXveswcGDCAFo+gPypiUctUEd9Fyi5MsHVqm0/7+IesB9avRbGiPIr3UyjloE+urt/AyEle9FDTY8ZmWoUGynGAdR08f53gQpOD2f9yOGR2bh18uNg4mcW+uvH2HEFUO3VC1IWCWCbvsoL4HtAeE5cCmmc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711542342; c=relaxed/simple;
-	bh=g8aAK1q90K+weeG5gqtiqpcau3auqf/c8zLG3tGER8A=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RADmSmw7NSKjQsUGVUN7hRoYh1U7qPTxIJg8B0ux98Xy6Y3MWxlY76b5N+4RtHC3+k2OPlm2hNwwhAIjqj3qB+0rrSRJjLAKmQVsuHdDfQ5BH0RhAkQ2o/tGOyZOQNkPhpS6w6fuQSj81We/lp08N+esHPjJtGhtVHdBolKNwHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m0z86vyf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5223BC43390;
-	Wed, 27 Mar 2024 12:25:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711542342;
-	bh=g8aAK1q90K+weeG5gqtiqpcau3auqf/c8zLG3tGER8A=;
-	h=From:To:Cc:Subject:Date:From;
-	b=m0z86vyfN2zp02FmTvX2kITr3BLi3gzHvboYnJYZPnQJw8rHhU2ghnAbNxKuDVUB4
-	 lUXXG0WFcqJgfBekN2Keyw3Jqa64V+SWGrpySTb0ybiheCAdK2AUZsY6w6P+4oGIdB
-	 +sUsV8SmMHYKlorWdAf/pOMyb96pOvP8Fz3mprjK+pCr+z9cIaD3bW8xEDD/eIs84s
-	 qUdcaFJnRjlvsBWLyge6QflqSeau+lBkScNC9//gpBfoITGFXyOnD6CNAIelGjN1ul
-	 9AR9cqUFRk8KaD3gE2MevcFaivF9NsIJKCe5+z+eKupM3k2KNbzElFX+W+6ck8e0Xd
-	 FpJe5mETVZVdQ==
-From: Sasha Levin <sashal@kernel.org>
-To: stable@vger.kernel.org,
-	anton@tuxera.com
-Cc: Ingo Molnar <mingo@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: FAILED: Patch "x86/pm: Work around false positive kmemleak report in msr_build_context()" failed to apply to 4.19-stable tree
-Date: Wed, 27 Mar 2024 08:25:40 -0400
-Message-ID: <20240327122540.2840429-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1711544141; c=relaxed/simple;
+	bh=3K5FY9zYoZ9NIYrs8JeXAE2pagjbwPp+dZ93De3oyV4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EK9zmRbNONZeGke3kZ1HaNlR6pkeGZsagmRjRX7c6yD3qbYeHbagALPCEYFJrquVd1AVQZDaSDxYNkAUjUeKgN1bJ7qhV6Lp2cNNCZsvK2lbi6xeSkqxnJB84EROndmZM8amMtff6lhKhdQwMsc91k9PH0EFy0so/SrbWvxZRxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 27C1E2F4;
+	Wed, 27 Mar 2024 05:56:12 -0700 (PDT)
+Received: from [192.168.178.110] (unknown [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1CD983F7C5;
+	Wed, 27 Mar 2024 05:55:35 -0700 (PDT)
+Message-ID: <410c5da7-c79c-4607-9aa3-2e78d991d2d7@arm.com>
+Date: Wed, 27 Mar 2024 13:55:34 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Patchwork-Hint: ignore
-X-stable: review
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RESEND][PATCH v2 3/4] PM: EM: Add em_dev_update_chip_binning()
+Content-Language: en-US
+To: Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org, sboyd@kernel.org, nm@ti.com,
+ linux-samsung-soc@vger.kernel.org, daniel.lezcano@linaro.org,
+ rafael@kernel.org, viresh.kumar@linaro.org, krzysztof.kozlowski@linaro.org,
+ alim.akhtar@samsung.com, m.szyprowski@samsung.com, mhiramat@kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20240322110850.77086-1-lukasz.luba@arm.com>
+ <20240322110850.77086-4-lukasz.luba@arm.com>
+ <eb9f48f6-cca8-405b-82a2-352893a79f14@arm.com>
+ <30ee98e9-3d9a-4be8-8127-043f68a7dcb1@arm.com>
+From: Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <30ee98e9-3d9a-4be8-8127-043f68a7dcb1@arm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The patch below does not apply to the 4.19-stable tree.
-If someone wants it applied there, or to any other stable or longterm
-tree, then please email the backport, including the original git commit
-id to <stable@vger.kernel.org>.
+On 26/03/2024 21:32, Lukasz Luba wrote:
+> 
+> 
+> On 3/26/24 10:09, Dietmar Eggemann wrote:
+>> On 22/03/2024 12:08, Lukasz Luba wrote:
 
-Thanks,
-Sasha
+[...]
 
------------------- original commit in Linus's tree ------------------
+>>> +    return em_recalc_and_update(dev, pd, em_table);
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(em_dev_update_chip_binning);
+>>
+>> In the previous version of 'chip-binning' you were using the new EM
+>> interface em_dev_compute_costs() (1) which is now replaced by
+>> em_recalc_and_update() -> em_compute_costs().
+>>
+>> https://lkml.kernel.org/r/20231220110339.1065505-2-lukasz.luba@arm.com
+>>
+>> Which leaves (1) still unused.
+>>
+>> That was why my concern back then that we shouldn't introduce EM
+>> interfaces without a user:
+>>
+>> https://lkml.kernel.org/r/8fc499cf-fca1-4465-bff7-a93dfd36f3c8@arm.com
+>>
+>> What happens now with em_dev_compute_costs()?
+>>
+> 
+> For now it's not used, but modules which will create new EMs
+> with custom power values will use it. When such a module have
+> e.g. 5 EMs for one PD and only switches on one of them, then
+> this em_dev_compute_costs() will be used at setup for those
+> 5 EMs. Later it won't be used.
+> I don't wanted to combine the registration of new EM with
+> the compute cost, because that will create overhead in the
+> switching to new EM code path. Now we have only ~3us, which
+> was the main goal.
+> 
+> When our scmi-cpufreq get the support for EM update this
+> compute cost will be used there.
 
-From e3f269ed0accbb22aa8f25d2daffa23c3fccd407 Mon Sep 17 00:00:00 2001
-From: Anton Altaparmakov <anton@tuxera.com>
-Date: Thu, 14 Mar 2024 14:26:56 +0000
-Subject: [PATCH] x86/pm: Work around false positive kmemleak report in
- msr_build_context()
-
-Since:
-
-  7ee18d677989 ("x86/power: Make restore_processor_context() sane")
-
-kmemleak reports this issue:
-
-  unreferenced object 0xf68241e0 (size 32):
-    comm "swapper/0", pid 1, jiffies 4294668610 (age 68.432s)
-    hex dump (first 32 bytes):
-      00 cc cc cc 29 10 01 c0 00 00 00 00 00 00 00 00  ....)...........
-      00 42 82 f6 cc cc cc cc cc cc cc cc cc cc cc cc  .B..............
-    backtrace:
-      [<461c1d50>] __kmem_cache_alloc_node+0x106/0x260
-      [<ea65e13b>] __kmalloc+0x54/0x160
-      [<c3858cd2>] msr_build_context.constprop.0+0x35/0x100
-      [<46635aff>] pm_check_save_msr+0x63/0x80
-      [<6b6bb938>] do_one_initcall+0x41/0x1f0
-      [<3f3add60>] kernel_init_freeable+0x199/0x1e8
-      [<3b538fde>] kernel_init+0x1a/0x110
-      [<938ae2b2>] ret_from_fork+0x1c/0x28
-
-Which is a false positive.
-
-Reproducer:
-
-  - Run rsync of whole kernel tree (multiple times if needed).
-  - start a kmemleak scan
-  - Note this is just an example: a lot of our internal tests hit these.
-
-The root cause is similar to the fix in:
-
-  b0b592cf0836 x86/pm: Fix false positive kmemleak report in msr_build_context()
-
-ie. the alignment within the packed struct saved_context
-which has everything unaligned as there is only "u16 gs;" at start of
-struct where in the past there were four u16 there thus aligning
-everything afterwards.  The issue is with the fact that Kmemleak only
-searches for pointers that are aligned (see how pointers are scanned in
-kmemleak.c) so when the struct members are not aligned it doesn't see
-them.
-
-Testing:
-
-We run a lot of tests with our CI, and after applying this fix we do not
-see any kmemleak issues any more whilst without it we see hundreds of
-the above report. From a single, simple test run consisting of 416 individual test
-cases on kernel 5.10 x86 with kmemleak enabled we got 20 failures due to this,
-which is quite a lot. With this fix applied we get zero kmemleak related failures.
-
-Fixes: 7ee18d677989 ("x86/power: Make restore_processor_context() sane")
-Signed-off-by: Anton Altaparmakov <anton@tuxera.com>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Acked-by: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: stable@vger.kernel.org
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Link: https://lore.kernel.org/r/20240314142656.17699-1-anton@tuxera.com
----
- arch/x86/include/asm/suspend_32.h | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/arch/x86/include/asm/suspend_32.h b/arch/x86/include/asm/suspend_32.h
-index a800abb1a9925..d8416b3bf832e 100644
---- a/arch/x86/include/asm/suspend_32.h
-+++ b/arch/x86/include/asm/suspend_32.h
-@@ -12,11 +12,6 @@
- 
- /* image of the saved processor state */
- struct saved_context {
--	/*
--	 * On x86_32, all segment registers except gs are saved at kernel
--	 * entry in pt_regs.
--	 */
--	u16 gs;
- 	unsigned long cr0, cr2, cr3, cr4;
- 	u64 misc_enable;
- 	struct saved_msrs saved_msrs;
-@@ -27,6 +22,11 @@ struct saved_context {
- 	unsigned long tr;
- 	unsigned long safety;
- 	unsigned long return_address;
-+	/*
-+	 * On x86_32, all segment registers except gs are saved at kernel
-+	 * entry in pt_regs.
-+	 */
-+	u16 gs;
- 	bool misc_enable_saved;
- } __attribute__((packed));
- 
--- 
-2.43.0
-
-
-
+OK, I see. I checked the reloadable EM test module and
+em_dev_compute_costs() is used there like you described it.
 
 
