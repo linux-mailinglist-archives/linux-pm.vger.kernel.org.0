@@ -1,172 +1,175 @@
-Return-Path: <linux-pm+bounces-5505-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5506-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBF6988E166
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 14:01:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89B4D88E271
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 14:26:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EDCFD1C2A3FF
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 13:01:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 45EC329BF9B
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 13:26:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BA4C1586DC;
-	Wed, 27 Mar 2024 12:16:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48109171645;
+	Wed, 27 Mar 2024 12:21:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FsT7D7V3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B144A158218;
-	Wed, 27 Mar 2024 12:16:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 217A1171640;
+	Wed, 27 Mar 2024 12:21:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711541817; cv=none; b=Qt2X8mpH52RMEt6Xks8Aho9aD33ltbVtNTO//Vlk8GNl8116EzPVuiBliDqkdkfYNL/I6MZQJuhhdPZnNfHJ3uwyu8ByK4Kn+/+IM7jFPfFPdiG+Lcu5V6BmmroZDAuwg1lnJ3/wr+AV6GERDLRYAkmoIoR96eMfiCrIZci6CWY=
+	t=1711542107; cv=none; b=mU9y6xIkJunoFSlFY5B+9wHuwAdMq3EOv8al20A0rzGokxGKfK7kSb3wu61levVk/alg70P4ebhmdvS9rygbxoC3KJdTo4j1Ut49YcbB84YVfPejhmMDNCxG6pLQCidfNm5yXg/e868fKX/RcQv2Si6FM+nJilrFzGR5lbMPmnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711541817; c=relaxed/simple;
-	bh=hDcbCqoUsh/uSrDxeLcfI7VVyJoLbnAOut0GvCf9SsU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qwoBzdwBG+Ujd8RpmAouN5eaz4U43VL9wz0EetRWouwMlvy+a+vDQO8qUtHUZPHDnbXmbYPqnBk134ofXLil0nuFudaOFd1CCsljAInV+aGt0p0/R1ME9lcsr0JCX/thjGNwKYqJHBa6h+RGEJTRYBqqMns/oX+6aYjebwRkdwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 41CF52F4;
-	Wed, 27 Mar 2024 05:17:26 -0700 (PDT)
-Received: from minigeek.lan (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4B1763F694;
-	Wed, 27 Mar 2024 05:16:49 -0700 (PDT)
-Date: Wed, 27 Mar 2024 12:16:40 +0000
-From: Andre Przywara <andre.przywara@arm.com>
-To: Sudeep Holla <sudeep.holla@arm.com>
-Cc: Samuel Holland <samuel@sholland.org>, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-sunxi@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, Brandon Cheo Fusi
- <fusibrandon13@gmail.com>, Martin Botka <martin.botka@somainline.org>,
- Martin Botka <martin.botka1@gmail.com>, Chris Morgan
- <macroalpha82@gmail.com>, Ryan Walklin <ryan@testtoast.com>, Mark Rutland
- <mark.rutland@arm.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, Yangtao
- Li <tiny.windzz@gmail.com>, Viresh Kumar <vireshk@kernel.org>, Nishanth
- Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, Rob Herring
- <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
- Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- "Rafael J . Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v3 6/8] cpufreq: sun50i: Add H616 support
-Message-ID: <20240327121640.11bb5684@minigeek.lan>
-In-Reply-To: <ZgQJ1N3-JeSFwZJb@bogus>
-References: <20240326114743.712167-1-andre.przywara@arm.com>
-	<20240326114743.712167-7-andre.przywara@arm.com>
-	<65e86555-761e-4e26-8778-e2452876b5e4@sholland.org>
-	<20240327114608.2ffca28e@minigeek.lan>
-	<ZgQJ1N3-JeSFwZJb@bogus>
-Organization: Arm Ltd.
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
+	s=arc-20240116; t=1711542107; c=relaxed/simple;
+	bh=IsRoMauX6XuP6xXjrNy5AIgQyoyyA53paEbXLm6oM+M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hUIDXt/pa24Hyhx6c6p3ZlS4Dth9RAgcKTCnO9SZIArRX/vrjy0WBYOwIPbSwomiiP3pJJOP5xXRuhGKcJTvMVOUCuC0VpBAwe9AK8vzkAQtKxm1aYNIqvpgv4LSnSItRXLw5BVHaR9cpa10p0FcMFugXa1g6X8ixGVaOrHXSFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FsT7D7V3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA2D8C433C7;
+	Wed, 27 Mar 2024 12:21:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711542106;
+	bh=IsRoMauX6XuP6xXjrNy5AIgQyoyyA53paEbXLm6oM+M=;
+	h=From:To:Cc:Subject:Date:From;
+	b=FsT7D7V3BQFSqXzKrnSOq3s9jqASdDSF68yJ6gBEPdsTOu1iE9HujDo08fvx3PghE
+	 W4SgY4bICMURXAbUBu9fUGolh68iH2wxJGsqnab53B0ojl7OyxYksFcr4cEQX5cSJy
+	 SQDVUEpDyUczJodQi5SxPbNd1bt5wgQKl0D4ugLUDRlbiLcI5Zsa7O6/ebjgiX7vRh
+	 7jQrAPsl5h8ATIh/qQaztc0ii/+pUYwfiTDFbty4wLmA14K2+VfhwSUeLsL473s5CG
+	 JeaYk9nU8wE0waq0ECsidflFdekWF9opJHlZq4DjAt6BOwV/1PRnOLGftbDTilMwRY
+	 Lo1UYGafmLrvg==
+From: Sasha Levin <sashal@kernel.org>
+To: stable@vger.kernel.org,
+	anton@tuxera.com
+Cc: Ingo Molnar <mingo@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: FAILED: Patch "x86/pm: Work around false positive kmemleak report in msr_build_context()" failed to apply to 5.4-stable tree
+Date: Wed, 27 Mar 2024 08:21:44 -0400
+Message-ID: <20240327122144.2837099-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-Patchwork-Hint: ignore
+X-stable: review
+Content-Transfer-Encoding: 8bit
 
-On Wed, 27 Mar 2024 11:58:12 +0000
-Sudeep Holla <sudeep.holla@arm.com> wrote:
+The patch below does not apply to the 5.4-stable tree.
+If someone wants it applied there, or to any other stable or longterm
+tree, then please email the backport, including the original git commit
+id to <stable@vger.kernel.org>.
 
-Hi Sudeep,
+Thanks,
+Sasha
 
-> On Wed, Mar 27, 2024 at 11:46:08AM +0000, Andre Przywara wrote:
-> > On Tue, 26 Mar 2024 22:46:27 -0500
-> > Samuel Holland <samuel@sholland.org> wrote:
-> > 
-> > Hi Samuel,
-> >   
-> > > On 3/26/24 06:47, Andre Przywara wrote:  
-> > > > From: Martin Botka <martin.botka@somainline.org>
-> > > > 
-> > > > The Allwinner H616/H618 SoCs have different OPP tables per SoC version
-> > > > and die revision. The SoC version is stored in NVMEM, as before, though
-> > > > encoded differently. The die revision is in a different register, in the
-> > > > SRAM controller. Firmware already exports that value in a standardised
-> > > > way, through the SMCCC SoCID mechanism. We need both values, as some chips
-> > > > have the same SoC version, but they don't support the same frequencies and
-> > > > they get differentiated by the die revision.
-> > > > 
-> > > > Add the new compatible string and tie the new translation function to
-> > > > it. This mechanism not only covers the original H616 SoC, but also its
-> > > > very close sibling SoCs H618 and H700, so add them to the list as well.
-> > > > 
-> > > > Signed-off-by: Martin Botka <martin.botka@somainline.org>
-> > > > Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> > > > ---
-> > > >  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 61 ++++++++++++++++++++++++++
-> > > >  1 file changed, 61 insertions(+)
-> > > > 
-> > > > diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> > > > index bd170611c7906..f9e9fc340f848 100644
-> > > > --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> > > > +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> > > > @@ -10,6 +10,7 @@
-> > > >  
-> > > >  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> > > >  
-> > > > +#include <linux/arm-smccc.h>
-> > > >  #include <linux/cpu.h>
-> > > >  #include <linux/module.h>
-> > > >  #include <linux/nvmem-consumer.h>
-> > > > @@ -46,14 +47,71 @@ static u32 sun50i_h6_efuse_xlate(u32 speedbin)
-> > > >  		return 0;
-> > > >  }
-> > > >  
-> > > > +/*
-> > > > + * Judging by the OPP tables in the vendor BSP, the quality order of the
-> > > > + * returned speedbin index is 4 -> 0/2 -> 3 -> 1, from worst to best.
-> > > > + * 0 and 2 seem identical from the OPP tables' point of view.
-> > > > + */
-> > > > +static u32 sun50i_h616_efuse_xlate(u32 speedbin)
-> > > > +{
-> > > > +	int ver_bits = arm_smccc_get_soc_id_revision();    
-> > > 
-> > > This needs a Kconfig dependency on ARM_SMCCC_SOC_ID.  
-> > 
-> > That was my first impulse as well, but it's actually not true:
-> > ARM_SMCCC_SOC_ID just protects the sysfs export code, not this function
-> > here. That does just depend on HAVE_ARM_SMCCC_DISCOVERY, which gets
-> > selected by ARM_GIC_V3, which gets selected by CONFIG_ARM64. So the
-> > arm64 kernel is safe.  
-> 
-> It is safe to add the dependency explicitly so that if GICV3 decides to drop
-> it, this won't be affected. Thoughts ?
+------------------ original commit in Linus's tree ------------------
 
-That would be one possibility, but since there are patches on the
-list[1] that use this driver for the Allwinner D1 with RISC-V cores,
-this would need to be revisited then anyway. 
+From e3f269ed0accbb22aa8f25d2daffa23c3fccd407 Mon Sep 17 00:00:00 2001
+From: Anton Altaparmakov <anton@tuxera.com>
+Date: Thu, 14 Mar 2024 14:26:56 +0000
+Subject: [PATCH] x86/pm: Work around false positive kmemleak report in
+ msr_build_context()
 
-> > Now apart from ARM(32) (where the situation seems a bit more complex) I
-> > just realise that this would torpedo Brandon's D1 efforts, so I need to
-> > add this change I played with to provide an alternative:
-> >
-> > static int get_soc_id_revision(void)
-> > {
-> > #ifdef CONFIG_HAVE_ARM_SMCCC_DISCOVERY
-> > 	return arm_smccc_get_soc_id_revision();
-> > #else
-> > 	/* Return the value for the worse die revision, to be safe. */
-> > 	return 2;
-> > #endif
-> > }
-> > 
-> > Does that look acceptable, despite the #ifdef?
-> >   
-> 
-> if(IS_ENABLED(CONFIG_HAVE_ARM_SMCCC_DISCOVERY)) instead ?
+Since:
 
-Well, but this would rely on at least the prototype to be visible,
-right? And then on the toolchain to optimise away the call, so that the
-symbol doesn't even appear in the object file?
-So would this work for the RISC-V case?
+  7ee18d677989 ("x86/power: Make restore_processor_context() sane")
 
-Cheers,
-Andre
+kmemleak reports this issue:
 
-[1]
-https://lore.kernel.org/linux-sunxi/20231218110543.64044-1-fusibrandon13@gmail.com/T/#t
+  unreferenced object 0xf68241e0 (size 32):
+    comm "swapper/0", pid 1, jiffies 4294668610 (age 68.432s)
+    hex dump (first 32 bytes):
+      00 cc cc cc 29 10 01 c0 00 00 00 00 00 00 00 00  ....)...........
+      00 42 82 f6 cc cc cc cc cc cc cc cc cc cc cc cc  .B..............
+    backtrace:
+      [<461c1d50>] __kmem_cache_alloc_node+0x106/0x260
+      [<ea65e13b>] __kmalloc+0x54/0x160
+      [<c3858cd2>] msr_build_context.constprop.0+0x35/0x100
+      [<46635aff>] pm_check_save_msr+0x63/0x80
+      [<6b6bb938>] do_one_initcall+0x41/0x1f0
+      [<3f3add60>] kernel_init_freeable+0x199/0x1e8
+      [<3b538fde>] kernel_init+0x1a/0x110
+      [<938ae2b2>] ret_from_fork+0x1c/0x28
+
+Which is a false positive.
+
+Reproducer:
+
+  - Run rsync of whole kernel tree (multiple times if needed).
+  - start a kmemleak scan
+  - Note this is just an example: a lot of our internal tests hit these.
+
+The root cause is similar to the fix in:
+
+  b0b592cf0836 x86/pm: Fix false positive kmemleak report in msr_build_context()
+
+ie. the alignment within the packed struct saved_context
+which has everything unaligned as there is only "u16 gs;" at start of
+struct where in the past there were four u16 there thus aligning
+everything afterwards.  The issue is with the fact that Kmemleak only
+searches for pointers that are aligned (see how pointers are scanned in
+kmemleak.c) so when the struct members are not aligned it doesn't see
+them.
+
+Testing:
+
+We run a lot of tests with our CI, and after applying this fix we do not
+see any kmemleak issues any more whilst without it we see hundreds of
+the above report. From a single, simple test run consisting of 416 individual test
+cases on kernel 5.10 x86 with kmemleak enabled we got 20 failures due to this,
+which is quite a lot. With this fix applied we get zero kmemleak related failures.
+
+Fixes: 7ee18d677989 ("x86/power: Make restore_processor_context() sane")
+Signed-off-by: Anton Altaparmakov <anton@tuxera.com>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Acked-by: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: stable@vger.kernel.org
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Link: https://lore.kernel.org/r/20240314142656.17699-1-anton@tuxera.com
+---
+ arch/x86/include/asm/suspend_32.h | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/arch/x86/include/asm/suspend_32.h b/arch/x86/include/asm/suspend_32.h
+index a800abb1a9925..d8416b3bf832e 100644
+--- a/arch/x86/include/asm/suspend_32.h
++++ b/arch/x86/include/asm/suspend_32.h
+@@ -12,11 +12,6 @@
+ 
+ /* image of the saved processor state */
+ struct saved_context {
+-	/*
+-	 * On x86_32, all segment registers except gs are saved at kernel
+-	 * entry in pt_regs.
+-	 */
+-	u16 gs;
+ 	unsigned long cr0, cr2, cr3, cr4;
+ 	u64 misc_enable;
+ 	struct saved_msrs saved_msrs;
+@@ -27,6 +22,11 @@ struct saved_context {
+ 	unsigned long tr;
+ 	unsigned long safety;
+ 	unsigned long return_address;
++	/*
++	 * On x86_32, all segment registers except gs are saved at kernel
++	 * entry in pt_regs.
++	 */
++	u16 gs;
+ 	bool misc_enable_saved;
+ } __attribute__((packed));
+ 
+-- 
+2.43.0
+
+
+
+
 
