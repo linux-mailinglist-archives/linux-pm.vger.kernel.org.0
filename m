@@ -1,40 +1,40 @@
-Return-Path: <linux-pm+bounces-5508-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5509-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87BC788E5F8
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 15:30:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18E1F88E601
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 15:30:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B853293504
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 14:30:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4AB951C2D773
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 14:30:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8197F137C40;
-	Wed, 27 Mar 2024 12:55:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76A68138497;
+	Wed, 27 Mar 2024 12:56:14 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF8EC12F37F;
-	Wed, 27 Mar 2024 12:55:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74468138481;
+	Wed, 27 Mar 2024 12:56:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711544141; cv=none; b=K6E2oLhunFnQvbQNSRXveswcGDCAFo+gPypiUctUEd9Fyi5MsHVqm0/7+IesB9avRbGiPIr3UyjloE+urt/AyEle9FDTY8ZmWoUGynGAdR08f53gQpOD2f9yOGR2bh18uNg4mcW+uvH2HEFUO3VC1IWCWCbvsoL4HtAeE5cCmmc=
+	t=1711544174; cv=none; b=huUIwCsCOBzzhkwW/oBHM0RdU75cbDlUj0rlPhhnkQcNLaX0DFrnbTElLr7xYr8Iyb+2jnMC+9njJk139v69eLkoA7trO6+l3rD7rrQz/65yDtQP+isfiqZ6ahlLkP4o1JkdFnnYBOq/CJ6fjqe/IHQd7/UygfH2CL0r2W7K3A0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711544141; c=relaxed/simple;
-	bh=3K5FY9zYoZ9NIYrs8JeXAE2pagjbwPp+dZ93De3oyV4=;
+	s=arc-20240116; t=1711544174; c=relaxed/simple;
+	bh=WZJCVOkyTHYxcqXrLL5fJDRlkvGm4gLHduI+I7k25ns=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EK9zmRbNONZeGke3kZ1HaNlR6pkeGZsagmRjRX7c6yD3qbYeHbagALPCEYFJrquVd1AVQZDaSDxYNkAUjUeKgN1bJ7qhV6Lp2cNNCZsvK2lbi6xeSkqxnJB84EROndmZM8amMtff6lhKhdQwMsc91k9PH0EFy0so/SrbWvxZRxA=
+	 In-Reply-To:Content-Type; b=Qi+LW77ETyP7KBKktOxXivuEz6PoV98WGd9i0uxVhkI3JM028WJOCtnHaBGzXTGr0sw7TJ4Jk6mzramR9k+6C6yHQoTnK8SwwKFDcGA8Px0q8HlH5sQAkLoY+k1+D8gbAjAXEvG6Ha9vwrJnKgU8sZVx9pW5M8DdNEA5/s163R0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 27C1E2F4;
-	Wed, 27 Mar 2024 05:56:12 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DDD2C2F4;
+	Wed, 27 Mar 2024 05:56:45 -0700 (PDT)
 Received: from [192.168.178.110] (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1CD983F7C5;
-	Wed, 27 Mar 2024 05:55:35 -0700 (PDT)
-Message-ID: <410c5da7-c79c-4607-9aa3-2e78d991d2d7@arm.com>
-Date: Wed, 27 Mar 2024 13:55:34 +0100
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 914273F7C5;
+	Wed, 27 Mar 2024 05:56:09 -0700 (PDT)
+Message-ID: <e02ca745-52df-4210-b175-f4ef278d81d8@arm.com>
+Date: Wed, 27 Mar 2024 13:56:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,7 +42,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RESEND][PATCH v2 3/4] PM: EM: Add em_dev_update_chip_binning()
+Subject: Re: [RESEND][PATCH v2 4/4] soc: samsung: exynos-asv: Update Energy
+ Model after adjusting voltage
 Content-Language: en-US
 To: Lukasz Luba <lukasz.luba@arm.com>
 Cc: linux-arm-kernel@lists.infradead.org, sboyd@kernel.org, nm@ti.com,
@@ -51,56 +52,56 @@ Cc: linux-arm-kernel@lists.infradead.org, sboyd@kernel.org, nm@ti.com,
  alim.akhtar@samsung.com, m.szyprowski@samsung.com, mhiramat@kernel.org,
  linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 References: <20240322110850.77086-1-lukasz.luba@arm.com>
- <20240322110850.77086-4-lukasz.luba@arm.com>
- <eb9f48f6-cca8-405b-82a2-352893a79f14@arm.com>
- <30ee98e9-3d9a-4be8-8127-043f68a7dcb1@arm.com>
+ <20240322110850.77086-5-lukasz.luba@arm.com>
+ <59d37960-cf19-4b10-802f-59d42496c133@arm.com>
+ <d5d6ae17-3ba1-4cb8-909f-865e47bfa45b@arm.com>
 From: Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <30ee98e9-3d9a-4be8-8127-043f68a7dcb1@arm.com>
+In-Reply-To: <d5d6ae17-3ba1-4cb8-909f-865e47bfa45b@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 26/03/2024 21:32, Lukasz Luba wrote:
+On 26/03/2024 21:12, Lukasz Luba wrote:
+> Hi Dietmar,
 > 
-> 
-> On 3/26/24 10:09, Dietmar Eggemann wrote:
+> On 3/26/24 11:20, Dietmar Eggemann wrote:
 >> On 22/03/2024 12:08, Lukasz Luba wrote:
-
-[...]
-
->>> +    return em_recalc_and_update(dev, pd, em_table);
->>> +}
->>> +EXPORT_SYMBOL_GPL(em_dev_update_chip_binning);
 >>
->> In the previous version of 'chip-binning' you were using the new EM
->> interface em_dev_compute_costs() (1) which is now replaced by
->> em_recalc_and_update() -> em_compute_costs().
+>> [...]
 >>
->> https://lkml.kernel.org/r/20231220110339.1065505-2-lukasz.luba@arm.com
+>>> @@ -97,9 +98,17 @@ static int exynos_asv_update_opps(struct
+>>> exynos_asv *asv)
+>>>               last_opp_table = opp_table;
+>>>                 ret = exynos_asv_update_cpu_opps(asv, cpu);
+>>> -            if (ret < 0)
+>>> +            if (!ret) {
+>>> +                /*
+>>> +                 * When the voltage for OPPs successfully
+>>> +                 * changed, update the EM power values to
+>>> +                 * reflect the reality and not use stale data
 >>
->> Which leaves (1) still unused.
+>> At this point, can we really say that the voltage has changed?
 >>
->> That was why my concern back then that we shouldn't introduce EM
->> interfaces without a user:
+>>    exynos_asv_update_cpu_opps()
 >>
->> https://lkml.kernel.org/r/8fc499cf-fca1-4465-bff7-a93dfd36f3c8@arm.com
+>>      ...
+>>      ret = dev_pm_opp_adjust_voltage()
+>>      if (!ret)
+>>        em_dev_update_chip_binning()
+>>      ...
 >>
->> What happens now with em_dev_compute_costs()?
+>> dev_pm_opp_adjust_voltage() also returns 0 when the voltage value stays
+>> the same?
 >>
+>> [...]
 > 
-> For now it's not used, but modules which will create new EMs
-> with custom power values will use it. When such a module have
-> e.g. 5 EMs for one PD and only switches on one of them, then
-> this em_dev_compute_costs() will be used at setup for those
-> 5 EMs. Later it won't be used.
-> I don't wanted to combine the registration of new EM with
-> the compute cost, because that will create overhead in the
-> switching to new EM code path. Now we have only ~3us, which
-> was the main goal.
-> 
-> When our scmi-cpufreq get the support for EM update this
-> compute cost will be used there.
+> The comment for the dev_pm_opp_adjust_voltage() says that it
+> returns 0 if no modification was done or modification was
+> successful. So I cannot distinguish in that driver code, but
+> also there is no additional need to do it IMO (even framework
+> doesn't do this).
 
-OK, I see. I checked the reloadable EM test module and
-em_dev_compute_costs() is used there like you described it.
+Precisely. That's why the added comment in exynos_asv_update_opps():
+"When the voltage for OPPs successfully __changed__, ..." is somehow
+misleading IMHO.
 
 
