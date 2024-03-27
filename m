@@ -1,204 +1,154 @@
-Return-Path: <linux-pm+bounces-5493-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5494-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3573288DBF0
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 12:04:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EB9E88DC04
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 12:06:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA7E61F2CBFB
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 11:04:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 225431F2D12D
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 11:06:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABA8547A7D;
-	Wed, 27 Mar 2024 11:04:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05470548FB;
+	Wed, 27 Mar 2024 11:06:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XzKpiN29"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k/TXKLmF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFE4E374C6
-	for <linux-pm@vger.kernel.org>; Wed, 27 Mar 2024 11:04:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AA9B1CA87;
+	Wed, 27 Mar 2024 11:06:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711537465; cv=none; b=ojH0Et+KcIuGy5zKIWTR5RBopLd/grvXbg98rI8PBfSVx4ApxW274pHoxNm+Hm8hSlr6r1hX1IiRdXftGBFogLJxa3lQMjwGPaJGPnemNGVzW68xLh6xdkCBeN1NiQhQi5Z/OPs8cj5gdgU+hobB/V0d52KPQeFK0YYoShwy1vQ=
+	t=1711537585; cv=none; b=YIp9S30TKe9Yz8+bAZurZtyQPX2LLJu+PbAr4dAo0MPm8efwvneY+owAKG98ATTMWlT2fusuC4/xkSEb+7MhIKW4N5PirrW51SdKu2RFBovZyDBeKTXBanF1qNKO3H57paICvKO2rlDTaY3Nokgmypz2WYcKrSYTNTMnSLJBV5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711537465; c=relaxed/simple;
-	bh=/SczowyxxvpDJ5ee5m18UEMjHGgSK1BcBvy5KMTHBvA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BBZMXM+KF8jGOvZsapphMPfSpKT+3VzoLqPCC2qdoqfH9EADp1BIgmnQRwIgtSw8NT0QaZ3ELgkHiFg+KDKqAy0CC+q8WPA8sLDlsuo40KKQ/QjgpbmvIM+giIxhvZrXMNK62nga6An546OBtA9dOLO5MSw9vpJymj7BRfz34To=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XzKpiN29; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2d687da75c4so74742651fa.0
-        for <linux-pm@vger.kernel.org>; Wed, 27 Mar 2024 04:04:23 -0700 (PDT)
+	s=arc-20240116; t=1711537585; c=relaxed/simple;
+	bh=q3gcyXoKhRYf2fa69N6NdBZzbRfzKOTZ8xEHtHAX8IU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=M5p+2X7MIDSIjm64B2fro56lSneYrfpMt3ZIzw480H9MF3rb+KRIy37+Afd2mSYOs4QHprGNOCkfHV2viZKqG6yYs0OgIHGqkIi1AxxPVI6Mbq3oxVXgyrI9EiqDf5q4FGnfazDRDwPqdVW8BwY0x84I35ubZHYqYz6cUME+04I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k/TXKLmF; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-513da1c1f26so8189100e87.3;
+        Wed, 27 Mar 2024 04:06:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711537462; x=1712142262; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=wUaMf1iP80xdDLh0OzXWHzyf7XtnHr+wu/kj3Mk1yrE=;
-        b=XzKpiN29O2r1gk+3QCJC+JQKLE1Ea3sAlzQFQYzFKLQVtPUW+47rBqC0lpM+27wJvl
-         9gcJv2q65G+BX2ccUcfa9yEkYbFZNb9F8ylNwr69uaw/wg5lcSJRR+TKIzO8mliZmtz3
-         sOdMrlmNiFNj4RHK2ifl5opnFwi/QhGNIV9IMVlFV6letB05/Lam5KtSzwsbCDh6rHfg
-         qFl+8AR7lALwQYzvmnZ4NB9EgAW/o6c3XP1sNdCxxrqxAdTQByYVxtJTK4SirVmuo6yW
-         hYUVCUZYp8/2q/a6LK2H5/Aazo/xpvPjCTDExmuphWeQmjuQxiykGGwwf/y0QfX8LhPc
-         Dzmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711537462; x=1712142262;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1711537582; x=1712142382; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wUaMf1iP80xdDLh0OzXWHzyf7XtnHr+wu/kj3Mk1yrE=;
-        b=aWHKicL8TJkDvKl8hyz7MPvvTmCM2yvr1Cqtms1bGsmtjgDYlITMsWzoQOjpO5nycn
-         RS/i8/MA5jj21izk7USm9DvZubpf++FGWy2cU3b+JJtcIFMlqpAtJNSFFX9WJYj7Kkhn
-         3pwjwnSyc22AVdQy1bAKg5xVRRMHD9rivSocEO6O6F6tuxF01DO2Ej55iFo1Y8tcxKMa
-         D17WZFzo3gw3du1/XwSsMCH7x2he4qNjCAS/Oeyt9S2Q7EfDoNWCt7b2gSfBcaYTd9ec
-         FBpYUeGpI5FLLevzJOtandeyOBSDllb8ijrxRzt1wb5HEotAnBoFiUWA92us7kn98LYo
-         qTug==
-X-Forwarded-Encrypted: i=1; AJvYcCV1YMEyrUOqs7aAh4QDr/r79cY6rWdWS1e5sSyI7xGq6jSz6YbyzD2RlJafEyS33F0JmZ9WPCb4Z3QQ/roximMs0Gj2PborYPk=
-X-Gm-Message-State: AOJu0Yzr+qYz3LKFhgL0dVumPQ7eh+0+5KPvMk9sg0fBHeHJ3k2OG7pY
-	JeJ6qfMTXs8ELrMv3zv19Hn6EQyfT71nLrB8iG4sW8Fy3f7cbnjXvC80WnORFDU=
-X-Google-Smtp-Source: AGHT+IHMtf/SNAeFSEBXCHSu4TonpIb/9voXFk6aDr1n/oHR7DVgJUncgnXqtT8og0LuvuP+YLOo9g==
-X-Received: by 2002:a2e:82d7:0:b0:2d6:da72:b5e with SMTP id n23-20020a2e82d7000000b002d6da720b5emr2727732ljh.28.1711537461668;
-        Wed, 27 Mar 2024 04:04:21 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.206.205])
-        by smtp.gmail.com with ESMTPSA id c21-20020a05600c0a5500b004140c161e8dsm1807115wmq.43.2024.03.27.04.04.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Mar 2024 04:04:21 -0700 (PDT)
-Message-ID: <c59f2f33-ad6b-469d-96be-9345920370b4@linaro.org>
-Date: Wed, 27 Mar 2024 12:04:19 +0100
+        bh=ayI6BKXEd9WeONlek9wdLp9tj6kKhJtPOmCx1zPxi9Y=;
+        b=k/TXKLmFi41IFRjM3qn5T1INI/8CgASOWtpdJjoZxrGL1omHZzd6DTgaD6jomsqWbv
+         t8fciV7t8NO9c21jhna8pmkXLFetJLeRQi6OjvlIk6m6Y81eCupau+zP2IaDVZgnXlrk
+         jg6hCPx5YzW6jNY5UKYTGWOyqcRGX+/7x93UZ5Qy/NhPgiMhP3hSkZGtoO86kjjHjEfj
+         wYfMFzfQcx6VBBnWjXSTzznTDCMAF+1IwZk3Ovvw25Z1YWKD57OY5z0SQGh2KYnlfBqt
+         mTrNaMphQaBUqunricz0UnXsHT7dClh2Iry2fvali3KJKnkCXnq78ziz1DHZebiKUHMh
+         cb9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711537582; x=1712142382;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ayI6BKXEd9WeONlek9wdLp9tj6kKhJtPOmCx1zPxi9Y=;
+        b=YOhglBs3VBXAufvziOTopxYfiscEXO5SeNOmlVFSKRNX3d6sIzkKsr0oWbeQDN7jfC
+         1kESEJe8sxi47RN5rKNuTkf+TrMDxZ1KMDk4LXfKtPrcVUTmcbXuS78U4l+J9kNtNfHA
+         R7WykV7EhN50Shllwg6alTyjjiPUwFg9IkX26q8eg5emYXb9ioZHUqvxwuY9pmaFYZ7t
+         pRfhk/jOaJS+r83KWkBArcU8g2XLisHGcBcZNY003aBTYLaKfc6LFGykbnV014I5MI8i
+         r4JpN7h+nf6J8JY52tplpfDF7oNa+pDNTemqTcMjlN8EVsEDezNqjerzMUqtmZSS9OLY
+         6wAA==
+X-Forwarded-Encrypted: i=1; AJvYcCUOYxc40I3lsj5NmHjSBgRC536dqaWcFfPzHMZiQm8qbYXOCp+omr6Ie/H0WDWDdOuZ+MGE0pat/bWRvb7+J0xm1u9Kgmhd056ZZkzM4MgnWgAJxXRj59o2dioOzvGhnW8P+kT6gQe6x1wQ/99VYH+NkxOOZRVbZjB21kNZItxXHel9L2Qim8U5qI9v5XYZyU2bJ2oBBkNNEQRkjto9sEbg/J/ldAQ56A==
+X-Gm-Message-State: AOJu0YwYxX5/iZFj9XtgFagu922FKtKW9eAsm2KEFObIJdypzEOEC3sI
+	0JoHfBVCle0p2zvGm4sH6AQgW25xlOT4kh3mjIMUnUWS47CewhBelUH+5azcuSrlgxnXJWDyGzh
+	xKQpo85X3JKHU9Z2Ew8ekSXcHGl/91MK+n7I=
+X-Google-Smtp-Source: AGHT+IFnYy+AySgWrpXBEZGt4xGMs0W5jejiOVEiyuTICA6bnE05GDy9uSYbdCvYonGwLXIiFkEPLNwKn6JkxI2YreM=
+X-Received: by 2002:ac2:5f91:0:b0:513:184a:ff5f with SMTP id
+ r17-20020ac25f91000000b00513184aff5fmr2552363lfe.50.1711537582050; Wed, 27
+ Mar 2024 04:06:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] dt-bindings: power: Add mediatek larb definition
-To: =?UTF-8?B?WXUtY2hhbmcgTGVlICjmnY7nprnnkosp?= <Yu-chang.Lee@mediatek.com>,
- =?UTF-8?B?TWFuZHlKSCBMaXUgKOWKieS6uuWDlik=?= <MandyJH.Liu@mediatek.com>,
- "conor+dt@kernel.org" <conor+dt@kernel.org>,
- "robh@kernel.org" <robh@kernel.org>,
- "krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
- "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
- "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
- "angelogioacchino.delregno@collabora.com"
- <angelogioacchino.delregno@collabora.com>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- Project_Global_Chrome_Upstream_Group
- <Project_Global_Chrome_Upstream_Group@mediatek.com>,
- =?UTF-8?B?WGl1ZmVuZyBMaSAo5p2O56eA5bOwKQ==?= <Xiufeng.Li@mediatek.com>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>, =?UTF-8?B?RmFuIENoZW4gKOmZs+WHoSk=?=
- <fan.chen@mediatek.com>
-References: <20240327055732.28198-1-yu-chang.lee@mediatek.com>
- <20240327055732.28198-3-yu-chang.lee@mediatek.com>
- <6dd9959e-f741-47af-b10a-1894f72ae78f@linaro.org>
- <c3ca3d90-898e-44b0-ad0f-dd78c09c5fcd@linaro.org>
- <f3eedfb3495bb9c28b5cbf466387c24822c5b6f6.camel@mediatek.com>
- <7ff9c4c7-3b56-4a5b-95b7-c37cbf8bcd6d@linaro.org>
- <b957b072d5d88ed315982e914a7f700e0ccafb83.camel@mediatek.com>
- <038ccb20-71cb-40d2-9720-ce1a0d3eac8c@linaro.org>
- <7f24ca2806a7199e4de6fad17b8dc1f127c82180.camel@mediatek.com>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <7f24ca2806a7199e4de6fad17b8dc1f127c82180.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20240324150107.976025-1-hpa@redhat.com> <20240324150107.976025-2-hpa@redhat.com>
+ <CAHp75Ve5201KNdjvDZYq_unHTKp9wZXPWZXDgStP8y+XjtnWWg@mail.gmail.com> <CAEth8oG7_qFuUrL+kX3ezNatWqKPqT-qiaO5NGY-N3F3ufQL9w@mail.gmail.com>
+In-Reply-To: <CAEth8oG7_qFuUrL+kX3ezNatWqKPqT-qiaO5NGY-N3F3ufQL9w@mail.gmail.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Wed, 27 Mar 2024 13:05:45 +0200
+Message-ID: <CAHp75VdQtmT0G1dFhdY7TrcBj2W6GhOaVv90_T1e3MdEtiduQQ@mail.gmail.com>
+Subject: Re: [PATCH v5 RESEND 1/6] platform: x86-android-tablets: other: Add
+ swnode for Xiaomi pad2 indicator LED
+To: Kate Hsuan <hpa@redhat.com>
+Cc: Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org, 
+	platform-driver-x86@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>, 
+	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	=?UTF-8?Q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>, 
+	linux-kernel@vger.kernel.org, Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 27/03/2024 11:56, Yu-chang Lee (李禹璋) wrote:
-> On Wed, 2024-03-27 at 11:43 +0100, Krzysztof Kozlowski wrote:
->>  	 
->> External email : Please do not click links or open attachments until
->> you have verified the sender or the content.
->>  On 27/03/2024 11:39, Yu-chang Lee (李禹璋) wrote:
->>>>>>
->>>>> Hi,
->>>>>
->>>>> I will double check the format of yaml for the next version,
->> sorry
->>>> for
->>>>> inconvenience. But I did test it on mt8188 chromebook, the reason
->>>> why
->>>>
->>>> How do you test a binding on chromebook?
->>>>
->>>>> power domain need larb node is that when mtcmos power on, signal
->>>> glitch
->>>>> may produce. Power domain driver must reset larb when this happen
->>>> to 
->>>>> prevent dummy transaction on bus. That why I need larb node in
->> dts.
->>>>
->>>> No one talks here about larb node...
->>>
->>> Sorry, May you elaborate on what information I need to provide to
->> you
->>> or it is just a syntax problem I need to fix?
->>
->> Please explain the purpose of this property (how is it going to be
->> used by drivers)and what does it represent.
->>
-> 
-> It represent SMI LARB(Local ARBitration). In power domain driver when
-> power on power domain, It need to reset LARB to prevent potential power
-> glitch which may cause dummy transaction on bus. Without taking care of
-> this issue it often leads to camera hang in stress test.
+On Wed, Mar 27, 2024 at 9:58=E2=80=AFAM Kate Hsuan <hpa@redhat.com> wrote:
+> On Mon, Mar 25, 2024 at 3:30=E2=80=AFAM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
+> > On Sun, Mar 24, 2024 at 5:02=E2=80=AFPM Kate Hsuan <hpa@redhat.com> wro=
+te:
 
-That sounds rather like missing resets... or something else connecting
-these devices. Maybe the explanation is just imprecise...
+...
 
-Best regards,
-Krzysztof
+> > > +/* main fwnode for ktd2026 */
+> > > +static const struct software_node ktd2026_node =3D {
+> > > +       .name =3D "ktd2026"
+> >
+> > Leave a comma, this is not a terminator.
+> >
+> > > +};
+> >
+> > When I asked about the name I relied on the fact that you have an idea
+> > how it works. So, assuming my understanding is correct, this platform
+> > may not have more than a single LED of this type. Dunno if we need a
+> > comment about this.
+>
+> I'll make a comment to describe the configuration.
+> This LED controller can be configured to an RGB LED like this. Also,
+> it can be configured as three single-color (RGB) LEDs to show red,
+> green, and blue only.
+> I think the name can be "ktd2026-multi-color". Is it good for you?
 
+My point here is that the name is static and if you have more than one
+LED in the system, the second one won't be registered due to sysfs
+name collisions. Question here is how many of these types of LEDs are
+possible on the platform? If more than one, the name has to be
+dropped. Writing this I think a comment would be good to have in any
+case.
+
+...
+
+> > > +static int __init xiaomi_mipad2_init(void)
+> > > +{
+> > > +       return software_node_register_node_group(ktd2026_node_group);
+> > > +}
+> > > +
+> > > +static void xiaomi_mipad2_exit(void)
+> >
+> > __exit ?
+> No need.
+> x86-andriod-tablet is based on platform_driver and platform_device so
+> it doesn't need __exit.
+>
+> I put __exit and the compiler complained about the warning.
+> =3D=3D=3D
+> WARNING: modpost:
+> drivers/platform/x86/x86-android-tablets/x86-android-tablets: section
+> mismatch in reference: xiaomi_mipad2_info+0x50 (section: .init.rodata)
+> -> xiaomi_mipad2_exit (section: .exit.text)
+> =3D=3D=3D
+
+This is interesting. Why then do we call them symmetrically?
+
+Hans, do we need to have anything here been amended?
+
+--=20
+With Best Regards,
+Andy Shevchenko
 
