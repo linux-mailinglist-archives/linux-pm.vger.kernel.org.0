@@ -1,75 +1,75 @@
-Return-Path: <linux-pm+bounces-5528-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5529-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37DD188EE22
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 19:19:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81CB488EE24
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 19:19:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 60172B2351B
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 18:18:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D10D1F3C126
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 18:19:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E95515098D;
-	Wed, 27 Mar 2024 18:17:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91FCD14F109;
+	Wed, 27 Mar 2024 18:19:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RlsG7+SQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="S1Kuf533"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAE5B14E2F3
-	for <linux-pm@vger.kernel.org>; Wed, 27 Mar 2024 18:17:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74C3E14D44A
+	for <linux-pm@vger.kernel.org>; Wed, 27 Mar 2024 18:19:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711563458; cv=none; b=Xt+KuW+oKuWFwjOzxlLlaVBXPpHmBdgJXXyovg8/csL9LLHBy1r/TWlbPdsTsG6r0CHKXxuQPaT0HWedRxVw44cbAzYuKYvZWTyeyTgoNjzq4q0Deaptpay/L3tdMvlU9DdlMSG1meMgFrsW7XufbYo6vhk2VWSPpi/zm08PAKA=
+	t=1711563581; cv=none; b=FnypanVrgZGAAKlxyR4evXYEj5kl1ZSjhEHYJGmWeLQ+qSukSHHSnVUqelQsrXRgiQHhobmyirixKJjFqK6bwbhVpSU7eKpn+xmi+8TjyEtSH8XU64hrdOkpvsnyIHb4RLdF9fp8z5a5G4k4qhgqUxAJYaX1F6fX9w3nr787Sxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711563458; c=relaxed/simple;
-	bh=ENbcx8N1xXocd8zX7r0desjGEpwQB/yo9BZhyH6YQ1I=;
+	s=arc-20240116; t=1711563581; c=relaxed/simple;
+	bh=dtmgsMnuTC5OTWHRIvUyku0A6RaYj7zvYnlFgL7V0Gg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tK//62IH8J299pDxS0Sah+mFPnOtBw+ixcx5D+jCZYMqqotHiCoLeo+K/dAgdVfcp7Noi1cSnFSudAXaCWcz+PLpY8k6We0HXOjvuebcEHcB1OR99BSv4sMjClWLgyXy9XMvaN+DdggfhNPCMQiFzdauTpWqU6K/U0TH1ay4g/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RlsG7+SQ; arc=none smtp.client-ip=209.85.208.46
+	 In-Reply-To:Content-Type; b=SefX7QZEk5bJR1uY6xAFuosTRTIVGmemlCnRLaLTpAa+xxhgkLZ2Vl9ogzfmE/JJnVK7ZD11oPTf6Zg44H+vh30wNc4BpLvZwo5AdLJD8M83AA+j36H5pXsBSR2y1zcYe2TGmC3oxgvu6q/bHVCaK/5sOTZC8muCbi28VPxc0EI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=S1Kuf533; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-56a2bb1d84eso267782a12.1
-        for <linux-pm@vger.kernel.org>; Wed, 27 Mar 2024 11:17:33 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4149529f410so1025905e9.3
+        for <linux-pm@vger.kernel.org>; Wed, 27 Mar 2024 11:19:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711563452; x=1712168252; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1711563578; x=1712168378; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=hNp7W+YbTCk9M0AZRLs9sUK9WKo8Gt25af0+2448FKk=;
-        b=RlsG7+SQso8cgsg4BdBEx3dfAWY/c9UFr449JWRl1ifOmL+HOofg8QV7/abcGfQCBY
-         qmS8nQhleXxT+3UZGknTGCSg7J2emN/5vGhgKyY+6uG/9FJ1y67jASsuX/oVpVK87jV0
-         +ltgckJrZ3djoN6VuTJTQ0gdY6wZ57lhSg3w1QCfeRh10a0ynojOx2UJNMLPFvfkkJub
-         e1j1fdWIno1XXvF7TqnIH03uw1fgmheNI9q1SA+bzaE7FYYK5ivN+JECZRt0CSYX08Wa
-         AzMYmh6t+wCBCNbLp5zgT8YgzjSRk8ff10xTD2VWhkwTH6QnVSIJnA0EJ1GlOSb1qB33
-         9UtQ==
+        bh=PcobpnYcZbRWfF5B9i1WJ+u7GNyJRkt5/xAAg1lhiL8=;
+        b=S1Kuf533Y4Z2HeunN6xjqm/1xs1XQF562VTSEuHW2Wp1mk6AAtl4m0DNngr6sMAYoy
+         7Jrxa6eC141tVPwrQY2jmuwam70UIfr2iocYNzDaznGyQwQuUjasFBaqGVOK0klkrzg2
+         QRNfg74dYoRZ9WOzTaD7SAvXlIUhn/gbO2xIFtHmtLReRONriA47ESALIHmcZZpEHQqY
+         r43wLo3vo8phI3goW1U+mkA7RSS88ip/tD2LHpDSEa0rUBDNJxs9siHG8p4zUKbtUNS3
+         FzmUTiKU4QKL/lG2cTMUE29c6HgAqy4HDNQE6fS1rYGjSjHKC4kDGVyv8uNEeGN4NB6B
+         oSjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711563452; x=1712168252;
+        d=1e100.net; s=20230601; t=1711563578; x=1712168378;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hNp7W+YbTCk9M0AZRLs9sUK9WKo8Gt25af0+2448FKk=;
-        b=Leym4JHRC9O5Pm76bcl4ptODVPwpgJvR+H3C2UtfFfOg+cF1P7JMVK1ZCVk6/vaR4l
-         tdeWFU7sjm4Bz/+IeQFVK+rw5b5v22hMkAIpz17iEJtZtZN/Hjyt++n+yJwK/JyoVNkD
-         oz1fCPaKZvtEeh4bVQ8ouL/RUa9Hh7qwXOUfBMmuO3oLmPrmclPYzSZsUfUdN88seSSy
-         DV1jWxA9Vwb4KQLhnNwzOWBwOvBUwTWbaF5OoS8WVJJSn7bfENcM1JwGzYcc4l2CatSW
-         uxKIAxhgmJ6mOTf2V9HiuCBxUhE4P7OJOzpOSuMrsvsTcbcCSXK19kYzr1Sk+tDnSl0B
-         MHiw==
-X-Forwarded-Encrypted: i=1; AJvYcCUoh+V5zE7BWHR1BS323kbqRqD8DV+KdSR2kWKPZFIfydHqOf6wIKCP0YNF7NiAV3mfGHwY3d8RFfB0YDmJE66tFbTogtQBz7A=
-X-Gm-Message-State: AOJu0Yz9bMzd/t8e37/aXP9yrhKYzhK7NgsX5F+rbWYUTakiMZMusjB8
-	UDobBH4wkMhUO84OdI+PzcTg5uySfGShTkOAsesGZ3aHH7+ohztcR8jACZdRKiY=
-X-Google-Smtp-Source: AGHT+IG37JTIFyjB31tW6B6vFjgUBb4R3/+9sByo2+eooXLpsuqwavvrUBMEvlZgDk3pJthgL3XddQ==
-X-Received: by 2002:a05:6402:518f:b0:56c:4ca0:5c54 with SMTP id q15-20020a056402518f00b0056c4ca05c54mr52123edd.16.1711563451792;
-        Wed, 27 Mar 2024 11:17:31 -0700 (PDT)
+        bh=PcobpnYcZbRWfF5B9i1WJ+u7GNyJRkt5/xAAg1lhiL8=;
+        b=By27kyA+WDP+62OuEj2HHFDuLuj6UUukcxrsMDqLpDEl6MrnmgwQLoBphNV7mVF2Rf
+         yt851H50yZ6EqRWcOx6MwvTBHBBv5s/XGaUKoEcIWe5+ToGGPuiTr8ICu9u153NXsATY
+         lSZqyoAQRME0bMy9ykAnhqmNNky5oHQAdprhhmuWTnhXVWv/zY92iSr7/hILsglkWPQq
+         YVMEnSXwcjzwCCUGWG6HNCvJxWm76v3MsvlofXiSaNZtMeSOBpkxa2Qh0cSa0WdezS3/
+         aDGaLmcC7A8+1e7lkoS77ZaJfMpSLSX5jLxjcobUSPLEEY7hWXu49NxCYEflV9MMgemq
+         L/PQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUk6ZRT2bE1CD3zlpL76CwKU7tZ1rqsRHaSEqwmzzPIlBKfQgCYQfKv6v24l3nxD+Se0EbXrQHFgaeAkCJioianJtoiEXP2mZ4=
+X-Gm-Message-State: AOJu0Yyxn/3n55Dl01IuDnXYcemFKDQnPkqLaer/2DTzqGdtQtlxVJAr
+	8HO5lJA5J7Q2IECkFnavjrlLKQ1QGlM3Yf2YTS+lWq6WQyyl5LKTKBZehKdItVg=
+X-Google-Smtp-Source: AGHT+IGEnbq7menc0e4kID/hTdIjQ1mI9/jD84v6AKwsMdoNCs27XbxzVNUSGvOZVtnb7ZRWjnXhMw==
+X-Received: by 2002:a05:6000:110:b0:33d:277b:8bf6 with SMTP id o16-20020a056000011000b0033d277b8bf6mr646140wrx.26.1711563577765;
+        Wed, 27 Mar 2024 11:19:37 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.206.205])
-        by smtp.gmail.com with ESMTPSA id i1-20020aa7c9c1000000b005667a11b951sm5595412edt.86.2024.03.27.11.17.28
+        by smtp.gmail.com with ESMTPSA id i15-20020a170906090f00b00a46d9966ff8sm5808025ejd.147.2024.03.27.11.19.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Mar 2024 11:17:30 -0700 (PDT)
-Message-ID: <af9def4e-c6d6-49d9-a457-68c40492587a@linaro.org>
-Date: Wed, 27 Mar 2024 19:17:27 +0100
+        Wed, 27 Mar 2024 11:19:37 -0700 (PDT)
+Message-ID: <1614af1c-330d-49ee-aa22-a19de866862e@linaro.org>
+Date: Wed, 27 Mar 2024 19:19:33 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,8 +77,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 01/16] regulator: dt-bindings: describe the PMU module
- of the QCA6390 package
+Subject: Re: [PATCH v6 02/16] regulator: dt-bindings: describe the PMU module
+ of the WCN7850 package
 To: Bartosz Golaszewski <brgl@bgdev.pl>, Marcel Holtmann
  <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
  "David S . Miller" <davem@davemloft.net>, Eric Dumazet
@@ -106,7 +106,7 @@ Cc: linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
  linux-pm@vger.kernel.org,
  Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 References: <20240325131624.26023-1-brgl@bgdev.pl>
- <20240325131624.26023-2-brgl@bgdev.pl>
+ <20240325131624.26023-3-brgl@bgdev.pl>
 Content-Language: en-US
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
@@ -153,36 +153,23 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240325131624.26023-2-brgl@bgdev.pl>
+In-Reply-To: <20240325131624.26023-3-brgl@bgdev.pl>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 25/03/2024 14:16, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> The QCA6390 package contains discreet modules for WLAN and Bluetooth. They
-> are powered by the Power Management Unit (PMU) that takes inputs from the
-> host and provides LDO outputs. This document describes this module.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> +    then:
+> +      required:
+> +        - vdd-supply
+> +        - vddio-supply
+> +        - vddaon-supply
+> +        - vdddig-supply
+> +        - vddrfa1p2-supply
+> +        - vddrfa1p8-supply
 
-Can you start using b4?
+I assume vddio1p2 is not required on purpose.
 
-This is a friendly reminder during the review process.
-
-It looks like you received a tag and forgot to add it.
-
-If you do not know the process, here is a short explanation:
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions, under or above your Signed-off-by tag. Tag is "received", when
-provided in a message replied to you on the mailing list. Tools like b4
-can help here. However, there's no need to repost patches *only* to add
-the tags. The upstream maintainer will do that for tags received on the
-version they apply.
-
-https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
-
-If a tag was not added on purpose, please state why and what changed.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
