@@ -1,153 +1,140 @@
-Return-Path: <linux-pm+bounces-5536-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5537-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD65A88F07A
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 21:48:23 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A377E88F086
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 21:57:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C4B01C282E7
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 20:48:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DF9E1B22780
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 20:57:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CADC1534FE;
-	Wed, 27 Mar 2024 20:48:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C0031509BF;
+	Wed, 27 Mar 2024 20:57:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="T4I57VPY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RUdwURHu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64893152195
-	for <linux-pm@vger.kernel.org>; Wed, 27 Mar 2024 20:48:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA6591534FE;
+	Wed, 27 Mar 2024 20:57:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711572497; cv=none; b=ddGr+MBkBiMSUo+MMkSU3+v8HHs4KZMRFx9vVDUs6P9neVwisB49T1Lhjjfw8C+0uEvUc6BUpdGO3j/z53dFRiRGUSLJdlUcH8I+CbUodpVAlI18xOj//OTyN46TauwFuo/XAvzPOOfI/pzpBxxg8aPUrK7E0v2oMDlFulk2PdA=
+	t=1711573029; cv=none; b=Jxsx8mu6RFznhGtGTcT5uvpIzTNrIUThnfEjZspu/fX/3pBAhvV/UwvVbQuMRF/HarkMBnwrpHuuum+VsiRD3fkefJFO3LzB/31/6mTS1htt02s4z6go7Kvc7lVEDGMXP3hwK4cfU0gAa1dCcuYGP49CLf15bvHt4gFMqizVaM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711572497; c=relaxed/simple;
-	bh=bBSihwyj6QqaoBrlVdzXuT1LwFsR3kDiWQ0i1Mjpbw0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fyfKK/jcQrIAEla0E+9UYlgoQjlMvcxAdqPzYneFALORDa37Oi+KjJFqo7pjGxpMQSxa2bwejv0e5i1oE/NABWMUe5nnCPsiyGIySxR1tkn6s82c1BRuek7c5ox0v08mL+xy0z2m10QyrT0ckFzB6YmGhRYlWXHMLslejJ+8s0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=T4I57VPY; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a46d0a8399aso227560366b.1
-        for <linux-pm@vger.kernel.org>; Wed, 27 Mar 2024 13:48:15 -0700 (PDT)
+	s=arc-20240116; t=1711573029; c=relaxed/simple;
+	bh=ASykyg23JcxT/XGhYWgv+/4msMSXbAY7lg2eIAUlMbM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=lmRQc1KvsxJAldcrow+AMkISKiVsAvjx5EsDiIt4+WmVDu8WuBAemgiznUNCXXpkauESZRLZXa5nF7hkHJjrv3yDkV/CPycxWZw4EZgWM8BQjaPOgLRYV0AzGHR7th7Q3yW4gr9JkWsiWbfdWXKN7TMx/R+7/vcL564W8ojOvI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RUdwURHu; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a4e0a65f37bso35304866b.0;
+        Wed, 27 Mar 2024 13:57:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711572494; x=1712177294; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=SUD3QukZ9tgzgqeBxO31WDQxtggejKllhzLhWk9Mxfw=;
-        b=T4I57VPY9a6twZp78LZt0Qgz4uaE1LAz/1jPQDK8uXdwmHK8G6z+djWXaOpccLGJp4
-         hozvYyPAGOsFJ2tq930hG+aiL+oR/5yu3ye/3/bLtHQ9DYhLlcbpRXIBxe67A95qF7Ed
-         DWR4FHtXCU+Mvtm0Fz0350uINLgAcYAID70le4sra349S4Tzk9kMeVAtHnn1Hl4YVAPW
-         uSVvEk3D6saZPSiJB0XDVJagvJabKS4clxU8VvfdkrBf7paSPQW3yaeKH3venVVxt7Pc
-         UA3ZM8w8zYKd98kxUyLLG5Q2gekuhNO+mYcG4k4vEk07xu27KU2/vaAn7v9rcHQiVfkg
-         l/Ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711572494; x=1712177294;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1711573026; x=1712177826; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SUD3QukZ9tgzgqeBxO31WDQxtggejKllhzLhWk9Mxfw=;
-        b=BEdeFBh7x1ik4thOfeGOIxE2Cvk1Iu4noX1ZRvqquDhBhS0N+5j3eU8e6knY/2zFQH
-         Z53O6vAG6X96xK7yt/ql3RuIXMKebIhprRbY3K09pwLiJX4xKurxC+lvZNPn1nXSgYLi
-         pyFdTA+oK5VUk1OuTn12ILakSecW1Bw3uv8GdL1ngWVdSVsqLA5yA8VVZp10b7QgzMw1
-         Uqg3yh0Yt8CScvUd2V/GOISsifqWN0P3ZZgr9l2ndRP98yhYlvoJkH+GjmWGhQ7wBHYO
-         6EXpOfmhNVddKZ6B4YVG713KLTrOkcarOiqTyf5/mXdtx5v1PvmcIgJ3CpDEf76lrjHP
-         3QvA==
-X-Gm-Message-State: AOJu0YyFL8Pr2XQgavhkuxtlUXhLU5fYIzgze+9KCP3FlUUi54rmtIps
-	pF3laUEOzKP/IoRPkJqs+ynASoyxfJlEvCeo9Dm5t8dvpThlL0vCHm9SjxMdeuw=
-X-Google-Smtp-Source: AGHT+IEYcDHAUGTZ+wcna45N+/LrIFKC5kbIuK+RvWvpeI+gdVZeTbUdyF4KUyJQz+c8qnZzQm6yvQ==
-X-Received: by 2002:a17:906:7252:b0:a46:a28d:2f49 with SMTP id n18-20020a170906725200b00a46a28d2f49mr362565ejk.32.1711572493672;
-        Wed, 27 Mar 2024 13:48:13 -0700 (PDT)
-Received: from [192.168.92.47] (078088045141.garwolin.vectranet.pl. [78.88.45.141])
-        by smtp.gmail.com with ESMTPSA id w17-20020a17090633d100b00a4df82aa6a7sm2026882eja.219.2024.03.27.13.48.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Mar 2024 13:48:13 -0700 (PDT)
-Message-ID: <e1d8d30f-483a-4e3b-882c-147cea40c532@linaro.org>
-Date: Wed, 27 Mar 2024 21:48:10 +0100
+        bh=oLxG9EcnVkh0DSQcXX7ogAec3EJe03+5XzYJOhrYVn4=;
+        b=RUdwURHuYYRd8cFLiPzs2Pw4vvRAY2R9cFKuh37/qGg1FT7sS391aiotktgaS2qQj+
+         kzx9V7FTmu8Ue2z2NcXhAOMf+TO4aOPISYl/Ot6tzpfmy0hjqgY9pzSzV9sjMllxhYQY
+         aLCisQhWlXHAlSLsYf6wLn98kfmYklP/5X0wPyWDf5sm1p+j3/gL0hJw1pCN5vA7gyYC
+         W+SjA0JRXKwj5zWKGVaHkfM7cFGin6PRyFpYXUj1JsjEO6gPtmyt2lHAWLXpsNcxR23P
+         8FsQcSBzztU9f6NnhXVPlqqvyOOiO7LuorhvvOStRrm7Z15XN1Z6B2bphxADbmS1SBif
+         QCsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711573026; x=1712177826;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oLxG9EcnVkh0DSQcXX7ogAec3EJe03+5XzYJOhrYVn4=;
+        b=rjInKsWlKFighuKtoHXRjPPDqpRDvDo1PlrPxTU3C9OKLFUCdqMELZOQUd6sOpLBiF
+         F7on4FulRWnru/U/1I+8vhqjCm41Oit03TfdWMjr6Q3Al0nYzYWdg8aWCootvuIvDkae
+         ffgeA6KohIMnOmj3tFEXs12dZpAzRLmlBa8hWOstwNsTJzdrzqGj6Z8Yj+XkflWdgFwO
+         B8v29UdlfkAEEZiGWMPr828i/9mE6e6oXXeH63sOvu+Dvmk4ESRqeA1GCA5JoK0LDqou
+         dcSK0vrK+9NPuJ/VaLVV0/J92sj4qig7Epj+UKOT81jqckx6lQowEksVhzVSYRPrYylI
+         jQ+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXDCgl+iQNLGnk5L5F53Q37oVGqPYzjlHznwr1cOnglR5u1HX1oAVQwmm5apMHLo0tOdwfWcuj4Zd3CY7jxzypSOdqQkzKnY5oEgA==
+X-Gm-Message-State: AOJu0YweZpFaA3zfRjr7e5kxwo8LOmbZo90V4T56qDOm9rTv9ofLrkse
+	olZe/Yxg/C0hNzTP9+2G9yzl1S/67t+bz28X2eMA0d0tveXSBVmX
+X-Google-Smtp-Source: AGHT+IEgamyfp26jk5puLJyAWoiz0SiekS9aAN+NI95EWS6Ohw6UAKgRKR/78XIAsNl9tlEJTNqMsg==
+X-Received: by 2002:a17:906:c4c:b0:a4d:f7ca:1856 with SMTP id t12-20020a1709060c4c00b00a4df7ca1856mr381084ejf.61.1711573026016;
+        Wed, 27 Mar 2024 13:57:06 -0700 (PDT)
+Received: from jernej-laptop.localnet (86-58-6-171.dynamic.telemach.net. [86.58.6.171])
+        by smtp.gmail.com with ESMTPSA id hg11-20020a1709072ccb00b00a4e03823107sm1231928ejc.210.2024.03.27.13.57.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Mar 2024 13:57:05 -0700 (PDT)
+From: Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To: Yangtao Li <tiny.windzz@gmail.com>, Viresh Kumar <vireshk@kernel.org>,
+ Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+ Samuel Holland <samuel@sholland.org>,
+ "Rafael J . Wysocki" <rafael@kernel.org>,
+ Andre Przywara <andre.przywara@arm.com>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-sunxi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ Brandon Cheo Fusi <fusibrandon13@gmail.com>,
+ Martin Botka <martin.botka@somainline.org>,
+ Martin Botka <martin.botka1@gmail.com>,
+ Chris Morgan <macroalpha82@gmail.com>, Ryan Walklin <ryan@testtoast.com>
+Subject:
+ Re: [PATCH v3 2/8] cpufreq: dt-platdev: Blocklist Allwinner H616/618 SoCs
+Date: Wed, 27 Mar 2024 21:57:04 +0100
+Message-ID: <4334338.ejJDZkT8p0@jernej-laptop>
+In-Reply-To: <20240326114743.712167-3-andre.przywara@arm.com>
+References:
+ <20240326114743.712167-1-andre.przywara@arm.com>
+ <20240326114743.712167-3-andre.przywara@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/4] power: supply: mm8013: fix "not charging"
- detection
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Sebastian Reichel <sre@kernel.org>, Hans de Goede <hdegoede@redhat.com>,
- Konrad Dybcio <konradybcio@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- Sebastian Reichel <sebastian.reichel@collabora.com>
-References: <20240303-power_supply-charge_behaviour_prop-v2-0-8ebb0a7c2409@weissschuh.net>
- <20240303-power_supply-charge_behaviour_prop-v2-1-8ebb0a7c2409@weissschuh.net>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <20240303-power_supply-charge_behaviour_prop-v2-1-8ebb0a7c2409@weissschuh.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-On 3.03.2024 4:31 PM, Thomas Weißschuh wrote:
-> The charge_behaviours property is meant as a control-knob that can be
-> changed by the user.
+Dne torek, 26. marec 2024 ob 12:47:37 CET je Andre Przywara napisal(a):
+> From: Martin Botka <martin.botka@somainline.org>
 > 
-> Page 23 of [0] which documents the flag CHG_INH as follows:
+> The AllWinner H616 SoC will use the (extended) H6 OPP driver, so add
+> them to the cpufreq-dt blocklist, to not create the device twice.
+> This also affects the closely related sibling SoCs H618 and H700.
 > 
->   CHG_INH : Charge Inhibit      When the current is more than or equal to charge
->                                 threshold current,
->                                 charge inhibit temperature (upper/lower limit) ：1
->                                 charge permission temperature or the current is
->                                 less than charge threshold current ：0
-> 
-> So this is pure read-only information which is better represented as
-> POWER_SUPPLY_STATUS_NOT_CHARGING.
-> 
-> [0] https://product.minebeamitsumi.com/en/product/category/ics/battery/fuel_gauge/parts/download/__icsFiles/afieldfile/2023/07/12/1_download_01_12.pdf
-> 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> Signed-off-by: Martin Botka <martin.botka@somainline.org>
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+
+Best regards,
+Jernej
+
 > ---
+>  drivers/cpufreq/cpufreq-dt-platdev.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+> index b993a498084bc..86d8baa816795 100644
+> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
+> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+> @@ -104,6 +104,9 @@ static const struct of_device_id allowlist[] __initconst = {
+>   */
+>  static const struct of_device_id blocklist[] __initconst = {
+>  	{ .compatible = "allwinner,sun50i-h6", },
+> +	{ .compatible = "allwinner,sun50i-h616", },
+> +	{ .compatible = "allwinner,sun50i-h618", },
+> +	{ .compatible = "allwinner,sun50i-h700", },
+>  
+>  	{ .compatible = "apple,arm-platform", },
+>  
+> 
 
-The patch is now queued, so I won't leave any additional tags,
-but thanks for taking care of this, Thomas!
 
-Konrad
+
+
 
