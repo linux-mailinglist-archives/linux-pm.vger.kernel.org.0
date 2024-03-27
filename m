@@ -1,84 +1,84 @@
-Return-Path: <linux-pm+bounces-5494-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5495-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EB9E88DC04
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 12:06:38 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 489C288DC17
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 12:08:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 225431F2D12D
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 11:06:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CB143B25D1D
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 11:08:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05470548FB;
-	Wed, 27 Mar 2024 11:06:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 674EB4EB4F;
+	Wed, 27 Mar 2024 11:08:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k/TXKLmF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IbbcMSD5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AA9B1CA87;
-	Wed, 27 Mar 2024 11:06:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD84C3DABF3;
+	Wed, 27 Mar 2024 11:08:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711537585; cv=none; b=YIp9S30TKe9Yz8+bAZurZtyQPX2LLJu+PbAr4dAo0MPm8efwvneY+owAKG98ATTMWlT2fusuC4/xkSEb+7MhIKW4N5PirrW51SdKu2RFBovZyDBeKTXBanF1qNKO3H57paICvKO2rlDTaY3Nokgmypz2WYcKrSYTNTMnSLJBV5E=
+	t=1711537699; cv=none; b=Qpo6lqtZjJ+V829Zg0WZdID7szmBPy59G2RXiYqjwvQSTZMkIX7LlJdLfGD2DWH4b+r7gTk4f3GscnoTbQFly4wVkIGbVhG9WXzNhIQTRXW8b4D7MJgJ3v3KLXejNosJaFQJadCRQ2RPjB6UdsMR+TnuxX4FitwuxbGfwQBhOZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711537585; c=relaxed/simple;
-	bh=q3gcyXoKhRYf2fa69N6NdBZzbRfzKOTZ8xEHtHAX8IU=;
+	s=arc-20240116; t=1711537699; c=relaxed/simple;
+	bh=yygm4eyQjYZoYbzIzaYLx0dMu2xifG7JsTbud9X5p5c=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=M5p+2X7MIDSIjm64B2fro56lSneYrfpMt3ZIzw480H9MF3rb+KRIy37+Afd2mSYOs4QHprGNOCkfHV2viZKqG6yYs0OgIHGqkIi1AxxPVI6Mbq3oxVXgyrI9EiqDf5q4FGnfazDRDwPqdVW8BwY0x84I35ubZHYqYz6cUME+04I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k/TXKLmF; arc=none smtp.client-ip=209.85.167.51
+	 To:Cc:Content-Type; b=ST9v5eTjnBSdtpq85xV83fr+xgnUA6ZYcJWLrUoxvCx9Nac7fzLpZ8nL0avZvjPmwlyS6qoJVJ8C/H/q+GG60xKryF3f+r1ekgSEI8Rd8JtBxp+Jei3Arw0V3VjK6IXVWNwXSH/IUOVtuCwGCdoEeXqWQMf/xlPwH14DiGmgR/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IbbcMSD5; arc=none smtp.client-ip=209.85.208.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-513da1c1f26so8189100e87.3;
-        Wed, 27 Mar 2024 04:06:23 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-56bdf81706aso6978732a12.2;
+        Wed, 27 Mar 2024 04:08:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711537582; x=1712142382; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711537696; x=1712142496; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ayI6BKXEd9WeONlek9wdLp9tj6kKhJtPOmCx1zPxi9Y=;
-        b=k/TXKLmFi41IFRjM3qn5T1INI/8CgASOWtpdJjoZxrGL1omHZzd6DTgaD6jomsqWbv
-         t8fciV7t8NO9c21jhna8pmkXLFetJLeRQi6OjvlIk6m6Y81eCupau+zP2IaDVZgnXlrk
-         jg6hCPx5YzW6jNY5UKYTGWOyqcRGX+/7x93UZ5Qy/NhPgiMhP3hSkZGtoO86kjjHjEfj
-         wYfMFzfQcx6VBBnWjXSTzznTDCMAF+1IwZk3Ovvw25Z1YWKD57OY5z0SQGh2KYnlfBqt
-         mTrNaMphQaBUqunricz0UnXsHT7dClh2Iry2fvali3KJKnkCXnq78ziz1DHZebiKUHMh
-         cb9A==
+        bh=On8wlY6OPWc3ddSd1nBCaNCKXsF3Ev3MZFqAfUa4Ga4=;
+        b=IbbcMSD5kX/scDDL8khzVDSJeIiql8hwu4C0QDXGdA4WFEf0gCX+ieboC8b4G0N42P
+         sY5CephI6HMZXxU9KVpsH0/tb5cqtD/jgcTbTeSN0K17QLNDZ7oDFIvUJ3xPmfNUO82t
+         Q4C9SDvx+S+XPhoZcYemmF9FdPOzRC6TtJCPqB0fi4ERgGg/8B4+aAH9PVMa5OPlEUEV
+         Zwrv+HGfkRTVPsIn4YWXl2kiIfhA9RmS+RKZtBl0sGFVvQIFxPzTsLY1E6Hadb/fKLPb
+         66oCUZNvyp0ze47K8B6LURyECUgpr6eKVnCKiLuDT2yKe8xUU86BW9wU2FTuRPZl8/A3
+         A3OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711537582; x=1712142382;
+        d=1e100.net; s=20230601; t=1711537696; x=1712142496;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ayI6BKXEd9WeONlek9wdLp9tj6kKhJtPOmCx1zPxi9Y=;
-        b=YOhglBs3VBXAufvziOTopxYfiscEXO5SeNOmlVFSKRNX3d6sIzkKsr0oWbeQDN7jfC
-         1kESEJe8sxi47RN5rKNuTkf+TrMDxZ1KMDk4LXfKtPrcVUTmcbXuS78U4l+J9kNtNfHA
-         R7WykV7EhN50Shllwg6alTyjjiPUwFg9IkX26q8eg5emYXb9ioZHUqvxwuY9pmaFYZ7t
-         pRfhk/jOaJS+r83KWkBArcU8g2XLisHGcBcZNY003aBTYLaKfc6LFGykbnV014I5MI8i
-         r4JpN7h+nf6J8JY52tplpfDF7oNa+pDNTemqTcMjlN8EVsEDezNqjerzMUqtmZSS9OLY
-         6wAA==
-X-Forwarded-Encrypted: i=1; AJvYcCUOYxc40I3lsj5NmHjSBgRC536dqaWcFfPzHMZiQm8qbYXOCp+omr6Ie/H0WDWDdOuZ+MGE0pat/bWRvb7+J0xm1u9Kgmhd056ZZkzM4MgnWgAJxXRj59o2dioOzvGhnW8P+kT6gQe6x1wQ/99VYH+NkxOOZRVbZjB21kNZItxXHel9L2Qim8U5qI9v5XYZyU2bJ2oBBkNNEQRkjto9sEbg/J/ldAQ56A==
-X-Gm-Message-State: AOJu0YwYxX5/iZFj9XtgFagu922FKtKW9eAsm2KEFObIJdypzEOEC3sI
-	0JoHfBVCle0p2zvGm4sH6AQgW25xlOT4kh3mjIMUnUWS47CewhBelUH+5azcuSrlgxnXJWDyGzh
-	xKQpo85X3JKHU9Z2Ew8ekSXcHGl/91MK+n7I=
-X-Google-Smtp-Source: AGHT+IFnYy+AySgWrpXBEZGt4xGMs0W5jejiOVEiyuTICA6bnE05GDy9uSYbdCvYonGwLXIiFkEPLNwKn6JkxI2YreM=
-X-Received: by 2002:ac2:5f91:0:b0:513:184a:ff5f with SMTP id
- r17-20020ac25f91000000b00513184aff5fmr2552363lfe.50.1711537582050; Wed, 27
- Mar 2024 04:06:22 -0700 (PDT)
+        bh=On8wlY6OPWc3ddSd1nBCaNCKXsF3Ev3MZFqAfUa4Ga4=;
+        b=gUY1wzGirC8Ggyhyq00qqHFoTLHZmllq6LbUsMHhnFxxvbNGyVJgKgmFu/z6tgEg9u
+         ma/x87CBFmfbeuJzU7C6dqMgJKVCCi2ioMbPKMfTc2RoxRrh+nEbkb3s1P5LPV4Qi4fO
+         0cBNTty9MgqFgajl4W1FHdx8UN24C2rpCC2DAf1ynNdrtr8+gkZuyCHYbNQUv2xxGM15
+         JaVqm7DXUio0u5LY598Otk4CFzpANzyVXh7hHYx7PvEXc6XJJErFnqPCYCdT9wDHiMEG
+         uRIyTlXkSftlye6aJnvXCbVtn/0P028MvMAentEZZDELFGd6VJlzwEU6CQCcCOOPPwKI
+         Fe5A==
+X-Forwarded-Encrypted: i=1; AJvYcCWVxJg21N2LDcob/K2a9zSLgT//ocTXxlN5Od0yKwehYADZw8jOIgkPTnhf/sHsfGdSLwC3kokPIEx/fP5ZwJJNSHVfRGA+fp1JE2qfOR/fx8/xxBDbrFUx8/ajBZKmxPKtwJUlh6OVBSxhTmQjhqoLtje1RBzLYfiV3b8Vn7c9lVJFXLeNW5enKVJZi5RIG+WZWKp+LyI487zaZ1oy1jTkGVJMH8J6BQ==
+X-Gm-Message-State: AOJu0YxD58/0Ilrc0xVCvyitOTSsJaDQRH2tPZd5schC/GU+B1kjdhOO
+	4rumOQwgpruwCqtsBX4I3ei+iJgSVxZG41nY9Xtb/5jMGQT9SovcpftYOYRp4EYF1dQS+H0sdfs
+	q6Juh2Zc9LHY8+Q8nI2QhmB5m9MU=
+X-Google-Smtp-Source: AGHT+IEf/6n+lZ0mTtjfzS5th3vrR2ph//ewCRZbOW7x2QDMk1WTXYd1fuMhSa1g+UweOR/iyDJ7Y1zzAqZW4zGL3ls=
+X-Received: by 2002:a17:906:114d:b0:a4d:f806:ad6e with SMTP id
+ i13-20020a170906114d00b00a4df806ad6emr2534995eja.52.1711537695981; Wed, 27
+ Mar 2024 04:08:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240324150107.976025-1-hpa@redhat.com> <20240324150107.976025-2-hpa@redhat.com>
- <CAHp75Ve5201KNdjvDZYq_unHTKp9wZXPWZXDgStP8y+XjtnWWg@mail.gmail.com> <CAEth8oG7_qFuUrL+kX3ezNatWqKPqT-qiaO5NGY-N3F3ufQL9w@mail.gmail.com>
-In-Reply-To: <CAEth8oG7_qFuUrL+kX3ezNatWqKPqT-qiaO5NGY-N3F3ufQL9w@mail.gmail.com>
+References: <20240324150107.976025-1-hpa@redhat.com> <20240324150107.976025-3-hpa@redhat.com>
+ <CAHp75VdosbYNKU90QWt+6SU_i5dWC94=xZy0GXiKvoQeDF30wg@mail.gmail.com> <CAEth8oFuPTRq0z-YbMMFt=kKgre6x+bDhtpUkj2vJeK-u8O72A@mail.gmail.com>
+In-Reply-To: <CAEth8oFuPTRq0z-YbMMFt=kKgre6x+bDhtpUkj2vJeK-u8O72A@mail.gmail.com>
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Wed, 27 Mar 2024 13:05:45 +0200
-Message-ID: <CAHp75VdQtmT0G1dFhdY7TrcBj2W6GhOaVv90_T1e3MdEtiduQQ@mail.gmail.com>
-Subject: Re: [PATCH v5 RESEND 1/6] platform: x86-android-tablets: other: Add
- swnode for Xiaomi pad2 indicator LED
+Date: Wed, 27 Mar 2024 13:07:39 +0200
+Message-ID: <CAHp75Vc6=0-eMMXYQEn9w5N09rKR9NNrqFPR8LBvZZyOiscsig@mail.gmail.com>
+Subject: Re: [PATCH v5 RESEND 2/6] leds: rgb: leds-ktd202x: Get device
+ properties through fwnode to support ACPI
 To: Kate Hsuan <hpa@redhat.com>
 Cc: Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org, 
 	platform-driver-x86@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>, 
@@ -88,65 +88,23 @@ Cc: Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>, linux-leds@vger.ker
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 27, 2024 at 9:58=E2=80=AFAM Kate Hsuan <hpa@redhat.com> wrote:
-> On Mon, Mar 25, 2024 at 3:30=E2=80=AFAM Andy Shevchenko
+On Wed, Mar 27, 2024 at 8:53=E2=80=AFAM Kate Hsuan <hpa@redhat.com> wrote:
+> On Mon, Mar 25, 2024 at 3:57=E2=80=AFAM Andy Shevchenko
 > <andy.shevchenko@gmail.com> wrote:
 > > On Sun, Mar 24, 2024 at 5:02=E2=80=AFPM Kate Hsuan <hpa@redhat.com> wro=
 te:
 
 ...
 
-> > > +/* main fwnode for ktd2026 */
-> > > +static const struct software_node ktd2026_node =3D {
-> > > +       .name =3D "ktd2026"
+> > > +       .id_table =3D ktd202x_id,
 > >
-> > Leave a comma, this is not a terminator.
-> >
-> > > +};
-> >
-> > When I asked about the name I relied on the fact that you have an idea
-> > how it works. So, assuming my understanding is correct, this platform
-> > may not have more than a single LED of this type. Dunno if we need a
-> > comment about this.
+> > Seems to me that you may split the I=C2=B2C ID table addition into a se=
+parate change.
 >
-> I'll make a comment to describe the configuration.
-> This LED controller can be configured to an RGB LED like this. Also,
-> it can be configured as three single-color (RGB) LEDs to show red,
-> green, and blue only.
-> I think the name can be "ktd2026-multi-color". Is it good for you?
+> Could you please describe this more clearly? Thank you
 
-My point here is that the name is static and if you have more than one
-LED in the system, the second one won't be registered due to sysfs
-name collisions. Question here is how many of these types of LEDs are
-possible on the platform? If more than one, the name has to be
-dropped. Writing this I think a comment would be good to have in any
-case.
-
-...
-
-> > > +static int __init xiaomi_mipad2_init(void)
-> > > +{
-> > > +       return software_node_register_node_group(ktd2026_node_group);
-> > > +}
-> > > +
-> > > +static void xiaomi_mipad2_exit(void)
-> >
-> > __exit ?
-> No need.
-> x86-andriod-tablet is based on platform_driver and platform_device so
-> it doesn't need __exit.
->
-> I put __exit and the compiler complained about the warning.
-> =3D=3D=3D
-> WARNING: modpost:
-> drivers/platform/x86/x86-android-tablets/x86-android-tablets: section
-> mismatch in reference: xiaomi_mipad2_info+0x50 (section: .init.rodata)
-> -> xiaomi_mipad2_exit (section: .exit.text)
-> =3D=3D=3D
-
-This is interesting. Why then do we call them symmetrically?
-
-Hans, do we need to have anything here been amended?
+I don't see how the introduction of the I=C2=B2C ID table is related to
+this patch. If needed it can be done separately, no?
 
 --=20
 With Best Regards,
