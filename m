@@ -1,90 +1,90 @@
-Return-Path: <linux-pm+bounces-5466-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5467-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF16788D6D8
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 07:53:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6803888D83E
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 09:00:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6938D2A3721
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 06:53:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7BF631C2638C
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 08:00:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5EE8249ED;
-	Wed, 27 Mar 2024 06:53:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 751954AED2;
+	Wed, 27 Mar 2024 07:58:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DMYdglGB"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="G++MOIjP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC58121A06
-	for <linux-pm@vger.kernel.org>; Wed, 27 Mar 2024 06:53:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D518C47F5C
+	for <linux-pm@vger.kernel.org>; Wed, 27 Mar 2024 07:58:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711522423; cv=none; b=sHiB1OFWMHOf8ZEAl5Jte2AGSHUMm9sJP/nWOcc75j+XUy+nVtjUag4Zyer+BYTt4YNJdQFmC4FXAzHTwNb1a3bLWUPNXjBPZQIYmvTj7s7dfa0/fs6cQUhMLI5RiRO6yjz7iYJhuxaBRI4D1jCDDinueLuTGscCa4bs1fJsTNM=
+	t=1711526284; cv=none; b=IWdipVnAM8s4AZmJDqW2qhqBTNZNZzm/6cx09Smid8Bt3rQ9d4jtendfZjTBGS4LvTd8LRFQGWclnx6lpHorsnfbTus55CwgTQlQVbdd4tYbuObjLEs/ip/qJrI9JIcE3mzdajvcHjPVV7krMYzOuw/PreecwsmPsAsFEnNqf50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711522423; c=relaxed/simple;
-	bh=W6RLXUxCHDJY3w70KCqWzO6oGutZMiRq4O8XdSmVm20=;
+	s=arc-20240116; t=1711526284; c=relaxed/simple;
+	bh=+jMhjERTTtRLM0KWZ1Ds1bG7HJxMTKBPNk0QcjknlfM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fbJOrzzM6h/qEAvdFRw7mc8gy62HQoj/6a3O/fwFjQT2rZPmMtdOEJlcv2tBQTzp3ZLNthnti134wcTdFCXn6Wtneh5whL5R091VCoxZyyvMuyHM1ggOpMcXN5rEl0lJig4c2qEA6sX3NhIoRRtEZCOWlFdXrNhIBS79nOJN6W0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DMYdglGB; arc=none smtp.client-ip=170.10.133.124
+	 To:Cc:Content-Type; b=gtHR46ehV2dplvjqUeCRvhZE1YxHDy7qxH1AZaVThBwoT/hr4f9Fi0c4oLUGigby0rX1ptFrpv1Kv5vIl3+nOOeaGvVZXBrUR3J+l3aP1rjLp2tHVPC66EeSY1/L3iinaqVzkaHrfgbQIftwupKCiY2DeGNz1gRgJwyC/Ii2WZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=G++MOIjP; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1711522420;
+	s=mimecast20190719; t=1711526282;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=hjyCvIB6syQyBLc/PURAesFgBPIAm7ixXYus2PqXUv8=;
-	b=DMYdglGBptN5vBmIR3K0QnAMT99IlnNae/yg1KWDZyIDAco9sgAFvzmN9mOmEsBbmKn9lK
-	KwyxM5gZJqzSV36esmIE0ZJkdmhs/K6hQmAt72Tx8CLTxMnTSCOUOLXPhTSR10npYVKqnq
-	9uzfHKJgmLr6byFJRA0U7NWmRJBeHPw=
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
- [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=FvCZIXlyJ0i9W5y1NVajdFVbSmQI+ddDaK6Um2GHqYw=;
+	b=G++MOIjPBHsMtmR+pyOBfnSJnp2pVeMn0+s3/qs+vj0ZHsEN0a+EEyUFTyTH2mj0pKMp77
+	T+jGl0RX4OMlEkWihmnuRVwTN86KLNHcIE7RhSv42LHTMtJuLqJooylbTOLmO+v+Y0AHOd
+	4L8ZRCjOvfxIijYHT3/TgaSLlbOzPhk=
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
+ [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-652-POXK3OLPPOq5AAIFT1MgfA-1; Wed, 27 Mar 2024 02:53:37 -0400
-X-MC-Unique: POXK3OLPPOq5AAIFT1MgfA-1
-Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-5cdfd47de98so4954066a12.1
-        for <linux-pm@vger.kernel.org>; Tue, 26 Mar 2024 23:53:37 -0700 (PDT)
+ us-mta-611-tCv1HkHzMB-jK6XvCrBAcA-1; Wed, 27 Mar 2024 03:57:59 -0400
+X-MC-Unique: tCv1HkHzMB-jK6XvCrBAcA-1
+Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-6e6a7798bfdso3068654b3a.3
+        for <linux-pm@vger.kernel.org>; Wed, 27 Mar 2024 00:57:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711522416; x=1712127216;
+        d=1e100.net; s=20230601; t=1711526279; x=1712131079;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hjyCvIB6syQyBLc/PURAesFgBPIAm7ixXYus2PqXUv8=;
-        b=KSrFijG43wg/+ThbQiPrN+QUHkVEYv/PuEpjUTnzUG9n9QuT2vdeY/oMGpKgjojWcj
-         aeCoBIgkkw3ct7FwABMrnKY0ImMg1nCEXZIbxcuXaIAG/zJn9lD62rZHv7fCzQDURh4t
-         L5DmF+pgcUFi1liH8vzK7qFUDUpx3jh9Bt8tcsO0K5bQfbGIp8NX9nbJOryqaZoQhALG
-         xt+2vpsG3ls+5nxG9dhKb3TbTVe3lB5KVVlIOGgfsAXQs425E8Jvt93cZUdKOhTq2iVU
-         PH3jeTUQ8NuRLoIyA7zY//tlkpWeeWUYoVcWjMENVdDXeVvGDltP4liLvO83qsyTqshU
-         YDVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUpH4ty7fPiMx3EI+N2t/udMkaf5zIGqAJGoxDu/UTRYhDMYd+BS7uFraK5XL/GaOFKO/LaSUDRayHxPgZHRMUvfM4e4KjwT7Q=
-X-Gm-Message-State: AOJu0YxZFzH+AAR/IgpSmeX7C/e0oa97ggpiYMFW/7LR9lFrQJ1207Hh
-	oIDtRXz7AVt9Ly072iyg18fXOsAjc8vri3cx1+Pd/fEq5LKokxWw4FvVA9lx8bF2S/5YWAal1mA
-	Z1riXkXC4muRoMYZQe7hB+K8AzRzaEBo7HK8xIZibZZ86TnPsAcKSHX/r56yZgE39EsWTVQzA1K
-	wrmpE/0TilskpwdR4LCva9BBEmpzE6JSw=
-X-Received: by 2002:a05:6a21:339c:b0:1a3:8904:1fc9 with SMTP id yy28-20020a056a21339c00b001a389041fc9mr3637952pzb.41.1711522416608;
-        Tue, 26 Mar 2024 23:53:36 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE92cxDxgpu4LIAd0jfCXzzTSPP16EKFP9ZwNdIoRwWxtFgYT4c5S27JpSdRV4WKq/fyTzRxyP70R1xOrLebfs=
-X-Received: by 2002:a05:6a21:339c:b0:1a3:8904:1fc9 with SMTP id
- yy28-20020a056a21339c00b001a389041fc9mr3637931pzb.41.1711522416229; Tue, 26
- Mar 2024 23:53:36 -0700 (PDT)
+        bh=FvCZIXlyJ0i9W5y1NVajdFVbSmQI+ddDaK6Um2GHqYw=;
+        b=THMXRJ3QspFEgE82f0buIcGoEvRGMKKV72OFt7vIYcmSICDP4S5fn9IpVws/Sm9yVF
+         JDNkg0i78/fYT6FP/G9zmGVBdli74JGjIxr386lxYIkpfS1RmCKR/bKpuy8fLd9TTwL2
+         WFGUekPVtoXbc1BDGaU6QbhtxXCNAxm6FmXbMO76OWQtHziQOd0XkCgDnIhipX+6zCX5
+         MqrZ0fk8l9KY+yNPHJJT1dsNsG1tKOyCZNYgMPvsESPtivV1INo8OPyAysvrZskZn+a/
+         SNWKHlmoIxkAxZVaR9eZ2XjIOFw+0BCsgF8KYBXBC77FN3+PS/qvg/nE7sBY5KVYMjx/
+         woGA==
+X-Forwarded-Encrypted: i=1; AJvYcCVv/gbT+D7gP6L2rMvezpJjUuxgX86wHWoCXuQp5ZTqBcU9zqHRZqIOV5yBMWD65APrCejfsiWW/kzg/QTfYH1SDzTYLtENyc4=
+X-Gm-Message-State: AOJu0YysoVZ17Qa0H+sqIM0J6ZCss0E/zPTGmLUjlR5zI9NW6HXz62/I
+	q3D7BcG37VQLza3gH8P07+CaJk5+7m2g0jx9KB2AzpyHeftDwLg2w/6jQaRodFZn0mkh54QNfM9
+	SeT3mLavYkzETS7cki/8qVMN/Y1Rpse1/IMIwF0oXDMrMUmwiJHu1bYIadID8Hw4a+3fBDvkzT6
+	2XAos1F+K9NZfoNME5E5okOq6dFB0LnPg=
+X-Received: by 2002:a05:6a21:78a1:b0:1a3:5440:520 with SMTP id bf33-20020a056a2178a100b001a354400520mr2261629pzc.1.1711526278845;
+        Wed, 27 Mar 2024 00:57:58 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF+Q9fuG8yTs+ELOSdaWHYwqpSczYEeTI5UtBaHspHNLcfSZRVndgU5mB3Z2zq0Hcih2Q+cX9I9biaM+ykuO08=
+X-Received: by 2002:a05:6a21:78a1:b0:1a3:5440:520 with SMTP id
+ bf33-20020a056a2178a100b001a354400520mr2261613pzc.1.1711526278530; Wed, 27
+ Mar 2024 00:57:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240324150107.976025-1-hpa@redhat.com> <20240324150107.976025-3-hpa@redhat.com>
- <CAHp75VdosbYNKU90QWt+6SU_i5dWC94=xZy0GXiKvoQeDF30wg@mail.gmail.com>
-In-Reply-To: <CAHp75VdosbYNKU90QWt+6SU_i5dWC94=xZy0GXiKvoQeDF30wg@mail.gmail.com>
+References: <20240324150107.976025-1-hpa@redhat.com> <20240324150107.976025-2-hpa@redhat.com>
+ <CAHp75Ve5201KNdjvDZYq_unHTKp9wZXPWZXDgStP8y+XjtnWWg@mail.gmail.com>
+In-Reply-To: <CAHp75Ve5201KNdjvDZYq_unHTKp9wZXPWZXDgStP8y+XjtnWWg@mail.gmail.com>
 From: Kate Hsuan <hpa@redhat.com>
-Date: Wed, 27 Mar 2024 14:53:24 +0800
-Message-ID: <CAEth8oFuPTRq0z-YbMMFt=kKgre6x+bDhtpUkj2vJeK-u8O72A@mail.gmail.com>
-Subject: Re: [PATCH v5 RESEND 2/6] leds: rgb: leds-ktd202x: Get device
- properties through fwnode to support ACPI
+Date: Wed, 27 Mar 2024 15:57:47 +0800
+Message-ID: <CAEth8oG7_qFuUrL+kX3ezNatWqKPqT-qiaO5NGY-N3F3ufQL9w@mail.gmail.com>
+Subject: Re: [PATCH v5 RESEND 1/6] platform: x86-android-tablets: other: Add
+ swnode for Xiaomi pad2 indicator LED
 To: Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc: Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org, 
 	platform-driver-x86@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>, 
@@ -98,85 +98,87 @@ Hi Andy,
 
 Thank you for reviewing it.
 
-On Mon, Mar 25, 2024 at 3:57=E2=80=AFAM Andy Shevchenko
+On Mon, Mar 25, 2024 at 3:30=E2=80=AFAM Andy Shevchenko
 <andy.shevchenko@gmail.com> wrote:
 >
 > On Sun, Mar 24, 2024 at 5:02=E2=80=AFPM Kate Hsuan <hpa@redhat.com> wrote=
 :
 > >
-> > This LED controller also installed on a Xiaomi pad2 and it is a x86
-> > platform. The original driver is based on device tree and can't be
+> > There is a KTD2026 LED controller to manage the indicator LED for Xiaom=
+i
+> > pad2. The ACPI for it is not properly made so the kernel can't get
+> > a correct description of it.
+> >
+> > This work add a description for this RGB LED controller and also set a
 >
-> the device
+> adds
+> sets
 >
-> > used for this ACPI based system. This patch migrated the driver to
-> > use fwnode to access the properties. Moreover, the fwnode API
-> > supports device tree so this work won't effect the original
+> > trigger to indicate the chaging event (bq27520-0-charging). When it is
 >
-> affect
+> charging
 >
-> > implementations.
+> > charging, the indicator LED will be turn on.
 >
-> ...
->
-> > +       fwnode_for_each_available_child_node(fwnode, child) {
-> > +               num_channels++;
-> > +       }
->
-> {} are not needed.
->
-> >         if (!num_channels || num_channels > chip->num_leds)
-> >                 return -EINVAL;
+> turned
 >
 > ...
 >
-> > +static int ktd202x_add_led(struct ktd202x *chip,
-> > +                          struct fwnode_handle *fwnode_color,
+> > +/* main fwnode for ktd2026 */
+> > +static const struct software_node ktd2026_node =3D {
+> > +       .name =3D "ktd2026"
 >
-> Can it be simply fwnode? (Originally it was np, so I assume there is
-> no name collision)
-It can be. I'll revise this.
+> Leave a comma, this is not a terminator.
+>
+> > +};
+>
+> When I asked about the name I relied on the fact that you have an idea
+> how it works. So, assuming my understanding is correct, this platform
+> may not have more than a single LED of this type. Dunno if we need a
+> comment about this.
 
->
-> ...
->
-> > +       count =3D device_get_child_node_count(dev);
-> >         if (!count || count > chip->num_leds)
-> >                 return -EINVAL;
->
-> > +       fwnode =3D dev_fwnode(chip->dev);
->
-> Why not dev?
-I'll use dev. I had declared it.
+I'll make a comment to describe the configuration.
+This LED controller can be configured to an RGB LED like this. Also,
+it can be configured as three single-color (RGB) LEDs to show red,
+green, and blue only.
+I think the name can be "ktd2026-multi-color". Is it good for you?
 
->
-> > +       if (!fwnode)
-> > +               return -ENODEV;
->
-> This is dead code. Please remove these three lines.
-
-Okay.
 
 >
 > ...
 >
-> > +       .id_table =3D ktd202x_id,
+> > +static int __init xiaomi_mipad2_init(void)
+> > +{
+> > +       return software_node_register_node_group(ktd2026_node_group);
+> > +}
+> > +
+> > +static void xiaomi_mipad2_exit(void)
 >
-> Seems to me that you may split the I=C2=B2C ID table addition into a sepa=
-rate change.
+> __exit ?
+No need.
+x86-andriod-tablet is based on platform_driver and platform_device so
+it doesn't need __exit.
 
-Could you please describe this more clearly? Thank you
-
+I put __exit and the compiler complained about the warning.
+=3D=3D=3D
+WARNING: modpost:
+drivers/platform/x86/x86-android-tablets/x86-android-tablets: section
+mismatch in reference: xiaomi_mipad2_info+0x50 (section: .init.rodata)
+-> xiaomi_mipad2_exit (section: .exit.text)
+=3D=3D=3D
+>
+> > +{
+> > +       software_node_unregister_node_group(ktd2026_node_group);
+> > +}
 >
 > --
 > With Best Regards,
 > Andy Shevchenko
 >
 
-I'll propose the v6 patch according to your comments.
+I'll propose the v6 patch to fix them according to your comments.
 
-
---=20
+--
 BR,
 Kate
 
