@@ -1,79 +1,75 @@
-Return-Path: <linux-pm+bounces-5488-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5489-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A3C588DB64
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 11:43:23 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 440AB88DB68
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 11:44:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 16BCB290C22
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 10:43:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 99258B23E16
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 10:43:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B90C28DC8;
-	Wed, 27 Mar 2024 10:43:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30D324F1E3;
+	Wed, 27 Mar 2024 10:43:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YvgIX9tr"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QBCJCWlN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC4EC1F606
-	for <linux-pm@vger.kernel.org>; Wed, 27 Mar 2024 10:43:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5656028DC8
+	for <linux-pm@vger.kernel.org>; Wed, 27 Mar 2024 10:43:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711536199; cv=none; b=W7LscLRrdlb1SKcq+SkFS7UaNFIZc2BDzx02weAuNiuKMDgjF7bzzSWucniegjxhuTmtRrrC6XyE5R+h5cE0zgXT1N1cz0IiG8lsCZv0DMUquLNEgOX2Y2aGWRlzfTus2L1yrF4naFVc7tLuMz+L7LNN4tVRIvs2ahfEl9v40mo=
+	t=1711536233; cv=none; b=mZ37r9qcL/O7zHKqEzJIJK6XhLeHhH5/xmrO3g6wpUZshBVYtowJrPlO+YvTablOikMxNB8oagSjKZOSiobjpocczS36W+cmPbJL6QfZkrPo7zzSoBBAfCCzo3oOEtI4DX7JHL8G5nJ4SQ4yiKHIUcMzl0qaCjY/SSQ/FK2gVAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711536199; c=relaxed/simple;
-	bh=7MAZ1oJYx2he2O/U2IQ1vXCKiFiHly3gLB+lXSIflb0=;
+	s=arc-20240116; t=1711536233; c=relaxed/simple;
+	bh=H6wzbLWXmGgYGb1yPOC33E1h8HSEqsOhlxPmCupQFh8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Wood0ci2M2cY3R9wl1hy6MmTu4+qmzFa4j20geTsbwX1BIHI5fcVihP8zdmg2XofcX/SCULA/su3wz5Yy6ES+66NPHWt/Ec2j2HCggCGkHKFstjHWIQ+iC6D1dQQun5rU0CjIVPPeMdNMxSkzgv6yv95Y9vSVz1fWgSWqzniwG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YvgIX9tr; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1711536196;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dFsd9d7Gos7i1/b5V+OTo42Y7I+kMeOk7bouc9bj640=;
-	b=YvgIX9trGJ5NKFfjxNs6erKKxsvlt2xISwf3AElcUOuoAL+tgdekolCuM12aoJJhCxKiOG
-	LXAG27d9xM16wq8ouCurA16pcEaGAnYroYsiacn9S1TDbaKFnSX7avIusz6BlASDCKOMNK
-	Hl9fUUUkljKAR9Sptv2WhVyeCKQnCSc=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-287-ECYXLbeUPrG1TFr0uSS44Q-1; Wed, 27 Mar 2024 06:43:15 -0400
-X-MC-Unique: ECYXLbeUPrG1TFr0uSS44Q-1
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-a46d59152c9so481570966b.0
-        for <linux-pm@vger.kernel.org>; Wed, 27 Mar 2024 03:43:15 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=lVNXzR7LwjYa2d9w2pYS1hXaF1hkcLEFbC+ZGWanWg5wEbHubD0aEjoCzOob3JeIV5+NsN/vKkbixNrmFln6HToYbtzPHu3lSAlkYAYmsPnxaAdAgQaFxT6yK7zLSEcQass31Qor2Wbs9HVO9Uem1wjtr3KGAFvSwBpXw8P+rfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QBCJCWlN; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a46ea03c2a5so138395266b.1
+        for <linux-pm@vger.kernel.org>; Wed, 27 Mar 2024 03:43:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1711536230; x=1712141030; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=e4NrpBXvsW7MggsJVU9krNc1XmRyUBDTMJN1iw/MahM=;
+        b=QBCJCWlNmciU9OjV4HhJWxI4sgKKeOLfU9gBlrOsGsqov+ND8CWk+ovoypbmgeIXwD
+         vJY4ZDaceuLrQrxyOR6jPpMvuHd32edgFc+5kWNfsPsoaDOK9Nrg/GH8yEPnE9rPRjHz
+         xLzDmzFMn8fxrqAh+B4vxs4mH9y/PP4m1GLzIerXAwJw5kODAbmIrIE5dndVr7o6vsJq
+         btMVEdBHNyPcAB6pj0zOE5+uG0ttHGI7BYIAWI9PyUFVUY0FGS5HEvVikGPxJCrom9Lu
+         GcLjNC3niMoZfqjhmCpvvCMjDTpZeGkbXvRxDkSAjrtYRVEtQMQVJoi6LBpglcB62ZCf
+         tx8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711536194; x=1712140994;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dFsd9d7Gos7i1/b5V+OTo42Y7I+kMeOk7bouc9bj640=;
-        b=R/ml4lUz5H2+w6bLlriJSMRWAr3GkEkjg7uiM8NW5jkdod9oEbCe8TQu9MIpQRrD1a
-         CjhiSOEvicu75yTZ6egDmUqZtVj5nQnMFTX31/Y92WcT9iUQ7zas1SZrc8zYIrOhN5RQ
-         fkhTSrsQOf+oogMv+XEM+6d2Unl+JLfALjGhKtiDJgyhpntGsN7qz8u2UWlv43gHiI7G
-         c7iSBOFL8KGuoq8v/xFd/vqpYyY3xw0TiYcNRFIp1u+n9zahSeqo0K/jW2jb8Aic0rqI
-         EpBv4SOYZQcJcR6+8yyyJzhZKwlrK3TbJKAkqbtxC0jkf1t5U5nvGMdpP0m0mNZT/T/j
-         474A==
-X-Gm-Message-State: AOJu0Yyxk60RcA7tcIpnUhDKB8p+gO4su9Kw/qRYjus8A0atLScbBDVi
-	4dU/1zaWXDGDcnlq/pHfK0Wla4BXPIMt4FblcojG2/ktSXSROV10ptL9fDORhwV/EZtkC2EBGRZ
-	ZWC+eQsjLT7sOCx0DAytzWmOyuOHhCunxpi8uzq2cdrgniyRxG8XqT9qx
-X-Received: by 2002:a17:906:b310:b0:a4d:ff60:23e with SMTP id n16-20020a170906b31000b00a4dff60023emr1355418ejz.11.1711536194208;
-        Wed, 27 Mar 2024 03:43:14 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF/F3TWm576rM7znpuR1Ur2IS4OPqOiCggxfDxScn/bJpxRgIpLeOjAepMa+WykCQOkbHV5jA==
-X-Received: by 2002:a17:906:b310:b0:a4d:ff60:23e with SMTP id n16-20020a170906b31000b00a4dff60023emr1355408ejz.11.1711536193870;
-        Wed, 27 Mar 2024 03:43:13 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id u17-20020a17090663d100b00a468bcde79bsm5311110ejk.109.2024.03.27.03.43.13
+        d=1e100.net; s=20230601; t=1711536230; x=1712141030;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e4NrpBXvsW7MggsJVU9krNc1XmRyUBDTMJN1iw/MahM=;
+        b=BGLqTh57XDUNzpvdy+fFqi0UtwlnCokc+MRnK6+BJ11DfcTJrpUD3UQTM2us+wmu4F
+         63CgEow2zKHoyaDUXSKqsdHMQiwCrtbYvvxorMVLzjzP8oqswXpk7KYpr/i+4oKUS48L
+         4/0mU35vajO97UNN9hgGS6zrLkLX8pTAQJ36uq9wrdvRyzXKc6IZwUsNfZllMMpiZibT
+         4qs60gDR3YqSrHnIDvrychbWRS655zpAec85wHXfKBo5dMcDJgA9BpCD1iBMnZb1Om5U
+         IlZJNr9cNAkQM3htZBJcv8N4aaySZIbvwdgaSWJwz41/JQjgMn1dRGGwyBi+4BTwvMyh
+         PZoA==
+X-Forwarded-Encrypted: i=1; AJvYcCWU56cFKboE9jtXZv9rNtopWnzmW0ccduqZZfUKgrOaEEG0gB7H+Z1bP2hx+FWnwr7PVktm4VytONapIQXhXoizjl28ji05+9Y=
+X-Gm-Message-State: AOJu0YwOmyFGJHSR/E2iMRIOTDImvOU8ouGwZpUEcxZ2OQeMT2MaElfE
+	x0fFJPFaBEPnZzyU3WxQLHUUKCTWj9h/iXP8evr0FCBx1tQfXBgEZzaFuUbTc0o=
+X-Google-Smtp-Source: AGHT+IGamD7bwkdSCDLxuqvNBNCGKiAV9AzedAo1MfteyoIBbpAnPEaKi3YY1DIV3Q+4H5dDPIM5Qw==
+X-Received: by 2002:a17:906:f84b:b0:a46:f99d:1af9 with SMTP id ks11-20020a170906f84b00b00a46f99d1af9mr3597593ejb.1.1711536229623;
+        Wed, 27 Mar 2024 03:43:49 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.206.205])
+        by smtp.gmail.com with ESMTPSA id rh9-20020a17090720e900b00a46d786365esm5290545ejb.94.2024.03.27.03.43.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Mar 2024 03:43:13 -0700 (PDT)
-Message-ID: <9e035ae4-cb07-4f84-8336-1a0050855bea@redhat.com>
-Date: Wed, 27 Mar 2024 11:43:12 +0100
+        Wed, 27 Mar 2024 03:43:48 -0700 (PDT)
+Message-ID: <038ccb20-71cb-40d2-9720-ce1a0d3eac8c@linaro.org>
+Date: Wed, 27 Mar 2024 11:43:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -81,130 +77,109 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/4] power: supply: core: fix charge_behaviour
- formatting
-Content-Language: en-US, nl
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Sebastian Reichel <sre@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- Sebastian Reichel <sebastian.reichel@collabora.com>
-References: <20240303-power_supply-charge_behaviour_prop-v2-0-8ebb0a7c2409@weissschuh.net>
- <20240303-power_supply-charge_behaviour_prop-v2-3-8ebb0a7c2409@weissschuh.net>
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20240303-power_supply-charge_behaviour_prop-v2-3-8ebb0a7c2409@weissschuh.net>
+Subject: Re: [PATCH v2 2/3] dt-bindings: power: Add mediatek larb definition
+To: =?UTF-8?B?WXUtY2hhbmcgTGVlICjmnY7nprnnkosp?= <Yu-chang.Lee@mediatek.com>,
+ =?UTF-8?B?TWFuZHlKSCBMaXUgKOWKieS6uuWDlik=?= <MandyJH.Liu@mediatek.com>,
+ "conor+dt@kernel.org" <conor+dt@kernel.org>,
+ "robh@kernel.org" <robh@kernel.org>,
+ "krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
+ "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+ "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+ "angelogioacchino.delregno@collabora.com"
+ <angelogioacchino.delregno@collabora.com>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ Project_Global_Chrome_Upstream_Group
+ <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+ =?UTF-8?B?WGl1ZmVuZyBMaSAo5p2O56eA5bOwKQ==?= <Xiufeng.Li@mediatek.com>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>, =?UTF-8?B?RmFuIENoZW4gKOmZs+WHoSk=?=
+ <fan.chen@mediatek.com>
+References: <20240327055732.28198-1-yu-chang.lee@mediatek.com>
+ <20240327055732.28198-3-yu-chang.lee@mediatek.com>
+ <6dd9959e-f741-47af-b10a-1894f72ae78f@linaro.org>
+ <c3ca3d90-898e-44b0-ad0f-dd78c09c5fcd@linaro.org>
+ <f3eedfb3495bb9c28b5cbf466387c24822c5b6f6.camel@mediatek.com>
+ <7ff9c4c7-3b56-4a5b-95b7-c37cbf8bcd6d@linaro.org>
+ <b957b072d5d88ed315982e914a7f700e0ccafb83.camel@mediatek.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <b957b072d5d88ed315982e914a7f700e0ccafb83.camel@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi Thomas,
-
-On 3/3/24 4:31 PM, Thomas Weißschuh wrote:
-> This property is documented to have a special format which exposes all
-> available behaviours and the currently active one at the same time.
-> For this special format some helpers are provided.
+On 27/03/2024 11:39, Yu-chang Lee (李禹璋) wrote:
+>>>>
+>>> Hi,
+>>>
+>>> I will double check the format of yaml for the next version, sorry
+>> for
+>>> inconvenience. But I did test it on mt8188 chromebook, the reason
+>> why
+>>
+>> How do you test a binding on chromebook?
+>>
+>>> power domain need larb node is that when mtcmos power on, signal
+>> glitch
+>>> may produce. Power domain driver must reset larb when this happen
+>> to 
+>>> prevent dummy transaction on bus. That why I need larb node in dts.
+>>
+>> No one talks here about larb node...
 > 
-> However the default property logic in power_supply_sysfs.c is not using
-> the helper and the default logic only prints the currently active
-> behaviour.
-> 
-> Adjust power_supply_sysfs.c to follow the documented format.
-> 
-> There are currently two in-tree drivers exposing charge behaviours:
-> thinkpad_acpi and mm8013.
-> thinkpad_acpi is not affected by the change, as it directly uses the
-> helpers and does not use the power_supply_sysfs.c logic.
-> 
-> As mm8013 does not set implement desc->charge_behaviours.
-> the new logic will preserve the simple output format in this case.
+> Sorry, May you elaborate on what information I need to provide to you
+> or it is just a syntax problem I need to fix?
 
-Since patch 1/3 now drops the charge behaviours from mm8013 I believe
-these 2 paragraphs should be replaced with:
+Please explain the purpose of this property (how is it going to be used
+by drivers) and what does it represent.
 
-"""
-thinkpad_acpi. is the only in-tree drivers currently exposing charge
-behaviours. thinkpad_acpi is not affected by the change, as it directly
-uses the helpers and does not use the power_supply_sysfs.c logic.
-"""
-
-> Fixes: 1b0b6cc8030d ("power: supply: add charge_behaviour attributes")
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> ---
->  drivers/power/supply/power_supply_sysfs.c | 20 ++++++++++++++++++++
->  include/linux/power_supply.h              |  1 +
->  2 files changed, 21 insertions(+)
-> 
-> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-> index 10fec411794b..a20aa0156b0a 100644
-> --- a/drivers/power/supply/power_supply_sysfs.c
-> +++ b/drivers/power/supply/power_supply_sysfs.c
-> @@ -271,6 +271,23 @@ static ssize_t power_supply_show_usb_type(struct device *dev,
->  	return count;
->  }
->  
-> +static ssize_t power_supply_show_charge_behaviour(struct device *dev,
-> +						  struct power_supply *psy,
-> +						  union power_supply_propval *value,
-> +						  char *buf)
-> +{
-> +	int ret;
-> +
-> +	ret = power_supply_get_property(psy,
-> +					POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
-> +					value);
-> +	if (ret < 0)
-> +		return ret;
-
-power_supply_show_property() has already called power_supply_get_property()
-before calling this, so this call can be dropped. At which point
-power_supply_show_charge_behaviour() becomes just a wrapper around
-power_supply_charge_behaviour_show() and thus can be dropped itself.
-
-And then ... (continued below).
-
-> +
-> +	return power_supply_charge_behaviour_show(dev, psy->desc->charge_behaviours,
-> +						  value->intval, buf);
-> +}
-> +
->  static ssize_t power_supply_show_property(struct device *dev,
->  					  struct device_attribute *attr,
->  					  char *buf) {
-> @@ -303,6 +320,9 @@ static ssize_t power_supply_show_property(struct device *dev,
->  		ret = power_supply_show_usb_type(dev, psy->desc,
->  						&value, buf);
->  		break;
-> +	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
-> +		ret = power_supply_show_charge_behaviour(dev, psy, &value, buf);
-
-replace this line with:
-
-		ret = power_supply_charge_behaviour_show(dev, psy->desc->charge_behaviours,
-							 value.intval, buf);
-
-Making this patch a nice simple patch :)
-
-Regards,
-
-Hans
-
-
-
-
-> +		break;
->  	case POWER_SUPPLY_PROP_MODEL_NAME ... POWER_SUPPLY_PROP_SERIAL_NUMBER:
->  		ret = sysfs_emit(buf, "%s\n", value.strval);
->  		break;
-> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> index c0992a77feea..a50ee69503bf 100644
-> --- a/include/linux/power_supply.h
-> +++ b/include/linux/power_supply.h
-> @@ -242,6 +242,7 @@ struct power_supply_config {
->  struct power_supply_desc {
->  	const char *name;
->  	enum power_supply_type type;
-> +	u8 charge_behaviours;
->  	const enum power_supply_usb_type *usb_types;
->  	size_t num_usb_types;
->  	const enum power_supply_property *properties;
-> 
+Best regards,
+Krzysztof
 
 
