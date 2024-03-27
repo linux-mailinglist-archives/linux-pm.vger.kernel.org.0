@@ -1,154 +1,226 @@
-Return-Path: <linux-pm+bounces-5499-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5500-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62FA988DCC1
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 12:42:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA32888DCC9
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 12:46:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 049691F26EA5
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 11:42:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 471161F2ABE9
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 11:46:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F10A11272D4;
-	Wed, 27 Mar 2024 11:42:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="GNUi/WB5"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F7EA129E82;
+	Wed, 27 Mar 2024 11:46:30 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5033658131;
-	Wed, 27 Mar 2024 11:42:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 139A4129E77;
+	Wed, 27 Mar 2024 11:46:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711539766; cv=none; b=MbLk2gnBiGoCy0nBSFyfhHeBMOch6qLkqCS73H/jV9Wu6qR5GH16BYtcceFS+a3oT7ro3FuWR99tXWm7n3AT5v6RIsIb8uo+Sw/8CCfyMVuK28jogCuQ2cAkRHj3rzvXku87bq1x8+gaH21bjvhH7gVxLrbFCfpLzvgzZYwDnfM=
+	t=1711539990; cv=none; b=j3eRTww/lwHX9kiJjK6/hdKI80+K6bON7HvY7ijxRzd40cpGslK1nhlSzKnSoMJ+wXK5ZPc10IeFMPXcox5rtrwc2TJqFbbPQsMFH02UNhjQQJTjxn+SbgXa4444trcQD1Z507/W55vmuPBaqVo3BQyoh9NUm/1cpOmrjfFAGsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711539766; c=relaxed/simple;
-	bh=jKerGuDBFpQHbzKd+ZNzzf/kDL+W5sx53L+ccsWbyuQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=XyVVEviq8LbqpHGVgDLBtsKAv+e/dvJTwZ8c/N6jn6Z9yx1Pk2NGwO/teW90ErIybew3wG/QaLgfeD9aQD2HMgdG9V21+GfqE8rbR7TzSiOLoWSb9AUUSjbvz7vvm58ILlx5MAZeIRZdskcrkW7N7T6Hu5FD6wBR2bWiLyqk45Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=GNUi/WB5; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42RARhUZ027583;
-	Wed, 27 Mar 2024 11:42:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=IRzo6j6PI/VAljRrgfvgQpUyrCe4gj1qQNWtNSI1tYU=; b=GN
-	Ui/WB5ygXp2ctlzQrYTpAy8H1RRWqvFzIGyPHSAtDIuHBAcLvLLr2zyiBE6Z+a4P
-	JLa1qm6aKFlE+fhnxfV/0pSHmaSe5G+fu8EFkLCJtULjGkAv67x1RzckQSSwVhcr
-	frYf4DwgwQ6f/Gf+qed7ZBRsNkKlvD/1+VDrvq07LP9nIewGf1ZIBKt5osL0+HWk
-	nBVs8vpD3e4JnyB7eUOcGtrSAk+fH3FsDqeKZKAuAdsT9rnDA5zs8s8Bwo1Du6fV
-	gGa6NqzWi/QloK1Pp3sEQCd6fZEzo+IWAwu0CtjAVuvlQk4KS9nma3KwKhZAToGI
-	p7XV6DKipgRr7yCjkwmw==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3x47839k5v-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 Mar 2024 11:42:34 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42RBgXJE009973
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 Mar 2024 11:42:33 GMT
-Received: from [10.50.35.38] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 27 Mar
- 2024 04:42:28 -0700
-Message-ID: <1e1fcedb-d001-4883-9046-58f3933ff185@quicinc.com>
-Date: Wed, 27 Mar 2024 17:12:25 +0530
+	s=arc-20240116; t=1711539990; c=relaxed/simple;
+	bh=Ul4yG9uNhoPlqOLn8b/P5MHv0W7DsyjvWSzXRltK4I8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=qBS6tQaTE8oF8KGefs+vkAiteKvvZpmzHGxTRa+r1KCeYKXWnHKte8DqsCVpSXWqOqL7DINH2389SlKxSF+x8PBwaTqkRr2cl1Iietkt4xBcPxVpQoIyhENfi8fInGOO8TuJW+Z1pKTk4GnNe0O1enLkrPbkwMQoWdsdHqqJco4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 75A7D2F4;
+	Wed, 27 Mar 2024 04:47:01 -0700 (PDT)
+Received: from minigeek.lan (unknown [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 77E033F694;
+	Wed, 27 Mar 2024 04:46:24 -0700 (PDT)
+Date: Wed, 27 Mar 2024 11:46:08 +0000
+From: Andre Przywara <andre.przywara@arm.com>
+To: Samuel Holland <samuel@sholland.org>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-sunxi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, Brandon
+ Cheo Fusi <fusibrandon13@gmail.com>, Martin Botka
+ <martin.botka@somainline.org>, Martin Botka <martin.botka1@gmail.com>,
+ Chris Morgan <macroalpha82@gmail.com>, Ryan Walklin <ryan@testtoast.com>,
+ Mark Rutland <mark.rutland@arm.com>, Lorenzo Pieralisi
+ <lpieralisi@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>, Yangtao Li
+ <tiny.windzz@gmail.com>, Viresh Kumar <vireshk@kernel.org>, Nishanth Menon
+ <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, Rob Herring
+ <robh+dt@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
+ Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>,
+ "Rafael J . Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v3 6/8] cpufreq: sun50i: Add H616 support
+Message-ID: <20240327114608.2ffca28e@minigeek.lan>
+In-Reply-To: <65e86555-761e-4e26-8778-e2452876b5e4@sholland.org>
+References: <20240326114743.712167-1-andre.przywara@arm.com>
+	<20240326114743.712167-7-andre.przywara@arm.com>
+	<65e86555-761e-4e26-8778-e2452876b5e4@sholland.org>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/4] interconnect: qcom: icc-rpmh: Add QoS
- configuration support
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Konrad Dybcio
-	<konrad.dybcio@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Georgi
- Djakov" <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-        "Krzysztof
- Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>
-CC: Kees Cook <keescook@chromium.org>, <cros-qcom-dts-watchers@chromium.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>, <quic_rlaggysh@quicinc.com>,
-        <quic_mdtipton@quicinc.com>
-References: <20240325181628.9407-1-quic_okukatla@quicinc.com>
- <20240325181628.9407-2-quic_okukatla@quicinc.com>
- <d59896bb-a559-4013-a615-37bb43278b2e@linaro.org>
- <73e5a697-2eb4-45d3-84eb-60401ea10cc1@linaro.org>
-Content-Language: en-US
-From: Odelu Kukatla <quic_okukatla@quicinc.com>
-In-Reply-To: <73e5a697-2eb4-45d3-84eb-60401ea10cc1@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 2yAyAHPi8QB0wCAF0w1KJLEba2MA0PaQ
-X-Proofpoint-ORIG-GUID: 2yAyAHPi8QB0wCAF0w1KJLEba2MA0PaQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-27_08,2024-03-21_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
- suspectscore=0 mlxlogscore=999 impostorscore=0 lowpriorityscore=0
- phishscore=0 spamscore=0 priorityscore=1501 clxscore=1015 malwarescore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2403210001 definitions=main-2403270079
 
+On Tue, 26 Mar 2024 22:46:27 -0500
+Samuel Holland <samuel@sholland.org> wrote:
 
+Hi Samuel,
 
-On 3/27/2024 2:14 PM, Krzysztof Kozlowski wrote:
-> On 26/03/2024 21:56, Konrad Dybcio wrote:
->> On 25.03.2024 7:16 PM, Odelu Kukatla wrote:
->>> It adds QoS support for QNOC device and includes support for
->>> configuring priority, priority forward disable, urgency forwarding.
->>> This helps in priortizing the traffic originating from different
->>> interconnect masters at NoC(Network On Chip).
->>>
->>> Signed-off-by: Odelu Kukatla <quic_okukatla@quicinc.com>
->>> ---
->>
->> [...]
->>
->>>  
->>> +	if (desc->config) {
->>> +		struct resource *res;
->>> +		void __iomem *base;
->>> +
->>> +		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->>> +		if (!res)
->>> +			goto skip_qos_config;
->>> +
->>> +		base = devm_ioremap_resource(dev, res);
->>
->> You were asked to substitute this call like 3 times already..
->>
->> devm_platform_get_and_ioremap_resource
->>
->> or even better, devm_platform_ioremap_resource
+> On 3/26/24 06:47, Andre Przywara wrote:
+> > From: Martin Botka <martin.botka@somainline.org>
+> > 
+> > The Allwinner H616/H618 SoCs have different OPP tables per SoC version
+> > and die revision. The SoC version is stored in NVMEM, as before, though
+> > encoded differently. The die revision is in a different register, in the
+> > SRAM controller. Firmware already exports that value in a standardised
+> > way, through the SMCCC SoCID mechanism. We need both values, as some chips
+> > have the same SoC version, but they don't support the same frequencies and
+> > they get differentiated by the die revision.
+> > 
+> > Add the new compatible string and tie the new translation function to
+> > it. This mechanism not only covers the original H616 SoC, but also its
+> > very close sibling SoCs H618 and H700, so add them to the list as well.
+> > 
+> > Signed-off-by: Martin Botka <martin.botka@somainline.org>
+> > Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> > ---
+> >  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 61 ++++++++++++++++++++++++++
+> >  1 file changed, 61 insertions(+)
+> > 
+> > diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> > index bd170611c7906..f9e9fc340f848 100644
+> > --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> > +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> > @@ -10,6 +10,7 @@
+> >  
+> >  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> >  
+> > +#include <linux/arm-smccc.h>
+> >  #include <linux/cpu.h>
+> >  #include <linux/module.h>
+> >  #include <linux/nvmem-consumer.h>
+> > @@ -46,14 +47,71 @@ static u32 sun50i_h6_efuse_xlate(u32 speedbin)
+> >  		return 0;
+> >  }
+> >  
+> > +/*
+> > + * Judging by the OPP tables in the vendor BSP, the quality order of the
+> > + * returned speedbin index is 4 -> 0/2 -> 3 -> 1, from worst to best.
+> > + * 0 and 2 seem identical from the OPP tables' point of view.
+> > + */
+> > +static u32 sun50i_h616_efuse_xlate(u32 speedbin)
+> > +{
+> > +	int ver_bits = arm_smccc_get_soc_id_revision();  
 > 
-> Yeah, I wonder what else from my feedback got ignored :(
+> This needs a Kconfig dependency on ARM_SMCCC_SOC_ID.
+
+That was my first impulse as well, but it's actually not true:
+ARM_SMCCC_SOC_ID just protects the sysfs export code, not this function
+here. That does just depend on HAVE_ARM_SMCCC_DISCOVERY, which gets
+selected by ARM_GIC_V3, which gets selected by CONFIG_ARM64. So the
+arm64 kernel is safe.
+Now apart from ARM(32) (where the situation seems a bit more complex) I
+just realise that this would torpedo Brandon's D1 efforts, so I need to
+add this change I played with to provide an alternative:
+
+static int get_soc_id_revision(void)
+{
+#ifdef CONFIG_HAVE_ARM_SMCCC_DISCOVERY
+	return arm_smccc_get_soc_id_revision();
+#else
+	/* Return the value for the worse die revision, to be safe. */
+	return 2;
+#endif
+}
+
+Does that look acceptable, despite the #ifdef?
+
+Cheers,
+Andre
+
+
+> 
+> Regards,
+> Samuel
+> 
+> > +	u32 value = 0;
+> > +
+> > +	switch (speedbin & 0xffff) {
+> > +	case 0x2000:
+> > +		value = 0;
+> > +		break;
+> > +	case 0x2400:
+> > +	case 0x7400:
+> > +	case 0x2c00:
+> > +	case 0x7c00:
+> > +		if (ver_bits != SMCCC_RET_NOT_SUPPORTED &&
+> > ver_bits <= 1) {
+> > +			/* ic version A/B */
+> > +			value = 1;
+> > +		} else {
+> > +			/* ic version C and later version */
+> > +			value = 2;
+> > +		}
+> > +		break;
+> > +	case 0x5000:
+> > +	case 0x5400:
+> > +	case 0x6000:
+> > +		value = 3;
+> > +		break;
+> > +	case 0x5c00:
+> > +		value = 4;
+> > +		break;
+> > +	case 0x5d00:
+> > +		value = 0;
+> > +		break;
+> > +	case 0x6c00:
+> > +		value = 5;
+> > +		break;
+> > +	default:
+> > +		pr_warn("sun50i-cpufreq-nvmem: unknown speed bin
+> > 0x%x, using default bin 0\n",
+> > +			speedbin & 0xffff);
+> > +		value = 0;
+> > +		break;
+> > +	}
+> > +
+> > +	return value;
+> > +}
+> > +
+> >  static struct sunxi_cpufreq_data sun50i_h6_cpufreq_data = {
+> >  	.efuse_xlate = sun50i_h6_efuse_xlate,
+> >  };
+> >  
+> > +static struct sunxi_cpufreq_data sun50i_h616_cpufreq_data = {
+> > +	.efuse_xlate = sun50i_h616_efuse_xlate,
+> > +};
+> > +
+> >  static const struct of_device_id cpu_opp_match_list[] = {
+> >  	{ .compatible = "allwinner,sun50i-h6-operating-points",
+> >  	  .data = &sun50i_h6_cpufreq_data,
+> >  	},
+> > +	{ .compatible = "allwinner,sun50i-h616-operating-points",
+> > +	  .data = &sun50i_h616_cpufreq_data,
+> > +	},
+> >  	{}
+> >  };
+> >  
+> > @@ -230,6 +288,9 @@ static struct platform_driver
+> > sun50i_cpufreq_driver = { 
+> >  static const struct of_device_id sun50i_cpufreq_match_list[] = {
+> >  	{ .compatible = "allwinner,sun50i-h6" },
+> > +	{ .compatible = "allwinner,sun50i-h616" },
+> > +	{ .compatible = "allwinner,sun50i-h618" },
+> > +	{ .compatible = "allwinner,sun50i-h700" },
+> >  	{}
+> >  };
+> >  MODULE_DEVICE_TABLE(of, sun50i_cpufreq_match_list);  
+> 
 > 
 
-There was a misinterpretation of your comment from my side. Got it now, I will address this.
-
-> 
-> Best regards,
-> Krzysztof
-> 
-
-Thanks,
-Odelu
 
