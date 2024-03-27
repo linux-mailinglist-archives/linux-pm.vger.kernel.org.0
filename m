@@ -1,40 +1,40 @@
-Return-Path: <linux-pm+bounces-5515-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5516-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DCF988E6FF
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 15:47:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A450B88E713
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 15:48:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CAFB92E5B32
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 14:46:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 452C51F23ED2
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 14:48:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 014961591EE;
-	Wed, 27 Mar 2024 13:35:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41BF815A48E;
+	Wed, 27 Mar 2024 13:39:21 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20FAC12E1C9;
-	Wed, 27 Mar 2024 13:35:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 693D313049D;
+	Wed, 27 Mar 2024 13:39:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711546507; cv=none; b=SXCcqpovZAsilJF0mTm3FW5MIxKpqKKgyN0+9DCxvY+8oGJdPHdbyBG+2px8dACcWpvmDsmMBqj+sUIp1a5zOy+unt0VRoXDXFOHXBLUsL5zh5LZj6pbRWc1XNJMOkodAsD5ytjriUIwfSjN5Q6vNMEneEhHHirgWAlnGpv9q4k=
+	t=1711546761; cv=none; b=q78ASltJtYLlNey57Kz5HFDtzHnTrwYkae+2e2oGxKFWwiNJk5FhQqe9lsdzRIqVYMmDYHtUbb3Ao2LK7trPaf9ykaFfskh0Be0AblvnAfsaUJXA6iMFS4Cif9bgu0BM2oHutEcpdd3aEHfrnOPc95C61Vhfhh1/aJRBJhGhRxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711546507; c=relaxed/simple;
-	bh=ooKZ6O9tR9+QN4moCAzd2mBAdIEUT5709FoWcHHdLnM=;
+	s=arc-20240116; t=1711546761; c=relaxed/simple;
+	bh=QMWV3ihNRz0mDxS6+fJ38ErgxdJliWpfb4IEPJW63YI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZIphwFNRtYRBK6mNSaBz5HdFc0/muB19hym7+tcaY0b1Fz1w/bdpwRpHY8MTuFM5iL1oo5CTZSWnik57sWdqusz84NMOcVSftTK2UHAfSecG9hNWroBN91M+/Y7dUTsltYkL2/mCkYU++/NacAk2cQclRizWWXhiejxJVCsnV9I=
+	 In-Reply-To:Content-Type; b=KwVUuDitiJGGRCBrAj3GFu27VA5ltnijHOOo3FCkrPqsoCOLCznzNJ/XO9HcJKPQtx2hvgfRi1yz9ICrTizeMm0++rXRH89zrmSskek8OxT+RUnMBcrdchclFC21DSH/ynDZMUgA/hDQolsn0DdhMIype+/3AxgjEke1zC+L0uI=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 792FE2F4;
-	Wed, 27 Mar 2024 06:35:39 -0700 (PDT)
-Received: from [10.57.53.95] (unknown [10.57.53.95])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D365E3F7BD;
-	Wed, 27 Mar 2024 06:35:02 -0700 (PDT)
-Message-ID: <bd7f537a-87a5-43e6-bde1-acb82dd4ec1e@arm.com>
-Date: Wed, 27 Mar 2024 13:35:01 +0000
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 347892F4;
+	Wed, 27 Mar 2024 06:39:52 -0700 (PDT)
+Received: from [10.57.72.20] (unknown [10.57.72.20])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D48CD3F7BD;
+	Wed, 27 Mar 2024 06:39:15 -0700 (PDT)
+Message-ID: <37e593f3-22f3-4270-8e92-80e9a6187f55@arm.com>
+Date: Wed, 27 Mar 2024 13:39:14 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,85 +42,73 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] sched: Consolidate cpufreq updates
-To: Qais Yousef <qyousef@layalina.io>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
- Ingo Molnar <mingo@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Juri Lelli <juri.lelli@redhat.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall
- <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
- Daniel Bristot de Oliveira <bristot@redhat.com>,
- Valentin Schneider <vschneid@redhat.com>,
- Christian Loehle <christian.loehle@arm.com>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240324020139.1032473-1-qyousef@layalina.io>
+Subject: Re: [RESEND][PATCH v2 4/4] soc: samsung: exynos-asv: Update Energy
+ Model after adjusting voltage
 Content-Language: en-US
-From: Hongyan Xia <hongyan.xia2@arm.com>
-In-Reply-To: <20240324020139.1032473-1-qyousef@layalina.io>
+To: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org, sboyd@kernel.org, nm@ti.com,
+ linux-samsung-soc@vger.kernel.org, daniel.lezcano@linaro.org,
+ rafael@kernel.org, viresh.kumar@linaro.org, krzysztof.kozlowski@linaro.org,
+ alim.akhtar@samsung.com, m.szyprowski@samsung.com, mhiramat@kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20240322110850.77086-1-lukasz.luba@arm.com>
+ <20240322110850.77086-5-lukasz.luba@arm.com>
+ <59d37960-cf19-4b10-802f-59d42496c133@arm.com>
+ <d5d6ae17-3ba1-4cb8-909f-865e47bfa45b@arm.com>
+ <e02ca745-52df-4210-b175-f4ef278d81d8@arm.com>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <e02ca745-52df-4210-b175-f4ef278d81d8@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 24/03/2024 02:01, Qais Yousef wrote:
-> Improve the interaction with cpufreq governors by making the
-> cpufreq_update_util() calls more intentional.
-> 
-> At the moment we send them when load is updated for CFS, bandwidth for
-> DL and at enqueue/dequeue for RT. But this can lead to too many updates
-> sent in a short period of time and potentially be ignored at a critical
-> moment due to the rate_limit_us in schedutil.
-> 
-> For example, simultaneous task enqueue on the CPU where 2nd task is
-> bigger and requires higher freq. The trigger to cpufreq_update_util() by
-> the first task will lead to dropping the 2nd request until tick. Or
-> another CPU in the same policy triggers a freq update shortly after.
-> 
-> Updates at enqueue for RT are not strictly required. Though they do help
-> to reduce the delay for switching the frequency and the potential
-> observation of lower frequency during this delay. But current logic
-> doesn't intentionally (at least to my understanding) try to speed up the
-> request.
-> 
-> To help reduce the amount of cpufreq updates and make them more
-> purposeful, consolidate them into these locations:
-> 
-> 1. context_switch()
-> 2. task_tick_fair()
-> 3. {attach, detach}_entity_load_avg()
-> 4. update_blocked_averages()
-> 
-> The update at context switch should help guarantee that DL and RT get
-> the right frequency straightaway when they're RUNNING. As mentioned
-> though the update will happen slightly after enqueue_task(); though in
-> an ideal world these tasks should be RUNNING ASAP and this additional
-> delay should be negligible. For fair tasks we need to make sure we send
-> a single update for every decay for the root cfs_rq. Any changes to the
-> rq will be deferred until the next task is ready to run, or we hit TICK.
-> But we are guaranteed the task is running at a level that meets its
-> requirements after enqueue.
-> 
-> To guarantee RT and DL tasks updates are never missed, we add a new
-> SCHED_CPUFREQ_FORCE_UPDATE to ignore the rate_limit_us. If we are
-> already running at the right freq, the governor will end up doing
-> nothing, but we eliminate the risk of the task ending up accidentally
-> running at the wrong freq due to rate_limit_us.
 
-There may be two things in this patch:
 
-1. Have well-defined, centralized places where we update CPU frequency.
-2. The FORCE_UPDATE flag.
-
-I agree that at the moment, frequency updates inside the scheduler are 
-scattered around in many places, and they can be called consecutively in 
-a short period of time. Defining those places explicitly instead of 
-triggering frequency updates here and there sounds like a good idea, so 
-I definitely support 1.
-
-Not sure about 2. I think rate limit is there for a reason, although I 
-don't have that many platforms to test on to know whether forcing the 
-update is a problem.
-
+On 3/27/24 12:56, Dietmar Eggemann wrote:
+> On 26/03/2024 21:12, Lukasz Luba wrote:
+>> Hi Dietmar,
+>>
+>> On 3/26/24 11:20, Dietmar Eggemann wrote:
+>>> On 22/03/2024 12:08, Lukasz Luba wrote:
+>>>
+>>> [...]
+>>>
+>>>> @@ -97,9 +98,17 @@ static int exynos_asv_update_opps(struct
+>>>> exynos_asv *asv)
+>>>>                last_opp_table = opp_table;
+>>>>                  ret = exynos_asv_update_cpu_opps(asv, cpu);
+>>>> -            if (ret < 0)
+>>>> +            if (!ret) {
+>>>> +                /*
+>>>> +                 * When the voltage for OPPs successfully
+>>>> +                 * changed, update the EM power values to
+>>>> +                 * reflect the reality and not use stale data
+>>>
+>>> At this point, can we really say that the voltage has changed?
+>>>
+>>>     exynos_asv_update_cpu_opps()
+>>>
+>>>       ...
+>>>       ret = dev_pm_opp_adjust_voltage()
+>>>       if (!ret)
+>>>         em_dev_update_chip_binning()
+>>>       ...
+>>>
+>>> dev_pm_opp_adjust_voltage() also returns 0 when the voltage value stays
+>>> the same?
+>>>
+>>> [...]
+>>
+>> The comment for the dev_pm_opp_adjust_voltage() says that it
+>> returns 0 if no modification was done or modification was
+>> successful. So I cannot distinguish in that driver code, but
+>> also there is no additional need to do it IMO (even framework
+>> doesn't do this).
 > 
-> [...] 
+> Precisely. That's why the added comment in exynos_asv_update_opps():
+> "When the voltage for OPPs successfully __changed__, ..." is somehow
+> misleading IMHO.
+> 
+
+I got your point. Let me re-phrase that comment to reflect this
+OPP function return properly.
 
