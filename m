@@ -1,106 +1,123 @@
-Return-Path: <linux-pm+bounces-5522-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5523-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71FEB88E93F
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 16:37:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6990C88E94D
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 16:39:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F2E21C2F4E9
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 15:37:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24B052979C6
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 15:39:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74B0F14A0BC;
-	Wed, 27 Mar 2024 15:25:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0A301311AD;
+	Wed, 27 Mar 2024 15:29:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R2KYClsI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nl/zDVix"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4836F14A0B4;
-	Wed, 27 Mar 2024 15:25:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 888EF1311A4;
+	Wed, 27 Mar 2024 15:29:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711553138; cv=none; b=fByThnwIj1mQXhkWbqcjwAIG3WDSxtnFafGGI4R0vlHAHGOHYcubQ0Y+lb0XL/oINnX1qRXC14ggQucSufz1awEfyeBODkRG+6OxB3ZOS5FUZt6vrZ7oau+Jk3fUMkhdxufdlnpN2ooGkzNFR9Qdyke5Qqv39e8mpYvUVbqGSXU=
+	t=1711553363; cv=none; b=Mvt6oZCVn0RVYSPS6+H4sSNHej5Ow7QNKpRmB4DC0jEPlKXvqe0dwEezKAXOgSCy4LjKpQ0Wg4vJGLvw9agd1mgyq3L1vvS6mGFqsrjuqhdWgJRRQjawUMg3+HBaxg+ojmL69ibD5MuepPE2OvWzfH5S3G6EB7PVToLwhVvr06s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711553138; c=relaxed/simple;
-	bh=HXxGyYs0zg9MvmwQmo/FM9aZyeFLcxqwQu3YQVRdxZw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=EPrlI+lPwMPdrpR4s65hYB8x4Lab2FNdeBSqG0h3gygzs8s+V5MmENvuN9QJT63oy33lKhyF8PLTjd/2syXDwJeo8K7tcaEdN5vsmugsoQAqAZx1nwePcMNfqAYIxK9W7Pu4KbSUmAXvKhjS0CxaKTEyCuzvnnj7CIBwbipNsdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R2KYClsI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E717C43390;
-	Wed, 27 Mar 2024 15:25:37 +0000 (UTC)
+	s=arc-20240116; t=1711553363; c=relaxed/simple;
+	bh=J0FtqkoqtSoPeUA98W8fjiXSUWfIrwK4RE1QO+34rPs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WE6dblQLRQZewlJAOulu1O7BvLcKrge2drzLrdJfeyuIJjyI3WA+RcxuPRi3Q/YjnNRCUnKjg48YxBJ4o5VQ6Wrq4876irovcx2b1fyzXAHPJRri+rS85FSx9a2h9UjItTDBLvplzPaZWB+B3IBDWIEFWB22ARM4Vl5Ul4BP9e0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nl/zDVix; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C417C43390;
+	Wed, 27 Mar 2024 15:29:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711553137;
-	bh=HXxGyYs0zg9MvmwQmo/FM9aZyeFLcxqwQu3YQVRdxZw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=R2KYClsIRScmJ/cKKxoS5swCi1tsAyfZSyP+rZdJS/EGlh7hm65GHmer/OZer4VXA
-	 cR8OxRcPSNnUBmD2NRkIWX4jRSIVLSNWfjG+fZ0Iu9G1G0yqvJkxU7q8Fn9c7tHRJm
-	 5CsaMNOilcdgDpyU5i59zJ4JJ/OFp3tRChChyI9Dw0b7NTLVmyVGxWKGiw9f94uB2g
-	 MNHiMW+/coaVZcJoAk+8Q9cMWpx2wJ5trKoVUH6iVbn24okAAQESZ1cOKqC3NS8dpD
-	 sXuT4UZPXe8iUk5nT0jRBSCon47w/sY3AXrvExeNmB4GI3vzUppZ+nrHv72QB7xIjL
-	 c+dRWYx96XN2w==
-Date: Wed, 27 Mar 2024 10:25:35 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH] Documentation: PM: Update platform_pci_wakeup_init()
- reference
-Message-ID: <20240327152535.GA1523374@bhelgaas>
+	s=k20201202; t=1711553363;
+	bh=J0FtqkoqtSoPeUA98W8fjiXSUWfIrwK4RE1QO+34rPs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=nl/zDVixGrTLeyXsUz126UKXQtIBJpjLSBMiXPt2B6wuqWjtineWSmEc+c8gI7SwW
+	 dDQ2toiEL3xzGoDbc1meDoU5Ii3vR5L9laK9tNQLl/7fiLjfUCNeYpxoUUSDyW4Sbf
+	 hMsMI8ih7So4x2i9bFEMv3Yi3JHwDl2Gf7Fg3btifFMr3m3s2CEBtlWpXnbQMOoVjy
+	 KvqhTUAyMvbdfozYJ75BF+KEtlkO8Z3+xjkNZCtCgFX6FBgY0i8seR15NhhXpET/cX
+	 cx1x1oAPhlcOUKPxjhoXCLGPQd7pDcUzsMrAs+8cN4bIRV/1MLXOQwNxA8FMOG/jZR
+	 lB5cvwCsBNAsQ==
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-22a10ce0e0bso48942fac.1;
+        Wed, 27 Mar 2024 08:29:23 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCW/dpFMLGBtopZtPk5FtPQMWyXLk3bSV88B/84fLDJkQChxEpOJwX9ABPBVDhWq8qFrzzPx5oR7hm3PDq/edTq2SfiQA5JSvgvFrYW6p9WoVcYa1R0hrsc2wsOXZ6UxDVGAXB8+j5k=
+X-Gm-Message-State: AOJu0Yy5y0vlKpmEh7O29YYGqcV6S98js9Hx4LM7R3CumdE7FwrMrzO6
+	wErK3eiv64ASIxYyEgoP9z0PT5dUfJWpHBXUmvhYE62dBZphwvwYYCEsQafAFiW4T3W9XCPwNxR
+	pwiv3XLjuS9hPVgy6asgwSbs0XAA=
+X-Google-Smtp-Source: AGHT+IG07sThI/qV4cALaRKmThkl0638APMo19Co2Zmx32nhPGF86ucjLP5HzUjuGu6a64ZLWksTrngsuIAMFom9xuE=
+X-Received: by 2002:a05:6870:17a2:b0:22a:1e39:8be4 with SMTP id
+ r34-20020a05687017a200b0022a1e398be4mr11684284oae.2.1711553362025; Wed, 27
+ Mar 2024 08:29:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0j6SaxTG9+Zr1Sk9iN_bvzzOCD+7_s98HEes1CY825epQ@mail.gmail.com>
+References: <20240321102100.2401340-1-ye.zhang@rock-chips.com> <c7b2cb6f-3e14-45c3-9e22-11c0a9422bce@arm.com>
+In-Reply-To: <c7b2cb6f-3e14-45c3-9e22-11c0a9422bce@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 27 Mar 2024 16:29:11 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hE+erpYAiYGbQS_D8u==-ovvut_cyGAMj47Rm5FD7HVg@mail.gmail.com>
+Message-ID: <CAJZ5v0hE+erpYAiYGbQS_D8u==-ovvut_cyGAMj47Rm5FD7HVg@mail.gmail.com>
+Subject: Re: [PATCH v2] thermal: devfreq_cooling: Fix perf state when
+ calculate dfc res_util
+To: Lukasz Luba <lukasz.luba@arm.com>, Ye Zhang <ye.zhang@rock-chips.com>
+Cc: tao.huang@rock-chips.com, heiko@sntech.de, daniel.lezcano@linaro.org, 
+	finley.xiao@rock-chips.com, linux-rockchip@lists.infradead.org, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, rui.zhang@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 27, 2024 at 04:23:41PM +0100, Rafael J. Wysocki wrote:
-> On Mon, Mar 25, 2024 at 11:11 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+On Fri, Mar 22, 2024 at 9:50=E2=80=AFAM Lukasz Luba <lukasz.luba@arm.com> w=
+rote:
+>
+>
+>
+> On 3/21/24 10:21, Ye Zhang wrote:
+> > The issue occurs when the devfreq cooling device uses the EM power mode=
+l
+> > and the get_real_power() callback is provided by the driver.
 > >
-> > From: Bjorn Helgaas <bhelgaas@google.com>
+> > The EM power table is sorted ascending=EF=BC=8Ccan't index the table by=
+ cooling
+> > device state=EF=BC=8Cso convert cooling state to performance state by
+> > dfc->max_state - dfc->capped_state.
 > >
-> > platform_pci_wakeup_init() was removed by d2e5f0c16ad6 ("ACPI / PCI: Rework
-> > the setup and cleanup of device wakeup") but was still mentioned in the
-> > documentation.
-> >
-> > Update the doc to refer to pci_acpi_setup(), which does the equivalent
-> > work.
-> >
-> > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> > Fixes: 615510fe13bd ("thermal: devfreq_cooling: remove old power model =
+and use EM")
+> > Cc: 5.11+ <stable@vger.kernel.org> # 5.11+
+> > Signed-off-by: Ye Zhang <ye.zhang@rock-chips.com>
 > > ---
+> > v1 -> v2:
+> >    - Update the commit message.
 > >
-> > pci_acpi_setup() is a firmware-specific wart in this otherwise generic
-> > paragraph, so maybe there's some better way to express this?
+> >   drivers/thermal/devfreq_cooling.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
 > >
-> >  Documentation/power/pci.rst | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > diff --git a/drivers/thermal/devfreq_cooling.c b/drivers/thermal/devfre=
+q_cooling.c
+> > index 50dec24e967a..8fd7cf1932cd 100644
+> > --- a/drivers/thermal/devfreq_cooling.c
+> > +++ b/drivers/thermal/devfreq_cooling.c
+> > @@ -214,7 +214,7 @@ static int devfreq_cooling_get_requested_power(stru=
+ct thermal_cooling_device *cd
 > >
-> > diff --git a/Documentation/power/pci.rst b/Documentation/power/pci.rst
-> > index 12070320307e..e2c1fb8a569a 100644
-> > --- a/Documentation/power/pci.rst
-> > +++ b/Documentation/power/pci.rst
-> > @@ -333,7 +333,7 @@ struct pci_dev.
-> >  The PCI subsystem's first task related to device power management is to
-> >  prepare the device for power management and initialize the fields of struct
-> >  pci_dev used for this purpose.  This happens in two functions defined in
-> > -drivers/pci/pci.c, pci_pm_init() and platform_pci_wakeup_init().
-> > +drivers/pci/, pci_pm_init() and pci_acpi_setup().
+> >               res =3D dfc->power_ops->get_real_power(df, power, freq, v=
+oltage);
+> >               if (!res) {
+> > -                     state =3D dfc->capped_state;
+> > +                     state =3D dfc->max_state - dfc->capped_state;
 > >
-> >  The first of these functions checks if the device supports native PCI PM
-> >  and if that's the case the offset of its power management capability structure
-> > --
-> 
-> Applied as 6.10 material, or if you'd rather take it to the PCI tree,
-> please let me know.
+> >                       /* Convert EM power into milli-Watts first */
+> >                       rcu_read_lock();
+>
+> Thanks, LGTM
+>
+> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
-Thanks, your tree is fine!
-
-Bjorn
+Applied as 6.9-rc material, thanks!
 
