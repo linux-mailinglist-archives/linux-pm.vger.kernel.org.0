@@ -1,115 +1,169 @@
-Return-Path: <linux-pm+bounces-5520-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5521-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82EA788E9EF
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 16:56:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E35BB88E939
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 16:36:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DCB8AB2C277
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 15:28:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 17D051C30B0A
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 15:36:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA9561386D7;
-	Wed, 27 Mar 2024 15:23:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC861149DF6;
+	Wed, 27 Mar 2024 15:25:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kfl54Krp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c0UtVpHi"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF8CB137921;
-	Wed, 27 Mar 2024 15:23:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C262D149DE0;
+	Wed, 27 Mar 2024 15:25:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711553033; cv=none; b=vAL/DgkSoZox2d61Nj4SkoGHAAT6XGibNu4nCadLPGXLqwXCyJxIMTR3/TTVmB3J0GPFSKe16C2ivxZ5LbhfsfMvn/m3zyby3UAnlVNhN3YSvbsqigoKnpCM2sEDeMDZ2h2cGoowtWgDl2o1m2B49/ytfGp798rDDo/rdt0CmuM=
+	t=1711553133; cv=none; b=d1l1dHlqs//CzlL1kIxaXeT5qO+rDY7hgsQaPJWno7/NT6FxU2RTrpuqwzoalUkOFtKsICvBBciIJu3HL8033lDAJ23bdwsiIPycDALVyNAVkw2BkOOPpz7UT7Qiu1QQXE4BOleIbhF4zNhZ1ecFaTWARNHv1ILJWnFBsX9J+3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711553033; c=relaxed/simple;
-	bh=3VMwR39j8weliV+6NBseozQ2vW9EVpKn2q9EWN43Fbg=;
+	s=arc-20240116; t=1711553133; c=relaxed/simple;
+	bh=DLhR7AzkO0xf8+xYLiFt7UJXuf/uTo3qQMUJ4AihCJI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WNox+W58Kz7lwobR3wdLDvVaf7WLJdWeJdRpx1vzoYsdKAW5706dN2t4Z42H9IhDydIrBdDbP/vEHx0ZPasCvM7VumEzrzfFX/UIdQP30yVv1GU/pEhRUfXxJ8lEQVoeMRlXLDSTZTh8kGD6VHohYgRQz2qBV2QXDBHEMnxArPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kfl54Krp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BE13C433B1;
-	Wed, 27 Mar 2024 15:23:53 +0000 (UTC)
+	 To:Cc:Content-Type; b=BF49v8B5G0AyU9Kklpm55ALVf+KmHb1zMaACSH4+cuKhy5bPH+CRQk0oNQNpID0EqCCxReZjtvvz9UQwySW/S1yqijm1M30ivj/J45jvLI2bTcGcpurAjUCP5gIffSyORmYXT6yZzEWLv/NfIPYcWynyaiWpotG7IOtbF0Vsl3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c0UtVpHi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B652C433B2;
+	Wed, 27 Mar 2024 15:25:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711553033;
-	bh=3VMwR39j8weliV+6NBseozQ2vW9EVpKn2q9EWN43Fbg=;
+	s=k20201202; t=1711553133;
+	bh=DLhR7AzkO0xf8+xYLiFt7UJXuf/uTo3qQMUJ4AihCJI=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=kfl54KrpGwKEcsKwcQ5MYF3qjPvupQxIMPPXPjQOFzlFAloQVNpWmTS1lU2a/cNfb
-	 C/do0a1YEpQOKC1aEokxm2HNnUXgZccLBa17WwS+bjezyaf53gH34EtUKFSzPLlre6
-	 LZT4WoozcJB4A6hktm8Wc8S8blz6va6a62Du2FBDuZee+zX9NEU5E0w8eyRG0Yz6Tc
-	 MfVTAk04umkvJTfLbroFyLufKUhfgPV9EO++Xok4AnQG3BSUECXhiY2iOGggO87ARr
-	 TPKnLOry79euk+t4wbIyEEA3jtrE9ZpsslqbC1i+XtOdBPi9QWthyacm8JPKwA1Hna
-	 c+IdCg8ZHlvww==
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5a4e0859b65so1553414eaf.0;
-        Wed, 27 Mar 2024 08:23:53 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWcf3plSaE0oDIouMa1lTduLm7cV25dDVDTy+gb1gqHizSWwRUomBJYj2S4LeBWSwZhFUAHqqunsEbPxR+Rmhhl4oQTWdZkQe8DJsVwDNJI9YLodSFiloleFrmGmD4dpLZXoEncHHU=
-X-Gm-Message-State: AOJu0YzQzzwDl9gx7oleFOny05JVxL4ju3BcpJuHLfAyG12AIdMF2+nD
-	dkFFAtgK4NStJEZ28D2h7fEEgIr3Mh2ntQVBBIJgEGSvma46U2DvoajmzPZblWF3WXQbOOXFEpG
-	3y2ZHea/Nx492Dlscid3eZBimnjA=
-X-Google-Smtp-Source: AGHT+IHnnPd1qt0QJuSVrS8+m3tGMC4EBht4R7Ia3lYi2xIGB8baAo+spJupmQK/R5BKggmU0YjFtvHyMt+CM0fAJec=
-X-Received: by 2002:a05:6871:289c:b0:22a:1e0c:8bc6 with SMTP id
- bq28-20020a056871289c00b0022a1e0c8bc6mr11717648oac.2.1711553032614; Wed, 27
- Mar 2024 08:23:52 -0700 (PDT)
+	b=c0UtVpHiXxvyCG626zVmhvcD4i+DEkn1Q1tGU04kzVzfizD8QtqNSfEwsNap+m4WS
+	 CtNJKmGYp0wu+cXzP4jDO4594oQ3oeCTPymspkML0Um5vg5kv6kJ4krIijtROSiJzn
+	 ap4GENDyB5KmbFgWXpjg1NdWrounhPxuWcZOnvyJqGRL2HAk9nq84HmfMeS0M4JJZf
+	 RMnVxMRfoQGVSB1fRr1wvZV0FeXbBZt9X57sdCBwnYb/z+FKNt+jVrf7H64tToLTZm
+	 wXdyPRhxgEqbt7OaZY6Kvw1bwBwBXgDEDKopFSAiz4tm0X2xOUsRewT/7K6xhga9j4
+	 1G6ucz3FPMhlQ==
+Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-6e67ad4c2e3so494569a34.1;
+        Wed, 27 Mar 2024 08:25:33 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXKNLHpx6t6dhxtCbLSJJK8VyscTgloL+YVZ58CfmXNoKi7NyTtkXu2sNbv3f2llEAXk8NooMoGqtPfbUKEHF2uBt2Od+Te/M0uc+59P+NG38WHYnBZIcvTFqrmO2T/+6kp+xwGpxo=
+X-Gm-Message-State: AOJu0YwNYDivdQpFOdgc9wH6cmnhknRgaxAj0rrybhHzh3aDy2rSAR75
+	blsb9QMeL5bnoKdzkoXEcdaWJHpoog+AChGNGo1yTBhLwIN0LYN7yWMY4mf4lZSethoGLgKx/eV
+	ZusLTJDdDA9dBztXPeGmOU7okxEg=
+X-Google-Smtp-Source: AGHT+IHyocjUoMb2836C7kecUnLxqysy7ocHQMv/hFnJPjZWGdKMobN2j6lJ80C5dtAFC/mUPOpuzP9Ai7SGpBhOzPE=
+X-Received: by 2002:a05:6870:14d6:b0:229:e3d8:128c with SMTP id
+ l22-20020a05687014d600b00229e3d8128cmr13824960oab.1.1711553132646; Wed, 27
+ Mar 2024 08:25:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240325220952.1453477-1-helgaas@kernel.org>
-In-Reply-To: <20240325220952.1453477-1-helgaas@kernel.org>
+References: <20240321-gpa-no-cooling-devs-v1-1-5c9e0ef2062e@trvn.ru>
+In-Reply-To: <20240321-gpa-no-cooling-devs-v1-1-5c9e0ef2062e@trvn.ru>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 27 Mar 2024 16:23:41 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0j6SaxTG9+Zr1Sk9iN_bvzzOCD+7_s98HEes1CY825epQ@mail.gmail.com>
-Message-ID: <CAJZ5v0j6SaxTG9+Zr1Sk9iN_bvzzOCD+7_s98HEes1CY825epQ@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: PM: Update platform_pci_wakeup_init() reference
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Bjorn Helgaas <bhelgaas@google.com>
+Date: Wed, 27 Mar 2024 16:25:21 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jAq=iMKzYBz-Ni6Zqpbgxp3_0UYpPiAoSLcfGNJ8ruhQ@mail.gmail.com>
+Message-ID: <CAJZ5v0jAq=iMKzYBz-Ni6Zqpbgxp3_0UYpPiAoSLcfGNJ8ruhQ@mail.gmail.com>
+Subject: Re: [PATCH] thermal: gov_power_allocator: Allow binding without
+ cooling devices
+To: nikita@trvn.ru, Lukasz Luba <lukasz.luba@arm.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 25, 2024 at 11:11=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.org>=
- wrote:
+On Thu, Mar 21, 2024 at 3:44=E2=80=AFPM Nikita Travkin <nikita@trvn.ru> wro=
+te:
 >
-> From: Bjorn Helgaas <bhelgaas@google.com>
+> Commit e83747c2f8e3 ("thermal: gov_power_allocator: Set up trip points ea=
+rlier")
+> added a check that would fail binding the governer if there is no
+> cooling devices bound to the thermal zone. Unfortunately this causes
+> issues in cases when the TZ is bound to the governer before the cooling
+> devices are attached to it. (I.e. when the tz is registered using
+> thermal_zone_device_register_with_trips().)
 >
-> platform_pci_wakeup_init() was removed by d2e5f0c16ad6 ("ACPI / PCI: Rewo=
-rk
-> the setup and cleanup of device wakeup") but was still mentioned in the
-> documentation.
+> Additionally, the documentation across gov_power_allocator suggests it's
+> intended to allow it to be bound to thermal zones without cooling
+> devices (and thus without passive/active trip points), however the same
+> change added a check for the trip point to be present, causing those TZ
+> to fail probing.
 >
-> Update the doc to refer to pci_acpi_setup(), which does the equivalent
-> work.
+> Those changes cause all thermal zones to fail on some devices (such as
+> sc7180-acer-aspire1) and prevent the kernel from controlling the cpu/gpu
+> frequency based on the temperature, as well as losing all the other
+> "informational" thermal zones if power_allocator is set as default.
 >
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> This commit partially reverts the referenced one by dropping the trip
+> point check and by allowing the TZ to probe even if no actor buffer was
+> allocated to allow those TZ to probe again.
+>
+> Fixes: e83747c2f8e3 ("thermal: gov_power_allocator: Set up trip points ea=
+rlier")
+> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
 > ---
->
-> pci_acpi_setup() is a firmware-specific wart in this otherwise generic
-> paragraph, so maybe there's some better way to express this?
->
->  Documentation/power/pci.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Documentation/power/pci.rst b/Documentation/power/pci.rst
-> index 12070320307e..e2c1fb8a569a 100644
-> --- a/Documentation/power/pci.rst
-> +++ b/Documentation/power/pci.rst
-> @@ -333,7 +333,7 @@ struct pci_dev.
->  The PCI subsystem's first task related to device power management is to
->  prepare the device for power management and initialize the fields of str=
-uct
->  pci_dev used for this purpose.  This happens in two functions defined in
-> -drivers/pci/pci.c, pci_pm_init() and platform_pci_wakeup_init().
-> +drivers/pci/, pci_pm_init() and pci_acpi_setup().
->
->  The first of these functions checks if the device supports native PCI PM
->  and if that's the case the offset of its power management capability str=
-ucture
-> --
+> I've noticed that all thermal zones fail probing with -EINVAL on my
+> sc7180 based Acer Aspire 1 since 6.8. This commit allows me to bring
+> them back.
 
-Applied as 6.10 material, or if you'd rather take it to the PCI tree,
-please let me know.
+=C5=81ukasz, any comments?
+
+> ---
+>  drivers/thermal/gov_power_allocator.c | 14 +++++---------
+>  1 file changed, 5 insertions(+), 9 deletions(-)
+>
+> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_=
+power_allocator.c
+> index 1b17dc4c219c..4f2d7f3b7508 100644
+> --- a/drivers/thermal/gov_power_allocator.c
+> +++ b/drivers/thermal/gov_power_allocator.c
+> @@ -679,11 +679,6 @@ static int power_allocator_bind(struct thermal_zone_=
+device *tz)
+>                 return -ENOMEM;
+>
+>         get_governor_trips(tz, params);
+> -       if (!params->trip_max) {
+> -               dev_warn(&tz->device, "power_allocator: missing trip_max\=
+n");
+> -               kfree(params);
+> -               return -EINVAL;
+> -       }
+>
+>         ret =3D check_power_actors(tz, params);
+>         if (ret < 0) {
+> @@ -693,7 +688,7 @@ static int power_allocator_bind(struct thermal_zone_d=
+evice *tz)
+>         }
+>
+>         ret =3D allocate_actors_buffer(params, ret);
+> -       if (ret) {
+> +       if (ret && ret !=3D -EINVAL) {
+>                 dev_warn(&tz->device, "power_allocator: allocation failed=
+\n");
+>                 kfree(params);
+>                 return ret;
+> @@ -714,9 +709,10 @@ static int power_allocator_bind(struct thermal_zone_=
+device *tz)
+>         else
+>                 params->sustainable_power =3D tz->tzp->sustainable_power;
+>
+> -       estimate_pid_constants(tz, tz->tzp->sustainable_power,
+> -                              params->trip_switch_on,
+> -                              params->trip_max->temperature);
+> +       if (params->trip_max)
+> +               estimate_pid_constants(tz, tz->tzp->sustainable_power,
+> +                                      params->trip_switch_on,
+> +                                      params->trip_max->temperature);
+>
+>         reset_pid_controller(params);
+>
+>
+> ---
+> base-commit: e7528c088874326d3060a46f572252be43755a86
+> change-id: 20240321-gpa-no-cooling-devs-c79ee3288325
+>
+> Best regards,
+> --
+> Nikita Travkin <nikita@trvn.ru>
+>
 
