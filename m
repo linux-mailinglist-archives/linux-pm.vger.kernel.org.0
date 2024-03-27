@@ -1,75 +1,75 @@
-Return-Path: <linux-pm+bounces-5474-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5475-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A81988D948
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 09:40:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36C7988D963
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 09:45:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 85DFDB23695
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 08:39:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA822294FA2
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 08:44:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C7B436119;
-	Wed, 27 Mar 2024 08:39:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F86036138;
+	Wed, 27 Mar 2024 08:44:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JHLcuD6q"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fiBW8ccN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82ED8339A1
-	for <linux-pm@vger.kernel.org>; Wed, 27 Mar 2024 08:39:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F4428DBC
+	for <linux-pm@vger.kernel.org>; Wed, 27 Mar 2024 08:44:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711528793; cv=none; b=frUwDN88DsHwAJjWpyf26Z97e9HINkhya0z11Ww25KnocWOu2+LR27W8DwoWMJ0eJNVz+iyAkuMvtxCrxYaEsZ6sWAL4vlW2fYONn7U2r1CU+VF5WLDPBo9rAXoW7NgyiJ1eNd98HKC2LUbdquiyVQThgUj/yiR90YwiQnDLq1U=
+	t=1711529067; cv=none; b=o17bLoEYHoOTldyo0QTpIAEbcTLZBORP3Hsg8zjx1h0iu3iewNthT0XAQvU53jD8wsyZ9NiKjqdngrX8CSs5253Yx5K0DVNmMnapLMijvvT4Jd5yO6gFeEKnKmSdHdHCR1E2NiRrWs6R35AU512WOAIzG+p/XFUszXW0HlLP2K4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711528793; c=relaxed/simple;
-	bh=ZDRZwJQ+QJIrrv40NZ8QrmrazFrIsbwXLrgM4abLjio=;
+	s=arc-20240116; t=1711529067; c=relaxed/simple;
+	bh=5jgLagnXQ6xhAkEIJNUbHLhU7RMCem4VEiLbv9YJlRo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VBFrKMr8FbJPJ89LgwJVgZkwt3iuGvN7ktIxaExpSuciSijghuS9wZK7peKyc9tdFKIaQMzYFJ7kzYhfoCGxUwbOglGWIVVrNVBGy2ER0OYBpuUcXnYf8RARvua/4+svBxxEqq//+t+jl4CHS7QDcCXBBj9l28/YAwgIdQ/iz1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JHLcuD6q; arc=none smtp.client-ip=209.85.218.41
+	 In-Reply-To:Content-Type; b=Q+fBk09KTa6mcXelwCfigSdQ0spim3kdOUDN2k9idjSGdhCpi7b2xfF9JVKjiZ/eF9utgBHb6pPJWj20LQNGKiA0mF0DWa3iD8ejFp+20Itv8EoIfPbOLif8k/ACor0gUUu+OOhw4ZFPNBTOaswkLu2wTb2w5E73/O18ln++O9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fiBW8ccN; arc=none smtp.client-ip=209.85.218.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a46a7208eedso873984466b.0
-        for <linux-pm@vger.kernel.org>; Wed, 27 Mar 2024 01:39:51 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a4a3a5e47baso375407066b.2
+        for <linux-pm@vger.kernel.org>; Wed, 27 Mar 2024 01:44:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711528790; x=1712133590; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1711529064; x=1712133864; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=7sgl91cyHd0ngfAv+/I8G9ELuV5bOxPH1UN/EjkLhck=;
-        b=JHLcuD6qIlJMpmP0/vlrxJLS0MR28dAuSryMogbUgJtFiXD12akirYden8sSCHbSpe
-         ntZ6YL0Iwd98pzf1b+00JLpQgY2ZYI0fInhnvI+5ZVe2nTYXrfOt0VBVLGX0DfNLZuLG
-         auyWohAwSa/x9Ftmhev7KagYdLgAHjdvSiZ+7n9Z/yXTgITFHTy9+LU57TEhekCurfqk
-         y8oU7Tp1Q63MpSukZBhpF0X+xkHhZcgezVG16CJND+Yhm1qfDthYeVyITYcrc3/Rgdl+
-         fF+EDjFuq1wuBimKHiPXaobMHNtmCBLfmvG4NcVaP3B0W+RaZADxYaN7ZzUPentOcM5n
-         WDaw==
+        bh=rFw5oadwcyNPA68+IoBOiw7o2WmetNa9KlFx7gAlFDI=;
+        b=fiBW8ccNTHG4mf/VZ6LuIhIF1ytsAXzaK9vh1+FZZYs3iek4jRIJ3Zsz+OrEee3/3d
+         Oh26ZMp79eEMTn1FBIGSm3R0GnpN3Xu8z05CImFqjjzVAJ0JshA8hkvExgI/GDVR3DlQ
+         HxHfZ0KKciw9FrRpADs/JcvznE9uuu7n3UzES5pQgydkMYkYcqMBSVJ9VCy0vWSBnmWc
+         19+0dYerF1788VcWf++thzeMN6XXx1TtiUlW6habOsPcxhGsNTU5ryFztitFo7v1Q1NQ
+         UFDhCujoF3Iq5ObXku/eQlYEwQ8hT1vF/6jRzZNGLihcLh6Yqfpi8osR1SOtwSxF4jU6
+         ESlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711528790; x=1712133590;
+        d=1e100.net; s=20230601; t=1711529064; x=1712133864;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7sgl91cyHd0ngfAv+/I8G9ELuV5bOxPH1UN/EjkLhck=;
-        b=cukHWHhg7gnB3jgFtgeu2d4GdD7vwtHu7bxaDOARPeFFI6o1X04YMys38JH/U1qZzm
-         FuhXmt6KRkyo81dVM91C1B3wRfnDVkfptanzIgKaSRBvcXzme8MeO+Jic4qOBfEd7TIP
-         y5iV8c6A+G0kVLbRSWFxcQRLxleGu8cucAAe/egztf0JcWKna75KypQB95b6IBFVr428
-         SmiRTCJO5HeHfTMvzpkVz9/3B8mjyAUgiSF0i6hMGQSqaunw2s74xdZImPQHyQFGt/3D
-         bCRZ/op10bMiLi+qh4Z+294oDNzyOWp51K5RQIrw2Xm/zr3mFTJoy2Ab/PxNo/1lfOIV
-         Qw3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUUOaPEYn25UUhuw4TzA99YSOGjYv/1LP7QnQjbK7myf/kzA++Zl0oitEh/q+UeVQhTb33Y3bMtBPSEmGmYkQhrv9OOPsX2YK0=
-X-Gm-Message-State: AOJu0Ywq9FsJn6jO1UX94fHRgtJ0Khjsn3y/GGNx2MWYO6mLWnwFvQ+h
-	W+aBC64ZDH8EEKEpIP52ntyaw2LvTvgbbT3SDdR6JnqlVYbxipyn4JBXNoCDHi4=
-X-Google-Smtp-Source: AGHT+IGHK6FAadZlHyi/lYzLgGyYgw6MgjuiXz0zX13j28Ww0caejOkBRShxKEix/y4WTM1gOunBQQ==
-X-Received: by 2002:a17:906:19d7:b0:a4d:f8e4:149e with SMTP id h23-20020a17090619d700b00a4df8e4149emr2162440ejd.51.1711528789846;
-        Wed, 27 Mar 2024 01:39:49 -0700 (PDT)
+        bh=rFw5oadwcyNPA68+IoBOiw7o2WmetNa9KlFx7gAlFDI=;
+        b=IJ6gM8te+Rv7SY8oXFPFa/R1tzkKig93VxGHqYmpGPtPPwRa0B6Cqs1Amgn5sYiQ2T
+         eAlgmtAXVnM0dDW39TLYCH6C5pIcYFXNJMAVCiX977GILcp9klYcbV1cz3nt+XD1oF2B
+         MWeWyHLAkVkeWilas2zrNCzZ++UtPB/LxqxNSAAqt7AgkZL4oFIEBn3H3DLTZHDQhnof
+         eEGh8vXTPjMrf0aGVsjp9Cupa5DY3bUZF/TaZeIdl5ZZxRqhDdiU3IpuhWZ9ZDDHhOAy
+         oAmwYQOzqZfIP6HqNpKtBrR8cevfgDGvT+o/8x81UQeGpqQQHUOdUOTXvMARytNrr/NJ
+         DPWw==
+X-Forwarded-Encrypted: i=1; AJvYcCVvu8fJp3z+KqbEnPh8X1PBazKF66PNoCRfZl4g7vCJRvBwcQ4YqLHn4ZajPzCMqh/0jEyU/brV/rXW5YCHMWzp/hyXzwe3sPk=
+X-Gm-Message-State: AOJu0YzMQFT6H/celyzxnBjFdZhbdy24afhzYTMc3dQOLoWOKW/crnHE
+	glUJwC1zVRB/MJY02OUIlmaLfr/7eU9H6ixhmlKWvvrXhaHmwPWuhZXBhIlKAu4=
+X-Google-Smtp-Source: AGHT+IGCW+el7emQ1/+oO1zg6ptwcHdw8/EJLjhWGE+dnvBCHkRrn/RhO1OxEXI/8C2Qt3RPc5EAZA==
+X-Received: by 2002:a17:906:798:b0:a4a:3441:2e2a with SMTP id l24-20020a170906079800b00a4a34412e2amr440215ejc.55.1711529064259;
+        Wed, 27 Mar 2024 01:44:24 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.206.205])
-        by smtp.gmail.com with ESMTPSA id q16-20020a170906389000b00a46a643b6fbsm5229376ejd.15.2024.03.27.01.39.48
+        by smtp.gmail.com with ESMTPSA id n19-20020a170906119300b00a4660b63502sm5196946eja.12.2024.03.27.01.44.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Mar 2024 01:39:49 -0700 (PDT)
-Message-ID: <6dd9959e-f741-47af-b10a-1894f72ae78f@linaro.org>
-Date: Wed, 27 Mar 2024 09:39:47 +0100
+        Wed, 27 Mar 2024 01:44:23 -0700 (PDT)
+Message-ID: <73e5a697-2eb4-45d3-84eb-60401ea10cc1@linaro.org>
+Date: Wed, 27 Mar 2024 09:44:21 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,20 +77,23 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] dt-bindings: power: Add mediatek larb definition
-To: "yu-chang.lee" <yu-chang.lee@mediatek.com>, Rob Herring
- <robh@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- MandyJH Liu <mandyjh.liu@mediatek.com>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org,
- Project_Global_Chrome_Upstream_Group@mediatek.com, fan.chen@mediatek.com,
- xiufeng.li@mediatek.com
-References: <20240327055732.28198-1-yu-chang.lee@mediatek.com>
- <20240327055732.28198-3-yu-chang.lee@mediatek.com>
+Subject: Re: [PATCH v4 1/4] interconnect: qcom: icc-rpmh: Add QoS
+ configuration support
+To: Konrad Dybcio <konrad.dybcio@linaro.org>,
+ Odelu Kukatla <quic_okukatla@quicinc.com>,
+ Bjorn Andersson <andersson@kernel.org>, Georgi Djakov <djakov@kernel.org>,
+ Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>, cros-qcom-dts-watchers@chromium.org,
+ "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+ linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hardening@vger.kernel.org, quic_rlaggysh@quicinc.com,
+ quic_mdtipton@quicinc.com
+References: <20240325181628.9407-1-quic_okukatla@quicinc.com>
+ <20240325181628.9407-2-quic_okukatla@quicinc.com>
+ <d59896bb-a559-4013-a615-37bb43278b2e@linaro.org>
 Content-Language: en-US
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
@@ -137,35 +140,41 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240327055732.28198-3-yu-chang.lee@mediatek.com>
+In-Reply-To: <d59896bb-a559-4013-a615-37bb43278b2e@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 27/03/2024 06:57, yu-chang.lee wrote:
-> Add Smart Multimedia Interface Local Arbiter to mediatek
-> power domain.
+On 26/03/2024 21:56, Konrad Dybcio wrote:
+> On 25.03.2024 7:16 PM, Odelu Kukatla wrote:
+>> It adds QoS support for QNOC device and includes support for
+>> configuring priority, priority forward disable, urgency forwarding.
+>> This helps in priortizing the traffic originating from different
+>> interconnect masters at NoC(Network On Chip).
+>>
+>> Signed-off-by: Odelu Kukatla <quic_okukatla@quicinc.com>
+>> ---
 > 
-> Signed-off-by: yu-chang.lee <yu-chang.lee@mediatek.com>
-> ---
->  .../devicetree/bindings/power/mediatek,power-controller.yaml  | 4 ++++
->  1 file changed, 4 insertions(+)
+> [...]
 > 
-> diff --git a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
-> index 8985e2df8a56..228c0dec5253 100644
-> --- a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
-> +++ b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
-> @@ -125,6 +125,10 @@ $defs:
->          $ref: /schemas/types.yaml#/definitions/phandle
->          description: phandle to the device containing the SMI register range.
->  
-> +     mediatek,larb:
-> +        $ref: /schemas/types.yaml#/definitions/phandle
-> +        description: phandle to the device containing the LARB register range.
+>>  
+>> +	if (desc->config) {
+>> +		struct resource *res;
+>> +		void __iomem *base;
+>> +
+>> +		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>> +		if (!res)
+>> +			goto skip_qos_config;
+>> +
+>> +		base = devm_ioremap_resource(dev, res);
+> 
+> You were asked to substitute this call like 3 times already..
+> 
+> devm_platform_get_and_ioremap_resource
+> 
+> or even better, devm_platform_ioremap_resource
 
-Why do you need it?
+Yeah, I wonder what else from my feedback got ignored :(
 
-Plus I also see mediatek,larbs and mediatek,larb-id... so now we have
-third one similar.
 
 Best regards,
 Krzysztof
