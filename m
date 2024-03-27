@@ -1,257 +1,270 @@
-Return-Path: <linux-pm+bounces-5455-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5456-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6329188D2D5
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 00:31:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E203F88D38D
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 01:57:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D05151F3E77B
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Mar 2024 23:31:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E4F1304EA1
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 00:57:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5445813E031;
-	Tue, 26 Mar 2024 23:31:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABB4AFBF3;
+	Wed, 27 Mar 2024 00:57:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="n1iGFLV0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RB+f1HrN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 733FD6FE35;
-	Tue, 26 Mar 2024 23:31:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D9CD17547;
+	Wed, 27 Mar 2024 00:57:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711495877; cv=none; b=KSY4c8yEHpBmOhaKJxn060rSsf418AKIG73I2I+kSiTkM0LatoeN/Pv0pus/A5WKL3FYNdyr9KYBQITcRS+0kUkES/zrq+8s8BZYS6US6wu6BiIlfZ4Ar2i64yhWxHIU+2GPzQ/52xbgmi1t4U084JKCliGrabdsoRCVvO4vqeg=
+	t=1711501030; cv=none; b=EXPRr3z7YmoL1OblOfcdfQrqDl38BJve3f6/m+2cr/wN3L1hci7QlyeU1e3ZNo59Oj686g+h+toY+2xU3tMBg+oVCtHfnkMbDx1u5JCiw6zKH4dJ8mUD5xA53Zc94u42WsY+wRqtqKUIQk85XboZpff0AL8y/sM1RjySJSTxIm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711495877; c=relaxed/simple;
-	bh=MTHbQxWWr82Pgl4Qpl4eCiscQ+kIVFbl12TUbUWZXfk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PCTp3OKuJcVIp428afAnCYFIFt4Z06XVo/t7LlSAJ50ycHW5prJZg+rEQe8tpSjFoxvJH1l/DOarLBsZrVJ2MGa3ZmGloyXRkNEkHWktQT5AgClq6hBGZMoEIqD4wI66qqGMTwmII/NnucZ3klaXVLM5MmvCjUklIZuriKjryOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=n1iGFLV0; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1711495873;
-	bh=MTHbQxWWr82Pgl4Qpl4eCiscQ+kIVFbl12TUbUWZXfk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=n1iGFLV0hIJ00/P6UnGBL2sCMeGrkCpUMc8TrbTr4kT+yzDJfyKHTg/NYejkGg2ag
-	 ONxhBfk1IIAJracIV3NFfmBk2OdTXMYO+BZrZ3pcmTZkJaLxJMIHxD4PCHquD5nTEH
-	 zn2ofxsxNkFNzCKPx9zkAB5D9dU6SO6gdk6LGjfGbkx8G/sIOA37vFoDkWibxH0xqW
-	 gBzYR4ZlNsNbTfsoPDoT6SxC108y6cC/3boom+1MmZ4bb9dDe2RDPOuMXcCFWsdSIn
-	 ZSgTDwtApYRf/yyZKK8lGCoRYbzWHVqmijM/4EVKzWcUUA8X5SOP5LfBANfUNcrdrV
-	 0oaTTLpm7k7pw==
-Received: from mercury (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sre)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 723BF37810C0;
-	Tue, 26 Mar 2024 23:31:13 +0000 (UTC)
-Received: by mercury (Postfix, from userid 1000)
-	id E8D2B10608D9; Wed, 27 Mar 2024 00:31:12 +0100 (CET)
-Date: Wed, 27 Mar 2024 00:31:12 +0100
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: nikita.shubin@maquefel.me
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v9 05/38] power: reset: Add a driver for the ep93xx reset
-Message-ID: <oxvj7wmugkxzeddmrzyowr6lxxahbo766sbip22a564qeczxoy@oagxcoathnsr>
-References: <20240326-ep93xx-v9-0-156e2ae5dfc8@maquefel.me>
- <20240326-ep93xx-v9-5-156e2ae5dfc8@maquefel.me>
+	s=arc-20240116; t=1711501030; c=relaxed/simple;
+	bh=zb4Sspc2/Dkp2hoYl16xLo2UI4ZH9fY9R/loa4b2xRU=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=DgHMNpnMlzlV7AdvXkTEI+uxyR/mtAnPwgueGUWx4XaH3gvR4ymKVnoGCtmnDpYcs35aINB0JS/E/o7lVi51kG0WwMnMpIhoYFGFSiB7Xo+PeL58av0IjhO2SQhTR0Js44gjCAQodPTGWoc12dnUJFsEab1kZrQo7bXUq43foJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RB+f1HrN; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711501028; x=1743037028;
+  h=date:from:to:cc:subject:message-id;
+  bh=zb4Sspc2/Dkp2hoYl16xLo2UI4ZH9fY9R/loa4b2xRU=;
+  b=RB+f1HrNZ5PJNrdk8DwnejQjcw+9UELo2YdO1vflq1boiZiD99aufGhy
+   nALWc5iyI4MnWbnxW/4PX/evLBNuw8gkTsx+3cN1e1vCHyUCe/ATjWhTk
+   m7Im3enFgujx7C7/pZF4smFSXp7GZHU9X8SC1tYdYecxXYWhK8S+S/qxq
+   7J308/h69IRUFYry32zfiERnG4UzKB/9usqNqZeQ8tur97CLgWU+puSwK
+   2lp07FWQRitcTBXm+hoi7brHdmmxyqA3pYj0o6DgLauNig5OCgwTybugW
+   YqmyuZDH5u9EmAsbqzKouCUdpGK8uk7Xl8G/dnQPUMM/C6r+rpSQdNqV2
+   w==;
+X-CSE-ConnectionGUID: zDXwGtEtQKqar5wE+0jeCA==
+X-CSE-MsgGUID: ytl/P8twTGezmAxJx+kaEg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="24072208"
+X-IronPort-AV: E=Sophos;i="6.07,157,1708416000"; 
+   d="scan'208";a="24072208"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 17:57:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,157,1708416000"; 
+   d="scan'208";a="16126360"
+Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 26 Mar 2024 17:57:06 -0700
+Received: from kbuild by be39aa325d23 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rpHbE-0000Zv-0I;
+	Wed, 27 Mar 2024 00:57:04 +0000
+Date: Wed, 27 Mar 2024 08:56:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 497faca9b45e03b5695f1ca41e665c39265f0d28
+Message-ID: <202403270826.DvXjQsh9-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="bxlmjncesy7eix7u"
-Content-Disposition: inline
-In-Reply-To: <20240326-ep93xx-v9-5-156e2ae5dfc8@maquefel.me>
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 497faca9b45e03b5695f1ca41e665c39265f0d28  Merge branch 'acpica' into bleeding-edge
 
---bxlmjncesy7eix7u
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+elapsed time: 738m
 
-Hi,
+configs tested: 178
+configs skipped: 3
 
-On Tue, Mar 26, 2024 at 12:18:32PM +0300, Nikita Shubin via B4 Relay wrote:
-> From: Nikita Shubin <nikita.shubin@maquefel.me>
->=20
-> Implement the reset behaviour of the various EP93xx SoCS
-> in drivers/power/reset.
->=20
-> It used to be located in arch/arm/mach-ep93xx.
->=20
-> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
-> Acked-by: Sebastian Reichel <sre@kernel.org>
-> ---
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-If another round is needed, please use devm_register_sys_off_handler()
-instead of register_restart_handler().
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                     nsimosci_hs_defconfig   gcc  
+arc                   randconfig-001-20240326   gcc  
+arc                   randconfig-002-20240326   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   clang
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm                      jornada720_defconfig   clang
+arm                   randconfig-001-20240326   gcc  
+arm                   randconfig-002-20240326   gcc  
+arm                   randconfig-003-20240326   gcc  
+arm                   randconfig-004-20240326   gcc  
+arm                          sp7021_defconfig   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240326   clang
+arm64                 randconfig-002-20240326   clang
+arm64                 randconfig-003-20240326   gcc  
+arm64                 randconfig-004-20240326   clang
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240326   gcc  
+csky                  randconfig-002-20240326   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20240326   clang
+hexagon               randconfig-002-20240326   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20240326   gcc  
+i386         buildonly-randconfig-002-20240326   clang
+i386         buildonly-randconfig-003-20240326   clang
+i386         buildonly-randconfig-004-20240326   gcc  
+i386         buildonly-randconfig-005-20240326   gcc  
+i386         buildonly-randconfig-006-20240326   gcc  
+i386                                defconfig   clang
+i386                  randconfig-001-20240326   gcc  
+i386                  randconfig-002-20240326   gcc  
+i386                  randconfig-003-20240326   gcc  
+i386                  randconfig-004-20240326   clang
+i386                  randconfig-005-20240326   gcc  
+i386                  randconfig-006-20240326   clang
+i386                  randconfig-011-20240326   clang
+i386                  randconfig-012-20240326   gcc  
+i386                  randconfig-013-20240326   clang
+i386                  randconfig-014-20240326   clang
+i386                  randconfig-015-20240326   clang
+i386                  randconfig-016-20240326   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20240326   gcc  
+loongarch             randconfig-002-20240326   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                          atari_defconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                        stmark2_defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                          ath79_defconfig   gcc  
+mips                           ip27_defconfig   gcc  
+mips                           jazz_defconfig   clang
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240326   gcc  
+nios2                 randconfig-002-20240326   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+openrisc                  or1klitex_defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20240326   gcc  
+parisc                randconfig-002-20240326   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                   microwatt_defconfig   gcc  
+powerpc               randconfig-001-20240326   clang
+powerpc               randconfig-002-20240326   gcc  
+powerpc               randconfig-003-20240326   clang
+powerpc                    socrates_defconfig   gcc  
+powerpc                 xes_mpc85xx_defconfig   gcc  
+powerpc64             randconfig-001-20240326   gcc  
+powerpc64             randconfig-002-20240326   gcc  
+powerpc64             randconfig-003-20240326   gcc  
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+riscv                 randconfig-001-20240326   gcc  
+riscv                 randconfig-002-20240326   clang
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+s390                  randconfig-001-20240326   clang
+s390                  randconfig-002-20240326   clang
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                    randconfig-001-20240326   gcc  
+sh                    randconfig-002-20240326   gcc  
+sh                           se7712_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                       sparc32_defconfig   gcc  
+sparc                       sparc64_defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20240326   gcc  
+sparc64               randconfig-002-20240326   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20240326   gcc  
+um                    randconfig-002-20240326   gcc  
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-001-20240327   gcc  
+x86_64       buildonly-randconfig-002-20240327   gcc  
+x86_64       buildonly-randconfig-003-20240327   gcc  
+x86_64       buildonly-randconfig-004-20240327   clang
+x86_64       buildonly-randconfig-005-20240327   gcc  
+x86_64       buildonly-randconfig-006-20240327   gcc  
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20240327   clang
+x86_64                randconfig-002-20240327   gcc  
+x86_64                randconfig-003-20240327   gcc  
+x86_64                randconfig-004-20240327   gcc  
+x86_64                randconfig-005-20240327   clang
+x86_64                randconfig-006-20240327   clang
+x86_64                randconfig-011-20240327   gcc  
+x86_64                randconfig-012-20240327   clang
+x86_64                randconfig-013-20240327   clang
+x86_64                randconfig-014-20240327   clang
+x86_64                randconfig-015-20240327   clang
+x86_64                randconfig-016-20240327   clang
+x86_64                randconfig-071-20240327   gcc  
+x86_64                randconfig-072-20240327   clang
+x86_64                randconfig-073-20240327   clang
+x86_64                randconfig-074-20240327   clang
+x86_64                randconfig-075-20240327   clang
+x86_64                randconfig-076-20240327   clang
+x86_64                          rhel-8.3-rust   clang
+xtensa                           alldefconfig   gcc  
+xtensa                            allnoconfig   gcc  
+xtensa                       common_defconfig   gcc  
 
-Greetings,
-
--- Sebastian
-
->  drivers/power/reset/Kconfig          | 10 +++++
->  drivers/power/reset/Makefile         |  1 +
->  drivers/power/reset/ep93xx-restart.c | 84 ++++++++++++++++++++++++++++++=
-++++++
->  3 files changed, 95 insertions(+)
->=20
-> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-> index fece990af4a7..389d5a193e5d 100644
-> --- a/drivers/power/reset/Kconfig
-> +++ b/drivers/power/reset/Kconfig
-> @@ -75,6 +75,16 @@ config POWER_RESET_BRCMSTB
->  	  Say Y here if you have a Broadcom STB board and you wish
->  	  to have restart support.
-> =20
-> +config POWER_RESET_EP93XX
-> +	bool "Cirrus EP93XX reset driver" if COMPILE_TEST
-> +	depends on MFD_SYSCON
-> +	default ARCH_EP93XX
-> +	help
-> +	  This driver provides restart support for Cirrus EP93XX SoC.
-> +
-> +	  Say Y here if you have a Cirrus EP93XX SoC and you wish
-> +	  to have restart support.
-> +
->  config POWER_RESET_GEMINI_POWEROFF
->  	bool "Cortina Gemini power-off driver"
->  	depends on ARCH_GEMINI || COMPILE_TEST
-> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
-> index a95d1bd275d1..10782d32e1da 100644
-> --- a/drivers/power/reset/Makefile
-> +++ b/drivers/power/reset/Makefile
-> @@ -7,6 +7,7 @@ obj-$(CONFIG_POWER_RESET_ATC260X) +=3D atc260x-poweroff.o
->  obj-$(CONFIG_POWER_RESET_AXXIA) +=3D axxia-reset.o
->  obj-$(CONFIG_POWER_RESET_BRCMKONA) +=3D brcm-kona-reset.o
->  obj-$(CONFIG_POWER_RESET_BRCMSTB) +=3D brcmstb-reboot.o
-> +obj-$(CONFIG_POWER_RESET_EP93XX) +=3D ep93xx-restart.o
->  obj-$(CONFIG_POWER_RESET_GEMINI_POWEROFF) +=3D gemini-poweroff.o
->  obj-$(CONFIG_POWER_RESET_GPIO) +=3D gpio-poweroff.o
->  obj-$(CONFIG_POWER_RESET_GPIO_RESTART) +=3D gpio-restart.o
-> diff --git a/drivers/power/reset/ep93xx-restart.c b/drivers/power/reset/e=
-p93xx-restart.c
-> new file mode 100644
-> index 000000000000..57cfb8620faf
-> --- /dev/null
-> +++ b/drivers/power/reset/ep93xx-restart.c
-> @@ -0,0 +1,84 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Cirrus EP93xx SoC reset driver
-> + *
-> + * Copyright (C) 2021 Nikita Shubin <nikita.shubin@maquefel.me>
-> + */
-> +
-> +#include <linux/bits.h>
-> +#include <linux/container_of.h>
-> +#include <linux/delay.h>
-> +#include <linux/errno.h>
-> +#include <linux/mfd/syscon.h>
-> +#include <linux/module.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/notifier.h>
-> +#include <linux/reboot.h>
-> +#include <linux/slab.h>
-> +
-> +#include <linux/soc/cirrus/ep93xx.h>
-> +
-> +#define EP93XX_SYSCON_DEVCFG		0x80
-> +#define EP93XX_SYSCON_DEVCFG_SWRST	BIT(31)
-> +
-> +struct ep93xx_restart {
-> +	struct ep93xx_regmap_adev *aux_dev;
-> +	struct notifier_block restart_handler;
-> +};
-> +
-> +static int ep93xx_restart_handle(struct notifier_block *this,
-> +				 unsigned long mode, void *cmd)
-> +{
-> +	struct ep93xx_restart *priv =3D
-> +		container_of(this, struct ep93xx_restart, restart_handler);
-> +	struct ep93xx_regmap_adev *aux =3D priv->aux_dev;
-> +
-> +	/* Issue the reboot */
-> +	aux->update_bits(aux->map, aux->lock, EP93XX_SYSCON_DEVCFG,
-> +			 EP93XX_SYSCON_DEVCFG_SWRST, EP93XX_SYSCON_DEVCFG_SWRST);
-> +	aux->update_bits(aux->map, aux->lock, EP93XX_SYSCON_DEVCFG,
-> +			 EP93XX_SYSCON_DEVCFG_SWRST, 0);
-> +
-> +	return NOTIFY_DONE;
-> +}
-> +
-> +static int ep93xx_reboot_probe(struct auxiliary_device *adev,
-> +			       const struct auxiliary_device_id *id)
-> +{
-> +	struct ep93xx_regmap_adev *rdev =3D to_ep93xx_regmap_adev(adev);
-> +	struct device *dev =3D &adev->dev;
-> +	struct ep93xx_restart *priv;
-> +	int err;
-> +
-> +	if (!rdev->update_bits)
-> +		return -ENODEV;
-> +
-> +	priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->aux_dev =3D rdev;
-> +
-> +	priv->restart_handler.notifier_call =3D ep93xx_restart_handle;
-> +	priv->restart_handler.priority =3D 128;
-> +
-> +	err =3D register_restart_handler(&priv->restart_handler);
-> +	if (err)
-> +		return dev_err_probe(dev, err, "can't register restart notifier\n");
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct auxiliary_device_id ep93xx_reboot_ids[] =3D {
-> +	{
-> +		.name =3D "soc_ep93xx.reset-ep93xx",
-> +	},
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(auxiliary, ep93xx_reboot_ids);
-> +
-> +static struct auxiliary_driver ep93xx_reboot_driver =3D {
-> +	.probe		=3D ep93xx_reboot_probe,
-> +	.id_table	=3D ep93xx_reboot_ids,
-> +};
-> +module_auxiliary_driver(ep93xx_reboot_driver);
->=20
-> --=20
-> 2.41.0
->=20
->=20
-
---bxlmjncesy7eix7u
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmYDWrwACgkQ2O7X88g7
-+ppn2A/7BgKXlLfayzxDGsLA+7oVEcxwjQwTAffSwpyYzOUL4p+nfQLNMPUJ5G+o
-bchGTHW9eGaWN8sL/bXyTtJZSIPisxtd0qKwGKLJH+kPY4ZFK7UAm+kxzeygXRbk
-JhHksfeuhefcbpZRGWOJaXamMRLWa5o2Mj+O/5+fK/p2bJuQUCyBuRNbvdnFfUmu
-E4cOcgnT4OlBH4REKwiQCtXIFmdv+BIJoFSW2qpqH4efjd9H14eZ75DSzFdANaQc
-2WqfGBccwOx1oYlkkocxlzMPwlEaKLpj3XtpyGwCD2uIhGSFRapud+i4h5hDB0fE
-0nYi4/orD91lWJpxg5awMlw7BiKyDnwH2OBFuWXmF+FVerLO49f4/OO9T89PbXzz
-ECQNWg35sMqA7Y8p2YhkeDH5Fa8CFtbFyAivuBM4pbFTwJrsW8+iaSI5dVW/ATVx
-CvzSPogVyiwzawupz00TMvlVPOgF3dxYA+hgh0GVRT2Wdo8YCWj2WGl9pUKW1/XZ
-nROizDuPIAYxrheZnCbSQuiBnWDzlypMzXLX/pP0w/yS1cUEa4teAdVE+ZJbqn2y
-yPaZ5KCJTNk30JoGMaSXAe1NbeFisVhtDCIb3W5/vTLTMRmnrk4JT5FuacWLDQZM
-/Cq5IfTTg4ougV87UZcz/Cn37z2733DRNZgjrmSQULhVRh8QkLM=
-=Q8qH
------END PGP SIGNATURE-----
-
---bxlmjncesy7eix7u--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
