@@ -1,326 +1,121 @@
-Return-Path: <linux-pm+bounces-5476-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5477-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27AA388D975
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 09:50:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D8B888D9B9
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 10:01:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59FC82986B1
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 08:50:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0DF1F2A47AF
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Mar 2024 09:01:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 213552E633;
-	Wed, 27 Mar 2024 08:50:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00500364AE;
+	Wed, 27 Mar 2024 09:01:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Rq5zoPr2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VahVV8sP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2632137162
-	for <linux-pm@vger.kernel.org>; Wed, 27 Mar 2024 08:50:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3E3C1EEFD;
+	Wed, 27 Mar 2024 09:01:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711529410; cv=none; b=gnJr1VlddSyxEzHBVNZOmrnhB9URHrtxwUYdg6lUSxCvaeeDdHA9tsIHe8NIov6cmsfWGO/GOlA/y3vMO2mxt7euwyIMgywCcpC1NfccOyts+yardopIQbFtxYLk44/IDp36wp+YZOoyelsw79x8wBfH/WT32FJZqXz6oL0ZzBE=
+	t=1711530108; cv=none; b=cLJwszZ5J12w2Cz1mp5ws1ncL1thgwv+NiXjO8ecMwtMKb1DoW5d5H5feMrn9jloPNfcY8KUTdFrt8WO6FM/zN//CQHSqfA+GteB+aKcRkKF1drQyFW9JT72XRlbe6RpXIZTEtgSShAJBXrCVsQ009HnDbL76vYdmvWnyw6A6p8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711529410; c=relaxed/simple;
-	bh=G1T8j6kmbh5YKnwus41DkuQV/P9KjTNsZ6i0EFzmw3U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gi/aIZkCg6pzh8uE6kIAVaL+wLN5mjj64pIJIS6nKjz2cT0FdrwnfCU40Mq7PetyKpA94ihYJFhCo3rnFVTdmSsbUV0JXZF09FOAlQ1KGgYYXGG01ICDdo/4IynKYKq+teX3Y5uJmH2PeQzYciVwSfNv7UfzSIyTor8151ZEjVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Rq5zoPr2; arc=none smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-60a0579a955so76075867b3.3
-        for <linux-pm@vger.kernel.org>; Wed, 27 Mar 2024 01:50:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711529407; x=1712134207; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pLYlN16RyWsxEwBzjLz8ThQC9SQHV7u2gPr9C5zHFq8=;
-        b=Rq5zoPr2vFNS3kDEmj8NfosnY1yFn+nDuLgPdtu3u8ogbcqnfAT4xNf5v8J35D53QF
-         E1S+NKtzbm0ovV34T9i/NJvNg+3zhxNeSD1D5jGci6ltHW0rcmhqs8qzUtCl5f2rgL8b
-         f9VblLDCChd1kM1RPXHmBLc8zcPnqQENBUG9c4yRuNW9AgjMW30uoFFQHNwDOpr1bFnb
-         z3WnK9WheVbFJcciKmqFkUqTVeG/PWmxXqADYzo/FLLV4QJuqppFn8sR80dPcn3zqgei
-         MoBO2VRCz4xuhB6k2Elgajc/TZS8fjzQEADpysiuug6vyZdcVbIIuK78ARo2duZGsDDy
-         bKRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711529407; x=1712134207;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pLYlN16RyWsxEwBzjLz8ThQC9SQHV7u2gPr9C5zHFq8=;
-        b=gkttY8H2h6YUcywYIJrc3ZePJFwu0eTEyA6ewbb8xHQZnStIIWWMKyPPhzReVpCyHs
-         EVk88WDrMIKI06gE1AssXjFnSJuLcLCTModIkisKUqYyEZLrc0cqfckretL8Yu1RJtTJ
-         hp9wgpsPt0DDfw26/tCKZER3A4pSMn/DW3Deh4hAcZkeSf4nkZ4k1Ka9OHXA0Hqj8aPf
-         Gs/h5AynC1ozJMJDQ/lmEVyyDT4N98A0sttfsmocL1CvwiFGrYcEQwkRmyLJQcqXgIeE
-         GupWGp13Gxc32fAodBh+fXc2i5E77CT7EE4xCN+2AF1cL2Yg/bM46E2q2ASgqyCdveKw
-         sVOw==
-X-Forwarded-Encrypted: i=1; AJvYcCXBBfEk5VBM2OKrg4e7eSEfKxWLSCQj9R4aLQPhgC6qDsZFKYYFSj1+M0Y0c2vvCzr5JbnrDNuvAeD7uPGURdvytSnjkdAwvB4=
-X-Gm-Message-State: AOJu0YzzirlTocacJHclfW+5zQFldXObrWo1F1rTGYmaymLyVFYSsP48
-	CpE3QdGG7/pipFKbVUeONpJzmBkOWhaz6bwNoHMsjXnhauwl8VLU0yhUHM29963s6F0bZxRuVg6
-	VL/TshyQkpi9tqfcjo8LU9CT4+N8q5VcW/dZWuA==
-X-Google-Smtp-Source: AGHT+IEABw9Q0JdmDvKgiS8uA31+HMp3kqLbyi2CuT4KgMzzWprj2LtLDfwFy6/eU3DS2O0M+a/cPSxeZju9nn66sIY=
-X-Received: by 2002:a25:aa4b:0:b0:dc7:3166:ad25 with SMTP id
- s69-20020a25aa4b000000b00dc73166ad25mr414150ybi.25.1711529407085; Wed, 27 Mar
- 2024 01:50:07 -0700 (PDT)
+	s=arc-20240116; t=1711530108; c=relaxed/simple;
+	bh=lyIEGaS1jPdeUhemduBEQ1WVoVPKb/fAHOq4AFGqAlY=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=aUxI/V2wVDcIpR90zgOFbb8I2L1Ce81IoS052MgCrDdUw8ZrMoPMvrE1y7YN/T+ej4EAVVHdJ2P4j6w7bmJIjlBFahN9bG/9cI1YfYezszqRlX7rUizhVr5feNUReojTZe5uPfiOhE5ysBGZFtxoi0Qh8fYGACXF0/duYaKjRyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VahVV8sP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2981BC43390;
+	Wed, 27 Mar 2024 09:01:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711530108;
+	bh=lyIEGaS1jPdeUhemduBEQ1WVoVPKb/fAHOq4AFGqAlY=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=VahVV8sPUT8wuLtiT+/FuwYXJASdefezzd/GOLaob/zAnNobMN2Z+yBBon0KF0kog
+	 WOqTFmPtX/3HWDyyP+CcaTxRqv6getFWAvw4kjgxYFdsnjHGHgqBpyHf04aACOWIZa
+	 xrquFEwTS0eY2PlhGhceKPg6I5XG0Gnz1vuu0Q5v3jCOicg/NM6fUZZ1iSojhvkdi7
+	 bgIWXlPXNA6gdiR7qV7VjH4uSppKPKWdp6WVYCvZKClNEB+PPS7TX7ARg0VE2z40UH
+	 ZBzdjwfjOyN+rkOqqV4+4iKP8GGIrW7oBijefo/rq+1sPJvak59EmPfgcwvo0f9aYP
+	 l0HgDlG+ODwFg==
+Date: Wed, 27 Mar 2024 04:01:47 -0500
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240327081850.2924870-1-quic_varada@quicinc.com> <20240327081850.2924870-3-quic_varada@quicinc.com>
-In-Reply-To: <20240327081850.2924870-3-quic_varada@quicinc.com>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Wed, 27 Mar 2024 10:49:56 +0200
-Message-ID: <CAA8EJpoFw3Qyq+NRffe5HBUbCfdYv03oWgoUwkB6pbdVrF6LEg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] clk: qcom: add IPQ9574 interconnect clocks support
-To: Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc: andersson@kernel.org, konrad.dybcio@linaro.org, mturquette@baylibre.com, 
-	sboyd@kernel.org, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
-	conor+dt@kernel.org, djakov@kernel.org, quic_anusha@quicinc.com, 
-	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+From: Rob Herring <robh@kernel.org>
+To: "yu-chang.lee" <yu-chang.lee@mediatek.com>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>, 
+ MandyJH Liu <mandyjh.liu@mediatek.com>, xiufeng.li@mediatek.com, 
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ linux-mediatek@lists.infradead.org, Ulf Hansson <ulf.hansson@linaro.org>, 
+ Project_Global_Chrome_Upstream_Group@mediatek.com, fan.chen@mediatek.com, 
+ linux-pm@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>, 
+ linux-arm-kernel@lists.infradead.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+In-Reply-To: <20240327055732.28198-3-yu-chang.lee@mediatek.com>
+References: <20240327055732.28198-1-yu-chang.lee@mediatek.com>
+ <20240327055732.28198-3-yu-chang.lee@mediatek.com>
+Message-Id: <171153010608.1499881.4707871183250112406.robh@kernel.org>
+Subject: Re: [PATCH v2 2/3] dt-bindings: power: Add mediatek larb
+ definition
 
-On Wed, 27 Mar 2024 at 10:21, Varadarajan Narayanan
-<quic_varada@quicinc.com> wrote:
->
-> Unlike MSM platforms that manage NoC related clocks and scaling
-> from RPM, IPQ SoCs dont involve RPM in managing NoC related
-> clocks and there is no NoC scaling.
->
-> However, there is a requirement to enable some NoC interface
-> clocks for accessing the peripheral controllers present on
-> these NoCs. Though exposing these as normal clocks would work,
-> having a minimalistic interconnect driver to handle these clocks
-> would make it consistent with other Qualcomm platforms resulting
-> in common code paths. This is similar to msm8996-cbf's usage of
-> icc-clk framework.
->
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+
+On Wed, 27 Mar 2024 13:57:31 +0800, yu-chang.lee wrote:
+> Add Smart Multimedia Interface Local Arbiter to mediatek
+> power domain.
+> 
+> Signed-off-by: yu-chang.lee <yu-chang.lee@mediatek.com>
 > ---
-> v4: Use clk_hw instead of indices
->     Do icc register in qcom_cc_probe() call stream
->     Add icc clock info to qcom_cc_desc structure
-> v3: Use indexed identifiers here to avoid confusion
->     Fix error messages and move to common.c
-> v2: Move DTS to separate patch
->     Update commit log
->     Auto select CONFIG_INTERCONNECT & CONFIG_INTERCONNECT_CLK to fix build error
-> ---
->  drivers/clk/qcom/Kconfig       |  2 ++
->  drivers/clk/qcom/common.c      | 34 ++++++++++++++++++++-
->  drivers/clk/qcom/common.h      |  4 ++-
->  drivers/clk/qcom/gcc-ipq9574.c | 54 ++++++++++++++++++++++++++++++++++
+>  .../devicetree/bindings/power/mediatek,power-controller.yaml  | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
 
-These changes must be separate.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
->  4 files changed, 92 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-> index 8ab08e7b5b6c..af73a0b396eb 100644
-> --- a/drivers/clk/qcom/Kconfig
-> +++ b/drivers/clk/qcom/Kconfig
-> @@ -243,6 +243,8 @@ config IPQ_GCC_8074
->
->  config IPQ_GCC_9574
->         tristate "IPQ9574 Global Clock Controller"
-> +       select INTERCONNECT
-> +       select INTERCONNECT_CLK
->         help
->           Support for global clock controller on ipq9574 devices.
->           Say Y if you want to use peripheral devices such as UART, SPI,
-> diff --git a/drivers/clk/qcom/common.c b/drivers/clk/qcom/common.c
-> index 75f09e6e057e..523d30d0ccbc 100644
-> --- a/drivers/clk/qcom/common.c
-> +++ b/drivers/clk/qcom/common.c
-> @@ -8,6 +8,8 @@
->  #include <linux/regmap.h>
->  #include <linux/platform_device.h>
->  #include <linux/clk-provider.h>
-> +#include <linux/interconnect-clk.h>
-> +#include <linux/interconnect-provider.h>
->  #include <linux/reset-controller.h>
->  #include <linux/of.h>
->
-> @@ -234,6 +236,36 @@ static struct clk_hw *qcom_cc_clk_hw_get(struct of_phandle_args *clkspec,
->         return cc->rclks[idx] ? &cc->rclks[idx]->hw : NULL;
->  }
->
-> +static int qcom_cc_icc_register(struct device *dev,
-> +                               const struct qcom_cc_desc *desc)
-> +{
-> +#if IS_ENABLED(CONFIG_INTERCONNECT_CLK)
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/power/mediatek,power-controller.yaml:128:6: [error] syntax error: expected <block end>, but found '<block mapping start>' (syntax)
+./Documentation/devicetree/bindings/power/mediatek,power-controller.yaml:129:9: [warning] wrong indentation: expected 7 but found 8 (indentation)
 
-General recommendation is to avoid #ifs inside function code. Please
-move them outside and add an empty stub.
+dtschema/dtc warnings/errors:
+make[2]: *** Deleting file 'Documentation/devicetree/bindings/power/mediatek,power-controller.example.dts'
+Documentation/devicetree/bindings/power/mediatek,power-controller.yaml:128:6: did not find expected key
+make[2]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/power/mediatek,power-controller.example.dts] Error 1
+make[2]: *** Waiting for unfinished jobs....
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/mediatek,mt8195-scpsys.yaml:
+while parsing a block mapping
+  in "<unicode string>", line 64, column 5
+did not find expected key
+  in "<unicode string>", line 128, column 6
+./Documentation/devicetree/bindings/power/mediatek,power-controller.yaml:128:6: did not find expected key
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml: ignoring, error parsing file
+make[1]: *** [/builds/robherring/dt-review-ci/linux/Makefile:1430: dt_binding_check] Error 2
+make: *** [Makefile:240: __sub-make] Error 2
 
-> +       struct icc_provider *provider;
-> +       struct icc_clk_data *icd;
-> +       int i;
-> +
-> +       if (!desc->icc_hws)
-> +               return 0;
-> +
-> +       icd = devm_kcalloc(dev, desc->num_icc_hws, sizeof(*icd), GFP_KERNEL);
-> +       if (!icd)
-> +               return dev_err_probe(dev, -ENOMEM, "malloc for icc clock data failed\n");
+doc reference errors (make refcheckdocs):
 
-No need to.
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240327055732.28198-3-yu-chang.lee@mediatek.com
 
-> +
-> +       for (i = 0; i < desc->num_icc_hws; i++) {
-> +               icd[i].clk = devm_clk_hw_get_clk(dev, desc->icc_hws[i], "");
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
-Passing an empty string is not correct from the CCF point of view.
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-> +               if (IS_ERR_OR_NULL(icd[i].clk))
-> +                       return dev_err_probe(dev, -ENOENT, "icc clock not found\n");
+pip3 install dtschema --upgrade
 
-No, just IS_ERR and PTR_ERR. Don't throw away the resulting code.
-In most of the case IS_ERR_OR_NULL is not correct. The function either
-returns NULL or returns an error pointer. It can not be both.
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
-> +               icd[i].name = clk_hw_get_name(desc->icc_hws[i]);
-> +       }
-> +
-> +       provider = icc_clk_register(dev, desc->first_id, desc->num_icc_hws, icd);
-> +       if (IS_ERR_OR_NULL(provider))
-
-just use PTR_ERR_OR_ZERO
-
-Also note that there is no qcom_cc_remove, so please add
-devm_icc_clk_register() and use it here:
-
-return PTR_ERR_OR_ZERO(devm_icc_clk_register(dev, ...));
-
-> +               return dev_err_probe(dev, PTR_ERR(provider),
-> +                                    "icc_clk_register failed\n");
-> +#endif
-> +       return 0;
-> +}
-> +
->  int qcom_cc_really_probe(struct platform_device *pdev,
->                          const struct qcom_cc_desc *desc, struct regmap *regmap)
->  {
-> @@ -303,7 +335,7 @@ int qcom_cc_really_probe(struct platform_device *pdev,
->         if (ret)
->                 return ret;
->
-> -       return 0;
-> +       return qcom_cc_icc_register(dev, desc);
->  }
->  EXPORT_SYMBOL_GPL(qcom_cc_really_probe);
->
-> diff --git a/drivers/clk/qcom/common.h b/drivers/clk/qcom/common.h
-> index 9c8f7b798d9f..3c3a07f6dcb9 100644
-> --- a/drivers/clk/qcom/common.h
-> +++ b/drivers/clk/qcom/common.h
-> @@ -29,6 +29,9 @@ struct qcom_cc_desc {
->         size_t num_gdscs;
->         struct clk_hw **clk_hws;
->         size_t num_clk_hws;
-> +       struct clk_hw **icc_hws;
-> +       size_t num_icc_hws;
-> +       unsigned int first_id;
->  };
->
->  /**
-> @@ -65,5 +68,4 @@ extern int qcom_cc_probe(struct platform_device *pdev,
->                          const struct qcom_cc_desc *desc);
->  extern int qcom_cc_probe_by_index(struct platform_device *pdev, int index,
->                                   const struct qcom_cc_desc *desc);
-> -
->  #endif
-> diff --git a/drivers/clk/qcom/gcc-ipq9574.c b/drivers/clk/qcom/gcc-ipq9574.c
-> index 0a3f846695b8..187fd9dcdf49 100644
-> --- a/drivers/clk/qcom/gcc-ipq9574.c
-> +++ b/drivers/clk/qcom/gcc-ipq9574.c
-> @@ -12,6 +12,7 @@
->
->  #include <dt-bindings/clock/qcom,ipq9574-gcc.h>
->  #include <dt-bindings/reset/qcom,ipq9574-gcc.h>
-> +#include <dt-bindings/interconnect/qcom,ipq9574.h>
->
->  #include "clk-alpha-pll.h"
->  #include "clk-branch.h"
-> @@ -4301,6 +4302,56 @@ static const struct qcom_reset_map gcc_ipq9574_resets[] = {
->         [GCC_WCSS_Q6_TBU_BCR] = { 0x12054, 0 },
->  };
->
-> +#define IPQ_APPS_ID                    9574    /* some unique value */
-> +
-> +enum {
-> +       ICC_ANOC_PCIE0,
-> +       ICC_SNOC_PCIE0,
-> +       ICC_ANOC_PCIE1,
-> +       ICC_SNOC_PCIE1,
-> +       ICC_ANOC_PCIE2,
-> +       ICC_SNOC_PCIE2,
-> +       ICC_ANOC_PCIE3,
-> +       ICC_SNOC_PCIE3,
-> +       ICC_SNOC_USB,
-> +       ICC_ANOC_USB_AXI,
-> +       ICC_NSSNOC_NSSCC,
-> +       ICC_NSSNOC_SNOC_0,
-> +       ICC_NSSNOC_SNOC_1,
-> +       ICC_NSSNOC_PCNOC_1,
-> +       ICC_NSSNOC_QOSGEN_REF,
-> +       ICC_NSSNOC_TIMEOUT_REF,
-> +       ICC_NSSNOC_XO_DCD,
-> +       ICC_NSSNOC_ATB,
-> +       ICC_MEM_NOC_NSSNOC,
-> +       ICC_NSSNOC_MEMNOC,
-> +       ICC_NSSNOC_MEM_NOC_1,
-> +};
-> +
-> +static struct clk_hw *icc_ipq9574_hws[] = {
-> +       [ICC_ANOC_PCIE0] = &gcc_anoc_pcie0_1lane_m_clk.clkr.hw,
-> +       [ICC_SNOC_PCIE0] = &gcc_anoc_pcie1_1lane_m_clk.clkr.hw,
-> +       [ICC_ANOC_PCIE1] = &gcc_anoc_pcie2_2lane_m_clk.clkr.hw,
-> +       [ICC_SNOC_PCIE1] = &gcc_anoc_pcie3_2lane_m_clk.clkr.hw,
-> +       [ICC_ANOC_PCIE2] = &gcc_snoc_pcie0_1lane_s_clk.clkr.hw,
-> +       [ICC_SNOC_PCIE2] = &gcc_snoc_pcie1_1lane_s_clk.clkr.hw,
-> +       [ICC_ANOC_PCIE3] = &gcc_snoc_pcie2_2lane_s_clk.clkr.hw,
-> +       [ICC_SNOC_PCIE3] = &gcc_snoc_pcie3_2lane_s_clk.clkr.hw,
-> +       [ICC_SNOC_USB] = &gcc_snoc_usb_clk.clkr.hw,
-> +       [ICC_ANOC_USB_AXI] = &gcc_anoc_usb_axi_clk.clkr.hw,
-> +       [ICC_NSSNOC_NSSCC] = &gcc_nssnoc_nsscc_clk.clkr.hw,
-> +       [ICC_NSSNOC_SNOC_0] = &gcc_nssnoc_snoc_clk.clkr.hw,
-> +       [ICC_NSSNOC_SNOC_1] = &gcc_nssnoc_snoc_1_clk.clkr.hw,
-> +       [ICC_NSSNOC_PCNOC_1] = &gcc_nssnoc_pcnoc_1_clk.clkr.hw,
-> +       [ICC_NSSNOC_QOSGEN_REF] = &gcc_nssnoc_qosgen_ref_clk.clkr.hw,
-> +       [ICC_NSSNOC_TIMEOUT_REF] = &gcc_nssnoc_timeout_ref_clk.clkr.hw,
-> +       [ICC_NSSNOC_XO_DCD] = &gcc_nssnoc_xo_dcd_clk.clkr.hw,
-> +       [ICC_NSSNOC_ATB] = &gcc_nssnoc_atb_clk.clkr.hw,
-> +       [ICC_MEM_NOC_NSSNOC] = &gcc_mem_noc_nssnoc_clk.clkr.hw,
-> +       [ICC_NSSNOC_MEMNOC] = &gcc_nssnoc_memnoc_clk.clkr.hw,
-> +       [ICC_NSSNOC_MEM_NOC_1] = &gcc_nssnoc_mem_noc_1_clk.clkr.hw,
-> +};
-> +
->  static const struct of_device_id gcc_ipq9574_match_table[] = {
->         { .compatible = "qcom,ipq9574-gcc" },
->         { }
-> @@ -4323,6 +4374,9 @@ static const struct qcom_cc_desc gcc_ipq9574_desc = {
->         .num_resets = ARRAY_SIZE(gcc_ipq9574_resets),
->         .clk_hws = gcc_ipq9574_hws,
->         .num_clk_hws = ARRAY_SIZE(gcc_ipq9574_hws),
-> +       .icc_hws = icc_ipq9574_hws,
-> +       .num_icc_hws = ARRAY_SIZE(icc_ipq9574_hws),
-> +       .first_id = IPQ_APPS_ID,
->  };
->
->  static int gcc_ipq9574_probe(struct platform_device *pdev)
-> --
-> 2.34.1
->
->
-
-
--- 
-With best wishes
-Dmitry
 
