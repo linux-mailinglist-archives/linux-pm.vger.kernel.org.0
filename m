@@ -1,135 +1,148 @@
-Return-Path: <linux-pm+bounces-5574-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5575-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6EC488FE0D
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 12:26:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15F9388FE80
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 13:01:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B9901F258D7
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 11:26:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6C5BBB2196A
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 12:01:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C400F7E11C;
-	Thu, 28 Mar 2024 11:26:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B17E7F464;
+	Thu, 28 Mar 2024 12:01:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hByEHpw7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cE5JLRU1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AF4B7CF2B;
-	Thu, 28 Mar 2024 11:26:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C7687E58F;
+	Thu, 28 Mar 2024 12:01:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711625190; cv=none; b=Fz0TsEDXxBCe8VJCS6OvnHnxg7r2L6eCgKQgvyeP1Xjd+Og1vp4bHIVEetILnKs/F8WNf4t++exzcAJSyjsxkpqC4+qAVnPJf4tmS3H4tGDFGxsyg0CZcwnlSFseN/W6WifU1hQ5+8v2JgsFdsaveiKkFJebAuTQnKzrBb03WQk=
+	t=1711627273; cv=none; b=a3KM/7/dSUYpGN8Gy8du9BOuKuf9W7BqEOnNqdose1PXSa79pc7Ff+gBvDydjictVa0t98qP8yAoY/2cwCJlxrJObB/o9tmNSiAAa1O4oHn1NdzE7lLTVwtkgznhVTfPiHGA0AumJFPpPI9lIe05wk+IMMyzdjDIexu4P4aDi2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711625190; c=relaxed/simple;
-	bh=RW+bEitQVyzqcixJGBJkJeN1dc8oywkABnm+GeaVq5I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=F7DMnvm5zJmUFbATb/qV5gN5765jtGi3DKlXBZ5o4SOIk8IyCgCfy74VhaRwl7L/djRKYxwXKGDuqCYTKY0fIjBtqgeDSb/G/FGsHzDMa35mHXRlfh05SaShsHSQiU9Ld+aZY65HjimrjudGECohE4ph+cjY3wEaOAQyctiDFHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hByEHpw7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 781ADC433C7;
-	Thu, 28 Mar 2024 11:26:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711625190;
-	bh=RW+bEitQVyzqcixJGBJkJeN1dc8oywkABnm+GeaVq5I=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=hByEHpw7A1f+VNpDOvuG6KswboMmsECSdiFzP1i4i5/TKdCTk6bXuW/91x+FyBbbx
-	 cU3GQBAp41qpu84ZVHO4QOQ1V37RxxQTW5Wm8mEvGgQ8aVxw0l03hLEL8SY6hWd+eq
-	 htFCiVXYeFGwEZ6nereNQmEtSyL/h/k/3zlZiQRU9BNBBVRjmggQ3jA2fDf/+UObyA
-	 Jvt1mI5lPKPqYvVaKJbz3oEXcOhAm1JAYVov7JbP7BOvQ8XZhfkTpahyxjtcni7RX7
-	 IFsC97O0f5yP5ccOxhuFwn3Aakyc+jE3vVI+wESSjSZznWE3gVp6hgk8bI7jODiVFr
-	 jX9E3eKCcCNAQ==
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-2229ad7a15aso170019fac.0;
-        Thu, 28 Mar 2024 04:26:30 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCW0VQ3Tg7+Ti/8qblzrUg8HBvvhNOyXM9YWDBL1jZA4m/jR3NagM8EAPl81Zmtj82SqbyN1EP4TPokL2NzqFtIIw2GkopfLfWIAGHCbvsfaices6Vyec8cIy0JLFr+MARPlHZgidN8=
-X-Gm-Message-State: AOJu0YwtOjT2AXb95Pej1Projcr6YFhiu/w8fk0GZNFiPE5V2QFXTjNp
-	6bhuyRvNwM+cnd0XtbSJLvNMb8wVgqmKlA2PyTms+tCfbN0bxI+w17WnVuBE58nsI6xm/muRFKu
-	bWPgIYm7V8YYQnuG4pkbCaWnH2cM=
-X-Google-Smtp-Source: AGHT+IFsY0yNL1Uoky4ja6PpWw1sFDAeWwkybKu8Ye/ktcEwRu/9Dew3Rp8WRBmejTHA+N6A0MgGQlK1qfRhyFj9iME=
-X-Received: by 2002:a05:6870:e993:b0:229:ec0b:e078 with SMTP id
- r19-20020a056870e99300b00229ec0be078mr2648557oao.0.1711625189726; Thu, 28 Mar
- 2024 04:26:29 -0700 (PDT)
+	s=arc-20240116; t=1711627273; c=relaxed/simple;
+	bh=nffDaJVrBNsyAnwZsAeZUbVZ9WuEdxBLqM6rPP+Bab8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=jCb22dvozA52izJHpmH2DeCNLTt2AKnzCgvq6tBGy1CCsfhD58MOVfRdzMv6jd0Co+TfNB9AQ5cVUrr16S99hVY3Npi629M8/rHhKWbk9CVYMzIG6C3XYVyEtWggScsRlGApqrIGQ8FiE7o3snCbyLWNVFHTkoWIP1B/zmhKI1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cE5JLRU1; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711627269; x=1743163269;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nffDaJVrBNsyAnwZsAeZUbVZ9WuEdxBLqM6rPP+Bab8=;
+  b=cE5JLRU1AVT2PXYUdBWc6Kg3aU5i/KW9EoQp4QPAJY7Mv+uF6Buco5Uy
+   aK0HnXpYPXdnUPq3duRZ/U/A9nHlLiCHQI0zRxIgDEji3HlCKQif7gtTH
+   Nndyp5kA0/VRhRcxccmhr3HdRGVNxV9BSfgpEJ3bbOWFSffXnyv+9FMdh
+   mwkEDdGfxrhkL+F9SffG0+rA7Nl7FzpTVgtywWpjaf0B+uIKqhqXgW9IR
+   GcDiIqIlcadnejjTnz1tlB/vkFdY6nx77OMeoMYc1m53UagTropynR/1M
+   Yg33vu1yHYmOaor8DOQQl2QaguHlBbjVKkdSTXbnSMvolDXGbAlWhOHvQ
+   g==;
+X-CSE-ConnectionGUID: B0WzBu+/TvC/LOv/OBDDdQ==
+X-CSE-MsgGUID: H5JrIp2RTGu2GDZqJrlOJg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11026"; a="9731495"
+X-IronPort-AV: E=Sophos;i="6.07,161,1708416000"; 
+   d="scan'208";a="9731495"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2024 05:01:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,161,1708416000"; 
+   d="scan'208";a="54073874"
+Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 28 Mar 2024 05:01:06 -0700
+Received: from kbuild by be39aa325d23 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rpoRM-00026w-0r;
+	Thu, 28 Mar 2024 12:01:04 +0000
+Date: Thu, 28 Mar 2024 20:00:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-acpi@vger.kernel.org, devel@acpica.org,
+	linux-pm@vger.kernel.org
+Subject: [rafael-pm:intel_pstate-testing 4/14]
+ drivers/cpufreq/intel_pstate.c:1655:25: warning: variable 'cpudata' is
+ uninitialized when used here
+Message-ID: <202403281955.LhZVDhXg-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <13494237.uLZWGnKmhe@kreacher> <9269494.CDJkKcVGEf@kreacher> <f1bdd6a971c67ea83697278ed2f1beff89a78f1f.camel@linux.intel.com>
-In-Reply-To: <f1bdd6a971c67ea83697278ed2f1beff89a78f1f.camel@linux.intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 28 Mar 2024 12:26:17 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0ir-V5ppRuw5q7PsZK4rsuvh7y4a3HNunJhovvurGh3hg@mail.gmail.com>
-Message-ID: <CAJZ5v0ir-V5ppRuw5q7PsZK4rsuvh7y4a3HNunJhovvurGh3hg@mail.gmail.com>
-Subject: Re: [PATCH v1 6/6] cpufreq: intel_pstate: Update the maximum CPU
- frequency consistently
-To: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Mar 27, 2024 at 7:08=E2=80=AFPM srinivas pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> On Mon, 2024-03-25 at 18:06 +0100, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > There are 3 places at which the maximum CPU frequency may change,
-> > store_no_turbo(), intel_pstate_update_limits() (when called by the
-> > cpufreq core) and intel_pstate_notify_work() (when handling a HWP
-> > change notification).  Currently, cpuinfo.max_freq is only updated by
-> > store_no_turbo(), although it principle it may be necessary to update
-> > it at the other 2 places too.
->
-> It also works for intel_pstate_notify_work() path as is without this
-> change.
->
-> To start with:
->
-> $ sudo rdmsr 0x771
-> 6080c14
-> $ cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_*
-> 2000000
-> 800000
-> 0
->
-> Now trigger a max frequency change via SST. intel_pstate_notify_work()
-> called because guaranteed also changed. We didn't subscribe for max
-> change only (although we should).
->
-> Max changed from 2GHz to 1.9 GHz.
->
-> $ sudo rdmsr 0x771
-> 6080e13
-> [labuser@gnr-bkc ~]$ cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_*
-> 1900000
-> 800000
-> 0
->
-> Now trigger SST to change to max frequency to 2GHz.
->
-> sudo rdmsr 0x771
-> 6080c14
->
-> cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_*
-> 2000000
-> 800000
-> 0
->
-> May be you mean something else.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git intel_pstate-testing
+head:   16303764deedb814defe7e69712edec6a09b50ad
+commit: ac9f58c46515ad482d972d5a65c127241c4751b9 [4/14] cpufreq: intel_pstate: Get rid of unnecessary READ_ONCE() annotations
+config: x86_64-rhel-8.3-bpf (https://download.01.org/0day-ci/archive/20240328/202403281955.LhZVDhXg-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240328/202403281955.LhZVDhXg-lkp@intel.com/reproduce)
 
-No, I don't, and you are right.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403281955.LhZVDhXg-lkp@intel.com/
 
-When I was writing the changelog, I somehow forgot that
-intel_pstate_notify_work() called __intel_pstate_update_max_freq(),
-even though the code changes in the patch obviously take that into
-account (I can't really explain what happened :-/).
+All warnings (new ones prefixed by >>):
 
-I'll fix the changelog.
+>> drivers/cpufreq/intel_pstate.c:1655:25: warning: variable 'cpudata' is uninitialized when used here [-Wuninitialized]
+    1655 |         schedule_delayed_work(&cpudata->hwp_notify_work, msecs_to_jiffies(10));
+         |                                ^~~~~~~
+   drivers/cpufreq/intel_pstate.c:1639:25: note: initialize the variable 'cpudata' to silence this warning
+    1639 |         struct cpudata *cpudata;
+         |                                ^
+         |                                 = NULL
+   1 warning generated.
 
-Cheers,
-Rafael
+
+vim +/cpudata +1655 drivers/cpufreq/intel_pstate.c
+
+57577c996d731c Srinivas Pandruvada 2021-09-28  1635  
+57577c996d731c Srinivas Pandruvada 2021-09-28  1636  void notify_hwp_interrupt(void)
+57577c996d731c Srinivas Pandruvada 2021-09-28  1637  {
+57577c996d731c Srinivas Pandruvada 2021-09-28  1638  	unsigned int this_cpu = smp_processor_id();
+57577c996d731c Srinivas Pandruvada 2021-09-28  1639  	struct cpudata *cpudata;
+57577c996d731c Srinivas Pandruvada 2021-09-28  1640  	unsigned long flags;
+57577c996d731c Srinivas Pandruvada 2021-09-28  1641  	u64 value;
+57577c996d731c Srinivas Pandruvada 2021-09-28  1642  
+ac9f58c46515ad Rafael J. Wysocki   2024-03-25  1643  	if (!hwp_active || !boot_cpu_has(X86_FEATURE_HWP_NOTIFY))
+57577c996d731c Srinivas Pandruvada 2021-09-28  1644  		return;
+57577c996d731c Srinivas Pandruvada 2021-09-28  1645  
+57577c996d731c Srinivas Pandruvada 2021-09-28  1646  	rdmsrl_safe(MSR_HWP_STATUS, &value);
+57577c996d731c Srinivas Pandruvada 2021-09-28  1647  	if (!(value & 0x01))
+57577c996d731c Srinivas Pandruvada 2021-09-28  1648  		return;
+57577c996d731c Srinivas Pandruvada 2021-09-28  1649  
+57577c996d731c Srinivas Pandruvada 2021-09-28  1650  	spin_lock_irqsave(&hwp_notify_lock, flags);
+57577c996d731c Srinivas Pandruvada 2021-09-28  1651  
+57577c996d731c Srinivas Pandruvada 2021-09-28  1652  	if (!cpumask_test_cpu(this_cpu, &hwp_intr_enable_mask))
+57577c996d731c Srinivas Pandruvada 2021-09-28  1653  		goto ack_intr;
+57577c996d731c Srinivas Pandruvada 2021-09-28  1654  
+57577c996d731c Srinivas Pandruvada 2021-09-28 @1655  	schedule_delayed_work(&cpudata->hwp_notify_work, msecs_to_jiffies(10));
+57577c996d731c Srinivas Pandruvada 2021-09-28  1656  
+57577c996d731c Srinivas Pandruvada 2021-09-28  1657  	spin_unlock_irqrestore(&hwp_notify_lock, flags);
+57577c996d731c Srinivas Pandruvada 2021-09-28  1658  
+57577c996d731c Srinivas Pandruvada 2021-09-28  1659  	return;
+57577c996d731c Srinivas Pandruvada 2021-09-28  1660  
+57577c996d731c Srinivas Pandruvada 2021-09-28  1661  ack_intr:
+57577c996d731c Srinivas Pandruvada 2021-09-28  1662  	wrmsrl_safe(MSR_HWP_STATUS, 0);
+57577c996d731c Srinivas Pandruvada 2021-09-28  1663  	spin_unlock_irqrestore(&hwp_notify_lock, flags);
+57577c996d731c Srinivas Pandruvada 2021-09-28  1664  }
+57577c996d731c Srinivas Pandruvada 2021-09-28  1665  
+
+:::::: The code at line 1655 was first introduced by commit
+:::::: 57577c996d731ce1e5a4a488e64e6e201b360847 cpufreq: intel_pstate: Process HWP Guaranteed change notification
+
+:::::: TO: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
