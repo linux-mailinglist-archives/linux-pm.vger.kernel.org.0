@@ -1,117 +1,163 @@
-Return-Path: <linux-pm+bounces-5589-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5590-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 440CF89040A
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 16:56:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 07BD08908D0
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 20:01:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A945CB226E5
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 15:56:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7D68DB20EC9
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 19:01:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C62E130E48;
-	Thu, 28 Mar 2024 15:56:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74474136E28;
+	Thu, 28 Mar 2024 19:01:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lz6E1std"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="uR9NKpyZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7998012FB21;
-	Thu, 28 Mar 2024 15:56:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5C73135A4D;
+	Thu, 28 Mar 2024 19:00:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711641377; cv=none; b=p+MlynZCS8ddvEjf11fIHK8/bWSUBMOYSyZtWAkFTcE9h38pS0wkzU1LY3TmPjTpX+eWc9xP0JWrxcW2LRkMXKqoJ1+6ZQ/+/TWvmlnSkKZD7GoGRjmdSz3zUwC0gWvHLsbLBhNaFfQ1kfiw8nAjuHcrvuDiEZhGiY274SzO3Js=
+	t=1711652473; cv=none; b=WaaNAYj/t0en9gn+VSVGuVf/owzmeCqSSg+QFJInNib/NhmOFW4y2JaIEsTAQxCWIBo7eSK9upjUVE+KHJ863IHQGoCSEcObu94Uo927xWXHL2QTkfHo415Fm8Zjs3EBaeQxbLnxJJSan77Gysmc9oTSG90Nm++MVNOwd4baVPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711641377; c=relaxed/simple;
-	bh=vwbLly6I3GZ7CR+wbxee82E1xfeIapoUlYJbYTZbNwI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=TJIuDXno+qwlrMX+AuOp1X5JhIqV+gaTSNkc57avZ7zWCznM8mfQ3XqkNlG6Yux601C3MLYUoxfjn/n2jb+jyyl55jBGLths870igMXJCk97X9hQ8Hm67Dwut1fjdYAVfZyxUkmL1Q20cwkK84TRYz84G5++VqoYp5IGP9M3DsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Lz6E1std; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711641374; x=1743177374;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vwbLly6I3GZ7CR+wbxee82E1xfeIapoUlYJbYTZbNwI=;
-  b=Lz6E1stdZLG2rMDF6JsRD62OivbCXKF5vy0si+dWonjvnLVMnfm6ftmA
-   z4PghJhCtqNqnjgRR1ziTsHszN0Aafw+aw2Z840fWRVROdSbfN8nqV2DE
-   d2YooslIIAp/34HfImwk48e4b9huDAAQG1t20+mQmkhKG5ASxgNzKWHvE
-   iLm2hGt8bdksU7lf8CmVT6Suw36VUP15xoUWw9Ob/E68tk5hoPyMcliZB
-   0miH7kHE/EqzSSFxCKrlawwEVrdApbpXhEoIyAAQTEfDZZ5OXGE18026R
-   oWacZF8kB+r1kiNtf/uHl/VYSh6gkzD21CSET8rq/4pMiQoGU69kdd+KC
-   A==;
-X-CSE-ConnectionGUID: x8zpC0RCRFGWZDbPW0/iDw==
-X-CSE-MsgGUID: FM10o1N8T6ain6AS3pMV2A==
-X-IronPort-AV: E=McAfee;i="6600,9927,11027"; a="17946717"
-X-IronPort-AV: E=Sophos;i="6.07,162,1708416000"; 
-   d="scan'208";a="17946717"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2024 08:56:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,162,1708416000"; 
-   d="scan'208";a="21388148"
-Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 28 Mar 2024 08:56:13 -0700
-Received: from kbuild by be39aa325d23 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rps6s-0002Hy-1G;
-	Thu, 28 Mar 2024 15:56:10 +0000
-Date: Thu, 28 Mar 2024 23:55:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
-	devel@acpica.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:intel_pstate-testing 14/14]
- drivers/cpufreq/intel_pstate.c:963:2: error: implicit declaration of
- function 'arch_set_cpu_capacity'; did you mean 'arch_scale_cpu_capacity'?
-Message-ID: <202403282334.VfY1MU72-lkp@intel.com>
+	s=arc-20240116; t=1711652473; c=relaxed/simple;
+	bh=bSQaSHiaC4u0gePRhewgeWg4QIM2Vad/ONuhnTPUE28=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mnTjtjS1QgGwW+yd0k6X00n0PhawFD/5Xq1KgUjUe4iUwkB1h0f2YGfDZx0VLRyxQwyqUNCUjbji6HPYgYUqBNMpYNmW72y7Naa53x0OmwFrXufBIK2lKA2aRUZomKGMFZNYo6pcnQbB3AEgFJNyv2qRyqLEg0PYhsXGaONyQBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=uR9NKpyZ reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
+ id a6c31ea869a14cc0; Thu, 28 Mar 2024 20:00:36 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id DCBDD66C24C;
+	Thu, 28 Mar 2024 20:00:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1711652436;
+	bh=bSQaSHiaC4u0gePRhewgeWg4QIM2Vad/ONuhnTPUE28=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=uR9NKpyZNNt4TYiSZ8fBcAOwUFZEsabsK4t+4NSMNcb+qoHsLX+JkXpsae0A2nH6W
+	 iImDk5Dq5ax+WpuH7y4rMqy3/qeG91qs99Nfun/pkWTqe/iYEFr3KNUQNEz3p8lW+2
+	 qnzTAtGnCQ4TcF0YVIn7VsqmIpRTc7ifJu+RwKXZCA9YUDTX3ukgzo4qmA8tSD+MJZ
+	 uFyxCnWOxfQYXr4u7SV4EysMs+6A0gqq4FTpFGNEIaHmHO6THEcKGhPF9xrUWZGSnS
+	 FOKuqxLuSLXSqm3s/EYjAmt8+rQ+II45tTqA+D17eNpRof2sfnGejbdkINhmuMtWRT
+	 j9nwV2VsKadLA==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject:
+ [Update][PATCH v1.2 4/5] cpufreq: intel_pstate: Get rid of unnecessary
+ READ_ONCE() annotations
+Date: Thu, 28 Mar 2024 20:00:35 +0100
+Message-ID: <12435759.O9o76ZdvQC@kreacher>
+In-Reply-To: <12420098.O9o76ZdvQC@kreacher>
+References:
+ <12409658.O9o76ZdvQC@kreacher> <2184891.irdbgypaU6@kreacher>
+ <12420098.O9o76ZdvQC@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudduledguddukecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeefpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git intel_pstate-testing
-head:   16303764deedb814defe7e69712edec6a09b50ad
-commit: 16303764deedb814defe7e69712edec6a09b50ad [14/14] cpufreq: intel_pstate: Set asymmetric CPU capacity on hybrid systems
-config: x86_64-randconfig-161-20240328 (https://download.01.org/0day-ci/archive/20240328/202403282334.VfY1MU72-lkp@intel.com/config)
-compiler: gcc-10 (Ubuntu 10.5.0-1ubuntu1) 10.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240328/202403282334.VfY1MU72-lkp@intel.com/reproduce)
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403282334.VfY1MU72-lkp@intel.com/
+Drop two redundant checks involving READ_ONCE() from notify_hwp_interrupt()
+and make it check hwp_active without READ_ONCE() which is not necessary,
+because that variable is only set once during the early initialization of
+the driver.
 
-All errors (new ones prefixed by >>):
+In order to make that clear, annotate hwp_active with __ro_after_init.
 
-   drivers/cpufreq/intel_pstate.c: In function 'hybrid_set_cpu_capacity':
->> drivers/cpufreq/intel_pstate.c:963:2: error: implicit declaration of function 'arch_set_cpu_capacity'; did you mean 'arch_scale_cpu_capacity'? [-Werror=implicit-function-declaration]
-     963 |  arch_set_cpu_capacity(cpu->cpu, cap);
-         |  ^~~~~~~~~~~~~~~~~~~~~
-         |  arch_scale_cpu_capacity
-   cc1: some warnings being treated as errors
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+v1.1 -> v1.2: Fix uninitialized memory access introduced in v1.1.
+
+---
+ drivers/cpufreq/intel_pstate.c |   27 +++++----------------------
+ 1 file changed, 5 insertions(+), 22 deletions(-)
+
+Index: linux-pm/drivers/cpufreq/intel_pstate.c
+===================================================================
+--- linux-pm.orig/drivers/cpufreq/intel_pstate.c
++++ linux-pm/drivers/cpufreq/intel_pstate.c
+@@ -292,7 +292,7 @@ struct pstate_funcs {
+ 
+ static struct pstate_funcs pstate_funcs __read_mostly;
+ 
+-static int hwp_active __read_mostly;
++static bool hwp_active __ro_after_init;
+ static int hwp_mode_bdw __read_mostly;
+ static bool per_cpu_limits __read_mostly;
+ static bool hwp_boost __read_mostly;
+@@ -1636,11 +1636,10 @@ static cpumask_t hwp_intr_enable_mask;
+ void notify_hwp_interrupt(void)
+ {
+ 	unsigned int this_cpu = smp_processor_id();
+-	struct cpudata *cpudata;
+ 	unsigned long flags;
+ 	u64 value;
+ 
+-	if (!READ_ONCE(hwp_active) || !boot_cpu_has(X86_FEATURE_HWP_NOTIFY))
++	if (!hwp_active || !boot_cpu_has(X86_FEATURE_HWP_NOTIFY))
+ 		return;
+ 
+ 	rdmsrl_safe(MSR_HWP_STATUS, &value);
+@@ -1652,24 +1651,8 @@ void notify_hwp_interrupt(void)
+ 	if (!cpumask_test_cpu(this_cpu, &hwp_intr_enable_mask))
+ 		goto ack_intr;
+ 
+-	/*
+-	 * Currently we never free all_cpu_data. And we can't reach here
+-	 * without this allocated. But for safety for future changes, added
+-	 * check.
+-	 */
+-	if (unlikely(!READ_ONCE(all_cpu_data)))
+-		goto ack_intr;
+-
+-	/*
+-	 * The free is done during cleanup, when cpufreq registry is failed.
+-	 * We wouldn't be here if it fails on init or switch status. But for
+-	 * future changes, added check.
+-	 */
+-	cpudata = READ_ONCE(all_cpu_data[this_cpu]);
+-	if (unlikely(!cpudata))
+-		goto ack_intr;
+-
+-	schedule_delayed_work(&cpudata->hwp_notify_work, msecs_to_jiffies(10));
++	schedule_delayed_work(&all_cpu_data[this_cpu]->hwp_notify_work,
++			      msecs_to_jiffies(10));
+ 
+ 	spin_unlock_irqrestore(&hwp_notify_lock, flags);
+ 
+@@ -3464,7 +3447,7 @@ static int __init intel_pstate_init(void
+ 		 * deal with it.
+ 		 */
+ 		if ((!no_hwp && boot_cpu_has(X86_FEATURE_HWP_EPP)) || hwp_forced) {
+-			WRITE_ONCE(hwp_active, 1);
++			hwp_active = true;
+ 			hwp_mode_bdw = id->driver_data;
+ 			intel_pstate.attr = hwp_cpufreq_attrs;
+ 			intel_cpufreq.attr = hwp_cpufreq_attrs;
 
 
-vim +963 drivers/cpufreq/intel_pstate.c
 
-   957	
-   958	static void hybrid_set_cpu_capacity(struct cpudata *cpu)
-   959	{
-   960		u64 cap = div_u64((u64)SCHED_CAPACITY_SCALE * cpu->capacity_perf,
-   961				  hybrid_max_perf_cpu->capacity_perf);
-   962	
- > 963		arch_set_cpu_capacity(cpu->cpu, cap);
-   964	}
-   965	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
