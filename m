@@ -1,148 +1,109 @@
-Return-Path: <linux-pm+bounces-5575-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5576-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15F9388FE80
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 13:01:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01F0988FFE6
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 14:15:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6C5BBB2196A
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 12:01:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD3172927CB
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 13:15:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B17E7F464;
-	Thu, 28 Mar 2024 12:01:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B20A80637;
+	Thu, 28 Mar 2024 13:15:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cE5JLRU1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h0evmTQG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C7687E58F;
-	Thu, 28 Mar 2024 12:01:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E4480620;
+	Thu, 28 Mar 2024 13:15:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711627273; cv=none; b=a3KM/7/dSUYpGN8Gy8du9BOuKuf9W7BqEOnNqdose1PXSa79pc7Ff+gBvDydjictVa0t98qP8yAoY/2cwCJlxrJObB/o9tmNSiAAa1O4oHn1NdzE7lLTVwtkgznhVTfPiHGA0AumJFPpPI9lIe05wk+IMMyzdjDIexu4P4aDi2M=
+	t=1711631721; cv=none; b=d6DTrABHgk2GYZLXihSGP6YrJBFEyMX55/V7RJVG8L4U2NOh40f6Lz/hmqHN100KGZnB3tFhLLmN6QEc7StUlPIfH/Ocwuvccv3/rzT6LPFjUXaIILx5MVGfxrSahEhNCxprQGlZoKgYMkTEkTpqT5YGHaX+XVo8QoXx/X5MEcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711627273; c=relaxed/simple;
-	bh=nffDaJVrBNsyAnwZsAeZUbVZ9WuEdxBLqM6rPP+Bab8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=jCb22dvozA52izJHpmH2DeCNLTt2AKnzCgvq6tBGy1CCsfhD58MOVfRdzMv6jd0Co+TfNB9AQ5cVUrr16S99hVY3Npi629M8/rHhKWbk9CVYMzIG6C3XYVyEtWggScsRlGApqrIGQ8FiE7o3snCbyLWNVFHTkoWIP1B/zmhKI1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cE5JLRU1; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711627269; x=1743163269;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nffDaJVrBNsyAnwZsAeZUbVZ9WuEdxBLqM6rPP+Bab8=;
-  b=cE5JLRU1AVT2PXYUdBWc6Kg3aU5i/KW9EoQp4QPAJY7Mv+uF6Buco5Uy
-   aK0HnXpYPXdnUPq3duRZ/U/A9nHlLiCHQI0zRxIgDEji3HlCKQif7gtTH
-   Nndyp5kA0/VRhRcxccmhr3HdRGVNxV9BSfgpEJ3bbOWFSffXnyv+9FMdh
-   mwkEDdGfxrhkL+F9SffG0+rA7Nl7FzpTVgtywWpjaf0B+uIKqhqXgW9IR
-   GcDiIqIlcadnejjTnz1tlB/vkFdY6nx77OMeoMYc1m53UagTropynR/1M
-   Yg33vu1yHYmOaor8DOQQl2QaguHlBbjVKkdSTXbnSMvolDXGbAlWhOHvQ
-   g==;
-X-CSE-ConnectionGUID: B0WzBu+/TvC/LOv/OBDDdQ==
-X-CSE-MsgGUID: H5JrIp2RTGu2GDZqJrlOJg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11026"; a="9731495"
-X-IronPort-AV: E=Sophos;i="6.07,161,1708416000"; 
-   d="scan'208";a="9731495"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2024 05:01:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,161,1708416000"; 
-   d="scan'208";a="54073874"
-Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 28 Mar 2024 05:01:06 -0700
-Received: from kbuild by be39aa325d23 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rpoRM-00026w-0r;
-	Thu, 28 Mar 2024 12:01:04 +0000
-Date: Thu, 28 Mar 2024 20:00:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-acpi@vger.kernel.org, devel@acpica.org,
-	linux-pm@vger.kernel.org
-Subject: [rafael-pm:intel_pstate-testing 4/14]
- drivers/cpufreq/intel_pstate.c:1655:25: warning: variable 'cpudata' is
- uninitialized when used here
-Message-ID: <202403281955.LhZVDhXg-lkp@intel.com>
+	s=arc-20240116; t=1711631721; c=relaxed/simple;
+	bh=m+h/KdE9apj2uOki2BwzpthHKlZsGJkW3Mwx6nf/uSU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NWGc6VX5SxImBiA2AaszXyOm5cjZLByzYJaUPZoorQXEIOWOpJC4NFfx4YUDMt0Bm/lynGseykNhVaY6tjOpTMXpHoLYq8b8J6Khtp586lO+I9aRRaW3ume+0igSuRHy6heiMrm/eXnxhTAVykUn01HmBZM2r54m1rpHbcLurzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h0evmTQG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80ECFC433C7;
+	Thu, 28 Mar 2024 13:15:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711631720;
+	bh=m+h/KdE9apj2uOki2BwzpthHKlZsGJkW3Mwx6nf/uSU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=h0evmTQGspNWIp9UxCKK5g7GZlsPRhW+Ixig9oMLHg46zlCMFblwQzP06UDKGcFVO
+	 aChVP7F5CFGgUQfGS4nUPTH5R2A3XmDOR4pW4ZsNNINcCqtFBRrHt1d1jFT1lk5maR
+	 cxP8bYS/WAtyf6ipv9HN6WGd24NYM5CGFPCBOuvenNcC8FUrt3KvLD4ebl/4Dj582A
+	 ngaMla9n4E8weFmdwLrwP4hVSnZlA7kr/PEaw08tdTmSBNpNj3GdImauAC9zBz3Bzq
+	 A3AwiRhOCXzv/fgI5DhEmk70kpqSCs7OQt9lUWeA9riDhPOsZUuU0G8okELQj9fAsV
+	 mi9ZtLJqcflhg==
+From: Georgi Djakov <djakov@kernel.org>
+To: gregkh@linuxfoundation.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	djakov@kernel.org
+Subject: [GIT PULL] interconnect fixes for 6.9-rc
+Date: Thu, 28 Mar 2024 15:15:01 +0200
+Message-Id: <20240328131501.641457-1-djakov@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git intel_pstate-testing
-head:   16303764deedb814defe7e69712edec6a09b50ad
-commit: ac9f58c46515ad482d972d5a65c127241c4751b9 [4/14] cpufreq: intel_pstate: Get rid of unnecessary READ_ONCE() annotations
-config: x86_64-rhel-8.3-bpf (https://download.01.org/0day-ci/archive/20240328/202403281955.LhZVDhXg-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240328/202403281955.LhZVDhXg-lkp@intel.com/reproduce)
+Hello Greg,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403281955.LhZVDhXg-lkp@intel.com/
+This pull request contains one core and one driver fix for the current
+cycle. The details are in the signed tag as usual. It is not based on rc1,
+but on a previous tag that you pulled, because i got these fixes during
+the merge window. All patches have been in linux-next for more than a week.
+Please pull into char-misc-linus when possible and propagate further when
+you have more char/misc fixes.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/cpufreq/intel_pstate.c:1655:25: warning: variable 'cpudata' is uninitialized when used here [-Wuninitialized]
-    1655 |         schedule_delayed_work(&cpudata->hwp_notify_work, msecs_to_jiffies(10));
-         |                                ^~~~~~~
-   drivers/cpufreq/intel_pstate.c:1639:25: note: initialize the variable 'cpudata' to silence this warning
-    1639 |         struct cpudata *cpudata;
-         |                                ^
-         |                                 = NULL
-   1 warning generated.
+Thanks,
+Georgi
 
 
-vim +/cpudata +1655 drivers/cpufreq/intel_pstate.c
+The following changes since commit 5464e7acea4a6c56b3c5c2d7aeef2eda92227b33:
 
-57577c996d731c Srinivas Pandruvada 2021-09-28  1635  
-57577c996d731c Srinivas Pandruvada 2021-09-28  1636  void notify_hwp_interrupt(void)
-57577c996d731c Srinivas Pandruvada 2021-09-28  1637  {
-57577c996d731c Srinivas Pandruvada 2021-09-28  1638  	unsigned int this_cpu = smp_processor_id();
-57577c996d731c Srinivas Pandruvada 2021-09-28  1639  	struct cpudata *cpudata;
-57577c996d731c Srinivas Pandruvada 2021-09-28  1640  	unsigned long flags;
-57577c996d731c Srinivas Pandruvada 2021-09-28  1641  	u64 value;
-57577c996d731c Srinivas Pandruvada 2021-09-28  1642  
-ac9f58c46515ad Rafael J. Wysocki   2024-03-25  1643  	if (!hwp_active || !boot_cpu_has(X86_FEATURE_HWP_NOTIFY))
-57577c996d731c Srinivas Pandruvada 2021-09-28  1644  		return;
-57577c996d731c Srinivas Pandruvada 2021-09-28  1645  
-57577c996d731c Srinivas Pandruvada 2021-09-28  1646  	rdmsrl_safe(MSR_HWP_STATUS, &value);
-57577c996d731c Srinivas Pandruvada 2021-09-28  1647  	if (!(value & 0x01))
-57577c996d731c Srinivas Pandruvada 2021-09-28  1648  		return;
-57577c996d731c Srinivas Pandruvada 2021-09-28  1649  
-57577c996d731c Srinivas Pandruvada 2021-09-28  1650  	spin_lock_irqsave(&hwp_notify_lock, flags);
-57577c996d731c Srinivas Pandruvada 2021-09-28  1651  
-57577c996d731c Srinivas Pandruvada 2021-09-28  1652  	if (!cpumask_test_cpu(this_cpu, &hwp_intr_enable_mask))
-57577c996d731c Srinivas Pandruvada 2021-09-28  1653  		goto ack_intr;
-57577c996d731c Srinivas Pandruvada 2021-09-28  1654  
-57577c996d731c Srinivas Pandruvada 2021-09-28 @1655  	schedule_delayed_work(&cpudata->hwp_notify_work, msecs_to_jiffies(10));
-57577c996d731c Srinivas Pandruvada 2021-09-28  1656  
-57577c996d731c Srinivas Pandruvada 2021-09-28  1657  	spin_unlock_irqrestore(&hwp_notify_lock, flags);
-57577c996d731c Srinivas Pandruvada 2021-09-28  1658  
-57577c996d731c Srinivas Pandruvada 2021-09-28  1659  	return;
-57577c996d731c Srinivas Pandruvada 2021-09-28  1660  
-57577c996d731c Srinivas Pandruvada 2021-09-28  1661  ack_intr:
-57577c996d731c Srinivas Pandruvada 2021-09-28  1662  	wrmsrl_safe(MSR_HWP_STATUS, 0);
-57577c996d731c Srinivas Pandruvada 2021-09-28  1663  	spin_unlock_irqrestore(&hwp_notify_lock, flags);
-57577c996d731c Srinivas Pandruvada 2021-09-28  1664  }
-57577c996d731c Srinivas Pandruvada 2021-09-28  1665  
+  interconnect: qcom: x1e80100: Add missing ACV enable_mask (2024-02-04 23:36:06 +0200)
 
-:::::: The code at line 1655 was first introduced by commit
-:::::: 57577c996d731ce1e5a4a488e64e6e201b360847 cpufreq: intel_pstate: Process HWP Guaranteed change notification
+are available in the Git repository at:
 
-:::::: TO: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.9-rc2
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+for you to fetch changes up to de1bf25b6d771abdb52d43546cf57ad775fb68a1:
+
+  interconnect: Don't access req_list while it's being manipulated (2024-03-14 13:51:44 +0200)
+
+----------------------------------------------------------------
+interconnect fixes for v6.9-rc
+
+Here are fixes for two reported issues. One of them is a fix for
+a driver that tries to access a non-existent resource which prints
+a warning message during boot. The other one is fixing a race
+condition in the core framework where one struct member has been
+left unprotected by mutex.
+
+- interconnect: qcom: x1e80100: Remove inexistent ACV_PERF BCM
+- interconnect: Don't access req_list while it's being manipulated
+
+Signed-off-by: Georgi Djakov <djakov@kernel.org>
+
+----------------------------------------------------------------
+Konrad Dybcio (1):
+      interconnect: qcom: x1e80100: Remove inexistent ACV_PERF BCM
+
+Mike Tipton (1):
+      interconnect: Don't access req_list while it's being manipulated
+
+ drivers/interconnect/core.c          |  8 +++
+ drivers/interconnect/qcom/x1e80100.c | 26 --------
+ 2 files changed, 8 insertions(+), 26 deletions(-)
 
