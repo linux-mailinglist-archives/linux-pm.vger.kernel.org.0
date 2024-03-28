@@ -1,135 +1,188 @@
-Return-Path: <linux-pm+bounces-5570-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5571-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B8B388FAF1
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 10:17:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB98A88FC06
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 10:50:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D66ACB26545
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 09:17:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8A72E1F2D923
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 09:50:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8079D58ADF;
-	Thu, 28 Mar 2024 09:17:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cY6JOo6N"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBE82657C4;
+	Thu, 28 Mar 2024 09:50:24 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC61F42A95
-	for <linux-pm@vger.kernel.org>; Thu, 28 Mar 2024 09:17:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F8A1651B6;
+	Thu, 28 Mar 2024 09:50:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711617426; cv=none; b=nnCozdZcYjrvfcC7sQseAYDAexcp46R+Fv7sqd/0bHisldak1qMGw5z5U0rRwG21JzE2IdB+Eqqhg8B488b7cCZXYV9FYJVvcYd5VJKPo+X13IACGntpBjjDu2P9UEJk5EgdhbFVj7MKlZQOxQWnnrGe/g4QPhOKNfNOGL7jPdg=
+	t=1711619424; cv=none; b=dAiyS5kU8cQ3wTskbXoYYky0xfMgRGl1KZsdM7eThURD4uUUkTyp3GfqhlYxP+glHtJR2AH239vJVyiMvQ9L+5Qv+s0IMNZbmcPtKKVsX+nfHEmtzSYMlbe+GsqKdbrzk5E4ISOzjoHgegdKudHBgFnfgc2LJjq7b4qrg4vKloc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711617426; c=relaxed/simple;
-	bh=6Gy4ugoy8i2cxQlvWL7ALq6UFeZ+OdAO4iKWFswgcnY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LeApQGT6Hxu/WCDgFJtePH6QpwjdqH4AiJ/zNKE9ikWacNxbBSMGUYo8sm0jehYqf3Ef5pYg5NYXtacc2w5vXXI6NdtmG21i2W+JG7+ALIlVLd80h/UyisXouQTKcK2OxcsDbguqq7ICDr6z6EFQ5VuuGgczbmuy08+S5INU/xw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cY6JOo6N; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1711617424;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RHdntgzQNe3U9Pl83BPn/RLVFTNLwSPTo5R9/5t/aKc=;
-	b=cY6JOo6NF4hbbVQk0RWom1z9Su5sluBHObiyG68PmAYDKa3wXf5tB7xhoSUrmmCddmyZfG
-	wbh0pi43JrJkDg6dCXDXx+S23L0wiX+IvNfnCbKy4DmClfs19yIKP1bwKJTv3M6o5v3d9t
-	ptYzrfFgnh1D19r8B2//+y6/CRCHjiI=
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
- [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-581-Df4MhqYGOD6QWJsSP3qinQ-1; Thu, 28 Mar 2024 05:17:01 -0400
-X-MC-Unique: Df4MhqYGOD6QWJsSP3qinQ-1
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-2a0862ca1b3so614609a91.3
-        for <linux-pm@vger.kernel.org>; Thu, 28 Mar 2024 02:17:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711617421; x=1712222221;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RHdntgzQNe3U9Pl83BPn/RLVFTNLwSPTo5R9/5t/aKc=;
-        b=l1cXcansAhaWuSP5lVJXICpvnl05mOJqIxs3Zu1/j8RuYa62/RCF36cwAvcgRwPwuK
-         wgrWBWTozZcJ735tVBD7LNfH0KhjyUsyO1I6E601R8l0dm8G5ejEa0mxZ5Qx8xw5fItA
-         GcKWCUAYCpH31Rgu3CfoKUQepC/Xa+OBwcGck4Fto49GoMA0292V/CnzZmsRJTv+hZ5a
-         xmS3X2dgQ03YX0xdXw8voiXoejb5tEydwYCq4MyyU/dbj744EnF2gDZWFdnQxmHJKpIH
-         zK04/AFO68Px85KRkT5xtM3xXPZxnISABhsh+VbkKv/BBpi62fepBIWKcKceXSzfslEB
-         2pog==
-X-Forwarded-Encrypted: i=1; AJvYcCVJXmlQpe12v6a+WCaVpD3p4OfpOFZbfYyODxb2lOt8D3SQcvwusK34MiRpYweKpjd8YU8DQIw0AhagIF5+sqTPLxJNgIirqko=
-X-Gm-Message-State: AOJu0YyMjtT9IWgCdTJuze0yRgRimvqfCFwrcoGVeDvIl8c5pqxny89/
-	jtVLAiiYSzy8e1jWCP1Rz+672YGZiJZLH1I8UBndrM8uIsP7/AqvDGuQuFfTLzwDlfNWiVMa6XF
-	1WD2OjBmQCZsnMpv29JDVWfkGMi/+//XFqI2x6xhjWobpkJjb/wxor5rq7i+rhJi2eZF7HzsAZ4
-	6iUbm4sB6aA0U9ErW8Qg0S3u1pPQ3UezY=
-X-Received: by 2002:a17:90a:3045:b0:29f:a779:1075 with SMTP id q5-20020a17090a304500b0029fa7791075mr1930921pjl.37.1711617420963;
-        Thu, 28 Mar 2024 02:17:00 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHh7LIZK1grxIAjSEbZxJU8sfdCnSCR08Lls19g/j9dBiAagox0TRBn0uSzYPXhg4LEkFCO+54lcOqzrGPqdQw=
-X-Received: by 2002:a17:90a:3045:b0:29f:a779:1075 with SMTP id
- q5-20020a17090a304500b0029fa7791075mr1930908pjl.37.1711617420686; Thu, 28 Mar
- 2024 02:17:00 -0700 (PDT)
+	s=arc-20240116; t=1711619424; c=relaxed/simple;
+	bh=34dy55diV+Qo54TTg/6m8LWWzKtrVmGDMbvaRXkv9Yk=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=S+GTsfgFbV3aLbaH1WgCuNdOWyivj+m4hTvR7ltm4yixRqods88kFSs61DpgLT5d107LO3VZBzW5jO7bP41C/SFUwq9Bd7GSCHSDCxVXB4eegj6hk7BPxd4eyYwCPrim1CrJuz072areZ4K0XWxJT60idWlRX+7Yl9CZlcjsSxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6667A339;
+	Thu, 28 Mar 2024 02:50:50 -0700 (PDT)
+Received: from [10.57.73.140] (unknown [10.57.73.140])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 77E5B3F7BD;
+	Thu, 28 Mar 2024 02:50:15 -0700 (PDT)
+Message-ID: <3df783db-3243-4484-a429-4d3e64b9dbae@arm.com>
+Date: Thu, 28 Mar 2024 09:50:14 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240324150107.976025-1-hpa@redhat.com> <20240324150107.976025-3-hpa@redhat.com>
- <CAHp75VdosbYNKU90QWt+6SU_i5dWC94=xZy0GXiKvoQeDF30wg@mail.gmail.com>
- <CAEth8oFuPTRq0z-YbMMFt=kKgre6x+bDhtpUkj2vJeK-u8O72A@mail.gmail.com> <CAHp75Vc6=0-eMMXYQEn9w5N09rKR9NNrqFPR8LBvZZyOiscsig@mail.gmail.com>
-In-Reply-To: <CAHp75Vc6=0-eMMXYQEn9w5N09rKR9NNrqFPR8LBvZZyOiscsig@mail.gmail.com>
-From: Kate Hsuan <hpa@redhat.com>
-Date: Thu, 28 Mar 2024 17:16:49 +0800
-Message-ID: <CAEth8oF_YD1dosS4a9N8UgTiQyUXuJF+HJR5xNv3+vz4KUzw-w@mail.gmail.com>
-Subject: Re: [PATCH v5 RESEND 2/6] leds: rgb: leds-ktd202x: Get device
- properties through fwnode to support ACPI
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org, 
-	platform-driver-x86@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>, 
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	=?UTF-8?Q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>, 
-	linux-kernel@vger.kernel.org, Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Mar 27, 2024 at 7:08=E2=80=AFPM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Wed, Mar 27, 2024 at 8:53=E2=80=AFAM Kate Hsuan <hpa@redhat.com> wrote=
-:
-> > On Mon, Mar 25, 2024 at 3:57=E2=80=AFAM Andy Shevchenko
-> > <andy.shevchenko@gmail.com> wrote:
-> > > On Sun, Mar 24, 2024 at 5:02=E2=80=AFPM Kate Hsuan <hpa@redhat.com> w=
-rote:
->
-> ...
->
-> > > > +       .id_table =3D ktd202x_id,
-> > >
-> > > Seems to me that you may split the I=C2=B2C ID table addition into a =
-separate change.
-> >
-> > Could you please describe this more clearly? Thank you
->
-> I don't see how the introduction of the I=C2=B2C ID table is related to
-> this patch. If needed it can be done separately, no?
-
-Okay. I'll prepare a separate patch to describe the i2c ID table.
-
-Thank you :)
-
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] thermal: gov_power_allocator: Allow binding without
+ cooling devices
+Content-Language: en-US
+From: Lukasz Luba <lukasz.luba@arm.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>, nikita@trvn.ru
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Zhang Rui <rui.zhang@intel.com>,
+ "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240321-gpa-no-cooling-devs-v1-1-5c9e0ef2062e@trvn.ru>
+ <CAJZ5v0jAq=iMKzYBz-Ni6Zqpbgxp3_0UYpPiAoSLcfGNJ8ruhQ@mail.gmail.com>
+ <1bfcb1cf-fc08-404b-be36-b5e1863f7c59@arm.com>
+In-Reply-To: <1bfcb1cf-fc08-404b-be36-b5e1863f7c59@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
---=20
-BR,
-Kate
 
+On 3/28/24 09:12, Lukasz Luba wrote:
+> Hi Rafael,
+> 
+> On 3/27/24 15:25, Rafael J. Wysocki wrote:
+>> On Thu, Mar 21, 2024 at 3:44 PM Nikita Travkin <nikita@trvn.ru> wrote:
+>>>
+>>> Commit e83747c2f8e3 ("thermal: gov_power_allocator: Set up trip 
+>>> points earlier")
+>>> added a check that would fail binding the governer if there is no
+>>> cooling devices bound to the thermal zone. Unfortunately this causes
+>>> issues in cases when the TZ is bound to the governer before the cooling
+>>> devices are attached to it. (I.e. when the tz is registered using
+>>> thermal_zone_device_register_with_trips().)
+>>>
+>>> Additionally, the documentation across gov_power_allocator suggests it's
+>>> intended to allow it to be bound to thermal zones without cooling
+>>> devices (and thus without passive/active trip points), however the same
+>>> change added a check for the trip point to be present, causing those TZ
+>>> to fail probing.
+
+This patch description is mixing trips and cooling devices and refers to
+a commit which is only for guarding the trip points number to be
+not less than 2. In IPA we require 2 trip points.
+
+>>>
+>>> Those changes cause all thermal zones to fail on some devices (such as
+>>> sc7180-acer-aspire1) and prevent the kernel from controlling the cpu/gpu
+>>> frequency based on the temperature, as well as losing all the other
+>>> "informational" thermal zones if power_allocator is set as default.
+>>>
+>>> This commit partially reverts the referenced one by dropping the trip
+>>> point check and by allowing the TZ to probe even if no actor buffer was
+>>> allocated to allow those TZ to probe again.
+>>>
+>>> Fixes: e83747c2f8e3 ("thermal: gov_power_allocator: Set up trip 
+>>> points earlier")
+
+Not that commit.
+
+>>> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+>>> ---
+>>> I've noticed that all thermal zones fail probing with -EINVAL on my
+>>> sc7180 based Acer Aspire 1 since 6.8. This commit allows me to bring
+>>> them back.
+>>
+>> Łukasz, any comments?
+> 
+> Let me check this today.
+> 
+>>
+>>> ---
+>>>   drivers/thermal/gov_power_allocator.c | 14 +++++---------
+>>>   1 file changed, 5 insertions(+), 9 deletions(-)
+>>>
+>>> diff --git a/drivers/thermal/gov_power_allocator.c 
+>>> b/drivers/thermal/gov_power_allocator.c
+>>> index 1b17dc4c219c..4f2d7f3b7508 100644
+>>> --- a/drivers/thermal/gov_power_allocator.c
+>>> +++ b/drivers/thermal/gov_power_allocator.c
+>>> @@ -679,11 +679,6 @@ static int power_allocator_bind(struct 
+>>> thermal_zone_device *tz)
+>>>                  return -ENOMEM;
+>>>
+>>>          get_governor_trips(tz, params);
+>>> -       if (!params->trip_max) {
+>>> -               dev_warn(&tz->device, "power_allocator: missing 
+>>> trip_max\n");
+
+This if() guards the binding of TZ with less than 2 trip points,
+not the cooling devices.
+
+>>> -               kfree(params);
+>>> -               return -EINVAL;
+>>> -       }
+>>>
+>>>          ret = check_power_actors(tz, params);
+>>>          if (ret < 0) {
+>>> @@ -693,7 +688,7 @@ static int power_allocator_bind(struct 
+>>> thermal_zone_device *tz)
+>>>          }
+>>>
+>>>          ret = allocate_actors_buffer(params, ret);
+>>> -       if (ret) {
+
+This if() is from different commit.
+
+>>> +       if (ret && ret != -EINVAL) {
+
+This is about 0 cooling devices in the thermal zone, but IPA won't work
+so why to even fake and forward binding?
+
+Rafael should we support binding with 0 cooling devices?
+
+>>>                  dev_warn(&tz->device, "power_allocator: allocation 
+>>> failed\n");
+>>>                  kfree(params);
+>>>                  return ret;
+>>> @@ -714,9 +709,10 @@ static int power_allocator_bind(struct 
+>>> thermal_zone_device *tz)
+>>>          else
+>>>                  params->sustainable_power = tz->tzp->sustainable_power;
+>>>
+>>> -       estimate_pid_constants(tz, tz->tzp->sustainable_power,
+>>> -                              params->trip_switch_on,
+>>> -                              params->trip_max->temperature);
+>>> +       if (params->trip_max)
+
+This is not supported, we need those 2 trip points.
+
+>>> +               estimate_pid_constants(tz, tz->tzp->sustainable_power,
+>>> +                                      params->trip_switch_on,
+>>> +                                      params->trip_max->temperature);
+>>>
+>>>          reset_pid_controller(params);
+>>>
+>>>
+>>> ---
+>>> base-commit: e7528c088874326d3060a46f572252be43755a86
+>>> change-id: 20240321-gpa-no-cooling-devs-c79ee3288325
+>>>
+>>> Best regards,
+>>> -- 
+>>> Nikita Travkin <nikita@trvn.ru>
+>>>
+> 
 
