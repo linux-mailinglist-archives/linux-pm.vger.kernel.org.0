@@ -1,54 +1,74 @@
-Return-Path: <linux-pm+bounces-5576-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5577-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01F0988FFE6
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 14:15:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B32E0890077
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 14:38:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD3172927CB
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 13:15:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E46E81C22EC6
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 13:38:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B20A80637;
-	Thu, 28 Mar 2024 13:15:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35DCE8120F;
+	Thu, 28 Mar 2024 13:38:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h0evmTQG"
+	dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b="jR2Sl/zK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E4480620;
-	Thu, 28 Mar 2024 13:15:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A6311DDF6;
+	Thu, 28 Mar 2024 13:38:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.18.73.165
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711631721; cv=none; b=d6DTrABHgk2GYZLXihSGP6YrJBFEyMX55/V7RJVG8L4U2NOh40f6Lz/hmqHN100KGZnB3tFhLLmN6QEc7StUlPIfH/Ocwuvccv3/rzT6LPFjUXaIILx5MVGfxrSahEhNCxprQGlZoKgYMkTEkTpqT5YGHaX+XVo8QoXx/X5MEcc=
+	t=1711633096; cv=none; b=tJxvZ9QEHJaiDeGcjANMlmqksLzE8gFlGtHIw3cZeQs13IUn7O02ehKNJ4hGOHRWJkz/r9b0ZoYd1ixHW3qKNAzkYEPccY90acnlBXZRrlBTfmkNEec96RzGuvM/+4eJgslEVUC2/uHogRKCeDb0MfsSf9xgJvBEkW3w5T22Apc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711631721; c=relaxed/simple;
-	bh=m+h/KdE9apj2uOki2BwzpthHKlZsGJkW3Mwx6nf/uSU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NWGc6VX5SxImBiA2AaszXyOm5cjZLByzYJaUPZoorQXEIOWOpJC4NFfx4YUDMt0Bm/lynGseykNhVaY6tjOpTMXpHoLYq8b8J6Khtp586lO+I9aRRaW3ume+0igSuRHy6heiMrm/eXnxhTAVykUn01HmBZM2r54m1rpHbcLurzs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h0evmTQG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80ECFC433C7;
-	Thu, 28 Mar 2024 13:15:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711631720;
-	bh=m+h/KdE9apj2uOki2BwzpthHKlZsGJkW3Mwx6nf/uSU=;
-	h=From:To:Cc:Subject:Date:From;
-	b=h0evmTQGspNWIp9UxCKK5g7GZlsPRhW+Ixig9oMLHg46zlCMFblwQzP06UDKGcFVO
-	 aChVP7F5CFGgUQfGS4nUPTH5R2A3XmDOR4pW4ZsNNINcCqtFBRrHt1d1jFT1lk5maR
-	 cxP8bYS/WAtyf6ipv9HN6WGd24NYM5CGFPCBOuvenNcC8FUrt3KvLD4ebl/4Dj582A
-	 ngaMla9n4E8weFmdwLrwP4hVSnZlA7kr/PEaw08tdTmSBNpNj3GdImauAC9zBz3Bzq
-	 A3AwiRhOCXzv/fgI5DhEmk70kpqSCs7OQt9lUWeA9riDhPOsZUuU0G8okELQj9fAsV
-	 mi9ZtLJqcflhg==
-From: Georgi Djakov <djakov@kernel.org>
-To: gregkh@linuxfoundation.org
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	djakov@kernel.org
-Subject: [GIT PULL] interconnect fixes for 6.9-rc
-Date: Thu, 28 Mar 2024 15:15:01 +0200
-Message-Id: <20240328131501.641457-1-djakov@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1711633096; c=relaxed/simple;
+	bh=0dok5g0tg7QuPm4S4YUPz3mypyYi9jIsQw4Y3h1htvA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=eGvcA4aFIXITaOg4315hcjuikbOSq8apEa3ouKdsc90WAHyd3zRyso67WbnpgU+rfiV5i8p4Vjr5v3xaBLKpy6E+uoE51zZIRnBb6YiV4pKOMvW2Kq8ChFDc0HJrbFUT3/HjtAXEFu1EOgsHWYkIK2Lm/5+4flLCT7Y9WPI+xxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com; spf=pass smtp.mailfrom=salutedevices.com; dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b=jR2Sl/zK; arc=none smtp.client-ip=37.18.73.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=salutedevices.com
+Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
+	by mx1.sberdevices.ru (Postfix) with ESMTP id 59E08100014;
+	Thu, 28 Mar 2024 16:38:09 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 59E08100014
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salutedevices.com;
+	s=mail; t=1711633089;
+	bh=1VOGE1dl8McFh3KcGh2ht+nrIDpqZWZpRU4J/qJlqq8=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
+	b=jR2Sl/zK8pmtiz+iiXdE3k4xB6dE01jb9JHaXlxIqzhPY7uiL8unvBd68Tyg85d64
+	 K97asJ082zBxtMLIXNGiKB9w9eKyt7lhrpm6WJQhXxi4Y8uj+kL7bsnIv5SIXuhCIz
+	 16q5JHKDW3/ydVlsRHy/lOoNsD49amT2g1SHuDVTr3ghzc6nBmRlCFnJFN69K1KO55
+	 pyCULfRLTdpaSW/QneBqalsAMqwKHL6i+ebK+nksm+Xx+Zj5F6Wc5n4MxN66nQWyiL
+	 cu9Dq16HWxEy/0oYBsjgnp9j+2hpKKynn+N8YPPuxWTAh+IVScZFZ9dysKf+oOq1Ly
+	 JZrJADaTyjnMw==
+Received: from smtp.sberdevices.ru (p-i-exch-sc-m02.sberdevices.ru [172.16.192.103])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx1.sberdevices.ru (Postfix) with ESMTPS;
+	Thu, 28 Mar 2024 16:38:09 +0300 (MSK)
+Received: from CAB-WSD-L081021.sberdevices.ru (100.64.160.123) by
+ p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Thu, 28 Mar 2024 16:38:08 +0300
+From: Dmitry Rokosov <ddrokosov@salutedevices.com>
+To: <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
+	<mturquette@baylibre.com>, <khilman@baylibre.com>,
+	<martin.blumenstingl@googlemail.com>, <glaroque@baylibre.com>,
+	<rafael@kernel.org>, <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
+	<lukasz.luba@arm.com>, <robh+dt@kernel.org>,
+	<krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>
+CC: <kernel@salutedevices.com>, <rockosov@gmail.com>,
+	<linux-amlogic@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, Dmitry Rokosov
+	<ddrokosov@salutedevices.com>
+Subject: [PATCH v1 0/2] thermal: amlogic: introduce A1 SoC family Thermal Sensor controller
+Date: Thu, 28 Mar 2024 16:37:51 +0300
+Message-ID: <20240328133802.15651-1-ddrokosov@salutedevices.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -56,54 +76,40 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
+ p-i-exch-sc-m02.sberdevices.ru (172.16.192.103)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 184470 [Mar 28 2024]
+X-KSMG-AntiSpam-Version: 6.1.0.4
+X-KSMG-AntiSpam-Envelope-From: ddrokosov@salutedevices.com
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 14 0.3.14 5a0c43d8a1c3c0e5b0916cc02a90d4b950c01f96, {Tracking_from_domain_doesnt_match_to}, smtp.sberdevices.ru:5.0.1,7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;salutedevices.com:7.1.1;100.64.160.123:7.1.2, FromAlignment: s, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean
+X-KSMG-LinksScanning: Clean
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2024/03/28 10:33:00 #24492761
+X-KSMG-AntiVirus-Status: Clean, skipped
 
-Hello Greg,
+It is primarily based on the G12A thermal controller, with only a slight
+variation in the offset value of the efuse parameters. Therefore, this
+patch series provides appropriate platform data and dt-bindings to
+ensure proper support.
 
-This pull request contains one core and one driver fix for the current
-cycle. The details are in the signed tag as usual. It is not based on rc1,
-but on a previous tag that you pulled, because i got these fixes during
-the merge window. All patches have been in linux-next for more than a week.
-Please pull into char-misc-linus when possible and propagate further when
-you have more char/misc fixes.
+Dmitry Rokosov (2):
+  dt-bindings: thermal: amlogic: add support for A1 thermal sensor
+  thermal: amlogic: support A1 SoC family Thermal Sensor controller
 
-Thanks,
-Georgi
+ .../bindings/thermal/amlogic,thermal.yaml          | 14 +++++++++-----
+ drivers/thermal/amlogic_thermal.c                  | 10 ++++++++++
+ 2 files changed, 19 insertions(+), 5 deletions(-)
 
+-- 
+2.43.0
 
-The following changes since commit 5464e7acea4a6c56b3c5c2d7aeef2eda92227b33:
-
-  interconnect: qcom: x1e80100: Add missing ACV enable_mask (2024-02-04 23:36:06 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.9-rc2
-
-for you to fetch changes up to de1bf25b6d771abdb52d43546cf57ad775fb68a1:
-
-  interconnect: Don't access req_list while it's being manipulated (2024-03-14 13:51:44 +0200)
-
-----------------------------------------------------------------
-interconnect fixes for v6.9-rc
-
-Here are fixes for two reported issues. One of them is a fix for
-a driver that tries to access a non-existent resource which prints
-a warning message during boot. The other one is fixing a race
-condition in the core framework where one struct member has been
-left unprotected by mutex.
-
-- interconnect: qcom: x1e80100: Remove inexistent ACV_PERF BCM
-- interconnect: Don't access req_list while it's being manipulated
-
-Signed-off-by: Georgi Djakov <djakov@kernel.org>
-
-----------------------------------------------------------------
-Konrad Dybcio (1):
-      interconnect: qcom: x1e80100: Remove inexistent ACV_PERF BCM
-
-Mike Tipton (1):
-      interconnect: Don't access req_list while it's being manipulated
-
- drivers/interconnect/core.c          |  8 +++
- drivers/interconnect/qcom/x1e80100.c | 26 --------
- 2 files changed, 8 insertions(+), 26 deletions(-)
 
