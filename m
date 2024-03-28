@@ -1,68 +1,66 @@
-Return-Path: <linux-pm+bounces-5590-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5591-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07BD08908D0
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 20:01:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50F4B8908D3
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 20:02:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7D68DB20EC9
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 19:01:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E54041F21913
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 19:02:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74474136E28;
-	Thu, 28 Mar 2024 19:01:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 297D313775B;
+	Thu, 28 Mar 2024 19:02:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="uR9NKpyZ"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="Z1SlBYNN"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5C73135A4D;
-	Thu, 28 Mar 2024 19:00:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66F265338F;
+	Thu, 28 Mar 2024 19:02:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711652473; cv=none; b=WaaNAYj/t0en9gn+VSVGuVf/owzmeCqSSg+QFJInNib/NhmOFW4y2JaIEsTAQxCWIBo7eSK9upjUVE+KHJ863IHQGoCSEcObu94Uo927xWXHL2QTkfHo415Fm8Zjs3EBaeQxbLnxJJSan77Gysmc9oTSG90Nm++MVNOwd4baVPk=
+	t=1711652544; cv=none; b=BZfxT8eAuzMrXHi/g3W8pqgWgE49wreGqZCp5k8ebMJSh6S1c38vQvi90b8Rq4DGnzhBFTrkbLui/9SZpgAE3MR7n5lOsX83U2GrsRqJNkd0J4D7ztsgWR/I5LQkdkWpj6J2uM9sxVNcYZov4TGvwCyvklZbakMlhSLJFSUsh5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711652473; c=relaxed/simple;
-	bh=bSQaSHiaC4u0gePRhewgeWg4QIM2Vad/ONuhnTPUE28=;
+	s=arc-20240116; t=1711652544; c=relaxed/simple;
+	bh=BJhan4nNEvDPO7IwX+c05Qg9xHwiLb9UN1oaP3pWkn0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mnTjtjS1QgGwW+yd0k6X00n0PhawFD/5Xq1KgUjUe4iUwkB1h0f2YGfDZx0VLRyxQwyqUNCUjbji6HPYgYUqBNMpYNmW72y7Naa53x0OmwFrXufBIK2lKA2aRUZomKGMFZNYo6pcnQbB3AEgFJNyv2qRyqLEg0PYhsXGaONyQBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=uR9NKpyZ reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+	 MIME-Version:Content-Type; b=qle0XHUs6M0BUizgF90EIE7RMdz5PRbif3JYBxTYsyQaqn7uLouAWcU3QLzLwA6AZWUBUIrl6RMDRbHc8GN9pZStV1HZ7c2VIxnJtga80s8ehUc6HwYnVUlylBd2lszKbhrQwMmSJF6zfvLVyjSiRNOE493PPcy2AxJu+MJiv3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=Z1SlBYNN reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
- id a6c31ea869a14cc0; Thu, 28 Mar 2024 20:00:36 +0100
+ id 99ba159edb798562; Thu, 28 Mar 2024 20:02:19 +0100
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id DCBDD66C24C;
-	Thu, 28 Mar 2024 20:00:35 +0100 (CET)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id CD12666C25F;
+	Thu, 28 Mar 2024 20:02:18 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1711652436;
-	bh=bSQaSHiaC4u0gePRhewgeWg4QIM2Vad/ONuhnTPUE28=;
+	s=dkim; t=1711652539;
+	bh=BJhan4nNEvDPO7IwX+c05Qg9xHwiLb9UN1oaP3pWkn0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=uR9NKpyZNNt4TYiSZ8fBcAOwUFZEsabsK4t+4NSMNcb+qoHsLX+JkXpsae0A2nH6W
-	 iImDk5Dq5ax+WpuH7y4rMqy3/qeG91qs99Nfun/pkWTqe/iYEFr3KNUQNEz3p8lW+2
-	 qnzTAtGnCQ4TcF0YVIn7VsqmIpRTc7ifJu+RwKXZCA9YUDTX3ukgzo4qmA8tSD+MJZ
-	 uFyxCnWOxfQYXr4u7SV4EysMs+6A0gqq4FTpFGNEIaHmHO6THEcKGhPF9xrUWZGSnS
-	 FOKuqxLuSLXSqm3s/EYjAmt8+rQ+II45tTqA+D17eNpRof2sfnGejbdkINhmuMtWRT
-	 j9nwV2VsKadLA==
+	b=Z1SlBYNNd+YKNuqZEhBSXVEol1f5dCJpSrVZJUxKBchPivj+SWZacjZHjR/vqmIpU
+	 6r+YN6c71Nr3l9dIAaPqPzyDc+y1s4A83bvpWMvn23hH88/f5sqTY3EtSkTKygJk2p
+	 /8tklU1C+XMbA1xa7qHFyOZpo15D5vmEPzxSxFQmnAY3YgAWikHwj+oPPwFM/gZH3+
+	 vrcnfviAvV/Jn/dWdMVCU4IFg1jZfd1s+ntr0dDO1eE+V36O8ZZlMjso24kZPi/qcf
+	 dP639SXzCQKLwSWaNofu+BVbS0p21lFG92ewkcjgx6kz/8MjSzId4sjkrZrFXIS3fo
+	 GIsQtOu7fo8Uw==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>,
  Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 Subject:
- [Update][PATCH v1.2 4/5] cpufreq: intel_pstate: Get rid of unnecessary
- READ_ONCE() annotations
-Date: Thu, 28 Mar 2024 20:00:35 +0100
-Message-ID: <12435759.O9o76ZdvQC@kreacher>
-In-Reply-To: <12420098.O9o76ZdvQC@kreacher>
-References:
- <12409658.O9o76ZdvQC@kreacher> <2184891.irdbgypaU6@kreacher>
- <12420098.O9o76ZdvQC@kreacher>
+ [PATCH v1.1 6/6] cpufreq: intel_pstate: Update the maximum CPU frequency
+ consistently
+Date: Thu, 28 Mar 2024 20:02:18 +0100
+Message-ID: <6059426.lOV4Wx5bFT@kreacher>
+In-Reply-To: <9269494.CDJkKcVGEf@kreacher>
+References: <13494237.uLZWGnKmhe@kreacher> <9269494.CDJkKcVGEf@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -79,84 +77,81 @@ X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Drop two redundant checks involving READ_ONCE() from notify_hwp_interrupt()
-and make it check hwp_active without READ_ONCE() which is not necessary,
-because that variable is only set once during the early initialization of
-the driver.
+There are 3 places at which the maximum CPU frequency may change,
+store_no_turbo(), intel_pstate_update_limits() (when called by the
+cpufreq core) and intel_pstate_notify_work() (when handling a HWP
+change notification).  Currently, cpuinfo.max_freq is only updated by
+store_no_turbo() and intel_pstate_notify_work(), although it principle
+it may be necessary to update it in intel_pstate_update_limits() either.
 
-In order to make that clear, annotate hwp_active with __ro_after_init.
+Make all of them mutually consistent.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
 
-v1.1 -> v1.2: Fix uninitialized memory access introduced in v1.1.
+v1 -> v1.1: Fix changelog (Srinivas).
 
 ---
- drivers/cpufreq/intel_pstate.c |   27 +++++----------------------
- 1 file changed, 5 insertions(+), 22 deletions(-)
+ drivers/cpufreq/intel_pstate.c |   23 ++++++++++++++++++-----
+ 1 file changed, 18 insertions(+), 5 deletions(-)
 
 Index: linux-pm/drivers/cpufreq/intel_pstate.c
 ===================================================================
 --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
 +++ linux-pm/drivers/cpufreq/intel_pstate.c
-@@ -292,7 +292,7 @@ struct pstate_funcs {
- 
- static struct pstate_funcs pstate_funcs __read_mostly;
- 
--static int hwp_active __read_mostly;
-+static bool hwp_active __ro_after_init;
- static int hwp_mode_bdw __read_mostly;
- static bool per_cpu_limits __read_mostly;
- static bool hwp_boost __read_mostly;
-@@ -1636,11 +1636,10 @@ static cpumask_t hwp_intr_enable_mask;
- void notify_hwp_interrupt(void)
+@@ -1153,18 +1153,32 @@ static void intel_pstate_update_policies
+ static void __intel_pstate_update_max_freq(struct cpudata *cpudata,
+ 					   struct cpufreq_policy *policy)
  {
- 	unsigned int this_cpu = smp_processor_id();
--	struct cpudata *cpudata;
- 	unsigned long flags;
- 	u64 value;
++	intel_pstate_get_hwp_cap(cpudata);
++
+ 	policy->cpuinfo.max_freq = READ_ONCE(global.no_turbo) ?
+ 			cpudata->pstate.max_freq : cpudata->pstate.turbo_freq;
++
+ 	refresh_frequency_limits(policy);
+ }
  
--	if (!READ_ONCE(hwp_active) || !boot_cpu_has(X86_FEATURE_HWP_NOTIFY))
-+	if (!hwp_active || !boot_cpu_has(X86_FEATURE_HWP_NOTIFY))
- 		return;
+ static void intel_pstate_update_limits(unsigned int cpu)
+ {
+-	mutex_lock(&intel_pstate_driver_lock);
++	struct cpufreq_policy *policy = cpufreq_cpu_acquire(cpu);
  
- 	rdmsrl_safe(MSR_HWP_STATUS, &value);
-@@ -1652,24 +1651,8 @@ void notify_hwp_interrupt(void)
- 	if (!cpumask_test_cpu(this_cpu, &hwp_intr_enable_mask))
- 		goto ack_intr;
+-	cpufreq_update_policy(cpu);
++	if (!policy)
++		return;
  
--	/*
--	 * Currently we never free all_cpu_data. And we can't reach here
--	 * without this allocated. But for safety for future changes, added
--	 * check.
--	 */
--	if (unlikely(!READ_ONCE(all_cpu_data)))
--		goto ack_intr;
--
--	/*
--	 * The free is done during cleanup, when cpufreq registry is failed.
--	 * We wouldn't be here if it fails on init or switch status. But for
--	 * future changes, added check.
--	 */
--	cpudata = READ_ONCE(all_cpu_data[this_cpu]);
--	if (unlikely(!cpudata))
--		goto ack_intr;
--
--	schedule_delayed_work(&cpudata->hwp_notify_work, msecs_to_jiffies(10));
-+	schedule_delayed_work(&all_cpu_data[this_cpu]->hwp_notify_work,
-+			      msecs_to_jiffies(10));
+-	mutex_unlock(&intel_pstate_driver_lock);
++	__intel_pstate_update_max_freq(all_cpu_data[cpu], policy);
++
++	cpufreq_cpu_release(policy);
++}
++
++static void intel_pstate_update_limits_for_all(void)
++{
++	int cpu;
++
++	for_each_possible_cpu(cpu)
++		intel_pstate_update_limits(cpu);
+ }
  
- 	spin_unlock_irqrestore(&hwp_notify_lock, flags);
+ /************************** sysfs begin ************************/
+@@ -1311,7 +1325,7 @@ static ssize_t store_no_turbo(struct kob
  
-@@ -3464,7 +3447,7 @@ static int __init intel_pstate_init(void
- 		 * deal with it.
- 		 */
- 		if ((!no_hwp && boot_cpu_has(X86_FEATURE_HWP_EPP)) || hwp_forced) {
--			WRITE_ONCE(hwp_active, 1);
-+			hwp_active = true;
- 			hwp_mode_bdw = id->driver_data;
- 			intel_pstate.attr = hwp_cpufreq_attrs;
- 			intel_cpufreq.attr = hwp_cpufreq_attrs;
+ 	mutex_unlock(&intel_pstate_limits_lock);
+ 
+-	intel_pstate_update_policies();
++	intel_pstate_update_limits_for_all();
+ 	arch_set_max_freq_ratio(no_turbo);
+ 
+ unlock_driver:
+@@ -1595,7 +1609,6 @@ static void intel_pstate_notify_work(str
+ 	struct cpufreq_policy *policy = cpufreq_cpu_acquire(cpudata->cpu);
+ 
+ 	if (policy) {
+-		intel_pstate_get_hwp_cap(cpudata);
+ 		__intel_pstate_update_max_freq(cpudata, policy);
+ 
+ 		cpufreq_cpu_release(policy);
 
 
 
