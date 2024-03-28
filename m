@@ -1,90 +1,80 @@
-Return-Path: <linux-pm+bounces-5603-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5604-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A494A890DB6
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 23:37:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCECE890E52
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 00:10:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B2E21F25372
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 22:37:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 69D011F24BD1
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 23:10:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEE5929CEF;
-	Thu, 28 Mar 2024 22:37:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92A544F5FC;
+	Thu, 28 Mar 2024 23:10:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="1UCFopmC"
+	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="TI5UFin6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 785E31D68F
-	for <linux-pm@vger.kernel.org>; Thu, 28 Mar 2024 22:37:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E4F982D66
+	for <linux-pm@vger.kernel.org>; Thu, 28 Mar 2024 23:10:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711665459; cv=none; b=IOvy29xse4o+EztmEGyiiJZ8lELdBiBFH/Uj1kmkCY7V1DiLlu9sxZ4XX+rtXJOmY99EE7KUGUyAVTrlmlCJDakqOmoiPnqmNRoqrLB7K/djx3dQVO4q3NByiACi3N3jIJfVVdhm1FMT0VDZ5lxSg3CPGNY+qAv37wATl5y+bKQ=
+	t=1711667410; cv=none; b=lbml/5V7hDCKEnkjBz18HJLpF5+TNmuiP+lzGeoJmO2s14IiBBGsk9XNoXKkEtKWKckbPWt5dJUH9DjB4KsiysQ6JoqMLhMpJbq13ccCBFMBvreWRgIdqc6j6I6enti7iZqBEmXinqidRkseRfdQK5LNLvwO+g5tergjJp1yFeA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711665459; c=relaxed/simple;
-	bh=Vkr1WxMhlFLO+x2ZcWsJgIMf8lc7J4Up6fBFg90WuTg=;
+	s=arc-20240116; t=1711667410; c=relaxed/simple;
+	bh=TMme5ZXKNnHSKd975NADNN1dvWbPPdeLtyyKmkGZOEU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i8UtkREuRCS73VPtLzAqs4X5Fmu2LJo8+O+0paFoCLllrkZrpwrDLTnBw60kQAMSJYu3lWEzTSD6qPJv4Pyz5lnbZ71GyLtyzn9tKJdZKYcJM0aejJwIG80KSM7qZHKudHQzgkz4XIOTKWtF/gmXGRqoCyysOVzvvzz1BJN4Edw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=1UCFopmC; arc=none smtp.client-ip=209.85.221.42
+	 Content-Type:Content-Disposition:In-Reply-To; b=WIn0He/9Fgqybj4CaUTkPha41ey1/1pQgx2+OOKYxl0S2jku8iX0dButXabtqu2Mxd8FxgwVEwajCJuItJOCZxS2tqEZP+mJIf4xk5jAc4auEf4FDtpEKHGjmOsPgjdiEb77Rd6hcDJuo2vCV9c44+b/HAeSVYz4JFTRik+uqmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=TI5UFin6; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-33ed7ba1a42so952845f8f.2
-        for <linux-pm@vger.kernel.org>; Thu, 28 Mar 2024 15:37:37 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-41494c040a1so10242875e9.2
+        for <linux-pm@vger.kernel.org>; Thu, 28 Mar 2024 16:10:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1711665456; x=1712270256; darn=vger.kernel.org;
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1711667406; x=1712272206; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VkPtcG4acJAFYV4pyrGTORem1a2S7l8qw1NBVRkOxbk=;
-        b=1UCFopmCMEOG73qoR3lKT+izIQbjb5uSexQbsRmI/dHvPaMyvs4UMs43E62HkIJ/5m
-         adSXaNDpNleHYSfVCCT4nZ6/bbQ6vHFQ9ZqN6YdRli753+Y3yOE3WzvZ0nIicch/dsVY
-         ErHDkTWTJLHGf8AUSs3Ya8x0l1HR1r1NoJl/SM1Ze4wEq+JicwBRfY+QA3gOHO9BNheD
-         wXA5Rev9ZIgaKvpuGBgg9Iwu5AfcSZE5D9B7eDgNz580VSAOjnfUWnbGHGJ+CW7iGmJ/
-         2GDz/pG81PAOTOBpektjVW/NARiBUCOUfDSLJODqRqN3oiV9KcA1nm21o/rb7bcfCJTg
-         Zvrg==
+        bh=1tO7ueWHoEepGddrFg7zTdu8r8oeX1Rtt58bpd+DL1I=;
+        b=TI5UFin68EuLmUobM0MoQNe8A/KD+V4pp6R/ZZiU3gaEXOZbi9cRe40/VjonTUt6km
+         HfgW/N1tVnAhCuFRqNdYmFwz0Z4xjb5FxYWAkRm7DNID4MpnaKIwJ8FU3Pqvrn7q1uhe
+         Qh0qBuhOX1huyyj2HSExikmn8mBi+nU52aUOPzfS0LKv5DPSTCA4YRrvvtOUmIRxSXxN
+         v+5jVW2XLiVrV5jnPo3gHJhUIJeB9G8qkm7DlyZKWECBGB50j3pOGslC3cgx96S8p1dA
+         m+ftdEhm6XbFo4GvMs8uHnKRQLoQ6xjCSZQoOnJNJBk6ZSrLZ/+EJhUChUdXWMa/TZlJ
+         ILpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711665456; x=1712270256;
+        d=1e100.net; s=20230601; t=1711667406; x=1712272206;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VkPtcG4acJAFYV4pyrGTORem1a2S7l8qw1NBVRkOxbk=;
-        b=TmGsn6sT0YMbfOeIOwU4nYKLOcs0GmUTA0aWkx4FCxDwj3tDJp2Xc8rUfX7iq0WxLd
-         IiNO1hAxXXTZOYFaabEk3A+f6+AwDCnFNeZdnBNvrE/yOiZsqAr4gn2t3wII6+XsTQiY
-         wYq12JVFJndMtawZz4Uqi5s7+hVLXUsGc6hdC92gCcEBvRZ6uYWVE5NF2mpqWDEiT+gO
-         YoFs5TYSvyLYOLNT551kKgGO/+bj5ytqkA59scJk30HDo9twIe4/1qCq0obLo2rDEYJe
-         t4ABpq0O6H7qOLDC19mtrTJAsnQ3FWInuEhQKpE8GDn9MC75XXkzdwkBkzl5XIb/8gLg
-         b5Ww==
-X-Forwarded-Encrypted: i=1; AJvYcCXa4WD7sYAGGoZWqIf13iLU1N9Er8GNkuAajog7ulVP6ZR/1TKJYl1LS9mU6yzoZPdbtcUupZAXM5FCOWDWz9xg0AWo5BITQ4M=
-X-Gm-Message-State: AOJu0YxnXr4YPiS6K6SiZq7ezJ4Pq6rsElum98lo7YOUr7K0PA+a4DEE
-	REMg7GkEzAbdZfS6rf63Tv7ODhh+nUmts0MmC2Ijf+2sG4UR/dEylcb/e+EQXIs=
-X-Google-Smtp-Source: AGHT+IHWEbOGYStLbJMwmtVNWmZxv+uVba1JGzpF1FPRnMxw0jc7hnuO8hg9jvIX9ZJLjqpITu+5aQ==
-X-Received: by 2002:a05:6000:1b04:b0:33e:d396:bc41 with SMTP id f4-20020a0560001b0400b0033ed396bc41mr200985wrz.71.1711665455743;
-        Thu, 28 Mar 2024 15:37:35 -0700 (PDT)
+        bh=1tO7ueWHoEepGddrFg7zTdu8r8oeX1Rtt58bpd+DL1I=;
+        b=t7xcZcm1jm+Jv+OcVybtMmeR9vz5IvJO4rOj2Xwy40nBVkR86wgjnVahiawKQyuZYX
+         dk7lln/WLmKzArwCnjzBYSyAmk7wJvgccG2WpToVQ4V6n8eHW8osKaC+fk3Hl54FBQZz
+         7r8ldugAJyrIVu9Rcw0F6WA5xoCdFUuJPeg6wW+jRQPq2gS/Gvfnl8C3blHhEWFEH5YN
+         8btUQcBVI/jSsv5jWOFOLy/i605o4Xm7yawK2sRD0fS9lMpUx8E424gSP5gB7ovpqoBA
+         QhQbw5x1UvGYN36/7nn6JAsf0iOtXfE7Uvy67xckcNYHrCBlUYf76zRf9V2Jg6KDkksE
+         ywsA==
+X-Forwarded-Encrypted: i=1; AJvYcCW1pNxYJpDeLLHYG5psiW+mKimv7BdJyrmZ60RaSGvUiROqwnbFvdL/l4dTKVBujM9xnylVgBv3XtYNqNDGuGzGx8Jn7NUNxio=
+X-Gm-Message-State: AOJu0Yxm8go+6vZcAXf0nMG1J4kLJflAONCgM+q2zreuGPPsE4CEoJFr
+	NAY01eYIYfYhMn6C3IizC63Lw5ZTbrO1eF0VfLMtMKOdL31dXggu53XRbT6gG/M=
+X-Google-Smtp-Source: AGHT+IGtv6Z6wrekG698P4dqfoqZoaq1wgGJGqbHO+TJKNv2oXfTlt6+QPfVRk1xfGTD9OygG7ACmw==
+X-Received: by 2002:a05:600c:4f90:b0:414:726:87d9 with SMTP id n16-20020a05600c4f9000b00414072687d9mr612127wmq.12.1711667405898;
+        Thu, 28 Mar 2024 16:10:05 -0700 (PDT)
 Received: from airbuntu (host81-157-90-255.range81-157.btcentralplus.com. [81.157.90.255])
-        by smtp.gmail.com with ESMTPSA id u18-20020a5d6ad2000000b0033d202abf01sm2743274wrw.28.2024.03.28.15.37.34
+        by smtp.gmail.com with ESMTPSA id jg2-20020a05600ca00200b0041490d1cd06sm3575459wmb.40.2024.03.28.16.10.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Mar 2024 15:37:35 -0700 (PDT)
-Date: Thu, 28 Mar 2024 22:37:33 +0000
+        Thu, 28 Mar 2024 16:10:05 -0700 (PDT)
+Date: Thu, 28 Mar 2024 23:10:04 +0000
 From: Qais Yousef <qyousef@layalina.io>
 To: Christian Loehle <christian.loehle@arm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Daniel Bristot de Oliveira <bristot@redhat.com>,
-	Valentin Schneider <vschneid@redhat.com>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] sched: Consolidate cpufreq updates
-Message-ID: <20240328223733.jwohkuq5azhcgroz@airbuntu>
-References: <20240324020139.1032473-1-qyousef@layalina.io>
- <ceecb0ac-13ce-4862-a41a-5ceac08a5df2@arm.com>
+Cc: linux-kernel@vger.kernel.org, vincent.guittot@linaro.org,
+	mingo@redhat.com, rafael@kernel.org, dietmar.eggemann@arm.com,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH] sched/uclamp: Fix iowait boost UCLAMP_MAX escape
+Message-ID: <20240328231004.fw7y4noyi6fbhxlc@airbuntu>
+References: <20240326180054.487388-1-christian.loehle@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -93,317 +83,154 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ceecb0ac-13ce-4862-a41a-5ceac08a5df2@arm.com>
+In-Reply-To: <20240326180054.487388-1-christian.loehle@arm.com>
 
-On 03/26/24 14:44, Christian Loehle wrote:
-> Hi Qais,
-> Some first thoughts, I'll do some more thinking and testing though.
-
-Thanks for having a look.
-
-> I wonder if the increased latency of applying the new freq later
-> (context-switch vs enqueue) has any measurable impact for some
-> workloads for somewhat higher delay switching platforms.
+On 03/26/24 18:00, Christian Loehle wrote:
+> A task, regardless of UCLAMP_MAX value, was previously allowed to
+> build up the sg_cpu->iowait boost up to SCHED_CAPACITY_SCALE when
+> enqueued. Since the boost was only uclamped when applied this led
+> to sugov iowait boosting the rq while the task is dequeued.
 > 
-> On 24/03/2024 02:01, Qais Yousef wrote:
-> > Improve the interaction with cpufreq governors by making the
-> > cpufreq_update_util() calls more intentional.
-> > 
-> > At the moment we send them when load is updated for CFS, bandwidth for
-> > DL and at enqueue/dequeue for RT. But this can lead to too many updates
-> > sent in a short period of time and potentially be ignored at a critical
-> > moment due to the rate_limit_us in schedutil.
-> > 
-> > For example, simultaneous task enqueue on the CPU where 2nd task is
-> > bigger and requires higher freq. The trigger to cpufreq_update_util() by
-> > the first task will lead to dropping the 2nd request until tick. Or
-> > another CPU in the same policy triggers a freq update shortly after.
-> Out of curiosity: Is that significant anywhere?
+> The fix introduced by
+> commit d37aee9018e6 ("sched/uclamp: Fix iowait boost escaping uclamp restriction")
+> added the uclamp check before the boost is applied. Unfortunately
+> that is insufficient, as the iowait_boost may be built up purely by
+> a task with UCLAMP_MAX task, but since this task is in_iowait often,
+> the clamps are no longer active during the in_iowait periods.
+> So another task (let's say with low utilization) may immediately
+> receive the iowait_boost value previously built up under UCLAMP_MAX
+> restrictions.
 
-It is hard to quantify. But simultaneous enqueue problem are common in
-practice. I think I have been raising the issue in various places on the list
-so far on how our wake up path in EAS needs to improve on how to balances.
-There are a number of corner cases where it lags behind.
+This is the intended behavior. Like utilization value, it should build up
+normally but at key decision points it gets clamped and the result of this
+clamping operation is used to make the decision. The reason is that this
+performance restriction could be left at any point of time and the system/task
+should go to the original behavior when this constraint is left.
 
-This is not the major motivation FWIW. Just an example.
+Beside the current design for iowait boost doesn't differentiate between who
+added the boost. So we are in for unnecessary complexity for a mechanism that
+needs to evolve anyway.
 
-> It is unfortunate for sure, but the delay until the 'big' freq update
-> is also bounded.
-
-Could you expand on this please?
+As an alternative We could say that tasks with uclamp_max shouldn't cause
+iowait boost to increase, which can be a reasonable assumption for many cases.
+But not a safe one in practice as it makes assumptions on who should use
+uclamp_max and restrict the benefit for other use cases. And we don't want to
+impose restrictions on who can benefit from it.
 
 > 
-> > 
-> > Updates at enqueue for RT are not strictly required. Though they do help
-> > to reduce the delay for switching the frequency and the potential
-> > observation of lower frequency during this delay. But current logic
-> > doesn't intentionally (at least to my understanding) try to speed up the
-> > request.
-> > 
-> > To help reduce the amount of cpufreq updates and make them more
-> > purposeful, consolidate them into these locations:
-> > 
-> > 1. context_switch()
-> > 2. task_tick_fair()
-> > 3. {attach, detach}_entity_load_avg()
-> > 4. update_blocked_averages()
-> > 
-> > The update at context switch should help guarantee that DL and RT get
-> > the right frequency straightaway when they're RUNNING. As mentioned
-> > though the update will happen slightly after enqueue_task(); though in
-> > an ideal world these tasks should be RUNNING ASAP and this additional
-> > delay should be negligible. For fair tasks we need to make sure we send
-> > a single update for every decay for the root cfs_rq. Any changes to the
-> > rq will be deferred until the next task is ready to run, or we hit TICK.
-> > But we are guaranteed the task is running at a level that meets its
-> > requirements after enqueue.
-> > 
-> > To guarantee RT and DL tasks updates are never missed, we add a new
-> > SCHED_CPUFREQ_FORCE_UPDATE to ignore the rate_limit_us. If we are
-> > already running at the right freq, the governor will end up doing
-> > nothing, but we eliminate the risk of the task ending up accidentally
-> > running at the wrong freq due to rate_limit_us.
-> > 
-> > Similarly for iowait boost. We also handle a case of a boost reset
-> > prematurely by adding a guard against TICK_NSEC in sugov_iowait_apply()
-> > in similar fashion to sugov_iowait_reset().
-> > 
-> > The new SCHED_CPUFREQ_FORCE_UPDATE should not impact the rate limit
-> > time stamps otherwise we can end up delaying updates for normal
-> > requests.
-> With the new updates and the assumed default of 2ms does rate_limit_us
-> even make sense then? It is very often ignored with these changes, so
-
-The normal case is fair tasks triggering the updates. And these tasks are not
-in_iowait most of the time. So the common case is still not to force an update.
-
-> unless rate_limit_us==2000 && CONFIG_HZ=1000 SCHED_CPUFREQ_FORCE_UPDATE
-> would dominate for many workloads, wouldn't it?
-
-I don't think so. RT/DL tasks are priviliged and a minority. And iowait is not
-the common case. There are scenarios where it is, but that doesn't make it the
-overall common case still.
-
-Also keep in mind that schedutil will not send an update unless this will lead
-to a frequency change. RT by default will run at max. So if there are multiple
-RT tasks context switching only the first one will send a request. The rest
-will end up with an overhead - which I alluded to the fact I can optimize to
-remove this overhead somewhere in the commit message.
-
-> Is that fine for all platforms? Platforms I'm aware of will drop older
-> requests when they couldn't be served yet and a new one is sent, can
-> we assume that generally?
-
-Aren't we dropping the requests in schedutil here too and this leads to
-the same problem?
-
-The current contract based on my understanding is that the kernel doesn't
-expect these to be dropped. If we expect them, then there has to be error
-reporting by the driver otherwise Linux will mistakenly think the frequency
-changed and drop future requests to the next frequency.
-
-I don't think rate_limit is the mechanism to handle hardware failure to honour
-the request - if that is a problem. We need the driver to let us know. To
-my knowledge there's no interface between drivers and governors for this. But
-I could be wrong. If I am not mistaken, maybe we should add one.
-
-> > Note worthy that we still have the following race condition on systems
-> > that have shared policy:
-> > 
-> > * CPUs with shared policy can end up sending simultaneous cpufreq
-> >   updates requests where the 2nd one will be unlucky and get blocked by
-> >   the rate_limit_us (schedutil).
-> > 
-> > We can potentially address this limitation later, but it is out of the
-> > scope of this patch.
+> The issue is less prevalent than the above might suggest, since if
+> the dequeuing of the UCLAMP_MAX set task will turn the cpu idle the
+> previous UCLAMP_MAX value is preserved by uclamp_idle_value().
+> Nonetheless anything being enqueued on the rq during the in_iowait
+> phase will falsely receive the iowait_boost.
 > 
-> Which has now gotten worse I'm afraid.
+> Can be observed with a basic single-threaded benchmark running with
+> UCLAMP_MAX of 0, the iowait_boost is then triggered by the occasional
+> kworker.
 
-How come?
+I think this a combination of two problems:
 
-> With a shared policy the "update at context switch" at least theoretically
-> no longer works for any freq update delay > 0.
-> It could be a non-issue, but confirming that isn't straightforward IMO.
+1. The max aggregation problem that have been discussed several times already.
+2. It is a limitation of the current mechanism. Moving to per-task iowait boost
+   we can do smarter behavior to handle this.
 
-Hmm. I did run tests on Pixel 6 and Apple M1 and didn't notice something. It'd
-be good if you can elaborate more on the problem you're seeing.
+I think we should focus on handling these two issues. For this particular use
+case, the latter is the major problem. Once the iowait boosted task is
+dequeued, the CPU shouldn't need to run at faster frequency. The iowait boosted
+tasks are usually short running too. So the latter improvement should mean the
+CPU can move to lower frequency during its waiting time. Though we'll have to
+see if the boost need to extend until the softirq has finished.
 
-FWIW the race to which CPU initiates the update between CPUs in shared policies
-doesn't change with this patch. It being done at enqueue or context switch
-doesn't matter, no?
-
-> > +DEFINE_STATIC_KEY_FALSE(cpufreq_update_enabled);
-> > +
-> >  /**
-> >   * cpufreq_add_update_util_hook - Populate the CPU's update_util_data pointer.
-> >   * @cpu: The CPU to set the pointer for.
-> > @@ -33,6 +35,8 @@ void cpufreq_add_update_util_hook(int cpu, struct update_util_data *data,
-> >  	if (WARN_ON(!data || !func))
-> >  		return;
-> >  
-> > +	static_branch_enable(&cpufreq_update_enabled);
-> > +
-> FWIW here's the lockdep splat:
-
-Thanks for catching this.
-
-> > @@ -294,17 +301,29 @@ static void sugov_iowait_boost(struct sugov_cpu *sg_cpu, u64 time,
-> >   * being more conservative on tasks which does sporadic IO operations.
-> >   */
-> >  static unsigned long sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time,
-> > -			       unsigned long max_cap)
-> > +			       unsigned long max_cap, unsigned int flags)
-> >  {
-> > +	bool forced_update = flags & SCHED_CPUFREQ_FORCE_UPDATE;
-> > +	s64 delta_ns = time - sg_cpu->last_update;
-> > +
-> >  	/* No boost currently required */
-> >  	if (!sg_cpu->iowait_boost)
-> >  		return 0;
-> >  
-> > +	if (forced_update)
-> > +		goto apply_boost;
-> > +
-> >  	/* Reset boost if the CPU appears to have been idle enough */
-> >  	if (sugov_iowait_reset(sg_cpu, time, false))
-> >  		return 0;
-> >  
-> >  	if (!sg_cpu->iowait_boost_pending) {
-> > +		/*
-> > +		 * Reduce boost only if a tick has elapsed since last request.
-> > +		 */
-> > +		if (delta_ns <= TICK_NSEC)
-> > +			goto apply_boost;
-> > +
-> 
-> That makes the entire reduce logic below dead code.
-
-Hmm yes you're right. This is band aid tbh. This logic needs reworking. I did
-go down the path of converting this to per-task iowait boost FWIW. But
-hopefully I can leave this to you now ;-)
-
-For the time being, I could:
-
-1. Check against a constant 1ms.
-2. Drop the reduce logic in favour of the reset logic (my vote goes here)
-3. Keep the current behavior the same and guard iowait boost updates with the
-   decay. But I think this defeats the purpose of this patch to make sure
-   changes are intentional and aren't accidentally dropped if unlucky.
-
-FWIW, I did hit this problem when changing the default sched period. So it has
-more hidden dependencies.
-
-> If delta_ns > TICK_NSEC then sugov_iowait_reset() will have returned early
-> anyway and reset the boost.
-> In theory the current iowait boost (probabilisticly because of rate_limit_us)
-> determined the boost level more or less by the fraction of iowait wakeups
-> to non-wakeups.
-> Did that ever work in a meaningful way? Maybe not.
-> But of course just relying on the reset opens up the boost to linger for
-> even longer.
-> Anyway the iowait boost needs some rework in both intel_pstate and sugov
-> if we switch to a context-switch freq update IMO.
-> 
-> 
-> >  		/*
-> >  		 * No boost pending; reduce the boost value.
-> >  		 */
-> > @@ -315,6 +334,7 @@ static unsigned long sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time,
-> >  		}
-> >  	}
-> >  
-> > +apply_boost:
-> >  	sg_cpu->iowait_boost_pending = false;
-> >  
-> >  	/*
-> > @@ -351,17 +371,28 @@ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
-> >  					      u64 time, unsigned long max_cap,
-> >  					      unsigned int flags)
-> >  {
-> > +	bool forced_update = flags & SCHED_CPUFREQ_FORCE_UPDATE;
-> > +	struct sugov_policy *sg_policy = sg_cpu->sg_policy;
-> > +	bool iowait_boost = flags & SCHED_CPUFREQ_IOWAIT;
-> >  	unsigned long boost;
-> >  
-> > +	/*
-> > +	 * Forced updates are initiated by iowait and RT/DL tasks. If the
-> > +	 * latter, verify that it's not our worker thread that is initiating
-> > +	 * this forced update.
-> > +	 */
-> > +	if (forced_update && !iowait_boost && current == sg_policy->thread)
-> > +		return false;
-> > +
-> I don't quite see why this isn't just
-> if (current == sg_policy->thread)
-> Is there a reason?
-
-The reason is what's written in the comment. These are the conditions where
-this check makes sense. We don't want a random out-of-line cpufreq update while
-sugov kthread is running to be accidentally dropped.
-
-> 
-> >  	sugov_iowait_boost(sg_cpu, time, flags);
-> >  	sg_cpu->last_update = time;
-> >  
-> >  	ignore_dl_rate_limit(sg_cpu);
-> >  
-> > -	if (!sugov_should_update_freq(sg_cpu->sg_policy, time))
-> > +	if (!sugov_should_update_freq(sg_cpu->sg_policy, time, flags))
-> >  		return false;
-> >  
-> > -	boost = sugov_iowait_apply(sg_cpu, time, max_cap);
-> > +	boost = sugov_iowait_apply(sg_cpu, time, max_cap, flags);
-> >  	sugov_get_util(sg_cpu, boost);
-> >  
-> >  	return true;
-> > @@ -397,7 +428,7 @@ static void sugov_update_single_freq(struct update_util_data *hook, u64 time,
-> >  		sg_policy->cached_raw_freq = cached_freq;
-> >  	}
-> >  
-> > -	if (!sugov_update_next_freq(sg_policy, time, next_f))
-> > +	if (!sugov_update_next_freq(sg_policy, time, next_f, flags))
-> >  		return;
-> >  
-> >  	/*
-> > @@ -449,10 +480,12 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
-> >  	cpufreq_driver_adjust_perf(sg_cpu->cpu, sg_cpu->bw_min,
-> >  				   sg_cpu->util, max_cap);
-> >  
-> > -	sg_cpu->sg_policy->last_freq_update_time = time;
-> > +	if (!unlikely(flags & SCHED_CPUFREQ_FORCE_UPDATE))
-> > +		sg_cpu->sg_policy->last_freq_update_time = time;
-> Is that unlikely? Or rather don't we intend to optimise for the
-> SCHED_CPUFREQ_FORCE_UPDATE case, as it's the more time-critical one?
-> Just a thought though.
-
-It is unlikely. Fair tasks that are not in iowait boost is the common case.
-
-> >  static inline void remove_entity_load_avg(struct sched_entity *se) {}
-> > @@ -6716,14 +6688,6 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
-> >  	 */
-> >  	util_est_enqueue(&rq->cfs, p);
-> >  
-> > -	/*
-> > -	 * If in_iowait is set, the code below may not trigger any cpufreq
-> > -	 * utilization updates, so do it here explicitly with the IOWAIT flag
-> > -	 * passed.
-> > -	 */
-> > -	if (p->in_iowait)
-> > -		cpufreq_update_util(rq, SCHED_CPUFREQ_IOWAIT);
-> > -
-> 
-> I'm sure you're aware, but of course this also changes behavior in intel_pstate.
-
-I don't expect this to make a difference to intel_pstate. We still send
-cpufreq_update_util() with iowait boost flag.
-
-I didn't do another test before sending this patch, but I remember trying on
-intel_pstate machine in the past. Will make sure to rerun this test before the
-next iteration.
+So overall I don't think we have a problem on how the hint is applied,
+but we need to fix problems elsewhere to make the overall behavior better.
 
 
 Thanks!
 
 --
 Qais Yousef
+
+> 
+> Fixes: 982d9cdc22c9 ("sched/cpufreq, sched/uclamp: Add clamps for FAIR and RT tasks")
+> Signed-off-by: Christian Loehle <christian.loehle@arm.com>
+> ---
+>  kernel/sched/cpufreq_schedutil.c | 36 +++++++++++++++++++++++++-------
+>  1 file changed, 28 insertions(+), 8 deletions(-)
+> 
+> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> index eece6244f9d2..bfd79762b28d 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -205,6 +205,25 @@ static void sugov_get_util(struct sugov_cpu *sg_cpu, unsigned long boost)
+>  	sg_cpu->util = sugov_effective_cpu_perf(sg_cpu->cpu, util, min, max);
+>  }
+>  
+> +/**
+> + * sugov_iowait_clamp() - Clamp the boost with UCLAMP_MAX
+> + * @sg_cpu: the sugov data for the CPU
+> + * @boost: the requested new boost
+> + *
+> + * Clamps the iowait boost according to the rq's UCLAMP_MAX restriction.
+> + */
+> +static void sugov_iowait_clamp(struct sugov_cpu *sg_cpu, unsigned int boost)
+> +{
+> +#if CONFIG_UCLAMP_TASK
+> +	unsigned int boost_scaled = (boost *
+> +		arch_scale_cpu_capacity(sg_cpu->cpu)) >> SCHED_CAPACITY_SHIFT;
+> +
+> +	if (uclamp_rq_get(cpu_rq(sg_cpu->cpu), UCLAMP_MAX) < boost_scaled)
+> +		return;
+> +#endif
+> +	sg_cpu->iowait_boost = boost;
+> +	sg_cpu->iowait_boost_pending = true;
+> +}
+>  /**
+>   * sugov_iowait_reset() - Reset the IO boost status of a CPU.
+>   * @sg_cpu: the sugov data for the CPU to boost
+> @@ -225,8 +244,8 @@ static bool sugov_iowait_reset(struct sugov_cpu *sg_cpu, u64 time,
+>  	if (delta_ns <= TICK_NSEC)
+>  		return false;
+>  
+> -	sg_cpu->iowait_boost = set_iowait_boost ? IOWAIT_BOOST_MIN : 0;
+> -	sg_cpu->iowait_boost_pending = set_iowait_boost;
+> +	if (set_iowait_boost)
+> +		sugov_iowait_clamp(sg_cpu, IOWAIT_BOOST_MIN);
+>  
+>  	return true;
+>  }
+> @@ -249,6 +268,7 @@ static void sugov_iowait_boost(struct sugov_cpu *sg_cpu, u64 time,
+>  			       unsigned int flags)
+>  {
+>  	bool set_iowait_boost = flags & SCHED_CPUFREQ_IOWAIT;
+> +	unsigned int iowait_boost;
+>  
+>  	/* Reset boost if the CPU appears to have been idle enough */
+>  	if (sg_cpu->iowait_boost &&
+> @@ -262,17 +282,17 @@ static void sugov_iowait_boost(struct sugov_cpu *sg_cpu, u64 time,
+>  	/* Ensure boost doubles only one time at each request */
+>  	if (sg_cpu->iowait_boost_pending)
+>  		return;
+> -	sg_cpu->iowait_boost_pending = true;
+>  
+>  	/* Double the boost at each request */
+>  	if (sg_cpu->iowait_boost) {
+> -		sg_cpu->iowait_boost =
+> -			min_t(unsigned int, sg_cpu->iowait_boost << 1, SCHED_CAPACITY_SCALE);
+> -		return;
+> +		iowait_boost = min_t(unsigned int, sg_cpu->iowait_boost << 1,
+> +				SCHED_CAPACITY_SCALE);
+> +	} else {
+> +		/* First wakeup after IO: start with minimum boost */
+> +		iowait_boost = IOWAIT_BOOST_MIN;
+>  	}
+>  
+> -	/* First wakeup after IO: start with minimum boost */
+> -	sg_cpu->iowait_boost = IOWAIT_BOOST_MIN;
+> +	sugov_iowait_clamp(sg_cpu, iowait_boost);
+>  }
+>  
+>  /**
+> -- 
+> 2.34.1
+> 
 
