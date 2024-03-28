@@ -1,160 +1,133 @@
-Return-Path: <linux-pm+bounces-5586-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5587-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 611BD89014A
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 15:10:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64E3C890150
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 15:10:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15C9D2965F0
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 14:10:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19C4C297007
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 14:10:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BF85823A3;
-	Thu, 28 Mar 2024 14:08:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33B22128382;
+	Thu, 28 Mar 2024 14:09:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="teyg8IDT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X+ChRLuS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6234F8564C
-	for <linux-pm@vger.kernel.org>; Thu, 28 Mar 2024 14:08:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1469414294;
+	Thu, 28 Mar 2024 14:09:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711634927; cv=none; b=netO6t+pe+s5/Fjg2ggcNcqCmKtZhIcN/rc18p/h9gH9QdHFBvxb5b/pFBxuUrdZHN4oug1LLlrAAFsEJFqnD0mLVkPmFuj22XsJFn9kv/WKHYeQbFt+HRN/zmmFxaVI3Jt+vHeDJQ8mK5CMxx2wUDNARIJpeUPPLoivvjMsnwo=
+	t=1711634958; cv=none; b=UG+QxWZS30RyEO73vedQPx49FoJSZxi7WHJUAfl8kv/2OgV9PqsV8eGV+0NATHSHaDHa1EmhXa/jnKh0AlIhhbvghTVVkRURmghe/tct6S0KlwM7q+1nNRIiYccOT2dhqXmEEu+Z9q9tEXr8/d9GE1gW4KGc+/qQ+9Z6y7kGY/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711634927; c=relaxed/simple;
-	bh=gy+79Ap55O5yFgH4vL0r2LFOc+Gja/OVumf4JwlTh5M=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=CKeK/py71bfvxe/WJ8ApW1Mqf8P0ZuII6e8VEqONNdihefQQYu3JrkF3dCq0HIiBPDV9JNg7y9lDVwfa+cnxbk37ld+/p04+RLfSQDO1sTqcMx/duLtYL60IWeVEbOT+hd5tReERJQGgQ52CnwjD3+fIaiTUjPH1YTBQ3WGJFOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=teyg8IDT; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-33ed6078884so1147152f8f.1
-        for <linux-pm@vger.kernel.org>; Thu, 28 Mar 2024 07:08:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711634924; x=1712239724; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3YqEn6nGpQ+ZQnytWZdjBha5P7xeBVM99EE9tBd3Qr0=;
-        b=teyg8IDT8y8GzuNfTdoz9d1Ijo/XRt67t8eSm7IpNrRbj0Pv3qOCu0/oNDYSPUk+Gd
-         tf5JFTa0Buxwt1zyZhvbZRLzizaKJwVt1PU+RWJnkLCmWG3ez0MgZpJWpuSL78wNU6Ff
-         Pqet8VX6NLOD9f8lBm9U7AmnAuFHanoKw+RMSAZz+83lbVwVLZahxBtP4Mc7sBFv+ChX
-         lKpynoIp3wCXyLOgwjEG0wWNwLDKE7JJCumSkbtjEdAJfFCKpl7Y/cvUnsfsUQ/CDBlD
-         y7vtnvjrPG8BV06SsCniSsjg30M9Jhj0V+ZovJLsPtdVcPH7tzR5oPsazQWoB7MwK+xR
-         k0EQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711634924; x=1712239724;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=3YqEn6nGpQ+ZQnytWZdjBha5P7xeBVM99EE9tBd3Qr0=;
-        b=sskm7XYJfLNQ6adilfVaSwWaJZyroIoI7psIl62BWgrEeHIm3kjb+R/HF+Reo2XvAq
-         dHvIEjol4LBecq1ciL76uV9R6RWqW/LJHFNLy2Ees8n7P9+sT1mB20lmSIN3RrdegL18
-         apCVUHYK+N7IpKxA3hPDlJf0qHvkZjXOjTS/1U7FEfriynSvopQknCm29UF/jFiN+WgD
-         fCw1Q1qcq3tNCMf5GqfjZXg1BLzve1c8ycLtoJ7aH7GuLzfjQi74eYxijGTQC3Rt9X3f
-         1hCewus7gdRP+LU8c0fLjM7UuWM8FcWwzNyEdDmhHtNebbjVuVvQLgeG/PNcG8x0KuY3
-         LCfg==
-X-Forwarded-Encrypted: i=1; AJvYcCV0LPa46BLqw5+Er3CUqxtVyO6dv8MLSzRvrD+WW9p9b7C1XdznXty/JzZgCQaV0MA7cuK3LiugiRsy9RZktf2IOFIXfv0YGnE=
-X-Gm-Message-State: AOJu0YypZRIZn3ejX+cJferh9dl00R/StcfYKhwSZPXfXjtPMZ37wdk2
-	F3/In1cSFQzVkFxjUjAVLgiq54sW5shmGRTF0CZdM5WiZjuaAMXMPZCJCVth/AE=
-X-Google-Smtp-Source: AGHT+IEC/GG3oRm4e7tBnbj5LOOMmvI8qJFpOtXQq9ZDhffYLQtVrVE6USAKpfkizGiK660to9vDdA==
-X-Received: by 2002:a5d:44cf:0:b0:33e:c68d:d536 with SMTP id z15-20020a5d44cf000000b0033ec68dd536mr1904760wrr.15.1711634923800;
-        Thu, 28 Mar 2024 07:08:43 -0700 (PDT)
-Received: from [192.168.7.190] (82-64-249-211.subs.proxad.net. [82.64.249.211])
-        by smtp.gmail.com with ESMTPSA id du9-20020a0560000d4900b00341bdd87fcasm1824861wrb.103.2024.03.28.07.08.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Mar 2024 07:08:43 -0700 (PDT)
-Message-ID: <b893fe72-d315-4069-9e57-17e797121639@linaro.org>
-Date: Thu, 28 Mar 2024 15:08:42 +0100
+	s=arc-20240116; t=1711634958; c=relaxed/simple;
+	bh=9ArBQfi0WbPJGGn9OWD45slXRdspJPNTm1sjms/frXQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=nmY8Dmz6vm3ghh/XPjmkpQk1DSO/abBU6Fz1Arpvhb2sMrCCYoEcWARpCU4oqlBsMqDkAUCNh4QwI4IvvAxbwS5ai/KBlP1jO48fonJicUxQbOrOYBnX5qYWcuxn+7//PTFKzQUGEJE0YHxevioOZ2JjDzyMrhfTbYLHU4GOYns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X+ChRLuS; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711634956; x=1743170956;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9ArBQfi0WbPJGGn9OWD45slXRdspJPNTm1sjms/frXQ=;
+  b=X+ChRLuS6jrpwnLModiwf+FW8VkMuWNRM6nmGu5R8hjmWXEnHUOBLzNn
+   eJvgng3EHaHPlYDmn+NF5ryeK19y9chQ2ji8PA91CL4i9YHTBuWTG8DQh
+   mhs+kibMkTZJUbGGQIwyXLH1iapxN0UXTBANXW0PP82McQQ/3Jvw5Yb+T
+   OnO3PCmXPQt8dJL2QX+V77pJ9iA2TUVDv+4+3fwlsLDsfVbuiCr8SuVUw
+   ZNtFvHQeuiIo019HKhocbCYNGZeyk/+G2q6wg2MvKanKtvnA/+v+FBRu8
+   oDPlcsc5miGOBuESNIw1UlTYdaR1i034WznPV7rpBibV7URSoENh4B/xI
+   Q==;
+X-CSE-ConnectionGUID: 5GW9oXwrSHaOOT+jOJZeRw==
+X-CSE-MsgGUID: EwqF9WFCSq61UPDNG+sKkQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11026"; a="9745391"
+X-IronPort-AV: E=Sophos;i="6.07,162,1708416000"; 
+   d="scan'208";a="9745391"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2024 07:09:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,162,1708416000"; 
+   d="scan'208";a="21126920"
+Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 28 Mar 2024 07:09:09 -0700
+Received: from kbuild by be39aa325d23 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rpqRH-0002CY-0y;
+	Thu, 28 Mar 2024 14:09:07 +0000
+Date: Thu, 28 Mar 2024 22:08:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-acpi@vger.kernel.org, devel@acpica.org,
+	linux-pm@vger.kernel.org
+Subject: [rafael-pm:intel_pstate-testing 14/14]
+ drivers/cpufreq/intel_pstate.c:963:2: error: call to undeclared function
+ 'arch_set_cpu_capacity'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202403282240.I0XCTxpL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v1 1/3] arm64: dts: amlogic: a1: add cooling-cells for
- DVFS feature
-To: Dmitry Rokosov <ddrokosov@salutedevices.com>, jbrunet@baylibre.com,
- mturquette@baylibre.com, khilman@baylibre.com,
- martin.blumenstingl@googlemail.com, glaroque@baylibre.com,
- rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
- lukasz.luba@arm.com, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- conor+dt@kernel.org
-Cc: kernel@salutedevices.com, rockosov@gmail.com,
- linux-amlogic@lists.infradead.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-References: <20240328134459.18446-1-ddrokosov@salutedevices.com>
- <20240328134459.18446-2-ddrokosov@salutedevices.com>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <20240328134459.18446-2-ddrokosov@salutedevices.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 28/03/2024 14:44, Dmitry Rokosov wrote:
-> It's used for CPU with DVFS feature to specify minimum and maximum
-> cooling state used in the reference.
-> Without these values DVFS will not work and dtbs_check will raise the
-> error.
-> 
-> Signed-off-by: Dmitry Rokosov <ddrokosov@salutedevices.com>
-> ---
->   arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-> index fbee986421f1..f65d4a77ee52 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-> +++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-> @@ -32,6 +32,7 @@ cpu0: cpu@0 {
->   			reg = <0x0 0x0>;
->   			enable-method = "psci";
->   			next-level-cache = <&l2>;
-> +			#cooling-cells = <2>;
->   		};
->   
->   		cpu1: cpu@1 {
-> @@ -40,6 +41,7 @@ cpu1: cpu@1 {
->   			reg = <0x0 0x1>;
->   			enable-method = "psci";
->   			next-level-cache = <&l2>;
-> +			#cooling-cells = <2>;
->   		};
->   
->   		l2: l2-cache0 {
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git intel_pstate-testing
+head:   16303764deedb814defe7e69712edec6a09b50ad
+commit: 16303764deedb814defe7e69712edec6a09b50ad [14/14] cpufreq: intel_pstate: Set asymmetric CPU capacity on hybrid systems
+config: i386-defconfig (https://download.01.org/0day-ci/archive/20240328/202403282240.I0XCTxpL-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240328/202403282240.I0XCTxpL-lkp@intel.com/reproduce)
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403282240.I0XCTxpL-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/cpufreq/intel_pstate.c:963:2: error: call to undeclared function 'arch_set_cpu_capacity'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     963 |         arch_set_cpu_capacity(cpu->cpu, cap);
+         |         ^
+   drivers/cpufreq/intel_pstate.c:963:2: note: did you mean 'arch_scale_cpu_capacity'?
+   include/linux/sched/topology.h:267:15: note: 'arch_scale_cpu_capacity' declared here
+     267 | unsigned long arch_scale_cpu_capacity(int cpu)
+         |               ^
+   drivers/cpufreq/intel_pstate.c:1008:3: error: call to undeclared function 'arch_set_cpu_capacity'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1008 |                 arch_set_cpu_capacity(max_perf_cpu->cpu, SCHED_CAPACITY_SCALE);
+         |                 ^
+   drivers/cpufreq/intel_pstate.c:1014:4: error: call to undeclared function 'arch_set_cpu_capacity'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1014 |                         arch_set_cpu_capacity(cpunum, SCHED_CAPACITY_SCALE);
+         |                         ^
+   drivers/cpufreq/intel_pstate.c:1073:3: error: call to undeclared function 'arch_set_cpu_capacity'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1073 |                 arch_set_cpu_capacity(cpu->cpu, SCHED_CAPACITY_SCALE);
+         |                 ^
+   drivers/cpufreq/intel_pstate.c:1207:2: error: call to undeclared function 'arch_set_cpu_capacity'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1207 |         arch_set_cpu_capacity(cpu->cpu, SCHED_CAPACITY_SCALE);
+         |         ^
+   5 errors generated.
+
+
+vim +/arch_set_cpu_capacity +963 drivers/cpufreq/intel_pstate.c
+
+   957	
+   958	static void hybrid_set_cpu_capacity(struct cpudata *cpu)
+   959	{
+   960		u64 cap = div_u64((u64)SCHED_CAPACITY_SCALE * cpu->capacity_perf,
+   961				  hybrid_max_perf_cpu->capacity_perf);
+   962	
+ > 963		arch_set_cpu_capacity(cpu->cpu, cap);
+   964	}
+   965	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
