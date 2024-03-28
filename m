@@ -1,75 +1,40 @@
-Return-Path: <linux-pm+bounces-5567-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5568-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0C6388FABC
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 10:07:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65EC188FAD4
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 10:12:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 782DB1C2BC92
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 09:07:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1BE351F27D1C
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Mar 2024 09:12:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A36325F861;
-	Thu, 28 Mar 2024 09:07:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xo0Sfd9/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E205B5F87E;
+	Thu, 28 Mar 2024 09:12:14 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 498A45FBB7
-	for <linux-pm@vger.kernel.org>; Thu, 28 Mar 2024 09:07:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36AF25F876;
+	Thu, 28 Mar 2024 09:12:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711616844; cv=none; b=T82iiYu4DDRJbDDkp3bxj4HVZE59P46CLhewge4MRjASzMbxJ0LFdNDd/UtzMjnst7ssV7/bNEkHPPQI/IWvsaz8rfD0D5jzinaA6Hz3Ya+UFrhC2qJ0fsZjSnTMrJV0ay9PS8rj0RIHvR2l1c8z8zGYznYarDQhsGnjnSkA+d8=
+	t=1711617134; cv=none; b=sKl1Ldmi7gSX6X9HGvnxrgYcPnsrXU3TGbIBjVNKIvfoHZkvuxYjwICcyEuakYU277F0BLK9Hkte8telQma7xy0ops34ltYwDHeAVeMf3m1UTHmVGBY4RkVfzGXWynymaJFvA/0HEoxXTNmmnATjwD+mcUkxbP8f8ftMHY64YLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711616844; c=relaxed/simple;
-	bh=B5P2QmTqG+zV/6zmv5Tkk3zk8lAWVapCRSaMTRw5r0A=;
+	s=arc-20240116; t=1711617134; c=relaxed/simple;
+	bh=933fPPeN920VA8PuAkQbUxRF+Bb72rrjQ+0veQXjZxg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PrW2+HqmdrxB2TuyyZtrb4D6suJLi02XAzTAD12C4d74/kYEbeoYcoZzEBXmB+jPSSdpQGYXGWVZ4GfHXQRjP0RmNf4YrJONwTFLgJ2zKnPHrjGzwtkENPMtoEaqgkkq/xb+HS1A0CXZ5J5w0wMEEMKloyLcUWZsHHOCLB5rYbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xo0Sfd9/; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-41494c040a1so4860125e9.2
-        for <linux-pm@vger.kernel.org>; Thu, 28 Mar 2024 02:07:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711616840; x=1712221640; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=kR7691QsLdiheg/qYlTvIwafZmDVMgMpzMu7f9J689k=;
-        b=xo0Sfd9/qBWj+gMrKlvyBeZ13v1Gi5WBWhsmVGYZJQHT3h4OaHMb3TbLrqwYJttNxv
-         HMecEWGEDtk4ZmyHUVpkv/2HxCb/lPya+P8yYcBtbPH64KS0Lpcoo0xc4Up6aQQ0q0HT
-         MpRutvmz4y48q8MTuCPaX+Yrj+NfmGs3uWm9ZhMYJWqjhXOWT6ahAhtum5JqCdB+cXTS
-         /YDCx39LT+LDwFQVZ8wXiJlg3+LSjBkv9skFr3cC5r/A1i1ZTntlFYBtCNOyktEEet7K
-         nUZmEML54bB9lnm1QCAAQO+/4FuDYHUoo/WEmQ0wgFIB7ym0E1a99L/9aVX1uNrOlMYK
-         v4kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711616840; x=1712221640;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kR7691QsLdiheg/qYlTvIwafZmDVMgMpzMu7f9J689k=;
-        b=n7mG/ydNkH4TOfraeWOUt3X7Vbw4BvL9ZC++Fj3E9AH5FJ/C5o+7rwFHtKXAMP+hMz
-         5T8aaHnSKpspLJxWgmW+JWwPA1OIgY7vxjDA1Un4TIX0DUYF1O60jNEqMs7YWnyh0T2C
-         UU2Q53a4gflHDslmVGRBXvqR1uBewjfgrXd6lVKnsTFeplba5db33X65of+oL/jdx49/
-         zftlqk5WE6JtMR+MXElJJwG1haWgSFuL6aCYEl8/AiKhfyzN3nCIMQ7MQwNE8P/qRDUW
-         LSlXMV3aRGrejH1xMUFJoSUAbVK32MtjoSnM7qthRxiWAGFCKnPKD3VArJlTLe5pdFue
-         ckxg==
-X-Forwarded-Encrypted: i=1; AJvYcCUKT7KADzh9HkR4Po669FL6bXgvwe4qIVaGUzpL9LbHd6ibOvJdYR04xNue/UUh92peo/hgkX5w8dHlH3JMun7dbIM/Z40ipM0=
-X-Gm-Message-State: AOJu0YxM7KJJ8bfZowspNE8fI2oB1AegZ+pUkOsFrtA0QeG6q2utRQa8
-	tRXRuYccceOqB139SkIT41uFTu+yEMZr3wUMhU7vIu8Qk27NUUxy0R1f97vl3eg=
-X-Google-Smtp-Source: AGHT+IFcH20TzPyDooBAuXCMccHixkHgImEVAVGVV0gG91HKEAKRs5otgy4+usrR2yWejLzN7oXoiw==
-X-Received: by 2002:a05:600c:1c23:b0:414:222:ad5e with SMTP id j35-20020a05600c1c2300b004140222ad5emr1870691wms.11.1711616840331;
-        Thu, 28 Mar 2024 02:07:20 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.148])
-        by smtp.gmail.com with ESMTPSA id w11-20020a05600c474b00b00414927b21f6sm4746668wmo.22.2024.03.28.02.07.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Mar 2024 02:07:19 -0700 (PDT)
-Message-ID: <dfebb955-6fbc-4e1b-bde3-13f9ddc33365@linaro.org>
-Date: Thu, 28 Mar 2024 10:07:17 +0100
+	 In-Reply-To:Content-Type; b=XsxsEFzPX3u83j7D3Xhs6yN83lABsPXTcswC5dA54XTWYgbabaZ4OXdq5GnlNwPHrs22cmc2gxrrtzvIhfqr/kUlETIJoM5v8AMaIPE5CXDZZUWo5BsPbWu8uEilstLVtJmrlp7IGKvoy7JEb3Loc/trtZy1cs2M5tRt+ufxxQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 403702F4;
+	Thu, 28 Mar 2024 02:12:46 -0700 (PDT)
+Received: from [10.57.73.140] (unknown [10.57.73.140])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5589D3F7BD;
+	Thu, 28 Mar 2024 02:12:11 -0700 (PDT)
+Message-ID: <1bfcb1cf-fc08-404b-be36-b5e1863f7c59@arm.com>
+Date: Thu, 28 Mar 2024 09:12:10 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,100 +42,110 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 01/16] regulator: dt-bindings: describe the PMU module
- of the QCA6390 package
-To: Bartosz Golaszewski <brgl@bgdev.pl>, Marcel Holtmann
- <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Kalle Valo <kvalo@kernel.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>, Liam Girdwood
- <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Bjorn Helgaas <bhelgaas@google.com>, Saravana Kannan <saravanak@google.com>,
- Geert Uytterhoeven <geert+renesas@glider.be>, Arnd Bergmann <arnd@arndb.de>,
- Neil Armstrong <neil.armstrong@linaro.org>,
- Marek Szyprowski <m.szyprowski@samsung.com>, Alex Elder <elder@linaro.org>,
- Srini Kandagatla <srinivas.kandagatla@linaro.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Abel Vesa <abel.vesa@linaro.org>, Manivannan Sadhasivam <mani@kernel.org>,
- Lukas Wunner <lukas@wunner.de>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-wireless@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
- linux-pm@vger.kernel.org,
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20240325131624.26023-1-brgl@bgdev.pl>
- <20240325131624.26023-2-brgl@bgdev.pl>
+Subject: Re: [PATCH] thermal: gov_power_allocator: Allow binding without
+ cooling devices
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, nikita@trvn.ru,
+ Zhang Rui <rui.zhang@intel.com>,
+ "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240321-gpa-no-cooling-devs-v1-1-5c9e0ef2062e@trvn.ru>
+ <CAJZ5v0jAq=iMKzYBz-Ni6Zqpbgxp3_0UYpPiAoSLcfGNJ8ruhQ@mail.gmail.com>
 Content-Language: en-US
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240325131624.26023-2-brgl@bgdev.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAJZ5v0jAq=iMKzYBz-Ni6Zqpbgxp3_0UYpPiAoSLcfGNJ8ruhQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 25/03/2024 14:16, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Hi Rafael,
+
+On 3/27/24 15:25, Rafael J. Wysocki wrote:
+> On Thu, Mar 21, 2024 at 3:44 PM Nikita Travkin <nikita@trvn.ru> wrote:
+>>
+>> Commit e83747c2f8e3 ("thermal: gov_power_allocator: Set up trip points earlier")
+>> added a check that would fail binding the governer if there is no
+>> cooling devices bound to the thermal zone. Unfortunately this causes
+>> issues in cases when the TZ is bound to the governer before the cooling
+>> devices are attached to it. (I.e. when the tz is registered using
+>> thermal_zone_device_register_with_trips().)
+>>
+>> Additionally, the documentation across gov_power_allocator suggests it's
+>> intended to allow it to be bound to thermal zones without cooling
+>> devices (and thus without passive/active trip points), however the same
+>> change added a check for the trip point to be present, causing those TZ
+>> to fail probing.
+>>
+>> Those changes cause all thermal zones to fail on some devices (such as
+>> sc7180-acer-aspire1) and prevent the kernel from controlling the cpu/gpu
+>> frequency based on the temperature, as well as losing all the other
+>> "informational" thermal zones if power_allocator is set as default.
+>>
+>> This commit partially reverts the referenced one by dropping the trip
+>> point check and by allowing the TZ to probe even if no actor buffer was
+>> allocated to allow those TZ to probe again.
+>>
+>> Fixes: e83747c2f8e3 ("thermal: gov_power_allocator: Set up trip points earlier")
+>> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+>> ---
+>> I've noticed that all thermal zones fail probing with -EINVAL on my
+>> sc7180 based Acer Aspire 1 since 6.8. This commit allows me to bring
+>> them back.
 > 
-> The QCA6390 package contains discreet modules for WLAN and Bluetooth. They
-> are powered by the Power Management Unit (PMU) that takes inputs from the
-> host and provides LDO outputs. This document describes this module.
+> Łukasz, any comments?
+
+Let me check this today.
+
 > 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
-
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+>> ---
+>>   drivers/thermal/gov_power_allocator.c | 14 +++++---------
+>>   1 file changed, 5 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+>> index 1b17dc4c219c..4f2d7f3b7508 100644
+>> --- a/drivers/thermal/gov_power_allocator.c
+>> +++ b/drivers/thermal/gov_power_allocator.c
+>> @@ -679,11 +679,6 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
+>>                  return -ENOMEM;
+>>
+>>          get_governor_trips(tz, params);
+>> -       if (!params->trip_max) {
+>> -               dev_warn(&tz->device, "power_allocator: missing trip_max\n");
+>> -               kfree(params);
+>> -               return -EINVAL;
+>> -       }
+>>
+>>          ret = check_power_actors(tz, params);
+>>          if (ret < 0) {
+>> @@ -693,7 +688,7 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
+>>          }
+>>
+>>          ret = allocate_actors_buffer(params, ret);
+>> -       if (ret) {
+>> +       if (ret && ret != -EINVAL) {
+>>                  dev_warn(&tz->device, "power_allocator: allocation failed\n");
+>>                  kfree(params);
+>>                  return ret;
+>> @@ -714,9 +709,10 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
+>>          else
+>>                  params->sustainable_power = tz->tzp->sustainable_power;
+>>
+>> -       estimate_pid_constants(tz, tz->tzp->sustainable_power,
+>> -                              params->trip_switch_on,
+>> -                              params->trip_max->temperature);
+>> +       if (params->trip_max)
+>> +               estimate_pid_constants(tz, tz->tzp->sustainable_power,
+>> +                                      params->trip_switch_on,
+>> +                                      params->trip_max->temperature);
+>>
+>>          reset_pid_controller(params);
+>>
+>>
+>> ---
+>> base-commit: e7528c088874326d3060a46f572252be43755a86
+>> change-id: 20240321-gpa-no-cooling-devs-c79ee3288325
+>>
+>> Best regards,
+>> --
+>> Nikita Travkin <nikita@trvn.ru>
+>>
 
