@@ -1,38 +1,38 @@
-Return-Path: <linux-pm+bounces-5677-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5678-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A35189209D
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 16:39:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83241891FBE
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 16:10:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 396A0B2E5C4
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 15:10:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E427285857
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 15:10:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 533E9146A9F;
-	Fri, 29 Mar 2024 14:13:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85E5B147C66;
+	Fri, 29 Mar 2024 14:13:40 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 949B914535D;
-	Fri, 29 Mar 2024 14:13:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0756014535D;
+	Fri, 29 Mar 2024 14:13:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711721618; cv=none; b=ejgsETFI4q6pgCbyacIeBcX92U+MqgHgzEQJvtzPF7mS0Hx0PkNcW+/GyyY1Va/ZIqG9C0dbk2tRIVA0ZsWVyyTUo/DkBGfz3h0VTn8lw4tcbjfyQY0120jrAsNIWA8KYMrN7sJvWZFPygYadF/SQq2Sj6AYSPspiX5kGekwPWU=
+	t=1711721620; cv=none; b=eM+qlkX/tCeTF9K1xYm4U5Z7LKUgyiuTJRNwgWxq1iFLQuam1oW/82N8s4i2Y28N8OTuQypgdVTZOPfcW/dChDSH5yi4zAMOqzNpS4eDSd31MoTTSnpUct3f2cwblY7k4Qg87PTG8+XU1wnYKYF6fs+JtKTEZ8G3yzXObnG+roA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711721618; c=relaxed/simple;
-	bh=uy4I8W2pojY6PLi7TcK5i89Ba3IrwWBIxIEZzB73pqg=;
+	s=arc-20240116; t=1711721620; c=relaxed/simple;
+	bh=OY6oSWnRcxDRIOIptMz+rhfaPqt6ZljS4C3MRBVC2GQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=cydEiX+KkrrYGZfHQVgygcTfcdIg4pX58fLpwKy7Dsr9VGkdXMNmdlPZYvH2mzUNZW9bI+/cRSHl5ODSGCXqqa4/q4TD5/ynuNhZ9EzOq/PFfilzk6x9QOJPqGZcTgCcGS9/xEukWFVMcKELGcCBHEqtFL6Wyd49zKPxaN15Yvs=
+	 MIME-Version; b=ZKy5eYB90zKEoH9ICDvTGmxZC8RY8GKemkFlZxh8wFxDo2ncytjoUU+kxRzdnmoQNmgxf+0/7a3bYQ9718wrh/cdBH7jZMYTI5fEYPDvATcAwQQ9nMoi1zoiMYVNVYxjxTI5g37zSAx+a6pLXMs++RCQfUzsZgSk9X6ZU5BKmSc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B722715A1;
-	Fri, 29 Mar 2024 07:14:08 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A2A01165C;
+	Fri, 29 Mar 2024 07:14:11 -0700 (PDT)
 Received: from localhost.localdomain (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7F5843F64C;
-	Fri, 29 Mar 2024 07:13:32 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C05843F64C;
+	Fri, 29 Mar 2024 07:13:35 -0700 (PDT)
 From: Andre Przywara <andre.przywara@arm.com>
 To: Yangtao Li <tiny.windzz@gmail.com>,
 	Viresh Kumar <vireshk@kernel.org>,
@@ -44,10 +44,7 @@ To: Yangtao Li <tiny.windzz@gmail.com>,
 	Chen-Yu Tsai <wens@csie.org>,
 	Jernej Skrabec <jernej.skrabec@gmail.com>,
 	Samuel Holland <samuel@sholland.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Sudeep Holla <sudeep.holla@arm.com>
+	"Rafael J . Wysocki" <rafael@kernel.org>
 Cc: linux-pm@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-sunxi@lists.linux.dev,
@@ -57,9 +54,9 @@ Cc: linux-pm@vger.kernel.org,
 	Martin Botka <martin.botka1@gmail.com>,
 	Chris Morgan <macroalpha82@gmail.com>,
 	Ryan Walklin <ryan@testtoast.com>
-Subject: [PATCH v4 1/8] firmware: smccc: Export revision soc_id function
-Date: Fri, 29 Mar 2024 14:13:04 +0000
-Message-Id: <20240329141311.27158-2-andre.przywara@arm.com>
+Subject: [PATCH v4 2/8] cpufreq: dt-platdev: Blocklist Allwinner H616/618 SoCs
+Date: Fri, 29 Mar 2024 14:13:05 +0000
+Message-Id: <20240329141311.27158-3-andre.przywara@arm.com>
 X-Mailer: git-send-email 2.35.8
 In-Reply-To: <20240329141311.27158-1-andre.przywara@arm.com>
 References: <20240329141311.27158-1-andre.przywara@arm.com>
@@ -73,34 +70,31 @@ Content-Transfer-Encoding: 8bit
 
 From: Martin Botka <martin.botka@somainline.org>
 
-The "SoC ID revision" as provided via the SMCCC SOCID interface can be
-valuable information for drivers, when certain functionality depends
-on a die revision, for instance.
-One example is the sun50i-cpufreq-nvmem driver, which needs this
-information to determine the speed bin of the SoC.
-
-Export the arm_smccc_get_soc_id_revision() function so that it can be
-called by any driver.
+The AllWinner H616 SoC will use the (extended) H6 OPP driver, so add
+them to the cpufreq-dt blocklist, to not create the device twice.
+This also affects the closely related sibling SoCs H618 and H700.
 
 Signed-off-by: Martin Botka <martin.botka@somainline.org>
 Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-Acked-by: Sudeep Holla <sudeep.holla@arm.com>
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 ---
- drivers/firmware/smccc/smccc.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/cpufreq/cpufreq-dt-platdev.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/firmware/smccc/smccc.c b/drivers/firmware/smccc/smccc.c
-index db818f9dcb8ee..d670635914ecb 100644
---- a/drivers/firmware/smccc/smccc.c
-+++ b/drivers/firmware/smccc/smccc.c
-@@ -69,6 +69,7 @@ s32 arm_smccc_get_soc_id_revision(void)
- {
- 	return smccc_soc_id_revision;
- }
-+EXPORT_SYMBOL_GPL(arm_smccc_get_soc_id_revision);
+diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+index b993a498084bc..86d8baa816795 100644
+--- a/drivers/cpufreq/cpufreq-dt-platdev.c
++++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+@@ -104,6 +104,9 @@ static const struct of_device_id allowlist[] __initconst = {
+  */
+ static const struct of_device_id blocklist[] __initconst = {
+ 	{ .compatible = "allwinner,sun50i-h6", },
++	{ .compatible = "allwinner,sun50i-h616", },
++	{ .compatible = "allwinner,sun50i-h618", },
++	{ .compatible = "allwinner,sun50i-h700", },
  
- static int __init smccc_devices_init(void)
- {
+ 	{ .compatible = "apple,arm-platform", },
+ 
 -- 
 2.35.8
 
