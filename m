@@ -1,64 +1,60 @@
-Return-Path: <linux-pm+bounces-5665-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5666-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9BB9891C09
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 14:40:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B569891C73
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 14:50:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 797391F2AA74
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 13:40:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E6051C24355
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 13:50:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DE4717AF87;
-	Fri, 29 Mar 2024 12:41:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE2941487FF;
+	Fri, 29 Mar 2024 12:42:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="baLQioz5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UdYoRZtG"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D3217A909;
-	Fri, 29 Mar 2024 12:41:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82194187870;
+	Fri, 29 Mar 2024 12:42:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711716066; cv=none; b=q6rQKvNsBjOOpiE3nnoNts44Cnxk5j1nf/umxa1PV4eaHVq1JJZ8oV5ygtfWnotHo5UJ+dXBfjR7cH0bHnUwunO3UsrAaDb8OBI2fRkfqCUICcdcN1HftQz1M9nKwYvEEp4EIGS8JOf8x8ys9SOKNbElnhvD+jGA9shIzrseEEY=
+	t=1711716135; cv=none; b=Iv6w6CE3guloG7CYMn7tj+NQ3mwljd2wof3+X0EuOCks9hqyscKcRakOVsecw/vNB4GXTnoso2nSMru5+A3vy6BTEySoalPDVLsIAapvOTGQWK+6b7TeRxbQVJgwSgAHmrv96I/ydL6iR3PPlYueupIw7pBdsJhH3ClSif76fns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711716066; c=relaxed/simple;
-	bh=r4/4GXGTk++z1W7+MaTn3Izp/E4xpOEvXWgaDBkkPY0=;
+	s=arc-20240116; t=1711716135; c=relaxed/simple;
+	bh=6tnYUOP215gYhaLsw+XIjv4f/5EIBDD3XJwwci8tAVQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=H4fT+RHPxSYLacqdqc0QwIuPUYXGkcD35HMo06U2wJYeJfPGIgNxaLhL/1B8qlR3k3B1b+k5ZW316+LtmHbYK5vDOpQf6ZKbuiKD73v8/3g/SUayANThD/1kuSHoNltQz7BbEqyTntPofG6vH5j8noJbjg8Aoh6SKFjnHO8nv3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=baLQioz5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A360AC433C7;
-	Fri, 29 Mar 2024 12:41:04 +0000 (UTC)
+	 MIME-Version; b=pZ6raYDQBPNFo5sOtZckOUdsAo5JKaPRakb3iI47GOiGepOtKXze8S9gSndkEHvdKOLxRrJDfnmSgrUnYzPNSwY389dhZkZLSNf9ThpAojGENLbvX2FONHBfv4gUA/Q/l/kwr1smDYBBTdcOzE833t4qKtjNfgsGi2X3AsDBzho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UdYoRZtG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F3CEC43394;
+	Fri, 29 Mar 2024 12:42:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711716066;
-	bh=r4/4GXGTk++z1W7+MaTn3Izp/E4xpOEvXWgaDBkkPY0=;
+	s=k20201202; t=1711716135;
+	bh=6tnYUOP215gYhaLsw+XIjv4f/5EIBDD3XJwwci8tAVQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=baLQioz50XIsKuHdo+rpqttrJPekLBK3y7njFGIM9EeM04Q6M3WhI69erfyAF+gDX
-	 Inv58JKl5Jlu/Eu4dA09v/zBxqE3K7CI8qlRzucZLyzHM01sjWfQq87oigoBOEhkq4
-	 Bf+ewqbWznthQ1a8KrqfTzSeI1wjSeV0a8LUSydScxYKnzThR3OugrGxNTIf0S+wyk
-	 iYLM9ISlZkm+H8IwNnO436fRCodP7nfcIE8sF8Yhr85EtvaSQL4jJwJ524isePhzM4
-	 xQVKefDLuyWuZMSagwHMI1gHD25BE9yQ1KGFQiYjqHvlNgYXV+F38delwiPyC4eIDf
-	 9bekIRWMy6UZg==
+	b=UdYoRZtGWZyARY2Og416YkBhDkvp4Wobh14KbNvJ1aUN5NaY9OimtzlOh9HkBT+zz
+	 /rZWZSiGCxyoFRn6OUIqMZ99YuQ9c584AAX+71z9pIt8CbFE0sT02OSD4M0vbI/HF2
+	 qiie3MSfRPb3ffAyHodtrLc5jR5br+LCrdLwDIuyRQh5SGVhijDlVpZzQkabJqbeJG
+	 ik589rPGBPY8fF50XAzvaoBSio+6gpQkE1t9FK4cKaJFXsuQbGsKCqK98yIkP5uVzZ
+	 m8RZHzpRFOgVuOaJpTRxY4x9NzEuXWbIrd2qLHDEj0V5EDpJPlF1WlZpAAbw3S0Xue
+	 G19CL6kBfQzEg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Adam Ford <aford173@gmail.com>,
-	Jacky Bai <ping.bai@nxp.com>,
-	Sandor Yu <Sandor.yu@nxp.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
+Cc: Viresh Kumar <viresh.kumar@linaro.org>,
+	Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>,
+	Roman Stratiienko <r.stratiienko@gmail.com>,
+	Dhruva Gole <d-gole@ti.com>,
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
 	Sasha Levin <sashal@kernel.org>,
-	shawnguo@kernel.org,
-	heiko@sntech.de,
-	marex@denx.de,
-	u.kleine-koenig@pengutronix.de,
-	linux-pm@vger.kernel.org,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.8 35/98] pmdomain: imx8mp-blk-ctrl: imx8mp_blk: Add fdcc clock to hdmimix domain
-Date: Fri, 29 Mar 2024 08:37:06 -0400
-Message-ID: <20240329123919.3087149-35-sashal@kernel.org>
+	rafael@kernel.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.8 73/98] cpufreq: Don't unregister cpufreq cooling on CPU hotplug
+Date: Fri, 29 Mar 2024 08:37:44 -0400
+Message-ID: <20240329123919.3087149-73-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240329123919.3087149-1-sashal@kernel.org>
 References: <20240329123919.3087149-1-sashal@kernel.org>
@@ -73,66 +69,92 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.8.2
 Content-Transfer-Encoding: 8bit
 
-From: Adam Ford <aford173@gmail.com>
+From: Viresh Kumar <viresh.kumar@linaro.org>
 
-[ Upstream commit 697624ee8ad557ab5417f985d2c804241a7ad30d ]
+[ Upstream commit c4d61a529db788d2e52654f5b02c8d1de4952c5b ]
 
-According to i.MX8MP RM and HDMI ADD, the fdcc clock is part of
-hdmi rx verification IP that should not enable for HDMI TX.
-But actually if the clock is disabled before HDMI/LCDIF probe,
-LCDIF will not get pixel clock from HDMI PHY and print the error
-logs:
+Offlining a CPU and bringing it back online is a common operation and it
+happens frequently during system suspend/resume, where the non-boot CPUs
+are hotplugged out during suspend and brought back at resume.
 
-[CRTC:39:crtc-2] vblank wait timed out
-WARNING: CPU: 2 PID: 9 at drivers/gpu/drm/drm_atomic_helper.c:1634 drm_atomic_helper_wait_for_vblanks.part.0+0x23c/0x260
+The cpufreq core already tries to make this path as fast as possible as
+the changes are only temporary in nature and full cleanup of resources
+isn't required in this case. For example the drivers can implement
+online()/offline() callbacks to avoid a lot of tear down of resources.
 
-Add fdcc clock to LCDIF and HDMI TX power domains to fix the issue.
+On similar lines, there is no need to unregister the cpufreq cooling
+device during suspend / resume, but only while the policy is getting
+removed.
 
-Signed-off-by: Adam Ford <aford173@gmail.com>
-Reviewed-by: Jacky Bai <ping.bai@nxp.com>
-Signed-off-by: Sandor Yu <Sandor.yu@nxp.com>
-Link: https://lore.kernel.org/r/20240203165307.7806-5-aford173@gmail.com
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Moreover, unregistering the cpufreq cooling device is resulting in an
+unwanted outcome, where the system suspend is eventually aborted in the
+process.  Currently, during system suspend the cpufreq core unregisters
+the cooling device, which in turn removes a kobject using device_del()
+and that generates a notification to the userspace via uevent broadcast.
+This causes system suspend to abort in some setups.
+
+This was also earlier reported (indirectly) by Roman [1]. Maybe there is
+another way around to fixing that problem properly, but this change
+makes sense anyways.
+
+Move the registering and unregistering of the cooling device to policy
+creation and removal times onlyy.
+
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218521
+Reported-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+Reported-by: Roman Stratiienko <r.stratiienko@gmail.com>
+Link: https://patchwork.kernel.org/project/linux-pm/patch/20220710164026.541466-1-r.stratiienko@gmail.com/ [1]
+Tested-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pmdomain/imx/imx8mp-blk-ctrl.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/cpufreq/cpufreq.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/pmdomain/imx/imx8mp-blk-ctrl.c b/drivers/pmdomain/imx/imx8mp-blk-ctrl.c
-index e3203eb6a0229..a56f7f92d0915 100644
---- a/drivers/pmdomain/imx/imx8mp-blk-ctrl.c
-+++ b/drivers/pmdomain/imx/imx8mp-blk-ctrl.c
-@@ -55,7 +55,7 @@ struct imx8mp_blk_ctrl_domain_data {
- 	const char *gpc_name;
- };
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 44db4f59c4cc6..4133c606dacb9 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1571,7 +1571,8 @@ static int cpufreq_online(unsigned int cpu)
+ 	if (cpufreq_driver->ready)
+ 		cpufreq_driver->ready(policy);
  
--#define DOMAIN_MAX_CLKS 2
-+#define DOMAIN_MAX_CLKS 3
- #define DOMAIN_MAX_PATHS 3
+-	if (cpufreq_thermal_control_enabled(cpufreq_driver))
++	/* Register cpufreq cooling only for a new policy */
++	if (new_policy && cpufreq_thermal_control_enabled(cpufreq_driver))
+ 		policy->cdev = of_cpufreq_cooling_register(policy);
  
- struct imx8mp_blk_ctrl_domain {
-@@ -457,8 +457,8 @@ static const struct imx8mp_blk_ctrl_domain_data imx8mp_hdmi_domain_data[] = {
- 	},
- 	[IMX8MP_HDMIBLK_PD_LCDIF] = {
- 		.name = "hdmiblk-lcdif",
--		.clk_names = (const char *[]){ "axi", "apb" },
--		.num_clks = 2,
-+		.clk_names = (const char *[]){ "axi", "apb", "fdcc" },
-+		.num_clks = 3,
- 		.gpc_name = "lcdif",
- 		.path_names = (const char *[]){"lcdif-hdmi"},
- 		.num_paths = 1,
-@@ -483,8 +483,8 @@ static const struct imx8mp_blk_ctrl_domain_data imx8mp_hdmi_domain_data[] = {
- 	},
- 	[IMX8MP_HDMIBLK_PD_HDMI_TX] = {
- 		.name = "hdmiblk-hdmi-tx",
--		.clk_names = (const char *[]){ "apb", "ref_266m" },
--		.num_clks = 2,
-+		.clk_names = (const char *[]){ "apb", "ref_266m", "fdcc" },
-+		.num_clks = 3,
- 		.gpc_name = "hdmi-tx",
- 	},
- 	[IMX8MP_HDMIBLK_PD_HDMI_TX_PHY] = {
+ 	pr_debug("initialization complete\n");
+@@ -1655,11 +1656,6 @@ static void __cpufreq_offline(unsigned int cpu, struct cpufreq_policy *policy)
+ 	else
+ 		policy->last_policy = policy->policy;
+ 
+-	if (cpufreq_thermal_control_enabled(cpufreq_driver)) {
+-		cpufreq_cooling_unregister(policy->cdev);
+-		policy->cdev = NULL;
+-	}
+-
+ 	if (has_target())
+ 		cpufreq_exit_governor(policy);
+ 
+@@ -1720,6 +1716,15 @@ static void cpufreq_remove_dev(struct device *dev, struct subsys_interface *sif)
+ 		return;
+ 	}
+ 
++	/*
++	 * Unregister cpufreq cooling once all the CPUs of the policy are
++	 * removed.
++	 */
++	if (cpufreq_thermal_control_enabled(cpufreq_driver)) {
++		cpufreq_cooling_unregister(policy->cdev);
++		policy->cdev = NULL;
++	}
++
+ 	/* We did light-weight exit earlier, do full tear down now */
+ 	if (cpufreq_driver->offline)
+ 		cpufreq_driver->exit(policy);
 -- 
 2.43.0
 
