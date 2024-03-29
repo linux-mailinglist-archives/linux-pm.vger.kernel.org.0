@@ -1,63 +1,58 @@
-Return-Path: <linux-pm+bounces-5655-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5656-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7C308919FD
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 13:51:16 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60039891A14
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 13:53:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 884091F26B6A
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 12:51:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D7C0EB24F6B
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 12:53:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 164751DDEA;
-	Fri, 29 Mar 2024 12:30:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F114715538D;
+	Fri, 29 Mar 2024 12:30:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SFlaGjzj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zaju6J5F"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2EC918AF8;
-	Fri, 29 Mar 2024 12:30:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2F2212FF8C;
+	Fri, 29 Mar 2024 12:30:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711715420; cv=none; b=Ju6kFhbB/Ws204lGYnCyFu9S8wN6ML1bcpLUzFA+h0XciLCjB4xIcNnMYCoA8fTGJunsqHXhr5edcarSfwL6lOpZQchKTioMaPoZdsu2TV2ctocZmvAx8VlOn1o2wrx2SgLI5fyMV4lv3UuFw5gyYKvlh34hQ5tPGeNesw71fHU=
+	t=1711715433; cv=none; b=TMC57yTeyfT4nJYG+3UH7U71wzOK8iJQuXCh9bPJRIhz27FaDmMLIJ2i98265m/09T2nmI+FIqSMZRZTvkOy67qIeEEUOlcpb9Q+WmMjBYNd5LKTj5FFnYtKXK4/5wc2B9iAT8WQu38okFBNwtyJODv/9/7mi5O0RJpQclrEd+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711715420; c=relaxed/simple;
-	bh=uRO9hNSHchqspmCb1F6je6akXTN4Hy8qBEMg95DG9jg=;
+	s=arc-20240116; t=1711715433; c=relaxed/simple;
+	bh=yEd0TIh/lRZcOAMIPybsRJxzmRYTgRG5NAGV2GK4dAk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=n41lsxeUwuYMbP+PZ8MBUAYaR4vKKDNYS+iziYwX6d/5qRKUBh1ZPxJno+RaWyKufLAp8D369GhxQiEjmXaJZv80C8iL7pVp+ueCVaZY/2IHN3eTtWi1Rt2ktHKOHz94gvvHwa4GDvmVqXBtr40hIU32P+8iv5Xo7dY1KCocFUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SFlaGjzj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FCF1C433F1;
-	Fri, 29 Mar 2024 12:30:18 +0000 (UTC)
+	 MIME-Version; b=q4ZpVoiDbHihNnx6msvPYw4zQ0wm/OX8CTJbJOQq0hxPvbrGjZBNmp7wSm4BMVWnR15GFfVWf3s3DszxasKQte9Aze61OfurrZW0Cwr8gvBDtcc97kxoql5GhLcRsZn5ytE0LeNEMr4drrmjfan4tcHX23wCWAtmC/TlX881z+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zaju6J5F; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67E0EC433B1;
+	Fri, 29 Mar 2024 12:30:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711715419;
-	bh=uRO9hNSHchqspmCb1F6je6akXTN4Hy8qBEMg95DG9jg=;
+	s=k20201202; t=1711715433;
+	bh=yEd0TIh/lRZcOAMIPybsRJxzmRYTgRG5NAGV2GK4dAk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=SFlaGjzjCEXWlMQSkYxntF1dfRWgtVpKNt8cyNEAG61rCUcy6A6IVWT4DTzAEQndR
-	 zg3BhendHhFcs7Sfoqze9oaafHh8ZE+nJ46WEvq82xCuYCl2qda7MWcJz+yaG3mdPz
-	 DKYbfj9VhFPXX7hSav1mpiShXUnUUu8gln2Z+VRYTa6sRGODOaXc0Njv/QsTewbZT+
-	 1v+2DJE26Jv9H3sy502RIK2iUeEBLgdEezZspfPHOWkBo3BhEaMNb6i7Rcz8MkBKYV
-	 WMMg0Ie+H0o0aCcvsU89iRrMNVw+X+KYaD6L9mzAD4DaQYoGR4yp+lJ57SlkIpjBRP
-	 jUkHr3hklRWqQ==
+	b=Zaju6J5FMtT/Dj2yR4S5oqNFvQs3xkRs/MIShE9Pht8R8U9c2C+q26sjXpRNoC/yY
+	 bK3iHaRakXo5AjOmVlo/lf7mYb14rxIFAsVI3UamPLZImW761sa7JvrL3QbqRDrF7h
+	 hA0NucgLm51qem8sj4VSo5axD/g9EmYdCb7p35Tt1JcCrngD3meQbF4nfg9ixV3Vzo
+	 crDsUJuD5fEc1rESzkXUhnl7pQgwa51lPDNWbqLRrybZHxJm8Alq0VjeEP3oe5ruPc
+	 zCk2FW2ToR81x/wNCW3QLV3MB7iy7tSnjFkz7+yiB1MiORBNDlI1qwv1AZU5R4Va8D
+	 +FpgY+Sd/XUkg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: C Cheng <C.Cheng@mediatek.com>,
-	Bo Ye <bo.ye@mediatek.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+Cc: Kunwu Chan <chentao@kylinos.cn>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
 	Sasha Levin <sashal@kernel.org>,
-	rafael@kernel.org,
-	daniel.lezcano@linaro.org,
-	matthias.bgg@gmail.com,
-	linux-pm@vger.kernel.org,
+	nm@ti.com,
 	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.6 14/52] cpuidle: Avoid potential overflow in integer multiplication
-Date: Fri, 29 Mar 2024 08:28:44 -0400
-Message-ID: <20240329122956.3083859-14-sashal@kernel.org>
+	linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.6 20/52] pmdomain: ti: Add a null pointer check to the omap_prm_domain_init
+Date: Fri, 29 Mar 2024 08:28:50 -0400
+Message-ID: <20240329122956.3083859-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240329122956.3083859-1-sashal@kernel.org>
 References: <20240329122956.3083859-1-sashal@kernel.org>
@@ -72,55 +67,35 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.6.23
 Content-Transfer-Encoding: 8bit
 
-From: C Cheng <C.Cheng@mediatek.com>
+From: Kunwu Chan <chentao@kylinos.cn>
 
-[ Upstream commit 88390dd788db485912ee7f9a8d3d56fc5265d52f ]
+[ Upstream commit 5d7f58ee08434a33340f75ac7ac5071eea9673b3 ]
 
-In detail:
+devm_kasprintf() returns a pointer to dynamically allocated memory
+which can be NULL upon failure. Ensure the allocation was successful
+by checking the pointer validity.
 
-In C language, when you perform a multiplication operation, if
-both operands are of int type, the multiplication operation is
-performed on the int type, and then the result is converted to
-the target type. This means that if the product of int type
-multiplication exceeds the range that int type can represent,
-an overflow will occur even if you store the result in a
-variable of int64_t type.
-
-For a multiplication of two int values, it is better to use
-mul_u32_u32() rather than s->exit_latency_ns = s->exit_latency *
-NSEC_PER_USEC to avoid potential overflow happenning.
-
-Signed-off-by: C Cheng <C.Cheng@mediatek.com>
-Signed-off-by: Bo Ye <bo.ye@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-[ rjw: New subject ]
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Kunwu Chan <chentao@kylinos.cn>
+Link: https://lore.kernel.org/r/20240118054257.200814-1-chentao@kylinos.cn
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cpuidle/driver.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/pmdomain/ti/omap_prm.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/cpuidle/driver.c b/drivers/cpuidle/driver.c
-index d9cda7f6ccb98..cf5873cc45dc8 100644
---- a/drivers/cpuidle/driver.c
-+++ b/drivers/cpuidle/driver.c
-@@ -16,6 +16,7 @@
- #include <linux/cpumask.h>
- #include <linux/tick.h>
- #include <linux/cpu.h>
-+#include <linux/math64.h>
+diff --git a/drivers/pmdomain/ti/omap_prm.c b/drivers/pmdomain/ti/omap_prm.c
+index c2feae3a634ca..b8ceb3c2b81c2 100644
+--- a/drivers/pmdomain/ti/omap_prm.c
++++ b/drivers/pmdomain/ti/omap_prm.c
+@@ -695,6 +695,8 @@ static int omap_prm_domain_init(struct device *dev, struct omap_prm *prm)
+ 	data = prm->data;
+ 	name = devm_kasprintf(dev, GFP_KERNEL, "prm_%s",
+ 			      data->name);
++	if (!name)
++		return -ENOMEM;
  
- #include "cpuidle.h"
- 
-@@ -187,7 +188,7 @@ static void __cpuidle_driver_init(struct cpuidle_driver *drv)
- 			s->target_residency = div_u64(s->target_residency_ns, NSEC_PER_USEC);
- 
- 		if (s->exit_latency > 0)
--			s->exit_latency_ns = s->exit_latency * NSEC_PER_USEC;
-+			s->exit_latency_ns = mul_u32_u32(s->exit_latency, NSEC_PER_USEC);
- 		else if (s->exit_latency_ns < 0)
- 			s->exit_latency_ns =  0;
- 		else
+ 	prmd->dev = dev;
+ 	prmd->prm = prm;
 -- 
 2.43.0
 
