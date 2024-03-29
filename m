@@ -1,63 +1,60 @@
-Return-Path: <linux-pm+bounces-5659-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5660-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D483A891A91
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 14:05:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D6172891AB4
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 14:08:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F81D286B2A
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 13:05:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 90746280A81
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 13:08:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2151C15B0F2;
-	Fri, 29 Mar 2024 12:32:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 766EF15E20B;
+	Fri, 29 Mar 2024 12:32:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FjfCZSp+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d3AcRsKT"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E976D85947;
-	Fri, 29 Mar 2024 12:32:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B99815E200;
+	Fri, 29 Mar 2024 12:32:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711715544; cv=none; b=S5i3TqFZvvFYk9vG6s9netg/39oRGjGqHssluA/PH3VryRshEmXhVlJgF36IdaLJPpo6hBiQvijkztFV1tXOFWxinCeKWE48oi47ShfDgYvIJGrQSWS6pkQjwu3mjCBRQvhzJDFb7pKfoPFre+EWPhqIaweyafZLSgmLALmArOo=
+	t=1711715572; cv=none; b=uzccIy9/Rl2Wmwv6sVIW4RSvna2kxPEM8RCCL6DaExsHRzW7ej61wXRCuhDFrk/+Cy1Iyzc1XmXQGxuP0v7H35TFzGwz/LPZNqeBZGlajXo6xm1boJ7sh0SR7jGMGuMQEXmIHbpW+m7RJKijOExbl6sPG9YW5Q7PschuxzTlNd8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711715544; c=relaxed/simple;
-	bh=Kx+1H+QtnuCB8ciX29fyhB79zT4Lxwy5pONlNfKxAiY=;
+	s=arc-20240116; t=1711715572; c=relaxed/simple;
+	bh=atto/ogA6M8ZBYdQ2P1WfmZG6v0P4C0Cd59ErmHOJ+E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=P+0BX15PwBJAKuEKnXsSrq9Y2JETGiPk+FmBDhlyG+FNh1M+8Pg9M4AY2z13eh5jZ0ytSqYr+5Dh0sCc6h9CrXH2hQhtBvQTPet/mEy4NViEl9OUddCUf0qBisxhM5szkpytPVC6ySf01OInLZTjBTB1qlfrN716N810Uwg8ClE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FjfCZSp+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08A9FC433A6;
-	Fri, 29 Mar 2024 12:32:21 +0000 (UTC)
+	 MIME-Version; b=Rrlace+x30fhPlluScok5V+8wMl/HEX4jrqTWwYXK3Y2LlA77UGJtfJ9uWJmQ+eDx1zokFtTVmX4CudKg79KrAx8SEwarMeqYqAQA/PG3IBpDD5q7uOqhAlollqWfxdi3f8//fHjaPyNbGgdGTtML7UO0U2YE4WvY+DxgE1aZTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d3AcRsKT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5C89C43390;
+	Fri, 29 Mar 2024 12:32:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711715543;
-	bh=Kx+1H+QtnuCB8ciX29fyhB79zT4Lxwy5pONlNfKxAiY=;
+	s=k20201202; t=1711715571;
+	bh=atto/ogA6M8ZBYdQ2P1WfmZG6v0P4C0Cd59ErmHOJ+E=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FjfCZSp+LMd4F7YfUcmRR8Xgk7/3nx6T7UYhN8/sav9hg8U7QVdz+PSCKwNlwM4dt
-	 xja3t+2tEdO6GYwZKFRcSIUkF91LnZx3fbw3f4UyKgwFjbku9jewGeA9R2jWdxhO7z
-	 vuHXdJJwg56DY0bEdx/LhcanXzz1ijXpYVCLBLmDACb8tj9N6Z8Sdsj23h0S50beot
-	 6bb0BfcztITz20RBTsdR0cKjrovjV03v1/kVsWJ9vpvmS3ZR4Hm4m5l4ivgEQeo9NK
-	 zxrFaBXRyXazof29MLUN1IjiBUBe92ac6AfSPOVSXy1RbJn3kej+syPrQpDMj0UNgi
-	 7shQYN51LGBRw==
+	b=d3AcRsKTZFiH+BEMHMhXk08L3HiDTDssg9Wy7TLJilkYNW2Qx4uUtDhlznWoXKTgv
+	 zxrkuwSNJiUkdoGwlZvmKXdFtvSHhTNS7FU/gUHZg4+ioD3rguqwEc/d1wN/FsevUX
+	 M6bvBz7gAgXqHDmQNSQkwLjyaaquegJYE9jgcMqSCCVMkH28+1l9KoIOVw9MLRAGVp
+	 co5B56pRISlr5y26pgNWkopwphnq0bvZZJgFVvFAAfczN4yxP6FmZGLqiVIVkI/r3S
+	 RLMqFu1ncRE7HcEfeiPs/vAxeBCoegjkRimI8+eTRhjt0fPDT+8fB+uXcvZQiofCWE
+	 1k7wy48sD4+5A==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: C Cheng <C.Cheng@mediatek.com>,
-	Bo Ye <bo.ye@mediatek.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+Cc: Viresh Kumar <viresh.kumar@linaro.org>,
+	Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>,
+	Roman Stratiienko <r.stratiienko@gmail.com>,
+	Dhruva Gole <d-gole@ti.com>,
 	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
 	Sasha Levin <sashal@kernel.org>,
 	rafael@kernel.org,
-	daniel.lezcano@linaro.org,
-	matthias.bgg@gmail.com,
-	linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.1 09/31] cpuidle: Avoid potential overflow in integer multiplication
-Date: Fri, 29 Mar 2024 08:31:28 -0400
-Message-ID: <20240329123207.3085013-9-sashal@kernel.org>
+	linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 22/31] cpufreq: Don't unregister cpufreq cooling on CPU hotplug
+Date: Fri, 29 Mar 2024 08:31:41 -0400
+Message-ID: <20240329123207.3085013-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240329123207.3085013-1-sashal@kernel.org>
 References: <20240329123207.3085013-1-sashal@kernel.org>
@@ -72,55 +69,92 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.1.83
 Content-Transfer-Encoding: 8bit
 
-From: C Cheng <C.Cheng@mediatek.com>
+From: Viresh Kumar <viresh.kumar@linaro.org>
 
-[ Upstream commit 88390dd788db485912ee7f9a8d3d56fc5265d52f ]
+[ Upstream commit c4d61a529db788d2e52654f5b02c8d1de4952c5b ]
 
-In detail:
+Offlining a CPU and bringing it back online is a common operation and it
+happens frequently during system suspend/resume, where the non-boot CPUs
+are hotplugged out during suspend and brought back at resume.
 
-In C language, when you perform a multiplication operation, if
-both operands are of int type, the multiplication operation is
-performed on the int type, and then the result is converted to
-the target type. This means that if the product of int type
-multiplication exceeds the range that int type can represent,
-an overflow will occur even if you store the result in a
-variable of int64_t type.
+The cpufreq core already tries to make this path as fast as possible as
+the changes are only temporary in nature and full cleanup of resources
+isn't required in this case. For example the drivers can implement
+online()/offline() callbacks to avoid a lot of tear down of resources.
 
-For a multiplication of two int values, it is better to use
-mul_u32_u32() rather than s->exit_latency_ns = s->exit_latency *
-NSEC_PER_USEC to avoid potential overflow happenning.
+On similar lines, there is no need to unregister the cpufreq cooling
+device during suspend / resume, but only while the policy is getting
+removed.
 
-Signed-off-by: C Cheng <C.Cheng@mediatek.com>
-Signed-off-by: Bo Ye <bo.ye@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-[ rjw: New subject ]
+Moreover, unregistering the cpufreq cooling device is resulting in an
+unwanted outcome, where the system suspend is eventually aborted in the
+process.  Currently, during system suspend the cpufreq core unregisters
+the cooling device, which in turn removes a kobject using device_del()
+and that generates a notification to the userspace via uevent broadcast.
+This causes system suspend to abort in some setups.
+
+This was also earlier reported (indirectly) by Roman [1]. Maybe there is
+another way around to fixing that problem properly, but this change
+makes sense anyways.
+
+Move the registering and unregistering of the cooling device to policy
+creation and removal times onlyy.
+
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218521
+Reported-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+Reported-by: Roman Stratiienko <r.stratiienko@gmail.com>
+Link: https://patchwork.kernel.org/project/linux-pm/patch/20220710164026.541466-1-r.stratiienko@gmail.com/ [1]
+Tested-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cpuidle/driver.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/cpufreq/cpufreq.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/cpuidle/driver.c b/drivers/cpuidle/driver.c
-index f70aa17e2a8e0..c594e28adddf3 100644
---- a/drivers/cpuidle/driver.c
-+++ b/drivers/cpuidle/driver.c
-@@ -16,6 +16,7 @@
- #include <linux/cpumask.h>
- #include <linux/tick.h>
- #include <linux/cpu.h>
-+#include <linux/math64.h>
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index c8912756fc06d..91efa23e0e8f3 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1525,7 +1525,8 @@ static int cpufreq_online(unsigned int cpu)
+ 	if (cpufreq_driver->ready)
+ 		cpufreq_driver->ready(policy);
  
- #include "cpuidle.h"
+-	if (cpufreq_thermal_control_enabled(cpufreq_driver))
++	/* Register cpufreq cooling only for a new policy */
++	if (new_policy && cpufreq_thermal_control_enabled(cpufreq_driver))
+ 		policy->cdev = of_cpufreq_cooling_register(policy);
  
-@@ -185,7 +186,7 @@ static void __cpuidle_driver_init(struct cpuidle_driver *drv)
- 			s->target_residency_ns = 0;
+ 	pr_debug("initialization complete\n");
+@@ -1609,11 +1610,6 @@ static void __cpufreq_offline(unsigned int cpu, struct cpufreq_policy *policy)
+ 	else
+ 		policy->last_policy = policy->policy;
  
- 		if (s->exit_latency > 0)
--			s->exit_latency_ns = s->exit_latency * NSEC_PER_USEC;
-+			s->exit_latency_ns = mul_u32_u32(s->exit_latency, NSEC_PER_USEC);
- 		else if (s->exit_latency_ns < 0)
- 			s->exit_latency_ns =  0;
+-	if (cpufreq_thermal_control_enabled(cpufreq_driver)) {
+-		cpufreq_cooling_unregister(policy->cdev);
+-		policy->cdev = NULL;
+-	}
+-
+ 	if (has_target())
+ 		cpufreq_exit_governor(policy);
+ 
+@@ -1674,6 +1670,15 @@ static void cpufreq_remove_dev(struct device *dev, struct subsys_interface *sif)
+ 		return;
  	}
+ 
++	/*
++	 * Unregister cpufreq cooling once all the CPUs of the policy are
++	 * removed.
++	 */
++	if (cpufreq_thermal_control_enabled(cpufreq_driver)) {
++		cpufreq_cooling_unregister(policy->cdev);
++		policy->cdev = NULL;
++	}
++
+ 	/* We did light-weight exit earlier, do full tear down now */
+ 	if (cpufreq_driver->offline)
+ 		cpufreq_driver->exit(policy);
 -- 
 2.43.0
 
