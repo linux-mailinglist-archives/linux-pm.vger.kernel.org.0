@@ -1,127 +1,145 @@
-Return-Path: <linux-pm+bounces-5673-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5674-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71303891F89
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 16:06:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F191B891FAC
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 16:09:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8150DB3064C
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 14:33:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A81F01F27F10
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 15:09:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD0311A7F68;
-	Fri, 29 Mar 2024 12:48:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98C061465AA;
+	Fri, 29 Mar 2024 13:51:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gs6mSHp3"
+	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="pnxVq16l"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB91E1A5D98;
-	Fri, 29 Mar 2024 12:48:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BF891C0DF1;
+	Fri, 29 Mar 2024 13:51:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711716484; cv=none; b=A1Nmn2vOQppXUwdaZyEKnFGyYgtMxePSiOz1ZXqFMHzTOG1xQ7GyTU8gN4fERF2NBUy4YdOs5N7ul6IIr7wH/ARcmm8NAV+bkFHC8ZbqFkUwnZ3Apc2iY9OwK8UhoK8/+17tZWCkq6m/sF1/lnK7Eo8au18Cwuq4+WtYJnr9c3E=
+	t=1711720317; cv=none; b=TtPfBZRl0GTZwCSvrbDwTJDcNRliSDwvF/DAg4C/QGADMtIJ0pbYspj37p4HUqT7HZsNMCNL7PU4+UxUZBvrJ3YFSFfNfs0o3H3+xhdZQxD3xz1x7XGUCwRyRgsgsXwP5LXy0C5JVIVDWU3hY3QLAnhY8xWgBu7Fq9hdO9C1jy4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711716484; c=relaxed/simple;
-	bh=Kx+1H+QtnuCB8ciX29fyhB79zT4Lxwy5pONlNfKxAiY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RVwPGtro0GOKaR+c5yrT3gobvXPmRDPm5CJVGHSqZnbXaj8CocgydgUi4XEHGu/i7IPNeli9ma3PhGf93eMsaB4a780QhrZcgQNwFsiDePpsxxtnfps+arQW9Qety7nPFHsx2yXs5l22Zzp677XapV4PARgIfCx857JHdhzBH6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gs6mSHp3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E403C433C7;
-	Fri, 29 Mar 2024 12:48:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711716484;
-	bh=Kx+1H+QtnuCB8ciX29fyhB79zT4Lxwy5pONlNfKxAiY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gs6mSHp3QbkBXyZ9L/bXL4MJ2rhy5ykyO1XxzKwMmecRldVYVzPjyYqxgtUAeRnUc
-	 b+6Y7LzYBXaPru5Fp1xyjCaoFCuEYg6Ymntmk4c9T81Ye5tc0j4waCC37DmOtOS2FI
-	 FCVO6aogisEEVRmCaIdJVxQyaZMN64Q+gDT5I/herSREGW/8WhLqnf4nXU3/ANB3kG
-	 fkVLtaXXufA07oMgxCvsGM2kDoMbLYI5z/xtt86M3xUnDVBnbdP5xWv34837byNldD
-	 PL7asfdK3eRNK5PMh3Z7/eoTR7vzO9Vx+lDwAn5N6SO49ozp0nFrd5atWH4rzglEwW
-	 IX6TPnoOYlVcw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: C Cheng <C.Cheng@mediatek.com>,
-	Bo Ye <bo.ye@mediatek.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-	Sasha Levin <sashal@kernel.org>,
-	rafael@kernel.org,
-	daniel.lezcano@linaro.org,
-	matthias.bgg@gmail.com,
-	linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.15 09/34] cpuidle: Avoid potential overflow in integer multiplication
-Date: Fri, 29 Mar 2024 08:47:10 -0400
-Message-ID: <20240329124750.3092394-9-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240329124750.3092394-1-sashal@kernel.org>
-References: <20240329124750.3092394-1-sashal@kernel.org>
+	s=arc-20240116; t=1711720317; c=relaxed/simple;
+	bh=1CtEIoW5Had2QClPgeyy73NMyNE2vfzEvp6rwVupVy8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QsY8Z30U3YSPmylknW2uxART9nBy2lEkIkBHB1TDBIoV0WK+GKVb4PQLsQjX2qLyZgPo62DmBLDA9jxjhKBSbqB791Wx4f5oEwZiXeV+NwHg1TQH3sRih4+Wnnur0PGBeoGUymVB4pgeX4nUg6Sa0Ti72QA2CBFnfTG7kcSH9hg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=pnxVq16l; arc=none smtp.client-ip=80.237.130.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:Reply-To:MIME-Version:Date:
+	Message-ID:From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:
+	Content-Type:Content-Transfer-Encoding:Content-ID:Content-Description:
+	In-Reply-To:References; bh=alXGIJuT49Qp7PxLLBHbTD5jAobwVRz5/+8YtYzfgt0=;
+	t=1711720315; x=1712152315; b=pnxVq16l1hp8mJs8kpmu42j+TltxDSKbXlVKtgzWcMWVmyy
+	vyVxqKenFSkOm6c2huPnzCRaWep7vdvL4qahX+qdlz0dfp4rQ2cXTE3FSs6xIU6+x5WpuiQe6ZXSD
+	njzgrDkhofXOJhQwWTq6EotYeFMaSew4JIuYr5kETsVCOT8g967xmtYEedoSypGrUKY+8CBdPUDfu
+	xJMvVp20tjRM5+sG2mKF5B7TYswCZ1QgrfuDDED/Gh3q4XFGYfwbIA6qm8BcgOPmWWVgK1FJ2zUko
+	bhBVQf8TXceQ0v+8LVXbokifaIFzF2w+VBN2xRgzI5HR4Jg4qn3jvDLMZNVELWvw==;
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	id 1rqCe3-0000RK-QN; Fri, 29 Mar 2024 14:51:47 +0100
+Message-ID: <1198933e-bf89-4237-a6e8-f7daeeebf885@leemhuis.info>
+Date: Fri, 29 Mar 2024 14:51:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.153
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Re: [PATCH 1/1] platform/x86/intel/hid: Don't wake on 5-button
+ releases
+To: David McFarland <corngood@gmail.com>, Chris Feng <chris.feng@mediatek.com>
+Cc: "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+ Alex Hung <alexhung@gmail.com>, Hans de Goede <hdegoede@redhat.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ "platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>,
+ Linux kernel regressions list <regressions@lists.linux.dev>,
+ linux-pm@vger.kernel.org
+References: <20240318191153.6978-1-corngood@gmail.com>
+ <20240318191153.6978-2-corngood@gmail.com>
+From: "Linux regression tracking (Thorsten Leemhuis)"
+ <regressions@leemhuis.info>
+Content-Language: en-US, de-DE
+In-Reply-To: <20240318191153.6978-2-corngood@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1711720315;987166c3;
+X-HE-SMSGID: 1rqCe3-0000RK-QN
 
-From: C Cheng <C.Cheng@mediatek.com>
+[CCing Chris, who authored the culprit; also CCing the platform folks
+and a few lists]
 
-[ Upstream commit 88390dd788db485912ee7f9a8d3d56fc5265d52f ]
+On 18.03.24 20:11, David McFarland wrote:
+> If, for example, the power button is configured to suspend, holding it
+> and releasing it after the machine has suspended, will wake the machine.
 
-In detail:
+David, from here is looks like this is stalled for ten days now. Or was
+there some progress and I just missed it?
 
-In C language, when you perform a multiplication operation, if
-both operands are of int type, the multiplication operation is
-performed on the int type, and then the result is converted to
-the target type. This means that if the product of int type
-multiplication exceeds the range that int type can represent,
-an overflow will occur even if you store the result in a
-variable of int64_t type.
+> Also on some machines, power button release events are sent during
+> hibernation, even if the button wasn't used to hibernate the machine.
+> This causes hibernation to be aborted.
 
-For a multiplication of two int values, it is better to use
-mul_u32_u32() rather than s->exit_latency_ns = s->exit_latency *
-NSEC_PER_USEC to avoid potential overflow happenning.
+From the cover letter[1] is sounds a lot like a "Fixes: 0c4cae1bc00d31
+("PM: hibernate: Avoid missing wakeup events during hibernation")" would
+be appropriate here.
 
-Signed-off-by: C Cheng <C.Cheng@mediatek.com>
-Signed-off-by: Bo Ye <bo.ye@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-[ rjw: New subject ]
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/cpuidle/driver.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Regarding the patch itself: hopefully this mail will get things moving.
 
-diff --git a/drivers/cpuidle/driver.c b/drivers/cpuidle/driver.c
-index f70aa17e2a8e0..c594e28adddf3 100644
---- a/drivers/cpuidle/driver.c
-+++ b/drivers/cpuidle/driver.c
-@@ -16,6 +16,7 @@
- #include <linux/cpumask.h>
- #include <linux/tick.h>
- #include <linux/cpu.h>
-+#include <linux/math64.h>
- 
- #include "cpuidle.h"
- 
-@@ -185,7 +186,7 @@ static void __cpuidle_driver_init(struct cpuidle_driver *drv)
- 			s->target_residency_ns = 0;
- 
- 		if (s->exit_latency > 0)
--			s->exit_latency_ns = s->exit_latency * NSEC_PER_USEC;
-+			s->exit_latency_ns = mul_u32_u32(s->exit_latency, NSEC_PER_USEC);
- 		else if (s->exit_latency_ns < 0)
- 			s->exit_latency_ns =  0;
- 	}
--- 
-2.43.0
+[1]
+https://lore.kernel.org/linux-pm/20240318191153.6978-1-corngood@gmail.com/
 
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
+
+#regzbot poke
+
+> Signed-off-by: David McFarland <corngood@gmail.com>
+>> ---
+>  drivers/platform/x86/intel/hid.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/x86/intel/hid.c b/drivers/platform/x86/intel/hid.c
+> index 7457ca2b27a6..707de9895965 100644
+> --- a/drivers/platform/x86/intel/hid.c
+> +++ b/drivers/platform/x86/intel/hid.c
+> @@ -504,6 +504,7 @@ static void notify_handler(acpi_handle handle, u32 event, void *context)
+>  	struct platform_device *device = context;
+>  	struct intel_hid_priv *priv = dev_get_drvdata(&device->dev);
+>  	unsigned long long ev_index;
+> +	struct key_entry *ke;
+>  	int err;
+>  
+>  	/*
+> @@ -545,11 +546,16 @@ static void notify_handler(acpi_handle handle, u32 event, void *context)
+>  		if (event == 0xc0 || !priv->array)
+>  			return;
+>  
+> -		if (!sparse_keymap_entry_from_scancode(priv->array, event)) {
+> +		ke = sparse_keymap_entry_from_scancode(priv->array, event);
+> +
+> +		if (!ke) {
+>  			dev_info(&device->dev, "unknown event 0x%x\n", event);
+>  			return;
+>  		}
+>  
+> +		if (ke->type == KE_IGNORE)
+> +			return;
+> +
+>  wakeup:
+>  		pm_wakeup_hard_event(&device->dev);
+>  
 
