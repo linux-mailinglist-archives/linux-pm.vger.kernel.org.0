@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-5646-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5647-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C662891872
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 13:15:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D6BC891876
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 13:15:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B84051F21A0D
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 12:15:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C16D31F21AC7
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 12:15:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 683CD8562A;
-	Fri, 29 Mar 2024 12:15:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3026285656;
+	Fri, 29 Mar 2024 12:15:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N6ZwJeaE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Svh6Eoae"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F73CF9E9;
-	Fri, 29 Mar 2024 12:15:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA60FF9E9;
+	Fri, 29 Mar 2024 12:15:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711714543; cv=none; b=U5WuaMWp6dO7tCriK3SDOzIwGkQtZhTe2sukum/BUhLztiULtKaQx+NoSWyrx5X3iBmc9M7UMCb6+DjNTk9UjsEXHHCN0n2tNeYNQleOJ8z3s7Tfu7EytXP2+XLHHViIImPiNUrooJaxyRMYe+FcQgT0csTIhw01RZunhmEOqcc=
+	t=1711714549; cv=none; b=jf2I8h4zFKKzHrreGk620AKUQ+Q5GNrRtltlnk2mbjcfL6mezwIZI1/P9dXIouSkSYlfG0VBATOL8ItyiYOKrTo2F8Y5EflVSjK+O+tg4bmdSiK8uOZoSGQiPX0DFo8NZi3urjsUvfj1WlKr/NTTZhZUOJJsySotH+wBfCz1iKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711714543; c=relaxed/simple;
-	bh=siGVj/Xg2z8xpiF3maaiGkxqFhkAIVxKGp8DjoZOtVE=;
+	s=arc-20240116; t=1711714549; c=relaxed/simple;
+	bh=5UiFWUC37ZhMG0HOo4KyMweQEBJUtmKpHlR7RXr0Fg0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nGVsD/u9IcpCaxPmiW42fh/339QoOyuR+IdP2+W8tZqkD1D+Je+dX8KBdtUHtiFSbx0UqWjSvZ2hHdWDpnp7idhUq3newLwj8zqOpbh+4+EQjdr0+QLUm93O8FSE7Ofsfq+D9Q7FP/ISq0LWluZM6BLX/G1zluBO9SAZcTzr/JM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N6ZwJeaE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B571C433C7;
-	Fri, 29 Mar 2024 12:15:37 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=R7TnVeX0XsWDEFVlZJtt2VyPh23CP/tFXzYU2AOPOKQLjm994J3lcvRh/OvuXz26+ZRLfe/lY/cNXGM7JPZD+/At6OMV6a+FHCLmy+jItMXlgxIVR/PKAxs5vY7btNmlLQHSWMT29Rb/ZYSbaIPhErtr8h4a9kVILbQqEsko/H4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Svh6Eoae; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AFBFC43394;
+	Fri, 29 Mar 2024 12:15:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711714542;
-	bh=siGVj/Xg2z8xpiF3maaiGkxqFhkAIVxKGp8DjoZOtVE=;
+	s=k20201202; t=1711714548;
+	bh=5UiFWUC37ZhMG0HOo4KyMweQEBJUtmKpHlR7RXr0Fg0=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=N6ZwJeaEDyZDDBo/ncq6WJVqtf8I+CRJIs98kEKjXk6Q+TJa3NKtvIrZKzIr71M69
-	 /tSaXoEuAW88VShb3e+vFXwznx/SH/DPEaowknnfJ5SujJdk7XAMZA55F3QQLMDRSK
-	 nUl+I9088iJcUrJG73WYA8D+ajIg3DyISRCDS5zJYNVtVhATdUBaE+jsN1netizodA
-	 uiyBgpiQi0xN92CBVc+ApxCK9E6y6EY2aC/VrEsYkBDHjOjZERTz4nH9iOlDS3Ms5B
-	 /be9PHo8Do4NuwE2dQ87io9pu1yhPisNbTxu+hqMxCnVMf0l9R0vdcUlATerH4o/T3
-	 hCaMadh8qK1bQ==
-Message-ID: <d9cfd735-05d4-4db0-9655-9108a6487a13@kernel.org>
-Date: Fri, 29 Mar 2024 13:15:33 +0100
+	b=Svh6EoaekQHiBaoQZ+LHkRGZW/WzStzRBWil63OPsIXuo0cmM9Qg/yIMz9Sdm2XKY
+	 NsaG3KkcY7FqDvhDsRHSaj2xLMYySrzzCkIAiK0FZllfCSd2iIpjuJMg/TNBq7Rg4u
+	 e5kiISj6FBnNFXMGgTu3+yG5UjImwf361QV2pjb6aUIAS206cav6EWmCWotKiVEwSw
+	 EASnX9e2O04TghVCGZTATeX8qAywfLro0M993seRReN+4TVLNp3QWbTic7VsCOX4h3
+	 1v+FbL9vmy3dnv2RSMD1PppLTCmfbXjp1IslMrVUmVQKfNRTmlyaMslEcku05LVAUK
+	 moyEwQbE/s6Sw==
+Message-ID: <c51c550b-e1d0-4016-8bae-35fb8b72d4bf@kernel.org>
+Date: Fri, 29 Mar 2024 13:15:41 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/18] media: platform: cros-ec: provide ID table for
- avoiding fallback match
+Subject: Re: [PATCH 02/18] gpio: cros-ec: provide ID table for avoiding
+ fallback match
 To: Tzung-Bi Shih <tzungbi@kernel.org>, bleung@chromium.org,
  groeck@chromium.org, linus.walleij@linaro.org, brgl@bgdev.pl,
  hverkuil-cisco@xs4all.nl, mchehab@kernel.org, sre@kernel.org,
@@ -60,7 +60,7 @@ Cc: chrome-platform@lists.linux.dev, pmalani@chromium.org,
  linux-gpio@vger.kernel.org, linux-media@vger.kernel.org,
  linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org
 References: <20240329075630.2069474-1-tzungbi@kernel.org>
- <20240329075630.2069474-2-tzungbi@kernel.org>
+ <20240329075630.2069474-3-tzungbi@kernel.org>
 Content-Language: en-US
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -106,17 +106,19 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240329075630.2069474-2-tzungbi@kernel.org>
+In-Reply-To: <20240329075630.2069474-3-tzungbi@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 29/03/2024 08:56, Tzung-Bi Shih wrote:
 > Instead of using fallback driver name match, provide ID table[1] for the
-> primary match.
+> primary match.  Also allow automatic module loading by adding
+> MODULE_DEVICE_TABLE().
 > 
 > [1]: https://elixir.bootlin.com/linux/v6.8/source/drivers/base/platform.c#L1353
 > 
 > Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+> ---
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
