@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-5620-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5621-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACF158914DA
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 08:58:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDE908914DF
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 08:58:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 693EC282B0F
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 07:58:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D2D01F2315E
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 07:58:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F058537FB;
-	Fri, 29 Mar 2024 07:57:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4412B481C4;
+	Fri, 29 Mar 2024 07:57:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y+fwJdaq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MxvNTi1o"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ED9C47F48;
-	Fri, 29 Mar 2024 07:57:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1579E4120C;
+	Fri, 29 Mar 2024 07:57:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711699074; cv=none; b=CMWJ1dMZK46z/T6gTKotRjIWXCyvsyuiirTVNLdvRCesgZfx6rW+wwRcRgQH8k0qsRfE25dmG5+OGRclHbUDX5iTg78OS3lN8GKw8BbTDPuIs+5jVPrNAvKG9PAfsVas8q3/kA3ShnMxvytRlnHl8KuDcEVqzBKSv67shnii7YY=
+	t=1711699077; cv=none; b=Ld/IBH989UXnQfR5Sh0FrVMjDJ/c2JwW0JkTTTCCdEo0deU48WX7E+NXkqKbyLJbpsQDA9eFrXVfmAcvhAHWsVMO+RbyWRt9zpv1rJIToC4h8fLFf80j/ynRBEu6C+ayVuA/ZvanYb7+fuiYlRaJ/evbRoW/+7/c7a3b9OO3T84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711699074; c=relaxed/simple;
-	bh=BgH88cOuBsp6Rcb7sjqjNz25lxzGf0AS7L5d/j/jfdE=;
+	s=arc-20240116; t=1711699077; c=relaxed/simple;
+	bh=lFOw5fKzQhBabthihGEd61vuz/8D+4zofg3e9FaPBrk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mA5Xmvml6a0pV+THM/SHuj7/lQKZYytfofP+Tdkt/MtkBsVwJei69y4r1fTX0tcDBfBb1tenRC0vlQQ6kLufQfydT/U5AC/ish95sttulsEv+Q1NtKuwLM5j4q4vxAr+CsURTyhy95wSA7KwSKkVimSTHzogEmAz4jECRWMZ+AI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y+fwJdaq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C13CFC433A6;
-	Fri, 29 Mar 2024 07:57:51 +0000 (UTC)
+	 MIME-Version; b=qQomGRYlhEZN5SB+ln/9cl1MgEfWI8B2G1ovMYgMhveOIvTgLgb4zn+Yr/BrWyJNCtrOwheo6Z+AfivC1g/PuEur2R7qtGFjt67DTPtVe7nSy2HqnonlYXtex1osPCxqurWA8hxi/AynlJ8ctYdcxibZQcYV4n+5OK203evrE20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MxvNTi1o; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88BFCC433B1;
+	Fri, 29 Mar 2024 07:57:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711699074;
-	bh=BgH88cOuBsp6Rcb7sjqjNz25lxzGf0AS7L5d/j/jfdE=;
+	s=k20201202; t=1711699077;
+	bh=lFOw5fKzQhBabthihGEd61vuz/8D+4zofg3e9FaPBrk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Y+fwJdaqBx1Cy0+jCAhuQGnps1JLB82nxhdBDvMlQfNVPCrSVz6XclD7+80AclNsl
-	 dWxWiB4hk8B5JeScudXSp9lQ+20sQ0q5Ba8o/9OXrO/2MEhRAu2OtheAmbfu0xLDiO
-	 ggQGUw0QOPeNtnL6rvZMy3lLa2q+FZI4D9ur6h+fkYpmLBfzR9/tS2YR1MrL8mR7W0
-	 Iu0EJaNQcSBYqgyBI26LV7E0thnRzemNBqqtVR9cWObR/DnLytnauD7LK6rhHmXBLW
-	 9THgDc2HBAJY9IvHz+eM5IVYSN/8jROJY3cdQ1xJ7JXNZak5gzd+Qv0PhDYnf09ZCB
-	 zpLyrtc1Zx9pw==
+	b=MxvNTi1ownDZ5TzUHkN3QCd8SFD8/TxANda/qG6OBvO59Vxyo6R6O73lCB2CYkKAM
+	 Uaf3toEyBj9bS4IC419SCis7teVFTWMsBd2YlnUdSy9xETWFRvBMPEgu/6ilMjjVIN
+	 jz193RqkjQLxBsgeLAeGSqkVglCqDzzcaPNQzc5SERm2sXGdhHWpSQyW/S0of8vho2
+	 DIMX9wcQkNnySop02WqMDErdGKoVkvnd9WGjhNnsUVkVpVRuRqjiMUyufmJ4AI6WOD
+	 04LXQ+xaXWlKxI5/GqArZRJRa8yLdwMboH0aeeCkMuXB3I7kImjqXZD7rRmJJTtPFr
+	 skHqNZjLUDB2A==
 From: Tzung-Bi Shih <tzungbi@kernel.org>
 To: bleung@chromium.org,
 	groeck@chromium.org,
@@ -58,9 +58,9 @@ Cc: tzungbi@kernel.org,
 	linux-pm@vger.kernel.org,
 	linux-rtc@vger.kernel.org,
 	krzk@kernel.org
-Subject: [PATCH 14/18] platform/chrome: cros_kbd_led_backlight: provide ID table for avoiding fallback match
-Date: Fri, 29 Mar 2024 15:56:26 +0800
-Message-ID: <20240329075630.2069474-15-tzungbi@kernel.org>
+Subject: [PATCH 15/18] platform/chrome: wilco_ec: telemetry: provide ID table for avoiding fallback match
+Date: Fri, 29 Mar 2024 15:56:27 +0800
+Message-ID: <20240329075630.2069474-16-tzungbi@kernel.org>
 X-Mailer: git-send-email 2.44.0.478.gd926399ef9-goog
 In-Reply-To: <20240329075630.2069474-1-tzungbi@kernel.org>
 References: <20240329075630.2069474-1-tzungbi@kernel.org>
@@ -75,54 +75,50 @@ Content-Transfer-Encoding: 8bit
 Instead of using fallback driver name match, provide ID table[1] for the
 primary match.
 
-Also shrink the name for fitting to [2].
-
 [1]: https://elixir.bootlin.com/linux/v6.8/source/drivers/base/platform.c#L1353
-[2]: https://elixir.bootlin.com/linux/v6.8/source/include/linux/mod_devicetable.h#L608
 
 Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 ---
- drivers/platform/chrome/cros_kbd_led_backlight.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/platform/chrome/wilco_ec/telemetry.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/platform/chrome/cros_kbd_led_backlight.c b/drivers/platform/chrome/cros_kbd_led_backlight.c
-index 793fd3f1015d..b83e4f328620 100644
---- a/drivers/platform/chrome/cros_kbd_led_backlight.c
-+++ b/drivers/platform/chrome/cros_kbd_led_backlight.c
-@@ -9,6 +9,7 @@
- #include <linux/init.h>
- #include <linux/kernel.h>
- #include <linux/leds.h>
+diff --git a/drivers/platform/chrome/wilco_ec/telemetry.c b/drivers/platform/chrome/wilco_ec/telemetry.c
+index b7c616f3d179..21d4cbbb009a 100644
+--- a/drivers/platform/chrome/wilco_ec/telemetry.c
++++ b/drivers/platform/chrome/wilco_ec/telemetry.c
+@@ -30,6 +30,7 @@
+ #include <linux/cdev.h>
+ #include <linux/device.h>
+ #include <linux/fs.h>
 +#include <linux/mod_devicetable.h>
  #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/platform_data/cros_ec_commands.h>
-@@ -247,17 +248,23 @@ static const struct of_device_id keyboard_led_of_match[] = {
- MODULE_DEVICE_TABLE(of, keyboard_led_of_match);
- #endif
+ #include <linux/platform_data/wilco-ec.h>
+ #include <linux/platform_device.h>
+@@ -409,12 +410,19 @@ static void telem_device_remove(struct platform_device *pdev)
+ 	put_device(&dev_data->dev);
+ }
  
-+static const struct platform_device_id keyboard_led_id[] = {
-+	{ "cros-keyboard-leds", 0 },
++static const struct platform_device_id telem_id[] = {
++	{ DRV_NAME, 0 },
 +	{}
 +};
-+MODULE_DEVICE_TABLE(platform, keyboard_led_id);
++MODULE_DEVICE_TABLE(platform, telem_id);
 +
- static struct platform_driver keyboard_led_driver = {
- 	.driver		= {
--		.name	= "chromeos-keyboard-leds",
-+		.name	= "cros-keyboard-leds",
- 		.acpi_match_table = ACPI_PTR(keyboard_led_acpi_match),
- 		.of_match_table = of_match_ptr(keyboard_led_of_match),
+ static struct platform_driver telem_driver = {
+ 	.probe = telem_device_probe,
+ 	.remove_new = telem_device_remove,
+ 	.driver = {
+ 		.name = DRV_NAME,
  	},
- 	.probe		= keyboard_led_probe,
-+	.id_table	= keyboard_led_id,
++	.id_table = telem_id,
  };
- module_platform_driver(keyboard_led_driver);
  
- MODULE_AUTHOR("Simon Que <sque@chromium.org>");
- MODULE_DESCRIPTION("ChromeOS Keyboard backlight LED Driver");
+ static int __init telem_module_init(void)
+@@ -466,4 +474,3 @@ module_exit(telem_module_exit);
+ MODULE_AUTHOR("Nick Crews <ncrews@chromium.org>");
+ MODULE_DESCRIPTION("Wilco EC telemetry driver");
  MODULE_LICENSE("GPL");
--MODULE_ALIAS("platform:chromeos-keyboard-leds");
+-MODULE_ALIAS("platform:" DRV_NAME);
 -- 
 2.44.0.478.gd926399ef9-goog
 
