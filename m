@@ -1,126 +1,132 @@
-Return-Path: <linux-pm+bounces-5624-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5625-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C958E8914EB
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 08:59:10 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 930B4891519
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 09:18:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 68F931F23152
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 07:59:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4FBB2B22BC7
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 08:18:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E52FC4A99C;
-	Fri, 29 Mar 2024 07:58:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 233463BBE2;
+	Fri, 29 Mar 2024 08:18:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W6Ro7Iyp"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="IsYIrUMT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B695142A89;
-	Fri, 29 Mar 2024 07:58:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C5339AF2;
+	Fri, 29 Mar 2024 08:18:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711699085; cv=none; b=W5z8j+YJEAGMSUziOkpEMi0WA0VbHM4Io+KFhr1f/L04CIn5hrH9DiUU+1CRW+xX7HKwmhFYqP3kYTk/YjNi6HO31DZ7W1pS8hFt7DRwbigR1myhgdqKYx0l1yEUUWduF95tHN1MsWAlqQozltP3X/Ay+XY38hR66MPkp7T2YOw=
+	t=1711700327; cv=none; b=hLtzqdFZAYXEsL17BGolQGx/M6ZZPJX2z3EqBxQEwWXCmARXSiaPbbe/XMqgGb8BQ22VJIctTXS/UsKs1tcU5Jdiyy3gGlcXuDjBiA4NtdS6pMQO6aC8hDSB/OcJWocEO2k/Y+UYwx4UfeSHh2WRv0pGDn+nGJJ2UWKaSkNa4TQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711699085; c=relaxed/simple;
-	bh=/0ERKwQzbBcB03sGj+BkH3NQoyRfCHwh6GJ4EJSb/CY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IteTTMdtt33yvJUZ5vsr5/AqXjCAOTVjTRKiteTbqk2oC5JK2r4msrS72Xiwoai/2ltelwrGRMxH4fkzqEJsds+96QYdEimvjIlXEWu65aTO22opG5sqHAUXRqBxLoLeU2Fmzy0p1+vbPm6rusvBHS4TpsYVTdBN37zaf8FJj0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W6Ro7Iyp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D88EAC433A6;
-	Fri, 29 Mar 2024 07:58:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711699085;
-	bh=/0ERKwQzbBcB03sGj+BkH3NQoyRfCHwh6GJ4EJSb/CY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=W6Ro7IypfmmWT7+JB6cNSgt06PrnA0g9HQADZagCxBLlztHncSV7w6D4WThSgswst
-	 /cEg1NxBMmp/JmhYRSnp1pMsjTMEepimEnC4gLM6i5hDunE+9FThU2Nemev6020fZG
-	 FvYHgFezABxppwogbspyV0tRUzxgV6r1zb+gdyrZGGhNunruycYy4zphPgyFWdvXIv
-	 6CsMxQKPtVANGXFdlnOae7pCC0ujLvp84US4cghLp8CVfzRtFY9AIlxxgyvYHFSS+E
-	 bNgcf/igsA8CEvB2UnIv7BRu8Res/4KuF4JNjH/lw+sErxxaI0qID3tC4Vj62vxwBw
-	 lycphMMQ1P1/Q==
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: bleung@chromium.org,
-	groeck@chromium.org,
-	linus.walleij@linaro.org,
-	brgl@bgdev.pl,
-	hverkuil-cisco@xs4all.nl,
-	mchehab@kernel.org,
-	sre@kernel.org,
-	alexandre.belloni@bootlin.com
-Cc: tzungbi@kernel.org,
-	chrome-platform@lists.linux.dev,
-	pmalani@chromium.org,
-	linux-gpio@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-rtc@vger.kernel.org,
-	krzk@kernel.org
-Subject: [PATCH 18/18] platform/chrome/wilco_ec: core: provide ID table for avoiding fallback match
-Date: Fri, 29 Mar 2024 15:56:30 +0800
-Message-ID: <20240329075630.2069474-19-tzungbi@kernel.org>
-X-Mailer: git-send-email 2.44.0.478.gd926399ef9-goog
-In-Reply-To: <20240329075630.2069474-1-tzungbi@kernel.org>
-References: <20240329075630.2069474-1-tzungbi@kernel.org>
+	s=arc-20240116; t=1711700327; c=relaxed/simple;
+	bh=ZfQyfX5CleZ4VR7K3+4MxiIAG8HW4iNUDvajqU/luM4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=dp/OR88Xqi4ocVy9ZpQUGns2Bc/OONrZ2oBg+e15b5iw2VbqeybFBuyCum7XtEbYNzD94PHGssuHjrPSPQbhugAbx/UFAodGzD7TVaI6VZ5Umvje1VO4ecauQAmVDUf0PCsWbfGwrSdAla7Djjn4rpjJXLaPmTCl2em45A5Dhlo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=IsYIrUMT; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1711700312;
+	bh=ZfQyfX5CleZ4VR7K3+4MxiIAG8HW4iNUDvajqU/luM4=;
+	h=From:Date:Subject:To:Cc:From;
+	b=IsYIrUMT6qvhdJP3Nqpx2Y1RQLmgsXvM5aDNvMplmnwg1Z+EN+Ee9OUMl9VdxkGCj
+	 EEI6+RpTvXqng1MU6tqHidAzFgi2dToJtmvKm2Pt+UIvd1iTAJrCw0pERRlYq6xrlB
+	 +9IHQ5yb2Mipza7zufX6g1/2JQI0LJBJUHbiQ1Kg=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date: Fri, 29 Mar 2024 09:18:29 +0100
+Subject: [PATCH] power: supply: core: simplify charge_behaviour formatting
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+Message-Id: <20240329-power-supply-simplify-v1-1-416f1002739f@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAFR5BmYC/x3MSQqEQAxA0atI1gbK2IN6FXEhVqo74BAqOCHev
+ YtevsX/FxhHYYMmuyDyJibLnFDkGQzffv4wik8GcvRwJdWoy84RbVUdTzSZdJRw4vNNVLkXc/A
+ eUquRgxz/b9vd9w+m194eZwAAAA==
+To: Sebastian Reichel <sre@kernel.org>
+Cc: Sebastian Reichel <sebastian.reichel@collabora.com>, 
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Hans de Goede <hdegoede@redhat.com>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1711700312; l=2284;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=ZfQyfX5CleZ4VR7K3+4MxiIAG8HW4iNUDvajqU/luM4=;
+ b=b0srRQ1bNaeTiPSKG7E15ppmTB1Ze+XWTTodFvwIzEbVkGs4E7euS+hhWsnqYJiBwBTXQVMu6
+ j6JJDJ4nQOWCUkxpx5GRc9d3c/B0zFXQVTD4YFl3ENB8KoABGcD1sxg
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Instead of using fallback driver name match, provide ID table[1] for the
-primary match.
+The function power_supply_show_charge_behaviour() is not needed and can
+be removed completely.
+Removing the function also saves a spurious read of the property from
+the driver on each call.
 
-[1]: https://elixir.bootlin.com/linux/v6.8/source/drivers/base/platform.c#L1353
+The convulted logic was a leftover from an earlier patch revision.
+Some restructuring made this cleanup possible.
 
-Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+Suggested-by: Hans de Goede <hdegoede@redhat.com>
+Link: https://lore.kernel.org/all/9e035ae4-cb07-4f84-8336-1a0050855bea@redhat.com/
+Fixes: 4e61f1e9d58f ("power: supply: core: fix charge_behaviour formatting")
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- drivers/platform/chrome/wilco_ec/core.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/power/supply/power_supply_sysfs.c | 20 ++------------------
+ 1 file changed, 2 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/platform/chrome/wilco_ec/core.c b/drivers/platform/chrome/wilco_ec/core.c
-index 9b59a1bed286..3e6b6cd81a9b 100644
---- a/drivers/platform/chrome/wilco_ec/core.c
-+++ b/drivers/platform/chrome/wilco_ec/core.c
-@@ -10,6 +10,7 @@
- #include <linux/acpi.h>
- #include <linux/device.h>
- #include <linux/ioport.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/platform_data/wilco-ec.h>
- #include <linux/platform_device.h>
-@@ -150,6 +151,12 @@ static const struct acpi_device_id wilco_ec_acpi_device_ids[] = {
- };
- MODULE_DEVICE_TABLE(acpi, wilco_ec_acpi_device_ids);
+diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+index 0d2c3724d0bc..b86e11bdc07e 100644
+--- a/drivers/power/supply/power_supply_sysfs.c
++++ b/drivers/power/supply/power_supply_sysfs.c
+@@ -271,23 +271,6 @@ static ssize_t power_supply_show_usb_type(struct device *dev,
+ 	return count;
+ }
  
-+static const struct platform_device_id wilco_ec_id[] = {
-+	{ DRV_NAME, 0 },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(platform, wilco_ec_id);
-+
- static struct platform_driver wilco_ec_driver = {
- 	.driver = {
- 		.name = DRV_NAME,
-@@ -157,6 +164,7 @@ static struct platform_driver wilco_ec_driver = {
- 	},
- 	.probe = wilco_ec_probe,
- 	.remove_new = wilco_ec_remove,
-+	.id_table = wilco_ec_id,
- };
- 
- module_platform_driver(wilco_ec_driver);
-@@ -165,4 +173,3 @@ MODULE_AUTHOR("Nick Crews <ncrews@chromium.org>");
- MODULE_AUTHOR("Duncan Laurie <dlaurie@chromium.org>");
- MODULE_LICENSE("GPL v2");
- MODULE_DESCRIPTION("ChromeOS Wilco Embedded Controller driver");
--MODULE_ALIAS("platform:" DRV_NAME);
+-static ssize_t power_supply_show_charge_behaviour(struct device *dev,
+-						  struct power_supply *psy,
+-						  union power_supply_propval *value,
+-						  char *buf)
+-{
+-	int ret;
+-
+-	ret = power_supply_get_property(psy,
+-					POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
+-					value);
+-	if (ret < 0)
+-		return ret;
+-
+-	return power_supply_charge_behaviour_show(dev, psy->desc->charge_behaviours,
+-						  value->intval, buf);
+-}
+-
+ static ssize_t power_supply_show_property(struct device *dev,
+ 					  struct device_attribute *attr,
+ 					  char *buf) {
+@@ -321,7 +304,8 @@ static ssize_t power_supply_show_property(struct device *dev,
+ 						&value, buf);
+ 		break;
+ 	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
+-		ret = power_supply_show_charge_behaviour(dev, psy, &value, buf);
++		ret = power_supply_charge_behaviour_show(dev, psy->desc->charge_behaviours,
++							 value.intval, buf);
+ 		break;
+ 	case POWER_SUPPLY_PROP_MODEL_NAME ... POWER_SUPPLY_PROP_SERIAL_NUMBER:
+ 		ret = sysfs_emit(buf, "%s\n", value.strval);
+
+---
+base-commit: 070c1470ae24317e7b19bd3882b300b6d69922a4
+change-id: 20240329-power-supply-simplify-5722806eefdd
+
+Best regards,
 -- 
-2.44.0.478.gd926399ef9-goog
+Thomas Weißschuh <linux@weissschuh.net>
 
 
