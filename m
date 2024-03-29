@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-5648-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5649-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B16589187A
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 13:16:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 377D1891882
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 13:17:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1BE29B20FF1
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 12:16:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B6499284F36
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 12:16:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0890C85649;
-	Fri, 29 Mar 2024 12:16:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FDAC85295;
+	Fri, 29 Mar 2024 12:16:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kYEIIGTQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="agm9B8k0"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C91328563A;
-	Fri, 29 Mar 2024 12:16:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BF4964C;
+	Fri, 29 Mar 2024 12:16:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711714566; cv=none; b=iUb+AnVXrtRzI7CdJnesxOs/Gqq7jjHESPAW7EP57CJys1+K54ue9RH2fpvlUyIRGXOHupiSFSHfklC9XFTHulUOL6dSICQNSLy5NEi4W7QcQVgHvRxJcrL42KkiQDgSmtLV9j/alW8WjtZVVt2bNrIb9OXgF1M7k4iuvpwwbGU=
+	t=1711714613; cv=none; b=MlhApPRMYbCGMK1DfEUvaI4V11WXVRjDqLMu5YDoVwazdlkzt7/AQdWeFY9b7GzuwGC2pIRF9EFNAO8CA/kpNbFI1zMo97mznrtzXN+1zJpjDdP0i9zVH7aOtcVTMfX6ygSnRkHsxwR1Izde19l1wuwNCAe3H54MBhYcPpHRUWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711714566; c=relaxed/simple;
+	s=arc-20240116; t=1711714613; c=relaxed/simple;
 	bh=siGVj/Xg2z8xpiF3maaiGkxqFhkAIVxKGp8DjoZOtVE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eEiwLvXyCG6hen6hlEfi3s7stRdp7FLU64Cl/okgUvngJFp6twnn9TmCpyo6pLNWcXV3IwKcuQ0EDPsKwCAxFlKhl5mbajROZI5TyRcDIiiLc6dW8ksRGAOqtzUIEuUI7Fgnv7lrQxohut+i3KPtjPg+Yi8djJVNp3gaj7xF964=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kYEIIGTQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCBCBC433C7;
-	Fri, 29 Mar 2024 12:16:01 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=qaoCukWay+hnk+tCXK+mmJTjeh5AWFjmy03PT2eQZR/wS2N/mfTjS44ZN/BXF+0dnqToOSPRYc95t8EPxKdgMJ94/hVIwKt2gkC+qa80o7WGmOoz2V+KJBv2JU3UDPogkZP9O3IbrWo6LIAWrPlEAL2Qu8QFp2opH2KlpxrwNxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=agm9B8k0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7C66C433C7;
+	Fri, 29 Mar 2024 12:16:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711714566;
+	s=k20201202; t=1711714612;
 	bh=siGVj/Xg2z8xpiF3maaiGkxqFhkAIVxKGp8DjoZOtVE=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=kYEIIGTQ/8Wr8/MV2eaFVHQoaSKILNwRVyHGjS41Gli0aF/tSUMR6WrW+EzwwK6HU
-	 UbqZEBc4sk/3pYQBpjaDeCr+tXJw0/4CllwR6CqisUGmqpkJLMVzqXhVdlI/jYY4nD
-	 VxfI9oEWZbM/DrfGhrnqeSumRdun1qZ30cLgUZ5MKe57XAGYa/ItoS39GimpIc3cc4
-	 9IswswrFmwdyx/x1PeGnsxxWoMSE8h715LuGETKi5Ti424R6ghlLeG26mj/jCzi/vR
-	 xbgtNn2gO4iUJ6Uf7Nnza4BvuI7pLGF56VfiyZb2sXSkJK9TsnSWDrVrJ2PbeGIjCP
-	 g2P5HSJw4Xg0w==
-Message-ID: <3ddeae2c-babe-4617-9c62-617f40d237e4@kernel.org>
-Date: Fri, 29 Mar 2024 13:15:58 +0100
+	b=agm9B8k0qMaJqSYnwi8+ZujRebrc0e59CHXvRCeGgADiqzynoaRPt31+9A4ox4Lip
+	 F5F+UPInaX+mkSllD2b9KQBo602ZgQmP1LnaWc6zZsI8TETcCwP3jJV5zdJe/c/8zr
+	 jQdbCQOdfEHgnLY/kN6NpU2+qjyRw2oWNXSueQbzkYkvSyKBzuvwFrM+RzjKpEkb9O
+	 sRyEFAc7Xejj4PA5IU4ikvwLZdumjrpKSFZcV+bgD30JyRFaU6cGf0fekXk6boIHGj
+	 NmeXH6N+rRrg2ZXEgmUqbPSGWARMorIBpJsEFPFFq/zClAbgzQo2mkMJrk33SlgOJk
+	 d1Ti0anT50OyA==
+Message-ID: <8dd7ba5d-0682-47a2-9dec-ba528f5ca1d7@kernel.org>
+Date: Fri, 29 Mar 2024 13:16:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 03/18] rtc: cros-ec: provide ID table for avoiding
- fallback match
+Subject: Re: [PATCH 04/18] platform/chrome: cros_ec_sensorhub: provide ID
+ table for avoiding fallback match
 To: Tzung-Bi Shih <tzungbi@kernel.org>, bleung@chromium.org,
  groeck@chromium.org, linus.walleij@linaro.org, brgl@bgdev.pl,
  hverkuil-cisco@xs4all.nl, mchehab@kernel.org, sre@kernel.org,
@@ -60,7 +60,7 @@ Cc: chrome-platform@lists.linux.dev, pmalani@chromium.org,
  linux-gpio@vger.kernel.org, linux-media@vger.kernel.org,
  linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org
 References: <20240329075630.2069474-1-tzungbi@kernel.org>
- <20240329075630.2069474-4-tzungbi@kernel.org>
+ <20240329075630.2069474-5-tzungbi@kernel.org>
 Content-Language: en-US
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -106,7 +106,7 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240329075630.2069474-4-tzungbi@kernel.org>
+In-Reply-To: <20240329075630.2069474-5-tzungbi@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
