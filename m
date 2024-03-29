@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-5661-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5663-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84205891AE0
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 14:12:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FC47891BF3
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 14:38:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 394911F29E08
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 13:12:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A21291C24108
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 13:38:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03180160782;
-	Fri, 29 Mar 2024 12:33:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94D7E179205;
+	Fri, 29 Mar 2024 12:40:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dtIMhUz+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NrZKtPVt"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDFF715FD1E;
-	Fri, 29 Mar 2024 12:33:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67CA8179201;
+	Fri, 29 Mar 2024 12:40:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711715607; cv=none; b=oyCPdc+HtrCEIQO0xG0ZB9UlOfbc3FrrTvc8JScxVaRoE47n+T9omPqQYt2147w2EOcUVhiuBB0pCcg/jv/JoqovKBAE5NGHXKrlTGiuyj0udym+eFQ5Gp9krkKa1NFZmmU6N6G+jMocMXMZMjW+SSVe9bfrNPsejuXzJ46axpQ=
+	t=1711716051; cv=none; b=fsIBZz3Dtmsw4jaB0IWZA5aUGD2FdnUfwYlajBFJKJd2414kp4sdOkktPk9mM1/N9KLnqmOIjv2LkgPqlD0MURF9CoJQJObMzNNjtnEV3xqP0yYgGynAd2ekm5y4w/zfQ08V1W9rCzWsA1ybSfyyg2xmrIRBtWQAFR4WUSv8nr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711715607; c=relaxed/simple;
-	bh=Kx+1H+QtnuCB8ciX29fyhB79zT4Lxwy5pONlNfKxAiY=;
+	s=arc-20240116; t=1711716051; c=relaxed/simple;
+	bh=uRO9hNSHchqspmCb1F6je6akXTN4Hy8qBEMg95DG9jg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bzxxAdfazUuGsCgwEkaY/4ceAMH1O9tGzDrjcR8kYRpLGl+Pw7rseZXCBoX/8OJ48wjsZkLSQN25p5/gNQoiRU5QelAs1KMCS0tqxmIIDtiwM+KcNS7BLixo83/LttQqXP8FnH3N1P6lzr1E0M9JJaJkcnpr30DGVFy9HwZgclc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dtIMhUz+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2734C43390;
-	Fri, 29 Mar 2024 12:33:25 +0000 (UTC)
+	 MIME-Version; b=MxpwZyMmtovYw7hVynB4z2n62Egex+M6Z/63D2tUSlcL3dPERQ8+ByUGS7MvUpdShV9J7rmkZQB5HCbzZ4dqPJ37WjP1jXaMJ7M5j+4MViWrO4pSU2088kIsUmehiM3Zsevpn2gedPTZLW3sS73qsdOThKmHmV1aaIzl1/E8Tec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NrZKtPVt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95DACC43390;
+	Fri, 29 Mar 2024 12:40:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711715607;
-	bh=Kx+1H+QtnuCB8ciX29fyhB79zT4Lxwy5pONlNfKxAiY=;
+	s=k20201202; t=1711716051;
+	bh=uRO9hNSHchqspmCb1F6je6akXTN4Hy8qBEMg95DG9jg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=dtIMhUz+sjAK2RIAXT0244Fa83nkSFwUPuMJyUW1fJrPI4ci51MyCJ/qXMDlINIZl
-	 DGjD+A197VcN/cZeNK6NxXQMgfObBm4Tp4dBRzUyTjm4Isf9TAbTIa6i0HWxN8M5F1
-	 ErEizI+j2IKccahFXAdgHA+W0qt8v0/uSCXoEnOka4yVJBv/UQ5woJAgM9gVwM/3YY
-	 rbcHDRe/mT0EjrFV4nwUsai+zF9dsSMlMMjwu1+FL6mn54JLjj7FX2ENEu0yI67xFi
-	 zR9ZZXjg3OrF92z9Fy6UCGfPGia5YyO1mI57vmOcDTARIVNYd4Pb+GT/kRbz6Fmmcr
-	 e69NRzo/eT7kA==
+	b=NrZKtPVtBxsI1CXM7WGuCkhix7O9SUgBdXFPSSxc0cTFh1+nJm+2RvxxChlUc0ct1
+	 q2UvZyv2UNtrYBMz2ybacAxfrR3meAKJUl4+EaxJEQLbzIgbCw555SMumiHpwRC/Sb
+	 sTyysz5wmC0YDXiD6bEpftRrY4wEYF0ImWn74cKzxX5nmF3A9EpdSmdwKFdDzCovjD
+	 R5xc2ZtDLUHKvKgopKgX8d14QNHOzdF93mj+35Yfae8pSNahMsS51VQ70Cp4BK+u3e
+	 phahzODtPeGYVfv47i1tquE1CRDUAyV8R+RcOUZYeGXraW0qtE4g3A3ItuADBcWVat
+	 vjS0wA0QkFF7w==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -55,12 +55,12 @@ Cc: C Cheng <C.Cheng@mediatek.com>,
 	linux-pm@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.15 06/20] cpuidle: Avoid potential overflow in integer multiplication
-Date: Fri, 29 Mar 2024 08:32:54 -0400
-Message-ID: <20240329123316.3085691-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.8 28/98] cpuidle: Avoid potential overflow in integer multiplication
+Date: Fri, 29 Mar 2024 08:36:59 -0400
+Message-ID: <20240329123919.3087149-28-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240329123316.3085691-1-sashal@kernel.org>
-References: <20240329123316.3085691-1-sashal@kernel.org>
+In-Reply-To: <20240329123919.3087149-1-sashal@kernel.org>
+References: <20240329123919.3087149-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -69,7 +69,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.153
+X-stable-base: Linux 6.8.2
 Content-Transfer-Encoding: 8bit
 
 From: C Cheng <C.Cheng@mediatek.com>
@@ -101,7 +101,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/cpuidle/driver.c b/drivers/cpuidle/driver.c
-index f70aa17e2a8e0..c594e28adddf3 100644
+index d9cda7f6ccb98..cf5873cc45dc8 100644
 --- a/drivers/cpuidle/driver.c
 +++ b/drivers/cpuidle/driver.c
 @@ -16,6 +16,7 @@
@@ -112,15 +112,15 @@ index f70aa17e2a8e0..c594e28adddf3 100644
  
  #include "cpuidle.h"
  
-@@ -185,7 +186,7 @@ static void __cpuidle_driver_init(struct cpuidle_driver *drv)
- 			s->target_residency_ns = 0;
+@@ -187,7 +188,7 @@ static void __cpuidle_driver_init(struct cpuidle_driver *drv)
+ 			s->target_residency = div_u64(s->target_residency_ns, NSEC_PER_USEC);
  
  		if (s->exit_latency > 0)
 -			s->exit_latency_ns = s->exit_latency * NSEC_PER_USEC;
 +			s->exit_latency_ns = mul_u32_u32(s->exit_latency, NSEC_PER_USEC);
  		else if (s->exit_latency_ns < 0)
  			s->exit_latency_ns =  0;
- 	}
+ 		else
 -- 
 2.43.0
 
