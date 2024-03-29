@@ -1,48 +1,74 @@
-Return-Path: <linux-pm+bounces-5698-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5699-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEE4E892150
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 17:11:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0C41892182
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 17:20:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 17AF2B27117
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 15:55:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 61BA21F25CC9
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 16:20:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F3966A355;
-	Fri, 29 Mar 2024 15:55:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 834BF6A8D2;
+	Fri, 29 Mar 2024 16:20:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="blQQS/ze"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nyunFQHw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B6BA5B1E6;
-	Fri, 29 Mar 2024 15:55:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CFD285654
+	for <linux-pm@vger.kernel.org>; Fri, 29 Mar 2024 16:20:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711727727; cv=none; b=rituFX7wKtr5JDGVl4LmNgy4Mk/wxsC48bqdazUj7bB7bJovNsdDZOnW7WXUKw5faFhOispUbNPMvfe/nAyUbok8zMLkbECUyZVabq9fc/aiWT/3ks24dxCyObeAvkERxOF5xJyeaguUhvjXjSC746PLPDf4iT91ZaaVc+4s6h0=
+	t=1711729244; cv=none; b=qZyWGuA7sMbZ07NMPYjnLSHwp2ow31KAdUkEpze6onCgjcMzS7PLnw+8SqhU07SEhYzsRfHzYChduTP2lCNtcHChQBRMj60xuhZJA260HfkGP0HtBSPpEdqmPjOWLxy8ROrCK+6bhjmn5xIHMQD10OIS4BOPd70m02qeOmHXxo8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711727727; c=relaxed/simple;
-	bh=8QThFo/0MRq+6GYzg5ufLVNNjLX3N2qhGYo08JHWd2A=;
+	s=arc-20240116; t=1711729244; c=relaxed/simple;
+	bh=aNV9rU7rNrtAHY4j9cGg2iNrlDQzSv+NWW6nridB+o4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Cc1d89kDvClGv+IO61jDaF1agmrxpSMnQ/USdilWvEaShYgO+S8lcSPwLtjg75YUVjVD/1bAxk9mfRApTNRdd06PNrRh9YZi8jAN5kRQbGp6zDxqQher0Gs6YclfDEy8AO0aCfvieFuh4g98elWTWMjcsC3Hjw/8RgNLDlcnVO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=blQQS/ze; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E676EC433F1;
-	Fri, 29 Mar 2024 15:55:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711727726;
-	bh=8QThFo/0MRq+6GYzg5ufLVNNjLX3N2qhGYo08JHWd2A=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=blQQS/zeN3+uXmnUMM3+vvTObyLgXtGaisN2WOrV+P+eMGnZnoXXKLINyoO6G+r6E
-	 Rav5i8To3y3KFJSJyZKEtW5x4saNmCbRfFkBPihys++bniGm07F4fiFdUSaFYmMAnv
-	 T1482wUb/ZmrE/DPkzzXwfAQ4EZ/E6AkYy8VF5bK5UnHa4O27nzc98Lt7snwRaFMLK
-	 SQNTZZDgmxUilQIWdMofF1BqWRnRqnRKJ+H63L+ZPQQZLZqq8uTdOpBZSJQdiT+hpm
-	 oXVOmfUVLbpXktGQUpl8wDQxg3M67dX7u4wsnD71+mvw4x9NQVceyg153dRybvxCzH
-	 CnGGgEZt4ec8w==
-Message-ID: <b927ea54-ba02-4410-8cc6-4f1258d03fce@kernel.org>
-Date: Fri, 29 Mar 2024 16:55:20 +0100
+	 In-Reply-To:Content-Type; b=UBhGVmkoq785tkoaknOjCHYI8o2bSbvXj8BOdpfEdLcTxDASBE2GCQhnOHBT94X3Oujuhk5NRxNYnKP/iK18+0ly3PGwpX7Yy9kReAZkjAs1F0+DrAt0GLXqiIknNh19YOYXXerM7IQVlJlHvpo8L7YJyKWpo4pP1dsBPBr1A30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nyunFQHw; arc=none smtp.client-ip=209.85.208.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2d6a1af9c07so24349071fa.3
+        for <linux-pm@vger.kernel.org>; Fri, 29 Mar 2024 09:20:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1711729241; x=1712334041; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Nv3nKG3kt1KExo6n8MktRZ2ubBO2o5feKCsd61d5ipk=;
+        b=nyunFQHwBy0+TCKUoThhWMuGSOkvKrgYWjmJKo70EsExNouwEVj0aGjD8CfFDPt7Qv
+         /dE3ql2uUNCVAQWmJhGiasfTx2i9t5sgaEUhehcQzEOE0sMuig40bp4XaHxDbRTMQksQ
+         p4aRcNq5b6xXLpG5foe2Td7Vh4Opey44p0IKHT5sxFBnfeGPUFosJRaHm2w0l41/BHa2
+         LEWBTw5OYmsL9JzpSRL5ZEF/e4o8rDlTNNoaFH4DArKzWv0rvqKw8v0fgB4HRcpLWf3I
+         N395qSRmpKa9QYVzrtgl5eewTxVS056hZqTMcQrm3c5SbZfKGh1mn5sdQic5eiAbX65E
+         mL+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711729241; x=1712334041;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Nv3nKG3kt1KExo6n8MktRZ2ubBO2o5feKCsd61d5ipk=;
+        b=aKdOaGxFLVyEfTtVeURQpxNLUpnfXLRDTPC6v1xBTFct+snOdUxvl1ly4g5nOW3v/8
+         t1CfKi6sC3iK6I3wzk/OHk9tcfD4caDvTinKSpiDtly/9LqXYNBbz5nVoFmkfVUKeXWd
+         Qcc/A+Fj68s1P2rqH6rUY9E2AL8cnmBmjoMQF6uiVhDKmZXT9ME3PMICI1UhbOK2Tkl+
+         UESpaFPzUF6ZkTcEKl88XfSp5SUvSHg5oHwDjNDG9hMRHbHB9Vfl6CSRR8jj/HTchFCc
+         iRP3AM4hn9vUAtYDDs0PuP9oiOHvp6tq8CXoeusvsv9aTSa3LxkdLWfoIQrf0IrF8+GR
+         UW1w==
+X-Forwarded-Encrypted: i=1; AJvYcCUjPmf7W8f63PJmCRFEQa2VJKgWptP16X41GVQztAEL9XpWcIu7V+F2VpkvVyucD0y7MpUclhhXxbShK6H8r0k7SeruzSPYICE=
+X-Gm-Message-State: AOJu0Yyd0HeC2c3PtJi2deI7Ceg5kZulJu+xll8jv35b5G7OvvCKznlf
+	CbzeQPYAoZev8Mny3PJe/jDdB1rc0Dm1GSHLQoI8d4L35fS5DESc39/vyyCWU+0=
+X-Google-Smtp-Source: AGHT+IFkqPrhomWaxduOdYh034fYe2OmWOQleSdfiah9gsEO+++4wFQjI0nbDJP5t3PvIV15vROuyQ==
+X-Received: by 2002:a2e:3c12:0:b0:2d7:1731:191d with SMTP id j18-20020a2e3c12000000b002d71731191dmr1357519lja.3.1711729240746;
+        Fri, 29 Mar 2024 09:20:40 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id n18-20020a05600c4f9200b004148c3685ffsm5964877wmq.3.2024.03.29.09.20.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Mar 2024 09:20:40 -0700 (PDT)
+Message-ID: <16999076-4ec6-4193-8a90-40a3f530a0b5@linaro.org>
+Date: Fri, 29 Mar 2024 17:20:39 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,79 +76,37 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 13/18] platform/chrome: cros_ec_vbc: provide ID table for
- avoiding fallback match
-To: Tzung-Bi Shih <tzungbi@kernel.org>, bleung@chromium.org,
- groeck@chromium.org, linus.walleij@linaro.org, brgl@bgdev.pl,
- hverkuil-cisco@xs4all.nl, mchehab@kernel.org, sre@kernel.org,
- alexandre.belloni@bootlin.com
-Cc: chrome-platform@lists.linux.dev, pmalani@chromium.org,
- linux-gpio@vger.kernel.org, linux-media@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org
-References: <20240329075630.2069474-1-tzungbi@kernel.org>
- <20240329075630.2069474-14-tzungbi@kernel.org>
+Subject: Re: [PATCH v5] thermal/drivers/tsens: Add suspend to RAM support for
+ tsens
 Content-Language: en-US
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240329075630.2069474-14-tzungbi@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: Priyansh Jain <quic_priyjain@quicinc.com>,
+ Amit Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>,
+ "Rafael J . Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: quic_manafm@quicinc.com
+References: <20240328050230.31770-1-quic_priyjain@quicinc.com>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20240328050230.31770-1-quic_priyjain@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 29/03/2024 08:56, Tzung-Bi Shih wrote:
-> Instead of using fallback driver name match, provide ID table[1] for the
-> primary match.
+On 28/03/2024 06:02, Priyansh Jain wrote:
+> As part of suspend to RAM, tsens hardware will be turned off.
+> While resume callback, re-initialize tsens hardware.
 > 
-> [1]: https://elixir.bootlin.com/linux/v6.8/source/drivers/base/platform.c#L1353
-> 
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+> Signed-off-by: Priyansh Jain <quic_priyjain@quicinc.com>
 > ---
->  drivers/platform/chrome/cros_ec_vbc.c | 9 ++++++++-
 
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+Applied, thanks
 
-Best regards,
-Krzysztof
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
 
