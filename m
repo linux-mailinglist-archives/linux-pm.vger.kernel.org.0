@@ -1,45 +1,46 @@
-Return-Path: <linux-pm+bounces-5606-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5607-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 229DF8914A1
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 08:57:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE3AF8914A5
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 08:57:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A489A1F21CA8
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 07:57:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0DBA41C2240A
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 07:57:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19F4840877;
-	Fri, 29 Mar 2024 07:57:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B27C642070;
+	Fri, 29 Mar 2024 07:57:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AOvqi7Sf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sSw0TcbA"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D56183B78E;
-	Fri, 29 Mar 2024 07:57:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8140B3B78E;
+	Fri, 29 Mar 2024 07:57:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711699036; cv=none; b=rEGYg64d+9iXF3GJmx4KDWxKitE7eSLyZLThS46Y50rPXwgDqWsKtyx1yPILMnVajmFIbXMzc+peYQZlSWONIvEwkiJhS+jI/hW3tAkiFjg1CwZTIsj2UHj/+nLDKLg3JJF35esOdAiIEitoZZnjFtrs19J3ohrtFn8qnwZHYyA=
+	t=1711699038; cv=none; b=mI9KGVRQgLXYherBOaQwiqx/z8X8S8BKp9TGYuwKc3HaauNBKDM6sZEpBEmEbRFAg+jM2h/kTtBn6vu+2HaUUo1mZyyQq8oKUbbLBSG51SFZi9PzAvGVBSNbHu9zx56pQiTMFOx+VulaYVIxDWA2tlmwmkhtzSLixPSi+6Y7qlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711699036; c=relaxed/simple;
-	bh=VfU7QoMGIzVV4cTnNZd5yeDBjCpnVSdeFYafrvvqPiM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HMSut6z74mSmp6qApezYAZLsInkheZ+GtEoKlNVaUSf6NExK1inkLY+AcpRPY2raGjJj96JJaeVLpDP4eByQviQ5/WyC7ZaBTdrmRT8VNAH1NaXrQAUmjRZoE3EfF+DgT4c81WDRhMAuvkjC5i8cEOt4qLu9TStYsBO532lmnFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AOvqi7Sf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D92CDC433F1;
-	Fri, 29 Mar 2024 07:57:12 +0000 (UTC)
+	s=arc-20240116; t=1711699038; c=relaxed/simple;
+	bh=rYj4oByNDWSNNv8deLJRnMMa9IMZFSG3YNnpzY4T5ds=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=LLRE5HgMQmqyT0qKDju3Ulz1YScm9P0g702YIR8ZUGukSyWezELzgb+gXdCk+TFHeZOOeVF2mWt+9RQ6WSCqmEvB3W8FVvyqmnH7MtSGYzBMjYBIBhItyk9ASsNstEmSS9xETQFhfIk/LG+k8+pu+4z6/pqAIpaFt1qkD32TsWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sSw0TcbA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9483C433A6;
+	Fri, 29 Mar 2024 07:57:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711699035;
-	bh=VfU7QoMGIzVV4cTnNZd5yeDBjCpnVSdeFYafrvvqPiM=;
-	h=From:To:Cc:Subject:Date:From;
-	b=AOvqi7Sfkt5flEJlMlu0M/klCkfS119dFjq3LoNxICxK+KOARjBZryfgw1kBPxygK
-	 w6gIDCSwBIHs+u2hUwSkXk6UgHs6sqRvNfRrFxwwtgHV3QugIUj1eXdqFffeDCv/1R
-	 CYYJ/XBYs6n0MvDaJOdZDIk0p0A6RN46nC/JIWoPpWBAiQQYP/goCWWV4UggqLfFZH
-	 2ecF5JSAyHl2eY4AQVUhDbWbP24LJVFZK1vsOQ2AbmfJ1JDI3FscqBHF3Xiz4tVt0V
-	 k8o9muzcjqIB6pL+XE6yfjbSVjANLJDypoELXvDhT6t6JtQi7MYLWpJOR0q8al1V/G
-	 9YRqXfiOb3dtA==
+	s=k20201202; t=1711699038;
+	bh=rYj4oByNDWSNNv8deLJRnMMa9IMZFSG3YNnpzY4T5ds=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=sSw0TcbAmrkw0IVVPBM+6Xb00vXRMrrkPRxwhXo+SWmEp9geg2jy74+FkG9UDt1H2
+	 FQqeZ8Y+IDVij/AMfEm1gYMMWgofQEpF8bFN97vxvVtSGas/NJtBjN/RdMRAaXk/l7
+	 o1Kr5HwT9buz1Cj6kHgsBcP/3QFOSZMdi63x9JX4CiM7jbuFgBrMRVSzl662X2bv9v
+	 2oAs3fTaUog2/um27x06mMcBCNBpk8R7gddsF/rOQZ5TrJdLptC5wp4IQYzqT4J7nU
+	 ZMgqzomA3BpbA/9RowBzCeEpwOjIOwV+2I//5V+APXQGduMMX+pgSXQpkTVMkKjLRX
+	 8JEpWp5cxFFhw==
 From: Tzung-Bi Shih <tzungbi@kernel.org>
 To: bleung@chromium.org,
 	groeck@chromium.org,
@@ -57,10 +58,12 @@ Cc: tzungbi@kernel.org,
 	linux-pm@vger.kernel.org,
 	linux-rtc@vger.kernel.org,
 	krzk@kernel.org
-Subject: [PATCH 00/18] platform/chrome: provide ID table for avoiding fallback match
-Date: Fri, 29 Mar 2024 15:56:12 +0800
-Message-ID: <20240329075630.2069474-1-tzungbi@kernel.org>
+Subject: [PATCH 01/18] media: platform: cros-ec: provide ID table for avoiding fallback match
+Date: Fri, 29 Mar 2024 15:56:13 +0800
+Message-ID: <20240329075630.2069474-2-tzungbi@kernel.org>
 X-Mailer: git-send-email 2.44.0.478.gd926399ef9-goog
+In-Reply-To: <20240329075630.2069474-1-tzungbi@kernel.org>
+References: <20240329075630.2069474-1-tzungbi@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -69,68 +72,54 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Inspired by [1].  Turn all MODULE_ALIAS() in ChromeOS EC platform drivers into
-proper platform_device_id table and MODULE_DEVICE_TABLE().
+Instead of using fallback driver name match, provide ID table[1] for the
+primary match.
 
-The series is basically looking for drivers from:
-- `struct mfd_cell` in drivers/mfd/cros_ec_dev.c.
-- grep -R MODULE_ALIAS drivers/platform/chrome/.
+[1]: https://elixir.bootlin.com/linux/v6.8/source/drivers/base/platform.c#L1353
 
-[1]: https://lore.kernel.org/chrome-platform/20240325-public-ucsi-h-v2-0-a6d716968bb1@chromium.org/T/#m2cc7d6f770cf0a48fb537bbaed655169c974f067
+Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+---
+ drivers/media/cec/platform/cros-ec/cros-ec-cec.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-Tzung-Bi Shih (18):
-  media: platform: cros-ec: provide ID table for avoiding fallback match
-  gpio: cros-ec: provide ID table for avoiding fallback match
-  rtc: cros-ec: provide ID table for avoiding fallback match
-  platform/chrome: cros_ec_sensorhub: provide ID table for avoiding
-    fallback match
-  power: supply: cros_usbpd: provide ID table for avoiding fallback
-    match
-  platform/chrome: cros_usbpd_logger: provide ID table for avoiding
-    fallback match
-  platform/chrome: cros_usbpd_notify: provide ID table for avoiding
-    fallback match
-  platform/chrome: cros_ec_chardev: provide ID table for avoiding
-    fallback match
-  platform/chrome: cros_ec_debugfs: provide ID table for avoiding
-    fallback match
-  platform/chrome: cros_ec_sysfs: provide ID table for avoiding fallback
-    match
-  power: supply: cros_pchg: provide ID table for avoiding fallback match
-  platform/chrome: cros_ec_lightbar: provide ID table for avoiding
-    fallback match
-  platform/chrome: cros_ec_vbc: provide ID table for avoiding fallback
-    match
-  platform/chrome: cros_kbd_led_backlight: provide ID table for avoiding
-    fallback match
-  platform/chrome: wilco_ec: telemetry: provide ID table for avoiding
-    fallback match
-  platform/chrome: wilco_ec: debugfs: provide ID table for avoiding
-    fallback match
-  platform/chrome: wilco_ec: event: remove redundant MODULE_ALIAS
-  platform/chrome/wilco_ec: core: provide ID table for avoiding fallback
-    match
-
- drivers/gpio/gpio-cros-ec.c                      |  8 ++++++++
- drivers/media/cec/platform/cros-ec/cros-ec-cec.c |  9 ++++++++-
- drivers/platform/chrome/cros_ec_chardev.c        |  9 ++++++++-
- drivers/platform/chrome/cros_ec_debugfs.c        |  9 ++++++++-
- drivers/platform/chrome/cros_ec_lightbar.c       |  9 ++++++++-
- drivers/platform/chrome/cros_ec_sensorhub.c      |  9 ++++++++-
- drivers/platform/chrome/cros_ec_sysfs.c          |  9 ++++++++-
- drivers/platform/chrome/cros_ec_vbc.c            |  9 ++++++++-
- drivers/platform/chrome/cros_kbd_led_backlight.c | 11 +++++++++--
- drivers/platform/chrome/cros_usbpd_logger.c      |  9 ++++++++-
- drivers/platform/chrome/cros_usbpd_notify.c      |  9 ++++++++-
- drivers/platform/chrome/wilco_ec/core.c          |  9 ++++++++-
- drivers/platform/chrome/wilco_ec/debugfs.c       |  9 ++++++++-
- drivers/platform/chrome/wilco_ec/event.c         |  1 -
- drivers/platform/chrome/wilco_ec/telemetry.c     |  9 ++++++++-
- drivers/power/supply/cros_peripheral_charger.c   | 11 +++++++++--
- drivers/power/supply/cros_usbpd-charger.c        | 11 +++++++++--
- drivers/rtc/rtc-cros-ec.c                        |  9 ++++++++-
- 18 files changed, 139 insertions(+), 20 deletions(-)
-
+diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+index 48ed2993d2f0..8fbbb4091455 100644
+--- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
++++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+@@ -8,6 +8,7 @@
+ 
+ #include <linux/kernel.h>
+ #include <linux/module.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/platform_device.h>
+ #include <linux/dmi.h>
+ #include <linux/pci.h>
+@@ -573,6 +574,12 @@ static void cros_ec_cec_remove(struct platform_device *pdev)
+ 	}
+ }
+ 
++static const struct platform_device_id cros_ec_cec_id[] = {
++	{ DRV_NAME, 0 },
++	{}
++};
++MODULE_DEVICE_TABLE(platform, cros_ec_cec_id);
++
+ static struct platform_driver cros_ec_cec_driver = {
+ 	.probe = cros_ec_cec_probe,
+ 	.remove_new = cros_ec_cec_remove,
+@@ -580,6 +587,7 @@ static struct platform_driver cros_ec_cec_driver = {
+ 		.name = DRV_NAME,
+ 		.pm = &cros_ec_cec_pm_ops,
+ 	},
++	.id_table = cros_ec_cec_id,
+ };
+ 
+ module_platform_driver(cros_ec_cec_driver);
+@@ -587,4 +595,3 @@ module_platform_driver(cros_ec_cec_driver);
+ MODULE_DESCRIPTION("CEC driver for ChromeOS ECs");
+ MODULE_AUTHOR("Neil Armstrong <narmstrong@baylibre.com>");
+ MODULE_LICENSE("GPL");
+-MODULE_ALIAS("platform:" DRV_NAME);
 -- 
 2.44.0.478.gd926399ef9-goog
 
