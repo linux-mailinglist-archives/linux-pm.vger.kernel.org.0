@@ -1,125 +1,179 @@
-Return-Path: <linux-pm+bounces-5626-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5627-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 626BF89151C
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 09:20:53 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8F1E8915C9
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 10:28:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 114F9287F3F
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 08:20:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 13514B21126
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 09:28:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E804147F78;
-	Fri, 29 Mar 2024 08:20:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2E3A47F78;
+	Fri, 29 Mar 2024 09:27:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kRQUdcm0"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="aMUf17tT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B21F94120C;
-	Fri, 29 Mar 2024 08:20:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F0894595A
+	for <linux-pm@vger.kernel.org>; Fri, 29 Mar 2024 09:27:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711700447; cv=none; b=i0XoYp9x/wPlJz0ekG9+77uKLbLDizmcTbSq0mEViLCX6O1In6iOfz7Et/Z8RQAs5Q8BcG1FAESc8/TJsxrudo9TfcMG0rRuikRDNDDHUi1j8U4Uq34mraStpARSLHGymC6fzbG3lsSTBTbs8saJp3uH6gUEkc214kfRkpwRMDc=
+	t=1711704463; cv=none; b=R/P6ZyLumbtsV/AGxR7wA9uRzCvkZsCEq5wfowqZ9DajYWJHHCYiITs7A5p2mUL8Cv2d0h+NDjmYt7L6uBWzG0eF9x1xduuLA7A03YOw5FxiNArLgxqvi4HTjfQFKtajsnB77Yhyw4Z9K5zQst396q1Jo5//FIMGH0nWFJ3n4yc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711700447; c=relaxed/simple;
-	bh=euIDv/bMlAG8q7AVNBouQvwowUNC5bhdLSI7uMJKXkY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ibcQIbeVkpHvKfl5FnPEG3WEqQIUgN9OXrd2CEofGiuxZx96A1Uu5Mb4086ZQgh8KWDyqnwaZwQ7NJaMEUDFWW5VXu9hm53LHhcjlKXQX7XNCGQRVyyxg40dzZ8K4Wpzbjh2Znb9X/24+r2VKAhU0IYE06rk2Uw0cdmYZgUWCi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kRQUdcm0; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711700446; x=1743236446;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=euIDv/bMlAG8q7AVNBouQvwowUNC5bhdLSI7uMJKXkY=;
-  b=kRQUdcm0QMS41bnnkYwC3P7wUXPmXUwHIUCzh4lnesi+5dZeSyxK7nHf
-   Bem4TLD/hVeOzROxcprZB1D/hX7jk+2ur0evLGYF5VOUIFHEvzBVSOCN9
-   iLlHcOUdbINQVcg90R7AAK1Z6z1yxwBIUVJW7lK/XRN5X1Dxv4k1+8lpC
-   WNlKoCnPDCk6xX/rvU3LOevpEVQvCES7+PTFGHVEYRCkZ3QXkXLnN3hP5
-   q2YDn06Px+oJtHHJ4ZGUzjrsJHez7ZxthEMQIOOhkN3mNPjCtOxMBP275
-   b0nRJidiewcTyNISa1kEtd9u23a+VGBGDRQQ9UkZZ9TJhoDTvs5dKtbb3
-   g==;
-X-CSE-ConnectionGUID: fb5AyJCjSg2yvspa9vstEw==
-X-CSE-MsgGUID: u9UYH76oSKO/DdI7qOAB+w==
-X-IronPort-AV: E=McAfee;i="6600,9927,11027"; a="10698887"
-X-IronPort-AV: E=Sophos;i="6.07,164,1708416000"; 
-   d="scan'208";a="10698887"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2024 01:20:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,164,1708416000"; 
-   d="scan'208";a="17369022"
-Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 29 Mar 2024 01:20:41 -0700
-Received: from kbuild by be39aa325d23 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rq7Tb-0002ze-0G;
-	Fri, 29 Mar 2024 08:20:39 +0000
-Date: Fri, 29 Mar 2024 16:20:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, rafael@kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, lukasz.luba@arm.com,
-	dietmar.eggemann@arm.com, linux-arm-kernel@lists.infradead.org,
-	sboyd@kernel.org, nm@ti.com, linux-samsung-soc@vger.kernel.org,
-	daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
-	krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
-	m.szyprowski@samsung.com, mhiramat@kernel.org
-Subject: Re: [PATCH v3 3/4] PM: EM: Add em_dev_update_chip_binning()
-Message-ID: <202403291602.UyrrrpzO-lkp@intel.com>
-References: <20240328085112.3873050-4-lukasz.luba@arm.com>
+	s=arc-20240116; t=1711704463; c=relaxed/simple;
+	bh=5ACZJa3Tq3dvPUxK1QZqVzKwAxpacncCtJOs3+hxanM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=MzSg9gfnOMY45MwnOZcS8oJNAU9+SZX98EIBwunT39roIQBLdn+cTshZWehlYS/+Cz/HuvR/q9EGmNpWb9yebvKd7bQFOlBbNAe4EFFNWuC64pcJLEgqz2/HdtMLPY5fSWfeNsMWB45QI4ggJ4GP1BCz+pxoctl/uCOukMshqNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=aMUf17tT; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1def3340682so16399735ad.1
+        for <linux-pm@vger.kernel.org>; Fri, 29 Mar 2024 02:27:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1711704460; x=1712309260; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wphdEuVRZdcfvU1uZa0UrVCyguVuaKQ82sqpzgvdX+0=;
+        b=aMUf17tTpTNeG7DergaquCVpR+cZU7zIOULs2Ggzraeb1Y2NMbNJnPfhCLrpDCxUzN
+         xIFjDc/kWvL+NSzp/6z0GpXaWpG+IO+LLay3VbHY4egNxMxfSDeGxAtUlZiSMxD8GYJc
+         Vu/GFvoLEEPq7V4AlCIb+H3dsK2/oOVDlzU8eWQKJHP/+xe+ZoZYuzZwSb7v4cC+rClh
+         Q+7sRAMLW71q2YZLSxsEFCFRDFL5eAWeK+CI7m+0ZFV2nCQXVnCDuqlJHhKHGa3bAqrT
+         Kn9occ+rCWkAvOggGVEt7G8FkLlnZmck1QpDj9n07TnNUBo5BozKzjW3T68hVv44hshV
+         Z6UA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711704460; x=1712309260;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wphdEuVRZdcfvU1uZa0UrVCyguVuaKQ82sqpzgvdX+0=;
+        b=u1QrzAAcDc3RyiOt0euFAsoE6fhPnPYowcI6NqaZSRHT0aSMPbZ1cwoIpygfh1wFZo
+         RXh7VwLPMewhup2XU311PfpladSCuw6+5oVL6FsqrrrDAJLY29mKslb2DTGPd7wzxdjr
+         U0fFa5W5euf9yu+MWWo+iWiLQfgIWEr8bk3OBuqIkFH0cbQ6M5stoa9tAYHZAVy7f8DT
+         BFZ0YPLy7zS0lVDTl8H2NPWyGpsWN337vUfsrT5J6+W+mmhMeE3VipXEchULEt0AbGg0
+         Zmva91p1dBt5Py98cryigOcvAGmbhstQUmD6za925Nva8JV2FHwkGBtpezbwuZyeyUGA
+         XPTg==
+X-Forwarded-Encrypted: i=1; AJvYcCUonyoWlWYk4DYkzOm8lHnxHoP+5zJBo21LIVlLlOrhzOxdyIOcuCBr66HI0+c/Udi8/px+8k5vnADadjCCRMPRntXFJm2khkc=
+X-Gm-Message-State: AOJu0Yy+re0/eHeTlUQPZ/Z4D1FgbpNyLOY0ocegg770FqCfMoauyiPU
+	5gDyqNZZ3A39RrjofYd/nEO82VYlqZSNPnUgiiaLyeR9zyGlMJ9AWNmj0AoK4Mk=
+X-Google-Smtp-Source: AGHT+IFf4f0IS4Sv1ofKMaYbSZwd8YlGOT1AaVNln1woRpkOY9F+Jd0NVeHAdCb352GScKE4g4Gsmw==
+X-Received: by 2002:a17:90a:4216:b0:2a0:33c2:997e with SMTP id o22-20020a17090a421600b002a033c2997emr1713230pjg.41.1711704460537;
+        Fri, 29 Mar 2024 02:27:40 -0700 (PDT)
+Received: from [127.0.1.1] (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
+        by smtp.gmail.com with ESMTPSA id cv17-20020a17090afd1100b002a02f8d350fsm2628830pjb.53.2024.03.29.02.27.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Mar 2024 02:27:40 -0700 (PDT)
+From: Max Hsu <max.hsu@sifive.com>
+Subject: [PATCH RFC 00/11] riscv: support Sdtrig extension
+ hcontext/scontext CSRs
+Date: Fri, 29 Mar 2024 17:26:16 +0800
+Message-Id: <20240329-dev-maxh-lin-452-6-9-v1-0-1534f93b94a7@sifive.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240328085112.3873050-4-lukasz.luba@arm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADmJBmYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDYyNL3ZTUMt3cxIoM3ZzMPF0TUyNdM11L3WQzIwPLVLOUJDPzNCWg1oK
+ i1LTMCrCx0UpBbs5KsbW1ABEr0dRrAAAA
+To: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, 
+ Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>, 
+ Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: Palmer Dabbelt <palmer@sifive.com>, linux-riscv@lists.infradead.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-pm@vger.kernel.org, kvm@vger.kernel.org, 
+ kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, 
+ Max Hsu <max.hsu@sifive.com>, Nick Hu <nick.hu@sifive.com>, 
+ Yong-Xuan Wang <yongxuan.wang@sifive.com>
+X-Mailer: b4 0.13.0
 
-Hi Lukasz,
+riscv-debug-spec [1] Chapter 5: Sdtrig extension introduces
+trigger CSRs which can cause a breakpoint exception,
+entry into Debug Mode, or a trace action without having to
+execute a special instruction.
 
-kernel test robot noticed the following build warnings:
+The focus in the following patches is on the two CSRs from
+the Sdtrig extension: hcontext and scontext.
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on krzk/for-next clk/clk-next linus/master v6.9-rc1 next-20240328]
-[cannot apply to soc/for-next rafael-pm/acpi-bus rafael-pm/devprop]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+These two CSRs are optional according to the spec, apart from
+the Smstateen extension [2], which has bit 57 to control the
+accessbility of the hcontext/scontext CSRs.
+We also introduce dt-binding in the CPU DTS for the existence of
+the CSRs in situations where the Smstaten extension is not available.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lukasz-Luba/OPP-OF-Export-dev_opp_pm_calc_power-for-usage-from-EM/20240328-165357
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20240328085112.3873050-4-lukasz.luba%40arm.com
-patch subject: [PATCH v3 3/4] PM: EM: Add em_dev_update_chip_binning()
-config: i386-buildonly-randconfig-002-20240328 (https://download.01.org/0day-ci/archive/20240329/202403291602.UyrrrpzO-lkp@intel.com/config)
-compiler: gcc-12 (Ubuntu 12.3.0-9ubuntu2) 12.3.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240329/202403291602.UyrrrpzO-lkp@intel.com/reproduce)
+The hcontext/scontext CSRs can help to raise triggers with the
+textra32/textra64 CSRs set up correctly. (Chapter 5.7.17/ 5.7.18 [1])
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403291602.UyrrrpzO-lkp@intel.com/
+Therefore, as part of Linux awareness debugging. 
+We propose the scontext CSR be filled by the Linux PID,
+And the hcontext CSR be filled with a self-maintained Guest OS ID.
 
-All warnings (new ones prefixed by >>):
+The reason for using the self-maintained Guest OS ID instead of VMID is
+that VMID might change over time, and the user setting up the trigger
+might enter the previous value, invoking the wrong VM for debugging.
 
->> kernel/power/energy_model.c:814: warning: bad line:                                 information is present in the OPPs.
+The tests have been done on QEMU with Sdtrig CSRs
+(mcontext/hcontext/scontext implemented) [3] boot on virt machine
+and also run the Guest OS as virt machine with KVM enabled,
+the two hcontext/scontext CSRs can be written correctly.
 
+This patch series is based on v6.9-rc1.
 
-vim +814 kernel/power/energy_model.c
+Link: https://github.com/riscv/riscv-debug-spec/releases/download/ar20231208/riscv-debug-stable.pdf [1]
+Link: https://github.com/riscvarchive/riscv-state-enable/releases/download/v1.0.0/Smstateen.pdf [2]
+Link: https://github.com/sifive/qemu/tree/dev/maxh/sdtrig_ISA [3]
 
-   811	
-   812	/**
-   813	 * em_dev_update_chip_binning() - Update Energy Model after the new voltage
- > 814					information is present in the OPPs.
+Signed-off-by: Max Hsu <max.hsu@sifive.com>
+---
+Max Hsu (7):
+      dt-bindings: riscv: Add Sdtrig ISA extension
+      dt-bindings: riscv: Add Sdtrig optional CSRs existence on DT
+      riscv: Add ISA extension parsing for Sdtrig
+      riscv: Add Sdtrig CSRs definition, Smstateen bit to access Sdtrig CSRs
+      riscv: cpufeature: Add Sdtrig optional CSRs checks
+      riscv: suspend: add Smstateen CSRs save/restore
+      riscv: Add task switch support for scontext CSR
 
+Yong-Xuan Wang (4):
+      riscv: KVM: Add Sdtrig Extension Support for Guest/VM
+      riscv: KVM: Add scontext to ONE_REG
+      riscv: KVM: Add hcontext support
+      KVM: riscv: selftests: Add Sdtrig Extension to get-reg-list test
+
+ Documentation/devicetree/bindings/riscv/cpus.yaml  |  18 +++
+ .../devicetree/bindings/riscv/extensions.yaml      |   7 +
+ arch/riscv/include/asm/csr.h                       |   6 +
+ arch/riscv/include/asm/hwcap.h                     |   1 +
+ arch/riscv/include/asm/kvm_host.h                  |  14 ++
+ arch/riscv/include/asm/kvm_vcpu_debug.h            |  24 +++
+ arch/riscv/include/asm/suspend.h                   |   7 +
+ arch/riscv/include/asm/switch_to.h                 |  15 ++
+ arch/riscv/include/uapi/asm/kvm.h                  |   9 ++
+ arch/riscv/kernel/cpufeature.c                     | 162 +++++++++++++++++++++
+ arch/riscv/kernel/suspend.c                        |  25 ++++
+ arch/riscv/kvm/Makefile                            |   1 +
+ arch/riscv/kvm/main.c                              |   4 +
+ arch/riscv/kvm/vcpu.c                              |   8 +
+ arch/riscv/kvm/vcpu_debug.c                        | 107 ++++++++++++++
+ arch/riscv/kvm/vcpu_onereg.c                       |  63 +++++++-
+ arch/riscv/kvm/vm.c                                |   4 +
+ tools/testing/selftests/kvm/riscv/get-reg-list.c   |  27 ++++
+ 18 files changed, 500 insertions(+), 2 deletions(-)
+---
+base-commit: 317c7bc0ef035d8ebfc3e55c5dde0566fd5fb171
+change-id: 20240329-dev-maxh-lin-452-6-9-c6209e6db67f
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Max Hsu <max.hsu@sifive.com>
+
 
