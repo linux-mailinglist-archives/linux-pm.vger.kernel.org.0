@@ -1,115 +1,113 @@
-Return-Path: <linux-pm+bounces-5703-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5704-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A78D2892360
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 19:32:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AEDE8923C4
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 19:59:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B8201F22C1C
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 18:32:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C12EC1F2291B
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 18:59:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95E7C2DF7D;
-	Fri, 29 Mar 2024 18:32:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pDAn6yTd"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1601B4AEED;
+	Fri, 29 Mar 2024 18:59:40 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C73D2C197;
-	Fri, 29 Mar 2024 18:32:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 123063B293;
+	Fri, 29 Mar 2024 18:59:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711737147; cv=none; b=J7jpvjXZ5QeCwkwjE2OOmBrIhQgaFIwhZbVY8/2/SiOiDUkOMhu9q0l3Og78nCTEpYlG2sn+Evh0/shdtfmcXQMeCXmXXSlsfLw5+3K1ZO+f3zqhSp32QmbL1JTCkP4MK9ofrr04HFrfGtwsuijjevz0FaUQOM4sF0FcJivGPTQ=
+	t=1711738780; cv=none; b=neRCNbiLBzU49WnZZfT3CE4W5WFC7wZCJjGb4BMHw8H06QOHF4DxvVu++LQb3asIRsSsAsiN+jnVS3WYT+O6NSG6KZgU23WVKDQZOoIniCupwUgxq9qh3G4CsbbJ2723RadwI65xjCXZ4mIK+HeFF0t0cIedb9ju2oY/5X7XYpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711737147; c=relaxed/simple;
-	bh=XiCSiQc4axHagATwzFvkJKiM9R/1a6wOPfd4GEqTYys=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=g1OLPnBIvHpmXgz7ZOd+UEd3wwoFxO9QFZRNxzuPn6l8j3ZVSQ+ZUOUF1/R08oxpW4stGQZkuw328KH5yD+cHjfoeHrVD9NHhfX6fopHcQnlZt1ohVyTVFQAt0c8LA6Avh8eKbutazuBi4AMyW/XVoygffkDUdFuxXeyDCCanNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pDAn6yTd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05861C433F1;
-	Fri, 29 Mar 2024 18:32:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711737147;
-	bh=XiCSiQc4axHagATwzFvkJKiM9R/1a6wOPfd4GEqTYys=;
-	h=From:Date:Subject:To:Cc:From;
-	b=pDAn6yTdVnc8GzZ+EackDsBtM2S96ZZ1TnmlXmhivKXVcRHCWZUOXUV5UZA0JC1yw
-	 rBHX3PHyqwEGDU88IIw59lDia7b1QJSU+W8h66icr8GrItq3s9lE45cGSpOLUjRxhs
-	 aGAledhfp4FcEa8Myi4q2bN1M/w8ork6TPcUzfF4KUV4kgyIAd3zKSnELM9r07Fr7F
-	 UxsbrCEpYuNYxYzwxbmn9SZptJ2lQtomxPK6hR6+OhOOafzfVevjAMVkRuH+P+51oO
-	 RRQ2ZrUvhDp4hoLFLjacKWZYo3e35yGtCCMEXsW24FYKpN5U2cDBqMhLvnningOFcw
-	 52CaBJkNi140g==
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-5a536642635so377632eaf.0;
-        Fri, 29 Mar 2024 11:32:27 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWvn+pfvwy1NaYw3QK5qNg7a/Wv1HA4tpvKIa8v+eAHYOpyX5klzJdKOLxw6EnnvsSpCAdkqbNiGXgVjr1FiHpYEaL5nprOkWaZuP3S
-X-Gm-Message-State: AOJu0YxudT0qSH69bubVo29QuvDiX5Naiey43Hbxj1AJfkyTfG6Z1uAU
-	flLCn5OhMsWSBJGNYNqYs86RkRVabCA1ygBV/3ikFogM7zttnd5L3eXbhZfErf8oP/gXmfjw3uO
-	Q55QO7Ive61Um6+HbxTg0069Q/Xo=
-X-Google-Smtp-Source: AGHT+IGUYMQBIXvIZxvjRX/Uy87LFYKzE/0lu2lV+Vhw/TK2opODhjLDTTKjrZTx0SoWqNVu1JnhU0o2oMWOrIpuYTI=
-X-Received: by 2002:a05:6870:4592:b0:222:81cc:ac9c with SMTP id
- y18-20020a056870459200b0022281ccac9cmr2902706oao.5.1711737146341; Fri, 29 Mar
- 2024 11:32:26 -0700 (PDT)
+	s=arc-20240116; t=1711738780; c=relaxed/simple;
+	bh=LRMKwu/ap0QLihMA7EqVXj8HuqIldcCnL+d0oAI08Mc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=d0VDmcJ89fjW47D/+tD40drelYcKeB3MOJ+1EvqrDIDa/mXoqT/FmuEbiAC3NcEhjCICNdzF4SHRytF+9+N+vCMvLAGeXMpS4jQJAokgDKi4jJlEdD6SBFWD4mFF9pP0D6KfjLxkjmUF4xTHH2F3ePueJp8kVm/RI8qE9huHTII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [192.168.0.2] (ip5f5af39e.dynamic.kabel-deutschland.de [95.90.243.158])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 12CCC61E5FE07;
+	Fri, 29 Mar 2024 19:59:15 +0100 (CET)
+Message-ID: <31aa7758-f854-4f96-8041-26b7197982df@molgen.mpg.de>
+Date: Fri, 29 Mar 2024 19:59:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 29 Mar 2024 19:32:15 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0j1X_0bsF86xWxd=SCBNa1-tFxOErw3uKOVmBZLtUEv4A@mail.gmail.com>
-Message-ID: <CAJZ5v0j1X_0bsF86xWxd=SCBNa1-tFxOErw3uKOVmBZLtUEv4A@mail.gmail.com>
-Subject: [GIT PULL] Thermal control fixes for v6.9-rc2
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: PM: hibernation: Image allocation is 28906 pages short
+To: Pavel Machek <pavel@ucw.cz>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>
+References: <58c89870-f7cd-4116-aaea-2ef53a1ab6c7@molgen.mpg.de>
+ <Zgb0RlS8QipgVZgW@duo.ucw.cz>
+Content-Language: en-US
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <Zgb0RlS8QipgVZgW@duo.ucw.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Linus,
-
-Please pull from the tag
-
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- thermal-6.9-rc2
-
-with top-most commit a26de34b3c77ae3a969654d94be49e433c947e3b
-
- thermal: devfreq_cooling: Fix perf state when calculate dfc res_util
-
-on top of commit 4cece764965020c22cff7665b18a012006359095
-
- Linux 6.9-rc1
-
-to receive thermal control fixes for 6.9-rc2.
-
-These revert a problematic optimization commit and address a devfreq
-cooling device issue.
-
-Specifics:
-
- - Revert thermal core optimization that introduced a functional issue
-   causing a critical trip point to be crossed in some cases (Daniel
-   Lezcano).
-
- - Add missing conversion between different state ranges to the
-   devfreq cooling device driver (Ye Zhang).
-
-Thanks!
+Dear Pavel,
 
 
----------------
+Thank you very much.
 
-Daniel Lezcano (1):
-      Revert "thermal: core: Don't update trip points inside the
-hysteresis range"
 
-Ye Zhang (1):
-      thermal: devfreq_cooling: Fix perf state when calculate dfc res_util
+Am 29.03.24 um 18:03 schrieb Pavel Machek:
 
----------------
+>> On a Dell XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022 with Debian
+>> sid/unstable and self-built Linux 6.9-rc1+ with one patch on top [1] and
+>> KASAN enabled
+>>
+>>      $ git log --no-decorate --oneline -2 a2ce022afcbb
+>>      a2ce022afcbb [PATCH] kbuild: Disable KCSAN for autogenerated *.mod.c intermediaries
+>>      8d025e2092e2 Merge tag 'erofs-for-6.9-rc2-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs
+>>
+>> the system tried to hibernate, but failed:
+> 
+>> Where is that image allocated? On the disk? There is still 65 GB of space,
+>> so 16 GB of memory should fit? Could the error message be improved, so users
+>> know more details to fix it?
+> 
+> In swap. See docs.
 
- drivers/thermal/devfreq_cooling.c |  2 +-
- drivers/thermal/thermal_trip.c    | 19 ++-----------------
- 2 files changed, 3 insertions(+), 18 deletions(-)
+Thank you. Unfortunately, I am not seeing my case described in 
+`Documentation/power/`. Only:
+
+> Q:
+>   If my application(s) causes lots of memory & swap space to be used
+>   (over half of the total system RAM), is it correct that it is likely
+>   to be useless to try to suspend to disk while that app is running?
+> 
+> A:
+>   No, it should work okay, as long as your app does not mlock()
+>   it. Just prepare big enough swap partition.
+
+I have 16 GB RAM and 8 GB swap partition.
+
+     $ LANG= free
+                    total        used        free      shared 
+buff/cache   available
+     Mem:        13828768     9760192     3115932     5383256 
+6681400     4068576
+     Swap:        8387904     1531820     6856084
+
+Shouldn’t user space (systemd or GNOME?) then know beforehand if 
+hibernate is possible? Is there a script for users to check, if 
+hibernation would be possible?
+
+
+Kind regards,
+
+Paul
 
