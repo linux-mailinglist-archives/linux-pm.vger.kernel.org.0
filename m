@@ -1,163 +1,172 @@
-Return-Path: <linux-pm+bounces-5643-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5644-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1ED8489171D
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 11:55:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38FB58917D7
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 12:32:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54564287B5E
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 10:55:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A65E11F22D9D
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 11:32:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DEF969E0D;
-	Fri, 29 Mar 2024 10:55:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37A9D6A35D;
+	Fri, 29 Mar 2024 11:32:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="NmmpRATo"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DLM/mEpy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93BC0364BA;
-	Fri, 29 Mar 2024 10:55:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56CE26A013
+	for <linux-pm@vger.kernel.org>; Fri, 29 Mar 2024 11:32:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711709736; cv=none; b=hN3pVS59bK3dBdw6WZGG/h+rz/oczmd+SUiXe5bZx/hqW2hQtEkkZkvmFXXRqgtoY4t1j/V2Q2rP8Up8TkE20G0uQrXdO8784JV5Hz/HekCCUzx5RBajVCZXw6nNg8NNotDT6BggjIlumxn7cj+IHvWh8lE3UzDPhyxE8Rl+AdU=
+	t=1711711966; cv=none; b=oP1glcWI5KyjtL1hVpCPUjUXAWELn3EpsoymZh0dn1wWp1J5g6EkOTtK0lT/6VpFuRFVUazfKgI5oQatth3XDsPAe1yjYCVNs93MUGZaqNmdsV+uOrk3pxBn3gs7nKe8IqZMJ2Em9ClkI0PD2M8WifGsvQhQqBOuzXZkD+wvmS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711709736; c=relaxed/simple;
-	bh=1pSOXma/n4d8FmXGex5jo01/Q0vLf66OpukJQyybll4=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=stwa1YHThEsud3otNQorZdWNsCPCNSwr50SY4csvcWKVkxgLl2mbRnTUFd7O45DEWf2lpCqN/0EJTcuPw6XhAf3WdDrSOChWS/Agn9ijTCUg75NRfLiPRbmSXLP/3jvoTdcdEowOACaTH8AcK7w7dRH8XIue77VzNfgmUhhr13Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=NmmpRATo; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42T6Y1go013592;
-	Fri, 29 Mar 2024 10:55:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=qcppdkim1; bh=FeDDBdkCPt1+HBPH/VoaH
-	2ybUO6SoYLovOae22/h6ao=; b=NmmpRAToqyj+2AAcIew4TXOQiUjAAgIRqJrvK
-	snI8Mcp2kASjE5AnlodjXyHAuqjx6ujmbUb5O06AQd4ujcTENEsY+pdhK961G9F2
-	5uMYTtcTtCl4ee3rh6HxuyxAp4Vjg2WFP/hsidPU1sSm00nF03qeDQ7AcUVYCjS6
-	hEjiKsENsvb1gckGS6IqafDEUnE152BM4BRGZ7E1Z5GQfUresBhUCnHxn/MSfgVo
-	dvUGbZhwCSVjWCH5pvi+8rVDuYdGVZ0QGRKpkawNJVJIXMJ2jc/vY1LKz6e30l0k
-	PJ4aat4LYq+G41PgvsIKaWT8KNDNrvGxXhcsPkQ4TgwqNgOXA==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3x5hskhkge-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 29 Mar 2024 10:55:30 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42TAtTbj031112
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 29 Mar 2024 10:55:29 GMT
-Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Fri, 29 Mar 2024 03:55:24 -0700
-Date: Fri, 29 Mar 2024 16:25:21 +0530
-From: Varadarajan Narayanan <quic_varada@quicinc.com>
-To: Stephen Boyd <sboyd@kernel.org>
-CC: <andersson@kernel.org>, <conor+dt@kernel.org>,
-        <devicetree@vger.kernel.org>, <djakov@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <konrad.dybcio@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <mturquette@baylibre.com>,
-        <quic_anusha@quicinc.com>, <robh@kernel.org>
-Subject: Re: [PATCH v5 4/5] clk: qcom: ipq9574: Use icc-clk for enabling NoC
- related clocks
-Message-ID: <ZgaeGZL7QXh75aSA@hu-varada-blr.qualcomm.com>
-References: <20240328075936.223461-1-quic_varada@quicinc.com>
- <20240328075936.223461-5-quic_varada@quicinc.com>
- <95f4e99a60cc97770fc3cee850b62faf.sboyd@kernel.org>
+	s=arc-20240116; t=1711711966; c=relaxed/simple;
+	bh=YiuwKN8qhFuIAOgDB7+gvuNvcRqxhHIJg2+GdaxoSzY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nKkGI7UzxocB+vMO+OWyB4tp4AdzFszCyzVkFg1bNh42eSkyeE7JACG2rIJ5tHORTrP65nFfCHkNcY+41mi3mkf4t1ym+H82oHfyU/QxjZyvkY+LqAXhQs+t7d3skMdmYH++XNb/5V/BXT8H/SzoO8HyG9uf9qJM7i1A02YJcUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DLM/mEpy; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1711711962;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=F4oBdGOgnjp9VHMYVc4RnnPVdgFa9XSj8SazzjSXu5g=;
+	b=DLM/mEpya/26JiHcH6U/YmmgitmHElRwEPKsyEBU2EVp30uyOUYalHF0Z/fWWZHivLvUBE
+	a1rfu9mm/f1SgdqKIAuZ/SjeLblT2rAD624lguOEwLKtqWUeo3bU+ukl/hVW4TtsZqM98h
+	XInxiJapZMlV3k7liscR1ttwbQyzCAg=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-358-xjZIgiOhNNS_Cl9d3aiEYw-1; Fri, 29 Mar 2024 07:32:40 -0400
+X-MC-Unique: xjZIgiOhNNS_Cl9d3aiEYw-1
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-a45acc7f07cso113803866b.2
+        for <linux-pm@vger.kernel.org>; Fri, 29 Mar 2024 04:32:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711711959; x=1712316759;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=F4oBdGOgnjp9VHMYVc4RnnPVdgFa9XSj8SazzjSXu5g=;
+        b=oIo77QCx7Zxywmt7CvdvB2KbCG67IoaDNI3Zdsxjh+lQC295NVYWqpi2xLFsYn1x7W
+         TtZsb834qrhB7SMt5eOes+L/6PTTpCcahv1Or6fUrQlla92Bhr0cwZYzGFL2NIqKyENL
+         Rb3m1ZjUASVALgnH3yDXa1zLgYhbzTVgU5Pz46lvhSf2XasqIyYaz5Qr3+qTQAZFpH1i
+         VXONm4zcjIUvFn6iywfn16Ft9/hlJn5AyJB6e245bvuzOp9tgEG+YxSfP5rEavLEf7XT
+         NJlbXgFJdFjk4NXQmEF9mTA91lfMs/umRaNO/nF5MZcwBHcJT7VHz28/jRms3NhVVgRD
+         5O0g==
+X-Forwarded-Encrypted: i=1; AJvYcCXBHVwKG2wTRvIPRH9ShgcETei0WIGvmvsyZ2rkwsx75nEyEi7kS6WLv30Cii4fI4Dn44vAVQSUTJFL1R2g2lYBF5RBbIx7WaE=
+X-Gm-Message-State: AOJu0Yy8heMD0vveomoibb54JoGZR7Lx51kM956uAjUl/BwjI1567zUd
+	q8d6TvgVDpw0G512NzYHx2//4Ney8l9kdyQjviaz9ecahbCxipncJBU6e9+kCoyGpSiA+bAGVRB
+	gLiukXJ6nZwglamxInayiK7Em0s7Ycj+OykiSU6bQZj7gbrmUsEo3oxn1
+X-Received: by 2002:a17:906:e0c4:b0:a4e:359e:a03e with SMTP id gl4-20020a170906e0c400b00a4e359ea03emr918552ejb.71.1711711959052;
+        Fri, 29 Mar 2024 04:32:39 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IER87D3bzG0neKDu29z4yu8LMxlAbCl6f3aOgE1ToOp8JlQHq1fhlVNJsW8s36yFAEfLW/eDA==
+X-Received: by 2002:a17:906:e0c4:b0:a4e:359e:a03e with SMTP id gl4-20020a170906e0c400b00a4e359ea03emr918545ejb.71.1711711958715;
+        Fri, 29 Mar 2024 04:32:38 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id m16-20020a170906581000b00a4a3807929esm1823908ejq.119.2024.03.29.04.32.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Mar 2024 04:32:38 -0700 (PDT)
+Message-ID: <f3d9a568-8953-4fce-9fef-5fe1539fb91a@redhat.com>
+Date: Fri, 29 Mar 2024 12:32:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <95f4e99a60cc97770fc3cee850b62faf.sboyd@kernel.org>
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: jjW6UuSHfZeUqTUEMLdErOzDLRtEXDih
-X-Proofpoint-ORIG-GUID: jjW6UuSHfZeUqTUEMLdErOzDLRtEXDih
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-29_09,2024-03-28_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
- clxscore=1015 bulkscore=0 suspectscore=0 priorityscore=1501 malwarescore=0
- impostorscore=0 adultscore=0 mlxscore=0 spamscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2403210001
- definitions=main-2403290094
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] power: supply: core: simplify charge_behaviour formatting
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ Sebastian Reichel <sre@kernel.org>
+Cc: Sebastian Reichel <sebastian.reichel@collabora.com>,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240329-power-supply-simplify-v1-1-416f1002739f@weissschuh.net>
+Content-Language: en-US, nl
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20240329-power-supply-simplify-v1-1-416f1002739f@weissschuh.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Mar 28, 2024 at 02:51:09PM -0700, Stephen Boyd wrote:
-> Quoting Varadarajan Narayanan (2024-03-28 00:59:35)
-> > diff --git a/drivers/clk/qcom/gcc-ipq9574.c b/drivers/clk/qcom/gcc-ipq9574.c
-> > index 0a3f846695b8..187fd9dcdf49 100644
-> > --- a/drivers/clk/qcom/gcc-ipq9574.c
-> > +++ b/drivers/clk/qcom/gcc-ipq9574.c
-> > @@ -4301,6 +4302,56 @@ static const struct qcom_reset_map gcc_ipq9574_resets[] = {
-> >         [GCC_WCSS_Q6_TBU_BCR] = { 0x12054, 0 },
-> >  };
-> >
-> > +#define IPQ_APPS_ID                    9574    /* some unique value */
->
-> How is this supposed to stay unique?
+Hi,
 
-The icc-clk driver expects some number that wouldn't interfere
-with the existing nodes. So just used the SoC id itself.
+On 3/29/24 9:18 AM, Thomas Weißschuh wrote:
+> The function power_supply_show_charge_behaviour() is not needed and can
+> be removed completely.
+> Removing the function also saves a spurious read of the property from
+> the driver on each call.
+> 
+> The convulted logic was a leftover from an earlier patch revision.
+> Some restructuring made this cleanup possible.
+> 
+> Suggested-by: Hans de Goede <hdegoede@redhat.com>
+> Link: https://lore.kernel.org/all/9e035ae4-cb07-4f84-8336-1a0050855bea@redhat.com/
+> Fixes: 4e61f1e9d58f ("power: supply: core: fix charge_behaviour formatting")
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 
-> I don't understand icc_node_create() API quite honestly. Why
-> can't icc_clk_register() maintain some ida of allocated
-> numbers? Or is there some global number space that we can
-> "reserve" from? I'm quite amazed this is how things are
-> connected in interconnect framework.
->
-> > +
-> > +enum {
-> > +       ICC_ANOC_PCIE0,
-> > +       ICC_SNOC_PCIE0,
-> > +       ICC_ANOC_PCIE1,
-> > +       ICC_SNOC_PCIE1,
-> > +       ICC_ANOC_PCIE2,
-> > +       ICC_SNOC_PCIE2,
-> > +       ICC_ANOC_PCIE3,
-> > +       ICC_SNOC_PCIE3,
-> > +       ICC_SNOC_USB,
-> > +       ICC_ANOC_USB_AXI,
-> > +       ICC_NSSNOC_NSSCC,
-> > +       ICC_NSSNOC_SNOC_0,
-> > +       ICC_NSSNOC_SNOC_1,
-> > +       ICC_NSSNOC_PCNOC_1,
-> > +       ICC_NSSNOC_QOSGEN_REF,
-> > +       ICC_NSSNOC_TIMEOUT_REF,
-> > +       ICC_NSSNOC_XO_DCD,
-> > +       ICC_NSSNOC_ATB,
-> > +       ICC_MEM_NOC_NSSNOC,
-> > +       ICC_NSSNOC_MEMNOC,
-> > +       ICC_NSSNOC_MEM_NOC_1,
-> > +};
->
-> Are these supposed to be in a dt-binding header?
+Thanks, patch looks good to me:
 
-Since these don't directly relate to the ids in the dt-bindings
-not sure if they will be permitted there. Will move and post a
-new version and get feedback.
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
-Thanks
-Varada
+Regards,
 
-> > +
-> > +static struct clk_hw *icc_ipq9574_hws[] = {
-> > +       [ICC_ANOC_PCIE0] = &gcc_anoc_pcie0_1lane_m_clk.clkr.hw,
-> > +       [ICC_SNOC_PCIE0] = &gcc_anoc_pcie1_1lane_m_clk.clkr.hw,
-> > +       [ICC_ANOC_PCIE1] = &gcc_anoc_pcie2_2lane_m_clk.clkr.hw,
-> > +       [ICC_SNOC_PCIE1] = &gcc_anoc_pcie3_2lane_m_clk.clkr.hw,
-> > +       [ICC_ANOC_PCIE2] = &gcc_snoc_pcie0_1lane_s_clk.clkr.hw,
-> > +       [ICC_SNOC_PCIE2] = &gcc_snoc_pcie1_1lane_s_clk.clkr.hw,
+Hans
+
+
+
+> ---
+>  drivers/power/supply/power_supply_sysfs.c | 20 ++------------------
+>  1 file changed, 2 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+> index 0d2c3724d0bc..b86e11bdc07e 100644
+> --- a/drivers/power/supply/power_supply_sysfs.c
+> +++ b/drivers/power/supply/power_supply_sysfs.c
+> @@ -271,23 +271,6 @@ static ssize_t power_supply_show_usb_type(struct device *dev,
+>  	return count;
+>  }
+>  
+> -static ssize_t power_supply_show_charge_behaviour(struct device *dev,
+> -						  struct power_supply *psy,
+> -						  union power_supply_propval *value,
+> -						  char *buf)
+> -{
+> -	int ret;
+> -
+> -	ret = power_supply_get_property(psy,
+> -					POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
+> -					value);
+> -	if (ret < 0)
+> -		return ret;
+> -
+> -	return power_supply_charge_behaviour_show(dev, psy->desc->charge_behaviours,
+> -						  value->intval, buf);
+> -}
+> -
+>  static ssize_t power_supply_show_property(struct device *dev,
+>  					  struct device_attribute *attr,
+>  					  char *buf) {
+> @@ -321,7 +304,8 @@ static ssize_t power_supply_show_property(struct device *dev,
+>  						&value, buf);
+>  		break;
+>  	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
+> -		ret = power_supply_show_charge_behaviour(dev, psy, &value, buf);
+> +		ret = power_supply_charge_behaviour_show(dev, psy->desc->charge_behaviours,
+> +							 value.intval, buf);
+>  		break;
+>  	case POWER_SUPPLY_PROP_MODEL_NAME ... POWER_SUPPLY_PROP_SERIAL_NUMBER:
+>  		ret = sysfs_emit(buf, "%s\n", value.strval);
+> 
+> ---
+> base-commit: 070c1470ae24317e7b19bd3882b300b6d69922a4
+> change-id: 20240329-power-supply-simplify-5722806eefdd
+> 
+> Best regards,
+
 
