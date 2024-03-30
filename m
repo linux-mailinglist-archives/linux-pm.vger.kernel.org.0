@@ -1,264 +1,158 @@
-Return-Path: <linux-pm+bounces-5734-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5735-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57CFF893205
-	for <lists+linux-pm@lfdr.de>; Sun, 31 Mar 2024 17:02:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DF4448932F4
+	for <lists+linux-pm@lfdr.de>; Sun, 31 Mar 2024 18:31:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D28E71F21A55
-	for <lists+linux-pm@lfdr.de>; Sun, 31 Mar 2024 15:02:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C0C31F246E1
+	for <lists+linux-pm@lfdr.de>; Sun, 31 Mar 2024 16:31:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A98BB1448ED;
-	Sun, 31 Mar 2024 15:02:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45FE814AD16;
+	Sun, 31 Mar 2024 16:26:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BnP8EbRS"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EuK11uYg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C16C5433BF;
-	Sun, 31 Mar 2024 15:02:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711897356; cv=none; b=PtAtR6ggEHsyp2mePr4jju/VVx9BitLrRQnSIXUILPaA9ga75QD9uIwRwvxd92DxHDj6vKUT+f5EmFZncYCc4IDp8cOMlMs1TlrZ9XnBHaQS3hO8Pavo6u63zqknfV9WTt5EsubNLRtsYFwQrZFtfbMz817HoztA5OmQsZMzjP0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711897356; c=relaxed/simple;
-	bh=aVuVh2OqrH74gF1FKTiMNhGw2N4I9suhNWP0z/DShdc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hk2tsWYNKyTfWOxkb/6GirTYkvo70dU7hyUolTM3Z5WKlswAE6LAFLi7vJVngLmF/6lGQsV3qlWcI6He+Wyw72TDYwsXujStQY6l4KTxgWCjLc5jsGlh7PhKZQkU0if7AsJ3Ms65gQ54kQaIozQXZj9LULX02ByJVPx6/GLte0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BnP8EbRS; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711897355; x=1743433355;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aVuVh2OqrH74gF1FKTiMNhGw2N4I9suhNWP0z/DShdc=;
-  b=BnP8EbRSCRzfxOPqVw1Ae9SZ/eLlLjxz9K4rEKtnCCZU+38vzVPF+Z8b
-   090qFGqDCqNiGHZzGFodDNTy0OqgiKE+CMIUPj/6scBZBTuFWi0vDdc1M
-   /VFQ92Eoiii8YxQGOtp6NzNAkf5smzw0r8dUAmGTjNgdpaLFZHX1QkBPO
-   h8KRdwZ4KqeVBns6fFCuYV7m+o56zQfvFSAbrJkBS+3w9TPe/4NZsMY94
-   vITY/oZBg00p5n3n7GQtdvBwWGAnEg2Y86Rw8PSquzDkeP0B9jVLrCCVd
-   TGcb54DNRWuWe0gxuNYMMhSp32yboomZaj0xKEqDFPznw4ZDA6OOk5bNy
-   Q==;
-X-CSE-ConnectionGUID: j9EwA1GZRnmt/vd615T3QA==
-X-CSE-MsgGUID: 9+ehEjrbTh6HBCCN0MHhNw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11030"; a="17594435"
-X-IronPort-AV: E=Sophos;i="6.07,170,1708416000"; 
-   d="scan'208";a="17594435"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2024 08:02:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,170,1708416000"; 
-   d="scan'208";a="17548115"
-Received: from lkp-server01.sh.intel.com (HELO 3d808bfd2502) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 31 Mar 2024 08:02:29 -0700
-Received: from kbuild by 3d808bfd2502 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rqwhX-0001CS-1p;
-	Sun, 31 Mar 2024 15:02:27 +0000
-Date: Sun, 31 Mar 2024 23:02:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: "yu-chang.lee" <yu-chang.lee@mediatek.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2335E14A63E;
+	Sun, 31 Mar 2024 16:26:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=62.96.220.36
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711902414; cv=pass; b=ksgeo40CZZoHjOGt8MKYqda3khumTsJ5Ndtklrqvhq63ohE/oRMRa+QBA60u1DlOUwQ1z3OIt6JePCAbX6JGsqTBX4YBSNZ/7iJulzeVE/sM/Xq0qp4DPKVy+agv+dwaenI1+fgC55h+wWoLI0rLE3bxWhiJTQFsXcodaLO7I58=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711902414; c=relaxed/simple;
+	bh=/4yQxoR3DV9yvkLWH5V8H39qrAkzGcPAl4uH956qFcQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=sudOgHIpgPPNJk/dMDoKJa+B28J9xh4YPiHc1E3CRAM84iS8E+X14c6u6VceJRJIEqrmKwjJ1QqHo6hQfsXKREO/ghyy3MalE4T5dr8LzwhFG/FIeoeUDwt/vyRFSA2Q3rsdUpiNkwW2xT2O5dRlWY8J7yyD0xR8Tp6ljsxjGxg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=fail smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=EuK11uYg; arc=none smtp.client-ip=209.85.128.46; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; arc=pass smtp.client-ip=62.96.220.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linaro.org
+Received: from localhost (localhost [127.0.0.1])
+	by a.mx.secunet.com (Postfix) with ESMTP id E8E1020851;
+	Sun, 31 Mar 2024 18:26:50 +0200 (CEST)
+X-Virus-Scanned: by secunet
+Received: from a.mx.secunet.com ([127.0.0.1])
+	by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0qOul6Xc8Cf7; Sun, 31 Mar 2024 18:26:50 +0200 (CEST)
+Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by a.mx.secunet.com (Postfix) with ESMTPS id 701DD208A2;
+	Sun, 31 Mar 2024 18:26:50 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com 701DD208A2
+Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
+	by mailout2.secunet.com (Postfix) with ESMTP id 6346F800051;
+	Sun, 31 Mar 2024 18:26:50 +0200 (CEST)
+Received: from mbx-essen-01.secunet.de (10.53.40.197) by
+ cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Sun, 31 Mar 2024 18:26:50 +0200
+Received: from Pickup by mbx-essen-01.secunet.de with Microsoft SMTP Server id
+ 15.1.2507.17; Sun, 31 Mar 2024 16:24:21 +0000
+X-sender: <linux-kernel+bounces-125888-steffen.klassert=secunet.com@vger.kernel.org>
+X-Receiver: <steffen.klassert@secunet.com>
+ ORCPT=rfc822;steffen.klassert@secunet.com NOTIFY=NEVER;
+ X-ExtendedProps=DwA1AAAATWljcm9zb2Z0LkV4Y2hhbmdlLlRyYW5zcG9ydC5EaXJlY3RvcnlEYXRhLklzUmVzb3VyY2UCAAAFABUAFgACAAAABQAUABEA8MUJLbkECUOS0gjaDTZ+uAUAagAJAAEAAAAAAAAABQAWAAIAAAUAQwACAAAFAEYABwADAAAABQBHAAIAAAUAEgAPAGIAAAAvbz1zZWN1bmV0L291PUV4Y2hhbmdlIEFkbWluaXN0cmF0aXZlIEdyb3VwIChGWURJQk9IRjIzU1BETFQpL2NuPVJlY2lwaWVudHMvY249U3RlZmZlbiBLbGFzc2VydDY4YwUACwAXAL4AAACheZxkHSGBRqAcAp3ukbifQ049REI2LENOPURhdGFiYXNlcyxDTj1FeGNoYW5nZSBBZG1pbmlzdHJhdGl2ZSBHcm91cCAoRllESUJPSEYyM1NQRExUKSxDTj1BZG1pbmlzdHJhdGl2ZSBHcm91cHMsQ049c2VjdW5ldCxDTj1NaWNyb3NvZnQgRXhjaGFuZ2UsQ049U2VydmljZXMsQ049Q29uZmlndXJhdGlvbixEQz1zZWN1bmV0LERDPWRlBQAOABEABiAS9uuMOkqzwmEZDvWNNQUAHQAPAAwAAABtYngtZXNzZW4tMDIFADwAAgAADwA2AAAATWljcm9zb2Z0LkV4Y2hhbmdlLlRyYW5zcG9ydC5NYWlsUmVjaXBpZW50LkRpc3BsYXlOYW1lDwARAAAAS2xhc3NlcnQsIFN0ZWZmZW4FAGwAAgAABQBYABcASgAAAPDFCS25BAlDktII2g02frhDTj1LbGFzc2VydCBTdGVmZmVuLE9VPVVzZXJzLE9VPU1pZ3JhdGlvbixEQz1zZWN1bmV0LERDPWRlBQAMAAIAAAUAJgACAAEFACIADwAxAAAAQXV0b1Jlc3BvbnNlU3VwcHJlc3M6IDANClRyYW5zbWl0SGlzdG9ye
+	TogRmFsc2UNCg8ALwAAAE1pY3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuRXhwYW5zaW9uR3JvdXBUeXBlDwAVAAAATWVtYmVyc0dyb3VwRXhwYW5zaW9uBQAjAAIAAQ==
+X-CreatedBy: MSExchange15
+X-HeloDomain: b.mx.secunet.com
+X-ExtendedProps: BQBjAAoAQKNAQuxQ3AgFAGEACAABAAAABQA3AAIAAA8APAAAAE1pY3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuTWFpbFJlY2lwaWVudC5Pcmdhbml6YXRpb25TY29wZREAAAAAAAAAAAAAAAAAAAAAAAUASQACAAEFAGIACgAhAAAAo4oAAAUABAAUIAEAAAAcAAAAc3RlZmZlbi5rbGFzc2VydEBzZWN1bmV0LmNvbQUABgACAAEPACoAAABNaWNyb3NvZnQuRXhjaGFuZ2UuVHJhbnNwb3J0LlJlc3VibWl0Q291bnQHAAIAAAAPAAkAAABDSUF1ZGl0ZWQCAAEFAAIABwABAAAABQADAAcAAAAAAAUABQACAAEFAGQADwADAAAASHViBQApAAIAAQ8APwAAAE1pY3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuRGlyZWN0b3J5RGF0YS5NYWlsRGVsaXZlcnlQcmlvcml0eQ8AAwAAAExvdw==
+X-Source: SMTP:Default MBX-DRESDEN-01
+X-SourceIPAddress: 62.96.220.37
+X-EndOfInjectedXHeaders: 13716
+X-Virus-Scanned: by secunet
+Received-SPF: Pass (sender SPF authorized) identity=mailfrom; client-ip=139.178.88.99; helo=sv.mirrors.kernel.org; envelope-from=linux-kernel+bounces-125888-steffen.klassert=secunet.com@vger.kernel.org; receiver=steffen.klassert@secunet.com 
+DKIM-Filter: OpenDKIM Filter v2.11.0 b.mx.secunet.com ED60D2025D
+Authentication-Results: b.mx.secunet.com;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EuK11uYg"
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+ARC-Seal: i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711833042; cv=none; b=eWzUgg8AsrOmii/PnsDx5QTK9phkSNbznWaLlXUL9148Rbu+JUEMhgY353KpmV8hwbgYmApakDCSLwKgWPZPLuwuYmsNReJFGqwaKirVisiIyo5s2uFi+HSggrO3M50bsupT2LXVIcBJVGZXqtXlRaGZ+WdQNji9Sx1zVgGMKnI=
+ARC-Message-Signature: i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711833042; c=relaxed/simple;
+	bh=/4yQxoR3DV9yvkLWH5V8H39qrAkzGcPAl4uH956qFcQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NaOAmtAu3ncdR9vZrxQkQhjyS2IsAXFUaJeob4num+FnfSS/TkWvYsKtYraDpv/O6N5KK75BCyxdrDviFCvT4v8dWbKcq6KgRqcMYxutFb4/qXYGDQX9E+UCTpp9xkrfiT/RyVR8JTIoPEd2wkyAi+IO8Z21gkVZb9DtQwZZ4pE=
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=EuK11uYg; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1711833039; x=1712437839; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=61v4scjVgIk2ToFnkXS2oeqx/czO/u3CzUzarujt/iQ=;
+        b=EuK11uYg2xMVqXhNGntIbfC9q8LcHUe1FkvyowcuCkBRpYY9fizfrZBPmOHpwpq6JT
+         youB6G1Azf4HbWTz6qs/jCr2ERT0dGTfcjq80tgPXt4ZTuRLE0HSLZcYvxkw4pFbpH+F
+         iNYEKUhOJIwT5kT4W35vWMn3mSoU2i2su++VHxpjWsyAI2XnbTpvHq0pmtqDMhPQULRE
+         IJ725Iok2kpIZ0uRzAs9McDhgnpdO2Aez7eUpsjzdt0KJMVtqhg+7ja47tc9DMd5SmWb
+         EtMoEXRCOIUN3KIxGwiokW3Tpyr7yEngB0k/ebCRXAhHzZm7KE8Rh7lD4GAZcEnsHuh8
+         PDKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711833039; x=1712437839;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=61v4scjVgIk2ToFnkXS2oeqx/czO/u3CzUzarujt/iQ=;
+        b=bA0s8o8fI8ASohhiuOMWSSBOXUkqtWzP0uS89oJok2Un7qhX0P/F0iwWFYKSzrN3J2
+         Ie5yny0vAJIoAMV4tWTR1FPTLo7fQ3d72NvdNHbX1kDnnbrWYoMlUAQBCPaLdmHwo+rF
+         z1wu3IBMLV68+oFUC4ByereB3szDb2xDV9701P7m8cnHY14EOIlnZ7/rmvyHWHRi11MS
+         lbbmyAS2BPS59RGbeET8S2/+vLMFafRLAIplLdd7WgoGt3jMOEm620MzBNm6IZeldgDK
+         phKt9/eUGoGd+pKq2g3hjbZ9lmoriPpSqJ6yvDWbpWpEeRYNggPzhXyDZVwbpwv10oPY
+         +7+A==
+X-Forwarded-Encrypted: i=1; AJvYcCVpoBHzsTzGsnrxiMtAl7ATZQzT7Ei2J3lzDbuYnmY6QWSpXygOk+qeWTcg6M2BhSWlbYCvynOmm4uSw510ezNW61RU4j8DhoYvtD5w
+X-Gm-Message-State: AOJu0YxC9hltUka7//zGVChSA/bPVe82QPAR/76GZo13XdJP2MbzkUIo
+	XLl6zWIC/dbpHM1Mkx6XfqwooGz/mh7OW6jrmojn20huwbgHCEEr8pkNtV2wzGI=
+X-Google-Smtp-Source: AGHT+IGvC5puYahyLfoRxaBZa5kEc2+uWb+/xISXFXurHNo+cizr9pJb/P/tTe/zgahZkVnF1kYg5g==
+X-Received: by 2002:a05:600c:4e8b:b0:414:f60:5d6a with SMTP id f11-20020a05600c4e8b00b004140f605d6amr4142782wmq.0.1711833039552;
+        Sat, 30 Mar 2024 14:10:39 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Ulf Hansson <ulf.hansson@linaro.org>,
 	Matthias Brugger <matthias.bgg@gmail.com>,
 	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	MandyJH Liu <mandyjh.liu@mediatek.com>
-Cc: oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	Project_Global_Chrome_Upstream_Group@mediatek.com,
-	fan.chen@mediatek.com, xiufeng.li@mediatek.com,
-	yu-chang.lee@mediatek.com
-Subject: Re: [PATCH v2 2/3] dt-bindings: power: Add mediatek larb definition
-Message-ID: <202403312222.fjYPC06h-lkp@intel.com>
-References: <20240327055732.28198-3-yu-chang.lee@mediatek.com>
+	linux-mediatek@lists.infradead.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] pmdomain: mediatek: scpsys: drop driver owner assignment
+Date: Sat, 30 Mar 2024 22:10:36 +0100
+Message-Id: <20240330211036.100956-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+Precedence: bulk
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240327055732.28198-3-yu-chang.lee@mediatek.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
 
-Hi yu-chang.lee,
+Core in platform_driver_register() already sets the .owner, so driver
+does not need to.
 
-kernel test robot noticed the following build warnings:
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/pmdomain/mediatek/mtk-scpsys.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on krzk-dt/for-next linus/master v6.9-rc1 next-20240328]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/yu-chang-lee/pmdomain-mediatek-add-smi_larb_reset-function-when-power-on/20240327-140007
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20240327055732.28198-3-yu-chang.lee%40mediatek.com
-patch subject: [PATCH v2 2/3] dt-bindings: power: Add mediatek larb definition
-compiler: loongarch64-linux-gcc (GCC) 13.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20240331/202403312222.fjYPC06h-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403312222.fjYPC06h-lkp@intel.com/
-
-dtcheck warnings: (new ones prefixed by >>)
->> Documentation/devicetree/bindings/power/mediatek,power-controller.yaml:128:6: [error] syntax error: expected <block end>, but found '<block mapping start>' (syntax)
->> Documentation/devicetree/bindings/power/mediatek,power-controller.yaml:129:9: [warning] wrong indentation: expected 7 but found 8 (indentation)
---
->> Documentation/devicetree/bindings/power/mediatek,power-controller.yaml:128:6: did not find expected key
->> Documentation/devicetree/bindings/mfd/mediatek,mt8195-scpsys.yaml:
-   while parsing a block mapping
-     in "<unicode string>", line 64, column 5
-   did not find expected key
-     in "<unicode string>", line 128, column 6
---
->> Documentation/devicetree/bindings/power/mediatek,power-controller.yaml: ignoring, error parsing file
-
-vim +128 Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
-
-     8	
-     9	maintainers:
-    10	  - MandyJH Liu <mandyjh.liu@mediatek.com>
-    11	  - Matthias Brugger <mbrugger@suse.com>
-    12	
-    13	description: |
-    14	  Mediatek processors include support for multiple power domains which can be
-    15	  powered up/down by software based on different application scenes to save power.
-    16	
-    17	  IP cores belonging to a power domain should contain a 'power-domains'
-    18	  property that is a phandle for SCPSYS node representing the domain.
-    19	
-    20	properties:
-    21	  $nodename:
-    22	    pattern: '^power-controller(@[0-9a-f]+)?$'
-    23	
-    24	  compatible:
-    25	    enum:
-    26	      - mediatek,mt6795-power-controller
-    27	      - mediatek,mt8167-power-controller
-    28	      - mediatek,mt8173-power-controller
-    29	      - mediatek,mt8183-power-controller
-    30	      - mediatek,mt8186-power-controller
-    31	      - mediatek,mt8188-power-controller
-    32	      - mediatek,mt8192-power-controller
-    33	      - mediatek,mt8195-power-controller
-    34	      - mediatek,mt8365-power-controller
-    35	
-    36	  '#power-domain-cells':
-    37	    const: 1
-    38	
-    39	  '#address-cells':
-    40	    const: 1
-    41	
-    42	  '#size-cells':
-    43	    const: 0
-    44	
-    45	patternProperties:
-    46	  "^power-domain@[0-9a-f]+$":
-    47	    $ref: "#/$defs/power-domain-node"
-    48	    patternProperties:
-    49	      "^power-domain@[0-9a-f]+$":
-    50	        $ref: "#/$defs/power-domain-node"
-    51	        patternProperties:
-    52	          "^power-domain@[0-9a-f]+$":
-    53	            $ref: "#/$defs/power-domain-node"
-    54	            patternProperties:
-    55	              "^power-domain@[0-9a-f]+$":
-    56	                $ref: "#/$defs/power-domain-node"
-    57	                unevaluatedProperties: false
-    58	            unevaluatedProperties: false
-    59	        unevaluatedProperties: false
-    60	    unevaluatedProperties: false
-    61	
-    62	$defs:
-    63	  power-domain-node:
-    64	    type: object
-    65	    description: |
-    66	      Represents the power domains within the power controller node as documented
-    67	      in Documentation/devicetree/bindings/power/power-domain.yaml.
-    68	
-    69	    properties:
-    70	
-    71	      '#power-domain-cells':
-    72	        description:
-    73	          Must be 0 for nodes representing a single PM domain and 1 for nodes
-    74	          providing multiple PM domains.
-    75	
-    76	      '#address-cells':
-    77	        const: 1
-    78	
-    79	      '#size-cells':
-    80	        const: 0
-    81	
-    82	      reg:
-    83	        description: |
-    84	          Power domain index. Valid values are defined in:
-    85	              "include/dt-bindings/power/mt6795-power.h" - for MT8167 type power domain.
-    86	              "include/dt-bindings/power/mt8167-power.h" - for MT8167 type power domain.
-    87	              "include/dt-bindings/power/mt8173-power.h" - for MT8173 type power domain.
-    88	              "include/dt-bindings/power/mt8183-power.h" - for MT8183 type power domain.
-    89	              "include/dt-bindings/power/mediatek,mt8188-power.h" - for MT8188 type power domain.
-    90	              "include/dt-bindings/power/mt8192-power.h" - for MT8192 type power domain.
-    91	              "include/dt-bindings/power/mt8195-power.h" - for MT8195 type power domain.
-    92	              "include/dt-bindings/power/mediatek,mt8365-power.h" - for MT8365 type power domain.
-    93	        maxItems: 1
-    94	
-    95	      clocks:
-    96	        description: |
-    97	          A number of phandles to clocks that need to be enabled during domain
-    98	          power-up sequencing.
-    99	
-   100	      clock-names:
-   101	        description: |
-   102	          List of names of clocks, in order to match the power-up sequencing
-   103	          for each power domain we need to group the clocks by name. BASIC
-   104	          clocks need to be enabled before enabling the corresponding power
-   105	          domain, and should not have a '-' in their name (i.e mm, mfg, venc).
-   106	          SUSBYS clocks need to be enabled before releasing the bus protection,
-   107	          and should contain a '-' in their name (i.e mm-0, isp-0, cam-0).
-   108	
-   109	          In order to follow properly the power-up sequencing, the clocks must
-   110	          be specified by order, adding first the BASIC clocks followed by the
-   111	          SUSBSYS clocks.
-   112	
-   113	      domain-supply:
-   114	        description: domain regulator supply.
-   115	
-   116	      mediatek,infracfg:
-   117	        $ref: /schemas/types.yaml#/definitions/phandle
-   118	        description: phandle to the device containing the INFRACFG register range.
-   119	
-   120	      mediatek,infracfg-nao:
-   121	        $ref: /schemas/types.yaml#/definitions/phandle
-   122	        description: phandle to the device containing the INFRACFG-NAO register range.
-   123	
-   124	      mediatek,smi:
-   125	        $ref: /schemas/types.yaml#/definitions/phandle
-   126	        description: phandle to the device containing the SMI register range.
-   127	
- > 128	     mediatek,larb:
- > 129	        $ref: /schemas/types.yaml#/definitions/phandle
-   130	        description: phandle to the device containing the LARB register range.
-   131	
-   132	    required:
-   133	      - reg
-   134	
-   135	required:
-   136	  - compatible
-   137	
-
+diff --git a/drivers/pmdomain/mediatek/mtk-scpsys.c b/drivers/pmdomain/mediatek/mtk-scpsys.c
+index 59a7a8c261ed..1a80c1537a43 100644
+--- a/drivers/pmdomain/mediatek/mtk-scpsys.c
++++ b/drivers/pmdomain/mediatek/mtk-scpsys.c
+@@ -1138,7 +1138,6 @@ static struct platform_driver scpsys_drv = {
+ 	.driver = {
+ 		.name = "mtk-scpsys",
+ 		.suppress_bind_attrs = true,
+-		.owner = THIS_MODULE,
+ 		.of_match_table = of_scpsys_match_tbl,
+ 	},
+ };
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
+
 
