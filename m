@@ -1,98 +1,110 @@
-Return-Path: <linux-pm+bounces-5725-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5726-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5399A892781
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Mar 2024 00:04:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 04F7D892990
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Mar 2024 07:54:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0DCA128161B
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Mar 2024 23:04:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 99D102831CB
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Mar 2024 06:54:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B0D713E8BC;
-	Fri, 29 Mar 2024 23:04:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 112AB64B;
+	Sat, 30 Mar 2024 06:54:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Pe9BIhi6"
+	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="IOfhLqrZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A658313E881
-	for <linux-pm@vger.kernel.org>; Fri, 29 Mar 2024 23:04:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F4A315CE;
+	Sat, 30 Mar 2024 06:54:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711753444; cv=none; b=lWQ6d0iSHuubn5YAjb1qW2LNOaaWEgsHArtAPULQO0s54lpEc84v9w9FpcJurux82H9OxkT6sRqGY9709M6idXnIJpCVyGLP7tPT/r2jH0xOl4qXv7TSWydQFKFpw69mVGnjcb5TBuYqTfwtaqgrz9GawKIW+7aN9Hq7jIwaID4=
+	t=1711781680; cv=none; b=HEGhAd5B/shieFcMg+Jus8J5n0dYiRs/yT8jtpORp50DOIgKfSY1K/ieM7pF9n9krqP8Bf31Dq86ea9fauhiFYRJjI7CEcWSP156VaZUXAGo5WWs3M2J4WuA2R4P9mgfkgSKnPxBB9hAdlnryhNxbEqFjaIseq5xytjJfnFQ2ts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711753444; c=relaxed/simple;
-	bh=ElBPjDIZnQxhX8OMQsnhNQHvpAXQI/SVRBZi1UXufCM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=afME6LfqiY4vgRzlDWXf6a8iBbY72SuJSJKFLwRdjfQHXy4sFgiSJQqyfd/0TK3MpYyMtp1ryat2+YSEqn7xMncFmIndid+V0wC2eCsySOil7H1EBfn5tNHrDNFpXFHCNCHlrrsNQa/MroJPS144JcsYlrHU24hw1gzt3sUb4Rk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Pe9BIhi6; arc=none smtp.client-ip=209.85.219.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6969388c36fso12888206d6.1
-        for <linux-pm@vger.kernel.org>; Fri, 29 Mar 2024 16:04:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1711753440; x=1712358240; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ElBPjDIZnQxhX8OMQsnhNQHvpAXQI/SVRBZi1UXufCM=;
-        b=Pe9BIhi6wVmFE/tDN7PvIW+xx1fkS5qJ8BQ87PXx2ib9ZbsUwUL3IieQIbzopBnNSl
-         nNa7uwuQP71R5DH07M+zMXKJ+oYtkwCm+zu/nojbXB3OMFkidtFdBKail2L+MZT+RzPx
-         PHopoUVHHYELKSJfa9m2GY8jnZ0EZ4RXciTDY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711753440; x=1712358240;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ElBPjDIZnQxhX8OMQsnhNQHvpAXQI/SVRBZi1UXufCM=;
-        b=Fi60F5STKCMO5dJ4WZ8xeiXbY8BW4c3D8ysIpPS/R4EhgJl6Bu1TNT3SpoiXsEQJbi
-         zc2u901lFK1mhnCIrBHXXIg5srcO8KquwdKtmEbveOnEJe/dRpUSTAUbuljzPw1ag35M
-         H6nUFQzNa4IIgra/sNRhThvJfNzmMwGWKiJr4quZ/Wi35F+0SiPRN3C0vxjXDRPhHc8z
-         C2/SHCLaTJS/gVa/fPCJez7Ni8QUon416xm7jb+2Du4UqbGewTVwKXdVqpBTX5XmgL1I
-         EJN1cXjms4cxSUL/BOwq3/xbIgimprX8GLwNyyMgaUewZS4Tnj3PeB2uERIPtJ5s30VI
-         3y7w==
-X-Forwarded-Encrypted: i=1; AJvYcCWIHQl25AaFaXLzCwW2i533EHNBRYjYzmEAkzpQskwTQrowqP3pBhW4WQgxGf4FYEtcrXGGh7xLHfF3l+9SM0S23e3YmwEry24=
-X-Gm-Message-State: AOJu0YwqaMBeSNMyI148pV5aJxaw041dF43c0a+wqHWCTtsGhmKQlhJx
-	rXq4m8RLWloh2qrhwo84ZwHfrmpyKcTZmdusOMZQe1gFDHfP8QYS///Znv5iHwVxQOAcrlNlIVO
-	EMb6/rKguKZaI7twC3+v1opX/HCgPoIPHlOuX
-X-Google-Smtp-Source: AGHT+IF+mqQ03gYx7d0d7DYJJ7rVBmyQcQsToUoGLPiRc+Fc5LU2ayUB7rH83oD5qBV9wXHQ8tTdvtFZhUqkRt2CKmo=
-X-Received: by 2002:a05:6214:1905:b0:690:d952:f17a with SMTP id
- er5-20020a056214190500b00690d952f17amr1755577qvb.31.1711753440726; Fri, 29
- Mar 2024 16:04:00 -0700 (PDT)
+	s=arc-20240116; t=1711781680; c=relaxed/simple;
+	bh=+ou0jJukvfoQwr+mDiPl4YAYu4nw/6Sg7nRXHQldpJU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZmL5NhqOT75vvtOGpH6Cuc/7dTt/0ulDjQjszhQ17HRrHSpBPepSUoKoDoqjpnSq0cjJA4TYmceH8dyM20ffsLfoXl3AGSS9HHdq2xZUm89tu7P+auQFDd6umEsCQ62aVDuo1O215hVRMkhMsiR/LUABxc4l4RQ5UpXMBp0m5+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=IOfhLqrZ; arc=none smtp.client-ip=80.237.130.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:
+	Content-Type:Content-Transfer-Encoding:Content-ID:Content-Description:
+	In-Reply-To:References; bh=syQUrvl2dgCvGtizdT7QEDmhkcbW3zS6mu/xuvhkvtM=;
+	t=1711781677; x=1712213677; b=IOfhLqrZA72NhvaODwms+j/TUGDaktmxl7rIt5SzvR9XJCu
+	pRmxQdkS7iBWhBHdsqirH7B62wh+zyJbfyCTeYXSH/SeojvRfPpFrru+4GsB//utXfPcjT9/N1FA7
+	zo0/Lmfj9wohTFvOGOnoI3hLjuQVS/21I/N/8iZSgJruzG36OQxyqjTaz++t6zKwzHWNoqc2cgwVI
+	sQqwRDwHGGpb5NoEIaqb5UKkzDG7WLqRqKmHoRKgkKJZsGiv2huHdgtlRQAbw+az5z1RXLND21MOw
+	YlJxmuaerWzn/5POOGYp3reviF933SCDJA4b31uLO07v3FIHCfHniBxCmeGnLQTA==;
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	id 1rqSbo-00030o-V8; Sat, 30 Mar 2024 07:54:33 +0100
+Message-ID: <29abd2f6-2de5-4a69-9113-61042c52f6bc@leemhuis.info>
+Date: Sat, 30 Mar 2024 07:54:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240329075630.2069474-1-tzungbi@kernel.org> <20240329075630.2069474-6-tzungbi@kernel.org>
-In-Reply-To: <20240329075630.2069474-6-tzungbi@kernel.org>
-From: Prashant Malani <pmalani@chromium.org>
-Date: Fri, 29 Mar 2024 16:03:49 -0700
-Message-ID: <CACeCKadpks=55-bfi2qOX0VdB5Fc0394OBEdKBoRBCsS6MNwAQ@mail.gmail.com>
-Subject: Re: [PATCH 05/18] power: supply: cros_usbpd: provide ID table for
- avoiding fallback match
-To: Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: bleung@chromium.org, groeck@chromium.org, linus.walleij@linaro.org, 
-	brgl@bgdev.pl, hverkuil-cisco@xs4all.nl, mchehab@kernel.org, sre@kernel.org, 
-	alexandre.belloni@bootlin.com, chrome-platform@lists.linux.dev, 
-	linux-gpio@vger.kernel.org, linux-media@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org, krzk@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/1] platform/x86/intel/hid: Don't wake on 5-button
+ releases
+To: David McFarland <corngood@gmail.com>
+Cc: Chris Feng <chris.feng@mediatek.com>,
+ Linux regressions mailing list <regressions@lists.linux.dev>,
+ "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+ Alex Hung <alexhung@gmail.com>, Hans de Goede <hdegoede@redhat.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ "platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org
+References: <20240318191153.6978-1-corngood@gmail.com>
+ <20240318191153.6978-2-corngood@gmail.com>
+ <1198933e-bf89-4237-a6e8-f7daeeebf885@leemhuis.info>
+ <87bk6wlxpp.fsf@gmail.com>
+From: "Linux regression tracking (Thorsten Leemhuis)"
+ <regressions@leemhuis.info>
+Content-Language: en-US, de-DE
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <87bk6wlxpp.fsf@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1711781677;ddeb3204;
+X-HE-SMSGID: 1rqSbo-00030o-V8
 
-On Fri, Mar 29, 2024 at 12:57=E2=80=AFAM Tzung-Bi Shih <tzungbi@kernel.org>=
- wrote:
->
-> Instead of using fallback driver name match, provide ID table[1] for the
-> primary match.
->
-> [1]: https://elixir.bootlin.com/linux/v6.8/source/drivers/base/platform.c=
-#L1353
->
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
-Reviewed-by: Prashant Malani <pmalani@chromium.org>
+On 29.03.24 19:06, David McFarland wrote:
+> "Linux regression tracking (Thorsten Leemhuis)"
+> <regressions@leemhuis.info> writes:
+> 
+>> David, from here is looks like this is stalled for ten days now. Or was
+>> there some progress and I just missed it?
+> No, I've not seen any emails since your last.
+
+Thx for confirming.
+
+>> From the cover letter[1] is sounds a lot like a "Fixes: 0c4cae1bc00d31
+>> ("PM: hibernate: Avoid missing wakeup events during hibernation")" would
+>> be appropriate here.
+> 
+> The specific behaviour I encountered (failure to hibernate) started with
+> that commit, but I think it just exposed the underlying behaviour (wake
+> on button release), which probably dates to when the driver was
+> introduced.
+
+Well, it depends on the maintainer in question (so you might better want
+to ignore this advice!), but I'd say: mention that in the patch
+description and add Fixes: tag, to ensure people pick it up when the
+change that exposed the problem is backported.
+
+This is hinted at in submitting-patches: "This tag also assists the
+stable kernel team in determining which stable kernel versions should
+receive your fix.". Maybe that text should mention scenario.
+
+Ciao, Thorsten
 
