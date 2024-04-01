@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-5743-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5744-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45024893794
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Apr 2024 05:01:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F59F893798
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Apr 2024 05:01:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7675D1C20B47
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Apr 2024 03:01:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B13041C20A59
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Apr 2024 03:01:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BF9C1FAA;
-	Mon,  1 Apr 2024 03:01:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDE139444;
+	Mon,  1 Apr 2024 03:01:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mebPtSk0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GF4fw1X3"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A3A09479;
-	Mon,  1 Apr 2024 03:01:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E1F9BA2B;
+	Mon,  1 Apr 2024 03:01:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711940478; cv=none; b=JouRWj3O+eSDTRCW5qoYfzgBLHxQklUhOHn1WF+pL55zCCZJu0EOLxGL4gMoh+oIOWnXwaSRAuyzRxLl/qOU5bl4BN9MZHgkyiJJwKZWx5MW1+WxnXVKZHy/yxAl5B91z15mpcP6EbyuI5U64wA8pYpILI+9hZgaoarxSz9oD/w=
+	t=1711940480; cv=none; b=GmmSgQNieDcpEJgXXHT7EmCKab9p55xTo3dyxx1ELgGzcydXoG48WCc1q4pDcN0myhFx7KW2kCI4kJ+dNofDDTCMCGRoRRWc2lwQxxw6uyQlqw5gLOPvWRXNNwvWYZHJI8s6GFI0NwPZ3VX61s4kE/K0xXl64RFn35AeeToectQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711940478; c=relaxed/simple;
-	bh=4ygibtdsXHmh6yImp9+dJnz+FeRFzVHcQC/vXMVmzw4=;
+	s=arc-20240116; t=1711940480; c=relaxed/simple;
+	bh=II3WcklFT4vc71YiPvas+ZBSQTksCjF6+Z2zutxVTko=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SWHcT4d/WK7ysymB/sWtaMulCMd/BNxrAwYbHQdjHZJfXbPvhuI/CWL+Gsp021XZcC7+5a/QOb/blwL1JGIfyZqOtOIr6Z5iWoe0oCZW8KcNqd0NXoIoD5GwlU82QBvIbLQdgW+54dt/eAq9GxEmUNmVyX2uiikUdSwAooqOF/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mebPtSk0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9BADC433C7;
-	Mon,  1 Apr 2024 03:01:15 +0000 (UTC)
+	 MIME-Version; b=ogwhL3d339iyRToWyj9xUtKoVm92+0tZ0od7cfxXIwFaRwJ74dIJWS8IziPtBGRGUQUdelDBgO+YQc5iVjgjjaEQllbkW/p1MOWNTicEEDGav4ODnqaJexmAQHLEEuFro/rI8SVCDj49gnDsFqgo9Jzi5Z17TERZwW8qH6uM0IM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GF4fw1X3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47446C433B1;
+	Mon,  1 Apr 2024 03:01:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711940477;
-	bh=4ygibtdsXHmh6yImp9+dJnz+FeRFzVHcQC/vXMVmzw4=;
+	s=k20201202; t=1711940480;
+	bh=II3WcklFT4vc71YiPvas+ZBSQTksCjF6+Z2zutxVTko=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mebPtSk0wpcjcPQXHOz8Y1t+WhXzZzXMH2Z9UOnJ1ZWIEOq1Fcu7UmFtglVIoriWe
-	 Uwq35FjC6fi2bX6dJi9OagYNPQ8egNJtvBgHbU6ZUqPBRz5+Y2a0Oq2yh+ZAuqqUfn
-	 noDu8tHmEUfQEN8yExP2o3ZE2JMRZSModdcQZlgp42MEco/p97kc3lHv/e4fpbBSg3
-	 3xSzYaVID6wWiqmWe8gbMtit6G1s0fxcYCIhnTBae4BBIoBHyODelPMwXCjTXDgAPI
-	 B8HdK/54OvslIiX5uhzW6wsDdjlIOCMc5Ip4cky0OsXVYQ5aAA7nShBvDUl+T6Zowv
-	 Y1qRVabPWEhsA==
+	b=GF4fw1X3ESSa7gfymTe/8l6qGIHFGrBnZH6rv5zv5QBZvKg+JlUqyfv1+kxKdv8O/
+	 NQLls838EZSNwy0zqx1JZkrMJNlgkgNEyt35sRIAZ/9NKMn67L8jUntoMBo+YjA4km
+	 9kgX8txtopFF0b8SM4+ywvcQtNMZ8m4ht8NgWI+T9BJJW4ISjSnBrUUB4avlMt0nl7
+	 6FbvnxpK0ICJFibJ3jG4qRgR+7646Je16gOWKS8RENeUl08yLmYl4y2KsZsIXn9Fz5
+	 cEQ51uIeJBu4O5xZNg30Kg72uaCP/OiO3bwA+3Rv/9vnAH6kYvxjH6AZJC/RxX8KfK
+	 D7dWqzg4x4WEw==
 From: Tzung-Bi Shih <tzungbi@kernel.org>
 To: bleung@chromium.org,
 	groeck@chromium.org,
@@ -55,11 +55,10 @@ Cc: tzungbi@kernel.org,
 	linux-gpio@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	linux-pm@vger.kernel.org,
-	krzk@kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 3/6] power: supply: cros_usbpd: provide ID table for avoiding fallback match
-Date: Mon,  1 Apr 2024 11:00:49 +0800
-Message-ID: <20240401030052.2887845-4-tzungbi@kernel.org>
+	krzk@kernel.org
+Subject: [PATCH v2 4/6] power: supply: cros_pchg: provide ID table for avoiding fallback match
+Date: Mon,  1 Apr 2024 11:00:50 +0800
+Message-ID: <20240401030052.2887845-5-tzungbi@kernel.org>
 X-Mailer: git-send-email 2.44.0.478.gd926399ef9-goog
 In-Reply-To: <20240401030052.2887845-1-tzungbi@kernel.org>
 References: <20240401030052.2887845-1-tzungbi@kernel.org>
@@ -77,53 +76,52 @@ primary match.
 [1]: https://elixir.bootlin.com/linux/v6.8/source/drivers/base/platform.c#L1353
 
 Reviewed-by: Benson Leung <bleung@chromium.org>
-Reviewed-by: Prashant Malani <pmalani@chromium.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 ---
 Changes from v1:
 - No code changes.
 - Add R-b tags.
 
- drivers/power/supply/cros_usbpd-charger.c | 11 +++++++++--
+ drivers/power/supply/cros_peripheral_charger.c | 11 +++++++++--
  1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/power/supply/cros_usbpd-charger.c b/drivers/power/supply/cros_usbpd-charger.c
-index b6c96376776a..8008e31c0c09 100644
---- a/drivers/power/supply/cros_usbpd-charger.c
-+++ b/drivers/power/supply/cros_usbpd-charger.c
+diff --git a/drivers/power/supply/cros_peripheral_charger.c b/drivers/power/supply/cros_peripheral_charger.c
+index a204f2355be4..d406f2a78449 100644
+--- a/drivers/power/supply/cros_peripheral_charger.c
++++ b/drivers/power/supply/cros_peripheral_charger.c
 @@ -5,6 +5,7 @@
-  * Copyright (c) 2014 - 2018 Google, Inc
+  * Copyright 2020 Google LLC.
   */
  
 +#include <linux/mod_devicetable.h>
  #include <linux/module.h>
+ #include <linux/notifier.h>
  #include <linux/platform_data/cros_ec_commands.h>
- #include <linux/platform_data/cros_ec_proto.h>
-@@ -711,16 +712,22 @@ static int cros_usbpd_charger_resume(struct device *dev)
- static SIMPLE_DEV_PM_OPS(cros_usbpd_charger_pm_ops, NULL,
- 			 cros_usbpd_charger_resume);
+@@ -367,16 +368,22 @@ static int __maybe_unused cros_pchg_resume(struct device *dev)
  
-+static const struct platform_device_id cros_usbpd_charger_id[] = {
+ static SIMPLE_DEV_PM_OPS(cros_pchg_pm_ops, NULL, cros_pchg_resume);
+ 
++static const struct platform_device_id cros_pchg_id[] = {
 +	{ DRV_NAME, 0 },
 +	{}
 +};
-+MODULE_DEVICE_TABLE(platform, cros_usbpd_charger_id);
++MODULE_DEVICE_TABLE(platform, cros_pchg_id);
 +
- static struct platform_driver cros_usbpd_charger_driver = {
+ static struct platform_driver cros_pchg_driver = {
  	.driver = {
  		.name = DRV_NAME,
- 		.pm = &cros_usbpd_charger_pm_ops,
+ 		.pm = &cros_pchg_pm_ops,
  	},
--	.probe = cros_usbpd_charger_probe
-+	.probe = cros_usbpd_charger_probe,
-+	.id_table = cros_usbpd_charger_id,
+-	.probe = cros_pchg_probe
++	.probe = cros_pchg_probe,
++	.id_table = cros_pchg_id,
  };
  
- module_platform_driver(cros_usbpd_charger_driver);
+ module_platform_driver(cros_pchg_driver);
  
  MODULE_LICENSE("GPL");
- MODULE_DESCRIPTION("ChromeOS EC USBPD charger");
+ MODULE_DESCRIPTION("ChromeOS EC peripheral device charger");
 -MODULE_ALIAS("platform:" DRV_NAME);
 -- 
 2.44.0.478.gd926399ef9-goog
