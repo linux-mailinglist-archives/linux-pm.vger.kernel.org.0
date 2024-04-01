@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-5750-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5751-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33EDD8939F0
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Apr 2024 12:03:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C561893A1D
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Apr 2024 12:19:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C7FE81F220FD
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Apr 2024 10:03:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B7E31C20FC0
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Apr 2024 10:19:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0BD712E7D;
-	Mon,  1 Apr 2024 10:03:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F75E14AB3;
+	Mon,  1 Apr 2024 10:19:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="odYgGmhR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EtP8KuBu"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B969011CB0;
-	Mon,  1 Apr 2024 10:03:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E18B11119F;
+	Mon,  1 Apr 2024 10:19:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711965800; cv=none; b=jw+bXv+Khy21rARyr0aPKVFgdVEv6drJRhPg3XCAgNDXmL5qF9QmBuzGeMIrGXjxLbaeiQQ8Bso/8wV0ZzSPwNWPcTxS0HYXkyt1MTU/l8L1wXdn4nP9v9L6LxlWPObwxO3uXortFD//sPjbQs2cVylH1tzUq4ssFtljIYYkYvc=
+	t=1711966765; cv=none; b=hap2Frxbgiu7d8eZIuKsYdGmaZsw0QOUWiFfh9NUM4JwJlW919OvV/ebNuLjtn+Hz5jJNNA7d+0rId6wSYAvJ0tqJ1dRllFpya8XviOMllR9RbFHMKDUd+GNQFvkWRonKFcgipoykL1hwH7Wggh0OPqPhUw0unj6xY9DGYpeGVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711965800; c=relaxed/simple;
-	bh=knGCPxN9wiDoX1keD/DkQUkSTgX0lXQ1iGdLbmYKznM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YwRPO/M0tQXndnwUdzzSny8Lrw6CIQNgEIfmoRKvMzEDiqVcP+7tLfx5Z5To/sHCybnbOxfwz9qB62hrHwYEgiRFAePXsWLWZKpexEUXZUQFVuxVzzI/GI88CwaV4MoA7hJNAt9EQv63Nxt6Ex3zxgTKAzPnUup3NH90TJkvjUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=odYgGmhR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF8FFC433F1;
-	Mon,  1 Apr 2024 10:03:15 +0000 (UTC)
+	s=arc-20240116; t=1711966765; c=relaxed/simple;
+	bh=3xoqoswzG37oz3ElpWeHWaniPd7OM86WXBxU0JySR6k=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=fmj4yougt3S751JBezGR+qMcxDdpImrLr3Fw1wGDx8rwqYocbpq17wW/YNx0dI6V1WmI72st63uuoRuCWJ4RfgEPU/YCaNvVZHgBTThA7Q/SIUC3pkrAF0fjUITsR5Wumh04UfoPFIV/ZWp1ptOcBJFvDzS9uIqQFHzU+xdkImI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EtP8KuBu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DDB9C433C7;
+	Mon,  1 Apr 2024 10:19:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711965800;
-	bh=knGCPxN9wiDoX1keD/DkQUkSTgX0lXQ1iGdLbmYKznM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=odYgGmhRr35tU6ns/ckjFmeupcmM22owfTIbX8Ox1kXKsjoc6GsSs9aujm4xQNA4V
-	 yjh9aBlFNBm7NYbP6dmuD4Eo5hOM/GaQLjW7F4ki7VeVza1NfpUpFbINauK2+y3et7
-	 TDKIzxrWEpx7jNlLVyh6cqiyAlaHZUDzvulk1pMiLhR30AjnyW3iUXnUAERIVy/f4/
-	 McXWxTmeUS3SA5Ck/PBwOXnovb8f7HMKGttcGdwp80dLrp4Go3DGwHrvVN0Q9kwTT1
-	 V+ABllxqG++mgxRZyIe8aJx8BMXzvQQ/Tr4ha8kk0kbntcivhWcM38NLNwbP7JmyDN
-	 DYCXDqgh6UYyA==
-Message-ID: <81e8cb22-601f-434d-90c2-024302b39aff@kernel.org>
-Date: Mon, 1 Apr 2024 12:03:13 +0200
+	s=k20201202; t=1711966763;
+	bh=3xoqoswzG37oz3ElpWeHWaniPd7OM86WXBxU0JySR6k=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=EtP8KuBu2WAMf1Byq24uyYfnb1C3SywfEBi9b892YBnhxV4Xtx5FFTHUTtZcSkLi1
+	 X9bPAHG6dx+DiJH750uuF4mct6loBmuh4T+n4edQBrwXiN42e/AcX52AtfxfsoWpv4
+	 b99szMI4aVzqNBxPg+sgUAUyM+2chUGOA1+5JmQGqOGFkjbe198/0CAlkOakV/3Y4n
+	 gF+jPibW4Wls247/2tEbBYLuBV0BJruNEFkFqPQK44eFBJ6lHlHhBPsosqsLD6uxNo
+	 /8DFn2glq7s/gDgbZ4uxnvL0ZnXlcGAuKHkkJ2L1w6Oj97ym/4NjH4dnPOlJkpT7NL
+	 aw54ppqIX/3aA==
+Message-ID: <026eed23-d75b-4ad9-a359-03a3870fbdae@kernel.org>
+Date: Mon, 1 Apr 2024 12:19:16 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,9 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 6/6] platform/chrome: cros_kbd_led_backlight: provide
- ID table for avoiding fallback match
+Subject: Re: [PATCH v2 5/6] platform/chrome: cros_kbd_led_backlight: shrink
+ the driver name
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Tzung-Bi Shih <tzungbi@kernel.org>, bleung@chromium.org,
  groeck@chromium.org, linus.walleij@linaro.org, brgl@bgdev.pl,
  hverkuil-cisco@xs4all.nl, mchehab@kernel.org, sre@kernel.org
@@ -59,9 +60,9 @@ Cc: chrome-platform@lists.linux.dev, pmalani@chromium.org,
  linux-gpio@vger.kernel.org, linux-media@vger.kernel.org,
  linux-pm@vger.kernel.org
 References: <20240401030052.2887845-1-tzungbi@kernel.org>
- <20240401030052.2887845-7-tzungbi@kernel.org>
+ <20240401030052.2887845-6-tzungbi@kernel.org>
+ <ffac342d-5b3e-49fb-ad0b-858cd36f3164@kernel.org>
 Content-Language: en-US
-From: Krzysztof Kozlowski <krzk@kernel.org>
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -105,21 +106,29 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240401030052.2887845-7-tzungbi@kernel.org>
+In-Reply-To: <ffac342d-5b3e-49fb-ad0b-858cd36f3164@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 01/04/2024 05:00, Tzung-Bi Shih wrote:
-> Instead of using fallback driver name match, provide ID table[1] for the
-> primary match.
+On 01/04/2024 12:02, Krzysztof Kozlowski wrote:
+> On 01/04/2024 05:00, Tzung-Bi Shih wrote:
+>> Prepare to provide platform_device_id table.  Shrink the driver name for
+>> fitting to [1].
 > 
-> [1]: https://elixir.bootlin.com/linux/v6.8/source/drivers/base/platform.c#L1353
+> Instead of linking to external resources, please describe the problem
+> and the bug you are fixing here.
 > 
-> Reviewed-by: Benson Leung <bleung@chromium.org>
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
-> ---
+>>
+>> [1]: https://elixir.bootlin.com/linux/v6.8/source/include/linux/mod_devicetable.h#L608
+>>
+>> Reviewed-by: Benson Leung <bleung@chromium.org>
+>> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+> 
+> Missing fixes tag and Cc-stable.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Ah, now I read your answer to v1 discussion. So this was not a bug in
+the first place? Hm, then probably my comment was not really correct and
+we should not split it.
 
 Best regards,
 Krzysztof
