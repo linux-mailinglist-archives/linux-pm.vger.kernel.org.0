@@ -1,169 +1,189 @@
-Return-Path: <linux-pm+bounces-5759-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5760-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D6A5893C79
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Apr 2024 16:59:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7371C893CE4
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Apr 2024 17:36:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5199A1C216B8
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Apr 2024 14:59:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48FF51C21A2A
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Apr 2024 15:36:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4A9A47A4C;
-	Mon,  1 Apr 2024 14:59:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ns0ZvzpV"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CA1546535;
+	Mon,  1 Apr 2024 15:36:50 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mail.inka.de (quechua.inka.de [193.197.184.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A0B146521
-	for <linux-pm@vger.kernel.org>; Mon,  1 Apr 2024 14:59:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C6324501C;
+	Mon,  1 Apr 2024 15:36:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.197.184.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711983569; cv=none; b=fplbBNSUUVQXcrpHpSQHQZTR23WGXzE0n1+hzqTPRE4A4u8l3GNg2ZKG651S/b2cPefoCY9v0b9YqqmCSZYDMoQvCVmG7Z3IwAML7z0Y7BVQFAGu8WbUO3vgFSYy5+EtVmz1thEbqCca83Z6EkLbgwrV/fUrj8Y2YuPaTuUqTzA=
+	t=1711985810; cv=none; b=gRBoHAMRSppPND7vtpbIaneEUhLK51dposn1KRJ4MLMNhHBth3KGPLrpb7HrqiuZuBWMKKBM+AP5YaMn6ITRyafVJN1E+uTShjOXCTVhxB5MRLEjtOL/8qNBEERU4/i0KDt22JthRab30skQQcpu2WiW+un4dHAHfOnkOUw8M7E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711983569; c=relaxed/simple;
-	bh=Y173ouXifC0UgenFiTZyN7ZdMZSoLV5wM5RT2GlmCFc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=uX+Y4/OINLFR2J/ABDoBSP9hpt3IcHCJ2tnaISJ5LizpC/1qjjR/AyQAyQ9ai0R2j23Jac6XYMGQGvzt4mWJp8HJKPdQhInazqDs050jmS/RvrsHKgITl9bPB0KIT+g5HD/Ve0Pb/wTZkHlnfLV684kgku9twi/j98pCD02hJs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ns0ZvzpV; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1711983567;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oYtrXSODkF7n06ZabqM/gn748i0MzfQn245Hdj5AU1M=;
-	b=Ns0ZvzpVkwdZiNa9UrPGdkQ6VGsl16wpar/CJwnQYcl91zZWeNrWB/ccpVysZJrm9zZAbz
-	JioXZrNKo/gCxSvuZWvcvuQxVOaQf1l5bBW8mU7mHv/Wt0c5bq5BAw83koCzaRpoZOE0BZ
-	PdveE0/pF3F4QVxsO8IiRYKArjqqjrw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-303-2-d38DFfNMaBj4mHhv0i_A-1; Mon, 01 Apr 2024 10:59:21 -0400
-X-MC-Unique: 2-d38DFfNMaBj4mHhv0i_A-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B9E33185A781;
-	Mon,  1 Apr 2024 14:59:19 +0000 (UTC)
-Received: from llong.com (unknown [10.22.16.160])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 955A58177;
-	Mon,  1 Apr 2024 14:59:18 +0000 (UTC)
-From: Waiman Long <longman@redhat.com>
-To: Tejun Heo <tj@kernel.org>,
-	Zefan Li <lizefan.x@bytedance.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Peter Zijlstra <peterz@infradead.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <len.brown@intel.com>,
-	Pavel Machek <pavel@ucw.cz>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	cgroups@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Frederic Weisbecker <frederic@kernel.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Alex Shi <alexs@kernel.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Barry Song <song.bao.hua@hisilicon.com>,
-	Waiman Long <longman@redhat.com>
-Subject: [PATCH 2/2] cgroup/cpuset: Add test_cpuset_v1_hp.sh
-Date: Mon,  1 Apr 2024 10:58:58 -0400
-Message-Id: <20240401145858.2656598-3-longman@redhat.com>
-In-Reply-To: <20240401145858.2656598-1-longman@redhat.com>
-References: <20240401145858.2656598-1-longman@redhat.com>
+	s=arc-20240116; t=1711985810; c=relaxed/simple;
+	bh=4IkYm12Xm40qZ4Fx7s8GjYsSBQxNdQAXgH2rzdNq4sw=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=sq9OXk9HhAdw0/CvxN2/My5zO5MYx5opPuTt/L5NeduUVcYxhVPxra24P25/wJHKre0+lweM/fULtkECUHcXu5wpHak8/tu8kDXdmnWbTNv+srf9U8tVzQodX/tKjvQ8ieMEz+LAe/tRaX2YaQefYwvxYySTPXJSKqzt20Bi3QE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inka.de; spf=pass smtp.mailfrom=inka.de; arc=none smtp.client-ip=193.197.184.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inka.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inka.de
+Received: from mail.berkhan-weisser.de ([2a03:4000:54:b9a::4])
+	by mail.inka.de with esmtpsa 
+	id 1rrJiE-00ArAD-30; Mon, 01 Apr 2024 17:36:42 +0200
+Received: from 127.0.0.1 (helo=localhost.localdomain)
+	by mail.berkhan-weisser.de with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <Enrik.Berkhan@inka.de>)
+	id 1rrJiD-003wxe-30;
+	Mon, 01 Apr 2024 17:36:41 +0200
+Message-ID: <85837371eadac58dec812c0be14264152ee1e5fd.camel@inka.de>
+Subject: Re: [PATCH 1/1] platform/x86/intel/hid: Don't wake on 5-button
+ releases
+From: Enrik Berkhan <Enrik.Berkhan@inka.de>
+To: Linux regressions mailing list <regressions@lists.linux.dev>, David
+ McFarland <corngood@gmail.com>, Chris Feng <chris.feng@mediatek.com>
+Cc: "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, Alex Hung
+ <alexhung@gmail.com>, Hans de Goede <hdegoede@redhat.com>, Ilpo
+ =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ "platform-driver-x86@vger.kernel.org"
+ <platform-driver-x86@vger.kernel.org>,  LKML
+ <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org
+Date: Mon, 01 Apr 2024 17:36:35 +0200
+In-Reply-To: <1198933e-bf89-4237-a6e8-f7daeeebf885@leemhuis.info>
+References: <20240318191153.6978-1-corngood@gmail.com>
+	 <20240318191153.6978-2-corngood@gmail.com>
+	 <1198933e-bf89-4237-a6e8-f7daeeebf885@leemhuis.info>
+Autocrypt: addr=Enrik.Berkhan@inka.de; prefer-encrypt=mutual;
+ keydata=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
+ Dh1pYX8125Sys26JeDfnh3bnI=
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.52.0 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
 
-Add a simple test to verify that an empty v1 cpuset will force its tasks
-to be moved to an ancestor node. It is based on the test case documented
-in commit 76bb5ab8f6e3 ("cpuset: break kernfs active protection in
-cpuset_write_resmask()").
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
 
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- tools/testing/selftests/cgroup/Makefile       |  2 +-
- .../selftests/cgroup/test_cpuset_v1_hp.sh     | 40 +++++++++++++++++++
- 2 files changed, 41 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/cgroup/test_cpuset_v1_hp.sh
+On Fri, 2024-03-29 at 14:51 +0100, Linux regression tracking (Thorsten
+Leemhuis) wrote:
+> [CCing Chris, who authored the culprit; also CCing the platform folks
+> and a few lists]
 
-diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
-index 00b441928909..16461dc0ffdf 100644
---- a/tools/testing/selftests/cgroup/Makefile
-+++ b/tools/testing/selftests/cgroup/Makefile
-@@ -4,7 +4,7 @@ CFLAGS += -Wall -pthread
- all: ${HELPER_PROGS}
- 
- TEST_FILES     := with_stress.sh
--TEST_PROGS     := test_stress.sh test_cpuset_prs.sh
-+TEST_PROGS     := test_stress.sh test_cpuset_prs.sh test_cpuset_v1_hp.sh
- TEST_GEN_FILES := wait_inotify
- TEST_GEN_PROGS = test_memcontrol
- TEST_GEN_PROGS += test_kmem
-diff --git a/tools/testing/selftests/cgroup/test_cpuset_v1_hp.sh b/tools/testing/selftests/cgroup/test_cpuset_v1_hp.sh
-new file mode 100755
-index 000000000000..0d0a1923d8ec
---- /dev/null
-+++ b/tools/testing/selftests/cgroup/test_cpuset_v1_hp.sh
-@@ -0,0 +1,40 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Test the special cpuset v1 hotplug case where a cpuset become empty of
-+# CPUs will force migration of tasks out to an ancestor.
-+#
-+
-+skip_test() {
-+	echo "$1"
-+	echo "Test SKIPPED"
-+	exit 4 # ksft_skip
-+}
-+
-+[[ $(id -u) -eq 0 ]] || skip_test "Test must be run as root!"
-+
-+# Find cpuset v1 mount point
-+CPUSET=$(mount -t cgroup | grep cpuset | head -1 | awk -e '{print $3}')
-+[[ -n "$CPUSET" ]] || skip_test "cpuset v1 mount point not found!"
-+
-+#
-+# Create a test cpuset, put a CPU and a task there and offline that CPU
-+#
-+TDIR=test$$
-+[[ -d $CPUSET/$TDIR ]] || mkdir $CPUSET/$TDIR
-+echo 1 > $CPUSET/$TDIR/cpuset.cpus
-+echo 0 > $CPUSET/$TDIR/cpuset.mems
-+sleep 10&
-+TASK=$!
-+echo $TASK > $CPUSET/$TDIR/tasks
-+echo 0 > /sys/devices/system/cpu/cpu1/online
-+sleep 0.5
-+echo 1 > /sys/devices/system/cpu/cpu1/online
-+NEWCS=$(cat /proc/$TASK/cpuset)
-+rmdir $CPUSET/$TDIR
-+[[ $NEWCS != "/" ]] && {
-+	echo "cpuset $NEWCS, test FAILED!"
-+	exit 1
-+}
-+echo "Test PASSED"
-+exit 0
--- 
-2.39.3
+(Intentionally replying to the "wrong" e-mail to get the enlarged
+recipient list for free ...)
 
+>=20
+
+> Regarding the patch itself: hopefully this mail will get things
+> moving.
+>=20
+> [1]
+> https://lore.kernel.org/linux-pm/20240318191153.6978-1-corngood@gmail.com=
+/
+>=20
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker'
+> hat)
+> --
+> Everything you wanna know about Linux kernel regression tracking:
+> https://linux-regtracking.leemhuis.info/about/#tldr
+> If I did something stupid, please tell me, as explained on that page.
+>=20
+> #regzbot poke
+>=20
+> > Signed-off-by: David McFarland <corngood@gmail.com>
+
+Tested-by: Enrik Berkhan <Enrik.Berkhan@inka.de>
+
+> > > ---
+> > =C2=A0drivers/platform/x86/intel/hid.c | 8 +++++++-
+> > =C2=A01 file changed, 7 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/platform/x86/intel/hid.c
+> > b/drivers/platform/x86/intel/hid.c
+> > index 7457ca2b27a6..707de9895965 100644
+> > --- a/drivers/platform/x86/intel/hid.c
+> > +++ b/drivers/platform/x86/intel/hid.c
+> > @@ -504,6 +504,7 @@ static void notify_handler(acpi_handle handle,
+> > u32 event, void *context)
+> > =C2=A0	struct platform_device *device =3D context;
+> > =C2=A0	struct intel_hid_priv *priv =3D dev_get_drvdata(&device-
+> > >dev);
+> > =C2=A0	unsigned long long ev_index;
+> > +	struct key_entry *ke;
+> > =C2=A0	int err;
+> > =C2=A0
+> > =C2=A0	/*
+> > @@ -545,11 +546,16 @@ static void notify_handler(acpi_handle
+> > handle, u32 event, void *context)
+> > =C2=A0		if (event =3D=3D 0xc0 || !priv->array)
+> > =C2=A0			return;
+> > =C2=A0
+> > -		if (!sparse_keymap_entry_from_scancode(priv-
+> > >array, event)) {
+> > +		ke =3D sparse_keymap_entry_from_scancode(priv-
+> > >array, event);
+> > +
+> > +		if (!ke) {
+> > =C2=A0			dev_info(&device->dev, "unknown event
+> > 0x%x\n", event);
+> > =C2=A0			return;
+> > =C2=A0		}
+> > =C2=A0
+> > +		if (ke->type =3D=3D KE_IGNORE)
+> > +			return;
+> > +
+> > =C2=A0wakeup:
+> > =C2=A0		pm_wakeup_hard_event(&device->dev);
+> > =C2=A0
+
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAEBCAAdFiEEbLyQBMI0qAWiF6l31AjqSkbLPKQFAmYK1IQACgkQ1AjqSkbL
+PKSUXwv/YWiU334Osus+niffw9gN94vCQid6OWuTIbX2zMNIunHmpHouMtfo6dpb
+7Qsyaz0sxaUEclRPLf/bSAV8zWromM/4Xoa/DoBq+GPOLle5wTJAlislhZVfDZFX
+FZ0EfUg+MvThqlJD8yhGNJWGVnSn92hDid7yy5Y/BSWTPCNhRxEsqy+d0pN82EnD
+0mqWnpfG28uqK6dtOLnvbiOuWQhgKYerKFYHXw8FLxZV0eKb3+RqBFf6ZdsAjUEC
++d7G9Oq4pc9jxZNvOMop+z3Eskd/bD8Wi2aDtR1qcRENMaK0ucevTuOjGL8Gh80c
+SbgKu2eU/qVlbnVrcaPgpB0CXXza7SYUynw5XWB8jBWOj6w2nxpnQPm5a0Z5aNYw
+/kLuabhSommEmUIJtoOA2vgO8D0ACfF2n95cNXaJRiOhuag3SRoair50TOzmf09Z
+4uco5iaWeIQwEpVFGdy+qh0V18kYclnNMZHC9bhO6heBDLB9Wy/iXDxko9tMXm/v
+XnfAKKw9
+=3DudJV
+-----END PGP SIGNATURE-----
 
