@@ -1,189 +1,273 @@
-Return-Path: <linux-pm+bounces-5760-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5761-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7371C893CE4
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Apr 2024 17:36:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C51D893E12
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Apr 2024 17:59:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48FF51C21A2A
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Apr 2024 15:36:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 026802830E5
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Apr 2024 15:59:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CA1546535;
-	Mon,  1 Apr 2024 15:36:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7301747A79;
+	Mon,  1 Apr 2024 15:59:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="BLGT9jyv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.inka.de (quechua.inka.de [193.197.184.2])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C6324501C;
-	Mon,  1 Apr 2024 15:36:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.197.184.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68F9B47A6B;
+	Mon,  1 Apr 2024 15:59:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711985810; cv=none; b=gRBoHAMRSppPND7vtpbIaneEUhLK51dposn1KRJ4MLMNhHBth3KGPLrpb7HrqiuZuBWMKKBM+AP5YaMn6ITRyafVJN1E+uTShjOXCTVhxB5MRLEjtOL/8qNBEERU4/i0KDt22JthRab30skQQcpu2WiW+un4dHAHfOnkOUw8M7E=
+	t=1711987142; cv=none; b=nZa5l+hOBOFWs7hYsogTlLvSoEvclKB1HU6ZYCEwfcIgD0WobwvxpXFJFnVMh1gdczkFEAXcwgfMMq/7Tl3AbWfIF46CnH24Ci+TEbyB0vFVuPp659yXmTYJLqvTZcLOVbvQGWdxGFuWGEJu7hKha3PgGgIVcHnq8mL9IMaWCAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711985810; c=relaxed/simple;
-	bh=4IkYm12Xm40qZ4Fx7s8GjYsSBQxNdQAXgH2rzdNq4sw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=sq9OXk9HhAdw0/CvxN2/My5zO5MYx5opPuTt/L5NeduUVcYxhVPxra24P25/wJHKre0+lweM/fULtkECUHcXu5wpHak8/tu8kDXdmnWbTNv+srf9U8tVzQodX/tKjvQ8ieMEz+LAe/tRaX2YaQefYwvxYySTPXJSKqzt20Bi3QE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inka.de; spf=pass smtp.mailfrom=inka.de; arc=none smtp.client-ip=193.197.184.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inka.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inka.de
-Received: from mail.berkhan-weisser.de ([2a03:4000:54:b9a::4])
-	by mail.inka.de with esmtpsa 
-	id 1rrJiE-00ArAD-30; Mon, 01 Apr 2024 17:36:42 +0200
-Received: from 127.0.0.1 (helo=localhost.localdomain)
-	by mail.berkhan-weisser.de with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <Enrik.Berkhan@inka.de>)
-	id 1rrJiD-003wxe-30;
-	Mon, 01 Apr 2024 17:36:41 +0200
-Message-ID: <85837371eadac58dec812c0be14264152ee1e5fd.camel@inka.de>
-Subject: Re: [PATCH 1/1] platform/x86/intel/hid: Don't wake on 5-button
- releases
-From: Enrik Berkhan <Enrik.Berkhan@inka.de>
-To: Linux regressions mailing list <regressions@lists.linux.dev>, David
- McFarland <corngood@gmail.com>, Chris Feng <chris.feng@mediatek.com>
-Cc: "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, Alex Hung
- <alexhung@gmail.com>, Hans de Goede <hdegoede@redhat.com>, Ilpo
- =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- "platform-driver-x86@vger.kernel.org"
- <platform-driver-x86@vger.kernel.org>,  LKML
- <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org
-Date: Mon, 01 Apr 2024 17:36:35 +0200
-In-Reply-To: <1198933e-bf89-4237-a6e8-f7daeeebf885@leemhuis.info>
-References: <20240318191153.6978-1-corngood@gmail.com>
-	 <20240318191153.6978-2-corngood@gmail.com>
-	 <1198933e-bf89-4237-a6e8-f7daeeebf885@leemhuis.info>
-Autocrypt: addr=Enrik.Berkhan@inka.de; prefer-encrypt=mutual;
- keydata=mQGNBF0BQWwBDACqVwNmsHX65pIZKLiW2zjQZDvALp9Xf09KwJyp1969Hxa4UqP4l+ORS
- Z9uKGYJuxJj1T7OiZ3WoXYKUrcLtrnotOrcBwmCgCtPQupfaXFUg1CnCuLsr3gclSG5Lt4V+/fkVd
- yraOCL5RN1RjH78jrMq49v7zE0BAzCY4sn2ZmXjU0hTwBYeg4qQiWQActUhYB26Yj2SXeETWAnWD4
- hGVKPBwVJ2scLIFdqAmvAwGJdOwc9jdM5y2Ydk61DMS/m2jMUdACsXb/DlyP5hQIzeepy7asWrt1K
- 2WDX1HVhJwzK3dmVWVJsf/cL4b866Ant7GOHY439FITcvZMYt2m963Ug8/WGfGdm/5/GJX7cmD1j6
- 8Uhe+q41gDkQ/eONETx+nslbcwxNB+hb9B2Pxd3mzxJEFcaGot+e7tT7S98pqZp4QU9BTqph+/lTl
- /FzyMzRu3vfpuYQBlr67vdD7VqZnFwNSblMJ+xoFA61aNRr0boY0LkaArkNTLCnjdU7sP/5yEAEQE
- AAbQlRW5yaWsgQmVya2hhbiA8RW5yaWsuQmVya2hhbkBpbmthLmRlPokBzgQTAQoAOBYhBGy8kATC
- NKgFohepd9QI6kpGyzykBQJdAUFsAhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJENQI6kpGy
- zykiLoMAKa5pjlkxnfQagzR2nS6XuVIAnILdTrJmaS2ozVsbeiVEEbQyykDzCPo10a8wAt94N85Nq
- lgfK27K9tUYI9Se1G1ka0D5LRAqddrLOY2s7/3qCzzNiAYRr1lsn9xiHYE2dwCyGIz930N2r+z7fF
- TQ9PxViDx9cv9BFGimCHrQzn6hPLotLl3v78UG3BvvcVqQkVfa3ITrb0mPORBCD8njK45aKfhlCi1
- VSXkbKcWpNlqwNwNPR1tCN691NE1KjQV2CB03Y+zghkpWDJUC16NSxMnB2g3Lo3dwvuRSZY7TRTuY
- /UyWHvMwOLOGT4QJAijSnzU8rRtEsVFiG9o5ok8yTOTS207llyKzYjFhI8ptNpWuYjlUAPqoZDpjJ
- pG+aaMzVpYtVzmoEDpG23x+G+wjZPR53I8cAr/U4yhVYYJiG6xvqNFt0zPMtOzltHx7oV98PnwJEX
- NW9xELp79GriPjPZlpQADElP+yOUfU+DqcESyp3rh1fVofIPImsz05WePBLkBjQRdAUFsAQwAxXIi
- PWkpeGtScOX7aImN8VNdBY3xrl4lHEGCsqqOy/aFmQEi5acgrNOTb/W7M5aOjenHI7QXIvHBVBWXZ
- miEur6Jel1kUCb1id9TVTDvKO2wNOSXkKrwBQAFaemwF7UF+0CL1lPmbsVYbuf1cDe1btgULWHGVe
- V+2yg1+2L7xv79tnPwqUFr9V7nU0lYwUTswD5QdwAvsY9Pe39FyB03m8E/zIY8Oah14Kv9eThxcOp
- 7lpMNupFGXgYVpgfUC8Ik541bBLkHuuHKRTNepjjqDAc9JsztcWHsAQacrXoY+pNY7r0yE37BC+nq
- 9QR1PCtO3Zazqdr/bvnXg1F/UYSKrQ41dY+xDoAxGV63F8W3zkLNL/7JSixbhPb7JDMcNQA/cwZrg
- VwSoTtuTeneKH/8QVsDBjJC7ICquMZs2hhHYOo/OrGhdD69tnXOgTKwK+CbdmM4nhR/Zmoka9NuTc
- rsLS8WfK/rhQtoI9OHT6gE2pRjaxiStwDNChdHbkrAXjn3ABEBAAGJAbYEGAEKACAWIQRsvJAEwjS
- oBaIXqXfUCOpKRss8pAUCXQFBbAIbDAAKCRDUCOpKRss8pEBUC/9NuPJXKf1+8o5GjyDDGz0lQ+xl
- NX7q48ZE94gkKgY9w8rbb2m+F2cNUKvMtEEW9L1zBf3F78BVbrSUWIB/HIun5XU8jYiLzMO7aXR63
- GtVPcXimXs9sbcaGR09FJW/7EFVwJ/ivedEazXdJxip4BENomhxY+mB36BrxhPOiDr/FB+dr1wOXU
- ZKxiQrjq1sfbLCeInO3X9ce5KA4mGHXJQFz38oYK/hUR2Jn21elB94PwjJTiBemqFRWIVy8CPyAU4
- CBSFIwyok5977LPf5/osyQFqjkRqi2OugSDe+WenhciKL0Y6fqJFVxMNAZ9PXBA+mODvpvVPV9bvm
- Up6klmUMO/pK5X2F94QLIJ7XmroN3Q31ipWu+S3+/c5QYH2RrlHafw0rtX+JPEhnV0S6d2RaKdkqF
- 3uzEF6yzgF9ymozFdXEAzzpVkJop48x0MbSLV9XHfbkj4IUdAbvSRzJ2lAAU2JBV15Wt29O5qfyP5
- Dh1pYX8125Sys26JeDfnh3bnI=
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.52.0 
+	s=arc-20240116; t=1711987142; c=relaxed/simple;
+	bh=WH/JXSmbMU4r5V/wKzEcNwcuz6RWsNiYqocaGFrJddE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=td82+oytYSbhft1UUI2n5U0OmI9OafhCvK9ZuWOpbdKfziJcLPL+PPU/opZBftnMFrDQNDSyflJx1XiUCZTPig+yYL+RjC+CdjOTc0x2scWuy1NUgfsrYodhTu/4+Ro8/t1axi7kCWCmqBVLxY0m36qNWqOfuv/TV98319gVfgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=BLGT9jyv; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1711987138;
+	bh=WH/JXSmbMU4r5V/wKzEcNwcuz6RWsNiYqocaGFrJddE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BLGT9jyvMZFJzmYyDJ+rJRKeiHQ8Ge7Yzl7Tl7lmQwwaWmH+l1yVXJDgU0UGlm8of
+	 5ossgCh2uwY4RFWc6YCPDxXiLgwb7eUROX3kGbMKYCktzswJbAsHpnCDXKT78D4RDU
+	 A7zUVyjWvnzjHILKPminlYbXW9fX3+sRtgz9FAIDWWBZFSKU/o8B0GI/yUgwkq3oTN
+	 GnIVmLRny+e+gM8MNjeI/MgYeVNYsyxt6hFSDwaM0vUVr9tTuTIcYJWY95g2HRTQ1F
+	 MFHXAleN0CDKzLV2CwC1QVAVL9s5JZlo+o8FU4MeJfTAaJYJikRWnWaGoznx3114E1
+	 Xq0665YbHTjEQ==
+Received: from mercury (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sre)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 6B2063780480;
+	Mon,  1 Apr 2024 15:58:58 +0000 (UTC)
+Received: by mercury (Postfix, from userid 1000)
+	id 02B0610608D9; Mon,  1 Apr 2024 17:58:57 +0200 (CEST)
+Date: Mon, 1 Apr 2024 17:58:57 +0200
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
+Cc: kernel@collabora.com, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: sbs-battery: Handle unsupported
+ PROP_TIME_TO_EMPTY_NOW
+Message-ID: <2emtfitxzs2suh4qsvz4vgwdrtlduarjbbtzrsebtjerzzkegf@46l2d3hpatgw>
+References: <20240307-sbs-time-empty-now-error-v1-1-18d0f8702330@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="bklrbywybkeid6t2"
+Content-Disposition: inline
+In-Reply-To: <20240307-sbs-time-empty-now-error-v1-1-18d0f8702330@collabora.com>
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA256
 
-On Fri, 2024-03-29 at 14:51 +0100, Linux regression tracking (Thorsten
-Leemhuis) wrote:
-> [CCing Chris, who authored the culprit; also CCing the platform folks
-> and a few lists]
+--bklrbywybkeid6t2
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-(Intentionally replying to the "wrong" e-mail to get the enlarged
-recipient list for free ...)
+Hi N=EDcolas,
 
+On Thu, Mar 07, 2024 at 05:05:10PM -0500, N=EDcolas F. R. A. Prado wrote:
+> Despite the RunTimeToEmpty() (0x11) function being defined in the SBS
+> specification as required, it seems that not all batteries implement it.
+> On platforms with such batteries, reading the property will cause an
+> error to be printed:
 >=20
+> power_supply sbs-8-000b: driver failed to report `time_to_empty_now' prop=
+erty: -5
+>=20
+> This not only pollutes the log, distracting from real problems on the
+> device, but also prevents the uevent file from being read since it
+> contains all properties, including the faulty one.
+>=20
+> The following table summarizes the findings for a handful of platforms:
+>=20
+> Platform                                Status  Manufacturer    Model
+> ------------------------------------------------------------------------
+> mt8186-corsola-steelix-sku131072        OK      BYD             L22B3PG0
+> mt8195-cherry-tomato-r2                 NOT OK  PANASON         AP16L5J
+> mt8192-asurada-spherion-r0              NOT OK  PANASON         AP15O5L
+> mt8183-kukui-jacuzzi-juniper-sku16      NOT OK  LGC KT0         AP16L8J
+> mt8173-elm-hana                         OK      Sunwoda         L18D3PG1
+> sc7180-trogdor-lazor-limozeen-nots-r5   NOT OK  Murata          AP18C4K
+> sc7180-trogdor-kingoftown               NOT OK  333-AC-0D-A     GG02047XL
+> rk3399-gru-kevin                        OK      SDI             4352D51
+>=20
+> Identify during probe, based on the battery model, if this is one of the
+> quirky batteries, and if so, don't register the
+> POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW property.
+>=20
+> Signed-off-by: N=EDcolas F. R. A. Prado <nfraprado@collabora.com>
+> ---
+>  drivers/power/supply/sbs-battery.c | 45 ++++++++++++++++++++++++++++++++=
+++++++
+>  1 file changed, 45 insertions(+)
+>=20
+> diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sb=
+s-battery.c
+> index a6c204c08232..85ff331cf87a 100644
+> --- a/drivers/power/supply/sbs-battery.c
+> +++ b/drivers/power/supply/sbs-battery.c
+> @@ -1112,6 +1112,49 @@ static const struct power_supply_desc sbs_default_=
+desc =3D {
+>  	.external_power_changed =3D sbs_external_power_changed,
+>  };
+> =20
+> +static const char * const unsupported_time_to_empty_now_models[] =3D {
+> +	"AP16L5J", "AP15O5L", "AP16L8J", "AP18C4K", "GG02047XL"
+> +};
+> +
+> +static void sbs_remove_unsupported_properties(struct power_supply_config=
+ *psy_cfg,
+> +					      struct power_supply_desc *sbs_desc)
+> +{
+> +	enum power_supply_property *new_properties;
+> +	struct sbs_info *chip =3D psy_cfg->drv_data;
+> +	bool missing_time_to_empty_now =3D false;
+> +	const char *model_name;
+> +	unsigned int new_num_properties;
+> +	unsigned int i =3D 0, j =3D 0;
+> +
+> +	model_name =3D sbs_get_constant_string(chip, POWER_SUPPLY_PROP_MODEL_NA=
+ME);
+> +	if (IS_ERR(model_name))
+> +		return;
+> +
+> +	for (i =3D 0; i < ARRAY_SIZE(unsupported_time_to_empty_now_models); i++=
+) {
+> +		if (!strcmp(model_name, unsupported_time_to_empty_now_models[i])) {
+> +			missing_time_to_empty_now =3D true;
+> +			break;
+> +		}
+> +	}
+> +
+> +	if (!missing_time_to_empty_now)
+> +		return;
+> +
+> +	new_num_properties =3D ARRAY_SIZE(sbs_properties) - 1;
+> +	new_properties =3D devm_kzalloc(&chip->client->dev, new_num_properties =
+* sizeof(sbs_properties[0]), GFP_KERNEL);
+> +
+> +	for (i =3D 0; i < sbs_desc->num_properties; i++) {
+> +		if (sbs_desc->properties[i] =3D=3D POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW)
+> +			continue;
+> +
+> +		new_properties[j] =3D sbs_desc->properties[i];
+> +		j++;
+> +	}
+> +
+> +	sbs_desc->properties =3D new_properties;
+> +	sbs_desc->num_properties =3D new_num_properties;
+> +};
+> +
+>  static int sbs_probe(struct i2c_client *client)
+>  {
+>  	struct sbs_info *chip;
+> @@ -1210,6 +1253,8 @@ static int sbs_probe(struct i2c_client *client)
+>  	if (rc)
+>  		return rc;
+> =20
+> +	sbs_remove_unsupported_properties(&psy_cfg, sbs_desc);
+> +
+>  	chip->power_supply =3D devm_power_supply_register(&client->dev, sbs_des=
+c,
+>  						   &psy_cfg);
+>  	if (IS_ERR(chip->power_supply))
+>=20
+> ---
 
-> Regarding the patch itself: hopefully this mail will get things
-> moving.
->=20
-> [1]
-> https://lore.kernel.org/linux-pm/20240318191153.6978-1-corngood@gmail.com=
-/
->=20
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker'
-> hat)
-> --
-> Everything you wanna know about Linux kernel regression tracking:
-> https://linux-regtracking.leemhuis.info/about/#tldr
-> If I did something stupid, please tell me, as explained on that page.
->=20
-> #regzbot poke
->=20
-> > Signed-off-by: David McFarland <corngood@gmail.com>
+I think it makes sense to use a proper quirk infrastructure.
+Something like this:
 
-Tested-by: Enrik Berkhan <Enrik.Berkhan@inka.de>
+/* required by the spec, but missing in some implementations */
+#define SBS_QUIRK_BROKEN_TTE_NOW    BIT(0)
 
-> > > ---
-> > =C2=A0drivers/platform/x86/intel/hid.c | 8 +++++++-
-> > =C2=A01 file changed, 7 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/platform/x86/intel/hid.c
-> > b/drivers/platform/x86/intel/hid.c
-> > index 7457ca2b27a6..707de9895965 100644
-> > --- a/drivers/platform/x86/intel/hid.c
-> > +++ b/drivers/platform/x86/intel/hid.c
-> > @@ -504,6 +504,7 @@ static void notify_handler(acpi_handle handle,
-> > u32 event, void *context)
-> > =C2=A0	struct platform_device *device =3D context;
-> > =C2=A0	struct intel_hid_priv *priv =3D dev_get_drvdata(&device-
-> > >dev);
-> > =C2=A0	unsigned long long ev_index;
-> > +	struct key_entry *ke;
-> > =C2=A0	int err;
-> > =C2=A0
-> > =C2=A0	/*
-> > @@ -545,11 +546,16 @@ static void notify_handler(acpi_handle
-> > handle, u32 event, void *context)
-> > =C2=A0		if (event =3D=3D 0xc0 || !priv->array)
-> > =C2=A0			return;
-> > =C2=A0
-> > -		if (!sparse_keymap_entry_from_scancode(priv-
-> > >array, event)) {
-> > +		ke =3D sparse_keymap_entry_from_scancode(priv-
-> > >array, event);
-> > +
-> > +		if (!ke) {
-> > =C2=A0			dev_info(&device->dev, "unknown event
-> > 0x%x\n", event);
-> > =C2=A0			return;
-> > =C2=A0		}
-> > =C2=A0
-> > +		if (ke->type =3D=3D KE_IGNORE)
-> > +			return;
-> > +
-> > =C2=A0wakeup:
-> > =C2=A0		pm_wakeup_hard_event(&device->dev);
-> > =C2=A0
+struct sbs_quirk_entry {
+    const char *manufacturer;
+    const char *model;
+    u32 flags;
+};
+
+static const struct sbs_quirk_entry sbs_quirks[] =3D {
+    {"PANASON", "AP16L5J", SBS_QUIRK_BROKEN_TTE_NOW},
+    {"PANASON", "AP15O5L", SBS_QUIRK_BROKEN_TTE_NOW},
+    {"LGC KT0", "AP16L8J", SBS_QUIRK_BROKEN_TTE_NOW},
+    ...
+};
+
+static void sbs_update_quirks(...) {
+    ...
+    manufacturer =3D sbs_get_constant_string(chip, POWER_SUPPLY_PROP_MANUFA=
+CTURER);
+    model =3D sbs_get_constant_string(chip, POWER_SUPPLY_PROP_MODEL_NAME);
+
+    /* reset quirks from battery before the hot-plug event */
+    chip->quirks =3D 0;
+
+    for (i =3D 0; i < ARRAY_SIZE(sbs_quirks); i++) {
+        if (strcmp(manufacturer, sbs_quirks[i].manufacturer))
+            continue;
+        if (strcmp(model, sbs_quirks[i].model))
+            continue;
+        chip->quirks |=3D sbs_quirks[i].flags;
+    }
+
+    if (chip->quirks & SBS_QUIRK_BROKEN_TTE_NOW)
+        dev_info(dev, "Added quirk disabling TIME_TO_EMPTY_NOW\n");
+}
+
+Also I think instead of removing the property, it's better to return
+-ENODATA for TIME_TO_EMPTY. That will remove it from the uevent file,
+but still expose the sysfs property file. So it's slightly worse from
+that aspect. But it means the quirk can be handled in sbs_update_presence()
+and it can be added/removed dynamically when different battery models
+are used with hot-plugging.
+
+For that it should be enough to call the above sbs_update_quirks() in
+sbs_update_presence() and add this at the beginning of
+sbs_get_battery_property():
+
+if (psp =3D=3D POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW &&
+    chip->quirks =3D=3D SBS_QUIRK_BROKEN_TTE_NOW)
+    return -ENODATA;
+
+As a side-effect it fixes your struggling with keeping the
+properties constant. Can you check, if that works?
+
+Thanks,
+
+-- Sebastian
+
+--bklrbywybkeid6t2
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQGzBAEBCAAdFiEEbLyQBMI0qAWiF6l31AjqSkbLPKQFAmYK1IQACgkQ1AjqSkbL
-PKSUXwv/YWiU334Osus+niffw9gN94vCQid6OWuTIbX2zMNIunHmpHouMtfo6dpb
-7Qsyaz0sxaUEclRPLf/bSAV8zWromM/4Xoa/DoBq+GPOLle5wTJAlislhZVfDZFX
-FZ0EfUg+MvThqlJD8yhGNJWGVnSn92hDid7yy5Y/BSWTPCNhRxEsqy+d0pN82EnD
-0mqWnpfG28uqK6dtOLnvbiOuWQhgKYerKFYHXw8FLxZV0eKb3+RqBFf6ZdsAjUEC
-+d7G9Oq4pc9jxZNvOMop+z3Eskd/bD8Wi2aDtR1qcRENMaK0ucevTuOjGL8Gh80c
-SbgKu2eU/qVlbnVrcaPgpB0CXXza7SYUynw5XWB8jBWOj6w2nxpnQPm5a0Z5aNYw
-/kLuabhSommEmUIJtoOA2vgO8D0ACfF2n95cNXaJRiOhuag3SRoair50TOzmf09Z
-4uco5iaWeIQwEpVFGdy+qh0V18kYclnNMZHC9bhO6heBDLB9Wy/iXDxko9tMXm/v
-XnfAKKw9
-=3DudJV
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmYK2b0ACgkQ2O7X88g7
++po4Mw//b3nyCoqiuZlpx1Ti/bEK447G474277PtlVcsKhy5EZkg68Xj2jLJUpW5
+LEt9GfYRWK9i/3IpWIhTP9KAwUlUjUcdgYvyFZrAgDuBsTb6pQ/dlpj3H8pRSN3t
+KAlKnxX79bo0cMCXzxF6ChMWl0NFcpPndvYATL7sWIhFxLVTlaai9CLvW4E/+7Fz
+AHws7vRYLDHxTfC8y3pY4hiZwH3hgEAe7dZcoaflrRwAPqi1CNF1rFuR5GrxlVMj
+8gOAy87ae4Z2MW9TvM+i7CWVuSOS3nZo21/hHQxe257QoLO+fln3rrRfEwwu2mHM
+krd4DlqXpoe3Z0w0adFkCK+G28hZhLnnhr9NNy7VhZ9+nzDeH6MhU29g4m1YQwWJ
+63i0efoZ76/G5boNIwHigJJUIKVskw5A5u9LBZdNihT3O1fh9DyyX16qxSrDnJPU
+KkGFAvubfB460cFqZ0B4aKUccIKAPSD9NM0lIt8jkItN5y2xDolczg6NKLAjYEke
+OEaSp+wXhq5zk/wrgLMmnQlgIy6gWMIGBq7sM/acjpmmpmOX9Kkg22+sLDjjlEWp
+Jh/bZvqJppvyirvVH33oX2opWbC9LA2g1jh4LWi7HzFBXz4I0VrBEZgv2CV5/ajm
+Q+d9KzgK7UxaCSdPyVxJfnHGLq6oPBImNTQUTG2sU5JQjM46MdA=
+=x46m
 -----END PGP SIGNATURE-----
+
+--bklrbywybkeid6t2--
 
