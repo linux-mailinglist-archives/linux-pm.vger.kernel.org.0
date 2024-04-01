@@ -1,49 +1,49 @@
-Return-Path: <linux-pm+bounces-5738-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5739-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5A578936F4
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Apr 2024 04:30:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4400A8936F9
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Apr 2024 04:30:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 536FD1F21337
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Apr 2024 02:30:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 75C0F1C209FF
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Apr 2024 02:30:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96B2164D;
-	Mon,  1 Apr 2024 02:30:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 244483D75;
+	Mon,  1 Apr 2024 02:30:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a1G8vljM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XYZqSz11"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 597737F;
-	Mon,  1 Apr 2024 02:30:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E29C07F;
+	Mon,  1 Apr 2024 02:30:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711938628; cv=none; b=KG1XIpLs3l7VRHyX4RTvPY502rGeVaCYzAmOLO1im7q5gMcB+9ePLaJrujk9393EK+y47Bhv/GGo/eI/mp9lqKVhPZ3wUy/7gB5XIPXH823ZZsRQxVbIK6egvxTc/JpYw2y0/NiHnOMc0CXk4ieq9wqDnHHx+LsPBMmTLZycphg=
+	t=1711938630; cv=none; b=TCCiN7mQ3I0y0sSkhv1rLUrPo8GS1h6aNoObgQWK9pgVzWJ/JylHkoMSdGqOdmEhj656G/DusTQgAhtd48mvS7QFuNDL9CxgRySmFFLRv0mlxp02FDvHVFhH5yL1PW2CJSFsGl0pcy6jdVevojC/gqzEt5J1OzcVd07WQ8JwaR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711938628; c=relaxed/simple;
-	bh=NsrbsQxeuGANg7ZCOH7zwX7e8H4x+BKV2I4IrrkCfm8=;
+	s=arc-20240116; t=1711938630; c=relaxed/simple;
+	bh=gSDh6j0mPdh6Tj2aafDUWkyS+e7+NO1FN3memgDF1Yg=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=oa94kHmBNm1iSqj9GsaVmQ4AB8kyu2HKxQfktgBumxVyQZ+DaqDcK+9GqbR64A0nXtCyNM6VTwT9fvBi6I4FXbWTeGK2/E1mnlSZssk0/sSRRUXN8ve9zpRpDCI0qQuVJQuQT2M1asTY3JqisWCTYxtxp/ybOdtVVvR25NnidXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a1G8vljM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E114BC43390;
-	Mon,  1 Apr 2024 02:30:27 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=C4zh9K7uuGEV3ZOj2Boc6Ze/HLdt6oR60hph93u0qg00d4F+8tQqzP1Gu0uBct4EKwT8ybZtjVb42D64jcqqqdjtLrqVDoSm2a1zE0LEEm47NPuQWm/q38sjl/o6WnN6yExBp0dUIIU0HOjzM7UQT9JHTq380kVCYdblj7Zos3g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XYZqSz11; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 73C1DC433B1;
+	Mon,  1 Apr 2024 02:30:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711938628;
-	bh=NsrbsQxeuGANg7ZCOH7zwX7e8H4x+BKV2I4IrrkCfm8=;
+	s=k20201202; t=1711938629;
+	bh=gSDh6j0mPdh6Tj2aafDUWkyS+e7+NO1FN3memgDF1Yg=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=a1G8vljMogY/BupvursTPI3HFqhDNGuiDLAHvlt1esJGJ1yASLg0LiLUSXssL5f24
-	 jjLe6Miip2IDyy6qBHljx0gRd2ZhnWVZWa6TZ2J9NE9qtfKvWueysnbPq/sx6+xmGG
-	 gbLrwKhvDtcOmBW+6kKt/8A7YJQhqEFWzzWrMB7Evcioz/cE7DLgO9/ZxlsRL6q3C+
-	 icXRt2gmnVhrcuPqN7BMr1PeS+Ygwzhl9+p0zt27NeUb+xuLVYBQSdaPj4oTIDoyyo
-	 4AnblGxv2hZgPPZehCa8TWrhY/E8CtffSTUVqQsEcHf1yogJ7C2ksM8JJWydN8Zi4H
-	 l7jBe5vPu9oXg==
+	b=XYZqSz11iTPXQBvEkCvp8h+uug23RL3NSbcZdlgUYGsKPiCQyFu0a5597q0WdXGsZ
+	 jqWwJSK5n15aKwUff7MT4AASjCXT5/blsp3mpcxW1ozUsw6tLEUrHOlm6Zfow/VMxq
+	 AZsIwdiESqCOa1PIkQSNAZds2qTaukPw/UaUWB23/LUnrP7Vhh8tDkYOvPMeF65U9Q
+	 p+J/mZ4tMvh6ZBMwVqH0B9Oo1CfmvChPc3+gW35T3k2GVE48Ofaoj2ybOEeLHi0Ck7
+	 AX1Pi998T6SBls9ExRcq3nYhMtqDthuX1WWO9pmch9/U5bbNMUG2spA1Cra970vzmW
+	 QqDE4DdXieiyA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D203BD9A14F;
-	Mon,  1 Apr 2024 02:30:27 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6BBA8D9A152;
+	Mon,  1 Apr 2024 02:30:29 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -56,8 +56,8 @@ Subject: Re: [PATCH 00/18] platform/chrome: provide ID table for avoiding fallba
  match
 From: patchwork-bot+chrome-platform@kernel.org
 Message-Id: 
- <171193862785.2149.7081277196721429329.git-patchwork-notify@kernel.org>
-Date: Mon, 01 Apr 2024 02:30:27 +0000
+ <171193862943.2149.8328845003202233556.git-patchwork-notify@kernel.org>
+Date: Mon, 01 Apr 2024 02:30:29 +0000
 References: <20240329075630.2069474-1-tzungbi@kernel.org>
 In-Reply-To: <20240329075630.2069474-1-tzungbi@kernel.org>
 To: Tzung-Bi Shih <tzungbi@kernel.org>
@@ -70,7 +70,7 @@ Cc: bleung@chromium.org, groeck@chromium.org, linus.walleij@linaro.org,
 
 Hello:
 
-This series was applied to chrome-platform/linux.git (for-kernelci)
+This series was applied to chrome-platform/linux.git (for-next)
 by Tzung-Bi Shih <tzungbi@kernel.org>:
 
 On Fri, 29 Mar 2024 15:56:12 +0800 you wrote:
