@@ -1,117 +1,82 @@
-Return-Path: <linux-pm+bounces-5816-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5817-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08023895910
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 18:00:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08DEB8959B1
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 18:26:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9CDA71F22833
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 16:00:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D3263B2A839
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 16:23:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12FBA135A73;
-	Tue,  2 Apr 2024 15:59:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6827114AD34;
+	Tue,  2 Apr 2024 16:23:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aqv3ImhL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76652131720;
-	Tue,  2 Apr 2024 15:59:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BE9014AD1D;
+	Tue,  2 Apr 2024 16:23:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712073549; cv=none; b=ndM2xQq5T3Wr75mqxjcIwCb2joZBExCKstXKqeMaX8eNrq6sulT0qie0vsEvKFEDt26qdyz9kJOSVPcr5TKwChm+zkAVBYvgKelIDMUEN9a0wgTcIBP+YdFwpuVqu0E2/vzf0iuavZmVOLfPkcrKaE/BqC2cwroQ3yaqfz2bAuQ=
+	t=1712075010; cv=none; b=exfF58fiUPRmKOcCOPhMJCLXxO0DaRXQ8SFzWBIOWsYwnsgJBdImL0KcIFzN/7HiQE+NqmeqCMdarBopgq1PfGBGooo+aa8LbSmXp1T5xaRKHslVL4NNogpAdDSXn+LmT9i4GIYaXtUmjbqGl1tXwcnCZyti9o8cKjop5zOw47o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712073549; c=relaxed/simple;
-	bh=qnN9weQ8zePSFzOoB2/Nqdch/QqBxOvQUT/3iZ1s9A4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=JDi9EuK11EhSYuUks0f/JWp1AnvHDSizHhExFuaF91OM0EdXZIdDlbaEHod9J66/sQUFIi1Ks8hjYymP23C/2F95R3+jSoGFxGoJk1WqF2/3V1d/CCASs4YaGZGHIr2tMb9OsCP9aba6VcO5A/lOF+JGoPjrquG36gc1JjzmmBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3CB3A1042;
-	Tue,  2 Apr 2024 08:59:38 -0700 (PDT)
-Received: from e129166.arm.com (unknown [10.57.72.194])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 514333F64C;
-	Tue,  2 Apr 2024 08:59:04 -0700 (PDT)
-From: Lukasz Luba <lukasz.luba@arm.com>
-To: linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	rafael@kernel.org
-Cc: lukasz.luba@arm.com,
-	dietmar.eggemann@arm.com,
-	linux-arm-kernel@lists.infradead.org,
-	sboyd@kernel.org,
-	nm@ti.com,
-	linux-samsung-soc@vger.kernel.org,
-	daniel.lezcano@linaro.org,
-	viresh.kumar@linaro.org,
-	krzysztof.kozlowski@linaro.org,
-	alim.akhtar@samsung.com,
-	m.szyprowski@samsung.com,
-	mhiramat@kernel.org
-Subject: [PATCH v4 4/4] soc: samsung: exynos-asv: Update Energy Model after adjusting voltage
-Date: Tue,  2 Apr 2024 16:58:22 +0100
-Message-Id: <20240402155822.505491-5-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240402155822.505491-1-lukasz.luba@arm.com>
-References: <20240402155822.505491-1-lukasz.luba@arm.com>
+	s=arc-20240116; t=1712075010; c=relaxed/simple;
+	bh=xYB/qZ9RTNhXxTESYZVU46lsLKaPjJLvUgmdS58ycBs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fB9x95IvjGoskoRTZevpSs6MolCxisYAMhsbCo7CGa1ObcSOZv7rf5iMEI2KSTFbD8gAzxmkXYfhEf6odBCLum+Su09mtpxkXcNHcUc4sqI8i6GhlxvGDdvFFJxfgdsAt7gPdxDczxzXSGpj0tOU4jOzZlSYFJWDjkw/Yciebm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aqv3ImhL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A32B4C433F1;
+	Tue,  2 Apr 2024 16:23:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712075009;
+	bh=xYB/qZ9RTNhXxTESYZVU46lsLKaPjJLvUgmdS58ycBs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aqv3ImhLq1PgJ337brrNrEBxR9qJmf0FXnJXgOwaUAud1wrbeWwQovWfLmtSArZ2+
+	 VbM4zi4pse5vhiYygB9CjlyJJ0mHVFk+wigK7NKMAwIqWhy34Preatizf9IbJsoMuM
+	 NrTu9SiLT+m+NLCX+TDYDzYVRGoscwGHlIwN/NjkJhthUtEHu7YP5s5akZtTH8DkoO
+	 g/JZd0YhqkZnUdgbzcOApXE+eHPjirScuH2VQdLL6SbWCjb0qCyl1Rg0a/3O3wod3O
+	 pUcayin0xsm6XXbBOtuir9EqntzT4Fe7UBt2Du9k6n/vvs5Enh70tHTxHj+5wNUwW+
+	 LI52eLRN3Y+tg==
+Date: Tue, 2 Apr 2024 11:23:27 -0500
+From: Rob Herring <robh@kernel.org>
+To: Nicolas Pitre <nico@fluxnic.net>
+Cc: Nicolas Pitre <npitre@baylibre.com>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2 12/15] dt-bindings: thermal: mediatek: Add LVTS
+ thermal controller definition for MT8188
+Message-ID: <171207500517.249957.12484282062174711386.robh@kernel.org>
+References: <20240402032729.2736685-1-nico@fluxnic.net>
+ <20240402032729.2736685-13-nico@fluxnic.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240402032729.2736685-13-nico@fluxnic.net>
 
-When the voltage for OPPs is adjusted there is a need to also update
-Energy Model framework. The EM data contains power values which depend
-on voltage values. The EM structure is used for thermal (IPA governor)
-and in scheduler task placement (EAS) so it should reflect the real HW
-model as best as possible to operate properly.
 
-Based on data on Exynos5422 ASV tables the maximum power difference might
-be ~29%. An Odroid-XU4 (with a random sample SoC in this chip lottery)
-showed power difference for some OPPs ~20%. Therefore, it's worth to
-update the EM.
+On Mon, 01 Apr 2024 23:25:46 -0400, Nicolas Pitre wrote:
+> From: Nicolas Pitre <npitre@baylibre.com>
+> 
+> Add LVTS thermal controller definition for MT8188.
+> 
+> Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
+> ---
+>  .../bindings/thermal/mediatek,lvts-thermal.yaml  |  4 ++++
+>  .../dt-bindings/thermal/mediatek,lvts-thermal.h  | 16 ++++++++++++++++
+>  2 files changed, 20 insertions(+)
+> 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
----
- drivers/soc/samsung/exynos-asv.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/soc/samsung/exynos-asv.c b/drivers/soc/samsung/exynos-asv.c
-index d60af8acc3916..d6d003e3a81ab 100644
---- a/drivers/soc/samsung/exynos-asv.c
-+++ b/drivers/soc/samsung/exynos-asv.c
-@@ -11,6 +11,7 @@
- 
- #include <linux/cpu.h>
- #include <linux/device.h>
-+#include <linux/energy_model.h>
- #include <linux/errno.h>
- #include <linux/of.h>
- #include <linux/pm_opp.h>
-@@ -97,9 +98,17 @@ static int exynos_asv_update_opps(struct exynos_asv *asv)
- 			last_opp_table = opp_table;
- 
- 			ret = exynos_asv_update_cpu_opps(asv, cpu);
--			if (ret < 0)
-+			if (!ret) {
-+				/*
-+				 * When the voltage for OPPs could be changed,
-+				 * make sure to update the EM power values, to
-+				 * reflect the reality and not use stale data.
-+				 */
-+				em_dev_update_chip_binning(cpu);
-+			} else {
- 				dev_err(asv->dev, "Couldn't udate OPPs for cpu%d\n",
- 					cpuid);
-+			}
- 		}
- 
- 		dev_pm_opp_put_opp_table(opp_table);
--- 
-2.25.1
+Reviewed-by: Rob Herring <robh@kernel.org>
 
 
