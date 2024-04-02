@@ -1,371 +1,215 @@
-Return-Path: <linux-pm+bounces-5765-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5766-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C99D48948EC
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 03:48:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E28E89491C
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 04:04:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F05D283D39
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 01:48:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 414101C20E39
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 02:04:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8041212E5D;
-	Tue,  2 Apr 2024 01:47:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22FB5D502;
+	Tue,  2 Apr 2024 02:04:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="vqJv50+j"
+	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="ahChOB9A"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2127.outbound.protection.outlook.com [40.107.104.127])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4451F9EC;
-	Tue,  2 Apr 2024 01:47:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.171.184.29
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712022471; cv=none; b=n66R1FYMODO/JzitbVvo7oDh+CLzhE4T3FtdY38rNRFxsCPY6eWuy9ssb0/pUN/3PPtXDV44xRZWcOBqlHn5PBsylwtWFz8gV7Qa/Y8NydPC8Efqte7CZC2jjftRBwubWENoNXtT5pa08wQX0otdGo7595vX5d0Pi05BsrgMdqU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712022471; c=relaxed/simple;
-	bh=k41Pvw0mfXzaqhx1OVEqvFMH75xZ+Wubo5cMCx7DvZ0=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=l+4erVAWARux7zPfMREekMuHDdbbt245Eu2jXrvragwtxXcSyjTax58SfjfwloizJl6ofETeXthDuJOd+ksKcx8mIO1OzTzTaEY1NxjKtPdIuVAECr7Y6jslOqazs+t3CrTtzHVZG+VHXpyn8Z69yk0i48WIHs0o8SnsvypLUxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=vqJv50+j; arc=none smtp.client-ip=207.171.184.29
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1712022470; x=1743558470;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=nmUKUSi2MoSUY6V0czBUbSS/ooN8zBAEjuFUgPRajcw=;
-  b=vqJv50+jcA2YB25b6Zr9xtHWa0RSQNjZa3zVgaPjOaOjeZyB4rsL/HC0
-   Ve82KKfSGLUr3DFIMCDcxwRSVROR4fyjAp1mTAVcvGOGoqO5oWRjBRWK2
-   rMnM/HOP+2SwZHvmYdd/G8tT+LJHLcn/no72rUnmvLoF9JVbbxBFhNMc/
-   E=;
-X-IronPort-AV: E=Sophos;i="6.07,173,1708387200"; 
-   d="scan'208";a="408337927"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.214])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2024 01:47:49 +0000
-Received: from EX19MTAUWA002.ant.amazon.com [10.0.7.35:1848]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.36.248:2525] with esmtp (Farcaster)
- id dbdfce37-3297-4f21-86c3-3f98adefad0d; Tue, 2 Apr 2024 01:47:48 +0000 (UTC)
-X-Farcaster-Flow-ID: dbdfce37-3297-4f21-86c3-3f98adefad0d
-Received: from EX19D001UWA003.ant.amazon.com (10.13.138.211) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.28; Tue, 2 Apr 2024 01:47:48 +0000
-Received: from u34cccd802f2d52.ant.amazon.com (10.252.141.8) by
- EX19D001UWA003.ant.amazon.com (10.13.138.211) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.28;
- Tue, 2 Apr 2024 01:47:46 +0000
-From: Haris Okanovic <harisokn@amazon.com>
-To: <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-	<linux-assembly@vger.kernel.org>
-CC: <peterz@infradead.org>, Haris Okanovic <harisokn@amazon.com>, Ali Saidi
-	<alisaidi@amazon.com>, Geoff Blake <blakgeof@amazon.com>, Brian Silver
-	<silverbr@amazon.com>
-Subject: [PATCH 3/3] arm64: cpuidle: Add arm_poll_idle
-Date: Mon, 1 Apr 2024 20:47:06 -0500
-Message-ID: <20240402014706.3969151-3-harisokn@amazon.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240402014706.3969151-1-harisokn@amazon.com>
-References: <20240402014706.3969151-1-harisokn@amazon.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F7F2BA2D;
+	Tue,  2 Apr 2024 02:04:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.104.127
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712023479; cv=fail; b=QeO5ojd1D15zYiUBAPb0Y8uOnzm6grLNwRDosz7+LwCnhisyKtkFt38rblCCeiVYHoSQNk8Y6upBxzxojGvY1PCnaB7nxIl7CQXJt7t7Mo5pMmODg1Sg9c+Az4nJnsPj6LFCQA+/2eb09hVZFFENcjaVYQ6maHKcrm7fqxXjnKQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712023479; c=relaxed/simple;
+	bh=l2SCVOOvi/G/VvjbDfHPFl6/y+mq0yaKjT5ZHDmSlSU=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=GlahKmPWsQxjrPfRJVV5fCRZY7KZAeK4ORytjh7xUJVG9UTT3fljMa22ScBM+8A3ep2FXnZVkzVqVWap3gR03ICaiLoFdNcoBEPUG6iEah5SIfYLF2bqwAqun8R5Ugv3h0J7r39bNXLgSiY4WC8/k0KeBeRMwsdcwfC/7UR8MQI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=ahChOB9A; arc=fail smtp.client-ip=40.107.104.127
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axis.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aLlNsmebpp395YI5B4lbfic7P5dfphwUTqdXaJID++05LOWbS0O0zCUVFyuJDYHNzKzcw/oFG5pLRhuh/XaYv6R+FMqa+NCaryx6YVaper9q1QwJ74UTnfPuu8wjwn2Vb0xZC7aOTej0kVaow/dRqYxJFt6sSOra5wTWQAG5bMCCahoiHAAPIp5TPA/OTZFOfvlD4ysLzkR7F62ATfuUSKoy54r1zvyEYS4lh2ABkoHuFyMlaLv6Wx4TZ29w+9005GZ4kGj3DDKRD9Okag1ehO2P4x8LmLVxQJ46An5hd3j8/S/Tjs8kM6NtgtpzRPvq7wFXNdzfzUWnasQIaP3k6w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ARigA/9RSsuHal5GS5YXeZRq/QqORgOuec2CEPDnVoo=;
+ b=lWmeRpSaYLAQTBNZ7L2Mvp38jW3EyZahjojXtl0IXb4hNxiJESbBKuq+4Lv1n+Waodq/MUmW4MUsvHVRCiMnOJv406LSofpbTDAqJO0ZZRQTX2GTmJUz6hmSmI8ZWq0pFtiP8ljnQHui4frUPWjFfLx+VRn9FQKWk+S9oLs7J5URNNuC07ssGhVkGKjDFUuPsq7k+pp0H2ksC6u17SsQwz1fC8HaBN1vSxKbMazoMvd3aYlhaEpFMpOX27B+3wiBM0HotuCHDsciDKAmcYPrg27cVrJU20l/WhcX7rff6GxBZQX/gJxrlv++AhUY/mmGFYP6CxkPdEaXtn4xFjQgTA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=axis.com; dmarc=pass action=none header.from=axis.com;
+ dkim=pass header.d=axis.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ARigA/9RSsuHal5GS5YXeZRq/QqORgOuec2CEPDnVoo=;
+ b=ahChOB9AeIeIYKmT2qxliO8uIgLX1vJTwT6yIG/kXV214l0AoqjVchHPq+lnzbD05sWXwqG+61mOjQIZZb5jH7VbXKGRyPwQRd1Q0sU89+UHkIn3mHEtHpRkBXdZd4EqBLRW+G87+sVtp/CxM9Oab3sx71Sy6S7k3uI9iziTw78=
+Received: from VI0PR02MB10536.eurprd02.prod.outlook.com
+ (2603:10a6:800:1b9::14) by DB5PR02MB10235.eurprd02.prod.outlook.com
+ (2603:10a6:10:4aa::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Tue, 2 Apr
+ 2024 02:04:33 +0000
+Received: from VI0PR02MB10536.eurprd02.prod.outlook.com
+ ([fe80::8baf:bcd1:cc88:2e09]) by VI0PR02MB10536.eurprd02.prod.outlook.com
+ ([fe80::8baf:bcd1:cc88:2e09%6]) with mapi id 15.20.7409.042; Tue, 2 Apr 2024
+ 02:04:33 +0000
+Message-ID: <ff34e22e-702f-acc9-469d-33f092bf20bd@axis.com>
+Date: Tue, 2 Apr 2024 10:04:22 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2] power: supply: bq27xxx: Divide the reg cache to each
+ register
+To: Andrew Davis <afd@ti.com>,
+ Sebastian Reichel <sebastian.reichel@collabora.com>,
+ Hermes Zhang <Hermes.Zhang@axis.com>
+Cc: kernel@axis.com, =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240306100904.1914263-1-Hermes.Zhang@axis.com>
+ <c4u27576oazfrlcp5avy3ect3i4jlsmdvi7nlun5qvez3ipti2@ue5jxbydmevs>
+ <c3c219ca-e126-42fb-8f20-5df0dec58d7c@ti.com>
+From: Hermes Zhang <chenhuiz@axis.com>
+In-Reply-To: <c3c219ca-e126-42fb-8f20-5df0dec58d7c@ti.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SG2PR04CA0175.apcprd04.prod.outlook.com
+ (2603:1096:4:14::13) To VI0PR02MB10536.eurprd02.prod.outlook.com
+ (2603:10a6:800:1b9::14)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D035UWB001.ant.amazon.com (10.13.138.33) To
- EX19D001UWA003.ant.amazon.com (10.13.138.211)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI0PR02MB10536:EE_|DB5PR02MB10235:EE_
+X-LD-Processed: 78703d3c-b907-432f-b066-88f7af9ca3af,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	Kpvn6gAYPfHgyJq4oM/tyaEX+ih3z/MJJqtXoCzAlSEwvOE1ax1X/y4zuimCXSnBS2RA8V/Kdspt9ohLhFIghb+I5ujRx7ZldAEnt4M1EiXbpWokk0iSZxRcxHGcYGgahnoEL4EjP7LrZ4AgA26rIZWeP+by5i3CQ6G2uR5EIRHnS72lEqyGvSLdhHETd6+q2uJ9ckvvXKBgJj053CYmBAa4t+26k9LkxJfR7s2oa4gkoJLAYcBaGBaGB7sM0CCFr896paeeT8VeDZEaFYYEj/iodf625OOp5CXHXOwCXdZxJ+teeI5MGdFQHtkvrxlQzM42x1nqAMnwzgEaT6RENQiWIFiu8r8088CqEC86XLM9FstzXqOb7xONuSJGS7rIUAnrrqdbKjgjwct3lUKSNltVjHuGYMQqdolCq8tbYKiWIKRfHKjM8BROSfLuRELsDKdEmYUIJJ/fXX/ynfOKxegOfnEX5w5MWbpcCwmpd6kQLA4zp9fA3AyYk5gQcChV1I0ru6dURpnpiIdoLK6KOXjP8MuHkdZgfBniTzbjFomaiP8cP3e+ut+kgHn+TNoLy3wleS15zckqxFwpcFDbxw0/XxwkU8XbDNIlNKhTv04aztncaeD5vTbcLMUpPNC2qovx+1kdL+J2vUyNBC6xxBGD88q0CjsVRKzMGck75h0=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI0PR02MB10536.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(1800799015)(376005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?bmtnR3BQVzZleTJEdUZSQUg1YklqNnZpZ2FhZkFwa00vSDdTRFpDSy9lVDBr?=
+ =?utf-8?B?OFJBYisvUU1LdkhwdDJDcnlUbWdOazdRNWp0UEhYM3JzY3VwQ1hCYUJQWVUv?=
+ =?utf-8?B?YU5HZzliV2NmeGtzTG9kcHhuNEZZbnFDSlp3cXhqSjN5ODE3cGZiK1dIK1Fo?=
+ =?utf-8?B?UXMxMTFYVzcyNTUvVnNnNmh6WENnanYwejlqdWx0ejFGR3FPL2FITlp3U0V5?=
+ =?utf-8?B?Y3UyNFFUa1lOd2h6ci9BM3lHQ29DbU4vWXZPb0RlTlBnSGoxeEpxVER6ZUNl?=
+ =?utf-8?B?TkJ1NUFOck5CTm8wY3JMYmxiTlRCcGJqdEJJaXVqSzlSMVI1TEUvVWd4ajNU?=
+ =?utf-8?B?NUZFK0UxT1RJK09EbFFyT3pzaWRPUFhGcGdjU2JHNk0rK3dFWXd3UCszNXRE?=
+ =?utf-8?B?YXBUQkFlYzZsWlp0dXNteks1N2ZyUHRjWWx5WXBZZzVSWWl0eGNQZGxxM3l6?=
+ =?utf-8?B?S1FNRzEvTTJDY2s0QkRiRisxNm43cjkvbENrelBvNit5emU3OHprdnNXeWE5?=
+ =?utf-8?B?YUFXcjB6SHI2eDVTbHI0dGg1UHQ1Qlp3WlVtUDA2ZnlJSUFpOFMwZUZOVHBO?=
+ =?utf-8?B?UjhnQWtackVEV2h3K2xDOEZxMmlnVElERkgwMWRhQjVSYlJEd0liNVkrL3dV?=
+ =?utf-8?B?Mmk0S0tiWlZFWFdzdmFxNEJCbExIWmc1V3RoL0FGN0xBbzhuTzVBQ01yZS9R?=
+ =?utf-8?B?dlVveDRjYW40ejhGSXM3QzNiZitmbEM1OUtNTS9jSytpRCs2eVFQTE0zNXlj?=
+ =?utf-8?B?UDJEYStvK1E4QWJJRk5seFd4YUl5YmZZTnhaaHowS1hrTTVGbUZidjdTcjlp?=
+ =?utf-8?B?TEwyKzNlNUUxcWNQRWlCbkVhN2ViOXo4UXlQelU1d1pjZEF0SVFSdktqUmEz?=
+ =?utf-8?B?bE1GZEhKQ0wwT3Z4L1hoWFhudGtHOHhDcGJkUG1OTUUwb054ajlmVzdqeDlp?=
+ =?utf-8?B?cjM5TTczOTN0UVYwbkkzNWRlZURPWE5IV3VqSk5qb1dFejNVKzFHNUp3VHU3?=
+ =?utf-8?B?OFUvUFVWdjRRbUN2VTY5dHNSVUNtY0VlaDlkSFY4dnJ1MGFvR0F1Yk5xV0Nz?=
+ =?utf-8?B?emlGYnFNa2JnYWJyRWRaT2M3WXZLNGg1QWQ0UDNmMXhEVjZ2bENvT3pPOWxG?=
+ =?utf-8?B?czBybndNNVM3VGp3ZjROZ1c4NHR1enUzdnYxU3krWkN2bUpVUkVMeUdlK2Q3?=
+ =?utf-8?B?Wm9hT1N1NEVZVHR1SHdjdDduTXpCZzF4UVdZQnczM1NSN2pjU3RZVW42dEds?=
+ =?utf-8?B?SjhFdnBxMjJpbks2ODRRdU1ZVVBHVU1WU1ZtUUFTTlBhNzcxV2hINWZqbnFL?=
+ =?utf-8?B?VXhlcmo0U2dQN2lUamRpblp5Ym05d3hSWVM5VlpqR1pVV3EvSTcvZTcvTFlP?=
+ =?utf-8?B?S3pPNFppcUs0RkNBaTRrVGJaUTVPc1F5SmtXV3I0V01qd3pyVWFjYm8wVncw?=
+ =?utf-8?B?MnFNZ093OG83UE1pNi81Kzh5YnJKYXBVTVk1ZzY0SzFJOTBoUEZJTU5ieGZO?=
+ =?utf-8?B?bFJsQzZxc1h3ZlFISXNjMlMzbFhhZ3d3Z09WeFBQbjVDVGlsYTZFUEFMNWVV?=
+ =?utf-8?B?dUh3SmtNYXFoRG1iSEtHUnlGSTNwWnNCTGpkbm9KSGpKZkZkaFZabnZVODVZ?=
+ =?utf-8?B?R2tMUXhVdTRYekxpU21GWWdkekhXbEEyc3RTN0VmdFhZY0lwOWZTaTlsZkFk?=
+ =?utf-8?B?VGkzVmF3aWxZNkM5OHpkcE1pRzB0WGEyY3NIeFpyOE9zNEtBdEFBY2ZmdHJi?=
+ =?utf-8?B?N3pjaVNLOWNHalRSVFc3L20wNk9ZeHhPaytXSlJ2Wk9QaVprTVJYMVU2TXU5?=
+ =?utf-8?B?enI3YzZ4ZHAwLzhDdk12VzRRSXQ0ZmJtRlgxb2NBT0RqQ2l5YWFRQ2lOemc2?=
+ =?utf-8?B?WTV1QXV2TDVxekhSbTIycUpCZmh2a1RMa28wNFMvUTZRY3VxWThoR3Eyb2hm?=
+ =?utf-8?B?NVpNTko2UzMzanhJQVVFd0VvV04rL3Z0Qmt0bGYzM3hoVlZvQmVtcXI4SXBp?=
+ =?utf-8?B?VTMydks0WVNlbTlYZ0czMytSRXVuTFZWTVdSKzlHR0tDYnNmVG9sbk12dzBY?=
+ =?utf-8?B?cHRsTDRMNGg0bFRRVFBXeWVLT2xnRVJ2ZnBoZ1dkeVNjUk10MzhNSFFMdGVs?=
+ =?utf-8?B?eC9zWEx0M2FjbUhBVTYvSUZDRDhFY1daRVpJMmNsY3VhcHhuMHk4ZFJkK3lM?=
+ =?utf-8?Q?2MubxypGdtQuwpe5RSH521S7Saac57UfX+Hkbli0SM58?=
+X-OriginatorOrg: axis.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1b8c7ddf-e221-433d-43a1-08dc52b93d28
+X-MS-Exchange-CrossTenant-AuthSource: VI0PR02MB10536.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Apr 2024 02:04:32.9559
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4cx2GZsadN6E4MorY5oRJ4WlgHS6Xy0Hb79D0iYzLfmP9A1ZQTDP7UC/WBTY/UpNimB3eXgJYhNvrZlb9dXLVw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB5PR02MB10235
 
-An arm64 cpuidle driver with two states: (1) First polls for new runable
-tasks up to 100 us (by default) before (2) a wfi idle and awoken by
-interrupt (the current arm64 behavior). It allows CPUs to return from
-idle more quickly by avoiding the longer interrupt wakeup path, which
-may require EL1/EL2 transition in certain VM scenarios.
+On 2024/4/1 21:57, Andrew Davis wrote:
+> On 4/1/24 8:15 AM, Sebastian Reichel wrote:
+>> [+cc Andrew Davis]
+>>
+>> Hello Hermes,
+>>
+>> Sorry for the delay. This arrived too close to the 6.9 merge window.
+>> I had a look now and while the patch looks fine to me on a conceptual
+>> level, it did not apply. It looks like you used a pre-2024 kernel tree
+>> to generate the patch against. Please always use something recent base
+>> tree (and ideally use git's --base option to document the used
+>> parent commit).
+>>
+>> Other than that I just applied a series from Andrew, which cleans up
+>> the register caching in bq27xxx and removed most registers from the
+>> cache. That's something I did not consider earlier, since I thought
+>> the cache was introduced to fix a different issue. But that was
+>> apparently sbs-battery and not bq27xxx.
+>>
+>
+> The original BQ27000 device did not have an interrupt pin to signal
+> when important updates to the battery occurred, so early devices
+> using it would have userspace poll those values. As the kernel driver
+> added its own polling for updates, it seems the early driver authors
+> simply decided to cache the values between kernel reads and return
+> those to userspace when it reads.
+>
+> This is a problem though for two reasons.
+> 1. If no one is interested in these values the kernel will still poll
+>    them anyway, wasting I2C bus time and power.
+> 2. If userspace is actually interested in some value and so checks it
+>    often, it will only get real updated values when the kernel next 
+> polls,
+>    which might not be often enough for some use-cases.
+>
+Agree! Also good to know the history.
 
-Poll duration is optionally configured at load time via the poll_limit
-module parameter.
 
-The default 100 us duration was experimentally chosen, by measuring QPS
-(queries per sec) of the MLPerf bert inference benchmark, which seems
-particularly susceptible to this change; see procedure below. 100 us is
-the inflection point where QPS stopped growing in a range of tested
-values. All results are from AWS m7g.16xlarge instances (Graviton3 SoC)
-with dedicated tenancy (dedicated hardware).
+>> Anyways, there is only two registers left in the cache now. I'm fine
+>> with having a per-register cache for them, if that is still needed
+>> to further reduce I2C traffic on your device.
+>>
+>> And... re-reading your problem description, I wonder if we need to
+>> reintroduce the caching for all registers (on a per register basis)
+>> to avoid userspace being able to do a denial of service by quickly
+>> polling the battery information.
+>>
+>
+> Preventing a DoS of the I2C bus is not the responsibility of a
+> given driver. Userspace has plenty of other ways to spam the
+> I2C bus if it really wants to, no need to try to predict what a
+> system's admin would want and block users from those actions.
+>
+> If we really do want to reduce I2C accesses for registers we know
+> cannot change often (which are few), then we should use the
+> existing regmap_cache mechanism, not roll our own. This driver
+> is complex enough without re-inventing the wheel and adding
+> our own custom register caching scheme.
+>
+Yes, actually for our case, we have already reviewed the access from 
+userspace and optimise it, then we found the driver also poll the 
+registers quite offten and some of them are not really needed. Now if we 
+think it's OK to remove some of the registers from the cache group, then 
+it's great and much simple solution than mine. Thanks for the patches.
 
-| before | 10us  | 25us | 50us | 100us | 125us | 150us | 200us | 300us |
-| 5.87   | 5.91  | 5.96 | 6.01 | 6.06  | 6.07  | 6.06  | 6.06  | 6.06  |
 
-Perf's scheduler benchmarks also improve with a range of poll_limit
-values >= 10 us. Higher limits produce near identical results within a
-3% noise margin. The following tables are `perf bench sched` results,
-run times in seconds.
+Best Regards,
 
-`perf bench sched messaging -l 80000`
-| AWS instance  | SoC       | Before | After  | % Change |
-| c6g.16xl (VM) | Graviton2 | 18.974 | 18.400 | none     |
-| c7g.16xl (VM) | Graviton3 | 13.852 | 13.859 | none     |
-| c6g.metal     | Graviton2 | 17.621 | 16.744 | none     |
-| c7g.metal     | Graviton3 | 13.430 | 13.404 | none     |
-
-`perf bench sched pipe -l 2500000`
-| AWS instance  | SoC       | Before | After  | % Change |
-| c6g.16xl (VM) | Graviton2 | 30.158 | 15.181 | -50%     |
-| c7g.16xl (VM) | Graviton3 | 18.289 | 12.067 | -34%     |
-| c6g.metal     | Graviton2 | 17.609 | 15.170 | -14%     |
-| c7g.metal     | Graviton3 | 14.103 | 12.304 | -13%     |
-
-`perf bench sched seccomp-notify -l 2500000`
-| AWS instance  | SoC       | Before | After  | % Change |
-| c6g.16xl (VM) | Graviton2 | 28.784 | 13.754 | -52%     |
-| c7g.16xl (VM) | Graviton3 | 16.964 | 11.430 | -33%     |
-| c6g.metal     | Graviton2 | 15.717 | 13.536 | -14%     |
-| c7g.metal     | Graviton3 | 13.301 | 11.491 | -14%     |
-
-Steps to run MLPerf bert inference on Ubuntu 22.04:
- sudo apt install build-essential python3 python3-pip
- pip install "pybind11[global]" tensorflow  transformers
- export TF_ENABLE_ONEDNN_OPTS=1
- export DNNL_DEFAULT_FPMATH_MODE=BF16
- git clone https://github.com/mlcommons/inference.git --recursive
- cd inference
- git checkout v2.0
- cd loadgen
- CFLAGS="-std=c++14" python3 setup.py bdist_wheel
- pip install dist/*.whl
- cd ../language/bert
- make setup
- python3 run.py --backend=tf --scenario=SingleStream
-
-Suggested-by: Ali Saidi <alisaidi@amazon.com>
-Reviewed-by: Ali Saidi <alisaidi@amazon.com>
-Reviewed-by: Geoff Blake <blakgeof@amazon.com>
-Cc: Brian Silver <silverbr@amazon.com>
-Signed-off-by: Haris Okanovic <harisokn@amazon.com>
----
- drivers/cpuidle/Kconfig.arm           |  13 ++
- drivers/cpuidle/Makefile              |   1 +
- drivers/cpuidle/cpuidle-arm-polling.c | 171 ++++++++++++++++++++++++++
- 3 files changed, 185 insertions(+)
- create mode 100644 drivers/cpuidle/cpuidle-arm-polling.c
-
-diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
-index a1ee475d180d..484666dda38d 100644
---- a/drivers/cpuidle/Kconfig.arm
-+++ b/drivers/cpuidle/Kconfig.arm
-@@ -14,6 +14,19 @@ config ARM_CPUIDLE
- 	  initialized by calling the CPU operations init idle hook
- 	  provided by architecture code.
- 
-+config ARM_POLL_CPUIDLE
-+	bool "ARM64 CPU idle Driver with polling"
-+	depends on ARM64
-+	depends on ARM_ARCH_TIMER_EVTSTREAM
-+	select CPU_IDLE_MULTIPLE_DRIVERS
-+	help
-+	  Select this to enable a polling cpuidle driver for ARM64:
-+	  The first state polls TIF_NEED_RESCHED for best latency on short
-+	  sleep intervals. The second state falls back to arch_cpu_idle() to
-+	  wait for interrupt. This is can be helpful in workloads that
-+	  frequently block/wake at short intervals or VMs where wakeup IPIs
-+	  are more expensive.
-+
- config ARM_PSCI_CPUIDLE
- 	bool "PSCI CPU idle Driver"
- 	depends on ARM_PSCI_FW
-diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
-index d103342b7cfc..23c21422792d 100644
---- a/drivers/cpuidle/Makefile
-+++ b/drivers/cpuidle/Makefile
-@@ -22,6 +22,7 @@ obj-$(CONFIG_ARM_U8500_CPUIDLE)         += cpuidle-ux500.o
- obj-$(CONFIG_ARM_AT91_CPUIDLE)          += cpuidle-at91.o
- obj-$(CONFIG_ARM_EXYNOS_CPUIDLE)        += cpuidle-exynos.o
- obj-$(CONFIG_ARM_CPUIDLE)		+= cpuidle-arm.o
-+obj-$(CONFIG_ARM_POLL_CPUIDLE)		+= cpuidle-arm-polling.o
- obj-$(CONFIG_ARM_PSCI_CPUIDLE)		+= cpuidle-psci.o
- obj-$(CONFIG_ARM_PSCI_CPUIDLE_DOMAIN)	+= cpuidle-psci-domain.o
- obj-$(CONFIG_ARM_TEGRA_CPUIDLE)		+= cpuidle-tegra.o
-diff --git a/drivers/cpuidle/cpuidle-arm-polling.c b/drivers/cpuidle/cpuidle-arm-polling.c
-new file mode 100644
-index 000000000000..bca128568114
---- /dev/null
-+++ b/drivers/cpuidle/cpuidle-arm-polling.c
-@@ -0,0 +1,171 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * ARM64 CPU idle driver using wfe polling
-+ *
-+ * Copyright 2024 Amazon.com, Inc. or its affiliates. All rights reserved.
-+ *
-+ * Authors:
-+ *   Haris Okanovic <harisokn@amazon.com>
-+ *   Brian Silver <silverbr@amazon.com>
-+ *
-+ * Based on cpuidle-arm.c
-+ * Copyright (C) 2014 ARM Ltd.
-+ * Author: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-+ */
-+
-+#include <linux/cpu.h>
-+#include <linux/cpu_cooling.h>
-+#include <linux/cpuidle.h>
-+#include <linux/sched/clock.h>
-+
-+#include <asm/cpuidle.h>
-+#include <asm/readex.h>
-+
-+#include "dt_idle_states.h"
-+
-+/* Max duration of the wfe() poll loop in us, before transitioning to
-+ * arch_cpu_idle()/wfi() sleep.
-+ */
-+#define DEFAULT_POLL_LIMIT_US 100
-+static unsigned int poll_limit __read_mostly = DEFAULT_POLL_LIMIT_US;
-+
-+/*
-+ * arm_idle_wfe_poll - Polls state in wfe loop until reschedule is
-+ * needed or timeout
-+ */
-+static int __cpuidle arm_idle_wfe_poll(struct cpuidle_device *dev,
-+				struct cpuidle_driver *drv, int idx)
-+{
-+	u64 time_start, time_limit;
-+
-+	time_start = local_clock();
-+	dev->poll_time_limit = false;
-+
-+	local_irq_enable();
-+
-+	if (current_set_polling_and_test())
-+		goto end;
-+
-+	time_limit = cpuidle_poll_time(drv, dev);
-+
-+	do {
-+		// exclusive read arms the monitor for wfe
-+		if (__READ_ONCE_EX(current_thread_info()->flags) & _TIF_NEED_RESCHED)
-+			goto end;
-+
-+		// may exit prematurely, see ARM_ARCH_TIMER_EVTSTREAM
-+		wfe();
-+	} while (local_clock() - time_start < time_limit);
-+
-+	dev->poll_time_limit = true;
-+
-+end:
-+	current_clr_polling();
-+	return idx;
-+}
-+
-+/*
-+ * arm_idle_wfi - Places cpu in lower power state until interrupt,
-+ * a fallback to polling
-+ */
-+static int __cpuidle arm_idle_wfi(struct cpuidle_device *dev,
-+				struct cpuidle_driver *drv, int idx)
-+{
-+	if (current_clr_polling_and_test()) {
-+		local_irq_enable();
-+		return idx;
-+	}
-+	arch_cpu_idle();
-+	return idx;
-+}
-+
-+static struct cpuidle_driver arm_poll_idle_driver __initdata = {
-+	.name = "arm_poll_idle",
-+	.owner = THIS_MODULE,
-+	.states = {
-+		{
-+			.enter			= arm_idle_wfe_poll,
-+			.exit_latency		= 0,
-+			.target_residency	= 0,
-+			.exit_latency_ns	= 0,
-+			.power_usage		= UINT_MAX,
-+			.flags			= CPUIDLE_FLAG_POLLING,
-+			.name			= "WFE",
-+			.desc			= "ARM WFE",
-+		},
-+		{
-+			.enter			= arm_idle_wfi,
-+			.exit_latency		= DEFAULT_POLL_LIMIT_US,
-+			.target_residency	= DEFAULT_POLL_LIMIT_US,
-+			.power_usage		= UINT_MAX,
-+			.name			= "WFI",
-+			.desc			= "ARM WFI",
-+		},
-+	},
-+	.state_count = 2,
-+};
-+
-+/*
-+ * arm_poll_init_cpu - Initializes arm cpuidle polling driver for one cpu
-+ */
-+static int __init arm_poll_init_cpu(int cpu)
-+{
-+	int ret;
-+	struct cpuidle_driver *drv;
-+
-+	drv = kmemdup(&arm_poll_idle_driver, sizeof(*drv), GFP_KERNEL);
-+	if (!drv)
-+		return -ENOMEM;
-+
-+	drv->cpumask = (struct cpumask *)cpumask_of(cpu);
-+	drv->states[1].exit_latency = poll_limit;
-+	drv->states[1].target_residency = poll_limit;
-+
-+	ret = cpuidle_register(drv, NULL);
-+	if (ret) {
-+		pr_err("failed to register driver: %d, cpu %d\n", ret, cpu);
-+		goto out_kfree_drv;
-+	}
-+
-+	pr_info("registered driver cpu %d\n", cpu);
-+
-+	cpuidle_cooling_register(drv);
-+
-+	return 0;
-+
-+out_kfree_drv:
-+	kfree(drv);
-+	return ret;
-+}
-+
-+/*
-+ * arm_poll_init - Initializes arm cpuidle polling driver
-+ */
-+static int __init arm_poll_init(void)
-+{
-+	int cpu, ret;
-+	struct cpuidle_driver *drv;
-+	struct cpuidle_device *dev;
-+
-+	for_each_possible_cpu(cpu) {
-+		ret = arm_poll_init_cpu(cpu);
-+		if (ret)
-+			goto out_fail;
-+	}
-+
-+	return 0;
-+
-+out_fail:
-+	pr_info("de-register all");
-+	while (--cpu >= 0) {
-+		dev = per_cpu(cpuidle_devices, cpu);
-+		drv = cpuidle_get_cpu_driver(dev);
-+		cpuidle_unregister(drv);
-+		kfree(drv);
-+	}
-+
-+	return ret;
-+}
-+
-+module_param(poll_limit, uint, 0444);
-+device_initcall(arm_poll_init);
--- 
-2.34.1
+Hermes
 
 
