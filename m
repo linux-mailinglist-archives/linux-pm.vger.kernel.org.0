@@ -1,123 +1,143 @@
-Return-Path: <linux-pm+bounces-5786-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5787-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E36C894BAC
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 08:44:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9E2B894DD1
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 10:46:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2AB2D282BE5
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 06:44:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 276891C21F8F
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 08:46:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 356AD2BD00;
-	Tue,  2 Apr 2024 06:44:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 287F4481C2;
+	Tue,  2 Apr 2024 08:46:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hHEKOWOQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wl3U/pMq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C1872BCE3;
-	Tue,  2 Apr 2024 06:44:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D93A4501C;
+	Tue,  2 Apr 2024 08:46:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712040261; cv=none; b=sT3jjtR08MxhItaIBtD0nQ9pEloh4k2PdZAD58NTbfnodhh176/cxxnelx9PW3T134gd/GQpEsTO66L7cs8SaMyAC9p55fKzaUM4ZzSL0fiYo4OHNrk2kDRHqnHPQDTv4e5Ul8QDV68hRHVAqw1CKMaULJsuP1aUqXZfJPOFNRQ=
+	t=1712047568; cv=none; b=Y5jhffmfXR9KrioEaUAMhSYXAhfZ6J97HErmywm6H4+PPq9TuwrU6Yz1Yo7raZDT3WAJMVD6BrAauY/oJX4O3ha/JKzCvSV6fOvMM0RFLGnRjc6qiuvudDzF/2zuoqEVxp+ZgW7Y9OT3vj79X3/eLnFMoz1kI9yiDY0bhKF43Gw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712040261; c=relaxed/simple;
-	bh=ZhMZFYiEO8TBbx//+t7SF96Y8NJnoF+F/tH/3WyofbE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SUQLVYJ5tNGEsur4f3vWd9ACLOHdVsxIiqYK/RqFarUw3QC1+F7Xw0QZtSKWQBHDmEgH/E6tCgYBYD2AZBidDPth9S/SXYXWLhDyUiwMZO5LYu4nI51mAP5ysGBXVMK7SVsixLzoaTc7IvMLQrWl5YJkjfGgIDyMBRhSNbH05Ww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hHEKOWOQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D34CC433F1;
-	Tue,  2 Apr 2024 06:44:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712040260;
-	bh=ZhMZFYiEO8TBbx//+t7SF96Y8NJnoF+F/tH/3WyofbE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=hHEKOWOQYNz3KdtTKkK1eaJsnLcTAx1xqsWbRA43uTdMYmEyuUgGBb1YWwD/TXuLi
-	 AB9VdTLlaRdav4knC6MYcu3kV8kibxPwtmO4HvqYB45CBUnH9mqPYSF9aCUKJntYTt
-	 O3KOYyjnGza/rW6+YwKCEBRvxIJxWFSTkZ2PMmOfyelYbyfMW2T51wS9dV//WeokU5
-	 8VGxAYuOOrpL9HGSFwXC550DsnuO4xP/9Fduq9Pmk401ymAacPKacEkVGIIEgaUyoR
-	 kkUDtw+/agS7E5GBEJFmRDiLiY0hnuT6VMYvuK6AOgxP8nNWStLrejESvkGvFd2CL7
-	 krA4dvgwcd9rg==
-Message-ID: <22e3c080-e51a-4edb-b332-3aa5a7b58f82@kernel.org>
-Date: Tue, 2 Apr 2024 08:44:15 +0200
+	s=arc-20240116; t=1712047568; c=relaxed/simple;
+	bh=Fh4xaBSV/7KMplnOoseILgEOyANlTljnCuikIBL5YzE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Eo89vudUdm5Tu1Ixde8HtVkfDEA9pvTTH5VX1TPdzJbfAbodK8y7htnYpBqGbqdTmzEIz/4Z78y4/+AuTd5UZb3v2SQiAdRx0JU2ADMkWsp49whXB86At7MiBxqw/to6WLQYGm4kSaedJPhnPHpYt9b75GWErEM0khlS3o3KDyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wl3U/pMq; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712047566; x=1743583566;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=Fh4xaBSV/7KMplnOoseILgEOyANlTljnCuikIBL5YzE=;
+  b=Wl3U/pMqKxjKP71jo63XFFK4GXgw9YupQZ2KsMyrxad5VB9irM4CAyDC
+   KMs1pi/ROhPtT4R25yC6dF2rL6WMjSkjW6RkI7i87B/mHysjgWVqs21GH
+   DAJUpSXKsTMiIFfKHfQfZqiYsHDilQf9MYo559K4rwnkZuMQWkSdABHp9
+   18XtBsLatiRYXqZj9eSDjT/dpPVwPtU5fQ8tYQ/XROWVQYQzjRWMGWwJ+
+   CdH5CF3PkpWEJmgLJzLjEZGyF2+fwQjkVkMzP7tCb8UVuMVSdHZBGoik/
+   Tv644hEkqkA0aqfZlUtaFaEuFbfTLzf/B2XWdTnnwviPXOravHIzBFo1I
+   A==;
+X-CSE-ConnectionGUID: Ox1ritnBS/+7t4Gtg/t/Ag==
+X-CSE-MsgGUID: wFDtkneSQeWrcU/ttCVEAw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="7361897"
+X-IronPort-AV: E=Sophos;i="6.07,174,1708416000"; 
+   d="scan'208";a="7361897"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2024 01:46:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,174,1708416000"; 
+   d="scan'208";a="18067477"
+Received: from spandruv-desk1.amr.corp.intel.com ([10.209.67.49])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2024 01:46:05 -0700
+Message-ID: <2a3e223f3f248e8b02a8aeb47ab2ab15a6225889.camel@linux.intel.com>
+Subject: Re: [PATCH v1 0/6] intel_pstate: Turbo disabled handling rework
+From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM
+ <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>
+Date: Tue, 02 Apr 2024 01:46:04 -0700
+In-Reply-To: <13494237.uLZWGnKmhe@kreacher>
+References: <13494237.uLZWGnKmhe@kreacher>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 06/15] dt-bindings: thermal: mediatek: Add LVTS thermal
- controller definition for MT8186
-To: Nicolas Pitre <nico@fluxnic.net>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org,
- linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
-Cc: Nicolas Pitre <npitre@baylibre.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-References: <20240402032729.2736685-1-nico@fluxnic.net>
- <20240402032729.2736685-7-nico@fluxnic.net>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240402032729.2736685-7-nico@fluxnic.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 02/04/2024 05:25, Nicolas Pitre wrote:
-> From: Nicolas Pitre <npitre@baylibre.com>
-> 
-> Add LVTS thermal controller definition for MT8186.
-> 
-> Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
+On Mon, 2024-03-25 at 18:00 +0100, Rafael J. Wysocki wrote:
+> Hi Everyone,
+>=20
+> This series reworks the handling of disabling turbo in intel_pstate
+> on top of the previous series of cleanups
+>=20
+> https://lore.kernel.org/linux-pm/12409658.O9o76ZdvQC@kreacher/
+>=20
+> The underlying problem is that disabling turbo is handled quite
+> consistently
+> in intel_pstate and basically it can get disabled at any time
+> (through
+> MSR_IA32_MISC_ENABLE_TURBO_DISABLE) without much coordination with
+> the
+> cpufreq core or anything else.
+>=20
+> Disabling turbo through the "no_turbo" sysfs attribute is more
+> consistent,
+> but it has issues too (for example, if turbo is disabled via
+> "no_turbo",
+> the frequency-invariance code gets notified on the turbo status
+> change,
+> but the actual maximum frequency of the CPU is only updated if the
+> MSR_IA32_MISC_ENABLE_TURBO_DISABLE value changes either, which need
+> not
+> happen at the same time or even at all).
+>=20
+> The first patch is not really related to the rest of the series, it's
+> just a cleanup and can be applied separately.
+>=20
+> Patch [2/6] uses the observation that it should be necessary to read
+> MSR_IA32_MISC_ENABLE_TURBO_DISABLE after driver initialization to
+> remove
+> in-flight reads on that MSR and turbo state updates related to them.
+>=20
+> Patch [3/6] builds on top of the previous one to adjust the
+> "no_turbo"
+> attribute "store" and "show" callbacks.
+>=20
+> Patch [4/6] adds READ_ONCE() annotations to global.no_turbo accesses
+> and
+> makes some related simplifications.
+>=20
+> Patch [5/6] replaces the cached MSR_IA32_MISC_ENABLE_TURBO_DISABLE
+> value in some checks with global.no_turbo for consistency.
+>=20
+> Patch [6/6] makes all of the code paths where the maximum CPU
+> frequency
+> can change to do that consistently by using the same set of
+> functions.
+>=20
+> Details are described in the individual patch changelogs.
+>=20
 
-Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
+Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-Best regards,
-Krzysztof
+Thanks,
+Srinivas
+
+> Thanks!
+>=20
+>=20
+>=20
+>=20
 
 
