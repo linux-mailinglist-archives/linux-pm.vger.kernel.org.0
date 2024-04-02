@@ -1,139 +1,128 @@
-Return-Path: <linux-pm+bounces-5830-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5829-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02380895CF0
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 21:43:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3D6C895CEE
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 21:43:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8670AB21B78
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 19:43:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4A361C22AFD
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 19:43:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E8A415D5A3;
-	Tue,  2 Apr 2024 19:43:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n79RWDNd"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80F0015B992;
+	Tue,  2 Apr 2024 19:43:02 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.lichtvoll.de (lichtvoll.de [89.58.27.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 486A915CD78;
-	Tue,  2 Apr 2024 19:43:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2EF115B972;
+	Tue,  2 Apr 2024 19:43:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.27.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712086984; cv=none; b=WtuxPUrfYtTQRHiahUAzzBm48afbhM2d2fw5vYb3vF6E3VC1KV60mpVmCB2kOdydpZRTdv+u2opDxUN+gma00br7y2fty/t6N5M3T6Dg9oAwlgmHdPWmfAR0Hmm8elbSY7ueSwN19s4BLAyPjjXHDF72gA1Ep/EqOe33cOS+wZ0=
+	t=1712086982; cv=none; b=RsAb8MnltWq7mkajqHf7Tt+tmot9uH355Vr5gWD87xy4AfK4ICPgVUbPds0SvdRdulwR0U6WyibgtphMAe/VEUEUq5dyFL0BJC/Pq8yn2upjrO1zZ2hwynn8/YyfvSSNsD69Gh6ZoTQh6LYJmMXX8D1eG2qWLERqsmWmqR9t29o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712086984; c=relaxed/simple;
-	bh=hux++m/Dx5FlfAfpKCTL72iTbUT8Ywm8K3OkJ/onX1E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jgBDRBE2/coGxvbygAJfUA6hpJ5fyHZLOmd739d3XePmWAbrbnB5ieNZhGozkmetFv1sEKTXs/BrT0fdxXFJHjxb19uYY6Aow31uFDPiLc2qhtzV+W+apSEnxiy3O22lOv0lttRhJUC9fhkCz2wdR4sJ7JrabLq5MrapnZSy1Vs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n79RWDNd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1AEDC43601;
-	Tue,  2 Apr 2024 19:43:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712086983;
-	bh=hux++m/Dx5FlfAfpKCTL72iTbUT8Ywm8K3OkJ/onX1E=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=n79RWDNdQ5jOejZzKpbWUX5cdLm9tDIsgvqhBfpj+Pgu2MGV3YkXLg+24mDi4ls3W
-	 nUb59vF/2Kcruciot+DRMca9y/IJLGpRXfurhwuy8RcbY8+sE7kxlTq05LwjIiHtzA
-	 CZy31RIgPKdzgKuLEQa5d4IyBWsG0msWf69Z52QzQUlkI0noGHdzfqPDg3F2FA0Epp
-	 CpFzrW+2G64IAuKYjtdOsYqhCETPP7mynXEHSyBqRpJc6Q6i0SsITpXoO+pDwDyKIX
-	 CJXUdqxin21h5pGsV6dBFJx7QC9jGGuz91AYn9d6/M5gdRMO8ZA4Uzr/nM/KohernR
-	 BrngJ4HBu+7HA==
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-5a4930d9c48so1089577eaf.1;
-        Tue, 02 Apr 2024 12:43:03 -0700 (PDT)
-X-Gm-Message-State: AOJu0YwKaz2CxziMGQjSv08gjca6bVTwq/2S83pFtb0W12F0MfDFbFEy
-	JPY8pfi2KMAa7VrP881JXjXsCLIhoPLFEhh1j78sJHzHm1xwsdDzzPL80yUJeYHmBsQmCkg4q74
-	8bYRVpwTmRxK196pwqg9zrL/heRM=
-X-Google-Smtp-Source: AGHT+IG0rTJIvGE2GbczLwW+SqLUgeZ4yISW7oJYWMUALQxGyOgRaj5b/VJdT3fuzvRrBwAsbtSz+v06K29NcIQqYHs=
-X-Received: by 2002:a05:6820:2289:b0:5a4:6e23:e335 with SMTP id
- ck9-20020a056820228900b005a46e23e335mr15520012oob.0.1712086983154; Tue, 02
- Apr 2024 12:43:03 -0700 (PDT)
+	s=arc-20240116; t=1712086982; c=relaxed/simple;
+	bh=T2zD/3mEbZDKBbyeVef0lMlUrsq/eZAor3kTjCaqZq8=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=uHEal2uDs/WWdopDYkExoij2S3seS8Rd9RHOOryK7j/iEn4MranTT9MzWuRtU9D11ulMLBHQL7efW5z7+qNsW4YryQFRB//ExbtDBeSX58iLfk9NETU8EByZTSR3e26paPFkKdAq5gXgH6CjdgZbVyJYtEZFE66xPkvHTwKTpc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lichtvoll.de; spf=pass smtp.mailfrom=lichtvoll.de; arc=none smtp.client-ip=89.58.27.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lichtvoll.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lichtvoll.de
+Received: from 127.0.0.1 (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (secp384r1) server-digest SHA384)
+	(No client certificate requested)
+	by mail.lichtvoll.de (Postfix) with ESMTPSA id A96EA872F;
+	Tue,  2 Apr 2024 19:42:58 +0000 (UTC)
+Authentication-Results: mail.lichtvoll.de;
+	auth=pass smtp.auth=martin@lichtvoll.de smtp.mailfrom=martin@lichtvoll.de
+From: Martin Steigerwald <martin@lichtvoll.de>
+To: linux-pm@vger.kernel.org, regressions@lists.linux.dev,
+ linux-kernel@vger.kernel.org,
+ Linux regressions mailing list <regressions@lists.linux.dev>
+Subject:
+ Re: [regression] 6.8.1: fails to hibernate with
+ pm_runtime_force_suspend+0x0/0x120 returns -16
+Date: Tue, 02 Apr 2024 21:42:58 +0200
+Message-ID: <22240355.EfDdHjke4D@lichtvoll.de>
+In-Reply-To: <be5a7213-78b3-4917-b95b-ec31cd2350e4@leemhuis.info>
+References:
+ <2325246.ElGaqSPkdT@lichtvoll.de> <12401263.O9o76ZdvQC@lichtvoll.de>
+ <be5a7213-78b3-4917-b95b-ec31cd2350e4@leemhuis.info>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <4558251.LvFx2qVVIh@kreacher>
-In-Reply-To: <4558251.LvFx2qVVIh@kreacher>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 2 Apr 2024 21:42:52 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iSyTP4SbGBYESNy9NynMCQn8dojCFoOtQU4Q305ZKGTQ@mail.gmail.com>
-Message-ID: <CAJZ5v0iSyTP4SbGBYESNy9NynMCQn8dojCFoOtQU4Q305ZKGTQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] thermal: More separation between the core and drivers
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Lukasz Luba <lukasz.luba@arm.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	"Rafael J. Wysocki" <rjw@rjwysocki.net>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Apr 2, 2024 at 9:04=E2=80=AFPM Rafael J. Wysocki <rjw@rjwysocki.net=
-> wrote:
->
-> Hi Everyone,
->
-> This is an update of
->
-> https://lore.kernel.org/linux-pm/4558384.LvFx2qVVIh@kreacher/
->
-> and
->
-> https://lore.kernel.org/linux-pm/2331888.ElGaqSPkdT@kreacher/
->
-> which rebases the first patch on top of 6.9-rc2, adds 3 patches and adjus=
-ts
-> the third patch from v2.
->
-> The original description of the first two patches still applies:
->
-> > Patch [1/2] is based on the observation that the threshold field in str=
-uct
-> > thermal_trip really should be core-internal and to make that happen it
-> > introduces a wrapper structure around struct thermal_trip for internal
-> > use in the core.
-> >
-> > Patch [2/2] moves the definition of the new structure and the struct
-> > thermal_zone_device one to a local header file in the core to enforce
-> > more separation between the core and drivers.
-> >
-> > The patches are not expected to introduce any observable differences in
-> > behavior, so please let me know if you see any of that.
->
-> Note that these patches were first sent before the merge window and have =
-not
-> really changed since then (except for a minor rebase of the first patch i=
-n
-> this series).  Moreover, no comments regarding the merit of these patches
-> have been made shared, so if this continues, I will be considering them a=
-s
-> good to go by the end of this week.
->
-> Patch [3/6] is a rewrite of comments regarding trip crossing and threshol=
-d
-> computations.
->
-> Patch [4/6] updates the trip crossing detection code to consolidate the
-> threshold initialization with trip crossing on the way up.
->
-> Patch [5/6] ([3/3] in v2) adds a mechanism to sort notifications and debu=
-g
-> calls taking place during one invocation of __thermal_zone_device_update(=
-) so
-> they always go in temperature order.
->
-> Patch [6/6] relocates the critical and trip point handling to avoid a
-> redundant temperature check.
->
-> The series applies on top of 6.9-rc2 and I'm planning to create a test
-> branch containing it.
+Hi Thorsten, hi,
 
-As promised:
+Linux regression tracking (Thorsten Leemhuis) - 19.03.24, 09:40:06 CEST:
+> On 16.03.24 17:12, Martin Steigerwald wrote:
+> > Martin Steigerwald - 16.03.24, 17:02:44 CET:
+> >> ThinkPad T14 AMD Gen 1 fails to hibernate with self-compiled 6.8.1.
+> >> Hibernation works correctly with self-compiled 6.7.9.
+> >=20
+> > Apparently 6.8.1 does not even reboot correctly anymore. runit on
+> > Devuan. It says it is doing the system reboot but then nothing
+> > happens.
+> >=20
+> > As for hibernation the kernel cancels the attempt and returns back to
+> > user space desktop session.
+> >=20
+> >> Trying to use "no_console_suspend" to debug next. Will not do bisect
+> >> between major kernel releases on a production machine.
+>=20
+> FWIW, without a bisection I guess no developer will take a closer look
+> (but I might be wrong and you lucky here!), as any change in those
+> hundreds of drivers used on that machine can possibly lead to problems
+> like yours. So without a bisection we are likely stuck here, unless
+> someone else runs into the same problem and bisects or fixes it. Sorry,
+> but that's just how it is.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log/?h=
-=3Dthermal-core-testing
+I have been asked this repeatedly with previous bug reports. My issue
+with bisecting between major kernel versions is this:
+
+When I look around here I see no second ThinkPad T14 AMD Gen 1 here I=20
+could use for testing. Also doing a kernel bisect using a GRML live iso=E2=
+=80=A6=20
+not really.
+
+The one I reported this from is a production machine with a 4 TB NVMe
+SSD which contains a lot of data. I am not willing to risk data loss or
+(silent) file system corruption by bisecting between major kernel
+releases. Bisecting between major kernel releases in my understanding
+would require to test various releases between in this example 6.7 and
+6.8 and even between 6.7 and 6.8-rc1. At least in my understand anything=20
+between 6.7 and 6.8-rc1 is not guaranteed to be even be somewhat stable. I=
+=20
+am not usually installing an rc1 kernel on a production machine, but=20
+rather wait for at least rc2/3 nowadays. Its a balanced risk calculation.=20
+And rc2/3 or later appears to be a risk I am willing to take. But=20
+something between stable and rc1? Nope.
+
+It is not even that rare. 6.7 some rc failed with hibernation as well.=20
+With exactly the same machine. I refused to do a bisect as well in that=20
+case. At some later time the issue was fixed without me doing anything=20
+more.
+
+Now my question is this: Without me willing to bisect in that case, is
+a bug report even useful? Otherwise I may just switch this last machine
+to distribution kernels. It would save a lot of time for me. This private=20
+and freelancer production machine is the last left-over machine with self-
+compiled kernels.
+
+So far I still thought I would somehow be contributing to Linux kernel
+quality with detailed bug reports that take time to write, but apparently=20
+I am not. Can you clarify?
+
+Ciao,
+=2D-=20
+Martin
+
+
 
