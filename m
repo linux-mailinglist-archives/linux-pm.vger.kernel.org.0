@@ -1,146 +1,172 @@
-Return-Path: <linux-pm+bounces-5808-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5809-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C08B89529C
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 14:12:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E60A6895665
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 16:14:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F05F11F225B1
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 12:12:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 07FBF1C21B41
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 14:14:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CE4E76C76;
-	Tue,  2 Apr 2024 12:12:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B8FE86ACA;
+	Tue,  2 Apr 2024 14:13:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AcA7VeuH"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Y2B+7rff"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3953556458
-	for <linux-pm@vger.kernel.org>; Tue,  2 Apr 2024 12:12:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA6FB86259;
+	Tue,  2 Apr 2024 14:13:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712059938; cv=none; b=D8QBW8htibwuNZe+6uvHJBYo3c1FNZekda9fjRng9AuBPKWmibA6LN3a9pJZyNO3KrgeJBVTkfxn0h8hOY7Pq+5HsqbujR/Cy55q7sXNXpSGJBvdPa/DiwbeZwcEGlG2X524qVtm03njLgWtN3BZ6h+NdCz8IFEbWPi4aVN+Gbc=
+	t=1712067230; cv=none; b=db0Plv7fct2Jz2osOdOnziEY7Rg4j0svbRpmDT1N4KXhhs+Chu4sCO1pIOAM/nJx6/4Jhv/9aFXybJOPc00LaoT6FEWaYzccnfC0kTOHiIiHrM4s29+D3JT6xhe+ISQcX4wj6UdNIBXcflShbHOUEqeRnVbIpM5E04pJzCY3gpQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712059938; c=relaxed/simple;
-	bh=ZU19AXGy1gTKu3ZdKgEYCn04X7EzHEkd9RdcAo9TIfw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XrcJ1+Zit3q6Vpf8Ga38ypVr18ljRB95xUfwCp9Q6zvN1PIy3YGaFR8/406istqrODycMyQRxVhmeljETkqWAezJTZxzoDUVe5roDzm7j80OjHylVR1OSReU79mziyZomP/498CCCWmB/XWgr5OCD2+jxsOwm0myKEYSN5NFOIE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=AcA7VeuH; arc=none smtp.client-ip=209.85.219.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-dc745927098so4770359276.3
-        for <linux-pm@vger.kernel.org>; Tue, 02 Apr 2024 05:12:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1712059935; x=1712664735; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=59+8zgH9nKJkFqI+MIO5KUM5XCs5xUxjBY89iFUie7c=;
-        b=AcA7VeuH1lsru5Ic48tq2Mzw+fYeKQfYxFjlYwjbhNZqZiMZrNGnc49AfTH8KtU+0b
-         DwDdB06Yx0nGgRNQr+uRvtwU83f8Hp8Q3YDSknC+GKmD/9yb6AB6eCA9x8viSNQueEZt
-         uYM8BxMdZSBpD3/RlNksTZVVg7LbwVtnYBUo0fvBEt5o++7H3fmcd2+eG1yPEfDqc7T+
-         1a2hctcRPBQCQPZ3M+Mo+QUefjmwhsdkQ3xpeXIZV13P9tReqlvrlhdMvX/0ta0IyCJA
-         ipaVJnjftUGu38a9Mzynj+RSBpim/6yNCWqHBf5dNy/Y9Z+t1p63iXWoXgRy1kI0ZPin
-         hawg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712059935; x=1712664735;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=59+8zgH9nKJkFqI+MIO5KUM5XCs5xUxjBY89iFUie7c=;
-        b=sDGOPieVMhfoIqFrXOMgKcHIt2/58VetWzLwNXVQtqNPdQasofs9qNfnaifRISNsEt
-         gNzPamfpqymZjpvP22lLgOvmZ0P/rvs5RpSV2k2reZa2TyzaynWM6crsTHNwALqI4+D8
-         DvJifSjz9eI+pejM6zjZKG8fCYHFhxTnRD5lFU2ep1ASORLuQJGRoW8Ivb6bTVoRocEf
-         Sz62a3lvvGN+g9hE+UzcvDFZGhv3rLbGFPq+lxxkKpnVCtCGtG+7e06jgyATWhH110bT
-         ggccTPOrNWQaPjy9CCEF8PDQm6qi1AOldTGsoNK9JzrzcA9tyEYdKzp898BRlFGscGrq
-         J9fw==
-X-Forwarded-Encrypted: i=1; AJvYcCVbRLZm95IOum8D+ES1QGNeofdy1dqFg0yadZ3bEuxNOToDrjfjBCyhkXL2sn5THovhqKHyvzjNTFdZCKfQVpGeLS1eJ8gxA+4=
-X-Gm-Message-State: AOJu0YzfdvKqjz2GqcIWoauwTsVO1obQmOhXt1NQuHeQGbJbA5H0GVl7
-	gFpvE5Rj/SwGkwkx45tvNHspLTkarikBTpNPnGHl2C7psXkoq2WVlU1d2pjH9PLx4aI8J9V1EDD
-	rZYcqt8gnHNjgoeX3umxNif5DPCHYqVwHPAJ91Q==
-X-Google-Smtp-Source: AGHT+IFkuZ7UzLaijf9AS20sbPh65/6NkxIIfNCV/NSfdOu3MxTu2vQNwQDFXF16gKf/9sOjZBiIcPSc2VfwYBA43k4=
-X-Received: by 2002:a25:8590:0:b0:dcc:a5dc:e9d6 with SMTP id
- x16-20020a258590000000b00dcca5dce9d6mr10343762ybk.30.1712059935303; Tue, 02
- Apr 2024 05:12:15 -0700 (PDT)
+	s=arc-20240116; t=1712067230; c=relaxed/simple;
+	bh=36P1uOtujsizwW2usw7mfkPhuqvi59s5Nt+PgGGqx0c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LcEW63i967IIA9Khq0BAlyAeMZNST+wDFXPISvneQIwhUhgAYWF93Jq01L9LldYNIiMcyCoMl2pTRbzPcrY9sNmBXRJLiGjyRdfgjwjLTtPaEBR9MzeXFiLAlIj3L5/WMNo9pEJoaTzNSfMQlP/LhOVoQIofUHIcFpg1gN8z5qE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Y2B+7rff; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:98])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id DDFFA5BE2C;
+	Tue,  2 Apr 2024 14:13:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1712067226; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KA7AVUof0UCDazD9kIzVR9xQgcPzIYUy3fkudyiEwWk=;
+	b=Y2B+7rffqbEm69uPQnaA7mdz2w0eK/38jkGPgDQNkMcQKA374UbUoeFc45NFeiLZyw3USB
+	LOnnWKV3sfhN0kfcSC946P9eJTPVNi6U3gYFCnc5aixSwPz2vhlDAxN1/XGc10nBRVDsys
+	F6ICdlUQn+ZzhTJsur2HWshIBvDb604=
+Authentication-Results: smtp-out2.suse.de;
+	dkim=none
+Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id C9C1A13A90;
+	Tue,  2 Apr 2024 14:13:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap2.dmz-prg2.suse.org with ESMTPSA
+	id GiIRMZoSDGboYwAAn2gu4w
+	(envelope-from <mkoutny@suse.com>); Tue, 02 Apr 2024 14:13:46 +0000
+Date: Tue, 2 Apr 2024 16:13:41 +0200
+From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To: Waiman Long <longman@redhat.com>
+Cc: Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Peter Zijlstra <peterz@infradead.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, Shuah Khan <shuah@kernel.org>, 
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Frederic Weisbecker <frederic@kernel.org>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Ingo Molnar <mingo@kernel.org>, 
+	Valentin Schneider <vschneid@redhat.com>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
+	Alex Shi <alexs@kernel.org>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Barry Song <song.bao.hua@hisilicon.com>
+Subject: Re: [PATCH 1/2] cgroup/cpuset: Make cpuset hotplug processing
+ synchronous
+Message-ID: <kce74bx6aafxfuw5yovaschym4ze4kommfk74eq5totojytest@mdxnfvl2kdol>
+References: <20240401145858.2656598-1-longman@redhat.com>
+ <20240401145858.2656598-2-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240402103406.3638821-1-quic_varada@quicinc.com>
- <20240402103406.3638821-4-quic_varada@quicinc.com> <CAA8EJpphk_kqzBE7cKb73ipdpTi29t9ZSOOdSfq7pAGSs5NKeg@mail.gmail.com>
- <CAA8EJpo=TMhu+Te+JE0cQzmjLOTDPi-Vv-h5Bch0Wfr_7iVi2w@mail.gmail.com>
- <ZgvlrbvvPNA6HRiL@hu-varada-blr.qualcomm.com> <CAA8EJpp2dgy0DcLoUuo6gz-8ee0RRwJ_mvCLGDbdvF-gVhREFg@mail.gmail.com>
- <ZgvqkhF2mTG82Rx2@hu-varada-blr.qualcomm.com>
-In-Reply-To: <ZgvqkhF2mTG82Rx2@hu-varada-blr.qualcomm.com>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Tue, 2 Apr 2024 15:12:04 +0300
-Message-ID: <CAA8EJprN3TuMF-v5PeFW_JUKk+a+MxB7poccZbi9biZNniRnTQ@mail.gmail.com>
-Subject: Re: [PATCH v6 3/6] interconnect: icc-clk: Add devm_icc_clk_register
-To: Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc: andersson@kernel.org, konrad.dybcio@linaro.org, mturquette@baylibre.com, 
-	sboyd@kernel.org, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
-	conor+dt@kernel.org, djakov@kernel.org, quic_anusha@quicinc.com, 
-	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-
-On Tue, 2 Apr 2024 at 14:23, Varadarajan Narayanan
-<quic_varada@quicinc.com> wrote:
->
-> On Tue, Apr 02, 2024 at 02:16:56PM +0300, Dmitry Baryshkov wrote:
-> > On Tue, 2 Apr 2024 at 14:02, Varadarajan Narayanan
-> > <quic_varada@quicinc.com> wrote:
-> > >
-> > > On Tue, Apr 02, 2024 at 01:48:08PM +0300, Dmitry Baryshkov wrote:
-> > > > On Tue, 2 Apr 2024 at 13:40, Dmitry Baryshkov
-> > > > <dmitry.baryshkov@linaro.org> wrote:
-> > > > >
-> > > > > On Tue, 2 Apr 2024 at 13:34, Varadarajan Narayanan
-> > > > > <quic_varada@quicinc.com> wrote:
-> > > > > >
-> > > > > > Wrap icc_clk_register to create devm_icc_clk_register to be
-> > > > > > able to release the resources properly.
-> > > > > >
-> > > > > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > > > > > ---
-> > > > > > v5: Introduced devm_icc_clk_register
-> > > > > > ---
-> > > > > >  drivers/interconnect/icc-clk.c   | 29 +++++++++++++++++++++++++++++
-> > > > > >  include/linux/interconnect-clk.h |  4 ++++
-> > > > > >  2 files changed, 33 insertions(+)
-> > > > >
-> > > > > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > > >
-> > > > Wait. Actually,
-> > > >
-> > > > Unreviewed-by: me
-> > > >
-> > > > Please return int from devm_icc_clk_register instead of returning the pointer.
-> > >
-> > > Wouldn't returning int break the general assumption that
-> > > devm_foo(), returns the same type as foo(). For example
-> > > devm_clk_hw_get_clk and clk_hw_get_clk return struct clk *?
-> >
-> > Not always. The only reason to return icc_provider was to make it
-> > possible to destroy it. With devres-managed function you don't have to
-> > do anything.
->
-> Ok. Will change as follows
->
->         return prov; -> return PTR_ERR_OR_ZERO(prov);
->
-
-I think the code might become simpler if you first allocate the ICC
-provider and then just 'return devm_add_action_or_reset(dev,
-your_icc_clk_release, provider)'
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="m3jtt4lb3pupq4nw"
+Content-Disposition: inline
+In-Reply-To: <20240401145858.2656598-2-longman@redhat.com>
+X-Spam-Score: -1.19
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-1.19 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 NEURAL_HAM_LONG(-0.96)[-0.965];
+	 MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	 MID_RHS_NOT_FQDN(0.50)[];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	 MX_GOOD(-0.01)[];
+	 NEURAL_HAM_SHORT(-0.20)[-0.999];
+	 RCPT_COUNT_TWELVE(0.00)[22];
+	 SIGNED_PGP(-2.00)[];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 R_DKIM_NA(2.20)[];
+	 MIME_TRACE(0.00)[0:+,1:+,2:~];
+	 RCVD_TLS_ALL(0.00)[];
+	 BAYES_HAM(-0.52)[80.23%];
+	 RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:98:from]
+X-Spam-Level: 
+X-Rspamd-Queue-Id: DDFFA5BE2C
 
 
--- 
-With best wishes
-Dmitry
+--m3jtt4lb3pupq4nw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hello Waiman.
+
+(I have no opinion on the overall locking reworks, only the bits about
+v1 migrations caught my attention.)
+
+On Mon, Apr 01, 2024 at 10:58:57AM -0400, Waiman Long <longman@redhat.com> wrote:
+...
+> @@ -4383,12 +4377,20 @@ hotplug_update_tasks_legacy(struct cpuset *cs,
+>  	/*
+>  	 * Move tasks to the nearest ancestor with execution resources,
+>  	 * This is full cgroup operation which will also call back into
+> -	 * cpuset. Should be done outside any lock.
+> +	 * cpuset. Execute it asynchronously using workqueue.
+
+                   ...to avoid deadlock on cpus_read_lock
+
+Is this the reason?
+Also, what happens with the tasks in the window till the migration
+happens?
+Is it handled gracefully that their cpu is gone?
+
+
+> -	if (is_empty) {
+> -		mutex_unlock(&cpuset_mutex);
+> -		remove_tasks_in_empty_cpuset(cs);
+> -		mutex_lock(&cpuset_mutex);
+> +	if (is_empty && css_tryget_online(&cs->css)) {
+> +		struct cpuset_remove_tasks_struct *s;
+> +
+> +		s = kzalloc(sizeof(*s), GFP_KERNEL);
+
+Is there a benefit of having a work for each cpuset?
+Instead of traversing whole top_cpuset once in the async work.
+
+
+Thanks,
+Michal
+
+
+--m3jtt4lb3pupq4nw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQQpEWyjXuwGT2dDBqAGvrMr/1gcjgUCZgwSkwAKCRAGvrMr/1gc
+jku7AP4wunT3qTbn0gNfnNlgS+aZURi7eScVHpxboPBoGEeorgEA0EEpGH79hJUs
+C5xcOZLm/5ZRgE5MXKIx0kiWKBGt9QY=
+=8lGP
+-----END PGP SIGNATURE-----
+
+--m3jtt4lb3pupq4nw--
 
