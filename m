@@ -1,63 +1,63 @@
-Return-Path: <linux-pm+bounces-5769-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5770-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BE138949E8
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 05:27:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EAFD8949E9
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 05:27:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B42FB28711B
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 03:27:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A68852871E7
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 03:27:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5D5C14F65;
-	Tue,  2 Apr 2024 03:27:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A137815E89;
+	Tue,  2 Apr 2024 03:27:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=pobox.com header.i=@pobox.com header.b="BGylCQtc";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b="xfxowGnN"
+	dkim=pass (1024-bit key) header.d=pobox.com header.i=@pobox.com header.b="lFgisjo0";
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b="V7d3ojbu"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from pb-smtp2.pobox.com (pb-smtp2.pobox.com [64.147.108.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8210E2C9E;
-	Tue,  2 Apr 2024 03:27:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A845B14AB7;
+	Tue,  2 Apr 2024 03:27:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.108.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712028470; cv=none; b=XKlb0UhJ+qWMEzNzboP6ipar5oMeoabH8CknhP8ytiT+JNKujh4YxvVnCtXzymuh4EJTHQb7jssRqgUSFShyN4jjxTsFoAk6a6lFjgtG/Zk1M5pvRJZUTh38xg3RYVZD06V0g9U8MuyLiaYRUZOb3wa9NWqROk6vNJAk88pZg1c=
+	t=1712028471; cv=none; b=qkDG0ZolT7Ok/NIK62UEOvktKi29g1tUYj8V5JPvQJVsNGffPpXOevYLgc0c6iAw1zSnWYcBXKPnQsmJ5cXCqDMQpJUaZuGS0sjl6zkkLOzvy5JF0bW3veZoAUHk9MiuJMKQwWo/dmtQl3QIBh6xCpaMCDfASnxZ1lduUdhY9Ug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712028470; c=relaxed/simple;
-	bh=ODM27AWbi/WoPUM8CtduNdu60hE5B64Y6ULqzglTfp4=;
+	s=arc-20240116; t=1712028471; c=relaxed/simple;
+	bh=ScwN+eL5Iy7BALIJYLXFDSBD9VouoWmZ+JLjnDMkDm8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YGCj4mRUbUB9hQbosLI1bXBcQdcmCThj8w3UoKZk4jMcluJlWK84hY2UeWhOa0zPYoDGwU8RpLcHsiO84RbdveSmt0qhM2/IRQXSYau0e1mzjxcxQnmHyvh6l55bYUUsqRllpS2bAjlD1w445+3qVjfkL5bBAKMwsr85X6qPBHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fluxnic.net; spf=pass smtp.mailfrom=fluxnic.net; dkim=pass (1024-bit key) header.d=pobox.com header.i=@pobox.com header.b=BGylCQtc; dkim=fail (1024-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b=xfxowGnN reason="signature verification failed"; arc=none smtp.client-ip=64.147.108.71
+	 MIME-Version; b=qD0XPuuZisddP7lxbS2Dz5X7vpbj2AdOaPERNYDiO/EgkHBiNiDqj2qbMqbFAMrZmJ2X7IDoXBucPDX8JzLgEQDimZjMJZ4GEw0RFMNUhDXG6X/+0BQyMkERqkKs5UDXlk/kfZtVXo25gw92uA3rO6hq5G3wvKTN3qBLS1YHicg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fluxnic.net; spf=pass smtp.mailfrom=fluxnic.net; dkim=pass (1024-bit key) header.d=pobox.com header.i=@pobox.com header.b=lFgisjo0; dkim=fail (1024-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b=V7d3ojbu reason="signature verification failed"; arc=none smtp.client-ip=64.147.108.71
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fluxnic.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fluxnic.net
 Received: from pb-smtp2.pobox.com (unknown [127.0.0.1])
-	by pb-smtp2.pobox.com (Postfix) with ESMTP id 572EA1DBD78;
-	Mon,  1 Apr 2024 23:27:47 -0400 (EDT)
+	by pb-smtp2.pobox.com (Postfix) with ESMTP id 7FC961DBD7C;
+	Mon,  1 Apr 2024 23:27:48 -0400 (EDT)
 	(envelope-from nico@fluxnic.net)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=from:to:cc
 	:subject:date:message-id:in-reply-to:references:mime-version
-	:content-transfer-encoding; s=sasl; bh=ODM27AWbi/WoPUM8CtduNdu60
-	hE5B64Y6ULqzglTfp4=; b=BGylCQtcUPq5HrGQyLEhxDCa9a2tDru1g4KyCfJyE
-	04KBLK49z/KKwnJG6LuxZPc6hFUBcVCJgDOriv+chJ6Y/tT+hluq9SNzDHi3DIWl
-	xoHrRt3t7rtnwNDOOn5/YLO0DNixq1GwW5NuCRlG91PzxlgEVfQT8tDD8zfIVuQe
-	2Y=
+	:content-transfer-encoding; s=sasl; bh=ScwN+eL5Iy7BALIJYLXFDSBD9
+	VouoWmZ+JLjnDMkDm8=; b=lFgisjo0MgDYa83l0yluEPrlyMffFxrXuFxD+4BcN
+	JeFwxQWmiIadb8sRRR5BztCyJIVrtigk84MBJIaw07ndRMThZ67nmLR+rWLr0D65
+	S4zvDPNOV/4k2O73vTuGE2rNGm1SP31alNIMeqRM8y0NeaRGo3IWp6MdSirUeliU
+	Q0=
 Received: from pb-smtp2.nyi.icgroup.com (unknown [127.0.0.1])
-	by pb-smtp2.pobox.com (Postfix) with ESMTP id 4D5761DBD77;
-	Mon,  1 Apr 2024 23:27:47 -0400 (EDT)
+	by pb-smtp2.pobox.com (Postfix) with ESMTP id 760A01DBD7B;
+	Mon,  1 Apr 2024 23:27:48 -0400 (EDT)
 	(envelope-from nico@fluxnic.net)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=fluxnic.net;
- h=from:to:cc:subject:date:message-id:in-reply-to:references:mime-version:content-transfer-encoding; s=2016-12.pbsmtp; bh=ROuDOPudaTnBIpzyth6id2zKJSaeiMGerblNaABRxDo=; b=xfxowGnNIiKzDpZYe0N6McbP2TG7hfRwnLsnI4eugSjK6vV2nY2TY38/mCTHPNLFq2Xv7slmgdE1wHivUGxpXqb4NgxNVS0piqZe6XF2RKxRoqbCejn9nyjGwX2OmeWcJQ97WZ54bbL6nXXPgrVlHNWWA4O7T6cbA8AkRhjrC4Q=
+ h=from:to:cc:subject:date:message-id:in-reply-to:references:mime-version:content-transfer-encoding; s=2016-12.pbsmtp; bh=KRLolNlFAREnWbcdTG3kKhk4k/XmV5J2nlwZY29mbd4=; b=V7d3ojbug0JFrc1ZbiXTyb7i/1TJfogRInYQ9QgYFOwAVkaCG5+YvX82kvlko9wFqRcoc/vBojeJqzg511b1XiSr7Kpuhf7N5/5pLFNUiDuCOr+My9GlRaypZvvHZHE6lj5Ray4Y0KZfP+lB/zPy4VGhYHll1+rwfc2jRKnAfwA=
 Received: from yoda.fluxnic.net (unknown [24.201.101.36])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by pb-smtp2.pobox.com (Postfix) with ESMTPSA id BE77B1DBD76;
-	Mon,  1 Apr 2024 23:27:46 -0400 (EDT)
+	by pb-smtp2.pobox.com (Postfix) with ESMTPSA id EB8411DBD7A;
+	Mon,  1 Apr 2024 23:27:47 -0400 (EDT)
 	(envelope-from nico@fluxnic.net)
 Received: from xanadu.lan (OpenWrt.lan [192.168.1.1])
-	by yoda.fluxnic.net (Postfix) with ESMTPSA id E7B95C1CECF;
-	Mon,  1 Apr 2024 23:27:44 -0400 (EDT)
+	by yoda.fluxnic.net (Postfix) with ESMTPSA id 10DDFC1CED0;
+	Mon,  1 Apr 2024 23:27:45 -0400 (EDT)
 From: Nicolas Pitre <nico@fluxnic.net>
 To: Daniel Lezcano <daniel.lezcano@linaro.org>,
 	linux-pm@vger.kernel.org,
@@ -65,9 +65,9 @@ To: Daniel Lezcano <daniel.lezcano@linaro.org>,
 	devicetree@vger.kernel.org
 Cc: Nicolas Pitre <npitre@baylibre.com>,
 	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v2 06/15] dt-bindings: thermal: mediatek: Add LVTS thermal controller definition for MT8186
-Date: Mon,  1 Apr 2024 23:25:40 -0400
-Message-ID: <20240402032729.2736685-7-nico@fluxnic.net>
+Subject: [PATCH v2 07/15] arm64: dts: mediatek: mt8186: add lvts definitions
+Date: Mon,  1 Apr 2024 23:25:41 -0400
+Message-ID: <20240402032729.2736685-8-nico@fluxnic.net>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240402032729.2736685-1-nico@fluxnic.net>
 References: <20240402032729.2736685-1-nico@fluxnic.net>
@@ -78,65 +78,58 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-Pobox-Relay-ID:
- F9980906-F0A0-11EE-8E76-25B3960A682E-78420484!pb-smtp2.pobox.com
+ FA4CA5A0-F0A0-11EE-85E4-25B3960A682E-78420484!pb-smtp2.pobox.com
 Content-Transfer-Encoding: quoted-printable
 
 From: Nicolas Pitre <npitre@baylibre.com>
 
-Add LVTS thermal controller definition for MT8186.
+Values extracted from vendor source tree.
 
 Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
 ---
- .../bindings/thermal/mediatek,lvts-thermal.yaml        |  2 ++
- include/dt-bindings/thermal/mediatek,lvts-thermal.h    | 10 ++++++++++
- 2 files changed, 12 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt8186.dtsi | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/thermal/mediatek,lvts-ther=
-mal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,lvts-therma=
-l.yaml
-index e6665af52e..4173bae530 100644
---- a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yam=
-l
-+++ b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yam=
-l
-@@ -19,6 +19,7 @@ properties:
-   compatible:
-     enum:
-       - mediatek,mt7988-lvts-ap
-+      - mediatek,mt8186-lvts
-       - mediatek,mt8192-lvts-ap
-       - mediatek,mt8192-lvts-mcu
-       - mediatek,mt8195-lvts-ap
-@@ -75,6 +76,7 @@ allOf:
-         compatible:
-           contains:
-             enum:
-+              - mediatek,mt8186-lvts
-               - mediatek,mt8195-lvts-ap
-               - mediatek,mt8195-lvts-mcu
-     then:
-diff --git a/include/dt-bindings/thermal/mediatek,lvts-thermal.h b/includ=
-e/dt-bindings/thermal/mediatek,lvts-thermal.h
-index 997e2f5512..433d298826 100644
---- a/include/dt-bindings/thermal/mediatek,lvts-thermal.h
-+++ b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
-@@ -16,6 +16,16 @@
- #define MT7988_ETHWARP_0	6
- #define MT7988_ETHWARP_1	7
+diff --git a/arch/arm64/boot/dts/mediatek/mt8186.dtsi b/arch/arm64/boot/d=
+ts/mediatek/mt8186.dtsi
+index 2fec6fd1c1..cef8244007 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8186.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+@@ -1355,6 +1355,18 @@ spi0: spi@1100a000 {
+ 			status =3D "disabled";
+ 		};
 =20
-+#define MT8186_LITTLE_CPU0	0
-+#define MT8186_LITTLE_CPU1	1
-+#define MT8186_LITTLE_CPU2	2
-+#define MT8186_CAM		3
-+#define MT8186_BIG_CPU0	4
-+#define MT8186_BIG_CPU1	5
-+#define MT8186_NNA		6
-+#define MT8186_ADSP		7
-+#define MT8186_MFG		8
++		lvts: thermal-sensor@1100b000 {
++			compatible =3D "mediatek,mt8186-lvts";
++			#thermal-sensor-cells =3D <1>;
++			reg =3D <0 0x1100b000 0 0x1000>;
++			interrupts =3D <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH 0>;
++			clocks =3D <&infracfg_ao CLK_INFRA_AO_THERM>;
++			clock-names =3D "lvts_clk";
++			resets =3D <&infracfg_ao MT8186_INFRA_THERMAL_CTRL_RST>;
++			nvmem-cells =3D <&lvts_e_data1 &lvts_e_data2>;
++			nvmem-cell-names =3D "e_data1","e_data2";
++		};
 +
- #define MT8195_MCU_BIG_CPU0     0
- #define MT8195_MCU_BIG_CPU1     1
- #define MT8195_MCU_BIG_CPU2     2
+ 		pwm0: pwm@1100e000 {
+ 			compatible =3D "mediatek,mt8186-disp-pwm", "mediatek,mt8183-disp-pwm"=
+;
+ 			reg =3D <0 0x1100e000 0 0x1000>;
+@@ -1668,6 +1680,14 @@ efuse: efuse@11cb0000 {
+ 			#address-cells =3D <1>;
+ 			#size-cells =3D <1>;
+=20
++			lvts_e_data1: data1 {
++				reg =3D <0x1cc 0x14>;
++			};
++
++			lvts_e_data2: data1-1 {
++				reg =3D <0x2f8 0x14>;
++			};
++
+ 			gpu_speedbin: gpu-speedbin@59c {
+ 				reg =3D <0x59c 0x4>;
+ 				bits =3D <0 3>;
 --=20
 2.44.0
 
