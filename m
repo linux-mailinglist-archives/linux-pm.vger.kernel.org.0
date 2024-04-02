@@ -1,119 +1,110 @@
-Return-Path: <linux-pm+bounces-5762-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5763-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11A418945DB
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Apr 2024 22:06:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21D8D8948E8
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 03:47:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA3E21F21D5A
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Apr 2024 20:06:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 536371C231B0
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 01:47:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B127053399;
-	Mon,  1 Apr 2024 20:06:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2769CA73;
+	Tue,  2 Apr 2024 01:47:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nGZNDbmO"
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="Z+5vbHNN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp-fw-52005.amazon.com (smtp-fw-52005.amazon.com [52.119.213.156])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F5DF3D9E;
-	Mon,  1 Apr 2024 20:06:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695C9945A;
+	Tue,  2 Apr 2024 01:47:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.119.213.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712002005; cv=none; b=abBfyFhnpoaTF9ux6HcpqfXRIaiNDYp0+24iiiy8hFQkVoi0rvSKSmSqHbI2tlCzHxTfpwawaAvx/aOiiiqeioy4IEnW4YW9PzS2eyD7HOlvOLRpcSj7zVL9JRy/FV8gGqYXKVw/8GFm4VdlQyFZZfWdG+Pe+ho52YSEPQ3wfwQ=
+	t=1712022466; cv=none; b=RpLoklF21/MT+czLM+j/4GSWBN7nxUkL6PoIhow8yqRYuPpbaTaUZJxfmmlcSsAqPRbvlV9nISLDPjlRDAFs3TCgCoCtpPRki7xMf2bLv5uROvKgzxuZBchZCfGqguki6/ncP1qOa+tugoPcDIwEg0laycr0GAnbltkfcN+8M2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712002005; c=relaxed/simple;
-	bh=hHQRXmo2aZ/DOP23EIK2Ayp/OQTbGs67h/enIjBg6/c=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=cZkFV/r3+tH/bqwV/12wHAXLMjLXCq7nHEfwu4XnFkBuvtsYNlDAA0OJGaDAzkxqOvIutlsZ/aH5RVeH2OPat2iqEj+i19MdA0G2Ad7JUe7CnBxdI2tz3RXhWVFGe2s2qK0UeUGK/LwVBkvqnDgX1i/28BfM0ior9J47R/SIG58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nGZNDbmO; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712002004; x=1743538004;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=hHQRXmo2aZ/DOP23EIK2Ayp/OQTbGs67h/enIjBg6/c=;
-  b=nGZNDbmOOFRVN5WdC4fDO9BYJPrGEV6qMdy9tHNizOBb0C4MSnCtLMhc
-   Mo5i851uLX+iIaC8DHIZ1+LI4rtQ6sqOgUocj6vN8PGaKRl+dLTB9KBuB
-   TbDj/XPHLjrOVJ7BEFY3P1cbGA45H8JwapU/5MpvjZQI5q6WJ6WHEHOe/
-   2+A2es3Xm88QHg5Guv9NeMwjcm5gKIhbVLIoZE87FNYCSZrHDD/SYSZng
-   l0yASq+cBKDbxwMCism4d2n2p6B/ww2FYDd/tMAIrnaulrEVMvjJhbu8Q
-   okONkpZbt5b9+2zKg4+VtfyTRRwLGPe1MmffUlSohioITVkkJwmpmXldX
-   w==;
-X-CSE-ConnectionGUID: Ccqx6x5SS7a3GywE7GAH6w==
-X-CSE-MsgGUID: BT8j6hYqSke2r26mSlI2mA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11031"; a="18594648"
-X-IronPort-AV: E=Sophos;i="6.07,173,1708416000"; 
-   d="scan'208";a="18594648"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2024 13:06:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,173,1708416000"; 
-   d="scan'208";a="17637588"
-Received: from spandruv-desk1.amr.corp.intel.com ([10.209.0.212])
-  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2024 13:06:43 -0700
-Message-ID: <509b52f28a911bc11f21c217e20e769bd094f24d.camel@linux.intel.com>
-Subject: Re: [PATCH v1 1/6] cpufreq: intel_pstate: Fold
- intel_pstate_max_within_limits() into caller
-From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM
- <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>
-Date: Mon, 01 Apr 2024 13:06:42 -0700
-In-Reply-To: <3297274.aeNJFYEL58@kreacher>
-References: <13494237.uLZWGnKmhe@kreacher> <3297274.aeNJFYEL58@kreacher>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+	s=arc-20240116; t=1712022466; c=relaxed/simple;
+	bh=E005gBSNtjSCIS2doCc/40wSL13e/DWnm8D1a1Y8FXA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jAsVJntG/WQXeU7G0ho54LJQBNTIEfroHa2qwocY3siw/n0dIIor4V9ICZjFgqXPrsqhJH/UAG/YFaBKLKeRzziIKVLp7xPCyjXTZVgvAFSqyhYXT6+IXRgyJ43J+0T7i7gS7B9zdXDADwAZCI8cHfmY/qm4wheCdE3oRTWpkwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=Z+5vbHNN; arc=none smtp.client-ip=52.119.213.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1712022465; x=1743558465;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=3vnZ3IHPBXc4ai5YYVkJH/KG1jfBRdDvhLTTJAolhIY=;
+  b=Z+5vbHNNl5C/Sq0z+MttQbjysUUZ9/N+5MgNttcfRTbGcBV+r/jaNC/l
+   EDcvYti6c1Lwqg+FkOL91kkjCjLHXGv6PbS0Gh/8MQRuhDBGmXSKaFDxw
+   1vx9pCPgj82CZCbJXE4ir6pBklXMhTI7470FCTFhrQjFsl79iAJrY68UQ
+   o=;
+X-IronPort-AV: E=Sophos;i="6.07,173,1708387200"; 
+   d="scan'208";a="645020000"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.6])
+  by smtp-border-fw-52005.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2024 01:47:43 +0000
+Received: from EX19MTAUWC001.ant.amazon.com [10.0.21.151:1581]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.7.132:2525] with esmtp (Farcaster)
+ id 3851c02f-02ac-4111-8f35-6d8584b37e21; Tue, 2 Apr 2024 01:47:42 +0000 (UTC)
+X-Farcaster-Flow-ID: 3851c02f-02ac-4111-8f35-6d8584b37e21
+Received: from EX19D001UWA003.ant.amazon.com (10.13.138.211) by
+ EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.28; Tue, 2 Apr 2024 01:47:40 +0000
+Received: from u34cccd802f2d52.ant.amazon.com (10.252.141.8) by
+ EX19D001UWA003.ant.amazon.com (10.13.138.211) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.28;
+ Tue, 2 Apr 2024 01:47:39 +0000
+From: Haris Okanovic <harisokn@amazon.com>
+To: <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<linux-assembly@vger.kernel.org>
+CC: <peterz@infradead.org>, Haris Okanovic <harisokn@amazon.com>
+Subject: [PATCH 1/3] arm64: Add TIF_POLLING_NRFLAG
+Date: Mon, 1 Apr 2024 20:47:04 -0500
+Message-ID: <20240402014706.3969151-1-harisokn@amazon.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D035UWB001.ant.amazon.com (10.13.138.33) To
+ EX19D001UWA003.ant.amazon.com (10.13.138.211)
 
-T24gTW9uLCAyMDI0LTAzLTI1IGF0IDE4OjAxICswMTAwLCBSYWZhZWwgSi4gV3lzb2NraSB3cm90
-ZToKPiBGcm9tOiBSYWZhZWwgSi4gV3lzb2NraSA8cmFmYWVsLmoud3lzb2NraUBpbnRlbC5jb20+
-Cj4gCj4gRm9sZCBpbnRlbF9wc3RhdGVfbWF4X3dpdGhpbl9saW1pdHMoKSBpbnRvIGl0cyBvbmx5
-IGNhbGxlci4KPiAKPiBObyBmdW5jdGlvbmFsIGltcGFjdC4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBS
-YWZhZWwgSi4gV3lzb2NraSA8cmFmYWVsLmoud3lzb2NraUBpbnRlbC5jb20+CkFja2VkLWJ5OiBT
-cmluaXZhcyBQYW5kcnV2YWRhIDxzcmluaXZhcy5wYW5kcnV2YWRhQGxpbnV4LmludGVsLmNvbT4K
-Cj4gLS0tCj4gwqBkcml2ZXJzL2NwdWZyZXEvaW50ZWxfcHN0YXRlLmMgfMKgwqAgMTMgKysrKy0t
-LS0tLS0tLQo+IMKgMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgOSBkZWxldGlvbnMo
-LSkKPiAKPiBJbmRleDogbGludXgtcG0vZHJpdmVycy9jcHVmcmVxL2ludGVsX3BzdGF0ZS5jCj4g
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PQo+IC0tLSBsaW51eC1wbS5vcmlnL2RyaXZlcnMvY3B1ZnJlcS9pbnRlbF9wc3Rh
-dGUuYwo+ICsrKyBsaW51eC1wbS9kcml2ZXJzL2NwdWZyZXEvaW50ZWxfcHN0YXRlLmMKPiBAQCAt
-MjAxMiwxNCArMjAxMiw2IEBAIHN0YXRpYyB2b2lkIGludGVsX3BzdGF0ZV9zZXRfbWluX3BzdGF0
-ZSgKPiDCoMKgwqDCoMKgwqDCoMKgaW50ZWxfcHN0YXRlX3NldF9wc3RhdGUoY3B1LCBjcHUtPnBz
-dGF0ZS5taW5fcHN0YXRlKTsKPiDCoH0KPiDCoAo+IC1zdGF0aWMgdm9pZCBpbnRlbF9wc3RhdGVf
-bWF4X3dpdGhpbl9saW1pdHMoc3RydWN0IGNwdWRhdGEgKmNwdSkKPiAtewo+IC3CoMKgwqDCoMKg
-wqDCoGludCBwc3RhdGUgPSBtYXgoY3B1LT5wc3RhdGUubWluX3BzdGF0ZSwgY3B1LQo+ID5tYXhf
-cGVyZl9yYXRpbyk7Cj4gLQo+IC3CoMKgwqDCoMKgwqDCoHVwZGF0ZV90dXJib19zdGF0ZSgpOwo+
-IC3CoMKgwqDCoMKgwqDCoGludGVsX3BzdGF0ZV9zZXRfcHN0YXRlKGNwdSwgcHN0YXRlKTsKPiAt
-fQo+IC0KPiDCoHN0YXRpYyB2b2lkIGludGVsX3BzdGF0ZV9nZXRfY3B1X3BzdGF0ZXMoc3RydWN0
-IGNwdWRhdGEgKmNwdSkKPiDCoHsKPiDCoMKgwqDCoMKgwqDCoMKgaW50IHBlcmZfY3RsX21heF9w
-aHlzID0gcHN0YXRlX2Z1bmNzLmdldF9tYXhfcGh5c2ljYWwoY3B1LQo+ID5jcHUpOwo+IEBAIC0y
-NTk0LDEyICsyNTg2LDE1IEBAIHN0YXRpYyBpbnQgaW50ZWxfcHN0YXRlX3NldF9wb2xpY3koc3Ry
-dWMKPiDCoMKgwqDCoMKgwqDCoMKgaW50ZWxfcHN0YXRlX3VwZGF0ZV9wZXJmX2xpbWl0cyhjcHUs
-IHBvbGljeS0+bWluLCBwb2xpY3ktCj4gPm1heCk7Cj4gwqAKPiDCoMKgwqDCoMKgwqDCoMKgaWYg
-KGNwdS0+cG9saWN5ID09IENQVUZSRVFfUE9MSUNZX1BFUkZPUk1BTkNFKSB7Cj4gK8KgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoGludCBwc3RhdGUgPSBtYXgoY3B1LT5wc3RhdGUubWluX3Bz
-dGF0ZSwgY3B1LQo+ID5tYXhfcGVyZl9yYXRpbyk7Cj4gKwo+IMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgLyoKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqIE5PSFpf
-RlVMTCBDUFVzIG5lZWQgdGhpcyBhcyB0aGUgZ292ZXJub3IgY2FsbGJhY2sKPiBtYXkgbm90Cj4g
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBiZSBpbnZva2VkIG9uIHRoZW0uCj4g
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKi8KPiDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoGludGVsX3BzdGF0ZV9jbGVhcl91cGRhdGVfdXRpbF9ob29rKHBvbGljeS0+
-Y3B1KTsKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaW50ZWxfcHN0YXRlX21heF93
-aXRoaW5fbGltaXRzKGNwdSk7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHVwZGF0
-ZV90dXJib19zdGF0ZSgpOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpbnRlbF9w
-c3RhdGVfc2V0X3BzdGF0ZShjcHUsIHBzdGF0ZSk7Cj4gwqDCoMKgwqDCoMKgwqDCoH0gZWxzZSB7
-Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpbnRlbF9wc3RhdGVfc2V0X3VwZGF0
-ZV91dGlsX2hvb2socG9saWN5LT5jcHUpOwo+IMKgwqDCoMKgwqDCoMKgwqB9Cj4gCj4gCj4gCgo=
+TIF_POLLING_NRFLAG was removed from arm64 as there were no polling
+idle states. Add back TIF_POLLING_NRFLAG in preparation for an arm64
+cpuidle driver which supports polling.
+
+Signed-off-by: Haris Okanovic <harisokn@amazon.com>
+---
+ arch/arm64/include/asm/thread_info.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm64/include/asm/thread_info.h b/arch/arm64/include/asm/thread_info.h
+index e72a3bf9e563..ab22c7d1967e 100644
+--- a/arch/arm64/include/asm/thread_info.h
++++ b/arch/arm64/include/asm/thread_info.h
+@@ -81,6 +81,7 @@ void arch_setup_new_exec(void);
+ #define TIF_SME			27	/* SME in use */
+ #define TIF_SME_VL_INHERIT	28	/* Inherit SME vl_onexec across exec */
+ #define TIF_KERNEL_FPSTATE	29	/* Task is in a kernel mode FPSIMD section */
++#define TIF_POLLING_NRFLAG	30
+ 
+ #define _TIF_SIGPENDING		(1 << TIF_SIGPENDING)
+ #define _TIF_NEED_RESCHED	(1 << TIF_NEED_RESCHED)
+@@ -97,6 +98,7 @@ void arch_setup_new_exec(void);
+ #define _TIF_SVE		(1 << TIF_SVE)
+ #define _TIF_MTE_ASYNC_FAULT	(1 << TIF_MTE_ASYNC_FAULT)
+ #define _TIF_NOTIFY_SIGNAL	(1 << TIF_NOTIFY_SIGNAL)
++#define _TIF_POLLING_NRFLAG	(1 << TIF_POLLING_NRFLAG)
+ 
+ #define _TIF_WORK_MASK		(_TIF_NEED_RESCHED | _TIF_SIGPENDING | \
+ 				 _TIF_NOTIFY_RESUME | _TIF_FOREIGN_FPSTATE | \
+-- 
+2.34.1
 
 
