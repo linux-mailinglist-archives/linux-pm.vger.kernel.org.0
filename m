@@ -1,119 +1,121 @@
-Return-Path: <linux-pm+bounces-5768-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5771-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85164894977
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 04:30:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E38C8949EC
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 05:28:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4044B285893
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 02:30:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CEC6C1C230F4
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 03:27:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 290122F52;
-	Tue,  2 Apr 2024 02:30:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF8CB168B9;
+	Tue,  2 Apr 2024 03:27:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="h1uzAWgw"
+	dkim=pass (1024-bit key) header.d=pobox.com header.i=@pobox.com header.b="Yc05Gq9Q";
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b="rGs9S7c5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
+Received: from pb-smtp20.pobox.com (pb-smtp20.pobox.com [173.228.157.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A788A7E6;
-	Tue,  2 Apr 2024 02:30:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.217
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45D442C9E;
+	Tue,  2 Apr 2024 03:27:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=173.228.157.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712025040; cv=none; b=Vdx6e9uxaSrPz6YJ27DJ1YUv2KWjNsoXqspR3cAWm/krsBkgC1Jm18zRQR8Uhbv7G4Zn3RNNQhMrJszX/lRDMps7qZNmrB7qEDOuO81z2GR303lom6tk4eAoMTmL/0gOyNrOIHdGify/9/TaN+4im6W62AYpoVNrdbjftbvDPaE=
+	t=1712028472; cv=none; b=loerdRdpw+gPQC82Pl1sB0OY6veXdE5/S6fMYWLDtA1YPHguckMAzJyAChzYhKEeB7VknxXifc4skoWvAO3Tis51i+3DosvTVJE6QsLb3e0sV6Wv4e1FKd+mHG83v+xxtC8OJsSAeaORkgZA7jMbaSkgtzGpJzVhLCZo7l59b5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712025040; c=relaxed/simple;
-	bh=PpSXo1QhcMevwm7I+K7iRFo96h88oIV/8+9o9/wUcnU=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=nV5gSzlyiCxLTPW78rXLDGTTNT09MgeiynIkgDCoAFnHBKvbCRnolYxdO26C7CUouGk3C2kVoyuO2vq9kTfcdy1w9C4xUJpSPXShFGSSw2jrdt+68VP41/MCOmxsZR3cLTEXU3qRs46jpUvsIkTPBKYbr7EkfrcP5d/6rfUQkSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=h1uzAWgw; arc=none smtp.client-ip=99.78.197.217
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1712025039; x=1743561039;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=PpSXo1QhcMevwm7I+K7iRFo96h88oIV/8+9o9/wUcnU=;
-  b=h1uzAWgwI7ITpOhT1CRD4wRPpUbXcgkHo67+ubu1QKQHgMiWTMjBtnxM
-   Y2dOnwtdyoTycs2mj/ikSs+6sutqF/WoAlbuAEkBf3UoE+2YkD546Amca
-   EI61fL54lysqTAWIxOqK6vzbhqMKrN/4/5cQizBPZXCX07906zIkheJ59
-   M=;
-X-IronPort-AV: E=Sophos;i="6.07,173,1708387200"; 
-   d="scan'208";a="284455721"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.214])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2024 02:30:33 +0000
-Received: from EX19MTAUWC002.ant.amazon.com [10.0.38.20:38275]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.56.234:2525] with esmtp (Farcaster)
- id b76e8157-aec4-494c-8c62-9b3ebbe5bb57; Tue, 2 Apr 2024 02:30:24 +0000 (UTC)
-X-Farcaster-Flow-ID: b76e8157-aec4-494c-8c62-9b3ebbe5bb57
-Received: from EX19D002UWA002.ant.amazon.com (10.13.138.246) by
- EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.28; Tue, 2 Apr 2024 02:30:24 +0000
-Received: from EX19D001UWA003.ant.amazon.com (10.13.138.211) by
- EX19D002UWA002.ant.amazon.com (10.13.138.246) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.28;
- Tue, 2 Apr 2024 02:30:24 +0000
-Received: from EX19D001UWA003.ant.amazon.com ([fe80::256a:26de:3ee6:48a2]) by
- EX19D001UWA003.ant.amazon.com ([fe80::256a:26de:3ee6:48a2%7]) with mapi id
- 15.02.1258.028; Tue, 2 Apr 2024 02:30:24 +0000
-From: "Okanovic, Haris" <harisokn@amazon.com>
-To: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-assembly@vger.kernel.org" <linux-assembly@vger.kernel.org>
-CC: "peterz@infradead.org" <peterz@infradead.org>, "Saidi, Ali"
-	<alisaidi@amazon.com>, "Blake, Geoff" <blakgeof@amazon.com>, "Silver, Brian"
-	<silverbr@amazon.com>
-Subject: Re: [PATCH 3/3] arm64: cpuidle: Add arm_poll_idle
-Thread-Topic: [PATCH 3/3] arm64: cpuidle: Add arm_poll_idle
-Thread-Index: AQHahJ/D8+a2/m+FEk+Q2bqBNHXo/LFUQbcA
-Date: Tue, 2 Apr 2024 02:30:23 +0000
-Message-ID: <738769693c52ed23e35850325ee414ab131a06ea.camel@amazon.com>
-References: <20240402014706.3969151-1-harisokn@amazon.com>
-	 <20240402014706.3969151-3-harisokn@amazon.com>
-In-Reply-To: <20240402014706.3969151-3-harisokn@amazon.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A5B816E60B1093468C4B39A6876BD3EC@amazon.com>
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1712028472; c=relaxed/simple;
+	bh=Y6jvOzEouXNWKuWy3ccTjj476XMGHanXU+3TO3ClnKg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=egbhL77VqsKhIh6q1e4MmU3NwfKtCm3cKzFQYydev814Po0VAoQulwHdjTwzQuURb1EDsLjK+FR7eV/CSfMfVVJ86lPNMNeMAM2vsQg8H7b1eJ3EMt4oi9m3/HblzC2mzQmZrqnIPmFtadt6t3fdbBpdDgyQ6DsutDPAsMwtQxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fluxnic.net; spf=pass smtp.mailfrom=fluxnic.net; dkim=pass (1024-bit key) header.d=pobox.com header.i=@pobox.com header.b=Yc05Gq9Q; dkim=fail (1024-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b=rGs9S7c5 reason="signature verification failed"; arc=none smtp.client-ip=173.228.157.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fluxnic.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fluxnic.net
+Received: from pb-smtp20.pobox.com (unknown [127.0.0.1])
+	by pb-smtp20.pobox.com (Postfix) with ESMTP id 929B325040;
+	Mon,  1 Apr 2024 23:27:50 -0400 (EDT)
+	(envelope-from nico@fluxnic.net)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=from:to:cc
+	:subject:date:message-id:mime-version:content-transfer-encoding;
+	 s=sasl; bh=Y6jvOzEouXNWKuWy3ccTjj476XMGHanXU+3TO3ClnKg=; b=Yc05
+	Gq9Q4s+S4T8ijXt4ByAH2vn0T9sWQinjDx0KDB9iZ4yaLIRz0Yr4mArCGoVdw4N5
+	PqVrlHe5jv1igraG7vjHtF5P7Zf6d1Pw6VPGy1vKz8JxIKah24EpD/RTf0xoi7nM
+	+8RVPPFT//es9w6lDVvHqctpGs685cgHzHgr+78=
+Received: from pb-smtp20.sea.icgroup.com (unknown [127.0.0.1])
+	by pb-smtp20.pobox.com (Postfix) with ESMTP id 8AD122503F;
+	Mon,  1 Apr 2024 23:27:50 -0400 (EDT)
+	(envelope-from nico@fluxnic.net)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=fluxnic.net;
+ h=from:to:cc:subject:date:message-id:mime-version:content-transfer-encoding;
+ s=2016-12.pbsmtp; bh=Y6jvOzEouXNWKuWy3ccTjj476XMGHanXU+3TO3ClnKg=;
+ b=rGs9S7c5Q0bvvz5g4tDLqISdgaZ+uFHhu/hvls5t2MQJLlLELiUj5GWWqrZKtsW7ql3p3yOQ/MrXaBzUGuOG02YmH1LTTwPlTfdbrL8ZPv1tnh6QMIDroITGXF0JAc9FrxGAc8tqkf5xn53uNvT6nWSe84shCXRxkCivcTuK5+o=
+Received: from yoda.fluxnic.net (unknown [24.201.101.36])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by pb-smtp20.pobox.com (Postfix) with ESMTPSA id 8736E2503D;
+	Mon,  1 Apr 2024 23:27:46 -0400 (EDT)
+	(envelope-from nico@fluxnic.net)
+Received: from xanadu.lan (OpenWrt.lan [192.168.1.1])
+	by yoda.fluxnic.net (Postfix) with ESMTPSA id 3F48BC1CEC6;
+	Mon,  1 Apr 2024 23:27:44 -0400 (EDT)
+From: Nicolas Pitre <nico@fluxnic.net>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>,
+	linux-pm@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	devicetree@vger.kernel.org
+Cc: Nicolas Pitre <npitre@baylibre.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v3 00/15] Mediatek thermal sensor driver support for MT8186 and MT8188
+Date: Mon,  1 Apr 2024 23:25:34 -0400
+Message-ID: <20240402032729.2736685-1-nico@fluxnic.net>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Pobox-Relay-ID:
+ F974D08A-F0A0-11EE-A764-F515D2CDFF5E-78420484!pb-smtp20.pobox.com
+Content-Transfer-Encoding: quoted-printable
 
-T24gTW9uLCAyMDI0LTA0LTAxIGF0IDIwOjQ3IC0wNTAwLCBIYXJpcyBPa2Fub3ZpYyB3cm90ZToK
-PiArc3RhdGljIGludCBfX2NwdWlkbGUgYXJtX2lkbGVfd2ZlX3BvbGwoc3RydWN0IGNwdWlkbGVf
-ZGV2aWNlICpkZXYsCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgc3RydWN0IGNwdWlkbGVfZHJpdmVyICpkcnYsIGludCBpZHgp
-Cj4gK3sKPiArwqDCoMKgwqDCoMKgwqB1NjQgdGltZV9zdGFydCwgdGltZV9saW1pdDsKPiArCj4g
-K8KgwqDCoMKgwqDCoMKgdGltZV9zdGFydCA9IGxvY2FsX2Nsb2NrKCk7Cj4gK8KgwqDCoMKgwqDC
-oMKgZGV2LT5wb2xsX3RpbWVfbGltaXQgPSBmYWxzZTsKPiArCj4gK8KgwqDCoMKgwqDCoMKgbG9j
-YWxfaXJxX2VuYWJsZSgpOwoKUmUgdGhpcyBjb21tZW50IGZyb20gUGV0ZXIgWmlqbHN0cmEgWzFd
-LCBzaG91bGQgSSB1c2UKcmF3X2xvY2FsX2lycV9lbmFibGUoKSBpbnN0ZWFkPyBJIHNlZSBleGFt
-cGxlcyBvZiBib3RoIHVuZGVyCmRyaXZlcnMvY3B1aWRsZS8uCgpbMV0KaHR0cHM6Ly9lbGl4aXIu
-Ym9vdGxpbi5jb20vbGludXgvdjYuOS1yYzIvc291cmNlL2luY2x1ZGUvbGludXgvY3B1aWRsZS5o
-I0wxMTkKCj4gKwo+ICvCoMKgwqDCoMKgwqDCoGlmIChjdXJyZW50X3NldF9wb2xsaW5nX2FuZF90
-ZXN0KCkpCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGdvdG8gZW5kOwo+ICsKPiAr
-wqDCoMKgwqDCoMKgwqB0aW1lX2xpbWl0ID0gY3B1aWRsZV9wb2xsX3RpbWUoZHJ2LCBkZXYpOwo+
-ICsKPiArwqDCoMKgwqDCoMKgwqBkbyB7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oC8vIGV4Y2x1c2l2ZSByZWFkIGFybXMgdGhlIG1vbml0b3IgZm9yIHdmZQo+ICvCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAoX19SRUFEX09OQ0VfRVgoY3VycmVudF90aHJlYWRfaW5m
-bygpLT5mbGFncykgJgo+IF9USUZfTkVFRF9SRVNDSEVEKQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZ290byBlbmQ7Cj4gKwo+ICvCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqAvLyBtYXkgZXhpdCBwcmVtYXR1cmVseSwgc2VlIEFSTV9BUkNIX1RJ
-TUVSX0VWVFNUUkVBTQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB3ZmUoKTsKPiAr
-wqDCoMKgwqDCoMKgwqB9IHdoaWxlIChsb2NhbF9jbG9jaygpIC0gdGltZV9zdGFydCA8IHRpbWVf
-bGltaXQpOwo+ICsKPiArwqDCoMKgwqDCoMKgwqBkZXYtPnBvbGxfdGltZV9saW1pdCA9IHRydWU7
-Cj4gKwo+ICtlbmQ6Cj4gK8KgwqDCoMKgwqDCoMKgY3VycmVudF9jbHJfcG9sbGluZygpOwo+ICvC
-oMKgwqDCoMKgwqDCoHJldHVybiBpZHg7Cj4gK30KPiArCgpUaGFua3MsCkhhcmlzIE9rYW5vdmlj
-Cgo=
+This is a bunch of patches to support the MT8186 and MT8188 thermal
+sensor configurations. Several changes are needed to cope with oddities
+these SOCs implement.
+
+All values (calibration data offsets, etc.) were lifted and adapted from
+the vendor driver source code.
+
+Changes from v2:
+
+ - use meaningful name for binding index definitions
+ - reuse LVTS_COEFF_*_MT7988 on MT8186 per reviewer request
+ - do similarly for MT8188 that now reuses LVTS_COEFF_*_MT8195
+ - use thermal zone names the svs driver wants
+ - adjust some DT node names and iospace length
+ - remove variable .hw_tshut_temp as it is constant across all SOCs
+
+Version 2 can be found here:
+
+ https://lore.kernel.org/all/20240318212428.3843952-1-nico@fluxnic.net/
+
+Changes from v1:
+
+ - renamed CPU cluster thermal zones in DT
+ - fixed logic to cope with empty controller slots at the beginning
+ - isolated bindings to their own patches
+ - added MT8188 default thermal zones
+
+Version 1 can be found here:
+
+ https://lore.kernel.org/all/20240111223020.3593558-1-nico@fluxnic.net/T/
+
+diffstat:
+
+ .../thermal/mediatek,lvts-thermal.yaml        |   6 +
+ arch/arm64/boot/dts/mediatek/mt8186.dtsi      | 256 +++++++++++
+ arch/arm64/boot/dts/mediatek/mt8188.dtsi      | 383 ++++++++++++++++
+ drivers/thermal/mediatek/lvts_thermal.c       | 434 +++++++++++++-----
+ .../thermal/mediatek,lvts-thermal.h           |  26 ++
+ 5 files changed, 987 insertions(+), 118 deletions(-)
 
