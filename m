@@ -1,129 +1,139 @@
-Return-Path: <linux-pm+bounces-5822-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5830-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 175B4895C1F
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 21:04:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02380895CF0
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 21:43:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7B6C61F23A03
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 19:04:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8670AB21B78
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 19:43:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6843515B54C;
-	Tue,  2 Apr 2024 19:04:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E8A415D5A3;
+	Tue,  2 Apr 2024 19:43:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="I5+8kT4Q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n79RWDNd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B990715B15D;
-	Tue,  2 Apr 2024 19:04:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 486A915CD78;
+	Tue,  2 Apr 2024 19:43:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712084690; cv=none; b=L8Z/Ky30HNil6RHhLAYCkiRpT2BP+UxE7wi9fyEayGiEcdlCgTfyYvJM3bu41AY6bjQzR1e1+YJ8Ga54/7Xzc+vkPSKOBbIzr0PBlYHWTwvYZ27VmArxddJaVpuGEE5NDhgf+UrDstYo/4x/6QkLrKT5A1G4FWiRpq05x3hhE5A=
+	t=1712086984; cv=none; b=WtuxPUrfYtTQRHiahUAzzBm48afbhM2d2fw5vYb3vF6E3VC1KV60mpVmCB2kOdydpZRTdv+u2opDxUN+gma00br7y2fty/t6N5M3T6Dg9oAwlgmHdPWmfAR0Hmm8elbSY7ueSwN19s4BLAyPjjXHDF72gA1Ep/EqOe33cOS+wZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712084690; c=relaxed/simple;
-	bh=Sav0fBkqwvpYmvVJzF5OXLJQIoDayOcopD95uzdB+yE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nK7isA209MMsLximC2QjKff41JIHt/Pa7TDwgm1N5QvPfNGXfz8HW2ElytvOThMaBk6oipGGD4Zn9cipUMMs22c4fjak4Ok/3IOu73j7JUxEwK90Cn3pxH+M9ZsSBhlsCEBxIv2z8txjHSDV5dyut7I6uyTdThh71GLqEcmNt0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=I5+8kT4Q; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
- id 2047051b797e604b; Tue, 2 Apr 2024 21:04:39 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 392E366C5C5;
-	Tue,  2 Apr 2024 21:04:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1712084679;
-	bh=Sav0fBkqwvpYmvVJzF5OXLJQIoDayOcopD95uzdB+yE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=I5+8kT4Q2BObBMgkLRHciZQkCa9ZqhyIsOzEVQpRbnNSWJGRiPOGulz2bpdxdb86i
-	 1ixGXiQW+2BafeM46UnhOONLMyjLeBS6J2NTYrXp05K41Y3LZBPzsdajsVmDQpJtFF
-	 xtO9qeAtQiD+WP1bCGQLO78BSb0cRQ/b6Jp8dW5QMru2uS0iHZT60Av/AxSJAfbmOO
-	 6oQO+e/NOe/FqN0XT+8LHA9EGMJ2dTtejg3CqP75ZdEjFUOQJOk7TwVqpZc2sMMD55
-	 tu/HX6XCRxbbQO1XXeruP/CLaYuVfNsk9nyOhC2B3+vicDP4qw8K+/hXrcci6YGRwo
-	 oGVc0r0RCGPkg==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Lukasz Luba <lukasz.luba@arm.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v3 6/6] thermal: core: Relocate critical and hot trip handling
-Date: Tue, 02 Apr 2024 21:04:28 +0200
-Message-ID: <3556878.iIbC2pHGDl@kreacher>
-In-Reply-To: <4558251.LvFx2qVVIh@kreacher>
-References: <4558251.LvFx2qVVIh@kreacher>
+	s=arc-20240116; t=1712086984; c=relaxed/simple;
+	bh=hux++m/Dx5FlfAfpKCTL72iTbUT8Ywm8K3OkJ/onX1E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jgBDRBE2/coGxvbygAJfUA6hpJ5fyHZLOmd739d3XePmWAbrbnB5ieNZhGozkmetFv1sEKTXs/BrT0fdxXFJHjxb19uYY6Aow31uFDPiLc2qhtzV+W+apSEnxiy3O22lOv0lttRhJUC9fhkCz2wdR4sJ7JrabLq5MrapnZSy1Vs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n79RWDNd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1AEDC43601;
+	Tue,  2 Apr 2024 19:43:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712086983;
+	bh=hux++m/Dx5FlfAfpKCTL72iTbUT8Ywm8K3OkJ/onX1E=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=n79RWDNdQ5jOejZzKpbWUX5cdLm9tDIsgvqhBfpj+Pgu2MGV3YkXLg+24mDi4ls3W
+	 nUb59vF/2Kcruciot+DRMca9y/IJLGpRXfurhwuy8RcbY8+sE7kxlTq05LwjIiHtzA
+	 CZy31RIgPKdzgKuLEQa5d4IyBWsG0msWf69Z52QzQUlkI0noGHdzfqPDg3F2FA0Epp
+	 CpFzrW+2G64IAuKYjtdOsYqhCETPP7mynXEHSyBqRpJc6Q6i0SsITpXoO+pDwDyKIX
+	 CJXUdqxin21h5pGsV6dBFJx7QC9jGGuz91AYn9d6/M5gdRMO8ZA4Uzr/nM/KohernR
+	 BrngJ4HBu+7HA==
+Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-5a4930d9c48so1089577eaf.1;
+        Tue, 02 Apr 2024 12:43:03 -0700 (PDT)
+X-Gm-Message-State: AOJu0YwKaz2CxziMGQjSv08gjca6bVTwq/2S83pFtb0W12F0MfDFbFEy
+	JPY8pfi2KMAa7VrP881JXjXsCLIhoPLFEhh1j78sJHzHm1xwsdDzzPL80yUJeYHmBsQmCkg4q74
+	8bYRVpwTmRxK196pwqg9zrL/heRM=
+X-Google-Smtp-Source: AGHT+IG0rTJIvGE2GbczLwW+SqLUgeZ4yISW7oJYWMUALQxGyOgRaj5b/VJdT3fuzvRrBwAsbtSz+v06K29NcIQqYHs=
+X-Received: by 2002:a05:6820:2289:b0:5a4:6e23:e335 with SMTP id
+ ck9-20020a056820228900b005a46e23e335mr15520012oob.0.1712086983154; Tue, 02
+ Apr 2024 12:43:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <4558251.LvFx2qVVIh@kreacher>
+In-Reply-To: <4558251.LvFx2qVVIh@kreacher>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 2 Apr 2024 21:42:52 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iSyTP4SbGBYESNy9NynMCQn8dojCFoOtQU4Q305ZKGTQ@mail.gmail.com>
+Message-ID: <CAJZ5v0iSyTP4SbGBYESNy9NynMCQn8dojCFoOtQU4Q305ZKGTQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/6] thermal: More separation between the core and drivers
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Lukasz Luba <lukasz.luba@arm.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudefvddgudeffecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgr
- rhhordhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopegrnhhgvghlohhgihhorggttghhihhnohdruggvlhhrvghgnhhosegtohhllhgrsghorhgrrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
+Content-Transfer-Encoding: quoted-printable
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Tue, Apr 2, 2024 at 9:04=E2=80=AFPM Rafael J. Wysocki <rjw@rjwysocki.net=
+> wrote:
+>
+> Hi Everyone,
+>
+> This is an update of
+>
+> https://lore.kernel.org/linux-pm/4558384.LvFx2qVVIh@kreacher/
+>
+> and
+>
+> https://lore.kernel.org/linux-pm/2331888.ElGaqSPkdT@kreacher/
+>
+> which rebases the first patch on top of 6.9-rc2, adds 3 patches and adjus=
+ts
+> the third patch from v2.
+>
+> The original description of the first two patches still applies:
+>
+> > Patch [1/2] is based on the observation that the threshold field in str=
+uct
+> > thermal_trip really should be core-internal and to make that happen it
+> > introduces a wrapper structure around struct thermal_trip for internal
+> > use in the core.
+> >
+> > Patch [2/2] moves the definition of the new structure and the struct
+> > thermal_zone_device one to a local header file in the core to enforce
+> > more separation between the core and drivers.
+> >
+> > The patches are not expected to introduce any observable differences in
+> > behavior, so please let me know if you see any of that.
+>
+> Note that these patches were first sent before the merge window and have =
+not
+> really changed since then (except for a minor rebase of the first patch i=
+n
+> this series).  Moreover, no comments regarding the merit of these patches
+> have been made shared, so if this continues, I will be considering them a=
+s
+> good to go by the end of this week.
+>
+> Patch [3/6] is a rewrite of comments regarding trip crossing and threshol=
+d
+> computations.
+>
+> Patch [4/6] updates the trip crossing detection code to consolidate the
+> threshold initialization with trip crossing on the way up.
+>
+> Patch [5/6] ([3/3] in v2) adds a mechanism to sort notifications and debu=
+g
+> calls taking place during one invocation of __thermal_zone_device_update(=
+) so
+> they always go in temperature order.
+>
+> Patch [6/6] relocates the critical and trip point handling to avoid a
+> redundant temperature check.
+>
+> The series applies on top of 6.9-rc2 and I'm planning to create a test
+> branch containing it.
 
-Modify handle_thermal_trip() to call handle_critical_trips() only after
-finding that the trip temperature has been crossed on the way up and
-remove the redundant temperature check from the latter.
+As promised:
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/thermal_core.c |   15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
-
-Index: linux-pm/drivers/thermal/thermal_core.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_core.c
-+++ linux-pm/drivers/thermal/thermal_core.c
-@@ -349,10 +349,6 @@ void thermal_zone_device_critical_reboot
- static void handle_critical_trips(struct thermal_zone_device *tz,
- 				  const struct thermal_trip *trip)
- {
--	/* If we have not crossed the trip_temp, we do not care. */
--	if (trip->temperature <= 0 || tz->temperature < trip->temperature)
--		return;
--
- 	trace_thermal_zone_trip(tz, thermal_zone_trip_id(tz, trip), trip->type);
- 
- 	if (trip->type == THERMAL_TRIP_CRITICAL)
-@@ -404,12 +400,15 @@ static void handle_thermal_trip(struct t
- 		list_add_tail(&td->notify_list_node, way_up_list);
- 		td->notify_temp = trip->temperature;
- 		td->threshold -= trip->hysteresis;
-+
-+		if (trip->type == THERMAL_TRIP_CRITICAL ||
-+		    trip->type == THERMAL_TRIP_HOT) {
-+			handle_critical_trips(tz, trip);
-+			return;
-+		}
- 	}
- 
--	if (trip->type == THERMAL_TRIP_CRITICAL || trip->type == THERMAL_TRIP_HOT)
--		handle_critical_trips(tz, trip);
--	else
--		handle_non_critical_trips(tz, trip);
-+	handle_non_critical_trips(tz, trip);
- }
- 
- static void update_temperature(struct thermal_zone_device *tz)
-
-
-
+https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log/?h=
+=3Dthermal-core-testing
 
