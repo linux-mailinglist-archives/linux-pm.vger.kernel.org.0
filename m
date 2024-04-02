@@ -1,75 +1,62 @@
-Return-Path: <linux-pm+bounces-5810-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5811-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F6DB89577A
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 16:51:55 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C05089583D
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 17:31:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCFB51F23E4F
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 14:51:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3091AB202E9
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 15:31:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18EE413118A;
-	Tue,  2 Apr 2024 14:49:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC8B9131751;
+	Tue,  2 Apr 2024 15:30:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ifShd6t0"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dfcjU7iJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49FAB12C544
-	for <linux-pm@vger.kernel.org>; Tue,  2 Apr 2024 14:49:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EE1C132C38
+	for <linux-pm@vger.kernel.org>; Tue,  2 Apr 2024 15:30:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712069380; cv=none; b=FEKZmDOxd+RhLuPQi1Fsfrg9rWHH+dQq5zdT3CciNuvOxWgJt2l8tc7kn/5HEFE6LNUWrJyEDTcInEioAfa9KTOs8QZuj09e6QWTXAPQ2+kh4zoQDtwJwyspamEca2ZcDlKvD9DEvREnCIKSqhL99oi3XDEp8TZIgFCXGVvn7zg=
+	t=1712071821; cv=none; b=k4+AmLTSqnzje0gSsdgkGVROFE3D3TbkbRncEJ9wjmTwXGrqZkzIqKv1vRZwcA7fmmPBn1Xqm1RAhP2VHfo9EIrfj99jkGCFfAnC+ceF+UibmbR1YQjq0ZuWsSOQMGAJe6E1rPzitNR1m8Q6HyuZxm1Cjsje4PeGFlhftpoqh04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712069380; c=relaxed/simple;
-	bh=R6qde+iITv8Ux/EKpL1jJjmQD4xhkEmuDaLF7RETwOA=;
+	s=arc-20240116; t=1712071821; c=relaxed/simple;
+	bh=23qNJ4ftegx5H447MVacyBoGDIcrxV1t1VQ4lsSZJ/A=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XGIEzPY9U37FhguCOyiJwxgfP2kfAloGo+vtZqX+013KjJWLPWbJHFjVjj7COMwunikPq9ilcfAMoyY/d1odl0ewamopD4DX1oFeVDPov8XV7KwPeaCKE3wcQPS10NUlrIpfrMkLQvUgMd2C0chPX16zz8QARb8O7IHyk0/Oe/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ifShd6t0; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-563cb3ba9daso5208834a12.3
-        for <linux-pm@vger.kernel.org>; Tue, 02 Apr 2024 07:49:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1712069377; x=1712674177; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=qLa+MN3bXJ5HxwNKiIPGEXS1wglnZiuZ2Ea5/Fw6iIM=;
-        b=ifShd6t0t41raE9O8TOLw/bl3gnuNErHtn2VQNJ8lvrgANbupd8YLKj/qr7dRj4kLw
-         N6/STJR+rtB86Xt3BBbD086vMel9IY4Y2vUBwoSV/32NZ8uZExqjwcmCDNkREnC8fvos
-         Lw2H0VSUTij3nL9vPENkzDtH1Hbo1wg3ZIFEknuN2zrFPG7Ilwoakuuwdt/fKhfS69Ju
-         jRm2hX4Jn1lBAO7Fc+3hAG2DFSe+Dzz1vaC07OxsNJMrjga+RJZWB4O6X+Yipqzz1Cwz
-         yn8kmPd4uTgoZSqE2vLW9atyh9iZwsId7Mz/ejQV7yM4GaB7EkOFCtyAGO+6419GcbUs
-         S4nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712069377; x=1712674177;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qLa+MN3bXJ5HxwNKiIPGEXS1wglnZiuZ2Ea5/Fw6iIM=;
-        b=Pm5PB3HAA8N8RjoYeT+75w7iGF6CsaUbDKTXf+spn5ZW3vMrnbADwSSK4djF5ayQIC
-         +nE0WZpKTpY80FmTUHtSuNhEDbYMocRsquAAHqrheHFm+FP5IZCrSBap8FMVHnzshC3J
-         mfEkAmZe7jgLR6MfH7xoW1DLLY3cjDeDCxNT3ourpGmn9IpueZO3vdD6cRhy/MzQd/vi
-         lMWGue+gApcsXDhyo5foDA8+Rjhrh+F4ipqVHSQx58rIgtzGle3Pn54nTuFBu3WXQ2RT
-         DCoqBjClKmkodBwg4SjKQWjid/DMe6pbF4b1xiiOuDqHPITw5DE7nuLA67nt8wiwdIjO
-         v0CA==
-X-Forwarded-Encrypted: i=1; AJvYcCVCE5P9Cn/aOtilOGTAQSIuiALY48x1Iy5bwFXZKSSQd8NB4XJ+uiLdF5NckLyzgi3UrDsHXEYOkFpKJbvou6YbEToDBO3KUqo=
-X-Gm-Message-State: AOJu0YxDd3jL8oZQcbdeh2s/OSssl46YO1613R4Rd0ngRei4sIJYLiLl
-	Rbgi4OkMCBMWPHKGreyg0TkXMJuprY0dwdmIZqmzQH4S/Gvjj7IC+C4W+rDYHR4=
-X-Google-Smtp-Source: AGHT+IGFYhRDcZm6Ii0rP7m5rmXlrAdHv5FZrzsVIj839wjWmHdgrYaO3ezpyXY/JT7It50aaa5OsA==
-X-Received: by 2002:a17:907:9286:b0:a4e:4e76:5fc7 with SMTP id bw6-20020a170907928600b00a4e4e765fc7mr8881269ejc.65.1712069376618;
-        Tue, 02 Apr 2024 07:49:36 -0700 (PDT)
-Received: from [192.168.92.47] (078088045141.garwolin.vectranet.pl. [78.88.45.141])
-        by smtp.gmail.com with ESMTPSA id q17-20020a1709060e5100b00a4623030893sm6527417eji.126.2024.04.02.07.49.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Apr 2024 07:49:36 -0700 (PDT)
-Message-ID: <0e599137-4a23-40b9-9a22-3c32f795fa1b@linaro.org>
-Date: Tue, 2 Apr 2024 16:49:33 +0200
+	 In-Reply-To:Content-Type; b=NrLqk0QA7tKGov7+ujbeYaJxnGKzm5i5LJSIRHNYGQvrYXN51iaV8TGWigQZJG2BDnXjqsTb1HzP5QmHqHuEmrxYwYcjC9kKOLPDkV7WZKquep6OQ+ITeH/g4zCzaGcRBdZAPjaxY7MJgPNYA5KAiPQ80D5YbH/Ca/rqizTIV+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dfcjU7iJ; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1712071818;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9CES7zO5vAsVp440eN4HWeKNk0OJ2Kki5eVVcnl1iPU=;
+	b=dfcjU7iJ4Xr2mO8rHtzf16z87ViIcBWb9JuydKG1xqsnqZjE5HKidjxPBPKzQWVdKS/RIR
+	7EQXIWKqwZPUv528473HuqxRX3nCNZzruu7gdJFV562w+1HsXefx5V+vaKb1jkOG/ecRer
+	k9oWrupH7KSLD98p1iQTkLzwsyiLYHY=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-611-mCLhMP9nP1GCXUty7wZCZQ-1; Tue,
+ 02 Apr 2024 11:30:14 -0400
+X-MC-Unique: mCLhMP9nP1GCXUty7wZCZQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 575BD1E441D0;
+	Tue,  2 Apr 2024 15:30:13 +0000 (UTC)
+Received: from [10.22.33.108] (unknown [10.22.33.108])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id E66122022EA7;
+	Tue,  2 Apr 2024 15:30:11 +0000 (UTC)
+Message-ID: <548efd52-e45f-41fa-a477-bc5112d7b00c@redhat.com>
+Date: Tue, 2 Apr 2024 11:30:11 -0400
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,85 +64,79 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 2/6] interconnect: icc-clk: Remove tristate from
- INTERCONNECT_CLK
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc: andersson@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
- robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- djakov@kernel.org, quic_anusha@quicinc.com, linux-arm-msm@vger.kernel.org,
- linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- kernel test robot <lkp@intel.com>
-References: <20240402103406.3638821-1-quic_varada@quicinc.com>
- <20240402103406.3638821-3-quic_varada@quicinc.com>
- <CAA8EJppyuagb5zkP4LCjjJwConw3mw3iS-+dO7YB01=7-waRTw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] cgroup/cpuset: Make cpuset hotplug processing
+ synchronous
 Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <CAA8EJppyuagb5zkP4LCjjJwConw3mw3iS-+dO7YB01=7-waRTw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
+Cc: Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+ Johannes Weiner <hannes@cmpxchg.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Peter Zijlstra <peterz@infradead.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
+ Pavel Machek <pavel@ucw.cz>, Shuah Khan <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Frederic Weisbecker <frederic@kernel.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+ Valentin Schneider <vschneid@redhat.com>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>, Alex Shi <alexs@kernel.org>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Barry Song <song.bao.hua@hisilicon.com>
+References: <20240401145858.2656598-1-longman@redhat.com>
+ <20240401145858.2656598-2-longman@redhat.com>
+ <kce74bx6aafxfuw5yovaschym4ze4kommfk74eq5totojytest@mdxnfvl2kdol>
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <kce74bx6aafxfuw5yovaschym4ze4kommfk74eq5totojytest@mdxnfvl2kdol>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
 
-On 2.04.2024 12:39 PM, Dmitry Baryshkov wrote:
-> On Tue, 2 Apr 2024 at 13:34, Varadarajan Narayanan
-> <quic_varada@quicinc.com> wrote:
->>
->> drivers/clk/qcom/common.c uses devm_icc_clk_register under
->> IS_ENABLED(CONFIG_INTERCONNECT_CLK). However, in kernel bot
->> random config build test, with the following combination
->>
->>         CONFIG_COMMON_CLK_QCOM=y
->>                 and
->>         CONFIG_INTERCONNECT_CLK=m
->>
->> the following error is seen as devm_icc_clk_register is in a
->> module and being referenced from vmlinux.
->>
->>         powerpc64-linux-ld: drivers/clk/qcom/common.o: in function `qcom_cc_really_probe':
->>         >> common.c:(.text+0x980): undefined reference to `devm_icc_clk_register'
->>
->> Hence, ensure INTERCONNECT_CLK is not selected as a module.
-> 
-> NAK. Please use `depends on INTERCONNECT_CLK || !INTERCONNECT_CLK` in
-> your Kconfig dependencies.
 
-Should icc-clk ever be built as a module? It really seems like it should be
-a part of the core framework.. And dependency management would be easier
+On 4/2/24 10:13, Michal Koutný wrote:
+> Hello Waiman.
+>
+> (I have no opinion on the overall locking reworks, only the bits about
+> v1 migrations caught my attention.)
+>
+> On Mon, Apr 01, 2024 at 10:58:57AM -0400, Waiman Long <longman@redhat.com> wrote:
+> ...
+>> @@ -4383,12 +4377,20 @@ hotplug_update_tasks_legacy(struct cpuset *cs,
+>>   	/*
+>>   	 * Move tasks to the nearest ancestor with execution resources,
+>>   	 * This is full cgroup operation which will also call back into
+>> -	 * cpuset. Should be done outside any lock.
+>> +	 * cpuset. Execute it asynchronously using workqueue.
+>                     ...to avoid deadlock on cpus_read_lock
+>
+> Is this the reason?
+> Also, what happens with the tasks in the window till the migration
+> happens?
+> Is it handled gracefully that their cpu is gone?
 
-Konrad
+Yes, there is a potential that a cpus_read_lock() may be called leading 
+to deadlock. So unless we reverse the current cgroup_mutex --> 
+cpu_hotplug_lock ordering, it is not safe to call 
+cgroup_transfer_tasks() directly.
+
+
+>
+>
+>> -	if (is_empty) {
+>> -		mutex_unlock(&cpuset_mutex);
+>> -		remove_tasks_in_empty_cpuset(cs);
+>> -		mutex_lock(&cpuset_mutex);
+>> +	if (is_empty && css_tryget_online(&cs->css)) {
+>> +		struct cpuset_remove_tasks_struct *s;
+>> +
+>> +		s = kzalloc(sizeof(*s), GFP_KERNEL);
+> Is there a benefit of having a work for each cpuset?
+> Instead of traversing whole top_cpuset once in the async work.
+
+We could do that too. It's just that we have the repeat the iteration 
+process once the workfn is invoked, but that has the advantage of not 
+needing to do memory allocation. I am OK with either way. Let's see what 
+other folks think about that.
+
+Cheers,
+Longman
+
 
