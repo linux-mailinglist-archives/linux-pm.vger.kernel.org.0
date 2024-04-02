@@ -1,82 +1,169 @@
-Return-Path: <linux-pm+bounces-5790-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5791-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CA4C894F87
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 12:07:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34FB9895042
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 12:36:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ADF471C2269D
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 10:07:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AE0C2B2267A
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 10:36:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 197345915C;
-	Tue,  2 Apr 2024 10:07:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E42B6A8A8;
+	Tue,  2 Apr 2024 10:34:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="fGRRghoq"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="pPIUvV6Q"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FD2F57876;
-	Tue,  2 Apr 2024 10:07:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AA945FDD2;
+	Tue,  2 Apr 2024 10:34:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712052433; cv=none; b=rg16DFbYsakceXX8h+Y5YaRSJF+gnqbpRJK5aEmGoORU2cDn2iyy9E+LFaKkovAIatVOZgDxOFmftWlKTUOIoO5S+c/iMZi3CcaMP4yLyoY/915hgWKScND3r9I1xYZYYQiWPV5cMHROtpE6Q4hgFW+PwLGttRNfxkluUU4NRrc=
+	t=1712054074; cv=none; b=apAJ19+G+xkoTpUKtJ92PfaCiWqIAY440dujGiQdV75xwPDrtrqnjH5JhAyKVsIcpjstdlRvURiXrAgiAZ229q/Vq4RHHXqpVfySuxPUJ+IUSwtkNw1OeE03lseBMlOPtfhhkrYA4g9NSN0M3/yBCIrhXGMphSvK0h+YmXQfgDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712052433; c=relaxed/simple;
-	bh=k7uSL7rD78kbpZ93B360CvxyeepNDwKB6sm5+q46zMQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=C+fL5vbUpx+fyhOv0uAV+AmRRezUhVKDiQ3c4hBkCFEq0EGgDXS2+yC1SdGJslI5XFWGTzzbtoZ2uaZCYMHc8ESmwIFa3CY/fiRzpky1NCIdXu/YmeUUsWVPxzNG1nkgW95H/lzJ21pWyRsN158eXMaWJxCQkWq7zezvxmUsYnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=fGRRghoq; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1712052429;
-	bh=k7uSL7rD78kbpZ93B360CvxyeepNDwKB6sm5+q46zMQ=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=fGRRghoqSOpQK/+xrlyxkH/kM1jDxzL7k7wClqL2MjXLGF274xgbCPBesHeXAosO5
-	 LKkEyvrhEUS4eQmUqljuDSBssqFfPvsWErgLPnWPWLUSy9u1eoxwEc4DL+pmpRo7ID
-	 ia5X8vO2ywsjwwBr/y/5fEiDq8QwEmcXjrrb11fArXTy2XKwfFrjhO2+q9ZDLHdAb0
-	 Y+g0uxW8qe0+5AgiOlu7h3j42GOfGfsD78/k1JFTN3mxZ4Z6GFymlbnNexxokWZARW
-	 aBuUJ3EqqbDUElPE5D7hfDynueLgpxhy31x++AVpd4yLiVVS4WFJX0MyNC5jUzAfza
-	 6PQqWKnblowWg==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 2B13737820EF;
-	Tue,  2 Apr 2024 10:07:09 +0000 (UTC)
-Message-ID: <ccf74cbb-a487-4392-9b2e-35c0d007ba79@collabora.com>
-Date: Tue, 2 Apr 2024 12:07:08 +0200
+	s=arc-20240116; t=1712054074; c=relaxed/simple;
+	bh=nvPbIMQta9inNL69UqwPZJB/9wmSdGd+rz0uwsafhOo=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Z1wqpfB2zyr1so4Saalct+NYGBRwesAoHqPLxGViYc17PuGlAB5BRKMBtHJLx5v5j5sr7CfiAivNAw5oVfceBxaZMOYm7f6qcs5u5luIuDVWonz0z5B3Wy8JOj+PknlvR4L4wck1x/qdWG+C1QEcMeW8v4baKSxlptoC8yXa5Us=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=pPIUvV6Q; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4327SO7V030590;
+	Tue, 2 Apr 2024 10:34:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=qcppdkim1; bh=GfC8GfN
+	W4k6MjCi7WKh9ZhxXE8ireQ9ETjfjeKbm/N0=; b=pPIUvV6Qq/TqjVXYSRSTi5Z
+	1cALeTNoxIDaWmyTLNom7X90AtvgMAfChY0C5FT9wGBskSet6UP34n7QRoAGnpDh
+	D3auhilxzv/fLsttYdewe0vtvzGJWe0sTSbJC8rb+YzlB0Aq8Obmw+yFyEvmWkpb
+	h0JKLYD3zoK4/V8G3OZAY620+Vrs6VJhL1Zp+4D+u9czeeZ7nLn36BXkwYNWg72G
+	zBWedaylAEngEqGDgPNzTLSDIs5drC3Q6HyipUd+LxiA45hyEbzo2XeF75kTym88
+	F36691wPXSxAAf19Wy8XA8SIgky5nL/SKvV8rNJ+ES6nD8CeHSiuoRXV88vNJoA=
+	=
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3x893ts0nb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 02 Apr 2024 10:34:26 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 432AYPAR012861
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 2 Apr 2024 10:34:25 GMT
+Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.4; Tue, 2 Apr 2024 03:34:20 -0700
+From: Varadarajan Narayanan <quic_varada@quicinc.com>
+To: <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>, <robh@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <djakov@kernel.org>, <quic_varada@quicinc.com>,
+        <dmitry.baryshkov@linaro.org>, <quic_anusha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>
+Subject: [PATCH v6 0/6] Add interconnect driver for IPQ9574 SoC
+Date: Tue, 2 Apr 2024 16:04:00 +0530
+Message-ID: <20240402103406.3638821-1-quic_varada@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] pmdomain: mediatek: scpsys: drop driver owner assignment
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Ulf Hansson <ulf.hansson@linaro.org>,
- Matthias Brugger <matthias.bgg@gmail.com>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org
-References: <20240330211036.100956-1-krzysztof.kozlowski@linaro.org>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20240330211036.100956-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: -zuBf1M0eqNHfPb-pUr_JfO7rtzJqSP5
+X-Proofpoint-ORIG-GUID: -zuBf1M0eqNHfPb-pUr_JfO7rtzJqSP5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-02_04,2024-04-01_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
+ adultscore=0 impostorscore=0 phishscore=0 malwarescore=0 clxscore=1015
+ priorityscore=1501 mlxscore=0 lowpriorityscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2403210001 definitions=main-2404020076
 
-Il 30/03/24 22:10, Krzysztof Kozlowski ha scritto:
-> Core in platform_driver_register() already sets the .owner, so driver
-> does not need to.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+MSM platforms manage NoC related clocks and scaling from RPM.
+However, in IPQ SoCs, RPM is not involved in managing NoC
+related clocks and there is no NoC scaling.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+However, there is a requirement to enable some NoC interface
+clocks for the accessing the peripherals present in the
+system. Hence add a minimalistic interconnect driver that
+establishes a path from the processor/memory to those peripherals
+and vice versa.
 
+---
+v6:	Removed 'Reviewed-by: Krzysztof' from dt-bindings patch
+	Remove clock get from ICC driver as suggested by Stephen Boyd
+	so that the actual peripheral can do the clock get
+	first_id -> icc_first_node_id
+	Remove tristate from INTERCONNECT_CLK
+v5:
+	Split gcc-ipq9574.c and common.c changes into separate patches
+	Introduce devm_icc_clk_register
+	Fix error handling
+v4:
+gcc-ipq9574.c
+	Use clk_hw instead of indices
+common.c
+	Do icc register in qcom_cc_probe() call stream
+common.h
+	Add icc clock info to qcom_cc_desc structure
+
+v3:
+qcom,ipq9574.h
+	Move 'first id' define to clock driver
+gcc-ipq9574.c:
+	Use indexed identifiers here to avoid confusion
+	Fix error messages and move code to common.c as it can be
+	shared with future SoCs
+
+v2:
+qcom,ipq9574.h
+	Fix license identifier
+	Rename macros
+qcom,ipq9574-gcc.yaml
+	Include interconnect-cells
+gcc-ipq9574.c
+	Update commit log
+	Remove IS_ENABLED(CONFIG_INTERCONNECT) and auto select it from Kconfig
+ipq9574.dtsi
+	Moved to separate patch
+	Include interconnect-cells to clock controller node
+drivers/clk/qcom/Kconfig:
+	Auto select CONFIG_INTERCONNECT & CONFIG_INTERCONNECT_CLK
+
+Varadarajan Narayanan (6):
+  dt-bindings: interconnect: Add Qualcomm IPQ9574 support
+  interconnect: icc-clk: Remove tristate from INTERCONNECT_CLK
+  interconnect: icc-clk: Add devm_icc_clk_register
+  clk: qcom: common: Add interconnect clocks support
+  clk: qcom: ipq9574: Use icc-clk for enabling NoC related clocks
+  arm64: dts: qcom: ipq9574: Add icc provider ability to gcc
+
+ .../bindings/clock/qcom,ipq9574-gcc.yaml      |  3 ++
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi         |  2 +
+ drivers/clk/qcom/Kconfig                      |  2 +
+ drivers/clk/qcom/common.c                     | 38 ++++++++++++++++++-
+ drivers/clk/qcom/common.h                     |  3 ++
+ drivers/clk/qcom/gcc-ipq9574.c                | 30 +++++++++++++++
+ drivers/interconnect/Kconfig                  |  1 -
+ drivers/interconnect/icc-clk.c                | 29 ++++++++++++++
+ .../dt-bindings/interconnect/qcom,ipq9574.h   | 36 ++++++++++++++++++
+ include/linux/interconnect-clk.h              |  4 ++
+ 10 files changed, 146 insertions(+), 2 deletions(-)
+ create mode 100644 include/dt-bindings/interconnect/qcom,ipq9574.h
+
+-- 
+2.34.1
 
 
