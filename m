@@ -1,174 +1,130 @@
-Return-Path: <linux-pm+bounces-5820-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5824-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EAD0895B0E
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 19:48:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C031895C21
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 21:05:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2D789B2920D
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 17:46:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E6A28B24AD3
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Apr 2024 19:05:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 821AF15AAAF;
-	Tue,  2 Apr 2024 17:46:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E921D15B55D;
+	Tue,  2 Apr 2024 19:04:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="FEkWLYqt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 538CD159910;
-	Tue,  2 Apr 2024 17:46:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96A7515B542;
+	Tue,  2 Apr 2024 19:04:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712079965; cv=none; b=haqs8ZSXLYmJqmS48c/w9ovTKUf5K+D0F9yPImD4CsvKVEkjwe+9Lwya7XPGaDEcMk9qKYpBGgHPXONUBvAb8fzhWnyePkEGJQ6vPD+d3Cll9CHDokF3RO6/C8uGFVa+MB76djUi4gDTI0dBD7ngFv6LRooLE/Ejk40FzIWNUp8=
+	t=1712084690; cv=none; b=WTKxJ1L9pF7Xf32xwhiNC8bS4gky07nCElRNeCIzh90bU7arkDGm1Bp66UixpqjRfMHewJjJvqGs0iGvUTeO7rrp00pg7Y5pUS7FR9nqM6dyYSEGde9EJ9LHV992a9KPehjLesr13TTOnnApRCdLilL+PtHd1v5gw4ZoIrHbzz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712079965; c=relaxed/simple;
-	bh=y93SZIbrnH2U1PRuoMZgbJFzq72nN3iSwDY/ntn2yG4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=g4MhYki6EqtD3XOY2bCm7m4pLUsq7DZZzCYnfD29PehkUiPLVFC85hE88YeL0Mui3ismoHF5yqhynf2yLcXBsMdenykK0drrRhiYO+puMdGhIvdRNFv/IMCEKEbSIKChhmA9Z0VImfGPXlGrfUwj9+bKTJ5c77K370KZ7+CbKWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-22e82734a13so340260fac.2;
-        Tue, 02 Apr 2024 10:46:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712079962; x=1712684762;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2uQrT4OPUnJJ7qwQbuOJ3w/i96EgMem11ZKbGpAMb2I=;
-        b=aFFTkTSB8K5BO/G7LsPLPxGWr+JEEIXSYsAFAYbp+XilZztyq87tJ3IpcYWGB4EcLq
-         6a/DhiyV47XRICYWOUi8qzH40IouOTqNgIMOsbiFBULMJubxWWaIu+RkQ24qm17nwQCN
-         QiJtAo2tT9gs/trxNiXfP0vAEXBsDmpVgTJl/fKAiw8wLOOMQFVi8+SzWrgCGRq1NCsh
-         TB8n4e0r1fFdl/5V7NJ2KHEdZw61+1FD6/iiDZA6aM8y8kVGGk+PNam217/xc61PGMhV
-         MqU4lhhinEI3/9xiDDb+SpVoEaFGD1uLoZEqqqhe3wXwovWi1kdnOs0I4koH7dDHvD+c
-         vLsg==
-X-Forwarded-Encrypted: i=1; AJvYcCX2UGh81Ai+h0ylBCJDvhF2DKdynhJguRjrz6zR7Tw/HjEKmstA3vE14V0cKyxrggtwM175u5rLs5H+10OSycVFPWCkDvXpDXsPSIdn
-X-Gm-Message-State: AOJu0YyC1xzLwdsfErStwyhSwvt4jleJQlKB/v5OyH6p7550UVgamkFb
-	JS+Ingvwo3wEEEvmiISd15qzJbEQ/Ijpjb/WcfS7afEJ2Bq9rlwUmNVSgKvKwNy1GJF1yM4Ca7t
-	miTvdHD6raEgMS5vr26KcWqLAvO0=
-X-Google-Smtp-Source: AGHT+IEOYGMciwLTpZJjgcMmo8Nro7C40F0fC2Llkhv4PjwwByG4OqSEXbHrQAStqnaR9XL0e+4gk0wcFr6hOxWRBOY=
-X-Received: by 2002:a05:6871:7a2:b0:222:a91a:63cd with SMTP id
- o34-20020a05687107a200b00222a91a63cdmr12864139oap.45.1712079962239; Tue, 02
- Apr 2024 10:46:02 -0700 (PDT)
+	s=arc-20240116; t=1712084690; c=relaxed/simple;
+	bh=Legyi8s1aj0iwNAVWc0C2wTLd3674Uc5QjKYYL+1Al0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Q70lw7X6Z8cwZXJT5GYVa3Q6JKi/9xt+t1v9EksXZO2ZawaY6nDcUD2qw6d7lI4qsLj39q/jOjbPg4e9Sv6lkLKRSEv4m2mwELk7a1VqgkXpqqzdYobHyGYRqMC1CnBei0MDc4dt86W/9I0Jrv5JbNbOA4BmyZkZHwjMfU8teSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=FEkWLYqt; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
+ id b02708ad7978d327; Tue, 2 Apr 2024 21:04:46 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 042FE66C5C5;
+	Tue,  2 Apr 2024 21:04:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1712084686;
+	bh=Legyi8s1aj0iwNAVWc0C2wTLd3674Uc5QjKYYL+1Al0=;
+	h=From:To:Cc:Subject:Date;
+	b=FEkWLYqtD2wI5oe7DgTOvmUjX6ziE7c/PAnAZnEKCTw4IxRygARUa+0h7Gokhh2AO
+	 99AwTowzRQelDFH6ZAM8YyQRrMdmEOeCahQONhZFjqpbydzhb8NYakun3strdeNz1n
+	 +7nzBix6dYuk8ul3y7mVhOkkeK8mEPzD6TTfx1cz3KUr76tKhk57OMYeE+1E7XqhhG
+	 UhkMzzA+8GffRtNT08P2Ne+Du5mkO/ZSCgRNzt9nH7ezJ2RH2yVtRlSiQFlSRoAWdF
+	 MY/NF5p7Xb667gRcGTPOBEY5mKU7U5GSD9LjqKlAePkiD8h3rFdYtvQGs14E9M5jpO
+	 PUevZPzjzQ+cQ==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Lukasz Luba <lukasz.luba@arm.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v3 0/6] thermal: More separation between the core and drivers
+Date: Tue, 02 Apr 2024 20:54:31 +0200
+Message-ID: <4558251.LvFx2qVVIh@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240308204957.2007212-1-justin.ernst@hpe.com>
-In-Reply-To: <20240308204957.2007212-1-justin.ernst@hpe.com>
-From: Len Brown <lenb@kernel.org>
-Date: Tue, 2 Apr 2024 13:45:50 -0400
-Message-ID: <CAJvTdK=R+XQZ4Vov8iXGiMADShgrwSoDL8-Jqfhii7YruRLDsg@mail.gmail.com>
-Subject: Re: [PATCH] tools/power/turbostat: Fix uncore frequency file string
-To: Justin Ernst <justin.ernst@hpe.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudefvddgudeffecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeegfffhudejlefhtdegffekteduhfethffhieettefhkeevgfdvgfefieekiefgheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepiedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepuggr
+ nhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtoheprghnghgvlhhoghhiohgrtggthhhinhhordguvghlrhgvghhnohestgholhhlrggsohhrrgdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
 
-Thanks for the patch, Justin,
+Hi Everyone,
 
-Looks like the probe part of this was already fixed in my git tree, so
-I lopped off that hunk and kept your 1st hunk.
+This is an update of
 
-Let me know if it works, or if I screwed it up.
+https://lore.kernel.org/linux-pm/4558384.LvFx2qVVIh@kreacher/
 
-latest is in this tree:
-https://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git/
+and
 
-thanks,
--Len
+https://lore.kernel.org/linux-pm/2331888.ElGaqSPkdT@kreacher/
 
-On Fri, Mar 8, 2024 at 3:50=E2=80=AFPM Justin Ernst <justin.ernst@hpe.com> =
-wrote:
->
-> Running turbostat on a 16 socket HPE Scale-up Compute 3200 (SapphireRapid=
-s) fails with:
-> turbostat: /sys/devices/system/cpu/intel_uncore_frequency/package_010_die=
-_00/current_freq_khz: open failed: No such file or directory
->
-> We observe the sysfs uncore frequency directories named:
-> ...
-> package_09_die_00/
-> package_10_die_00/
-> package_11_die_00/
-> ...
-> package_15_die_00/
->
-> The culprit is an incorrect sprintf format string "package_0%d_die_0%d" u=
-sed
-> with each instance of reading uncore frequency files. uncore-frequency-co=
-mmon.c
-> creates the sysfs directory with the format "package_%02d_die_%02d". Once=
- the
-> package value reaches double digits, the formats diverge.
->
-> Change each instance of "package_0%d_die_0%d" to "package_%02d_die_%02d".
->
-> Signed-off-by: Justin Ernst <justin.ernst@hpe.com>
-> ---
->  tools/power/x86/turbostat/turbostat.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turb=
-ostat/turbostat.c
-> index 7a334377f92b..2a15a23cb726 100644
-> --- a/tools/power/x86/turbostat/turbostat.c
-> +++ b/tools/power/x86/turbostat/turbostat.c
-> @@ -2599,7 +2599,7 @@ unsigned long long get_uncore_mhz(int package, int =
-die)
->  {
->         char path[128];
->
-> -       sprintf(path, "/sys/devices/system/cpu/intel_uncore_frequency/pac=
-kage_0%d_die_0%d/current_freq_khz", package,
-> +       sprintf(path, "/sys/devices/system/cpu/intel_uncore_frequency/pac=
-kage_%02d_die_%02d/current_freq_khz", package,
->                 die);
->
->         return (snapshot_sysfs_counter(path) / 1000);
-> @@ -4589,20 +4589,20 @@ static void probe_intel_uncore_frequency(void)
->                 for (j =3D 0; j < topo.num_die; ++j) {
->                         int k, l;
->
-> -                       sprintf(path, "/sys/devices/system/cpu/intel_unco=
-re_frequency/package_0%d_die_0%d/min_freq_khz",
-> +                       sprintf(path, "/sys/devices/system/cpu/intel_unco=
-re_frequency/package_%02d_die_%02d/min_freq_khz",
->                                 i, j);
->                         k =3D read_sysfs_int(path);
-> -                       sprintf(path, "/sys/devices/system/cpu/intel_unco=
-re_frequency/package_0%d_die_0%d/max_freq_khz",
-> +                       sprintf(path, "/sys/devices/system/cpu/intel_unco=
-re_frequency/package_%02d_die_%02d/max_freq_khz",
->                                 i, j);
->                         l =3D read_sysfs_int(path);
->                         fprintf(outf, "Uncore Frequency pkg%d die%d: %d -=
- %d MHz ", i, j, k / 1000, l / 1000);
->
->                         sprintf(path,
-> -                               "/sys/devices/system/cpu/intel_uncore_fre=
-quency/package_0%d_die_0%d/initial_min_freq_khz",
-> +                               "/sys/devices/system/cpu/intel_uncore_fre=
-quency/package_%02d_die_%02d/initial_min_freq_khz",
->                                 i, j);
->                         k =3D read_sysfs_int(path);
->                         sprintf(path,
-> -                               "/sys/devices/system/cpu/intel_uncore_fre=
-quency/package_0%d_die_0%d/initial_max_freq_khz",
-> +                               "/sys/devices/system/cpu/intel_uncore_fre=
-quency/package_%02d_die_%02d/initial_max_freq_khz",
->                                 i, j);
->                         l =3D read_sysfs_int(path);
->                         fprintf(outf, "(%d - %d MHz)\n", k / 1000, l / 10=
-00);
-> --
-> 2.26.2
->
+which rebases the first patch on top of 6.9-rc2, adds 3 patches and adjusts
+the third patch from v2.
+
+The original description of the first two patches still applies:
+
+> Patch [1/2] is based on the observation that the threshold field in struct
+> thermal_trip really should be core-internal and to make that happen it
+> introduces a wrapper structure around struct thermal_trip for internal
+> use in the core.
+> 
+> Patch [2/2] moves the definition of the new structure and the struct
+> thermal_zone_device one to a local header file in the core to enforce
+> more separation between the core and drivers.
+> 
+> The patches are not expected to introduce any observable differences in
+> behavior, so please let me know if you see any of that.
+
+Note that these patches were first sent before the merge window and have not
+really changed since then (except for a minor rebase of the first patch in
+this series).  Moreover, no comments regarding the merit of these patches
+have been made shared, so if this continues, I will be considering them as
+good to go by the end of this week.
+
+Patch [3/6] is a rewrite of comments regarding trip crossing and threshold
+computations.
+
+Patch [4/6] updates the trip crossing detection code to consolidate the
+threshold initialization with trip crossing on the way up.
+
+Patch [5/6] ([3/3] in v2) adds a mechanism to sort notifications and debug
+calls taking place during one invocation of __thermal_zone_device_update() so
+they always go in temperature order.
+
+Patch [6/6] relocates the critical and trip point handling to avoid a
+redundant temperature check.
+
+The series applies on top of 6.9-rc2 and I'm planning to create a test
+branch containing it.
+
+Thanks!
 
 
---=20
-Len Brown, Intel
+
 
