@@ -1,75 +1,72 @@
-Return-Path: <linux-pm+bounces-5901-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5902-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC6ED897924
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 21:41:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 727C1897969
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 21:56:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B3131C257C0
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 19:41:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B25AB1F23460
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 19:56:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D76A41553BE;
-	Wed,  3 Apr 2024 19:41:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D81E71553A2;
+	Wed,  3 Apr 2024 19:56:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qhe3HXDA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PcX24eMc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFD2F155316;
-	Wed,  3 Apr 2024 19:41:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A458515530D;
+	Wed,  3 Apr 2024 19:56:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712173278; cv=none; b=gUGIXWlhKrHr27gycp0hGAgDPVs/UMwDYDy9/S8lsbaJhubIA4o1aQzvacwAwhlTPcu+vgPhacqqaVsiCc0cf+AHyYTpFoETNRZI93mtrLok/fGM9koqk3gC/b4bhs1pKRIYFq35S2THW0FUznS35fWSYbcM1ZwH5QUwmHtpeIM=
+	t=1712174203; cv=none; b=VZHBbbiEdfieVaNrAC3I/XjGJb7WHRcaEeQMILpA/RD3eBZRb3E7qsggauVDKjArCCaa3o7k3QADY/2KTQ5Q5L9Ud1ePse6ndAmOm7vHt8frv/pm2/vZbmsHmGzLSmEeCUDqQiIot2YEecBEUppcikEXJ/E0K8gvjxOO6zPiqD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712173278; c=relaxed/simple;
-	bh=yFkQfuzZTJdoNsPnecCMz4y1YNFx3yiN7JzywwM0XFo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=lTuCBvJchfnCCYEFevL4D8p++i+dnHMCIoQorcofEVXbJFU+jV2O3I7q5CQUF0xzdysuTLqZ6vd3Zc36GCqul/Nwh4eKoGyXykRso0U0/9WRWUJnL8tjD36Xf2JB3u6bPDEyUpXTxlV/SiWSAtmUvQ3RsT+uiFt24sUWFIHA+Qw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qhe3HXDA; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712173276; x=1743709276;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yFkQfuzZTJdoNsPnecCMz4y1YNFx3yiN7JzywwM0XFo=;
-  b=Qhe3HXDAP38TgIbiNn/rnWcgYmsvAmFuZb0YxaZLTBsvy02DB79ChbWD
-   bPSqLRv0YI5ggU+g8dEluoWnW7OHqppLA+/8WQ4kT9r1FDQwOJm1Ow6LU
-   UowhqOTA+tEtSXMC7rc/6bbKqsVUq8WDhy/X1e5cvZKqv/jHav4fRfGxu
-   /tZ+my5qxUEAs/Skhu5luL7rXLW8N08E/Q++d+haqU+7FXOzkOVXXIAm+
-   TYjwHTZV5cOUdWheiZnE6VJena1lHCfmkSUBG1H+H7qAOVw8LcZAVoZBO
-   LfcHtFOWXyy9GsWrBUjuBDv+O2Qe+eKvS2ub0vxjMjku7duV9Dk3OiZ1Z
-   A==;
-X-CSE-ConnectionGUID: VB/d9ANFREuC3o9xNMLEfA==
-X-CSE-MsgGUID: lmY2ue9jSEupjc7UDZGSww==
-X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="7618109"
-X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
-   d="scan'208";a="7618109"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 12:41:13 -0700
-X-CSE-ConnectionGUID: fayLiIPfQoSSJLwK2vzxqA==
-X-CSE-MsgGUID: e6nq0fcUTRixmKKJrcLV0w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
-   d="scan'208";a="19147944"
-Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 03 Apr 2024 12:41:11 -0700
-Received: from kbuild by e61807b1d151 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rs6Ts-0000Am-2x;
-	Wed, 03 Apr 2024 19:41:08 +0000
-Date: Thu, 4 Apr 2024 03:40:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
-	devel@acpica.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:thermal-core-testing 2/6]
- drivers/thermal/./thermal_trace_ipa.h:27:36: error: invalid use of undefined
- type 'struct thermal_zone_device'
-Message-ID: <202404040355.vMDBmRgN-lkp@intel.com>
+	s=arc-20240116; t=1712174203; c=relaxed/simple;
+	bh=qy2c8g78O518PO9O6KiZAFu1Ifp8jJwqGnz0VLfkXp0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eQLvd+Lf8m7VvoBVJ6N4aV1jRAzdoz+Wp+uQiSfQ+iepEXcfgY3QtJo1S4itHUQUsK+dtd8qTf2LH0lz9NzSggdGTTTAMn4LcvoOHvfoc1TxxuRPNlnz/nqLoK8Ht26TQWDBUrodaVROvm/CLRI7hoBVQm3l/uUwUagBMe4nrRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PcX24eMc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A3A6C433F1;
+	Wed,  3 Apr 2024 19:56:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712174203;
+	bh=qy2c8g78O518PO9O6KiZAFu1Ifp8jJwqGnz0VLfkXp0=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=PcX24eMcI3r7RMuyiQtrdT8VNobuQKE7qDwRG7xa37VjD5kc/Xx41+a+Cb52paHq0
+	 KaceVi8Oe9+qRPi0GuEmV2AtxD2JvTGAE1YW+jXb3POR+gVzfHA1hlSSh3EFTcLmTS
+	 vzOnz34ygzA/82y8tPPcGA+QS9L1heyXaQ/ZeMWqbc9iJJt06OgESedUPv2LWTGe6X
+	 Hapzco7aMc1HdW7cSPObY/IoDDZw/AKTggKWbHcmJcFWas9Cu/nTc9urIqk89BEAgA
+	 W7UhLFX7Fbn8+V+QDZAa+m6AQIOP0/NaMlwAoYNW4YNF3vlR1x8vmZwCKQoCX9ZTB8
+	 nIydySl/aw1DQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id B7698CE0D85; Wed,  3 Apr 2024 12:56:42 -0700 (PDT)
+Date: Wed, 3 Apr 2024 12:56:42 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	Linux Regressions <regressions@lists.linux.dev>,
+	lkft-triage@lists.linaro.org,
+	clang-built-linux <llvm@lists.linux.dev>,
+	Linux PM <linux-pm@vger.kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-riscv@lists.infradead.org,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>
+Subject: Re: kernel/sched/core.c:961:15: error: incompatible pointer to
+ integer conversion passing 'typeof
+Message-ID: <8d5dcb8c-6fc8-4e01-b20e-970809bf842e@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <CA+G9fYtj3aBdRreBmKZDQApEe2x8mugycPgN+_J5ebJzXDEq4g@mail.gmail.com>
+ <CAKfTPtC9YgbZgGNK82MhhzzsD3P6j64+w6oieJMDKQNOmrC4FQ@mail.gmail.com>
+ <20240403160041.GA1252923@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -78,168 +75,587 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240403160041.GA1252923@dev-arch.thelio-3990X>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-core-testing
-head:   a89f1989a5e97c0ca6a1e355500e2659f64707c5
-commit: 9396b9d5d714caf9b54037b49877bfa441cb292c [2/6] thermal: core: Make struct thermal_zone_device definition internal
-config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20240404/202404040355.vMDBmRgN-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240404/202404040355.vMDBmRgN-lkp@intel.com/reproduce)
+On Wed, Apr 03, 2024 at 09:00:41AM -0700, Nathan Chancellor wrote:
+> Hi all,
+> 
+> + Paul McKenney
+> 
+> On Wed, Apr 03, 2024 at 03:26:05PM +0200, Vincent Guittot wrote:
+> > Hi Naresh,
+> > 
+> > Adding riscv people
+> > 
+> > On Wed, 3 Apr 2024 at 09:38, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> > >
+> > > The riscv clang-17 defconfig build failed due to following warnings / errors
+> > > on the Linux next-20240402.
+> > 
+> > Could you confirm that there is no problem with other arch and/or
+> > other toolchain ?
+> 
+> This is not a clang specific issue, it happens with GCC too:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404040355.vMDBmRgN-lkp@intel.com/
+Some of these are fixed, but there are a few remaining failures.
 
-All errors (new ones prefixed by >>):
+I have pulled this series from -next, and apologies for putting it in
+too soon.
 
-   In file included from include/trace/define_trace.h:102,
-                    from drivers/thermal/thermal_trace_ipa.h:102,
-                    from drivers/thermal/gov_power_allocator.c:15:
-   drivers/thermal/./thermal_trace_ipa.h: In function 'trace_event_raw_event_thermal_power_allocator':
->> drivers/thermal/./thermal_trace_ipa.h:27:36: error: invalid use of undefined type 'struct thermal_zone_device'
-      27 |                 __entry->tz_id = tz->id;
-         |                                    ^~
-   include/trace/trace_events.h:402:11: note: in definition of macro 'DECLARE_EVENT_CLASS'
-     402 |         { assign; }                                                     \
-         |           ^~~~~~
-   include/trace/trace_events.h:44:30: note: in expansion of macro 'PARAMS'
-      44 |                              PARAMS(assign),                   \
-         |                              ^~~~~~
-   drivers/thermal/./thermal_trace_ipa.h:10:1: note: in expansion of macro 'TRACE_EVENT'
-      10 | TRACE_EVENT(thermal_power_allocator,
-         | ^~~~~~~~~~~
-   drivers/thermal/./thermal_trace_ipa.h:26:9: note: in expansion of macro 'TP_fast_assign'
-      26 |         TP_fast_assign(
-         |         ^~~~~~~~~~~~~~
-   drivers/thermal/./thermal_trace_ipa.h: In function 'trace_event_raw_event_thermal_power_actor':
-   drivers/thermal/./thermal_trace_ipa.h:55:36: error: invalid use of undefined type 'struct thermal_zone_device'
-      55 |                 __entry->tz_id = tz->id;
-         |                                    ^~
-   include/trace/trace_events.h:402:11: note: in definition of macro 'DECLARE_EVENT_CLASS'
-     402 |         { assign; }                                                     \
-         |           ^~~~~~
-   include/trace/trace_events.h:44:30: note: in expansion of macro 'PARAMS'
-      44 |                              PARAMS(assign),                   \
-         |                              ^~~~~~
-   drivers/thermal/./thermal_trace_ipa.h:44:1: note: in expansion of macro 'TRACE_EVENT'
-      44 | TRACE_EVENT(thermal_power_actor,
-         | ^~~~~~~~~~~
-   drivers/thermal/./thermal_trace_ipa.h:54:9: note: in expansion of macro 'TP_fast_assign'
-      54 |         TP_fast_assign(
-         |         ^~~~~~~~~~~~~~
-   drivers/thermal/./thermal_trace_ipa.h: In function 'trace_event_raw_event_thermal_power_allocator_pid':
-   drivers/thermal/./thermal_trace_ipa.h:80:36: error: invalid use of undefined type 'struct thermal_zone_device'
-      80 |                 __entry->tz_id = tz->id;
-         |                                    ^~
-   include/trace/trace_events.h:402:11: note: in definition of macro 'DECLARE_EVENT_CLASS'
-     402 |         { assign; }                                                     \
-         |           ^~~~~~
-   include/trace/trace_events.h:44:30: note: in expansion of macro 'PARAMS'
-      44 |                              PARAMS(assign),                   \
-         |                              ^~~~~~
-   drivers/thermal/./thermal_trace_ipa.h:66:1: note: in expansion of macro 'TRACE_EVENT'
-      66 | TRACE_EVENT(thermal_power_allocator_pid,
-         | ^~~~~~~~~~~
-   drivers/thermal/./thermal_trace_ipa.h:79:9: note: in expansion of macro 'TP_fast_assign'
-      79 |         TP_fast_assign(
-         |         ^~~~~~~~~~~~~~
-   In file included from include/trace/define_trace.h:103:
-   drivers/thermal/./thermal_trace_ipa.h: In function 'perf_trace_thermal_power_allocator':
->> drivers/thermal/./thermal_trace_ipa.h:27:36: error: invalid use of undefined type 'struct thermal_zone_device'
-      27 |                 __entry->tz_id = tz->id;
-         |                                    ^~
-   include/trace/perf.h:51:11: note: in definition of macro 'DECLARE_EVENT_CLASS'
-      51 |         { assign; }                                                     \
-         |           ^~~~~~
-   include/trace/trace_events.h:44:30: note: in expansion of macro 'PARAMS'
-      44 |                              PARAMS(assign),                   \
-         |                              ^~~~~~
-   drivers/thermal/./thermal_trace_ipa.h:10:1: note: in expansion of macro 'TRACE_EVENT'
-      10 | TRACE_EVENT(thermal_power_allocator,
-         | ^~~~~~~~~~~
-   drivers/thermal/./thermal_trace_ipa.h:26:9: note: in expansion of macro 'TP_fast_assign'
-      26 |         TP_fast_assign(
-         |         ^~~~~~~~~~~~~~
-   drivers/thermal/./thermal_trace_ipa.h: In function 'perf_trace_thermal_power_actor':
-   drivers/thermal/./thermal_trace_ipa.h:55:36: error: invalid use of undefined type 'struct thermal_zone_device'
-      55 |                 __entry->tz_id = tz->id;
-         |                                    ^~
-   include/trace/perf.h:51:11: note: in definition of macro 'DECLARE_EVENT_CLASS'
-      51 |         { assign; }                                                     \
-         |           ^~~~~~
-   include/trace/trace_events.h:44:30: note: in expansion of macro 'PARAMS'
-      44 |                              PARAMS(assign),                   \
-         |                              ^~~~~~
-   drivers/thermal/./thermal_trace_ipa.h:44:1: note: in expansion of macro 'TRACE_EVENT'
-      44 | TRACE_EVENT(thermal_power_actor,
-         | ^~~~~~~~~~~
-   drivers/thermal/./thermal_trace_ipa.h:54:9: note: in expansion of macro 'TP_fast_assign'
-      54 |         TP_fast_assign(
-         |         ^~~~~~~~~~~~~~
-   drivers/thermal/./thermal_trace_ipa.h: In function 'perf_trace_thermal_power_allocator_pid':
-   drivers/thermal/./thermal_trace_ipa.h:80:36: error: invalid use of undefined type 'struct thermal_zone_device'
-      80 |                 __entry->tz_id = tz->id;
-         |                                    ^~
-   include/trace/perf.h:51:11: note: in definition of macro 'DECLARE_EVENT_CLASS'
-      51 |         { assign; }                                                     \
-         |           ^~~~~~
-   include/trace/trace_events.h:44:30: note: in expansion of macro 'PARAMS'
-      44 |                              PARAMS(assign),                   \
-         |                              ^~~~~~
-   drivers/thermal/./thermal_trace_ipa.h:66:1: note: in expansion of macro 'TRACE_EVENT'
-      66 | TRACE_EVENT(thermal_power_allocator_pid,
-         | ^~~~~~~~~~~
-   drivers/thermal/./thermal_trace_ipa.h:79:9: note: in expansion of macro 'TP_fast_assign'
-      79 |         TP_fast_assign(
-         |         ^~~~~~~~~~~~~~
+							Thanx, Paul
 
-
-vim +27 drivers/thermal/./thermal_trace_ipa.h
-
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02   9  
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02  10  TRACE_EVENT(thermal_power_allocator,
-792c3dc08ddcf2 drivers/thermal/thermal_trace_ipa.h            Lukasz Luba  2023-12-20  11  	TP_PROTO(struct thermal_zone_device *tz, u32 total_req_power,
-792c3dc08ddcf2 drivers/thermal/thermal_trace_ipa.h            Lukasz Luba  2023-12-20  12  		 u32 total_granted_power, int num_actors, u32 power_range,
-792c3dc08ddcf2 drivers/thermal/thermal_trace_ipa.h            Lukasz Luba  2023-12-20  13  		 u32 max_allocatable_power, int current_temp, s32 delta_temp),
-792c3dc08ddcf2 drivers/thermal/thermal_trace_ipa.h            Lukasz Luba  2023-12-20  14  	TP_ARGS(tz, total_req_power, total_granted_power, num_actors,
-792c3dc08ddcf2 drivers/thermal/thermal_trace_ipa.h            Lukasz Luba  2023-12-20  15  		power_range, max_allocatable_power, current_temp, delta_temp),
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02  16  	TP_STRUCT__entry(
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02  17  		__field(int,           tz_id          )
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02  18  		__field(u32,           total_req_power          )
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02  19  		__field(u32,           total_granted_power      )
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02  20  		__field(size_t,        num_actors               )
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02  21  		__field(u32,           power_range              )
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02  22  		__field(u32,           max_allocatable_power    )
-17e8351a77397e include/trace/events/thermal_power_allocator.h Sascha Hauer 2015-07-24  23  		__field(int,           current_temp             )
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02  24  		__field(s32,           delta_temp               )
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02  25  	),
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02  26  	TP_fast_assign(
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02 @27  		__entry->tz_id = tz->id;
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02  28  		__entry->total_req_power = total_req_power;
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02  29  		__entry->total_granted_power = total_granted_power;
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02  30  		__entry->num_actors = num_actors;
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02  31  		__entry->power_range = power_range;
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02  32  		__entry->max_allocatable_power = max_allocatable_power;
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02  33  		__entry->current_temp = current_temp;
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02  34  		__entry->delta_temp = delta_temp;
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02  35  	),
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02  36  
-792c3dc08ddcf2 drivers/thermal/thermal_trace_ipa.h            Lukasz Luba  2023-12-20  37  	TP_printk("thermal_zone_id=%d total_req_power=%u total_granted_power=%u power_range=%u max_allocatable_power=%u current_temperature=%d delta_temperature=%d",
-792c3dc08ddcf2 drivers/thermal/thermal_trace_ipa.h            Lukasz Luba  2023-12-20  38  		__entry->tz_id,	__entry->total_req_power,
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02  39  		__entry->total_granted_power, __entry->power_range,
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02  40  		__entry->max_allocatable_power, __entry->current_temp,
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02  41  		__entry->delta_temp)
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02  42  );
-6828a4711f994b include/trace/events/thermal_power_allocator.h Javi Merino  2015-03-02  43  
-
-:::::: The code at line 27 was first introduced by commit
-:::::: 6828a4711f994bbd9d3fd27b7a541217fc37b341 thermal: add trace events to the power allocator governor
-
-:::::: TO: Javi Merino <javi.merino@arm.com>
-:::::: CC: Eduardo Valentin <edubezval@gmail.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>   $ make -skj"$(nproc)" ARCH=riscv CROSS_COMPILE=riscv64-linux- mrproper defconfig kernel/sched/core.o
+>   kernel/sched/core.c: In function '__wake_q_add':
+>   arch/riscv/include/asm/cmpxchg.h:175:62: warning: passing argument 2 of 'cmpxchg_emu_u8' makes integer from pointer without a cast [-Wint-conversion]
+>     175 |                 __ret = cmpxchg_emu_u8((volatile u8 *)__ptr, __old, __new); \
+>         |                                                              ^~~~~
+>         |                                                              |
+>         |                                                              struct wake_q_node *
+>   include/linux/compiler.h:77:45: note: in definition of macro 'unlikely'
+>      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+>         |                                             ^
+>   arch/riscv/include/asm/cmpxchg.h:212:30: note: in expansion of macro '__cmpxchg_relaxed'
+>     212 |         (__typeof__(*(ptr))) __cmpxchg_relaxed((ptr),                   \
+>         |                              ^~~~~~~~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:89:29: note: in expansion of macro 'arch_cmpxchg_relaxed'
+>      89 | #define raw_cmpxchg_relaxed arch_cmpxchg_relaxed
+>         |                             ^~~~~~~~~~~~~~~~~~~~
+>   include/linux/atomic/atomic-instrumented.h:4810:9: note: in expansion of macro 'raw_cmpxchg_relaxed'
+>    4810 |         raw_cmpxchg_relaxed(__ai_ptr, __VA_ARGS__); \
+>         |         ^~~~~~~~~~~~~~~~~~~
+>   kernel/sched/core.c:961:22: note: in expansion of macro 'cmpxchg_relaxed'
+>     961 |         if (unlikely(cmpxchg_relaxed(&node->next, NULL, WAKE_Q_TAIL)))
+>         |                      ^~~~~~~~~~~~~~~
+>   In file included from arch/riscv/include/asm/cmpxchg.h:12,
+>                    from arch/riscv/include/asm/atomic.h:19,
+>                    from include/linux/atomic.h:7,
+>                    from include/linux/cpumask.h:14,
+>                    from include/linux/smp.h:13,
+>                    from include/linux/lockdep.h:14,
+>                    from include/linux/spinlock.h:63,
+>                    from include/linux/wait.h:9,
+>                    from include/linux/wait_bit.h:8,
+>                    from include/linux/fs.h:6:
+>   include/linux/cmpxchg-emu.h:13:52: note: expected 'uintptr_t' {aka 'long unsigned int'} but argument is of type 'struct wake_q_node *'
+>      13 | uintptr_t cmpxchg_emu_u8(volatile u8 *p, uintptr_t old, uintptr_t new);
+>         |                                          ~~~~~~~~~~^~~
+>   arch/riscv/include/asm/cmpxchg.h:175:69: warning: passing argument 3 of 'cmpxchg_emu_u8' makes integer from pointer without a cast [-Wint-conversion]
+>     175 |                 __ret = cmpxchg_emu_u8((volatile u8 *)__ptr, __old, __new); \
+>         |                                                                     ^~~~~
+>         |                                                                     |
+>         |                                                                     struct wake_q_node *
+>   include/linux/compiler.h:77:45: note: in definition of macro 'unlikely'
+>      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+>         |                                             ^
+>   arch/riscv/include/asm/cmpxchg.h:212:30: note: in expansion of macro '__cmpxchg_relaxed'
+>     212 |         (__typeof__(*(ptr))) __cmpxchg_relaxed((ptr),                   \
+>         |                              ^~~~~~~~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:89:29: note: in expansion of macro 'arch_cmpxchg_relaxed'
+>      89 | #define raw_cmpxchg_relaxed arch_cmpxchg_relaxed
+>         |                             ^~~~~~~~~~~~~~~~~~~~
+>   include/linux/atomic/atomic-instrumented.h:4810:9: note: in expansion of macro 'raw_cmpxchg_relaxed'
+>    4810 |         raw_cmpxchg_relaxed(__ai_ptr, __VA_ARGS__); \
+>         |         ^~~~~~~~~~~~~~~~~~~
+>   kernel/sched/core.c:961:22: note: in expansion of macro 'cmpxchg_relaxed'
+>     961 |         if (unlikely(cmpxchg_relaxed(&node->next, NULL, WAKE_Q_TAIL)))
+>         |                      ^~~~~~~~~~~~~~~
+>   include/linux/cmpxchg-emu.h:13:67: note: expected 'uintptr_t' {aka 'long unsigned int'} but argument is of type 'struct wake_q_node *'
+>      13 | uintptr_t cmpxchg_emu_u8(volatile u8 *p, uintptr_t old, uintptr_t new);
+>         |                                                         ~~~~~~~~~~^~~
+>   arch/riscv/include/asm/cmpxchg.h:175:23: warning: assignment to 'struct wake_q_node *' from 'uintptr_t' {aka 'long unsigned int'} makes pointer from integer without a cast [-Wint-conversion]
+>     175 |                 __ret = cmpxchg_emu_u8((volatile u8 *)__ptr, __old, __new); \
+>         |                       ^
+>   include/linux/compiler.h:77:45: note: in definition of macro 'unlikely'
+>      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+>         |                                             ^
+>   arch/riscv/include/asm/cmpxchg.h:212:30: note: in expansion of macro '__cmpxchg_relaxed'
+>     212 |         (__typeof__(*(ptr))) __cmpxchg_relaxed((ptr),                   \
+>         |                              ^~~~~~~~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:89:29: note: in expansion of macro 'arch_cmpxchg_relaxed'
+>      89 | #define raw_cmpxchg_relaxed arch_cmpxchg_relaxed
+>         |                             ^~~~~~~~~~~~~~~~~~~~
+>   include/linux/atomic/atomic-instrumented.h:4810:9: note: in expansion of macro 'raw_cmpxchg_relaxed'
+>    4810 |         raw_cmpxchg_relaxed(__ai_ptr, __VA_ARGS__); \
+>         |         ^~~~~~~~~~~~~~~~~~~
+>   kernel/sched/core.c:961:22: note: in expansion of macro 'cmpxchg_relaxed'
+>     961 |         if (unlikely(cmpxchg_relaxed(&node->next, NULL, WAKE_Q_TAIL)))
+>         |                      ^~~~~~~~~~~~~~~
+>   arch/riscv/include/asm/cmpxchg.h:179:64: warning: passing argument 2 of 'cmpxchg_emu_u16' makes integer from pointer without a cast [-Wint-conversion]
+>     179 |                 __ret = cmpxchg_emu_u16((volatile u16 *)__ptr, __old, __new); \
+>         |                                                                ^~~~~
+>         |                                                                |
+>         |                                                                struct wake_q_node *
+>   include/linux/compiler.h:77:45: note: in definition of macro 'unlikely'
+>      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+>         |                                             ^
+>   arch/riscv/include/asm/cmpxchg.h:212:30: note: in expansion of macro '__cmpxchg_relaxed'
+>     212 |         (__typeof__(*(ptr))) __cmpxchg_relaxed((ptr),                   \
+>         |                              ^~~~~~~~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:89:29: note: in expansion of macro 'arch_cmpxchg_relaxed'
+>      89 | #define raw_cmpxchg_relaxed arch_cmpxchg_relaxed
+>         |                             ^~~~~~~~~~~~~~~~~~~~
+>   include/linux/atomic/atomic-instrumented.h:4810:9: note: in expansion of macro 'raw_cmpxchg_relaxed'
+>    4810 |         raw_cmpxchg_relaxed(__ai_ptr, __VA_ARGS__); \
+>         |         ^~~~~~~~~~~~~~~~~~~
+>   kernel/sched/core.c:961:22: note: in expansion of macro 'cmpxchg_relaxed'
+>     961 |         if (unlikely(cmpxchg_relaxed(&node->next, NULL, WAKE_Q_TAIL)))
+>         |                      ^~~~~~~~~~~~~~~
+>   include/linux/cmpxchg-emu.h:14:54: note: expected 'uintptr_t' {aka 'long unsigned int'} but argument is of type 'struct wake_q_node *'
+>      14 | uintptr_t cmpxchg_emu_u16(volatile u16 *p, uintptr_t old, uintptr_t new);
+>         |                                            ~~~~~~~~~~^~~
+>   arch/riscv/include/asm/cmpxchg.h:179:71: warning: passing argument 3 of 'cmpxchg_emu_u16' makes integer from pointer without a cast [-Wint-conversion]
+>     179 |                 __ret = cmpxchg_emu_u16((volatile u16 *)__ptr, __old, __new); \
+>         |                                                                       ^~~~~
+>         |                                                                       |
+>         |                                                                       struct wake_q_node *
+>   include/linux/compiler.h:77:45: note: in definition of macro 'unlikely'
+>      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+>         |                                             ^
+>   arch/riscv/include/asm/cmpxchg.h:212:30: note: in expansion of macro '__cmpxchg_relaxed'
+>     212 |         (__typeof__(*(ptr))) __cmpxchg_relaxed((ptr),                   \
+>         |                              ^~~~~~~~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:89:29: note: in expansion of macro 'arch_cmpxchg_relaxed'
+>      89 | #define raw_cmpxchg_relaxed arch_cmpxchg_relaxed
+>         |                             ^~~~~~~~~~~~~~~~~~~~
+>   include/linux/atomic/atomic-instrumented.h:4810:9: note: in expansion of macro 'raw_cmpxchg_relaxed'
+>    4810 |         raw_cmpxchg_relaxed(__ai_ptr, __VA_ARGS__); \
+>         |         ^~~~~~~~~~~~~~~~~~~
+>   kernel/sched/core.c:961:22: note: in expansion of macro 'cmpxchg_relaxed'
+>     961 |         if (unlikely(cmpxchg_relaxed(&node->next, NULL, WAKE_Q_TAIL)))
+>         |                      ^~~~~~~~~~~~~~~
+>   include/linux/cmpxchg-emu.h:14:69: note: expected 'uintptr_t' {aka 'long unsigned int'} but argument is of type 'struct wake_q_node *'
+>      14 | uintptr_t cmpxchg_emu_u16(volatile u16 *p, uintptr_t old, uintptr_t new);
+>         |                                                           ~~~~~~~~~~^~~
+>   arch/riscv/include/asm/cmpxchg.h:179:23: warning: assignment to 'struct wake_q_node *' from 'uintptr_t' {aka 'long unsigned int'} makes pointer from integer without a cast [-Wint-conversion]
+>     179 |                 __ret = cmpxchg_emu_u16((volatile u16 *)__ptr, __old, __new); \
+>         |                       ^
+>   include/linux/compiler.h:77:45: note: in definition of macro 'unlikely'
+>      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+>         |                                             ^
+>   arch/riscv/include/asm/cmpxchg.h:212:30: note: in expansion of macro '__cmpxchg_relaxed'
+>     212 |         (__typeof__(*(ptr))) __cmpxchg_relaxed((ptr),                   \
+>         |                              ^~~~~~~~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:89:29: note: in expansion of macro 'arch_cmpxchg_relaxed'
+>      89 | #define raw_cmpxchg_relaxed arch_cmpxchg_relaxed
+>         |                             ^~~~~~~~~~~~~~~~~~~~
+>   include/linux/atomic/atomic-instrumented.h:4810:9: note: in expansion of macro 'raw_cmpxchg_relaxed'
+>    4810 |         raw_cmpxchg_relaxed(__ai_ptr, __VA_ARGS__); \
+>         |         ^~~~~~~~~~~~~~~~~~~
+>   kernel/sched/core.c:961:22: note: in expansion of macro 'cmpxchg_relaxed'
+>     961 |         if (unlikely(cmpxchg_relaxed(&node->next, NULL, WAKE_Q_TAIL)))
+>         |                      ^~~~~~~~~~~~~~~
+>   arch/riscv/include/asm/cmpxchg.h:179:23: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>     179 |                 __ret = cmpxchg_emu_u16((volatile u16 *)__ptr, __old, __new); \
+>         |                 ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   include/linux/compiler.h:77:45: note: in definition of macro 'unlikely'
+>      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+>         |                                             ^
+>   arch/riscv/include/asm/cmpxchg.h:212:30: note: in expansion of macro '__cmpxchg_relaxed'
+>     212 |         (__typeof__(*(ptr))) __cmpxchg_relaxed((ptr),                   \
+>         |                              ^~~~~~~~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:89:29: note: in expansion of macro 'arch_cmpxchg_relaxed'
+>      89 | #define raw_cmpxchg_relaxed arch_cmpxchg_relaxed
+>         |                             ^~~~~~~~~~~~~~~~~~~~
+>   include/linux/atomic/atomic-instrumented.h:4810:9: note: in expansion of macro 'raw_cmpxchg_relaxed'
+>    4810 |         raw_cmpxchg_relaxed(__ai_ptr, __VA_ARGS__); \
+>         |         ^~~~~~~~~~~~~~~~~~~
+>   kernel/sched/core.c:961:22: note: in expansion of macro 'cmpxchg_relaxed'
+>     961 |         if (unlikely(cmpxchg_relaxed(&node->next, NULL, WAKE_Q_TAIL)))
+>         |                      ^~~~~~~~~~~~~~~
+>   arch/riscv/include/asm/cmpxchg.h:180:9: note: here
+>     180 |         case 4:                                                         \
+>         |         ^~~~
+>   include/linux/compiler.h:77:45: note: in definition of macro 'unlikely'
+>      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+>         |                                             ^
+>   arch/riscv/include/asm/cmpxchg.h:212:30: note: in expansion of macro '__cmpxchg_relaxed'
+>     212 |         (__typeof__(*(ptr))) __cmpxchg_relaxed((ptr),                   \
+>         |                              ^~~~~~~~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:89:29: note: in expansion of macro 'arch_cmpxchg_relaxed'
+>      89 | #define raw_cmpxchg_relaxed arch_cmpxchg_relaxed
+>         |                             ^~~~~~~~~~~~~~~~~~~~
+>   include/linux/atomic/atomic-instrumented.h:4810:9: note: in expansion of macro 'raw_cmpxchg_relaxed'
+>    4810 |         raw_cmpxchg_relaxed(__ai_ptr, __VA_ARGS__); \
+>         |         ^~~~~~~~~~~~~~~~~~~
+>   kernel/sched/core.c:961:22: note: in expansion of macro 'cmpxchg_relaxed'
+>     961 |         if (unlikely(cmpxchg_relaxed(&node->next, NULL, WAKE_Q_TAIL)))
+>         |                      ^~~~~~~~~~~~~~~
+>   kernel/sched/sched.h: In function 'mm_cid_put_lazy':
+>   arch/riscv/include/asm/cmpxchg.h:333:23: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>     333 |                 __ret = cmpxchg_emu_u16((volatile u16 *)__ptr, __old, __new); \
+>         |                 ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   arch/riscv/include/asm/cmpxchg.h:368:30: note: in expansion of macro '__cmpxchg'
+>     368 |         (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
+>         |                              ^~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:55:21: note: in expansion of macro 'arch_cmpxchg'
+>      55 | #define raw_cmpxchg arch_cmpxchg
+>         |                     ^~~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:192:16: note: in expansion of macro 'raw_cmpxchg'
+>     192 |         ___r = raw_cmpxchg((_ptr), ___o, (_new)); \
+>         |                ^~~~~~~~~~~
+>   include/linux/atomic/atomic-instrumented.h:4880:9: note: in expansion of macro 'raw_try_cmpxchg'
+>    4880 |         raw_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>         |         ^~~~~~~~~~~~~~~
+>   kernel/sched/sched.h:3292:14: note: in expansion of macro 'try_cmpxchg'
+>    3292 |             !try_cmpxchg(&this_cpu_ptr(pcpu_cid)->cid, &cid, MM_CID_UNSET))
+>         |              ^~~~~~~~~~~
+>   arch/riscv/include/asm/cmpxchg.h:334:9: note: here
+>     334 |         case 4:                                                         \
+>         |         ^~~~
+>   arch/riscv/include/asm/cmpxchg.h:368:30: note: in expansion of macro '__cmpxchg'
+>     368 |         (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
+>         |                              ^~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:55:21: note: in expansion of macro 'arch_cmpxchg'
+>      55 | #define raw_cmpxchg arch_cmpxchg
+>         |                     ^~~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:192:16: note: in expansion of macro 'raw_cmpxchg'
+>     192 |         ___r = raw_cmpxchg((_ptr), ___o, (_new)); \
+>         |                ^~~~~~~~~~~
+>   include/linux/atomic/atomic-instrumented.h:4880:9: note: in expansion of macro 'raw_try_cmpxchg'
+>    4880 |         raw_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>         |         ^~~~~~~~~~~~~~~
+>   kernel/sched/sched.h:3292:14: note: in expansion of macro 'try_cmpxchg'
+>    3292 |             !try_cmpxchg(&this_cpu_ptr(pcpu_cid)->cid, &cid, MM_CID_UNSET))
+>         |              ^~~~~~~~~~~
+>   kernel/sched/sched.h: In function 'mm_cid_get':
+>   arch/riscv/include/asm/cmpxchg.h:333:23: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>     333 |                 __ret = cmpxchg_emu_u16((volatile u16 *)__ptr, __old, __new); \
+>         |                 ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   arch/riscv/include/asm/cmpxchg.h:368:30: note: in expansion of macro '__cmpxchg'
+>     368 |         (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
+>         |                              ^~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:55:21: note: in expansion of macro 'arch_cmpxchg'
+>      55 | #define raw_cmpxchg arch_cmpxchg
+>         |                     ^~~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:192:16: note: in expansion of macro 'raw_cmpxchg'
+>     192 |         ___r = raw_cmpxchg((_ptr), ___o, (_new)); \
+>         |                ^~~~~~~~~~~
+>   include/linux/atomic/atomic-instrumented.h:4880:9: note: in expansion of macro 'raw_try_cmpxchg'
+>    4880 |         raw_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>         |         ^~~~~~~~~~~~~~~
+>   kernel/sched/sched.h:3429:21: note: in expansion of macro 'try_cmpxchg'
+>    3429 |                 if (try_cmpxchg(&this_cpu_ptr(pcpu_cid)->cid, &cid, MM_CID_UNSET))
+>         |                     ^~~~~~~~~~~
+>   arch/riscv/include/asm/cmpxchg.h:334:9: note: here
+>     334 |         case 4:                                                         \
+>         |         ^~~~
+>   arch/riscv/include/asm/cmpxchg.h:368:30: note: in expansion of macro '__cmpxchg'
+>     368 |         (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
+>         |                              ^~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:55:21: note: in expansion of macro 'arch_cmpxchg'
+>      55 | #define raw_cmpxchg arch_cmpxchg
+>         |                     ^~~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:192:16: note: in expansion of macro 'raw_cmpxchg'
+>     192 |         ___r = raw_cmpxchg((_ptr), ___o, (_new)); \
+>         |                ^~~~~~~~~~~
+>   include/linux/atomic/atomic-instrumented.h:4880:9: note: in expansion of macro 'raw_try_cmpxchg'
+>    4880 |         raw_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>         |         ^~~~~~~~~~~~~~~
+>   kernel/sched/sched.h:3429:21: note: in expansion of macro 'try_cmpxchg'
+>    3429 |                 if (try_cmpxchg(&this_cpu_ptr(pcpu_cid)->cid, &cid, MM_CID_UNSET))
+>         |                     ^~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h: In function 'raw_atomic_cmpxchg_relaxed':
+>   arch/riscv/include/asm/cmpxchg.h:179:23: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>     179 |                 __ret = cmpxchg_emu_u16((volatile u16 *)__ptr, __old, __new); \
+>         |                 ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   arch/riscv/include/asm/cmpxchg.h:212:30: note: in expansion of macro '__cmpxchg_relaxed'
+>     212 |         (__typeof__(*(ptr))) __cmpxchg_relaxed((ptr),                   \
+>         |                              ^~~~~~~~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:89:29: note: in expansion of macro 'arch_cmpxchg_relaxed'
+>      89 | #define raw_cmpxchg_relaxed arch_cmpxchg_relaxed
+>         |                             ^~~~~~~~~~~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:2108:16: note: in expansion of macro 'raw_cmpxchg_relaxed'
+>    2108 |         return raw_cmpxchg_relaxed(&v->counter, old, new);
+>         |                ^~~~~~~~~~~~~~~~~~~
+>   arch/riscv/include/asm/cmpxchg.h:180:9: note: here
+>     180 |         case 4:                                                         \
+>         |         ^~~~
+>   arch/riscv/include/asm/cmpxchg.h:212:30: note: in expansion of macro '__cmpxchg_relaxed'
+>     212 |         (__typeof__(*(ptr))) __cmpxchg_relaxed((ptr),                   \
+>         |                              ^~~~~~~~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:89:29: note: in expansion of macro 'arch_cmpxchg_relaxed'
+>      89 | #define raw_cmpxchg_relaxed arch_cmpxchg_relaxed
+>         |                             ^~~~~~~~~~~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:2108:16: note: in expansion of macro 'raw_cmpxchg_relaxed'
+>    2108 |         return raw_cmpxchg_relaxed(&v->counter, old, new);
+>         |                ^~~~~~~~~~~~~~~~~~~
+>   kernel/sched/core.c: In function '__sched_mm_cid_migrate_from_try_steal_cid':
+>   arch/riscv/include/asm/cmpxchg.h:333:23: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>     333 |                 __ret = cmpxchg_emu_u16((volatile u16 *)__ptr, __old, __new); \
+>         |                 ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   arch/riscv/include/asm/cmpxchg.h:368:30: note: in expansion of macro '__cmpxchg'
+>     368 |         (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
+>         |                              ^~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:55:21: note: in expansion of macro 'arch_cmpxchg'
+>      55 | #define raw_cmpxchg arch_cmpxchg
+>         |                     ^~~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:192:16: note: in expansion of macro 'raw_cmpxchg'
+>     192 |         ___r = raw_cmpxchg((_ptr), ___o, (_new)); \
+>         |                ^~~~~~~~~~~
+>   include/linux/atomic/atomic-instrumented.h:4880:9: note: in expansion of macro 'raw_try_cmpxchg'
+>    4880 |         raw_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>         |         ^~~~~~~~~~~~~~~
+>   kernel/sched/core.c:11724:14: note: in expansion of macro 'try_cmpxchg'
+>   11724 |         if (!try_cmpxchg(&src_pcpu_cid->cid, &src_cid, lazy_cid))
+>         |              ^~~~~~~~~~~
+>   arch/riscv/include/asm/cmpxchg.h:334:9: note: here
+>     334 |         case 4:                                                         \
+>         |         ^~~~
+>   arch/riscv/include/asm/cmpxchg.h:368:30: note: in expansion of macro '__cmpxchg'
+>     368 |         (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
+>         |                              ^~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:55:21: note: in expansion of macro 'arch_cmpxchg'
+>      55 | #define raw_cmpxchg arch_cmpxchg
+>         |                     ^~~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:192:16: note: in expansion of macro 'raw_cmpxchg'
+>     192 |         ___r = raw_cmpxchg((_ptr), ___o, (_new)); \
+>         |                ^~~~~~~~~~~
+>   include/linux/atomic/atomic-instrumented.h:4880:9: note: in expansion of macro 'raw_try_cmpxchg'
+>    4880 |         raw_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>         |         ^~~~~~~~~~~~~~~
+>   kernel/sched/core.c:11724:14: note: in expansion of macro 'try_cmpxchg'
+>   11724 |         if (!try_cmpxchg(&src_pcpu_cid->cid, &src_cid, lazy_cid))
+>         |              ^~~~~~~~~~~
+>   arch/riscv/include/asm/cmpxchg.h:333:23: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>     333 |                 __ret = cmpxchg_emu_u16((volatile u16 *)__ptr, __old, __new); \
+>         |                 ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   arch/riscv/include/asm/cmpxchg.h:368:30: note: in expansion of macro '__cmpxchg'
+>     368 |         (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
+>         |                              ^~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:55:21: note: in expansion of macro 'arch_cmpxchg'
+>      55 | #define raw_cmpxchg arch_cmpxchg
+>         |                     ^~~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:192:16: note: in expansion of macro 'raw_cmpxchg'
+>     192 |         ___r = raw_cmpxchg((_ptr), ___o, (_new)); \
+>         |                ^~~~~~~~~~~
+>   include/linux/atomic/atomic-instrumented.h:4880:9: note: in expansion of macro 'raw_try_cmpxchg'
+>    4880 |         raw_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>         |         ^~~~~~~~~~~~~~~
+>   kernel/sched/core.c:11760:14: note: in expansion of macro 'try_cmpxchg'
+>   11760 |         if (!try_cmpxchg(&src_pcpu_cid->cid, &lazy_cid, MM_CID_UNSET))
+>         |              ^~~~~~~~~~~
+>   arch/riscv/include/asm/cmpxchg.h:334:9: note: here
+>     334 |         case 4:                                                         \
+>         |         ^~~~
+>   arch/riscv/include/asm/cmpxchg.h:368:30: note: in expansion of macro '__cmpxchg'
+>     368 |         (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
+>         |                              ^~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:55:21: note: in expansion of macro 'arch_cmpxchg'
+>      55 | #define raw_cmpxchg arch_cmpxchg
+>         |                     ^~~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:192:16: note: in expansion of macro 'raw_cmpxchg'
+>     192 |         ___r = raw_cmpxchg((_ptr), ___o, (_new)); \
+>         |                ^~~~~~~~~~~
+>   include/linux/atomic/atomic-instrumented.h:4880:9: note: in expansion of macro 'raw_try_cmpxchg'
+>    4880 |         raw_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>         |         ^~~~~~~~~~~~~~~
+>   kernel/sched/core.c:11760:14: note: in expansion of macro 'try_cmpxchg'
+>   11760 |         if (!try_cmpxchg(&src_pcpu_cid->cid, &lazy_cid, MM_CID_UNSET))
+>         |              ^~~~~~~~~~~
+>   kernel/sched/core.c: In function 'task_mm_cid_work':
+>   arch/riscv/include/asm/cmpxchg.h:333:25: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>     333 |                 __ret = cmpxchg_emu_u16((volatile u16 *)__ptr, __old, __new); \
+>         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   arch/riscv/include/asm/cmpxchg.h:368:30: note: in expansion of macro '__cmpxchg'
+>     368 |         (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
+>         |                              ^~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:55:21: note: in expansion of macro 'arch_cmpxchg'
+>      55 | #define raw_cmpxchg arch_cmpxchg
+>         |                     ^~~~~~~~~~~~
+>   include/linux/atomic/atomic-instrumented.h:4788:9: note: in expansion of macro 'raw_cmpxchg'
+>    4788 |         raw_cmpxchg(__ai_ptr, __VA_ARGS__); \
+>         |         ^~~~~~~~~~~
+>   kernel/sched/core.c:11945:23: note: in expansion of macro 'cmpxchg'
+>   11945 |                 res = cmpxchg(&mm->mm_cid_next_scan, old_scan, next_scan);
+>         |                       ^~~~~~~
+>   arch/riscv/include/asm/cmpxchg.h:334:9: note: here
+>     334 |         case 4:                                                         \
+>         |         ^~~~
+>   arch/riscv/include/asm/cmpxchg.h:368:30: note: in expansion of macro '__cmpxchg'
+>     368 |         (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
+>         |                              ^~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:55:21: note: in expansion of macro 'arch_cmpxchg'
+>      55 | #define raw_cmpxchg arch_cmpxchg
+>         |                     ^~~~~~~~~~~~
+>   include/linux/atomic/atomic-instrumented.h:4788:9: note: in expansion of macro 'raw_cmpxchg'
+>    4788 |         raw_cmpxchg(__ai_ptr, __VA_ARGS__); \
+>         |         ^~~~~~~~~~~
+>   kernel/sched/core.c:11945:23: note: in expansion of macro 'cmpxchg'
+>   11945 |                 res = cmpxchg(&mm->mm_cid_next_scan, old_scan, next_scan);
+>         |                       ^~~~~~~
+>   arch/riscv/include/asm/cmpxchg.h:333:25: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>     333 |                 __ret = cmpxchg_emu_u16((volatile u16 *)__ptr, __old, __new); \
+>         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   arch/riscv/include/asm/cmpxchg.h:368:30: note: in expansion of macro '__cmpxchg'
+>     368 |         (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
+>         |                              ^~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:55:21: note: in expansion of macro 'arch_cmpxchg'
+>      55 | #define raw_cmpxchg arch_cmpxchg
+>         |                     ^~~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:192:16: note: in expansion of macro 'raw_cmpxchg'
+>     192 |         ___r = raw_cmpxchg((_ptr), ___o, (_new)); \
+>         |                ^~~~~~~~~~~
+>   include/linux/atomic/atomic-instrumented.h:4880:9: note: in expansion of macro 'raw_try_cmpxchg'
+>    4880 |         raw_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>         |         ^~~~~~~~~~~~~~~
+>   kernel/sched/core.c:11953:14: note: in expansion of macro 'try_cmpxchg'
+>   11953 |         if (!try_cmpxchg(&mm->mm_cid_next_scan, &old_scan, next_scan))
+>         |              ^~~~~~~~~~~
+>   arch/riscv/include/asm/cmpxchg.h:334:9: note: here
+>     334 |         case 4:                                                         \
+>         |         ^~~~
+>   arch/riscv/include/asm/cmpxchg.h:368:30: note: in expansion of macro '__cmpxchg'
+>     368 |         (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
+>         |                              ^~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:55:21: note: in expansion of macro 'arch_cmpxchg'
+>      55 | #define raw_cmpxchg arch_cmpxchg
+>         |                     ^~~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:192:16: note: in expansion of macro 'raw_cmpxchg'
+>     192 |         ___r = raw_cmpxchg((_ptr), ___o, (_new)); \
+>         |                ^~~~~~~~~~~
+>   include/linux/atomic/atomic-instrumented.h:4880:9: note: in expansion of macro 'raw_try_cmpxchg'
+>    4880 |         raw_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>         |         ^~~~~~~~~~~~~~~
+>   kernel/sched/core.c:11953:14: note: in expansion of macro 'try_cmpxchg'
+>   11953 |         if (!try_cmpxchg(&mm->mm_cid_next_scan, &old_scan, next_scan))
+>         |              ^~~~~~~~~~~
+>   kernel/sched/core.c: In function 'sched_mm_cid_remote_clear':
+>   arch/riscv/include/asm/cmpxchg.h:333:23: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>     333 |                 __ret = cmpxchg_emu_u16((volatile u16 *)__ptr, __old, __new); \
+>         |                 ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   arch/riscv/include/asm/cmpxchg.h:368:30: note: in expansion of macro '__cmpxchg'
+>     368 |         (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
+>         |                              ^~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:55:21: note: in expansion of macro 'arch_cmpxchg'
+>      55 | #define raw_cmpxchg arch_cmpxchg
+>         |                     ^~~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:192:16: note: in expansion of macro 'raw_cmpxchg'
+>     192 |         ___r = raw_cmpxchg((_ptr), ___o, (_new)); \
+>         |                ^~~~~~~~~~~
+>   include/linux/atomic/atomic-instrumented.h:4880:9: note: in expansion of macro 'raw_try_cmpxchg'
+>    4880 |         raw_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>         |         ^~~~~~~~~~~~~~~
+>   kernel/sched/core.c:11841:14: note: in expansion of macro 'try_cmpxchg'
+>   11841 |         if (!try_cmpxchg(&pcpu_cid->cid, &cid, lazy_cid))
+>         |              ^~~~~~~~~~~
+>   arch/riscv/include/asm/cmpxchg.h:334:9: note: here
+>     334 |         case 4:                                                         \
+>         |         ^~~~
+>   arch/riscv/include/asm/cmpxchg.h:368:30: note: in expansion of macro '__cmpxchg'
+>     368 |         (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
+>         |                              ^~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:55:21: note: in expansion of macro 'arch_cmpxchg'
+>      55 | #define raw_cmpxchg arch_cmpxchg
+>         |                     ^~~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:192:16: note: in expansion of macro 'raw_cmpxchg'
+>     192 |         ___r = raw_cmpxchg((_ptr), ___o, (_new)); \
+>         |                ^~~~~~~~~~~
+>   include/linux/atomic/atomic-instrumented.h:4880:9: note: in expansion of macro 'raw_try_cmpxchg'
+>    4880 |         raw_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>         |         ^~~~~~~~~~~~~~~
+>   kernel/sched/core.c:11841:14: note: in expansion of macro 'try_cmpxchg'
+>   11841 |         if (!try_cmpxchg(&pcpu_cid->cid, &cid, lazy_cid))
+>         |              ^~~~~~~~~~~
+>   arch/riscv/include/asm/cmpxchg.h:333:23: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>     333 |                 __ret = cmpxchg_emu_u16((volatile u16 *)__ptr, __old, __new); \
+>         |                 ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   arch/riscv/include/asm/cmpxchg.h:368:30: note: in expansion of macro '__cmpxchg'
+>     368 |         (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
+>         |                              ^~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:55:21: note: in expansion of macro 'arch_cmpxchg'
+>      55 | #define raw_cmpxchg arch_cmpxchg
+>         |                     ^~~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:192:16: note: in expansion of macro 'raw_cmpxchg'
+>     192 |         ___r = raw_cmpxchg((_ptr), ___o, (_new)); \
+>         |                ^~~~~~~~~~~
+>   include/linux/atomic/atomic-instrumented.h:4880:9: note: in expansion of macro 'raw_try_cmpxchg'
+>    4880 |         raw_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>         |         ^~~~~~~~~~~~~~~
+>   kernel/sched/core.c:11874:21: note: in expansion of macro 'try_cmpxchg'
+>   11874 |                 if (try_cmpxchg(&pcpu_cid->cid, &lazy_cid, MM_CID_UNSET))
+>         |                     ^~~~~~~~~~~
+>   arch/riscv/include/asm/cmpxchg.h:334:9: note: here
+>     334 |         case 4:                                                         \
+>         |         ^~~~
+>   arch/riscv/include/asm/cmpxchg.h:368:30: note: in expansion of macro '__cmpxchg'
+>     368 |         (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
+>         |                              ^~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:55:21: note: in expansion of macro 'arch_cmpxchg'
+>      55 | #define raw_cmpxchg arch_cmpxchg
+>         |                     ^~~~~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:192:16: note: in expansion of macro 'raw_cmpxchg'
+>     192 |         ___r = raw_cmpxchg((_ptr), ___o, (_new)); \
+>         |                ^~~~~~~~~~~
+>   include/linux/atomic/atomic-instrumented.h:4880:9: note: in expansion of macro 'raw_try_cmpxchg'
+>    4880 |         raw_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+>         |         ^~~~~~~~~~~~~~~
+>   kernel/sched/core.c:11874:21: note: in expansion of macro 'try_cmpxchg'
+>   11874 |                 if (try_cmpxchg(&pcpu_cid->cid, &lazy_cid, MM_CID_UNSET))
+>         |                     ^~~~~~~~~~~
+>   kernel/sched/sched.h: In function 'mm_cid_pcpu_unset':
+>   arch/riscv/include/asm/cmpxchg.h:333:23: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>     333 |                 __ret = cmpxchg_emu_u16((volatile u16 *)__ptr, __old, __new); \
+>         |                 ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   arch/riscv/include/asm/cmpxchg.h:368:30: note: in expansion of macro '__cmpxchg'
+>     368 |         (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
+>         |                              ^~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:55:21: note: in expansion of macro 'arch_cmpxchg'
+>      55 | #define raw_cmpxchg arch_cmpxchg
+>         |                     ^~~~~~~~~~~~
+>   include/linux/atomic/atomic-instrumented.h:4788:9: note: in expansion of macro 'raw_cmpxchg'
+>    4788 |         raw_cmpxchg(__ai_ptr, __VA_ARGS__); \
+>         |         ^~~~~~~~~~~
+>   kernel/sched/sched.h:3310:23: note: in expansion of macro 'cmpxchg'
+>    3310 |                 res = cmpxchg(&this_cpu_ptr(pcpu_cid)->cid, cid, MM_CID_UNSET);
+>         |                       ^~~~~~~
+>   arch/riscv/include/asm/cmpxchg.h:334:9: note: here
+>     334 |         case 4:                                                         \
+>         |         ^~~~
+>   arch/riscv/include/asm/cmpxchg.h:368:30: note: in expansion of macro '__cmpxchg'
+>     368 |         (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
+>         |                              ^~~~~~~~~
+>   include/linux/atomic/atomic-arch-fallback.h:55:21: note: in expansion of macro 'arch_cmpxchg'
+>      55 | #define raw_cmpxchg arch_cmpxchg
+>         |                     ^~~~~~~~~~~~
+>   include/linux/atomic/atomic-instrumented.h:4788:9: note: in expansion of macro 'raw_cmpxchg'
+>    4788 |         raw_cmpxchg(__ai_ptr, __VA_ARGS__); \
+>         |         ^~~~~~~~~~~
+>   kernel/sched/sched.h:3310:23: note: in expansion of macro 'cmpxchg'
+>    3310 |                 res = cmpxchg(&this_cpu_ptr(pcpu_cid)->cid, cid, MM_CID_UNSET);
+>         |                       ^~~~~~~
+> 
+> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > >
+> > > riscv:
+> > >   build:
+> > >     * clang-17-lkftconfig - Failed
+> > >     * rv32-clang-17-defconfig - Failed
+> > >     * clang-17-tinyconfig - Failed
+> > >     * rv32-clang-17-tinyconfig - Failed
+> > >     * clang-17-defconfig - Failed
+> > >     * clang-17-allnoconfig - Failed
+> > >     * rv32-clang-17-allnoconfig - Failed
+> > >
+> > > Build log:
+> > > -------
+> > > kernel/sched/core.c:961:15: error: incompatible pointer to integer
+> > > conversion passing 'typeof (*((__ai_ptr)))' (aka 'struct wake_q_node
+> > > *') to parameter of type 'uintptr_t' (aka 'unsigned long')
+> > > [-Wint-conversion]
+> > >   961 |         if (unlikely(cmpxchg_relaxed(&node->next, NULL, WAKE_Q_TAIL)))
+> > >       |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > 
+> > There is no recent change on this code. Could it be a change in
+> > cmpxchg_relaxed ?
+> 
+> Yes, it is caused by commit df35ee400e06 ("riscv: Emulate one-byte and
+> two-byte cmpxchg") in -next. There is another thread on this problem
+> with a suggested diff that resolves it for me (there are other issues
+> with that change as well such as break not being in the correct
+> location):
+> 
+> https://lore.kernel.org/Zgz98szFLLjTIZSO@yujie-X299/
+> 
+> Cheers,
+> Nathan
 
