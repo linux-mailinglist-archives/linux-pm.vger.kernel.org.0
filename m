@@ -1,166 +1,123 @@
-Return-Path: <linux-pm+bounces-5881-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5882-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C80289745D
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 17:48:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD1E1897469
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 17:49:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B04151C23B7D
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 15:48:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 829F71F23FF3
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 15:49:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94F2314AD00;
-	Wed,  3 Apr 2024 15:48:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z8VILx7Z"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1651B14A63B;
+	Wed,  3 Apr 2024 15:49:28 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B352E14A4C8;
-	Wed,  3 Apr 2024 15:47:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C60EE14A0B4;
+	Wed,  3 Apr 2024 15:49:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712159281; cv=none; b=PSRe62tpRwRoYIZ+kywnb5W5anQe3vc+FlfLD893G98k9GhYXQhuGZtZJbg0RHAPs0bYiUCN8yv0/CblFcM8383+YTjicZHf0B5i7xJD5LPvuSTuI5UlumhFyGMZqErM86+jmqeUpgbUcRE3Qx8W2Nxg/0/+xoMQMTm6nYZkQAM=
+	t=1712159368; cv=none; b=n17Vt0m60lcVu8roovDjd7QTYBlJNP16t/V7eNCuC/rFCFgV0khX6Gr/QdFPNTw2bnwNmPanuCfj8K0JTKAlZquB0Ui5fvdaEbUHozFtPErgJWHDWygxN4IWVOVer4ngBa4+vHKcY5C0jAW8FMgeRI/bXVUbipc9ywHXFeqsO9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712159281; c=relaxed/simple;
-	bh=HHPDm+TLj1RKaDaIxeLlYDtf5KUMp/lQSPe/aTjr+IY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GK4qPx4LClDZ1OtMsUdTyLCR9mqUvWzX6agR4++JUwcJSYdiC5uIZdpmL6Mlf1HrCLjPIU9IXH64EvrB2Php8YAVFGOrrgOBsdYrOLwtB9GGkDzzNMyXd537YrE9G+7/f0aFoysXSux9lieFA0jDAQVseWfY4uCNzLI1RiRVAwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z8VILx7Z; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712159280; x=1743695280;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=HHPDm+TLj1RKaDaIxeLlYDtf5KUMp/lQSPe/aTjr+IY=;
-  b=Z8VILx7ZHGanJgT8YehLXrvuMdIUbKUT2qXRpyMTCEGATGv/M3/rPM+2
-   hIRtOdwejeX+fJGtrJZ1/rMRun3Wkjwd+f3zIwWulgSFlg+UdlqSVRuO1
-   A0JIAtxbVICStED0GmQx6WSharEvLcpaKnazX2/E4lAvtg5M8tnY0KEve
-   n/rdRNRT2vwUsR2kc9oBX4y3oadY+F70BjWsLtkBbkO7k7YzQFJyVOXNd
-   VMLqx/Oz8yp+oq3RapWslAz7OIOYULgaL4r04Z7zR0Ic2w+B93FFd+wJ3
-   bKYtha8f5Ta2+BxkeJ0nwfDlaqWFHaEKW8frk87iMMIrl55lwqx1PhvO1
-   g==;
-X-CSE-ConnectionGUID: 4188y/KYR+qT4NpSWF74iQ==
-X-CSE-MsgGUID: DFuHLn/BQdSl54BSCXlJdQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="18558397"
-X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
-   d="scan'208";a="18558397"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 08:47:59 -0700
-X-CSE-ConnectionGUID: Ynzp+NMBQ/SrwU4aUtba9g==
-X-CSE-MsgGUID: lnSkcc3aThqAee/09MNTdw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
-   d="scan'208";a="18397635"
-Received: from lkp-server02.sh.intel.com (HELO 90ee3aa53dbd) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 03 Apr 2024 08:47:54 -0700
-Received: from kbuild by 90ee3aa53dbd with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rs2q8-0002Mo-03;
-	Wed, 03 Apr 2024 15:47:52 +0000
-Date: Wed, 3 Apr 2024 23:42:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Varadarajan Narayanan <quic_varada@quicinc.com>, andersson@kernel.org,
-	konrad.dybcio@linaro.org, mturquette@baylibre.com, sboyd@kernel.org,
-	robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, djakov@kernel.org, dmitry.baryshkov@linaro.org,
-	quic_anusha@quicinc.com, linux-arm-msm@vger.kernel.org,
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v6 2/6] interconnect: icc-clk: Remove tristate from
- INTERCONNECT_CLK
-Message-ID: <202404032328.7zrla6d9-lkp@intel.com>
-References: <20240402103406.3638821-3-quic_varada@quicinc.com>
+	s=arc-20240116; t=1712159368; c=relaxed/simple;
+	bh=ubUVS5S6mpXJBVwqb+wtd1l3uI9l3+kshLrYYVibeGY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tcSiwI8EY++YVd/VVscwAea3Li97OsEmI0LXqKZ8bOW+ZssjzfZg7R+YbDucsy4pE0JDXDoMlnSt6QX/RpBDUAmuN+T0o//ihqdKVhQFHXgWVLTcjV3pxwG8pkq+0A3N/7hTbtI0316yk9no8+Z2lCW8O6mYO9N5KbxeTV8XGXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CFCDC1007;
+	Wed,  3 Apr 2024 08:49:55 -0700 (PDT)
+Received: from e129166.arm.com (unknown [10.57.72.191])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 553313F7B4;
+	Wed,  3 Apr 2024 08:49:22 -0700 (PDT)
+From: Lukasz Luba <lukasz.luba@arm.com>
+To: linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	rafael@kernel.org
+Cc: lukasz.luba@arm.com,
+	dietmar.eggemann@arm.com,
+	linux-arm-kernel@lists.infradead.org,
+	sboyd@kernel.org,
+	nm@ti.com,
+	linux-samsung-soc@vger.kernel.org,
+	daniel.lezcano@linaro.org,
+	viresh.kumar@linaro.org,
+	krzysztof.kozlowski@linaro.org,
+	alim.akhtar@samsung.com,
+	m.szyprowski@samsung.com,
+	mhiramat@kernel.org
+Subject: [PATCH v5 0/4] Update Energy Model after chip binning adjusted voltages
+Date: Wed,  3 Apr 2024 16:49:03 +0100
+Message-Id: <20240403154907.1420245-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240402103406.3638821-3-quic_varada@quicinc.com>
 
-Hi Varadarajan,
+Hi all,
 
-kernel test robot noticed the following build errors:
+This is a follow-up patch aiming to add EM modification due to chip binning.
+The first RFC and the discussion can be found here [1].
 
-[auto build test ERROR on clk/clk-next]
-[also build test ERROR on robh/for-next linus/master v6.9-rc2 next-20240403]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+It uses Exynos chip driver code as a 1st user. The EM framework has been
+extended to handle this use case easily, when the voltage has been changed
+after setup. On my Odroid-xu4 in some OPPs I can observe ~20% power difference.
+According to that data in driver tables it could be up to ~29%.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Varadarajan-Narayanan/dt-bindings-interconnect-Add-Qualcomm-IPQ9574-support/20240402-223729
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-patch link:    https://lore.kernel.org/r/20240402103406.3638821-3-quic_varada%40quicinc.com
-patch subject: [PATCH v6 2/6] interconnect: icc-clk: Remove tristate from INTERCONNECT_CLK
-config: arm64-defconfig (https://download.01.org/0day-ci/archive/20240403/202404032328.7zrla6d9-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240403/202404032328.7zrla6d9-lkp@intel.com/reproduce)
+This chip binning is applicable to a lot of SoCs, so the EM framework should
+make it easy to update. It uses the existing OPP and DT information to
+re-calculate the new power values.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404032328.7zrla6d9-lkp@intel.com/
+It has dependency on Exynos SoC driver tree.
 
-All errors (new ones prefixed by >>):
+Changes:
+v5:
+- adjusted aligning of the function arguments in patch 1/4 (Dietmar)
+- adjusted the in-code comment patch 4/4 (Dietmar)
+- added Reviewed-by to all patches (Dietmar)
+v4:
+- added asterisk in the comment section (test robot)
+- change the patch 2/4 header name and use 'Refactor'
+v3:
+- updated header description patch 2/4 (Dietmar)
+- removed 2 sentences from comment and adjusted in patch 3/4 (Dietmar)
+- patch 4/4 re-phrased code comment (Dietmar)
+- collected tags (Krzysztof, Viresh)
+v2:
+- removed 'ret' from error message which wasn't initialized (Christian)
+v1:
+- exported the OPP calculation function from the OPP/OF so it can be
+  used from EM fwk (Viresh)
+- refactored EM updating function to re-use common code
+- added new EM function which can be used by chip device drivers which
+  modify the voltage in OPPs
+RFC is at [1]
 
-   aarch64-linux-ld: Unexpected GOT/PLT entries detected!
-   aarch64-linux-ld: Unexpected run-time procedure linkages detected!
-   aarch64-linux-ld: drivers/clk/qcom/clk-cbf-8996.o: in function `qcom_msm8996_cbf_icc_remove':
->> drivers/clk/qcom/clk-cbf-8996.c:257:(.text+0x10): undefined reference to `icc_clk_unregister'
-   aarch64-linux-ld: drivers/clk/qcom/clk-cbf-8996.o: in function `qcom_msm8996_cbf_icc_register':
->> drivers/clk/qcom/clk-cbf-8996.c:244:(.text+0x360): undefined reference to `icc_clk_register'
+Regards,
+Lukasz Luba
 
+[1] https://lore.kernel.org/lkml/20231220110339.1065505-1-lukasz.luba@arm.com/
 
-vim +257 drivers/clk/qcom/clk-cbf-8996.c
+Lukasz Luba (4):
+  OPP: OF: Export dev_opp_pm_calc_power() for usage from EM
+  PM: EM: Refactor em_adjust_new_capacity()
+  PM: EM: Add em_dev_update_chip_binning()
+  soc: samsung: exynos-asv: Update Energy Model after adjusting voltage
 
-12dc71953e664f Dmitry Baryshkov 2023-05-12  234  
-12dc71953e664f Dmitry Baryshkov 2023-05-12  235  static int qcom_msm8996_cbf_icc_register(struct platform_device *pdev, struct clk_hw *cbf_hw)
-12dc71953e664f Dmitry Baryshkov 2023-05-12  236  {
-12dc71953e664f Dmitry Baryshkov 2023-05-12  237  	struct device *dev = &pdev->dev;
-12dc71953e664f Dmitry Baryshkov 2023-05-12  238  	struct clk *clk = devm_clk_hw_get_clk(dev, cbf_hw, "cbf");
-12dc71953e664f Dmitry Baryshkov 2023-05-12  239  	const struct icc_clk_data data[] = {
-12dc71953e664f Dmitry Baryshkov 2023-05-12  240  		{ .clk = clk, .name = "cbf", },
-12dc71953e664f Dmitry Baryshkov 2023-05-12  241  	};
-12dc71953e664f Dmitry Baryshkov 2023-05-12  242  	struct icc_provider *provider;
-12dc71953e664f Dmitry Baryshkov 2023-05-12  243  
-12dc71953e664f Dmitry Baryshkov 2023-05-12 @244  	provider = icc_clk_register(dev, CBF_MASTER_NODE, ARRAY_SIZE(data), data);
-12dc71953e664f Dmitry Baryshkov 2023-05-12  245  	if (IS_ERR(provider))
-12dc71953e664f Dmitry Baryshkov 2023-05-12  246  		return PTR_ERR(provider);
-12dc71953e664f Dmitry Baryshkov 2023-05-12  247  
-12dc71953e664f Dmitry Baryshkov 2023-05-12  248  	platform_set_drvdata(pdev, provider);
-12dc71953e664f Dmitry Baryshkov 2023-05-12  249  
-12dc71953e664f Dmitry Baryshkov 2023-05-12  250  	return 0;
-12dc71953e664f Dmitry Baryshkov 2023-05-12  251  }
-12dc71953e664f Dmitry Baryshkov 2023-05-12  252  
-abaf59c470a7c9 Uwe Kleine-König 2023-09-11  253  static void qcom_msm8996_cbf_icc_remove(struct platform_device *pdev)
-12dc71953e664f Dmitry Baryshkov 2023-05-12  254  {
-12dc71953e664f Dmitry Baryshkov 2023-05-12  255  	struct icc_provider *provider = platform_get_drvdata(pdev);
-12dc71953e664f Dmitry Baryshkov 2023-05-12  256  
-12dc71953e664f Dmitry Baryshkov 2023-05-12 @257  	icc_clk_unregister(provider);
-12dc71953e664f Dmitry Baryshkov 2023-05-12  258  }
-12dc71953e664f Dmitry Baryshkov 2023-05-12  259  #define qcom_msm8996_cbf_icc_sync_state icc_sync_state
-12dc71953e664f Dmitry Baryshkov 2023-05-12  260  #else
-12dc71953e664f Dmitry Baryshkov 2023-05-12  261  static int qcom_msm8996_cbf_icc_register(struct platform_device *pdev,  struct clk_hw *cbf_hw)
-12dc71953e664f Dmitry Baryshkov 2023-05-12  262  {
-12dc71953e664f Dmitry Baryshkov 2023-05-12  263  	dev_warn(&pdev->dev, "CONFIG_INTERCONNECT is disabled, CBF clock is fixed\n");
-12dc71953e664f Dmitry Baryshkov 2023-05-12  264  
-12dc71953e664f Dmitry Baryshkov 2023-05-12  265  	return 0;
-12dc71953e664f Dmitry Baryshkov 2023-05-12  266  }
-abaf59c470a7c9 Uwe Kleine-König 2023-09-11  267  #define qcom_msm8996_cbf_icc_remove(pdev) { }
-12dc71953e664f Dmitry Baryshkov 2023-05-12  268  #define qcom_msm8996_cbf_icc_sync_state NULL
-12dc71953e664f Dmitry Baryshkov 2023-05-12  269  #endif
-12dc71953e664f Dmitry Baryshkov 2023-05-12  270  
+ drivers/opp/of.c                 |  17 +++--
+ drivers/soc/samsung/exynos-asv.c |  10 ++-
+ include/linux/energy_model.h     |   5 ++
+ include/linux/pm_opp.h           |   8 +++
+ kernel/power/energy_model.c      | 106 +++++++++++++++++++++++++------
+ 5 files changed, 121 insertions(+), 25 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.25.1
+
 
