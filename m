@@ -1,107 +1,122 @@
-Return-Path: <linux-pm+bounces-5892-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5893-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E7BD897522
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 18:24:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 84F0A897672
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 19:24:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33913289E94
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 16:24:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40577284EED
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 17:24:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73660152513;
-	Wed,  3 Apr 2024 16:23:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AE40157482;
+	Wed,  3 Apr 2024 17:17:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dRiBhLBC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F184D15218F;
-	Wed,  3 Apr 2024 16:23:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E9415747E;
+	Wed,  3 Apr 2024 17:17:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712161408; cv=none; b=fAtN3KhKF+oxT6fG77f+M3zyYcswJ5FOaCObpm65+CVytNEo/pUHaMTFyAoNZLJvfsrKKVkFMbLThEFhU7DaXei36pDRm7QCHLwLoKGBLVoulrXqWB2XWBSaFZwIurgH9U3vOtshlMpC8MYm2Y+FterIHC8wyhfkW1rSZuy+Kdg=
+	t=1712164652; cv=none; b=hi/IdSl/KfpZeyWlNxKwPa4o1TazlAyJiiOsHWYThJcFFiAuBt0YtLoyTYJgFmB3negf4/tlOi+1k2YrSmbsr6nLKHS6yf5z0aMU41UVid+PymckwLQnDbo6hM2APZcNzqiNZhTbUHNcny6i/4W+OqY+21merHLZtjHrx1P+T20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712161408; c=relaxed/simple;
-	bh=0eUlnvrqigfBBPIoBqRDi/ZXh4M8CY7dC6afPqLOJW8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=LkLoZajq1UWwUv9l1pnsGL/SHNs69UMELK4KCLGTzxx/NBACnV26fqmPC6zY1YosWiVF84pyCoii1sQRzVysBdQ0oUv16OtRstCpd0vYPm2b9O2YUpFogsOfUQJm7reBCkbcllECDkRl4KuaLlHGtNHTbH62xENUDNkoh0Tt+e8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5430D1684;
-	Wed,  3 Apr 2024 09:23:57 -0700 (PDT)
-Received: from e129166.arm.com (unknown [10.57.72.191])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6A56D3F7B4;
-	Wed,  3 Apr 2024 09:23:24 -0700 (PDT)
-From: Lukasz Luba <lukasz.luba@arm.com>
+	s=arc-20240116; t=1712164652; c=relaxed/simple;
+	bh=LRtxW9+b/yvQ8uXaMpgy8K8yy1lCpLxqsVwoUZLH2dw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=BAUdrz6mPK5Nd9LxKYCN2PM/topEDucECPKPIwcynB3KxJ59KapQXAN2JQCvLUOhEdWO6VuVnsAtKaMTL+HTJeq6dflLYOgli3moNRg1s4VKKpOEC6l6iWM78xOD81Pr6Rqns859STacjRd0ux5a4cJJUpUloQ2camFEBGiSkms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dRiBhLBC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59C66C433A6;
+	Wed,  3 Apr 2024 17:17:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712164652;
+	bh=LRtxW9+b/yvQ8uXaMpgy8K8yy1lCpLxqsVwoUZLH2dw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=dRiBhLBCSnRPD9myjYPKEbM9Q65j9wlmjNGZg4pn3RaKqBV38rKI4IYCDfJYk6aaX
+	 iYJAC//eQwykPGzH9E2BaANIDlsplA+5N7PVfnHNueaY4UVuTneX5ihZ55UcrQQJSU
+	 2c/7xOOC56n7bJcsYhSFOmSUbhS17gnP/oPfN10ugR1u4gC1emKxdJzP/pEEaHXyMo
+	 HUdz6dUL9obf09byrJCijiroWErtXFhfI7psdehex0QJ9kRoP1Jo9uBAB6njpfcLZj
+	 JV0YJBs326hYSo6lBBia7tP2zjlfIYS134wp3NpGnQvDFpTXm8fbhWwxCq9pVwigQF
+	 Qv5R0Tavk0hNg==
+From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Cc: lukasz.luba@arm.com,
-	dietmar.eggemann@arm.com,
-	linux-arm-kernel@lists.infradead.org,
-	sudeep.holla@arm.com,
-	cristian.marussi@arm.com,
-	linux-samsung-soc@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Sasha Levin <sashal@kernel.org>,
 	rafael@kernel.org,
-	viresh.kumar@linaro.org,
-	quic_sibis@quicinc.com
-Subject: [PATCH 2/2] cpufreq: scmi: Update Energy Model with allowed performance limits
-Date: Wed,  3 Apr 2024 17:23:15 +0100
-Message-Id: <20240403162315.1458337-3-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240403162315.1458337-1-lukasz.luba@arm.com>
-References: <20240403162315.1458337-1-lukasz.luba@arm.com>
+	linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.8 16/28] thermal/of: Assume polling-delay(-passive) 0 when absent
+Date: Wed,  3 Apr 2024 13:16:18 -0400
+Message-ID: <20240403171656.335224-16-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240403171656.335224-1-sashal@kernel.org>
+References: <20240403171656.335224-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.8.3
 Content-Transfer-Encoding: 8bit
 
-The Energy Model (EM) supports performance limits updates. Use the SCMI
-notifications to get information from FW about allowed frequency scope for
-the CPUs.
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+[ Upstream commit 488164006a281986d95abbc4b26e340c19c4c85b ]
+
+Currently, thermal zones associated with providers that have interrupts
+for signaling hot/critical trips are required to set a polling-delay
+of 0 to indicate no polling. This feels a bit backwards.
+
+Change the code such that "no polling delay" also means "no polling".
+
+Suggested-by: Bjorn Andersson <andersson@kernel.org>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Link: https://lore.kernel.org/r/20240125-topic-thermal-v1-2-3c9d4dced138@linaro.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cpufreq/scmi-cpufreq.c | 19 ++++++++++++++++---
- 1 file changed, 16 insertions(+), 3 deletions(-)
+ drivers/thermal/thermal_of.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-index d946b7a082584..90c8448578cb1 100644
---- a/drivers/cpufreq/scmi-cpufreq.c
-+++ b/drivers/cpufreq/scmi-cpufreq.c
-@@ -185,12 +185,25 @@ static int scmi_limit_notify_cb(struct notifier_block *nb, unsigned long event,
- {
- 	struct scmi_data *priv = container_of(nb, struct scmi_data, limit_notify_nb);
- 	struct scmi_perf_limits_report *limit_notify = data;
-+	unsigned int limit_freq_max_khz, limit_freq_min_khz;
- 	struct cpufreq_policy *policy = priv->policy;
--	unsigned int limit_freq_khz;
-+	struct em_perf_domain *pd;
-+	int ret;
-+
-+	limit_freq_max_khz = limit_notify->range_max_freq / HZ_PER_KHZ;
-+	limit_freq_min_khz = limit_notify->range_min_freq / HZ_PER_KHZ;
+diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+index 4d6c22e0ed85b..61bbd42aa2cb4 100644
+--- a/drivers/thermal/thermal_of.c
++++ b/drivers/thermal/thermal_of.c
+@@ -225,14 +225,18 @@ static int thermal_of_monitor_init(struct device_node *np, int *delay, int *pdel
+ 	int ret;
  
--	limit_freq_khz = limit_notify->range_max_freq / HZ_PER_KHZ;
-+	pd = em_cpu_get(policy->cpu);
-+	if (pd) {
-+		ret = em_update_performance_limits(pd, limit_freq_min_khz,
-+						   limit_freq_max_khz);
-+		if (ret)
-+			dev_warn(priv->cpu_dev,
-+				 "EM perf limits update failed\n");
-+	}
+ 	ret = of_property_read_u32(np, "polling-delay-passive", pdelay);
+-	if (ret < 0) {
+-		pr_err("%pOFn: missing polling-delay-passive property\n", np);
++	if (ret == -EINVAL) {
++		*pdelay = 0;
++	} else if (ret < 0) {
++		pr_err("%pOFn: Couldn't get polling-delay-passive: %d\n", np, ret);
+ 		return ret;
+ 	}
  
--	policy->max = clamp(limit_freq_khz, policy->cpuinfo.min_freq, policy->cpuinfo.max_freq);
-+	policy->max = clamp(limit_freq_max_khz, policy->cpuinfo.min_freq,
-+			    policy->cpuinfo.max_freq);
- 
- 	cpufreq_update_pressure(policy);
+ 	ret = of_property_read_u32(np, "polling-delay", delay);
+-	if (ret < 0) {
+-		pr_err("%pOFn: missing polling-delay property\n", np);
++	if (ret == -EINVAL) {
++		*delay = 0;
++	} else if (ret < 0) {
++		pr_err("%pOFn: Couldn't get polling-delay: %d\n", np, ret);
+ 		return ret;
+ 	}
  
 -- 
-2.25.1
+2.43.0
 
 
