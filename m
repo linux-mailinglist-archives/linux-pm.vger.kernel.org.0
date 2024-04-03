@@ -1,146 +1,172 @@
-Return-Path: <linux-pm+bounces-5834-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5835-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1EB489652F
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 09:00:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74C9D89658F
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 09:11:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D7E32841EF
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 07:00:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 29D5C283642
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 07:11:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76BF1524B4;
-	Wed,  3 Apr 2024 06:59:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 255825D467;
+	Wed,  3 Apr 2024 07:09:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SGfli6gO"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="J+mhxvgV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05DA024B23;
-	Wed,  3 Apr 2024 06:59:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A57454906
+	for <linux-pm@vger.kernel.org>; Wed,  3 Apr 2024 07:09:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712127580; cv=none; b=N8H0cljV832hgoWOOa++YeUgfZ7kE8dEaLe5DBIIMOQg4sjFHX8ql2871ybfBdM6jedn7gRHPTlbbWhIilUCzjccmJ52x8UlcTK4b3JShWXzs+b8+xVS4ixYg1gFzahM4Ume6V6DIagWhQrKiKS+cXy5T5saCzBF/zxfO35U58Q=
+	t=1712128163; cv=none; b=KMz1FS0yykazwvqYImvcvV5dErP6kw82GK4C2QeXHe/wNUG2hswTNc+NVkK+2BD15qNkIjCpg9Okktv8JnzwqA+RFruJhLFgjz+W1F3HTrqz1JkaalLi5j+BRpXla5LxmhxUxQeYBgCoGphgYqnTQcoKdFKcwLBJ8Fm/yssWuKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712127580; c=relaxed/simple;
-	bh=C63E9xFIqmaqyqq61R2hzDE8eqlb46lHuUiLFuY6IEw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=jdpiWAS78cEO7K8zcxSrL5y3OC0s7nE0gaziJjQN09qZ7NbfDDuJy/xWmUIoaW8fzAZMppaLaMb5Eye8mj2Zzd6NOxGsoYTTG3pFEFxKtIhqCQ+4qTlBLhc42ZBNsQPJjOMhJ7QS7Ljgoz9ff+jgKVmghM59UQ/b+s/ec/xEGvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SGfli6gO; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712127577; x=1743663577;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=C63E9xFIqmaqyqq61R2hzDE8eqlb46lHuUiLFuY6IEw=;
-  b=SGfli6gO83rmByJtWG2jri7iPoKjmff05JJqPVfzMPLwNTEbo86Xum1/
-   szIrh3YfbXgk5KUcLM/+dP93WbHdR5Fv+RzB2HJ09ogt8utJpLZe8nct2
-   OzrDal4+e+5/fZKEvvtVJYV9eeKMZdNMbsssk2e36DZ87YYwNe5v/FLpu
-   gP9sOZ8dR8r3HbrWUAfD9idyEOtAqNvaVfcc4T/DtLdSEnJahcLI5LAdk
-   /o8oyyFfWPZWXB1pEyDKL8XqKgViu0yt0PQ6ftjKDQ04P5WV7ZiukCDCu
-   1oHdYfFiGy4ndBOiodClbLIQrhUmoiRWSvJv+0bVIyIIHyLrWeHbkm/37
-   Q==;
-X-CSE-ConnectionGUID: Pl5JO6dSR5S4O0hwmopfYQ==
-X-CSE-MsgGUID: fgWcETS0QCaP+We0gtQ7CQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="18496024"
-X-IronPort-AV: E=Sophos;i="6.07,176,1708416000"; 
-   d="scan'208";a="18496024"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2024 23:59:36 -0700
-X-CSE-ConnectionGUID: HmdooRwJQVSKUF9bR/U2HA==
-X-CSE-MsgGUID: r4IZeYqkScavXWJcFrl30Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,176,1708416000"; 
-   d="scan'208";a="23027565"
-Received: from lkp-server02.sh.intel.com (HELO 90ee3aa53dbd) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 02 Apr 2024 23:59:35 -0700
-Received: from kbuild by 90ee3aa53dbd with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rruaq-0001xR-1z;
-	Wed, 03 Apr 2024 06:59:32 +0000
-Date: Wed, 3 Apr 2024 14:58:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
-	devel@acpica.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:intel_pstate-testing 14/14]
- drivers/cpufreq/intel_pstate.c:3301:undefined reference to
- `arch_rebuild_sched_domains'
-Message-ID: <202404031421.nMNiWZMY-lkp@intel.com>
+	s=arc-20240116; t=1712128163; c=relaxed/simple;
+	bh=w8lYqOHfeCnx5dohRvnbfVZFUThxcvDdyzU7nBE59jI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=oibku0M/Id2Gqpl+zt3K6ryz9nKeMJZ1pql+Ce3K8Wb/vwUIeHOaGYV9+c2CjUY0xcpyOoOQVSfPg/kjM+kd8jHMfLuskk7SU6ItjM6X3tXH/oDXtwR9psWuc0RApSzfzPxoJdjEyfZ1KeEVtnhRQEfWx3kDWBXNMz8B42DDgfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=J+mhxvgV; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-513d212f818so6603589e87.2
+        for <linux-pm@vger.kernel.org>; Wed, 03 Apr 2024 00:09:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1712128159; x=1712732959; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=fYpb7gc5mEpIwDyiesaebegaIhLVavoAyYkXkWaJkd8=;
+        b=J+mhxvgV798NfJSu4mpXLuTqMnZYtL8xQlS8peavd899vAeZCoQDurPTP1quA9L5rb
+         B/5KLaRnWhcXj1cO/CySzKE2L99kNuvd5nFhbw1UnYreM+fltEClWLdwLh8IWA/zZwgK
+         6hx08WWBciMJw23bPvDOr4Q5he7sTDzbB8NpANRxlyCfugtix00C271uPjAwOxeQvOgO
+         GQNYZw07dCn54MvnyU1egXXSlrbTFkeuZ/V1VKspxst5QzMbppBrX7fSNOkLqKkG35FM
+         GdVPVEhsXsOBU1XL6UWBWFaZ5jCbezgbFI31ZeSki893OimLURRxzhMR9VueU0FvIzay
+         AMmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712128159; x=1712732959;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fYpb7gc5mEpIwDyiesaebegaIhLVavoAyYkXkWaJkd8=;
+        b=KoW3n2PsASUawFtF24W0GAMj0bHqjFpJB7CgpB4rnTpuWIdpmKyPRFL9KxrLmD8GOX
+         fMn6Voi4WtX4di5wTLkPLg5QrD0YSmzY+6NcnxY0cYtTKNHTQX6jbNunaV09l2x2P370
+         h3iz2LQjyX9v71+jAYiptJ+N4eF9Mv4WqrrMKXlrBgV+4NZl4ZerKBr2pI3pKphQS89I
+         eKRn/N78RYRhUFNHyVF/MdR7uf04zQHNu+kH5QmHHNtM+/uusNsVcoT5KFDbFzLye9LC
+         fIeIr5igzr8Q8kJk225VnV5doAE1IhyVS3KLLqvvwc3KnAh/7K5DMGC6g4BCKDuC1qKA
+         DBPg==
+X-Forwarded-Encrypted: i=1; AJvYcCXZ9hO0NejDiha4Z6TgjS0dRiG+HDkxbwU6bJdOj+GmmutJ3GK4FXXMfIAll0qBftXqIlF9mFWwyfNrv513+ofV9q+MmJKxt2k=
+X-Gm-Message-State: AOJu0Yw1GxHeVkEY4UC+mY/4Ht9ONvKg1g3UCScBwD2U7UTjVRi9uqZq
+	l+7grKt0TtWHrc60xW1Z/IrdShR5PQ3T4/tqH6cf4lD7vXX0Pz8uEY/gOq0yT8w=
+X-Google-Smtp-Source: AGHT+IGGM6CQsdZ/zpAkCWsQwBnDwuHSf+3IyMRVPph3ekNhTZzXuzT/k/YugeG5SWY4hrWXeLQtRw==
+X-Received: by 2002:ac2:58f2:0:b0:513:3d26:7cc6 with SMTP id v18-20020ac258f2000000b005133d267cc6mr8383432lfo.15.1712128158365;
+        Wed, 03 Apr 2024 00:09:18 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.16])
+        by smtp.gmail.com with ESMTPSA id wy11-20020a170906fe0b00b00a4e4a3e69acsm5069973ejb.71.2024.04.03.00.09.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Apr 2024 00:09:17 -0700 (PDT)
+Message-ID: <1a6fccd3-452c-423f-b73e-cef5f9d01633@linaro.org>
+Date: Wed, 3 Apr 2024 09:09:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 1/6] dt-bindings: interconnect: Add Qualcomm IPQ9574
+ support
+To: Varadarajan Narayanan <quic_varada@quicinc.com>, andersson@kernel.org,
+ konrad.dybcio@linaro.org, mturquette@baylibre.com, sboyd@kernel.org,
+ robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ djakov@kernel.org, dmitry.baryshkov@linaro.org, quic_anusha@quicinc.com,
+ linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20240402103406.3638821-1-quic_varada@quicinc.com>
+ <20240402103406.3638821-2-quic_varada@quicinc.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240402103406.3638821-2-quic_varada@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git intel_pstate-testing
-head:   e35f6a1b27a71e7c8cb1880197e01d93b593cc85
-commit: e35f6a1b27a71e7c8cb1880197e01d93b593cc85 [14/14] cpufreq: intel_pstate: Set asymmetric CPU capacity on hybrid systems
-config: x86_64-randconfig-014-20240403 (https://download.01.org/0day-ci/archive/20240403/202404031421.nMNiWZMY-lkp@intel.com/config)
-compiler: gcc-13 (Ubuntu 13.2.0-4ubuntu3) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240403/202404031421.nMNiWZMY-lkp@intel.com/reproduce)
+On 02/04/2024 12:34, Varadarajan Narayanan wrote:
+> +#define ICC_NSSNOC_NSSCC	10
+> +#define ICC_NSSNOC_SNOC_0	11
+> +#define ICC_NSSNOC_SNOC_1	12
+> +#define ICC_NSSNOC_PCNOC_1	13
+> +#define ICC_NSSNOC_QOSGEN_REF	14
+> +#define ICC_NSSNOC_TIMEOUT_REF	15
+> +#define ICC_NSSNOC_XO_DCD	16
+> +#define ICC_NSSNOC_ATB		17
+> +#define ICC_MEM_NOC_NSSNOC	18
+> +#define ICC_NSSNOC_MEMNOC	19
+> +#define ICC_NSSNOC_MEM_NOC_1	20
+> +
+> +#define ICC_NSSNOC_PPE		0
+> +#define ICC_NSSNOC_PPE_CFG	1
+> +#define ICC_NSSNOC_NSS_CSR	2
+> +#define ICC_NSSNOC_IMEM_QSB	3
+> +#define ICC_NSSNOC_IMEM_AHB	4
+> +
+> +#define MASTER(x)	((ICC_ ## x) * 2)
+> +#define SLAVE(x)	(MASTER(x) + 1)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404031421.nMNiWZMY-lkp@intel.com/
+You already received comment to make your bindings consistent with other
+Qualcomm bindings. Now you repeat the same mistake.
 
-All errors (new ones prefixed by >>):
-
-   ld: drivers/cpufreq/intel_pstate.o: in function `intel_pstate_register_driver':
->> drivers/cpufreq/intel_pstate.c:3301:(.text+0x409c): undefined reference to `arch_rebuild_sched_domains'
+No, that is neither consistent nor greppble.
 
 
-vim +3301 drivers/cpufreq/intel_pstate.c
+Best regards,
+Krzysztof
 
-  3267	
-  3268	static int intel_pstate_register_driver(struct cpufreq_driver *driver)
-  3269	{
-  3270		int ret;
-  3271	
-  3272		if (driver == &intel_pstate)
-  3273			intel_pstate_sysfs_expose_hwp_dynamic_boost();
-  3274	
-  3275		memset(&global, 0, sizeof(global));
-  3276		global.max_perf_pct = 100;
-  3277		global.turbo_disabled = turbo_is_disabled();
-  3278		global.no_turbo = global.turbo_disabled;
-  3279	
-  3280		arch_set_max_freq_ratio(global.turbo_disabled);
-  3281	
-  3282		intel_pstate_driver = driver;
-  3283		ret = cpufreq_register_driver(intel_pstate_driver);
-  3284		if (ret) {
-  3285			intel_pstate_driver_cleanup();
-  3286			return ret;
-  3287		}
-  3288	
-  3289		global.min_perf_pct = min_perf_pct_min();
-  3290	
-  3291		/*
-  3292		 * On hybrid systems, use asym capacity instead of ITMT, but because
-  3293		 * the capacity of SMT threads is not deterministic even approximately,
-  3294		 * do not do that when SMT is in use.
-  3295		 */
-  3296		if (hwp_is_hybrid && !sched_smt_active()) {
-  3297			sched_clear_itmt_support();
-  3298	
-  3299			hybrid_init_cpu_scaling();
-  3300	
-> 3301			arch_rebuild_sched_domains();
-  3302		}
-  3303	
-  3304		return 0;
-  3305	}
-  3306	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
