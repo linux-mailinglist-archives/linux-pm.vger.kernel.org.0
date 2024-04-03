@@ -1,119 +1,166 @@
-Return-Path: <linux-pm+bounces-5880-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5881-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD99B8973A4
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 17:13:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C80289745D
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 17:48:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A6BC285189
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 15:13:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B04151C23B7D
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 15:48:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 596AB14A4FC;
-	Wed,  3 Apr 2024 15:10:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94F2314AD00;
+	Wed,  3 Apr 2024 15:48:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bDPLt6si"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z8VILx7Z"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C521114A4DB
-	for <linux-pm@vger.kernel.org>; Wed,  3 Apr 2024 15:10:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B352E14A4C8;
+	Wed,  3 Apr 2024 15:47:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712157048; cv=none; b=cpDkfxjp5OrhNERA0klG+0FJMDh2uUgBrXlI2yx91azvJJnpJZajSAZTvxCvyZdww64gBzUJX24q0vV0CgrWzV1P4nfTIFw8s2WkwAur/QKKSDXFuKlh3a364z7YnST8Gg5EzU8H5squ4ikmBGBjKT8s5RhWYlZm39tRVXE2vPI=
+	t=1712159281; cv=none; b=PSRe62tpRwRoYIZ+kywnb5W5anQe3vc+FlfLD893G98k9GhYXQhuGZtZJbg0RHAPs0bYiUCN8yv0/CblFcM8383+YTjicZHf0B5i7xJD5LPvuSTuI5UlumhFyGMZqErM86+jmqeUpgbUcRE3Qx8W2Nxg/0/+xoMQMTm6nYZkQAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712157048; c=relaxed/simple;
-	bh=anwzlEybqYMGwaD+F9GCbHmbnWkGkyE/W+MYH3vfNAU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UQpW2U7HzGUUpVHxSNj+dR+iShOvcCSt7Y+TjuWOYfRJxvh3PjZTgHzLVTGqTfPolYYfC9onuIIbNaCQehuj9o4uQSX+31xxc/0LiF0GuJTC3ApgVXElYDJRYLVJCur9SpEZGBOGSkq8NePN5S42CjgJaQ454axTfzR0ATMll74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bDPLt6si; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1712157045;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vcTH6u0Rlg+BVw+a7Jg/5/hidJ0AE0bMPe3NIsD6EkA=;
-	b=bDPLt6sibniL94jXKHcQabn5v15dNcmY8O0sa5Yq9VKF17RLzt/xHmVHNZDP1EQzBLBdus
-	TipUGdVveH8Jx2/5Ga2G3XRs9ZLsjsTMUrCigRWye8ceT70dQlwsHGOrRjOVicwMGWUHu6
-	xrZBfTw67qlD2Rbk7U3GZ7gV5yrqjRI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-453-5XXZIlPLMNmZ6TxIZUFe7A-1; Wed, 03 Apr 2024 11:10:40 -0400
-X-MC-Unique: 5XXZIlPLMNmZ6TxIZUFe7A-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E328A80B1E3;
-	Wed,  3 Apr 2024 15:10:38 +0000 (UTC)
-Received: from [10.22.33.218] (unknown [10.22.33.218])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 80B2B2166B31;
-	Wed,  3 Apr 2024 15:10:37 +0000 (UTC)
-Message-ID: <ae27aa5a-4c34-46dd-b139-3017729e2c1f@redhat.com>
-Date: Wed, 3 Apr 2024 11:10:37 -0400
+	s=arc-20240116; t=1712159281; c=relaxed/simple;
+	bh=HHPDm+TLj1RKaDaIxeLlYDtf5KUMp/lQSPe/aTjr+IY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GK4qPx4LClDZ1OtMsUdTyLCR9mqUvWzX6agR4++JUwcJSYdiC5uIZdpmL6Mlf1HrCLjPIU9IXH64EvrB2Php8YAVFGOrrgOBsdYrOLwtB9GGkDzzNMyXd537YrE9G+7/f0aFoysXSux9lieFA0jDAQVseWfY4uCNzLI1RiRVAwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z8VILx7Z; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712159280; x=1743695280;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=HHPDm+TLj1RKaDaIxeLlYDtf5KUMp/lQSPe/aTjr+IY=;
+  b=Z8VILx7ZHGanJgT8YehLXrvuMdIUbKUT2qXRpyMTCEGATGv/M3/rPM+2
+   hIRtOdwejeX+fJGtrJZ1/rMRun3Wkjwd+f3zIwWulgSFlg+UdlqSVRuO1
+   A0JIAtxbVICStED0GmQx6WSharEvLcpaKnazX2/E4lAvtg5M8tnY0KEve
+   n/rdRNRT2vwUsR2kc9oBX4y3oadY+F70BjWsLtkBbkO7k7YzQFJyVOXNd
+   VMLqx/Oz8yp+oq3RapWslAz7OIOYULgaL4r04Z7zR0Ic2w+B93FFd+wJ3
+   bKYtha8f5Ta2+BxkeJ0nwfDlaqWFHaEKW8frk87iMMIrl55lwqx1PhvO1
+   g==;
+X-CSE-ConnectionGUID: 4188y/KYR+qT4NpSWF74iQ==
+X-CSE-MsgGUID: DFuHLn/BQdSl54BSCXlJdQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="18558397"
+X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
+   d="scan'208";a="18558397"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 08:47:59 -0700
+X-CSE-ConnectionGUID: Ynzp+NMBQ/SrwU4aUtba9g==
+X-CSE-MsgGUID: lnSkcc3aThqAee/09MNTdw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
+   d="scan'208";a="18397635"
+Received: from lkp-server02.sh.intel.com (HELO 90ee3aa53dbd) ([10.239.97.151])
+  by fmviesa010.fm.intel.com with ESMTP; 03 Apr 2024 08:47:54 -0700
+Received: from kbuild by 90ee3aa53dbd with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rs2q8-0002Mo-03;
+	Wed, 03 Apr 2024 15:47:52 +0000
+Date: Wed, 3 Apr 2024 23:42:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Varadarajan Narayanan <quic_varada@quicinc.com>, andersson@kernel.org,
+	konrad.dybcio@linaro.org, mturquette@baylibre.com, sboyd@kernel.org,
+	robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org, djakov@kernel.org, dmitry.baryshkov@linaro.org,
+	quic_anusha@quicinc.com, linux-arm-msm@vger.kernel.org,
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v6 2/6] interconnect: icc-clk: Remove tristate from
+ INTERCONNECT_CLK
+Message-ID: <202404032328.7zrla6d9-lkp@intel.com>
+References: <20240402103406.3638821-3-quic_varada@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] cgroup/cpuset: Make cpuset hotplug processing
- synchronous
-Content-Language: en-US
-To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc: Valentin Schneider <vschneid@redhat.com>, Tejun Heo <tj@kernel.org>,
- Zefan Li <lizefan.x@bytedance.com>, Johannes Weiner <hannes@cmpxchg.org>,
- Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@ucw.cz>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Frederic Weisbecker <frederic@kernel.org>,
- "Paul E. McKenney" <paulmck@kernel.org>, Ingo Molnar <mingo@kernel.org>,
- Anna-Maria Behnsen <anna-maria@linutronix.de>, Alex Shi <alexs@kernel.org>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Barry Song <song.bao.hua@hisilicon.com>
-References: <20240401145858.2656598-1-longman@redhat.com>
- <20240401145858.2656598-2-longman@redhat.com>
- <kce74bx6aafxfuw5yovaschym4ze4kommfk74eq5totojytest@mdxnfvl2kdol>
- <548efd52-e45f-41fa-a477-bc5112d7b00c@redhat.com>
- <u3naomgv34t5rnc7pmyy4zjppgf36skeo45orss2xnqcvtrcez@m74tsl2ws76f>
- <7e62b37d-6c9c-4e55-a01a-175695475cb5@redhat.com>
- <xhsmhedbmbjz5.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <620d1b70-cfbc-4b76-ad04-b3be559afd56@redhat.com>
- <tm5kvzgn2g5yv63zoyqvd2bdrgl7l3ytffu4cq4ybxyq5irp76@hpmq3zfbtmlp>
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <tm5kvzgn2g5yv63zoyqvd2bdrgl7l3ytffu4cq4ybxyq5irp76@hpmq3zfbtmlp>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.6
+In-Reply-To: <20240402103406.3638821-3-quic_varada@quicinc.com>
+
+Hi Varadarajan,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on clk/clk-next]
+[also build test ERROR on robh/for-next linus/master v6.9-rc2 next-20240403]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Varadarajan-Narayanan/dt-bindings-interconnect-Add-Qualcomm-IPQ9574-support/20240402-223729
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+patch link:    https://lore.kernel.org/r/20240402103406.3638821-3-quic_varada%40quicinc.com
+patch subject: [PATCH v6 2/6] interconnect: icc-clk: Remove tristate from INTERCONNECT_CLK
+config: arm64-defconfig (https://download.01.org/0day-ci/archive/20240403/202404032328.7zrla6d9-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240403/202404032328.7zrla6d9-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404032328.7zrla6d9-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   aarch64-linux-ld: Unexpected GOT/PLT entries detected!
+   aarch64-linux-ld: Unexpected run-time procedure linkages detected!
+   aarch64-linux-ld: drivers/clk/qcom/clk-cbf-8996.o: in function `qcom_msm8996_cbf_icc_remove':
+>> drivers/clk/qcom/clk-cbf-8996.c:257:(.text+0x10): undefined reference to `icc_clk_unregister'
+   aarch64-linux-ld: drivers/clk/qcom/clk-cbf-8996.o: in function `qcom_msm8996_cbf_icc_register':
+>> drivers/clk/qcom/clk-cbf-8996.c:244:(.text+0x360): undefined reference to `icc_clk_register'
 
 
-On 4/3/24 10:56, Michal KoutnÃ½ wrote:
-> On Wed, Apr 03, 2024 at 10:47:33AM -0400, Waiman Long <longman@redhat.com> wrote:
->> should be rare these days as it will only apply in the case of cgroup
->> v1 under certain condtion,
-> Could the migration be simply omitted it those special cases?
->
-> (Tasks remain in cpusets with empty cpusets -- that already happens in
-> with the current patch before workqueue is dispatched.)
+vim +257 drivers/clk/qcom/clk-cbf-8996.c
 
-The tasks should not be runnable if there is no CPUs left in their v1 
-cpuset. Migrating them to a parent with runnable CPUs is the current way 
-which I don't want to break. Alternatively, we could force it to fall 
-back to cgroup v2 behavior using the CPUs in their parent cpuset.
+12dc71953e664f Dmitry Baryshkov 2023-05-12  234  
+12dc71953e664f Dmitry Baryshkov 2023-05-12  235  static int qcom_msm8996_cbf_icc_register(struct platform_device *pdev, struct clk_hw *cbf_hw)
+12dc71953e664f Dmitry Baryshkov 2023-05-12  236  {
+12dc71953e664f Dmitry Baryshkov 2023-05-12  237  	struct device *dev = &pdev->dev;
+12dc71953e664f Dmitry Baryshkov 2023-05-12  238  	struct clk *clk = devm_clk_hw_get_clk(dev, cbf_hw, "cbf");
+12dc71953e664f Dmitry Baryshkov 2023-05-12  239  	const struct icc_clk_data data[] = {
+12dc71953e664f Dmitry Baryshkov 2023-05-12  240  		{ .clk = clk, .name = "cbf", },
+12dc71953e664f Dmitry Baryshkov 2023-05-12  241  	};
+12dc71953e664f Dmitry Baryshkov 2023-05-12  242  	struct icc_provider *provider;
+12dc71953e664f Dmitry Baryshkov 2023-05-12  243  
+12dc71953e664f Dmitry Baryshkov 2023-05-12 @244  	provider = icc_clk_register(dev, CBF_MASTER_NODE, ARRAY_SIZE(data), data);
+12dc71953e664f Dmitry Baryshkov 2023-05-12  245  	if (IS_ERR(provider))
+12dc71953e664f Dmitry Baryshkov 2023-05-12  246  		return PTR_ERR(provider);
+12dc71953e664f Dmitry Baryshkov 2023-05-12  247  
+12dc71953e664f Dmitry Baryshkov 2023-05-12  248  	platform_set_drvdata(pdev, provider);
+12dc71953e664f Dmitry Baryshkov 2023-05-12  249  
+12dc71953e664f Dmitry Baryshkov 2023-05-12  250  	return 0;
+12dc71953e664f Dmitry Baryshkov 2023-05-12  251  }
+12dc71953e664f Dmitry Baryshkov 2023-05-12  252  
+abaf59c470a7c9 Uwe Kleine-König 2023-09-11  253  static void qcom_msm8996_cbf_icc_remove(struct platform_device *pdev)
+12dc71953e664f Dmitry Baryshkov 2023-05-12  254  {
+12dc71953e664f Dmitry Baryshkov 2023-05-12  255  	struct icc_provider *provider = platform_get_drvdata(pdev);
+12dc71953e664f Dmitry Baryshkov 2023-05-12  256  
+12dc71953e664f Dmitry Baryshkov 2023-05-12 @257  	icc_clk_unregister(provider);
+12dc71953e664f Dmitry Baryshkov 2023-05-12  258  }
+12dc71953e664f Dmitry Baryshkov 2023-05-12  259  #define qcom_msm8996_cbf_icc_sync_state icc_sync_state
+12dc71953e664f Dmitry Baryshkov 2023-05-12  260  #else
+12dc71953e664f Dmitry Baryshkov 2023-05-12  261  static int qcom_msm8996_cbf_icc_register(struct platform_device *pdev,  struct clk_hw *cbf_hw)
+12dc71953e664f Dmitry Baryshkov 2023-05-12  262  {
+12dc71953e664f Dmitry Baryshkov 2023-05-12  263  	dev_warn(&pdev->dev, "CONFIG_INTERCONNECT is disabled, CBF clock is fixed\n");
+12dc71953e664f Dmitry Baryshkov 2023-05-12  264  
+12dc71953e664f Dmitry Baryshkov 2023-05-12  265  	return 0;
+12dc71953e664f Dmitry Baryshkov 2023-05-12  266  }
+abaf59c470a7c9 Uwe Kleine-König 2023-09-11  267  #define qcom_msm8996_cbf_icc_remove(pdev) { }
+12dc71953e664f Dmitry Baryshkov 2023-05-12  268  #define qcom_msm8996_cbf_icc_sync_state NULL
+12dc71953e664f Dmitry Baryshkov 2023-05-12  269  #endif
+12dc71953e664f Dmitry Baryshkov 2023-05-12  270  
 
-Cheers,
-Longman
-
->
-> Michal
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
