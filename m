@@ -1,94 +1,94 @@
-Return-Path: <linux-pm+bounces-5888-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5889-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F5678974C2
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 18:03:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF62389750B
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 18:20:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 32C1B1C2551E
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 16:03:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 18E10B22112
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 16:17:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F00F14D291;
-	Wed,  3 Apr 2024 16:02:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38BEC14EC5B;
+	Wed,  3 Apr 2024 16:17:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VAcgQ19B"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="b0AFMhed"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E28AA14D426
-	for <linux-pm@vger.kernel.org>; Wed,  3 Apr 2024 16:02:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B7983DB9B
+	for <linux-pm@vger.kernel.org>; Wed,  3 Apr 2024 16:17:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712160140; cv=none; b=ESe5W+Poi0KIxKKSVRHIQM5NQVueJHwL7pl84WFxIa2siWctarFFTVGmzp5DCZQOHNLuLibhJTX0TvNSAtZFK96PylRwayQ2PofnnoAl7JWP1hv8+YUJzges5Y7rcEBwkj8ITXn1QZEv++PAGsFYOmXgHLOpysfG2sAJg8/E0DI=
+	t=1712161054; cv=none; b=tS2X26sTeZsmBCzcUP4j73R2K4lbA3VKH8GMAa9YxcW6jdg2RmYI2QmL8OVmFqw1jbn8q0PmjN9ZNbmbf7aBvLZNMAwXArpTgI7IR+l5/gAAtvXYUdm4/nOptyI6iKo0CJT/ipjHeYQUG1EbPSOU9bZVjIq3n5mgh1ouxCMPCh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712160140; c=relaxed/simple;
-	bh=EtQkIfas5F975pCNmO5rwqnv2ceEeeJPPr3zzLdQc80=;
+	s=arc-20240116; t=1712161054; c=relaxed/simple;
+	bh=/oHz60YmomB8xtLx1SmFXh+ChYzmFb8LPQK3p7ehSUc=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=i6DgRh6b/1X2eK7nQF5xZlJ4pBv+XVWyC3H0PMP3TIySpSpaMsEmc3gg9HHSOO2WkVLQ8LJOY1jnEdvJ9lZPrcQSnMEacFxNGs6eDvt1JEXem/wapZ5b9b7VCSQu3s3RMHHHFEckTgojmjNuVKQ/GXExBIEVZFteAI5XEEAIkBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VAcgQ19B; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version:Content-Type; b=D7K3faTDhP0wamg/XoBXQgXH6pzdhqVh6BP6fyk6xwRChoi/q206AHWY+qHtoGuIGOww9xOf3mLPxyQfdNF3N6OmEVFyVb1u/dV7KBDDgBaWiCpBK17Y+4jUlNJU+Vmhgx5uzqW3uDuYCFECLhpOEubg/TWI3Eu+9ppjsd2c0MU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=b0AFMhed; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1712160137;
+	s=mimecast20190719; t=1712161051;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=zZpJ0IxiRlaFYwJ6F+30f6cESCy9pq69KzZZhi/luDY=;
-	b=VAcgQ19BEImlCEO1x8cbTIoXofia3aBEppaX9s4QqbGI0GZFyP3sfR3Nb0b8jc46iJTIdM
-	P54HgoNxJWP+y7Fubky+XT+H5MCcVlQ0fwiRjsSZCzmLExzZOYHLRETi/BGB0qAGafVaoE
-	LnRvBfLaGdSTQ+BWPnbiq0xVYXiSKtU=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=OQm7KJ2wxSLm5O0upddCNpxjqnodHhe0dn1TWqhcwVM=;
+	b=b0AFMhedKxFhZ29g//n8fiDhSzNn0DiL5DDEZ+r0C4uVuRqhTC+Kk9HOS2fR38CLqexP75
+	rLHTuirUcfrey97QLZ7zg2HuuN7L9a7ovmqOxyrDFHZ0UssD/wdSc+N9JjFcGDUUHp6oUf
+	0REMtTek5i2dRWAjf/+AsUhZaPsLRsU=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-104-y8Goks9DMi2aYijWOW7yJA-1; Wed, 03 Apr 2024 12:02:16 -0400
-X-MC-Unique: y8Goks9DMi2aYijWOW7yJA-1
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-78a09c0a053so734035385a.2
-        for <linux-pm@vger.kernel.org>; Wed, 03 Apr 2024 09:02:16 -0700 (PDT)
+ us-mta-79-14KVG30ZMnS6AWdnzj0T_A-1; Wed, 03 Apr 2024 12:17:30 -0400
+X-MC-Unique: 14KVG30ZMnS6AWdnzj0T_A-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-78a090f8d45so214105785a.0
+        for <linux-pm@vger.kernel.org>; Wed, 03 Apr 2024 09:17:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712160136; x=1712764936;
+        d=1e100.net; s=20230601; t=1712161050; x=1712765850;
         h=content-transfer-encoding:mime-version:message-id:date:references
          :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zZpJ0IxiRlaFYwJ6F+30f6cESCy9pq69KzZZhi/luDY=;
-        b=xT72xY+LQ9l+wuIP5x9XEFCPZUC/P70sjD7zQXKwDm/GJDLg8D6MIpZWtd6qoJbBEq
-         L8Fu6JhTsEoFsyKizuBc5T+/mY37Q/8sYqOn94JJw7Hk7NVQePOZsApRPW+N9F7BtrkN
-         GO9IhwnIDvYNplwyV6djg+oNTJxzk6bzDAZ28GbWEsHe4NWabWHrumU8CZcj+uTQOO7n
-         TL8CNXWmj7P2j3u1os5JOEBvST0xkG91Ycy0/wh+5Ucx00CboUwv4YWDasgUTLW7PC8E
-         mu7FDgjk4eEXnpyQkTEZgBpOGEHSp5jAvNn2r6XmN4/yS5JcpA76r1UTk2zibX5PfPx9
-         eJig==
-X-Forwarded-Encrypted: i=1; AJvYcCXvueTB+q0VSZNPItJj+BCJIjbBQ9wMIwCLwxIWfnaMMSwbV05a+NNk/Lg2hcgMAlGWZNi0LTPhY2vkFa+ECdzGX/JeMd7yjdE=
-X-Gm-Message-State: AOJu0Yxn/HKRWSNOsy3XGMgnH3OBGr+JPBTv5q6A6WvXP95fI97FU4Kp
-	l20fpK+Snggpuz7S1zNjT/GiSNt7OUrddDJ/rFSASr5T/6HMcqZ32sf6IKHVq49qk8NAMuqGR5l
-	xvQtdjn36WpefiCf0TCqzdTJhpr/isUziYyP8Z35A9/y6Nv8aLK8FLguU
-X-Received: by 2002:a05:620a:5841:b0:78a:69ab:e829 with SMTP id wn1-20020a05620a584100b0078a69abe829mr16850037qkn.68.1712160135676;
-        Wed, 03 Apr 2024 09:02:15 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHdnSbhhYZso0CoMvpl3Y3IaXvHWWX8w91ZynzApMi1NN5iXhRNBBdqMmiccCfrAXTIF7H8gA==
-X-Received: by 2002:a05:620a:5841:b0:78a:69ab:e829 with SMTP id wn1-20020a05620a584100b0078a69abe829mr16849993qkn.68.1712160135251;
-        Wed, 03 Apr 2024 09:02:15 -0700 (PDT)
+        bh=OQm7KJ2wxSLm5O0upddCNpxjqnodHhe0dn1TWqhcwVM=;
+        b=hJf2aTNX2VtbDtmkcd7CVk33IZvBDRoqs6eVoIzHpp4q6vEbeM89sS1+A9G7KJjws1
+         OssIuRqXXvRBuyFWximGjvBwmE41myHBU9Fc9faTtwUAymvwsnCz348ZEPkkBSKMPJAO
+         lvP5yhCXbeM4LsMGdy7k2y3+U8XD2w785AzIElPj1v4M1riSwfqm1PsXxvDYC3KLdlmi
+         HbiVWNwWT1jZ590HHKhTopyg3j8AMy8Lm42q9R8pNzSmqUEmocBGRXKLjk1Ga4850Zki
+         TzcWnuLvDTiyvTa/40wI6fpY5FpWqv4ewDJTEro/X7zGgsdjHNTn0hGNUloVaVus0AcH
+         ZHMg==
+X-Forwarded-Encrypted: i=1; AJvYcCXc2RtXM5bKGwYKBIgi0RfeknPn/zaDCEMVW+SkDwr3aJN6pMrtoCdCabTZbpkF0XnaBznPwYZEOg0ecFl13G0qOO8q9PHQ8Ao=
+X-Gm-Message-State: AOJu0Yy2N1wcHLYaHqnMRMC001PUymPrx45n4zG3x/mPAEb6saFwqfnN
+	3Zj+kwwLULqHm0s/Jiuo3jDaKP2N+nbmr0ttJy+3SfEhp87iC3TfcIOkQZ94ztkmYxYC44uRzTT
+	lddJ1tqY/nhtZXLpOJoQaX5crDU9gZw3q7eOdm1uDhMwzHxz7gIXkY3Ld
+X-Received: by 2002:a05:6214:4a5b:b0:696:926e:dfe3 with SMTP id ph27-20020a0562144a5b00b00696926edfe3mr4445017qvb.22.1712161049919;
+        Wed, 03 Apr 2024 09:17:29 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHR3C2HuuS83Z+oeOqPEr+EoDC/KiDUbG8jZaKkAfFo7rb5+8xu5HIXGjsbFTYHuv5C36xqTg==
+X-Received: by 2002:a05:6214:4a5b:b0:696:926e:dfe3 with SMTP id ph27-20020a0562144a5b00b00696926edfe3mr4444998qvb.22.1712161049636;
+        Wed, 03 Apr 2024 09:17:29 -0700 (PDT)
 Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-141-166.abo.bbox.fr. [213.44.141.166])
-        by smtp.gmail.com with ESMTPSA id pe30-20020a05620a851e00b00789f5a04b3esm5123833qkn.58.2024.04.03.09.02.11
+        by smtp.gmail.com with ESMTPSA id oo14-20020a056214450e00b00690c9256676sm6614401qvb.49.2024.04.03.09.17.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Apr 2024 09:02:14 -0700 (PDT)
+        Wed, 03 Apr 2024 09:17:29 -0700 (PDT)
 From: Valentin Schneider <vschneid@redhat.com>
-To: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-Cc: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>, Zefan Li
- <lizefan.x@bytedance.com>, Johannes Weiner <hannes@cmpxchg.org>, Thomas
- Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@ucw.cz>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+To: Waiman Long <longman@redhat.com>, Michal =?utf-8?Q?Koutn=C3=BD?=
+ <mkoutny@suse.com>
+Cc: Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>, Johannes
+ Weiner <hannes@cmpxchg.org>, Thomas Gleixner <tglx@linutronix.de>, Peter
+ Zijlstra <peterz@infradead.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, Shuah Khan
+ <shuah@kernel.org>, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
  linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org, Frederic
  Weisbecker <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>,
  Ingo Molnar <mingo@kernel.org>, Anna-Maria Behnsen
  <anna-maria@linutronix.de>, Alex Shi <alexs@kernel.org>, Vincent Guittot
  <vincent.guittot@linaro.org>, Barry Song <song.bao.hua@hisilicon.com>
-Subject: Re: Re: [PATCH 1/2] cgroup/cpuset: Make cpuset hotplug processing
+Subject: Re: [PATCH 1/2] cgroup/cpuset: Make cpuset hotplug processing
  synchronous
-In-Reply-To: <mhwbjfm3zsoinm2eozz6d7djtflf6tbpmfzsbbsscv3u5aijtr@p2edxl6voxoa>
+In-Reply-To: <620d1b70-cfbc-4b76-ad04-b3be559afd56@redhat.com>
 References: <20240401145858.2656598-1-longman@redhat.com>
  <20240401145858.2656598-2-longman@redhat.com>
  <kce74bx6aafxfuw5yovaschym4ze4kommfk74eq5totojytest@mdxnfvl2kdol>
@@ -96,9 +96,9 @@ References: <20240401145858.2656598-1-longman@redhat.com>
  <u3naomgv34t5rnc7pmyy4zjppgf36skeo45orss2xnqcvtrcez@m74tsl2ws76f>
  <7e62b37d-6c9c-4e55-a01a-175695475cb5@redhat.com>
  <xhsmhedbmbjz5.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <mhwbjfm3zsoinm2eozz6d7djtflf6tbpmfzsbbsscv3u5aijtr@p2edxl6voxoa>
-Date: Wed, 03 Apr 2024 18:02:10 +0200
-Message-ID: <xhsmhbk6qbfjx.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <620d1b70-cfbc-4b76-ad04-b3be559afd56@redhat.com>
+Date: Wed, 03 Apr 2024 18:17:25 +0200
+Message-ID: <xhsmh8r1ubeui.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -108,119 +108,40 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On 03/04/24 16:54, Michal Koutn=C3=BD wrote:
-> On Wed, Apr 03, 2024 at 04:26:38PM +0200, Valentin Schneider <vschneid@re=
-dhat.com> wrote:
->> Also, I gave Michal's patch a try and it looks like it's introducing a
+On 03/04/24 10:47, Waiman Long wrote:
+> On 4/3/24 10:26, Valentin Schneider wrote:
+>> IIUC that was Thomas' suggestion [1], but I can't tell yet how bad it wo=
+uld
+>> be to change cgroup_lock() to also do a cpus_read_lock().
 >
-> Thank you.
+> Changing the locking order is certainly doable. I have taken a cursory
+> look at it and at least the following files need to be changed:
 >
->>   cgroup_threadgroup_rwsem -> cpuset_mutex
->> ordering from
->>   cgroup_transfer_tasks_locked()
->>   `\
->>     percpu_down_write(&cgroup_threadgroup_rwsem);
->>     cgroup_migrate()
->>     `\
->>       cgroup_migrate_execute()
->>       `\
->>         ss->can_attach() // cpuset_can_attach()
->>         `\
->>           mutex_lock(&cpuset_mutex);
->>
->> which is invalid, see below.
+>  =C2=A0kernel/bpf/cgroup.c
+>  =C2=A0kernel/cgroup/cgroup.c
+>  =C2=A0kernel/cgroup/legacy_freezer.c
+>  =C2=A0mm/memcontrol.c
 >
-> _This_ should be the right order (cpuset_mutex inside
-> cgroup_threadgroup_rwsem), at least in my mental model. Thus I missed
-> that cpuset_mutex must have been taken somewhere higher up in the
-> hotplug code (CPU 0 in the lockdep dump, I can't easily see where from)
-> :-/.
+> That requires a lot more testing to make sure that there won't be a
+> regression. Given that the call to cgroup_transfer_tasks() should be
+> rare these days as it will only apply in the case of cgroup v1 under
+> certain condtion, I am not sure this requirement justifies making such
+> extensive changes. So I kind of defer it until we reach a consensus that
+> it is the right thing to do.
 >
 
-If I got this right...
+Yeah if we can avoid it initially I'd be up for it.
 
-    cpuset_hotplug_update_tasks()
-    `\
-      mutex_lock(&cpuset_mutex);
-      hotplug_update_tasks_legacy()
-      `\
-        remove_tasks_in_empty_cpuset()
-        `\
-          cgroup_transfer_tasks_locked()
-          `\
-            percpu_down_write(&cgroup_threadgroup_rwsem);
+Just one thing that came to mind - there's no flushing of the
+cpuset_migrate_tasks_workfn() work, so the scheduler might move tasks
+itself before the cpuset does via:
 
-But then that is also followed by:
+  balance_push() ->__balance_push_cpu_stop() -> select_fallback_rq()
 
-            cgroup_migrate()
-            `\
-              cgroup_migrate_execute()
-              `\
-                ss->can_attach() // cpuset_can_attach()
-                `\
-                  mutex_lock(&cpuset_mutex);
+But, given the current placement of cpuset_wait_for_hotplug(), I believe
+that's something we can already have, so we should be good.
 
-which doesn't look good...
-
-
-Also, I missed that earlier, but this triggers:
-
-  cgroup_transfer_tasks_locked() ~> lockdep_assert_held(&cgroup_mutex);
-
-[   30.773092] WARNING: CPU: 2 PID: 24 at kernel/cgroup/cgroup-v1.c:112 cgr=
-oup_transfer_tasks_locked+0x39f/0x450
-[   30.773807] Modules linked in:
-[   30.774063] CPU: 2 PID: 24 Comm: cpuhp/2 Not tainted 6.9.0-rc1-00042-g84=
-4178b616c7-dirty #25
-[   30.774672] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS =
-rel-1.16.3-0-ga6ed6b701f0a-prebuilt.qemu.org 04/01/2014
-[   30.775457] RIP: 0010:cgroup_transfer_tasks_locked+0x39f/0x450
-[   30.775891] Code: 0f 85 70 ff ff ff 0f 1f 44 00 00 e9 6d ff ff ff be ff =
-ff ff ff 48 c7 c7 48 82 d6 82 e8 5a 6a ec 00 85 c0 0f 85 6d fd ff ff 90 <0f=
-> 0b 90 e9 64 fd ff ff 48 8b bd e8 fe ff ff be 01 00 00 00 e8 78
-[   30.777270] RSP: 0000:ffffc900000e7c20 EFLAGS: 00010246
-[   30.777813] RAX: 0000000000000000 RBX: ffffc900000e7cb0 RCX: 00000000000=
-00000
-[   30.778443] RDX: 0000000000000000 RSI: ffffffff82d68248 RDI: ffff888004a=
-9a300
-[   30.779142] RBP: ffffc900000e7d50 R08: 0000000000000001 R09: 00000000000=
-00000
-[   30.779889] R10: ffffc900000e7d70 R11: 0000000000000001 R12: ffff8880057=
-c6040
-[   30.780420] R13: ffff88800539f800 R14: 0000000000000001 R15: 00000000000=
-00004
-[   30.780951] FS:  0000000000000000(0000) GS:ffff88801f500000(0000) knlGS:=
-0000000000000000
-[   30.781561] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   30.781989] CR2: 00000000f7e6fe85 CR3: 00000000064ac000 CR4: 00000000000=
-006f0
-[   30.782558] Call Trace:
-[   30.782783]  <TASK>
-[   30.782982]  ? __warn+0x87/0x180
-[   30.783250]  ? cgroup_transfer_tasks_locked+0x39f/0x450
-[   30.783644]  ? report_bug+0x164/0x190
-[   30.783970]  ? handle_bug+0x3b/0x70
-[   30.784288]  ? exc_invalid_op+0x17/0x70
-[   30.784641]  ? asm_exc_invalid_op+0x1a/0x20
-[   30.784992]  ? cgroup_transfer_tasks_locked+0x39f/0x450
-[   30.785375]  ? __lock_acquire+0xe9d/0x16d0
-[   30.785707]  ? cpuset_update_active_cpus+0x15a/0xca0
-[   30.786074]  ? cpuset_update_active_cpus+0x782/0xca0
-[   30.786443]  cpuset_update_active_cpus+0x782/0xca0
-[   30.786816]  sched_cpu_deactivate+0x1ad/0x1d0
-[   30.787148]  ? __pfx_sched_cpu_deactivate+0x10/0x10
-[   30.787509]  cpuhp_invoke_callback+0x16b/0x6b0
-[   30.787859]  ? cpuhp_thread_fun+0x56/0x240
-[   30.788175]  cpuhp_thread_fun+0x1ba/0x240
-[   30.788485]  smpboot_thread_fn+0xd8/0x1d0
-[   30.788823]  ? __pfx_smpboot_thread_fn+0x10/0x10
-[   30.789229]  kthread+0xce/0x100
-[   30.789526]  ? __pfx_kthread+0x10/0x10
-[   30.789876]  ret_from_fork+0x2f/0x50
-[   30.790200]  ? __pfx_kthread+0x10/0x10
-[   30.792341]  ret_from_fork_asm+0x1a/0x30
-[   30.792716]  </TASK>
-
-> Michal
+> Cheers,
+> Longman
 
 
