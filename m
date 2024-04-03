@@ -1,40 +1,40 @@
-Return-Path: <linux-pm+bounces-5862-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5863-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD7A4896EB2
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 14:08:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DF1F896EE8
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 14:36:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5A751C25B7C
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 12:08:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF6F91F21980
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 12:36:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A2D5146003;
-	Wed,  3 Apr 2024 12:07:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B62C61E53A;
+	Wed,  3 Apr 2024 12:36:33 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB4BB143869;
-	Wed,  3 Apr 2024 12:07:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92F6B23BE;
+	Wed,  3 Apr 2024 12:36:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712146079; cv=none; b=F2mhf0apcBGieFFgAm2mZmm4aMnkrWLUwiwbqUC5oeRrW/pom5R6qOdOdHSje5Q3F3ejUg7j9ZiaI4QaBrK89jDXrohcWbjK6GgUldW9pN9Rk/LH8SY3S8I9eBQc5KTdKRmw+tEaNHh1ZEAFftMPvwNAHn+k+6dhDUWSiRcwi9M=
+	t=1712147793; cv=none; b=hx0JKUyXzMUdlbeyOnR+Rq59Vnt8mgq55v1aYB0uCg+T2lk/ABOtxx5K5oCi2yiESXdxlarc4tN7hENzs2KLeLu+Ij+0Zu1R0oxVepOVtuuzWHlwft0m4C0YOejJlW2TF2dDrzy7iVuCepB1qTpeWIbBtX0rcBw1C4nFaHlkY+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712146079; c=relaxed/simple;
-	bh=EwpnPCGxmMvv8rA/eff2h/LdO5QZDZn+k3W+wcBdnEU=;
+	s=arc-20240116; t=1712147793; c=relaxed/simple;
+	bh=1DIsaoDpER4p++k4Z7iVSmQ6SUDjiw+1VTM2vtYz1FE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bBnSfWQqsKv5+QTGXXURQ6F7EGLy54va0VDNZhakMp84MgDYPuXOe5CmOIANXqzXIqcPji6Bmzzsd1R3iWD15NmXT6bc9DKfzPqS1Vr9cVlK0gENjOSkP3iyTzQMdw2LABC06uFsTnrLyJ1UEKPnk7vDk1d7zoCWo3YzJpA3oqs=
+	 In-Reply-To:Content-Type; b=Q+UNHgPxVSTATaSbgucW/WX1ewTwb+k6DIH/CvTeVjURZc060RaqGIVdoMhnEvS9cM4qQMMBaWpo8TKx7Zo3HG8ZzEvULC5N5gLH9PXsi310pvqWjx+hfuPeRPYmLbtbZF12RXM1gxWmNVgFk/E4dHps1cbIWWmXaGQl1qg4sAk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 659001007;
-	Wed,  3 Apr 2024 05:08:28 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 503973F64C;
-	Wed,  3 Apr 2024 05:07:55 -0700 (PDT)
-Message-ID: <6445e850-fe24-4eb2-86f0-217b62b9001d@arm.com>
-Date: Wed, 3 Apr 2024 14:07:55 +0200
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3E0A81007;
+	Wed,  3 Apr 2024 05:37:01 -0700 (PDT)
+Received: from [10.57.72.191] (unknown [10.57.72.191])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E6D6F3F64C;
+	Wed,  3 Apr 2024 05:36:27 -0700 (PDT)
+Message-ID: <8519bb4c-e8b4-436c-bd3b-4a08e328a6ec@arm.com>
+Date: Wed, 3 Apr 2024 13:36:29 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,44 +42,91 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 4/4] soc: samsung: exynos-asv: Update Energy Model
- after adjusting voltage
+Subject: Re: [PATCH v4 0/4] Update Energy Model after chip binning adjusted
+ voltages
 Content-Language: en-US
-To: Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, rafael@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org, sboyd@kernel.org, nm@ti.com,
+To: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org, sboyd@kernel.org,
+ rafael@kernel.org, linux-pm@vger.kernel.org, nm@ti.com,
  linux-samsung-soc@vger.kernel.org, daniel.lezcano@linaro.org,
  viresh.kumar@linaro.org, krzysztof.kozlowski@linaro.org,
- alim.akhtar@samsung.com, m.szyprowski@samsung.com, mhiramat@kernel.org
+ alim.akhtar@samsung.com, m.szyprowski@samsung.com, mhiramat@kernel.org,
+ linux-kernel@vger.kernel.org
 References: <20240402155822.505491-1-lukasz.luba@arm.com>
- <20240402155822.505491-5-lukasz.luba@arm.com>
-From: Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20240402155822.505491-5-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=UTF-8
+ <045fa6db-4f76-46aa-85ba-c9e698c7e390@arm.com>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <045fa6db-4f76-46aa-85ba-c9e698c7e390@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 02/04/2024 17:58, Lukasz Luba wrote:
+Hi Dietmar,
 
-[...]
+On 4/3/24 13:07, Dietmar Eggemann wrote:
+> On 02/04/2024 17:58, Lukasz Luba wrote:
+>> Hi all,
+>>
+>> This is a follow-up patch aiming to add EM modification due to chip binning.
+>> The first RFC and the discussion can be found here [1].
+>>
+>> It uses Exynos chip driver code as a 1st user. The EM framework has been
+>> extended to handle this use case easily, when the voltage has been changed
+>> after setup. On my Odroid-xu4 in some OPPs I can observe ~20% power difference.
+>> According to that data in driver tables it could be up to ~29%.
+>>
+>> This chip binning is applicable to a lot of SoCs, so the EM framework should
+>> make it easy to update. It uses the existing OPP and DT information to
+>> re-calculate the new power values.
+>>
+>> It has dependency on Exynos SoC driver tree.
+>>
+>> Changes:
+>> v4:
+>> - added asterisk in the comment section (test robot)
+>> - change the patch 2/4 header name and use 'Refactor'
+>> v3:
+>> - updated header description patch 2/4 (Dietmar)
+>> - removed 2 sentences from comment and adjusted in patch 3/4 (Dietmar)
+>> - patch 4/4 re-phrased code comment (Dietmar)
+>> - collected tags (Krzysztof, Viresh)
+>> v2:
+>> - removed 'ret' from error message which wasn't initialized (Christian)
+>> v1:
+>> - exported the OPP calculation function from the OPP/OF so it can be
+>>    used from EM fwk (Viresh)
+>> - refactored EM updating function to re-use common code
+>> - added new EM function which can be used by chip device drivers which
+>>    modify the voltage in OPPs
+>> RFC is at [1]
+>>
+>> Regards,
+>> Lukasz Luba
+>>
+>> [1] https://lore.kernel.org/lkml/20231220110339.1065505-1-lukasz.luba@arm.com/
+>>
+>> Lukasz Luba (4):
+>>    OPP: OF: Export dev_opp_pm_calc_power() for usage from EM
+>>    PM: EM: Refactor em_adjust_new_capacity()
+>>    PM: EM: Add em_dev_update_chip_binning()
+>>    soc: samsung: exynos-asv: Update Energy Model after adjusting voltage
+>>
+>>   drivers/opp/of.c                 |  17 +++--
+>>   drivers/soc/samsung/exynos-asv.c |  11 +++-
+>>   include/linux/energy_model.h     |   5 ++
+>>   include/linux/pm_opp.h           |   8 +++
+>>   kernel/power/energy_model.c      | 106 +++++++++++++++++++++++++------
+>>   5 files changed, 122 insertions(+), 25 deletions(-)
+> 
+> LGTM.
+> 
+> Just two very minor things which I mentioned in the individual patches.
+> 
+> Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> 
+> 
+> 
 
-> @@ -97,9 +98,17 @@ static int exynos_asv_update_opps(struct exynos_asv *asv)
->  			last_opp_table = opp_table;
->  
->  			ret = exynos_asv_update_cpu_opps(asv, cpu);
-> -			if (ret < 0)
-> +			if (!ret) {
-> +				/*
-> +				 * When the voltage for OPPs could be changed,
-> +				 * make sure to update the EM power values, to
-> +				 * reflect the reality and not use stale data.
-> +				 */
+Thank you for the review. I will send the v5 with those.
 
-Maybe shorter?
-
-                                /*
-                                 * Update EM power values since OPP
-                                 * voltage values may have changed.
-                                 */
-
-[...]
+Regards,
+Lukasz
 
