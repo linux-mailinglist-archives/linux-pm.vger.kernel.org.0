@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-5836-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5837-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8121889660F
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 09:20:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4910896611
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 09:20:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CCD7285A24
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 07:20:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 127361C2279E
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 07:20:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 107035788B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 523D25A7BB;
 	Wed,  3 Apr 2024 07:20:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D1qg+8I9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="URMZ2Fms"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCDB34D133;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A4758AA9;
 	Wed,  3 Apr 2024 07:20:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712128827; cv=none; b=JBGhuDAR4Bx8juI4iQ+efe/z1ILTtsragkY/T8EGs87IW71saTzaMUflwTZQakXD9bOtWdF492rbYIfZ0xibWYFBhCXFakPRAZ9d0mKPSE9N2uLx6y+OpRGG8kLfGjZTpKeKqZLlfao6d7xjSyK7H37vYzMUS06wTr66W5wwv9s=
+	t=1712128827; cv=none; b=i1buI3EVkyYnragyEEacsHKQEEJTGyubn3PNhAcr4DnZdvC2M8cmc+0sAIUCUGbK4SwoCCT31x2YU4I8Dc2bUpXyVD5IEc6gq+sdQx4fy6fE9NLypZhXs3HJn1eg/2mzfn0JmeQ3k178poL0TJgCacsDE6b8h2W46gWTKTYNkBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1712128827; c=relaxed/simple;
-	bh=+ye0ANlJ3AJBgvzVY9w5v2SVeZwz8u+XeZZr7JXa8yQ=;
+	bh=81ffTdP21cS4rhwsQEZ+8+anWHy2S8vDbzNSF7oAnCI=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=qwf/I29g+xyF2yR0210oJSAf2vXElfm2SG5PSWyhHvmUP8XMVjCpoB5ewgyuRI2JIzuR6de7RFuLvQ7A+GuX6Ki5NeGnLINgaSCi2qQdxwKi9sfidZBJCSaHOEKYV21GrE0OgWZaEcNmoOkbSMZa6EAnQiepxV6b0SvXx8N4dWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D1qg+8I9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5D27DC433F1;
+	 In-Reply-To:To:Cc; b=c7gMfHdf7wBHpcC4PLx65FuqxmJZl2MQ4A2EiTET/ArKbRCq2PlP5LXRvCa+W+dXPOimab1naqilR1WJ07T1uDsJl6ouVil8FDyt4ipwvLNEt1cHa6C0VgaKO3Wcge3Wne/uKo3EvSASVAWl6AeTyLfXN6FiOS8BlhQpU8qcWJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=URMZ2Fms; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 95150C43330;
 	Wed,  3 Apr 2024 07:20:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1712128826;
-	bh=+ye0ANlJ3AJBgvzVY9w5v2SVeZwz8u+XeZZr7JXa8yQ=;
+	bh=81ffTdP21cS4rhwsQEZ+8+anWHy2S8vDbzNSF7oAnCI=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=D1qg+8I9Meq1gWuzmyCbX4jtvHi/dBLn4GGYDCLGGaZs5xp4Auq/NFEyxa9Ph1o1Y
-	 qWhiXcwxf9NG6v6l07IIjI04GUqEipwFVgZEx32tIE7ukfO5Rz8brl4g1jGgb4hgRL
-	 BfdtMRJlaaVKkJcJVJ1gTiNSOI/3YheE6wOjqa8WJWHKtbKdEktsWcAn6BRvtquMVH
-	 wXOsnXakNmxTnsw9IHakAhf0Rhms220TNXHv3673cZaVCMJWRFaP0Uv48mizJD97va
-	 VLz/8a+/ebY1NU1scfuRGM8QriPQtqgMJ9iHLCQNfYjYEqIisdiiEF/P2GoHLWAY6a
-	 VYjN8k6uUcFUw==
+	b=URMZ2Fmss2hynDj8Vcluta/QuNOuktD2WVELRxxBbch3LyhzX6EE9g7nTi8C72zOM
+	 rXqlVlTw/hgB3FDNpP0U9t8OHxjHEadcwQvy9JlF0uE/6MR9wjWgkd+WCUE6yBwEAK
+	 t9So4pNszVKG4kw3eA04xw9AGvPrTkobwnHaZOEAy2wf9W8MZyWBJe1QE+lWC7OkHT
+	 Ql6TxMh6KPIouPD7p6xNWg0fx8CzSdTpGiEgqjwz16n3l9Xe+hbhTio5gX4p1iLcuk
+	 ekaueKfaNczFvnJmLYnwWDG2L7h2s6WDlto8m+FqgN8T95Ix0RTSxN+oFzfZZQA9QL
+	 Vb5hodw+czQSQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4C2A0C43168;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8ABA2D9A158;
 	Wed,  3 Apr 2024 07:20:26 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -56,7 +56,7 @@ Subject: Re: [PATCH 00/18] platform/chrome: provide ID table for avoiding fallba
  match
 From: patchwork-bot+chrome-platform@kernel.org
 Message-Id: 
- <171212882630.6261.5572341363969592219.git-patchwork-notify@kernel.org>
+ <171212882656.6261.8246903894715211334.git-patchwork-notify@kernel.org>
 Date: Wed, 03 Apr 2024 07:20:26 +0000
 References: <20240329075630.2069474-1-tzungbi@kernel.org>
 In-Reply-To: <20240329075630.2069474-1-tzungbi@kernel.org>
@@ -70,7 +70,7 @@ Cc: bleung@chromium.org, groeck@chromium.org, linus.walleij@linaro.org,
 
 Hello:
 
-This series was applied to chrome-platform/linux.git (for-kernelci)
+This series was applied to chrome-platform/linux.git (for-next)
 by Tzung-Bi Shih <tzungbi@kernel.org>:
 
 On Fri, 29 Mar 2024 15:56:12 +0800 you wrote:
