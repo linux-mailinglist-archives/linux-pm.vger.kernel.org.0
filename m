@@ -1,40 +1,40 @@
-Return-Path: <linux-pm+bounces-5863-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5864-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DF1F896EE8
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 14:36:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8F34896F1D
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 14:44:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF6F91F21980
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 12:36:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA3831C250A1
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 12:44:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B62C61E53A;
-	Wed,  3 Apr 2024 12:36:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAA8B13248C;
+	Wed,  3 Apr 2024 12:44:01 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92F6B23BE;
-	Wed,  3 Apr 2024 12:36:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D85D158112;
+	Wed,  3 Apr 2024 12:43:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712147793; cv=none; b=hx0JKUyXzMUdlbeyOnR+Rq59Vnt8mgq55v1aYB0uCg+T2lk/ABOtxx5K5oCi2yiESXdxlarc4tN7hENzs2KLeLu+Ij+0Zu1R0oxVepOVtuuzWHlwft0m4C0YOejJlW2TF2dDrzy7iVuCepB1qTpeWIbBtX0rcBw1C4nFaHlkY+E=
+	t=1712148241; cv=none; b=NW2ECjasLt0dWk18qKKPPKBcQ2EdKACd66aBRMljpUcJhvZyhoWXGgQDdkXoPr6QnzQ0gHkwWp43NHOao8cY3I+WXhOEohDEnHJVrleXSt6HcvFa/60rCEkZcum/lJjtP7EF27eeUk/J09smtXX6oCxocGVtfVuaq31tbGZaz90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712147793; c=relaxed/simple;
-	bh=1DIsaoDpER4p++k4Z7iVSmQ6SUDjiw+1VTM2vtYz1FE=;
+	s=arc-20240116; t=1712148241; c=relaxed/simple;
+	bh=iTl4hiDfmuAKuYy1bynC/DvOEHtq0a5faUhxWHTuGPY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Q+UNHgPxVSTATaSbgucW/WX1ewTwb+k6DIH/CvTeVjURZc060RaqGIVdoMhnEvS9cM4qQMMBaWpo8TKx7Zo3HG8ZzEvULC5N5gLH9PXsi310pvqWjx+hfuPeRPYmLbtbZF12RXM1gxWmNVgFk/E4dHps1cbIWWmXaGQl1qg4sAk=
+	 In-Reply-To:Content-Type; b=TBB9L1lSc61ly4E4LRyHsmcuEq5gvvbFxQf+JUUtLybTibH97i3l18ov7x0PaJasXJd94EQSQpARznA8v3IPQQ6tjatZYK4WdTkCfiFYps0S0IaceMhy88bm3cfTJ8zKeiY8ME+QoS40rrM5GX6O9fY2vxsoUCg6r8yXv7KM/R0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3E0A81007;
-	Wed,  3 Apr 2024 05:37:01 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0F8DD1007;
+	Wed,  3 Apr 2024 05:44:30 -0700 (PDT)
 Received: from [10.57.72.191] (unknown [10.57.72.191])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E6D6F3F64C;
-	Wed,  3 Apr 2024 05:36:27 -0700 (PDT)
-Message-ID: <8519bb4c-e8b4-436c-bd3b-4a08e328a6ec@arm.com>
-Date: Wed, 3 Apr 2024 13:36:29 +0100
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BC9E23F64C;
+	Wed,  3 Apr 2024 05:43:57 -0700 (PDT)
+Message-ID: <d048f863-05d1-4aeb-8904-4c09ecbe55d9@arm.com>
+Date: Wed, 3 Apr 2024 13:43:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,91 +42,60 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/4] Update Energy Model after chip binning adjusted
- voltages
+Subject: Re: [PATCH v2 1/3] thermal: gov_power_allocator: Allow binding
+ without cooling devices
 Content-Language: en-US
-To: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org, sboyd@kernel.org,
- rafael@kernel.org, linux-pm@vger.kernel.org, nm@ti.com,
- linux-samsung-soc@vger.kernel.org, daniel.lezcano@linaro.org,
- viresh.kumar@linaro.org, krzysztof.kozlowski@linaro.org,
- alim.akhtar@samsung.com, m.szyprowski@samsung.com, mhiramat@kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240402155822.505491-1-lukasz.luba@arm.com>
- <045fa6db-4f76-46aa-85ba-c9e698c7e390@arm.com>
+To: Nikita Travkin <nikitos.tr@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+ "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, linux-pm@vger.kernel.org,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, linux-kernel@vger.kernel.org,
+ Zhang Rui <rui.zhang@intel.com>
+References: <20240403-gpa-no-cooling-devs-v2-0-79bdd8439449@trvn.ru>
+ <20240403-gpa-no-cooling-devs-v2-1-79bdd8439449@trvn.ru>
 From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <045fa6db-4f76-46aa-85ba-c9e698c7e390@arm.com>
+In-Reply-To: <20240403-gpa-no-cooling-devs-v2-1-79bdd8439449@trvn.ru>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi Dietmar,
 
-On 4/3/24 13:07, Dietmar Eggemann wrote:
-> On 02/04/2024 17:58, Lukasz Luba wrote:
->> Hi all,
->>
->> This is a follow-up patch aiming to add EM modification due to chip binning.
->> The first RFC and the discussion can be found here [1].
->>
->> It uses Exynos chip driver code as a 1st user. The EM framework has been
->> extended to handle this use case easily, when the voltage has been changed
->> after setup. On my Odroid-xu4 in some OPPs I can observe ~20% power difference.
->> According to that data in driver tables it could be up to ~29%.
->>
->> This chip binning is applicable to a lot of SoCs, so the EM framework should
->> make it easy to update. It uses the existing OPP and DT information to
->> re-calculate the new power values.
->>
->> It has dependency on Exynos SoC driver tree.
->>
->> Changes:
->> v4:
->> - added asterisk in the comment section (test robot)
->> - change the patch 2/4 header name and use 'Refactor'
->> v3:
->> - updated header description patch 2/4 (Dietmar)
->> - removed 2 sentences from comment and adjusted in patch 3/4 (Dietmar)
->> - patch 4/4 re-phrased code comment (Dietmar)
->> - collected tags (Krzysztof, Viresh)
->> v2:
->> - removed 'ret' from error message which wasn't initialized (Christian)
->> v1:
->> - exported the OPP calculation function from the OPP/OF so it can be
->>    used from EM fwk (Viresh)
->> - refactored EM updating function to re-use common code
->> - added new EM function which can be used by chip device drivers which
->>    modify the voltage in OPPs
->> RFC is at [1]
->>
->> Regards,
->> Lukasz Luba
->>
->> [1] https://lore.kernel.org/lkml/20231220110339.1065505-1-lukasz.luba@arm.com/
->>
->> Lukasz Luba (4):
->>    OPP: OF: Export dev_opp_pm_calc_power() for usage from EM
->>    PM: EM: Refactor em_adjust_new_capacity()
->>    PM: EM: Add em_dev_update_chip_binning()
->>    soc: samsung: exynos-asv: Update Energy Model after adjusting voltage
->>
->>   drivers/opp/of.c                 |  17 +++--
->>   drivers/soc/samsung/exynos-asv.c |  11 +++-
->>   include/linux/energy_model.h     |   5 ++
->>   include/linux/pm_opp.h           |   8 +++
->>   kernel/power/energy_model.c      | 106 +++++++++++++++++++++++++------
->>   5 files changed, 122 insertions(+), 25 deletions(-)
+
+On 4/3/24 12:31, Nikita Travkin via B4 Relay wrote:
+> From: Nikita Travkin <nikita@trvn.ru>
 > 
-> LGTM.
+> IPA was recently refactored to split out memory allocation into a
+> separate funciton. That funciton was made to return -EINVAL if there is
+> zero power_actors and thus no memory to allocate. This causes IPA to
+> fail probing when the thermal zone has no attached cooling devices.
 > 
-> Just two very minor things which I mentioned in the individual patches.
+> Since cooling devices can attach after the thermal zone is created and
+> the governer is attached to it, failing probe due to the lack of cooling
+> devices is incorrect.
 > 
-> Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Change the allocate_actors_buffer() to return success when there is no
+> cooling devices present.
 > 
+> Fixes: 912e97c67cc3 ("thermal: gov_power_allocator: Move memory allocation out of throttle()")
+> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+> ---
+>   drivers/thermal/gov_power_allocator.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
+> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+> index 1b17dc4c219c..ec637071ef1f 100644
+> --- a/drivers/thermal/gov_power_allocator.c
+> +++ b/drivers/thermal/gov_power_allocator.c
+> @@ -606,7 +606,7 @@ static int allocate_actors_buffer(struct power_allocator_params *params,
+>   
+>   	/* There might be no cooling devices yet. */
+>   	if (!num_actors) {
+> -		ret = -EINVAL;
+> +		ret = 0;
+>   		goto clean_state;
+>   	}
+>   
 > 
 
-Thank you for the review. I will send the v5 with those.
+LGTM
 
-Regards,
-Lukasz
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
