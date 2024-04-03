@@ -1,143 +1,146 @@
-Return-Path: <linux-pm+bounces-5876-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5877-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB8E5897328
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 16:56:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A92189732D
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 16:57:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9E838B2BB57
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 14:56:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B6AF51F29297
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 14:57:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9CB31494D8;
-	Wed,  3 Apr 2024 14:56:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51F031494CB;
+	Wed,  3 Apr 2024 14:57:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="aKnImIsP"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="UWe6UtNz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC2B13AD06
-	for <linux-pm@vger.kernel.org>; Wed,  3 Apr 2024 14:56:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7806C13A41F;
+	Wed,  3 Apr 2024 14:57:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712156175; cv=none; b=qqBJRgjIGF9zZXt0qqQViL3wwrU5PC6ah0N5K/sABzgFIUTVUZLT1VBbHxKAKQlKeBltklbyxseI0Q8n/w7oQ6ix8W5MZboZFuGuS4qNvch+mrT7sS2MrfVUF+NFui0Df0LnC9T5TLw6sqf5zDxwEDTgJb5OIEH72t5Xi6I2gVA=
+	t=1712156225; cv=none; b=bYkBh0CXQ2ZcP/MdknIljMf6Tjkp5toTJnV1/Z82/4PTiVl7qjw7GAX/qZPH4pO6UrT2nip0n/lAXEetgcWlRJTDlAuO+PEMdap46cNH+26eHLNcDmGPWgIqM5O3QxL0oQAtaCytOVcP1icmV4JiAQ5njwidvSENdcldPSqV3sU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712156175; c=relaxed/simple;
-	bh=qIMp/Bi43gG5OxVpu00ce21O5fSpFFXCTZkgJC0kaJQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=X/e9igxKp1MV7GMwsRzeKIkEm6Xaki3rari/H7hABq/te6Jbi3bxNuWuPLFZ6Hf+Vh7YLyVIA+p/vyhA0nmChMgQvcKfzRkQjexqse0tnmX98IE+NWDvRzWg5vyELXsYd2yxM/gfapXq8Kc/7RDyrzZCIAVOLmU4AGy4dHUNQMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=aKnImIsP; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-513e134f73aso8523197e87.2
-        for <linux-pm@vger.kernel.org>; Wed, 03 Apr 2024 07:56:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1712156172; x=1712760972; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0AEDPySL2e/8A7unRrzw52gMZQYQQOXlB4w/mt06n1w=;
-        b=aKnImIsP8DZAEOQspUmW8LWc/9dXAMfFVzUOfjLRQsExSm+YC8ycRjE9jQg1o6dCoh
-         5iCfqS8uDMWH8uO6lMAz2bXbEK1O0D1nYOBbq3XqtW79q/Cc7cVCG/R+muXrspBOhUUm
-         wadCcstUMIMt3R/oSq96Xl2cpKgJiSVRjicPLlU31sGKvbVAKvjSD7hEZhM0KUek9PDj
-         D9ZxTZrrn2A9yTFvjpckb3yAeEfUcfL7ftrnJfDZXwe2Sxq44SAu4rCtOAIHV/88Fhxr
-         lrLYKerwj6Ig9SZ5Ouak9rn5oo6VaMzJgxH0mXFJBHIYX3GIlS7S/g+p7/JVK98F7huP
-         C6Vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712156172; x=1712760972;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0AEDPySL2e/8A7unRrzw52gMZQYQQOXlB4w/mt06n1w=;
-        b=SKF+pYLH3yDMRzFwrWL0lhr6y6ZgaXQAAQQSOO7g5PzQjYdf1JfxoDAyZl3fzo981O
-         sqHLVYdCVGwi5pF4kMT2okdKuy1L4Le0mzVs3cXbPJHgZZ+2sgYvPSt19l/O2Rp36rUb
-         +2s3ueIiaFFFIGXoGqb04eYzyHv0DNFPhvBWVKCq1tYQYg4oxfD2u4aGUt7CjQBoIh0h
-         6wqcpVhQUsq1mixDKbR/gFt57Q+2xOVu8jS0eyMbqg3JOl4k2Fr+sSGDG6Pc022GfmHw
-         m4yFpYgRHd0wPBJUjjPu0e22P7KXG/sMGtaZ9ZHTzat8CU9zQ62H6cwwsZ8HxqADxm+W
-         Ye3A==
-X-Forwarded-Encrypted: i=1; AJvYcCUsh65QBNEAovk+Pb8ZXXpv8b8F2emERhJ071nB4EiLaqxiEgu+6x0L/1SZ2HlzTnkOSEjeogqY6m0UcmXnnN12I2+yZOhHiws=
-X-Gm-Message-State: AOJu0YwKbqrTF3XHAXRkiSbTjlnPSIXzHRWlgvUXtlZPW50twkuK94ew
-	ohChx32dFCrFNarZrJBCTP+QwqYSFkmcN7prn18EPKrqLkkzFx5pois2H65lxLeLpuf+lR3ZrF6
-	9MAGrx6I9yuQGFiSCzoRAZbOSNLqz522l2AHJxw==
-X-Google-Smtp-Source: AGHT+IH1uAqfWGiUk+RIbBgdGkD1xZiuVe0WG6sH6tI1B254BJw9nsHUMXBNKMkZlc7467jz/bVPfZDn3fzBPSidFbA=
-X-Received: by 2002:a05:6512:36d2:b0:515:c17e:ddb1 with SMTP id
- e18-20020a05651236d200b00515c17eddb1mr11741487lfs.50.1712156171964; Wed, 03
- Apr 2024 07:56:11 -0700 (PDT)
+	s=arc-20240116; t=1712156225; c=relaxed/simple;
+	bh=eZVmBB1d4Df5D2F0Ce5Nd9fY/AAZw/o+Je5pGJeTmvQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QA3Z+4V0D/IwaOhZjLOoDta7SpdsxuWqmD8t6jeBHi09v3Yeb2DbhSJYn9Q5rVfS4+QghOO1yAhQk2egXu7KR1D0LB+RCCmTb6fujU9fuAMk15gdo9ON7J6DZGyJLSVOKbJLjcPwz3SQVpDZGhfZGtLeTYCAHt3kQKgR2v0hgzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=UWe6UtNz; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id A43135CDC4;
+	Wed,  3 Apr 2024 14:57:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1712156221; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=eZVmBB1d4Df5D2F0Ce5Nd9fY/AAZw/o+Je5pGJeTmvQ=;
+	b=UWe6UtNzKToX2b2B2yqhkfbY/y8wLxleX9wXq9Bn2GIkXCuDN9OriucLIt8uIXIB2kG4Oo
+	m68swMT8b3cv1YODbkDNHlPWFdotkpgir9Sgu/CYlDd0suCoyYWfT9co9mCdfBU1ErfFZ7
+	E2vZ+UOYkYSN6fp0X9WWzPZqZ1iv5kk=
+Authentication-Results: smtp-out2.suse.de;
+	none
+Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id 8E11F13357;
+	Wed,  3 Apr 2024 14:57:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap2.dmz-prg2.suse.org with ESMTPSA
+	id j0KEIj1uDWZPagAAn2gu4w
+	(envelope-from <mkoutny@suse.com>); Wed, 03 Apr 2024 14:57:01 +0000
+Date: Wed, 3 Apr 2024 16:56:52 +0200
+From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To: Waiman Long <longman@redhat.com>
+Cc: Valentin Schneider <vschneid@redhat.com>, Tejun Heo <tj@kernel.org>, 
+	Zefan Li <lizefan.x@bytedance.com>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Frederic Weisbecker <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Ingo Molnar <mingo@kernel.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
+	Alex Shi <alexs@kernel.org>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Barry Song <song.bao.hua@hisilicon.com>
+Subject: Re: Re: [PATCH 1/2] cgroup/cpuset: Make cpuset hotplug processing
+ synchronous
+Message-ID: <tm5kvzgn2g5yv63zoyqvd2bdrgl7l3ytffu4cq4ybxyq5irp76@hpmq3zfbtmlp>
+References: <20240401145858.2656598-1-longman@redhat.com>
+ <20240401145858.2656598-2-longman@redhat.com>
+ <kce74bx6aafxfuw5yovaschym4ze4kommfk74eq5totojytest@mdxnfvl2kdol>
+ <548efd52-e45f-41fa-a477-bc5112d7b00c@redhat.com>
+ <u3naomgv34t5rnc7pmyy4zjppgf36skeo45orss2xnqcvtrcez@m74tsl2ws76f>
+ <7e62b37d-6c9c-4e55-a01a-175695475cb5@redhat.com>
+ <xhsmhedbmbjz5.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <620d1b70-cfbc-4b76-ad04-b3be559afd56@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240325131624.26023-1-brgl@bgdev.pl> <20240325131624.26023-6-brgl@bgdev.pl>
- <87msqm8l6q.fsf@kernel.org>
-In-Reply-To: <87msqm8l6q.fsf@kernel.org>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Wed, 3 Apr 2024 16:56:01 +0200
-Message-ID: <CAMRc=MeCjNn7QdDrcQMuj32JFYoemQ6A8WOYcwKJo1YhDTfY+Q@mail.gmail.com>
-Subject: Re: [PATCH v6 05/16] dt-bindings: net: wireless: describe the ath12k
- PCI module
-To: Kalle Valo <kvalo@kernel.org>
-Cc: Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Saravana Kannan <saravanak@google.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Arnd Bergmann <arnd@arndb.de>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Alex Elder <elder@linaro.org>, Srini Kandagatla <srinivas.kandagatla@linaro.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Abel Vesa <abel.vesa@linaro.org>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Lukas Wunner <lukas@wunner.de>, 
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, linux-bluetooth@vger.kernel.org, 
-	netdev@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="s5g4gqxizdmthray"
+Content-Disposition: inline
+In-Reply-To: <620d1b70-cfbc-4b76-ad04-b3be559afd56@redhat.com>
+X-Spamd-Result: default: False [-4.89 / 50.00];
+	BAYES_HAM(-2.99)[99.97%];
+	SIGNED_PGP(-2.00)[];
+	MID_RHS_NOT_FQDN(0.50)[];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	NEURAL_HAM_SHORT(-0.20)[-0.985];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[22];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	MISSING_XM_UA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap2.dmz-prg2.suse.org:rdns,imap2.dmz-prg2.suse.org:helo]
+X-Spam-Score: -4.89
+X-Spam-Level: 
+X-Spam-Flag: NO
 
-On Mon, Mar 25, 2024 at 3:01=E2=80=AFPM Kalle Valo <kvalo@kernel.org> wrote=
-:
->
-> Bartosz Golaszewski <brgl@bgdev.pl> writes:
->
-> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> >
-> > +
-> > +maintainers:
-> > +  - Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->
-> IMHO it would be better to have just driver maintainers listed here.
->
 
-Why? What's wrong with having the author of the bindings in the Cc list?
+--s5g4gqxizdmthray
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - vddaon-supply
-> > +  - vddwlcx-supply
-> > +  - vddwlmx-supply
-> > +  - vddrfacmn-supply
-> > +  - vddrfa0p8-supply
-> > +  - vddrfa1p2-supply
-> > +  - vddrfa1p8-supply
-> > +  - vddpcie0p9-supply
-> > +  - vddpcie1p8-supply
->
-> Same comment here as in patch 4. There are also ath12k PCI devices which
-> don't need DT at all. I don't know if that should be reflected in the
-> bindings doc but I want to point out this.
->
+On Wed, Apr 03, 2024 at 10:47:33AM -0400, Waiman Long <longman@redhat.com> wrote:
+> should be rare these days as it will only apply in the case of cgroup
+> v1 under certain condtion,
 
-But DT bindings don't apply to devices that don't have DT nodes. This
-isn't an issue at all.
+Could the migration be simply omitted it those special cases?
 
-Bart
+(Tasks remain in cpusets with empty cpusets -- that already happens in
+with the current patch before workqueue is dispatched.)
+
+Michal
+
+--s5g4gqxizdmthray
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQQpEWyjXuwGT2dDBqAGvrMr/1gcjgUCZg1uMgAKCRAGvrMr/1gc
+juxsAP9LdPIENmgJ+lo1a52HXy+sDng3vYcaC8VapHG5CyOA7AEAlOwpne+LzkiO
+IIyeIE+x8ZyV9QlL/DM6cnabIMR+IgI=
+=d6JV
+-----END PGP SIGNATURE-----
+
+--s5g4gqxizdmthray--
 
