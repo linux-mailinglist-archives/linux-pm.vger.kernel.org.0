@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-5894-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5895-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41B998976AF
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 19:31:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 934738976E5
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 19:35:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D72B61F2DECF
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 17:31:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5005E295EA7
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 17:35:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48D1C15B133;
-	Wed,  3 Apr 2024 17:18:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FEA1161305;
+	Wed,  3 Apr 2024 17:19:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eRGv7/sR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N4tfyX95"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D60615B12A;
-	Wed,  3 Apr 2024 17:18:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E904C16089C;
+	Wed,  3 Apr 2024 17:19:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712164719; cv=none; b=c84EY4xr2TV8XhKtvv2A8Y268WB21hSK2PwqgN6D7eckI9aGmw2i66jOZad1TyQ5gxD8g1dYn66mhr/VuxOf01rqpe9+gvx8u7XMmr9/vuhcl/szkgPo/N0YxYK7V0aOnIUOryJqi0/Y+mGNaS2kcA0a++9Z5RYTrwRrH7FhU8g=
+	t=1712164770; cv=none; b=sVscr/rB1ENgdeMLxgaCJ46q3Uu53tNOkqDrrPBOQ4Aak+e25wk3BputD08gg3bWywfZdcLVFZ6nBne/lHfTVmQtqEoelRh2uq6QSACj/ziUaKW63r4kNRwDK84evygLsrLSn3iF6EE2dk3ZPDE6Oiyol3rL0vdZncnK4HbLT2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712164719; c=relaxed/simple;
-	bh=yzC+JZhmJqa/ti57dXkE6VO8RengwTz78QgN6A8pHNQ=;
+	s=arc-20240116; t=1712164770; c=relaxed/simple;
+	bh=+molO8qQbX4QeS0LNGvlr/5BUWpD3H1OZtd27L7winI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Rvp75lxwA4N9nbq0M+8WT/uhITykU1mcTyG9+/K5emtF3I+iFdMgvirsfRiqxT5Ir+OXgQR4M/dqoB5+FM/qUUwZaGtqA3a4thbps+A0tEMFlclyPFV+z1yu184SoX60vJFanjcEJ/eLOhxpDSIN5t9e/VyBryj7al14BU7Ambc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eRGv7/sR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABF00C433A6;
-	Wed,  3 Apr 2024 17:18:37 +0000 (UTC)
+	 MIME-Version; b=tN3jsZlAu7uUSs7ymi259pheYAlSmjVzzsgszu+2PsAYSNMcOcCYaGO8+d17oXoVbBvwodzKeeRPYoKcAtFhAm5mDZ27lXgPI04zBzd3Kb8inZDxWrm2exV7yZ+7wQnhsYVzGZwuf7ke3ikDXmd3xgcDOwsGKNIR9h9qd0d8NpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N4tfyX95; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74BCAC43601;
+	Wed,  3 Apr 2024 17:19:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712164718;
-	bh=yzC+JZhmJqa/ti57dXkE6VO8RengwTz78QgN6A8pHNQ=;
+	s=k20201202; t=1712164769;
+	bh=+molO8qQbX4QeS0LNGvlr/5BUWpD3H1OZtd27L7winI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=eRGv7/sR74w5tFWoezIIuEtf97AYsDRndfgM4lWbz1VljhjfhVM1ScutpXRXz5mDm
-	 uNmC7cyOh3MR65PYwrOOzLTtcJKD2J4FjPUa7nfLl+S8G6h4t02pc/GhCLiErxlvH1
-	 Vu5TNPtW7vSd/EeYZk9+LDeP7n3UOwA8XVX80kkCFnjPYQW0tWMgUIpKxV2ORyhy88
-	 dJihi2wT8gejDjXpFyJQ5tjfU0lHNBORiHjB8z8236Ko8NNZIp1j07FXLbqeWIQYvv
-	 XFpGis9GIzWjm6DXVcdbyMVHwAK9swOGWIPhU11O9eA5wjqPRv4t/H1HwFjHPj6b09
-	 vSrO/Xge0nuRg==
+	b=N4tfyX9523InZf76ZS28KGIE7ScybkYQvu3ioScsFkk+7C+11r+xPxbqFlufi9C8a
+	 3hrdIHCVlWbV1XtT3jRFFKcYjSE0ra6GSOEpKBUXAUuOEgHjH/JmmiirGJf0rxtvke
+	 PUd1cl3nzxUGDaLZDflBU96Rm3wdAvJG3Yor2UYfpwQkD7T3oi4VHK/1OK/g3Gcwto
+	 4NiVK3jEvogR0n7DSuB20kPJbEnI/HxQKtF6+6xrx9ZiSI1+ufTW/kPVGh0LSqSHCn
+	 w0mWhD7veOmpaQZVnCBc1MB5coaO86sngLunZ8p5eBtHzOMkIxrih4UOB9VLbZQjpa
+	 IC2UroOmmP+gA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -51,12 +51,12 @@ Cc: Konrad Dybcio <konrad.dybcio@linaro.org>,
 	Sasha Levin <sashal@kernel.org>,
 	rafael@kernel.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 11/20] thermal/of: Assume polling-delay(-passive) 0 when absent
-Date: Wed,  3 Apr 2024 13:17:52 -0400
-Message-ID: <20240403171815.342668-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 09/15] thermal/of: Assume polling-delay(-passive) 0 when absent
+Date: Wed,  3 Apr 2024 13:18:53 -0400
+Message-ID: <20240403171909.345570-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240403171815.342668-1-sashal@kernel.org>
-References: <20240403171815.342668-1-sashal@kernel.org>
+In-Reply-To: <20240403171909.345570-1-sashal@kernel.org>
+References: <20240403171909.345570-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -65,7 +65,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.24
+X-stable-base: Linux 6.1.84
 Content-Transfer-Encoding: 8bit
 
 From: Konrad Dybcio <konrad.dybcio@linaro.org>
@@ -90,10 +90,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 8 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index 1e0655b63259f..d5174f11b91c2 100644
+index 4104743dbc17e..202dce0d2e309 100644
 --- a/drivers/thermal/thermal_of.c
 +++ b/drivers/thermal/thermal_of.c
-@@ -225,14 +225,18 @@ static int thermal_of_monitor_init(struct device_node *np, int *delay, int *pdel
+@@ -337,14 +337,18 @@ static int thermal_of_monitor_init(struct device_node *np, int *delay, int *pdel
  	int ret;
  
  	ret = of_property_read_u32(np, "polling-delay-passive", pdelay);
