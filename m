@@ -1,146 +1,206 @@
-Return-Path: <linux-pm+bounces-5877-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5878-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A92189732D
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 16:57:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED11189733E
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 16:59:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B6AF51F29297
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 14:57:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 18BBA1C21E4A
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Apr 2024 14:59:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51F031494CB;
-	Wed,  3 Apr 2024 14:57:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFDF4149C77;
+	Wed,  3 Apr 2024 14:59:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="UWe6UtNz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EOcAjgyF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7806C13A41F;
-	Wed,  3 Apr 2024 14:57:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ADB159B67;
+	Wed,  3 Apr 2024 14:59:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712156225; cv=none; b=bYkBh0CXQ2ZcP/MdknIljMf6Tjkp5toTJnV1/Z82/4PTiVl7qjw7GAX/qZPH4pO6UrT2nip0n/lAXEetgcWlRJTDlAuO+PEMdap46cNH+26eHLNcDmGPWgIqM5O3QxL0oQAtaCytOVcP1icmV4JiAQ5njwidvSENdcldPSqV3sU=
+	t=1712156388; cv=none; b=MyLrdPfDY3vy3aXTUR4GoJSut9ccL1GewtPUAFO3rJcP+58lzDe2D00/lptbM19GCiw6LNaC7VftoB7S6jtvtXn1eE5cwv639adkPhWCo6gRwX9IS3RDBZrxK7CLaHQxmdi2rKYb3swaokLKeXRK+gssJYttwuBGHjWV8R82iCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712156225; c=relaxed/simple;
-	bh=eZVmBB1d4Df5D2F0Ce5Nd9fY/AAZw/o+Je5pGJeTmvQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QA3Z+4V0D/IwaOhZjLOoDta7SpdsxuWqmD8t6jeBHi09v3Yeb2DbhSJYn9Q5rVfS4+QghOO1yAhQk2egXu7KR1D0LB+RCCmTb6fujU9fuAMk15gdo9ON7J6DZGyJLSVOKbJLjcPwz3SQVpDZGhfZGtLeTYCAHt3kQKgR2v0hgzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=UWe6UtNz; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id A43135CDC4;
-	Wed,  3 Apr 2024 14:57:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1712156221; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eZVmBB1d4Df5D2F0Ce5Nd9fY/AAZw/o+Je5pGJeTmvQ=;
-	b=UWe6UtNzKToX2b2B2yqhkfbY/y8wLxleX9wXq9Bn2GIkXCuDN9OriucLIt8uIXIB2kG4Oo
-	m68swMT8b3cv1YODbkDNHlPWFdotkpgir9Sgu/CYlDd0suCoyYWfT9co9mCdfBU1ErfFZ7
-	E2vZ+UOYkYSN6fp0X9WWzPZqZ1iv5kk=
-Authentication-Results: smtp-out2.suse.de;
-	none
-Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id 8E11F13357;
-	Wed,  3 Apr 2024 14:57:01 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap2.dmz-prg2.suse.org with ESMTPSA
-	id j0KEIj1uDWZPagAAn2gu4w
-	(envelope-from <mkoutny@suse.com>); Wed, 03 Apr 2024 14:57:01 +0000
-Date: Wed, 3 Apr 2024 16:56:52 +0200
-From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To: Waiman Long <longman@redhat.com>
-Cc: Valentin Schneider <vschneid@redhat.com>, Tejun Heo <tj@kernel.org>, 
-	Zefan Li <lizefan.x@bytedance.com>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Frederic Weisbecker <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Ingo Molnar <mingo@kernel.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
-	Alex Shi <alexs@kernel.org>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Barry Song <song.bao.hua@hisilicon.com>
-Subject: Re: Re: [PATCH 1/2] cgroup/cpuset: Make cpuset hotplug processing
- synchronous
-Message-ID: <tm5kvzgn2g5yv63zoyqvd2bdrgl7l3ytffu4cq4ybxyq5irp76@hpmq3zfbtmlp>
-References: <20240401145858.2656598-1-longman@redhat.com>
- <20240401145858.2656598-2-longman@redhat.com>
- <kce74bx6aafxfuw5yovaschym4ze4kommfk74eq5totojytest@mdxnfvl2kdol>
- <548efd52-e45f-41fa-a477-bc5112d7b00c@redhat.com>
- <u3naomgv34t5rnc7pmyy4zjppgf36skeo45orss2xnqcvtrcez@m74tsl2ws76f>
- <7e62b37d-6c9c-4e55-a01a-175695475cb5@redhat.com>
- <xhsmhedbmbjz5.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <620d1b70-cfbc-4b76-ad04-b3be559afd56@redhat.com>
+	s=arc-20240116; t=1712156388; c=relaxed/simple;
+	bh=QIT4Ex7GyF+BHrfMmNs1ExDsS8kFe+3O5Qth8kwlp4U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=NCNPQ0D9kDiwDKkyr/FDX/l8yhUxym6VPyII/ObfFKNQke5MvAWellkFo2Sp+iO4mOd6IACi+orsCgWdGhv87KEbbB2EL4HjBu8mAb7DWk+R7ruJ2DanCNEIRCmYK4XvjVlU+iJt8NKvQsEIoSvsiDL2uWfqG8BlVwQ15xJUngU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EOcAjgyF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23F00C433C7;
+	Wed,  3 Apr 2024 14:59:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712156388;
+	bh=QIT4Ex7GyF+BHrfMmNs1ExDsS8kFe+3O5Qth8kwlp4U=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=EOcAjgyFZUCVR4EnR+SCCB820JDwkI/Cgni50UoLACTXX9v0Nk2F0gBo00ugbCyKp
+	 JYxh1zhQA022f4gKnyZSRQgsECaubonNp1PVIglaPYrc8kpL9dp6hdzj5YYtQELLIC
+	 OTpJeduSFKk3vsHELIFA3qUOQ0iBbf63YHd3FPcB5/HXELINRLvs6ZmMR+icV2qrQb
+	 SFm7xPBzyq1g9ZXjtW5J42ud0jsfGTAokciVCpQn0JLixZP3EFFCE/Ue/26P8YYLDE
+	 P2ano1m7xjxQtrgIwNmoRVSfnLrblarbDyEPFuAg+w3XvdtcD+oZHeYPwlXEV57MJj
+	 h5yT7RKqXWU5g==
+Message-ID: <58c9b754-b9a7-444d-9545-9e6648010630@kernel.org>
+Date: Wed, 3 Apr 2024 16:59:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="s5g4gqxizdmthray"
-Content-Disposition: inline
-In-Reply-To: <620d1b70-cfbc-4b76-ad04-b3be559afd56@redhat.com>
-X-Spamd-Result: default: False [-4.89 / 50.00];
-	BAYES_HAM(-2.99)[99.97%];
-	SIGNED_PGP(-2.00)[];
-	MID_RHS_NOT_FQDN(0.50)[];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	NEURAL_HAM_SHORT(-0.20)[-0.985];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	ARC_NA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[22];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	MISSING_XM_UA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap2.dmz-prg2.suse.org:rdns,imap2.dmz-prg2.suse.org:helo]
-X-Spam-Score: -4.89
-X-Spam-Level: 
-X-Spam-Flag: NO
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 1/5] dt-bindings: interconnect: Add Qualcomm IPQ9574
+ support
+To: Varadarajan Narayanan <quic_varada@quicinc.com>, andersson@kernel.org,
+ konrad.dybcio@linaro.org, mturquette@baylibre.com, sboyd@kernel.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, djakov@kernel.org,
+ dmitry.baryshkov@linaro.org, quic_anusha@quicinc.com,
+ linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20240403104220.1092431-1-quic_varada@quicinc.com>
+ <20240403104220.1092431-2-quic_varada@quicinc.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240403104220.1092431-2-quic_varada@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 03/04/2024 12:42, Varadarajan Narayanan wrote:
+> Add interconnect-cells to clock provider so that it can be
+> used as icc provider.
+> 
+> Add master/slave ids for Qualcomm IPQ9574 Network-On-Chip
+> interfaces. This will be used by the gcc-ipq9574 driver
+> that will for providing interconnect services using the
+> icc-clk framework.
+> 
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
+> v7:
+> Fix macro names to be consistent with other bindings
+> v6:
+> Removed Reviewed-by: Krzysztof Kozlowski
+> Redefine the bindings such that driver and DT can share them
+> 
+> v3:
+> Squash Documentation/ and include/ changes into same patch
+> 
+> qcom,ipq9574.h
+> 	Move 'first id' to clock driver
+> 
+> ---
+>  .../bindings/clock/qcom,ipq9574-gcc.yaml      |  3 +
+>  .../dt-bindings/interconnect/qcom,ipq9574.h   | 87 +++++++++++++++++++
+>  2 files changed, 90 insertions(+)
+>  create mode 100644 include/dt-bindings/interconnect/qcom,ipq9574.h
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,ipq9574-gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,ipq9574-gcc.yaml
+> index 944a0ea79cd6..824781cbdf34 100644
+> --- a/Documentation/devicetree/bindings/clock/qcom,ipq9574-gcc.yaml
+> +++ b/Documentation/devicetree/bindings/clock/qcom,ipq9574-gcc.yaml
+> @@ -33,6 +33,9 @@ properties:
+>        - description: PCIE30 PHY3 pipe clock source
+>        - description: USB3 PHY pipe clock source
+>  
+> +  '#interconnect-cells':
+> +    const: 1
+> +
+>  required:
+>    - compatible
+>    - clocks
+> diff --git a/include/dt-bindings/interconnect/qcom,ipq9574.h b/include/dt-bindings/interconnect/qcom,ipq9574.h
+> new file mode 100644
+> index 000000000000..0b076b0cf880
+> --- /dev/null
+> +++ b/include/dt-bindings/interconnect/qcom,ipq9574.h
+> @@ -0,0 +1,87 @@
+> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+> +#ifndef INTERCONNECT_QCOM_IPQ9574_H
+> +#define INTERCONNECT_QCOM_IPQ9574_H
+> +
+> +#define ICC_ANOC_PCIE0		0
+> +#define ICC_SNOC_PCIE0		1
+> +#define ICC_ANOC_PCIE1		2
+> +#define ICC_SNOC_PCIE1		3
+> +#define ICC_ANOC_PCIE2		4
+> +#define ICC_SNOC_PCIE2		5
+> +#define ICC_ANOC_PCIE3		6
+> +#define ICC_SNOC_PCIE3		7
+> +#define ICC_SNOC_USB		8
+> +#define ICC_ANOC_USB_AXI	9
+> +#define ICC_NSSNOC_NSSCC	10
+> +#define ICC_NSSNOC_SNOC_0	11
+> +#define ICC_NSSNOC_SNOC_1	12
+> +#define ICC_NSSNOC_PCNOC_1	13
+> +#define ICC_NSSNOC_QOSGEN_REF	14
+> +#define ICC_NSSNOC_TIMEOUT_REF	15
+> +#define ICC_NSSNOC_XO_DCD	16
+> +#define ICC_NSSNOC_ATB		17
+> +#define ICC_MEM_NOC_NSSNOC	18
+> +#define ICC_NSSNOC_MEMNOC	19
+> +#define ICC_NSSNOC_MEM_NOC_1	20
+> +
+> +#define ICC_NSSNOC_PPE		0
+> +#define ICC_NSSNOC_PPE_CFG	1
+> +#define ICC_NSSNOC_NSS_CSR	2
+> +#define ICC_NSSNOC_IMEM_QSB	3
+> +#define ICC_NSSNOC_IMEM_AHB	4
+> +
+> +#define MASTER_ANOC_PCIE0		(ICC_ANOC_PCIE0 * 2)
+> +#define SLAVE_ANOC_PCIE0		((ICC_ANOC_PCIE0 * 2) + 1)
 
---s5g4gqxizdmthray
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Which existing Qualcomm platform has such code?
 
-On Wed, Apr 03, 2024 at 10:47:33AM -0400, Waiman Long <longman@redhat.com> wrote:
-> should be rare these days as it will only apply in the case of cgroup
-> v1 under certain condtion,
+This is the third time I am asking for consistent headers. Open
+existing, recently added headers and look how it is done there. Why?
+Because I am against such calculations and see no reason for them.
 
-Could the migration be simply omitted it those special cases?
+Best regards,
+Krzysztof
 
-(Tasks remain in cpusets with empty cpusets -- that already happens in
-with the current patch before workqueue is dispatched.)
-
-Michal
-
---s5g4gqxizdmthray
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQQpEWyjXuwGT2dDBqAGvrMr/1gcjgUCZg1uMgAKCRAGvrMr/1gc
-juxsAP9LdPIENmgJ+lo1a52HXy+sDng3vYcaC8VapHG5CyOA7AEAlOwpne+LzkiO
-IIyeIE+x8ZyV9QlL/DM6cnabIMR+IgI=
-=d6JV
------END PGP SIGNATURE-----
-
---s5g4gqxizdmthray--
 
