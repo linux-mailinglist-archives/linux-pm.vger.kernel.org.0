@@ -1,189 +1,163 @@
-Return-Path: <linux-pm+bounces-5935-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5936-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9837E898D19
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 19:17:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15580898E0F
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 20:37:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 22F8A1F23872
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 17:17:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A9A5B1F22A9B
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 18:37:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87CA312CDB5;
-	Thu,  4 Apr 2024 17:17:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 787B3133424;
+	Thu,  4 Apr 2024 18:36:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="B8SNxWDv"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BhNsoWfJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from merlin.infradead.org (merlin.infradead.org [178.238.156.107])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F57912B82;
-	Thu,  4 Apr 2024 17:17:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.156.107
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D448C13340E
+	for <linux-pm@vger.kernel.org>; Thu,  4 Apr 2024 18:36:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712251046; cv=none; b=IXVonOJRiFqmT6AS9OvP9Ud68uI5xjXej9HsjChFHcIrRJcLZt1ctgVqGRpaIB5TtDFod+nmIp32pP6oFnkDE5NyV6whNQlG+yXKk6JOVEogz+q1LI6QZ1ellhU5YeNfd0D4SxQyoDmNxU6S9Xd0dLR/rCAGwdqiMrmKxHTlDZE=
+	t=1712255764; cv=none; b=Ed5o4T3AmvbzOcm9g2mnF5NwvdtVnT4fCgkbS6GG/vEkvhYHbwSgf9p5ZYvoNHLjcBq6fXa6g4Iz3Vq4ECuEmdx4UbhvVQovQe7O7ouJ2g2lI3HlX+UfWakWHlZz0WDkk88wB/VugHn7UqwY+r/EC4P4tc0Eaco886fjy6QUgW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712251046; c=relaxed/simple;
-	bh=gcvJrvXgQyaZQSS7uTs9ltp/mFfw8fzNyR20mYGy9vU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=slXKfXrPrYROWDnV1DsZpeVZ5P8RdKVeU15VI2BiJpgBq2KurRlZ1DyqJ+ddrDf3k0vypFuzedwzVuTY8Ui9CuLwIZZ9TQIZUjX9hStZayh3qgQ4E2vb5P6eIEv++3pHpfWZKgaAgLBWHZtrMx8pZYJddwFq1oqi6Ebgy9jO+wE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=B8SNxWDv; arc=none smtp.client-ip=178.238.156.107
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=ScSQs4d+rDTfELeZWche4AJihoLV+Vg3lVZPViVwPu4=; b=B8SNxWDvnBeKDZ9MhqKkMekJ7O
-	Zc3M1yZYlr44Cqhhwa2v9i/PAK7oIsq+fGYN296QLJqd2qALwL8FdFv6gYGtLnp39E/gob0XHZMRQ
-	TxofCwl3Hw/3P2KZrP48ADqL2SGsxDCe8/H4FlxyKUbjJ6EipFf0pn7dADO10gJ06qVMcApsU9hL0
-	nTXcMJZF237e/QFuUyp+urbWjhBQx8IKFa0FJSyA4Cr0Sk4ffGdhtYfORHAquxHIIGdB4RV2KczJP
-	rL+qLiPA8Urp6RmT1vrItfiLI5JD87Wg6Gl62fqaST4XHWdDDFtFtUB19H38CIrXCpiqEekxGXktc
-	3pNy3GtQ==;
-Received: from kyle by merlin.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rsQiF-00000007Pea-09Ef;
-	Thu, 04 Apr 2024 17:17:19 +0000
-Date: Thu, 4 Apr 2024 13:17:19 -0400
-From: Kyle McMartin <kyle@infradead.org>
-To: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: Kyle McMartin <kyle@infradead.org>,
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	linux-pm@vger.kernel.org, kernel-team@fb.com,
-	linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] therm_throt: test bits as we build
- therm_intr_core_clear_mask
-Message-ID: <Zg7gn2ATm_NMiw_2@merlin.infradead.org>
-References: <Zg3GhhTZotBNvlRR@merlin.infradead.org>
- <8b4cb4ad67032fad69f29df8e6b83054c7fa15db.camel@linux.intel.com>
+	s=arc-20240116; t=1712255764; c=relaxed/simple;
+	bh=YVSg+A+c0G/QBzGTi+zsoSF49xeNhM8/ZpTf0D52olQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WMz+POBlCMXbiO7y0L2F0VWGJXRUQaM+QjlPQmAa6eH5ijo3WlIIaQAruh4jyKuCSUZWNixwbzSsXKJ/Cl5oOYtKhAKLt63u+SchmP7EOadp5ky2ksffQCY6wFPo840KQ40/2eR7JB27iV6THpnI90Nk2EPpxk3XLPlUCUFRmpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BhNsoWfJ; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1712255761;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MPrsf2vDVW83MpKZ+078E5Z+3QsHXZHitSwEpFix1qI=;
+	b=BhNsoWfJBCJZV0c2R5724B3whxQ1QXDErnRa319b9utirb0WZnGPmDmWwgGMKJabCuOlaL
+	Q9g711bTc1VBxgi9JsBf+jnR5lcqATUc2IifqeLwWuvVt6TNvas4jkUNkSl9D9UmM/d1tz
+	Lxgr03AYNGMBhA4HyWVb1SJ5BXU0N6Q=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-30-cX5wV-LxNnS0IIzOZpVrTg-1; Thu, 04 Apr 2024 14:35:59 -0400
+X-MC-Unique: cX5wV-LxNnS0IIzOZpVrTg-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-a4d8e5d6722so101853266b.0
+        for <linux-pm@vger.kernel.org>; Thu, 04 Apr 2024 11:35:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712255759; x=1712860559;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MPrsf2vDVW83MpKZ+078E5Z+3QsHXZHitSwEpFix1qI=;
+        b=GVZrcDxvT3CYYhkyl31tE7tKCQn4RwhFNv0rw6ZMPvgibgJuCuo4wV2tT0qCjGVCIJ
+         HCsVVjTRkxhAbUNuOJ8Tm+83ZpGaWOP5/VB1lDc/FLgO8Z3RJM75T70lu2IuqbKoqcqy
+         oqFwRl8hLMSNWOI2Uhj/YIZJd/dOKw9aVhZ4H77Gc/0qK/JVCsmzc5jHk1aYi62PQKRE
+         7EUE8cClbzf+wN2ULNWEoaBCx9qbQBClNlwn6LBm0KRBBgjnshSgL0QZIRQsCg/jsl9A
+         dRqbR0zVbqVjlVcgRsfWmsg/49Uld6vXCQYYLK5uy4NN7OIfOR+8ZZsHWRxSO/N6Ecxy
+         y8iQ==
+X-Gm-Message-State: AOJu0YxYiilLIelx6ClXOmXtLyjXYRbmQPTLEatOvt427DZHnjWGh6nV
+	EuN5xDx8H7tFC/k5GaEPoHfXS9EL1/vfrLOiB5RtBjOAbjeDiqf12DSy0jEKau+x6fqOHxP7oHe
+	4veZjSQqahzQZZY0H5nm+pvK1jPlyuhiQ2PzFnGB0cPejyNavIbfy3Zet
+X-Received: by 2002:a17:906:1949:b0:a46:74fe:904f with SMTP id b9-20020a170906194900b00a4674fe904fmr2067506eje.26.1712255758863;
+        Thu, 04 Apr 2024 11:35:58 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEa+ZuOvVws59lFzI3y5YPXmbug3i3lf8SJUvio1Ht/zAnke4XGNg1Tstmua6dOpJA/6Hr9SQ==
+X-Received: by 2002:a17:906:1949:b0:a46:74fe:904f with SMTP id b9-20020a170906194900b00a4674fe904fmr2067500eje.26.1712255758511;
+        Thu, 04 Apr 2024 11:35:58 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id i25-20020a17090639d900b00a4df5e48d11sm9367831eje.72.2024.04.04.11.35.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Apr 2024 11:35:58 -0700 (PDT)
+Message-ID: <919c6143-79be-4adf-8f51-53ebcc454773@redhat.com>
+Date: Thu, 4 Apr 2024 20:35:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8b4cb4ad67032fad69f29df8e6b83054c7fa15db.camel@linux.intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] platform/x86/intel/hid: Don't wake on 5-button
+ releases
+To: David McFarland <corngood@gmail.com>
+Cc: linux-pm@vger.kernel.org, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?=
+ <ilpo.jarvinen@linux.intel.com>,
+ "platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>,
+ "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+ Enrik Berkhan <Enrik.Berkhan@inka.de>
+References: <20240318191153.6978-1-corngood@gmail.com>
+ <20240318191153.6978-2-corngood@gmail.com>
+ <ed891842-a86f-4ca8-af29-f7921a259146@redhat.com>
+ <878r1tpd6u.fsf_-_@gmail.com>
+Content-Language: en-US, nl
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <878r1tpd6u.fsf_-_@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Apr 03, 2024 at 06:15:47PM -0700, srinivas pandruvada wrote:
-> > On Broadwell and Broadwell-DE, the HWP flag is not set, but writing
-> > these bits does not trap.
-> > 
-> > On our Skylake-DE, Skylake, and Cooper Lake platforms, the HWP flag
-> > is
-> > set in CPUID, and writing 1 to these bits traps attempting to write
-> > 0xAAA8 to MSR 0x19C (THERM_STATUS). Writing 0xAA8 from userspace
-> > works
-> > as expected to un-stick PROCHOT_LOG.
-> 
-> I think this issue happens only on Skylake, Cascade Lake, Cooper Lake
-> and not on any other systems.
-> 
-> Please verify:
-> GP# happens only when bit13 (Current Limit Log) or bit15 (Cross Domain
-> Limit Log) is 1.
-> 
+Hi,
 
-Yeah, if either of the bits are set, we'll trap and fail the WRMSRL.
-
-> Basically writing 0x2000 or 0x8000  or A000 will cause this issue.
-> Are you using the latest BIOS with microcode?
-> Please confirm your microcode version, I can check internally.
+On 4/4/24 1:41 PM, David McFarland wrote:
+> If, for example, the power button is configured to suspend, holding it
+> and releasing it after the machine has suspended, will wake the machine.
 > 
-
-On SkylakeDE, 6-85-4 we've got 0x2006e08 and 0x2006e05 as the most commonly
-deployed microcodes. On Skylake, 6-85-4 we've got 0x2006e05 and 0x2000065.
-Finally, on Cooper Lake, 6-85-11, we have 0x700001f and are in the process
-of rolling out 0x7002503.
-
-Rolling out new firmware is a pretty slow process... Since we're not
-clearing those bits anywhere in the kernel we're deploying, I just
-stubbed out setting BIT(13) and BIT(15) on those platforms for now while
-we discuss a more durable fix.
-
-Thanks for following up! --kyle
-
-> Thanks,
-> Srinivas
+> Also on some machines, power button release events are sent during
+> hibernation, even if the button wasn't used to hibernate the machine.
+> This causes hibernation to be aborted.
 > 
+> Fixes: 0c4cae1bc00d ("PM: hibernate: Avoid missing wakeup events during hibernation")
+> Signed-off-by: David McFarland <corngood@gmail.com>
+> Tested-by: Enrik Berkhan <Enrik.Berkhan@inka.de>
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Thank you, this version looks good to me.
+
+Ilpo, can you pick this up as a bug-fix for the 6.9 cycle please?
+
+Regards,
+
+Hans
+
+
+
+> ---
+> v2: Added tags and fixed whitespace, as requested by Hans.
 > 
-> > 
-> > On our Sapphire Rapids platforms, the HWP flag is set, and writing 1
-> > to
-> > these bits is successful.
-> > 
-> >  drivers/thermal/intel/therm_throt.c | 29 ++++++++++++++++++++++-----
-> > --
-> >  1 file changed, 22 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/drivers/thermal/intel/therm_throt.c
-> > b/drivers/thermal/intel/therm_throt.c
-> > index e69868e868eb..3058d8fcfcef 100644
-> > --- a/drivers/thermal/intel/therm_throt.c
-> > +++ b/drivers/thermal/intel/therm_throt.c
-> > @@ -196,8 +196,14 @@ static const struct attribute_group
-> > thermal_attr_group = {
-> >  static u64 therm_intr_core_clear_mask;
-> >  static u64 therm_intr_pkg_clear_mask;
-> >  
-> > +/* Probe each addition to the mask to ensure that our wrmsrl
-> > + * won't fail to clear bits.
-> > + */
-> >  static void thermal_intr_init_core_clear_mask(void)
-> >  {
-> > +       u64 bits = 0;
-> > +       u64 mask = 0;
-> > +
-> >         if (therm_intr_core_clear_mask)
-> >                 return;
-> >  
-> > @@ -211,25 +217,34 @@ static void
-> > thermal_intr_init_core_clear_mask(void)
-> >          * Bit 1, 3, 5: CPUID.01H:EDX[22] = 1. This driver will not
-> >          * enable interrupts, when 0 as it checks for
-> > X86_FEATURE_ACPI.
-> >          */
-> > -       therm_intr_core_clear_mask = (BIT(1) | BIT(3) | BIT(5));
-> > +       mask = (BIT(1) | BIT(3) | BIT(5));
-> >  
-> >         /*
-> >          * Bit 7 and 9: Thermal Threshold #1 and #2 log
-> >          * If CPUID.01H:ECX[8] = 1
-> >          */
-> > -       if (boot_cpu_has(X86_FEATURE_TM2))
-> > -               therm_intr_core_clear_mask |= (BIT(7) | BIT(9));
-> > +       bits = BIT(7) | BIT(9);
-> > +       if (boot_cpu_has(X86_FEATURE_TM2) &&
-> > +           wrmsrl_safe(MSR_IA32_THERM_STATUS, mask | bits) >= 0)
-> > +               mask |= bits;
-> > +
-> >  
-> >         /* Bit 11: Power Limitation log (R/WC0) If CPUID.06H:EAX[4] =
-> > 1 */
-> > -       if (boot_cpu_has(X86_FEATURE_PLN))
-> > -               therm_intr_core_clear_mask |= BIT(11);
-> > +       bits = BIT(11);
-> > +       if (boot_cpu_has(X86_FEATURE_PLN) &&
-> > +           wrmsrl_safe(MSR_IA32_THERM_STATUS, mask | bits) >= 0)
-> > +               mask |= bits;
-> >  
-> >         /*
-> >          * Bit 13: Current Limit log (R/WC0) If CPUID.06H:EAX[7] = 1
-> >          * Bit 15: Cross Domain Limit log (R/WC0) If CPUID.06H:EAX[7]
-> > = 1
-> >          */
-> > -       if (boot_cpu_has(X86_FEATURE_HWP))
-> > -               therm_intr_core_clear_mask |= (BIT(13) | BIT(15));
-> > +       bits = BIT(13) | BIT(15);
-> > +       if (boot_cpu_has(X86_FEATURE_HWP) &&
-> > +           wrmsrl_safe(MSR_IA32_THERM_STATUS, mask | bits) >= 0)
-> > +               mask |= bits;
-> > +
-> > +       therm_intr_core_clear_mask = mask;
-> >  }
-> >  
-> >  static void thermal_intr_init_pkg_clear_mask(void)
+>  drivers/platform/x86/intel/hid.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 > 
+> diff --git a/drivers/platform/x86/intel/hid.c b/drivers/platform/x86/intel/hid.c
+> index 7457ca2b27a6..9ffbdc988fe5 100644
+> --- a/drivers/platform/x86/intel/hid.c
+> +++ b/drivers/platform/x86/intel/hid.c
+> @@ -504,6 +504,7 @@ static void notify_handler(acpi_handle handle, u32 event, void *context)
+>  	struct platform_device *device = context;
+>  	struct intel_hid_priv *priv = dev_get_drvdata(&device->dev);
+>  	unsigned long long ev_index;
+> +	struct key_entry *ke;
+>  	int err;
+>  
+>  	/*
+> @@ -545,11 +546,15 @@ static void notify_handler(acpi_handle handle, u32 event, void *context)
+>  		if (event == 0xc0 || !priv->array)
+>  			return;
+>  
+> -		if (!sparse_keymap_entry_from_scancode(priv->array, event)) {
+> +		ke = sparse_keymap_entry_from_scancode(priv->array, event);
+> +		if (!ke) {
+>  			dev_info(&device->dev, "unknown event 0x%x\n", event);
+>  			return;
+>  		}
+>  
+> +		if (ke->type == KE_IGNORE)
+> +			return;
+> +
+>  wakeup:
+>  		pm_wakeup_hard_event(&device->dev);
+>  
+
 
