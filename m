@@ -1,224 +1,102 @@
-Return-Path: <linux-pm+bounces-5933-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5934-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E42A898AE6
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 17:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F3739898B9C
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 17:54:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DAB11F2D868
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 15:20:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D72E1F2A776
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 15:54:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCF9B12C7FA;
-	Thu,  4 Apr 2024 15:16:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFA58129A78;
+	Thu,  4 Apr 2024 15:54:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JPx4GUnY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W4er2kLl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC424E1CF
-	for <linux-pm@vger.kernel.org>; Thu,  4 Apr 2024 15:16:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C6E112A176;
+	Thu,  4 Apr 2024 15:54:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712243796; cv=none; b=d9HCOBkqj3g4QcifauFgeAf6Dshymcmfb2hkwSyQRY+SyJoJ885vKwCFqqmG+9lOTqGHnxDwEpd5kV5tRyoE2ZtYeXe1a8pEt2wBgfvoIH/jt4JE7hlAscxvBbnwlNs5ZhlTBwyl6fZQSd3eq4xSanSTcKigxpXoWmuseuMR4dQ=
+	t=1712246043; cv=none; b=IE8S5vhD/O9Ps8wH9Jha0CRnM3+/QBaND6j7DTeXb6j+C//+fXpKe0tr/Negy9/BTavilYZUzZfSV7iG3qppsTBAOJQI2+Nq4NpCM0XkWF9m/cVcSLcIK6mtPUxlk2Zlw5XXLw18qfAvMWc1VA0q968NZhJgLO/k/HYZxdeJG+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712243796; c=relaxed/simple;
-	bh=9MkKX+3kBMH19o8dPP7/p0dh5ccoNvunQHFXL3tCCzI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E1belY1OLlYBMPM5YP1gWNFUIpRrLUh7eON0Sh/hYZcJWfh+Hl/JB4iKIfb77/SyFgPZtS3Usxev0JL1BlbeaSyO5PzP3V6aU2UbkXqYARWFGSDStGhXSLXrRveBb9udKC6clEt4p82x2nMN7X2s3fo8hPIl3Me4EsLTVu3cgb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JPx4GUnY; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4162b74f2a1so4333625e9.3
-        for <linux-pm@vger.kernel.org>; Thu, 04 Apr 2024 08:16:34 -0700 (PDT)
+	s=arc-20240116; t=1712246043; c=relaxed/simple;
+	bh=/3m8tbMTKbpp8DczNbgjKG86CcVoJKTX6w3QpC6Pclo=;
+	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=JXmDH7PyHbcENDOKLg8chVDeoArGCOKBQrm2147ss80pKLVHbuYvQjjaY1O2pllgMBc52k0wFp8xTp1w5xXwdst/JrbLdTPNt9L5xVi3mQh/bk7oeCAn9lNHGy+MrhlY/nav1GuraWX4zc/BT8BMazjal1cm+f7vsXau+7WdHF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W4er2kLl; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3436b096690so1778443f8f.1;
+        Thu, 04 Apr 2024 08:54:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1712243793; x=1712848593; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JadJf1yHiM3agA//2OvneRIfLrToVBQS2kX3ZvyjY2U=;
-        b=JPx4GUnYW8pShjn4vePM/q2qlgJCWGE5aB8vSzSeLuNe+2Q9PqgxzFk+JECTtDWWFn
-         RuAYWj+cWoWkWWPasagxlVf3WuMnoRixv32DssBjMaz1Efy+vdfQUAfm1oKe9yNtaox2
-         9cUfLDbg1pJ0uuB1kyoKHT6FMWwFBM8mnS6REZkW4SQa/1PkWnLdG/B/MzomEJMBoiPH
-         VMDBSUbF063tDCedhF5B8regUVY0nPOCJNt/sgeQYgnIkLZu305wSRmoJThAkTo9qRnY
-         ShcYrxxUX9vvGIkEgvyLqWN/FK5QA/dkZNuqpuNMbsKFqyQKKgN6c8rY9GzUCmI1ErAo
-         ye5g==
+        d=gmail.com; s=20230601; t=1712246040; x=1712850840; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:date:cc:to:from
+         :subject:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=/3m8tbMTKbpp8DczNbgjKG86CcVoJKTX6w3QpC6Pclo=;
+        b=W4er2kLloJj/DzIgKX0jHW1xdpJ/eacb1AxxhiMYZQvio9s/G6qSVO3eWdcf9YXLo/
+         JN4QjJJYLs38vWs3Rv9nVf6QpSCdx5YHWQEJd8zujj/O6OZOeOsPFm8NxuFp+pa44SxM
+         VtkcGeamNA08hQ2q3LxVNVowYm7NPhNjqeulrNNPaZolDs+PhgtLMzuZa1fiIclrLXzQ
+         Z8DU2oj4eI5h3TCznehBcT9z9dlWqH+CA9XUz0jT58jayf9v/R3nte1ceAIjwgO26L8y
+         Y5nI7QebxwRGw2dhdLAWnHTDD3vzX3YaDbsQgJFmfBHRzjtXk5OIaM4bBWfJk3YBHgUo
+         vQAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712243793; x=1712848593;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JadJf1yHiM3agA//2OvneRIfLrToVBQS2kX3ZvyjY2U=;
-        b=O6KNdZ/UmMtsbc6vptXaEjr0kBYWvXKPFatP3y80+69u8xdBJ0/qyvrfrmNLz30N+Q
-         a5bQQb3pyiY7OEltYgalrvn73xyz1HSswY80E3i3krUhye0/wKFp1fm7aJuIOm7JGRHZ
-         lJZMHH831thV+IYxeDPbzZ2tM1bq1xt4Sl/2Az21QFVTHefhLYsNSVZ6ufRUFngeQniE
-         54nzNbguyCvWgv6ww6rF/1nPHXxSGJVdlJb42Ve8akYpfPkOsAtSvG9HGvmBLnbc7M59
-         5Xj8bgI1AjIAZT6i1NcCNIpLdxnLHV6MWb9rLoZGWnukGpnZ/rrkygbIL9w7Gu09EqQw
-         uXdw==
-X-Forwarded-Encrypted: i=1; AJvYcCU/Z2T0Ae650pDcmBzYQjm7Cpp8OAp6Cwy0BJrWqlTzwcWAsdgFnEcINBdKI2CiZcU4vdm2MESMuc8SinA8rawFBF6AP9oDObU=
-X-Gm-Message-State: AOJu0YyDsjA3gZgbwpGA5xiFoLmRllVyvlat69nZKWW0BXQaPy5jVe8+
-	FEAbh1fOjlu7nZbmVPSqncQFrTVKgyaxqlF+eos71lXZ3pHE6boa7wAsQ+pr9hE=
-X-Google-Smtp-Source: AGHT+IHGzZnEGQ65V0RqdcQeBjbSGhJ1sZ8RB12ktW1XRjg9KxwbStdZLcCDqoNbiATje9p9j5Hj4w==
-X-Received: by 2002:a05:600c:3016:b0:415:67ac:3245 with SMTP id j22-20020a05600c301600b0041567ac3245mr52794wmh.28.1712243793225;
-        Thu, 04 Apr 2024 08:16:33 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id j10-20020a05600c488a00b004161ea7ed6dsm2914260wmp.38.2024.04.04.08.16.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Apr 2024 08:16:32 -0700 (PDT)
-Message-ID: <aab10d22-b1a1-45e9-85bc-a4334aa6c497@linaro.org>
-Date: Thu, 4 Apr 2024 17:16:32 +0200
+        d=1e100.net; s=20230601; t=1712246040; x=1712850840;
+        h=mime-version:user-agent:content-transfer-encoding:date:cc:to:from
+         :subject:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/3m8tbMTKbpp8DczNbgjKG86CcVoJKTX6w3QpC6Pclo=;
+        b=EWv9YS7PBMd1YhiHxRuvcQf7UMLmdhxfr6NA/eG7ZTU2hkAVXwS0VQNgrD/FUxkPou
+         ZYczpzw4xOlPZ9h+oEHP0dAZHpRqfhKd7XTNbtclBfZlouaBBepwnCXJkkymaRALHdAq
+         SwvViDPu3rBtgXn7IU+L0JyolA3M6wvbsvJM7oZmPhQJtxvSuk5eQ+hTjAI+EI/G7s0w
+         wBByjecKtQmh19mOb+2yujTAGMVCi3aCxqJuEtg7d8qIb84oUehbJAlNyx7gTLZl3R/F
+         +poQihHdVXA/wZzR7WVqn9ZVINGB3ZVsAGlWmUewUKVf6axsD+eC4S5lI0BZ1T218zsx
+         ZPLA==
+X-Forwarded-Encrypted: i=1; AJvYcCUXfX1EhRPASVCzLmWH6nFvf29nwkiJeX1SeUWFBC4U2OpfQ91eYnJNDs/TMz/PKHvdrrOuShifgfQ2BZfFELZkOncibSwz5VembY7e
+X-Gm-Message-State: AOJu0YyIAgOhKmsF+QflwclCmbM8Qj1MUQj6qg00Atm5DoexTn2krqxD
+	q7oU+VATkwqrRnfeTszh4Pdid5DewfqN9kEFJ0jQzxDCQeKVx8A0RhzNLnEzw3E=
+X-Google-Smtp-Source: AGHT+IHVFPGEZrCTsk92L3eJtuYBge9oeCNt9BZBgO+gIRZfLUwK7t6faaFK5b1/SpqxVj9fbL6r3w==
+X-Received: by 2002:a05:6000:4f1:b0:343:6c07:c816 with SMTP id cr17-20020a05600004f100b003436c07c816mr3091423wrb.16.1712246040329;
+        Thu, 04 Apr 2024 08:54:00 -0700 (PDT)
+Received: from ?IPv6:2001:8a0:e622:f700:7d3e:f9e7:30e2:91a5? ([2001:8a0:e622:f700:7d3e:f9e7:30e2:91a5])
+        by smtp.gmail.com with ESMTPSA id by7-20020a056000098700b0033ec94c6277sm20590586wrb.115.2024.04.04.08.53.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Apr 2024 08:54:00 -0700 (PDT)
+Message-ID: <fccbb040330a706a4f7b34875db1d896a0bf81c8.camel@gmail.com>
+Subject: iMX8M Mini suspend/resume hanging on imx8m_blk_ctrl_power_on()
+From: vitor <ivitro@gmail.com>
+To: linux-pm@vger.kernel.org, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc: ivitro@gmail.com, vitor.soares@toradex.com, ulf.hansson@linaro.org, 
+ shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, 
+ festevam@gmail.com, rafael@kernel.org, geert+renesas@glider.be,
+ peng.fan@nxp.com,  linus.walleij@linaro.org,
+ u.kleine-koenig@pengutronix.de, marex@denx.de
+Date: Thu, 04 Apr 2024 16:53:58 +0100
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 15/15] arm64: dts: mediatek: mt8188: add default
- thermal zones
-Content-Language: en-US
-To: Nicolas Pitre <nico@fluxnic.net>, linux-pm@vger.kernel.org,
- linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
-Cc: Nicolas Pitre <npitre@baylibre.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-References: <20240402032729.2736685-1-nico@fluxnic.net>
- <20240402032729.2736685-16-nico@fluxnic.net>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20240402032729.2736685-16-nico@fluxnic.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
+Greetings,
 
-Hi Nico,
+I'm trying to suspend/resume our Verdin iMX8M Mini with VPU IP using
+the latest 6.9.0-rc2 Kernel. While the system can suspend without
+issues, it hangs on the resume routine. After some investigation, I can
+see the Kernel hanging on imx8m_blk_ctrl_power_on()[1] while resuming
+the hantro-vpu power domain.
 
-a few comments about this description.
+Any hint about that?
 
-On 02/04/2024 05:25, Nicolas Pitre wrote:
-> From: Nicolas Pitre <npitre@baylibre.com>
-> 
-> Inspired by the vendor kernel but adapted to the upstream thermal
-> driver version.
-
-[ ... ]
-
-> +	thermal_zones: thermal-zones {
-> +		cpu-little0-thermal {
-> +			polling-delay = <1000>;
-
-Except if I'm wrong, the driver supports the interrupt mode, so it not 
-necessary to poll constantly when there is no mitigation. You can remove 
-the line and everywhere else.
-
-> +			polling-delay-passive = <250>;
-
-As little CPU, 200ms or 150ms may be more adequate.
-
-> +			thermal-sensors = <&lvts_mcu MT8188_MCU_LITTLE_CPU0>;
-> +
-> +			trips {
-> +				cpu_little0_alert: trip-alert {
-> +					temperature = <85000>;
-> +					hysteresis = <2000>;
-> +					type = "passive";
-> +				};
-
-You may want to add a 'hot' trip point in between, so the userspace can 
-be notified and take an action before reaching 'critical' (like 
-unplugging a CPU)
-
-> +				cpu_little0_crit: trip-crit {
-> +					temperature = <100000>;
-> +					hysteresis = <2000>;
-
-critical is a point of no return. Hysteresis does not make sense.
-
-These comments apply to all thermal zones.
-
-[ .. ]
-
-> +		cpu_big0-thermal {
-> +			polling-delay = <1000>;
-> +			polling-delay-passive = <250>;
-
-Same comments as the little but may be an even lower value. eg. 100ms.
-
-> +			thermal-sensors = <&lvts_mcu MT8188_MCU_BIG_CPU0>;
-> +
-> +			trips {
-> +				cpu_big0_alert: trip-alert {
-> +					temperature = <85000>;
-> +					hysteresis = <2000>;
-> +					type = "passive";
-> +				};
-> +
-> +				cpu_big0_crit: trip-crit {
-> +					temperature = <100000>;
-> +					hysteresis = <2000>;
-> +					type = "critical";
-> +				};
-> +			};
-> +
-> +			cooling-maps {
-> +				map0 {
-> +					trip = <&cpu_big0_alert>;
-> +					cooling-device = <&cpu6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +							 <&cpu7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-> +				};
-> +			};
-> +		};
-
-[ ... ]
-
-> +		gpu1-thermal {
-> +			polling-delay = <1000>;
-> +			polling-delay-passive = <250>;
-> +			thermal-sensors = <&lvts_ap MT8188_AP_GPU1>;
-> +
-> +			trips {
-> +				gpu1_alert: trip-alert {
-> +					temperature = <85000>;
-> +					hysteresis = <2000>;
-> +					type = "passive";
-> +				};
-> +
-> +				gpu1_crit: trip-crit {
-> +					temperature = <100000>;
-> +					hysteresis = <2000>;
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
-> +
-> +		gpu2-thermal {
-> +			polling-delay = <1000>;
-> +			polling-delay-passive = <250>;
-> +			thermal-sensors = <&lvts_ap MT8188_AP_GPU2>;
-> +
-> +			trips {
-> +				gpu2_alert: trip-alert {
-> +					temperature = <85000>;
-> +					hysteresis = <2000>;
-> +					type = "passive";
-> +				};
-> +
-> +				gpu2_crit: trip-crit {
-> +					temperature = <100000>;
-> +					hysteresis = <2000>;
-> +					type = "critical";
-> +				};
-> +			};
-
-You can add a devfreq cooling device for the GPU here.
-
-[ ... ]
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+[1]https://elixir.bootlin.com/linux/v6.9-rc2/source/drivers/pmdomain/imx/im=
+x8m-blk-ctrl.c#L101
 
 
