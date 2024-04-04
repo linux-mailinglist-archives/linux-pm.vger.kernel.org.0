@@ -1,181 +1,113 @@
-Return-Path: <linux-pm+bounces-5914-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5915-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45AF4898558
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 12:47:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F308898596
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 13:00:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C60F11F27723
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 10:47:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6EAAD1C21AE6
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 11:00:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 072348002A;
-	Thu,  4 Apr 2024 10:47:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0065F7EF09;
+	Thu,  4 Apr 2024 11:00:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KucgOAAX"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UBaPvh0+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F0AE757E5
-	for <linux-pm@vger.kernel.org>; Thu,  4 Apr 2024 10:47:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A71C8062E
+	for <linux-pm@vger.kernel.org>; Thu,  4 Apr 2024 11:00:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712227633; cv=none; b=Fpst6j8wcmAPD/vdlw32KDdS61U9p/2QEfJC3iBstmEcZRgQd3ptbK4M7XhDkuIGi8EyLMV3XhlJvnrpiGucVXisVRks1T5HPIvNaYSgnggFWbdvMSPmRyWzuYMaNEmJ1APTRxK3Y0t8Ogts53TC7JckO5Tbvh7BUsMWFal8hIo=
+	t=1712228408; cv=none; b=iaXa3gw6mfQukFO4OBQBrya13Kc4wGsDgV6FCt5hOEFwmxGlw7BuFO/v2ZIssQn7folf4TG2pO5DW5fNar+PnVTvwKtMIQs4b7gbgEveH4F4EWFXOw6cQGF9bQzPXyzj7zRD8aZ79fuU9ktcJxIK7yvLY+ge/VPE2/surtZwgFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712227633; c=relaxed/simple;
-	bh=V8wv6frzZebJQXeoCr9BTYoZ7AS6+o1u8akU2yyz/1E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=S9k/FBQwrSQ6XErMBuzcA1SMTwKRHCBzlqVsOt86OIF1KhpAAEKQnfWBmHcYFhAnxqGWD7Lra0hL+k5yE5/+V9z/cmTQnbcF9I80XgyFzdrFKzZSQ9oxKlLdYjan7KdlFDkyy8tOGgAOYXB19pZ6QDSl4u1d0YQ+a66Gsl+1Y7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KucgOAAX; arc=none smtp.client-ip=209.85.219.180
+	s=arc-20240116; t=1712228408; c=relaxed/simple;
+	bh=QZUH1a52jMmfuHXnlXXu1W4aybSdzgNJ2CJHqixfuF4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=llZfcalo3gTQ0du8jyN1uors9YaRW/xAnw0gIUT+bFCTCVeKtjExDDQAGUQA4OZ1dwSK2YA2WTrlMrCJk8l6nGFIXx+gXUwzh0zC7bhlGi2HV+mQBTByxtTP+Lhc+o0Lob4E7mtluJ6NHECgA3c/hAzLDczsW5xAbe/Mxc7/zC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UBaPvh0+; arc=none smtp.client-ip=209.85.208.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-dcbd1d4904dso845530276.3
-        for <linux-pm@vger.kernel.org>; Thu, 04 Apr 2024 03:47:11 -0700 (PDT)
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2d6eedf3e99so18247931fa.1
+        for <linux-pm@vger.kernel.org>; Thu, 04 Apr 2024 04:00:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1712227631; x=1712832431; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=L0Ykm2W1S1p85sujFPKLol+N6IEGAfeW2v8P+jKKQlQ=;
-        b=KucgOAAXGyvDLgVlFP79uaBNM0lHxRPP5SI52xTns2+d4W2BQOqHa8JuQeptXuGAJm
-         90GFrPLkysgTdYAt8MFAGVgacGXtW1ploArIf8cG+nqUyX/3TEwXYAOenldcxdldCNpj
-         0KiH1//m/HioVu4L5Hd91RDkiAMUpK/52Z9l/Kxv+9AiEEW0qsBMxQFdsy+Nbh5bkORJ
-         sTCIT299fHyDOcB/cfoB5HyEN4NMlwc4TllsrfvLAXeU3rk7YfphRXmtOqWVGA/fMKjq
-         j1gL4vEvXRj9vnrdAbKbqzY8mnug+7ydjfSH2IOYvAMzNPDdwUNYtBOThQFZcnBycDaL
-         YdfQ==
+        d=linaro.org; s=google; t=1712228405; x=1712833205; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q/4VrhFwIx4miS0ZTEG4Oh3FbRsUqj9LhWZBkvCX24A=;
+        b=UBaPvh0+jhPb7SCqBikJW7IWSp9qcbYkBFYzrI9TslS4mK6417e9pYrgZrHKNXtU5Q
+         be0NjlP/y6EuruRyYWLDEEl9+amH4LbPN4bMUJw8pm7WqXdFxHdPwAcP9CYZovmF+hnD
+         W41Sq9jksB5XAgc9HPBaE8tJnIJm+XzO9uNIB7r5jr5EoktdKjmuUWqGlpMU0I/sO5Au
+         w8XwrdfgOqfQOJPYyegoZDU1gZPe6VUV2V3/5rT1KxQ5aKAnMEpWcoxuh9W1rDpy301w
+         RKN2c84tPTRJGAuO4VTPb37P57wQmG7x3kVkROZpa70B2vDhsCT0f5ONT+fiRrcJyoLF
+         sfQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712227631; x=1712832431;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1712228405; x=1712833205;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=L0Ykm2W1S1p85sujFPKLol+N6IEGAfeW2v8P+jKKQlQ=;
-        b=hkkrAMMBlP+KrionrgAO9w8DCJdL4GtawjSXe6FKDwEUBS1rwpQcglpPDJ920mRfN7
-         1gzOQapBl+WMDthB3CeX50R/jWHroSCWMnJmunbgBNKhQ2Coxk29niWQRTMNSBWIyYsk
-         GD3uu979eOZzR1ErNpSd5+TdrUFa4nJYTG6SGKO9SelvzxcfVwzcu0enbss4tiuVALRU
-         qf6UN8IJagMBXzmghI6WR/U1OIJ0kQqrFVNSiMVSu0gSzWMIoJN17WWfGOkmm3amiX1C
-         HXjGHj8fWiQrgVlZhKJtCHs+gorMdw/SSdccq2iH+cBM2QRVXU/wd5fCMReU/TIcxRK7
-         hjqw==
-X-Forwarded-Encrypted: i=1; AJvYcCVW81kk2vDIR/ccREGcg6aurdDnzjgVJfXbU4hOOm8eyvZGsBJRgK9vLPuzOayj5pukxCr+W0G+3Chkwlq+mdjLZGcH4XutT4E=
-X-Gm-Message-State: AOJu0YwHZWXuGaduuT3hZtyPwwTu8yfypVXsK96O4n7bPr8NhTsISJ+3
-	tvt+mqjlST2T+Gj1mEnP/FC2/lKAmX1mnBFLAxfoYyzTj1eM4ZXh2aEDyZ9CkV8MThszRZR8xVR
-	DRNxaW96qvzcrdpp5UiyhfaZC82ge/vaYbyd9hg==
-X-Google-Smtp-Source: AGHT+IG8QfWI6GVdC6qLbyKBp8gOwWy/t5BNQ+Yfrm5Mn9ZdgBynu+9KPMQrhUmNrccslE7argS+hG9yXel1mv9D6SM=
-X-Received: by 2002:a25:9111:0:b0:dc7:4f61:5723 with SMTP id
- v17-20020a259111000000b00dc74f615723mr1910942ybl.39.1712227631181; Thu, 04
- Apr 2024 03:47:11 -0700 (PDT)
+        bh=Q/4VrhFwIx4miS0ZTEG4Oh3FbRsUqj9LhWZBkvCX24A=;
+        b=wj/oDKKghtTi86gbiA4ZSfp+9aybzQbL57Gg9jCuspaCiImzS0SkDnEEogdVaZCIv3
+         jnP658ZOz2/vp1ruvIFBxZisL7hjYnrXlo3u/UdKfdkzbHcBLrtdOktQHdlTh2u6NvGY
+         rH4g22y6hUBvfDo6k3RgSOMqg3JxpKAGrwyg4fodAZQ+YFEUqpXDm4xTWMzb7R9rqewo
+         g5HM4oLlFiAJP52wJmGDJ65JKnWHYSDJbnE+BYw/i/eK7ZvQjPKRkAb2fd7xkgdOjYus
+         PWpi5VnV00jdAATmz90EgY5R3D+ZQi8SuJsISqyshchLICngfYnknQICCuZhQEsf0URa
+         SN4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXamtI+QOXbOPJcmkTnAD735d3P58Xo0Cm/fipaRfBqDB4YMpIfqI9rmqHJEyQA/xCKL2JE+gJ+Xr2E3SpQh4hApn9zjJUXC0w=
+X-Gm-Message-State: AOJu0YyzQi/SRFIyv584DHpV4/kDDyrNqH2u8FohPBPxODUv2j8r4tfP
+	L5HBhFNe6pV6DyVx5/JKUbCH4c+8zxxn/4nmCC/pypNJIAbMAZbifqq9iiO66xk=
+X-Google-Smtp-Source: AGHT+IFdsz1dPl+XP6/LnYzHYCfgyWAYaamiQYXNuyslyHX2CpEcMsg1VYQm52tn0PFfQ/QqgFpr9g==
+X-Received: by 2002:a2e:9cd7:0:b0:2d7:1cd2:d382 with SMTP id g23-20020a2e9cd7000000b002d71cd2d382mr749307ljj.15.1712228403147;
+        Thu, 04 Apr 2024 04:00:03 -0700 (PDT)
+Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
+        by smtp.gmail.com with ESMTPSA id e20-20020a2ea554000000b002d3f3da0702sm2069719ljn.107.2024.04.04.04.00.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Apr 2024 04:00:02 -0700 (PDT)
+From: Ulf Hansson <ulf.hansson@linaro.org>
+To: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	linux-pm@vger.kernel.org
+Cc: Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Sudeep Holla <sudeep.holla@arm.com>
+Subject: [PATCH] MAINTAINERS: Add a git for the ARM PSCI PM DOMAIN
+Date: Thu,  4 Apr 2024 12:59:52 +0200
+Message-Id: <20240404105952.562885-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240329044142.3095193-1-fshao@chromium.org>
-In-Reply-To: <20240329044142.3095193-1-fshao@chromium.org>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 4 Apr 2024 12:46:35 +0200
-Message-ID: <CAPDyKFqr2wPHGScSAdwocjOF8jUTJnti+j5sWMYW5kg5x5OmyQ@mail.gmail.com>
-Subject: Re: [PATCH v2] pmdomain: mediatek: Add MT8188 buck isolation setting
-To: Fei Shao <fshao@chromium.org>
-Cc: Johnson Wang <johnson.wang@mediatek.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Fri, 29 Mar 2024 at 05:43, Fei Shao <fshao@chromium.org> wrote:
->
-> From: Johnson Wang <johnson.wang@mediatek.com>
->
-> From: Johnson Wang <johnson.wang@mediatek.com>
->
-> Add buck isolation setting to ADSP_AO, CAM_VCORE and IMG_VCORE power
-> domains in MT8188 for proper buck isolation control in power domain
-> on/off.
->
-> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
-> Signed-off-by: Fei Shao <fshao@chromium.org>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Let' make it clear that we have git to manage the corresponding patches for
+the ARM PSCI PM DOMAIN.
 
-Applied for next, thanks!
+Cc: Sudeep Holla <sudeep.holla@arm.com>
+Cc: Rafael J. Wysocki <rafael@kernel.org>
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Kind regards
-Uffe
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 7c121493f43d..7fb5b93dfbfe 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5578,6 +5578,7 @@ M:	Ulf Hansson <ulf.hansson@linaro.org>
+ L:	linux-pm@vger.kernel.org
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Supported
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git
+ F:	drivers/cpuidle/cpuidle-psci-domain.c
+ F:	drivers/cpuidle/cpuidle-psci.h
+ 
+-- 
+2.34.1
 
-
-> ---
->
-> Changes in v2:
-> [1] was reviewed but didn't get accepted at the time.
-> This rebases [1] on next-20240327 with revised commit message.
->
-> [1]: https://lore.kernel.org/all/20230315114505.25144-1-johnson.wang@mediatek.com/
->
->  drivers/pmdomain/mediatek/mt8188-pm-domains.h | 14 +++++++++++---
->  1 file changed, 11 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/pmdomain/mediatek/mt8188-pm-domains.h b/drivers/pmdomain/mediatek/mt8188-pm-domains.h
-> index 06834ab6597c..007235be9efe 100644
-> --- a/drivers/pmdomain/mediatek/mt8188-pm-domains.h
-> +++ b/drivers/pmdomain/mediatek/mt8188-pm-domains.h
-> @@ -175,6 +175,8 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
->                 .ctl_offs = 0x35C,
->                 .pwr_sta_offs = 0x16C,
->                 .pwr_sta2nd_offs = 0x170,
-> +               .ext_buck_iso_offs = 0x3EC,
-> +               .ext_buck_iso_mask = BIT(10),
->                 .bp_cfg = {
->                         BUS_PROT_WR(INFRA,
->                                     MT8188_TOP_AXI_PROT_EN_2_ADSP_AO_STEP1,
-> @@ -187,7 +189,7 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
->                                     MT8188_TOP_AXI_PROT_EN_2_CLR,
->                                     MT8188_TOP_AXI_PROT_EN_2_STA),
->                 },
-> -               .caps = MTK_SCPD_ALWAYS_ON,
-> +               .caps = MTK_SCPD_ALWAYS_ON | MTK_SCPD_EXT_BUCK_ISO,
->         },
->         [MT8188_POWER_DOMAIN_ADSP_INFRA] = {
->                 .name = "adsp_infra",
-> @@ -524,6 +526,8 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
->                 .ctl_offs = 0x3A4,
->                 .pwr_sta_offs = 0x16C,
->                 .pwr_sta2nd_offs = 0x170,
-> +               .ext_buck_iso_offs = 0x3EC,
-> +               .ext_buck_iso_mask = BIT(12),
->                 .bp_cfg = {
->                         BUS_PROT_WR(INFRA,
->                                     MT8188_TOP_AXI_PROT_EN_MM_IMG_VCORE_STEP1,
-> @@ -541,7 +545,8 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
->                                     MT8188_TOP_AXI_PROT_EN_MM_2_CLR,
->                                     MT8188_TOP_AXI_PROT_EN_MM_2_STA),
->                 },
-> -               .caps = MTK_SCPD_KEEP_DEFAULT_OFF | MTK_SCPD_DOMAIN_SUPPLY,
-> +               .caps = MTK_SCPD_KEEP_DEFAULT_OFF | MTK_SCPD_DOMAIN_SUPPLY |
-> +                       MTK_SCPD_EXT_BUCK_ISO,
->         },
->         [MT8188_POWER_DOMAIN_IMG_MAIN] = {
->                 .name = "img_main",
-> @@ -591,6 +596,8 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
->                 .ctl_offs = 0x3A0,
->                 .pwr_sta_offs = 0x16C,
->                 .pwr_sta2nd_offs = 0x170,
-> +               .ext_buck_iso_offs = 0x3EC,
-> +               .ext_buck_iso_mask = BIT(11),
->                 .bp_cfg = {
->                         BUS_PROT_WR(INFRA,
->                                     MT8188_TOP_AXI_PROT_EN_MM_CAM_VCORE_STEP1,
-> @@ -618,7 +625,8 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
->                                     MT8188_TOP_AXI_PROT_EN_MM_2_CLR,
->                                     MT8188_TOP_AXI_PROT_EN_MM_2_STA),
->                 },
-> -               .caps = MTK_SCPD_KEEP_DEFAULT_OFF | MTK_SCPD_DOMAIN_SUPPLY,
-> +               .caps = MTK_SCPD_KEEP_DEFAULT_OFF | MTK_SCPD_DOMAIN_SUPPLY |
-> +                       MTK_SCPD_EXT_BUCK_ISO,
->         },
->         [MT8188_POWER_DOMAIN_CAM_MAIN] = {
->                 .name = "cam_main",
-> --
-> 2.44.0.478.gd926399ef9-goog
->
 
