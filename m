@@ -1,118 +1,162 @@
-Return-Path: <linux-pm+bounces-5937-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5938-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AD1A898E9F
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 21:05:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 897E0898F04
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 21:28:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5429628E9AB
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 19:05:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACD871C281B2
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 19:28:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0B3A13281A;
-	Thu,  4 Apr 2024 19:05:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A2E613341E;
+	Thu,  4 Apr 2024 19:27:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XsG8/Haq"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="sDcofTuR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 871E317997;
-	Thu,  4 Apr 2024 19:05:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17F5E134404;
+	Thu,  4 Apr 2024 19:27:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712257525; cv=none; b=KpB7yMoiUyHlsMwyyGavm26cpdlk7zoXGr55Lgco5Jgmg8zo/C1CSSAkrwLZ9CBdy8cXLN0V6aivt2PxiiaRqpWq1wsvBUaH9Bvim/Up0M2o9Z1Ae1Op3nN+KBfEd316qLOtSlV8f7FZpoye9KfS5nSxkg6GjVY9D9+4Oz2/VjI=
+	t=1712258840; cv=none; b=dPZn6yI0nQGUiBIJDV45vVVqMlT9XdOvw791tOwgHXU8zI+NxsINTDREbiNNDoPVo8lkS3e09Vw99u3DUGczIiK0/UGOr9e+reHiJKaey8smTb4MWXXhGE/d5SijJ3Mu1xIShAlGhGy5bK7mSR4ZsMlyz+pYVUtJy4IhMDeDopI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712257525; c=relaxed/simple;
-	bh=Ad+WmrWDZH+uyKZBlmShx10JISDhkl/xsbS0yXDWUk4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kWHNIIfXzv316WAOr3SWrotOEU5YTHg6gtuesRKCNXEPwWAwzjdaOwC+O4wDYuoLiGV8EDMXkE5N1Eyi/84V6Xx1xipCXo+dRN5/u64eCRlcWuGzuEUj1Cp/TDXAtHU/IDP3OQ+yQgmkxL2J5VhlhJ1VHXteq2Xt8KUnoN3f3d0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XsG8/Haq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06E2BC43601;
-	Thu,  4 Apr 2024 19:05:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712257525;
-	bh=Ad+WmrWDZH+uyKZBlmShx10JISDhkl/xsbS0yXDWUk4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=XsG8/HaqIvyCJuoOQFKDwECV3OYkmZu8A9rTkM0MG1JRLMcx2zd4tfudpgJ1khL5x
-	 W+eu2v9TwL0NLzO2sR2mJuTAlhsti+X9UKivX7Y4jlEdKcYGcLFiJ4MNHOd4KrG1pN
-	 92ek6+WUmBdMNJSG73zkIdUOVnJ3tYoU6vOkYZvYKfDO4laRXrNwNdyGG4LNYP+uex
-	 2BCu7o4bpDFUtql84t4Qb3iRpuU8jB7cR0mrN7W6ZzZmRCu+KuRAtjXT/zFuvp2ftQ
-	 WNKHosJmJnrih1p+QQjmnEKXEGtt8y3yQfVUjbfJWoibbSKsJfZ2csrhGZkVrfo8h+
-	 n9xXNLXvn5euw==
-Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-5a4930d9c48so235831eaf.1;
-        Thu, 04 Apr 2024 12:05:25 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUcuQXUx3nJbzcN5MJSfyX8OOaF4zdmnzGUIqRSGVsVXKIaughZI6bpB9gHEeZU3+NAQC1/xD9h7lIWspFmK/1VuP0vKVV0uqVFANQ1WLtW+fR9d4BPXGu4qLrdx/y+Y9r9ZKvGG0E=
-X-Gm-Message-State: AOJu0Yw0EECsEQSO0pAAFrony6xao8cW8fsKpNtDsTzrv4UjbSEozoXv
-	BzewvgDodYs5G/BIvNqe6/Yv4E0HaBio8h2L7HeobSgO9Ire3Wb2L3phrMngpLYbogFW0EKESLk
-	faf+ENFGeskhbsuqc73kPoJeJpdo=
-X-Google-Smtp-Source: AGHT+IHw4k4WanAoMWlqbMjVDfiDJN8txdomLinvsfjLzaoY0TxyxKEy28w6X6kRMZd7IprazV5/dSqGVCX1BuW3tCU=
-X-Received: by 2002:a05:6820:2205:b0:5a4:6e23:e335 with SMTP id
- cj5-20020a056820220500b005a46e23e335mr3756823oob.0.1712257524264; Thu, 04 Apr
- 2024 12:05:24 -0700 (PDT)
+	s=arc-20240116; t=1712258840; c=relaxed/simple;
+	bh=vkdN9bc97p/devrra31F+aN1d0APMHfWHF3uqUbNmeY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=JKBsofXKvs4gSl+8JqxgoLRYcHujCEUGTxtI8eN31m9lcrGvCyjKuaGJ7lvxaHCReFTiDnTCPZb3D3sNgF80Mr7VWuaGVbBquWvMCOFY7HN374lbuCL4FlKQxhPYvJRAURgSrxlr68bnKhiPTN++YYWZtCPcyW0yfPxvTXoylGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=sDcofTuR reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
+ id 43b95b81933d4ea7; Thu, 4 Apr 2024 21:27:08 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 10BEE665D83;
+	Thu,  4 Apr 2024 21:27:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1712258828;
+	bh=vkdN9bc97p/devrra31F+aN1d0APMHfWHF3uqUbNmeY=;
+	h=From:To:Cc:Subject:Date;
+	b=sDcofTuRmD2N8fsJqjfbBVB6JnF71+i8SyTf0c7HiZLTZ6WJ/T8OZfvZmJ5pq66E5
+	 cZLs66t9veKtstJvDvteXA3jOENUk+Dasf5JvnwOGJA2rMnf7jOu6NOpDDp4nqXhsx
+	 ZvfypW8W6v609L8KAgp5AyxPrKDKU0uFQqgoXwW/88chCsGsgDrqh+Bmf/tQPIdjB5
+	 6ZSLqdFBaFRsaiptYXS2XdANvEj828mDq3upQ9iDY3ZsLTNYNPTRKSnfo9ycXokBAp
+	 8e4735dYD+5xsKgfIPFCSAP5L0Sy7wVw91mN3HP32iqYVvn8TRzwYO349E7VxPCHCZ
+	 GYHna4FWvEepQ==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject:
+ [PATCH v1] thermal: core: Relocate the struct thermal_governor definition
+Date: Thu, 04 Apr 2024 21:27:07 +0200
+Message-ID: <2725268.mvXUDI8C0e@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240404104200.1672208-1-vincent.guittot@linaro.org> <7ecd3ec9-6990-4d3e-84ae-d0d3a1cccb78@arm.com>
-In-Reply-To: <7ecd3ec9-6990-4d3e-84ae-d0d3a1cccb78@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 4 Apr 2024 21:05:12 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iXZug9pcFbps8v0xpz6hwbcH8+_esOOTD=wgrmcfCDhA@mail.gmail.com>
-Message-ID: <CAJZ5v0iXZug9pcFbps8v0xpz6hwbcH8+_esOOTD=wgrmcfCDhA@mail.gmail.com>
-Subject: Re: [PATCH] PM:EM: fix wrong utilization estimation in em_cpu_energy()
-To: Lukasz Luba <lukasz.luba@arm.com>, Vincent Guittot <vincent.guittot@linaro.org>
-Cc: rui.zhang@intel.com, amit.kucheria@verdurent.com, amit.kachhap@gmail.com, 
-	daniel.lezcano@linaro.org, viresh.kumar@linaro.org, len.brown@intel.com, 
-	pavel@ucw.cz, mhiramat@kernel.org, qyousef@layalina.io, wvw@google.com, 
-	xuewen.yan94@gmail.com, rafael@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, dietmar.eggemann@arm.com
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudefkedgudefkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeegpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
 
-On Thu, Apr 4, 2024 at 1:05=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> wr=
-ote:
->
-> Hi Vincent,
->
-> On 4/4/24 11:42, Vincent Guittot wrote:
-> > Commit 1b600da51073 ("PM: EM: Optimize em_cpu_energy() and remove divis=
-ion")
-> > has added back map_util_perf() in em_cpu_energy() computation which has
-> > been removed with the rework of scheduler/cpufreq interface.
-> > This is wrong because sugov_effective_cpu_perf() already takes care of
-> > mapping the utilization to a performance level.
-> >
-> > Fixes: 1b600da51073 ("PM: EM: Optimize em_cpu_energy() and remove divis=
-ion")
-> > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> > ---
-> >   include/linux/energy_model.h | 1 -
-> >   1 file changed, 1 deletion(-)
-> >
-> > diff --git a/include/linux/energy_model.h b/include/linux/energy_model.=
-h
-> > index 770755df852f..70cd7258cd29 100644
-> > --- a/include/linux/energy_model.h
-> > +++ b/include/linux/energy_model.h
-> > @@ -245,7 +245,6 @@ static inline unsigned long em_cpu_energy(struct em=
-_perf_domain *pd,
-> >        * max utilization to the allowed CPU capacity before calculating
-> >        * effective performance.
-> >        */
-> > -     max_util =3D map_util_perf(max_util);
-> >       max_util =3D min(max_util, allowed_cpu_cap);
-> >
-> >       /*
->
-> LGTM. It was developed in parallel IIRC and that change which removes
-> the extra margin to the util was lost from my radar. I can see it
-> landed first.
->
-> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Applied as 6.9-rc material, thanks!
+Notice that struct thermal_governor is only used by the thermal core
+and so move its definition to thermal_core.h.
+
+No functional impact.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/thermal/thermal_core.h |   25 +++++++++++++++++++++++++
+ include/linux/thermal.h        |   25 -------------------------
+ 2 files changed, 25 insertions(+), 25 deletions(-)
+
+Index: linux-pm/drivers/thermal/thermal_core.h
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_core.h
++++ linux-pm/drivers/thermal/thermal_core.h
+@@ -23,6 +23,31 @@ struct thermal_trip_desc {
+ };
+ 
+ /**
++ * struct thermal_governor - structure that holds thermal governor information
++ * @name:	name of the governor
++ * @bind_to_tz: callback called when binding to a thermal zone.  If it
++ *		returns 0, the governor is bound to the thermal zone,
++ *		otherwise it fails.
++ * @unbind_from_tz:	callback called when a governor is unbound from a
++ *			thermal zone.
++ * @throttle:	callback called for every trip point even if temperature is
++ *		below the trip point temperature
++ * @update_tz:	callback called when thermal zone internals have changed, e.g.
++ *		thermal cooling instance was added/removed
++ * @governor_list:	node in thermal_governor_list (in thermal_core.c)
++ */
++struct thermal_governor {
++	const char *name;
++	int (*bind_to_tz)(struct thermal_zone_device *tz);
++	void (*unbind_from_tz)(struct thermal_zone_device *tz);
++	int (*throttle)(struct thermal_zone_device *tz,
++			const struct thermal_trip *trip);
++	void (*update_tz)(struct thermal_zone_device *tz,
++			  enum thermal_notify_event reason);
++	struct list_head	governor_list;
++};
++
++/**
+  * struct thermal_zone_device - structure for a thermal zone
+  * @id:		unique id number for each thermal zone
+  * @type:	the thermal zone device type
+Index: linux-pm/include/linux/thermal.h
+===================================================================
+--- linux-pm.orig/include/linux/thermal.h
++++ linux-pm/include/linux/thermal.h
+@@ -126,31 +126,6 @@ struct thermal_cooling_device {
+ #endif
+ };
+ 
+-/**
+- * struct thermal_governor - structure that holds thermal governor information
+- * @name:	name of the governor
+- * @bind_to_tz: callback called when binding to a thermal zone.  If it
+- *		returns 0, the governor is bound to the thermal zone,
+- *		otherwise it fails.
+- * @unbind_from_tz:	callback called when a governor is unbound from a
+- *			thermal zone.
+- * @throttle:	callback called for every trip point even if temperature is
+- *		below the trip point temperature
+- * @update_tz:	callback called when thermal zone internals have changed, e.g.
+- *		thermal cooling instance was added/removed
+- * @governor_list:	node in thermal_governor_list (in thermal_core.c)
+- */
+-struct thermal_governor {
+-	const char *name;
+-	int (*bind_to_tz)(struct thermal_zone_device *tz);
+-	void (*unbind_from_tz)(struct thermal_zone_device *tz);
+-	int (*throttle)(struct thermal_zone_device *tz,
+-			const struct thermal_trip *trip);
+-	void (*update_tz)(struct thermal_zone_device *tz,
+-			  enum thermal_notify_event reason);
+-	struct list_head	governor_list;
+-};
+-
+ /* Structure to define Thermal Zone parameters */
+ struct thermal_zone_params {
+ 	const char *governor_name;
+
+
+
 
