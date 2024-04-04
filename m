@@ -1,252 +1,274 @@
-Return-Path: <linux-pm+bounces-5904-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5905-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09515897D57
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 03:16:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73A35897E1A
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 05:58:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9449628A5FA
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 01:16:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AB2AFB22704
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 03:58:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7624125B9;
-	Thu,  4 Apr 2024 01:15:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7CAF2137E;
+	Thu,  4 Apr 2024 03:58:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c+KmZwJl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R6Ob0Aut"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0BA8BE40;
-	Thu,  4 Apr 2024 01:15:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3CAE208A5;
+	Thu,  4 Apr 2024 03:58:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712193350; cv=none; b=CkYzm6AaQMwXmxkJ+w2MGiIbZlwfhkeLI2qFnV6lc8wIhFOGe/Tk6ZxIXBjbREB6lroAy3C5i/MMRs8moj7tzBZxyDgAjM2BAZHo2vUk9g9fhv3KRWfszmK1QiXhKCHOO77y8ieTQxF+YEAECx8GyRTAH6pidl0DMX7Rk/MMvCw=
+	t=1712203111; cv=none; b=PLu9iXnji8zCJhsz0dYnvZghN5IYB8H4n8gZo6mdS3LqQnIkyNe5F2719dcSouzab05qWq407gis2qaUj70hVdI0KFBrUs2isdqMeK8cnRFvh08UiIXpfe2YwOqovrkYmESz3HUxv0ACEz/i9S3IaK9Knt2DrqFuBKQGFIL9zak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712193350; c=relaxed/simple;
-	bh=bTWiElf3y9Mb72tsq/IL9WbaI71cY8hVMEjcnYahzoQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=o3aZyhU+DXLmSrPb31gZW0+4iT+M644Nb7qvtq+7hoKTIlZGlb2wGxEVLe3jsciW+ALUi1UHZ0+S/RYfAtOPTAD5DLuIY+321dQI8Fw9D6pxzCxbzXqN76ie6GKrnuBDVzDepUo9wbbBeLvkOSUei8a9FmDh65HCdJIwNNval6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c+KmZwJl; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1712203111; c=relaxed/simple;
+	bh=UeYt3dItpqPdunIkGLkEi8Q/kczieh0vkCQgPkJWLAQ=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=exYvxlNIHyR0Cjwp5PKjxKc8cJW3Vbq12oAY25xqs4hIcXjbVYVPPLMA58EadPyG8PLLyvuxT0TsqU64QGtGocdre4VsHJX2iexVsZHdwn6FS856mPbXpWIj4Z0S+IbGejFY7uQ2Y5zA82A/AdxkKNBtX3tQksroS0wDcz5gzhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R6Ob0Aut; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712193349; x=1743729349;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=bTWiElf3y9Mb72tsq/IL9WbaI71cY8hVMEjcnYahzoQ=;
-  b=c+KmZwJlQS3vQYXtGA68MRG+arOzr4Vs1F36xTii+itM7xbrOyJqAtE0
-   22wEDPOEuBb/r4NidVhpGxesKBPHbjNuZLRv+ktqX1kSNe7YKtcw3i4+S
-   OBIWXy7FS38tdfZKuRA2JYpPLnkUq/fVnVIMPkwYxo1SPK7RkXUue47L5
-   3JGYi295Z6lULMqxkbJNdjJju4eMSdTdKCCWL/vuHRwH2tvJPWwURy300
-   nSsMwsQg0zlVFiaNPWVhfb6A3kU0ZoC/k9o+ZcRvFuB3yT4Xl47B5K8H0
-   5CBReRliSuShfm1rTjQ/QmJ1e4ZyYgGix3h4euRxOzfvyuw5gYcOlzukY
-   w==;
-X-CSE-ConnectionGUID: B3OSSMmQTHut9DYyFJFL2w==
-X-CSE-MsgGUID: ol5M3NH4QA6cKnBjrPx0MQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="11232322"
+  t=1712203111; x=1743739111;
+  h=date:from:to:cc:subject:message-id;
+  bh=UeYt3dItpqPdunIkGLkEi8Q/kczieh0vkCQgPkJWLAQ=;
+  b=R6Ob0AutJdhKBGKS5V0lz+yPzujQX4mI+mydfHW51pPlq8pKd8XbT6WP
+   nijK9x+JorgZ1ZGNi8RCJkUCWX4NKwOTKD1LxxOkwGT64iMvCfU3JPdT8
+   skM7QpcvdTCXPYNNGI72e//R3r7ME4ARNFUV/nk+PoNq59gZ/9nP6um/s
+   2GrLVkFKB5l0oFuy2zKfHhN7MKnqNZgT5CCEiqL1+i9krpg5wli4dXAeA
+   yZna4P+sezzC94vDtfF9EjqdkFYjlh40o/J/fpVIXVzZ6c9w4T5ZXXqeU
+   QCblCqXkg6DcrNz/3UP0x5IRrWfTM+XNuQ0HRFkZap7WoulLRtNC8J1N0
+   g==;
+X-CSE-ConnectionGUID: d7DJL8uOSk6NDZhG+js2YQ==
+X-CSE-MsgGUID: kWZKlHOxTM+XyVLeChN25g==
+X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="11297074"
 X-IronPort-AV: E=Sophos;i="6.07,178,1708416000"; 
-   d="scan'208";a="11232322"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 18:15:48 -0700
-X-CSE-ConnectionGUID: 7ep+mN8GSBaDSDyIrjVxYA==
-X-CSE-MsgGUID: WtNWftyFTcu9u3gDFtobGA==
+   d="scan'208";a="11297074"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 20:58:29 -0700
+X-CSE-ConnectionGUID: XiUMPiBVR96928DOn+fnvQ==
+X-CSE-MsgGUID: 3xY/J0kJQTi3r4VCgLWQCQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,178,1708416000"; 
-   d="scan'208";a="18722413"
-Received: from spandruv-desk1.amr.corp.intel.com ([10.209.37.99])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 18:15:49 -0700
-Message-ID: <8b4cb4ad67032fad69f29df8e6b83054c7fa15db.camel@linux.intel.com>
-Subject: Re: [RFC PATCH] therm_throt: test bits as we build
- therm_intr_core_clear_mask
-From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To: Kyle McMartin <kyle@infradead.org>, "Rafael J. Wysocki"
-	 <rafael.j.wysocki@intel.com>
-Cc: linux-pm@vger.kernel.org, kernel-team@fb.com,
- linux-kernel@vger.kernel.org
-Date: Wed, 03 Apr 2024 18:15:47 -0700
-In-Reply-To: <Zg3GhhTZotBNvlRR@merlin.infradead.org>
-References: <Zg3GhhTZotBNvlRR@merlin.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+   d="scan'208";a="23406519"
+Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 03 Apr 2024 20:58:26 -0700
+Received: from kbuild by e61807b1d151 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rsEF6-0000a4-0q;
+	Thu, 04 Apr 2024 03:58:24 +0000
+Date: Thu, 04 Apr 2024 11:57:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ ec7c9cb7f43d11580085bd9d98189295f54b6638
+Message-ID: <202404041131.U2NmoFyA-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-Hi Kyle,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: ec7c9cb7f43d11580085bd9d98189295f54b6638  Merge branch 'pm-sleep' into bleeding-edge
 
-On Wed, 2024-04-03 at 17:13 -0400, Kyle McMartin wrote:
-> X86_FEATURE_HWP appears to be insufficient on some platforms, and
-> writing 1 to BIT(13)|BIT(15) results in the wrmsrl trapping and
-> failing
-> to clear PROCHOT_LOG.
->=20
-> Instead, also try to wrmsrl_safe with those bits set in the mask, and
-> check if we get -EIO back. If so, those bits will trap and prevent us
-> from writing to THERM_STATUS.
->=20
-> Signed-off-by: Kyle McMartin <jkkm@fb.com>
->=20
-> ---
->=20
-> We noticed a problem on some of our production hosts while rolling
-> out
-> 6.4 kernels where we were seeing PROCHOT_LOG set but never cleared,
-> along with a warn on once in wrmsr.
->=20
-> I tracked this down to:
->=20
-> commit 930d06bf071aa746db11d68d2d75660b449deff3
-> Author: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Date:=C2=A0=C2=A0 Tue Nov 15 18:54:17 2022 -0800
->=20
-> =C2=A0=C2=A0=C2=A0 thermal: intel: Protect clearing of thermal status bit=
-s
->=20
-> which started setting some unexpected bits in THERM_STATUS on our
-> platform. Previously, the mask had these bits set, but we were
-> masking
-> with the MSR which was resulting in them not being written to 1.
->=20
-> Starting with 117e4e5bd9d47b89777dbf6b37a709dcfe59520f, these bits
-> were
-> protected by the HWP CPUID flag, but on some of our platforms, this
-> doesn't seem sufficient.
->=20
-> On Broadwell and Broadwell-DE, the HWP flag is not set, but writing
-> these bits does not trap.
->=20
-> On our Skylake-DE, Skylake, and Cooper Lake platforms, the HWP flag
-> is
-> set in CPUID, and writing 1 to these bits traps attempting to write
-> 0xAAA8 to MSR 0x19C (THERM_STATUS). Writing 0xAA8 from userspace
-> works
-> as expected to un-stick PROCHOT_LOG.
+elapsed time: 732m
 
-I think this issue happens only on Skylake, Cascade Lake, Cooper Lake
-and not on any other systems.
+configs tested: 180
+configs skipped: 3
 
-Please verify:
-GP# happens only when bit13 (Current Limit Log) or bit15 (Cross Domain
-Limit Log) is 1.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Basically writing 0x2000 or 0x8000  or A000 will cause this issue.
-Are you using the latest BIOS with microcode?
-Please confirm your microcode version, I can check internally.
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20240404   gcc  
+arc                   randconfig-002-20240404   gcc  
+arm                              alldefconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   clang
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm                        mvebu_v5_defconfig   gcc  
+arm                          pxa3xx_defconfig   clang
+arm                   randconfig-001-20240404   gcc  
+arm                   randconfig-002-20240404   gcc  
+arm                   randconfig-003-20240404   clang
+arm                   randconfig-004-20240404   clang
+arm                         s3c6400_defconfig   gcc  
+arm                         wpcm450_defconfig   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240404   gcc  
+arm64                 randconfig-002-20240404   gcc  
+arm64                 randconfig-003-20240404   clang
+arm64                 randconfig-004-20240404   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240404   gcc  
+csky                  randconfig-002-20240404   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20240404   clang
+hexagon               randconfig-002-20240404   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20240404   gcc  
+i386         buildonly-randconfig-002-20240404   clang
+i386         buildonly-randconfig-003-20240404   clang
+i386         buildonly-randconfig-004-20240404   gcc  
+i386         buildonly-randconfig-005-20240404   clang
+i386         buildonly-randconfig-006-20240404   gcc  
+i386                                defconfig   clang
+i386                  randconfig-001-20240404   gcc  
+i386                  randconfig-002-20240404   clang
+i386                  randconfig-003-20240404   clang
+i386                  randconfig-004-20240404   gcc  
+i386                  randconfig-005-20240404   clang
+i386                  randconfig-006-20240404   clang
+i386                  randconfig-011-20240404   gcc  
+i386                  randconfig-012-20240404   clang
+i386                  randconfig-013-20240404   gcc  
+i386                  randconfig-014-20240404   clang
+i386                  randconfig-015-20240404   gcc  
+i386                  randconfig-016-20240404   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20240404   gcc  
+loongarch             randconfig-002-20240404   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                        m5407c3_defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                        bcm63xx_defconfig   clang
+mips                     cu1000-neo_defconfig   gcc  
+mips                     loongson1b_defconfig   clang
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240404   gcc  
+nios2                 randconfig-002-20240404   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20240404   gcc  
+parisc                randconfig-002-20240404   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                        cell_defconfig   gcc  
+powerpc                     powernv_defconfig   gcc  
+powerpc               randconfig-001-20240404   gcc  
+powerpc               randconfig-002-20240404   gcc  
+powerpc               randconfig-003-20240404   clang
+powerpc                     skiroot_defconfig   clang
+powerpc64             randconfig-001-20240404   gcc  
+powerpc64             randconfig-002-20240404   clang
+powerpc64             randconfig-003-20240404   clang
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+riscv                    nommu_virt_defconfig   clang
+riscv                 randconfig-001-20240404   clang
+riscv                 randconfig-002-20240404   clang
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+s390                  randconfig-001-20240404   gcc  
+s390                  randconfig-002-20240404   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                    randconfig-001-20240404   gcc  
+sh                    randconfig-002-20240404   gcc  
+sh                          sdk7786_defconfig   gcc  
+sh                           se7619_defconfig   gcc  
+sh                           sh2007_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20240404   gcc  
+sparc64               randconfig-002-20240404   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20240404   clang
+um                    randconfig-002-20240404   clang
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-001-20240404   gcc  
+x86_64       buildonly-randconfig-002-20240404   gcc  
+x86_64       buildonly-randconfig-003-20240404   gcc  
+x86_64       buildonly-randconfig-004-20240404   clang
+x86_64       buildonly-randconfig-005-20240404   clang
+x86_64       buildonly-randconfig-006-20240404   clang
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20240404   clang
+x86_64                randconfig-002-20240404   gcc  
+x86_64                randconfig-003-20240404   clang
+x86_64                randconfig-004-20240404   gcc  
+x86_64                randconfig-005-20240404   gcc  
+x86_64                randconfig-006-20240404   gcc  
+x86_64                randconfig-011-20240404   clang
+x86_64                randconfig-012-20240404   clang
+x86_64                randconfig-013-20240404   clang
+x86_64                randconfig-014-20240404   clang
+x86_64                randconfig-015-20240404   gcc  
+x86_64                randconfig-016-20240404   gcc  
+x86_64                randconfig-071-20240404   gcc  
+x86_64                randconfig-072-20240404   clang
+x86_64                randconfig-073-20240404   clang
+x86_64                randconfig-074-20240404   gcc  
+x86_64                randconfig-075-20240404   clang
+x86_64                randconfig-076-20240404   gcc  
+x86_64                          rhel-8.3-rust   clang
+xtensa                            allnoconfig   gcc  
+xtensa                       common_defconfig   gcc  
+xtensa                randconfig-001-20240404   gcc  
+xtensa                randconfig-002-20240404   gcc  
 
-Thanks,
-Srinivas
-
-
->=20
-> On our Sapphire Rapids platforms, the HWP flag is set, and writing 1
-> to
-> these bits is successful.
->=20
-> =C2=A0drivers/thermal/intel/therm_throt.c | 29 ++++++++++++++++++++++----=
--
-> --
-> =C2=A01 file changed, 22 insertions(+), 7 deletions(-)
->=20
-> diff --git a/drivers/thermal/intel/therm_throt.c
-> b/drivers/thermal/intel/therm_throt.c
-> index e69868e868eb..3058d8fcfcef 100644
-> --- a/drivers/thermal/intel/therm_throt.c
-> +++ b/drivers/thermal/intel/therm_throt.c
-> @@ -196,8 +196,14 @@ static const struct attribute_group
-> thermal_attr_group =3D {
-> =C2=A0static u64 therm_intr_core_clear_mask;
-> =C2=A0static u64 therm_intr_pkg_clear_mask;
-> =C2=A0
-> +/* Probe each addition to the mask to ensure that our wrmsrl
-> + * won't fail to clear bits.
-> + */
-> =C2=A0static void thermal_intr_init_core_clear_mask(void)
-> =C2=A0{
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u64 bits =3D 0;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u64 mask =3D 0;
-> +
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (therm_intr_core_clear=
-_mask)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0return;
-> =C2=A0
-> @@ -211,25 +217,34 @@ static void
-> thermal_intr_init_core_clear_mask(void)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Bit 1, 3, 5: CPUID.01H=
-:EDX[22] =3D 1. This driver will not
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * enable interrupts, whe=
-n 0 as it checks for
-> X86_FEATURE_ACPI.
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0therm_intr_core_clear_mask =3D=
- (BIT(1) | BIT(3) | BIT(5));
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mask =3D (BIT(1) | BIT(3) | BI=
-T(5));
-> =C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Bit 7 and 9: Thermal T=
-hreshold #1 and #2 log
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * If CPUID.01H:ECX[8] =
-=3D 1
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (boot_cpu_has(X86_FEATURE_T=
-M2))
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0therm_intr_core_clear_mask |=3D (BIT(7) | BIT(9));
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bits =3D BIT(7) | BIT(9);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (boot_cpu_has(X86_FEATURE_T=
-M2) &&
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 wrmsrl_safe=
-(MSR_IA32_THERM_STATUS, mask | bits) >=3D 0)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0mask |=3D bits;
-> +
-> =C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Bit 11: Power Limitati=
-on log (R/WC0) If CPUID.06H:EAX[4] =3D
-> 1 */
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (boot_cpu_has(X86_FEATURE_P=
-LN))
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0therm_intr_core_clear_mask |=3D BIT(11);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bits =3D BIT(11);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (boot_cpu_has(X86_FEATURE_P=
-LN) &&
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 wrmsrl_safe=
-(MSR_IA32_THERM_STATUS, mask | bits) >=3D 0)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0mask |=3D bits;
-> =C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Bit 13: Current Limit =
-log (R/WC0) If CPUID.06H:EAX[7] =3D 1
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Bit 15: Cross Domain L=
-imit log (R/WC0) If CPUID.06H:EAX[7]
-> =3D 1
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (boot_cpu_has(X86_FEATURE_H=
-WP))
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0therm_intr_core_clear_mask |=3D (BIT(13) | BIT(15));
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bits =3D BIT(13) | BIT(15);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (boot_cpu_has(X86_FEATURE_H=
-WP) &&
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 wrmsrl_safe=
-(MSR_IA32_THERM_STATUS, mask | bits) >=3D 0)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0mask |=3D bits;
-> +
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0therm_intr_core_clear_mask =3D=
- mask;
-> =C2=A0}
-> =C2=A0
-> =C2=A0static void thermal_intr_init_pkg_clear_mask(void)
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
