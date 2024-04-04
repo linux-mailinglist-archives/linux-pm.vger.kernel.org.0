@@ -1,126 +1,119 @@
-Return-Path: <linux-pm+bounces-5912-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5913-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E131289853D
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 12:42:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70FEF898556
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 12:47:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70E2D289957
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 10:42:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A10F41C22F8C
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 10:47:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 818C07FBB6;
-	Thu,  4 Apr 2024 10:42:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DA82757E5;
+	Thu,  4 Apr 2024 10:47:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QtP9R+E8"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gN/cpNZt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A80CF8F7D
-	for <linux-pm@vger.kernel.org>; Thu,  4 Apr 2024 10:42:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94B3679F3
+	for <linux-pm@vger.kernel.org>; Thu,  4 Apr 2024 10:47:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712227330; cv=none; b=VzTHZu+PChWwm8XaRRMHfttz88cld2E0+tDE6YawvzbX9j/29Nri2ASEm6/pBv0HhQLLKjt88a0o00+opLTy7wi9jyHSjWy/p+/Gj3h5PI1LBbLfmjLDQToONLjUq5Fts0yG4BV/pIhMmidlhhxFlQXdXnGNIH/YdIoArrWcgKo=
+	t=1712227626; cv=none; b=lUZ6CdExEEeFZ6bA1WfghXseA/2GPBnacre1jltM4ytoIi6ptWuQEOJDgYdZ03fIItFBvo7rzBYzOp5EO/jr4iNRcfw4Lg92mv3qhsb9m6Y0F5LAZUPjpnMALCkGJ3x54sY6zfajZuVZ7tAEyiHfVU/I6QwLZiDAC6yhYBWGEb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712227330; c=relaxed/simple;
-	bh=F+ImSYJLyugWmmAj9uepc0So3V1g9t4KB1p1y7LgtK0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=I0wpbDlyeNgL4OlU+qJ/l/fYEkDKqEjh2ryI3YkhMxnz8VuyeFtFXkaC9WdJnOZg3EeY0sHqZ1/ye0xdFE0MVpCiOXg8zv14Dnwo0srw6+2asYuAwpWVj+MOWdINUWUcrdnqU50NRQHkEDIA5r+D4ILSFhz1nDdRTXvPkpZ+RWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QtP9R+E8; arc=none smtp.client-ip=209.85.167.48
+	s=arc-20240116; t=1712227626; c=relaxed/simple;
+	bh=c01EuYyZ3SiHskwBzOJ+kOOtzarjS+3wqSXsqxO128w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sbKDMZg0FOFbSNYgj62V6aPn+94rJWKKQIKJOAfr+y6UkEItlLjVAvKYur/qw4Lf4kvAbMT+8yjmERVF/iYEoTxLRpUFQb0AW0UI8kqDeyku2xVasY6Gj1OTzOZAPU7HrLh2UtGZYX2zkon6nHeg0r+bY5JYmNfNaHWopOTC0CU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gN/cpNZt; arc=none smtp.client-ip=209.85.219.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-516cdb21b34so613899e87.1
-        for <linux-pm@vger.kernel.org>; Thu, 04 Apr 2024 03:42:08 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-dbed0710c74so780596276.1
+        for <linux-pm@vger.kernel.org>; Thu, 04 Apr 2024 03:47:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1712227327; x=1712832127; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pMlr4ISB96FS0s1ezgMhw1dQVyqmmEV48Kuj+0pAf/8=;
-        b=QtP9R+E8ezCozggvQyDR1mJke6OsMUOyu6vQ3E298gdKVrcvIvxiRKNeucmiQSp7Aq
-         6poRsIp7xyyBboZfHbVNQn+hG17nGhoYHs5ZUhgJKO7YUtl/kIXV2i8aw1NdnzEVvShC
-         1ZwYZHzPVVAXLsI7Q4DM+/d/LW9yoBYu4AeFjVfR4qKEeWUmQA4fqOwojPXSSo93CAw5
-         GYA8SPRTnkRWuC2c14Nt6UrML/4JmLcwS6LV/HVMd0VDZgfnIODGLQBbH1SmsIdTztl3
-         ylMx2/oAOgJ6FSR6FpEeUuMSbHwEdcyiijJqYWPqPJSutR6MQknbQbMSwFn6RXTLicyV
-         N49Q==
+        d=linaro.org; s=google; t=1712227623; x=1712832423; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0OLGHTxDGXllhjSVr+wpHbh0zVlIAwon7mEvnonKBt0=;
+        b=gN/cpNZt1xzI5Qt7W9riUkBX2lF/5yY2zwiavdC9N2C/pKG220qmZMxbcTR2NK276r
+         QwX0iA2XAHbA9F8/v0PvqlJrvx7a4Pf+cllw7jPFlx7qFG+TQk0bEh8d7HKrNU5ApcKd
+         JkT80C9o/mlKG/hCZP1CffGSvI1cX97pvVT4hpQj/JhdAxj3eEZDbqk1T+nyUmgNESW2
+         0pO0g9ay0GjvxiqbG2aUnB3ep2a10JO+mHO0XwBrbOYPCjRP+DIxABlmhZD2Zke0uFQ4
+         J8g/CoB8SUp9hgP/JZAUNRwhaKqwPIVh6+OQcn6mM/h2cq+cNQK3BrbAp7DIpciT+BqL
+         nDwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712227327; x=1712832127;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1712227623; x=1712832423;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pMlr4ISB96FS0s1ezgMhw1dQVyqmmEV48Kuj+0pAf/8=;
-        b=MJuDqstyXI18kltRe4fzP8vk/KVREyO5inIpUpfIUX27RhSrEiD0MW9aJ9S+u16532
-         cagCMbC6tFHNrQ6pf+oW/QYZHViuGFJuUbw1nfgaark7nv1i74jQOvRTSKyew+RL4gQl
-         zLcB8FNoDc6dNhiWJf6iYQ6ZJ8XVQNm+Swkg6fPz+mdipKyFtgUC5papMVUfmtUmf6Ay
-         18pE4OPA3NQBoE+/VTGwDHG3AwOi+mIaLZUhtSwLlUrJoxP2mAukwKD9dpePQcfv9Qtn
-         oBYwxw+Ytrd3YyzabYgXgmi7WTyCQbJq+L4YupTbYi+Lm67XCa6VpwoB+KVvnt1zwFQe
-         4EPA==
-X-Forwarded-Encrypted: i=1; AJvYcCV3ZYGxaPJk1qVKp8RUrYBIGxB3apiOa4QHENd21XxpIB/PY5zOcXN9OxVnb1+X3BF1V8y1qhEYlExD1bU2/o5wuk7UXUWXrcI=
-X-Gm-Message-State: AOJu0Yy5104C9hRBbu/Yc5koFSphwVPDek+nz0++EvW78g3bwWCHvFCy
-	TsoQX3JQj4SeyqNZ8xX3T4/pj3ftooeDcytCElvkDCqHP3uiXczwIC3anSGzEueV6Ux0/stNq3Y
-	s
-X-Google-Smtp-Source: AGHT+IHHTnr5FGWLUjbBYPIWS8xHHJjMEZgZYgVBrSYPzGMWLUeJY4muZvKJ4gA3iycESCyrF4JSFA==
-X-Received: by 2002:a05:6512:282:b0:513:dda5:a379 with SMTP id j2-20020a056512028200b00513dda5a379mr1513517lfp.57.1712227326729;
-        Thu, 04 Apr 2024 03:42:06 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:e0a:f:6020:fdfa:a65d:5f57:ba15])
-        by smtp.gmail.com with ESMTPSA id k6-20020a05600c1c8600b00416244a53b8sm2309923wms.4.2024.04.04.03.42.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Apr 2024 03:42:06 -0700 (PDT)
-From: Vincent Guittot <vincent.guittot@linaro.org>
-To: lukasz.luba@arm.com,
-	rafael@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	dietmar.eggemann@arm.com
-Cc: rui.zhang@intel.com,
-	amit.kucheria@verdurent.com,
-	amit.kachhap@gmail.com,
-	daniel.lezcano@linaro.org,
-	viresh.kumar@linaro.org,
-	len.brown@intel.com,
-	pavel@ucw.cz,
-	mhiramat@kernel.org,
-	qyousef@layalina.io,
-	wvw@google.com,
-	xuewen.yan94@gmail.com,
-	Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH] PM:EM: fix wrong utilization estimation in em_cpu_energy()
-Date: Thu,  4 Apr 2024 12:42:00 +0200
-Message-Id: <20240404104200.1672208-1-vincent.guittot@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        bh=0OLGHTxDGXllhjSVr+wpHbh0zVlIAwon7mEvnonKBt0=;
+        b=FKE0OHOGZoHQAisAlx6qFcii4UdjZG8+J35FYuBuwg3jGuc53Jig+b4raOG+l6KALQ
+         9W4HTiej1o1+C1mZ941z8UTQ40MzuQfsu15O3YVKSE4kWgxOhRSMDWd+3EVUvKi+TBpJ
+         2Pu1BnaHwf2Xu8hqapluapBvwDl2IJESDf2WuseHo6+Wc61tpLaJiiH46yS6Yp5DETis
+         z2L/zpsUUI56tKkpkT2Ba4uM5A2wRDu6U9wwQNQDNh2wECVCm4wjIg2cX2zcksRemKHf
+         jvGh4646CR1H2mN0ITE9Ekcrjb01+6O0/cd2MCmhyo4cWjMOmCpAaWHHt39NZT+1R0eA
+         UApQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVDtoXtvsBbeKLYjUmW5w6l6Y6CWN0ZoEeIkzwEcLGT2xirULfmO1m9D5Bn8zieJVv+Z8zQdvkUKWDNfKvhprnsRcxhs0GHCss=
+X-Gm-Message-State: AOJu0YwwIaDs5ei7jcXDz/oyV8YjGymGRtPL1pNfS+QWqaZnNB/mY/Fz
+	sDHvTY8CDV6Y57rcwEgv8iZAX2wrM/WCcArwzMFFl3x6xn7BlpFaYd9vi5rD4oEDHgReoZph5Om
+	Rtw0YbCG3B/3knT8NNJw4jKX35VpQANm6P17saQ==
+X-Google-Smtp-Source: AGHT+IHb2ngWJuGXnRgC7Jjqe2VL15KZSHlCl5aI2amVAv9f9Jw4owxwUzrf1g3jQ6SJX9boCj6Pb0Kb6Mg+LWoz51E=
+X-Received: by 2002:a25:d045:0:b0:dc7:4b0a:589 with SMTP id
+ h66-20020a25d045000000b00dc74b0a0589mr2041087ybg.55.1712227623549; Thu, 04
+ Apr 2024 03:47:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240330211036.100956-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20240330211036.100956-1-krzysztof.kozlowski@linaro.org>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 4 Apr 2024 12:46:27 +0200
+Message-ID: <CAPDyKFoWO+xUsOb0xDge62kNYu9v18eWBAZ=RgLjWJsgvqMWtQ@mail.gmail.com>
+Subject: Re: [PATCH] pmdomain: mediatek: scpsys: drop driver owner assignment
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 
-Commit 1b600da51073 ("PM: EM: Optimize em_cpu_energy() and remove division")
-has added back map_util_perf() in em_cpu_energy() computation which has
-been removed with the rework of scheduler/cpufreq interface.
-This is wrong because sugov_effective_cpu_perf() already takes care of
-mapping the utilization to a performance level.
+On Sat, 30 Mar 2024 at 22:10, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> Core in platform_driver_register() already sets the .owner, so driver
+> does not need to.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Fixes: 1b600da51073 ("PM: EM: Optimize em_cpu_energy() and remove division")
-Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
----
- include/linux/energy_model.h | 1 -
- 1 file changed, 1 deletion(-)
+Applied for next, thanks!
 
-diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
-index 770755df852f..70cd7258cd29 100644
---- a/include/linux/energy_model.h
-+++ b/include/linux/energy_model.h
-@@ -245,7 +245,6 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
- 	 * max utilization to the allowed CPU capacity before calculating
- 	 * effective performance.
- 	 */
--	max_util = map_util_perf(max_util);
- 	max_util = min(max_util, allowed_cpu_cap);
- 
- 	/*
--- 
-2.34.1
+Kind regards
+Uffe
 
+
+> ---
+>  drivers/pmdomain/mediatek/mtk-scpsys.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/pmdomain/mediatek/mtk-scpsys.c b/drivers/pmdomain/mediatek/mtk-scpsys.c
+> index 59a7a8c261ed..1a80c1537a43 100644
+> --- a/drivers/pmdomain/mediatek/mtk-scpsys.c
+> +++ b/drivers/pmdomain/mediatek/mtk-scpsys.c
+> @@ -1138,7 +1138,6 @@ static struct platform_driver scpsys_drv = {
+>         .driver = {
+>                 .name = "mtk-scpsys",
+>                 .suppress_bind_attrs = true,
+> -               .owner = THIS_MODULE,
+>                 .of_match_table = of_scpsys_match_tbl,
+>         },
+>  };
+> --
+> 2.34.1
+>
 
