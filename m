@@ -1,175 +1,224 @@
-Return-Path: <linux-pm+bounces-5931-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5933-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AEC6898923
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 15:48:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E42A898AE6
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 17:20:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9AC5B1C25CB5
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 13:48:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DAB11F2D868
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 15:20:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56533129A73;
-	Thu,  4 Apr 2024 13:48:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCF9B12C7FA;
+	Thu,  4 Apr 2024 15:16:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dNFQzFUa"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JPx4GUnY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 787A71292D9
-	for <linux-pm@vger.kernel.org>; Thu,  4 Apr 2024 13:48:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC424E1CF
+	for <linux-pm@vger.kernel.org>; Thu,  4 Apr 2024 15:16:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712238497; cv=none; b=RHq1OJ2YfWs6LEGkMm8byXxJ0PD8uHnq9DEOQIDepJ5kija1yy318uCgYEC7G9v11Xm0xSpz493MeQ3ACqkWvVpt1+VXuQrrIwS7RJJHX2zKQPqPxb8i54rnzjfwjPEg2wkYzxMgE/7bz+h63qf5gampJasnXf4sKpae7GfMsx0=
+	t=1712243796; cv=none; b=d9HCOBkqj3g4QcifauFgeAf6Dshymcmfb2hkwSyQRY+SyJoJ885vKwCFqqmG+9lOTqGHnxDwEpd5kV5tRyoE2ZtYeXe1a8pEt2wBgfvoIH/jt4JE7hlAscxvBbnwlNs5ZhlTBwyl6fZQSd3eq4xSanSTcKigxpXoWmuseuMR4dQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712238497; c=relaxed/simple;
-	bh=y6/IshHk0uv9fDFkEevt+RsUXDV7iaRgIf3llsfiB/A=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=V44eDGqrJNTyaH62nIxVsIfs1uXj7HFM06faQJyy9s9gc9c5GsiqYos0LSlbXIHGGAC8KxWJ85NarW6l/WpLVwwxwdw9nzh9tz/MHgi5Q1JItMDQTCljFFE6r5lATjqjDkgYaQZcrJioGR5EwLfRuof821/YWDMtm7OerzHPMFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dNFQzFUa; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1712238494;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hl4pfGBrbON0r6A5JWj3i+j4YMcyleP+1dPbuGF0SPU=;
-	b=dNFQzFUaoOhcgzKe24k71xYdFNCV4Zq/dY6g4bPTp4N+E9boeOf2aNPpvaGhJEkEitlTAO
-	MUuoj2mw9lhqV2CMDpVZ/dWxYTAw84OsQ3h3Qr7EJZ+Dm68ngDyIEuEV9VdNUKn3am+Qq6
-	DDZioJXoJ3JUSqrwPcSnoIbqlJc/ogY=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-260-zJ0kA69APuKU_kbfP0Pa-g-1; Thu,
- 04 Apr 2024 09:48:09 -0400
-X-MC-Unique: zJ0kA69APuKU_kbfP0Pa-g-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BEFD228043E4;
-	Thu,  4 Apr 2024 13:48:07 +0000 (UTC)
-Received: from llong.com (unknown [10.22.9.12])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 8F3F13C54;
-	Thu,  4 Apr 2024 13:48:06 +0000 (UTC)
-From: Waiman Long <longman@redhat.com>
-To: Tejun Heo <tj@kernel.org>,
-	Zefan Li <lizefan.x@bytedance.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Peter Zijlstra <peterz@infradead.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <len.brown@intel.com>,
-	Pavel Machek <pavel@ucw.cz>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	cgroups@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Frederic Weisbecker <frederic@kernel.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Alex Shi <alexs@kernel.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Waiman Long <longman@redhat.com>
-Subject: [PATCH v2 2/2] cgroup/cpuset: Add test_cpuset_v1_hp.sh
-Date: Thu,  4 Apr 2024 09:47:49 -0400
-Message-Id: <20240404134749.2857852-3-longman@redhat.com>
-In-Reply-To: <20240404134749.2857852-1-longman@redhat.com>
-References: <20240404134749.2857852-1-longman@redhat.com>
+	s=arc-20240116; t=1712243796; c=relaxed/simple;
+	bh=9MkKX+3kBMH19o8dPP7/p0dh5ccoNvunQHFXL3tCCzI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=E1belY1OLlYBMPM5YP1gWNFUIpRrLUh7eON0Sh/hYZcJWfh+Hl/JB4iKIfb77/SyFgPZtS3Usxev0JL1BlbeaSyO5PzP3V6aU2UbkXqYARWFGSDStGhXSLXrRveBb9udKC6clEt4p82x2nMN7X2s3fo8hPIl3Me4EsLTVu3cgb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JPx4GUnY; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4162b74f2a1so4333625e9.3
+        for <linux-pm@vger.kernel.org>; Thu, 04 Apr 2024 08:16:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1712243793; x=1712848593; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JadJf1yHiM3agA//2OvneRIfLrToVBQS2kX3ZvyjY2U=;
+        b=JPx4GUnYW8pShjn4vePM/q2qlgJCWGE5aB8vSzSeLuNe+2Q9PqgxzFk+JECTtDWWFn
+         RuAYWj+cWoWkWWPasagxlVf3WuMnoRixv32DssBjMaz1Efy+vdfQUAfm1oKe9yNtaox2
+         9cUfLDbg1pJ0uuB1kyoKHT6FMWwFBM8mnS6REZkW4SQa/1PkWnLdG/B/MzomEJMBoiPH
+         VMDBSUbF063tDCedhF5B8regUVY0nPOCJNt/sgeQYgnIkLZu305wSRmoJThAkTo9qRnY
+         ShcYrxxUX9vvGIkEgvyLqWN/FK5QA/dkZNuqpuNMbsKFqyQKKgN6c8rY9GzUCmI1ErAo
+         ye5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712243793; x=1712848593;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JadJf1yHiM3agA//2OvneRIfLrToVBQS2kX3ZvyjY2U=;
+        b=O6KNdZ/UmMtsbc6vptXaEjr0kBYWvXKPFatP3y80+69u8xdBJ0/qyvrfrmNLz30N+Q
+         a5bQQb3pyiY7OEltYgalrvn73xyz1HSswY80E3i3krUhye0/wKFp1fm7aJuIOm7JGRHZ
+         lJZMHH831thV+IYxeDPbzZ2tM1bq1xt4Sl/2Az21QFVTHefhLYsNSVZ6ufRUFngeQniE
+         54nzNbguyCvWgv6ww6rF/1nPHXxSGJVdlJb42Ve8akYpfPkOsAtSvG9HGvmBLnbc7M59
+         5Xj8bgI1AjIAZT6i1NcCNIpLdxnLHV6MWb9rLoZGWnukGpnZ/rrkygbIL9w7Gu09EqQw
+         uXdw==
+X-Forwarded-Encrypted: i=1; AJvYcCU/Z2T0Ae650pDcmBzYQjm7Cpp8OAp6Cwy0BJrWqlTzwcWAsdgFnEcINBdKI2CiZcU4vdm2MESMuc8SinA8rawFBF6AP9oDObU=
+X-Gm-Message-State: AOJu0YyDsjA3gZgbwpGA5xiFoLmRllVyvlat69nZKWW0BXQaPy5jVe8+
+	FEAbh1fOjlu7nZbmVPSqncQFrTVKgyaxqlF+eos71lXZ3pHE6boa7wAsQ+pr9hE=
+X-Google-Smtp-Source: AGHT+IHGzZnEGQ65V0RqdcQeBjbSGhJ1sZ8RB12ktW1XRjg9KxwbStdZLcCDqoNbiATje9p9j5Hj4w==
+X-Received: by 2002:a05:600c:3016:b0:415:67ac:3245 with SMTP id j22-20020a05600c301600b0041567ac3245mr52794wmh.28.1712243793225;
+        Thu, 04 Apr 2024 08:16:33 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id j10-20020a05600c488a00b004161ea7ed6dsm2914260wmp.38.2024.04.04.08.16.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Apr 2024 08:16:32 -0700 (PDT)
+Message-ID: <aab10d22-b1a1-45e9-85bc-a4334aa6c497@linaro.org>
+Date: Thu, 4 Apr 2024 17:16:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 15/15] arm64: dts: mediatek: mt8188: add default
+ thermal zones
+Content-Language: en-US
+To: Nicolas Pitre <nico@fluxnic.net>, linux-pm@vger.kernel.org,
+ linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
+Cc: Nicolas Pitre <npitre@baylibre.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+References: <20240402032729.2736685-1-nico@fluxnic.net>
+ <20240402032729.2736685-16-nico@fluxnic.net>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20240402032729.2736685-16-nico@fluxnic.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
 
-Add a simple test to verify that an empty v1 cpuset will force its tasks
-to be moved to an ancestor node. It is based on the test case documented
-in commit 76bb5ab8f6e3 ("cpuset: break kernfs active protection in
-cpuset_write_resmask()").
 
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- tools/testing/selftests/cgroup/Makefile       |  2 +-
- .../selftests/cgroup/test_cpuset_v1_hp.sh     | 46 +++++++++++++++++++
- 2 files changed, 47 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/cgroup/test_cpuset_v1_hp.sh
+Hi Nico,
 
-diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
-index 00b441928909..16461dc0ffdf 100644
---- a/tools/testing/selftests/cgroup/Makefile
-+++ b/tools/testing/selftests/cgroup/Makefile
-@@ -4,7 +4,7 @@ CFLAGS += -Wall -pthread
- all: ${HELPER_PROGS}
- 
- TEST_FILES     := with_stress.sh
--TEST_PROGS     := test_stress.sh test_cpuset_prs.sh
-+TEST_PROGS     := test_stress.sh test_cpuset_prs.sh test_cpuset_v1_hp.sh
- TEST_GEN_FILES := wait_inotify
- TEST_GEN_PROGS = test_memcontrol
- TEST_GEN_PROGS += test_kmem
-diff --git a/tools/testing/selftests/cgroup/test_cpuset_v1_hp.sh b/tools/testing/selftests/cgroup/test_cpuset_v1_hp.sh
-new file mode 100755
-index 000000000000..3f45512fb512
---- /dev/null
-+++ b/tools/testing/selftests/cgroup/test_cpuset_v1_hp.sh
-@@ -0,0 +1,46 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Test the special cpuset v1 hotplug case where a cpuset become empty of
-+# CPUs will force migration of tasks out to an ancestor.
-+#
-+
-+skip_test() {
-+	echo "$1"
-+	echo "Test SKIPPED"
-+	exit 4 # ksft_skip
-+}
-+
-+[[ $(id -u) -eq 0 ]] || skip_test "Test must be run as root!"
-+
-+# Find cpuset v1 mount point
-+CPUSET=$(mount -t cgroup | grep cpuset | head -1 | awk -e '{print $3}')
-+[[ -n "$CPUSET" ]] || skip_test "cpuset v1 mount point not found!"
-+
-+#
-+# Create a test cpuset, put a CPU and a task there and offline that CPU
-+#
-+TDIR=test$$
-+[[ -d $CPUSET/$TDIR ]] || mkdir $CPUSET/$TDIR
-+echo 1 > $CPUSET/$TDIR/cpuset.cpus
-+echo 0 > $CPUSET/$TDIR/cpuset.mems
-+sleep 10&
-+TASK=$!
-+echo $TASK > $CPUSET/$TDIR/tasks
-+NEWCS=$(cat /proc/$TASK/cpuset)
-+[[ $NEWCS != "/$TDIR" ]] && {
-+	echo "Unexpected cpuset $NEWCS, test FAILED!"
-+	exit 1
-+}
-+
-+echo 0 > /sys/devices/system/cpu/cpu1/online
-+sleep 0.5
-+echo 1 > /sys/devices/system/cpu/cpu1/online
-+NEWCS=$(cat /proc/$TASK/cpuset)
-+rmdir $CPUSET/$TDIR
-+[[ $NEWCS != "/" ]] && {
-+	echo "cpuset $NEWCS, test FAILED!"
-+	exit 1
-+}
-+echo "Test PASSED"
-+exit 0
+a few comments about this description.
+
+On 02/04/2024 05:25, Nicolas Pitre wrote:
+> From: Nicolas Pitre <npitre@baylibre.com>
+> 
+> Inspired by the vendor kernel but adapted to the upstream thermal
+> driver version.
+
+[ ... ]
+
+> +	thermal_zones: thermal-zones {
+> +		cpu-little0-thermal {
+> +			polling-delay = <1000>;
+
+Except if I'm wrong, the driver supports the interrupt mode, so it not 
+necessary to poll constantly when there is no mitigation. You can remove 
+the line and everywhere else.
+
+> +			polling-delay-passive = <250>;
+
+As little CPU, 200ms or 150ms may be more adequate.
+
+> +			thermal-sensors = <&lvts_mcu MT8188_MCU_LITTLE_CPU0>;
+> +
+> +			trips {
+> +				cpu_little0_alert: trip-alert {
+> +					temperature = <85000>;
+> +					hysteresis = <2000>;
+> +					type = "passive";
+> +				};
+
+You may want to add a 'hot' trip point in between, so the userspace can 
+be notified and take an action before reaching 'critical' (like 
+unplugging a CPU)
+
+> +				cpu_little0_crit: trip-crit {
+> +					temperature = <100000>;
+> +					hysteresis = <2000>;
+
+critical is a point of no return. Hysteresis does not make sense.
+
+These comments apply to all thermal zones.
+
+[ .. ]
+
+> +		cpu_big0-thermal {
+> +			polling-delay = <1000>;
+> +			polling-delay-passive = <250>;
+
+Same comments as the little but may be an even lower value. eg. 100ms.
+
+> +			thermal-sensors = <&lvts_mcu MT8188_MCU_BIG_CPU0>;
+> +
+> +			trips {
+> +				cpu_big0_alert: trip-alert {
+> +					temperature = <85000>;
+> +					hysteresis = <2000>;
+> +					type = "passive";
+> +				};
+> +
+> +				cpu_big0_crit: trip-crit {
+> +					temperature = <100000>;
+> +					hysteresis = <2000>;
+> +					type = "critical";
+> +				};
+> +			};
+> +
+> +			cooling-maps {
+> +				map0 {
+> +					trip = <&cpu_big0_alert>;
+> +					cooling-device = <&cpu6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&cpu7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +			};
+> +		};
+
+[ ... ]
+
+> +		gpu1-thermal {
+> +			polling-delay = <1000>;
+> +			polling-delay-passive = <250>;
+> +			thermal-sensors = <&lvts_ap MT8188_AP_GPU1>;
+> +
+> +			trips {
+> +				gpu1_alert: trip-alert {
+> +					temperature = <85000>;
+> +					hysteresis = <2000>;
+> +					type = "passive";
+> +				};
+> +
+> +				gpu1_crit: trip-crit {
+> +					temperature = <100000>;
+> +					hysteresis = <2000>;
+> +					type = "critical";
+> +				};
+> +			};
+> +		};
+> +
+> +		gpu2-thermal {
+> +			polling-delay = <1000>;
+> +			polling-delay-passive = <250>;
+> +			thermal-sensors = <&lvts_ap MT8188_AP_GPU2>;
+> +
+> +			trips {
+> +				gpu2_alert: trip-alert {
+> +					temperature = <85000>;
+> +					hysteresis = <2000>;
+> +					type = "passive";
+> +				};
+> +
+> +				gpu2_crit: trip-crit {
+> +					temperature = <100000>;
+> +					hysteresis = <2000>;
+> +					type = "critical";
+> +				};
+> +			};
+
+You can add a devfreq cooling device for the GPU here.
+
+[ ... ]
+
 -- 
-2.39.3
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
 
