@@ -1,40 +1,40 @@
-Return-Path: <linux-pm+bounces-5921-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5922-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43A5C8985DC
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 13:15:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51649898606
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 13:26:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D8C8D1F25576
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 11:15:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0AE0D28E4E6
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 11:26:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56DF0811E7;
-	Thu,  4 Apr 2024 11:15:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4552C8286A;
+	Thu,  4 Apr 2024 11:26:38 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 133CF80C09;
-	Thu,  4 Apr 2024 11:15:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 663EA8286B;
+	Thu,  4 Apr 2024 11:26:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712229324; cv=none; b=aMsG51pn8kyvhzLn5/hK8u5H5VIY1DOao8dXwvx2alNCDBs6TWprwjSwulc+F2Drg5iLfUJzyIS5YqWqJ7UExbFiYVWflyba1GNvabonnEGDlMcBf9eiwIaGLj4SOGq3x4HThD0AVAJrRAaf6QSPsnzh//7lyXXrBn2ajIjTw0s=
+	t=1712229998; cv=none; b=OcTY1ZyCplUCTnrmUZ3nLKJVDlUIf5GO64KXiyoQiBfrg5gF/pqPMqyzBRZzDex1zUwHE2rz1vDrDUninYpJYLyByJD/PUht2HfJglVGbwzq6mY3tTEFtGxaW+MxgMLxB2BSWI36vsuxjzvz8ItIeMeiN/ahB5s2Dvzb5xxLX4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712229324; c=relaxed/simple;
-	bh=Gb6TQcZhy8zvbAqHNSQ5R13gtVldiV+tKWL8vvqYeV0=;
+	s=arc-20240116; t=1712229998; c=relaxed/simple;
+	bh=l2B8DsM6rv9m6KxY3JGKVlChYIWsAzS5o8y7YJPs8Hg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TZPLdZKv8wgsrhfb7HpW9FEtYlnhS+RHn3qP7gn2p9B9Tg7L81RhQUfNyuUejGIC5hRK7K1jIEZj0r0sKs6Y8KXI6P0rsto1mf70Bn1+3btF9Rzk5ABULd9jYcg/Mzoznuj4upncMhgYwDslptSbrtYbefOMi4aSASYIWQTjlIA=
+	 In-Reply-To:Content-Type; b=MXyAApCZBuRJJCn+Vd/EyFefOJK8w73xwumP13XaNooIMOtpJ+c7EiGSn7djfSRXpsINHOmrLcLJPVeLOhU8Mj+tYUXv/tzjGFHmCaPYTgtEURnVYq/v9X8s+Qd1FBnqnZolPVMDgGb0MYS7LQK+oUch0lymRnnpD0V9YBea+Vg=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D4E9FEC;
-	Thu,  4 Apr 2024 04:15:52 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9AAA7FEC;
+	Thu,  4 Apr 2024 04:27:06 -0700 (PDT)
 Received: from [10.57.73.43] (unknown [10.57.73.43])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A2B373F7B4;
-	Thu,  4 Apr 2024 04:15:20 -0700 (PDT)
-Message-ID: <7ebaa870-64d0-4944-bf62-d4ef1a97a1a9@arm.com>
-Date: Thu, 4 Apr 2024 12:15:22 +0100
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1BD103F7B4;
+	Thu,  4 Apr 2024 04:26:34 -0700 (PDT)
+Message-ID: <6f950b18-4ff7-4570-957d-49b46167c12e@arm.com>
+Date: Thu, 4 Apr 2024 12:26:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,98 +42,69 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/2] thermal: gov_step_wise: Simplify
- get_target_state()
+Subject: Re: [PATCH v1 2/2] thermal: gov_step_wise: Simplify checks related to
+ passive trips
 Content-Language: en-US
 To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Cc: LKML <linux-kernel@vger.kernel.org>,
  Daniel Lezcano <daniel.lezcano@linaro.org>,
  Linux PM <linux-pm@vger.kernel.org>
-References: <5766468.DvuYhMxLoT@kreacher> <4907519.31r3eYUQgx@kreacher>
+References: <5766468.DvuYhMxLoT@kreacher> <2318465.ElGaqSPkdT@kreacher>
 From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <4907519.31r3eYUQgx@kreacher>
+In-Reply-To: <2318465.ElGaqSPkdT@kreacher>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi Rafael,
 
-On 4/3/24 19:11, Rafael J. Wysocki wrote:
+
+On 4/3/24 19:12, Rafael J. Wysocki wrote:
 > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> The step-wise governor's get_target_state() function contains redundant
-> braces, redundant parens and a redundant next_target local variable, so
-> get rid of all that stuff.
+> Make it more clear from the code flow that the passive polling status
+> updates only take place for passive trip points.
 > 
 > No intentional functional impact.
 > 
 > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
->   drivers/thermal/gov_step_wise.c |   27 ++++++++++-----------------
->   1 file changed, 10 insertions(+), 17 deletions(-)
+>   drivers/thermal/gov_step_wise.c |   14 ++++++--------
+>   1 file changed, 6 insertions(+), 8 deletions(-)
 > 
 > Index: linux-pm/drivers/thermal/gov_step_wise.c
 > ===================================================================
 > --- linux-pm.orig/drivers/thermal/gov_step_wise.c
 > +++ linux-pm/drivers/thermal/gov_step_wise.c
-> @@ -32,7 +32,6 @@ static unsigned long get_target_state(st
->   {
->   	struct thermal_cooling_device *cdev = instance->cdev;
->   	unsigned long cur_state;
-> -	unsigned long next_target;
+> @@ -92,15 +92,13 @@ static void thermal_zone_trip_update(str
+>   		if (instance->initialized && old_target == instance->target)
+>   			continue;
 >   
->   	/*
->   	 * We keep this instance the way it is by default.
-> @@ -40,32 +39,26 @@ static unsigned long get_target_state(st
->   	 * cdev in use to determine the next_target.
->   	 */
->   	cdev->ops->get_cur_state(cdev, &cur_state);
-> -	next_target = instance->target;
->   	dev_dbg(&cdev->device, "cur_state=%ld\n", cur_state);
+> -		if (old_target == THERMAL_NO_TARGET &&
+> -		    instance->target != THERMAL_NO_TARGET) {
+> -			/* Activate a passive thermal instance */
+> -			if (trip->type == THERMAL_TRIP_PASSIVE)
+> +		if (trip->type == THERMAL_TRIP_PASSIVE) {
+> +			/* If needed, update the status of passive polling. */
+> +			if (old_target == THERMAL_NO_TARGET &&
+> +			    instance->target != THERMAL_NO_TARGET)
+>   				tz->passive++;
+> -		} else if (old_target != THERMAL_NO_TARGET &&
+> -			   instance->target == THERMAL_NO_TARGET) {
+> -			/* Deactivate a passive thermal instance */
+> -			if (trip->type == THERMAL_TRIP_PASSIVE)
+> +			else if (old_target != THERMAL_NO_TARGET &&
+> +				 instance->target == THERMAL_NO_TARGET)
+>   				tz->passive--;
+>   		}
 >   
->   	if (!instance->initialized) {
-> -		if (throttle) {
-> -			next_target = clamp((cur_state + 1), instance->lower, instance->upper);
-> -		} else {
-> -			next_target = THERMAL_NO_TARGET;
-> -		}
-> +		if (throttle)
-> +			return clamp(cur_state + 1, instance->lower, instance->upper);
->   
-> -		return next_target;
-> +		return THERMAL_NO_TARGET;
->   	}
->   
->   	if (throttle) {
->   		if (trend == THERMAL_TREND_RAISING)
-> -			next_target = clamp((cur_state + 1), instance->lower, instance->upper);
-> -	} else {
-> -		if (trend == THERMAL_TREND_DROPPING) {
-> -			if (cur_state <= instance->lower)
-> -				next_target = THERMAL_NO_TARGET;
-> -			else
-> -				next_target = clamp((cur_state - 1), instance->lower, instance->upper);
-> -		}
-> +			return clamp(cur_state + 1, instance->lower, instance->upper);
-> +	} else if (trend == THERMAL_TREND_DROPPING) {
-> +		if (cur_state <= instance->lower)
-> +			return THERMAL_NO_TARGET;
-> +
-> +		return clamp(cur_state - 1, instance->lower, instance->upper);
->   	}
->   
-> -	return next_target;
-> +	return instance->target;
->   }
->   
->   static void thermal_zone_trip_update(struct thermal_zone_device *tz,
 > 
 > 
 > 
 
-LGTM,
+The patch looks good, although I got some warning while applying with
+my b4 tool:
+BADSIG: DKIM/rjwysocki.net
+
+Anyway, it looks like false warning IMO.
 
 Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-
-Regards,
-Lukasz
 
