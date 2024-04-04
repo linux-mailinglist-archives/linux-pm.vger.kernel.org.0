@@ -1,92 +1,99 @@
-Return-Path: <linux-pm+bounces-5918-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5919-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 535BD8985B6
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 13:07:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE20C8985B7
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 13:07:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C8062817B6
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 11:06:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E0011F23825
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 11:07:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 977AE8061C;
-	Thu,  4 Apr 2024 11:06:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C67680BF7;
+	Thu,  4 Apr 2024 11:07:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LMIF+mAV"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jLuw9HF3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C50F5745C3
-	for <linux-pm@vger.kernel.org>; Thu,  4 Apr 2024 11:06:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D431A745C3
+	for <linux-pm@vger.kernel.org>; Thu,  4 Apr 2024 11:07:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712228817; cv=none; b=GwPb7JYxwk9pqEo0YzPn402ub4I7WFLQHtIsO3SeQdqyiRppsdvgsgVD9pCDxwjZH/Qb05ae9/Rhd/E+oozqdhPLImiRFH+0CvhtSClDm3DHX8y19zZwPWCvwFunWFSwEgYr2mdvm3LTz2yww9+VWsGvUarLItqHk1x0sSo9os8=
+	t=1712228823; cv=none; b=P+0EcI/0pqGKhkM3P8EUaYHDtkfloZgsTebgf/N/POEOgdV+45krx/xM/Ho4LkctBWOj37t+DUtlL1pc/g1svL1if/JbmggMrVJ9uaiuEYs2kqnpy2MweI99bH4wpe5LQWiyDtgb5me/tOwS5Kiptro5QneK3S+yvtdd6YXlexI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712228817; c=relaxed/simple;
-	bh=5V+OUUQEgI9vl8LmcA0OjhwzuJPiZMzJcf6vbpryyZY=;
+	s=arc-20240116; t=1712228823; c=relaxed/simple;
+	bh=smjTSYhH7gbTnsCwUt060q54oqGuPVkPiEP1WSeLBRE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=E+na8Ae/7lAWLpuR26fo5Iqo0ClLHSi+8FxWtXk8W3sNCkoKzwnFOfWIYcXSBm0bHKVRtT5p4V1mKmll9aCg4YRuPEJWYTmRSJH5NA6TYIgWXxwFNlclMcFx/Tlr+rmfDVyNMDmPzQlW2d6CxXA87VRJahrus5hLhv5Fua59fCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LMIF+mAV; arc=none smtp.client-ip=209.85.128.173
+	 To:Cc:Content-Type; b=qxSexWOLODWarkyNkwdg4NCOmC1bTddF6cBm0937gDLIIAmB7EQYxWHzPpOOm0bCejCu4Na1WLphGiCRU2lhQg0sl0YX1RjvB7FfasHf0KZE+CU5hleSZnjSpvgAJX0gkNgogzpTKq4XrkeY8Zx0lJcZ8DizGtZ3F6y31+JYtng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jLuw9HF3; arc=none smtp.client-ip=209.85.219.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-614b02f8ed6so17119037b3.0
-        for <linux-pm@vger.kernel.org>; Thu, 04 Apr 2024 04:06:55 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-dc6d8bd612dso944189276.1
+        for <linux-pm@vger.kernel.org>; Thu, 04 Apr 2024 04:07:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1712228814; x=1712833614; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1712228821; x=1712833621; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=EUrhQlIeNcsOw2CmXgJeR5MWpcnNUD94Apq+OR2phkU=;
-        b=LMIF+mAVWpeFB5EprdK4DgGfH+6dkm0/96e5xED+/5ChNhY+2avJmD0DKuQQr2XpB1
-         2n4lSzZ1umyUArvFSz1RA8VQMhZBb8ekQ7T7H4cIfjSBfB5hCqMyRi6ifiSOrwiNHQwB
-         5UVS3LRBeg62oFnyA7bkV5T3/22xCg+/OEZdwF3KY9reC/qK/0gyS1LAF7Y9x4L9qg1z
-         TGr6TYK3MtvmcQVpOTIiDvWfO2gmlZ+fKakYNl8joFePbYvui60fj6BeamLo8T2aC1ih
-         sF+6S/vxJLBBIP9PNM8EYGsONN6fzQ/i4mVSH2qge0nK79YA4rnVQj7vhrlsz032rt2b
-         HusQ==
+        bh=CGsX++L9+ujhMyLx1u2hIAzny98z/SAWY5CGSjDOSb0=;
+        b=jLuw9HF3FArb+Q0y8ntGeFossdmnGvjqc/P4ly5RQPY5VUorbufzOceOYzCCuaTOxx
+         PkwelVx59Ghvdy6MQgp2BOn+6OBaVY0baFlR3tawLK1TTU1H4+v0izqoGroqJQSRuh1F
+         1TKG4GPqTzLk3j2yWJQ346WvX7b0Y1v5JX/tfGgUc5hFaZRSrIY7CSKUTyDJfsUh4hCg
+         PMp/E5U1I5RBV423Orf80ruq1X1SVCRAWn71NGMZ8wlmKu2PhKtp8Q0BelSrCiXPtj2a
+         PxVxLKnPKk8RW807MCeOhzxC+Qa5cXxgXaTo3l8eqr9yG78sd+/SZHngJDqs4LZ4Srtz
+         9eWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712228814; x=1712833614;
+        d=1e100.net; s=20230601; t=1712228821; x=1712833621;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=EUrhQlIeNcsOw2CmXgJeR5MWpcnNUD94Apq+OR2phkU=;
-        b=BokW0Cw5Sxfn7nvelIgsI53XmGcpDRjDxiG2STwn/YTr41z85MOOGlXG5Tmnvi2UOg
-         Bgc8k+PmI0h8/FVG0iBRa34CtYZ3wXxFwZj826lAcbmrG/zvgjKpepWzltZV616Ia5Ey
-         wrIasypIOZ3pxUxiAipbdeqmVwku2V3s148V+TOCB0TdUu/xb+etPi1YUfIlenwgG4jQ
-         0kSDVa3LKn3FIwQTSAdWNCujfDAEFHZhkcxQ/hTMaS+gSpLtI39YY9VNq8+L4YT4leMp
-         3Ch8cGCvfyCWkjpjKK/3LFqDwsZAPl/m+Qa+UUBAAbeOkOrf8AgA3nBJPUMr+GQUc6BY
-         1C1w==
-X-Forwarded-Encrypted: i=1; AJvYcCUM+L5JS+J+k1gZ2knA1hhgELw79hCToH1a5FaTSDfNARuVJBPj6OKVomfPVthlma8asYcTZjOrqTptKNMD4/XNg5ZO6KBMQHU=
-X-Gm-Message-State: AOJu0YzRTeWxv2VN5mZQ481acAQESuQb86TE3AsTAv9PBtoWx7Jw3IKN
-	wxt7WtR1YMHveeTRVaVeUVGgxpLJDeO03Zf4Wtuz7te1xCU7U3Ij3dIuPxBhAkBUMaxVCh5mSqr
-	1zkMYUoWKWMQ/3/R8DSFCVh6xP7TOcm27+Eieow==
-X-Google-Smtp-Source: AGHT+IHhQBDmJVslcc5jNndqogQbD7z2vRCEtDJwTJw1F4ttQtXxFF/71MvVUAxY5jBGM/ky3ViZgd2uDSYaCRovSQ0=
-X-Received: by 2002:a25:bcc7:0:b0:ddc:d115:4768 with SMTP id
- l7-20020a25bcc7000000b00ddcd1154768mr3822445ybm.1.1712228814663; Thu, 04 Apr
- 2024 04:06:54 -0700 (PDT)
+        bh=CGsX++L9+ujhMyLx1u2hIAzny98z/SAWY5CGSjDOSb0=;
+        b=Xb9/8XnjOM4ZloKH3SV3q68IDZlaZFoXZiHqWCO1YciXmoILP6c0c3O4Bs4GzLLvFP
+         AIzni4CSWsWpLASVBx4MylMiWqBgu0HyQl0E7xrL76M8hNX1rpHEvNdhScox3ZFKosfI
+         ff5GStWa43G7vh/0/mebCmHA7UMkd8c5e47b7JPbS7pdiwECYRmZmStnl4sK/FIeOkt6
+         rfoR2lGV/a8rQztdFtf+9xm7qeAc9c4Ykdx5emXxPXLkoBf019i2jUeO41TKRUGIRDfL
+         /Rl7t0VXgy247fvMVcJjNMqnUfVH9mVx+XaEfQACg6OOn49K+OL7f56fzOp3oaSLhp70
+         iSDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVYIudlQxKLpWhcHOpmozvWyMukJyMKNCP156ESlYk+euOJqIE0m8kTQOqgvPB1peXIU4BPJ4ovIv9H0W4IofjHhe8GL+8sEKI=
+X-Gm-Message-State: AOJu0YwH8ifMFydV7PJlXRLh+NXSVe4ZO6IG6BwKnmtDabUhmUm3RVrL
+	dIm4aJxbP2LZ4xl5MDl41hG4ZAfl6upwE0bXL+X3rmOtFlrfpVumCCBpnxk61FD6JQl6vN7RvD+
+	FOZo7RQPsxrv6PQX+eIket4Kl3ohft6QL58CKxQ==
+X-Google-Smtp-Source: AGHT+IFw+8brBd6LN/Kukzcljb9jj6pC2FMNpnmCLIgwBkv5VrTUBCR8g0DssTUbjdDazcsVvJj+fUy2FXpfWXLjx+Q=
+X-Received: by 2002:a05:6902:c0e:b0:dc7:4860:1214 with SMTP id
+ fs14-20020a0569020c0e00b00dc748601214mr2686805ybb.4.1712228820938; Thu, 04
+ Apr 2024 04:07:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240228151139.2650258-1-ulf.hansson@linaro.org>
-In-Reply-To: <20240228151139.2650258-1-ulf.hansson@linaro.org>
+References: <20240217-init_level-v1-0-bde9e11f8317@quicinc.com> <20240217-init_level-v1-2-bde9e11f8317@quicinc.com>
+In-Reply-To: <20240217-init_level-v1-2-bde9e11f8317@quicinc.com>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 4 Apr 2024 13:06:18 +0200
-Message-ID: <CAPDyKFqtxR4yBw71LGiTyvHasxU3CNw2Lj_wsrP1rvkedYQkEw@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: psci: Drop superfluous wrappers psci_dt_attach|detach_cpu()
-To: "Rafael J . Wysocki" <rafael@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org
-Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Maulik Shah <quic_mkshah@quicinc.com>, linux-arm-kernel@lists.infradead.org
+Date: Thu, 4 Apr 2024 13:06:25 +0200
+Message-ID: <CAPDyKFpG3wRWicOnp5hshBNN7FF0mEqiooju3UR-21HUf30BPQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] cpuidle: psci: Update init level to core_initcall()
+To: Maulik Shah <quic_mkshah@quicinc.com>
+Cc: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	quic_lsrao@quicinc.com
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 28 Feb 2024 at 16:11, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+On Sat, 17 Feb 2024 at 14:57, Maulik Shah <quic_mkshah@quicinc.com> wrote:
 >
-> To simplify the code, let's drop psci_dt_attach|detach_cpu() and use the
-> common dt_idle_attach|detach_cpu() directly instead.
+> Clients like regulators, interconnects and clocks depend on rpmh-rsc to
+> vote on resources and rpmh-rsc depends on psci power-domains to complete
+> probe. All of them are in core_initcall().
 >
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Change psci domain init level to core_initcall() to avoid probe defer from
+> all of the above.
+>
+> Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
 
 Queued up for next via my linux-pm.git (pmdomain), thanks!
 
@@ -95,88 +102,21 @@ Uffe
 
 
 > ---
->  drivers/cpuidle/cpuidle-psci-domain.c |  1 +
->  drivers/cpuidle/cpuidle-psci.c        |  5 +++--
->  drivers/cpuidle/cpuidle-psci.h        | 20 --------------------
->  3 files changed, 4 insertions(+), 22 deletions(-)
+>  drivers/cpuidle/cpuidle-psci-domain.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
 > diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
-> index b88af1262f1a..2b47811d986f 100644
+> index b88af1262f1a..3e5b1150f75b 100644
 > --- a/drivers/cpuidle/cpuidle-psci-domain.c
 > +++ b/drivers/cpuidle/cpuidle-psci-domain.c
-> @@ -20,6 +20,7 @@
->  #include <linux/string.h>
->
->  #include "cpuidle-psci.h"
-> +#include "dt_idle_genpd.h"
->
->  struct psci_pd_provider {
->         struct list_head link;
-> diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-> index bf68920d038a..782030a27703 100644
-> --- a/drivers/cpuidle/cpuidle-psci.c
-> +++ b/drivers/cpuidle/cpuidle-psci.c
-> @@ -28,6 +28,7 @@
->
->  #include "cpuidle-psci.h"
->  #include "dt_idle_states.h"
-> +#include "dt_idle_genpd.h"
->
->  struct psci_cpuidle_data {
->         u32 *psci_states;
-> @@ -224,7 +225,7 @@ static int psci_dt_cpu_init_topology(struct cpuidle_driver *drv,
->         if (IS_ENABLED(CONFIG_PREEMPT_RT))
->                 return 0;
->
-> -       data->dev = psci_dt_attach_cpu(cpu);
-> +       data->dev = dt_idle_attach_cpu(cpu, "psci");
->         if (IS_ERR_OR_NULL(data->dev))
->                 return PTR_ERR_OR_ZERO(data->dev);
->
-> @@ -311,7 +312,7 @@ static void psci_cpu_deinit_idle(int cpu)
+> @@ -200,4 +200,4 @@ static int __init psci_idle_init_domains(void)
 >  {
->         struct psci_cpuidle_data *data = per_cpu_ptr(&psci_cpuidle_data, cpu);
->
-> -       psci_dt_detach_cpu(data->dev);
-> +       dt_idle_detach_cpu(data->dev);
->         psci_cpuidle_use_cpuhp = false;
+>         return platform_driver_register(&psci_cpuidle_domain_driver);
 >  }
+> -subsys_initcall(psci_idle_init_domains);
+> +core_initcall(psci_idle_init_domains);
 >
-> diff --git a/drivers/cpuidle/cpuidle-psci.h b/drivers/cpuidle/cpuidle-psci.h
-> index 4e132640ed64..ef004ec7a7c5 100644
-> --- a/drivers/cpuidle/cpuidle-psci.h
-> +++ b/drivers/cpuidle/cpuidle-psci.h
-> @@ -3,29 +3,9 @@
->  #ifndef __CPUIDLE_PSCI_H
->  #define __CPUIDLE_PSCI_H
->
-> -struct device;
->  struct device_node;
->
->  void psci_set_domain_state(u32 state);
->  int psci_dt_parse_state_node(struct device_node *np, u32 *state);
->
-> -#ifdef CONFIG_ARM_PSCI_CPUIDLE_DOMAIN
-> -
-> -#include "dt_idle_genpd.h"
-> -
-> -static inline struct device *psci_dt_attach_cpu(int cpu)
-> -{
-> -       return dt_idle_attach_cpu(cpu, "psci");
-> -}
-> -
-> -static inline void psci_dt_detach_cpu(struct device *dev)
-> -{
-> -       dt_idle_detach_cpu(dev);
-> -}
-> -
-> -#else
-> -static inline struct device *psci_dt_attach_cpu(int cpu) { return NULL; }
-> -static inline void psci_dt_detach_cpu(struct device *dev) { }
-> -#endif
-> -
->  #endif /* __CPUIDLE_PSCI_H */
 > --
-> 2.34.1
+> 2.22.0
 >
 
