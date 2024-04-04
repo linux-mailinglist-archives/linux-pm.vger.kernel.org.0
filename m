@@ -1,102 +1,189 @@
-Return-Path: <linux-pm+bounces-5934-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5935-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3739898B9C
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 17:54:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9837E898D19
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 19:17:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D72E1F2A776
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 15:54:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 22F8A1F23872
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Apr 2024 17:17:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFA58129A78;
-	Thu,  4 Apr 2024 15:54:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87CA312CDB5;
+	Thu,  4 Apr 2024 17:17:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W4er2kLl"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="B8SNxWDv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from merlin.infradead.org (merlin.infradead.org [178.238.156.107])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C6E112A176;
-	Thu,  4 Apr 2024 15:54:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F57912B82;
+	Thu,  4 Apr 2024 17:17:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.156.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712246043; cv=none; b=IE8S5vhD/O9Ps8wH9Jha0CRnM3+/QBaND6j7DTeXb6j+C//+fXpKe0tr/Negy9/BTavilYZUzZfSV7iG3qppsTBAOJQI2+Nq4NpCM0XkWF9m/cVcSLcIK6mtPUxlk2Zlw5XXLw18qfAvMWc1VA0q968NZhJgLO/k/HYZxdeJG+c=
+	t=1712251046; cv=none; b=IXVonOJRiFqmT6AS9OvP9Ud68uI5xjXej9HsjChFHcIrRJcLZt1ctgVqGRpaIB5TtDFod+nmIp32pP6oFnkDE5NyV6whNQlG+yXKk6JOVEogz+q1LI6QZ1ellhU5YeNfd0D4SxQyoDmNxU6S9Xd0dLR/rCAGwdqiMrmKxHTlDZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712246043; c=relaxed/simple;
-	bh=/3m8tbMTKbpp8DczNbgjKG86CcVoJKTX6w3QpC6Pclo=;
-	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=JXmDH7PyHbcENDOKLg8chVDeoArGCOKBQrm2147ss80pKLVHbuYvQjjaY1O2pllgMBc52k0wFp8xTp1w5xXwdst/JrbLdTPNt9L5xVi3mQh/bk7oeCAn9lNHGy+MrhlY/nav1GuraWX4zc/BT8BMazjal1cm+f7vsXau+7WdHF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W4er2kLl; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3436b096690so1778443f8f.1;
-        Thu, 04 Apr 2024 08:54:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712246040; x=1712850840; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:date:cc:to:from
-         :subject:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=/3m8tbMTKbpp8DczNbgjKG86CcVoJKTX6w3QpC6Pclo=;
-        b=W4er2kLloJj/DzIgKX0jHW1xdpJ/eacb1AxxhiMYZQvio9s/G6qSVO3eWdcf9YXLo/
-         JN4QjJJYLs38vWs3Rv9nVf6QpSCdx5YHWQEJd8zujj/O6OZOeOsPFm8NxuFp+pa44SxM
-         VtkcGeamNA08hQ2q3LxVNVowYm7NPhNjqeulrNNPaZolDs+PhgtLMzuZa1fiIclrLXzQ
-         Z8DU2oj4eI5h3TCznehBcT9z9dlWqH+CA9XUz0jT58jayf9v/R3nte1ceAIjwgO26L8y
-         Y5nI7QebxwRGw2dhdLAWnHTDD3vzX3YaDbsQgJFmfBHRzjtXk5OIaM4bBWfJk3YBHgUo
-         vQAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712246040; x=1712850840;
-        h=mime-version:user-agent:content-transfer-encoding:date:cc:to:from
-         :subject:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/3m8tbMTKbpp8DczNbgjKG86CcVoJKTX6w3QpC6Pclo=;
-        b=EWv9YS7PBMd1YhiHxRuvcQf7UMLmdhxfr6NA/eG7ZTU2hkAVXwS0VQNgrD/FUxkPou
-         ZYczpzw4xOlPZ9h+oEHP0dAZHpRqfhKd7XTNbtclBfZlouaBBepwnCXJkkymaRALHdAq
-         SwvViDPu3rBtgXn7IU+L0JyolA3M6wvbsvJM7oZmPhQJtxvSuk5eQ+hTjAI+EI/G7s0w
-         wBByjecKtQmh19mOb+2yujTAGMVCi3aCxqJuEtg7d8qIb84oUehbJAlNyx7gTLZl3R/F
-         +poQihHdVXA/wZzR7WVqn9ZVINGB3ZVsAGlWmUewUKVf6axsD+eC4S5lI0BZ1T218zsx
-         ZPLA==
-X-Forwarded-Encrypted: i=1; AJvYcCUXfX1EhRPASVCzLmWH6nFvf29nwkiJeX1SeUWFBC4U2OpfQ91eYnJNDs/TMz/PKHvdrrOuShifgfQ2BZfFELZkOncibSwz5VembY7e
-X-Gm-Message-State: AOJu0YyIAgOhKmsF+QflwclCmbM8Qj1MUQj6qg00Atm5DoexTn2krqxD
-	q7oU+VATkwqrRnfeTszh4Pdid5DewfqN9kEFJ0jQzxDCQeKVx8A0RhzNLnEzw3E=
-X-Google-Smtp-Source: AGHT+IHVFPGEZrCTsk92L3eJtuYBge9oeCNt9BZBgO+gIRZfLUwK7t6faaFK5b1/SpqxVj9fbL6r3w==
-X-Received: by 2002:a05:6000:4f1:b0:343:6c07:c816 with SMTP id cr17-20020a05600004f100b003436c07c816mr3091423wrb.16.1712246040329;
-        Thu, 04 Apr 2024 08:54:00 -0700 (PDT)
-Received: from ?IPv6:2001:8a0:e622:f700:7d3e:f9e7:30e2:91a5? ([2001:8a0:e622:f700:7d3e:f9e7:30e2:91a5])
-        by smtp.gmail.com with ESMTPSA id by7-20020a056000098700b0033ec94c6277sm20590586wrb.115.2024.04.04.08.53.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Apr 2024 08:54:00 -0700 (PDT)
-Message-ID: <fccbb040330a706a4f7b34875db1d896a0bf81c8.camel@gmail.com>
-Subject: iMX8M Mini suspend/resume hanging on imx8m_blk_ctrl_power_on()
-From: vitor <ivitro@gmail.com>
-To: linux-pm@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc: ivitro@gmail.com, vitor.soares@toradex.com, ulf.hansson@linaro.org, 
- shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, 
- festevam@gmail.com, rafael@kernel.org, geert+renesas@glider.be,
- peng.fan@nxp.com,  linus.walleij@linaro.org,
- u.kleine-koenig@pengutronix.de, marex@denx.de
-Date: Thu, 04 Apr 2024 16:53:58 +0100
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1712251046; c=relaxed/simple;
+	bh=gcvJrvXgQyaZQSS7uTs9ltp/mFfw8fzNyR20mYGy9vU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=slXKfXrPrYROWDnV1DsZpeVZ5P8RdKVeU15VI2BiJpgBq2KurRlZ1DyqJ+ddrDf3k0vypFuzedwzVuTY8Ui9CuLwIZZ9TQIZUjX9hStZayh3qgQ4E2vb5P6eIEv++3pHpfWZKgaAgLBWHZtrMx8pZYJddwFq1oqi6Ebgy9jO+wE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=B8SNxWDv; arc=none smtp.client-ip=178.238.156.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=ScSQs4d+rDTfELeZWche4AJihoLV+Vg3lVZPViVwPu4=; b=B8SNxWDvnBeKDZ9MhqKkMekJ7O
+	Zc3M1yZYlr44Cqhhwa2v9i/PAK7oIsq+fGYN296QLJqd2qALwL8FdFv6gYGtLnp39E/gob0XHZMRQ
+	TxofCwl3Hw/3P2KZrP48ADqL2SGsxDCe8/H4FlxyKUbjJ6EipFf0pn7dADO10gJ06qVMcApsU9hL0
+	nTXcMJZF237e/QFuUyp+urbWjhBQx8IKFa0FJSyA4Cr0Sk4ffGdhtYfORHAquxHIIGdB4RV2KczJP
+	rL+qLiPA8Urp6RmT1vrItfiLI5JD87Wg6Gl62fqaST4XHWdDDFtFtUB19H38CIrXCpiqEekxGXktc
+	3pNy3GtQ==;
+Received: from kyle by merlin.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rsQiF-00000007Pea-09Ef;
+	Thu, 04 Apr 2024 17:17:19 +0000
+Date: Thu, 4 Apr 2024 13:17:19 -0400
+From: Kyle McMartin <kyle@infradead.org>
+To: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: Kyle McMartin <kyle@infradead.org>,
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	linux-pm@vger.kernel.org, kernel-team@fb.com,
+	linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] therm_throt: test bits as we build
+ therm_intr_core_clear_mask
+Message-ID: <Zg7gn2ATm_NMiw_2@merlin.infradead.org>
+References: <Zg3GhhTZotBNvlRR@merlin.infradead.org>
+ <8b4cb4ad67032fad69f29df8e6b83054c7fa15db.camel@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8b4cb4ad67032fad69f29df8e6b83054c7fa15db.camel@linux.intel.com>
 
-Greetings,
+On Wed, Apr 03, 2024 at 06:15:47PM -0700, srinivas pandruvada wrote:
+> > On Broadwell and Broadwell-DE, the HWP flag is not set, but writing
+> > these bits does not trap.
+> > 
+> > On our Skylake-DE, Skylake, and Cooper Lake platforms, the HWP flag
+> > is
+> > set in CPUID, and writing 1 to these bits traps attempting to write
+> > 0xAAA8 to MSR 0x19C (THERM_STATUS). Writing 0xAA8 from userspace
+> > works
+> > as expected to un-stick PROCHOT_LOG.
+> 
+> I think this issue happens only on Skylake, Cascade Lake, Cooper Lake
+> and not on any other systems.
+> 
+> Please verify:
+> GP# happens only when bit13 (Current Limit Log) or bit15 (Cross Domain
+> Limit Log) is 1.
+> 
 
-I'm trying to suspend/resume our Verdin iMX8M Mini with VPU IP using
-the latest 6.9.0-rc2 Kernel. While the system can suspend without
-issues, it hangs on the resume routine. After some investigation, I can
-see the Kernel hanging on imx8m_blk_ctrl_power_on()[1] while resuming
-the hantro-vpu power domain.
+Yeah, if either of the bits are set, we'll trap and fail the WRMSRL.
 
-Any hint about that?
+> Basically writing 0x2000 or 0x8000  or A000 will cause this issue.
+> Are you using the latest BIOS with microcode?
+> Please confirm your microcode version, I can check internally.
+> 
 
-[1]https://elixir.bootlin.com/linux/v6.9-rc2/source/drivers/pmdomain/imx/im=
-x8m-blk-ctrl.c#L101
+On SkylakeDE, 6-85-4 we've got 0x2006e08 and 0x2006e05 as the most commonly
+deployed microcodes. On Skylake, 6-85-4 we've got 0x2006e05 and 0x2000065.
+Finally, on Cooper Lake, 6-85-11, we have 0x700001f and are in the process
+of rolling out 0x7002503.
 
+Rolling out new firmware is a pretty slow process... Since we're not
+clearing those bits anywhere in the kernel we're deploying, I just
+stubbed out setting BIT(13) and BIT(15) on those platforms for now while
+we discuss a more durable fix.
+
+Thanks for following up! --kyle
+
+> Thanks,
+> Srinivas
+> 
+> 
+> > 
+> > On our Sapphire Rapids platforms, the HWP flag is set, and writing 1
+> > to
+> > these bits is successful.
+> > 
+> >  drivers/thermal/intel/therm_throt.c | 29 ++++++++++++++++++++++-----
+> > --
+> >  1 file changed, 22 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/drivers/thermal/intel/therm_throt.c
+> > b/drivers/thermal/intel/therm_throt.c
+> > index e69868e868eb..3058d8fcfcef 100644
+> > --- a/drivers/thermal/intel/therm_throt.c
+> > +++ b/drivers/thermal/intel/therm_throt.c
+> > @@ -196,8 +196,14 @@ static const struct attribute_group
+> > thermal_attr_group = {
+> >  static u64 therm_intr_core_clear_mask;
+> >  static u64 therm_intr_pkg_clear_mask;
+> >  
+> > +/* Probe each addition to the mask to ensure that our wrmsrl
+> > + * won't fail to clear bits.
+> > + */
+> >  static void thermal_intr_init_core_clear_mask(void)
+> >  {
+> > +       u64 bits = 0;
+> > +       u64 mask = 0;
+> > +
+> >         if (therm_intr_core_clear_mask)
+> >                 return;
+> >  
+> > @@ -211,25 +217,34 @@ static void
+> > thermal_intr_init_core_clear_mask(void)
+> >          * Bit 1, 3, 5: CPUID.01H:EDX[22] = 1. This driver will not
+> >          * enable interrupts, when 0 as it checks for
+> > X86_FEATURE_ACPI.
+> >          */
+> > -       therm_intr_core_clear_mask = (BIT(1) | BIT(3) | BIT(5));
+> > +       mask = (BIT(1) | BIT(3) | BIT(5));
+> >  
+> >         /*
+> >          * Bit 7 and 9: Thermal Threshold #1 and #2 log
+> >          * If CPUID.01H:ECX[8] = 1
+> >          */
+> > -       if (boot_cpu_has(X86_FEATURE_TM2))
+> > -               therm_intr_core_clear_mask |= (BIT(7) | BIT(9));
+> > +       bits = BIT(7) | BIT(9);
+> > +       if (boot_cpu_has(X86_FEATURE_TM2) &&
+> > +           wrmsrl_safe(MSR_IA32_THERM_STATUS, mask | bits) >= 0)
+> > +               mask |= bits;
+> > +
+> >  
+> >         /* Bit 11: Power Limitation log (R/WC0) If CPUID.06H:EAX[4] =
+> > 1 */
+> > -       if (boot_cpu_has(X86_FEATURE_PLN))
+> > -               therm_intr_core_clear_mask |= BIT(11);
+> > +       bits = BIT(11);
+> > +       if (boot_cpu_has(X86_FEATURE_PLN) &&
+> > +           wrmsrl_safe(MSR_IA32_THERM_STATUS, mask | bits) >= 0)
+> > +               mask |= bits;
+> >  
+> >         /*
+> >          * Bit 13: Current Limit log (R/WC0) If CPUID.06H:EAX[7] = 1
+> >          * Bit 15: Cross Domain Limit log (R/WC0) If CPUID.06H:EAX[7]
+> > = 1
+> >          */
+> > -       if (boot_cpu_has(X86_FEATURE_HWP))
+> > -               therm_intr_core_clear_mask |= (BIT(13) | BIT(15));
+> > +       bits = BIT(13) | BIT(15);
+> > +       if (boot_cpu_has(X86_FEATURE_HWP) &&
+> > +           wrmsrl_safe(MSR_IA32_THERM_STATUS, mask | bits) >= 0)
+> > +               mask |= bits;
+> > +
+> > +       therm_intr_core_clear_mask = mask;
+> >  }
+> >  
+> >  static void thermal_intr_init_pkg_clear_mask(void)
+> 
 
