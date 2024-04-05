@@ -1,169 +1,98 @@
-Return-Path: <linux-pm+bounces-5970-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5971-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CA74899CEF
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 14:31:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A2FF899E6B
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 15:35:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E5590B21F4F
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 12:31:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BCEECB23601
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 13:35:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 217D416C857;
-	Fri,  5 Apr 2024 12:31:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C945316DEA1;
+	Fri,  5 Apr 2024 13:34:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DIN5424d"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="WPouFyde"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5BF913C670;
-	Fri,  5 Apr 2024 12:31:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 870132E401;
+	Fri,  5 Apr 2024 13:34:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712320275; cv=none; b=unRmbR/Pfiqj25KtLWh0NTP9yo9t0z1dK1GowQKDep7u+phme78f7S4NCwEJrpIsYgrAraYvf53VfG6+TBtIP5RScrEkG9gSQoLCrROmqJ0/Gjiaaag6dLXByDUUqK1qITQYEXZkvDOqxNwbmkLhRHt+yxni4sEe6Czc7r8lEZU=
+	t=1712324074; cv=none; b=P99BbPmPg6L77dQU7Aq2rDybSz0Ud3oKXErdo+e24rpEF+Y9RIBryF3RHcLNoitpuGGwueq/cF+4hsb76zsH2qe0RlRL9lsjVVttDNtX5nXGoML0/FB1BYM5MAHzj+PErvPW3o8pYNQIbQqK1yjr3rGvm9gU+ZnR5nwTwJyDBsk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712320275; c=relaxed/simple;
-	bh=nOZUjovfA1TSvzaMpe+qzYO18xLqNYoJ7Tk9cqEQ9rg=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=XcUdCYMfzJg49LWRX7igOUjuQVTH23TrAFP7GVHhKbQQvN/qzPK8BUHjYgsxCkFHYFmMfyYAfK6APChM+kG4vUJYlZRGAiogCO7QlY1dhIEul/dUXNQDs2EEXfOOBlW8B+D4+KtmizvRd+dNMap/sG9re67dKqAXbxCqAHXxCUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DIN5424d; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712320273; x=1743856273;
-  h=from:to:cc:subject:date:message-id;
-  bh=nOZUjovfA1TSvzaMpe+qzYO18xLqNYoJ7Tk9cqEQ9rg=;
-  b=DIN5424dRHwznOMDV2yxfzEA4UeRBwB+sC/2mQZlzDkXC/H9urdqgZRJ
-   p8fUPMjDYqmC+x2tghTZrzESbbwUS3lVE1uL6/sY/YSxU0kcl2v2y87hx
-   KXQwSUIqa8Ru+i875db9UbviIZ3dDUW7F1j53SHCSoBf/MVG1Y54KnAgC
-   8IBFuX9/b2HP7q4+7zONUZBZ9YvpICCBODNQZReWDeNBBeISUhIbnSjIy
-   8CJD/Xp5by9miFxHr8QwE/0SNhNYojxhkvTaR6043/P71ovd8cwAzb3nz
-   MccKGEPicFLPDMa2NLRPNtsVnqmy03VSoTvOGULtOOhtEyyYyglvoMZ2v
-   g==;
-X-CSE-ConnectionGUID: O2RYbtIxRBORnJ1wW25NTw==
-X-CSE-MsgGUID: q398mmydSNiyrpmSBbDc9w==
-X-IronPort-AV: E=McAfee;i="6600,9927,11034"; a="7773668"
-X-IronPort-AV: E=Sophos;i="6.07,181,1708416000"; 
-   d="scan'208";a="7773668"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2024 05:31:12 -0700
-X-CSE-ConnectionGUID: 3snKCyrzT+Gbdqac/nMkQw==
-X-CSE-MsgGUID: rjKZHFngSDaA6MQNajB4yw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,181,1708416000"; 
-   d="scan'208";a="23832355"
-Received: from srpawnik.iind.intel.com ([10.223.107.103])
-  by orviesa003.jf.intel.com with ESMTP; 05 Apr 2024 05:31:11 -0700
-From: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-To: rafael@kernel.org,
-	srinivas.pandruvada@linux.intel.com,
-	linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Cc: sumeet.r.pawnikar@intel.com
-Subject: [PATCH] ACPI: DPTF: Add Lunar Lake support
-Date: Fri,  5 Apr 2024 17:48:19 +0530
-Message-Id: <20240405121819.31331-1-sumeet.r.pawnikar@intel.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1712324074; c=relaxed/simple;
+	bh=SHjwBnomV+gF9BLymsPmd0cih8P9zBHkIagsuETR9I4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CniwXBu3DPC1pZNretUZNpxqlogJ1d4bJlhXxrGiWsKTW7OsvD3pqOctZUoHDIJfU2UUfDGuBhZOyrNDMuSgZFNEwQFb/5aROnCpwJM+QwccBM5i8N1mASUcw6yBZWboX+d8PnCvcTOvleqHa6omwPb5vlZceWpVeDTK75xYABE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=WPouFyde; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B89E2C433C7;
+	Fri,  5 Apr 2024 13:34:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1712324074;
+	bh=SHjwBnomV+gF9BLymsPmd0cih8P9zBHkIagsuETR9I4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WPouFydeq4lV+Y0xFxUhvTsLfA8DLxUGy5BJZ137GlWxh5WGH5cUqjTkSlKyrQTxn
+	 4fDzrljELByplixrq++TRfx4p25kZVe1RgtxcrsqfOkd5ClOOlz7QMGVcaMn7FJBvS
+	 oPi/USSpWR6GYkypD/fe5yLtiAjkx8tjfSHgtMk8=
+Date: Fri, 5 Apr 2024 15:34:30 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Martin Steigerwald <martin@lichtvoll.de>
+Cc: linux-pm@vger.kernel.org, regressions@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [regression] 6.8.1 and 6.7.12: fails to hibernate with
+ pm_runtime_force_suspend+0x0/0x120 returns -16
+Message-ID: <2024040512-defective-wreckage-f202@gregkh>
+References: <2325246.ElGaqSPkdT@lichtvoll.de>
+ <6034738.lOV4Wx5bFT@lichtvoll.de>
+ <12413606.O9o76ZdvQC@lichtvoll.de>
+ <12414153.O9o76ZdvQC@lichtvoll.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <12414153.O9o76ZdvQC@lichtvoll.de>
 
-Add Lunar Lake ACPI IDs for DPTF devices.
+On Fri, Apr 05, 2024 at 02:11:11PM +0200, Martin Steigerwald wrote:
+> Martin Steigerwald - 05.04.24, 13:54:34 CEST:
+> > > Not doing it today or probably the weekend, but now I have some
+> > > actionable git bisect plan without bisecting between major kernel
+> > > releases which as I have been told between 6.7 an 6.8-rc1 can lead to
+> > > non working modeset graphics on AMD Ryzen in between.
+> > > 
+> > > It seems now I only need to git bisect between 6.7.11 and 6.7.12 to
+> > > find the patch that breaks hibernation on 6.8.1 as well. However
+> > > first I will briefly check whether 6.8.4 hibernates okay.
+> > 
+> > 6.8.4 is still affected and fails hibernation with the same error
+> > message.
+> 
+> Both kernels also fail to reboot the machine. Runit says:
+> 
+> - runit: system reboot
+> 
+> And then nothing anymore.
+> 
+> It is not just hibernation.
+> 
+> I think ThinkPad T14 AMD Gen 1 or similar systems with Linux are not that 
+> rare. I am surprised this is not hitting more people. Well maybe it does 
+> and no one reported it here.
+> 
+> Well let's see what happens when 6.7.12 hits distribution kernels.
+> 
+> Anyway, I have an actionable git bisect between 6.7.11 and 6.7.12, just 
+> not today. Maybe beginning of next week.
 
-Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
----
- drivers/acpi/dptf/dptf_pch_fivr.c                       | 1 +
- drivers/acpi/dptf/dptf_power.c                          | 2 ++
- drivers/acpi/dptf/int340x_thermal.c                     | 6 ++++++
- drivers/acpi/fan.h                                      | 1 +
- drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 1 +
- drivers/thermal/intel/int340x_thermal/int3403_thermal.c | 1 +
- 6 files changed, 12 insertions(+)
+6.7.y is end-of-life, I wouldn't worry too much about it, there's
+nothing we can do about it anymore, sorry.
 
-diff --git a/drivers/acpi/dptf/dptf_pch_fivr.c b/drivers/acpi/dptf/dptf_pch_fivr.c
-index 654aaa53c67f..d202730fafd8 100644
---- a/drivers/acpi/dptf/dptf_pch_fivr.c
-+++ b/drivers/acpi/dptf/dptf_pch_fivr.c
-@@ -150,6 +150,7 @@ static const struct acpi_device_id pch_fivr_device_ids[] = {
- 	{"INTC1045", 0},
- 	{"INTC1049", 0},
- 	{"INTC1064", 0},
-+	{"INTC106B", 0},
- 	{"INTC10A3", 0},
- 	{"", 0},
- };
-diff --git a/drivers/acpi/dptf/dptf_power.c b/drivers/acpi/dptf/dptf_power.c
-index b8187babbbbb..8023b3e23315 100644
---- a/drivers/acpi/dptf/dptf_power.c
-+++ b/drivers/acpi/dptf/dptf_power.c
-@@ -232,6 +232,8 @@ static const struct acpi_device_id int3407_device_ids[] = {
- 	{"INTC1061", 0},
- 	{"INTC1065", 0},
- 	{"INTC1066", 0},
-+	{"INTC106C", 0},
-+	{"INTC106D", 0},
- 	{"INTC10A4", 0},
- 	{"INTC10A5", 0},
- 	{"", 0},
-diff --git a/drivers/acpi/dptf/int340x_thermal.c b/drivers/acpi/dptf/int340x_thermal.c
-index b7113fa92fa6..014ada759954 100644
---- a/drivers/acpi/dptf/int340x_thermal.c
-+++ b/drivers/acpi/dptf/int340x_thermal.c
-@@ -43,6 +43,12 @@ static const struct acpi_device_id int340x_thermal_device_ids[] = {
- 	{"INTC1064"},
- 	{"INTC1065"},
- 	{"INTC1066"},
-+	{"INTC1068"},
-+	{"INTC1069"},
-+	{"INTC106A"},
-+	{"INTC106B"},
-+	{"INTC106C"},
-+	{"INTC106D"},
- 	{"INTC10A0"},
- 	{"INTC10A1"},
- 	{"INTC10A2"},
-diff --git a/drivers/acpi/fan.h b/drivers/acpi/fan.h
-index e7b4b4e4a55e..f89d19c922dc 100644
---- a/drivers/acpi/fan.h
-+++ b/drivers/acpi/fan.h
-@@ -15,6 +15,7 @@
- 	{"INTC1044", }, /* Fan for Tiger Lake generation */ \
- 	{"INTC1048", }, /* Fan for Alder Lake generation */ \
- 	{"INTC1063", }, /* Fan for Meteor Lake generation */ \
-+	{"INTC106A", }, /* Fan for Lunar Lake generation */ \
- 	{"INTC10A2", }, /* Fan for Raptor Lake generation */ \
- 	{"PNP0C0B", } /* Generic ACPI fan */
- 
-diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-index 427d370648d5..f8ebdd19d340 100644
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -705,6 +705,7 @@ static const struct acpi_device_id int3400_thermal_match[] = {
- 	{"INTC1040", 0},
- 	{"INTC1041", 0},
- 	{"INTC1042", 0},
-+	{"INTC1068", 0},
- 	{"INTC10A0", 0},
- 	{}
- };
-diff --git a/drivers/thermal/intel/int340x_thermal/int3403_thermal.c b/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
-index 9b33fd3a66da..86901f9f54d8 100644
---- a/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
-@@ -284,6 +284,7 @@ static const struct acpi_device_id int3403_device_ids[] = {
- 	{"INTC1043", 0},
- 	{"INTC1046", 0},
- 	{"INTC1062", 0},
-+	{"INTC1069", 0},
- 	{"INTC10A1", 0},
- 	{"", 0},
- };
--- 
-2.17.1
-
+greg k-h
 
