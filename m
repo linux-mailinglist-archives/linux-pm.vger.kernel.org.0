@@ -1,142 +1,110 @@
-Return-Path: <linux-pm+bounces-5973-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5974-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4AA589A0A8
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 17:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 93DEE89A0F3
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 17:21:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 64CCB1F2232E
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 15:06:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 32CA41F24930
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 15:21:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A21F516F856;
-	Fri,  5 Apr 2024 15:06:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BD4916F900;
+	Fri,  5 Apr 2024 15:21:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I4Ua375V"
+	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="JNhKaCGk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E926D16F832;
-	Fri,  5 Apr 2024 15:06:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C690816FF32;
+	Fri,  5 Apr 2024 15:21:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712329590; cv=none; b=YwXmTNYZYiNsRz1aCo8VwRwcy0y9zA8Gci6W57rp4eU+PM/Fp43g3+EvYW+MdMeLuDat6Rc7QPDtp3gU6/xB27qOzjygTLIL/le+JIwH59E+jRRppV+pgoN4gohvMidFMAX5PQsZeUWYWV7XNSuf1tgUFHT5MOueJr8tAfRVcEU=
+	t=1712330468; cv=none; b=OCcqRo0Q0QZD5n/+qLpZkTkfZKkLMvUPHNebdHPgMgMf6jrjIkImQbbKEqRPjnhhlLo/shXEDZABXXyaiuCAn7isajiaxz6ekJCLbKmGxYrav+WDqzzV/4p0EB11ed6maFdDGfed663GadDF71VsxCzYBsW7fnR9OWahU5ujWO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712329590; c=relaxed/simple;
-	bh=nDClXF3j4lc22O9XFA6Ptr+e7CswgCu/KhRNNcL/s2k=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RF2MewbJzX7d7B4uWFCa/JrJyBHsYLrKa2R1GTHVdibgkMEx03QFn6PcogXfxgQs5IuiTd5QbjhmZOuTl4CYSLOy7xkD3hKxPRoKVN9hM61gTOli+Zg8zj8qSnHUuhGuRTEo/1muas0S6RVCJoxeKKMNnT4crIW9ZKQ2odaTKPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I4Ua375V; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-343d88460cdso859204f8f.2;
-        Fri, 05 Apr 2024 08:06:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712329587; x=1712934387; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=cBcaVMbSMZkgJPIkV9Rq48dY7hxQJkftAGqxOYcj3jc=;
-        b=I4Ua375Vu2cxCySRVctA7MQy4P5adUzw7E+o75qNtSljM9hKQIMmgJ/wnrNMoiyOIl
-         6jmi/v9OcZ5HNfTRNiMC1AndJvcm9wuI8g/jorGcsF6hDOuGdhDBcNOypOzzZ3XWHqcm
-         aKpcnP5hvodyTfRnrE+C2ZZsA89fG+ViRCMDKdZ98juUIAiGWnJPlafN8WzE0Efo0ErU
-         41TbNJULb0TNBf+al/hqJfqQowR9s9MafT5idLwqwVtC5zHAdsc5/SQCt43tvccI6L1E
-         Ot1PNSPdxOcAHH3o2wOEyHXMnOOg7qlw7ZJrlIKw00PygWYxb4CkFm9l3MbNfHwhWGa2
-         kPxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712329587; x=1712934387;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cBcaVMbSMZkgJPIkV9Rq48dY7hxQJkftAGqxOYcj3jc=;
-        b=s4ng1CbWbD5h6ZyMm7SCsV4sTK6B9T2kde3dqiWjtoz0d01INsDGWs4EI07VNBHDWA
-         cS4Pl5xbkJVJe4MsFgX1r0cgsJU4aEWrE2gk6qDmnt9jnBGhUh0Wt1a0cBBk/9f+KTdQ
-         5nPDM2xxu5BFRh3KMz0rEJ6AeurtmiuZVWTAQgh+yx1gqHC5NHn0Tib6jkzfX8PnjyWQ
-         g/ePcuXMdQ8kGY0VtLTG4hgkRZ0A1CcmIsGly9XUB8ACwzdqjybVFJ7vApY2UI5BRMdt
-         +3YaB7YSebWhg+4dfSX95n8FUROJ/k0QbujLltHEHtB9V7c2gwl9LqJ7PVLCpkw+Yu2S
-         VfHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXTgpIKn0xYKXPgWnqYzLNy4NXXa+/mFcRPIRGNcbrZCP09dEgWoq6h3cJzUHFLi0R6I5zZtcTO+jCkIstuDG2vZbyppejJzRDx0UmD
-X-Gm-Message-State: AOJu0Yz7K2TcvADG2hXUl4qvXv6JbxroMzKUokfMsUGm2OQnAtNKFR71
-	QoQcBRX+lIFNh63y3/ZQyIddAmwR0xUfkCRUaiJuQ5EzY//HBFqeSNDmz3QojzE=
-X-Google-Smtp-Source: AGHT+IGup9KuT3bGcXDYshgualkO8wp4iqLuiaYwB3pv/mfMPLTy4X+Az68C+QLsBtuAw65y5iqOgg==
-X-Received: by 2002:adf:e510:0:b0:33e:8aba:cd0a with SMTP id j16-20020adfe510000000b0033e8abacd0amr1267736wrm.9.1712329586904;
-        Fri, 05 Apr 2024 08:06:26 -0700 (PDT)
-Received: from ?IPv6:2001:8a0:e622:f700:b890:c074:f63d:508d? ([2001:8a0:e622:f700:b890:c074:f63d:508d])
-        by smtp.gmail.com with ESMTPSA id a17-20020a5d5091000000b00341ba91c1f5sm2210015wrt.102.2024.04.05.08.06.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Apr 2024 08:06:26 -0700 (PDT)
-Message-ID: <4e781d80fbec0db13555456ab8af6bdae6dee168.camel@gmail.com>
-Subject: Re: iMX8M Mini suspend/resume hanging on imx8m_blk_ctrl_power_on()
-From: vitor <ivitro@gmail.com>
-To: linux-pm@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc: vitor.soares@toradex.com, ulf.hansson@linaro.org, shawnguo@kernel.org, 
-	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, 
-	rafael@kernel.org, geert+renesas@glider.be, peng.fan@nxp.com, 
-	linus.walleij@linaro.org, u.kleine-koenig@pengutronix.de, marex@denx.de
-Date: Fri, 05 Apr 2024 16:06:25 +0100
-In-Reply-To: <fccbb040330a706a4f7b34875db1d896a0bf81c8.camel@gmail.com>
-References: <fccbb040330a706a4f7b34875db1d896a0bf81c8.camel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1712330468; c=relaxed/simple;
+	bh=X6XGUm6JZsKq6Bbf/V28UbuXZ15PV3XG3X+8BEf6k+A=;
+	h=Message-ID:Date:MIME-Version:From:To:Subject:Cc:Content-Type; b=XoXN/idxczbvda//DrW6G4Z6XlqVlSDwcX6gydJbEG6pgClIf/0fRZ5U+OCKLk4r7XuEme9Czpe4f6Crkjd+6POB8Ghp+9yqMynF7uTHmt+u/ZN4J+9/DaU7TIzrrvHZCf0zldCNerzPWTQzdh1gROjh/QL/0lR3yvGvQsOyYUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=JNhKaCGk; arc=none smtp.client-ip=80.237.130.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
+	Reply-To:Cc:Subject:To:From:MIME-Version:Date:Message-ID:From:Sender:Reply-To
+	:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
+	References; bh=v+qNG8sMUH5bGX+DRd6ZrkCiAd3Pu96BpQB8qRYZ0u8=; t=1712330466;
+	x=1712762466; b=JNhKaCGks6Ki/21xuIkSJgSjtV4ew9AwXk7AkkePp35/SD46QhNIC53V99JpL
+	+QlLXAxsYqtNN5VlvKa4HtKtHu8snRPec9pvRDmAnDdaKO71hbIJ5MYoRldSMTb2cQ0hhi4xpxK0x
+	QiPyEAdyeJvAVOO7Y25qHPzVkRVc23u9i4Co3D67KL8OLzCX/G76S0INmfasbURVgpDu5IlT7QzAT
+	ycinjlaOUcObl2pVjqPeSTbN0QjFBdoQsNd2NYWddDYVtyAP09QV4eSS0k8kAY5H+LvK6FXAQycvB
+	mwDJvOnX0rVtYSboiERpk2LYUH04uj+Tr4Jl9z2bCUTNsmRpLQ==;
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	id 1rslNI-0005aJ-0J; Fri, 05 Apr 2024 17:21:04 +0200
+Message-ID: <19851b9b-c3ff-4781-8292-4ce5999747d3@leemhuis.info>
+Date: Fri, 5 Apr 2024 17:21:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+From: "Linux regression tracking (Thorsten Leemhuis)"
+ <regressions@leemhuis.info>
+Content-Language: en-US, de-DE
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Subject: [regression] opp issues on devices with multiple power-domains
+Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ Linux kernel regressions list <regressions@lists.linux.dev>,
+ Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1712330466;6f3db7fd;
+X-HE-SMSGID: 1rslNI-0005aJ-0J
 
-Hi,
+Hi, Thorsten here, the Linux kernel's regression tracker.
 
-On Thu, 2024-04-04 at 16:53 +0100, vitor wrote:
-> Greetings,
->=20
-> I'm trying to suspend/resume our Verdin iMX8M Mini with VPU IP using
-> the latest 6.9.0-rc2 Kernel. While the system can suspend without
-> issues, it hangs on the resume routine. After some investigation, I
-> can
-> see the Kernel hanging on imx8m_blk_ctrl_power_on()[1] while resuming
-> the hantro-vpu power domain.
->=20
-> Any hint about that?
->=20
-> [1]
-> https://elixir.bootlin.com/linux/v6.9-rc2/source/drivers/pmdomain/imx
-> /imx8m-blk-ctrl.c#L101
->=20
+Viresh Kumar, I noticed a report about a regression in
+bugzilla.kernel.org that appears to be caused by a change of yours
+(e37440e7e2c276 ("OPP: Call dev_pm_opp_set_opp() for required OPPs")
+[v6.8-rc1]). As many (most?) kernel developers don't keep an eye on it,
+I decided to forward it by mail.
 
-Looking at other child nodes of the pgc node, pgc_vpu_[g1|g2|h1] seems
-to be nested into pgc_vpumix.
+Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=218682 :
 
-After applying the following changes to imx8mm.dtsi, the suspend/resume
-is working.
+> Created attachment 306086 [details]
+> Dmesg from xiaomi-onclite
+> 
+> Devices with multiple power-domains has issues with required_opps is
+> pointing to wrong opp table because it lazily just uses dt node to find it.
+> But every genpd device has its own table.
+> 
+> The issue was fixed downstream with this commit:
+> https://github.com/msm8953-mainline/linux/commit/6afec1ea2cf1cdb968d646c45d1d1a80f6cb5fb2
 
+See the ticket for more details. Note, you have to use bugzilla to reach
+the reporter, as I sadly[1] can not CCed them in mails like this.
 
-@@ -739,16 +739,19 @@ pgc_vpumix: power-domain@6 {
-	pgc_vpu_g1: power-domain@7 {
-		#power-domain-cells =3D <0>;
-		reg =3D <IMX8MM_POWER_DOMAIN_VPUG1>;
-+		power-domains =3D <&pgc_vpumix>;
-	};
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
 
-	pgc_vpu_g2: power-domain@8 {
-		#power-domain-cells =3D <0>;
-		reg =3D <IMX8MM_POWER_DOMAIN_VPUG2>;
-+		power-domains =3D <&pgc_vpumix>;
-	};
+[1] because bugzilla.kernel.org tells users upon registration their
+"email address will never be displayed to logged out users"
 
-	pgc_vpu_h1: power-domain@9 {
-		#power-domain-cells =3D <0>;
-		reg =3D <IMX8MM_POWER_DOMAIN_VPUH1>;
-+		power-domains =3D <&pgc_vpumix>;
-	};
+P.S.: let me use this mail to also add the report to the list of tracked
+regressions to ensure it's doesn't fall through the cracks:
 
-
-I will prepare the patch to send in the next couple of days.
-
-Regards,
-Vitor Soares
+#regzbot introduced: e37440e7e2c2760475d60c5556b59c8880a7fd63
+#regzbot title: OPP: issues on devices with multiple power-domains
+#regzbot from: Barnabás Czémán
+#regzbot duplicate: https://bugzilla.kernel.org/show_bug.cgi?id=218682
+#regzbot ignore-activity
 
