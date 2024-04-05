@@ -1,113 +1,151 @@
-Return-Path: <linux-pm+bounces-5949-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5950-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DA9C8997D5
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 10:31:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0AC58997E3
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 10:34:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0E236B212FF
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 08:31:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 84B101F21830
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 08:34:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1BDC1514F6;
-	Fri,  5 Apr 2024 08:31:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 033A615F300;
+	Fri,  5 Apr 2024 08:34:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="artZWtV9"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ZGPpchnC";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="iZLMIhAp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2ED3150984
-	for <linux-pm@vger.kernel.org>; Fri,  5 Apr 2024 08:31:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 560B1145B09;
+	Fri,  5 Apr 2024 08:34:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712305864; cv=none; b=QHQkhDlgRCxUNMsNQULz9glNUdiWynoEYjzTFBDO9k8ceGjjjMIldSAipVMui8KMb9QD9vlIu59C5om4ezjSyYT6t/x7jn5TtuoEtRogEDSbzepKJdoma28/neOhgZdoE/SCV5wzHmavWy3vk+1uD8+3Zv0kO4GtU/lq6xCyBDI=
+	t=1712306066; cv=none; b=kfeWoybO/nqJ5Lo3cYBHPypD3zKDzfKP+eZ4fo3F2MSoJJGAmlYjnUeXZ8JVkqzeLawnaXTZhCSg/4tbFrP28exqEuQ6WIlUerNF2+9Z5vQ++jtqrBhHoDq+cdKYy2Zc8z7e4U5ACXnIhykKOeosa7AC6gTjo3pIePsBzaR5Eg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712305864; c=relaxed/simple;
-	bh=yxdBB10ArDmSlmE0g0r1a9LmbtngWEnM0SlxQmAvBY4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IkrvrYbgE9WOO6P6jmPj31nfpAPmG55eWxxUpv05wizRtfwZrn9Abcc/UJs1DAifVw9be6veMEFFu+0y32+AHhCmvVhhmAXggOWX9c4DT0ocb5y6SKFYjtLACrCQSB+G9bBYX8h4Dt4dEM7Mhrc0nciie4j9LNH68qEENxXbR/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=artZWtV9; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4163181a7ceso1289655e9.0
-        for <linux-pm@vger.kernel.org>; Fri, 05 Apr 2024 01:31:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1712305859; x=1712910659; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k+yiJOo7/g4gpSdzIrOskjwlXwHDi0ApeHqIT18FSLE=;
-        b=artZWtV9YaxV7ecokOgz02QMDGSdua/wB+XoZK/eo3Vh/wC/1cWYBFhS49mM6AhauJ
-         GOK6sF+0LTqD+mGqqUuBVuN0RA4ArYbsCsK9XepqP5jjlhM5FHX+0jGZob3uHSgnsHYQ
-         11i6RFzuV6mEHKmegfFRkjWqsTIPxE5kG8479OVelXnqTo7Kp3NPmXxEvVpgFDZaTJ85
-         QpjyogaqcyZlAIt6Zfu6cy2jKxqAEAgz2czKwUj+wZYsRmyorpa0vC+se23o7jrZ1WT0
-         pA8sbdVYL/6FEWrm6bYf64DNNksStpTGatQddBFEsVoFu9QQ5NXW/p27/yVaWokBemL0
-         EiQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712305859; x=1712910659;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k+yiJOo7/g4gpSdzIrOskjwlXwHDi0ApeHqIT18FSLE=;
-        b=GQ0wWodUsDayETjV+8Zt9+6+8wnWeYUcU+iVUC+CcTPs4NHV3J+w3QMdrd6TV51ANS
-         7VzK3DDyNJ9lIaE3/0jJS2dkzfDIJTDA6Bp+As2JUIuIjGhEJsIVBIcpRRRTMLPzLytp
-         WahDtw2pDVaAVkBoYcLtBm6yja+KgYGe9e5HCw+OKuhfgnphZipm3oDcod7Jvc0erwSd
-         ycgLmlr7VVbL2SmBJ5TLIQRh6AKlxnFHjoHVTWfqP83y1EevEIfiv55DH6fQNZldoeuk
-         Cx2C4AhXD78laVDAgWTTwhoHwKs6E0rnXJ+9OeDuFiR2ljKJLx50PSGJWk3rgdWSXLKw
-         +UHw==
-X-Forwarded-Encrypted: i=1; AJvYcCUNyhaEnfmxHwG16jxmMRwlOdX2C4SzsU2WZR3G6Q6nix9GbofGHQngN3X1uMZFaKG3dRRT6FNVYpDYV1pki78r9QkEa55V48c=
-X-Gm-Message-State: AOJu0YyS8IuewVCXlKZshBaqU2nl+zExLahWbeP37APrawqxFX514c7/
-	2LDuav+u44838nw4VufEQwRZoysVgd5m+/whDcVMWlrTe5ENm4uAuE1gIu4g2rQ=
-X-Google-Smtp-Source: AGHT+IHwzZg6mqbOsTet1vE1TEWA9BHTjUj5nkdl33/YZd+0KsGS7zI4vNLvez40dZEnn1sQDzcRBw==
-X-Received: by 2002:a05:600c:1f93:b0:416:2a95:6e8b with SMTP id je19-20020a05600c1f9300b004162a956e8bmr572430wmb.26.1712305859037;
-        Fri, 05 Apr 2024 01:30:59 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id n8-20020a5d4c48000000b0033e7b05edf3sm1446622wrt.44.2024.04.05.01.30.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Apr 2024 01:30:58 -0700 (PDT)
-Message-ID: <cf1ad84d-3983-4595-aeab-e421bc1f95b5@linaro.org>
-Date: Fri, 5 Apr 2024 10:30:57 +0200
+	s=arc-20240116; t=1712306066; c=relaxed/simple;
+	bh=PR+7ds2HGo2jve0t4aq/uu/b6Ds20Iyx2n8veKfoFqw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HK1rdOznsgn8upsoFiRQkeY96ToXCvGZ2Bfxr2+DNcme8bjYf8rYTsNINvbxM5SgQZ1z6/Vr8x9v8mhhcJJpD5yNmIJiM4OCXri2EPd48NfnvEryki0V6H+8W+SD+yveBus3EodM82IlnMUHIDdiRL7sq48LfaaL8//7e7JcChU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ZGPpchnC; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=iZLMIhAp; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Anna-Maria Behnsen <anna-maria@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1712306062;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=vz9gdAWslzxa17vDr2RXb+lx+EfINHoYwLIVtOfMNtI=;
+	b=ZGPpchnCt2RNbT1lS8u3Ih0SiM+WOpteLMPsAwQ2vFB493JDuLNdAtMbGkH7fpOTvPb9fk
+	m1120JXJwnveC1nXpyaK1rPS2V491lHQfJc6id+zFOSNc0t4TBXShc5uRu1sro6eHWqt1m
+	rQiL4q23e++KHIaySuYVwMORQKaWpxRJ7bWSx7Bvb6ftAv2lp/y1/iSDe7pcAkzp5gcOLW
+	DBbDs6gUMDF3LWHTeZUsbIt5Pb49M6Ks1sCeutSkNb5v/SJQsrXjCYFhodwMel2EVRfxIx
+	1b3TbK/fx+iRazqNaDuSIb37FqBz4MsOcXvQ3Qt7Yn7y7gCAoJUNZe3l7hfrQg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1712306062;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=vz9gdAWslzxa17vDr2RXb+lx+EfINHoYwLIVtOfMNtI=;
+	b=iZLMIhApPYlZDWKi3sN9uPbNXcXtdkpN8bUfaaTBYWnX5UPJJWpYteetnuJCCVS+Wir8MR
+	Tj/It3XOCiV9SBCw==
+To: linux-kernel@vger.kernel.org
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>,
+	Len Brown <len.brown@intel.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-pm@vger.kernel.org,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	x86@kernel.org,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	stable@kernel.org
+Subject: [PATCH] PM: s2idle: Make sure CPUs will wakeup directly on resume
+Date: Fri,  5 Apr 2024 10:34:10 +0200
+Message-Id: <20240405083410.4896-1-anna-maria@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/6] thermal: core: Rewrite comments in
- handle_thermal_trip()
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-References: <4558251.LvFx2qVVIh@kreacher> <3284691.aeNJFYEL58@kreacher>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <3284691.aeNJFYEL58@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 02/04/2024 20:59, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Make the comments regarding trip crossing and threshold updates in
-> handle_thermal_trip() slightly more clear.
-> 
-> No functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+s2idle works like a regular suspend with freezing processes and freezing
+devices. All CPUs except the control CPU go into idle. Once this is
+completed the control CPU kicks all other CPUs out of idle, so that they
+reenter the idle loop and then enter s2idle state. The control CPU then
+issues an swait() on the suspend state and therefore enters the idle loop
+as well.
 
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Due to being kicked out of idle, the other CPUs leave their NOHZ states,
+which means the tick is active and the corresponding hrtimer is programmed
+to the next jiffie.
 
+On entering s2idle the CPUs shut down their local clockevent device to
+prevent wakeups. The last CPU which enters s2idle shuts down its local
+clockevent and freezes timekeeping.
+
+On resume, one of the CPUs receives the wakeup interrupt, unfreezes
+timekeeping and its local clockevent and starts the resume process. At that
+point all other CPUs are still in s2idle with their clockevents switched
+off. They only resume when they are kicked by another CPU or after resuming
+devices and then receiving a device interrupt.
+
+That means there is no guarantee that all CPUs will wakeup directly on
+resume. As the consequence there is no guarantee that timers which are
+queued on those CPUs and should expire directly after resume, are
+handled. Also timer list timers which are remotely queued to one of those
+CPUs after resume will not result in a reporgramming IPI as the tick is
+active. A queue hrtimer will also not result in a reprogramming IPI because
+the first hrtimer event is already in the past.
+
+The recent introduction of the timer pull model (7ee988770326 ("timers:
+Implement the hierarchical pull model")) amplifies this problem, if the
+current migrator is one of the non woken up CPUs. When a non pinned timer
+list timer is queued and the queueing CPU goes idle, it relies on the still
+suspended migrator CPU to expire the timer which will happen by chance.
+
+The problem existis since commit 8d89835b0467 ("PM: suspend: Do not pause
+cpuidle in the suspend-to-idle path"). There the cpuidle_pause() call which
+in turn invoked a wakeup for all idle CPUs was moved to a later point in
+the resume process. This might not be reached or reached very late because
+it waits on a timer of a still suspended CPU.
+
+Address this by kicking all CPUs out of idle after the control CPU returns
+from swait() so that they resume their timers and restore consistent system
+state.
+
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218641
+Fixes: 8d89835b0467 ("PM: suspend: Do not pause cpuidle in the suspend-to-idle path")
+Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
+Tested-by: Mario Limonciello <mario.limonciello@amd.com>
+Cc: stable@kernel.org
+---
+ kernel/power/suspend.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+index e3ae93bbcb9b..09f8397bae15 100644
+--- a/kernel/power/suspend.c
++++ b/kernel/power/suspend.c
+@@ -106,6 +106,12 @@ static void s2idle_enter(void)
+ 	swait_event_exclusive(s2idle_wait_head,
+ 		    s2idle_state == S2IDLE_STATE_WAKE);
+ 
++	/*
++	 * Kick all CPUs to ensure that they resume their timers and restore
++	 * consistent system state.
++	 */
++	wake_up_all_idle_cpus();
++
+ 	cpus_read_unlock();
+ 
+ 	raw_spin_lock_irq(&s2idle_lock);
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.39.2
 
 
