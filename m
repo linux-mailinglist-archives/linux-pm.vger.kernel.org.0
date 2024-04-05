@@ -1,429 +1,157 @@
-Return-Path: <linux-pm+bounces-5965-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5966-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0238C899BA4
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 13:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 37679899C11
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 13:49:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC319286902
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 11:10:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E4EC8284020
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 11:49:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 810F316C6A4;
-	Fri,  5 Apr 2024 11:10:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Fh8wBnw7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 536B916C69F;
+	Fri,  5 Apr 2024 11:49:15 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.lichtvoll.de (lichtvoll.de [89.58.27.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D45716C692
-	for <linux-pm@vger.kernel.org>; Fri,  5 Apr 2024 11:10:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF7F016C696;
+	Fri,  5 Apr 2024 11:49:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.27.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712315405; cv=none; b=ttqO8wzWI91Z9ufH4juqFkUyCp8RPTl5VWW9HHFCwR40tf9aA67f7/pJFXfcdcmA3tM/a/yIBOUOkxpPS/ZeTctMRzp1Sq2XE0ClBJZtDxm95gtmgsMzXQCpNXlylENeVn4X/kY9Dj2/MpmaTgcTDVQ+OokjvoMFJwdezbM9rYQ=
+	t=1712317755; cv=none; b=NdAUdo5NPCgH+Co3HgXNyDjMVczhsRQZLxZ2VV9YLcuAJfd6YsTz3EIPIHvyLhUDNLO/IoP166WhV0lSQVgGrzGq5mVOyVbkWyzRR86hetXX3z/oXbDatgeDIKdygbuqxbrA04NHBzEMbXoUVGS7vvNd51/9imdj1FJupROvP5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712315405; c=relaxed/simple;
-	bh=oJ0Xk5ltsUzu+JZRjpvBKqDh2i8n3mVzm5U30u1RFic=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=JZFLSRuyps68L5X0wU44n/SX6LxToad5ljNuz8XToEX3fq+w1nfgaBQMbYJGfTeY9xYP8Gt0ihgYl6iTgwiMm/6+FH3430GXl4ar5uMixZXCkC/svbAMS5mwYlyG6qEETXRla/efvjzna21T4pVB/9tarIbJ+5sxvpHxMRSNsv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Fh8wBnw7; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1e0d82d441bso18190965ad.3
-        for <linux-pm@vger.kernel.org>; Fri, 05 Apr 2024 04:10:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1712315402; x=1712920202; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ys2+MgQ3wDlipfHVv7Q6NNeD/t7+Th7HLHKb6mu7BLE=;
-        b=Fh8wBnw7hDzzYdD/s3mlOCL6n/BRvfJVfMWPPrvntKBZam9VS0SyPObxRCeg8xn/k0
-         4B32wlfoHtZ/4Way/ADAbmBihWMS1cKxtxnulV05oADTwdZLwemdgRieYqOW4rWV/4UT
-         5rm3IAtEMwVMZlwsij2zw9zvKepfj3W0baJItCV7hi0taFHsxEBMxGursmMdK3+SFMkR
-         Inhv/QHtl5X0qewZ6OatQQglcag82IrDS8krwENPZL0hys6lBBHFOiPLmn6bl1ubZoer
-         iHEVcVZ5xxAJHF68i0l/+I1+M5278kOJUTEV5SG8M3b2gMGpG6+zadJweGxjUIN+MmL+
-         IUSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712315402; x=1712920202;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ys2+MgQ3wDlipfHVv7Q6NNeD/t7+Th7HLHKb6mu7BLE=;
-        b=JICDRdMcK23Ujz0C6PUs1xjLadPwmKmw7JtVvaT1PCJ0soBGyPkvylrXcWryvBIjHA
-         H/+/sJ4vznssGm3ojucyz9qrgkVA8R8LMzuESGu6rO/heSEPU8YM4Xlz81ozKbRXEwWI
-         W9+g2ncg3P2NhNFILLzdhJVLSmVMQPXPnnZuYqZVwmC42HopgZsw3m1XZQRfn3jQxBqV
-         gmbclWyB/xS3Mkjaps5IA8DDjtiTBgD5MXM5YyqHsC8OwMgFczKg8yE+HKV4w8+OtaX2
-         4Hnesct+c+q+3ya4wVYrwF9JyNcXY9phaeGorhpnhceOBScCVw4x5x1mAfnq2arfDWAE
-         UGaA==
-X-Gm-Message-State: AOJu0YyODzpezm6ZWUk9H3O99Baa5pF2cGRtxBjdH9G5ghSwQTgDzY0d
-	d1ELBtuPQR16YUvSKZCOoJHYxW2C1MYvl8jvHy5lnTKNBGdQTUnKfo9yGuyUB18=
-X-Google-Smtp-Source: AGHT+IHY008fVlaXyLCmPu4dOH9eJ8BuR16MLkMWqRpMFG6rw8TwPA5CEyLsSKF/R0JagteMrv6iVg==
-X-Received: by 2002:a17:902:d4c4:b0:1e2:1df1:5ac0 with SMTP id o4-20020a170902d4c400b001e21df15ac0mr1301311plg.9.1712315402338;
-        Fri, 05 Apr 2024 04:10:02 -0700 (PDT)
-Received: from localhost ([122.172.85.136])
-        by smtp.gmail.com with ESMTPSA id l17-20020a170902d05100b001dddf29b6e8sm1297065pll.299.2024.04.05.04.10.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Apr 2024 04:10:01 -0700 (PDT)
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>
-Cc: linux-pm@vger.kernel.org,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Nishanth Menon <nm@ti.com>,
-	rust-for-linux@vger.kernel.org,
-	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
-	Erik Schilling <erik.schilling@linaro.org>,
-	=?UTF-8?q?Alex=20Benn=C3=A9e?= <alex.bennee@linaro.org>,
-	Joakim Bech <joakim.bech@linaro.org>,
-	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 3/3] cpufreq: Add Rust based cpufreq-dt driver
-Date: Fri,  5 Apr 2024 16:39:40 +0530
-Message-Id: <1792467a772b7a8355c6d0cb0cbacfbffff08afd.1712314032.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
-In-Reply-To: <cover.1712314032.git.viresh.kumar@linaro.org>
-References: <cover.1712314032.git.viresh.kumar@linaro.org>
+	s=arc-20240116; t=1712317755; c=relaxed/simple;
+	bh=1OjGkRdD/bYDsePiq+qSN6i3amCm1EPH02CPR05K2vM=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kiL5yqvjfP82v0mQgbKnOZe8sdzqSGyKulNMBsuFlrsCuc2zXQF1v6F3rsIYpP3DTGfkPazKcMR+RLY3R9psbz/rffkjT5xyIWnZQBzizEs5tIDjoRmRvTu/cAOnLo9FsibNHGL3f6uBayHlBhY6niBFV1nYJd2LOr+Grt4lmVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lichtvoll.de; spf=pass smtp.mailfrom=lichtvoll.de; arc=none smtp.client-ip=89.58.27.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lichtvoll.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lichtvoll.de
+Received: from 127.0.0.1 (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (secp384r1) server-digest SHA384)
+	(No client certificate requested)
+	by mail.lichtvoll.de (Postfix) with ESMTPSA id 7EE44A155;
+	Fri,  5 Apr 2024 11:49:04 +0000 (UTC)
+Authentication-Results: mail.lichtvoll.de;
+	auth=pass smtp.auth=martin@lichtvoll.de smtp.mailfrom=martin@lichtvoll.de
+From: Martin Steigerwald <martin@lichtvoll.de>
+To: linux-pm@vger.kernel.org, regressions@lists.linux.dev,
+ linux-kernel@vger.kernel.org,
+ Linux regressions mailing list <regressions@lists.linux.dev>
+Subject:
+ Re: [regression] 6.8.1: fails to hibernate with
+ pm_runtime_force_suspend+0x0/0x120 returns -16
+Date: Fri, 05 Apr 2024 13:49:00 +0200
+Message-ID: <6034738.lOV4Wx5bFT@lichtvoll.de>
+In-Reply-To: <be5a7213-78b3-4917-b95b-ec31cd2350e4@leemhuis.info>
+References:
+ <2325246.ElGaqSPkdT@lichtvoll.de> <12401263.O9o76ZdvQC@lichtvoll.de>
+ <be5a7213-78b3-4917-b95b-ec31cd2350e4@leemhuis.info>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 
-This commit adds a Rust based cpufreq-dt driver, which covers most of
-the functionality of the existing C based driver. Only a handful of
-things are left, like fetching platform data from cpufreq-dt-platdev.c.
+Linux regression tracking (Thorsten Leemhuis) - 19.03.24, 09:40:06 CEST:
+> On 16.03.24 17:12, Martin Steigerwald wrote:
+> > Martin Steigerwald - 16.03.24, 17:02:44 CET:
+> >> ThinkPad T14 AMD Gen 1 fails to hibernate with self-compiled 6.8.1.
+> >> Hibernation works correctly with self-compiled 6.7.9.
+> >=20
+> > Apparently 6.8.1 does not even reboot correctly anymore. runit on
+> > Devuan. It says it is doing the system reboot but then nothing
+> > happens.
+> >=20
+> > As for hibernation the kernel cancels the attempt and returns back to
+> > user space desktop session.
+> >=20
+> >> Trying to use "no_console_suspend" to debug next. Will not do bisect
+> >> between major kernel releases on a production machine.
+>=20
+> FWIW, without a bisection I guess no developer will take a closer look
+> (but I might be wrong and you lucky here!), as any change in those
+> hundreds of drivers used on that machine can possibly lead to problems
+> like yours. So without a bisection we are likely stuck here, unless
+> someone else runs into the same problem and bisects or fixes it. Sorry,
+> but that's just how it is.
 
-This is tested with the help of QEMU for now and switching of
-frequencies work as expected.
+The plot thickens, now 6.7.12 as compared to 6.7.11 which failed hibernation
+with busy work queues=B9 and 6.7.9 + bcachefs downgrade fixes fails
+hibernation with the same error message than 6.8.1:
 
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/cpufreq/Kconfig        |  12 ++
- drivers/cpufreq/Makefile       |   1 +
- drivers/cpufreq/rcpufreq_dt.rs | 264 +++++++++++++++++++++++++++++++++
- 3 files changed, 277 insertions(+)
- create mode 100644 drivers/cpufreq/rcpufreq_dt.rs
+[   74.330285] PM: hibernation: hibernation entry
+[   74.617009] Filesystems sync: 0.097 seconds
+[   74.617309] Freezing user space processes
+[   74.620021] Freezing user space processes completed (elapsed 0.002 secon=
+ds)
+[   74.620048] OOM killer disabled.
+[   74.620250] PM: hibernation: Marking nosave pages: [mem 0x00000000-0x000=
+00fff]
+[   74.620253] PM: hibernation: Marking nosave pages: [mem 0x0009f000-0x000=
+fffff]
+[   74.620256] PM: hibernation: Marking nosave pages: [mem 0x09c00000-0x09d=
+00fff]
+[   74.620261] PM: hibernation: Marking nosave pages: [mem 0x09f00000-0x09f=
+0ffff]
+[   74.620263] PM: hibernation: Marking nosave pages: [mem 0xa22b7000-0xa22=
+b7fff]
+[   74.620264] PM: hibernation: Marking nosave pages: [mem 0xa22c4000-0xa22=
+c5fff]
+[   74.620266] PM: hibernation: Marking nosave pages: [mem 0xa22d3000-0xa22=
+d4fff]
+[   74.620267] PM: hibernation: Marking nosave pages: [mem 0xa22e5000-0xa22=
+e5fff]
+[   74.620269] PM: hibernation: Marking nosave pages: [mem 0xb9533000-0xb95=
+c3fff]
+[   74.620272] PM: hibernation: Marking nosave pages: [mem 0xbd9de000-0xcc3=
+fdfff]
+[   74.620752] PM: hibernation: Marking nosave pages: [mem 0xce000000-0xfff=
+fffff]
+[   74.622717] PM: hibernation: Basic memory bitmaps created
+[   74.629269] PM: hibernation: Preallocating image memory
+[   76.658495] PM: hibernation: Allocated 2042025 pages for snapshot
+[   76.658875] PM: hibernation: Allocated 8168100 kbytes in 2.02 seconds (4=
+043.61 MB/s)
+[   76.658901] Freezing remaining freezable tasks
+[   76.660457] Freezing remaining freezable tasks completed (elapsed 0.001 =
+seconds)
+[   76.666115] port 0000:02:00.1:0.0: PM: dpm_run_callback(): pm_runtime_fo=
+rce_suspend+0x0/0x120 returns -16
+[   76.666255] port 0000:02:00.1:0.0: PM: failed to freeze: error -16
+[   78.616495] psmouse serio1: synaptics: queried max coordinates: x [..567=
+8], y [..4694]
+[   78.654349] psmouse serio1: synaptics: queried min coordinates: x [1266.=
+=2E], y [1162..]
+[   79.106531] PM: hibernation: Basic memory bitmaps freed
+[   79.106855] OOM killer enabled.
+[   79.106873] Restarting tasks ... done.
+[   79.111514] PM: hibernation: hibernation exit
 
-diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
-index 94e55c40970a..eb9359bd3c5c 100644
---- a/drivers/cpufreq/Kconfig
-+++ b/drivers/cpufreq/Kconfig
-@@ -217,6 +217,18 @@ config CPUFREQ_DT
- 
- 	  If in doubt, say N.
- 
-+config CPUFREQ_DT_RUST
-+	tristate "Rust based Generic DT based cpufreq driver"
-+	depends on HAVE_CLK && OF && RUST
-+	select CPUFREQ_DT_PLATDEV
-+	select PM_OPP
-+	help
-+	  This adds a Rust based generic DT based cpufreq driver for frequency
-+	  management.  It supports both uniprocessor (UP) and symmetric
-+	  multiprocessor (SMP) systems.
-+
-+	  If in doubt, say N.
-+
- config CPUFREQ_DT_PLATDEV
- 	tristate "Generic DT based cpufreq platdev driver"
- 	depends on OF
-diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
-index 8d141c71b016..4981d908b803 100644
---- a/drivers/cpufreq/Makefile
-+++ b/drivers/cpufreq/Makefile
-@@ -15,6 +15,7 @@ obj-$(CONFIG_CPU_FREQ_GOV_COMMON)		+= cpufreq_governor.o
- obj-$(CONFIG_CPU_FREQ_GOV_ATTR_SET)	+= cpufreq_governor_attr_set.o
- 
- obj-$(CONFIG_CPUFREQ_DT)		+= cpufreq-dt.o
-+obj-$(CONFIG_CPUFREQ_DT_RUST)		+= rcpufreq_dt.o
- obj-$(CONFIG_CPUFREQ_DT_PLATDEV)	+= cpufreq-dt-platdev.o
- 
- # Traces
-diff --git a/drivers/cpufreq/rcpufreq_dt.rs b/drivers/cpufreq/rcpufreq_dt.rs
-new file mode 100644
-index 000000000000..d29182eba75e
---- /dev/null
-+++ b/drivers/cpufreq/rcpufreq_dt.rs
-@@ -0,0 +1,264 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+//! Rust based implementation of the cpufreq-dt driver.
-+
-+use core::{format_args, ptr};
-+
-+use kernel::{
-+    b_str, bindings, c_str, cpufreq, define_of_id_table,
-+    device::{self, Device, RawDevice},
-+    error::{code::*, to_result},
-+    fmt,
-+    macros::vtable,
-+    module_platform_driver, of, opp, platform,
-+    prelude::*,
-+    str::CString,
-+    sync::Arc,
-+};
-+
-+// Finds exact supply name from the OF node.
-+fn find_supply_name_exact(np: *mut bindings::device_node, name: &str) -> Option<CString> {
-+    let sname = CString::try_from_fmt(fmt!("{}-supply", name)).ok()?;
-+
-+    // SAFETY: The OF node is guaranteed by the C code to be valid.
-+    let pp = unsafe { bindings::of_find_property(np, sname.as_ptr() as *mut _, ptr::null_mut()) };
-+    if pp.is_null() {
-+        None
-+    } else {
-+        CString::try_from_fmt(fmt!("{}", name)).ok()
-+    }
-+}
-+
-+// Finds supply name for the CPU from DT.
-+fn find_supply_names(dev: &Device, cpu: u32) -> Option<Vec<CString>> {
-+    // SAFETY: The requirements are satisfied by the existence of `RawDevice` and its safety
-+    // requirements. The OF node is guaranteed by the C code to be valid or NULL and
-+    // `of_node_get()` handles both the cases safely.
-+    let np = unsafe { bindings::of_node_get((*dev.raw_device()).of_node) };
-+    if np.is_null() {
-+        return None;
-+    }
-+
-+    // Try "cpu0" for older DTs.
-+    let mut name = if cpu == 0 {
-+        find_supply_name_exact(np, "cpu0")
-+    } else {
-+        None
-+    };
-+
-+    if name.is_none() {
-+        name = find_supply_name_exact(np, "cpu");
-+    }
-+
-+    // SAFETY: It is safe to drop reference to the OF node we just took.
-+    unsafe { bindings::of_node_put(np) };
-+
-+    match name {
-+        Some(name) => {
-+            let mut list = Vec::try_with_capacity(1).ok()?;
-+            list.try_push(name).ok()?;
-+
-+            // SAFETY: The slice is fully initialized now.
-+            Some(list)
-+        }
-+
-+        None => None,
-+    }
-+}
-+
-+// Represents the cpufreq dt device.
-+struct CPUFreqDTDevice {
-+    opp_table: opp::Table,
-+    freq_table: opp::FreqTable,
-+    #[allow(dead_code)]
-+    config: Option<opp::Config<Self>>,
-+    #[allow(dead_code)]
-+    clk: cpufreq::Clk,
-+}
-+
-+#[vtable]
-+impl opp::ConfigOps for CPUFreqDTDevice {}
-+
-+#[vtable]
-+impl cpufreq::DriverOps for CPUFreqDTDevice {
-+    type PData = Arc<Self>;
-+
-+    fn init(policy: &mut cpufreq::Policy) -> Result<Self::PData> {
-+        let cpu = policy.cpu();
-+
-+        // SAFETY: It is safe to call `get_cpu_device()` for any CPU.
-+        let dev = unsafe { bindings::get_cpu_device(cpu) };
-+        if dev.is_null() {
-+            return Err(ENODEV);
-+        }
-+
-+        // SAFETY: `dev` is valid, non-null, and has a non-zero reference count.
-+        let dev = unsafe { Device::new(dev) };
-+
-+        policy.set_cpus(cpu);
-+
-+        let config = if let Some(names) = find_supply_names(&dev, cpu) {
-+            let mut config = opp::Config::<Self>::new();
-+            config.set_regulator_names(names)?;
-+            config.set(&dev)?;
-+            Some(config)
-+        } else {
-+            None
-+        };
-+
-+        // Get OPP-sharing information from "operating-points-v2" bindings.
-+        let fallback = match opp::Table::of_sharing_cpus(&dev, policy.cpus()) {
-+            Ok(_) => false,
-+            Err(e) => {
-+                if e != ENOENT {
-+                    return Err(e);
-+                }
-+
-+                // "operating-points-v2" not supported. If the platform hasn't
-+                // set sharing CPUs, fallback to all CPUs share the `Policy`
-+                // for backward compatibility.
-+                opp::Table::sharing_cpus(&dev, policy.cpus()).is_err()
-+            }
-+        };
-+
-+        // Initialize OPP tables for all policy cpus.
-+        //
-+        // For platforms not using "operating-points-v2" bindings, we do this
-+        // before updating policy cpus. Otherwise, we will end up creating
-+        // duplicate OPPs for the CPUs.
-+        //
-+        // OPPs might be populated at runtime, don't fail for error here unless
-+        // it is -EPROBE_DEFER.
-+        let mut opp_table = match opp::Table::from_of_cpumask(&dev, policy.cpus()) {
-+            Ok(table) => table,
-+            Err(e) => {
-+                if e == EPROBE_DEFER {
-+                    return Err(e);
-+                }
-+
-+                // The table is added dynamically ?
-+                opp::Table::from_dev(&dev)?
-+            }
-+        };
-+
-+        // The OPP table must be initialized, statically or dynamically, by this point.
-+        opp_table.opp_count()?;
-+
-+        // Set sharing cpus for fallback scenario.
-+        if fallback {
-+            policy.set_all_cpus();
-+            opp_table.set_sharing_cpus(policy.cpus())?;
-+        }
-+
-+        let mut transition_latency = opp_table.max_transition_latency() as u32;
-+        if transition_latency == 0 {
-+            transition_latency = cpufreq::ETERNAL_LATENCY;
-+        }
-+
-+        let freq_table = opp_table.to_cpufreq_table()?;
-+        policy.set_freq_table(freq_table.table());
-+        policy.set_dvfs_possible_from_any_cpu();
-+        policy.set_suspend_freq((opp_table.suspend_freq() / 1000) as u32);
-+        policy.set_transition_latency(transition_latency);
-+        let clk = policy.set_clk(&dev, None)?;
-+
-+        Ok(Arc::try_new(CPUFreqDTDevice {
-+            opp_table,
-+            config,
-+            freq_table,
-+            clk,
-+        })?)
-+    }
-+
-+    fn exit(_policy: &mut cpufreq::Policy, _data: Option<Self::PData>) -> Result<()> {
-+        Ok(())
-+    }
-+
-+    fn online(_policy: &mut cpufreq::Policy) -> Result<()> {
-+        // We did light-weight tear down earlier, nothing to do here.
-+        Ok(())
-+    }
-+
-+    fn offline(_policy: &mut cpufreq::Policy) -> Result<()> {
-+        // Preserve policy->data and don't free resources on light-weight
-+        // tear down.
-+        Ok(())
-+    }
-+
-+    fn suspend(policy: &mut cpufreq::Policy) -> Result<()> {
-+        // SAFETY: By the type invariants, we know that `self` owns a reference, so it is safe to
-+        // use it now.
-+        to_result(unsafe { bindings::cpufreq_generic_suspend(policy.as_ptr()) })
-+    }
-+
-+    fn verify(data: &mut cpufreq::PolicyData) -> Result<()> {
-+        // SAFETY: By the type invariants, we know that `data` owns a reference received from the C
-+        // code, so it is safe to use it now.
-+        to_result(unsafe { bindings::cpufreq_generic_frequency_table_verify(data.as_ptr()) })
-+    }
-+
-+    fn target_index(policy: &mut cpufreq::Policy, index: u32) -> Result<()> {
-+        let data = match policy.data::<Self::PData>() {
-+            Some(data) => data,
-+            None => return Err(ENOENT),
-+        };
-+
-+        let freq = data.freq_table.freq(index.try_into().unwrap())? as u64;
-+        data.opp_table.set_rate(freq * 1000)
-+    }
-+
-+    fn get(policy: &mut cpufreq::Policy) -> Result<u32> {
-+        // SAFETY: It is safe to call `cpufreq_generic_get()` for policy's CPU.
-+        Ok(unsafe { bindings::cpufreq_generic_get(policy.cpu()) })
-+    }
-+
-+    fn set_boost(_policy: &mut cpufreq::Policy, _state: i32) -> Result<()> {
-+        Ok(())
-+    }
-+
-+    fn register_em(policy: &mut cpufreq::Policy) {
-+        // SAFETY: By the type invariants, we know that `self` owns a reference, so it is safe to
-+        // use it now.
-+        unsafe { bindings::cpufreq_register_em_with_opp(policy.as_ptr()) };
-+    }
-+}
-+
-+type DeviceData = device::Data<cpufreq::Registration<CPUFreqDTDevice>, (), ()>;
-+
-+struct CPUFreqDTDriver;
-+
-+impl platform::Driver for CPUFreqDTDriver {
-+    type Data = Arc<DeviceData>;
-+
-+    define_of_id_table! {(), [
-+        (of::DeviceId::Compatible(b_str!("operating-points-v2")), None),
-+    ]}
-+
-+    fn probe(_dev: &mut platform::Device, _id_info: Option<&Self::IdInfo>) -> Result<Self::Data> {
-+        let data = Arc::<DeviceData>::from(kernel::new_device_data!(
-+            cpufreq::Registration::new(),
-+            (),
-+            (),
-+            "CPUFreqDT::Registration"
-+        )?);
-+        let flags = cpufreq::flags::NEED_INITIAL_FREQ_CHECK | cpufreq::flags::IS_COOLING_DEV;
-+        let boost = true;
-+
-+        data.registrations()
-+            .ok_or(ENXIO)?
-+            .as_pinned_mut()
-+            .register(c_str!("cpufreq-dt"), (), flags, boost)?;
-+
-+        pr_info!("CPUFreq DT driver registered\n");
-+
-+        Ok(data)
-+    }
-+}
-+
-+module_platform_driver! {
-+    type: CPUFreqDTDriver,
-+    name: "cpufreq_dt",
-+    author: "Viresh Kumar <viresh.kumar@linaro.org>",
-+    description: "Generic CPUFreq DT driver",
-+    license: "GPL v2",
-+}
--- 
-2.31.1.272.g89b43f80a514
+Not doing it today or probably the weekend, but now I have some actionable
+git bisect plan without bisecting between major kernel releases which as I
+have been told between 6.7 an 6.8-rc1 can lead to non working modeset
+graphics on AMD Ryzen in between.
+
+It seems now I only need to git bisect between 6.7.11 and 6.7.12 to find the
+patch that breaks hibernation on 6.8.1 as well. However first I will briefly
+check whether 6.8.4 hibernates okay.
+
+[1] * 6.7.11: Fails to hibernate - work queues still busy
+@ 2024-04-02 19:29 Martin Steigerwald
+
+https://lore.kernel.org/regressions/2ad93b57-8fdc-476e-83b7-2c0af1cfd41d@le=
+emhuis.info/T/#t
+
+Best,
+=2D-=20
+Martin
+
 
 
