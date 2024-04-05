@@ -1,147 +1,137 @@
-Return-Path: <linux-pm+bounces-5977-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5978-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F65D89A2C5
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 18:43:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5179D89A3BD
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 19:52:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0C9D7B25A09
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 16:43:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05E291F2429E
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 17:52:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 580DC16F858;
-	Fri,  5 Apr 2024 16:43:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F60B171E56;
+	Fri,  5 Apr 2024 17:52:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="jPG+QmFa"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="pp8ex2Zs";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="21i9kyjH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B38D16FF5D
-	for <linux-pm@vger.kernel.org>; Fri,  5 Apr 2024 16:43:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA4B171E5C;
+	Fri,  5 Apr 2024 17:52:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712335399; cv=none; b=gWQd1mdrb0saSGlQaTsP+j6i/uk1WcaM3s5mTI6mCkqJou6hey1j/cPuIALwwYL62zuzHXT73MHcWpMCVHhLGWbuX8TsghU7wGFlZo53HowQ1ZMHlEzPMmunKJZzEaq/vCPlNypyTEgaMW7exhdcTrV3Kq5f/EWs/nSwcK8iN38=
+	t=1712339540; cv=none; b=mLg8cz5xvMx6jYqRl3Bn5Ij6azqpcJm6YskxkUyAF2CL7ctmWJgV5NP2rEIW/LVFs31Sq5a76u4y0/W7tXP4aQPWb0aiodnw79JRPsTygw7IU6VKXX2M/AI1tk4hg5pMLWsyQIEOTbe/OVMR4URkjIm8SyYFipKCDJXi0ObqBDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712335399; c=relaxed/simple;
-	bh=Du9h33ax/WF9K6k1IOLz20BjM3yy/Y4jIXMjT5Ky/G8=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E7wYkI4RnKqq6P18AMEqCMN0qwCpqARDjtolR+0k6O/xNId6f75n4Pb/cTNNkO1Ao4vixikWojNT1gV2z5HD9I/wpmqH3cJ9KxV+jE9KqZSHufuOplT0sXt+GC4s4Ges1AN/x6EVXNNs9W2WfP+6U3Hdo8icZ0QVHVdlLw2DijA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=jPG+QmFa; arc=none smtp.client-ip=198.47.23.248
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 435GhAiY071880;
-	Fri, 5 Apr 2024 11:43:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1712335390;
-	bh=Ca6cZ0I77356MxQsWJBLVQCi1Uu6E7lx++J/ouSnSn0=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=jPG+QmFaYbR7EXl1V7AHRJsJHT49b/oGkys/TOLz0Lk1YAtVKhb37z8Dk9XWX28hC
-	 KZSTk0TAI1PFLOOZEcbJrMvG9Dkpmr1wMO2Tb306UWxgnyg8kX3dod61TCkvIyGKZf
-	 Q9lydKKINvNIxYpsZK4uBUVM9i88tF7ghCkU834Q=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 435GhAhS014240
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 5 Apr 2024 11:43:10 -0500
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 5
- Apr 2024 11:43:10 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 5 Apr 2024 11:43:10 -0500
-Received: from localhost (dhruva.dhcp.ti.com [172.24.227.68])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 435Gh9Ll003177;
-	Fri, 5 Apr 2024 11:43:10 -0500
-Date: Fri, 5 Apr 2024 22:13:08 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-CC: "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM
-	<linux-pm@vger.kernel.org>,
-        Nikunj Kela <quic_nkela@quicinc.com>,
-        Kevin
- Hilman <khilman@baylibre.com>,
-        Doug Anderson <dianders@chromium.org>, <nm@ti.com>, <vigneshr@ti.com>,
-        <vibhore@ti.com>
-Subject: Re: [CfP] LPC 2024 - Power Management and Thermal Control
- Micro-Conference
-Message-ID: <20240405164308.qnxllmdbhzkmtcdt@dhruva>
-References: <CAJZ5v0i+G7q0jxLGEnoigWf8Aa=zi4esC3EzethsBkxrp=sCLA@mail.gmail.com>
- <CAPDyKFrUKZ+h37YEhkkLj9ffPtV_gn5_8_dqUrSGNsYn7T_ozw@mail.gmail.com>
+	s=arc-20240116; t=1712339540; c=relaxed/simple;
+	bh=j7yhX/0k89FjgZpWop60wH7jFudilKgIEAQOT4pmwFc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=f8iKmwizXXOS/tCqms7UKU0Zs4KC5yxezLD7qSmHSk/z/6kVhMAbcYKzF/aWRHVJIaCEqyMfJhJTbhLn3laMOu0QsRhtbqyAURP5n21kRS7+1OKqNlMnrLAP+7P8Aq8uwkZutCKRBsxZmPWWpBkh0oU211DcRt1mJMdLdBsRh7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=pp8ex2Zs; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=21i9kyjH; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1712339536;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=j7yhX/0k89FjgZpWop60wH7jFudilKgIEAQOT4pmwFc=;
+	b=pp8ex2ZsLRPjTgD5B64xpI/Ztqb+a3c8XLyOM5lBZ0X1XlPNn3N443JQJUPx2FFIult+gD
+	CnvtHY7LJ9vfRpbMZdNITpA25tjaumpkzjcwinlKxPVsdEhdmNF5B4DGXEiy16ua3msDPZ
+	7hTg5OmQ8FdNj2892/9G0aZhEZrGLjTSN9AweM2WrRt/4Qu8yPvCs+NIHEeQHXGo1SGwt6
+	5Fy+boPBiIHxgq64uU0ZfsD52t5ci2Y/zFzPLdahPkbqcvVbUevdVc+cqoFocjpEFlFpDc
+	aghVnAc3Tx4AR63TJ1VTchMZcbzd8NBcu6P7bWdgDc/OPyIRgO7yh0kfSeXvBA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1712339536;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=j7yhX/0k89FjgZpWop60wH7jFudilKgIEAQOT4pmwFc=;
+	b=21i9kyjHmB1jIK0h8UR8AjeiTCXFhrCFrthxjn9uL94YkY2aosXsbD20lo2w9pvGyV1cHr
+	LoK9FbGzohFzFhCw==
+To: Anna-Maria Behnsen <anna-maria@linutronix.de>, linux-kernel@vger.kernel.org
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+ Len Brown <len.brown@intel.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+ linux-pm@vger.kernel.org, Frederic Weisbecker <frederic@kernel.org>,
+ x86@kernel.org, Anna-Maria Behnsen <anna-maria@linutronix.de>, Mario
+ Limonciello <mario.limonciello@amd.com>, stable@kernel.org
+Subject: Re: [PATCH] PM: s2idle: Make sure CPUs will wakeup directly on resume
+In-Reply-To: <20240405083410.4896-1-anna-maria@linutronix.de>
+References: <20240405083410.4896-1-anna-maria@linutronix.de>
+Date: Fri, 05 Apr 2024 19:52:16 +0200
+Message-ID: <87jzlb8zov.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFrUKZ+h37YEhkkLj9ffPtV_gn5_8_dqUrSGNsYn7T_ozw@mail.gmail.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain
 
-Hi all,
+On Fri, Apr 05 2024 at 10:34, Anna-Maria Behnsen wrote:
+> s2idle works like a regular suspend with freezing processes and freezing
+> devices. All CPUs except the control CPU go into idle. Once this is
+> completed the control CPU kicks all other CPUs out of idle, so that they
+> reenter the idle loop and then enter s2idle state. The control CPU then
+> issues an swait() on the suspend state and therefore enters the idle loop
+> as well.
+>
+> Due to being kicked out of idle, the other CPUs leave their NOHZ states,
+> which means the tick is active and the corresponding hrtimer is programmed
+> to the next jiffie.
+>
+> On entering s2idle the CPUs shut down their local clockevent device to
+> prevent wakeups. The last CPU which enters s2idle shuts down its local
+> clockevent and freezes timekeeping.
+>
+> On resume, one of the CPUs receives the wakeup interrupt, unfreezes
+> timekeeping and its local clockevent and starts the resume process. At that
+> point all other CPUs are still in s2idle with their clockevents switched
+> off. They only resume when they are kicked by another CPU or after resuming
+> devices and then receiving a device interrupt.
+>
+> That means there is no guarantee that all CPUs will wakeup directly on
+> resume. As the consequence there is no guarantee that timers which are
 
-On Apr 04, 2024 at 13:31:26 +0200, Ulf Hansson wrote:
-> + Dhruva, Nikunj, Kevin, Doug (I probably forgot some of the last
-> years attendants, please loop them if you know)
-> 
-> On Mon, 25 Mar 2024 at 12:37, Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > Hi Everyone,
-> >
-> > This year the Linux Plumbers Conference will be held in Vienna,
-> > Austria, on Wednesday 18th,  Thursday 19th and Friday 20th of
-> > September (http://linuxplumbersconf.org/).
-> >
-> > As it has been a tradition for the last few years, I'm planning to
-> > submit a proposal for a Power Management and Thermal Control
-> > Micro-Conference to the LPC and I'm looking for topics that people
-> > would like to discuss in that MC.
-> 
-> Thanks for continuing to drive this! If you need some additional help
-> around this, feel free to reach out to me.
-> 
-> >
-> > The LPC is focused on work in progress and future developments, so any
-> > work that has been completed already is not a suitable topic for it,
-> > but if there's anything you'd like to do or you are planning or
-> > considering in the power management and thermal control space in
-> > Linux, please let me know.
-> 
-> We had a BoF last year around "supporting multiple low power states
-> for system wide suspend".
-> 
-> Not so much progress has been made I believe? (Except for some local
-> hacks that I am working on).
+s/As the/As a/
 
-A small update on TI end, we have been working on how to support
-multiple low power modes in heterogeneous SoC architecture.
+> queued on those CPUs and should expire directly after resume, are
+> handled. Also timer list timers which are remotely queued to one of those
+> CPUs after resume will not result in a reporgramming IPI as the tick is
 
-TI team will present Low Power Modes ARCH and how we have tried to solve
-the issue in K3 SoCs..
-Please feel free to join the session on on April 10th 8:00AM CST
+s/reporgramming/reprogamming/
 
-https://ti.webex.com/ti/j.php?MTID=m433b5e0c9b1b2edc4296a988c320a2a9
+> active. A queue hrtimer will also not result in a reprogramming IPI because
 
-> 
-> If possible, I think it would be a good opportunity to continue the
-> discussions from last year, assuming people are still interested in
-> this topic.
+s/A queue/Queueing a/
 
-We would love to garner inputs and reviews from the community on what
-they think about this. Perhaps we can look at scaling this as a standard
-or something on similar lines maybe. It is still in it's early stages and hence
-looking for alignment with what the community thinks/expects.
+> the first hrtimer event is already in the past.
+>
+> The recent introduction of the timer pull model (7ee988770326 ("timers:
+> Implement the hierarchical pull model")) amplifies this problem, if the
+> current migrator is one of the non woken up CPUs. When a non pinned timer
+> list timer is queued and the queueing CPU goes idle, it relies on the still
+> suspended migrator CPU to expire the timer which will happen by chance.
+>
+> The problem existis since commit 8d89835b0467 ("PM: suspend: Do not pause
+> cpuidle in the suspend-to-idle path"). There the cpuidle_pause() call which
+> in turn invoked a wakeup for all idle CPUs was moved to a later point in
+> the resume process. This might not be reached or reached very late because
+> it waits on a timer of a still suspended CPU.
+>
+> Address this by kicking all CPUs out of idle after the control CPU returns
+> from swait() so that they resume their timers and restore consistent system
+> state.
+>
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218641
+> Fixes: 8d89835b0467 ("PM: suspend: Do not pause cpuidle in the suspend-to-idle path")
+> Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
+> Tested-by: Mario Limonciello <mario.limonciello@amd.com>
+> Cc: stable@kernel.org
 
-Perhaps the community can continue from this talk and discuss further at
-LPC at the PM microconference how things can be made more scalable/
-improved if there seem to be gaps to be addressd.
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
 
--- 
-Best regards,
-Dhruva Gole <d-gole@ti.com>
 
