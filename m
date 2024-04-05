@@ -1,101 +1,133 @@
-Return-Path: <linux-pm+bounces-5980-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5981-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C39DB89A459
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 20:42:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8769D89A4B6
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 21:13:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7ECE3284D6B
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 18:42:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B87AC1C20F9B
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 19:13:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3D97172797;
-	Fri,  5 Apr 2024 18:42:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78D8817276C;
+	Fri,  5 Apr 2024 19:13:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ac1syLc6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y4/A+dL1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C515172793;
-	Fri,  5 Apr 2024 18:42:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB3E516C861
+	for <linux-pm@vger.kernel.org>; Fri,  5 Apr 2024 19:12:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712342536; cv=none; b=jEnTOvX6AOpacSlZh8L4vWIw/IGvH01buC04cZljS8/rpTAK56DWtaDLRnlYVUcBX7yExiQdS2GXuuSCbvVlSpt6PCzU/jcwXlFDGcjSJdgEKSDwQE372h8IlkwQwqbUkxSee0nUSa9OTN/MJ4nuzaOHugEGIgs2VEWUE/QzKcg=
+	t=1712344380; cv=none; b=VVJJQXBWZgbBTgcATVSfFRqb9/+CKaL5NGGAwnA7opm0VZoAETsOef7IiLFIQvAEnE5pdAadilRxhqsi3NN6MXixuC6S9nAZaWacIRPQQGKMu281HkxDKgzZNWOlykwUlmRpGmZOAkjEUtaALxXgA2v+y8R/usIGBxjzQuL0zxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712342536; c=relaxed/simple;
-	bh=Ak6v9rbGghmGpiFluFVzlaA5Oh6/1f4GbxQrsFllnAM=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=k7f5PWE7vOvXL4QDmJhAlSsyrU4FaBBYI9Zc6LZHD8UGvNXP8Qhf1dcIyVFPJV5GtBdP0Lpw73hKzGnLUfZQTSwhMXt87q+qg6CmVuoosRT37i5GFsfTTKI4W9LrjRIljhYCXX2UfP+m2K/J5YXVTmlDm2MTQ45E8fNL7qhzRPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ac1syLc6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AF06C43390;
-	Fri,  5 Apr 2024 18:42:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712342536;
-	bh=Ak6v9rbGghmGpiFluFVzlaA5Oh6/1f4GbxQrsFllnAM=;
-	h=From:Date:Subject:To:Cc:From;
-	b=Ac1syLc6m50kY4Mj4USrXx5wXtTyNkAGbzOS8/vpbe53ZyYJJpKMUkRBuwp++P6Us
-	 t6cIFlU1LV4y099Mzmqb2UnZygO1NlZL12gytrEPYaPv546DOK6PsreNz1ybFNjPg6
-	 TowI8u3fC6eAiI4OMCdeKTAGPnOTDmy3FKiqrlPR131qWC/JDApVjDRXAbLaPBc2ph
-	 5IA+vVb2r1oiS4zLlQru44RgJPUE7hJJr+7ISuMmz14SdkZAgOVM5NzY2AXT+Fe+/y
-	 P6Wo/7r6BzYaWt4rHXpNlX2PdZPpNRhGF+OkzNz/l/IacgkiVf8z3rUnEPDEHw1Gcm
-	 OQ+HuSCBVhwsA==
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-5a9ef9ba998so374838eaf.1;
-        Fri, 05 Apr 2024 11:42:16 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVJirOL2bdlyR+Pzes/Mm1HWiG+WuTTsVnK2a2js1Zz1ADXxrX1sl1NrJFtEgeGnNH+6USDIbQ7inlE4pxv/bi2UGzlwrSZ9Ida/sSa
-X-Gm-Message-State: AOJu0YyeGqXr3Y1iqY0HhebG7TJQP99y+hC7yPb327fzwVdbpzVW6Y/m
-	PAT0I6twaSmc4mSE+HE1rLdOxxO+TPDU6C1Q7+eXmTIZMpoYQrItmVbtrPmyxx59cjNyTzOGM0r
-	neKfewDNqzVbuW+oSQ52wKHgrSDs=
-X-Google-Smtp-Source: AGHT+IHa4Y2pb37I/713DfZdVtE/UlHCMq7EzxKt8VxfzdWAjIbu4L/Z77dvQVqjyo17HZMlPQtC3iHlNwnlCHkWmzA=
-X-Received: by 2002:a05:6820:2b81:b0:5a6:2c6b:d3b with SMTP id
- du1-20020a0568202b8100b005a62c6b0d3bmr2690755oob.0.1712342535472; Fri, 05 Apr
- 2024 11:42:15 -0700 (PDT)
+	s=arc-20240116; t=1712344380; c=relaxed/simple;
+	bh=A45E0Dnro4cEhAf8SKuZOXS769KAgPil2u/nCnyd29g=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=muCsIscIa2Z6ZXcJyjaSvcvNJOPT6Y8YwErXOAyoq316w0qoUFsQCcyZ5KYivukZ+p9iE/KAtL/PTgmzz/tJfXyspF9GhBKoBpYFkC+xv0QVJ2dU2oONQy5UxCcFNsi9sRbOzN6keh2pkWBw+mCT/TwSFk/IXlhcfHKA1PvgP40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y4/A+dL1; arc=none smtp.client-ip=209.85.219.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-6993bc144a4so7111336d6.0
+        for <linux-pm@vger.kernel.org>; Fri, 05 Apr 2024 12:12:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712344377; x=1712949177; darn=vger.kernel.org;
+        h=content-transfer-encoding:organization:reply-to:mime-version
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YPyPM8OZMD9zL8KPdnCOXzVIlNnWCyR7K2E5l5W+kwE=;
+        b=Y4/A+dL1gyJ7pSFVsvjSOAqYOlnVlT2oqhAuNHzcgMLK8NFJXdF11+SoA0vvufOwVX
+         HJHQSp81YmK47oV34vWBrby8spx4NIY1ywMX6BBWOcftCl5uALFzRpM0QICzOhAsQqML
+         LdXBq+yct/VIKxXRmi5Hm9FPJuhwSfedEbbc42Rfj9oEee2Cdyk/6c/0obju/g/bppN8
+         pyE3RckOQFK7gWKVRou5s3AanmulhjOUrMSWEddABmWC2ziyfupGrjkcI65rmUguIG0R
+         kQBKqjo37CSdJNUAbHBBts+AZ3VIdspXICouu25F9ajAHyOea+MOAG3gbXbZ5jg5QLpR
+         SXuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712344377; x=1712949177;
+        h=content-transfer-encoding:organization:reply-to:mime-version
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=YPyPM8OZMD9zL8KPdnCOXzVIlNnWCyR7K2E5l5W+kwE=;
+        b=QJhewURohhOBdXRZfjaan79XydIFDr6fdBz9voUg7H/mmxQyhAFWWBRABu4BNwp+IE
+         4MlobVlic90w4BJxIs1JVOw1jicc3I2w2JByBEO7JqNLW5gQhP5fh0OWxg1bpcWAa7oX
+         dglXadRaGNHb5Wj3kqM73xiSTcjtxexSLFKhQbb6CJwGOQS9pR/Eb+EKMCC4UYhRO2K8
+         5ndhke0fiu9XvwxNXE7783Io6DpfHkHRaFm1drqt7Q3hWdyP/KSG7ChFCEVtX4Xa08TD
+         QDI/u41VIucpxj5He3Rsc2PXSEWnawB/o9JWo7hR1C0p99sBnW6dYvM+n48erbYjOldZ
+         KwTA==
+X-Gm-Message-State: AOJu0YzDQM6by18jV7ELmLtiQ6Rf+3e1MAZc71mt9YTZI7nq+K/Sr4P8
+	/Y3ws9bdFYDziArEAkByk2/U9WtoWox4igruz0uj2cOLsDZa7yHlvONPOki9
+X-Google-Smtp-Source: AGHT+IFaTffPNO6NsGJ0r/6opSzs+iFCzgKybl3kOYZAZ9WpOCUgP+UiCfnscaicg+qEdz/1P5XvNw==
+X-Received: by 2002:a05:6214:c63:b0:699:3798:5ff4 with SMTP id t3-20020a0562140c6300b0069937985ff4mr2139573qvj.40.1712344377360;
+        Fri, 05 Apr 2024 12:12:57 -0700 (PDT)
+Received: from lenb-Intel-NUC8i7HVKVA.search.charter.net (2603-9000-9f01-67cf-959a-2db8-c6b5-99b4.inf6.spectrum.com. [2603:9000:9f01:67cf:959a:2db8:c6b5:99b4])
+        by smtp.gmail.com with ESMTPSA id o3-20020a0cfa83000000b00691873a7748sm847906qvn.128.2024.04.05.12.12.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Apr 2024 12:12:57 -0700 (PDT)
+Sender: Len Brown <lenb417@gmail.com>
+From: Len Brown <lenb@kernel.org>
+To: linux-pm@vger.kernel.org
+Cc: Len Brown <len.brown@intel.com>
+Subject: [PATCH 1/1] pm: Take advantage of %ps to simplify debug output
+Date: Fri,  5 Apr 2024 15:12:25 -0400
+Message-Id: <2aaa9ba442f027fd9d1011c5fb30adea9bd1b799.1712344255.git.len.brown@intel.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 5 Apr 2024 20:42:04 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gVqOUuFfJ8um+_F_ubU4QsWYneyQsFBHu9rG10-rJYEg@mail.gmail.com>
-Message-ID: <CAJZ5v0gVqOUuFfJ8um+_F_ubU4QsWYneyQsFBHu9rG10-rJYEg@mail.gmail.com>
-Subject: [GIT PULL] Power management fixes for v6.9-rc3
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Reply-To: Len Brown <lenb@kernel.org>
+Organization: Intel Open Source Technology Center
+Content-Transfer-Encoding: 8bit
 
-Hi Linus,
+From: Len Brown <len.brown@intel.com>
 
-Please pull from the tag
+initcall_debug previous and new output:
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-6.9-rc3
+...PM: calling pci_pm_suspend+0x0/0x1b0 @ 3233, parent: pci0000:00
 
-with top-most commit 8130b05c559d1aa83d0c8971b422ba0da18ef24a
+...PM: calling pci_pm_suspend @ 3233, parent: pci0000:00
 
- PM: EM: fix wrong utilization estimation in em_cpu_energy()
+Signed-off-by: Len Brown <len.brown@intel.com>
+---
+ drivers/base/power/main.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-on top of commit 39cd87c4eb2b893354f3b850f916353f2658ae6f
+diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+index f85f3515c258..de581c33095f 100644
+--- a/drivers/base/power/main.c
++++ b/drivers/base/power/main.c
+@@ -209,7 +209,7 @@ static ktime_t initcall_debug_start(struct device *dev, void *cb)
+ 	if (!pm_print_times_enabled)
+ 		return 0;
+ 
+-	dev_info(dev, "calling %pS @ %i, parent: %s\n", cb,
++	dev_info(dev, "calling %ps @ %i, parent: %s\n", cb,
+ 		 task_pid_nr(current),
+ 		 dev->parent ? dev_name(dev->parent) : "none");
+ 	return ktime_get();
+@@ -224,7 +224,7 @@ static void initcall_debug_report(struct device *dev, ktime_t calltime,
+ 		return;
+ 
+ 	rettime = ktime_get();
+-	dev_info(dev, "%pS returned %d after %Ld usecs\n", cb, error,
++	dev_info(dev, "%ps returned %d after %Ld usecs\n", cb, error,
+ 		 (unsigned long long)ktime_us_delta(rettime, calltime));
+ }
+ 
+@@ -1963,7 +1963,7 @@ EXPORT_SYMBOL_GPL(dpm_suspend_start);
+ void __suspend_report_result(const char *function, struct device *dev, void *fn, int ret)
+ {
+ 	if (ret)
+-		dev_err(dev, "%s(): %pS returns %d\n", function, fn, ret);
++		dev_err(dev, "%s(): %ps returns %d\n", function, fn, ret);
+ }
+ EXPORT_SYMBOL_GPL(__suspend_report_result);
+ 
+-- 
+2.40.1
 
- Linux 6.9-rc2
-
-to receive a power management fix for 6.9-rc3.
-
-This fixes a recent Energy Model change that went against a recent
-scheduler change made independently (Vincent Guittot).
-
-Thanks!
-
-
----------------
-
-Vincent Guittot (1):
-      PM: EM: fix wrong utilization estimation in em_cpu_energy()
-
----------------
-
- include/linux/energy_model.h | 1 -
- 1 file changed, 1 deletion(-)
 
