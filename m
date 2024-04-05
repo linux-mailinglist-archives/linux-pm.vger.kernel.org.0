@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-5979-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5980-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D63389A456
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 20:42:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C39DB89A459
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 20:42:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 113031F25B17
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 18:42:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7ECE3284D6B
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Apr 2024 18:42:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67D5D174EC2;
-	Fri,  5 Apr 2024 18:41:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3D97172797;
+	Fri,  5 Apr 2024 18:42:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iFzTlWaL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ac1syLc6"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B517172766;
-	Fri,  5 Apr 2024 18:41:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C515172793;
+	Fri,  5 Apr 2024 18:42:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712342476; cv=none; b=l0d60MKdRKAZu9ts45jB9bSGD4S9zDWk8FOTYW5Wc8/VwTlzDwRC1GnFpH8Do9P+VD14aINZRw64xbIvAHM5GZo2YG9aYV0ucyffJo2NX0UVfYQyQgEPokyhXv0F5xomQrsS3mD1rd5fkO0LRDxxRFU8wFP8GBuSq1vPu9I8k30=
+	t=1712342536; cv=none; b=jEnTOvX6AOpacSlZh8L4vWIw/IGvH01buC04cZljS8/rpTAK56DWtaDLRnlYVUcBX7yExiQdS2GXuuSCbvVlSpt6PCzU/jcwXlFDGcjSJdgEKSDwQE372h8IlkwQwqbUkxSee0nUSa9OTN/MJ4nuzaOHugEGIgs2VEWUE/QzKcg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712342476; c=relaxed/simple;
-	bh=ahFnZ0vavyaYu2qL/A3OV5znLtsIcqMrPE06H3bADIA=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=rdzbdR0sxEqlviw2GcKnkBCuw3MQ4a6OXJ/mh1iMls59ZaFy6/vCftWPKWGsEPvM3ZV0yHCIuXP04ij1WkCuE5RdQI6jrRfe4wzrV4OHPTG1eT6GdRFQI6wlx6iGvd7E2a2kD01U+OduDRNcLJ6GSvpX48Xn1NoYme4aV4GYG2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iFzTlWaL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B8C0C43601;
-	Fri,  5 Apr 2024 18:41:16 +0000 (UTC)
+	s=arc-20240116; t=1712342536; c=relaxed/simple;
+	bh=Ak6v9rbGghmGpiFluFVzlaA5Oh6/1f4GbxQrsFllnAM=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=k7f5PWE7vOvXL4QDmJhAlSsyrU4FaBBYI9Zc6LZHD8UGvNXP8Qhf1dcIyVFPJV5GtBdP0Lpw73hKzGnLUfZQTSwhMXt87q+qg6CmVuoosRT37i5GFsfTTKI4W9LrjRIljhYCXX2UfP+m2K/J5YXVTmlDm2MTQ45E8fNL7qhzRPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ac1syLc6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AF06C43390;
+	Fri,  5 Apr 2024 18:42:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712342476;
-	bh=ahFnZ0vavyaYu2qL/A3OV5znLtsIcqMrPE06H3bADIA=;
+	s=k20201202; t=1712342536;
+	bh=Ak6v9rbGghmGpiFluFVzlaA5Oh6/1f4GbxQrsFllnAM=;
 	h=From:Date:Subject:To:Cc:From;
-	b=iFzTlWaLQTeMd9XvbeleRgWhGAIQr9PUENHM8uWLJZgfbMpaxFX+71yRNICh8zl/H
-	 E9F/g5+CMQD/XSKdojWjRHx2iCaMACFBZbja2nP4hnji6p3DAQGDf07JHrmROnUG0H
-	 OUCCM3+3PpJUJn5mPwSsX3qw0yp/9XHF38Deh/WqlAJhnt8vfybNIs0e5+CZJl9rxm
-	 vjt7JV5M5+N68zEvzN3iYAzv+A/00h6PrjJ6EDYBS7fD8nyqsNI6UzwYj16qwSlVK3
-	 iol/I9BUbCNxCsjC6ttdg1cG+lJqlN/vashy7XPQIq22gKVWZhKko8KKbWlAGgcVWl
-	 su5FVFmDsFbAg==
-Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-5a47680a806so732645eaf.0;
-        Fri, 05 Apr 2024 11:41:16 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXwox0CeC3BQdi8vxNnJXgdxt01M/Oq8pl2CYghbhYXmlyxOwQCq+mJ/0UOuON+zNZuuBLhC8Es8npdZs906TTJXzu/Z7gJ2EU3C7jK3rc+vBIIK6yZ8u2gjP63SpAj0wslt8Mv36dUyQ==
-X-Gm-Message-State: AOJu0YwlmKjwURm5CEP8YmGQkauj4EKE6mqNcjtTfAfgQvvOEav+nHab
-	tJbEhKXnP/Dwwrscap7n4s3S1IrbGEo0WBIDyVWz1GSs+FjfV5hiIGZgg8S/WuvWax4F23/Pygy
-	JPQbQc7FQushx0lDprTV5pSPN5Z0=
-X-Google-Smtp-Source: AGHT+IGWs1c8u7OEOwNopt7d01lGeC9+Ckks5+bsi/GEKX5c7e0wX/vghKSGy2MIGCgKqoLRArct50Z9D68anlgGuww=
+	b=Ac1syLc6m50kY4Mj4USrXx5wXtTyNkAGbzOS8/vpbe53ZyYJJpKMUkRBuwp++P6Us
+	 t6cIFlU1LV4y099Mzmqb2UnZygO1NlZL12gytrEPYaPv546DOK6PsreNz1ybFNjPg6
+	 TowI8u3fC6eAiI4OMCdeKTAGPnOTDmy3FKiqrlPR131qWC/JDApVjDRXAbLaPBc2ph
+	 5IA+vVb2r1oiS4zLlQru44RgJPUE7hJJr+7ISuMmz14SdkZAgOVM5NzY2AXT+Fe+/y
+	 P6Wo/7r6BzYaWt4rHXpNlX2PdZPpNRhGF+OkzNz/l/IacgkiVf8z3rUnEPDEHw1Gcm
+	 OQ+HuSCBVhwsA==
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-5a9ef9ba998so374838eaf.1;
+        Fri, 05 Apr 2024 11:42:16 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVJirOL2bdlyR+Pzes/Mm1HWiG+WuTTsVnK2a2js1Zz1ADXxrX1sl1NrJFtEgeGnNH+6USDIbQ7inlE4pxv/bi2UGzlwrSZ9Ida/sSa
+X-Gm-Message-State: AOJu0YyeGqXr3Y1iqY0HhebG7TJQP99y+hC7yPb327fzwVdbpzVW6Y/m
+	PAT0I6twaSmc4mSE+HE1rLdOxxO+TPDU6C1Q7+eXmTIZMpoYQrItmVbtrPmyxx59cjNyTzOGM0r
+	neKfewDNqzVbuW+oSQ52wKHgrSDs=
+X-Google-Smtp-Source: AGHT+IHa4Y2pb37I/713DfZdVtE/UlHCMq7EzxKt8VxfzdWAjIbu4L/Z77dvQVqjyo17HZMlPQtC3iHlNwnlCHkWmzA=
 X-Received: by 2002:a05:6820:2b81:b0:5a6:2c6b:d3b with SMTP id
- du1-20020a0568202b8100b005a62c6b0d3bmr2688220oob.0.1712342475428; Fri, 05 Apr
- 2024 11:41:15 -0700 (PDT)
+ du1-20020a0568202b8100b005a62c6b0d3bmr2690755oob.0.1712342535472; Fri, 05 Apr
+ 2024 11:42:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -57,14 +57,13 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 5 Apr 2024 20:41:04 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hHLvQWGDtwk=yXv_bJxZH2KTW2SWSUopdRDHHQp0sqow@mail.gmail.com>
-Message-ID: <CAJZ5v0hHLvQWGDtwk=yXv_bJxZH2KTW2SWSUopdRDHHQp0sqow@mail.gmail.com>
-Subject: [GIT PULL] Thermal control fixes for v6.9-rc3
+Date: Fri, 5 Apr 2024 20:42:04 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gVqOUuFfJ8um+_F_ubU4QsWYneyQsFBHu9rG10-rJYEg@mail.gmail.com>
+Message-ID: <CAJZ5v0gVqOUuFfJ8um+_F_ubU4QsWYneyQsFBHu9rG10-rJYEg@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v6.9-rc3
 To: Linus Torvalds <torvalds@linux-foundation.org>
 Cc: Linux PM <linux-pm@vger.kernel.org>, 
-	ACPI Devel Maling List <linux-acpi@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
 Hi Linus,
@@ -72,46 +71,31 @@ Hi Linus,
 Please pull from the tag
 
  git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- thermal-6.9-rc3
+ pm-6.9-rc3
 
-with top-most commit 6f824c9fccd494319988fa529601923edf5caacb
+with top-most commit 8130b05c559d1aa83d0c8971b422ba0da18ef24a
 
- Merge branch 'acpi-thermal'
+ PM: EM: fix wrong utilization estimation in em_cpu_energy()
 
 on top of commit 39cd87c4eb2b893354f3b850f916353f2658ae6f
 
  Linux 6.9-rc2
 
-to receive thermal control fixes for 6.9-rc3.
+to receive a power management fix for 6.9-rc3.
 
-These fix two power allocator thermal governor issues and an ACPI
-thermal driver regression that all were introduced during the 6.8
-development cycle.
-
-Specifics:
-
- - Allow the power allocator thermal governor to bind to a thermal zone
-   without cooling devices and/or without trip points (Nikita Travkin).
-
- - Make the ACPI thermal driver register a tripless thermal zone when
-   it cannot find any usable trip points instead of returning an error
-   from acpi_thermal_add() (Stephen Horvath).
+This fixes a recent Energy Model change that went against a recent
+scheduler change made independently (Vincent Guittot).
 
 Thanks!
 
 
 ---------------
 
-Nikita Travkin (2):
-      thermal: gov_power_allocator: Allow binding without cooling devices
-      thermal: gov_power_allocator: Allow binding without trip points
-
-Stephen Horvath (1):
-      ACPI: thermal: Register thermal zones without valid trip points
+Vincent Guittot (1):
+      PM: EM: fix wrong utilization estimation in em_cpu_energy()
 
 ---------------
 
- drivers/acpi/thermal.c                | 22 ++++++++++------------
- drivers/thermal/gov_power_allocator.c | 14 +++++---------
- 2 files changed, 15 insertions(+), 21 deletions(-)
+ include/linux/energy_model.h | 1 -
+ 1 file changed, 1 deletion(-)
 
