@@ -1,161 +1,113 @@
-Return-Path: <linux-pm+bounces-5993-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-5994-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE06889A806
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Apr 2024 02:58:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1D5F89A844
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Apr 2024 03:38:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 32FAFB22D6E
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Apr 2024 00:58:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 30195280E7E
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Apr 2024 01:38:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6675717BAA;
-	Sat,  6 Apr 2024 00:58:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E225033C9;
+	Sat,  6 Apr 2024 01:38:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K1yIZBdG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RbjJuc20"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 997F8EEB3;
-	Sat,  6 Apr 2024 00:58:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC3C22119
+	for <linux-pm@vger.kernel.org>; Sat,  6 Apr 2024 01:38:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712365097; cv=none; b=rXmNcE/SWbdeX81V+qJ754O4cYsWCRLLszTUj6V8x91lqmGm8hwPSM0yzbhgj01IjdwhLECQ0ouVA/HGyJQilaE2IVqAqnzP606Y4x5WGNLizeeFLNUmYw6w/pYc1/HfJ5yvIp/S7dpEX+75xzTbRqwomaM2XJ2/5Apeh3m0fhE=
+	t=1712367528; cv=none; b=td7ovpi7ms4GjxogE8j6k4OD/W/W3yMtDtnJ3kUeI1MIxPCNB0pHddOeBRujAAUiltHsO7LdHQ6PDAh69s6Gf4l4VKjla7i14drptem8qP/+peKMe1RpvPF+N6BycbK+RzhEtXX/SPCDm0RkWrdyG+ghghO9Nj5VHadsijFkf00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712365097; c=relaxed/simple;
-	bh=LvJf7IpSrSk0ODEovUEZymwOVnvp4IWE/x7bmgvJpPE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=U+fOkC29Vuns77v3UKs5A1flwKDO/R451LNe1iPUmY5ZmkTB4oPXd+GwmC+1j9FRurTmRIi6UNZuhrjHjxM2SqjbeoANxeigV6aqXnKgosyHcxA6MVybIvNHp7bGihVaejROyUNmsVDy0iG7U8ntPiKUAe7joG0Wf6UB9XXVulI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K1yIZBdG; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712365096; x=1743901096;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=LvJf7IpSrSk0ODEovUEZymwOVnvp4IWE/x7bmgvJpPE=;
-  b=K1yIZBdG+7sjaUxlEtCVrl/Jd9PdI9efY/1LbaDTQ28msICnTRK9I3S3
-   wkE8P1uXl8h/xtSg00C8u9h75ff/cIrczBa7bE3AIYEuza5iblNGHaVQM
-   Cr6atgtxrWYPt8ceGjebeUgLVEEvkC4O93hj2VKEHQfkVfMwO0TFIEwQS
-   w3TwPvGKm9YankUjsoRJhtWJbidjiaQ6HgWOC5IZMcPTV3GrPsgVOkUyr
-   DCRIlEu1B7Ci7pOJ8Hhdgu8T6z5RXSdoUz6ipl4b1YSx6TJvUbgenSC6g
-   cfsKneobfK/2NYLhkFSZvjMg8ka2pBhqAzJBPuGXR3eZRnMgpuO/NynFx
-   w==;
-X-CSE-ConnectionGUID: /9cJtAYFSG+8mHGkSNXjRA==
-X-CSE-MsgGUID: m7LQNKegR8aYfHo8NTTxVQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11035"; a="25153884"
-X-IronPort-AV: E=Sophos;i="6.07,182,1708416000"; 
-   d="scan'208";a="25153884"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2024 17:58:12 -0700
-X-CSE-ConnectionGUID: pysUpNznTUKUAfBlXx2RyQ==
-X-CSE-MsgGUID: xTKN75TDQoyumuzIHGfrAg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,182,1708416000"; 
-   d="scan'208";a="19252369"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orviesa009.jf.intel.com with ESMTP; 05 Apr 2024 17:58:12 -0700
-From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	linux-pm@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Ricardo Neri <ricardo.neri@intel.com>
-Subject: [PATCH 3/3] hwmon: (coretemp) Use a model-specific bitmask to read registers
-Date: Fri,  5 Apr 2024 18:04:16 -0700
-Message-Id: <20240406010416.4821-4-ricardo.neri-calderon@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20240406010416.4821-1-ricardo.neri-calderon@linux.intel.com>
-References: <20240406010416.4821-1-ricardo.neri-calderon@linux.intel.com>
+	s=arc-20240116; t=1712367528; c=relaxed/simple;
+	bh=lNUTfgM3lq1CicNGVvWyXq6R8VsyvvyrVbw81iNAY70=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=VqNE40gDAhzySeEygUJpWGLWXRChtbujzIbpbPZ1iJ9Qac2POU51748kzTSiLOye5V+2+/FGFsbzt40+GHqlB5QKmDV/r9WY03ZW15zmRl2SAHekHebA/XqYNijntxL1D8VhGx352iPF/RCbP2E/uHUcsXQjlL+ntd5mvO8JmWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RbjJuc20; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 57CF8C433A6
+	for <linux-pm@vger.kernel.org>; Sat,  6 Apr 2024 01:38:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712367528;
+	bh=lNUTfgM3lq1CicNGVvWyXq6R8VsyvvyrVbw81iNAY70=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=RbjJuc20fkPQ1KPo7CXCq83ucXiWfS/AMTtd70Fwt91reiHarRaIxT566CVioL5PW
+	 5a5BOFL7m65nT9mr+smSyg/Dlv8L9DjKTwO1bW7SMoG5ykcWIVMAie1ZO9bHM/xyaU
+	 qykYAEmYss8vrYaEC1oWjkRnnRQxNXSfPw74ed1Pk+yGYtViCmxgk5AwnbARiE9pzH
+	 UrKQn+NL6K7ATvwBu/duzMPhsvKzv4rV9pl+TrLU4KVqJZOYD0WdIhHFOdTNTCTAC9
+	 42EgR/idhEuOvnTrTktBEVFQanwQ9x9+RUsgYhS4JyCux4f+2fk+rpCgS6MG/mydou
+	 PRJQ2H3V6WHkg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 4CC75C53BD3; Sat,  6 Apr 2024 01:38:48 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 217931] amd-pstate lacks crucial features: CPU frequency and
+ boost control
+Date: Sat, 06 Apr 2024 01:38:47 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: aros@gmx.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-217931-137361-GAcJBOdLlK@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217931-137361@https.bugzilla.kernel.org/>
+References: <bug-217931-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-The Intel Software Development manual defines states the temperature
-digital readout as the bits [22:16] of the IA32_[PACKAGE]_THERM_STATUS
-registers. In recent processor, however, the range is [23:16]. Use a
-model-specific bitmask to extract the temperature readout correctly.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217931
 
-Instead of re-implementing model checks, extract the correct bitmask
-using the intel_tcc library. Add an 'imply' weak reverse dependency on
-CONFIG_INTEL_TCC. This captures the dependency and lets user to unselect
-them if they are so inclined. In such case, the bitmask used for the
-digital readout is [22:16] as specified in the Intel Software Developer's
-manual.
+--- Comment #56 from Artem S. Tashkinov (aros@gmx.com) ---
+Here's my report for 6.8.4 and Ryzen 7 7840HS:
 
-Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
----
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Lukasz Luba <lukasz.luba@arm.com>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: linux-hwmon@vger.kernel.org
-Cc: linux-pm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: stable@vger.kernel.org # v6.7+
----
- drivers/hwmon/Kconfig    | 1 +
- drivers/hwmon/coretemp.c | 6 +++++-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+1. Setting scaling_max_freq works, cool, but you cannot go below 544MHz. You
+can set 400MHz but the CPU will continue to jump to 544MHz, not a big deal.
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 83945397b6eb..11d72b3009bf 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -847,6 +847,7 @@ config SENSORS_I5500
- config SENSORS_CORETEMP
- 	tristate "Intel Core/Core2/Atom temperature sensor"
- 	depends on X86
-+	imply INTEL_TCC
- 	help
- 	  If you say yes here you get support for the temperature
- 	  sensor inside your CPU. Most of the family 6 CPUs
-diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-index 616bd1a5b864..5632e1b1dfb1 100644
---- a/drivers/hwmon/coretemp.c
-+++ b/drivers/hwmon/coretemp.c
-@@ -17,6 +17,7 @@
- #include <linux/sysfs.h>
- #include <linux/hwmon-sysfs.h>
- #include <linux/err.h>
-+#include <linux/intel_tcc.h>
- #include <linux/mutex.h>
- #include <linux/list.h>
- #include <linux/platform_device.h>
-@@ -404,6 +405,8 @@ static ssize_t show_temp(struct device *dev,
- 	tjmax = get_tjmax(tdata, dev);
- 	/* Check whether the time interval has elapsed */
- 	if (time_after(jiffies, tdata->last_updated + HZ)) {
-+		u32 mask = intel_tcc_get_temp_mask(is_pkg_temp_data(tdata));
-+
- 		rdmsr_on_cpu(tdata->cpu, tdata->status_reg, &eax, &edx);
- 		/*
- 		 * Ignore the valid bit. In all observed cases the register
-@@ -411,7 +414,7 @@ static ssize_t show_temp(struct device *dev,
- 		 * Return it instead of reporting an error which doesn't
- 		 * really help at all.
- 		 */
--		tdata->temp = tjmax - ((eax >> 16) & 0x7f) * 1000;
-+		tdata->temp = tjmax - ((eax >> 16) & mask) * 1000;
- 		tdata->last_updated = jiffies;
- 	}
- 
-@@ -838,4 +841,5 @@ module_exit(coretemp_exit)
- 
- MODULE_AUTHOR("Rudolf Marek <r.marek@assembler.cz>");
- MODULE_DESCRIPTION("Intel Core temperature monitor");
-+MODULE_IMPORT_NS(INTEL_TCC);
- MODULE_LICENSE("GPL");
--- 
-2.34.1
+2. Setting scaling_min_freq sort of works, the CPU _prefers_ to stay at this
+specified frequency but occasionally drops to 400MHz. Then, the CPU doesn't
+totally respect it, i.e. for values below 1.4GHz it stays around 1397MHz. T=
+he
+relationship is not linear, setting 4GHz results in the CPU preferring 3766=
+Mhz.
+Or 2GHz -> 1982MHz. Not a big deal. Unlikely anyone would want to set the
+lowest frequency.
 
+3. /sys/devices/system/cpu/amd_pstate/cpb_boost is missing altogether:
+
+# find /sys -iname '*boost*'
+[nothing]
+
+So, my only remaining question is where's boost support? Or it's not suppor=
+ted
+for all Zen CPUs?
+
+Thanks a lot for your work regardless!
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
 
