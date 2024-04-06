@@ -1,139 +1,83 @@
-Return-Path: <linux-pm+bounces-6000-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6001-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0216D89AB07
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Apr 2024 15:17:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11C6C89AB20
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Apr 2024 15:52:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9E4F21F21C34
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Apr 2024 13:17:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDF2E282286
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Apr 2024 13:52:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11F79374F9;
-	Sat,  6 Apr 2024 13:17:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TOM9kjRm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7FDA36AF6;
+	Sat,  6 Apr 2024 13:52:12 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 844AB374EB;
-	Sat,  6 Apr 2024 13:17:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33CC213ACC;
+	Sat,  6 Apr 2024 13:52:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.242.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712409430; cv=none; b=iDY94o5Q3DHSS3SmBjMTn/aMFYmJM/tSeHF7TMno4GxhBK++DKKdd/PbyFkiixWoq/jDIz3TGyYkSR9siS09qlrcVzDgkWpcfzMmeYEa0g8T8OOWqZYGWbqQgjayqVNJLED5m7D8FJDsFQzZZ195c0Dnz7I0irArw29mHMV5Pxo=
+	t=1712411532; cv=none; b=Q33Yu3yflhIdnRXeHSsLWGVTmN+pTiAyCsMO9QWRtyglEfytxZNDLVKeoVXJGUhdWmbeU/eErFjcMdihw1UJAaHIZ2UEGA4Lld1uqMIOy8tHOuYy06aS1RLlVKn12JLNXgpeqcdx1o5iVha9UJIl67WpySVgtg3S7SXul/5XqYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712409430; c=relaxed/simple;
-	bh=VJJCSOf/JvpxykJNws5kwPDmUfdpbC4X42YTE2K1AUE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pMcGPeJ5w8nm178ZKa2GylL3KNj5G1j4ZeBtK1Scrz4exuJC8Mw49HQNtfsuUAOSwHZBiHKq7l+IGHOyaMZUHWxTo/beSXAmRAgO1c0Vd+Zj4ilZfE6RoqE5CKAc0jRSjE8Rbcios3cmbAxBFf63upc4w9YPfxWv5z1BZ37MFnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TOM9kjRm; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2a3095907ffso1186996a91.0;
-        Sat, 06 Apr 2024 06:17:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712409428; x=1713014228; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DzKx5rEfU8Mn0ywULn1KY41VZeJws0/wMPTNdGwCnF4=;
-        b=TOM9kjRm/lmt1lD5AucveB5G83IOwHByyD8XszdjuUg0WWOnffoSc1Qj16bTZLvRQQ
-         bfQfphXoVa6FuoPY9fhoUFSF9DqXXA9J2RJ89oRuUylx/uXV7WKOg1bCKvszDtf08DFY
-         jIusal6h2lQWtsMnjSb/GGU405nZmWNlfMs3rmhaS4je0E+0CltQoiycBHjJObf5qlfk
-         LBV3R4E2G6PbA4CN4FLUq+T+BxZWbggWNpcPgvKe48H78n2nUqYULKQYAiT1KGRVjqvl
-         FHCRLoBUrYPb99+KyANUsLTik9+jFEcyc3ml/mxJik3VDL1ZSUWUeIH5QTQo8fBypB/T
-         0ZiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712409428; x=1713014228;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DzKx5rEfU8Mn0ywULn1KY41VZeJws0/wMPTNdGwCnF4=;
-        b=v2hQFUyL1VlGO6tU5tSGs6xzO8G1wzK4UA15H5hQNtzgGkNmMOnCuV55a9+UjgeuOl
-         GEVSbVLir/Ysp44J3aAwyIqUlWTuK3dUGuDK4+MvYv2ULuhUhzMsehPXoPSotBmtj/3E
-         7H+0kJ5uAFIUhJfy1bikE/C+jS+BbX/ezKJCxqA4SYkvqp5+uTwwpH2auLUxZmsG+WJI
-         9DCx44Vg/7KFKZwyByX3yo3PviepNVdS7Gf6T8kfScQT/dYIVDjH6ZR5x8Yx/ECd7xT2
-         z/ulzX99tIrdA2inDzGSfU/Rz34EgOEDbnVEsmnpT1qBBanCFgqan4pna8V9z5KnJdUg
-         i4Iw==
-X-Forwarded-Encrypted: i=1; AJvYcCWvoBImOI1MG1IEkwm6YO+IduGGHiURhI8GhvgV0z+z0O/MKUH4RE2kjwzgkNZMiy/ZL0Vze8j7B1ZgOhg4xNzVrG3wEnNDjNkXH4Z32/r80Fn5BFhl1cdeWRFlNj+plC8wCk5H7FDGAhHxcDSO9f8M+pe49ZN6NCIccqq0lHXyYu7vLg==
-X-Gm-Message-State: AOJu0Yw4zOgebtiOyN31mkvFgpSprwB0GRujmOCaKGxtl/rpCdE+Obbu
-	wVVXJBWqg1QGPpCtFRfMkVShiUVN4pIymkZFE5I12biKby/SJM4q
-X-Google-Smtp-Source: AGHT+IGtrbyINl2CLwezwEj0RKyyXObl5s3LgTlCnH0C8D9V33PuxQi7dGzGBDmI/RYzBthjjTgsTg==
-X-Received: by 2002:a17:90a:72c4:b0:2a0:3a16:7489 with SMTP id l4-20020a17090a72c400b002a03a167489mr3200611pjk.44.1712409427904;
-        Sat, 06 Apr 2024 06:17:07 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j1-20020a17090a588100b002a29e717991sm4911802pji.22.2024.04.06.06.17.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Apr 2024 06:17:06 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sat, 6 Apr 2024 06:17:06 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	Zhang Rui <rui.zhang@intel.com>, Jean Delvare <jdelvare@suse.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Ricardo Neri <ricardo.neri@intel.com>
-Subject: Re: [PATCH 3/3] hwmon: (coretemp) Use a model-specific bitmask to
- read registers
-Message-ID: <f4d18a63-c348-4882-897b-dc636feb149b@roeck-us.net>
-References: <20240406010416.4821-1-ricardo.neri-calderon@linux.intel.com>
- <20240406010416.4821-4-ricardo.neri-calderon@linux.intel.com>
+	s=arc-20240116; t=1712411532; c=relaxed/simple;
+	bh=c4P6XCqXe/1/PyNm0hEV/fhObLttlXBUccidgoz+KNA=;
+	h=Message-Id:From:Date:Subject:To:Cc; b=mMlODrFL13/cWyvrkYkx65xwMpCoVHsmPZGNQd/w/SVmm3Z9wc5V/f9w9+vV3bds3ENFFIaq/pn8E5nfsdbO1aUPhZgIcBoM8//qjW5aPJ03Kf8XTuspVnsIJFB3d6OVfWNxfVvIy8Q21Zpw2VAQiWcOTw3AaMltZ2Lq+HagSxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=pass smtp.mailfrom=wunner.de; arc=none smtp.client-ip=176.9.242.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wunner.de
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout3.hostsharing.net (Postfix) with ESMTPS id 94813100D943C;
+	Sat,  6 Apr 2024 15:51:59 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id 3B10F233389; Sat,  6 Apr 2024 15:51:59 +0200 (CEST)
+Message-Id: <cover.1712410202.git.lukas@wunner.de>
+From: Lukas Wunner <lukas@wunner.de>
+Date: Sat, 6 Apr 2024 15:52:00 +0200
+Subject: [PATCH 0/2] Deduplicate bin_attribute simple read() callbacks
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, linux-kernel@vger.kernel.org
+Cc: Michael Ellerman <mpe@ellerman.id.au>, linuxppc-dev@lists.ozlabs.org, linux-acpi@vger.kernel.org, Jean Delvare <jdelvare@suse.com>, Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org, Zhenyu Wang <zhenyuw@linux.intel.com>, Zhi Wang <zhi.wang.linux@gmail.com>, intel-gvt-dev@lists.freedesktop.org, Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240406010416.4821-4-ricardo.neri-calderon@linux.intel.com>
 
-On Fri, Apr 05, 2024 at 06:04:16PM -0700, Ricardo Neri wrote:
-> The Intel Software Development manual defines states the temperature
-> digital readout as the bits [22:16] of the IA32_[PACKAGE]_THERM_STATUS
-> registers. In recent processor, however, the range is [23:16]. Use a
-> model-specific bitmask to extract the temperature readout correctly.
-> 
-> Instead of re-implementing model checks, extract the correct bitmask
-> using the intel_tcc library. Add an 'imply' weak reverse dependency on
-> CONFIG_INTEL_TCC. This captures the dependency and lets user to unselect
-> them if they are so inclined. In such case, the bitmask used for the
-> digital readout is [22:16] as specified in the Intel Software Developer's
-> manual.
-> 
-> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> ---
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Lukasz Luba <lukasz.luba@arm.com>
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: linux-hwmon@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: stable@vger.kernel.org # v6.7+
-> ---
->  drivers/hwmon/Kconfig    | 1 +
->  drivers/hwmon/coretemp.c | 6 +++++-
->  2 files changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 83945397b6eb..11d72b3009bf 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -847,6 +847,7 @@ config SENSORS_I5500
->  config SENSORS_CORETEMP
->  	tristate "Intel Core/Core2/Atom temperature sensor"
->  	depends on X86
-> +	imply INTEL_TCC
+For my upcoming PCI device authentication v2 patches, I have the need
+to expose a simple buffer in virtual memory as a bin_attribute.
 
-I do not think it is appropriate to make a hardware monitoring driver
-depend on the thermal subsystem.
+It turns out we've duplicated the ->read() callback for such simple
+buffers a fair number of times across the tree.
 
-NAK in the current form.
+So instead of reinventing the wheel, I decided to introduce a common
+helper and eliminate all duplications I could find.
 
-Guenter
+I'm open to a bikeshedding discussion on the sysfs_bin_attr_simple_read()
+name. ;)
+
+Lukas Wunner (2):
+  sysfs: Add sysfs_bin_attr_simple_read() helper
+  treewide: Use sysfs_bin_attr_simple_read() helper
+
+ arch/powerpc/platforms/powernv/opal.c              | 10 +-------
+ drivers/acpi/bgrt.c                                |  9 +-------
+ drivers/firmware/dmi_scan.c                        | 12 ++--------
+ drivers/firmware/efi/rci2-table.c                  | 10 +-------
+ drivers/gpu/drm/i915/gvt/firmware.c                | 26 +++++----------------
+ .../intel/int340x_thermal/int3400_thermal.c        |  9 +-------
+ fs/sysfs/file.c                                    | 27 ++++++++++++++++++++++
+ include/linux/sysfs.h                              | 15 ++++++++++++
+ init/initramfs.c                                   | 10 +-------
+ kernel/module/sysfs.c                              | 13 +----------
+ 10 files changed, 56 insertions(+), 85 deletions(-)
+
+-- 
+2.43.0
+
 
