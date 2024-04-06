@@ -1,297 +1,147 @@
-Return-Path: <linux-pm+bounces-6003-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6004-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C1C889AB2D
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Apr 2024 15:54:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F8CC89AB6E
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Apr 2024 16:49:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AAAFF2821E8
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Apr 2024 13:54:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4CE701F21F01
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Apr 2024 14:49:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAA9D374E9;
-	Sat,  6 Apr 2024 13:54:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39D20376E7;
+	Sat,  6 Apr 2024 14:48:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="nLkzMh+c"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C96C2D05E;
-	Sat,  6 Apr 2024 13:54:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.78.240
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8776C2561F;
+	Sat,  6 Apr 2024 14:48:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712411661; cv=none; b=jBPrjJY2Psv4Resl/TlgFsetGc8sDS2uQOSSXsNHEa7QeyFTm8AlWF1kLHiK1xiZjY9hcPhx/CDcYXxSAZRfA4VMY/YBxHUfvnq+dEbkbY0mnFpa6/F/vMbqy6nv/LIbPo9pgwHer3bz51sqrAYst+tV+0EWyHsIMfLeoLU0yK8=
+	t=1712414935; cv=none; b=iE+EpRH1nPhjY2qXdDE+F1znatZ78qNUcE0f6O/GtHQzjuELhoUZI+y0+dh7XnQWfrdlcYiwNZVcFubxt1H9n3m9UpKntNrg+svbF8Oc2tm49goju3dMRHy8VlqNkKc7HjoaaXfAD6W/TQy9BUP9M8hWw28BzFObpN1ueLlwDwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712411661; c=relaxed/simple;
-	bh=++C446erfBmkIadT7UESxN+hRSqQcV8WtV6QE89m0GM=;
-	h=Message-Id:In-Reply-To:References:From:Date:Subject:To:Cc; b=Ri2tzIyzkDCL/JJtYu9lpo++jFAQJHcEbYk9RS5VZCXSXSqOCCPNc+vAWn87TIRjxtxSoiR9UOxRtANhN6xxiZ9EzQWC8TSsnoJCLZBPyiV7YVOHV4Wu0cEDi7fJAHL90K9tNnAeyBbzj0Z3Mkton1aBsnhEtWx6xYCL+FJH2E0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=pass smtp.mailfrom=wunner.de; arc=none smtp.client-ip=83.223.78.240
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wunner.de
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
-	by bmailout2.hostsharing.net (Postfix) with ESMTPS id 879992800B3F1;
-	Sat,  6 Apr 2024 15:54:16 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id 8084A9926B3; Sat,  6 Apr 2024 15:54:16 +0200 (CEST)
-Message-Id: <92ee0a0e83a5a3f3474845db6c8575297698933a.1712410202.git.lukas@wunner.de>
-In-Reply-To: <cover.1712410202.git.lukas@wunner.de>
-References: <cover.1712410202.git.lukas@wunner.de>
-From: Lukas Wunner <lukas@wunner.de>
-Date: Sat, 6 Apr 2024 15:52:02 +0200
-Subject: [PATCH 2/2] treewide: Use sysfs_bin_attr_simple_read() helper
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, linux-kernel@vger.kernel.org
-Cc: Michael Ellerman <mpe@ellerman.id.au>, linuxppc-dev@lists.ozlabs.org, linux-acpi@vger.kernel.org, Jean Delvare <jdelvare@suse.com>, Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org, Zhenyu Wang <zhenyuw@linux.intel.com>, Zhi Wang <zhi.wang.linux@gmail.com>, intel-gvt-dev@lists.freedesktop.org, Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org
+	s=arc-20240116; t=1712414935; c=relaxed/simple;
+	bh=3IsIiSHahqBrRCmVosGXFKNr6uA/zks+RieTV/DRZM4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=JrvJLkoxSOBG9uAQ4Pnwqxo1j6AaZN4n8leNtPW3Ru2zd1t7s3I+ZaQqAijn2t5WxP0ruKTeFYL8gBMnpNEj+ak2eCgLodBaVZbUFIbZ3hHK/+2ABhiw07odcLkUwHygJ3BtVlLwLbg0+SwsVCeC4k+OPbjKT0saixZXrAKV4sg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=nLkzMh+c; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 436ElWSM028801;
+	Sat, 6 Apr 2024 14:48:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=/a+AbHpn+isNK8mqS3AAtxnCcpkXqIhp0UtjQqbegYg=; b=nL
+	kzMh+cDl4AGJK5i1QkCc0seSvFUy2gqvPwMpaSUrXFkvKqcaYH4+VSnUVe4yA4b/
+	GUIOI4lhEvO7Xu7Gx0Gq2sVf/JCOdAkuPo48nMUnrcCDGptTllBRvoUUJaCYWqzU
+	hS8JBSHWVDs/eva5mxDH1FR7ucEF5JBIWtbBOQLhKXHbM6y/BjGlu/UIwfZkmfet
+	zplXIF/mUmz4BiNjyn3I1bmW7pYBDlpHC/jeCv1OSNpiPdfGlAI6DVRHzDbT48EU
+	WlSWvnlg/XOkPbSTdWB9OHD5Rg8WWJ1/4URbRVFifpA9cK13hKfAYO+lilchSU5q
+	GRLi2eRH9U7kLB9nfZVw==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xawbv0q5f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 06 Apr 2024 14:48:37 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 436Emaoj011182
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 6 Apr 2024 14:48:36 GMT
+Received: from [10.216.19.147] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Sat, 6 Apr 2024
+ 07:48:28 -0700
+Message-ID: <12e5708a-ea6e-4798-a487-f2465c848278@quicinc.com>
+Date: Sat, 6 Apr 2024 20:18:23 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/3] Add support for the IPQ5321 SoC
+Content-Language: en-US
+To: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio
+	<konrad.dybcio@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        "Krzysztof
+ Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>, Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki"
+	<rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+CC: <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        "Krzysztof
+ Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        Mukesh Ojha
+	<quic_mojha@quicinc.com>
+References: <20240325-ipq5321-sku-support-v2-0-f30ce244732f@quicinc.com>
+From: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+In-Reply-To: <20240325-ipq5321-sku-support-v2-0-f30ce244732f@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: fkQFsPcLaDGYK77QlZfeX-OzOvz9NqXz
+X-Proofpoint-GUID: fkQFsPcLaDGYK77QlZfeX-OzOvz9NqXz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-06_11,2024-04-05_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
+ suspectscore=0 priorityscore=1501 mlxscore=0 malwarescore=0 spamscore=0
+ bulkscore=0 adultscore=0 mlxlogscore=828 phishscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2404010003
+ definitions=main-2404060116
 
-Deduplicate ->read() callbacks of bin_attributes which are backed by a
-simple buffer in memory:
 
-Use the newly introduced sysfs_bin_attr_simple_read() helper instead,
-either by referencing it directly or by declaring such bin_attributes
-with BIN_ATTR_SIMPLE_RO() or BIN_ATTR_SIMPLE_ADMIN_RO().
 
-Aside from a reduction of LoC, this shaves off a few bytes from vmlinux
-(304 bytes on an x86_64 allyesconfig).
+On 3/25/2024 9:19 PM, Kathiravan Thirumoorthy wrote:
+> IPQ5321 SoC belong to IPQ5332 family. Add the SoC ID and the cpufreq
+> support. Maximum cpufreq for IPQ5321 is 1.1GHZ, which is determined
+> based on the eFuse.
+> 
+> Viresh is okay to merge the cpufreq change via qcom tree[1] and provided
+> his Ack.
+> 
+> [1]
+> https://lore.kernel.org/linux-arm-msm/20240306053200.6iwrviltwt3pnfnt@vireshk-i7/
 
-No functional change intended.
 
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
----
- arch/powerpc/platforms/powernv/opal.c              | 10 +--------
- drivers/acpi/bgrt.c                                |  9 +-------
- drivers/firmware/dmi_scan.c                        | 12 ++--------
- drivers/firmware/efi/rci2-table.c                  | 10 +--------
- drivers/gpu/drm/i915/gvt/firmware.c                | 26 +++++-----------------
- .../intel/int340x_thermal/int3400_thermal.c        |  9 +-------
- init/initramfs.c                                   | 10 +--------
- kernel/module/sysfs.c                              | 13 +----------
- 8 files changed, 14 insertions(+), 85 deletions(-)
+Gentle Reminder...
 
-diff --git a/arch/powerpc/platforms/powernv/opal.c b/arch/powerpc/platforms/powernv/opal.c
-index 45dd77e..5d0f35b 100644
---- a/arch/powerpc/platforms/powernv/opal.c
-+++ b/arch/powerpc/platforms/powernv/opal.c
-@@ -792,14 +792,6 @@ static int __init opal_sysfs_init(void)
- 	return 0;
- }
- 
--static ssize_t export_attr_read(struct file *fp, struct kobject *kobj,
--				struct bin_attribute *bin_attr, char *buf,
--				loff_t off, size_t count)
--{
--	return memory_read_from_buffer(buf, count, &off, bin_attr->private,
--				       bin_attr->size);
--}
--
- static int opal_add_one_export(struct kobject *parent, const char *export_name,
- 			       struct device_node *np, const char *prop_name)
- {
-@@ -826,7 +818,7 @@ static int opal_add_one_export(struct kobject *parent, const char *export_name,
- 	sysfs_bin_attr_init(attr);
- 	attr->attr.name = name;
- 	attr->attr.mode = 0400;
--	attr->read = export_attr_read;
-+	attr->read = sysfs_bin_attr_simple_read;
- 	attr->private = __va(vals[0]);
- 	attr->size = vals[1];
- 
-diff --git a/drivers/acpi/bgrt.c b/drivers/acpi/bgrt.c
-index e4fb9e2..d1d9c92 100644
---- a/drivers/acpi/bgrt.c
-+++ b/drivers/acpi/bgrt.c
-@@ -29,14 +29,7 @@
- BGRT_SHOW(xoffset, image_offset_x);
- BGRT_SHOW(yoffset, image_offset_y);
- 
--static ssize_t image_read(struct file *file, struct kobject *kobj,
--	       struct bin_attribute *attr, char *buf, loff_t off, size_t count)
--{
--	memcpy(buf, attr->private + off, count);
--	return count;
--}
--
--static BIN_ATTR_RO(image, 0);	/* size gets filled in later */
-+static BIN_ATTR_SIMPLE_RO(image);
- 
- static struct attribute *bgrt_attributes[] = {
- 	&bgrt_attr_version.attr,
-diff --git a/drivers/firmware/dmi_scan.c b/drivers/firmware/dmi_scan.c
-index 015c95a..3d0f773 100644
---- a/drivers/firmware/dmi_scan.c
-+++ b/drivers/firmware/dmi_scan.c
-@@ -746,16 +746,8 @@ static void __init dmi_scan_machine(void)
- 	pr_info("DMI not present or invalid.\n");
- }
- 
--static ssize_t raw_table_read(struct file *file, struct kobject *kobj,
--			      struct bin_attribute *attr, char *buf,
--			      loff_t pos, size_t count)
--{
--	memcpy(buf, attr->private + pos, count);
--	return count;
--}
--
--static BIN_ATTR(smbios_entry_point, S_IRUSR, raw_table_read, NULL, 0);
--static BIN_ATTR(DMI, S_IRUSR, raw_table_read, NULL, 0);
-+static BIN_ATTR_SIMPLE_ADMIN_RO(smbios_entry_point);
-+static BIN_ATTR_SIMPLE_ADMIN_RO(DMI);
- 
- static int __init dmi_init(void)
- {
-diff --git a/drivers/firmware/efi/rci2-table.c b/drivers/firmware/efi/rci2-table.c
-index de1a9a1..4fd45d6 100644
---- a/drivers/firmware/efi/rci2-table.c
-+++ b/drivers/firmware/efi/rci2-table.c
-@@ -40,15 +40,7 @@ struct rci2_table_global_hdr {
- static u32 rci2_table_len;
- unsigned long rci2_table_phys __ro_after_init = EFI_INVALID_TABLE_ADDR;
- 
--static ssize_t raw_table_read(struct file *file, struct kobject *kobj,
--			      struct bin_attribute *attr, char *buf,
--			      loff_t pos, size_t count)
--{
--	memcpy(buf, attr->private + pos, count);
--	return count;
--}
--
--static BIN_ATTR(rci2, S_IRUSR, raw_table_read, NULL, 0);
-+static BIN_ATTR_SIMPLE_ADMIN_RO(rci2);
- 
- static u16 checksum(void)
- {
-diff --git a/drivers/gpu/drm/i915/gvt/firmware.c b/drivers/gpu/drm/i915/gvt/firmware.c
-index 4dd52ac..5e66a26 100644
---- a/drivers/gpu/drm/i915/gvt/firmware.c
-+++ b/drivers/gpu/drm/i915/gvt/firmware.c
-@@ -50,21 +50,7 @@ struct gvt_firmware_header {
- 
- #define dev_to_drm_minor(d) dev_get_drvdata((d))
- 
--static ssize_t
--gvt_firmware_read(struct file *filp, struct kobject *kobj,
--	     struct bin_attribute *attr, char *buf,
--	     loff_t offset, size_t count)
--{
--	memcpy(buf, attr->private + offset, count);
--	return count;
--}
--
--static struct bin_attribute firmware_attr = {
--	.attr = {.name = "gvt_firmware", .mode = (S_IRUSR)},
--	.read = gvt_firmware_read,
--	.write = NULL,
--	.mmap = NULL,
--};
-+static BIN_ATTR_SIMPLE_ADMIN_RO(gvt_firmware);
- 
- static int expose_firmware_sysfs(struct intel_gvt *gvt)
- {
-@@ -107,10 +93,10 @@ static int expose_firmware_sysfs(struct intel_gvt *gvt)
- 	crc32_start = offsetof(struct gvt_firmware_header, version);
- 	h->crc32 = crc32_le(0, firmware + crc32_start, size - crc32_start);
- 
--	firmware_attr.size = size;
--	firmware_attr.private = firmware;
-+	bin_attr_gvt_firmware.size = size;
-+	bin_attr_gvt_firmware.private = firmware;
- 
--	ret = device_create_bin_file(&pdev->dev, &firmware_attr);
-+	ret = device_create_bin_file(&pdev->dev, &bin_attr_gvt_firmware);
- 	if (ret) {
- 		vfree(firmware);
- 		return ret;
-@@ -122,8 +108,8 @@ static void clean_firmware_sysfs(struct intel_gvt *gvt)
- {
- 	struct pci_dev *pdev = to_pci_dev(gvt->gt->i915->drm.dev);
- 
--	device_remove_bin_file(&pdev->dev, &firmware_attr);
--	vfree(firmware_attr.private);
-+	device_remove_bin_file(&pdev->dev, &bin_attr_gvt_firmware);
-+	vfree(bin_attr_gvt_firmware.private);
- }
- 
- /**
-diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-index 427d370..6d4b51a 100644
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -73,14 +73,7 @@ struct odvp_attr {
- 	struct device_attribute attr;
- };
- 
--static ssize_t data_vault_read(struct file *file, struct kobject *kobj,
--	     struct bin_attribute *attr, char *buf, loff_t off, size_t count)
--{
--	memcpy(buf, attr->private + off, count);
--	return count;
--}
--
--static BIN_ATTR_RO(data_vault, 0);
-+static BIN_ATTR_SIMPLE_RO(data_vault);
- 
- static struct bin_attribute *data_attributes[] = {
- 	&bin_attr_data_vault,
-diff --git a/init/initramfs.c b/init/initramfs.c
-index da79760..5193fae 100644
---- a/init/initramfs.c
-+++ b/init/initramfs.c
-@@ -575,15 +575,7 @@ static int __init initramfs_async_setup(char *str)
- #include <linux/initrd.h>
- #include <linux/kexec.h>
- 
--static ssize_t raw_read(struct file *file, struct kobject *kobj,
--			struct bin_attribute *attr, char *buf,
--			loff_t pos, size_t count)
--{
--	memcpy(buf, attr->private + pos, count);
--	return count;
--}
--
--static BIN_ATTR(initrd, 0440, raw_read, NULL, 0);
-+static BIN_ATTR(initrd, 0440, sysfs_bin_attr_simple_read, NULL, 0);
- 
- void __init reserve_initrd_mem(void)
- {
-diff --git a/kernel/module/sysfs.c b/kernel/module/sysfs.c
-index d964167..26efe13 100644
---- a/kernel/module/sysfs.c
-+++ b/kernel/module/sysfs.c
-@@ -146,17 +146,6 @@ struct module_notes_attrs {
- 	struct bin_attribute attrs[] __counted_by(notes);
- };
- 
--static ssize_t module_notes_read(struct file *filp, struct kobject *kobj,
--				 struct bin_attribute *bin_attr,
--				 char *buf, loff_t pos, size_t count)
--{
--	/*
--	 * The caller checked the pos and count against our size.
--	 */
--	memcpy(buf, bin_attr->private + pos, count);
--	return count;
--}
--
- static void free_notes_attrs(struct module_notes_attrs *notes_attrs,
- 			     unsigned int i)
- {
-@@ -205,7 +194,7 @@ static void add_notes_attrs(struct module *mod, const struct load_info *info)
- 			nattr->attr.mode = 0444;
- 			nattr->size = info->sechdrs[i].sh_size;
- 			nattr->private = (void *)info->sechdrs[i].sh_addr;
--			nattr->read = module_notes_read;
-+			nattr->read = sysfs_bin_attr_simple_read;
- 			++nattr;
- 		}
- 		++loaded;
--- 
-2.43.0
-
+> 
+> Signed-off-by: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+> ---
+> Changes in v2:
+> 	- rebase on next-20240325
+> 	- pick up the tags
+> 	- Link to v1:
+> 	  https://lore.kernel.org/linux-arm-msm/20240228-ipq5321-sku-support-v1-0-14e4d4715f4b@quicinc.com/
+> 
+> ---
+> Kathiravan Thirumoorthy (3):
+>        dt-bindings: arm: qcom,ids: Add SoC ID for IPQ5321
+>        soc: qcom: socinfo: Add SoC ID for IPQ5321
+>        cpufreq: qcom-nvmem: add support for IPQ5321
+> 
+>   drivers/cpufreq/qcom-cpufreq-nvmem.c | 1 +
+>   drivers/soc/qcom/socinfo.c           | 1 +
+>   include/dt-bindings/arm/qcom,ids.h   | 1 +
+>   3 files changed, 3 insertions(+)
+> ---
+> base-commit: 1fdad13606e104ff103ca19d2d660830cb36d43e
+> change-id: 20240228-ipq5321-sku-support-bd07056d5e01
+> 
+> Best regards,
 
