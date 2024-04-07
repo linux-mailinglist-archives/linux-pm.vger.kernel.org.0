@@ -1,87 +1,94 @@
-Return-Path: <linux-pm+bounces-6014-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6015-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4912389B056
-	for <lists+linux-pm@lfdr.de>; Sun,  7 Apr 2024 12:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 04DA989B093
+	for <lists+linux-pm@lfdr.de>; Sun,  7 Apr 2024 13:21:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B101EB2176E
-	for <lists+linux-pm@lfdr.de>; Sun,  7 Apr 2024 10:18:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 99CDCB215AA
+	for <lists+linux-pm@lfdr.de>; Sun,  7 Apr 2024 11:21:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF03617C77;
-	Sun,  7 Apr 2024 10:18:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 761B24C74;
+	Sun,  7 Apr 2024 11:21:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="ke+OHFQ/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VUY3qdvu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 687F217550;
-	Sun,  7 Apr 2024 10:18:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50BF923768
+	for <linux-pm@vger.kernel.org>; Sun,  7 Apr 2024 11:21:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712485085; cv=none; b=hsjz3m0NUy//pIQYMebtyKQwk/Dta+HQZYmluOLDQsd82YhPiVAKa2RNkXMQnCqn1IxMRxXMSBu1dryCTGLL1mmxOq7D546AldEiEWUgnIPogKu3WPAKxp0Yql0VabqRCs7K8KWG4o9I0KwxXPwNQ+my9Ki6y2QRD9vOGGPVzL4=
+	t=1712488862; cv=none; b=g/03dpa+1bqqBtN7aCARpZ+wWx3+3RtUVR1sdDfYG6Alu1Bo1JWbEUkY+AO87a/Stl+vh6l5a2NwgMzzetxCIWeK94sc1ZZxhnfWfgWqRzvI8G2x9xjdj9J6ZCl2bgZoJQgbFJESaCdSM4tfSV7sNWCdc1OK3olPL2vjYXTACRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712485085; c=relaxed/simple;
-	bh=PyzTbx+EV6uWhguY3E9lMN77MG5Dy/bTtQbGz1gti+w=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XRon2cFjhcGcYH09J5Yu2xPeLCS2wiRVTzdQAvMo4NJ6rVciCb8EPhUqyUA0Z4gdy2fqx+ZkoSFUoVvmklnY1b98vILEdLKROSwCqPk/LOmv56u4RcRAcrwmXuD4KvKaU+fEfCx++E3UTFuZsHz9Or6fDiGPJe96RNymJTrCIOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=ke+OHFQ/; arc=none smtp.client-ip=185.70.40.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=sxa7bzw2fvhc3ioreindctqiwm.protonmail; t=1712485080; x=1712744280;
-	bh=O29HBNf2ylU05p6urIS325zaON00H83jAr3bRLHuDus=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=ke+OHFQ/1+90MhQrbMijafNQVoXGtkbC3xHr7bZqlVz2VzMazx7jqgD24er9PZmOu
-	 pDf78eAlOsmXSK0pikaqX00fttn7yWvZdS/XXgmoVNPTKyyPYh1vTI6arG3zUaG5X2
-	 kXTuPPXv0WQF0eaXQiUKQQbKFwCgeKNcGDrEPhtN4TNKwmG+2b6rQEnPrlkKG9LMoP
-	 LJNONaYvi9zA89gK0Wg7YU1qZ24cHV0BS1WJw9uQizbefXnDKqJcZ4iQhkLsbERZvy
-	 6ujujOTbTVMX6s5VKLyYdqcnfX6ceXWLpvcRxPBaGm47TEYIemXmIX3QIgXe5xTv8v
-	 E9GxjE5BPUiFg==
-Date: Sun, 07 Apr 2024 10:17:52 +0000
-To: Viresh Kumar <viresh.kumar@linaro.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>
-From: Benno Lossin <benno.lossin@proton.me>
-Cc: linux-pm@vger.kernel.org, Vincent Guittot <vincent.guittot@linaro.org>, Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>, rust-for-linux@vger.kernel.org, Manos Pitsidianakis <manos.pitsidianakis@linaro.org>, Erik Schilling <erik.schilling@linaro.org>, =?utf-8?Q?Alex_Benn=C3=A9e?= <alex.bennee@linaro.org>, Joakim Bech <joakim.bech@linaro.org>, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 3/3] cpufreq: Add Rust based cpufreq-dt driver
-Message-ID: <8c4f2053-acbc-4f4a-93de-18f149c80869@proton.me>
-In-Reply-To: <4ff5f30b-f2b8-4625-b3cd-ac08e4ffb068@proton.me>
-References: <cover.1712314032.git.viresh.kumar@linaro.org> <1792467a772b7a8355c6d0cb0cbacfbffff08afd.1712314032.git.viresh.kumar@linaro.org> <4ff5f30b-f2b8-4625-b3cd-ac08e4ffb068@proton.me>
-Feedback-ID: 71780778:user:proton
+	s=arc-20240116; t=1712488862; c=relaxed/simple;
+	bh=V9ceUh/koPA8XO+ov4c4yP6FZ7yPIrbvVTBlzC0Zmhc=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=j13rXi9fgTN9DRAuSsDbYEPU/zJRPE+SwJ+cN6QydTLuv6jarpVamlL/EbAZSfP3SsdH80cAuqMtml+pSpU+aUe/qSIQwNT/TkIMmJTfxMcAPtjIXdTCxBL3aRk5JYvAwTvH7VvR/homYHnaYcQJNwX/WP4RFyWKFNnERkD+A24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VUY3qdvu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 250EBC433C7
+	for <linux-pm@vger.kernel.org>; Sun,  7 Apr 2024 11:21:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712488862;
+	bh=V9ceUh/koPA8XO+ov4c4yP6FZ7yPIrbvVTBlzC0Zmhc=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=VUY3qdvusqo3vkHDCCV6rUsl5E81UV+CFk5/VJr9gpzPatXFvBEBy3ww4eJbvEf8y
+	 cayKduSDjt+EXuaa+R21bZL2UyLMlAcMNpgSvHIgXfqDaqwoBytdV7AUq+ItyOQkNl
+	 jBzv+lrx5Ib0FmfNXKNSGklw7lxk1aUaAcxL6i3T6h6EiS0Bzh8py78RmjaZusLFdQ
+	 muoenGvgmLZ5ZPG4iQ50IQwIk5Di3BDyDjbadRRYuyex3matlkCWOBV44D6yU3NacQ
+	 dtx+/GecJJ06pcdm2VCbRCMhha3TRUdVChZU5SLVxwU07VqDjqfOYFJfpkuCgTlqss
+	 x1eiq5MCIsotw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 196ADC53BD6; Sun,  7 Apr 2024 11:21:02 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 218689] AMD_Pstate_EPP Ryzen 7000 issues. Freezing and static
+ sound
+Date: Sun, 07 Apr 2024 11:21:01 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: aros@gmx.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218689-137361-mw47t3DKZD@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218689-137361@https.bugzilla.kernel.org/>
+References: <bug-218689-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-On 07.04.24 11:54, Benno Lossin wrote:
-> On 05.04.24 13:09, Viresh Kumar wrote:
->> +// Finds exact supply name from the OF node.
->> +fn find_supply_name_exact(np: *mut bindings::device_node, name: &str) -=
-> Option<CString> {
->> +    let sname =3D CString::try_from_fmt(fmt!("{}-supply", name)).ok()?;
->> +
->> +    // SAFETY: The OF node is guaranteed by the C code to be valid.
->> +    let pp =3D unsafe { bindings::of_find_property(np, sname.as_ptr() a=
-s *mut _, ptr::null_mut()) };
->=20
-> Drivers should avoid calling `unsafe` code as much as possible. They
-> also should not be calling `bindings` code directly. Please write (or
-> find) abstractions for these `unsafe` calls.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218689
 
-Having re-read the cover letter, I see that you are already aware of
-this. If you need any help with creating the abstractions, feel free to
-reach out!
+--- Comment #1 from Artem S. Tashkinov (aros@gmx.com) ---
+This is extremely unlikely to be caused by the CPU driver.
+
+Please try resetting your BIOS settings and not using any XMP memory profil=
+es
+first.
 
 --=20
-Cheers,
-Benno
+You may reply to this email to add a comment.
 
+You are receiving this mail because:
+You are the assignee for the bug.=
 
