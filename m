@@ -1,164 +1,84 @@
-Return-Path: <linux-pm+bounces-6017-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6018-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC5EB89B0E3
-	for <lists+linux-pm@lfdr.de>; Sun,  7 Apr 2024 14:49:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DD7489B25A
+	for <lists+linux-pm@lfdr.de>; Sun,  7 Apr 2024 15:50:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33949281F6F
-	for <lists+linux-pm@lfdr.de>; Sun,  7 Apr 2024 12:49:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A8801C20A7B
+	for <lists+linux-pm@lfdr.de>; Sun,  7 Apr 2024 13:49:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C72162BAE2;
-	Sun,  7 Apr 2024 12:49:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C360039AC4;
+	Sun,  7 Apr 2024 13:49:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="XmxrPP5E";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="81qsvsI7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E03E4C7B;
-	Sun,  7 Apr 2024 12:49:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31B6F38F9A;
+	Sun,  7 Apr 2024 13:49:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712494180; cv=none; b=j62qt1VXQr8n+q/2P672WyalYKb8OHc5M6JJVE3VIQN0fnpkkxg5QygW3IHIYdAe6N1gfudifoUfGO1zRuZfOq9gR1k4vf1x7zn24CxwuQcITblVdy4mloo85YC8BHTuZxqG37D4QllKhOEuUkH3xeOu+HIquVPO9xWLLHV89UY=
+	t=1712497784; cv=none; b=BXG3jD/IqsmttrACwX+O7qJPOCodOUZn31h9G4VW/3jGOkioyPMhQ8xMt2VLYHZDNWbUA+CfdEOJ5NzbY2ToDlMR0OiDhTQ8FrIqbXJ3vLonXYze81y3RZ8OMDWIkfN6BbrhpDsTOQzNHkcj1/JoLmTEBEMPcjenQHz6dZfPAU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712494180; c=relaxed/simple;
-	bh=J1H/qX8SRFDlHJ/QBkm7cFTa1sYh0vN4k5jahtXiAaQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UMFyPKfVQso35X0c1TW6cQ5hMTV5uh4gxvHeky3pMzYHSb0OC+ILfQIObatVlJkYYLrPuTuCFj9Pm9G2E4o1fI/JQDgMLEmVERLGMVoQU5veCSTQ/ftKk+9xHo/+hR3WrChcntwquCBh1cqguHbkqaS/u2z/4HWdBhYTri16+Cw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6ecee443c79so411687b3a.0;
-        Sun, 07 Apr 2024 05:49:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712494178; x=1713098978;
-        h=content-transfer-encoding:mime-version:list-id:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gH1KKOCelF2ThGU1cHU4FIyi0LwXgGcMVoj+JXuvN68=;
-        b=MIJA0Wot1Qghh8EQLxxyyfbLrBYRKDYh7aNXOqdQNmN+CJsqDCipBR5eWRnI5x70mA
-         05ThpeHeLEPSk6/XVVESA2RV4GWzaoHMel2tjwzV5syjTsJ2BwN372/5wZGIiAqGKZNd
-         KOEQj1kF0io5iNGktVOjZ2+3e4fvLsI0NL5ReralF9Z7Pu5I304/F0+Kf1uuuYCmZv5Q
-         2ZlumbaNpx+/rMqHYmU6zX1KXstrozYLXpsNSXFrTdivtIvQAzfBxZKxd6W4Sp0ozlch
-         0OfRM6kGgQTZGxvVUc2CRGBFTIw0ypRD99rhEY8QzyRjk7ammTF+7PhoJvKBH4+8tb3h
-         Rjow==
-X-Forwarded-Encrypted: i=1; AJvYcCVhM7fTIZhDD8Qshqy0I1Kc+w+bKR6q8OPoXVvUfiT80bnhn7cjloNKQKeVCO8z9UihmhScWZomyQ7t6oEtiBuNbbVInSnLvJGIejYjn1+1ZZ1AY36HRJCcflcMJDtd5ptl4mtZSwOMzD3GmTgCNhyb0VyR8VBUlZedclQ9Q+uEKfsSDBV4FcMLrlqNd2m52tHKeGXWm+1p4hZQ6xW5EGTpMODLCktTwfLZNAIl6jExjFoBha2wYg5K2vYFtiCVjCQKJ/M=
-X-Gm-Message-State: AOJu0YzZ+GU6xzTsuqvNvmEw68gC55YnLvWajrm9EvkASsqJwWIquiNj
-	/LnTlCGxp9e+fasH2hrXUfs6HHq081bQJQYuC4hUCFfUKzcv+uh4
-X-Google-Smtp-Source: AGHT+IGmwZEw1xm9D6NmAXuVXmOZeBYvUcoCH5DdguExSt3s8bitCu93PDdAZPDeUUAbx3SB5z+oag==
-X-Received: by 2002:a05:6a20:2452:b0:1a7:17d:8863 with SMTP id t18-20020a056a20245200b001a7017d8863mr8555787pzc.4.1712494177572;
-        Sun, 07 Apr 2024 05:49:37 -0700 (PDT)
-Received: from tgsp-ThinkPad-X280.. ([223.153.78.230])
-        by smtp.gmail.com with ESMTPSA id e7-20020a63aa07000000b005f09e966e8asm4495442pgf.60.2024.04.07.05.49.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Apr 2024 05:49:37 -0700 (PDT)
-From: xiongxin <xiongxin@kylinos.cn>
-To: mario.limonciello@amd.com,
-	Rafael Wysocki <rafael@kernel.org>,
-	hdegoede@redhat.com,
-	linus.walleij@linaro.org
-Cc: Basavaraj.Natikar@amd.com,
-	Shyam-sundar.S-k@amd.com,
-	linux-pm@vger.kernel.org,
-	linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org,
-	linux-gpio@vger.kernel.org
-Subject: [PATCH v4 1/4] include/linux/suspend.h: Only show pm_pr_dbg messages at suspend/resume
-Date: Sun,  7 Apr 2024 20:49:15 +0800
-Message-Id: <20230602073025.22884-1-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230602073025.22884-1-mario.limonciello@amd.com>
-References: <20230602073025.22884-1-mario.limonciello@amd.com>
+	s=arc-20240116; t=1712497784; c=relaxed/simple;
+	bh=v3i75iLJScUhKZfBYfcOQN24IW7bHaC626D7DjAAoPc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=EIfAMuKe/G2ktkvG6pCA4zNFzSmBdkwT8vbFQFJ0+0XFgr9536NOnYGzglJuXeKbc+q1O0T/C4gDR07uhxSjxKHzuNSEVb7tT7RGDXByxgOuXEdu6plxqFQCjXqK3j5yGaBIJlkVJRfmr+JtjOkV7F/PL/NMyFPURokVU9ZyssE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=XmxrPP5E; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=81qsvsI7; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1712497781;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=v3i75iLJScUhKZfBYfcOQN24IW7bHaC626D7DjAAoPc=;
+	b=XmxrPP5EwmxtS63LFefDo0n5JjMRFTZi4spv3XIcauRCiOCFMMzaiX6+tUaMyXw13vTrQS
+	bxu9V1M3vp0OcqDsc+IFxESOoeRZvlj14vSmHzXXl9UQABh6XnXS88Vz+40gnRMQ4ga7bt
+	MRLZB6orCIvdJBJaGGaJ5zSX/Rn9yGvZ7B1tuXIP7QPYDgL4XNGnmRMHwxX7pBmIpuSMHe
+	RAid6DZLf6tiVIkrN8SxxKdgcjFlwRAlqvTOTwAtQZAyO1m2lefCjedmjxnwpuuDonNBHq
+	puDytO5UWqsGzuwdHPr1wANuELTME95+CptzXB5sAJs9zMPTnyOi9W1bPdAhFw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1712497781;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=v3i75iLJScUhKZfBYfcOQN24IW7bHaC626D7DjAAoPc=;
+	b=81qsvsI7t3qDkcxG48dCw2FqgWztUfZyWdgvqVs/zGUukDyxP1s2vdd55phQQbVw4CNyG+
+	+EtKFN2wsieMjPBQ==
+To: Anna-Maria Behnsen <anna-maria@linutronix.de>, linux-kernel@vger.kernel.org
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+ Len Brown <len.brown@intel.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+ linux-pm@vger.kernel.org, Frederic Weisbecker <frederic@kernel.org>,
+ x86@kernel.org, Anna-Maria Behnsen <anna-maria@linutronix.de>, Mario
+ Limonciello <mario.limonciello@amd.com>, stable@kernel.org
+Subject: Re: [PATCH] PM: s2idle: Make sure CPUs will wakeup directly on resume
+In-Reply-To: <87jzlb8zov.ffs@tglx>
+References: <20240405083410.4896-1-anna-maria@linutronix.de>
+ <87jzlb8zov.ffs@tglx>
+Date: Sun, 07 Apr 2024 15:49:40 +0200
+Message-ID: <875xwt8eq3.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+On Fri, Apr 05 2024 at 19:52, Thomas Gleixner wrote:
+> On Fri, Apr 05 2024 at 10:34, Anna-Maria Behnsen wrote:
+>> queued on those CPUs and should expire directly after resume, are
+>> handled. Also timer list timers which are remotely queued to one of those
+>> CPUs after resume will not result in a reporgramming IPI as the tick is
+>
+> s/reporgramming/reprogamming/
 
-All uses in the kernel are currently already oriented around
-suspend/resume. As some other parts of the kernel may also use these
-messages in functions that could also be used outside of
-suspend/resume, only enable in suspend/resume path.
-
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
-v3->v4:
- * add back do/while as it wasn't pointless.  It fixes a warning.
----
- include/linux/suspend.h | 8 +++++---
- kernel/power/main.c     | 6 ++++++
- 2 files changed, 11 insertions(+), 3 deletions(-)
-
-diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-index 1a0426e6761c..74f406c53ac0 100644
---- a/include/linux/suspend.h
-+++ b/include/linux/suspend.h
-@@ -555,6 +555,7 @@ static inline void unlock_system_sleep(unsigned int flags) {}
- #ifdef CONFIG_PM_SLEEP_DEBUG
- extern bool pm_print_times_enabled;
- extern bool pm_debug_messages_on;
-+extern bool pm_debug_messages_should_print(void);
- static inline int pm_dyn_debug_messages_on(void)
- {
- #ifdef CONFIG_DYNAMIC_DEBUG
-@@ -568,14 +569,14 @@ static inline int pm_dyn_debug_messages_on(void)
- #endif
- #define __pm_pr_dbg(fmt, ...)					\
- 	do {							\
--		if (pm_debug_messages_on)			\
-+		if (pm_debug_messages_should_print())		\
- 			printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__);	\
- 		else if (pm_dyn_debug_messages_on())		\
- 			pr_debug(fmt, ##__VA_ARGS__);	\
- 	} while (0)
- #define __pm_deferred_pr_dbg(fmt, ...)				\
- 	do {							\
--		if (pm_debug_messages_on)			\
-+		if (pm_debug_messages_should_print())		\
- 			printk_deferred(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__);	\
- 	} while (0)
- #else
-@@ -593,7 +594,8 @@ static inline int pm_dyn_debug_messages_on(void)
- /**
-  * pm_pr_dbg - print pm sleep debug messages
-  *
-- * If pm_debug_messages_on is enabled, print message.
-+ * If pm_debug_messages_on is enabled and the system is entering/leaving
-+ *      suspend, print message.
-  * If pm_debug_messages_on is disabled and CONFIG_DYNAMIC_DEBUG is enabled,
-  *	print message only from instances explicitly enabled on dynamic debug's
-  *	control.
-diff --git a/kernel/power/main.c b/kernel/power/main.c
-index 3113ec2f1db4..daa535012e51 100644
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -556,6 +556,12 @@ power_attr_ro(pm_wakeup_irq);
- 
- bool pm_debug_messages_on __read_mostly;
- 
-+bool pm_debug_messages_should_print(void)
-+{
-+	return pm_debug_messages_on && pm_suspend_target_state != PM_SUSPEND_ON;
-
-> hibernate processes also mostly use the pm_pr_dbg() function, which
-> results in hibernate processes only being able to output such logs
-> through dynamic debug, which is unfriendly to kernels without
-> CONFIG_DYNAMIC_DEBUG configuration.
-
-+}
-+EXPORT_SYMBOL_GPL(pm_debug_messages_should_print);
-+
- static ssize_t pm_debug_messages_show(struct kobject *kobj,
- 				      struct kobj_attribute *attr, char *buf)
- {
-
--- 
-2.34.1
+Haha. I can't spell either. reprogramming obviously.
 
