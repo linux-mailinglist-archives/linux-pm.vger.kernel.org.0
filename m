@@ -1,162 +1,139 @@
-Return-Path: <linux-pm+bounces-6019-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6020-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B30589B2B4
-	for <lists+linux-pm@lfdr.de>; Sun,  7 Apr 2024 17:33:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7CEE89B357
+	for <lists+linux-pm@lfdr.de>; Sun,  7 Apr 2024 19:37:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 123AD1C20F75
-	for <lists+linux-pm@lfdr.de>; Sun,  7 Apr 2024 15:33:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2C862B213EA
+	for <lists+linux-pm@lfdr.de>; Sun,  7 Apr 2024 17:37:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24DD139FEF;
-	Sun,  7 Apr 2024 15:33:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2C8C26AE3;
+	Sun,  7 Apr 2024 17:37:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="qSha4Hyp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AEEROaIn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43ED18485;
-	Sun,  7 Apr 2024 15:32:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E1591E864;
+	Sun,  7 Apr 2024 17:37:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712503983; cv=none; b=K7Av1UtgiCl9J2vrO7vLEdv09e23+GH+QbHd5076O5gD67PUs5d6DiqJUJ9BEISAVyOjhqwfD87uM0Mlh2qV1VL4Fo9ldmJ0A7qBtjU/wpMcgN3pYDwH5fLdIamsXqpcrWWHNcp9dAO+0SuV31B/2+g/aK/+pSyLIxmNLKzCd74=
+	t=1712511455; cv=none; b=oSJhfyNurQ7ZayKF534HL8k1ZZhkAD//RGz5TlpR9aYaFPigFq/DWrE8TvAFmkAhAynN4+JS8oDOG2YC9S8eDfBY5b3Pz29wjz8R1e6dzhAJm3E8KDSoFajcj+4ix13p13tTtn9f6FwSY+LQpBIcWIMotegrCOIg8uGKunTlylM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712503983; c=relaxed/simple;
-	bh=AvRYUhFInEf5FxUp/Xb5Vz8WYz3KdPlt9mAh9CIAq7Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=f/XLlDcjgdwD969C0rcTSlzEWIUUA74IeYjYkt0wkMFjdfsU3SvPuMQlJTzZ8sXHKnXvtvBBjizhRT4yCKJQrrLW4wOb55hjJ1v10KcFtd19s8SgRbAI8Y48b9iL7GorfLUj5sJioCsO5HK5Y3m5dqBqZG6IPicId2U15YI4kbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=qSha4Hyp; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=MLm6iC4WNTdIn+XgL/qIwT01bSJfAFu6/aMBhdI31mM=; b=qSha4Hyp47jW+Iw55N4ejDVPWe
-	R50J4MZBkjl1ljsl8lmbCyXXeRCtIkvr9H8+MhKWL1RqgS0YadiGyTeVkQtJaLxMBUmny++XLamZo
-	naMhlFfBA9Wj1dQyIMiwAlars/PfCZtyAe8Qt8T38x8MmzZhs7Y1Ke7WKWdMmJ+2iKSuM9sTd8kWc
-	ti03BmHsO/GPxs1BL3ZrhSW3dzRvZi1ubQEIkPXTCog0N0uUXnTD9dbqqZoA4UhU85Rav2dPWANty
-	RjPUjL9YjSqCk29sHdsFWuEV0tSwNWrASf/6aoPtQvkCY0ATh+zI1NiDBPE0hrxAeAGIGnclSDIPv
-	c5aq+uNQ==;
-Received: from [50.53.2.121] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rtUVo-0000000CuIr-3hLx;
-	Sun, 07 Apr 2024 15:32:52 +0000
-Message-ID: <7a8bc242-d41e-425b-9a62-36835aca7721@infradead.org>
-Date: Sun, 7 Apr 2024 08:32:49 -0700
+	s=arc-20240116; t=1712511455; c=relaxed/simple;
+	bh=5E3I208ZRfLfnXBiRp3HidYhlnwHD8M9uL2fwenzHlo=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=ci6aiuuSc9s0NxbXFTYNu1HwU6zEGv9a6BzvfyU6t5HjR4axlbKrkUEpzbCgPKJR9tlYprLFCvDkLdfJ63QC37RTC+7BIV3CyLgxOLRd4mHDVjQ3Q36KnEBOHqZJRLNEArkIe7xyj0iVpZaHvEezXXXUaprz5V3HqFzANtfeeU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AEEROaIn; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-516f2e0edb7so677085e87.1;
+        Sun, 07 Apr 2024 10:37:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712511452; x=1713116252; darn=vger.kernel.org;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fiAuzQn2Z2TB48wpHO151bWpj2tXPyvASblLxy16+ls=;
+        b=AEEROaIn9FjOQDIEpv8qzoRfdQhvZCGVClBD6KlpyLjl4cBCLpdk+YLZ40zZmYzc2Y
+         ublM+4Yu/8Pw3Sf/9TN1aC4FnDQ1sxu3KFOXKX6dWgp7j1cPecWo+FxafTQfcB4lDPD5
+         lDmQZBt1WY9q8pyX5kBXcnQEdNitdpTT/DGFwcnSVlkS4N39No/HGp8/0b632jeS5wuv
+         /cyX8D5oW+osTSds8g9DiOR7tjle1auYa7KsxVJhesmHF0vkv6JXkciska+rBjWnzE+i
+         8GGT8jLMM9++WA3uHz5uGnGS6uHyp28a7cyUZFQn6NSoiMXMuz44bEqIvTv6M6WXysBz
+         fv9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712511452; x=1713116252;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fiAuzQn2Z2TB48wpHO151bWpj2tXPyvASblLxy16+ls=;
+        b=ED5FXTNktC17S5kgE5qvA6jyU559z8x2y47Vdo4i7+9qeoAFoqlA+rph63FELnu+p+
+         MjnfaKAubslxBaqcvxMiOgTyUL6S8oIlNOBk3LkYDzmkWrKgK7f3q+jeIaMUdsgnlPJb
+         tbmgjBwLkv9wQX4Y1O7z0iaLRsBB0sbRDfEY2sXvMNGpkCnr9XP83JYxz4aG9zt1EpWY
+         R9m0LnHlpvc60PXnfbeO8PRcjxHZvOKmQ4FMUxZE+33s8lIvXOwI+ncDWycGxRTdvVS5
+         9oqPcB0spB77s3Z7BCbxZYPikofz+hrwk54reqQ2TdSCPEgdkpmBfrsIYCsgZuICr6Tz
+         aoCA==
+X-Forwarded-Encrypted: i=1; AJvYcCVAT6ZkoDkGtIoQPLWTnMc/d11KSmUmQfL6tgKa+8gsEZ2/u8n3RI1Ja0IbXBXV1X+BJccJFBhMwgfPcue+pP486ORV2pv3a06jUQDzFoiygAMvUXcYmv9duMKu9G4n/opiPDW/1m4=
+X-Gm-Message-State: AOJu0YybtcGnCk7jmvNO3D4ILs015PBJ61qSaLFBR3dGzbtRoP3U5QxE
+	1Meh7bB3f4QkxZA95TzEcPFakNAHs62qK/GSzkV67Z9wvWOnscUQ
+X-Google-Smtp-Source: AGHT+IG29g68C2NTBORFcpoM+CsYGHQEH7u1c7R6m+exnck9GhHNuVs6qlv3W6w3fNSnAGwG+0GVGA==
+X-Received: by 2002:a05:6512:4015:b0:516:a6ff:2467 with SMTP id br21-20020a056512401500b00516a6ff2467mr5800058lfb.0.1712511451821;
+        Sun, 07 Apr 2024 10:37:31 -0700 (PDT)
+Received: from smtpclient.apple (2a01-036d-0103-8d29-0484-7a18-3936-0af1.pool6.digikabel.hu. [2a01:36d:103:8d29:484:7a18:3936:af1])
+        by smtp.gmail.com with ESMTPSA id xi1-20020a170906dac100b00a51d3785c7bsm508799ejb.196.2024.04.07.10.37.30
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 07 Apr 2024 10:37:31 -0700 (PDT)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/4] include/linux/suspend.h: Only show pm_pr_dbg
- messages at suspend/resume
-To: xiongxin <xiongxin@kylinos.cn>, mario.limonciello@amd.com,
- Rafael Wysocki <rafael@kernel.org>, hdegoede@redhat.com,
- linus.walleij@linaro.org
-Cc: Basavaraj.Natikar@amd.com, Shyam-sundar.S-k@amd.com,
- linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
- linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- linux-gpio@vger.kernel.org
-References: <20230602073025.22884-1-mario.limonciello@amd.com>
- <20230602073025.22884-1-mario.limonciello@amd.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230602073025.22884-1-mario.limonciello@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.500.171.1.1\))
+Subject: Re: [PATCH] intel_idle: Add RaptorLake support
+From: =?utf-8?B?TMOhc3psw7MgUMOpdGVy?= <peter.laszlo2@gmail.com>
+In-Reply-To: <7e2c1da24b48217045e8ad95b739ec96cdce5931.camel@intel.com>
+Date: Sun, 7 Apr 2024 19:37:19 +0200
+Cc: "smarter3@gmail.com" <smarter3@gmail.com>,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ "jacob.jun.pan@linux.intel.com" <jacob.jun.pan@linux.intel.com>,
+ "noltari@gmail.com" <noltari@gmail.com>,
+ "lenb@kernel.org" <lenb@kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "Bityutskiy, Artem" <artem.bityutskiy@intel.com>,
+ "Kumar, Vinay" <vinay.kumar@intel.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <BCBB0027-F0E9-42EE-BB43-D50091D9115F@gmail.com>
+References: <20230119070205.90047-1-noltari@gmail.com>
+ <c79904e98b86b68c87add286aa1487b3f81712b6.camel@intel.com>
+ <c7d1eced-d77b-aca7-1422-6eefaf704f3e@gmail.com>
+ <7e2c1da24b48217045e8ad95b739ec96cdce5931.camel@intel.com>
+To: "Zhang, Rui" <rui.zhang@intel.com>
+X-Mailer: Apple Mail (2.3774.500.171.1.1)
 
 
 
-On 4/7/24 5:49 AM, xiongxin wrote:
-> From: Mario Limonciello <mario.limonciello@amd.com>
-> 
-> All uses in the kernel are currently already oriented around
-> suspend/resume. As some other parts of the kernel may also use these
-> messages in functions that could also be used outside of
-> suspend/resume, only enable in suspend/resume path.
-> 
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
-> v3->v4:
->  * add back do/while as it wasn't pointless.  It fixes a warning.
-> ---
->  include/linux/suspend.h | 8 +++++---
->  kernel/power/main.c     | 6 ++++++
->  2 files changed, 11 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-> index 1a0426e6761c..74f406c53ac0 100644
-> --- a/include/linux/suspend.h
-> +++ b/include/linux/suspend.h
-> @@ -555,6 +555,7 @@ static inline void unlock_system_sleep(unsigned int flags) {}
->  #ifdef CONFIG_PM_SLEEP_DEBUG
->  extern bool pm_print_times_enabled;
->  extern bool pm_debug_messages_on;
-> +extern bool pm_debug_messages_should_print(void);
->  static inline int pm_dyn_debug_messages_on(void)
->  {
->  #ifdef CONFIG_DYNAMIC_DEBUG
-> @@ -568,14 +569,14 @@ static inline int pm_dyn_debug_messages_on(void)
->  #endif
->  #define __pm_pr_dbg(fmt, ...)					\
->  	do {							\
-> -		if (pm_debug_messages_on)			\
-> +		if (pm_debug_messages_should_print())		\
->  			printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__);	\
->  		else if (pm_dyn_debug_messages_on())		\
->  			pr_debug(fmt, ##__VA_ARGS__);	\
->  	} while (0)
->  #define __pm_deferred_pr_dbg(fmt, ...)				\
->  	do {							\
-> -		if (pm_debug_messages_on)			\
-> +		if (pm_debug_messages_should_print())		\
->  			printk_deferred(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__);	\
->  	} while (0)
->  #else
-> @@ -593,7 +594,8 @@ static inline int pm_dyn_debug_messages_on(void)
->  /**
->   * pm_pr_dbg - print pm sleep debug messages
->   *
-> - * If pm_debug_messages_on is enabled, print message.
-> + * If pm_debug_messages_on is enabled and the system is entering/leaving
-> + *      suspend, print message.
->   * If pm_debug_messages_on is disabled and CONFIG_DYNAMIC_DEBUG is enabled,
->   *	print message only from instances explicitly enabled on dynamic debug's
->   *	control.
-> diff --git a/kernel/power/main.c b/kernel/power/main.c
-> index 3113ec2f1db4..daa535012e51 100644
-> --- a/kernel/power/main.c
-> +++ b/kernel/power/main.c
-> @@ -556,6 +556,12 @@ power_attr_ro(pm_wakeup_irq);
->  
->  bool pm_debug_messages_on __read_mostly;
->  
-> +bool pm_debug_messages_should_print(void)
-> +{
-> +	return pm_debug_messages_on && pm_suspend_target_state != PM_SUSPEND_ON;
-> 
->> hibernate processes also mostly use the pm_pr_dbg() function, which
->> results in hibernate processes only being able to output such logs
->> through dynamic debug, which is unfriendly to kernels without
->> CONFIG_DYNAMIC_DEBUG configuration.
+> On 20 Aug 2023, at 11:20, Zhang, Rui <rui.zhang@intel.com> wrote:
+>=20
+> This is still work in progress because there are still some open
+> questions that we cannot answer from our measurement, and the table is
+> not finalized yet.
+>=20
+> thanks,
+> rui
+>=20
+>=20
 
-This part of the patch doesn't look so good. ^^^^^^^^^^^^^^^^^^^^
+Hi,
 
-> 
-> +}
-> +EXPORT_SYMBOL_GPL(pm_debug_messages_should_print);
-> +
->  static ssize_t pm_debug_messages_show(struct kobject *kobj,
->  				      struct kobj_attribute *attr, char *buf)
->  {
-> 
+I also just stumbled upon this patch series as I was wondering about the =
+lack of specific support for RaptorLake in intel_idle. The AlderLake =
+specific part of the intel_idle.c code mentions that "On AlderLake C1 =
+has to be disabled if C1E is enabled, and vice versa =E2=80=A6. By =
+default we enable C1E and disable C1 by marking it with...=E2=80=9D.   =
+Without a patch on RaptorLake (which I assume works the same way) this =
+cannot be controlled with the preferred_cstates kernel parameter. Also =
+on my NUC 13 Pro i5-1340P the latency for C10 looks suspiciously large =
+compared to the AlderLake cstates table.
 
--- 
-#Randy
+grep . /sys/devices/system/cpu/cpu0/cpuidle/state*/desc
+/sys/devices/system/cpu/cpu0/cpuidle/state0/desc:CPUIDLE CORE POLL IDLE
+/sys/devices/system/cpu/cpu0/cpuidle/state1/desc:ACPI FFH MWAIT 0x0
+/sys/devices/system/cpu/cpu0/cpuidle/state2/desc:ACPI FFH MWAIT 0x21
+/sys/devices/system/cpu/cpu0/cpuidle/state3/desc:ACPI FFH MWAIT 0x60
+
+grep . /sys/devices/system/cpu/cpu0/cpuidle/state*/latency
+/sys/devices/system/cpu/cpu0/cpuidle/state0/latency:0
+/sys/devices/system/cpu/cpu0/cpuidle/state1/latency:1
+/sys/devices/system/cpu/cpu0/cpuidle/state2/latency:127
+/sys/devices/system/cpu/cpu0/cpuidle/state3/latency:1048
+
+Thanks,
+Peter
+
 
