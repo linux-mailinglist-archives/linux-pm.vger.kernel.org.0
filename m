@@ -1,146 +1,192 @@
-Return-Path: <linux-pm+bounces-6027-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6028-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2524B89B3DF
-	for <lists+linux-pm@lfdr.de>; Sun,  7 Apr 2024 22:03:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D68A989B3F6
+	for <lists+linux-pm@lfdr.de>; Sun,  7 Apr 2024 22:16:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FA6D1C20A3F
-	for <lists+linux-pm@lfdr.de>; Sun,  7 Apr 2024 20:03:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD95C1C20ADF
+	for <lists+linux-pm@lfdr.de>; Sun,  7 Apr 2024 20:16:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0E613FB02;
-	Sun,  7 Apr 2024 20:03:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B12394207F;
+	Sun,  7 Apr 2024 20:15:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="qvs10VBO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bZrzm/8m"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-27.smtpout.orange.fr [80.12.242.27])
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 165F03EA93;
-	Sun,  7 Apr 2024 20:03:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.27
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B31C5405DB;
+	Sun,  7 Apr 2024 20:15:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712520197; cv=none; b=WAGJKuXX1EgYrOmV8WJrVrAvcZbyeJTDO1INGnOnkKMW5imnoB1lNV2zNdS387gbRCsXnASEV0k3e5OefHyXDl5/4wYnw5S5lmUd2YQsHDYehTfSO1xMkFEoyZRYmpi+bRrL2n8ltzNkPl5BRb+IYYbkkitIdMCZRZkFSnyVDCM=
+	t=1712520948; cv=none; b=Tj21OSFSbr4N9LKHQ9lf7pH0iWTOvUr6P7Te7Ew7VdCKRriKbQywR3QAMW/NIDc+ocUzQrE1K0djTftW9B/FolapaBf5sI02t6GF11+d53vfqJ9Uyf+svgc2KvwIeUB/3mBozhgxBfkV53J7SWQgB4G098jUZDeSKqOQB5TITug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712520197; c=relaxed/simple;
-	bh=lHqg1QJCxrsNhs4z4v/Y14TlaLQ598KsjsJ/Pyg4uMA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JbN5LdtnGNPjXGHspKLjWAvo7vpXEX3OscEDdkoqVzvfLJTwqo6ZK/q01sNzd0dDr1LJCUHnKUUgrCNHI138JLv2fqJtzlXa8o+MLSTsWyTZcbc1mGTVdyTYoYtQfzVjAhMmojIzU/jbJp0FYGvMB2oqbBX06KviMXTUTB/sH4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=qvs10VBO; arc=none smtp.client-ip=80.12.242.27
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from fedora.home ([86.243.17.157])
-	by smtp.orange.fr with ESMTPA
-	id tYiBrICUDz1OZtYiJrfStr; Sun, 07 Apr 2024 22:02:05 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1712520125;
-	bh=yDBPh3Zd5MPQHTnfbxFeCnae77YFIui58j4SxgeMCkQ=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=qvs10VBOaOJ7o7KEE3sCJ1qbBrUcBXVDTAqkSfuaumV8kz1YI/wUFqQCBed3AqJ4R
-	 WW9w1d1LT+Pa1WfjBHBOiD5W9T6ozKlp2uYEujckaXwRLcePiUBTE/qa2cLxOh3qhj
-	 S7bk4U7p9jur8kb5szZBdHfstJ6yS/P5BUUAvG2da6/reJuu/Uu7TVbpLYSZ8hIhED
-	 X2Y6+UD2jq7xgj6B6xCuzalrhTepBK/dHLHCu5ml/p+pEvUl53XJ5MtceIdCU6/fTY
-	 iQUdYdBqAnyNKl4jajCq1mMvX3alsRr4vn5jBA9D7wIYD3ocMw2HwzPf4hnenOfz6l
-	 IPjEMwU4liSHA==
-X-ME-Helo: fedora.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 07 Apr 2024 22:02:05 +0200
-X-ME-IP: 86.243.17.157
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: [PATCH 2/2] thermal/drivers/mediatek/lvts_thermal: Improve some memory allocation
-Date: Sun,  7 Apr 2024 22:01:49 +0200
-Message-ID: <8cb69f245311a348164b0b5ca3dbc59386746035.1712520052.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <42a87fb9837f1760d1ad4eb7162a7536785dc6f5.1712520052.git.christophe.jaillet@wanadoo.fr>
-References: <42a87fb9837f1760d1ad4eb7162a7536785dc6f5.1712520052.git.christophe.jaillet@wanadoo.fr>
+	s=arc-20240116; t=1712520948; c=relaxed/simple;
+	bh=76XjftA/KrWaAs/RyC554gpcc/C1GBVNnSKTMj6RfK8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=IuyZ4jVuGPV6ZK4t437E6tGTB0BYVB9v9rctARd5jSm07WPT82fFavJefU/nJHxsEsQDDua71LMmQe091aG6VdRvuA5x9Hq/7a5/CG9zY+MH6bg/ki5CHEeLrQ72oRV6QO32jzpi4S11oi9HBJYF5beeCNYC9l1rXuAuj/iqSEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bZrzm/8m; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a46ea03c2a5so639817466b.1;
+        Sun, 07 Apr 2024 13:15:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712520944; x=1713125744; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q6eQqk7gGTUAVRT9CeP6Y7G5z0ZafAHB/W/7nu1XoWo=;
+        b=bZrzm/8m35xAigg+n+mWXn0aJdjTIK3E+yQ4vlLa8wrKbbW3uUk/HgXCZ1gqFpnfSz
+         icMv8UHy5qs/OOHvxq4IWzUuRqKmNXDXV3AAX1yQ9nRkEOpq1nmV1RSQj9/VfdBZaNHG
+         auL0tWgbPdJoV94Ta/H1fgVZcTu1PX6alQpQ1VTR9oze1ycJQtezJCFxJ8DzuNiMLH0W
+         4fbTXynwvQ6tvkUN6pbkXas6KsJt2RmhWldxRnu9qF+p0LJZYYNjCjMLVGCZWvkQg5tx
+         P7L8AZuKlEJ+AbNOEAGkKjYskO/vgOjGQxVsBF4DopnxozGCPMTl0iXYcdiCz7nz5mJj
+         0luA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712520944; x=1713125744;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q6eQqk7gGTUAVRT9CeP6Y7G5z0ZafAHB/W/7nu1XoWo=;
+        b=dtN1IT+E36AaJDS3bqNhsIXUNFrQS1jGciLCZZjAmB55I95pux4BwSITkBFGsL6RKw
+         e1vQp4UNO6TDeqidEYnC94X5jFPIudQfPHd1SZnypggdaMrCPWJQIzMjKLtytReurGTD
+         gRcqpKZvu0sa5SDljI44SMKT2//0lGvy3M8k3qjf+85ajdv0caG7Jdh39dIedOwrMNNW
+         EpZnSXXQkXoalDpMMCVLLo8t+iE+Bn2hUrqLTB/OQbp5ATXZsQQU+Rp160PGQRQ8i6ea
+         D41Jhzp4R/Kmcd4eZM0WvIjwpsuQNkFVG7NnAd1hqwSnI7Z6esnISoDH24IaHS7iuwCY
+         7RFA==
+X-Forwarded-Encrypted: i=1; AJvYcCVQwFn2RTvqVZeVmrtopprDLauH7KMh9bfgvcMDxO1BjofzPuFfezfvha5bl9OGjCLqzkSQkgzweMuzcPQUgrwOdrSensFKXI6iUJR07bkRWPBrc7e5x4elMQye2Pf8V2jASzGsVaq6DBk=
+X-Gm-Message-State: AOJu0YzqWy8mGzgteVFk/VX+3e4+6/RDc+JLFWoVSjT6qEfK4wPQpebG
+	By6r1N2V7gk6/MQ2wMmMWNOy5dkoavBv6C6xOYOdoA7e+qmQYl51wb1htPqP3TkNYA==
+X-Google-Smtp-Source: AGHT+IG5YM5cfeqUYXvBWMmIzoUk0aO3X5ru2tfzO0tWUfmHRGrKwjFUD4YymbcQPRIBcLrWy5e//w==
+X-Received: by 2002:a17:907:9693:b0:a51:b1ab:2903 with SMTP id hd19-20020a170907969300b00a51b1ab2903mr6582767ejc.8.1712520943752;
+        Sun, 07 Apr 2024 13:15:43 -0700 (PDT)
+Received: from [127.0.1.1] (84-115-213-64.cable.dynamic.surfer.at. [84.115.213.64])
+        by smtp.gmail.com with ESMTPSA id b16-20020a170906039000b00a51a5c8ea6fsm3393559eja.193.2024.04.07.13.15.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Apr 2024 13:15:43 -0700 (PDT)
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Date: Sun, 07 Apr 2024 22:15:29 +0200
+Subject: [PATCH next] cpupfreq: tegra124: eliminate uses of of_node_put()
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240407-cpufreq_of_node_put-v1-1-2c8889d4935d@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAOD+EmYC/x3MQQqAIBBA0avErBPUrKirREjoWLNR04ogunvS8
+ i3+fyBjIswwVg8kvChT8AWirsBsi1+RkS0GyaXiivfMxNMl3HVw2geLOp4H41YMvVyapu0ElDI
+ mdHT/1wk83gfM7/sBV8tQ3msAAAA=
+To: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Viresh Kumar <viresh.kumar@linaro.org>, 
+ Thierry Reding <thierry.reding@gmail.com>, 
+ Jonathan Hunter <jonathanh@nvidia.com>, 
+ Julia Lawall <julia.lawall@inria.fr>
+Cc: linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1712520942; l=2900;
+ i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
+ bh=76XjftA/KrWaAs/RyC554gpcc/C1GBVNnSKTMj6RfK8=;
+ b=95c6Mi2WcY3kgBihjHDclcelzfvVrsaeLSngA4Fww1oc27t0iyuuxmytDFcy0ouE1t2/EiTXk
+ WcgwJI/3S+QBA8vNURb26iq6wqzmpSMRP1QGb2QK7SX/KnPyykEILLf
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
 
-lvts_debugfs_init() is called with lvts_td->num_lvts_ctrl being 2, 3 or 4.
-sizeof(struct debugfs_regset32) is small. 32 byres on a x86_64.
+Make use of the __free() cleanup handler to automatically free nodes
+when they get out of scope. Only the probe function is affected by this
+modification.
 
-So, given the overhead of devm_kzalloc(), it is better to allocate all
-needed regset at once.
+Given that this mechanism requires the node to be initialized, its
+initialization and the value check have been moved to the top of the
+function.
 
-The overhead of devm_kzalloc() is 40 bytes on a x86_64, and because of
-rounding in memory allocation, it leads to:
- 2 * (32 + 40) = 2 * 72	--> 2 96 bytes allocations for a total of 192 bytes
- 3 * (32 + 40) = 3 * 72	--> 3 96 bytes allocations for a total of 288 bytes
- 4 * (32 + 40) = 4 * 72	--> 4 96 bytes allocations for a total of 384 bytes
+After removing uses of of_node_put(), the jump to out_put_np is no
+longer necessary.
 
-using a single devm_kcalloc():
- 2 * 32 + 40 = 104	--> 1 allocation for a total of 128
- 3 * 32 + 40 = 136	--> 1 allocation for a total of 192
- 4 * 32 + 40 = 168	--> 1 allocation for a total of 192
-
-So, this saves both a few bytes and reduce memory fragmentation.
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Suggested-by: Julia Lawall <julia.lawall@inria.fr>
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 ---
-Compile tested-only
----
- drivers/thermal/mediatek/lvts_thermal.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+This patch is a proof of concept to remove uses of of_node_put() in
+cpufreq, which can be replaced with the clenaup handler introduced with
+54da6a092431 ("locking: Introduce __cleanup() based infrastructure").
 
-diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-index 3003dc350766..b133f731c5ba 100644
---- a/drivers/thermal/mediatek/lvts_thermal.c
-+++ b/drivers/thermal/mediatek/lvts_thermal.c
-@@ -204,7 +204,7 @@ static const struct debugfs_reg32 lvts_regs[] = {
+This change provides a scope-based cleanup mechanism to avoid potential
+memory leaks that can appear if of_node_put() is not used correctly.
+
+The patch is based on the latest linux-next tag (next-20240405).
+---
+ drivers/cpufreq/tegra124-cpufreq.c | 19 ++++++-------------
+ 1 file changed, 6 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/cpufreq/tegra124-cpufreq.c b/drivers/cpufreq/tegra124-cpufreq.c
+index aae951d4e77c..514146d98bca 100644
+--- a/drivers/cpufreq/tegra124-cpufreq.c
++++ b/drivers/cpufreq/tegra124-cpufreq.c
+@@ -52,12 +52,15 @@ static int tegra124_cpu_switch_to_dfll(struct tegra124_cpufreq_priv *priv)
  
- static int lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
+ static int tegra124_cpufreq_probe(struct platform_device *pdev)
  {
--	struct debugfs_regset32 *regset;
-+	struct debugfs_regset32 *regsets;
- 	struct lvts_ctrl *lvts_ctrl;
- 	struct dentry *dentry;
- 	char name[64];
-@@ -214,8 +214,14 @@ static int lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
- 	if (IS_ERR(lvts_td->dom_dentry))
- 		return 0;
++	struct device_node *np __free(device_node) = of_cpu_device_node_get(0);
+ 	struct tegra124_cpufreq_priv *priv;
+-	struct device_node *np;
+ 	struct device *cpu_dev;
+ 	struct platform_device_info cpufreq_dt_devinfo = {};
+ 	int ret;
  
-+	regsets = devm_kcalloc(dev, lvts_td->num_lvts_ctrl,
-+			       sizeof(*regsets), GFP_KERNEL);
-+	if (!regsets)
-+		return 0;
++	if (!np)
++		return -ENODEV;
 +
- 	for (i = 0; i < lvts_td->num_lvts_ctrl; i++) {
+ 	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+ 	if (!priv)
+ 		return -ENOMEM;
+@@ -66,15 +69,9 @@ static int tegra124_cpufreq_probe(struct platform_device *pdev)
+ 	if (!cpu_dev)
+ 		return -ENODEV;
  
-+		struct debugfs_regset32 *regset = &regsets[i];
- 		lvts_ctrl = &lvts_td->lvts_ctrl[i];
- 
- 		sprintf(name, "controller%d", i);
-@@ -223,10 +229,6 @@ static int lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
- 		if (IS_ERR(dentry))
- 			continue;
- 
--		regset = devm_kzalloc(dev, sizeof(*regset), GFP_KERNEL);
--		if (!regset)
--			continue;
+-	np = of_cpu_device_node_get(0);
+-	if (!np)
+-		return -ENODEV;
 -
- 		regset->base = lvts_ctrl->base;
- 		regset->regs = lvts_regs;
- 		regset->nregs = ARRAY_SIZE(lvts_regs);
+ 	priv->cpu_clk = of_clk_get_by_name(np, "cpu_g");
+-	if (IS_ERR(priv->cpu_clk)) {
+-		ret = PTR_ERR(priv->cpu_clk);
+-		goto out_put_np;
+-	}
++	if (IS_ERR(priv->cpu_clk))
++		return PTR_ERR(priv->cpu_clk);
+ 
+ 	priv->dfll_clk = of_clk_get_by_name(np, "dfll");
+ 	if (IS_ERR(priv->dfll_clk)) {
+@@ -110,8 +107,6 @@ static int tegra124_cpufreq_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, priv);
+ 
+-	of_node_put(np);
+-
+ 	return 0;
+ 
+ out_put_pllp_clk:
+@@ -122,8 +117,6 @@ static int tegra124_cpufreq_probe(struct platform_device *pdev)
+ 	clk_put(priv->dfll_clk);
+ out_put_cpu_clk:
+ 	clk_put(priv->cpu_clk);
+-out_put_np:
+-	of_node_put(np);
+ 
+ 	return ret;
+ }
+
+---
+base-commit: 8568bb2ccc278f344e6ac44af6ed010a90aa88dc
+change-id: 20240407-cpufreq_of_node_put-0d1972a33561
+
+Best regards,
 -- 
-2.44.0
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
 
