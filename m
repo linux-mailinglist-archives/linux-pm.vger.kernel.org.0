@@ -1,128 +1,103 @@
-Return-Path: <linux-pm+bounces-6066-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6067-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 672E389CC21
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 21:00:06 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E79289CC27
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 21:03:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 834A21C21ECF
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 19:00:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C646FB20DF2
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 19:03:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F1B11448FA;
-	Mon,  8 Apr 2024 19:00:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1328E1448FA;
+	Mon,  8 Apr 2024 19:03:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RJ+rD1vF"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="a9pnsVpg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A30511448D4;
-	Mon,  8 Apr 2024 18:59:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54BAC13F006
+	for <linux-pm@vger.kernel.org>; Mon,  8 Apr 2024 19:03:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712602801; cv=none; b=Zte2SLCIf2ukpPDaSw/QwtWuk5cadh7/5HpeNelviRD/78fkdeDtOn5g2NXmS2S2JGZTQ/wUTg/U42BtbM+1uvmqspT6orXpEWeB0FA8orYx81mKsQsOpLetT+7G9eRBwTOU2IWIXX72PpQjt0n8QvSsOg8cYgixBl8hA4n4Daw=
+	t=1712603013; cv=none; b=iZVXHAgfapZYuGcOXr1+3POL5GkJQIrwbqO5sWFhlkeUIR+SWLqfrW4/Hge+goEWmINKh/LANomo45GDpfnyqCbEX16l0Pf5j65w/pyWEVE1urI8DNrbGKVQEpstGdjn2brnB3ZPbz0k1juDqh/vd03+DJMXDdFsYGzvBs/XXio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712602801; c=relaxed/simple;
-	bh=hVNRy6nxiQS7v5uHtkchJIMbzjbuzLrJZecBob6Zx6M=;
+	s=arc-20240116; t=1712603013; c=relaxed/simple;
+	bh=0HC5mYPHz5gVrurl6w8jOAjdNy8i7VxysBO3RpMEL/s=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CV6749OMS3rEMoOxifHjwPU1Wz9qEqFRkvqG7Rd++LveiZcmj5gZcraZloDCNa8NDlWKjmT7R9P1rwgUWiYk+SPOGccZK6oOvfpc6vmeLfnMSzilwL7p8koXoNZs/Wr6691TZ4bUbaU7RiH3gtUpP/Bvqv5oNdRkceF8lvGVi7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RJ+rD1vF; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-516c403c2e4so4136927e87.0;
-        Mon, 08 Apr 2024 11:59:59 -0700 (PDT)
+	 To:Cc:Content-Type; b=k3Pn1p/ZrCbgO+OuMgWnnnzwyk+GZ69snassvg2kaoNoaZtAOCs1U0dLIIZPWOlingfLC3srjO5ffPfoMd8aT1S857KUxJRQ0r7xhe2ITp+Bhk4m8Nmn7El9E5aRxZwJcXA6eNyWZsGehQQG1kKXwN1ylvKFrfJ+U9utsSQb4FE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=a9pnsVpg; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-41641a889ccso12825e9.1
+        for <linux-pm@vger.kernel.org>; Mon, 08 Apr 2024 12:03:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712602798; x=1713207598; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1712603010; x=1713207810; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rh9kkcOlOamrussQ/gPrZ63/bVYdek8XEIRHeCWx3os=;
-        b=RJ+rD1vFR2efPRszATmd1RD0jilvKudnsCwGp6iVL/gUbFGB3ejzezHi6yBvx7p3b+
-         rIpZn7EXiVzKnPaGCstkbzUwrISaJTpbD0rdEmSCl1Yy6HEEE0b74TK5dNfUeb6XnlaJ
-         qxk1mkGLbF5vjn+X9RqOp/ol3jJnAX6FKcoM5oBPiK3NupI7d+nMKhTCsdnaK7gphjDy
-         dLfs2IGO3daZJBb/43SKae7NIFr+HpTQ2GAayiWTS/Iq2hfAvekdZ6TW5zjIcJdO77Ff
-         RJVM2ErScy0WfYcyAlAlg0tDnWC9p86VqeP02a/2aPVz1ehTUY0ensFVkte6Fny+Ws0J
-         SgnA==
+        bh=0HC5mYPHz5gVrurl6w8jOAjdNy8i7VxysBO3RpMEL/s=;
+        b=a9pnsVpgg8Mk2yMnmZVUEnrdl4DdUCNE3o7lfskWNlCNK6+7zLoNisztIHiUhXTrM7
+         ITVh5QMijQaIYHLsKPcbdc1+cRL1BjhLts/NhlxUOw3Mw3kfHvfu2dOzDp6tsFnj9oO/
+         p/ZeFrb8CHHNk/QkHuWF6jjWxOAWLykgPVM2nveaxAnYhXv1zVIvZ648YZ9SpsgjOGb6
+         s3gRWYJkuvL4ld3Z4r5UFf1jwl8dyglGl1WmkcCZdNwA7ukDXYMnpJGNvTl4AL7xwwfc
+         MgSovzJ9GttpdG06K/I0HET6lBGyl0zfbsb4mrSahENloM+3GDdqMI9WXc9kJ0TzGmNo
+         CcnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712602798; x=1713207598;
+        d=1e100.net; s=20230601; t=1712603010; x=1713207810;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rh9kkcOlOamrussQ/gPrZ63/bVYdek8XEIRHeCWx3os=;
-        b=tX1qf64E3MEQds5vsR/4DyQnrl4lJeDwKZ/0lZumH4pR/pIyzKFJve0XI2t4AoPDK8
-         +KQXj7pD4sPAlo/Lqrl+o/ZiS/HM9PzPPErHGvegpx+HD8ELZJbV79eKZUIGiHoqrfYE
-         3u4aY8Ip7xqjkHuCDkRVt5RaEcjpGVqtnG+plQs9gZ2ND3jtrvgGg3T1EiknafWVtEA8
-         0v/mj5DKarUhd1sbSLCBLU1UaqesjSKgdc3bD8eqgtD5xi5j9975izTpxga4OBUXP/Yt
-         xVQqewZ8KWgS3R8GU1FSWuvsgxOYWzIBiv8pG0woU6UEBM2od+BMAAHVxMpT0vXm1KH0
-         S9tw==
-X-Forwarded-Encrypted: i=1; AJvYcCUA8SoT5dPFNEITMKMjW57Q24dOf6br4uOCSAbtECq08rcnu81tkvvil6E8iuVLxIPnio7zsPeRh4t1KhvIQuoSJ8dDC0yZR0Xgj2+X
-X-Gm-Message-State: AOJu0YxO8RAVm1VzBPpGb1mI1o6pkNO+dF0cpQ5WMq343wtyZ3Ramz9J
-	oUwf2UhHgABnflXSZ476MkcEBsm+K/dQb2Yf+FK+t3vea9zJCpnspcXbOItBXRkw5lTYdVtbUYU
-	GCM4GDXyL7A8+MRxZ76wW+B1hryAz1iM9dv4=
-X-Google-Smtp-Source: AGHT+IHzYhwEdp+6FK6ZCIWWNClIkC3X6f/N14N+ugEpxpfc5jUrSXkNbmXJTNPJN+SfBv4Ch5B6Nn5kzVo2/WEBTSQ=
-X-Received: by 2002:a19:c20c:0:b0:513:ec32:aa88 with SMTP id
- l12-20020a19c20c000000b00513ec32aa88mr159659lfc.8.1712602797534; Mon, 08 Apr
- 2024 11:59:57 -0700 (PDT)
+        bh=0HC5mYPHz5gVrurl6w8jOAjdNy8i7VxysBO3RpMEL/s=;
+        b=JPS2HeJGedIEhClJ/tdm5WPlpGMfOhSUIQf77qeqf6xQLeOcoNAo4NUzNIzrGSkBP8
+         KEr07tKwx2wuLzPF9NsHkwJVaTb1/9ag1lgk1PO95Fvq/ZIJIBU9XBMJwjrHFa/uHpPX
+         KGkXm/zkY42CN1oU+LRlA3NzhUgi92oJvD3aA8PlKO7nDjW5M1xVWk0v5cBnPhnHMmA4
+         N47YqOL0cpy3Abym833GmcP3BsnzI3XRi+W9RQwEcvh/2aXXj6dPa9CG9NjVjsQ1BOQm
+         42TXNNX5W+rTDDSJ6+ndlhbwc1ThDa/ZER+C0oWcQuLblZFi/7v3QZhauaolEMjrfHv9
+         A8dA==
+X-Gm-Message-State: AOJu0Yxg7mGMY8BIUeuw5kFlaxbdzakx+FW0hO2EvE3E//A3uzGk/23/
+	F0HtX1O4LWVShm87zKa+25MZapdmg0N1K9wb23y28PHFnPkZqmoGT0F4kavIKc6+ifs/ZZHtcKT
+	nFwph0DuwFPGagYz0Tr2nzh+WazIe7HxH1xk=
+X-Google-Smtp-Source: AGHT+IHjsReJwNnZwcwrj3ergbDNsoJTfOha25CxepNLW75WyxCSLMT2cP9EuT5lY9Lza3LOIM0cQDaEt8uc2pT6tK0=
+X-Received: by 2002:a05:600c:4f8a:b0:416:6d90:38fe with SMTP id
+ n10-20020a05600c4f8a00b004166d9038femr22455wmq.4.1712603009646; Mon, 08 Apr
+ 2024 12:03:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20220710164026.541466-1-r.stratiienko@gmail.com> <CANDhNCpAhtgdwpSUTJ2jo2J5L6rHzQHVB9q+kkZ3ouTt12b-uw@mail.gmail.com>
-In-Reply-To: <CANDhNCpAhtgdwpSUTJ2jo2J5L6rHzQHVB9q+kkZ3ouTt12b-uw@mail.gmail.com>
-From: Roman Stratiienko <r.stratiienko@gmail.com>
-Date: Mon, 8 Apr 2024 21:59:46 +0300
-Message-ID: <CAGphcdnK8Hx-YsA-HukRKbvC-HpnLktCtq8qFicQUL-8ZHC+1w@mail.gmail.com>
+References: <20220710164026.541466-1-r.stratiienko@gmail.com>
+ <CANDhNCpAhtgdwpSUTJ2jo2J5L6rHzQHVB9q+kkZ3ouTt12b-uw@mail.gmail.com> <CAGphcdnK8Hx-YsA-HukRKbvC-HpnLktCtq8qFicQUL-8ZHC+1w@mail.gmail.com>
+In-Reply-To: <CAGphcdnK8Hx-YsA-HukRKbvC-HpnLktCtq8qFicQUL-8ZHC+1w@mail.gmail.com>
+From: John Stultz <jstultz@google.com>
+Date: Mon, 8 Apr 2024 12:03:18 -0700
+Message-ID: <CANDhNCpN-MGXswfFV=mbMJBbHh919iTv9BMYFsk7bMgbZa1gVQ@mail.gmail.com>
 Subject: Re: [RFC] thermal/core: Disable uevent messages for cooling devices
-To: John Stultz <jstultz@google.com>
+To: Roman Stratiienko <r.stratiienko@gmail.com>
 Cc: linux-pm@vger.kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org, 
 	amitk@kernel.org, rui.zhang@intel.com, linux-kernel@vger.kernel.org, 
 	megi@xff.cz
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi John,
-
-I haven't worked on it since I posted it initially. But it looks like
-there's an alternative patch already upstreamed and backported into
-stable:
-
-https://lore.kernel.org/linux-kernel/CAJZ5v0hHTuEXmQA=3D0D90eR_KUsOsfcxYbTS=
-=3DzQYDTXuY6o_K_Q@mail.gmail.com/T/
-
-BR,
-Roman
-
-=D0=BF=D0=BD, 8 =D0=B0=D0=BF=D1=80. 2024=E2=80=AF=D0=B3. =D0=B2 21:48, John=
- Stultz <jstultz@google.com>:
+On Mon, Apr 8, 2024 at 11:59=E2=80=AFAM Roman Stratiienko
+<r.stratiienko@gmail.com> wrote:
 >
-> On Sun, Jul 10, 2022 at 9:40=E2=80=AFAM Roman Stratiienko
-> <r.stratiienko@gmail.com> wrote:
-> >
-> > During suspend, the big CPU cluster is turned off first while a little
-> > is still running. This forcibly unregisters the cooling device which
-> > sends a "REMOVE" uevent to all subscribers [1].
-> >
-> > In case userspace netlink subscriber has set the EPOLLWAKEUP flag, a
-> > wakeup event is triggered that causes suspend to be aborted.
-> >
-> > Without this change, suspend doesn't work on PinePhone PRO with AOSP
-> > userland.
-> >
-> > [1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git=
-/commit/?id=3D5c238a8b599f1ae25eaeb08ad0e9e13e2b9eb023
-> > Signed-off-by: Roman Stratiienko <r.stratiienko@gmail.com>
+> I haven't worked on it since I posted it initially. But it looks like
+> there's an alternative patch already upstreamed and backported into
+> stable:
 >
-> Hey Roman,
->   I wanted to drudge this patch up, to ask what the current status of
-> it was?  Is there an alternative solution that you've been using since
-> this was last sent out?
-> I've heard of some vendors working around something similar, so I
-> wanted to see if we could get a common fix upstream.
->
-> thanks
-> -john
+> https://lore.kernel.org/linux-kernel/CAJZ5v0hHTuEXmQA=3D0D90eR_KUsOsfcxYb=
+TS=3DzQYDTXuY6o_K_Q@mail.gmail.com/T/
+
+Ah! Many thanks for the link! I'll check in with folks to better
+understand if there is a functionality gap between what you submitted
+and what landed upstream.
+
+Thanks again!
+-john
 
