@@ -1,117 +1,125 @@
-Return-Path: <linux-pm+bounces-6058-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6059-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FDFF89C7AD
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 17:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A03A89C7D4
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 17:09:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0288283DDC
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 15:01:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA94528467D
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 15:09:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6ADC13F433;
-	Mon,  8 Apr 2024 15:01:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75D1613F421;
+	Mon,  8 Apr 2024 15:09:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iPVzIBvT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i4oRDvXD"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 470CD13F42A;
-	Mon,  8 Apr 2024 15:01:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FE6C1E4AF
+	for <linux-pm@vger.kernel.org>; Mon,  8 Apr 2024 15:09:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712588494; cv=none; b=uRoqqWANLNavbl5vmJnsCI4xn5XWcY4D5QYlTYtBKee6s8H4U6lakBSySHofUzWXb4l8a5c1DZh7NevtJfL8iJDzHTUxGPz/OhMui4vbheLZfMah4cCeRzo/tXAOPsbuHWNcrjaUtDl4On02G5sBnG4plBv6lJpcDBLscpEvzCE=
+	t=1712588993; cv=none; b=gvBNflyaRMU7kPSbPJT/AuxbORKOB2jikAf2Lzf32mxx2BwvMRO2Kq6ejo2NIRZVEBMp9CKzYkb3Rdv4GxK9h1TRUIUA2mL9vLDpEl+ZOJrNLk+KZM9KCTdHCKNYuMjnMJQOR7TC3s80y0cscY7aOvPqJjJ+Z5KoMomhnh2lO8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712588494; c=relaxed/simple;
-	bh=EITVdlJtkrnylLXhed9Pr1DfYAyVTQ3XvaUDh63E534=;
+	s=arc-20240116; t=1712588993; c=relaxed/simple;
+	bh=hJKYlVdf/q/VjMZd1nMh+Q3xNnPz7wn88AsUlxAwrTY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bjGRrwHk++ZbrkhTgH5dXtENpfRHmOQgJczDQVc15iA567JVW7k1W6MUUOXs7yZhxnNGzTX9gfmFXSqeiqb/RfO03pubmr21C5vGhsPv+wymsdlr54E51D1WxkfwCXhutiACQjLNfRk4LWGJ4pRpG7g74ENrtKCkg1UVyI74PrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iPVzIBvT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB446C433F1;
-	Mon,  8 Apr 2024 15:01:33 +0000 (UTC)
+	 To:Cc:Content-Type; b=LM7qXurKxms3v59dkL8nnyKLYrdgYrwoDKd9RUUU76/3hKBf2PUacy7dmbojBN32vJTaAQKHlct8DqkW39E8pMLNBApiXdsBI2mqDag8CQxP1oB47+2u8DcaCQT/SfsE5HfbfeJSLHl61tHNBWYe8YCH8M1dofnGBvhDn6ax1vI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i4oRDvXD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D12C7C433C7
+	for <linux-pm@vger.kernel.org>; Mon,  8 Apr 2024 15:09:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712588493;
-	bh=EITVdlJtkrnylLXhed9Pr1DfYAyVTQ3XvaUDh63E534=;
+	s=k20201202; t=1712588992;
+	bh=hJKYlVdf/q/VjMZd1nMh+Q3xNnPz7wn88AsUlxAwrTY=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=iPVzIBvT/iSK03mJ74WyCdtfwrYQ0FIvhL5K8YMXOWzUcxtAW1X9DNCrqtBiFjfyi
-	 tl90sPwPpZ5rbnlWkWlrmucbJbApIpssRcLEk4bwAVt6FxwLnhmycj60p3s5ZulGuY
-	 Oi6kb5XzN6oeZLDaCEoYGMUGaCwA36s9aVa2vFCs+0r3L2ACNZZS6RJMIMK7lmGxXl
-	 LZaKWREq5eaTZ8dEmqubeluPfq1pepZhLI9FVjpANsP8XqyeISOYtrQC8gZ/KN/t0I
-	 J4RLdMza2ntow+e8CC8hAcBjXsrybDusTaZepo397svH4xSl9ToXUzq+mYubuhRT/b
-	 17pKAxdggeVsA==
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-6ea1572136eso453455a34.1;
-        Mon, 08 Apr 2024 08:01:33 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCW3+0lUuKg3hHhe5fIqYbB6u665OvDnFDviXdUd7KWwdn3iXbLFY6hEeIr3VKPT+6KhtijdC/aMEQixQJR8e62LzYen9GjggTwawKLEhn9SqELjylZL57kGQkpxmjD/8n7Z+WFUBW8H2HCWTBOLjc+YqFVDm55FTv5XdDPgzEIaiLOjT+XnmOtAolUMwTh7zUKraa7MV0+2yxafcRNvULKVG6VwrLZivXIW1gexeQtwi62weIsFjgZCMyHHVQ==
-X-Gm-Message-State: AOJu0YzUFgJuG5OoHcgg+C7cG0jOPGlDiSTYqqsmM17PI9Otqcm2Gp8w
-	0xKNpdaFYwl5HKE7Dz+tIuFRrDijMGKw9nsfRzmQji05ws/GVvDn/2lcM2jA+e5CupL+fHBJ80z
-	yHjpuw6lyNGtgRjHxBoAg7xnjuYg=
-X-Google-Smtp-Source: AGHT+IE7BjvtTOsOgPqYkXR1Qq+KOOG/nJtiEyKbfNUuvRcPpCIK8D3B6ZYbWXxS6qJ87RK9Jxd6UH195uv+p6a4TTw=
-X-Received: by 2002:a05:6808:603:b0:3c5:f534:e2c7 with SMTP id
- y3-20020a056808060300b003c5f534e2c7mr2839026oih.1.1712588493105; Mon, 08 Apr
- 2024 08:01:33 -0700 (PDT)
+	b=i4oRDvXDJcPww9y2vY9mSNfP8uOXQjI6q/piWS2plAY69KaZBhQwB3bIPlnI3NzSU
+	 ePEiDVfXgdiLf3QMoyPvDa2fE+jQDOvmzqmeYaUGXPPxJCTBd+bxhvuVoRQAROlQAX
+	 +2dhNxdJdaRpzkfJJTCwaNjgqOx9dJ27gMSoRZ+qxjt2+DKze09GcwjutDFUW/GVgf
+	 5E1gq6GcSoh8aHsycQ6cKgxKmboRaE3GPt5UV2TeqfWJvY2o1enouroDAGNNnEy7fT
+	 4jrJ+UBe736EUqkdfYNkD9zwyGSHTvhg2LURiveyxH7hm6JmmyC8r6BdGzzdxAZs+D
+	 1tAnp7QtHKLMA==
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-22ea60e145dso33433fac.0
+        for <linux-pm@vger.kernel.org>; Mon, 08 Apr 2024 08:09:52 -0700 (PDT)
+X-Gm-Message-State: AOJu0YzUkQC7MfCGxT7N1Rs6UvYcKszm+dxSwkJ8t9n/iEjh7GOG9FHh
+	XlWh6xFsQVELD7qpXe4IU7zelCdW7arEWZlrvhByYSw3arfS45wOtScOzCN8PRhEsQxCQzKs+fM
+	hakduWfeXEY6BOp7HYQq4xOmJfG0=
+X-Google-Smtp-Source: AGHT+IEyp4wCCYLyMhBVkIeUbB9PQn6s2tPCaPPAnudG1QZmbM3xQx79lZVoKXRUcuQaGD4DsYRuNAWLWxY/rba1Cos=
+X-Received: by 2002:a05:6870:1651:b0:220:bd4d:674d with SMTP id
+ c17-20020a056870165100b00220bd4d674dmr9276795oae.5.1712588992219; Mon, 08 Apr
+ 2024 08:09:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1712410202.git.lukas@wunner.de>
-In-Reply-To: <cover.1712410202.git.lukas@wunner.de>
+References: <2aaa9ba442f027fd9d1011c5fb30adea9bd1b799.1712344255.git.len.brown@intel.com>
+In-Reply-To: <2aaa9ba442f027fd9d1011c5fb30adea9bd1b799.1712344255.git.len.brown@intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 8 Apr 2024 17:01:22 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hOHCSp8-8EZjuGAOR0QSH3CcvokG3uBGAKFFpTrkqQRA@mail.gmail.com>
-Message-ID: <CAJZ5v0hOHCSp8-8EZjuGAOR0QSH3CcvokG3uBGAKFFpTrkqQRA@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Deduplicate bin_attribute simple read() callbacks
-To: Lukas Wunner <lukas@wunner.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>, 
-	linuxppc-dev@lists.ozlabs.org, linux-acpi@vger.kernel.org, 
-	Jean Delvare <jdelvare@suse.com>, Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org, 
-	Zhenyu Wang <zhenyuw@linux.intel.com>, Zhi Wang <zhi.wang.linux@gmail.com>, 
-	intel-gvt-dev@lists.freedesktop.org, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org, 
-	Luis Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org
+Date: Mon, 8 Apr 2024 17:09:40 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gFqeHabWTrBfDyKzYpsy4qEgM=VO3P3T72xmTz_QzByQ@mail.gmail.com>
+Message-ID: <CAJZ5v0gFqeHabWTrBfDyKzYpsy4qEgM=VO3P3T72xmTz_QzByQ@mail.gmail.com>
+Subject: Re: [PATCH 1/1] pm: Take advantage of %ps to simplify debug output
+To: Len Brown <lenb@kernel.org>
+Cc: linux-pm@vger.kernel.org, Len Brown <len.brown@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Apr 6, 2024 at 3:52=E2=80=AFPM Lukas Wunner <lukas@wunner.de> wrote=
-:
+On Fri, Apr 5, 2024 at 9:13=E2=80=AFPM Len Brown <lenb@kernel.org> wrote:
 >
-> For my upcoming PCI device authentication v2 patches, I have the need
-> to expose a simple buffer in virtual memory as a bin_attribute.
+> From: Len Brown <len.brown@intel.com>
 >
-> It turns out we've duplicated the ->read() callback for such simple
-> buffers a fair number of times across the tree.
+> initcall_debug previous and new output:
 >
-> So instead of reinventing the wheel, I decided to introduce a common
-> helper and eliminate all duplications I could find.
+> ...PM: calling pci_pm_suspend+0x0/0x1b0 @ 3233, parent: pci0000:00
 >
-> I'm open to a bikeshedding discussion on the sysfs_bin_attr_simple_read()
-> name. ;)
+> ...PM: calling pci_pm_suspend @ 3233, parent: pci0000:00
 >
-> Lukas Wunner (2):
->   sysfs: Add sysfs_bin_attr_simple_read() helper
->   treewide: Use sysfs_bin_attr_simple_read() helper
+> Signed-off-by: Len Brown <len.brown@intel.com>
+> ---
+>  drivers/base/power/main.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 >
->  arch/powerpc/platforms/powernv/opal.c              | 10 +-------
->  drivers/acpi/bgrt.c                                |  9 +-------
->  drivers/firmware/dmi_scan.c                        | 12 ++--------
->  drivers/firmware/efi/rci2-table.c                  | 10 +-------
->  drivers/gpu/drm/i915/gvt/firmware.c                | 26 +++++-----------=
------
->  .../intel/int340x_thermal/int3400_thermal.c        |  9 +-------
->  fs/sysfs/file.c                                    | 27 ++++++++++++++++=
-++++++
->  include/linux/sysfs.h                              | 15 ++++++++++++
->  init/initramfs.c                                   | 10 +-------
->  kernel/module/sysfs.c                              | 13 +----------
->  10 files changed, 56 insertions(+), 85 deletions(-)
+> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> index f85f3515c258..de581c33095f 100644
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -209,7 +209,7 @@ static ktime_t initcall_debug_start(struct device *de=
+v, void *cb)
+>         if (!pm_print_times_enabled)
+>                 return 0;
+>
+> -       dev_info(dev, "calling %pS @ %i, parent: %s\n", cb,
+> +       dev_info(dev, "calling %ps @ %i, parent: %s\n", cb,
+>                  task_pid_nr(current),
+>                  dev->parent ? dev_name(dev->parent) : "none");
+>         return ktime_get();
+> @@ -224,7 +224,7 @@ static void initcall_debug_report(struct device *dev,=
+ ktime_t calltime,
+>                 return;
+>
+>         rettime =3D ktime_get();
+> -       dev_info(dev, "%pS returned %d after %Ld usecs\n", cb, error,
+> +       dev_info(dev, "%ps returned %d after %Ld usecs\n", cb, error,
+>                  (unsigned long long)ktime_us_delta(rettime, calltime));
+>  }
+>
+> @@ -1963,7 +1963,7 @@ EXPORT_SYMBOL_GPL(dpm_suspend_start);
+>  void __suspend_report_result(const char *function, struct device *dev, v=
+oid *fn, int ret)
+>  {
+>         if (ret)
+> -               dev_err(dev, "%s(): %pS returns %d\n", function, fn, ret)=
+;
+> +               dev_err(dev, "%s(): %ps returns %d\n", function, fn, ret)=
+;
+>  }
+>  EXPORT_SYMBOL_GPL(__suspend_report_result);
 >
 > --
 
-For the series
-
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Applied as 6.10 material, thanks!
 
