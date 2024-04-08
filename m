@@ -1,103 +1,147 @@
-Return-Path: <linux-pm+bounces-6046-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6047-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E164A89BB71
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 11:17:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A5A9E89BBF4
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 11:39:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1EC7F1C211C4
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 09:17:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D66931C22023
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 09:39:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84DF045946;
-	Mon,  8 Apr 2024 09:16:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44ED351009;
+	Mon,  8 Apr 2024 09:38:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cVnm8Wq6"
+	dkim=pass (2048-bit key) header.d=t-argos.ru header.i=@t-argos.ru header.b="NSgtco00"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx1.t-argos.ru (mx1.t-argos.ru [109.73.34.58])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EC3A3B290
-	for <linux-pm@vger.kernel.org>; Mon,  8 Apr 2024 09:16:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B79A4EB54;
+	Mon,  8 Apr 2024 09:38:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.73.34.58
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712567805; cv=none; b=M42kuvWs00w489pfwWKmu1A2HFbmAG8y+ntmmgwbcbf/bdSMOh1ZE1v08CypsgTluqaSeVdJ1KnW8N8GoNRn1EaUcNQO9364E1aB8w4tdNQ4pAjd5ijmjsx/6FCcfrxbj4dhmRrmm6vPFDEDSj9v3ifN2N2S75w6XLD5zdQs/bo=
+	t=1712569104; cv=none; b=Hr46CpAyeNu1XXGdxQtljAGYJrn28/0vIotqcAcqNnm3ijiTVxy9FZCwprTd7b9ks8p+uXI9QqByH8bApBu6Cfx5GrehBgIqWnNiR9G4/44UZtEe/4dMkWW3/ugGuloBv8IShH3/+yWVD8Hj1E7+a6kseNNaAD+9i94Ynl0XON8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712567805; c=relaxed/simple;
-	bh=L1Fn1pqjpM64JyH8tbtfUBU5bFgp1UKPHYeodosr/DU=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=tyOQ03IXTzgEIOgVb1MVA29lxcE0U0YgpMEkitqahhSyGuzPf4nlJensXQeo4+Gpu8ltXynWvZkNih838SnFobilx9ppMm0AOp0ITyQlukVNI1e2mCNphLhbMYPj8+jsSpeQv9UjmiKRehrRWeTFBKBziGttdX90afSKPQEJ9Uk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cVnm8Wq6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E5468C43394
-	for <linux-pm@vger.kernel.org>; Mon,  8 Apr 2024 09:16:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712567804;
-	bh=L1Fn1pqjpM64JyH8tbtfUBU5bFgp1UKPHYeodosr/DU=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=cVnm8Wq6khBC60zAwgZeJOIk0mGpteTW7DNiYhvvJf+p4PjRz6/zoUMlXmAiEeKlo
-	 XJPuYYq7LIg63cXjG2T3qNdNyr6pvhcYoImV6cc6LLZR47Hi3KrVE2/0d6oqb7Zyoo
-	 2XpT0H5WCQhWYR5r393iQbCZ3NbWycPsx5E16jYfPl8e7ejdF6bD+UwtuIKHmdGlJk
-	 nMySrvwjM3Sx19faOZktgwc5FV7uucfGZAmhIALJDgXdk8/hBWJTmOQrGDrf2oGfD0
-	 3zoOP2hXHO5H99J1cAyCRyAPk+gVPNZYaLGniHYs/ltzl9cBkC6HzyjasBXnH/4A7Y
-	 YW+rinxD42huw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id D3CFDC53BD3; Mon,  8 Apr 2024 09:16:44 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 218689] AMD_Pstate_EPP Ryzen 7000 issues. Freezing and static
- sound
-Date: Mon, 08 Apr 2024 09:16:44 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: aros@gmx.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-218689-137361-pzuIubfMmq@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218689-137361@https.bugzilla.kernel.org/>
-References: <bug-218689-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1712569104; c=relaxed/simple;
+	bh=H+zPOpmZR4l5c0oeQGM2NXVXZuHY/mOAxUBkn+hY5ng=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=j63iqSHNLM+njQfrY+eRrATGvXmStll89lmkIzxqdBYpjqdzgNKzMLjFWS0hmrmPk0ir6VTse1SnGStuBkYtOYkiF357I1S3YvCelDfx3gsp9bE5W7H5qJ2RM3Tjo2h+Ocn04XOULo9XbasLfTxJGkvaRGth+xPuc3cxDMFyYZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=t-argos.ru; spf=pass smtp.mailfrom=t-argos.ru; dkim=pass (2048-bit key) header.d=t-argos.ru header.i=@t-argos.ru header.b=NSgtco00; arc=none smtp.client-ip=109.73.34.58
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=t-argos.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=t-argos.ru
+Received: from mx1.t-argos.ru (localhost [127.0.0.1])
+	by mx1.t-argos.ru (Postfix) with ESMTP id 4C561100003;
+	Mon,  8 Apr 2024 12:38:01 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=t-argos.ru; s=mail;
+	t=1712569081; bh=h50psJaMeumsGCm0bUiI8H/m9L5vMNpSqmXAdhWyywk=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+	b=NSgtco00Ak4LWJU1ma628ay6u/x4KEAuXLUsFBF4C7jYOAaebwtiotU0rPFfjCcu/
+	 Y02oj+8NGgYKiaC1GUWsnPcAuEfyxe8DAPgWO9rJMuysqOXIBgncYT8V0nPsSxgpRS
+	 Ato6EVIqOtZJQ/XURVW2pIt/cnThlmLp6QFXYN630Wd+qyVYhaUD0IM7XSbkN02aSt
+	 ANO28i0mkEh3vv5kLMYu1zeLOl7bFJ1qjPVR3SMuxTY2kOkkKpbsMJgl+CupyhOGlM
+	 hTkFiQ19dG9MZy62OmX+1LqOTm9rqYZIqAUvT2/zXC1pCznKOrAvQGmjeD/0bV/Zxc
+	 HRf3QbaeWORbg==
+Received: from mx1.t-argos.ru.ru (ta-mail-02.ta.t-argos.ru [172.17.13.212])
+	by mx1.t-argos.ru (Postfix) with ESMTP;
+	Mon,  8 Apr 2024 12:36:38 +0300 (MSK)
+Received: from localhost.localdomain (172.17.215.6) by ta-mail-02
+ (172.17.13.212) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 8 Apr 2024
+ 12:35:43 +0300
+From: Aleksandr Mishin <amishin@t-argos.ru>
+To: Ionela Voinescu <ionela.voinescu@arm.com>
+CC: Aleksandr Mishin <amishin@t-argos.ru>, "Rafael J. Wysocki"
+	<rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<lvc-project@linuxtesting.org>
+Subject: [PATCH v2] cppc_cpufreq: Fix possible null pointer dereference
+Date: Mon, 8 Apr 2024 12:35:36 +0300
+Message-ID: <20240408093536.19485-1-amishin@t-argos.ru>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20240405094005.18545-1-amishin@t-argos.ru>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: ta-mail-02.ta.t-argos.ru (172.17.13.212) To ta-mail-02
+ (172.17.13.212)
+X-KSMG-Rule-ID: 1
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 184614 [Apr 08 2024]
+X-KSMG-AntiSpam-Version: 6.1.0.4
+X-KSMG-AntiSpam-Envelope-From: amishin@t-argos.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 15 0.3.15 adb41f89e2951eb37b279104a7abb8e79494a5e7, {Tracking_from_domain_doesnt_match_to}, d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;mx1.t-argos.ru.ru:7.1.1;127.0.0.199:7.1.2;t-argos.ru:7.1.1, FromAlignment: s
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean, bases: 2024/04/08 07:15:00
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2024/04/08 06:53:00 #24704467
+X-KSMG-AntiVirus-Status: Clean, skipped
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218689
+cppc_cpufreq_get_rate() and hisi_cppc_cpufreq_get_rate() can be called from
+different places with various parameters. So cpufreq_cpu_get() can return
+null as 'policy' in some circumstances.
+Fix this bug by adding null return check.
 
-Artem S. Tashkinov (aros@gmx.com) changed:
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|aros@gmx.com                |
+Fixes: a28b2bfc099c ("cppc_cpufreq: replace per-cpu data array with a list")
+Signed-off-by: Aleksandr Mishin <amishin@t-argos.ru>
+---
+v2: Fix mixed declarations
 
---- Comment #7 from Artem S. Tashkinov (aros@gmx.com) ---
-> if there were* to be a hardware issue^^^
+ drivers/cpufreq/cppc_cpufreq.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-AFAIK you're the _only_ person using Linux who experiences such issues. So =
-far
-there have been _zero_ reports about complications related to the amd-pstate
-driver.
+diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+index 64420d9cfd1e..15f1d41920a3 100644
+--- a/drivers/cpufreq/cppc_cpufreq.c
++++ b/drivers/cpufreq/cppc_cpufreq.c
+@@ -741,10 +741,15 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
+ {
+ 	struct cppc_perf_fb_ctrs fb_ctrs_t0 = {0}, fb_ctrs_t1 = {0};
+ 	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+-	struct cppc_cpudata *cpu_data = policy->driver_data;
++	struct cppc_cpudata *cpu_data;
+ 	u64 delivered_perf;
+ 	int ret;
+ 
++	if (!policy)
++		return -ENODEV;
++
++	cpu_data = policy->driver_data;
++
+ 	cpufreq_cpu_put(policy);
+ 
+ 	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t0);
+@@ -822,10 +827,15 @@ static struct cpufreq_driver cppc_cpufreq_driver = {
+ static unsigned int hisi_cppc_cpufreq_get_rate(unsigned int cpu)
+ {
+ 	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+-	struct cppc_cpudata *cpu_data = policy->driver_data;
++	struct cppc_cpudata *cpu_data;
+ 	u64 desired_perf;
+ 	int ret;
+ 
++	if (!policy)
++		return -ENODEV;
++
++	cpu_data = policy->driver_data;
++
+ 	cpufreq_cpu_put(policy);
+ 
+ 	ret = cppc_get_desired_perf(cpu, &desired_perf);
+-- 
+2.30.2
 
-It may not work at all but it doesn't and cannot lead to freezes or sounds.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
 
