@@ -1,110 +1,129 @@
-Return-Path: <linux-pm+bounces-6061-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6062-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 228EF89C894
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 17:42:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9B5889CAEA
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 19:40:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D256F287E93
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 15:42:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 538611F24F09
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 17:40:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B95CD1411F3;
-	Mon,  8 Apr 2024 15:42:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45284143C60;
+	Mon,  8 Apr 2024 17:40:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y+luKZL4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fOQSMnet"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D65D2561F;
-	Mon,  8 Apr 2024 15:42:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6BD81E489;
+	Mon,  8 Apr 2024 17:40:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712590932; cv=none; b=YN4l4IHFVUfy+9LX1L9WaAYDWjmWqA3tZfsVhL4rs9i4/uJAo7A78iY+0o9nVV+RzPGmIvAke6/9Qz8o8Ls5UDUc23VyaD4A9EaL+FxrqV57qSZ62uzVOjybwLp+ll61xUuf66Ng4wY8pwW1Ldciqt1VtCiCVyEGxZB/rOrMhxs=
+	t=1712598038; cv=none; b=HoqS6nMXIA3+RjXfCTB6aPSfNtZ8Vwoo30TJfuGfn+uPc6TGkDnrPlV7j4Aa0HzIX1SQSZNs4bMhY2nIEcdlMJtLMxXyoH5j1m1UVVSGLD1nPcSKJ/jTcdB5vtyMh4g17kqu8F4EBIDn8PFDWZGo45ZBem7yKiDpUNMETKYpHVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712590932; c=relaxed/simple;
-	bh=AH28H53DqldJs4ww5n3whh1PzflM9wSUCYbhqULRZag=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=bytsSUN0UlIIN9vUny7pEVnRho1jKCl2HGWlhrAOzoWH6/DAN4PgfYNVcktCfXnILo9qZFQwGZuALatu6NXxoZSm0uTMJJeQk3pcLJSHmCiHFhbrMS/yZ64ADjzdZF7zuxToVsVrG4eSLsBS/qSdfPU06Mu9Pz501CcroAzmif8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y+luKZL4; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712590932; x=1744126932;
-  h=from:to:cc:in-reply-to:references:subject:message-id:
-   date:mime-version:content-transfer-encoding;
-  bh=AH28H53DqldJs4ww5n3whh1PzflM9wSUCYbhqULRZag=;
-  b=Y+luKZL4hPeZlrFPAqSGUK8xQqjqM2XQvkfzAj0abrckKJH57Ugh8c8n
-   TEJ5akaWglvV7zIopVF9P7EEkKS7yuGcR+66plMFy2oJ+lVNgleh1Tje0
-   69WZ5OcH0ATyBJ1q3nP2VjWz8DNjUrmFKAWyea2ka3PQzOOf5l469kmm5
-   BZD/3MEJw3RdShh6KOr7+iNlPBCDaqOb4fQAd13cxUVE6k8sUgIu2h8Q4
-   3RwSp7vGxAMqFXhS+VZoQT+T2Enov8YTzeWiDsMlEyIZ9NKINyPjV7/rt
-   ZO+XiSxUOMM9NfkCipLBlgRVTWPWROCay7VNPxG3PvedSLVN5CkUHbRep
-   A==;
-X-CSE-ConnectionGUID: jfAJuWeWSQyix27MivDbFA==
-X-CSE-MsgGUID: Of86VuttSFKP8j6TwHhRmA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="19018774"
-X-IronPort-AV: E=Sophos;i="6.07,187,1708416000"; 
-   d="scan'208";a="19018774"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 08:42:11 -0700
-X-CSE-ConnectionGUID: 16LSFUV3SBirKL7FH1jj9Q==
-X-CSE-MsgGUID: ve+7XDGRQkG9pmWpAAYg2w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,187,1708416000"; 
-   d="scan'208";a="24622267"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.28])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 08:42:08 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To: Hans de Goede <hdegoede@redhat.com>, 
- David McFarland <corngood@gmail.com>
-Cc: linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
- "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, 
- Enrik Berkhan <Enrik.Berkhan@inka.de>
-In-Reply-To: <878r1tpd6u.fsf_-_@gmail.com>
-References: <20240318191153.6978-1-corngood@gmail.com>
- <20240318191153.6978-2-corngood@gmail.com>
- <ed891842-a86f-4ca8-af29-f7921a259146@redhat.com>
- <878r1tpd6u.fsf_-_@gmail.com>
-Subject: Re: [PATCH v2] platform/x86/intel/hid: Don't wake on 5-button
- releases
-Message-Id: <171259092281.17776.17775713093698615601.b4-ty@linux.intel.com>
-Date: Mon, 08 Apr 2024 18:42:02 +0300
+	s=arc-20240116; t=1712598038; c=relaxed/simple;
+	bh=0t2Bpc123pAXmXsM8799oE5ds9SByPwdC46wy2Ype2Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hh9MIttxbIFbArBkV8rwEbsHgMGopvgUPAan8sxx7BqNSHV+EjWCR1XUBX64fAYWeZyzFEbkG4mM1+qv3+PJuc9T/Peum/EBNtgVO9blfxKsCekEBrK32u/VUh3KF1Tiw7Y++gemHFo7TcXjXJR3V3+TfwbCrj6qb7VhCSXW7XQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fOQSMnet; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2a526803fccso700099a91.1;
+        Mon, 08 Apr 2024 10:40:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712598036; x=1713202836; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=67qLt4AzcbjXyX04hZDnLSNr7BdUcYeQncTdQc0kA5c=;
+        b=fOQSMnet0NHXFhamklkyxU/By/feu4NjWCO6Wb5J0E+kmy+SPSapwZ3K/tuHfOVdif
+         njSBfGP7/0BrHciwfbvhC6LjEDzs3gU853ulgsqy8S9LYN+b3dbR9zUe01qdar9nEzjr
+         TM3fYCjZTXbcU2bQmDri3Y2s+S2IEatDXJnUF4BYFjRWZrULLCgqvDgldB/7cjbTeMA0
+         kkU97PVRjhilzsqqzKlpb5RyOuzucYdovucafmqyWcMJmGMO0FLs9QQaU0fiPaM0oxy+
+         uDgpnojJARMLLWYmrNR1PUiiqxB7bZvvlnfGLVVdm734OVLAaVLiehUG7PZYxz008hbj
+         veWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712598036; x=1713202836;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=67qLt4AzcbjXyX04hZDnLSNr7BdUcYeQncTdQc0kA5c=;
+        b=Q8Y/05DmPDNhrlsUDhPTprT1Aixp7p3tfntmNRlbDCz2cpn3gH7znY3l2654L2fV8p
+         sAXOcz+mWIs4wf8E7M+mYxz5RmtCN+EmMT21oNiZkyhkGTb1tttLBvZg5jzU4pbHO646
+         gMb6+uekT1PctG7PQNLiLiNjoj+Ui89vDQHB50vBz9H+mNd9rnRKijd2A/oCUlfLLXDa
+         VfAnilylz2PAdwXPyMXuc7D0Suua9Un+m3cZVNixi/ryZgpJAFw2uJy4+M7QgLMI3zdT
+         DJtjw1ZbGhIDmT6gFVFXbBn+WTKKO13sxMJ2+dFgbJIkY/zxxvBCfHIZtDh+0jwy6DG7
+         0Iqw==
+X-Forwarded-Encrypted: i=1; AJvYcCXEs6ybxzuMVfxAkqwvG5c+6uNbr54sJJKLrjsTtnTGNlvQ+rB5eNnHhhlVjjtGj/Rotl8AbHhMLeNUkyJ5Rvaug4eLM8I8+5EpsFUS1D+OQ+mpHUqZ2MiG1VDIEUg20zyRBqkJDnuCyWvhLr5Um3JHdhy9uFcYYS1iekgfBfO6rNPS7z2qX5bT2tb5LgeaJMg5NO1Zq3wlM4o+wuUASxaW
+X-Gm-Message-State: AOJu0YxZB7sD4YBRc6q5Y4rL/AuEWwX/BP2lXWNHaAs8PP+CO2cJzXQR
+	Tdtsk8EabCktmtLJ2aWIXH8NXM+ICPJjSMPg6pUmBckpPE5F8yi5
+X-Google-Smtp-Source: AGHT+IGJpqaEj0ve/GvVry9/PXmcU1mCac94AlQ6tO3MBLesQOSeKIOmAx/IhFrkqWmuQqeMmgb6rw==
+X-Received: by 2002:a17:90a:1649:b0:2a5:4a76:81af with SMTP id x9-20020a17090a164900b002a54a7681afmr1622299pje.20.1712598035791;
+        Mon, 08 Apr 2024 10:40:35 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:a5f4])
+        by smtp.gmail.com with ESMTPSA id gk21-20020a17090b119500b002a54222e694sm1420162pjb.51.2024.04.08.10.40.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Apr 2024 10:40:35 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date: Mon, 8 Apr 2024 07:40:33 -1000
+From: Tejun Heo <tj@kernel.org>
+To: Waiman Long <longman@redhat.com>
+Cc: Zefan Li <lizefan.x@bytedance.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Peter Zijlstra <peterz@infradead.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	cgroups@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Frederic Weisbecker <frederic@kernel.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Alex Shi <alexs@kernel.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Subject: Re: [PATCH v2 0/2] cgroup/cpuset: Make cpuset hotplug processing
+ synchronous
+Message-ID: <ZhQsESPi9PwpPhx7@slm.duckdns.org>
+References: <20240404134749.2857852-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240404134749.2857852-1-longman@redhat.com>
 
-On Thu, 04 Apr 2024 08:41:45 -0300, David McFarland wrote:
-
-> If, for example, the power button is configured to suspend, holding it
-> and releasing it after the machine has suspended, will wake the machine.
+On Thu, Apr 04, 2024 at 09:47:47AM -0400, Waiman Long wrote:
+>  v2:
+>   - Found that rebuild_sched_domains() has external callers, revert its
+>     change and introduce rebuild_sched_domains_cpuslocked() instead.
 > 
-> Also on some machines, power button release events are sent during
-> hibernation, even if the button wasn't used to hibernate the machine.
-> This causes hibernation to be aborted.
+> As discussed in the LKML thread [1], the asynchronous nature of cpuset
+> hotplug handling code is causing problem with RCU testing. With recent
+> changes in the way locking is being handled in the cpuset code, it is
+> now possible to make the cpuset hotplug code synchronous again without
+> major changes.
 > 
-> [...]
+> This series enables the hotplug code to call directly into cpuset hotplug
+> core without indirection with the exception of the special case of v1
+> cpuset becoming empty still being handled indirectly with workqueue.
+> 
+> A new simple test case was also written to test this special v1 cpuset
+> case. The test_cpuset_prs.sh script was also run with LOCKDEP on to
+> verify that there is no regression.
 
+Applied to cgroup/for-6.10. Hopefully, this one will work out. Thanks for
+working on this.
 
-Thank you for your contribution, it has been applied to my local
-review-ilpo branch. Note it will show up in the public
-platform-drivers-x86/review-ilpo branch only once I've pushed my
-local branch there, which might take a while.
-
-The list of commits applied:
-[1/1] platform/x86/intel/hid: Don't wake on 5-button releases
-      commit: 5864e479ca4344f3a5df8074524da24c960f440b
-
---
- i.
-
+-- 
+tejun
 
