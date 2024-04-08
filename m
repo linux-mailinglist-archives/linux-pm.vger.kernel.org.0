@@ -1,133 +1,132 @@
-Return-Path: <linux-pm+bounces-6049-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6050-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9ECD789BDD2
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 13:12:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C4E389BE37
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 13:40:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0B1C1B224C0
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 11:12:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C7C52282B79
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 11:40:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F167964CF2;
-	Mon,  8 Apr 2024 11:12:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8395169D37;
+	Mon,  8 Apr 2024 11:40:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="KDdYgPfc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U/1oprHx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C43524AF;
-	Mon,  8 Apr 2024 11:12:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBEEA1E497;
+	Mon,  8 Apr 2024 11:40:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712574724; cv=none; b=k964G3MECkIiSKN5VOY0NlMUMBGHuyjdAuEyU7eoucQOGJJDeq8b15qlpTXRxijTFAtyOdSREKd1A0cbtj/HNCb+wXfvJAUh0ZtpwTqi2E5yobSDlq73NhP3mewYoq5KH2l0f5FkV8JhHjfqHPliiLM/HJHIrr/2kkm/C7aHoPM=
+	t=1712576419; cv=none; b=CY3QRNQ3KVVk2d87uzD/PQHrA5xk/qbCHh2DOnbNcRhH8u5PqmMkeKrJeuQ0wS/EV/BSFICdP1VBNvQKjP0q6Q+MD3mmq+vqPQUG8g+KIdGiySIawHqwFR2cz2gmwctHT57fbO5T8iszoAO69pqdgMMZLJ6egkBRatr6p1gyJ/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712574724; c=relaxed/simple;
-	bh=/qHdiMaIekzpF2hh/Wzjj4H9Q+/t8SpERCHBTT65Khw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=EMFRCIUMJhfaN1uWX0SJ8At0/EaClwm+QeqDM/2di4ApyJ6eKy5trlvKAKAMP7Az97/FxkIJRDp+EfX2ibeTFNP7q+CLyWojaFzRgin4ALvF5jg5FWoQW0DqNqLUOmOm/MYHDdHlpGNL0q44U5NKtUHS2AaynMqfMDDkq8GwsxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=KDdYgPfc; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1712574719;
-	bh=Gy2IffhRM6JRRrukWvLRqJnwzreji6m9bj34GwffDNM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=KDdYgPfcoO4Xwkc9vPoJtb5pfxHOMMswqVXzEkb/jhRhZbDZDKl2m5brlJJmmnDdl
-	 0Kkk/GINLb1FttDTi7KiDUakFnGXKeHNjAMNPprZXB820lvKPVgL6e3YNFLJgM8X6r
-	 /Bt/2va9Kh+M5yTqqWdLcOsVJQBS6422N6PmXhpKT+4uMtLMWfFRYFOGVJ1PDbgp5W
-	 aBLla90cOIxiStLjk7j/zyOvU4VMGviSwd/s0Htc/v191CCU4vuhkXFJ/ldbpaMBn+
-	 vCiuYLbrxjHnMPxLxfiOeuQ7etxHECiSkN+/1wB6saocLq7ZwqZ+iE0iUd4YlxCv7i
-	 ww2jBxf3AqLhg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VCmdB2lhKz4wcF;
-	Mon,  8 Apr 2024 21:11:57 +1000 (AEST)
-From: Michael Ellerman <mpe@ellerman.id.au>
-To: Lukas Wunner <lukas@wunner.de>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- linux-kernel@vger.kernel.org
-Cc: linuxppc-dev@lists.ozlabs.org, linux-acpi@vger.kernel.org, Jean Delvare
- <jdelvare@suse.com>, Ard Biesheuvel <ardb@kernel.org>,
- linux-efi@vger.kernel.org, Zhenyu Wang <zhenyuw@linux.intel.com>, Zhi Wang
- <zhi.wang.linux@gmail.com>, intel-gvt-dev@lists.freedesktop.org, Daniel
- Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org, Luis
- Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org
-Subject: Re: [PATCH 2/2] treewide: Use sysfs_bin_attr_simple_read() helper
-In-Reply-To: <92ee0a0e83a5a3f3474845db6c8575297698933a.1712410202.git.lukas@wunner.de>
-References: <cover.1712410202.git.lukas@wunner.de>
- <92ee0a0e83a5a3f3474845db6c8575297698933a.1712410202.git.lukas@wunner.de>
-Date: Mon, 08 Apr 2024 21:11:57 +1000
-Message-ID: <87jzl8az2a.fsf@mail.lhotse>
+	s=arc-20240116; t=1712576419; c=relaxed/simple;
+	bh=rWFRjSTrFEi3sr3QTftz5bcZoSq9cdKy8xG19AUfBpo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d7k9bSmJpdxwZuxl6dLk//rBgIUAUsdqKckcs9MwgGL5pEdNuwOQk+qr/DLIh6Ta806XPQynsqLWyc2mtVzKIPUQ4ozyylP0UUDJMpQaZzrUOFkRtOh6egSowL8SCC0ehgbzEep0OpTfBw3WD6EGBDaG0X5MtfQGMK34d100Ljw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U/1oprHx; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1e45b9a5c53so2708175ad.3;
+        Mon, 08 Apr 2024 04:40:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712576417; x=1713181217; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o8Bi3GrM8szMy/fOrN09Zas7BpLrzN+uFd18xGLTGdw=;
+        b=U/1oprHxwvfac4Zg5q7t4Ni3AfNbHOFZEpbVAHlSqTohOBeoB0uZd1slDzP9s+OiQu
+         lA5/qLJkqlu1jz72+/3YqoNeSVRU5tPYkP8fQZ04PoDsqJQZm3ZhVWl51McPQF5eZBVs
+         7DBBdtkGvo8fMNpGUff4dq8leVlWRZTJ9ZxrQf+0jUwGTwUzeNweiJTDyFkyv8wdP37Y
+         UzoYkc/zrENCZdpLyCAZir8nWfFspe8xPf8n2WNpgSh9IfeDHLO4hJnni/ihisxdJwRC
+         TG+8ArBncUpGdjMnWl+CCFQvTy8IHIi5gq+iB+p3hOEuLQRmDik6SilsNkh8NONdY9t7
+         VORQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712576417; x=1713181217;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=o8Bi3GrM8szMy/fOrN09Zas7BpLrzN+uFd18xGLTGdw=;
+        b=UdaKECoP9C2qx3NVHMiBfnqkinQNoHVn8sp6nPD+mfDJ9xT97xrWCXD3yYnmmjoJ1N
+         b1v7P1SHPuXGLatsvNN8QMTwaZL54bFqLG2W4tcvaIKn9hAeFRqR98pgxvo3hioGM3XX
+         M9lJHrngUj8t44UAMiq9z1Ayeb1gYVWdbB+x8vz5aewuOdPKS19QJkrPXFEyHEoIaKoY
+         4M1HXqHI13TIP8i4l/jWJcT07wFQXuCFTEJya1uR5kD/h4e8sA9uUmvD08Y6ygs0E1vf
+         k8fQMNocC35925qYbaIb+il2wbfP3ChUY03FAc+58rKE51Ro7eEjfZG28PXKC8RHku4w
+         dFfA==
+X-Forwarded-Encrypted: i=1; AJvYcCVdk6+d5FaKnfZNMPjzAWYoOu/EN8SNGLrD7SddULUjRdJSnB/DJBpQSsEZ/OvwCoOW+mAXKfitkgMu41hXKjWpRYTJNCxkKSQwuB8BrNuM7wQyXWmw90OjpBiKefvg1LovqD6E4vVzdupsXR2t8S/cEwJA0Zdi7UgeyiLpWXVbTSsy8A==
+X-Gm-Message-State: AOJu0Yx9I5iccTLx5+6B4gyn7IAAnfqPTpNbjnS+iGhxJBlV8xw5Nv/2
+	/uURiuN1YqK3D2X/UKWg6E/TQTH7DVFeGJNvQNEhs4xWcKmoiUrP
+X-Google-Smtp-Source: AGHT+IGwQWIqu2bxXFF7QdG5ABpWhh1MQiQODBJT2SoTN/3dDWilIKrLY6SbJvOTCbbTs6SIeQeOBw==
+X-Received: by 2002:a17:902:6b02:b0:1e2:3e0a:fc5e with SMTP id o2-20020a1709026b0200b001e23e0afc5emr8424464plk.33.1712576416956;
+        Mon, 08 Apr 2024 04:40:16 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p22-20020a1709027ed600b001e3e081d07esm4439176plb.179.2024.04.08.04.40.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Apr 2024 04:40:15 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Mon, 8 Apr 2024 04:40:14 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: "Zhang, Rui" <rui.zhang@intel.com>
+Cc: "ricardo.neri-calderon@linux.intel.com" <ricardo.neri-calderon@linux.intel.com>,
+	"Neri, Ricardo" <ricardo.neri@intel.com>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	"lukasz.luba@arm.com" <lukasz.luba@arm.com>,
+	"daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+	"jdelvare@suse.com" <jdelvare@suse.com>,
+	"srinivas.pandruvada@linux.intel.com" <srinivas.pandruvada@linux.intel.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH 3/3] hwmon: (coretemp) Use a model-specific bitmask to
+ read registers
+Message-ID: <48f81be1-b484-45c1-850b-8aa364b8d836@roeck-us.net>
+References: <20240406010416.4821-1-ricardo.neri-calderon@linux.intel.com>
+ <20240406010416.4821-4-ricardo.neri-calderon@linux.intel.com>
+ <f4d18a63-c348-4882-897b-dc636feb149b@roeck-us.net>
+ <d0b5ae04b4d08e2003114c4d6b6d3a040f585995.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d0b5ae04b4d08e2003114c4d6b6d3a040f585995.camel@intel.com>
 
-Lukas Wunner <lukas@wunner.de> writes:
-> Deduplicate ->read() callbacks of bin_attributes which are backed by a
-> simple buffer in memory:
->
-> Use the newly introduced sysfs_bin_attr_simple_read() helper instead,
-> either by referencing it directly or by declaring such bin_attributes
-> with BIN_ATTR_SIMPLE_RO() or BIN_ATTR_SIMPLE_ADMIN_RO().
->
-> Aside from a reduction of LoC, this shaves off a few bytes from vmlinux
-> (304 bytes on an x86_64 allyesconfig).
->
-> No functional change intended.
->
-> Signed-off-by: Lukas Wunner <lukas@wunner.de>
-> ---
->  arch/powerpc/platforms/powernv/opal.c              | 10 +--------
->  drivers/acpi/bgrt.c                                |  9 +-------
->  drivers/firmware/dmi_scan.c                        | 12 ++--------
->  drivers/firmware/efi/rci2-table.c                  | 10 +--------
->  drivers/gpu/drm/i915/gvt/firmware.c                | 26 +++++-----------------
->  .../intel/int340x_thermal/int3400_thermal.c        |  9 +-------
->  init/initramfs.c                                   | 10 +--------
->  kernel/module/sysfs.c                              | 13 +----------
->  8 files changed, 14 insertions(+), 85 deletions(-)
->
-> diff --git a/arch/powerpc/platforms/powernv/opal.c b/arch/powerpc/platforms/powernv/opal.c
-> index 45dd77e..5d0f35b 100644
-> --- a/arch/powerpc/platforms/powernv/opal.c
-> +++ b/arch/powerpc/platforms/powernv/opal.c
-> @@ -792,14 +792,6 @@ static int __init opal_sysfs_init(void)
->  	return 0;
->  }
->  
-> -static ssize_t export_attr_read(struct file *fp, struct kobject *kobj,
-> -				struct bin_attribute *bin_attr, char *buf,
-> -				loff_t off, size_t count)
-> -{
-> -	return memory_read_from_buffer(buf, count, &off, bin_attr->private,
-> -				       bin_attr->size);
-> -}
-> -
->  static int opal_add_one_export(struct kobject *parent, const char *export_name,
->  			       struct device_node *np, const char *prop_name)
->  {
-> @@ -826,7 +818,7 @@ static int opal_add_one_export(struct kobject *parent, const char *export_name,
->  	sysfs_bin_attr_init(attr);
->  	attr->attr.name = name;
->  	attr->attr.mode = 0400;
-> -	attr->read = export_attr_read;
-> +	attr->read = sysfs_bin_attr_simple_read;
->  	attr->private = __va(vals[0]);
->  	attr->size = vals[1];
+On Sun, Apr 07, 2024 at 08:39:51AM +0000, Zhang, Rui wrote:
+> > I do not think it is appropriate to make a hardware monitoring driver
+> > depend on the thermal subsystem.
+> > 
+> > NAK in the current form.
+> > 
+> Hi, Guenter,
+> 
+> Thanks for reviewing.
+> 
+> We've seen a couple of hwmon drivers depends on or imply THERMAL.
+> That's why we think this is an applicable solution.
 
-I gave it a quick boot and checked I could still read the attributes,
-everything seems fine.
+So far this was - unless someone sneaked something by - for drivers
+which registered thermal zones, not for calling code which resides
+inside thermal subsystem.
 
-Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+> Using the intel_tcc APIs can effectively reduce the future maintenance
+> burden because we don't need to duplicate the model list in multiple
+> places.
+> 
+> or do you have any suggestions?
 
-cheers
+The exported code should reside outside the thermal subsystem.
+
+Also, as implemented, if INTEL_TCC=n, the returned temperature mask value
+is 0x7f, and the offset mask is 0. So the alternative would be to just use
+those values unconditionally since apparently that is sufficient.
+
+Thanks,
+Guenter
 
