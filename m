@@ -1,145 +1,180 @@
-Return-Path: <linux-pm+bounces-6054-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6055-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B6CF89C654
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 16:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DA8089C67C
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 16:11:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3DEC01C22BF5
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 14:06:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A1B421C229D7
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 14:11:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0709F8120F;
-	Mon,  8 Apr 2024 14:06:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1453084D35;
+	Mon,  8 Apr 2024 14:11:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iaNLfay3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hi4haSiz"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDDE97C097;
-	Mon,  8 Apr 2024 14:06:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCC9984D1C;
+	Mon,  8 Apr 2024 14:11:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712585213; cv=none; b=h6KNDGZQmEKe1yoG8spWFHC588hAuKwXe7TvO3avAKz74ZOholJDYXXMQ9L2kbXptF/6tprBpkpd18HrziPeOahTwGt+08h/W8ZzugESkClJLm75gE7DUxDoO/m9ciOXpVoYzUdBklmtJMcGdHl3UfMGTlhoqMXpZa1jRdLEvRA=
+	t=1712585510; cv=none; b=faCJAns5daGJeyTvM1f/Y5Cn5r8cuCzS60KcK6KVxKB++kOaJqo4bqsGHTktkTautVOFBDYm/DwtfMCU6kirGkLpYgsiB8qrn6QeClliaW+C9pGYP3EO74gH9t7zWpuNo/QUbwT2NTMxdUP74s39+3lvF5MQXGssvN00SPsbkcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712585213; c=relaxed/simple;
-	bh=kJRZax7tKQw/4aGj608DFmiz3SzBrQfRW1Czn6YXsFM=;
+	s=arc-20240116; t=1712585510; c=relaxed/simple;
+	bh=Y5VDGX/dMQKlUWcPOeqi5ZCYWJijxH8qLM/15IHq2Ag=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lBsmf+TBO+8jNKV09d1R7g17Zt6jTcgQ5w3h+pTCH/umds2m+CBGJ8DlRxEiWO+rVt0Hhe60rWVxmTaLNlKcJHmq+4T89E8DoYszCaalFIeIqJnBTLUqUJqojBHY0zHA2VydY265YzUp/u0Zp1Qu6zWOWwIQueL58IoaYEzdr6A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iaNLfay3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94005C433C7;
-	Mon,  8 Apr 2024 14:06:53 +0000 (UTC)
+	 To:Cc:Content-Type; b=pNzWCJtZTC44Bh4sRv1hxpljvwkPsjk6dPlKwF/VfaYMq4N475Tn4Y1G7wvOrn7xwdFvgVf0SfjTcOHt7G9qQl809QPJmvCNXT1sauA71lLQO9LIHBboFv1nrm0VU8LB4Pa+HFFjO0S/JuEuC3Q4zE+VZvDGSmhl/To0GAtAJ4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hi4haSiz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D384C433F1;
+	Mon,  8 Apr 2024 14:11:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712585213;
-	bh=kJRZax7tKQw/4aGj608DFmiz3SzBrQfRW1Czn6YXsFM=;
+	s=k20201202; t=1712585509;
+	bh=Y5VDGX/dMQKlUWcPOeqi5ZCYWJijxH8qLM/15IHq2Ag=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=iaNLfay3XcHLZIpaCy2Tg5KiN9C3T5cq/wYk6+Alx80Fm/p5jZv6aRCZll9Kz4KXQ
-	 +1umEhFvpMDhygvSnwrGi9eHUz3JhVFewNicg4vs5ZfvNqvF70YPp7weJcsIgssSmU
-	 1YUW1VYVR5YeCyV4p8KHNZbAEMkhNg/xbY0fdSjGw+M6v/mJ0ABsmTPOSECekQV46t
-	 ofuMtPwfaSrvSagJ8G332KuTNnPDZGMzGoBzALD12Tzt68P4lMSy5Io6zjToMmO75z
-	 g1OjDlOYV4RmVRBsFu0PyHTitXZMoV5SnnXcqHi41q87Dqn0TDHtavTSJk/lHAYnyZ
-	 jLydp/j7C2+ZA==
-Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-5aa327a5514so62092eaf.0;
-        Mon, 08 Apr 2024 07:06:53 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWS6Hq0met6ef5CV5XhojOX/n6pkk2S+IKXYRRPnVt7XEvdYf8bfLX6WExx+8NI41IJHk9yPZPXkHC2lyZ7/YfuumatxNQaChNMQ133mzMRcb7ooUutzWOnyI12L+Z1agDMhfABzad1CGdj7g==
-X-Gm-Message-State: AOJu0Yww8oFUE3aJSdxFWqcENr4QxTTKpWCyUMgSFJsuIuUE7gb5jIs5
-	kNasAJciUTU9LGlkGSZE3lauxAQiX7cdYCS55W33laMnebaPh4LCew85eCqLzPXm+Jo2ltkFvlu
-	u//hgfFffO5QbYbzX5oeMsbANrCc=
-X-Google-Smtp-Source: AGHT+IEbfthzZ79XuDvyUQLEJLfFsf+aggAbvd3kcXbcCcp/nApsYYrvB2ACXv1jcTNPI8mdNwRCkjBg8LGXi0Cz1m8=
-X-Received: by 2002:a05:6870:1651:b0:220:bd4d:674d with SMTP id
- c17-20020a056870165100b00220bd4d674dmr9057467oae.5.1712585212959; Mon, 08 Apr
- 2024 07:06:52 -0700 (PDT)
+	b=hi4haSizLHLeV1cxPz2QxOf0sM5W3Vwrpvpz75wspuo6phr5Q9EBAv7ole5+JcHVD
+	 B4mexWtiU6i6SPVdOj2n6Rq505T3XDeG9s3dNAD6hSM0PNKHldCAeGmRisHEQNiz6K
+	 cb+isO7Gdz7sXcDItzLKhMvJCpxh+KiIJoLpSY2qlF2PO8kXAnnXj95DQWRnhJiLh/
+	 S8FBsGvp1Z0706XWzLBPsM41nUCDTILIr4iJyQZj+ZsAONcNlB0pglPvW4cIeFCQYK
+	 /cSTYusoNphLJSzIou22wDseKz2gruSn/tzKFclelULXvPLE8+LGdg+8FIXiv6PRkB
+	 VasGbzrUpZMFQ==
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-6ea0a6856d7so606196a34.1;
+        Mon, 08 Apr 2024 07:11:49 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVUoPJgMkLd+wuxJNYrSwV8ur1Sn0Sge/n8Lm9XdVgFBz5aULQVZoiE0I36oPyCHNniI8Nme594ZFmF34frxwdNRbAAC4F7F6OnsAUpBJhIF3l7XfBqjLFwGOmVuy61OesEkMTmxU7y2XXc329rkuvDu5BaUu/XZzUY+jWrS1O+7MEQ
+X-Gm-Message-State: AOJu0YxZt49HPtNuVBTord259UCSjilcfqiP0CavN+SfVhcwTpx0A2Z7
+	bNxvP6Q3qypWZ7rx0RxSzAU56bDpAAu2cjY7Bic+XrzcWZffvxxW/q7nVkc9ea1ODgQmsmaazDj
+	rmHQ2zKgEtqgcCDDxXaPOXVfq3Zs=
+X-Google-Smtp-Source: AGHT+IHXfmB+SUI1PFf5gbH9pXpP3RXeYlH6OKyn7AkJ05XBV8CG5i8TYv8qnvxxum64Q8ax1o9IrX71zGPJ88VXXks=
+X-Received: by 2002:a05:6808:130a:b0:3c5:dc7a:57d0 with SMTP id
+ y10-20020a056808130a00b003c5dc7a57d0mr10464908oiv.5.1712585508701; Mon, 08
+ Apr 2024 07:11:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240403154907.1420245-1-lukasz.luba@arm.com>
-In-Reply-To: <20240403154907.1420245-1-lukasz.luba@arm.com>
+References: <20240405121819.31331-1-sumeet.r.pawnikar@intel.com>
+In-Reply-To: <20240405121819.31331-1-sumeet.r.pawnikar@intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 8 Apr 2024 16:06:41 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jP8j3kcUFHx45_qpeOTa9THtP3qztC0oxuiohcYs5PPQ@mail.gmail.com>
-Message-ID: <CAJZ5v0jP8j3kcUFHx45_qpeOTa9THtP3qztC0oxuiohcYs5PPQ@mail.gmail.com>
-Subject: Re: [PATCH v5 0/4] Update Energy Model after chip binning adjusted voltages
-To: Lukasz Luba <lukasz.luba@arm.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, rafael@kernel.org, 
-	dietmar.eggemann@arm.com, linux-arm-kernel@lists.infradead.org, 
-	sboyd@kernel.org, nm@ti.com, linux-samsung-soc@vger.kernel.org, 
-	daniel.lezcano@linaro.org, viresh.kumar@linaro.org, 
-	krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com, 
-	m.szyprowski@samsung.com, mhiramat@kernel.org
+Date: Mon, 8 Apr 2024 16:11:37 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0is1Y+QHWfp-=sddAD8bUgn+QD7PmfBnAzgjZktqMYhBA@mail.gmail.com>
+Message-ID: <CAJZ5v0is1Y+QHWfp-=sddAD8bUgn+QD7PmfBnAzgjZktqMYhBA@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: DPTF: Add Lunar Lake support
+To: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+Cc: rafael@kernel.org, srinivas.pandruvada@linux.intel.com, 
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 3, 2024 at 5:49=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> wr=
-ote:
+On Fri, Apr 5, 2024 at 2:31=E2=80=AFPM Sumeet Pawnikar
+<sumeet.r.pawnikar@intel.com> wrote:
 >
-> Hi all,
+> Add Lunar Lake ACPI IDs for DPTF devices.
 >
-> This is a follow-up patch aiming to add EM modification due to chip binni=
-ng.
-> The first RFC and the discussion can be found here [1].
+> Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+> ---
+>  drivers/acpi/dptf/dptf_pch_fivr.c                       | 1 +
+>  drivers/acpi/dptf/dptf_power.c                          | 2 ++
+>  drivers/acpi/dptf/int340x_thermal.c                     | 6 ++++++
+>  drivers/acpi/fan.h                                      | 1 +
+>  drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 1 +
+>  drivers/thermal/intel/int340x_thermal/int3403_thermal.c | 1 +
+>  6 files changed, 12 insertions(+)
 >
-> It uses Exynos chip driver code as a 1st user. The EM framework has been
-> extended to handle this use case easily, when the voltage has been change=
-d
-> after setup. On my Odroid-xu4 in some OPPs I can observe ~20% power diffe=
-rence.
-> According to that data in driver tables it could be up to ~29%.
+> diff --git a/drivers/acpi/dptf/dptf_pch_fivr.c b/drivers/acpi/dptf/dptf_p=
+ch_fivr.c
+> index 654aaa53c67f..d202730fafd8 100644
+> --- a/drivers/acpi/dptf/dptf_pch_fivr.c
+> +++ b/drivers/acpi/dptf/dptf_pch_fivr.c
+> @@ -150,6 +150,7 @@ static const struct acpi_device_id pch_fivr_device_id=
+s[] =3D {
+>         {"INTC1045", 0},
+>         {"INTC1049", 0},
+>         {"INTC1064", 0},
+> +       {"INTC106B", 0},
+>         {"INTC10A3", 0},
+>         {"", 0},
+>  };
+> diff --git a/drivers/acpi/dptf/dptf_power.c b/drivers/acpi/dptf/dptf_powe=
+r.c
+> index b8187babbbbb..8023b3e23315 100644
+> --- a/drivers/acpi/dptf/dptf_power.c
+> +++ b/drivers/acpi/dptf/dptf_power.c
+> @@ -232,6 +232,8 @@ static const struct acpi_device_id int3407_device_ids=
+[] =3D {
+>         {"INTC1061", 0},
+>         {"INTC1065", 0},
+>         {"INTC1066", 0},
+> +       {"INTC106C", 0},
+> +       {"INTC106D", 0},
+>         {"INTC10A4", 0},
+>         {"INTC10A5", 0},
+>         {"", 0},
+> diff --git a/drivers/acpi/dptf/int340x_thermal.c b/drivers/acpi/dptf/int3=
+40x_thermal.c
+> index b7113fa92fa6..014ada759954 100644
+> --- a/drivers/acpi/dptf/int340x_thermal.c
+> +++ b/drivers/acpi/dptf/int340x_thermal.c
+> @@ -43,6 +43,12 @@ static const struct acpi_device_id int340x_thermal_dev=
+ice_ids[] =3D {
+>         {"INTC1064"},
+>         {"INTC1065"},
+>         {"INTC1066"},
+> +       {"INTC1068"},
+> +       {"INTC1069"},
+> +       {"INTC106A"},
+> +       {"INTC106B"},
+> +       {"INTC106C"},
+> +       {"INTC106D"},
+>         {"INTC10A0"},
+>         {"INTC10A1"},
+>         {"INTC10A2"},
+> diff --git a/drivers/acpi/fan.h b/drivers/acpi/fan.h
+> index e7b4b4e4a55e..f89d19c922dc 100644
+> --- a/drivers/acpi/fan.h
+> +++ b/drivers/acpi/fan.h
+> @@ -15,6 +15,7 @@
+>         {"INTC1044", }, /* Fan for Tiger Lake generation */ \
+>         {"INTC1048", }, /* Fan for Alder Lake generation */ \
+>         {"INTC1063", }, /* Fan for Meteor Lake generation */ \
+> +       {"INTC106A", }, /* Fan for Lunar Lake generation */ \
+>         {"INTC10A2", }, /* Fan for Raptor Lake generation */ \
+>         {"PNP0C0B", } /* Generic ACPI fan */
 >
-> This chip binning is applicable to a lot of SoCs, so the EM framework sho=
-uld
-> make it easy to update. It uses the existing OPP and DT information to
-> re-calculate the new power values.
->
-> It has dependency on Exynos SoC driver tree.
->
-> Changes:
-> v5:
-> - adjusted aligning of the function arguments in patch 1/4 (Dietmar)
-> - adjusted the in-code comment patch 4/4 (Dietmar)
-> - added Reviewed-by to all patches (Dietmar)
-> v4:
-> - added asterisk in the comment section (test robot)
-> - change the patch 2/4 header name and use 'Refactor'
-> v3:
-> - updated header description patch 2/4 (Dietmar)
-> - removed 2 sentences from comment and adjusted in patch 3/4 (Dietmar)
-> - patch 4/4 re-phrased code comment (Dietmar)
-> - collected tags (Krzysztof, Viresh)
-> v2:
-> - removed 'ret' from error message which wasn't initialized (Christian)
-> v1:
-> - exported the OPP calculation function from the OPP/OF so it can be
->   used from EM fwk (Viresh)
-> - refactored EM updating function to re-use common code
-> - added new EM function which can be used by chip device drivers which
->   modify the voltage in OPPs
-> RFC is at [1]
->
-> Regards,
-> Lukasz Luba
->
-> [1] https://lore.kernel.org/lkml/20231220110339.1065505-1-lukasz.luba@arm=
-.com/
->
-> Lukasz Luba (4):
->   OPP: OF: Export dev_opp_pm_calc_power() for usage from EM
->   PM: EM: Refactor em_adjust_new_capacity()
->   PM: EM: Add em_dev_update_chip_binning()
->   soc: samsung: exynos-asv: Update Energy Model after adjusting voltage
->
->  drivers/opp/of.c                 |  17 +++--
->  drivers/soc/samsung/exynos-asv.c |  10 ++-
->  include/linux/energy_model.h     |   5 ++
->  include/linux/pm_opp.h           |   8 +++
->  kernel/power/energy_model.c      | 106 +++++++++++++++++++++++++------
->  5 files changed, 121 insertions(+), 25 deletions(-)
->
+> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/dr=
+ivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> index 427d370648d5..f8ebdd19d340 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> @@ -705,6 +705,7 @@ static const struct acpi_device_id int3400_thermal_ma=
+tch[] =3D {
+>         {"INTC1040", 0},
+>         {"INTC1041", 0},
+>         {"INTC1042", 0},
+> +       {"INTC1068", 0},
+>         {"INTC10A0", 0},
+>         {}
+>  };
+> diff --git a/drivers/thermal/intel/int340x_thermal/int3403_thermal.c b/dr=
+ivers/thermal/intel/int340x_thermal/int3403_thermal.c
+> index 9b33fd3a66da..86901f9f54d8 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
+> +++ b/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
+> @@ -284,6 +284,7 @@ static const struct acpi_device_id int3403_device_ids=
+[] =3D {
+>         {"INTC1043", 0},
+>         {"INTC1046", 0},
+>         {"INTC1062", 0},
+> +       {"INTC1069", 0},
+>         {"INTC10A1", 0},
+>         {"", 0},
+>  };
 > --
 
-All patches in the series applied as 6.10 material, thanks!
+Applied as 6.10 material, thanks!
 
