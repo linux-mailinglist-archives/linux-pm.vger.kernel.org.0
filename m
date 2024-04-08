@@ -1,132 +1,169 @@
-Return-Path: <linux-pm+bounces-6050-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6051-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C4E389BE37
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 13:40:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7D0089BF4B
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 14:45:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C7C52282B79
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 11:40:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA7F51C23404
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 12:45:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8395169D37;
-	Mon,  8 Apr 2024 11:40:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FD9C7BAEE;
+	Mon,  8 Apr 2024 12:43:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U/1oprHx"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hlbGNp/f"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBEEA1E497;
-	Mon,  8 Apr 2024 11:40:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B1DA7BAF4
+	for <linux-pm@vger.kernel.org>; Mon,  8 Apr 2024 12:43:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712576419; cv=none; b=CY3QRNQ3KVVk2d87uzD/PQHrA5xk/qbCHh2DOnbNcRhH8u5PqmMkeKrJeuQ0wS/EV/BSFICdP1VBNvQKjP0q6Q+MD3mmq+vqPQUG8g+KIdGiySIawHqwFR2cz2gmwctHT57fbO5T8iszoAO69pqdgMMZLJ6egkBRatr6p1gyJ/o=
+	t=1712580216; cv=none; b=rukGG+Sj55kp1VIVUnt0/bcPkueJ8XGoVuYofExVGo8i+qEBUqKmgjmqHAaO6eBbh6Ckx+oXyuFW94CYKqZOf5LhQJ9fFwWIKHFGKq+jePdvXX8q3waxmQ9Ki1ietVAdQs3KZkBr0Ifdo1whR3+W6mSan56g7GghGnP1zPwjdn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712576419; c=relaxed/simple;
-	bh=rWFRjSTrFEi3sr3QTftz5bcZoSq9cdKy8xG19AUfBpo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d7k9bSmJpdxwZuxl6dLk//rBgIUAUsdqKckcs9MwgGL5pEdNuwOQk+qr/DLIh6Ta806XPQynsqLWyc2mtVzKIPUQ4ozyylP0UUDJMpQaZzrUOFkRtOh6egSowL8SCC0ehgbzEep0OpTfBw3WD6EGBDaG0X5MtfQGMK34d100Ljw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U/1oprHx; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1e45b9a5c53so2708175ad.3;
-        Mon, 08 Apr 2024 04:40:17 -0700 (PDT)
+	s=arc-20240116; t=1712580216; c=relaxed/simple;
+	bh=fKehCiClD9dg01VzoXzMKEtrJs4OUkNg+PrGr3/Dtj4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HzIbba+axRK5UxYx3tpqYJvAg9zb5lI4AT7ugndM325wY0Bj03UYpm+b0D9YST8mqnK+PlyFXEQW2bnhuvB6ETz4O+qzX3r/3TcdngbiOdPNfQRNdLFuSA5LfUPI4JSghNdZmugIUifeK4bc2HrcpWjgh+tF+KdgCkbHvUsGm4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hlbGNp/f; arc=none smtp.client-ip=209.85.219.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-dc236729a2bso4184133276.0
+        for <linux-pm@vger.kernel.org>; Mon, 08 Apr 2024 05:43:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712576417; x=1713181217; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o8Bi3GrM8szMy/fOrN09Zas7BpLrzN+uFd18xGLTGdw=;
-        b=U/1oprHxwvfac4Zg5q7t4Ni3AfNbHOFZEpbVAHlSqTohOBeoB0uZd1slDzP9s+OiQu
-         lA5/qLJkqlu1jz72+/3YqoNeSVRU5tPYkP8fQZ04PoDsqJQZm3ZhVWl51McPQF5eZBVs
-         7DBBdtkGvo8fMNpGUff4dq8leVlWRZTJ9ZxrQf+0jUwGTwUzeNweiJTDyFkyv8wdP37Y
-         UzoYkc/zrENCZdpLyCAZir8nWfFspe8xPf8n2WNpgSh9IfeDHLO4hJnni/ihisxdJwRC
-         TG+8ArBncUpGdjMnWl+CCFQvTy8IHIi5gq+iB+p3hOEuLQRmDik6SilsNkh8NONdY9t7
-         VORQ==
+        d=linaro.org; s=google; t=1712580212; x=1713185012; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JxaT3PMRuL4e9KTFT/emlcM/OCUcuLvdOqHXG/okFts=;
+        b=hlbGNp/fBHWVphGMddVgDdX+vu3xoJ9QQPpk6l8/NG4rT82WYaVeixwkytbFU8/JQC
+         A8q8q1r2C8yMKaItjJaVpoUj4SUxaKQPJ9r9sqZSQU7+N5UIcunE0ytCeULyfHUqQgjr
+         OcGZS7+ph3UilRsolSfKpyET8XsQmMk3B8oayeOEdZ8UmtVPJ3GXwVwhTc2UE0MDY7V9
+         5bIbd4fsAA7lBdAAAcSpU8pwvZIxYzGWooW6ZP0MHEvXTI1IrcjE9eXemPn6HTGvyA97
+         tXe0TqsL+UvcxSMSdv7Mv56VFx9d+A5Y+VAuL+ZLF+WX5hy5umtW41Predm+PK7S4KAT
+         CUAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712576417; x=1713181217;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=o8Bi3GrM8szMy/fOrN09Zas7BpLrzN+uFd18xGLTGdw=;
-        b=UdaKECoP9C2qx3NVHMiBfnqkinQNoHVn8sp6nPD+mfDJ9xT97xrWCXD3yYnmmjoJ1N
-         b1v7P1SHPuXGLatsvNN8QMTwaZL54bFqLG2W4tcvaIKn9hAeFRqR98pgxvo3hioGM3XX
-         M9lJHrngUj8t44UAMiq9z1Ayeb1gYVWdbB+x8vz5aewuOdPKS19QJkrPXFEyHEoIaKoY
-         4M1HXqHI13TIP8i4l/jWJcT07wFQXuCFTEJya1uR5kD/h4e8sA9uUmvD08Y6ygs0E1vf
-         k8fQMNocC35925qYbaIb+il2wbfP3ChUY03FAc+58rKE51Ro7eEjfZG28PXKC8RHku4w
-         dFfA==
-X-Forwarded-Encrypted: i=1; AJvYcCVdk6+d5FaKnfZNMPjzAWYoOu/EN8SNGLrD7SddULUjRdJSnB/DJBpQSsEZ/OvwCoOW+mAXKfitkgMu41hXKjWpRYTJNCxkKSQwuB8BrNuM7wQyXWmw90OjpBiKefvg1LovqD6E4vVzdupsXR2t8S/cEwJA0Zdi7UgeyiLpWXVbTSsy8A==
-X-Gm-Message-State: AOJu0Yx9I5iccTLx5+6B4gyn7IAAnfqPTpNbjnS+iGhxJBlV8xw5Nv/2
-	/uURiuN1YqK3D2X/UKWg6E/TQTH7DVFeGJNvQNEhs4xWcKmoiUrP
-X-Google-Smtp-Source: AGHT+IGwQWIqu2bxXFF7QdG5ABpWhh1MQiQODBJT2SoTN/3dDWilIKrLY6SbJvOTCbbTs6SIeQeOBw==
-X-Received: by 2002:a17:902:6b02:b0:1e2:3e0a:fc5e with SMTP id o2-20020a1709026b0200b001e23e0afc5emr8424464plk.33.1712576416956;
-        Mon, 08 Apr 2024 04:40:16 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p22-20020a1709027ed600b001e3e081d07esm4439176plb.179.2024.04.08.04.40.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Apr 2024 04:40:15 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 8 Apr 2024 04:40:14 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: "Zhang, Rui" <rui.zhang@intel.com>
-Cc: "ricardo.neri-calderon@linux.intel.com" <ricardo.neri-calderon@linux.intel.com>,
-	"Neri, Ricardo" <ricardo.neri@intel.com>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"lukasz.luba@arm.com" <lukasz.luba@arm.com>,
-	"daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-	"jdelvare@suse.com" <jdelvare@suse.com>,
-	"srinivas.pandruvada@linux.intel.com" <srinivas.pandruvada@linux.intel.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH 3/3] hwmon: (coretemp) Use a model-specific bitmask to
- read registers
-Message-ID: <48f81be1-b484-45c1-850b-8aa364b8d836@roeck-us.net>
-References: <20240406010416.4821-1-ricardo.neri-calderon@linux.intel.com>
- <20240406010416.4821-4-ricardo.neri-calderon@linux.intel.com>
- <f4d18a63-c348-4882-897b-dc636feb149b@roeck-us.net>
- <d0b5ae04b4d08e2003114c4d6b6d3a040f585995.camel@intel.com>
+        d=1e100.net; s=20230601; t=1712580212; x=1713185012;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JxaT3PMRuL4e9KTFT/emlcM/OCUcuLvdOqHXG/okFts=;
+        b=PDTDjwID14V1zP7cweDAElD7uBb8PB2PzH2SgxgaOKwQ8l4T1ymJ8Uazn6gUdZRV78
+         FpvP8rFwkqoOxuKwPYpBFKJwxT2WyvmEo/WMbK5mjbEvymmo4V9kfLHkJdF2vu0LMP2N
+         3ANtNbfMJIn5ZE0YJg2T6PHH7xPmicZ7NuIdVbck6UKpbpvZNI1GB3MUOsobZlrYLPeo
+         E1jhKdCscFEUig3+1N2zoAqPABBj00K6DBgSq4s+KmsysJZSxzZRo6KpEuwTrK3JGD5Y
+         R84LSjhmLeELa9fQk2z/h4d/X2mWAYBr+oBJJk6v0EMujHWuHYz7msyBMjgliXWhAY1b
+         WUow==
+X-Forwarded-Encrypted: i=1; AJvYcCW0udUujf8OCxswA5YpRFsEFg+W0BQjzr99DHgEwEqS1ZEHRLM+KZLSpBseEXwPuNeAFAPdOH69/P2furZyQRexEkU+3ltGvFc=
+X-Gm-Message-State: AOJu0YzHTxFxEiF0sQsy51s5RYG1to132StJRxBNSfpKchRqEARWpH8F
+	c1tgfDFL2j+NwDsh2BJYtWZZxnRkwKk9l4VPmNo1VnTZ2RA014Kwu4W2rSkyp4vX3qRgiVsyWuL
+	ZPqPe4FbR62HExzK3M/q6ktC28Q+4F7Q9GTjjJQ==
+X-Google-Smtp-Source: AGHT+IGQxbNzH63UQFQ7p/mhjOGB9jWdMTr1htv/fo/3N9wxCGG7juvIee6jEqslTXlE94kDc2JpOoAnb98ws1sIxxU=
+X-Received: by 2002:a25:ef03:0:b0:dcd:5bdb:4aa4 with SMTP id
+ g3-20020a25ef03000000b00dcd5bdb4aa4mr5956331ybd.51.1712580212336; Mon, 08 Apr
+ 2024 05:43:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d0b5ae04b4d08e2003114c4d6b6d3a040f585995.camel@intel.com>
+References: <20240405083410.4896-1-anna-maria@linutronix.de> <87r0fg5ocg.fsf@somnus>
+In-Reply-To: <87r0fg5ocg.fsf@somnus>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Mon, 8 Apr 2024 14:42:56 +0200
+Message-ID: <CAPDyKFo7KT4V8Nvn58N3mNfeW6ai=-5hampjN7N19kYaR7zdVA@mail.gmail.com>
+Subject: Re: [PATCH v2] PM: s2idle: Make sure CPUs will wakeup directly on resume
+To: Anna-Maria Behnsen <anna-maria@linutronix.de>
+Cc: linux-kernel@vger.kernel.org, "Rafael J . Wysocki" <rafael@kernel.org>, 
+	Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org, 
+	Frederic Weisbecker <frederic@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org, 
+	Mario Limonciello <mario.limonciello@amd.com>, stable@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Sun, Apr 07, 2024 at 08:39:51AM +0000, Zhang, Rui wrote:
-> > I do not think it is appropriate to make a hardware monitoring driver
-> > depend on the thermal subsystem.
-> > 
-> > NAK in the current form.
-> > 
-> Hi, Guenter,
-> 
-> Thanks for reviewing.
-> 
-> We've seen a couple of hwmon drivers depends on or imply THERMAL.
-> That's why we think this is an applicable solution.
+On Mon, 8 Apr 2024 at 09:02, Anna-Maria Behnsen
+<anna-maria@linutronix.de> wrote:
+>
+> s2idle works like a regular suspend with freezing processes and freezing
+> devices. All CPUs except the control CPU go into idle. Once this is
+> completed the control CPU kicks all other CPUs out of idle, so that they
+> reenter the idle loop and then enter s2idle state. The control CPU then
+> issues an swait() on the suspend state and therefore enters the idle loop
+> as well.
+>
+> Due to being kicked out of idle, the other CPUs leave their NOHZ states,
+> which means the tick is active and the corresponding hrtimer is programmed
+> to the next jiffie.
+>
+> On entering s2idle the CPUs shut down their local clockevent device to
+> prevent wakeups. The last CPU which enters s2idle shuts down its local
+> clockevent and freezes timekeeping.
+>
+> On resume, one of the CPUs receives the wakeup interrupt, unfreezes
+> timekeeping and its local clockevent and starts the resume process. At that
+> point all other CPUs are still in s2idle with their clockevents switched
+> off. They only resume when they are kicked by another CPU or after resuming
+> devices and then receiving a device interrupt.
+>
+> That means there is no guarantee that all CPUs will wakeup directly on
+> resume. As a consequence there is no guarantee that timers which are queued
+> on those CPUs and should expire directly after resume, are handled. Also
+> timer list timers which are remotely queued to one of those CPUs after
+> resume will not result in a reprogramming IPI as the tick is
+> active. Queueing a hrtimer will also not result in a reprogramming IPI
+> because the first hrtimer event is already in the past.
+>
+> The recent introduction of the timer pull model (7ee988770326 ("timers:
+> Implement the hierarchical pull model")) amplifies this problem, if the
+> current migrator is one of the non woken up CPUs. When a non pinned timer
+> list timer is queued and the queuing CPU goes idle, it relies on the still
+> suspended migrator CPU to expire the timer which will happen by chance.
+>
+> The problem exists since commit 8d89835b0467 ("PM: suspend: Do not pause
+> cpuidle in the suspend-to-idle path"). There the cpuidle_pause() call which
+> in turn invoked a wakeup for all idle CPUs was moved to a later point in
+> the resume process. This might not be reached or reached very late because
+> it waits on a timer of a still suspended CPU.
+>
+> Address this by kicking all CPUs out of idle after the control CPU returns
+> from swait() so that they resume their timers and restore consistent system
+> state.
+>
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218641
+> Fixes: 8d89835b0467 ("PM: suspend: Do not pause cpuidle in the suspend-to-idle path")
+> Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
+> Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+> Tested-by: Mario Limonciello <mario.limonciello@amd.com>
+> Cc: stable@kernel.org
 
-So far this was - unless someone sneaked something by - for drivers
-which registered thermal zones, not for calling code which resides
-inside thermal subsystem.
+Thanks for the detailed commit message! Please add:
 
-> Using the intel_tcc APIs can effectively reduce the future maintenance
-> burden because we don't need to duplicate the model list in multiple
-> places.
-> 
-> or do you have any suggestions?
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-The exported code should reside outside the thermal subsystem.
+Kind regards
+Uffe
 
-Also, as implemented, if INTEL_TCC=n, the returned temperature mask value
-is 0x7f, and the offset mask is 0. So the alternative would be to just use
-those values unconditionally since apparently that is sufficient.
-
-Thanks,
-Guenter
+> ---
+> v2: Fix typos in commit message
+> ---
+>  kernel/power/suspend.c |    6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> --- a/kernel/power/suspend.c
+> +++ b/kernel/power/suspend.c
+> @@ -106,6 +106,12 @@ static void s2idle_enter(void)
+>         swait_event_exclusive(s2idle_wait_head,
+>                     s2idle_state == S2IDLE_STATE_WAKE);
+>
+> +       /*
+> +        * Kick all CPUs to ensure that they resume their timers and restore
+> +        * consistent system state.
+> +        */
+> +       wake_up_all_idle_cpus();
+> +
+>         cpus_read_unlock();
+>
+>         raw_spin_lock_irq(&s2idle_lock);
 
