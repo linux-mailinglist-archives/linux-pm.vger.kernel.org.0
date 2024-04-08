@@ -1,121 +1,132 @@
-Return-Path: <linux-pm+bounces-6042-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6043-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE19C89B889
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 09:36:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B5B489B9C8
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 10:10:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D37F1F21DDC
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 07:36:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E53028259D
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 08:10:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0A362BB16;
-	Mon,  8 Apr 2024 07:36:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 999693B19D;
+	Mon,  8 Apr 2024 08:10:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BCdJ1pjI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B88782B9D4;
-	Mon,  8 Apr 2024 07:36:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2338A3838A
+	for <linux-pm@vger.kernel.org>; Mon,  8 Apr 2024 08:09:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712561771; cv=none; b=fQegQGp1oiofGsTU3Q+qiKTR0aZqPbRzP7+cZOr8FXKGzD/9GECy9eG9gxnzer5RjcHg2gLYwqpwkEzy1VtxvMx+teVNplTcUKnma2ELOdQ9/hu7125EBcAX7Q5oFmquV1Y8/hY3JlVu2u90SXU0y/PbbvBGjKVoB/8OziXHSvA=
+	t=1712563801; cv=none; b=BmbMUARrQWCDky+fP6ioGAR2ftbKe9lF2TG6OJymV+asuCrZvs2iViwKftpUA/4ll1QMIXZUApPZQ1ywC7QAxT4sMy8strXz7Tm6SK0+s3NYwhLtbQ4BbNwExOp52+sNFpfDkv9hwwpd7dWOcxQENs2wsrNxqWvDUcQ1A3fXahE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712561771; c=relaxed/simple;
-	bh=MYVEQ4Bnra1nXlCfh4cdc1ky1mz9ACZ0YBff5gnAeHE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=shaoHMKw0tZcZ+nixAlmTFr4HvVloLdJPzuTlBnIT8CY2XswDzNKgu8Y8qDjJf3AoE7d+44y9HKqe1AqBB3hdQCYmYkCx9/NSdVsXUuRhA1I0rNiKEiXyb3SANXIjU3l1BChdSKC4wqZzMK/8IcDUZu6v5pneBo1KvMIgkRbS6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83CAFC433C7;
-	Mon,  8 Apr 2024 07:36:08 +0000 (UTC)
-Message-ID: <0ee2d906-8ba3-4c3a-b731-4ed2f5d9fecc@xs4all.nl>
-Date: Mon, 8 Apr 2024 09:36:06 +0200
+	s=arc-20240116; t=1712563801; c=relaxed/simple;
+	bh=ljkAHH/jrVsEddYmqwbcAhxir0nJCPPqH96atvjx+I8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZS1tzAATXuPytOoCLY/lHJxXMtbw6plhlC7iPA9xjjku3rXVKxU640QIknkAiz1YWjYgx6L6NZDJ+tb675VurbGApX1Tjyp3YxRZl+f9O17C5go1OWl6S7XtRmAl4UWF4+EJEVfOYmpJaY9btS7V/DZ3pbBlCxAKggvM8Oni4QE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BCdJ1pjI; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a51beae2f13so158141566b.1
+        for <linux-pm@vger.kernel.org>; Mon, 08 Apr 2024 01:09:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1712563797; x=1713168597; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OzIHovojG3644yJzi7Rp4zPvS+LnsKi9BT3OOCmERoA=;
+        b=BCdJ1pjInKKk4vrgVcjnsJf+I8ArtH02GFeLNUq5rIpogQRb1hlTw5Z4a3CIC9dQ86
+         p99pc2LF+33dZHwTcmQ1PXNyRNgdShtYxKUSWlLafAORk5KWI3oB/Ej8E8U0MpM8EJlY
+         qpkdpWMfD8j733hkxoa0lhQ8kmu+Quh1PTpL/yIXyID5KDMxHta/P9lXZ3uyOkRE1FNP
+         NVbd3Z2+aDKxlS+UCRpPT6VnHCKMul0ZxQ4TisDo8oMpguE1aYKRNXfWum1OD/3yOZFA
+         jUaYsiHZiRh/Emp4+Hs73LZBgkDILK2QonUpJAWjV06+OC6Mh1L222fKXGtzA9bfNqtI
+         dvdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712563797; x=1713168597;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OzIHovojG3644yJzi7Rp4zPvS+LnsKi9BT3OOCmERoA=;
+        b=vgH3DBbVtl/DyMyAtfBnn0OxulrYJugc6F2nYNIjYMlveAeC/ixUGR3yhW3/jub/wI
+         tOPzV1W65zqIvypn66jZCKfKCblEVNjBwWD/k5y3fMs7TUkuX/pY/vtXdxIIx783sOfr
+         AvpgHkWO2mi8sg0BmPOpaOS+0SSl7ADzy7BwUMfaDiySuIa35EYlDhf1K8rCllEwVMm/
+         K/9lngMOBJHLJ6KRXD0gz62f/I6d6lRx8x9s00fZSMNaFTi2y3QueTFwQJZWzaVSbXfm
+         gZvfry1kwhBDhTH1zQ7e9Ec3GTSC4aRKy8ORPEw7OJjI++Dvpu7F7VPFK2SmAEu7ipgR
+         rgFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXq2kMww87d11A1SRdqML/ij3oqR2SoU0Nk5yRZNDa5FIXw2XnAI1zEaCZ7vNU7OXmr2EidqQ50tRFRf/qaoOrbI1brara72os=
+X-Gm-Message-State: AOJu0YynUNOVfy+9idQ6iVDIKbF2lk/Ihg0kNd+Ftt52baXHdbBJEBoO
+	rN+9TB7Gf/D+4a3j8yPh/sxWQYGsXHN+nre3XgatDFwG5g6enaECesg1EBcfl30=
+X-Google-Smtp-Source: AGHT+IHtvCDCPVlkweFZtEXFJMtCJqeKZm0fgLqDOmu+n81huoTOcfZOWzp5QNMYK38WJkLMK2XiTQ==
+X-Received: by 2002:a17:906:3391:b0:a4e:768a:144f with SMTP id v17-20020a170906339100b00a4e768a144fmr4666050eja.36.1712563797196;
+        Mon, 08 Apr 2024 01:09:57 -0700 (PDT)
+Received: from localhost ([102.222.70.76])
+        by smtp.gmail.com with ESMTPSA id gt17-20020a1709072d9100b00a51b3d4bb39sm3081020ejc.59.2024.04.08.01.09.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Apr 2024 01:09:56 -0700 (PDT)
+Date: Mon, 8 Apr 2024 11:09:51 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 2/2] thermal/drivers/mediatek/lvts_thermal: Improve some
+ memory allocation
+Message-ID: <d97f2a57-d318-455b-a860-8bd7972c8aaf@moroto.mountain>
+References: <42a87fb9837f1760d1ad4eb7162a7536785dc6f5.1712520052.git.christophe.jaillet@wanadoo.fr>
+ <8cb69f245311a348164b0b5ca3dbc59386746035.1712520052.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/6] media: platform: cros-ec: provide ID table for
- avoiding fallback match
-Content-Language: en-US, nl
-To: Tzung-Bi Shih <tzungbi@kernel.org>, bleung@chromium.org,
- groeck@chromium.org, linus.walleij@linaro.org, brgl@bgdev.pl,
- mchehab@kernel.org, sre@kernel.org
-Cc: chrome-platform@lists.linux.dev, pmalani@chromium.org,
- linux-gpio@vger.kernel.org, linux-media@vger.kernel.org,
- linux-pm@vger.kernel.org, krzk@kernel.org,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20240401030052.2887845-1-tzungbi@kernel.org>
- <20240401030052.2887845-2-tzungbi@kernel.org>
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20240401030052.2887845-2-tzungbi@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8cb69f245311a348164b0b5ca3dbc59386746035.1712520052.git.christophe.jaillet@wanadoo.fr>
 
-On 01/04/2024 05:00, Tzung-Bi Shih wrote:
-> Instead of using fallback driver name match, provide ID table[1] for the
-> primary match.
-> 
-> [1]: https://elixir.bootlin.com/linux/v6.8/source/drivers/base/platform.c#L1353
-> 
-> Reviewed-by: Benson Leung <bleung@chromium.org>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
-
-Looks OK, I'll queue this patch up for v6.10.
-
-Regards,
-
-	Hans
-
-> ---
-> Changes from v1:
-> - No code changes.
-> - Add R-b tags.
-> 
->  drivers/media/cec/platform/cros-ec/cros-ec-cec.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-> index 48ed2993d2f0..8fbbb4091455 100644
-> --- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-> +++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
-> @@ -8,6 +8,7 @@
+On Sun, Apr 07, 2024 at 10:01:49PM +0200, Christophe JAILLET wrote:
+> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+> index 3003dc350766..b133f731c5ba 100644
+> --- a/drivers/thermal/mediatek/lvts_thermal.c
+> +++ b/drivers/thermal/mediatek/lvts_thermal.c
+> @@ -204,7 +204,7 @@ static const struct debugfs_reg32 lvts_regs[] = {
 >  
->  #include <linux/kernel.h>
->  #include <linux/module.h>
-> +#include <linux/mod_devicetable.h>
->  #include <linux/platform_device.h>
->  #include <linux/dmi.h>
->  #include <linux/pci.h>
-> @@ -573,6 +574,12 @@ static void cros_ec_cec_remove(struct platform_device *pdev)
->  	}
->  }
+>  static int lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
+>  {
+> -	struct debugfs_regset32 *regset;
+> +	struct debugfs_regset32 *regsets;
+>  	struct lvts_ctrl *lvts_ctrl;
+>  	struct dentry *dentry;
+>  	char name[64];
+> @@ -214,8 +214,14 @@ static int lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
+>  	if (IS_ERR(lvts_td->dom_dentry))
+>  		return 0;
 >  
-> +static const struct platform_device_id cros_ec_cec_id[] = {
-> +	{ DRV_NAME, 0 },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(platform, cros_ec_cec_id);
+> +	regsets = devm_kcalloc(dev, lvts_td->num_lvts_ctrl,
+> +			       sizeof(*regsets), GFP_KERNEL);
+> +	if (!regsets)
+> +		return 0;
+
+I understand that this preserved the behavior from the original code,
+but the original code was wrong.  This should return -ENOMEM.
+
 > +
->  static struct platform_driver cros_ec_cec_driver = {
->  	.probe = cros_ec_cec_probe,
->  	.remove_new = cros_ec_cec_remove,
-> @@ -580,6 +587,7 @@ static struct platform_driver cros_ec_cec_driver = {
->  		.name = DRV_NAME,
->  		.pm = &cros_ec_cec_pm_ops,
->  	},
-> +	.id_table = cros_ec_cec_id,
->  };
+>  	for (i = 0; i < lvts_td->num_lvts_ctrl; i++) {
 >  
->  module_platform_driver(cros_ec_cec_driver);
-> @@ -587,4 +595,3 @@ module_platform_driver(cros_ec_cec_driver);
->  MODULE_DESCRIPTION("CEC driver for ChromeOS ECs");
->  MODULE_AUTHOR("Neil Armstrong <narmstrong@baylibre.com>");
->  MODULE_LICENSE("GPL");
-> -MODULE_ALIAS("platform:" DRV_NAME);
+> +		struct debugfs_regset32 *regset = &regsets[i];
+>  		lvts_ctrl = &lvts_td->lvts_ctrl[i];
+
+The blank line should come after the declaration.
+
+regards,
+dan carpenter
 
 
