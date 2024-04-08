@@ -1,146 +1,121 @@
-Return-Path: <linux-pm+bounces-6041-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6042-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEB6389B815
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 09:02:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE19C89B889
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 09:36:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A95ED282EB3
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 07:02:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D37F1F21DDC
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 07:36:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BFC61F93E;
-	Mon,  8 Apr 2024 07:02:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="SlHQUBf+";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="OfoIxj3J"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0A362BB16;
+	Mon,  8 Apr 2024 07:36:11 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FDD42BB0D;
-	Mon,  8 Apr 2024 07:02:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B88782B9D4;
+	Mon,  8 Apr 2024 07:36:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712559753; cv=none; b=cKOPYQSIXQcnqaq8dUukNwT0uXxfT9IGK5SPCDTOVVp9zNWdAiACwbB1XwetcncIkTaRHJ1zAQVGaDj4uhthGBDNTBw3FA6+GR26zDyoigRMm/B85ESvzPizInMxK9S0djGTLGZFxlPhUhBuQ0JKUGKf40teDKIAwV7+ZqbK7wo=
+	t=1712561771; cv=none; b=fQegQGp1oiofGsTU3Q+qiKTR0aZqPbRzP7+cZOr8FXKGzD/9GECy9eG9gxnzer5RjcHg2gLYwqpwkEzy1VtxvMx+teVNplTcUKnma2ELOdQ9/hu7125EBcAX7Q5oFmquV1Y8/hY3JlVu2u90SXU0y/PbbvBGjKVoB/8OziXHSvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712559753; c=relaxed/simple;
-	bh=QOSh4rAjt7EpTH6eCTMkOk4R42jH2WV4EIL3hGsapBo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=OMNu84uRU+qr2rq7hQVtX7bxNjmqPWTcI6Kv388vgoyUMzrddnn2tcK1V3T0uzJdIj7AmhWEn9gGUJg7uw/GwTiCHN0hSuZySCu8Ecnpj0R4pgYAR3ijxQo211GV2MULQIjraCGF4lokYQxPB93pNpAQZnvb4K6d24jPGLFxL0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=SlHQUBf+; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=OfoIxj3J; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Anna-Maria Behnsen <anna-maria@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1712559744;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UUwDtrm53vQQRYnp3vpMLTiNe30BZmkb/pL6DAKCU3I=;
-	b=SlHQUBf+iLS0zQeNnLeKKal+9XI5fo5ofz1fxfsruZ/klXptQfEKLKPCO3f4pgpBFr3zTx
-	5Ke3hhnnCxp38F2OKPLmvqsS1fWN8uh9RpFKTj8zx9e/PxGm2nx7zMpmc3KCmvJCjT5zsV
-	NZF6nRxBSPZ35m2T/AvtWO7vgsKk/SbPrKjpRdfXG52PhaGD4JVMKosGRLpv3CbmzjRjHr
-	b5S40nbIf/iueTmG0Px+epcMK7WUINuWVUPXQWkWPZwJQh8IXThpLiZqVh0y1ta3xLS1PN
-	qkt/QDGyBMRwf7yVx8WSWyfrDO1ghtxgURHJJfmbU+hEqWq9EkwXEQ7gXozSDg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1712559744;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UUwDtrm53vQQRYnp3vpMLTiNe30BZmkb/pL6DAKCU3I=;
-	b=OfoIxj3Jc/K3eeNw1pc1uUcUA1y75B5si0ZQfK1tEDQiiRp4ODpmFNH3Mi8yvrZSve35CV
-	MQswu7qoP+7eUbAQ==
-To: linux-kernel@vger.kernel.org
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
- Len Brown <len.brown@intel.com>, Ulf Hansson <ulf.hansson@linaro.org>,
- linux-pm@vger.kernel.org, Frederic Weisbecker <frederic@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org, Mario Limonciello
- <mario.limonciello@amd.com>, stable@kernel.org
-Subject: [PATCH v2] PM: s2idle: Make sure CPUs will wakeup directly on resume
-In-Reply-To: <20240405083410.4896-1-anna-maria@linutronix.de>
-References: <20240405083410.4896-1-anna-maria@linutronix.de>
-Date: Mon, 08 Apr 2024 09:02:23 +0200
-Message-ID: <87r0fg5ocg.fsf@somnus>
+	s=arc-20240116; t=1712561771; c=relaxed/simple;
+	bh=MYVEQ4Bnra1nXlCfh4cdc1ky1mz9ACZ0YBff5gnAeHE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=shaoHMKw0tZcZ+nixAlmTFr4HvVloLdJPzuTlBnIT8CY2XswDzNKgu8Y8qDjJf3AoE7d+44y9HKqe1AqBB3hdQCYmYkCx9/NSdVsXUuRhA1I0rNiKEiXyb3SANXIjU3l1BChdSKC4wqZzMK/8IcDUZu6v5pneBo1KvMIgkRbS6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83CAFC433C7;
+	Mon,  8 Apr 2024 07:36:08 +0000 (UTC)
+Message-ID: <0ee2d906-8ba3-4c3a-b731-4ed2f5d9fecc@xs4all.nl>
+Date: Mon, 8 Apr 2024 09:36:06 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/6] media: platform: cros-ec: provide ID table for
+ avoiding fallback match
+Content-Language: en-US, nl
+To: Tzung-Bi Shih <tzungbi@kernel.org>, bleung@chromium.org,
+ groeck@chromium.org, linus.walleij@linaro.org, brgl@bgdev.pl,
+ mchehab@kernel.org, sre@kernel.org
+Cc: chrome-platform@lists.linux.dev, pmalani@chromium.org,
+ linux-gpio@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-pm@vger.kernel.org, krzk@kernel.org,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20240401030052.2887845-1-tzungbi@kernel.org>
+ <20240401030052.2887845-2-tzungbi@kernel.org>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20240401030052.2887845-2-tzungbi@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-s2idle works like a regular suspend with freezing processes and freezing
-devices. All CPUs except the control CPU go into idle. Once this is
-completed the control CPU kicks all other CPUs out of idle, so that they
-reenter the idle loop and then enter s2idle state. The control CPU then
-issues an swait() on the suspend state and therefore enters the idle loop
-as well.
+On 01/04/2024 05:00, Tzung-Bi Shih wrote:
+> Instead of using fallback driver name match, provide ID table[1] for the
+> primary match.
+> 
+> [1]: https://elixir.bootlin.com/linux/v6.8/source/drivers/base/platform.c#L1353
+> 
+> Reviewed-by: Benson Leung <bleung@chromium.org>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 
-Due to being kicked out of idle, the other CPUs leave their NOHZ states,
-which means the tick is active and the corresponding hrtimer is programmed
-to the next jiffie.
+Looks OK, I'll queue this patch up for v6.10.
 
-On entering s2idle the CPUs shut down their local clockevent device to
-prevent wakeups. The last CPU which enters s2idle shuts down its local
-clockevent and freezes timekeeping.
+Regards,
 
-On resume, one of the CPUs receives the wakeup interrupt, unfreezes
-timekeeping and its local clockevent and starts the resume process. At that
-point all other CPUs are still in s2idle with their clockevents switched
-off. They only resume when they are kicked by another CPU or after resuming
-devices and then receiving a device interrupt.
+	Hans
 
-That means there is no guarantee that all CPUs will wakeup directly on
-resume. As a consequence there is no guarantee that timers which are queued
-on those CPUs and should expire directly after resume, are handled. Also
-timer list timers which are remotely queued to one of those CPUs after
-resume will not result in a reprogramming IPI as the tick is
-active. Queueing a hrtimer will also not result in a reprogramming IPI
-because the first hrtimer event is already in the past.
+> ---
+> Changes from v1:
+> - No code changes.
+> - Add R-b tags.
+> 
+>  drivers/media/cec/platform/cros-ec/cros-ec-cec.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+> index 48ed2993d2f0..8fbbb4091455 100644
+> --- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+> +++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+> @@ -8,6 +8,7 @@
+>  
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+> +#include <linux/mod_devicetable.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/dmi.h>
+>  #include <linux/pci.h>
+> @@ -573,6 +574,12 @@ static void cros_ec_cec_remove(struct platform_device *pdev)
+>  	}
+>  }
+>  
+> +static const struct platform_device_id cros_ec_cec_id[] = {
+> +	{ DRV_NAME, 0 },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(platform, cros_ec_cec_id);
+> +
+>  static struct platform_driver cros_ec_cec_driver = {
+>  	.probe = cros_ec_cec_probe,
+>  	.remove_new = cros_ec_cec_remove,
+> @@ -580,6 +587,7 @@ static struct platform_driver cros_ec_cec_driver = {
+>  		.name = DRV_NAME,
+>  		.pm = &cros_ec_cec_pm_ops,
+>  	},
+> +	.id_table = cros_ec_cec_id,
+>  };
+>  
+>  module_platform_driver(cros_ec_cec_driver);
+> @@ -587,4 +595,3 @@ module_platform_driver(cros_ec_cec_driver);
+>  MODULE_DESCRIPTION("CEC driver for ChromeOS ECs");
+>  MODULE_AUTHOR("Neil Armstrong <narmstrong@baylibre.com>");
+>  MODULE_LICENSE("GPL");
+> -MODULE_ALIAS("platform:" DRV_NAME);
 
-The recent introduction of the timer pull model (7ee988770326 ("timers:
-Implement the hierarchical pull model")) amplifies this problem, if the
-current migrator is one of the non woken up CPUs. When a non pinned timer
-list timer is queued and the queuing CPU goes idle, it relies on the still
-suspended migrator CPU to expire the timer which will happen by chance.
-
-The problem exists since commit 8d89835b0467 ("PM: suspend: Do not pause
-cpuidle in the suspend-to-idle path"). There the cpuidle_pause() call which
-in turn invoked a wakeup for all idle CPUs was moved to a later point in
-the resume process. This might not be reached or reached very late because
-it waits on a timer of a still suspended CPU.
-
-Address this by kicking all CPUs out of idle after the control CPU returns
-from swait() so that they resume their timers and restore consistent system
-state.
-
-Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218641
-Fixes: 8d89835b0467 ("PM: suspend: Do not pause cpuidle in the suspend-to-idle path")
-Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Mario Limonciello <mario.limonciello@amd.com>
-Cc: stable@kernel.org
----
-v2: Fix typos in commit message
----
- kernel/power/suspend.c |    6 ++++++
- 1 file changed, 6 insertions(+)
-
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -106,6 +106,12 @@ static void s2idle_enter(void)
- 	swait_event_exclusive(s2idle_wait_head,
- 		    s2idle_state == S2IDLE_STATE_WAKE);
- 
-+	/*
-+	 * Kick all CPUs to ensure that they resume their timers and restore
-+	 * consistent system state.
-+	 */
-+	wake_up_all_idle_cpus();
-+
- 	cpus_read_unlock();
- 
- 	raw_spin_lock_irq(&s2idle_lock);
 
