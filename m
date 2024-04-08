@@ -1,180 +1,167 @@
-Return-Path: <linux-pm+bounces-6055-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6056-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DA8089C67C
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 16:11:55 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00D3C89C6DD
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 16:21:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A1B421C229D7
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 14:11:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 01971B22125
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 14:17:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1453084D35;
-	Mon,  8 Apr 2024 14:11:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A935086136;
+	Mon,  8 Apr 2024 14:17:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hi4haSiz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TbfgDgdU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCC9984D1C;
-	Mon,  8 Apr 2024 14:11:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D57485C5D;
+	Mon,  8 Apr 2024 14:17:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712585510; cv=none; b=faCJAns5daGJeyTvM1f/Y5Cn5r8cuCzS60KcK6KVxKB++kOaJqo4bqsGHTktkTautVOFBDYm/DwtfMCU6kirGkLpYgsiB8qrn6QeClliaW+C9pGYP3EO74gH9t7zWpuNo/QUbwT2NTMxdUP74s39+3lvF5MQXGssvN00SPsbkcc=
+	t=1712585862; cv=none; b=Tu6ROJo0KSOu2+0+iWBjupffqndsdw2ScEPC9MsF/c54SkiybJNd1Ny0shjMkTSex+7DhjK8PMdGX4Y6qIY249yket61QNk9AI0BlVTYEPbPw65EnPmfW1MZccrLVloy8MQBVj1b12sFfE1b5tz6O6sVaZ1sSXC/qJq/F1r3cdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712585510; c=relaxed/simple;
-	bh=Y5VDGX/dMQKlUWcPOeqi5ZCYWJijxH8qLM/15IHq2Ag=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pNzWCJtZTC44Bh4sRv1hxpljvwkPsjk6dPlKwF/VfaYMq4N475Tn4Y1G7wvOrn7xwdFvgVf0SfjTcOHt7G9qQl809QPJmvCNXT1sauA71lLQO9LIHBboFv1nrm0VU8LB4Pa+HFFjO0S/JuEuC3Q4zE+VZvDGSmhl/To0GAtAJ4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hi4haSiz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D384C433F1;
-	Mon,  8 Apr 2024 14:11:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712585509;
-	bh=Y5VDGX/dMQKlUWcPOeqi5ZCYWJijxH8qLM/15IHq2Ag=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=hi4haSizLHLeV1cxPz2QxOf0sM5W3Vwrpvpz75wspuo6phr5Q9EBAv7ole5+JcHVD
-	 B4mexWtiU6i6SPVdOj2n6Rq505T3XDeG9s3dNAD6hSM0PNKHldCAeGmRisHEQNiz6K
-	 cb+isO7Gdz7sXcDItzLKhMvJCpxh+KiIJoLpSY2qlF2PO8kXAnnXj95DQWRnhJiLh/
-	 S8FBsGvp1Z0706XWzLBPsM41nUCDTILIr4iJyQZj+ZsAONcNlB0pglPvW4cIeFCQYK
-	 /cSTYusoNphLJSzIou22wDseKz2gruSn/tzKFclelULXvPLE8+LGdg+8FIXiv6PRkB
-	 VasGbzrUpZMFQ==
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-6ea0a6856d7so606196a34.1;
-        Mon, 08 Apr 2024 07:11:49 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVUoPJgMkLd+wuxJNYrSwV8ur1Sn0Sge/n8Lm9XdVgFBz5aULQVZoiE0I36oPyCHNniI8Nme594ZFmF34frxwdNRbAAC4F7F6OnsAUpBJhIF3l7XfBqjLFwGOmVuy61OesEkMTmxU7y2XXc329rkuvDu5BaUu/XZzUY+jWrS1O+7MEQ
-X-Gm-Message-State: AOJu0YxZt49HPtNuVBTord259UCSjilcfqiP0CavN+SfVhcwTpx0A2Z7
-	bNxvP6Q3qypWZ7rx0RxSzAU56bDpAAu2cjY7Bic+XrzcWZffvxxW/q7nVkc9ea1ODgQmsmaazDj
-	rmHQ2zKgEtqgcCDDxXaPOXVfq3Zs=
-X-Google-Smtp-Source: AGHT+IHXfmB+SUI1PFf5gbH9pXpP3RXeYlH6OKyn7AkJ05XBV8CG5i8TYv8qnvxxum64Q8ax1o9IrX71zGPJ88VXXks=
-X-Received: by 2002:a05:6808:130a:b0:3c5:dc7a:57d0 with SMTP id
- y10-20020a056808130a00b003c5dc7a57d0mr10464908oiv.5.1712585508701; Mon, 08
- Apr 2024 07:11:48 -0700 (PDT)
+	s=arc-20240116; t=1712585862; c=relaxed/simple;
+	bh=xtO+UZtPh4czwtwpsw4636hm7erzTR79z/J1kew+UD0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gcS9XiPfovuhDjufv+76xoe29TVSYo5g8C7MDKSRCY720iXGiGB3bRrjuwtK6v6/rV7pHqm3FB/DzKqEtS5D6x3OO4EH1g0el64vEZixnFwAaYWc441uJ0HbPSzIP3jEDePeKzeU7VNMVCvezg//G+VEXhNq3O2UhZ5MfjkuFjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TbfgDgdU; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712585860; x=1744121860;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=xtO+UZtPh4czwtwpsw4636hm7erzTR79z/J1kew+UD0=;
+  b=TbfgDgdUU/tq5uIBmxNKpN38YLdLjRZfSSve2yqIsOWbZOqgwevtAdhY
+   whc7k5AI2Bci1pQLqF45/PxB5jG8Rl67XP08PgUMHS/TXYysvhdcmUEPM
+   kOQedDN11HWA8ifWUv/58XxwtznIbgp5BmP1j8b3UAAXl3WsWGyQP7UQy
+   U+r3C4Z4zOq0Fz4kx/cWNNgHH72HJ4x9zEsUts70SdUEP96cDxuHVGwnP
+   BZogcjBIvF61A9uuF4h6nJ5giytxGHrEyA4OzSIny45ChtVo/mCrfMkj9
+   cS4DXADy6ehtw54MTm1ZJcOlCsoufRAdItvMrcXzab6Szybx+S0kWYZC4
+   A==;
+X-CSE-ConnectionGUID: ivye9XGxST63o2z1FifjeQ==
+X-CSE-MsgGUID: SHAp5hWxSs+T2kYy2O+IYA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="7731985"
+X-IronPort-AV: E=Sophos;i="6.07,187,1708416000"; 
+   d="scan'208";a="7731985"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 07:17:39 -0700
+X-CSE-ConnectionGUID: ILCau2wjQ6+WB29dITlcHg==
+X-CSE-MsgGUID: SgHdLwAUS9SBYniORcWUuA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,187,1708416000"; 
+   d="scan'208";a="24390367"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 07:17:39 -0700
+Date: Mon, 8 Apr 2024 07:23:43 -0700
+From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To: "Zhang, Rui" <rui.zhang@intel.com>
+Cc: "linux@roeck-us.net" <linux@roeck-us.net>,
+	"Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+	"jdelvare@suse.com" <jdelvare@suse.com>,
+	"srinivas.pandruvada@linux.intel.com" <srinivas.pandruvada@linux.intel.com>,
+	"lukasz.luba@arm.com" <lukasz.luba@arm.com>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	"daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"Neri, Ricardo" <ricardo.neri@intel.com>
+Subject: Re: [PATCH 1/3] thermal: intel: intel_tcc: Add model checks for
+ temperature registers
+Message-ID: <20240408142343.GA16542@ranerica-svr.sc.intel.com>
+References: <20240406010416.4821-1-ricardo.neri-calderon@linux.intel.com>
+ <20240406010416.4821-2-ricardo.neri-calderon@linux.intel.com>
+ <5e86524413ec2cfeb1096f49851bf18837c7e50b.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240405121819.31331-1-sumeet.r.pawnikar@intel.com>
-In-Reply-To: <20240405121819.31331-1-sumeet.r.pawnikar@intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 8 Apr 2024 16:11:37 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0is1Y+QHWfp-=sddAD8bUgn+QD7PmfBnAzgjZktqMYhBA@mail.gmail.com>
-Message-ID: <CAJZ5v0is1Y+QHWfp-=sddAD8bUgn+QD7PmfBnAzgjZktqMYhBA@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: DPTF: Add Lunar Lake support
-To: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-Cc: rafael@kernel.org, srinivas.pandruvada@linux.intel.com, 
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5e86524413ec2cfeb1096f49851bf18837c7e50b.camel@intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 
-On Fri, Apr 5, 2024 at 2:31=E2=80=AFPM Sumeet Pawnikar
-<sumeet.r.pawnikar@intel.com> wrote:
->
-> Add Lunar Lake ACPI IDs for DPTF devices.
->
-> Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-> ---
->  drivers/acpi/dptf/dptf_pch_fivr.c                       | 1 +
->  drivers/acpi/dptf/dptf_power.c                          | 2 ++
->  drivers/acpi/dptf/int340x_thermal.c                     | 6 ++++++
->  drivers/acpi/fan.h                                      | 1 +
->  drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 1 +
->  drivers/thermal/intel/int340x_thermal/int3403_thermal.c | 1 +
->  6 files changed, 12 insertions(+)
->
-> diff --git a/drivers/acpi/dptf/dptf_pch_fivr.c b/drivers/acpi/dptf/dptf_p=
-ch_fivr.c
-> index 654aaa53c67f..d202730fafd8 100644
-> --- a/drivers/acpi/dptf/dptf_pch_fivr.c
-> +++ b/drivers/acpi/dptf/dptf_pch_fivr.c
-> @@ -150,6 +150,7 @@ static const struct acpi_device_id pch_fivr_device_id=
-s[] =3D {
->         {"INTC1045", 0},
->         {"INTC1049", 0},
->         {"INTC1064", 0},
-> +       {"INTC106B", 0},
->         {"INTC10A3", 0},
->         {"", 0},
->  };
-> diff --git a/drivers/acpi/dptf/dptf_power.c b/drivers/acpi/dptf/dptf_powe=
-r.c
-> index b8187babbbbb..8023b3e23315 100644
-> --- a/drivers/acpi/dptf/dptf_power.c
-> +++ b/drivers/acpi/dptf/dptf_power.c
-> @@ -232,6 +232,8 @@ static const struct acpi_device_id int3407_device_ids=
-[] =3D {
->         {"INTC1061", 0},
->         {"INTC1065", 0},
->         {"INTC1066", 0},
-> +       {"INTC106C", 0},
-> +       {"INTC106D", 0},
->         {"INTC10A4", 0},
->         {"INTC10A5", 0},
->         {"", 0},
-> diff --git a/drivers/acpi/dptf/int340x_thermal.c b/drivers/acpi/dptf/int3=
-40x_thermal.c
-> index b7113fa92fa6..014ada759954 100644
-> --- a/drivers/acpi/dptf/int340x_thermal.c
-> +++ b/drivers/acpi/dptf/int340x_thermal.c
-> @@ -43,6 +43,12 @@ static const struct acpi_device_id int340x_thermal_dev=
-ice_ids[] =3D {
->         {"INTC1064"},
->         {"INTC1065"},
->         {"INTC1066"},
-> +       {"INTC1068"},
-> +       {"INTC1069"},
-> +       {"INTC106A"},
-> +       {"INTC106B"},
-> +       {"INTC106C"},
-> +       {"INTC106D"},
->         {"INTC10A0"},
->         {"INTC10A1"},
->         {"INTC10A2"},
-> diff --git a/drivers/acpi/fan.h b/drivers/acpi/fan.h
-> index e7b4b4e4a55e..f89d19c922dc 100644
-> --- a/drivers/acpi/fan.h
-> +++ b/drivers/acpi/fan.h
-> @@ -15,6 +15,7 @@
->         {"INTC1044", }, /* Fan for Tiger Lake generation */ \
->         {"INTC1048", }, /* Fan for Alder Lake generation */ \
->         {"INTC1063", }, /* Fan for Meteor Lake generation */ \
-> +       {"INTC106A", }, /* Fan for Lunar Lake generation */ \
->         {"INTC10A2", }, /* Fan for Raptor Lake generation */ \
->         {"PNP0C0B", } /* Generic ACPI fan */
->
-> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/dr=
-ivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> index 427d370648d5..f8ebdd19d340 100644
-> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> @@ -705,6 +705,7 @@ static const struct acpi_device_id int3400_thermal_ma=
-tch[] =3D {
->         {"INTC1040", 0},
->         {"INTC1041", 0},
->         {"INTC1042", 0},
-> +       {"INTC1068", 0},
->         {"INTC10A0", 0},
->         {}
->  };
-> diff --git a/drivers/thermal/intel/int340x_thermal/int3403_thermal.c b/dr=
-ivers/thermal/intel/int340x_thermal/int3403_thermal.c
-> index 9b33fd3a66da..86901f9f54d8 100644
-> --- a/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
-> +++ b/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
-> @@ -284,6 +284,7 @@ static const struct acpi_device_id int3403_device_ids=
-[] =3D {
->         {"INTC1043", 0},
->         {"INTC1046", 0},
->         {"INTC1062", 0},
-> +       {"INTC1069", 0},
->         {"INTC10A1", 0},
->         {"", 0},
->  };
-> --
+On Sun, Apr 07, 2024 at 08:13:28AM +0000, Zhang, Rui wrote:
+> > +
+> > +#define TCC_FAM6_MODEL_TEMP_MASKS
 
-Applied as 6.10 material, thanks!
+Thank your your review, Rui!
+
+> 
+> Future non FAM6 processors can still use this macro, right?
+> So I'd prefer to remove FAM6_MODEL in the macro name.
+
+Yes, it is true, FAM6_MODEL it is restrictive and also not needed here.
+I will update accodingly.
+ 
+> [...]
+> > 
+> > +
+> > +/**
+> > + * get_tcc_offset_mask() - Returns the model-specific bitmask for
+> > TCC offset
+> > + *
+> > + * Get the model-specific bitmask to extract TCC_OFFSET from the
+> > MSR_TEMPERATURE_
+> > + * TARGET register. If the mask is 0, it means the processor does
+> > not support TCC offset.
+> > + *
+> > + * Return: The model-specific bitmask for TCC offset.
+> > + */
+> > +u32 get_tcc_offset_mask(void)
+> > +{
+> > +       return intel_tcc_temp_masks.tcc_offset;
+> > +}
+> > +EXPORT_SYMBOL_NS(get_tcc_offset_mask, INTEL_TCC);
+> 
+> the name is not consistent with the other intel_tcc APIs.
+> 
+> how about intel_tcc_get_offset_mask()?
+
+Sure. I can make this change.
+
+> 
+> [...]
+> 
+> > diff --git a/include/linux/intel_tcc.h b/include/linux/intel_tcc.h
+> > index 8ff8eabb4a98..e281cf06aeab 100644
+> > --- a/include/linux/intel_tcc.h
+> > +++ b/include/linux/intel_tcc.h
+> > @@ -14,5 +14,13 @@ int intel_tcc_get_tjmax(int cpu);
+> >  int intel_tcc_get_offset(int cpu);
+> >  int intel_tcc_set_offset(int cpu, int offset);
+> >  int intel_tcc_get_temp(int cpu, int *temp, bool pkg);
+> > +#ifdef CONFIG_INTEL_TCC
+> > +u32 get_tcc_offset_mask(void);
+> > +u32 intel_tcc_get_temp_mask(bool pkg);
+> > +#else
+> > +static inline u32 get_tcc_offset_mask(void) { return 0; }
+> > +/* Use the architectural bitmask of the temperature readout. No
+> > model checks. */
+> > +static inline u32 intel_tcc_get_temp_mask(bool pkg) { return 0x7f; }
+> > +#endif
+> 
+> for intel_tcc_get_temp_mask()
+>    1. with CONFIG_INTEL_TCC
+>       a) for a platform in the model list, return the hardcoded value
+>       b) for a platform not in the model list, return 0xff
+>    2. without CONFIG_INTEL_TCC, return 0x7f
+> 
+> This is a bit confusing. IMO, at least we should leave a comment about
+> this difference.
+
+If we don't do model checks, I think we should rely on what is architectural
+as per the SDM. Hence the 0x7f value.
+
+Perhaps I can expand the comment in this hunk to detail what we do when we
+do model checks.
+
 
