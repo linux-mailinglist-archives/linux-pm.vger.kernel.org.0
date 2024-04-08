@@ -1,158 +1,117 @@
-Return-Path: <linux-pm+bounces-6057-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6058-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5297989C783
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 16:52:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FDFF89C7AD
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 17:01:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A7141C20DB7
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 14:52:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0288283DDC
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Apr 2024 15:01:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6019613F011;
-	Mon,  8 Apr 2024 14:52:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6ADC13F433;
+	Mon,  8 Apr 2024 15:01:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iPVzIBvT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5461813F00C
-	for <linux-pm@vger.kernel.org>; Mon,  8 Apr 2024 14:51:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.86.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 470CD13F42A;
+	Mon,  8 Apr 2024 15:01:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712587921; cv=none; b=Qu6MvNRbEipkm7AD3BWDbO+u6lbrnHLeSLJv24kxkHcNttHSHrXehkhm5x6L/G9yTDZiE9c7QP/QbpFaSE/bWbotHO057sTDWkHXmjkzO5uYoftNKeG8qWrrimRd8ubHVm0yLk3d6u+HhSc3DBsqvB9Iak+MYhv4lRXPoKojZzo=
+	t=1712588494; cv=none; b=uRoqqWANLNavbl5vmJnsCI4xn5XWcY4D5QYlTYtBKee6s8H4U6lakBSySHofUzWXb4l8a5c1DZh7NevtJfL8iJDzHTUxGPz/OhMui4vbheLZfMah4cCeRzo/tXAOPsbuHWNcrjaUtDl4On02G5sBnG4plBv6lJpcDBLscpEvzCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712587921; c=relaxed/simple;
-	bh=joBS4N+InEhxAxePrDedqkg1DBS7fYz8aPowxWmurS4=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 MIME-Version:Content-Type; b=F9Cbp7vmZbyiHCbHbdU1GYHsNE4WvkNRdP5utmZP7jF3IKLkZ2QaBbXMnGM9YWMChEQ26igt27LqzxGkls6nlg5huFVBvaLieEn6uQekjyJ2A9ofFWUj4OHS7QoiGsgCqfLe36VzDbLlVioTO4bPHpdyvdciQfuHGu2CWJ2sFsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.86.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-71-6TRe-qOWOSiRkJM3kA_YFw-1; Mon, 08 Apr 2024 15:51:48 +0100
-X-MC-Unique: 6TRe-qOWOSiRkJM3kA_YFw-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 8 Apr
- 2024 15:51:13 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Mon, 8 Apr 2024 15:51:13 +0100
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Haris Okanovic' <harisokn@amazon.com>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-pm@vger.kernel.org"
-	<linux-pm@vger.kernel.org>, "linux-assembly@vger.kernel.org"
-	<linux-assembly@vger.kernel.org>
-CC: "peterz@infradead.org" <peterz@infradead.org>
-Subject: RE: [PATCH 2/3] arm64: add __READ_ONCE_EX()
-Thread-Topic: [PATCH 2/3] arm64: add __READ_ONCE_EX()
-Thread-Index: AQHahJ/HcAF4vsIbZ0CGgbWFvfkyfLFefKGg
-Date: Mon, 8 Apr 2024 14:51:13 +0000
-Message-ID: <1b659ba3fa50482a8338b1a6942884cc@AcuMS.aculab.com>
-References: <20240402014706.3969151-1-harisokn@amazon.com>
- <20240402014706.3969151-2-harisokn@amazon.com>
-In-Reply-To: <20240402014706.3969151-2-harisokn@amazon.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
+	s=arc-20240116; t=1712588494; c=relaxed/simple;
+	bh=EITVdlJtkrnylLXhed9Pr1DfYAyVTQ3XvaUDh63E534=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bjGRrwHk++ZbrkhTgH5dXtENpfRHmOQgJczDQVc15iA567JVW7k1W6MUUOXs7yZhxnNGzTX9gfmFXSqeiqb/RfO03pubmr21C5vGhsPv+wymsdlr54E51D1WxkfwCXhutiACQjLNfRk4LWGJ4pRpG7g74ENrtKCkg1UVyI74PrE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iPVzIBvT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB446C433F1;
+	Mon,  8 Apr 2024 15:01:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712588493;
+	bh=EITVdlJtkrnylLXhed9Pr1DfYAyVTQ3XvaUDh63E534=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=iPVzIBvT/iSK03mJ74WyCdtfwrYQ0FIvhL5K8YMXOWzUcxtAW1X9DNCrqtBiFjfyi
+	 tl90sPwPpZ5rbnlWkWlrmucbJbApIpssRcLEk4bwAVt6FxwLnhmycj60p3s5ZulGuY
+	 Oi6kb5XzN6oeZLDaCEoYGMUGaCwA36s9aVa2vFCs+0r3L2ACNZZS6RJMIMK7lmGxXl
+	 LZaKWREq5eaTZ8dEmqubeluPfq1pepZhLI9FVjpANsP8XqyeISOYtrQC8gZ/KN/t0I
+	 J4RLdMza2ntow+e8CC8hAcBjXsrybDusTaZepo397svH4xSl9ToXUzq+mYubuhRT/b
+	 17pKAxdggeVsA==
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-6ea1572136eso453455a34.1;
+        Mon, 08 Apr 2024 08:01:33 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCW3+0lUuKg3hHhe5fIqYbB6u665OvDnFDviXdUd7KWwdn3iXbLFY6hEeIr3VKPT+6KhtijdC/aMEQixQJR8e62LzYen9GjggTwawKLEhn9SqELjylZL57kGQkpxmjD/8n7Z+WFUBW8H2HCWTBOLjc+YqFVDm55FTv5XdDPgzEIaiLOjT+XnmOtAolUMwTh7zUKraa7MV0+2yxafcRNvULKVG6VwrLZivXIW1gexeQtwi62weIsFjgZCMyHHVQ==
+X-Gm-Message-State: AOJu0YzUFgJuG5OoHcgg+C7cG0jOPGlDiSTYqqsmM17PI9Otqcm2Gp8w
+	0xKNpdaFYwl5HKE7Dz+tIuFRrDijMGKw9nsfRzmQji05ws/GVvDn/2lcM2jA+e5CupL+fHBJ80z
+	yHjpuw6lyNGtgRjHxBoAg7xnjuYg=
+X-Google-Smtp-Source: AGHT+IE7BjvtTOsOgPqYkXR1Qq+KOOG/nJtiEyKbfNUuvRcPpCIK8D3B6ZYbWXxS6qJ87RK9Jxd6UH195uv+p6a4TTw=
+X-Received: by 2002:a05:6808:603:b0:3c5:f534:e2c7 with SMTP id
+ y3-20020a056808060300b003c5f534e2c7mr2839026oih.1.1712588493105; Mon, 08 Apr
+ 2024 08:01:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
+References: <cover.1712410202.git.lukas@wunner.de>
+In-Reply-To: <cover.1712410202.git.lukas@wunner.de>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 8 Apr 2024 17:01:22 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hOHCSp8-8EZjuGAOR0QSH3CcvokG3uBGAKFFpTrkqQRA@mail.gmail.com>
+Message-ID: <CAJZ5v0hOHCSp8-8EZjuGAOR0QSH3CcvokG3uBGAKFFpTrkqQRA@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Deduplicate bin_attribute simple read() callbacks
+To: Lukas Wunner <lukas@wunner.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>, 
+	linuxppc-dev@lists.ozlabs.org, linux-acpi@vger.kernel.org, 
+	Jean Delvare <jdelvare@suse.com>, Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org, 
+	Zhenyu Wang <zhenyuw@linux.intel.com>, Zhi Wang <zhi.wang.linux@gmail.com>, 
+	intel-gvt-dev@lists.freedesktop.org, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org, 
+	Luis Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-From: Haris Okanovic
-> Sent: 02 April 2024 02:47
->=20
-> Perform an exclusive load, which atomically loads a word and arms the
-> execusive monitor to enable wfe() polling of an address.
->=20
-> Adding this macro in preparation for an arm64 cpuidle driver which
-> supports a wfe() based polling state.
->=20
-> https://developer.arm.com/documentation/dht0008/a/arm-synchronization-pri=
-mitives/exclusive-
-> accesses/exclusive-monitors
->=20
-> Signed-off-by: Haris Okanovic <harisokn@amazon.com>
-> ---
->  arch/arm64/include/asm/readex.h | 46 +++++++++++++++++++++++++++++++++
->  1 file changed, 46 insertions(+)
->  create mode 100644 arch/arm64/include/asm/readex.h
->=20
-> diff --git a/arch/arm64/include/asm/readex.h b/arch/arm64/include/asm/rea=
-dex.h
-> new file mode 100644
-> index 000000000000..51963c3107e1
-> --- /dev/null
-> +++ b/arch/arm64/include/asm/readex.h
-> @@ -0,0 +1,46 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Based on arch/arm64/include/asm/rwonce.h
-> + *
-> + * Copyright (C) 2020 Google LLC.
-> + * Copyright (C) 2024 Amazon.com, Inc. or its affiliates.
-> + */
-> +
-> +#ifndef __ASM_READEX_H
-> +#define __ASM_READEX_H
-> +
-> +#define __LOAD_EX(sfx, regs...) "ldaxr" #sfx "\t" #regs
-> +
-> +#define __READ_ONCE_EX(x)=09=09=09=09=09=09\
-> +({=09=09=09=09=09=09=09=09=09\
-> +=09typeof(&(x)) __x =3D &(x);=09=09=09=09=09\
-> +=09int atomic =3D 1;=09=09=09=09=09=09=09\
-> +=09union { __unqual_scalar_typeof(*__x) __val; char __c[1]; } __u;=09\
-> +=09switch (sizeof(x)) {=09=09=09=09=09=09\
-> +=09case 1:=09=09=09=09=09=09=09=09\
-> +=09=09asm volatile(__LOAD_EX(b, %w0, %1)=09=09=09\
-> +=09=09=09: "=3Dr" (*(__u8 *)__u.__c)=09=09=09\
-> +=09=09=09: "Q" (*__x) : "memory");=09=09=09\
-> +=09=09break;=09=09=09=09=09=09=09\
-> +=09case 2:=09=09=09=09=09=09=09=09\
-> +=09=09asm volatile(__LOAD_EX(h, %w0, %1)=09=09=09\
-> +=09=09=09: "=3Dr" (*(__u16 *)__u.__c)=09=09=09\
-> +=09=09=09: "Q" (*__x) : "memory");=09=09=09\
-> +=09=09break;=09=09=09=09=09=09=09\
-> +=09case 4:=09=09=09=09=09=09=09=09\
-> +=09=09asm volatile(__LOAD_EX(, %w0, %1)=09=09=09\
-> +=09=09=09: "=3Dr" (*(__u32 *)__u.__c)=09=09=09\
-> +=09=09=09: "Q" (*__x) : "memory");=09=09=09\
-> +=09=09break;=09=09=09=09=09=09=09\
-> +=09case 8:=09=09=09=09=09=09=09=09\
-> +=09=09asm volatile(__LOAD_EX(, %0, %1)=09=09=09\
-> +=09=09=09: "=3Dr" (*(__u64 *)__u.__c)=09=09=09\
-> +=09=09=09: "Q" (*__x) : "memory");=09=09=09\
-> +=09=09break;=09=09=09=09=09=09=09\
-> +=09default:=09=09=09=09=09=09=09\
-> +=09=09atomic =3D 0;=09=09=09=09=09=09\
-> +=09}=09=09=09=09=09=09=09=09\
-> +=09atomic ? (typeof(*__x))__u.__val : (*(volatile typeof(__x))__x);\
+On Sat, Apr 6, 2024 at 3:52=E2=80=AFPM Lukas Wunner <lukas@wunner.de> wrote=
+:
+>
+> For my upcoming PCI device authentication v2 patches, I have the need
+> to expose a simple buffer in virtual memory as a bin_attribute.
+>
+> It turns out we've duplicated the ->read() callback for such simple
+> buffers a fair number of times across the tree.
+>
+> So instead of reinventing the wheel, I decided to introduce a common
+> helper and eliminate all duplications I could find.
+>
+> I'm open to a bikeshedding discussion on the sysfs_bin_attr_simple_read()
+> name. ;)
+>
+> Lukas Wunner (2):
+>   sysfs: Add sysfs_bin_attr_simple_read() helper
+>   treewide: Use sysfs_bin_attr_simple_read() helper
+>
+>  arch/powerpc/platforms/powernv/opal.c              | 10 +-------
+>  drivers/acpi/bgrt.c                                |  9 +-------
+>  drivers/firmware/dmi_scan.c                        | 12 ++--------
+>  drivers/firmware/efi/rci2-table.c                  | 10 +-------
+>  drivers/gpu/drm/i915/gvt/firmware.c                | 26 +++++-----------=
+-----
+>  .../intel/int340x_thermal/int3400_thermal.c        |  9 +-------
+>  fs/sysfs/file.c                                    | 27 ++++++++++++++++=
+++++++
+>  include/linux/sysfs.h                              | 15 ++++++++++++
+>  init/initramfs.c                                   | 10 +-------
+>  kernel/module/sysfs.c                              | 13 +----------
+>  10 files changed, 56 insertions(+), 85 deletions(-)
+>
+> --
 
-I'm pretty sure that doesn't work the way you expect.
-The ?: operator promotes 'unsigned char' to  'int'.
-So you can fall foul of signedness tests (eg in min()).
-It also isn't going to work for non-scalers.
+For the series
 
-Replacing the ?: with __builtin_choose_expr() may help.
-
-(This is probably a bug in the code you copied.)
-
-=09David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
-PT, UK
-Registration No: 1397386 (Wales)
-
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
