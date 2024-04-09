@@ -1,79 +1,79 @@
-Return-Path: <linux-pm+bounces-6086-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6087-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1CA089CF69
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 02:32:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EBE189CF6A
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 02:32:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A8ED1F248DD
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EEFE0284B74
 	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 00:32:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9F214A04;
-	Tue,  9 Apr 2024 00:31:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15A694A2C;
+	Tue,  9 Apr 2024 00:32:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hMhIVoce"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E4+Hm8ea"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 290866FCB
-	for <linux-pm@vger.kernel.org>; Tue,  9 Apr 2024 00:31:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E5ED10F2
+	for <linux-pm@vger.kernel.org>; Tue,  9 Apr 2024 00:31:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712622718; cv=none; b=BM2wMyV5NUi8ZMzKrvta4jIUFm4y4s8+mfRxiNhbeTbgLAazg3LDzATRic+ZyjyCGruELmQsKtnX6wau3Cx2Qg+mMf1ToEsipdTJYSjNLWP99WF5BAfp3LKI21a9pLyhI4Fwm/iWt046YLP3BeufCZfFIACHXr13AT+sTSGw20E=
+	t=1712622720; cv=none; b=fzi0T3oMWVy/lE6FDY4a5TIkLjQIugTfNFABcnBD7WpQDpUCxwTMfZZgUNmnzpzufS2a7nCf93hJrb45umbV0+xrEPBlEiMn95pm/daohhcTbLT3hV50oi1qDD4SCKTUEIIgtzmXfoPZ9VrHxOUGLDsCnq9D1eoyXRScRjwe69Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712622718; c=relaxed/simple;
-	bh=gi9Nq/rLi6q4vLZrhgGgB4P3Z0EKqyougPf4b2pLf1s=;
+	s=arc-20240116; t=1712622720; c=relaxed/simple;
+	bh=Wyf/xeYNMTebt+gtGkQivYTc22AFahIAjvMfUtiOVvM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=FvWS03JNQNQQFZp2NLp2qn9D8D82CZRtWTuS25lgOoYfgxaEAOs7DeqEXymgBOJ371ulqtf67HRRZPBvWKadVfQhNKol7YBA0J2JbBlzlZLMcoa80C7oYhuXS6DH6yJf833hb7Im8Pu1lP/KsdO0RYYUYJIJlg1XJxikmJvPugo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hMhIVoce; arc=none smtp.client-ip=209.85.219.176
+	 MIME-Version; b=O/LWOLkKONQL7goiWFxP7BWoriOytQb9qQIB3MMMLMhpo7QHZohTGxEibIN+vcl6tRilYzn6ZPc7vSJm/91nOJAHPjjRnpkVAa+9QLC7jqe0KccV6nZ7cvfUsk3cupoUxmKycPaKjOtdJxTJAN79iyvyPKhWdsO6Cjpr5sv6LFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E4+Hm8ea; arc=none smtp.client-ip=209.85.219.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-dccb1421bdeso4979485276.1
-        for <linux-pm@vger.kernel.org>; Mon, 08 Apr 2024 17:31:56 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-dc6d8bd618eso4741551276.3
+        for <linux-pm@vger.kernel.org>; Mon, 08 Apr 2024 17:31:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712622716; x=1713227516; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1712622717; x=1713227517; darn=vger.kernel.org;
         h=content-transfer-encoding:organization:reply-to:mime-version
          :references:in-reply-to:message-id:date:subject:cc:to:from:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=luDi78ZV0wVN225rOuayHwvu4VrSv9q1v6WTiodjvj0=;
-        b=hMhIVoceLWwRcCleu6jx1E1m9hpuPCK/WGNNl2521nsmjPC8dvY+GgZFNrzysmeQIj
-         yCfPbGZlBPa4Y0u1lhindLGhIqjMDeYk3grCMZjGN2UwHeYCI/pCrfnGUCHnEvz43aZR
-         verw3GP+zXDEOfbbhRToR7ly105B69IK7rQBHADyzx3FKnTjqg5XL3ZohhDAWddQQ+JX
-         zd03lamLTuPa2Yk+QPjh3pAL+QDyloXG8D/lOKx+obJYhTz58BpJGlEdxlZEdNtsbJTS
-         GhyEkBABGKF70yZXSfA+F2q/Xu3mftFJrzqiHlt0Y6Vgg63bAu81ie54ckeiEhIHK0DS
-         /R1w==
+        bh=/6SxItsuR1lM8G3EGEqZ2t7EFKHGphQEmG5btbZ/69E=;
+        b=E4+Hm8eaS+CwVurz+WJ6ok+xX8JW5hgRacfIPPpGcrnvbuztr5qXWLp1Ld+iKEFMh/
+         FzQ9P0GWXofgLAIh0VG9QnkVwlNLkxM9JXpHnsRAfGCjvDKSYc8ysKPh/1gcnanPxZVf
+         pcomqGBt1NjkLWrsipVtScYJqkzALqDD++JRcMwZHiFi+MoFZrMPSkMdGNU7UlYOYSV+
+         HyzakLJ1toIHoQh1E5Z1vI25A31We6x1sL/wOINclL9zhcd39mV0LniKAbapQoOASTkk
+         W+9073p8g+5CBHOzppVYrCf4V+iN45AdC2EXmqUxbS4CecetJjWxsD1OUIn0Vg8Ntyf3
+         mRDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712622716; x=1713227516;
+        d=1e100.net; s=20230601; t=1712622717; x=1713227517;
         h=content-transfer-encoding:organization:reply-to:mime-version
          :references:in-reply-to:message-id:date:subject:cc:to:from:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=luDi78ZV0wVN225rOuayHwvu4VrSv9q1v6WTiodjvj0=;
-        b=qVedvbZh8hFJEg5ob7h/pQdM72CWFfmQkGWzdRsMOElHuV/obJx3sYkr32IrPzsnqT
-         vqIPRHW+lxaMwtzHM273rjl4t5JZNUCzBvIKit1r1H9i/ZfGyOLISs5R2M+YLsVgDn4P
-         B+RREZ0dP72SFWPLVi89F4tCHYSE8tjV9v/2ANv4hw4nnFEtmQDh/L57l3d4Ie+MEibW
-         LBp8HS3+YsteFUCGRna1lp/VcLEzHFXnc5GbFTRiI0w/5EVLJAdcLcKc5b/nP3QOFiWn
-         HjVnjxLiV9w8Aq6gaXx5gLqZCG+FF7rs2mUfZ3dLZZCN5LMIpJ91SzcQlp/HrPrJIrpG
-         ejXQ==
-X-Gm-Message-State: AOJu0YwoIoccRKLvezXcQl0HBtQ0uPar83EBnmim0al2XIHUX72oxBxE
-	AR1B05R/EJDQbqXEgJ6u9JWoJdSEP58a4tWIZI3lp7Zup9YIUhdbNCfwOsM9
-X-Google-Smtp-Source: AGHT+IFJgM+1Klwmb4uQ7BoQCWqmsF5nuUtSBJNpO2RDI+fDaxvvVRJTeoxcXWRUzaciZrtqfPgm2w==
-X-Received: by 2002:a25:2102:0:b0:dc7:1d:5db4 with SMTP id h2-20020a252102000000b00dc7001d5db4mr7241733ybh.34.1712622716008;
-        Mon, 08 Apr 2024 17:31:56 -0700 (PDT)
+        bh=/6SxItsuR1lM8G3EGEqZ2t7EFKHGphQEmG5btbZ/69E=;
+        b=USMIbhy6RFDQH9t4DRGMY5okncSgIISXlGw3JmaNoii9BA1og85zCo6Js9PEHMIL40
+         DvvKabXkJI0Yam9DpB+q73FpHqQEHmq6ZI9+9jMF/7W5YQrk5OovvbYgwfXxH4sF8llu
+         WRy6c3novscaXBYypdYxEXYWRxF+qFAg6V3yEOmxAgXQAxDUnLGWlhBkH/bQQ4y2fPRv
+         u4NIRRyamu1yKU7Rk1s84usOCgOqH9W6F4rD/dl4RFhPo6RWAYy2QsSB2vhHc7oaa0/h
+         hDijbaggCszkXsOUma+2HqUYHwQpyoVAa6+Rk9TBa+gu6pX3kYMUZxTofJBaxgbwnHnw
+         1brw==
+X-Gm-Message-State: AOJu0YxDORVlaFp65B7tCvgQOl8BEYjEhzXcmlPLlv0uCh6bYZLWnIn+
+	u+GUZlol+u9tnc8OnG5g86T8MAe8fO5PnfTx5+2bZSkMHQf3QitMM9m6Qalp
+X-Google-Smtp-Source: AGHT+IFNeoDzjG4dMxN1SNGXTvfptxI+cl0D0lAf/vD7Ls+TMS0EWmFJvoHaSpenjXGouEepWsM1iA==
+X-Received: by 2002:a25:952:0:b0:dcf:bc57:cd61 with SMTP id u18-20020a250952000000b00dcfbc57cd61mr8565044ybm.50.1712622717292;
+        Mon, 08 Apr 2024 17:31:57 -0700 (PDT)
 Received: from lenb-Intel-NUC8i7HVKVA.search.charter.net (2603-9000-9f01-67cf-100c-5508-c194-b194.inf6.spectrum.com. [2603:9000:9f01:67cf:100c:5508:c194:b194])
-        by smtp.gmail.com with ESMTPSA id h6-20020a25e206000000b00dc74ac54f5fsm1531949ybe.63.2024.04.08.17.31.55
+        by smtp.gmail.com with ESMTPSA id h6-20020a25e206000000b00dc74ac54f5fsm1531949ybe.63.2024.04.08.17.31.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Apr 2024 17:31:55 -0700 (PDT)
+        Mon, 08 Apr 2024 17:31:57 -0700 (PDT)
 Sender: Len Brown <lenb417@gmail.com>
 From: Len Brown <lenb@kernel.org>
 To: linux-pm@vger.kernel.org
 Cc: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>,
 	Len Brown <len.brown@intel.com>
-Subject: [PATCH 14/26] tools/power turbostat: add early exits for permission checks
-Date: Mon,  8 Apr 2024 20:31:08 -0400
-Message-Id: <aed48c48fa65abdd584e14f7d0273711bc10d223.1712621427.git.len.brown@intel.com>
+Subject: [PATCH 15/26] tools/power turbostat: Clear added counters when in no-msr mode
+Date: Mon,  8 Apr 2024 20:31:09 -0400
+Message-Id: <4a1bb4dad5d16669e841410944e7bc84ef7263fc.1712621427.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <e5f4e68eed85fa8495d78cd966eecc2b27bb9e53.1712621427.git.len.brown@intel.com>
 References: <e5f4e68eed85fa8495d78cd966eecc2b27bb9e53.1712621427.git.len.brown@intel.com>
@@ -89,133 +89,94 @@ Content-Transfer-Encoding: 8bit
 
 From: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
 
-Checking early if the permissions are even needed gets rid of the
-warnings about some of them missing. Earlier we issued a warning in case
-of missing MSR and/or perf permissions, even when user never asked for
-counters that require those.
+If user request --no-msr or is not able to access the MSRs,
+turbostat should clear all the counters added with --add.
+Because MSR access permission checks are done after the cmdline is
+parsed, the decision has to be defered up until the transition into
+no-msr mode happen.
 
-Signed-off-by: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 66 +++++++++++++++++++++++++--
- 1 file changed, 61 insertions(+), 5 deletions(-)
+ tools/power/x86/turbostat/turbostat.c | 47 ++++++++++++++++++++++++++-
+ 1 file changed, 46 insertions(+), 1 deletion(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 30db6e92193a..e5e01b58992e 100644
+index e5e01b58992e..b4a892bf22bf 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -5818,6 +5818,14 @@ static int has_instr_count_access(void)
- 	return has_access;
- }
+@@ -1160,6 +1160,37 @@ struct sys_counters {
+ 	struct msr_counter *pp;
+ } sys;
  
-+bool is_aperf_access_required(void)
++void free_sys_counters(void)
 +{
-+	return BIC_IS_ENABLED(BIC_Avg_MHz)
-+	    || BIC_IS_ENABLED(BIC_Busy)
-+	    || BIC_IS_ENABLED(BIC_Bzy_MHz)
-+	    || BIC_IS_ENABLED(BIC_IPC);
++	struct msr_counter *p = sys.tp, *pnext = NULL;
++	while (p) {
++		pnext = p->next;
++		free(p);
++		p = pnext;
++	}
++
++	p = sys.cp, pnext = NULL;
++	while (p) {
++		pnext = p->next;
++		free(p);
++		p = pnext;
++	}
++
++	p = sys.pp, pnext = NULL;
++	while (p) {
++		pnext = p->next;
++		free(p);
++		p = pnext;
++	}
++
++	sys.added_thread_counters = 0;
++	sys.added_core_counters = 0;
++	sys.added_package_counters = 0;
++	sys.tp = NULL;
++	sys.cp = NULL;
++	sys.pp = NULL;
 +}
 +
- /*
-  * Linux-perf manages the HW instructions-retired counter
-  * by enabling when requested, and hiding rollover
-@@ -5833,8 +5841,7 @@ void linux_perf_init(void)
- 			err(-1, "calloc fd_instr_count_percpu");
- 	}
+ struct system_summary {
+ 	struct thread_data threads;
+ 	struct core_data cores;
+@@ -1315,6 +1346,8 @@ static void bic_disable_msr_access(void)
+ 	    BIC_Pkgpc2 | BIC_Pkgpc3 | BIC_Pkgpc6 | BIC_Pkgpc7 | BIC_Pkgpc8 | BIC_Pkgpc9 | BIC_Pkgpc10 | BIC_PkgTmp;
  
--	const bool aperf_required = BIC_IS_ENABLED(BIC_Avg_MHz) || BIC_IS_ENABLED(BIC_Busy) ||
--	    BIC_IS_ENABLED(BIC_Bzy_MHz) || BIC_IS_ENABLED(BIC_IPC);
-+	const bool aperf_required = is_aperf_access_required();
- 	if (aperf_required && has_aperf && amperf_source == AMPERF_SOURCE_PERF) {
- 		fd_amperf_percpu = calloc(topo.max_cpu_num + 1, sizeof(*fd_amperf_percpu));
- 		if (fd_amperf_percpu == NULL)
-@@ -5903,6 +5910,9 @@ static int has_amperf_access_via_perf(void)
- /* Check if we can access APERF and MPERF */
- static int has_amperf_access(void)
- {
-+	if (!is_aperf_access_required())
-+		return 0;
+ 	bic_enabled &= ~bic_msrs;
 +
- 	if (!no_msr && has_amperf_access_via_msr())
- 		return 1;
++	free_sys_counters();
+ }
  
-@@ -6581,7 +6591,8 @@ static void set_amperf_source(void)
- {
- 	amperf_source = AMPERF_SOURCE_PERF;
- 
--	if (no_perf || !has_amperf_access_via_perf())
-+	const bool aperf_required = is_aperf_access_required();
-+	if (no_perf || !aperf_required || !has_amperf_access_via_perf())
- 		amperf_source = AMPERF_SOURCE_MSR;
- 
- 	if (quiet || !debug)
-@@ -6590,8 +6601,51 @@ static void set_amperf_source(void)
+ static long perf_event_open(struct perf_event_attr *hw_event, pid_t pid, int cpu, int group_fd, unsigned long flags)
+@@ -6601,12 +6634,24 @@ static void set_amperf_source(void)
  	fprintf(outf, "aperf/mperf source preference: %s\n", amperf_source == AMPERF_SOURCE_MSR ? "msr" : "perf");
  }
  
-+bool is_msr_access_required(void)
++bool has_added_counters(void)
 +{
-+	/* TODO: add detection for dynamic counters from add_counter() */
-+	if (no_msr)
-+		return false;
++	/*
++	 * It only makes sense to call this after the command line is parsed,
++	 * otherwise sys structure is not populated.
++	 */
 +
-+	return BIC_IS_ENABLED(BIC_SMI)
-+	    || BIC_IS_ENABLED(BIC_CPU_c1)
-+	    || BIC_IS_ENABLED(BIC_CPU_c3)
-+	    || BIC_IS_ENABLED(BIC_CPU_c6)
-+	    || BIC_IS_ENABLED(BIC_CPU_c7)
-+	    || BIC_IS_ENABLED(BIC_Mod_c6)
-+	    || BIC_IS_ENABLED(BIC_CoreTmp)
-+	    || BIC_IS_ENABLED(BIC_Totl_c0)
-+	    || BIC_IS_ENABLED(BIC_Any_c0)
-+	    || BIC_IS_ENABLED(BIC_GFX_c0)
-+	    || BIC_IS_ENABLED(BIC_CPUGFX)
-+	    || BIC_IS_ENABLED(BIC_Pkgpc3)
-+	    || BIC_IS_ENABLED(BIC_Pkgpc6)
-+	    || BIC_IS_ENABLED(BIC_Pkgpc2)
-+	    || BIC_IS_ENABLED(BIC_Pkgpc7)
-+	    || BIC_IS_ENABLED(BIC_Pkgpc8)
-+	    || BIC_IS_ENABLED(BIC_Pkgpc9)
-+	    || BIC_IS_ENABLED(BIC_Pkgpc10)
-+	    || BIC_IS_ENABLED(BIC_CorWatt)
-+	    || BIC_IS_ENABLED(BIC_Cor_J)
-+	    || BIC_IS_ENABLED(BIC_PkgWatt)
-+	    || BIC_IS_ENABLED(BIC_CorWatt)
-+	    || BIC_IS_ENABLED(BIC_GFXWatt)
-+	    || BIC_IS_ENABLED(BIC_RAMWatt)
-+	    || BIC_IS_ENABLED(BIC_Pkg_J)
-+	    || BIC_IS_ENABLED(BIC_Cor_J)
-+	    || BIC_IS_ENABLED(BIC_GFX_J)
-+	    || BIC_IS_ENABLED(BIC_RAM_J)
-+	    || BIC_IS_ENABLED(BIC_PKG__)
-+	    || BIC_IS_ENABLED(BIC_RAM__)
-+	    || BIC_IS_ENABLED(BIC_PkgTmp)
-+	    || (is_aperf_access_required() && !has_amperf_access_via_perf());
++	return sys.added_core_counters | sys.added_thread_counters | sys.added_package_counters;
 +}
 +
- void check_msr_access(void)
+ bool is_msr_access_required(void)
  {
-+	if (!is_msr_access_required())
-+		no_msr = 1;
+-	/* TODO: add detection for dynamic counters from add_counter() */
+ 	if (no_msr)
+ 		return false;
+ 
++	if (has_added_counters())
++		return true;
 +
- 	check_dev_msr();
- 	check_msr_permission();
- 
-@@ -6601,10 +6655,12 @@ void check_msr_access(void)
- 
- void check_perf_access(void)
- {
--	if (no_perf || !has_instr_count_access())
-+	const bool intrcount_required = BIC_IS_ENABLED(BIC_IPC);
-+	if (no_perf || !intrcount_required || !has_instr_count_access())
- 		bic_enabled &= ~BIC_IPC;
- 
--	if (!has_amperf_access()) {
-+	const bool aperf_required = is_aperf_access_required();
-+	if (!aperf_required || !has_amperf_access()) {
- 		bic_enabled &= ~BIC_Avg_MHz;
- 		bic_enabled &= ~BIC_Busy;
- 		bic_enabled &= ~BIC_Bzy_MHz;
+ 	return BIC_IS_ENABLED(BIC_SMI)
+ 	    || BIC_IS_ENABLED(BIC_CPU_c1)
+ 	    || BIC_IS_ENABLED(BIC_CPU_c3)
 -- 
 2.40.1
 
