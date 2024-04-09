@@ -1,310 +1,205 @@
-Return-Path: <linux-pm+bounces-6104-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6105-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE78C89D919
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 14:20:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18F2389D942
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 14:34:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 385AC1F22F42
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 12:20:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 707A2B224FE
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 12:34:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA8B812C817;
-	Tue,  9 Apr 2024 12:20:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 634B222318;
+	Tue,  9 Apr 2024 12:34:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l8hInSwR"
+	dkim=pass (2048-bit key) header.d=topic.nl header.i=@topic.nl header.b="EbA068HJ";
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=topic.nl header.i=@topic.nl header.b="cd0Orsaq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2092.outbound.protection.outlook.com [40.107.8.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3DCB12B14F;
-	Tue,  9 Apr 2024 12:20:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712665219; cv=none; b=kV0o2Y57OBsNMYTElBAKqAb+vrPAdmu5TtYrMm+c1gRTTDQW155NKy+MehrX+5Z4Fx16a5fBf2Np+gvGGUXP5uqwV8YGa8iyz9WmarcVGVyGYXz9czN7WjtPTUbjjjZvPZBXcP+RWpObJ6Ipp9oJLrLHXVjsU6TzaDrzE7fE0HQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712665219; c=relaxed/simple;
-	bh=210/FfMnnEHrTZuHurJZtxMnFqXxkms8u/m6ywgoA+I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=T8OCQ03wQ2M8A8rqo9dXcxmbsB+b9ct6dZf5xLUjTKvUAux8EusPVi4Otu23dwHbGUnn3PSoLBouHydkPHBArB3RZsyZoJ7K4bXYAF3eQ7mUYdyUFzWyeppnfrYsonuu0Fqg2QlzGIrSqO4rdQOugO0nEBi/iJp2ZCSBt+V0Q0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l8hInSwR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C235C433C7;
-	Tue,  9 Apr 2024 12:20:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712665219;
-	bh=210/FfMnnEHrTZuHurJZtxMnFqXxkms8u/m6ywgoA+I=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=l8hInSwRc/x4GbXkcRGnfXy1vNIDaxJRirFNFnShKM0lxgYa16BwUA6N/qSp5hteU
-	 j6MLxeLehougW5EJHYGlKDjWbd9V515QqXB6Pi0pTiM7O5GeitTE/xgUOYhRBUpLiq
-	 kw4Gum8gkbcBWAQlntzIgc8hYVnV1E/IzJuT+cyLPmFf+a+hrM62IPz0YfDcJ81Ifx
-	 UNsKzOJDylCMXudneKGTPfWaYDMHZSaM8j7pT1/JrDz/vsSSZUVhb7jCAVp+u+aLIB
-	 8UGsmyLckY7SYJqjuw3o1LAH+VJMd1AqHR2IVJhB+NUqYwnlmaus6fH5WYaZEWVUuh
-	 OBya+SObtvq1w==
-Message-ID: <a0173a13-5f20-4e24-8417-afce5fdbda0e@kernel.org>
-Date: Tue, 9 Apr 2024 14:20:12 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E6D1384;
+	Tue,  9 Apr 2024 12:34:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.8.92
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712666086; cv=fail; b=h0IhZ7Zua+PQ3EWFJ8Hftjh3+uO+lkpWtYjsp6pcOd3nwiRQDa0XNjdMd7j1/e1aEjzwpM9IOd3leExWRnid8Z8pJiJNwKGGGf+/7CXchHpCpt152GvIw/s+zK7NOS23jbxb+7uLW7OgMn1FQWntrRIcBQBYjdnrrCUOCmT+6NE=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712666086; c=relaxed/simple;
+	bh=SA+Fg/xKq9Pv9tnXwWugqUHFhKgM2DTteLRehODu/kQ=;
+	h=Message-ID:Date:From:Subject:To:CC:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=BIwOUldU7V3Ut+3St8D90XoSasi6s+RZ9toggvgE6Yqf0u8KZHZluB+xzNXVzUBlRbzhtu2jsHbX3caHdFiwA96VI3/5w3YOynlZwuomDA11+zdg2w7hU/3N5g4WFJtBvEpa7xDO50ehMM+B4AwnTh2+siwAPY9h7LoWzvvHpQU=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=topic.nl; spf=pass smtp.mailfrom=topic.nl; dkim=pass (2048-bit key) header.d=topic.nl header.i=@topic.nl header.b=EbA068HJ; dkim=fail (2048-bit key) header.d=topic.nl header.i=@topic.nl header.b=cd0Orsaq reason="signature verification failed"; arc=fail smtp.client-ip=40.107.8.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=topic.nl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=topic.nl
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=fail;
+ b=LY2S0AUslWsGr4k/sIM0HZp+HVu/tlWc9oupjhppMTeyrOEoQfqLruOyCMUnKa8RVa5rziZEkTnuR7FyGBMjiWl2VM3xRAq8c8327FO6zLyVjylijX1m4EUTfaGjH3wkefTgB0Jg5zrcXkJMihdDZPaVHukhmlbGyYjdRIWDlEicDXTLCzOcwKKBWHEne86RvaarHEQ9FSantkwCfRjElzDwfu8bU5K+KHtRl6YSiSr0zGs54dxjZMl1mxRs6C8lHRCWf3BSMKAf5DlXXo6whKNy9zXpaUpHCJf7y+l2iYvjHRkFrFtJI4yDRznLRBIrwREv10ttWIozo35U1gitHw==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wq5LiJPfIWisRA1HqlROpBdfyxVgbrerPh76/LqMsWM=;
+ b=Vyxkxt0KI3bVgdDLRmwPlxti4qm3ORwe8AhNg09FWkR4ku9NPkdOsPmvYyN88kxAvbBDgCKRiBNyTRLGhhPwb/B3hHgx3MS5gBwclKYXWYSpFB2qvkSo5sRhww8lnpDGbZtwofHt6/H/a+5ANtizQCPYmJIsC4r35dqjDH2VMnG0UUYgnK9EZByC3IQhjpWlLl/7XikxoZsREb1WEu7WcZkePFzxyyQWGhzlU9Tr2z1CJlBmoPlVYuaQO7CJUgINEXxZ5I8sYCQTjRcdiDxwrveLjj0YSa/Kj/oO1aTTXhjKjrsBxy7f/z0ht4I43EXm1SDcumGtMEKS7SGmeZVmiA==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 40.69.19.60) smtp.rcpttodomain=linaro.org smtp.mailfrom=topic.nl; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=topic.nl; dkim=fail
+ (signature did not verify) header.d=topic.nl; arc=fail (47)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=topic.nl; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wq5LiJPfIWisRA1HqlROpBdfyxVgbrerPh76/LqMsWM=;
+ b=EbA068HJE0mUkzHRatw1cJiyw9iJ4JXiTBVSLp0n2K8WNLtihLEDxCrTN04GiZFiKB0ENKNC4JKPGTYzvJv5ItCS0DZbk97CwEIcDbl82apwnxNLMB5iZtKg+uVfjaHfGvbOZXZv4r2SKvZCVlgOUH7YnCY+rtzzdKOH9D6EFqCBab+gBHhDSHI/+hqfCCYAPVczn0JHKt+cYxaPxuI+F5t23RrOyrJOKLO9O3jNmFu0zMDoxn/J797Tiuw5NrYNqfjklQlgkC1RlqQSY3oNm5OzCkHvaOf319of1Dj05cuUPWrZNVKfQs1mgmf61Py66tndNfuqMo8uJDUpSp9bKA==
+Received: from DU2PR04CA0023.eurprd04.prod.outlook.com (2603:10a6:10:3b::28)
+ by GV1PR04MB9152.eurprd04.prod.outlook.com (2603:10a6:150:27::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.54; Tue, 9 Apr
+ 2024 12:34:37 +0000
+Received: from DB5PEPF00014B9A.eurprd02.prod.outlook.com
+ (2603:10a6:10:3b:cafe::92) by DU2PR04CA0023.outlook.office365.com
+ (2603:10a6:10:3b::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.13 via Frontend
+ Transport; Tue, 9 Apr 2024 12:34:37 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 40.69.19.60)
+ smtp.mailfrom=topic.nl; dkim=fail (signature did not verify)
+ header.d=topic.nl;dmarc=pass action=none header.from=topic.nl;
+Received-SPF: Pass (protection.outlook.com: domain of topic.nl designates
+ 40.69.19.60 as permitted sender) receiver=protection.outlook.com;
+ client-ip=40.69.19.60; helo=westeu100-emailsignatures-cloud.codetwo.com; pr=C
+Received: from westeu100-emailsignatures-cloud.codetwo.com (40.69.19.60) by
+ DB5PEPF00014B9A.mail.protection.outlook.com (10.167.8.167) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7452.22 via Frontend Transport; Tue, 9 Apr 2024 12:34:36 +0000
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (104.47.2.51) by westeu100-emailsignatures-cloud.codetwo.com with CodeTwo SMTP Server (TLS12) via SMTP; Tue, 09 Apr 2024 12:34:34 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BCjfm/hLciKGdhLhSe0NRV8UW+w3DZL+sFN8GqLrl98RxN9TwTeoYXPPNsSpVY20oLLSTKdW1PiQW4DkUUnNuK17zf6VxkIz3MCZG18UZsQxWR5TO7TNF2pVb3xqzkp3qawwss9F7vjE9xJtkEeYbPRlwtWJezK3DZpIlMOeqXZ5wz06YVsY8P5nRVvTCYjylWaZ+oHBPzK81+nzojcm3qTpRFismOdtevy5ll2EN+kDqWSCu7X2D8VxODpp210w7lzRBTBnnV15Jnql+DaYSa4tPDWNE2dj2fGtdpT59M+Y4DMwJ6N4/8+IkHP66EnmnUnl3qTpSHogD9EmOnemJA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DDl/D6OtQW/3PFtCXh3D3kXlNarVDlqy7e1Zp3GJQTo=;
+ b=arguS8FWi2iAf2Ry5wnOycRjfAr0xhWNwRhMnDF8ii8y0/zYNrj0sr3NH+KVcGup3qzq39N5OUDGhjtnNZ3F/3uCO97nyHeVUbE5CiA2uGOiqaVBwNbJup4d/41iYi+PcaMqc742wzzDWSh4szsy3OYTD/R65q6AyFZa5gqGZFZq+phEn7/TC8Hcv8n1Yl9RxGIXMQf0aa7vxd21l/XLeRjYdMls2xZgv+iYLBwRc4I73lLp0HN0g+Id4ChNFmgxibNedSQ2b9Fv/PjolhDdmIJ4Td4LPP3i3LD5AnjnByxNUhgCQhc9hB88rUzuQgn7mD5PdWck2STjycumg5GRxA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=topic.nl; dmarc=pass action=none header.from=topic.nl;
+ dkim=pass header.d=topic.nl; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=topic.nl; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DDl/D6OtQW/3PFtCXh3D3kXlNarVDlqy7e1Zp3GJQTo=;
+ b=cd0OrsaqFs7G7G0hCa5RZXowo17Xi4H64ztsT3Lxm5bbi+RjXCfFHk70WpnYPZFiJ9l+K5RBWbdFjpASHvJ0q5eavasuz3leoQyL4jSnXMCPh6KfTXC6rop8ZZGohT8rmzwSa0mpUe6B+L14if2yQl09m8jdU99WztmYkxCbWMsVjKOm56xp4eq4CrIBq5jPbb+6dieqz4Fl3KHeRV1uVaAkgsIF/naWM+FgMrY+GBEQGzd5bGvNa8IqY5WUHjgeHRlOd7D2vnujDvz7rs5dmoWC9bRJLG6RbyV2WV2iXLGrtYE1YCWoyNPt13kohtmqtgMLny0icv5E7g7UX9fXQQ==
+Received: from AS8PR04MB8644.eurprd04.prod.outlook.com (2603:10a6:20b:42b::12)
+ by PAXPR04MB8302.eurprd04.prod.outlook.com (2603:10a6:102:1ca::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Tue, 9 Apr
+ 2024 12:34:30 +0000
+Received: from AS8PR04MB8644.eurprd04.prod.outlook.com
+ ([fe80::e86d:f110:534e:480a]) by AS8PR04MB8644.eurprd04.prod.outlook.com
+ ([fe80::e86d:f110:534e:480a%4]) with mapi id 15.20.7409.053; Tue, 9 Apr 2024
+ 12:34:30 +0000
+Message-ID: <3ff7ab51-b671-4a77-9abd-f4683fcc744d@topic.nl>
+Date: Tue, 9 Apr 2024 14:34:29 +0200
+User-Agent: Mozilla Thunderbird
+From: Mike Looijmans <mike.looijmans@topic.nl>
+Subject: Re: [PATCH 1/2] dt-bindings: power: supply: ltc3350-charger: Add
+ bindings
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ linux-pm@vger.kernel.org
+CC: Conor Dooley <conor+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Rob Herring <robh@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.3bc97c8f-843d-4e46-84f9-469b7ba2489d@emailsignatures365.codetwo.com>
+ <20240408064905.20298-1-mike.looijmans@topic.nl>
+ <a4a9f949-ecc7-4603-8c8b-90a1e309570a@linaro.org>
+Content-Language: en-US, nl
+Organization: Topic
+In-Reply-To: <a4a9f949-ecc7-4603-8c8b-90a1e309570a@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: AS4P195CA0007.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5e2::7) To AS8PR04MB8644.eurprd04.prod.outlook.com
+ (2603:10a6:20b:42b::12)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 1/5] dt-bindings: interconnect: Add Qualcomm IPQ9574
- support
-To: Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc: andersson@kernel.org, konrad.dybcio@linaro.org, mturquette@baylibre.com,
- sboyd@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- djakov@kernel.org, dmitry.baryshkov@linaro.org, quic_anusha@quicinc.com,
- linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20240403104220.1092431-1-quic_varada@quicinc.com>
- <20240403104220.1092431-2-quic_varada@quicinc.com>
- <58c9b754-b9a7-444d-9545-9e6648010630@kernel.org>
- <Zg5q6mnWtK6hmPBT@hu-varada-blr.qualcomm.com>
- <ZhTxFVDH0xTSkw7r@hu-varada-blr.qualcomm.com>
- <1ec401be-11cb-416a-9eae-d72ea8acf06f@kernel.org>
- <ZhUghsa5Do5m7wrX@hu-varada-blr.qualcomm.com>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <ZhUghsa5Do5m7wrX@hu-varada-blr.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-TrafficTypeDiagnostic:
+	AS8PR04MB8644:EE_|PAXPR04MB8302:EE_|DB5PEPF00014B9A:EE_|GV1PR04MB9152:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ KkHl9Xjkg/zEALNHNJE9P5Abpasc2Hyw0HRiWIi0pZTjHr6PL4G3XMETytTwSFnuKBRNJfvjo6EUIISNN1bwFJPhWcOwxWspxrX75xbMH1WthvyiZPaOgwTl4i67iTTGxTpl32/k1pB1Jr52OSOjs1q1iVArio0a74tjwG4y4Lm7Nl8Gp+OqCwQMA1uEfkkScZID2ptgd/ouypOy4hUfCXwL4D3ZqAl4h+6vSm0HVXZeRc6r1KsjbepJbxtl4/Is5m4x8pVJNtfBnKoM/OM6XboUj+ahpCmkPWlwGfedhFuRK7hTlxw+CxAKHOj3Jq2BOeUogVSU80kF8r/kNWqKuqgRbpBflu5MhBgmqg9vEdy71dP3YoEFenlhtrqsln/YUI0c9TMSkWCihoA3ghi90byFriQ4LY+3dSRFg00kS5FgPGhmw7T1kqHysUwcAFA9Uq7+Rzw4uizKUpOsoOVqzOggrlHGAN6RW/+qCJiuW2gbu+0cGq8Bcb8DyMJZCNwHJ+vfhHhZkMajMVk4AHkXhoXwD6gQRr0AZjcvnHK/KfdxyzwohbTo3JIXHvOf5PGMPfM2EzMj+i89u7B6c+cYHz+cx2DrpkLJ7JsquTXyK7iWGj2+NTXWTL4ATLXj201VK7jlKxNPHN0uwxEMFkYFBLGwv1z6il2ZyRurNttB7Nc=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8644.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(1800799015)(52116005)(366007)(38350700005);DIR:OUT;SFP:1102;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8302
+X-CodeTwo-MessageID: f0f6f95e-04a7-49dd-bdbb-b7c5cf7be4af.20240409123434@westeu100-emailsignatures-cloud.codetwo.com
+X-CodeTwoProcessed: true
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DB5PEPF00014B9A.eurprd02.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3bbeca07-a488-41bf-3d29-08dc58916ad8
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	N33Dex8qwimty8y1PPH15Q0xRcm6jufimzRZPpxxiGrnTbJS5DLfo8bAn+XF9XmGqixQXm6P0YEf6NIgVSXYcxS8Sg/BCyrA+c8t7kmr7gO0S5iFMo8+pdY5TsPyyNxCvXEeonlM1Q+NJdEoptkmQzbFrmMCD2R8veItDSkNevz7CU5dlcZThAdNIcQIBYffGRLaWacGyBCtAu8GIDSob+EaOxXKBvI76yW+BcJNuKO1jzo4gbgjUwg770V7imfLhOA8ryIgWFjviqFMk+d8SMDojHC+QUGL48DfaescjIOJShNcxsj7Y/UqmFYft+/i+mgfpODP2e2lT2FrA2BbdRWoJYF4YawkmkyxBzlZgMx/xOAleZRDwX+XwXuVMWLoRLBTwgsqM3BTZ7XvUVxipyyjiRNV0svmAlUieNv1evIwQz9RZIvEdkQ9HX4+ye3ykBaHGglPzNi3qoJQ0PhzfdmdtetLh2h5eC6Jaao3tg5/ZDzyVYK+/lzRQnRG6YnSqoIg9pHDHMzTap+tZWj5+qz78hdHPA54lmHXKrnBypMrvcj5a9dsw42JyKoLsKlDWT0oDe3xGkpJGIklT5aI/iZiCmYxjqQeQmN4j4mM4hhX+XRTglxhj6fXR/wGfwbrxU5j/W8QEi45GzGxnDmczzLC0+mpu1SVRoZASMoGFl4IpiWQSw4fw/0MgtXTSpe9/wVjhmM7cOQUXIJZUu169g==
+X-Forefront-Antispam-Report:
+	CIP:40.69.19.60;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:westeu100-emailsignatures-cloud.codetwo.com;PTR:westeu100-emailsignatures-cloud.codetwo.com;CAT:NONE;SFS:(13230031)(1800799015)(376005)(82310400014)(36860700004);DIR:OUT;SFP:1102;
+X-OriginatorOrg: topic.nl
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Apr 2024 12:34:36.4107
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3bbeca07-a488-41bf-3d29-08dc58916ad8
+X-MS-Exchange-CrossTenant-Id: 449607a5-3517-482d-8d16-41dd868cbda3
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=449607a5-3517-482d-8d16-41dd868cbda3;Ip=[40.69.19.60];Helo=[westeu100-emailsignatures-cloud.codetwo.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DB5PEPF00014B9A.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR04MB9152
 
-On 09/04/2024 13:03, Varadarajan Narayanan wrote:
-> On Tue, Apr 09, 2024 at 11:45:51AM +0200, Krzysztof Kozlowski wrote:
->> On 09/04/2024 09:41, Varadarajan Narayanan wrote:
->>> On Thu, Apr 04, 2024 at 02:25:06PM +0530, Varadarajan Narayanan wrote:
->>>> On Wed, Apr 03, 2024 at 04:59:40PM +0200, Krzysztof Kozlowski wrote:
->>>>> On 03/04/2024 12:42, Varadarajan Narayanan wrote:
->>>>>> Add interconnect-cells to clock provider so that it can be
->>>>>> used as icc provider.
->>>>>>
->>>>>> Add master/slave ids for Qualcomm IPQ9574 Network-On-Chip
->>>>>> interfaces. This will be used by the gcc-ipq9574 driver
->>>>>> that will for providing interconnect services using the
->>>>>> icc-clk framework.
->>>>>>
->>>>>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
->>>>>> ---
->>>>>> v7:
->>>>>> Fix macro names to be consistent with other bindings
->>>>>> v6:
->>>>>> Removed Reviewed-by: Krzysztof Kozlowski
->>>>>> Redefine the bindings such that driver and DT can share them
->>>>>>
->>>>>> v3:
->>>>>> Squash Documentation/ and include/ changes into same patch
->>>>>>
->>>>>> qcom,ipq9574.h
->>>>>> 	Move 'first id' to clock driver
->>>>>>
->>>>>> ---
->>>>>>  .../bindings/clock/qcom,ipq9574-gcc.yaml      |  3 +
->>>>>>  .../dt-bindings/interconnect/qcom,ipq9574.h   | 87 +++++++++++++++++++
->>>>>>  2 files changed, 90 insertions(+)
->>>>>>  create mode 100644 include/dt-bindings/interconnect/qcom,ipq9574.h
->>>>>>
->>>>>> diff --git a/Documentation/devicetree/bindings/clock/qcom,ipq9574-gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,ipq9574-gcc.yaml
->>>>>> index 944a0ea79cd6..824781cbdf34 100644
->>>>>> --- a/Documentation/devicetree/bindings/clock/qcom,ipq9574-gcc.yaml
->>>>>> +++ b/Documentation/devicetree/bindings/clock/qcom,ipq9574-gcc.yaml
->>>>>> @@ -33,6 +33,9 @@ properties:
->>>>>>        - description: PCIE30 PHY3 pipe clock source
->>>>>>        - description: USB3 PHY pipe clock source
->>>>>>
->>>>>> +  '#interconnect-cells':
->>>>>> +    const: 1
->>>>>> +
->>>>>>  required:
->>>>>>    - compatible
->>>>>>    - clocks
->>>>>> diff --git a/include/dt-bindings/interconnect/qcom,ipq9574.h b/include/dt-bindings/interconnect/qcom,ipq9574.h
->>>>>> new file mode 100644
->>>>>> index 000000000000..0b076b0cf880
->>>>>> --- /dev/null
->>>>>> +++ b/include/dt-bindings/interconnect/qcom,ipq9574.h
->>>>>> @@ -0,0 +1,87 @@
->>>>>> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
->>>>>> +#ifndef INTERCONNECT_QCOM_IPQ9574_H
->>>>>> +#define INTERCONNECT_QCOM_IPQ9574_H
->>>>>> +
->>>>>> +#define ICC_ANOC_PCIE0		0
->>>>>> +#define ICC_SNOC_PCIE0		1
->>>>>> +#define ICC_ANOC_PCIE1		2
->>>>>> +#define ICC_SNOC_PCIE1		3
->>>>>> +#define ICC_ANOC_PCIE2		4
->>>>>> +#define ICC_SNOC_PCIE2		5
->>>>>> +#define ICC_ANOC_PCIE3		6
->>>>>> +#define ICC_SNOC_PCIE3		7
->>>>>> +#define ICC_SNOC_USB		8
->>>>>> +#define ICC_ANOC_USB_AXI	9
->>>>>> +#define ICC_NSSNOC_NSSCC	10
->>>>>> +#define ICC_NSSNOC_SNOC_0	11
->>>>>> +#define ICC_NSSNOC_SNOC_1	12
->>>>>> +#define ICC_NSSNOC_PCNOC_1	13
->>>>>> +#define ICC_NSSNOC_QOSGEN_REF	14
->>>>>> +#define ICC_NSSNOC_TIMEOUT_REF	15
->>>>>> +#define ICC_NSSNOC_XO_DCD	16
->>>>>> +#define ICC_NSSNOC_ATB		17
->>>>>> +#define ICC_MEM_NOC_NSSNOC	18
->>>>>> +#define ICC_NSSNOC_MEMNOC	19
->>>>>> +#define ICC_NSSNOC_MEM_NOC_1	20
->>>>>> +
->>>>>> +#define ICC_NSSNOC_PPE		0
->>>>>> +#define ICC_NSSNOC_PPE_CFG	1
->>>>>> +#define ICC_NSSNOC_NSS_CSR	2
->>>>>> +#define ICC_NSSNOC_IMEM_QSB	3
->>>>>> +#define ICC_NSSNOC_IMEM_AHB	4
->>>>>> +
->>>>>> +#define MASTER_ANOC_PCIE0		(ICC_ANOC_PCIE0 * 2)
->>>>>> +#define SLAVE_ANOC_PCIE0		((ICC_ANOC_PCIE0 * 2) + 1)
->>>>>
->>>>> Which existing Qualcomm platform has such code?
->>>>
->>>> Existing Qualcomm platforms don't use icc-clk. They use icc-rpm
->>>> or icc-rpmh. clk-cbf-msm8996.c is the only driver that uses icc-clk.
->>>>
->>>> The icc_clk_register automatically creates master & slave nodes
->>>> for each clk entry provided as input with the node-ids 'n' and
->>>> 'n+1'. Since clk-cbf-msm8996.c has only one entry, it could just
->>>> define MASTER_CBF_M4M and SLAVE_CBF_M4M with 0 and 1 and avoid these
->>>> calculations.
->>>>
->>>> However, ipq9574 gives an array of clock entries as input to
->>>> icc_clk_register. To tie the order/sequence of these clock
->>>> entries correctly with the node-ids, this calculation is needed.
->>>>
->>>>> This is the third time I am asking for consistent headers. Open
->>>>> existing, recently added headers and look how it is done there. Why?
->>>>> Because I am against such calculations and see no reason for them.
->>>>
->>>> Apologies. Regret that I have to trouble you.
->>>>
->>>> In this ipq9574 case, have to reconcile between the following
->>>> feedbacks.
->>>>
->>>> 1. https://lore.kernel.org/linux-arm-msm/fe40b307-26d0-4b2a-869b-5d093415b9d1@linaro.org/
->>>>    We could probably use indexed identifiers here to avoid confusion:
->>>>    [ICC_BINDING_NAME] = CLK_BINDING_NAME
->>>>
->>>> 2. https://lore.kernel.org/linux-arm-msm/95f4e99a60cc97770fc3cee850b62faf.sboyd@kernel.org/
->>>>    Are these supposed to be in a dt-binding header?
->>>>
->>>> 3. https://lore.kernel.org/linux-arm-msm/031d0a35-b192-4161-beef-97b89d5d1da6@linaro.org/
->>>>    Do you use them as well in the DTS?
->>>>
->>>> Having the defines (with the calculations) seemed to to comply
->>>> with the above three feedbacks.
->>>>
->>>> Please let me know if this can be handled in a different way that
->>>> would be consistent with other Qualcomm platforms.
->>>
->>> Krzysztof,
->>>
->>> Is this ok? Can I post a new version addressing other review comments?
->>
->> I don't understand and you did not answered before, why you have to do
->> it differently than all other Qualcomm interconnect providers. Maybe the
->> code here needs it, maybe not, but I don't see any argument proving this.
-> 
-> Other Qualcomm interconnect providers use the icc-rpm.
-> 
-> 	1. The SoC specific interconnect providers have control
-> 	   over the master/slave id-numbers and is hard coded.
-> 
-> 	2. These id-numbers are used by the RPM firmware.
-> 
-> IPQ9574 uses icc-clk.
-> 
-> 	1. The ipq9574 specific interconnect provider doesn't
-> 	   have control over the master/slave id-numbers. The
-> 	   icc-clk framework auto generates it in the order of
-> 	   the clock entries given as input.
 
-Okay, so what happens if icc-clk way of generating them changes a bit?
-It can change, why not, driver implementation is not an ABI.
+Thanks for your feedback. Will fix them all, except see below.
 
-> 
-> 	2. These auto-generated id-numbers have to be correctly
-> 	   tied to the DT nodes. Else, the relevant clocks may
-> 	   not get enabled.
+I'll send a v2
 
-Sorry, I don't get, how auto generated ID number is tied to DT node.
-What DT node?
 
-> 
-> Since ICC-CLK creates two ids per clock entry (one MASTER_xxx and
-> one SLAVE_xxx), using those MASTER/SLAVE_xxx macros as indices in
-> the below array would create holes.
-> 
-> 	static int icc_ipq9574_hws[] = {
-> 		[MASTER_ANOC_PCIE0] = GCC_ANOC_PCIE0_1LANE_M_CLK,
-> 		[MASTER_SNOC_PCIE0] = GCC_SNOC_PCIE0_1LANE_S_CLK,
-> 		[MASTER_ANOC_PCIE1] = GCC_ANOC_PCIE1_1LANE_M_CLK,
-> 		[MASTER_SNOC_PCIE1] = GCC_SNOC_PCIE1_1LANE_S_CLK,
-> 		. . .
-> 	};
-> 
-> Other Qualcomm drivers don't have this issue and they can
-> directly use the MASTER/SLAVE_xxx macros.
+On 09-04-2024 10:27, Krzysztof Kozlowski wrote:
+...
+>> +
+>> +  lltc,rsnsc-micro-ohms:
+>> +    description: Capacitor charger sense resistor in microohm.
+>> +    minimum: 1000
+>> +
+>> +  lltc,rsnsi-micro-ohms:
+>> +    description: Input current sense resistor in microohm.
+>> +    minimum: 1000
+> Looks like it is shunt-resistor-micro-ohms. Unless it is something
+> different?
 
-I understand, thanks, yet your last patch keeps adding fake IDs, means
-IDs which are not part of ABI.
+It's a shunt, but different and there's two of them (akin to the=20
+ltc4162-l which has the same property with the same meaning). One to=20
+measure input, one to measure charge current.
 
-> 
-> As the MASTER_xxx macros cannot be used, have to define a new set
-> of macros that can be used for indices in the above array. This
-> is the reason for the ICC_BINDING_NAME macros.
+When the datasheet talks about "shunt" it means the resistor that can be=20
+used to balance or discharge the caps. So I'd rather avoid the word=20
+completely so users aren't tempted to put the wrong resistor value there.
 
-Then maybe fix the driver, instead of adding something which is not an
-ABI to bindings and completely skipping the actual ABI.
+The datasheet uses "rsnsi" and "rsnsc" whenever referring to these=20
+resistors.
 
-Best regards,
-Krzysztof
+
+...
+
+
+--=20
+Mike Looijmans
+System Expert
+
+TOPIC Embedded Products B.V.
+Materiaalweg 4, 5681 RJ Best
+The Netherlands
+
+T: +31 (0) 499 33 69 69
+E: mike.looijmans@topic.nl
+W: www.topic.nl
+
+
 
 
