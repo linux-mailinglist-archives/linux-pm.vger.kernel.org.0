@@ -1,125 +1,136 @@
-Return-Path: <linux-pm+bounces-6114-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6118-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFC1589DC14
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 16:20:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4D4B89DD4C
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 16:50:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79B66282FB2
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 14:20:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 79D5A1F27635
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 14:50:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90DAC12FB2A;
-	Tue,  9 Apr 2024 14:20:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B822D130A4F;
+	Tue,  9 Apr 2024 14:48:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="pcoVXCGB"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=lausen.nl header.i=@lausen.nl header.b="YX28zyeO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from m15.mail.163.com (m15.mail.163.com [45.254.50.220])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E10112F5BD;
-	Tue,  9 Apr 2024 14:20:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.50.220
+Received: from devico.uberspace.de (devico.uberspace.de [185.26.156.185])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0D6250275
+	for <linux-pm@vger.kernel.org>; Tue,  9 Apr 2024 14:48:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.26.156.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712672421; cv=none; b=q7TXrfyGc3wG4mWGpI43KOuCotPosDyvYHd1eL0HOKbK4oxAcp4SS0TVqi92gEbpQkJm/bIgUlWU7BVlYfM4dE67oE0QbL+Kr/NRRoDXTB3O5kjwTe1FPKFzNpPj6T9Hc3z5Sebz/fX2w7dPDaznYyIMkkuBQfUs6u8dwYDYKLI=
+	t=1712674130; cv=none; b=d+cUtoe05J+WF6mcoHRaTUmsLmfxJcfuDbzVK8J0x4vwcbRLED24lpkizlfny99/ScQBTwOU8ALmxlP2c/csXuoJof2vH6jXHiloOWujYllJrwiE6nyRs4KM0AwziWFSH8giZ5aoGedZsvhEP7yh6zkov6NwvPEkeb4Xuor8zmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712672421; c=relaxed/simple;
-	bh=eR8mjObwrnxacavEWLjfNBi8mwmRrdwSFLbY2h+f4BA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pud5QLJ7eAiVpOsdwjpY9uGEYrayP5rRE3jc4VrdCn7ayhc5asFNAxBFDaDAMnQnX5HXtbpJFEAysE7FJQeKC8bjWsGKE1+ZeAnslwIkttwTnLwZ6geJe/jaBzaZeThO4GfPF0/xTRIbZrZ72NnQJSmNWRu0kPQKdFtXuoyCznI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=pcoVXCGB; arc=none smtp.client-ip=45.254.50.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=KCt6W
-	vX38grmIkpZ6PL0d3x3MonnLIxac4chg0TbkU0=; b=pcoVXCGBcf3ls8oM/5EwT
-	uSID642AiI/E7VjA1lR/aiVBBSfxTlGdc/k7jd4YafZmEPPnHmVvWI+tF9uSNkRd
-	uCP5a8CITybzK097P8sS82+twb0JF/fJTAJYNj+vNKPhtgktDeNNNTl5e6O03F/b
-	+tJiSf6mCAoVIGjELc9TLM=
-Received: from localhost.localdomain (unknown [101.86.11.106])
-	by gzga-smtp-mta-g0-1 (Coremail) with SMTP id _____wDndzFkThVmu5ZqAg--.477S4;
-	Tue, 09 Apr 2024 22:19:45 +0800 (CST)
-From: Lizhe <sensor1010@163.com>
-To: rafael@kernel.org,
-	viresh.kumar@linaro.org,
-	axun.yang@flygoat.com
-Cc: linux-pm@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Lizhe <sensor1010@163.com>
-Subject: [PATCH] cpufreq: Remove redundant exit() functions
-Date: Tue,  9 Apr 2024 07:19:09 -0700
-Message-Id: <20240409141909.4413-1-sensor1010@163.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1712674130; c=relaxed/simple;
+	bh=bSBMOSEIwri42I+EM+PyX9ZK5/mVrNAM53JMXpJiGrY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pAT/N0gKPMY/+vxT53UFiZ8ds5pkkoNfX5yfrNxvg98OBLpszTP7Nh+52ZhnmObGICngxMgX1KJKkJ1Jh0yIXaSBto4sQ5C0FQrPqYYME1XBmQT6mpBX1f8Tvh9KwFf8yO1NF5JB6cK1uHA8s5HtJjoXBMGF/M5Q1gaQ/HhwdK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lausen.nl; spf=pass smtp.mailfrom=lausen.nl; dkim=fail (0-bit key) header.d=lausen.nl header.i=@lausen.nl header.b=YX28zyeO reason="key not found in DNS"; arc=none smtp.client-ip=185.26.156.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lausen.nl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lausen.nl
+Received: (qmail 31281 invoked by uid 990); 9 Apr 2024 14:42:05 -0000
+Authentication-Results: devico.uberspace.de;
+	auth=pass (plain)
+Received: from unknown (HELO unkown) (::1)
+	by devico.uberspace.de (Haraka/3.0.1) with ESMTPSA; Tue, 09 Apr 2024 16:42:04 +0200
+Message-ID: <18a16fcd-3ae1-48af-94ed-72700a656e8e@lausen.nl>
+Date: Tue, 9 Apr 2024 10:41:59 -0400
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/3] gov_power_allocator: Allow binding before cooling
+ devices
+Content-Language: en-US
+To: nikita@trvn.ru, Lukasz Luba <lukasz.luba@arm.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Nikita Travkin <nikitos.tr@gmail.com>
+References: <20240403-gpa-no-cooling-devs-v2-0-79bdd8439449@trvn.ru>
+From: Leonard Lausen <leonard@lausen.nl>
+In-Reply-To: <20240403-gpa-no-cooling-devs-v2-0-79bdd8439449@trvn.ru>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDndzFkThVmu5ZqAg--.477S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxJF1UCF1UKw13XF1xtrW8Zwb_yoW8CrW3pF
-	W3ZrWUur1rJFWqq3Zru3ykW3W5u3ZFyFyDGFW7GwnYvF13AF15W3WUKFyUZrZ5CrykGFsI
-	vF1kXay7GF48JrUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRI38UUUUUU=
-X-CM-SenderInfo: 5vhq20jurqiii6rwjhhfrp/1tbiSAe7q2XAk0aYWwABst
+X-Rspamd-Bar: +
+X-Rspamd-Report: SUSPICIOUS_RECIPS(1.5) BAYES_HAM(-0.348686) XM_UA_NO_VERSION(0.01) MIME_GOOD(-0.1)
+X-Rspamd-Score: 1.061313
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=lausen.nl; s=uberspace;
+	h=from:to:cc:subject:date;
+	bh=bSBMOSEIwri42I+EM+PyX9ZK5/mVrNAM53JMXpJiGrY=;
+	b=YX28zyeOtVRG3iXskkpsZdlPIRqBHVYU6I9cNBc3xLfDDE33JZLNx6dw+qLb8GvYKmgv711jor
+	+QGFuFRR0+cGrngBvCKAnLs+kgzAsKk4vXkJJNRjWgrM4DZIVPS8ZUZ0/kzCBZAHjLkbWDCYYd/T
+	a66wcx6AFaW4geAPdDOVjf2XvrZMj3UmZS1H076oT0/Ro4G3Etz3Zr7LTg8bxlbRpW2hQeYEZlov
+	MbbTPyUAapELfJIGPLL8ZFAjlDB+Kbw6iuGfKE03QV5IbtzVLt0ITYiKHAgjpck2xIk/JJu6c3qf
+	sH3LfY/6hjeEuytbmU/PFn/GZx4DujcrAsEtL5YgQDdphl5pS+CAAzZW1jRFviZjzDUHVE+LXkod
+	YeKhJ+ch+cIZfVZfdoLxSkt0l87oLPO94LSQwbHJa+Y/wEq19q7g3eE6eaU807uZQCAqWSCkbEJJ
+	dLBOQ/XnAgElQb5it2xk8Ea3qz4z2AnDK+DrN/gLwGEeETepW5AwJclqvsgP4rimCuDVVKZIGcRZ
+	wkKHDaT2eaCWx2Rq77++IqwPJPbqx+XaroVgA1CbIIwGrWziCtaCzgsyZmqtC2BW7UemqJmLjWBT
+	eWIxbFMSWSejefQzjqExPUM6/h4599p0e1/+fg0RKrV5JS48xRsswn3JIcQvfgsFLj+d3E0kntey
+	U=
 
-The return value of exit() is 0 and it performs no action.
-This function can be omitted. Please refer to the end condition
-check in the __cpufreq_offline() function.
+Hi Nikita, Hi Łukasz,
 
-Signed-off-by: Lizhe <sensor1010@163.com>
----
- drivers/cpufreq/cpufreq-nforce2.c   | 6 ------
- drivers/cpufreq/loongson2_cpufreq.c | 6 ------
- 2 files changed, 12 deletions(-)
+thank you for fixing the e83747c2f8e3 ("thermal: gov_power_allocator: Set up trip points earlier") and 912e97c67cc3 ("thermal: gov_power_allocator: Move memory allocation out of throttle()") regressions as part of v6.9-rc3. As the regression was introduced in v6.8, would it be possible to include the fix in a v6.8 patch release?
 
-diff --git a/drivers/cpufreq/cpufreq-nforce2.c b/drivers/cpufreq/cpufreq-nforce2.c
-index f7a7bcf6f52e..fedad1081973 100644
---- a/drivers/cpufreq/cpufreq-nforce2.c
-+++ b/drivers/cpufreq/cpufreq-nforce2.c
-@@ -359,11 +359,6 @@ static int nforce2_cpu_init(struct cpufreq_policy *policy)
- 	return 0;
- }
- 
--static int nforce2_cpu_exit(struct cpufreq_policy *policy)
--{
--	return 0;
--}
--
- static struct cpufreq_driver nforce2_driver = {
- 	.name = "nforce2",
- 	.flags = CPUFREQ_NO_AUTO_DYNAMIC_SWITCHING,
-@@ -371,7 +366,6 @@ static struct cpufreq_driver nforce2_driver = {
- 	.target = nforce2_target,
- 	.get = nforce2_get,
- 	.init = nforce2_cpu_init,
--	.exit = nforce2_cpu_exit,
- };
- 
- #ifdef MODULE
-diff --git a/drivers/cpufreq/loongson2_cpufreq.c b/drivers/cpufreq/loongson2_cpufreq.c
-index afc59b292153..6a8e97896d38 100644
---- a/drivers/cpufreq/loongson2_cpufreq.c
-+++ b/drivers/cpufreq/loongson2_cpufreq.c
-@@ -85,18 +85,12 @@ static int loongson2_cpufreq_cpu_init(struct cpufreq_policy *policy)
- 	return 0;
- }
- 
--static int loongson2_cpufreq_exit(struct cpufreq_policy *policy)
--{
--	return 0;
--}
--
- static struct cpufreq_driver loongson2_cpufreq_driver = {
- 	.name = "loongson2",
- 	.init = loongson2_cpufreq_cpu_init,
- 	.verify = cpufreq_generic_frequency_table_verify,
- 	.target_index = loongson2_cpufreq_target,
- 	.get = cpufreq_generic_get,
--	.exit = loongson2_cpufreq_exit,
- 	.attr = cpufreq_generic_attr,
- };
- 
--- 
-2.25.1
+Thank you
+Leonard
 
+#regzbot introduced: 912e97c67cc3f333c4c5df8f51498c651792e658
+#regzbot fixed-by: 1057c4c36ef8b236a2e28edef301da0801338c5f
+
+
+#regzbot introduced: e83747c2f8e3cc5e284e37a8921099f1901d79d8
+#regzbot fixed-by: da781936e7c301e6197eb6513775748e79fb2575
+
+On 4/3/24 07:31, Nikita Travkin via B4 Relay wrote:
+> Recent changes in IPA made it fail probing if the TZ has no cooling
+> devices attached on probe or no trip points defined.
+> 
+> This series restores prior behavior to:
+> 
+> - allow IPA to probe before cooling devices have attached;
+> - allow IPA to probe when the TZ has no passive/active trip points.
+> 
+> I've noticed that all thermal zones fail probing with -EINVAL on my
+> sc7180 based Acer Aspire 1 since 6.8. This series allows me to bring
+> them back.
+> 
+> Additionally there is a commit that supresses the "sustainable_power
+> will be estimated" warning on TZ that have no trip points (and thus IPA
+> will not be able to do anything for them anyway). This allowed me to
+> notice that some of the TZ with cooling_devices on my platform actually
+> lack the sustainable_power value.
+> 
+> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+> ---
+> Changes in v2:
+> - Split to two changes (Lukasz)
+> - Return 0 in allocate_actors_buffer() instead of suppressing -EINVAL
+>   (Lukasz)
+> - Add a change to supress "sustainable_power will be estimated" warning
+>   on "empty" TZ
+> - Link to v1: https://lore.kernel.org/r/20240321-gpa-no-cooling-devs-v1-1-5c9e0ef2062e@trvn.ru
+> 
+> ---
+> Nikita Travkin (3):
+>       thermal: gov_power_allocator: Allow binding without cooling devices
+>       thermal: gov_power_allocator: Allow binding without trip points
+>       thermal: gov_power_allocator: Suppress sustainable_power warning without trip_points
+> 
+>  drivers/thermal/gov_power_allocator.c | 16 ++++++----------
+>  1 file changed, 6 insertions(+), 10 deletions(-)
+> ---
+> base-commit: 727900b675b749c40ba1f6669c7ae5eb7eb8e837
+> change-id: 20240321-gpa-no-cooling-devs-c79ee3288325
+> 
+> Best regards,
 
