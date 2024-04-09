@@ -1,205 +1,138 @@
-Return-Path: <linux-pm+bounces-6123-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6124-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73EB489DF77
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 17:41:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CFEB89DFA4
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 17:49:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 976A81C22E48
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 15:41:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BCBD3285AD2
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 15:49:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0934B135A6D;
-	Tue,  9 Apr 2024 15:40:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A99E413D50F;
+	Tue,  9 Apr 2024 15:49:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b="T+Wwmva1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RcO6XzOb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4375980619
-	for <linux-pm@vger.kernel.org>; Tue,  9 Apr 2024 15:40:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AF0813BC15;
+	Tue,  9 Apr 2024 15:49:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712677209; cv=none; b=be/YUhgzzq49WOoGS8NoAPDkjKzUv0nEazC8x5HOHp9HxjzNgJEkHDkHkg/sFkpLOYgVgnu+OxNKtqX7ysQoLkW8wOswQRAJAq1I7i+fizIZ8uV2U45puwxoqrtQYa4tp99FhOgENOPDWoj7su0ckhmRZ5TyCAw1W3Jco7YvOPE=
+	t=1712677750; cv=none; b=goO/yAekyvvzxosmxyDYWj+DT9o57vVHFklVvec5kvr+T73zZXCirJLEJQw+LhGMXWIibJVlJrKsffcHAjo5IAGTVD/XnIcU2g2Te7+GMnJbtwzMTRnvfeYGW62OaV9nh23tnW88esH5Jy/oYOxv6Jx1r7t31dNh4buJub+XVF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712677209; c=relaxed/simple;
-	bh=Im2pV7UUUvn6tVTrpIQQKBUVfbBnt4AHOBFlG8bAws0=;
-	h=From:To:Cc:References:In-Reply-To:Subject:Date:Message-ID:
-	 MIME-Version:Content-Type; b=OLSYAcKCOFC7konDrYw9+MhQlGDhA+Fa7a7MxWU4yu4b/go6OoLoIJQiw8czLpangp2Xf82+wlzF8711VmAo7VmaXYjGz74f37w9g5xtP897ddpU0axrTBqdc4M0yRpFE1u2F/770CwJUgG06oag+yBIrQiYfrOUCYNhkEHfX2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=telus.net; spf=pass smtp.mailfrom=telus.net; dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b=T+Wwmva1; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=telus.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=telus.net
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1e3e56c9d2cso25468965ad.1
-        for <linux-pm@vger.kernel.org>; Tue, 09 Apr 2024 08:40:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google; t=1712677207; x=1713282007; darn=vger.kernel.org;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=t1ZdjIfpwsEpN0j3fC1ZIMkWKugMLDNqW+g9FjihQJo=;
-        b=T+Wwmva1E0RbFZVYk+wdhlb0eb9clZrQM9g6EwM41NWglXzihYvWhj/IpfaH1AcRq+
-         gae8jA259O0Eaii0c8a3Vo44qi773jrUqwoR5xvJvHN+d1pfF9eOJXED+3Y9hrdqWIiv
-         409IZfqhCrFI9h6bAMhfDKVw+EBAVXpuUztUH2TIyOUu+tKUWj7fxV1YhbhRh6IvhrZ2
-         nQo/ndY6t1ehQPoiCAEYhHMu4+bW+QIK1rLE1aYT3JqV4SczpMitvgH1QDv+2NYvIXUL
-         18ciDLTKVa3G88SpsdEYmPEIKK2YBsygLylxpn/LS5ZaznVcyf8YT4SEA/BWCiqVsRhI
-         yR8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712677207; x=1713282007;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t1ZdjIfpwsEpN0j3fC1ZIMkWKugMLDNqW+g9FjihQJo=;
-        b=EYvkTPlg9siLfNrDEWMB88nPw83VpZplLwjWivojkUdwPr86KmCmmnk7mgdSJZix0L
-         PhbWXxrobQPjZxl4wcNyENxZVKjD2P5jeM5WmyJLqz8T6o98ol6cp1NBqTSYTapBOpF0
-         YnbO75YIkzcS/2M00TR92oMXvJeLllzwGZRM0w2mMgfAB99n6+iAFA1noR4x1Mf1Z3fs
-         QeBIQva+8r0WGZ7jKktQAU6Upc4I392faKEWW45Lsqk+kBiFJASF1l9tBKn8QsO+D1s5
-         GZ94Z4tsSsFWvJuMckksux3czCmGW0xSA85bjGAmhjdPmo5guDkRfs1BFlDiCnNyQ12U
-         6Hdw==
-X-Gm-Message-State: AOJu0YyuAKWKVzXU7JwDb8OtpumY3S9Z9ZeQQpS9fDSEhW4rtBu7TEn/
-	W5VOFuuytEqZTTVfwtw9joID2bwzsoDbfGewQDRf/IpZuA6FZ9zsfroHXyjCC2Zu4vfmm2DSn5y
-	B
-X-Google-Smtp-Source: AGHT+IGTtKPEPO9cZFEW6ACzIuOC7DuCasGENwvMLoSNZEl7VVK1zlW421vIJy8PwAwSYsfaacQpTQ==
-X-Received: by 2002:a17:903:11cd:b0:1e4:b1c7:9a7a with SMTP id q13-20020a17090311cd00b001e4b1c79a7amr172710plh.22.1712677207553;
-        Tue, 09 Apr 2024 08:40:07 -0700 (PDT)
-Received: from DougS18 (s66-183-142-209.bc.hsia.telus.net. [66.183.142.209])
-        by smtp.gmail.com with ESMTPSA id lg15-20020a170902fb8f00b001e0c5be4e2esm9065235plb.48.2024.04.09.08.40.06
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 09 Apr 2024 08:40:07 -0700 (PDT)
-From: "Doug Smythies" <dsmythies@telus.net>
-To: "'Len Brown'" <lenb@kernel.org>
-Cc: <linux-pm@vger.kernel.org>,
-	"Doug Smythies" <dsmythies@telus.net>
-References: <20240409003120.338589-1-lenb@kernel.org>
-In-Reply-To: <20240409003120.338589-1-lenb@kernel.org>
-Subject: RE: turbostat 2024.04.08 queued for upstream
-Date: Tue, 9 Apr 2024 08:40:08 -0700
-Message-ID: <001001da8a94$33d941c0$9b8bc540$@telus.net>
+	s=arc-20240116; t=1712677750; c=relaxed/simple;
+	bh=ggaHHuc2VG2fdrOMhbw4XnILVWpXV0g7RGQkl6nlwv8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fg8KCiQOHu6XOC9CzZ/EOHhYBKwxVIChmoGUCC6nwagQ47Zt9KaMVf8dClCYFvZaYM3ombE2I9elTKFdOSiHAVDvpu5JaJ4txgZcNhnTV3r85ocofFmcfPmtx1JMh8CmsL29tyLLAIDH7FfxPcg7opYDHJQ4f9rM3+Opjtuu/+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RcO6XzOb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05969C43390;
+	Tue,  9 Apr 2024 15:49:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712677749;
+	bh=ggaHHuc2VG2fdrOMhbw4XnILVWpXV0g7RGQkl6nlwv8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RcO6XzObc7wlgdxiDjy0f1wHeJ/xg90oJK1uvGdSoHGMh1uDr+/iRiQu11+OQMo4Q
+	 sJVbfuMNUvyKdBlNhz0pFzDcPRsQRWgwCjoiC/5WC7ktrR5xGmTyH39axjMlKIWkBD
+	 RoLLn6NtCxA4/EgdcW6ce1XZyV64uZgdpUFUW5KT4yIDRy/h0SnWdTjZN1/YZFglOO
+	 ooFFV5hsQsFBynSxN5lYVTvFdQ1mYVB83rs42o/PTOwBdmwgjqH2N5lULzJiY8kv4y
+	 PxoUnyv4L2D20qsLEHGbCn7fuFr44N1ZRwCjJc7e8WTO9o2xRMPJtm8/y77fjEyP7o
+	 W4c1mQgm9bWnA==
+Date: Tue, 9 Apr 2024 16:49:02 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Andrew Jones <ajones@ventanamicro.com>
+Cc: Conor Dooley <conor.dooley@microchip.com>, Max Hsu <max.hsu@sifive.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>, Anup Patel <anup@brainfault.org>,
+	Atish Patra <atishp@atishpatra.org>,
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Palmer Dabbelt <palmer@sifive.com>, linux-riscv@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, kvm@vger.kernel.org,
+	kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC 02/11] dt-bindings: riscv: Add Sdtrig optional CSRs
+ existence on DT
+Message-ID: <20240409-princess-hypnotic-7fd89aafa31d@spud>
+References: <20240329-dev-maxh-lin-452-6-9-v1-0-1534f93b94a7@sifive.com>
+ <20240329-dev-maxh-lin-452-6-9-v1-2-1534f93b94a7@sifive.com>
+ <20240329-affidavit-anatomist-1118a12c3e60@wendy>
+ <20240405-ebdb2943657ab08d2d563c03@orel>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-ca
-Thread-Index: AQIsF5tMX79vUXAlmdV8P6+qWnzTh7C84lHA
-
-Hi Len,
-
-Thank you for the new version of turbostat.
-There seems to be 5 patches missing from the set of 26.
-I also checked on patchworks:
-
-https://patchwork.kernel.org/project/linux-pm/list/?series=842622
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="S3RasL52JpCL7Ifu"
+Content-Disposition: inline
+In-Reply-To: <20240405-ebdb2943657ab08d2d563c03@orel>
 
 
-On 2024.04.08 17:31 Len wrote:
+--S3RasL52JpCL7Ifu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Please let me know if you see any problems in this update.
->
-> thanks!
-> -len
->
-> git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git tags/turbostat-2024.04.08
+On Fri, Apr 05, 2024 at 05:59:41PM +0200, Andrew Jones wrote:
+> On Fri, Mar 29, 2024 at 10:31:10AM +0000, Conor Dooley wrote:
+> > On Fri, Mar 29, 2024 at 05:26:18PM +0800, Max Hsu wrote:
+> > > The mcontext/hcontext/scontext CSRs are optional in the Sdtrig extens=
+ion,
+> > > to prevent RW operations to the missing CSRs, which will cause
+> > > illegal instructions.
+> > >=20
+> > > As a solution, we have proposed the dt format for these CSRs.
+> >=20
+> > As I mentioned in your other patch, I amn't sure what the actual value
+> > is in being told about "sdtrig" itself if so many of the CSRs are
+> > optional. I think we should define pseudo extensions that represent
+> > usable subsets that are allowed by riscv,isa-extensions, such as
+> > those you describe here: sdtrig + mcontext, sdtrig + scontext and
+> > sdtrig + hcontext. Probably also for strig + mscontext. What
+> > additional value does having a debug child node give us that makes
+> > it worth having over something like the above?
+>=20
+> Yeah, Sdtrig, which doesn't tell you what you get, isn't nice at all.
+> I wonder if we can start with requiring Sdtrig to be accompanied by
+> Ssstrict in order to enable the context CSRs, i.e.
+>=20
+>  Sdtrig          - support without optional CSRs
+>  Sdtrig+Ssstrict - probe for optional CSRs, support what's found
+>=20
+> If there are platforms with Sdtrig and optional CSRs, but not Ssstrict,
+> then maybe the optional CSRs can be detected in some vendor-specific way,
+> where the decision as to whether or not that vendor-specific way is
+> acceptable is handled case-by-case.
 
-I cloned it and all 26 patches are there. 
-I would just compile turbostat there and use that one, but it doesn't compile.
-(see below).
+I think it's pretty reasonable to make sstrict a requirement for the
+kernel's use of sdtrig. If we have some non-sstrict systems that do
+implement these particular CSRs, then I guess we can add some psuedo
+instructions then (and nothing would stop the sstrict systems also
+specifying directly). If they're using some non-standard CSRs then
+case-by-case I guess.
 
->
-> Turbostat version 2024.04.08
->
->Use of the CPU MSR driver is now optional.
-> Perf is now preferred for many counters.
->
-> Non-root users can now execute turbostat, though with limited function.
->
-> Add counters for some new GFX hardware.
->
-> ----------------------------------------------------------------
-> Chen Yu (1):
->      tools/power turbostat: Do not print negative LPI residency
->
-> Doug Smythies (1):
->      tools/power turbostat: Fix added raw MSR output
->
-> Justin Ernst (1):
->      tools/power/turbostat: Fix uncore frequency file string
+I'm just specifically not keen on adding extra dt properties that do
+things we can already do with the ones we have!
 
-Missing.
+--S3RasL52JpCL7Ifu
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> Len Brown (4):
->      tools/power turbostat: Expand probe_intel_uncore_frequency()
->      tools/power turbostat: Fix warning upon failed /dev/cpu_dma_latency read
->      tools/power turbostat: enhance -D (debug counter dump) output
->      tools/power turbostat: v2024.04.08
+-----BEGIN PGP SIGNATURE-----
 
-Missing (just tools/power turbostat: v2024.04.08 is missing)
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZhVjbgAKCRB4tDGHoIJi
+0uhaAQDa5o/BPeXShwDCWbzLtGoQJW9RQEEKp0v/Px0VcnBn/wEAtxi0+ePlahyg
+iuqh+k0zlBfw0fgjAmUxXyvYlSonvAc=
+=bIMw
+-----END PGP SIGNATURE-----
 
-This chunk of the patch:
-
- @@ -3371,7 +3374,7 @@ int get_rapl_counters(int cpu, int domain, struct core_data *c, struct pkg_data
-        struct rapl_counter_info_t *rci = &rapl_counter_info_perdomain[domain];
-
-        if (debug)
--               fprintf(stderr, "get_rapl_counters: cpu%d domain%d\n", cpu, domain);
-+               fprintf(stderr, "%s: cpu%d domain%d\n" __func__, cpu, domain);
-
-        assert(rapl_counter_info_perdomain);
-
-Should be this (note the missing comma added):
-
-+               fprintf(stderr, "%s: cpu%d domain%d\n", __func__, cpu, domain);
-
-With that change turbostat version 2024.04.08 compiles.
-
-> Patryk Wlazlyn (11):
->      tools/power turbostat: Print ucode revision only if valid
->      tools/power turbostat: Read base_hz and bclk from CPUID.16H if available
->      tools/power turbostat: Add --no-msr option
->      tools/power turbostat: Add --no-perf option
->      tools/power turbostat: Add reading aperf and mperf via perf API
->      tools/power turbostat: detect and disable unavailable BICs at runtime
->      tools/power turbostat: add early exits for permission checks
->      tools/power turbostat: Clear added counters when in no-msr mode
->      tools/power turbostat: Add proper re-initialization for perf file descriptors
->      tools/power turbostat: read RAPL counters via perf
->      tools/power turbostat: Add selftests
->
-> Peng Liu (1):
->      tools/power turbostat: Fix Bzy_MHz documentation typo
->
-> Wyes Karny (1):
->      tools/power turbostat: Increase the limit for fd opened
->
-> Zhang Rui (6):
->      tools/power/turbostat: Enable MSR_CORE_C1_RES support for ICX
->      tools/power/turbostat: Cache graphics sysfs path
->      tools/power/turbostat: Unify graphics sysfs snapshots
->      tools/power/turbostat: Introduce BIC_SAM_mc6/BIC_SAMMHz/BIC_SAMACTMHz
-
-Missing
-
->      tools/power/turbostat: Add support for new i915 sysfs knobs
-
-Missing
-
->      tools/power/turbostat: Add support for Xe sysfs knobs
-
-Missing
-
->
-> MAINTAINERS                                     |    1 +
-> tools/power/x86/turbostat/turbostat.8           |    6 +-
-> tools/power/x86/turbostat/turbostat.c           | 2197 ++++++++++++++++++-----
-> tools/testing/selftests/turbostat/defcolumns.py |   60 +
-> 4 files changed, 1805 insertions(+), 459 deletions(-)
-> create mode 100755 tools/testing/selftests/turbostat/defcolumns.py
-
-
+--S3RasL52JpCL7Ifu--
 
