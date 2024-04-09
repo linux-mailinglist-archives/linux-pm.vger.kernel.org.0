@@ -1,277 +1,212 @@
-Return-Path: <linux-pm+bounces-6093-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6094-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31E4789CF70
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 02:32:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C62C89CFF4
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 03:44:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA44E284BCE
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 00:32:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A103282DAE
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 01:44:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B0585CB0;
-	Tue,  9 Apr 2024 00:32:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fIiJVKSn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 198FCA951;
+	Tue,  9 Apr 2024 01:44:41 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47EE38BE8
-	for <linux-pm@vger.kernel.org>; Tue,  9 Apr 2024 00:32:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id E948B4E1A8;
+	Tue,  9 Apr 2024 01:44:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=42.101.60.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712622724; cv=none; b=RrctfkEllPNfKfuYv5pUUClUtscr0sFB1PzARveGZge6i+BOnG3Sm+qcuCccSCn/nwrNch21uSDkm/QGNNIMYWN27AAb8YnF2Nr+4E1RNwhqa3MNPCXweOQ/Vdwx/CShetAJexpSomSrs0/cJqV05QT7kW1eKt0r2YSiWqp7kGU=
+	t=1712627081; cv=none; b=rsrtAMtdOsPVs9PH6BgTiIHCsdG0mZSGL9rj7SFEYrv5/7sP++ThY3pXDpINQ7OCTxcViJAIAwCWxSxdMGCmiW93KVZLFiBTB+MveMIWXQR3TKyQqF+uSB4Wm6WzrpmOTNXIgFHtSQaq7hZrhbhWBswTJi/vNx5MTgChHi/E9eg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712622724; c=relaxed/simple;
-	bh=9DvyiQ5cmVfEHS9en053kSG/3AnU3Q6AB/z1DwyOqWA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=PpmXu7c5FKgf4yi3cwNcAJ6BPf4dALM7US4i3GVaCQp7gy1Y/VG8PWEoTjAVbXkG74jbQkvOfREROPFJm3SDSiADT1wcRkomMzHUWca/xYYfMZxokPxBFB9x6x5ZwfCYDIlL9b/XfR+CRu59eSjecb6F/FHIOtyuSNDipj5Ic38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fIiJVKSn; arc=none smtp.client-ip=209.85.219.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-dc74435c428so4972260276.2
-        for <linux-pm@vger.kernel.org>; Mon, 08 Apr 2024 17:32:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712622722; x=1713227522; darn=vger.kernel.org;
-        h=content-transfer-encoding:organization:reply-to:mime-version
-         :references:in-reply-to:message-id:date:subject:cc:to:from:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qiiR+qQjnUBO6RaNbAiylki53QLfCNwffKMAjAsmniA=;
-        b=fIiJVKSnVTVD2ATcQtFhmz5SXZXcea3ANZc8CB4p0dotdINsExWQE5ai66ozqcF4Q1
-         LeOWCkGrQxckFlhqS+PMPHMc4fwwAzU4qmDELNMr4diLxApJXJHJKZmeq+wliXxZBcmi
-         ubvuweEKv7x6jw6qyNuc0ZfHJACfUcH6XPyTr0wQeGR/XgHpvvZeLDQiHt5Irk3kaYHr
-         vkYK/o5vbU2PB6w1TlLqxg54abdXFHYhoyd8Jz5WksGESvqygU1CAwHUWCfvAXpfcA3w
-         WOxs4I8IROq+OqvnFEt2y6JZJE7UOmqdNleaWuCWtxgHSdJPjp57S5ANqBC7xYqwVdgQ
-         wTMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712622722; x=1713227522;
-        h=content-transfer-encoding:organization:reply-to:mime-version
-         :references:in-reply-to:message-id:date:subject:cc:to:from:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qiiR+qQjnUBO6RaNbAiylki53QLfCNwffKMAjAsmniA=;
-        b=JT6AHJ0FrOj4WymEXpaF0eusgNrm2SsfI5PFwZVASWo2RN3mTnoXkHACCxsA06dvdd
-         z0nppitQa0XThKTbOBnoRR8QU96IcnVF1qwd/skszKPbl84TmA43fVVzNfS5f17F4h4T
-         hJorg1D4Oy+H50aRHjA+abE2zl3ATV++hCgmwDMv+V8x5YafyZRCn9gzKhJ9hbN444Pc
-         h5m88sk6BR5OzqQ1id+eL0hcw/WTloG2FGHKX4U6S9wvsAj1mYZtUMEeeMhTV+Q0Z5xY
-         C8d3/xE/9uxA7Odn1F6b70UKycNOV12KORAKQOHBoLugZ3YhEul8siGyuZ27h33Xr7Y3
-         xExg==
-X-Gm-Message-State: AOJu0YzSUpHDs9xUd4nqhsF79qqtF7w2CdUXwud/rj26S0/CvEmaQLcA
-	k7bL3U2iXhTZUwoq7JpzGCjKXXqB4LoCYz9+92aZTbhqGO3tgbZJMi/WUCA7
-X-Google-Smtp-Source: AGHT+IGrchvSgUOSCqosLjtJxbOEPriEoVhXDlBnWssgcvdixN/L3Lp8+dHib1sc/pB6A9BNsPF2ZQ==
-X-Received: by 2002:a25:148b:0:b0:dc6:d808:cf75 with SMTP id 133-20020a25148b000000b00dc6d808cf75mr7763912ybu.20.1712622722006;
-        Mon, 08 Apr 2024 17:32:02 -0700 (PDT)
-Received: from lenb-Intel-NUC8i7HVKVA.search.charter.net (2603-9000-9f01-67cf-100c-5508-c194-b194.inf6.spectrum.com. [2603:9000:9f01:67cf:100c:5508:c194:b194])
-        by smtp.gmail.com with ESMTPSA id h6-20020a25e206000000b00dc74ac54f5fsm1531949ybe.63.2024.04.08.17.32.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Apr 2024 17:32:01 -0700 (PDT)
-Sender: Len Brown <lenb417@gmail.com>
-From: Len Brown <lenb@kernel.org>
-To: linux-pm@vger.kernel.org
-Cc: Zhang Rui <rui.zhang@intel.com>,
-	Len Brown <len.brown@intel.com>
-Subject: [PATCH 21/26] tools/power/turbostat: Unify graphics sysfs snapshots
-Date: Mon,  8 Apr 2024 20:31:15 -0400
-Message-Id: <ed9ddd35267bed801eb86e78847e533bb31c45b4.1712621427.git.len.brown@intel.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <e5f4e68eed85fa8495d78cd966eecc2b27bb9e53.1712621427.git.len.brown@intel.com>
-References: <e5f4e68eed85fa8495d78cd966eecc2b27bb9e53.1712621427.git.len.brown@intel.com>
+	s=arc-20240116; t=1712627081; c=relaxed/simple;
+	bh=X0Ro0EQvQfBNdQaiQRarPTjPl5tuRnyzzAyvFmZYeC0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=B0t4LnOdNvQe2dOVxPRnAI5FzBD+6U0vgIIUCuVdU3WNytAdmWyKUW+1ncJ0DKM6v+TleCP204Gn4XhPq5XyLCZZWngx44KUkpAZR/TM3btv+po3hKaet16Y515A2vC5Q8ftTGuWmvLvmum7J5F+ag4X+K5A/+48JXpE72/g9P8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com; spf=pass smtp.mailfrom=nfschina.com; arc=none smtp.client-ip=42.101.60.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
+Received: from localhost.localdomain (unknown [103.163.180.4])
+	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id 57B4A60234E9B;
+	Tue,  9 Apr 2024 09:44:27 +0800 (CST)
+X-MD-Sfrom: zhangyang@nfschina.com
+X-MD-SrcIP: 103.163.180.4
+From: zhangyang <zhangyang@nfschina.com>
+To: rafael@kernel.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	zhangyang <zhangyang@nfschina.com>
+Subject: [PATCH] fix aarch64 after hibernate when resume smp_call_function_many was called at in_irq (option hibernate=nocompress)
+Date: Tue,  9 Apr 2024 09:44:14 +0800
+Message-Id: <20240409014414.162-1-zhangyang@nfschina.com>
+X-Mailer: git-send-email 2.39.0.windows.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Reply-To: Len Brown <lenb@kernel.org>
-Organization: Intel Open Source Technology Center
 Content-Transfer-Encoding: 8bit
 
-From: Zhang Rui <rui.zhang@intel.com>
-
-Graphics sysfs snapshots share similar logic.
-Combine them into one function to avoid code duplication.
-
-No functional change.
-
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-Signed-off-by: Len Brown <len.brown@intel.com>
+[   12.603468] WARNING: CPU: 6 PID: 0 at kernel/smp.c:424 smp_call_function_many+0x2fc/0x390
+[   12.612730] Modules linked in: raid10(E) raid456(E) libcrc32c(E) async_raid6_recov(E) async_memcpy(E) async_pq(E) async_xor(E) xor(E) xor_neon(E) async_tx(E) raid6_pq(E) raid1(E) raid0(E) multipath(E) linear(E) md_mod(E) hid_generic(E) usbhid(E) hid(E) uhci_hcd(E) ehci_hcd(E) arise_pro(OE) drm_kms_helper(E) evdev(E) efivars(E) clk_scpi(E) sd_mod(E) usbcore(E) drm(E) arm_scpi(E)
+[   12.650675] CPU: 6 PID: 0 Comm: swapper/6 Tainted: G        W  OE     5.4.0-100-generic #100.1+m38+21nfs5
+[   12.661512] Hardware name: LENOVO INVALID/FD2000ZX200MB1, BIOS W0AKT19B 08/16/2022
+[   12.670085] pstate: 20000085 (nzCv daIf -PAN -UAO)
+[   12.675506] pc : smp_call_function_many+0x2fc/0x390
+[   12.681026] lr : kick_all_cpus_sync+0x34/0x3c
+[   12.685954] sp : ffff800010033c40
+[   12.689700] x29: ffff800010033c40 x28: ffff80001152a1b8
+[   12.695712] x27: 0000000000000006 x26: 0000000000000001
+[   12.701723] x25: ffff0000780b8000 x24: 0000000000000000
+[   12.707735] x23: 0000000000000000 x22: ffff8000101b6ad0
+[   12.713746] x21: 0000000000000006 x20: ffff80001152a1b8
+[   12.719758] x19: ffff0026d3e08100 x18: 0000000000000000
+[   12.725769] x17: 000000004143b1b7 x16: 0000000000000008
+[   12.731781] x15: 0000000000004446 x14: 000000000000ba7e
+[   12.737792] x13: 000042cf7b84cf9c x12: 000042cf7b84cf9c
+[   12.743804] x11: 00000000000042cf x10: 0000000000000040
+[   12.749815] x9 : ffff80001154e748 x8 : ffff80001154e740
+[   12.755826] x7 : ffff0026d8400af8 x6 : ffff0026d3e08180
+[   12.761837] x5 : 0000000000001000 x4 : ffff0026d0b2f000
+[   12.767849] x3 : 0000000000000001 x2 : ffff800011159018
+[   12.773860] x1 : 0000000000000080 x0 : 0000000000000000
+[   12.779871] Call trace:
+[   12.782634]  smp_call_function_many+0x2fc/0x390
+[   12.787759]  kick_all_cpus_sync+0x34/0x3c
+[   12.792295]  hib_end_io+0x104/0x180
+[   12.796240]  bio_endio+0x148/0x1f0
+[   12.800086]  blk_update_request+0xd8/0x3b0
+[   12.804718]  blk_mq_end_request+0x34/0x150
+[   12.809352]  nvme_complete_rq+0x74/0x230
+[   12.813788]  nvme_pci_complete_rq+0x5c/0xd0
+[   12.818520]  blk_mq_complete_request+0x10c/0x14c
+[   12.823743]  nvme_complete_cqes+0xbc/0x1bc
+[   12.828375]  nvme_irq+0x13c/0x15c
+[   12.832123]  __handle_irq_event_percpu+0x68/0x240
+[   12.837445]  handle_irq_event+0x68/0x1ac
+[   12.841881]  handle_fasteoi_irq+0xc8/0x23c
+[   12.846514]  __handle_domain_irq+0x80/0xe0
+[   12.851147]  gic_handle_irq+0xd8/0x180
+[   12.855385]  el1_irq+0xb8/0x140
+[   12.858934]  arch_cpu_idle+0x40/0x1d0
+[   12.863075]  do_idle+0x230/0x2dc
+[   12.866722]  cpu_startup_entry+0x30/0xc0
+[   12.871159]  secondary_start_kernel+0x138/0x184
+[   12.876283] ---[ end trace 9cf7b6db3165264d ]---
 ---
- tools/power/x86/turbostat/turbostat.c | 109 ++++++++------------------
- 1 file changed, 34 insertions(+), 75 deletions(-)
+ kernel/power/swap.c | 59 +++++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 54 insertions(+), 5 deletions(-)
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 4c26eefeca24..cba000c198d7 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -251,11 +251,8 @@ char *output_buffer, *outp;
- unsigned int do_dts;
- unsigned int do_ptm;
- unsigned int do_ipc;
--unsigned long long gfx_cur_rc6_ms;
- unsigned long long cpuidle_cur_cpu_lpi_us;
- unsigned long long cpuidle_cur_sys_lpi_us;
--unsigned int gfx_cur_mhz;
--unsigned int gfx_act_mhz;
- unsigned int tj_max;
- unsigned int tj_max_override;
- double rapl_power_units, rapl_time_units;
-@@ -285,6 +282,9 @@ enum gfx_sysfs_idx {
- 
- struct gfx_sysfs_info {
- 	const char *path;
-+	FILE *fp;
-+	unsigned int val;
-+	unsigned long long val_ull;
- };
- 
- static struct gfx_sysfs_info gfx_info[GFX_MAX];
-@@ -3571,17 +3571,17 @@ int get_counters(struct thread_data *t, struct core_data *c, struct pkg_data *p)
- 	}
- 
- 	if (DO_BIC(BIC_GFX_rc6))
--		p->gfx_rc6_ms = gfx_cur_rc6_ms;
-+		p->gfx_rc6_ms = gfx_info[GFX_rc6].val_ull;
- 
- 	/* n.b. assume die0 uncore frequency applies to whole package */
- 	if (DO_BIC(BIC_UNCORE_MHZ))
- 		p->uncore_mhz = get_uncore_mhz(p->package_id, 0);
- 
- 	if (DO_BIC(BIC_GFXMHz))
--		p->gfx_mhz = gfx_cur_mhz;
-+		p->gfx_mhz = gfx_info[GFX_MHz].val;
- 
- 	if (DO_BIC(BIC_GFXACTMHz))
--		p->gfx_act_mhz = gfx_act_mhz;
-+		p->gfx_act_mhz = gfx_info[GFX_ACTMHz].val;
- 
- 	for (i = 0, mp = sys.pp; mp; i++, mp = mp->next) {
- 		if (get_mp(cpu, mp, &p->counter[i]))
-@@ -4617,81 +4617,40 @@ int snapshot_proc_interrupts(void)
- }
- 
- /*
-- * snapshot_gfx_rc6_ms()
-+ * snapshot_graphics()
-  *
-- * record snapshot of
-- * /sys/class/drm/card0/power/rc6_residency_ms
-+ * record snapshot of specified graphics sysfs knob
-  *
-  * return 1 if config change requires a restart, else return 0
+diff --git a/kernel/power/swap.c b/kernel/power/swap.c
+index 5bc04bfe2..5ee3908af 100644
+--- a/kernel/power/swap.c
++++ b/kernel/power/swap.c
+@@ -41,7 +41,6 @@ u32 swsusp_hardware_signature;
+  * in which case some architectures need these pages cleaning before they
+  * can be executed. We don't know which pages these may be, so clean the lot.
   */
--int snapshot_gfx_rc6_ms(void)
-+int snapshot_graphics(int idx)
- {
- 	FILE *fp;
- 	int retval;
- 
--	fp = fopen_or_die(gfx_info[GFX_rc6].path, "r");
--
--	retval = fscanf(fp, "%lld", &gfx_cur_rc6_ms);
--	if (retval != 1)
--		err(1, "GFX rc6");
--
--	fclose(fp);
--
--	return 0;
--}
--
--/*
-- * snapshot_gfx_mhz()
-- *
-- * fall back to /sys/class/graphics/fb0/device/drm/card0/gt_cur_freq_mhz
-- * when /sys/class/drm/card0/gt_cur_freq_mhz is not available.
-- *
-- * return 1 if config change requires a restart, else return 0
-- */
--int snapshot_gfx_mhz(void)
--{
--	static FILE *fp;
--	int retval;
--
--	if (fp == NULL) {
--		fp = fopen_or_die(gfx_info[GFX_MHz].path, "r");
--	} else {
--		rewind(fp);
--		fflush(fp);
--	}
--
--	retval = fscanf(fp, "%d", &gfx_cur_mhz);
--	if (retval != 1)
--		err(1, "GFX MHz");
--
--	return 0;
--}
--
--/*
-- * snapshot_gfx_cur_mhz()
-- *
-- * fall back to /sys/class/graphics/fb0/device/drm/card0/gt_act_freq_mhz
-- * when /sys/class/drm/card0/gt_act_freq_mhz is not available.
-- *
-- * return 1 if config change requires a restart, else return 0
-- */
--int snapshot_gfx_act_mhz(void)
--{
--	static FILE *fp;
--	int retval;
--
--	if (fp == NULL) {
--		fp = fopen_or_die(gfx_info[GFX_ACTMHz].path, "r");
--	} else {
--		rewind(fp);
--		fflush(fp);
-+	switch (idx) {
-+	case GFX_rc6:
-+		fp = fopen_or_die(gfx_info[idx].path, "r");
-+		retval = fscanf(fp, "%lld", &gfx_info[idx].val_ull);
-+		if (retval != 1)
-+			err(1, "rc6");
-+		fclose(fp);
-+		return 0;
-+	case GFX_MHz:
-+	case GFX_ACTMHz:
-+		if (gfx_info[idx].fp == NULL) {
-+			gfx_info[idx].fp = fopen_or_die(gfx_info[idx].path, "r");
-+		} else {
-+			rewind(gfx_info[idx].fp);
-+			fflush(gfx_info[idx].fp);
-+		}
-+		retval = fscanf(gfx_info[idx].fp, "%d", &gfx_info[idx].val);
-+		if (retval != 1)
-+			err(1, "MHz");
-+		return 0;
-+	default:
-+		return -EINVAL;
- 	}
--
--	retval = fscanf(fp, "%d", &gfx_act_mhz);
--	if (retval != 1)
--		err(1, "GFX ACT MHz");
--
--	return 0;
- }
+-static bool clean_pages_on_read;
+ static bool clean_pages_on_decompress;
  
  /*
-@@ -4756,13 +4715,13 @@ int snapshot_proc_sysfs_files(void)
- 			return 1;
+@@ -256,9 +255,6 @@ static void hib_end_io(struct bio *bio)
  
- 	if (DO_BIC(BIC_GFX_rc6))
--		snapshot_gfx_rc6_ms();
-+		snapshot_graphics(GFX_rc6);
+ 	if (bio_data_dir(bio) == WRITE)
+ 		put_page(page);
+-	else if (clean_pages_on_read)
+-		flush_icache_range((unsigned long)page_address(page),
+-				   (unsigned long)page_address(page) + PAGE_SIZE);
  
- 	if (DO_BIC(BIC_GFXMHz))
--		snapshot_gfx_mhz();
-+		snapshot_graphics(GFX_MHz);
+ 	if (bio->bi_status && !hb->error)
+ 		hb->error = bio->bi_status;
+@@ -1084,6 +1080,50 @@ static int swap_reader_finish(struct swap_map_handle *handle)
+ 	return 0;
+ }
  
- 	if (DO_BIC(BIC_GFXACTMHz))
--		snapshot_gfx_act_mhz();
-+		snapshot_graphics(GFX_ACTMHz);
++struct swsusp_readpages {
++	unsigned long size;
++	unsigned long cursor;
++	struct page **pages;
++};
++
++static int swsusp_init_readpages(struct swsusp_readpages *read_pages, unsigned int nr_to_read)
++{
++	read_pages->pages = (struct page **)vzalloc(sizeof(struct page *) * nr_to_read);
++	if (!read_pages->pages) {
++		return -ENOMEM;
++	}
++
++	read_pages->size = nr_to_read;
++	read_pages->cursor = 0;
++	
++	return 0;
++}
++
++
++static int swsusp_add_readpage(struct swsusp_readpages *read_pages, void *page_addr)
++{
++	if (read_pages->cursor >= read_pages->size) {
++		return -ENOMEM;
++	}
++
++	read_pages->pages[read_pages->cursor++] = virt_to_page(page_addr);
++	return 0;
++}
++
++static void swsusp_clean_readedpages(struct swsusp_readpages *read_pages, bool flush)
++{
++	unsigned long idx;
++
++	for (idx = 0; idx < read_pages->cursor; idx++) {
++		if (flush && read_pages->pages[idx])
++			flush_icache_range((unsigned long)page_address(read_pages->pages[idx]),
++								(unsigned long)page_address(read_pages->pages[idx] + PAGE_SIZE));
++	}
++
++	vfree(read_pages->pages);
++	return;
++}
++
+ /**
+  *	load_image - load the image using the swap map handle
+  *	@handle and the snapshot handle @snapshot
+@@ -1101,10 +1141,14 @@ static int load_image(struct swap_map_handle *handle,
+ 	struct hib_bio_batch hb;
+ 	int err2;
+ 	unsigned nr_pages;
++	struct swsusp_readpages pages_to_clean;
  
- 	if (DO_BIC(BIC_CPU_LPI))
- 		snapshot_cpu_lpi_us();
+ 	hib_init_batch(&hb);
++	ret = swsusp_init_readpages(&pages_to_clean, nr_to_read);
++	if (!ret) {
++		return ret;
++	}
+ 
+-	clean_pages_on_read = true;
+ 	pr_info("Loading image data pages (%u pages)...\n", nr_to_read);
+ 	m = nr_to_read / 10;
+ 	if (!m)
+@@ -1122,6 +1166,10 @@ static int load_image(struct swap_map_handle *handle,
+ 			ret = hib_wait_io(&hb);
+ 		if (ret)
+ 			break;
++		ret = swsusp_add_readpage(&pages_to_clean, data_of(*snapshot));
++		if (ret)
++			break;
++
+ 		if (!(nr_pages % m))
+ 			pr_info("Image loading progress: %3d%%\n",
+ 				nr_pages / m * 10);
+@@ -1132,6 +1180,7 @@ static int load_image(struct swap_map_handle *handle,
+ 	stop = ktime_get();
+ 	if (!ret)
+ 		ret = err2;
++	swsusp_clean_readedpages(&pages_to_clean, !ret);
+ 	if (!ret) {
+ 		pr_info("Image loading done\n");
+ 		ret = snapshot_write_finalize(snapshot);
 -- 
-2.40.1
+2.39.0.windows.1
 
 
