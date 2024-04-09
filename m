@@ -1,224 +1,205 @@
-Return-Path: <linux-pm+bounces-6122-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6123-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94B9789DF5E
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 17:38:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73EB489DF77
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 17:41:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 098281F2526F
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 15:38:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 976A81C22E48
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 15:41:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23C741353E3;
-	Tue,  9 Apr 2024 15:35:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0934B135A6D;
+	Tue,  9 Apr 2024 15:40:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="M8RQIUlD"
+	dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b="T+Wwmva1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D1CF137C3F
-	for <linux-pm@vger.kernel.org>; Tue,  9 Apr 2024 15:35:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4375980619
+	for <linux-pm@vger.kernel.org>; Tue,  9 Apr 2024 15:40:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712676952; cv=none; b=epaXoirQHrP9daImYM/UwwUl+vRlu3ChVFxSWyLiJXBpddUJTjjT5MQqYw0d1XPcmcYwo2BWKaihED/egBqJnP9Ej9fYaXFEoBmatxHkayL/Jb6DB8alf4Nrl+RHlimw+sPykCJq8nCRERwzF6r+NH7yM9ug4qehK8csu7Jx5DE=
+	t=1712677209; cv=none; b=be/YUhgzzq49WOoGS8NoAPDkjKzUv0nEazC8x5HOHp9HxjzNgJEkHDkHkg/sFkpLOYgVgnu+OxNKtqX7ysQoLkW8wOswQRAJAq1I7i+fizIZ8uV2U45puwxoqrtQYa4tp99FhOgENOPDWoj7su0ckhmRZ5TyCAw1W3Jco7YvOPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712676952; c=relaxed/simple;
-	bh=0pjTPnekrZ6Mo2O3A8pGX4AK75zIDzNbFZm+tv/AiyM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=h+8VkL+2+9mWk5ncmKkvZ4OmZtUjwgsjYmpobsHfV6FCi+K+6I/Qn3IldUwoWxrI/7usVFyQ15oP53IaCTLVIBsJYTnaEAiyMG01mHo2MW91Kif0xHNssEcXgP6nkl6CqPSX3yvBe1z9Jr9f84ymNjmPmV0RolZxRfuvDe65cnc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=M8RQIUlD; arc=none smtp.client-ip=209.85.208.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2d094bc2244so61115421fa.1
-        for <linux-pm@vger.kernel.org>; Tue, 09 Apr 2024 08:35:49 -0700 (PDT)
+	s=arc-20240116; t=1712677209; c=relaxed/simple;
+	bh=Im2pV7UUUvn6tVTrpIQQKBUVfbBnt4AHOBFlG8bAws0=;
+	h=From:To:Cc:References:In-Reply-To:Subject:Date:Message-ID:
+	 MIME-Version:Content-Type; b=OLSYAcKCOFC7konDrYw9+MhQlGDhA+Fa7a7MxWU4yu4b/go6OoLoIJQiw8czLpangp2Xf82+wlzF8711VmAo7VmaXYjGz74f37w9g5xtP897ddpU0axrTBqdc4M0yRpFE1u2F/770CwJUgG06oag+yBIrQiYfrOUCYNhkEHfX2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=telus.net; spf=pass smtp.mailfrom=telus.net; dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b=T+Wwmva1; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=telus.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=telus.net
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1e3e56c9d2cso25468965ad.1
+        for <linux-pm@vger.kernel.org>; Tue, 09 Apr 2024 08:40:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1712676948; x=1713281748; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nARArI/JGxcqeVSW+91I3DRTdX+G+3rkUWRdOGuyuMs=;
-        b=M8RQIUlDboOKc3mYlmgZamgiQC/aqLQdEjingQuXqsMIhm0B833yg2d/kFvFgYpdcs
-         uI+RCkeL7K7XLOF/96xLDwC4TbsVVRzLdv3icLl0LbRBslasba4tb2KPocIze+zr9O24
-         tGobTO82QFpSI01PDd9R/PIqqdqEHl3XFIhJxdf+MiL+I2oPBRvjlk2cSkwsLYvgqoR/
-         YW58TtOa+ApGdF7yexxbzbmvIHajgQlMIMa9jTil8T4fJg2HAARCZpAsJmdTktmgwkRc
-         qXPZOxCylHAAHTn1sCxK5OWt2JuGhCGFF2KvvdtpBvYSXePb/br+ec+iNyk53+5Z65uH
-         WihA==
+        d=telus.net; s=google; t=1712677207; x=1713282007; darn=vger.kernel.org;
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=t1ZdjIfpwsEpN0j3fC1ZIMkWKugMLDNqW+g9FjihQJo=;
+        b=T+Wwmva1E0RbFZVYk+wdhlb0eb9clZrQM9g6EwM41NWglXzihYvWhj/IpfaH1AcRq+
+         gae8jA259O0Eaii0c8a3Vo44qi773jrUqwoR5xvJvHN+d1pfF9eOJXED+3Y9hrdqWIiv
+         409IZfqhCrFI9h6bAMhfDKVw+EBAVXpuUztUH2TIyOUu+tKUWj7fxV1YhbhRh6IvhrZ2
+         nQo/ndY6t1ehQPoiCAEYhHMu4+bW+QIK1rLE1aYT3JqV4SczpMitvgH1QDv+2NYvIXUL
+         18ciDLTKVa3G88SpsdEYmPEIKK2YBsygLylxpn/LS5ZaznVcyf8YT4SEA/BWCiqVsRhI
+         yR8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712676948; x=1713281748;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nARArI/JGxcqeVSW+91I3DRTdX+G+3rkUWRdOGuyuMs=;
-        b=iPz1eqCHr+nLqcKN0TZsAysawtdGfDaNYM0VbygMcaokYslkykSA9cc6dsX8Ydqt07
-         Ht1jbAE+pftdZxgEeeGnp9ZtLUL00ypgIegoIfAjaLmiR/Gh0YpfYo87VgpKCDksBHod
-         IU7VHKQBARH+z6iqc+ISsKZDw7NqaElvkuqSh9Ws8XfAIQMWEYjP2g5Hppq24s2lliiE
-         L0qx83iEkWYdCYh4ol/L6462xupM5ANsJzcC3ZCoD4WD2jxTcOg3s9/nkJpEkzSXdLAF
-         otbJqqrQuYKxf9/31ygSpG0ynoxcHrLPMQi3WU9P8eLSFhA1Awuq5HDSZWBC8KL62n11
-         F4VQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUdhiRUw+PCP6oi19OCbnf56p1TU7TmMx32ZEObPmfAUsmM4fLyNm3G3oneG92fQDDT+fKs6SK9yNY2dehXkPTuQuRbVHhm0PQ=
-X-Gm-Message-State: AOJu0YwqHreduZmlrqSWvu+ZqtFGMcwl7oAGjeXFN700roB8YbrZZ3xF
-	8pbUOujz5Wv1rFfsx/wBB5iXApNRd61bZts6zZQY11BrD9vE29TWz99um3+R5CkwYKp/7jJhsLI
-	YH/jQH70b5AAnCyazDAkZNn5hQjJjis8V9Mh50Q==
-X-Google-Smtp-Source: AGHT+IGYR0H515M8Yuyw6jAM8maTiRT7zQOgLaut79Nmzv6VqTS4JpTG+pUsMdsTdhL2wX5eqAgRDApWqIUOQCBytW4=
-X-Received: by 2002:a2e:b8c3:0:b0:2d8:a814:583d with SMTP id
- s3-20020a2eb8c3000000b002d8a814583dmr166320ljp.30.1712676947967; Tue, 09 Apr
- 2024 08:35:47 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1712677207; x=1713282007;
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=t1ZdjIfpwsEpN0j3fC1ZIMkWKugMLDNqW+g9FjihQJo=;
+        b=EYvkTPlg9siLfNrDEWMB88nPw83VpZplLwjWivojkUdwPr86KmCmmnk7mgdSJZix0L
+         PhbWXxrobQPjZxl4wcNyENxZVKjD2P5jeM5WmyJLqz8T6o98ol6cp1NBqTSYTapBOpF0
+         YnbO75YIkzcS/2M00TR92oMXvJeLllzwGZRM0w2mMgfAB99n6+iAFA1noR4x1Mf1Z3fs
+         QeBIQva+8r0WGZ7jKktQAU6Upc4I392faKEWW45Lsqk+kBiFJASF1l9tBKn8QsO+D1s5
+         GZ94Z4tsSsFWvJuMckksux3czCmGW0xSA85bjGAmhjdPmo5guDkRfs1BFlDiCnNyQ12U
+         6Hdw==
+X-Gm-Message-State: AOJu0YyuAKWKVzXU7JwDb8OtpumY3S9Z9ZeQQpS9fDSEhW4rtBu7TEn/
+	W5VOFuuytEqZTTVfwtw9joID2bwzsoDbfGewQDRf/IpZuA6FZ9zsfroHXyjCC2Zu4vfmm2DSn5y
+	B
+X-Google-Smtp-Source: AGHT+IGTtKPEPO9cZFEW6ACzIuOC7DuCasGENwvMLoSNZEl7VVK1zlW421vIJy8PwAwSYsfaacQpTQ==
+X-Received: by 2002:a17:903:11cd:b0:1e4:b1c7:9a7a with SMTP id q13-20020a17090311cd00b001e4b1c79a7amr172710plh.22.1712677207553;
+        Tue, 09 Apr 2024 08:40:07 -0700 (PDT)
+Received: from DougS18 (s66-183-142-209.bc.hsia.telus.net. [66.183.142.209])
+        by smtp.gmail.com with ESMTPSA id lg15-20020a170902fb8f00b001e0c5be4e2esm9065235plb.48.2024.04.09.08.40.06
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 09 Apr 2024 08:40:07 -0700 (PDT)
+From: "Doug Smythies" <dsmythies@telus.net>
+To: "'Len Brown'" <lenb@kernel.org>
+Cc: <linux-pm@vger.kernel.org>,
+	"Doug Smythies" <dsmythies@telus.net>
+References: <20240409003120.338589-1-lenb@kernel.org>
+In-Reply-To: <20240409003120.338589-1-lenb@kernel.org>
+Subject: RE: turbostat 2024.04.08 queued for upstream
+Date: Tue, 9 Apr 2024 08:40:08 -0700
+Message-ID: <001001da8a94$33d941c0$9b8bc540$@telus.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240325131624.26023-1-brgl@bgdev.pl> <6b63d5d2-5f30-4fbd-a872-91f32dc32c87@gmail.com>
-In-Reply-To: <6b63d5d2-5f30-4fbd-a872-91f32dc32c87@gmail.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Tue, 9 Apr 2024 17:35:36 +0200
-Message-ID: <CAMRc=McWdU-=MoGe+yVnj4OKzM-2D9KUZnQuj0MmtxDG10e3kw@mail.gmail.com>
-Subject: Re: [PATCH v6 00/16] power: sequencing: implement the subsystem and
- add first users
-To: Xilin Wu <wuxilin123@gmail.com>
-Cc: Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Kalle Valo <kvalo@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Saravana Kannan <saravanak@google.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Arnd Bergmann <arnd@arndb.de>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Marek Szyprowski <m.szyprowski@samsung.com>, Alex Elder <elder@linaro.org>, 
-	Srini Kandagatla <srinivas.kandagatla@linaro.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Abel Vesa <abel.vesa@linaro.org>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Lukas Wunner <lukas@wunner.de>, 
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, linux-bluetooth@vger.kernel.org, 
-	netdev@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+	charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: en-ca
+Thread-Index: AQIsF5tMX79vUXAlmdV8P6+qWnzTh7C84lHA
 
-On Sat, Apr 6, 2024 at 5:03=E2=80=AFAM Xilin Wu <wuxilin123@gmail.com> wrot=
-e:
->
-> I tested the patchset on SM8550 and it does give me working WiFi. However=
- I
-> seethe following warnings during boot.
->
-> [    5.973011] mhi mhi0: Requested to power ON
-> [    6.597591] mhi mhi0: Power on setup success
-> [    6.597631] sysfs: cannot create duplicate filename '/devices/platform=
-/soc@0/1c00000.pcie/pci0000:00/0000:00:00.0/resource0'
-> [    6.597634] CPU: 7 PID: 154 Comm: kworker/u32:5 Tainted: G S          =
-       6.9.0-rc1-next-20240328-g955237c9980c #1
-> [    6.597635] Hardware name: AYN Odin 2 (DT)
-> [    6.597637] Workqueue: async async_run_entry_fn
-> [    6.597645] Call trace:
-> [    6.597646]  dump_backtrace+0xa0/0x128
-> [    6.597649]  show_stack+0x20/0x38
-> [    6.597650]  dump_stack_lvl+0x74/0x90
-> [    6.597653]  dump_stack+0x18/0x28
-> [    6.597654]  sysfs_warn_dup+0x6c/0x90
-> [    6.597658]  sysfs_add_bin_file_mode_ns+0xdc/0x100
-> [    6.597660]  sysfs_create_bin_file+0x7c/0xb8
-> [    6.597662]  pci_create_attr+0xb4/0x1a8
-> [    6.597665]  pci_create_resource_files+0x64/0xd0
-> [    6.597667]  pci_create_sysfs_dev_files+0x24/0x40
-> [    6.597669]  pci_bus_add_device+0x54/0x138
-> [    6.597670]  pci_bus_add_devices+0x40/0x98
-> [    6.597672]  pci_host_probe+0x70/0xf0
-> [    6.597673]  dw_pcie_host_init+0x248/0x658
-> [    6.597676]  qcom_pcie_probe+0x234/0x330
-> [    6.597677]  platform_probe+0x70/0xd8
-> [    6.597680]  really_probe+0xc8/0x3a0
-> [    6.597681]  __driver_probe_device+0x84/0x170
-> [    6.597682]  driver_probe_device+0x44/0x120
-> [    6.597683]  __device_attach_driver+0xc4/0x168
-> [    6.597684]  bus_for_each_drv+0x8c/0xf0
-> [    6.597686]  __device_attach_async_helper+0xb4/0x118
-> [    6.597687]  async_run_entry_fn+0x40/0x178
-> [    6.597689]  process_one_work+0x16c/0x410
-> [    6.597691]  worker_thread+0x284/0x3a0
-> [    6.597693]  kthread+0x118/0x128
-> [    6.597693]  ret_from_fork+0x10/0x20
-> [    6.597698] ------------[ cut here ]------------
-> [    6.597698] proc_dir_entry '0000:00/00.0' already registered
-> [    6.597710] WARNING: CPU: 7 PID: 154 at fs/proc/generic.c:375 proc_reg=
-ister+0x138/0x1d0
-> [    6.597713] Modules linked in:
-> [    6.597714] CPU: 7 PID: 154 Comm: kworker/u32:5 Tainted: G S          =
-       6.9.0-rc1-next-20240328-g955237c9980c #1
-> [    6.597715] Hardware name: AYN Odin 2 (DT)
-> [    6.597716] Workqueue: async async_run_entry_fn
-> [    6.597718] pstate: 61400005 (nZCv daif +PAN -UAO -TCO +DIT -SSBS BTYP=
-E=3D--)
-> [    6.597719] pc : proc_register+0x138/0x1d0
-> [    6.597721] lr : proc_register+0x138/0x1d0
-> [    6.597723] sp : ffff800081e3b9a0
-> [    6.597723] x29: ffff800081e3b9a0 x28: 0000000000000000 x27: ffffddb2a=
-28eabe0
-> [    6.597725] x26: ffff3425c9ada5c0 x25: ffffddb2a2d4eef0 x24: ffff3425c=
-9ada540
-> [    6.597726] x23: 0000000000000004 x22: ffff3425c7b1822c x21: 000000000=
-0000004
-> [    6.597727] x20: ffff3425c7b18180 x19: ffff3425c9adaec8 x18: fffffffff=
-fffffff
-> [    6.597729] x17: 3040636f732f6d72 x16: 6f6674616c702f73 x15: ffff80008=
-1e3b910
-> [    6.597730] x14: 0000000000000000 x13: 0a64657265747369 x12: 676572207=
-9646165
-> [    6.597731] x11: fffffffffff00000 x10: ffffddb2a27c4fb0 x9 : ffffddb29=
-f5d7528
-> [    6.597733] x8 : 00000000ffff7fff x7 : ffffddb2a27c4fb0 x6 : 80000000f=
-fff8000
-> [    6.597734] x5 : 0000000000000358 x4 : 0000000000000000 x3 : 00000000f=
-fffffff
-> [    6.597736] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff3425c=
-5ce0000
-> [    6.597737] Call trace:
-> [    6.597737]  proc_register+0x138/0x1d0
-> [    6.597739]  proc_create_data+0x48/0x78
-> [    6.597741]  pci_proc_attach_device+0x84/0x118
-> [    6.597743]  pci_bus_add_device+0x5c/0x138
-> [    6.597744]  pci_bus_add_devices+0x40/0x98
-> [    6.597745]  pci_host_probe+0x70/0xf0
-> [    6.597746]  dw_pcie_host_init+0x248/0x658
-> [    6.597748]  qcom_pcie_probe+0x234/0x330
-> [    6.597749]  platform_probe+0x70/0xd8
-> [    6.597750]  really_probe+0xc8/0x3a0
-> [    6.597751]  __driver_probe_device+0x84/0x170
-> [    6.597752]  driver_probe_device+0x44/0x120
-> [    6.597753]  __device_attach_driver+0xc4/0x168
-> [    6.597754]  bus_for_each_drv+0x8c/0xf0
-> [    6.597756]  __device_attach_async_helper+0xb4/0x118
-> [    6.597757]  async_run_entry_fn+0x40/0x178
-> [    6.597759]  process_one_work+0x16c/0x410
-> [    6.597760]  worker_thread+0x284/0x3a0
-> [    6.597761]  kthread+0x118/0x128
-> [    6.597762]  ret_from_fork+0x10/0x20
-> [    6.597763] ---[ end trace 0000000000000000 ]---
->
-> This probably only occurs when the relevant drivers on compiled as built-=
-in.
-> Similar behavior has been noticed before as well:
->
-> https://lore.kernel.org/lkml/20240201155532.49707-1-brgl@bgdev.pl/T/#mdee=
-ca9bc8e19458787d53738298abcfff443068a
->
-> Thanks,
-> Xilin
->
+Hi Len,
 
-Thanks for the report. The reason for this was populating the platform
-devices before the bridge device was fully added. In case of loadable
-modules this meant the pwrctl probe would be deferred long enough for
-that to complete so I didn't see it but with pwrctl built-in this
-would trigger the problem. I fixed it locally and will resend with
-that addressed.
+Thank you for the new version of turbostat.
+There seems to be 5 patches missing from the set of 26.
+I also checked on patchworks:
 
-Bart
+https://patchwork.kernel.org/project/linux-pm/list/?series=842622
+
+
+On 2024.04.08 17:31 Len wrote:
+
+> Please let me know if you see any problems in this update.
+>
+> thanks!
+> -len
+>
+> git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git tags/turbostat-2024.04.08
+
+I cloned it and all 26 patches are there. 
+I would just compile turbostat there and use that one, but it doesn't compile.
+(see below).
+
+>
+> Turbostat version 2024.04.08
+>
+>Use of the CPU MSR driver is now optional.
+> Perf is now preferred for many counters.
+>
+> Non-root users can now execute turbostat, though with limited function.
+>
+> Add counters for some new GFX hardware.
+>
+> ----------------------------------------------------------------
+> Chen Yu (1):
+>      tools/power turbostat: Do not print negative LPI residency
+>
+> Doug Smythies (1):
+>      tools/power turbostat: Fix added raw MSR output
+>
+> Justin Ernst (1):
+>      tools/power/turbostat: Fix uncore frequency file string
+
+Missing.
+
+> Len Brown (4):
+>      tools/power turbostat: Expand probe_intel_uncore_frequency()
+>      tools/power turbostat: Fix warning upon failed /dev/cpu_dma_latency read
+>      tools/power turbostat: enhance -D (debug counter dump) output
+>      tools/power turbostat: v2024.04.08
+
+Missing (just tools/power turbostat: v2024.04.08 is missing)
+
+This chunk of the patch:
+
+ @@ -3371,7 +3374,7 @@ int get_rapl_counters(int cpu, int domain, struct core_data *c, struct pkg_data
+        struct rapl_counter_info_t *rci = &rapl_counter_info_perdomain[domain];
+
+        if (debug)
+-               fprintf(stderr, "get_rapl_counters: cpu%d domain%d\n", cpu, domain);
++               fprintf(stderr, "%s: cpu%d domain%d\n" __func__, cpu, domain);
+
+        assert(rapl_counter_info_perdomain);
+
+Should be this (note the missing comma added):
+
++               fprintf(stderr, "%s: cpu%d domain%d\n", __func__, cpu, domain);
+
+With that change turbostat version 2024.04.08 compiles.
+
+> Patryk Wlazlyn (11):
+>      tools/power turbostat: Print ucode revision only if valid
+>      tools/power turbostat: Read base_hz and bclk from CPUID.16H if available
+>      tools/power turbostat: Add --no-msr option
+>      tools/power turbostat: Add --no-perf option
+>      tools/power turbostat: Add reading aperf and mperf via perf API
+>      tools/power turbostat: detect and disable unavailable BICs at runtime
+>      tools/power turbostat: add early exits for permission checks
+>      tools/power turbostat: Clear added counters when in no-msr mode
+>      tools/power turbostat: Add proper re-initialization for perf file descriptors
+>      tools/power turbostat: read RAPL counters via perf
+>      tools/power turbostat: Add selftests
+>
+> Peng Liu (1):
+>      tools/power turbostat: Fix Bzy_MHz documentation typo
+>
+> Wyes Karny (1):
+>      tools/power turbostat: Increase the limit for fd opened
+>
+> Zhang Rui (6):
+>      tools/power/turbostat: Enable MSR_CORE_C1_RES support for ICX
+>      tools/power/turbostat: Cache graphics sysfs path
+>      tools/power/turbostat: Unify graphics sysfs snapshots
+>      tools/power/turbostat: Introduce BIC_SAM_mc6/BIC_SAMMHz/BIC_SAMACTMHz
+
+Missing
+
+>      tools/power/turbostat: Add support for new i915 sysfs knobs
+
+Missing
+
+>      tools/power/turbostat: Add support for Xe sysfs knobs
+
+Missing
+
+>
+> MAINTAINERS                                     |    1 +
+> tools/power/x86/turbostat/turbostat.8           |    6 +-
+> tools/power/x86/turbostat/turbostat.c           | 2197 ++++++++++++++++++-----
+> tools/testing/selftests/turbostat/defcolumns.py |   60 +
+> 4 files changed, 1805 insertions(+), 459 deletions(-)
+> create mode 100755 tools/testing/selftests/turbostat/defcolumns.py
+
+
 
