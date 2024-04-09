@@ -1,79 +1,79 @@
-Return-Path: <linux-pm+bounces-6090-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6092-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 274AA89CF6D
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 02:32:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EE5289CF6E
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 02:32:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8808284AB1
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 00:32:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 73D781C23F3B
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 00:32:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C5848827;
-	Tue,  9 Apr 2024 00:32:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4309079CF;
+	Tue,  9 Apr 2024 00:32:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ddwUNXvx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zi1+vm+9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 735656FD5
-	for <linux-pm@vger.kernel.org>; Tue,  9 Apr 2024 00:32:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81E8B5231
+	for <linux-pm@vger.kernel.org>; Tue,  9 Apr 2024 00:32:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712622722; cv=none; b=KvbQjh7hW3NlKIHtSiiUAj2c5hr9qGg+bK4hvLTmOp+PlcWUReUVv1WVk1GIshG56tnQwhDFjvC3t0dGGL0OPUgI1xzcN7k6v+YFVLpn9jZkLbFYwc59OwCSOuumwMZTmpm62cFJG2EyYCAha9N8Z/pcWTp5fx+hgZjYkuoml2w=
+	t=1712622724; cv=none; b=EQll0Q7ohARc/zN41KNE7RjYEsYD/IGWhmjndO+9URZIzNCpwRu4pA29/oYHOztkyoJjd1L3F8TfHMBYg8G+GFZx0DBZzbc2rzvL1+mq1Npym+R2kK3vPVoTZa9ZUHxpNPDuSkMZfzidraPBDCqoUXNmpdNqmKM70CxtcsQn1mI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712622722; c=relaxed/simple;
-	bh=yenTKRj6kNUFU+zG0Vghl68RJAlRqZkEzZBCIO0yjqA=;
+	s=arc-20240116; t=1712622724; c=relaxed/simple;
+	bh=OR4/ymGzinO2JG/WSH+n5uNXciQdd1TW4KdGxybvODA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=rFzJJoGFz2IqOtXAA+aWL3A0dVsd1zRSjS9ahdvaw5sf+Bk4lJ7S0vefstRkTSiFD7hX27FOSh9HCiGU7YGIwVSpW3oW8APOWnqf31vrmmdZwbsf57xLJ9rIGK3oH2gRykugpH8pJEJdDJeZM2d4Z3rtnVu3Q2qFXMZZWmh02zc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ddwUNXvx; arc=none smtp.client-ip=209.85.128.171
+	 MIME-Version; b=NbTEY3j7JDCsh3c8UOC0WI3+3+zCgfN/uKS1r+wtXgnJ9uFSSk4s4x65aNdfvAK2DOsU6I6jZUvhUu/2b4Wr3jsxV3lmkyv/moOJ3ZqrHOK0ZYeoQNYl1soiIjlFEtCITqa3qv/BKRw2zNQ64N+RV1XdLHzbn3Kc4/IR4BjGWKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zi1+vm+9; arc=none smtp.client-ip=209.85.219.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-6150670d372so47196487b3.1
-        for <linux-pm@vger.kernel.org>; Mon, 08 Apr 2024 17:32:01 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-dcd7c526cc0so4975667276.1
+        for <linux-pm@vger.kernel.org>; Mon, 08 Apr 2024 17:32:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712622720; x=1713227520; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1712622721; x=1713227521; darn=vger.kernel.org;
         h=content-transfer-encoding:organization:reply-to:mime-version
          :references:in-reply-to:message-id:date:subject:cc:to:from:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=kkxM0r+iZ3PYDJxmmawWKLRyX3WMxGpccQe4KO+bInE=;
-        b=ddwUNXvxV0Tl6AqRrvyg/KdHXBk/8SVUuJOP37uhWIfLUpnZU3+283OyfvZ0Krl1Zd
-         X6Ght9sO+BFH5JnEQajHLxYmUDBThfQKqIxX7csqy8Z7vwiu3GhsSXdQ3gY0KKYykXV6
-         jeCEmYQhvm6KW3HiusjrCSlRueK+mzkNZCzPiVjVSb16K/09l3z1Uxj6vue8FKFhYtvI
-         gTWsd3mh9EkEuuJyxfd7S5yR+QdMnM23SLFH9ypoxiNqjNYPIRcre5F2ccg5zexuoeOT
-         p6zySv9Kooq4wevJJ1t9y4KKoQBlPFmFJOdyqcee0PyMSgJw5ppZiXtvG8xZ62cdHnW6
-         8vPA==
+        bh=Sk2ylhTUvpRDkyAxMxGuAEs6OqeCTy/nYzwuc5GiXXc=;
+        b=Zi1+vm+90lsa6etTcE3M48WJdjMnGMYhiwoTZUBhHv5FybdH+U0sw4FGi+CPFsozGr
+         PI7mAvzthkp8dBIqVPEWLseFSxO0FEait2InNAP3MKgoCWf9JLBr+uKoW5Rligxypm3d
+         5fsOXL5fhILQ7vYbDVMmSqAaoLUML28xbCsfyeBsdKqJwHatrCT2StKdKoLWWpODLo8G
+         vNBO4+2Y3b8m3+yCsY/ptnvCsTFtev8Y7DgfCn6E4jDcv51uhvTBIfG1G31lE30H2JqM
+         3OoKOvILhjRax1gBDpSqidAZmo/Mk/b4s33T7vYXQmkr22XJ/ZtyCFljnEOUPfUtmcGZ
+         0cQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712622720; x=1713227520;
+        d=1e100.net; s=20230601; t=1712622721; x=1713227521;
         h=content-transfer-encoding:organization:reply-to:mime-version
          :references:in-reply-to:message-id:date:subject:cc:to:from:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kkxM0r+iZ3PYDJxmmawWKLRyX3WMxGpccQe4KO+bInE=;
-        b=kJn0GcAw1Xo807qgLsYsqftOAdtAIudWKzjjlbjj+wyvi297iDFhwnMDcwPEUERyG8
-         wDab0W/abIEjfnav56SqIXm8M5vdQrClza/2pE9VTQnulOInj2YAKv/qRPKjcm7jMDau
-         rOJeJHACar9hmOvv1LuxCz1NsWpCGcYtmEHOybGABm+UvWbP2DJLmBuqbgY3PDmA0aDN
-         qf+l1cPRlobYuU/KMMZPVZ9Zzr8VwohoLOsb2BR1HywQzfotoSyoE1oOP4NJPOU9UBbA
-         qzquvWkqIffLiD03ckGap7MW+Bc+K5wq5eGZ/dtcnt1ft+l/himyZ00N1UQfJ4j43ys6
-         E/sQ==
-X-Gm-Message-State: AOJu0YyAY0FzxbwZ8EPDL5iq2S2EUZuX0WwD8xkzGpKIM9s+a50Fl/0J
-	ItodDZT9zcBplsUfbtxQdgRtIWsX1MUDQyWzSFz0fMbMWa7cY8T/VwNOtebS
-X-Google-Smtp-Source: AGHT+IEPoCsu0B5+aiaIKsB7QWs3WfEyE2axyadnz4vVTaE8a7RDp7ADL/0PbAzFtrbTAW1nUBE/qQ==
-X-Received: by 2002:a25:1e07:0:b0:dcc:5a25:ae88 with SMTP id e7-20020a251e07000000b00dcc5a25ae88mr8159348ybe.19.1712622720403;
-        Mon, 08 Apr 2024 17:32:00 -0700 (PDT)
+        bh=Sk2ylhTUvpRDkyAxMxGuAEs6OqeCTy/nYzwuc5GiXXc=;
+        b=YZLE68yk+XldGdKItZkwaJXuPNipOR5lUF6OElX+Voq/e5bj3hn3thKG0DoPS/0Pbr
+         OVAwBH7eE11wBYJAXTenJ++gKsBPjIWtj0swdK1dehmDMltmlOKu1GAIxrBMow3kdPHg
+         Q7EehsaQ8CR1R6/Hu/2K0JY/gzRt9DGY7KnChiLVbYrL/8aiU7nYI0hPHbNUc6vK32Ah
+         YQVKudV5f72agAokB4TaPD7GlaDihj7LoNNAljhp6GVxrPIG9TtRhVzHYfpVqVlxEDyE
+         VZB325znq2OC4ZUBZB6Z9qbKwOdiP7IKYdO0KePmsHFUNGQT/n4A/ikTof1EiTQeQKx9
+         EbIA==
+X-Gm-Message-State: AOJu0Yzx/OJiX21ZWDXofK/hdVrRuyPAo1A8tfJAJ4Ucmt/jYaw9Usfl
+	cIEZ0eKbXLQga6UqvDD767H3iFFkd9O3p8wvJtlFQ1g9D6RRBeHQkHBnb9l8
+X-Google-Smtp-Source: AGHT+IE2c/vBYLx0t5kKlJqOSJ46o3gJgogQDFVJ6Ea1/foL8Fcl07gsWTsf85ulCEBz3kbRq+gGSQ==
+X-Received: by 2002:a05:6902:20c9:b0:dcf:3ef2:6182 with SMTP id dj9-20020a05690220c900b00dcf3ef26182mr10254367ybb.0.1712622721344;
+        Mon, 08 Apr 2024 17:32:01 -0700 (PDT)
 Received: from lenb-Intel-NUC8i7HVKVA.search.charter.net (2603-9000-9f01-67cf-100c-5508-c194-b194.inf6.spectrum.com. [2603:9000:9f01:67cf:100c:5508:c194:b194])
-        by smtp.gmail.com with ESMTPSA id h6-20020a25e206000000b00dc74ac54f5fsm1531949ybe.63.2024.04.08.17.31.59
+        by smtp.gmail.com with ESMTPSA id h6-20020a25e206000000b00dc74ac54f5fsm1531949ybe.63.2024.04.08.17.32.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Apr 2024 17:32:00 -0700 (PDT)
+        Mon, 08 Apr 2024 17:32:01 -0700 (PDT)
 Sender: Len Brown <lenb417@gmail.com>
 From: Len Brown <lenb@kernel.org>
 To: linux-pm@vger.kernel.org
 Cc: Zhang Rui <rui.zhang@intel.com>,
 	Len Brown <len.brown@intel.com>
-Subject: [PATCH 19/26] tools/power/turbostat: Enable MSR_CORE_C1_RES support for ICX
-Date: Mon,  8 Apr 2024 20:31:13 -0400
-Message-Id: <d8644ae58157edbd575d372e8eeed2b01eb892f1.1712621427.git.len.brown@intel.com>
+Subject: [PATCH 20/26] tools/power/turbostat: Cache graphics sysfs path
+Date: Mon,  8 Apr 2024 20:31:14 -0400
+Message-Id: <6dc2648536279c918cf6e0dbaed90be923a6c49a.1712621427.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <e5f4e68eed85fa8495d78cd966eecc2b27bb9e53.1712621427.git.len.brown@intel.com>
 References: <e5f4e68eed85fa8495d78cd966eecc2b27bb9e53.1712621427.git.len.brown@intel.com>
@@ -89,26 +89,107 @@ Content-Transfer-Encoding: 8bit
 
 From: Zhang Rui <rui.zhang@intel.com>
 
-Enable Core C1 hardware residency counter (MSR_CORE_C1_RES) on ICX.
+Graphics drivers (i915/Xe) have different sysfs knobs on different
+platforms, and it is possible that different sysfs knobs fit into the
+same turbostat columns.
+
+Instead of specifying different sysfs knobs every time, detect them
+once and cache the path for future use.
+
+No functional change.
 
 Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/power/x86/turbostat/turbostat.c | 45 +++++++++++++++++++--------
+ 1 file changed, 32 insertions(+), 13 deletions(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index e813831e73a5..c8b148942fa0 100644
+index c8b148942fa0..4c26eefeca24 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -664,6 +664,7 @@ static const struct platform_features icx_features = {
- 	.bclk_freq = BCLK_100MHZ,
- 	.supported_cstates = CC1 | CC6 | PC2 | PC6,
- 	.cst_limit = CST_LIMIT_ICX,
-+	.has_msr_core_c1_res = 1,
- 	.has_irtl_msrs = 1,
- 	.has_cst_prewake_bit = 1,
- 	.trl_msrs = TRL_BASE | TRL_CORECOUNT,
+@@ -276,6 +276,19 @@ bool no_msr;
+ bool no_perf;
+ enum amperf_source amperf_source;
+ 
++enum gfx_sysfs_idx {
++	GFX_rc6,
++	GFX_MHz,
++	GFX_ACTMHz,
++	GFX_MAX
++};
++
++struct gfx_sysfs_info {
++	const char *path;
++};
++
++static struct gfx_sysfs_info gfx_info[GFX_MAX];
++
+ int get_msr(int cpu, off_t offset, unsigned long long *msr);
+ 
+ /* Model specific support Start */
+@@ -4616,7 +4629,7 @@ int snapshot_gfx_rc6_ms(void)
+ 	FILE *fp;
+ 	int retval;
+ 
+-	fp = fopen_or_die("/sys/class/drm/card0/power/rc6_residency_ms", "r");
++	fp = fopen_or_die(gfx_info[GFX_rc6].path, "r");
+ 
+ 	retval = fscanf(fp, "%lld", &gfx_cur_rc6_ms);
+ 	if (retval != 1)
+@@ -4641,9 +4654,7 @@ int snapshot_gfx_mhz(void)
+ 	int retval;
+ 
+ 	if (fp == NULL) {
+-		fp = fopen("/sys/class/drm/card0/gt_cur_freq_mhz", "r");
+-		if (!fp)
+-			fp = fopen_or_die("/sys/class/graphics/fb0/device/drm/card0/gt_cur_freq_mhz", "r");
++		fp = fopen_or_die(gfx_info[GFX_MHz].path, "r");
+ 	} else {
+ 		rewind(fp);
+ 		fflush(fp);
+@@ -4670,9 +4681,7 @@ int snapshot_gfx_act_mhz(void)
+ 	int retval;
+ 
+ 	if (fp == NULL) {
+-		fp = fopen("/sys/class/drm/card0/gt_act_freq_mhz", "r");
+-		if (!fp)
+-			fp = fopen_or_die("/sys/class/graphics/fb0/device/drm/card0/gt_act_freq_mhz", "r");
++		fp = fopen_or_die(gfx_info[GFX_ACTMHz].path, "r");
+ 	} else {
+ 		rewind(fp);
+ 		fflush(fp);
+@@ -5334,14 +5343,24 @@ static void probe_intel_uncore_frequency(void)
+ static void probe_graphics(void)
+ {
+ 	if (!access("/sys/class/drm/card0/power/rc6_residency_ms", R_OK))
+-		BIC_PRESENT(BIC_GFX_rc6);
++		gfx_info[GFX_rc6].path = "/sys/class/drm/card0/power/rc6_residency_ms";
+ 
+-	if (!access("/sys/class/drm/card0/gt_cur_freq_mhz", R_OK) ||
+-	    !access("/sys/class/graphics/fb0/device/drm/card0/gt_cur_freq_mhz", R_OK))
+-		BIC_PRESENT(BIC_GFXMHz);
++	if (!access("/sys/class/drm/card0/gt_cur_freq_mhz", R_OK))
++		gfx_info[GFX_MHz].path = "/sys/class/drm/card0/gt_cur_freq_mhz";
++	else if (!access("/sys/class/graphics/fb0/device/drm/card0/gt_cur_freq_mhz", R_OK))
++		gfx_info[GFX_MHz].path = "/sys/class/graphics/fb0/device/drm/card0/gt_cur_freq_mhz";
++
++
++	if (!access("/sys/class/drm/card0/gt_act_freq_mhz", R_OK))
++		gfx_info[GFX_ACTMHz].path = "/sys/class/drm/card0/gt_act_freq_mhz";
++	else if (!access("/sys/class/graphics/fb0/device/drm/card0/gt_act_freq_mhz", R_OK))
++		gfx_info[GFX_ACTMHz].path = "/sys/class/graphics/fb0/device/drm/card0/gt_act_freq_mhz";
+ 
+-	if (!access("/sys/class/drm/card0/gt_act_freq_mhz", R_OK) ||
+-	    !access("/sys/class/graphics/fb0/device/drm/card0/gt_act_freq_mhz", R_OK))
++	if (gfx_info[GFX_rc6].path)
++		BIC_PRESENT(BIC_GFX_rc6);
++	if (gfx_info[GFX_MHz].path)
++		BIC_PRESENT(BIC_GFXMHz);
++	if (gfx_info[GFX_ACTMHz].path)
+ 		BIC_PRESENT(BIC_GFXACTMHz);
+ }
+ 
 -- 
 2.40.1
 
