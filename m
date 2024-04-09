@@ -1,258 +1,159 @@
-Return-Path: <linux-pm+bounces-6095-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6096-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD53689D146
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 05:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D292589D24A
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 08:22:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CCF9DB216C2
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 03:44:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 12727B233B5
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Apr 2024 06:22:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21E7054BFD;
-	Tue,  9 Apr 2024 03:44:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B53B76413;
+	Tue,  9 Apr 2024 06:22:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nltjmCXp"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sVAg4r6F"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BC4154F95;
-	Tue,  9 Apr 2024 03:44:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CB7476058
+	for <linux-pm@vger.kernel.org>; Tue,  9 Apr 2024 06:22:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712634280; cv=none; b=rP4zWPP6rr3px91SZaP7U+zh9fzpyB/CF/IFS2BjijJe7wTJBbqYQDUgeg432fzTVyAyEFI5NmX6grYfoaSs0DdneYz6A1nzH5dFRc7k5bFM4QDPGrh9NCpoJK6CAw1xRJi/V7b0ytjU0wuVEjWxzk80Bg2t+TyGBVKaab7EVg8=
+	t=1712643744; cv=none; b=mYkSbByRqGZsj1N4z4u+VODuwtoX4k2hr58clWeOZEdZ+TGkpvFtPKjJgfHhjxTQFjs+YiOlvm3YZaDfsQcMdtmQsYGc1Ac+7YNyncgWTN20/vEoj/HgYHx1/nVug2RwYbG4cUpYN8uMHNghJwi+M4c3TiXdApJIxglXf9OYy/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712634280; c=relaxed/simple;
-	bh=AANh9M7G7SWG/okuqygfFIMxXWKb97Hck50JlQi898s=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=WoYB19oyQv3k0FQL3LCTR4JLGJV0HSDVevA9Bur4fhBcVlnHtVMIlyfaNCBKEZFFuoKyVlLCf2TwzrxDBAyx55dpqZUbkaQJY1N/4x5mmvO9mrLN7rKoj5iX/V1XHU7QQxOoLlJT09OKW1MtZjH3K8ZZXruFeQg7ScIxaDivV6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nltjmCXp; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712634279; x=1744170279;
-  h=date:from:to:cc:subject:message-id;
-  bh=AANh9M7G7SWG/okuqygfFIMxXWKb97Hck50JlQi898s=;
-  b=nltjmCXp+wwDQciyanXX3xJyADAKIWxAmlbCXx6iVA78guIOaHO8N695
-   MtyjDK52Ia79Qg9yYc/RVfJSGNDll3/tWg5dWqN5sbcnsQzS0zyLZ7zw3
-   gRgJvVB2M/EwL4qwRIX6ajgaEMlxBv6YaZ9xbC/sAJIJl6odmvXHKCvkq
-   a8u+W81afM4XK8loP0d67bnnHLdvhZ1z2IRDoctWpYdRWdZ6ntWW1r/f0
-   8Jqi+HFZTm4M/jvXYnl0AhROgUR0gE8FgAk0IV2qoZ0GTGI1hZz4mVLea
-   joF9ybPClrQMVtnAiFnnR3N33Oj28uxZTPo8laXN+AlnSfVfSc92fVwrO
-   w==;
-X-CSE-ConnectionGUID: +7W4P7nISsOX+Pw3PXsU8Q==
-X-CSE-MsgGUID: yWVp1svTQhmVkTNlk22BPg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="8116374"
-X-IronPort-AV: E=Sophos;i="6.07,188,1708416000"; 
-   d="scan'208";a="8116374"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 20:44:38 -0700
-X-CSE-ConnectionGUID: xSArzpCpSEKsSd/+doJMRA==
-X-CSE-MsgGUID: tLeWYmgzTh+4IlYlYMMhNg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,188,1708416000"; 
-   d="scan'208";a="20122708"
-Received: from lkp-server01.sh.intel.com (HELO e61807b1d151) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 08 Apr 2024 20:44:36 -0700
-Received: from kbuild by e61807b1d151 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ru2PS-0005hM-08;
-	Tue, 09 Apr 2024 03:44:34 +0000
-Date: Tue, 09 Apr 2024 11:44:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- caf1c457a4b7ed17cf34816ae7bbb77fee6d8e88
-Message-ID: <202404091125.r3dk84Wt-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1712643744; c=relaxed/simple;
+	bh=y/N4w4ACVX8+rwzurXt0wPOGs6PInCUVXqIgWDsm+HY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RQ+B+2MkgdCvnEeUpofJOWtZNrI3jDn/QUzHVEejuyS25RwpFQRcl/WnCXBYQW9bwVIhYySQApIpRtZjab3uLMyEN0Uk/rTTlNykLLWsL1/yZoTwv3lWfjIfetnepB4AscPTv1I/lsvzx7VRZSCHVppb1LpQWKL5ksO3ahyXgqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sVAg4r6F; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a47385a4379so1146805466b.0
+        for <linux-pm@vger.kernel.org>; Mon, 08 Apr 2024 23:22:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1712643739; x=1713248539; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=UMDYO2c6oxyg4uLYpkx2s2QjYRlbgcgKpJOA25y7Xcg=;
+        b=sVAg4r6FL9E4SZ+4X2QmfJEMURmaH5I/b6xZtgQLypadhicxgXhJptvwowhyXSu9rP
+         8gxJ0rLdWMeGpEQFu3vA3sZJwkLVGrukNEGpxmde+odqx7ZYWHoZnPlb6HeHQeFIWXex
+         2MSlIMY4ulEqu2gkIsIN2c+OEn8uYmjev+yq3GqpgslcxrE+RynWrfRqmkiZWmbKuT8d
+         mnAVByivy8CzoKz2RsF8TnE5kIXieaRLuEHY2Yl45sX5IS8LsHlkBmzDjoBKRQsSpHyT
+         j79VcNKbbHm3DtZD0LfZxgcOJf0+EpKw+yxOsRPO6F9G2Ru61HVzmfYUb+w8rGfl/ICQ
+         cJhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712643739; x=1713248539;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UMDYO2c6oxyg4uLYpkx2s2QjYRlbgcgKpJOA25y7Xcg=;
+        b=lbj2JuLPO5otJqzBX8HccFefJXAI/ay8RqdH/7nc5Drc+qYoo0iFXF2AyWo9/wZ6qG
+         9Q1S7zaW/4af9m/juYWSISHBqOPLl8XveXZUemqLmzGQw0NwqLEOhezeTp9CQNDw5UGr
+         llPIW+eHDU3Bnlc9CeBEy6L6izPWRUdZfyyaRSFLoHZ+G4miAh+qOpKrEiyK3HxQmxRR
+         3be4iYBtryNeJ1FTVNfTNQSEDkiG0cBTd5sJJrYjEbLhIU0T666K+yVlNyJR+35gTFCL
+         eJxtmtlGfasmnybc8aTT8EnW0iBVCi+t0l6CAiCzbdyL+rPFmuqfcdTbIsvVdaOGyoJw
+         LPCg==
+X-Forwarded-Encrypted: i=1; AJvYcCUIeM1yQfYPb42bUQe+8Q5lvtggFyxkMA5BNwrsaZwZRJAp+VTYFBgb9cOYKyP3WjhnRPiqR4io7HygHOKSxTXuIGlqE9+4lZs=
+X-Gm-Message-State: AOJu0Yz9NJ34/rWo+IUTYzteMjor+sbz1O7RlQVHHeg3iBbHyTKWKG5M
+	UNycFCwiJnV5zFbLqFjIkSbI5jC2PRyVpST/tbFwI70hDduALkWVHGBkuddmfYI=
+X-Google-Smtp-Source: AGHT+IFezcxylFThCkZ5dq6o+jnfozGQsIp94NHvIm6eTu25O92P3DhT+nJlYrPygKuAeOBrFXddww==
+X-Received: by 2002:a17:907:7203:b0:a51:d48e:52a0 with SMTP id dr3-20020a170907720300b00a51d48e52a0mr1969227ejc.27.1712643739522;
+        Mon, 08 Apr 2024 23:22:19 -0700 (PDT)
+Received: from localhost ([102.222.70.76])
+        by smtp.gmail.com with ESMTPSA id qx25-20020a170907b59900b00a46caa13e67sm5252758ejc.105.2024.04.08.23.22.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Apr 2024 23:22:18 -0700 (PDT)
+Date: Tue, 9 Apr 2024 09:22:14 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 2/2] thermal/drivers/mediatek/lvts_thermal: Improve some
+ memory allocation
+Message-ID: <483b8e9a-26db-45c8-ada6-e39575760c51@moroto.mountain>
+References: <42a87fb9837f1760d1ad4eb7162a7536785dc6f5.1712520052.git.christophe.jaillet@wanadoo.fr>
+ <8cb69f245311a348164b0b5ca3dbc59386746035.1712520052.git.christophe.jaillet@wanadoo.fr>
+ <d97f2a57-d318-455b-a860-8bd7972c8aaf@moroto.mountain>
+ <4ebbe227-38b1-4a1c-af34-9ba7bdfecad5@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4ebbe227-38b1-4a1c-af34-9ba7bdfecad5@wanadoo.fr>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: caf1c457a4b7ed17cf34816ae7bbb77fee6d8e88  Merge branch 'pm-sleep' into bleeding-edge
+On Mon, Apr 08, 2024 at 08:41:26PM +0200, Christophe JAILLET wrote:
+> Le 08/04/2024 à 10:09, Dan Carpenter a écrit :
+> > On Sun, Apr 07, 2024 at 10:01:49PM +0200, Christophe JAILLET wrote:
+> > > diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+> > > index 3003dc350766..b133f731c5ba 100644
+> > > --- a/drivers/thermal/mediatek/lvts_thermal.c
+> > > +++ b/drivers/thermal/mediatek/lvts_thermal.c
+> > > @@ -204,7 +204,7 @@ static const struct debugfs_reg32 lvts_regs[] = {
+> > >   static int lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
+> > >   {
+> > > -	struct debugfs_regset32 *regset;
+> > > +	struct debugfs_regset32 *regsets;
+> > >   	struct lvts_ctrl *lvts_ctrl;
+> > >   	struct dentry *dentry;
+> > >   	char name[64];
+> > > @@ -214,8 +214,14 @@ static int lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
+> > >   	if (IS_ERR(lvts_td->dom_dentry))
+> > >   		return 0;
+> > > +	regsets = devm_kcalloc(dev, lvts_td->num_lvts_ctrl,
+> > > +			       sizeof(*regsets), GFP_KERNEL);
+> > > +	if (!regsets)
+> > > +		return 0;
+> > 
+> > I understand that this preserved the behavior from the original code,
+> > but the original code was wrong.  This should return -ENOMEM.
+> 
+> Hi Dan,
+> I don't agree.
+> 
+> For me, this memory allocation is of the same type as all debugfs functions
+> that we ignore the error code.
+> 
+> If it fails, it is not a reason good enough to have the probe fail. (anyway,
+> if we are short on memory at this point other errors will likely occur)
+> 
 
-elapsed time: 720m
+Huh.  It's an interesting point.  Fair enough.
 
-configs tested: 164
-configs skipped: 3
+> > 
+> > > +
+> > >   	for (i = 0; i < lvts_td->num_lvts_ctrl; i++) {
+> > > +		struct debugfs_regset32 *regset = &regsets[i];
+> > >   		lvts_ctrl = &lvts_td->lvts_ctrl[i];
+> > 
+> > The blank line should come after the declaration.
+> 
+> The blank line was already there, and in this file, it looks like the
+> preferred style (even if not completely consistent)
+> 
+> Let see if there is some comment about 0 or -ENOMEM in case of memory
+> allocation error, and if needed, I'll repost without the blank line.
+> 
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+There is supposed to be a blank line after declarations though so I
+think if you re-run checkpatch.pl -f on the file there is a checkpatch
+warning now.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                     haps_hs_smp_defconfig   gcc  
-arc                   randconfig-001-20240409   gcc  
-arc                   randconfig-002-20240409   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                          ep93xx_defconfig   clang
-arm                          gemini_defconfig   clang
-arm                      integrator_defconfig   clang
-arm                      jornada720_defconfig   clang
-arm                            mps2_defconfig   clang
-arm                   randconfig-001-20240409   gcc  
-arm                   randconfig-002-20240409   clang
-arm                   randconfig-003-20240409   clang
-arm                   randconfig-004-20240409   gcc  
-arm                         s3c6400_defconfig   gcc  
-arm                         socfpga_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240409   gcc  
-arm64                 randconfig-002-20240409   gcc  
-arm64                 randconfig-003-20240409   clang
-arm64                 randconfig-004-20240409   clang
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240409   gcc  
-csky                  randconfig-002-20240409   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240409   clang
-hexagon               randconfig-002-20240409   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240409   clang
-i386         buildonly-randconfig-002-20240409   clang
-i386         buildonly-randconfig-003-20240409   gcc  
-i386         buildonly-randconfig-004-20240409   clang
-i386         buildonly-randconfig-005-20240409   gcc  
-i386         buildonly-randconfig-006-20240409   gcc  
-i386                                defconfig   clang
-i386                  randconfig-001-20240409   clang
-i386                  randconfig-002-20240409   gcc  
-i386                  randconfig-003-20240409   clang
-i386                  randconfig-004-20240409   gcc  
-i386                  randconfig-005-20240409   gcc  
-i386                  randconfig-006-20240409   clang
-i386                  randconfig-011-20240409   gcc  
-i386                  randconfig-012-20240409   clang
-i386                  randconfig-013-20240409   clang
-i386                  randconfig-014-20240409   clang
-i386                  randconfig-015-20240409   gcc  
-i386                  randconfig-016-20240409   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240409   gcc  
-loongarch             randconfig-002-20240409   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                        m5407c3_defconfig   gcc  
-m68k                            mac_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                            gpr_defconfig   clang
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240409   gcc  
-nios2                 randconfig-002-20240409   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240409   gcc  
-parisc                randconfig-002-20240409   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                     mpc512x_defconfig   clang
-powerpc               randconfig-001-20240409   clang
-powerpc               randconfig-002-20240409   gcc  
-powerpc               randconfig-003-20240409   clang
-powerpc64             randconfig-001-20240409   gcc  
-powerpc64             randconfig-002-20240409   clang
-powerpc64             randconfig-003-20240409   gcc  
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                 randconfig-001-20240409   clang
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-001-20240409   gcc  
-s390                  randconfig-002-20240409   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                          polaris_defconfig   gcc  
-sh                    randconfig-001-20240409   gcc  
-sh                          rsk7201_defconfig   gcc  
-sh                          sdk7780_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   clang
-x86_64                           alldefconfig   gcc  
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240409   clang
-x86_64       buildonly-randconfig-002-20240409   clang
-x86_64       buildonly-randconfig-003-20240409   gcc  
-x86_64       buildonly-randconfig-004-20240409   gcc  
-x86_64       buildonly-randconfig-005-20240409   clang
-x86_64       buildonly-randconfig-006-20240409   clang
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240409   clang
-x86_64                randconfig-002-20240409   clang
-x86_64                randconfig-003-20240409   gcc  
-x86_64                randconfig-004-20240409   gcc  
-x86_64                randconfig-005-20240409   clang
-x86_64                randconfig-006-20240409   clang
-x86_64                randconfig-011-20240409   gcc  
-x86_64                randconfig-012-20240409   clang
-x86_64                randconfig-013-20240409   gcc  
-x86_64                randconfig-014-20240409   clang
-x86_64                randconfig-015-20240409   gcc  
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
+regards,
+dan carpenter
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
