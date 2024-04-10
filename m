@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-6240-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6238-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 506D989FEEF
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 19:46:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAD0E89FEEB
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 19:46:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 07B9F1F23FFD
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 17:46:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0803F1C22D13
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 17:46:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50E3C181CF6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 166F8181CE2;
 	Wed, 10 Apr 2024 17:45:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="MxQ2yLXg"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="XlQ7hpRB"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A48D1802D6;
-	Wed, 10 Apr 2024 17:44:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3207517F39D;
+	Wed, 10 Apr 2024 17:44:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712771103; cv=none; b=nj9JFi9upBNoxEFSXH4Cq2tJi9MasWiatzNMgI6Tng1jFCbR0RBiSIEosW9pgyFSk9wSdMNIl0vx1Y6V2e9yPOr5WRPa1XLIssUVmD5mRkwGoSLe04QkqXam6Td9j8r7UwlxxRnGPhjkdy8mKVp3KYTe812iHCrrsK6BOLMw2qA=
+	t=1712771103; cv=none; b=t/f5I0FsXDy8gH90PR7Z7Aq4RQVv/2aSSPj6Oag5TIwjv10IhtcOJkvRwYmJPC2avXkY8swqZ+S4V8ZTaGr7VvQSM0PzUPWF6YWROvF7whMnptL7Fgu4eshdo3I7RQUejBh+QyLf6Mcd5+5hRh9OmSiUD57WRnTxNaIgRUkjAjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1712771103; c=relaxed/simple;
-	bh=7gKWhycZmUjTMJkPd/ZDFGuQf2EeEblQmHNOYDf0bmA=;
+	bh=CifjVrjUKG+0XiMiN+5J1c80gqRxTGj0TWQ+VlD1gpY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SbDUBj9Og6S3zEN94Muwai6dd4gbAIrdiBbt6lyvBX4hnqiXm/wHjVBI0/UF8oTSaxVmbN8kfH0nD5R/RKc5F6Q8n6kc364jHszhizSb5/hQ8U0M7jY6vAe3AKwrB6XX/OGx6NlsG+Y/z4vS5Aq46nmNefiITO8hhYImcGCxJ/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=MxQ2yLXg reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+	 MIME-Version:Content-Type; b=mxa1H4VvwcWlecHJxsw5+4pczpTwTwl3lwhALm6QBCHUzA0pPt2sR2Os6nwwWL5wmIGGeB+KiBEmEZRu1ISUegt+pKL2UOZqWVTLal6xZJASuIwD93wMU6VzFclNESqzjrRgCY6JFUUg+9q/YeaQN2TUOhBAn6xuAVBOhP3R828=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=XlQ7hpRB reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
- id ba490e62e58493f8; Wed, 10 Apr 2024 19:44:52 +0200
+ id 7f3fb694b8305f10; Wed, 10 Apr 2024 19:44:51 +0200
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id DCB8A66C66F;
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 17AB566C66F;
 	Wed, 10 Apr 2024 19:44:51 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1712771092;
-	bh=7gKWhycZmUjTMJkPd/ZDFGuQf2EeEblQmHNOYDf0bmA=;
+	s=dkim; t=1712771091;
+	bh=CifjVrjUKG+0XiMiN+5J1c80gqRxTGj0TWQ+VlD1gpY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=MxQ2yLXgDS6P/McDyoK30LNF31tyFQP8krWVDW1BqXRxT9nlV1m50Sot9JAFwPWJw
-	 6NFKg83CF4I1bk3k5Mkhi4j/ymKP+giuI3nVh+vZpxNrbLj6ZwKyKyI/4Sd2fDTQaf
-	 5+u8nzIbKfwYZwMxRvKjo896HDtZ5jR17lFMnxzzjiioy3dNk1T0dbc0vjDztnQgzd
-	 b3JkxjcHuVNXOftOF0791IeENOTgx65p/B2JejTygB+I5rWjUWdfhxuTpLJ9HTxxP9
-	 /L3N524ysVxDLAg88Qx21X3YUI1odJDgJ+81KpK/n3I5Zaakx1fsivxmbIow/H6MDJ
-	 bkEEdftpzybpQ==
+	b=XlQ7hpRB3aaato4ZrW3UEMBhSR3zgyzYkSR3z0FfTX9J3mfCPfsSxsiq48K1qKaTk
+	 GGIOk7L5XTDBcwqgK3vqhJTCOCHnWMionLjtcAewNCve7GLBeqnoJ6+eej3bAsF1c5
+	 9qwdLj3JOV+IURbJfc+UOV9I8bNYCgPJMmmsJ4EgU99HsFICyJ12JtCukOhwgnwBb+
+	 tudBy84msFDYgBJuPA5uGGWFISVDK/7IAfbYdTE2Crn+cDyBHmJrK9oIxk1VK7PNu5
+	 hxwSEUhusjbWO+dYMw4bf8h9+udNZpkmgvI+SJYMXmIcpPnOBE9aBfhEBfsVOAQ1Xr
+	 FZNnBL0D9Fqjw==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>,
@@ -57,10 +57,10 @@ Cc: LKML <linux-kernel@vger.kernel.org>,
  Lukasz Luba <lukasz.luba@arm.com>,
  Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 Subject:
- [PATCH v1 11/16] thermal: gov_fair_share: Use .manage() callback instead of
- .throttle()
-Date: Wed, 10 Apr 2024 18:57:38 +0200
-Message-ID: <2411572.NG923GbCHz@kreacher>
+ [PATCH v1 12/16] thermal: gov_fair_share: Use trip thresholds instead of trip
+ temperatures
+Date: Wed, 10 Apr 2024 18:58:56 +0200
+Message-ID: <5484095.Sb9uPGUboI@kreacher>
 In-Reply-To: <13515747.uLZWGnKmhe@kreacher>
 References: <13515747.uLZWGnKmhe@kreacher>
 Precedence: bulk
@@ -74,108 +74,66 @@ Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 195.136.19.94
 X-CLIENT-HOSTNAME: 195.136.19.94
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudehiedguddugecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtohepshhr
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudehiedguddufecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtohepshhr
  ihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomh
 X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-The Fair Share governor tries very hard to be stateless and so it
-calls get_trip_level() from fair_share_throttle() every time, even
-though the number produced by this function for all of the trips
-during a given thermal zone update is actually the same.  Since
-get_trip_level() walks all of the trips in the thermal zone every
-time it is called, doing this may generate quite a bit of completely
-useless overhead.
+In principle, the Fair Share governor should take trip hystereses
+into account.  After all, once a trip has been crossed on the way up,
+mitigation is still needed until it is crossed on the way down.
 
-For this reason, make the governor use the new .manage() callback
-instead of .throttle() which allows it to call get_trip_level() just
-once and use the value computed by it to handle all of the trips.
+For this reason, make it use trip thresholds that are computed by
+the core when trips are crossed, so as to apply mitigations if the
+zone temperature is in a hysteresis rage of one or more trips that
+were crossed on the way up, but have not been crossed on the way
+down yet.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/thermal/gov_fair_share.c |   37 ++++++++++++++++++++++++++-----------
- 1 file changed, 26 insertions(+), 11 deletions(-)
+ drivers/thermal/gov_fair_share.c |   14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
 Index: linux-pm/drivers/thermal/gov_fair_share.c
 ===================================================================
 --- linux-pm.orig/drivers/thermal/gov_fair_share.c
 +++ linux-pm/drivers/thermal/gov_fair_share.c
-@@ -53,6 +53,7 @@ static long get_target_state(struct ther
-  * fair_share_throttle - throttles devices associated with the given zone
-  * @tz: thermal_zone_device
-  * @trip: trip point
-+ * @trip_level: number of trips crossed by the zone temperature
-  *
-  * Throttling Logic: This uses three parameters to calculate the new
-  * throttle state of the cooling devices associated with the given zone.
-@@ -61,22 +62,19 @@ static long get_target_state(struct ther
-  * P1. max_state: Maximum throttle state exposed by the cooling device.
-  * P2. percentage[i]/100:
-  *	How 'effective' the 'i'th device is, in cooling the given zone.
-- * P3. cur_trip_level/max_no_of_trips:
-+ * P3. trip_level/max_no_of_trips:
-  *	This describes the extent to which the devices should be throttled.
-  *	We do not want to throttle too much when we trip a lower temperature,
-  *	whereas the throttling is at full swing if we trip critical levels.
-- *	(Heavily assumes the trip points are in ascending order)
-  * new_state of cooling device = P3 * P2 * P1
-  */
--static int fair_share_throttle(struct thermal_zone_device *tz,
--			       const struct thermal_trip *trip)
-+static void fair_share_throttle(struct thermal_zone_device *tz,
-+				const struct thermal_trip *trip,
-+				int trip_level)
+@@ -17,28 +17,26 @@
+ 
+ static int get_trip_level(struct thermal_zone_device *tz)
  {
- 	struct thermal_instance *instance;
- 	int total_weight = 0;
- 	int total_instance = 0;
--	int cur_trip_level = get_trip_level(tz);
+-	const struct thermal_trip *level_trip = NULL;
++	const struct thermal_trip_desc *level_td = NULL;
+ 	const struct thermal_trip_desc *td;
+ 	int trip_level = -1;
+ 
+ 	for_each_trip_desc(tz, td) {
+-		const struct thermal_trip *trip = &td->trip;
 -
--	lockdep_assert_held(&tz->lock);
+-		if (trip->temperature >= tz->temperature)
++		if (td->threshold > tz->temperature)
+ 			continue;
  
- 	list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
- 		if (instance->trip != trip)
-@@ -99,18 +97,35 @@ static int fair_share_throttle(struct th
- 			percentage = (instance->weight * 100) / total_weight;
+ 		trip_level++;
  
- 		instance->target = get_target_state(tz, cdev, percentage,
--						    cur_trip_level);
-+						    trip_level);
- 
- 		mutex_lock(&cdev->lock);
- 		__thermal_cdev_update(cdev);
- 		mutex_unlock(&cdev->lock);
+-		if (!level_trip || trip->temperature > level_trip->temperature)
+-			level_trip = trip;
++		if (!level_td || td->threshold > level_td->threshold)
++			level_td = td;
  	}
-+}
  
--	return 0;
-+static void fair_share_manage(struct thermal_zone_device *tz)
-+{
-+	int trip_level = get_trip_level(tz);
-+	const struct thermal_trip_desc *td;
-+
-+	lockdep_assert_held(&tz->lock);
-+
-+	for_each_trip_desc(tz, td) {
-+		const struct thermal_trip *trip = &td->trip;
-+
-+		if (trip->temperature == THERMAL_TEMP_INVALID ||
-+		    trip->type == THERMAL_TRIP_CRITICAL ||
-+		    trip->type == THERMAL_TRIP_HOT)
-+			continue;
-+
-+		fair_share_throttle(tz, trip, trip_level);
-+	}
+ 	/*  Bail out if the temperature is not greater than any trips. */
+ 	if (trip_level < 0)
+ 		return 0;
+ 
+-	trace_thermal_zone_trip(tz, thermal_zone_trip_id(tz, level_trip),
+-				level_trip->type);
++	trace_thermal_zone_trip(tz, thermal_zone_trip_id(tz, &level_td->trip),
++				level_td->trip.type);
+ 
+ 	return trip_level;
  }
- 
- static struct thermal_governor thermal_gov_fair_share = {
--	.name		= "fair_share",
--	.throttle	= fair_share_throttle,
-+	.name	= "fair_share",
-+	.manage	= fair_share_manage,
- };
- THERMAL_GOVERNOR_DECLARE(thermal_gov_fair_share);
 
 
 
