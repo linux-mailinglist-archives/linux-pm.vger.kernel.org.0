@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-6141-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6142-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96BD989EA04
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 07:48:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 886FE89EAA1
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 08:17:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3676E1F235FE
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 05:48:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 424742812AD
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 06:17:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6D2A15AF9;
-	Wed, 10 Apr 2024 05:48:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB37E26291;
+	Wed, 10 Apr 2024 06:17:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JdyS5Cfr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gFHQq3y6"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A281AC129
-	for <linux-pm@vger.kernel.org>; Wed, 10 Apr 2024 05:48:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 870612628B
+	for <linux-pm@vger.kernel.org>; Wed, 10 Apr 2024 06:17:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712728128; cv=none; b=ABPs/rw6YNpbKjQOQ3oIGHpcb0oVPNdij3M6rhrEzOP1TQah7ytvC5HLg8JVI9HfdKNKVmXQcQo7JpfSibMfeGFFtITanD+vmE7TeFGWKed9oKYSklN6Xaruc8c9XautvbCa+tvW6ah5cHsh9cu5fQ7Z/+fMqBN2J9GeYurz7ns=
+	t=1712729866; cv=none; b=b5crS7dFiaGPvxtySIQgFc9ekBx0Ulo8tgg55KdKUEKQFF8HccpH1UvT/tWkb6cC9c9rOTHb+L4475kkrPujmA/jdvhlV3LkRU0KRO9ZImeiqO2+veUYbVJwU5a15/mOc95bfo7Bh8wbhrswmpjEIn+nttLcPyli9LPDkl1IOYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712728128; c=relaxed/simple;
-	bh=Gjqqvaiz8atseIKaaPOcv+OwcXTJgvW+6yvQP1WLoYQ=;
+	s=arc-20240116; t=1712729866; c=relaxed/simple;
+	bh=cSCg/4eqmd22rQLvMPFiorrbenJHTkpd+tmWcyFhV/g=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=laOghGA3g4Ixndxa2OU8Wok1w6zAh/u+nQ8BgjXrpE+rREHaCoSBTV/3xjwHBgqt6IXVC9ZkfszJkyrvu32LdHKZ0ddrcLDme75FNO/drMpMAGpfMDTs8gc0sU/4klkiilCaYYAeKgJHnNDztRW1GjYqVG/JL35QQhQV/OHM0fU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JdyS5Cfr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1FC5EC43390
-	for <linux-pm@vger.kernel.org>; Wed, 10 Apr 2024 05:48:48 +0000 (UTC)
+	 Content-Type:MIME-Version; b=C4i1FspNqo3VxOxOhEoYLasWshXKhV5GMqJRyRtln3m4JsH702LXm5YxgKX2bfgDtTkyEboNi5Jx/ltK/NQiEBwfR4Oy7DKXktXWyW3zAYHVouWPgdYkFMAEfgJoAkw/Ie5k9uaGK80/PH1Mi0Q2vAUcREHzP4dNmiUV3H/n2ho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gFHQq3y6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 16E0BC433C7
+	for <linux-pm@vger.kernel.org>; Wed, 10 Apr 2024 06:17:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712728128;
-	bh=Gjqqvaiz8atseIKaaPOcv+OwcXTJgvW+6yvQP1WLoYQ=;
+	s=k20201202; t=1712729866;
+	bh=cSCg/4eqmd22rQLvMPFiorrbenJHTkpd+tmWcyFhV/g=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=JdyS5Cfr08/uBQ+JbnAluv0sEM4smryo4vVRZDqgG0o7cqpcxJnqBqyPOo9Eq/WQ8
-	 pPBrjHmPKAwPUPaRKBwiHfo6j0aq7hWvmN/3uYXOHYbWFZ4CLeIEkKtZHLneEjx2bf
-	 csCCGj7JZs8Kbli8Y4WNpmXbSuJ4xAePhlpXMBa3nTFgAEB2RmrwEXzqlGDrUco/Ye
-	 Wc/gvJfTbKpAlqbZ+coS4pNc5wJGlw6F2zvzIrr3BBWtCFjymIIuT+9D8JKp1e+00i
-	 1Uw3kh3yx5SYogioaQl5MZTLihT7/q0suRw4WyVuubGeBw22kUr58NSMNFaZjstt1l
-	 6NWr0zGV1rG8w==
+	b=gFHQq3y6twzkx1l8Ebqiy08Ae6QDnF6w59CFrpJlkQhHUYlBVZF+oAKdpiL7cedrD
+	 em36uYV5Ztvci1H9YfJc44mTr5wW1QoFPAvNxbPIvwxmr/E3sYI4m859eiQQiaAke+
+	 Hc3OEL36EfCEw5bhaC9bmooC4DFmJM2n92MNMvEhulvI7teyrErQZ0YLvgDAL4zv1B
+	 8wvE7aURU2xUys0FhordErZ8lVvMHZ04gG5s1fgXqWVYp/1Ix7/+gUeTU3B7DNrQlT
+	 6hGmUwD327boNp4UmgQBl2p2FalVCWpZsjsYNhqvlCU9l9/0CIAU4cznzXZCCfAzAf
+	 jZd+49RftvP6A==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 0D15BC53BD3; Wed, 10 Apr 2024 05:48:48 +0000 (UTC)
+	id 083BFC53BD9; Wed, 10 Apr 2024 06:17:46 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-pm@vger.kernel.org
 Subject: [Bug 218686] Fail to set energy_performance_preference of amd
  processor on asus ga403uv
-Date: Wed, 10 Apr 2024 05:48:47 +0000
+Date: Wed, 10 Apr 2024 06:17:45 +0000
 X-Bugzilla-Reason: AssignedTo
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -56,14 +56,14 @@ X-Bugzilla-Component: cpufreq
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: Perry.Yuan@amd.com
+X-Bugzilla-Who: al0uette@outlook.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218686-137361-bG7ntWteib@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-218686-137361-ecnEKqRcnG@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-218686-137361@https.bugzilla.kernel.org/>
 References: <bug-218686-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,29 +79,10 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D218686
 
---- Comment #7 from Perry Yuan(AMD) (Perry.Yuan@amd.com) ---
-(In reply to al0uette from comment #6)
-> (In reply to Perry Yuan(AMD) from comment #5)
-> > Hi=EF=BC=8Cplease help to provide this output with below commands.
-> >=20
-> > # cd /sys/devices/system/cpu/cpu0/cpufreq
-> > # grep . *
-> > #sudo rdmsr 0xc00102b3 -a
-> > #lscpu -ae
-> > #dmesg
->=20
-> Should I do this with amd_pstate=3Dactive commandline?
-
-Yes, if your kernel is not updated to include the patches which make the
-amd_pstate_epp as the default mode, you would need to add amd_pstate=3Dacti=
-ve
-commandline.
-
-After you added the amd_pstate=3Dactive and boot system up, we can check wh=
-y  the
-EPP values cannot be changed.=20
-
-Perry.
+--- Comment #8 from al0uette@outlook.com ---
+Created attachment 306117
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D306117&action=3Dedit
+output
 
 --=20
 You may reply to this email to add a comment.
