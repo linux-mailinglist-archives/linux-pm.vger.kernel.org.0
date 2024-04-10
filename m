@@ -1,104 +1,98 @@
-Return-Path: <linux-pm+bounces-6162-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6163-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EED589EDE8
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 10:45:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BACD889EE14
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 10:55:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 803521C20D13
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 08:45:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7663C2847C0
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 08:55:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0996F155744;
-	Wed, 10 Apr 2024 08:44:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 864F615538F;
+	Wed, 10 Apr 2024 08:54:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="y9g4G46m"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="BC1sVjt9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C7E91553AC;
-	Wed, 10 Apr 2024 08:44:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8142F154BFE;
+	Wed, 10 Apr 2024 08:54:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712738651; cv=none; b=OvnK4QVlmrgI3G4KCfIYZtnZQWBoNyxoSkJ3+AXSXvjO9ptTxMRMkbaligdVhgKSxxkqV7g+vwk5hOIZGGRY57Zl0GwvcInvUFObcnMOmyvB6JbizqDtY3FZNYA5pEAC5TaCFEHun14wqRbcT9wY1Hww2b/pAlVN81DS+xqhrOw=
+	t=1712739297; cv=none; b=Niyr2PIvCBW7oRQj/DmGIDfwMB2Vt7r4rEJ85SG37f16aRQ75WM4Afhct9pzhAujlFpRSJzjU26DBjMmU7bNkmkeYKcnJved7xgMRl+d4KGTuIQ6gQkBcgqiNHCV6o4ic1cruo6bjlZS8mgj9bEoTLIjVniMmiC8qYZhnIaKfho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712738651; c=relaxed/simple;
-	bh=MClo/LdCJCeuzDJxjlhI62aOolIJ3BFr09Hb39twgwo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QFdofx8vt0K1TWVyU+TbvJpFnSnMkUsKosAh56Avfm4M/COiYjJCXH4KtANzBJikVQTEqZrvXDKHVCTKQsmhSg7WaY4CGARaUDvt9OMinBK7muHXLmEp3yb8bt9yQmDUnafnflcm+OYWEo2J4eebMPEj6aUCRDRGrfbSsqOTh1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=y9g4G46m; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1712738648;
-	bh=MClo/LdCJCeuzDJxjlhI62aOolIJ3BFr09Hb39twgwo=;
-	h=From:To:Cc:Subject:Date:From;
-	b=y9g4G46mTs/zGx3EyUZZPgX3TZYtvYZBaPbDIQgb1F0KlHb9tZwXImJtUIsYErAXx
-	 Emg42bXD24FrR/Ks2iX200XzRHNB7jIh+2oPEcyhJRWIyL5jGhebt+VE6BheblvUbJ
-	 AU3X6Q9NCZYhxrQKJnypJwILngVyp+Cm2sps+rph0EDRXC75qVpVVM28oiDLpN740J
-	 tz7Ij5R1GFd73NwJ/8L+WAdt5zWsr6+TUYcvgjVqoCIawe/3mkb74mSbsYHxWB36y8
-	 TpNnix/RCO8YI9ZROCOT/yn8M8CD3+5rblsMATaioa2/yLQVmNotM4mJy4jRf/o/56
-	 OmJIX6j42eepA==
-Received: from IcarusMOD.eternityproject.eu (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id D8B973781453;
-	Wed, 10 Apr 2024 08:44:07 +0000 (UTC)
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-To: sre@kernel.org
-Cc: matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com,
-	mazziesaccount@gmail.com,
-	gene_chen@richtek.com,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: [PATCH] power: supply: mt6360_charger: Fix of_match for usb-otg-vbus regulator
-Date: Wed, 10 Apr 2024 10:44:05 +0200
-Message-ID: <20240410084405.1389378-1-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.44.0
+	s=arc-20240116; t=1712739297; c=relaxed/simple;
+	bh=Z4OFHRpr3nmIyEO1k7F/aAyiG8qyK/DH8BQ8AL7YSc8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=g1z2gctwk7R5Kgde9JeDJx1EVYlPhaZVjN06aF7czZ+/cOklEzJPRwNzI7+p4ucoL9QWrY7f4nKHpSKEfmQ6EFfEi2AhJzchH+mKRRTIVV3I6pIi5MWbfXYEy7YPjuuPos3LsheT4nFJGSauIsHtTUBgDIfDTWJmc1m4b0XtA48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=BC1sVjt9; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=U7D8PI3wu075m0OUTFPGJL2EXXEYUI1OP6LrQdtjtEU=; b=BC1sVjt9yA5JEifjOYOfUfCkr7
+	Q/HTFvQuc1LjQLEuKCQ5fc69H/+KR3wjyjVr60K1YRmz1jLkbtWfPazYVPIDzeaC4aKeQHwomz6Ht
+	BW4tXcB0Qxhe9vzA++6LtrYuBv/HFGPWtxBD6QH9QvA+9B3ykudPiCMENAi9Rjvf445T5xCZlKX/+
+	Luwyl+2k3fHCOy9hPr2dpUq1VO/1yQg8HzcVwK5JjU3BH7C4No0/8bPVhFr1LXvv8c/ov7fvEM3x/
+	vvlTLNNKr32zGV24MWqnC6rtCn4x6evvI7zABZOwJYrYcvj1RFtYdBlw1mVJiqLfcJ2lT4rWxzdZi
+	mTwJ/ewQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1ruTj7-000000080U0-3lnr;
+	Wed, 10 Apr 2024 08:54:42 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 88ED53004D5; Wed, 10 Apr 2024 10:54:41 +0200 (CEST)
+Date: Wed, 10 Apr 2024 10:54:41 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Atul Pant <quic_atulpant@quicinc.com>
+Cc: mingo@redhat.com, juri.lelli@redhat.com, vincent.guittot@linaro.org,
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+	rafael@kernel.org, daniel.lezcano@linaro.org, kernel@quicinc.com,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [RFC PATCH 0/2] Disable RT-throttling for idle-inject threads
+Message-ID: <20240410085441.GA21455@noisy.programming.kicks-ass.net>
+References: <20240410045417.3048209-1-quic_atulpant@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240410045417.3048209-1-quic_atulpant@quicinc.com>
 
-The of_match shall correspond to the name of the regulator subnode,
-or the deprecated `regulator-compatible` property must be used:
-failing to do so, the regulator won't probe (and the driver will
-as well not probe).
+On Wed, Apr 10, 2024 at 10:24:15AM +0530, Atul Pant wrote:
+> We are trying to implement a solution for thermal mitigation by using
+> idle injection on CPUs.  However we face some limitations with the
+> current idle-inject framework. As per our need, we want to start
+> injecting idle cycles on a cpu for indefinite time (until the
+> temperature/power of the CPU falls below a threshold). This will allow
+> to keep the hot CPUs in the sleep state until we see improvement in
+> temperature/power. If we set idle duration to a large value or have an
+> idle-injection ratio of 100%,  then the idle-inject RT thread suffers
+> from RT throttling. This results in the CPU exiting from the sleep state
+> and consume some power.
+> 
+> To solve this limitation, we propose a solution to disable RT-throttling
+> whenever idle-inject threads run. We achieve this by not accounting the
+> runtime for the idle-inject threads.
 
-Since the devicetree binding for this driver is actually correct
-and wants DTs to use the "usb-otg-vbus-regulator" subnode name,
-fix this driver by aligning the `of_match` string to what the DT
-binding wants.
+Running RT tasks for indefinite amounts of time will wreck the system.
+Things like workqueues and other per-cpu threads expect service or
+things will pile up and run to ground.
 
-Fixes: 0402e8ebb8b8 ("power: supply: mt6360_charger: add MT6360 charger support")
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/power/supply/mt6360_charger.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Idle injection, just like every other RT user must not be able to starve
+the system of service.
 
-diff --git a/drivers/power/supply/mt6360_charger.c b/drivers/power/supply/mt6360_charger.c
-index 1305cba61edd..aca123783efc 100644
---- a/drivers/power/supply/mt6360_charger.c
-+++ b/drivers/power/supply/mt6360_charger.c
-@@ -588,7 +588,7 @@ static const struct regulator_ops mt6360_chg_otg_ops = {
- };
- 
- static const struct regulator_desc mt6360_otg_rdesc = {
--	.of_match = "usb-otg-vbus",
-+	.of_match = "usb-otg-vbus-regulator",
- 	.name = "usb-otg-vbus",
- 	.ops = &mt6360_chg_otg_ops,
- 	.owner = THIS_MODULE,
--- 
-2.44.0
-
+If your system design requires this (I would argue it is broken), look
+at other means, like CPU-hotplug (which I also really detest) -- which
+takes down the CPU in a controlled manner and avoids the resource
+issues.
 
