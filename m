@@ -1,144 +1,125 @@
-Return-Path: <linux-pm+bounces-6239-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6225-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E105B89FEEC
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 19:46:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58EC089FD6D
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 18:52:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 928642851A0
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 17:46:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 14C3C28697A
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 16:52:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22BE1181CE5;
-	Wed, 10 Apr 2024 17:45:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5996D17B501;
+	Wed, 10 Apr 2024 16:52:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="JB1bdQVy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YJXS6gEN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9D51180A89;
-	Wed, 10 Apr 2024 17:45:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3579316EC19
+	for <linux-pm@vger.kernel.org>; Wed, 10 Apr 2024 16:52:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712771103; cv=none; b=UM6Is3ScioyErxZy5F2ytcuyLUN2XL1931i6PhMhNHg1ltJkp0puo2cRatofZMnMxzH/Ktqq7baIDdtnu2Co35KJkXr+7fpEY/GHj3mjxzAES16HFUvgLTdqu+GYxvmLLf/j0UriapEqheFd/oFY8dMY5laPkIz+oSCFK9Pkxtk=
+	t=1712767938; cv=none; b=UEwmHIPd3yzz0hjTGFbHhaiFddnFYZriK3wzYpeG8UdH0bOWnHLdmAJYNR88UtuaCF0OxGyKlMh/Kexc1CF7rmTKWJPjREEVKMG5j7D2Rrfpc8iulxIWWwlXEBn7l813J6OqM8F84kFP47lVrD7IbC4RVr7Yd+xgRydC2S99FHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712771103; c=relaxed/simple;
-	bh=hkMWHvHYQS4MmSqAa11HxBZKh9J4WE9vRTr50DrZTx8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Z+z3pqWogAfb3tvuOX/YcrPnFLpT3ZnKpqrzFPIHDOp5byS3PCn5G7Dx8odAtdJzE3m7yA1spajaqTSqfjjrA5V903yIepAYkY74Q6uS7O5tdgDJ9yUxAlzzH5Y9g+rp4PqwsScRC8guRXLB6w+NRhl6bS0RSOK9+fmATSv0h4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=JB1bdQVy reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
- id 0bff15c04255a154; Wed, 10 Apr 2024 19:44:53 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id CE5D266C66F;
-	Wed, 10 Apr 2024 19:44:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1712771093;
-	bh=hkMWHvHYQS4MmSqAa11HxBZKh9J4WE9vRTr50DrZTx8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=JB1bdQVyscMohZm2b4QioU75sZupLKylO+Qlo0SXjEHip3qbw46CKJC+HCSwGqPCR
-	 xZdnsrKiBXh2btNr3BlczB5m5+ORwDnUBq3ANXsvgPKZ/w/K8xZv7lLqbh5NKk3+L8
-	 fUlc/bpbMbBIj3lVQdAnU3uRMAZNxc7wXjGclxFs+O10BBM2g1LvX5CK4FRoO+YWV1
-	 fjSH0NXHpVYIK2rN1jpI2mz+yfeZ8eXNhLf9el0/iip8hf8Q0xA89SJJrFlE92kqmS
-	 W5PokYwXC9gaLZgJSnSK6uGWANVUuNq7urs76hmSUzWBLjSIDWUjiF/Qe/9U8rzD8k
-	 kw6pbu/pOcYjg==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Lukasz Luba <lukasz.luba@arm.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject:
- [PATCH v1 10/16] thermal: gov_step_wise: Clean up thermal_zone_trip_update()
-Date: Wed, 10 Apr 2024 18:44:14 +0200
-Message-ID: <1883063.atdPhlSkOF@kreacher>
-In-Reply-To: <13515747.uLZWGnKmhe@kreacher>
-References: <13515747.uLZWGnKmhe@kreacher>
+	s=arc-20240116; t=1712767938; c=relaxed/simple;
+	bh=N06ZjcU3Tmw8k7UPM3cuip8jbxBss6eUKXLS3Ji8pu4=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=nHiDIr/GeUSJQR2mUJDKQbCA709uLfRBlqZPYyMhNLU5qUv0ejLzHLkZPZcbNZQnRaPGobDBbCV6j/KZy21tyWz2Rz8DJhLw3whq7DJ5g9qoOlVwkUFjJJZPexW9W6WMgnDPJIBIO8unVDUG5YfI2PnOolEXyC6SZlDZdqNqh3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YJXS6gEN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B77D7C43390
+	for <linux-pm@vger.kernel.org>; Wed, 10 Apr 2024 16:52:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712767937;
+	bh=N06ZjcU3Tmw8k7UPM3cuip8jbxBss6eUKXLS3Ji8pu4=;
+	h=From:To:Subject:Date:From;
+	b=YJXS6gENcV2t63g97R24bhj7we0I+3xeGn7tVvojwrHnkxP1ifx658FkkCxgcP6zo
+	 2Utga9oMc2HOgaXi7Udfh/70JvV+OfwqXOFj/ObOh3KLJLYYWeUPh6O25RzZQ7QYHr
+	 3SrlQnvJ1VYUFa15BtWEv1jqRo5ThtRJHjnuUBSxH6q32cl/Dw3u3QLOE6D8mgAJ5i
+	 u8c9I3TIcVL34nE0PNV5qXdV83wadg54qPI3xaHUbl1qZ9G28DkUFLC/Gp1ZLMwA6s
+	 VscO2Yz+uhbzcpLOjwauDswhJHjTmLECuIWLNZhISZm5uOFnIG35RvLP2k0zlgaX9S
+	 RrVFA82hDj6DQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id AB018C53BD3; Wed, 10 Apr 2024 16:52:17 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 218705] New: amd_pstate fails to load on AMD 5950x with Asus
+ ROG CROSSHAIR VIII DARK HERO x570
+Date: Wed, 10 Apr 2024 16:52:17 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: andamu@posteo.net
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ cf_regression
+Message-ID: <bug-218705-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudehiedguddufecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtohepshhr
- ihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218705
 
-Do some assorted cleanups in thermal_zone_trip_update():
+            Bug ID: 218705
+           Summary: amd_pstate fails to load on AMD 5950x with Asus ROG
+                    CROSSHAIR VIII DARK HERO x570
+           Product: Power Management
+           Version: 2.5
+          Hardware: AMD
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P3
+         Component: cpufreq
+          Assignee: linux-pm@vger.kernel.org
+          Reporter: andamu@posteo.net
+        Regression: No
 
- * Compute the trend value upfront.
- * Move old_target definition to the block where it is used.
- * Adjust white space around diagnositc messages and locking.
- * Use suitable field formatting in a message to avoid an explicit
-   cast to int.
+Hi!
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/gov_step_wise.c |   13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+Sorry if the formatting is broken or this is unreadable. Description previe=
+w is
+broken it seems.
 
-Index: linux-pm/drivers/thermal/gov_step_wise.c
-===================================================================
---- linux-pm.orig/drivers/thermal/gov_step_wise.c
-+++ linux-pm/drivers/thermal/gov_step_wise.c
-@@ -65,13 +65,10 @@ static void thermal_zone_trip_update(str
- 				     const struct thermal_trip *trip,
- 				     int trip_threshold)
- {
-+	enum thermal_trend trend = get_tz_trend(tz, trip);
- 	int trip_id = thermal_zone_trip_id(tz, trip);
--	enum thermal_trend trend;
- 	struct thermal_instance *instance;
- 	bool throttle = false;
--	int old_target;
--
--	trend = get_tz_trend(tz, trip);
- 
- 	if (tz->temperature >= trip_threshold) {
- 		throttle = true;
-@@ -82,13 +79,16 @@ static void thermal_zone_trip_update(str
- 		trip_id, trip->type, trip_threshold, trend, throttle);
- 
- 	list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
-+		int old_target;
-+
- 		if (instance->trip != trip)
- 			continue;
- 
- 		old_target = instance->target;
- 		instance->target = get_target_state(instance, trend, throttle);
--		dev_dbg(&instance->cdev->device, "old_target=%d, target=%d\n",
--					old_target, (int)instance->target);
-+
-+		dev_dbg(&instance->cdev->device, "old_target=%d, target=%ld\n",
-+			old_target, instance->target);
- 
- 		if (instance->initialized && old_target == instance->target)
- 			continue;
-@@ -104,6 +104,7 @@ static void thermal_zone_trip_update(str
- 		}
- 
- 		instance->initialized = true;
-+
- 		mutex_lock(&instance->cdev->lock);
- 		instance->cdev->updated = false; /* cdev needs update */
- 		mutex_unlock(&instance->cdev->lock);
+amd_pstate fails to load on this hardware:
+CPU: AMD 5950x
+Mainboard: Asus ROG CROSSHAIR VIII DARK HERO x570 running UEFI version 4702
+OS: Fedora 39 Wayland with kernel Linux 6.8.4-200.fc39.x86_64
 
+amd_pstate does not get automatically enabled. dmesg -T | grep pstate says:=
+=20
 
+[Tue Apr  9 17:24:36 2024] amd_pstate: driver load is disabled, boot with
+specific mode to enable this
 
+No cppc found in output from lscpu. In UEFI the following are activated:
+
+Advanced > AMD CBS > NBIO Common Options > SMU Common Options
+
+CPPC (Auto / Enabled / Disabled): Enabled
+CPPC Preferred Cores: Enabled
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
 
