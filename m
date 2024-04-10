@@ -1,104 +1,114 @@
-Return-Path: <linux-pm+bounces-6164-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6165-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73D5189EEAC
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 11:21:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9275689EF21
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 11:49:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 294631F27E13
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 09:21:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 11179B21C5D
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 09:49:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38B78156861;
-	Wed, 10 Apr 2024 09:21:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="lOZwytox"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF6C1157A46;
+	Wed, 10 Apr 2024 09:49:26 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FB4D8BE8
-	for <linux-pm@vger.kernel.org>; Wed, 10 Apr 2024 09:20:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FCE0155744;
+	Wed, 10 Apr 2024 09:49:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712740860; cv=none; b=AUInzGDHIWfyiOkFOkiUXTQHyblfZndiYW5WkTMfrDr+SFJ5u3Sdpq0HGwjXpDdgh7AUkl7ncvFVrpu5th14LWKutduU12p5XdjTcRfh0UajBzcplDdKGL8XdlKlqKqraqX349/HlyFc959Rpqgg3yG7mRboE8nk6+2/dzqJRSg=
+	t=1712742566; cv=none; b=WOcNCu4qHRZ6ndw72F2U5rHu+aZ8K23g/vhmnbYQ+dMu1gwXTalhp5bXdDF8S4BWvx0jksHbRfWBtTd16VEDdUDW+R803hSiLMecANNw0aXFv8URR4iifRcEsY4Mj4uAYqs6qa6mzyGRfKyGD5r/BVZ6zsQGlhBVmeyfAcMik7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712740860; c=relaxed/simple;
-	bh=O6XERnHnMwc1UPkJwA7M4dMe8kK/+Z7/oP46jzawayI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eB07NVk1VA8YfEDcFuYMKmkf6cNuABxLJbhNcQlOl7sXf+97REDCpFFdE1lo0Uxuxtq94AK70kq7g20Dw5428ZJIiAZW97dni8lHiCaQF3PS6IT4FKEiXQH6ThHa1WclVheNW9igbNYUaVQcFlEJaTYClYeq0Q3ofhbRiiSWVPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=lOZwytox; arc=none smtp.client-ip=209.85.208.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2d8743ecebdso46169221fa.1
-        for <linux-pm@vger.kernel.org>; Wed, 10 Apr 2024 02:20:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1712740857; x=1713345657; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O6XERnHnMwc1UPkJwA7M4dMe8kK/+Z7/oP46jzawayI=;
-        b=lOZwytoxyU/pUArKN0fsqC4w3VprMSwPRtA+1E3nCcqB9vASpxZg9ZjMAc9sycmCE+
-         CyGqHi0R9pEbPYlNwJ1mP0K3f421voB6BD3sBBUYkHgA82eaeKk/Lh2rbD1+MmW1HKu3
-         ABwWcQBSPeNQLgb8Jxt+uPtzGbgU2D2Cv1HdU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712740857; x=1713345657;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O6XERnHnMwc1UPkJwA7M4dMe8kK/+Z7/oP46jzawayI=;
-        b=QvwndkCUW6n2VkJEwaluNthMgsTi8SOwamNlfQrOQSfT9nGbkirq03ISwxsyK0N+T1
-         Q0xGpQ02/uctM5k4oA57KW+HVjD7gi3pFambyeSfidNHE30Dsl9xPKSQNLH+7+XY/8Nm
-         phRqgXYgQv1igkfDJ1t/EqOr1vXGiCER3vek2q5kOSWDw1Pvu3FjinX88OguNqTopze1
-         NyYNMUWezaLiQD7ueuzz0tQOfRTDP2bwCnZZSG8/W1oC6ca4NtBXBb7UawPcLHe5v5nr
-         +H6h/Co3Vy0Ek00fspM8NPsQE/XRByj294+kXVJ826IQjo1+P8D9gXoCPLEgJScs4LOa
-         O6Ig==
-X-Forwarded-Encrypted: i=1; AJvYcCXJd57UxLKwA7YV/PbfabPaXusbfb/ZtMwGfnPvWXQuAlIYpvWnkTPQlsPFuzubR/90rlqfEiFgNLemA+kZL3kb7Q3yaNMnKSE=
-X-Gm-Message-State: AOJu0Yz+hOpmi+YpfHzHXxs5GiKU3CCq9720PzYkHud7qyRcGlrzBhmh
-	Bpy8weJF0qnIHmz2e3WvNTug4bnLF9KMOP5UWjgirnzd1CHXq+q/MRh4jvDDM8cCvkJIYItHFUP
-	MMk9EyrZPXDOyRCuTUb5Chh2SyEEUyd7P4l6w
-X-Google-Smtp-Source: AGHT+IFL6KPS7uL0x/EtSSqM+BxaTQB6YKxFAO4dVgt7h/JSlGs8pTFg9ELkmasVKscLtesWpTkQnSz+ws7ho1rA6oM=
-X-Received: by 2002:a2e:9913:0:b0:2d8:2fea:2e4d with SMTP id
- v19-20020a2e9913000000b002d82fea2e4dmr1821870lji.2.1712740856858; Wed, 10 Apr
- 2024 02:20:56 -0700 (PDT)
+	s=arc-20240116; t=1712742566; c=relaxed/simple;
+	bh=NooABAJJvob9ag+Jl18WHSFxgZjpmUjgfLwNCOukDXM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YROGM+DYqvmBbwBGekhNdHRNTihili4xv1B09/nlAT1JfbPYVHDJIlhgFR8k1ZBbJqT09pDlaBvuuBf0ArCS7x58op8/L+C0PdKUQSR+g2kebZwOvxfvMteEpUPK8EF8P2tS6xwdM//xvvJo4BgUl9nqDeJ5/zBYoVaKCjSbRhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [112.20.109.80])
+	by gateway (Coremail) with SMTP id _____8DxOLqbYBZmBy8lAA--.4241S3;
+	Wed, 10 Apr 2024 17:49:15 +0800 (CST)
+Received: from localhost.localdomain (unknown [112.20.109.80])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8AxSRKZYBZmXlV3AA--.21925S2;
+	Wed, 10 Apr 2024 17:49:14 +0800 (CST)
+From: Binbin Zhou <zhoubinbin@loongson.cn>
+To: Binbin Zhou <zhoubb.aaron@gmail.com>,
+	Huacai Chen <chenhuacai@loongson.cn>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Amit Kucheria <amitk@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Huacai Chen <chenhuacai@kernel.org>,
+	loongson-kernel@lists.loongnix.cn,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Yinbo Zhu <zhuyinbo@loongson.cn>,
+	WANG Xuerui <git@xen0n.name>,
+	loongarch@lists.linux.dev,
+	Binbin Zhou <zhoubinbin@loongson.cn>
+Subject: [PATCH 0/4] thermal: loongson2: Add Loongson-2K0500 and Loongson-2K2000 thermal support
+Date: Wed, 10 Apr 2024 17:48:59 +0800
+Message-ID: <cover.1712733065.git.zhoubinbin@loongson.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240410084405.1389378-1-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20240410084405.1389378-1-angelogioacchino.delregno@collabora.com>
-From: Chen-Yu Tsai <wenst@chromium.org>
-Date: Wed, 10 Apr 2024 17:20:45 +0800
-Message-ID: <CAGXv+5FJM2_yr0dwD=FhaDi4FJzYn50=jY6fJsFnder2q7TKrw@mail.gmail.com>
-Subject: Re: [PATCH] power: supply: mt6360_charger: Fix of_match for
- usb-otg-vbus regulator
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: sre@kernel.org, matthias.bgg@gmail.com, mazziesaccount@gmail.com, 
-	gene_chen@richtek.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:AQAAf8AxSRKZYBZmXlV3AA--.21925S2
+X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBj9xXoW7XryDtw17tF1rXFy3Zry5Awc_yoWftFXEkF
+	ySga48Jw17CF13tFy7Wr4xG3sxWFWq9345CFW8try7W340yFyDXrWDur9xWa1fXrs8uF15
+	X3ykGr1xAw1xWosvyTuYvTs0mTUanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUbfAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6F4UJVW0owAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
+	Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_
+	JF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+	xGrwCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWU
+	JVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+	vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IY
+	x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
+	xKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAF
+	wI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8EksDUUUUU==
 
-On Wed, Apr 10, 2024 at 4:44=E2=80=AFPM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> The of_match shall correspond to the name of the regulator subnode,
-> or the deprecated `regulator-compatible` property must be used:
-> failing to do so, the regulator won't probe (and the driver will
-> as well not probe).
->
-> Since the devicetree binding for this driver is actually correct
-> and wants DTs to use the "usb-otg-vbus-regulator" subnode name,
-> fix this driver by aligning the `of_match` string to what the DT
-> binding wants.
->
-> Fixes: 0402e8ebb8b8 ("power: supply: mt6360_charger: add MT6360 charger s=
-upport")
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
+Hi all:
 
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+This patchset introduce the Loongson-2K0500 and Loongson-2K2000
+temperature sensors.
+
+The temperature sensors of Loongson-2K series CPUs are similar, except
+that the temperature reading method of the Loongson-2K2000 is
+different.
+
+Specifically, the temperature output register of the Loongson-2K2000 is
+defined in the chip configuration domain. We need to define it in dts
+and calculate it using different calculation methods.
+
+Thanks.
+
+Binbin Zhou (4):
+  thermal: loongson2: Trivial code style adjustment
+  dt-bindings: thermal: loongson,ls2k-thermal: Add Loongson-2K0500
+    compaible
+  dt-bindings: thermal: loongson,ls2k-thermal: Fix incorrect compatible
+    definition
+  thermal: loongson2: Add Loongson-2K2000 support
+
+ .../thermal/loongson,ls2k-thermal.yaml        |  23 +++-
+ drivers/thermal/loongson2_thermal.c           | 111 +++++++++++-------
+ 2 files changed, 92 insertions(+), 42 deletions(-)
+
+-- 
+2.43.0
+
 
