@@ -1,189 +1,106 @@
-Return-Path: <linux-pm+bounces-6241-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6223-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5533589FEF0
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 19:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6918889FC7D
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 18:08:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC5E228A76C
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 17:46:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1AB2228E7E9
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 16:08:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1209181D15;
-	Wed, 10 Apr 2024 17:45:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A77F2179644;
+	Wed, 10 Apr 2024 16:08:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="iSoF/Hwu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qLpbw9Ly"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 328A8181309;
-	Wed, 10 Apr 2024 17:45:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 843391791FB
+	for <linux-pm@vger.kernel.org>; Wed, 10 Apr 2024 16:08:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712771103; cv=none; b=TbrepkRF7kIOUossllGLUewx6YgTDt0+6RdTxO/GlfFJjllpX6xwHMYs/WNU3qX5S5y7dshX+IQVsa2r91xebstc48BwJIw+XU7kep/yg7viUCMTV8JfdNXlEA6ZC4aHLCHUPEZAcrsguvJKfX2ZDrPLD0e6ryGTXpIUBaWVOjI=
+	t=1712765288; cv=none; b=nRuudagh9w7NBO3f01aXwWzwt2TXRFAaibrlV/JY9MIRAHzntyQHpKPfuFwr9vY16h5T0okx2eASroAE9Uk7E6r+PvlDJ9dPj5Dwm4nhej0PhGMx2sQVWOigDdIHmscQbqNmnGbTkLSqmCbTjVVjpJnEdzWP0hz3izSW1eV3slk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712771103; c=relaxed/simple;
-	bh=YLpF9evNNCyUp3zGlcL/ohUkidKwvzYeXfl48AqGi3g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ILFhHMzWcWp9hKdGSsZXwynKu8uVjgjL2TAfG/ZcNzYysI8/3xAb7ywIbF3JYeffD44cPSZ9r4nssCkUA9d8OLoZeI1PMCT51fyI7ztgcnGkroQp2X0/Iyv6I+CpxIFhuMA95fMV+RKoKD7swSPmYuXi76VxLfyVKOT/sBgkdMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=iSoF/Hwu reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
- id c608399947856aca; Wed, 10 Apr 2024 19:44:59 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 94A1166C66F;
-	Wed, 10 Apr 2024 19:44:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1712771099;
-	bh=YLpF9evNNCyUp3zGlcL/ohUkidKwvzYeXfl48AqGi3g=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=iSoF/HwujqWr2JuwIxmhENPrJ1m7up4GOmNJSM0wfYUEGdFsi9e7Q8+H/itVFelG2
-	 +aYAT2O5m43rvwxg32QmF7OU0KE5D9AGvRGJ4tVyrVv5GloxUlWQ1Iu2X/uL+52NK3
-	 5pTpnTK/8Sg/EnSpi68i8WXGG7ovcYIJ22/XpmSx5OAA58fPQgHGaTTaTMePiGfvhQ
-	 6nLcUovReQgGKaQfiNSFgMHDNIN1RHIOLMFB1jzrcL9vCfKsF88FOl3JF/QOV1Qi8x
-	 2iIjP0v5Fro9egX/1Ohl552GRxaRt7H1Pc3/lEneU0DyP/i4iIa+rIuIjhJlhduoQa
-	 AzTpEEBBnHc/A==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Lukasz Luba <lukasz.luba@arm.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject:
- [PATCH v1 04/16] thermal: gov_bang_bang: Fold thermal_zone_trip_update() into
- its caller
-Date: Wed, 10 Apr 2024 18:06:34 +0200
-Message-ID: <3827124.kQq0lBPeGt@kreacher>
-In-Reply-To: <13515747.uLZWGnKmhe@kreacher>
-References: <13515747.uLZWGnKmhe@kreacher>
+	s=arc-20240116; t=1712765288; c=relaxed/simple;
+	bh=1oyNBwADwsj3pc9LEqW8/oUb9mcGaoQswCyC+xHqoV8=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=j4kT4je5PGtDKnnJflVy95t8tHFhDy/uaqZ/i5pZUKL8clXga2gi960m4GsZZQ+sA4e2YPrN5+1e64Z6gVmxbqHucS9ml5BcMphc5SxToCGazGiItNYN6THwgCgFmJAwQbSs46860zXAmxsn9bT9admmGc1QirVsP8grqFRtPfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qLpbw9Ly; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 652C8C43390
+	for <linux-pm@vger.kernel.org>; Wed, 10 Apr 2024 16:08:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712765288;
+	bh=1oyNBwADwsj3pc9LEqW8/oUb9mcGaoQswCyC+xHqoV8=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=qLpbw9Lyl5ZfJpucq26TWsngZPY4f0bzXLZIXT3XnegEqHAJUfX/rZE52UlPpAqlv
+	 IwpIYnmmb7tGGIaoUU70V3DUdc6ufSFk5jq65gES5JRXJQt2SXIB9xMoTvyiHbscor
+	 f4E0AUY2MGp27knOkbsJ4MShzFBIHr7gZiU7vavmczrclwa0JeTPyTUUdj/iA6eC3a
+	 wTX0ktrF7z7tuWJLZR7zqJnvf8tNBHYiaA133aZrPpmQjAqUy2Q6pLfW50fsEPk2Rw
+	 IxKsiEhEaYauHlqiA5lA3wqmYZ1m/ZFsbYaYXVSFprwtA5mMviSg4tWMVKg0MFfWVO
+	 wi0Y3hDBeeozQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 5BA26C53BD3; Wed, 10 Apr 2024 16:08:08 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 218686] Fail to set energy_performance_preference of amd
+ processor on asus ga403uv
+Date: Wed, 10 Apr 2024 16:08:08 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mario.limonciello@amd.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: DOCUMENTED
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-218686-137361-2YfcpWROUu@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218686-137361@https.bugzilla.kernel.org/>
+References: <bug-218686-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudehiedguddufecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtohepshhr
- ihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218686
 
-Fold thermal_zone_trip_update() into bang_bang_control() which is the
-only caller of it to reduce code size and make it easier to follow.
+Mario Limonciello (AMD) (mario.limonciello@amd.com) changed:
 
-No functional impact.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |DOCUMENTED
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/gov_bang_bang.c |   75 +++++++++++++++++-----------------------
- 1 file changed, 33 insertions(+), 42 deletions(-)
+--- Comment #24 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
+As this is caused by a BIOS issue that we can't do anything about in Linux,
+closing the issue.
 
-Index: linux-pm/drivers/thermal/gov_bang_bang.c
-===================================================================
---- linux-pm.orig/drivers/thermal/gov_bang_bang.c
-+++ linux-pm/drivers/thermal/gov_bang_bang.c
-@@ -13,47 +13,6 @@
- 
- #include "thermal_core.h"
- 
--static void thermal_zone_trip_update(struct thermal_zone_device *tz,
--				     const struct thermal_trip *trip,
--				     bool crossed_up)
--{
--	struct thermal_instance *instance;
--
--	dev_dbg(&tz->device, "Trip%d[temp=%d]:temp=%d:hyst=%d\n",
--		thermal_zone_trip_id(tz, trip), trip->temperature,
--		tz->temperature, trip->hysteresis);
--
--	list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
--		if (instance->trip != trip)
--			continue;
--
--		if (instance->target == THERMAL_NO_TARGET)
--			instance->target = 0;
--
--		if (instance->target != 0 && instance->target != 1) {
--			pr_debug("Unexpected state %ld of thermal instance %s in bang-bang\n",
--				 instance->target, instance->name);
--
--			instance->target = 1;
--		}
--
--		/*
--		 * Enable the fan when the trip is crossed on the way up and
--		 * disable it when the trip is crossed on the way down.
--		 */
--		if (instance->target == 0 && crossed_up)
--			instance->target = 1;
--		else if (instance->target == 1 && !crossed_up)
--			instance->target = 0;
--
--		dev_dbg(&instance->cdev->device, "target=%ld\n", instance->target);
--
--		mutex_lock(&instance->cdev->lock);
--		instance->cdev->updated = false; /* cdev needs update */
--		mutex_unlock(&instance->cdev->lock);
--	}
--}
--
- /**
-  * bang_bang_control - controls devices associated with the given zone
-  * @tz: thermal_zone_device
-@@ -90,7 +49,39 @@ static void bang_bang_control(struct the
- 
- 	lockdep_assert_held(&tz->lock);
- 
--	thermal_zone_trip_update(tz, trip, crossed_up);
-+	dev_dbg(&tz->device, "Trip%d[temp=%d]:temp=%d:hyst=%d\n",
-+		thermal_zone_trip_id(tz, trip), trip->temperature,
-+		tz->temperature, trip->hysteresis);
-+
-+	list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
-+		if (instance->trip != trip)
-+			continue;
-+
-+		if (instance->target == THERMAL_NO_TARGET)
-+			instance->target = 0;
-+
-+		if (instance->target != 0 && instance->target != 1) {
-+			pr_debug("Unexpected state %ld of thermal instance %s in bang-bang\n",
-+				 instance->target, instance->name);
-+
-+			instance->target = 1;
-+		}
-+
-+		/*
-+		 * Enable the fan when the trip is crossed on the way up and
-+		 * disable it when the trip is crossed on the way down.
-+		 */
-+		if (instance->target == 0 && crossed_up)
-+			instance->target = 1;
-+		else if (instance->target == 1 && !crossed_up)
-+			instance->target = 0;
-+
-+		dev_dbg(&instance->cdev->device, "target=%ld\n", instance->target);
-+
-+		mutex_lock(&instance->cdev->lock);
-+		instance->cdev->updated = false; /* cdev needs update */
-+		mutex_unlock(&instance->cdev->lock);
-+	}
- 
- 	list_for_each_entry(instance, &tz->thermal_instances, tz_node)
- 		thermal_cdev_update(instance->cdev);
+FWIW if you're getting resistance from ASUS in fixing it you can try to
+reproduce it in Windows.  AFAICT HWinfo64 will report whether CPPC is worki=
+ng
+or not.
 
+https://www.hwinfo.com/forum/threads/how-does-hwinfo-query-the-cppc-preferr=
+ed-cores-data.7927/
 
+--=20
+You may reply to this email to add a comment.
 
+You are receiving this mail because:
+You are the assignee for the bug.=
 
