@@ -1,42 +1,42 @@
-Return-Path: <linux-pm+bounces-6208-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6209-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A468C89F42D
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 15:27:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 173FF89F436
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 15:28:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 19D401F2D1A8
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 13:27:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2CA928B225
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 13:28:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7D321607B6;
-	Wed, 10 Apr 2024 13:25:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1DD015EFAA;
+	Wed, 10 Apr 2024 13:26:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Iq72dBmA"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="ZAtfnjHH"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73BC115ECD8;
-	Wed, 10 Apr 2024 13:25:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAA0D158D76;
+	Wed, 10 Apr 2024 13:26:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712755506; cv=none; b=BhLlA/cXpL34bQFh+bCOxIdiCUZcN8azsl2WYoxmq/Hu2P2i5OKVyZbULCCFzRmqiaJZKFE6eYK3ItJT5mZ1TqIa+NNRhlXvqjsRDoekv/EBvvBkQNISXGeyesTWiQDrH7XwpPBrXJd+bPLFzTNf2DC4b4WN+Xn0uVBQZMtbi2E=
+	t=1712755616; cv=none; b=DevxFbiK+LXRm7ckh3sZY8ekjZYRLmaa+zZQgHMFm3hluLgkubKNWuu3Vl+227AbIJhdhq9l0YFYBVV8rP1gMD8eC8BFpiYY1w2JgAele+3Tv+gjY4TMfWds3LzVdt+Fo17qa+BEqG/TrdRE89QCDlp0yoJ8pM8skvaLJwScn+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712755506; c=relaxed/simple;
+	s=arc-20240116; t=1712755616; c=relaxed/simple;
 	bh=Km74g6LMKfH+zqrYFsIQW6Z1f2bpHSbSyit5M/p4XXo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RTDcklR7oPOttBwqXwW3WY5ITSQF5YmWCnlOW65p1YY9ITOlKAvLXrx5vU3+3AC5KPR5eVHkaIRlUpyVUhgxyPUlzZqgMbh3vRo9i4gprvstiLUqGGIIHR/ftq2ccf+BILRgvN2vqW5wevItKCOy5PikhlPK58DRKuRszkS6vgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Iq72dBmA; arc=none smtp.client-ip=220.197.31.2
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=FL01xZ+Wy9iMnVRtPsBHzujBwriRoeKH8KSd0IWRMlAG68Wvud0LR5UUd5Q0eiLtPm/ngYfJBv9UIbrmHC3/azFXtLcFQmhdxiE1K4WzXSlFTRnRzN45EVKZdslDyo9+vh8zX+CcZZILdrgw0u1H57IZuA9VNneVplucjGqiHhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=ZAtfnjHH; arc=none smtp.client-ip=220.197.31.2
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
 	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=0k9vD
-	y3IhLXKl1/oPUacgobANip3sPaFSxC+sZynpEs=; b=Iq72dBmA27lcU+nCiBTiJ
-	zRkACXIYwe+9VHpKiNizbk3ppnXB8hp20uIQdyhzgscR19FZTocSHrlOtBpEwNBm
-	t5fAP8wxxkw2dEPQydho9TgBntIngUQXmg8W/hfFgbqG915+RzHy3mfuDjJsyZsj
-	P32dDGH1FZj2W9yPJjx2bs=
+	y3IhLXKl1/oPUacgobANip3sPaFSxC+sZynpEs=; b=ZAtfnjHHXPSjAYMgeE5As
+	oEorvp1cnCmONXS9I7yt+O8y+vUhsPUV+i4sBETUDOwf6yd96abr/tmkE7sgwBfA
+	kaokf5MITki6RIoVELqJDQsJHSmzZkKGuPM5qM6DkHGV35t/IvK0orGarfIO5chD
+	PmFKDwkSbkrVa0JPcfCoi0=
 Received: from localhost.localdomain (unknown [101.86.11.106])
-	by gzga-smtp-mta-g1-5 (Coremail) with SMTP id _____wDnLyFjkhZmXX3aAg--.54775S4;
-	Wed, 10 Apr 2024 21:21:55 +0800 (CST)
+	by gzga-smtp-mta-g2-1 (Coremail) with SMTP id _____wDnN9+3khZm9NnPAg--.11748S4;
+	Wed, 10 Apr 2024 21:23:27 +0800 (CST)
 From: Lizhe <sensor1010@163.com>
 To: rafael@kernel.org,
 	viresh.kumar@linaro.org,
@@ -73,8 +73,8 @@ Cc: linux-pm@vger.kernel.org,
 	linux-mediatek@lists.infradead.org,
 	Lizhe <sensor1010@163.com>
 Subject: [PATCH] cpufreq: Covert to exit callback returning void
-Date: Wed, 10 Apr 2024 06:21:31 -0700
-Message-Id: <20240410132132.3526-1-sensor1010@163.com>
+Date: Wed, 10 Apr 2024 06:22:47 -0700
+Message-Id: <20240410132247.3587-1-sensor1010@163.com>
 X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -83,12 +83,12 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDnLyFjkhZmXX3aAg--.54775S4
+X-CM-TRANSID:_____wDnN9+3khZm9NnPAg--.11748S4
 X-Coremail-Antispam: 1Uf129KBjvAXoWfXw47Cw45Gr1fZr45GFWfKrg_yoW8uw18Xo
 	WfXFyrG3W8Gryxtw1DAa1xtFZrZanFk3Z5Jws8XFs0gasFyF17XrZrtr45JF1fWay5KrWx
 	Z3Wjgwn3Ar4xGr1Un29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjTRC89MUUUUU
-X-CM-SenderInfo: 5vhq20jurqiii6rwjhhfrp/1tbiSBe8q2XAk1gLbQAAsA
+	AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjTRCHqcDUUUU
+X-CM-SenderInfo: 5vhq20jurqiii6rwjhhfrp/1tbiKA+8q2XAk1Y-GgAAs1
 
 For the exit() callback function returning an int type value.
 this leads many driver authors mistakenly believing that error
