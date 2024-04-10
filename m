@@ -1,298 +1,180 @@
-Return-Path: <linux-pm+bounces-6221-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6244-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C853189FC5C
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 18:00:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DA2689FEFD
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 19:48:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3EE2E1F22420
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 16:00:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5221C288FF9
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 17:48:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E38E9172BB8;
-	Wed, 10 Apr 2024 15:59:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A012190690;
+	Wed, 10 Apr 2024 17:45:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="SRhvLYbz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1FC215DBA9;
-	Wed, 10 Apr 2024 15:59:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0D741836C0;
+	Wed, 10 Apr 2024 17:45:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712764747; cv=none; b=Yn6aMDK1J9NepSyYZAeEf8exfWwta5r1Tts3ipsgPn9/XIL5rBqZ83m/suYEgO/lkEHrY0seDzlShK8wTnu594rZXXrgAEn9YzN3DojoSBwFkUFqAp6Etx266eYdeYqO/ENSX0JSoK4R35rP/UFMoHyRsVNYPJ+hs58EFZ/Ek10=
+	t=1712771106; cv=none; b=okwRsNrwFaVSXFF2eo20i0jl3RltcSlqUiktE7ba7cAFxFKstIWqom+Xw+ylU36IYTHBrdfn2u/Hi4FpLIoRZj5msK0rS/anN3SptkKcmiqnnTvIbrSXGMkr0RWuw7RgLqRLO8PnqU6qAtlLYRRFvKBjT+IuCyA58ebphf0rNtw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712764747; c=relaxed/simple;
-	bh=xfuJ3ry5n91qJc92j6kBa5Z9W5YhchcmI5daF8Z4UqY=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=C3CudGzcCa84BvuYwipZaYA0DCgyK0O8kow+kyKvYUgCHxfWtbtynoyPuBk7mHSEAtvgymIYYy9BBSxiTrFyRznUwEF0VXVv6ZRnm+7b7hCBXk+FfgXVCcvIn7dlEfmPEz+GOporlrqwHAidBaMfufRPo0is8NSPMojr2vmCB7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VF6sR73psz6J9yF;
-	Wed, 10 Apr 2024 23:57:15 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 32165140DD4;
-	Wed, 10 Apr 2024 23:58:56 +0800 (CST)
-Received: from localhost (10.122.247.231) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Wed, 10 Apr
- 2024 16:58:55 +0100
-Date: Wed, 10 Apr 2024 16:58:54 +0100
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: Russell King <rmk+kernel@armlinux.org.uk>, <linux-pm@vger.kernel.org>,
-	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-riscv@lists.infradead.org>,
-	<kvmarm@lists.linux.dev>, <x86@kernel.org>,
-	<acpica-devel@lists.linuxfoundation.org>, <linux-csky@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-ia64@vger.kernel.org>,
-	<linux-parisc@vger.kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>, <jianyong.wu@arm.com>,
-	<justin.he@arm.com>, James Morse <james.morse@arm.com>, Miguel Luis
-	<miguel.luis@oracle.com>
-Subject: Re: [PATCH RFC v4 02/15] ACPI: processor: Register all CPUs from
- acpi_processor_get_info()
-Message-ID: <20240410165854.00002973@huawei.com>
-In-Reply-To: <CAJZ5v0hRPFd7jmhJdCu8jVCRc4hZRUt9sKm6iWfynZH1mX7rCg@mail.gmail.com>
-References: <Zbp5xzmFhKDAgHws@shell.armlinux.org.uk>
-	<E1rVDmU-0027YP-Jz@rmk-PC.armlinux.org.uk>
-	<CAJZ5v0iiJpUWq5GMSnKFWQTzn_bdwoQz9m=hDaXNg4Lj_ePF4g@mail.gmail.com>
-	<20240322185327.00002416@Huawei.com>
-	<20240410134318.0000193c@huawei.com>
-	<CAJZ5v0ggD042sfz3jDXQVDUxQZu_AWaF2ox-Me8CvFeRB8nczw@mail.gmail.com>
-	<20240410145005.00003050@Huawei.com>
-	<CAJZ5v0hRPFd7jmhJdCu8jVCRc4hZRUt9sKm6iWfynZH1mX7rCg@mail.gmail.com>
-Organization: Huawei Technologies R&D (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; x86_64-w64-mingw32)
+	s=arc-20240116; t=1712771106; c=relaxed/simple;
+	bh=O4fc6NcbFmDtcu5Mpz4hlacgxv2TpLc3B9RGa8Nme0s=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fuWcxxuUnjRagF9zPq/ukzDTeNcJhqQfmt1ybzkLLTGvhT31XsQAYz8JX6MnqS3PnnlqJ2VXm7/gcxINBmWJic3XXtzHUH/z/5iDTsinoTfkQn+WuiXohA0PH3kQSToxtBFP7gMk17AlPK7urNEVo24sP35jePESjgkn8E6aCn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=SRhvLYbz reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
+ id bb772444a988b3f5; Wed, 10 Apr 2024 19:45:00 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 31B2666C66F;
+	Wed, 10 Apr 2024 19:45:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1712771100;
+	bh=O4fc6NcbFmDtcu5Mpz4hlacgxv2TpLc3B9RGa8Nme0s=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=SRhvLYbzwUbjbbB+rh71vwG0EtJ9YzgpOngRxzfdN/W2k4R1cTGiSM6Ojd96fiHnk
+	 gAs8MqLt+9dXZ7Q1+YdfFHURbUvmfB6S7PwpOo9TV85i2cZmBqnvwgnevA8sY3CyKP
+	 LWzA018gPOwTB3N6LD4q1VzfPmAoEXqT4fsNQWLTRr6uxkhjYSQQAZh1DDj+3giJkU
+	 jV0+/H4XY5FnYGsOPdKMsfYnIGqUCSOdFwBOwpImUCyd+n8QYXmhr+D8BUKZGNPgiq
+	 rhjF1gOiIfvAwK7PrOs0GFTQh1MXl8qgVSjsYX8lXGNNyO04420Sff0Nh1E0AQX94I
+	 Bzng0OWja8fPA==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Lukasz Luba <lukasz.luba@arm.com>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject:
+ [PATCH v1 02/16] thermal: gov_bang_bang: Use .trip_crossed() instead of
+ .throttle()
+Date: Wed, 10 Apr 2024 18:04:39 +0200
+Message-ID: <2289003.iZASKD2KPV@kreacher>
+In-Reply-To: <13515747.uLZWGnKmhe@kreacher>
+References: <13515747.uLZWGnKmhe@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudehiedguddugecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtohepshhr
+ ihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 
-On Wed, 10 Apr 2024 16:19:50 +0200
-"Rafael J. Wysocki" <rafael@kernel.org> wrote:
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-> On Wed, Apr 10, 2024 at 3:50=E2=80=AFPM Jonathan Cameron
-> <Jonathan.Cameron@huawei.com> wrote:
-> >
-> > On Wed, 10 Apr 2024 15:28:18 +0200
-> > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> > =20
-> > > On Wed, Apr 10, 2024 at 2:43=E2=80=AFPM Jonathan Cameron
-> > > <Jonathan.Cameron@huawei.com> wrote: =20
-> > > > =20
-> > > > > > =20
-> > > > > > > diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
-> > > > > > > index 47de0f140ba6..13d052bf13f4 100644
-> > > > > > > --- a/drivers/base/cpu.c
-> > > > > > > +++ b/drivers/base/cpu.c
-> > > > > > > @@ -553,7 +553,11 @@ static void __init cpu_dev_register_gene=
-ric(void)
-> > > > > > >  {
-> > > > > > >         int i, ret;
-> > > > > > >
-> > > > > > > -       if (!IS_ENABLED(CONFIG_GENERIC_CPU_DEVICES))
-> > > > > > > +       /*
-> > > > > > > +        * When ACPI is enabled, CPUs are registered via
-> > > > > > > +        * acpi_processor_get_info().
-> > > > > > > +        */
-> > > > > > > +       if (!IS_ENABLED(CONFIG_GENERIC_CPU_DEVICES) || !acpi_=
-disabled)
-> > > > > > >                 return; =20
-> > > > > >
-> > > > > > Honestly, this looks like a quick hack to me and it absolutely
-> > > > > > requires an ACK from the x86 maintainers to go anywhere. =20
-> > > > > Will address this separately.
-> > > > > =20
-> > > >
-> > > > So do people prefer this hack, or something along lines of the foll=
-owing?
-> > > >
-> > > > static int __init cpu_dev_register_generic(void)
-> > > > {
-> > > >         int i, ret =3D 0;
-> > > >
-> > > >         for_each_online_cpu(i) {
-> > > >                 if (!get_cpu_device(i)) {
-> > > >                         ret =3D arch_register_cpu(i);
-> > > >                         if (ret)
-> > > >                                 pr_warn("register_cpu %d failed (%d=
-)\n", i, ret);
-> > > >                 }
-> > > >         }
-> > > >         //Probably just eat the error.
-> > > >         return 0;
-> > > > }
-> > > > subsys_initcall_sync(cpu_dev_register_generic); =20
-> > >
-> > > I would prefer something like the above.
-> > >
-> > > I actually thought that arch_register_cpu() might return something
-> > > like -EPROBE_DEFER when it cannot determine whether or not the CPU is
-> > > really available. =20
-> >
-> > Ok. That would end up looking much more like the original code I think.
-> > So we wouldn't have this late registration at all, or keep it for DT
-> > on arm64?  I'm not sure that's a clean solution though leaves
-> > the x86 path alone. =20
->=20
-> I'm not sure why DT on arm64 would need to do late registration.
+The Bang-Bang governor really is only concerned about trip point
+crossing, so it can use the new .trip_crossed() callback instead of
+.throttle() that is not particularly suitable for it.
 
-This was me falsely thinking better to do it close together for
-DT and ACPI. It definitely doesn't need to (or it wouldn't work today!)
+Modify it to do so which also takes trip hysteresis into account, so the
+governor does not need to use it directly any more.
 
->=20
-> There is this chain of calls in the mainline today:
->=20
-> driver_init()
->   cpu_dev_init()
->     cpu_dev_register_generic()
->=20
-> the last of which registers CPUs on arm64/DT systems IIUC. I don't see
-> a need to change this behavior.
->=20
-> On arm64/ACPI, though, arch_register_cpu() cannot make progress until
-> it can look into the ACPI Namespace, so I would just make it return
-> -EPROBE_DEFER or equivalent then and the ACPI enumeration will find
-> the CPU and basically treat it as one that has just appeared.
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/thermal/gov_bang_bang.c |   31 +++++++++++++------------------
+ 1 file changed, 13 insertions(+), 18 deletions(-)
 
-Ok so giving this a go...
+Index: linux-pm/drivers/thermal/gov_bang_bang.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/gov_bang_bang.c
++++ linux-pm/drivers/thermal/gov_bang_bang.c
+@@ -13,8 +13,9 @@
+ 
+ #include "thermal_core.h"
+ 
+-static int thermal_zone_trip_update(struct thermal_zone_device *tz,
+-				    const struct thermal_trip *trip)
++static void thermal_zone_trip_update(struct thermal_zone_device *tz,
++				     const struct thermal_trip *trip,
++				     bool crossed_up)
+ {
+ 	int trip_index = thermal_zone_trip_id(tz, trip);
+ 	struct thermal_instance *instance;
+@@ -43,13 +44,12 @@ static int thermal_zone_trip_update(stru
+ 		}
+ 
+ 		/*
+-		 * enable fan when temperature exceeds trip_temp and disable
+-		 * the fan in case it falls below trip_temp minus hysteresis
++		 * Enable the fan when the trip is crossed on the way up and
++		 * disable it when the trip is crossed on the way down.
+ 		 */
+-		if (instance->target == 0 && tz->temperature >= trip->temperature)
++		if (instance->target == 0 && crossed_up)
+ 			instance->target = 1;
+-		else if (instance->target == 1 &&
+-			 tz->temperature < trip->temperature - trip->hysteresis)
++		else if (instance->target == 1 && !crossed_up)
+ 			instance->target = 0;
+ 
+ 		dev_dbg(&instance->cdev->device, "target=%d\n",
+@@ -59,14 +59,13 @@ static int thermal_zone_trip_update(stru
+ 		instance->cdev->updated = false; /* cdev needs update */
+ 		mutex_unlock(&instance->cdev->lock);
+ 	}
+-
+-	return 0;
+ }
+ 
+ /**
+  * bang_bang_control - controls devices associated with the given zone
+  * @tz: thermal_zone_device
+  * @trip: the trip point
++ * @crossed_up: whether or not the trip has been crossed on the way up
+  *
+  * Regulation Logic: a two point regulation, deliver cooling state depending
+  * on the previous state shown in this diagram:
+@@ -90,26 +89,22 @@ static int thermal_zone_trip_update(stru
+  *     (trip_temp - hyst) so that the fan gets turned off again.
+  *
+  */
+-static int bang_bang_control(struct thermal_zone_device *tz,
+-			     const struct thermal_trip *trip)
++static void bang_bang_control(struct thermal_zone_device *tz,
++			      const struct thermal_trip *trip,
++			      bool crossed_up)
+ {
+ 	struct thermal_instance *instance;
+-	int ret;
+ 
+ 	lockdep_assert_held(&tz->lock);
+ 
+-	ret = thermal_zone_trip_update(tz, trip);
+-	if (ret)
+-		return ret;
++	thermal_zone_trip_update(tz, trip, crossed_up);
+ 
+ 	list_for_each_entry(instance, &tz->thermal_instances, tz_node)
+ 		thermal_cdev_update(instance->cdev);
+-
+-	return 0;
+ }
+ 
+ static struct thermal_governor thermal_gov_bang_bang = {
+ 	.name		= "bang_bang",
+-	.throttle	= bang_bang_control,
++	.trip_crossed	= bang_bang_control,
+ };
+ THERMAL_GOVERNOR_DECLARE(thermal_gov_bang_bang);
 
-Arm 64 version of arch_register_cpu() ended up as the following
-(obviously needs cleaning up, bikeshedding of naming etc)
-
-int arch_register_cpu(int cpu)
-{
-        struct cpu *c =3D &per_cpu(cpu_devices, cpu);
-        acpi_handle acpi_handle =3D ACPI_HANDLE(&c->dev);
-        int ret;
-
-	printk("!!!!! INTO arch_register_cpu() %px\n", ACPI_HANDLE(&c->dev));
-
-        if (!acpi_disabled && !acpi_handle)
-                return -EPROBE_DEFER;
-        if (acpi_handle) {
-                ret =3D acpi_sta_enabled(acpi_handle);
-                if (ret) {
-                        printk("Have handle, not enabled\n");
-                        /* Not enabled */
-                        return ret;
-                }
-        }
-        printk("!!!!! onwards arch_register_cpu()\n");
-
-        c->hotpluggable =3D arch_cpu_is_hotpluggable(cpu);
-
-        return register_cpu(c, cpu);
-}
-
-with new utility function in drivers/acpi/utils.c
-
-int acpi_sta_enabled(acpi_handle handle)
-{
-       unsigned long long sta;
-       bool present, enabled;
-       acpi_status status;
-
-       if (acpi_has_method(handle, "_STA")) {
-               status =3D acpi_evaluate_integer(handle, "_STA", NULL, &sta);
-               if (ACPI_FAILURE(status))
-                       return -ENODEV;
-
-               present =3D sta & ACPI_STA_DEVICE_PRESENT;
-               enabled =3D sta & ACPI_STA_DEVICE_ENABLED;
-               if (!present || !enabled) {
-                       return -EPROBE_DEFER;
-               }
-               return 0;
-       }
-       return 0; /* No _STA means always on! */
-}
-	struct cpu *c =3D &per_cpu(cpu_devices, pr->id);=09
-	ACPI_COMPANION_SET(&c->dev, device);
-
-in acpi_processor_get_info() and that calls
-
-static int acpi_processor_make_enabled(struct acpi_processor *pr)
-{
-        int ret;
-
-        if (invalid_phys_cpuid(pr->phys_id))
-                return -ENODEV;
-
-        cpus_write_lock();
-        ret =3D arch_register_cpu(pr->id);
-        cpus_write_unlock();
-
-        return ret;
-}
-
-I think setting the ACPI handle should be harmless on other architectures.
-It seems like the obvious one to set it to for cpu->dev.
-
-Brief tests on same set of DT and ACPI on x86 and arm64 seem fine.
-
->=20
-> > If we get rid of this catch all, solution would be to move the
-> > !acpi_disabled check into the arm64 version of arch_cpu_register()
-> > because we would only want the delayed registration path to be
-> > used on ACPI cases where the question of CPU availability can't
-> > yet be resolved. =20
->=20
-> Exactly.
->=20
-> This is similar (if not equivalent even) to a CPU becoming available
-> between the cpu_dev_register_generic() call and the ACPI enumeration.
-
->=20
-> > >
-> > > Then, the ACPI processor enumeration path may take care of registering
-> > > CPU that have not been registered so far and in the more-or-less the
-> > > same way regardless of the architecture (modulo some arch-specific
-> > > stuff). =20
-> >
-> > If I understand correctly, in acpi_processor_get_info() we'd end up
-> > with a similar check on whether it was already registered (the x86 path)
-> > or had be deferred (arm64 / acpi).
-> > =20
-> > >
-> > > In the end, it should be possible to avoid changing the behavior of
-> > > x86 and loongarch in this series. =20
-> >
-> > Possible, yes, but result if I understand correctly is we end up with
-> > very different flows and replication of functionality between the
-> > early registration and the late one. I'm fine with that if you prefer i=
-t! =20
->=20
-> But that's what is there today, isn't it?
-
-Agreed - but I was previously thinking we could move everything late.
-I'm fine with just keeping the two flows separate.
-
->=20
-> I think this can be changed to reduce the duplication, but I'd prefer
-> to do that later, when the requisite functionality is in place and we
-> just do the consolidation.  In that case, if anything goes wrong, we
-> can take a step back and reconsider without deferring the arm64 CPU
-> hotplug support.
-
-Great. That plan certainly works for me :)
-
-Thanks for quick replies and help getting this headed in right direction.
-
-+CC Miguel who is also looking at some of this series. Sorry Miguel,
-was assuming you were on the thread and never checked :(
-
-Jonathan
 
 
 
