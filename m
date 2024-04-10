@@ -1,127 +1,111 @@
-Return-Path: <linux-pm+bounces-6228-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6245-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D55FE89FED3
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 19:45:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C7968A001E
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 20:56:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F1EA288BD7
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 17:45:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0DE841F249A3
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 18:56:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCD1117F38D;
-	Wed, 10 Apr 2024 17:44:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DD4A17F365;
+	Wed, 10 Apr 2024 18:56:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="oxbOfCp3"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="Eih04ugn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32E9317F369;
-	Wed, 10 Apr 2024 17:44:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC05363E;
+	Wed, 10 Apr 2024 18:56:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712771098; cv=none; b=LMGNZRPL1HkWjyS3bzqLgompBt/WIJH6vIysgtIf2PvE5xZZVDdM8ULLev6jXWTdMbG+RMW1RKl/OLfzdg2nMIppkna8+k2f+3T/+xF7yfku1jPknkI7Nlmm/xWxyQDB12RFQcKx4cn0baMigKg49cvUyZqgvGpSB3S0y0H8vEg=
+	t=1712775384; cv=none; b=IiBzD55Heu7H98dBYWYWUST0kQzuuMlYsRxxUc0LalVslUqg70HcKCbhgMz22U+o7RMCuGB3KcwpDo/d3CAHFCOjJsCAiHYvB7dyNqZZlGCUW+k+w/eYrHiMSOfP0xKF9jDC+WLiHzS5K/Ul0aEZFDYuJuRodkrMpFf/EIM9DrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712771098; c=relaxed/simple;
-	bh=J3FVnwDh/KGiA6tpfeXzIKlz2LWvlujkzxc+I0KPgFU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XxhlSZ+zWzhZbeqR99972jFZTxzK7w520UfGZXCpZ4Yly6JPtNt8PnpXSVYaeuyKPkJ9NijexG5TWOR8j+j2DDcloHZTtrDFbCZV8+nWXMfFUb0etrdi0cpT32t3KSFeZfY1qykKB+M7V1p7VCUs9FuqW6yYdPCyjYTyfQxQHes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=oxbOfCp3 reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
- id 65631d58b4123eed; Wed, 10 Apr 2024 19:44:47 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 59FAD66C66F;
-	Wed, 10 Apr 2024 19:44:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1712771087;
-	bh=J3FVnwDh/KGiA6tpfeXzIKlz2LWvlujkzxc+I0KPgFU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=oxbOfCp34dSikTSvRh20E+pQNQ5B0RJPEGlIv4//yecq30J08PCq7hJIfAZeWIzwm
-	 MbHIkinVq86zESqyD049uRYJ5CXO+Z953AhLmbEPVJWzaeRU6+yMoKwdvpMT6GZ0Tp
-	 bnDfOlfer4EWovhKfzbQOvjwaY8E8mHSnF1n4Vj+70jlQgSq6DDVEYnIOnjKgyeK5S
-	 uB/6xVcuPbxZdWoMWSkogMvL5gDsaGxFOW9IrwOG2qSKRCP50L5Wv/FLiR7gjx62v1
-	 WB1qGUZXOVOj1HlD9vgxQK8LLL7QhVOF5IpI+UwJrle1CRCugEWcPc5dBkyWZIpDV9
-	 PUip6MCY/oHTw==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Lukasz Luba <lukasz.luba@arm.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject:
- [PATCH v1 16/16] thermal: core: Relocate critical and hot trip handling
-Date: Wed, 10 Apr 2024 19:44:34 +0200
-Message-ID: <9337957.rMLUfLXkoz@kreacher>
-In-Reply-To: <13515747.uLZWGnKmhe@kreacher>
-References: <13515747.uLZWGnKmhe@kreacher>
+	s=arc-20240116; t=1712775384; c=relaxed/simple;
+	bh=z8uL29ol4D/VzeVxNrLkekTvpm9qYZqbPbEmZ0BnNKc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DMqUGRhpYI+3ScR7JZ6Xvhy/jp+0JxEQMskHzRXSrAgjbBgMYYwc2w2wGtp2JDd8iYxfO3KBqS/2mG06IlEvdWHFQeMEnMgWkWrbhCEcAwqvhLBmWJTLVxSR6nrdMFyuRPYsHCspfCsZbhV2xH5viXAlAeMlB+gMCy0apeEDIcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=Eih04ugn; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=U8bqg6vv1xN246qvsvrQZYNVGTMrjTXzu9x/4q0URWY=; b=Eih04ugnqStfjTGj8LCSTHRa8I
+	JVKC9gkRyoCXJUkvOs3gxMIVb6pp3NE4PiFgKq38B/dWSfl77kt3RXU5fC9mMMM6OCB3O8hcgUx2S
+	Iv1Pl/+4KblR/zsHS7r1cSKoeP4zO0tKaJGaX6F+EpE3lDTPTujdhDVlzVNGQN9/rLbNsvowxTg2K
+	CWuVQR8+MaNkHOw8BqdKVjxzsNgCldrupd7faINLxt+omBYy9HAtuQW8d1cgHLKwfslwkV2lecqX8
+	goWQIWe7kLglAMnYY1F9r7DLY0WiKdfvrjCoo58dPUxqUlo+NqnwAQtfmvkjDxde80Y5aYlKd0JtS
+	qpMjAr0Q==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:38784)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1rud77-0008Nd-2R;
+	Wed, 10 Apr 2024 19:56:05 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1rud73-0006BQ-2Q; Wed, 10 Apr 2024 19:56:01 +0100
+Date: Wed, 10 Apr 2024 19:56:00 +0100
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+	loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+	x86@kernel.org, acpica-devel@lists.linuxfoundation.org,
+	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	jianyong.wu@arm.com, justin.he@arm.com,
+	James Morse <james.morse@arm.com>
+Subject: Re: [PATCH RFC v4 02/15] ACPI: processor: Register all CPUs from
+ acpi_processor_get_info()
+Message-ID: <ZhbgwBBvh6ccdO7x@shell.armlinux.org.uk>
+References: <Zbp5xzmFhKDAgHws@shell.armlinux.org.uk>
+ <E1rVDmU-0027YP-Jz@rmk-PC.armlinux.org.uk>
+ <CAJZ5v0iiJpUWq5GMSnKFWQTzn_bdwoQz9m=hDaXNg4Lj_ePF4g@mail.gmail.com>
+ <20240322185327.00002416@Huawei.com>
+ <20240410134318.0000193c@huawei.com>
+ <CAJZ5v0ggD042sfz3jDXQVDUxQZu_AWaF2ox-Me8CvFeRB8nczw@mail.gmail.com>
+ <20240410145005.00003050@Huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudehiedguddugecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtohepshhr
- ihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240410145005.00003050@Huawei.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Subject: [PATCH v1] 
+On Wed, Apr 10, 2024 at 02:50:05PM +0100, Jonathan Cameron wrote:
+> If we get rid of this catch all, solution would be to move the
+> !acpi_disabled check into the arm64 version of arch_cpu_register()
+> because we would only want the delayed registration path to be
+> used on ACPI cases where the question of CPU availability can't
+> yet be resolved.
 
-Modify handle_thermal_trip() to call handle_critical_trips() only after
-finding that the trip temperature has been crossed on the way up and
-remove the redundant temperature check from the latter.
+Aren't we then needing two arch_register_cpu() implementations?
+I'm assuming that you're suggesting that the !acpi_disabled, then
+do nothing check is moved into arch_register_cpu() - or to put it
+another way, arch_register_cpu() does nothing if ACPI is enabled.
 
-No intentional functional impact.
+If arch_register_cpu() does nothing if ACPI is enabled, how do
+CPUs get registered (and sysfs files get created to control them)
+on ACPI systems? ACPI wouldn't be able to call arch_register_cpu(),
+so I suspect you'll need an ACPI-specific version of this function.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/thermal_core.c |   11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
-
-Index: linux-pm/drivers/thermal/thermal_core.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_core.c
-+++ linux-pm/drivers/thermal/thermal_core.c
-@@ -350,10 +350,6 @@ void thermal_zone_device_critical_reboot
- static void handle_critical_trips(struct thermal_zone_device *tz,
- 				  const struct thermal_trip *trip)
- {
--	/* If we have not crossed the trip_temp, we do not care. */
--	if (trip->temperature <= 0 || tz->temperature < trip->temperature)
--		return;
--
- 	trace_thermal_zone_trip(tz, thermal_zone_trip_id(tz, trip), trip->type);
- 
- 	if (trip->type == THERMAL_TRIP_CRITICAL)
-@@ -405,10 +401,11 @@ static void handle_thermal_trip(struct t
- 		list_add_tail(&td->notify_list_node, way_up_list);
- 		td->notify_temp = trip->temperature;
- 		td->threshold -= trip->hysteresis;
--	}
- 
--	if (trip->type == THERMAL_TRIP_CRITICAL || trip->type == THERMAL_TRIP_HOT)
--		handle_critical_trips(tz, trip);
-+		if (trip->type == THERMAL_TRIP_CRITICAL ||
-+		    trip->type == THERMAL_TRIP_HOT)
-+			handle_critical_trips(tz, trip);
-+	}
- }
- 
- static void update_temperature(struct thermal_zone_device *tz)
-
-
-
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
