@@ -1,86 +1,122 @@
-Return-Path: <linux-pm+bounces-6251-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6252-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8C1C8A0140
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 22:24:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 523F08A01B2
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 23:07:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 801EA1F27A5A
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 20:24:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D931283598
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 21:07:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD78F181BB5;
-	Wed, 10 Apr 2024 20:24:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e/Jidtmb"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9727D1836CB;
+	Wed, 10 Apr 2024 21:07:21 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF98181BAB;
-	Wed, 10 Apr 2024 20:24:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0CA7181CFD;
+	Wed, 10 Apr 2024 21:07:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712780641; cv=none; b=lwcG5fKAp9Npv7480abDI26ke+YdLVVh8N8CT7bInuJnyA8YcHTeZrXgsY5JQQTIHQo2iM9m4fBPDbHLeG00OLuxHGQvrs7aKdBGG4Bep7Q0d6+C9rC8Xt7X0tojxEOwUSlfq5jbXb96PPixQAAW2ILEkIDyMWifcZp1T63Qbt4=
+	t=1712783241; cv=none; b=VQ6IksTT8/O8xAil77IXR4m/+ESi/umn+EX3uVLFwxx0C3ydccgyWryGMcm/YINH394pJbg/krcq+ky9AWBvnl5DQkvgvTpQYR+8lkamfJI77YxVaPdcbJLq4qYe84IxM6TWotHgBQx44pIUoCaZFWZkffYNrvJEszYwijyOdtY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712780641; c=relaxed/simple;
-	bh=sWg/KbJxC90lruB1AIuChQK3GO6zYnkej0/XpbiRfcw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f03nOKHNxoyhl8TiGIQxp8eTVjUqpmbRY5c/e8MuBOnGs1Xa49+d4mR12Gydmmyjs3ACdd7bwZHMsTk0JlpbTXJ52szMcnRObHhWz5eqhq8pzNuK43mukJgxMTN/SPzrCHskJTvs/sjLzLqAsxl0vOHem9wVtB4pveuyhcCU3yA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e/Jidtmb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE937C433F1;
-	Wed, 10 Apr 2024 20:24:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712780641;
-	bh=sWg/KbJxC90lruB1AIuChQK3GO6zYnkej0/XpbiRfcw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=e/JidtmbhgDCPRrt4YMse9xoD2smjvZqowOsjvxo836/beLksi7HKo+Sr+mwKtb1a
-	 eFZz92n0BSYMyLQVJnDIiBC8mgxw7FInK+k87kgaPVboQNhM3DeTXRYucxn8Swr3n1
-	 MnbDN+LCgTd5zalHKDY7QUua4Snu0rByMWMznfE0GWutTeawFnQKChbc36MrtLUI8z
-	 13/jzbFJcrVVn/5/FdKqjSpcXCOJKQBnqNhWcJ+hdMuniRYTTU7KwzkRDAYEoc9H91
-	 /BqKoSmA6Db58s94pGW/XHrJkgVKJaxPHzPncceVc9DASxprMayu7zCzbnJRln82RF
-	 /J0D7ADEUZXlQ==
-Date: Wed, 10 Apr 2024 15:23:58 -0500
-From: Rob Herring <robh@kernel.org>
-To: Binbin Zhou <zhoubinbin@loongson.cn>
-Cc: Rob Herring <robh+dt@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	loongson-kernel@lists.loongnix.cn, linux-pm@vger.kernel.org,
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-	Binbin Zhou <zhoubb.aaron@gmail.com>,
-	Yinbo Zhu <zhuyinbo@loongson.cn>, Amit Kucheria <amitk@kernel.org>,
-	loongarch@lists.linux.dev, Huacai Chen <chenhuacai@loongson.cn>,
-	WANG Xuerui <git@xen0n.name>, Huacai Chen <chenhuacai@kernel.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH 2/4] dt-bindings: thermal: loongson,ls2k-thermal: Add
- Loongson-2K0500 compaible
-Message-ID: <171278063662.1282741.14842048022599311146.robh@kernel.org>
-References: <cover.1712733065.git.zhoubinbin@loongson.cn>
- <7f6a9ea7ad32584d3d3aa1553e5cc033870fb02c.1712733065.git.zhoubinbin@loongson.cn>
+	s=arc-20240116; t=1712783241; c=relaxed/simple;
+	bh=WUkQx3MHNfpPK223Za2QnwYdPQf2mwT7iuWRCuTCPQM=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mLN/P1nqVz2HkBVi+OS6NK976bTyLo8RMRsOuNHvo54V4kq39PcVNIAHjkfffgizcF9rMNmfOaetlVp1CH9JU6MUSkinlmGf70QTspUEKWJKKDH8s2/cy2IWPJlom1bqE0ejPQqeJxVmwVKUn3gupbooCV/Zfn/oSFLCfHAAYwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VFFjC372rz6K6DM;
+	Thu, 11 Apr 2024 05:05:35 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 403711402C7;
+	Thu, 11 Apr 2024 05:07:14 +0800 (CST)
+Received: from localhost (10.126.168.81) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Wed, 10 Apr
+ 2024 22:07:13 +0100
+Date: Wed, 10 Apr 2024 22:07:12 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+CC: "Russell King (Oracle)" <linux@armlinux.org.uk>,
+	<linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
+	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+	<x86@kernel.org>, <acpica-devel@lists.linuxfoundation.org>,
+	<linux-csky@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-ia64@vger.kernel.org>, <linux-parisc@vger.kernel.org>, Salil Mehta
+	<salil.mehta@huawei.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	<jianyong.wu@arm.com>, <justin.he@arm.com>, James Morse
+	<james.morse@arm.com>, Miguel Luis <miguel.luis@oracle.com>
+Subject: Re: [PATCH RFC v4 02/15] ACPI: processor: Register all CPUs from
+ acpi_processor_get_info()
+Message-ID: <20240410220712.0000726f@Huawei.com>
+In-Reply-To: <CAJZ5v0gG0xLajHsWXVM+-V+fQZAudvojechUa-DzFgwCs2q8Dg@mail.gmail.com>
+References: <Zbp5xzmFhKDAgHws@shell.armlinux.org.uk>
+	<E1rVDmU-0027YP-Jz@rmk-PC.armlinux.org.uk>
+	<CAJZ5v0iiJpUWq5GMSnKFWQTzn_bdwoQz9m=hDaXNg4Lj_ePF4g@mail.gmail.com>
+	<20240322185327.00002416@Huawei.com>
+	<20240410134318.0000193c@huawei.com>
+	<CAJZ5v0ggD042sfz3jDXQVDUxQZu_AWaF2ox-Me8CvFeRB8nczw@mail.gmail.com>
+	<20240410145005.00003050@Huawei.com>
+	<ZhbgwBBvh6ccdO7x@shell.armlinux.org.uk>
+	<CAJZ5v0gG0xLajHsWXVM+-V+fQZAudvojechUa-DzFgwCs2q8Dg@mail.gmail.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7f6a9ea7ad32584d3d3aa1553e5cc033870fb02c.1712733065.git.zhoubinbin@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
+On Wed, 10 Apr 2024 21:08:06 +0200
+"Rafael J. Wysocki" <rafael@kernel.org> wrote:
 
-On Wed, 10 Apr 2024 17:49:01 +0800, Binbin Zhou wrote:
-> The thermal on the Loongson-2K0500 shares the design with the
-> Loongson-2K1000. Define corresponding compatible string, having the
-> loongson,ls2k1000-thermal as a fallback.
-> 
-> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> ---
->  .../devicetree/bindings/thermal/loongson,ls2k-thermal.yaml       | 1 +
->  1 file changed, 1 insertion(+)
-> 
+> On Wed, Apr 10, 2024 at 8:56=E2=80=AFPM Russell King (Oracle)
+> <linux@armlinux.org.uk> wrote:
+> >
+> > On Wed, Apr 10, 2024 at 02:50:05PM +0100, Jonathan Cameron wrote: =20
+> > > If we get rid of this catch all, solution would be to move the
+> > > !acpi_disabled check into the arm64 version of arch_cpu_register()
+> > > because we would only want the delayed registration path to be
+> > > used on ACPI cases where the question of CPU availability can't
+> > > yet be resolved. =20
+> >
+> > Aren't we then needing two arch_register_cpu() implementations?
+> > I'm assuming that you're suggesting that the !acpi_disabled, then
+> > do nothing check is moved into arch_register_cpu() - or to put it
+> > another way, arch_register_cpu() does nothing if ACPI is enabled.
+> >
+> > If arch_register_cpu() does nothing if ACPI is enabled, how do
+> > CPUs get registered (and sysfs files get created to control them)
+> > on ACPI systems? ACPI wouldn't be able to call arch_register_cpu(),
+> > so I suspect you'll need an ACPI-specific version of this function. =20
+>=20
+> arch_register_cpu() will do what it does, but it will check (upfront)
+> if ACPI is enabled and if so, if the ACPI Namespace is available.  In
+> the case when ACPI is enabled and the ACPI Namespace is not ready, it
+> will return -EPROBE_DEFER (say).
 
-Acked-by: Rob Herring <robh@kernel.org>
+Exactly.  I oversimplified and wasn't clear enough.
+The check is there in the arch_register_cpu() and is one of the ways
+that function can decide to actually register the cpu but not the only one.
 
+I think we may later want to consider breaking it into 2 arch calls
+(check if ready to register + register) to reduce code duplication
+in with the hotplug path where there is a little extra to do
+inbetween.
+
+Hopefully that can wait though.
+
+Jonathan
 
