@@ -1,96 +1,182 @@
-Return-Path: <linux-pm+bounces-6226-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6240-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8233389FD7C
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 18:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 506D989FEEF
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 19:46:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 37EB81F27DA7
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 16:54:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 07B9F1F23FFD
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 17:46:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9036F17B503;
-	Wed, 10 Apr 2024 16:54:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50E3C181CF6;
+	Wed, 10 Apr 2024 17:45:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LpxA0Rpe"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="MxQ2yLXg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BDF837168
-	for <linux-pm@vger.kernel.org>; Wed, 10 Apr 2024 16:54:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A48D1802D6;
+	Wed, 10 Apr 2024 17:44:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712768086; cv=none; b=G8tNdom9GKOfCd0sWM4JhO9zcl0kjR3sal4fWtuZcSxZEck0z2Yn4SJi3KmMJ8ZIAh7SL655b3OWNSCSpBYgLCIj1+vIX0OGLP0A9MzNXLYSJdqKxIL1sjWyj+9o28mIBUG2f0seLB7B4237Nccy7ukXGtz4o4p7LJZ3VFkvA4c=
+	t=1712771103; cv=none; b=nj9JFi9upBNoxEFSXH4Cq2tJi9MasWiatzNMgI6Tng1jFCbR0RBiSIEosW9pgyFSk9wSdMNIl0vx1Y6V2e9yPOr5WRPa1XLIssUVmD5mRkwGoSLe04QkqXam6Td9j8r7UwlxxRnGPhjkdy8mKVp3KYTe812iHCrrsK6BOLMw2qA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712768086; c=relaxed/simple;
-	bh=znQ4p0ojjKEq7yMBBqukNgJu/CwAdqHbMGNRKktC5Ik=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=p5BC5UzRx/zJnXikYQatrjbNjaBA1frx4qkcIh07C/F220UrDFOryb8HzXOPiFf6Pzut7g+iiSfPme3h2wHnDDeRSLw2qD1lZxX60DC+UzwECfgMXChsoqbAnP+L6mx3GQDKvkjmWAtI82LpbrZax/3JrrWeFXan9UisR7qG5wQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LpxA0Rpe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4BB42C433F1
-	for <linux-pm@vger.kernel.org>; Wed, 10 Apr 2024 16:54:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712768086;
-	bh=znQ4p0ojjKEq7yMBBqukNgJu/CwAdqHbMGNRKktC5Ik=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=LpxA0RpedDHZ+APV0omt35YrfLSzg+iQ+YIuyyL5ktY9f0KWVGuytRymClAdcnvou
-	 YDh2MZpIGs3IbOs1FaPzJxDqP2s5fExQXhT9Nigr8Md9k/8YYsxrf+OrIwyU40M7S0
-	 0PBOx60vqz962Vg3kLXZ755M3l5EuC4LETQBQR8Pm/M8YfsuDwOtZtTQBgP9RMo7M+
-	 xWu0JmRyC7G9KsNP6M+rPrYNahxB1wVWGfA4NzxaLia2gGoQLYLT5mZt/TC4OrYV4H
-	 20FhI4kr2UJW/jj/2xgmZBMec5vRjofmMtMneM84lkaV7Ftj3N50RhPFWqNgv1YM8e
-	 pD0bKL8RkXzTw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 3F038C53BD3; Wed, 10 Apr 2024 16:54:46 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 218705] amd_pstate fails to load on AMD 5950x with Asus ROG
- CROSSHAIR VIII DARK HERO x570
-Date: Wed, 10 Apr 2024 16:54:46 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: andamu@posteo.net
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218705-137361-lBJpg1r2Vh@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218705-137361@https.bugzilla.kernel.org/>
-References: <bug-218705-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1712771103; c=relaxed/simple;
+	bh=7gKWhycZmUjTMJkPd/ZDFGuQf2EeEblQmHNOYDf0bmA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=SbDUBj9Og6S3zEN94Muwai6dd4gbAIrdiBbt6lyvBX4hnqiXm/wHjVBI0/UF8oTSaxVmbN8kfH0nD5R/RKc5F6Q8n6kc364jHszhizSb5/hQ8U0M7jY6vAe3AKwrB6XX/OGx6NlsG+Y/z4vS5Aq46nmNefiITO8hhYImcGCxJ/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=MxQ2yLXg reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
+ id ba490e62e58493f8; Wed, 10 Apr 2024 19:44:52 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id DCB8A66C66F;
+	Wed, 10 Apr 2024 19:44:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1712771092;
+	bh=7gKWhycZmUjTMJkPd/ZDFGuQf2EeEblQmHNOYDf0bmA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=MxQ2yLXgDS6P/McDyoK30LNF31tyFQP8krWVDW1BqXRxT9nlV1m50Sot9JAFwPWJw
+	 6NFKg83CF4I1bk3k5Mkhi4j/ymKP+giuI3nVh+vZpxNrbLj6ZwKyKyI/4Sd2fDTQaf
+	 5+u8nzIbKfwYZwMxRvKjo896HDtZ5jR17lFMnxzzjiioy3dNk1T0dbc0vjDztnQgzd
+	 b3JkxjcHuVNXOftOF0791IeENOTgx65p/B2JejTygB+I5rWjUWdfhxuTpLJ9HTxxP9
+	 /L3N524ysVxDLAg88Qx21X3YUI1odJDgJ+81KpK/n3I5Zaakx1fsivxmbIow/H6MDJ
+	 bkEEdftpzybpQ==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Lukasz Luba <lukasz.luba@arm.com>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject:
+ [PATCH v1 11/16] thermal: gov_fair_share: Use .manage() callback instead of
+ .throttle()
+Date: Wed, 10 Apr 2024 18:57:38 +0200
+Message-ID: <2411572.NG923GbCHz@kreacher>
+In-Reply-To: <13515747.uLZWGnKmhe@kreacher>
+References: <13515747.uLZWGnKmhe@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudehiedguddugecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtohepshhr
+ ihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218705
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
---- Comment #1 from Andrei Amuraritei (andamu@posteo.net) ---
-Reading though 218171, I have checked if my ACPI tables have the _CPC entri=
-es
-and they do:
+The Fair Share governor tries very hard to be stateless and so it
+calls get_trip_level() from fair_share_throttle() every time, even
+though the number produced by this function for all of the trips
+during a given thermal zone update is actually the same.  Since
+get_trip_level() walks all of the trips in the thermal zone every
+time it is called, doing this may generate quite a bit of completely
+useless overhead.
 
-ssdt10.dsl:        Name (_CPC, Package (0x17)  // _CPC: Continuous Performa=
-nce
-Control
+For this reason, make the governor use the new .manage() callback
+instead of .throttle() which allows it to call get_trip_level() just
+once and use the value computed by it to handle all of the trips.
 
---=20
-You may reply to this email to add a comment.
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/thermal/gov_fair_share.c |   37 ++++++++++++++++++++++++++-----------
+ 1 file changed, 26 insertions(+), 11 deletions(-)
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+Index: linux-pm/drivers/thermal/gov_fair_share.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/gov_fair_share.c
++++ linux-pm/drivers/thermal/gov_fair_share.c
+@@ -53,6 +53,7 @@ static long get_target_state(struct ther
+  * fair_share_throttle - throttles devices associated with the given zone
+  * @tz: thermal_zone_device
+  * @trip: trip point
++ * @trip_level: number of trips crossed by the zone temperature
+  *
+  * Throttling Logic: This uses three parameters to calculate the new
+  * throttle state of the cooling devices associated with the given zone.
+@@ -61,22 +62,19 @@ static long get_target_state(struct ther
+  * P1. max_state: Maximum throttle state exposed by the cooling device.
+  * P2. percentage[i]/100:
+  *	How 'effective' the 'i'th device is, in cooling the given zone.
+- * P3. cur_trip_level/max_no_of_trips:
++ * P3. trip_level/max_no_of_trips:
+  *	This describes the extent to which the devices should be throttled.
+  *	We do not want to throttle too much when we trip a lower temperature,
+  *	whereas the throttling is at full swing if we trip critical levels.
+- *	(Heavily assumes the trip points are in ascending order)
+  * new_state of cooling device = P3 * P2 * P1
+  */
+-static int fair_share_throttle(struct thermal_zone_device *tz,
+-			       const struct thermal_trip *trip)
++static void fair_share_throttle(struct thermal_zone_device *tz,
++				const struct thermal_trip *trip,
++				int trip_level)
+ {
+ 	struct thermal_instance *instance;
+ 	int total_weight = 0;
+ 	int total_instance = 0;
+-	int cur_trip_level = get_trip_level(tz);
+-
+-	lockdep_assert_held(&tz->lock);
+ 
+ 	list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
+ 		if (instance->trip != trip)
+@@ -99,18 +97,35 @@ static int fair_share_throttle(struct th
+ 			percentage = (instance->weight * 100) / total_weight;
+ 
+ 		instance->target = get_target_state(tz, cdev, percentage,
+-						    cur_trip_level);
++						    trip_level);
+ 
+ 		mutex_lock(&cdev->lock);
+ 		__thermal_cdev_update(cdev);
+ 		mutex_unlock(&cdev->lock);
+ 	}
++}
+ 
+-	return 0;
++static void fair_share_manage(struct thermal_zone_device *tz)
++{
++	int trip_level = get_trip_level(tz);
++	const struct thermal_trip_desc *td;
++
++	lockdep_assert_held(&tz->lock);
++
++	for_each_trip_desc(tz, td) {
++		const struct thermal_trip *trip = &td->trip;
++
++		if (trip->temperature == THERMAL_TEMP_INVALID ||
++		    trip->type == THERMAL_TRIP_CRITICAL ||
++		    trip->type == THERMAL_TRIP_HOT)
++			continue;
++
++		fair_share_throttle(tz, trip, trip_level);
++	}
+ }
+ 
+ static struct thermal_governor thermal_gov_fair_share = {
+-	.name		= "fair_share",
+-	.throttle	= fair_share_throttle,
++	.name	= "fair_share",
++	.manage	= fair_share_manage,
+ };
+ THERMAL_GOVERNOR_DECLARE(thermal_gov_fair_share);
+
+
+
 
