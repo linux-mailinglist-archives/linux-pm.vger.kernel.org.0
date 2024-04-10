@@ -1,131 +1,103 @@
-Return-Path: <linux-pm+bounces-6135-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6136-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05AA889E944
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 06:55:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98F6C89E9B9
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 07:28:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AD1161F23984
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 04:55:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 52FB2285851
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 05:28:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DCFD19BA6;
-	Wed, 10 Apr 2024 04:55:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F26310A3E;
+	Wed, 10 Apr 2024 05:28:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="dFrBOjdy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uk69s96a"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52806168D0;
-	Wed, 10 Apr 2024 04:55:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57572168CC
+	for <linux-pm@vger.kernel.org>; Wed, 10 Apr 2024 05:28:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712724915; cv=none; b=tmA51vWjREOg7KG3iTaXMv9wFF2JAAvoz96zk/BlhTQgA4FGfyatchuWhUD0I7MDe+v5rhVDG1zW5hpelY9nH6lnnKaxbTtm64V3iXFRZ4salqj8PMx/fE422GRpMkpUrAYjx5STJlAVlndnFO5WElCdDAIOmjwI9dsbt10zzfU=
+	t=1712726922; cv=none; b=mjJ33E0Lkqb/frrssMMWfdOW6AL9BGzWtcCW0fA6k1EETSAg1APDsEkBBht0xh3JCYAz4OILQCegu+lhZMNECtmtoFTsrKmC87rYcjnMNI8jb7R3kPjxWCieCzz3MuybmAh9unHXUpY4X7uazYbzfZLM5RGKhWG1tSknVTOqiPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712724915; c=relaxed/simple;
-	bh=sWswXJyjBQ2nkPehb6b9OC8FpWgmJGhvn+kM9/2mJR8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=uW+JSiNqJ49k2I62ycuIaRIuVNMbBf8j6dXbWl2oT3bVh9yOWCBJhVPQqvk91m43PORMkpM7FAppbh1avvV8cIhX3W2gKpsYmw9S9JCvxFN0N0VqbiD1pmsnuwOjjN/ioA754f4WfIs6QJD1zwQVUBu6HNb1ch0kz+t4gs4FvLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=dFrBOjdy; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43A4YjSN032480;
-	Wed, 10 Apr 2024 04:54:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding; s=qcppdkim1; bh=6bXVQP/
-	MeTp7czzAt3VhgRTeKtkth59inoNPfKrnrMs=; b=dFrBOjdyR5pQFBNOnUvDqum
-	NkjuTz+5d4YBdYGCBO0QbwCayMBnZAusrGGEKfjnLJD3vyiYyAXoEluHokAvEUu+
-	+gyO4V3itdmllJ3BYVSGr2MgBeFdSwhBYG86zaFrcJ3o4E+unHecrqaBPhZNNEYp
-	6F3apK0IdiQkrpbqCzSiFIh87UXGZTZy1+5k98SVItgLIb1V3GQKom1bIwxVrcF8
-	mLF5yzxeYzBCcQlqru2zxu91Dvpm1DC4o0lU7jRZ/TaFGzpW4EgOvoEETVwfRICe
-	/HBKF8FuhlEi5ZqL4TyoeE1MQ3YAhBhpJvf10c107CVrLZNiPO5SQxl5kHG6HDA=
-	=
-Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xdkv8g3r2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 10 Apr 2024 04:54:27 +0000 (GMT)
-Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-	by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 43A4sMSD019647;
-	Wed, 10 Apr 2024 04:54:24 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 3xayfm2ybr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 10 Apr 2024 04:54:24 +0000
-Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 43A4sO9x019669;
-	Wed, 10 Apr 2024 04:54:24 GMT
-Received: from hu-maiyas-hyd.qualcomm.com (hu-atulpant-hyd.qualcomm.com [10.213.109.143])
-	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 43A4sOJn019667
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 10 Apr 2024 04:54:24 +0000
-Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 3869597)
-	id 5EB3F24ED9; Wed, 10 Apr 2024 10:24:23 +0530 (+0530)
-From: Atul Pant <quic_atulpant@quicinc.com>
-To: mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org
-Cc: Atul Pant <quic_atulpant@quicinc.com>, kernel@quicinc.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [RFC PATCH 2/2] sched/idle: Add a description for play_idle_precise
-Date: Wed, 10 Apr 2024 10:24:17 +0530
-Message-Id: <20240410045417.3048209-3-quic_atulpant@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240410045417.3048209-1-quic_atulpant@quicinc.com>
-References: <20240410045417.3048209-1-quic_atulpant@quicinc.com>
+	s=arc-20240116; t=1712726922; c=relaxed/simple;
+	bh=N5oHX8knLvgcEjedCtwi/YgcPcAFs9rJzovunf0b7ms=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=LuxOuPnIc3La6mC0I++6L5JwhJIJgZXRcayiCtk5ldfUavrjNzkH82wb7mBwCMUIYBrVBQj7XWUtr5QL1k3gZL2C5h0740Cdi7PqEhH6sjIgh+eJENgerJecZSQksUD/gTPXFgLlQBRcs1WzAMw55FIcN5nwHfThDCIdhX9TJN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uk69s96a; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E7FAAC433F1
+	for <linux-pm@vger.kernel.org>; Wed, 10 Apr 2024 05:28:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712726921;
+	bh=N5oHX8knLvgcEjedCtwi/YgcPcAFs9rJzovunf0b7ms=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=uk69s96aQFZVX43j7/HK37H5AyYz6nae1zZamSU276kMdf/jIimHwLZgk7rAdTpIA
+	 rvedXWUWFcVWr0tethpqA+hn797UZRd4nembUSCmLlPETWDLLd8ekn7TRIRn9pW9XQ
+	 yR1wDBpF8FKiQTAkZPpnt9btcP89INJ2Vi6zDB6buxnYyBGVCobgGlD7FqU3rlyAaP
+	 a3ejBK98CsrqLXzz4vZ1P93u64Y0/8TNemf6gDUdI2wyDUpZ28xKUEQoGzvFwosfV8
+	 vrQVXFj8zCEKhDmmVn4ti93ugcu/9pqmwfbXmj4+XBgG7muoX3+YV3StK4tt3oBlK/
+	 ZqExrM9kFmlMQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id E0BB7C53BD3; Wed, 10 Apr 2024 05:28:41 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 218686] Fail to set energy_performance_preference of amd
+ processor on asus ga403uv
+Date: Wed, 10 Apr 2024 05:28:41 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mario.limonciello@amd.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218686-137361-QAbx8OKBhl@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218686-137361@https.bugzilla.kernel.org/>
+References: <bug-218686-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: U7yqdkGZSK0GOvPgfZ2Kfn9OPH6130Zh
-X-Proofpoint-GUID: U7yqdkGZSK0GOvPgfZ2Kfn9OPH6130Zh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-09_12,2024-04-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- clxscore=1015 suspectscore=0 priorityscore=1501 spamscore=0 phishscore=0
- malwarescore=0 lowpriorityscore=0 mlxlogscore=982 impostorscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2404010003 definitions=main-2404100033
 
-Since runtime accounting of any RT idle thread is prevented, add a
-description about this function that it runs idle loops on a cpu
-without these threads being preempted due to RT throttling.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218686
 
-Signed-off-by: Atul Pant <quic_atulpant@quicinc.com>
----
- kernel/sched/idle.c | 5 +++++
- 1 file changed, 5 insertions(+)
+--- Comment #2 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
+This is a modern machine (Phoenix) that should support X86_FEATURE_CPPC.  Do
+you "need" to set amd_pstate=3Dactive on the kernel command line?  If so, t=
+hen
+that points at a bigger problem to me.  That's supposed to be the default on
+machines like yours.
 
-diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
-index 5007b25c5bc6..7aaf3679f50a 100644
---- a/kernel/sched/idle.c
-+++ b/kernel/sched/idle.c
-@@ -334,6 +334,11 @@ static enum hrtimer_restart idle_inject_timer_fn(struct hrtimer *timer)
- 	return HRTIMER_NORESTART;
- }
- 
-+/*
-+ * This function runs idle loops on a cpu, whose policy is set as SCHED_FIFO.
-+ * Despite being a rt thread, runtime for it is not accounted, thus preventing
-+ * its preemption due to rt-throttling
-+ */
- void play_idle_precise(u64 duration_ns, u64 latency_ns)
- {
- 	struct idle_timer it;
--- 
-2.25.1
+Can you please share /proc/cpuinfo?
 
+I suggest turning on dynamic debug for drivers/cpufreq/amd-pstate.c while
+reproducing this error and then sharing the snippet it has with the messages
+that occurred.
+
+https://www.kernel.org/doc/html/v6.9-rc3/admin-guide/dynamic-debug-howto.ht=
+ml
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
 
