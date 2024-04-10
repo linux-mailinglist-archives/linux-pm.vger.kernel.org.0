@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-6230-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6231-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D528F89FED8
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 19:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F0DD89FEDA
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 19:45:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B1E91F2410D
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 17:45:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B8EA11F24034
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 17:45:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EB411802C0;
-	Wed, 10 Apr 2024 17:44:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AF841802D8;
+	Wed, 10 Apr 2024 17:45:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="s6bQKZwO"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="M3OuAZmo"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 107E817F36E;
-	Wed, 10 Apr 2024 17:44:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32EDC17F36B;
+	Wed, 10 Apr 2024 17:44:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712771099; cv=none; b=Ly7+vT1VZbb4OWP6t1VvGxXCOud8BNKKToPugf8/yS0k/7oB1+dZOzNfubBIAf1HFFXlMZ2Sa0H+jzEpQnhJOpYBM1K+sY2Z9oaocFI8CIBbjRZiCLav9GlFO9RJZzByQGvsCMYU+2Sf441q5X5S5PcyTsQxlWqvHudGvl1Nx9s=
+	t=1712771099; cv=none; b=iOeydLCTZefl58A4PGBDmXy45fl4kUm361XR7WMNtS24vys6Xg1rAM5ekr948WBGKPfHNCCiG9jG9n0GA7rboSF+6CNnfR+kaPX19eahHhp65IRnknIJnxbRUfSK55YR6GjhnFtsgpfcUarDYALieo2AP+bYvPX1mCVbhaxnRUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1712771099; c=relaxed/simple;
-	bh=NA5yrW51H85dk5WAOZypgvfcgjWO3737t7jPzppEXU4=;
+	bh=6ytj9DA2mXccOWmIrWdStZbef+qLEGZrkbosfSivSz4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RSdXkQ0I2YAypFvhGLiYVGp2YyZDXf5RniMsSPLxs/mXLOKQ6yMYZF/lp4+JFRHDYgGcnhgqX2/UTIJK3eihmYiB/jV7mh9zyswrCNNgIfugUCWcF4RZCkKcNauljQzd2zehTrcuvW8TdH0Md9cJb6kj7JqNw9GAVbR3Xi4JiXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=s6bQKZwO reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+	 MIME-Version:Content-Type; b=NvggQ9cggfeuO7AcstDT53D+2iQNX9eMP8+4JjKWilLZCeDPDOgoXLNs0hAqOli2xW5w8UvepyMX6dz0zwct1hnz+A/d8iayLEEZEsBsAOWIrH9k7SIuAmsJ4WJOla3Yw2yYJN7Nzjia3jHFy/EyOmuL9Wj4oAvvRJS6LduTyQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=M3OuAZmo reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
- id 28e78abd95b63886; Wed, 10 Apr 2024 19:44:55 +0200
+ id 08b050b7cb17d430; Wed, 10 Apr 2024 19:44:54 +0200
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 7676066C66F;
-	Wed, 10 Apr 2024 19:44:54 +0200 (CEST)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id A09E766C66F;
+	Wed, 10 Apr 2024 19:44:53 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
 	s=dkim; t=1712771094;
-	bh=NA5yrW51H85dk5WAOZypgvfcgjWO3737t7jPzppEXU4=;
+	bh=6ytj9DA2mXccOWmIrWdStZbef+qLEGZrkbosfSivSz4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=s6bQKZwOpEprs7BFpzU29yApt4Qr/EV78+9DKe7LPrVIXeFB5mOEsRdtmU6Skq+gl
-	 J10Jy+ifbUlQtVEBrYKoG0tzIguMt410tgDHkHXhHbKeMhtE7N5ASTpDebe9T+lmuO
-	 F6gHd1twOj8Vr3NhHobW9U4otfth7f5W2up5RpY8WZY3FGrQVpjB2/id1DtKeZ8ZTB
-	 rlCbSQ0u1YNDE6+O8xC/Job1GBKl1eW+1gsfwIxrqGazkABOzRXVMbFMEdMS+dEBph
-	 cnlpFZaFR4vLGs9iiQizM8aIkQrlTtcb42qmzV1lUjolnua24PLLbFh026ZE2uXPqk
-	 pnuNHDoJwe0Dg==
+	b=M3OuAZmoCwrUIRv+om+PU5ix93rnpCxQlpPugkVbZBrFRtX9/lyou8hi4JdbsoV0B
+	 mD0keTs2qWvAXT8IkhXNuCsFtTKVLLWYAi9U6Iur1lCqyAEbaq9MDqeCveryPOVB/y
+	 ps3KHMKQ1TAQEEUoh9t5KNozVIMwsR8nb0gPw05hu3PQ/PVfKQhOKIiiYZS5sMPTqg
+	 x2hEwbaBkFx1yFhD2sRkwyrOrBo4mQZsSBfSLsWfsd1LQIdiOWvfK8cceYsQlzlNa+
+	 yVq0Q2aiPEzn3ZqeZHgKi+SVnX6BIP2LsFS4ETjTW1Ft7pobSHP7nv7siVcDY41p4m
+	 j9GYYFx6nb8WA==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>,
@@ -57,10 +57,10 @@ Cc: LKML <linux-kernel@vger.kernel.org>,
  Lukasz Luba <lukasz.luba@arm.com>,
  Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 Subject:
- [PATCH v1 08/16] thermal: gov_step_wise: Use .manage() callback instead of
- .throttle()
-Date: Wed, 10 Apr 2024 18:13:55 +0200
-Message-ID: <2628456.Lt9SDvczpP@kreacher>
+ [PATCH v1 09/16] thermal: gov_step_wise: Use trip thresholds instead of trip
+ temperatures
+Date: Wed, 10 Apr 2024 18:43:07 +0200
+Message-ID: <3769085.MHq7AAxBmi@kreacher>
 In-Reply-To: <13515747.uLZWGnKmhe@kreacher>
 References: <13515747.uLZWGnKmhe@kreacher>
 Precedence: bulk
@@ -80,79 +80,59 @@ X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Make the Step-Wise governor use the new .manage() callback instead of
-.throttle().
+In principle, the Step-Wise governor should take trip hystereses into
+account.  After all, once a trip has been crossed on the way up,
+mitigation is still needed until it is crossed on the way down.
 
-Even though using .throttle() is not particularly problematic for the
-Step-Wise governor, using .manage() instead still allows it to reduce
-overhead by updating all of the colling devices once after setting
-target values for all of the thermal instances.
+For this reason, make it use trip thresholds that are computed by
+the core when trips are crossed, so as to apply mitigations in the
+hysteresis rages of trips that were crossed on the way up, but have
+not been crossed on the way down yet.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/thermal/gov_step_wise.c |   39 +++++++++++++++++++++------------------
- 1 file changed, 21 insertions(+), 18 deletions(-)
+ drivers/thermal/gov_step_wise.c |    9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
 Index: linux-pm/drivers/thermal/gov_step_wise.c
 ===================================================================
 --- linux-pm.orig/drivers/thermal/gov_step_wise.c
 +++ linux-pm/drivers/thermal/gov_step_wise.c
-@@ -109,34 +109,37 @@ static void thermal_zone_trip_update(str
- 	}
+@@ -62,7 +62,8 @@ static unsigned long get_target_state(st
  }
  
--/**
-- * step_wise_throttle - throttles devices associated with the given zone
-- * @tz: thermal_zone_device
-- * @trip: trip point
-- *
-- * Throttling Logic: This uses the trend of the thermal zone to throttle.
-- * If the thermal zone is 'heating up' this throttles all the cooling
-- * devices associated with the zone and its particular trip point, by one
-- * step. If the zone is 'cooling down' it brings back the performance of
-- * the devices by one step.
-- */
--static int step_wise_throttle(struct thermal_zone_device *tz,
--			      const struct thermal_trip *trip)
-+static void step_wise_manage(struct thermal_zone_device *tz)
+ static void thermal_zone_trip_update(struct thermal_zone_device *tz,
+-				     const struct thermal_trip *trip)
++				     const struct thermal_trip *trip,
++				     int trip_threshold)
  {
-+	const struct thermal_trip_desc *td;
- 	struct thermal_instance *instance;
+ 	int trip_id = thermal_zone_trip_id(tz, trip);
+ 	enum thermal_trend trend;
+@@ -72,13 +73,13 @@ static void thermal_zone_trip_update(str
  
- 	lockdep_assert_held(&tz->lock);
+ 	trend = get_tz_trend(tz, trip);
  
--	thermal_zone_trip_update(tz, trip);
-+	/*
-+	 * Throttling Logic: Use the trend of the thermal zone to throttle.
-+	 * If the thermal zone is 'heating up', throttle all of the cooling
-+	 * devices associated with each trip point by one step. If the zone
-+	 * is 'cooling down', it brings back the performance of the devices
-+	 * by one step.
-+	 */
-+	for_each_trip_desc(tz, td) {
-+		const struct thermal_trip *trip = &td->trip;
-+
-+		if (trip->temperature == THERMAL_TEMP_INVALID ||
-+		    trip->type == THERMAL_TRIP_CRITICAL ||
-+		    trip->type == THERMAL_TRIP_HOT)
-+			continue;
-+
-+		thermal_zone_trip_update(tz, trip);
-+	}
+-	if (tz->temperature >= trip->temperature) {
++	if (tz->temperature >= trip_threshold) {
+ 		throttle = true;
+ 		trace_thermal_zone_trip(tz, trip_id, trip->type);
+ 	}
+ 
+ 	dev_dbg(&tz->device, "Trip%d[type=%d,temp=%d]:trend=%d,throttle=%d\n",
+-		trip_id, trip->type, trip->temperature, trend, throttle);
++		trip_id, trip->type, trip_threshold, trend, throttle);
+ 
+ 	list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
+ 		if (instance->trip != trip)
+@@ -131,7 +132,7 @@ static void step_wise_manage(struct ther
+ 		    trip->type == THERMAL_TRIP_HOT)
+ 			continue;
+ 
+-		thermal_zone_trip_update(tz, trip);
++		thermal_zone_trip_update(tz, trip, td->threshold);
+ 	}
  
  	list_for_each_entry(instance, &tz->thermal_instances, tz_node)
- 		thermal_cdev_update(instance->cdev);
--
--	return 0;
- }
- 
- static struct thermal_governor thermal_gov_step_wise = {
--	.name		= "step_wise",
--	.throttle	= step_wise_throttle,
-+	.name	= "step_wise",
-+	.manage	= step_wise_manage,
- };
- THERMAL_GOVERNOR_DECLARE(thermal_gov_step_wise);
 
 
 
