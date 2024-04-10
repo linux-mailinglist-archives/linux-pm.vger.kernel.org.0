@@ -1,267 +1,136 @@
-Return-Path: <linux-pm+bounces-6198-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6200-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B023789F319
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 14:54:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0017189F34D
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 15:03:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 12B83B26B82
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 12:54:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFB8428BBE2
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 13:03:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C63B316F847;
-	Wed, 10 Apr 2024 12:47:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3CA715B150;
+	Wed, 10 Apr 2024 13:03:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="H5Li0XwV"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="HV2v4aCO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB5E116F0DF
-	for <linux-pm@vger.kernel.org>; Wed, 10 Apr 2024 12:47:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43FA915991C
+	for <linux-pm@vger.kernel.org>; Wed, 10 Apr 2024 13:03:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712753240; cv=none; b=GniTFkXj9UqpIrjGzhJDUPvWBSM7B7+LGmV+vbhmkw/t5yx+R1kskGnLMfikf8ZcBqb9WU0DxLS2F6zx6RbS9Lbf8OAgQ+sqFuEU2Y3WEXHDehmRq1jWpuqrOUTeizkJFF/Ph9+rNMKzKDVA0otn7wWTjvMMUuliCHFcJ+GGF7w=
+	t=1712754183; cv=none; b=L1EbvRHpRnyEgp25wS/tYaRH/Uap44Xljo/jwBpOTTCM38jnY3I0zWacVhkhv/eE9Y0OeWlNNGu//H2yRl1EK2XoghVqpDrAYCHRC35UK6XUEt9tMuibiia7igbBAoYR1bz460Dk+5GlF1CkIZ1ftJYEeDYxPssLgVUVPn+NesI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712753240; c=relaxed/simple;
-	bh=nYwGcUeSu2lOGz0Fbu3qFb7BX7DjJR5EiBYQwBjfl1E=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=SDFV+qa75khGFukI/gPJifl0XSsUCNPPipV96ecEJdIcko9hsQhawgHbKJi6E8w7MMNljFh3xyAhLfX4jpfghvhDxF7Ay00oJtF5FLCD8yWpDVd0Okp6kRltPMxrMkSGt41pVUO9wXe3Th7t1/XQkj4O/F+xffv7toJAdgF7D30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=H5Li0XwV; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-416a0878ad9so12834465e9.3
-        for <linux-pm@vger.kernel.org>; Wed, 10 Apr 2024 05:47:16 -0700 (PDT)
+	s=arc-20240116; t=1712754183; c=relaxed/simple;
+	bh=Mzy1RLChKpTXckeRfOn3L90L6pWcJRlTrF3gU8yBosw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Ah8gAqj2VfrN3TMyw9tfFmZNciEGVLGPqPtURdX1L9d6AeK+lfzCUFhPpCMwLwy4E02p8VhwFhztGzHHnujzNaGQyY9pRgfuBxg7R/ydiQGetwbFa7jTHDL5LDlgnWeW5/TfH6FCFiKBRXsaU2PGJMR5eV1xtj7k189a5XYN/J0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=HV2v4aCO; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1e411e339b8so25299125ad.3
+        for <linux-pm@vger.kernel.org>; Wed, 10 Apr 2024 06:03:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1712753234; x=1713358034; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5q7lk+2TIXEIJZSxUoCWXqCmqzprQnmyhj7L+zSgmo8=;
-        b=H5Li0XwVjeSHqbCIPNY5fzFSvaUuyaZzq+g6CHLT/phZKFa0FFKaPeg6hRLMiN3nYc
-         d6ZIoYhF6FPUhta9HgzwHzZ/foERyjbgAC7bVPjSKYQc4mK/r0vU51JFPwL4xfkhQ6Y5
-         vAtKDxSne7JOi8aVU/9G61eEStXoOxYGFJgOA6g+6BsffdvEEGNpvFDt54RQ49j1u+RP
-         qEfmq0j4dayWS/yyk7ZWP4aRhvD/q2MMP00l9qzHPP1lU6cuguJGqFS4EfHWhYDiClDF
-         erwR7IG73muufV16nDEj2d/EFa9C66RuClbELBHxvs6XwnhQV94sZr7GY8cAffjKLZnO
-         QDqg==
+        d=chromium.org; s=google; t=1712754181; x=1713358981; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=x3Y56dDS984KsDzs2nzTKgy6adBy9joM/agCd66RARo=;
+        b=HV2v4aCOwl3k/clrmZQFBqxbjXAfywP+A1nfAEERh1oEHpPCE7lp29TZeR2QRva8Zk
+         FuSULnBwlZSZOJTBnZblK6yDWkepeoEH9aVcnMgI3+d4tW/aEutjpsuxgZOxMv3meflG
+         bF4foDQoigW1EGhuGL5wJOYjtaIXmq6njJ5GA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712753234; x=1713358034;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5q7lk+2TIXEIJZSxUoCWXqCmqzprQnmyhj7L+zSgmo8=;
-        b=GnE5WPW+QFl8uhIK8MG0m01Aei9EZTGw0dv3wJyn3zgQwx02BQtSEhdZhkmycwUMoR
-         TMt5aXSemj3+ZThdBypmmkmcJPLYSL5+UoNapFH7I2yjcmsXaBZMWRQBx8vKv3p4ZDEN
-         3F4u3K2yzar/xpuZgPCoFQgur34Uf42R2dSIeUAL6y9fpe5BbU6sonbGhIR3ggvvjSFC
-         8X1v21QDBol6uktHgssX7bmSsCV7KSr6nFWbPU/RhUhSFHD41yEMQJrCBUtKpsMwXIL/
-         JH5RMcAVsK+shyaEtenLMU+0v72FdTOPAETce1ezJZdXrMEZtSA3gIHkWujnQ7lT8i/s
-         HJzg==
-X-Forwarded-Encrypted: i=1; AJvYcCW74hrO/6HVRwQEbTH0b8+4ncTj/y7ASFORV/6H5hTDLXAFXQcPxeELNqH8i8S3Wp3fljeZXh0id7RJfvoBfNWA2BOKlyYBN/o=
-X-Gm-Message-State: AOJu0YwBo4LrV3KZhcJZFGG1y3xDI5ie+GTsfcV/TlTTDohfhtRaLYL3
-	1Mo+MS398FWzSKZINSz3B9vGDBp5dOPxHWfGaorDUJ0/+rY3R8aXDURYk9/ybPI=
-X-Google-Smtp-Source: AGHT+IGzNBVq2J4oXhJNVxf0m4Uq3S1m1LfJNb/cYzPTpCQQKQUTLV3uj9tFyoTEBHLmuaJd+/h9VA==
-X-Received: by 2002:a05:600c:1d24:b0:414:63c6:8665 with SMTP id l36-20020a05600c1d2400b0041463c68665mr2268143wms.2.1712753234433;
-        Wed, 10 Apr 2024 05:47:14 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:75a:e000:6908:7e99:35c9:d585])
-        by smtp.gmail.com with ESMTPSA id v13-20020a05600c444d00b0041663450a4asm2150929wmn.45.2024.04.10.05.47.13
+        d=1e100.net; s=20230601; t=1712754181; x=1713358981;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x3Y56dDS984KsDzs2nzTKgy6adBy9joM/agCd66RARo=;
+        b=EJekbfO7VAHyaefyIPHzE7b519zA6HwqEnEjx6LhFJpywaYaS5lg+jN8Gx78G59eCm
+         udy4r82eJ9/r9zc8PGlY3YNd56vxlK7iY7S7rRACsnsqkkXUTXIuGMzWp33j8wCeUm2i
+         5k9cpTYlnRjfwdi9eNJtWNAEff7a8fRVCSOPKh9mUA+NvnzNwStA+XlckJKOlBFZmx+e
+         tkK4+8qvOiE0jgMnImaqRcwHynZcksTHNOzgMbm2IE7k3rU0VdScvzDlP+qSncWOSNMo
+         UIwTABeXonQ/rT7c310R3MA55W5OnnLBZseWGIukczO1L7N/tHaFweCYevM4dW1i3X0K
+         4UwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUF9GA7x4JOBWSdM+tvf1QAgjK1QpTqsGv39AI5i2Kb5t3+B1lusZJFDMB8p6BxFo88JyNsZ5JBReRT3VB2fTGyupiHkDOz56c=
+X-Gm-Message-State: AOJu0Yz1/KGn4g2BIq0rdu2ZqQqeKEhWpJlaUFkT05TTwa9pll+zi0tC
+	kYSiMxcMeRT4PjPJsETV2AbKFyE4KyRGf8Y42E+73cKZQxctlt2Mz1d6Oa2YMA==
+X-Google-Smtp-Source: AGHT+IHqZzwYa8MxtXFxj041lgd7J88+1a1m5BQKJBRqUvFpLKeI9bdlPRTEzn2uQM5glqcDtWs7AQ==
+X-Received: by 2002:a17:902:fc48:b0:1e4:10d9:5dfb with SMTP id me8-20020a170902fc4800b001e410d95dfbmr3179942plb.38.1712754181302;
+        Wed, 10 Apr 2024 06:03:01 -0700 (PDT)
+Received: from yuanhsinte1.c.googlers.com (88.216.124.34.bc.googleusercontent.com. [34.124.216.88])
+        by smtp.gmail.com with ESMTPSA id kq12-20020a170903284c00b001e29acb2d18sm10726341plb.4.2024.04.10.06.02.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Apr 2024 05:47:14 -0700 (PDT)
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-To: Marcel Holtmann <marcel@holtmann.org>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Kalle Valo <kvalo@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Saravana Kannan <saravanak@google.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Alex Elder <elder@linaro.org>,
-	Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Abel Vesa <abel.vesa@linaro.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Lukas Wunner <lukas@wunner.de>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Amit Pundir <amit.pundir@linaro.org>,
-	Xilin Wu <wuxilin123@gmail.com>
-Cc: linux-bluetooth@vger.kernel.org,
-	netdev@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-wireless@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-pci@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH v7 16/16] PCI/pwrctl: add a PCI power control driver for power sequenced devices
-Date: Wed, 10 Apr 2024 14:46:28 +0200
-Message-Id: <20240410124628.171783-17-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20240410124628.171783-1-brgl@bgdev.pl>
-References: <20240410124628.171783-1-brgl@bgdev.pl>
+        Wed, 10 Apr 2024 06:03:00 -0700 (PDT)
+From: Hsin-Te Yuan <yuanhsinte@chromium.org>
+Date: Wed, 10 Apr 2024 13:02:48 +0000
+Subject: [PATCH v2] thermal/drivers/mediatek/lvts_thermal: Add coeff for
+ mt8192
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240410-lvts_thermal-v2-1-621cb7c07a32@chromium.org>
+X-B4-Tracking: v=1; b=H4sIAPeNFmYC/3XMQQ6CMBCF4auQWVvTFgrqynsYYrBM6SRAzRQbD
+ eHuVvYu/5e8b4WITBjhUqzAmChSmHPoQwHWd/OAgvrcoKWuZKWkGNMS74tHnrpRlH1Zm1PVdNY
+ 5yJcno6P3zt3a3J7iEviz60n91j9QUkIJRCMf+mxVY+qr9Rwmek3HwAO027Z9AUg9I3KrAAAA
+To: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>, 
+ =?utf-8?q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>, 
+ Balsam CHIHI <bchihi@baylibre.com>
+Cc: Alexandre Mergnat <amergnat@baylibre.com>, linux-pm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-mediatek@lists.infradead.org, Hsin-Te Yuan <yuanhsinte@chromium.org>
+X-Mailer: b4 0.12.4
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+In order for lvts_raw_to_temp to function properly on mt8192,
+temperature coefficients for mt8192 need to be added.
 
-Add a PCI power control driver that's capable of correctly powering up
-devices using the power sequencing subsystem. The first user of this
-driver is the ath11k module on QCA6390.
-
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Fixes: 288732242db4 ("thermal/drivers/mediatek/lvts_thermal: Add mt8192 support")
+Signed-off-by: Hsin-Te Yuan <yuanhsinte@chromium.org>
 ---
- drivers/pci/pwrctl/Kconfig             |  9 +++
- drivers/pci/pwrctl/Makefile            |  2 +
- drivers/pci/pwrctl/pci-pwrctl-pwrseq.c | 89 ++++++++++++++++++++++++++
- 3 files changed, 100 insertions(+)
- create mode 100644 drivers/pci/pwrctl/pci-pwrctl-pwrseq.c
+Changes in v2:
+- Reusing mt8195 coeff instead of creating duplicate definitions
+- Link to v1: https://lore.kernel.org/r/20240410-lvts_thermal-v1-1-ee50b29c1756@chromium.org
+---
+ drivers/thermal/mediatek/lvts_thermal.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/pci/pwrctl/Kconfig b/drivers/pci/pwrctl/Kconfig
-index 96195395af69..eb126225eb9f 100644
---- a/drivers/pci/pwrctl/Kconfig
-+++ b/drivers/pci/pwrctl/Kconfig
-@@ -5,4 +5,13 @@ menu "PCI Power control drivers"
- config PCI_PWRCTL
- 	tristate
+diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+index fd4bd650c77a6..4e5c213a89225 100644
+--- a/drivers/thermal/mediatek/lvts_thermal.c
++++ b/drivers/thermal/mediatek/lvts_thermal.c
+@@ -1530,11 +1530,15 @@ static const struct lvts_data mt7988_lvts_ap_data = {
+ static const struct lvts_data mt8192_lvts_mcu_data = {
+ 	.lvts_ctrl	= mt8192_lvts_mcu_data_ctrl,
+ 	.num_lvts_ctrl	= ARRAY_SIZE(mt8192_lvts_mcu_data_ctrl),
++	.temp_factor	= LVTS_COEFF_A_MT8195,
++	.temp_offset	= LVTS_COEFF_B_MT8195,
+ };
  
-+config PCI_PWRCTL_PWRSEQ
-+	tristate "PCI Power Control driver using the Power Sequencing subsystem"
-+	select POWER_SEQUENCING
-+	select PCI_PWRCTL
-+	default m if (ATH11K_PCI && ARCH_QCOM)
-+	help
-+	  Enable support for the PCI power control driver for device
-+	  drivers using the Power Sequencing subsystem.
-+
- endmenu
-diff --git a/drivers/pci/pwrctl/Makefile b/drivers/pci/pwrctl/Makefile
-index 52ae0640ef7b..d308aae4800c 100644
---- a/drivers/pci/pwrctl/Makefile
-+++ b/drivers/pci/pwrctl/Makefile
-@@ -2,3 +2,5 @@
+ static const struct lvts_data mt8192_lvts_ap_data = {
+ 	.lvts_ctrl	= mt8192_lvts_ap_data_ctrl,
+ 	.num_lvts_ctrl	= ARRAY_SIZE(mt8192_lvts_ap_data_ctrl),
++	.temp_factor	= LVTS_COEFF_A_MT8195,
++	.temp_offset	= LVTS_COEFF_B_MT8195,
+ };
  
- obj-$(CONFIG_PCI_PWRCTL)		+= pci-pwrctl-core.o
- pci-pwrctl-core-y			:= core.o
-+
-+obj-$(CONFIG_PCI_PWRCTL_PWRSEQ)		+= pci-pwrctl-pwrseq.o
-diff --git a/drivers/pci/pwrctl/pci-pwrctl-pwrseq.c b/drivers/pci/pwrctl/pci-pwrctl-pwrseq.c
-new file mode 100644
-index 000000000000..c7a113a76c0c
---- /dev/null
-+++ b/drivers/pci/pwrctl/pci-pwrctl-pwrseq.c
-@@ -0,0 +1,89 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2024 Linaro Ltd.
-+ */
-+
-+#include <linux/device.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/pci-pwrctl.h>
-+#include <linux/platform_device.h>
-+#include <linux/pwrseq/consumer.h>
-+#include <linux/slab.h>
-+#include <linux/types.h>
-+
-+struct pci_pwrctl_pwrseq_data {
-+	struct pci_pwrctl ctx;
-+	struct pwrseq_desc *pwrseq;
-+};
-+
-+static void devm_pci_pwrctl_pwrseq_power_off(void *data)
-+{
-+	struct pwrseq_desc *pwrseq = data;
-+
-+	pwrseq_power_off(pwrseq);
-+}
-+
-+static int pci_pwrctl_pwrseq_probe(struct platform_device *pdev)
-+{
-+	struct pci_pwrctl_pwrseq_data *data;
-+	struct device *dev = &pdev->dev;
-+	int ret;
-+
-+	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data->pwrseq = devm_pwrseq_get(dev, of_device_get_match_data(dev));
-+	if (IS_ERR(data->pwrseq))
-+		return dev_err_probe(dev, PTR_ERR(data->pwrseq),
-+				     "Failed to get the power sequencer\n");
-+
-+	ret = pwrseq_power_on(data->pwrseq);
-+	if (ret)
-+		return dev_err_probe(dev, ret,
-+				     "Failed to power-on the device\n");
-+
-+	ret = devm_add_action_or_reset(dev, devm_pci_pwrctl_pwrseq_power_off,
-+				       data->pwrseq);
-+	if (ret)
-+		return ret;
-+
-+	data->ctx.dev = dev;
-+
-+	ret = devm_pci_pwrctl_device_set_ready(dev, &data->ctx);
-+	if (ret)
-+		return dev_err_probe(dev, ret,
-+				     "Failed to register the pwrctl wrapper\n");
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id pci_pwrctl_pwrseq_of_match[] = {
-+	{
-+		/* ATH11K in QCA6390 package. */
-+		.compatible = "pci17cb,1101",
-+		.data = "wlan",
-+	},
-+	{
-+		/* ATH12K in WCN7850 package. */
-+		.compatible = "pci17cb,1107",
-+		.data = "wlan",
-+	},
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, pci_pwrctl_pwrseq_of_match);
-+
-+static struct platform_driver pci_pwrctl_pwrseq_driver = {
-+	.driver = {
-+		.name = "pci-pwrctl-pwrseq",
-+		.of_match_table = pci_pwrctl_pwrseq_of_match,
-+	},
-+	.probe = pci_pwrctl_pwrseq_probe,
-+};
-+module_platform_driver(pci_pwrctl_pwrseq_driver);
-+
-+MODULE_AUTHOR("Bartosz Golaszewski <bartosz.golaszewski@linaro.org>");
-+MODULE_DESCRIPTION("Generic PCI Power Control module for power sequenced devices");
-+MODULE_LICENSE("GPL");
+ static const struct lvts_data mt8195_lvts_mcu_data = {
+
+---
+base-commit: 20cb38a7af88dc40095da7c2c9094da3873fea23
+change-id: 20240410-lvts_thermal-3d365847acff
+
+Best regards,
 -- 
-2.40.1
+Hsin-Te Yuan <yuanhsinte@chromium.org>
 
 
