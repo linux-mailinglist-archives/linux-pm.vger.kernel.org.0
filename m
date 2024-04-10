@@ -1,144 +1,158 @@
-Return-Path: <linux-pm+bounces-6207-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6210-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50D4A89F42B
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 15:26:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D1AF089F440
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 15:28:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0DFBD28902E
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 13:26:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8CC0F28C761
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 13:28:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A5E1160885;
-	Wed, 10 Apr 2024 13:24:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBB4915E81C;
+	Wed, 10 Apr 2024 13:28:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iubVYXfK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B5051607B6;
-	Wed, 10 Apr 2024 13:24:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9744315ADA2;
+	Wed, 10 Apr 2024 13:28:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712755473; cv=none; b=eb7sHXQyMD50KbqnU/3k4DZZO1WlX7I37aEnT/y9yJa8fb9V67UazOjHpUBsyGTLEGtGbhYRtD8R+/Je6UuiCjMLIoffrLMkOXW+JZs9/BgA1slLpO5gIg5eFySSZztIWeZbd7QWNhV2x5Iv6oOW0jSZPl+WDFTtPjAGS5gvuak=
+	t=1712755711; cv=none; b=O/M9uf7vji4Ave9amjru6NyNlQA3EDkla8qZGZQMb5iUwoYIS3kUat4RrLUZEijh9HdvxrA/LdSZgn2tH7vqus6dGqpPXt4P02Eyehr3pADBkNVuDeUszF9ijQAWDIco1g6FE4DMuhXZbTvqTB7wBzfykeUFwjGGbrIJoOn0f5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712755473; c=relaxed/simple;
-	bh=t9jkfk8XACYeLJXoE1wrqULFC+XfVk5LexGcFzggemo=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=EXdd/CwKwH2BSKoAB6pMXd9u2jhSw1X7rt+u03EmG9WCjZZlNHuHbeTUXXKrXjbd540Tg/vdMiEm2AREIaiZmN3oAUDvms5YrUjXPFrouDc5Fr4+T2ztNu2hx1WgMC2F4r/p6k41o89ILUrAfis7QOIvdMYMLsn/ql+GbKWX9sk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-6ea1189de94so2446876a34.0;
-        Wed, 10 Apr 2024 06:24:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712755470; x=1713360270;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UtaYETGaEYlrDsdbImdt57cidjxrz0+GyNKetr9EE3U=;
-        b=nvPp2yDT2Wg8UcQDZZ444FfxZS6yNtgWCfiBANWUs1XFUSw3e2JzPyoBfq+aqwF69O
-         o7c0xa26BeidI7SUMCwhzUTAqnaxVFIvhWz6Mr3gOujqmBCb5AtDRTbt7XG4gUkngubF
-         PSLN+WxnP+Kuhoj/AFkG4eiiOcXnZxZgC/T0kqTy4VIM83N7ApQuquvHyC4rkhtlR/yp
-         11V4xlWZvk0CxFs824dHVic94a8u6GYyLzASvfp7/goo9/oyA8kXzqC8RgjN5MjEd+41
-         cbBjAMS4/3Jnfi26XvfU0ec9QthpZwDV58GiXfwTD8TJtI3uB7/c+JQwsVv39EXJiAyQ
-         cZyg==
-X-Forwarded-Encrypted: i=1; AJvYcCUWuTr7N4rD62XpYNbOE6Shhg4oCIjmWaVG4+by4N4YI/t0be5c4hsb8xbEYSbCyL4+tWWHSfABViZLdfC2ZUjkfjeBjSSPS9QbqneQ
-X-Gm-Message-State: AOJu0YxuT4sOt96PZW/n9qdWNQHnAQFhI8vv8j16mW/4+VIaTMo1UsgA
-	XWl4PCj8/vvAF/N/DvMlYYkd1hR0grZCbldZgw3raUpjTuC4p0KduaaEo4dF1/4w9a8v7xnbIuC
-	cCOuLZfipyhcnPdDihuU2saava8ZAF9KSHV4=
-X-Google-Smtp-Source: AGHT+IG2WNvalWON7mCKZlXjytpV7RH6vRtGhizlJEjNAsAgPrhFb2y5eaL1suG5Lx/MdcmQZ0Tza6SxC+YRwVUcUR0=
-X-Received: by 2002:a05:6870:505:b0:22e:9574:6121 with SMTP id
- j5-20020a056870050500b0022e95746121mr2847536oao.14.1712755470671; Wed, 10 Apr
- 2024 06:24:30 -0700 (PDT)
+	s=arc-20240116; t=1712755711; c=relaxed/simple;
+	bh=vG/etX9uFWDRMQyM96dxgcCHcoWyYgwQIb4SGb4iHUc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Milf5EHTOqdLYwAyKHZTQlTSuq938u+2iRPrWIp907ZhHSVBK8dudVj1Ln19aZDvvyYa7+i72OuVNnl2wLWHHZL+tiYq1XRNemPygq2JXgu1G8ozB9f3Rx3KDIjB5uUiQEr8zuA7y8qvqkrPk63fp5tWLo3F6n6w7d5ORUSu9g4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iubVYXfK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 420B6C43390;
+	Wed, 10 Apr 2024 13:28:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712755711;
+	bh=vG/etX9uFWDRMQyM96dxgcCHcoWyYgwQIb4SGb4iHUc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=iubVYXfK6JPDhhN9TmRS0x6QzxNaToPZCeVJnHP93bzsfQkb7YaWzUGU5fvosdVlK
+	 1iYtCJ+3WmeWgXErCaKKoO8GwwKCAVsPQSeaDEZwvjhLCuOC89oo5gQpo6M/afAEAy
+	 4yeMyJV1phaU5H/syWUh2fS6hJ6AmMPbK9BuOo+0TU6FA/S11ekIIS3LR1gsLiMZaG
+	 mJvEUbFS4EnjHWHw0mmkVeePQ3ozflixNW+Mf7PgkbFPaNxs5zDRXrhRsUvsJ6qIwh
+	 nvaEhh/w7672EUsnJyENttVNo1/Exy/MsDqmdMXp6iyLxGelAPVwHWr0EhfXbeuCBH
+	 DtboMbnFmvheg==
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-22f0429c1ebso185206fac.0;
+        Wed, 10 Apr 2024 06:28:31 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUUcst/lEX0TrGqaZcggeqiPU+99cGmB4KLjRYNj6ZHx6CvmX/0iux/PHrv9BkgPQhexl4/cAYo0E0X+DFH2SO8qCqp2crdxsi365sCWaHER2kck0+6g38wJ68p4wvsVU4wZT2We0W5OpCOLe1es/4Y0h+vrO6jFdicgDUpj+xm3oC4hjBUAvc8D3wJav6dc5iwuiE/ycdF7RYhFpQjNAnJYiIh0S3CkHKextzPzsYbdHoQT1k7ZVZ9F50NXJiTN65baYuCYKMgUrhNTHSCxxLDlmL7vtAhwlgXEi7p0zvSAxOgh7W85X18LeMstJ2xREHVhvyR5CjdsUHC9hNm/xV5hPn9JnO0Bu5osE2rLGHH
+X-Gm-Message-State: AOJu0YzEIW7zi+uQ3p6nnF2pVZwTJrnvJ+NcJT5qcWoP830PtPnIukE+
+	MFAibq2RZZXmrqB0AcDGutcTJsd2vyDnkNo9oEkBzx7IKMfLSyj18pTebcrb5MZhaaedunYN+o3
+	kUeOk+d8GCg4/+1GbCQBzvGyTeUs=
+X-Google-Smtp-Source: AGHT+IFL5SftybRh1r8JWNftMLn5Ll2W8+pkIYo7YlzdluWnaIUYaO6UpMp9mGVfMWaTjUBfbyWqBLpc+8TxlkLduX4=
+X-Received: by 2002:a05:6871:a00a:b0:22d:fb4b:9d11 with SMTP id
+ vp10-20020a056871a00a00b0022dfb4b9d11mr2534660oab.4.1712755710509; Wed, 10
+ Apr 2024 06:28:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Len Brown <lenb@kernel.org>
-Date: Wed, 10 Apr 2024 09:24:19 -0400
-Message-ID: <CAJvTdKmK_U7nChpm=MzaDyw3T9V6hSua-6C89WCjo828vxm+yw@mail.gmail.com>
-Subject: [GIT PULL] turbostat 2024.04.10
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Linux PM list <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <Zbp5xzmFhKDAgHws@shell.armlinux.org.uk> <E1rVDmU-0027YP-Jz@rmk-PC.armlinux.org.uk>
+ <CAJZ5v0iiJpUWq5GMSnKFWQTzn_bdwoQz9m=hDaXNg4Lj_ePF4g@mail.gmail.com>
+ <20240322185327.00002416@Huawei.com> <20240410134318.0000193c@huawei.com>
+In-Reply-To: <20240410134318.0000193c@huawei.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 10 Apr 2024 15:28:18 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0ggD042sfz3jDXQVDUxQZu_AWaF2ox-Me8CvFeRB8nczw@mail.gmail.com>
+Message-ID: <CAJZ5v0ggD042sfz3jDXQVDUxQZu_AWaF2ox-Me8CvFeRB8nczw@mail.gmail.com>
+Subject: Re: [PATCH RFC v4 02/15] ACPI: processor: Register all CPUs from acpi_processor_get_info()
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Russell King <rmk+kernel@armlinux.org.uk>, 
+	linux-pm@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org, 
+	acpica-devel@lists.linuxfoundation.org, linux-csky@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, Salil Mehta <salil.mehta@huawei.com>, 
+	Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com, justin.he@arm.com, 
+	James Morse <james.morse@arm.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Linus,
+On Wed, Apr 10, 2024 at 2:43=E2=80=AFPM Jonathan Cameron
+<Jonathan.Cameron@huawei.com> wrote:
+>
+> > >
+> > > > diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
+> > > > index 47de0f140ba6..13d052bf13f4 100644
+> > > > --- a/drivers/base/cpu.c
+> > > > +++ b/drivers/base/cpu.c
+> > > > @@ -553,7 +553,11 @@ static void __init cpu_dev_register_generic(vo=
+id)
+> > > >  {
+> > > >         int i, ret;
+> > > >
+> > > > -       if (!IS_ENABLED(CONFIG_GENERIC_CPU_DEVICES))
+> > > > +       /*
+> > > > +        * When ACPI is enabled, CPUs are registered via
+> > > > +        * acpi_processor_get_info().
+> > > > +        */
+> > > > +       if (!IS_ENABLED(CONFIG_GENERIC_CPU_DEVICES) || !acpi_disabl=
+ed)
+> > > >                 return;
+> > >
+> > > Honestly, this looks like a quick hack to me and it absolutely
+> > > requires an ACK from the x86 maintainers to go anywhere.
+> > Will address this separately.
+> >
+>
+> So do people prefer this hack, or something along lines of the following?
+>
+> static int __init cpu_dev_register_generic(void)
+> {
+>         int i, ret =3D 0;
+>
+>         for_each_online_cpu(i) {
+>                 if (!get_cpu_device(i)) {
+>                         ret =3D arch_register_cpu(i);
+>                         if (ret)
+>                                 pr_warn("register_cpu %d failed (%d)\n", =
+i, ret);
+>                 }
+>         }
+>         //Probably just eat the error.
+>         return 0;
+> }
+> subsys_initcall_sync(cpu_dev_register_generic);
 
-The following changes since commit 0dd3ee31125508cd67f7e7172247f05b7fd1753a:
+I would prefer something like the above.
 
-  Linux 6.7 (2024-01-07 12:18:38 -0800)
+I actually thought that arch_register_cpu() might return something
+like -EPROBE_DEFER when it cannot determine whether or not the CPU is
+really available.
 
-are available in the Git repository at:
+Then, the ACPI processor enumeration path may take care of registering
+CPU that have not been registered so far and in the more-or-less the
+same way regardless of the architecture (modulo some arch-specific
+stuff).
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git
-tags/turbostat-2024.04.10
+In the end, it should be possible to avoid changing the behavior of
+x86 and loongarch in this series.
 
-for you to fetch changes up to 3ab7296a7e6aa34634dcc2926af933107a117996:
+> Which may look familiar at it's effectively patch 3 from v3 which was dea=
+ling
+> with CPUs missing from DSDT (something we think doesn't happen).
+>
+> It might be possible to elide the arch_register_cpu() in
+> make_present() but that will mean we use different flows in this patch se=
+t
+> for the hotplug and initially present cases which is a bit messy.
+>
+> I've tested this lightly on arm64 and x86 ACPI + DT booting and it "seems=
+" fine.
 
-  tools/power turbostat: v2024.04.10 (2024-04-10 09:07:57 -0400)
+Sounds promising.
 
-----------------------------------------------------------------
-Turbostat version 2024.04.10
-
-Use of the CPU MSR driver is now optional.
-Perf is now preferred for many counters.
-
-Non-root users can now execute turbostat, though with limited function.
-
-Add counters for some new GFX hardware.
-
-Minor fixes.
-
-----------------------------------------------------------------
-Chen Yu (1):
-      tools/power turbostat: Do not print negative LPI residency
-
-Doug Smythies (1):
-      tools/power turbostat: Fix added raw MSR output
-
-Justin Ernst (1):
-      tools/power/turbostat: Fix uncore frequency file string
-
-Len Brown (4):
-      tools/power turbostat: Expand probe_intel_uncore_frequency()
-      tools/power turbostat: Fix warning upon failed /dev/cpu_dma_latency read
-      tools/power turbostat: enhance -D (debug counter dump) output
-      tools/power turbostat: v2024.04.10
-
-Patryk Wlazlyn (11):
-      tools/power turbostat: Print ucode revision only if valid
-      tools/power turbostat: Read base_hz and bclk from CPUID.16H if available
-      tools/power turbostat: Add --no-msr option
-      tools/power turbostat: Add --no-perf option
-      tools/power turbostat: Add reading aperf and mperf via perf API
-      tools/power turbostat: detect and disable unavailable BICs at runtime
-      tools/power turbostat: add early exits for permission checks
-      tools/power turbostat: Clear added counters when in no-msr mode
-      tools/power turbostat: Add proper re-initialization for perf
-file descriptors
-      tools/power turbostat: read RAPL counters via perf
-      tools/power turbostat: Add selftests
-
-Peng Liu (1):
-      tools/power turbostat: Fix Bzy_MHz documentation typo
-
-Wyes Karny (1):
-      tools/power turbostat: Increase the limit for fd opened
-
-Zhang Rui (6):
-      tools/power/turbostat: Enable MSR_CORE_C1_RES support for ICX
-      tools/power/turbostat: Cache graphics sysfs path
-      tools/power/turbostat: Unify graphics sysfs snapshots
-      tools/power/turbostat: Introduce BIC_SAM_mc6/BIC_SAMMHz/BIC_SAMACTMHz
-      tools/power/turbostat: Add support for new i915 sysfs knobs
-      tools/power/turbostat: Add support for Xe sysfs knobs
-
- MAINTAINERS                                     |    1 +
- tools/power/x86/turbostat/turbostat.8           |   18 +-
- tools/power/x86/turbostat/turbostat.c           | 2201 ++++++++++++++++++-----
- tools/testing/selftests/turbostat/defcolumns.py |   60 +
- 4 files changed, 1819 insertions(+), 461 deletions(-)
- create mode 100755 tools/testing/selftests/turbostat/defcolumns.py
+Thanks!
 
