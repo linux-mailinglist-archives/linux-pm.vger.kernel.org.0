@@ -1,42 +1,42 @@
-Return-Path: <linux-pm+bounces-6279-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6280-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FDD38A1823
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 17:06:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFDBB8A1829
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 17:07:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 910CA1F245C7
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 15:06:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E35F11C2224F
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 15:07:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E6F5DDC4;
-	Thu, 11 Apr 2024 15:06:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B52E614003;
+	Thu, 11 Apr 2024 15:07:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="qY5VnNkm"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Ein9fSy2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from m15.mail.163.com (m15.mail.163.com [45.254.50.220])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D902DF42;
-	Thu, 11 Apr 2024 15:06:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.50.220
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACC6FDF42;
+	Thu, 11 Apr 2024 15:07:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712848008; cv=none; b=P9CW+jlFaUWnYHODc/lfxEQZE+lllLA5sEMJN2WBBZxlmosFBjlXHkLgs/V4b4qNevCStZpF1n36NO2D9nwyTvlpaWBJthKTSctyQhJRrB8IVqYJ+cuE0RxjdA78zvNepf8Emr/CBXezxy+lttWg7nLKvbFAIU+G/ML4J+hAIRQ=
+	t=1712848049; cv=none; b=qqvZuA+lhe7uL5tpoHjVqLPCAofuicV9zsgzg5GAPDNSqks1kT2kfZozsMoOh21NQiqk1iYg4KRh+ZhhaLtLeHxTsK7PnG+f0vvcVgRkFO+o1Fspi1NMd3QVjDN66dMxPK/g7dO7Ka2gyADyFRtFrBS7Dw3u2GEPU/UdnPQuPSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712848008; c=relaxed/simple;
+	s=arc-20240116; t=1712848049; c=relaxed/simple;
 	bh=C6vXPh7Ldx4KhgbuYgRJZPLELakzOPaiKKdVUBf4PSU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=e9Q3udg4d6DtVhjJT4bTYpqAMRc1+dgtL6n3e1n/qmHTcfJwCNHcYPaK2L48Jse6iCvfSBZ7HIve26GrAd6ouQfiMpXeQexyROTjeti5MD5MMCIGWQ6lE17Tv+W3C2VFDLHZoZK7OwnWnVpkf+Vt1FxSUKH0o7ZULIIrpLub3F8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=qY5VnNkm; arc=none smtp.client-ip=45.254.50.220
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ai8UyNtUg3uOBWaeP99ULr1hI/HqYI6UDVFcWWhj8SV5ktUDnHAjoYcs2ymm1x6aFJFGw4M81eho8xdsT1eYTGnh76c9hD/4JNpQ0i1oCr2WnigiahY44B5KzK9WDky+guI/RjeZjK9RrK0UaoHGTPXH2+uOHJkFcTEu0p/nld4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Ein9fSy2; arc=none smtp.client-ip=117.135.210.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
 	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=LzweM
-	wJIknLqf15S3nYrZOUI8TDHp5K5t8mMB7psTts=; b=qY5VnNkmyXZMIEILoNSzc
-	ZDxQEegYk2q4oVFr2wRbgZPHhlC0zTDO9brzt9uoMDH+GC6ZIdWVO5EGMo/RrqRw
-	I1Ofnrq9upHfRHoav/SkLds6w5yIYMoano4idFatkbVj7COMkPbmXUIuHT2Ymgiu
-	1RW0Wc9nQci9nrfrFYczz4=
+	wJIknLqf15S3nYrZOUI8TDHp5K5t8mMB7psTts=; b=Ein9fSy28qkrLlfpbxsOM
+	4K5EtgHw9JVFy0jXaJLhWh2lIEOP7qNh7kL07gIq/IenKBYnvPwCKbOFDBlh1HkI
+	vZsg45rCzGIzWnY72fgh2lN7/fHmdZBQk29+ChJ/keaCJ7yQjiE64QqOQ5IKNHi6
+	jM2FR73kyEH5lA2VcpAHUg=
 Received: from localhost.localdomain (unknown [101.86.127.38])
-	by gzga-smtp-mta-g0-5 (Coremail) with SMTP id _____wDHT4dB_BdmjsBKAw--.39632S4;
-	Thu, 11 Apr 2024 23:05:59 +0800 (CST)
+	by gzga-smtp-mta-g3-0 (Coremail) with SMTP id _____wDnr4R3_Bdm+utEAw--.36662S4;
+	Thu, 11 Apr 2024 23:06:46 +0800 (CST)
 From: Lizhe <sensor1010@163.com>
 To: ray.huang@amd.com,
 	rafael@kernel.org,
@@ -53,8 +53,8 @@ Cc: linux-pm@vger.kernel.org,
 	linux-tegra@vger.kernel.org,
 	Lizhe <sensor1010@163.com>
 Subject: [PATCH] cpufreq: Covert to offline callback returning void
-Date: Thu, 11 Apr 2024 08:05:27 -0700
-Message-Id: <20240411150527.19201-1-sensor1010@163.com>
+Date: Thu, 11 Apr 2024 08:06:20 -0700
+Message-Id: <20240411150620.19262-1-sensor1010@163.com>
 X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -63,12 +63,12 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDHT4dB_BdmjsBKAw--.39632S4
+X-CM-TRANSID:_____wDnr4R3_Bdm+utEAw--.36662S4
 X-Coremail-Antispam: 1Uf129KBjvJXoWxKFyUKw13JF1UXw4xXF1kKrg_yoWxGr4fpF
 	4UWrWvkr10qFWDt3y7Ca1Dua4a9Fs7A3yUG34xCasYvanrJ3WYg3WDGryUZFWFkrykWF43
 	Ar1rtayxGa18JFUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pimhF7UUUUU=
-X-CM-SenderInfo: 5vhq20jurqiii6rwjhhfrp/1tbiKBq9q2XAk2EhBAABsX
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0piL0ePUUUUU=
+X-CM-SenderInfo: 5vhq20jurqiii6rwjhhfrp/1tbiWBq9q2VOCWZoKwABsS
 
 For the offline() callback function returning an int type value,
 this leads many driver authors mistakenly believing that error
