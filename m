@@ -1,115 +1,344 @@
-Return-Path: <linux-pm+bounces-6288-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6289-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AC738A1F48
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 21:14:56 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B81D18A2066
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 22:47:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 342CF1F284A1
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 19:14:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E6B1CB21962
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 20:47:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE3FC205E1A;
-	Thu, 11 Apr 2024 19:14:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EC3E1E86C;
+	Thu, 11 Apr 2024 20:46:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="PKjQqiMy"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="dH6DWJCr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C72C1802B
-	for <linux-pm@vger.kernel.org>; Thu, 11 Apr 2024 19:14:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAA591C686
+	for <linux-pm@vger.kernel.org>; Thu, 11 Apr 2024 20:46:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712862891; cv=none; b=qbmGhzgZXclYcAcc45FGszchuLYyW74j6oH/YQxgZJJCPGEUd9njv3HjR49wP97kk5vPdN2wq3mDVPmMPuEfKEaTksC/PHfed6I1Gf3g9jp0mXOpVbgB/Mo/Sco2aN2vzK/vzQeE/YyD0cQooGK2q/JvdR3vWkk4+/zVXl5INEU=
+	t=1712868409; cv=none; b=ZyK1FpD6ayz6fXpJ1I9AUxwy8cJWKghHXDhSFs3o52qewQ+tQDFS1TQaXKiZUZbBKGTBmCJI9tlIqmwp51SZG70LRRsmXNPRn8/sPiDA8cURDWolxb2/USTrR1XJ8/Gj4E3KnDGg7y3+upjEKAkc0M/U1kZBV0PHI8xfrpNcvcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712862891; c=relaxed/simple;
-	bh=H8ys9L1hv7S7Nx/j9cn+rySGJ/YQIhVVIhaZ1i15xeY=;
+	s=arc-20240116; t=1712868409; c=relaxed/simple;
+	bh=OxJotFEVcyZpSuyTpPU36bAgJGIAZrz7JYB5vj7LE9c=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jmzz1OSedsAUuURBJSSiGm+gGfciboCPEiXuUnX5f9Ep+E7AywA9WUBfnatjWfOW3qWhM334R+6oornnDI+e8SorQVkvsGwYx1uH4YS/MMZb5SkfzD+ZT6jJ92Bhn5P9VjQ/pwG+SUNdg39hgL8oVNE8+Hke5kfvPv7+v7x4oKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=PKjQqiMy; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-516b6e75dc3so226984e87.3
-        for <linux-pm@vger.kernel.org>; Thu, 11 Apr 2024 12:14:49 -0700 (PDT)
+	 To:Cc:Content-Type; b=JYpLhq0O+t4eSVsEiWdz+DJFkmGOSsLs0DZ1/9Trj/5kFmOU5Mj67Whvp5y927ZvnQdmNM5EiLoNFdnX/3df9RJ/d59ObWGuz37ZMo3mmu/XDvw11uZ7KeRewOXHIcqXDpY00XHfrMmceMJTyGa5+GGB7DmsF0qs3QPJnvfvhek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=dH6DWJCr; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-5cedfc32250so173019a12.0
+        for <linux-pm@vger.kernel.org>; Thu, 11 Apr 2024 13:46:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1712862888; x=1713467688; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=24c5MYVKM5W9suD5aHIvWrEfS4imCoj9FJNn9YD5CY4=;
-        b=PKjQqiMyZwpR2Uz7GycDFY43Zud9snhUbFkDnWSZwohnAdGFw6RbjSSseTjpiWKMPT
-         4mJg3mWIHFLr8aR6f4M2+N20jzRrS76XhfVXHbkA/sSpjCnvjbS2bEAHavLoxKD+5BEE
-         F+BkLf9dsVLkBlG+qj9185+XtP1vww40iX2fI=
+        d=chromium.org; s=google; t=1712868406; x=1713473206; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SIDVajEu5qVpvE8z50G25VfbDDiky2dkQVswDqavWmw=;
+        b=dH6DWJCrC+i1iUnJMQRQkwJxsPfSkNFJSkl+ZQJvoCD9JVQHbAggzl2BU1qP5Cyc01
+         CvBhxTo4G8Zn8Aoj+6azRThSB9NcePVpk7kXXRU5aetAAyet9crrb+9bP0L7ojtXo/Wb
+         DjLrwqJJgo/APvVYqMnJoeKxm6GNrPMGPD01s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712862888; x=1713467688;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=24c5MYVKM5W9suD5aHIvWrEfS4imCoj9FJNn9YD5CY4=;
-        b=r6p7mTA3Ammm5EzZdsg6lcUHhaudFLghUsWPeBGjZzUaEz9siD380RESn6Y1h6WWGf
-         n+psYQKeFQCDm3XKgLKDhMDHBgy+D687g0QhpRqN8f8OFWcOCJtdOsxv+zW0VF6ZMV9j
-         O5Fr4eH84uOo1GpdaK40yhLTAA33Ba82oWOf+6GqlfIeVMPo1gFPzesK0cXJwq8uHCxH
-         2ap2sp/IUSmYD15+6Q/F819CSgNAarvTGax403W6UDvrOzxX7XbtfSE1PM9dLeLQJrwr
-         /Y2m2oGv3vshd6gWsTQp6M2Eby3iQPd+IC600Ih4Kf7Cs8Sp4fAbY1aON2yC2b/GpVbA
-         o96g==
-X-Gm-Message-State: AOJu0YyRGC2Wt2GUcuFMFMVx06MCg9IrIxFA+hYRryQNsgoEdRrAVoOq
-	enEA9Ych+pwVyBVWI6j2rCH5Gl958fBZxUo3QVOvzRMgpzSpSXgNyWTIuNodvFZsfilolcmDUfp
-	deZePuQ==
-X-Google-Smtp-Source: AGHT+IGbOLZT7cpwa13g8EfeFRST9kyMgC3ib+HKxwfiGotEDfcNTN1CI9ZMas3EM3uUbD3NRXw8Gg==
-X-Received: by 2002:a19:7604:0:b0:515:b0ef:2ae3 with SMTP id c4-20020a197604000000b00515b0ef2ae3mr357428lff.39.1712862887978;
-        Thu, 11 Apr 2024 12:14:47 -0700 (PDT)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
-        by smtp.gmail.com with ESMTPSA id m19-20020a17090679d300b00a4e03c28fd5sm1017980ejo.43.2024.04.11.12.14.47
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Apr 2024 12:14:47 -0700 (PDT)
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-343f62d8124so74335f8f.2
-        for <linux-pm@vger.kernel.org>; Thu, 11 Apr 2024 12:14:47 -0700 (PDT)
-X-Received: by 2002:a5d:570b:0:b0:346:44:3910 with SMTP id a11-20020a5d570b000000b0034600443910mr307796wrv.49.1712862887128;
- Thu, 11 Apr 2024 12:14:47 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1712868406; x=1713473206;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SIDVajEu5qVpvE8z50G25VfbDDiky2dkQVswDqavWmw=;
+        b=LVx38/LG9YawY6vnHP+xg46HJlv941FAImxh5Oyobqqe8u+S/7intCDuaesCFPQk7L
+         CyYtuul50m3Ndfg9SEjP08kjuyi1wkLtqg1uJWuKXiYkIKJ/BSmXJk0ESRsC2+5WhBgA
+         ZCdze/NvuVYKMhKFJ/wPZ1KFQr76ckrSy5cEU9DV4LBzMWFUnhuDlvm9Udigb1MnVv62
+         v1g9TTpne8RK5PCZhmTmuo+2pbO++vEHbbah+/SzqyKh+SG3sN97RnPDKX2JIFRPRsrb
+         S3aKSkTK7UR6GXttVglvMUisq803u5BZ6jVTD+grxhVU4AOG+55f3dVNqNL/xexRHXAh
+         TS4A==
+X-Forwarded-Encrypted: i=1; AJvYcCW/uNketfWLVrlk8hd8LiTpwQTNndG5erarlx+8YFPfhiB2wZmhNJ3RKo7YOiwXQ/f/AjPS7hLpe26R6j/lFu7stktIyqjcnLc=
+X-Gm-Message-State: AOJu0Yz1dsMixd94UPlH2Mw23PC8oWmqoQXsXopFZWSKQgiMLV9QRq4g
+	rhZBaV0/pnqmUWJnin5Mavn4T4vL4MOE2gwcjZvFhfLh9BbE/kDFO7AKEBd5/BfUHPVZbH5tAbS
+	dwClxT/mMMaBmWiZJKztHqm63aJHnMq8htc5E
+X-Google-Smtp-Source: AGHT+IHaPFmbWl4CRobBCOwnVbN1ApnbwICulL1MHyiOpyCXRJEfB/+tR9nlXdoQX2nVlx/a/PWkPUPCTsjRQkCZQqs=
+X-Received: by 2002:a17:902:ecc7:b0:1e5:2885:2 with SMTP id
+ a7-20020a170902ecc700b001e528850002mr558906plh.68.1712868406134; Thu, 11 Apr
+ 2024 13:46:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAJvTdKmK_U7nChpm=MzaDyw3T9V6hSua-6C89WCjo828vxm+yw@mail.gmail.com>
- <CAHk-=wgaTzpJssX2z7OiQOLL0BZzHGAfJn0MYPhuN9oU0R2f-Q@mail.gmail.com> <CAJvTdK=BO2YtUCrNzjMR8EydaDzaPasfi9m3_4UreC2J1MYjTg@mail.gmail.com>
-In-Reply-To: <CAJvTdK=BO2YtUCrNzjMR8EydaDzaPasfi9m3_4UreC2J1MYjTg@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Thu, 11 Apr 2024 12:14:30 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgNZV3pwPMjOr1_NGUt3L1rK+38xtSp78w02X6qYwqhJA@mail.gmail.com>
-Message-ID: <CAHk-=wgNZV3pwPMjOr1_NGUt3L1rK+38xtSp78w02X6qYwqhJA@mail.gmail.com>
-Subject: Re: [GIT PULL] turbostat 2024.04.10
-To: Len Brown <lenb@kernel.org>
-Cc: Linux PM list <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20240119110842.772606-1-abailon@baylibre.com> <20240119110842.772606-3-abailon@baylibre.com>
+In-Reply-To: <20240119110842.772606-3-abailon@baylibre.com>
+From: Pin-yen Lin <treapking@chromium.org>
+Date: Thu, 11 Apr 2024 16:46:35 -0400
+Message-ID: <CAEXTbpeJ=3kxeKy4rXUfNEO==XYQ2DQx+ex2nLNkur_X6p1VVQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] thermal: Add support of multi sensors to thermal_core
+To: Alexandre Bailon <abailon@baylibre.com>
+Cc: rafael@kernel.org, daniel.lezcano@linaro.org, robh+dt@kernel.org, 
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, rui.zhang@intel.com, 
+	lukasz.luba@arm.com, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Hsin-Te Yuan <yuanhsinte@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 11 Apr 2024 at 11:20, Len Brown <lenb@kernel.org> wrote:
+Hi Alexandre,
+
+On Thu, Apr 11, 2024 at 4:34=E2=80=AFPM Alexandre Bailon <abailon@baylibre.=
+com> wrote:
 >
-> ISTR that once upon a time at the kernel summit you expressed a
-> preference that things like utilities (which sometimes depend on merge
-> window changes) come in after rc1 is declared to basically stay out of
-> the way.
+> This adds support of multi sensors to thermal.
+> Currently, this only support the get_temp operation.
+> This returns an average temperature of all the sensors.
+> If defined, a coefficient is applied to the value read from the sensor
+> before computing the average.
+>
+> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
+> ---
+>  drivers/thermal/Makefile        |   1 +
+>  drivers/thermal/thermal_core.h  |   7 ++
+>  drivers/thermal/thermal_multi.c | 178 ++++++++++++++++++++++++++++++++
+>  3 files changed, 186 insertions(+)
+>  create mode 100644 drivers/thermal/thermal_multi.c
+>
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index c934cab309ae..757289a406f7 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -6,6 +6,7 @@ CFLAGS_thermal_core.o           :=3D -I$(src)
+>  obj-$(CONFIG_THERMAL)          +=3D thermal_sys.o
+>  thermal_sys-y                  +=3D thermal_core.o thermal_sysfs.o
+>  thermal_sys-y                  +=3D thermal_trip.o thermal_helpers.o
+> +thermal_sys-y                  +=3D thermal_multi.o
+>
+>  # netlink interface to manage the thermal framework
+>  thermal_sys-$(CONFIG_THERMAL_NETLINK)          +=3D thermal_netlink.o
+> diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_cor=
+e.h
+> index 0a3b3ec5120b..26e83a5c8298 100644
+> --- a/drivers/thermal/thermal_core.h
+> +++ b/drivers/thermal/thermal_core.h
+> @@ -138,6 +138,13 @@ ssize_t weight_show(struct device *, struct device_a=
+ttribute *, char *);
+>  ssize_t weight_store(struct device *, struct device_attribute *, const c=
+har *,
+>                      size_t);
+>
+> +/* Multi sensors */
+> +int thermal_multi_sensor_validate_coeff(int *coeff, int count, int offse=
+t);
+> +int thermal_multi_sensor_register(const char *name,
+> +       struct thermal_zone_device *sensor_tz, int coeff);
+> +void thermal_multi_sensor_unregister(struct thermal_zone_device *sensor_=
+tz);
+> +
+> +
+>  #ifdef CONFIG_THERMAL_STATISTICS
+>  void thermal_cooling_device_stats_update(struct thermal_cooling_device *=
+cdev,
+>                                          unsigned long new_state);
+> diff --git a/drivers/thermal/thermal_multi.c b/drivers/thermal/thermal_mu=
+lti.c
+> new file mode 100644
+> index 000000000000..a5a4f1f2d594
+> --- /dev/null
+> +++ b/drivers/thermal/thermal_multi.c
+> @@ -0,0 +1,178 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <linux/err.h>
+> +#include <linux/export.h>
+> +#include <linux/of.h>
+> +#include <linux/slab.h>
+> +#include <linux/thermal.h>
+> +#include <linux/types.h>
+> +#include <linux/string.h>
+> +
+> +#include "thermal_core.h"
+> +
+> +struct sensor_interface {
+> +       struct thermal_zone_device *tz;
+> +       int coeff;
+> +
+> +       struct list_head node;
+> +};
+> +
+> +struct multi_sensor_thermal_zone {
+> +       struct thermal_zone_device *tz;
+> +       struct mutex sensors_lock;
+> +       struct list_head sensors;
+> +
+> +       struct list_head node;
+> +};
+> +
+> +static DEFINE_MUTEX(multi_tz_mutex);
+> +static LIST_HEAD(multi_tz_list);
+> +
+> +#define TJ_MAX 120000
+> +
+> +static int multi_sensor_get_temp(struct thermal_zone_device *tz, int *te=
+mp)
+> +{
+> +       struct multi_sensor_thermal_zone *multi_tz =3D tz->devdata;
+> +       struct sensor_interface *sensor;
+> +       int accumulated_temp =3D 0;
+> +       u32 accumulated_coeff;
 
-That may have been true at some point, but probably long ago - the
-merge windows have been so reliable that it's just not an issue any
-more.
+Should we initialize accumulated_coeff to 0 as well?
 
-So I'd rather see people hold to the normal release cycle, and aim to
-have the rc releases for fixes or major problems.
+> +       int ret;
+> +
+> +       mutex_lock(&multi_tz->sensors_lock);
+> +
+> +       if (list_empty(&multi_tz->sensors)) {
+> +               mutex_unlock(&multi_tz->sensors_lock);
+> +               return -ENODEV;
+> +       }
+> +
+> +       list_for_each_entry(sensor, &multi_tz->sensors, node) {
+> +               ret =3D thermal_zone_get_temp(sensor->tz, temp);
+> +               if (ret) {
+> +                       mutex_unlock(&multi_tz->sensors_lock);
+> +                       return ret;
+> +               }
+> +
+> +               accumulated_temp +=3D *temp * sensor->coeff;
+> +               accumulated_coeff +=3D sensor->coeff;
+> +       }
+> +
+> +       mutex_unlock(&multi_tz->sensors_lock);
+> +
+> +       *temp =3D accumulated_temp / accumulated_coeff;
+> +       return ret;
+> +}
+> +
+> +struct thermal_zone_device_ops multi_sensor_ops =3D {
+> +       .get_temp =3D multi_sensor_get_temp,
+> +};
+> +
+> +int thermal_multi_sensor_validate_coeff(int *coeff, int count, int offse=
+t)
+> +{
+> +       int max_accumulated_temp =3D 0;
+> +       int i;
+> +
+> +       for (i =3D 0; i < count; i++) {
+> +               max_accumulated_temp +=3D TJ_MAX * coeff[i];
+> +               if (max_accumulated_temp < 0)
+> +                       return -EOVERFLOW;
+> +       }
+> +
+> +       max_accumulated_temp +=3D offset;
+> +       return max_accumulated_temp < 0 ? -EOVERFLOW : 0;
+> +}
+> +
+> +static struct thermal_zone_device *multi_sensor_tz_alloc(const char *nam=
+e)
+> +{
+> +       struct thermal_zone_device *tz;
+> +       struct thermal_zone_params tzp =3D {};
+> +       struct multi_sensor_thermal_zone *multi_tz;
+> +
+> +       tz =3D thermal_zone_get_zone_by_name(name);
+> +       if (!IS_ERR(tz)) {
+> +               mutex_unlock(&multi_tz_mutex);
+> +               return tz;
+> +       }
+> +
+> +       multi_tz =3D kzalloc(sizeof(*multi_tz), GFP_KERNEL);
+> +       if (!multi_tz)
+> +               return ERR_PTR(-ENOMEM);
+> +       mutex_init(&multi_tz->sensors_lock);
+> +       INIT_LIST_HEAD(&multi_tz->sensors);
+> +
+> +       tzp.no_hwmon =3D true;
+> +       tzp.slope =3D 1;
+> +       tzp.offset =3D 0;
+> +
+> +       tz =3D thermal_tripless_zone_device_register(name, multi_tz,
+> +                                                  &multi_sensor_ops, &tz=
+p);
+> +       if (IS_ERR(tz)) {
+> +               kfree(multi_tz);
+> +       } else {
+> +               multi_tz->tz =3D tz;
+> +               list_add(&multi_tz->node, &multi_tz_list);
+> +       }
+> +
+> +       return tz;
+> +}
+> +
+> +int thermal_multi_sensor_register(const char *name,
+> +       struct thermal_zone_device *sensor_tz, int coeff)
+> +{
+> +       struct thermal_zone_device *tz;
+> +       struct multi_sensor_thermal_zone *multi_tz;
+> +       struct sensor_interface *sensor;
+> +
+> +       mutex_lock(&multi_tz_mutex);
+> +
+> +       tz =3D multi_sensor_tz_alloc(name);
+> +       if (IS_ERR(tz)) {
+> +               mutex_unlock(&multi_tz_mutex);
+> +               return PTR_ERR(tz);
+> +       }
+> +       multi_tz =3D  tz->devdata;
+> +
+> +       sensor =3D kzalloc(sizeof(*sensor), GFP_KERNEL);
+> +       if (!sensor) {
+> +               mutex_unlock(&multi_tz_mutex);
+> +               return -ENOMEM;
+> +       }
+> +
+> +       sensor->tz =3D sensor_tz;
+> +       sensor->coeff =3D coeff;
+> +       mutex_lock(&multi_tz->sensors_lock);
+> +       list_add(&sensor->node, &multi_tz->sensors);
+> +       mutex_unlock(&multi_tz->sensors_lock);
+> +
+> +       thermal_zone_device_enable(tz);
+> +
+> +       mutex_unlock(&multi_tz_mutex);
+> +
+> +       return 0;
+> +}
+> +
+> +void thermal_multi_sensor_unregister(struct thermal_zone_device *sensor_=
+tz)
+> +{
+> +       struct multi_sensor_thermal_zone *multi_tz;
+> +       struct sensor_interface *sensor, *tmp;
+> +
+> +       mutex_lock(&multi_tz_mutex);
+> +       list_for_each_entry(multi_tz, &multi_tz_list, node) {
+> +               mutex_lock(&multi_tz->sensors_lock);
+> +               list_for_each_entry_safe(sensor, tmp, &multi_tz->sensors,=
+ node) {
+> +                       if (sensor->tz =3D=3D sensor_tz) {
+> +                               list_del(&sensor->node);
+> +                               kfree(sensor);
+> +                               break;
+> +                       }
+> +               }
+> +
+> +               if (list_empty(&multi_tz->sensors)) {
+> +                       thermal_zone_device_unregister(multi_tz->tz);
+> +                       mutex_unlock(&multi_tz->sensors_lock);
+> +                       kfree(multi_tz);
+> +               } else {
+> +                       mutex_unlock(&multi_tz->sensors_lock);
+> +               }
+> +       }
+> +       mutex_unlock(&multi_tz_mutex);
+> +}
+> --
+> 2.41.0
+>
 
-We also used to allow entirely new drivers etc outside the release
-cycle as a "this cannot regress" exception to the normal rules, but
-that has also been largely abandoned as the release cycle is just
-short enough that it makes no sense.
+By the way, may I know why min/max aggregation is dropped in this
+version? I thought that checking max temperature is the most direct
+approach to protect the hardware and the users from high temperature.
 
-So the "new hardware support" rule has basically been watered down
-over the years, and has become a "new hardware IDs are fine" kind of
-rule, where just adding basically just a PCI ID or OF matching entry
-or similar is still fine, but no more "whole new drivers".
-
-                  Linus
+Best regards,
+Pin-yen
 
