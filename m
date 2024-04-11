@@ -1,92 +1,126 @@
-Return-Path: <linux-pm+bounces-6268-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6269-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 565558A12BE
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 13:14:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BD398A12FF
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 13:30:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB8A71F2135B
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 11:14:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB0F7285E57
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 11:30:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBAB0147C7E;
-	Thu, 11 Apr 2024 11:14:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F003E1482FC;
+	Thu, 11 Apr 2024 11:30:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V4wTvvQa"
+	dkim=pass (2048-bit key) header.d=t-argos.ru header.i=@t-argos.ru header.b="CqpnU+BP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx1.t-argos.ru (mx1.t-argos.ru [109.73.34.58])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98397147C77
-	for <linux-pm@vger.kernel.org>; Thu, 11 Apr 2024 11:14:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 030EA145B08;
+	Thu, 11 Apr 2024 11:30:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.73.34.58
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712834043; cv=none; b=KXtc90N3BQZgRlguRaQdxA1fCa4obYyFiDBCFUjyUruRV2feo3SClpbCU9sFTfIU0IxKZ5SdXhKQNA3FgfYZM9/7RyRq8iIcUsBJk5P0QWxhgXcvoOtjnBcDy6ThmwSBb712qiqW3yWe09iv3xYOh2kzaPA4cEVsvZCX7oIr6+U=
+	t=1712835013; cv=none; b=C8X4/jX0I67H/j4MDO3MNinfJqiydrNkJsdm21L8ukQlYwEo8M+wInQJO1PR1BEWajaVhDkQNoGCenB10kwbnckkTw6gDzwj17trj/USw31LHkoBJZPhfgtbknA0iJwy+o76V6148KFjqbO4ls1+pfCRbZPKHwTK4AwArs8sM5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712834043; c=relaxed/simple;
-	bh=0hGxv/Y7yLWYpyCQV7OAdlAU3YJ08rMN39dW7DtkkEw=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=mWhAh4+xFkHmqCzMJXZF5n+dvNu3WpgS7oEisUYQl0CUI8olJ4FMCsIjNDW0Y+6ograAp1w4ZChahh6wfit/haDCtyo6nx7E3fdh9otkariCh1Rcq5raS8/mkqObOZV0jLxHFPHsYXvq70Erv1cbOCysmgivnNMR+pmnksmlr9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V4wTvvQa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 31015C43390
-	for <linux-pm@vger.kernel.org>; Thu, 11 Apr 2024 11:14:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712834043;
-	bh=0hGxv/Y7yLWYpyCQV7OAdlAU3YJ08rMN39dW7DtkkEw=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=V4wTvvQadks3EBWs3ygUzqVHBfl8CL//yUwXZNy2Xk5wifgmQ8VuQvdxXSXfxIyRd
-	 pe4OlfoqVytKz7HqoltxGQO89YR6KH2uaXKse6uTEu/uk+XXy2ClnrilSsgnorzd81
-	 F8NH5Smz/VNPWVVKxEVm3mBf/xJjMPlObH/zet6HJ9FsrZ1nnrN616y4yckgpC0d9h
-	 bttR6l/j1ex+6MN1g/+oqjhrW57mr1yQjUledtRjrwnocbycLZlrMlZETm/N7W5GBQ
-	 nWTz9koetwcrPAOiw5bqW3iSiF8i+cETubAimTvzEf7aVFZUzUgnqHG70iPxSOuZGi
-	 2JqUN39jm07lw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 1F7ECC53BDA; Thu, 11 Apr 2024 11:14:03 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 218686] Fail to set energy_performance_preference of amd
- processor on asus ga403uv
-Date: Thu, 11 Apr 2024 11:14:02 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mario.limonciello@amd.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: DOCUMENTED
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218686-137361-4kw8ESb6iI@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218686-137361@https.bugzilla.kernel.org/>
-References: <bug-218686-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1712835013; c=relaxed/simple;
+	bh=1APKQilN3KOr/QtnFwq4ziD2NuoZYSGfZUZ72o0YZC8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=FYjYRktXCbwdW3/7gWVtRDVph+NkTQ4qo7dmUL7cFiYGBC7TH3xyQGx2uyzqpGRECZsIzmenDwTryz/oVRgZdUNjl5biYm/P90My69Lyu3YXM3vwivoL0RKEzbWrIvh7DdCK4Em3yi33ALjWyoWJxBu5cUkAfDMbgR1piph4b0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=t-argos.ru; spf=pass smtp.mailfrom=t-argos.ru; dkim=pass (2048-bit key) header.d=t-argos.ru header.i=@t-argos.ru header.b=CqpnU+BP; arc=none smtp.client-ip=109.73.34.58
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=t-argos.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=t-argos.ru
+Received: from mx1.t-argos.ru (localhost [127.0.0.1])
+	by mx1.t-argos.ru (Postfix) with ESMTP id DF9C7100002;
+	Thu, 11 Apr 2024 14:29:48 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=t-argos.ru; s=mail;
+	t=1712834988; bh=vfdGuoVAYV58AUhj/zofkCcJDkvE34z/umq0QY3tVtQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	b=CqpnU+BPtIXoHL27lTCUB//pJ/oI7+UiMbh3szTXfRpXA8CnXmVQQiLHxygyWtLUj
+	 qKTdLrv5s1PgwQvJPr+GqH3mAExr90VgrbKLu/Nw9sFQ2Je1fqBqimQvwTNt/CRNax
+	 kW0Two4BFNPX2EF4MZqqk9bE9B/ALjiqFUPC+BA2Y9VoKAldOpgpBp38dOloRnsIBs
+	 Gs0WFPci0Jj/AJSZNbTmk3s/r88n+MuKN5Ax4GTQr+D9g1toL1A0K6Ywn0TprLSQ+h
+	 q42sCK1BXn0V5BSQYdOW0zpM6IkFtsiW23focFz5UEZdCm5KMsrnt7ErV3/iO5uYy9
+	 NnfYS1PtZua4w==
+Received: from mx1.t-argos.ru.ru (mail.t-argos.ru [172.17.13.212])
+	by mx1.t-argos.ru (Postfix) with ESMTP;
+	Thu, 11 Apr 2024 14:27:48 +0300 (MSK)
+Received: from [172.17.214.6] (172.17.214.6) by ta-mail-02 (172.17.13.212)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 11 Apr
+ 2024 14:27:28 +0300
+Message-ID: <478ad5a2-88b7-4069-aa9b-52084ffeda67@t-argos.ru>
+Date: Thu, 11 Apr 2024 14:24:58 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] drivers: thermal: tsens: Fix null pointer dereference
+Content-Language: ru
+To: Konrad Dybcio <konrad.dybcio@linaro.org>, Christian Marangi
+	<ansuelsmth@gmail.com>
+CC: Amit Kucheria <amitk@kernel.org>, Thara Gopinath
+	<thara.gopinath@gmail.com>, Bjorn Andersson <andersson@kernel.org>, "Rafael
+ J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	<linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <lvc-project@linuxtesting.org>
+References: <20240405090720.16419-1-amishin@t-argos.ru>
+ <2cd986c0-8663-4143-9d35-4af94fe5e4bb@linaro.org>
+From: Aleksandr Mishin <amishin@t-argos.ru>
+In-Reply-To: <2cd986c0-8663-4143-9d35-4af94fe5e4bb@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: ta-mail-02.ta.t-argos.ru (172.17.13.212) To ta-mail-02
+ (172.17.13.212)
+X-KSMG-Rule-ID: 1
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 184672 [Apr 11 2024]
+X-KSMG-AntiSpam-Version: 6.1.0.4
+X-KSMG-AntiSpam-Envelope-From: amishin@t-argos.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 16 0.3.16 6e64c33514fcbd07e515710c86ba61de7f56194e, {Tracking_arrow_text}, {Tracking_from_domain_doesnt_match_to}, t-argos.ru:7.1.1;mx1.t-argos.ru.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2, FromAlignment: s
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean, bases: 2024/04/11 07:47:00
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2024/04/11 10:13:00 #24743273
+X-KSMG-AntiVirus-Status: Clean, skipped
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218686
 
---- Comment #34 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
-Well now that you know it happens in Windows too maybe it's easier to repor=
-t to
-them.
 
---=20
-You may reply to this email to add a comment.
+On 09.04.2024 12:52, Konrad Dybcio wrote:
+> 
+> 
+> On 4/5/24 11:07, Aleksandr Mishin wrote:
+>> compute_intercept_slope() is called from calibrate_8960() (in 
+>> tsens-8960.c)
+>> as compute_intercept_slope(priv, p1, NULL, ONE_PT_CALIB) which lead to 
+>> null
+>> pointer dereference (if DEBUG or DYNAMIC_DEBUG set).
+>> Fix this bug by adding null pointer check.
+>>
+>> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+>>
+>> Fixes: dfc1193d4dbd ("thermal/drivers/tsens: Replace custom 8960 apis 
+>> with generic apis")
+>> Signed-off-by: Aleksandr Mishin <amishin@t-argos.ru>
+>> ---
+> 
+> Maybe we can replace p2[i] with p2 ? p2[i] : 0
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+Your solution look better for me. Thanks. I'll offer v2 patch
+
+> 
+> Konrad
+
+-- 
+Kind regards
+Aleksandr
 
