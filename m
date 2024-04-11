@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-6254-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6255-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73DDF8A070A
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 06:18:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD4A38A070B
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 06:19:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A08971C20DAC
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 04:18:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 621631F21926
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 04:19:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0482513C3CA;
-	Thu, 11 Apr 2024 04:18:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 406FF13B794;
+	Thu, 11 Apr 2024 04:19:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ihQW1OGv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ox4UrACg"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D246713C3C3
-	for <linux-pm@vger.kernel.org>; Thu, 11 Apr 2024 04:18:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C8252A1DC
+	for <linux-pm@vger.kernel.org>; Thu, 11 Apr 2024 04:19:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712809125; cv=none; b=cRxXMiVhtB73g7PeDFS49iSeaWQGTkr7YRAETnW1PUScaARLhXcOfssWpuO9tLJI47fSQQj+QauCCnuXeZhdeyM1Dlpy4IvRB/VorDuhwYY6ACbV5psKNEATxw/5P6XvJDbKGfw7grNWzyn5v4dymwzMhI1IoOgpp1WxSe56zHE=
+	t=1712809190; cv=none; b=fzRF4101US0ZHObkp3adJG3I90Mnc38QSb7EdBvOCRuNoLuPCmCv35Izd6sX1kwdENfIS7ZHLwSvwpcn60vaMEkhFcMCAN8ZCEnQNqLSDyZc3v1ttMsG416pD8cymEsIRoNqopsEQkua6QPU0dJ8QTZ57J7+f9ahvJYFV3vbmiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712809125; c=relaxed/simple;
-	bh=9Ay8WCRGdOWd4QObDOm4Pzeo7daZ8hEZ0kkHw8Xm+vY=;
+	s=arc-20240116; t=1712809190; c=relaxed/simple;
+	bh=DkVrLfso/tYp5+QkO+PjZr1y246c7jmol7o48VLb1TQ=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=B/6im2DTxlszQIEjRiiUEBLdhwInROvRLNH7F+HsI86hFCIcMeANORzlM7rO9+RMmHmORCWgzn0W8wSuq0uzVvVsMcpUe+QXvc5V4cB3VBmWWjpfIKz4VdDk1KGqwd7rZ/ozncUwJJse9hxONbvy1eTqBQFsGO5He4Hlv2e/0Rs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ihQW1OGv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7EA35C43390
-	for <linux-pm@vger.kernel.org>; Thu, 11 Apr 2024 04:18:45 +0000 (UTC)
+	 Content-Type:MIME-Version; b=E2px6m9kfuByyoWkHXN/PG9QGGb+tezohAVjlNbLGd+qkN/rOtjPqpuitSj3m+Q970txjS3QnDCpQy/a/I4WeKYoapxBiwoj6nHZf0tTobold6YdQaTCANG/VTRi1/CS8uCRgp/8fIEy2pDXrJO2nVpN5Upr1ULWUTTb3/9TWmE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ox4UrACg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A0B54C433C7
+	for <linux-pm@vger.kernel.org>; Thu, 11 Apr 2024 04:19:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712809125;
-	bh=9Ay8WCRGdOWd4QObDOm4Pzeo7daZ8hEZ0kkHw8Xm+vY=;
+	s=k20201202; t=1712809189;
+	bh=DkVrLfso/tYp5+QkO+PjZr1y246c7jmol7o48VLb1TQ=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=ihQW1OGvIlohKThfY1gHWeRLUe2I9pYgsMQrPpR39CSDmJISFIYf7W069c4rUEMNK
-	 WFUkGy8Maaz9A+945SBHQH3fuWIA+D09ewp9uXWLfk43II6j8d4nFGA8vBPwRqYbmK
-	 63iO72MLoJa6GgrDlzqPOPtIMzdTlpPNVQeVOQWhE7f9k/6o1W/cCzeprlqPE3F5wY
-	 /PqXE3IEWdG3cAGqRjbbFf1Tu7Z1E9nYh7f/Aj4OOCKrTi9vq4k12x1WdQ96HHeV1n
-	 wM+w6xTPqKK06GFWIQmVnImD7nU/v+Ccw0urbDwCXzUdMduAguYzky2HeIFb29ED9l
-	 /0HfY4smocQ5w==
+	b=ox4UrACgumyuZLajeTl1k3pjzPD5O9cDOjbaghWE/fV5V1TNaDz4Qkfez1yIZSLST
+	 Pmg4HD5iGRUJBLHMLphW/kkrDJ00lfzZgObxaAtbItTaSqSJ8Dvr2WFAPgWON063tA
+	 9Lku7u82H/q4tt5a9hkb7BSxYEPJTHB9jWPD1qpa/JF9IdJYYccct8BQTNaIb/gpcq
+	 EYK9cB4xpHSvv4zfh2NJ1OEHehhTToCf/6PthysRrz0J1ZaWKrCXUCz8j/FqOM7wSG
+	 s9DS0AqCN7XBswIZ8wKAHtgitv62pO7kMiVKfMkLCvYHaK1k0twkTC37112ZmYI4g3
+	 ks2oluAnhALcA==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 73BD2C53BD6; Thu, 11 Apr 2024 04:18:45 +0000 (UTC)
+	id 98A7BC53BD6; Thu, 11 Apr 2024 04:19:49 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-pm@vger.kernel.org
 Subject: [Bug 218686] Fail to set energy_performance_preference of amd
  processor on asus ga403uv
-Date: Thu, 11 Apr 2024 04:18:45 +0000
+Date: Thu, 11 Apr 2024 04:19:49 +0000
 X-Bugzilla-Reason: AssignedTo
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -62,8 +62,8 @@ X-Bugzilla-Resolution: DOCUMENTED
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218686-137361-3PELNxqDNy@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-218686-137361-FtrzIkPciZ@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-218686-137361@https.bugzilla.kernel.org/>
 References: <bug-218686-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,8 +79,10 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D218686
 
---- Comment #25 from al0uette@outlook.com ---
-Strangely I found CPPC do work on Windows
+--- Comment #26 from al0uette@outlook.com ---
+Created attachment 306126
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D306126&action=3Dedit
+Screenshot of HWinfo64
 
 --=20
 You may reply to this email to add a comment.
