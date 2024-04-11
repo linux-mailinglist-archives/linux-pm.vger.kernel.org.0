@@ -1,104 +1,90 @@
-Return-Path: <linux-pm+bounces-6253-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6254-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B81C8A0696
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 05:16:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73DDF8A070A
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 06:18:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 007C31F24B10
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 03:16:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A08971C20DAC
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 04:18:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E862813B7AC;
-	Thu, 11 Apr 2024 03:15:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0482513C3CA;
+	Thu, 11 Apr 2024 04:18:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QdrkL7LS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ihQW1OGv"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B22A113B795;
-	Thu, 11 Apr 2024 03:15:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D246713C3C3
+	for <linux-pm@vger.kernel.org>; Thu, 11 Apr 2024 04:18:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712805356; cv=none; b=B8YZUvYFQRhJ7/lifoJuayzgJrnDXJHBodlDuPax6uKFyMkj8xTtSLFc/S1aeB8EvYY7YuELxqFDr27Qcxa/TWpqB6H9mAx6dZow6COsO+SeA9+nHknqdjtvuB33R8J0oTs8UZHLQa/bOK8EYX3J86tZAGE5Pj5u9empXLhe9bs=
+	t=1712809125; cv=none; b=cRxXMiVhtB73g7PeDFS49iSeaWQGTkr7YRAETnW1PUScaARLhXcOfssWpuO9tLJI47fSQQj+QauCCnuXeZhdeyM1Dlpy4IvRB/VorDuhwYY6ACbV5psKNEATxw/5P6XvJDbKGfw7grNWzyn5v4dymwzMhI1IoOgpp1WxSe56zHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712805356; c=relaxed/simple;
-	bh=hy1z9iyb5VzHmSvD9OU1ijF/ELGQxBn3bMjuKQBN8zM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DOyAdRBVxi1rV8KYoF5Evzr9arEiSaVW7ihlflL2K3fC3W+yNU2t1vPL69/vKNNZsh3Qwhys1KOxHhEES4W82eaoS8oP1XxcNDxZ8gGbY0bgD0dH/b3hlCagCkRAsxh2Wq+bu+qhmBo+hAWsH0dFvQ0TBOezXcg2eR7TUt5NC6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QdrkL7LS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F359C433C7;
-	Thu, 11 Apr 2024 03:15:55 +0000 (UTC)
+	s=arc-20240116; t=1712809125; c=relaxed/simple;
+	bh=9Ay8WCRGdOWd4QObDOm4Pzeo7daZ8hEZ0kkHw8Xm+vY=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=B/6im2DTxlszQIEjRiiUEBLdhwInROvRLNH7F+HsI86hFCIcMeANORzlM7rO9+RMmHmORCWgzn0W8wSuq0uzVvVsMcpUe+QXvc5V4cB3VBmWWjpfIKz4VdDk1KGqwd7rZ/ozncUwJJse9hxONbvy1eTqBQFsGO5He4Hlv2e/0Rs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ihQW1OGv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7EA35C43390
+	for <linux-pm@vger.kernel.org>; Thu, 11 Apr 2024 04:18:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712805356;
-	bh=hy1z9iyb5VzHmSvD9OU1ijF/ELGQxBn3bMjuKQBN8zM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QdrkL7LSwLI3ym8riSY+yo8E68yp85sPRsqxrxpkU6jdLBRG+I7iGX5Rzigk21D9X
-	 Kgkc1LyYXKuteE968Qjx8JbOtjjFrA1a3f+nxMG0v5d648KEC1+KOnFuKz1SAAudZQ
-	 HQYHHUkY2OhpBthIn4ZlOCiOOHI6jSiG6Ue0tpW6S0UgPUZZ3R2NB8064LEtMrwTcW
-	 K0vfZ+3Eg+BnDJOzHQk19wSnfAXwmviX5KDNvOIIEW4CnapLYX43Bthz9fwf8naHsK
-	 gd3R+bBnzMhplBYUsEs24rdqN1TndbthAUTRzCH1DZz0BhpjuA5W0j6qihQSrBnXca
-	 iftK5BtuBSyCA==
-Date: Wed, 10 Apr 2024 22:15:53 -0500
-From: Bjorn Andersson <andersson@kernel.org>
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: Amit Kucheria <amitk@kernel.org>, 
-	Thara Gopinath <thara.gopinath@gmail.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH] thermal/drivers/qcom: Remove some unused fields in
- struct qpnp_tm_chip
-Message-ID: <h23clexblxinnqkrxtb7cngtq4eimt65vtcqaeavjglskp2o3y@ibdua6bug4y2>
-References: <d1c3a3c455f485dae46290e3488daf1dcc1d355a.1712687589.git.christophe.jaillet@wanadoo.fr>
+	s=k20201202; t=1712809125;
+	bh=9Ay8WCRGdOWd4QObDOm4Pzeo7daZ8hEZ0kkHw8Xm+vY=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=ihQW1OGvIlohKThfY1gHWeRLUe2I9pYgsMQrPpR39CSDmJISFIYf7W069c4rUEMNK
+	 WFUkGy8Maaz9A+945SBHQH3fuWIA+D09ewp9uXWLfk43II6j8d4nFGA8vBPwRqYbmK
+	 63iO72MLoJa6GgrDlzqPOPtIMzdTlpPNVQeVOQWhE7f9k/6o1W/cCzeprlqPE3F5wY
+	 /PqXE3IEWdG3cAGqRjbbFf1Tu7Z1E9nYh7f/Aj4OOCKrTi9vq4k12x1WdQ96HHeV1n
+	 wM+w6xTPqKK06GFWIQmVnImD7nU/v+Ccw0urbDwCXzUdMduAguYzky2HeIFb29ED9l
+	 /0HfY4smocQ5w==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 73BD2C53BD6; Thu, 11 Apr 2024 04:18:45 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 218686] Fail to set energy_performance_preference of amd
+ processor on asus ga403uv
+Date: Thu, 11 Apr 2024 04:18:45 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: al0uette@outlook.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: DOCUMENTED
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218686-137361-3PELNxqDNy@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218686-137361@https.bugzilla.kernel.org/>
+References: <bug-218686-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d1c3a3c455f485dae46290e3488daf1dcc1d355a.1712687589.git.christophe.jaillet@wanadoo.fr>
 
-On Tue, Apr 09, 2024 at 09:56:34PM +0200, Christophe JAILLET wrote:
-> In "struct qpnp_tm_chip", the 'prev_stage' field is unused.
-> Remove it.
-> 
-> Found with cppcheck, unusedStructMember.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218686
 
-Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+--- Comment #25 from al0uette@outlook.com ---
+Strangely I found CPPC do work on Windows
 
-Regards,
-Bjorn
+--=20
+You may reply to this email to add a comment.
 
-> ---
-> Compile tested only.
-> 
-> Apparently, it has never been used. It is not a left-over from a
-> refactoring.
-> ---
->  drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-> index 78c5cfe6a0c0..3cd74f6cac8f 100644
-> --- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-> +++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-> @@ -74,7 +74,6 @@ struct qpnp_tm_chip {
->  	long				temp;
->  	unsigned int			thresh;
->  	unsigned int			stage;
-> -	unsigned int			prev_stage;
->  	unsigned int			base;
->  	/* protects .thresh, .stage and chip registers */
->  	struct mutex			lock;
-> -- 
-> 2.44.0
-> 
-> 
+You are receiving this mail because:
+You are the assignee for the bug.=
 
