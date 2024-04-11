@@ -1,122 +1,104 @@
-Return-Path: <linux-pm+bounces-6252-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6253-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 523F08A01B2
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 23:07:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B81C8A0696
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 05:16:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D931283598
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Apr 2024 21:07:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 007C31F24B10
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 03:16:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9727D1836CB;
-	Wed, 10 Apr 2024 21:07:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E862813B7AC;
+	Thu, 11 Apr 2024 03:15:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QdrkL7LS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0CA7181CFD;
-	Wed, 10 Apr 2024 21:07:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B22A113B795;
+	Thu, 11 Apr 2024 03:15:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712783241; cv=none; b=VQ6IksTT8/O8xAil77IXR4m/+ESi/umn+EX3uVLFwxx0C3ydccgyWryGMcm/YINH394pJbg/krcq+ky9AWBvnl5DQkvgvTpQYR+8lkamfJI77YxVaPdcbJLq4qYe84IxM6TWotHgBQx44pIUoCaZFWZkffYNrvJEszYwijyOdtY=
+	t=1712805356; cv=none; b=B8YZUvYFQRhJ7/lifoJuayzgJrnDXJHBodlDuPax6uKFyMkj8xTtSLFc/S1aeB8EvYY7YuELxqFDr27Qcxa/TWpqB6H9mAx6dZow6COsO+SeA9+nHknqdjtvuB33R8J0oTs8UZHLQa/bOK8EYX3J86tZAGE5Pj5u9empXLhe9bs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712783241; c=relaxed/simple;
-	bh=WUkQx3MHNfpPK223Za2QnwYdPQf2mwT7iuWRCuTCPQM=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mLN/P1nqVz2HkBVi+OS6NK976bTyLo8RMRsOuNHvo54V4kq39PcVNIAHjkfffgizcF9rMNmfOaetlVp1CH9JU6MUSkinlmGf70QTspUEKWJKKDH8s2/cy2IWPJlom1bqE0ejPQqeJxVmwVKUn3gupbooCV/Zfn/oSFLCfHAAYwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VFFjC372rz6K6DM;
-	Thu, 11 Apr 2024 05:05:35 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 403711402C7;
-	Thu, 11 Apr 2024 05:07:14 +0800 (CST)
-Received: from localhost (10.126.168.81) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Wed, 10 Apr
- 2024 22:07:13 +0100
-Date: Wed, 10 Apr 2024 22:07:12 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: "Russell King (Oracle)" <linux@armlinux.org.uk>,
-	<linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
-	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-	<x86@kernel.org>, <acpica-devel@lists.linuxfoundation.org>,
-	<linux-csky@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-ia64@vger.kernel.org>, <linux-parisc@vger.kernel.org>, Salil Mehta
-	<salil.mehta@huawei.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	<jianyong.wu@arm.com>, <justin.he@arm.com>, James Morse
-	<james.morse@arm.com>, Miguel Luis <miguel.luis@oracle.com>
-Subject: Re: [PATCH RFC v4 02/15] ACPI: processor: Register all CPUs from
- acpi_processor_get_info()
-Message-ID: <20240410220712.0000726f@Huawei.com>
-In-Reply-To: <CAJZ5v0gG0xLajHsWXVM+-V+fQZAudvojechUa-DzFgwCs2q8Dg@mail.gmail.com>
-References: <Zbp5xzmFhKDAgHws@shell.armlinux.org.uk>
-	<E1rVDmU-0027YP-Jz@rmk-PC.armlinux.org.uk>
-	<CAJZ5v0iiJpUWq5GMSnKFWQTzn_bdwoQz9m=hDaXNg4Lj_ePF4g@mail.gmail.com>
-	<20240322185327.00002416@Huawei.com>
-	<20240410134318.0000193c@huawei.com>
-	<CAJZ5v0ggD042sfz3jDXQVDUxQZu_AWaF2ox-Me8CvFeRB8nczw@mail.gmail.com>
-	<20240410145005.00003050@Huawei.com>
-	<ZhbgwBBvh6ccdO7x@shell.armlinux.org.uk>
-	<CAJZ5v0gG0xLajHsWXVM+-V+fQZAudvojechUa-DzFgwCs2q8Dg@mail.gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1712805356; c=relaxed/simple;
+	bh=hy1z9iyb5VzHmSvD9OU1ijF/ELGQxBn3bMjuKQBN8zM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DOyAdRBVxi1rV8KYoF5Evzr9arEiSaVW7ihlflL2K3fC3W+yNU2t1vPL69/vKNNZsh3Qwhys1KOxHhEES4W82eaoS8oP1XxcNDxZ8gGbY0bgD0dH/b3hlCagCkRAsxh2Wq+bu+qhmBo+hAWsH0dFvQ0TBOezXcg2eR7TUt5NC6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QdrkL7LS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F359C433C7;
+	Thu, 11 Apr 2024 03:15:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712805356;
+	bh=hy1z9iyb5VzHmSvD9OU1ijF/ELGQxBn3bMjuKQBN8zM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QdrkL7LSwLI3ym8riSY+yo8E68yp85sPRsqxrxpkU6jdLBRG+I7iGX5Rzigk21D9X
+	 Kgkc1LyYXKuteE968Qjx8JbOtjjFrA1a3f+nxMG0v5d648KEC1+KOnFuKz1SAAudZQ
+	 HQYHHUkY2OhpBthIn4ZlOCiOOHI6jSiG6Ue0tpW6S0UgPUZZ3R2NB8064LEtMrwTcW
+	 K0vfZ+3Eg+BnDJOzHQk19wSnfAXwmviX5KDNvOIIEW4CnapLYX43Bthz9fwf8naHsK
+	 gd3R+bBnzMhplBYUsEs24rdqN1TndbthAUTRzCH1DZz0BhpjuA5W0j6qihQSrBnXca
+	 iftK5BtuBSyCA==
+Date: Wed, 10 Apr 2024 22:15:53 -0500
+From: Bjorn Andersson <andersson@kernel.org>
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: Amit Kucheria <amitk@kernel.org>, 
+	Thara Gopinath <thara.gopinath@gmail.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] thermal/drivers/qcom: Remove some unused fields in
+ struct qpnp_tm_chip
+Message-ID: <h23clexblxinnqkrxtb7cngtq4eimt65vtcqaeavjglskp2o3y@ibdua6bug4y2>
+References: <d1c3a3c455f485dae46290e3488daf1dcc1d355a.1712687589.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d1c3a3c455f485dae46290e3488daf1dcc1d355a.1712687589.git.christophe.jaillet@wanadoo.fr>
 
-On Wed, 10 Apr 2024 21:08:06 +0200
-"Rafael J. Wysocki" <rafael@kernel.org> wrote:
+On Tue, Apr 09, 2024 at 09:56:34PM +0200, Christophe JAILLET wrote:
+> In "struct qpnp_tm_chip", the 'prev_stage' field is unused.
+> Remove it.
+> 
+> Found with cppcheck, unusedStructMember.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-> On Wed, Apr 10, 2024 at 8:56=E2=80=AFPM Russell King (Oracle)
-> <linux@armlinux.org.uk> wrote:
-> >
-> > On Wed, Apr 10, 2024 at 02:50:05PM +0100, Jonathan Cameron wrote: =20
-> > > If we get rid of this catch all, solution would be to move the
-> > > !acpi_disabled check into the arm64 version of arch_cpu_register()
-> > > because we would only want the delayed registration path to be
-> > > used on ACPI cases where the question of CPU availability can't
-> > > yet be resolved. =20
-> >
-> > Aren't we then needing two arch_register_cpu() implementations?
-> > I'm assuming that you're suggesting that the !acpi_disabled, then
-> > do nothing check is moved into arch_register_cpu() - or to put it
-> > another way, arch_register_cpu() does nothing if ACPI is enabled.
-> >
-> > If arch_register_cpu() does nothing if ACPI is enabled, how do
-> > CPUs get registered (and sysfs files get created to control them)
-> > on ACPI systems? ACPI wouldn't be able to call arch_register_cpu(),
-> > so I suspect you'll need an ACPI-specific version of this function. =20
->=20
-> arch_register_cpu() will do what it does, but it will check (upfront)
-> if ACPI is enabled and if so, if the ACPI Namespace is available.  In
-> the case when ACPI is enabled and the ACPI Namespace is not ready, it
-> will return -EPROBE_DEFER (say).
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
 
-Exactly.  I oversimplified and wasn't clear enough.
-The check is there in the arch_register_cpu() and is one of the ways
-that function can decide to actually register the cpu but not the only one.
+Regards,
+Bjorn
 
-I think we may later want to consider breaking it into 2 arch calls
-(check if ready to register + register) to reduce code duplication
-in with the hotplug path where there is a little extra to do
-inbetween.
-
-Hopefully that can wait though.
-
-Jonathan
+> ---
+> Compile tested only.
+> 
+> Apparently, it has never been used. It is not a left-over from a
+> refactoring.
+> ---
+>  drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+> index 78c5cfe6a0c0..3cd74f6cac8f 100644
+> --- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+> +++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+> @@ -74,7 +74,6 @@ struct qpnp_tm_chip {
+>  	long				temp;
+>  	unsigned int			thresh;
+>  	unsigned int			stage;
+> -	unsigned int			prev_stage;
+>  	unsigned int			base;
+>  	/* protects .thresh, .stage and chip registers */
+>  	struct mutex			lock;
+> -- 
+> 2.44.0
+> 
+> 
 
