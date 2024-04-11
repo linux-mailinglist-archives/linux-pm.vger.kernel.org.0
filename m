@@ -1,85 +1,92 @@
-Return-Path: <linux-pm+bounces-6273-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6274-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2EA88A14E2
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 14:45:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72D9A8A151B
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 14:56:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ABCAB287635
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 12:45:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A45741C216F1
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 12:56:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4001939FEF;
-	Thu, 11 Apr 2024 12:45:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DCA347773;
+	Thu, 11 Apr 2024 12:56:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Ia/qNr8A"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Oyq1tSdG"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16A3E1EF1E;
-	Thu, 11 Apr 2024 12:45:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA9813399F
+	for <linux-pm@vger.kernel.org>; Thu, 11 Apr 2024 12:56:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712839532; cv=none; b=GkShqsxvhW3zFU2M+g1QUtQmn/t/tQ63b5ywQSlSVNzLjtlHDJ4D33YujrFr03xucn32vogAEG4R/OR2xGoC9aISmJFxySAgywEqvsXSwX9ulLEtTS6Kmc/zjmstwbw5+lHS9A7ab1kqMJOd11jKRuNCwBt5WKFH1r7fRGxxLL8=
+	t=1712840207; cv=none; b=H2gpMFQUO3hwv1GopQNMFHFPru5q/O8vZEzrXiBuFn0CuD9iPSYEovqRdj7OMteGOmpqXfNPBGxElR5OzzLlH96rfDuRp7sF1arDN0yzcfrmdf1J0hzjJsFggCcKW4ACjttPKSRwRskFYHTjOW6nX/lfpuOGmqrmmbrCSv9G28Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712839532; c=relaxed/simple;
-	bh=TUAFmNOg8ko8L/rZMOo1RHLUk6ov5w7Zi/WvSRN48vY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tw7ecMV2BvbX3IbObiLi0+Yt0d7pw0ZTLxXMzKd3Vtb6TjqH1sKO100Lnt500PNKb1Th213dcmyg3pHNIPyTtw1qnl7/QpTw7WKzIpzS1fLz7o5PlqEeZIw2sBsmtVek0nBL35uiR3uvkb+4RPsXFfBTABL63rOcwKsALzSsG9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Ia/qNr8A; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54FEEC433F1;
-	Thu, 11 Apr 2024 12:45:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1712839531;
-	bh=TUAFmNOg8ko8L/rZMOo1RHLUk6ov5w7Zi/WvSRN48vY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Ia/qNr8AHfRHgODE+CRBlgQBvNKQsy8PE4MnupLaRWLynA6ee5v5scgxosHXBZ9Cp
-	 THFGXnqYipqv4XnS9Kpnxbua6CDk1YOGj89zkeVuhJXBJPO5jAi9cGuwheGND9+hH6
-	 MKFaNOG4T1GckHJ/LexTanKiCaQMHUIe4flepk3g=
-Date: Thu, 11 Apr 2024 14:45:29 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Georgi Djakov <djakov@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] interconnect fixes for 6.9-rc
-Message-ID: <2024041115-compile-zipping-c17f@gregkh>
-References: <20240328131501.641457-1-djakov@kernel.org>
+	s=arc-20240116; t=1712840207; c=relaxed/simple;
+	bh=kbTxxTbJV+Dk2o7FN5YsPjcEzWn9Y+mLFz3tDGgKh8g=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=CHGZUzzwmzqDcoCz1awv1ei6E7McTXkrlHuhTsmee67xsktzwpbDYjxSRPyZstTRlmACDVtWVva+TPRapUw92fTlHwY8IEV9A41UYC4JTDt3qCFJ/QJzbVVP2kzEHE/a79LgmQ8uFwlsh1AN/VzQcCP3ruR48KedZQ5ij5Rq+EE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Oyq1tSdG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7832CC433C7
+	for <linux-pm@vger.kernel.org>; Thu, 11 Apr 2024 12:56:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712840206;
+	bh=kbTxxTbJV+Dk2o7FN5YsPjcEzWn9Y+mLFz3tDGgKh8g=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=Oyq1tSdGpJVDb/woGi6fWFif5fLdXAohV5lKIOveMYyrQifE9o04P/XSlmf5386f7
+	 ffqoUUWQIXZ2FbkNh3I3qtwu00rZaobpGeChKooicCYw/KsVFeTeHZdrdGI06nyURe
+	 XgXM3enZFQGVqVGRlADsFpg9i4flgRDvFPSoUTnQ/LZuHC7KfQMCK5jHar7tl5vn6R
+	 MbWNTVebrX7ckvbPp/RGk3HU1zEWnOYNHp2Z5pm5jMAatZNxQO2D187JXSlIKLjESw
+	 OP/+dE3f3tTuP/07SyM8LqYOj5nZpi9iZerJgg3wWGTHu71yvnWknWJeAofs468hyS
+	 tEVRI5VWzlcQw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 5AD32C53BDA; Thu, 11 Apr 2024 12:56:46 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 218686] Fail to set energy_performance_preference of amd
+ processor on asus ga403uv
+Date: Thu, 11 Apr 2024 12:56:46 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mario.limonciello@amd.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: DOCUMENTED
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218686-137361-kLUlIG5cB1@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218686-137361@https.bugzilla.kernel.org/>
+References: <bug-218686-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240328131501.641457-1-djakov@kernel.org>
 
-On Thu, Mar 28, 2024 at 03:15:01PM +0200, Georgi Djakov wrote:
-> Hello Greg,
-> 
-> This pull request contains one core and one driver fix for the current
-> cycle. The details are in the signed tag as usual. It is not based on rc1,
-> but on a previous tag that you pulled, because i got these fixes during
-> the merge window. All patches have been in linux-next for more than a week.
-> Please pull into char-misc-linus when possible and propagate further when
-> you have more char/misc fixes.
-> 
-> Thanks,
-> Georgi
-> 
-> 
-> The following changes since commit 5464e7acea4a6c56b3c5c2d7aeef2eda92227b33:
-> 
->   interconnect: qcom: x1e80100: Add missing ACV enable_mask (2024-02-04 23:36:06 +0200)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.9-rc2
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218686
 
-Sorry for the delay, now pulled and pushed out.
+--- Comment #35 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
+One more idea for you. Can you please try to go into BIOS and do "reset BIOS
+default settings"? Even if you haven't changed anything this will reset any
+hidden settings too in case there is a problem with one of them.
 
-thanks.
+--=20
+You may reply to this email to add a comment.
 
-greg k-h
+You are receiving this mail because:
+You are the assignee for the bug.=
 
