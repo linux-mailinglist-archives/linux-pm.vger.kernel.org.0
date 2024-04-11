@@ -1,250 +1,165 @@
-Return-Path: <linux-pm+bounces-6280-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6281-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFDBB8A1829
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 17:07:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 103628A1880
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 17:23:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E35F11C2224F
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 15:07:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B97D1F2515E
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 15:23:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B52E614003;
-	Thu, 11 Apr 2024 15:07:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Ein9fSy2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9390C13AEE;
+	Thu, 11 Apr 2024 15:21:15 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACC6FDF42;
-	Thu, 11 Apr 2024 15:07:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DADBAE55F;
+	Thu, 11 Apr 2024 15:21:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712848049; cv=none; b=qqvZuA+lhe7uL5tpoHjVqLPCAofuicV9zsgzg5GAPDNSqks1kT2kfZozsMoOh21NQiqk1iYg4KRh+ZhhaLtLeHxTsK7PnG+f0vvcVgRkFO+o1Fspi1NMd3QVjDN66dMxPK/g7dO7Ka2gyADyFRtFrBS7Dw3u2GEPU/UdnPQuPSo=
+	t=1712848875; cv=none; b=W3bqZFUBOh4CrsGjVj7gVmzAxgx/XwdBWXsGLfaW0PumIDnzUeoz9DBdFLRHApxewbt03K7FsWsMfK3GNTPVTOHWR1denoRjW6XmRs/iZkrFUewEj8FQioKJhNFFnW2hcqFZdY3qYe4tiYKN9/Sy3tlqVdm03Sm9nDUZyZ0Gqxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712848049; c=relaxed/simple;
-	bh=C6vXPh7Ldx4KhgbuYgRJZPLELakzOPaiKKdVUBf4PSU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ai8UyNtUg3uOBWaeP99ULr1hI/HqYI6UDVFcWWhj8SV5ktUDnHAjoYcs2ymm1x6aFJFGw4M81eho8xdsT1eYTGnh76c9hD/4JNpQ0i1oCr2WnigiahY44B5KzK9WDky+guI/RjeZjK9RrK0UaoHGTPXH2+uOHJkFcTEu0p/nld4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Ein9fSy2; arc=none smtp.client-ip=117.135.210.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=LzweM
-	wJIknLqf15S3nYrZOUI8TDHp5K5t8mMB7psTts=; b=Ein9fSy28qkrLlfpbxsOM
-	4K5EtgHw9JVFy0jXaJLhWh2lIEOP7qNh7kL07gIq/IenKBYnvPwCKbOFDBlh1HkI
-	vZsg45rCzGIzWnY72fgh2lN7/fHmdZBQk29+ChJ/keaCJ7yQjiE64QqOQ5IKNHi6
-	jM2FR73kyEH5lA2VcpAHUg=
-Received: from localhost.localdomain (unknown [101.86.127.38])
-	by gzga-smtp-mta-g3-0 (Coremail) with SMTP id _____wDnr4R3_Bdm+utEAw--.36662S4;
-	Thu, 11 Apr 2024 23:06:46 +0800 (CST)
-From: Lizhe <sensor1010@163.com>
-To: ray.huang@amd.com,
-	rafael@kernel.org,
-	viresh.kumar@linaro.org,
-	srinivas.pandruvada@linux.intel.com,
-	lenb@kernel.org,
-	andersson@kernel.org,
-	konrad.dybcio@linaro.org,
-	thierry.reding@gmail.com,
-	jonathanh@nvidia.com
-Cc: linux-pm@vger.kernel.org,
-	inux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-tegra@vger.kernel.org,
-	Lizhe <sensor1010@163.com>
-Subject: [PATCH] cpufreq: Covert to offline callback returning void
-Date: Thu, 11 Apr 2024 08:06:20 -0700
-Message-Id: <20240411150620.19262-1-sensor1010@163.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1712848875; c=relaxed/simple;
+	bh=RJssVZ7udHxHo3Et4hZ7dfRETRPZhl3bmJL+mnWNB7g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DUBAO6eaFug28GF+ZZZePEgu09jUipjlhXBgtjDWzhgA8kMpP62tx7W3Sjhb0C0g2vr0QdgZVU22oOJrbzouyxeuBSksfbjgb8uIsFXJ3cR6UPrB0TwKFUmhrXznE6WCRLVVp38aRD0GRRStEYGc1G3jhNvkrvszGUp8GJRs4IU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-6ea1d2c1d58so2131774a34.3;
+        Thu, 11 Apr 2024 08:21:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712848872; x=1713453672;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XvwCFVAdeanbRP1IDnrbTtt4W//JJjkKoqgQmst2hsg=;
+        b=IqJ/5n1o2wjLT2F2jDfAarQimsxBD6sLd5/s7BGK42yGILp9lyN4hPctjzln9ov4Oj
+         t3J9wyZZEWMrwg4Jc/0DK1fOS6tpu30zrZMrzg6j224iVkwqHJaReBf0UrXnqksa4go8
+         LZZTGa1Vue5o0sUoyp7NuvIcvOIQP3ksNdZvpvxqHXU1GYhY5CRMF0fIbt0DMKZdUUuN
+         KU+TTIbJmCB32FqOjTEj8xB2Qg8ai/4JG0V520SahLEiAoBUUS+SaYrdybMCzwUohBcA
+         fbNAG+UH26CFeCiy6Gpcs0LjoO/xYqrrfs1xnzOWe9qbTWdU66mcgHIsMwVmDv/27PCR
+         qPSg==
+X-Forwarded-Encrypted: i=1; AJvYcCWoV9aDXZNRN2YxqIeN/HxK86V9JuJEpp18BkV/YVuwC2LKrKkUH/rvnyCAyIncN3aaIScf8MBgfjLU/lgqRjdYyMDcWePwfj6XBmmKyfrbQboa742ddkqwh76GdbJieboqk9pmFOVr9V9CLNIuhfAiIEurXkMhqizeCzItDvSMCnvPoiWl/5/M2tNOAm7ULNqa7FmB8k/hLCTbBF4VMr3Bc0O+ohpaFwBqHAyIfCUJeGIhBadxpHJbfeCz6R0MXUGj9AuwCw==
+X-Gm-Message-State: AOJu0Yy992Hzg7PNa99UOSYIrQ6HgkF/F8Va/dP17FVTxlCwmIr5IEXT
+	XrGPLNSpHZmhmvZBA3APhOJmXgHeANkIo42SThTnNFNOMEmB5XzLVH2f8Wr/
+X-Google-Smtp-Source: AGHT+IFKatdvmiB7Q+dm5pkiFASZLvgcLBXvJO2C6iEi0l0sMqlgKEeeFsuI9Ng5fXBBFq/U1y2uzg==
+X-Received: by 2002:a05:6808:8d8:b0:3c5:eeb5:c6e2 with SMTP id k24-20020a05680808d800b003c5eeb5c6e2mr6356039oij.36.1712848871698;
+        Thu, 11 Apr 2024 08:21:11 -0700 (PDT)
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com. [209.85.167.178])
+        by smtp.gmail.com with ESMTPSA id j8-20020a544808000000b003c5d2c04a52sm251045oij.34.2024.04.11.08.21.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Apr 2024 08:21:11 -0700 (PDT)
+Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-3c6efac587eso53490b6e.0;
+        Thu, 11 Apr 2024 08:21:10 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV7C0vdcdCbkj31EXVhBXtFKjQluSIPlaOVqa0fbEniozH39Mic6yPRTSa8mA7DVKOZK2VJcQrLUX1TBEzTTn4FLP8GuQmo/MUO3SbmxiLqyCw0Uc4Y7h4012WpLOm9E3+P/RmnfC9h4pabCwPyA/LTJk/yrLRfqVnU4VTkuT6MaMVpw5pn8frWSGm+nevFuM2z9bw4m3phDk7IrGetuSFqrR57FLfeqlZag9cjY0hp803XgLTnf3XAlEpvk36/e1NsQfugQw==
+X-Received: by 2002:a05:6808:2228:b0:3c5:e2dc:8a6a with SMTP id
+ bd40-20020a056808222800b003c5e2dc8a6amr7491416oib.24.1712848870629; Thu, 11
+ Apr 2024 08:21:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDnr4R3_Bdm+utEAw--.36662S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxKFyUKw13JF1UXw4xXF1kKrg_yoWxGr4fpF
-	4UWrWvkr10qFWDt3y7Ca1Dua4a9Fs7A3yUG34xCasYvanrJ3WYg3WDGryUZFWFkrykWF43
-	Ar1rtayxGa18JFUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0piL0ePUUUUU=
-X-CM-SenderInfo: 5vhq20jurqiii6rwjhhfrp/1tbiWBq9q2VOCWZoKwABsS
+References: <20240410134044.2138310-1-claudiu.beznea.uj@bp.renesas.com> <20240410134044.2138310-10-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20240410134044.2138310-10-claudiu.beznea.uj@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 11 Apr 2024 17:20:58 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW-SOzs87+ErfGCcw1eYaaDqsLc4++fNUbTsVrkFqyHPg@mail.gmail.com>
+Message-ID: <CAMuHMdW-SOzs87+ErfGCcw1eYaaDqsLc4++fNUbTsVrkFqyHPg@mail.gmail.com>
+Subject: Re: [PATCH RESEND v8 09/10] watchdog: rzg2l_wdt: Power on the PM
+ domain in rzg2l_wdt_restart()
+To: Claudiu <claudiu.beznea@tuxon.dev>
+Cc: wim@linux-watchdog.org, linux@roeck-us.net, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, p.zabel@pengutronix.de, 
+	geert+renesas@glider.be, magnus.damm@gmail.com, biju.das.jz@bp.renesas.com, 
+	linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-For the offline() callback function returning an int type value,
-this leads many driver authors mistakenly believing that error
-handling can be performed by returning an error code, However
-the returned value is ignored, and to improve this situation,
-it is proposed to modify the return type of the offline() callback
-function to void.
+Hi Claudiu,
 
-Signed-off-by: Lizhe <sensor1010@163.com>
----
- drivers/cpufreq/amd-pstate.c       |  4 +---
- drivers/cpufreq/cpufreq.c          |  3 +--
- drivers/cpufreq/intel_pstate.c     | 10 ++++------
- drivers/cpufreq/qcom-cpufreq-hw.c  |  6 ++----
- drivers/cpufreq/tegra194-cpufreq.c | 11 -----------
- include/linux/cpufreq.h            |  2 +-
- 6 files changed, 9 insertions(+), 27 deletions(-)
+CC pmdomain
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 2015c9fcc3c9..036608935aaa 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -1530,7 +1530,7 @@ static void amd_pstate_epp_offline(struct cpufreq_policy *policy)
- 	mutex_unlock(&amd_pstate_limits_lock);
- }
- 
--static int amd_pstate_epp_cpu_offline(struct cpufreq_policy *policy)
-+static void amd_pstate_epp_cpu_offline(struct cpufreq_policy *policy)
- {
- 	struct amd_cpudata *cpudata = policy->driver_data;
- 
-@@ -1541,8 +1541,6 @@ static int amd_pstate_epp_cpu_offline(struct cpufreq_policy *policy)
- 
- 	if (cppc_state == AMD_PSTATE_ACTIVE)
- 		amd_pstate_epp_offline(policy);
--
--	return 0;
- }
- 
- static int amd_pstate_epp_verify_policy(struct cpufreq_policy_data *policy)
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 66e10a19d76a..04d349372de3 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -1685,7 +1685,7 @@ static void __cpufreq_offline(unsigned int cpu, struct cpufreq_policy *policy)
- 	}
- }
- 
--static int cpufreq_offline(unsigned int cpu)
-+static void cpufreq_offline(unsigned int cpu)
- {
- 	struct cpufreq_policy *policy;
- 
-@@ -1702,7 +1702,6 @@ static int cpufreq_offline(unsigned int cpu)
- 	__cpufreq_offline(cpu, policy);
- 
- 	up_write(&policy->rwsem);
--	return 0;
- }
- 
- /*
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index dbbf299f4219..80dfe1c20210 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -2679,14 +2679,14 @@ static int intel_pstate_verify_policy(struct cpufreq_policy_data *policy)
- 	return 0;
- }
- 
--static int intel_cpufreq_cpu_offline(struct cpufreq_policy *policy)
-+static void intel_cpufreq_cpu_offline(struct cpufreq_policy *policy)
- {
- 	struct cpudata *cpu = all_cpu_data[policy->cpu];
- 
- 	pr_debug("CPU %d going offline\n", cpu->cpu);
- 
- 	if (cpu->suspended)
--		return 0;
-+		return;
- 
- 	/*
- 	 * If the CPU is an SMT thread and it goes offline with the performance
-@@ -2700,8 +2700,6 @@ static int intel_cpufreq_cpu_offline(struct cpufreq_policy *policy)
- 		intel_pstate_set_min_pstate(cpu);
- 
- 	intel_pstate_exit_perf_limits(policy);
--
--	return 0;
- }
- 
- static int intel_pstate_cpu_online(struct cpufreq_policy *policy)
-@@ -2724,11 +2722,11 @@ static int intel_pstate_cpu_online(struct cpufreq_policy *policy)
- 	return 0;
- }
- 
--static int intel_pstate_cpu_offline(struct cpufreq_policy *policy)
-+static void intel_pstate_cpu_offline(struct cpufreq_policy *policy)
- {
- 	intel_pstate_clear_update_util_hook(policy->cpu);
- 
--	return intel_cpufreq_cpu_offline(policy);
-+	intel_cpufreq_cpu_offline(policy);
- }
- 
- static int intel_pstate_cpu_exit(struct cpufreq_policy *policy)
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 70b0f21968a0..dc35fa3cc3ce 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -482,12 +482,12 @@ static int qcom_cpufreq_hw_cpu_online(struct cpufreq_policy *policy)
- 	return ret;
- }
- 
--static int qcom_cpufreq_hw_cpu_offline(struct cpufreq_policy *policy)
-+static void qcom_cpufreq_hw_cpu_offline(struct cpufreq_policy *policy)
- {
- 	struct qcom_cpufreq_data *data = policy->driver_data;
- 
- 	if (data->throttle_irq <= 0)
--		return 0;
-+		return;
- 
- 	mutex_lock(&data->throttle_lock);
- 	data->cancel_throttle = true;
-@@ -496,8 +496,6 @@ static int qcom_cpufreq_hw_cpu_offline(struct cpufreq_policy *policy)
- 	cancel_delayed_work_sync(&data->throttle_work);
- 	irq_set_affinity_and_hint(data->throttle_irq, NULL);
- 	disable_irq_nosync(data->throttle_irq);
--
--	return 0;
- }
- 
- static void qcom_cpufreq_hw_lmh_exit(struct qcom_cpufreq_data *data)
-diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
-index 59865ea455a8..8b57dcd43d54 100644
---- a/drivers/cpufreq/tegra194-cpufreq.c
-+++ b/drivers/cpufreq/tegra194-cpufreq.c
-@@ -541,16 +541,6 @@ static int tegra194_cpufreq_online(struct cpufreq_policy *policy)
- 	return 0;
- }
- 
--static int tegra194_cpufreq_offline(struct cpufreq_policy *policy)
--{
--	/*
--	 * Preserve policy->driver_data and don't free resources on light-weight
--	 * tear down.
--	 */
--
--	return 0;
--}
--
- static int tegra194_cpufreq_exit(struct cpufreq_policy *policy)
- {
- 	struct device *cpu_dev = get_cpu_device(policy->cpu);
-@@ -590,7 +580,6 @@ static struct cpufreq_driver tegra194_cpufreq_driver = {
- 	.init = tegra194_cpufreq_init,
- 	.exit = tegra194_cpufreq_exit,
- 	.online = tegra194_cpufreq_online,
--	.offline = tegra194_cpufreq_offline,
- 	.attr = cpufreq_generic_attr,
- };
- 
-diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-index 9956afb9acc2..2472e9fd2df9 100644
---- a/include/linux/cpufreq.h
-+++ b/include/linux/cpufreq.h
-@@ -385,7 +385,7 @@ struct cpufreq_driver {
- 	int		(*bios_limit)(int cpu, unsigned int *limit);
- 
- 	int		(*online)(struct cpufreq_policy *policy);
--	int		(*offline)(struct cpufreq_policy *policy);
-+	void		(*offline)(struct cpufreq_policy *policy);
- 	int		(*exit)(struct cpufreq_policy *policy);
- 	int		(*suspend)(struct cpufreq_policy *policy);
- 	int		(*resume)(struct cpufreq_policy *policy);
--- 
-2.25.1
+On Thu, Apr 11, 2024 at 1:11=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.dev> =
+wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>
+> The rzg2l_wdt_restart() is called from atomic context. Calling
+> pm_runtime_{get_sync, resume_and_get}() or any other runtime PM resume
+> APIs is not an option as it may lead to issues as described in commit
+> e4cf89596c1f ("watchdog: rzg2l_wdt: Fix 'BUG: Invalid wait context'")
+> that removed the pm_runtime_get_sync() and used directly the
+> clk_prepare_enable() APIs.
+>
+> Starting with RZ/G3S the watchdog could be part of its own software
+> controlled power domain (see the initial implementation in Link section).
+> In case the watchdog is not used the power domain is off and accessing
+> watchdog registers leads to aborts.
+>
+> To solve this the patch powers on the power domain using
+> dev_pm_genpd_resume() API before enabling its clock. This is not
+> sleeping or taking any other locks as the power domain will not be
+> registered with GENPD_FLAG_IRQ_SAFE flags.
+>
+> Link: https://lore.kernel.org/all/20240208124300.2740313-1-claudiu.beznea=
+.uj@bp.renesas.com
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
+Thanks for your patch!
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+> --- a/drivers/watchdog/rzg2l_wdt.c
+> +++ b/drivers/watchdog/rzg2l_wdt.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/pm_domain.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/reset.h>
+>  #include <linux/units.h>
+> @@ -164,6 +165,17 @@ static int rzg2l_wdt_restart(struct watchdog_device =
+*wdev,
+>         struct rzg2l_wdt_priv *priv =3D watchdog_get_drvdata(wdev);
+>         int ret;
+>
+> +       /*
+> +        * The device may be part of a power domain that is currently
+> +        * powered off. We need to power it up before accessing registers=
+.
+> +        * We don't undo the dev_pm_genpd_resume() as the device need to
+> +        * be up for the reboot to happen. Also, as we are in atomic cont=
+ext
+> +        * here there is no need to increment PM runtime usage counter
+> +        * (to make sure pm_runtime_active() doesn't return wrong code).
+> +        */
+> +       if (!pm_runtime_active(wdev->parent))
+> +               dev_pm_genpd_resume(wdev->parent);
+> +
+>         clk_prepare_enable(priv->pclk);
+>         clk_prepare_enable(priv->osc_clk);
+>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
