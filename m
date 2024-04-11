@@ -1,47 +1,40 @@
-Return-Path: <linux-pm+bounces-6259-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6260-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFC1B8A0870
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 08:26:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C5FE8A0886
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 08:35:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F7051F25938
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 06:26:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D68491F2373D
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Apr 2024 06:35:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2886A13CAAE;
-	Thu, 11 Apr 2024 06:26:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="tRYL1WpP"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28FB713CA86;
+	Thu, 11 Apr 2024 06:35:39 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D72A13CA9C
-	for <linux-pm@vger.kernel.org>; Thu, 11 Apr 2024 06:26:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F39E41AAC;
+	Thu, 11 Apr 2024 06:35:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712816805; cv=none; b=p6yIPb8G4D0532w/tUDbETiAX63sad+zTXcYMZvq9JXLVwuVE9t/xTzI7mimz9Ho7dCOwmYi/M3TdDgP65PaRCH0X4UZCDVL8NGK2AcL5nI2kv5tWbOAjjfkz5pdI+IbMF7CyrBM9+dYH1nP0zgKJUhjdwrWlcv+pfjOmu7oyrk=
+	t=1712817339; cv=none; b=hkgbJ5lDHv2NKLW69+JgcD1xA+GPnXaQIHWhnWs2bi+pIcexv9ERkX83JsE97W4zyMMdGfgiCr+xq/aTXcRrsJgRlrPApCQuQQIOjhgsCtlzREKui94KXH7M8hYqymddEOLRd1nuR6Qtm4Hxw+rMyYflHu+rWWuW1tXl7syV94c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712816805; c=relaxed/simple;
-	bh=NShf+u8DNtXFzrZE0/9Rdcy8z5WHE/GYnNzx6CFVFwk=;
+	s=arc-20240116; t=1712817339; c=relaxed/simple;
+	bh=1MPVI2kYWj1qJxWiiW5osq9U4UgjXlkSWpkwjxb/RRM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PIilTf+A+rbzvbzlbgKRdvz/QcJGIiUEJMOomGY3mnfiIq9Mbf6xzTAiosyXV1o2lBmIimS9wUdYwe3KliXM+boF96Go7qTLpCAcOZA5kmPRxGEyy1m0t5L42fMcrNfWCj95E2X3WBm2JkKXNjlNhsYLEqO6PFDFn+yAcQSgvFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=tRYL1WpP; arc=none smtp.client-ip=166.84.1.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
-Received: from [192.168.8.249] (ip72-193-154-75.lv.lv.cox.net [72.193.154.75])
-	by mailbackend.panix.com (Postfix) with ESMTPSA id 4VFV8K2gTXz12Nv;
-	Thu, 11 Apr 2024 02:26:24 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
-	t=1712816785; bh=NShf+u8DNtXFzrZE0/9Rdcy8z5WHE/GYnNzx6CFVFwk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=tRYL1WpPDPwxO/ufG/QNFJ37M4R501FRfdxtA7Rv0Me9RP5y7B4yd8G0trNZ79PIN
-	 GRJqOIFR6lNMYXPWo5zGUZz+BVXmRbCcquUuQLdOQoy70zUUEsDnB0Z3AJdWyRWB/F
-	 xVZsTgA8v8kLltfbMYXoWyJ1QejKZIaP5j9pHuyo=
-Message-ID: <56308bc8-0fd3-4693-9218-63348da8cf36@panix.com>
-Date: Wed, 10 Apr 2024 23:26:14 -0700
+	 In-Reply-To:Content-Type; b=h0/uA8fblqwa6HcpHaeF6otPx+TQQXBrnOczdD2ZqA5gbLhR9gl8ESofF9lMG/mhRv/5lJtxwpLmGiQXsf7+3ze50bK9jbWj9BgxXSb4wNQPC7uXVHO+B6/hDSq8e/hYn3AIJq8avbMG05K6u1RHH8T0TSJtmsQ0aCCOZMaDYM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DEBC1113E;
+	Wed, 10 Apr 2024 23:36:04 -0700 (PDT)
+Received: from [10.57.75.96] (unknown [10.57.75.96])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1ED863F766;
+	Wed, 10 Apr 2024 23:35:33 -0700 (PDT)
+Message-ID: <1080e95f-f0ff-471e-b265-8bfd1355ebd8@arm.com>
+Date: Thu, 11 Apr 2024 07:35:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -49,61 +42,62 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: Commit 0c4cae1bc ("PM: hibernate: Avoid missing wakeup events
- during hibernation") prevents my laptop from hibernating
-To: "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>
-Cc: chris.feng@mediatek.com,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-References: <cb5d3388-3d2c-42f1-9e93-026d14c7e827@panix.com>
- <124e6b11-ca62-48dc-9401-7932845e19f7@intel.com>
+Subject: Re: [PATCH v3 6/6] thermal: core: Relocate critical and hot trip
+ handling
 Content-Language: en-US
-From: Kenneth Crudup <kenny@panix.com>
-In-Reply-To: <124e6b11-ca62-48dc-9401-7932845e19f7@intel.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>
+References: <4558251.LvFx2qVVIh@kreacher> <3556878.iIbC2pHGDl@kreacher>
+ <CAJZ5v0j0jKi9=w_RiYqSZuQtveskcE8jKZHDwaP1EmNOxLk-RQ@mail.gmail.com>
+ <a4e421d2-7279-4b03-9113-db0776dd5355@arm.com>
+ <CAJZ5v0igWeyW=x0DOeUVAvgUp4O+_QrXfwy=o3nj1+KAQ+B8pw@mail.gmail.com>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAJZ5v0igWeyW=x0DOeUVAvgUp4O+_QrXfwy=o3nj1+KAQ+B8pw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 
-Well, the good news is the patch in the commit fixes the "bailing out of 
-hibernate" issue.
 
-(The bad news is resume from a hibernate still fails, but that's an 
-issue to be bisected later)
+On 4/10/24 16:56, Rafael J. Wysocki wrote:
+> Hi Lukasz,
+> 
+> On Fri, Apr 5, 2024 at 9:35 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>> Hi Rafael,
+>>
+>> On 4/4/24 10:03, Rafael J. Wysocki wrote:
+>>> On Tue, Apr 2, 2024 at 9:04 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>>>>
+>>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>>
+>>>> Modify handle_thermal_trip() to call handle_critical_trips() only after
+>>>> finding that the trip temperature has been crossed on the way up and
+>>>> remove the redundant temperature check from the latter.
+>>>>
+>>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>
+>>> This change is premature, as it will cause handle_non_critical_trips()
+>>> to be called for hot/critical trips which is questionable, so I'm
+>>> withdrawing it for now.
+>>>
+>>> The rest of the series is still applicable, though.
+>>>
+>>>
+>>
+>> Could you explain your concerns about this, please?
+>> Is about the extra execution time for the non-critical trip,
+>> while we are in section of handling critical ASAP?
+>> (also it would require that extra sorting there IMO)
+> 
+> No, it is mostly about exposing the critical and hot trips to the
+> governor code that may not be ready for seeing them and get somewhat
+> surprised.  In particular, this would cause the User Space governor to
+> send uevents regarding critical and hot trip points which it has not
+> been doing so far and so user space may get confused.
 
--Kenny
-
-On 4/10/24 12:00, Wysocki, Rafael J wrote:
-> [Resend with the linux-pm address fixed]
-> 
-> On 4/9/2024 10:40 PM, Kenneth Crudup wrote:
->>
->> While in the process of trying to fix kernel 6.8 hibernate issues on 
->> my laptop (including bisecting why my laptop crashes on resume from 
->> hibernate on my machine (a Dell XPS 9320, i7-1280P, and using a 
->> swapfile)), I'd determined the named commit prevents hibernation from 
->> occurring in the first place.
->>
->> Are there any other reports of this?
->>
-> 
-> There are.  Please see
-> 
-> https://patchwork.kernel.org/project/linux-pm/patch/878r1tpd6u.fsf_-_@gmail.com/
-> 
-> 
->> What do you need from me to help fix this issue? I'm assuming that 
->> whatever (pending?) wakeup event that's causing the rejection does not 
->> seem to hinder previous kernels from having sucessful suspend/resume 
->> cycles.
->>
-> 
-> If the patch above does not address the issue for you, the problematic 
-> commit will have to be reverted I'm afraid.
-> 
-> Thanks!
-> 
-> 
-
--- 
-Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
-County CA
+Got it, thanks!
 
