@@ -1,216 +1,115 @@
-Return-Path: <linux-pm+bounces-6313-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6314-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD9558A2BF2
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 12:08:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A60928A2C54
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 12:29:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F203EB2105E
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 10:07:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62D5A2820AA
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 10:29:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D01053378;
-	Fri, 12 Apr 2024 10:07:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AA4653384;
+	Fri, 12 Apr 2024 10:29:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="dS/yLfWb"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="zIqo32Hl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ECC7502AC;
-	Fri, 12 Apr 2024 10:07:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37FF953E0C
+	for <linux-pm@vger.kernel.org>; Fri, 12 Apr 2024 10:28:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712916473; cv=none; b=lyBv4w5Ah4HwBFmcN0E6Spa5fBbSsuxK7pQ4ePWkE3udz0k05CCK1AtblnK9Ny1wPjnfZaKpmpXohS71DdLvO2eku7OVMV6h2rZ69NAWHlg84FDwQ8R8W+ArvIUcSgKtqVBeFROOKPeBuXKm2RGa7JTsiiYv3mFCMB/xfPeiCc8=
+	t=1712917740; cv=none; b=jdqBJGnuzPF/sTteZih8NUC0j7ODG81BXSkSUBhOZTMZ2jQVMEuTHBHNmS7VsdvEV1CHuy+ujrtkqj55BGOl6gUWYBlP7UKJFJ9fAN0KQdTcsuykFnY4ELWkm5Lpc+1jhk1HHHlE8hVx+JCvOJzL/B7YptHahjw9pEScrEJMPH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712916473; c=relaxed/simple;
-	bh=rsBOxr6Gjs4j8AYZEtfDkxXxCRpzRRY6DRRlTtZbPbY=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
-	 In-Reply-To:Content-Type; b=ee05clSVrn747Yjp4ZyrYClS7OWRx+axdtLl4cgBVT8FbvrZceJLYlTMMR5oBQjAIPgDO4YxFJD3v+rup5HeBafSRh9zbPBrSfvGMfHglwr8RQXoEr69wL6iaR0mhwqvRNIgzwmXnZKv+69j9zKmO+VxSRMewQUjsgZUL9xAG+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=dS/yLfWb; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43C6F8Y0005367;
-	Fri, 12 Apr 2024 10:07:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:from:to:cc:references
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=gIqeReF95pXfXYhYP0AXo2CDiHUnEU8JxPisJt7r5No=; b=dS
-	/yLfWbwCT4HcoWPWVa+9gC7uA8ID6SHKt+fGS0Mdz/duNOtcVVMblAHudzfoNb+D
-	X7VFSSwYZ4xDBoZ/XN0gz0lVdQBUZ1qy5xhb1qC3qyRFVE3ghZZmTodu/V/YN3Lg
-	+IkOzd41hRAIljpwEAcjWiwFp306AjsrSpppGIYM1uruq4jxKufnQsFCuKuKS5wr
-	cD132wgz1Hlr+Hl6TNhLv9wu3lpWyBMuICXr/Nucdoif8AKUIbVEQYNT8Awz27zS
-	sFMaLvnhUWJefhzWsoDdVCZqeo323mG3Nga5j9I3deNvk9RB/NKZmHL/c4tACPv7
-	v0fJB0kvGKjIBKkzEWDw==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xev74ruej-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 12 Apr 2024 10:07:29 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43CA7S2s002736
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 12 Apr 2024 10:07:28 GMT
-Received: from [10.216.43.23] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 12 Apr
- 2024 03:07:20 -0700
-Message-ID: <c1f8c627-6497-4598-8b71-6be45e9c12f1@quicinc.com>
-Date: Fri, 12 Apr 2024 15:36:43 +0530
+	s=arc-20240116; t=1712917740; c=relaxed/simple;
+	bh=07V4dIIYHErzrufrKisSjuWCUcxaXJQk98wQ+x0QmRE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P033CLChe9V8xphtc2f6I0IV7E2p5zvpjLjgcWT+F5aRtUK4XGh9mt9Q6omCSb1lR3FAUM+U7ZdTWjzD/+kL9AElRAVdNg0NqA52lqCXu8CHO3voK3mejdBXloe0OIdk5LT8twXrE5kgiSQ+3k10WOEDbMQoUuIGCY9+spHvrac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=zIqo32Hl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20801C113CC;
+	Fri, 12 Apr 2024 10:28:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1712917739;
+	bh=07V4dIIYHErzrufrKisSjuWCUcxaXJQk98wQ+x0QmRE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=zIqo32HltE8+nc5pXVbPZ5L2maTu2wY8O3De029Cp4dOmqdj7NpHNtdhT/QWVNwSY
+	 rCi5JauYFXkbn4+pVRaivDwsJDRlrloDdBz5uZAWN5ml+97Zblo2weCbxJdHOkE6Cr
+	 LqyqToMnwf/bkZow0QyqUjaxPnR4Lfu7UkNmHIxk=
+Date: Fri, 12 Apr 2024 12:28:56 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: lizhe <sensor1010@163.com>,
+	"grygorii.strashko" <grygorii.strashko@ti.com>,
+	"gregory.clement" <gregory.clement@bootlin.com>,
+	"grant.likely" <grant.likely@secretlab.ca>,
+	bsegall <bsegall@google.com>, broonie <broonie@kernel.org>,
+	bristot <bristot@redhat.com>, brgl <brgl@bgdev.pl>,
+	"f.fainelli" <f.fainelli@gmail.com>,
+	"fancer.lancer" <fancer.lancer@gmail.com>,
+	festevam <festevam@gmail.com>, Finn Thain <fthain@linux-m68k.org>,
+	rafael <rafael@kernel.org>, linux-pm <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH] cpufreq: exit() callback is optional
+Message-ID: <2024041259-ranking-aeration-29f8@gregkh>
+References: <b97964653d02225f061e0c2a650b365c354b98c8.1712900945.git.viresh.kumar@linaro.org>
+ <5759bc29.32d04.18ed0ef5037.Coremail.sensor1010@163.com>
+ <20240412062407.ntahibzv6xsbrnxs@vireshk-i7>
+ <1b53a162.32e95.18ed0fdb13e.Coremail.sensor1010@163.com>
+ <20240412063246.tk5z245miakbxws4@vireshk-i7>
+ <2117690204.533771.1712904398042.JavaMail.root@mail-tracker-145-3ep34-c9h23-5f64cf7787-82gdh>
+ <2024041212-bony-emphasize-75dd@gregkh>
+ <663acff5.349d4.18ed18da6ff.Coremail.sensor1010@163.com>
+ <20240412092108.xuvrfd6ioszltonf@vireshk-i7>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 8/8] sched/pelt: Introduce PELT multiplier
-From: Ashay Jaiswal <quic_ashayj@quicinc.com>
-To: Vincent Guittot <vincent.guittot@linaro.org>,
-        Qais Yousef
-	<qyousef@layalina.io>
-CC: Ingo Molnar <mingo@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar
-	<viresh.kumar@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        Lukasz Luba
-	<lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
-        Rick Yiu
-	<rickyiu@google.com>, Chung-Kai Mei <chungkai@google.com>,
-        <quic_anshar@quicinc.com>, <quic_atulpant@quicinc.com>,
-        <quic_shashim@quicinc.com>, <quic_rgottimu@quicinc.com>,
-        <quic_adharmap@quicinc.com>, <quic_kshivnan@quicinc.com>,
-        <quic_pkondeti@quicinc.com>
-References: <20231208002342.367117-1-qyousef@layalina.io>
- <20231208002342.367117-9-qyousef@layalina.io>
- <a561029e-993d-726d-18ce-0bc014e6533c@quicinc.com>
- <20240121000444.ghue2miejmiair6l@airbuntu>
- <8dfb5db7-6da0-4f6f-30ef-8966428e4a1c@quicinc.com>
- <CAKfTPtB=nv7DDqTvsdenOg+UNoNFx=f2SLvihHx+CMkeE6NyNA@mail.gmail.com>
- <2270ebb6-3830-d667-1b9e-2efc96746b94@quicinc.com>
-Content-Language: en-US
-In-Reply-To: <2270ebb6-3830-d667-1b9e-2efc96746b94@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: A51eqVVYQa2YnVSeNW0ANGELHT1P6_b9
-X-Proofpoint-ORIG-GUID: A51eqVVYQa2YnVSeNW0ANGELHT1P6_b9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-12_06,2024-04-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
- spamscore=0 bulkscore=0 clxscore=1011 lowpriorityscore=0 malwarescore=0
- phishscore=0 impostorscore=0 priorityscore=1501 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2404010003 definitions=main-2404120073
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240412092108.xuvrfd6ioszltonf@vireshk-i7>
 
-On 2/6/2024 10:37 PM, Ashay Jaiswal wrote:
+On Fri, Apr 12, 2024 at 02:51:08PM +0530, Viresh Kumar wrote:
+> On 12-04-24, 17:05, lizhe wrote:
+> > I found it first and submitted it to the main line first. Please be fair and just. Let him withdraw his patch.
 > 
+> Well, I decided not to reply to your emails anymore but this needs to
+> be clarified a bit now.
 > 
-> On 1/30/2024 10:58 PM, Vincent Guittot wrote:
->> On Sun, 28 Jan 2024 at 17:22, Ashay Jaiswal <quic_ashayj@quicinc.com> wrote:
->>>
->>> Hello Qais Yousef,
->>>
->>> Thank you for your response.
->>>
->>> On 1/21/2024 5:34 AM, Qais Yousef wrote:
->>>> Hi Ashay
->>>>
->>>> On 01/20/24 13:22, Ashay Jaiswal wrote:
->>>>> Hello Qais Yousef,
->>>>>
->>>>> We ran few benchmarks with PELT multiplier patch on a Snapdragon 8Gen2
->>>>> based internal Android device and we are observing significant
->>>>> improvements with PELT8 configuration compared to PELT32.
->>>>>
->>>>> Following are some of the benchmark results with PELT32 and PELT8
->>>>> configuration:
->>>>>
->>>>> +-----------------+---------------+----------------+----------------+
->>>>> | Test case                       |     PELT32     |     PELT8      |
->>>>> +-----------------+---------------+----------------+----------------+
->>>>> |                 |    Overall    |     711543     |     971275     |
->>>>> |                 +---------------+----------------+----------------+
->>>>> |                 |    CPU        |     193704     |     224378     |
->>>>> |                 +---------------+----------------+----------------+
->>>>> |ANTUTU V9.3.9    |    GPU        |     284650     |     424774     |
->>>>> |                 +---------------+----------------+----------------+
->>>>> |                 |    MEM        |     125207     |     160548     |
->>>>> |                 +---------------+----------------+----------------+
->>>>> |                 |    UX         |     107982     |     161575     |
->>>>> +-----------------+---------------+----------------+----------------+
->>>>> |                 |   Single core |     1170       |     1268       |
->>>>> |GeekBench V5.4.4 +---------------+----------------+----------------+
->>>>> |                 |   Multi core  |     2530       |     3797       |
->>>>> +-----------------+---------------+----------------+----------------+
->>>>> |                 |    Twitter    |     >50 Janks  |     0          |
->>>>> |     SCROLL      +---------------+----------------+----------------+
->>>>> |                 |    Contacts   |     >30 Janks  |     0          |
->>>>> +-----------------+---------------+----------------+----------------+
->>>>>
->>>>> Please let us know if you need any support with running any further
->>>>> workloads for PELT32/PELT8 experiments, we can help with running the
->>>>> experiments.
->>>>
->>>> Thanks a lot for the test results. Was this tried with this patch alone or
->>>> the whole series applied?
->>>>
->>> I have only applied patch8(sched/pelt: Introduce PELT multiplier) for the tests.
->>>
->>>> Have you tried to tweak each policy response_time_ms introduced in patch
->>>> 7 instead? With the series applied, boot with PELT8, record the response time
->>>> values for each policy, then boot back again to PELT32 and use those values.
->>>> Does this produce similar results?
->>>>
->>> As the device is based on 5.15 kernel, I will try to pull all the 8 patches
->>> along with the dependency patches on 5.15 and try out the experiments as
->>> suggested.
->>
->> Generally speaking, it would be better to compare with the latest
->> kernel or at least close and which includes new features added since
->> v5.15 (which is more than 2 years old now). I understand that this is
->> not always easy or doable but you could be surprised by the benefit of
->> some features like [0] merged since v5.15
->>
->> [0] https://lore.kernel.org/lkml/249816c9-c2b5-8016-f9ce-dab7b7d384e4@arm.com/
->>
-> Thank you Vincent for the suggestion, I will try to get the results on device running
-> with most recent kernel and update.
+> You sent a lot of patches, over and over again and it was a mess. I
+> saw the this [1] series first and went over to read the code and fixed
+> an issue which I found (by the $subject patch).
 > 
-> Thanks,
-> Ashay Jaiswal
+> Later I read your other patch [2], which I Acked roughly two hours
+> back and yes you did send a patch that fixed the problem partially. I
+> never saw it earlier, which is okay and it happens. Despite me giving
+> an Ack to your patch, you have sent half-a-dozen more emails..
+> 
+> Then I posted a newer version of my patch some time back, removing the
+> bits you already fixed [3].
+> 
+> That is all one side of the story. But all the noise you have created
+> here has really demotivated people to review your stuff now.
+> 
+> --
+> Viresh
+> 
+> [1] https://lore.kernel.org/all/20240410132132.3526-1-sensor1010@163.com/
+> [2] https://lore.kernel.org/all/20240411231818.2471-1-sensor1010@163.com/
+> [3] https://lore.kernel.org/all/68294ce534668c6ab3b71a1b3e6650227c6e1f20.1712911186.git.viresh.kumar@linaro.org/
 
-Hello Qais Yousef and Vincent,
+Thanks for the links, I don't see that you did anything wrong here at
+all.
 
-Sorry for the delay, setting up internal device on latest kernel is taking more time than anticipated.
-We are trying to bring-up latest kernel on the device and will complete the testing with the latest
-cpufreq patches as you suggested.
+Lizhe, you seem to be confused as to how kernel development works.  I
+suggest you take some time off and read up on how this all is supposed
+to happen and then work with some local people, in person, to get this
+figured out first, before submitting changes again.
 
-Regarding PELT multiplier patch [1], are we planning to merge it separately or will it be merged
-altogether with the cpufreq patches?
+thanks,
 
-[1]: https://lore.kernel.org/all/20231208002342.367117-9-qyousef@layalina.io/
-
-Thanks and Regards,
-Ashay Jaiswal
-
->>>
->>>> You didn't share power numbers which I assume the perf gains are more important
->>>> than the power cost for you.
->>>>
->>> If possible I will try to collect the power number for future test and share the
->>> details.
->>>
->>>>
->>>> Thanks!
->>>>
->>>> --
->>>> Qais Yousef
+greg k-h
 
