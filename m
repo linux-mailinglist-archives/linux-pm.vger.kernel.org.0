@@ -1,95 +1,79 @@
-Return-Path: <linux-pm+bounces-6294-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6295-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE6408A25F7
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 07:51:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65F4F8A25FB
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 07:52:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DDB391C21585
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 05:51:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2060F2836C4
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 05:52:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FCB01BDDF;
-	Fri, 12 Apr 2024 05:51:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E79C81BC20;
+	Fri, 12 Apr 2024 05:52:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cVCHuWZK"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Q+PqjxQg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10A12224E8
-	for <linux-pm@vger.kernel.org>; Fri, 12 Apr 2024 05:51:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C4311CAA1
+	for <linux-pm@vger.kernel.org>; Fri, 12 Apr 2024 05:52:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712901069; cv=none; b=lvkW6/xIan/jgMoaHwZTXWH3ZIwjCzN2yXQ/9ibrcgx+6NRdPWpGhdB21UU9c9y+0ahrs8mgo7GkoUk6vFAiDlcjsJIfkHn0zGQc0KOhY6+EyleT5EoJ5BAS3/srXhBKFXTCW3LcfWXSKeIudPdL4ljY/WO6wVlzDelFYBGAnKM=
+	t=1712901142; cv=none; b=kuXlGdYjE+PDTbkiHzJWY8bpQSNaQZWSp4fiicR8yFPzh18a5XhBp5LfWabZH8nhjRZydULpxOK5jA4jVK78H96KBS/4sXlKUYHWTnIDYDViWDG4lt4kVerUHJ19N1RN0ketF7VeLUJMSVC7eisblVleBPpHwCRbfdrlTHSkWjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712901069; c=relaxed/simple;
-	bh=E2HOYIo0M+louxFAZIYoIGaiArPc5YQLoHHmYSX2FfY=;
+	s=arc-20240116; t=1712901142; c=relaxed/simple;
+	bh=Xk89cVFkdI52ZyYOY7Kf6L78ue6asWefaNYNc0ddo/g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gIzCJmIV9fOGoOi/NTyD6h+VgwDPI6m+A2O8P+s/gWZrZmD4o5EoCUYRC/rVL3hFAKpLJk/FBVQ786YPsjB5iVniLvEnOTUjzOhL7H2IY99rKCcBV+5CwOmzyqltUEQNRU7LoKcyn59T9RWs3xsCRMHOVoa+wHU5yMyG+7jmRf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cVCHuWZK; arc=none smtp.client-ip=209.85.161.51
+	 Content-Type:Content-Disposition:In-Reply-To; b=TvwwVYlY5itlAT5lFwQj1rdYpftdPmm+vbou6uIGzV/+Kr47OLP4Y+kNP3cIwV+MKWdrU9fy+OHmF62QtpiQYPGVWXdc3fI8qHeos9yMpVghSrAtpPpA92m00Vxdh3qzRvC/a8IMvzcns1dXpixZfl8Hu17hbv+vKBV4GMmnNLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Q+PqjxQg; arc=none smtp.client-ip=209.85.210.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-5aa22ebd048so423030eaf.1
-        for <linux-pm@vger.kernel.org>; Thu, 11 Apr 2024 22:51:07 -0700 (PDT)
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6ecff9df447so604551b3a.1
+        for <linux-pm@vger.kernel.org>; Thu, 11 Apr 2024 22:52:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1712901067; x=1713505867; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1712901141; x=1713505941; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jsq5q5UHoVt7pKRebObRPtr1OCda190s+OuGBgKxHn0=;
-        b=cVCHuWZKEnfNt4Bq5y81P2nYkhOngE0auqOb23OMyApnZ+fEUl1iHyHJySur67b4R4
-         urob6A9rH//4KGHPD3TbwFTiKEBLdT6V6PJxIl6OjyCvq9b0uRdXLVFc6Vyis47cn13+
-         Ztak1W9skJyPx3HZhf/BPloRXdP8e3Jo+IEth7LqQ38uDydAQ82cWm8H9WlmJZyopWiD
-         l1UAvtNbMuzQjHYlE7tH2n7AVzHwBN5EnQI4VsZ/aSJKgMS7U9NcKg5rwUEmd193858z
-         OebxWqXUBPes/r74sj2hCwKonlT9zauWBksy9dVVsyEJgrhzAjA2VELbHzrdWbFvMNN0
-         m/lg==
+        bh=5k+qpIN+bvCtZK47zSdCc5SpgFpAXhOx3I1lcWOdYRY=;
+        b=Q+PqjxQgvOjxZ5hnJUQXR/Ow3sDN0AyHJwJwbg1X39q7ocXIJKkCM1qjTPLEoitVFE
+         3z6nK3iagvprth2JuExAmHyU668b4BVktP+HGQjnw2q53ttE4G8CHTOn+N/hK8XIXs44
+         BDBkpEy2E/4pCBZuIl8/YHk1WJ4R5fKRnV4iLhyypNAij32cQF12gKqa8mqwAMoF+48+
+         VhcsRMZG+EXuvI6caxbOKf7Oqtu8/JinhsM9gvGJSRAVNe/kA0xYU5F9rUlSRc0tULNe
+         OE/mE3Oxxyv16mCmIh7q9bWnfX8MQNKy/Xhlrt9jas6EyC6eeE7qL3kYpnL2TOhTlwTY
+         f5/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712901067; x=1713505867;
+        d=1e100.net; s=20230601; t=1712901141; x=1713505941;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jsq5q5UHoVt7pKRebObRPtr1OCda190s+OuGBgKxHn0=;
-        b=FoPNlMR94jcUEDS5y/QR80kbwHvX4kKq7viyUo9FR6leUbK7BAY2EWBDM5CXNbipzd
-         UE1N/LaP77hKv8MQtsDm5rISEHcqoozOignZwfBC5OsROU0YhyncvRVRm5waZ4/KCoBc
-         gT/F9nmODwu7JsQEszX5cjwHfOU2mS7WFeUPIi/NZ1TpnSCe2HJIZYSPdlF8ViOi05ae
-         p193VlBosO/OMgJeyFDpz6q4ylmo68nmwOPX2BaoJhfAylU+/7UaeLTUOOf3XkYFxHiq
-         U3nxXh6aaCfNo9P//0b9c5DsOTi1IrlA4zRWdun45VK7HzDDTI3NSAD2Ldusnq0WZRnF
-         2MSA==
-X-Forwarded-Encrypted: i=1; AJvYcCWz7fKXiAb3pahppA5k37XZbqcxlM7ATInOHBF3VS7Y8IN/hON518R3UbdfTvkl//4iUEaULtjcn4EDcRSZIFrUktpfKkIWGVs=
-X-Gm-Message-State: AOJu0Yx78bdwSZs7cJHu5FIgX6dGqAeioBb/sg2wnNGQFz0z9ON2K3Sz
-	JUQHgL2G13gxwOiKIejLbLn0OWEu6cgSJZq5xdNFe+JoAmGkpfl6vUh7188SIlw=
-X-Google-Smtp-Source: AGHT+IEG1FU24MtDCXRG9NUIv3wHELsdindXw8+i8hpMtR3KeQx//WqcDN2bTFHDAFA+yErzH/gw4Q==
-X-Received: by 2002:a05:6870:fba5:b0:22e:f3cd:b6b7 with SMTP id kv37-20020a056870fba500b0022ef3cdb6b7mr1845728oab.27.1712901067103;
-        Thu, 11 Apr 2024 22:51:07 -0700 (PDT)
+        bh=5k+qpIN+bvCtZK47zSdCc5SpgFpAXhOx3I1lcWOdYRY=;
+        b=PWsfi/QriBmd3w7C3lBMBqkUNrq2IEHf9Q9BMDr9JdNh4I3Q3B4K2cCSmL4DUsjLVZ
+         rfc8bKFPk+Khf0ZTJOQwHgTyA8mRIhxc9wd/3p4O62WLrm991CRf4sv5akLfLk6/rnJ5
+         aorToD9W677hjfcdaYMGTg6W66OB8RIx4StxGck7VtV+MJ/7bq08cDDIqegk/Pc5io81
+         JagSwVn8esz1AnRwtu6BmrNp4b37jiOmk1nKPZz/irbEkRTBScPDKJpJKBvwud7Az/P/
+         zhx7pI0nre31DMeyphg+ZcdvyDdbAxff9q3PHwU1R6VCb82CO4i/2re1HYM1+1q1fg65
+         c1tA==
+X-Forwarded-Encrypted: i=1; AJvYcCXRquh+/hdtYvwBNXmL7W2tnV1q2I0Fkf+2OL+PfakpdzDIMPo0viA7OOB0oVK0OR3LwOUgC5P4mSyFvP70bpTUmg8LDIC5w+4=
+X-Gm-Message-State: AOJu0YwYGV7s9yWXCnMxxTKyxMllZ+Hbjjxyg2e99hQY09PU4SnP+kFs
+	T7qhtTAsCOZj9tcO0rbtn7FZ7nFFqGdWUqfVZdpUx1tttN/BHFAL9O7jGVxU4M4=
+X-Google-Smtp-Source: AGHT+IEXREnuzVi1AWDuu5Crjz5K7NndQbQAQd/ZmvZa+sa7/KprNUAKuey8qhUFNPPhIvMOzgoHQg==
+X-Received: by 2002:a05:6a20:7489:b0:1a7:8978:a6b1 with SMTP id p9-20020a056a20748900b001a78978a6b1mr2458815pzd.16.1712901140744;
+        Thu, 11 Apr 2024 22:52:20 -0700 (PDT)
 Received: from localhost ([122.172.85.136])
-        by smtp.gmail.com with ESMTPSA id gj4-20020a056a00840400b006ed92b011desm2089319pfb.169.2024.04.11.22.51.06
+        by smtp.gmail.com with ESMTPSA id k32-20020a17090a4ca300b0029c3bac0aa8sm4157940pjh.4.2024.04.11.22.52.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Apr 2024 22:51:06 -0700 (PDT)
-Date: Fri, 12 Apr 2024 11:21:04 +0530
+        Thu, 11 Apr 2024 22:52:19 -0700 (PDT)
+Date: Fri, 12 Apr 2024 11:22:17 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: lizhe <sensor1010@163.com>
-Cc: "christophe.leroy" <christophe.leroy@csgroup.eu>,
-	mpe <mpe@ellerman.id.au>, npiggin <npiggin@gmail.com>,
-	"aneesh.kumar" <aneesh.kumar@kernel.org>,
-	"naveen.n.rao" <naveen.n.rao@linux.ibm.com>,
-	rafael <rafael@kernel.org>, andersson <andersson@kernel.org>,
-	"konrad.dybcio" <konrad.dybcio@linaro.org>,
-	"sudeep.holla" <sudeep.holla@arm.com>,
-	"cristian.marussi" <cristian.marussi@arm.com>,
-	"thierry.reding" <thierry.reding@gmail.com>,
-	jonathanh <jonathanh@nvidia.com>,
-	inuxppc-dev <inuxppc-dev@lists.ozlabs.org>,
-	linux-pm <linux-pm@vger.kernel.org>,
-	linux-kernel <linux-kernel@vger.kernel.org>,
-	linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-	linux-tegra <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH] cpufreq: Convert to exit callback returning void
-Message-ID: <20240412055104.y5kea33qsvxbywg2@vireshk-i7>
-References: <20240409145316.5181-1-sensor1010@163.com>
- <7abe982f-54cc-4288-a410-df43cec68f67@csgroup.eu>
- <6dd5eb5.28532.18ec3682dcf.Coremail.sensor1010@163.com>
+To: Lizhe <sensor1010@163.com>
+Cc: rafael@kernel.org, axun.yang@flygoat.com, linux-pm@vger.kernel.org,
+	linux-mips@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: Remove redundant exit() functions
+Message-ID: <20240412055217.soyzvivcenoadt3m@vireshk-i7>
+References: <20240409141909.4413-1-sensor1010@163.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -98,16 +82,20 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6dd5eb5.28532.18ec3682dcf.Coremail.sensor1010@163.com>
+In-Reply-To: <20240409141909.4413-1-sensor1010@163.com>
 
-On 09-04-24, 23:09, lizhe wrote:
-> it  is  imperative to modify the declaration,
-> i have not completed the  submission yet, only  part of the modifcation have been submittef
+On 09-04-24, 07:19, Lizhe wrote:
+> The return value of exit() is 0 and it performs no action.
+> This function can be omitted. Please refer to the end condition
+> check in the __cpufreq_offline() function.
+> 
+> Signed-off-by: Lizhe <sensor1010@163.com>
+> ---
+>  drivers/cpufreq/cpufreq-nforce2.c   | 6 ------
+>  drivers/cpufreq/loongson2_cpufreq.c | 6 ------
+>  2 files changed, 12 deletions(-)
 
-Please only submit patches after they are fully done. There is no hurry and
-sending partially prepared patches is only going to waste everyone's time.
-
-Thanks.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 -- 
 viresh
