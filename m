@@ -1,238 +1,243 @@
-Return-Path: <linux-pm+bounces-6311-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6312-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77C118A2B43
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 11:33:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 974488A2BE7
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 12:05:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31DA7283058
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 09:33:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E6F228904C
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 10:05:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8790A50A66;
-	Fri, 12 Apr 2024 09:33:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97C8A53819;
+	Fri, 12 Apr 2024 10:05:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="bzQmWAx3"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="Z7HYXTPb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C72054D58E;
-	Fri, 12 Apr 2024 09:33:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A1545381B
+	for <linux-pm@vger.kernel.org>; Fri, 12 Apr 2024 10:05:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712914390; cv=none; b=M2kdLoCnaPzHJvk4XankF00w/IGOpXX8MC/52yL2Nq9ASvbBCZCZl4UIH4xlVBtjJQXMmExCmt0rhGzNYKY9M6yculwdy2TiGXYTALgUs3W7TE9r3gjVH6CJoGBIGZ6mxzpOoPf8e2w/D3EkfI54RhxD4BbXRPRz/8RHvg1FlNg=
+	t=1712916306; cv=none; b=mIOvh7BY1YS7v7PCLfbU/eEN5Ii0iF/SlWlBBRs+QsgoaipdLMqCXit66PAQYwVg1sFAi/gZBYOMJhVwPrCzDs+JsCtqjHHDUN8fc75J6Wkiw2R4n06A3RZJJnjO5NeujT4Bo0eqFRiluh85vl9xiR6y/svkYE6Jq7X2C7MjZNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712914390; c=relaxed/simple;
-	bh=447vID+BjsGAEuT5pXDvttIGggtbTmZ35xwoUndklWQ=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=flTm/A7QD2t7MCFxNvhHRIJWMvTaVbMo4NnUNZRFfOhcAoAC2Bgu+8GwskaQrDHdAddr0IfB1mnLfo5OVD60wLt0Fzr/k6MkalUyJLpJDFbD+GrwF9Uhc1MG1aXanBBhMRRhGusSNFpY4XdvsENuXuj6WV3+e6mzMVbQPYZ6LjI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=bzQmWAx3; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43C7l4aa025212;
-	Fri, 12 Apr 2024 09:32:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=qcppdkim1; bh=sZ8qCrQrYqQLoJHciB//k
-	j+RjjDUdkNCd9ioYLTNi20=; b=bzQmWAx36Vt/7Vm3VjvnZuk/q91iMvKosXd67
-	yK9SnhpKF+GSYOe7HVV2ju6lv9mAZH1ClT5kF09hOtUHLZU9rmtSzEtt15SCxneu
-	NRPebQQwL2i9iFNvq8WdxGw0s/504QxDd/DGckKzQ94pzxJSQVr9wZ6cwqzKi1gh
-	Q5+GhorMEO4vaaHVKmeNM3W+h537tpv/DF7sl2Dq0Ob6LyG0zX/5JIgtoHHDsDdd
-	wUixavYnrRpVXquDWk5jvohC4wLAP9A1JFsXm6Yi8glWPqO/wopklL3I3smHkDcl
-	vkN3O0uu3J/48m8sx3gQsce8rge+LXWCvDhFzVJUj0EIUNVrQ==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xf0uw06mb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 12 Apr 2024 09:32:57 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43C9WuS9025598
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 12 Apr 2024 09:32:56 GMT
-Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Fri, 12 Apr 2024 02:32:51 -0700
-Date: Fri, 12 Apr 2024 15:02:47 +0530
-From: Varadarajan Narayanan <quic_varada@quicinc.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-CC: Konrad Dybcio <konrad.dybcio@linaro.org>, <andersson@kernel.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>, <robh@kernel.org>,
-        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <djakov@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <quic_anusha@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v7 1/5] dt-bindings: interconnect: Add Qualcomm IPQ9574
- support
-Message-ID: <Zhj/v+AfzHlUCwRg@hu-varada-blr.qualcomm.com>
-References: <58c9b754-b9a7-444d-9545-9e6648010630@kernel.org>
- <Zg5q6mnWtK6hmPBT@hu-varada-blr.qualcomm.com>
- <ZhTxFVDH0xTSkw7r@hu-varada-blr.qualcomm.com>
- <1ec401be-11cb-416a-9eae-d72ea8acf06f@kernel.org>
- <ZhUghsa5Do5m7wrX@hu-varada-blr.qualcomm.com>
- <a0173a13-5f20-4e24-8417-afce5fdbda0e@kernel.org>
- <ZhZjuCkJrtPbwtS/@hu-varada-blr.qualcomm.com>
- <70d0afa7-4990-4180-8dfa-cdf267e4c7a2@kernel.org>
- <f1b0d280-6986-4055-a611-2caceb15867d@linaro.org>
- <82e5503c-0710-4b17-af79-8dece4794ec8@kernel.org>
+	s=arc-20240116; t=1712916306; c=relaxed/simple;
+	bh=m7SZnyJBVQZSm3/ZMgPP8KmAohN82QOdxqDUo61ETQY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=F6+inFhryAlOPT9G9Jji212CxRslMblEc7ESeppgOb2eZWIB/78DOQdopc8Is5kS5L7slpVwp95oEzYrmsc/iQnxia8JQJK8+GL1asA7DMvoS23p6BuO5NsGRcTTnBWesZjoPyqExYY6HkKJ0y3r6OKbclmTZWQ8LYBZY6ccRSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Z7HYXTPb; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a520410b7c0so82416066b.0
+        for <linux-pm@vger.kernel.org>; Fri, 12 Apr 2024 03:05:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1712916302; x=1713521102; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NmvVpGqH/YnUJn3EKn9NCfL9fG7zsGqsH7iqYTHHqXM=;
+        b=Z7HYXTPbEgHcFEGia5f3Cjw4XQFfFdF11UzWrXfj5n/Cr013pUpChNuVE3Gfi2LXBZ
+         z4MTf+vkcVMv/ixTP04YBHG9LKgTqvq6OqAHs+IuL0l5uDdN4EDadc0x36a8d9OcB/g6
+         K43uquGDN8TlGSmwvb2pk8Ltv4YCTTHny3ZbtWRIPJu5GUX3Fk65V8abkN/385fonp3N
+         FSH17u0IAOZ7rRTg4R6O+hivA7sErjQHtQht5ccslYOAaSCe6RFyxjPrjdgthWUTaF+Y
+         qdw10Cy83XX+CPOc9JdLjLH5FLYZl0F8bI+KSxnAKLRbBban0ytnVIXTOWCwV2wLZY+i
+         tzuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712916302; x=1713521102;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NmvVpGqH/YnUJn3EKn9NCfL9fG7zsGqsH7iqYTHHqXM=;
+        b=LZQNLtNNNea8bN8rB8jViyBs7c3QyMJL/+R0cdHd8wNrKsMGDHcuLwGN/8GogayFRJ
+         pQfkdaHa29A0iQm1/pEibVmUuUk6NKgG6xDd1loifDVp9XyijMcAHs7HrrvjAk0aSU84
+         gydj/k3iIcuKmvFQdECbLFT4Ny2acPD+0vZmOUtYpLiv9OHYptmIb18NWuP1qWXj1Wlh
+         RhVTTF7z0SODTHaUdMZ4VvLCSDHuSCwJBHKXoMq1nYL3eF8MN5x98vf/mmytJsG3GrSo
+         5D1e4NqY42BfHjppvSsKynyNOg6bpdOZaq3nCPIzKzILeL3omqBbXbrmhEMwuQh12wKF
+         zBfQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVUhpzPV0PZLub3usnGejoVm2jK6IzFNa2Hd2sGwlRseSLTaSSagRmJBHrvzmbwnXYFKLNEFiP7MOGtzitDRxliP6mzEw8sduU=
+X-Gm-Message-State: AOJu0YwEm1aQn3uISy82JmA8fY0hHX4LItN/DKjVio/3w6FVwhLHty8T
+	b7TEL3R+M1qCKrv1+Ypvx0pfffMAMdTZLQmbd6Xr95++9Rhi4ItCqAvuKhKc7NY=
+X-Google-Smtp-Source: AGHT+IHQMQDAmt/KUMiRX2jfsv9Ugd19LQKa3XJw1aZ7aEKYJ1UBxTCpp3X0iWhacATHBs5n4+le0A==
+X-Received: by 2002:a17:906:36d6:b0:a51:d7f3:324b with SMTP id b22-20020a17090636d600b00a51d7f3324bmr1290933ejc.66.1712916301420;
+        Fri, 12 Apr 2024 03:05:01 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.8])
+        by smtp.gmail.com with ESMTPSA id g22-20020a1709063b1600b00a4e533085aesm1637200ejf.129.2024.04.12.03.04.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Apr 2024 03:05:00 -0700 (PDT)
+Message-ID: <2a07d159-fdd4-48d4-b351-01f5e2579c3a@tuxon.dev>
+Date: Fri, 12 Apr 2024 13:04:58 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <82e5503c-0710-4b17-af79-8dece4794ec8@kernel.org>
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: EOkL0jt8Cn-SKNNZmytxTZuFP3PqlHd3
-X-Proofpoint-ORIG-GUID: EOkL0jt8Cn-SKNNZmytxTZuFP3PqlHd3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-12_06,2024-04-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- mlxlogscore=999 bulkscore=0 phishscore=0 lowpriorityscore=0 mlxscore=0
- clxscore=1015 impostorscore=0 suspectscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2404010003 definitions=main-2404120068
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/9] clk: renesas: rzg2l: Add support for power domains
+Content-Language: en-US
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ magnus.damm@gmail.com, linux-renesas-soc@vger.kernel.org,
+ linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>,
+ Linux PM list <linux-pm@vger.kernel.org>, Guenter Roeck
+ <linux@roeck-us.net>, Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>
+References: <20240410122657.2051132-1-claudiu.beznea.uj@bp.renesas.com>
+ <CAMuHMdUesJe0396MsH9PSUMEq=sWx3BYc=QrAFzR2EVcLhm03Q@mail.gmail.com>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <CAMuHMdUesJe0396MsH9PSUMEq=sWx3BYc=QrAFzR2EVcLhm03Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Apr 10, 2024 at 02:01:00PM +0200, Krzysztof Kozlowski wrote:
-> On 10/04/2024 13:48, Konrad Dybcio wrote:
-> >
-> >
-> > On 4/10/24 13:15, Krzysztof Kozlowski wrote:
-> >> On 10/04/2024 12:02, Varadarajan Narayanan wrote:
-> >>>> Okay, so what happens if icc-clk way of generating them changes a bit?
-> >>>> It can change, why not, driver implementation is not an ABI.
-> >>>>
-> >>>>>
-> >>>>> 	2. These auto-generated id-numbers have to be correctly
-> >>>>> 	   tied to the DT nodes. Else, the relevant clocks may
-> >>>>> 	   not get enabled.
-> >>>>
-> >>>> Sorry, I don't get, how auto generated ID number is tied to DT node.
-> >>>> What DT node?
-> >>>
-> >>> I meant the following usage for the 'interconnects' entry of the
-> >>> consumer peripheral's node.
-> >>>
-> >>> 	interconnects = <&gcc MASTER_ANOC_PCIE0 &gcc SLAVE_ANOC_PCIE0>,
-> >>> 			      ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^
-> >>> 			<&gcc MASTER_SNOC_PCIE0 &gcc SLAVE_SNOC_PCIE0>;
-> >>> 			      ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^
-> >>>
-> >>>>> Since ICC-CLK creates two ids per clock entry (one MASTER_xxx and
-> >>>>> one SLAVE_xxx), using those MASTER/SLAVE_xxx macros as indices in
-> >>>>> the below array would create holes.
-> >>>>>
-> >>>>> 	static int icc_ipq9574_hws[] = {
-> >>>>> 		[MASTER_ANOC_PCIE0] = GCC_ANOC_PCIE0_1LANE_M_CLK,
-> >>>>> 		[MASTER_SNOC_PCIE0] = GCC_SNOC_PCIE0_1LANE_S_CLK,
-> >>>>> 		[MASTER_ANOC_PCIE1] = GCC_ANOC_PCIE1_1LANE_M_CLK,
-> >>>>> 		[MASTER_SNOC_PCIE1] = GCC_SNOC_PCIE1_1LANE_S_CLK,
-> >>>>> 		. . .
-> >>>>> 	};
-> >>>>>
-> >>>>> Other Qualcomm drivers don't have this issue and they can
-> >>>>> directly use the MASTER/SLAVE_xxx macros.
-> >>>>
-> >>>> I understand, thanks, yet your last patch keeps adding fake IDs, means
-> >>>> IDs which are not part of ABI.
-> >>>>
-> >>>>>
-> >>>>> As the MASTER_xxx macros cannot be used, have to define a new set
-> >>>>> of macros that can be used for indices in the above array. This
-> >>>>> is the reason for the ICC_BINDING_NAME macros.
-> >>>>
-> >>>> Then maybe fix the driver, instead of adding something which is not an
-> >>>> ABI to bindings and completely skipping the actual ABI.
-> >>>
-> >>> Will remove the ICC_xxx defines from the header. And in the
-> >>> driver will change the declaration as follows. Will that be
-> >>> acceptable?
-> >>>
-> >>> 	static int icc_ipq9574_hws[] = {
-> >>> 		[MASTER_ANOC_PCIE0 / 2] = GCC_ANOC_PCIE0_1LANE_M_CLK,
-> >>
-> >> What is the binding in such case? What exactly do you bind between
-> >> driver and DTS?
-> >
-> > I think what Krzysztof is trying to say here is "the icc-clk API is tragic"
-> > and the best solution would be to make it such that the interconnect indices
-> > are set explicitly, instead of (master, slave), (master, slave) etc.
-> >
-> > Does that sound good, Krzysztof?
->
-> Yes, I think earlier I expressed that icc-clk might needs fixes.
+Hi, Geert,
 
-Ok
+On 11.04.2024 18:30, Geert Uytterhoeven wrote:
+> Hi Claudiu,
+> 
+> CC pmdomain, watchdog
+> 
+> On Wed, Apr 10, 2024 at 2:27 PM Claudiu <claudiu.beznea@tuxon.dev> wrote:
+>> Series adds support for power domains on rzg2l driver.
+>>
+>> RZ/G2L kind of devices support a functionality called MSTOP (module
+>> stop/standby). According to hardware manual the module could be switch
+>> to standby after its clocks are disabled. The reverse order of operation
+>> should be done when enabling a module (get the module out of standby,
+>> enable its clocks etc).
+>>
+>> In [1] the MSTOP settings were implemented by adding code in driver
+>> to attach the MSTOP state to the IP clocks. But it has been proposed
+>> to implement it as power domain. The result is this series.
+>>
+>> Along with MSTOP functionality there is also module power down
+>> functionality (which is currently available only on RZ/G3S). This has
+>> been also implemented through power domains.
+>>
+>> The DT bindings were updated with power domain IDs (plain integers
+>> that matches the DT with driver data structures). The current DT
+>> bindings were updated with module IDs for the modules listed in tables
+>> with name "Registers for Module Standby Mode" (see HW manual) exception
+>> being RZ/G3S where, due to the power down functionality, the DDR,
+>> TZCDDR, OTFDE_DDR were also added, to avoid system being blocked due
+>> to the following lines of code from patch 6/9.
+>>
+>> +       /* Prepare for power down the BUSes in power down mode. */
+>> +       if (info->pm_domain_pwrdn_mstop)
+>> +               writel(CPG_PWRDN_MSTOP_ENABLE, priv->base + CPG_PWRDN_MSTOP);
+>>
+>> Domain IDs were added to all SoC specific bindings.
+>>
+>> Thank you,
+>> Claudiu Beznea
+>>
+>> Changes in v3:
+>> - collected tags
+>> - dinamically detect if a SCIF is serial console and populate
+>>   pd->suspend_check
+>> - dropped patch 09/10 from v2
+> 
+> Thanks for the update!
+> 
+> I have provided my R-b for all patches, and the usual path for these
+> patches would be for me to queue patches 1-8 in renesas-clk for v6.10,
+> and to queue 9 in renesas-devel.
+> 
+> However:
+>   1. I had missed before the pmdomain people weren't CCed before,
+>      they still might have some comments,
 
-> The indices you define in the binding must be used by DTS and by the driver.
+My bad here, I missed it too.
 
-There are 3 drivers in play here.
-	1. The icc-clk driver
-	2. The gcc (i.e. the interconnect driver)
-	3. The consumer peripheral's driver
+>   2. Patch 9 has a hard dependency on the rest of the series, so
+>      it has to wait one more cycle,
 
-By 'driver' I assume, you mean the icc-clk driver.
+I think 5/9 should also wait to avoid binding validation failures.
 
-> Directly, otherwise it is error-prone and not really an ABI...
+>   3. Adding the watchdog domain has a dependency on [1].
 
-To address this, will modify the icc-clk driver as follows.
+Adding the code for it in patch 7/9 w/o passing it as reference to watchdog
+node (as in patch 9/9) is harmless. The previous behavior will be in place.
 
-	==========================================
-	diff --git a/include/linux/interconnect-clk.h b/include/linux/interconnect-clk.h
-	index 5c611a8b0892..9bcee3e9c56c 100644
-	--- a/include/linux/interconnect-clk.h
-	+++ b/include/linux/interconnect-clk.h
-	@@ -11,6 +11,8 @@ struct device;
-	 struct icc_clk_data {
-		struct clk *clk;
-		const char *name;
-	+	unsigned int master_id;
-	+	unsigned int slave_id;
-	 };
+At the moment the watchdog domain initialization code is not in patch 7/9
+and the patch 9/9 has reference to watchdog domain to pass the DT binding
+validation. The probe will fail though, as I wasn't sure what should be
+better to drop: device probe or reset functionality. I mentioned it in
+patch for suggestions.
 
+> 
+> 2 and 2 may be resolved using an immutable branch.
 
-	diff --git a/drivers/interconnect/icc-clk.c b/drivers/interconnect/icc-clk.c
-	index bce946592c98..f788db15cd76 100644
-	--- a/drivers/interconnect/icc-clk.c
-	+++ b/drivers/interconnect/icc-clk.c
-	@@ -108,7 +108,7 @@ struct icc_provider *icc_clk_register(struct device *dev,
-		for (i = 0, j = 0; i < num_clocks; i++) {
-			qp->clocks[i].clk = data[i].clk;
+2 and 3?
 
-	-		node = icc_node_create(first_id + j);
-	+		node = icc_node_create(first_id + data[i].master_id);
-			if (IS_ERR(node)) {
-				ret = PTR_ERR(node);
-				goto err;
-	@@ -118,10 +118,10 @@ struct icc_provider *icc_clk_register(struct device *dev,
-			node->data = &qp->clocks[i];
-			icc_node_add(node, provider);
-			/* link to the next node, slave */
-	-		icc_link_create(node, first_id + j + 1);
-	+		icc_link_create(node, first_id + data[i].slave_id);
-			onecell->nodes[j++] = node;
+Immutable branch should be good, AFAICT. If that would be the strategy I
+can send an update to also add the initialization data for watchdog domain
+in 7/9. Or I can send an update afterwards. Please let me know how would
+you prefer.
 
-	-		node = icc_node_create(first_id + j);
-	+		node = icc_node_create(first_id + data[i].slave_id);
-			if (IS_ERR(node)) {
-				ret = PTR_ERR(node);
-				goto err;
-	==========================================
+Thank you,
+Claudiu Beznea
 
-And update the inputs going from gcc-ipq9574.c accordingly
-to use the MASTER_xxx and SLAVE_xxx defines. Will this be ok?
-
-Konrad & Krzysztof kindly let me know.
-
-Thanks
-Varada
+> Are my assumptions correct?
+> 
+> Thanks!
+> 
+> [1] "[PATCH RESEND v8 09/10] watchdog: rzg2l_wdt: Power on the PM
+>     domain in rzg2l_wdt_restart()"
+>     https://lore.kernel.org/all/20240410134044.2138310-10-claudiu.beznea.uj@bp.renesas.com
+> 
+>> Changes in v2:
+>> - addressed review comments
+>> - dropped:
+>>     - dt-bindings: clock: r9a09g011-cpg: Add always-on power domain IDs
+>>     - clk: renesas: r9a07g043: Add initial support for power domains
+>>     - clk: renesas: r9a07g044: Add initial support for power domains
+>>     - clk: renesas: r9a09g011: Add initial support for power domains
+>>     - clk: renesas: r9a09g011: Add initial support for power domains
+>>     - arm64: dts: renesas: r9a07g043: Update #power-domain-cells = <1>
+>>     - arm64: dts: renesas: r9a07g044: Update #power-domain-cells = <1>
+>>     - arm64: dts: renesas: r9a07g054: Update #power-domain-cells = <1>
+>>     - arm64: dts: renesas: r9a09g011: Update #power-domain-cells = <1>
+>>   as suggested in the review process
+>> - dropped "arm64: dts: renesas: rzg3s-smarc-som: Guard the ethernet IRQ
+>>   GPIOs with proper flags" patch as it was integrated
+>> - added suspend to RAM support
+>> - collected tag
+>>
+>> [1] https://lore.kernel.org/all/20231120070024.4079344-4-claudiu.beznea.uj@bp.renesas.com/
+>>
+>>
+>> Claudiu Beznea (9):
+>>   dt-bindings: clock: r9a07g043-cpg: Add power domain IDs
+>>   dt-bindings: clock: r9a07g044-cpg: Add power domain IDs
+>>   dt-bindings: clock: r9a07g054-cpg: Add power domain IDs
+>>   dt-bindings: clock: r9a08g045-cpg: Add power domain IDs
+>>   dt-bindings: clock: renesas,rzg2l-cpg: Update #power-domain-cells =
+>>     <1> for RZ/G3S
+>>   clk: renesas: rzg2l: Extend power domain support
+>>   clk: renesas: r9a08g045: Add support for power domains
+>>   clk: renesas: rzg2l-cpg: Add suspend/resume support for power domains
+>>   arm64: dts: renesas: r9a08g045: Update #power-domain-cells = <1>
+>>
+>>  .../bindings/clock/renesas,rzg2l-cpg.yaml     |  18 +-
+>>  arch/arm64/boot/dts/renesas/r9a08g045.dtsi    |  20 +-
+>>  drivers/clk/renesas/r9a08g045-cpg.c           |  61 ++++
+>>  drivers/clk/renesas/rzg2l-cpg.c               | 269 +++++++++++++++++-
+>>  drivers/clk/renesas/rzg2l-cpg.h               |  77 +++++
+>>  include/dt-bindings/clock/r9a07g043-cpg.h     |  52 ++++
+>>  include/dt-bindings/clock/r9a07g044-cpg.h     |  58 ++++
+>>  include/dt-bindings/clock/r9a07g054-cpg.h     |  58 ++++
+>>  include/dt-bindings/clock/r9a08g045-cpg.h     |  70 +++++
+>>  9 files changed, 659 insertions(+), 24 deletions(-)
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
 
