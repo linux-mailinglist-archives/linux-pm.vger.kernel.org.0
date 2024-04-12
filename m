@@ -1,135 +1,115 @@
-Return-Path: <linux-pm+bounces-6301-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6302-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E57718A26A6
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 08:32:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99AF28A26AD
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 08:33:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A16F0282B4F
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 06:32:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54CE0287B43
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 06:33:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 200362230C;
-	Fri, 12 Apr 2024 06:32:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF53926ADB;
+	Fri, 12 Apr 2024 06:33:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ueViv4fc"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RJlhg4+z"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A706D168A8
-	for <linux-pm@vger.kernel.org>; Fri, 12 Apr 2024 06:32:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65DFC1BDCF
+	for <linux-pm@vger.kernel.org>; Fri, 12 Apr 2024 06:33:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712903572; cv=none; b=AQClZ137/F9wdazP9e0FXzsAkN1rNSnOASymnZhrCdQfq34ReXNoHrW7pS2vyylhfqZsDaOqDqlLnxem9TEO7UE/17xfSfp4i/p/FXSAth7pZjH0Hb2RqdMMpR4g70OCuA9Nt+f2zx67O/1P1pvmf5Vos83gzLpSyYEyS7aLBHY=
+	t=1712903634; cv=none; b=kct0ZXne8PpmGVr0OJKKGlueLWvvOwkVYdVDfZ5zregWFu5GztzAc9K7mO7BlBUSZCNVx1wcWFL88zlQGV1Wqi9FhFHKtzUvYeLrgXeJAjViAShwFlgkS9tRkxm71XZiczlDG6W7HgOIhKrhljP07Rp/P10TdEEgxpAwhpTc70Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712903572; c=relaxed/simple;
-	bh=uxgkGq0IyS6tdhfrvKhR3900zGHBdDLE3NA0/IJa7u4=;
+	s=arc-20240116; t=1712903634; c=relaxed/simple;
+	bh=wjy0tCcDDFSFANGy5jt/fSLtKW8TEgDaYPXpMvKiAi4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uuTO9NExv4bnPnyMIxz6B+LyKe/4JssXHX4W1ofRB18uaE6ISJGlymcWuJToKzI8bZabBO6xJzLoBOYj1UejZdd2PoxcBkkYJujne/t2aNsIwzucS/CjxoQxUZl5pWm3Oj5IUH+mvSt+pXMoWLfdipt+o24W+0F0NrmKrPFmtM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ueViv4fc; arc=none smtp.client-ip=209.85.210.53
+	 Content-Type:Content-Disposition:In-Reply-To; b=MppNz8uM5GKLZx/YWZh6Tg9aok8Hmchx4lpeAHri/bEl2VCL10QXiFJaN5U3To68aqIfOpDy79tqvwtsuaF4Nd5bCqW6Z7NfaVm1JHTFssQPgRscVFX2Gpp0spPfUssMymXmkKXiYeVHeWQs75uekZxFgwZqDE14aNjvON3o7vc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RJlhg4+z; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6e0f43074edso453007a34.1
-        for <linux-pm@vger.kernel.org>; Thu, 11 Apr 2024 23:32:50 -0700 (PDT)
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1e51398cc4eso5989655ad.2
+        for <linux-pm@vger.kernel.org>; Thu, 11 Apr 2024 23:33:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1712903570; x=1713508370; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=1gOcCS7A/vf1M4eu5npCTxNSh214bCEI8cslchyUmXs=;
-        b=ueViv4fcJ+UKCH12lF9EWdGk8miFn+ZBZYjTAFy6/WU92xkPAoadlvU9xIeZIuFTm8
-         2yFEQ8TmBnf4RjTlj5Wlz96Tys/I0niRHWDzoeaJdKHMxelurbg8Ejv1Y9LMFB4JgFRl
-         FQJzUK0Gv4EKnVsfHikd7VZUCR34LIcOzOFRF3SKMhy1BUX+lM9Nqi+4K0rO9xoZtTOS
-         jk3Y0ui2EEVgBXpUzYjpLnUZZ+cFUjZ8R5phHKlthOOd4+RkFi2fcHjUg8koDRBUw/Jw
-         bcT+N2UXqVCB4ALUWbTaCvJgTFmBerk9r2z1NXPxRxUgTMHXgcKNGBkGLAqxQTIhIdb+
-         jx1Q==
+        d=linaro.org; s=google; t=1712903633; x=1713508433; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YLvptBdz/0pjB6K/QkOMOBUPaiviyAg/FmtjlBZbyCg=;
+        b=RJlhg4+zuYqdxq7IoXkbOVJzTZfz4NYEmYNFda3Yn/EWQJnvgnjdOKOrhP8L+ShBx8
+         h5IBybKjrhtLmAORpHZTEimyzebuonOqTjLXfrpddIUxwTm7n4LrKFjfSifoyvUlxu3B
+         vWNgR3QrdPlvnsrytBzpDujs9bNoKit7XYOgkJs+Sd10aWvY0++G7or8D0Do8sDF0pmy
+         lWSa9Wwfi17HB8XS/mBSIhEbtcG3aoo2S9gjIQy98lElhExplVGU90BBEoiLL4ZHIDiA
+         cwa4+1KNzS/eHW2onxXRp6UAeVn8Z2VyPV8QsGhlZYpNLtR1aZ/Cbm7xcuPGVOJ/TzrY
+         /CFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712903570; x=1713508370;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1gOcCS7A/vf1M4eu5npCTxNSh214bCEI8cslchyUmXs=;
-        b=oJ49P956WyjezUUrUDVFtGfKzgB9XdNA9R+MAnNn3QVGj1Ugs7u9yOYKjn1KBk9EHr
-         W8VSXLOvI8+KBedhCZRJ6gYBrW/790puXFV3EPSb8YsHecb3WplAqK5n0QRt/PLZG8Pu
-         i1IrqB6HY8j/s+Mz3nTGodHa0MEgVsksS5VI9TpiATYUSSH6YxHI9KdAjI62hylE3Bf9
-         +7nUDl/GKJabSszfvgvN+aSbc74FvBc6t1uFKpij5+sow4ptQZJeDFG6tgs9gwi24y2f
-         KzyylI36C9sonq45jjEy36k3MeOQC2GbZYVEjJqIGIRa+wfdeNjgqWFODS2VuEW+6UgB
-         Q79A==
-X-Forwarded-Encrypted: i=1; AJvYcCVcH/0suHq5Adqs6e1d5bae/wpoG/1bM6MW3fU3IIPjsr0WO6efLjn4eqzYtRlf/xKa9/UI8vhOZMZ4qO85mGZRZme5oiJ8wy0=
-X-Gm-Message-State: AOJu0Yyqm6g2KJnUvewCothj7H5qwq/9vvwTbyxaO/JoWaXD6ZBrsn4h
-	8teY2KnzjtTo63aDpFrk4gtM/SWzDvtxlGv1GKWR59w/0MuCZi12ypxANrjA9WM=
-X-Google-Smtp-Source: AGHT+IGBxBOg4TEsrK4sE46CjyZBiwV0uRDNuCX52Ny7ovU474/OKXO1O6Hb1DpNkthFrxyKZZXJIQ==
-X-Received: by 2002:a05:6830:4790:b0:6ea:2a61:176f with SMTP id df16-20020a056830479000b006ea2a61176fmr1779921otb.18.1712903569570;
-        Thu, 11 Apr 2024 23:32:49 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1712903633; x=1713508433;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YLvptBdz/0pjB6K/QkOMOBUPaiviyAg/FmtjlBZbyCg=;
+        b=m9YEW6N0lKz6gjfWsRCnsTeFAqCIRwn+rirZ+L1ZOVfhtlM3b3YeqOCNFynsIOeE61
+         Be13Y244M3VSsoejgD9GBu+NdY9PyfAI6HLHoJkyg0GN0dV+2TUS5Cuzep0KAbXxzPTh
+         nX2oh4IGoAL3ZZumxugbwTE1OYydM4i29sYTuwLVWLEZ7XzP5CN7WY+I407I6KweLibp
+         3r9q4BtbqmpC7DUho8Q8iTLjj6I3xzxtkJfD2xrYNk3yyjyMgFLT8XiU7cl3IpgeOo2q
+         9MU0l410g3XFC1e7XciyyYuzLlLcdzEe4t3RRlZ5MhgvoOYGSh+TO47pwN+81dpYwtVy
+         5bRQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXPt4aNVdK223QC5FpuSY1NnTWh5Codw8rAcuiYodKIgL51zjro86IR75izmPoUXiKBKFuOeJN6nO+uZUOu9L47sUrFq1Kz9AI=
+X-Gm-Message-State: AOJu0YyloJxELdC9fTzxt7WWqRYX1LKKqjQEKs4oFB/WErFOcNLR+ca+
+	ZquljlX8ODL54jvDIAeHNivQ23ti3RmTzNucuDRT32kP4C6Yf4PR8AnT26OI0Rk=
+X-Google-Smtp-Source: AGHT+IE6jM9Et3yQ8yb1c9/7mBThsd5wLAGj5SfIUnGojPSeadsQQbg1tFSGX+qbEKoYAGWiHOtv5g==
+X-Received: by 2002:a17:903:230b:b0:1e2:9676:c326 with SMTP id d11-20020a170903230b00b001e29676c326mr2096392plh.29.1712903632480;
+        Thu, 11 Apr 2024 23:33:52 -0700 (PDT)
 Received: from localhost ([122.172.85.136])
-        by smtp.gmail.com with ESMTPSA id k28-20020a63ba1c000000b005f0793db2ebsm1793984pgf.74.2024.04.11.23.32.48
+        by smtp.gmail.com with ESMTPSA id z17-20020a170903019100b001dddcfca329sm2215394plg.148.2024.04.11.23.33.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Apr 2024 23:32:49 -0700 (PDT)
-Date: Fri, 12 Apr 2024 12:02:46 +0530
+        Thu, 11 Apr 2024 23:33:51 -0700 (PDT)
+Date: Fri, 12 Apr 2024 12:03:50 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: gregkh@linuxfoundation.org
-Cc: lizhe <sensor1010@163.com>, rafael <rafael@kernel.org>,
-	linux-pm <linux-pm@vger.kernel.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] cpufreq: exit() callback is optional
-Message-ID: <20240412063246.tk5z245miakbxws4@vireshk-i7>
-References: <b97964653d02225f061e0c2a650b365c354b98c8.1712900945.git.viresh.kumar@linaro.org>
- <5759bc29.32d04.18ed0ef5037.Coremail.sensor1010@163.com>
- <20240412062407.ntahibzv6xsbrnxs@vireshk-i7>
- <1b53a162.32e95.18ed0fdb13e.Coremail.sensor1010@163.com>
+To: Lizhe <sensor1010@163.com>
+Cc: rafael@kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: Fixed kernel crash caused by cpufreq issues
+Message-ID: <20240412063350.oozcb3awzbkk5zdt@vireshk-i7>
+References: <20240411231818.2471-1-sensor1010@163.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1b53a162.32e95.18ed0fdb13e.Coremail.sensor1010@163.com>
+In-Reply-To: <20240411231818.2471-1-sensor1010@163.com>
 
-Getting the Cc list back, + Greg.
+On 11-04-24, 16:18, Lizhe wrote:
+> When the cpufreq_driver does not provide an exit() function.
+> cpufreq offline operations can result in a kernel crash.
+> 
+> Signed-off-by: Lizhe <sensor1010@163.com>
+> ---
+>  drivers/cpufreq/cpufreq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 04d349372de3..e8660bc7d232 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1739,7 +1739,7 @@ static void cpufreq_remove_dev(struct device *dev, struct subsys_interface *sif)
+>  	}
+>  
+>  	/* We did light-weight exit earlier, do full tear down now */
+> -	if (cpufreq_driver->offline)
+> +	if (cpufreq_driver->offline && cpufreq_driver->exit)
+>  		cpufreq_driver->exit(policy);
+>  
+>  	up_write(&policy->rwsem);
 
-Greg,
+Hmm, saw this just now.
 
-Looks like another one of those experiments with the community ?
-
-:)
-
-On 12-04-24, 14:27, lizhe wrote:
-> You are really disgusting and have no manners at all. This makes people feel disgusted with your company.
-> 
-> 
-> 
-> ---- Replied Message ----
-> | From | Viresh Kumar<viresh.kumar@linaro.org> |
-> | Date | 04/12/2024 14:24 |
-> | To | lizhe<sensor1010@163.com> |
-> | Cc | rafael<rafael@kernel.org>、linux-pm<linux-pm@vger.kernel.org>、Vincent Guittot<vincent.guittot@linaro.org>、linux-kernel<linux-kernel@vger.kernel.org> |
-> | Subject | Re: [PATCH] cpufreq: exit() callback is optional |
-> On 12-04-24, 14:12, lizhe wrote:
-> > I was the first one to find this problem, so the patch should be submitted by me.
-> 
-> :)
-> 
-> This patch doesn't take away any of the work you have done. What you are trying
-> to do is simplify drivers with empty exit callback and the unused return value
-> of the callback.
-> 
-> And what I am trying to do is fix a bug in the cpufreq core, which only makes
-> your other patches more acceptable.
-> 
-> So no, you never identified the problem this patch is trying to solve.
-> 
-> Please don't feel that anyone is trying to take away your hardwork. That's not
-> how things are done here. We appreciate anyone who is spending time to make the
-> kernel better.
-> 
-> If I were to take credit of your work, then I would have sent a big patch to fix
-> the exit() callback issue you are trying to solve, with randomly sent patches.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 -- 
 viresh
