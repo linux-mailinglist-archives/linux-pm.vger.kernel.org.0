@@ -1,117 +1,238 @@
-Return-Path: <linux-pm+bounces-6310-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6311-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA87A8A2B1E
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 11:24:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77C118A2B43
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 11:33:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 800631F21ED9
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 09:24:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31DA7283058
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 09:33:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EACA153E20;
-	Fri, 12 Apr 2024 09:23:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8790A50A66;
+	Fri, 12 Apr 2024 09:33:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WWWZQsuH"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="bzQmWAx3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80D3C53E13
-	for <linux-pm@vger.kernel.org>; Fri, 12 Apr 2024 09:23:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C72054D58E;
+	Fri, 12 Apr 2024 09:33:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712913795; cv=none; b=h6ZIkuLmlrm2DDEai0OTnBUb/9h2/JKGuYbq5WzwkIoeo9mbdXRpBGs+juO2gt0Y2YM+k2nkafqd3r4Ybb2NHPGM2Xtw9WEu6CqzpzIMfANXPKWTw30tyimNszlcUzGD/1UOgHhHWSP1BMW0veHBhkhKQUKbw6cmfx31aidgKME=
+	t=1712914390; cv=none; b=M2kdLoCnaPzHJvk4XankF00w/IGOpXX8MC/52yL2Nq9ASvbBCZCZl4UIH4xlVBtjJQXMmExCmt0rhGzNYKY9M6yculwdy2TiGXYTALgUs3W7TE9r3gjVH6CJoGBIGZ6mxzpOoPf8e2w/D3EkfI54RhxD4BbXRPRz/8RHvg1FlNg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712913795; c=relaxed/simple;
-	bh=E6KMIIOqA1QVK9aa+E0L6Y6Fc7WePR4/O5s11BcWfok=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cyQ1Zc/wpSvo5knZW1N5LlY7DDwSqJiNaFBNio8vpB9XbZLL0BpUzykaPiGbqfwyNHou4CbILRcz1l0EatbOY7QwF3QjgytoP9vyxRS0DeV0QWm28EA/eOa5kjZm+VHq6Sac44oIYRSDBlX5Gr/99YF4B6l8me1I1vCV//GNZOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WWWZQsuH; arc=none smtp.client-ip=209.85.215.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-5cddfe0cb64so444433a12.0
-        for <linux-pm@vger.kernel.org>; Fri, 12 Apr 2024 02:23:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1712913794; x=1713518594; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=R4ch3SZG+u9KXNYx8JP1SCc8PoJ9Y2e8skYjDOyaH8k=;
-        b=WWWZQsuHFHnCUmSOMppKC9RD9CDRVRn1jvopIq0uQQpE9Y5hPwxp6PVqPyzq51i9a1
-         6+Luj8bCDxoa/A6q2tQtleV15POEx3q/ok1dkKcklazuC0mmtDwgF/UmKp1fl8LWiK7w
-         ng7W+T670wi8FOnaOzJ+j+KP9U4gwmQgBP3RavhmOWei613axLNLfIGDbzEGTgNwQ33w
-         avJuX+rFRTlFI59R3OXZNATIOOJXa2jbriLf3A7ZgAleH1u6grt0kGj0WA4GjcFLU84L
-         lSRY/A1kn4R+YgfBPFBBI89sypVV/QRkjWEnBzze4GGBhCk4ENk+2gViUEFbONZ1YiYw
-         m4Tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712913794; x=1713518594;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R4ch3SZG+u9KXNYx8JP1SCc8PoJ9Y2e8skYjDOyaH8k=;
-        b=pym1mqKR6Y7rTEsqn5BO8Gcq9KQIxgZ1FnyRAuZwBGEP+2+4WWNxAjSQzWkvA2nKEy
-         iOYrPL8dxPBqEQByIE+gZVZDQnNgxIw8NjPh5ny50qLJmYXOOElUdYZBdwtgjdFu7a93
-         +C9ovvmxcJlDYODm6mfcV1wCl6E56V3fkdFOaO8rBaCOLvhOCKcBLu8fSMTJaVb947Ti
-         OQ8WIYK0nhmb7+ccTFfuI5UOa/DUNxtOUZyB/Q8+w1S40QLaimohYPX0aW0A2Nb8l4g3
-         l92A7D4I111/kQe6irwxMIGNZNQ3PgYlninfeM8JavpauN15KLNYBk5o9TkYwiXAi7y5
-         veEA==
-X-Forwarded-Encrypted: i=1; AJvYcCVe/7/3Hhal9bvC7T5cnI0KXeh68PjIRv8/qsOYfM7Ey5sci0+Pd9qtGZJTRlzHSua8NXd1KeA+bVZjkCTNOYJyWFRq3Y5R1bM=
-X-Gm-Message-State: AOJu0Yyl759+8IqFYKKTmiZc3ciHvXZzn7mvfO8uk0Cx+tJvnspIOfep
-	Hz0UQipYNL1S3Jrmj2Jgbor7tWL/NKR2MjNbqGurbZjcPYXQZiT5uDyCxZMPAPQ=
-X-Google-Smtp-Source: AGHT+IGbtWnfzY4wLra4XHruU+wkDpKN8WajlFxh72ENwVoA79DpapgLQC70i+IR0TNX+C1q+A0hIQ==
-X-Received: by 2002:a05:6a20:de14:b0:1a9:84f6:dcb6 with SMTP id kz20-20020a056a20de1400b001a984f6dcb6mr1767828pzb.57.1712913793598;
-        Fri, 12 Apr 2024 02:23:13 -0700 (PDT)
-Received: from localhost ([122.172.85.136])
-        by smtp.gmail.com with ESMTPSA id o16-20020a170902d4d000b001e088a9e2bcsm2537800plg.292.2024.04.12.02.23.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Apr 2024 02:23:13 -0700 (PDT)
-Date: Fri, 12 Apr 2024 14:53:11 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: lizhe <sensor1010@163.com>,
-	"grygorii.strashko" <grygorii.strashko@ti.com>,
-	"gregory.clement" <gregory.clement@bootlin.com>,
-	"grant.likely" <grant.likely@secretlab.ca>,
-	bsegall <bsegall@google.com>, broonie <broonie@kernel.org>,
-	bristot <bristot@redhat.com>, brgl <brgl@bgdev.pl>,
-	"f.fainelli" <f.fainelli@gmail.com>,
-	"fancer.lancer" <fancer.lancer@gmail.com>,
-	festevam <festevam@gmail.com>, Finn Thain <fthain@linux-m68k.org>,
-	rafael <rafael@kernel.org>, linux-pm <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH] cpufreq: exit() callback is optional
-Message-ID: <20240412092311.nlwmqlt7ujtew4cw@vireshk-i7>
-References: <b97964653d02225f061e0c2a650b365c354b98c8.1712900945.git.viresh.kumar@linaro.org>
- <5759bc29.32d04.18ed0ef5037.Coremail.sensor1010@163.com>
- <20240412062407.ntahibzv6xsbrnxs@vireshk-i7>
- <1b53a162.32e95.18ed0fdb13e.Coremail.sensor1010@163.com>
- <20240412063246.tk5z245miakbxws4@vireshk-i7>
- <2117690204.533771.1712904398042.JavaMail.root@mail-tracker-145-3ep34-c9h23-5f64cf7787-82gdh>
- <2024041212-bony-emphasize-75dd@gregkh>
- <663acff5.349d4.18ed18da6ff.Coremail.sensor1010@163.com>
- <2024041238-publisher-provable-7ebe@gregkh>
+	s=arc-20240116; t=1712914390; c=relaxed/simple;
+	bh=447vID+BjsGAEuT5pXDvttIGggtbTmZ35xwoUndklWQ=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=flTm/A7QD2t7MCFxNvhHRIJWMvTaVbMo4NnUNZRFfOhcAoAC2Bgu+8GwskaQrDHdAddr0IfB1mnLfo5OVD60wLt0Fzr/k6MkalUyJLpJDFbD+GrwF9Uhc1MG1aXanBBhMRRhGusSNFpY4XdvsENuXuj6WV3+e6mzMVbQPYZ6LjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=bzQmWAx3; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43C7l4aa025212;
+	Fri, 12 Apr 2024 09:32:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	date:from:to:cc:subject:message-id:references:mime-version
+	:content-type:in-reply-to; s=qcppdkim1; bh=sZ8qCrQrYqQLoJHciB//k
+	j+RjjDUdkNCd9ioYLTNi20=; b=bzQmWAx36Vt/7Vm3VjvnZuk/q91iMvKosXd67
+	yK9SnhpKF+GSYOe7HVV2ju6lv9mAZH1ClT5kF09hOtUHLZU9rmtSzEtt15SCxneu
+	NRPebQQwL2i9iFNvq8WdxGw0s/504QxDd/DGckKzQ94pzxJSQVr9wZ6cwqzKi1gh
+	Q5+GhorMEO4vaaHVKmeNM3W+h537tpv/DF7sl2Dq0Ob6LyG0zX/5JIgtoHHDsDdd
+	wUixavYnrRpVXquDWk5jvohC4wLAP9A1JFsXm6Yi8glWPqO/wopklL3I3smHkDcl
+	vkN3O0uu3J/48m8sx3gQsce8rge+LXWCvDhFzVJUj0EIUNVrQ==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xf0uw06mb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 12 Apr 2024 09:32:57 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43C9WuS9025598
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 12 Apr 2024 09:32:56 GMT
+Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Fri, 12 Apr 2024 02:32:51 -0700
+Date: Fri, 12 Apr 2024 15:02:47 +0530
+From: Varadarajan Narayanan <quic_varada@quicinc.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+CC: Konrad Dybcio <konrad.dybcio@linaro.org>, <andersson@kernel.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>, <robh@kernel.org>,
+        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <djakov@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <quic_anusha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v7 1/5] dt-bindings: interconnect: Add Qualcomm IPQ9574
+ support
+Message-ID: <Zhj/v+AfzHlUCwRg@hu-varada-blr.qualcomm.com>
+References: <58c9b754-b9a7-444d-9545-9e6648010630@kernel.org>
+ <Zg5q6mnWtK6hmPBT@hu-varada-blr.qualcomm.com>
+ <ZhTxFVDH0xTSkw7r@hu-varada-blr.qualcomm.com>
+ <1ec401be-11cb-416a-9eae-d72ea8acf06f@kernel.org>
+ <ZhUghsa5Do5m7wrX@hu-varada-blr.qualcomm.com>
+ <a0173a13-5f20-4e24-8417-afce5fdbda0e@kernel.org>
+ <ZhZjuCkJrtPbwtS/@hu-varada-blr.qualcomm.com>
+ <70d0afa7-4990-4180-8dfa-cdf267e4c7a2@kernel.org>
+ <f1b0d280-6986-4055-a611-2caceb15867d@linaro.org>
+ <82e5503c-0710-4b17-af79-8dece4794ec8@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <2024041238-publisher-provable-7ebe@gregkh>
+In-Reply-To: <82e5503c-0710-4b17-af79-8dece4794ec8@kernel.org>
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: EOkL0jt8Cn-SKNNZmytxTZuFP3PqlHd3
+X-Proofpoint-ORIG-GUID: EOkL0jt8Cn-SKNNZmytxTZuFP3PqlHd3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-12_06,2024-04-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
+ mlxlogscore=999 bulkscore=0 phishscore=0 lowpriorityscore=0 mlxscore=0
+ clxscore=1015 impostorscore=0 suspectscore=0 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2404010003 definitions=main-2404120068
 
-On 12-04-24, 11:14, Greg KH wrote:
-> On Fri, Apr 12, 2024 at 05:05:05PM +0800, lizhe wrote:
-> > I found it first and submitted it to the main line first. Please be fair and just. Let him withdraw his patch.
-> 
-> lore.kernel.org links for this please?
+On Wed, Apr 10, 2024 at 02:01:00PM +0200, Krzysztof Kozlowski wrote:
+> On 10/04/2024 13:48, Konrad Dybcio wrote:
+> >
+> >
+> > On 4/10/24 13:15, Krzysztof Kozlowski wrote:
+> >> On 10/04/2024 12:02, Varadarajan Narayanan wrote:
+> >>>> Okay, so what happens if icc-clk way of generating them changes a bit?
+> >>>> It can change, why not, driver implementation is not an ABI.
+> >>>>
+> >>>>>
+> >>>>> 	2. These auto-generated id-numbers have to be correctly
+> >>>>> 	   tied to the DT nodes. Else, the relevant clocks may
+> >>>>> 	   not get enabled.
+> >>>>
+> >>>> Sorry, I don't get, how auto generated ID number is tied to DT node.
+> >>>> What DT node?
+> >>>
+> >>> I meant the following usage for the 'interconnects' entry of the
+> >>> consumer peripheral's node.
+> >>>
+> >>> 	interconnects = <&gcc MASTER_ANOC_PCIE0 &gcc SLAVE_ANOC_PCIE0>,
+> >>> 			      ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^
+> >>> 			<&gcc MASTER_SNOC_PCIE0 &gcc SLAVE_SNOC_PCIE0>;
+> >>> 			      ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^
+> >>>
+> >>>>> Since ICC-CLK creates two ids per clock entry (one MASTER_xxx and
+> >>>>> one SLAVE_xxx), using those MASTER/SLAVE_xxx macros as indices in
+> >>>>> the below array would create holes.
+> >>>>>
+> >>>>> 	static int icc_ipq9574_hws[] = {
+> >>>>> 		[MASTER_ANOC_PCIE0] = GCC_ANOC_PCIE0_1LANE_M_CLK,
+> >>>>> 		[MASTER_SNOC_PCIE0] = GCC_SNOC_PCIE0_1LANE_S_CLK,
+> >>>>> 		[MASTER_ANOC_PCIE1] = GCC_ANOC_PCIE1_1LANE_M_CLK,
+> >>>>> 		[MASTER_SNOC_PCIE1] = GCC_SNOC_PCIE1_1LANE_S_CLK,
+> >>>>> 		. . .
+> >>>>> 	};
+> >>>>>
+> >>>>> Other Qualcomm drivers don't have this issue and they can
+> >>>>> directly use the MASTER/SLAVE_xxx macros.
+> >>>>
+> >>>> I understand, thanks, yet your last patch keeps adding fake IDs, means
+> >>>> IDs which are not part of ABI.
+> >>>>
+> >>>>>
+> >>>>> As the MASTER_xxx macros cannot be used, have to define a new set
+> >>>>> of macros that can be used for indices in the above array. This
+> >>>>> is the reason for the ICC_BINDING_NAME macros.
+> >>>>
+> >>>> Then maybe fix the driver, instead of adding something which is not an
+> >>>> ABI to bindings and completely skipping the actual ABI.
+> >>>
+> >>> Will remove the ICC_xxx defines from the header. And in the
+> >>> driver will change the declaration as follows. Will that be
+> >>> acceptable?
+> >>>
+> >>> 	static int icc_ipq9574_hws[] = {
+> >>> 		[MASTER_ANOC_PCIE0 / 2] = GCC_ANOC_PCIE0_1LANE_M_CLK,
+> >>
+> >> What is the binding in such case? What exactly do you bind between
+> >> driver and DTS?
+> >
+> > I think what Krzysztof is trying to say here is "the icc-clk API is tragic"
+> > and the best solution would be to make it such that the interconnect indices
+> > are set explicitly, instead of (master, slave), (master, slave) etc.
+> >
+> > Does that sound good, Krzysztof?
+>
+> Yes, I think earlier I expressed that icc-clk might needs fixes.
 
-Yeah, I just posted those in a separate reply. There was some
-confusion in the beginning and I already acked the concerned patch few
-hours back. Rafael may apply them later.
+Ok
 
-Not sure why the emails are still coming despite that..
+> The indices you define in the binding must be used by DTS and by the driver.
 
--- 
-viresh
+There are 3 drivers in play here.
+	1. The icc-clk driver
+	2. The gcc (i.e. the interconnect driver)
+	3. The consumer peripheral's driver
+
+By 'driver' I assume, you mean the icc-clk driver.
+
+> Directly, otherwise it is error-prone and not really an ABI...
+
+To address this, will modify the icc-clk driver as follows.
+
+	==========================================
+	diff --git a/include/linux/interconnect-clk.h b/include/linux/interconnect-clk.h
+	index 5c611a8b0892..9bcee3e9c56c 100644
+	--- a/include/linux/interconnect-clk.h
+	+++ b/include/linux/interconnect-clk.h
+	@@ -11,6 +11,8 @@ struct device;
+	 struct icc_clk_data {
+		struct clk *clk;
+		const char *name;
+	+	unsigned int master_id;
+	+	unsigned int slave_id;
+	 };
+
+
+	diff --git a/drivers/interconnect/icc-clk.c b/drivers/interconnect/icc-clk.c
+	index bce946592c98..f788db15cd76 100644
+	--- a/drivers/interconnect/icc-clk.c
+	+++ b/drivers/interconnect/icc-clk.c
+	@@ -108,7 +108,7 @@ struct icc_provider *icc_clk_register(struct device *dev,
+		for (i = 0, j = 0; i < num_clocks; i++) {
+			qp->clocks[i].clk = data[i].clk;
+
+	-		node = icc_node_create(first_id + j);
+	+		node = icc_node_create(first_id + data[i].master_id);
+			if (IS_ERR(node)) {
+				ret = PTR_ERR(node);
+				goto err;
+	@@ -118,10 +118,10 @@ struct icc_provider *icc_clk_register(struct device *dev,
+			node->data = &qp->clocks[i];
+			icc_node_add(node, provider);
+			/* link to the next node, slave */
+	-		icc_link_create(node, first_id + j + 1);
+	+		icc_link_create(node, first_id + data[i].slave_id);
+			onecell->nodes[j++] = node;
+
+	-		node = icc_node_create(first_id + j);
+	+		node = icc_node_create(first_id + data[i].slave_id);
+			if (IS_ERR(node)) {
+				ret = PTR_ERR(node);
+				goto err;
+	==========================================
+
+And update the inputs going from gcc-ipq9574.c accordingly
+to use the MASTER_xxx and SLAVE_xxx defines. Will this be ok?
+
+Konrad & Krzysztof kindly let me know.
+
+Thanks
+Varada
 
