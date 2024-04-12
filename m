@@ -1,74 +1,63 @@
-Return-Path: <linux-pm+bounces-6312-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6313-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 974488A2BE7
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 12:05:49 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD9558A2BF2
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 12:08:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E6F228904C
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 10:05:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F203EB2105E
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 10:07:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97C8A53819;
-	Fri, 12 Apr 2024 10:05:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D01053378;
+	Fri, 12 Apr 2024 10:07:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="Z7HYXTPb"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="dS/yLfWb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A1545381B
-	for <linux-pm@vger.kernel.org>; Fri, 12 Apr 2024 10:05:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ECC7502AC;
+	Fri, 12 Apr 2024 10:07:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712916306; cv=none; b=mIOvh7BY1YS7v7PCLfbU/eEN5Ii0iF/SlWlBBRs+QsgoaipdLMqCXit66PAQYwVg1sFAi/gZBYOMJhVwPrCzDs+JsCtqjHHDUN8fc75J6Wkiw2R4n06A3RZJJnjO5NeujT4Bo0eqFRiluh85vl9xiR6y/svkYE6Jq7X2C7MjZNE=
+	t=1712916473; cv=none; b=lyBv4w5Ah4HwBFmcN0E6Spa5fBbSsuxK7pQ4ePWkE3udz0k05CCK1AtblnK9Ny1wPjnfZaKpmpXohS71DdLvO2eku7OVMV6h2rZ69NAWHlg84FDwQ8R8W+ArvIUcSgKtqVBeFROOKPeBuXKm2RGa7JTsiiYv3mFCMB/xfPeiCc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712916306; c=relaxed/simple;
-	bh=m7SZnyJBVQZSm3/ZMgPP8KmAohN82QOdxqDUo61ETQY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F6+inFhryAlOPT9G9Jji212CxRslMblEc7ESeppgOb2eZWIB/78DOQdopc8Is5kS5L7slpVwp95oEzYrmsc/iQnxia8JQJK8+GL1asA7DMvoS23p6BuO5NsGRcTTnBWesZjoPyqExYY6HkKJ0y3r6OKbclmTZWQ8LYBZY6ccRSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Z7HYXTPb; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a520410b7c0so82416066b.0
-        for <linux-pm@vger.kernel.org>; Fri, 12 Apr 2024 03:05:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1712916302; x=1713521102; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NmvVpGqH/YnUJn3EKn9NCfL9fG7zsGqsH7iqYTHHqXM=;
-        b=Z7HYXTPbEgHcFEGia5f3Cjw4XQFfFdF11UzWrXfj5n/Cr013pUpChNuVE3Gfi2LXBZ
-         z4MTf+vkcVMv/ixTP04YBHG9LKgTqvq6OqAHs+IuL0l5uDdN4EDadc0x36a8d9OcB/g6
-         K43uquGDN8TlGSmwvb2pk8Ltv4YCTTHny3ZbtWRIPJu5GUX3Fk65V8abkN/385fonp3N
-         FSH17u0IAOZ7rRTg4R6O+hivA7sErjQHtQht5ccslYOAaSCe6RFyxjPrjdgthWUTaF+Y
-         qdw10Cy83XX+CPOc9JdLjLH5FLYZl0F8bI+KSxnAKLRbBban0ytnVIXTOWCwV2wLZY+i
-         tzuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712916302; x=1713521102;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NmvVpGqH/YnUJn3EKn9NCfL9fG7zsGqsH7iqYTHHqXM=;
-        b=LZQNLtNNNea8bN8rB8jViyBs7c3QyMJL/+R0cdHd8wNrKsMGDHcuLwGN/8GogayFRJ
-         pQfkdaHa29A0iQm1/pEibVmUuUk6NKgG6xDd1loifDVp9XyijMcAHs7HrrvjAk0aSU84
-         gydj/k3iIcuKmvFQdECbLFT4Ny2acPD+0vZmOUtYpLiv9OHYptmIb18NWuP1qWXj1Wlh
-         RhVTTF7z0SODTHaUdMZ4VvLCSDHuSCwJBHKXoMq1nYL3eF8MN5x98vf/mmytJsG3GrSo
-         5D1e4NqY42BfHjppvSsKynyNOg6bpdOZaq3nCPIzKzILeL3omqBbXbrmhEMwuQh12wKF
-         zBfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVUhpzPV0PZLub3usnGejoVm2jK6IzFNa2Hd2sGwlRseSLTaSSagRmJBHrvzmbwnXYFKLNEFiP7MOGtzitDRxliP6mzEw8sduU=
-X-Gm-Message-State: AOJu0YwEm1aQn3uISy82JmA8fY0hHX4LItN/DKjVio/3w6FVwhLHty8T
-	b7TEL3R+M1qCKrv1+Ypvx0pfffMAMdTZLQmbd6Xr95++9Rhi4ItCqAvuKhKc7NY=
-X-Google-Smtp-Source: AGHT+IHQMQDAmt/KUMiRX2jfsv9Ugd19LQKa3XJw1aZ7aEKYJ1UBxTCpp3X0iWhacATHBs5n4+le0A==
-X-Received: by 2002:a17:906:36d6:b0:a51:d7f3:324b with SMTP id b22-20020a17090636d600b00a51d7f3324bmr1290933ejc.66.1712916301420;
-        Fri, 12 Apr 2024 03:05:01 -0700 (PDT)
-Received: from [192.168.50.4] ([82.78.167.8])
-        by smtp.gmail.com with ESMTPSA id g22-20020a1709063b1600b00a4e533085aesm1637200ejf.129.2024.04.12.03.04.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Apr 2024 03:05:00 -0700 (PDT)
-Message-ID: <2a07d159-fdd4-48d4-b351-01f5e2579c3a@tuxon.dev>
-Date: Fri, 12 Apr 2024 13:04:58 +0300
+	s=arc-20240116; t=1712916473; c=relaxed/simple;
+	bh=rsBOxr6Gjs4j8AYZEtfDkxXxCRpzRRY6DRRlTtZbPbY=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+	 In-Reply-To:Content-Type; b=ee05clSVrn747Yjp4ZyrYClS7OWRx+axdtLl4cgBVT8FbvrZceJLYlTMMR5oBQjAIPgDO4YxFJD3v+rup5HeBafSRh9zbPBrSfvGMfHglwr8RQXoEr69wL6iaR0mhwqvRNIgzwmXnZKv+69j9zKmO+VxSRMewQUjsgZUL9xAG+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=dS/yLfWb; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43C6F8Y0005367;
+	Fri, 12 Apr 2024 10:07:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:from:to:cc:references
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=gIqeReF95pXfXYhYP0AXo2CDiHUnEU8JxPisJt7r5No=; b=dS
+	/yLfWbwCT4HcoWPWVa+9gC7uA8ID6SHKt+fGS0Mdz/duNOtcVVMblAHudzfoNb+D
+	X7VFSSwYZ4xDBoZ/XN0gz0lVdQBUZ1qy5xhb1qC3qyRFVE3ghZZmTodu/V/YN3Lg
+	+IkOzd41hRAIljpwEAcjWiwFp306AjsrSpppGIYM1uruq4jxKufnQsFCuKuKS5wr
+	cD132wgz1Hlr+Hl6TNhLv9wu3lpWyBMuICXr/Nucdoif8AKUIbVEQYNT8Awz27zS
+	sFMaLvnhUWJefhzWsoDdVCZqeo323mG3Nga5j9I3deNvk9RB/NKZmHL/c4tACPv7
+	v0fJB0kvGKjIBKkzEWDw==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xev74ruej-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 12 Apr 2024 10:07:29 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43CA7S2s002736
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 12 Apr 2024 10:07:28 GMT
+Received: from [10.216.43.23] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 12 Apr
+ 2024 03:07:20 -0700
+Message-ID: <c1f8c627-6497-4598-8b71-6be45e9c12f1@quicinc.com>
+Date: Fri, 12 Apr 2024 15:36:43 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -76,168 +65,152 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/9] clk: renesas: rzg2l: Add support for power domains
+Subject: Re: [PATCH v2 8/8] sched/pelt: Introduce PELT multiplier
+From: Ashay Jaiswal <quic_ashayj@quicinc.com>
+To: Vincent Guittot <vincent.guittot@linaro.org>,
+        Qais Yousef
+	<qyousef@layalina.io>
+CC: Ingo Molnar <mingo@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar
+	<viresh.kumar@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        Lukasz Luba
+	<lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
+        Rick Yiu
+	<rickyiu@google.com>, Chung-Kai Mei <chungkai@google.com>,
+        <quic_anshar@quicinc.com>, <quic_atulpant@quicinc.com>,
+        <quic_shashim@quicinc.com>, <quic_rgottimu@quicinc.com>,
+        <quic_adharmap@quicinc.com>, <quic_kshivnan@quicinc.com>,
+        <quic_pkondeti@quicinc.com>
+References: <20231208002342.367117-1-qyousef@layalina.io>
+ <20231208002342.367117-9-qyousef@layalina.io>
+ <a561029e-993d-726d-18ce-0bc014e6533c@quicinc.com>
+ <20240121000444.ghue2miejmiair6l@airbuntu>
+ <8dfb5db7-6da0-4f6f-30ef-8966428e4a1c@quicinc.com>
+ <CAKfTPtB=nv7DDqTvsdenOg+UNoNFx=f2SLvihHx+CMkeE6NyNA@mail.gmail.com>
+ <2270ebb6-3830-d667-1b9e-2efc96746b94@quicinc.com>
 Content-Language: en-US
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- magnus.damm@gmail.com, linux-renesas-soc@vger.kernel.org,
- linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
- Ulf Hansson <ulf.hansson@linaro.org>,
- Linux PM list <linux-pm@vger.kernel.org>, Guenter Roeck
- <linux@roeck-us.net>, Wim Van Sebroeck <wim@linux-watchdog.org>,
- Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>
-References: <20240410122657.2051132-1-claudiu.beznea.uj@bp.renesas.com>
- <CAMuHMdUesJe0396MsH9PSUMEq=sWx3BYc=QrAFzR2EVcLhm03Q@mail.gmail.com>
-From: claudiu beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <CAMuHMdUesJe0396MsH9PSUMEq=sWx3BYc=QrAFzR2EVcLhm03Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <2270ebb6-3830-d667-1b9e-2efc96746b94@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: A51eqVVYQa2YnVSeNW0ANGELHT1P6_b9
+X-Proofpoint-ORIG-GUID: A51eqVVYQa2YnVSeNW0ANGELHT1P6_b9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-12_06,2024-04-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ spamscore=0 bulkscore=0 clxscore=1011 lowpriorityscore=0 malwarescore=0
+ phishscore=0 impostorscore=0 priorityscore=1501 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2404010003 definitions=main-2404120073
 
-Hi, Geert,
-
-On 11.04.2024 18:30, Geert Uytterhoeven wrote:
-> Hi Claudiu,
+On 2/6/2024 10:37 PM, Ashay Jaiswal wrote:
 > 
-> CC pmdomain, watchdog
 > 
-> On Wed, Apr 10, 2024 at 2:27 PM Claudiu <claudiu.beznea@tuxon.dev> wrote:
->> Series adds support for power domains on rzg2l driver.
+> On 1/30/2024 10:58 PM, Vincent Guittot wrote:
+>> On Sun, 28 Jan 2024 at 17:22, Ashay Jaiswal <quic_ashayj@quicinc.com> wrote:
+>>>
+>>> Hello Qais Yousef,
+>>>
+>>> Thank you for your response.
+>>>
+>>> On 1/21/2024 5:34 AM, Qais Yousef wrote:
+>>>> Hi Ashay
+>>>>
+>>>> On 01/20/24 13:22, Ashay Jaiswal wrote:
+>>>>> Hello Qais Yousef,
+>>>>>
+>>>>> We ran few benchmarks with PELT multiplier patch on a Snapdragon 8Gen2
+>>>>> based internal Android device and we are observing significant
+>>>>> improvements with PELT8 configuration compared to PELT32.
+>>>>>
+>>>>> Following are some of the benchmark results with PELT32 and PELT8
+>>>>> configuration:
+>>>>>
+>>>>> +-----------------+---------------+----------------+----------------+
+>>>>> | Test case                       |     PELT32     |     PELT8      |
+>>>>> +-----------------+---------------+----------------+----------------+
+>>>>> |                 |    Overall    |     711543     |     971275     |
+>>>>> |                 +---------------+----------------+----------------+
+>>>>> |                 |    CPU        |     193704     |     224378     |
+>>>>> |                 +---------------+----------------+----------------+
+>>>>> |ANTUTU V9.3.9    |    GPU        |     284650     |     424774     |
+>>>>> |                 +---------------+----------------+----------------+
+>>>>> |                 |    MEM        |     125207     |     160548     |
+>>>>> |                 +---------------+----------------+----------------+
+>>>>> |                 |    UX         |     107982     |     161575     |
+>>>>> +-----------------+---------------+----------------+----------------+
+>>>>> |                 |   Single core |     1170       |     1268       |
+>>>>> |GeekBench V5.4.4 +---------------+----------------+----------------+
+>>>>> |                 |   Multi core  |     2530       |     3797       |
+>>>>> +-----------------+---------------+----------------+----------------+
+>>>>> |                 |    Twitter    |     >50 Janks  |     0          |
+>>>>> |     SCROLL      +---------------+----------------+----------------+
+>>>>> |                 |    Contacts   |     >30 Janks  |     0          |
+>>>>> +-----------------+---------------+----------------+----------------+
+>>>>>
+>>>>> Please let us know if you need any support with running any further
+>>>>> workloads for PELT32/PELT8 experiments, we can help with running the
+>>>>> experiments.
+>>>>
+>>>> Thanks a lot for the test results. Was this tried with this patch alone or
+>>>> the whole series applied?
+>>>>
+>>> I have only applied patch8(sched/pelt: Introduce PELT multiplier) for the tests.
+>>>
+>>>> Have you tried to tweak each policy response_time_ms introduced in patch
+>>>> 7 instead? With the series applied, boot with PELT8, record the response time
+>>>> values for each policy, then boot back again to PELT32 and use those values.
+>>>> Does this produce similar results?
+>>>>
+>>> As the device is based on 5.15 kernel, I will try to pull all the 8 patches
+>>> along with the dependency patches on 5.15 and try out the experiments as
+>>> suggested.
 >>
->> RZ/G2L kind of devices support a functionality called MSTOP (module
->> stop/standby). According to hardware manual the module could be switch
->> to standby after its clocks are disabled. The reverse order of operation
->> should be done when enabling a module (get the module out of standby,
->> enable its clocks etc).
+>> Generally speaking, it would be better to compare with the latest
+>> kernel or at least close and which includes new features added since
+>> v5.15 (which is more than 2 years old now). I understand that this is
+>> not always easy or doable but you could be surprised by the benefit of
+>> some features like [0] merged since v5.15
 >>
->> In [1] the MSTOP settings were implemented by adding code in driver
->> to attach the MSTOP state to the IP clocks. But it has been proposed
->> to implement it as power domain. The result is this series.
+>> [0] https://lore.kernel.org/lkml/249816c9-c2b5-8016-f9ce-dab7b7d384e4@arm.com/
 >>
->> Along with MSTOP functionality there is also module power down
->> functionality (which is currently available only on RZ/G3S). This has
->> been also implemented through power domains.
->>
->> The DT bindings were updated with power domain IDs (plain integers
->> that matches the DT with driver data structures). The current DT
->> bindings were updated with module IDs for the modules listed in tables
->> with name "Registers for Module Standby Mode" (see HW manual) exception
->> being RZ/G3S where, due to the power down functionality, the DDR,
->> TZCDDR, OTFDE_DDR were also added, to avoid system being blocked due
->> to the following lines of code from patch 6/9.
->>
->> +       /* Prepare for power down the BUSes in power down mode. */
->> +       if (info->pm_domain_pwrdn_mstop)
->> +               writel(CPG_PWRDN_MSTOP_ENABLE, priv->base + CPG_PWRDN_MSTOP);
->>
->> Domain IDs were added to all SoC specific bindings.
->>
->> Thank you,
->> Claudiu Beznea
->>
->> Changes in v3:
->> - collected tags
->> - dinamically detect if a SCIF is serial console and populate
->>   pd->suspend_check
->> - dropped patch 09/10 from v2
+> Thank you Vincent for the suggestion, I will try to get the results on device running
+> with most recent kernel and update.
 > 
-> Thanks for the update!
-> 
-> I have provided my R-b for all patches, and the usual path for these
-> patches would be for me to queue patches 1-8 in renesas-clk for v6.10,
-> and to queue 9 in renesas-devel.
-> 
-> However:
->   1. I had missed before the pmdomain people weren't CCed before,
->      they still might have some comments,
+> Thanks,
+> Ashay Jaiswal
 
-My bad here, I missed it too.
+Hello Qais Yousef and Vincent,
 
->   2. Patch 9 has a hard dependency on the rest of the series, so
->      it has to wait one more cycle,
+Sorry for the delay, setting up internal device on latest kernel is taking more time than anticipated.
+We are trying to bring-up latest kernel on the device and will complete the testing with the latest
+cpufreq patches as you suggested.
 
-I think 5/9 should also wait to avoid binding validation failures.
+Regarding PELT multiplier patch [1], are we planning to merge it separately or will it be merged
+altogether with the cpufreq patches?
 
->   3. Adding the watchdog domain has a dependency on [1].
+[1]: https://lore.kernel.org/all/20231208002342.367117-9-qyousef@layalina.io/
 
-Adding the code for it in patch 7/9 w/o passing it as reference to watchdog
-node (as in patch 9/9) is harmless. The previous behavior will be in place.
+Thanks and Regards,
+Ashay Jaiswal
 
-At the moment the watchdog domain initialization code is not in patch 7/9
-and the patch 9/9 has reference to watchdog domain to pass the DT binding
-validation. The probe will fail though, as I wasn't sure what should be
-better to drop: device probe or reset functionality. I mentioned it in
-patch for suggestions.
-
-> 
-> 2 and 2 may be resolved using an immutable branch.
-
-2 and 3?
-
-Immutable branch should be good, AFAICT. If that would be the strategy I
-can send an update to also add the initialization data for watchdog domain
-in 7/9. Or I can send an update afterwards. Please let me know how would
-you prefer.
-
-Thank you,
-Claudiu Beznea
-
-> Are my assumptions correct?
-> 
-> Thanks!
-> 
-> [1] "[PATCH RESEND v8 09/10] watchdog: rzg2l_wdt: Power on the PM
->     domain in rzg2l_wdt_restart()"
->     https://lore.kernel.org/all/20240410134044.2138310-10-claudiu.beznea.uj@bp.renesas.com
-> 
->> Changes in v2:
->> - addressed review comments
->> - dropped:
->>     - dt-bindings: clock: r9a09g011-cpg: Add always-on power domain IDs
->>     - clk: renesas: r9a07g043: Add initial support for power domains
->>     - clk: renesas: r9a07g044: Add initial support for power domains
->>     - clk: renesas: r9a09g011: Add initial support for power domains
->>     - clk: renesas: r9a09g011: Add initial support for power domains
->>     - arm64: dts: renesas: r9a07g043: Update #power-domain-cells = <1>
->>     - arm64: dts: renesas: r9a07g044: Update #power-domain-cells = <1>
->>     - arm64: dts: renesas: r9a07g054: Update #power-domain-cells = <1>
->>     - arm64: dts: renesas: r9a09g011: Update #power-domain-cells = <1>
->>   as suggested in the review process
->> - dropped "arm64: dts: renesas: rzg3s-smarc-som: Guard the ethernet IRQ
->>   GPIOs with proper flags" patch as it was integrated
->> - added suspend to RAM support
->> - collected tag
->>
->> [1] https://lore.kernel.org/all/20231120070024.4079344-4-claudiu.beznea.uj@bp.renesas.com/
->>
->>
->> Claudiu Beznea (9):
->>   dt-bindings: clock: r9a07g043-cpg: Add power domain IDs
->>   dt-bindings: clock: r9a07g044-cpg: Add power domain IDs
->>   dt-bindings: clock: r9a07g054-cpg: Add power domain IDs
->>   dt-bindings: clock: r9a08g045-cpg: Add power domain IDs
->>   dt-bindings: clock: renesas,rzg2l-cpg: Update #power-domain-cells =
->>     <1> for RZ/G3S
->>   clk: renesas: rzg2l: Extend power domain support
->>   clk: renesas: r9a08g045: Add support for power domains
->>   clk: renesas: rzg2l-cpg: Add suspend/resume support for power domains
->>   arm64: dts: renesas: r9a08g045: Update #power-domain-cells = <1>
->>
->>  .../bindings/clock/renesas,rzg2l-cpg.yaml     |  18 +-
->>  arch/arm64/boot/dts/renesas/r9a08g045.dtsi    |  20 +-
->>  drivers/clk/renesas/r9a08g045-cpg.c           |  61 ++++
->>  drivers/clk/renesas/rzg2l-cpg.c               | 269 +++++++++++++++++-
->>  drivers/clk/renesas/rzg2l-cpg.h               |  77 +++++
->>  include/dt-bindings/clock/r9a07g043-cpg.h     |  52 ++++
->>  include/dt-bindings/clock/r9a07g044-cpg.h     |  58 ++++
->>  include/dt-bindings/clock/r9a07g054-cpg.h     |  58 ++++
->>  include/dt-bindings/clock/r9a08g045-cpg.h     |  70 +++++
->>  9 files changed, 659 insertions(+), 24 deletions(-)
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
+>>>
+>>>> You didn't share power numbers which I assume the perf gains are more important
+>>>> than the power cost for you.
+>>>>
+>>> If possible I will try to collect the power number for future test and share the
+>>> details.
+>>>
+>>>>
+>>>> Thanks!
+>>>>
+>>>> --
+>>>> Qais Yousef
 
