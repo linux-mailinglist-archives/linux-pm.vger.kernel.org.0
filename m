@@ -1,115 +1,118 @@
-Return-Path: <linux-pm+bounces-6314-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6315-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A60928A2C54
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 12:29:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6E398A2CB0
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 12:42:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62D5A2820AA
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 10:29:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7221928980D
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Apr 2024 10:42:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AA4653384;
-	Fri, 12 Apr 2024 10:29:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D62503FBAC;
+	Fri, 12 Apr 2024 10:42:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="zIqo32Hl"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Gl1lzpBX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37FF953E0C
-	for <linux-pm@vger.kernel.org>; Fri, 12 Apr 2024 10:28:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2386F20310
+	for <linux-pm@vger.kernel.org>; Fri, 12 Apr 2024 10:42:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712917740; cv=none; b=jdqBJGnuzPF/sTteZih8NUC0j7ODG81BXSkSUBhOZTMZ2jQVMEuTHBHNmS7VsdvEV1CHuy+ujrtkqj55BGOl6gUWYBlP7UKJFJ9fAN0KQdTcsuykFnY4ELWkm5Lpc+1jhk1HHHlE8hVx+JCvOJzL/B7YptHahjw9pEScrEJMPH4=
+	t=1712918546; cv=none; b=igWWgggQwFgAmiUBVyDbWWQaVq8BpzndDJHoicepL1wivz3KQ1pQoFdBbbUpfesSCH9lxhhMuNd/zH5W9ljwdWV2V9mq34xV9CEDhDt0oPnIzgZ0PWW5USFoYmdr3mfEIHKUTjDCo8/lLDoi23RK8KAonEIkUB4LvqB3MDrPO+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712917740; c=relaxed/simple;
-	bh=07V4dIIYHErzrufrKisSjuWCUcxaXJQk98wQ+x0QmRE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P033CLChe9V8xphtc2f6I0IV7E2p5zvpjLjgcWT+F5aRtUK4XGh9mt9Q6omCSb1lR3FAUM+U7ZdTWjzD/+kL9AElRAVdNg0NqA52lqCXu8CHO3voK3mejdBXloe0OIdk5LT8twXrE5kgiSQ+3k10WOEDbMQoUuIGCY9+spHvrac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=zIqo32Hl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20801C113CC;
-	Fri, 12 Apr 2024 10:28:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1712917739;
-	bh=07V4dIIYHErzrufrKisSjuWCUcxaXJQk98wQ+x0QmRE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=zIqo32HltE8+nc5pXVbPZ5L2maTu2wY8O3De029Cp4dOmqdj7NpHNtdhT/QWVNwSY
-	 rCi5JauYFXkbn4+pVRaivDwsJDRlrloDdBz5uZAWN5ml+97Zblo2weCbxJdHOkE6Cr
-	 LqyqToMnwf/bkZow0QyqUjaxPnR4Lfu7UkNmHIxk=
-Date: Fri, 12 Apr 2024 12:28:56 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: lizhe <sensor1010@163.com>,
-	"grygorii.strashko" <grygorii.strashko@ti.com>,
-	"gregory.clement" <gregory.clement@bootlin.com>,
-	"grant.likely" <grant.likely@secretlab.ca>,
-	bsegall <bsegall@google.com>, broonie <broonie@kernel.org>,
-	bristot <bristot@redhat.com>, brgl <brgl@bgdev.pl>,
-	"f.fainelli" <f.fainelli@gmail.com>,
-	"fancer.lancer" <fancer.lancer@gmail.com>,
-	festevam <festevam@gmail.com>, Finn Thain <fthain@linux-m68k.org>,
-	rafael <rafael@kernel.org>, linux-pm <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH] cpufreq: exit() callback is optional
-Message-ID: <2024041259-ranking-aeration-29f8@gregkh>
-References: <b97964653d02225f061e0c2a650b365c354b98c8.1712900945.git.viresh.kumar@linaro.org>
- <5759bc29.32d04.18ed0ef5037.Coremail.sensor1010@163.com>
- <20240412062407.ntahibzv6xsbrnxs@vireshk-i7>
- <1b53a162.32e95.18ed0fdb13e.Coremail.sensor1010@163.com>
- <20240412063246.tk5z245miakbxws4@vireshk-i7>
- <2117690204.533771.1712904398042.JavaMail.root@mail-tracker-145-3ep34-c9h23-5f64cf7787-82gdh>
- <2024041212-bony-emphasize-75dd@gregkh>
- <663acff5.349d4.18ed18da6ff.Coremail.sensor1010@163.com>
- <20240412092108.xuvrfd6ioszltonf@vireshk-i7>
+	s=arc-20240116; t=1712918546; c=relaxed/simple;
+	bh=UIokhiS5Rj3MPlQ+/XRMF9ng6qEkITKXuZOWx3vpGv4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Zr7WzZNlKGOrOqD1cZuauDWkq0GiLsvmc53iTxCBcj8dY7lAqJ1B7AnOJIOJdGLrrqYw6k5wuDeeGp/yqZN5UvYAI4uNEpWImXbQdR/v8jg5yLTTWmobLGd6/gXzyZyBFZrl4nRyumOOgywFlWjHIKa/JV4iI7qtpn1uboaHkfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Gl1lzpBX; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-518931f8d23so188307e87.3
+        for <linux-pm@vger.kernel.org>; Fri, 12 Apr 2024 03:42:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1712918543; x=1713523343; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0yzFF7XLEaVBUn6zqt63Jmp6pMmz0w4BTjsr5ZlkzWs=;
+        b=Gl1lzpBXgTsaFqFsrX3lBEI8SggK4N06IMkg7smvtCkA5kGOdnjGKYtNVGEEIaD4u3
+         0LrMk2t+tOH8G0PvZQY+UdUI0VnCCyWfIBODAdjz0aN+Je0XYvorJP6qzBCEVGZrylGj
+         tAh1gIvpCOxzg+AXb3maMxxVlugEQDFnPNcQ/RSFbGsQSnEZmFOIw4s/geSl3rywlY2A
+         s2YpCKZLLNafI89Zn+onk7oEX/Tdhssg7TYwjnYdfeUgToWqNceZQkLtpqkYmxdFy4m7
+         yJFZdRa0CZngOx3CDzWBNqQTS3N1ehaMe3YU06KgwmcZ6Lms0JRT0W3bQbkuymi+lW2K
+         ppxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712918543; x=1713523343;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0yzFF7XLEaVBUn6zqt63Jmp6pMmz0w4BTjsr5ZlkzWs=;
+        b=YmBbhTMNYauWpV5D4dZGd7cm3tdAKU6sKl/v8G71fdyrrnz9U8JmXIaZRQTdcyqF7Q
+         Yi1h1Lbs2BtOUaJksRj0MN3RApFF8W3pOVZ0/IkTXaBY2xKQkoEcbzI206XNUX8ASopy
+         Vb2jbgqnKCNu3sWfoasEDXIdNCADIJPxi1l8NlICM4tXpHf1saiottuPMAYv0Zm7TAYr
+         CZ/huD9YF3ezZWsK1gestNlxTcIpckDhoL1+U0bR0eMFxwziftbUns1FrRh3qfKzNztd
+         ea4iVDdNf6OjNduup5wf0qWVCQd5OyQCaKRwrjMdvT/7bNtOL1HdpSg+GaGPzlopjVZx
+         pA4A==
+X-Forwarded-Encrypted: i=1; AJvYcCXvFVqEau7qsMBm/fztpCfxoKTzZCgxFcy8ImWnyPZlVRtSu2kJH3IVXKetpKH4K2BjYQHd/wQVVOtvvUM21PpZ/NTK/L6POAo=
+X-Gm-Message-State: AOJu0YxQfWQclRwVF16x3NimeZXuIPZ55JD7Cz82DaYEfvs7EOSpof21
+	EImdOqgcpN0a7bqgLdVH4Qit/x5+CtDdL2uOzW8RVlOvdWG1sP41avmDHo5cJLc=
+X-Google-Smtp-Source: AGHT+IFEu4dnjTinOwWdQUMez8s60WK/1nUwKuFkVdaWfd4AmIZ0Ku0mYf4Xc1K806sEPp0uonGS3g==
+X-Received: by 2002:a05:6512:609:b0:518:9964:a7a6 with SMTP id b9-20020a056512060900b005189964a7a6mr1218lfe.42.1712918543246;
+        Fri, 12 Apr 2024 03:42:23 -0700 (PDT)
+Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
+        by smtp.gmail.com with ESMTPSA id v10-20020a05651203aa00b005135f60f486sm493689lfp.112.2024.04.12.03.42.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Apr 2024 03:42:22 -0700 (PDT)
+From: Ulf Hansson <ulf.hansson@linaro.org>
+To: Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-pm@vger.kernel.org
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Nikunj Kela <nkela@quicinc.com>,
+	Prasad Sodagudi <psodagud@quicinc.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] pmdomain: core: Update the rejected/usage counters at system suspend too
+Date: Fri, 12 Apr 2024 12:42:07 +0200
+Message-Id: <20240412104208.74361-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240412092108.xuvrfd6ioszltonf@vireshk-i7>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Apr 12, 2024 at 02:51:08PM +0530, Viresh Kumar wrote:
-> On 12-04-24, 17:05, lizhe wrote:
-> > I found it first and submitted it to the main line first. Please be fair and just. Let him withdraw his patch.
-> 
-> Well, I decided not to reply to your emails anymore but this needs to
-> be clarified a bit now.
-> 
-> You sent a lot of patches, over and over again and it was a mess. I
-> saw the this [1] series first and went over to read the code and fixed
-> an issue which I found (by the $subject patch).
-> 
-> Later I read your other patch [2], which I Acked roughly two hours
-> back and yes you did send a patch that fixed the problem partially. I
-> never saw it earlier, which is okay and it happens. Despite me giving
-> an Ack to your patch, you have sent half-a-dozen more emails..
-> 
-> Then I posted a newer version of my patch some time back, removing the
-> bits you already fixed [3].
-> 
-> That is all one side of the story. But all the noise you have created
-> here has really demotivated people to review your stuff now.
-> 
-> --
-> Viresh
-> 
-> [1] https://lore.kernel.org/all/20240410132132.3526-1-sensor1010@163.com/
-> [2] https://lore.kernel.org/all/20240411231818.2471-1-sensor1010@163.com/
-> [3] https://lore.kernel.org/all/68294ce534668c6ab3b71a1b3e6650227c6e1f20.1712911186.git.viresh.kumar@linaro.org/
+During system suspend we may try to enter a low power-state for the genpd
+in question. Let's take this into account for the statistics too, by
+updating the rejected/usage counters for the corresponding state.
 
-Thanks for the links, I don't see that you did anything wrong here at
-all.
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
+ drivers/pmdomain/core.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Lizhe, you seem to be confused as to how kernel development works.  I
-suggest you take some time off and read up on how this all is supposed
-to happen and then work with some local people, in person, to get this
-figured out first, before submitting changes again.
+diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+index 4215ffd9b11c..903ea0c193e1 100644
+--- a/drivers/pmdomain/core.c
++++ b/drivers/pmdomain/core.c
+@@ -1178,8 +1178,12 @@ static void genpd_sync_power_off(struct generic_pm_domain *genpd, bool use_lock,
+ 
+ 	/* Choose the deepest state when suspending */
+ 	genpd->state_idx = genpd->state_count - 1;
+-	if (_genpd_power_off(genpd, false))
++	if (_genpd_power_off(genpd, false)) {
++		genpd->states[genpd->state_idx].rejected++;
+ 		return;
++	} else {
++		genpd->states[genpd->state_idx].usage++;
++	}
+ 
+ 	genpd->status = GENPD_STATE_OFF;
+ 
+-- 
+2.34.1
 
-thanks,
-
-greg k-h
 
