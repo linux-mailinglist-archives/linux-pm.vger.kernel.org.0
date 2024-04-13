@@ -1,180 +1,167 @@
-Return-Path: <linux-pm+bounces-6350-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6351-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 262A38A3BB9
-	for <lists+linux-pm@lfdr.de>; Sat, 13 Apr 2024 10:49:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 533948A3D4A
+	for <lists+linux-pm@lfdr.de>; Sat, 13 Apr 2024 17:21:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D107A282474
-	for <lists+linux-pm@lfdr.de>; Sat, 13 Apr 2024 08:49:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9E336B210BE
+	for <lists+linux-pm@lfdr.de>; Sat, 13 Apr 2024 15:21:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36FD31CD20;
-	Sat, 13 Apr 2024 08:49:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD31E45C07;
+	Sat, 13 Apr 2024 15:21:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="JQu8t4a6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5A45321B4
-	for <linux-pm@vger.kernel.org>; Sat, 13 Apr 2024 08:49:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBB2345BE1;
+	Sat, 13 Apr 2024 15:21:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712998163; cv=none; b=Hd/NNgaZp8OaM8iZkTC8FyPnOCaruJCkVQU54H9n+qFFnRAc/E8xgPJoJ6F0FpnZ59YKu4+dY050KBXFvF3mn4MmDYg05wPGwPQnWiu/vGFWXz+xF1/Po930qlhSzGApAb4XSKq0GrBWNf03zva5Y1xz3wOtUlicyDoYOE/xhLg=
+	t=1713021693; cv=none; b=sG8A4C5hQcDy7+I2gFgaZK6+xPJ5D+c7zCoOsqaY39ctXr42Fnj0KNO1q2X7BBnpu7U9ygL42vSwqR6sog8WLvrgYACrwCEwtJSGGOG67+xdzeFaNHTnDm5ZsXONzV2u4w8mussveeKjhS2uT87vsqZYXnmCLTpsf/Ng9r5a6uc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712998163; c=relaxed/simple;
-	bh=6FIPiQ594KFngeqpTnGrN4qG2Klq6DDn5xZjR0G3Pr4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cs4OwYKXMvPprn8khbGDad9Yu65+yFsf0Voeyj8adNj5KwuB9nnHyvC0XoQZ85skN8UuJc6pM26uHXNhqpJol41i2vAmxdGkU6bt947q8FEcfzxcVhD6V9cvzPY3PDZZF58x9TznaD8GLwn5QGyIiU4OeOu4DGa2aaTaZ3jQSvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rvZ3g-00055f-W5; Sat, 13 Apr 2024 10:48:25 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rvZ3a-00C201-5I; Sat, 13 Apr 2024 10:48:18 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rvZ3a-000gB5-03;
-	Sat, 13 Apr 2024 10:48:18 +0200
-Date: Sat, 13 Apr 2024 10:48:17 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Nikita Shubin <nikita.shubin@maquefel.me>, 
-	Hartley Sweeten <hsweeten@visionengravers.com>, Alexander Sverdlin <alexander.sverdlin@gmail.com>, 
-	Russell King <linux@armlinux.org.uk>, Lukasz Majewski <lukma@denx.de>, 
-	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
-	Andy Shevchenko <andy@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
-	Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
-	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Thierry Reding <thierry.reding@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Miquel Raynal <miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>, 
-	Vignesh Raghavendra <vigneshr@ti.com>, Damien Le Moal <dlemoal@kernel.org>, 
-	Sergey Shtylyov <s.shtylyov@omp.ru>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-	Ralf Baechle <ralf@linux-mips.org>, Aaron Wu <Aaron.Wu@analog.com>, Lee Jones <lee@kernel.org>, 
-	Olof Johansson <olof@lixom.net>, Niklas Cassel <cassel@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, linux-clk@vger.kernel.org, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, dmaengine@vger.kernel.org, linux-watchdog@vger.kernel.org, 
-	linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org, Netdev <netdev@vger.kernel.org>, 
-	linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org, linux-input@vger.kernel.org, 
-	linux-sound@vger.kernel.org, Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Andrew Lunn <andrew@lunn.ch>, Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [PATCH v9 00/38] ep93xx device tree conversion
-Message-ID: <izbjcqcvjjhwwbrrhk7jer536ydi5gr7gqdg5icsbmialrrepn@dp7q6jvjujrj>
-References: <20240326-ep93xx-v9-0-156e2ae5dfc8@maquefel.me>
- <66e1da99-5cf4-4506-b0bf-4bdf04959f41@app.fastmail.com>
+	s=arc-20240116; t=1713021693; c=relaxed/simple;
+	bh=yEWjbDnznVC6vT4NO/Xj3JDq3tC38KjlGRoMlOKXXps=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Z8gHuB+xB9Y67wFlcx7/QBr86ZfHbUCqN7flFo4hjkLQtTQcrE66rVqp7VQJXIBNiw8nBguZBBXyE7bWxlJQK8V5v6af8eXjzvAtw0W8EgaHDrM48LWamX/jjfo/CRW0LRdbLYfWw6SOcrd30vUP+hhFNPTBufxJKc9W6GBPUTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=JQu8t4a6; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43DF8N9f030225;
+	Sat, 13 Apr 2024 15:21:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=qcppdkim1; bh=v1nRL8Z
+	DfgPlt89U1eI5XAv4EMOC/gfGb5BYwBW6vPk=; b=JQu8t4a655UPNQQ8dGlTmJP
+	oQ9mY2FKlsgjA8ZrFGG9G9gnU1WOdagMFN1FjvjAdU/MJ38/a6PA3S14I3gWG1Hb
+	C+brhU03ryywUQxJu8DLtVwr/hZ3BVDxkUUcwc/1ILZeppcClqEt6JOg2P5yvsQx
+	fuw1bvSdpRu0KIcgFLJRdT2v6u+m3limXExyI5tanwWfxHjXxCnLVwvT8TGBzSpf
+	Q4XrVcY0uOI9K8QHHem5vdxNtqKUs8W234VL8nLQIvHgNzHyoKcN0ZGgV3xcridd
+	Wyx2HTEamHfdjKf90GR0h9xksqjm7FwrYjmonR9qyQFfER1ZLB+zNjqaDlbmaFQ=
+	=
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xfh2crnw4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 13 Apr 2024 15:21:10 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43DFL8uV007731
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 13 Apr 2024 15:21:08 GMT
+Received: from hu-jkona-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Sat, 13 Apr 2024 08:21:00 -0700
+From: Jagadeesh Kona <quic_jkona@quicinc.com>
+To: Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette
+	<mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Stanimir Varbanov
+	<stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Mauro Carvalho Chehab
+	<mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J .
+ Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>, Pavel Machek
+	<pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Andy
+ Gross" <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
+        "Satya Priya
+ Kakitapalli" <quic_skakitap@quicinc.com>,
+        Imran Shaik
+	<quic_imrashai@quicinc.com>,
+        Ajit Pandey <quic_ajipan@quicinc.com>,
+        "Jagadeesh Kona" <quic_jkona@quicinc.com>
+Subject: [PATCH V5 RESEND 0/5] PM: domains: Add control for switching back and forth to HW control
+Date: Sat, 13 Apr 2024 20:50:08 +0530
+Message-ID: <20240413152013.22307-1-quic_jkona@quicinc.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="pjwf7nurmhwqoh67"
-Content-Disposition: inline
-In-Reply-To: <66e1da99-5cf4-4506-b0bf-4bdf04959f41@app.fastmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: FAzFLGXG3OsMsDAkOAIwv7xrlrnCVhrp
+X-Proofpoint-GUID: FAzFLGXG3OsMsDAkOAIwv7xrlrnCVhrp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-13_04,2024-04-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 mlxscore=0 malwarescore=0 clxscore=1011 lowpriorityscore=0
+ spamscore=0 mlxlogscore=999 suspectscore=0 impostorscore=0 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2404010003 definitions=main-2404130113
 
+This series adds support for dev_pm_genpd_set_hwmode() and dev_pm_genpd_get_hwmode() APIs
+and support in gdsc provider drivers to register respective callbacks and venus consumer
+driver example using above API to switch the power domain(GDSC) to HW/SW modes dynamically
+at runtime.
 
---pjwf7nurmhwqoh67
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is resend of V5 series, added R-By tags received in V5 for 1st & 2nd patches.
 
-Hello Arnd,
+Link to V5: https://lore.kernel.org/all/20240315111046.22136-1-quic_jkona@quicinc.com/
 
-On Tue, Mar 26, 2024 at 11:07:06AM +0100, Arnd Bergmann wrote:
-> On Tue, Mar 26, 2024, at 10:18, Nikita Shubin via B4 Relay wrote:
-> > The goal is to recieve ACKs for all patches in series to merge it via=
-=20
-> > Arnd branch.
->=20
-> Thank you for the continued updates, I really hope we can merge
-> it all for 6.10. I've looked through it again and I'm pretty much
-> ready to just merge it, though I admit that the process is not
-> working out that great, and it would probably have been quicker
-> to add DT support to drivers individually through the subsystem
-> trees.
->=20
-> > Stephen Boyd, Vinod Koul PLEASE! give some comments on following, couse=
-=20
-> > i hadn't one for a couple of iterations already:
-> >
-> > Following patches require attention from Stephen Boyd, as they were=20
-> > converted to aux_dev as suggested:
-> >
-> > - ARM: ep93xx: add regmap aux_dev
-> > - clk: ep93xx: add DT support for Cirrus EP93xx
-> >
-> > Following patches require attention from Vinod Koul:
-> >
-> > - dma: cirrus: Convert to DT for Cirrus EP93xx
-> > - dma: cirrus: remove platform code
->=20
-> I suspect that Stephen and Vinod may be missing this, as reviewing
-> a 38 patch series tends to be a lot of work, and they may have
-> missed that they are on the critical path here. I certainly
-> tend to just ignore an entire thread when it looks like I'm not
-> immediately going to be reviewing it all and other people are
-> likely to have more comments first, so I'm not blaming them.
->=20
-> To better catch their attention, I would suggest you repost the
-> two smaller sets of patches as a separate series, with only the
-> relevant people on Cc. Please also include the respective
-> bindings when you send send these patches to Stephen and
-> Vinod.
+Changes in V5:
+- Updated 1st patch as per V4 review comments to synchronize the initial HW mode state by
+  invoking ->get_hwmode_dev()callback in genpd_add_device()
+- With above change, SW cached hwmode will contain correct value initially, and it will be
+  updated everytime mode is changed in set_hwmode, hence updated dev_pm_genpd_get_hwmode()
+  to just return SW cached hwmode in 1st patch
+- Updated commit text for 1st, 3rd, 4th and 5th patches
+- Updated 3rd and 5th patches as per review comments received on V4 series
+- Added R-By tags received in older series to 1st and 2nd patches
 
-It seems this happend for the clock series; it's at
-https://lore.kernel.org/all/20240408-ep93xx-clk-v1-0-1d0f4c324647@maquefel.=
-me/
-and received an ack by Stephen.
+Previous series:
+V4: https://lore.kernel.org/all/20240122-gdsc-hwctrl-v4-0-9061e8a7aa07@linaro.org/
+V3: https://lore.kernel.org/lkml/20230823114528.3677667-1-abel.vesa@linaro.org/ 
+V2: https://lore.kernel.org/lkml/20230816145741.1472721-1-abel.vesa@linaro.org/
+V1: https://lore.kernel.org/all/20230628105652.1670316-1-abel.vesa@linaro.org/
 
-Vinod gave some feedback in this thread with some remarks that need
-addressing.
+Abel Vesa (1):
+  PM: domains: Add the domain HW-managed mode to the summary
 
-With the latter I wonder if the plan to get this as a whole into v6.10
-is screwed and if I should pick up the PWM bits (patches #12, #13 and
-maybe #38) via my tree. Patch #38 touches arch/arm and
-include/linux/soc, so I wouldn't pick that one up without an explicit
-ack by (I guess) Arnd.
+Jagadeesh Kona (3):
+  clk: qcom: gdsc: Add set and get hwmode callbacks to switch GDSC mode
+  clk: qcom: Use HW_CTRL_TRIGGER flag to switch video GDSC to HW mode
+  venus: pm_helpers: Use dev_pm_genpd_set_hwmode to switch GDSC mode on
+    V6
 
-Best regards
-Uwe
+Ulf Hansson (1):
+  PM: domains: Allow devices attached to genpd to be managed by HW
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+ drivers/clk/qcom/gdsc.c                       | 37 +++++++++
+ drivers/clk/qcom/gdsc.h                       |  1 +
+ drivers/clk/qcom/videocc-sc7280.c             |  2 +-
+ drivers/clk/qcom/videocc-sm8250.c             |  4 +-
+ .../media/platform/qcom/venus/pm_helpers.c    | 39 ++++++----
+ drivers/pmdomain/core.c                       | 78 ++++++++++++++++++-
+ include/linux/pm_domain.h                     | 17 ++++
+ 7 files changed, 157 insertions(+), 21 deletions(-)
 
---pjwf7nurmhwqoh67
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+2.43.0
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmYaRtAACgkQj4D7WH0S
-/k4o+wgAuEjfWmNoFVoIX9NkVmNLAztPiy6Nh9yJ/HEcfVvrFbjsMvDotb4qsGsE
-zfAz7mfofpUhLaFIGx1Sr9p8Zx4eXf0lmRH68rTiXE/hV39TXWKgmf03FG3yPOzN
-1KouxDXOtKIiBxdhSBON/zWyYksJzI9WfjLtzPhcbS0N3CEWi7aTvVS7HmKStyAU
-8/YI17F/4ym1Rf8Zm6JqyzQy5lOmmjy+Sq+BHfkB0ZpNIHQSoaOWISL3Y9bsFSJX
-ALkkO6L4WJVqkAL718q6pYMtb9SiNVyQjyYgYddxFfM6c6cnhg1AV+QEk+VLTPHy
-OgUVpigrpDXH/2JTVvZ7VetbpnSGAg==
-=sCOf
------END PGP SIGNATURE-----
-
---pjwf7nurmhwqoh67--
 
