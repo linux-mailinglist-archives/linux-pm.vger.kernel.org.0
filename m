@@ -1,182 +1,272 @@
-Return-Path: <linux-pm+bounces-6363-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6364-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67D638A433A
-	for <lists+linux-pm@lfdr.de>; Sun, 14 Apr 2024 16:53:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E338B8A4466
+	for <lists+linux-pm@lfdr.de>; Sun, 14 Apr 2024 19:30:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE6B61F21119
-	for <lists+linux-pm@lfdr.de>; Sun, 14 Apr 2024 14:53:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B3A428247A
+	for <lists+linux-pm@lfdr.de>; Sun, 14 Apr 2024 17:30:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C72F13443F;
-	Sun, 14 Apr 2024 14:53:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 746EF135A51;
+	Sun, 14 Apr 2024 17:30:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="pimdMKwy"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="htrnAf79"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B99CE364BF;
-	Sun, 14 Apr 2024 14:53:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A93C6134CD0;
+	Sun, 14 Apr 2024 17:30:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713106382; cv=none; b=jG8BJ4vnBtuyEpslgfwMMOUlOcy++V+i4ZdPL670kXL/fYI12CFSCwJwLBCvN8yn4qAnGkxZFB9YBJ1+XKE9xW3BcF9pyOaQ5svC+VbYsJtOE8H5OHikUUbA3JHTSFLbfpiMamKsGceD6z7Hz/y8ErL5fbFwQlftPD8WPFr78OI=
+	t=1713115803; cv=none; b=K45L3pFTl4YJSTEJ7X26QKDAHe6XiDYdadl1XVjC8bUalb6OfltyvzGn5SZoSBjm7t/3H7sldO2ry6YISE27FyCGvzObSGXgvEVnsrjmMwHy279bw3NFz2+m+MfCyQHEF8124pZvfDsQu0xuMvf6lraTeI1NMTbQGVwjw+EH9r0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713106382; c=relaxed/simple;
-	bh=cWAebCGmyhzie5/QiR3suKBycookZfKNe1eWu4+4FQ4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=TqGiklbUUWtIXHsSBgAfAbP6qUs/LV3hLF0+ErQNG51guu08omUTVRHhYvsWw8rQTUUpoavb3onx0g1fVbYOSbaQVXy0+tqQcUZBbZXOlqd2x+TKJ2lofwub9FBfVCJRefIrk1iFPMBEJHZ59BEnR1KnzaVIMOlcXfdcEZimyWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=pimdMKwy; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43EEoKQJ013403;
-	Sun, 14 Apr 2024 14:52:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=68mVWSW7A1H1vgKnHISFRNUy/s6fqpVN8Q+NKU/SusA=; b=pi
-	mdMKwySYyUrOWvDP1XRAhpsix3ADWnozSlp23PAM9qy0SYmx9Lsr3B+bkVGSflHk
-	Pj5Nsn6azoSNP5v34rpXLU8UB/M81ZioKq9N6cI6MUMN1ASDg/OhPGBefmcZWjOi
-	YS2r7CQBSXxpP25VCGRFth9uXVaJiKVMjSxk6A7YHkq56fKtC+R1bup+WW7W3MgJ
-	1abpu7pULqP7OZ3ec3EvA1DjvyDtGmpH4f0xmYWQOh8B0oJL09I0gcn1uKM52mYJ
-	TD4pBFJsRijnVOIgNEm1XKq+tjrgWkiKj9rscAWwJWE8CMg+fafZYCaOQUDtpu9T
-	P2SLQsVEU1dMJLvcaDeA==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xfkbdhx7b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 14 Apr 2024 14:52:48 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43EEqlZ3005406
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 14 Apr 2024 14:52:47 GMT
-Received: from [10.216.31.249] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Sun, 14 Apr
- 2024 07:52:37 -0700
-Message-ID: <b96ef82c-4033-43e0-9c1e-347ffb500751@quicinc.com>
-Date: Sun, 14 Apr 2024 20:22:17 +0530
+	s=arc-20240116; t=1713115803; c=relaxed/simple;
+	bh=oGOHxDj4kfdOE/HzO5dKHC063UBWLzSiV7pAnYLyCPk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BcbQ7oIgj2Xg3Emx4iUG/Nznc3O9cIO24aspISl4wiLXvGsWUE6cFsB15beNePAoLQmpThdcSo/33//GKMPegXHroutLJDEASq7gTLlPS2w5pjgnbWRxPNiejEmGRdXe4DmsgysT5NiCvUkF2N9aJRtlb3ucEsAxHXWsM9zw3vg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=htrnAf79; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1713115799;
+	bh=oGOHxDj4kfdOE/HzO5dKHC063UBWLzSiV7pAnYLyCPk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=htrnAf79VM0ZqVqBR08Z4L/roRsBN2oX462GKbGRRZCjHSw8tqZdnPd1hHz+wYxbl
+	 /tl8y0l56GgRwLTCezto6y9/FvEOuQ5wQPyUWM8WfvOA8XFMOsT1U+iAK8mRiS/gG5
+	 CEWkTRLaVX4HKTOfAbbTxnYwE2VVn01DvVZnxImDkRQhXQf65BOYMqeBSnJ9QFwO/S
+	 c7l8nps68U+5T/z3jfHnAeD+7tuVMyGSUbjRmf2mFkQa8weO/wQ76kugoIKLvqJO88
+	 ihT0WrpcX5WwQwUrYsxOnyYKmPGvBJxP2yq7tvtmSaaxFrRzODLUl3MnvqJYwwMPg4
+	 e+YmDDCZqXDIA==
+Received: from mercury (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sre)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id ADBE13780627;
+	Sun, 14 Apr 2024 17:29:59 +0000 (UTC)
+Received: by mercury (Postfix, from userid 1000)
+	id 13DD010608FB; Sun, 14 Apr 2024 19:29:57 +0200 (CEST)
+Date: Sun, 14 Apr 2024 19:29:56 +0200
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Mike Looijmans <mike.looijmans@topic.nl>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	=?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
+Subject: Re: [PATCH v3 2/2] power: supply: ltc3350-charger: Add driver
+Message-ID: <lxxwadaf2mrghy2kygm3cucb7ygl5qu4dxnmpbancrm2hwjm4g@5eudactyudca>
+References: <20240409135442.37732-1-mike.looijmans@topic.nl>
+ <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.dab85cfc-973d-4930-8fea-324aa26b5801@emailsignatures365.codetwo.com>
+ <20240409135442.37732-2-mike.looijmans@topic.nl>
+ <5hpl2kspf667hmmxgg36ahiux5rs364qzrg2itpljspspa47vp@dsbnhdnq5s54>
+ <efae4037-c22a-40be-8ba9-7c1c12ece042@topic.nl>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V5 RESEND 5/5] venus: pm_helpers: Use
- dev_pm_genpd_set_hwmode to switch GDSC mode on V6
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        "Stephen
- Boyd" <sboyd@kernel.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Mauro Carvalho Chehab
-	<mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J .
- Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>, Pavel Machek
-	<pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Andy
- Gross" <agross@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
-        "Satya Priya
- Kakitapalli" <quic_skakitap@quicinc.com>,
-        Imran Shaik
-	<quic_imrashai@quicinc.com>,
-        Ajit Pandey <quic_ajipan@quicinc.com>
-References: <20240413152013.22307-1-quic_jkona@quicinc.com>
- <20240413152013.22307-6-quic_jkona@quicinc.com>
- <5c78ad52-524b-4ad7-b149-0e7252abc2ee@linaro.org>
-Content-Language: en-US
-From: Jagadeesh Kona <quic_jkona@quicinc.com>
-In-Reply-To: <5c78ad52-524b-4ad7-b149-0e7252abc2ee@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: veCuhAHTmxkcbsZpphBoC4DzPmYdR7Dv
-X-Proofpoint-GUID: veCuhAHTmxkcbsZpphBoC4DzPmYdR7Dv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-14_04,2024-04-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- priorityscore=1501 clxscore=1015 malwarescore=0 adultscore=0 mlxscore=0
- phishscore=0 impostorscore=0 mlxlogscore=999 lowpriorityscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2404010003 definitions=main-2404140107
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="empim7clzpnbt47x"
+Content-Disposition: inline
+In-Reply-To: <efae4037-c22a-40be-8ba9-7c1c12ece042@topic.nl>
 
 
+--empim7clzpnbt47x
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 4/14/2024 6:09 PM, Bryan O'Donoghue wrote:
-> On 13/04/2024 16:20, Jagadeesh Kona wrote:
->> The Venus driver requires vcodec GDSC to be ON in SW mode for clock
->> operations and move it back to HW mode to gain power benefits. Earlier,
->> as there is no interface to switch the GDSC mode from GenPD framework,
->> the GDSC is moved to HW control mode as part of GDSC enable callback and
->> venus driver is writing to its POWER_CONTROL register to keep the GDSC ON
->> from SW whereever required. But the POWER_CONTROL register addresses
->> are not constant and can vary across the variants.
->>
->> Also as per the HW recommendation, the GDSC mode switching needs to be
->> controlled from respective GDSC register and this is a uniform approach
->> across all the targets. Hence use dev_pm_genpd_set_hwmode() API which
->> controls GDSC mode switching using its respective GDSC register.
->>
->> In venus V6 variants, the vcodec gdsc gets enabled in SW mode by default
->> with new HW_CTRL_TRIGGER flag and there is no need to switch it to SW
->> mode again after enable, hence add check to avoid switching gdsc to SW 
->> mode
->> again after gdsc enable. Similarly add check to avoid switching GDSC 
->> to HW
->> mode before disabling the GDSC, so GDSC gets enabled in SW mode in the 
->> next
->> enable.
->>
->> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
->> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
->> ---
-> 
-> When I tested this out on sm8250 a few months ago it was broken.
-> 
-> I don't quite see in your commit logs, how the breakage was addressed.
-> 
-> Can you provide some details ?
-> 
+[+cc Nicolas]
 
-Thanks Bryan for your review!
+Hello Mike,
 
-In earlier series, venus driver is switching the vcodec GDSC to HW 
-control mode before disabling the GDSC by invoking 
-vcodec_control_v4(..., false) in poweroff_coreid(). Due to this, the 
-subsequent GDSC enable from venus driver is failing while polling for 
-GDSC power ON status, since GDSC is under HW control mode and HW can 
-keep the GDSC in disabled state.
+On Fri, Apr 12, 2024 at 08:53:58AM +0200, Mike Looijmans wrote:
+> > please share output of
+> > ./tools/testing/selftests/power_supply/test_power_supply_properties.sh
+> > below the fold with your next submission. It's useful for verifying,
+> > that you got the unit scaling correct for the standard properties :)
+>=20
+> Will do. Did a quick run on the driver as it is now, that yields the
+> following output:
+>=20
+> (Any thoughts on the "arithmetic syntax error" messages?)
 
-Now a check is added in poweroff_coreid() to avoid switching the GDSC to 
-HW control mode before disabling the GDSC for Venus V6 variants that use 
-this new API. Hence during the next GDSC enable, GDSC will be in SW mode 
-and GDSC will powerup properly.
+The script contains some bash specific shell extensions and should
+use /bin/bash instead of /bin/sh in the shebang. Just call it with
+/bin/bash ./tools/testing/... and you should get rid of them :)
 
-Thanks,
-Jagadeesh
+Nicolas, do you want to send a fix for that to Shuah with Reported-by
+=66rom Mike?
 
-> ---
-> bod
-> 
+[...]
+
+> # Reported: '1' ()
+> ok 6 ltc3350.sysfs.online
+
+[...]
+
+> # Reported: '711600' uA (711.6 mA)
+> ok 24 ltc3350.sysfs.current_now
+
+So it's full, but still getting charged with 0.7 Amps at ~23V
+(i.e. 16W)? That seems quite high.
+
+[...]
+
+> > > +static ssize_t ltc3350_attr_show(struct device *dev,
+> > > +				 struct device_attribute *attr, char *buf,
+> > > +				 unsigned int reg, unsigned int scale)
+> > > +{
+> > > +	struct power_supply *psy =3D to_power_supply(dev);
+> > > +	struct ltc3350_info *info =3D power_supply_get_drvdata(psy);
+> > > +	unsigned int regval;
+> > > +	int ret;
+> > > +
+> > > +	ret =3D regmap_read(info->regmap, reg, &regval);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	regval *=3D scale; /* Scale is in 10 =CE=BCV units */
+> > please keep custom uAPI consistent with the general uAPI and use =C2=B5=
+V.
+>=20
+> I'll amend the comment to clarify that this is about the scale factor pas=
+sed
+> into this method. This prevents overflow while keeping all calculations in
+> 32 bits.
+
+ack
+
+[...]
+
+> > > +/* Shunt voltage, 183.5=CE=BCV per LSB */
+> > > +LTC3350_DEVICE_ATTR_RW(vshunt, LTC3350_REG_VSHUNT, 1835);
+> > > +
+> > > +/* Single capacitor voltages, 183.5=CE=BCV per LSB */
+> > > +LTC3350_DEVICE_ATTR_RO(vcap1, LTC3350_REG_MEAS_VCAP1, 1835);
+> > > +LTC3350_DEVICE_ATTR_RO(vcap2, LTC3350_REG_MEAS_VCAP2, 1835);
+> > > +LTC3350_DEVICE_ATTR_RO(vcap3, LTC3350_REG_MEAS_VCAP3, 1835);
+> > > +LTC3350_DEVICE_ATTR_RO(vcap4, LTC3350_REG_MEAS_VCAP4, 1835);
+> > > +LTC3350_DEVICE_ATTR_RW(cap_uv, LTC3350_REG_CAP_UV_LVL, 1835);
+> > > +LTC3350_DEVICE_ATTR_RW(cap_ov, LTC3350_REG_CAP_OV_LVL, 1835);
+> > > +
+> > > +/* General purpose input, 183.5=CE=BCV per LSB */
+> > > +LTC3350_DEVICE_ATTR_RO(gpi, LTC3350_REG_MEAS_GPI, 1835);
+> > > +LTC3350_DEVICE_ATTR_RW(gpi_uv, LTC3350_REG_GPI_UV_LVL, 1835);
+> > > +LTC3350_DEVICE_ATTR_RW(gpi_ov, LTC3350_REG_GPI_OV_LVL, 1835);
+> > > +
+> > > +/* Input voltage, 2.21mV per LSB */
+> > > +LTC3350_DEVICE_ATTR_RO(vin, LTC3350_REG_MEAS_VIN, 22100);
+> > > +LTC3350_DEVICE_ATTR_RW(vin_uv, LTC3350_REG_VIN_UV_LVL, 22100);
+> > > +LTC3350_DEVICE_ATTR_RW(vin_ov, LTC3350_REG_VIN_OV_LVL, 22100);
+> > > +
+> > > +/* Capacitor stack voltage, 1.476 mV per LSB */
+> > > +LTC3350_DEVICE_ATTR_RO(vcap, LTC3350_REG_MEAS_VCAP, 14760);
+> > > +LTC3350_DEVICE_ATTR_RW(vcap_uv, LTC3350_REG_VCAP_UV_LVL, 14760);
+> > > +LTC3350_DEVICE_ATTR_RW(vcap_ov, LTC3350_REG_VCAP_OV_LVL, 14760);
+> > I suppose it would be sensible to expose this as a second
+> > power_supply device of type battery with ltc3350_config.supplied_to
+> > set to this second power_supply device.
+> >=20
+> > Then you can map
+> >=20
+> > LTC3350_REG_MEAS_VCAP -> VOLTAGE_NOW
+> > LTC3350_REG_VCAP_UV_LVL -> VOLTAGE_MIN
+> > LTC3350_REG_VCAP_OV_LVL -> VOLTAGE_MAX
+> > LTC3350_REG_VSHUNT -> CURRENT_NOW
+> > TECHNOLOGY =3D POWER_SUPPLY_TECHNOLOGY_CAPACITOR (new)
+>=20
+> Makes sense.
+>=20
+> Should I create a separate patch that adds the new properties?
+
+Yes, make it one extra patch adding POWER_SUPPLY_TECHNOLOGY_CAPACITOR
+and one extra patch for the cell information properties. Also do not
+forget to update all necessary files:
+
+ * Documentation/ABI/testing/sysfs-class-power
+ * include/linux/power_supply.h
+ * drivers/power/supply/power_supply_sysfs.c
+
+> > Also the single capacitor voltages are similar to per-cell voltage
+> > information, so I think we should create generic properties for
+> > that:
+> >=20
+> > LTC3350_REG_NUM_CAPS   -> NUMBER_OF_CELLS (new)
+> > LTC3350_REG_MEAS_VCAP1 -> CELL1_VOLTAGE_NOW (new)
+> > LTC3350_REG_MEAS_VCAP2 -> CELL2_VOLTAGE_NOW (new)
+> > LTC3350_REG_MEAS_VCAP3 -> CELL3_VOLTAGE_NOW (new)
+> > LTC3350_REG_MEAS_VCAP4 -> CELL4_VOLTAGE_NOW (new)
+> > LTC3350_REG_CAP_UV_LVL -> CELL_VOLTAGE_MIN (new)
+> > LTC3350_REG_CAP_OV_LVL -> CELL_VOLTAGE_MAX (new)
+> >=20
+> > ...
+
+After re-reading it: This only works for serial cells, but not for
+parallel ones. While it's technically not possible to measure
+parallel cells, it might be desired to expose the exact
+configuration at some point. Thus it should be
+NUMBER_OF_SERIAL_CELLS. Also the documentation for
+CELL<X>_VOLTAGE_NOW should mention that this might measure more than
+one cell, if there are multiple cells connected in parallel.
+
+[...]
+
+> > > +
+> > > +static int ltc3350_probe(struct i2c_client *client)
+> > > +{
+> > > +	struct i2c_adapter *adapter =3D client->adapter;
+> > > +	struct device *dev =3D &client->dev;
+> > > +	struct ltc3350_info *info;
+> > > +	struct power_supply_config ltc3350_config =3D {};
+> > > +	int ret;
+> > > +
+> > > +	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_WORD_DATA)) {
+> > > +		dev_err(dev, "No support for SMBUS_WORD_DATA\n");
+> > > +		return -ENODEV;
+> > > +	}
+> > return dev_err_probe(dev, -ENODEV, "No support for SMBUS_WORD_DATA\n");
+> >=20
+> > But I think this can just be dropped. devm_regmap_init_i2c() should
+> > generate an error, if the i2c adapter requirements are not met.
+>=20
+> It's quite interesting to see what other drivers do here. Most report a
+> message, and there's no consensus on the value returned.
+
+I checked and devm_regmap_init_i2c() calls into regmap_get_i2c_bus()
+and that contains the same check. If it fails, the bus will not be
+found and the function returns -ENOTSUPP. It should be fine to remove
+the driver specific extra handling with the error being printed for
+devm_regmap_init_i2c(). Considering this is mostly a hardware sanity
+check, I would expect this error to only happen on developer
+systems. A developer should be able to figure out what that means.
+
+Greetings,
+
+-- Sebastian
+
+--empim7clzpnbt47x
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmYcEpAACgkQ2O7X88g7
++ppgJA/+IhLiJ3Q9ST7X5EasixJEnW6bG0DslSSvXUEw12PVjRSvZ1uJCzGtXMQ1
+3b+C3ARCcVkVpr64dQDMmYwUDTCi8XAodgv1NX+eEe9QuxW4xnbRSxIsvtZ6Tclb
+gPb9uLvwScTdrZX/zkwaWY3pcczimOzWLX3p+qymyd9+DNnFKZy88xWSLHyqCPVg
+TPF8ZcsHpPaDfQyRtizg1N+HUtAfL7ZGGW2g9gR2ekIBo4cK1Soa6nSDe9y30+CR
+fNd2X9/RSU2Dd+MEBOHje1ptBI7UMe2w1WxjS7duJl7oBj8cdRAyPlJ568UjekYK
+o8pRg1GiJ0SnoodbyjQpQXfg3Lofauhn4AsQ0n+qNbZFgAZks4hzBrhB+mwIYrjb
+/cr6MxwAU1J01Ch3b4nx7E8rtQx9sTk4f2hbw0WVj+ntj6hF1rIyKgNfsbHUl2kv
+q/uNOlhMyYlb1QVBy6KVw71U2nLlVrtGTFffbnfSQ9cq8ZEkjpdWavdhrZHmXDiz
+WAXR2rg68dU3xUP8AgQsAEaYFb9yklhQCHbpnbqUcCSqxF1UcCi2oFPyUpbKWWha
+E98DfJv4Zi9oRCMc0NogY50moD47FkEyF7tQMKdKCSd6BQJV58C0C/dUS4PcVg/G
+8siIqm9Vp2ElY7cASblwFxu89P17+0/UOmA634oTPZAz4VTE1BQ=
+=gXIh
+-----END PGP SIGNATURE-----
+
+--empim7clzpnbt47x--
 
