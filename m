@@ -1,209 +1,129 @@
-Return-Path: <linux-pm+bounces-6445-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6446-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C1278A5A55
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 21:05:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D3308A5B08
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 21:42:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D7182284C05
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 19:05:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BD115B23919
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 19:42:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B04715575B;
-	Mon, 15 Apr 2024 19:05:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E9D715FCE1;
+	Mon, 15 Apr 2024 19:34:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="0OcTwWiW"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uBSZdj0i"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99C8269DE4;
-	Mon, 15 Apr 2024 19:05:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79B9815F3E1
+	for <linux-pm@vger.kernel.org>; Mon, 15 Apr 2024 19:34:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713207936; cv=none; b=tWd7ZGMCYVTxwnwqqYoPtqpDwzqoc2DXAYfgDYBI0vZzJsnVNYJjQsN/kHMnPW13K3aAHLGRbxprbB1bDkzJjPVzel/4p/iCi4BVeLKWaO1Y8UpQ200wP64zGyKWPWNoJyhKrvh2meSiBz67BVfztKRJ38esVW2QNeeiGSvNPwQ=
+	t=1713209694; cv=none; b=IWKxMHDFZKxTDUrPX8eKX0zvI1pwxlnbPjAKieSaQwdMxPb1PLC0P0d9RpPVyKKXlN7i6N+YB9spfcrm2CWfwQVIv/6WvDhGpOh4+O8sloyU7bWSXwAVM0SDbGJUDP5rQ+DSrwtl71k8wA1WPzv9dPqzt0kdwM2pGoNJCKHZgq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713207936; c=relaxed/simple;
-	bh=X6aFBbtbhlwjSibF1VZUjZZxSmOI1D+UMTgw0IW9PEk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=k4wXx+pODjsdDSs/vhGbDydj7aBMDpcE0gzyIyeFpfaA92EmWF8T4DAN5hte6X5H7R7YSoBAR982ihxNj0UJZZomVWhRvOMrgjLkAfBCYM5UgYAftRJ3hlfD+YK0/BphMux3jqEazcZa4OhLP9NXg9vLFQ0EtpnJuO/V1VFSJyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=0OcTwWiW; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1713207932;
-	bh=X6aFBbtbhlwjSibF1VZUjZZxSmOI1D+UMTgw0IW9PEk=;
-	h=From:Date:Subject:To:Cc:From;
-	b=0OcTwWiWCtRVuE77yuxqUFcIYOrmqNgQPxsN1PMsCx3xqNdqRWGp8pF9+0Wwr9x90
-	 Dr1Zx8LV9kChdlcB8eQAVfeUETnsBD6FlPCwbxzhYRUiMiIep+db0+7TJJid7Cek5I
-	 bsCKkqPWAMQGdDsl5NMfujf2tDGM5VNPQ4h0m49Vq+lSWtev/g91rUQEoBmR9T/WqS
-	 OYaaWrfHCAlQKfhvTLuwdeHHV9aT4en78p1Eu6zU4arvAt8kZJjst0IYpy1kdQahWs
-	 POr369JPCvD8z2siHYb4NIZzBqyAXoKEnyeBz7EpB4ErNeiUzbGJOQsQFNzuTMKFxl
-	 lFxq1fJ+Rs4UA==
-Received: from [192.168.42.226] (zone.collabora.co.uk [167.235.23.81])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nfraprado)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 2A2AB37820EF;
-	Mon, 15 Apr 2024 19:05:32 +0000 (UTC)
-From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-Date: Mon, 15 Apr 2024 15:05:28 -0400
-Subject: [PATCH v2] power: supply: sbs-battery: Handle unsupported
- PROP_TIME_TO_EMPTY_NOW
+	s=arc-20240116; t=1713209694; c=relaxed/simple;
+	bh=RQH/xq79Dx1ojuJ4FQ/1sF/nVGfejgfjDs1gdTGmfb4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nbrs3vmh9tXNeq140ZCGoWAxcZbd5f6/mKJEQtcjscXpYGFt9nO1WgdNo1mdSecZK/WgGC/OZ9b+DbPoIN5tTSH7p//QMBz2aA/r9MIsNusEEXkNRgGaCY7Bm3atZ6SXgtUj4oNVc2X2kyzZvLoPPf4L6K7BEveO22xPKUopK24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uBSZdj0i; arc=none smtp.client-ip=209.85.208.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2d895138ce6so42466921fa.0
+        for <linux-pm@vger.kernel.org>; Mon, 15 Apr 2024 12:34:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1713209689; x=1713814489; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=74eh0UAxjJzTVRALg/TqF+8BFcarO+L4T6AcFES85ZQ=;
+        b=uBSZdj0iJ7YWi/iCIKkcSf8QzNbly0iw8z8f6QAn7pHtVBCsn8vDbV88sFqabbzPe/
+         8qt8Y3Nw1mjGvTpdEjHfCcv+LeXIQSE385185nh+WjHhSQcydGMivNUUgahpafnc2um6
+         p6LW7DAR3yTaW3SzTLMotTn9I3WdJ1y+O17fCNXeDoLOqxg2/k/AB4qfUGY+ud36dsKr
+         LBLTIPRi5N2HafysJt9+GN2Yd7Qud/FYNH4zfzmMDOdH+zDl8+4hbP73SZNr8cIxz8jG
+         DagIeWNoVRSPdJmHcIWbiSzvJPV0VCD7b9fkczOIzNTNTqPQR9k86eCGTO79M+cF+eAD
+         ewsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713209689; x=1713814489;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=74eh0UAxjJzTVRALg/TqF+8BFcarO+L4T6AcFES85ZQ=;
+        b=l9Kavese/1zsWRdL64lZlfMpcH6jwOQlXswWCiiICIaOZs5ycXcNFsKUgohJN71d6F
+         SL5WYX//5mGIgcQR+7n8CcLfkQMR3GJm5VgcJzKsfXEUr8g0pLm0gE1WhjgBTsALxl3j
+         dUWRJvcLiu/0xjrX6oadvNCH4LSODeOf6fFnJwy5Rzmj7PWvtQEecVF7zyHbYuCE1VRX
+         k4Og3VSopEpi6WeS09zW57uA9MR0sRjW3ySYLTsgG0T8zu/6u/SNiShqhI4zzPAxxSWC
+         ZN/ijp6kR3w9wVSFIRjWKtW2H3uGy7MJ+u2kQPxN1L7r41pobFCKkLDUI1Z8LblfJcn+
+         jndw==
+X-Forwarded-Encrypted: i=1; AJvYcCVAE9/YhSLVVTn99IsJCuFHEb80ny621L+S8J0PprAzzK8LsdXGHmcODlMXLkgkX5gfTITKNz3Sajww12+gSYn8DdyixUv9jfo=
+X-Gm-Message-State: AOJu0Ywk/248swKSPMqohVtRdt2/v0vUQO970LJMsNUI9k3tglznTJ3z
+	qvf56VuLZxdkeMOFomCt4U2sXp15OUnbuK7eFaV0EiK+yOj6KUBHxIVJEQXLzRA=
+X-Google-Smtp-Source: AGHT+IFQbBYBAbKPlge2VUflWQ2uNCh+LB7V46pgV2EVpKugyDBFZB4CcvFXwqvdSBuJQ983f8Qc0A==
+X-Received: by 2002:a2e:9bcc:0:b0:2d7:16f6:f678 with SMTP id w12-20020a2e9bcc000000b002d716f6f678mr5697752ljj.15.1713209689508;
+        Mon, 15 Apr 2024 12:34:49 -0700 (PDT)
+Received: from [172.30.205.18] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
+        by smtp.gmail.com with ESMTPSA id c3-20020a2ea1c3000000b002d8c9bcedcdsm1344155ljm.95.2024.04.15.12.34.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Apr 2024 12:34:48 -0700 (PDT)
+Message-ID: <c02f9730-3182-46b4-b584-02487aafa22b@linaro.org>
+Date: Mon, 15 Apr 2024 21:34:43 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240415-sbs-time-empty-now-error-v2-1-32d8a747e308@collabora.com>
-X-B4-Tracking: v=1; b=H4sIAHd6HWYC/42NQQqDQAxFryKzbkrMCEpXvUdxoWOsATWSEVsR7
- 95pT1D+6n347x8usglHd8sOZ7xJFJ0T0CVzYWjmJ4N0iR0hFeixhNhGWGVi4GlZd5j1BWymBp6
- oDVgWne/Jpfli3Mv7p37UiQeJq9r+e9ryb/uHdMshpeqwr0ok7/EedBybVq25Bp1cfZ7nBxpTz
- OXEAAAA
-To: Sebastian Reichel <sre@kernel.org>
-Cc: kernel@collabora.com, linux-pm@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-X-Mailer: b4 0.13.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/4] dt-bindings: arm: Document reboot mode magic
+To: Elliot Berman <quic_eberman@quicinc.com>,
+ Bjorn Andersson <andersson@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+ Andy Yan <andy.yan@rock-chips.com>, Lorenzo Pieralisi
+ <lpieralisi@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Cc: Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+ Melody Olvera <quic_molvera@quicinc.com>,
+ Shivendra Pratap <quic_spratap@quicinc.com>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ Florian Fainelli <florian.fainelli@broadcom.com>, linux-pm@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org
+References: <20240414-arm-psci-system_reset2-vendor-reboots-v2-0-da9a055a648f@quicinc.com>
+ <20240414-arm-psci-system_reset2-vendor-reboots-v2-2-da9a055a648f@quicinc.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20240414-arm-psci-system_reset2-vendor-reboots-v2-2-da9a055a648f@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Despite the RunTimeToEmpty() (0x11) function being defined in the SBS
-specification as required, it seems that not all batteries implement it.
-On platforms with such batteries, reading the property will cause an
-error to be printed:
 
-power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
 
-This not only pollutes the log, distracting from real problems on the
-device, but also prevents the uevent file from being read since it
-contains all properties, including the faulty one.
+On 4/14/24 21:30, Elliot Berman wrote:
+> Add bindings to describe vendor-specific reboot modes. Values here
+> correspond to valid parameters to vendor-specific reset types in PSCI
+> SYSTEM_RESET2 call.
+> 
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> ---
 
-The following table summarizes the findings for a handful of platforms:
+[...]
 
-Platform                                Status  Manufacturer    Model
-------------------------------------------------------------------------
-mt8186-corsola-steelix-sku131072        OK      BYD             L22B3PG0
-mt8195-cherry-tomato-r2                 NOT OK  PANASON         AP16L5J
-mt8192-asurada-spherion-r0              NOT OK  PANASON         AP15O5L
-mt8183-kukui-jacuzzi-juniper-sku16      NOT OK  LGC KT0         AP16L8J
-mt8173-elm-hana                         OK      Sunwoda         L18D3PG1
-sc7180-trogdor-lazor-limozeen-nots-r5   NOT OK  Murata          AP18C4K
-sc7180-trogdor-kingoftown               NOT OK  333-AC-0D-A     GG02047XL
-rk3399-gru-kevin                        OK      SDI             4352D51
 
-Detect if this is one of the quirky batteries during presence update, so
-that hot-plugging works as expected, and if so report -ENODATA for
-POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW, which removes it from uevent and
-prevents throwing errors.
+> +
+> +    // Case 5: SYSTEM_RESET2 vendor resets
+> +    psci {
+> +      compatible = "arm,psci-1.0";
+> +      method = "smc";
+> +
+> +      mode-edl = <0>;
+> +      mode-bootloader = <1 2>;
 
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
-Changes in v2:
-- Reworked patch to lay down and use a proper quirk infrastructure, and
-  update the quirks on the presence update callback so it works properly
-  even when hot-plugging different batteries
-- Link to v1: https://lore.kernel.org/r/20240307-sbs-time-empty-now-error-v1-1-18d0f8702330@collabora.com
----
- drivers/power/supply/sbs-battery.c | 55 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+These properties seem overly generic, and with PSCI only growing every
+now and then, I think a reboot-mode (or similar) subnode would be in
+order here
 
-diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
-index a6c204c08232..92acbda9e78e 100644
---- a/drivers/power/supply/sbs-battery.c
-+++ b/drivers/power/supply/sbs-battery.c
-@@ -214,6 +214,7 @@ struct sbs_info {
- 	struct delayed_work		work;
- 	struct mutex			mode_lock;
- 	u32				flags;
-+	u32				quirks;
- 	int				technology;
- 	char				strings[NR_STRING_BUFFERS][I2C_SMBUS_BLOCK_MAX + 1];
- };
-@@ -263,6 +264,54 @@ static void sbs_disable_charger_broadcasts(struct sbs_info *chip)
- 		dev_dbg(&chip->client->dev, "%s\n", __func__);
- }
- 
-+/* Required by the spec, but missing in some implementations */
-+#define SBS_QUIRK_BROKEN_TTE_NOW	BIT(0)
-+
-+struct sbs_quirk_entry {
-+	const char *manufacturer;
-+	const char *model;
-+	u32 flags;
-+};
-+
-+static const struct sbs_quirk_entry sbs_quirks[] = {
-+	{"PANASON", "AP16L5J", SBS_QUIRK_BROKEN_TTE_NOW},
-+	{"PANASON", "AP15O5L", SBS_QUIRK_BROKEN_TTE_NOW},
-+	{"LGC KT0", "AP16L8J", SBS_QUIRK_BROKEN_TTE_NOW},
-+	{"Murata", "AP18C4K", SBS_QUIRK_BROKEN_TTE_NOW},
-+	{"333-AC-0D-A", "GG02047XL", SBS_QUIRK_BROKEN_TTE_NOW},
-+};
-+
-+static const char *sbs_get_constant_string(struct sbs_info *chip,
-+					   enum power_supply_property psp);
-+
-+static void sbs_update_quirks(struct sbs_info *chip)
-+{
-+	const char *model;
-+	const char *manufacturer;
-+	unsigned int i = 0;
-+
-+	/* reset quirks from battery before the hot-plug event */
-+	chip->quirks = 0;
-+
-+	manufacturer = sbs_get_constant_string(chip, POWER_SUPPLY_PROP_MANUFACTURER);
-+	model = sbs_get_constant_string(chip, POWER_SUPPLY_PROP_MODEL_NAME);
-+	if (IS_ERR(manufacturer) || IS_ERR(model)) {
-+		dev_warn(&chip->client->dev, "Couldn't read manufacturer and model to set quirks\n");
-+		return;
-+	}
-+
-+	for (i = 0; i < ARRAY_SIZE(sbs_quirks); i++) {
-+		if (strcmp(manufacturer, sbs_quirks[i].manufacturer))
-+			continue;
-+		if (strcmp(model, sbs_quirks[i].model))
-+			continue;
-+		chip->quirks |= sbs_quirks[i].flags;
-+	}
-+
-+	if (chip->quirks & SBS_QUIRK_BROKEN_TTE_NOW)
-+		dev_info(&chip->client->dev, "Added quirk disabling TIME_TO_EMPTY_NOW\n");
-+}
-+
- static int sbs_update_presence(struct sbs_info *chip, bool is_present)
- {
- 	struct i2c_client *client = chip->client;
-@@ -323,6 +372,8 @@ static int sbs_update_presence(struct sbs_info *chip, bool is_present)
- 	dev_dbg(&client->dev, "PEC: %s\n", (client->flags & I2C_CLIENT_PEC) ?
- 		"enabled" : "disabled");
- 
-+	sbs_update_quirks(chip);
-+
- 	if (!chip->is_present && is_present && !chip->charger_broadcasts)
- 		sbs_disable_charger_broadcasts(chip);
- 
-@@ -614,6 +665,10 @@ static int sbs_get_battery_property(struct i2c_client *client,
- 	struct sbs_info *chip = i2c_get_clientdata(client);
- 	s32 ret;
- 
-+	if (psp == POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW &&
-+	    chip->quirks & SBS_QUIRK_BROKEN_TTE_NOW)
-+		return -ENODATA;
-+
- 	ret = sbs_read_word_data(client, sbs_data[reg_offset].addr);
- 	if (ret < 0)
- 		return ret;
-
----
-base-commit: 11afac187274a6177a7ac82997f8691c0f469e41
-change-id: 20240307-sbs-time-empty-now-error-322bc074d3f2
-
-Best regards,
--- 
-Nícolas F. R. A. Prado <nfraprado@collabora.com>
-
+Konrad
 
