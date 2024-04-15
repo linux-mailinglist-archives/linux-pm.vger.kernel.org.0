@@ -1,102 +1,104 @@
-Return-Path: <linux-pm+bounces-6425-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6426-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 343D38A5680
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 17:32:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B56788A5686
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 17:34:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9311FB22383
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 15:32:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E65DC1C20DD6
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 15:34:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22AE57F464;
-	Mon, 15 Apr 2024 15:32:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A994F78C7B;
+	Mon, 15 Apr 2024 15:34:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="c7p6I8OG"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="1WmA62Kw"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0809478C78;
-	Mon, 15 Apr 2024 15:32:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 441691D52B;
+	Mon, 15 Apr 2024 15:34:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713195163; cv=none; b=WEo9P1+yxoQneVVww4QkyaEuoMu3tQnCvIz1MAM5eYUzmsmo1CUdawmewKHQzacavey9E2VR5KG/e5XdJikKvW9UafXr7TaSlvIWVHsET7hdEOE3QpFt8P8nuqC4HkQsfI+cf5P6hZnfSXjHtnpEeUiXk0kTwzlMJ7pUs6sFrcY=
+	t=1713195271; cv=none; b=RFTZC6i8ZBDZAPsPD3Z9KFtcHOV1oYzGhXwTrGt0hyNORVPeBtKyXwbHL3LHfT5Mn16WHvE4cepN72fc9DwKxMundewXr5tLjztuWehhcVzyHd0fiZ2nVIZa5EOlQjJYcMQ0kbXBpqzX1NCou25lOr2nZ4iM8wob9e08H/TmRKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713195163; c=relaxed/simple;
-	bh=0pFnxBdv2Aw+FFWBe7jdyVdRMZ4i1+0Pu9uZ+7wnjz8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=pjrH24mKTVqO2PyA2gOjWAo9ugWxEKc+oXBC22FjR/QsP2muoBCrNVRSTgwh5p79KchRwfhLzT2nMcP0lBlVWdfZsmydbk//JLZv+vVtBRffqSS/bQlpuUHucQ/z6vyUNcqiQROoSR6wEC2WwVS1jDBQeCUyieM2UKF3YMW/pTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=c7p6I8OG; arc=none smtp.client-ip=46.235.227.194
+	s=arc-20240116; t=1713195271; c=relaxed/simple;
+	bh=byghmlwYgW0PL2c7jQST28C4hISBEL5i30P9W6RbAik=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dcjJ2cyzUt+ibSx1Q7+6BHQdnLPBVAOGJLpRkm7eev9ukD/YpAlup0q0K81QRfC0dhrraXXsgWEAGkPC3c7nTX6fSrwD4DpB+WQW/78wp+qWJisGVcJD8HFy/aArNqHkq/Lbk0gqnvpcizzCuupqiaxKLGakpU/JGN9U9o503R0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=1WmA62Kw; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1713195159;
-	bh=0pFnxBdv2Aw+FFWBe7jdyVdRMZ4i1+0Pu9uZ+7wnjz8=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=c7p6I8OGVtjkOFs/1NKsBL6gVO0NvGXc7gi16HBlL/v5UpI0gZQZMmPOuPPSWlc9N
-	 E7dn6PFZ0pkmgInPQkZcYOpmmyOxPC+yn1eWsBXvDwcmh9K+j2z3kdlSwRp+VdAAvE
-	 eI3Asuas45xxr1VP+TXHf73nqR/kE788IK6Spy40iumI72p7iWzDvcfZb5pcvSwA+y
-	 aIv38lb7FTuy42cZtmKFgOzOQBBk0jSPMzXFTOpRpO3P7oo9yV+AsMAUX+OZCR01rs
-	 lfiiH7tL8pAs9qnL6+uPLeaRg8Pig4fVeccwUV0YNnO739YW3oEwlEWTxf/0BmEjrf
-	 bl8kSmDK6WhXQ==
-Received: from [192.168.42.226] (zone.collabora.co.uk [167.235.23.81])
+	s=mail; t=1713195268;
+	bh=byghmlwYgW0PL2c7jQST28C4hISBEL5i30P9W6RbAik=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=1WmA62KwZ8Z/y/7fHkGBZDB3agmqTdZFPCRO9w5UP44EwBfYi78kr7icRAu8HID/V
+	 SInagdizHMCnbNvQ39RD76DPJ3AGyCiVRzg8mnSuqn/GVS74EMM3ioMvtxPc/9V+zp
+	 KCiF/E8fR9vdjqrCUAPgbNG1zPsTq75Vt8sw0V8e+gLzfoEDPLHhby6NTM1l/8vRMm
+	 78sg2QXKGQIWKSi2x/casIRoLbIxUUEOLvtGpUWGOfHph0MZX3bcVgI2Ng+Y5DjJVd
+	 pepLWuHIP2Y1k1oBqj5ZLI9V1jzU+dcwcN5PPgPxJbPnfSAkx48Mj8YmngwSgTk61+
+	 y9GnN5Q02cU6g==
+Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: nfraprado)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 2E822378201A;
-	Mon, 15 Apr 2024 15:32:38 +0000 (UTC)
-From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-Date: Mon, 15 Apr 2024 11:32:16 -0400
-Subject: [PATCH 2/2] selftests: power_supply: Make it POSIX-compliant
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id CCCAE3780022;
+	Mon, 15 Apr 2024 15:34:27 +0000 (UTC)
+Date: Mon, 15 Apr 2024 11:34:26 -0400
+From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Mike Looijmans <mike.looijmans@topic.nl>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] power: supply: ltc3350-charger: Add driver
+Message-ID: <141c40a7-9c15-4d58-9081-073c5c72606b@notapiano>
+References: <20240409135442.37732-1-mike.looijmans@topic.nl>
+ <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.dab85cfc-973d-4930-8fea-324aa26b5801@emailsignatures365.codetwo.com>
+ <20240409135442.37732-2-mike.looijmans@topic.nl>
+ <5hpl2kspf667hmmxgg36ahiux5rs364qzrg2itpljspspa47vp@dsbnhdnq5s54>
+ <efae4037-c22a-40be-8ba9-7c1c12ece042@topic.nl>
+ <lxxwadaf2mrghy2kygm3cucb7ygl5qu4dxnmpbancrm2hwjm4g@5eudactyudca>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240415-supply-selftest-posix-sh-v1-2-328f008d698d@collabora.com>
-References: <20240415-supply-selftest-posix-sh-v1-0-328f008d698d@collabora.com>
-In-Reply-To: <20240415-supply-selftest-posix-sh-v1-0-328f008d698d@collabora.com>
-To: Shuah Khan <shuah@kernel.org>
-Cc: Sebastian Reichel <sre@kernel.org>, 
- Mike Looijmans <mike.looijmans@topic.nl>, kernel@collabora.com, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-pm@vger.kernel.org, 
- =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-X-Mailer: b4 0.13.0
+In-Reply-To: <lxxwadaf2mrghy2kygm3cucb7ygl5qu4dxnmpbancrm2hwjm4g@5eudactyudca>
 
-There is one use of bash specific syntax in the script. Change it to the
-equivalent POSIX syntax. This doesn't change functionality and allows
-the test to be run on shells other than bash.
+On Sun, Apr 14, 2024 at 07:29:56PM +0200, Sebastian Reichel wrote:
+> [+cc Nicolas]
+> 
+> Hello Mike,
+> 
+> On Fri, Apr 12, 2024 at 08:53:58AM +0200, Mike Looijmans wrote:
+> > > please share output of
+> > > ./tools/testing/selftests/power_supply/test_power_supply_properties.sh
+> > > below the fold with your next submission. It's useful for verifying,
+> > > that you got the unit scaling correct for the standard properties :)
+> > 
+> > Will do. Did a quick run on the driver as it is now, that yields the
+> > following output:
+> > 
+> > (Any thoughts on the "arithmetic syntax error" messages?)
+> 
+> The script contains some bash specific shell extensions and should
+> use /bin/bash instead of /bin/sh in the shebang. Just call it with
+> /bin/bash ./tools/testing/... and you should get rid of them :)
+> 
+> Nicolas, do you want to send a fix for that to Shuah with Reported-by
+> from Mike?
 
-Reported-by: Mike Looijmans <mike.looijmans@topic.nl>
-Closes: https://lore.kernel.org/all/efae4037-c22a-40be-8ba9-7c1c12ece042@topic.nl/
-Fixes: 4a679c5afca0 ("selftests: Add test to verify power supply properties")
-Signed-off-by: NÃ­colas F. R. A. Prado <nfraprado@collabora.com>
----
- tools/testing/selftests/power_supply/test_power_supply_properties.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+It was easy to make it POSIX-compliant, so I sent a series doing that instead:
 
-diff --git a/tools/testing/selftests/power_supply/test_power_supply_properties.sh b/tools/testing/selftests/power_supply/test_power_supply_properties.sh
-index df272dfe1d2a..a66b1313ed88 100755
---- a/tools/testing/selftests/power_supply/test_power_supply_properties.sh
-+++ b/tools/testing/selftests/power_supply/test_power_supply_properties.sh
-@@ -23,7 +23,7 @@ count_tests() {
- 	total_tests=0
- 
- 	for i in $SUPPLIES; do
--		total_tests=$(("$total_tests" + "$NUM_TESTS"))
-+		total_tests=$((total_tests + NUM_TESTS))
- 	done
- 
- 	echo "$total_tests"
+https://lore.kernel.org/all/20240415-supply-selftest-posix-sh-v1-0-328f008d698d@collabora.com
 
--- 
-2.44.0
-
+Thanks,
+Nícolas
 
