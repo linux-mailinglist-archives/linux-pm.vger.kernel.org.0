@@ -1,62 +1,62 @@
-Return-Path: <linux-pm+bounces-6375-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6376-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8346C8A4697
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 03:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D0E08A4699
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 03:39:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9EE511C20AFE
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 01:37:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E6B91C20D63
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 01:39:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 212F24C9F;
-	Mon, 15 Apr 2024 01:37:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3FCB4C9F;
+	Mon, 15 Apr 2024 01:39:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="n4tWNA9C"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="tsyY0Xar"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2053.outbound.protection.outlook.com [40.107.94.53])
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2055.outbound.protection.outlook.com [40.107.92.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F399B4A24;
-	Mon, 15 Apr 2024 01:37:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9BA4A24;
+	Mon, 15 Apr 2024 01:39:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.55
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713145049; cv=fail; b=Ttod4tNkLaIDRrLve0JJDcZSfRhnH3JRx37HAv/181HxBuU7vPiViLvUkvZcgLqLYNCBeqxhKfFABvFruzCCOFpU9RT65+Cm7X1TK9AN3Hy17WFO1rQ/r/TA+QgEmdM/3KJ8twGba+AWfx9INNwyDjgFBtyDHOpZcMKI7zeSNAE=
+	t=1713145164; cv=fail; b=HfT0qtEJ7Q8ju4y1AsLSdvi8yho1L3F14LpuaA77tnyBSYuerMi9PbUhqpqq1u7I0Ep0L4Y/q1adjHPzG5CIR3NBKXMLY4rZ9sHAYgPcyFiNUayrjAcn5vPTdB9w06oNTEofXVatphZwVO6WMwTCSoH/++b/dMSUlycH2EISBEQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713145049; c=relaxed/simple;
-	bh=Q48MVyxUhRGkZ/DwxJAGwLPrjDAX6+eEmws6mPP/QhY=;
+	s=arc-20240116; t=1713145164; c=relaxed/simple;
+	bh=sWjUQv9nMPt1eH/AqUcQ9PoVU1YXrubpCfjISlxBmgw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=tfEytiCA7RwYAXaWra+YIzzdyVMST0cYyH60rUwfTFR3+HXabu94IxasHdqxtDlgSbezhGRn2ApOiBuMizCM2Zi+4Oq93N4wUTBycIEcVhZfy+CF6b1/MDCQTc7uy6h2pj35zr0gqyK6qq2/DT6StSYsQSlxp/bw4skMpZEBGXs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=n4tWNA9C; arc=fail smtp.client-ip=40.107.94.53
+	 Content-Disposition:In-Reply-To:MIME-Version; b=Ouu4oBZdVv6LGhdU2LpIVNvpWVbDRfDz9ARX346ihRKmMryDRDTyqLu+oR+4dRmzzSYrDga60s+yktWwwjifb6BtoZ8fUA3A4Za5q5ztS5cecsf8+WQezNoDhKwlx8KTCS+wIdXLnY5zQfAJnqzjERDdf5i9lvZH36R/phpapss=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=tsyY0Xar; arc=fail smtp.client-ip=40.107.92.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JPms64NsA5n0n4uwMH4ci7FaXutKiDnTjOTBksjDXvEuMuBSfB+xDUI8Qjm2Kvd0Qt4qPvHXuMfLdvRkiiqnyn620fDeSPydpSeqCrapZ/fIK6djhNkYb5wbJcros+YXkaawz0DT8oNRJQdpibLzXc3Tmx3TYeSIkF9npfMF3AtyX6PP/9hlD7PWf+3cvxOwtNegaJrqsZOVFsvNqK6Mqm+rX5D6on04kHBBV4CLeOmwYw5i89GJYr96xPOx/uloIKHjt+WRVwbciatNm49Ol3iiXCVWyX1OKg9ly37DVDPu3gTivE0Y+JyOjU4+3Bk1iq6dj76heCCdhQ9asR3xog==
+ b=Js4BdayIV8cNmmw3OYB8yHlcpJMs6GTnZl9fcgXa3KchVYkfOIAvCnQ8ug64nsBW7/CMKdIr1v+xJ0z2m9pTP5KeAtHGowaJETqUC8mF5EMeF/QASZv2+JxUjfYFsbxHbipp2AJVsLe1GUZ/0f+p6bHljCQyYi3akPWlGccsjdzpt5T7RlfItBqrXqDACj7ktbzzwyNJhi1sU+7Ez44WjRogTOhv2hTKY+GIvEoML6HAX/r4pqsJmvxd6IFURnjngrTbstKqjSIbqQqqIkxhDMBmYvbCAKTJow5llTVWIFQCKzLRti5xkCRa2p89GDLRJHZ47kynVoWqNzjK8ePi3w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=C2WNIijLFvvWRl+F8jnwWwluuapKuJf2WPiA/GDcjZA=;
- b=mQpYIARcX++9jd1G2GwnDcVrVUzbQ38aPdm/0j4A8wzA0XwqOMOd9Z56TnUlvuMQ7GkOQVx/eekfl7L4UKFobU6/Xt7w42Vm8XxcLYQ03LbpvjoIZvvKrNQ8tReyjsQlA1lizKjyGuLDufCl/yC0bcF4Iz9/CwX2LHMAlvlkTkrXXyakXbKW+Ck3qlZL+W5ImQcb1LOB32NpuvRC+vEYiCEilzx/KvzlbL/A+QXMOL7luHUHJ5bYMudsFrpFTO3IxWDYX4i7yxnV9kY0+Hmmr3NlUcELeYOsORdPHmvEQAvHP77oCeexbrwZ0vCuglFECkbm6wxgIhqRAzhoDJbe2A==
+ bh=aVJCBLUkeqZj/vAvNvAotM7q7KnVww5+PZmXzb7qpX8=;
+ b=Uhxk0km1I+kUrJx8EzrWObSpxj6V9ybjtD1kwdh/TiIsbzLlgM3X8uBDCx+wdzi7NO5uxKcR/VsEoTkkPXcl9ehZVlEkhWlKfZWxz/QrbuRsJnTLcDiOLf7wCO9TXMVPbH1473/TFOuUDQulaqp+gxSlCvzYZqNiYvyIy9G8WlAscIveEfCJcnMxGFTj5G3Q7+bNLBomDgMNGMXC6LhkUwvN0LvyHqFYWkXocgjb1T188FYJs9pqN4GZgUJyGnhcUVVl8hKMhZWFJXYKyriiSnNGwWupX3Y54aWfLIX+E/jW9ljDn/ACrUU6o9iaoaMoRyizO5Mmb69ckvkxg7EynA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C2WNIijLFvvWRl+F8jnwWwluuapKuJf2WPiA/GDcjZA=;
- b=n4tWNA9CPvlqgUnAv2hxgM0VQY07B2nPRuNHOWiJMNQfR2704LJ/F/rKDms6HJzVUew/lGclQfS8rM2O9uU1RWiKhZynlcBHPJb4I/XSaNqCGdEhx0C151U0cSQGDeu9RnZ5SFCZWWl3orz8WfYb1F5+mlXSvFk2J0QEgIVTws4=
+ bh=aVJCBLUkeqZj/vAvNvAotM7q7KnVww5+PZmXzb7qpX8=;
+ b=tsyY0XarKkOdgLh/Hikoug2W7ne65BhX+HPeth9vlxzOZrYikggfNmIJUTkYXhq9SEBDsAXaejQeF0NZGUbFr9qTWMSDwRn/3qY+TzJdUwoJsYqTC8N986lxZmJ6HgvLCfcA9kPEp5V2QJUnPwIVjVxTmzIsFhRpC/2tCLZXngY=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from SJ2PR12MB8690.namprd12.prod.outlook.com (2603:10b6:a03:540::10)
- by MN2PR12MB4342.namprd12.prod.outlook.com (2603:10b6:208:264::7) with
+ by SJ1PR12MB6028.namprd12.prod.outlook.com (2603:10b6:a03:489::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7452.50; Mon, 15 Apr
- 2024 01:37:24 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.55; Mon, 15 Apr
+ 2024 01:39:19 +0000
 Received: from SJ2PR12MB8690.namprd12.prod.outlook.com
  ([fe80::e7a:5022:4b7d:ade1]) by SJ2PR12MB8690.namprd12.prod.outlook.com
  ([fe80::e7a:5022:4b7d:ade1%7]) with mapi id 15.20.7409.042; Mon, 15 Apr 2024
- 01:37:23 +0000
-Date: Mon, 15 Apr 2024 09:37:04 +0800
+ 01:39:19 +0000
+Date: Mon, 15 Apr 2024 09:38:58 +0800
 From: Huang Rui <ray.huang@amd.com>
 To: "Yuan, Perry" <Perry.Yuan@amd.com>
 Cc: "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
@@ -71,17 +71,16 @@ Cc: "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
 	"Meng, Li (Jassmine)" <Li.Meng@amd.com>,
 	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
 	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v10 1/8] cpufreq: amd-pstate: Document *_limit_* fields
- in struct amd_cpudata
-Message-ID: <ZhyEwE3Hr8Waf620@amd.com>
+Subject: Re: [PATCH v10 2/8] cpufreq: amd-pstate: Document the units for freq
+ variables in amd_cpudata
+Message-ID: <ZhyFMiYffSEBcJKi@amd.com>
 References: <cover.1711335714.git.perry.yuan@amd.com>
- <6b8432f302165e686a01ffe7d1d98852d5e88609.1711335714.git.perry.yuan@amd.com>
+ <87c6aeb265a0281b3abebd07ba2069d80da21944.1711335714.git.perry.yuan@amd.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6b8432f302165e686a01ffe7d1d98852d5e88609.1711335714.git.perry.yuan@amd.com>
-X-ClientProxiedBy: TYCP286CA0074.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:31a::19) To SJ2PR12MB8690.namprd12.prod.outlook.com
- (2603:10b6:a03:540::10)
+In-Reply-To: <87c6aeb265a0281b3abebd07ba2069d80da21944.1711335714.git.perry.yuan@amd.com>
+X-ClientProxiedBy: SG2P153CA0027.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c7::14)
+ To SJ2PR12MB8690.namprd12.prod.outlook.com (2603:10b6:a03:540::10)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -89,98 +88,102 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR12MB8690:EE_|MN2PR12MB4342:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8264d88d-8b79-42e5-1b43-08dc5cec9948
+X-MS-TrafficTypeDiagnostic: SJ2PR12MB8690:EE_|SJ1PR12MB6028:EE_
+X-MS-Office365-Filtering-Correlation-Id: 034dbc8b-55da-4630-dc43-08dc5cecde43
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	PvwhC/0WI/uz/6fAto5agxiNkgg45O9Wl/OTPhvDzrR/Uz0I3lp650Kxj57uH89dY5OZrfx9p0akjmru2Dpe+HCsqtcMGidnfo3YMl8rLDH/0t+CaOZXFZ5/EtQp9kfF2LuiGNjo4/KQbmQbPBYh6GLiHaXe08yNBJNEv5yKN6coPy1b0M1pF4TpXovNz3Su7s4894eEMStX2OSmdQqu7mj9yKFYjjQmOnp+n2iPtEdntlzunWFtMpqwtbY7BS9FXRX1930dnJunho+RmkYiLf4JvxvjIBP8Q6Fx6C/UC1okVDYhxgD9C4qM2ZzZ8A1YOAJi0W6DOQRsvsO0YgHnSoPN4dtxyR7Ytpd1zfjg614dhEu4aHqw0ASeg8li+yYFTpAJuxsW+4qzkgHBLrmbORXhs2Q/0hSNDEs1xS+uRUuHvQ4KDPIFW6xmvlqThQXlfIz22ogPm6G1UPDOFIMhBOvJsNXWkoClPqO93DHe27UOHutG81OQwJUr0VYENB6WlWSJAJxQL3SLK3RnA6A59oK+YebEa8QUxJYf7N4jvZJVLWEjzJanl9Jo8fE4lV2vOOTl+t1IrMgEoXCX36Fk8Y3SEIBLxNLzbQOc8ViyJ5H8xwSzh8HS0H2ktwGemz6kOridlIp66QF7UZQiJQH8c1C/hufyDGOCm675Ncr/4wo=
+	3bbc4WHuifo8TUJMtr15vvotkp5hDLgb8tBpvGq7JYGgjQ62SDzpov0zqbdyrdzxIuh2ZCpzxCnHswXBa3e0iWFmzUE/VtuZwwCPyhUkz+E7inB0I3IEIdQA1azXzsxTiYBDDiHhgNCsjme4rLTaSUDPMD0/SHcigymZEaIJbqDXLVSO8buCeDul6Ea580v+dFGoq+cKs9m39/cfhpl2sNsozYLKeXJmTshYfB9cArbcBj4z0R1fRlBhPfZlNSbB6c5jKfM1jMT4oVVy5Yx4LqPZDfvtpPZLOYZ5uNokmo0p9GlVMITcMEQXWzfQUrSh5ixE+ao/u3bCWue/liw23c96XnTxKFxWItGEMEE51FfSragKjgrqGgTaSAlHUpzMqEIuoKDINDsFQk3AcO5lnObZbkQgR4LZXL/8P1vw6ioDM9auTTcL5DylIPGakvElz5OLH94IIcMi6A0E2L9sLgLdisbmgvYUMgyZMiR2exPuMQPSnNG9ht1prhRHtG9cGIbC+fgrsoI9NKQrmNtz1OPfokiqGZ+ob9UldQ6j04qsrxHCmzIJKgxENgH+RmuwTKcxfzWM0LuT9YpLAeR5QnPyEpSZejizw9y0uaZuNju6xFeqsX8cPf8JADlUeY4i6YR4saqdACp+g1LrnfRBpD8c0CaqWWCsD6d8Qr3zR4c=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR12MB8690.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(1800799015)(366007);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR12MB8690.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(1800799015);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?tOVt2nUr663nR6sIScdyzOhmT5hJcYOj2Jttw+Ke7nRHbzuz0qMiGswCTmw+?=
- =?us-ascii?Q?WbPfg10e9OCD7Fn5eDRHgjCLeGVTFzKMcBm3nSz94bA2FqAXuzqePOXjQKmK?=
- =?us-ascii?Q?A9b024pZGjZWaS4QseS00KJGZUq79kYs0RSnJ/tcclRIKssu3dWodSRyKMnA?=
- =?us-ascii?Q?fS/Rgor2mS/0JIyoWiEVNU+NyVu+2psuHwpHVH+LRxQjr54qb0PK06abG2+8?=
- =?us-ascii?Q?9u/VqG14IEa1M9eyK4B66G2Od6oXJPrk7SV7wb9qh5jFX68fJpCxuks3CtMx?=
- =?us-ascii?Q?b8vDQZMJnB4F6AiVMNjTTzkWQwJ6+ciB7ZJeBh0aS3JkxHXipDVO1LK3KPCJ?=
- =?us-ascii?Q?8G/1C/3mtpt2JnrN0lX/4Yp8DtEXC+dxraOpQ7CTFZmJ7OHn+PrLuNPkEiry?=
- =?us-ascii?Q?bAHPU5CCalqEVAngDcfwrH0Njg6BjPA3lyZxG86AWsk53no0nSnfPnVuGKK8?=
- =?us-ascii?Q?wWGUCItpSEvrMVeRYI5JWIg1811AKN3HaC9E6ZvF5XkQ0oqA5zRmegkEtR++?=
- =?us-ascii?Q?d/VsA4kE0ozXg30snUr7we/2mknToBjTQzvBdzo5r2hJbQlVICkCWxBzlfhx?=
- =?us-ascii?Q?X3A0xniFNBzAFla2mHfNbWkLkUE0Jlkqs7za4RM+2jf3uPcK3GMiR6dSArjh?=
- =?us-ascii?Q?5UKriuYWaezAzmWW+QNPGdzV2ISQtXUgs8+OZZhAAtgRjJ4mjZqwj0U5sEzh?=
- =?us-ascii?Q?JadW0VapkY+dhCDST9cBwdUAqKxarIFHL9dIpEZe8tQlUKhdn2PJqXuHBvQa?=
- =?us-ascii?Q?DpccSxDIXBA68zVEADPU+MwPjygb6Mq3NRvROjhxODjhjRefvO14iImyiKbq?=
- =?us-ascii?Q?kPci5j+9m+o12Ngc0XOQC03lvVEDZxJ8BCTwSrpObOUg333riak7ClmxpFyC?=
- =?us-ascii?Q?05gnBMaFiM8L1jShN05cOeie5E5FeJYxalipmkn+ZSDxt3KjnS/MOBEcXOF/?=
- =?us-ascii?Q?M3/FCawKz+RTkOWly2L3gVYHZftVzMpzb6bIoZWTCU0NHH0jpUSqOIMjaB4t?=
- =?us-ascii?Q?ZFKGaETR6+2k+vLM+WQv+RebCvKvVlXAH4bDdWUImSK2mS6o2hxK8M6zRVKE?=
- =?us-ascii?Q?h5hwZFh53Y0UK8azshWD7hBp7muQWpjL7MdOr+DTk+7NQxkNxbmgQOWY2cUH?=
- =?us-ascii?Q?D6rcx/Etm9umfTje9afB9SnqyXOUGM40gOjwnCkJlk4Qxyf9Q9YmBS1BAo4H?=
- =?us-ascii?Q?Vq9WmHjfZ3OeYdm93saSeXwitEhWePRjn06LP0e7PTt4x4aTMviqj/OBVRfM?=
- =?us-ascii?Q?x1fdS1b6KFgQUwylyXWLGKP4g9BcEqOzUhTmlyzZScUqgX9IEq4wpxDESfYY?=
- =?us-ascii?Q?5EAqKlRbP0jipY6wBE931AWBnMpnvpQJzBDfkwiyVMoMn3cBWM1gTgJ1gKdS?=
- =?us-ascii?Q?0v4i70gMZ+uPNotw04E2+ru8Vz5YKdRvfoiq1YECi1Pd5jf4ETfh9KTfDncU?=
- =?us-ascii?Q?BwQQj+mt2C7WBSy7bxMguW7djIacDO8jbJVrEjkUybenxYfC3E0+tCbUkMC3?=
- =?us-ascii?Q?zUbVHQCX2+WiRoJuCWRWor3rlqcC6FFRuILsiqocdvgny0qhXu9TKLmunWd3?=
- =?us-ascii?Q?YS3QFGn/DY5eyYsx/2Xcz1ScnQsaO5hwbIpATfup?=
+	=?us-ascii?Q?kxWM+Dsb4VoCsHRsjOYgzy0+pcd8ioZVKvSAdI8oyDtFrv8rpeEce269qak+?=
+ =?us-ascii?Q?1lCsq74YN9Z4eF+cn2OVsurNF8+TyEP9NdswOm6Wszw+TsVlXx2ePB/6Ws9i?=
+ =?us-ascii?Q?KhSOTzT6ebneUQ1djT1BSRpcGNOKV7Gf8pC/DOvWW/yQCOGFzJYD2Vhx6eEX?=
+ =?us-ascii?Q?EYW5D+BKuuQmP+/0tlBGB2oAIws0dGNOBDboPv127wXChDFWx3wuIeUUylMv?=
+ =?us-ascii?Q?ZYq8xi33Iktz5pYRUJI+lBxEHkJpXVecoycEWqQ4qkxxgTlSPNXRps9g+gQ1?=
+ =?us-ascii?Q?kp/gqWTmsqT5JNrM2h9u5PAt5wyNVgA7jPqyk3O4lZnR9b9K4xCSYNJfphlf?=
+ =?us-ascii?Q?aLSjzl+8s4/uzCbYK42tw9AGZtXkn3RkmhjvyOWm6knX+ARXBVr2unCCljSC?=
+ =?us-ascii?Q?ygLC8vjHfI0aOOBrC49UHmcHRt3ywnZOsZMrEAKEqGyXinfFaBWeKtF3qlYQ?=
+ =?us-ascii?Q?L+qVezeyuIds+dQrxbzKEuLiRJpOMZNf2IIWyFZawRzU1ESeR1CPhm5RwMSx?=
+ =?us-ascii?Q?ATz478gF6oeE9bPZr3t4mbp11vjg4Z4PwoLZ/MmcbRlwmA3PLL1hjaBrlaO0?=
+ =?us-ascii?Q?E6D0d/6NwsOWltAm7WHYEZDLaVvuGcA3aX+wo6wlJtkrdB+lN+qQLadgPPAU?=
+ =?us-ascii?Q?LmXdSZQYrE1KcmaAzUGQ5j9wvvt3WoNQIwFX20afz+ZsPvq0pwznLh5pGNfD?=
+ =?us-ascii?Q?8nTlfx0n9xGTYMzBxZFQPlGTlqaWG33JzUJDOTaz7ls9RwHlu+J+UBSJ0gW6?=
+ =?us-ascii?Q?k2u2nyQfmc9CfSXbP9JcZh9AQX84V2Bcfqq3ViTDSvhymqStftGsNXwiEJzK?=
+ =?us-ascii?Q?vDmNMzDjm5v/3o8Md62WXgx9WdWsnbXT6/MdNTWWdKK5Ss9jg3FJC4gEcvdT?=
+ =?us-ascii?Q?J1jyIX30vPJG5vzIXamDerXUsJhrSiwN1KZeRTfCKjXr/e6HqJc70hcPlmqo?=
+ =?us-ascii?Q?vcvkKYdnxUx0JF0omFl+4302MnNa4eCG/uP42YTk312F4o0nnw/VpBSPui3Q?=
+ =?us-ascii?Q?Qzgw7Lp8O2G9A7dbXpqfALY+43EDwGHmo3zCa0tWa6KVNJ5+AogQ+8fJYcIp?=
+ =?us-ascii?Q?1wYtbSSeFnuzMU8thYsic94wBamD8Ps7TCosujqxy5ubYszjIBFxfaEkcSpp?=
+ =?us-ascii?Q?L+1XBerkgv5wniqk/3pGz+vWwJ7U8OrqYFjAumL9jw5+8tLmmWS/9/pMLy6f?=
+ =?us-ascii?Q?KB0ftffcFlPunPLCVfJMOLgojF/fVSrv7fIs19wG9NEDfLqL92TB/n/zocnU?=
+ =?us-ascii?Q?+0DOjaurMpgeij0dQyKK+6IqVFdP4oKtfhqBMkT9j2RiAdCmIUFqsSTdleZV?=
+ =?us-ascii?Q?vwdpg06rwHrF0+78ondDUQw9IUxU972MjoHfLYTWv/z4OXESOkebWWWNeSs8?=
+ =?us-ascii?Q?1G9dRlXwM1fsdRn9JRMB2I+LrNAzGEww7A5zkVWY72riB/OVl+Qrux5/SpHM?=
+ =?us-ascii?Q?JJFEkMZpP4lz8Y0zlknrEXQ2ei7f1E68XuwmoiGwNbotwe7qwjF5u6RZ/xUw?=
+ =?us-ascii?Q?z5PRK6X2pWnDhCQ7J4/vLDbD45WFU1wVJQFKvX7gQWx/4IduA5twCdsUL52F?=
+ =?us-ascii?Q?Xdr2oK/kJN3pcywZbD1rZilio2xTaS+v3Yb8pWjx?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8264d88d-8b79-42e5-1b43-08dc5cec9948
+X-MS-Exchange-CrossTenant-Network-Message-Id: 034dbc8b-55da-4630-dc43-08dc5cecde43
 X-MS-Exchange-CrossTenant-AuthSource: SJ2PR12MB8690.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Apr 2024 01:37:23.6869
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Apr 2024 01:39:19.2369
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JWW4Zy4Lnh7RJl0kTbl4GYUJQT7e4INSPoLOMklKL5piWDmC4WmBxvNIrwNKGDFoHQSQJVVbKEIWtBxtQOKVIA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4342
+X-MS-Exchange-CrossTenant-UserPrincipalName: sNs1lfjdfaGFbJfF+AFRT0bZPcQLKuZJuj3KI5yq0MPoLKtwngkl8ndf13V9lPMPJwbqZFjppQhasvr1T7FSsQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6028
 
-On Mon, Mar 25, 2024 at 11:03:21AM +0800, Yuan, Perry wrote:
+On Mon, Mar 25, 2024 at 11:03:22AM +0800, Yuan, Perry wrote:
 > From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
 > 
-> The four fields of struct cpudata namely min_limit_perf,
-> max_limit_perf, min_limit_freq, max_limit_freq introduced in the
-> commit febab20caeba("cpufreq/amd-pstate: Fix scaling_min_freq and
-> scaling_max_freq update") are currently undocumented
+> The min_limit_freq, max_limit_freq, min_freq, max_freq, nominal_freq
+> and the lowest_nominal_freq members of struct cpudata store the
+> frequency value in khz to be consistent with the cpufreq
+> core. Update the comment to document this.
 > 
-> Add comments describing these fields
-> 
-> Fixes: febab20caeba("cpufreq/amd-pstate: Fix scaling_min_freq and scaling_max_freq update")
 > Reviewed-by: Li Meng <li.meng@amd.com>
 > Tested-by: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
 > Signed-off-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
 > Signed-off-by: Perry Yuan <perry.yuan@amd.com>
 > ---
->  include/linux/amd-pstate.h | 4 ++++
->  1 file changed, 4 insertions(+)
+
+Acked-by: Huang Rui <ray.huang@amd.com>
+
+>  include/linux/amd-pstate.h | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
 > 
 > diff --git a/include/linux/amd-pstate.h b/include/linux/amd-pstate.h
-> index d21838835abd..212f377d615b 100644
+> index 212f377d615b..ab7e82533718 100644
 > --- a/include/linux/amd-pstate.h
 > +++ b/include/linux/amd-pstate.h
-> @@ -49,6 +49,10 @@ struct amd_aperf_mperf {
->   * @lowest_perf: the absolute lowest performance level of the processor
->   * @prefcore_ranking: the preferred core ranking, the higher value indicates a higher
+> @@ -51,15 +51,15 @@ struct amd_aperf_mperf {
 >   * 		  priority.
-> + * @min_limit_perf: Cached value of the perf corresponding to policy->min
-> + * @max_limit_perf: Cached value of the perf corresponding to policy->max
-
-I think we should use "performance" instead of "perf" in the comments.
-
-With that fixed, patch is Acked-by: Huang Rui <ray.huang@amd.com>
-
-Thanks,
-Ray
-
-> + * @min_limit_freq: Cached value of policy->min
-> + * @max_limit_freq: Cached value of policy->max
->   * @max_freq: the frequency that mapped to highest_perf
->   * @min_freq: the frequency that mapped to lowest_perf
->   * @nominal_freq: the frequency that mapped to nominal_perf
+>   * @min_limit_perf: Cached value of the perf corresponding to policy->min
+>   * @max_limit_perf: Cached value of the perf corresponding to policy->max
+> - * @min_limit_freq: Cached value of policy->min
+> - * @max_limit_freq: Cached value of policy->max
+> - * @max_freq: the frequency that mapped to highest_perf
+> - * @min_freq: the frequency that mapped to lowest_perf
+> - * @nominal_freq: the frequency that mapped to nominal_perf
+> - * @lowest_nonlinear_freq: the frequency that mapped to lowest_nonlinear_perf
+> + * @min_limit_freq: Cached value of policy->min (in khz)
+> + * @max_limit_freq: Cached value of policy->max (in khz)
+> + * @max_freq: the frequency (in khz) that mapped to highest_perf
+> + * @min_freq: the frequency (in khz) that mapped to lowest_perf
+> + * @nominal_freq: the frequency (in khz) that mapped to nominal_perf
+> + * @lowest_nonlinear_freq: the frequency (in khz) that mapped to lowest_nonlinear_perf
+>   * @cur: Difference of Aperf/Mperf/tsc count between last and current sample
+>   * @prev: Last Aperf/Mperf/tsc count value read from register
+> - * @freq: current cpu frequency value
+> + * @freq: current cpu frequency value (in khz)
+>   * @boost_supported: check whether the Processor or SBIOS supports boost mode
+>   * @hw_prefcore: check whether HW supports preferred core featue.
+>   * 		  Only when hw_prefcore and early prefcore param are true,
 > -- 
 > 2.34.1
 > 
