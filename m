@@ -1,164 +1,151 @@
-Return-Path: <linux-pm+bounces-6373-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6374-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEAC68A465A
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 02:33:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5F418A4679
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 03:13:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79D03281F17
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 00:33:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1CDFD1C216B8
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 01:13:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEC5B1859;
-	Mon, 15 Apr 2024 00:33:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E35A53D68;
+	Mon, 15 Apr 2024 01:13:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="YeMHkANG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dKQxXxQm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32CE7639;
-	Mon, 15 Apr 2024 00:33:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5347E14A84;
+	Mon, 15 Apr 2024 01:13:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713141184; cv=none; b=r683TVcHV7HZv8FYHJZAMDUflxuY71BX5u1o7ydt1nNCPcp6gWChRFcAXP0t6EBCzCT097cdfHdagNQWXKxgyyWESDmIFkl12JAzy45R+iHIAi5xDjiCMqk7eQ0Ib0mMTvJDqyVTrKLcVEmX8iNOVONqsAAXjzWLXNJmWp8ky5g=
+	t=1713143611; cv=none; b=SKPZSaBYOjP3D1zuTfyl0Cp2qn0k3JjOqmfriD5ECMXrO8nBMh9Q/99suQgt+4KmzkuseOY4TxCEdUM8ES9AbXMbYVL86xXNUmdsZ17O+yD6DKDQbAyfkuMNK6o1VihjOwkpA6Q+ZCQ4Ol4QMOPz/LQ5RzcC80x7+wjDNqmFl/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713141184; c=relaxed/simple;
-	bh=155gXXdQANVmSfdXxHCjI5F0Dg3hhFGrVuBtSaIunTY=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vm9mzOFm8tLS9reAzxn4Sq+JsNSEwdKCY7zD4A7ReGrkkRwdv7WIST8J3PFWHV9KHzgE5K8V2vLRywpC1HA+4czKmSnKJbP9UwlLiNw8RjcXbWnUcroMB9/YYsmJJtx1xqeCFqr0izvgo3G9iqgu5oQNaHSRzhsU73WMy7kgXrU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=YeMHkANG; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43F0Mv4R025751;
-	Mon, 15 Apr 2024 00:32:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=qcppdkim1; bh=JH+99CJAPu+dl8sSsv/0Q
-	anm5M2oT5yN2gTeVMFHO8M=; b=YeMHkANGMlol9YOwgxeQM8CpDWKY/Wy/V6Ybm
-	b5sN1cdA583eOCTqEsAUr+66WD/Zx+is7kUKsHBuoHxKSfGDj9rtV85MG1mN/6R7
-	Q5tPFNfW3qRmu+fc8OUn0/tfjnFAU/Xd1yganYHrEzZmwmKFgvXXcjTSz9orwMfm
-	m4E66l2RppG9aDiJbf9wK5P2NyuuYM5cCbAUv8Cjy5Zzpda9z2A5VNpkq5ukgJjz
-	XJX+QE8vH7Mj7iGQJcAvIoiZHcTxFQMBqMKxJTqWeP193iOUPbXtuA1JkSR1o1q/
-	/lJcsVHLTbUlYcsHc3Ftzfy7AMD6sbCkaqQ8iu87xjvQCImKw==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xggvgrg2v-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 15 Apr 2024 00:32:39 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43F0WcwK020603
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 15 Apr 2024 00:32:38 GMT
-Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Sun, 14 Apr 2024 17:32:37 -0700
-Date: Sun, 14 Apr 2024 17:32:37 -0700
-From: Elliot Berman <quic_eberman@quicinc.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC: Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konrad.dybcio@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>, Rob Herring
-	<robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Andy Yan
-	<andy.yan@rock-chips.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        "Mark
- Rutland" <mark.rutland@arm.com>,
-        Bartosz Golaszewski
-	<bartosz.golaszewski@linaro.org>,
-        Satya Durga Srinivasu Prabhala
-	<quic_satyap@quicinc.com>,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        Shivendra Pratap <quic_spratap@quicinc.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH v2 4/4] arm64: dts: qcom: Add PSCI SYSTEM_RESET2 types
- for qcm6490-idp
-Message-ID: <20240414173158942-0700.eberman@hu-eberman-lv.qualcomm.com>
-References: <20240414-arm-psci-system_reset2-vendor-reboots-v2-0-da9a055a648f@quicinc.com>
- <20240414-arm-psci-system_reset2-vendor-reboots-v2-4-da9a055a648f@quicinc.com>
- <CAA8EJpoXrbdD5xVmuo-2b4-WwpSachcJ-abDtu4BS_qa-2A+OA@mail.gmail.com>
+	s=arc-20240116; t=1713143611; c=relaxed/simple;
+	bh=kzbxnprmViyV4GPGajUJ0UyOuQn77rMqLGGBVn8hrPk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pHdib7c1BFhe/wQxhwMCrWlKbA6N/7RDTYdEMp/N9xg2h5fMNkOhjvNNwVraNQfWrKg/RBGoazHhN2PcrdsASPaLgt+BsUFYxo/3f1HqcrPlkSm37Tzsnn5eflw9xU9WLP6l8yEn7Ihpj5DR9Sbzg09s71yHLVuWwBKfhG5qFe4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dKQxXxQm; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713143611; x=1744679611;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=kzbxnprmViyV4GPGajUJ0UyOuQn77rMqLGGBVn8hrPk=;
+  b=dKQxXxQm2Gar0BoHidLOSqnuH/mh4gbG8H3xbGYrsP5/0kfUvE1fT0+k
+   SPnwkhBeBGaVLtxPROdVIOQwQce7d6ZywAZdr51joyNHteKyHOoquuTOf
+   6ZRI4N14p5kF67aiIpKwfEUX2lr8ATOCMVuDgz3JUrge96hxuuWSYsgzf
+   SvlW5+62nDBePlMxVLCZekYX3ZfuLisX9255AL37WmK/O6w9m5TRkVecC
+   InLWqLxaVZT1ZiKoJArAoRLEZPPknJf38uRha7W1c0/sJY+Ogr14gs/KE
+   eaFge1RFXubmSoIyxrwA0OOUYVbW1qA4F87cPpIR0/bccani+CHqfyokM
+   w==;
+X-CSE-ConnectionGUID: 50zbtgvwQ4uBirekqXsnKw==
+X-CSE-MsgGUID: rBA2/A2SRyOs8KCyKbH9LQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11044"; a="8384979"
+X-IronPort-AV: E=Sophos;i="6.07,202,1708416000"; 
+   d="scan'208";a="8384979"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2024 18:13:30 -0700
+X-CSE-ConnectionGUID: NtOcI3GjQl+QtD+MzkRFaA==
+X-CSE-MsgGUID: /DR2+x3MSnWUenUoObJD/Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,202,1708416000"; 
+   d="scan'208";a="21818814"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmviesa009.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2024 18:13:29 -0700
+Date: Sun, 14 Apr 2024 18:19:46 -0700
+From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To: "Zhang, Rui" <rui.zhang@intel.com>
+Cc: "linux@roeck-us.net" <linux@roeck-us.net>,
+	"Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+	"jdelvare@suse.com" <jdelvare@suse.com>,
+	"srinivas.pandruvada@linux.intel.com" <srinivas.pandruvada@linux.intel.com>,
+	"lukasz.luba@arm.com" <lukasz.luba@arm.com>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	"daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"Neri, Ricardo" <ricardo.neri@intel.com>
+Subject: Re: [PATCH 3/3] hwmon: (coretemp) Use a model-specific bitmask to
+ read registers
+Message-ID: <20240415011946.GA12551@ranerica-svr.sc.intel.com>
+References: <20240406010416.4821-1-ricardo.neri-calderon@linux.intel.com>
+ <20240406010416.4821-4-ricardo.neri-calderon@linux.intel.com>
+ <6411e721a1cd559f59aecd8ac57a941cdaa13ff1.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CAA8EJpoXrbdD5xVmuo-2b4-WwpSachcJ-abDtu4BS_qa-2A+OA@mail.gmail.com>
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: i0sW7yvkwcQAUBWnVrmtschMRkubiVkZ
-X-Proofpoint-ORIG-GUID: i0sW7yvkwcQAUBWnVrmtschMRkubiVkZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-14_10,2024-04-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- bulkscore=0 adultscore=0 lowpriorityscore=0 clxscore=1015
- priorityscore=1501 suspectscore=0 phishscore=0 mlxlogscore=865 mlxscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2404010003 definitions=main-2404150001
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6411e721a1cd559f59aecd8ac57a941cdaa13ff1.camel@intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 
-On Mon, Apr 15, 2024 at 02:13:29AM +0300, Dmitry Baryshkov wrote:
-> On Sun, 14 Apr 2024 at 22:32, Elliot Berman <quic_eberman@quicinc.com> wrote:
-> >
-> > Add nodes for the vendor-defined system resets. "bootloader" will cause
-> > device to reboot and stop in the bootloader's fastboot mode. "edl" will
-> > cause device to reboot into "emergency download mode", which permits
-> > loading images via the Firehose protocol.
-> >
-> > Co-developed-by: Shivendra Pratap <quic_spratap@quicinc.com>
-> > Signed-off-by: Shivendra Pratap <quic_spratap@quicinc.com>
-> > Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-> > ---
-> >  arch/arm64/boot/dts/qcom/qcm6490-idp.dts | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/qcm6490-idp.dts b/arch/arm64/boot/dts/qcom/qcm6490-idp.dts
-> > index e4bfad50a669..a966f6c8dd7c 100644
-> > --- a/arch/arm64/boot/dts/qcom/qcm6490-idp.dts
-> > +++ b/arch/arm64/boot/dts/qcom/qcm6490-idp.dts
-> > @@ -126,6 +126,11 @@ debug_vm_mem: debug-vm@d0600000 {
-> >                 };
-> >         };
-> >
-> > +       psci {
+On Sun, Apr 07, 2024 at 08:24:40AM +0000, Zhang, Rui wrote:
+> On Fri, 2024-04-05 at 18:04 -0700, Ricardo Neri wrote:
+> > The Intel Software Development manual defines states the temperature
 > 
-> Please use a label instead. Otherwise it looks as if you are adding
-> new device node.
+> I failed to parse this, is the above "states" redundant?
+
+Sorry Rui! I missed this repy.
+
+Ah, the commit message is wrong. I will do s/defines//
+
 > 
-
-Right. Fixed for the next revision.
-
-Thanks,
-Elliot
-
-> > +               mode-bootloader = <0x10001 0x2>;
-> > +               mode-edl = <0 0x1>;
-> > +       };
+> [...]
+> 
+> > digital readout as the bits [22:16] of the
+> > IA32_[PACKAGE]_THERM_STATUS
+> > registers. In recent processor, however, the range is [23:16]. Use a
+> > model-specific bitmask to extract the temperature readout correctly.
+> > 
+> > diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+> > index 616bd1a5b864..5632e1b1dfb1 100644
+> > --- a/drivers/hwmon/coretemp.c
+> > +++ b/drivers/hwmon/coretemp.c
+> > @@ -17,6 +17,7 @@
+> >  #include <linux/sysfs.h>
+> >  #include <linux/hwmon-sysfs.h>
+> >  #include <linux/err.h>
+> > +#include <linux/intel_tcc.h>
+> >  #include <linux/mutex.h>
+> >  #include <linux/list.h>
+> >  #include <linux/platform_device.h>
+> > @@ -404,6 +405,8 @@ static ssize_t show_temp(struct device *dev,
+> >         tjmax = get_tjmax(tdata, dev);
+> >         /* Check whether the time interval has elapsed */
+> >         if (time_after(jiffies, tdata->last_updated + HZ)) {
+> > +               u32 mask =
+> > intel_tcc_get_temp_mask(is_pkg_temp_data(tdata));
 > > +
-> >         vph_pwr: vph-pwr-regulator {
-> >                 compatible = "regulator-fixed";
-> >                 regulator-name = "vph_pwr";
-> >
-> > --
-> > 2.34.1
-> >
-> >
-> 
-> 
-> -- 
-> With best wishes
-> Dmitry
+> >                 rdmsr_on_cpu(tdata->cpu, tdata->status_reg, &eax,
+> > &edx);
+> >                 /*
+> >                  * Ignore the valid bit. In all observed cases the
+> > register
+> > @@ -411,7 +414,7 @@ static ssize_t show_temp(struct device *dev,
+> >                  * Return it instead of reporting an error which
+> > doesn't
+> >                  * really help at all.
+> >                  */
+> > -               tdata->temp = tjmax - ((eax >> 16) & 0x7f) * 1000;
+> > +               tdata->temp = tjmax - ((eax >> 16) & mask) * 1000;
+> >                 tdata->last_updated = jiffies;
+> >         }
+> > 
+> Besides this one, we can also convert to use intel_tcc_get_tjmax() in
+> get_tjmax().
+
+I thought about this, but realized that the bitmask of TjMax is always
+[23:16]; no need for a model check. If anything, intel_tcc_get_tjmax()
+would remove some duplicated code. But coretemp.c would need to depend
+on INTEL_TCC, which seems to be a non-starter.
 
