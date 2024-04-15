@@ -1,268 +1,225 @@
-Return-Path: <linux-pm+bounces-6437-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6438-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D06828A58F6
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 19:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CC61F8A592E
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 19:35:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 863FB2826A3
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 17:17:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82F6C282F71
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 17:35:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92622839E0;
-	Mon, 15 Apr 2024 17:17:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="s6rN87AU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 533F783CA0;
+	Mon, 15 Apr 2024 17:35:04 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D6AE82862;
-	Mon, 15 Apr 2024 17:17:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D80C7C085;
+	Mon, 15 Apr 2024 17:34:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713201428; cv=none; b=UCa0qmxxfbAz1Lf1K4fe1QtW6sIF5p+f9KPAKV1aoSyPeNtH2hiSCYwLqqri0slQ8kocnTqu+kSfPJ5mLNCeEPDUMVVffYSV9yiXYA1g3NIjELOkYj1miR13ZwEZyXoukAuVodXLbHut60rBx7oOYl8VMHJYUG6k1a/Eq8UZs2g=
+	t=1713202504; cv=none; b=IofJLulzUuZFDGBECrSWo5Nho2kgRrlTwAhgiOP7VPcNEQEk3xJTZuKhuFLqIjbC7dZTEfqsg3+eQXucOAZeveXdliSUTAP3eqljWn0fadaXq34X1rDa3IthKslNdJqW6A5eOXTKgoujxOW62xB3I6+YJ5/jUh8pFpmZZIJTwfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713201428; c=relaxed/simple;
-	bh=4BkJwkl/uYopsa8E8PWG5WHDYPiwLD4WoLbgqd2ThUE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MSohESmTnWXlVa2dSXaATVM94zbQSVQ65DgYYxIj4hKlyMV0HO+SmyV0IbPK75j+n43qyPn+cEDO0rR+ilzLrHsQ4kLyFDNz1xIahQHYXBXwU+zWCQ41qmPAoz+egCZ6qZ43lA8dSBcGjbSYrnbj49tM0CSkzvv//w6Gs3oOHp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=s6rN87AU; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Received: from [192.168.88.20] (91-154-34-181.elisa-laajakaista.fi [91.154.34.181])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 37CE65B2;
-	Mon, 15 Apr 2024 19:16:18 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1713201379;
-	bh=4BkJwkl/uYopsa8E8PWG5WHDYPiwLD4WoLbgqd2ThUE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=s6rN87AUn6cOji1XlKyMu6z9FpL2GzwtHGjJAYNKjOrvT335v8CJWrvu1T+SFZi7m
-	 kEygJwSj86PXuHYxDsWmoh8QlzwbeIW6eQc9APQH1C5Tlnt6Vz1+D+UgjZZaZbWwDI
-	 yNQPHBEK4g+Q/9xNCd367QWjAh9V7mHrqNUbaZ8E=
-Message-ID: <d4cd0323-4792-49b0-a4e2-0bc92068e7f0@ideasonboard.com>
-Date: Mon, 15 Apr 2024 20:17:00 +0300
+	s=arc-20240116; t=1713202504; c=relaxed/simple;
+	bh=8nW1r00CaQqsroyhph8CiKXzAWz528/ZnYH9HoUPHrE=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=APHeLVl4hP/ch+Kb/s/8HnSiApp+0+WQWkXdO20aEbYbpjXsdNE6xc/YJkESUYUpU9t2q2VAP/zVkpQoBa+gtClpuce/OgrpKJyrhYUEUcsMt+GwrtP86yni6qbtFpRUlGxY2uAgfkQGfYKEfU9j2zxQnHpw5oSh9ihuqFDY7PI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VJDlf2GLCz6K5Wg;
+	Tue, 16 Apr 2024 01:33:02 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 95A0D140517;
+	Tue, 16 Apr 2024 01:34:56 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Mon, 15 Apr
+ 2024 18:34:55 +0100
+Date: Mon, 15 Apr 2024 18:34:54 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>, <linuxarm@huawei.com>
+CC: <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
+	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<kvmarm@lists.linux.dev>, <x86@kernel.org>, Russell King
+	<linux@armlinux.org.uk>, Miguel Luis <miguel.luis@oracle.com>, James Morse
+	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, "Jean-Philippe
+ Brucker" <jean-philippe@linaro.org>, Catalin Marinas
+	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+	<justin.he@arm.com>, <jianyong.wu@arm.com>
+Subject: Re: [PATCH v5 02/18] ACPI: processor: Set the ACPI_COMPANION for
+ the struct cpu instance
+Message-ID: <20240415183454.000072f6@Huawei.com>
+In-Reply-To: <20240415175057.00002e11@Huawei.com>
+References: <20240412143719.11398-1-Jonathan.Cameron@huawei.com>
+	<20240412143719.11398-3-Jonathan.Cameron@huawei.com>
+	<CAJZ5v0izN5naWY7sTi16whds9ubXkLpgqV2gePQs869BoJTCDA@mail.gmail.com>
+	<20240415164854.0000264f@Huawei.com>
+	<CAJZ5v0hd+CNsnH9xY+UX0iy_AEaqUqJj4KdR=+yvtvy5FQEy5Q@mail.gmail.com>
+	<CAJZ5v0j6gMaHamrCvrF8s+SgC0QVtG+naXhA4Dwg0t1YJvh4Uw@mail.gmail.com>
+	<20240415175057.00002e11@Huawei.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 2/2] pmdomain: ti-sci: Support retaining PD boot time
- state
-To: Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
- Santosh Shilimkar <ssantosh@kernel.org>, Dave Gerlach <d-gerlach@ti.com>,
- J Keerthy <j-keerthy@ti.com>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Santosh Shilimkar <santosh.shilimkar@oracle.com>,
- linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- dri-devel@lists.freedesktop.org, Devarsh Thakkar <devarsht@ti.com>
-References: <20240415-ti-sci-pd-v1-0-a0e56b8ad897@ideasonboard.com>
- <20240415-ti-sci-pd-v1-2-a0e56b8ad897@ideasonboard.com>
-Content-Language: en-US
-From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Autocrypt: addr=tomi.valkeinen@ideasonboard.com; keydata=
- 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
-In-Reply-To: <20240415-ti-sci-pd-v1-2-a0e56b8ad897@ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On 15/04/2024 19:00, Tomi Valkeinen wrote:
-> Add a new flag, TI_SCI_PD_KEEP_BOOT_STATE, which can be set in the dts
-> when referring to power domains. When this flag is set, the ti-sci
-> driver will check if the PD is currently enabled in the HW, and if so,
-> set the GENPD_FLAG_ALWAYS_ON flag so that the PD will stay enabled.
-> 
-> The main issue I'm trying to solve here is this:
-> 
-> If the Display Subsystem (DSS) has been enabled by the bootloader, the
-> related PD has also been enabled in the HW. When the tidss driver
-> probes, the driver framework will automatically enable the PD. While
-> executing the probe function it is very common for the probe to return
-> EPROBE_DEFER, and, in rarer cases, an actual error. When this happens
-> (probe() returns an error), the driver framework will automatically
-> disable the related PD.
-> 
-> Powering off the PD while the DSS is enabled and displaying a picture
-> will cause the DSS HW to enter a bad state, from which (afaik) it can't
-> be woken up except with full power-cycle. Trying to access the DSS in
-> this state (e.g. when retrying the probe) will usually cause the board
-> to hang sooner or later.
-> 
-> Even if we wouldn't have this board-hangs issue, it's nice to be able to
-> keep the DSS PD enabled: we want to keep the DSS enabled when the
-> bootloader has enabled the screen. If, instead, we disable the PD at the
-> first EPROBE_DEFER, the screen will (probably) go black.
+On Mon, 15 Apr 2024 17:50:57 +0100
+Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
 
-A few things occurred to me. The driver is supposed to clear the 
-GENPD_FLAG_ALWAYS_ON when the driver has probed successfully. There are 
-two possible issues with that:
+> On Mon, 15 Apr 2024 18:19:17 +0200
+> "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+>=20
+> > On Mon, Apr 15, 2024 at 6:16=E2=80=AFPM Rafael J. Wysocki <rafael@kerne=
+l.org> wrote: =20
+> > >
+> > > On Mon, Apr 15, 2024 at 5:49=E2=80=AFPM Jonathan Cameron
+> > > <Jonathan.Cameron@huawei.com> wrote:   =20
+> > > >
+> > > > On Fri, 12 Apr 2024 20:10:54 +0200
+> > > > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+> > > >   =20
+> > > > > On Fri, Apr 12, 2024 at 4:38=E2=80=AFPM Jonathan Cameron
+> > > > > <Jonathan.Cameron@huawei.com> wrote:   =20
+> > > > > >
+> > > > > > The arm64 specific arch_register_cpu() needs to access the _STA
+> > > > > > method of the DSDT object so make it available by assigning the
+> > > > > > appropriate handle to the struct cpu instance.
+> > > > > >
+> > > > > > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > > > > > ---
+> > > > > >  drivers/acpi/acpi_processor.c | 3 +++
+> > > > > >  1 file changed, 3 insertions(+)
+> > > > > >
+> > > > > > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_=
+processor.c
+> > > > > > index 7a0dd35d62c9..93e029403d05 100644
+> > > > > > --- a/drivers/acpi/acpi_processor.c
+> > > > > > +++ b/drivers/acpi/acpi_processor.c
+> > > > > > @@ -235,6 +235,7 @@ static int acpi_processor_get_info(struct a=
+cpi_device *device)
+> > > > > >         union acpi_object object =3D { 0 };
+> > > > > >         struct acpi_buffer buffer =3D { sizeof(union acpi_objec=
+t), &object };
+> > > > > >         struct acpi_processor *pr =3D acpi_driver_data(device);
+> > > > > > +       struct cpu *c;
+> > > > > >         int device_declaration =3D 0;
+> > > > > >         acpi_status status =3D AE_OK;
+> > > > > >         static int cpu0_initialized;
+> > > > > > @@ -314,6 +315,8 @@ static int acpi_processor_get_info(struct a=
+cpi_device *device)
+> > > > > >                         cpufreq_add_device("acpi-cpufreq");
+> > > > > >         }
+> > > > > >
+> > > > > > +       c =3D &per_cpu(cpu_devices, pr->id);
+> > > > > > +       ACPI_COMPANION_SET(&c->dev, device);   =20
+> > > > >
+> > > > > This is also set for per_cpu(cpu_sys_devices, pr->id) in
+> > > > > acpi_processor_add(), via acpi_bind_one().   =20
+> > > >
+> > > > Hi Rafael,
+> > > >
+> > > > cpu_sys_devices gets filled with a pointer to this same structure.
+> > > > The contents gets set in register_cpu() so at this point
+> > > > it doesn't point anywhere.  As a side note register_cpu()
+> > > > memsets to zero the value I set it to in the code above which isn't
+> > > > great, particularly as I want to use this in post_eject for
+> > > > arm64.
+> > > >
+> > > > We could make a copy of the handle and put it back after
+> > > > the memset in register_cpu() but that is also ugly.
+> > > > It's the best I've come up with to make sure this is still set
+> > > > come remove time but is rather odd.   =20
+> > > > >
+> > > > > Moreover, there is some pr->id validation in acpi_processor_add()=
+, so
+> > > > > it seems premature to use it here this way.
+> > > > >
+> > > > > I think that ACPI_COMPANION_SET() should be called from here on
+> > > > > per_cpu(cpu_sys_devices, pr->id) after validating pr->id (so the
+> > > > > pr->id validation should all be done here) and then NULL can be p=
+assed
+> > > > > as acpi_dev to acpi_bind_one() in acpi_processor_add().  Then, th=
+ere
+> > > > > will be one physical device corresponding to the processor ACPI d=
+evice
+> > > > > and no confusion.   =20
+> > > >
+> > > > I'm fairly sure this is pointing to the same device but agreed this
+> > > > is a tiny bit confusing. However we can't use cpu_sys_devices at th=
+is point
+> > > > so I'm not immediately seeing a cleaner solution :(   =20
+> > >
+> > > Well, OK.
+> > >
+> > > Please at least consider doing the pr->id validation checks before
+> > > setting the ACPI companion for &per_cpu(cpu_devices, pr->id).
+> > >
+> > > Also, acpi_bind_one() needs to be called on the "physical" devices
+> > > passed to ACPI_COMPANION_SET() (with NULL as the second argument) for
+> > > the reference counting and physical device lookup to work.
+> > >
+> > > Please also note that acpi_primary_dev_companion() should return
+> > > per_cpu(cpu_sys_devices, pr->id) for the processor ACPI device, which
+> > > depends on the order of acpi_bind_one() calls involving the same ACPI
+> > > device.   =20
+> >=20
+> > Of course, if the value set by ACPI_COMPANION_SET() is cleared
+> > subsequently, the above is not needed, but then using
+> > ACPI_COMPANION_SET() is questionable overall. =20
+>=20
+> Agreed + smoothing over that by stashing and putting it back doesn't
+> work because there is an additional call to acpi_bind_one() inbetween
+> here and the one you reference.
+>=20
+> The arch_register_cpu() calls end up calling register_cpu() /
+> device_register() / acpi_device_notify() / acpi_bind_one()
+>=20
+> With current code that fails (silently)
+> If I make sure the handle is set before register_cpu() then it
+> succeeds, but we end up with duplicate sysfs files etc because we
+> bind twice.
+>=20
+> I think the only way around this is larger reorganization of the
+> CPU hotplug code to pull the arch_register_cpu() call to where
+> the acpi_bind_one() call is.  However that changes a lot more than I'd li=
+ke
+> (and I don't have it working yet).
+>=20
+> Alternatively find somewhere else to stash the handle, or just add it as
+> a parameter to arch_register_cpu(). Right now this feels the easier
+> path to me. arch_register_cpu(int cpu, acpi_handle handle)=20
+>=20
+> Would that be a path you'd consider?
 
-- Afaics, there's no API to do that, and currently I just clear the bit 
-in genpd->flags. There's a clear race there, so some locking would be 
-required.
+Another option would be to do the per_cpu(processors, pr->id) =3D pr
+a few lines earlier than currently and access that directly from the
+arch_register_cpu() call.  Similarly remove that reference a bit later and
+use it in arch_unregister_cpu().
 
-- This uses the GENPD_FLAG_ALWAYS_ON flag to say "PD is always on, until 
-the driver has started". If the PD would have GENPD_FLAG_ALWAYS_ON set 
-for other reasons, the driver would still go and clear the flag, which 
-might break things.
+This seems like the simplest solution, but I may be missing something.
 
-Also, unrelated to the above and not a problem in practice at the very 
-moment, but I think clocks should also be dealt with somehow. Something, 
-at early-ish boot stage, should mark the relevant clocks as in use, so 
-that there's no chance they would be turned off when the main kernel has 
-started (the main display driver is often a module).
+Jonathan
 
-It would be nice to deal with all the above in a single place. I wonder 
-if the tidss driver itself could somehow be split into two parts, an 
-early part that would probe with minimal dependencies, mainly to reserve 
-the core resources without doing any kind of DRM init. And a main part 
-which would (somehow) finish the initialization at a later point, when 
-we have the filesystem (for firmware) and the other bridge/panel drivers 
-have probed.
-
-That can be somewhat achieved with simplefb or simpledrm, though, but we 
-can't do any TI DSS specific things there, and it also creates a 
-requirement to have either of those drivers built-in, and the related DT 
-nodes to be added.
-
-  Tomi
-
-> Another option here would perhaps be to change the driver framework
-> (drivers/base/platform.c) which attaches and detaches the PD, and make
-> it somehow optional, allowing the driver the manage the PD. That option
-> has two downsides: 1) the driver _has_ to manage the PD, which would
-> rule out the use of simplefb and simpledrm, and 2) it would leave the PD
-> in off state from Linux's perspective until a driver enables the PD, and
-> that might mean that the PD gets actually disabled as part of normal
-> system wide power management (disabling unused resources).
-> 
-> Yet another option would be to do this outside the ti_sci_pm_domains
-> driver: a piece of code that would somehow be ran after the
-> ti_sci_pm_domains driver has probed (so that we have the PDs), but
-> before tidss/simplefb/simpledrm probes. The problem here is the
-> "somehow" part. Also, this would partly have the same issue 2) as
-> mentioned above.
-> 
-> TODO: If this approach is ok, sci-pm-domain.yaml needs to be extended.
-> Also, it sounds a bit like the cell value is not a bit-mask, so maybe
-> adding TI_SCI_PD_KEEP_BOOT_STATE flag this way is not fine.
-> 
-> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> ---
->   drivers/pmdomain/ti/ti_sci_pm_domains.c    | 27 +++++++++++++++++++++++++--
->   include/dt-bindings/soc/ti,sci_pm_domain.h |  1 +
->   2 files changed, 26 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pmdomain/ti/ti_sci_pm_domains.c b/drivers/pmdomain/ti/ti_sci_pm_domains.c
-> index 1510d5ddae3d..b71b390aaa39 100644
-> --- a/drivers/pmdomain/ti/ti_sci_pm_domains.c
-> +++ b/drivers/pmdomain/ti/ti_sci_pm_domains.c
-> @@ -103,7 +103,7 @@ static struct generic_pm_domain *ti_sci_pd_xlate(
->   		return ERR_PTR(-ENOENT);
->   
->   	genpd_to_ti_sci_pd(genpd_data->domains[idx])->exclusive =
-> -		genpdspec->args[1];
-> +		genpdspec->args[1] & TI_SCI_PD_EXCLUSIVE;
->   
->   	return genpd_data->domains[idx];
->   }
-> @@ -161,6 +161,8 @@ static int ti_sci_pm_domain_probe(struct platform_device *pdev)
->   				break;
->   
->   			if (args.args_count >= 1 && args.np == dev->of_node) {
-> +				bool is_on = false;
-> +
->   				if (args.args[0] > max_id) {
->   					max_id = args.args[0];
->   				} else {
-> @@ -189,7 +191,28 @@ static int ti_sci_pm_domain_probe(struct platform_device *pdev)
->   				pd->idx = args.args[0];
->   				pd->parent = pd_provider;
->   
-> -				pm_genpd_init(&pd->pd, NULL, true);
-> +				/*
-> +				 * If TI_SCI_PD_KEEP_BOOT_STATE is set and the
-> +				 * PD has been enabled by the bootloader, set
-> +				 * the PD to GENPD_FLAG_ALWAYS_ON. This will
-> +				 * make sure the PD stays enabled until a driver
-> +				 * takes over and clears the GENPD_FLAG_ALWAYS_ON
-> +				 * flag.
-> +				 */
-> +				if (args.args_count > 1 &&
-> +				    args.args[1] & TI_SCI_PD_KEEP_BOOT_STATE) {
-> +					/*
-> +					 * We ignore any error here, and in case
-> +					 * of error just assume the PD is off.
-> +					 */
-> +					pd_provider->ti_sci->ops.dev_ops.is_on(pd_provider->ti_sci,
-> +						pd->idx, NULL, &is_on);
-> +
-> +					if (is_on)
-> +						pd->pd.flags |= GENPD_FLAG_ALWAYS_ON;
-> +				}
-> +
-> +				pm_genpd_init(&pd->pd, NULL, !is_on);
->   
->   				list_add(&pd->node, &pd_provider->pd_list);
->   			}
-> diff --git a/include/dt-bindings/soc/ti,sci_pm_domain.h b/include/dt-bindings/soc/ti,sci_pm_domain.h
-> index 8f2a7360b65e..af610208e3a3 100644
-> --- a/include/dt-bindings/soc/ti,sci_pm_domain.h
-> +++ b/include/dt-bindings/soc/ti,sci_pm_domain.h
-> @@ -3,6 +3,7 @@
->   #ifndef __DT_BINDINGS_TI_SCI_PM_DOMAIN_H
->   #define __DT_BINDINGS_TI_SCI_PM_DOMAIN_H
->   
-> +#define TI_SCI_PD_KEEP_BOOT_STATE 2
->   #define TI_SCI_PD_EXCLUSIVE	1
->   #define TI_SCI_PD_SHARED	0
->   
-> 
+>=20
+> Jonathan
+>=20
+>=20
+>=20
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
 
 
