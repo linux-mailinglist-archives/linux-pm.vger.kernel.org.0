@@ -1,107 +1,164 @@
-Return-Path: <linux-pm+bounces-6372-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6373-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F383F8A464C
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 02:14:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEAC68A465A
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 02:33:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8FF681F2185E
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 00:14:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79D03281F17
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 00:33:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81D33817;
-	Mon, 15 Apr 2024 00:14:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEC5B1859;
+	Mon, 15 Apr 2024 00:33:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="YeMHkANG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AF8136B;
-	Mon, 15 Apr 2024 00:14:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32CE7639;
+	Mon, 15 Apr 2024 00:33:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713140086; cv=none; b=G66XPFYlcp8PC3Sj1oHx+ZMstSf2RotBS9Ciaov2WjxmXQEG7b4TaL/Vj/G89gYYXNPP8RRgK/JHLOsE+8dZIbhRpF28vrEARhsCahjwPGpfCuLso2qD8xsaVlLLwQlE3lSA5vFRfv4/7miA6gxueTuxUmBpbo5AfeMDjcKmUyM=
+	t=1713141184; cv=none; b=r683TVcHV7HZv8FYHJZAMDUflxuY71BX5u1o7ydt1nNCPcp6gWChRFcAXP0t6EBCzCT097cdfHdagNQWXKxgyyWESDmIFkl12JAzy45R+iHIAi5xDjiCMqk7eQ0Ib0mMTvJDqyVTrKLcVEmX8iNOVONqsAAXjzWLXNJmWp8ky5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713140086; c=relaxed/simple;
-	bh=YoR9uOxSje0476YJAFfp+KDhnzxNJHjo9PEGKaVNrrU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=H+NUOfSDrrodxdIIOCXdoKIgQAoRDNj5xECA/XxmJwdVWkXkXnapJPHYJIDjLzNEKYCkAlHa+R1D6/e+4sJZuI6aXnFqIGEjIjCG/TThv6ZW8zChFjaZz43rJh4BumzzH/1ebE/mOInlxu9zK+wX8sw2lrDHtp2WKP9OTbqvg9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 03649339;
-	Sun, 14 Apr 2024 17:15:13 -0700 (PDT)
-Received: from minigeek.lan (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6A0C83F64C;
-	Sun, 14 Apr 2024 17:14:41 -0700 (PDT)
-Date: Mon, 15 Apr 2024 01:14:35 +0100
-From: Andre Przywara <andre.przywara@arm.com>
-To: "Ryan Walklin" <ryan@testtoast.com>
-Cc: "Viresh Kumar" <viresh.kumar@linaro.org>, "Yangtao Li"
- <tiny.windzz@gmail.com>, "Viresh Kumar" <vireshk@kernel.org>, "Nishanth
- Menon" <nm@ti.com>, "Stephen Boyd" <sboyd@kernel.org>, "Rob Herring"
- <robh+dt@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Chen-Yu Tsai" <wens@csie.org>, "Jernej Skrabec"
- <jernej.skrabec@gmail.com>, "Samuel Holland" <samuel@sholland.org>, "Rafael
- J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-sunxi@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, "Brandon Cheo Fusi"
- <fusibrandon13@gmail.com>, "Martin Botka" <martin.botka@somainline.org>,
- "Martin Botka" <martin.botka1@gmail.com>, "Chris Morgan"
- <macroalpha82@gmail.com>, "Mark Rutland" <mark.rutland@arm.com>, "Lorenzo
- Pieralisi" <lpieralisi@kernel.org>, "Sudeep Holla" <sudeep.holla@arm.com>
-Subject: Re: [PATCH v4 0/8] cpufreq: sun50i: Add Allwinner H616 support
-Message-ID: <20240415011435.2aeae1f1@minigeek.lan>
-In-Reply-To: <0e021133-f8c1-457d-9079-d9c972e0e69b@app.fastmail.com>
-References: <20240329141311.27158-1-andre.przywara@arm.com>
- <20240404064027.shjqvqih7s5rnv2i@vireshk-i7>
- <0e021133-f8c1-457d-9079-d9c972e0e69b@app.fastmail.com>
-Organization: Arm Ltd.
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
+	s=arc-20240116; t=1713141184; c=relaxed/simple;
+	bh=155gXXdQANVmSfdXxHCjI5F0Dg3hhFGrVuBtSaIunTY=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vm9mzOFm8tLS9reAzxn4Sq+JsNSEwdKCY7zD4A7ReGrkkRwdv7WIST8J3PFWHV9KHzgE5K8V2vLRywpC1HA+4czKmSnKJbP9UwlLiNw8RjcXbWnUcroMB9/YYsmJJtx1xqeCFqr0izvgo3G9iqgu5oQNaHSRzhsU73WMy7kgXrU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=YeMHkANG; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43F0Mv4R025751;
+	Mon, 15 Apr 2024 00:32:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	date:from:to:cc:subject:message-id:references:mime-version
+	:content-type:in-reply-to; s=qcppdkim1; bh=JH+99CJAPu+dl8sSsv/0Q
+	anm5M2oT5yN2gTeVMFHO8M=; b=YeMHkANGMlol9YOwgxeQM8CpDWKY/Wy/V6Ybm
+	b5sN1cdA583eOCTqEsAUr+66WD/Zx+is7kUKsHBuoHxKSfGDj9rtV85MG1mN/6R7
+	Q5tPFNfW3qRmu+fc8OUn0/tfjnFAU/Xd1yganYHrEzZmwmKFgvXXcjTSz9orwMfm
+	m4E66l2RppG9aDiJbf9wK5P2NyuuYM5cCbAUv8Cjy5Zzpda9z2A5VNpkq5ukgJjz
+	XJX+QE8vH7Mj7iGQJcAvIoiZHcTxFQMBqMKxJTqWeP193iOUPbXtuA1JkSR1o1q/
+	/lJcsVHLTbUlYcsHc3Ftzfy7AMD6sbCkaqQ8iu87xjvQCImKw==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xggvgrg2v-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 15 Apr 2024 00:32:39 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43F0WcwK020603
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 15 Apr 2024 00:32:38 GMT
+Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Sun, 14 Apr 2024 17:32:37 -0700
+Date: Sun, 14 Apr 2024 17:32:37 -0700
+From: Elliot Berman <quic_eberman@quicinc.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio
+	<konrad.dybcio@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>, Rob Herring
+	<robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Andy Yan
+	<andy.yan@rock-chips.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "Mark
+ Rutland" <mark.rutland@arm.com>,
+        Bartosz Golaszewski
+	<bartosz.golaszewski@linaro.org>,
+        Satya Durga Srinivasu Prabhala
+	<quic_satyap@quicinc.com>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        Shivendra Pratap <quic_spratap@quicinc.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH v2 4/4] arm64: dts: qcom: Add PSCI SYSTEM_RESET2 types
+ for qcm6490-idp
+Message-ID: <20240414173158942-0700.eberman@hu-eberman-lv.qualcomm.com>
+References: <20240414-arm-psci-system_reset2-vendor-reboots-v2-0-da9a055a648f@quicinc.com>
+ <20240414-arm-psci-system_reset2-vendor-reboots-v2-4-da9a055a648f@quicinc.com>
+ <CAA8EJpoXrbdD5xVmuo-2b4-WwpSachcJ-abDtu4BS_qa-2A+OA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAA8EJpoXrbdD5xVmuo-2b4-WwpSachcJ-abDtu4BS_qa-2A+OA@mail.gmail.com>
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: i0sW7yvkwcQAUBWnVrmtschMRkubiVkZ
+X-Proofpoint-ORIG-GUID: i0sW7yvkwcQAUBWnVrmtschMRkubiVkZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-14_10,2024-04-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ bulkscore=0 adultscore=0 lowpriorityscore=0 clxscore=1015
+ priorityscore=1501 suspectscore=0 phishscore=0 mlxlogscore=865 mlxscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2404010003 definitions=main-2404150001
 
-On Thu, 04 Apr 2024 20:44:02 +1300
-"Ryan Walklin" <ryan@testtoast.com> wrote:
-
-Hi Ryan,
-
-> On Thu, 4 Apr 2024, at 7:40 PM, Viresh Kumar wrote:
-> > Is it okay to merge all the changes via the cpufreq tree ?  
+On Mon, Apr 15, 2024 at 02:13:29AM +0300, Dmitry Baryshkov wrote:
+> On Sun, 14 Apr 2024 at 22:32, Elliot Berman <quic_eberman@quicinc.com> wrote:
+> >
+> > Add nodes for the vendor-defined system resets. "bootloader" will cause
+> > device to reboot and stop in the bootloader's fastboot mode. "edl" will
+> > cause device to reboot into "emergency download mode", which permits
+> > loading images via the Firehose protocol.
+> >
+> > Co-developed-by: Shivendra Pratap <quic_spratap@quicinc.com>
+> > Signed-off-by: Shivendra Pratap <quic_spratap@quicinc.com>
+> > Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> > ---
+> >  arch/arm64/boot/dts/qcom/qcm6490-idp.dts | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/qcm6490-idp.dts b/arch/arm64/boot/dts/qcom/qcm6490-idp.dts
+> > index e4bfad50a669..a966f6c8dd7c 100644
+> > --- a/arch/arm64/boot/dts/qcom/qcm6490-idp.dts
+> > +++ b/arch/arm64/boot/dts/qcom/qcm6490-idp.dts
+> > @@ -126,6 +126,11 @@ debug_vm_mem: debug-vm@d0600000 {
+> >                 };
+> >         };
+> >
+> > +       psci {
 > 
-> I have tested this series with an H700-based board, and have at least one speed-bin (1.032GHz) is not supported although the governor attempts to enable it based on the opp-supported-hw bitmask, and I am unable to reach the 1.5GHz bin at 1.16v (or higher) despite it working on the vendor BSP (kernel panic at boot if enabled), so this may need some slight rework.
-
-Thanks for the report!
-So can you try to merge the 1.032 GHz OPP into the 1.008 GHz one? That
-would be beneficial anyways since this is the default frequency that
-U-Boot sets up.
-Should be:
-opp-1008000000 {
-....
-	opp-microvolt-speed5 = <900000>;
-	opp-supported-hw = <0x3f>;
-....
-
-As for the 1.5 GHz speed bin: We could leave that out for now if it
-causes trouble. But can you first state how you got the OPPs? I copied
-them from some table you dumped once on IRC, but it would be good to
-double check what the actual values are that the BSP kernel runs with.
-The values in the vendor DT are highly inconsistent, besides we don't
-know for sure which speed bin index the BSP is using and how this maps
-to our method.
-
-Cheers,
-Andre
-
-
-> I have reached out to Andre on IRC to debug.
+> Please use a label instead. Otherwise it looks as if you are adding
+> new device node.
 > 
-> Ryan
 
+Right. Fixed for the next revision.
+
+Thanks,
+Elliot
+
+> > +               mode-bootloader = <0x10001 0x2>;
+> > +               mode-edl = <0 0x1>;
+> > +       };
+> > +
+> >         vph_pwr: vph-pwr-regulator {
+> >                 compatible = "regulator-fixed";
+> >                 regulator-name = "vph_pwr";
+> >
+> > --
+> > 2.34.1
+> >
+> >
+> 
+> 
+> -- 
+> With best wishes
+> Dmitry
 
