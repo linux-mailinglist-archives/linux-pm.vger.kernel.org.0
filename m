@@ -1,177 +1,209 @@
-Return-Path: <linux-pm+bounces-6442-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6445-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6731E8A5A4D
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 21:03:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C1278A5A55
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 21:05:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A1031C2227D
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 19:03:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D7182284C05
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 19:05:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E26C155A25;
-	Mon, 15 Apr 2024 19:03:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B04715575B;
+	Mon, 15 Apr 2024 19:05:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="M9EGh4hO"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="0OcTwWiW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67B2884D24;
-	Mon, 15 Apr 2024 19:03:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99C8269DE4;
+	Mon, 15 Apr 2024 19:05:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713207803; cv=none; b=TMeqPJah9IjtCfrwR+wtuTZJNNu04GvDRwTEpMoZeEVmmZP2+WbD8W2wjDahZxd0fl0LW4DHaH7E9zos4nNBkFwNbFJCrvToFY6Oph/GyOcEO/vE7Bw3MyZ5ol/xixi0iILYUOrp476cFpVxVoHUMmsX7nuJeTqIHJvsycPowb0=
+	t=1713207936; cv=none; b=tWd7ZGMCYVTxwnwqqYoPtqpDwzqoc2DXAYfgDYBI0vZzJsnVNYJjQsN/kHMnPW13K3aAHLGRbxprbB1bDkzJjPVzel/4p/iCi4BVeLKWaO1Y8UpQ200wP64zGyKWPWNoJyhKrvh2meSiBz67BVfztKRJ38esVW2QNeeiGSvNPwQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713207803; c=relaxed/simple;
-	bh=CQNI1NZ7g4v/dwm4IEXv3eA8nBv8ecvnI47e7IY43ks=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=k/6n9pdD/3sl6kq6hOO+Vz9mBDV+3rKclldxvIc/zaHdNUDVY6/39ZBM2afJ4/htyTlDDRX5COUD05T5iC7ILQm3uJFw/XERHJ6tH+wVYh8FxXneLl3CmQImLba15XLZ0vgk+s4yyInO93GpbES42IKF52V/vsm3uFxUO1YqVUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=M9EGh4hO reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
- id e37f4f2d11543fe6; Mon, 15 Apr 2024 21:03:12 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
+	s=arc-20240116; t=1713207936; c=relaxed/simple;
+	bh=X6aFBbtbhlwjSibF1VZUjZZxSmOI1D+UMTgw0IW9PEk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=k4wXx+pODjsdDSs/vhGbDydj7aBMDpcE0gzyIyeFpfaA92EmWF8T4DAN5hte6X5H7R7YSoBAR982ihxNj0UJZZomVWhRvOMrgjLkAfBCYM5UgYAftRJ3hlfD+YK0/BphMux3jqEazcZa4OhLP9NXg9vLFQ0EtpnJuO/V1VFSJyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=0OcTwWiW; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1713207932;
+	bh=X6aFBbtbhlwjSibF1VZUjZZxSmOI1D+UMTgw0IW9PEk=;
+	h=From:Date:Subject:To:Cc:From;
+	b=0OcTwWiWCtRVuE77yuxqUFcIYOrmqNgQPxsN1PMsCx3xqNdqRWGp8pF9+0Wwr9x90
+	 Dr1Zx8LV9kChdlcB8eQAVfeUETnsBD6FlPCwbxzhYRUiMiIep+db0+7TJJid7Cek5I
+	 bsCKkqPWAMQGdDsl5NMfujf2tDGM5VNPQ4h0m49Vq+lSWtev/g91rUQEoBmR9T/WqS
+	 OYaaWrfHCAlQKfhvTLuwdeHHV9aT4en78p1Eu6zU4arvAt8kZJjst0IYpy1kdQahWs
+	 POr369JPCvD8z2siHYb4NIZzBqyAXoKEnyeBz7EpB4ErNeiUzbGJOQsQFNzuTMKFxl
+	 lFxq1fJ+Rs4UA==
+Received: from [192.168.42.226] (zone.collabora.co.uk [167.235.23.81])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 8A69D66CF45;
-	Mon, 15 Apr 2024 21:03:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1713207792;
-	bh=CQNI1NZ7g4v/dwm4IEXv3eA8nBv8ecvnI47e7IY43ks=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=M9EGh4hODnGqxqAYnNjSiv101bCMaZIlxWdb/zEp7XiWTnyPnayIMso9Yg8faJ9M3
-	 r57uiL/FBfHoDW99iReGstfc/qItdgnx8rXzg/N++/zuJUXE1UtODq4AgZQIEPMYS1
-	 xw28c7SbtnFpkVMcPKkRVfHv7NMav3jYXQnR9khHutNr7g17Cx/PTX+48/ZYN1rMUa
-	 5LK2pvFWa81nmqDJ8cbqXxiJN5dKcYilPwr7jcT1q4QAP62Klw8fXMj7QtWhaX62G4
-	 0hiyjWlRqfRqvk95h+slHnhKITQ20lIKONSNoNhJ4Lg9FRChX+80svF0l7W7Dwg8Y/
-	 AQSGkIo0ekqDA==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
- Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject:
- [PATCH v1 2/2] thermal/debugfs: Add helper function for trip stats updates
-Date: Mon, 15 Apr 2024 21:03:06 +0200
-Message-ID: <2321994.ElGaqSPkdT@kreacher>
-In-Reply-To: <12418263.O9o76ZdvQC@kreacher>
-References: <12418263.O9o76ZdvQC@kreacher>
+	(Authenticated sender: nfraprado)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 2A2AB37820EF;
+	Mon, 15 Apr 2024 19:05:32 +0000 (UTC)
+From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
+Date: Mon, 15 Apr 2024 15:05:28 -0400
+Subject: [PATCH v2] power: supply: sbs-battery: Handle unsupported
+ PROP_TIME_TO_EMPTY_NOW
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudejvddgudeffecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeegpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20240415-sbs-time-empty-now-error-v2-1-32d8a747e308@collabora.com>
+X-B4-Tracking: v=1; b=H4sIAHd6HWYC/42NQQqDQAxFryKzbkrMCEpXvUdxoWOsATWSEVsR7
+ 95pT1D+6n347x8usglHd8sOZ7xJFJ0T0CVzYWjmJ4N0iR0hFeixhNhGWGVi4GlZd5j1BWymBp6
+ oDVgWne/Jpfli3Mv7p37UiQeJq9r+e9ryb/uHdMshpeqwr0ok7/EedBybVq25Bp1cfZ7nBxpTz
+ OXEAAAA
+To: Sebastian Reichel <sre@kernel.org>
+Cc: kernel@collabora.com, linux-pm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
+X-Mailer: b4 0.13.0
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Despite the RunTimeToEmpty() (0x11) function being defined in the SBS
+specification as required, it seems that not all batteries implement it.
+On platforms with such batteries, reading the property will cause an
+error to be printed:
 
-The code updating a trip_stats entry in thermal_debug_tz_trip_up()
-and thermal_debug_update_temp() is almost entirely duplicate, so move
-it to a new helper function that will be called from both these places.
+power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
 
-While at it, drop a redundant tz_dbg->nr_trips check and a label related
-to it from thermal_debug_update_temp().
+This not only pollutes the log, distracting from real problems on the
+device, but also prevents the uevent file from being read since it
+contains all properties, including the faulty one.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+The following table summarizes the findings for a handful of platforms:
+
+Platform                                Status  Manufacturer    Model
+------------------------------------------------------------------------
+mt8186-corsola-steelix-sku131072        OK      BYD             L22B3PG0
+mt8195-cherry-tomato-r2                 NOT OK  PANASON         AP16L5J
+mt8192-asurada-spherion-r0              NOT OK  PANASON         AP15O5L
+mt8183-kukui-jacuzzi-juniper-sku16      NOT OK  LGC KT0         AP16L8J
+mt8173-elm-hana                         OK      Sunwoda         L18D3PG1
+sc7180-trogdor-lazor-limozeen-nots-r5   NOT OK  Murata          AP18C4K
+sc7180-trogdor-kingoftown               NOT OK  333-AC-0D-A     GG02047XL
+rk3399-gru-kevin                        OK      SDI             4352D51
+
+Detect if this is one of the quirky batteries during presence update, so
+that hot-plugging works as expected, and if so report -ENODATA for
+POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW, which removes it from uevent and
+prevents throwing errors.
+
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 ---
- drivers/thermal/thermal_debugfs.c |   42 +++++++++++++++++---------------------
- 1 file changed, 19 insertions(+), 23 deletions(-)
+Changes in v2:
+- Reworked patch to lay down and use a proper quirk infrastructure, and
+  update the quirks on the presence update callback so it works properly
+  even when hot-plugging different batteries
+- Link to v1: https://lore.kernel.org/r/20240307-sbs-time-empty-now-error-v1-1-18d0f8702330@collabora.com
+---
+ drivers/power/supply/sbs-battery.c | 55 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
-Index: linux-pm/drivers/thermal/thermal_debugfs.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_debugfs.c
-+++ linux-pm/drivers/thermal/thermal_debugfs.c
-@@ -539,6 +539,19 @@ static struct tz_episode *thermal_debugf
- 	return tze;
+diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
+index a6c204c08232..92acbda9e78e 100644
+--- a/drivers/power/supply/sbs-battery.c
++++ b/drivers/power/supply/sbs-battery.c
+@@ -214,6 +214,7 @@ struct sbs_info {
+ 	struct delayed_work		work;
+ 	struct mutex			mode_lock;
+ 	u32				flags;
++	u32				quirks;
+ 	int				technology;
+ 	char				strings[NR_STRING_BUFFERS][I2C_SMBUS_BLOCK_MAX + 1];
+ };
+@@ -263,6 +264,54 @@ static void sbs_disable_charger_broadcasts(struct sbs_info *chip)
+ 		dev_dbg(&chip->client->dev, "%s\n", __func__);
  }
  
-+static struct trip_stats *update_tz_episode(struct tz_debugfs *tz_dbg,
-+					    int trip_id, int temperature)
-+{
-+	struct tz_episode *tze = list_first_entry(&tz_dbg->tz_episodes,
-+						  struct tz_episode, node);
-+	struct trip_stats *trip_stats = &tze->trip_stats[trip_id];
++/* Required by the spec, but missing in some implementations */
++#define SBS_QUIRK_BROKEN_TTE_NOW	BIT(0)
 +
-+	trip_stats->max = max(trip_stats->max, temperature);
-+	trip_stats->min = min(trip_stats->min, temperature);
-+	trip_stats->avg += (temperature - trip_stats->avg) / ++trip_stats->count;
-+	return trip_stats;
++struct sbs_quirk_entry {
++	const char *manufacturer;
++	const char *model;
++	u32 flags;
++};
++
++static const struct sbs_quirk_entry sbs_quirks[] = {
++	{"PANASON", "AP16L5J", SBS_QUIRK_BROKEN_TTE_NOW},
++	{"PANASON", "AP15O5L", SBS_QUIRK_BROKEN_TTE_NOW},
++	{"LGC KT0", "AP16L8J", SBS_QUIRK_BROKEN_TTE_NOW},
++	{"Murata", "AP18C4K", SBS_QUIRK_BROKEN_TTE_NOW},
++	{"333-AC-0D-A", "GG02047XL", SBS_QUIRK_BROKEN_TTE_NOW},
++};
++
++static const char *sbs_get_constant_string(struct sbs_info *chip,
++					   enum power_supply_property psp);
++
++static void sbs_update_quirks(struct sbs_info *chip)
++{
++	const char *model;
++	const char *manufacturer;
++	unsigned int i = 0;
++
++	/* reset quirks from battery before the hot-plug event */
++	chip->quirks = 0;
++
++	manufacturer = sbs_get_constant_string(chip, POWER_SUPPLY_PROP_MANUFACTURER);
++	model = sbs_get_constant_string(chip, POWER_SUPPLY_PROP_MODEL_NAME);
++	if (IS_ERR(manufacturer) || IS_ERR(model)) {
++		dev_warn(&chip->client->dev, "Couldn't read manufacturer and model to set quirks\n");
++		return;
++	}
++
++	for (i = 0; i < ARRAY_SIZE(sbs_quirks); i++) {
++		if (strcmp(manufacturer, sbs_quirks[i].manufacturer))
++			continue;
++		if (strcmp(model, sbs_quirks[i].model))
++			continue;
++		chip->quirks |= sbs_quirks[i].flags;
++	}
++
++	if (chip->quirks & SBS_QUIRK_BROKEN_TTE_NOW)
++		dev_info(&chip->client->dev, "Added quirk disabling TIME_TO_EMPTY_NOW\n");
 +}
 +
- void thermal_debug_tz_trip_up(struct thermal_zone_device *tz,
- 			      const struct thermal_trip *trip)
+ static int sbs_update_presence(struct sbs_info *chip, bool is_present)
  {
-@@ -547,6 +560,7 @@ void thermal_debug_tz_trip_up(struct the
- 	struct thermal_debugfs *thermal_dbg = tz->debugfs;
- 	int temperature = tz->temperature;
- 	int trip_id = thermal_zone_trip_id(tz, trip);
-+	struct trip_stats *trip_stats;
- 	ktime_t now = ktime_get();
+ 	struct i2c_client *client = chip->client;
+@@ -323,6 +372,8 @@ static int sbs_update_presence(struct sbs_info *chip, bool is_present)
+ 	dev_dbg(&client->dev, "PEC: %s\n", (client->flags & I2C_CLIENT_PEC) ?
+ 		"enabled" : "disabled");
  
- 	if (!thermal_dbg)
-@@ -612,14 +626,8 @@ void thermal_debug_tz_trip_up(struct the
- 	 */
- 	tz_dbg->trips_crossed[tz_dbg->nr_trips++] = trip_id;
++	sbs_update_quirks(chip);
++
+ 	if (!chip->is_present && is_present && !chip->charger_broadcasts)
+ 		sbs_disable_charger_broadcasts(chip);
  
--	tze = list_first_entry(&tz_dbg->tz_episodes, struct tz_episode, node);
--	tze->trip_stats[trip_id].timestamp = now;
--	tze->trip_stats[trip_id].max = max(tze->trip_stats[trip_id].max, temperature);
--	tze->trip_stats[trip_id].min = min(tze->trip_stats[trip_id].min, temperature);
--	tze->trip_stats[trip_id].count++;
--	tze->trip_stats[trip_id].avg = tze->trip_stats[trip_id].avg +
--		(temperature - tze->trip_stats[trip_id].avg) /
--		tze->trip_stats[trip_id].count;
-+	trip_stats = update_tz_episode(tz_dbg, trip_id, temperature);
-+	trip_stats->timestamp = now;
+@@ -614,6 +665,10 @@ static int sbs_get_battery_property(struct i2c_client *client,
+ 	struct sbs_info *chip = i2c_get_clientdata(client);
+ 	s32 ret;
  
- unlock:
- 	mutex_unlock(&thermal_dbg->lock);
-@@ -686,9 +694,8 @@ out:
- void thermal_debug_update_temp(struct thermal_zone_device *tz)
- {
- 	struct thermal_debugfs *thermal_dbg = tz->debugfs;
--	struct tz_episode *tze;
- 	struct tz_debugfs *tz_dbg;
--	int trip_id, i;
-+	int i;
- 
- 	if (!thermal_dbg)
- 		return;
-@@ -697,20 +704,9 @@ void thermal_debug_update_temp(struct th
- 
- 	tz_dbg = &thermal_dbg->tz_dbg;
- 
--	if (!tz_dbg->nr_trips)
--		goto out;
-+	for (i = 0; i < tz_dbg->nr_trips; i++)
-+		update_tz_episode(tz_dbg, tz_dbg->trips_crossed[i], tz->temperature);
- 
--	for (i = 0; i < tz_dbg->nr_trips; i++) {
--		trip_id = tz_dbg->trips_crossed[i];
--		tze = list_first_entry(&tz_dbg->tz_episodes, struct tz_episode, node);
--		tze->trip_stats[trip_id].count++;
--		tze->trip_stats[trip_id].max = max(tze->trip_stats[trip_id].max, tz->temperature);
--		tze->trip_stats[trip_id].min = min(tze->trip_stats[trip_id].min, tz->temperature);
--		tze->trip_stats[trip_id].avg = tze->trip_stats[trip_id].avg +
--			(tz->temperature - tze->trip_stats[trip_id].avg) /
--			tze->trip_stats[trip_id].count;
--	}
--out:
- 	mutex_unlock(&thermal_dbg->lock);
- }
- 
++	if (psp == POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW &&
++	    chip->quirks & SBS_QUIRK_BROKEN_TTE_NOW)
++		return -ENODATA;
++
+ 	ret = sbs_read_word_data(client, sbs_data[reg_offset].addr);
+ 	if (ret < 0)
+ 		return ret;
 
+---
+base-commit: 11afac187274a6177a7ac82997f8691c0f469e41
+change-id: 20240307-sbs-time-empty-now-error-322bc074d3f2
 
+Best regards,
+-- 
+Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
 
