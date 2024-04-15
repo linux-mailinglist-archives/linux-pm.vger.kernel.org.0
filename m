@@ -1,64 +1,63 @@
-Return-Path: <linux-pm+bounces-6443-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6442-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B0568A5A4E
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 21:03:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6731E8A5A4D
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 21:03:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E2C6CB22940
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 19:03:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A1031C2227D
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Apr 2024 19:03:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50A16155A2F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E26C155A25;
 	Mon, 15 Apr 2024 19:03:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="Nxf8k2NC"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="M9EGh4hO"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BA0B13B78F;
-	Mon, 15 Apr 2024 19:03:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67B2884D24;
+	Mon, 15 Apr 2024 19:03:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713207803; cv=none; b=vAPIaEP78AEZR/fA93CuGyGXLExjvBo5IkVJ4Jc3XTx1QQOxnWu/+VCZDWkxe2vXktNUVM5/olxXozIROZ9I43acYn/ZVFQxeIexla5AwckucXLBwg2A5G2TVuJKWW5q4IUSncuau4uRiJGG6JKkL8aEAsJyM+TFQMWRnvUd2tc=
+	t=1713207803; cv=none; b=TMeqPJah9IjtCfrwR+wtuTZJNNu04GvDRwTEpMoZeEVmmZP2+WbD8W2wjDahZxd0fl0LW4DHaH7E9zos4nNBkFwNbFJCrvToFY6Oph/GyOcEO/vE7Bw3MyZ5ol/xixi0iILYUOrp476cFpVxVoHUMmsX7nuJeTqIHJvsycPowb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1713207803; c=relaxed/simple;
-	bh=R5j1i6fx4eY28IZJTdMlNFW1/w7oGnarF5KekQdrVhk=;
+	bh=CQNI1NZ7g4v/dwm4IEXv3eA8nBv8ecvnI47e7IY43ks=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=E60K7Gxxl0m4/s0YvSpZrp4/gny6lxx5aOMd7m3MNVOoUaXQwFNhA+SpeNVrBmpGKrDFukDNnxx90vx7EuCqYSohuaTtH3eBZ593WtkgQ/5+P+GaJ3ii6duSFs9OzRU36uSKlB6KhNC7QbnkWkkzmPgQ0xLO5CNq04QEMyVNyY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=Nxf8k2NC reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+	 MIME-Version:Content-Type; b=k/6n9pdD/3sl6kq6hOO+Vz9mBDV+3rKclldxvIc/zaHdNUDVY6/39ZBM2afJ4/htyTlDDRX5COUD05T5iC7ILQm3uJFw/XERHJ6tH+wVYh8FxXneLl3CmQImLba15XLZ0vgk+s4yyInO93GpbES42IKF52V/vsm3uFxUO1YqVUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=M9EGh4hO reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
- id a459e9c29f1a53e7; Mon, 15 Apr 2024 21:03:12 +0200
+ id e37f4f2d11543fe6; Mon, 15 Apr 2024 21:03:12 +0200
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 5C83D66CF48;
-	Mon, 15 Apr 2024 21:03:12 +0200 (CEST)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 8A69D66CF45;
+	Mon, 15 Apr 2024 21:03:11 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
 	s=dkim; t=1713207792;
-	bh=R5j1i6fx4eY28IZJTdMlNFW1/w7oGnarF5KekQdrVhk=;
+	bh=CQNI1NZ7g4v/dwm4IEXv3eA8nBv8ecvnI47e7IY43ks=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Nxf8k2NCcan69GF2dTpbwl/A9AWr7/Xk04tst6/6igviEAa8f+7qd9+CczqrGq6+8
-	 ZRCD+5ZDwPulOVqfZEaam5nsYO7msSc6CkSJYnEnumXlkqn7OAAJHqNODIpcg6/K8n
-	 6pdV450uZ3TqGl2lxrPDJwdTTlv9SEJfthY+prSNH8gmi7dlADiNtI+WPYxZCa62qH
-	 0QO33YQRNVwR3196zDpRLfnvtcZh8uCX59jiaMWa1PQE8qJ86Au+CqxM3T7u7voGOH
-	 4nbAuMmeNPUNMYDPDDUZXqRO+hhlrHpHWGSggQfeTswTYtkkXMhMui8dFnb+Mfz+/p
-	 nUAqiI6pjdXvA==
+	b=M9EGh4hODnGqxqAYnNjSiv101bCMaZIlxWdb/zEp7XiWTnyPnayIMso9Yg8faJ9M3
+	 r57uiL/FBfHoDW99iReGstfc/qItdgnx8rXzg/N++/zuJUXE1UtODq4AgZQIEPMYS1
+	 xw28c7SbtnFpkVMcPKkRVfHv7NMav3jYXQnR9khHutNr7g17Cx/PTX+48/ZYN1rMUa
+	 5LK2pvFWa81nmqDJ8cbqXxiJN5dKcYilPwr7jcT1q4QAP62Klw8fXMj7QtWhaX62G4
+	 0hiyjWlRqfRqvk95h+slHnhKITQ20lIKONSNoNhJ4Lg9FRChX+80svF0l7W7Dwg8Y/
+	 AQSGkIo0ekqDA==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
  Daniel Lezcano <daniel.lezcano@linaro.org>
 Subject:
- [PATCH v1 1/2] thermal/debugfs: Add missing count increment to
- thermal_debug_tz_trip_up()
-Date: Mon, 15 Apr 2024 21:02:12 +0200
-Message-ID: <4912620.31r3eYUQgx@kreacher>
+ [PATCH v1 2/2] thermal/debugfs: Add helper function for trip stats updates
+Date: Mon, 15 Apr 2024 21:03:06 +0200
+Message-ID: <2321994.ElGaqSPkdT@kreacher>
 In-Reply-To: <12418263.O9o76ZdvQC@kreacher>
 References: <12418263.O9o76ZdvQC@kreacher>
 Precedence: bulk
@@ -77,48 +76,101 @@ X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-The count field in struct trip_stats, representing the number of times
-the zone temperature was above the trip point, needs to be incremented
-in thermal_debug_tz_trip_up(), for two reasons.
+The code updating a trip_stats entry in thermal_debug_tz_trip_up()
+and thermal_debug_update_temp() is almost entirely duplicate, so move
+it to a new helper function that will be called from both these places.
 
-First, if a trip point is crossed on the way up for the first time,
-thermal_debug_update_temp() called from update_temperature() does
-not see it because it has not been added to trips_crossed[] array
-in the thermal zone's struct tz_debugfs object yet.  Therefore, when
-thermal_debug_tz_trip_up() is called after that, the trip point's
-count value is 0, and the attempt to divide by it during the average
-temperature computation leads to a divide error which causes the kernel
-to crash.  Setting the count to 1 before the division by incrementing it
-fixes this problem.
+While at it, drop a redundant tz_dbg->nr_trips check and a label related
+to it from thermal_debug_update_temp().
 
-Second, if a trip point is crossed on the way up, but it has been
-crossed on the way up already before, its count value needs to be
-incremented to make a record of the fact that the zone temperature is
-above the trip now.  Without doing that, if the mitigations applied
-after crossing the trip cause the zone temperature to drop below its
-threshold, the count will not be updated for this episode at all and
-the average temperature in the trip statistics record will be somewhat
-smaller than it should be.
-
-Fixes: 7ef01f228c9f ("thermal/debugfs: Add thermal debugfs information for mitigation episodes")
-Cc :6.8+ <stable@vger.kernel.org> # 6.8+
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/thermal/thermal_debugfs.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/thermal/thermal_debugfs.c |   42 +++++++++++++++++---------------------
+ 1 file changed, 19 insertions(+), 23 deletions(-)
 
 Index: linux-pm/drivers/thermal/thermal_debugfs.c
 ===================================================================
 --- linux-pm.orig/drivers/thermal/thermal_debugfs.c
 +++ linux-pm/drivers/thermal/thermal_debugfs.c
-@@ -616,6 +616,7 @@ void thermal_debug_tz_trip_up(struct the
- 	tze->trip_stats[trip_id].timestamp = now;
- 	tze->trip_stats[trip_id].max = max(tze->trip_stats[trip_id].max, temperature);
- 	tze->trip_stats[trip_id].min = min(tze->trip_stats[trip_id].min, temperature);
-+	tze->trip_stats[trip_id].count++;
- 	tze->trip_stats[trip_id].avg = tze->trip_stats[trip_id].avg +
- 		(temperature - tze->trip_stats[trip_id].avg) /
- 		tze->trip_stats[trip_id].count;
+@@ -539,6 +539,19 @@ static struct tz_episode *thermal_debugf
+ 	return tze;
+ }
+ 
++static struct trip_stats *update_tz_episode(struct tz_debugfs *tz_dbg,
++					    int trip_id, int temperature)
++{
++	struct tz_episode *tze = list_first_entry(&tz_dbg->tz_episodes,
++						  struct tz_episode, node);
++	struct trip_stats *trip_stats = &tze->trip_stats[trip_id];
++
++	trip_stats->max = max(trip_stats->max, temperature);
++	trip_stats->min = min(trip_stats->min, temperature);
++	trip_stats->avg += (temperature - trip_stats->avg) / ++trip_stats->count;
++	return trip_stats;
++}
++
+ void thermal_debug_tz_trip_up(struct thermal_zone_device *tz,
+ 			      const struct thermal_trip *trip)
+ {
+@@ -547,6 +560,7 @@ void thermal_debug_tz_trip_up(struct the
+ 	struct thermal_debugfs *thermal_dbg = tz->debugfs;
+ 	int temperature = tz->temperature;
+ 	int trip_id = thermal_zone_trip_id(tz, trip);
++	struct trip_stats *trip_stats;
+ 	ktime_t now = ktime_get();
+ 
+ 	if (!thermal_dbg)
+@@ -612,14 +626,8 @@ void thermal_debug_tz_trip_up(struct the
+ 	 */
+ 	tz_dbg->trips_crossed[tz_dbg->nr_trips++] = trip_id;
+ 
+-	tze = list_first_entry(&tz_dbg->tz_episodes, struct tz_episode, node);
+-	tze->trip_stats[trip_id].timestamp = now;
+-	tze->trip_stats[trip_id].max = max(tze->trip_stats[trip_id].max, temperature);
+-	tze->trip_stats[trip_id].min = min(tze->trip_stats[trip_id].min, temperature);
+-	tze->trip_stats[trip_id].count++;
+-	tze->trip_stats[trip_id].avg = tze->trip_stats[trip_id].avg +
+-		(temperature - tze->trip_stats[trip_id].avg) /
+-		tze->trip_stats[trip_id].count;
++	trip_stats = update_tz_episode(tz_dbg, trip_id, temperature);
++	trip_stats->timestamp = now;
+ 
+ unlock:
+ 	mutex_unlock(&thermal_dbg->lock);
+@@ -686,9 +694,8 @@ out:
+ void thermal_debug_update_temp(struct thermal_zone_device *tz)
+ {
+ 	struct thermal_debugfs *thermal_dbg = tz->debugfs;
+-	struct tz_episode *tze;
+ 	struct tz_debugfs *tz_dbg;
+-	int trip_id, i;
++	int i;
+ 
+ 	if (!thermal_dbg)
+ 		return;
+@@ -697,20 +704,9 @@ void thermal_debug_update_temp(struct th
+ 
+ 	tz_dbg = &thermal_dbg->tz_dbg;
+ 
+-	if (!tz_dbg->nr_trips)
+-		goto out;
++	for (i = 0; i < tz_dbg->nr_trips; i++)
++		update_tz_episode(tz_dbg, tz_dbg->trips_crossed[i], tz->temperature);
+ 
+-	for (i = 0; i < tz_dbg->nr_trips; i++) {
+-		trip_id = tz_dbg->trips_crossed[i];
+-		tze = list_first_entry(&tz_dbg->tz_episodes, struct tz_episode, node);
+-		tze->trip_stats[trip_id].count++;
+-		tze->trip_stats[trip_id].max = max(tze->trip_stats[trip_id].max, tz->temperature);
+-		tze->trip_stats[trip_id].min = min(tze->trip_stats[trip_id].min, tz->temperature);
+-		tze->trip_stats[trip_id].avg = tze->trip_stats[trip_id].avg +
+-			(tz->temperature - tze->trip_stats[trip_id].avg) /
+-			tze->trip_stats[trip_id].count;
+-	}
+-out:
+ 	mutex_unlock(&thermal_dbg->lock);
+ }
+ 
 
 
 
