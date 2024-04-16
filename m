@@ -1,130 +1,182 @@
-Return-Path: <linux-pm+bounces-6478-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6479-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A5438A6E69
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Apr 2024 16:35:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4A928A6FE8
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Apr 2024 17:38:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E82FBB24092
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Apr 2024 14:32:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D32421C20D78
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Apr 2024 15:38:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA32312BF3A;
-	Tue, 16 Apr 2024 14:32:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4BD1130E54;
+	Tue, 16 Apr 2024 15:38:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="CRyCJdk9"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="tJ7zAhJy"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6716B1CAA6;
-	Tue, 16 Apr 2024 14:32:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FD5842A89;
+	Tue, 16 Apr 2024 15:38:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713277936; cv=none; b=XbiRmG/hWkHFxRD7z/dyGcIsRtCfAkWKasDda9Kdwm1QG4xW/lG/fzAXT3sFmTc6OXr1Z40YJ9UQzr1y+zsD8E7oliAquQwXJMaAYrToRm6TuE8ZZ6dtVMtPFKrOt6IXkSP7o4e2i3M0Uo+rhdJwL5BSy6iFmWg7ZGsFFNITPXA=
+	t=1713281891; cv=none; b=RG4zmboFAAM4q/CLBtxmQnXN+cdTiXJ+rjg1rvtqjNAP9vctpXrGGeLUbQRWxjFnewKq/eYs6PG9bn8dtTaKqonS0z6aoriAu7yjVTlg+lBx/yi5NJqcUub6cBPmf8o5I9NmsFIUORALHhLvu66mvT7O6hgX1QdCSHr5b04TBhM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713277936; c=relaxed/simple;
-	bh=xwtOX3huVgNQWdzLmjX+ow6uv3bTrZuFvMHF8dtE9a4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mQOZMRfrqZyiI7U1v1kI/LI03UE/NngahIGrfgfwHle30Xe9c+dsA7AgRNpYanYrwgyqKWj+WPOoB27ZzZkd/Md+zEbiv9QPm8MVOYIVpJA0mK8oQvWVALFZgdlqrQbsY4icz37x0ZwvxIxVXU4RomWnizZD6Vq5KBb2MvXK7bM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=CRyCJdk9; arc=none smtp.client-ip=46.235.227.194
+	s=arc-20240116; t=1713281891; c=relaxed/simple;
+	bh=u6Z1DEbl0qxU+nlJwpAZ3PPcKHfeSP3iPuCT/kByKmA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eIuNQAilKUjSbfNMQVEKmjjbI0zvCokg+MSvAeQhJ1tzqoVlyFIFR7bFwjJADoAcN18xZqXEufLQkqdPCe1h7k8b7nQEbx9Xtl1ofPf1OxDf84IfIbyJGMdrvJhZjsLVABhgUyN839qDq+0Ot/FeSNI+cBZ0NqgCMrNaV5BUPQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=tJ7zAhJy; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1713277933;
-	bh=xwtOX3huVgNQWdzLmjX+ow6uv3bTrZuFvMHF8dtE9a4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CRyCJdk9BPM0d4kzXLOxXz4EylR0wqZhxNbJR89AC3uCDb+7PEoZ1pPCcQJx25jvv
-	 Y2xbXdD9hj6+yPwoulIB5puWXkEf21/Ba8OUxyvR1D4MoQ7Dy1ykkmLitxLXJ5IT0M
-	 4VOz6S+m74p/WqkxE45AX5HPwEYY32SePcmYjfHnm7Ce43lB6zI8pWwksZNl18SWQ3
-	 XwfqRnj/OzxJZpKmwEo3RtDoZRaoKV75oiN5BEAemk4n45cftF8PPO3QJxrWl5nlyf
-	 zCRAGkMR/9TUPCrcEJBCbeDQ7jXs24jTw9XtgqWHlssOyY4vQUSiaBqfaPPFrZQyg7
-	 wt8X90IFgqitw==
-Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
+	s=mail; t=1713281888;
+	bh=u6Z1DEbl0qxU+nlJwpAZ3PPcKHfeSP3iPuCT/kByKmA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=tJ7zAhJyNIpuLrKAEYB2NkV5PdhWvv0IYxmXLIM7OY+pSCgp66qX3t0DxHpeVnzwD
+	 MJfdxJMq3YqBWolopIyvdgUKfAGpeezzqxlGjayxPLgR69/UcnE+l7SA9GJzjuD7/1
+	 GbRVi8LXZNWNtYv/MkwkOSfqfDrdolVQFsLUXoI5seQNvQKkD4+Kxz9O8Bvuou8Gfd
+	 EH6C89O5SVZ3v00SXsTN+ZVKun9+3NQSCwzIAM3anSHBEObGgykSP3lH7j92AkjE5K
+	 OFQtcx8xFXivGTdYadZIaO+hPqw+bfOjK+8z/05tGv9+N2E/nM14JyikP2pXvpOGju
+	 zL6YZ8QixZRFA==
+Received: from IcarusMOD.eternityproject.eu (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: nfraprado)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id B6BCE37820F9;
-	Tue, 16 Apr 2024 14:32:12 +0000 (UTC)
-Date: Tue, 16 Apr 2024 10:32:10 -0400
-From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: Sebastian Reichel <sre@kernel.org>, kernel@collabora.com,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] power: supply: sbs-battery: Handle unsupported
- PROP_TIME_TO_EMPTY_NOW
-Message-ID: <9f805ec3-1611-4682-831e-9499ba8284d5@notapiano>
-References: <20240415-sbs-time-empty-now-error-v2-1-32d8a747e308@collabora.com>
- <9ba1b4df-78dc-4f24-bb61-d7b168da18f8@collabora.com>
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 45CA537804B2;
+	Tue, 16 Apr 2024 15:38:07 +0000 (UTC)
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+To: djakov@kernel.org
+Cc: robh@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org,
+	matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com,
+	lgirdwood@gmail.com,
+	broonie@kernel.org,
+	keescook@chromium.org,
+	gustavoars@kernel.org,
+	henryc.chen@mediatek.com,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	kernel@collabora.com,
+	wenst@chromium.org,
+	amergnat@baylibre.com
+Subject: [PATCH v1 0/6] MediaTek DVFSRC Bus Bandwidth and Regulator knobs
+Date: Tue, 16 Apr 2024 17:37:59 +0200
+Message-ID: <20240416153805.431118-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <9ba1b4df-78dc-4f24-bb61-d7b168da18f8@collabora.com>
 
-On Tue, Apr 16, 2024 at 09:46:56AM +0200, AngeloGioacchino Del Regno wrote:
-> Il 15/04/24 21:05, Nícolas F. R. A. Prado ha scritto:
-[..]
-> > +
-> > +static void sbs_update_quirks(struct sbs_info *chip)
-> > +{
-> > +	const char *model;
-> > +	const char *manufacturer;
-> > +	unsigned int i = 0;
-> 
-> Please reorder:
-> 
-> 	const char *manufacturer;
-> 	const char *model;
-> 	unsigned int i;
-> 
-> ...and please remove (like shown, of course) the double initialization of the
-> `i` variable, as you're initializing it again later in your for loop.
+This series adds support for the MediaTek Dynamic Voltage and Frequency
+Scaling Resource Controller (DVFSRC), found on many MediaTek SoCs.
 
-Ack.
+This hardware collects requests from both software and the various remote
+processors embededd into the SoC, and decides about a minimum operating
+voltage and a minimum DRAM frequency to fulfill those requests, in an
+effort to provide the best achievable performance per watt.
 
-> 
-> > +
-> > +	/* reset quirks from battery before the hot-plug event */
-> > +	chip->quirks = 0;
-> > +
-> > +	manufacturer = sbs_get_constant_string(chip, POWER_SUPPLY_PROP_MANUFACTURER);
-> > +	model = sbs_get_constant_string(chip, POWER_SUPPLY_PROP_MODEL_NAME);
-> > +	if (IS_ERR(manufacturer) || IS_ERR(model)) {
-> > +		dev_warn(&chip->client->dev, "Couldn't read manufacturer and model to set quirks\n");
-> > +		return;
-> > +	}
-> > +
-> > +	for (i = 0; i < ARRAY_SIZE(sbs_quirks); i++) {
-> > +		if (strcmp(manufacturer, sbs_quirks[i].manufacturer))
-> > +			continue;
-> > +		if (strcmp(model, sbs_quirks[i].model))
-> > +			continue;
-> > +		chip->quirks |= sbs_quirks[i].flags;
-> > +	}
-> > +
-> > +	if (chip->quirks & SBS_QUIRK_BROKEN_TTE_NOW)
-> > +		dev_info(&chip->client->dev, "Added quirk disabling TIME_TO_EMPTY_NOW\n");
-> 
-> I don't really expect many quirks, but having a dev_info() print for every
-> quirk that gets set would make this driver too chatty, IMO.
-> 
-> Please, either turn that into a dev_dbg() or print a mask of the quirks .. or both.
+Such hardware IP is capable of transparently performing direct register
+R/W on all of the DVFSRC-controlled regulators and SoC bandwidth knobs.
 
-I wouldn't make this debug as it's pretty important information to be
-reported. I'd be ok with having a single message listing all the quirks, but at
-the same time I feel like this would be trying to fix a problem that we don't
-know will ever exist (one SBS battery that has many quirks). I propose we keep
-it the way it is - a nice clear message of what has happened - and adapt in the
-future if it turns out to be too much information.
+Summarizing how the DVFSRC works for Interconnect:
 
-Thanks,
-Nícolas
+             ICC provider         ICC Nodes
+                              ----          ----
+             _________       |CPU |   |--- |VPU |
+    _____   |         |-----  ----    |     ----
+   |     |->|  DRAM   |       ----    |     ----
+   |DRAM |->|scheduler|----- |GPU |   |--- |DISP|
+   |     |->|  (EMI)  |       ----    |     ----
+   |_____|->|_________|---.   -----   |     ----
+               /|\         `-|MMSYS|--|--- |VDEC|
+                |             -----   |     ----
+                |                     |     ----
+                | change DRAM freq    |--- |VENC|
+             --------                 |     ----
+    SMC --> | DVFSRC |                |     ----
+             --------                 |--- |IMG |
+                                      |     ----
+                                      |     ----
+                                      |--- |CAM |
+                                            ----
+
+...and for regulators, it's simply...
+   SMC -> DVFSRC -> Regulator voltage decider -> (vreg) Registers R/W
+
+Please note that this series is based on an old (abandoned) series from
+MediaTek [1], and reuses some parts of the code found in that.
+
+Besides, included in this series, there's also a refactoring of the
+mtk-dvfsrc-regulator driver, which never got compiled at all, and would
+not build anyway because of missing headers and typos: that commit did
+not get any Fixes tag because, well, backporting makes no sense at all
+as the DVFSRC support - which is critical for that driver to work - is
+introduced with *this series*! :-)
+
+P.S.: The DVFSRC regulator is a requirement for the MediaTek UFSHCI
+      controller's crypto boost feature, which is already upstream but
+      lacking the actual regulator to work....... :-)
+
+[1]: https://lore.kernel.org/all/20210812085846.2628-1-dawei.chien@mediatek.com/
+
+Cheers!
+
+AngeloGioacchino Del Regno (6):
+  dt-bindings: soc: mediatek: Add DVFSRC bindings for MT8183 and MT8195
+  dt-bindings: interconnect: Add MediaTek EMI Interconnect bindings
+  dt-bindings: regulator: Add bindings for MediaTek DVFSRC Regulators
+  soc: mediatek: Add MediaTek DVFS Resource Collector (DVFSRC) driver
+  regulator: mtk-dvfsrc-regulator: Refactor and add MT8192/MT8195 vregs
+  interconnect: mediatek: Add MediaTek MT8183/8195 EMI Interconnect
+    driver
+
+ .../interconnect/mediatek,mt8183-emi.yaml     |  76 +++
+ .../mediatek,mt6873-dvfsrc-regulator.yaml     |  71 +++
+ .../soc/mediatek/mediatek,mt8183-dvfsrc.yaml  |  57 ++
+ drivers/interconnect/Kconfig                  |   1 +
+ drivers/interconnect/Makefile                 |   1 +
+ drivers/interconnect/mediatek/Kconfig         |  32 +
+ drivers/interconnect/mediatek/Makefile        |   5 +
+ drivers/interconnect/mediatek/icc-emi.c       | 153 +++++
+ drivers/interconnect/mediatek/icc-emi.h       |  40 ++
+ drivers/interconnect/mediatek/mt8183.c        | 143 +++++
+ drivers/interconnect/mediatek/mt8195.c        | 339 +++++++++++
+ drivers/regulator/mtk-dvfsrc-regulator.c      | 242 ++++----
+ drivers/soc/mediatek/Kconfig                  |  11 +
+ drivers/soc/mediatek/Makefile                 |   1 +
+ drivers/soc/mediatek/mtk-dvfsrc.c             | 551 ++++++++++++++++++
+ .../interconnect/mediatek,mt8183.h            |  23 +
+ .../interconnect/mediatek,mt8195.h            |  44 ++
+ include/linux/soc/mediatek/dvfsrc.h           |  36 ++
+ include/linux/soc/mediatek/mtk_sip_svc.h      |   3 +
+ 19 files changed, 1699 insertions(+), 130 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/mediatek,mt8183-emi.yaml
+ create mode 100644 Documentation/devicetree/bindings/regulator/mediatek,mt6873-dvfsrc-regulator.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mediatek,mt8183-dvfsrc.yaml
+ create mode 100644 drivers/interconnect/mediatek/Kconfig
+ create mode 100644 drivers/interconnect/mediatek/Makefile
+ create mode 100644 drivers/interconnect/mediatek/icc-emi.c
+ create mode 100644 drivers/interconnect/mediatek/icc-emi.h
+ create mode 100644 drivers/interconnect/mediatek/mt8183.c
+ create mode 100644 drivers/interconnect/mediatek/mt8195.c
+ create mode 100644 drivers/soc/mediatek/mtk-dvfsrc.c
+ create mode 100644 include/dt-bindings/interconnect/mediatek,mt8183.h
+ create mode 100644 include/dt-bindings/interconnect/mediatek,mt8195.h
+ create mode 100644 include/linux/soc/mediatek/dvfsrc.h
+
+-- 
+2.44.0
+
 
