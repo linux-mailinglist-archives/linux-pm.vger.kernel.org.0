@@ -1,125 +1,114 @@
-Return-Path: <linux-pm+bounces-6493-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6494-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B83E88A7269
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Apr 2024 19:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D65178A7271
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Apr 2024 19:34:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DAE8E1C213F2
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Apr 2024 17:32:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 148E41C21335
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Apr 2024 17:34:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D1D11332A7;
-	Tue, 16 Apr 2024 17:32:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DDA6133400;
+	Tue, 16 Apr 2024 17:34:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G4C1FZxI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NjTyf0JL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D12C8F4E7;
-	Tue, 16 Apr 2024 17:32:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 997F412FF72;
+	Tue, 16 Apr 2024 17:34:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713288758; cv=none; b=PwU0E6fGOxeRh3kD8YVEuqa//uJ6jmWYZvz6W2vog/jQUjcb0gC/2CMNNFlyeqlcvlXMdrVaxaYzv05QLPkUYcV5HqzjFec+MNZMhDy0E/fWkh5Vg1e1TU0mBS/urXRtgtkRAApqqqh9PXxGjeoyN61I5HZhKZzJoY3xkOQeNT4=
+	t=1713288870; cv=none; b=nFrnjg1PPD9CnzUdEPC1q+jIwY3hVrtnVVmUUfWfSbhf5m4FcZ5uPWo0ajjcdibsGpguCwLjdfvBhWSmTwoNuczRMimu+/pRQTgFJprVq5zgLLT9NgC7G6qeY4vhidlcgaQdpz+0xOK0WpltKNnel2Ql+IznuuUAt5ijB7irEW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713288758; c=relaxed/simple;
-	bh=7VKV1EUsD87ldi+cT0aXudqS/r014jvpTOraAVsjgJI=;
+	s=arc-20240116; t=1713288870; c=relaxed/simple;
+	bh=xu+k3B6e0S5uV2AeyPNUBYkGSJodPLz6zhec+aOyGCc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=M+/UVpZcjBYRqKcy/Nd6ToRg0m3NOUC34DUWaP3t7AcfKbcq8Z6owp3G9/5kbmnIUCLE5fATIopRnmNh/YkFs4KDcXoDYUIdjCVXXjmyn3WDtxGFcI14HdgVUy5Y0PXE3+DFjGCLCfCOc1yzvZlMmgWfUE3sF7qekgWOJ6fFyQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G4C1FZxI; arc=none smtp.client-ip=209.85.221.54
+	 To:Cc:Content-Type; b=a06AHTDgLRBSKGmBMIEzhrzWyAVjFXhK7dqiCB/nmwHQrwCsjN7qx3X9scZOmoMqFvUePelrlOo0DWJwKk5AvwXs6Vl4fAtzOM0ykDAAOyFDK8hDAJxyT0He8stsccz4kIlxYXGAztv0+v8uyKibw+OVOPz1xMqWvFYnm8K4fkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NjTyf0JL; arc=none smtp.client-ip=209.85.218.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-343cfa6faf0so3984818f8f.0;
-        Tue, 16 Apr 2024 10:32:36 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a51a1c8d931so604171266b.0;
+        Tue, 16 Apr 2024 10:34:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713288755; x=1713893555; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1713288867; x=1713893667; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0IO+hOuqEkrsrUsRHeAcDDvHavwu6kyd/enzsNdg3aQ=;
-        b=G4C1FZxIulua8SaYrMChOcR2wM+amxqPUDes+dg1H56JlKo1qSw8yvU9nuTQ2DCQeS
-         ni0AbsCkXFxy0zZXeaqI6Wr9/5YeXYewj04yEtBGPx6a0Zb9ORrUwz9quwbu+OqYl7IP
-         OrqmAEgYjHrV8KovgFXVKDraIQOA+yDb97p6twFhcZza78Iq6qS4NJ2Qhxc7sYlAeidF
-         5XykUx5cl26OBdbAYDOtmDxIrpNUsfgkwue7ON6kvrd/MBSuuKH7osvvIoDT7gA2FIH+
-         RzTxTMQ/waRke455Xbq2ALQwCprqUc2PYI0Bpoxy/tJkii8+nwknOGqt+kea4tZW5pS+
-         jZVg==
+        bh=XBGtZhXrsDv9/IU80RlwXoRNjhCMbNIbfxUge/aRn1Q=;
+        b=NjTyf0JLqTV953rWO+NTClV5fq1t5KbksMf9skJGxo7oSRc+MARP+bPUs/CufTXTOC
+         dyZFS1aIeqUXQ3XyODeWNtsRjyTC7clYyQ/07nV/A4JACvzpsul4AiTCe7Kb6ACvXc7n
+         VMG9jrqIT0jYXD9CaF1wJkcTWBc1rJjOTQUZaUesLWqbo1BX2vQq9lIZG/SAwmtgPklV
+         knYFm5DFbysz1c5Vrvi8EgpfAqRR5WsFy45LLAgxk3z5PjRF4uliH7ATJrxT0Zjj6XWe
+         hNT5CHliYC74ietoEeAHQeoyFp+Qw5aDdus2CjQGp0/e/Gp9QVSSGc0RItu8P9iQN2eQ
+         l22A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713288755; x=1713893555;
+        d=1e100.net; s=20230601; t=1713288867; x=1713893667;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0IO+hOuqEkrsrUsRHeAcDDvHavwu6kyd/enzsNdg3aQ=;
-        b=Wm1SlByESCfr10/QdhjqQpr9btdde4WDB4GDLlsCvZc6KpzebPiJMXHhl20NDKU6wu
-         epHs87vQlfyj+VDDJczaBVOE/Gq+3ajy+vb9XHbe8v/V5YwBPwxwHegr+rORAvlOyLJU
-         rjsPXRKTVfWwxk6D/hU2VOW20pnF1xF8djR+cN8zjkBqXV3uHfL1NIRKALUputVs93c8
-         pmh/mhLF9ueHgtXrR2647JbAgdfZlzqejZ2kubC3aaLi+DEjztvbagZIzSG7PAwt3Irn
-         vH+Yk4Wbav/KHYNunujCSBJboqe3hk24mLF8CqUUT+iicPr/v1rpA7t/55jLcG4g4S20
-         Pplw==
-X-Forwarded-Encrypted: i=1; AJvYcCXsMFXKWyYrkj7th37bi0+Wy1muaix5anZgsGuOio9yBEVb+ItmRI3jjoFCEpfDzG+mgnqbDFkh1I4v1Fsi86r2oBalYWtvdqYVJzbqMMBz6JwGH55cyjrRZDEKH9jHhbRmhSen1AEtuk3tovD1NTtnpKjE+o//99E8O6gkdSKojSwg4eXsziMHZLaMz1270Wu0o8WZO13b1cSjiYHLXmQXOz/+/rvGKQ==
-X-Gm-Message-State: AOJu0YyDJc1anWzLs/KBOfqbH2Y3kaiQc2nedE9QtJ+9vWR3r9lC4Mqr
-	6b/HGWFjuCkgETM+gkVtOVnKiCko92zdz2P71jBlC74JfGyniM8TKbYoG6Kwxuu29/c1X5JxdTV
-	64AiXRZxIYuWyTHjfy4noiFCOxE8=
-X-Google-Smtp-Source: AGHT+IHhkCf/2ZnzY6pNeLJbq60C0fBWHz8dbjiDAKTwhyZmVWd1gblADeMUbMwbc7myH0QHmC/VGj3aVOrkIOZb5sY=
-X-Received: by 2002:a05:6000:d47:b0:343:734e:73d1 with SMTP id
- du7-20020a0560000d4700b00343734e73d1mr10848248wrb.37.1713288754926; Tue, 16
- Apr 2024 10:32:34 -0700 (PDT)
+        bh=XBGtZhXrsDv9/IU80RlwXoRNjhCMbNIbfxUge/aRn1Q=;
+        b=SJX/OtRka5lmul2WAWd9+5cHjOD3f6rzSfyRfF1UNx1lbpeCLHrKkzO5ATZZm4hJH1
+         x8/but4VJihol/6dAMYaDmpsLOX0GKD5ewWikc/2jQxRigndjQPp4IkzNtFdWFL0B8TK
+         JyxUtkBFbyNT9aQUfTVgYd09Vp/5xXXmDtsX+dPyuO5RIQdeZk/yeB0PuRzbl+yBOtUQ
+         vHi5NtD0h525zW8vPwhv0+CDuWATwdGNm5NO5Wj1D8iYaQ2aODUDam23nW2dp7M/a/Ny
+         aTM8NFasLHLi7MIrqNPhHyUQENKdhx4xDGq7R0mR4eZzZudxkyoDhghC2vQRob7I8nVS
+         xHYA==
+X-Forwarded-Encrypted: i=1; AJvYcCXCdFdih/TsQVoKZ1T0ruiC5pjger2UZg3sJ92Lg8tfu5zynJzPTK2Qvs10wHJ+ACChFNay2tfjWlPj3btZyNjXlVSbJ5dRvSL627EZlrlwN3+xZwhSAv9ih5wfM81UvtnYXW8LIEwQG0OT3nctnqngBYYQCw3vtYUQzFwo40UQ/VkivhQhzTpau1Q+ZQ5IomP8fUB5IFBrGoWvGoZzmVBDuudavv+oqQ==
+X-Gm-Message-State: AOJu0Yz/Sr1LTT50BhFlMDVy/rVgBrEHZP6v8AESTTFVryersdw7hpzc
+	VLxDK2OK9z6d3vKpTy4oaFY1nDjskwxzJ+AkufdGFHbXXA4/IiCF6Mx8Zqv8thRf8LRIIKIvPc5
+	31k3fZ4cgXL03fzT6PL79zAjhAh8=
+X-Google-Smtp-Source: AGHT+IESOFgHtJldCSkg3hlXty7KCffRAd8b1WXWXaSWCE1frVgK14VVZblAjVAWRBOrri139ePgBSSDR7J4vov0Bco=
+X-Received: by 2002:a17:907:31c9:b0:a52:4fc1:ea90 with SMTP id
+ xf9-20020a17090731c900b00a524fc1ea90mr7379092ejb.62.1713288866697; Tue, 16
+ Apr 2024 10:34:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240416053909.256319-1-hpa@redhat.com> <20240416053909.256319-4-hpa@redhat.com>
-In-Reply-To: <20240416053909.256319-4-hpa@redhat.com>
+References: <20240416053909.256319-5-hpa@redhat.com> <202404170023.1zEGO9ja-lkp@intel.com>
+In-Reply-To: <202404170023.1zEGO9ja-lkp@intel.com>
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Tue, 16 Apr 2024 20:31:59 +0300
-Message-ID: <CAHp75VdRgBqaX4NNvABS-90O34OtRf5t85JOjpG=tOw2SHr_tw@mail.gmail.com>
-Subject: Re: [PATCH v6 3/5] leds: rgb: leds-ktd202x: I2C ID tables for KTD2026
- and 2027
-To: Kate Hsuan <hpa@redhat.com>
-Cc: Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org, 
-	platform-driver-x86@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>, 
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+Date: Tue, 16 Apr 2024 20:33:50 +0300
+Message-ID: <CAHp75VeKCGSZTb5bGU4YNr9r-z+gXmk4GC5HOZCFcoRQRN37CA@mail.gmail.com>
+Subject: Re: [PATCH v6 4/5] power: supply: power-supply-leds: Add
+ charging_orange_full_green trigger for RGB LED
+To: kernel test robot <lkp@intel.com>
+Cc: Kate Hsuan <hpa@redhat.com>, Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>, 
+	linux-leds@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
+	Hans de Goede <hdegoede@redhat.com>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
 	=?UTF-8?Q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>, 
-	linux-kernel@vger.kernel.org, Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
+	linux-kernel@vger.kernel.org, Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org, 
+	oe-kbuild-all@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 16, 2024 at 8:40=E2=80=AFAM Kate Hsuan <hpa@redhat.com> wrote:
+On Tue, Apr 16, 2024 at 8:03=E2=80=AFPM kernel test robot <lkp@intel.com> w=
+rote:
 >
-> This table shows the maximum support LED channel for KTD2026 and KTD-2027=
-.
-> The 3-channel LED controller KTD2026 controls R/G/B three LEDs. The
-> 4-channel LED controller KTD2027 controls R/G/B and a flashing LEDs.
-
-and flashing
-
-...
-
-> Link: https://www.kinet-ic.com/uploads/KTD2026-7-04h.pdf
-
-Make it Datasheet: tag
-
+> Hi Kate,
 >
+> kernel test robot noticed the following build errors:
 
-and drop this blank line (to ensure the Datasheet will be recognised as a t=
-ag).
+> All errors (new ones prefixed by >>):
+>
+>    drivers/power/supply/power_supply_leds.c: In function 'power_supply_up=
+date_bat_leds':
+> >> drivers/power/supply/power_supply_leds.c:42:17: error: implicit declar=
+ation of function 'led_mc_trigger_event'; did you mean 'led_trigger_event'?=
+ [-Werror=3Dimplicit-function-declaration]
+>       42 |                 led_mc_trigger_event(psy->charging_orange_full=
+_green_trig,
+>          |                 ^~~~~~~~~~~~~~~~~~~~
+>          |                 led_trigger_event
+>    cc1: some warnings being treated as errors
 
-> Signed-off-by: Kate Hsuan <hpa@redhat.com>
-
-...
-
-> -       .shutdown =3D ktd202x_shutdown
-> +       .shutdown =3D ktd202x_shutdown,
-> +       .id_table =3D ktd202x_id
-
-Exactly good example to show what the difference is between
-"terminator entry" and "last field in the initialiser" and why in the
-latter it's better to keep a trailing comma. And hence why the stray
-change in the previous patch. So, id_table also should keep a trailing
-comma.
+Probably you need a new dependency or so.
 
 --=20
 With Best Regards,
