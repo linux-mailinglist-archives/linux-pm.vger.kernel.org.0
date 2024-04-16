@@ -1,289 +1,184 @@
-Return-Path: <linux-pm+bounces-6505-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6506-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44D368A76BA
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Apr 2024 23:36:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8482A8A7892
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 01:28:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C5D891F21BFA
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Apr 2024 21:36:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A591D1C211C7
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Apr 2024 23:28:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7FBF13C668;
-	Tue, 16 Apr 2024 21:23:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C56913A885;
+	Tue, 16 Apr 2024 23:28:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JKivNLKw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h78knIKr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ADD013C3F2;
-	Tue, 16 Apr 2024 21:23:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6C0213A41B;
+	Tue, 16 Apr 2024 23:28:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713302596; cv=none; b=l+KI2O17oEcN+f+IKiVbqD1O35PnK/QP/vPs1ZcURYz4vl87yoYE8w93UeNxXtPeClDyhOO97quSSROt1qn74ImssWWp4kFTtvBm4zaB3nPI4/h3IlFBOQK0z3VQq5J+1OdNU1k0NhEDYUdGwwuV/mafVMvj4w574L+S2lzKTXg=
+	t=1713310106; cv=none; b=XqZtDkKLNLHRWUXtrIudd09NFkLGg7xi0QWoP+P8aaPQdbsRcagU2ATPyYDCQ9ZHgOnq/1xPpZ/rEdtup7MsRW/d9bRPqde7hcZI+dpRlAVYNeeZaW25+ETnQoyE2ZviD7PG51niINiuOsk0nGGYIimctcKaQU/Zw13xLGx4Cb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713302596; c=relaxed/simple;
-	bh=cHSrv9YsmZgvpXYa/KLOkVdNEYLeKrVQodlWj7bJymI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZzpWwH9BsI96Pt9ZQfJhXkxZZOdUCY9GvHZGJ7KLQImZBbpiwsU/g8k/U01pRRRLnC8qsyTuRUO1Lze9cHe7xPFyLUZqnj07SbplxF3V9YKW2Dnp4Pqub3wYJOb2EAUjfhyBLn1ztHcGObroJolG2+lyfwRO4jR/JMnUifaqedw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JKivNLKw; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1713310106; c=relaxed/simple;
+	bh=RWjT95QphPZ5AOknCIiCxI3mE5E53bV0YbYg4KQf3RQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UHQG9iUfOIO1HsFzwHprtlITSKfZQ2YfFrfVNxx3cR46DN/gdu4O+bJLoQFZwdE1MF8kV0p4Px73pIMnzCw21v3iC+4stMosuN+dVPuH5/fQljUeVpt86Wc9i22XLmiRTHk7x3qyEogOnxQbA+bN/kPPu/sBZUpO3Q72fZN5a7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h78knIKr; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713302596; x=1744838596;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=cHSrv9YsmZgvpXYa/KLOkVdNEYLeKrVQodlWj7bJymI=;
-  b=JKivNLKwGPEOsGeFpVqSBjiuD9DunqBTbLOe4gvkp7HCnrl6skNaVS9i
-   utsNu8Z2PsJq+2gB+mRoyfQ3mlWqB3EiiZrp716vcDNoVHDUiKr6MRIPL
-   JoatOurMBHGTPcZCxFoCn9UuyxEWw8d86aEr5iKTCzNrH7je44ypjAyNK
-   ZPPJ7biQ2ZosSn7ouSkl3Ju7NJu2w0TrPQy9s7DtzpZXp2QB9FU3gAJgu
-   LGUuyLec1mi1mXCD7/1D7KcrurNpYT+4tmraDyjgLVt14yQ5qu1LLvIHx
-   raxnxxT3j5khbUL1hhrcb87kMjTBap9ZqAjKZ9df9jzX1h4xT1ohjYppc
-   g==;
-X-CSE-ConnectionGUID: g/7mFhE9SgO4w1g8BtmtnQ==
-X-CSE-MsgGUID: tvjlQ8l3SyixAj9NHfpYoQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="31254775"
+  t=1713310104; x=1744846104;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RWjT95QphPZ5AOknCIiCxI3mE5E53bV0YbYg4KQf3RQ=;
+  b=h78knIKr/ZjKUgK6sV9HLmgvLDdw+UcVTUzM/MdQqpwJF/sdmKcYApPp
+   d7iLFTG4vxWgwZZ3cKN6l7pXM2GSrMSmN4pEhdd0AUtQ8xdAHRXVZIsFC
+   VOoWRnWxOe3Nxmzf/jA6jT8kt0Qbo7IjhqCY4BFMMlcrHFruNd+8R/EpF
+   8QiCp6Dhp0OnQPzyc5awLqPl4QLMriVGgIVjxym3gVPNpsjEpExG+0x/v
+   zeQk3GtglTEPBNMZZmtBPvrIndnZ5aFBKtZ1UDCDRn1iu005gLac+BZks
+   kSdjfBTjhysosD1R9NXPA9Ws3f4DRiOe9UJvzCGHjnTDDbtORzxHWtmdj
+   w==;
+X-CSE-ConnectionGUID: ohl2ZBz3RAac/o8kfZFKOA==
+X-CSE-MsgGUID: 1OSof5m0TX+rOrzrN0NfoQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="26294546"
 X-IronPort-AV: E=Sophos;i="6.07,207,1708416000"; 
-   d="scan'208";a="31254775"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 14:23:13 -0700
-X-CSE-ConnectionGUID: yKOceLxWQwqJOSrZHkpOgw==
-X-CSE-MsgGUID: u+iVn0lWRVm97TVJeGDncA==
+   d="scan'208";a="26294546"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 16:28:20 -0700
+X-CSE-ConnectionGUID: H/mRELqoQU6ABXfhBxqDvQ==
+X-CSE-MsgGUID: EjFeB3IYQ/2rC9oO8AUjYA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,207,1708416000"; 
-   d="scan'208";a="45678009"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.105])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 14:23:07 -0700
-From: Tony Luck <tony.luck@intel.com>
-To: linux-kernel@vger.kernel.org
-Cc: Len Brown <lenb@kernel.org>,
-	linux-pm@vger.kernel.org,
-	patches@lists.linux.dev,
-	Tony Luck <tony.luck@intel.com>
-Subject: [PATCH v3 72/74] x86/cpu/vfm: Update tools/power/x86/turbostat/turbostat.c
-Date: Tue, 16 Apr 2024 14:23:04 -0700
-Message-ID: <20240416212304.10028-1-tony.luck@intel.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240416211941.9369-1-tony.luck@intel.com>
-References: <20240416211941.9369-1-tony.luck@intel.com>
+   d="scan'208";a="22478448"
+Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 16 Apr 2024 16:28:16 -0700
+Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rwsDm-0005qD-2G;
+	Tue, 16 Apr 2024 23:28:14 +0000
+Date: Wed, 17 Apr 2024 07:27:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kate Hsuan <hpa@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+	Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	=?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>,
+	linux-kernel@vger.kernel.org,
+	Andy Shevchenko <andy.shevchenko@gmail.com>,
+	Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kate Hsuan <hpa@redhat.com>
+Subject: Re: [PATCH v6 4/5] power: supply: power-supply-leds: Add
+ charging_orange_full_green trigger for RGB LED
+Message-ID: <202404170705.Or8MFKNi-lkp@intel.com>
+References: <20240416053909.256319-5-hpa@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240416053909.256319-5-hpa@redhat.com>
 
-New CPU #defines encode vendor and family as well as model.
+Hi Kate,
 
-Signed-off-by: Tony Luck <tony.luck@intel.com>
----
- tools/power/x86/turbostat/turbostat.c | 161 +++++++++++++++-----------
- 1 file changed, 93 insertions(+), 68 deletions(-)
+kernel test robot noticed the following build errors:
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 98256468e248..80dc3bdaa5fc 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -9,6 +9,30 @@
- 
- #define _GNU_SOURCE
- #include MSRHEADER
-+
-+// copied from arch/x86/include/asm/cpu_device_id.h
-+#define VFM_MODEL_BIT	0
-+#define VFM_FAMILY_BIT	8
-+#define VFM_VENDOR_BIT	16
-+#define VFM_RSVD_BIT	24
-+
-+#define	VFM_MODEL_MASK	GENMASK(VFM_FAMILY_BIT - 1, VFM_MODEL_BIT)
-+#define	VFM_FAMILY_MASK	GENMASK(VFM_VENDOR_BIT - 1, VFM_FAMILY_BIT)
-+#define	VFM_VENDOR_MASK	GENMASK(VFM_RSVD_BIT - 1, VFM_VENDOR_BIT)
-+
-+#define VFM_MODEL(vfm)	(((vfm) & VFM_MODEL_MASK) >> VFM_MODEL_BIT)
-+#define VFM_FAMILY(vfm)	(((vfm) & VFM_FAMILY_MASK) >> VFM_FAMILY_BIT)
-+#define VFM_VENDOR(vfm)	(((vfm) & VFM_VENDOR_MASK) >> VFM_VENDOR_BIT)
-+
-+#define	VFM_MAKE(_vendor, _family, _model) (	\
-+	((_model) << VFM_MODEL_BIT) |		\
-+	((_family) << VFM_FAMILY_BIT) |		\
-+	((_vendor) << VFM_VENDOR_BIT)		\
-+)
-+// end copied section
-+
-+#define X86_VENDOR_INTEL	0
-+
- #include INTEL_FAMILY_HEADER
- #include <stdarg.h>
- #include <stdio.h>
-@@ -334,7 +358,7 @@ struct platform_features {
- };
- 
- struct platform_data {
--	unsigned int model;
-+	unsigned int vfm;
- 	const struct platform_features *features;
- };
- 
-@@ -860,73 +884,73 @@ static const struct platform_features amd_features_with_rapl = {
- };
- 
- static const struct platform_data turbostat_pdata[] = {
--	{ INTEL_FAM6_NEHALEM, &nhm_features },
--	{ INTEL_FAM6_NEHALEM_G, &nhm_features },
--	{ INTEL_FAM6_NEHALEM_EP, &nhm_features },
--	{ INTEL_FAM6_NEHALEM_EX, &nhx_features },
--	{ INTEL_FAM6_WESTMERE, &nhm_features },
--	{ INTEL_FAM6_WESTMERE_EP, &nhm_features },
--	{ INTEL_FAM6_WESTMERE_EX, &nhx_features },
--	{ INTEL_FAM6_SANDYBRIDGE, &snb_features },
--	{ INTEL_FAM6_SANDYBRIDGE_X, &snx_features },
--	{ INTEL_FAM6_IVYBRIDGE, &ivb_features },
--	{ INTEL_FAM6_IVYBRIDGE_X, &ivx_features },
--	{ INTEL_FAM6_HASWELL, &hsw_features },
--	{ INTEL_FAM6_HASWELL_X, &hsx_features },
--	{ INTEL_FAM6_HASWELL_L, &hswl_features },
--	{ INTEL_FAM6_HASWELL_G, &hswg_features },
--	{ INTEL_FAM6_BROADWELL, &bdw_features },
--	{ INTEL_FAM6_BROADWELL_G, &bdwg_features },
--	{ INTEL_FAM6_BROADWELL_X, &bdx_features },
--	{ INTEL_FAM6_BROADWELL_D, &bdx_features },
--	{ INTEL_FAM6_SKYLAKE_L, &skl_features },
--	{ INTEL_FAM6_SKYLAKE, &skl_features },
--	{ INTEL_FAM6_SKYLAKE_X, &skx_features },
--	{ INTEL_FAM6_KABYLAKE_L, &skl_features },
--	{ INTEL_FAM6_KABYLAKE, &skl_features },
--	{ INTEL_FAM6_COMETLAKE, &skl_features },
--	{ INTEL_FAM6_COMETLAKE_L, &skl_features },
--	{ INTEL_FAM6_CANNONLAKE_L, &cnl_features },
--	{ INTEL_FAM6_ICELAKE_X, &icx_features },
--	{ INTEL_FAM6_ICELAKE_D, &icx_features },
--	{ INTEL_FAM6_ICELAKE_L, &cnl_features },
--	{ INTEL_FAM6_ICELAKE_NNPI, &cnl_features },
--	{ INTEL_FAM6_ROCKETLAKE, &cnl_features },
--	{ INTEL_FAM6_TIGERLAKE_L, &cnl_features },
--	{ INTEL_FAM6_TIGERLAKE, &cnl_features },
--	{ INTEL_FAM6_SAPPHIRERAPIDS_X, &spr_features },
--	{ INTEL_FAM6_EMERALDRAPIDS_X, &spr_features },
--	{ INTEL_FAM6_GRANITERAPIDS_X, &spr_features },
--	{ INTEL_FAM6_LAKEFIELD, &cnl_features },
--	{ INTEL_FAM6_ALDERLAKE, &adl_features },
--	{ INTEL_FAM6_ALDERLAKE_L, &adl_features },
--	{ INTEL_FAM6_RAPTORLAKE, &adl_features },
--	{ INTEL_FAM6_RAPTORLAKE_P, &adl_features },
--	{ INTEL_FAM6_RAPTORLAKE_S, &adl_features },
--	{ INTEL_FAM6_METEORLAKE, &cnl_features },
--	{ INTEL_FAM6_METEORLAKE_L, &cnl_features },
--	{ INTEL_FAM6_ARROWLAKE, &cnl_features },
--	{ INTEL_FAM6_LUNARLAKE_M, &cnl_features },
--	{ INTEL_FAM6_ATOM_SILVERMONT, &slv_features },
--	{ INTEL_FAM6_ATOM_SILVERMONT_D, &slvd_features },
--	{ INTEL_FAM6_ATOM_AIRMONT, &amt_features },
--	{ INTEL_FAM6_ATOM_GOLDMONT, &gmt_features },
--	{ INTEL_FAM6_ATOM_GOLDMONT_D, &gmtd_features },
--	{ INTEL_FAM6_ATOM_GOLDMONT_PLUS, &gmtp_features },
--	{ INTEL_FAM6_ATOM_TREMONT_D, &tmtd_features },
--	{ INTEL_FAM6_ATOM_TREMONT, &tmt_features },
--	{ INTEL_FAM6_ATOM_TREMONT_L, &tmt_features },
--	{ INTEL_FAM6_ATOM_GRACEMONT, &adl_features },
--	{ INTEL_FAM6_ATOM_CRESTMONT_X, &srf_features },
--	{ INTEL_FAM6_ATOM_CRESTMONT, &grr_features },
--	{ INTEL_FAM6_XEON_PHI_KNL, &knl_features },
--	{ INTEL_FAM6_XEON_PHI_KNM, &knl_features },
-+	{ INTEL_NEHALEM, &nhm_features },
-+	{ INTEL_NEHALEM_G, &nhm_features },
-+	{ INTEL_NEHALEM_EP, &nhm_features },
-+	{ INTEL_NEHALEM_EX, &nhx_features },
-+	{ INTEL_WESTMERE, &nhm_features },
-+	{ INTEL_WESTMERE_EP, &nhm_features },
-+	{ INTEL_WESTMERE_EX, &nhx_features },
-+	{ INTEL_SANDYBRIDGE, &snb_features },
-+	{ INTEL_SANDYBRIDGE_X, &snx_features },
-+	{ INTEL_IVYBRIDGE, &ivb_features },
-+	{ INTEL_IVYBRIDGE_X, &ivx_features },
-+	{ INTEL_HASWELL, &hsw_features },
-+	{ INTEL_HASWELL_X, &hsx_features },
-+	{ INTEL_HASWELL_L, &hswl_features },
-+	{ INTEL_HASWELL_G, &hswg_features },
-+	{ INTEL_BROADWELL, &bdw_features },
-+	{ INTEL_BROADWELL_G, &bdwg_features },
-+	{ INTEL_BROADWELL_X, &bdx_features },
-+	{ INTEL_BROADWELL_D, &bdx_features },
-+	{ INTEL_SKYLAKE_L, &skl_features },
-+	{ INTEL_SKYLAKE, &skl_features },
-+	{ INTEL_SKYLAKE_X, &skx_features },
-+	{ INTEL_KABYLAKE_L, &skl_features },
-+	{ INTEL_KABYLAKE, &skl_features },
-+	{ INTEL_COMETLAKE, &skl_features },
-+	{ INTEL_COMETLAKE_L, &skl_features },
-+	{ INTEL_CANNONLAKE_L, &cnl_features },
-+	{ INTEL_ICELAKE_X, &icx_features },
-+	{ INTEL_ICELAKE_D, &icx_features },
-+	{ INTEL_ICELAKE_L, &cnl_features },
-+	{ INTEL_ICELAKE_NNPI, &cnl_features },
-+	{ INTEL_ROCKETLAKE, &cnl_features },
-+	{ INTEL_TIGERLAKE_L, &cnl_features },
-+	{ INTEL_TIGERLAKE, &cnl_features },
-+	{ INTEL_SAPPHIRERAPIDS_X, &spr_features },
-+	{ INTEL_EMERALDRAPIDS_X, &spr_features },
-+	{ INTEL_GRANITERAPIDS_X, &spr_features },
-+	{ INTEL_LAKEFIELD, &cnl_features },
-+	{ INTEL_ALDERLAKE, &adl_features },
-+	{ INTEL_ALDERLAKE_L, &adl_features },
-+	{ INTEL_RAPTORLAKE, &adl_features },
-+	{ INTEL_RAPTORLAKE_P, &adl_features },
-+	{ INTEL_RAPTORLAKE_S, &adl_features },
-+	{ INTEL_METEORLAKE, &cnl_features },
-+	{ INTEL_METEORLAKE_L, &cnl_features },
-+	{ INTEL_ARROWLAKE, &cnl_features },
-+	{ INTEL_LUNARLAKE_M, &cnl_features },
-+	{ INTEL_ATOM_SILVERMONT, &slv_features },
-+	{ INTEL_ATOM_SILVERMONT_D, &slvd_features },
-+	{ INTEL_ATOM_AIRMONT, &amt_features },
-+	{ INTEL_ATOM_GOLDMONT, &gmt_features },
-+	{ INTEL_ATOM_GOLDMONT_D, &gmtd_features },
-+	{ INTEL_ATOM_GOLDMONT_PLUS, &gmtp_features },
-+	{ INTEL_ATOM_TREMONT_D, &tmtd_features },
-+	{ INTEL_ATOM_TREMONT, &tmt_features },
-+	{ INTEL_ATOM_TREMONT_L, &tmt_features },
-+	{ INTEL_ATOM_GRACEMONT, &adl_features },
-+	{ INTEL_ATOM_CRESTMONT_X, &srf_features },
-+	{ INTEL_ATOM_CRESTMONT, &grr_features },
-+	{ INTEL_XEON_PHI_KNL, &knl_features },
-+	{ INTEL_XEON_PHI_KNM, &knl_features },
- 	/*
- 	 * Missing support for
--	 * INTEL_FAM6_ICELAKE
--	 * INTEL_FAM6_ATOM_SILVERMONT_MID
--	 * INTEL_FAM6_ATOM_AIRMONT_MID
--	 * INTEL_FAM6_ATOM_AIRMONT_NP
-+	 * INTEL_ICELAKE
-+	 * INTEL_ATOM_SILVERMONT_MID
-+	 * INTEL_ATOM_AIRMONT_MID
-+	 * INTEL_ATOM_AIRMONT_NP
- 	 */
- 	{ 0, NULL },
- };
-@@ -951,11 +975,12 @@ void probe_platform_features(unsigned int family, unsigned int model)
- 		return;
- 	}
- 
--	if (!genuine_intel || family != 6)
-+	if (!genuine_intel)
- 		return;
- 
- 	for (i = 0; turbostat_pdata[i].features; i++) {
--		if (turbostat_pdata[i].model == model) {
-+		if (VFM_FAMILY(turbostat_pdata[i].vfm) == family &&
-+		    VFM_MODEL(turbostat_pdata[i].vfm) == model) {
- 			platform = turbostat_pdata[i].features;
- 			return;
- 		}
+[auto build test ERROR on sre-power-supply/for-next]
+[also build test ERROR on lee-leds/for-leds-next linus/master v6.9-rc4]
+[cannot apply to next-20240416]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kate-Hsuan/platform-x86-android-tablets-other-Add-swnode-for-Xiaomi-pad2-indicator-LED/20240416-134240
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
+patch link:    https://lore.kernel.org/r/20240416053909.256319-5-hpa%40redhat.com
+patch subject: [PATCH v6 4/5] power: supply: power-supply-leds: Add charging_orange_full_green trigger for RGB LED
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240417/202404170705.Or8MFKNi-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240417/202404170705.Or8MFKNi-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404170705.Or8MFKNi-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/power/supply/power_supply_leds.c:42:3: error: implicit declaration of function 'led_mc_trigger_event' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   led_mc_trigger_event(psy->charging_orange_full_green_trig,
+                   ^
+   drivers/power/supply/power_supply_leds.c:42:3: note: did you mean 'led_trigger_event'?
+   include/linux/leds.h:489:6: note: 'led_trigger_event' declared here
+   void led_trigger_event(struct led_trigger *trigger,  enum led_brightness event);
+        ^
+   1 error generated.
+
+
+vim +/led_mc_trigger_event +42 drivers/power/supply/power_supply_leds.c
+
+    21	
+    22	static void power_supply_update_bat_leds(struct power_supply *psy)
+    23	{
+    24		union power_supply_propval status;
+    25		unsigned int intensity_green[3] = {255, 0, 0};
+    26		unsigned int intensity_orange[3] = {128, 0, 255};
+    27		unsigned int intensity_red[3] = {0, 0, 255};
+    28	
+    29		if (power_supply_get_property(psy, POWER_SUPPLY_PROP_STATUS, &status))
+    30			return;
+    31	
+    32		dev_dbg(&psy->dev, "%s %d\n", __func__, status.intval);
+    33	
+    34		switch (status.intval) {
+    35		case POWER_SUPPLY_STATUS_FULL:
+    36			led_trigger_event(psy->charging_full_trig, LED_FULL);
+    37			led_trigger_event(psy->charging_trig, LED_OFF);
+    38			led_trigger_event(psy->full_trig, LED_FULL);
+    39			/* Going from blink to LED on requires a LED_OFF event to stop blink */
+    40			led_trigger_event(psy->charging_blink_full_solid_trig, LED_OFF);
+    41			led_trigger_event(psy->charging_blink_full_solid_trig, LED_FULL);
+  > 42			led_mc_trigger_event(psy->charging_orange_full_green_trig,
+    43					     intensity_green,
+    44					     ARRAY_SIZE(intensity_green),
+    45					     LED_FULL);
+    46			break;
+    47		case POWER_SUPPLY_STATUS_CHARGING:
+    48			led_trigger_event(psy->charging_full_trig, LED_FULL);
+    49			led_trigger_event(psy->charging_trig, LED_FULL);
+    50			led_trigger_event(psy->full_trig, LED_OFF);
+    51			led_trigger_blink(psy->charging_blink_full_solid_trig, 0, 0);
+    52			led_mc_trigger_event(psy->charging_orange_full_green_trig,
+    53					     intensity_orange,
+    54					     ARRAY_SIZE(intensity_orange),
+    55					     LED_FULL);
+    56			break;
+    57		default:
+    58			led_trigger_event(psy->charging_full_trig, LED_OFF);
+    59			led_trigger_event(psy->charging_trig, LED_OFF);
+    60			led_trigger_event(psy->full_trig, LED_OFF);
+    61			led_trigger_event(psy->charging_blink_full_solid_trig,
+    62				LED_OFF);
+    63			led_mc_trigger_event(psy->charging_orange_full_green_trig,
+    64					     intensity_red,
+    65					     ARRAY_SIZE(intensity_red),
+    66					     LED_OFF);
+    67			break;
+    68		}
+    69	}
+    70	
+
 -- 
-2.44.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
