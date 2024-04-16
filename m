@@ -1,125 +1,105 @@
-Return-Path: <linux-pm+bounces-6465-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6466-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E727E8A69AA
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Apr 2024 13:34:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FE648A69B8
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Apr 2024 13:37:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2329C1C20F3F
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Apr 2024 11:34:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA6AB282DC6
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Apr 2024 11:37:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C8E21292D7;
-	Tue, 16 Apr 2024 11:34:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82D3E1292D7;
+	Tue, 16 Apr 2024 11:37:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tPW985o9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CEzc3L2W"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CBDA1DFEF;
-	Tue, 16 Apr 2024 11:34:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B466127B4E;
+	Tue, 16 Apr 2024 11:37:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713267285; cv=none; b=bVp0ftU1qUvBajnuOtn3or9j4DMM5RDEzNs7gduVwFe67zKoxzGdYAG3nsC+Ljr+6CzXlNTzgLHDxwY1rKSlUk+cqnP0dOKHJXHbLk972si/JggC2P6nReDtUhXbvZ31lBjd74Nl+7JkrHbqTrAlELLAZxMfTLDE8gGwYz7p5k8=
+	t=1713267441; cv=none; b=PuTKhcr6sA1G53RiF1nhOYEhsf+YkiNrV/yulK4l24STWnC0f/xD7UnvUktQj01Pmzz6HvATvMAeWA99OkW43FLztgGg2wVWv8FwHszx9e1u1yTf/ivQEuAh47j85o5cMFnViJeAQutbNcLXcmSGSphvirRwkYkbl8e1F879dQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713267285; c=relaxed/simple;
-	bh=JEB2ze4FTOdoPtrx7qGRWNXJdiwK6MLijfrzKDOzS+8=;
+	s=arc-20240116; t=1713267441; c=relaxed/simple;
+	bh=UyxbjKiyQT2TSVa74a/Hvt0YwGCTEEk9gpdwaddw9QI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kKAZwADgRzPaxxdydD3R21m09KKSqYDYlfhjCEEiW/hjv1oKYFT6f3OCCkanL08elgaUN2McM9ozgmIbutEOJrbq8ppKYMup8mL0zuV4mZZIIxibxhZh/xO6SyyqCc8M0HwT5Pdjp9eBS9tCpe/IH7Mu5X4HNZjBhMqIqNR8Ijc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tPW985o9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D814AC3277B;
-	Tue, 16 Apr 2024 11:34:44 +0000 (UTC)
+	 To:Cc:Content-Type; b=fV5oz2mQ3UB4U3S4Dt2bJurCpA75IrI/WHTapKdsrNcj8A3DXOZZ/QMbNR1HjQeKtZI3ym4Xz+ckYWNMcF/pe8XjkyZpaakYNukQT1xIbcT4omXymTMXQY20KPB+ZL5qPp4D5dKmVQg1I+QCihEDSXmqOfeXTcnSMhJqHvnEap0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CEzc3L2W; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C659DC3277B;
+	Tue, 16 Apr 2024 11:37:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713267284;
-	bh=JEB2ze4FTOdoPtrx7qGRWNXJdiwK6MLijfrzKDOzS+8=;
+	s=k20201202; t=1713267440;
+	bh=UyxbjKiyQT2TSVa74a/Hvt0YwGCTEEk9gpdwaddw9QI=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=tPW985o99XgdT5+tX0EwF2yFaLjiWldWohukQaA3emhWvxgHecbpM+E6vgsYklXZu
-	 lxRbgEIvSmmL4SkikIUatHHtYPQk8J6/gZ+d99OCxPA8I2JSsJJ8a1DjhyxD+Q8zhH
-	 2yFPORjIh2bN9cf6RCg3Sl+XrbmKV2ElPglrUYhikD6yOO5D3u72WktobOjEay1xZC
-	 adMvtWpuwwyzxlXXgtC9pAzxTUtwL5KUIn6IhSg/Ext+jFvh0CU1Xrs2eoMkzM+Ybe
-	 oqwpHrzc2y9Oj+y00e9/KD/ewnbcO64/h0w/BQFHOwr8+ujZGihFnEIeKJynkKstzT
-	 JcPhxsa+jvCmw==
-Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-6eac2b144b3so1183541a34.0;
-        Tue, 16 Apr 2024 04:34:44 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXk/35jrJGKspklnvj8tvntYLPqF0HNSZwm/VM2bqyc/+XLSF2QLugeasUJUjAkhyTLN6YoHsmqOWdtkVlXiuIdHzFbdAHYDvLuc83b9UVyEipP1428yvse6LsT1KcHR1M5pPVF8Yw=
-X-Gm-Message-State: AOJu0Yw3QSQuA3G1TtR8rM36Lwtwvm+/S0mkT/E/PwpqpuS+zMtqXJIz
-	eXzj2uEsbnAHCY3uQcPGvNfxjPznboX5N+6IFLG2ND/wi8TNLSO+9W+4lzk5EBoUsgOpMsw5Rcy
-	MNGgo8VIFmRifr80fcmY5pFa9VBE=
-X-Google-Smtp-Source: AGHT+IFNqiWoke4OcolARhwscUnn1kKtQJrYzcKsSCBgcNH5PmMnem/f7qJvG1YCbBid8j89jX5GZBomywu49X2Prdg=
-X-Received: by 2002:a05:6870:d28d:b0:232:fa03:3736 with SMTP id
- d13-20020a056870d28d00b00232fa033736mr15052954oae.0.1713267284150; Tue, 16
- Apr 2024 04:34:44 -0700 (PDT)
+	b=CEzc3L2WfroEpK0zLJEoXgFcP7cXMaHNPbNfWRvSq3jupWQt7Et44r3snPc/knUGr
+	 ObHzwLgwevlzeJO59r1cyJ2N85mdFbHbkSe7lpkq4pbq3DsNvIfdzp/jD9TadrJ3FZ
+	 fH0WK4ptWwxf20/QWsPGYkvQbffSzkg1yEi8yBrU74QQ8Kak9ZYu+KTAh2xCEH13h3
+	 peParTvmRIWSET1USE8y/iK9nhNFdSEbyaC0b22vDZwl4Gy8LiKyyuP0q4Onc9nefa
+	 ghgn9h+0aT3Fo6eGYqLg+FojWdy2vkQRytwDeu8NsWzgVP1q/g6+bKBOEqtsX4t1fv
+	 wH4qz8Z5fV7Cw==
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5aca32d3f78so707346eaf.1;
+        Tue, 16 Apr 2024 04:37:20 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXpI5X/KzxVVYZOgIDHhqryyU533wss2E+G1/8mR0ztomTb6YiZBYZpnJ1ZWZr57DJlJtUAYKhg0v4iTcfEYqdJEwDwRUNuCXk9VVpwEenb5pGmbQTXj6Ya1CgCw/ThzhdR7yOsGBI=
+X-Gm-Message-State: AOJu0YzFl5ShfU7/VV0VSzcxqMethHgICIODyboXZB3smO11po1157LN
+	uSgm7SXI+x9VnG3+sbvIVF0IAeFCmUqyS8+WTVY8tUdniLqmz8crisuHO4CV/keEwJpepthvtJS
+	SVvyXrzjAEhTnpVfzs9m/tIjIkx8=
+X-Google-Smtp-Source: AGHT+IEY7Mo6AwubDZGT6wjxJ03CgcDJZG8cuE8RjfcYK0Yjqd5F4BwbEMXKErQ24aKFqmarhYO77+Az2Aol/GWWaik=
+X-Received: by 2002:a05:6870:7099:b0:22e:88bd:6b26 with SMTP id
+ v25-20020a056870709900b0022e88bd6b26mr14636512oae.3.1713267440099; Tue, 16
+ Apr 2024 04:37:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240415094821.3060892-1-dawei.li@shingroup.cn>
-In-Reply-To: <20240415094821.3060892-1-dawei.li@shingroup.cn>
+References: <20240408040548.249664-1-rui.zhang@intel.com>
+In-Reply-To: <20240408040548.249664-1-rui.zhang@intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 16 Apr 2024 13:34:32 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hgeRo0oVviN8GHNaR_wNOBxGyYF=S-2LU3GEOFSUzytQ@mail.gmail.com>
-Message-ID: <CAJZ5v0hgeRo0oVviN8GHNaR_wNOBxGyYF=S-2LU3GEOFSUzytQ@mail.gmail.com>
-Subject: Re: [PATCH] powercap: Avoid explicit cpumask allocation on stack
-To: Dawei Li <dawei.li@shingroup.cn>
-Cc: daniel.lezcano@kernel.org, rafael@kernel.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+Date: Tue, 16 Apr 2024 13:37:09 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hoEnDn5Cqi51924ZpO2sGu+ip1LUQdVA68atmK4gWXHw@mail.gmail.com>
+Message-ID: <CAJZ5v0hoEnDn5Cqi51924ZpO2sGu+ip1LUQdVA68atmK4gWXHw@mail.gmail.com>
+Subject: Re: [PATCH] powercap: intel_rapl: Add support for ArrowLake-H platform
+To: Zhang Rui <rui.zhang@intel.com>
+Cc: rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 15, 2024 at 11:48=E2=80=AFAM Dawei Li <dawei.li@shingroup.cn> w=
-rote:
+On Mon, Apr 8, 2024 at 6:06=E2=80=AFAM Zhang Rui <rui.zhang@intel.com> wrot=
+e:
 >
-> In general it's preferable to avoid placing cpumasks on the stack, as
-> for large values of NR_CPUS these can consume significant amounts of
-> stack space and make stack overflows more likely.
+> Add support for ArrowLake-H platform.
 >
-> Use cpumask_weight_and() to avoid the need for a temporary cpumask on
-> the stack.
->
-> Signed-off-by: Dawei Li <dawei.li@shingroup.cn>
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 > ---
->  drivers/powercap/dtpm_cpu.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
+>  drivers/powercap/intel_rapl_common.c | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
-> index bc90126f1b5f..6b6f51b21550 100644
-> --- a/drivers/powercap/dtpm_cpu.c
-> +++ b/drivers/powercap/dtpm_cpu.c
-> @@ -43,13 +43,11 @@ static u64 set_pd_power_limit(struct dtpm *dtpm, u64 =
-power_limit)
->         struct dtpm_cpu *dtpm_cpu =3D to_dtpm_cpu(dtpm);
->         struct em_perf_domain *pd =3D em_cpu_get(dtpm_cpu->cpu);
->         struct em_perf_state *table;
-> -       struct cpumask cpus;
->         unsigned long freq;
->         u64 power;
->         int i, nr_cpus;
+> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/inte=
+l_rapl_common.c
+> index a28d54fd5222..c02851c73751 100644
+> --- a/drivers/powercap/intel_rapl_common.c
+> +++ b/drivers/powercap/intel_rapl_common.c
+> @@ -1263,6 +1263,7 @@ static const struct x86_cpu_id rapl_ids[] __initcon=
+st =3D {
+>         X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,    &rapl_defaults_sp=
+r_server),
+>         X86_MATCH_INTEL_FAM6_MODEL(EMERALDRAPIDS_X,     &rapl_defaults_sp=
+r_server),
+>         X86_MATCH_INTEL_FAM6_MODEL(LUNARLAKE_M,         &rapl_defaults_co=
+re),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ARROWLAKE_H,         &rapl_defaults_co=
+re),
+>         X86_MATCH_INTEL_FAM6_MODEL(ARROWLAKE,           &rapl_defaults_co=
+re),
+>         X86_MATCH_INTEL_FAM6_MODEL(LAKEFIELD,           &rapl_defaults_co=
+re),
 >
-> -       cpumask_and(&cpus, cpu_online_mask, to_cpumask(pd->cpus));
-> -       nr_cpus =3D cpumask_weight(&cpus);
-> +       nr_cpus =3D cpumask_weight_and(cpu_online_mask, to_cpumask(pd->cp=
-us));
->
->         rcu_read_lock();
->         table =3D em_perf_state_from_pd(pd);
-> @@ -123,11 +121,9 @@ static int update_pd_power_uw(struct dtpm *dtpm)
->         struct dtpm_cpu *dtpm_cpu =3D to_dtpm_cpu(dtpm);
->         struct em_perf_domain *em =3D em_cpu_get(dtpm_cpu->cpu);
->         struct em_perf_state *table;
-> -       struct cpumask cpus;
->         int nr_cpus;
->
-> -       cpumask_and(&cpus, cpu_online_mask, to_cpumask(em->cpus));
-> -       nr_cpus =3D cpumask_weight(&cpus);
-> +       nr_cpus =3D cpumask_weight_and(cpu_online_mask, to_cpumask(em->cp=
-us));
->
->         rcu_read_lock();
->         table =3D em_perf_state_from_pd(em);
 > --
 
 Applied as 6.10 material, thanks!
