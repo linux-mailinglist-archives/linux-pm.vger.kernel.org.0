@@ -1,263 +1,314 @@
-Return-Path: <linux-pm+bounces-6603-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6604-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C188B8A8A6E
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 19:50:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 263DE8A8AB4
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 20:00:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78D5C283FD9
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 17:50:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 927A51F2521D
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 18:00:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B309172BAB;
-	Wed, 17 Apr 2024 17:50:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1545D172BC9;
+	Wed, 17 Apr 2024 18:00:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="JZb4ivCQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FGnr7c8x"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8052C171099
-	for <linux-pm@vger.kernel.org>; Wed, 17 Apr 2024 17:50:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D53E0172BC3;
+	Wed, 17 Apr 2024 18:00:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713376219; cv=none; b=UrhMlZuw7oYF7rhvwRUrREaajaplYhQacSCMgOfDUTcJUV1ijfKg7jJIIZpp9GnEQmY6PSmfoLTa1GDTd5yv2Hhfi4TRuBrWZIOOu9QXMrxJ0/l5kpETAe05z7EmjDHzX3F/E+Md+VJEZ9Bo7B0CsPoQlUvcN+tbRLvPH8K4b68=
+	t=1713376804; cv=none; b=SMADWL2EdP3KhvZ9n2AmO+txVSZbLPO0tKWJTowBb2XqE8e1ZUy3fFOnB8yO/NBucxJIegZu/F/Wt0E1hV0gMjMNnxArD8P0msml12X4zLKSafYjdP8dRzH9q6UpwoBmAlhu1aD/h6IShJOmYNUMuV3ffkAOA3pMugE++5/FOk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713376219; c=relaxed/simple;
-	bh=p3XAAvGb0pAomutzKcQoXviRa+BDcuhjn9eMjQ+MTGo=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=LRNnZTJzCN+N1vDWMGU6mkOWkz0FRWr9+PwYai7eAetFwPUDalxQgTjYBQUp28N3MAdz4lCk2RlY6gxNrGA7tc0fUb6nJ9r+2tveaXJzHh+vr/FJO27XIb3KPMteZ+cuhgsSoHDjRn7PM3tsjSmtzndVH2kOH+ozG1qVDGZ6m5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=JZb4ivCQ; arc=none smtp.client-ip=209.85.160.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-434d0f63c31so28426261cf.1
-        for <linux-pm@vger.kernel.org>; Wed, 17 Apr 2024 10:50:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1713376216; x=1713981016; darn=vger.kernel.org;
-        h=in-reply-to:autocrypt:references:cc:to:subject:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=E24JLALbKrKCna4BOR/0UFVl6PjktLmDSyDyppUZTyk=;
-        b=JZb4ivCQA3y2Lw9OHqLETyPmDk+WIoB7VHys+dWuzeMNJQYwCXkNAv/4v3jc4BerPn
-         LqPwNSsLwOkDWTZI3FuAtTHBJ3LpiNS+vmzbRXH/vbYJclKgTgZ0c1myrmbSFwW59nSN
-         gLBvPOtY1TQRzzm6RjlXuEK9LVx/Phf4Dk8A4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713376216; x=1713981016;
-        h=in-reply-to:autocrypt:references:cc:to:subject:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=E24JLALbKrKCna4BOR/0UFVl6PjktLmDSyDyppUZTyk=;
-        b=mYw3xmqy9zHPLwrph8cYShsslb3Vzz3saByZELvMX7E3e9a29zXnkdO/yrhFqgYM/+
-         hLgeXw8vJWrZn8y5v0TZ5fRgNCYABoS07gtah0mcpjRhbLHbpBKjUUMhZkbuLC/v29vH
-         lKcZ6jnlUAqSoPbjS6SI1S2b24vbD+/In+4ppuBqXRRrnRYoZxfMBbUSw7u9/NElG4Io
-         O34GdrgLOk+xHxcGRWZ+ycY1b2AkfgmU5okGV5L6d5rXwGfVav++VmwDU97t58yfWd+n
-         kSnbv7WiDUqJjh6O2D4sWznnuFoZvA29B4yVhVKsQV13f9Docf3dewVn7oLWjqbl0HSO
-         T8MA==
-X-Forwarded-Encrypted: i=1; AJvYcCUoCBnY5hFGngtdcu0W+9veemaQIZ7NOHsH4v4MKSDnwJYstDDjka4kLQrBug35qrYtoVjRqjc5zrDECQwDILqBk+u0rtCzAt4=
-X-Gm-Message-State: AOJu0YwxzBYskwtobhd1AQgRjQipQb1ZPnc0ktSPTGRZFq1Ol7UF7+FA
-	Mea7RlujBIKYDFzXJzcyh5rmFhmKN9IReHbIVCvSRQ/Ih0aiMbMY0F4itCVc9w==
-X-Google-Smtp-Source: AGHT+IG2m6chLy1gmFSjN+juMHJ1CD5Y9kQn3g+j1bP0tVitWnvqFGEjVF3hbZD+roin10wgev4Ixw==
-X-Received: by 2002:a05:622a:199b:b0:436:a38b:707a with SMTP id u27-20020a05622a199b00b00436a38b707amr225520qtc.26.1713376216389;
-        Wed, 17 Apr 2024 10:50:16 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id g8-20020ac84808000000b004378ec294f9sm102019qtq.72.2024.04.17.10.50.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Apr 2024 10:50:15 -0700 (PDT)
-Message-ID: <48f366f5-4a17-474c-a8e3-6d79c9092d62@broadcom.com>
-Date: Wed, 17 Apr 2024 10:50:07 -0700
+	s=arc-20240116; t=1713376804; c=relaxed/simple;
+	bh=V0BYQUyy2073cKbq7Zjbzjmt5xR8pfFi/NSeHZlp01Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DO2WYFMMiDkd3icyJonB4M+iSjdPB3gNp+Rdve9tvwWJ6kF9TLsfzocHzMOhOxT0Xoc17/+sBlR7DkdHLam7JbhcqIf2hcYu0JDzc6WcvaAAip1BBC9T1kBzIMK7OKnRCy+Ah2xkGZtELjtqB+xFDw4wYS4spNw3n2mKLRfpTOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FGnr7c8x; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C405C4AF0B;
+	Wed, 17 Apr 2024 18:00:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713376803;
+	bh=V0BYQUyy2073cKbq7Zjbzjmt5xR8pfFi/NSeHZlp01Q=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=FGnr7c8xW1ja2beitV6j7TSVXEClBXGeuoYYYo+4BL1tArgGcQP5L4R8AefJk1IGR
+	 se4oVF4uENvFjiSrUcS1ssP0KSCGSCgmxLpDd//6EeNVe4xnY115ZMOg5Xr8M3OlJ5
+	 QEf98OxHPbIfe3J5gvFcZOFpKV3x5ZTv/hXrLPaGJLgBfIR5U/1gm8uBZaaoGTzeZu
+	 INAqd+JPua/GnSsm7TTIIPcS1FstY+kYv4GppdET9dmI9awVR1gItMCOR3OAjPR5/P
+	 2az3JjBkaQ/VEdpdoSDNRxAFqDNx2IQLCMtY2YLKXGx4eB4jnNngnSGqR9y0BLkS0/
+	 1UCKEG0xdm2YQ==
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5ac4470de3bso6624eaf.0;
+        Wed, 17 Apr 2024 11:00:03 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUkAmENu17wghWPxipxIgefaJa3onlQR8ThE7eyJG2678EMyF7XRDfj3n0HM2VWH3xk+onwxD9B9JK6dcvmG0wU9V+hO9dzSbo/bxP7Ll1pd168/9/0aQtm+FGj23vpP4ApeNXJqxs/55MjGQapH/l6bcDVsRyWtI2bDndk2TfCxPupDHp+Frf0XLuTjJ9DNBQ2gVnBUaePpML+Yaphaw==
+X-Gm-Message-State: AOJu0YyGFwzRR9DFbmWaz3W6FpHK24sGBuyilyJVyV9UrhIu5Z7gjvGF
+	z3h5E58YnI5L3wDRBjJwXenhBR+r1Y2M29JaW8B4ckxQrdfdni9jyS9TDXm7/XeplKgeKCZsRNP
+	FAOKqGGnjsm48sNFcpVFTzbvBYzI=
+X-Google-Smtp-Source: AGHT+IGdb9fVf0nDkCZ4moh+SZ4JXNUOMFl73Fzy+XXkB7kFSkI6i9jMBSPuRrApwYio0wFQm8gC4I1C99yI4wOC8po=
+X-Received: by 2002:a4a:b447:0:b0:5a4:7790:61b4 with SMTP id
+ h7-20020a4ab447000000b005a4779061b4mr499834ooo.0.1713376802449; Wed, 17 Apr
+ 2024 11:00:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-Subject: Re: [PATCH v2 0/4] Implement vendor resets for PSCI SYSTEM_RESET2
-To: Sudeep Holla <sudeep.holla@arm.com>,
- Elliot Berman <quic_eberman@quicinc.com>
-Cc: Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>, Sebastian Reichel
- <sre@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- Andy Yan <andy.yan@rock-chips.com>, Lorenzo Pieralisi
- <lpieralisi@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
- Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
- Melody Olvera <quic_molvera@quicinc.com>,
- Shivendra Pratap <quic_spratap@quicinc.com>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20240414-arm-psci-system_reset2-vendor-reboots-v2-0-da9a055a648f@quicinc.com>
- <Zh5GWqt2oCNHdF_h@bogus>
-Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
- xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
- M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
- JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
- PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
- KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
- AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
- IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
- ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
- bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
- Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
- tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
- TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
- zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
- WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
- IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
- U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
- 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
- pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
- MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
- IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
- gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
- obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
- N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
- CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
- C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
- wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
- EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
- fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
- MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
- 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
- 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <Zh5GWqt2oCNHdF_h@bogus>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000c49d3206164e7cdd"
+References: <20240417131909.7925-1-Jonathan.Cameron@huawei.com>
+ <20240417131909.7925-7-Jonathan.Cameron@huawei.com> <22ace9b108ee488eb017f5b3e8facb8d@huawei.com>
+ <20240417163842.0000415e@Huawei.com> <CAJZ5v0gJL0mucnN9Na2pCg0ckcTO8cNtpnAcnPD5w9eavUMQcg@mail.gmail.com>
+ <20240417180939.00003db7@huawei.com>
+In-Reply-To: <20240417180939.00003db7@huawei.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 17 Apr 2024 19:59:50 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iFpkZZ9Ky6n5OiYsiNQ8_SRJv8hH0CLwPX=N4Ucc_snQ@mail.gmail.com>
+Message-ID: <CAJZ5v0iFpkZZ9Ky6n5OiYsiNQ8_SRJv8hH0CLwPX=N4Ucc_snQ@mail.gmail.com>
+Subject: Re: [PATCH v6 06/16] ACPI: processor: Register deferred CPUs from acpi_processor_get_info()
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Salil Mehta <salil.mehta@huawei.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>, 
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
+	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>, 
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>, 
+	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>, "x86@kernel.org" <x86@kernel.org>, 
+	Russell King <linux@armlinux.org.uk>, Miguel Luis <miguel.luis@oracle.com>, 
+	James Morse <james.morse@arm.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Linuxarm <linuxarm@huawei.com>, 
+	"justin.he@arm.com" <justin.he@arm.com>, "jianyong.wu@arm.com" <jianyong.wu@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---000000000000c49d3206164e7cdd
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On Wed, Apr 17, 2024 at 7:09=E2=80=AFPM Jonathan Cameron
+<Jonathan.Cameron@huawei.com> wrote:
+>
+> On Wed, 17 Apr 2024 17:59:36 +0200
+> "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+>
+> > On Wed, Apr 17, 2024 at 5:38=E2=80=AFPM Jonathan Cameron
+> > <Jonathan.Cameron@huawei.com> wrote:
+> > >
+> > > On Wed, 17 Apr 2024 16:03:51 +0100
+> > > Salil Mehta <salil.mehta@huawei.com> wrote:
+> > >
+> > > > >  From: Jonathan Cameron <jonathan.cameron@huawei.com>
+> > > > >  Sent: Wednesday, April 17, 2024 2:19 PM
+> > > > >
+> > > > >  From: James Morse <james.morse@arm.com>
+> > > > >
+> > > > >  The arm64 specific arch_register_cpu() call may defer CPU regist=
+ration until
+> > > > >  the ACPI interpreter is available and the _STA method can be eva=
+luated.
+> > > > >
+> > > > >  If this occurs, then a second attempt is made in acpi_processor_=
+get_info().
+> > > > >  Note that the arm64 specific call has not yet been added so for =
+now this will
+> > > > >  be called for the original hotplug case.
+> > > > >
+> > > > >  For architectures that do not defer until the ACPI Processor dri=
+ver loads
+> > > > >  (e.g. x86), for initially present CPUs there will already be a C=
+PU device. If
+> > > > >  present do not try to register again.
+> > > > >
+> > > > >  Systems can still be booted with 'acpi=3Doff', or not include an=
+ ACPI
+> > > > >  description at all as in these cases arch_register_cpu() will no=
+t have
+> > > > >  deferred registration when first called.
+> > > > >
+> > > > >  This moves the CPU register logic back to a subsys_initcall(), w=
+hile the
+> > > > >  memory nodes will have been registered earlier.
+> > > > >  Note this is where the call was prior to the cleanup series so t=
+here should be
+> > > > >  no side effects of moving it back again for this specific case.
+> > > > >
+> > > > >  [PATCH 00/21] Initial cleanups for vCPU HP.
+> > > > >  https://lore.kernel.org/all/ZVyz%2FVe5pPu8AWoA@shell.armlinux.or=
+g.uk/
+> > > > >
+> > > > >  e.g. 5b95f94c3b9f ("x86/topology: Switch over to GENERIC_CPU_DEV=
+ICES")
+> > > > >
+> > > > >  Signed-off-by: James Morse <james.morse@arm.com>
+> > > > >  Reviewed-by: Gavin Shan <gshan@redhat.com>
+> > > > >  Tested-by: Miguel Luis <miguel.luis@oracle.com>
+> > > > >  Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
+> > > > >  Tested-by: Jianyong Wu <jianyong.wu@arm.com>
+> > > > >  Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk=
+>
+> > > > >  Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > > > >  Signed-off-by: Joanthan Cameron <Jonathan.Cameron@huawei.com>
+> > > > >  ---
+> > > > >  v6: Squash the two paths for conventional CPU Hotplug and arm64
+> > > > >      vCPU HP.
+> > > > >  v5: Update commit message to make it clear this is moving the
+> > > > >      init back to where it was until very recently.
+> > > > >
+> > > > >      No longer change the condition in the earlier registration p=
+oint
+> > > > >      as that will be handled by the arm64 registration routine
+> > > > >      deferring until called again here.
+> > > > >  ---
+> > > > >   drivers/acpi/acpi_processor.c | 12 +++++++++++-
+> > > > >   1 file changed, 11 insertions(+), 1 deletion(-)
+> > > > >
+> > > > >  diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_p=
+rocessor.c
+> > > > >  index 7ecb13775d7f..0cac77961020 100644
+> > > > >  --- a/drivers/acpi/acpi_processor.c
+> > > > >  +++ b/drivers/acpi/acpi_processor.c
+> > > > >  @@ -356,8 +356,18 @@ static int acpi_processor_get_info(struct
+> > > > >  acpi_device *device)
+> > > > >      *
+> > > > >      *  NOTE: Even if the processor has a cpuid, it may not be pr=
+esent
+> > > > >      *  because cpuid <-> apicid mapping is persistent now.
+> > > > >  +   *
+> > > > >  +   *  Note this allows 3 flows, it is up to the arch_register_c=
+pu()
+> > > > >  +   *  call to reject any that are not supported on a given arch=
+itecture.
+> > > > >  +   *  A) CPU becomes present.
+> > > > >  +   *  B) Previously invalid logical CPU ID (Same as becoming pr=
+esent)
+> > > > >  +   *  C) CPU already present and now being enabled (and wasn't
+> > > > >  registered
+> > > > >  +   *     early on an arch that doesn't defer to here)
+> > > > >      */
+> > > > >  -  if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
+> > > > >  +  if ((!invalid_logical_cpuid(pr->id) && cpu_present(pr->id) &&
+> > > > >  +       !get_cpu_device(pr->id)) ||
+> > > > >  +      invalid_logical_cpuid(pr->id) ||
+> > > > >  +      !cpu_present(pr->id)) {
+> > > >
+> > > >
+> > > Hi Salil,
+> > >
+> > > Thanks for quick review!
+> > >
+> > > > Logic is clear but it is ugly. We should turn them into macro or in=
+line.
+> > >
+> > > You've found the 'ugly' in this approach vs keeping them separate.
+> > >
+> > > For this version I wanted to keep it clear that indeed this condition
+> > > is a complex mess of different things (and to let people compare
+> > > it easily with the two paths in v5 to convinced themselves this
+> > > is the same)
+> > >
+> > > It's also a little tricky to do, so will need some thought.
+> > >
+> > > I don't think a simple acpi_cpu_is_hotplug() condition is useful
+> > > as it just moves the complexity away from where a reader is looking
+> > > and it would only be used in this one case.
+> > >
+> > > It doesn't separate well into finer grained subconditions because
+> > > (C) is a messy case of the vCPU HP case and a not done
+> > > something else earlier.  The disadvantage of only deferring for
+> > > arm64 and not other architectures.
+> > >
+> > > The best I can quickly come up with is something like this:
+> > > #define acpi_cpu_not_present(cpu) \
+> > >         (invalid_logical_cpuid(cpu) || !cpu_present(cpu))
+> > > #define acpi_cpu_not_enabled(cpu) \
+> > >         (!invalid_logical_cpuid(cpu) || cpu_present(cpu))
+> > >
+> > >         if ((apci_cpu_not_enabled(pr->id) && !get_cpu_device(pr->id) =
+||
+> > >             acpi_cpu_not_present(pr->id))
+> > >
+> > > Which would still need the same amount of documentation. The
+> > > code still isn't enough for me to immediately be able to see
+> > > what is going on.
+> > >
+> > > So maybe worth it... I'm not sure.  Rafael, you get to keep this
+> > > fun, what would you prefer?
+> >
+> > I would use a static inline function returning bool to carry out these
+> > checks with comments explaining the different cases in which 'true'
+> > needs to be returned.
+>
+> The following makes a subtle logic change (I'll retest tomorrow) but
+> I think that get_cpu_device(cpu) can never succeed in a path where
+> hotadd makes sense.
+>
+> +/*
+> + * Identify if the state transition indicates that hotadd_init
+> + * should be called.
+> + *
+> + * For acpi_processor_add() to be called, the reported state must
+> + * now be enabled and present. Conditions reflect prior state.
+> + */
+> +static inline bool acpi_processor_should_hotadd_init(int cpu)
+> +{
+> +       /* Already register, initial registration was not deferred */
 
-On 4/16/24 02:35, Sudeep Holla wrote:
-> On Sun, Apr 14, 2024 at 12:30:23PM -0700, Elliot Berman wrote:
->> The PSCI SYSTEM_RESET2 call allows vendor firmware to define additional
->> reset types which could be mapped to the reboot argument.
->>
->> Setting up reboot on Qualcomm devices can be inconsistent from chipset
->> to chipset.
-> 
-> That doesn't sound good. Do you mean PSCI SYSTEM_RESET doesn't work as
-> expected ? Does it mean it is not conformant to the specification ?
-> 
->> Generally, there is a PMIC register that gets written to
->> decide the reboot type. There is also sometimes a cookie that can be
->> written to indicate that the bootloader should behave differently than a
->> regular boot. These knobs evolve over product generations and require
->> more drivers. Qualcomm firmwares are beginning to expose vendor
->> SYSTEM_RESET2 types to simplify driver requirements from Linux.
->>
-> 
-> Why can't this be fully userspace driven ? What is the need to keep the
-> cookie in the DT ?
-> 
-> 
+"Already registered." I think.
 
-Using the second example in the Device Tree:
+> +       if (get_cpu_device(cpu))
+> +               return false;
+> +
+> +       /* Processor has become present */
+> +       if (!cpu_present(cpu))
+> +               return true;
+> +
+> +       /* Logical cpuid currently invalid indicates hotadd */
+> +       if (invalid_logical_cpuid(cpu))
+> +               return true;
+> +
+> +       /*
+> +        * Previously present and the logical cpu id is valid.
+> +        * Deferred registration now _STA can be queries, or
+> +        * Hotadd due to enabled becoming true on an online capable
+> +        * CPU.
+> +        */
+> +       if (cpu_present(cpu))
+> +               return true;
 
-mode-bootloader = <1 2>;
+It returns true for both the cpu_present(cpu) and !cpu_present(cpu)
+cases, so will it ever return false except for when
+get_cpu_device(cpu) returns true?
 
-are you suggesting that within psci_vendor_sys_reset2() we would look at 
-the data argument and assume that we have something like this in memory:
-
-const char *cmd = data;
-
-cmd[] = "bootloader 2"
-
-where "bootloader" is the reboot command, and "2" is the cookie? From an 
-util-linux, busybox, toybox, etc. we would have to concatenate those 
-arguments with a space, but I suppose that would be doable.
-
-For the use cases that I am after we did not have a need for the cookie, 
-so I admit I did not think too much about it.
--- 
-Florian
-
-
---000000000000c49d3206164e7cdd
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIQeQYJKoZIhvcNAQcCoIIQajCCEGYCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-gg3QMIIFDTCCA/WgAwIBAgIQeEqpED+lv77edQixNJMdADANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA5MTYwMDAwMDBaFw0yODA5MTYwMDAwMDBaMFsxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBS
-MyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
-vbCmXCcsbZ/a0fRIQMBxp4gJnnyeneFYpEtNydrZZ+GeKSMdHiDgXD1UnRSIudKo+moQ6YlCOu4t
-rVWO/EiXfYnK7zeop26ry1RpKtogB7/O115zultAz64ydQYLe+a1e/czkALg3sgTcOOcFZTXk38e
-aqsXsipoX1vsNurqPtnC27TWsA7pk4uKXscFjkeUE8JZu9BDKaswZygxBOPBQBwrA5+20Wxlk6k1
-e6EKaaNaNZUy30q3ArEf30ZDpXyfCtiXnupjSK8WU2cK4qsEtj09JS4+mhi0CTCrCnXAzum3tgcH
-cHRg0prcSzzEUDQWoFxyuqwiwhHu3sPQNmFOMwIDAQABo4IB2jCCAdYwDgYDVR0PAQH/BAQDAgGG
-MGAGA1UdJQRZMFcGCCsGAQUFBwMCBggrBgEFBQcDBAYKKwYBBAGCNxQCAgYKKwYBBAGCNwoDBAYJ
-KwYBBAGCNxUGBgorBgEEAYI3CgMMBggrBgEFBQcDBwYIKwYBBQUHAxEwEgYDVR0TAQH/BAgwBgEB
-/wIBADAdBgNVHQ4EFgQUljPR5lgXWzR1ioFWZNW+SN6hj88wHwYDVR0jBBgwFoAUj/BLf6guRSSu
-TVD6Y5qL3uLdG7wwegYIKwYBBQUHAQEEbjBsMC0GCCsGAQUFBzABhiFodHRwOi8vb2NzcC5nbG9i
-YWxzaWduLmNvbS9yb290cjMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5j
-b20vY2FjZXJ0L3Jvb3QtcjMuY3J0MDYGA1UdHwQvMC0wK6ApoCeGJWh0dHA6Ly9jcmwuZ2xvYmFs
-c2lnbi5jb20vcm9vdC1yMy5jcmwwWgYDVR0gBFMwUTALBgkrBgEEAaAyASgwQgYKKwYBBAGgMgEo
-CjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAN
-BgkqhkiG9w0BAQsFAAOCAQEAdAXk/XCnDeAOd9nNEUvWPxblOQ/5o/q6OIeTYvoEvUUi2qHUOtbf
-jBGdTptFsXXe4RgjVF9b6DuizgYfy+cILmvi5hfk3Iq8MAZsgtW+A/otQsJvK2wRatLE61RbzkX8
-9/OXEZ1zT7t/q2RiJqzpvV8NChxIj+P7WTtepPm9AIj0Keue+gS2qvzAZAY34ZZeRHgA7g5O4TPJ
-/oTd+4rgiU++wLDlcZYd/slFkaT3xg4qWDepEMjT4T1qFOQIL+ijUArYS4owpPg9NISTKa1qqKWJ
-jFoyms0d0GwOniIIbBvhI2MJ7BSY9MYtWVT5jJO3tsVHwj4cp92CSFuGwunFMzCCA18wggJHoAMC
-AQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUAMEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9v
-dCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWduMRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5
-MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEgMB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENB
-IC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzARBgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqG
-SIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0E
-XyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuul9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+J
-J5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJpij2aTv2y8gokeWdimFXN6x0FNx04Druci8u
-nPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTv
-riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
-QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
-UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
-M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
-Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
-14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
-a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
-XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
-RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
-UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
-MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
-BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
-9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
-AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
-UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
-KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
-nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
-Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
-VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
-ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
-CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
-MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
-d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
-hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
-bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
-BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
-KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
-kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
-2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
-3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
-NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
-AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
-LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIGziEFeDeLJysivf
-NcKPsu4a0RIBQoPBOhZTDofHkfvaMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTI0MDQxNzE3NTAxNlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
-AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBy3FU6/cUhyKWMgSaaiebw7SGlYKwiFvUK
-aqWXWUCu7ctsE/R/fgfdUZEelIjI8Z0MJEqQnkeb5q7UEdP+fLDBxNRM9fn4aKOoUBM8cjKpZIMO
-o6t1A99fnIMoSxz21+oa4FzTCeUX+/upcKxh1m5WPgJYLqaImtxsbaCA2hBGgwGkTrK6dEQNX6Qk
-xyOsn/8W+/WCjDlAUSykEzey36FTEPVzPCXN4GgAxmBk6AzIMJOucqxbcBYm+MzJOTpeXkahTKd/
-T4+IcG0acuyneBJ3PVhy4qmfxzdMDnldeEE52U4OO/2HLhtOlSTombxFDqlCj82HVK+pa2+td5JV
-oyWb
---000000000000c49d3206164e7cdd--
+> +
+> +       return false;
+> +}
+> +
+>  static int acpi_processor_get_info(struct acpi_device *device)
+>  {
+>         union acpi_object object =3D { 0 };
+> @@ -356,18 +388,8 @@ static int acpi_processor_get_info(struct acpi_devic=
+e *device)
+>          *
+>          *  NOTE: Even if the processor has a cpuid, it may not be presen=
+t
+>          *  because cpuid <-> apicid mapping is persistent now.
+> -        *
+> -        *  Note this allows 3 flows, it is up to the arch_register_cpu()
+> -        *  call to reject any that are not supported on a given architec=
+ture.
+> -        *  A) CPU becomes present.
+> -        *  B) Previously invalid logical CPU ID (Same as becoming presen=
+t)
+> -        *  C) CPU already present and now being enabled (and wasn't regi=
+stered
+> -        *     early on an arch that doesn't defer to here)
+>          */
+> -       if ((!invalid_logical_cpuid(pr->id) && cpu_present(pr->id) &&
+> -            !get_cpu_device(pr->id)) ||
+> -           invalid_logical_cpuid(pr->id) ||
+> -           !cpu_present(pr->id)) {
+> +       if (acpi_processor_should_hotadd_init(pr->id)) {
+>                 ret =3D acpi_processor_hotadd_init(pr, device);
+>
 
