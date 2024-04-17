@@ -1,195 +1,241 @@
-Return-Path: <linux-pm+bounces-6512-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6513-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F2EF8A7CA1
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 08:57:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA6088A7E0E
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 10:21:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B22B91C20CCA
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 06:57:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B246284BC2
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 08:21:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8F9B6A004;
-	Wed, 17 Apr 2024 06:57:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFCA27D405;
+	Wed, 17 Apr 2024 08:21:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H7Ud4Kgu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a4K0+uR/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80DD829D06;
-	Wed, 17 Apr 2024 06:57:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7B295D8F6;
+	Wed, 17 Apr 2024 08:21:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713337064; cv=none; b=h+C3A+jVhBvul8Zdml3qekVKCrPjz6BOeUq6qIC/hSK88CUs7DXxHC+yoUT7UrP0R8V7SHCcnIRSShsCaYFX6wVJIOnRDvAGF3yxPaRELj9XrbehuLPFykUyltJM9Jpa425we8fuxsoKK/fOElZSrpyh1I9aYmPN/Hve9TokzlQ=
+	t=1713342069; cv=none; b=gXPmn32Mh2WH7hhl/JHAChiE3s0ZgAd83FMIN57wOOLCkBUFxZhdeSspB8P/DYJBGPIwBjPQm0d9i5zsyHvzUEcJdzcQLg+yak/xws05iQsFhhSN4UnDP16OE3Dn6ymcNe4/HGFJCYQ5EOcz4DnnzeEMWsXQhfNsW7rNxfG7tf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713337064; c=relaxed/simple;
-	bh=D8gNjNs0rwbKLkg6d3UqBEQgb6u+NQpYLNulN9JXtLo=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=sGSNGpwtVMUtXHRRIJf/2TWUSQWmtnZF9nNtYvMHsUNeZ0yy6q20tshRAQldKigGPYSHdpBQRdqvJ5lLPD0yfIe2sx7lLuP8lbpoo6iNmrInsklZuRdI38zDIbqWisk8H1T3z+nNy1Zq7otEFaCrSapldah9AgI2bhMkTHdHeAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H7Ud4Kgu; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713337062; x=1744873062;
-  h=date:from:to:cc:subject:message-id;
-  bh=D8gNjNs0rwbKLkg6d3UqBEQgb6u+NQpYLNulN9JXtLo=;
-  b=H7Ud4Kgu7kICh5R9d0fMG7LqhBNzIopaesTrSnO/sy+WbewTCTzyHB6M
-   fonXWwfDuFXSi7U8vh7Z8EQEZvjl0WHT4pbDNvOPJKC/uq7FbY0zCdqvz
-   MTuW/QWYmg4SQTqkLYkVS8ueaPU39q7oMWgX7SI4LJm0gxVAP/XYK+9o4
-   InsUGbm2gf1hJ+a/4gQxqF0uQpHMdpAZK+O/mP13WheeVKrBowhcEsYEU
-   85b8rswn1B/VWh7ImhCdLl+Yxi1KSeLXiFuXgjUEmNt+VRC7qky8nQD9O
-   CCGps6A7HSIIp9CRcsrI3mBU9R8vgZX+TD+Vmm34Kf7s7c3fgLI/g8JWE
-   A==;
-X-CSE-ConnectionGUID: elcCj0ZHRw+xA7ufxAgx3A==
-X-CSE-MsgGUID: YeJLfCNXQoiWPwIqZPYiKA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="19518503"
-X-IronPort-AV: E=Sophos;i="6.07,208,1708416000"; 
-   d="scan'208";a="19518503"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 23:57:37 -0700
-X-CSE-ConnectionGUID: mcGOqNbTR1K+5onl1Rm98Q==
-X-CSE-MsgGUID: gp3E9w9JRb2WzxZAdVRWTg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,208,1708416000"; 
-   d="scan'208";a="22933138"
-Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 16 Apr 2024 23:57:35 -0700
-Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rwzE4-0006Eg-08;
-	Wed, 17 Apr 2024 06:57:12 +0000
-Date: Wed, 17 Apr 2024 14:54:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 3dc435409d5b22cbc02ad767af3092af2b86a407
-Message-ID: <202404171450.AzKyfonP-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1713342069; c=relaxed/simple;
+	bh=n75R7c/Oh7vGZ60kh161ESLlcInlrQbqdPcmJ9fFJVA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NKI7cRXAmYBsszIxW73cvt5jQBZF6fe4EoTyxeH4pwWuy0A/q/jjRXrflBMSdGKsC/Y95t44Y0t1MC3dyxTRbjK6kGxtHVHaLuh08wU9cHNXl3T0d0E3hgfKWyrd9wR276sRqUXAHABtBG7VEydYrMSQb6fq6bROksskomx1+YU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a4K0+uR/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51783C32783;
+	Wed, 17 Apr 2024 08:21:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713342069;
+	bh=n75R7c/Oh7vGZ60kh161ESLlcInlrQbqdPcmJ9fFJVA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=a4K0+uR/k2z17A2pywiLxoy0vZO9lFEVelB4VBEjpEyYmS5TT4Z953zhvoWf7I6MK
+	 DIWO9lEYOnLkg+Hg0iqpKbxx5B/ZkdsLidlKZYQeMC7QSsWBEAbUIHcvLcxHakdhg1
+	 tzY7o2Iav71HHrqOs9aIhkb1dS1w1F9cUnE+jmRNdAa2hkwjTqJ2s4Adko/bTeYLjF
+	 6YNWsSu0H+2lhob3h6s2T8WqkXDs9vqv/1fbhknSI+IrXuRPcPYDcJl82+agzYzC6q
+	 wE3+hWsG6cxNCSV16gc0b33SRmILYlROlXFoRa3BqywZuaVZ9SvqCWBtralvh+aZdX
+	 PgB+CT2Cqs4lw==
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-5a9ef9ba998so1395060eaf.1;
+        Wed, 17 Apr 2024 01:21:09 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXdXg7XvJNxh5ZLfHzoprqfurVo4qicbJwV8jbCY7RnFhCK5+4c8ggU4r9cocGpRo4ymTTbYShGo4BU0tnkByKSwmRbHlCqnLECgG206WJieGhA2Dr0TVYAnAtrUzp12aY3C4GT3HQ=
+X-Gm-Message-State: AOJu0Yx9yjAxH/RvLsuFlI82t3E4rdKcV/A6RW0gLjyNAIgEWvpY3onH
+	TnOJ00psG9kry8q1uHILxed5T/Tejc0rJlf3jc69OnNyY1KJgiN1akPMoDVy1xy2SHCSWzcwX3t
+	0dYsH4p5v1HQ1iI3ky/g9h/lJMv8=
+X-Google-Smtp-Source: AGHT+IF1HUDQADytF/vNEBQ2UKS59DYMbC6OocjMGqOLuGMZH0OZPRVlzAAbkHRUU1qzVJJiRvJRK+r7AgZPRefv4/U=
+X-Received: by 2002:a05:6820:4187:b0:5ac:6fc1:c2cb with SMTP id
+ fk7-20020a056820418700b005ac6fc1c2cbmr15321134oob.0.1713342068650; Wed, 17
+ Apr 2024 01:21:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20240416211941.9369-1-tony.luck@intel.com> <20240416212204.9471-1-tony.luck@intel.com>
+In-Reply-To: <20240416212204.9471-1-tony.luck@intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 17 Apr 2024 10:20:56 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iGL8kk_0ym5-mvodZbkfhPtkJbjytEMjPmBN2G1vt=5A@mail.gmail.com>
+Message-ID: <CAJZ5v0iGL8kk_0ym5-mvodZbkfhPtkJbjytEMjPmBN2G1vt=5A@mail.gmail.com>
+Subject: Re: [PATCH v3 43/74] x86/cpu/vfm: Update drivers/cpufreq/intel_pstate.c
+To: Tony Luck <tony.luck@intel.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Len Brown <lenb@kernel.org>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 3dc435409d5b22cbc02ad767af3092af2b86a407  Merge branch 'thermal-fixes' into bleeding-edge
+On Tue, Apr 16, 2024 at 11:22=E2=80=AFPM Tony Luck <tony.luck@intel.com> wr=
+ote:
+>
+> New CPU #defines encode vendor and family as well as model.
+>
+> Signed-off-by: Tony Luck <tony.luck@intel.com>
 
-elapsed time: 732m
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-configs tested: 101
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240417   clang
-i386         buildonly-randconfig-002-20240417   gcc  
-i386         buildonly-randconfig-003-20240417   clang
-i386         buildonly-randconfig-004-20240417   gcc  
-i386         buildonly-randconfig-005-20240417   gcc  
-i386         buildonly-randconfig-006-20240417   gcc  
-i386                                defconfig   clang
-i386                  randconfig-001-20240417   clang
-i386                  randconfig-002-20240417   gcc  
-i386                  randconfig-003-20240417   gcc  
-i386                  randconfig-004-20240417   clang
-i386                  randconfig-005-20240417   clang
-i386                  randconfig-006-20240417   clang
-i386                  randconfig-011-20240417   gcc  
-i386                  randconfig-012-20240417   gcc  
-i386                  randconfig-013-20240417   clang
-i386                  randconfig-014-20240417   gcc  
-i386                  randconfig-015-20240417   gcc  
-i386                  randconfig-016-20240417   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64                              defconfig   gcc  
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  drivers/cpufreq/intel_pstate.c | 90 +++++++++++++++++-----------------
+>  1 file changed, 44 insertions(+), 46 deletions(-)
+>
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstat=
+e.c
+> index dbbf299f4219..685ec80e0af5 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -2402,52 +2402,51 @@ static const struct pstate_funcs knl_funcs =3D {
+>         .get_val =3D core_get_val,
+>  };
+>
+> -#define X86_MATCH(model, policy)                                        =
+\
+> -       X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL, 6, INTEL_FAM6_##model, =
+\
+> -                                          X86_FEATURE_APERFMPERF, &polic=
+y)
+> +#define X86_MATCH(vfm, policy)                                  \
+> +       X86_MATCH_VFM_FEATURE(vfm, X86_FEATURE_APERFMPERF, &policy)
+>
+>  static const struct x86_cpu_id intel_pstate_cpu_ids[] =3D {
+> -       X86_MATCH(SANDYBRIDGE,          core_funcs),
+> -       X86_MATCH(SANDYBRIDGE_X,        core_funcs),
+> -       X86_MATCH(ATOM_SILVERMONT,      silvermont_funcs),
+> -       X86_MATCH(IVYBRIDGE,            core_funcs),
+> -       X86_MATCH(HASWELL,              core_funcs),
+> -       X86_MATCH(BROADWELL,            core_funcs),
+> -       X86_MATCH(IVYBRIDGE_X,          core_funcs),
+> -       X86_MATCH(HASWELL_X,            core_funcs),
+> -       X86_MATCH(HASWELL_L,            core_funcs),
+> -       X86_MATCH(HASWELL_G,            core_funcs),
+> -       X86_MATCH(BROADWELL_G,          core_funcs),
+> -       X86_MATCH(ATOM_AIRMONT,         airmont_funcs),
+> -       X86_MATCH(SKYLAKE_L,            core_funcs),
+> -       X86_MATCH(BROADWELL_X,          core_funcs),
+> -       X86_MATCH(SKYLAKE,              core_funcs),
+> -       X86_MATCH(BROADWELL_D,          core_funcs),
+> -       X86_MATCH(XEON_PHI_KNL,         knl_funcs),
+> -       X86_MATCH(XEON_PHI_KNM,         knl_funcs),
+> -       X86_MATCH(ATOM_GOLDMONT,        core_funcs),
+> -       X86_MATCH(ATOM_GOLDMONT_PLUS,   core_funcs),
+> -       X86_MATCH(SKYLAKE_X,            core_funcs),
+> -       X86_MATCH(COMETLAKE,            core_funcs),
+> -       X86_MATCH(ICELAKE_X,            core_funcs),
+> -       X86_MATCH(TIGERLAKE,            core_funcs),
+> -       X86_MATCH(SAPPHIRERAPIDS_X,     core_funcs),
+> -       X86_MATCH(EMERALDRAPIDS_X,      core_funcs),
+> +       X86_MATCH(INTEL_SANDYBRIDGE,            core_funcs),
+> +       X86_MATCH(INTEL_SANDYBRIDGE_X,          core_funcs),
+> +       X86_MATCH(INTEL_ATOM_SILVERMONT,        silvermont_funcs),
+> +       X86_MATCH(INTEL_IVYBRIDGE,              core_funcs),
+> +       X86_MATCH(INTEL_HASWELL,                core_funcs),
+> +       X86_MATCH(INTEL_BROADWELL,              core_funcs),
+> +       X86_MATCH(INTEL_IVYBRIDGE_X,            core_funcs),
+> +       X86_MATCH(INTEL_HASWELL_X,              core_funcs),
+> +       X86_MATCH(INTEL_HASWELL_L,              core_funcs),
+> +       X86_MATCH(INTEL_HASWELL_G,              core_funcs),
+> +       X86_MATCH(INTEL_BROADWELL_G,            core_funcs),
+> +       X86_MATCH(INTEL_ATOM_AIRMONT,           airmont_funcs),
+> +       X86_MATCH(INTEL_SKYLAKE_L,              core_funcs),
+> +       X86_MATCH(INTEL_BROADWELL_X,            core_funcs),
+> +       X86_MATCH(INTEL_SKYLAKE,                core_funcs),
+> +       X86_MATCH(INTEL_BROADWELL_D,            core_funcs),
+> +       X86_MATCH(INTEL_XEON_PHI_KNL,           knl_funcs),
+> +       X86_MATCH(INTEL_XEON_PHI_KNM,           knl_funcs),
+> +       X86_MATCH(INTEL_ATOM_GOLDMONT,          core_funcs),
+> +       X86_MATCH(INTEL_ATOM_GOLDMONT_PLUS,     core_funcs),
+> +       X86_MATCH(INTEL_SKYLAKE_X,              core_funcs),
+> +       X86_MATCH(INTEL_COMETLAKE,              core_funcs),
+> +       X86_MATCH(INTEL_ICELAKE_X,              core_funcs),
+> +       X86_MATCH(INTEL_TIGERLAKE,              core_funcs),
+> +       X86_MATCH(INTEL_SAPPHIRERAPIDS_X,       core_funcs),
+> +       X86_MATCH(INTEL_EMERALDRAPIDS_X,        core_funcs),
+>         {}
+>  };
+>  MODULE_DEVICE_TABLE(x86cpu, intel_pstate_cpu_ids);
+>
+>  static const struct x86_cpu_id intel_pstate_cpu_oob_ids[] __initconst =
+=3D {
+> -       X86_MATCH(BROADWELL_D,          core_funcs),
+> -       X86_MATCH(BROADWELL_X,          core_funcs),
+> -       X86_MATCH(SKYLAKE_X,            core_funcs),
+> -       X86_MATCH(ICELAKE_X,            core_funcs),
+> -       X86_MATCH(SAPPHIRERAPIDS_X,     core_funcs),
+> +       X86_MATCH(INTEL_BROADWELL_D,            core_funcs),
+> +       X86_MATCH(INTEL_BROADWELL_X,            core_funcs),
+> +       X86_MATCH(INTEL_SKYLAKE_X,              core_funcs),
+> +       X86_MATCH(INTEL_ICELAKE_X,              core_funcs),
+> +       X86_MATCH(INTEL_SAPPHIRERAPIDS_X,       core_funcs),
+>         {}
+>  };
+>
+>  static const struct x86_cpu_id intel_pstate_cpu_ee_disable_ids[] =3D {
+> -       X86_MATCH(KABYLAKE,             core_funcs),
+> +       X86_MATCH(INTEL_KABYLAKE,               core_funcs),
+>         {}
+>  };
+>
+> @@ -3386,14 +3385,13 @@ static inline void intel_pstate_request_control_f=
+rom_smm(void) {}
+>
+>  #define INTEL_PSTATE_HWP_BROADWELL     0x01
+>
+> -#define X86_MATCH_HWP(model, hwp_mode)                                 \
+> -       X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL, 6, INTEL_FAM6_##model, =
+\
+> -                                          X86_FEATURE_HWP, hwp_mode)
+> +#define X86_MATCH_HWP(vfm, hwp_mode)                           \
+> +       X86_MATCH_VFM_FEATURE(vfm, X86_FEATURE_HWP, hwp_mode)
+>
+>  static const struct x86_cpu_id hwp_support_ids[] __initconst =3D {
+> -       X86_MATCH_HWP(BROADWELL_X,      INTEL_PSTATE_HWP_BROADWELL),
+> -       X86_MATCH_HWP(BROADWELL_D,      INTEL_PSTATE_HWP_BROADWELL),
+> -       X86_MATCH_HWP(ANY,              0),
+> +       X86_MATCH_HWP(INTEL_BROADWELL_X,        INTEL_PSTATE_HWP_BROADWEL=
+L),
+> +       X86_MATCH_HWP(INTEL_BROADWELL_D,        INTEL_PSTATE_HWP_BROADWEL=
+L),
+> +       X86_MATCH_HWP(INTEL_ANY,                0),
+>         {}
+>  };
+>
+> @@ -3426,15 +3424,15 @@ static const struct x86_cpu_id intel_epp_default[=
+] =3D {
+>          * which can result in one core turbo frequency for
+>          * AlderLake Mobile CPUs.
+>          */
+> -       X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L, HWP_SET_DEF_BALANCE_PERF_=
+EPP(102)),
+> -       X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X, HWP_SET_DEF_BALANCE_=
+PERF_EPP(32)),
+> -       X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE_L, HWP_SET_EPP_VALUES(HWP_E=
+PP_POWERSAVE,
+> -                                                       HWP_EPP_BALANCE_P=
+OWERSAVE, 115, 16)),
+> +       X86_MATCH_VFM(INTEL_ALDERLAKE_L, HWP_SET_DEF_BALANCE_PERF_EPP(102=
+)),
+> +       X86_MATCH_VFM(INTEL_SAPPHIRERAPIDS_X, HWP_SET_DEF_BALANCE_PERF_EP=
+P(32)),
+> +       X86_MATCH_VFM(INTEL_METEORLAKE_L, HWP_SET_EPP_VALUES(HWP_EPP_POWE=
+RSAVE,
+> +                     HWP_EPP_BALANCE_POWERSAVE, 115, 16)),
+>         {}
+>  };
+>
+>  static const struct x86_cpu_id intel_hybrid_scaling_factor[] =3D {
+> -       X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE_L, HYBRID_SCALING_FACTOR_MT=
+L),
+> +       X86_MATCH_VFM(INTEL_METEORLAKE_L, HYBRID_SCALING_FACTOR_MTL),
+>         {}
+>  };
+>
+> --
+> 2.44.0
+>
 
