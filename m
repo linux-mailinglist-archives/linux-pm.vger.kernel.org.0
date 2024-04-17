@@ -1,143 +1,229 @@
-Return-Path: <linux-pm+bounces-6555-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6557-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DC728A83F3
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 15:13:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E92D8A8426
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 15:19:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B3C6A28567A
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 13:13:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F8C71F2353B
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 13:19:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF72C14037C;
-	Wed, 17 Apr 2024 13:12:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="BzfDyKsj"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45B9013DDC7;
+	Wed, 17 Apr 2024 13:19:17 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4115E13E88C;
-	Wed, 17 Apr 2024 13:12:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 440C7128811;
+	Wed, 17 Apr 2024 13:19:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713359529; cv=none; b=vBh4p9GF5i6sBRWGdYwxy/+kqydQD67YIzjc/1+n8Nq1a+liQiKpn6SkbOlzI9cp7F5sXcChHAOPBIRE4CxFxrW9KHnlDLxjBaG2NgIbNWtId9aT2eeqiBVZ5SDODu/rtZ4d+XoIlht6VKVSWzswnqKx1bXhDFdPTOhtBJEbcu4=
+	t=1713359957; cv=none; b=iOHgbl6BMK5M27d/6jpixmUyqj9/2dtRvnOO02uQ4bVxENKRm8MkA1+8sGo/olBerjgCVT0pTJ/5mkj5YaV/ZPkPToNvUGlRKtLPlyC7HfDpKPKYC+UaR3gta76YtF5dssbkh744IKq/vRdNPeuX1jssZ9mcmfM1Cvq85Cwsuuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713359529; c=relaxed/simple;
-	bh=8QaLAPTDIhcj685tv/xgh0SXkZ17NauhUBDxY/86eRc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NbP63xax0vJVftnB+NGFVW3MN4mC4VI6sa4apwvfl3Qrk7yu2/YAi2rY3k/rkMKu+rCGpCkvBd7akVbPYW6Vr7xCdCqycZZEcoudSEJGgz1kFxH28h/ZeJqirZHyfYqkD8Tr9u9NbxKLXz25xdLJ2uiPG5f9VNYjmUQzeZkFqCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=BzfDyKsj reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
- id 612d45fe4c8ba6e1; Wed, 17 Apr 2024 15:11:56 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 7354166D262;
-	Wed, 17 Apr 2024 15:11:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1713359516;
-	bh=8QaLAPTDIhcj685tv/xgh0SXkZ17NauhUBDxY/86eRc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=BzfDyKsjCxbokZNWvmHDcRVKiipl5iYe/YxFVFOyazEAxCnoFnamOZJ2Ye7J0KrGS
-	 To3OUtvLXqCHHFQQp7VY5EUeCOSvvGx89MlZ9Oc24jftL/2BDeQC2GsozYGaSLDU75
-	 +133WOWcQSd+pPn6Qhd17UQ85AFekxyVdOtUC7vO9SemQTOlg0m7RkuE3CYlsS/s3G
-	 hDZEeuDhTpw0KoQh5ZdhUQcBg6Qac5hmxkgQ8tmRXfwWZ/+3PakMB+glvphc63eZs/
-	 71CrfC3GtPfu3+sJCE4mHEitvGiUG8gvXUyUZu1vbKeW13jwbszRAHQlJOaJ+5ieNs
-	 /RcA9WxPL40MA==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
- Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject:
- [PATCH v1 3/3] thermal/debugfs: Rename thermal_debug_update_temp() to
- thermal_debug_update_trip_stats()
-Date: Wed, 17 Apr 2024 15:11:50 +0200
-Message-ID: <2937506.e9J7NaK4W3@kreacher>
-In-Reply-To: <4918025.31r3eYUQgx@kreacher>
-References: <4918025.31r3eYUQgx@kreacher>
+	s=arc-20240116; t=1713359957; c=relaxed/simple;
+	bh=gFfeS1Q/DjmdgWYgHFzPVk4SQvxuOFbrk1sBpvMI1rs=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GGj0MlS1mdOzDuNDnjl2I+53n8vP+sPnketoPth3AqY3QVeaIqkUGvmJFLofgaQzs4DnD+qm6l7QYmJcJpCcTlY6h2zEElI66D+H80Epz1oiye/vHQXfiGafAoqEnt+UIsR/n/YVFmuggFioWdLa2EusxzLvO4RyiMdhq5nb/es=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VKLw50z3Kz6K8hg;
+	Wed, 17 Apr 2024 21:14:13 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id ACB24140A46;
+	Wed, 17 Apr 2024 21:19:10 +0800 (CST)
+Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
+ lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Wed, 17 Apr 2024 14:19:10 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
+	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
+	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+	<x86@kernel.org>, Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki"
+	<rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, James Morse
+	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, Jean-Philippe
+ Brucker <jean-philippe@linaro.org>, Catalin Marinas
+	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
+CC: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
+ Hansen <dave.hansen@linux.intel.com>, <linuxarm@huawei.com>,
+	<justin.he@arm.com>, <jianyong.wu@arm.com>
+Subject: [PATCH v6 00/16] ACPI/arm64: add support for virtual cpu hotplug
+Date: Wed, 17 Apr 2024 14:18:53 +0100
+Message-ID: <20240417131909.7925-1-Jonathan.Cameron@huawei.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudejkedgiedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopegurghnihgvlhdrlhgviigt
- rghnoheslhhinhgrrhhordhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Fundamental change: At the level of common ACPI infrastructure, use
+the existing hotplug path for arm64 even though what needs to be
+done at the architecture specific level is quite different.
 
-Rename thermal_debug_update_temp() to thermal_debug_update_trip_stats()
-which is a better match for the purpose of the function.
+An explicit check in arch_register_cpu() for arm64 prevents
+this code doing anything if Physical CPU Hotplug is signalled.
 
-No functional impact.
+This should resolve any concerns about treating virtual CPU
+hotplug as if it were physical and potential unwanted side effects
+if physical CPU hotplug is added to the ARM architecture in the
+future.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/thermal_core.c    |    2 +-
- drivers/thermal/thermal_debugfs.c |    2 +-
- drivers/thermal/thermal_debugfs.h |    4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+v6: Thanks to Rafael for extensive help with the approach + reviews.
+Specific changes:
+ - Do not differentiate wrt code flow between traditional CPU HP
+   and the new ARM flow.  The conditions on performing hotplug actions
+   do need to be adjusted though to incorporate the slightly different
+   state transition
+     Added PRESENT + !ENABLED -> PRESENT + ENABLED
+     to existing !PRESENT + !ENABLED -> PRESENT + ENABLED
+ - Enable ACPI_HOTPLUG_CPU on arm64 and drop the earlier patches that
+   took various code out of the protection of that.  Now the paths
+ - New patch to drop unnecessary _STA check in hotplug code. This
+   code cannot be entered unless ENABLED + PRESENT are set.
+ - New patch to unify the flow of already onlined (at time of driver
+   load) and hotplugged CPUs in acpi/processor_driver.c.
+   This change is necessary because we can't easily distinguish the
+   2 cases of deferred vs hotplug calls of register_cpu() on arm64.
+   It is also a nice simplification.
+ - Use flags rather than a structure for the extra parameter to
+   acpi_scan_check_and_detach() - Thank to Shameer for offline feedback.
 
-Index: linux-pm/drivers/thermal/thermal_core.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_core.c
-+++ linux-pm/drivers/thermal/thermal_core.c
-@@ -504,7 +504,7 @@ void __thermal_zone_device_update(struct
- 	if (governor->manage)
- 		governor->manage(tz);
+Updated version of James' original introduction.
+
+This series adds what looks like cpuhotplug support to arm64 for use in
+virtual machines. It does this by moving the cpu_register() calls for
+architectures that support ACPI into an arch specific call made from
+the ACPI processor driver.
  
--	thermal_debug_update_temp(tz);
-+	thermal_debug_update_trip_stats(tz);
- 
- 	monitor_thermal_zone(tz);
- }
-Index: linux-pm/drivers/thermal/thermal_debugfs.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_debugfs.c
-+++ linux-pm/drivers/thermal/thermal_debugfs.c
-@@ -676,7 +676,7 @@ out:
- 	mutex_unlock(&thermal_dbg->lock);
- }
- 
--void thermal_debug_update_temp(struct thermal_zone_device *tz)
-+void thermal_debug_update_trip_stats(struct thermal_zone_device *tz)
- {
- 	struct thermal_debugfs *thermal_dbg = tz->debugfs;
- 	struct tz_debugfs *tz_dbg;
-Index: linux-pm/drivers/thermal/thermal_debugfs.h
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_debugfs.h
-+++ linux-pm/drivers/thermal/thermal_debugfs.h
-@@ -11,7 +11,7 @@ void thermal_debug_tz_trip_up(struct the
- 			      const struct thermal_trip *trip);
- void thermal_debug_tz_trip_down(struct thermal_zone_device *tz,
- 				const struct thermal_trip *trip);
--void thermal_debug_update_temp(struct thermal_zone_device *tz);
-+void thermal_debug_update_trip_stats(struct thermal_zone_device *tz);
- #else
- static inline void thermal_debug_init(void) {}
- static inline void thermal_debug_cdev_add(struct thermal_cooling_device *cdev) {}
-@@ -24,5 +24,5 @@ static inline void thermal_debug_tz_trip
- 					    const struct thermal_trip *trip) {};
- static inline void thermal_debug_tz_trip_down(struct thermal_zone_device *tz,
- 					      const struct thermal_trip *trip) {}
--static inline void thermal_debug_update_temp(struct thermal_zone_device *tz) {}
-+static inline void thermal_debug_update_trip_stats(struct thermal_zone_device *tz) {}
- #endif /* CONFIG_THERMAL_DEBUGFS */
+The kubernetes folk really want to be able to add CPUs to an existing VM,
+in exactly the same way they do on x86. The use-case is pre-booting guests
+with one CPU, then adding the number that were actually needed when the
+workload is provisioned.
 
+Wait? Doesn't arm64 support cpuhotplug already!?
+In the arm world, cpuhotplug gets used to mean removing the power from a CPU.
+The CPU is offline, and remains present. For x86, and ACPI, cpuhotplug
+has the additional step of physically removing the CPU, so that it isn't
+present anymore.
+ 
+Arm64 doesn't support this, and can't support it: CPUs are really a slice
+of the SoC, and there is not enough information in the existing ACPI tables
+to describe which bits of the slice also got removed. Without a reference
+machine: adding this support to the spec is a wild goose chase.
+ 
+Critically: everything described in the firmware tables must remain present.
+ 
+For a virtual machine this is easy as all the other bits of 'virtual SoC'
+are emulated, so they can (and do) remain present when a vCPU is 'removed'.
 
+On a system that supports cpuhotplug the MADT has to describe every possible
+CPU at boot. Under KVM, the vGIC needs to know about every possible vCPU before
+the guest is started.
+With these constraints, virtual-cpuhotplug is really just a hypervisor/firmware
+policy about which CPUs can be brought online.
+ 
+This series adds support for virtual-cpuhotplug as exactly that: firmware
+policy. This may even work on a physical machine too; for a guest the part of
+firmware is played by the VMM. (typically Qemu).
+ 
+PSCI support is modified to return 'DENIED' if the CPU can't be brought
+online/enabled yet. The CPU object's _STA method's enabled bit is used to
+indicate firmware's current disposition. If the CPU has its enabled bit clear,
+it will not be registered with sysfs, and attempts to bring it online will
+fail. The notifications that _STA has changed its value then work in the same
+way as physical hotplug, and firmware can cause the CPU to be registered some
+time later, allowing it to be brought online.
+ 
+This creates something that looks like cpuhotplug to user-space and the
+kernel beyond arm64 architecture specific code, as the sysfs
+files appear and disappear, and the udev notifications look the same.
+ 
+One notable difference is the CPU present mask, which is exposed via sysfs.
+Because the CPUs remain present throughout, they can still be seen in that mask.
+This value does get used by webbrowsers to estimate the number of CPUs
+as the CPU online mask is constantly changed on mobile phones.
+ 
+Linux is tolerant of PSCI returning errors, as its always been allowed to do
+that. To avoid confusing OS that can't tolerate this, we needed an additional
+bit in the MADT GICC flags. This series copies ACPI_MADT_ONLINE_CAPABLE, which
+appears to be for this purpose, but calls it ACPI_MADT_GICC_CPU_CAPABLE as it
+has a different bit position in the GICC.
+ 
+This code is unconditionally enabled for all ACPI architectures, though for
+now only arm64 will have deferred the cpu_register() calls.
+
+If folk want to play along at home, you'll need a copy of Qemu that supports this.
+https://github.com/salil-mehta/qemu.git virt-cpuhp-armv8/rfc-v2
+
+Replace your '-smp' argument with something like:
+ | -smp cpus=1,maxcpus=3,cores=3,threads=1,sockets=1
+ 
+ then feed the following to the Qemu montior;
+ | (qemu) device_add driver=host-arm-cpu,core-id=1,id=cpu1
+ | (qemu) device_del cpu1
+
+James Morse (7):
+  ACPI: processor: Register deferred CPUs from acpi_processor_get_info()
+  ACPI: Add post_eject to struct acpi_scan_handler for cpu hotplug
+  arm64: acpi: Move get_cpu_for_acpi_id() to a header
+  irqchip/gic-v3: Don't return errors from gic_acpi_match_gicc()
+  irqchip/gic-v3: Add support for ACPI's disabled but 'online capable'
+    CPUs
+  arm64: document virtual CPU hotplug's expectations
+  cpumask: Add enabled cpumask for present CPUs that can be brought
+    online
+
+Jean-Philippe Brucker (1):
+  arm64: psci: Ignore DENIED CPUs
+
+Jonathan Cameron (8):
+  ACPI: processor: Simplify initial onlining to use same path for cold
+    and hotplug
+  cpu: Do not warn on arch_register_cpu() returning -EPROBE_DEFER
+  ACPI: processor: Drop duplicated check on _STA (enabled + present)
+  ACPI: processor: Move checks and availability of acpi_processor
+    earlier
+  ACPI: processor: Add acpi_get_processor_handle() helper
+  ACPI: scan: switch to flags for acpi_scan_check_and_detach();
+  arm64: arch_register_cpu() variant to check if an ACPI handle is now
+    available.
+  arm64: Kconfig: Enable hotplug CPU on arm64 if ACPI_PROCESSOR is
+    enabled.
+
+ .../ABI/testing/sysfs-devices-system-cpu      |   6 +
+ Documentation/arch/arm64/cpu-hotplug.rst      |  79 ++++++++++++
+ Documentation/arch/arm64/index.rst            |   1 +
+ arch/arm64/Kconfig                            |   1 +
+ arch/arm64/include/asm/acpi.h                 |  11 ++
+ arch/arm64/kernel/acpi.c                      |  16 +++
+ arch/arm64/kernel/acpi_numa.c                 |  11 --
+ arch/arm64/kernel/psci.c                      |   2 +-
+ arch/arm64/kernel/smp.c                       |  56 ++++++++-
+ drivers/acpi/acpi_processor.c                 | 112 +++++++++++-------
+ drivers/acpi/processor_driver.c               |  44 ++-----
+ drivers/acpi/scan.c                           |  47 ++++++--
+ drivers/base/cpu.c                            |  12 +-
+ drivers/irqchip/irq-gic-v3.c                  |  32 +++--
+ include/acpi/acpi_bus.h                       |   1 +
+ include/acpi/processor.h                      |   2 +-
+ include/linux/acpi.h                          |  10 +-
+ include/linux/cpumask.h                       |  25 ++++
+ kernel/cpu.c                                  |   3 +
+ 19 files changed, 362 insertions(+), 109 deletions(-)
+ create mode 100644 Documentation/arch/arm64/cpu-hotplug.rst
+
+-- 
+2.39.2
 
 
