@@ -1,225 +1,234 @@
-Return-Path: <linux-pm+bounces-6598-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6599-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37B9C8A890D
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 18:39:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC6E38A8966
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 18:55:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E303D28460E
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 16:39:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 018301C2312B
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 16:55:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0C8517107B;
-	Wed, 17 Apr 2024 16:39:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="CxqSaL8x"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89080171066;
+	Wed, 17 Apr 2024 16:55:13 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5721F171060;
-	Wed, 17 Apr 2024 16:39:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C593F1581F0;
+	Wed, 17 Apr 2024 16:55:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713371982; cv=none; b=LEQNR/JEQ2cPz8diwyG5qMIqJvA6OVGVFJMWu704rXkt5iQYYt7aErEaKfpilS9EfCOt4KjdcZQjnlLr4oc/4Ot77pPmo8rddIK2zL91y+pySSjzZDkLU/RgwJGLLnQ0KQQvzkwdqI2m7X4NO8y2IQQ5DJaQ9vSpkplbXUYBVog=
+	t=1713372913; cv=none; b=gwWlhWvavu34uf6ylA9wxOJuFNHCzPdlURyaZ0evVcufcawCenAbbej0wHm15FthVgl8cIc498UrDfswKKDl3fVZU8opOa4bko5j5GpiIYMoFsWmrpZDFnLwQpRCkba1JGvTj3f17AhXWSld+ctuF1UJ7A6RDXE8SmLkI29LVfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713371982; c=relaxed/simple;
-	bh=nNiDdi5dMzvYy7L4OlCVwamn4t6fg20UJ5DJLQW5mUc=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Al5YSuCEaFw1BG6SQrcY9oHtkFAXLhp0c0y6g4Y2eZiNI/DIe24zoyvNNoImuF7ksfGvBLJw9Y4zYUC2iiPcp8dun5ZtbRzkh/hDQT4y+irru6NUWGioZI3GSLMAiZ2+RQM8LbkOSSvTbao/UEnXHJVAVWHTWzcIyrKrx7hfgcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=CxqSaL8x; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43HG0ngo000483;
-	Wed, 17 Apr 2024 16:39:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=qcppdkim1; bh=UtmHnbfH1lF7TfGP3VMjz
-	gGrAOLOlqHk80fnpNVynQg=; b=CxqSaL8xuCSFeLDHdesUSwtA9YVBlfyIwGpjI
-	dR2bJRuJmfgVpQ7oZEIc0WGV1x/PypZE6M2CQUjqgV1RbP5XJXbehdhCvdLOrQwT
-	DYtFOTZu5LIrfKffQw/CDh7AN5wrGpmdj4XLIzZrudNEkVUBlo53krc8IKy7opZt
-	RTKEx09I/BeppNpbwRat9t5+ceY25moz81EFcHZNPjdBBij5X+U4MkJN3KF3iVFp
-	byJ0NrSs7C3H2VgnkDyLDJwzfZN2ZR/GJO4TI9aIe0x5Ez2jCW2Vcy5PtECvxuS7
-	/ibKJEu4MBpzVoNbEfA5d1r53uXYucmQPX7LdeDI3bUc/3ZBw==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xj7tr1nf3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Apr 2024 16:39:37 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43HGdaq3031708
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Apr 2024 16:39:36 GMT
-Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 17 Apr 2024 09:39:31 -0700
-Date: Wed, 17 Apr 2024 22:09:27 +0530
-From: Varadarajan Narayanan <quic_varada@quicinc.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC: <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <konrad.dybcio@linaro.org>, <djakov@kernel.org>,
-        <quic_anusha@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v8 6/7] clk: qcom: ipq9574: Use icc-clk for enabling NoC
- related clocks
-Message-ID: <Zh/7PzrIM6hlbSsz@hu-varada-blr.qualcomm.com>
-References: <20240417105605.836705-1-quic_varada@quicinc.com>
- <20240417105605.836705-7-quic_varada@quicinc.com>
- <CAA8EJpruv2dmw61Z4c4C0p5662CKwSqzRBjDQU+_KSMNU=cL5g@mail.gmail.com>
+	s=arc-20240116; t=1713372913; c=relaxed/simple;
+	bh=LTW2xvAuavXyOzbR1XOTWRWDNOnqiX2ba2R8DGu801k=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kxVVUJJcyWMXjM8UtOZyJayfPnVesnxUyGcIZDNVdxVH1TFIG+OPMCAxKbQKoOPQDPrdI+j9RqfiU3hl6IWsQo5UwLtGj3n2qqhq8TJvuQXjcGHyDSG5vwDkTmlFJ89koS/rO2yYVPEJmQLTKgh8Ugj9uprcIXlPeEAfMC5ZOZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VKRmg57swz67n5j;
+	Thu, 18 Apr 2024 00:53:07 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 17FCF140B38;
+	Thu, 18 Apr 2024 00:55:08 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Wed, 17 Apr
+ 2024 17:55:07 +0100
+Date: Wed, 17 Apr 2024 17:55:06 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Salil Mehta <salil.mehta@huawei.com>
+CC: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
+	<peterz@infradead.org>, "linux-pm@vger.kernel.org"
+	<linux-pm@vger.kernel.org>, "loongarch@lists.linux.dev"
+	<loongarch@lists.linux.dev>, "linux-acpi@vger.kernel.org"
+	<linux-acpi@vger.kernel.org>, "linux-arch@vger.kernel.org"
+	<linux-arch@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
+	<kvmarm@lists.linux.dev>, "x86@kernel.org" <x86@kernel.org>, Russell King
+	<linux@armlinux.org.uk>, "Rafael J . Wysocki" <rafael@kernel.org>, "Miguel
+ Luis" <miguel.luis@oracle.com>, James Morse <james.morse@arm.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>, Catalin Marinas
+	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Ingo Molnar
+	<mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+	<dave.hansen@linux.intel.com>, Linuxarm <linuxarm@huawei.com>,
+	"justin.he@arm.com" <justin.he@arm.com>, "jianyong.wu@arm.com"
+	<jianyong.wu@arm.com>
+Subject: Re: [PATCH v6 13/16] arm64: arch_register_cpu() variant to check if
+ an ACPI handle is now available.
+Message-ID: <20240417175506.00004934@Huawei.com>
+In-Reply-To: <073c665c658e40f080c766803d326b77@huawei.com>
+References: <20240417131909.7925-1-Jonathan.Cameron@huawei.com>
+	<20240417131909.7925-14-Jonathan.Cameron@huawei.com>
+	<073c665c658e40f080c766803d326b77@huawei.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAA8EJpruv2dmw61Z4c4C0p5662CKwSqzRBjDQU+_KSMNU=cL5g@mail.gmail.com>
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 9Kcr_0C2cNGaxxmn1QV4JSVrr_FK47Iz
-X-Proofpoint-GUID: 9Kcr_0C2cNGaxxmn1QV4JSVrr_FK47Iz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-17_14,2024-04-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
- adultscore=0 suspectscore=0 impostorscore=0 phishscore=0 mlxlogscore=999
- clxscore=1015 priorityscore=1501 lowpriorityscore=0 bulkscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2404010003 definitions=main-2404170117
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Wed, Apr 17, 2024 at 02:30:02PM +0300, Dmitry Baryshkov wrote:
-> On Wed, 17 Apr 2024 at 13:57, Varadarajan Narayanan
-> <quic_varada@quicinc.com> wrote:
-> >
-> > Use the icc-clk framework to enable few clocks to be able to
-> > create paths and use the peripherals connected on those NoCs.
-> >
-> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > ---
-> > v8: Bind clock and interconnect using master and slave ids
-> >     Use indices instead of clock pointers
-> > v7: Auto select INTERCONNECT & INTERCONNECT_CLK in COMMON_CLK_QCOM
-> >     to address build break with random config build test, with the
-> >     following combination
-> >
-> >         CONFIG_COMMON_CLK_QCOM=y
-> >                 and
-> >         CONFIG_INTERCONNECT_CLK=m
-> >
-> >     the following error is seen as devm_icc_clk_register is in a
-> >     module and being referenced from vmlinux.
-> >
-> >         powerpc64-linux-ld: drivers/clk/qcom/common.o: in function `qcom_cc_really_probe':
-> >         >> common.c:(.text+0x980): undefined reference to `devm_icc_clk_register'
-> >
-> > v6: Move enum to dt-bindings and share between here and DT
-> >     first_id -> icc_first_node_id
-> > v5: Split from common.c changes into separate patch
-> >     No functional changes
-> > ---
-> >  drivers/clk/qcom/Kconfig       |  2 ++
-> >  drivers/clk/qcom/gcc-ipq9574.c | 31 +++++++++++++++++++++++++++++++
-> >  2 files changed, 33 insertions(+)
-> >
-> > diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-> > index 8ab08e7b5b6c..b65a373f2e6b 100644
-> > --- a/drivers/clk/qcom/Kconfig
-> > +++ b/drivers/clk/qcom/Kconfig
-> > @@ -17,6 +17,8 @@ menuconfig COMMON_CLK_QCOM
-> >         select RATIONAL
-> >         select REGMAP_MMIO
-> >         select RESET_CONTROLLER
-> > +       select INTERCONNECT
-> > +       select INTERCONNECT_CLK
-> >
-> >  if COMMON_CLK_QCOM
-> >
-> > diff --git a/drivers/clk/qcom/gcc-ipq9574.c b/drivers/clk/qcom/gcc-ipq9574.c
-> > index 0a3f846695b8..7983e9ba0f35 100644
-> > --- a/drivers/clk/qcom/gcc-ipq9574.c
-> > +++ b/drivers/clk/qcom/gcc-ipq9574.c
-> > @@ -4,6 +4,7 @@
-> >   */
-> >
-> >  #include <linux/clk-provider.h>
-> > +#include <linux/interconnect-clk.h>
-> >  #include <linux/kernel.h>
-> >  #include <linux/module.h>
-> >  #include <linux/of.h>
-> > @@ -12,6 +13,7 @@
-> >
-> >  #include <dt-bindings/clock/qcom,ipq9574-gcc.h>
-> >  #include <dt-bindings/reset/qcom,ipq9574-gcc.h>
-> > +#include <dt-bindings/interconnect/qcom,ipq9574.h>
-> >
-> >  #include "clk-alpha-pll.h"
-> >  #include "clk-branch.h"
-> > @@ -4301,6 +4303,32 @@ static const struct qcom_reset_map gcc_ipq9574_resets[] = {
-> >         [GCC_WCSS_Q6_TBU_BCR] = { 0x12054, 0 },
-> >  };
-> >
-> > +#define IPQ_APPS_ID                    9574    /* some unique value */
-> > +
-> > +static struct qcom_icc_hws_data icc_ipq9574_hws[] = {
-> > +       HWS_DATA(ANOC_PCIE0, GCC_ANOC_PCIE0_1LANE_M_CLK),
->
-> Have you seen other parts of the qcom framework using macros to wrap
-> around structure initialisation? I don't think so. Please follow the
-> suit and inline the macro here.
+On Wed, 17 Apr 2024 17:33:02 +0100
+Salil Mehta <salil.mehta@huawei.com> wrote:
 
-Ok, will change and post a new version.
+> Hi Jonathan,
+> 
+> >  From: Jonathan Cameron <jonathan.cameron@huawei.com>
+> >  Sent: Wednesday, April 17, 2024 2:19 PM
+> >  
+> >  The ARM64 architecture does not support physical CPU HP today.
+> >  To avoid any possibility of a bug against such an architecture if defined in
+> >  future, check for the physical CPU HP case (not present) and return an error
+> >  on any such attempt.
+> >  
+> >  On ARM64 virtual CPU Hotplug relies on the status value that can be queried
+> >  via the AML method _STA for the CPU object.
+> >  
+> >  There are two conditions in which the CPU can be registered.
+> >  1) ACPI disabled.
+> >  2) ACPI enabled and the acpi_handle is available.
+> >     _STA evaluates to the CPU is both enabled and present.
+> >     (Note that in absence of the _STA method they are always in this
+> >      state).
+> >  
+> >  If neither of these conditions is met the CPU is not 'yet' ready to be used
+> >  and -EPROBE_DEFER is returned.
+> >  
+> >  Success occurs in the early attempt to register the CPUs if we are booting
+> >  with DT (no concept yet of vCPU HP) if not it succeeds for already enabled
+> >  CPUs when the ACPI Processor driver attaches to them.  Finally it may
+> >  succeed via the CPU Hotplug code indicating that the CPU is now enabled.
+> >  
+> >  For ACPI if CONFIG_ACPI_PROCESSOR the only path to get to
+> >  arch_register_cpu() with that handle set is via
+> >  acpi_processor_hot_add_init() which is only called from an ACPI bus scan in
+> >  which _STA has already been queried there is no need to repeat it here.
+> >  Add a comment to remind us of this in the future.
+> >  
+> >  Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
+> >  Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> >  ---
+> >  v6: Add protection again Physical CPU HP to the arch specific code
+> >      and don't actually check _STA
+> >  
+> >  Tested on arm64 with ACPI + DT build and DT only builds, booting with ACPI
+> >  and DT as appropriate.
+> >  ---
+> >   arch/arm64/kernel/smp.c | 53
+> >  +++++++++++++++++++++++++++++++++++++++++
+> >   1 file changed, 53 insertions(+)
+> >  
+> >  diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c index
+> >  dc0e0b3ec2d4..ccb6ad347df9 100644
+> >  --- a/arch/arm64/kernel/smp.c
+> >  +++ b/arch/arm64/kernel/smp.c
+> >  @@ -504,6 +504,59 @@ static int __init smp_cpu_setup(int cpu)  static bool
+> >  bootcpu_valid __initdata;  static unsigned int cpu_count = 1;
+> >  
+> >  +int arch_register_cpu(int cpu)
+> >  +{
+> >  +	acpi_handle acpi_handle = acpi_get_processor_handle(cpu);
+> >  +	struct cpu *c = &per_cpu(cpu_devices, cpu);
+> >  +
+> >  +	if (!acpi_disabled && !acpi_handle &&
+> >  +	    IS_ENABLED(CONFIG_ACPI_HOTPLUG_CPU))
+> >  +		return -EPROBE_DEFER;
+> >  +
+> >  +#ifdef CONFIG_ACPI_HOTPLUG_CPU
+> >  +	/* For now block anything that looks like physical CPU Hotplug */
+> >  +	if (invalid_logical_cpuid(cpu) || !cpu_present(cpu)) {
+> >  +		pr_err_once("Changing CPU present bit is not
+> >  supported\n");
+> >  +		return -ENODEV;
+> >  +	}
+> >  +#endif
+> >  +
+> >  +	/*
+> >  +	 * Availability of the acpi handle is sufficient to establish
+> >  +	 * that _STA has aleady been checked. No need to recheck here.
+> >  +	 */
+> >  +	c->hotpluggable = arch_cpu_is_hotpluggable(cpu);
+> >  +  
+> 
+> 
+> We would still need 'enabled' bitmask as applications need a way to clearly
+> get which processors are enabled and usable in case of ARM64. Otherwise,
+> they will end up scanning the entire MAX CPU space to figure out which
+> processors have been plugged or unplugged. It is inefficient to bank upon
+> errors to detect this and unnecessary to scan again and again.
+>            
+> +            set_cpu_enabled(cpu, true);   // will need this change
+> 
+> 
+> And its corresponding additions of enabled bitmask along side the present masks.
+> 
+> I think we had this discussion in Linaro Open Discussions group few years
+> back.
 
-Thanks
-Varada
+Agreed - but if I understand correctly that is  handled in patch 16 -
+which introduced the enabled bitmask. I tested that works and it all seems fine.
+Done for all architectures in register_cpu() and unregister_cpu() rather
+than in arch specific code.
 
-> > +       HWS_DATA(SNOC_PCIE0, GCC_SNOC_PCIE0_1LANE_S_CLK),
-> > +       HWS_DATA(ANOC_PCIE1, GCC_ANOC_PCIE1_1LANE_M_CLK),
-> > +       HWS_DATA(SNOC_PCIE1, GCC_SNOC_PCIE1_1LANE_S_CLK),
-> > +       HWS_DATA(ANOC_PCIE2, GCC_ANOC_PCIE2_2LANE_M_CLK),
-> > +       HWS_DATA(SNOC_PCIE2, GCC_SNOC_PCIE2_2LANE_S_CLK),
-> > +       HWS_DATA(ANOC_PCIE3, GCC_ANOC_PCIE3_2LANE_M_CLK),
-> > +       HWS_DATA(SNOC_PCIE3, GCC_SNOC_PCIE3_2LANE_S_CLK),
-> > +       HWS_DATA(USB, GCC_SNOC_USB_CLK),
-> > +       HWS_DATA(USB_AXI, GCC_ANOC_USB_AXI_CLK),
-> > +       HWS_DATA(NSSNOC_NSSCC, GCC_NSSNOC_NSSCC_CLK),
-> > +       HWS_DATA(NSSNOC_SNOC_0, GCC_NSSNOC_SNOC_CLK),
-> > +       HWS_DATA(NSSNOC_SNOC_1, GCC_NSSNOC_SNOC_1_CLK),
-> > +       HWS_DATA(NSSNOC_PCNOC_1, GCC_NSSNOC_PCNOC_1_CLK),
-> > +       HWS_DATA(NSSNOC_QOSGEN_REF, GCC_NSSNOC_QOSGEN_REF_CLK),
-> > +       HWS_DATA(NSSNOC_TIMEOUT_REF, GCC_NSSNOC_TIMEOUT_REF_CLK),
-> > +       HWS_DATA(NSSNOC_XO_DCD, GCC_NSSNOC_XO_DCD_CLK),
-> > +       HWS_DATA(NSSNOC_ATB, GCC_NSSNOC_ATB_CLK),
-> > +       HWS_DATA(MEM_NOC_NSSNOC, GCC_MEM_NOC_NSSNOC_CLK),
-> > +       HWS_DATA(NSSNOC_MEMNOC, GCC_NSSNOC_MEMNOC_CLK),
-> > +       HWS_DATA(NSSNOC_MEM_NOC_1, GCC_NSSNOC_MEM_NOC_1_CLK),
-> > +};
-> > +
-> >  static const struct of_device_id gcc_ipq9574_match_table[] = {
-> >         { .compatible = "qcom,ipq9574-gcc" },
-> >         { }
-> > @@ -4323,6 +4351,9 @@ static const struct qcom_cc_desc gcc_ipq9574_desc = {
-> >         .num_resets = ARRAY_SIZE(gcc_ipq9574_resets),
-> >         .clk_hws = gcc_ipq9574_hws,
-> >         .num_clk_hws = ARRAY_SIZE(gcc_ipq9574_hws),
-> > +       .icc_hws = icc_ipq9574_hws,
-> > +       .num_icc_hws = ARRAY_SIZE(icc_ipq9574_hws),
-> > +       .icc_first_node_id = IPQ_APPS_ID,
-> >  };
-> >
-> >  static int gcc_ipq9574_probe(struct platform_device *pdev)
-> > --
-> > 2.34.1
-> >
->
->
-> --
-> With best wishes
-> Dmitry
+Jonathan
+
+
+> 
+> 
+> >  +	return register_cpu(c, cpu);
+> >  +}
+> >  +
+> >  +#ifdef CONFIG_ACPI_HOTPLUG_CPU
+> >  +void arch_unregister_cpu(int cpu)
+> >  +{
+> >  +	acpi_handle acpi_handle = acpi_get_processor_handle(cpu);
+> >  +	struct cpu *c = &per_cpu(cpu_devices, cpu);
+> >  +	acpi_status status;
+> >  +	unsigned long long sta;
+> >  +
+> >  +	if (!acpi_handle) {
+> >  +		pr_err_once("Removing a CPU without associated ACPI
+> >  handle\n");
+> >  +		return;
+> >  +	}
+> >  +
+> >  +	status = acpi_evaluate_integer(acpi_handle, "_STA", NULL, &sta);
+> >  +	if (ACPI_FAILURE(status))
+> >  +		return;
+> >  +
+> >  +	/* For now do not allow anything that looks like physical CPU HP */
+> >  +	if (cpu_present(cpu) && !(sta & ACPI_STA_DEVICE_PRESENT)) {
+> >  +		pr_err_once("Changing CPU present bit is not
+> >  supported\n");
+> >  +		return;
+> >  +	}
+> >  +  
+> 
+> For the same reasons as above:
+> 
+> +            set_cpu_enabled(cpu, flase);   // will need this change
+> 
+> 
+> >  +	unregister_cpu(c);
+> >  +}
+> >  +#endif /* CONFIG_ACPI_HOTPLUG_CPU */
+> >  +
+> >   #ifdef CONFIG_ACPI
+> >   static struct acpi_madt_generic_interrupt cpu_madt_gicc[NR_CPUS];
+> >  
+> >  --
+> >  2.39.2  
+> 
+
 
