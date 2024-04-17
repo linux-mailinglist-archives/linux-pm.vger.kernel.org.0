@@ -1,187 +1,177 @@
-Return-Path: <linux-pm+bounces-6539-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6540-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 029D08A8125
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 12:39:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F1D38A8155
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 12:56:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24D011C22552
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 10:39:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F2F71C22712
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 10:56:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D69E13C66E;
-	Wed, 17 Apr 2024 10:39:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B370013C699;
+	Wed, 17 Apr 2024 10:56:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Y7byvPVF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BE2E1386B3;
-	Wed, 17 Apr 2024 10:39:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03A9513C80D;
+	Wed, 17 Apr 2024 10:56:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713350394; cv=none; b=X6a2K2X1KBLSjqIWMy/FgW3tWkirZsKchtf23Lf094ivZcLWX/yoTyUgfH+9eQWnYdX+a1VFmS8e4LirCtkpc4rnKPrguU+FP1/jHmw7q46oqwJCkAD6Nt1rALU05Uf4mQ7TYwscgWk3RHCVECHih8X3lCnGK2RKXUGpWEu/ZqI=
+	t=1713351403; cv=none; b=QbU9j+4nmG7qhBT+qBqz2s1ub44hvs89sPZkcPTV9ZfXkTHnhiq1QA9RZ9aTvK68DZAtuSDih1TqUV4aHrzwaWoViVj/RLF7z1+nzkYK6MCn78t9//oFt00PmTvg8iYiq6OjoRywrYyHQtHfljhblJlXU4dCQN2W6r2G24vt/bE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713350394; c=relaxed/simple;
-	bh=/XtRZN0ydfLzBjIUi0ukfwL5IcMWRM7rSQeDti6Shk4=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=o9TtkrhxMJcRrVFFt8h89/V3ASP21nSjplc4r8cenk6GhV4owuGwI9ipwoz7GfS930HTXT5ogys/1/LiKZh2Aoi4mRq0e2VZs1vjkp3V2KkHSzom9lYBUiYz4ozv0p6jiMxmirxvFZ9hxS9W8+VuJ418/uj+3WDDNdiaKhhfBAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VKHRc1ST4z6JB7k;
-	Wed, 17 Apr 2024 18:37:48 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id C2D22140A46;
-	Wed, 17 Apr 2024 18:39:47 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Wed, 17 Apr
- 2024 11:39:47 +0100
-Date: Wed, 17 Apr 2024 11:39:46 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: Thomas Gleixner <tglx@linutronix.de>, "Russell King (Oracle)"
-	<linux@armlinux.org.uk>, <linux-pm@vger.kernel.org>,
-	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-	<x86@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, James Morse
-	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, "Jean-Philippe
- Brucker" <jean-philippe@linaro.org>, Catalin Marinas
-	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
-	<linuxarm@huawei.com>, <justin.he@arm.com>, <jianyong.wu@arm.com>
-Subject: Re: [PATCH v5 03/18] ACPI: processor: Register deferred CPUs from
- acpi_processor_get_info()
-Message-ID: <20240417113946.00000edb@Huawei.com>
-In-Reply-To: <CAJZ5v0iK61_ihUZX_tXoSGdhpYDWFhEBbEuFf6WFiiD0QSeTDg@mail.gmail.com>
-References: <20240412143719.11398-1-Jonathan.Cameron@huawei.com>
-	<20240412143719.11398-4-Jonathan.Cameron@huawei.com>
-	<CAJZ5v0gNvy2e=hOGQQ2kLpnrDr8=QGBax-E5odEJ=7BA8qW-9A@mail.gmail.com>
-	<ZhmWkE+fCEG/WFoi@shell.armlinux.org.uk>
-	<87bk6ez4hj.ffs@tglx>
-	<ZhmtO6zBExkQGZLk@shell.armlinux.org.uk>
-	<878r1iyxkr.ffs@tglx>
-	<20240415094552.000008d7@Huawei.com>
-	<CAJZ5v0ireu4pOedLjMjK2NrLkq_2vySpdgEgGccQEiFC5=otWQ@mail.gmail.com>
-	<20240415125649.00001354@huawei.com>
-	<CAJZ5v0iNSmV6EsBOc5oYWSTR9UvFOeg8_mj8Ofhum4Tonb3kNQ@mail.gmail.com>
-	<20240415132351.00007439@huawei.com>
-	<20240416184116.0000513c@huawei.com>
-	<CAJZ5v0iK61_ihUZX_tXoSGdhpYDWFhEBbEuFf6WFiiD0QSeTDg@mail.gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1713351403; c=relaxed/simple;
+	bh=afjPJ+/sEGHXn5XptKJhYoMIJReCKeOloC55pJERJ/k=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=F18+aX4CDJyga0TMttdHJqrBuP5kwZUvsZTlZ+ZhkO2cvvlLmojbTBeT13LHS+z0cpWrCmyVvMLZZaq8GNoqz/KA3q9uiMP1lp3b6Edwk8KxScpDKS4uzv3GvDkA6IBWnL3A/F4x3n1gfbT8NJ1pBYROxkByA6hrBv6SBmPX6uo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Y7byvPVF; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43HAe6vt008139;
+	Wed, 17 Apr 2024 10:56:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=qcppdkim1; bh=jpKK8kT
+	JPz/dw2xT2ql4d4xaFedCm5918xzB0Fm1l9E=; b=Y7byvPVFY+qlvZ4fFvL+97O
+	+XSBzzg7afr1nP4/963tAsqY5dC4zby3GiR8YCDLW/g4O/h92ngvV63z5jYZyl2e
+	U9vOJP8cNwL2UO4iXmbU9rwxJrshqEXRnAEBuHyTYI+gHTjIWgylq0OWVXr3lseI
+	EGshGo4gH6+9MCpc03+hkzqPkQsWMBHD4NdJNyxATlcFIYZflmQKtHLKVPIxQAN2
+	eZOPWlSqaKPL4GwZIYPO5m3ssgDr50SttASRE16Nzw4xt/0+OKhjsta93XSguy2o
+	sAa/pmbFeDmiQ4GK1RqnYwTRxC6zOu0J+02qBxZ6Uui9QcIobsJCBYKL536ABQw=
+	=
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xj7j90t26-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 17 Apr 2024 10:56:36 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43HAuZ0p008853
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 17 Apr 2024 10:56:35 GMT
+Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Wed, 17 Apr 2024 03:56:30 -0700
+From: Varadarajan Narayanan <quic_varada@quicinc.com>
+To: <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+        <konrad.dybcio@linaro.org>, <djakov@kernel.org>,
+        <quic_varada@quicinc.com>, <dmitry.baryshkov@linaro.org>,
+        <quic_anusha@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: [PATCH v8 0/7] Add interconnect driver for IPQ9574 SoC
+Date: Wed, 17 Apr 2024 16:25:58 +0530
+Message-ID: <20240417105605.836705-1-quic_varada@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: CRyEgWiZEmJhBKsE7FkG-yEzEaWC1k1o
+X-Proofpoint-ORIG-GUID: CRyEgWiZEmJhBKsE7FkG-yEzEaWC1k1o
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-17_08,2024-04-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
+ adultscore=0 clxscore=1011 impostorscore=0 mlxlogscore=970 malwarescore=0
+ phishscore=0 suspectscore=0 spamscore=0 bulkscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2404010003
+ definitions=main-2404170075
 
-On Tue, 16 Apr 2024 21:02:02 +0200
-"Rafael J. Wysocki" <rafael@kernel.org> wrote:
+MSM platforms manage NoC related clocks and scaling from RPM.
+However, in IPQ SoCs, RPM is not involved in managing NoC
+related clocks and there is no NoC scaling.
 
-> On Tue, Apr 16, 2024 at 7:41=E2=80=AFPM Jonathan Cameron
-> <Jonathan.Cameron@huawei.com> wrote:
-> >
-> > On Mon, 15 Apr 2024 13:23:51 +0100
-> > Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
-> > =20
-> > > On Mon, 15 Apr 2024 14:04:26 +0200
-> > > "Rafael J. Wysocki" <rafael@kernel.org> wrote: =20
->=20
-> [cut]
->=20
-> > > > > I'm still very much stuck on the hotadd_init flag however, so any=
- suggestions
-> > > > > on that would be very welcome! =20
-> > > >
-> > > > I need to do some investigation which will take some time I suppose=
-. =20
-> > >
-> > > I'll do so as well once I've gotten the rest sorted out.  That whole
-> > > structure seems overly complex and liable to race, though maybe suffi=
-cient
-> > > locking happens to be held that it's not a problem. =20
-> >
-> > Back to this a (maybe) last outstanding problem.
-> >
-> > Superficially I think we might be able to get around this by always
-> > doing the setup in the initial online. In brief that looks something the
-> > below code.  Relying on the cpu hotplug callback registration calling
-> > the acpi_soft_cpu_online for all instances that are already online.
-> >
-> > Very lightly tested on arm64 and x86 with cold and hotplugged CPUs.
-> > However this is all in emulation and I don't have access to any signifi=
-cant
-> > x86 test farms :( So help will be needed if it's not immediately obviou=
-s why
-> > we can't do this. =20
->=20
-> AFAICS, this should work.  At least I don't see why it wouldn't.
->=20
-> > Of course, I'm open to other suggestions!
-> >
-> > For now I'll put a tidied version of this one is as an RFC with the res=
-t of v6.
-> >
-> > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processo=
-r.c
-> > index 06e718b650e5..97ca53b516d0 100644
-> > --- a/drivers/acpi/acpi_processor.c
-> > +++ b/drivers/acpi/acpi_processor.c
-> > @@ -340,7 +340,7 @@ static int acpi_processor_get_info(struct acpi_devi=
-ce *device)
-> >          */
-> >         per_cpu(processor_device_array, pr->id) =3D device;
-> >         per_cpu(processors, pr->id) =3D pr;
-> > -
-> > +       pr->flags.need_hotplug_init =3D 1;
-> >         /*
-> >          *  Extra Processor objects may be enumerated on MP systems with
-> >          *  less than the max # of CPUs. They should be ignored _iff
-> > diff --git a/drivers/acpi/processor_driver.c b/drivers/acpi/processor_d=
-river.c
-> > index 67db60eda370..930f911fc435 100644
-> > --- a/drivers/acpi/processor_driver.c
-> > +++ b/drivers/acpi/processor_driver.c
-> > @@ -206,7 +206,7 @@ static int acpi_processor_start(struct device *dev)
-> >
-> >         /* Protect against concurrent CPU hotplug operations */
-> >         cpu_hotplug_disable();
-> > -       ret =3D __acpi_processor_start(device);
-> > +       //      ret =3D __acpi_processor_start(device);
-> >         cpu_hotplug_enable();
-> >         return ret;
-> >  } =20
->=20
-> So it looks like acpi_processor_start() is not necessary any more, is it?
+However, there is a requirement to enable some NoC interface
+clocks for the accessing the peripherals present in the
+system. Hence add a minimalistic interconnect driver that
+establishes a path from the processor/memory to those peripherals
+and vice versa.
 
-Absolutely.  This needs cleaning up beyond this hack.
+---
+v8:	Change icc-clk driver to take master and slave ids instead
+	of auto generating
+	Remove ICC_xxx defines from dt-bindings header
+	Define MASTER/SLAVE_xxx macros from 0 .. n
 
-Given pr has been initialized to 0, flipping the flag to be something
-like 'initialized' and having the driver set it on first online rather than
-in acpi_processor.c will clean it up further.
+v7:	Fix macro names in dt-bindings header
+	Do clock get in icc driver
 
-Jonathan
->=20
-> > @@ -279,7 +279,7 @@ static int __init acpi_processor_driver_init(void)
-> >         if (result < 0)
-> >                 return result;
-> >
-> > -       result =3D cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
-> > +       result =3D cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
-> >                                            "acpi/cpu-drv:online",
-> >                                            acpi_soft_cpu_online, NULL);
-> >         if (result < 0) =20
-> > >
-> > > Jonathan =20
->=20
-> Thanks!
+v6:	Removed 'Reviewed-by: Krzysztof' from dt-bindings patch
+	Remove clock get from ICC driver as suggested by Stephen Boyd
+	so that the actual peripheral can do the clock get
+	first_id -> icc_first_node_id
+	Remove tristate from INTERCONNECT_CLK
+v5:
+	Split gcc-ipq9574.c and common.c changes into separate patches
+	Introduce devm_icc_clk_register
+	Fix error handling
+v4:
+gcc-ipq9574.c
+	Use clk_hw instead of indices
+common.c
+	Do icc register in qcom_cc_probe() call stream
+common.h
+	Add icc clock info to qcom_cc_desc structure
+
+v3:
+qcom,ipq9574.h
+	Move 'first id' define to clock driver
+gcc-ipq9574.c:
+	Use indexed identifiers here to avoid confusion
+	Fix error messages and move code to common.c as it can be
+	shared with future SoCs
+
+v2:
+qcom,ipq9574.h
+	Fix license identifier
+	Rename macros
+qcom,ipq9574-gcc.yaml
+	Include interconnect-cells
+gcc-ipq9574.c
+	Update commit log
+	Remove IS_ENABLED(CONFIG_INTERCONNECT) and auto select it from Kconfig
+ipq9574.dtsi
+	Moved to separate patch
+	Include interconnect-cells to clock controller node
+drivers/clk/qcom/Kconfig:
+	Auto select CONFIG_INTERCONNECT & CONFIG_INTERCONNECT_CLK
+
+Varadarajan Narayanan (7):
+  interconnect: icc-clk: Allow user to specify master/slave ids
+  clk: qcom: cbf-msm8996: Specify master and slave id
+  dt-bindings: interconnect: Add Qualcomm IPQ9574 support
+  interconnect: icc-clk: Add devm_icc_clk_register
+  clk: qcom: common: Add interconnect clocks support
+  clk: qcom: ipq9574: Use icc-clk for enabling NoC related clocks
+  arm64: dts: qcom: ipq9574: Add icc provider ability to gcc
+
+ .../bindings/clock/qcom,ipq9574-gcc.yaml      |  3 +
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi         |  2 +
+ drivers/clk/qcom/Kconfig                      |  2 +
+ drivers/clk/qcom/clk-cbf-8996.c               |  7 ++-
+ drivers/clk/qcom/common.c                     | 35 ++++++++++-
+ drivers/clk/qcom/common.h                     | 16 +++++
+ drivers/clk/qcom/gcc-ipq9574.c                | 31 ++++++++++
+ drivers/interconnect/icc-clk.c                | 24 +++++++-
+ .../dt-bindings/interconnect/qcom,ipq9574.h   | 59 +++++++++++++++++++
+ include/linux/interconnect-clk.h              |  4 ++
+ 10 files changed, 178 insertions(+), 5 deletions(-)
+ create mode 100644 include/dt-bindings/interconnect/qcom,ipq9574.h
+
+-- 
+2.34.1
 
 
