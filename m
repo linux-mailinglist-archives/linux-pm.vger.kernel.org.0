@@ -1,72 +1,76 @@
-Return-Path: <linux-pm+bounces-6516-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6517-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 028738A7E1B
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 10:22:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB41E8A7E1F
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 10:23:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 85449B258E0
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 08:22:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 638FE28155C
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 08:23:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1FA07C6EB;
-	Wed, 17 Apr 2024 08:22:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 352B67D08F;
+	Wed, 17 Apr 2024 08:23:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dogaSANW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cl0dXFi7"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB69D200D2;
-	Wed, 17 Apr 2024 08:22:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A40584FAC;
+	Wed, 17 Apr 2024 08:23:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713342150; cv=none; b=XC7q6bLftsRnOcemx0DRflL2w6wLyJuyzCJODgwhY+ViXuCbJvqko201wscAG8UbPLO0SoILgfc1iN7WMIfr/AuEvH5jKUGzyfW5gagH7nfSSN35KfCbXh8W7TTJFCwN8eYMmSI5nET+XNGINcZJt+cMOhhkT1jOGVEZ5OW+Gt4=
+	t=1713342200; cv=none; b=SZKq+1XplUGwavJX+bYqPMUwwwEl+f4VLHOfiKtuC3KAV84PUtTk09cer0b0ACqhjgAS/DcqSoOa2xHRuqfshQPBv3XawtalwXgN8D/hrgockhUcP4IqAV7pUalVu5yIOBxGEgZBXIFKfV1JPd95geH3PWjM7ZUdS0wPQOP7FzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713342150; c=relaxed/simple;
-	bh=vxL+yxEBtW69wT2VNPtV3o2n6+YTBPYdeGmwrvtUUYA=;
+	s=arc-20240116; t=1713342200; c=relaxed/simple;
+	bh=C4tOCdvuBbe0nWsP1RYC0WfHw/yvoZ/fnppLyqdrzVg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ULsyIpOciG3Zp0KeGBfHGlvcehKpBXZm6h9O5fTousx38zJ0DEpBhn5avPupi/E5G6pzCRPce0lW2HHZW4HVzWMamx0eWQTRBEQEQbkF1Sv5c0KpWMCaiBAAWkkg5axCqF+iSioeYjvU3xIZDLW/quiV11mkR5HSNG+FEQiqI9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dogaSANW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A324FC072AA;
-	Wed, 17 Apr 2024 08:22:30 +0000 (UTC)
+	 To:Cc:Content-Type; b=NIfvlyUbyss5dti7iYFDrnOZSSrTpUTRapEFLIAWPAR2oqxhp9UW1SZWQRQZgpa1cnR7abC2eHyQdGPcwq7av0b1GQYfzBlI0B1TYa6YEDyuYHcDPAeHqyNZPgMu6X8jx/I4ecb/bcNZeVRp9sU347vbS4iCsTZi4/5BpUwKhXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cl0dXFi7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B2F4C32783;
+	Wed, 17 Apr 2024 08:23:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713342150;
-	bh=vxL+yxEBtW69wT2VNPtV3o2n6+YTBPYdeGmwrvtUUYA=;
+	s=k20201202; t=1713342199;
+	bh=C4tOCdvuBbe0nWsP1RYC0WfHw/yvoZ/fnppLyqdrzVg=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=dogaSANWv2AzM5+rClXb1dimseX9oKu/we3riLUBqQ5+mS6q7bGPetgZPkCQHvFEa
-	 djOxTqbQLPIJNNqQq6Q794U/zcMiv2ksLhKDyjjcrBo1W1v4jocPVN0MwxGY4wQmDa
-	 ieb9jevlcp3HSFuJOjx/X4dd85q/5fraTZMIsxXZdPWRKd/lpgs82ipEna7i+EDBIw
-	 g56OJR9vz2+oDG7e/Y9RCNYYXB9nKJf317qGCUek9uGrGJcOTR3CncpEYJ8wD8Fqx+
-	 UTYx99XkpC10r+zq+2qp0ylkfWcT9+N2LkhZyq6z7+mrifsUOrFU11S4iCKsSvgD3Y
-	 SK6944R91yjgA==
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-6eba841d83cso51078a34.2;
-        Wed, 17 Apr 2024 01:22:30 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXw0hVFuZSeWHzLhPIpcRk6DqI3p9AOk/vnvB5DbpI6lRtncKQQv460UKEbkPjfDNFUPuxog/A1nRX8XUQhypmuqNl98xMaUTc=
-X-Gm-Message-State: AOJu0YydzgSB7KoNPbJ6PGlgzKjYdBejYkg/o6BY9taoQa57NCkebtCF
-	e02NtxDRl5vC7h5Yy6cfgLCPCbbyFOD24RJoep9gDXUUmMfi8oO0L5fQtF7q1t+B/asYPXrRq2r
-	TgDT4u1mtp48UK94nUv2PXIlxfUg=
-X-Google-Smtp-Source: AGHT+IFrSekiz2ow8oMM1nzzDDUyICAfK9eLF583H9K9wsJGYqysgZFcvoUQKjCJpVjwMuMvfXAQPk4VISJFQP+//g8=
-X-Received: by 2002:a4a:e9f0:0:b0:5aa:6a31:4f53 with SMTP id
- w16-20020a4ae9f0000000b005aa6a314f53mr13550582ooc.0.1713342150021; Wed, 17
- Apr 2024 01:22:30 -0700 (PDT)
+	b=Cl0dXFi7+cjctcO4EmDYic4Anp14X9g7oZQmOJzpgfUGrw+jlsNE4rsYPyaSGibd5
+	 AgrdAoHAghKXhkZuTLTsdHvmIxd8bjB5LauD7bPkXD1DMbx39P9GtgNZ33VtZzKLpp
+	 JfxgYOAT2KLRgnBpiDL4IsZ1RdcJpcEGZKQCWk0kilcCQaEqIZ0az8CrMEenlmvx0i
+	 dqWgyK1XnPJD7BGHp5uiFJzNv6UZyhwNBo27xo6aAM/EEIw/ZkLrPyDo4AJVKUaliG
+	 7eEYwPlT2cTGcnUA1IloRrDpURijulNu6E56nh2yOUvDC+UBMOh0sekIQ3V9XwuEqh
+	 KaK9v7OdBfLIg==
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5acdbfa6e95so191406eaf.3;
+        Wed, 17 Apr 2024 01:23:19 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWEarIp0Ahk38DyjcVUPMVj58WlTPjvmUZDq3deQ3R3dAi4jUfkubLodv/IXozSPD7/bmlK4F8t0D8Nn1b/kCwbbJsy5ODCIx4Twc25JhWI9yuuK27CaRNGuX7s2fWkKMK8HHk29d9cKOfytOQgWpDR198nsg0y6y1H9ZJ2sMInjveigAQH4tEA1taG
+X-Gm-Message-State: AOJu0YyX4r5tLUo5gLrCSj/v9kQy3UH7foDmsDrFvGP3mRi1U0LoF7p1
+	32NJPlsVfnnMONvGBKZXMU0g8DgT14y2IdfvWwhcBtyWo/X2KQjtqDodCWJoWDaEcKD0J6y1WBq
+	+lFPjcp317NawiSohOghjqqgUeMA=
+X-Google-Smtp-Source: AGHT+IEwWhyxwziJmItu3CudJNR/cbcOGfyy1lJsPIqbwVt2BL7zHv844Kmjt0yZaihq6jyNI/6OLt9Cemu6KrK30DQ=
+X-Received: by 2002:a05:6820:4003:b0:5a7:db56:915c with SMTP id
+ fh3-20020a056820400300b005a7db56915cmr17216803oob.1.1713342198919; Wed, 17
+ Apr 2024 01:23:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240416211941.9369-1-tony.luck@intel.com> <20240416212245.9929-1-tony.luck@intel.com>
-In-Reply-To: <20240416212245.9929-1-tony.luck@intel.com>
+References: <20240416211941.9369-1-tony.luck@intel.com> <20240416212250.9969-1-tony.luck@intel.com>
+In-Reply-To: <20240416212250.9969-1-tony.luck@intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 17 Apr 2024 10:22:17 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gFqbysg5Qm2SD+Y2QqONAxbUnOOKA2viCxoGnFzVxpgw@mail.gmail.com>
-Message-ID: <CAJZ5v0gFqbysg5Qm2SD+Y2QqONAxbUnOOKA2viCxoGnFzVxpgw@mail.gmail.com>
-Subject: Re: [PATCH v3 67/74] x86/cpu/vfm: Update drivers/powercap/intel_rapl_msr.c
+Date: Wed, 17 Apr 2024 10:23:06 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hJbpCzGeshmP4NT0P6We=GTTgxVi0OTUoRF8DYpvKGCQ@mail.gmail.com>
+Message-ID: <CAJZ5v0hJbpCzGeshmP4NT0P6We=GTTgxVi0OTUoRF8DYpvKGCQ@mail.gmail.com>
+Subject: Re: [PATCH v3 69/74] x86/cpu/vfm: Update intel_soc_dts_thermal.c
 To: Tony Luck <tony.luck@intel.com>
-Cc: linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	linux-pm@vger.kernel.org, patches@lists.linux.dev
+Cc: Hans de Goede <hdegoede@redhat.com>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
+	patches@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
@@ -80,38 +84,58 @@ ote:
 Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
 > ---
->  drivers/powercap/intel_rapl_msr.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
+>  include/linux/platform_data/x86/soc.h         | 12 ++++++------
+>  drivers/thermal/intel/intel_soc_dts_thermal.c |  2 +-
+>  2 files changed, 7 insertions(+), 7 deletions(-)
 >
-> diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_r=
-apl_msr.c
-> index 35cb152fa9aa..733a36f67fbc 100644
-> --- a/drivers/powercap/intel_rapl_msr.c
-> +++ b/drivers/powercap/intel_rapl_msr.c
-> @@ -139,14 +139,14 @@ static int rapl_msr_write_raw(int cpu, struct reg_a=
-ction *ra)
+> diff --git a/include/linux/platform_data/x86/soc.h b/include/linux/platfo=
+rm_data/x86/soc.h
+> index a5705189e2ac..f981907a5cb0 100644
+> --- a/include/linux/platform_data/x86/soc.h
+> +++ b/include/linux/platform_data/x86/soc.h
+> @@ -20,7 +20,7 @@
+>  static inline bool soc_intel_is_##soc(void)                    \
+>  {                                                              \
+>         static const struct x86_cpu_id soc##_cpu_ids[] =3D {      \
+> -               X86_MATCH_INTEL_FAM6_MODEL(type, NULL),         \
+> +               X86_MATCH_VFM(type, NULL),                      \
+>                 {}                                              \
+>         };                                                      \
+>         const struct x86_cpu_id *id;                            \
+> @@ -31,11 +31,11 @@ static inline bool soc_intel_is_##soc(void)          =
+       \
+>         return false;                                           \
+>  }
 >
->  /* List of verified CPUs. */
->  static const struct x86_cpu_id pl4_support_ids[] =3D {
-> -       X86_MATCH_INTEL_FAM6_MODEL(TIGERLAKE_L, NULL),
-> -       X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE, NULL),
-> -       X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L, NULL),
-> -       X86_MATCH_INTEL_FAM6_MODEL(ATOM_GRACEMONT, NULL),
-> -       X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE, NULL),
-> -       X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P, NULL),
-> -       X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE, NULL),
-> -       X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE_L, NULL),
-> +       X86_MATCH_VFM(INTEL_TIGERLAKE_L, NULL),
-> +       X86_MATCH_VFM(INTEL_ALDERLAKE, NULL),
-> +       X86_MATCH_VFM(INTEL_ALDERLAKE_L, NULL),
-> +       X86_MATCH_VFM(INTEL_ATOM_GRACEMONT, NULL),
-> +       X86_MATCH_VFM(INTEL_RAPTORLAKE, NULL),
-> +       X86_MATCH_VFM(INTEL_RAPTORLAKE_P, NULL),
-> +       X86_MATCH_VFM(INTEL_METEORLAKE, NULL),
-> +       X86_MATCH_VFM(INTEL_METEORLAKE_L, NULL),
+> -SOC_INTEL_IS_CPU(byt, ATOM_SILVERMONT);
+> -SOC_INTEL_IS_CPU(cht, ATOM_AIRMONT);
+> -SOC_INTEL_IS_CPU(apl, ATOM_GOLDMONT);
+> -SOC_INTEL_IS_CPU(glk, ATOM_GOLDMONT_PLUS);
+> -SOC_INTEL_IS_CPU(cml, KABYLAKE_L);
+> +SOC_INTEL_IS_CPU(byt, INTEL_ATOM_SILVERMONT);
+> +SOC_INTEL_IS_CPU(cht, INTEL_ATOM_AIRMONT);
+> +SOC_INTEL_IS_CPU(apl, INTEL_ATOM_GOLDMONT);
+> +SOC_INTEL_IS_CPU(glk, INTEL_ATOM_GOLDMONT_PLUS);
+> +SOC_INTEL_IS_CPU(cml, INTEL_KABYLAKE_L);
+>
+>  #undef SOC_INTEL_IS_CPU
+>
+> diff --git a/drivers/thermal/intel/intel_soc_dts_thermal.c b/drivers/ther=
+mal/intel/intel_soc_dts_thermal.c
+> index 9c825c6e1f38..718c6326eaf4 100644
+> --- a/drivers/thermal/intel/intel_soc_dts_thermal.c
+> +++ b/drivers/thermal/intel/intel_soc_dts_thermal.c
+> @@ -36,7 +36,7 @@ static irqreturn_t soc_irq_thread_fn(int irq, void *dev=
+_data)
+>  }
+>
+>  static const struct x86_cpu_id soc_thermal_ids[] =3D {
+> -       X86_MATCH_INTEL_FAM6_MODEL(ATOM_SILVERMONT, BYT_SOC_DTS_APIC_IRQ)=
+,
+> +       X86_MATCH_VFM(INTEL_ATOM_SILVERMONT, BYT_SOC_DTS_APIC_IRQ),
 >         {}
 >  };
->
+>  MODULE_DEVICE_TABLE(x86cpu, soc_thermal_ids);
 > --
 > 2.44.0
 >
