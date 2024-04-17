@@ -1,142 +1,124 @@
-Return-Path: <linux-pm+bounces-6523-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6524-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 096C48A7E5F
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 10:34:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 609788A7E79
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 10:40:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A2801C20643
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 08:34:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 921FD1C2096F
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 08:40:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1F8369E0C;
-	Wed, 17 Apr 2024 08:34:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 595F0126F2C;
+	Wed, 17 Apr 2024 08:40:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SfBEpZU0"
+	dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b="AdlsAK4A"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9651142A83;
-	Wed, 17 Apr 2024 08:34:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78F8E8529D;
+	Wed, 17 Apr 2024 08:40:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.18.73.165
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713342865; cv=none; b=PIMJfGdNnDFCqkREKgFQSzMvURR7SniUGNDT5pEAQw0Z3t80LR9eGlxNL8yz7TA9z97qbTV4NDqwWXvA4eG01z2CRP04wi3ypQFzIJ+uruQsitcatqf9wFzBAF0F1Wmiqt1+c1maepTMYJX8L40oW5/DZ6huI9rYe51tMzZ9hoU=
+	t=1713343222; cv=none; b=tyiTDS5sO6q96xCdvwSr5luetJQNxZ9+hzGjsbhZQjYJWdGJM5Kno3BPON4e9oPdnUAwRh5p9+qXPTQGfjASRc/G1XRYAGnzLPYgH5rD0RQ/61OF/4U1qRHpiCNUnhorItAQGZoYds+bccVO0Prsz1moCkKK+vcJwD81jKmONk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713342865; c=relaxed/simple;
-	bh=s0/8NwQnmMOTxw/pDh1/9tQW0awcQnIOgrb+lAYC168=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lCJPh+RCShXzF/fhOHFaQbX1bnGVGsmHxvEmxGVmEBTP3HrO126tFc0g8LDfXNjSjgKhhEUbHG0TKzg7TzahgUrt1w0+oJbPBV4Utbcdj+3HZ2fZh66QSmpjAtJlcstigPaTTRUmIw5RRafuz6iiRZlE9O2ZGbJ4Q0NANr+tR5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SfBEpZU0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BB9BC072AA;
-	Wed, 17 Apr 2024 08:34:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713342865;
-	bh=s0/8NwQnmMOTxw/pDh1/9tQW0awcQnIOgrb+lAYC168=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=SfBEpZU0mJ3S6rEbPWy5lc3DL7kqfQJ5rHWhVMDISFJm3vX9h4Z4r4VCEcmMxQKFF
-	 8zLbk4+FXnPDqCyzhYxKsItWNzhPDlVFdcyNE/RCFkheSxAFkf63e9WhR3Fhq1Sa72
-	 7uIf2SLG7GeyRI0mIX2WDcjtYotAxZFZ3cQQK1qfGj89XJo0AxALViWtoWwMldaJdg
-	 LTVZXfMVZXTzkAgUiPqIE5B1JPXyYFquT/tfkEQJrdKOhxSuHA/DNwjJFhb6RLMT0o
-	 5LczNowNAw6FZSrhzkEMba7aGykbZY4l3e0OLrefBhquAGyqsJPCdSSFBJ1OdkZ+Bk
-	 LLnHCqdjd94sw==
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-5acdbfac113so211723eaf.3;
-        Wed, 17 Apr 2024 01:34:25 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX8yxFTWZKiWcWj5fWmGVbv8wV13Xuo6iKzyv1UgnAXjZnhNLyLcJl++tjqoLlR6qIGVN/pN0hgr6hW3Id65XiZCnHglCS3D1WyecHDrHeNApG36V6bajmuC0Tyg9UuU9VJJ5yHMIk=
-X-Gm-Message-State: AOJu0YzzUQq6Lc2WN+lpDNkDeeIonrUKjXjh/EV0AHtBXN8R5HKQBhW2
-	uF3hI56uyu+TtK6WLsUgfbNiO6D6BjcgX9QbXK3zHigPNBDerr/P5/ldSdV1/FyR4jokMwd6eR6
-	TeRt+okRjk+HucSLCMIKgtPigZos=
-X-Google-Smtp-Source: AGHT+IGcsRnDLpjjTgbpHkK4JnzqlUQhItrDjYDobJhARv5yhC8Q9xAmq3LJxwQIx7VB03oe6HYibVISRHSwpVGmleE=
-X-Received: by 2002:a05:6820:f44:b0:5aa:241a:7f4b with SMTP id
- ep4-20020a0568200f4400b005aa241a7f4bmr14997194oob.1.1713342864351; Wed, 17
- Apr 2024 01:34:24 -0700 (PDT)
+	s=arc-20240116; t=1713343222; c=relaxed/simple;
+	bh=zEiPERZJKSDRCkJgHODqJT/l8hNbR0wSJNM5rQn2U9s=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HmrWaa/woSrAimj+cJJYeLMifK21yD/JE018FlvXZ8ER4Tr5gAmnFie7CxctUnRV1936a9hITDQGQpFR/cqIcG6OZYF2b4oj2U9gnXa6jBNsQ2zo2SiXrMqCO3LFXKa/m+yAtG8QChjHDAOSiJ4YdIk/p5TwsGNqAQKyXDq/zwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com; spf=pass smtp.mailfrom=salutedevices.com; dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b=AdlsAK4A; arc=none smtp.client-ip=37.18.73.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=salutedevices.com
+Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
+	by mx1.sberdevices.ru (Postfix) with ESMTP id 97559100004;
+	Wed, 17 Apr 2024 11:40:08 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 97559100004
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salutedevices.com;
+	s=mail; t=1713343208;
+	bh=vzd5CRR2cDvfBR88K8Vu/kXje8h9WcD3OB/r8NxbU0A=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
+	b=AdlsAK4Awszbn81O4XFpoLY26dLzLtGQfpXe0DiZTXrtT1pF7tYsME626ZVBohY0G
+	 U0LM8iwzaisfPW2dWWQEhQI/RDLP0dQKgfrx/WzCVldyErmpvwn1MfE4AdagB7GcW5
+	 RhYpnMKeYCvfxJYdmX08kO7XY2Kaodg1o3w/vUgbr0N1zcn3u9lDCr9Tzdh5d7G+yq
+	 Ujo2uxes4/VAfYx/lKVXhorm76xRDkply7agqIcbF+Sotde1zv1qC6rmPyBGOMxts/
+	 Tao5pwd/9g/mArcsHLoQl/dkiipqLl2FQ5p5Ltl6b08kgWvCqB/avWZJnUoEs8y8v3
+	 CdG3cIHrBsHKg==
+Received: from smtp.sberdevices.ru (p-i-exch-sc-m02.sberdevices.ru [172.16.192.103])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx1.sberdevices.ru (Postfix) with ESMTPS;
+	Wed, 17 Apr 2024 11:40:08 +0300 (MSK)
+Received: from localhost (100.64.160.123) by p-i-exch-sc-m02.sberdevices.ru
+ (172.16.192.103) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 17 Apr
+ 2024 11:40:08 +0300
+Date: Wed, 17 Apr 2024 11:40:07 +0300
+From: Dmitry Rokosov <ddrokosov@salutedevices.com>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+CC: <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
+	<mturquette@baylibre.com>, <khilman@baylibre.com>,
+	<martin.blumenstingl@googlemail.com>, <glaroque@baylibre.com>,
+	<rafael@kernel.org>, <rui.zhang@intel.com>, <lukasz.luba@arm.com>,
+	<robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+	<conor+dt@kernel.org>, <kernel@salutedevices.com>, <rockosov@gmail.com>,
+	<linux-amlogic@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 0/2] thermal: amlogic: introduce A1 SoC family Thermal
+ Sensor controller
+Message-ID: <20240417084007.uzg2uc7gwb6mi7bi@CAB-WSD-L081021>
+References: <20240328191322.17551-1-ddrokosov@salutedevices.com>
+ <38ba3618-2a67-4e21-b08d-7e382411e51a@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240408035141.248644-1-rui.zhang@intel.com> <20240408035141.248644-2-rui.zhang@intel.com>
- <CAJZ5v0hF-AHY97y-Hz78=1MYGM4zHtOZ8U62NQBMMUNP4L-Kqw@mail.gmail.com> <45835aa25b4574732d8d4eb4dfd5b7f89af66f58.camel@intel.com>
-In-Reply-To: <45835aa25b4574732d8d4eb4dfd5b7f89af66f58.camel@intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 17 Apr 2024 10:34:12 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iCpG3fKcXTMyFCe_nVnUCMmvTGpiuM+wQWQhO5G6Pe1A@mail.gmail.com>
-Message-ID: <CAJZ5v0iCpG3fKcXTMyFCe_nVnUCMmvTGpiuM+wQWQhO5G6Pe1A@mail.gmail.com>
-Subject: Re: [PATCH V2 1/3] powercap: intel_rapl: Sort header files
-To: "Zhang, Rui" <rui.zhang@intel.com>
-Cc: "rafael@kernel.org" <rafael@kernel.org>, 
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <38ba3618-2a67-4e21-b08d-7e382411e51a@linaro.org>
+User-Agent: NeoMutt/20220415
+X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
+ p-i-exch-sc-m02.sberdevices.ru (172.16.192.103)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 184751 [Apr 17 2024]
+X-KSMG-AntiSpam-Version: 6.1.0.4
+X-KSMG-AntiSpam-Envelope-From: ddrokosov@salutedevices.com
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 17 0.3.17 f2153f38d75b12894d9cf445f96cd15c9ef63a9d, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;salutedevices.com:7.1.1;100.64.160.123:7.1.2;smtp.sberdevices.ru:7.1.1,5.0.1, FromAlignment: s, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean
+X-KSMG-LinksScanning: Clean
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2024/04/16 18:45:00 #24828684
+X-KSMG-AntiVirus-Status: Clean, skipped
 
-On Wed, Apr 17, 2024 at 3:57=E2=80=AFAM Zhang, Rui <rui.zhang@intel.com> wr=
-ote:
->
-> On Tue, 2024-04-16 at 16:01 +0200, Rafael J. Wysocki wrote:
-> > On Mon, Apr 8, 2024 at 5:51=E2=80=AFAM Zhang Rui <rui.zhang@intel.com> =
-wrote:
-> > >
-> > > Sort header files alphabetically.
-> > >
-> > > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> > > ---
-> > >  drivers/powercap/intel_rapl_common.c | 24 ++++++++++++------------
-> > >  1 file changed, 12 insertions(+), 12 deletions(-)
-> > >
-> > > diff --git a/drivers/powercap/intel_rapl_common.c
-> > > b/drivers/powercap/intel_rapl_common.c
-> > > index a28d54fd5222..1f4a7aa12d77 100644
-> > > --- a/drivers/powercap/intel_rapl_common.c
-> > > +++ b/drivers/powercap/intel_rapl_common.c
-> > > @@ -5,27 +5,27 @@
-> > >   */
-> > >  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> > >
-> > > +#include <linux/bitmap.h>
-> > >  #include <linux/cleanup.h>
-> > > +#include <linux/cpu.h>
-> > > +#include <linux/delay.h>
-> > > +#include <linux/device.h>
-> > > +#include <linux/intel_rapl.h>
-> > >  #include <linux/kernel.h>
-> > > -#include <linux/module.h>
-> > >  #include <linux/list.h>
-> > > -#include <linux/types.h>
-> > > -#include <linux/device.h>
-> > > -#include <linux/slab.h>
-> > >  #include <linux/log2.h>
-> > > -#include <linux/bitmap.h>
-> > > -#include <linux/delay.h>
-> > > -#include <linux/sysfs.h>
-> > > -#include <linux/cpu.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/platform_device.h>
-> > >  #include <linux/powercap.h>
-> > > -#include <linux/suspend.h>
-> > > -#include <linux/intel_rapl.h>
-> > >  #include <linux/processor.h>
-> > > -#include <linux/platform_device.h>
-> > > +#include <linux/slab.h>
-> > > +#include <linux/suspend.h>
-> > > +#include <linux/sysfs.h>
-> > > +#include <linux/types.h>
-> > >
-> > > -#include <asm/iosf_mbi.h>
-> > >  #include <asm/cpu_device_id.h>
-> > >  #include <asm/intel-family.h>
-> > > +#include <asm/iosf_mbi.h>
-> > >
-> > >  /* bitmasks for RAPL MSRs, used by primitive access functions */
-> > >  #define ENERGY_STATUS_MASK      0xffffffff
-> > > --
-> >
-> > I can apply this cleanup right away, so do you want me to do that?
->
-> yes, please. thanks!
+Hello Daniel,
 
-Now applied as 6.10 material, thanks!
+Could you please let me know in which repository you have applied this
+change? I am trying to cherry-pick the original applied commit and apply
+it to our internal mainline branch instead of the internal commit.
+However, I am unable to find the applied series in any of the
+repositories on git.kernel.org.
+
+On Thu, Apr 04, 2024 at 02:23:21PM +0200, Daniel Lezcano wrote:
+> On 28/03/2024 20:13, Dmitry Rokosov wrote:
+> > It is primarily based on the G12A thermal controller, with only a slight
+> > variation in the offset value of the efuse parameters. Therefore, this
+> > patch series provides appropriate platform data and dt-bindings to
+> > ensure proper support.
+> 
+> 
+> Applied, thanks
+
+-- 
+Thank you,
+Dmitry
 
