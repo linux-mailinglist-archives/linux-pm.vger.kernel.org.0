@@ -1,92 +1,156 @@
-Return-Path: <linux-pm+bounces-6609-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6610-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A9BC8A8D32
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 22:45:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C26E78A8E5B
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 23:55:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AAA83B21128
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 20:45:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 76D2628465B
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 21:55:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB93644C8D;
-	Wed, 17 Apr 2024 20:45:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADDFF80C14;
+	Wed, 17 Apr 2024 21:55:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="au2DcBRj"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="R9CkucTj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EF5644C7B;
-	Wed, 17 Apr 2024 20:45:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20F3212E1DE;
+	Wed, 17 Apr 2024 21:55:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713386717; cv=none; b=jDH5xuLJbG6r20B3n2TKYje3AqesRpXvVO14WZOltwBqFmWSrGieeypIul6zYr4obzIm9UsTZfK1hbSttOatNxUrlXYfb4wDfqXFh5SB9OKbazGHR0Qv8cYc2CjVcsw1TVNJqKyTaL7jKNhspz1P8qk62sGOCCizqbMbr2RzEzw=
+	t=1713390928; cv=none; b=Wa+IWGgcHn53cNMNAKxgOBQsgAHDl4CWib8cwPY/vTZ/Dg/75RrWL/B64wmR9E+hsk0mi2jbI77z9Vz48OH6ifIZOuQNh7rIjAx8GqFn3ZFtDQMfmesaYDQWUp2N8RDX5MTDzqSEl9XjrJbdDeHBR6PQeyaTPh4M7jrfXLVL99E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713386717; c=relaxed/simple;
-	bh=wlIgsqiPUF9bkmZTjmmRjmIDrDC3JSbRWMjul89Oki8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KgeGLye2Tw3wUn1nzHJysjkfFWAkQgSmpsg/C1WZjyEWIHQd8rYTYpFrEmV8jeiIV7a0QZr9kotucruZyFeLKSZk3BGNWE2sPvPY8fSKIQQW63oUy0jE6qLnau5DJL4VAp+hfSPeF8OdERoP+3Oqq3h9+tIOj8xvvixHnW6YJ8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=au2DcBRj; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=BvHSSwDgZvfid1sqlQ1o/inIrOdXBqnLwTqg0dZSKDY=; b=au2DcBRjLagu7riDaYwmuhQlr8
-	1sN/vD6VJwfFlUQEDBtksahdUlaFRNeq7KD8l4pO+a5xnsn7CYm6uxK4mZwvxxnTuPJYYfWH3RssR
-	8ZOZRlGfQvUTbuxz8mQT596e8AQZX2nQp+ZEDi1Vd0wVmAvquUPxnbz5uYoyBna+UIW8vTzgFF08w
-	YZr7C+F35vr+O+nLFUUSktfpoEgGd4IVaVwIt+zV6HsNapeXMGxQZWV+rK0FWrIzgrFHAhD7xmeh6
-	S+T8rLkiEcNIReTcDGXGCwqddPljPoZKqnn3BLcn/N01SZOcICi1zTgx1IsnQb84lk0Btz9r/tWM4
-	4zSWze/w==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-	id 1rxC9P-00EdzQ-24;
-	Wed, 17 Apr 2024 20:45:03 +0000
-Date: Wed, 17 Apr 2024 21:45:03 +0100
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Jan Kara <jack@suse.cz>, Yu Kuai <yukuai1@huaweicloud.com>, hch@lst.de,
-	axboe@kernel.dk, linux-fsdevel@vger.kernel.org,
-	linux-block@vger.kernel.org, yi.zhang@huawei.com,
-	yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>,
-	Christian Brauner <brauner@kernel.org>, linux-pm@vger.kernel.org
-Subject: [RFC] set_blocksize() in kernel/power/swap.c (was Re: [PATCH vfs.all
- 22/26] block: stash a bdev_file to read/write raw blcok_device)
-Message-ID: <20240417204503.GD2118490@ZenIV>
-References: <49f99e7b-3983-8074-bb09-4b093c1269d1@huaweicloud.com>
- <20240410105911.hfxz4qh3n5ekrpqg@quack3>
- <20240410223443.GG2118490@ZenIV>
- <20240411-logik-besorgen-b7d590d6c1e9@brauner>
- <20240411140409.GH2118490@ZenIV>
- <20240412-egalisieren-fernreise-71b1f21f8e64@brauner>
- <20240412112919.GN2118490@ZenIV>
- <20240413-hievt-zweig-2e40ac6443aa@brauner>
- <20240415204511.GV2118490@ZenIV>
- <20240416063253.GA2118490@ZenIV>
+	s=arc-20240116; t=1713390928; c=relaxed/simple;
+	bh=ev4z2iRO1kF+bMaP55rRGKH6OK9Jeje9YeGmXIt+15g=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CJlFzAfQ9/cO7HZPvG35hAN0SfVWMCYKgD+FIvZwZB4jTodrMCoV1Xi7wYj/Igv8Ejbxsgj+Z9w7a2RxJMGiNMN/v8Le5/4jnTXUhP+AAvEDg8+fGHd4cQ7YFrQB77CkR2BEFohWIWCh8yJpSWhPkcBM+XRPNL2D0gBGTXXOLcA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=R9CkucTj; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43HLSujJ016011;
+	Wed, 17 Apr 2024 21:55:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	date:from:to:cc:subject:message-id:references:mime-version
+	:content-type:in-reply-to; s=qcppdkim1; bh=TDIAnHm/ZUhSuPlUruXFm
+	A+SpAnGyjShzKLJ5rfhgtk=; b=R9CkucTjyCITUuWsyhAuUdunoCJCAiMlyGV3e
+	mGr3/PoGdVF2ayXNRRglagEmhe3daC22jhL2L2yiM7SFQM+ZJ4O5jIp5MjIl06LC
+	JKqSqDXVsvExdyllvHCfZc41Ge13iTcnsjq1ptr3RYpinYDIpCL5voD8arn7WPhz
+	++v2JF02IvloWwx3nKXLyNUDUP98IAoG+4whaRnn1a6zCt8XLsnlGBaiNnpz2sup
+	5Nz/CS1gftLURBMutCLa+CHKnml/OXgf5+mpKDsMQT5WccgwfJ73gsLV/go5Qqdo
+	KfDEvghRESRSCW731UaSqT2OxFkL5t8tsZuJGFCr1eUUZbzAA==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xj8auth2q-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 17 Apr 2024 21:55:11 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43HLsggm015445
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 17 Apr 2024 21:54:42 GMT
+Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Wed, 17 Apr 2024 14:54:41 -0700
+Date: Wed, 17 Apr 2024 14:54:41 -0700
+From: Elliot Berman <quic_eberman@quicinc.com>
+To: Sudeep Holla <sudeep.holla@arm.com>
+CC: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio
+	<konrad.dybcio@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>, Rob Herring
+	<robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Andy Yan
+	<andy.yan@rock-chips.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "Mark
+ Rutland" <mark.rutland@arm.com>,
+        Bartosz Golaszewski
+	<bartosz.golaszewski@linaro.org>,
+        Satya Durga Srinivasu Prabhala
+	<quic_satyap@quicinc.com>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        Shivendra Pratap <quic_spratap@quicinc.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH v2 0/4] Implement vendor resets for PSCI SYSTEM_RESET2
+Message-ID: <20240417140957985-0700.eberman@hu-eberman-lv.qualcomm.com>
+References: <20240414-arm-psci-system_reset2-vendor-reboots-v2-0-da9a055a648f@quicinc.com>
+ <Zh5GWqt2oCNHdF_h@bogus>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20240416063253.GA2118490@ZenIV>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+In-Reply-To: <Zh5GWqt2oCNHdF_h@bogus>
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Fj2qyuwf4HChIqXQIWRk-MgKV3h44KJW
+X-Proofpoint-GUID: Fj2qyuwf4HChIqXQIWRk-MgKV3h44KJW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-17_18,2024-04-17_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ bulkscore=0 priorityscore=1501 mlxlogscore=846 clxscore=1011 mlxscore=0
+ suspectscore=0 adultscore=0 impostorscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2404010003 definitions=main-2404170156
 
-On Tue, Apr 16, 2024 at 07:32:53AM +0100, Al Viro wrote:
+On Tue, Apr 16, 2024 at 10:35:22AM +0100, Sudeep Holla wrote:
+> On Sun, Apr 14, 2024 at 12:30:23PM -0700, Elliot Berman wrote:
+> > The PSCI SYSTEM_RESET2 call allows vendor firmware to define additional
+> > reset types which could be mapped to the reboot argument.
+> >
+> > Setting up reboot on Qualcomm devices can be inconsistent from chipset
+> > to chipset.
+> 
+> That doesn't sound good. Do you mean PSCI SYSTEM_RESET doesn't work as
+> expected ? Does it mean it is not conformant to the specification ?
+> 
 
-> kernel/power/swap.c:371:        res = set_blocksize(file_bdev(hib_resume_bdev_file), PAGE_SIZE);
-> kernel/power/swap.c:1577:               set_blocksize(file_bdev(hib_resume_bdev_file), PAGE_SIZE);
-> 	Special cases (for obvious reasons); said that, why do we bother
-> with set_blocksize() on those anyway?
+I was motivating the reason for using SYSTEM_RESET2. How to set the PMIC
+register and IMEM cookie can change between chipsets. Using
+SYSTEM_RESET2 alows us to abstract how to perform the reset.
 
-AFAICS, we really don't need either - all IO is done via hib_submit_io(),
-which sets a single-page bio and feeds it to submit_bio{,_wait}()
-directly.  We are *not* using the page cache of the block device
-in question, let alone any buffer_head instances.
+> > Generally, there is a PMIC register that gets written to
+> > decide the reboot type. There is also sometimes a cookie that can be
+> > written to indicate that the bootloader should behave differently than a
+> > regular boot. These knobs evolve over product generations and require
+> > more drivers. Qualcomm firmwares are beginning to expose vendor
+> > SYSTEM_RESET2 types to simplify driver requirements from Linux.
+> >
+> 
+> Why can't this be fully userspace driven ? What is the need to keep the
+> cookie in the DT ?
 
-Could swsusp folks comment?
+As Dmitry pointed out, this information isn't discoverable. I suppose
+we could technically use bootconfig or kernel command-line to convey the
+map although I think devicetree is the right spot for this mapping.
+
+- Other vendor-specific bits for PSCI are described in the devicetree.
+  One example is the suspend param (e.g. the StateID) for cpu idle
+  states.
+- Describing firmware bits in the DT isn't unprecedented, and putting
+  this information outside the DT means that other OSes (besides Linux)
+  need their own way to convey this information.
+- PSCI would be the odd one out that reboot mode map is not described in
+  DT. Other reboot-mode drivers specify the mapping in the DT. Userspace
+  that runs with firmware that support vendor reset2 need to make sure
+  they can configure the mapping early enough.
+
+Thanks,
+Elliot
+
 
