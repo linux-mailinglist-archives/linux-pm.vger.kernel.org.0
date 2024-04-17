@@ -1,126 +1,209 @@
-Return-Path: <linux-pm+bounces-6588-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6589-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E435B8A87AC
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 17:33:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63D228A87E6
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 17:40:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 216001C213C2
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 15:33:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AD760B2339D
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Apr 2024 15:40:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71A10147C9E;
-	Wed, 17 Apr 2024 15:33:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="2Nw0ur49"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03FF3148820;
+	Wed, 17 Apr 2024 15:38:50 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38B2213EFEC;
-	Wed, 17 Apr 2024 15:33:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D13DD1487F1;
+	Wed, 17 Apr 2024 15:38:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713367984; cv=none; b=WBamnpM/JWzeC51CR7A2wzDSKSHUApsYI6hrkCUHQXtuosLa6qen+osDPwb7H6bPsNxMRIBQ2S8bm+vi+k2B9OaO69STk9m3CXDJBSKnICfJ4qCN4f7xI2lIK47RvuieV0qgXZko3ZkpCtRg188MJUhYYIUo6dzqS2JhSEA9JSg=
+	t=1713368329; cv=none; b=UwGM78zlH1SFT0qa/RkCosQinq/sg2+bUsLzNJu2G/pGW93bb4hXIkAn3QihgsD6ppU6WEeVp7m0coVHBWHBPZG13f5Jl7Mwz8c/mt9Vkzj2P0jwlcBF2mAJPyjZlDxgSExhMZCSNNhuLpLpvToAuMxTV4J9ddSTP0rR2t5uKQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713367984; c=relaxed/simple;
-	bh=2xn4oP5qSf+gAMTht/g7tss9ReK+HcgndLYujyEm8Ac=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J1jkrR7o2MGGm3yQJ+hB2h3SBeIl5GcOA59rtmva4MkGQV74zDSUv5ujHZVmgTIIcNtWVKCQQiKSfOQva0CXavsqSWkn1M9yppXtdZg6wgtxCaE+3VRp33YFK59fCKJ1RbnKHXrMC8/DxaKHZaWKtxjaKNTiNOCL6/C8c+Y9WNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=2Nw0ur49; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1713367979;
-	bh=2xn4oP5qSf+gAMTht/g7tss9ReK+HcgndLYujyEm8Ac=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=2Nw0ur492Zb/y4Fr0BxzxP5YKMPjw99hkTQ/6oQaqB3+TKVKQgGYBrzJ5jJjUK5C+
-	 rqnfaLCAzZS6Y4lwooVAe3tkIF4Y/j+3RFx0r/OkjAxhnAjoLyHcQKycQoRGZrfvtn
-	 gBV2oZMyRtPJa4Z+YL8ANtXiuZOG4m/dsN7DoTDSKiPLVdmd06Kpq5kjkMa2of9vWJ
-	 YJxdniLjhP02rYUR5TRcTzi0GUJ36xaHfNGAuhi5HEXi7Pi15z13hmap5zqT4ThXlV
-	 8obhAOg9xFFA0U3O+BI6GWy2CQ1Dyn2vvv4E0tkNotlFeikZaXdEvGRL7dcHhPlQpl
-	 AdHfXY7lei2/w==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 329843782144;
-	Wed, 17 Apr 2024 15:32:58 +0000 (UTC)
-Message-ID: <59edbcc4-fcd2-4de7-a275-1d10e0c35155@collabora.com>
-Date: Wed, 17 Apr 2024 17:32:58 +0200
+	s=arc-20240116; t=1713368329; c=relaxed/simple;
+	bh=GEwKcew9dkrK7al83zqmzbXTl8DFGOiIto9YUHLUKgI=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=AENnMVv308UNu3yM9loaH62fdAS9vBwj0Nb6Rujzxr+QEZdJ1vWkWBdqGoLQxWTCv4xFFJLg6LF6kuiHXuAl0PH9ATok8lCfZMQHaGHedqhrsizK6+4NJKKZyYP2FW+iWN2LasFH9QE9aPxRNFJtPo3GIdxSeYsDvc412AqA/XA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VKQ4W5nkBz6F951;
+	Wed, 17 Apr 2024 23:36:43 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 35D8B140B38;
+	Wed, 17 Apr 2024 23:38:44 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Wed, 17 Apr
+ 2024 16:38:43 +0100
+Date: Wed, 17 Apr 2024 16:38:42 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Salil Mehta <salil.mehta@huawei.com>
+CC: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
+	<peterz@infradead.org>, "linux-pm@vger.kernel.org"
+	<linux-pm@vger.kernel.org>, "loongarch@lists.linux.dev"
+	<loongarch@lists.linux.dev>, "linux-acpi@vger.kernel.org"
+	<linux-acpi@vger.kernel.org>, "linux-arch@vger.kernel.org"
+	<linux-arch@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
+	<kvmarm@lists.linux.dev>, "x86@kernel.org" <x86@kernel.org>, Russell King
+	<linux@armlinux.org.uk>, "Rafael J . Wysocki" <rafael@kernel.org>, "Miguel
+ Luis" <miguel.luis@oracle.com>, James Morse <james.morse@arm.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>, Catalin Marinas
+	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Ingo Molnar
+	<mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+	<dave.hansen@linux.intel.com>, Linuxarm <linuxarm@huawei.com>,
+	"justin.he@arm.com" <justin.he@arm.com>, "jianyong.wu@arm.com"
+	<jianyong.wu@arm.com>
+Subject: Re: [PATCH v6 06/16] ACPI: processor: Register deferred CPUs from
+ acpi_processor_get_info()
+Message-ID: <20240417163842.0000415e@Huawei.com>
+In-Reply-To: <22ace9b108ee488eb017f5b3e8facb8d@huawei.com>
+References: <20240417131909.7925-1-Jonathan.Cameron@huawei.com>
+	<20240417131909.7925-7-Jonathan.Cameron@huawei.com>
+	<22ace9b108ee488eb017f5b3e8facb8d@huawei.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/7] dt-bindings: regulator: Add bindings for MediaTek
- DVFSRC Regulators
-To: Rob Herring <robh@kernel.org>
-Cc: henryc.chen@mediatek.com, wenst@chromium.org, keescook@chromium.org,
- gustavoars@kernel.org, linux-mediatek@lists.infradead.org,
- amergnat@baylibre.com, broonie@kernel.org, devicetree@vger.kernel.org,
- krzysztof.kozlowski+dt@linaro.org, linux-arm-kernel@lists.infradead.org,
- conor+dt@kernel.org, matthias.bgg@gmail.com, djakov@kernel.org,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, lgirdwood@gmail.com,
- kernel@collabora.com
-References: <20240417091442.170505-1-angelogioacchino.delregno@collabora.com>
- <20240417091442.170505-2-angelogioacchino.delregno@collabora.com>
- <171336511790.2347768.12360106374334104584.robh@kernel.org>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <171336511790.2347768.12360106374334104584.robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-Il 17/04/24 16:46, Rob Herring ha scritto:
-> 
-> On Wed, 17 Apr 2024 11:14:36 +0200, AngeloGioacchino Del Regno wrote:
->> The Dynamic Voltage and Frequency Scaling Resource Collector Regulators
->> are controlled with votes to the DVFSRC hardware.
->>
->> This adds support for the regulators found in MT6873, MT8183, MT8192
->> and MT8195 SoCs.
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> ---
->>   .../mediatek,mt6873-dvfsrc-regulator.yaml     | 71 +++++++++++++++++++
->>   1 file changed, 71 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/regulator/mediatek,mt6873-dvfsrc-regulator.yaml
->>
-> 
-> My bot found errors running 'make dt_binding_check' on your patch:
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> Documentation/devicetree/bindings/regulator/mediatek,mt6873-dvfsrc-regulator.example.dtb: /example-0/soc/system-controller@10012000: failed to match any schema with compatible: ['mediatek,mt8195-dvfsrc']
-> 
+On Wed, 17 Apr 2024 16:03:51 +0100
+Salil Mehta <salil.mehta@huawei.com> wrote:
 
-This is a circular dependency with patch [3/7], so I think that the bot complaining
-is expected?
+> >  From: Jonathan Cameron <jonathan.cameron@huawei.com>
+> >  Sent: Wednesday, April 17, 2024 2:19 PM
+> >  
+> >  From: James Morse <james.morse@arm.com>
+> >  
+> >  The arm64 specific arch_register_cpu() call may defer CPU registration until
+> >  the ACPI interpreter is available and the _STA method can be evaluated.
+> >  
+> >  If this occurs, then a second attempt is made in acpi_processor_get_info().
+> >  Note that the arm64 specific call has not yet been added so for now this will
+> >  be called for the original hotplug case.
+> >  
+> >  For architectures that do not defer until the ACPI Processor driver loads
+> >  (e.g. x86), for initially present CPUs there will already be a CPU device. If
+> >  present do not try to register again.
+> >  
+> >  Systems can still be booted with 'acpi=off', or not include an ACPI
+> >  description at all as in these cases arch_register_cpu() will not have
+> >  deferred registration when first called.
+> >  
+> >  This moves the CPU register logic back to a subsys_initcall(), while the
+> >  memory nodes will have been registered earlier.
+> >  Note this is where the call was prior to the cleanup series so there should be
+> >  no side effects of moving it back again for this specific case.
+> >  
+> >  [PATCH 00/21] Initial cleanups for vCPU HP.
+> >  https://lore.kernel.org/all/ZVyz%2FVe5pPu8AWoA@shell.armlinux.org.uk/
+> >  
+> >  e.g. 5b95f94c3b9f ("x86/topology: Switch over to GENERIC_CPU_DEVICES")
+> >  
+> >  Signed-off-by: James Morse <james.morse@arm.com>
+> >  Reviewed-by: Gavin Shan <gshan@redhat.com>
+> >  Tested-by: Miguel Luis <miguel.luis@oracle.com>
+> >  Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
+> >  Tested-by: Jianyong Wu <jianyong.wu@arm.com>
+> >  Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> >  Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> >  Signed-off-by: Joanthan Cameron <Jonathan.Cameron@huawei.com>
+> >  ---
+> >  v6: Squash the two paths for conventional CPU Hotplug and arm64
+> >      vCPU HP.
+> >  v5: Update commit message to make it clear this is moving the
+> >      init back to where it was until very recently.
+> >  
+> >      No longer change the condition in the earlier registration point
+> >      as that will be handled by the arm64 registration routine
+> >      deferring until called again here.
+> >  ---
+> >   drivers/acpi/acpi_processor.c | 12 +++++++++++-
+> >   1 file changed, 11 insertions(+), 1 deletion(-)
+> >  
+> >  diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
+> >  index 7ecb13775d7f..0cac77961020 100644
+> >  --- a/drivers/acpi/acpi_processor.c
+> >  +++ b/drivers/acpi/acpi_processor.c
+> >  @@ -356,8 +356,18 @@ static int acpi_processor_get_info(struct
+> >  acpi_device *device)
+> >   	 *
+> >   	 *  NOTE: Even if the processor has a cpuid, it may not be present
+> >   	 *  because cpuid <-> apicid mapping is persistent now.
+> >  +	 *
+> >  +	 *  Note this allows 3 flows, it is up to the arch_register_cpu()
+> >  +	 *  call to reject any that are not supported on a given architecture.
+> >  +	 *  A) CPU becomes present.
+> >  +	 *  B) Previously invalid logical CPU ID (Same as becoming present)
+> >  +	 *  C) CPU already present and now being enabled (and wasn't
+> >  registered
+> >  +	 *     early on an arch that doesn't defer to here)
+> >   	 */
+> >  -	if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
+> >  +	if ((!invalid_logical_cpuid(pr->id) && cpu_present(pr->id) &&
+> >  +	     !get_cpu_device(pr->id)) ||
+> >  +	    invalid_logical_cpuid(pr->id) ||
+> >  +	    !cpu_present(pr->id)) {  
+> 
+> 
+Hi Salil,
+
+Thanks for quick review!
+
+> Logic is clear but it is ugly. We should turn them into macro or inline.
+
+You've found the 'ugly' in this approach vs keeping them separate.
+
+For this version I wanted to keep it clear that indeed this condition
+is a complex mess of different things (and to let people compare
+it easily with the two paths in v5 to convinced themselves this
+is the same) 
+
+It's also a little tricky to do, so will need some thought.
+
+I don't think a simple acpi_cpu_is_hotplug() condition is useful
+as it just moves the complexity away from where a reader is looking
+and it would only be used in this one case.
+
+It doesn't separate well into finer grained subconditions because
+(C) is a messy case of the vCPU HP case and a not done
+something else earlier.  The disadvantage of only deferring for
+arm64 and not other architectures.
+
+The best I can quickly come up with is something like this:
+#define acpi_cpu_not_present(cpu) \
+	(invalid_logical_cpuid(cpu) || !cpu_present(cpu))
+#define acpi_cpu_not_enabled(cpu) \
+	(!invalid_logical_cpuid(cpu) || cpu_present(cpu))
+
+	if ((apci_cpu_not_enabled(pr->id) && !get_cpu_device(pr->id) ||
+	    acpi_cpu_not_present(pr->id))
+
+Which would still need the same amount of documentation. The
+code still isn't enough for me to immediately be able to see
+what is going on.
+
+So maybe worth it... I'm not sure.  Rafael, you get to keep this
+fun, what would you prefer?
+
+Jonathan
 
 
-> doc reference errors (make refcheckdocs):
 > 
-> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240417091442.170505-2-angelogioacchino.delregno@collabora.com
 > 
-> The base for the series is generally the latest rc1. A different dependency
-> should be noted in *this* patch.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit after running the above command yourself. Note
-> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-> your schema. However, it must be unset to test all examples with your schema.
-> 
-
+> Thanks
+> Salil.
 
 
