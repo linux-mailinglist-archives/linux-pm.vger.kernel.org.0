@@ -1,119 +1,133 @@
-Return-Path: <linux-pm+bounces-6647-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6648-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52B548A964C
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 11:37:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C9058A9654
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 11:38:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D3F0DB21D89
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 09:36:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC92B1F22DCD
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 09:37:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6600115ADB1;
-	Thu, 18 Apr 2024 09:36:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3A0C15B105;
+	Thu, 18 Apr 2024 09:37:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hsG7NUQk"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="qzhdWhRS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3968B54BC4;
-	Thu, 18 Apr 2024 09:36:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0420A15ADB7;
+	Thu, 18 Apr 2024 09:37:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713433014; cv=none; b=RzxNGbor2U2O0eExuph/cCeYdLHOePnjiN9mztUGB7E7+HZjJt1pzlY9UccEF3QNkX0okovS2QnEnICYtDduKom+5Lxnj0A48Expky52tyPIUJT9S6XKn+q+KPlMi2RFRWomt2YkNZMb6FGtIq49Lty7f5URwdFxdxXOvzi/5Sk=
+	t=1713433074; cv=none; b=OEvYlTt00ZOx7w7Rzd3iV0J/OJ46aVMg0yM6fC5D52lwT/hhKjriu+kz4GUq2OPk9YQiDWvbwGnMM9RwmEzcfPJZ+mK5A01tr66d1dEAv3ISUbcUyqsebOo1sBZP22clZDuyjQ0Vnt7VOKpy01UZquE3XUOL5K5Vn8Dh+aG4wXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713433014; c=relaxed/simple;
-	bh=Qp9k4aU9c7AEiPS0ii/bSgM7Vml63g+4H5aHCfN6h24=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=sjwWFigqN1pewvffhVTX7EHsEFAGOpuDZxqnYpsG8EDp0XmlIb8jyLj7OyMyA4ShYqB6nA/IaFm8u+Rrsg/H3VyKnqjMaSkJ2sDxLBilJREYRC9u1l9ckkKvVt6wUqYIB2Mwgs1Bw2wOACcA0uvdvejxk2CuXjLEwcxyeP1hRuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hsG7NUQk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78A51C2BD11;
-	Thu, 18 Apr 2024 09:36:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713433013;
-	bh=Qp9k4aU9c7AEiPS0ii/bSgM7Vml63g+4H5aHCfN6h24=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=hsG7NUQkfXYBpr62bEa0fDE+fRS17kSekv8vqSAjQ3UjaFhJ4gSG4evawt/1hg0qh
-	 QNg4xQZ+92jFrtncFCYi+GQOKQPrEpcL6ck5kJlVbUszC/TrhfVAZJVSKEQSKrPkRi
-	 vWzL52Suy1MXEAZ236Q8Rs9JmG4UzInyIINctH/LkIG0GLsVmlOp+n8rWiQ5uAnCad
-	 t7Gj95Om40+vVsORrLwSzny4Ri2T/8+dapC12vgGaDYs670DI2/3B4f633Z+HPmKc6
-	 VIR3zN1s1YRmkGM674StxAYLVC3M47HJcYDkWNNZUBeP5WypigY2XBYGftc77nUP4B
-	 oxf8SduVO56lA==
-Date: Thu, 18 Apr 2024 04:36:52 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1713433074; c=relaxed/simple;
+	bh=xTTRylhxTMNxuBPyF0ZhqgtTHDOevThfPc3RUW/tG/c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HSyVLGyHK6QDsjYsF9QOWHt+CfdeAb1YWq82nSdQdmISKIAQzQ9bdkvVv1I45yJK1uJumEqyQRbr15MLu99hJaeeZ+spTkWKPQ2qXpyY5VqfhQSPGdYeGN78xiosFAfte0R24OKRCMcQw9lSjzaID5cypQ/A3owmmdo7E/b4Vxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=qzhdWhRS; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1713433071;
+	bh=xTTRylhxTMNxuBPyF0ZhqgtTHDOevThfPc3RUW/tG/c=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=qzhdWhRSZDUQAR3tcksUDkxqnZpVvM6wSVUDbGme+YCwaZ6VCN6zVZCwj4V82tqTF
+	 SGtlShSYstZUYS6Hm7D+qpZT8L0IOFgbR7EYbqi75tbyHpg/VwjmUO8LdkT5WI1lEy
+	 Cguc92jAtUWBprkFt7MpVm3RLHbc5elQ3cn5TV6G9FADJw4mV/E9CeeAxuIYikY17V
+	 eT7ya0NbDgfsm2JDBvqqfQbUFf/c+KnVitUuAAGJyVIohYZli06fFcALDWyT4Iv9Xd
+	 7Zve4oKydMyuemER0dwuub0KPc873KsZjt+SfIh8h5kp95S2G8in9vhLbZO6cY5Pbm
+	 hJN6qqUkgC5jA==
+Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 8A90737813E3;
+	Thu, 18 Apr 2024 09:37:49 +0000 (UTC)
+Message-ID: <8e572021-f872-48c7-bebb-e33e7ed7acf1@collabora.com>
+Date: Thu, 18 Apr 2024 11:37:48 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Rob Herring <robh@kernel.org>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: henryc.chen@mediatek.com, krzysztof.kozlowski+dt@linaro.org, 
- wenst@chromium.org, gustavoars@kernel.org, devicetree@vger.kernel.org, 
- linux-mediatek@lists.infradead.org, matthias.bgg@gmail.com, 
- conor+dt@kernel.org, kernel@collabora.com, amergnat@baylibre.com, 
- linux-pm@vger.kernel.org, keescook@chromium.org, 
- linux-arm-kernel@lists.infradead.org, lgirdwood@gmail.com, 
- djakov@kernel.org, broonie@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20240418082812.152270-4-angelogioacchino.delregno@collabora.com>
-References: <20240418082812.152270-1-angelogioacchino.delregno@collabora.com>
- <20240418082812.152270-4-angelogioacchino.delregno@collabora.com>
-Message-Id: <171343301130.424721.10758711321868587171.robh@kernel.org>
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3 3/7] dt-bindings: soc: mediatek: Add DVFSRC bindings
  for MT8183 and MT8195
+To: Rob Herring <robh@kernel.org>
+Cc: henryc.chen@mediatek.com, krzysztof.kozlowski+dt@linaro.org,
+ wenst@chromium.org, gustavoars@kernel.org, devicetree@vger.kernel.org,
+ linux-mediatek@lists.infradead.org, matthias.bgg@gmail.com,
+ conor+dt@kernel.org, kernel@collabora.com, amergnat@baylibre.com,
+ linux-pm@vger.kernel.org, keescook@chromium.org,
+ linux-arm-kernel@lists.infradead.org, lgirdwood@gmail.com,
+ djakov@kernel.org, broonie@kernel.org, linux-kernel@vger.kernel.org
+References: <20240418082812.152270-1-angelogioacchino.delregno@collabora.com>
+ <20240418082812.152270-4-angelogioacchino.delregno@collabora.com>
+ <171343301130.424721.10758711321868587171.robh@kernel.org>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <171343301130.424721.10758711321868587171.robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-
-On Thu, 18 Apr 2024 10:28:08 +0200, AngeloGioacchino Del Regno wrote:
-> Add bindings for the MediaTek Dynamic Voltage and Frequency Scaling
-> Resource Collector (DVFSRC), a hardware module used to collect all the
-> requests from both software and the various remote processors embedded
-> into the SoC and decide about a minimum operating voltage and a minimum
-> DRAM frequency to fulfill those requests in an effort to provide the
-> best achievable performance per watt.
+Il 18/04/24 11:36, Rob Herring ha scritto:
 > 
-> This hardware IP is capable of transparently performing direct register
-> R/W on all of the DVFSRC-controlled regulators and SoC bandwidth knobs.
+> On Thu, 18 Apr 2024 10:28:08 +0200, AngeloGioacchino Del Regno wrote:
+>> Add bindings for the MediaTek Dynamic Voltage and Frequency Scaling
+>> Resource Collector (DVFSRC), a hardware module used to collect all the
+>> requests from both software and the various remote processors embedded
+>> into the SoC and decide about a minimum operating voltage and a minimum
+>> DRAM frequency to fulfill those requests in an effort to provide the
+>> best achievable performance per watt.
+>>
+>> This hardware IP is capable of transparently performing direct register
+>> R/W on all of the DVFSRC-controlled regulators and SoC bandwidth knobs.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>>   .../soc/mediatek/mediatek,mt8183-dvfsrc.yaml  | 94 +++++++++++++++++++
+>>   1 file changed, 94 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mediatek,mt8183-dvfsrc.yaml
+>>
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  .../soc/mediatek/mediatek,mt8183-dvfsrc.yaml  | 94 +++++++++++++++++++
->  1 file changed, 94 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mediatek,mt8183-dvfsrc.yaml
+> My bot found errors running 'make dt_binding_check' on your patch:
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mediatek/mediatek,mt8183-dvfsrc.example.dtb: system-controller@10012000: regulators@0: 'reg' does not match any of the regexes: 'pinctrl-[0-9]+'
+> 	from schema $id: http://devicetree.org/schemas/soc/mediatek/mediatek,mt8183-dvfsrc.yaml#
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mediatek/mediatek,mt8183-dvfsrc.example.dtb: system-controller@10012000: interconnect@1: Unevaluated properties are not allowed ('reg' was unexpected)
+> 	from schema $id: http://devicetree.org/schemas/soc/mediatek/mediatek,mt8183-dvfsrc.yaml#
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mediatek/mediatek,mt8183-dvfsrc.example.dtb: regulators@0: 'reg' does not match any of the regexes: 'pinctrl-[0-9]+'
+> 	from schema $id: http://devicetree.org/schemas/regulator/mediatek,mt6873-dvfsrc-regulator.yaml#
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mediatek/mediatek,mt8183-dvfsrc.example.dtb: interconnect@1: Unevaluated properties are not allowed ('reg' was unexpected)
+> 	from schema $id: http://devicetree.org/schemas/interconnect/mediatek,mt8183-emi.yaml#
+> 
+> doc reference errors (make refcheckdocs):
+> 
+> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240418082812.152270-4-angelogioacchino.delregno@collabora.com
+> 
+> The base for the series is generally the latest rc1. A different dependency
+> should be noted in *this* patch.
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+> 
+> pip3 install dtschema --upgrade
+> 
+> Please check and re-submit after running the above command yourself. Note
+> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> your schema. However, it must be unset to test all examples with your schema.
 > 
 
-My bot found errors running 'make dt_binding_check' on your patch:
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mediatek/mediatek,mt8183-dvfsrc.example.dtb: system-controller@10012000: regulators@0: 'reg' does not match any of the regexes: 'pinctrl-[0-9]+'
-	from schema $id: http://devicetree.org/schemas/soc/mediatek/mediatek,mt8183-dvfsrc.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mediatek/mediatek,mt8183-dvfsrc.example.dtb: system-controller@10012000: interconnect@1: Unevaluated properties are not allowed ('reg' was unexpected)
-	from schema $id: http://devicetree.org/schemas/soc/mediatek/mediatek,mt8183-dvfsrc.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mediatek/mediatek,mt8183-dvfsrc.example.dtb: regulators@0: 'reg' does not match any of the regexes: 'pinctrl-[0-9]+'
-	from schema $id: http://devicetree.org/schemas/regulator/mediatek,mt6873-dvfsrc-regulator.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mediatek/mediatek,mt8183-dvfsrc.example.dtb: interconnect@1: Unevaluated properties are not allowed ('reg' was unexpected)
-	from schema $id: http://devicetree.org/schemas/interconnect/mediatek,mt8183-emi.yaml#
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240418082812.152270-4-angelogioacchino.delregno@collabora.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+Whoops. Forgot to update this one. Sending v4.
 
 
