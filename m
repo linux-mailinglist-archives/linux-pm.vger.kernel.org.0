@@ -1,98 +1,235 @@
-Return-Path: <linux-pm+bounces-6657-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6658-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C67968A985E
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 13:16:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F6548A99EB
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 14:34:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81F1F281AD5
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 11:16:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 919C61C21388
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 12:34:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36CB715E5B2;
-	Thu, 18 Apr 2024 11:16:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69FEF1DA26;
+	Thu, 18 Apr 2024 12:34:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="HaYZpKgd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDEF715E5AD;
-	Thu, 18 Apr 2024 11:16:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9749E6FC3;
+	Thu, 18 Apr 2024 12:34:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713439011; cv=none; b=h23pFigJ4yk19Z8s9+UVL1OGZSQ5QH9fcNr3D9q4jLls8UsMprJ7BYolaf+6TFRvLdU6cI+MbuqVKtCEOkENFU20PQ7/1vmFdd/vMHurwHLOIwjnKlziF90LsTx2x2iAC7I5B5WkI0UIxvdzUC9HrWW2fabCYOsRa4ppmw/mUXQ=
+	t=1713443662; cv=none; b=AdE1l3rcdUcBnSwkTs/yHVNbtP4Fc/T6CxVmaOeXJbn/obKd+dCDJzrKwYX+CXPHbL4JZ8ObVzk4Lx2F9iuRTKklvbZhak3KYwkIblf9AFSZAa074nxBVQDHx8dyRDAo36ueiueXtVySKX/QdOcLG25K0HqYR32gmhljCMzzSeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713439011; c=relaxed/simple;
-	bh=OyCllvAsE01qdFgOdvtS6usRklZOgOwrr5mtH7cN8Yc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NhzmYlBfWI7NgxwOIDGzX4io6KfWG5wZOoGJqAJMdvsehZYCM1tMKNXemAgBpQPcwRSlP7qJA3aop7h9zrWj3OFnCgm+sx1uXI0+gPHb+mlwylAYgIiEgj0nNdoSdfCBxRvPDA3EJdRUv8jIV3GJQbNt/OFBzSLbtgXtBF9jErg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E13D2339;
-	Thu, 18 Apr 2024 04:17:16 -0700 (PDT)
-Received: from donnerap.manchester.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5A2CB3F792;
-	Thu, 18 Apr 2024 04:16:46 -0700 (PDT)
-Date: Thu, 18 Apr 2024 12:16:42 +0100
-From: Andre Przywara <andre.przywara@arm.com>
-To: "Ryan Walklin" <ryan@testtoast.com>, "Viresh Kumar"
- <viresh.kumar@linaro.org>
-Cc: "Yangtao Li" <tiny.windzz@gmail.com>, "Viresh Kumar"
- <vireshk@kernel.org>, "Nishanth Menon" <nm@ti.com>, "Stephen Boyd"
- <sboyd@kernel.org>, "Rob Herring" <robh+dt@kernel.org>, "Krzysztof
- Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley"
- <conor+dt@kernel.org>, "Chen-Yu Tsai" <wens@csie.org>, "Jernej Skrabec"
- <jernej.skrabec@gmail.com>, "Samuel Holland" <samuel@sholland.org>, "Rafael
- J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-sunxi@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, "Brandon Cheo Fusi"
- <fusibrandon13@gmail.com>, "Martin Botka" <martin.botka@somainline.org>,
- "Martin Botka" <martin.botka1@gmail.com>, "Chris Morgan"
- <macroalpha82@gmail.com>, "Mark Rutland" <mark.rutland@arm.com>, "Lorenzo
- Pieralisi" <lpieralisi@kernel.org>, "Sudeep Holla" <sudeep.holla@arm.com>
-Subject: Re: [PATCH v4 0/8] cpufreq: sun50i: Add Allwinner H616 support
-Message-ID: <20240418121642.53208fab@donnerap.manchester.arm.com>
-In-Reply-To: <0e021133-f8c1-457d-9079-d9c972e0e69b@app.fastmail.com>
-References: <20240329141311.27158-1-andre.przywara@arm.com>
-	<20240404064027.shjqvqih7s5rnv2i@vireshk-i7>
-	<0e021133-f8c1-457d-9079-d9c972e0e69b@app.fastmail.com>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+	s=arc-20240116; t=1713443662; c=relaxed/simple;
+	bh=9nrO80FRTuJXMuwoaTwMR7mzXbtEaRk4icXUo6sWJXM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oL+o4Crf+3GKHCYu6pND2K2P+LwjrFpFmhPtQqiu6XEblcajSWcxmKtlLr913diJdinM5JfK+/SXqNfPkq0uIWWCmlGF77D1Dqk/X/OiFCYDqeSBMqaRpxPMtA6FW73S7QE4yceRxDWwzysrWO/Nfu32xBPsAh30VuYNePNHDMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=HaYZpKgd; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1713443655;
+	bh=9nrO80FRTuJXMuwoaTwMR7mzXbtEaRk4icXUo6sWJXM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HaYZpKgdNFUdHkfAcsARDN6AXW4gxCFkHK6jY2fTv8nDN53OqOyhSjzpAHXORAVJ3
+	 lddss/S96/oRtugpzT0eEUkMnOwv6hB64H+/UuUtYLltujwMWlqpO0Dl/9Bz+3+tk7
+	 tQ9vroTmxaCya/ZCHLdrFd1qU1tPWLNjqa70tGyPvHjjPqaktDJMZ0V8gZzy9VpeKt
+	 eygdvspEX9yI52Gf1aY2ZhT0wYABhcPPoHCo+y0oxG53TZJNsNi45UavBH7s5zytuR
+	 m5GgUTSDWoWev3XQrBjN7fdV1J7Uv+ip7bH/HT/1hrVwF/JXoUHkrTbFLHh51yDEQn
+	 j1kB16xP5U5ZQ==
+Received: from mercury (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sre)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 238373781116;
+	Thu, 18 Apr 2024 12:34:15 +0000 (UTC)
+Received: by mercury (Postfix, from userid 1000)
+	id C3714106071D; Thu, 18 Apr 2024 14:34:14 +0200 (CEST)
+Date: Thu, 18 Apr 2024 14:34:14 +0200
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Kate Hsuan <hpa@redhat.com>
+Cc: Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>, 
+	linux-leds@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
+	Hans de Goede <hdegoede@redhat.com>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
+	=?utf-8?B?QW5kcsOp?= Apitzsch <git@apitzsch.eu>, linux-kernel@vger.kernel.org, 
+	Andy Shevchenko <andy.shevchenko@gmail.com>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v6 4/5] power: supply: power-supply-leds: Add
+ charging_orange_full_green trigger for RGB LED
+Message-ID: <sjhe7jvzvrlthf42lipnsnooh3z7vczdcruupsbstmpiujprze@jxwc3lquzvki>
+References: <20240416053909.256319-1-hpa@redhat.com>
+ <20240416053909.256319-5-hpa@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-
-On Thu, 04 Apr 2024 20:44:02 +1300
-"Ryan Walklin" <ryan@testtoast.com> wrote:
-
-Hi Viresh, Ryan,
-
-> On Thu, 4 Apr 2024, at 7:40 PM, Viresh Kumar wrote:
-> > Is it okay to merge all the changes via the cpufreq tree ?  
-> 
-> I have tested this series with an H700-based board, and have at least one speed-bin (1.032GHz) is not supported although the governor attempts to enable it based on the opp-supported-hw bitmask, and I am unable to reach the 1.5GHz bin at 1.16v (or higher) despite it working on the vendor BSP (kernel panic at boot if enabled), so this may need some slight rework.
-> 
-> I have reached out to Andre on IRC to debug.
-
-So those test results look odd, especially since it seems to work on the
-BSP. I don't want to jeopardise this series over the oddity on this
-variant, so I am dropping the H700 specific speed bin for now. Not
-directly matching any known SoC variant now, it will fall back to bin 0,
-which gives us some safe values. We lose the highest OPP (1.5 GHz),
-but this was exactly the problematic one in the testing, so it's not a
-great loss.
-Once we have worked out what's really going on there, we can easily add a
-well tested OPP set later, to get the 1.5 GHz back.
-
-Will send a v5 shortly.
-
-Cheers,
-Andre
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="rjak7nyqoe7bx2om"
+Content-Disposition: inline
+In-Reply-To: <20240416053909.256319-5-hpa@redhat.com>
 
 
+--rjak7nyqoe7bx2om
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+On Tue, Apr 16, 2024 at 01:39:08PM +0800, Kate Hsuan wrote:
+> Add a charging_orange_full_green LED trigger and the trigger is based on
+> led_mc_trigger_event() which can set an RGB LED when the trigger is
+> triggered. The LED will show orange when the battery status is charging.
+> The LED will show green when the battery status is full.
+>=20
+> Link: https://lore.kernel.org/linux-leds/f40a0b1a-ceac-e269-c2dd-0158c5b4=
+a1ad@gmail.com/
+>=20
+> Signed-off-by: Kate Hsuan <hpa@redhat.com>
+> ---
+
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+
+-- Sebastian
+
+>  drivers/power/supply/power_supply_leds.c | 26 ++++++++++++++++++++++++
+>  include/linux/power_supply.h             |  2 ++
+>  2 files changed, 28 insertions(+)
+>=20
+> diff --git a/drivers/power/supply/power_supply_leds.c b/drivers/power/sup=
+ply/power_supply_leds.c
+> index c7db29d5fcb8..8dd99199c65b 100644
+> --- a/drivers/power/supply/power_supply_leds.c
+> +++ b/drivers/power/supply/power_supply_leds.c
+> @@ -22,6 +22,9 @@
+>  static void power_supply_update_bat_leds(struct power_supply *psy)
+>  {
+>  	union power_supply_propval status;
+> +	unsigned int intensity_green[3] =3D {255, 0, 0};
+> +	unsigned int intensity_orange[3] =3D {128, 0, 255};
+> +	unsigned int intensity_red[3] =3D {0, 0, 255};
+> =20
+>  	if (power_supply_get_property(psy, POWER_SUPPLY_PROP_STATUS, &status))
+>  		return;
+> @@ -36,12 +39,20 @@ static void power_supply_update_bat_leds(struct power=
+_supply *psy)
+>  		/* Going from blink to LED on requires a LED_OFF event to stop blink */
+>  		led_trigger_event(psy->charging_blink_full_solid_trig, LED_OFF);
+>  		led_trigger_event(psy->charging_blink_full_solid_trig, LED_FULL);
+> +		led_mc_trigger_event(psy->charging_orange_full_green_trig,
+> +				     intensity_green,
+> +				     ARRAY_SIZE(intensity_green),
+> +				     LED_FULL);
+>  		break;
+>  	case POWER_SUPPLY_STATUS_CHARGING:
+>  		led_trigger_event(psy->charging_full_trig, LED_FULL);
+>  		led_trigger_event(psy->charging_trig, LED_FULL);
+>  		led_trigger_event(psy->full_trig, LED_OFF);
+>  		led_trigger_blink(psy->charging_blink_full_solid_trig, 0, 0);
+> +		led_mc_trigger_event(psy->charging_orange_full_green_trig,
+> +				     intensity_orange,
+> +				     ARRAY_SIZE(intensity_orange),
+> +				     LED_FULL);
+>  		break;
+>  	default:
+>  		led_trigger_event(psy->charging_full_trig, LED_OFF);
+> @@ -49,6 +60,10 @@ static void power_supply_update_bat_leds(struct power_=
+supply *psy)
+>  		led_trigger_event(psy->full_trig, LED_OFF);
+>  		led_trigger_event(psy->charging_blink_full_solid_trig,
+>  			LED_OFF);
+> +		led_mc_trigger_event(psy->charging_orange_full_green_trig,
+> +				     intensity_red,
+> +				     ARRAY_SIZE(intensity_red),
+> +				     LED_OFF);
+>  		break;
+>  	}
+>  }
+> @@ -74,6 +89,11 @@ static int power_supply_create_bat_triggers(struct pow=
+er_supply *psy)
+>  	if (!psy->charging_blink_full_solid_trig_name)
+>  		goto charging_blink_full_solid_failed;
+> =20
+> +	psy->charging_orange_full_green_trig_name =3D kasprintf(GFP_KERNEL,
+> +		"%s-charging-orange-full-green", psy->desc->name);
+> +	if (!psy->charging_orange_full_green_trig_name)
+> +		goto charging_red_full_green_failed;
+> +
+>  	led_trigger_register_simple(psy->charging_full_trig_name,
+>  				    &psy->charging_full_trig);
+>  	led_trigger_register_simple(psy->charging_trig_name,
+> @@ -82,9 +102,13 @@ static int power_supply_create_bat_triggers(struct po=
+wer_supply *psy)
+>  				    &psy->full_trig);
+>  	led_trigger_register_simple(psy->charging_blink_full_solid_trig_name,
+>  				    &psy->charging_blink_full_solid_trig);
+> +	led_trigger_register_simple(psy->charging_orange_full_green_trig_name,
+> +				    &psy->charging_orange_full_green_trig);
+> =20
+>  	return 0;
+> =20
+> +charging_red_full_green_failed:
+> +	kfree(psy->charging_blink_full_solid_trig_name);
+>  charging_blink_full_solid_failed:
+>  	kfree(psy->full_trig_name);
+>  full_failed:
+> @@ -101,10 +125,12 @@ static void power_supply_remove_bat_triggers(struct=
+ power_supply *psy)
+>  	led_trigger_unregister_simple(psy->charging_trig);
+>  	led_trigger_unregister_simple(psy->full_trig);
+>  	led_trigger_unregister_simple(psy->charging_blink_full_solid_trig);
+> +	led_trigger_unregister_simple(psy->charging_orange_full_green_trig);
+>  	kfree(psy->charging_blink_full_solid_trig_name);
+>  	kfree(psy->full_trig_name);
+>  	kfree(psy->charging_trig_name);
+>  	kfree(psy->charging_full_trig_name);
+> +	kfree(psy->charging_orange_full_green_trig_name);
+>  }
+> =20
+>  /* Generated power specific LEDs triggers. */
+> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+> index c0992a77feea..9b6898085224 100644
+> --- a/include/linux/power_supply.h
+> +++ b/include/linux/power_supply.h
+> @@ -318,6 +318,8 @@ struct power_supply {
+>  	char *online_trig_name;
+>  	struct led_trigger *charging_blink_full_solid_trig;
+>  	char *charging_blink_full_solid_trig_name;
+> +	struct led_trigger *charging_orange_full_green_trig;
+> +	char *charging_orange_full_green_trig_name;
+>  #endif
+>  };
+> =20
+> --=20
+> 2.44.0
+>=20
+>=20
+
+--rjak7nyqoe7bx2om
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmYhEzsACgkQ2O7X88g7
++prC0Q//Rb0bzJmGZkOxFWmxv+IBe9q++qbxCWIjBwwb4XT6VSj0i9LdMdJ5NKr3
+nwqUL2LT7NZ7xjQJ7tq60AwEvmCB/okPOGDmB6zdwHcgWDtVV/vJjjWvtv0G9goz
+2szdOTQfPx7B8RcM+2TEe1YX+N4aVvx+OOY7eWiZlvf6Oec8UcnstUU9Oei/BHod
+WL5Hvy1fbf2TZdIOW/HuXFgORaiC1JJ3uPjNI4DfH7vuHUiMSHxHHuAhvAGl7Vst
+LlLLXIHgEgrFsAnlWa750e6VqvWLcK0INRuh/N7BzDz8kNuJe8PX4TDsdwOZgYTO
+1EleCSYoElW4C/CDTeJeYu1g9810F09jsnM4DEAwnWhWsg1hrb3cfdhnViunDpVU
+eJt/6iwHCVtBx10hJAQEaKCY5GIZ3UKUCGa37DkndO23Bv0LOy7AKmbwefaE1FCf
+lp8NPFXM1Wvlwfh4fr+casBzwKem5e6JTsy+DXnm9ogfBgUxldzw5um8+DEBc+Jl
+LDVQqsSGPlIxb7N/GUSzimWj86GTJwsIhFcqedmi5t0nI68kDNYXBlEYccgm6JiA
+wOJZ0Km2yVEa+NYkUGxTxEW453G2ycZTRVB3494Tt379JwW161woDC+ko5eMEbXA
+McOywM0Z+Yciiinx/G9RnAkdge/bL/hZiaMBwUdEkm8kD/X3tFs=
+=En/T
+-----END PGP SIGNATURE-----
+
+--rjak7nyqoe7bx2om--
 
