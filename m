@@ -1,135 +1,119 @@
-Return-Path: <linux-pm+bounces-6643-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6645-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72AC38A9622
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 11:28:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA7428A962D
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 11:29:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8DC8C1C21BE4
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 09:28:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A62EF283BF5
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 09:29:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A695160865;
-	Thu, 18 Apr 2024 09:24:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="C7OnSNOu"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C92F215ADBB;
+	Thu, 18 Apr 2024 09:27:16 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5B1715B993;
-	Thu, 18 Apr 2024 09:24:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3349E1CA92;
+	Thu, 18 Apr 2024 09:27:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713432268; cv=none; b=raWOFQKk1Wsn0uTh3Ia2cf5e2xQlGItOb+Ee4ABLCfDjSthUm/D5aHjyp+w7yGYUe0BzQVshjE94LyZFPD9idayX/o45o8a4TaiwoTQkAvvfAE8DyHbrlaLFTCiZFh6fgLw+pOVshfIMT4o1UYtQHIM9b9/LTvnSc+ZuuPhEjqU=
+	t=1713432436; cv=none; b=DvqPVgaP2k01Adz9ES5JWVz6vpiczxQ8yMD3YScflnf/xF8cF2A6wpJKf8nYGFdQRuI6Z/Rq0ftO5ELwIp8ECJ2VneekPkJjI3GRyEVexsz/iNDEjVssGeh7nvoI3W0lety+7X27DnUu8QqQl3LQq8Pg6cU5CfEvaF8MbTOV5oE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713432268; c=relaxed/simple;
-	bh=T6AypkH3WpV7sX0/al8Y8+9eYsNDm9sgfT2ZqgdoI8k=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cxuUvhu3idUFXrxeEK62CUHee5A3r46MTNUMEuJEyKsoPAqGiyVSIT5O31LAW5c2Lx6UU171wRg6Z+s6w9jsXNbnWnL/IRPhv2A8ya/TcWE0F0HT22/hpZSfeXWl6ywp8z0D6KVobUv2TKjYp2HgtS2nJScTu4IEci/8VlADT04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=C7OnSNOu; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43I8dNaS010824;
-	Thu, 18 Apr 2024 09:24:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding:content-type; s=
-	qcppdkim1; bh=XQz0y87xjJzpSve+PFnGb8Dxx4cy4BCAlvoWDerKyCU=; b=C7
-	OnSNOuJM73wQOp1CutkdQo9X3If1XIHr0z0OghcKyYY/hpER73ov4CMaGM+SGlAN
-	Qc7lgCd7G1YYOfV649oVNcx/eERm6qnZ8ZobC1cwCD6DFOj+pfY5vX/6HDFPHhQW
-	6ryWQXpXztzifkHZoGuoe3bttRrxFU334XfdvIGjnCxrAToKtoJFYfx3SQaXVerh
-	wAFYAn0hfnKpVVAZTAOVf0Ew/4rlK4HZBf5yKYmM4YLCrgY6SVDlou6RQIQwbt8l
-	KadCv6xz8qyOxnceUw9qhe6otRQIIyqajJ5On/GYSgz1jk5BidpxXvxjxYvlFyzX
-	f5mYFW99YQqtqMoYjKvw==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xk06n0327-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 18 Apr 2024 09:24:22 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43I9O46s009459
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 18 Apr 2024 09:24:04 GMT
-Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 18 Apr 2024 02:23:59 -0700
-From: Varadarajan Narayanan <quic_varada@quicinc.com>
-To: <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <konrad.dybcio@linaro.org>, <djakov@kernel.org>,
-        <quic_varada@quicinc.com>, <dmitry.baryshkov@linaro.org>,
-        <quic_anusha@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-Subject: [PATCH v9 6/6] arm64: dts: qcom: ipq9574: Add icc provider ability to gcc
-Date: Thu, 18 Apr 2024 14:53:05 +0530
-Message-ID: <20240418092305.2337429-7-quic_varada@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240418092305.2337429-1-quic_varada@quicinc.com>
-References: <20240418092305.2337429-1-quic_varada@quicinc.com>
+	s=arc-20240116; t=1713432436; c=relaxed/simple;
+	bh=hqxluRsi3qaCAmHk6Qx6Senn1Pgk/ulJLCDIeSKH/Xo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nVSm3Szt/W6AcPLPA7BuQ4x7JDwjxxiu9oLtxVFAmuWGSkXJ8+qixHiIrqdDxcLS2ttGp69I0gv93bQwTIkYV+kAu/7XrdzyhaVpyGR1NW7zZcXA/u2zYsaGUauDmzMy0rZ/DNBoYEWgxwkZAm3Q8Kn77b8VymMcsen9nbw6KL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-de466c64161so474064276.3;
+        Thu, 18 Apr 2024 02:27:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713432434; x=1714037234;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/CP6t4OVSGkEimMqG3qVA2gUXQRTEs1wglu72p8zwBo=;
+        b=evP5o4UnVmJ+ATIFgQR1S5zwekNo6+t0Oz02GgUN7qjloWzMeKViWiSnKTqVn63rOS
+         3wYhpOqo/78NP7MVgcuNnyOmMyTG05sXeLmkyR2uYLORaFV/zD00/hOMeurWqZVZY2w5
+         VxjRNfoSc2AKouzf8m0v3+9eQWh+COU7lTBq7CudsAdyY9v3Tl2ZrEB6Kg/k0dLHSRCz
+         dDqMOkj2dD1+OwdU7E72VKFjpDfLZFrpFH/Rs/OrHXOaaHGaDiC8i65ulv5OJFOIgPqg
+         pNVOo/h0uew7JL79qe8tJDfKSKtp04m9IOnrGxtmTiWkGc1PvLxn0O7ySoiOImBoY7Rv
+         KGUg==
+X-Forwarded-Encrypted: i=1; AJvYcCVsPAGes8Nlfkp8lwFd8Sy9LBRoi9Vn6synm4f3SHexWoGjf489Sdb6D1kvG+G1IqWB3XwU0YcfFTIpTDpJgqD9AYJty4e77sNnifhHTOsT3sXz0YCJdNIn27KHwyMzhNdMELhm8tq7EzBzOQ==
+X-Gm-Message-State: AOJu0YyaFpCjKVi7O4UVtvDhMEZglrz1OafsA/u1ezF8SlayX7q4MRXl
+	rqKH7sdnfPBYBWShhUGeymGHvqIqjMcke6fD2g0XhlYoBIT0RwJZ4k2mchVdViY=
+X-Google-Smtp-Source: AGHT+IGLuKOUttzZ/G/LKyb7veKXegKYBbCLNdNmzAg4urDzc7/bd4VCR4cLp1/10th+j3Kmi1Uvvg==
+X-Received: by 2002:a25:c70e:0:b0:dcc:76a0:503b with SMTP id w14-20020a25c70e000000b00dcc76a0503bmr2240532ybe.13.1713432433776;
+        Thu, 18 Apr 2024 02:27:13 -0700 (PDT)
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
+        by smtp.gmail.com with ESMTPSA id cj15-20020a056902188f00b00de3cb766aecsm272302ybb.54.2024.04.18.02.27.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Apr 2024 02:27:13 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-de466c64161so474051276.3;
+        Thu, 18 Apr 2024 02:27:13 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXCOxa/RX0TdM9w9gom3Z8akVO/ank8hzHKU383becOA1xPKImJkY1UDKomco7ffsrPdTY31J+gbmrf2IDMdlbpKZdY2klf2q2v3uskkmDG9qBvCKpeInsatPy1o05/3As8gBFEGsf8Pi5SyQ==
+X-Received: by 2002:a25:8e0b:0:b0:dcd:59e4:620c with SMTP id
+ p11-20020a258e0b000000b00dcd59e4620cmr2203016ybl.49.1713432433247; Thu, 18
+ Apr 2024 02:27:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: B91TqVD3TfvBU7fVMsw8obO6U3BnMPDM
-X-Proofpoint-GUID: B91TqVD3TfvBU7fVMsw8obO6U3BnMPDM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-18_08,2024-04-17_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- spamscore=0 priorityscore=1501 impostorscore=0 mlxlogscore=999
- adultscore=0 clxscore=1015 malwarescore=0 lowpriorityscore=0 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2404010003 definitions=main-2404180066
+References: <20240327133013.3982199-1-niklas.soderlund+renesas@ragnatech.se> <20240327133013.3982199-2-niklas.soderlund+renesas@ragnatech.se>
+In-Reply-To: <20240327133013.3982199-2-niklas.soderlund+renesas@ragnatech.se>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 18 Apr 2024 11:27:01 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVW1a2OUs8At3549QvK1LOGstSd_EjzXbjW+4qQwq8YQA@mail.gmail.com>
+Message-ID: <CAMuHMdVW1a2OUs8At3549QvK1LOGstSd_EjzXbjW+4qQwq8YQA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] thermal: rcar_gen3: Move Tj_T storage to shared
+ private data
+To: =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-IPQ SoCs dont involve RPM in managing NoC related clocks and
-there is no NoC scaling. Linux itself handles these clocks.
-However, these should not be exposed as just clocks and align
-with other Qualcomm SoCs that handle these clocks from a
-interconnect provider.
+On Wed, Mar 27, 2024 at 2:30=E2=80=AFPM Niklas S=C3=B6derlund
+<niklas.soderlund+renesas@ragnatech.se> wrote:
+> The calculated Tj_T constant is calculated from the PTAT data either
+> read from the first TSC zone on the device if calibration data is fused,
+> or from fallback values in the driver itself. The value calculated is
+> shared among all TSC zones.
+>
+> Move the Tj_T constant to the shared private data structure instead of
+> duplicating it in each TSC private data. This requires adding a pointer
+> to the shared data to the TSC private data structure. This back pointer
+> make it easier to further rework the temperature conversion logic.
+>
+> Signed-off-by: Niklas S=C3=B6derlund <niklas.soderlund+renesas@ragnatech.=
+se>
+> ---
+> * Changes since v1
+> - Insert tj_t member in struct rcar_gen3_thermal_priv in reverse
+>   Christmas-tree ordering.
+> - Only calculate Tj_T once, instead of once for each TSC zone.
+> - Fix misspelling in commit message.
 
-Hence include icc provider capability to the gcc node so that
-peripherals can use the interconnect facility to enable these
-clocks.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
----
- arch/arm64/boot/dts/qcom/ipq9574.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+Gr{oetje,eeting}s,
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-index 7f2e5cbf3bbb..5b3e69379b1f 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-@@ -8,6 +8,7 @@
- 
- #include <dt-bindings/clock/qcom,apss-ipq.h>
- #include <dt-bindings/clock/qcom,ipq9574-gcc.h>
-+#include <dt-bindings/interconnect/qcom,ipq9574.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/reset/qcom,ipq9574-gcc.h>
- #include <dt-bindings/thermal/thermal.h>
-@@ -306,6 +307,7 @@ gcc: clock-controller@1800000 {
- 			#clock-cells = <1>;
- 			#reset-cells = <1>;
- 			#power-domain-cells = <1>;
-+			#interconnect-cells = <1>;
- 		};
- 
- 		tcsr_mutex: hwlock@1905000 {
--- 
-2.34.1
+                        Geert
 
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
