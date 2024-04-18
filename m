@@ -1,260 +1,239 @@
-Return-Path: <linux-pm+bounces-6633-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6634-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B0B78A9568
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 10:55:43 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1ACCB8A95BE
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 11:13:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FEF0282891
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 08:55:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4814FB2206E
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 09:13:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1430815AAC0;
-	Thu, 18 Apr 2024 08:55:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DABD515AABE;
+	Thu, 18 Apr 2024 09:13:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hWAcdUwG"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="5FuadTBU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2069.outbound.protection.outlook.com [40.107.220.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BC5B15AAB8
-	for <linux-pm@vger.kernel.org>; Thu, 18 Apr 2024 08:55:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713430529; cv=none; b=rDQyxz23zCxv1uk77dOLNBfc4ktFufhhSo8cKYeJKoE9PMYsGIj55lnxa0MQV4oSqxRfLdFQehix8D/8By/8ClMwZwlxih8MPsISzVJCZSEv4Z3QegXmxMwsuPRNk5slhet376uQBetHQKQ3mq0WZQMLDcWNkYGygegOHwumg68=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713430529; c=relaxed/simple;
-	bh=rg1Htv+lB6hxsvVaFwD5Nffj1OIzHqszQvu3GxaKkIg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=rrgS2eGzfbSwP2zo9nuf2NL6QBWkSAShXkdJM5Gk5LsSKS7qeagfaHkhf/HR8bLmUVWqd3DlxS6UZBXx8J1BsdPlXQaW2PtmnWYlomxc9+08SloTVRS1u+AchU/wCd2knuOkKcwUKbN5jPky7r+NabMxB6UKvRLgMTNxp/t+pJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hWAcdUwG; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1713430526;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=a3ijnHOr2lMizZp28dkk/a8tpj5sBpid4ALmXZbWPA8=;
-	b=hWAcdUwG5KfDuu41xabzY+J2CbrUK/M/HO9BtcGh3Ow+4cD4QNPDxOLR5rJF0GmZSQeok1
-	BTd8MDZG4mZdYtp71UcykwWxfUDdjugKhnpffmJxFJQ4nctb86HBDYKpDdLlkhgvUpkP0M
-	OSSyVoOWxL6WkgSxouXLpR3hWCGKrbY=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-82-y1q97wHAMG2IROX6gwLiNA-1; Thu, 18 Apr 2024 04:55:24 -0400
-X-MC-Unique: y1q97wHAMG2IROX6gwLiNA-1
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-a51cb1feb23so24959266b.1
-        for <linux-pm@vger.kernel.org>; Thu, 18 Apr 2024 01:55:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713430522; x=1714035322;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a3ijnHOr2lMizZp28dkk/a8tpj5sBpid4ALmXZbWPA8=;
-        b=XkSS73JVUO9y4TNVAaPB7bgBKC0Q5xJOJEyBxwxSvVQLliJ5HnTN2mNP4pu365q+Aj
-         UcJArtWwZMQhwx+9VI9HCPI5DH3Qn/C+fpowYObSgFHuF8GZsDoTU8gkXrvUflG5KRKJ
-         xwXt/jqm/o3UiRjIGtaOmAdIwiKDtbpLYS/RJkX/5T9ItJ6FRWvWIQi9X32i2bR1jxah
-         x+GoEp9DA2dwM6+aCbJ4vwntZ1dm872cscwBJaybc+rIvb2I2muOk7GgShqef2/WRdFJ
-         9wTmkv4H2g69ZEWqmUZ675GvRLxbGgcWE3/0FKxtxqDUz4yTBUJ2YCyQ3yVwC1Lr8PIY
-         AFvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWS7pQRXfStbpvTgLU3hPLgBYP06UuOklbc/NDb/RPluJ7drJzwVPH0yNhjyJKdc9EaNkHDvflNfX/i6NR0rZkdY+UXz7qOVAg=
-X-Gm-Message-State: AOJu0YziVxiERjvPaePNVFp19BlCe2IfIG5XspZ+JzoqK+YsoqQ63i7F
-	ATyVlA5YZisPBE4YgeJHE+AaXH66xYoKuyWwNs6iUkqqUhn7jRdS1lzxJ7O8rIgSkiE9wij2zH9
-	X8Sxgf06wVcT+wcslyZAmzjF7lAEFK8yuPQ9EoLPLRWS+ltnyUw6YoiwJ
-X-Received: by 2002:a17:907:76a9:b0:a55:59e8:b780 with SMTP id jw9-20020a17090776a900b00a5559e8b780mr1277601ejc.4.1713430522280;
-        Thu, 18 Apr 2024 01:55:22 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGKfvYq8xxFx0WBymZMPuQA2LKlM895k5PHfbu+ObgkMs+Rqx5cC1+8yukvqXz4+PJX9lUPTw==
-X-Received: by 2002:a17:907:76a9:b0:a55:59e8:b780 with SMTP id jw9-20020a17090776a900b00a5559e8b780mr1277588ejc.4.1713430521889;
-        Thu, 18 Apr 2024 01:55:21 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id t7-20020a1709066bc700b00a5556cd0fd5sm598453ejs.183.2024.04.18.01.55.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Apr 2024 01:55:21 -0700 (PDT)
-Message-ID: <218ad508-88bf-451a-a4cc-8246c3d02535@redhat.com>
-Date: Thu, 18 Apr 2024 10:55:20 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 034FE158DD5;
+	Thu, 18 Apr 2024 09:12:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.69
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1713431581; cv=fail; b=C6BpXC8uaHmYetHinVoYg0VAPm6dFIXtla+kwPGPd44KOi/uQLkmtxIetC1b9NPvDPV5+SvSNvgazQOhZ/hzur3dzDpzszAGwwG2Vd/Y93Ajg13p9paL8VWs7UAbhUvCKNQrW8Fh39a4V3pHCi+FyEHQazJgw0HU3BBuGuO8IKQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1713431581; c=relaxed/simple;
+	bh=GOJN073ewCRBX7DhvK00AvZTy0554LGWueCiRzyMLRQ=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=RavUUnpQ5rr8Qx/OAFXEddbb15UGX58DQsyWCw6f5P67LzIKEkf3wKHUM0ehKMK0Jr5sApdGKXJdNsmGyl84bNlGOiMBILY+VBMHLTem9TxU3zCcr82X584UlMvY13yUzuP7HP+LgvP0LatkZlHN9JGY8bf98S6DfyqkeBO7wks=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=5FuadTBU; arc=fail smtp.client-ip=40.107.220.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YdKfddh0r7bpAvYjhJHraUrbdkysQ9XfB54TTc9WsDCmk85uRmW8H3BOOcuBhuipPFcptgbn04t6LpUEOQ9E5rKJf4ODqf44bsfzjQsNOkSg/5LsHAQfFGPiyjCar1vE1ek9jKxWSfSCUAAs0iGKYgzsG2knJP+rWEJtuB288GLTMoE3HmObpZ8G51+kKNx16w7bGYxpGgNNYkpCHxiT9AW3y5Tij5R+36sI5HEqzshFHpY1gjy13I2t4MfhZtreNMNjhEQLsojsobPGBf2XnTYML2mU56Zw1jG9iWb0ed3GJuyXTuu2WgO8fKlHKwzgOZA/soskVYKqdeSiLdmwqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7t0JLkiMyT0uvr3clgnRf0lhf2YfyKWxH2Wr8WwBtBI=;
+ b=mtHMXCB07ceqpjv+Q1F+tkkoK49yn9AhZBjFOTwLudyeAjwMZjD4Q/oLoYfOrnj0Uv3FZ5+VhtpSDMR7pl2I1Eb9Q9rqoSmkxtLu8Roy9rr/KUG7rG1KffyhJkXuiKGqM1jFIQrRE+jOjHH/ywfK/LPqcepmjFZZAF8RB5vJC0S3IDsEAFhS6Qr0XWIbFIqcsRYbkpTg9kV9Qiq6Lrr+8Ei1Vt3jb28GYES/5EpVVmVEPnskS/jVDMsDfpnXwz0ptPpZh/jDTPnVzC1MBTsBiplDn7fg/g2/6mHqcUXj7Srz6VFrXhQzjo+lgE3WCUamJHYfoIeRl72j3sA2gme0nw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7t0JLkiMyT0uvr3clgnRf0lhf2YfyKWxH2Wr8WwBtBI=;
+ b=5FuadTBU+RUMXzoa8jqZ02Wd9TSdt/TP+6Fy75Wa3dRgd2uw1fq1FN5JZRMiKcerNNwGM14dx9Tw+tlEJ5LWXHxVEIeSo2heb4DlopMl+QaoIfGEqQFgiUQItsv/Qgorx6eCr2q+51qh+1poX6XAKM8kITEQmaDD9nJR9QNYjEE=
+Received: from CYYPR12MB8655.namprd12.prod.outlook.com (2603:10b6:930:c4::19)
+ by PH7PR12MB5735.namprd12.prod.outlook.com (2603:10b6:510:1e2::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7452.55; Thu, 18 Apr
+ 2024 09:12:55 +0000
+Received: from CYYPR12MB8655.namprd12.prod.outlook.com
+ ([fe80::64d2:3c49:7c63:1749]) by CYYPR12MB8655.namprd12.prod.outlook.com
+ ([fe80::64d2:3c49:7c63:1749%4]) with mapi id 15.20.7472.037; Thu, 18 Apr 2024
+ 09:12:55 +0000
+From: "Yuan, Perry" <Perry.Yuan@amd.com>
+To: "Huang, Ray" <Ray.Huang@amd.com>
+CC: "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>, "Limonciello,
+ Mario" <Mario.Limonciello@amd.com>, "viresh.kumar@linaro.org"
+	<viresh.kumar@linaro.org>, "Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>,
+	"Petkov, Borislav" <Borislav.Petkov@amd.com>, "Deucher, Alexander"
+	<Alexander.Deucher@amd.com>, "Huang, Shimmer" <Shimmer.Huang@amd.com>,
+	"oleksandr@natalenko.name" <oleksandr@natalenko.name>, "Du, Xiaojian"
+	<Xiaojian.Du@amd.com>, "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v10 5/8] cpufreq: amd-pstate: Bail out if
+ min/max/nominal_freq is 0
+Thread-Topic: [PATCH v10 5/8] cpufreq: amd-pstate: Bail out if
+ min/max/nominal_freq is 0
+Thread-Index: AQHafqlY2qQ26ls5VUGx4r/FI7TAtLFpjaMAgARV9LA=
+Date: Thu, 18 Apr 2024 09:12:55 +0000
+Message-ID:
+ <CYYPR12MB86551E90D79E0324845D8C9C9C0E2@CYYPR12MB8655.namprd12.prod.outlook.com>
+References: <cover.1711335714.git.perry.yuan@amd.com>
+ <c2809391c877dd5842389aaf87bf2b5fce5dc866.1711335714.git.perry.yuan@amd.com>
+ <Zh1AwtnewmweX3zr@amd.com>
+In-Reply-To: <Zh1AwtnewmweX3zr@amd.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=570a3b71-859b-40c7-be74-6eafc05079d8;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2024-04-18T09:11:55Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CYYPR12MB8655:EE_|PH7PR12MB5735:EE_
+x-ms-office365-filtering-correlation-id: 4f4b1332-a697-4264-9d09-08dc5f87bbef
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ R1JuVzzEKcd9l1c80yrXSutIboL7cp9w0O3c6PXPV1csGrkzQF41ksGzhB9mMKtI+TcQtNzLZn46p02aXy3N0RNCWrTAvjeNrT+eLjIJh57GMQ18hsslOphuxWacTP14Ax3iRXP5jjTtj4cJ98C0dl2axBO/OXV3fv+IYIAwr0QIiRLXMLnEF7xL2ekW3bxvw3vvPchTeeeq/k2e7g4mSvfQ6FzMImMIv1l0lxhGJph2HOJrnKMXglNdTUD8/H4Pflvh1WYIeSbTsY1zbGzxu+UHxPXGqfBylD6nBrl/0t24m0cVPGVlqcLPiO2XU6tMslx8GO4m2yaoxK79iDKOkcDxCKjJLVzJ60TDFz3tbdRn92iIuxx3M8ZMs2oudFoEV5KttdD0Sdvar678GgZa3+tG09+ROc8+YdklvDjsXtXrokFvKDvo9pWGmIOAXyIPEwunQPd+GqY9eeEBWpCPLrsAnjo7ZKxKW7x9iZrn6y2C1SYGV06e6X5ppFQQENtNsBwFqVLJOfuAIXQxUF1zjrZKRCUqEl0BJmltJLBsoeSrz4gZXjH/FagyF9VfcUz4ifpOvafxbT/MyWLQqQt/r72V7Z3ft+QnIGUntnUjnhu7E25QTdgC1/Y4xjmThDWKOhYrAxLcU1WsL9HETDJbBkL0KOv29QiNq9404849j9LrHoZ8OuLbnwbql5b05zoiBEnD+7E80BNeBmKgWmslGn0rqKtztTAN2/QyliKFJdg=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CYYPR12MB8655.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(1800799015)(366007)(38070700009);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?4iSWze+S8ZeaeprDmZ6Wo3TB6M8vlgoxHPT4wkcCvnP1uvCtT32SEV1X0IOS?=
+ =?us-ascii?Q?ViJZkPcSqpkdOhJ12CVkOInfDljPMGoLeF8NpCT8+k1bk8ExWunSSh3CAdbq?=
+ =?us-ascii?Q?DQ3Kf44gEg9S9OAM4fw0DsegiezXH4tJVKUN7FQXfR5VtphT6eYMMjfzUNZV?=
+ =?us-ascii?Q?ZqD5WsO1RYkbO4rE9RnMQ1vNBcQ8tcnyb+Mjmo8C6cnHwNreZeYZjMbi5P7U?=
+ =?us-ascii?Q?by8N/8FOMks9gi5V0DmBNkDKF00dsUxcka0nK8xtBd9VgXIH0kFjYIydhFR7?=
+ =?us-ascii?Q?HdJdF7QgYwDCP5uKYsJOAFXFdjhoK2BcpyJGNMHQ1zgJEfpA0btFarLdB2xp?=
+ =?us-ascii?Q?O2UgK3nuY9H2jqJKdNbQYnv8rQIQpgRtT0/H8nc3YX9ABlp/vZ3OqB4gdAbN?=
+ =?us-ascii?Q?AB0Azozc0SnjQ0dvb8Sm35etb7I0v+sZdR0YIoQRsxAGvzzAMtvCrcUpUKKi?=
+ =?us-ascii?Q?bZjLlPZ1xYIJlIwiLrDSmYL54xrhzZ52uIOEBwfhWWMYVhLDxuFIQh0r3ijD?=
+ =?us-ascii?Q?xtqqg8ItciJOHNTMYApPG779btiMHVaKWO1OJrEc28IuR5+2bmHhPC4HLSJX?=
+ =?us-ascii?Q?3h0a6c2k6tIKz3ZcYHW24E8ZrCif/XfnKpqmiSNm051qkMEu86VjbInHXJMp?=
+ =?us-ascii?Q?M1zXiuMKx/OE/Wk4WuT1e3s0NDBm1kQUb6HE+U9rBZbJm7fhR35fVvS+vVnl?=
+ =?us-ascii?Q?fueMhGuKvwiPjjv7EEJkBHDkq7RTsA7XaGZCCIKi9nHEiAtudkias6/nEJL1?=
+ =?us-ascii?Q?hX35ff8EG67nKsQslSpxqMBGZbHKopmWZn8XrhUOra2OsI8D1DrCBLZyvNiB?=
+ =?us-ascii?Q?cdPxfmx0vhld7pms9GR+3a4iroWHX5cx2LG7yeiAGN+ak8Cek+E3y8DCu+it?=
+ =?us-ascii?Q?+XWQBDihD06otIfCP+FuqHVPcFFBwZ8v1dsWwxTbjyBN152LThjrq00y/EEy?=
+ =?us-ascii?Q?j9bwx/1LJU1fonL5qUKKXyIjamXDy0YKplqqN4ZzD0MOyu994eCOYewprZQO?=
+ =?us-ascii?Q?U0GF0KMVFIoq/L/0nuKNXvAKRYe3MedXU9yGVzK2GVmcBFwRBFD0rjQemOFU?=
+ =?us-ascii?Q?gbM4Y7lttgytduhk7yg1JSffmLd/MknRijyg3aLKijv3sOy8WpgbC5aXd5HE?=
+ =?us-ascii?Q?x4AOAujekEAz0L+6EBBxv/BmHY/ceUzzpZUmr8Rbycxoxy1BJQv7ijTQtWYt?=
+ =?us-ascii?Q?NsgXtxVGjKnfmJL2V4F4AeTxW5+ZhcDX9E0NnK4kVqm/pwt8Nv2r6HEedKH1?=
+ =?us-ascii?Q?ILmF0MPCroEXyXust3DBxFO1K3ufJq1qDHoRbtfQaZ+i0Z/hwhUZBVuW7kGe?=
+ =?us-ascii?Q?Vr3rh4OhUkcNoS3wBSrh9axnxjOM4PlQtgAv9GigDnvKiVu2dvInHV4VpZTv?=
+ =?us-ascii?Q?lVdqUxQXtZGOpnNSxrU9YkX+teBbvlyWJdEvO/yQ/zgus0+IMiVi1QneUew5?=
+ =?us-ascii?Q?b2VMrwDXsDglMuDbmzs/B6jpsmljcrOJJ08KwOtTFfDhAPiOB+Z0sIT7Mztc?=
+ =?us-ascii?Q?a8bGhw1oiohI/r0p07TbYiBq7LOrH1QoKvhh/cOxGAUGZImkCh/W227ADNhW?=
+ =?us-ascii?Q?OuT6KwvrP6MqUmz487ORjSPaM7Gr+0cpwaHuOZi2?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 1/5] platform: x86-android-tablets: other: Add swnode
- for Xiaomi pad2 indicator LED
-To: Kate Hsuan <hpa@redhat.com>, Pavel Machek <pavel@ucw.cz>,
- Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org,
- platform-driver-x86@vger.kernel.org,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- =?UTF-8?Q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>,
- linux-kernel@vger.kernel.org, Andy Shevchenko <andy.shevchenko@gmail.com>,
- Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-References: <20240416053909.256319-1-hpa@redhat.com>
- <20240416053909.256319-2-hpa@redhat.com>
-Content-Language: en-US, nl
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20240416053909.256319-2-hpa@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CYYPR12MB8655.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4f4b1332-a697-4264-9d09-08dc5f87bbef
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Apr 2024 09:12:55.7734
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0fhDlIkiMifvd4q+zxVB7w2j+EtorexuFur9VtM55b7mGOeb+Qh41sGiHkKpSQ0+YgKR7GqeXulGofjDnK6zPQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5735
 
-Hi Kate,
+[AMD Official Use Only - General]
 
-On 4/16/24 7:39 AM, Kate Hsuan wrote:
-> KTD2026 LED controller manages the indicator LED for Xiaomi pad2. The ACPI
-> for it is not properly made so the kernel can't get a correct description.
-> 
-> This work adds a description for this RGB LED controller and also sets a
-> trigger to indicate the changing event (bq27520-0-charging). When it is
-> charging, the indicator LED will be turned on.
-> 
-> Signed-off-by: Kate Hsuan <hpa@redhat.com>
+Regards.
+Perry
 
-Since this patch is more or less done and since which fwnodes there should
-be and with which contents is prescribed by the existing devicetree
-bindings which are not being changes I have already merged this patch
-into pdx86/for-next:
+> -----Original Message-----
+> From: Huang, Ray <Ray.Huang@amd.com>
+> Sent: Monday, April 15, 2024 10:59 PM
+> To: Yuan, Perry <Perry.Yuan@amd.com>
+> Cc: rafael.j.wysocki@intel.com; Limonciello, Mario
+> <Mario.Limonciello@amd.com>; viresh.kumar@linaro.org; Shenoy, Gautham
+> Ranjal <gautham.shenoy@amd.com>; Petkov, Borislav
+> <Borislav.Petkov@amd.com>; Deucher, Alexander
+> <Alexander.Deucher@amd.com>; Huang, Shimmer
+> <Shimmer.Huang@amd.com>; oleksandr@natalenko.name; Du, Xiaojian
+> <Xiaojian.Du@amd.com>; Meng, Li (Jassmine) <Li.Meng@amd.com>; linux-
+> pm@vger.kernel.org; linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH v10 5/8] cpufreq: amd-pstate: Bail out if
+> min/max/nominal_freq is 0
+>
+> On Mon, Mar 25, 2024 at 11:03:25AM +0800, Yuan, Perry wrote:
+> > The amd-pstate driver cannot work when the min_freq, nominal_freq or
+> > the max_freq is zero. When this happens it is prudent to error out
+> > early on rather than waiting failing at the time of the governor
+> > initialization.
+> >
+> > Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+> > Tested-by: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
+> > Signed-off-by: Perry Yuan <perry.yuan@amd.com>
+> > ---
+> >  drivers/cpufreq/amd-pstate.c | 16 ++++++++++------
+> >  1 file changed, 10 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/amd-pstate.c
+> > b/drivers/cpufreq/amd-pstate.c index 132330b4942f..6708c436e1a2
+> 100644
+> > --- a/drivers/cpufreq/amd-pstate.c
+> > +++ b/drivers/cpufreq/amd-pstate.c
+> > @@ -839,9 +839,11 @@ static int amd_pstate_cpu_init(struct
+> cpufreq_policy *policy)
+> >     nominal_freq =3D READ_ONCE(cpudata->nominal_freq);
+> >     lowest_nonlinear_freq =3D READ_ONCE(cpudata-
+> >lowest_nonlinear_freq);
+> >
+> > -   if (min_freq < 0 || max_freq < 0 || min_freq > max_freq) {
+> > -           dev_err(dev, "min_freq(%d) or max_freq(%d) value is
+> incorrect\n",
+> > -                   min_freq, max_freq);
+> > +   if (min_freq <=3D 0 || max_freq <=3D 0 ||
+> > +       nominal_freq <=3D 0 || min_freq > max_freq) {
+> > +           dev_err(dev,
+> > +                   "min_freq(%d) or max_freq(%d) or nominal_freq
+> (%d) value is incorrect\n",
+> > +                   min_freq, max_freq, nominal_freq);
+>
+> I suggest that we add one comment to remind that should be the error of
+> ACPI table or BIOS.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/commit/?h=for-next&id=fcc6220ddc7e54d8442287273d0cb8c415ada022
+ Ok, thanks for comment,  will add one more comment in v11.
 
-So there is no reason to resend this. Please drop this patch from v7
-of the patch-set.
+>
+> >             ret =3D -EINVAL;
+> >             goto free_cpudata1;
+> >     }
+> > @@ -1299,9 +1301,11 @@ static int amd_pstate_epp_cpu_init(struct
+> cpufreq_policy *policy)
+> >     max_freq =3D READ_ONCE(cpudata->max_freq);
+> >     nominal_freq =3D READ_ONCE(cpudata->nominal_freq);
+> >     lowest_nonlinear_freq =3D READ_ONCE(cpudata-
+> >lowest_nonlinear_freq);
+> > -   if (min_freq < 0 || max_freq < 0 || min_freq > max_freq) {
+> > -           dev_err(dev, "min_freq(%d) or max_freq(%d) value is
+> incorrect\n",
+> > -                           min_freq, max_freq);
+> > +   if (min_freq <=3D 0 || max_freq <=3D 0 ||
+> > +       nominal_freq <=3D 0 || min_freq > max_freq) {
+> > +           dev_err(dev,
+> > +                   "min_freq(%d) or max_freq(%d) or nominal_freq(%d)
+> value is incorrect\n",
+> > +                   min_freq, max_freq, nominal_freq);
+>
+> The same with above.
+>
+> With that fixed, patch is Acked-by: Huang Rui <ray.huang@amd.com>
+>
+> Thanks,
+> Ray
 
-Regards,
+Thanks for the ACK.
 
-Hans
-
-
-
-
-> ---
->  .../platform/x86/x86-android-tablets/other.c  | 82 +++++++++++++++++++
->  .../x86/x86-android-tablets/shared-psy-info.h |  2 +
->  2 files changed, 84 insertions(+)
-> 
-> diff --git a/drivers/platform/x86/x86-android-tablets/other.c b/drivers/platform/x86/x86-android-tablets/other.c
-> index bc6bbf7ec6ea..c77d56454f2d 100644
-> --- a/drivers/platform/x86/x86-android-tablets/other.c
-> +++ b/drivers/platform/x86/x86-android-tablets/other.c
-> @@ -13,6 +13,8 @@
->  #include <linux/input.h>
->  #include <linux/platform_device.h>
->  
-> +#include <dt-bindings/leds/common.h>
-> +
->  #include "shared-psy-info.h"
->  #include "x86-android-tablets.h"
->  
-> @@ -593,6 +595,83 @@ const struct x86_dev_info whitelabel_tm800a550l_info __initconst = {
->  	.gpiod_lookup_tables = whitelabel_tm800a550l_gpios,
->  };
->  
-> +/*
-> + * The fwnode for ktd2026 on Xaomi pad2. It composed of a RGB LED node
-> + * with three subnodes for each color. The RGB LED node is named
-> + * "multi-led" to align with the name in the device tree.
-> + */
-> +
-> +/* main fwnode for ktd2026 */
-> +static const struct software_node ktd2026_node = {
-> +	.name = "ktd2026"
-> +};
-> +
-> +static const struct property_entry ktd2026_rgb_led_props[] = {
-> +	PROPERTY_ENTRY_U32("reg", 0),
-> +	PROPERTY_ENTRY_U32("color", LED_COLOR_ID_RGB),
-> +	PROPERTY_ENTRY_STRING("function", "indicator"),
-> +	PROPERTY_ENTRY_STRING("linux,default-trigger", "bq27520-0-charging"),
-> +	{ }
-> +};
-> +
-> +static const struct software_node ktd2026_rgb_led_node = {
-> +	.name = "multi-led",
-> +	.properties = ktd2026_rgb_led_props,
-> +	.parent = &ktd2026_node,
-> +};
-> +
-> +static const struct property_entry ktd2026_blue_led_props[] = {
-> +	PROPERTY_ENTRY_U32("reg", 0),
-> +	PROPERTY_ENTRY_U32("color", LED_COLOR_ID_BLUE),
-> +	{ }
-> +};
-> +
-> +static const struct software_node ktd2026_blue_led_node = {
-> +	.properties = ktd2026_blue_led_props,
-> +	.parent = &ktd2026_rgb_led_node,
-> +};
-> +
-> +static const struct property_entry ktd2026_green_led_props[] = {
-> +	PROPERTY_ENTRY_U32("reg", 1),
-> +	PROPERTY_ENTRY_U32("color", LED_COLOR_ID_GREEN),
-> +	{ }
-> +};
-> +
-> +static const struct software_node ktd2026_green_led_node = {
-> +	.properties = ktd2026_green_led_props,
-> +	.parent = &ktd2026_rgb_led_node,
-> +};
-> +
-> +static const struct property_entry ktd2026_red_led_props[] = {
-> +	PROPERTY_ENTRY_U32("reg", 2),
-> +	PROPERTY_ENTRY_U32("color", LED_COLOR_ID_RED),
-> +	{ }
-> +};
-> +
-> +static const struct software_node ktd2026_red_led_node = {
-> +	.properties = ktd2026_red_led_props,
-> +	.parent = &ktd2026_rgb_led_node,
-> +};
-> +
-> +static const struct software_node *ktd2026_node_group[] = {
-> +	&ktd2026_node,
-> +	&ktd2026_rgb_led_node,
-> +	&ktd2026_green_led_node,
-> +	&ktd2026_blue_led_node,
-> +	&ktd2026_red_led_node,
-> +	NULL
-> +};
-> +
-> +static int __init xiaomi_mipad2_init(void)
-> +{
-> +	return software_node_register_node_group(ktd2026_node_group);
-> +}
-> +
-> +static void xiaomi_mipad2_exit(void)
-> +{
-> +	software_node_unregister_node_group(ktd2026_node_group);
-> +}
-> +
->  /*
->   * If the EFI bootloader is not Xiaomi's own signed Android loader, then the
->   * Xiaomi Mi Pad 2 X86 tablet sets OSID in the DSDT to 1 (Windows), causing
-> @@ -616,6 +695,7 @@ static const struct x86_i2c_client_info xiaomi_mipad2_i2c_clients[] __initconst
->  			.type = "ktd2026",
->  			.addr = 0x30,
->  			.dev_name = "ktd2026",
-> +			.swnode = &ktd2026_node,
->  		},
->  		.adapter_path = "\\_SB_.PCI0.I2C3",
->  	},
-> @@ -624,4 +704,6 @@ static const struct x86_i2c_client_info xiaomi_mipad2_i2c_clients[] __initconst
->  const struct x86_dev_info xiaomi_mipad2_info __initconst = {
->  	.i2c_client_info = xiaomi_mipad2_i2c_clients,
->  	.i2c_client_count = ARRAY_SIZE(xiaomi_mipad2_i2c_clients),
-> +	.init = xiaomi_mipad2_init,
-> +	.exit = xiaomi_mipad2_exit,
->  };
-> diff --git a/drivers/platform/x86/x86-android-tablets/shared-psy-info.h b/drivers/platform/x86/x86-android-tablets/shared-psy-info.h
-> index c2d2968cddc2..8c33ec47ee12 100644
-> --- a/drivers/platform/x86/x86-android-tablets/shared-psy-info.h
-> +++ b/drivers/platform/x86/x86-android-tablets/shared-psy-info.h
-> @@ -29,4 +29,6 @@ extern const char * const bq24190_modules[];
->  extern const struct platform_device_info int3496_pdevs[];
->  extern struct gpiod_lookup_table int3496_reference_gpios;
->  
-> +extern const struct software_node ktd2026_leds_node;
-> +
->  #endif
+Perry.
 
 
