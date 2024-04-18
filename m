@@ -1,133 +1,260 @@
-Return-Path: <linux-pm+bounces-6676-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6677-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE7E48A9DB0
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 16:56:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EA048A9E76
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 17:31:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A34362812AA
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 14:56:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 692CC1C21BAC
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 15:31:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 129FB168B06;
-	Thu, 18 Apr 2024 14:56:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CBFE16D32B;
+	Thu, 18 Apr 2024 15:31:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Pf47Y+eM"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="2YttR71l"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6617B15E5C2
-	for <linux-pm@vger.kernel.org>; Thu, 18 Apr 2024 14:56:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8241D16C84A;
+	Thu, 18 Apr 2024 15:31:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713452195; cv=none; b=usbvuuuhxlyCXDY+hMn44bsM+xsEjfzK1PdOFhyinTJ0TPB0YZeM6/l56qn2pODtgtQC73h0xqs+uGCFD9hkiYp0MqA+dWC2w3ARU6XrNnzmB2XnD1JRGK0qQ8FpN4FHsjS4vjntRcdXVWtytGCCdQq/TgGki6bKGQyMab7C7fQ=
+	t=1713454283; cv=none; b=cv8bw77iSkn9Pn7owAT1JB0JWeYUhLeCcEYOjS5OAHHsU9k9TgSUG5uSTcDqTMvv0cG0txpM9e/wtfTZJS/cmOjT1+uaXVTS7CGpQ43ZFbYT06fRjxG+AOo9dzJ3yXityuBAqy7maoI4xJyae8FMODMVK8ciWXgo9XjpLQI7Eec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713452195; c=relaxed/simple;
-	bh=LCgK1Nl7X6eiOEgLnSDHPjrE4OmWhWaXYy1AgFyQE4c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=C6IZsr8wKRgZjvlKURefUtwU1eTshp4nOCVUSU0G3PW9q8ArsANiv/5JRYiD4Lhi2iQAE8bm5nkGBXN+cb9dnHZGuc8k5b1Xp28LyHYdyHZ9HcqpwMfbEettSrIBxwdBTahjf7yuUSdQZnheFymyTESfCvwxkSvNFc3ygr1I7cw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Pf47Y+eM; arc=none smtp.client-ip=209.85.219.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-dd10ebcd702so1014732276.2
-        for <linux-pm@vger.kernel.org>; Thu, 18 Apr 2024 07:56:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713452192; x=1714056992; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V4lP11AC4mEgAygBmUrYdUs5fesWy/SPsDBJGp96UBo=;
-        b=Pf47Y+eMT+p3ZzFS/PCe8WBSpgREFwme6x77bmIOwtmxRZalN0Wr2VPqDVYrQ/sK5A
-         MZqSo1DF+vVUK1Tm1RJ9cLFAvAA8J8C/FLG63CtA8aHA1Q6SDI+q1hYJppLvtqWz0mkl
-         grG8ywpcR1J/0o294kRuffKkS20NTJULm7bDSW0sX/SQAirRllihO9AMCfRi43zW04/T
-         fivg2GkbKsV6Bm51SLJcQmQLOy6XkLgbQ2vXTTqi7LBJ56qPuwVm56AuYPMcv5CFswtl
-         5O9+vUP83JKMldlcYxKpLx29A4EFFpGfg5fyb1YaezrGya1T8t8s4mMWHl3TdatprsTl
-         7n+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713452192; x=1714056992;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=V4lP11AC4mEgAygBmUrYdUs5fesWy/SPsDBJGp96UBo=;
-        b=Jd54nmz/e5fSsfFxZ4HntrgzVsdVI4u0Eaxm5dLXB3fcwW/UXOJDe2+YkBeP6eSFab
-         jLIHJnOSjyvZruDVzxsU+jImsShSGlr2DPc48vCeUZg1l46IQ4Rrb9vQ4up597MGG49J
-         vFWhFoZQImvdmnqPB4c3dMbYQKh493+5OCgf0PLQ3G0Kqq8/S+m2jyBC9xTrtPGY0xO0
-         8Hqyl8iaYcHAA2pw11Glj0X2/7dORkBV1P0GohxVJ/eb4i0XXYsrTvbRQW1PYhYHYc7Y
-         IqRhxO/dF30U+y6R9nmyU5vPJo+RN6Z04gUZpukJcQeB3873VET4M89AQjmO7rKnpeKX
-         8qLw==
-X-Forwarded-Encrypted: i=1; AJvYcCUL9MTHBZC6FLd45tSvafnNAtVWthD+HBP1uufwBz3Iwc2kb6Hvb7cKgQMr1koVKo/b2deYIPWDer6Qr0NCo05QzfMvj0bLL48=
-X-Gm-Message-State: AOJu0YyaHh25bZVXuKE+aiknl4VDdWiLpD2UopLwYf/6J/QVKm9jEP9L
-	+4Co5N9gZad0fvks3gIWlOLjfEfXcaS9SdZ2tP8x/9Jsz2btPNEadwQnDs/GtADueFX1+jenBrD
-	QgXQtU5mHjByCP1xzWcazwlu4hLUpxIS5I5pDdS2a7SUR77Jm
-X-Google-Smtp-Source: AGHT+IFYsnYxZkuoVUYNlb8Ts5dFS8t8z3/D+sz6e79RFN3U2QXIkbUK1DFABjBRkpsq61z+xoVBtqPAJ7iR6Mrk2nI=
-X-Received: by 2002:a25:ae1f:0:b0:dcc:787:e8f9 with SMTP id
- a31-20020a25ae1f000000b00dcc0787e8f9mr3107129ybj.51.1713452192453; Thu, 18
- Apr 2024 07:56:32 -0700 (PDT)
+	s=arc-20240116; t=1713454283; c=relaxed/simple;
+	bh=JuSoF/w8806XRpwQQcO6JP05+Jq2I3SdVOtm2SB0vRQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=oWYS6Def1z9+je0A+I9aVuCwkZY2T5dUwStYgX56YcB2HJhEUcsC/oJr1nGTZOhx6pgRuw+uPoHpsbX5sWUtkAdcVsoBk7EI/dH2F/wXf3MIcPgfgURRX7fwTwcrg4kiyqQAJXmiJgI2JHAI05jgVvF83rXttY4LZezU0yFX4dM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=2YttR71l; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1713454279;
+	bh=JuSoF/w8806XRpwQQcO6JP05+Jq2I3SdVOtm2SB0vRQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=2YttR71lcYfTYNxL1JnRrfB3PGpymI0znps3FXAoT2lCUuN5gNDijebmmMWg9PjHe
+	 z1Jd95s8lOMNLWz3msoGwSD2F94M96lxQlquM8h724515gYwfeHZ3l4mrIyD+ggj7p
+	 pochh//OUkslB7q1kWK9UiMOO6dat8iqNqZtBH/qHHgBWVSgQsG7476kT8/jWxbv5c
+	 YyYxFoE7X73RlU1+fWlHXelL52kOXinBNXJqYOA0YDuDvAXjWya6T17vgG2GcvbdET
+	 NlduIQaoKnJuvKKMTR30V3Thb77IwV+vXDVww3yMzWm/kZnkWCFGJ5TXGnSEGlaV9Z
+	 Xo5G5QL4y9LIQ==
+Received: from localhost.localdomain (broslavsky.collaboradmins.com [68.183.210.73])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 48EDE3782117;
+	Thu, 18 Apr 2024 15:31:17 +0000 (UTC)
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	kernel@collabora.com,
+	linux-pm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: cpufreq: conform test to TAP
+Date: Thu, 18 Apr 2024 20:31:45 +0500
+Message-Id: <20240418153146.2095230-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1713348705.git.geert+renesas@glider.be>
-In-Reply-To: <cover.1713348705.git.geert+renesas@glider.be>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 18 Apr 2024 16:55:56 +0200
-Message-ID: <CAPDyKFqSmBOgiUumtctsd71_Ee1LqZ+vuZ87SkUYVPYT0VStNA@mail.gmail.com>
-Subject: Re: [PATCH 0/4] pmdomain: renesas: rcar-sysc: Cleanups and R-Car M3-W
- quirk handling
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, 17 Apr 2024 at 12:31, Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
->
->         Hi all,
->
-> According to the hardware team, R-Car H3 ES1.0 and R-Car M3-W have a
-> rare quirk where powering down the A3IR, A3VC, and A3VP power domains
-> requires an extra delay of 1 =C2=B5s.  So far upstream never handled that=
-,
-> but the BSP has a fix[1].  As support for R-Car H3 ES1.x was dropped in
-> v6.4, only R-Car M3-W still needs to be handled.
->
-> The BSP fix relies on hard-coded string comparisons of power domain
-> names, and thus applies to all R-Car Gen3 SoCs (many introduced after
-> the original fix was written) having domains with a matching name,
-> whether they are affected or not.  Hence I took the opportunity to
-> refactor the R-Car SYSC driver first, and came up with a less-intrusive
-> fix.
->
-> Thanks for your comments!
->
-> [1] https://github.com/renesas-rcar/linux-bsp/commit/495e47e390499c522197=
-352a08f423e8a3b41e83
->
-> Geert Uytterhoeven (4):
->   pmdomain: renesas: rcar-sysc: Absorb rcar_sysc_ch into rcar_sysc_pd
->   pmdomain: renesas: rcar-sysc: Split R-Car M3-W and M3-W+ sub-drivers
->   pmdomain: renesas: rcar-sysc: Remove rcar_sysc_nullify() helper
->   pmdomain: renesas: rcar-sysc: Add R-Car M3-W power-off delay quirk
->
->  drivers/pmdomain/renesas/Makefile             |  4 +-
->  .../{r8a7796-sysc.c =3D> r8a77960-sysc.c}       | 34 +++------
->  .../{r8a7796-sysc.c =3D> r8a77961-sysc.c}       | 28 ++------
->  drivers/pmdomain/renesas/rcar-sysc.c          | 70 ++++++++-----------
->  drivers/pmdomain/renesas/rcar-sysc.h          |  9 +--
->  5 files changed, 43 insertions(+), 102 deletions(-)
->  copy drivers/pmdomain/renesas/{r8a7796-sysc.c =3D> r8a77960-sysc.c} (64%=
-)
->  rename drivers/pmdomain/renesas/{r8a7796-sysc.c =3D> r8a77961-sysc.c} (6=
-9%)
->
+This test outputs lots of information. Let's conform the core part of
+the test to TAP and leave the information printing messages for now.
+Include ktap_helpers.sh to print conformed logs. Use KSFT_* macros to
+return the correct exit code for the kselftest framework and CIs to
+understand the exit status.
 
-Applied for next, thanks!
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+ tools/testing/selftests/cpufreq/cpufreq.sh |  3 +-
+ tools/testing/selftests/cpufreq/main.sh    | 47 +++++++++++++---------
+ tools/testing/selftests/cpufreq/module.sh  |  6 +--
+ 3 files changed, 31 insertions(+), 25 deletions(-)
 
-Kind regards
-Uffe
+diff --git a/tools/testing/selftests/cpufreq/cpufreq.sh b/tools/testing/selftests/cpufreq/cpufreq.sh
+index b583a2fb45042..a8b1dbc0a3a5b 100755
+--- a/tools/testing/selftests/cpufreq/cpufreq.sh
++++ b/tools/testing/selftests/cpufreq/cpufreq.sh
+@@ -178,8 +178,7 @@ cpufreq_basic_tests()
+ 
+ 	count=$(count_cpufreq_managed_cpus)
+ 	if [ $count = 0 ]; then
+-		printf "No cpu is managed by cpufreq core, exiting\n"
+-		exit;
++		ktap_exit_fail_msg "No cpu is managed by cpufreq core, exiting\n"
+ 	else
+ 		printf "CPUFreq manages: $count CPUs\n\n"
+ 	fi
+diff --git a/tools/testing/selftests/cpufreq/main.sh b/tools/testing/selftests/cpufreq/main.sh
+index 60ce18ed06660..a0eb84cf7167f 100755
+--- a/tools/testing/selftests/cpufreq/main.sh
++++ b/tools/testing/selftests/cpufreq/main.sh
+@@ -7,15 +7,15 @@ source governor.sh
+ source module.sh
+ source special-tests.sh
+ 
++DIR="$(dirname $(readlink -f "$0"))"
++source "${DIR}"/../kselftest/ktap_helpers.sh
++
+ FUNC=basic	# do basic tests by default
+ OUTFILE=cpufreq_selftest
+ SYSFS=
+ CPUROOT=
+ CPUFREQROOT=
+ 
+-# Kselftest framework requirement - SKIP code is 4.
+-ksft_skip=4
+-
+ helpme()
+ {
+ 	printf "Usage: $0 [-h] [-todg args]
+@@ -32,7 +32,7 @@ helpme()
+ 	[-d <driver's module name: only with \"-t modtest>\"]
+ 	[-g <governor's module name: only with \"-t modtest>\"]
+ 	\n"
+-	exit 2
++	exit "${KSFT_FAIL}"
+ }
+ 
+ prerequisite()
+@@ -40,8 +40,8 @@ prerequisite()
+ 	msg="skip all tests:"
+ 
+ 	if [ $UID != 0 ]; then
+-		echo $msg must be run as root >&2
+-		exit $ksft_skip
++		ktap_skip_all "$msg must be run as root"
++		exit "${KSFT_SKIP}"
+ 	fi
+ 
+ 	taskset -p 01 $$
+@@ -49,21 +49,21 @@ prerequisite()
+ 	SYSFS=`mount -t sysfs | head -1 | awk '{ print $3 }'`
+ 
+ 	if [ ! -d "$SYSFS" ]; then
+-		echo $msg sysfs is not mounted >&2
+-		exit 2
++		ktap_skip_all "$msg sysfs is not mounted"
++		exit "${KSFT_SKIP}"
+ 	fi
+ 
+ 	CPUROOT=$SYSFS/devices/system/cpu
+ 	CPUFREQROOT="$CPUROOT/cpufreq"
+ 
+ 	if ! ls $CPUROOT/cpu* > /dev/null 2>&1; then
+-		echo $msg cpus not available in sysfs >&2
+-		exit 2
++		ktap_skip_all "$msg cpus not available in sysfs"
++		exit "${KSFT_SKIP}"
+ 	fi
+ 
+ 	if ! ls $CPUROOT/cpufreq > /dev/null 2>&1; then
+-		echo $msg cpufreq directory not available in sysfs >&2
+-		exit 2
++		ktap_skip_all "$msg cpufreq directory not available in sysfs"
++		exit "${KSFT_SKIP}"
+ 	fi
+ }
+ 
+@@ -105,8 +105,7 @@ do_test()
+ 	count=$(count_cpufreq_managed_cpus)
+ 
+ 	if [ $count = 0 -a $FUNC != "modtest" ]; then
+-		echo "No cpu is managed by cpufreq core, exiting"
+-		exit 2;
++		ktap_exit_fail_msg "No cpu is managed by cpufreq core, exiting"
+ 	fi
+ 
+ 	case "$FUNC" in
+@@ -125,8 +124,7 @@ do_test()
+ 		"modtest")
+ 		# Do we have modules in place?
+ 		if [ -z $DRIVER_MOD ] && [ -z $GOVERNOR_MOD ]; then
+-			echo "No driver or governor module passed with -d or -g"
+-			exit 2;
++			ktap_exit_fail_msg "No driver or governor module passed with -d or -g"
+ 		fi
+ 
+ 		if [ $DRIVER_MOD ]; then
+@@ -137,8 +135,7 @@ do_test()
+ 			fi
+ 		else
+ 			if [ $count = 0 ]; then
+-				echo "No cpu is managed by cpufreq core, exiting"
+-				exit 2;
++				ktap_exit_fail_msg "No cpu is managed by cpufreq core, exiting"
+ 			fi
+ 
+ 			module_governor_test $GOVERNOR_MOD
+@@ -162,7 +159,7 @@ do_test()
+ 		;;
+ 
+ 		*)
+-		echo "Invalid [-f] function type"
++		ktap_print_msg "Invalid [-f] function type"
+ 		helpme
+ 		;;
+ 	esac
+@@ -186,13 +183,25 @@ dmesg_dumps()
+ 	dmesg >> $1.dmesg_full.txt
+ }
+ 
++ktap_print_header
++
+ # Parse arguments
+ parse_arguments $@
+ 
++ktap_set_plan 1
++
+ # Make sure all requirements are met
+ prerequisite
+ 
+ # Run requested functions
+ clear_dumps $OUTFILE
+ do_test | tee -a $OUTFILE.txt
++if [ "${PIPESTATUS[0]}" -ne 0 ]; then
++    exit ${PIPESTATUS[0]};
++fi
+ dmesg_dumps $OUTFILE
++
++ktap_test_pass "Completed successfully"
++
++ktap_print_totals
++exit "${KSFT_PASS}"
+diff --git a/tools/testing/selftests/cpufreq/module.sh b/tools/testing/selftests/cpufreq/module.sh
+index 22563cd122e7d..7f2667e0ae2da 100755
+--- a/tools/testing/selftests/cpufreq/module.sh
++++ b/tools/testing/selftests/cpufreq/module.sh
+@@ -24,16 +24,14 @@ test_basic_insmod_rmmod()
+ 	# insert module
+ 	insmod $1
+ 	if [ $? != 0 ]; then
+-		printf "Insmod $1 failed\n"
+-		exit;
++		ktap_exit_fail_msg "Insmod $1 failed\n"
+ 	fi
+ 
+ 	printf "Removing $1 module\n"
+ 	# remove module
+ 	rmmod $1
+ 	if [ $? != 0 ]; then
+-		printf "rmmod $1 failed\n"
+-		exit;
++		ktap_exit_fail_msg "rmmod $1 failed\n"
+ 	fi
+ 
+ 	printf "\n"
+-- 
+2.39.2
+
 
