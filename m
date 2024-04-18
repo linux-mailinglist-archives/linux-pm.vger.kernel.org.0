@@ -1,235 +1,240 @@
-Return-Path: <linux-pm+bounces-6658-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6659-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F6548A99EB
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 14:34:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF0E18A9BB3
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 15:54:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 919C61C21388
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 12:34:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 864A3284AE7
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 13:54:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69FEF1DA26;
-	Thu, 18 Apr 2024 12:34:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="HaYZpKgd"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3814D160796;
+	Thu, 18 Apr 2024 13:54:20 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9749E6FC3;
-	Thu, 18 Apr 2024 12:34:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4702A1607B2;
+	Thu, 18 Apr 2024 13:54:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713443662; cv=none; b=AdE1l3rcdUcBnSwkTs/yHVNbtP4Fc/T6CxVmaOeXJbn/obKd+dCDJzrKwYX+CXPHbL4JZ8ObVzk4Lx2F9iuRTKklvbZhak3KYwkIblf9AFSZAa074nxBVQDHx8dyRDAo36ueiueXtVySKX/QdOcLG25K0HqYR32gmhljCMzzSeI=
+	t=1713448460; cv=none; b=tsllf4OmMVWAUP74NRlGsLIPqm+y0bluuyaDcGzggL6FOoXzSHzWfbH7XvW0+d3vZTeav+o7/fjcCSN+QtkQiNLnHTTML3Gi4KdMx2k/Pbm2968SXxmDJ53iLzbg/P9d+4nAPhUrNuCPU+/YZaKr4t3JAzF7Ry8oku6XF7T4gPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713443662; c=relaxed/simple;
-	bh=9nrO80FRTuJXMuwoaTwMR7mzXbtEaRk4icXUo6sWJXM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oL+o4Crf+3GKHCYu6pND2K2P+LwjrFpFmhPtQqiu6XEblcajSWcxmKtlLr913diJdinM5JfK+/SXqNfPkq0uIWWCmlGF77D1Dqk/X/OiFCYDqeSBMqaRpxPMtA6FW73S7QE4yceRxDWwzysrWO/Nfu32xBPsAh30VuYNePNHDMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=HaYZpKgd; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1713443655;
-	bh=9nrO80FRTuJXMuwoaTwMR7mzXbtEaRk4icXUo6sWJXM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HaYZpKgdNFUdHkfAcsARDN6AXW4gxCFkHK6jY2fTv8nDN53OqOyhSjzpAHXORAVJ3
-	 lddss/S96/oRtugpzT0eEUkMnOwv6hB64H+/UuUtYLltujwMWlqpO0Dl/9Bz+3+tk7
-	 tQ9vroTmxaCya/ZCHLdrFd1qU1tPWLNjqa70tGyPvHjjPqaktDJMZ0V8gZzy9VpeKt
-	 eygdvspEX9yI52Gf1aY2ZhT0wYABhcPPoHCo+y0oxG53TZJNsNi45UavBH7s5zytuR
-	 m5GgUTSDWoWev3XQrBjN7fdV1J7Uv+ip7bH/HT/1hrVwF/JXoUHkrTbFLHh51yDEQn
-	 j1kB16xP5U5ZQ==
-Received: from mercury (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sre)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 238373781116;
-	Thu, 18 Apr 2024 12:34:15 +0000 (UTC)
-Received: by mercury (Postfix, from userid 1000)
-	id C3714106071D; Thu, 18 Apr 2024 14:34:14 +0200 (CEST)
-Date: Thu, 18 Apr 2024 14:34:14 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Kate Hsuan <hpa@redhat.com>
-Cc: Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>, 
-	linux-leds@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
-	Hans de Goede <hdegoede@redhat.com>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
-	=?utf-8?B?QW5kcsOp?= Apitzsch <git@apitzsch.eu>, linux-kernel@vger.kernel.org, 
-	Andy Shevchenko <andy.shevchenko@gmail.com>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v6 4/5] power: supply: power-supply-leds: Add
- charging_orange_full_green trigger for RGB LED
-Message-ID: <sjhe7jvzvrlthf42lipnsnooh3z7vczdcruupsbstmpiujprze@jxwc3lquzvki>
-References: <20240416053909.256319-1-hpa@redhat.com>
- <20240416053909.256319-5-hpa@redhat.com>
+	s=arc-20240116; t=1713448460; c=relaxed/simple;
+	bh=yXKPO/hvrdFwE0im3psB1dSWiai6UVdyh79F1t1raf4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=u/sB7UvpO7d59wQye03KLNtn6POtQQghniYN+mgQaQ1W6WJN++6v0SEMQoRRxO2522xRVR+PKqr4iuFuc+ORqXPTXIE1AZM4qsBlL41/r0Noo+w8I/cwSBAtxp5qlHWNNixZksWzvduWIbAf/p4DYT2KUHxosj4CGZb9PKVpxkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VKzjQ2WsNz6K5sZ;
+	Thu, 18 Apr 2024 21:52:10 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 9FF1D140119;
+	Thu, 18 Apr 2024 21:54:13 +0800 (CST)
+Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
+ lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Thu, 18 Apr 2024 14:54:13 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
+	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
+	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+	<x86@kernel.org>, Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki"
+	<rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, James Morse
+	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, Jean-Philippe
+ Brucker <jean-philippe@linaro.org>, Catalin Marinas
+	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
+CC: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
+ Hansen <dave.hansen@linux.intel.com>, <linuxarm@huawei.com>,
+	<justin.he@arm.com>, <jianyong.wu@arm.com>
+Subject: [PATCH v7 00/16] ACPI/arm64: add support for virtual cpu hotplug
+Date: Thu, 18 Apr 2024 14:53:56 +0100
+Message-ID: <20240418135412.14730-1-Jonathan.Cameron@huawei.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="rjak7nyqoe7bx2om"
-Content-Disposition: inline
-In-Reply-To: <20240416053909.256319-5-hpa@redhat.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
+Whilst it is a bit quick after v6, a couple of critical issues
+were pointed out by Russell, Salil and Rafael + one build issue
+had been missed, so it seems sensible to make sure those conducting
+testing or further review have access to a fixed version.
 
---rjak7nyqoe7bx2om
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+v7:
+  - Fix misplaced config guard that broke bisection.
+  - Greatly simplify the condition on which we call
+    acpi_processor_hotadd_init().
+  - Improve teardown ordering.
 
-Hi,
+Fundamental change v6+: At the level of common ACPI infrastructure, use
+the existing hotplug path for arm64 even though what needs to be
+done at the architecture specific level is quite different.
 
-On Tue, Apr 16, 2024 at 01:39:08PM +0800, Kate Hsuan wrote:
-> Add a charging_orange_full_green LED trigger and the trigger is based on
-> led_mc_trigger_event() which can set an RGB LED when the trigger is
-> triggered. The LED will show orange when the battery status is charging.
-> The LED will show green when the battery status is full.
->=20
-> Link: https://lore.kernel.org/linux-leds/f40a0b1a-ceac-e269-c2dd-0158c5b4=
-a1ad@gmail.com/
->=20
-> Signed-off-by: Kate Hsuan <hpa@redhat.com>
-> ---
+An explicit check in arch_register_cpu() for arm64 prevents
+this code doing anything if Physical CPU Hotplug is signalled.
 
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+This should resolve any concerns about treating virtual CPU
+hotplug as if it were physical and potential unwanted side effects
+if physical CPU hotplug is added to the ARM architecture in the
+future.
 
--- Sebastian
+v6: Thanks to Rafael for extensive help with the approach + reviews.
+Specific changes:
+ - Do not differentiate wrt code flow between traditional CPU HP
+   and the new ARM flow.  The conditions on performing hotplug actions
+   do need to be adjusted though to incorporate the slightly different
+   state transition
+     Added PRESENT + !ENABLED -> PRESENT + ENABLED
+     to existing !PRESENT + !ENABLED -> PRESENT + ENABLED
+ - Enable ACPI_HOTPLUG_CPU on arm64 and drop the earlier patches that
+   took various code out of the protection of that.  Now the paths
+ - New patch to drop unnecessary _STA check in hotplug code. This
+   code cannot be entered unless ENABLED + PRESENT are set.
+ - New patch to unify the flow of already onlined (at time of driver
+   load) and hotplugged CPUs in acpi/processor_driver.c.
+   This change is necessary because we can't easily distinguish the
+   2 cases of deferred vs hotplug calls of register_cpu() on arm64.
+   It is also a nice simplification.
+ - Use flags rather than a structure for the extra parameter to
+   acpi_scan_check_and_detach() - Thank to Shameer for offline feedback.
 
->  drivers/power/supply/power_supply_leds.c | 26 ++++++++++++++++++++++++
->  include/linux/power_supply.h             |  2 ++
->  2 files changed, 28 insertions(+)
->=20
-> diff --git a/drivers/power/supply/power_supply_leds.c b/drivers/power/sup=
-ply/power_supply_leds.c
-> index c7db29d5fcb8..8dd99199c65b 100644
-> --- a/drivers/power/supply/power_supply_leds.c
-> +++ b/drivers/power/supply/power_supply_leds.c
-> @@ -22,6 +22,9 @@
->  static void power_supply_update_bat_leds(struct power_supply *psy)
->  {
->  	union power_supply_propval status;
-> +	unsigned int intensity_green[3] =3D {255, 0, 0};
-> +	unsigned int intensity_orange[3] =3D {128, 0, 255};
-> +	unsigned int intensity_red[3] =3D {0, 0, 255};
-> =20
->  	if (power_supply_get_property(psy, POWER_SUPPLY_PROP_STATUS, &status))
->  		return;
-> @@ -36,12 +39,20 @@ static void power_supply_update_bat_leds(struct power=
-_supply *psy)
->  		/* Going from blink to LED on requires a LED_OFF event to stop blink */
->  		led_trigger_event(psy->charging_blink_full_solid_trig, LED_OFF);
->  		led_trigger_event(psy->charging_blink_full_solid_trig, LED_FULL);
-> +		led_mc_trigger_event(psy->charging_orange_full_green_trig,
-> +				     intensity_green,
-> +				     ARRAY_SIZE(intensity_green),
-> +				     LED_FULL);
->  		break;
->  	case POWER_SUPPLY_STATUS_CHARGING:
->  		led_trigger_event(psy->charging_full_trig, LED_FULL);
->  		led_trigger_event(psy->charging_trig, LED_FULL);
->  		led_trigger_event(psy->full_trig, LED_OFF);
->  		led_trigger_blink(psy->charging_blink_full_solid_trig, 0, 0);
-> +		led_mc_trigger_event(psy->charging_orange_full_green_trig,
-> +				     intensity_orange,
-> +				     ARRAY_SIZE(intensity_orange),
-> +				     LED_FULL);
->  		break;
->  	default:
->  		led_trigger_event(psy->charging_full_trig, LED_OFF);
-> @@ -49,6 +60,10 @@ static void power_supply_update_bat_leds(struct power_=
-supply *psy)
->  		led_trigger_event(psy->full_trig, LED_OFF);
->  		led_trigger_event(psy->charging_blink_full_solid_trig,
->  			LED_OFF);
-> +		led_mc_trigger_event(psy->charging_orange_full_green_trig,
-> +				     intensity_red,
-> +				     ARRAY_SIZE(intensity_red),
-> +				     LED_OFF);
->  		break;
->  	}
->  }
-> @@ -74,6 +89,11 @@ static int power_supply_create_bat_triggers(struct pow=
-er_supply *psy)
->  	if (!psy->charging_blink_full_solid_trig_name)
->  		goto charging_blink_full_solid_failed;
-> =20
-> +	psy->charging_orange_full_green_trig_name =3D kasprintf(GFP_KERNEL,
-> +		"%s-charging-orange-full-green", psy->desc->name);
-> +	if (!psy->charging_orange_full_green_trig_name)
-> +		goto charging_red_full_green_failed;
-> +
->  	led_trigger_register_simple(psy->charging_full_trig_name,
->  				    &psy->charging_full_trig);
->  	led_trigger_register_simple(psy->charging_trig_name,
-> @@ -82,9 +102,13 @@ static int power_supply_create_bat_triggers(struct po=
-wer_supply *psy)
->  				    &psy->full_trig);
->  	led_trigger_register_simple(psy->charging_blink_full_solid_trig_name,
->  				    &psy->charging_blink_full_solid_trig);
-> +	led_trigger_register_simple(psy->charging_orange_full_green_trig_name,
-> +				    &psy->charging_orange_full_green_trig);
-> =20
->  	return 0;
-> =20
-> +charging_red_full_green_failed:
-> +	kfree(psy->charging_blink_full_solid_trig_name);
->  charging_blink_full_solid_failed:
->  	kfree(psy->full_trig_name);
->  full_failed:
-> @@ -101,10 +125,12 @@ static void power_supply_remove_bat_triggers(struct=
- power_supply *psy)
->  	led_trigger_unregister_simple(psy->charging_trig);
->  	led_trigger_unregister_simple(psy->full_trig);
->  	led_trigger_unregister_simple(psy->charging_blink_full_solid_trig);
-> +	led_trigger_unregister_simple(psy->charging_orange_full_green_trig);
->  	kfree(psy->charging_blink_full_solid_trig_name);
->  	kfree(psy->full_trig_name);
->  	kfree(psy->charging_trig_name);
->  	kfree(psy->charging_full_trig_name);
-> +	kfree(psy->charging_orange_full_green_trig_name);
->  }
-> =20
->  /* Generated power specific LEDs triggers. */
-> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> index c0992a77feea..9b6898085224 100644
-> --- a/include/linux/power_supply.h
-> +++ b/include/linux/power_supply.h
-> @@ -318,6 +318,8 @@ struct power_supply {
->  	char *online_trig_name;
->  	struct led_trigger *charging_blink_full_solid_trig;
->  	char *charging_blink_full_solid_trig_name;
-> +	struct led_trigger *charging_orange_full_green_trig;
-> +	char *charging_orange_full_green_trig_name;
->  #endif
->  };
-> =20
-> --=20
-> 2.44.0
->=20
->=20
+Updated version of James' original introduction.
 
---rjak7nyqoe7bx2om
-Content-Type: application/pgp-signature; name="signature.asc"
+This series adds what looks like cpuhotplug support to arm64 for use in
+virtual machines. It does this by moving the cpu_register() calls for
+architectures that support ACPI into an arch specific call made from
+the ACPI processor driver.
+ 
+The kubernetes folk really want to be able to add CPUs to an existing VM,
+in exactly the same way they do on x86. The use-case is pre-booting guests
+with one CPU, then adding the number that were actually needed when the
+workload is provisioned.
 
------BEGIN PGP SIGNATURE-----
+Wait? Doesn't arm64 support cpuhotplug already!?
+In the arm world, cpuhotplug gets used to mean removing the power from a CPU.
+The CPU is offline, and remains present. For x86, and ACPI, cpuhotplug
+has the additional step of physically removing the CPU, so that it isn't
+present anymore.
+ 
+Arm64 doesn't support this, and can't support it: CPUs are really a slice
+of the SoC, and there is not enough information in the existing ACPI tables
+to describe which bits of the slice also got removed. Without a reference
+machine: adding this support to the spec is a wild goose chase.
+ 
+Critically: everything described in the firmware tables must remain present.
+ 
+For a virtual machine this is easy as all the other bits of 'virtual SoC'
+are emulated, so they can (and do) remain present when a vCPU is 'removed'.
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmYhEzsACgkQ2O7X88g7
-+prC0Q//Rb0bzJmGZkOxFWmxv+IBe9q++qbxCWIjBwwb4XT6VSj0i9LdMdJ5NKr3
-nwqUL2LT7NZ7xjQJ7tq60AwEvmCB/okPOGDmB6zdwHcgWDtVV/vJjjWvtv0G9goz
-2szdOTQfPx7B8RcM+2TEe1YX+N4aVvx+OOY7eWiZlvf6Oec8UcnstUU9Oei/BHod
-WL5Hvy1fbf2TZdIOW/HuXFgORaiC1JJ3uPjNI4DfH7vuHUiMSHxHHuAhvAGl7Vst
-LlLLXIHgEgrFsAnlWa750e6VqvWLcK0INRuh/N7BzDz8kNuJe8PX4TDsdwOZgYTO
-1EleCSYoElW4C/CDTeJeYu1g9810F09jsnM4DEAwnWhWsg1hrb3cfdhnViunDpVU
-eJt/6iwHCVtBx10hJAQEaKCY5GIZ3UKUCGa37DkndO23Bv0LOy7AKmbwefaE1FCf
-lp8NPFXM1Wvlwfh4fr+casBzwKem5e6JTsy+DXnm9ogfBgUxldzw5um8+DEBc+Jl
-LDVQqsSGPlIxb7N/GUSzimWj86GTJwsIhFcqedmi5t0nI68kDNYXBlEYccgm6JiA
-wOJZ0Km2yVEa+NYkUGxTxEW453G2ycZTRVB3494Tt379JwW161woDC+ko5eMEbXA
-McOywM0Z+Yciiinx/G9RnAkdge/bL/hZiaMBwUdEkm8kD/X3tFs=
-=En/T
------END PGP SIGNATURE-----
+On a system that supports cpuhotplug the MADT has to describe every possible
+CPU at boot. Under KVM, the vGIC needs to know about every possible vCPU before
+the guest is started.
+With these constraints, virtual-cpuhotplug is really just a hypervisor/firmware
+policy about which CPUs can be brought online.
+ 
+This series adds support for virtual-cpuhotplug as exactly that: firmware
+policy. This may even work on a physical machine too; for a guest the part of
+firmware is played by the VMM. (typically Qemu).
+ 
+PSCI support is modified to return 'DENIED' if the CPU can't be brought
+online/enabled yet. The CPU object's _STA method's enabled bit is used to
+indicate firmware's current disposition. If the CPU has its enabled bit clear,
+it will not be registered with sysfs, and attempts to bring it online will
+fail. The notifications that _STA has changed its value then work in the same
+way as physical hotplug, and firmware can cause the CPU to be registered some
+time later, allowing it to be brought online.
+ 
+This creates something that looks like cpuhotplug to user-space and the
+kernel beyond arm64 architecture specific code, as the sysfs
+files appear and disappear, and the udev notifications look the same.
+ 
+One notable difference is the CPU present mask, which is exposed via sysfs.
+Because the CPUs remain present throughout, they can still be seen in that mask.
+This value does get used by webbrowsers to estimate the number of CPUs
+as the CPU online mask is constantly changed on mobile phones.
+ 
+Linux is tolerant of PSCI returning errors, as its always been allowed to do
+that. To avoid confusing OS that can't tolerate this, we needed an additional
+bit in the MADT GICC flags. This series copies ACPI_MADT_ONLINE_CAPABLE, which
+appears to be for this purpose, but calls it ACPI_MADT_GICC_CPU_CAPABLE as it
+has a different bit position in the GICC.
+ 
+This code is unconditionally enabled for all ACPI architectures, though for
+now only arm64 will have deferred the cpu_register() calls.
 
---rjak7nyqoe7bx2om--
+If folk want to play along at home, you'll need a copy of Qemu that supports this.
+https://github.com/salil-mehta/qemu.git virt-cpuhp-armv8/rfc-v2
+
+Replace your '-smp' argument with something like:
+ | -smp cpus=1,maxcpus=3,cores=3,threads=1,sockets=1
+ 
+ then feed the following to the Qemu montior;
+ | (qemu) device_add driver=host-arm-cpu,core-id=1,id=cpu1
+ | (qemu) device_del cpu1
+
+James Morse (7):
+  ACPI: processor: Register deferred CPUs from acpi_processor_get_info()
+  ACPI: Add post_eject to struct acpi_scan_handler for cpu hotplug
+  arm64: acpi: Move get_cpu_for_acpi_id() to a header
+  irqchip/gic-v3: Don't return errors from gic_acpi_match_gicc()
+  irqchip/gic-v3: Add support for ACPI's disabled but 'online capable'
+    CPUs
+  arm64: document virtual CPU hotplug's expectations
+  cpumask: Add enabled cpumask for present CPUs that can be brought
+    online
+
+Jean-Philippe Brucker (1):
+  arm64: psci: Ignore DENIED CPUs
+
+Jonathan Cameron (8):
+  ACPI: processor: Simplify initial onlining to use same path for cold
+    and hotplug
+  cpu: Do not warn on arch_register_cpu() returning -EPROBE_DEFER
+  ACPI: processor: Drop duplicated check on _STA (enabled + present)
+  ACPI: processor: Move checks and availability of acpi_processor
+    earlier
+  ACPI: processor: Add acpi_get_processor_handle() helper
+  ACPI: scan: switch to flags for acpi_scan_check_and_detach()
+  arm64: arch_register_cpu() variant to check if an ACPI handle is now
+    available.
+  arm64: Kconfig: Enable hotplug CPU on arm64 if ACPI_PROCESSOR is
+    enabled.
+
+ .../ABI/testing/sysfs-devices-system-cpu      |   6 +
+ Documentation/arch/arm64/cpu-hotplug.rst      |  79 ++++++++++++
+ Documentation/arch/arm64/index.rst            |   1 +
+ arch/arm64/Kconfig                            |   1 +
+ arch/arm64/include/asm/acpi.h                 |  11 ++
+ arch/arm64/kernel/acpi.c                      |  16 +++
+ arch/arm64/kernel/acpi_numa.c                 |  11 --
+ arch/arm64/kernel/psci.c                      |   2 +-
+ arch/arm64/kernel/smp.c                       |  56 ++++++++-
+ drivers/acpi/acpi_processor.c                 | 113 ++++++++++--------
+ drivers/acpi/processor_driver.c               |  44 ++-----
+ drivers/acpi/scan.c                           |  47 ++++++--
+ drivers/base/cpu.c                            |  12 +-
+ drivers/irqchip/irq-gic-v3.c                  |  32 +++--
+ include/acpi/acpi_bus.h                       |   1 +
+ include/acpi/processor.h                      |   2 +-
+ include/linux/acpi.h                          |  10 +-
+ include/linux/cpumask.h                       |  25 ++++
+ kernel/cpu.c                                  |   3 +
+ 19 files changed, 357 insertions(+), 115 deletions(-)
+ create mode 100644 Documentation/arch/arm64/cpu-hotplug.rst
+
+-- 
+2.39.2
+
 
