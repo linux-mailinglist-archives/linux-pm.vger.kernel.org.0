@@ -1,143 +1,168 @@
-Return-Path: <linux-pm+bounces-6691-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6692-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3DE68AA13E
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 19:39:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 052818AA182
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 19:53:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 834BB1F218FE
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 17:39:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B42C3282223
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 17:53:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1DE5176FCF;
-	Thu, 18 Apr 2024 17:39:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 292D617556C;
+	Thu, 18 Apr 2024 17:53:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ee6ScVtO"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="h4KKn1zH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6ADA16191A;
-	Thu, 18 Apr 2024 17:39:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E2F6168B06;
+	Thu, 18 Apr 2024 17:53:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713461950; cv=none; b=GD2DDp2flaEmTXZeTB+AzKPMeAGkMHMFS6DprLacrFKTTHFxpDTogIoS5NEdVkdFxKO5/qElKv9ZLABYYNu/9itLBdnaN61z6RspxpbbCqpcANpc4Zq9zl18/2Vzw/mvk7jsAAbWXPOV00cw/qIGHTPL8jC0bZh8+xBbGsLiV5s=
+	t=1713462789; cv=none; b=G6cUAiP2cdfaNWmiA+y4gTc6mX/UN+QxauswLdZOJoyKEbYrEOa1L6ZxrHL4uDTe2rzjsIh22RnFaOvRYXCF0nrybDVe4xxwYMYAYVHoB/nDBA5oJm5wjV29aoNSyywq5HHEWrS6cg2WRC1DqsvtoKnHVtIWxvIM+aUg/txVy+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713461950; c=relaxed/simple;
-	bh=FAHI99o3/qIUZzGqglZBZTI/az3nq3RPVxtdG60ysmk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=DvaKkOa+mHM5ZHk5BY3rfOcUI8s8S81tlZbmChERQtmq22QGOF9SgcW7ISygoovaASvGdfXSc+Fftxj3c42olEMj3hZfLR12Z4UZdYO+LyP3dOplxGd3uZnRG4ny2FzOnZXrd9cxIqXKBQ8rZdJXjlDzCWK8z24BYZeV3h2zJsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ee6ScVtO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23825C32782;
-	Thu, 18 Apr 2024 17:39:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713461950;
-	bh=FAHI99o3/qIUZzGqglZBZTI/az3nq3RPVxtdG60ysmk=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=ee6ScVtOC9dHPT6B1cHR9LbGZF5n66Z6tE4FHnzLSX8AnCtVVWdyBFpTglVQ6H7FT
-	 JUT97832b8pjDqQapHY1a3Q1FYULM9/AS5AyrrH40M3rNb7FPUi44KAEpAJsYGYto+
-	 kn556JiqoaiPWjiSZRqaXWxTx4ImfVjpTUmDNnZxtMMYmu6V8a9TH8/4iqd3k/Z1cZ
-	 RfLRJOlIh8bSowCU3WZa7EyKl3LmRGHkjaJK8JQiJb8nyNZiGtHoAT4eLvQ4UsPfyF
-	 divk1fPA+/ItNt5MepwAWsZRQQ9ozMy/zH0+o1+jRwYT15y8cBNba9nNZGvXM2dwlL
-	 fCldAwaCLQkkA==
-Message-ID: <2f94f990-77d2-43ec-9773-4ee0e9c0870a@kernel.org>
-Date: Thu, 18 Apr 2024 19:39:03 +0200
+	s=arc-20240116; t=1713462789; c=relaxed/simple;
+	bh=mxsmswwSv3MlubdkJSAH9bBgma7I297X5/cGzKeLz7w=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sn4cwjPyaMPL1gZTFftODQL5Ee2Uu+R072lvuPKMJGQ13lQMv1JCmq/N2A0uxDgWKJhhQbGv7WuJTQ/WhqGSo2nd9npoabrxCjaTuDj90tguL2VMXwSTlkC6OTMDgE7zPMYxOYeVQl7hyAckuB+PC9QjUuGY9H3XR0WJVINw7BM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=h4KKn1zH; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43I6JJvP031164;
+	Thu, 18 Apr 2024 17:52:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	date:from:to:cc:subject:message-id:references:mime-version
+	:content-type:in-reply-to; s=qcppdkim1; bh=bnrzjQhNziNHAvrM2jWXW
+	X33bItHGVrnqHoeBXEuOnY=; b=h4KKn1zHYpvv7htN4StCfL5fe2OlUeJkwh7Wc
+	EiqzKzeL2mNkdWc+1lVCkjgm47r0p/ZXFrBuQGtox8V0zfEfn4K/VSnMBnQ5WJK3
+	yTorHf1eEZybGd9zy47lXEcV6+gYnmICz15uvkw+zWyUIT7kRwEURoscz4UPcxpl
+	GEfqI9qR64syFJNJKvAIDrPU5F/XrbJ4hKb3O8Ur70jre3z2W1MrKmWf5oq+23vU
+	t20abfRdTv7DKuM0JI+4WFiETwMl8BnhaqqZ7IN/TXCKy2vPicAcagbvyH0MVtUH
+	a8Z4WVACBjDpP0YiXufCD/I46wvn7AYY8HcHkuRDgRJWMvBXg==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xjx51hm2v-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 18 Apr 2024 17:52:53 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43IHqq6o025795
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 18 Apr 2024 17:52:52 GMT
+Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Thu, 18 Apr 2024 10:52:51 -0700
+Date: Thu, 18 Apr 2024 10:52:51 -0700
+From: Elliot Berman <quic_eberman@quicinc.com>
+To: Florian Fainelli <florian.fainelli@broadcom.com>
+CC: Sudeep Holla <sudeep.holla@arm.com>,
+        Bjorn Andersson
+	<andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Sebastian
+ Reichel" <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Andy Yan <andy.yan@rock-chips.com>,
+        "Lorenzo
+ Pieralisi" <lpieralisi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        "Satya Durga Srinivasu
+ Prabhala" <quic_satyap@quicinc.com>,
+        Melody Olvera
+	<quic_molvera@quicinc.com>,
+        Shivendra Pratap <quic_spratap@quicinc.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH v2 0/4] Implement vendor resets for PSCI SYSTEM_RESET2
+Message-ID: <20240418104330754-0700.eberman@hu-eberman-lv.qualcomm.com>
+References: <20240414-arm-psci-system_reset2-vendor-reboots-v2-0-da9a055a648f@quicinc.com>
+ <Zh5GWqt2oCNHdF_h@bogus>
+ <20240417140957985-0700.eberman@hu-eberman-lv.qualcomm.com>
+ <fda6e9f8-5c86-4e8f-a40b-986708e1b03b@broadcom.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 2/6] dt-bindings: interconnect: Add Qualcomm IPQ9574
- support
-To: Varadarajan Narayanan <quic_varada@quicinc.com>, andersson@kernel.org,
- mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, konrad.dybcio@linaro.org,
- djakov@kernel.org, dmitry.baryshkov@linaro.org, quic_anusha@quicinc.com,
- linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20240418092305.2337429-1-quic_varada@quicinc.com>
- <20240418092305.2337429-3-quic_varada@quicinc.com>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
- QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
- gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
- /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
- iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
- VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
- 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
- xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
- eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
- AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
- MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
- Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
- ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
- vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
- oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
- lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
- t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
- uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
- 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
- 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240418092305.2337429-3-quic_varada@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <fda6e9f8-5c86-4e8f-a40b-986708e1b03b@broadcom.com>
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 8EQdvq8Szf_dUbX10ikuEb4a6WYUrCe_
+X-Proofpoint-GUID: 8EQdvq8Szf_dUbX10ikuEb4a6WYUrCe_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-18_16,2024-04-17_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ impostorscore=0 adultscore=0 lowpriorityscore=0 priorityscore=1501
+ spamscore=0 malwarescore=0 phishscore=0 mlxlogscore=999 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2404010003 definitions=main-2404180128
 
-On 18/04/2024 11:23, Varadarajan Narayanan wrote:
-> Add interconnect-cells to clock provider so that it can be
-> used as icc provider.
+On Wed, Apr 17, 2024 at 03:01:00PM -0700, Florian Fainelli wrote:
+> On 4/17/24 14:54, Elliot Berman wrote:
+> > On Tue, Apr 16, 2024 at 10:35:22AM +0100, Sudeep Holla wrote:
+> > > On Sun, Apr 14, 2024 at 12:30:23PM -0700, Elliot Berman wrote:
+> > > > The PSCI SYSTEM_RESET2 call allows vendor firmware to define additional
+> > > > reset types which could be mapped to the reboot argument.
+> > > > 
+> > > > Setting up reboot on Qualcomm devices can be inconsistent from chipset
+> > > > to chipset.
+> > > 
+> > > That doesn't sound good. Do you mean PSCI SYSTEM_RESET doesn't work as
+> > > expected ? Does it mean it is not conformant to the specification ?
+> > > 
+> > 
+> > I was motivating the reason for using SYSTEM_RESET2. How to set the PMIC
+> > register and IMEM cookie can change between chipsets. Using
+> > SYSTEM_RESET2 alows us to abstract how to perform the reset.
+> > 
+> > > > Generally, there is a PMIC register that gets written to
+> > > > decide the reboot type. There is also sometimes a cookie that can be
+> > > > written to indicate that the bootloader should behave differently than a
+> > > > regular boot. These knobs evolve over product generations and require
+> > > > more drivers. Qualcomm firmwares are beginning to expose vendor
+> > > > SYSTEM_RESET2 types to simplify driver requirements from Linux.
+> > > > 
+> > > 
+> > > Why can't this be fully userspace driven ? What is the need to keep the
+> > > cookie in the DT ?
+> > 
+> > As Dmitry pointed out, this information isn't discoverable. I suppose
+> > we could technically use bootconfig or kernel command-line to convey the
+> > map although I think devicetree is the right spot for this mapping.
+> > 
+> > - Other vendor-specific bits for PSCI are described in the devicetree.
+> >    One example is the suspend param (e.g. the StateID) for cpu idle
+> >    states.
+> > - Describing firmware bits in the DT isn't unprecedented, and putting
+> >    this information outside the DT means that other OSes (besides Linux)
+> >    need their own way to convey this information.
+> > - PSCI would be the odd one out that reboot mode map is not described in
+> >    DT. Other reboot-mode drivers specify the mapping in the DT. Userspace
+> >    that runs with firmware that support vendor reset2 need to make sure
+> >    they can configure the mapping early enough.
 > 
-> Add master/slave ids for Qualcomm IPQ9574 Network-On-Chip
-> interfaces. This will be used by the gcc-ipq9574 driver
-> that will for providing interconnect services using the
-> icc-clk framework.
-> 
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
-> v8:
-> Remove ICC_xxx macros
-> Fix macro defines to be consistent with other bindings
-> v7:
-> Fix macro names to be consistent with other bindings
-> v6:
-> Removed Reviewed-by: Krzysztof Kozlowski
-> Redefine the bindings such that driver and DT can share them
-> 
-> v3:
-> Squash Documentation/ and include/ changes into same patch
+> FWIW, I read Sudeep's response as being specifically inquiring about the
+> 'cookie' parameter, do you see a need for that to be in described in the DT
+> or could that just be an user-space parameter that is conveyed through the
+> reboot system call?
 
-
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+Ah, I had thought the ask was for the reboot type as well as the cookie.
+We don't do this for hardware-based reboot mode cookies and I didn't see
+why we should ask userspace to do something different for PSCI.
+It seems to me that SYSTEM_RESET2 fits nicely with the existing design
+for reboot-mode bindings.
 
 
