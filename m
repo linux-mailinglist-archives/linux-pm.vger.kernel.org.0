@@ -1,168 +1,102 @@
-Return-Path: <linux-pm+bounces-6687-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6688-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A3828A9F19
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 17:52:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CA618A9FF8
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 18:24:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 88131B236BB
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 15:52:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D3CA285047
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Apr 2024 16:24:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A791D16EBFB;
-	Thu, 18 Apr 2024 15:52:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AECC16F902;
+	Thu, 18 Apr 2024 16:24:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gQWwmmPH"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="OYjV0tlZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.15.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED27B16EBE1;
-	Thu, 18 Apr 2024 15:52:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82D4816F90E;
+	Thu, 18 Apr 2024 16:24:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713455530; cv=none; b=AZeq/3Q2kaOFQGqO6I8eKee60d3NaQwLEt88GWgICcRIvSA1Sl/BYnRjv7zh3RtsTy5iESyeYujaOzIuHKEr4cxGIUVSw7+rnQjBWHtEfbUnK3l0Au2XOuz+Opraw8Gz/oS3wBPi0IvTps41f2yAh8t3l40WLVHQ6f2jSCappyA=
+	t=1713457493; cv=none; b=E0560YnDdTkncR3GSS1zI9qBRSH2tgQZgOkzGU/kqAzeAZ7PyO9+DNKXT8ZsIVII8BTySKNqCk3EaUEbnYR58Ger65nCPNVVAalObn9II/7e/1EENQvNUUUF0LIVdpFO7wpl00fdrg8wmukeNfFboKUDslXpY34HrhfsLlDuGBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713455530; c=relaxed/simple;
-	bh=wFnbcWy5gk5sXW+5zvt0NargWqewhsVtKQ7Weekss4g=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=L39thU4zx6BpflSR+bMJd+DaLAI6IYpSlDPaZMbsAfQpLek0Me+2fVZTYmTsKB56KxkHm/L4LJjdchtZ3CXwUADfxuJ57x0WNP/+FfB/bPh+BxrTJ0IFISe6UWAT6CKzhw+W/vYodpIAOTYwSBumjZRSi83HPCsBNKX0ZJ/AOjI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gQWwmmPH; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-416a8ec0239so6408355e9.0;
-        Thu, 18 Apr 2024 08:52:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713455526; x=1714060326; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WPBZ9ExHuwu+bu/mp1K2y+evtVoXz/i7anIOf+mTPDM=;
-        b=gQWwmmPH1uWnTyO1OWY3UhpPR/xTuH864OmjPShFuK6zQ8OADlA4rvnDcQFTE2G4KD
-         nvno1Z/mCEDoYsiUlcBYJFfX+leELAcHUKEz/X4Cl1ezwPQ4NSKBINQYAdLow8IfjIaT
-         Rg0g0yzlp5U/VxpS0Xfox6sArLeNDvia/ft8dgLnZAcw/Jdmam/uWV+u0Ad45TjcpBwf
-         DsIOgDtxRvsYDy6bwWojPmZ1jM/YYOAFzvmDAMAaMRZuFHjnofh4livsJ+aWEg/0R7ZA
-         QwaZI9ImQebR4SCFYKVKZT8fHrabZZSe3uGuqi0S9GFgTokklFeOPn1SYXDwVl24AlUV
-         uhzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713455526; x=1714060326;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WPBZ9ExHuwu+bu/mp1K2y+evtVoXz/i7anIOf+mTPDM=;
-        b=AK8FfJUe1wF2u/nBXruwVvqIVeeAptc41RmkBFktwFHU2pmYpgOU6PJkov7lJt4LlU
-         RcHrXxShinzqo034ReX9oFGWS6sGdzUu+zBMfqQ0eUdCcKY0fgwMtP2glHdMVHOtfh7q
-         4HiMah0PU0b/C3/KhVol+Yw1ohhx9WFE2Z8JoP8Mu/9o4bYC8GV5PFqt0K/4f3LuHfp9
-         Va4oRQUH/qbcOttmQW9apSul/btyuIrIIE3h2jJXWjhcpjQejhY3WEEyF6CXHbmS2PLK
-         42oYks0PAokfn74Jk3SD1XSNNKLO/t3WaGvvBMwLV1ET8XV+4ANrzPv5YK2EdsB0Iacr
-         kR+w==
-X-Forwarded-Encrypted: i=1; AJvYcCWhkSiwWU4PbQRQR8ReMYy+7ckSoMUQYOyZr6E3Rc9DtDG10PLKhcbB4+ASZUpLkegEfSMOREXSHj1ysLlgXDco7Chb2EPCi8KvL6i0rmxiR0zK0qVUFj2j3T+i25zuxlsEs78EFJyOFcJpL1lzc3Url/vdQq6Z1k0gAi11aeY=
-X-Gm-Message-State: AOJu0Yy3dhayejxhNlOrk3be717OU14ZPUYw6bn87l4hYMa4SIZxILEe
-	xt4Ew5XvGBtSEaFr7dh4ag9S76pZmqFRS0TonLTb46sl6DA3NYuP
-X-Google-Smtp-Source: AGHT+IFSm2+nTTTBh/s5wnJ18wP/8/m9M0ecQsavX8QpbNXPEQlYhBTSMGaOPCVh/XJ7vaSK6GL7IQ==
-X-Received: by 2002:a05:600c:4e09:b0:418:f219:6e22 with SMTP id b9-20020a05600c4e0900b00418f2196e22mr1182984wmq.11.1713455526019;
-        Thu, 18 Apr 2024 08:52:06 -0700 (PDT)
-Received: from vitor-nb.. ([2001:8a0:e622:f700:cffe:40a8:31d4:2e61])
-        by smtp.gmail.com with ESMTPSA id o30-20020adfa11e000000b00341b7d5054bsm2168202wro.72.2024.04.18.08.52.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Apr 2024 08:52:05 -0700 (PDT)
-From: Vitor Soares <ivitro@gmail.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>
-Cc: Vitor Soares <vitor.soares@toradex.com>,
-	linux-pm@vger.kernel.org,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	ivitro@gmail.com,
-	stable@vger.kernel.org,
-	Lucas Stach <l.stach@pengutronix.de>
-Subject: [PATCH v1] pmdomain: imx8m-blk-ctrl: fix suspend/resume order
-Date: Thu, 18 Apr 2024 16:51:51 +0100
-Message-Id: <20240418155151.355133-1-ivitro@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1713457493; c=relaxed/simple;
+	bh=DbjXq4pJyTvVziXvUNSDua2fGdhfY5xnL5fNr9958LI=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=smkjOdFeqAsZK/fCaR079xjWbv55+QrNGEWkp3vPZjb0jNfx0Oqssj6Ckrpyk+RLkzK1ImHtxNm1T7dXMr2TeaKMXV1WqY2wMy889JUGWGGovDMogO7T2BsBeUbSK1rYn/vgrl0Gm63gJpnx2awhliTQXN6mRwiyud8THrIUiG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=OYjV0tlZ; arc=none smtp.client-ip=212.227.15.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1713457465; x=1714062265; i=markus.elfring@web.de;
+	bh=VJbd+pzZQijTTHJtcHc3eD4TbZ4PGNvmnMzb9lj7ksM=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=OYjV0tlZjEhljdLB8qMSLtDRrL0EuX2958PkTfl5+cTBSwk0HMjHX3v4d+Ujm+xg
+	 SVUQBygJNR4KqpsoR8RafIfx+tRWrEqrnkIPz4P/D1XQ8hOUEqqxt9IleRemC7Vl9
+	 lBMJ1gjvr/2HDU6J1cW/jG5x6oX0EKtiqwyrX6Xy8D9F84c6307sRJD1Glr0aqMba
+	 jXsVg8is7Ds3Nhp6EsSE/jYyQIM3sudinz6zCQAsgHZAcQ5xD6bzqHIaWtTjQ3PDE
+	 qRHX/eUVsyE0H879XAeJqAZF6LdeFcZUivDHKl5gmRP+nQgZOQMFySDKfQ6SYuvcH
+	 6pJQMdeXxlUyRS6/rw==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.85.95]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MlLE9-1sR58f44yr-00kAR6; Thu, 18
+ Apr 2024 18:24:25 +0200
+Message-ID: <29e1a687-99f5-4e9f-a8c5-50154312cac4@web.de>
+Date: Thu, 18 Apr 2024 18:24:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+To: Vitor Soares <vitor.soares@toradex.com>, linux-pm@vger.kernel.org,
+ imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ kernel-janitors@vger.kernel.org, kernel@pengutronix.de,
+ Fabio Estevam <festevam@gmail.com>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Shawn Guo <shawnguo@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Vitor Soares <ivitro@gmail.com>, Lucas Stach <l.stach@pengutronix.de>,
+ LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org
+References: <20240418155151.355133-1-ivitro@gmail.com>
+Subject: Re: [PATCH] pmdomain: imx8m-blk-ctrl: fix suspend/resume order
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240418155151.355133-1-ivitro@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:/oCiH/JHJi2n0pqJF8inD5bHsFynG+pCawIauTrb9OI2hvhH28t
+ gjjT/GOHMldhaZ0cBwtp5q8vUcWITbAuZoMK6kK9nf6WryTvVxnf/0lrscbMHYoSrgTsPjj
+ n5cOrJGy/JXnIRvPsr15v50bjbvKcuRna77rvTWOc8ASNO6eFbcFNUWGQZ8vErIHXfhADDV
+ +WwN5a3vQtpSibFO8PWIQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:gRkFTCmNWJQ=;6COwrFiZp9DOns+lAus10zZPYkA
+ +Itb8ehwOrZlGnLpuAw9gy9X+IZR0SrImDhkqAxVa72T0bGfB5lceo36sTos9fzITy5XZ5IVd
+ 5dZ93g9lsyCfdSx8xlaOhyi9zmDNyRx4XHWOPugKzdtoLTlTHXxIR1a+NiIf6v07Go2OJ3S4Z
+ Wb27B791noVlSF2Vl+M0W0W4egtlg80y+hiNjER46dYXa728ik4lQQNiKYm3O2qla3A+Mo53M
+ quf+CvIlDPvv6bVbGooSh6B6Jrw9BGk/1xjd9e+MLI64HmDwfJVMDYCD30Eijte9y+gJS5vMK
+ trvgu+oonniytmpMTgv4RfhDjc7dZXl9tp6rTqOucXqFAFqow2Lp5Fey9Fm51IF1WSROvahfN
+ UIOFrokWIdAA6s7EMTplh7PL5oCFBNLyBUYRgR27yEYJ9I2n49YptgxtVlhNt7Eye3ftUMbiG
+ z/bMsn8FdC5nKkztpb/H2Qwt9Tb2OgTzp0vyjUEn+mNuI15ipcQ8stfySwi95cOT6yDzJytdA
+ stVqjFUfa9rkLR9R3B0A180zN0M5DwyvyBMOEDuEIblJqdG+75WSrquyQKka63v8yCp+Xs3bb
+ k9GFGi1w9ql7HYR3bGC6JJZePjJH1ki+X3NDhJow53OcOf5zm2FlV0B/G7MoTxL4OsT7ryK2a
+ N58wbWrskS7ti4zngt2h/INl6enrzkFvLqzOKem2lzpHrvrVFzudycVvVh6juW4tMtyi1Hu9W
+ MBzqWFK8qZgDrgCFWKbRDsbAZAdbLZqPDowPW8e+uyv2eBCmErdKx05Jm1VCRfvQHVLoaxZFb
+ EopcpViTHG6FBd8Gh4xnQRlviAL2LcdkKFugYgOXxzYqo=
 
-From: Vitor Soares <vitor.soares@toradex.com>
+>                                         =E2=80=A6, add a device link bet=
+weem
+> blk_ctrl and genpd power_dev. =E2=80=A6
 
-During the probe, the genpd power_dev is added to the dpm_list after
-blk_ctrl due to its parent/child relationship. Making the blk_ctrl
-suspend after and resume before the genpd power_dev.
+I hope that a typo will be avoided in this change description for the fina=
+l commit.
 
-As a consequence, the system hangs when resuming the VPU due to the
-power domain dependency.
-
-To ensure the proper suspend/resume order, add a device link betweem
-blk_ctrl and genpd power_dev. It guarantees genpd power_dev is suspended
-after and resumed before blk-ctrl.
-
-Cc: <stable@vger.kernel.org>
-Closes: https://lore.kernel.org/all/fccbb040330a706a4f7b34875db1d896a0bf81c8.camel@gmail.com/
-Link: https://lore.kernel.org/all/20240409085802.290439-1-ivitro@gmail.com/
-Fixes: 2684ac05a8c4 ("soc: imx: add i.MX8M blk-ctrl driver")
-Suggested-by: Lucas Stach <l.stach@pengutronix.de>
-Signed-off-by: Vitor Soares <vitor.soares@toradex.com>
----
-
-This is a new patch, but is a follow-up of:
-https://lore.kernel.org/all/20240409085802.290439-1-ivitro@gmail.com/
-
-As suggested by Lucas, we are addressing this PM issue in the imx8m-blk-ctrl
-driver instead of in the imx8mm.dtsi.
-
- drivers/pmdomain/imx/imx8m-blk-ctrl.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
-
-diff --git a/drivers/pmdomain/imx/imx8m-blk-ctrl.c b/drivers/pmdomain/imx/imx8m-blk-ctrl.c
-index ca942d7929c2..cd0d2296080d 100644
---- a/drivers/pmdomain/imx/imx8m-blk-ctrl.c
-+++ b/drivers/pmdomain/imx/imx8m-blk-ctrl.c
-@@ -283,6 +283,20 @@ static int imx8m_blk_ctrl_probe(struct platform_device *pdev)
- 			goto cleanup_pds;
- 		}
- 
-+		/*
-+		 * Enforce suspend/resume ordering by making genpd power_dev a
-+		 * provider of blk-ctrl. Genpd power_dev is suspended after and
-+		 * resumed before blk-ctrl.
-+		 */
-+		if (!device_link_add(dev, domain->power_dev, DL_FLAG_STATELESS)) {
-+			ret = -EINVAL;
-+			dev_err_probe(dev, ret,
-+				      "failed to link to %s\n", data->name);
-+			pm_genpd_remove(&domain->genpd);
-+			dev_pm_domain_detach(domain->power_dev, true);
-+			goto cleanup_pds;
-+		}
-+
- 		/*
- 		 * We use runtime PM to trigger power on/off of the upstream GPC
- 		 * domain, as a strict hierarchical parent/child power domain
-@@ -324,6 +338,7 @@ static int imx8m_blk_ctrl_probe(struct platform_device *pdev)
- 	of_genpd_del_provider(dev->of_node);
- cleanup_pds:
- 	for (i--; i >= 0; i--) {
-+		device_link_remove(dev, bc->domains[i].power_dev);
- 		pm_genpd_remove(&bc->domains[i].genpd);
- 		dev_pm_domain_detach(bc->domains[i].power_dev, true);
- 	}
-@@ -343,6 +358,7 @@ static void imx8m_blk_ctrl_remove(struct platform_device *pdev)
- 	for (i = 0; bc->onecell_data.num_domains; i++) {
- 		struct imx8m_blk_ctrl_domain *domain = &bc->domains[i];
- 
-+		device_link_remove(&pdev->dev, domain->power_dev);
- 		pm_genpd_remove(&domain->genpd);
- 		dev_pm_domain_detach(domain->power_dev, true);
- 	}
--- 
-2.34.1
-
+Regards,
+Markus
 
