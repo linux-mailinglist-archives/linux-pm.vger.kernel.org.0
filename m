@@ -1,123 +1,100 @@
-Return-Path: <linux-pm+bounces-6715-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6716-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8F638AADF2
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 13:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B98E98AAE7A
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 14:31:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB7B41C20C6E
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 11:56:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA3591C216CF
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 12:31:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3077183A07;
-	Fri, 19 Apr 2024 11:56:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04BA31E867;
+	Fri, 19 Apr 2024 12:31:16 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D5C37FBDF
-	for <linux-pm@vger.kernel.org>; Fri, 19 Apr 2024 11:56:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B212B20300
+	for <linux-pm@vger.kernel.org>; Fri, 19 Apr 2024 12:31:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713527797; cv=none; b=RRLaZAthRXLOdTh8RoK9O0xWmfx1pgdX/BuVaRiX9wtuFbR56Heck/ldPChuQu1RgH8VO/w9xm0z3eYyfzqq8ogvG3OP/TokpcEzPY2E9gKJfOvbcivK9H9wDBl+cdasLxHatl2Jgg92+Im53y/rHubdEul1QsbXDDZ8/0AeBWw=
+	t=1713529875; cv=none; b=BDk0O5XF8irBXwT0wIu8Qe/yi1n91k2Q6p7USfAlSyOm2pODmPfAU1MzlRxK45CuElsT3T5L2d+nK8ADhrkEOCcObxiYbhg71PLSIqv2Vyc1L4RomBXxCEtWAFsbC61inzgtqFNRL8oLz1QyuEywaJqP+3lEb3OUyTDeDAlrb00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713527797; c=relaxed/simple;
-	bh=T3STDVe7xxU2a7JoWtzmlCoWg5g6NQdOyEj8aWsFGW0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=N7yDyfC9DfaKFoILRxoGD3H2UHd83oXom3eTqGHGVOfAtl5jBkMVOHaECfOSPPquovAmT2JI7zq4nyqkZY7Y3zJRO4VR5uOGed2NYyYezhCUA2Lnt6usb7hZZSlHEDLCzZso2l7IF5VQ8BAEsCfvZNM2KzMtyAzx3j2zCSTJmW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 19CCF2F;
-	Fri, 19 Apr 2024 04:57:02 -0700 (PDT)
-Received: from donnerap.manchester.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 13DF73F64C;
-	Fri, 19 Apr 2024 04:56:32 -0700 (PDT)
-Date: Fri, 19 Apr 2024 12:56:30 +0100
-From: Andre Przywara <andre.przywara@arm.com>
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: kernel test robot <lkp@intel.com>, Brandon Cheo Fusi
- <fusibrandon13@gmail.com>, oe-kbuild-all@lists.linux.dev, Jernej Skrabec
- <jernej.skrabec@gmail.com>, linux-pm@vger.kernel.org
-Subject: Re: [vireshk-pm:cpufreq/arm/linux-next 6/10]
- drivers/cpufreq/sun50i-cpufreq-nvmem.c:128:44: warning: '%d' directive
- output may be truncated writing between 1 and 10 bytes into a region of
- size 2
-Message-ID: <20240419125630.7951b45c@donnerap.manchester.arm.com>
-In-Reply-To: <20240419105628.faaqz2p4qdlfxyre@vireshk-i7>
-References: <202404191715.LDwMm2gP-lkp@intel.com>
-	<20240419111345.028ad7ec@donnerap.manchester.arm.com>
-	<20240419105628.faaqz2p4qdlfxyre@vireshk-i7>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+	s=arc-20240116; t=1713529875; c=relaxed/simple;
+	bh=O/SrvwnPSNSDMP5T2MMmgW12mV+NccNc4AqI53/GDfE=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=fUdJt5pUdRlamaPiHC797GRkB30NNPx5EdPUHJeT4jjtDvs9JecFLkWW0ACda2ZU/FBbrDyw1TE4lKXQBwYyrUre+lEe6AEQlvNM7t4Ue+Nu2nKtaXd4lEy1JxhjZhYjCCOuwLXFfCc8SQ3IOCUQ/20/9ELaqebE8dNzwLA3KR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [141.14.220.34] (g34.guest.molgen.mpg.de [141.14.220.34])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id D5B3961E5FE05;
+	Fri, 19 Apr 2024 14:30:56 +0200 (CEST)
+Message-ID: <d0e7eaad-d549-423c-a138-84c2abc817a7@molgen.mpg.de>
+Date: Fri, 19 Apr 2024 14:30:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Huang Rui <ray.huang@amd.com>
+Cc: linux-pm@vger.kernel.org
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+Subject: Warning `amd_pstate: the _CPC object is not present in SBIOS or ACPI
+ disabled`
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Fri, 19 Apr 2024 16:26:28 +0530
-Viresh Kumar <viresh.kumar@linaro.org> wrote:
+Dear Linux folks,
 
-Hi Viresh,
 
-> On 19-04-24, 11:13, Andre Przywara wrote:
-> > So I see the problem: "speed" must fit into one decimal digit. At the
-> > moment it's fine, because "speed" is returned by one of the *_efuse_xlate
-> > functions. For the H6, the output is masked by 0x7, so can never be larger
-> > than that. For the H616, the return value is a constant selected in a
-> > switch/case, which is at most "4" at the moment, so it's safe as well.
-> > 
-> > So is there some established way to communicate this, to appease gcc here?
-> > Would explicitly checking for the range and bailing out solve this? Or is
-> > the some kind of assert to make gcc happy?
-> > Or do we just increase MAX_NAME_LEN?  
-> 
-> I fixed it like this in the OPP core earlier:
+On a Dell OptiPlex 5055 with AMD Ryzen 5 PRO 1500 Quad-Core Processor
 
-Ah, yes, thanks, that looks good to me, and indeed fixes the warning.
+     $ dmesg | grep -e "DMI:" -e "Linux version" -e microcode
+     [    0.000000] Linux version 6.9.0-rc4.mx64.461-00045-g6c95a9f46024 
+(x@holidayincambodia.molgen.mpg.de) (gcc (GCC) 12.3.0, GNU ld (GNU 
+Binutils) 2.41) #17 SMP PREEMPT_DYNAMIC Thu Apr 18 12:10:17 CEST 2024
+     [    0.000000] DMI: Dell Inc. OptiPlex 5055 Ryzen CPU/0P03DX, BIOS 
+1.12.0 03/03/2024
+     [    3.562349] microcode: Current revision: 0x08001137
 
-How are we going to handle this? Do you gonna squash this into the
-respective patch?
+even with the latest system firmware 1.12.0 [1], Linux warns:
 
-Cheers,
-Andre
+     $ dmesg --level alert,crit,err,warn
+     [    3.506197] amd_pstate: the _CPC object is not present in SBIOS 
+or ACPI disabled
+     [    5.152840] xfs filesystem being remounted at / supports 
+timestamps until 2038-01-19 (0x7fffffff)
+     [    5.340653] wmi_bus wmi_bus-PNP0C14:00: [Firmware Bug]: WQBC 
+data block query control method not found
+     [    7.891459] kfd kfd: amdgpu: VERDE  not supported in kfd
+     [   12.032894] xfs filesystem being mounted at /amd/hypnotoad/0 
+supports timestamps until 2038-01-19 (0x7fffffff)
+     [   13.283545] NFSD: Unable to initialize client recovery tracking! 
+(-110)
 
-> 
-> diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> index 30e5c337611c..cd50cea16a87 100644
-> --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> @@ -19,8 +19,6 @@
->  #include <linux/pm_opp.h>
->  #include <linux/slab.h>
-> 
-> -#define MAX_NAME_LEN   7
-> -
->  #define NVMEM_MASK     0x7
->  #define NVMEM_SHIFT    5
-> 
-> @@ -208,7 +206,7 @@ static int sun50i_cpufreq_get_efuse(void)
->  static int sun50i_cpufreq_nvmem_probe(struct platform_device *pdev)
->  {
->         int *opp_tokens;
-> -       char name[MAX_NAME_LEN];
-> +       char name[] = "speedXXXXXXXXXXX"; /* Integers can take 11 chars max */
->         unsigned int cpu, supported_hw;
->         struct dev_pm_opp_config config = {};
->         int speed;
-> @@ -235,7 +233,7 @@ static int sun50i_cpufreq_nvmem_probe(struct platform_device *pdev)
->                 config.supported_hw_count = 1;
->         }
-> 
-> -       snprintf(name, MAX_NAME_LEN, "speed%d", speed);
-> +       snprintf(name, sizeof(name), "speed%d", speed);
->         config.prop_name = name;
-> 
->         for_each_possible_cpu(cpu) {
-> 
+What can I do about the warning?
 
+
+Kind regards,
+
+Paul
+
+
+[1]: 
+https://dl.dell.com/FOLDER11328712M/1/OptiPlex_5055_Ryzen_CPU_1.12.0.exe
+
+download with
+
+     wget --user-agent="Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:52.0) 
+Gecko/20100101 Firefox/52.0" 
+https://dl.dell.com/FOLDER11328712M/1/OptiPlex_5055_Ryzen_CPU_1.12.0.exe
 
