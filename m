@@ -1,40 +1,40 @@
-Return-Path: <linux-pm+bounces-6733-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6734-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BB348AB536
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 20:50:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D33848AB541
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 20:52:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AE20FB22027
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 18:50:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C36B1C21BF7
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 18:52:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0FD481729;
-	Fri, 19 Apr 2024 18:50:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 560D812E1ED;
+	Fri, 19 Apr 2024 18:52:14 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 037AFD268;
-	Fri, 19 Apr 2024 18:50:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6F7E12D748;
+	Fri, 19 Apr 2024 18:52:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713552605; cv=none; b=EbpHz0/t1jQ2Xdx1Lh0IhawOlSBwUVM9UmG5N6yOa/degVyTcFsVEYS1dkVTgJoIh0X/SDZAbe04L9tSpFmkFZh2KKgGNC9kWvKG9MjT564JcJBDVdR7HB0YKP7Py0+EFKS6PKmA4aUIN+POEfyZEubb04+8TIU4Jdz52B90Jao=
+	t=1713552734; cv=none; b=kxWtbGDklNmt6pjv6HDMv4z5eAOiL38nzoZy+pznTMVtW0RgG98QI4PpAq+cUEHp52NuOyYmb6Iy17/BuPAC7Z71IBPQhAul7+k4IPnS8dvyCJ1GAkSp6F7eLW6n6my5pFZIplJ3HySvrPs/Smw4ao7yTkIgVmXzUMUvywI7RPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713552605; c=relaxed/simple;
-	bh=1ggBmLkPz+ipDBQEkORKrE3vtL6SmwmuVgCydJ99IsY=;
+	s=arc-20240116; t=1713552734; c=relaxed/simple;
+	bh=LvzbHY6wjPzDhWTFvAMUoScyMQIzNkpOgmAl4nAWw1c=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J82+jNywPOG3yWbU++fFClo/PtzC7Z3cM/ERbTKyB/XyGoD71n8KkaDqnluc/6Q5WGjgAdbaW0Vk0z6uOD6rtx+cYmdmyFAqyEUKAVPr41bMI6MqIV+1DOh4GiY4LdgP0QPqTW8yXMkkzGPTCVEGNypy16zfSj/ZIthInpO4/38=
+	 In-Reply-To:Content-Type; b=mDDrBsAgNnY7WfgQ9cej0nEocuYeG/a2dZQVkSuQstHhlVuIRp/TfDiBoxjtrD1KRyAMKYbkPoIUqBvkKnpb9POiRzFhfMqpZu3JQNPkR53zD625PxM+9HoDZBLBA08yhge9JIoZpmZ1fPBcUuHKZb60v3f3PeUCu4A+mtQyoZU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C7D352F;
-	Fri, 19 Apr 2024 11:50:31 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6B8C8339;
+	Fri, 19 Apr 2024 11:52:40 -0700 (PDT)
 Received: from [10.57.77.69] (unknown [10.57.77.69])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8B2263F64C;
-	Fri, 19 Apr 2024 11:50:02 -0700 (PDT)
-Message-ID: <80a764dc-b54c-443b-9832-977ab9f6d7cf@arm.com>
-Date: Fri, 19 Apr 2024 19:50:09 +0100
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2A4E23F64C;
+	Fri, 19 Apr 2024 11:52:11 -0700 (PDT)
+Message-ID: <c8d48dab-a04e-4699-b361-a7a4cd35f863@arm.com>
+Date: Fri, 19 Apr 2024 19:52:17 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,90 +42,70 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 15/16] thermal: core: Drop the .throttle() governor
- callback
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
+Subject: Re: [PATCH v1 16/16] thermal: core: Relocate critical and hot trip
+ handling
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
  Daniel Lezcano <daniel.lezcano@linaro.org>,
  Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-References: <13515747.uLZWGnKmhe@kreacher> <2701448.BddDVKsqQX@kreacher>
+References: <13515747.uLZWGnKmhe@kreacher> <9337957.rMLUfLXkoz@kreacher>
 Content-Language: en-US
 From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <2701448.BddDVKsqQX@kreacher>
+In-Reply-To: <9337957.rMLUfLXkoz@kreacher>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 4/10/24 18:42, Rafael J. Wysocki wrote:
+On 4/10/24 18:44, Rafael J. Wysocki wrote:
 > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Subject: [PATCH v1]
 > 
-> Since all of the governors in the tree have been switched over to using
-> the new callbacks, either .trip_crossed() or .manage(), the .throttle()
-> governor callback is not used any more, so drop it.
+> Modify handle_thermal_trip() to call handle_critical_trips() only after
+> finding that the trip temperature has been crossed on the way up and
+> remove the redundant temperature check from the latter.
+> 
+> No intentional functional impact.
 > 
 > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
->   drivers/thermal/thermal_core.c |   11 -----------
->   drivers/thermal/thermal_core.h |    4 ----
->   2 files changed, 15 deletions(-)
+>   drivers/thermal/thermal_core.c |   11 ++++-------
+>   1 file changed, 4 insertions(+), 7 deletions(-)
 > 
 > Index: linux-pm/drivers/thermal/thermal_core.c
 > ===================================================================
 > --- linux-pm.orig/drivers/thermal/thermal_core.c
 > +++ linux-pm/drivers/thermal/thermal_core.c
-> @@ -310,15 +310,6 @@ static struct thermal_governor *thermal_
->   	return def_governor;
->   }
->   
-> -static void handle_non_critical_trips(struct thermal_zone_device *tz,
-> -				      const struct thermal_trip *trip)
-> -{
-> -	struct thermal_governor *governor = thermal_get_tz_governor(tz);
-> -
-> -	if (governor->throttle)
-> -		governor->throttle(tz, trip);
-> -}
-> -
->   void thermal_governor_update_tz(struct thermal_zone_device *tz,
->   				enum thermal_notify_event reason)
+> @@ -350,10 +350,6 @@ void thermal_zone_device_critical_reboot
+>   static void handle_critical_trips(struct thermal_zone_device *tz,
+>   				  const struct thermal_trip *trip)
 >   {
-> @@ -418,8 +409,6 @@ static void handle_thermal_trip(struct t
+> -	/* If we have not crossed the trip_temp, we do not care. */
+> -	if (trip->temperature <= 0 || tz->temperature < trip->temperature)
+> -		return;
+> -
+>   	trace_thermal_zone_trip(tz, thermal_zone_trip_id(tz, trip), trip->type);
 >   
->   	if (trip->type == THERMAL_TRIP_CRITICAL || trip->type == THERMAL_TRIP_HOT)
->   		handle_critical_trips(tz, trip);
-> -	else
-> -		handle_non_critical_trips(tz, trip);
+>   	if (trip->type == THERMAL_TRIP_CRITICAL)
+> @@ -405,10 +401,11 @@ static void handle_thermal_trip(struct t
+>   		list_add_tail(&td->notify_list_node, way_up_list);
+>   		td->notify_temp = trip->temperature;
+>   		td->threshold -= trip->hysteresis;
+> -	}
+>   
+> -	if (trip->type == THERMAL_TRIP_CRITICAL || trip->type == THERMAL_TRIP_HOT)
+> -		handle_critical_trips(tz, trip);
+> +		if (trip->type == THERMAL_TRIP_CRITICAL ||
+> +		    trip->type == THERMAL_TRIP_HOT)
+> +			handle_critical_trips(tz, trip);
+> +	}
 >   }
 >   
 >   static void update_temperature(struct thermal_zone_device *tz)
-> Index: linux-pm/drivers/thermal/thermal_core.h
-> ===================================================================
-> --- linux-pm.orig/drivers/thermal/thermal_core.h
-> +++ linux-pm/drivers/thermal/thermal_core.h
-> @@ -32,8 +32,6 @@ struct thermal_trip_desc {
->    *			thermal zone.
->    * @trip_crossed:	called for trip points that have just been crossed
->    * @manage:	called on thermal zone temperature updates
-> - * @throttle:	callback called for every trip point even if temperature is
-> - *		below the trip point temperature
->    * @update_tz:	callback called when thermal zone internals have changed, e.g.
->    *		thermal cooling instance was added/removed
->    * @governor_list:	node in thermal_governor_list (in thermal_core.c)
-> @@ -46,8 +44,6 @@ struct thermal_governor {
->   			     const struct thermal_trip *trip,
->   			     bool crossed_up);
->   	void (*manage)(struct thermal_zone_device *tz);
-> -	int (*throttle)(struct thermal_zone_device *tz,
-> -			const struct thermal_trip *trip);
->   	void (*update_tz)(struct thermal_zone_device *tz,
->   			  enum thermal_notify_event reason);
->   	struct list_head	governor_list;
 > 
 > 
 > 
-
-
 
 Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
