@@ -1,40 +1,40 @@
-Return-Path: <linux-pm+bounces-6706-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6707-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 270088AAB81
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 11:34:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C06648AAB9D
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 11:41:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A43F1B224ED
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 09:34:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 749D8282E62
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 09:41:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7972A77F2D;
-	Fri, 19 Apr 2024 09:34:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D1107BB07;
+	Fri, 19 Apr 2024 09:41:23 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 738F3651B6;
-	Fri, 19 Apr 2024 09:34:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC04679B87;
+	Fri, 19 Apr 2024 09:41:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713519252; cv=none; b=Z1XGVabsDxo7QFUmxJ32hO68wjtg0clUHS1Pj5dBkOQOoby5/ptWp8XYfubHJ5t4blc5FzA5qmTVR7PkfTkK7j8jHiJy5zgUBVvlT579cJiEwhRrEmOXKsS38OL5WnU9u5V5e6Y+i/VPnNo1sTFwlfZ5CeTICHY/aa4jjDZv/ps=
+	t=1713519683; cv=none; b=NNWOxvStQ0bV39go+Bi/4sVf6w3GR+7zlOeEGwGX2jrqpUDeSInXtpQHyIJyaxRndlw1aCsmjaR7RXk9e1AXiogxAbvSEq8Vtoi05h+3/CjYeZ9zjuA4NiA+DZAY009Hhcqt71Cf4ul1JCXdk2QoTgU6K0lAvREncty6fwdVWKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713519252; c=relaxed/simple;
-	bh=y2lmeFfEw5I9sC+waqhaoIh9vZLUPMRGg6Cn3TMRnWY=;
+	s=arc-20240116; t=1713519683; c=relaxed/simple;
+	bh=piOLTlZ9jEPVrKKjrjmWxxPg1/3uUX0Kmj4uQ0YMG8g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HwmoAT364XOsi4rh6B7skGYxkmvfJnUxGdV+u2dmrvAfSGNrXHraMKjczh+wqdMoaCAMczWJzfBWfnxf+1Cc8K3sngnmBOQap2P3yGYRWyyZBmpEfeIrUVpQyrgiX+V/i4w4lAgrdUnow4kMeJQsrnfMYxjaqKSHaw3/u1N8OHw=
+	 In-Reply-To:Content-Type; b=clH+S/hujRc5W9zNqBVskEkstkA2PKG/AObvPUexNnKLsJiJ4DY0dUWTafpqVFt1k8l7EFhygEN7E88MGEqElrw01gnnY/NaGCRpm/qpV6RGcu/fwT9UiRq+D/Kodn14xgSB8xrSQx16n57lr8wK0DjKnvCPUmfCLwcbzwO4BBg=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DB8702F;
-	Fri, 19 Apr 2024 02:34:37 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 828B42F;
+	Fri, 19 Apr 2024 02:41:49 -0700 (PDT)
 Received: from [10.57.77.69] (unknown [10.57.77.69])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A98403F792;
-	Fri, 19 Apr 2024 02:34:08 -0700 (PDT)
-Message-ID: <0a523ecb-bf60-4970-a0b6-0ee1bd414079@arm.com>
-Date: Fri, 19 Apr 2024 10:34:16 +0100
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 49F483F792;
+	Fri, 19 Apr 2024 02:41:20 -0700 (PDT)
+Message-ID: <74de6868-770e-4fd1-8856-4ae327f1bbbe@arm.com>
+Date: Fri, 19 Apr 2024 10:41:27 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,118 +42,86 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 02/16] thermal: gov_bang_bang: Use .trip_crossed()
- instead of .throttle()
+Subject: Re: [PATCH v1 03/16] thermal: gov_bang_bang: Clean up
+ thermal_zone_trip_update()
 To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
  Daniel Lezcano <daniel.lezcano@linaro.org>,
  Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-References: <13515747.uLZWGnKmhe@kreacher> <2289003.iZASKD2KPV@kreacher>
+References: <13515747.uLZWGnKmhe@kreacher> <22273122.EfDdHjke4D@kreacher>
 Content-Language: en-US
 From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <2289003.iZASKD2KPV@kreacher>
+In-Reply-To: <22273122.EfDdHjke4D@kreacher>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 4/10/24 17:04, Rafael J. Wysocki wrote:
+On 4/10/24 17:05, Rafael J. Wysocki wrote:
 > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> The Bang-Bang governor really is only concerned about trip point
-> crossing, so it can use the new .trip_crossed() callback instead of
-> .throttle() that is not particularly suitable for it.
+> Do the following cleanups in thermal_zone_trip_update():
 > 
-> Modify it to do so which also takes trip hysteresis into account, so the
-> governor does not need to use it directly any more.
+>   * Drop the useless "zero hysteresis" message.
+>   * Eliminate the trip_index local variable that is redundant.
+>   * Drop 2 comments that are not useful.
+>   * Downgrade a diagnostic message from pr_warn() to pr_debug().
+>   * Use consistent field formatting in diagnostic messages.
 > 
 > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
->   drivers/thermal/gov_bang_bang.c |   31 +++++++++++++------------------
->   1 file changed, 13 insertions(+), 18 deletions(-)
+>   drivers/thermal/gov_bang_bang.c |   19 ++++++-------------
+>   1 file changed, 6 insertions(+), 13 deletions(-)
 > 
 > Index: linux-pm/drivers/thermal/gov_bang_bang.c
 > ===================================================================
 > --- linux-pm.orig/drivers/thermal/gov_bang_bang.c
 > +++ linux-pm/drivers/thermal/gov_bang_bang.c
-> @@ -13,8 +13,9 @@
->   
->   #include "thermal_core.h"
->   
-> -static int thermal_zone_trip_update(struct thermal_zone_device *tz,
-> -				    const struct thermal_trip *trip)
-> +static void thermal_zone_trip_update(struct thermal_zone_device *tz,
-> +				     const struct thermal_trip *trip,
-> +				     bool crossed_up)
+> @@ -17,29 +17,23 @@ static void thermal_zone_trip_update(str
+>   				     const struct thermal_trip *trip,
+>   				     bool crossed_up)
 >   {
->   	int trip_index = thermal_zone_trip_id(tz, trip);
+> -	int trip_index = thermal_zone_trip_id(tz, trip);
 >   	struct thermal_instance *instance;
-> @@ -43,13 +44,12 @@ static int thermal_zone_trip_update(stru
->   		}
 >   
->   		/*
-> -		 * enable fan when temperature exceeds trip_temp and disable
-> -		 * the fan in case it falls below trip_temp minus hysteresis
-> +		 * Enable the fan when the trip is crossed on the way up and
-> +		 * disable it when the trip is crossed on the way down.
->   		 */
-> -		if (instance->target == 0 && tz->temperature >= trip->temperature)
-> +		if (instance->target == 0 && crossed_up)
->   			instance->target = 1;
-> -		else if (instance->target == 1 &&
-> -			 tz->temperature < trip->temperature - trip->hysteresis)
-> +		else if (instance->target == 1 && !crossed_up)
+> -	if (!trip->hysteresis)
+> -		dev_info_once(&tz->device,
+> -			      "Zero hysteresis value for thermal zone %s\n", tz->type);
+> -
+>   	dev_dbg(&tz->device, "Trip%d[temp=%d]:temp=%d:hyst=%d\n",
+> -				trip_index, trip->temperature, tz->temperature,
+> -				trip->hysteresis);
+> +		thermal_zone_trip_id(tz, trip), trip->temperature,
+> +		tz->temperature, trip->hysteresis);
+>   
+>   	list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
+>   		if (instance->trip != trip)
+>   			continue;
+>   
+> -		/* in case fan is in initial state, switch the fan off */
+>   		if (instance->target == THERMAL_NO_TARGET)
 >   			instance->target = 0;
 >   
->   		dev_dbg(&instance->cdev->device, "target=%d\n",
-> @@ -59,14 +59,13 @@ static int thermal_zone_trip_update(stru
+> -		/* in case fan is neither on nor off set the fan to active */
+>   		if (instance->target != 0 && instance->target != 1) {
+> -			pr_warn("Thermal instance %s controlled by bang-bang has unexpected state: %ld\n",
+> -					instance->name, instance->target);
+> +			pr_debug("Unexpected state %ld of thermal instance %s in bang-bang\n",
+> +				 instance->target, instance->name);
+> +
+>   			instance->target = 1;
+>   		}
+>   
+> @@ -52,8 +46,7 @@ static void thermal_zone_trip_update(str
+>   		else if (instance->target == 1 && !crossed_up)
+>   			instance->target = 0;
+>   
+> -		dev_dbg(&instance->cdev->device, "target=%d\n",
+> -					(int)instance->target);
+> +		dev_dbg(&instance->cdev->device, "target=%ld\n", instance->target);
+>   
+>   		mutex_lock(&instance->cdev->lock);
 >   		instance->cdev->updated = false; /* cdev needs update */
->   		mutex_unlock(&instance->cdev->lock);
->   	}
-> -
-> -	return 0;
->   }
->   
->   /**
->    * bang_bang_control - controls devices associated with the given zone
->    * @tz: thermal_zone_device
->    * @trip: the trip point
-> + * @crossed_up: whether or not the trip has been crossed on the way up
->    *
->    * Regulation Logic: a two point regulation, deliver cooling state depending
->    * on the previous state shown in this diagram:
-> @@ -90,26 +89,22 @@ static int thermal_zone_trip_update(stru
->    *     (trip_temp - hyst) so that the fan gets turned off again.
->    *
->    */
-> -static int bang_bang_control(struct thermal_zone_device *tz,
-> -			     const struct thermal_trip *trip)
-> +static void bang_bang_control(struct thermal_zone_device *tz,
-> +			      const struct thermal_trip *trip,
-> +			      bool crossed_up)
->   {
->   	struct thermal_instance *instance;
-> -	int ret;
->   
->   	lockdep_assert_held(&tz->lock);
->   
-> -	ret = thermal_zone_trip_update(tz, trip);
-> -	if (ret)
-> -		return ret;
-> +	thermal_zone_trip_update(tz, trip, crossed_up);
->   
->   	list_for_each_entry(instance, &tz->thermal_instances, tz_node)
->   		thermal_cdev_update(instance->cdev);
-> -
-> -	return 0;
->   }
->   
->   static struct thermal_governor thermal_gov_bang_bang = {
->   	.name		= "bang_bang",
-> -	.throttle	= bang_bang_control,
-> +	.trip_crossed	= bang_bang_control,
->   };
->   THERMAL_GOVERNOR_DECLARE(thermal_gov_bang_bang);
 > 
 > 
 > 
