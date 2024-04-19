@@ -1,40 +1,40 @@
-Return-Path: <linux-pm+bounces-6730-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6731-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D79988AB501
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 20:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C1D18AB510
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 20:28:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F2331F21C45
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 18:21:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EFD5F1F21C75
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 18:28:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72DC913B5BE;
-	Fri, 19 Apr 2024 18:21:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96EF713BC37;
+	Fri, 19 Apr 2024 18:28:47 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EC358004E;
-	Fri, 19 Apr 2024 18:21:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75C601E502;
+	Fri, 19 Apr 2024 18:28:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713550913; cv=none; b=kAmS41l0pyEmwnz5eaBotE0f1Pk4i5l05MN8JRPUuMK5HSqLH9XIUDRCrDq38IamZByqu9nIJm8yzYUVHIu2Of+AE6vbN6jC1al2qO6cFO5YjTVVV8LPSrRFaZgCsHGbrHkkkfVWnaeIa9xZgFd2Bz7fwVuLBO4WM9IDRv5AGsM=
+	t=1713551327; cv=none; b=sTy62lzNDNY4WFQA6Z6VwGivRETy9x6oLcDvDRvCcBkuSE/zhrMoY9olUxqgJskYfD7YTqVar8W4L9PIW5ESp9HCqgDvLLKiL25yFPTYnsTf+V2Hppy9kPeSFWioqG7WCrVSfj33De2qRUu1dIXqFjfMZ0zYto89+an28R3/j/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713550913; c=relaxed/simple;
-	bh=HJqGs58SwQcHskZ/zUCCkx/SDgDbJpe0+oBP1ApuyA8=;
+	s=arc-20240116; t=1713551327; c=relaxed/simple;
+	bh=8bmUsk784IioOyBQS180AqAoVXiqQZUfPFKdqag2ld8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EqVqm9lM3hB67Mk1uZ3vMVggUM1RaZOp4x2uFx1scKOfasgC0C1tSlnjHZjdqlfRm4jEM/orLpEsDqo9r+pG2OX+fQPRcn1Hv9cfNJuMizqFMtDUCwS66jE9c6r4hk0EU7r0OaF+pOJMj1V74vFQgOexMGJlf92RvHvaXaPdJCc=
+	 In-Reply-To:Content-Type; b=MARdyr6v7vthHfNWGLyoa9rOvA1DSeQzRpHFaHzmv5hxI8ri5V8aXEoAfBsaYfo6Dl5hsqsBV1bXVB//jVi2RFUGe4W50W3Ucki+tbCbZ76Xp+47OmbDz/aPKJ5ScYG6kq8swk3FKLAHy4JAlVbxiDM1c6zlNljddrJhiyWy7fs=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A5CAF2F;
-	Fri, 19 Apr 2024 11:22:18 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 417AA2F;
+	Fri, 19 Apr 2024 11:29:13 -0700 (PDT)
 Received: from [10.57.77.69] (unknown [10.57.77.69])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4D7DC3F792;
-	Fri, 19 Apr 2024 11:21:49 -0700 (PDT)
-Message-ID: <ea5b7f04-f51d-4bfd-9b88-a850af5fa95f@arm.com>
-Date: Fri, 19 Apr 2024 19:21:55 +0100
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DA33E3F792;
+	Fri, 19 Apr 2024 11:28:43 -0700 (PDT)
+Message-ID: <370ff15c-fc44-4ba6-a357-f06e89d67250@arm.com>
+Date: Fri, 19 Apr 2024 19:28:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,91 +42,125 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 10/16] thermal: gov_step_wise: Clean up
- thermal_zone_trip_update()
+Subject: Re: [PATCH v1 11/16] thermal: gov_fair_share: Use .manage() callback
+ instead of .throttle()
 To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
  Daniel Lezcano <daniel.lezcano@linaro.org>,
  Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-References: <13515747.uLZWGnKmhe@kreacher> <1883063.atdPhlSkOF@kreacher>
+References: <13515747.uLZWGnKmhe@kreacher> <2411572.NG923GbCHz@kreacher>
 Content-Language: en-US
 From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <1883063.atdPhlSkOF@kreacher>
+In-Reply-To: <2411572.NG923GbCHz@kreacher>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 4/10/24 17:44, Rafael J. Wysocki wrote:
+On 4/10/24 17:57, Rafael J. Wysocki wrote:
 > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Do some assorted cleanups in thermal_zone_trip_update():
+> The Fair Share governor tries very hard to be stateless and so it
+> calls get_trip_level() from fair_share_throttle() every time, even
+> though the number produced by this function for all of the trips
+> during a given thermal zone update is actually the same.  Since
+> get_trip_level() walks all of the trips in the thermal zone every
+> time it is called, doing this may generate quite a bit of completely
+> useless overhead.
 > 
->   * Compute the trend value upfront.
->   * Move old_target definition to the block where it is used.
->   * Adjust white space around diagnositc messages and locking.
-
-s/diagnositc/diagnostic/
-
->   * Use suitable field formatting in a message to avoid an explicit
->     cast to int.
+> For this reason, make the governor use the new .manage() callback
+> instead of .throttle() which allows it to call get_trip_level() just
+> once and use the value computed by it to handle all of the trips.
 > 
 > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
->   drivers/thermal/gov_step_wise.c |   13 +++++++------
->   1 file changed, 7 insertions(+), 6 deletions(-)
+>   drivers/thermal/gov_fair_share.c |   37 ++++++++++++++++++++++++++-----------
+>   1 file changed, 26 insertions(+), 11 deletions(-)
 > 
-> Index: linux-pm/drivers/thermal/gov_step_wise.c
+> Index: linux-pm/drivers/thermal/gov_fair_share.c
 > ===================================================================
-> --- linux-pm.orig/drivers/thermal/gov_step_wise.c
-> +++ linux-pm/drivers/thermal/gov_step_wise.c
-> @@ -65,13 +65,10 @@ static void thermal_zone_trip_update(str
->   				     const struct thermal_trip *trip,
->   				     int trip_threshold)
+> --- linux-pm.orig/drivers/thermal/gov_fair_share.c
+> +++ linux-pm/drivers/thermal/gov_fair_share.c
+> @@ -53,6 +53,7 @@ static long get_target_state(struct ther
+>    * fair_share_throttle - throttles devices associated with the given zone
+>    * @tz: thermal_zone_device
+>    * @trip: trip point
+> + * @trip_level: number of trips crossed by the zone temperature
+>    *
+>    * Throttling Logic: This uses three parameters to calculate the new
+>    * throttle state of the cooling devices associated with the given zone.
+> @@ -61,22 +62,19 @@ static long get_target_state(struct ther
+>    * P1. max_state: Maximum throttle state exposed by the cooling device.
+>    * P2. percentage[i]/100:
+>    *	How 'effective' the 'i'th device is, in cooling the given zone.
+> - * P3. cur_trip_level/max_no_of_trips:
+> + * P3. trip_level/max_no_of_trips:
+>    *	This describes the extent to which the devices should be throttled.
+>    *	We do not want to throttle too much when we trip a lower temperature,
+>    *	whereas the throttling is at full swing if we trip critical levels.
+> - *	(Heavily assumes the trip points are in ascending order)
+>    * new_state of cooling device = P3 * P2 * P1
+>    */
+> -static int fair_share_throttle(struct thermal_zone_device *tz,
+> -			       const struct thermal_trip *trip)
+> +static void fair_share_throttle(struct thermal_zone_device *tz,
+> +				const struct thermal_trip *trip,
+> +				int trip_level)
 >   {
-> +	enum thermal_trend trend = get_tz_trend(tz, trip);
->   	int trip_id = thermal_zone_trip_id(tz, trip);
-> -	enum thermal_trend trend;
 >   	struct thermal_instance *instance;
->   	bool throttle = false;
-> -	int old_target;
+>   	int total_weight = 0;
+>   	int total_instance = 0;
+> -	int cur_trip_level = get_trip_level(tz);
 > -
-> -	trend = get_tz_trend(tz, trip);
->   
->   	if (tz->temperature >= trip_threshold) {
->   		throttle = true;
-> @@ -82,13 +79,16 @@ static void thermal_zone_trip_update(str
->   		trip_id, trip->type, trip_threshold, trend, throttle);
+> -	lockdep_assert_held(&tz->lock);
 >   
 >   	list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
-> +		int old_target;
-> +
 >   		if (instance->trip != trip)
->   			continue;
+> @@ -99,18 +97,35 @@ static int fair_share_throttle(struct th
+>   			percentage = (instance->weight * 100) / total_weight;
 >   
->   		old_target = instance->target;
->   		instance->target = get_target_state(instance, trend, throttle);
-> -		dev_dbg(&instance->cdev->device, "old_target=%d, target=%d\n",
-> -					old_target, (int)instance->target);
+>   		instance->target = get_target_state(tz, cdev, percentage,
+> -						    cur_trip_level);
+> +						    trip_level);
+>   
+>   		mutex_lock(&cdev->lock);
+>   		__thermal_cdev_update(cdev);
+>   		mutex_unlock(&cdev->lock);
+>   	}
+> +}
+>   
+> -	return 0;
+> +static void fair_share_manage(struct thermal_zone_device *tz)
+> +{
+> +	int trip_level = get_trip_level(tz);
+> +	const struct thermal_trip_desc *td;
 > +
-> +		dev_dbg(&instance->cdev->device, "old_target=%d, target=%ld\n",
-> +			old_target, instance->target);
->   
->   		if (instance->initialized && old_target == instance->target)
->   			continue;
-> @@ -104,6 +104,7 @@ static void thermal_zone_trip_update(str
->   		}
->   
->   		instance->initialized = true;
+> +	lockdep_assert_held(&tz->lock);
 > +
->   		mutex_lock(&instance->cdev->lock);
->   		instance->cdev->updated = false; /* cdev needs update */
->   		mutex_unlock(&instance->cdev->lock);
+> +	for_each_trip_desc(tz, td) {
+> +		const struct thermal_trip *trip = &td->trip;
+> +
+> +		if (trip->temperature == THERMAL_TEMP_INVALID ||
+> +		    trip->type == THERMAL_TRIP_CRITICAL ||
+> +		    trip->type == THERMAL_TRIP_HOT)
+> +			continue;
+> +
+> +		fair_share_throttle(tz, trip, trip_level);
+> +	}
+>   }
+>   
+>   static struct thermal_governor thermal_gov_fair_share = {
+> -	.name		= "fair_share",
+> -	.throttle	= fair_share_throttle,
+> +	.name	= "fair_share",
+> +	.manage	= fair_share_manage,
+>   };
+>   THERMAL_GOVERNOR_DECLARE(thermal_gov_fair_share);
 > 
 > 
 > 
 
-LGTM w/ spelling fixed.
+LGTM
 
 Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
