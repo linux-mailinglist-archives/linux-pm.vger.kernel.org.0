@@ -1,40 +1,40 @@
-Return-Path: <linux-pm+bounces-6734-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6735-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D33848AB541
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 20:52:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 042B38AB56E
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 21:11:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C36B1C21BF7
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 18:52:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B0A7284236
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 19:11:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 560D812E1ED;
-	Fri, 19 Apr 2024 18:52:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 636DB13C3F2;
+	Fri, 19 Apr 2024 19:11:48 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6F7E12D748;
-	Fri, 19 Apr 2024 18:52:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C3AA13B284;
+	Fri, 19 Apr 2024 19:11:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713552734; cv=none; b=kxWtbGDklNmt6pjv6HDMv4z5eAOiL38nzoZy+pznTMVtW0RgG98QI4PpAq+cUEHp52NuOyYmb6Iy17/BuPAC7Z71IBPQhAul7+k4IPnS8dvyCJ1GAkSp6F7eLW6n6my5pFZIplJ3HySvrPs/Smw4ao7yTkIgVmXzUMUvywI7RPQ=
+	t=1713553908; cv=none; b=FghEoVn6mOs7wOAkA5uHwKV3XnaFykbwApJs61WJSArVtqEOfCnPABOpgUbzAoXMzgdbEJ+f5UCnx+eCNnPOqoV++ZuUfO5fovyZbArhqurLMuvgiCQnByrXE8pp+cH+R1NO1jDSRo91U1DvaXYT0Lt6FaEyJsLRbZCTvQNdUC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713552734; c=relaxed/simple;
-	bh=LvzbHY6wjPzDhWTFvAMUoScyMQIzNkpOgmAl4nAWw1c=;
+	s=arc-20240116; t=1713553908; c=relaxed/simple;
+	bh=kqMCpndmWFZjXsjIShMKBOUoUhJZZSYr8ABoLqLSEH8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mDDrBsAgNnY7WfgQ9cej0nEocuYeG/a2dZQVkSuQstHhlVuIRp/TfDiBoxjtrD1KRyAMKYbkPoIUqBvkKnpb9POiRzFhfMqpZu3JQNPkR53zD625PxM+9HoDZBLBA08yhge9JIoZpmZ1fPBcUuHKZb60v3f3PeUCu4A+mtQyoZU=
+	 In-Reply-To:Content-Type; b=TK/RV4nrtpZAWITITJUGIEytbqcDlyNPMsLnrvrYEKb99v+VH9GqOi+Jn2PFMoyT6kQi2WYiBm8iZs6SfC1VIyzcwg3vnPsp8o6r1XL8n5efTbBmmIE34Cdp8AjWpVYcUXypFNKEAxxSnrZiOw3X9uZeMqmIOCQ2WOlYs27DdaQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6B8C8339;
-	Fri, 19 Apr 2024 11:52:40 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0A0F62F;
+	Fri, 19 Apr 2024 12:12:14 -0700 (PDT)
 Received: from [10.57.77.69] (unknown [10.57.77.69])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2A4E23F64C;
-	Fri, 19 Apr 2024 11:52:11 -0700 (PDT)
-Message-ID: <c8d48dab-a04e-4699-b361-a7a4cd35f863@arm.com>
-Date: Fri, 19 Apr 2024 19:52:17 +0100
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BC5893F64C;
+	Fri, 19 Apr 2024 12:11:44 -0700 (PDT)
+Message-ID: <111aa494-124c-4236-a5f2-29cb1cb0fb56@arm.com>
+Date: Fri, 19 Apr 2024 20:11:51 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,70 +42,90 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 16/16] thermal: core: Relocate critical and hot trip
- handling
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
+Subject: Re: [PATCH v1 09/16] thermal: gov_step_wise: Use trip thresholds
+ instead of trip temperatures
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
  Daniel Lezcano <daniel.lezcano@linaro.org>,
  Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-References: <13515747.uLZWGnKmhe@kreacher> <9337957.rMLUfLXkoz@kreacher>
+References: <13515747.uLZWGnKmhe@kreacher> <3769085.MHq7AAxBmi@kreacher>
 Content-Language: en-US
 From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <9337957.rMLUfLXkoz@kreacher>
+In-Reply-To: <3769085.MHq7AAxBmi@kreacher>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 4/10/24 18:44, Rafael J. Wysocki wrote:
+On 4/10/24 17:43, Rafael J. Wysocki wrote:
 > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Subject: [PATCH v1]
 > 
-> Modify handle_thermal_trip() to call handle_critical_trips() only after
-> finding that the trip temperature has been crossed on the way up and
-> remove the redundant temperature check from the latter.
+> In principle, the Step-Wise governor should take trip hystereses into
+
+s/hystereses/hysteresis/
+
+> account.  After all, once a trip has been crossed on the way up,
+> mitigation is still needed until it is crossed on the way down.
 > 
-> No intentional functional impact.
+> For this reason, make it use trip thresholds that are computed by
+> the core when trips are crossed, so as to apply mitigations in the
+> hysteresis rages of trips that were crossed on the way up, but have
+> not been crossed on the way down yet.
 > 
 > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
->   drivers/thermal/thermal_core.c |   11 ++++-------
->   1 file changed, 4 insertions(+), 7 deletions(-)
+>   drivers/thermal/gov_step_wise.c |    9 +++++----
+>   1 file changed, 5 insertions(+), 4 deletions(-)
 > 
-> Index: linux-pm/drivers/thermal/thermal_core.c
+> Index: linux-pm/drivers/thermal/gov_step_wise.c
 > ===================================================================
-> --- linux-pm.orig/drivers/thermal/thermal_core.c
-> +++ linux-pm/drivers/thermal/thermal_core.c
-> @@ -350,10 +350,6 @@ void thermal_zone_device_critical_reboot
->   static void handle_critical_trips(struct thermal_zone_device *tz,
->   				  const struct thermal_trip *trip)
->   {
-> -	/* If we have not crossed the trip_temp, we do not care. */
-> -	if (trip->temperature <= 0 || tz->temperature < trip->temperature)
-> -		return;
-> -
->   	trace_thermal_zone_trip(tz, thermal_zone_trip_id(tz, trip), trip->type);
->   
->   	if (trip->type == THERMAL_TRIP_CRITICAL)
-> @@ -405,10 +401,11 @@ static void handle_thermal_trip(struct t
->   		list_add_tail(&td->notify_list_node, way_up_list);
->   		td->notify_temp = trip->temperature;
->   		td->threshold -= trip->hysteresis;
-> -	}
->   
-> -	if (trip->type == THERMAL_TRIP_CRITICAL || trip->type == THERMAL_TRIP_HOT)
-> -		handle_critical_trips(tz, trip);
-> +		if (trip->type == THERMAL_TRIP_CRITICAL ||
-> +		    trip->type == THERMAL_TRIP_HOT)
-> +			handle_critical_trips(tz, trip);
-> +	}
+> --- linux-pm.orig/drivers/thermal/gov_step_wise.c
+> +++ linux-pm/drivers/thermal/gov_step_wise.c
+> @@ -62,7 +62,8 @@ static unsigned long get_target_state(st
 >   }
 >   
->   static void update_temperature(struct thermal_zone_device *tz)
+>   static void thermal_zone_trip_update(struct thermal_zone_device *tz,
+> -				     const struct thermal_trip *trip)
+> +				     const struct thermal_trip *trip,
+> +				     int trip_threshold)
+>   {
+>   	int trip_id = thermal_zone_trip_id(tz, trip);
+>   	enum thermal_trend trend;
+> @@ -72,13 +73,13 @@ static void thermal_zone_trip_update(str
+>   
+>   	trend = get_tz_trend(tz, trip);
+>   
+> -	if (tz->temperature >= trip->temperature) {
+> +	if (tz->temperature >= trip_threshold) {
+
+So this value in 'trip_threshold' might be lower than older
+'trip->temperature', but not necessarily. Anyway, all good here.
+
+>   		throttle = true;
+>   		trace_thermal_zone_trip(tz, trip_id, trip->type);
+>   	}
+>   
+>   	dev_dbg(&tz->device, "Trip%d[type=%d,temp=%d]:trend=%d,throttle=%d\n",
+> -		trip_id, trip->type, trip->temperature, trend, throttle);
+> +		trip_id, trip->type, trip_threshold, trend, throttle);
+>   
+>   	list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
+>   		if (instance->trip != trip)
+> @@ -131,7 +132,7 @@ static void step_wise_manage(struct ther
+>   		    trip->type == THERMAL_TRIP_HOT)
+>   			continue;
+>   
+> -		thermal_zone_trip_update(tz, trip);
+> +		thermal_zone_trip_update(tz, trip, td->threshold);
+>   	}
+>   
+>   	list_for_each_entry(instance, &tz->thermal_instances, tz_node)
 > 
 > 
 > 
+
+
+LGTM w/ spelling fixed.
 
 Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
