@@ -1,161 +1,145 @@
-Return-Path: <linux-pm+bounces-6704-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6705-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A5F88AAAD3
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 10:47:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CAD18AAAF1
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 10:53:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D3A81F21FB8
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 08:47:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 28D2E2846DF
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 08:53:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BDDA6CDA6;
-	Fri, 19 Apr 2024 08:47:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E7D96FE14;
+	Fri, 19 Apr 2024 08:53:54 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBD8A38D;
-	Fri, 19 Apr 2024 08:47:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C00AFF9CD;
+	Fri, 19 Apr 2024 08:53:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713516469; cv=none; b=heAOYsuvwSwxssuA2fAVEop/fzwGs1lQs08s3lclx2eL3ZS8r4ShLI/o1NWcvo2rLQdYB5epSm+lsfvu1/cLzwQD8bv9y48HqmkPwRFOcDhHCfmEQ4WKkVeJCfb0lecV9BJPC4sGMWaJhDixD9Rt8gbWj/XF8BbPxAKSk1wdsO0=
+	t=1713516834; cv=none; b=oQfzDhx1zdC34i6Q73AbvMaiU0J0E+n82hAI9/DRWe8/zqwiDkfQpVKAyOqoTB5jU2K8Fr5s5tk/OkOr6DXpF6zhvvakWF24kYARs+4PAiQ+bKgprgdWLZ43lHSPmzjRG6h86bg0FXoCaSoMZSlJIjd9Ks1bKBBRfBDUXx5T2X8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713516469; c=relaxed/simple;
-	bh=ejQFfEFhwy1828jrRZzifZwAL99YIhldwvw8ing12js=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SQY8PfiE/49yS20ZBmStvbTwR9YAvQU68aiWqkow6TXM8z3zj0dBobt2yzKgsXYlRIc3p7thoUxONH72v7kkrpJ2xRT+gXB0RyAZlCvAtb7kUN7ajTk5fA70FM6EayZLhIrkKYoOKp+xl/9QRT8r5xllurXYXSnp713/Mnx5WVQ=
+	s=arc-20240116; t=1713516834; c=relaxed/simple;
+	bh=mZaqwvICdeQc4Uk1/mG9rpCXgLLl45RMWhDGIpJ27DU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YRIkL5xv59i2SOpty6Qle+dx6GdAnJAZ93rIE9oY3EZlbWn3GQGpF3vUXq/DSy+1AejJgILOg3+obowcyfomY6ChsICpwV90uRIbCvqI/u8uXtth6LWGMZz/z1Us6XhSxXPPivzi36T2wnKh0AcaPxMJ8T09arF0+9GIeO7J7zM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EE6122F;
-	Fri, 19 Apr 2024 01:48:13 -0700 (PDT)
-Received: from [10.57.77.69] (unknown [10.57.77.69])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C20B33F792;
-	Fri, 19 Apr 2024 01:47:44 -0700 (PDT)
-Message-ID: <22041543-cc7c-432d-9f3b-91456b6dc6b2@arm.com>
-Date: Fri, 19 Apr 2024 09:47:52 +0100
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 198A42F;
+	Fri, 19 Apr 2024 01:54:19 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D14E23F792;
+	Fri, 19 Apr 2024 01:53:47 -0700 (PDT)
+Date: Fri, 19 Apr 2024 09:53:45 +0100
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Elliot Berman <quic_eberman@quicinc.com>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Andy Yan <andy.yan@rock-chips.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+	Melody Olvera <quic_molvera@quicinc.com>,
+	Shivendra Pratap <quic_spratap@quicinc.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] Implement vendor resets for PSCI SYSTEM_RESET2
+Message-ID: <20240419085345.4ovebbbmcabo3f73@bogus>
+References: <20240414-arm-psci-system_reset2-vendor-reboots-v2-0-da9a055a648f@quicinc.com>
+ <Zh5GWqt2oCNHdF_h@bogus>
+ <20240417140957985-0700.eberman@hu-eberman-lv.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 01/16] thermal: core: Introduce .trip_crossed()
- callback for thermal governors
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-References: <13515747.uLZWGnKmhe@kreacher> <2009494.usQuhbGJ8B@kreacher>
-Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <2009494.usQuhbGJ8B@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240417140957985-0700.eberman@hu-eberman-lv.qualcomm.com>
 
+On Wed, Apr 17, 2024 at 02:54:41PM -0700, Elliot Berman wrote:
+> On Tue, Apr 16, 2024 at 10:35:22AM +0100, Sudeep Holla wrote:
+> > On Sun, Apr 14, 2024 at 12:30:23PM -0700, Elliot Berman wrote:
+> > > The PSCI SYSTEM_RESET2 call allows vendor firmware to define additional
+> > > reset types which could be mapped to the reboot argument.
+> > >
+> > > Setting up reboot on Qualcomm devices can be inconsistent from chipset
+> > > to chipset.
+> >
+> > That doesn't sound good. Do you mean PSCI SYSTEM_RESET doesn't work as
+> > expected ? Does it mean it is not conformant to the specification ?
+> >
+>
+> I was motivating the reason for using SYSTEM_RESET2. How to set the PMIC
+> register and IMEM cookie can change between chipsets. Using
+> SYSTEM_RESET2 alows us to abstract how to perform the reset.
 
+Fair enough. But I assume you are not providing the details of PMIC register
+or IMEM cookie via DT.
 
-On 4/10/24 17:10, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Introduce a new thermal governor callback called .trip_crossed()
-> that will be invoked whenever a trip point is crossed by the zone
-> temperature, either on the way up or on the way down.
-> 
-> The trip crossing direction information will be passed to it and if
-> multiple trips are crossed in the same direction during one thermal zone
-> update, the new callback will be invoked for them in temperature order,
-> either ascending or descending, depending on the trip crossing
-> direction.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->   drivers/thermal/thermal_core.c |   19 +++++++++++++++++--
->   drivers/thermal/thermal_core.h |    4 ++++
->   2 files changed, 21 insertions(+), 2 deletions(-)
-> 
-> Index: linux-pm/drivers/thermal/thermal_core.c
-> ===================================================================
-> --- linux-pm.orig/drivers/thermal/thermal_core.c
-> +++ linux-pm/drivers/thermal/thermal_core.c
-> @@ -302,11 +302,21 @@ static void monitor_thermal_zone(struct
->   		thermal_zone_device_set_polling(tz, tz->polling_delay_jiffies);
->   }
->   
-> +static struct thermal_governor *thermal_get_tz_governor(struct thermal_zone_device *tz)
-> +{
-> +	if (tz->governor)
-> +		return tz->governor;
-> +
-> +	return def_governor;
-> +}
-> +
->   static void handle_non_critical_trips(struct thermal_zone_device *tz,
->   				      const struct thermal_trip *trip)
->   {
-> -	tz->governor ? tz->governor->throttle(tz, trip) :
-> -		       def_governor->throttle(tz, trip);
-> +	struct thermal_governor *governor = thermal_get_tz_governor(tz);
-> +
-> +	if (governor->throttle)
-> +		governor->throttle(tz, trip);
->   }
->   
->   void thermal_governor_update_tz(struct thermal_zone_device *tz,
-> @@ -470,6 +480,7 @@ static int thermal_trip_notify_cmp(void
->   void __thermal_zone_device_update(struct thermal_zone_device *tz,
->   				  enum thermal_notify_event event)
->   {
-> +	struct thermal_governor *governor = thermal_get_tz_governor(tz);
->   	struct thermal_trip_desc *td;
->   	LIST_HEAD(way_down_list);
->   	LIST_HEAD(way_up_list);
-> @@ -493,12 +504,16 @@ void __thermal_zone_device_update(struct
->   	list_for_each_entry(td, &way_up_list, notify_list_node) {
->   		thermal_notify_tz_trip_up(tz, &td->trip);
->   		thermal_debug_tz_trip_up(tz, &td->trip);
-> +		if (governor->trip_crossed)
-> +			governor->trip_crossed(tz, &td->trip, true);
->   	}
->   
->   	list_sort(NULL, &way_down_list, thermal_trip_notify_cmp);
->   	list_for_each_entry(td, &way_down_list, notify_list_node) {
->   		thermal_notify_tz_trip_down(tz, &td->trip);
->   		thermal_debug_tz_trip_down(tz, &td->trip);
-> +		if (governor->trip_crossed)
-> +			governor->trip_crossed(tz, &td->trip, false);
->   	}
->   
->   	monitor_thermal_zone(tz);
-> Index: linux-pm/drivers/thermal/thermal_core.h
-> ===================================================================
-> --- linux-pm.orig/drivers/thermal/thermal_core.h
-> +++ linux-pm/drivers/thermal/thermal_core.h
-> @@ -30,6 +30,7 @@ struct thermal_trip_desc {
->    *		otherwise it fails.
->    * @unbind_from_tz:	callback called when a governor is unbound from a
->    *			thermal zone.
-> + * @trip_crossed:	called for trip points that have just been crossed
->    * @throttle:	callback called for every trip point even if temperature is
->    *		below the trip point temperature
->    * @update_tz:	callback called when thermal zone internals have changed, e.g.
-> @@ -40,6 +41,9 @@ struct thermal_governor {
->   	const char *name;
->   	int (*bind_to_tz)(struct thermal_zone_device *tz);
->   	void (*unbind_from_tz)(struct thermal_zone_device *tz);
-> +	void (*trip_crossed)(struct thermal_zone_device *tz,
-> +			     const struct thermal_trip *trip,
-> +			     bool crossed_up);
->   	int (*throttle)(struct thermal_zone_device *tz,
->   			const struct thermal_trip *trip);
->   	void (*update_tz)(struct thermal_zone_device *tz,
-> 
-> 
-> 
+Anyways you did confirm if PSCI SYSTEM_RESET works as expected or not. That
+is default and must work.
 
-LGTM
+> > > Generally, there is a PMIC register that gets written to
+> > > decide the reboot type. There is also sometimes a cookie that can be
+> > > written to indicate that the bootloader should behave differently than a
+> > > regular boot. These knobs evolve over product generations and require
+> > > more drivers. Qualcomm firmwares are beginning to expose vendor
+> > > SYSTEM_RESET2 types to simplify driver requirements from Linux.
+> > >
+> >
+> > Why can't this be fully userspace driven ? What is the need to keep the
+> > cookie in the DT ?
+>
+> As Dmitry pointed out, this information isn't discoverable. I suppose
+> we could technically use bootconfig or kernel command-line to convey the
+> map although I think devicetree is the right spot for this mapping.
+>
 
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+Yes and as usual DT has become dumping ground for firmware that don't
+make things discoverable. Make crap that Qcom puts in the DT are firmware
+related and can be make discoverable. Anyways it is sad that no efforts
+to make it so are done as DT is always there to provide shortcuts.
+
+> - Other vendor-specific bits for PSCI are described in the devicetree.
+>   One example is the suspend param (e.g. the StateID) for cpu idle
+>   states.
+
+You are right, but that is the only example I can see and it was done
+in very early days of PSCI. It shouldn't be example if there are better
+ways.
+
+> - Describing firmware bits in the DT isn't unprecedented, and putting
+>   this information outside the DT means that other OSes (besides Linux)
+>   need their own way to convey this information.
+
+Correct but it can be Qcom specific firmware interface. There are so many
+already. This splitting information between firmware and DT works well
+for vertically integrated things which probably is the case with most of
+Qcom SoCs but it is prone to issues if DT and firmware mismatch. Firmware
+discovery eliminates such issues.
+
+> - PSCI would be the odd one out that reboot mode map is not described in
+>   DT. Other reboot-mode drivers specify the mapping in the DT. Userspace
+>   that runs with firmware that support vendor reset2 need to make sure
+>   they can configure the mapping early enough.
+>
+
+Well I am not saying not to this yet, just exploring and getting more info
+so that whatever is done here can be reused on all PSCI based systems.
+
+--
+Regards,
+Sudeep
 
