@@ -1,100 +1,122 @@
-Return-Path: <linux-pm+bounces-6716-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6717-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B98E98AAE7A
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 14:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 40F358AAEB3
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 14:39:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA3591C216CF
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 12:31:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 69CDB1C21720
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 12:39:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04BA31E867;
-	Fri, 19 Apr 2024 12:31:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A63585C74;
+	Fri, 19 Apr 2024 12:38:56 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B212B20300
-	for <linux-pm@vger.kernel.org>; Fri, 19 Apr 2024 12:31:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B03185943;
+	Fri, 19 Apr 2024 12:38:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713529875; cv=none; b=BDk0O5XF8irBXwT0wIu8Qe/yi1n91k2Q6p7USfAlSyOm2pODmPfAU1MzlRxK45CuElsT3T5L2d+nK8ADhrkEOCcObxiYbhg71PLSIqv2Vyc1L4RomBXxCEtWAFsbC61inzgtqFNRL8oLz1QyuEywaJqP+3lEb3OUyTDeDAlrb00=
+	t=1713530336; cv=none; b=l0ogdbnm+50WAWGtHVvp+d6IEbClSfN5JUUZOQrqf4Bhj9Iubgxu7rCuYdClIu4+DLUWWMdl/wT3WpHCSXuIqB6o2zuimru9z2MBVxrZ9z4nxY4+pMixnNzPSxD+AHv372wdl8r2M/uKSd+PZZn4ntDhzt8HK5PEkSv+J+ODEL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713529875; c=relaxed/simple;
-	bh=O/SrvwnPSNSDMP5T2MMmgW12mV+NccNc4AqI53/GDfE=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=fUdJt5pUdRlamaPiHC797GRkB30NNPx5EdPUHJeT4jjtDvs9JecFLkWW0ACda2ZU/FBbrDyw1TE4lKXQBwYyrUre+lEe6AEQlvNM7t4Ue+Nu2nKtaXd4lEy1JxhjZhYjCCOuwLXFfCc8SQ3IOCUQ/20/9ELaqebE8dNzwLA3KR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [141.14.220.34] (g34.guest.molgen.mpg.de [141.14.220.34])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id D5B3961E5FE05;
-	Fri, 19 Apr 2024 14:30:56 +0200 (CEST)
-Message-ID: <d0e7eaad-d549-423c-a138-84c2abc817a7@molgen.mpg.de>
-Date: Fri, 19 Apr 2024 14:30:56 +0200
+	s=arc-20240116; t=1713530336; c=relaxed/simple;
+	bh=6c4g+/06gQCstLfzuVhVmJ7KExrdz67CYKZTprqbHuk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hod9qIm+tAbT2RLRNLbHs+Af+HmDtj/mnhnso/kJYhdkSV7qNe04COHi92yMPApsg9ZiCQuTfunRJRy8l0efBbTIrssNNB0inCv/dit8346iymXkk9H8Z+cDtACdfzRTKYZD4qBA02P//PzAJ+cQK+eBLNIe0vijlXCxJyF0GsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 69E772F;
+	Fri, 19 Apr 2024 05:39:21 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1A9ED3F64C;
+	Fri, 19 Apr 2024 05:38:49 -0700 (PDT)
+Date: Fri, 19 Apr 2024 13:38:47 +0100
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: Elliot Berman <quic_eberman@quicinc.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Andy Yan <andy.yan@rock-chips.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+	Melody Olvera <quic_molvera@quicinc.com>,
+	Shivendra Pratap <quic_spratap@quicinc.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] Implement vendor resets for PSCI SYSTEM_RESET2
+Message-ID: <20240419123847.ica22nft3sejqnm7@bogus>
+References: <20240414-arm-psci-system_reset2-vendor-reboots-v2-0-da9a055a648f@quicinc.com>
+ <Zh5GWqt2oCNHdF_h@bogus>
+ <48f366f5-4a17-474c-a8e3-6d79c9092d62@broadcom.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Huang Rui <ray.huang@amd.com>
-Cc: linux-pm@vger.kernel.org
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: Warning `amd_pstate: the _CPC object is not present in SBIOS or ACPI
- disabled`
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <48f366f5-4a17-474c-a8e3-6d79c9092d62@broadcom.com>
 
-Dear Linux folks,
+On Wed, Apr 17, 2024 at 10:50:07AM -0700, Florian Fainelli wrote:
+> On 4/16/24 02:35, Sudeep Holla wrote:
+> > On Sun, Apr 14, 2024 at 12:30:23PM -0700, Elliot Berman wrote:
+> > > The PSCI SYSTEM_RESET2 call allows vendor firmware to define additional
+> > > reset types which could be mapped to the reboot argument.
+> > >
+> > > Setting up reboot on Qualcomm devices can be inconsistent from chipset
+> > > to chipset.
+> >
+> > That doesn't sound good. Do you mean PSCI SYSTEM_RESET doesn't work as
+> > expected ? Does it mean it is not conformant to the specification ?
+> >
+> > > Generally, there is a PMIC register that gets written to
+> > > decide the reboot type. There is also sometimes a cookie that can be
+> > > written to indicate that the bootloader should behave differently than a
+> > > regular boot. These knobs evolve over product generations and require
+> > > more drivers. Qualcomm firmwares are beginning to expose vendor
+> > > SYSTEM_RESET2 types to simplify driver requirements from Linux.
+> > >
+> >
+> > Why can't this be fully userspace driven ? What is the need to keep the
+> > cookie in the DT ?
+> >
+> >
+>
+> Using the second example in the Device Tree:
+>
+> mode-bootloader = <1 2>;
+>
+> are you suggesting that within psci_vendor_sys_reset2() we would look at the
+> data argument and assume that we have something like this in memory:
+>
+> const char *cmd = data;
+>
+> cmd[] = "bootloader 2"
+>
+> where "bootloader" is the reboot command, and "2" is the cookie? From an
+> util-linux, busybox, toybox, etc. we would have to concatenate those
+> arguments with a space, but I suppose that would be doable.
+>
 
+Yes that was my thought when I wrote the email. But since I have looked at
+existing bindings and support in the kernel in little more detail I would say.
+So I am not sure what would be the better choice for PSCI SYSTEM_RESET2
+especially when there is some ground support to build.
 
-On a Dell OptiPlex 5055 with AMD Ryzen 5 PRO 1500 Quad-Core Processor
+So I am open for alternatives including this approach.
 
-     $ dmesg | grep -e "DMI:" -e "Linux version" -e microcode
-     [    0.000000] Linux version 6.9.0-rc4.mx64.461-00045-g6c95a9f46024 
-(x@holidayincambodia.molgen.mpg.de) (gcc (GCC) 12.3.0, GNU ld (GNU 
-Binutils) 2.41) #17 SMP PREEMPT_DYNAMIC Thu Apr 18 12:10:17 CEST 2024
-     [    0.000000] DMI: Dell Inc. OptiPlex 5055 Ryzen CPU/0P03DX, BIOS 
-1.12.0 03/03/2024
-     [    3.562349] microcode: Current revision: 0x08001137
-
-even with the latest system firmware 1.12.0 [1], Linux warns:
-
-     $ dmesg --level alert,crit,err,warn
-     [    3.506197] amd_pstate: the _CPC object is not present in SBIOS 
-or ACPI disabled
-     [    5.152840] xfs filesystem being remounted at / supports 
-timestamps until 2038-01-19 (0x7fffffff)
-     [    5.340653] wmi_bus wmi_bus-PNP0C14:00: [Firmware Bug]: WQBC 
-data block query control method not found
-     [    7.891459] kfd kfd: amdgpu: VERDE  not supported in kfd
-     [   12.032894] xfs filesystem being mounted at /amd/hypnotoad/0 
-supports timestamps until 2038-01-19 (0x7fffffff)
-     [   13.283545] NFSD: Unable to initialize client recovery tracking! 
-(-110)
-
-What can I do about the warning?
-
-
-Kind regards,
-
-Paul
-
-
-[1]: 
-https://dl.dell.com/FOLDER11328712M/1/OptiPlex_5055_Ryzen_CPU_1.12.0.exe
-
-download with
-
-     wget --user-agent="Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:52.0) 
-Gecko/20100101 Firefox/52.0" 
-https://dl.dell.com/FOLDER11328712M/1/OptiPlex_5055_Ryzen_CPU_1.12.0.exe
+--
+Regards,
+Sudeep
 
