@@ -1,115 +1,115 @@
-Return-Path: <linux-pm+bounces-6701-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6702-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DD448AA8EE
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 09:15:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A27A38AA920
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 09:26:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF9181C2147B
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 07:14:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D81B281F91
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 07:26:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 045033E485;
-	Fri, 19 Apr 2024 07:14:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E1F72E405;
+	Fri, 19 Apr 2024 07:26:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VpaXPN+j"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="4zM+gxI1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A43E4381D5
-	for <linux-pm@vger.kernel.org>; Fri, 19 Apr 2024 07:14:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C46592E3F2;
+	Fri, 19 Apr 2024 07:26:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713510895; cv=none; b=oozd1oSPwlnSfrFNw/sOpxKbsQfB3IOKHeMom8zTmhOvNZiBMwYHip32EH/N9UrpYBTutKVdB01b6AHNctoyskOFF0NLrBrMJN7bPCW3504iC0WiO2xvG3RLnsK1VYzfUUVvsENf/Ae0a7i/K8Br+Qa5wh8v/Jn+4fwhqHRsQcc=
+	t=1713511606; cv=none; b=p+j/oGM3OrrYYFvMEjz93pmDLPN8BBi4j8A4ZLnGiAxSAwYB/3t3FjVzkQGG729GwHv7so7kfXp0ZYg53S7dVgNY3mlekSdX8ZuDnqxgW6Pkw7efxD9gb3cjnWV/oy/jnFBfXq3QxoTLNAyBKz0Xqo16NmXaD4/h6KQPtcFeiqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713510895; c=relaxed/simple;
-	bh=EZwRuBKu4HxxbNeubieqwDvAk4cYLZBGNhSv/CphZBU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TdBJvNBT/mj4NAAoHXYgZJM69UUS3Pz44RTwcVjqVNXBcVcYeUIEQTEBJYIL2xWzXKjxgL1gpLMmF8+eT44TsUycZErawxIwJnOPFQGlOAMfSd4K6VP8tP7ptXzN3useXg9e1Z86nXJlhQrRA0+YdycrHG9X13m472FPyOiwF+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VpaXPN+j; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6ed054f282aso1451313b3a.0
-        for <linux-pm@vger.kernel.org>; Fri, 19 Apr 2024 00:14:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713510894; x=1714115694; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vhc6CEa4yodPk95tSkHjVnxQry4y1AM9/vzU+jumnV8=;
-        b=VpaXPN+jkFd3+93gV/P0bcxpq9hY1VMEJhmHXAvNKmEL1FbhxEK6U3oU5PyANUH4We
-         CVQa0Vb7T9OP6+pZ3mVFdTj44QUwb0Va8VhbGwxZgjUBsVVdYpvczXYRSmfklaMmZ8ro
-         xjTn/T85uIhAFH14i4pJgRYChUClPLduNe4Tt1xhGm1VwSCozjcJGPaZCXOuOSjXv4Ut
-         6ZyoBxlZwdA0ywRxz3EoDtsqQaGev6v+vXvziSAJ6WFWNYMMZK6nidYlQzLK3sM9AGpt
-         V6s99msQzNPVRToxgyZ06d0lXRSeywDk5efMVp584DXn68pFsiNhM9BxQDdNm4XUS99T
-         763Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713510894; x=1714115694;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Vhc6CEa4yodPk95tSkHjVnxQry4y1AM9/vzU+jumnV8=;
-        b=ACXPZU0dZBXbg65wDkM11yuSMCEvFZR4seuhpS93V8yMma6QNCJ8Ns3e5QwJlGKxtU
-         +OqaOa2nUq7bh+LU3XYHPS7N2qpkKJawWE1a548MAmaXBOk29DcA4GBOOM7MWuIrm017
-         SsE5dI0cqs+Omi8nwc7RQRpLAhgXbSN6wE90rRv8QQbVmkskmB+TsiJ5HGVuXC2i2Ib2
-         K4f8l+sVtoBNcUBHrcW3+AYQxnGB+M8rOhjdDQLChPzvMw23pYNJLB1EY2FOroG/WMg4
-         y2CefB5jdNIvIfaFOdJpd6QtJuaA5chcNSu++xJe4TYxyQkhVnQMvBV1UYkirKSbdUKs
-         /bIA==
-X-Forwarded-Encrypted: i=1; AJvYcCUCy2uyqveKaSZ/dKpp9CqP4cos/RCBZpJaaHU5/CnABOZ2aIqkHER/uk8WyH6DOfPZy6oGSRg0zJLACp4sQEEL7C8PAaGbSgI=
-X-Gm-Message-State: AOJu0YxJ0RB01Tr85rS7b1e7XaAjurEeXVaT0/SKp45cmgra0KsI9pbx
-	ZyHNYvmRsME6IqB2hKN7lEGcmJ3YI8/zd4Rn/1K4glxw0fBjeOL/RUBszFXeh7c=
-X-Google-Smtp-Source: AGHT+IHGlJ8scQEEw8KQoTd3yaIXAQBiHEVN0IdsvDfwSNRbMjqmNmjhmzpulIebiPmnvU8XHjhvQw==
-X-Received: by 2002:a05:6a21:996:b0:1a1:878d:d3f6 with SMTP id li22-20020a056a21099600b001a1878dd3f6mr1196467pzb.26.1713510893725;
-        Fri, 19 Apr 2024 00:14:53 -0700 (PDT)
-Received: from localhost ([122.172.87.52])
-        by smtp.gmail.com with ESMTPSA id g11-20020aa7818b000000b006ecfd0bf326sm1051144pfi.99.2024.04.19.00.14.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Apr 2024 00:14:53 -0700 (PDT)
-Date: Fri, 19 Apr 2024 12:44:50 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Andre Przywara <andre.przywara@arm.com>
-Cc: Yangtao Li <tiny.windzz@gmail.com>, Viresh Kumar <vireshk@kernel.org>,
-	Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-sunxi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	Brandon Cheo Fusi <fusibrandon13@gmail.com>,
-	Martin Botka <martin.botka@somainline.org>,
-	Martin Botka <martin.botka1@gmail.com>,
-	Chris Morgan <macroalpha82@gmail.com>,
-	Ryan Walklin <ryan@testtoast.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [PATCH v5 0/8]  cpufreq: sun50i: Add Allwinner H616 support
-Message-ID: <20240419071450.7aiheeoyq35yjoo7@vireshk-i7>
-References: <20240418154408.1740047-1-andre.przywara@arm.com>
+	s=arc-20240116; t=1713511606; c=relaxed/simple;
+	bh=NbiX6SQgDac8YMpn0q71EvxqdfagHCgz6XEdm25gKWg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Nfgg8CjBLEq7J3yTG4xbJ+JUgROM1JME2AFzzbwv3NkoykcArDgNIBNfv6HfafhRxPMxQRxlzSfmyeN86Lb8E3ouzx7seYm3i5CNAjmzKprrG7e0MYXgp1OIliDf72Sjr2kHEb21nb24RIj4+27xixctC96Moul07i7Lgr9etms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=4zM+gxI1; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1713511603;
+	bh=NbiX6SQgDac8YMpn0q71EvxqdfagHCgz6XEdm25gKWg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=4zM+gxI1fphZpJ/WXGnyXqU3d1RrtwcZGGsTFDRZexxL+wj3LnDTprdHJt6z73T5r
+	 Hs8pHuIDjO2zZDlIy6ZklXNVdjMP4LU281TBF+rfA4+zRofL9k1ivtj5farMG0r2Hs
+	 oZ9Os8TOsdC7mTcXXD+JTXiM8G+aWYyOTnDNp/E8eNBiOa2d440iBjgirrHCNIxckh
+	 A3H6KMaoLkh/6/RsApVgxvQFJuuXopH/4lByR0f3YKhwckjfurBOrGoO2Dm/xVyqrt
+	 ZRn7KFrnhBwhRnuuxFUze8Hw1rt2UBVsf+OurP8Sx/5abATZcnhQdZXZU7nlptTjIO
+	 vD+KGU0kuZI8g==
+Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 769203781104;
+	Fri, 19 Apr 2024 07:26:42 +0000 (UTC)
+Message-ID: <f8c0bdd4-58fb-45a5-a70e-cc97f176222e@collabora.com>
+Date: Fri, 19 Apr 2024 09:26:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240418154408.1740047-1-andre.przywara@arm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] power: supply: sbs-battery: Handle unsupported
+ PROP_TIME_TO_EMPTY_NOW
+To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
+ Sebastian Reichel <sre@kernel.org>
+Cc: kernel@collabora.com, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Pin-yen Lin <treapking@chromium.org>,
+ Hsin-Te Yuan <yuanhsinte@chromium.org>
+References: <20240418-sbs-time-empty-now-error-v3-1-f286e29e3fca@collabora.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <20240418-sbs-time-empty-now-error-v3-1-f286e29e3fca@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 18-04-24, 16:44, Andre Przywara wrote:
-> This series adds cpufreq support to the Allwinner H616 SoC.
-> v5 just removes the explicit H700 speedbin support, as this proved to be
-> problematic/unstable in testing. The rest is the same as v4.
-> This is based on Martin's original series from about half a year ago[1].
-> Thanks for the comments on the list!
-> See below for a changelog.
+Il 18/04/24 19:34, Nícolas F. R. A. Prado ha scritto:
+> Despite the RunTimeToEmpty() (0x11) function being defined in the SBS
+> specification as required, it seems that not all batteries implement it.
+> On platforms with such batteries, reading the property will cause an
+> error to be printed:
+> 
+> power_supply sbs-8-000b: driver failed to report `time_to_empty_now' property: -5
+> 
+> This not only pollutes the log, distracting from real problems on the
+> device, but also prevents the uevent file from being read since it
+> contains all properties, including the faulty one.
+> 
+> The following table summarizes the findings for a handful of platforms:
+> 
+> Platform                                Status  Manufacturer    Model
+> ------------------------------------------------------------------------
+> mt8186-corsola-steelix-sku131072        OK      BYD             L22B3PG0
+> mt8195-cherry-tomato-r2                 NOT OK  PANASON         AP16L5J
+> mt8192-asurada-spherion-r0              NOT OK  PANASON         AP15O5L
+> mt8183-kukui-jacuzzi-juniper-sku16      NOT OK  LGC KT0         AP16L8J
+> mt8173-elm-hana                         OK      Sunwoda         L18D3PG1
+> sc7180-trogdor-lazor-limozeen-nots-r5   NOT OK  Murata          AP18C4K
+> sc7180-trogdor-kingoftown               NOT OK  333-AC-0D-A     GG02047XL
+> rk3399-gru-kevin                        OK      SDI             4352D51
+> 
+> Detect if this is one of the quirky batteries during presence update, so
+> that hot-plugging works as expected, and if so report -ENODATA for
+> POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW, which removes it from uevent and
+> prevents throwing errors.
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-Applied. Thanks.
+Nícolas, please, I think that sending this commit to stable for backporting
+makes a lot of sense since you're actually fixing laptops (that does not
+really require a Fixes tag) that are supported upstream since .. lots of time
+ago.
 
--- 
-viresh
+In any case, this LGTM.
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
 
