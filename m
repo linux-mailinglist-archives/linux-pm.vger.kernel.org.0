@@ -1,79 +1,101 @@
-Return-Path: <linux-pm+bounces-6726-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6727-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6E358AB3BC
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 18:50:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B8868AB401
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 18:59:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2559F1C21FD5
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 16:50:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DDCA9B20E8B
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 16:59:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75CC6139D03;
-	Fri, 19 Apr 2024 16:49:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jUvDr3tg"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ABB3137779;
+	Fri, 19 Apr 2024 16:59:24 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C5D3137C22;
-	Fri, 19 Apr 2024 16:49:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A89C4C63A;
+	Fri, 19 Apr 2024 16:59:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.142.180.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713545383; cv=none; b=SjG6UgOPDYiREDKx8XJfE26x+9OMRg8EE+dI904pgJGjKmCd+wcArEk7jr0534bmBJg5GFE1b3He5vP0jkaeNOJAoqqaRWlLLpa+EKqNf4Zw7l5qhJDP1nMX++M8CHBjnu+lYgMsGwqmXhUIK4A+aoVzfJdMC07b0wCrtptexA8=
+	t=1713545964; cv=none; b=LQL5riu+q+stfSgxbFoGm8jmxHll6iubkGqy1X7GtVldx9c30Kv98U7ESqFFDJwKoDWEbgVI0T7OchJzIhWsYOe72NIiZdGcOGOqjWE5t6Dbtsvb3UHOT0Tc3cFNBqDgdg/cn/QHtRCfGWOxFl84bxCLBIj+tbBgHjMXXtZZRaM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713545383; c=relaxed/simple;
-	bh=LvIXi2wN+yYFSO+Vl+/VTbjTLcA1eivTooBBTxxTMFY=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=FUpHvvmerihdkTaVSpH3p1Tt/1utEXlU52iZMBhZCCzOaDMy2GZ3XWPKavOlF/PKKgKkqNxWr4UgQIO/QFh2grZolqMEXgcsyn3GFl/Ebgqm0njNHcVOCVxuEv8J+6g0Gyo/LCR+Y9V4p3ByRzqy4N7iBERn+1WRyLfR4Mr0OfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jUvDr3tg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CA5BFC2BD11;
-	Fri, 19 Apr 2024 16:49:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713545382;
-	bh=LvIXi2wN+yYFSO+Vl+/VTbjTLcA1eivTooBBTxxTMFY=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=jUvDr3tg2+e+IK8hbS0oKwepz6deiX8ey/Q5Ts6OoXyjRv3cIqY2il5DN6iGMueDo
-	 aLb8wty5XOmYl6iRIB7xJak08SF2Sx3phsdpLLexLFZVkeWKMhOSPsAqBq2zB1e6fz
-	 mPtjTzA16ik/eTFeO7Zv2ScUhgqWo1KMa6s36F5ZYGq4ytuozt5QmUd5aJ4uZiJH6F
-	 WOkUvymQomnB/0HiMQ0OGu8kShribmPeOdJaN7g06NBgvb4kdWyFcT2yyBhVtmDQH/
-	 w5odCMXVaxXOgbMZIHTZ2IGEUGEZYOZ/a/fLogQkVepp/Rk4Wm2wv8i/RqQL5fXD8e
-	 Yzo7quqguhEVA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B9AB1C43616;
-	Fri, 19 Apr 2024 16:49:42 +0000 (UTC)
-Subject: Re: [GIT PULL] Thermal control fix for v6.9-rc5
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0hqseoeH6t0xKNOC-NMAXz5dWxTA5DKqGdxn_AghRKP1Q@mail.gmail.com>
-References: <CAJZ5v0hqseoeH6t0xKNOC-NMAXz5dWxTA5DKqGdxn_AghRKP1Q@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0hqseoeH6t0xKNOC-NMAXz5dWxTA5DKqGdxn_AghRKP1Q@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-6.9-rc5
-X-PR-Tracked-Commit-Id: b552f63cd43735048bbe9bfbb7a9dcfce166fbdd
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: dbe0a7be283829566c966642c739e820e0be1081
-Message-Id: <171354538273.26173.3611669050829355017.pr-tracker-bot@kernel.org>
-Date: Fri, 19 Apr 2024 16:49:42 +0000
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Linux PM <linux-pm@vger.kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
+	s=arc-20240116; t=1713545964; c=relaxed/simple;
+	bh=cCw3To0crIlEWMlxy5XePe+u1HZtbjc8kkBOUA1C/0I=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=V41cYB4/oFcn8BhlTg1NhiBojepwDynq/pBTn3u/6QDEUdOXEqEx4WjMpgSKTd5D7f2SBsmWqUJHzLxKazLoh2UZOiVvEi+LQxW2v9wmFwmlyrSG7w9/sBKCqrIWVqwUddzx2W6oEUnAsNMH3yDnY4mxvJs7lDfXJdcknjMjt/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org; spf=pass smtp.mailfrom=makrotopia.org; arc=none smtp.client-ip=185.142.180.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=makrotopia.org
+Received: from local
+	by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+	 (Exim 4.97.1)
+	(envelope-from <daniel@makrotopia.org>)
+	id 1rxra0-000000007Nq-26mP;
+	Fri, 19 Apr 2024 16:59:16 +0000
+Date: Fri, 19 Apr 2024 17:59:07 +0100
+From: Daniel Golle <daniel@makrotopia.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: [PATCH] cpufreq: mediatek: Add support for MT7988A
+Message-ID: <acf4fb446aacfbf6ce7b6e94bf3aad303e0ad4d1.1713545923.git.daniel@makrotopia.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The pull request you sent on Fri, 19 Apr 2024 15:16:58 +0200:
+From: Sam Shih <sam.shih@mediatek.com>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-6.9-rc5
+This add cpufreq support for mediatek MT7988A SoC.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/dbe0a7be283829566c966642c739e820e0be1081
+The platform data of MT7988A is different from previous MediaTek SoCs,
+so we add a new compatible and platform data for it.
 
-Thank you!
+Signed-off-by: Sam Shih <sam.shih@mediatek.com>
+---
+ drivers/cpufreq/mediatek-cpufreq.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
+diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+index a0a61919bc4c..518606adf14e 100644
+--- a/drivers/cpufreq/mediatek-cpufreq.c
++++ b/drivers/cpufreq/mediatek-cpufreq.c
+@@ -707,6 +707,15 @@ static const struct mtk_cpufreq_platform_data mt7623_platform_data = {
+ 	.ccifreq_supported = false,
+ };
+ 
++static const struct mtk_cpufreq_platform_data mt7988_platform_data = {
++	.min_volt_shift = 100000,
++	.max_volt_shift = 200000,
++	.proc_max_volt = 900000,
++	.sram_min_volt = 0,
++	.sram_max_volt = 1150000,
++	.ccifreq_supported = true,
++};
++
+ static const struct mtk_cpufreq_platform_data mt8183_platform_data = {
+ 	.min_volt_shift = 100000,
+ 	.max_volt_shift = 200000,
+@@ -740,6 +749,7 @@ static const struct of_device_id mtk_cpufreq_machines[] __initconst = {
+ 	{ .compatible = "mediatek,mt2712", .data = &mt2701_platform_data },
+ 	{ .compatible = "mediatek,mt7622", .data = &mt7622_platform_data },
+ 	{ .compatible = "mediatek,mt7623", .data = &mt7623_platform_data },
++	{ .compatible = "mediatek,mt7988a", .data = &mt7988_platform_data },
+ 	{ .compatible = "mediatek,mt8167", .data = &mt8516_platform_data },
+ 	{ .compatible = "mediatek,mt817x", .data = &mt2701_platform_data },
+ 	{ .compatible = "mediatek,mt8173", .data = &mt2701_platform_data },
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.44.0
+
 
