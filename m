@@ -1,101 +1,150 @@
-Return-Path: <linux-pm+bounces-6727-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6728-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B8868AB401
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 18:59:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 124BA8AB442
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 19:20:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DDCA9B20E8B
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 16:59:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8A1A6B21C73
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 17:20:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ABB3137779;
-	Fri, 19 Apr 2024 16:59:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64FF01386D5;
+	Fri, 19 Apr 2024 17:19:57 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A89C4C63A;
-	Fri, 19 Apr 2024 16:59:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.142.180.65
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B14091369AA;
+	Fri, 19 Apr 2024 17:19:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713545964; cv=none; b=LQL5riu+q+stfSgxbFoGm8jmxHll6iubkGqy1X7GtVldx9c30Kv98U7ESqFFDJwKoDWEbgVI0T7OchJzIhWsYOe72NIiZdGcOGOqjWE5t6Dbtsvb3UHOT0Tc3cFNBqDgdg/cn/QHtRCfGWOxFl84bxCLBIj+tbBgHjMXXtZZRaM=
+	t=1713547197; cv=none; b=r1ARv3109qaw8ZpYmbkjhQumFRtBBime/tHiStRHNMIoAhK8EkVENMH2gqyBp4v6bSHX8uc4RS06Am0LpubljTE2rV8VcYhJkbMCHOois4luuPgzg7ArxHappDaDmif8gZtyN5ylB+J/pztHH+Qw+kEDeGq/UZRw4UejnB3WpDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713545964; c=relaxed/simple;
-	bh=cCw3To0crIlEWMlxy5XePe+u1HZtbjc8kkBOUA1C/0I=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=V41cYB4/oFcn8BhlTg1NhiBojepwDynq/pBTn3u/6QDEUdOXEqEx4WjMpgSKTd5D7f2SBsmWqUJHzLxKazLoh2UZOiVvEi+LQxW2v9wmFwmlyrSG7w9/sBKCqrIWVqwUddzx2W6oEUnAsNMH3yDnY4mxvJs7lDfXJdcknjMjt/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org; spf=pass smtp.mailfrom=makrotopia.org; arc=none smtp.client-ip=185.142.180.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=makrotopia.org
-Received: from local
-	by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-	 (Exim 4.97.1)
-	(envelope-from <daniel@makrotopia.org>)
-	id 1rxra0-000000007Nq-26mP;
-	Fri, 19 Apr 2024 16:59:16 +0000
-Date: Fri, 19 Apr 2024 17:59:07 +0100
-From: Daniel Golle <daniel@makrotopia.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: [PATCH] cpufreq: mediatek: Add support for MT7988A
-Message-ID: <acf4fb446aacfbf6ce7b6e94bf3aad303e0ad4d1.1713545923.git.daniel@makrotopia.org>
+	s=arc-20240116; t=1713547197; c=relaxed/simple;
+	bh=jS0Wjt6mvchInpqAd68pdacEdHH71a7uFXsfWA3fjVc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rI9lcnc88TeSPPwk0CPtwVTeFTZnVPMxjOIZRciSBkbDi8RPpSaU303gaeGqz51BCHfKP3PX8Y0INt8/Fs173SggiXp7UUAlvuG7UFURDQ9szBboauW8w+mGw7WqAae0cgGpraiUr6OWyrM/KjRiXbO9E8N94TmSKAGJA49Vwus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6BCF22F;
+	Fri, 19 Apr 2024 10:20:23 -0700 (PDT)
+Received: from [10.57.77.69] (unknown [10.57.77.69])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 193A33F792;
+	Fri, 19 Apr 2024 10:19:53 -0700 (PDT)
+Message-ID: <5b65dc57-5503-4f9b-948a-6146185f5faf@arm.com>
+Date: Fri, 19 Apr 2024 18:20:00 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 08/16] thermal: gov_step_wise: Use .manage() callback
+ instead of .throttle()
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+References: <13515747.uLZWGnKmhe@kreacher> <2628456.Lt9SDvczpP@kreacher>
+Content-Language: en-US
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <2628456.Lt9SDvczpP@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Sam Shih <sam.shih@mediatek.com>
 
-This add cpufreq support for mediatek MT7988A SoC.
 
-The platform data of MT7988A is different from previous MediaTek SoCs,
-so we add a new compatible and platform data for it.
+On 4/10/24 17:13, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Make the Step-Wise governor use the new .manage() callback instead of
+> .throttle().
+> 
+> Even though using .throttle() is not particularly problematic for the
+> Step-Wise governor, using .manage() instead still allows it to reduce
+> overhead by updating all of the colling devices once after setting
 
-Signed-off-by: Sam Shih <sam.shih@mediatek.com>
----
- drivers/cpufreq/mediatek-cpufreq.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+s/colling/cooling/
 
-diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
-index a0a61919bc4c..518606adf14e 100644
---- a/drivers/cpufreq/mediatek-cpufreq.c
-+++ b/drivers/cpufreq/mediatek-cpufreq.c
-@@ -707,6 +707,15 @@ static const struct mtk_cpufreq_platform_data mt7623_platform_data = {
- 	.ccifreq_supported = false,
- };
- 
-+static const struct mtk_cpufreq_platform_data mt7988_platform_data = {
-+	.min_volt_shift = 100000,
-+	.max_volt_shift = 200000,
-+	.proc_max_volt = 900000,
-+	.sram_min_volt = 0,
-+	.sram_max_volt = 1150000,
-+	.ccifreq_supported = true,
-+};
-+
- static const struct mtk_cpufreq_platform_data mt8183_platform_data = {
- 	.min_volt_shift = 100000,
- 	.max_volt_shift = 200000,
-@@ -740,6 +749,7 @@ static const struct of_device_id mtk_cpufreq_machines[] __initconst = {
- 	{ .compatible = "mediatek,mt2712", .data = &mt2701_platform_data },
- 	{ .compatible = "mediatek,mt7622", .data = &mt7622_platform_data },
- 	{ .compatible = "mediatek,mt7623", .data = &mt7623_platform_data },
-+	{ .compatible = "mediatek,mt7988a", .data = &mt7988_platform_data },
- 	{ .compatible = "mediatek,mt8167", .data = &mt8516_platform_data },
- 	{ .compatible = "mediatek,mt817x", .data = &mt2701_platform_data },
- 	{ .compatible = "mediatek,mt8173", .data = &mt2701_platform_data },
--- 
-2.44.0
+> target values for all of the thermal instances.
 
+Make sense, good observation, it's pointless to call the
+thermal_cdev_update() in each trip point throttle() invocation.
+
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>   drivers/thermal/gov_step_wise.c |   39 +++++++++++++++++++++------------------
+>   1 file changed, 21 insertions(+), 18 deletions(-)
+> 
+> Index: linux-pm/drivers/thermal/gov_step_wise.c
+> ===================================================================
+> --- linux-pm.orig/drivers/thermal/gov_step_wise.c
+> +++ linux-pm/drivers/thermal/gov_step_wise.c
+> @@ -109,34 +109,37 @@ static void thermal_zone_trip_update(str
+>   	}
+>   }
+>   
+> -/**
+> - * step_wise_throttle - throttles devices associated with the given zone
+> - * @tz: thermal_zone_device
+> - * @trip: trip point
+> - *
+> - * Throttling Logic: This uses the trend of the thermal zone to throttle.
+> - * If the thermal zone is 'heating up' this throttles all the cooling
+> - * devices associated with the zone and its particular trip point, by one
+> - * step. If the zone is 'cooling down' it brings back the performance of
+> - * the devices by one step.
+> - */
+> -static int step_wise_throttle(struct thermal_zone_device *tz,
+> -			      const struct thermal_trip *trip)
+> +static void step_wise_manage(struct thermal_zone_device *tz)
+>   {
+> +	const struct thermal_trip_desc *td;
+>   	struct thermal_instance *instance;
+>   
+>   	lockdep_assert_held(&tz->lock);
+>   
+> -	thermal_zone_trip_update(tz, trip);
+> +	/*
+> +	 * Throttling Logic: Use the trend of the thermal zone to throttle.
+> +	 * If the thermal zone is 'heating up', throttle all of the cooling
+> +	 * devices associated with each trip point by one step. If the zone
+> +	 * is 'cooling down', it brings back the performance of the devices
+> +	 * by one step.
+> +	 */
+> +	for_each_trip_desc(tz, td) {
+> +		const struct thermal_trip *trip = &td->trip;
+> +
+> +		if (trip->temperature == THERMAL_TEMP_INVALID ||
+> +		    trip->type == THERMAL_TRIP_CRITICAL ||
+> +		    trip->type == THERMAL_TRIP_HOT)
+> +			continue;
+> +
+> +		thermal_zone_trip_update(tz, trip);
+> +	}
+>   
+>   	list_for_each_entry(instance, &tz->thermal_instances, tz_node)
+>   		thermal_cdev_update(instance->cdev);
+> -
+> -	return 0;
+>   }
+>   
+>   static struct thermal_governor thermal_gov_step_wise = {
+> -	.name		= "step_wise",
+> -	.throttle	= step_wise_throttle,
+> +	.name	= "step_wise",
+> +	.manage	= step_wise_manage,
+>   };
+>   THERMAL_GOVERNOR_DECLARE(thermal_gov_step_wise);
+> 
+> 
+> 
+
+LGTM w/ that 'cooling' spelling fixed.
+
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
