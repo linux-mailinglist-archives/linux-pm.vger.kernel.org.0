@@ -1,163 +1,121 @@
-Return-Path: <linux-pm+bounces-6697-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6698-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AE4C8AA7AE
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 06:37:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF2AD8AA86C
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 08:28:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87052287215
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 04:37:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 906871F220BF
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 06:28:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9DDA2F29;
-	Fri, 19 Apr 2024 04:37:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 198F522085;
+	Fri, 19 Apr 2024 06:28:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fcj/RZ87"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fYVVByH6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A0BC5256;
-	Fri, 19 Apr 2024 04:37:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC7658F7A
+	for <linux-pm@vger.kernel.org>; Fri, 19 Apr 2024 06:28:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713501448; cv=none; b=Kxv7a+tYPYxGBb6Ixn6C8+lvu1mGWwHuWVk19fhst77GLrA0xhwZjskIE7Nd7jgixcyyctuMa8qWDP/f3OWmSt2AV1qe893hjdPRc+lh/D2vC63hejJMQwh21EW8451eZ/Lbwcyw8+qUr8IggvRwu1mA6rWdgmG5afxvLet1KkE=
+	t=1713508130; cv=none; b=FuiV3cYb9bMODAXdvSt3oqlbyoNyEZBNim3LTf2mCK2ldEjFcpc+h1deM4ACD1VEoHRl88ifD8+EGX9xn/uqI4UCoCOWll2/gKasggkRPZWp7hr4+N2hp7OY3hL8BBOCv9qaqZWtdaR3SXW6080OEllGDHarE/lq7SBXtWrK/ok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713501448; c=relaxed/simple;
-	bh=aA0eWf4lTjyJXrzsPGUfl9MnnAc/P4pB9uRI/dobEws=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TimKwRoYE9qYz9Ps4TQsJ5Lv5lhJRL5pUVkmkY4L75TaSeM0Q/mR+0NOmpeTu9c1VAPygsI2RQYnot68eltSAezKBHmnSq54dTZw0wXQJBb5uHf5bIQGg2cYgGNzpvuLi8A8b2FBwwx6c5MZ8vsrMjX/B+GTLuRRhk+2+TrBrtA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fcj/RZ87; arc=none smtp.client-ip=209.85.219.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-dbed0710c74so1632242276.1;
-        Thu, 18 Apr 2024 21:37:27 -0700 (PDT)
+	s=arc-20240116; t=1713508130; c=relaxed/simple;
+	bh=WKkdIjjJd5AwfMBglOssEINqseYjTUuL5UgymD4croI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IQv5ASC8o9ZPTgS4MbDGmTq23CVLw2c57NBRi/uf9QcbJw20+ROu997LPT3aEJMxB6PgiklKrbIjK1phez5d/beZ988NwB6U1+ZncB4sVJT4TMgSavxefPeEYtwp5xVLo9VPqIerD+az+e4vXnwUsclF6+ugtzkejlxrrFU/ouA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fYVVByH6; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-6ed691fb83eso1475615b3a.1
+        for <linux-pm@vger.kernel.org>; Thu, 18 Apr 2024 23:28:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713501446; x=1714106246; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CFpAdFUlK6c+FuOE2UkmdUUly6ellBWMJzLFthxSKp4=;
-        b=fcj/RZ8770N/1WpzjpIYwzVZ3xS3i+AJPoaJ4n7R9Gb2ua1QlI1QG8vRHkncjVC7eW
-         UcfudVd+FPLxRnTZ8NTFCWTG1P8Xv+GSL8jwAMjlwNdIWCJj9SFRCZB4DqdhKCyal6xq
-         BvlYVS8WbzKnC64anlA2H20bgFWOAI9e0BExbCvkZ1z7YxdpleIsMRFfayCtNHbWGxVy
-         G2D01SoF4pCOrUgKMdGWyIgFhSE9w+0FRBHuUxLZsxyGYW3/qvUNHCkUNIausBXFxGrK
-         2owr4SjBJIiLbrzIlzPUaFqzQob5W1A4jLCFDMxjjnjarfcvkao58c1HldgU7jF4jHIU
-         QuSw==
+        d=linaro.org; s=google; t=1713508127; x=1714112927; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XvSTBBH3v6roeXx5/W42r/UqmZ0hAwtViWz/IKSvWRU=;
+        b=fYVVByH6WPCV8/K85Z/NBuiOiwbCMeRHof50sACsEuzo5wyrq/tTlILw4hvHo7UTjM
+         SRspFUWkzjs7uELrTcvOZSDm6T9GYELqmkq7dWT5tvFhHkhMGXAc3tL0Z8MmMfcX+2P3
+         74L7kBRecYZVmfRwzwYL9or+Yhwz5V51cX/RmKV9b6gLF4reG+tO0xlXGxoyUXK+mPxo
+         Fld4SuCa0nv7mZ3csbf80YW/WYI/UGqk9I4B4sSvWaZnU2YcVFXY2dJtXroauS0dCvJd
+         L1rWK8nhlrJGaZro8kRjCu0dlmhcDZS6HroXfcPx/u1xodnDwjB6OakQxASExrAvbJXe
+         XDqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713501446; x=1714106246;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CFpAdFUlK6c+FuOE2UkmdUUly6ellBWMJzLFthxSKp4=;
-        b=GOvj40z2vCTHQsicSmnUpoRjkap23FEYD8W2CKO7qx7AK0RwlrRwav/8Z4hJql0t58
-         6R1mJEcWlhAImsPLWICtAJdFidT0c455Y9lIpkDOaZWRhXL34j8VPVIENPZab64HMtZX
-         /W2pXqIee+WCGpUJI8NJJblyeijrSN5QGiYzbK7vpv8Kr0BhRpf/oNdIrwEhirBDKH0a
-         KvJAXOAefP5uGIrPpTv7n1jvpRlvQpXAGvKZfV0RoMRpeuDxjRkIeeT/5J1eCQVA6QyI
-         Qf9HudQh2+835/BV1KOaFRRvaT/kre36wYpXlE0pmvtIwexOiJRuouw5KmdeCszLxxYm
-         +lBg==
-X-Forwarded-Encrypted: i=1; AJvYcCXhL5e+EydUKIaXHa7HaostJCQEf5qgR+i8i3yJrFCm3e7GMpANQuZhO+Pbgfd9X0d6fgtjpYa+JVwDd96f6MlCkumKi4XQDC1SiNLkdphlHyrXifUQ0xBe4Z2MTL8h2g1P8lj0
-X-Gm-Message-State: AOJu0YzoQueUXRyAfVD4cvRoE8cxgEYNzq9kU+0Exi2ionf07kdnW4Ft
-	ybV+O+7xQ9l8okBcXm7fsu5lAFvJAUcjoy7utVM7eGJon+mqXtln+xi60Qim3uVPLHe2dZvtM0q
-	cPsrZPREqwyNIAPuUa9esgWJSLBNCBSdpWrhgPw==
-X-Google-Smtp-Source: AGHT+IGTBPvZEpv98oIQFH2424OjkFzeVum4zf0vfYLvtPIGm4i4ccBnGSIz8ZL6mTZ/+r66PKpvcXJU8KZMx2xCLfg=
-X-Received: by 2002:a25:8046:0:b0:dc7:4c21:fbd5 with SMTP id
- a6-20020a258046000000b00dc74c21fbd5mr716876ybn.0.1713501446407; Thu, 18 Apr
- 2024 21:37:26 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1713508127; x=1714112927;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XvSTBBH3v6roeXx5/W42r/UqmZ0hAwtViWz/IKSvWRU=;
+        b=Y67lGdkUjnGVNoBvqzoyZDENbuZjDNp7hejE9/Voo1XlEfvvKH8WEPki70B9xFCGxK
+         JeUdw+vSC4Gac0UwY7b9AsvOmiQ+jQs/JTlN36JBkiF+i8SVHssS5rug02s/h/eoV94y
+         DPF607WSFM7L+1rgEoz5yT+1mjdg4GpXPZ5GqJQBR2+voL8RZNy+C3RRtUs/GcPbS/1J
+         UnvGKzVpaCy/j+H8h/01hlZGxCks5tbqOsQyUvmXk/jHTt+rAYHdd9YRmW1Aq22T6wNV
+         KSiFYOV55+3QWJHyFeedZ/YwoJxiRPWsqdP9KtnTfqotPMRH5FoRg5cBWjohEiBIJAu4
+         V3Fw==
+X-Forwarded-Encrypted: i=1; AJvYcCWY4ImzGZv6R2n4fv7QakR+vCjz+58m2CkS10K7At4lTebZQ7ZAtOWec60nOyGJDejL6eb1WoVsEFeCVIypxH+v4fw3jZZCzSs=
+X-Gm-Message-State: AOJu0YxQvpBpp2J+THyU+QYaWlNqdM4+8rGegw+ONFJfWIDN0W1mG6+j
+	N7skB0qMVT7S3rOXcY/LPyzJMJFFPH2rE8+FezUXSIUle368AmLoyiIzXbogWtc=
+X-Google-Smtp-Source: AGHT+IHy6niLl/88ecXlZ1L49JJ5pPAijtlXeB8NEQg0SKtgaVRWocf5WffnSjz653PBAgOikR70LA==
+X-Received: by 2002:a05:6a20:c70e:b0:1a9:c214:b7d with SMTP id hi14-20020a056a20c70e00b001a9c2140b7dmr1440687pzb.2.1713508126697;
+        Thu, 18 Apr 2024 23:28:46 -0700 (PDT)
+Received: from localhost ([122.172.87.52])
+        by smtp.gmail.com with ESMTPSA id m20-20020a170902c45400b001e197cee600sm2595636plm.3.2024.04.18.23.28.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Apr 2024 23:28:45 -0700 (PDT)
+Date: Fri, 19 Apr 2024 11:58:42 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Julia Lawall <julia.lawall@inria.fr>, linux-pm@vger.kernel.org,
+	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH next] cpupfreq: tegra124: eliminate uses of of_node_put()
+Message-ID: <20240419062842.dc6tzssbcqdtdfi5@vireshk-i7>
+References: <20240407-cpufreq_of_node_put-v1-1-2c8889d4935d@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1713147645.git.zhoubinbin@loongson.cn> <9d2132d4713321a83cdeef3cdc8887b7d39340e6.1713147645.git.zhoubinbin@loongson.cn>
- <7396c6d4-878f-4b07-9b7f-bc793bebe4bd@linaro.org>
-In-Reply-To: <7396c6d4-878f-4b07-9b7f-bc793bebe4bd@linaro.org>
-From: Binbin Zhou <zhoubb.aaron@gmail.com>
-Date: Fri, 19 Apr 2024 10:37:14 +0600
-Message-ID: <CAMpQs4JDWd3=ne3KisBXi3pYZWtRuu=3VsMv1+Gj0zHxL0TBRA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] dt-bindings: thermal: loongson,ls2k-thermal: Fix
- incorrect compatible definition
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Binbin Zhou <zhoubinbin@loongson.cn>, Huacai Chen <chenhuacai@loongson.cn>, 
-	"Rafael J . Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Huacai Chen <chenhuacai@kernel.org>, loongson-kernel@lists.loongnix.cn, 
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	Yinbo Zhu <zhuyinbo@loongson.cn>, WANG Xuerui <git@xen0n.name>, loongarch@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240407-cpufreq_of_node_put-v1-1-2c8889d4935d@gmail.com>
 
-On Mon, Apr 15, 2024 at 2:04=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 15/04/2024 04:31, Binbin Zhou wrote:
-> > The temperature output register of the Loongson-2K2000 is defined in th=
-e
-> > chip configuration domain, which is different from the Loongson-2K1000,
-> > so it can't be fallbacked.
-> >
-> > We need to use two groups of registers to describe it: the first group
-> > is the high and low temperature threshold setting register; the second
-> > group is the temperature output register.
-> >
-> > It is true that this fix will cause ABI corruption, but it is necessary
-> > otherwise the Loongson-2K2000 temperature sensor will not work properly=
-.
-> >
-> > Fixes: 72684d99a854 ("thermal: dt-bindings: add loongson-2 thermal")
-> > Cc: Yinbo Zhu <zhuyinbo@loongson.cn>
-> > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> > ---
-> >  .../thermal/loongson,ls2k-thermal.yaml        | 23 +++++++++++++++++--
-> >  1 file changed, 21 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/thermal/loongson,ls2k-th=
-ermal.yaml b/Documentation/devicetree/bindings/thermal/loongson,ls2k-therma=
-l.yaml
-> > index 9748a479dcd4..fac6f64d6c67 100644
-> > --- a/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.y=
-aml
-> > +++ b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.y=
-aml
-> > @@ -18,14 +18,15 @@ properties:
-> >      oneOf:
-> >        - enum:
-> >            - loongson,ls2k1000-thermal
-> > +          - loongson,ls2k2000-thermal
-> >        - items:
-> >            - enum:
-> >                - loongson,ls2k0500-thermal
-> > -              - loongson,ls2k2000-thermal
-> >            - const: loongson,ls2k1000-thermal
-> >
-> >    reg:
-> > -    maxItems: 1
-> > +    minItems: 1
-> > +    maxItems: 2
-> >
-> >    interrupts:
-> >      maxItems: 1
-> > @@ -41,6 +42,24 @@ required:
-> >
-> >  unevaluatedProperties: false
-> >
-> > +if:
->
-> This goes before unevaluatedProperties, just like in example schema.
->
-Hi Krzysztof:
+On 07-04-24, 22:15, Javier Carrasco wrote:
+> Make use of the __free() cleanup handler to automatically free nodes
+> when they get out of scope. Only the probe function is affected by this
+> modification.
+> 
+> Given that this mechanism requires the node to be initialized, its
+> initialization and the value check have been moved to the top of the
+> function.
+> 
+> After removing uses of of_node_put(), the jump to out_put_np is no
+> longer necessary.
+> 
+> Suggested-by: Julia Lawall <julia.lawall@inria.fr>
+> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> ---
+> This patch is a proof of concept to remove uses of of_node_put() in
+> cpufreq, which can be replaced with the clenaup handler introduced with
+> 54da6a092431 ("locking: Introduce __cleanup() based infrastructure").
+> 
+> This change provides a scope-based cleanup mechanism to avoid potential
+> memory leaks that can appear if of_node_put() is not used correctly.
+> 
+> The patch is based on the latest linux-next tag (next-20240405).
+> ---
+>  drivers/cpufreq/tegra124-cpufreq.c | 19 ++++++-------------
+>  1 file changed, 6 insertions(+), 13 deletions(-)
 
-Thanks for your reply.
-I will adjust the position of this part in the next version.
+Applied. Thanks.
 
-Thanks.
-Binbin
->
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Best regards,
-> Krzysztof
->
+-- 
+viresh
 
