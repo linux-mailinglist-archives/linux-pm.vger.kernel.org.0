@@ -1,135 +1,123 @@
-Return-Path: <linux-pm+bounces-6714-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6715-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00C3A8AAD7D
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 13:15:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8F638AADF2
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 13:56:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2DC5282B69
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 11:15:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB7B41C20C6E
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 11:56:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9E488121F;
-	Fri, 19 Apr 2024 11:14:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="ViHSVXBA"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3077183A07;
+	Fri, 19 Apr 2024 11:56:37 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 546D280BF3;
-	Fri, 19 Apr 2024 11:14:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D5C37FBDF
+	for <linux-pm@vger.kernel.org>; Fri, 19 Apr 2024 11:56:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713525299; cv=none; b=k9UnkIEK77zgSFGi4st0o0vK2mr0NdnsPXvqGbGut9hBH6bPYvTpeQuulTjtwftfnmArotmVCDNidELFrVHNyaQXRfWWeR3Lf5Rm84LfTZ7FYPjEZI5A1IM3SpPp3RrR+O+CuGDhq2y8p82YIyJTBcxE/37WPS+1eh1Sc5nat08=
+	t=1713527797; cv=none; b=RRLaZAthRXLOdTh8RoK9O0xWmfx1pgdX/BuVaRiX9wtuFbR56Heck/ldPChuQu1RgH8VO/w9xm0z3eYyfzqq8ogvG3OP/TokpcEzPY2E9gKJfOvbcivK9H9wDBl+cdasLxHatl2Jgg92+Im53y/rHubdEul1QsbXDDZ8/0AeBWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713525299; c=relaxed/simple;
-	bh=gDPa2MrXoMrXr4as5EkG42RSNIOl7KdjtQco1b6NedI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lUOVoPqHUbE5AUnuADWV91ErD6bG9KqNH1m61YeW0XxhCDxiPwkn9MPcigpPjlCYB6SeivZ33mkY+xVbY7jaFO/ZMDrZQku78Z3GU2obIZH03g51cZHRmHo7Q2RlK5g7DCVOK5WfSzhetqCWlGI4Tn2BerzQfVmu75YwykSKdUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=ViHSVXBA; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1713525290;
-	bh=gDPa2MrXoMrXr4as5EkG42RSNIOl7KdjtQco1b6NedI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ViHSVXBAbYwkBpODcua3/KxNbqWdYuqaCwmgFoVbOGT2jEJ90KG6r7f60374Zo4dl
-	 ZtU9fExQBKh2P6siEbZi/YR+rG/fdFyu1tdSvM7UNgcqgkCIxl+DVOrqflq44a+dBD
-	 2982+1sYXPgiD2P1USZuTMyQkIFIHKDm/WQRJlsSjgmUtH7l53k/rQTwomvycXa10p
-	 5dl92dqDvB2AuL13SeW58+AtlYuGIwv5Y8YAZyVCgXid1Bx0Y7SxUlbJd4cTG9IgLT
-	 yTcFywZ/SB7eec8nG8iIqLus/Sid92rTf5ShdKG3p9ImGjKPLq15EV+J3KDP/TlzjA
-	 z8jr399lFk1KQ==
-Received: from mercury (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sre)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 4A88E3782145;
-	Fri, 19 Apr 2024 11:14:50 +0000 (UTC)
-Received: by mercury (Postfix, from userid 1000)
-	id E4CBC106139F; Fri, 19 Apr 2024 13:14:49 +0200 (CEST)
-Date: Fri, 19 Apr 2024 13:14:49 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: Kate Hsuan <hpa@redhat.com>, Pavel Machek <pavel@ucw.cz>, 
-	Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, =?utf-8?B?QW5kcsOp?= Apitzsch <git@apitzsch.eu>, 
-	linux-kernel@vger.kernel.org, Andy Shevchenko <andy.shevchenko@gmail.com>, 
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v6 4/5] power: supply: power-supply-leds: Add
- charging_orange_full_green trigger for RGB LED
-Message-ID: <ppwhxcsruclsdrvd6gfxwan3so2shtxyarml5rgi6fo4ukb7bi@a4b5acxh3w65>
-References: <20240416053909.256319-1-hpa@redhat.com>
- <20240416053909.256319-5-hpa@redhat.com>
- <sjhe7jvzvrlthf42lipnsnooh3z7vczdcruupsbstmpiujprze@jxwc3lquzvki>
- <a9e8759e-4d30-4923-bcfd-4cd133fe950d@redhat.com>
+	s=arc-20240116; t=1713527797; c=relaxed/simple;
+	bh=T3STDVe7xxU2a7JoWtzmlCoWg5g6NQdOyEj8aWsFGW0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=N7yDyfC9DfaKFoILRxoGD3H2UHd83oXom3eTqGHGVOfAtl5jBkMVOHaECfOSPPquovAmT2JI7zq4nyqkZY7Y3zJRO4VR5uOGed2NYyYezhCUA2Lnt6usb7hZZSlHEDLCzZso2l7IF5VQ8BAEsCfvZNM2KzMtyAzx3j2zCSTJmW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 19CCF2F;
+	Fri, 19 Apr 2024 04:57:02 -0700 (PDT)
+Received: from donnerap.manchester.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 13DF73F64C;
+	Fri, 19 Apr 2024 04:56:32 -0700 (PDT)
+Date: Fri, 19 Apr 2024 12:56:30 +0100
+From: Andre Przywara <andre.przywara@arm.com>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: kernel test robot <lkp@intel.com>, Brandon Cheo Fusi
+ <fusibrandon13@gmail.com>, oe-kbuild-all@lists.linux.dev, Jernej Skrabec
+ <jernej.skrabec@gmail.com>, linux-pm@vger.kernel.org
+Subject: Re: [vireshk-pm:cpufreq/arm/linux-next 6/10]
+ drivers/cpufreq/sun50i-cpufreq-nvmem.c:128:44: warning: '%d' directive
+ output may be truncated writing between 1 and 10 bytes into a region of
+ size 2
+Message-ID: <20240419125630.7951b45c@donnerap.manchester.arm.com>
+In-Reply-To: <20240419105628.faaqz2p4qdlfxyre@vireshk-i7>
+References: <202404191715.LDwMm2gP-lkp@intel.com>
+	<20240419111345.028ad7ec@donnerap.manchester.arm.com>
+	<20240419105628.faaqz2p4qdlfxyre@vireshk-i7>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="m7iifoiplmzvvdow"
-Content-Disposition: inline
-In-Reply-To: <a9e8759e-4d30-4923-bcfd-4cd133fe950d@redhat.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Fri, 19 Apr 2024 16:26:28 +0530
+Viresh Kumar <viresh.kumar@linaro.org> wrote:
 
---m7iifoiplmzvvdow
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Viresh,
 
-Hi,
+> On 19-04-24, 11:13, Andre Przywara wrote:
+> > So I see the problem: "speed" must fit into one decimal digit. At the
+> > moment it's fine, because "speed" is returned by one of the *_efuse_xlate
+> > functions. For the H6, the output is masked by 0x7, so can never be larger
+> > than that. For the H616, the return value is a constant selected in a
+> > switch/case, which is at most "4" at the moment, so it's safe as well.
+> > 
+> > So is there some established way to communicate this, to appease gcc here?
+> > Would explicitly checking for the range and bailing out solve this? Or is
+> > the some kind of assert to make gcc happy?
+> > Or do we just increase MAX_NAME_LEN?  
+> 
+> I fixed it like this in the OPP core earlier:
 
-On Fri, Apr 19, 2024 at 09:37:56AM +0200, Hans de Goede wrote:
-> On 4/18/24 2:34 PM, Sebastian Reichel wrote:
-> > On Tue, Apr 16, 2024 at 01:39:08PM +0800, Kate Hsuan wrote:
-> >> Add a charging_orange_full_green LED trigger and the trigger is based =
-on
-> >> led_mc_trigger_event() which can set an RGB LED when the trigger is
-> >> triggered. The LED will show orange when the battery status is chargin=
-g.
-> >> The LED will show green when the battery status is full.
-> >>
-> >> Link: https://lore.kernel.org/linux-leds/f40a0b1a-ceac-e269-c2dd-0158c=
-5b4a1ad@gmail.com/
-> >>
-> >> Signed-off-by: Kate Hsuan <hpa@redhat.com>
-> >> ---
-> >=20
-> > Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
->=20
-> Thanks. Does this mean your ok with routing this change through the LED t=
-ree
-> together with the 2 LED core patches adding the new led_mc_trigger_event()
-> function this uses ?
+Ah, yes, thanks, that looks good to me, and indeed fixes the warning.
 
-Yes.
+How are we going to handle this? Do you gonna squash this into the
+respective patch?
 
--- Sebastian
+Cheers,
+Andre
 
---m7iifoiplmzvvdow
-Content-Type: application/pgp-signature; name="signature.asc"
+> 
+> diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> index 30e5c337611c..cd50cea16a87 100644
+> --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> @@ -19,8 +19,6 @@
+>  #include <linux/pm_opp.h>
+>  #include <linux/slab.h>
+> 
+> -#define MAX_NAME_LEN   7
+> -
+>  #define NVMEM_MASK     0x7
+>  #define NVMEM_SHIFT    5
+> 
+> @@ -208,7 +206,7 @@ static int sun50i_cpufreq_get_efuse(void)
+>  static int sun50i_cpufreq_nvmem_probe(struct platform_device *pdev)
+>  {
+>         int *opp_tokens;
+> -       char name[MAX_NAME_LEN];
+> +       char name[] = "speedXXXXXXXXXXX"; /* Integers can take 11 chars max */
+>         unsigned int cpu, supported_hw;
+>         struct dev_pm_opp_config config = {};
+>         int speed;
+> @@ -235,7 +233,7 @@ static int sun50i_cpufreq_nvmem_probe(struct platform_device *pdev)
+>                 config.supported_hw_count = 1;
+>         }
+> 
+> -       snprintf(name, MAX_NAME_LEN, "speed%d", speed);
+> +       snprintf(name, sizeof(name), "speed%d", speed);
+>         config.prop_name = name;
+> 
+>         for_each_possible_cpu(cpu) {
+> 
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmYiUiUACgkQ2O7X88g7
-+prOFQ//TjbtkQ0OJWGd6ZCuFNOVohJ1IEGplVxLSx6KRXskQ32PZ9P1gcH7irdF
-DShkzHdkeb7M7HmX15+34nuqVQF67HM3lpjmnk1jTzzV+fEy5gUiL/vGvvW/zXQ5
-Lf66FfWVW0AJRn9/Rdr8HF9VlS6UWhTzgGC6+x3+1OPUm+zVxC/PV9/68a/bF8rv
-RaDvyor5NbEIi5RuJzw+Zkl3gzoQNgc0kG5JUEtlGYhP5wGMdDsJLShAy3KxMKMc
-b8SsPw7xeoJjU6NJog3yTwqDFtjHDYaGB68d1LQJyyNUNI3kwl1ZbmP4XuD2W1B4
-ChfWvuyhD+O/L5D9SClmEdfWHatATMpiAcNLWMcyCla0E5f1T/zOqlqDLZpxLMx+
-heEV5G/ZUHXBQjh6xnGd0TvVf8ikroJQaFKn48zGYLhSK0ve+/h4hMLADUm7lHlb
-Ef3+/5c4Y5h7ropk4yLLgN9NBy59lqXXesELGnDF7F5+mM2wEoRlwT7+8y/Olh8Q
-OwKl0DY2hmlLjOOick2y/IW3spmdIp39vy5A4JIwWywuMPRR6PJ4pqP6IZ8Ow2Lb
-17chbX8TJNu+YXxL+/SxrujcvyuY8e+742pSZYWKaJNHIi/yskHOg2155clAuD3D
-k/pCp43naYDabsiqKZQRcN3BRIE5tAo792W76qBnniIUWKHdTb4=
-=ClyY
------END PGP SIGNATURE-----
-
---m7iifoiplmzvvdow--
 
