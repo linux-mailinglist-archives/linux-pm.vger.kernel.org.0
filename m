@@ -1,145 +1,164 @@
-Return-Path: <linux-pm+bounces-6705-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6706-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CAD18AAAF1
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 10:53:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 270088AAB81
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 11:34:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 28D2E2846DF
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 08:53:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A43F1B224ED
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 09:34:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E7D96FE14;
-	Fri, 19 Apr 2024 08:53:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7972A77F2D;
+	Fri, 19 Apr 2024 09:34:12 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C00AFF9CD;
-	Fri, 19 Apr 2024 08:53:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 738F3651B6;
+	Fri, 19 Apr 2024 09:34:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713516834; cv=none; b=oQfzDhx1zdC34i6Q73AbvMaiU0J0E+n82hAI9/DRWe8/zqwiDkfQpVKAyOqoTB5jU2K8Fr5s5tk/OkOr6DXpF6zhvvakWF24kYARs+4PAiQ+bKgprgdWLZ43lHSPmzjRG6h86bg0FXoCaSoMZSlJIjd9Ks1bKBBRfBDUXx5T2X8=
+	t=1713519252; cv=none; b=Z1XGVabsDxo7QFUmxJ32hO68wjtg0clUHS1Pj5dBkOQOoby5/ptWp8XYfubHJ5t4blc5FzA5qmTVR7PkfTkK7j8jHiJy5zgUBVvlT579cJiEwhRrEmOXKsS38OL5WnU9u5V5e6Y+i/VPnNo1sTFwlfZ5CeTICHY/aa4jjDZv/ps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713516834; c=relaxed/simple;
-	bh=mZaqwvICdeQc4Uk1/mG9rpCXgLLl45RMWhDGIpJ27DU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YRIkL5xv59i2SOpty6Qle+dx6GdAnJAZ93rIE9oY3EZlbWn3GQGpF3vUXq/DSy+1AejJgILOg3+obowcyfomY6ChsICpwV90uRIbCvqI/u8uXtth6LWGMZz/z1Us6XhSxXPPivzi36T2wnKh0AcaPxMJ8T09arF0+9GIeO7J7zM=
+	s=arc-20240116; t=1713519252; c=relaxed/simple;
+	bh=y2lmeFfEw5I9sC+waqhaoIh9vZLUPMRGg6Cn3TMRnWY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HwmoAT364XOsi4rh6B7skGYxkmvfJnUxGdV+u2dmrvAfSGNrXHraMKjczh+wqdMoaCAMczWJzfBWfnxf+1Cc8K3sngnmBOQap2P3yGYRWyyZBmpEfeIrUVpQyrgiX+V/i4w4lAgrdUnow4kMeJQsrnfMYxjaqKSHaw3/u1N8OHw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 198A42F;
-	Fri, 19 Apr 2024 01:54:19 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D14E23F792;
-	Fri, 19 Apr 2024 01:53:47 -0700 (PDT)
-Date: Fri, 19 Apr 2024 09:53:45 +0100
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Elliot Berman <quic_eberman@quicinc.com>
-Cc: Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Andy Yan <andy.yan@rock-chips.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
-	Melody Olvera <quic_molvera@quicinc.com>,
-	Shivendra Pratap <quic_spratap@quicinc.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] Implement vendor resets for PSCI SYSTEM_RESET2
-Message-ID: <20240419085345.4ovebbbmcabo3f73@bogus>
-References: <20240414-arm-psci-system_reset2-vendor-reboots-v2-0-da9a055a648f@quicinc.com>
- <Zh5GWqt2oCNHdF_h@bogus>
- <20240417140957985-0700.eberman@hu-eberman-lv.qualcomm.com>
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DB8702F;
+	Fri, 19 Apr 2024 02:34:37 -0700 (PDT)
+Received: from [10.57.77.69] (unknown [10.57.77.69])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A98403F792;
+	Fri, 19 Apr 2024 02:34:08 -0700 (PDT)
+Message-ID: <0a523ecb-bf60-4970-a0b6-0ee1bd414079@arm.com>
+Date: Fri, 19 Apr 2024 10:34:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240417140957985-0700.eberman@hu-eberman-lv.qualcomm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 02/16] thermal: gov_bang_bang: Use .trip_crossed()
+ instead of .throttle()
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+References: <13515747.uLZWGnKmhe@kreacher> <2289003.iZASKD2KPV@kreacher>
+Content-Language: en-US
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <2289003.iZASKD2KPV@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Apr 17, 2024 at 02:54:41PM -0700, Elliot Berman wrote:
-> On Tue, Apr 16, 2024 at 10:35:22AM +0100, Sudeep Holla wrote:
-> > On Sun, Apr 14, 2024 at 12:30:23PM -0700, Elliot Berman wrote:
-> > > The PSCI SYSTEM_RESET2 call allows vendor firmware to define additional
-> > > reset types which could be mapped to the reboot argument.
-> > >
-> > > Setting up reboot on Qualcomm devices can be inconsistent from chipset
-> > > to chipset.
-> >
-> > That doesn't sound good. Do you mean PSCI SYSTEM_RESET doesn't work as
-> > expected ? Does it mean it is not conformant to the specification ?
-> >
->
-> I was motivating the reason for using SYSTEM_RESET2. How to set the PMIC
-> register and IMEM cookie can change between chipsets. Using
-> SYSTEM_RESET2 alows us to abstract how to perform the reset.
 
-Fair enough. But I assume you are not providing the details of PMIC register
-or IMEM cookie via DT.
 
-Anyways you did confirm if PSCI SYSTEM_RESET works as expected or not. That
-is default and must work.
+On 4/10/24 17:04, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> The Bang-Bang governor really is only concerned about trip point
+> crossing, so it can use the new .trip_crossed() callback instead of
+> .throttle() that is not particularly suitable for it.
+> 
+> Modify it to do so which also takes trip hysteresis into account, so the
+> governor does not need to use it directly any more.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>   drivers/thermal/gov_bang_bang.c |   31 +++++++++++++------------------
+>   1 file changed, 13 insertions(+), 18 deletions(-)
+> 
+> Index: linux-pm/drivers/thermal/gov_bang_bang.c
+> ===================================================================
+> --- linux-pm.orig/drivers/thermal/gov_bang_bang.c
+> +++ linux-pm/drivers/thermal/gov_bang_bang.c
+> @@ -13,8 +13,9 @@
+>   
+>   #include "thermal_core.h"
+>   
+> -static int thermal_zone_trip_update(struct thermal_zone_device *tz,
+> -				    const struct thermal_trip *trip)
+> +static void thermal_zone_trip_update(struct thermal_zone_device *tz,
+> +				     const struct thermal_trip *trip,
+> +				     bool crossed_up)
+>   {
+>   	int trip_index = thermal_zone_trip_id(tz, trip);
+>   	struct thermal_instance *instance;
+> @@ -43,13 +44,12 @@ static int thermal_zone_trip_update(stru
+>   		}
+>   
+>   		/*
+> -		 * enable fan when temperature exceeds trip_temp and disable
+> -		 * the fan in case it falls below trip_temp minus hysteresis
+> +		 * Enable the fan when the trip is crossed on the way up and
+> +		 * disable it when the trip is crossed on the way down.
+>   		 */
+> -		if (instance->target == 0 && tz->temperature >= trip->temperature)
+> +		if (instance->target == 0 && crossed_up)
+>   			instance->target = 1;
+> -		else if (instance->target == 1 &&
+> -			 tz->temperature < trip->temperature - trip->hysteresis)
+> +		else if (instance->target == 1 && !crossed_up)
+>   			instance->target = 0;
+>   
+>   		dev_dbg(&instance->cdev->device, "target=%d\n",
+> @@ -59,14 +59,13 @@ static int thermal_zone_trip_update(stru
+>   		instance->cdev->updated = false; /* cdev needs update */
+>   		mutex_unlock(&instance->cdev->lock);
+>   	}
+> -
+> -	return 0;
+>   }
+>   
+>   /**
+>    * bang_bang_control - controls devices associated with the given zone
+>    * @tz: thermal_zone_device
+>    * @trip: the trip point
+> + * @crossed_up: whether or not the trip has been crossed on the way up
+>    *
+>    * Regulation Logic: a two point regulation, deliver cooling state depending
+>    * on the previous state shown in this diagram:
+> @@ -90,26 +89,22 @@ static int thermal_zone_trip_update(stru
+>    *     (trip_temp - hyst) so that the fan gets turned off again.
+>    *
+>    */
+> -static int bang_bang_control(struct thermal_zone_device *tz,
+> -			     const struct thermal_trip *trip)
+> +static void bang_bang_control(struct thermal_zone_device *tz,
+> +			      const struct thermal_trip *trip,
+> +			      bool crossed_up)
+>   {
+>   	struct thermal_instance *instance;
+> -	int ret;
+>   
+>   	lockdep_assert_held(&tz->lock);
+>   
+> -	ret = thermal_zone_trip_update(tz, trip);
+> -	if (ret)
+> -		return ret;
+> +	thermal_zone_trip_update(tz, trip, crossed_up);
+>   
+>   	list_for_each_entry(instance, &tz->thermal_instances, tz_node)
+>   		thermal_cdev_update(instance->cdev);
+> -
+> -	return 0;
+>   }
+>   
+>   static struct thermal_governor thermal_gov_bang_bang = {
+>   	.name		= "bang_bang",
+> -	.throttle	= bang_bang_control,
+> +	.trip_crossed	= bang_bang_control,
+>   };
+>   THERMAL_GOVERNOR_DECLARE(thermal_gov_bang_bang);
+> 
+> 
+> 
 
-> > > Generally, there is a PMIC register that gets written to
-> > > decide the reboot type. There is also sometimes a cookie that can be
-> > > written to indicate that the bootloader should behave differently than a
-> > > regular boot. These knobs evolve over product generations and require
-> > > more drivers. Qualcomm firmwares are beginning to expose vendor
-> > > SYSTEM_RESET2 types to simplify driver requirements from Linux.
-> > >
-> >
-> > Why can't this be fully userspace driven ? What is the need to keep the
-> > cookie in the DT ?
->
-> As Dmitry pointed out, this information isn't discoverable. I suppose
-> we could technically use bootconfig or kernel command-line to convey the
-> map although I think devicetree is the right spot for this mapping.
->
+LGTM
 
-Yes and as usual DT has become dumping ground for firmware that don't
-make things discoverable. Make crap that Qcom puts in the DT are firmware
-related and can be make discoverable. Anyways it is sad that no efforts
-to make it so are done as DT is always there to provide shortcuts.
-
-> - Other vendor-specific bits for PSCI are described in the devicetree.
->   One example is the suspend param (e.g. the StateID) for cpu idle
->   states.
-
-You are right, but that is the only example I can see and it was done
-in very early days of PSCI. It shouldn't be example if there are better
-ways.
-
-> - Describing firmware bits in the DT isn't unprecedented, and putting
->   this information outside the DT means that other OSes (besides Linux)
->   need their own way to convey this information.
-
-Correct but it can be Qcom specific firmware interface. There are so many
-already. This splitting information between firmware and DT works well
-for vertically integrated things which probably is the case with most of
-Qcom SoCs but it is prone to issues if DT and firmware mismatch. Firmware
-discovery eliminates such issues.
-
-> - PSCI would be the odd one out that reboot mode map is not described in
->   DT. Other reboot-mode drivers specify the mapping in the DT. Userspace
->   that runs with firmware that support vendor reset2 need to make sure
->   they can configure the mapping early enough.
->
-
-Well I am not saying not to this yet, just exploring and getting more info
-so that whatever is done here can be reused on all PSCI based systems.
-
---
-Regards,
-Sudeep
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
