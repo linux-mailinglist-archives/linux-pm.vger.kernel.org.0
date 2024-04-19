@@ -1,159 +1,126 @@
-Return-Path: <linux-pm+bounces-6720-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6721-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B0338AAF46
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 15:26:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C8C38AAF99
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 15:42:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E4F15283A59
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 13:26:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1521B284A5D
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 13:42:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2602312C819;
-	Fri, 19 Apr 2024 13:25:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="qZnu8DIG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C01712A151;
+	Fri, 19 Apr 2024 13:42:24 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C93F12AAEB;
-	Fri, 19 Apr 2024 13:25:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC90712BEBE;
+	Fri, 19 Apr 2024 13:42:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713533130; cv=none; b=VzuXS+DVCkxmXU0nsPKpo6daD9/tbg/IF3Q00OfeMHxmjvprIEilPejzqODi7N2sr/AWkW0v5gBLY40qHXbLP0dniGxvPAMzCFPItyXR4kFuIKpF+ocsbIa/C3PQiCgJXUKcTMXWLTnb64etmon0J2ryQ3faC03b7R6Ru997EIw=
+	t=1713534144; cv=none; b=eng2nG/D6iD+39DNu9lGmZjYhvVN34eq+rJhjsJXIHuMhUIz/oNZapnpx93q3BGzSS5dNK7abGrxe7rpoizK5e8/68Sa8HA+lKgjdrE/+/1s4UnrySLcP7LdZfy6afRABXvQvOAxXpJpA8OF9YqaJy7hs8m/NySCEd5X6RokLfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713533130; c=relaxed/simple;
-	bh=N88JXv4IEgJGGdg4ExzP0hQMQcK9z1NkVdyG4OwVB3s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dh7YdDy2b6Ek6ixbAIXHnf85iRFvmBepHB/kb2NeE3uiSjZLURYqAlQwAHmLWndPCpqBp0CnMr55z5iAumjStZEm3axToHWZ8wWAdtkt1uX2Yg6MwXyuYaQbWZzRLk6fnMTPjVuJo7sUAMgxOVM5LgUY2KRCZP7ktPtYNVZ/I1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=qZnu8DIG; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1713533126;
-	bh=N88JXv4IEgJGGdg4ExzP0hQMQcK9z1NkVdyG4OwVB3s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qZnu8DIGVckN5qmVu5OZqqnIpbOcGOUHkqeGi9R+zthuGdzLfARZ9mSGb8S66qRvT
-	 9sUIVNrNodfyQCRddaHFaeF51xpYKKKJsivaaoq3Zhst1kuRq9ewQUsCYmdt3gBMQu
-	 AWDrrs83Bw0hZWfK34wmEygmT0ninptA0BTptVhkK1j6wge1CnK1xB1jP/k7swJFKQ
-	 JRlNkKgv8ixzMipohX0cjg6BoGq/8jCzAEpYts1jliFN311ylemCAtpGTcdk/I2vNi
-	 CEMtFy/nOhGOjvSlNg+qaILhhq223NLWMUjDwj+GYgjPjIDQdt93qexxluROmup0jV
-	 V1bKEaLr4FGvg==
-Received: from mercury (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sre)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 68AE63781144;
-	Fri, 19 Apr 2024 13:25:26 +0000 (UTC)
-Received: by mercury (Postfix, from userid 1000)
-	id 0E78F106139F; Fri, 19 Apr 2024 15:25:26 +0200 (CEST)
-Date: Fri, 19 Apr 2024 15:25:26 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>, 
-	kernel@collabora.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Pin-yen Lin <treapking@chromium.org>, Hsin-Te Yuan <yuanhsinte@chromium.org>
-Subject: Re: [PATCH v3] power: supply: sbs-battery: Handle unsupported
- PROP_TIME_TO_EMPTY_NOW
-Message-ID: <b3btqqoijplf4ezr4akbj3dd5nevlf2pzen47bzwbm424pwnci@gc3etymakduu>
-References: <20240418-sbs-time-empty-now-error-v3-1-f286e29e3fca@collabora.com>
- <f8c0bdd4-58fb-45a5-a70e-cc97f176222e@collabora.com>
+	s=arc-20240116; t=1713534144; c=relaxed/simple;
+	bh=2Th4AlJNiK8G7lYUCJU5ZRC6UwKwfk2DPXWCgGmkaZI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=a74iCjzKaglIZvskSIfOUNkF8XGDJmgMKuqf86pPYCDInm8v0sNrzFmHCe1wfiCExs6Usrsyt7FAcMxkOm452ZvCj0Rl8C6S0xBf3kmNOezNN5rwAtSzjdY+BpUlEYmEd+WA/2bZ6s8eQw3Z4E3gGhy0GLn14Om3eClbRroMlGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6AAE6339;
+	Fri, 19 Apr 2024 06:42:50 -0700 (PDT)
+Received: from [10.1.30.55] (e133047.arm.com [10.1.30.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D05DF3F64C;
+	Fri, 19 Apr 2024 06:42:18 -0700 (PDT)
+Message-ID: <d99fd27a-dac5-4c71-b644-1213f51f2ba0@arm.com>
+Date: Fri, 19 Apr 2024 14:42:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="cydfw5cw3mawxhkn"
-Content-Disposition: inline
-In-Reply-To: <f8c0bdd4-58fb-45a5-a70e-cc97f176222e@collabora.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 2/2] cpufreq/schedutil: Remove iowait boost
+To: Qais Yousef <qyousef@layalina.io>, "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-kernel@vger.kernel.org, peterz@infradead.org,
+ juri.lelli@redhat.com, mingo@redhat.com, dietmar.eggemann@arm.com,
+ vschneid@redhat.com, vincent.guittot@linaro.org, Johannes.Thumshirn@wdc.com,
+ adrian.hunter@intel.com, ulf.hansson@linaro.org, andres@anarazel.de,
+ asml.silence@gmail.com, linux-pm@vger.kernel.org,
+ linux-block@vger.kernel.org, io-uring@vger.kernel.org
+References: <20240304201625.100619-1-christian.loehle@arm.com>
+ <20240304201625.100619-3-christian.loehle@arm.com>
+ <CAJZ5v0gMni0QJTBJXoVOav=kOtQ9W--NyXAgq+dXA+m-bciG8w@mail.gmail.com>
+ <5060c335-e90a-430f-bca5-c0ee46a49249@arm.com>
+ <CAJZ5v0janPrWRkjcLkFeP9gmTC-nVRF-NQCh6CTET6ENy-_knQ@mail.gmail.com>
+ <20240325023726.itkhlg66uo5kbljx@airbuntu>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <20240325023726.itkhlg66uo5kbljx@airbuntu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+On 25/03/2024 02:37, Qais Yousef wrote:
+> On 03/18/24 18:08, Rafael J. Wysocki wrote:
+>> On Mon, Mar 18, 2024 at 5:40 PM Christian Loehle
+>> <christian.loehle@arm.com> wrote:
+>>>
+>>> On 18/03/2024 14:07, Rafael J. Wysocki wrote:
+>>>> On Mon, Mar 4, 2024 at 9:17 PM Christian Loehle
+>>>> <christian.loehle@arm.com> wrote:
+>>>>>
+>>>>> The previous commit provides a new cpu_util_cfs_boost_io interface for
+>>>>> schedutil which uses the io boosted utilization of the per-task
+>>>>> tracking strategy. Schedutil iowait boosting is therefore no longer
+>>>>> necessary so remove it.
+>>>>
+>>>> I'm wondering about the cases when schedutil is used without EAS.
+>>>>
+>>>> Are they still going to be handled as before after this change?
+>>>
+>>> Well they should still get boosted (under the new conditions) and according
+>>> to my tests that does work.
+>>
+>> OK
+>>
+>>> Anything in particular you're worried about?
+>>
+>> It is not particularly clear to me how exactly the boost is taken into
+>> account without EAS.
+>>
+>>> So in terms of throughput I see similar results with EAS and CAS+sugov.
+>>> I'm happy including numbers in the cover letter for future versions, too.
+>>> So far my intuition was that nobody would care enough to include them
+>>> (as long as it generally still works).
+>>
+>> Well, IMV clear understanding of the changes is more important.
+> 
+> I think the major thing we need to be careful about is the behavior when the
+> task is sleeping. I think the boosting will be removed when the task is
+> dequeued and I can bet there will be systems out there where the BLOCK softirq
+> being boosted when the task is sleeping will matter.
 
---cydfw5cw3mawxhkn
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Currently I see this mainly protected by the sugov rate_limit_us.
+With the enqueue's being the dominating cpufreq updates it's not really an
+issue, the boost is expected to survive the sleep duration, during which it
+wouldn't be active.
+I did experiment with some sort of 'stickiness' of the boost to the rq, but
+it is somewhat of a pain to deal with if we want to remove it once enqueued
+on a different rq. A sugov 1ms timer is much simpler of course.
+Currently it's not necessary IMO, but for the sake of being future-proof in
+terms of more frequent freq updates I might include it in v2.
 
-Hi,
+> 
+> FWIW I do have an implementation for per-task iowait boost where I went a step
+> further and converted intel_pstate too and like Christian didn't notice
+> a regression. But I am not sure (rather don't think) I triggered this use case.
+> I can't tell when the systems truly have per-cpu cpufreq control or just appear
+> so and they are actually shared but not visible at linux level.
 
-On Fri, Apr 19, 2024 at 09:26:41AM +0200, AngeloGioacchino Del Regno wrote:
-> Il 18/04/24 19:34, N=EDcolas F. R. A. Prado ha scritto:
-> > Despite the RunTimeToEmpty() (0x11) function being defined in the SBS
-> > specification as required, it seems that not all batteries implement it.
-> > On platforms with such batteries, reading the property will cause an
-> > error to be printed:
-> >=20
-> > power_supply sbs-8-000b: driver failed to report `time_to_empty_now' pr=
-operty: -5
-> >=20
-> > This not only pollutes the log, distracting from real problems on the
-> > device, but also prevents the uevent file from being read since it
-> > contains all properties, including the faulty one.
-> >=20
-> > The following table summarizes the findings for a handful of platforms:
-> >=20
-> > Platform                                Status  Manufacturer    Model
-> > ------------------------------------------------------------------------
-> > mt8186-corsola-steelix-sku131072        OK      BYD             L22B3PG0
-> > mt8195-cherry-tomato-r2                 NOT OK  PANASON         AP16L5J
-> > mt8192-asurada-spherion-r0              NOT OK  PANASON         AP15O5L
-> > mt8183-kukui-jacuzzi-juniper-sku16      NOT OK  LGC KT0         AP16L8J
-> > mt8173-elm-hana                         OK      Sunwoda         L18D3PG1
-> > sc7180-trogdor-lazor-limozeen-nots-r5   NOT OK  Murata          AP18C4K
-> > sc7180-trogdor-kingoftown               NOT OK  333-AC-0D-A     GG02047=
-XL
-> > rk3399-gru-kevin                        OK      SDI             4352D51
-> >=20
-> > Detect if this is one of the quirky batteries during presence update, so
-> > that hot-plugging works as expected, and if so report -ENODATA for
-> > POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW, which removes it from uevent and
-> > prevents throwing errors.
-> >=20
-> > Signed-off-by: N=EDcolas F. R. A. Prado <nfraprado@collabora.com>
->=20
-> N=EDcolas, please, I think that sending this commit to stable for backpor=
-ting
-> makes a lot of sense since you're actually fixing laptops (that does not
-> really require a Fixes tag) that are supported upstream since .. lots of =
-time
-> ago.
->=20
-> In any case, this LGTM.
->=20
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
-ora.com>
+Please do share your intel_pstate proposal!
 
-Considering we have a single commit adding TTE, it should be fine to
-just add a Fixes tag for that:
-
-Fixes: 6ea0126631b0 ("power: supply: sbs-battery: add support for time_to_e=
-mpty_now attribute")
-
--- Sebastian
-
---cydfw5cw3mawxhkn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmYicMEACgkQ2O7X88g7
-+prwSg//ZJvOpFl9Jz8TJ0tdJb6BXGy3zv4WAEvPZT8oJPsjaJMUC1Bm+R3uCNfD
-vuVZdlRzou3EwLWyho1vN2iR8Oi7DmpfZTMUcjGkbIxul2ty4g1mc6gEkycPt/ku
-MkNeD1XD4A+R88dR7x2oaGzcA4WxUbnQMqEwzy1t7D6wVSo5aDaenFFHCOAhHwAX
-MbKn6oe+taewYosI8rkVBO/K9HdaEOczHb9ds1Dp3WfL/LvJarKUcS27Sk35GCfF
-9VWT9PYXqheMnkqGmnwUqGxRwSMyQqUxRv60IzWg9RgA1iZv8C/vIvcdcixQNw0w
-ObmltEPif2u7QA9kM1g+wOmhkbdeuf/Qvmloekja5y7zgZK9OQQdiqDjSUpJzK6k
-tNMU9OlfRBHA38S6UUc131UidHvKSiODKbBjMzubqMcXdEo628iIWk8Inw90sF94
-Z8YOwomDfFiur7oCW19gUOnNJS+fAmrUd85fRjuHLYldF5zPH+mixbWwqizFF6G/
-IYyzPtCLPVRDbPl2msd2Ev2hlMyKfMgtPeh0tdQJJ37Qn7f1KkDZ2vunHIsbdS4Q
-kXGj9yUkg5Zsz5mDsNyioBC6rd7WDDJuw43YAfz3JAZ6NSuKTRjilk3DDZW4tUoD
-l08yAaC8ax90uizXdxwZvnPty1YZ3bqlBwHqu66r3YO0VsM6Tyw=
-=1rQq
------END PGP SIGNATURE-----
-
---cydfw5cw3mawxhkn--
+Kind Regards,
+Christian
 
