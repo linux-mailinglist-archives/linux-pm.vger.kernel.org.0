@@ -1,193 +1,134 @@
-Return-Path: <linux-pm+bounces-6737-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6738-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B32618AB77D
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Apr 2024 01:31:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9C078AB85F
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Apr 2024 03:46:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4014D1F21486
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Apr 2024 23:31:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 59077B21231
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Apr 2024 01:46:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E42F813D890;
-	Fri, 19 Apr 2024 23:31:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="p6dZWNO1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D767205E0D;
+	Sat, 20 Apr 2024 01:46:11 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4408F64D;
-	Fri, 19 Apr 2024 23:31:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 274A5A40;
+	Sat, 20 Apr 2024 01:46:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713569498; cv=none; b=uVc244I0b5KTZuGy+pVIB+NccgsMLNbj+gncKTuf0dQim383U9OIeZGVKz9dv9howZPrXD4cbTiUDLkEGySOAgbDcv57fIoGPZxo72X+H1vosjbj4LJ25KtH6SWXuVOvne+C8bSb1vIvH8Ci0bGnfCX9x6fGIQtEE6rrw3WltYo=
+	t=1713577571; cv=none; b=siCV4ieiGCJEokF6adQAT3mQPNxd36Ysh6vb60P+9TJDWlNqZ9xCOPPDeTBE5KEic5QeVIgqYm33l7LHpeLtYrrKHZX4vlFX5VIE5t2l5o7JI0itjE6Hk4bg83jxPqs4vC2L9mKeG8yCb5ksZcUU7L0jpeE4z7dbKZU+1iCDSiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713569498; c=relaxed/simple;
-	bh=6IGgM1ninH2UvKvYGTOhBMyMEqSh2CQFZKSqqRp6Ml4=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BaPKBY0XsnfWZqv0xE72OP9PMFE4Mrvcr2zspA+auni5G8pDojVwwHqqAWFfeayHb1oUdahNHIx8/F3YTDBOhelYXv2qzAzfxzIJs8MtpgKpvF92dMiYUq1kmoFI3QcbsvAB8WFyOb4Y4/HJ030CHKgrFsA/6vGbs8zREZtsEJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=p6dZWNO1; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43JMsPNc025597;
-	Fri, 19 Apr 2024 23:31:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=qcppdkim1; bh=7YnOs/zIN96oMB3AwWlXg
-	64tPuvFDKMPlHsSp9oJv1I=; b=p6dZWNO1tSiHG2IBHs697YnUU6PtAm4t1qJml
-	/CsthJIMrWP0pL/iukK6CKVPqKADiZ5a7v8m+mUFCw7IQM4Tc2AQtILnQQjY9L0N
-	xabs1UGVHrWYVtNOKeMairbBSR4ogrT2LbiRZ6t3Qnnant9r2Eh1iyFsURos8wm6
-	tS62m00iiCjsVOqO1oIIVTedot3sbo9u16EFIivfkNh+WF6RpNFgaUNxRySXXOh8
-	LSABk1GO4Ajley8x/kuIAzvChn5wQf2lrez7KPAG7T9IINAyTgHluFdJ7yQWzCeJ
-	B686XdG5N7wun21PfCGLIOODR9/9yeJm5PHcp7UMv0GTqLYtw==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xkkss9uc7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 19 Apr 2024 23:31:19 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43JNVIsT003709
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 19 Apr 2024 23:31:18 GMT
-Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Fri, 19 Apr 2024 16:31:17 -0700
-Date: Fri, 19 Apr 2024 16:31:17 -0700
-From: Elliot Berman <quic_eberman@quicinc.com>
-To: Sudeep Holla <sudeep.holla@arm.com>
-CC: Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konrad.dybcio@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>, Rob Herring
-	<robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Andy Yan
-	<andy.yan@rock-chips.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        "Mark
- Rutland" <mark.rutland@arm.com>,
-        Bartosz Golaszewski
-	<bartosz.golaszewski@linaro.org>,
-        Satya Durga Srinivasu Prabhala
-	<quic_satyap@quicinc.com>,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        Shivendra Pratap <quic_spratap@quicinc.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH v2 0/4] Implement vendor resets for PSCI SYSTEM_RESET2
-Message-ID: <20240419134542691-0700.eberman@hu-eberman-lv.qualcomm.com>
-References: <20240414-arm-psci-system_reset2-vendor-reboots-v2-0-da9a055a648f@quicinc.com>
- <Zh5GWqt2oCNHdF_h@bogus>
- <20240417140957985-0700.eberman@hu-eberman-lv.qualcomm.com>
- <20240419085345.4ovebbbmcabo3f73@bogus>
+	s=arc-20240116; t=1713577571; c=relaxed/simple;
+	bh=bJjpIGTuHq/tNnAK50kecEJdDZuq7kA9oC6gFX8UV9k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rN4GVV/+isAbyjT7bkrZkgJg6v17YFI+eb1t/Lp5ab0zhqk5qtFDRFhLSAf9w8OwN0yCsZSwHPNX4DJEu5mx3M8B30SYOO8MwN7oqhwf7SMk5xjbn4ut7MqgauP+dWgGhSpo6STo4aEaM6C2wliqL9eUK7vabwmWuKWmaTO+5a4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [112.20.112.218])
+	by gateway (Coremail) with SMTP id _____8Bx7_BZHiNmnDwAAA--.994S3;
+	Sat, 20 Apr 2024 09:46:01 +0800 (CST)
+Received: from localhost.localdomain (unknown [112.20.112.218])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8BxIeBXHiNmAIIAAA--.2913S2;
+	Sat, 20 Apr 2024 09:46:00 +0800 (CST)
+From: Binbin Zhou <zhoubinbin@loongson.cn>
+To: Binbin Zhou <zhoubb.aaron@gmail.com>,
+	Huacai Chen <chenhuacai@loongson.cn>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Amit Kucheria <amitk@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Huacai Chen <chenhuacai@kernel.org>,
+	loongson-kernel@lists.loongnix.cn,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Yinbo Zhu <zhuyinbo@loongson.cn>,
+	WANG Xuerui <git@xen0n.name>,
+	loongarch@lists.linux.dev,
+	Binbin Zhou <zhoubinbin@loongson.cn>
+Subject: [PATCH v3 0/4] thermal: loongson2: Add Loongson-2K0500 and Loongson-2K2000 thermal support
+Date: Sat, 20 Apr 2024 09:45:45 +0800
+Message-ID: <cover.1713509889.git.zhoubinbin@loongson.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20240419085345.4ovebbbmcabo3f73@bogus>
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: ptwZxpIb3YjMjehV0iVZZt6crq1l_sl3
-X-Proofpoint-GUID: ptwZxpIb3YjMjehV0iVZZt6crq1l_sl3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-19_15,2024-04-19_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- lowpriorityscore=0 malwarescore=0 suspectscore=0 priorityscore=1501
- mlxscore=0 mlxlogscore=949 adultscore=0 bulkscore=0 clxscore=1015
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2404010003 definitions=main-2404190183
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:AQAAf8BxIeBXHiNmAIIAAA--.2913S2
+X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBj93XoW7ZrWftFW8AryDZw45KFWUJrc_yoW8XryUpa
+	nxu3sxGr1UAF4UZw4fA3y8Ars09rWftayDWr4fJw1rArZ8Gw13t34rta1YvrZ7urW0gFW2
+	qrn5Kr4UCFn8CrXCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUB0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
+	twAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+	8JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
+	6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
+	AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
+	0xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
+	v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AK
+	xVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUcpBTUUUUU
 
-On Fri, Apr 19, 2024 at 09:53:45AM +0100, Sudeep Holla wrote:
-> On Wed, Apr 17, 2024 at 02:54:41PM -0700, Elliot Berman wrote:
-> > On Tue, Apr 16, 2024 at 10:35:22AM +0100, Sudeep Holla wrote:
-> > > On Sun, Apr 14, 2024 at 12:30:23PM -0700, Elliot Berman wrote:
-> > > > The PSCI SYSTEM_RESET2 call allows vendor firmware to define additional
-> > > > reset types which could be mapped to the reboot argument.
-> > > >
-> > > > Setting up reboot on Qualcomm devices can be inconsistent from chipset
-> > > > to chipset.
-> > >
-> > > That doesn't sound good. Do you mean PSCI SYSTEM_RESET doesn't work as
-> > > expected ? Does it mean it is not conformant to the specification ?
-> > >
-> >
-> > I was motivating the reason for using SYSTEM_RESET2. How to set the PMIC
-> > register and IMEM cookie can change between chipsets. Using
-> > SYSTEM_RESET2 alows us to abstract how to perform the reset.
-> 
-> Fair enough. But I assume you are not providing the details of PMIC register
-> or IMEM cookie via DT.
+Hi all:
 
-Kernel doesn't need this info.
+This patchset introduce the Loongson-2K0500 and Loongson-2K2000
+temperature sensors.
 
-> 
-> Anyways you did confirm if PSCI SYSTEM_RESET works as expected or not. That
-> is default and must work.
-> 
+The temperature sensors of Loongson-2K series CPUs are similar, except
+that the temperature reading method of the Loongson-2K2000 is
+different.
 
-Yes, SYSTEM_RESET works on Quacomm firmware. The bindings disallow
-trying to override the default reboot. (reboot command = NULL or "") The
-PSCI parsing of the DT also doesn't have any of the special handling to
-deal with "mode-normal".
+Specifically, the temperature output register of the Loongson-2K2000 is
+defined in the chip configuration domain. We need to define it in dts
+and calculate it using different calculation methods.
 
-> > > > Generally, there is a PMIC register that gets written to
-> > > > decide the reboot type. There is also sometimes a cookie that can be
-> > > > written to indicate that the bootloader should behave differently than a
-> > > > regular boot. These knobs evolve over product generations and require
-> > > > more drivers. Qualcomm firmwares are beginning to expose vendor
-> > > > SYSTEM_RESET2 types to simplify driver requirements from Linux.
-> > > >
-> > >
-> > > Why can't this be fully userspace driven ? What is the need to keep the
-> > > cookie in the DT ?
-> >
-> > As Dmitry pointed out, this information isn't discoverable. I suppose
-> > we could technically use bootconfig or kernel command-line to convey the
-> > map although I think devicetree is the right spot for this mapping.
-> >
-> 
-> Yes and as usual DT has become dumping ground for firmware that don't
-> make things discoverable. Make crap that Qcom puts in the DT are firmware
-> related and can be make discoverable. Anyways it is sad that no efforts
-> to make it so are done as DT is always there to provide shortcuts.
-> 
-> > - Other vendor-specific bits for PSCI are described in the devicetree.
-> >   One example is the suspend param (e.g. the StateID) for cpu idle
-> >   states.
-> 
-> You are right, but that is the only example I can see and it was done
-> in very early days of PSCI. It shouldn't be example if there are better
-> ways.
-> 
-> > - Describing firmware bits in the DT isn't unprecedented, and putting
-> >   this information outside the DT means that other OSes (besides Linux)
-> >   need their own way to convey this information.
-> 
-> Correct but it can be Qcom specific firmware interface. There are so many
-> already. This splitting information between firmware and DT works well
-> for vertically integrated things which probably is the case with most of
-> Qcom SoCs but it is prone to issues if DT and firmware mismatch. Firmware
-> discovery eliminates such issues.
-> 
+Thanks.
 
-I worry about designing interfaces both in Qualcomm firmware and in
-the PSCI driver which doesn't really suit handling the discovery. We can
-implement the dynamic discovery mechanims once there is a board which
-needs it.
+---
+V3:
+- Collect Acked-by and Reviewed-by tag, thanks.
+patch(1/4):
+  - Several code stlye adjustments, such as line breaks.
+patch(3/4):
+  - If-else statement goes before unevaluatedProperties.
 
-Thanks,
-Elliot
+Link to V2:
+https://lore.kernel.org/all/cover.1713147645.git.zhoubinbin@loongson.cn/
+
+V2:
+patch(2/4):
+ - Add Acked-by tag from Rob, thanks.
+patch(3/4):
+ - Add "minItems: 2" to the reg attribute of Loongson-2K2000.
+
+Link to V1:
+https://lore.kernel.org/all/cover.1712733065.git.zhoubinbin@loongson.cn/
+
+Binbin Zhou (4):
+  thermal: loongson2: Trivial code style adjustment
+  dt-bindings: thermal: loongson,ls2k-thermal: Add Loongson-2K0500
+    compatible
+  dt-bindings: thermal: loongson,ls2k-thermal: Fix incorrect compatible
+    definition
+  thermal: loongson2: Add Loongson-2K2000 support
+
+ .../thermal/loongson,ls2k-thermal.yaml        |  24 +++-
+ drivers/thermal/loongson2_thermal.c           | 111 +++++++++++-------
+ 2 files changed, 93 insertions(+), 42 deletions(-)
+
+-- 
+2.43.0
+
 
