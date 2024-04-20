@@ -1,209 +1,188 @@
-Return-Path: <linux-pm+bounces-6743-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6744-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DB768ABA5C
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Apr 2024 10:42:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D6F28ABB2B
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Apr 2024 12:57:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CDE6B1F2237D
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Apr 2024 08:42:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 86D37B21147
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Apr 2024 10:57:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CC6D134BE;
-	Sat, 20 Apr 2024 08:42:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54ED510E9;
+	Sat, 20 Apr 2024 10:57:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CjwykDC+"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="owxG409S"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2F8538C;
-	Sat, 20 Apr 2024 08:42:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A53E810A1D
+	for <linux-pm@vger.kernel.org>; Sat, 20 Apr 2024 10:57:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713602572; cv=none; b=WCrUEFUPI/go/m6RSx6DO+ZGCJPTmD6LWKByyodSdKmGx5FFXUlChyyu2nb8N52trbO7cZQvXeiiYceGZJc/KxWNJoNKOmgFvjuz/Qp3B4XEOEbx9z0jYGf0ulxVTBM6t0yRVjcVbEkQnvChfC3oSyxfYkyL/nZN6Br5cTI6x2Q=
+	t=1713610669; cv=none; b=IFSOpSUb2mkPtSkBsz776qjvkP7IMn9w4j9vW2QrlMGs9QwPN/r0LQVEqY51C9Z9DUWi/YF9x4DtSRLB9SBzt9HCtUIPozBTMZEVMJHgbTB5F0RADWCr7BV2ff05FJIMsl+pXeoF6jzE3di98SMx7R7QeQ/AAr+BFOhqoVU3uUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713602572; c=relaxed/simple;
-	bh=ulAUZvq09VWmvufi41gUROAERCYrwToqdQQIua7fmMw=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=YchwRXvSGuO+WUNUhP5mJUMsBVrnTSTBdVyWLULkL4pTFUYSC4dy9I8WcifMVSHlcyPM/XAyOXLsAYWJsSbPToQJDS3+S7gIqZlG8O8HwF2nXnSie13IZ6rO01z3ZrPfkrT9rmoOdfLV8BM1T3RCcRhMXgOXxLG4ZhrEm3sM6WI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CjwykDC+; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713602570; x=1745138570;
-  h=date:from:to:cc:subject:message-id;
-  bh=ulAUZvq09VWmvufi41gUROAERCYrwToqdQQIua7fmMw=;
-  b=CjwykDC+Oe2hXsA3ngQ1FwoiunXUSGK5G0OsDvAAycvTWcrck05EjLjm
-   KMisZ9W3jNfxAe2h1u+JunSajEj55wM3kGFu3c3etXKBfhScTBP/tg3qx
-   84dLm8DaIRXqk1dyLlv8GylDNALHe5h8MEONCzK0yuMPy94Mzyfn6rsnp
-   Nel81HBAAn7xHxzBc7x+mys8Y2l0YDKggt+z12WKjzmFJhC0hJ7IVYsuI
-   kh+HKkc0pP3FniBJ1OXDYRr9196f7kHMlUY5niQ3ksFkHPe8eVGDgDHoS
-   SA2bSEzeqoA7viWlH+4j66p/46u5UvlLGBsJ96WVSNGVByGMjSYNU2OsM
-   g==;
-X-CSE-ConnectionGUID: LiO2G8JOTraMEoUC6yMJkA==
-X-CSE-MsgGUID: sshFbSzvSzumohe+7sWP6g==
-X-IronPort-AV: E=McAfee;i="6600,9927,11049"; a="19900598"
-X-IronPort-AV: E=Sophos;i="6.07,216,1708416000"; 
-   d="scan'208";a="19900598"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2024 01:42:49 -0700
-X-CSE-ConnectionGUID: mQLhZkp9RAuS832Xt2EJNA==
-X-CSE-MsgGUID: Jld5XHqiTZCEaJBYDUE8/g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,216,1708416000"; 
-   d="scan'208";a="23623859"
-Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 20 Apr 2024 01:42:48 -0700
-Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ry6J3-000AsO-1w;
-	Sat, 20 Apr 2024 08:42:45 +0000
-Date: Sat, 20 Apr 2024 16:42:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 4a144cb33ba0ff7bff6841d362e0d975d565c3ef
-Message-ID: <202404201626.scymyjLR-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1713610669; c=relaxed/simple;
+	bh=23hWeEr+W84WKW10MFW2wGv1mxXeR0jauqdsZvPF0GI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=O0TwPBcjLLLcDTJGcfq/oTHLLB1ozSj/vnvsqX5moIrmchRmkkvugotjXjsFDjbAcCWp7M8gIQ2ONvZQpsXGuH4+fSfAQohP+zZwANq/fQi4CmlyRQY2JcDrQQl9SpcnCAtvSivq2r+d0TpK1wl3y3teGzuiPsdEKHtxpPY2ZkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=owxG409S; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3455ff1339dso1962015f8f.0
+        for <linux-pm@vger.kernel.org>; Sat, 20 Apr 2024 03:57:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1713610666; x=1714215466; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ipeqzc6ZZ02TREHla/6ToLuSgvq7MVUYfKOCJgBT6bM=;
+        b=owxG409SfEpU5cOFtgZcJEhFPcw5NUntZLZBL4vQs9lTeeDnpX62Bc7d4YGtoIdjBJ
+         Eu4ha6pi+t9LwujS2virBMeoVM05N+76ryd4eFqtWigv3cFXof2vmk2HTG7imdl8AcFr
+         TK5lgdcYMtJpiLa/obgpULqJqF9kQxd5nO0sXEGm/9JcVHRjVEiIseBvOfjctV3boKfg
+         fRubbjbs3cvZeyQBqZcPYXlCrytsAYHLv5PRcb2eLwxMDDwDp57ifaTVKIKZDdXAStLU
+         6b3ynl6ikthICRhfwC0IlIwH5c/mKHWsawyh7VPnxDJr206mqw148gF+q66XkcFR/BTg
+         +3tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713610666; x=1714215466;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ipeqzc6ZZ02TREHla/6ToLuSgvq7MVUYfKOCJgBT6bM=;
+        b=JIxseIvCUYEK1T8uuRtNJvRF+yqU8OSy5HfFjOi2e2gn1YiznAD38nd84wkHY+rOye
+         57BX8kOIChxFeMQialfJbuwDqr127ulT/lz8OCtOed43ZtVAOoV6pB7vuMRmh8ieXM4Y
+         gH/g9aiKBShgBEaFQLNviol7KRXGL6A/GrLy88ZSFyvAGIQDtxMLSKQEcyZzhSerRnTU
+         DShVB9ms+tVlG6EEj0flrVFxgNNXdosUHRC+v+hJsiBew/VTXF03tNiMJMNAO7RTrUFY
+         XKzsF02wC8+2ynQsJcsaFQdnyIy5ysS6SGltH+cc0rY5W7tPqW4Q+ewdtoWoiOs192Ff
+         8hjg==
+X-Forwarded-Encrypted: i=1; AJvYcCVYG+kazl5zlIGxz/4HsWGjsAE72pBYleiANhuRoEQ+Kn3WtKLdZcND6HS2EibXEY8ivkTtFBIcsB6U8D/HW1bzL+P/Hi7Rsts=
+X-Gm-Message-State: AOJu0YyZIckM/9ByVIMJa5Bd1LwhIc12FIZe8zxnLoISuRIfBkwoVhfh
+	WgGxeIPVV3akSw6xP1wCNVeEq8OxoVD0Rh9QZLD9kmtUjLf2M3bcjr5vyLx/oIE=
+X-Google-Smtp-Source: AGHT+IFkA8Y7ennaLjq8bZ4n1JCaFKc7IdLrpPRWj5rTDXNWayaiI2eIh0FoCthPJ/SBJ9VRtl2pYg==
+X-Received: by 2002:a5d:49c9:0:b0:343:44d2:3828 with SMTP id t9-20020a5d49c9000000b0034344d23828mr3230642wrs.16.1713610666016;
+        Sat, 20 Apr 2024 03:57:46 -0700 (PDT)
+Received: from [10.236.36.88] ([88.128.88.151])
+        by smtp.gmail.com with ESMTPSA id n17-20020a05600c501100b00419e078677csm2258995wmr.16.2024.04.20.03.57.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 20 Apr 2024 03:57:45 -0700 (PDT)
+Message-ID: <19bee3e2-ea14-4fe9-ba10-497166ab791e@linaro.org>
+Date: Sat, 20 Apr 2024 02:50:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/4] dt-bindings: power: reset: Convert mode-.*
+ properties to array
+To: Elliot Berman <quic_eberman@quicinc.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>, Sebastian Reichel
+ <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+ Andy Yan <andy.yan@rock-chips.com>, Lorenzo Pieralisi
+ <lpieralisi@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Cc: Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+ Melody Olvera <quic_molvera@quicinc.com>,
+ Shivendra Pratap <quic_spratap@quicinc.com>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ Florian Fainelli <florian.fainelli@broadcom.com>, linux-pm@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org
+References: <20240414-arm-psci-system_reset2-vendor-reboots-v2-0-da9a055a648f@quicinc.com>
+ <20240414-arm-psci-system_reset2-vendor-reboots-v2-1-da9a055a648f@quicinc.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzTRLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+wsGUBBMBCgA+FiEE
+ m9B+DgxR+NWWd7dUG5NDfTtBYpsFAmI+BxMCGwMFCRRfreEFCwkIBwIGFQoJCAsCBBYCAwEC
+ HgECF4AACgkQG5NDfTtBYptgbhAAjAGunRoOTduBeC7V6GGOQMYIT5n3OuDSzG1oZyM4kyvO
+ XeodvvYv49/ng473E8ZFhXfrre+c1olbr1A8pnz9vKVQs9JGVa6wwr/6ddH7/yvcaCQnHRPK
+ mnXyP2BViBlyDWQ71UC3N12YCoHE2cVmfrn4JeyK/gHCvcW3hUW4i5rMd5M5WZAeiJj3rvYh
+ v8WMKDJOtZFXxwaYGbvFJNDdvdTHc2x2fGaWwmXMJn2xs1ZyFAeHQvrp49mS6PBQZzcx0XL5
+ cU9ZjhzOZDn6Apv45/C/lUJvPc3lo/pr5cmlOvPq1AsP6/xRXsEFX/SdvdxJ8w9KtGaxdJuf
+ rpzLQ8Ht+H0lY2On1duYhmro8WglOypHy+TusYrDEry2qDNlc/bApQKtd9uqyDZ+rx8bGxyY
+ qBP6bvsQx5YACI4p8R0J43tSqWwJTP/R5oPRQW2O1Ye1DEcdeyzZfifrQz58aoZrVQq+innR
+ aDwu8qDB5UgmMQ7cjDSeAQABdghq7pqrA4P8lkA7qTG+aw8Z21OoAyZdUNm8NWJoQy8m4nUP
+ gmeeQPRc0vjp5JkYPgTqwf08cluqO6vQuYL2YmwVBIbO7cE7LNGkPDA3RYMu+zPY9UUi/ln5
+ dcKuEStFZ5eqVyqVoZ9eu3RTCGIXAHe1NcfcMT9HT0DPp3+ieTxFx6RjY3kYTGLOwU0EVUNc
+ NAEQAM2StBhJERQvgPcbCzjokShn0cRA4q2SvCOvOXD+0KapXMRFE+/PZeDyfv4dEKuCqeh0
+ hihSHlaxTzg3TcqUu54w2xYskG8Fq5tg3gm4kh1Gvh1LijIXX99ABA8eHxOGmLPRIBkXHqJY
+ oHtCvPc6sYKNM9xbp6I4yF56xVLmHGJ61KaWKf5KKWYgA9kfHufbja7qR0c6H79LIsiYqf92
+ H1HNq1WlQpu/fh4/XAAaV1axHFt/dY/2kU05tLMj8GjeQDz1fHas7augL4argt4e+jum3Nwt
+ yupodQBxncKAUbzwKcDrPqUFmfRbJ7ARw8491xQHZDsP82JRj4cOJX32sBg8nO2N5OsFJOcd
+ 5IE9v6qfllkZDAh1Rb1h6DFYq9dcdPAHl4zOj9EHq99/CpyccOh7SrtWDNFFknCmLpowhct9
+ 5ZnlavBrDbOV0W47gO33WkXMFI4il4y1+Bv89979rVYn8aBohEgET41SpyQz7fMkcaZU+ok/
+ +HYjC/qfDxT7tjKXqBQEscVODaFicsUkjheOD4BfWEcVUqa+XdUEciwG/SgNyxBZepj41oVq
+ FPSVE+Ni2tNrW/e16b8mgXNngHSnbsr6pAIXZH3qFW+4TKPMGZ2rZ6zITrMip+12jgw4mGjy
+ 5y06JZvA02rZT2k9aa7i9dUUFggaanI09jNGbRA/ABEBAAHCwXwEGAEKACYCGwwWIQSb0H4O
+ DFH41ZZ3t1Qbk0N9O0FimwUCYDzvagUJFF+UtgAKCRAbk0N9O0Fim9JzD/0auoGtUu4mgnna
+ oEEpQEOjgT7l9TVuO3Qa/SeH+E0m55y5Fjpp6ZToc481za3xAcxK/BtIX5Wn1mQ6+szfrJQ6
+ 59y2io437BeuWIRjQniSxHz1kgtFECiV30yHRgOoQlzUea7FgsnuWdstgfWi6LxstswEzxLZ
+ Sj1EqpXYZE4uLjh6dW292sO+j4LEqPYr53hyV4I2LPmptPE9Rb9yCTAbSUlzgjiyyjuXhcwM
+ qf3lzsm02y7Ooq+ERVKiJzlvLd9tSe4jRx6Z6LMXhB21fa5DGs/tHAcUF35hSJrvMJzPT/+u
+ /oVmYDFZkbLlqs2XpWaVCo2jv8+iHxZZ9FL7F6AHFzqEFdqGnJQqmEApiRqH6b4jRBOgJ+cY
+ qc+rJggwMQcJL9F+oDm3wX47nr6jIsEB5ZftdybIzpMZ5V9v45lUwmdnMrSzZVgC4jRGXzsU
+ EViBQt2CopXtHtYfPAO5nAkIvKSNp3jmGxZw4aTc5xoAZBLo0OV+Ezo71pg3AYvq0a3/oGRG
+ KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
+ fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240414-arm-psci-system_reset2-vendor-reboots-v2-1-da9a055a648f@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 4a144cb33ba0ff7bff6841d362e0d975d565c3ef  Merge branch 'thermal-core-next' into bleeding-edge
+On 14/04/2024 21:30, Elliot Berman wrote:
+> PSCI reboot mode will map a mode name to multiple magic values instead
+> of just one. Convert the mode-.* property to an array. Users of the
+> reboot-mode schema will need to specify the maxItems of the mode-.*
+> properties. Existing users will all be 1.
+> 
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> ---
+>  .../devicetree/bindings/power/reset/nvmem-reboot-mode.yaml   |  4 ++++
+>  Documentation/devicetree/bindings/power/reset/qcom,pon.yaml  |  4 ++++
+>  .../devicetree/bindings/power/reset/reboot-mode.yaml         | 12 ++++++++++--
+>  .../devicetree/bindings/power/reset/syscon-reboot-mode.yaml  |  4 ++++
+>  4 files changed, 22 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/power/reset/nvmem-reboot-mode.yaml b/Documentation/devicetree/bindings/power/reset/nvmem-reboot-mode.yaml
+> index 627f8a6078c2..03b3b9be36de 100644
+> --- a/Documentation/devicetree/bindings/power/reset/nvmem-reboot-mode.yaml
+> +++ b/Documentation/devicetree/bindings/power/reset/nvmem-reboot-mode.yaml
+> @@ -30,6 +30,10 @@ properties:
+>  
+>  allOf:
+>    - $ref: reboot-mode.yaml#
+> +  - patternProperties:
+> +      "^mode-.*$":
+> +        items:
+> +          maxItems: 1
 
-elapsed time: 727m
+You still need to limit total number of items. This only defines how
+many items you have in each inner cell of the matrix. What about the
+other cell?
 
-configs tested: 115
-configs skipped: 3
+I understood that you want something more or less equivalent, but the
+code does not look like.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20240420   gcc  
-arc                   randconfig-002-20240420   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                   randconfig-001-20240420   gcc  
-arm                   randconfig-002-20240420   gcc  
-arm                   randconfig-003-20240420   clang
-arm                   randconfig-004-20240420   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240420   clang
-arm64                 randconfig-002-20240420   clang
-arm64                 randconfig-003-20240420   gcc  
-arm64                 randconfig-004-20240420   clang
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240420   gcc  
-csky                  randconfig-002-20240420   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240420   clang
-hexagon               randconfig-002-20240420   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240420   gcc  
-i386         buildonly-randconfig-002-20240420   clang
-i386         buildonly-randconfig-003-20240420   gcc  
-i386         buildonly-randconfig-004-20240420   gcc  
-i386         buildonly-randconfig-005-20240420   gcc  
-i386         buildonly-randconfig-006-20240420   gcc  
-i386                                defconfig   clang
-i386                  randconfig-001-20240420   clang
-i386                  randconfig-002-20240420   gcc  
-i386                  randconfig-003-20240420   gcc  
-i386                  randconfig-004-20240420   gcc  
-i386                  randconfig-005-20240420   clang
-i386                  randconfig-006-20240420   gcc  
-i386                  randconfig-011-20240420   clang
-i386                  randconfig-012-20240420   clang
-i386                  randconfig-013-20240420   clang
-i386                  randconfig-014-20240420   clang
-i386                  randconfig-015-20240420   clang
-i386                  randconfig-016-20240420   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64                              defconfig   gcc  
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards,
+Krzysztof
+
 
