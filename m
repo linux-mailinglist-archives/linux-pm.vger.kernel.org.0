@@ -1,218 +1,209 @@
-Return-Path: <linux-pm+bounces-6742-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6743-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D8418AB866
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Apr 2024 03:46:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DB768ABA5C
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Apr 2024 10:42:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E838B281DB2
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Apr 2024 01:46:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CDE6B1F2237D
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Apr 2024 08:42:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A547A40;
-	Sat, 20 Apr 2024 01:46:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CC6D134BE;
+	Sat, 20 Apr 2024 08:42:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CjwykDC+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F41D3749F;
-	Sat, 20 Apr 2024 01:46:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2F8538C;
+	Sat, 20 Apr 2024 08:42:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713577586; cv=none; b=gPi4BBSXb9+D2MKgWWe0cyHbAmwG0eXX7mykNKfjCcgTO5O1vCC77utZlOCCnnL6u8vWoRKWEry775rJj6K5XQDRawfyTONwigMm8yfGwJXofXIvT6p6mMYg+a/P5J+8IjjPU/Ra7zaa3C+B0Kk5+rBesrUWEJclLguPHkA0eXE=
+	t=1713602572; cv=none; b=WCrUEFUPI/go/m6RSx6DO+ZGCJPTmD6LWKByyodSdKmGx5FFXUlChyyu2nb8N52trbO7cZQvXeiiYceGZJc/KxWNJoNKOmgFvjuz/Qp3B4XEOEbx9z0jYGf0ulxVTBM6t0yRVjcVbEkQnvChfC3oSyxfYkyL/nZN6Br5cTI6x2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713577586; c=relaxed/simple;
-	bh=h6jarikVF26j8aPkjTGqpeqb6H4GeWm6GlEqUopV/nU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JfGSIeGgg4QEzptySqqCRR+uSHz2RZhQJJft9u5Lrm0hNGcGUkp0cwyww/NhE73Oi/7FSXkUZNphVFKRW1QMJw7IvJv2yXOfvfg4DmP3r5qnVwFkie/nigXG4/9b60NYNI9fwrzWz/gjhkGRV1Xk3Idejst6x6NlBCsSA3+UMRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [112.20.112.218])
-	by gateway (Coremail) with SMTP id _____8BxcfFtHiNm5zwAAA--.1450S3;
-	Sat, 20 Apr 2024 09:46:21 +0800 (CST)
-Received: from localhost.localdomain (unknown [112.20.112.218])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8AxUuBsHiNmJYIAAA--.2827S2;
-	Sat, 20 Apr 2024 09:46:20 +0800 (CST)
-From: Binbin Zhou <zhoubinbin@loongson.cn>
-To: Binbin Zhou <zhoubb.aaron@gmail.com>,
-	Huacai Chen <chenhuacai@loongson.cn>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Amit Kucheria <amitk@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: Huacai Chen <chenhuacai@kernel.org>,
-	loongson-kernel@lists.loongnix.cn,
-	linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Yinbo Zhu <zhuyinbo@loongson.cn>,
-	WANG Xuerui <git@xen0n.name>,
-	loongarch@lists.linux.dev,
-	Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: [PATCH v3 4/4] thermal: loongson2: Add Loongson-2K2000 support
-Date: Sat, 20 Apr 2024 09:46:08 +0800
-Message-ID: <e3c9b6bdfe8624d90bcc16eefe92abd66bd3da12.1713509889.git.zhoubinbin@loongson.cn>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1713509889.git.zhoubinbin@loongson.cn>
-References: <cover.1713509889.git.zhoubinbin@loongson.cn>
+	s=arc-20240116; t=1713602572; c=relaxed/simple;
+	bh=ulAUZvq09VWmvufi41gUROAERCYrwToqdQQIua7fmMw=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=YchwRXvSGuO+WUNUhP5mJUMsBVrnTSTBdVyWLULkL4pTFUYSC4dy9I8WcifMVSHlcyPM/XAyOXLsAYWJsSbPToQJDS3+S7gIqZlG8O8HwF2nXnSie13IZ6rO01z3ZrPfkrT9rmoOdfLV8BM1T3RCcRhMXgOXxLG4ZhrEm3sM6WI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CjwykDC+; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713602570; x=1745138570;
+  h=date:from:to:cc:subject:message-id;
+  bh=ulAUZvq09VWmvufi41gUROAERCYrwToqdQQIua7fmMw=;
+  b=CjwykDC+Oe2hXsA3ngQ1FwoiunXUSGK5G0OsDvAAycvTWcrck05EjLjm
+   KMisZ9W3jNfxAe2h1u+JunSajEj55wM3kGFu3c3etXKBfhScTBP/tg3qx
+   84dLm8DaIRXqk1dyLlv8GylDNALHe5h8MEONCzK0yuMPy94Mzyfn6rsnp
+   Nel81HBAAn7xHxzBc7x+mys8Y2l0YDKggt+z12WKjzmFJhC0hJ7IVYsuI
+   kh+HKkc0pP3FniBJ1OXDYRr9196f7kHMlUY5niQ3ksFkHPe8eVGDgDHoS
+   SA2bSEzeqoA7viWlH+4j66p/46u5UvlLGBsJ96WVSNGVByGMjSYNU2OsM
+   g==;
+X-CSE-ConnectionGUID: LiO2G8JOTraMEoUC6yMJkA==
+X-CSE-MsgGUID: sshFbSzvSzumohe+7sWP6g==
+X-IronPort-AV: E=McAfee;i="6600,9927,11049"; a="19900598"
+X-IronPort-AV: E=Sophos;i="6.07,216,1708416000"; 
+   d="scan'208";a="19900598"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2024 01:42:49 -0700
+X-CSE-ConnectionGUID: mQLhZkp9RAuS832Xt2EJNA==
+X-CSE-MsgGUID: Jld5XHqiTZCEaJBYDUE8/g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,216,1708416000"; 
+   d="scan'208";a="23623859"
+Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 20 Apr 2024 01:42:48 -0700
+Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ry6J3-000AsO-1w;
+	Sat, 20 Apr 2024 08:42:45 +0000
+Date: Sat, 20 Apr 2024 16:42:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 4a144cb33ba0ff7bff6841d362e0d975d565c3ef
+Message-ID: <202404201626.scymyjLR-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:AQAAf8AxUuBsHiNmJYIAAA--.2827S2
-X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxAw48Kw47Kw43CFWftr43Jwc_yoWruFWkp3
-	47C3y5KrWDXr4Du3s8Aw1kZF4Yyry3ta9xZFs7Gw1fW393t343Wry5KF10vrWSkFZ8JFy5
-	ZrZ0vFWxC3WDW3gCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUBIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8JVW8Jr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26rWY
-	6Fy7McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-	vIr41lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-	Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0
-	cI8IcVAFwI0_Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw2
-	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x02
-	67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0XdjtUUUUU==
 
-The Loongson-2K2000 and Loongson-2K1000 have similar thermal sensors,
-except that the temperature is read differently.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 4a144cb33ba0ff7bff6841d362e0d975d565c3ef  Merge branch 'thermal-core-next' into bleeding-edge
 
-In particular, the temperature output registers of the Loongson-2K2000
-are defined in the chip configuration domain and are read in a different
-way.
+elapsed time: 727m
 
-Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-Acked-by: Huacai Chen <chenhuacai@loongson.cn>
----
- drivers/thermal/loongson2_thermal.c | 50 +++++++++++++++++++++++------
- 1 file changed, 40 insertions(+), 10 deletions(-)
+configs tested: 115
+configs skipped: 3
 
-diff --git a/drivers/thermal/loongson2_thermal.c b/drivers/thermal/loongson2_thermal.c
-index 7de01fbea801..8ecd8ed465ec 100644
---- a/drivers/thermal/loongson2_thermal.c
-+++ b/drivers/thermal/loongson2_thermal.c
-@@ -30,12 +30,20 @@
- 					 LOONGSON2_THSENS_INT_HIGH)
- #define LOONGSON2_THSENS_OUT_MASK	0xFF
- 
-+/*
-+ * This flag is used to indicate the temperature reading
-+ * method of the Loongson-2K2000
-+ */
-+#define LS2K2000_THSENS_OUT_FLAG	BIT(0)
-+
- struct loongson2_thermal_chip_data {
- 	unsigned int thermal_sensor_sel;
-+	unsigned int flags;
- };
- 
- struct loongson2_thermal_data {
--	void __iomem *regs;
-+	void __iomem *ctrl_reg;
-+	void __iomem *temp_reg;
- 	const struct loongson2_thermal_chip_data *chip_data;
- };
- 
-@@ -48,7 +56,7 @@ static void loongson2_set_ctrl_regs(struct loongson2_thermal_data *data,
- 
- 	reg_ctrl = ctrl_data + HECTO;
- 	reg_ctrl |= enable ? 0x100 : 0;
--	writew(reg_ctrl, data->regs + ctrl_reg + reg_off);
-+	writew(reg_ctrl, data->ctrl_reg + ctrl_reg + reg_off);
- }
- 
- static int loongson2_thermal_set(struct loongson2_thermal_data *data,
-@@ -65,11 +73,16 @@ static int loongson2_thermal_set(struct loongson2_thermal_data *data,
- 
- static int loongson2_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
- {
--	u32 reg_val;
-+	int val;
- 	struct loongson2_thermal_data *data = thermal_zone_device_priv(tz);
- 
--	reg_val = readl(data->regs + LOONGSON2_THSENS_OUT_REG);
--	*temp = ((reg_val & LOONGSON2_THSENS_OUT_MASK) - HECTO) * KILO;
-+	if (data->chip_data->flags) {
-+		val = readl(data->temp_reg);
-+		*temp = ((val & 0xffff) * 820 / 0x4000 - 311) * KILO;
-+	} else {
-+		val = readl(data->ctrl_reg + LOONGSON2_THSENS_OUT_REG);
-+		*temp = ((val & LOONGSON2_THSENS_OUT_MASK) - HECTO) * KILO;
-+	}
- 
- 	return 0;
- }
-@@ -79,7 +92,7 @@ static irqreturn_t loongson2_thermal_irq_thread(int irq, void *dev)
- 	struct thermal_zone_device *tzd = dev;
- 	struct loongson2_thermal_data *data = thermal_zone_device_priv(tzd);
- 
--	writeb(LOONGSON2_THSENS_INT_EN, data->regs + LOONGSON2_THSENS_STATUS_REG);
-+	writeb(LOONGSON2_THSENS_INT_EN, data->ctrl_reg + LOONGSON2_THSENS_STATUS_REG);
- 
- 	thermal_zone_device_update(tzd, THERMAL_EVENT_UNSPECIFIED);
- 
-@@ -111,15 +124,22 @@ static int loongson2_thermal_probe(struct platform_device *pdev)
- 
- 	data->chip_data = device_get_match_data(dev);
- 
--	data->regs = devm_platform_ioremap_resource(pdev, 0);
--	if (IS_ERR(data->regs))
--		return PTR_ERR(data->regs);
-+	data->ctrl_reg = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(data->ctrl_reg))
-+		return PTR_ERR(data->ctrl_reg);
-+
-+	/* The temperature output register is separate for Loongson-2K2000 */
-+	if (data->chip_data->flags) {
-+		data->temp_reg = devm_platform_ioremap_resource(pdev, 1);
-+		if (IS_ERR(data->temp_reg))
-+			return PTR_ERR(data->temp_reg);
-+	}
- 
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq < 0)
- 		return irq;
- 
--	writeb(LOONGSON2_THSENS_INT_EN, data->regs + LOONGSON2_THSENS_STATUS_REG);
-+	writeb(LOONGSON2_THSENS_INT_EN, data->ctrl_reg + LOONGSON2_THSENS_STATUS_REG);
- 
- 	loongson2_thermal_set(data, 0, 0, false);
- 
-@@ -146,6 +166,12 @@ static int loongson2_thermal_probe(struct platform_device *pdev)
- 
- static const struct loongson2_thermal_chip_data loongson2_thermal_ls2k1000_data = {
- 	.thermal_sensor_sel = 0,
-+	.flags = 0,
-+};
-+
-+static const struct loongson2_thermal_chip_data loongson2_thermal_ls2k2000_data = {
-+	.thermal_sensor_sel = 0,
-+	.flags = LS2K2000_THSENS_OUT_FLAG,
- };
- 
- static const struct of_device_id of_loongson2_thermal_match[] = {
-@@ -153,6 +179,10 @@ static const struct of_device_id of_loongson2_thermal_match[] = {
- 		.compatible = "loongson,ls2k1000-thermal",
- 		.data = &loongson2_thermal_ls2k1000_data,
- 	},
-+	{
-+		.compatible = "loongson,ls2k2000-thermal",
-+		.data = &loongson2_thermal_ls2k2000_data,
-+	},
- 	{ /* end */ }
- };
- MODULE_DEVICE_TABLE(of, of_loongson2_thermal_match);
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20240420   gcc  
+arc                   randconfig-002-20240420   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   clang
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm                   randconfig-001-20240420   gcc  
+arm                   randconfig-002-20240420   gcc  
+arm                   randconfig-003-20240420   clang
+arm                   randconfig-004-20240420   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240420   clang
+arm64                 randconfig-002-20240420   clang
+arm64                 randconfig-003-20240420   gcc  
+arm64                 randconfig-004-20240420   clang
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240420   gcc  
+csky                  randconfig-002-20240420   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20240420   clang
+hexagon               randconfig-002-20240420   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20240420   gcc  
+i386         buildonly-randconfig-002-20240420   clang
+i386         buildonly-randconfig-003-20240420   gcc  
+i386         buildonly-randconfig-004-20240420   gcc  
+i386         buildonly-randconfig-005-20240420   gcc  
+i386         buildonly-randconfig-006-20240420   gcc  
+i386                                defconfig   clang
+i386                  randconfig-001-20240420   clang
+i386                  randconfig-002-20240420   gcc  
+i386                  randconfig-003-20240420   gcc  
+i386                  randconfig-004-20240420   gcc  
+i386                  randconfig-005-20240420   clang
+i386                  randconfig-006-20240420   gcc  
+i386                  randconfig-011-20240420   clang
+i386                  randconfig-012-20240420   clang
+i386                  randconfig-013-20240420   clang
+i386                  randconfig-014-20240420   clang
+i386                  randconfig-015-20240420   clang
+i386                  randconfig-016-20240420   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64                              defconfig   gcc  
+x86_64                          rhel-8.3-rust   clang
+xtensa                            allnoconfig   gcc  
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
