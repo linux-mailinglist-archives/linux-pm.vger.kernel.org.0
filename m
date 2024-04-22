@@ -1,146 +1,212 @@
-Return-Path: <linux-pm+bounces-6814-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6815-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36C4E8AD0FC
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 17:34:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 900308AD107
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 17:35:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E72A028CF8C
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 15:34:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B35291C21D66
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 15:35:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D50C915350B;
-	Mon, 22 Apr 2024 15:34:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mYJmCzPc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B42CA153511;
+	Mon, 22 Apr 2024 15:35:27 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38AB61534E2
-	for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 15:34:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E2491534E2
+	for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 15:35:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713800069; cv=none; b=blFKGf1nu8X5mbCIJxHAnkw/fdohrF19Jo1p33E3QGr8SAQKb8FS3ltMwnGh9aQvHTHR1fyKpEriUn4PEd58egplXih3JSlfJO5kk952snEOBIb5ZJGi/CkFuvoQyHdeqEh6g6oFANHqwoh+TyTynAq2p9FQ1CFdJzlj89B1XU4=
+	t=1713800127; cv=none; b=uCCiUrM/+98BGv9GnZGZ9hhwXar396Tbw12RAn/kERXKBNRfQF3fwJ4O7maZ2Vq8PieoS1vJVKw13NlcXBFc++SjX5nb0TUVfZvrCpP5OSdMPZ4ZyBX9DfD4vpiCRllEH1rVOeQbMFpm073ZYspMbyQ1O8CdWDz1hA+KXaznj10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713800069; c=relaxed/simple;
-	bh=rFLnY69caO6DCxXEt1GspAQ7lGhSrz3Q5rZCzd4arF0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VTZE5pdMvdlUgnYZIrl64kYPic82gHP600Orb5SQ7GL8M1WMAFLNMco1Uk5pTqXeiSaUfxS31GTZt7uCRmOYSg/mAJuoWVKMYB5CLppczcDrM+NEho3iQKZPljRWtxF8LsUMntwBfnLWKduUUIHgKe0PRRhEEGDrDrsA2WEvDis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mYJmCzPc; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4196c62bb4eso21659995e9.2
-        for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 08:34:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713800066; x=1714404866; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Lz4BLGLppaJS4RUqiGyn4/E8WuIMdCWJat0A3CWxGLU=;
-        b=mYJmCzPcf6rf5bwAx4Zgc+8pn22SZbgC4TQaH7WsmXqgCmyx4BJAJ72m2dCbvLuoh1
-         8eOsL0xOxLEzQwHQruKutD0JR8AQHUfvozd/PL0XWqeq+YKlR9FNODyNXNNbYg10XyjI
-         ys52rVnGkVQ7CZezvVzi0Wm5jL0vR0Cdf/hDoTtOdQisKilrwM3Zw2ARMoit2t+HyKnU
-         SMOlwipg/ybpKPO8CApTVJxCX34eVtcKfdbscLNyIGIhQcIM1Xm61sW8NQecygE0MjaV
-         EMuLORbtZK3GVUX4iQXOhYfJtQGk5kPKrFbjLmHlzS0xjFWun5GwCM+2uFpySRazQhrd
-         dagA==
+	s=arc-20240116; t=1713800127; c=relaxed/simple;
+	bh=OWyazZp4D8Qo127EkctJzV9VM2hgKoVyNCIkPRGrTlQ=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=FAogG7jlaNgRTbCAIk6kQvfFMD4JsJ7wGR+B8UirKNvVFDbKkTZPXtuVBt1smIi0UXrJZmUuJpSp0iiCzBfaVoLX0nwMwWoOVUpVHDi3w3/oHvWYpLX+kFS+kZWS1+CBVH1+QCUMiHCKE9QAFdNqLyYXxKTxn2MxjOuDylAqGgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-7cf265b30e2so602724639f.1
+        for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 08:35:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713800066; x=1714404866;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lz4BLGLppaJS4RUqiGyn4/E8WuIMdCWJat0A3CWxGLU=;
-        b=QbCGYWFNawUgyafHsWKNC7pu456fz9aPBCvOmT16qTZdAhQ8mtyJOfI7YH9K7qORuJ
-         DSFUg6cjXUfSOYaBnKPp+y5Z41DqjDMJQ4JFfi4NjJpzZ6iFqdIujCkqMp3L6kykTsTu
-         hH50o0cWjep0UuIYkpxhwimM8tSMEw2yFYCqnNq8vz4Kk5tZAVHyfqjcz5/BCF5kBZyn
-         rN9wLswR7lGRZFsjTikVSVT7qwfnU6fiy/7qdFb96Umrvl7wuAxp92XjwZ2REyL2Vyj2
-         m82KMfVRNNzm2xQitOq6DGp17xtXPGUFGrNlJAOw8GVMumI42zIr3W+ITig2G7fam+bp
-         kIww==
-X-Forwarded-Encrypted: i=1; AJvYcCWiIvry0lgpp8qIbUu1fZDweoYAZ2ywuoj+8SpNgKRs2R+ufdLnLYhoFZMNIIomiwfh/OeNlEVydxsvz6GRg9JnO0dL+b6vSWA=
-X-Gm-Message-State: AOJu0YyxU2CxGTXljjiuBtGJWpjPuWm44SS9EG9hk8QePPgZCPpXrE4v
-	hryxKiCXxdUrj6hIvvqCWmH3DI9OUW58MDXTWxYBQhu8cDYa86QE61Jxnt7QEZw=
-X-Google-Smtp-Source: AGHT+IH5rX73xaS6keYkyu8tgA9v9NkmtE5lmRGsiDlfEoHkzUAXtqPcF25Q3kCt+0u5ccN57FtUfw==
-X-Received: by 2002:a05:600c:470b:b0:418:e0cf:dbfe with SMTP id v11-20020a05600c470b00b00418e0cfdbfemr7951667wmo.15.1713800066519;
-        Mon, 22 Apr 2024 08:34:26 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id p8-20020a5d48c8000000b0034af40b2efdsm4198955wrs.108.2024.04.22.08.34.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Apr 2024 08:34:26 -0700 (PDT)
-Message-ID: <e8193798-4c02-423a-a9d8-63d29ebd7faa@linaro.org>
-Date: Mon, 22 Apr 2024 17:34:25 +0200
+        d=1e100.net; s=20230601; t=1713800125; x=1714404925;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zrVgre9w/j/M95ocT+xsZ1lldJlk/bW9cdj9Jm+iEAo=;
+        b=Q0w8qgNhPQK1JR5f/vZem4CkpS5AM+zioQqKy/TIp/a7q8H47Onoj0+9uiKJCTZpsK
+         q/6/M7a9uKlQQTZuNNq/0zz+vtxa1zgq0tYQryg/pRKWDYSETaBR3rqowIJb/6s1V0BJ
+         4qcTOlnrNGVfBtIG1n6OnjxLiKohkoNaKcKsVdhX1MQYHSglxMrzQCmrsrBeUoLw0psi
+         LlHH6C7kxMuDN3Aj12y7ganqeWTfpRTNFRQarVV0ARUSWefG1WM1ozKjZdhLfbZRHkAR
+         JDdBIIDEu7q0k01PPDNd6vcPGnD7CLIR/C7w2ey8Rgk+wXQP2YZECnkgz77IrSaGPWLO
+         zQ4w==
+X-Forwarded-Encrypted: i=1; AJvYcCUPIPJ26rCjozYbv+89ujio0A1sNOVVSP2j6nwdUUBnmtShJL01f+xSZ++fvG1eQN/qN2kZ3OAe0j5GmEOrhYG8rKBJlln0GAA=
+X-Gm-Message-State: AOJu0YxisSev3WmeuTnXL8U5A8P9is8HkaGk5N5Q5P7iOlm8X41iyDdR
+	P6ur70uRHx4w0F6HUjGvrC1LlU5KEnEI+hz643qgsQNoLZ/fPljfTcRhbf67XSzv2Ekpkx6v8ei
+	avohXGwcpWD7RvBtGmgXwvTO6LgoOld6itm8HdjpqEpyiDx3l52QDFqc=
+X-Google-Smtp-Source: AGHT+IG8uW9/okHFkFvM8qazTCwyWrjv5CDruDwOprecEUu703BPnsxRR1dPZJFhClzMWGZ0hkIl0bltv8A9AEojHUQ0bOznpUGb
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 0/3] thermal/debugfs: Fix and clean up trip point
- statistics updates
-Content-Language: en-US
-To: Lukasz Luba <lukasz.luba@arm.com>, "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>
-References: <4918025.31r3eYUQgx@kreacher>
- <3a8f1978-c5df-40d6-91ca-276431bb01e1@arm.com>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <3a8f1978-c5df-40d6-91ca-276431bb01e1@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6602:148d:b0:7da:67e8:9379 with SMTP id
+ a13-20020a056602148d00b007da67e89379mr250417iow.4.1713800125322; Mon, 22 Apr
+ 2024 08:35:25 -0700 (PDT)
+Date: Mon, 22 Apr 2024 08:35:25 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000afab690616b12f99@google.com>
+Subject: [syzbot] [pm?] KASAN: use-after-free Read in netdev_unregister_kobject
+From: syzbot <syzbot+6cf5652d3df49fae2e3f@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, len.brown@intel.com, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, pavel@ucw.cz, 
+	rafael@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 22/04/2024 13:37, Lukasz Luba wrote:
-> Hi Rafael,
-> 
-> On 4/17/24 14:07, Rafael J. Wysocki wrote:
->> Hi Everyone,
->>
->> The first patch in this series addresses the problem of updating trip
->> point statistics prematurely for trip points that have just been
->> crossed on the way down (please see the patch changelog for details).
->>
->> The way it does that renders the following cleanup patch inapplicable:
->>
->> https://lore.kernel.org/linux-pm/2321994.ElGaqSPkdT@kreacher/
->>
->> The remaining two patches in the series are cleanups on top of the
->> first one.
->>
->> This series is based on an older patch series posted last week:
->>
->> https://lore.kernel.org/linux-pm/13515747.uLZWGnKmhe@kreacher/
->>
->> but it can be trivially rebased on top of the current linux-next.
->>
->> Thanks!
->>
->>
->>
-> 
-> I've checked this patch patch set on top of your bleeding-edge
-> which has thermal re-work as well. The patch set looks good
-> and works properly.
-> 
-> Although, I have found some issue in this debug info files and
-> I'm not sure if this is expected or not. If not I can address this
-> and send some small fix for it.
-> 
-> When I read the cooling device residency statistics, I don't
-> get updates for the first time the state is used. It can only
-> be counted when that state was known and finished it's usage.
-> 
-> IMO it is not the right behavior, isn't it?
+Hello,
 
-Do you mean the right behavior is a regression or we should expect at 
-least the residency to be showed even if the mitigation state is not 
-closed ?
+syzbot found the following issue on:
+
+HEAD commit:    3cdb45594619 Merge tag 's390-6.9-4' of git://git.kernel.or..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=13d23353180000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d239903bd07761e5
+dashboard link: https://syzkaller.appspot.com/bug?extid=6cf5652d3df49fae2e3f
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=172afcbf180000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=144067cb180000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/5135044ea611/disk-3cdb4559.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/3c5a5ab80ba8/vmlinux-3cdb4559.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/e215eb6531dd/bzImage-3cdb4559.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6cf5652d3df49fae2e3f@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: use-after-free in device_for_each_child+0xa7/0x170 drivers/base/core.c:4044
+Read of size 8 at addr ffff88807bee95f8 by task kbnepd bnep0/5202
+
+CPU: 0 PID: 5202 Comm: kbnepd bnep0 Not tainted 6.9.0-rc4-syzkaller-00173-g3cdb45594619 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/27/2024
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x241/0x360 lib/dump_stack.c:114
+ print_address_description mm/kasan/report.c:377 [inline]
+ print_report+0x169/0x550 mm/kasan/report.c:488
+ kasan_report+0x143/0x180 mm/kasan/report.c:601
+ device_for_each_child+0xa7/0x170 drivers/base/core.c:4044
+ pm_runtime_set_memalloc_noio+0x114/0x260 drivers/base/power/runtime.c:248
+ netdev_unregister_kobject+0x178/0x250 net/core/net-sysfs.c:2106
+ unregister_netdevice_many_notify+0x11dd/0x16e0 net/core/dev.c:11135
+ unregister_netdevice_many net/core/dev.c:11163 [inline]
+ unregister_netdevice_queue+0x303/0x370 net/core/dev.c:11042
+ unregister_netdevice include/linux/netdevice.h:3115 [inline]
+ unregister_netdev+0x1c/0x30 net/core/dev.c:11181
+ bnep_session+0x2e09/0x3000 net/bluetooth/bnep/core.c:525
+ kthread+0x2f2/0x390 kernel/kthread.c:388
+ ret_from_fork+0x4d/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+ </TASK>
+
+The buggy address belongs to the physical page:
+page: refcount:0 mapcount:0 mapping:0000000000000000 index:0x400000000 pfn:0x7bee9
+flags: 0xfff80000000000(node=0|zone=1|lastcpupid=0xfff)
+page_type: 0xffffffff()
+raw: 00fff80000000000 0000000000000000 dead000000000122 0000000000000000
+raw: 0000000400000000 0000000000000000 00000000ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as freed
+page last allocated via order 2, migratetype Unmovable, gfp_mask 0x40dc0(GFP_KERNEL|__GFP_COMP|__GFP_ZERO), pid 5095, tgid -432259438 (syz-executor223), ts 5095, free_ts 96070220809
+ set_page_owner include/linux/page_owner.h:32 [inline]
+ post_alloc_hook+0x1ea/0x210 mm/page_alloc.c:1534
+ prep_new_page mm/page_alloc.c:1541 [inline]
+ get_page_from_freelist+0x3410/0x35b0 mm/page_alloc.c:3317
+ __alloc_pages+0x256/0x6c0 mm/page_alloc.c:4575
+ __alloc_pages_node include/linux/gfp.h:238 [inline]
+ alloc_pages_node include/linux/gfp.h:261 [inline]
+ __kmalloc_large_node+0x91/0x1f0 mm/slub.c:3911
+ __do_kmalloc_node mm/slub.c:3954 [inline]
+ __kmalloc+0x320/0x4a0 mm/slub.c:3979
+ kmalloc include/linux/slab.h:632 [inline]
+ kzalloc include/linux/slab.h:749 [inline]
+ hci_alloc_dev_priv+0x27/0x2030 net/bluetooth/hci_core.c:2500
+ hci_alloc_dev include/net/bluetooth/hci_core.h:1672 [inline]
+ __vhci_create_device drivers/bluetooth/hci_vhci.c:406 [inline]
+ vhci_create_device+0x12e/0x720 drivers/bluetooth/hci_vhci.c:480
+ vhci_get_user drivers/bluetooth/hci_vhci.c:537 [inline]
+ vhci_write+0x3cb/0x480 drivers/bluetooth/hci_vhci.c:617
+ call_write_iter include/linux/fs.h:2110 [inline]
+ new_sync_write fs/read_write.c:497 [inline]
+ vfs_write+0xa86/0xcb0 fs/read_write.c:590
+ ksys_write+0x1a0/0x2c0 fs/read_write.c:643
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xf5/0x240 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+page last free pid 5095 tgid 5095 stack trace:
+ reset_page_owner include/linux/page_owner.h:25 [inline]
+ free_pages_prepare mm/page_alloc.c:1141 [inline]
+ free_unref_page_prepare+0x986/0xab0 mm/page_alloc.c:2347
+ free_unref_page+0x37/0x3f0 mm/page_alloc.c:2487
+ __folio_put_large+0x13f/0x190 mm/swap.c:132
+ __folio_put+0x299/0x390 mm/swap.c:140
+ folio_put include/linux/mm.h:1506 [inline]
+ free_large_kmalloc+0x105/0x1c0 mm/slub.c:4361
+ kfree+0x1ca/0x3a0 mm/slub.c:4384
+ hci_release_dev+0x1516/0x16a0 net/bluetooth/hci_core.c:2833
+ bt_host_release+0x83/0x90 net/bluetooth/hci_sysfs.c:94
+ device_release+0x9b/0x1c0
+ kobject_cleanup lib/kobject.c:689 [inline]
+ kobject_release lib/kobject.c:720 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ kobject_put+0x231/0x480 lib/kobject.c:737
+ vhci_release+0x8b/0xd0 drivers/bluetooth/hci_vhci.c:675
+ __fput+0x42b/0x8a0 fs/file_table.c:422
+ task_work_run+0x251/0x310 kernel/task_work.c:180
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0xa1b/0x27e0 kernel/exit.c:878
+ do_group_exit+0x207/0x2c0 kernel/exit.c:1027
+ __do_sys_exit_group kernel/exit.c:1038 [inline]
+ __se_sys_exit_group kernel/exit.c:1036 [inline]
+ __x64_sys_exit_group+0x3f/0x40 kernel/exit.c:1036
+
+Memory state around the buggy address:
+ ffff88807bee9480: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff88807bee9500: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>ffff88807bee9580: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+                                                                ^
+ ffff88807bee9600: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff88807bee9680: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+==================================================================
 
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
