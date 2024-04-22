@@ -1,74 +1,74 @@
-Return-Path: <linux-pm+bounces-6839-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6840-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF17C8AD86A
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 01:03:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEB8B8AD89F
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 01:07:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87FF928497E
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 23:03:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A4A791F21223
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 23:07:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2A82181BB2;
-	Mon, 22 Apr 2024 22:55:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37DC11C0DC2;
+	Mon, 22 Apr 2024 23:00:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dDLHP7bL"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QMaRmnZX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DE1F181B9D
-	for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 22:55:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 823211BF6C4
+	for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 23:00:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713826502; cv=none; b=IlVmGkSNNKO44dXGH8tqJuje/s9xI1LnWzP6srxK5AOHYRWDokz6+n/+57UKh/mtR2HyBBcUSnayVAELFYiD6YZ9URb6smpcIRoVmDxJK50xi6X/RsjIGpe+/nde6Oh6O50BKy2iFhFy1FEAAEv7G7sexuLSsyw5ZPyQknxzV1I=
+	t=1713826853; cv=none; b=puNNPUePYdDujvqCaVskUCrJ+Xfk2DpvSEJH5PqfRv+4NiJzzNiKEDMxera5nMvt6+2iutG9YBV6SPl7bFuUAf8Q0RVM369+HoEabF4Kb01d0+ykZ9SAWTn8bFTwBFu2p/vE9Gxw5efa7sDcmkBGVA0BbyB7KmncWRtQvTdK4tI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713826502; c=relaxed/simple;
-	bh=6HogZA72dEjIUD+2dcxM4x6w3f26UzuKuHmtXyQJhYM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sBP6VZNygn+8CemBXoH2tLzCeiQZRI91t+mHJ2VoGzEUNQEDkQS/s3NPFaA3SzKFU7thSSxFFRORdYmb0/GtxT/S1EoMFacrk1r53byj9TpzLgUWnaHYSciKUsLXkTlupL4z6tKi4q6vMtU7yXFg+Eh8xXmvPvdzXDfr9pF6Zjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dDLHP7bL; arc=none smtp.client-ip=209.85.167.45
+	s=arc-20240116; t=1713826853; c=relaxed/simple;
+	bh=/jci29mGzzIavqEL2qT00cRZYvwPd29ad4CaRDp8/n4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=gliTJMXRpXeXEtXo9UdAt8M3cyYUfvOWW7OGpEBHYDwTNE839UHIx67f9sU8A2eYMabRMIXUoeaxLhF0t0DhrVIcg5BuyI14UakuyDtCMHvq9jPvIWey1vENAALYTDstBoqAxhEzKRfHV3aJWw6oZyeeCrptJHivwxS8hu3/YiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QMaRmnZX; arc=none smtp.client-ip=209.85.167.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-516d2b9cd69so6049070e87.2
-        for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 15:54:59 -0700 (PDT)
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-518f8a69f82so6018704e87.2
+        for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 16:00:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713826498; x=1714431298; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1713826850; x=1714431650; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mZZenxLxXRLNUaVa8fsakmHFgHCabBfzf+FG1fzHvGg=;
-        b=dDLHP7bLr8iaFxrFy9eROta/6il280DnVVjQLUgnoFYEjjB4y9CqDrlXN6ALhi+6Bb
-         p0SVa1RNvUPd1SFplgXyaqbEd4cS9pzTAxM13e0sfvUUcqeWunsGEhXhr5bFPgB8fNRJ
-         8gzbUkTkED77qm+bfgyCWQSF+i2wGvvdxldZq3qmCOP5ijoXPfehI0znimaNzMXh2Qz8
-         wB7j8OcD5F8PGic3l6SUooGJ6zr2eveUDBY8hV+j3U12SP5Zz1nHpyvd9Qzn/0cPXtK5
-         EkmveKG1xkiblTLpebpVc8Wwb30kXR5b57kCR1o52gsIMVjWJ3vuEIM/pJl3R1yK84ky
-         TiSw==
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=kk8RZ3kIPMume4l3zZttutOgAKIxylCidZY2eGmr83I=;
+        b=QMaRmnZXt3PXtMtQbha0JxDPw5DCEdF7dazfdKvpRdh/098lw1OODIEPMIBqBkJgKI
+         ViV6dNEPJ8i43Y8WXXhDGJN3yjMbdyljRD1HKpjmr/v/DS7cPL8pyTTYeDTonLN3dq2J
+         iC0tmz8HApS4FJpvniTgH9UcfJ14wUc/9lnNRU4twe05eZeZdJEMCknmzmlTQzFiv1s2
+         T5JNkR3SfZWjCM5QHA3Ndk9XOJGETWxDbFfN3rstOViq8Akbjr1o8khQyQyGHZtcYQEF
+         ahNBoQ4eheCQt4qvTzkXov1vTil/ka0dDGquS09oOTzrdWcq4HNcrIEcmjEs5crjkNrU
+         VzIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713826498; x=1714431298;
+        d=1e100.net; s=20230601; t=1713826850; x=1714431650;
         h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :references:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mZZenxLxXRLNUaVa8fsakmHFgHCabBfzf+FG1fzHvGg=;
-        b=TfTUxZ/hRLKlJF1uhN+gIyFdv20YrVTQ1Xv6wv3HR3x4n7WkmbidoCnkP8qCltoiqa
-         mnlgVdDnWE1zxcayfd7qlxyssZgkolFB4oIIpL/CQKpoq9bgMaj8JTO7yW8otmAsVN9D
-         guT5t/N7y/i1g6BE4LM/HTmjpxId6WjK0Ix+VDil1pfFBSs56HATMMnqOTN9al9EINcJ
-         DP2hTBRU2wduwYZ6HmwwMwSRkzhnZZmJKb3TfjkPe8o2Eg5E+8hyKnqIM1hlvJFUpVKk
-         JzsFZ558inrfxUCTSKfSNsaKDvrl7504p74O+3oWealUWRBykcb/SmBQ2bekI1dBiBwN
-         /6uQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVqb3gedmyjAWg69yaHjEFVU9GStKEi8OnEiagaZS1SjwE7DXYU4mgJsdVzsRl4ppQaqOsm4Oqme6xU2ZvQTelFtEICMuM64ts=
-X-Gm-Message-State: AOJu0YxLIdPVU/11C5KNpTW+GjYCHqiJt+S1Wro5OAghZEMmKLhCQnwK
-	ZK0lAteTNGuvzJ9JEUh8SO6r+3HDO7Z+e20BlYwpgVfjHLZPlYbfBn00v1BUEiI=
-X-Google-Smtp-Source: AGHT+IELvYr9TnwH1ZhKLd/4NPGBCKp/hD2+vGQEykAEl5SbO2M55duobRfLF8evMAaGAmUz4pqtMg==
-X-Received: by 2002:ac2:4294:0:b0:51a:fe04:13e3 with SMTP id m20-20020ac24294000000b0051afe0413e3mr4109059lfh.8.1713826498423;
-        Mon, 22 Apr 2024 15:54:58 -0700 (PDT)
+        bh=kk8RZ3kIPMume4l3zZttutOgAKIxylCidZY2eGmr83I=;
+        b=rK94fQmHdLt4DqS8eT44c2JGanH5KKB8QAAmCLj1MediQ0/+b/+5vtmh0SRUU4r8dY
+         4svN5ICKAYPZErLxzrIw0Wddulinhsf49N/dZyQ4Wq+V9ikSejTZe0ujzKGTZNSLSGMh
+         hm0/0S2JmJ5Zf4PQ14fmQb+0phE6WBUM71RAQhyaJqoyUR3R+hUR/nUT8W+ZEU5eiZpc
+         B8ai/EYJ2c3nUS89D5zXnJq2Y4jdWHCLRUU+WDddIo+EOuEAk/RkHER+2+EnxwFK1Q57
+         uNOBHrOJfMH5Jv1oQV+CbzZbtyXZ7BSfCj1/D2Cp6LChec8ITTDwuYOmH7nIJEPeIDCl
+         xGbg==
+X-Forwarded-Encrypted: i=1; AJvYcCUoZXiGeLKWylLEMbxU68N6f0Org3dlIyzFL/noJRwRwcYrjow+KzceWroy7ZRUxfcnfjf+AOosEvoawwDQxBFjH/xZ4qcfPUY=
+X-Gm-Message-State: AOJu0Yy8VN4Krvervj0Zh6ajyjDe6YT+vhVd0ZGJsEpa/jhl1xT7DZP+
+	bJgQwUXKHCoTh7A5+R2/4y2tzwFZ0Hzr0JryyB3/Zpw39FDcSLQsav3JKHohDN0=
+X-Google-Smtp-Source: AGHT+IEQ2a2C6x5MBOQkua4NvRFyZgVGrHQKhZtpBWTuE/jycfIwqTASlvwYmTONiFAlMbc33a9Fsw==
+X-Received: by 2002:a05:6512:e83:b0:51b:64c3:8cfa with SMTP id bi3-20020a0565120e8300b0051b64c38cfamr2469243lfb.13.1713826849758;
+        Mon, 22 Apr 2024 16:00:49 -0700 (PDT)
 Received: from [172.30.204.103] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
-        by smtp.gmail.com with ESMTPSA id u18-20020ac24c32000000b0051b5e710366sm266474lfq.129.2024.04.22.15.54.54
+        by smtp.gmail.com with ESMTPSA id w11-20020a05651234cb00b00518c057e78csm1830167lfr.159.2024.04.22.16.00.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Apr 2024 15:54:58 -0700 (PDT)
-Message-ID: <3592cea4-7e5c-448a-83c0-562b4ef4e7a1@linaro.org>
-Date: Tue, 23 Apr 2024 00:54:53 +0200
+        Mon, 22 Apr 2024 16:00:49 -0700 (PDT)
+Message-ID: <da8fc783-6b2b-495d-ab15-be297b0fa435@linaro.org>
+Date: Tue, 23 Apr 2024 01:00:48 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -76,56 +76,47 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V5 RESEND 4/5] clk: qcom: Use HW_CTRL_TRIGGER flag to
- switch video GDSC to HW mode
-To: Jagadeesh Kona <quic_jkona@quicinc.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
- Vikash Garodia <quic_vgarodia@quicinc.com>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Ulf Hansson <ulf.hansson@linaro.org>, "Rafael J . Wysocki"
- <rafael@kernel.org>, Kevin Hilman <khilman@kernel.org>,
- Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Andy Gross <agross@kernel.org>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Abel Vesa <abel.vesa@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
- linux-pm@vger.kernel.org, Taniya Das <quic_tdas@quicinc.com>,
- Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
- Imran Shaik <quic_imrashai@quicinc.com>,
- Ajit Pandey <quic_ajipan@quicinc.com>
-References: <20240413152013.22307-1-quic_jkona@quicinc.com>
- <20240413152013.22307-5-quic_jkona@quicinc.com>
+Subject: Re: [PATCH v9 1/6] interconnect: icc-clk: Allow user to specify
+ master/slave ids
+To: Varadarajan Narayanan <quic_varada@quicinc.com>, andersson@kernel.org,
+ mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, djakov@kernel.org,
+ dmitry.baryshkov@linaro.org, quic_anusha@quicinc.com,
+ linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20240418092305.2337429-1-quic_varada@quicinc.com>
+ <20240418092305.2337429-2-quic_varada@quicinc.com>
 Content-Language: en-US
 From: Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20240413152013.22307-5-quic_jkona@quicinc.com>
+In-Reply-To: <20240418092305.2337429-2-quic_varada@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 4/13/24 17:20, Jagadeesh Kona wrote:
-> The HW_CTRL_TRIGGER flag provides flexibility to switch the GDSC
-> mode as per the consumers requirement compared to HW_CTRL flag which
-> directly switches the GDSC mode as part of gdsc enable/disable.
-> Hence use HW_CTRL_TRIGGER flag for vcodec GDSC's to allow venus driver
-> to switch the vcodec GDSC to HW/SW control modes at runtime using
-> dev_pm_genpd_set_hwmode() API.
+On 4/18/24 11:23, Varadarajan Narayanan wrote:
+> Presently, icc-clk driver autogenerates the master and slave ids.
+> However, devices with multiple nodes on the interconnect could
+> have other constraints and may not match with the auto generated
+> node ids. Hence, allow the driver to provide the preferred master
+> and slave ids.
 > 
-> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> Also, update clk-cbf-8996 accordingly.
+> 
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 > ---
+> v9: squash cbf-msm8996 change into this
+> v8: Per review feedback, set master/slave ids explicitly. Dont autogenerate
+>      https://lore.kernel.org/linux-arm-msm/f1b0d280-6986-4055-a611-2caceb15867d@linaro.org/
+> ---
+>   drivers/clk/qcom/clk-cbf-8996.c  | 7 ++++++-
+>   drivers/interconnect/icc-clk.c   | 6 +++---
+>   include/linux/interconnect-clk.h | 2 ++
 
-The commit title states clk: qcom: yet the only files changed are:
+How is this going to be merged? :/
 
->   drivers/clk/qcom/videocc-sc7280.c | 2 +-
->   drivers/clk/qcom/videocc-sm8250.c | 4 ++--
-
-With no explanation as to why anywhere
+icc-next? clk-next?
 
 Konrad
 
