@@ -1,56 +1,58 @@
-Return-Path: <linux-pm+bounces-6854-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6855-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 392948ADA10
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 02:04:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7A468ADA30
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 02:07:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E1FEA1F235F5
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 00:04:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 882741F21236
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 00:07:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A20615EFD2;
-	Mon, 22 Apr 2024 23:56:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9865316D4FC;
+	Mon, 22 Apr 2024 23:56:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fGY8g8UB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FU/t/N+W"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E335215EFCB;
-	Mon, 22 Apr 2024 23:56:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E84B16D4FA;
+	Mon, 22 Apr 2024 23:56:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713830179; cv=none; b=fRky5fXgjp1zNg3Kb1gjrPZjFlt8xJXphsNRV3Ueu6tIFirN/RN2pegXirOrhPZSgyBeh84b1Piuu0Llx4nCu4Jee/9A33gM5nFfMAVQGHfGMo3grftSw2b2ONc5+c7npC6AIJlqBXykAOmxNizNoNATUZj1cJqd0u5qNZz5hEo=
+	t=1713830201; cv=none; b=LimjJg3Og0kVWZanzT6OPXo6VcpL2OgFnfbQLl5GmzOBS4RFfymdGh65duJLVNJDjRDDUvpR+bujitgPN1QIg2nx5MYskKvIFoulYV40ihRyeEipHTdJy/XAQC3wMEtFUKhayHEeN6vNCACTufNg6YrN4s1gMdxSLsAyYG/reKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713830179; c=relaxed/simple;
-	bh=PxHB1mGEVMBptErtg7/qLYILTuvu0iatnLxuz1OJ0Mk=;
+	s=arc-20240116; t=1713830201; c=relaxed/simple;
+	bh=LfuPnuHcChf51dbQiZm/elalM7ORqg0EA5yqXzxL7ps=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZtLHYRtEPFjBI5CLwfl5NwM7WeZdBX++U/XkwGvEYx6cIe21pJ+KoD5AkU8hnrUasDp/uPVGJhDtdrxm5MmjI0GJ/g5dNhayzg6PrK+dgh6EXYUwR5ihpYUdXh13ON8MGyNItP06jM4zaqAV8nAvn2tgJOy5Zl8Y7b5qvNJvqck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fGY8g8UB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9289C2BD11;
-	Mon, 22 Apr 2024 23:56:17 +0000 (UTC)
+	 MIME-Version; b=tv896v2WYbYBou4ZjTV8UiZaLHWfnBQ7Aty36gf5VxHQtCZwPQhDI4gm+OYelKCu7jTQBdM38oeGTxcgbXw9KTly6hH+PJu2IfJUnEWBFcAQUWKW6bL6D7ksXwT5A0H1P3ndz3xy00oKsFyK+AcLJSYtAGffVYuzti/LrzshA+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FU/t/N+W; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C8D5C3277B;
+	Mon, 22 Apr 2024 23:56:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713830178;
-	bh=PxHB1mGEVMBptErtg7/qLYILTuvu0iatnLxuz1OJ0Mk=;
+	s=k20201202; t=1713830201;
+	bh=LfuPnuHcChf51dbQiZm/elalM7ORqg0EA5yqXzxL7ps=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fGY8g8UBj9BfPpAFk7kR3ijp/VtbfvCmMAqcEyzZ3zZDxjR3X6/rgdCLiajiJcz65
-	 nQp7q095eRVKAfAICmc1RIUg++7WBV3UZMW+GbS6QZSiaal3FxrtHhI2fZeKC6dqKE
-	 RVFBNgqN2WHtzrcRQLa/031RHkfavVfgzor0nO+eO+BIVEQrOalSNHGmId53ra2WIt
-	 GRPa6Aso1yfHW87c8T3UDYt79HeC2pQvUOi/7O8Qp4OWcXYCZ929WuyB7cVtRXD2em
-	 gqoT6/cKJ7+xp5iSWSi8u8JD5Ngf3DXzAmS55JmM23H3qhpF5q4H2A3pHnC3xpHZSD
-	 chbfgdclUQEQQ==
+	b=FU/t/N+WogyRQBtwWfn1T7oMpN8DiM8hD5juT3Ha4mfqM2s2gDZAS8MCVfBmwg0yh
+	 V58JSpHPbdFUpiGWNlM1IPn5+SJuZf3ihpHbvvHDIkLHdQJkbQ44dc1CnznjEQkjhZ
+	 XN8ewnLJFBAjI6sgMA9Nbn//8HJMc4lYfC7fX05U/ym8b+owNAvwq0dVqgjCldE11p
+	 iCBG1YkXCR+PUqBUxI3/SIugO3gTCZBlIcFrzIaqIbY5tc1KO5NnRoFPhD0Kf4/yn1
+	 CpVXTAIc8vwPaDeXNfRsVNcvLhxqj0xu99/bxQK+eLRFh633LK8ByadE9ovXdUGAon
+	 U1/zfS15kaL1Q==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Len Brown <len.brown@intel.com>,
+Cc: Justin Ernst <justin.ernst@hpe.com>,
+	Thomas Renninger <trenn@suse.de>,
+	Len Brown <len.brown@intel.com>,
 	Sasha Levin <sashal@kernel.org>,
 	lenb@kernel.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 05/29] tools/power turbostat: Fix warning upon failed /dev/cpu_dma_latency read
-Date: Mon, 22 Apr 2024 19:16:46 -0400
-Message-ID: <20240422231730.1601976-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 16/29] tools/power/turbostat: Fix uncore frequency file string
+Date: Mon, 22 Apr 2024 19:16:57 -0400
+Message-ID: <20240422231730.1601976-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240422231730.1601976-1-sashal@kernel.org>
 References: <20240422231730.1601976-1-sashal@kernel.org>
@@ -65,39 +67,51 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.6.28
 Content-Transfer-Encoding: 8bit
 
-From: Len Brown <len.brown@intel.com>
+From: Justin Ernst <justin.ernst@hpe.com>
 
-[ Upstream commit b6fe938317eed58e8c687bd5965a956e15fb5828 ]
+[ Upstream commit 60add818ab2543b7e4f2bfeaacf2504743c1eb50 ]
 
-Previously a failed read of /dev/cpu_dma_latency erroneously complained
-turbostat: capget(CAP_SYS_ADMIN) failed, try "# setcap cap_sys_admin=ep ./turbostat
+Running turbostat on a 16 socket HPE Scale-up Compute 3200 (SapphireRapids) fails with:
+turbostat: /sys/devices/system/cpu/intel_uncore_frequency/package_010_die_00/current_freq_khz: open failed: No such file or directory
 
-This went unnoticed because this file is typically visible to root,
-and turbostat was typically run as root.
+We observe the sysfs uncore frequency directories named:
+...
+package_09_die_00/
+package_10_die_00/
+package_11_die_00/
+...
+package_15_die_00/
 
-Going forward, when a non-root user can run turbostat...
-Complain about failed read access to this file only if --debug is used.
+The culprit is an incorrect sprintf format string "package_0%d_die_0%d" used
+with each instance of reading uncore frequency files. uncore-frequency-common.c
+creates the sysfs directory with the format "package_%02d_die_%02d". Once the
+package value reaches double digits, the formats diverge.
 
+Change each instance of "package_0%d_die_0%d" to "package_%02d_die_%02d".
+
+[lenb: deleted the probe part of this patch, as it was already fixed]
+
+Signed-off-by: Justin Ernst <justin.ernst@hpe.com>
+Reviewed-by: Thomas Renninger <trenn@suse.de>
 Signed-off-by: Len Brown <len.brown@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/power/x86/turbostat/turbostat.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/power/x86/turbostat/turbostat.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 4dfeda4870f71..0561362301c53 100644
+index 0561362301c53..ffa964ddbacef 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -5479,7 +5479,8 @@ void print_dev_latency(void)
+@@ -1969,7 +1969,7 @@ unsigned long long get_uncore_mhz(int package, int die)
+ {
+ 	char path[128];
  
- 	fd = open(path, O_RDONLY);
- 	if (fd < 0) {
--		warnx("capget(CAP_SYS_ADMIN) failed, try \"# setcap cap_sys_admin=ep %s\"", progname);
-+		if (debug)
-+			warnx("Read %s failed", path);
- 		return;
- 	}
+-	sprintf(path, "/sys/devices/system/cpu/intel_uncore_frequency/package_0%d_die_0%d/current_freq_khz", package,
++	sprintf(path, "/sys/devices/system/cpu/intel_uncore_frequency/package_%02d_die_%02d/current_freq_khz", package,
+ 		die);
  
+ 	return (snapshot_sysfs_counter(path) / 1000);
 -- 
 2.43.0
 
