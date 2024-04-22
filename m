@@ -1,131 +1,146 @@
-Return-Path: <linux-pm+bounces-6774-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6775-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 370628ACAB4
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 12:31:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4026C8ACB08
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 12:44:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DFA4D1F22414
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 10:31:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6A2F81C20E44
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 10:44:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 358BF145335;
-	Mon, 22 Apr 2024 10:30:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ud7D1pak"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C47D9146D4D;
+	Mon, 22 Apr 2024 10:39:22 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4541144307
-	for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 10:30:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B6E5146D46;
+	Mon, 22 Apr 2024 10:39:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713781856; cv=none; b=euPH19xIDsMgfIn9YZEN0FqiQh9FPiZM9TnxrrLGwun1fBPKCVoGtFtQ+SlkJc9SHJGRjvKcE/aaICuxhITwDImdEJ1sO/WxlRLW5OD7Z5iHJXX9bkmMc1Xl0FHxt/HeBxGNM+Z1rhefi9g/blD6ebzQHY6x6rPfa63IXbLjWTM=
+	t=1713782362; cv=none; b=WPH1t3tbL9B/m0Y5hwzJoJwqk81JWvquxnw0HDvbRO67s9w0sBEIplY6AFnuIXs/Ic/CmY8VETcW6OHnEvYjvPID34moSmflklas83SC778t4VIw72XT2ukObQZEUphhIZFyelsoaUNe97oHaEFMor8q30AH+xho0bL1jyXEtXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713781856; c=relaxed/simple;
-	bh=YeDcYif+zDkHv19iBPgDSKK6Yx0J30FDJC2BzwsHGkY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rLdm60lz/959N8zwYxS5DXjxtYqzf8NIJOqgqKlOkmZM2stgM4ksqKMGZpdBQPb4WMRlV7dgEA1Fzoo29+To8S138qMElw+Nk2BRXHbbuELicNx6FXzGXFObhEvJKmDu8mohmwbOqYvOSG8q1B19KgMUwMQ1OiTvNFLz7h+zhLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ud7D1pak; arc=none smtp.client-ip=209.85.166.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-36c15989a31so400385ab.2
-        for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 03:30:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713781853; x=1714386653; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tKvKShPD6e4jW0fEjFt1J89IUkhFZDroLQfz2r7xoxA=;
-        b=ud7D1pakDx2PpC4Uc+Z0CyrKHAn2uMtkg6YCu9t3iBJvFGOWBU4FHUtVH50NHZaOwi
-         EL3KId9U96GK/tNSD+Zlgw0zLGOSKfRq/UpQdBAFRwKqGTMbRsh/vBGYVcOleZhwMk9e
-         KfN9g6mty39XsZDK7udlkXM1gE5L8Nu+wRcpatlWoGU0QvWqdYLvdFj+lzL7yTJLu0q+
-         jXDgr/wuyKamS40MAH30V15yz1R9yQpcySvn/MkS8DSWEzxojkVpC2l/1ZDtxn4bSEiK
-         FzcLEJr2ea2c4AqyDAdzm5fQDI38QDQYyhOuio3qJseTzYxW3wpw4hOfWVfxgc6WQSE+
-         MBAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713781853; x=1714386653;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tKvKShPD6e4jW0fEjFt1J89IUkhFZDroLQfz2r7xoxA=;
-        b=NAIdIt1/QrhZKau56+uTPNm3qRER3pSNl1uLB3VJkT8p7wwpKWvDcJkKFb2ZsK3oxf
-         zXLqqiL+4jkmCRc8Gj/BETWpkK/DGAJAagNGwcR8mtcPlvlAKx6evflpB0JsnL1L5Z6I
-         k/Umcgc9SEsmbP6pT+egIXyrVGX0B5l8iAdDEA2LP/coiZN8P4rv7mNLPsUm3+CV0SFJ
-         6onINiUPomkzvlNwyTAou2XxHr5WTjaF39hlDEeIWNZXqytpc0/n8B6YrW6/C9m4yaeN
-         c1q88SGDaJiSoC7iDlCzLOigtJXpchrv9adpcg0d+HHzTDKhv5IoCs3m28V5pBxU4b3Q
-         ZN7g==
-X-Forwarded-Encrypted: i=1; AJvYcCUvtTu4XTGWaiXbqVq4oGhxD4mShGKn+DqGUBY36kXF8Y795NN0r+D0snPEGB9tpBn+4lno/jUJQh5ZVmrIHlI5mcxHSmfW7fs=
-X-Gm-Message-State: AOJu0Yz8duThyqDZD5w5rdJ1i8dHCuyNXJLy67qa4a7/utMffgeKszOa
-	/C7WdMfOO0Mgr24jVWrYn6wm6hQrjvE5g0ZdatvXnGIr3YAn8trT6HywtvFhT6E=
-X-Google-Smtp-Source: AGHT+IFMstOfkynojIXKMT7fdib7YBQsjSPodFp6FkukQeWvXC8QXVBhUf5fo2h3O99o9v1Dh/D+SQ==
-X-Received: by 2002:a05:6e02:1848:b0:368:9799:fc30 with SMTP id b8-20020a056e02184800b003689799fc30mr13356900ilv.17.1713781852752;
-        Mon, 22 Apr 2024 03:30:52 -0700 (PDT)
-Received: from localhost ([122.172.87.52])
-        by smtp.gmail.com with ESMTPSA id u3-20020a631403000000b005bdbe9a597fsm7366083pgl.57.2024.04.22.03.30.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Apr 2024 03:30:52 -0700 (PDT)
-Date: Mon, 22 Apr 2024 16:00:50 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Benno Lossin <benno.lossin@proton.me>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>, linux-pm@vger.kernel.org,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-	rust-for-linux@vger.kernel.org,
-	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
-	Erik Schilling <erik.schilling@linaro.org>,
-	Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
-	Joakim Bech <joakim.bech@linaro.org>, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 3/3] cpufreq: Add Rust based cpufreq-dt driver
-Message-ID: <20240422103050.tiecvamrd5upunou@vireshk-i7>
-References: <cover.1712314032.git.viresh.kumar@linaro.org>
- <1792467a772b7a8355c6d0cb0cbacfbffff08afd.1712314032.git.viresh.kumar@linaro.org>
- <4ff5f30b-f2b8-4625-b3cd-ac08e4ffb068@proton.me>
- <8c4f2053-acbc-4f4a-93de-18f149c80869@proton.me>
+	s=arc-20240116; t=1713782362; c=relaxed/simple;
+	bh=JqE3ylYWKarL5FDsaFXHHjgdDBTPGkxZWyvz1pBSwRY=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tZvr1uUiE1xKovsTXYa3hGaj1A7xUS7rXUqCMNUQqX0O3UOGu3QWQP/+DSQANOD4Vlae9kXouzRzVyCUZOwsQ2JlaOe6CP1iLMFzOeORCJMwLbMIpcJgpHRyV+VekKAUiAjoH6we9zEmpozLRuUNpE+iI38Ww7onKod8YLa+vdw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VNMBM0NFfz6JBRQ;
+	Mon, 22 Apr 2024 18:36:59 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 928E1140CB1;
+	Mon, 22 Apr 2024 18:39:12 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Mon, 22 Apr
+ 2024 11:39:11 +0100
+Date: Mon, 22 Apr 2024 11:39:10 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
+	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
+	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+	<x86@kernel.org>, Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki"
+	<rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, "James Morse"
+	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, Jean-Philippe
+ Brucker <jean-philippe@linaro.org>, Catalin Marinas
+	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+	<linuxarm@huawei.com>
+CC: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, "Dave
+ Hansen" <dave.hansen@linux.intel.com>, <justin.he@arm.com>,
+	<jianyong.wu@arm.com>, Marc Zyngier <maz@kernel.org>
+Subject: Re: [PATCH v7 10/16] irqchip/gic-v3: Don't return errors from
+ gic_acpi_match_gicc()
+Message-ID: <20240422113839.00000cde@huawei.com>
+In-Reply-To: <20240418135412.14730-11-Jonathan.Cameron@huawei.com>
+References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com>
+	<20240418135412.14730-11-Jonathan.Cameron@huawei.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8c4f2053-acbc-4f4a-93de-18f149c80869@proton.me>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On 07-04-24, 10:17, Benno Lossin wrote:
-> On 07.04.24 11:54, Benno Lossin wrote:
-> > On 05.04.24 13:09, Viresh Kumar wrote:
-> >> +// Finds exact supply name from the OF node.
-> >> +fn find_supply_name_exact(np: *mut bindings::device_node, name: &str) -> Option<CString> {
-> >> +    let sname = CString::try_from_fmt(fmt!("{}-supply", name)).ok()?;
-> >> +
-> >> +    // SAFETY: The OF node is guaranteed by the C code to be valid.
-> >> +    let pp = unsafe { bindings::of_find_property(np, sname.as_ptr() as *mut _, ptr::null_mut()) };
-> > 
-> > Drivers should avoid calling `unsafe` code as much as possible. They
-> > also should not be calling `bindings` code directly. Please write (or
-> > find) abstractions for these `unsafe` calls.
+On Thu, 18 Apr 2024 14:54:06 +0100
+Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
+
+> From: James Morse <james.morse@arm.com>
 > 
-> Having re-read the cover letter, I see that you are already aware of
-> this. If you need any help with creating the abstractions, feel free to
-> reach out!
+> gic_acpi_match_gicc() is only called via gic_acpi_count_gicr_regions().
+> It should only count the number of enabled redistributors, but it
+> also tries to sanity check the GICC entry, currently returning an
+> error if the Enabled bit is set, but the gicr_base_address is zero.
+> 
+> Adding support for the online-capable bit to the sanity check will
+> complicate it, for no benefit. The existing check implicitly depends on
+> gic_acpi_count_gicr_regions() previous failing to find any GICR regions
+> (as it is valid to have gicr_base_address of zero if the redistributors
+> are described via a GICR entry).
+> 
+> Instead of complicating the check, remove it. Failures that happen at
+> this point cause the irqchip not to register, meaning no irqs can be
+> requested. The kernel grinds to a panic() pretty quickly.
+> 
+> Without the check, MADT tables that exhibit this problem are still
+> caught by gic_populate_rdist(), which helpfully also prints what went
+> wrong:
+> | CPU4: mpidr 100 has no re-distributor!
+> 
+> Signed-off-by: James Morse <james.morse@arm.com>
+> Reviewed-by: Gavin Shan <gshan@redhat.com>
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Thanks Benno. I am not sure what's the right approach here as there
-are so many missing things (frameworks) I need. Though I don't need
-full support for them but just a handful of APIs.
+I've been focused on the ACPI aspects until now, but now realize that this
+and the next patch should have included the GIC maintainer in the
+to list. I'll fix that for future versions, but for now
 
-And then there is dependency on the generic support for device/driver,
-platform device/driver, etc.
++CC Marc.
+> ---
+> v7: No change
+> ---
+>  drivers/irqchip/irq-gic-v3.c | 13 ++-----------
+>  1 file changed, 2 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+> index 6fb276504bcc..10af15f93d4d 100644
+> --- a/drivers/irqchip/irq-gic-v3.c
+> +++ b/drivers/irqchip/irq-gic-v3.c
+> @@ -2415,19 +2415,10 @@ static int __init gic_acpi_match_gicc(union acpi_subtable_headers *header,
+>  	 * If GICC is enabled and has valid gicr base address, then it means
+>  	 * GICR base is presented via GICC
+>  	 */
+> -	if (acpi_gicc_is_usable(gicc) && gicc->gicr_base_address) {
+> +	if (acpi_gicc_is_usable(gicc) && gicc->gicr_base_address)
+>  		acpi_data.enabled_rdists++;
+> -		return 0;
+> -	}
+>  
+> -	/*
+> -	 * It's perfectly valid firmware can pass disabled GICC entry, driver
+> -	 * should not treat as errors, skip the entry instead of probe fail.
+> -	 */
+> -	if (!acpi_gicc_is_usable(gicc))
+> -		return 0;
+> -
+> -	return -ENODEV;
+> +	return 0;
+>  }
+>  
+>  static int __init gic_acpi_count_gicr_regions(void)
 
--- 
-viresh
 
