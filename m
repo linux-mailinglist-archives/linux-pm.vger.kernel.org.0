@@ -1,61 +1,57 @@
-Return-Path: <linux-pm+bounces-6849-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6850-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 897408AD9CD
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 01:59:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65D4A8ADA04
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 02:04:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E8121B267FB
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 23:59:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05DCD1F23389
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 00:04:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C229158DA4;
-	Mon, 22 Apr 2024 23:54:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AA281553A3;
+	Mon, 22 Apr 2024 23:56:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SVlQFzw1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WfmEpAzx"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31FD313E418;
-	Mon, 22 Apr 2024 23:54:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E47E745BE7;
+	Mon, 22 Apr 2024 23:56:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713830089; cv=none; b=XPqDmsziKSCiDXth35+J+kRSuUzJb4Kac+yuSlVua7BMl14va4J1FxCdCuetMVzz5fhnkKJ/HAQXaiW1mjFU4v5idXz+etQf7fDnmzjLlYrWtkFYu8YqJDZgojlUbI0FJjMSOlaLlzpVkhv0FadAVjHlHGeXG6A5PvIoRppkwsk=
+	t=1713830174; cv=none; b=CfzIwTrteqL3d2mZWEz9xwE5yqg2q/h//UQWBXidp8IzFxwc+wINp0vu7OVwRnXsL0XTyVcpk7/IEmoQ7JJsLguo5jLIwHdQih35fve7wMAkjcTCucW0Lo3eFOw+ew0cSbkKgzDiO7dBbsoUSHWnPEiroPgykfAEWxa5Zwmq4YI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713830089; c=relaxed/simple;
-	bh=ltIROLwzh3NwESS782JFP356g9Ygs7Q1t/CRAXFVPoY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qKncvk7aRRFD7JtmFbgTNIbjLeOZPKe1VKVAYjm/3XbJzQ/BmiLM5SNeLA7zFnb99u1/xiD6j2SaRvnOeMoJyL2+HB8b/DXIbA1HHU6WZSO2jOMnw5jc0im2stq/eumHouSRqPtKSSQ2H2g4ZmhPuPh01AnmRAsjUVv5n+mfTFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SVlQFzw1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D55EC32782;
-	Mon, 22 Apr 2024 23:54:48 +0000 (UTC)
+	s=arc-20240116; t=1713830174; c=relaxed/simple;
+	bh=xgs9yldURSCSvhxW3ZvMExUrRcwypGcRMA719gLE1OI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f0/g4r/IzT7uRxXJUy9qIU4tb5AdbhSKREAoY4GPuseIRw3pcGlqtRwL13sCbymuldYV4/KxmvUFueQzY9wXn5WL2HuKw4sQ6FJJub8Sd/4MPqUyPimnX3gMjcujxTi3hMeQCmKoEQZL+ijUqNZysWUUMM1AQTp1Aw+kdhul4WA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WfmEpAzx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D909C113CC;
+	Mon, 22 Apr 2024 23:56:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713830089;
-	bh=ltIROLwzh3NwESS782JFP356g9Ygs7Q1t/CRAXFVPoY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=SVlQFzw1PXhleRKKRl1ZAPxbQtLQjnxAFf5oketqIfW4Wvioo5IAky/kLotchKv29
-	 RDL72C85n4nzeyFOTrYpmZAfC16MGCGJtr6FSZETq5BVXFT0OUyLCAbWWPBSIZxgv4
-	 q+VKEhJ7Cbt7bJmqrkGLFdqNydTeESfcIVVBaf4/mYcW/Wva4iLRCMGlrcS24kNY6w
-	 hx9tiFhvRPnPmGIkcqZV1lMwHQr6V0GesR7KXOPPhDvjtR1llLo/Uj/QRbYftQtbOy
-	 RSoIiv3MO2hgxugN10SALbF/n7Mu3T+8VxMbfcOIa7dKgHNa8EuLarMc2OAwgHhhpB
-	 w1K6Qk1e374fA==
+	s=k20201202; t=1713830173;
+	bh=xgs9yldURSCSvhxW3ZvMExUrRcwypGcRMA719gLE1OI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=WfmEpAzxYscQcynbVD5nQX4uZlBqKsQdWfp/2AtPv/HCcFmANBTm1KwfcHsRbE+7f
+	 mtUSss16eyFyzX3ggKqaZksvfj4aGa99IGnEmHNSG6QzCWEkm+gZ7sBsr4cipuEbzh
+	 YdCsjX1ttSzdRbnGEtynU8MGLYnoV+3Ia5Qr3PY26lHG/BKlJ+XlrPyPJjz0CRFgV7
+	 vY/+IGQ6k8Ae8MiTOZVeV+aeHGSUggAIHSCZ8cF20m3f3CXm4qi7cV3YXj4LUhcmh2
+	 rra1eXGwYGQqgwE8aTF7LxlK//DH3WF5bS2/1abI2Wq5UCpgEoBynPsbf4ZNDbvusb
+	 dXHuAjnEXUIEw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Justin Ernst <justin.ernst@hpe.com>,
-	Thomas Renninger <trenn@suse.de>,
+Cc: Doug Smythies <dsmythies@telus.net>,
 	Len Brown <len.brown@intel.com>,
 	Sasha Levin <sashal@kernel.org>,
 	lenb@kernel.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.8 23/43] tools/power/turbostat: Fix uncore frequency file string
-Date: Mon, 22 Apr 2024 19:14:09 -0400
-Message-ID: <20240422231521.1592991-23-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 01/29] tools/power turbostat: Fix added raw MSR output
+Date: Mon, 22 Apr 2024 19:16:42 -0400
+Message-ID: <20240422231730.1601976-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240422231521.1592991-1-sashal@kernel.org>
-References: <20240422231521.1592991-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -64,54 +60,88 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.8.7
+X-stable-base: Linux 6.6.28
 Content-Transfer-Encoding: 8bit
 
-From: Justin Ernst <justin.ernst@hpe.com>
+From: Doug Smythies <dsmythies@telus.net>
 
-[ Upstream commit 60add818ab2543b7e4f2bfeaacf2504743c1eb50 ]
+[ Upstream commit e5f4e68eed85fa8495d78cd966eecc2b27bb9e53 ]
 
-Running turbostat on a 16 socket HPE Scale-up Compute 3200 (SapphireRapids) fails with:
-turbostat: /sys/devices/system/cpu/intel_uncore_frequency/package_010_die_00/current_freq_khz: open failed: No such file or directory
+When using --Summary mode, added MSRs in raw mode always
+print zeros. Print the actual register contents.
 
-We observe the sysfs uncore frequency directories named:
-...
-package_09_die_00/
-package_10_die_00/
-package_11_die_00/
-...
-package_15_die_00/
+Example, with patch:
 
-The culprit is an incorrect sprintf format string "package_0%d_die_0%d" used
-with each instance of reading uncore frequency files. uncore-frequency-common.c
-creates the sysfs directory with the format "package_%02d_die_%02d". Once the
-package value reaches double digits, the formats diverge.
+note the added column:
+--add msr0x64f,u32,package,raw,REASON
 
-Change each instance of "package_0%d_die_0%d" to "package_%02d_die_%02d".
+Where:
 
-[lenb: deleted the probe part of this patch, as it was already fixed]
+0x64F is MSR_CORE_PERF_LIMIT_REASONS
 
-Signed-off-by: Justin Ernst <justin.ernst@hpe.com>
-Reviewed-by: Thomas Renninger <trenn@suse.de>
+Busy%   Bzy_MHz PkgTmp  PkgWatt CorWatt     REASON
+0.00    4800    35      1.42    0.76    0x00000000
+0.00    4801    34      1.42    0.76    0x00000000
+80.08   4531    66      108.17  107.52  0x08000000
+98.69   4530    66      133.21  132.54  0x08000000
+99.28   4505    66      128.26  127.60  0x0c000400
+99.65   4486    68      124.91  124.25  0x0c000400
+99.63   4483    68      124.90  124.25  0x0c000400
+79.34   4481    41      99.80   99.13   0x0c000000
+0.00    4801    41      1.40    0.73    0x0c000000
+
+Where, for the test processor (i5-10600K):
+
+PKG Limit #1: 125.000 Watts, 8.000000 sec
+MSR bit 26 = log; bit 10 = status
+
+PKG Limit #2: 136.000 Watts, 0.002441 sec
+MSR bit 27 = log; bit 11 = status
+
+Example, without patch:
+
+Busy%   Bzy_MHz PkgTmp  PkgWatt CorWatt     REASON
+0.01    4800    35      1.43    0.77    0x00000000
+0.00    4801    35      1.39    0.73    0x00000000
+83.49   4531    66      112.71  112.06  0x00000000
+98.69   4530    68      133.35  132.69  0x00000000
+99.31   4500    67      127.96  127.30  0x00000000
+99.63   4483    69      124.91  124.25  0x00000000
+99.61   4481    69      124.90  124.25  0x00000000
+99.61   4481    71      124.92  124.25  0x00000000
+59.35   4479    42      75.03   74.37   0x00000000
+0.00    4800    42      1.39    0.73    0x00000000
+0.00    4801    42      1.42    0.76    0x00000000
+
+c000000
+
+[lenb: simplified patch to apply only to package scope]
+
+Signed-off-by: Doug Smythies <dsmythies@telus.net>
 Signed-off-by: Len Brown <len.brown@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/power/x86/turbostat/turbostat.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/power/x86/turbostat/turbostat.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 3438ad938d7e4..53b764422e804 100644
+index 785de89077de0..9602a4798f383 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -2612,7 +2612,7 @@ unsigned long long get_uncore_mhz(int package, int die)
- {
- 	char path[128];
+@@ -1811,9 +1811,10 @@ int sum_counters(struct thread_data *t, struct core_data *c, struct pkg_data *p)
+ 	average.packages.rapl_dram_perf_status += p->rapl_dram_perf_status;
  
--	sprintf(path, "/sys/devices/system/cpu/intel_uncore_frequency/package_0%d_die_0%d/current_freq_khz", package,
-+	sprintf(path, "/sys/devices/system/cpu/intel_uncore_frequency/package_%02d_die_%02d/current_freq_khz", package,
- 		die);
- 
- 	return (snapshot_sysfs_counter(path) / 1000);
+ 	for (i = 0, mp = sys.pp; mp; i++, mp = mp->next) {
+-		if (mp->format == FORMAT_RAW)
+-			continue;
+-		average.packages.counter[i] += p->counter[i];
++		if ((mp->format == FORMAT_RAW) && (topo.num_packages == 0))
++			average.packages.counter[i] = p->counter[i];
++		else
++			average.packages.counter[i] += p->counter[i];
+ 	}
+ 	return 0;
+ }
 -- 
 2.43.0
 
