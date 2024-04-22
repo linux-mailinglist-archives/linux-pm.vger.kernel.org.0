@@ -1,74 +1,40 @@
-Return-Path: <linux-pm+bounces-6794-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6795-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BC378ACBBF
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 13:13:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 391648ACBD0
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 13:15:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D66EF1F24257
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 11:13:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE6DF1F24419
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 11:15:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6BFA14659B;
-	Mon, 22 Apr 2024 11:13:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RV5atbym"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D2FC146A9D;
+	Mon, 22 Apr 2024 11:14:51 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69431145FFF
-	for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 11:13:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90775146A6F;
+	Mon, 22 Apr 2024 11:14:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713784416; cv=none; b=YKRWg1/NqhgDOvp0xcOreY5RdF9ycCdmytCMoIpWaEF7M6xFTaKTRt5t3A4vcQ31+4EX0NlG4gzvA1YUtt42Y0RIMLYzJE8IsAzbW6i211PMr3RNNGIprKCpGVafOzYzjA2EgYxokBB7XVIBD3kTT1twLWjQriiqJDGav3FLC0Q=
+	t=1713784491; cv=none; b=Xv//Wums4SbeBkWnmOJFdji8h5xmR+xy0ATEXaFdV5kP2jErkuBjIifdN8Ozo26rLvUavXJyqzHWGu59kcRkIURp59WBpQ66Gg9eZxvuCiJtn5RbLaHprNTMplUI/KbNL6VGDp4VGoRxu97/5dH2iO7lfxp+5dM65z0toa703aQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713784416; c=relaxed/simple;
-	bh=gf1LSfks/DZu1KDGH9YWvHY5EzI1fuwlgU++9PgdGiM=;
+	s=arc-20240116; t=1713784491; c=relaxed/simple;
+	bh=9nemOUTQvwBWQ8gRNksNJmnj7GhJzwX5Qhmg5BnR3RU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Jq79ry1lwD41oGcPgOIKMcCDj+jsxUxX/eqk+Dr6BjXjaxjODp0iIW+jW/rympPoV4CnB7Nr/wc67a7oCXJ4U3Ma38PcpzBI53+4Go0j4vnSNxMJMv8XygzrpDN9mpDtFZnX0Y3CAkCYUy33ALyiWFkPJChyKZlIjtz4RY01Bfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RV5atbym; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-344047ac7e4so3082155f8f.0
-        for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 04:13:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713784413; x=1714389213; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CzoM1x8KJ7efkIkmfaAcVKjjXVwNSzB4dxxASXuEBKw=;
-        b=RV5atbymdvPdnVTe3Sg/5pmOTEzsOZ3I2J3JKSWht745V2NfXKCueu1WioOlaQp6jc
-         N7HJcfUEBB2RM6bXmbDg5AHrBRiQXfZUshioXI8JfiHQqc6veP7EcTHzA8E6ZeASeLxA
-         9i+ye3w6sK7w3OMcLLDWy+ugSCkHprv3Kq9SJuDH3d14yetUvSIhy/IoqyKJFUeC6HA2
-         BKT34BhvLuwyMYxL8o9zxfol9NrlrHPlDEl/SUGv4EgqQ3SUxmZIRTqzazqcq2GVLXPr
-         IAxuv2L1UXE3VUwv9E9fSqqprIfccQrmQfqVhwp60++XNco8L8Nhb8tEiF8cZFKa8Mv/
-         3+CA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713784413; x=1714389213;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CzoM1x8KJ7efkIkmfaAcVKjjXVwNSzB4dxxASXuEBKw=;
-        b=ng3nQtNszYsVn4Wkld7+03ATcbFwDlO4Fc8p024G6/cf+DWmTuj8O16OyYYk0YWPT6
-         tDWNmBhd8zZNtejRjEvtV39BoCaYxao0OHTUiXkxJcs0fDvsVz68/JzBK+iF0Neygylz
-         m7wYLhBD1PTZpnaXWY4DyTnZytOojoAXemDvyl7OoVCbji11cEysljPbkHs+3w/Z8LoA
-         OM7MzWO7viI9CA6SCUkUm2cCL7ZtJn3Av/zD20QS9BdIKqEKz5EMD0l9ODNxcecGdwqc
-         DP8f48Ujz3AMg70CEl6ZCjiulaN36CKFQsKFkC+EH8E/zEZalzcpP6H04Da4p2FfLCPB
-         WVyA==
-X-Forwarded-Encrypted: i=1; AJvYcCU6FNNfhC+hpWs2NIQvS+lAV9nmHDylRfa+eulvwYNucU6EkrYz4WFfeWa4DjGd5mXkEYU0QTHsRdIAFSi31BHaSS5Zs/1yks4=
-X-Gm-Message-State: AOJu0YwAX44SBudnuxe9uYlXU+ZxfTbqCiLbJeGC1RfbKdUNDQxASVhK
-	fOpdQsby0L1iEzW8GvOZaemPHL4RGT1xvbbk3Td67MQaCRfb6WqwbHJ43VD0nHc=
-X-Google-Smtp-Source: AGHT+IEOp5Z7JHtY8l4UoPuY/jR6T3IYDex/kZU1e2WpLFswrPJSHkIzZhdC+1o76Ax2K18wmbbOfQ==
-X-Received: by 2002:a5d:4083:0:b0:349:bb17:6e60 with SMTP id o3-20020a5d4083000000b00349bb176e60mr9370805wrp.2.1713784412724;
-        Mon, 22 Apr 2024 04:13:32 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id b4-20020a5d6344000000b00347363b77dasm11684546wrw.33.2024.04.22.04.13.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Apr 2024 04:13:32 -0700 (PDT)
-Message-ID: <3f42fdb9-044f-460b-8701-7a95f9d5e638@linaro.org>
-Date: Mon, 22 Apr 2024 13:13:31 +0200
+	 In-Reply-To:Content-Type; b=rCXDNB6WYh156OLDAs0/xhFY/qs604K+vHWZlrCsrEmTmBOsaiD4S6Yf8rbI2pgR28argKWjtkufv/kbPzWCjk3ITI7E5GBnpx3NQRWzNAWYgApo9cf0F9uQWwPHJK6S0Oc8Itr4nZMzfb9EAUq+zHJ7ASceznaajfPLOi/WFpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3DBB6339;
+	Mon, 22 Apr 2024 04:15:17 -0700 (PDT)
+Received: from [10.57.75.149] (unknown [10.57.75.149])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0FBBE3F7BD;
+	Mon, 22 Apr 2024 04:14:47 -0700 (PDT)
+Message-ID: <fcb8851c-9b07-4d4c-bc22-8793bc59a50c@arm.com>
+Date: Mon, 22 Apr 2024 12:14:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -76,38 +42,99 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] thermal/debugfs: Make tze_seq_show() skip invalid
- trips and trips with no stats
+Subject: Re: [PATCH v1 1/3] thermal/debugfs: Avoid excessive updates of trip
+ point statistics
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>
+References: <4918025.31r3eYUQgx@kreacher> <4890052.GXAFRqVoOG@kreacher>
 Content-Language: en-US
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- Linux PM <linux-pm@vger.kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Lukasz Luba
- <lukasz.luba@arm.com>, LKML <linux-kernel@vger.kernel.org>
-References: <2727917.mvXUDI8C0e@kreacher>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <2727917.mvXUDI8C0e@kreacher>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <4890052.GXAFRqVoOG@kreacher>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 17/04/2024 17:51, Rafael J. Wysocki wrote:
+
+
+On 4/17/24 14:09, Rafael J. Wysocki wrote:
 > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Currently, tze_seq_show() output includes all of the trips in the zone
-> except for critical ones, including invalid trips and trips with no stats
-> which is confusing.
+> Since thermal_debug_update_temp() is called before invoking
+> thermal_debug_tz_trip_down() for the trips that were crossed by the
+> zone temperature on the way up, it updates the statistics for them
+> as though the current zone temperature was above the low temperature
+> of each of them.  However, if a given trip has just been crossed on the
+> way down, the zone temperature is in fact below its low temperature,
+> but this is handled by thermal_debug_tz_trip_down() running after the
+> update of the trip statistics.
 > 
-> Make it skip the trips for which there is not mitigation information.
+> The remedy is to call thermal_debug_update_temp() after
+> thermal_debug_tz_trip_down() has been invoked for all of the
+> trips in question, but then thermal_debug_tz_trip_up() needs to
+> be adjusted, so it does not update the statistics for the trips
+> that has just been crossed on the way up, as that will be taken
+> care of by thermal_debug_update_temp() down the road.
 > 
+> Modify the code accordingly.
+> 
+> Fixes: 7ef01f228c9f ("thermal/debugfs: Add thermal debugfs information for mitigation episodes")
 > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
+>   drivers/thermal/thermal_core.c    |    3 ++-
+>   drivers/thermal/thermal_debugfs.c |    7 -------
+>   2 files changed, 2 insertions(+), 8 deletions(-)
+> 
+> Index: linux-pm/drivers/thermal/thermal_core.c
+> ===================================================================
+> --- linux-pm.orig/drivers/thermal/thermal_core.c
+> +++ linux-pm/drivers/thermal/thermal_core.c
+> @@ -427,7 +427,6 @@ static void update_temperature(struct th
+>   	trace_thermal_temperature(tz);
+>   
+>   	thermal_genl_sampling_temp(tz->id, temp);
+> -	thermal_debug_update_temp(tz);
+>   }
+>   
+>   static void thermal_zone_device_check(struct work_struct *work)
+> @@ -505,6 +504,8 @@ void __thermal_zone_device_update(struct
+>   	if (governor->manage)
+>   		governor->manage(tz);
+>   
+> +	thermal_debug_update_temp(tz);
+> +
+>   	monitor_thermal_zone(tz);
+>   }
+>   
+> Index: linux-pm/drivers/thermal/thermal_debugfs.c
+> ===================================================================
+> --- linux-pm.orig/drivers/thermal/thermal_debugfs.c
+> +++ linux-pm/drivers/thermal/thermal_debugfs.c
+> @@ -545,7 +545,6 @@ void thermal_debug_tz_trip_up(struct the
+>   	struct tz_episode *tze;
+>   	struct tz_debugfs *tz_dbg;
+>   	struct thermal_debugfs *thermal_dbg = tz->debugfs;
+> -	int temperature = tz->temperature;
+>   	int trip_id = thermal_zone_trip_id(tz, trip);
+>   	ktime_t now = ktime_get();
+>   
+> @@ -614,12 +613,6 @@ void thermal_debug_tz_trip_up(struct the
+>   
+>   	tze = list_first_entry(&tz_dbg->tz_episodes, struct tz_episode, node);
+>   	tze->trip_stats[trip_id].timestamp = now;
+> -	tze->trip_stats[trip_id].max = max(tze->trip_stats[trip_id].max, temperature);
+> -	tze->trip_stats[trip_id].min = min(tze->trip_stats[trip_id].min, temperature);
+> -	tze->trip_stats[trip_id].count++;
+> -	tze->trip_stats[trip_id].avg = tze->trip_stats[trip_id].avg +
+> -		(temperature - tze->trip_stats[trip_id].avg) /
+> -		tze->trip_stats[trip_id].count;
+>   
+>   unlock:
+>   	mutex_unlock(&thermal_dbg->lock);
+> 
+> 
+> 
+> 
 
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
