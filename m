@@ -1,112 +1,121 @@
-Return-Path: <linux-pm+bounces-6837-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6838-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FBF98AD4AF
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 21:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E6C58AD75C
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 00:40:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CDAB51F224DB
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 19:17:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 98DB31F22AA8
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 22:40:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3EEA155323;
-	Mon, 22 Apr 2024 19:17:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b7ZSZoI2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34FB11F605;
+	Mon, 22 Apr 2024 22:40:18 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EA601DFFB;
-	Mon, 22 Apr 2024 19:17:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F167625;
+	Mon, 22 Apr 2024 22:40:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713813430; cv=none; b=NefindJ92ura3clEBclDtn6QyWojClgySZfkWZ/Mfhet+LnYPoaBirq34Jk+BvOysWCEnZNUQMzWrrp7xUlrQJaZpbupoUScqjuv8zY8mfX+Id6nYtIb5/SzF/a5No4k5YMP79Hm/6OiOWo2UECSI2bfa7ZeakuW/qrwkj9Z7UU=
+	t=1713825618; cv=none; b=UFh3BFaTjilzQE9qbjCxRq0TAOSSCy/VH5bhhRXCpAR+8aA1NM0Q75aKeym1HjAP9cZcG2tWW18882/PYJGa/l/DwVUl63mTDRhCAPRH9YGKES4huFpKLBjNNXCUTESxemles82f+U5TrA7+R2rFVgw9qJ7WSp19BtRp8cuegi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713813430; c=relaxed/simple;
-	bh=lHeD1D8H/MmEcMeeZUI4LjzVYUL80F8jZcOEKkoujmU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hMf0EhcTQIWEmZTv7yEqhoSLnYknfC//OI2TSzyWwxPRu2Cs/JocW+eQZ8H82RzF6X/Zw89DoxhOaWsQW5Zv+uzWW+vYjKqLvdi8Dk6Fa/w3y54BR6KKBBs1SM/IlNP3Q41FOWVSZlx6bhRPvgR75e8scOspIRjjnXCVMccbVz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b7ZSZoI2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F17AC4AF08;
-	Mon, 22 Apr 2024 19:17:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713813429;
-	bh=lHeD1D8H/MmEcMeeZUI4LjzVYUL80F8jZcOEKkoujmU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=b7ZSZoI2D2X7HToN0E2f+jHBxNlm4eQzdNjbZ10yTbZjs1FKmOK9k1iO6QPgtz2xp
-	 8QejgxtE7KQUGIdIkS9QFuiY0V7Saxw5lrBpsl6L7mVfx3bRXjY5dzwP4fgz6FXq7U
-	 RpvoPIq+1CcoiYl6Tzv2QVAmo+EVV3Vy0dM03efQwFApmW4Vy+KD2hRKoErIGKhksF
-	 bsCKqvT/d1sOlAo9yJEqwHwQqRTjQH0woiQ7AJvYOiKKbJC/RtvbTmCtQXiXqCNm1d
-	 ZGZC1bHRjbQzp+on2e6E6QUky5rdwSx7QwYjBs0YcKt7eqGIxCpy9xGOT2uAzcvU/F
-	 c/ix7B+Whg4BQ==
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3c74c0edd57so87520b6e.2;
-        Mon, 22 Apr 2024 12:17:08 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXsqKhbvKp2P49PEV4d3c0iDMjtznONmHp/CWXimHDY5jkjvkXJvdiIlXadHVvQHLFGWrLY60pgz2q8XWJSOJHF64OOiioeTrtXIU9fJNeeWav6T7eZcas12hoEQC9+xHDKIkE3YLgen0pawjg4Sc2qqyLnDDK0vrYf0c7FM9ijjhk19zkS/zcnUQsUDCv4Xx3GsMxBS4tZ6rUlB4oUKg==
-X-Gm-Message-State: AOJu0Yw8vqlaurJaruMqH+BuXZGW9dMxfEJ64u6CkS95kfNLj3C+ilH4
-	Q/SmZpC+5rQlc++38MrUCVev4DbH6SjrW9o7hLgaxqjgFUbkYDb/B3p+N+otWPkMt5+RIFyL/d+
-	weSDbjyyF9iKdjd36h1aAhLl9/cY=
-X-Google-Smtp-Source: AGHT+IHHJ9QaEiYpQj2Hs91rOTJeMn0u59rXfQOhxmRruL4EPRiSN5Poxfp89Kp24hNMmCEZhAKqnasVJk7tiQxt2jk=
-X-Received: by 2002:a05:6820:e07:b0:5aa:14ff:4128 with SMTP id
- el7-20020a0568200e0700b005aa14ff4128mr11147467oob.1.1713813428277; Mon, 22
- Apr 2024 12:17:08 -0700 (PDT)
+	s=arc-20240116; t=1713825618; c=relaxed/simple;
+	bh=YYWQ72Ji1mlYlNcfWfkUgczygjka+1APIsmWDrb2QZ0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=iQn9igh81PocHHyzcISPx2fNw1atWnT1ZEkXCxINA4pxo6un3kQj+E6+rQF5UbHbGK4Qz03YIIpOxFfDTbUx7nefy4x2sJoLWkNkw2Ou+aXPLHz1K7r8/nbPtjT4j4QU2NNc7OTvC2IJPj9mqIcpqm8YbB0uwRCJzQ3uZRAZA8M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4F569339;
+	Mon, 22 Apr 2024 15:40:42 -0700 (PDT)
+Received: from minigeek.lan (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6ABA13F7BD;
+	Mon, 22 Apr 2024 15:40:12 -0700 (PDT)
+Date: Mon, 22 Apr 2024 23:39:58 +0100
+From: Andre Przywara <andre.przywara@arm.com>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Yangtao Li
+ <tiny.windzz@gmail.com>, Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec
+ <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>,
+ linux-pm@vger.kernel.org, Vincent Guittot <vincent.guittot@linaro.org>,
+ kernel test robot <lkp@intel.com>, linux-arm-kernel@lists.infradead.org,
+ linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: sun50i: Fix build warning around snprint()
+Message-ID: <20240422233958.0e2d992c@minigeek.lan>
+In-Reply-To: <285de20a187f3e4baeb28f639b5bf55e914a3821.1713756666.git.viresh.kumar@linaro.org>
+References: <285de20a187f3e4baeb28f639b5bf55e914a3821.1713756666.git.viresh.kumar@linaro.org>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com> <CAJZ5v0giKShCa7AaRRmhcfTshyjDKwn487-kqRr3pqVmYJ2BrA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0giKShCa7AaRRmhcfTshyjDKwn487-kqRr3pqVmYJ2BrA@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 22 Apr 2024 21:16:56 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jBXpZPUFU+XMGV9oWf8XqKY_pTwitq4sWzZsiT5J3XoA@mail.gmail.com>
-Message-ID: <CAJZ5v0jBXpZPUFU+XMGV9oWf8XqKY_pTwitq4sWzZsiT5J3XoA@mail.gmail.com>
-Subject: Re: [PATCH v7 00/16] ACPI/arm64: add support for virtual cpu hotplug
-To: Jonathan Cameron <jonathan.cameron@huawei.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>, linux-pm@vger.kernel.org, 
-	loongarch@lists.linux.dev, linux-acpi@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org, 
-	Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki" <rafael@kernel.org>, 
-	Miguel Luis <miguel.luis@oracle.com>, James Morse <james.morse@arm.com>, 
-	Salil Mehta <salil.mehta@huawei.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, linuxarm@huawei.com, justin.he@arm.com, 
-	jianyong.wu@arm.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, Apr 18, 2024 at 9:50=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
->
-> On Thu, Apr 18, 2024 at 3:54=E2=80=AFPM Jonathan Cameron
-> <Jonathan.Cameron@huawei.com> wrote:
-> >
-> > Whilst it is a bit quick after v6, a couple of critical issues
-> > were pointed out by Russell, Salil and Rafael + one build issue
-> > had been missed, so it seems sensible to make sure those conducting
-> > testing or further review have access to a fixed version.
-> >
-> > v7:
-> >   - Fix misplaced config guard that broke bisection.
-> >   - Greatly simplify the condition on which we call
-> >     acpi_processor_hotadd_init().
-> >   - Improve teardown ordering.
->
-> Thank you for the update!
->
-> From a quick look, patches [01-08/16] appear to be good now, but I'll
-> do a more detailed review on the following days.
+On Mon, 22 Apr 2024 09:01:09 +0530
+Viresh Kumar <viresh.kumar@linaro.org> wrote:
 
-Done now, I've sent comments on patches [4-5/16].
+Hi,
 
-The other patches in the first half of the series LGTM.
+> The Sun50i driver generates a warning with W=1:
+> 
+> warning: '%d' directive output may be truncated writing between 1 and 10 bytes into a region of size 2 [-Wformat-truncation=]
+> 
+> Fix it by allocating a big enough array to print an integer.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202404191715.LDwMm2gP-lkp@intel.com/
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-I can't say much about the ARM64-specific part and the last patch has
-been already ACKed by Thomas.
+For the records: as it stands right now, "speed" will always be smaller
+than 10 at the moment, but it's indeed better to play safe here.
+So the fix makes sense to me and fixes the issue:
 
-Thanks!
+Reviewed-by: Andre Przywara <andre.przywara@arm.com>
+Tested-by: Andre Przywara <andre.przywara@arm.com>
+
+Cheers,
+Andre
+
+> ---
+>  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> index 30e5c337611c..cd50cea16a87 100644
+> --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> @@ -19,8 +19,6 @@
+>  #include <linux/pm_opp.h>
+>  #include <linux/slab.h>
+>  
+> -#define MAX_NAME_LEN	7
+> -
+>  #define NVMEM_MASK	0x7
+>  #define NVMEM_SHIFT	5
+>  
+> @@ -208,7 +206,7 @@ static int sun50i_cpufreq_get_efuse(void)
+>  static int sun50i_cpufreq_nvmem_probe(struct platform_device *pdev)
+>  {
+>  	int *opp_tokens;
+> -	char name[MAX_NAME_LEN];
+> +	char name[] = "speedXXXXXXXXXXX"; /* Integers can take 11 chars max */
+>  	unsigned int cpu, supported_hw;
+>  	struct dev_pm_opp_config config = {};
+>  	int speed;
+> @@ -235,7 +233,7 @@ static int sun50i_cpufreq_nvmem_probe(struct platform_device *pdev)
+>  		config.supported_hw_count = 1;
+>  	}
+>  
+> -	snprintf(name, MAX_NAME_LEN, "speed%d", speed);
+> +	snprintf(name, sizeof(name), "speed%d", speed);
+>  	config.prop_name = name;
+>  
+>  	for_each_possible_cpu(cpu) {
+
 
