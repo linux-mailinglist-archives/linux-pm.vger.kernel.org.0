@@ -1,75 +1,74 @@
-Return-Path: <linux-pm+bounces-6827-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6828-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8D7F8AD1D4
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 18:23:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E43C98AD29A
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 18:46:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E065285A3B
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 16:23:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2125C1C20E91
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 16:46:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28DA0153803;
-	Mon, 22 Apr 2024 16:23:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 836CD153807;
+	Mon, 22 Apr 2024 16:44:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rXN1Gn0U"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ClmOenp0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CF7A153588
-	for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 16:23:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEA35153BE9
+	for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 16:44:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713803018; cv=none; b=PTF+7i2ZtJDe/XsqxEHj03wAyH1TufN9yynrblD2rQcfiYGZdojMaMq6LIkfMlLojoSOx5B2GcGXXSvo7jNkd1I0eaQJGIx0tCXpc+7OIeGWruvKCaACYioMlHa8XKmIZDsrgqeSxPcQX+QsrhAZJZTmbM/TlYIv0Ai4wjf/yxw=
+	t=1713804260; cv=none; b=gzF94/ALkTR1BcdunwcpMs10UOUz8FwF50rgZsRpVmmhB7k91eWFzr46dgBm0u7BsAzeFIr049UkZ8oFnHQ52sgaE8nrdgrhFXQazrh79d/xGNrESt5RddZWjVhlMrNYSH7b/qSrixMbtVl9nOkc8F4AIIxdGtVzhdotIfuRH58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713803018; c=relaxed/simple;
-	bh=gqAW7fj3sgPiDcoedoxjzT94bBENsJV3N5K7VEiaRyc=;
+	s=arc-20240116; t=1713804260; c=relaxed/simple;
+	bh=OLIXdSdWyYDbVVGKfMKB5COs4TOKhQUHpd4n73zkPmw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qIfAZXPvNfKAxCRzCByV+O+yIyIjeer5XAXD8Cu07/GQ34bIEvzc4lFtSYysnKoxkxGlJk2an309VdNkjfy1aRKfEkohjfEomY3E811+WKkud3t/9/BshHystcmnSQrWe/RAyVW5cDjyIwPGHf/ifTeE3t1rsEtsilsZ6T4KM4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rXN1Gn0U; arc=none smtp.client-ip=209.85.218.46
+	 In-Reply-To:Content-Type; b=rNVkClZwkDNlRWtcxcY+Vz9aP6XVeWFIgR/SyLq2iqKkeEqhK65BXmweYW3Gf3FetfaXWJnWlXGAj0Y2FnGwyLrRCnOkkqenNiUpRfUfX86SSJX39ZZrEEl6dAvWoAtJOBYzPyplzdq9ISri3dCFaqNx4Earj1t1vQy5eZNW7mw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ClmOenp0; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a55ab922260so191949066b.3
-        for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 09:23:36 -0700 (PDT)
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-41a1d88723bso10830725e9.0
+        for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 09:44:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713803015; x=1714407815; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1713804257; x=1714409057; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=o2Gdo6hcLZXgF9GvYlYr9IKBTKZTq045vqCsZKtFOJU=;
-        b=rXN1Gn0U4rIil6Kl1u41s8budwzML064Epq+/m4lm2zb5Ix1SyWd2FMdMipa0d7Bvn
-         479gxxq0X0UhU6WxHKR/iDBtXis5sGDvhMnllXXbyvh/prD26+Ymvom2c9vRipzArxPT
-         iOCIiOpe6lscY4aZAsxNIWtBd0REXM8Q3jdyU6jv1ii4PwQlhrIqOAH8Ie7p4WPmhikE
-         xlV46C2hrgKfBYeoq9l8iHw+FQrDAZ2kqTvv1hBNVlB+46lmYbcEQYkomF4qMTai0Etv
-         HBKV+grPj6or+UXOOwHwNw9tt1TKqf21RDyRD5C5J5Wjd8Oz6vfvuj5qxgVjbVX4jR8o
-         9MjQ==
+        bh=z6Igkul0EwY2j/aQPEzUDfSBugLceVua3YOJOdTVDis=;
+        b=ClmOenp0YzTqL6CvF3y0p5zORolypxIV0C+NopHZUi6RkUdgzcjzePk3gs5WVveTI1
+         Uo6iP+WGTGq6X/lS65dIdAicQlANZH5rQjC8lzj+4wF8XLO6yjFGwyOHXOXndCkNfgGp
+         z5mjYZBn0+Paw6gnrbYKl2IuycnT5gbHJbRq24yBLc+gboWC1wgs5vTtp1AlQE387xHj
+         n2g46hFrlYGwHuMqDoNmALsNsoBXbk6FgHgZJ9dDquFNp6L31y+FTbWqUThAD1y1ZSIA
+         xUaMIRAI8WEBCw77R+95aUEPSDBz/gOjylu37HOfSunW29Vl+NFcTT8+IRTw+2EQNGnz
+         zicQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713803015; x=1714407815;
+        d=1e100.net; s=20230601; t=1713804257; x=1714409057;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o2Gdo6hcLZXgF9GvYlYr9IKBTKZTq045vqCsZKtFOJU=;
-        b=frjZP8ZKfnVLK7GQuAWdvwjTgMVwTxWVKbA6Yf6kinshVhLROhzi0SPL7Oaa4IqSZj
-         xjhNpnwtDP5ytrVuYOqjvjrW3ji3ST42lvMhQtkpW+EBln6hRqmzbVCMZXNK9W7Udlc9
-         LlcjH6954OfdQpAU9wubOLBkSc3fG+yma/W8Q5WeQDeXeWhYHaiMr9HeUFtYk/azma/4
-         2CDaHPjUsKXIxo121b+NdQmKtnWY2PUZEMJI9QntwZlQaPI0lB1IwI2o+UwO8HmgKnW7
-         1q/MylH5w/fXVr7w28Ls5ASlYGD40VG83AEhXr41k3dVrTyz0AD5TMyKYZ36KS3TpFdc
-         DpIA==
-X-Forwarded-Encrypted: i=1; AJvYcCX9rXZoLSxruOoX67dpUICFFhPxB/eZEPciTBxfy/Ng3/RCl2JKfNbJV/fVd6w1z3RQCJ5gfp4Ale+zeQueyoajvvUhGEPdHSg=
-X-Gm-Message-State: AOJu0YzlLUJEk38BwIRBzGxJoUxMB8+jqHFhMYkAfuFhL7i3uhwki4Ar
-	FrHvZyhwoY5yMqTPGfWYd76FCvcrLZ4NLFy0X3fUbN1ccni1c7BRo/z6thu1A5bv8PvkC7RUXMf
-	C
-X-Google-Smtp-Source: AGHT+IGb3tPKIR9iF0L1avzReD6Mvwqc3ppr1BDLASz06MR3UMXIn/UmsJyjK9xZIyrnuqWwhkPifw==
-X-Received: by 2002:a17:906:17cf:b0:a55:5ddd:ec0f with SMTP id u15-20020a17090617cf00b00a555dddec0fmr7102481eje.12.1713803014742;
-        Mon, 22 Apr 2024 09:23:34 -0700 (PDT)
+        bh=z6Igkul0EwY2j/aQPEzUDfSBugLceVua3YOJOdTVDis=;
+        b=SghQEWTVoq+Ie+WUKQ3KhvKwhLHp8iJfIQNMUDzuF1xDgkIGLXKauCOvzToAvwgwzT
+         b1uY8JshvPzy5/gS8lYW6vCiBUVcX5VJ9KFu6Qj4E4+sYA2HWxNZcNbP9ycUaWDwpUn+
+         Zw1HHyQBoUeNMPrsiqryKdeoYSM8uFpfrF+U2QiPyRxnZK/XkCI/KIxPSMQX1VP4Lb8Y
+         i/++VZ/GgaPp4qlOusa9h4je0ofiXLwXHuOjEEXAGlOLxEpwUmakeoxgEToBYqnbIVT6
+         UMTQeY1Kr79OVQ4KUY6L6SI6k3JWuJ2Uu/wWJ1zNDoa8iEvpwK4yMwmFA6WczkTexhQt
+         6g1w==
+X-Forwarded-Encrypted: i=1; AJvYcCWqoPMX2Ppv+6eGITv713xva7kDJRFIsGtn46PArcYggAE64AjXasSjiUoaNam7GO/Ncxik/t286r+Y64SKwG46ZyF2B7onWhw=
+X-Gm-Message-State: AOJu0Yz96+MAkz9hW3iThCgbgLQQOHT97iaT/T/RC7HtNSbuqAmM3sYT
+	8QdkesIcID47yq5ixlavpC3d6AwYq+7RpHHqUx1sYfTypQ9ejaN0g9muFNjer0Y=
+X-Google-Smtp-Source: AGHT+IF2L5+lrLgaqC7ydR1b2YumbNI161DVVAbfMpg1U1grbIoqOICMThHm60FmuT1h116XNolFUw==
+X-Received: by 2002:a5d:6acf:0:b0:346:d2c0:7682 with SMTP id u15-20020a5d6acf000000b00346d2c07682mr5989895wrw.30.1713804257244;
+        Mon, 22 Apr 2024 09:44:17 -0700 (PDT)
 Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id a10-20020a1709066d4a00b00a52567ca1b6sm5924253ejt.94.2024.04.22.09.23.32
+        by smtp.googlemail.com with ESMTPSA id d4-20020a5d6dc4000000b00341ce80ea66sm12414035wrz.82.2024.04.22.09.44.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Apr 2024 09:23:34 -0700 (PDT)
-Message-ID: <e1f44931-41f2-40e7-84a6-9e7685b3d4c4@linaro.org>
-Date: Mon, 22 Apr 2024 18:23:32 +0200
+        Mon, 22 Apr 2024 09:44:16 -0700 (PDT)
+Message-ID: <8fcac485-d280-4753-88af-b9b8c58bbb64@linaro.org>
+Date: Mon, 22 Apr 2024 18:44:16 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,23 +76,22 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] thermal/drivers/qcom: Remove some unused fields in struct
- qpnp_tm_chip
+Subject: Re: [PATCH] thermal: k3_bandgap: Remove some unused fields in struct
+ k3_bandgap
 Content-Language: en-US
 To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
- Amit Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>,
  "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
  Lukasz Luba <lukasz.luba@arm.com>
 Cc: linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <d1c3a3c455f485dae46290e3488daf1dcc1d355a.1712687589.git.christophe.jaillet@wanadoo.fr>
+ linux-pm@vger.kernel.org
+References: <206d39bed9ec6df9b4d80b1fc064e499389fc7fc.1712687420.git.christophe.jaillet@wanadoo.fr>
 From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <d1c3a3c455f485dae46290e3488daf1dcc1d355a.1712687589.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <206d39bed9ec6df9b4d80b1fc064e499389fc7fc.1712687420.git.christophe.jaillet@wanadoo.fr>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 On 09/04/2024 21:56, Christophe JAILLET wrote:
-> In "struct qpnp_tm_chip", the 'prev_stage' field is unused.
+> In "struct k3_bandgap", the 'conf' field is unused.
 > Remove it.
 > 
 > Found with cppcheck, unusedStructMember.
