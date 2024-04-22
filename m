@@ -1,168 +1,126 @@
-Return-Path: <linux-pm+bounces-6820-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6821-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 517288AD17E
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 18:04:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF5AD8AD19C
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 18:12:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B7D8287E1F
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 16:04:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C2C23B22C16
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 16:12:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B315153589;
-	Mon, 22 Apr 2024 16:04:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D232153566;
+	Mon, 22 Apr 2024 16:12:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cF69LuIA"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gvPQGwEr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77BC8153580
-	for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 16:04:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7724315357B
+	for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 16:12:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713801856; cv=none; b=XJa2FZS3/stuNAt9RehfNLZ677o2wJr8VfzjADBcYceRxwjsCqTOSko7+g2C4jIECaZuTLARGWPfrYxwBUyvsN/m6CnfJoEqmr+EsTObwJ61lnCdt0+lop9WAaYp2NIrZtYbTUW973/VRMmFGsqAwKIvY7ChnAVvn5Uxep7qctY=
+	t=1713802348; cv=none; b=tfxDWhdsIU3pGpCjz5iu0BoYJoDQ1CgY2w9+LeUttIMiZ47LJvtWlZOJTD7pwELLAr6Ub19mF6zxSsNouRkng1HyJJ6zoi7Bt9L08/5gdk0/tL965/J1Tioov8fSNTIgq0aGJmpUAgkxp2vc80p1w+n8nx3T6oguW7LG1TBcc6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713801856; c=relaxed/simple;
-	bh=kv1rDUKhFWJK/WnTyUTNRbq2aspxu1c+vFiiS6tbOQE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ets6/7pkt9CWYPQBN8H48xqVGrnPuJXPiPgO+AzXaLgmRZ/YvBd7LpWAUo9IRDryJafhoNEq8QyqM3L3RJO0Sy5s8EK5V6zVdmZ7T2d1GDRyh2couKS8dtsZ1nR1+vAAW6ToFWCQgszbmYtSOWp5UNfDFslfoDh2owpshDIP3VM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cF69LuIA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE252C32786
-	for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 16:04:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713801856;
-	bh=kv1rDUKhFWJK/WnTyUTNRbq2aspxu1c+vFiiS6tbOQE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=cF69LuIAMO3J9W9YKkqCTf8pi6oiI0ASBSqIc3zF6v1pZKpwpd9r3Pih5n0cJxJji
-	 YO69bbi1mpwWIDv7/fGKWwtRdAjVHdhRz66OCCiiQVA5Ida6rKuCdq/w5JNiDIrP/Z
-	 EFBiOTz8uEQvz6MnqW5Fg9YL4xM6O7fXfY02cNaMmzsLz6ahyZrTDESm0FD22Znb9g
-	 e3X4LVdfYhYwTKxtEUv0M1LS+YJneeC7xNT/ufB4mYeSpJjKgU3/tcl1Hd473gMfRm
-	 UETe8Xsh2YkGTiuYs12PiOg74if916Bwh00mLPWZtf03Mk1FgyIqISKZ69+S7J+7he
-	 1LbR/aB0hZYbA==
-Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-6eb7a4d64e8so1212932a34.0
-        for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 09:04:15 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWfiflwHORrFy/xa6OooSTq1vdVt4hD+iD7Fmb1MWBrMMNaunba7baosUiQjFg+AopZ83r5DB0I6zr1d7yuSWumOYhyM8Bo0YI=
-X-Gm-Message-State: AOJu0YwVfbOf+WYlgOQ4ZxoMVCy86A1+NUEg9qujL2DypwrVgYU1x0R+
-	8l2sQUM5WMYH56cfgE1Q3h9NOlWyghXBtfoFir5O2pfITsHS9P9ZbyQK/J/tFSon7aA/qfHCdcJ
-	7bGOQn+j3YVkghaoNZ6QTZIJuSZE=
-X-Google-Smtp-Source: AGHT+IGiS7/chjrczGmIoYQ5F9EW0YI+aEyPnTeRT71vYurnvkJhwOlZ1lAhxPnXxCapz0veNqY9V9viTCdzhTgtHXI=
-X-Received: by 2002:a05:6820:26c3:b0:5aa:6a31:4f53 with SMTP id
- da3-20020a05682026c300b005aa6a314f53mr11403838oob.0.1713801855184; Mon, 22
- Apr 2024 09:04:15 -0700 (PDT)
+	s=arc-20240116; t=1713802348; c=relaxed/simple;
+	bh=pyespoIenYOvwr+vFAWDKTKpySEFKhKzEmeVBB6ayjU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=d7+h+58kMiMA9T1FTz2mjBRWIoSxDlUqEdKQgcqcgnd9vopgZYW62pEqfAqbNKiiCYxllWKBy+LpxsIFHtQhXamJbK3/MnZDo7NPglPkyW1FJfVvem9O9QzFMjPPUo9DdC+z9FnVXOH+ksGbRsYpAn8tidVpatWtkKEHJm4cj9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gvPQGwEr; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-418c2bf2f55so31283085e9.2
+        for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 09:12:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1713802345; x=1714407145; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PnFFhvINgBkGoeGxt72lLRxIj0jus3I5w0uDFrtanEw=;
+        b=gvPQGwErFwllCkbn3pU4ylHAktTYu3QKFDkqJT/+hHGLEgFPUxS/nPxMXCuhS6pILp
+         o4z5UHtjnhaT8G9kdcaHEq583d1OgaqoTit0w3t4kzCFF3tq3NyCuZRkIo57EmPIDVcn
+         OUzDG5WecjuzyvO6WnpDVU3COv/rNFRiGFS+1rpdYyYPZYcNrDLlweiX8olkJWbDaYR4
+         KPUOr1V33UWn+2MxNz96gQWrbw6Ej7qXhXm4eewwxTEiSRAk107q06gVs9NMVa5Q+VEr
+         6u/5grM9tzGlrEk76WQROD1v8ToIVdoP50c1jeUP4SFfANIuHmjLsua2vx3tnRAFKKh5
+         0SlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713802345; x=1714407145;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PnFFhvINgBkGoeGxt72lLRxIj0jus3I5w0uDFrtanEw=;
+        b=neIetN2WRk1jlW0jZ65gaxth6AZQfxqzb7HWrzkFsSgcWUCvh9rl7zNbFP005K0wOZ
+         ORqLuwwVbKkiZqpj3TkvSodM238rw9i0F6qMdxQRq8HJN+qyyXuHcNmTo8T+dDVfNapT
+         labnDA6lrRgRLokaOAzZ8jpV/xfuHZRosRQ2FKx86xjrbHALWl9qCjyg2vtelHLqBulG
+         z6VvqcnEksw/jtHzI45M3UZ0Ldc6z63GuswKUxBfNRHVObHInbD/yiQdB+aGEGnbEqyA
+         Q2B3VDxFJIIt6Gwo/TqLzIDodyKnykeCw/6ad6xma2a36Q7PsIVCmDa40dfkIEgvee83
+         kq0A==
+X-Forwarded-Encrypted: i=1; AJvYcCXunXCctvWFYAg1I1KoLFkWZpft8u9mPpPdylMYBKisFzlESQ2EYtYPokQ/GVa8EfZwpoU2v6klQHaL/TI//FnPlCDBmWL+dQo=
+X-Gm-Message-State: AOJu0Yzd4eqGqqHdlijxxEiM9i0cdP4dQPCzVjJ/BKgM74Tog7+0mzjS
+	fFngECCSS1zLZdruDJtqDbBbdD0iOQ5G7AuhfQRk5V0poQ4seXAYnkD/Kv7ZJQQ=
+X-Google-Smtp-Source: AGHT+IHr5ZN8Vuq2/rI8TUkOzEMqB0i773L+TnbVRnQcQznM1VMn2gKZ7tsYNkoxi+P2H8/Ew24caA==
+X-Received: by 2002:a05:600c:1547:b0:418:e08c:817 with SMTP id f7-20020a05600c154700b00418e08c0817mr7012270wmg.32.1713802344362;
+        Mon, 22 Apr 2024 09:12:24 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id v3-20020adfa1c3000000b0034b61423d54sm22412wrv.106.2024.04.22.09.12.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Apr 2024 09:12:24 -0700 (PDT)
+Message-ID: <2acea3c3-5c8f-4f3c-a275-743c3fbfd2e6@linaro.org>
+Date: Mon, 22 Apr 2024 18:12:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240422093619.118278-1-xiongxin@kylinos.cn> <37847b26-1c1e-48d3-a74e-bd2bcc6e1fda@amd.com>
- <CAJZ5v0gmF0Lcy_nHSvTDnu4C3N0mipaeJqHff=00fgWdtwOzMw@mail.gmail.com>
- <2888cd41-65d9-4832-a913-399a074de7a9@amd.com> <CAJZ5v0ggFGSsPKWxowqn89WtLbmXVjUWZvc5KO-ab-UZHagR+Q@mail.gmail.com>
- <7b739eb8-573e-4479-9225-be3d2f4adbff@amd.com> <CAJZ5v0itOXsVCvU0kXgZA8v6OX5yy=RZn1d9FTe-fo1tqVy90w@mail.gmail.com>
- <cf3a8d4c-846e-4d7c-ba6e-b774dff420d8@amd.com>
-In-Reply-To: <cf3a8d4c-846e-4d7c-ba6e-b774dff420d8@amd.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 22 Apr 2024 18:04:00 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jp2ici368ebaHyBjhdsEPbgkdNg4FLCfS6kAfNZjd7mA@mail.gmail.com>
-Message-ID: <CAJZ5v0jp2ici368ebaHyBjhdsEPbgkdNg4FLCfS6kAfNZjd7mA@mail.gmail.com>
-Subject: Re: [PATCH] Revert "include/linux/suspend.h: Only show pm_pr_dbg
- messages at suspend/resume"
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, xiongxin <xiongxin@kylinos.cn>, len.brown@intel.com, 
-	pavel@ucw.cz, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 0/3] thermal/debugfs: Fix and clean up trip point
+ statistics updates
+Content-Language: en-US
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Lukasz Luba <lukasz.luba@arm.com>, "Rafael J. Wysocki"
+ <rjw@rjwysocki.net>, LKML <linux-kernel@vger.kernel.org>,
+ Linux PM <linux-pm@vger.kernel.org>
+References: <4918025.31r3eYUQgx@kreacher>
+ <3a8f1978-c5df-40d6-91ca-276431bb01e1@arm.com>
+ <e8193798-4c02-423a-a9d8-63d29ebd7faa@linaro.org>
+ <CAJZ5v0i2pvTLwj7jTzwhoQMap_cvjvNnK2Beuje2COo+F4hBzA@mail.gmail.com>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0i2pvTLwj7jTzwhoQMap_cvjvNnK2Beuje2COo+F4hBzA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Apr 22, 2024 at 5:54=E2=80=AFPM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
->
-> On 4/22/2024 10:43, Rafael J. Wysocki wrote:
-> > On Mon, Apr 22, 2024 at 5:25=E2=80=AFPM Mario Limonciello
-> > <mario.limonciello@amd.com> wrote:
-> >>
-> >> On 4/22/2024 10:18, Rafael J. Wysocki wrote:
-> >>> On Mon, Apr 22, 2024 at 5:02=E2=80=AFPM Mario Limonciello
-> >>> <mario.limonciello@amd.com> wrote:
-> >>>>
-> >>>> On 4/22/2024 09:45, Rafael J. Wysocki wrote:
-> >>>>> On Mon, Apr 22, 2024 at 4:33=E2=80=AFPM Mario Limonciello
-> >>>>> <mario.limonciello@amd.com> wrote:
-> >>>>>>
-> >>>>>> On 4/22/2024 04:36, xiongxin wrote:
-> >>>>>>> This reverts commit cdb8c100d8a4b4e31c829724e40b4fdf32977cce.
-> >>>>>>>
-> >>>>>>> In the suspend process, pm_pr_dbg() is called before setting
-> >>>>>>> pm_suspend_target_state. As a result, this part of the log cannot=
- be
-> >>>>>>> output.
-> >>>>>>>
-> >>>>>>> pm_pr_dbg() also outputs debug logs for hibernate, but
-> >>>>>>> pm_suspend_target_state is not set, resulting in hibernate debug =
-logs
-> >>>>>>> can only be output through dynamic debug, which is very inconveni=
-ent.
-> >>>>>>
-> >>>>>> As an alternative, how about exporting and renaming the variable
-> >>>>>> in_suspend in kernel/power/hibernate.c and considering that to tel=
-l if
-> >>>>>> the hibernate process is going on?
-> >>>>>>
-> >>>>>> Then it should work just the same as it does at suspend.
-> >>>>>
-> >>>>> Well, this is not the only part that stopped working AFAICS.  I'll
-> >>>>> queue up the revert.
-> >>>>
-> >>>> I just tested the revert to see what happens to other drivers but it=
-'s
-> >>>> going to have more collateral damage.
-> >>>>
-> >>>> ERROR: modpost: "pm_debug_messages_on"
-> >>>> [drivers/platform/x86/amd/pmc/amd-pmc.ko] undefined!
-> >>>
-> >>> What about removing the "pm_suspend_target_state !=3D PM_SUSPEND_ON"
-> >>> part from pm_debug_messages_should_print()?
-> >>>
-> >>> This should be as good as the revert from the POV of restoring the
-> >>> previous functionality.
-> >>
-> >> That would probably help this reported issue but it's going to be REAL=
-LY
-> >> noisy for the pinctrl-amd driver for anyone that sets
-> >> /sys/power/pm_debug_messages.
-> >>
-> >> There is a message in that driver that is emitted whenever a GPIO is
-> >> active and pm_debug_messages is set.
-> >>
-> >> It's a really useful message for tracking down which GPIO woke the
-> >> system up as the IRQ that is active is the GPIO controller master IRQ
-> >> not an IRQ for the GPIO.
-> >>
-> >> But if that change is made anyone who sets /sys/power/pm_debug_message=
-s
-> >> is going to see their kernel ring buffer flooded with every since
-> >> interrupt associated with an I2C touchpad attention pin (for example).
-> >>
-> >> So if the desire really is to back all this out, I think we need to al=
-so
-> >> back out other users of pm_pr_dbg() too.
-> >
-> > OK, so it needs to check hibernate_atomic in addition to
-> > pm_suspend_target_state.
->
-> Yeah, that sounds great to me.
+On 22/04/2024 17:48, Rafael J. Wysocki wrote:
+> On Mon, Apr 22, 2024 at 5:34 PM Daniel Lezcano
 
-OK
+[ ... ]
 
-> Tangentially related to the discussion; how would you feel about a
-> /sys/power/pm_wakeup_gpio?  Or /sys/power/pm_wakeup_gpios?
->
-> If we did the plural and used a comma separated list we could probably
-> axe the message I mentioned above from pinctrl-amd all together.
+>> or we should expect at least the residency to be showed even if the
+>> mitigation state is not closed ?
+> 
+> Well, in fact the device has already been in that state for some time
+> and the mitigation can continue for a while.
 
-That would be too specific IMV.
+Yes, but when to update the residency time ?
 
-The whole idea with pm_debug_messages is to switch them all on or off in on=
-e go.
+When we cross a trip point point ?
+
+or
+
+When we read the information ?
+
+The former is what we are currently doing AFAIR and the latter must add 
+the delta between the last update and the current time for the current 
+state, right ?
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
 
