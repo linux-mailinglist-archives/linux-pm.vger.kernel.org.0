@@ -1,331 +1,130 @@
-Return-Path: <linux-pm+bounces-6817-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6818-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C1A68AD127
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 17:46:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BABEE8AD136
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 17:48:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF7351C221F6
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 15:46:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5274D1F21BB9
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 15:48:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B27D515351B;
-	Mon, 22 Apr 2024 15:46:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC0E9153514;
+	Mon, 22 Apr 2024 15:48:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="u6c3ebGq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eQtkKAfi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12257150984
-	for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 15:46:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82B6E502A8;
+	Mon, 22 Apr 2024 15:48:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713800767; cv=none; b=mJZrDzgZ4xxKKuP3ZKQPOWm6nA6lAWfhQhbV0AAyIwYGzjBZ/OSQzH+aebPwEGbWsABUfaIAicUe4VqkxvDlfubhHOW3viJpagkKaz4HNeZA0cC0u5kuIGPenLKYlq75kHwzj21H9xF2ThQP8XhmJShR21m8VRlprE8J85fg5Hg=
+	t=1713800899; cv=none; b=WMIdrDuCTYloUrdwqgX/KeQBc8b+dqKm0JUbTvteAQ5zMBvYLgXnzkVScuul+zzeqVurlzhMJ2w69m1fAHYNDAGoPuOHruHIabTwYI12kXgtZcfBOg8dvJCA4ktuybKigxmdb3e4ustrnUploKJMZtryVG4cLTtDcHMGiBQIiuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713800767; c=relaxed/simple;
-	bh=Oqe94VpkGzk9aI9bTFO9lAx9HZdL+gdczyCkhmSweuM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k+JzJ8AkBKQCsGeb3HGzkaT1JZigiwa8LS4gQXLypgvIPD5/dshlpC+RniTI4TZ3k4IBKfFF2ufiQNIH8+rDzVMbjTkW5/R0RAOve+clOcZAJ4TMBiT+TpU1p5hmh+WwWPBWiVu3vStIDQnCXk8YvWKZy/5VY5jDjY8hmqiiG3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=u6c3ebGq; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-41aa2f6ff2dso724165e9.3
-        for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 08:46:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713800763; x=1714405563; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QRhycPgQpwIvlf2hP1EnQY6sOD615yvq6bGxEhUzAgA=;
-        b=u6c3ebGqOgtsxK6rj28g9DreA/No7m0C+hUwWaL2Y9cGlHyrOxqeCEy37CfpESNIcr
-         MG0Kg3XzLds+oHnF6rtmDabs7Jfa8X6TqO276QFoX2WsYAd/Yl1rvNtPL+fs/0DJBRlM
-         cnv7u8aUM8I1pVZ+g46Ho4Ktsc5NAVWAadnUodjUgcqF46JcysMdHV0DG1ctbfqvEdnZ
-         R5LQFbO2P6tPSa467NtR3gFI+EJ7NlEQDC82P+CM2KmWyZP4rH89p8iku+Ba5QhaY7rf
-         gahQRZsS18l/gc9iM/kntdrZ+5ngI7kb46Wk11IZwS3jIMXQ8eKu6Uhv9idQl8heNylc
-         ZMIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713800763; x=1714405563;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QRhycPgQpwIvlf2hP1EnQY6sOD615yvq6bGxEhUzAgA=;
-        b=LYRD2t2Ge9vgFxqk/hMD6oFvSA0DjismtCuR7bZCEsK4qsHeXaqEIrmwEYxaqINDzZ
-         zG/0GwXKYPVn6fOQw8Q+KDTZvBrZtvWFJTRX0jkD1LQVglZwm0oVfxiXQp6kJwzW1t7p
-         GLeCyLgwN+8jkS1Aq5d+pit+v963nO8H8078YtsN/P6f1OJ+o7fpSwAPz5k1nrq8/HQW
-         j12MQqZHRd422ohzbILcMvjTRHIIV0wHK22gV4ANSgbNlJ51nriuS6mHEUPuO7cJoAoP
-         f5y6LloNRr7PLDfIQGkRqhVCbUzqryzSJPy9Q1fg7OkI3TyHnkRqIun5sQ6gTJiJ/IOm
-         Oxdg==
-X-Forwarded-Encrypted: i=1; AJvYcCXsfjtejhSJHbXdEaj+Uc1ia+hx+yixq+b2lpihzBc4VbL0tW+4xZihBW7daUmECTHJ7+HM9Pj2V5tlccXaBYmnxhtmOwUalwo=
-X-Gm-Message-State: AOJu0Yxqfdx+OYCJXSdKGXOLDs+X2LGiwtHRGWctJKdkSg7qjV9GTgw6
-	jtFavrJvNaSJ9YMqyEncO82cy4MqeOGfWllnl/k7wM9h/nWXlDR5CLsgcETp/nqV3ZTSDnZiKPv
-	w
-X-Google-Smtp-Source: AGHT+IHCeMPLS9nliM1CTYfOFO1ec5EePI1GqVcgmrHjQqsOMOPBPCULd64+GUugUnsLHY5e6ecbqg==
-X-Received: by 2002:a05:600c:a004:b0:417:c329:b52b with SMTP id jg4-20020a05600ca00400b00417c329b52bmr6971360wmb.39.1713800763311;
-        Mon, 22 Apr 2024 08:46:03 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id n8-20020a05600c500800b0041a97870d6fsm910461wmr.2.2024.04.22.08.46.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Apr 2024 08:46:02 -0700 (PDT)
-Message-ID: <d8c1d7a4-60d0-4940-b604-ee62591fa3e8@linaro.org>
-Date: Mon, 22 Apr 2024 17:46:02 +0200
+	s=arc-20240116; t=1713800899; c=relaxed/simple;
+	bh=qhx0qzJ6eh/Piwu61s3SOfrpixoraj8h9WKEC68zkvE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rTLY//LY6eDvddaIk3uq3aMaTFcRp+6mMnAq61ywLZC7CGcsd+BtNyIJn2AyyPupPwJW4u5m4BeneNGTzsZkSiXqy8MeEqnh4zymZ6e5pu905vXE+Uj/GHJVIGFVVhRbZRUHrFS410eTg9+7sDiUADbxrVRsAJ1KnN7+cD6cQr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eQtkKAfi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0339EC113CC;
+	Mon, 22 Apr 2024 15:48:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713800899;
+	bh=qhx0qzJ6eh/Piwu61s3SOfrpixoraj8h9WKEC68zkvE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=eQtkKAfiwdsuq9XsDA3nQk4XOR+nL7theGHHVtmfJBKxJX4cx+ryozk04IpE1d1Wi
+	 4dGU2YB7VPTSm4ZXmDPlWuxqTvh8aYhXx1rrh+Tnh+oCtaCKzSe9uJUYHqw3EpC6hz
+	 0YVJztgRg9qW8BY0PW+eGHvEXL8NMUegwRx2nuGlcUfBByvKRIqZpLJiOZ2zkjjARj
+	 Vmu9XUGdTXA0XLtUspNjPiHBQgO0yU11bQpoaYg5CKawps1PW/QTGtg2s/fCOSfsOT
+	 6tHBdpl+8WDjtLJdUnnTGOAqE9Tecz5dbtgVyDRfytUdL1jhWFluqwD9eOpE7DpC98
+	 v2UZVkiXiELbw==
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5acf5723325so1073148eaf.0;
+        Mon, 22 Apr 2024 08:48:18 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV3Iis48cDCO715Mr1axJd3r7G16lw/lbV2HxS94x9lSsd3/MteLHp1SaMdG7ZgmtvxEtZsRMQtQdXY4hriJGkDxVYXf8d1qYw8zHoNcxTZP/C9PhV1tvBYCsWva5b8HTegO4sPCu0=
+X-Gm-Message-State: AOJu0YyyL9/0geVn2VZKr7EZMZnTC+IgMHJCi11BJkZGZ0rLe3RxVFXG
+	OAPZq8zroF9ilj7z3lM24EBNMr/Bgih5yDHzCBfB7yxa847lCk1gC1EwB7IrqJ83FodqxOg5uz/
+	vrJcgsD4QsTdj1Ml/yUDKXOEH6ZQ=
+X-Google-Smtp-Source: AGHT+IEejy7ZrxkOXryq/C/rtyhD6+Fy0SmQNR3iAw9VjlGe2eFjqyjYSJMQRgsNHyrgaAjcIJHaXgJ5j1bzdRA9xgM=
+X-Received: by 2002:a4a:de19:0:b0:5a7:db56:915c with SMTP id
+ y25-20020a4ade19000000b005a7db56915cmr11719433oot.1.1713800898393; Mon, 22
+ Apr 2024 08:48:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] thermal: k3_j72xx_bandgap: implement suspend/resume
- support
-Content-Language: en-US
-To: Thomas Richard <thomas.richard@bootlin.com>, rafael@kernel.org
-Cc: rui.zhang@intel.com, lukasz.luba@arm.com, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, gregory.clement@bootlin.com,
- thomas.petazzoni@bootlin.com, theo.lebrun@bootlin.com, u-kumar1@ti.com,
- Keerthy <j-keerthy@ti.com>
-References: <20240417120338.910769-1-thomas.richard@bootlin.com>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20240417120338.910769-1-thomas.richard@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <4918025.31r3eYUQgx@kreacher> <3a8f1978-c5df-40d6-91ca-276431bb01e1@arm.com>
+ <e8193798-4c02-423a-a9d8-63d29ebd7faa@linaro.org>
+In-Reply-To: <e8193798-4c02-423a-a9d8-63d29ebd7faa@linaro.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 22 Apr 2024 17:48:02 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0i2pvTLwj7jTzwhoQMap_cvjvNnK2Beuje2COo+F4hBzA@mail.gmail.com>
+Message-ID: <CAJZ5v0i2pvTLwj7jTzwhoQMap_cvjvNnK2Beuje2COo+F4hBzA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/3] thermal/debugfs: Fix and clean up trip point
+ statistics updates
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Lukasz Luba <lukasz.luba@arm.com>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
+	LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 17/04/2024 14:03, Thomas Richard wrote:
-> From: Théo Lebrun <theo.lebrun@bootlin.com>
-> 
-> This add suspend-to-ram support.
-> 
-> The derived_table is kept-as is, so the resume is only about
-> pm_runtime_* calls and restoring the same registers as the probe.
-> 
-> Extract the hardware initialization procedure to a function called at
-> both probe-time & resume-time.
-> 
-> The probe-time loop is split in two to ensure doing the hardware
-> initialization before registering thermal zones. That ensures our
-> callbacks cannot be called while in bad state.
-> 
-> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
-> Acked-by: Keerthy <j-keerthy@ti.com>
-> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
-> ---
-> 
-> v3:
->   - Remove __maybe_unused attributes and use the magic of PTR_IF()
+On Mon, Apr 22, 2024 at 5:34=E2=80=AFPM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> On 22/04/2024 13:37, Lukasz Luba wrote:
+> > Hi Rafael,
+> >
+> > On 4/17/24 14:07, Rafael J. Wysocki wrote:
+> >> Hi Everyone,
+> >>
+> >> The first patch in this series addresses the problem of updating trip
+> >> point statistics prematurely for trip points that have just been
+> >> crossed on the way down (please see the patch changelog for details).
+> >>
+> >> The way it does that renders the following cleanup patch inapplicable:
+> >>
+> >> https://lore.kernel.org/linux-pm/2321994.ElGaqSPkdT@kreacher/
+> >>
+> >> The remaining two patches in the series are cleanups on top of the
+> >> first one.
+> >>
+> >> This series is based on an older patch series posted last week:
+> >>
+> >> https://lore.kernel.org/linux-pm/13515747.uLZWGnKmhe@kreacher/
+> >>
+> >> but it can be trivially rebased on top of the current linux-next.
+> >>
+> >> Thanks!
+> >>
+> >>
+> >>
+> >
+> > I've checked this patch patch set on top of your bleeding-edge
+> > which has thermal re-work as well. The patch set looks good
+> > and works properly.
+> >
+> > Although, I have found some issue in this debug info files and
+> > I'm not sure if this is expected or not. If not I can address this
+> > and send some small fix for it.
+> >
+> > When I read the cooling device residency statistics, I don't
+> > get updates for the first time the state is used. It can only
+> > be counted when that state was known and finished it's usage.
+> >
+> > IMO it is not the right behavior, isn't it?
+>
+> Do you mean the right behavior is a regression
 
-Where are these changes ?
+It has not changed AFAICS.
 
-> v2:
->   - Fix warnings/errors reported by kernel test robot
-> 
->   drivers/thermal/k3_j72xx_bandgap.c | 112 ++++++++++++++++++++---------
->   1 file changed, 79 insertions(+), 33 deletions(-)
-> 
-> diff --git a/drivers/thermal/k3_j72xx_bandgap.c b/drivers/thermal/k3_j72xx_bandgap.c
-> index c74094a86982..a7244e05ed5c 100644
-> --- a/drivers/thermal/k3_j72xx_bandgap.c
-> +++ b/drivers/thermal/k3_j72xx_bandgap.c
-> @@ -178,6 +178,7 @@ struct k3_j72xx_bandgap {
->   	void __iomem *base;
->   	void __iomem *cfg2_base;
->   	struct k3_thermal_data *ts_data[K3_VTM_MAX_NUM_TS];
-> +	int cnt;
->   };
->   
->   /* common data structures */
-> @@ -338,24 +339,53 @@ static void print_look_up_table(struct device *dev, int *ref_table)
->   		dev_dbg(dev, "%d       %d %d\n", i, derived_table[i], ref_table[i]);
->   }
->   
-> +static void k3_j72xx_bandgap_init_hw(struct k3_j72xx_bandgap *bgp)
-> +{
-> +	struct k3_thermal_data *data;
-> +	int id, high_max, low_temp;
-> +	u32 val;
-> +
-> +	for (id = 0; id < bgp->cnt; id++) {
-> +		data = bgp->ts_data[id];
-> +		val = readl(bgp->cfg2_base + data->ctrl_offset);
-> +		val |= (K3_VTM_TMPSENS_CTRL_MAXT_OUTRG_EN |
-> +			K3_VTM_TMPSENS_CTRL_SOC |
-> +			K3_VTM_TMPSENS_CTRL_CLRZ | BIT(4));
-> +		writel(val, bgp->cfg2_base + data->ctrl_offset);
-> +	}
-> +
-> +	/*
-> +	 * Program TSHUT thresholds
-> +	 * Step 1: set the thresholds to ~123C and 105C WKUP_VTM_MISC_CTRL2
-> +	 * Step 2: WKUP_VTM_TMPSENS_CTRL_j set the MAXT_OUTRG_EN  bit
-> +	 *         This is already taken care as per of init
-> +	 * Step 3: WKUP_VTM_MISC_CTRL set the ANYMAXT_OUTRG_ALERT_EN  bit
-> +	 */
-> +	high_max = k3_j72xx_bandgap_temp_to_adc_code(MAX_TEMP);
-> +	low_temp = k3_j72xx_bandgap_temp_to_adc_code(COOL_DOWN_TEMP);
-> +
-> +	writel((low_temp << 16) | high_max, bgp->cfg2_base + K3_VTM_MISC_CTRL2_OFFSET);
-> +	mdelay(100);
+> or we should expect at least the residency to be showed even if the
+> mitigation state is not closed ?
 
-	100ms ?
-
-Ok, I know you did not introduce this delay. But as it is a suspend / 
-resume, this delay will be called at each resume which is not acceptable 
-given its duration.
-
-Please, investigate a way to get rid of this delay
-
-
-> +	writel(K3_VTM_ANYMAXT_OUTRG_ALERT_EN, bgp->cfg2_base + K3_VTM_MISC_CTRL_OFFSET);
-> +}
-> +
->   struct k3_j72xx_bandgap_data {
->   	const bool has_errata_i2128;
->   };
->   
->   static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
->   {
-> -	int ret = 0, cnt, val, id;
-> -	int high_max, low_temp;
-> -	struct resource *res;
-> +	const struct k3_j72xx_bandgap_data *driver_data;
-> +	struct thermal_zone_device *ti_thermal;
->   	struct device *dev = &pdev->dev;
-> +	bool workaround_needed = false;
->   	struct k3_j72xx_bandgap *bgp;
->   	struct k3_thermal_data *data;
-> -	bool workaround_needed = false;
-> -	const struct k3_j72xx_bandgap_data *driver_data;
-> -	struct thermal_zone_device *ti_thermal;
-> -	int *ref_table;
->   	struct err_values err_vals;
->   	void __iomem *fuse_base;
-> +	int ret = 0, val, id;
-> +	struct resource *res;
-> +	int *ref_table;
-
-No related to the changes but the patch is showing signs the driver 
-needs a code cleanup AFAICT
-
->   	const s64 golden_factors[] = {
->   		-490019999999999936,
-> @@ -422,10 +452,10 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
->   
->   	/* Get the sensor count in the VTM */
->   	val = readl(bgp->base + K3_VTM_DEVINFO_PWR0_OFFSET);
-> -	cnt = val & K3_VTM_DEVINFO_PWR0_TEMPSENS_CT_MASK;
-> -	cnt >>= __ffs(K3_VTM_DEVINFO_PWR0_TEMPSENS_CT_MASK);
-> +	bgp->cnt = val & K3_VTM_DEVINFO_PWR0_TEMPSENS_CT_MASK;
-> +	bgp->cnt >>= __ffs(K3_VTM_DEVINFO_PWR0_TEMPSENS_CT_MASK);
->   
-> -	data = devm_kcalloc(bgp->dev, cnt, sizeof(*data), GFP_KERNEL);
-> +	data = devm_kcalloc(bgp->dev, bgp->cnt, sizeof(*data), GFP_KERNEL);
->   	if (!data) {
->   		ret = -ENOMEM;
->   		goto err_alloc;
-> @@ -449,8 +479,8 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
->   	else
->   		init_table(3, ref_table, pvt_wa_factors);
->   
-> -	/* Register the thermal sensors */
-> -	for (id = 0; id < cnt; id++) {
-> +	/* Precompute the derived table & fill each thermal sensor struct */
-> +	for (id = 0; id < bgp->cnt; id++) {
->   		data[id].bgp = bgp;
->   		data[id].ctrl_offset = K3_VTM_TMPSENS0_CTRL_OFFSET + id * 0x20;
->   		data[id].stat_offset = data[id].ctrl_offset +
-> @@ -470,13 +500,13 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
->   		else if (id == 0 && !workaround_needed)
->   			memcpy(derived_table, ref_table, TABLE_SIZE * 4);
->   
-> -		val = readl(data[id].bgp->cfg2_base + data[id].ctrl_offset);
-> -		val |= (K3_VTM_TMPSENS_CTRL_MAXT_OUTRG_EN |
-> -			K3_VTM_TMPSENS_CTRL_SOC |
-> -			K3_VTM_TMPSENS_CTRL_CLRZ | BIT(4));
-> -		writel(val, data[id].bgp->cfg2_base + data[id].ctrl_offset);
-> -
->   		bgp->ts_data[id] = &data[id];
-> +	}
-> +
-> +	k3_j72xx_bandgap_init_hw(bgp);
-> +
-> +	/* Register the thermal sensors */
-> +	for (id = 0; id < bgp->cnt; id++) {
->   		ti_thermal = devm_thermal_of_zone_register(bgp->dev, id, &data[id],
->   							   &k3_of_thermal_ops);
->   		if (IS_ERR(ti_thermal)) {
-> @@ -486,21 +516,7 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
->   		}
->   	}
->   
-> -	/*
-> -	 * Program TSHUT thresholds
-> -	 * Step 1: set the thresholds to ~123C and 105C WKUP_VTM_MISC_CTRL2
-> -	 * Step 2: WKUP_VTM_TMPSENS_CTRL_j set the MAXT_OUTRG_EN  bit
-> -	 *         This is already taken care as per of init
-> -	 * Step 3: WKUP_VTM_MISC_CTRL set the ANYMAXT_OUTRG_ALERT_EN  bit
-> -	 */
-> -	high_max = k3_j72xx_bandgap_temp_to_adc_code(MAX_TEMP);
-> -	low_temp = k3_j72xx_bandgap_temp_to_adc_code(COOL_DOWN_TEMP);
-> -
-> -	writel((low_temp << 16) | high_max, data[0].bgp->cfg2_base +
-> -	       K3_VTM_MISC_CTRL2_OFFSET);
-> -	mdelay(100);
-> -	writel(K3_VTM_ANYMAXT_OUTRG_ALERT_EN, data[0].bgp->cfg2_base +
-> -	       K3_VTM_MISC_CTRL_OFFSET);
-> +	platform_set_drvdata(pdev, bgp);
->   
->   	print_look_up_table(dev, ref_table);
->   	/*
-> @@ -527,6 +543,35 @@ static void k3_j72xx_bandgap_remove(struct platform_device *pdev)
->   	pm_runtime_disable(&pdev->dev);
->   }
->   
-> +static int k3_j72xx_bandgap_suspend(struct device *dev)
-> +{
-> +	pm_runtime_put_sync(dev);
-> +	pm_runtime_disable(dev);
-> +	return 0;
-> +}
-> +
-> +static int k3_j72xx_bandgap_resume(struct device *dev)
-> +{
-> +	struct k3_j72xx_bandgap *bgp = dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	pm_runtime_enable(dev);
-> +	ret = pm_runtime_get_sync(dev);
-> +	if (ret < 0) {
-> +		pm_runtime_put_noidle(dev);
-> +		pm_runtime_disable(dev);
-> +		return ret;
-> +	}
-> +
-> +	k3_j72xx_bandgap_init_hw(bgp);
-> +
-> +	return 0;
-> +}
-> +
-> +static DEFINE_SIMPLE_DEV_PM_OPS(k3_j72xx_bandgap_pm_ops,
-> +				k3_j72xx_bandgap_suspend,
-> +				k3_j72xx_bandgap_resume);
-> +
->   static const struct k3_j72xx_bandgap_data k3_j72xx_bandgap_j721e_data = {
->   	.has_errata_i2128 = true,
->   };
-> @@ -554,6 +599,7 @@ static struct platform_driver k3_j72xx_bandgap_sensor_driver = {
->   	.driver = {
->   		.name = "k3-j72xx-soc-thermal",
->   		.of_match_table	= of_k3_j72xx_bandgap_match,
-> +		.pm = pm_sleep_ptr(&k3_j72xx_bandgap_pm_ops),
->   	},
->   };
->   
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Well, in fact the device has already been in that state for some time
+and the mitigation can continue for a while.
 
