@@ -1,125 +1,157 @@
-Return-Path: <linux-pm+bounces-6778-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6780-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4241E8ACB25
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 12:46:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E35FF8ACB34
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 12:47:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DE403B23164
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 10:46:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 71A4DB23547
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 10:47:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C6C0146A60;
-	Mon, 22 Apr 2024 10:44:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="m9CpuyAd"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91113145FE8;
+	Mon, 22 Apr 2024 10:46:46 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 957CD1465BC
-	for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 10:44:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D22BE14A8B;
+	Mon, 22 Apr 2024 10:46:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713782691; cv=none; b=nWmxuUbybCpy11SvedC2CGJBsbI/KgDT5HvrqRdLRTa1LI6AnrKXAvGmwF9PcTGIblybi+lB6GeekvPAt2J7rwXUATztAbqN4UmvuU1+8PuEsczoWXNy/DSq7NbpiyafjEMLX8TrOV4s8eq7MNPMqZNx3smZpKLnnveD9Z64AEY=
+	t=1713782806; cv=none; b=INhdwBZkxxy/xTGn4pXr4LMN1N8lcBqEhAq/8/diPnnKzPFRL1tj0Br4M/rdkRM+E9cU/ErG5NDuAvcSEDaL9fWf5UM5iBVAiCBnhD9XVIR/WqYjDEROgk0FlDjepTvTMPvISVFXX9UBcVEIYrpGWXUkPwlozrErbd4XJO1NH9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713782691; c=relaxed/simple;
-	bh=bzcewTEZp8Wbd6KSaSgbrbH+qvbZxzp23uj9WiUjdUw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jrNUhTdeQD2d8HdvrPjKXVkOM7RQtCb9+p2QhYDXLWTlTUCxouC5gX2W41xIO6BKxyqA6B9cs/1iuzkdbsISXAI8TscYSQbKUP8C5PrMJcYjoy7enHGUNr80teaeqb8x5MMnsU+isoybc/XwSsFpp9t2r/qhuqL3Iek04mDFto8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=m9CpuyAd; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-417e327773cso28600875e9.1
-        for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 03:44:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713782688; x=1714387488; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wR97KP7K22vcCUiLNn0X4KfDnNwelS8JUEnq9UX2UNk=;
-        b=m9CpuyAdmtDXEQV035cywFXV5WJmesQilOXrkjzBZmTJHssq+aOYgtu19zy8X+uVfJ
-         f1Wi6YKaP+aSgMSmeORYODqY08dcXSaRf3TNxBzDYQQsyLQMzdRJIuhNKccNmIVaEgrY
-         EVD++Co14+VZzs+9yQdsvwiIg5qgBADxvhbklx6DtKP3fqEcG56HyWZ6a2mw3S6BU2oi
-         Rjd2WU6IyGe5OxWS9UrqQ3Su0QtuCAllP4gkXM2DZAT5BnOksBJ0v2pENzySrVeKMsFX
-         +xod4kFoLOFOPIxiUn1hQp0n4GSuF01N1hTjqsfVFJ4KCqSXNjPOAjlOe7B1TvGkwpw+
-         4wow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713782688; x=1714387488;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wR97KP7K22vcCUiLNn0X4KfDnNwelS8JUEnq9UX2UNk=;
-        b=wVOB07Vd7+s2RpUnvz+bbRd43uFRWHRDFYkZxTTxmW8xtlm0DPYhsKtWusqDgZDHQB
-         EkbLxrzCgLBVMRJ5b6FDlP/2YLuZpszGTPWEfoDYQN+gSuWCnKHUZ74vdG4d6kstnHEB
-         1RXS99U14txqtDtC+xHG3jaW1tKIGHXGoPvEUxlrAlIibiYnOItVWPnQMZr4leajeYS3
-         oJuK3mknvY6dDY+bcBW3Uhdh0V8Sycgc+P1nFiwa82eOHlSgq6HLSx/6tlV8evT0nxOW
-         clJ2h8MhbqHH3bfLsCODZ1XbWcHikTJVxP7EZk/cyHdBwvqC35Y4Cjp8qWdEsJDN2uyC
-         co7g==
-X-Forwarded-Encrypted: i=1; AJvYcCXcaUxZSMuPF+eJsm/5tJyiGatA30LBAAW1uCxr+c+Wh909R/egy4HngTFQy0Q/x9xuUbiHSiTQDvYIvkJKPotI70HXy4MhIn4=
-X-Gm-Message-State: AOJu0YwgF3PkoiVzI7epOv6ghNj2aeYe9juFITwpOEWuVvF2a1afnadi
-	dCVvCUI+7302HhtKcLCS65PcHr2ii5CEC2ZwrzkWz8l06/MamhehtVyavkWPiU4=
-X-Google-Smtp-Source: AGHT+IHEVYgt9vgZzUvOGj9DvGZzF9NFHN00yyy4hZi+7IPr9wmffeRfEUo3Gjiacp8SiOwFg51jtg==
-X-Received: by 2002:adf:ec0a:0:b0:34a:eb4e:2633 with SMTP id x10-20020adfec0a000000b0034aeb4e2633mr2464786wrn.10.1713782687876;
-        Mon, 22 Apr 2024 03:44:47 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id g30-20020adfa49e000000b00343f662327bsm11845256wrb.77.2024.04.22.03.44.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Apr 2024 03:44:47 -0700 (PDT)
-Message-ID: <5020e895-2810-4895-9f1f-9e15f7cec357@linaro.org>
-Date: Mon, 22 Apr 2024 12:44:46 +0200
+	s=arc-20240116; t=1713782806; c=relaxed/simple;
+	bh=TBfSszjsYeu8dxmuoA7yzrZI7AlIw4uTE4Ri0Sho5Z4=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Se6ioeX757YOHIu6GxsCvU0gxaZXpeQVDFk8WxqMLHhWW/jkvaAvozVzjzvlGsVFVOpqmZqi4lXme15VljhFdGuki/v8O7LLSstJ1t05T6j7IIlLYYawFN8pCr3dZPUozQIvbEoqtlRwQCgzLDfEkFlEd7dxIJBlw3fnh9hpnmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VNMPR49BXz6K9Mn;
+	Mon, 22 Apr 2024 18:46:35 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 382BF1406AC;
+	Mon, 22 Apr 2024 18:46:41 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Mon, 22 Apr
+ 2024 11:46:40 +0100
+Date: Mon, 22 Apr 2024 11:46:39 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
+	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
+	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+	<x86@kernel.org>, Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki"
+	<rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, "James Morse"
+	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, Jean-Philippe
+ Brucker <jean-philippe@linaro.org>, Catalin Marinas
+	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Lorenzo Pieralisi
+	<lpieralisi@kernel.org>, Hanjun Guo <guohanjun@huawei.com>, Sudeep Holla
+	<sudeep.holla@arm.com>
+CC: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, "Dave
+ Hansen" <dave.hansen@linux.intel.com>, <justin.he@arm.com>,
+	<jianyong.wu@arm.com>, <linuxarm@huawei.com>
+Subject: Re: [PATCH v7 09/16] arm64: acpi: Move get_cpu_for_acpi_id() to a
+ header
+Message-ID: <20240422114639.0000651a@Huawei.com>
+In-Reply-To: <20240418135412.14730-10-Jonathan.Cameron@huawei.com>
+References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com>
+	<20240418135412.14730-10-Jonathan.Cameron@huawei.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/2] thermal: rcar_gen3: Use temperature approximation
- from datasheet
-Content-Language: en-US
-To: =?UTF-8?Q?Niklas_S=C3=B6derlund?=
- <niklas.soderlund+renesas@ragnatech.se>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>,
- linux-renesas-soc@vger.kernel.org
-References: <20240327133013.3982199-1-niklas.soderlund+renesas@ragnatech.se>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20240327133013.3982199-1-niklas.soderlund+renesas@ragnatech.se>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On 27/03/2024 14:30, Niklas Söderlund wrote:
-> Hello,
-> 
-> When the driver was first added the temperature approximation was
-> reversed engineered from an out-of-tree driver as the datasheets of the
-> time did not contain this information. Recent datasheets, both Gen3 and
-> Gen4, now contains this information.
-> 
-> This series changes the temperature approximation formula to match
-> what's described in the datasheets. It has been tested on both Gen3 and
-> Gen4 with minimal changes in temperatures reported.
-> 
-> Patch 1 is a cleanup making the scope of a constant more clear. Patch
-> 2 is the real work changing the approximation formula.
-> 
-> Compared to v1 patch 3/3 have been squashed intro v2 patch 2/2. This is
-> due to a suggestion from Geert where the precision in approximation
-> could be increased while removing the need for the changed done in v1
-> 3/3, thanks Geert!
-> 
-> See individual patches for detailed changelog.
+On Thu, 18 Apr 2024 14:54:05 +0100
+Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
 
-Applied, thanks
+> From: James Morse <james.morse@arm.com>
+> 
+> ACPI identifies CPUs by UID. get_cpu_for_acpi_id() maps the ACPI UID
+> to the Linux CPU number.
+> 
+> The helper to retrieve this mapping is only available in arm64's NUMA
+> code.
+> 
+> Move it to live next to get_acpi_id_for_cpu().
+> 
+> Signed-off-by: James Morse <james.morse@arm.com>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Reviewed-by: Gavin Shan <gshan@redhat.com>
+> Tested-by: Miguel Luis <miguel.luis@oracle.com>
+> Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
+> Tested-by: Jianyong Wu <jianyong.wu@arm.com>
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Another one where we'd been focused on the general ACPI aspects so long
+the CC list didn't include relevant maintainers.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
++CC Lorenzo, Hanjun and Sudeep.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+
+> ---
+> v7: No change
+> ---
+>  arch/arm64/include/asm/acpi.h | 11 +++++++++++
+>  arch/arm64/kernel/acpi_numa.c | 11 -----------
+>  2 files changed, 11 insertions(+), 11 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/acpi.h b/arch/arm64/include/asm/acpi.h
+> index 6792a1f83f2a..bc9a6656fc0c 100644
+> --- a/arch/arm64/include/asm/acpi.h
+> +++ b/arch/arm64/include/asm/acpi.h
+> @@ -119,6 +119,17 @@ static inline u32 get_acpi_id_for_cpu(unsigned int cpu)
+>  	return	acpi_cpu_get_madt_gicc(cpu)->uid;
+>  }
+>  
+> +static inline int get_cpu_for_acpi_id(u32 uid)
+> +{
+> +	int cpu;
+> +
+> +	for (cpu = 0; cpu < nr_cpu_ids; cpu++)
+> +		if (uid == get_acpi_id_for_cpu(cpu))
+> +			return cpu;
+> +
+> +	return -EINVAL;
+> +}
+> +
+>  static inline void arch_fix_phys_package_id(int num, u32 slot) { }
+>  void __init acpi_init_cpus(void);
+>  int apei_claim_sea(struct pt_regs *regs);
+> diff --git a/arch/arm64/kernel/acpi_numa.c b/arch/arm64/kernel/acpi_numa.c
+> index e51535a5f939..0c036a9a3c33 100644
+> --- a/arch/arm64/kernel/acpi_numa.c
+> +++ b/arch/arm64/kernel/acpi_numa.c
+> @@ -34,17 +34,6 @@ int __init acpi_numa_get_nid(unsigned int cpu)
+>  	return acpi_early_node_map[cpu];
+>  }
+>  
+> -static inline int get_cpu_for_acpi_id(u32 uid)
+> -{
+> -	int cpu;
+> -
+> -	for (cpu = 0; cpu < nr_cpu_ids; cpu++)
+> -		if (uid == get_acpi_id_for_cpu(cpu))
+> -			return cpu;
+> -
+> -	return -EINVAL;
+> -}
+> -
+>  static int __init acpi_parse_gicc_pxm(union acpi_subtable_headers *header,
+>  				      const unsigned long end)
+>  {
 
 
