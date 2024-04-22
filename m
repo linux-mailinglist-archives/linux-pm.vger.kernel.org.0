@@ -1,40 +1,48 @@
-Return-Path: <linux-pm+bounces-6797-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6798-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B71938ACBD5
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 13:15:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE8C18ACBF2
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 13:22:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C9321F240A7
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 11:15:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AB78C285F3D
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Apr 2024 11:22:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 928431465A6;
-	Mon, 22 Apr 2024 11:15:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F92414658C;
+	Mon, 22 Apr 2024 11:22:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QpL+rkRy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34530146595;
-	Mon, 22 Apr 2024 11:15:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BC24145FE9
+	for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 11:22:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713784527; cv=none; b=u4ubhDQmyR2+X64vgd2KV/WP4gFLNwM/1dKpRkry8WD+XsYbvnQ9tALy7CSYBJPXPDDjnTmRzxKWt1r4tgvR2B5V52vZ0OWlpWrypJ9eDVfDNziIOJ2/uRbaYdirdEQkJQ4ASKnLFH0vTQyt28KS1lhz6UHJ+qJVmqBGZ6riOA0=
+	t=1713784944; cv=none; b=a/7cXpqY/V4c9kdPjgE8vRlnOKqNEdGNCOTANb88Qoh1cazDmeAcS6ySsO0Om1210GCMYLvxLCNzd+SbvL1j4P78U6JMRGdzEyViAALrLC7IVUT9TUwJHZLBhIcv1dSfx4Qrg+oGlG+FX+3MaBujxifwjQhQ415zdOHXcwqhDFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713784527; c=relaxed/simple;
-	bh=NRjxtz/01zaNwXC4ygXZ+GEc92RrPS3zV8ZqSZi7wKM=;
+	s=arc-20240116; t=1713784944; c=relaxed/simple;
+	bh=ZWYE1QjPK4DfJdpl3qs9Bik5fZDJcYLXEIcmrPF3gvs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WXzCOTy/ApcToCT3kzHU7iMGJRwnTwhdxlg1nx2ucDsFgho52qTvYJ5IRlhq5FgGgaD5troLaUCjNLiNZ41A6Ab/EEeP9nqnWqGkJfbNobPbr1zZdr95YCdZSl2fYv4dQA8uuAxdaOZyWvJHgbo7FizGC5aXLpRoirNE9Hk1qzg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0D6BB339;
-	Mon, 22 Apr 2024 04:15:54 -0700 (PDT)
-Received: from [10.57.75.149] (unknown [10.57.75.149])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D4B963F7BD;
-	Mon, 22 Apr 2024 04:15:24 -0700 (PDT)
-Message-ID: <748f5ec4-fa84-4ac8-bb3b-b452741fd786@arm.com>
-Date: Mon, 22 Apr 2024 12:15:33 +0100
+	 In-Reply-To:Content-Type; b=nnAhesKZMP+jymUDdXFxLldy7s6NM7jOh7vtrKkdHkrGKjCP73Tcbi6h29hFUPfzm/UJtivyQkY8YgES0f0zlmARsUaHOCj83rrnPW8MAnT/FT7pcDi6o06KxuV3o1cvpQNLQp024Bkb/61UzeKH5Jpq4aoY1bPgASpFZX44qwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QpL+rkRy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0408C113CC;
+	Mon, 22 Apr 2024 11:22:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713784943;
+	bh=ZWYE1QjPK4DfJdpl3qs9Bik5fZDJcYLXEIcmrPF3gvs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=QpL+rkRyOU6Hoo/L/aSrYelrs6uQeFAewWE0VHCm8ReC/VP1stAj5lusV1ihj1PAa
+	 qVI9o9wAmWp371aatuLmwBuuR5AeipB/nNm+TmklI4SufuPX3KdYplgR2IvWT2XpQ4
+	 QILI4KQ8QZUd5Z1Xr/VbyUihxC4KFiHEydWr1ToLDxoe/uyxc6QDFDd2F73K9nncbc
+	 o/okm7sd5lcfpW2Adhdatj95b3cfPI/IpCiZMbTIo1nAmviPGvaEIWbZNiQJzl78eV
+	 u+fUtp5CfGIKdvxC4viUpcH5/R3t3Pu3Uk507ccZ2de5912aqs7LUwGPqHu/LEU0TI
+	 vzX4XldLpCvQg==
+Message-ID: <6e72f357-f944-4f0f-b74a-587de5780a78@kernel.org>
+Date: Mon, 22 Apr 2024 05:21:26 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,85 +50,61 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 3/3] thermal/debugfs: Rename
- thermal_debug_update_temp() to thermal_debug_update_trip_stats()
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>
-References: <4918025.31r3eYUQgx@kreacher> <2937506.e9J7NaK4W3@kreacher>
+Subject: Re: Re:Re:Re: [PATCH] cpufreq: exit() callback is optional
+To: lizhe <sensor1010@163.com>
+Cc: "grygorii.strashko" <grygorii.strashko@ti.com>, viresh.kumar@linaro.org,
+ Greg KH <gregkh@linuxfoundation.org>, torvalds@linux-foundation.org,
+ "gregory.clement" <gregory.clement@bootlin.com>,
+ "grant.likely" <grant.likely@secretlab.ca>, bsegall <bsegall@google.com>,
+ broonie <broonie@kernel.org>, bristot <bristot@redhat.com>,
+ brgl <brgl@bgdev.pl>, "f.fainelli" <f.fainelli@gmail.com>,
+ "fancer.lancer" <fancer.lancer@gmail.com>, festevam <festevam@gmail.com>,
+ Finn Thain <fthain@linux-m68k.org>, rafael <rafael@kernel.org>,
+ linux-pm <linux-pm@vger.kernel.org>, Shuah Khan <skhan@linuxfoundation.org>
+References: <b97964653d02225f061e0c2a650b365c354b98c8.1712900945.git.viresh.kumar@linaro.org>
+ <5759bc29.32d04.18ed0ef5037.Coremail.sensor1010@163.com>
+ <20240412062407.ntahibzv6xsbrnxs@vireshk-i7>
+ <1b53a162.32e95.18ed0fdb13e.Coremail.sensor1010@163.com>
+ <20240412063246.tk5z245miakbxws4@vireshk-i7>
+ <2117690204.533771.1712904398042.JavaMail.root@mail-tracker-145-3ep34-c9h23-5f64cf7787-82gdh>
+ <2024041212-bony-emphasize-75dd@gregkh>
+ <663acff5.349d4.18ed18da6ff.Coremail.sensor1010@163.com>
+ <20240412092108.xuvrfd6ioszltonf@vireshk-i7>
+ <2024041259-ranking-aeration-29f8@gregkh>
+ <28e13fe5.bc4.18ed2962985.Coremail.sensor1010@163.com>
+ <1209348234.554742.1712932905664.JavaMail.root@mail-tracker-145-3ep34-c9h23-5f64cf7787-82gdh>
 Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <2937506.e9J7NaK4W3@kreacher>
+From: shuah <shuah@kernel.org>
+In-Reply-To: <1209348234.554742.1712932905664.JavaMail.root@mail-tracker-145-3ep34-c9h23-5f64cf7787-82gdh>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
+Hi Lizhe,
 
-
-On 4/17/24 14:11, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 4/12/24 08:41, lizhe wrote:
 > 
-> Rename thermal_debug_update_temp() to thermal_debug_update_trip_stats()
-> which is a better match for the purpose of the function.
-> 
-> No functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->   drivers/thermal/thermal_core.c    |    2 +-
->   drivers/thermal/thermal_debugfs.c |    2 +-
->   drivers/thermal/thermal_debugfs.h |    4 ++--
->   3 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> Index: linux-pm/drivers/thermal/thermal_core.c
-> ===================================================================
-> --- linux-pm.orig/drivers/thermal/thermal_core.c
-> +++ linux-pm/drivers/thermal/thermal_core.c
-> @@ -504,7 +504,7 @@ void __thermal_zone_device_update(struct
->   	if (governor->manage)
->   		governor->manage(tz);
->   
-> -	thermal_debug_update_temp(tz);
-> +	thermal_debug_update_trip_stats(tz);
->   
->   	monitor_thermal_zone(tz);
->   }
-> Index: linux-pm/drivers/thermal/thermal_debugfs.c
-> ===================================================================
-> --- linux-pm.orig/drivers/thermal/thermal_debugfs.c
-> +++ linux-pm/drivers/thermal/thermal_debugfs.c
-> @@ -676,7 +676,7 @@ out:
->   	mutex_unlock(&thermal_dbg->lock);
->   }
->   
-> -void thermal_debug_update_temp(struct thermal_zone_device *tz)
-> +void thermal_debug_update_trip_stats(struct thermal_zone_device *tz)
->   {
->   	struct thermal_debugfs *thermal_dbg = tz->debugfs;
->   	struct tz_debugfs *tz_dbg;
-> Index: linux-pm/drivers/thermal/thermal_debugfs.h
-> ===================================================================
-> --- linux-pm.orig/drivers/thermal/thermal_debugfs.h
-> +++ linux-pm/drivers/thermal/thermal_debugfs.h
-> @@ -11,7 +11,7 @@ void thermal_debug_tz_trip_up(struct the
->   			      const struct thermal_trip *trip);
->   void thermal_debug_tz_trip_down(struct thermal_zone_device *tz,
->   				const struct thermal_trip *trip);
-> -void thermal_debug_update_temp(struct thermal_zone_device *tz);
-> +void thermal_debug_update_trip_stats(struct thermal_zone_device *tz);
->   #else
->   static inline void thermal_debug_init(void) {}
->   static inline void thermal_debug_cdev_add(struct thermal_cooling_device *cdev) {}
-> @@ -24,5 +24,5 @@ static inline void thermal_debug_tz_trip
->   					    const struct thermal_trip *trip) {};
->   static inline void thermal_debug_tz_trip_down(struct thermal_zone_device *tz,
->   					      const struct thermal_trip *trip) {}
-> -static inline void thermal_debug_update_temp(struct thermal_zone_device *tz) {}
-> +static inline void thermal_debug_update_trip_stats(struct thermal_zone_device *tz) {}
->   #endif /* CONFIG_THERMAL_DEBUGFS */
-> 
+> Let's both take a step back and add my signature to the patch,
+> since I was the one who discovered and reported the vulnerability.
 > 
 > 
 
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+You might have discovered the vulnerability and sent in a patch. After that,
+it is totally up to the maintainer to decide to accept or reject the patch.
+Developers can't demand their patches to be reviewed and/or accepted. They
+can request a review and inclusion if maintainer deems it acceptable.
+
+In this email thread, I can see that maintainers and developers have been
+advising you to understand the kernel development process.
+
+Refer to the following document to understand the process:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst
+
+Refer to the following Contributor Covenant Code of Conduct to understand the
+code of conduct the Linux kernel community abides by:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/code-of-conduct.rst
+
+thanks,
+-- Shuah (On behalf of the Code of Conduct Committee)
 
