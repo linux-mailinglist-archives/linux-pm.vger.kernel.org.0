@@ -1,150 +1,136 @@
-Return-Path: <linux-pm+bounces-6934-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6935-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64E2F8AE85E
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 15:38:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2A068AEA28
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 17:06:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 058B11F217C4
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 13:38:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73D49289214
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 15:06:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FEFA13666F;
-	Tue, 23 Apr 2024 13:38:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BAD513BAEE;
+	Tue, 23 Apr 2024 15:05:48 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 066FC13664A;
-	Tue, 23 Apr 2024 13:38:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2F6B13BADD;
+	Tue, 23 Apr 2024 15:05:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713879527; cv=none; b=RJhiGHClFKeLC6YtAZMK64LfHAHroIhan136mJ5omeS7mm1f0+iPW5cv2Z3ZOdLYhWA0Un5QwdAGk8WCeu3hX1+vG3VlP4e/z5E/G8ol9ikTTJVo8eWgRj0ZUC2UGIRabJ/INuLO1iiFGK2mf9uVzskz94/RQhyZ/2srFcj4thI=
+	t=1713884748; cv=none; b=IouaFfEhI5JFOjLh3iHzkk6DfrQ53CaqUuBR7jzQokDOr8v+YuivW9xufn2J9BT2ezO/t4GyJzAPT91dcWrQtY76beXRrxKs0RGN9dUQrdU99C8NLOsb37pIXS1U5igCZ0bfd/yi+a8mgua2qKphsKJhkH30/EbtYl3flaoWSdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713879527; c=relaxed/simple;
-	bh=PfhZ9BWya075TMeIKQE4oWCcQuH0pMJSpG0ApxJMxuA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PENRTkNMvshJ6518DG22qCSvuBx8Y92xGsBxbV34utusqV2m+jFym68Feakwufw2M/unI9K+LoNlaWDXrtOAXx5g9pDn6Qsj6bJry9CGclcaReYGmgjb1ZAMZ/ags6sl8QrQPaKZEtfXN6Zx5s5d6PmLJc6TPFsOZtUf6M4zzcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 369F8339;
-	Tue, 23 Apr 2024 06:39:10 -0700 (PDT)
-Received: from [10.57.76.137] (unknown [10.57.76.137])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5F1193F64C;
-	Tue, 23 Apr 2024 06:38:41 -0700 (PDT)
-Message-ID: <95c30582-4fba-4e2d-8cc1-776b3e5507b7@arm.com>
-Date: Tue, 23 Apr 2024 14:38:50 +0100
+	s=arc-20240116; t=1713884748; c=relaxed/simple;
+	bh=h5kV1l89BoEi9fDSpK7Gp7bev6cXdWjIrcXMe8EAFxc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kOhbKrw+K/QKmfJht9gpKP7/71iinoTQSWOxAcYKtQWzaLCOUfx3+Cx3RbWNi4Mvd72qXw1kODCYZeaeBV30Z6N0dqslzsQWc5Tr5rJTi+ejzslBhyFyEA41arz3ngPG1Mxi0/Xzpy7JX1cndTVNXdHnRS/sihxNcQQV3M6e3Wg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-5ad2da2196aso2331436eaf.2;
+        Tue, 23 Apr 2024 08:05:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713884742; x=1714489542;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rAVYrqEHhFdWuNhEyQZKOUcz0r0/ZgTBbeGf7YkVpTw=;
+        b=bT/euAxKkU9GbwJlm9WFGZlYBjO2GmwEU7xW5Yvup0tjaygrYhJBaK8TEffa/N0tXW
+         mZtZJZOtP8R6U/4fxm7cfzsm084EGpcKpyX1yDj8/WpJ10iBbJvHsPcVxT8L4l6ovjus
+         9wU9ugndeXeS4PnsYc/4PPaKALqGIffajeul0jh8F7rCED1CNEhylQCqGCHaeghAMhGE
+         +iSo+Umu4obs9Mihupkip//o+Uj2gChjeUkNkEAOaWtQnCVSdtthtFXl8OcpixgKp0ya
+         nknBXSuz3GurQdNyMZe0NZ2CzIkDFRt3HZ8gss9dYC2x5Fi/yOvdG1RpZxEBH4v93Ra4
+         xItw==
+X-Forwarded-Encrypted: i=1; AJvYcCUk4RW5/UgIbOAPoNBFthz1iZR3E4R+cblw892YkX7HnkQo9JioulNIeyvgC88+DbHLPQ6+C/Fmd0rA0Nk/B0BJYiqgUpD/EvATpvAgI6jVVHBb9BtU2BVf2O+GyHX3Sc1BA8MVblKHPXSjaUnKWuHl21yf/VPWfJtur/zvpKZYc5ECDUo=
+X-Gm-Message-State: AOJu0Yxn7vLydNhuxv/86Qf4+WovsuF6lzyugueVSV+lQjSj2bx1UyBC
+	fIlhFS/S96MTe91f60dwDGmgZb9Mw0w4E0FMox9ZB8RZdWpQzKCcSuEMOXis
+X-Google-Smtp-Source: AGHT+IGXHW6AudjriUZ7U0rbyVVeOreoHKa/wNFM1GRx5XBd1bjI8PswXDqWnXR/d9m7B7DV4ROSYQ==
+X-Received: by 2002:a4a:b0c8:0:b0:5ac:5c89:2d08 with SMTP id l8-20020a4ab0c8000000b005ac5c892d08mr14998511oon.1.1713884742089;
+        Tue, 23 Apr 2024 08:05:42 -0700 (PDT)
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com. [209.85.161.44])
+        by smtp.gmail.com with ESMTPSA id s68-20020a4a5147000000b005a48e64c699sm2627028ooa.40.2024.04.23.08.05.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Apr 2024 08:05:40 -0700 (PDT)
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-5af27a0dde1so1335562eaf.3;
+        Tue, 23 Apr 2024 08:05:40 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXw/bORkETv/D41c6VoBm5srTy6YEBrXUUtObPXApu3+iKcMoKviPOI7kYIa7roZPtsaHuefScdmSzhncuCo3ex/BNsDqGqAxNtYHe9XEmF4GUFUbF/ggKaPTQ5wMZlKQViLHDD+E9yUHqy7E08Rf/QTXl53OyJELLgeXDhWPh+Oo/verk=
+X-Received: by 2002:a05:6358:b5d3:b0:17e:6a5b:4d3a with SMTP id
+ wb19-20020a056358b5d300b0017e6a5b4d3amr18788376rwc.8.1713884740245; Tue, 23
+ Apr 2024 08:05:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 0/3] thermal/debugfs: Fix and clean up trip point
- statistics updates
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>
-References: <4918025.31r3eYUQgx@kreacher>
- <3a8f1978-c5df-40d6-91ca-276431bb01e1@arm.com>
- <e8193798-4c02-423a-a9d8-63d29ebd7faa@linaro.org>
- <CAJZ5v0i2pvTLwj7jTzwhoQMap_cvjvNnK2Beuje2COo+F4hBzA@mail.gmail.com>
- <2acea3c3-5c8f-4f3c-a275-743c3fbfd2e6@linaro.org>
- <CAJZ5v0j5Ja9-vuC9ve9Li=UxATcBtTmdMdhMS1g993XBe1DVqw@mail.gmail.com>
-Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0j5Ja9-vuC9ve9Li=UxATcBtTmdMdhMS1g993XBe1DVqw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240422111123.1622967-1-claudiu.beznea.uj@bp.renesas.com>
+ <CAMuHMdUXRx1-95PD_WG4X=y4UefYXzTqm7T2mi+di+ZdKGUXYA@mail.gmail.com> <3d8925a8-32ee-467a-aca7-d4a04f26821f@tuxon.dev>
+In-Reply-To: <3d8925a8-32ee-467a-aca7-d4a04f26821f@tuxon.dev>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 23 Apr 2024 17:05:27 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVoK_qC8JPdRUQQZvNNLzuufWidxjee2HW7KrDGiNJCMQ@mail.gmail.com>
+Message-ID: <CAMuHMdVoK_qC8JPdRUQQZvNNLzuufWidxjee2HW7KrDGiNJCMQ@mail.gmail.com>
+Subject: Re: [PATCH] serial: sh-sci: Call device_set_wakeup_path() for serial console
+To: claudiu beznea <claudiu.beznea@tuxon.dev>
+Cc: gregkh@linuxfoundation.org, jirislaby@kernel.org, ulf.hansson@linaro.org, 
+	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Hi Claudiu,
 
+On Tue, Apr 23, 2024 at 2:47=E2=80=AFPM claudiu beznea <claudiu.beznea@tuxo=
+n.dev> wrote:
+> On 23.04.2024 10:27, Geert Uytterhoeven wrote:
+> > On Mon, Apr 22, 2024 at 1:11=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.d=
+ev> wrote:
+> >> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> >>
+> >> In case the SCI is used as a UART console, no_console_suspend is
+> >> available in bootargs and SCI is part of a software-controlled power
+> >> domain we need to call device_set_wakeup_path(). This lets the power
+> >> domain core code knows that this domain should not be powered off
+> >
+> > know
+> >
+> >> durring system suspend. Otherwise, the SCI power domain is turned off,
+> >
+> > during
+> >
+> >> nothing is printed while suspending and the suspend/resume process is
+> >> blocked. This was detected on the RZ/G3S SoC while adding support
+> >> for power domains.
+> >>
+> >> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-On 4/23/24 13:26, Rafael J. Wysocki wrote:
-> On Mon, Apr 22, 2024 at 6:12 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->> On 22/04/2024 17:48, Rafael J. Wysocki wrote:
->>> On Mon, Apr 22, 2024 at 5:34 PM Daniel Lezcano
->>
->> [ ... ]
->>
->>>> or we should expect at least the residency to be showed even if the
->>>> mitigation state is not closed ?
->>>
->>> Well, in fact the device has already been in that state for some time
->>> and the mitigation can continue for a while.
->>
->> Yes, but when to update the residency time ?
->>
->> When we cross a trip point point ?
->>
->> or
->>
->> When we read the information ?
->>
->> The former is what we are currently doing AFAIR
-> 
-> Not really.
-> 
-> Records are added by thermal_debug_cdev_state_update() which only runs
-> when __thermal_cdev_update() is called, ie. from governors.
-> 
-> Moreover, it assumes the initial state to be 0 and checks if the new
-> state is equal to the current one before doing anything else, so it
-> will not make a record for the 0 state until the first transition.
+> > If this works, we can remove the console_suspend_enabled handling
+> > from drivers/pmdomain/renesas/rmobile-sysc.c, and revert commit
+> > 309864dcf92b76fc ("genpd: imx: scu-pd: do not power off console if
+> > no_console_suspend").
+>
+> OK, first I'll go with this patch and after things settles down with it
+> I'll propose changes for rmobile-sysc and imx. Is this ok for you?
 
-Correct, AFAIKS.
+I have already made these changes to rmobile-sysc locally to test
+your patch ;-)
 
-> 
->> and the latter must add the delta between the last update and the current time for the current
->> state, right ?
-> 
-> Yes, and it is doing this already AFAICS.
-> 
-> The problem is that it only creates a record for the old state, so if
-> the new one is seen for the first time, there will be no record for it
-> until it changes to some other state.
+It works fine on R-Mobile APE6, so
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Exactly, it's not totally wrong what we have now, just some missing part
-that needs to be added in the code, while we are counting/updating
-these stats.
+Gr{oetje,eeting}s,
 
-> 
-> The appended patch (modulo GMail-induced white space breakage) should
-> help with this, but the initial state handling needs to be addressed
-> separately.
-> 
-> ---
->   drivers/thermal/thermal_debugfs.c |    8 ++++++++
->   1 file changed, 8 insertions(+)
-> 
-> Index: linux-pm/drivers/thermal/thermal_debugfs.c
-> ===================================================================
-> --- linux-pm.orig/drivers/thermal/thermal_debugfs.c
-> +++ linux-pm/drivers/thermal/thermal_debugfs.c
-> @@ -433,6 +433,14 @@ void thermal_debug_cdev_state_update(con
->       }
-> 
->       cdev_dbg->current_state = new_state;
-> +
-> +    /*
-> +     * Create a record for the new state if it is not there, so its
-> +     * duration will be printed by cdev_dt_seq_show() as expected if it
-> +     * runs before the next state transition.
-> +     */
-> +    thermal_debugfs_cdev_record_get(thermal_dbg, cdev_dbg->durations,
-> new_state);
-> +
->       transition = (old_state << 16) | new_state;
-> 
->       /*
+                        Geert
 
-Yes, something like this should do the trick. We will get the record
-entry in the list, so we at least enter the list loop in the
-cdev_dt_seq_show().
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
-
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
