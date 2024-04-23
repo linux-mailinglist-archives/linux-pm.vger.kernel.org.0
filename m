@@ -1,99 +1,161 @@
-Return-Path: <linux-pm+bounces-6889-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6890-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7B6A8ADE33
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 09:25:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7D008ADE39
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 09:28:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 01F5F1C20CBC
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 07:25:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D0C91F245B5
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 07:28:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9402445BF3;
-	Tue, 23 Apr 2024 07:25:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QmUnS/z1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 297F546525;
+	Tue, 23 Apr 2024 07:27:58 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DB9D1C698
-	for <linux-pm@vger.kernel.org>; Tue, 23 Apr 2024 07:25:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B10B1C698;
+	Tue, 23 Apr 2024 07:27:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713857153; cv=none; b=c2LapW5g/KjJtCoJXVMzGzgaZUAZBbi3qGRPGzUvCJ9ySZBTQN4ENG89yzogNHZdC6oQhwySna3+mCLls8X1OQmLzYO2fcgOzpx0fp4npACame/Kw+8dq1coeUMkLhzqeL1DxpRq3ZIHwT5v2Uq4zASgHTDJhf4HG5S6FfYkmZs=
+	t=1713857278; cv=none; b=RnP0Lq7vmhtPcbnCm3Rst25vUiiM3spvsIJVw9A6zTpJ16sj923B/6/jITRID7aaQe3InhM7/aOgTFrrJrN9B/MUCsQ75ZNZJdyRWxawlSlCKP6UAhqlYUxAiWaNvoz5Slcbi7raH1SMfkQmL6V8o1rUXUnWF2mK9v6ztYCO+m0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713857153; c=relaxed/simple;
-	bh=XViWGPNpcp+6+TsAesnw0VJlnBmEZsA+7oAUKZSvl/o=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=qluH3bVCvK8M2UplKhj7jXof60xfII+FHSK/6k+ma0piJc7I1QQi/DtYf7/xmM1otoxKRli4/N+HpiRCFkGAd/fRzBzfI5ZhVfAO8R4sFWsQdC1Q2LZGi8Hu4ZLRhDGDZ2wah8gcxVoOeJcvziXQSYQk+UOkBXVrjeq/FvWVNKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QmUnS/z1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E3419C32781
-	for <linux-pm@vger.kernel.org>; Tue, 23 Apr 2024 07:25:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713857152;
-	bh=XViWGPNpcp+6+TsAesnw0VJlnBmEZsA+7oAUKZSvl/o=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=QmUnS/z1g1tb7hsXr0qkYS+pesP/vUht8LcLBqRx6Re4yHYkokwBPnGkiGrBwrvIH
-	 u01r6ZhDa3eX6UcDM+rK3Yni6QNrpnRZunWhOjSCKk2TmR1hjh/pwuZurwtve6/CKj
-	 P14JNUT7VBCPqR43DOx4pevu4QMu8KH7mmorsZWd6fC8taYHNINlZrLeQhMED8WJ0g
-	 qFQFlEeLnCjaXuwTpB/UFbiLXwbJD6rCMouC55JqM6Sqbz4tcfT6TcvqncRw0Y2QYD
-	 dQHU0KlnEr1L4HpLLL6LvgxgPBK7XG8a85fIW2Ro2/tciDY0rACZmmuOzTzoYeqrLh
-	 JCTlJ2JB74lVg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id CE037C04223; Tue, 23 Apr 2024 07:25:52 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 218686] Fail to set energy_performance_preference of amd
- processor on asus ga403uv
-Date: Tue, 23 Apr 2024 07:25:52 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: al0uette@outlook.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: DOCUMENTED
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218686-137361-hLRNJn0heh@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218686-137361@https.bugzilla.kernel.org/>
-References: <bug-218686-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1713857278; c=relaxed/simple;
+	bh=WCE297pXyCGDdhhfCD0olqnd+53OCM/7N0xDi3vCiKI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=W77uO7Wj+M8jDQ4AE/SSYTIS/7YRoC6de6Ciy6e731OUb57URT6aR67qrBSOa9ySbEF7H2V3ogwtsrinT59m+kVkuAKWLMCTR565B1lV0Gz/VUZ9NXsslR2DpcO8clz4HDn0gq94dMuE3ZPXJg/STXDuJ0kK/SSgcMI+xY3relg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-61b4387ae4fso34613037b3.2;
+        Tue, 23 Apr 2024 00:27:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713857274; x=1714462074;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kAJUv+Bt0mn8NDZY50gq/EY+6KHjPMT7UvJ7vKHp6FQ=;
+        b=wlkrGejcmBDeDkjLXeZ1ZPoEmkqDEM1Sgf+neyPmDFKULg8yr1rl/zIdtcU74msnwl
+         wzJyTWJUNOul9Enq+0Pxff4xsj4qQjkBaGA81teTBt7zJx4voqaWb3yCIpeS1KxV5PJj
+         6eg5A8ck111pVbSEZUU7q6Lg4qHD6oMKQqC7E78lcN/yGbQq0VD6n65XZDFtrzL4iYof
+         775x6GPiBHLPNVeXxVpICpKonawWYd3GFL7zTP+XeVER47CkKd+Q6ENNdrFEDrgjRh/K
+         m/MftvkdZRGgtaiSnBv6kIlykJs++sVlRURBynSvS+fzV6Xb+WLNMunjyZdyhSmuIAlB
+         t9dw==
+X-Forwarded-Encrypted: i=1; AJvYcCXIWNDx6Zxq82Ke0GEDIzlQNn1w/7FXAYYFT4iP2u8HoOxfNJUlr3rNOJQc+HeJpDymE9dF1gVJlPZS5/Yg//IL+h62S7g9pf9uw96j4FuvQ/bXPeq8zt940rkEJ325AVGjEXbJ/3hs6PeuXTuVEVAqynivpEIEne4M05yOa0V9KFeVmZg=
+X-Gm-Message-State: AOJu0YzcqqEIRKG8i3uXY5D1tvFaHYtFut3S5wZfD4u5sEsGrf6m8VR5
+	wZDhC34r6zxuWBKhj3PET1qHLWS5/4avtpn91uoy0Ut9GpJK04EhDzd+xBYI
+X-Google-Smtp-Source: AGHT+IFu+WZtOTgIRKVC7zH0MysdWnKL7gJp/2tpJONE4B2UX256YUC11BeSiqFiW4i8AboacqcVtg==
+X-Received: by 2002:a05:690c:3810:b0:61a:c4a3:8a5c with SMTP id jx16-20020a05690c381000b0061ac4a38a5cmr14438523ywb.44.1713857274025;
+        Tue, 23 Apr 2024 00:27:54 -0700 (PDT)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id a16-20020a81bc10000000b0061877ef0f7asm2343678ywi.44.2024.04.23.00.27.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Apr 2024 00:27:53 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-de54b28c41eso662857276.0;
+        Tue, 23 Apr 2024 00:27:53 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWSA0DTctmHkkKRg7WYkb3MG2LMmgd2qwNq56wlYmzaW2yYBT6eyaTMEkmR3yShM3+ALuFz0oTxq4XuL/KBinIQM/C09wknAhCp8JldgkW3GOoyCcCad/HuRvkO+AF3MSZm1UTyA6EcXoR9aSAMrCEtJCpAZE5B6oR0WpaZue36eavJf/Q=
+X-Received: by 2002:a25:d655:0:b0:dcc:58ed:6ecc with SMTP id
+ n82-20020a25d655000000b00dcc58ed6eccmr12671072ybg.41.1713857273097; Tue, 23
+ Apr 2024 00:27:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240422111123.1622967-1-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20240422111123.1622967-1-claudiu.beznea.uj@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 23 Apr 2024 09:27:41 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUXRx1-95PD_WG4X=y4UefYXzTqm7T2mi+di+ZdKGUXYA@mail.gmail.com>
+Message-ID: <CAMuHMdUXRx1-95PD_WG4X=y4UefYXzTqm7T2mi+di+ZdKGUXYA@mail.gmail.com>
+Subject: Re: [PATCH] serial: sh-sci: Call device_set_wakeup_path() for serial console
+To: Claudiu <claudiu.beznea@tuxon.dev>
+Cc: gregkh@linuxfoundation.org, jirislaby@kernel.org, ulf.hansson@linaro.org, 
+	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218686
+Hi Claudiu,
 
---- Comment #44 from al0uette@outlook.com ---
-(In reply to Perry Yuan(AMD) from comment #43)
-> The issue has been confirmed that CPPC is not enabled by default on the A=
-SUS
-> GA403uv BIOS release. AMD has requested ASUS to enable CPPC in future BIOS
-> releases. If you wish to expedite the release, you may consider contacting
-> ASUS customer service.
->=20
-> Perry.
+CC Peng
 
-You really helped me a lot, thank you Perry!
+Thanks for your patch!
 
---=20
-You may reply to this email to add a comment.
+On Mon, Apr 22, 2024 at 1:11=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.dev> =
+wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>
+> In case the SCI is used as a UART console, no_console_suspend is
+> available in bootargs and SCI is part of a software-controlled power
+> domain we need to call device_set_wakeup_path(). This lets the power
+> domain core code knows that this domain should not be powered off
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+know
+
+> durring system suspend. Otherwise, the SCI power domain is turned off,
+
+during
+
+> nothing is printed while suspending and the suspend/resume process is
+> blocked. This was detected on the RZ/G3S SoC while adding support
+> for power domains.
+>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> ---
+>  drivers/tty/serial/sh-sci.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
+> index 97031db26ae4..57a7f18e16e4 100644
+> --- a/drivers/tty/serial/sh-sci.c
+> +++ b/drivers/tty/serial/sh-sci.c
+> @@ -3441,8 +3441,12 @@ static __maybe_unused int sci_suspend(struct devic=
+e *dev)
+>  {
+>         struct sci_port *sport =3D dev_get_drvdata(dev);
+>
+> -       if (sport)
+> +       if (sport) {
+> +               if (uart_console(&sport->port) && !console_suspend_enable=
+d)
+> +                       device_set_wakeup_path(dev);
+
+device_set_awake_path(), as of commit 10bb4e4ab7dd3898 ("PM: sleep:
+Add helpers to allow a device to remain powered-on") in v6.6
+(although I'm still a bit puzzled about the difference).
+
+> +
+>                 uart_suspend_port(&sci_uart_driver, &sport->port);
+
+I think it would be better to make this more general, and move the call
+to the existing console_suspend_enabled handling in uart_suspend_port().
+
+> +       }
+>
+>         return 0;
+>  }
+
+If this works, we can remove the console_suspend_enabled handling
+from drivers/pmdomain/renesas/rmobile-sysc.c, and revert commit
+309864dcf92b76fc ("genpd: imx: scu-pd: do not power off console if
+no_console_suspend").
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
