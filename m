@@ -1,74 +1,55 @@
-Return-Path: <linux-pm+bounces-6913-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6914-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A3588AE08C
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 11:06:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD1D58AE0EB
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 11:22:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C87531C21BE4
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 09:06:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1F6B2824CF
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 09:22:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEB8F5644F;
-	Tue, 23 Apr 2024 09:06:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 262CD5C613;
+	Tue, 23 Apr 2024 09:22:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="a5vodbmY"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="cmeFpD26"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A131A5578A
-	for <linux-pm@vger.kernel.org>; Tue, 23 Apr 2024 09:06:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8430C56B65;
+	Tue, 23 Apr 2024 09:22:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713863173; cv=none; b=IcqeujMt59mzxZ24BTOeoMBqe3/h87OuaogzBKIdIHqS226MgshBRMgKiBxzBOmczIANQYZXfuD5+xuZG/M7TSNB2xjTxY8yrai260DH76j/XH2hWmBqeynXoX3n72nAecDnoRe4U0PH8vrE/a6j0rSiWTrBj2FZPEXpsY5jNMk=
+	t=1713864133; cv=none; b=KIeBaEn/n7ENiKqWfeXzjBOBBzBZhxA+kBpElxlns8b7nt4zzTjDRNmvZMoHwg+pQoQfN9sLU4FIBmpRJ+y2Hcy5d01UohiI0Fw8+9Dl88QOiKnC1bLt6aXj9PlbxgvAphxsHxbUZHpcyJLyKbjxFfVm8hD4toA/DwXxv3cY4vI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713863173; c=relaxed/simple;
-	bh=JQG2DHaylaKVY1UHfizY1eaq/F2qkHVRo3sTzXgTqTA=;
+	s=arc-20240116; t=1713864133; c=relaxed/simple;
+	bh=FjKigUCfND/yp/nDDgcfrG3dAnCXLuVl43TcITs3ywA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sGpJbT16gPg8dJpQE5J4LnNweeSC0/58su/vzAHPczq88/pPm5BK0Dj7jWyKowfk8gJMzRPNBcAoCHdTaKdL9LG1l2chrlm9AVXRxDRPQS0eMORUk6wVySY4GqbGRzrnV3cjmvRrMuyG4mMj9fZLRIDRhfy8pwC7IC8H/hip5MU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=a5vodbmY; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-34b64b7728cso552179f8f.0
-        for <linux-pm@vger.kernel.org>; Tue, 23 Apr 2024 02:06:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713863168; x=1714467968; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LZvKemPhdZXx1a5wAZJqa8euX8d+AR9YE7+2VTNoqyA=;
-        b=a5vodbmYSUTc1tn51JwLknEwBLFLpkPjOwKojQE64fHIVm3z9qbjwZO92nyDGF0scS
-         r6rhiQWV461fgzcSpB3p6F4WvGiWEaJKRPuAPfprnE0CoicMrOXR9tqpV1ncHgAGL397
-         gTEsAw9V+9eqx8r9b/SdXg6Q3JE82Yp5WrJRKzxJrqIjX8VRgrip+4ACHfS/CicS/GII
-         OmA5S+GbjjpwyRGrI/H4l1a+AZPb5NIKRdr5LjAB4Wqda6zM/mJfMxcek8ccsKoyDwRk
-         lOjtzMQhi2Sbc7ruRV/yyhNEMJCsNStkz8oM9+9aDxeMXc/h60r7beOsno25tix13+eJ
-         0raw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713863168; x=1714467968;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LZvKemPhdZXx1a5wAZJqa8euX8d+AR9YE7+2VTNoqyA=;
-        b=tP75dQ/qz8e91vN2JUqJQJbGUSxSXLsEVka+cCZcf9MDS9A7XKfNu1zhRBa6NhwqMw
-         xiXqm0fFm/Ffc/N8wlK9O57yVcb9zC5gTOG5ij+J0TO5+J9BsOuVwvc+reugGYtRKgnv
-         XD0a2mZmhjLDQDM0vOn4F1l/aGW8WYJ+gyzqb8a+Kh0/InTB65RL9N9uyyfUb8uFgDn0
-         a78e0WnXAdNggypOrIByFIzJIqVrZ/GPBkMt2EEV59QPt1cK2orkQJ31kZ4lRbaLPhv6
-         LF8oKwY1q7uDtp1UsGYlTaS8YPrs+gRVZz4/hy4sd3R4eZOsu+VhxUxwsAwy/q9jYdDL
-         NJcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX79UyUKs+E9/bG8CJkTFXReFETidzD19hCerSDAN15u0b89D+7fkjfvi187RdGZ+giJ+FmQuGk7SyLpDsm5H3NOA3OQ7lJQZM=
-X-Gm-Message-State: AOJu0YweD8vWgwvFmHNCjl6GIHKM6vljM56OaOVInNBPse/UwhuY8W21
-	1e7b+Yzhg9wQWe2LX2tcixsjwL56Cn5hJixfPr4+LoWWuJ8niIAJbZhul/+Gej8=
-X-Google-Smtp-Source: AGHT+IHG4sDArZk8hnzhxx9ggspr37j2e30TIdiJYyOlEmHIcaoKuInnRHqczfjjQmlkFqUJcqEnXA==
-X-Received: by 2002:a05:6000:12c4:b0:34a:e6aa:bc01 with SMTP id l4-20020a05600012c400b0034ae6aabc01mr4790936wrx.5.1713863167966;
-        Tue, 23 Apr 2024 02:06:07 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id o12-20020a5d62cc000000b00349c42f2559sm14036551wrv.11.2024.04.23.02.06.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Apr 2024 02:06:07 -0700 (PDT)
-Message-ID: <3fabe40f-2353-48c5-a29c-fa0ae9ddf3ce@linaro.org>
-Date: Tue, 23 Apr 2024 11:06:06 +0200
+	 In-Reply-To:Content-Type; b=CbRsdG/AuTOAKZc8ioIaiIpMGavzNDi1ToC/h34nfOGHV4CBRMxVOGwGBf1ZIAwdNyVcbxLQAytEDMQOQNou+bbI4nsjgqYg9nhIjSMc5lFaRxMIFJKYqW1ku7sMGmkvNoagQmXjA7+lEsq1SoTDCJL8KV7mZYFvPP7p7ic8tms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=cmeFpD26; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1713864129;
+	bh=FjKigUCfND/yp/nDDgcfrG3dAnCXLuVl43TcITs3ywA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=cmeFpD26AokQActMeUtYI378J8vQtgdQ/44EN20pPRIvLBef2hKpchW5av5QRs7/4
+	 dMqfUD6PbzcIFpFuHLUjgSQrsIdPUCMnzXAs7/KLGybd2xWI3GGpTT3FI1Egc4OcLS
+	 MW6V8IcTOhte8770C4qxsTYRxUjB4YvVNz/aai5vtiiUtVe5ikpxNU9d9/nR4bMsiT
+	 BwWBUHiydI13yCNfsIAYjSAH7c5THIL5OrDNFPSBKHUr5friWlRUfyrhpvYG58i0an
+	 +yAvKNKcMZxqgvWDU+d09nDdmvihR9BiHnJFGmcjD2oTYAG8RMXovPPDsiJqCXPafr
+	 eXUvdbZNBTZIQ==
+Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 4B0633781453;
+	Tue, 23 Apr 2024 09:22:09 +0000 (UTC)
+Message-ID: <981a8748-16d0-4744-b097-aa9dd14c63a8@collabora.com>
+Date: Tue, 23 Apr 2024 11:22:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -78,27 +59,18 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3 00/15] Mediatek thermal sensor driver support for
  MT8186 and MT8188
-Content-Language: en-US
-To: Nicolas Pitre <nico@fluxnic.net>, linux-pm@vger.kernel.org,
+To: Nicolas Pitre <nico@fluxnic.net>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org,
  linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
-Cc: Nicolas Pitre <npitre@baylibre.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: Nicolas Pitre <npitre@baylibre.com>
 References: <20240402032729.2736685-1-nico@fluxnic.net>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
 In-Reply-To: <20240402032729.2736685-1-nico@fluxnic.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-
-Hi Nico,
-
-applied the series, except the DT changes
-
-Thanks
-
-   -- Daniel
-
-On 02/04/2024 05:25, Nicolas Pitre wrote:
+Il 02/04/24 05:25, Nicolas Pitre ha scritto:
 > This is a bunch of patches to support the MT8186 and MT8188 thermal
 > sensor configurations. Several changes are needed to cope with oddities
 > these SOCs implement.
@@ -106,6 +78,16 @@ On 02/04/2024 05:25, Nicolas Pitre wrote:
 > All values (calibration data offsets, etc.) were lifted and adapted from
 > the vendor driver source code.
 > 
+
+I picked patches 7 and 12 (and also fixed them) introducing the nodes for the
+LVTS controllers, but will not pick 9 and 15, as they're either missing thermal
+zones and/or using the wrong names; let's wait for the next cycle for those, as
+I will also be able to add the SVS on top (needs a bit of time for testing),
+getting both SoCs complete on the LVTS side, without rushing.
+
+Cheers,
+Angelo
+
 > Changes from v2:
 > 
 >   - use meaningful name for binding index definitions
@@ -138,14 +120,5 @@ On 02/04/2024 05:25, Nicolas Pitre wrote:
 >   drivers/thermal/mediatek/lvts_thermal.c       | 434 +++++++++++++-----
 >   .../thermal/mediatek,lvts-thermal.h           |  26 ++
 >   5 files changed, 987 insertions(+), 118 deletions(-)
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
 
 
