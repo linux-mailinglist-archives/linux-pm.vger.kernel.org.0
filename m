@@ -1,99 +1,182 @@
-Return-Path: <linux-pm+bounces-6867-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6868-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEA3B8ADAEA
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 02:23:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2DC98ADB68
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 03:10:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0FEFA1C209CB
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 00:23:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 19B53B217CE
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 01:10:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 551591C9EBE;
-	Mon, 22 Apr 2024 23:59:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FKV9XUNI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7D4EF9D4;
+	Tue, 23 Apr 2024 01:10:35 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27D771C9EAE;
-	Mon, 22 Apr 2024 23:59:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 727C8E57E
+	for <linux-pm@vger.kernel.org>; Tue, 23 Apr 2024 01:10:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713830365; cv=none; b=BOeADodtcinkqHXHyrIAGGSpx5ainVCGZbN1OfBUzAVicpKSmt+pYqjVlrJpE5U1SAQfIKlDFNCrVcO4hxKIWCJ+/5seVrYIWIT26iraDILawbJjZUwQoqPGxDPCzlGIFjxRDUjBv8ooUlwo3jKi4IGp0j4l42Oa95UbLv/HWxc=
+	t=1713834635; cv=none; b=XHs2D9wbInXPT33VcN6pOyfWcQpxWS7TJ+rgbVPTOeeBMIqm1CmE2oeqF5FQKC47aKz/VYps0gYe2FqONvfWG3qRJvDvKyPak9cvOtn5fHvbYRxMkPBBnsNSmszth+bvYHoQZMPt4G2pdJv1gqrIcqeVZ1vECnwDwVW4dXa2EEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713830365; c=relaxed/simple;
-	bh=vLQFAZIJubsoxdjKFTHmou1qkN+kTNZCtLfClWjL4vI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HDXv+QDwAl70iDgtzu+iN8o0i+YmkGy7doUBs6kNjrp6NAFheVJN9VupZAPdS+a3UzH6OBiQtAlrkNHrI0QuJ2KvMDwKiG5yqxRdIuYdgNX1AP0BjG0Kjx5aXdFwKbXwtrGQhzL91JoatRD4vtuz/wRbIzEWH51fChoOAvKSNn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FKV9XUNI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9DD7C3277B;
-	Mon, 22 Apr 2024 23:59:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713830364;
-	bh=vLQFAZIJubsoxdjKFTHmou1qkN+kTNZCtLfClWjL4vI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FKV9XUNIaU3cFaRRVaApE73GUuUO8boG8m6JIrL69lWA8as8oNSh8ff7ydRPgJUzX
-	 /Uvuv53wQZxc8EUXMbiigBLo0SOxDaaPlzrAJq8xtAbz82crl9BrpKnVI5Z4KlEZYR
-	 2Pk1MV+YAzyCv7ZGqcGXigA0mpQgn8PqZDM6QGHgTQxFyTZfrLXA11Ao78JJYDcsyV
-	 wrefZVCb3YWpRkqxU2d2Nuz6cb08aTL5KDAahtWx8O6CXch9c7heJuZZ8d8NFqM+kB
-	 +37e8OBChChaIxrV/sb146HZ68OR0fHSwtgzuyR/t4zr0jMCzYn/m27l3ysaO91VSc
-	 +8DlJj+Z8Xo0A==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Peng Liu <liupeng17@lenovo.com>,
-	Len Brown <len.brown@intel.com>,
-	Sasha Levin <sashal@kernel.org>,
-	lenb@kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 2/7] tools/power turbostat: Fix Bzy_MHz documentation typo
-Date: Mon, 22 Apr 2024 19:20:34 -0400
-Message-ID: <20240422232040.1616527-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240422232040.1616527-1-sashal@kernel.org>
-References: <20240422232040.1616527-1-sashal@kernel.org>
+	s=arc-20240116; t=1713834635; c=relaxed/simple;
+	bh=GgMf3uMCmN0oqH6RpZtN3zKEbU5HvZScf/MrhNa7EcI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aWe+RjdL/EymK9G7SDmpAKtujevSsj+hZK03TYmN7X/WxhPLvmNsTN0sAMQIYhsmZz/gLIBq0lMH/OkYeDxTEdGtQNcaPw+XhWEPeSAgDw40wh3ATo+74fctzpgNan5h7JDwAAtNLXBhylpHDPIObhk/oWeZgGaupVlz2vM5eIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: c338fb32010c11ef9305a59a3cc225df-20240423
+X-CID-UNFAMILIAR: 1
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.37,REQID:41c87912-8174-4536-b24c-c2a4e066c345,IP:20,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-6,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:14
+X-CID-INFO: VERSION:1.1.37,REQID:41c87912-8174-4536-b24c-c2a4e066c345,IP:20,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-6,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:14
+X-CID-META: VersionHash:6f543d0,CLOUDID:50d37eff2965001d29c24b493887e7db,BulkI
+	D:240422223350JJOW0951,BulkQuantity:8,Recheck:0,SF:24|16|19|44|64|66|38|10
+	2,TC:nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:40,QS:nil,BEC:n
+	il,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_FSD,TF_CID_SPAM_FSI,TF_CID_SPAM_SNR,TF_CID_SPAM_USA
+X-UUID: c338fb32010c11ef9305a59a3cc225df-20240423
+Received: from node4.com.cn [(39.156.73.12)] by mailgw.kylinos.cn
+	(envelope-from <xiongxin@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 1734081977; Tue, 23 Apr 2024 08:59:39 +0800
+Received: from node4.com.cn (localhost [127.0.0.1])
+	by node4.com.cn (NSMail) with SMTP id 8D14016002082;
+	Tue, 23 Apr 2024 08:59:39 +0800 (CST)
+X-ns-mid: postfix-662707FB-4514967
+Received: from [10.42.116.201] (unknown [10.42.116.201])
+	by node4.com.cn (NSMail) with ESMTPA id 5C9E316002082;
+	Tue, 23 Apr 2024 00:59:38 +0000 (UTC)
+Message-ID: <4cf0d1cb-34df-4be3-926a-8fc645ff8f17@kylinos.cn>
+Date: Tue, 23 Apr 2024 08:59:37 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.19.312
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] Revert "include/linux/suspend.h: Only show pm_pr_dbg
+ messages at suspend/resume"
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Mario Limonciello <mario.limonciello@amd.com>
+Cc: len.brown@intel.com, pavel@ucw.cz, linux-pm@vger.kernel.org
+References: <20240422093619.118278-1-xiongxin@kylinos.cn>
+ <37847b26-1c1e-48d3-a74e-bd2bcc6e1fda@amd.com>
+ <CAJZ5v0gmF0Lcy_nHSvTDnu4C3N0mipaeJqHff=00fgWdtwOzMw@mail.gmail.com>
+ <2888cd41-65d9-4832-a913-399a074de7a9@amd.com>
+ <CAJZ5v0ggFGSsPKWxowqn89WtLbmXVjUWZvc5KO-ab-UZHagR+Q@mail.gmail.com>
+ <7b739eb8-573e-4479-9225-be3d2f4adbff@amd.com>
+ <CAJZ5v0itOXsVCvU0kXgZA8v6OX5yy=RZn1d9FTe-fo1tqVy90w@mail.gmail.com>
+ <cf3a8d4c-846e-4d7c-ba6e-b774dff420d8@amd.com>
+ <CAJZ5v0jp2ici368ebaHyBjhdsEPbgkdNg4FLCfS6kAfNZjd7mA@mail.gmail.com>
+Content-Language: en-US
+From: xiongxin <xiongxin@kylinos.cn>
+In-Reply-To: <CAJZ5v0jp2ici368ebaHyBjhdsEPbgkdNg4FLCfS6kAfNZjd7mA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 
-From: Peng Liu <liupeng17@lenovo.com>
+=E5=9C=A8 2024/4/23 00:04, Rafael J. Wysocki =E5=86=99=E9=81=93:
+> On Mon, Apr 22, 2024 at 5:54=E2=80=AFPM Mario Limonciello
+> <mario.limonciello@amd.com> wrote:
+>> On 4/22/2024 10:43, Rafael J. Wysocki wrote:
+>>> On Mon, Apr 22, 2024 at 5:25=E2=80=AFPM Mario Limonciello
+>>> <mario.limonciello@amd.com> wrote:
+>>>> On 4/22/2024 10:18, Rafael J. Wysocki wrote:
+>>>>> On Mon, Apr 22, 2024 at 5:02=E2=80=AFPM Mario Limonciello
+>>>>> <mario.limonciello@amd.com> wrote:
+>>>>>> On 4/22/2024 09:45, Rafael J. Wysocki wrote:
+>>>>>>> On Mon, Apr 22, 2024 at 4:33=E2=80=AFPM Mario Limonciello
+>>>>>>> <mario.limonciello@amd.com> wrote:
+>>>>>>>> On 4/22/2024 04:36, xiongxin wrote:
+>>>>>>>>> This reverts commit cdb8c100d8a4b4e31c829724e40b4fdf32977cce.
+>>>>>>>>>
+>>>>>>>>> In the suspend process, pm_pr_dbg() is called before setting
+>>>>>>>>> pm_suspend_target_state. As a result, this part of the log cann=
+ot be
+>>>>>>>>> output.
+>>>>>>>>>
+>>>>>>>>> pm_pr_dbg() also outputs debug logs for hibernate, but
+>>>>>>>>> pm_suspend_target_state is not set, resulting in hibernate debu=
+g logs
+>>>>>>>>> can only be output through dynamic debug, which is very inconve=
+nient.
+>>>>>>>> As an alternative, how about exporting and renaming the variable
+>>>>>>>> in_suspend in kernel/power/hibernate.c and considering that to t=
+ell if
+>>>>>>>> the hibernate process is going on?
+>>>>>>>>
+>>>>>>>> Then it should work just the same as it does at suspend.
+>>>>>>> Well, this is not the only part that stopped working AFAICS.  I'l=
+l
+>>>>>>> queue up the revert.
+>>>>>> I just tested the revert to see what happens to other drivers but =
+it's
+>>>>>> going to have more collateral damage.
+>>>>>>
+>>>>>> ERROR: modpost: "pm_debug_messages_on"
+>>>>>> [drivers/platform/x86/amd/pmc/amd-pmc.ko] undefined!
 
-[ Upstream commit 0b13410b52c4636aacb6964a4253a797c0fa0d16 ]
+The revert has simply removed the pm_debug_messages_should_print() func,=20
+there is no reference to
 
-The code calculates Bzy_MHz by multiplying TSC_delta * APERF_delta/MPERF_delta
-The man page erroneously showed that TSC_delta was divided.
+this function anywhere else in the source code, and=20
+drivers/platform/x86/amd/pmc/ path does not
 
-Signed-off-by: Peng Liu <liupeng17@lenovo.com>
-Signed-off-by: Len Brown <len.brown@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/power/x86/turbostat/turbostat.8 | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+reference pm_debug_messages_on or this function.
 
-diff --git a/tools/power/x86/turbostat/turbostat.8 b/tools/power/x86/turbostat/turbostat.8
-index a6db83a88e852..25a560c41321d 100644
---- a/tools/power/x86/turbostat/turbostat.8
-+++ b/tools/power/x86/turbostat/turbostat.8
-@@ -318,7 +318,7 @@ below the processor's base frequency.
- 
- Busy% = MPERF_delta/TSC_delta
- 
--Bzy_MHz = TSC_delta/APERF_delta/MPERF_delta/measurement_interval
-+Bzy_MHz = TSC_delta*APERF_delta/MPERF_delta/measurement_interval
- 
- Note that these calculations depend on TSC_delta, so they
- are not reliable during intervals when TSC_MHz is not running at the base frequency.
--- 
-2.43.0
+>>>>> What about removing the "pm_suspend_target_state !=3D PM_SUSPEND_ON=
+"
+>>>>> part from pm_debug_messages_should_print()?
+>>>>>
+>>>>> This should be as good as the revert from the POV of restoring the
+>>>>> previous functionality.
+>>>> That would probably help this reported issue but it's going to be RE=
+ALLY
+>>>> noisy for the pinctrl-amd driver for anyone that sets
+>>>> /sys/power/pm_debug_messages.
+>>>>
+>>>> There is a message in that driver that is emitted whenever a GPIO is
+>>>> active and pm_debug_messages is set.
+>>>>
+>>>> It's a really useful message for tracking down which GPIO woke the
+>>>> system up as the IRQ that is active is the GPIO controller master IR=
+Q
+>>>> not an IRQ for the GPIO.
+>>>>
+>>>> But if that change is made anyone who sets /sys/power/pm_debug_messa=
+ges
+>>>> is going to see their kernel ring buffer flooded with every since
+>>>> interrupt associated with an I2C touchpad attention pin (for example=
+).
+>>>>
+>>>> So if the desire really is to back all this out, I think we need to =
+also
+>>>> back out other users of pm_pr_dbg() too.
+>>> OK, so it needs to check hibernate_atomic in addition to
+>>> pm_suspend_target_state.
+>> Yeah, that sounds great to me.
+> OK
+>
+>> Tangentially related to the discussion; how would you feel about a
+>> /sys/power/pm_wakeup_gpio?  Or /sys/power/pm_wakeup_gpios?
+>>
+>> If we did the plural and used a comma separated list we could probably
+>> axe the message I mentioned above from pinctrl-amd all together.
+> That would be too specific IMV.
+>
+> The whole idea with pm_debug_messages is to switch them all on or off i=
+n one go.
+
 
 
