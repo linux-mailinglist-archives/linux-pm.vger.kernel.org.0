@@ -1,119 +1,124 @@
-Return-Path: <linux-pm+bounces-6902-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6903-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C880F8ADF8E
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 10:17:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A06018ADFB7
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 10:28:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 84F682849D4
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 08:17:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3FF561F239B4
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 08:28:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F18714CDF9;
-	Tue, 23 Apr 2024 08:17:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 847EE50291;
+	Tue, 23 Apr 2024 08:28:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ek8nh+OR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 837293F9E8
-	for <linux-pm@vger.kernel.org>; Tue, 23 Apr 2024 08:17:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9FC93F9E8;
+	Tue, 23 Apr 2024 08:27:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713860260; cv=none; b=Zpfa4Xa0ZFcAisZ4so6lRqz1rYOi+7SOBUT/Fye+XQB6syL3C/kefUW7HRXtcs9+BmaB5/i1HeR7wDlwP5atrdPiiysMAyoL6waqc7UbWb3ZJnSE7BXMw416a15VCxSNU559JUpM1uV9F/XaBjjoSC2POpkyeH3pXlj1soVdC9w=
+	t=1713860881; cv=none; b=ELO9Td+93UoJuFL1/ocUiXpe137vrC3g70SUM+IzF/jM7zre8Z2Uw/CEhjORB7hpFAdcwQd1yeE17obbWdrXha3Ocuz/uGXByHSOcu1qpDleZJ+U4Hb1eVXGaVR3MxT0LBS2kYmoc7LLslYNj7fv52z2xS8UvzFQHL+2iv/oARY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713860260; c=relaxed/simple;
-	bh=4wwNOgiceRwMpLgqMzgC+fHN1YogUEuRd/gFugGnOC0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=XpzHjjNdZKNaaN2Bd+CM05jrNM9oWa94bx/u7H6DHJV8OB2vtHs/EFnPhNvclejobpbK4VZkgsEg/iqbMv0olAHRdwgO+vzfE2UrBWanbooVOnRmhBv2eruXrA10dkoSZgh7GH1qSElNIeTcRV5KNOENG2MnAU+wKmRBbkIGmbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+	s=arc-20240116; t=1713860881; c=relaxed/simple;
+	bh=4rgs+Q8tD+dHRzJTXxgmPYJ2leRoMwnoR8des6f8Y3E=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=rozTRni9ywgrfK/RTIH67zaBiBuVUBIjlcXSZP4pVWEMQmvS9grX4VJmhcQv9SzqZCwJcEJMPLwIUOrQTdQDRrxsiQOZ8vuV7orIZeikn+zOlRr3+eg6Z54qmzcg5W+OcnaB4jW/OKiPT5rZ8hmTkDOvEgfPMOACiD1C4uvjHJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ek8nh+OR; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2ab48c1156dso909611a91.3
-        for <linux-pm@vger.kernel.org>; Tue, 23 Apr 2024 01:17:37 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a51a7d4466bso569372966b.2;
+        Tue, 23 Apr 2024 01:27:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713860878; x=1714465678; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=n1ow1jnUWA2uy4x+ujOJIYra489DoEXou+HGtbxx9DY=;
+        b=Ek8nh+ORjB+eFUgGkeNsV+dK/LKnDl/wLUkZ8a//cBx2xnWvOx1VQHbgGR58RjOv+C
+         n11zQ47aExU4mVqUyfEHmgmJpArPO8JMFnQxR0lMd0Y+NVJZMKVV+eYUNyy680UWWmBF
+         QyjL278dVy54/YA0qL4UUc56m8eVk1Z+TMX0C2ene8umxTmcvQz/c+GzZxZImB8DhpkH
+         TpSbQixSeNZ8d2ARH45VyPn5X+TYdo4stpbbABNN7WGoJSv1LgKwN8k7qVziOfh9l3tO
+         nR4pWvN5Z03lsNok0PHrtgN7rW5NoVmK05zIXMD5IgwqJ3+/rSJA/m7T3oxzgUd+B7wd
+         ckuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713860257; x=1714465057;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kb9FXgEDAB68H75aCsXFWYpeBHJc/ttXTv+quz+QRrI=;
-        b=qdC0kINvyV5Olqv/5K9w+HdT2rIRr60tGngdikQtSvrtuNICNAvZTYnH9Cp8t7cF11
-         D+fxPrWnh2LtJjaV+i25A+PHyGl3nuRYg4OtYQZseE0ojWFdurXrKcW7LSWQSGr6isCc
-         OkfIQa/GW9Q8dFwX0pnpqpW4voJq1L0xkrScVeBQVBuFikdzWH/srZDfan2baQsSj9o+
-         VaHGPe/lZJqUHUoGaramzjN2EnWDtFz14pdKaMMnZy7GAZngX7yfc0yIH8DV9dVbkTJs
-         ZHW2wOd3bhnr8HJfme/ZswSJZdcYaNj6v6OFl7lhNCN/JnVL9KKwYQSeS+RxqSjHK5QU
-         j6tQ==
-X-Gm-Message-State: AOJu0YzUPVn5/ECTQOA5KB331fjQd4OmvU1CqbNuqkgVxWmmf6ImRLBS
-	+JWwePTEg20B4XC31xYRDWfJm9xxh8FrFT1N/JG10ulgGu1K3PKRAzfXZQ==
-X-Google-Smtp-Source: AGHT+IHuA1A1ueOeKXMbLXjrAPGawnQytPIX+UADs75T+/GttA1ZE/v6DxGQ6M/4/5wS3oiMOAvdZg==
-X-Received: by 2002:a17:902:8498:b0:1dd:da28:e5ca with SMTP id c24-20020a170902849800b001ddda28e5camr14010425plo.0.1713860256603;
-        Tue, 23 Apr 2024 01:17:36 -0700 (PDT)
-Received: from tgsp-ThinkPad-X280.. ([111.48.58.12])
-        by smtp.gmail.com with ESMTPSA id b1-20020a170902d30100b001e451abffebsm9414989plc.86.2024.04.23.01.17.33
+        d=1e100.net; s=20230601; t=1713860878; x=1714465678;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n1ow1jnUWA2uy4x+ujOJIYra489DoEXou+HGtbxx9DY=;
+        b=tW7uqh3aYat2nx9j+zZsAnHvdrVN3D93X6rXC1TXptrHtA9xpY8awbJ0T2HOVmQwDK
+         foWicyTW1iLPxKX0zJ9I42PprMY8EoOGa7xpFYQmxanqapGwGIMbu4sFi3vDDHDhqynh
+         LzioByYndDbx4Cy6BCMmULgELuAWEDx8QxRoY86nbXIHk469XASspUb3Z6ZiWjhWNXg3
+         5nKE/pChetOilSaSdZGRxpwzJGmrVDEDQ2VjWbtTRziylL61fbBQpgsNPwPFN724E3DX
+         Q1MI1xMwcdaJksEKK7uG1/+DbS/ilHkHQphImzApi3RdorTx/KgNwMWIa1LXCaW+OqmY
+         9SUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVMRovHSGGmtJ4sIemo0uJFoyYC50KsCO5b8JGi6HMoTSLg8d+OiQ7gSmtGQfjFFJ5G98YqAh6Nd2m3du4d7uR8/xnoGuzNY6Kl0H42
+X-Gm-Message-State: AOJu0YwLKdnGD1gVRB3WwtvmE01X6HQhveGQq4ltAgJ2MxIa78Yn/WUk
+	6Mhf13rRG3/k92vyz47mCCkzQ6HYE4JPcS+YBpvZvTlvgk8Y9Fj5
+X-Google-Smtp-Source: AGHT+IGdXvZE85ygrZFhUrP7aObavKBO1ceClUkXfSC1BjEwFEregBeh8y6zm1Psp3IVsTRdHsfAuw==
+X-Received: by 2002:a17:906:4718:b0:a58:7982:6282 with SMTP id y24-20020a170906471800b00a5879826282mr990508ejq.62.1713860878079;
+        Tue, 23 Apr 2024 01:27:58 -0700 (PDT)
+Received: from [127.0.1.1] (91-118-163-37.static.upcbusiness.at. [91.118.163.37])
+        by smtp.gmail.com with ESMTPSA id z13-20020a17090655cd00b00a4739efd7cesm6798786ejp.60.2024.04.23.01.27.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Apr 2024 01:17:36 -0700 (PDT)
-From: xiongxin <xiongxin@kylinos.cn>
-To: rafael@kernel.org,
-	mario.limonciello@amd.com
-Cc: linux-pm@vger.kernel.org,
-	xiongxin <xiongxin@kylinos.cn>
-Subject: [PATCH] PM: sleep: Optimize the pm_debug_messages_should_print() function
-Date: Tue, 23 Apr 2024 16:17:23 +0800
-Message-Id: <20240423081723.412237-1-xiongxin@kylinos.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240422093619.118278-1-xiongxin@kylinos.cn>
-References: <20240422093619.118278-1-xiongxin@kylinos.cn>
+        Tue, 23 Apr 2024 01:27:56 -0700 (PDT)
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Subject: [PATCH 0/2] cpufreq: dt/dt-platdev: eliminate uses of
+ of_node_put()
+Date: Tue, 23 Apr 2024 10:27:43 +0200
+Message-Id: <20240423-of_node_put_cpufreq_dt-v1-0-19f51910276f@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAP9wJ2YC/x3MQQqAIBBA0avErBPMdGFXiZDQsWajphZBdPek5
+ Vv8/0DBTFhg6h7IeFGhGBqGvgO7r2FDRq4ZBBeSSyFY9CZEhyad1dh0+oyHcZVpq0YlnUbtObQ
+ 4ZfR0/+N5ed8Pf8gwuGgAAAA=
+To: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Viresh Kumar <viresh.kumar@linaro.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1713860876; l=1045;
+ i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
+ bh=4rgs+Q8tD+dHRzJTXxgmPYJ2leRoMwnoR8des6f8Y3E=;
+ b=m9B63KnDmu0Phc7Ai4aQwdSEXublyZ92HpOKSUhIN2N0RdK7MbLybtUomXpTXEqF4f1C8LgDO
+ VLCzBQdGCUTBEh6Zgw9AP3ov5mo9xLhxDJdQ/ZPPmir644SAjSbnM9f
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
 
-commit cdb8c100d8a4 ("include/linux/suspend.h: Only show pm_pr_dbg
-messages at suspend/resume"), pm_debug_messages_should_print() is
-implemented to determine the output of pm_pr_dbg(), using
-pm_suspend_target_state to identify the suspend process. However, this
-limits the output range of pm_pr_dbg().
+This series removes uses of of_node_put() in dt and dt-platdev, which
+can be replaced with the clenaup handler introduced with
+54da6a092431 ("locking: Introduce __cleanup() based infrastructure").
 
-In the suspend process, pm_pr_dbg() is called before setting
-pm_suspend_target_state. As a result, this part of the log cannot be
-output.
+This change provides a scope-based cleanup mechanism to avoid potential
+memory leaks that can appear if of_node_put() is not used correctly.
 
-pm_pr_dbg() also outputs debug logs for hibernate, but
-pm_suspend_target_state is not set, resulting in hibernate debug logs
-can only be output through dynamic debug, which is very inconvenient.
+The series is based on linux-next (next-20240422) and has been validated
+with a Rockchip RK3568 that makes use of these drivers.
 
-Currently, remove pm_suspend_target_state from
-pm_debug_messages_should_print() to ensure that sleep and hibernate main
-logic can output debug normally.
-
-Fixes: cdb8c100d8a4 ("include/linux/suspend.h: Only show pm_pr_dbg messages at suspend/resume").
-Signed-off-by: xiongxin <xiongxin@kylinos.cn>
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 ---
-v2:
-	* Resolve the compilation error and re-submit with the fix
-	  patch.
-v1:
-	* Revert the commit cdb8c100d8a4 ("include/linux/suspend.h: Only
-	  show pm_pr_dbg messages at suspend/resume").
----
+Javier Carrasco (2):
+      cpufreq: dt: eliminate uses of of_node_put()
+      cpufreq: dt-platdev: eliminate uses of of_node_put()
 
-diff --git a/kernel/power/main.c b/kernel/power/main.c
-index a9e0693aaf69..24693599c0bc 100644
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -613,7 +613,7 @@ bool pm_debug_messages_on __read_mostly;
- 
- bool pm_debug_messages_should_print(void)
- {
--	return pm_debug_messages_on && pm_suspend_target_state != PM_SUSPEND_ON;
-+	return pm_debug_messages_on;
- }
- EXPORT_SYMBOL_GPL(pm_debug_messages_should_print);
- 
+ drivers/cpufreq/cpufreq-dt-platdev.c |  7 ++-----
+ drivers/cpufreq/cpufreq-dt.c         | 21 ++++++---------------
+ 2 files changed, 8 insertions(+), 20 deletions(-)
+---
+base-commit: f529a6d274b3b8c75899e949649d231298f30a32
+change-id: 20240422-of_node_put_cpufreq_dt-9c5354d9e9f0
+
+Best regards,
 -- 
-2.34.1
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
 
