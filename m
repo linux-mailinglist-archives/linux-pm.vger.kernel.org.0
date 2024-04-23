@@ -1,96 +1,118 @@
-Return-Path: <linux-pm+bounces-6885-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6886-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C8F38ADDF4
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 09:03:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CD2D8ADE06
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 09:11:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA2621F22349
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 07:03:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF2171C2180F
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 07:11:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D3BC286A6;
-	Tue, 23 Apr 2024 07:03:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9374036B1C;
+	Tue, 23 Apr 2024 07:11:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="stKpWkbi"
+	dkim=pass (1024-bit key) header.d=inria.fr header.i=@inria.fr header.b="Rp5fpjlN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC2DC28689
-	for <linux-pm@vger.kernel.org>; Tue, 23 Apr 2024 07:03:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E14422C1AE;
+	Tue, 23 Apr 2024 07:11:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.134.164.104
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713855796; cv=none; b=CksCp1BdQpdUI/EzkLmP9enWA+bWnGJk6qIUgHib3gHBuh92wODwburPthNCDYtYedkHXI0/h2mOdMNlYha98+FVRf93nFutLXzP5MGGfbaCynDktg9wXOsBnmV1CQBJpQgbQfTNpSRXgZKz/vX4SCQqkAR545vKR/4vwcA2m5M=
+	t=1713856279; cv=none; b=Q5kFuELBnA14UxWSokDNqtK2QMSNwYI7Cr1W/vnfexbGHIC4Kg4jlHfmSpOmTniXMj23VnnwypLaFzEJn04MpZOwjQVZz5Y7K5ajaklsR1jEPc6m2kdqv5Q0AfL5OnjXAwQm4b4v8gYick4FeTfve6toye0NX7tzgo1gL4iyzvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713855796; c=relaxed/simple;
-	bh=IaaTk/EWdXZ0b03D4MtgH3hZRIkscD8zrzp8RQw6qL4=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Mr9AUF4ksZ6QjyVa22yPxsJ5xkFs4/0mEH/Yhz0rdYo/o5omAzpPdUzZbFpRQgBgBpoPVz1dkhg3NqsnlGZo5oZz95dcUEKnavfsavekGQaFQZVJnDyWTe6EBcxwCWnc99KQABKLx1qtz37fGHE2wbTkK1B8EAEBLh/hkUt+5l8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=stKpWkbi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5AA1EC32782
-	for <linux-pm@vger.kernel.org>; Tue, 23 Apr 2024 07:03:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713855796;
-	bh=IaaTk/EWdXZ0b03D4MtgH3hZRIkscD8zrzp8RQw6qL4=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=stKpWkbiWxNF4KEI2m5yPzviso6b/zzypJ0ktDE/M277DWTDDNF+DGShALxCiTrn8
-	 Wxa1qJb2qHrN4hbVljfDFqdxqObJcgvW60IuPMAQMdYaZkpzrpRolNafuAuwid4fRt
-	 4I5nDCHqLtsPCwfjw0Uj3h80LS63DwV6aOvLD9UQj5vYW5rpQWbBiDEgQTZd+ZV5Vi
-	 XTIbVdQD0VLCCbxPMM2NJPjNpsSVWyifjfOkpPF+ijRd5x4jJS31vrofmHlHnSlkCe
-	 E0uKO/xQLTkCb10mWZ9wlsM70DXJVf/E52NmLiX9zOoiPFPirRw6Pd9LP+shcdnQMj
-	 02iJAVCIhXqOQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 4E8C9C04223; Tue, 23 Apr 2024 07:03:16 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 218686] Fail to set energy_performance_preference of amd
- processor on asus ga403uv
-Date: Tue, 23 Apr 2024 07:03:15 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: Perry.Yuan@amd.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: DOCUMENTED
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218686-137361-m3NqKatWWK@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218686-137361@https.bugzilla.kernel.org/>
-References: <bug-218686-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1713856279; c=relaxed/simple;
+	bh=nLaGBHamuhtzaalMmDBdLqxZF1juSecJx5/vJnANln8=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=GSutYpGHZK1Nv2M+tfmUM8eygzkbS7e3LEuPVnBmhz/ul2JhUYTJwkrXL7GJeoHeDf/QTAq6MZet7Yedjj7vH41hSK5jA2O34JQPhXtSZZ1H/MG1bz8PiWpCwHTPhQ22ysgoS4hg/X3sqUzQVxliYIVm+j0d3SsUhp2x0K8TaTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inria.fr; spf=pass smtp.mailfrom=inria.fr; dkim=pass (1024-bit key) header.d=inria.fr header.i=@inria.fr header.b=Rp5fpjlN; arc=none smtp.client-ip=192.134.164.104
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inria.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inria.fr
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=kVygBsNtcrP1nWUhXC/dyte0z5MenHlyUiOgHcNUvQg=;
+  b=Rp5fpjlNZQhd10e7B1pmmHySpUMks7ZNk3HFDqjKa7D5wPq3TofILbFD
+   gGWYIVbxQ/7lqe+1KF0RxaxUUsXLdy5cPFM7NBcC36wraxS06M1xPVR/t
+   tZlM70P2I2fLagsUhJlE6OG8cheLxe51OhS+4x6EXEFyverbGDU5JjibJ
+   Q=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="6.07,222,1708383600"; 
+   d="scan'208";a="85487077"
+Received: from dmz02.dagstuhl.de (HELO hadrien) ([192.76.146.51])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 09:11:08 +0200
+Date: Tue, 23 Apr 2024 09:11:07 +0200 (CEST)
+From: Julia Lawall <julia.lawall@inria.fr>
+To: Shivani Gupta <shivani07g@gmail.com>
+cc: "Rafael J . Wysocki" <rafael@kernel.org>, 
+    Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org, 
+    linux-kernel@vger.kernel.org, skhan@linuxfoundation.org, 
+    javier.carrasco.cruz@gmail.com
+Subject: Re: [PATCH] cpufreq: ti: Implement scope-based cleanup in
+ ti_cpufreq_match_node()
+In-Reply-To: <20240423020727.776360-1-shivani07g@gmail.com>
+Message-ID: <aa2bd3b6-7bb9-98ae-b762-6060f828170@inria.fr>
+References: <20240423020727.776360-1-shivani07g@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218686
 
---- Comment #43 from Perry Yuan(AMD) (Perry.Yuan@amd.com) ---
-The issue has been confirmed that CPPC is not enabled by default on the ASUS
-GA403uv BIOS release. AMD has requested ASUS to enable CPPC in future BIOS
-releases. If you wish to expedite the release, you may consider contacting =
-ASUS
-customer service.
 
-Perry.
+On Tue, 23 Apr 2024, Shivani Gupta wrote:
 
---=20
-You may reply to this email to add a comment.
+> This patch modifies the ti_cpufreq_match_node() function to utilize the
+> __free() cleanup handler for automatically releasing the device
+> node when it goes out of scope.
+>
+> By moving the declaration to the initialization, the patch ensures that
+> the device node is properly managed throughout the function's scope,
+> thus eliminating the need for manual invocation of of_node_put().
+> This approach reduces the potential for memory leaks.
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+The code is fine.  The log message is a bit verbose.  Try to avoid
+referring to the patch.  It's obvious that you are talking about the
+patch.  Try to favor the imperative, so "Modify..." instead of "This patch
+modifies".
+
+julia
+
+
+>
+> Suggested-by: Julia Lawall <julia.lawall@inria.fr>
+> Signed-off-by: Shivani Gupta <shivani07g@gmail.com>
+> ---
+>  drivers/cpufreq/ti-cpufreq.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
+> index 46c41e2ca727..714ed53753fa 100644
+> --- a/drivers/cpufreq/ti-cpufreq.c
+> +++ b/drivers/cpufreq/ti-cpufreq.c
+> @@ -347,12 +347,10 @@ static const struct of_device_id ti_cpufreq_of_match[] = {
+>
+>  static const struct of_device_id *ti_cpufreq_match_node(void)
+>  {
+> -	struct device_node *np;
+> +	struct device_node *np __free(device_node) = of_find_node_by_path("/");
+>  	const struct of_device_id *match;
+>
+> -	np = of_find_node_by_path("/");
+>  	match = of_match_node(ti_cpufreq_of_match, np);
+> -	of_node_put(np);
+>
+>  	return match;
+>  }
+> --
+> 2.34.1
+>
+>
 
