@@ -1,122 +1,112 @@
-Return-Path: <linux-pm+bounces-6880-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6881-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2F5E8ADD5E
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 08:13:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9916B8ADD69
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 08:18:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59A082834F8
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 06:13:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 31777B23135
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 06:18:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFB93225D7;
-	Tue, 23 Apr 2024 06:12:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VRY0M8JK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8AFE225D7;
+	Tue, 23 Apr 2024 06:18:11 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B041A21A04
-	for <linux-pm@vger.kernel.org>; Tue, 23 Apr 2024 06:12:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C00018AED;
+	Tue, 23 Apr 2024 06:18:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713852779; cv=none; b=P4oe98cnW3Egqvtrg32dgdNwvWYNMfij5juUpFwwX3yAfma2jayS9fIb1ZelZcAtM2eQTcJvAUuAgttQs1reSuPs3XdYYt8baYaIHgr/IDcWGSiMj7Pk82iZbyrQzaWFNC3+3mFtJVf6QUl5TpzDDtelZx4tU6RExSS4DcO/KTc=
+	t=1713853091; cv=none; b=WwaQiRMCbqdjBBz1EBcgHdHqvGbEzVnyMe/Es2iZcXMLLOcSgVxtcr4j62th6qu+roR7L5LY5gCc/pg6mME1IXbU9FcVvECkxcvhzfmPvqshGOPbroDyB1HpL54ptfdmcT7nX0gcnnHJVfCOHI41ssbzT8ki8AhjG7e4J8wKmT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713852779; c=relaxed/simple;
-	bh=M2JXIn03F7/QSf+dBvEbYBl2M3pS0JqlWeKIyakpfqo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Jz5l+OToUZX8VsPoEBelPytl1Wzg1jLKnofIYYGiOM1X+BiiO8Oel5LSmiIarPzYfM6eHD23Em00tR1PPa4bgiIxtAC3USoYCRa39byanGCclCpEI8r8RhbxFfE7ggReW6Re4ZYOp1foK0EvKEh3SIe3Y4YjozKUaaVam2r7Mic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VRY0M8JK; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-6ed04c91c46so5118199b3a.0
-        for <linux-pm@vger.kernel.org>; Mon, 22 Apr 2024 23:12:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713852777; x=1714457577; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=PegfXTHjFM9RFqoVlG6Hw8mcJ5lOawWkximGpqrPUKo=;
-        b=VRY0M8JK1Mpdd5dXKWSenCZ+5FbYaalCKgfuAInlbur7zB5tC3VAsw+3SP6PBwwT1V
-         uQU+op1k/eSIiweeGBuDukDxl3ipxrdyK+fim4yGK0azl/AwTvAuPPbHTXOlhG3Yvl5b
-         5y7Xks8jqYXEkCwdgkvLuZ/mzFRsLuvoZLKPlRuOlpdTgrH3HRkSEBv7eELZ5Wy6evv0
-         9sxAscHPmoGuA01x/Qhiql192qoDTYRVd1vWJrgnTLM9EV0xGS12q/X9dwBE3m5RXE14
-         S+uv7oJLOoULF0D0FvcYzuXGhcSK2bMJAdBGIj4NkuJxXUj2H2tdxn7R5FZcWMVfAE0M
-         0hhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713852777; x=1714457577;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PegfXTHjFM9RFqoVlG6Hw8mcJ5lOawWkximGpqrPUKo=;
-        b=YtaUYAPyAWHVLxNaSvGhsIF3o5EWHlqm58Uq0qLJbQb+XYZv+7Ti92hSuwJWeM4Y18
-         IoTfHqrqogJy4h4k3+e47LKAIg9NAVSyJVJtjQl4FWp24es5MDTAcETfkfse1SQDP9po
-         MvC6ZanfggeN7IiuZsQyi46sesIL56MMS3ZDHT7BJgL3wnTnw7W3cmEbdraihZvoml4A
-         t5vi1EZVMIjF4XJzbZileXuc1fBMaCSiiqXBjJ590Oq3Q7b8t2QJ+brbWlVNNO9BC5Wz
-         tFV14ueHuBBY+8wsa7lKSP//yRaou9ktpVlg676GFKI5VbRG+PGgcWg+rAF35dS/ueGY
-         LnoA==
-X-Forwarded-Encrypted: i=1; AJvYcCUP6C1O+LLQLbGSNZT5T7UQJ55oVuvjkTH4sOwrasQ1L2ryeqprIzBZElil9JlabwAmZ/T/ZaySaTb+URDjRWoJW/1WFI4TV1U=
-X-Gm-Message-State: AOJu0Yx+WxaaDaozasDdrJQGfa0j7+odwoa1pCX29I2u3p1LPmVExSJC
-	3bPQyhzQLCq0m5NovmGgDNiLX9C+NKl7zs8WPRPwtDO4iq+BOLq50ZX7FyZbkoo=
-X-Google-Smtp-Source: AGHT+IGUw/otBatPf+zILKW7L7JHzdCQoAVgJpbhjmlDG/lbtxa2H+ZKe1feDHWuNTXxbhpg0ZR54w==
-X-Received: by 2002:a05:6a20:da8c:b0:1a7:ad53:d3a3 with SMTP id iy12-20020a056a20da8c00b001a7ad53d3a3mr17586950pzb.35.1713852776820;
-        Mon, 22 Apr 2024 23:12:56 -0700 (PDT)
-Received: from localhost ([122.172.87.52])
-        by smtp.gmail.com with ESMTPSA id fn22-20020a056a002fd600b006edbcfe7005sm9139811pfb.144.2024.04.22.23.12.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Apr 2024 23:12:55 -0700 (PDT)
-Date: Tue, 23 Apr 2024 11:42:53 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Julian Calaby <julian.calaby@gmail.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Yangtao Li <tiny.windzz@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>, linux-pm@vger.kernel.org,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	kernel test robot <lkp@intel.com>,
-	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: sun50i: Fix build warning around snprint()
-Message-ID: <20240423061253.blyfuqasyiatm5sa@vireshk-i7>
-References: <285de20a187f3e4baeb28f639b5bf55e914a3821.1713756666.git.viresh.kumar@linaro.org>
- <CAGRGNgWHkVkOP13jh-w1KQYeR_yeq1JgOt9a+R40F8DGYKMtkg@mail.gmail.com>
+	s=arc-20240116; t=1713853091; c=relaxed/simple;
+	bh=a7a1rN9kNf6WGRL3kJeNoPiIhGtMJivIOtqJ86BB3Tc=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=kGEYlDNMfAO6fbNcQ5lwfknLdPweZu2BGVYK/ESsPf5vZuhWXOJALkFS0YKo8yVA/YzMijYnheoqWkkY9hcenByXHo/608uVzRG/CHG/WlGjLfbYVahXQ3StoLeG6xKpeWzjsU2qYbACLc/Nt51sv+FTN8+auxerCICycpK9LnY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.252])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4VNsKk0zmqzvQ5C;
+	Tue, 23 Apr 2024 14:15:06 +0800 (CST)
+Received: from dggpemm500002.china.huawei.com (unknown [7.185.36.229])
+	by mail.maildlp.com (Postfix) with ESMTPS id 3ED3018006B;
+	Tue, 23 Apr 2024 14:18:06 +0800 (CST)
+Received: from [10.174.178.247] (10.174.178.247) by
+ dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Tue, 23 Apr 2024 14:18:05 +0800
+Subject: Re: [PATCH v7 01/16] ACPI: processor: Simplify initial onlining to
+ use same path for cold and hotplug
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>, Thomas Gleixner
+	<tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>,
+	<linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
+	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<kvmarm@lists.linux.dev>, <x86@kernel.org>, Russell King
+	<linux@armlinux.org.uk>, "Rafael J . Wysocki" <rafael@kernel.org>, Miguel
+ Luis <miguel.luis@oracle.com>, James Morse <james.morse@arm.com>, Salil Mehta
+	<salil.mehta@huawei.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
+CC: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
+ Hansen <dave.hansen@linux.intel.com>, <linuxarm@huawei.com>,
+	<justin.he@arm.com>, <jianyong.wu@arm.com>
+References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com>
+ <20240418135412.14730-2-Jonathan.Cameron@huawei.com>
+From: Hanjun Guo <guohanjun@huawei.com>
+Message-ID: <0ec78ec2-636d-c7b1-4265-7cffa88765e1@huawei.com>
+Date: Tue, 23 Apr 2024 14:18:04 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGRGNgWHkVkOP13jh-w1KQYeR_yeq1JgOt9a+R40F8DGYKMtkg@mail.gmail.com>
+In-Reply-To: <20240418135412.14730-2-Jonathan.Cameron@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500002.china.huawei.com (7.185.36.229)
 
-On 23-04-24, 11:38, Julian Calaby wrote:
-> On Mon, Apr 22, 2024 at 1:31 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> > index 30e5c337611c..cd50cea16a87 100644
-> > --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> > +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> > @@ -208,7 +206,7 @@ static int sun50i_cpufreq_get_efuse(void)
-> >  static int sun50i_cpufreq_nvmem_probe(struct platform_device *pdev)
-> >  {
-> >         int *opp_tokens;
-> > -       char name[MAX_NAME_LEN];
-> > +       char name[] = "speedXXXXXXXXXXX"; /* Integers can take 11 chars max */
+On 2024/4/18 21:53, Jonathan Cameron wrote:
+> Separate code paths, combined with a flag set in acpi_processor.c to
+> indicate a struct acpi_processor was for a hotplugged CPU ensured that
+> per CPU data was only set up the first time that a CPU was initialized.
+> This appears to be unnecessary as the paths can be combined by letting
+> the online logic also handle any CPUs online at the time of driver load.
 > 
-> Would it make sense to just set a static length for the string here,
-> say 17-20 characters and add a comment explaining the number, say: /*
-> "speed" + 11 chars for the int */
+> Motivation for this change, beyond simplification, is that ARM64
+> virtual CPU HP uses the same code paths for hotplug and cold path in
+> acpi_processor.c so had no easy way to set the flag for hotplug only.
+> Removing this necessity will enable ARM64 vCPU HP to reuse the existing
+> code paths.
 > 
-> The string constant, while it'll probably be optimised away, seems
-> weird and wasteful.
+> Leave noisy pr_info() in place but update it to not state the CPU
+> was hotplugged.
+> 
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> 
+> ---
+> v7: No change.
+> v6: New patch.
+> RFT: I have very limited test resources for x86 and other
+> architectures that may be affected by this change.
+> ---
+>   drivers/acpi/acpi_processor.c   |  1 -
+>   drivers/acpi/processor_driver.c | 44 ++++++++++-----------------------
+>   include/acpi/processor.h        |  2 +-
+>   3 files changed, 14 insertions(+), 33 deletions(-)
 
-The counting goes wrong (I have done it in the past) sometimes and so
-I like to explicitly reserve space like this, it also makes it look
-cleaner, i.e. how the eventual string will be named.
+Nice simplification,
 
--- 
-viresh
+Reviewed-by: Hanjun Guo <guohanjun@huawei.com>
+
+Thanks
+Hanjun
 
