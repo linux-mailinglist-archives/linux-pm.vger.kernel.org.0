@@ -1,192 +1,133 @@
-Return-Path: <linux-pm+bounces-6954-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6951-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24F5A8AF6FB
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 21:03:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B985E8AF642
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 20:06:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CFD2928CBAC
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 19:03:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EACA01C218A3
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Apr 2024 18:06:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72AFD140394;
-	Tue, 23 Apr 2024 19:03:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3334613DDAA;
+	Tue, 23 Apr 2024 18:05:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="RgqrazB8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WkDHqjiE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EB0E13FD8C;
-	Tue, 23 Apr 2024 19:03:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 098EF1420B3;
+	Tue, 23 Apr 2024 18:05:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713899001; cv=none; b=aGpO1JUjM2W6uiEw0x1z4wymy1Kr0IguOEVRkyRWfBeexrZHG13IjlwQsMO00FkcZajA4ESZV7gL7xpu55Hj6uZkZ43IUc7kTLPr2lEsA68lVV0N6v13LzVLXjIYZrYkBIOgwF/VnwgJfgNOvrT1veU3E1UOn8Oen+11K8TWmhI=
+	t=1713895550; cv=none; b=VNfa603+sIGce/4FBocrkimrd+/w6LFjvG3ovg7bO5UDu5u6SQFAgNzZu4vubfIREJzhT1JnEbDCsLpi+0po4AKTh+RVWVZZlWjx9mPuzej2mq5jcQ5W/Q3JUGlKWloVOBDkaNnVzafF/VIrfSwq+nO45aIqlcE6TxGdHj0xvrc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713899001; c=relaxed/simple;
-	bh=Bv3kllpQAlF6/y8cUblx2UV+ugsq2CFF5/mk5tDG3sM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FqOK3+KHK3OqTvGcbv+CpaRc8uHPbIyNlKZuzs7aNq1T2JcJejFZZWq691CBHwLjmj/9s5WNFfwAGgB3dZ8wyH67iUrGTRQkNpQ/zja9arb2EGcLAZ3Nb8vWaY01P+Td64S09kUNX0aXoNWMtogUg13QnX6rdGISfga533t9HyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=RgqrazB8 reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
- id 49a53ae6f26f328d; Tue, 23 Apr 2024 20:03:17 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 14FA466DB86;
-	Tue, 23 Apr 2024 20:03:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1713895397;
-	bh=Bv3kllpQAlF6/y8cUblx2UV+ugsq2CFF5/mk5tDG3sM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=RgqrazB8H4YffU3uZ1a/E7XDvYFy3CfPZIdF9BDc6LBUtY2N+n1NBvSLafrDD74Uz
-	 xTHmrcUAytZhLBf+ulCBNNYMR32U2PKF16iZ3iv06d6JuwQ8G1Wm4WfliLfOoralHn
-	 mijTmEaxYlIc3wDLc1PCvBRFcabgpy4ZppPFQPa3F7K9Z67mFMdqm3xuiT4uJgxZaw
-	 P9/DnehWPuVCJqwnGvftwNFNwgeBA6R860CdIMhn4UNthN0o9UwNy6OZiKlLh6CJFu
-	 LN2ft37U+8ji6XIbfDfilq7nnxl9E5fVAPR63WU4Ya5/3bpMlAKdbiV/hsoA/Hg+ON
-	 o/KAfCJm+Z/0Q==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
- Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject:
- [PATCH v1 3/3] thermal/debugfs: Avoid printing zero duration for mitigation
- episodes in progress
-Date: Tue, 23 Apr 2024 20:02:16 +0200
-Message-ID: <2933330.e9J7NaK4W3@kreacher>
-In-Reply-To: <5774279.DvuYhMxLoT@kreacher>
-References: <5774279.DvuYhMxLoT@kreacher>
+	s=arc-20240116; t=1713895550; c=relaxed/simple;
+	bh=OGMcGHaqmVBhYuFv0XCcX1mQzR2UG/wAjsLV5VmbwUI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=G+DdEU+AEViiqiKcoUVb3FLfIpgokpWGOglObbeILErporcoluqG+8CPDNwEbsNH7KzmuHuADpYt2OoLBcc3lYy4aea6vofxOI4FAzjhsuroS18kktu1CWqPuF9hEm6Dy9H5vFUJlQ6xtNHL1HdQjqmimXtA7X11A0lnHyUDFDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WkDHqjiE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8526FC2BD10;
+	Tue, 23 Apr 2024 18:05:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713895549;
+	bh=OGMcGHaqmVBhYuFv0XCcX1mQzR2UG/wAjsLV5VmbwUI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=WkDHqjiE3LCkX3HPeTNDULGQ0DVIPnQl/X1zq8Aw/MBVnjMFOVxl3ARRK9bmWkvAW
+	 U0BlupYN2L8DjgJgUGOAVk7x2LUxcBv0xDo4VwabqNunS6+sVGDWwWEEALwaHmUqox
+	 M8KOVtS9SFnqyEbuUIbBdNfR4pgHPeyLsRa9IN+edz0oR2DlbOnoRnyzQmhjqwJPO+
+	 20i2Z1cxZSfuS0Bvy/nVywABRQL2OoE/vx+agEkCBxyzDdgawrLKFOCpNDDAM3ddM3
+	 ZK+wneHy9SkQY9UOBCp8KzcIYCNWn8++17H99GKJ2xq2Hwm0qJXVemkzuO5JzUZ+jb
+	 cueC0bXubAI9g==
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-5acdbfa7a45so1850905eaf.2;
+        Tue, 23 Apr 2024 11:05:49 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWnzS3ct8FM6VkTqPOKolee1bv2qctRhUqpkHk4zExoWj2Ac3C5TRa9kwBXn0RVqb/n3ppicpN+8LKhJS4SzpYgdktufdiG5RfT8rr7nUiMCJnv0LqDHMR4VwmUb3OwapR+9/CxogY=
+X-Gm-Message-State: AOJu0Yyo3Pva20DbbRmtj50IaSU8bcAKIL8luWvt61dTpQOsy+z1N4JG
+	yA70HHzHgU5EQMn0zkUgm8Se0jg1AFU/ctIx2WOthmxL6B0O/XzRq6WfAcjmJY7nI95v3omW8dI
+	0VM8Spk6UdmqHma4hFrwbiMNGmqU=
+X-Google-Smtp-Source: AGHT+IHA3zRxg1BGJSgFNpcroEm6mCZAwWfZ03DVjGk2V5epNCqRunPkRnnFOzcfuQronb1t6Qww4+MDB94LAzg7Vaw=
+X-Received: by 2002:a4a:ee8d:0:b0:5aa:6b2e:36f0 with SMTP id
+ dk13-20020a4aee8d000000b005aa6b2e36f0mr126873oob.0.1713895548914; Tue, 23 Apr
+ 2024 11:05:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+References: <13515747.uLZWGnKmhe@kreacher> <1913649.CQOukoFCf9@kreacher>
+ <8e26c3cb-1283-4561-95aa-30432f1d13ee@linaro.org> <CAJZ5v0h=15LYhukPWmHPK5hvD=2u75rTEiC8oJMVBFziMkB5gQ@mail.gmail.com>
+ <33cafcb3-af9c-4058-b6b6-4e5aab6e21cb@linaro.org>
+In-Reply-To: <33cafcb3-af9c-4058-b6b6-4e5aab6e21cb@linaro.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 23 Apr 2024 20:05:37 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hR-fN08g-g_S261e+U=2Enfza3b9NZpmp4yhzAa=426A@mail.gmail.com>
+Message-ID: <CAJZ5v0hR-fN08g-g_S261e+U=2Enfza3b9NZpmp4yhzAa=426A@mail.gmail.com>
+Subject: Re: [PATCH v1 07/16] thermal: gov_power_allocator: Eliminate a
+ redundant variable
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
+	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Lukasz Luba <lukasz.luba@arm.com>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudeluddguddvudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthhqredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedtvdefgeelvdefvdevveehvdetfeefhedvueeiudekieeltdetgfdviefhgfetteenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtohepuggrnhhivghlrdhlvgii
- tggrnhhosehlihhnrghrohdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+Content-Transfer-Encoding: quoted-printable
 
-=46rom: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Tue, Apr 23, 2024 at 8:00=E2=80=AFPM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> On 23/04/2024 19:54, Rafael J. Wysocki wrote:
+> > On Tue, Apr 23, 2024 at 7:35=E2=80=AFPM Daniel Lezcano
+> > <daniel.lezcano@linaro.org> wrote:
+> >>
+> >> On 10/04/2024 18:12, Rafael J. Wysocki wrote:
+> >>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >>>
+> >>> Notice that the passive field in struct thermal_zone_device is not
+> >>> used by the Power Allocator governor itself and so the ordering of
+> >>> its updates with respect to allow_maximum_power() or allocate_power()
+> >>> does not matter.
+> >>>
+> >>> Accordingly, make power_allocator_manage() update that field right
+> >>> before returning, which allows the current value of it to be passed
+> >>> directly to allow_maximum_power() without using the additional update
+> >>> variable that can be dropped.
+> >>>
+> >>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >>> ---
+> >>
+> >> The step_wise and the power allocator are changing the tz->passive
+> >> values, so telling the core to start and stop the passive mitigation t=
+imer.
+> >>
+> >> It looks strange that a plugin controls the core internal and not the
+> >> opposite.
+> >>
+> >> I'm wondering if it would not make sense to have the following ops:
+> >>
+> >>          .start
+> >>          .stop
+> >>
+> >> .start is called when the first trip point is crossed the way up
+> >> .stop is called when the first trip point is crossed the way down
+> >>
+> >>    - The core is responsible to start and stop the passive mitigation =
+timer.
+> >>
+> >>    - the governors do no longer us tz->passive
+> >>
+> >> The reset of the governor can happen at start or stop, as well as the
+> >> device cooling states.
+> >
+> > I have a patch that simply increments tz->passive when a passive trip
+> > point is passed on the way up and decrements it when a passive trip
+> > point is crossed on the way down.  It appears to work reasonably well.
+>
+> Does it make the governors getting ride of it ? Or at least not changing
+> its value ?
 
-If a thermal mitigation event is in progress, its duration value has
-not been updated yet, so 0 will be printed as the event duration by
-tze_seq_show() which is confusing.
-
-Avoid doing that by marking the beginning of the event with the
-KTIME_MIN duration value and making tze_seq_show() compute the current
-event duration on the fly, in which case '>' will be printed instead of
-'=3D' in the event duration value field.
-
-Similarly, for trip points that have been crossed on the down, mark
-the end of mitigation with the KTIME_MAX timestamp value and make
-tze_seq_show() compute the current duration on the fly for the trip
-points still involved in the mitigation, in which cases the duration
-value printed by it will be prepended with a '>' character.
-
-=46ixes: 7ef01f228c9f ("thermal/debugfs: Add thermal debugfs information fo=
-r mitigation episodes")
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-=2D--
- drivers/thermal/thermal_debugfs.c |   39 ++++++++++++++++++++++++++++++++-=
-=2D----
- 1 file changed, 33 insertions(+), 6 deletions(-)
-
-Index: linux-pm/drivers/thermal/thermal_debugfs.c
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=2D-- linux-pm.orig/drivers/thermal/thermal_debugfs.c
-+++ linux-pm/drivers/thermal/thermal_debugfs.c
-@@ -530,6 +530,7 @@ static struct tz_episode *thermal_debugf
-=20
- 	INIT_LIST_HEAD(&tze->node);
- 	tze->timestamp =3D now;
-+	tze->duration =3D KTIME_MIN;
-=20
- 	for (i =3D 0; i < tz->num_trips; i++) {
- 		tze->trip_stats[i].min =3D INT_MAX;
-@@ -665,6 +666,9 @@ void thermal_debug_tz_trip_down(struct t
- 	tze->trip_stats[trip_id].duration =3D
- 		ktime_add(delta, tze->trip_stats[trip_id].duration);
-=20
-+	/* Mark the end of mitigation for this trip point. */
-+	tze->trip_stats[trip_id].timestamp =3D KTIME_MAX;
-+
- 	/*
- 	 * This event closes the mitigation as we are crossing the
- 	 * last trip point the way down.
-@@ -742,15 +746,25 @@ static int tze_seq_show(struct seq_file
- 	struct thermal_trip_desc *td;
- 	struct tz_episode *tze;
- 	const char *type;
-+	u64 duration_ms;
- 	int trip_id;
-+	char c;
-=20
- 	tze =3D list_entry((struct list_head *)v, struct tz_episode, node);
-=20
-=2D	seq_printf(s, ",-Mitigation at %lluus, duration=3D%llums\n",
-=2D		   ktime_to_us(tze->timestamp),
-=2D		   ktime_to_ms(tze->duration));
-+	if (tze->duration =3D=3D KTIME_MIN) {
-+		/* Mitigation in progress. */
-+		duration_ms =3D ktime_to_ms(ktime_sub(ktime_get(), tze->timestamp));
-+		c =3D '>';
-+	} else {
-+		duration_ms =3D ktime_to_ms(tze->duration);
-+		c =3D '=3D';
-+	}
-+
-+	seq_printf(s, ",-Mitigation at %lluus, duration%c%llums\n",
-+		   ktime_to_us(tze->timestamp), c, duration_ms);
-=20
-=2D	seq_printf(s, "| trip |     type | temp(=C2=B0mC) | hyst(=C2=B0mC) |  d=
-uration  |  avg(=C2=B0mC) |  min(=C2=B0mC) |  max(=C2=B0mC) |\n");
-+	seq_printf(s, "| trip |     type | temp(=C2=B0mC) | hyst(=C2=B0mC) |  dur=
-ation   |  avg(=C2=B0mC) |  min(=C2=B0mC) |  max(=C2=B0mC) |\n");
-=20
- 	for_each_trip_desc(tz, td) {
- 		const struct thermal_trip *trip =3D &td->trip;
-@@ -782,12 +796,25 @@ static int tze_seq_show(struct seq_file
- 		else
- 			type =3D "hot";
-=20
-=2D		seq_printf(s, "| %*d | %*s | %*d | %*d | %*lld | %*d | %*d | %*d |\n",
-+		if (trip_stats->timestamp !=3D KTIME_MAX) {
-+			/* Mitigation in progress. */
-+			ktime_t delta =3D ktime_sub(ktime_get(),
-+						  trip_stats->timestamp);
-+
-+			delta =3D ktime_add(delta, trip_stats->duration);
-+			duration_ms =3D ktime_to_ms(delta);
-+			c =3D '>';
-+		} else {
-+			duration_ms =3D ktime_to_ms(trip_stats->duration);
-+			c =3D ' ';
-+		}
-+
-+		seq_printf(s, "| %*d | %*s | %*d | %*d | %c%*lld | %*d | %*d | %*d |\n",
- 			   4 , trip_id,
- 			   8, type,
- 			   9, trip->temperature,
- 			   9, trip->hysteresis,
-=2D			   10, ktime_to_ms(trip_stats->duration),
-+			   c, 10, duration_ms,
- 			   9, trip_stats->avg,
- 			   9, trip_stats->min,
- 			   9, trip_stats->max);
-
-
-
+Not yet, but I'm going to update it this way.  The governors should
+not mess up with tz->passive IMV.
 
