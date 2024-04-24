@@ -1,110 +1,116 @@
-Return-Path: <linux-pm+bounces-6972-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6973-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 319338B029B
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 08:56:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3860B8B02D4
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 09:04:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E43AF285860
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 06:56:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6E89BB23327
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 07:04:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 679B7158A31;
-	Wed, 24 Apr 2024 06:54:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0588157A47;
+	Wed, 24 Apr 2024 07:04:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="h6EzSpYH"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="don4JdYK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0339C157E99
-	for <linux-pm@vger.kernel.org>; Wed, 24 Apr 2024 06:54:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D96D15442D
+	for <linux-pm@vger.kernel.org>; Wed, 24 Apr 2024 07:04:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713941648; cv=none; b=hw+sxvup0ruA0698HjvRo4mpft3R7LyCtRbj6Qtcpv36AdhJnBd65XiFmMjBFIGuEktHthN6P12GVQN+PBFx3lZta8SskwXlWe9SPcHW1lzp2jYl4R8IkYEt8zCJE9HaZr+MPkR+nqGbXuL5i2w/Ay9gT60CPO6sG18OhQ/6OEg=
+	t=1713942242; cv=none; b=p+AwJuHMKmCMmwTxp/1Ex12wtMrpYtG1nmTy2iTqsFL/9Tvb47lzkMR6C0nexp6ELD6J25fkAR/Z4JBVVPSIRkbaDA4XyPOXkItmDVdOjHJDRe577OCUF6ZpTCgMqFEGUrbcA/kM+126aYhuP9pUy174DuUztZxH1GdHnGv3I6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713941648; c=relaxed/simple;
-	bh=p7Qf/Wv2gRIQXdGwm+8FyGDK8jF8gAk1WduxuCaLuAU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ovNtCrFpipAR2Nu/caI77nLqcCbnNj3RjR6p84MMTiPEokoOuvptlmSx3QH4OYSO85hs1a1JWYm3BS7C1UPurdUfYV70QIxFetDyAS2PenRBUbDEtS5bJyAYaSu7e8MxtPkz4XWCD8aypTgPaYhuJff3fqGkFMGEJhobsYRZsa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=h6EzSpYH; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1713941646;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oCFCbOFCL4zzLvTeJtHwSPF85SA+R3VeJ49a5BsSC8o=;
-	b=h6EzSpYHCm4suoGKZ5sLfM6FuiUjGaVRIQL6zurcoc1+eJrOIXbsvQcfHa9yyMRfuQ68cs
-	hwGaF7cQSWwQHx/S9wL9rH6pM+AzsQhI6ye6AEchq40+bK2LcEyofxlfBM/8wkurcs9J3t
-	k//L3piJWrkCml0jZtZ8HFpE6DGsy+w=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-610-Lb7JrbX_OaKHTGL8L_60Jw-1; Wed, 24 Apr 2024 02:54:01 -0400
-X-MC-Unique: Lb7JrbX_OaKHTGL8L_60Jw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3BD0D804C61;
-	Wed, 24 Apr 2024 06:54:01 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.39.193.73])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 8E6FAC01595;
-	Wed, 24 Apr 2024 06:53:55 +0000 (UTC)
-From: Kate Hsuan <hpa@redhat.com>
-To: Pavel Machek <pavel@ucw.cz>,
-	Lee Jones <lee@kernel.org>,
-	linux-leds@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org,
-	Hans de Goede <hdegoede@redhat.com>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	=?UTF-8?q?Andr=C3=A9=20Apitzsch?= <git@apitzsch.eu>,
-	linux-kernel@vger.kernel.org,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Sebastian Reichel <sre@kernel.org>,
-	linux-pm@vger.kernel.org
-Cc: Kate Hsuan <hpa@redhat.com>
-Subject: [PATCH v7 6/6] platform: x86-android-tablets: others: Set the LED trigger to charging_orange_full_green for Xiaomi pad2
-Date: Wed, 24 Apr 2024 14:52:12 +0800
-Message-ID: <20240424065212.263784-7-hpa@redhat.com>
-In-Reply-To: <20240424065212.263784-1-hpa@redhat.com>
-References: <20240424065212.263784-1-hpa@redhat.com>
+	s=arc-20240116; t=1713942242; c=relaxed/simple;
+	bh=o5jcMAoIDMNK7GfvCWxVvCxihxd3VCuD7FnUm6B2H+4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Cv4kA6zAwSyYzMYZgER5F2Wb8zieb5C0eUooh76lJdKsTQTBpUklpNViv7N190oMpx9kAW+8AMOpF47RnD4Y2TJc9sRLg7Xvm+ntbpkaPwsr6BVObxsvSuckQdLj7TfPqR/uV7Zf5Nx72Aa0IBHLC+XSbp5nTchQifP4Yo5SD4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=don4JdYK; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-41b13c5cbe0so532695e9.0
+        for <linux-pm@vger.kernel.org>; Wed, 24 Apr 2024 00:04:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1713942239; x=1714547039; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cOI5h8lbYo046MdXyWvwZM6Al+RR9BSMFKRZs9RVGww=;
+        b=don4JdYKTkzVV+O6EmcRZS7J29JEmF+DUrJ2nl2hrNeMHjNERzi3sDjNsTv2LCwpKk
+         14LI+ZT6wSUF7BMueQ6TZfGD+Toz/nvEx22+i6NeTvsB7WfQeVC5brPHS9tKiHHO4yrt
+         I9EwbnYJEwmYVXdi4JZ+iRZnTiHMoTMC5v9MFFvpLAEq1LD2xj1X4aoqdrIWSycTj5Z1
+         8YCKJdV1G+1qDT4cd3Pl380wMa9uP9Bw0k6Wz1scrWIQulfZF/hCLBS+CJj6XHaMbiUn
+         3Yw5TOD7pdW75QeqSpIH5Go0rLQQe8GYQ5xv6U3/9yn5Wr+NK97XVlPVDD9Xp/JE3Dtx
+         dyUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713942239; x=1714547039;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cOI5h8lbYo046MdXyWvwZM6Al+RR9BSMFKRZs9RVGww=;
+        b=K1bQfCWixCwtuTPRohOPiLJjLRGfghbjIsxnVa20J4sBzn67ZJSEBnTncw5u6E4y4s
+         5feGZeWgHXAGoXBh7PZh34PzFv5pTIxUZKHPDTc1AbpHCYvNwgLAa1O7zesxQ1PMaoA8
+         ew/Nwu5qV7RF5CYYUZoRfkv0Ok6xxheUrdaO+137PogGKpWsiSFVx3IR2EP6SJeHAKjQ
+         anJuyphZyjDBg1ro0ppr/ZQbIVEJPAk+E/OTSuhe4mAd+oSv15GiLcxqMKKHRCFHYVYT
+         Nskupsh7wRJNUUd5AQhYXArt8WzDZ7pisOHpDND9u7r5OT6yFcMmoFFJNIRQRGrQu/Tn
+         6xWA==
+X-Forwarded-Encrypted: i=1; AJvYcCUx3aVngjWbW6/+73zHmS8YvFhfaan51ItlJ2DvKhNegp1UTdgQ9PDv5UQWGuuZVSBliUOntxHVgEmg4+i8WQegjgYTtnOaHWY=
+X-Gm-Message-State: AOJu0YzYVik848rP9Arjy0ZY0/9uyGo+rjGtxpHDTkAGZt04eUEc8/QX
+	vAPEPd0ge+7cls356u2SrT8UdPbrp4i+jJ75W6QK/8YVjlkXBmAB2MRBHetoQf4=
+X-Google-Smtp-Source: AGHT+IEjfhUliB0ROA8SKjhBk1g0czsRVu0UcRbAW3otfksb7AnqbmAdQyGcaBd/8Pvcv9jHo73X3g==
+X-Received: by 2002:a05:600c:c10:b0:41b:935:248d with SMTP id fm16-20020a05600c0c1000b0041b0935248dmr387282wmb.22.1713942239568;
+        Wed, 24 Apr 2024 00:03:59 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id g9-20020a05600c310900b0041a9fc2a6b5sm6079518wmo.20.2024.04.24.00.03.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Apr 2024 00:03:59 -0700 (PDT)
+Message-ID: <6067e8e1-d4e9-4226-9767-62cb930f400e@linaro.org>
+Date: Wed, 24 Apr 2024 09:03:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 09/16] thermal: gov_step_wise: Use trip thresholds
+ instead of trip temperatures
+Content-Language: en-US
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+References: <13515747.uLZWGnKmhe@kreacher> <3769085.MHq7AAxBmi@kreacher>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <3769085.MHq7AAxBmi@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
 
-Set the default trigger to bq27520-0-charging-orange-full-green. The LED
-will show orange when the battery is charging. The LED will show green
-when the battery status is full.
+On 10/04/2024 18:43, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> In principle, the Step-Wise governor should take trip hystereses into
+> account.  After all, once a trip has been crossed on the way up,
+> mitigation is still needed until it is crossed on the way down.
+> 
+> For this reason, make it use trip thresholds that are computed by
+> the core when trips are crossed, so as to apply mitigations in the
+> hysteresis rages of trips that were crossed on the way up, but have
+> not been crossed on the way down yet.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
 
-Signed-off-by: Kate Hsuan <hpa@redhat.com>
----
- drivers/platform/x86/x86-android-tablets/other.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-diff --git a/drivers/platform/x86/x86-android-tablets/other.c b/drivers/platform/x86/x86-android-tablets/other.c
-index c77d56454f2d..52032a874b7f 100644
---- a/drivers/platform/x86/x86-android-tablets/other.c
-+++ b/drivers/platform/x86/x86-android-tablets/other.c
-@@ -610,7 +610,7 @@ static const struct property_entry ktd2026_rgb_led_props[] = {
- 	PROPERTY_ENTRY_U32("reg", 0),
- 	PROPERTY_ENTRY_U32("color", LED_COLOR_ID_RGB),
- 	PROPERTY_ENTRY_STRING("function", "indicator"),
--	PROPERTY_ENTRY_STRING("linux,default-trigger", "bq27520-0-charging"),
-+	PROPERTY_ENTRY_STRING("linux,default-trigger", "bq27520-0-charging-orange-full-green"),
- 	{ }
- };
- 
 -- 
-2.44.0
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
 
