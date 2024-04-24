@@ -1,222 +1,183 @@
-Return-Path: <linux-pm+bounces-7001-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7002-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFDDF8B0752
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 12:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B01D8B0840
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 13:23:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 99A8FB26525
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 10:28:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A066CB21BAB
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 11:23:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46199159562;
-	Wed, 24 Apr 2024 10:28:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4D6C15A4A3;
+	Wed, 24 Apr 2024 11:23:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="J+sbYCbO"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ULMeqJtG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B22ED152DE1;
-	Wed, 24 Apr 2024 10:28:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6193A142E62
+	for <linux-pm@vger.kernel.org>; Wed, 24 Apr 2024 11:23:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713954483; cv=none; b=JHz2JtQeFrfSVwRqytvi7tgjC/P2rc3MmBnyBMAaicqfo9YWbTYf9YOR7TDJ3Hlt4mqMJPb3YCUc1vcyvxNJyWR0uzV8WKVVu4Db6wX+T8JToEza+mqv8K75k7pUzi30rko2TyG2MGKkfA6EOpDKC7eAia9hn5JMOe14roG/HZY=
+	t=1713957815; cv=none; b=OhqvIWQxUSSk3lu4KSCDyvpyh+o4DDsZVSDufbMRP4W3VWlWrQ3zrwtl5Q3XRRI6FqZjv/tQ7IMke3kiaBTQfz8m2AUAhzQerch0F1qA72dTfsRAwIUcWrDv+xPSpKbnB67J5naSwLJ40N7kD09x203S6ycNnU4/OwRwmq591XE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713954483; c=relaxed/simple;
-	bh=KMVHm+SIAgutMAbC6mgTihoI+YnjySmbBuGhkkDnQtM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=TZj5UKXGvgbqZdw7jp9xv+FwHVpytd0b2ALw2pAlIE9LwKDhsQNGp7Wi5rmhCq2kYYjVjb01w9itDVKvS+gnLIuia3fz+GITVbPypoiRTFfmRwcsknc34yQPKtrArFHl0HVvztH4OPYBp2AWDfbXeXoH20jxn9PuR377CXvMDFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=J+sbYCbO; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43O6Xc50016794;
-	Wed, 24 Apr 2024 10:27:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=RQNt5PZZm3frh00wj8WKWSZPe7aKlTUmfVkfoQWkc4g=; b=J+
-	sbYCbOCxdLNqKvWyyG2apikUXBGiWrqSBsioJEOPuPWldzZZLss82Cw5wpyesS1t
-	xfq5MylLo5D6k4Oet2g8Zs1GOXK02jbfOvBUoJsBPp8CpVRveVZlFmPV8HPUWMUM
-	d7dQM2enkLhfNBahD0VEV9tDjIzrkHGJvPtvulnxA3Q/ZlVJoIZz0lHDuFuOrWUV
-	Pp8fhMYIlMd/5YO1ozlwZkifc+tSxiYT3HvVtvBWlZBbehuTT88cxwXjUKun2Gs1
-	EcUIXB7FCGUwaD8l5yjrkWccctFy3dteg2omVj+K8IfzXm7teDn/tjr8T5Jv8Lc3
-	ArUmhB/KVUptpc/5QTCg==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xpv9fgj42-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 24 Apr 2024 10:27:52 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43OARoPf012223
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 24 Apr 2024 10:27:50 GMT
-Received: from [10.218.5.19] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 24 Apr
- 2024 03:27:42 -0700
-Message-ID: <2e8f5e93-1f24-4451-ab9f-ad1e7d98bc65@quicinc.com>
-Date: Wed, 24 Apr 2024 15:57:39 +0530
+	s=arc-20240116; t=1713957815; c=relaxed/simple;
+	bh=jO1+xmcyT5I9v4tZVZ1d96pbFPmBoJZzFcDtl1zowAU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=osqSw+L7R3XXnIHLFcUQOZfILyQEkocFFjtcsfcBx5JsFoNrcV7FV8YfJUApjbx+EK0t6RknQMKMw4+pN0Dn23i0RB2s1rTvdb1TbK8a+tx0WBi1K/P8pGAGMRkjWdbRXWhlWX+X2GKaN81J02boMrQ1QF99N1JfMHqbysFeyzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ULMeqJtG; arc=none smtp.client-ip=209.85.128.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-617e42a3f94so73682007b3.2
+        for <linux-pm@vger.kernel.org>; Wed, 24 Apr 2024 04:23:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1713957812; x=1714562612; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ln9+pg397axOqdZ8donOOoy2lTHgumZvva3u8wpOyis=;
+        b=ULMeqJtGGk8VtJdWNpblq5XHhxwlHRSxkvm9vTS14PXWx0aDNlx1yvPv0+GKtYAe1L
+         OkK/bKR8Xio/TZbXLDPug643BFq3lyWyNXkfiTp5t2kZP/ulS5inDET5ubv00bOAeuYr
+         hyJEpPQKem+3gupTwXAkqs9jk1QhnWz9BNISy9RDsrAEhveAQi80gTUtyxAKPHtp3xiB
+         bS9kDaNpdL15NOPwaUuXmrNZhggS2LTK3wyKUXFcgTnG5Y+hHUGRTMMQjodZohyZymBZ
+         w2FZeiKruxaS4jf59XIvI0CeTmW1yrfp9xFN5oV4jKlmMC1Ox9lD7skVZtYQRzJQqwp7
+         k6bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713957812; x=1714562612;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ln9+pg397axOqdZ8donOOoy2lTHgumZvva3u8wpOyis=;
+        b=R5Y7srz9gi+paNCAKoq0YjAZHnBmABNC3ACsu1mxpmpoW/lFgMVqXw8QHakF2K7Q6v
+         rAenWoIYHh8Wwi1FId4rWqYkmjA3w6Kn4MX7H1M5jfdvo6rcyf9p0vCRpt7few4rKuBE
+         Eq4PFUH4pjhppc6X9IEEQQw7fjVyHFS/pRL2qAbvhiWchbzSZ8kjZSQ//M/LNPrhPlqq
+         EVTfc1sVudo48Y9DQ0+h9QClWdsfTKuxtqgVrDmj2jJOvp7uPM3rKvNh2XFk96jWaW3o
+         h6ygx9H8HRXY3NiZuFg053lsc48nim7lkOH7IEVKfxPlLU3+kFNUAQiMO2ztwyIMO5Qx
+         PKSw==
+X-Forwarded-Encrypted: i=1; AJvYcCVgn8ETSNXhg2RbMM7JJxu9qw0DTao8OJsLcg2g27aFVOUT1upttwXQXRF05tC8DhJ/ZcCBXYosTQVzJW8ni3f4DsJNc+CAVUM=
+X-Gm-Message-State: AOJu0YxLh6hHdfC5cWcqKfmqZo3+LkaecnMoZ/CRhbi9FiHNBUgE4NC9
+	64vYLxZ6gEX0o6gdQ+M+CZad4YqjVTtxS9Sebwkq9n0h/fcUwFUmCOT7WoA28sw9UaMhoLnpyLH
+	AjBpV0TZuGTBVN1xtHpZDE4RXbx612T8gCB2Gqg==
+X-Google-Smtp-Source: AGHT+IGyMvZRrFQqm2rU9lrkFEVJeFfiWq/kBNzRzDGPLliI2awpe//wjMSlt7lzbgaKuWjFkR6/B06yPkXjykP9pGQ=
+X-Received: by 2002:a25:6841:0:b0:ddd:696a:8656 with SMTP id
+ d62-20020a256841000000b00ddd696a8656mr2219684ybc.41.1713957812276; Wed, 24
+ Apr 2024 04:23:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V5 RESEND 3/5] clk: qcom: gdsc: Add set and get hwmode
- callbacks to switch GDSC mode
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        "Stephen
- Boyd" <sboyd@kernel.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Mauro Carvalho Chehab
-	<mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J .
- Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>, Pavel Machek
-	<pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Andy
- Gross" <agross@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
-        "Satya Priya
- Kakitapalli" <quic_skakitap@quicinc.com>,
-        Imran Shaik
-	<quic_imrashai@quicinc.com>,
-        Ajit Pandey <quic_ajipan@quicinc.com>
-References: <20240413152013.22307-1-quic_jkona@quicinc.com>
- <20240413152013.22307-4-quic_jkona@quicinc.com>
- <e70e0379-cab0-4586-825e-ade6775ca67c@linaro.org>
- <e419c6aa-6bb2-48ff-bacb-17a2e85856ea@quicinc.com>
- <0ed739d8-7ef6-4b0d-bd61-62966c9a9362@linaro.org>
-Content-Language: en-US
-From: Jagadeesh Kona <quic_jkona@quicinc.com>
-In-Reply-To: <0ed739d8-7ef6-4b0d-bd61-62966c9a9362@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: UdaJqMHmAelHEwYEvmrTYsnUWBXurROV
-X-Proofpoint-GUID: UdaJqMHmAelHEwYEvmrTYsnUWBXurROV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-04-24_08,2024-04-23_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- impostorscore=0 clxscore=1015 priorityscore=1501 adultscore=0 phishscore=0
- mlxlogscore=999 lowpriorityscore=0 suspectscore=0 mlxscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2404010003
- definitions=main-2404240043
+References: <20240424101503.635364-1-quic_tengfan@quicinc.com> <20240424101503.635364-4-quic_tengfan@quicinc.com>
+In-Reply-To: <20240424101503.635364-4-quic_tengfan@quicinc.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Wed, 24 Apr 2024 14:23:21 +0300
+Message-ID: <CAA8EJpqiXqsNq0B6EHnqubPcUzwJ0bc0y3rJ4RfrRimKifPf0Q@mail.gmail.com>
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm4450: Supply clock from cpufreq
+ node to CPUs
+To: Tengfei Fan <quic_tengfan@quicinc.com>
+Cc: rafael@kernel.org, viresh.kumar@linaro.org, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, andersson@kernel.org, 
+	konrad.dybcio@linaro.org, manivannan.sadhasivam@linaro.org, 
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+On Wed, 24 Apr 2024 at 13:17, Tengfei Fan <quic_tengfan@quicinc.com> wrote:
+>
+> Qualcomm platforms making use of CPUFreq HW Engine (EPSS/OSM) supply
+> clocks to the CPU cores. But this relationship is not represented in DTS
+> so far.
+>
+> So let's make cpufreq node as the clock provider and CPU nodes as the
+> consumers. The clock index for each CPU node is based on the frequency
+> domain index.
 
+Is there any reason why this is not a part of the previous patch?
 
-On 4/24/2024 3:25 PM, Bryan O'Donoghue wrote:
-> On 24/04/2024 10:47, Jagadeesh Kona wrote:
->>
->>
->> On 4/24/2024 5:18 AM, Bryan O'Donoghue wrote:
->>> On 13/04/2024 16:20, Jagadeesh Kona wrote:
->>>> Some GDSC client drivers require the GDSC mode to be switched 
->>>> dynamically
->>>> to HW mode at runtime to gain the power benefits. Typically such client
->>>> drivers require the GDSC to be brought up in SW mode initially to 
->>>> enable
->>>> the required dependent clocks and configure the hardware to proper 
->>>> state.
->>>> Once initial hardware set up is done, they switch the GDSC to HW 
->>>> mode to
->>>> save power. At the end of usecase, they switch the GDSC back to SW mode
->>>> and disable the GDSC.
->>>>
->>>> Introduce HW_CTRL_TRIGGER flag to register the set_hwmode_dev and
->>>> get_hwmode_dev callbacks for GDSC's whose respective client drivers
->>>> require the GDSC mode to be switched dynamically at runtime using
->>>> dev_pm_genpd_set_hwmode() API.
->>>>
->>>> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
->>>> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
->>>> ---
->>>>   drivers/clk/qcom/gdsc.c | 37 +++++++++++++++++++++++++++++++++++++
->>>>   drivers/clk/qcom/gdsc.h |  1 +
->>>>   2 files changed, 38 insertions(+)
->>>>
->>>> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
->>>> index df9618ab7eea..c5f6be8181d8 100644
->>>> --- a/drivers/clk/qcom/gdsc.c
->>>> +++ b/drivers/clk/qcom/gdsc.c
->>>> @@ -363,6 +363,39 @@ static int gdsc_disable(struct 
->>>> generic_pm_domain *domain)
->>>>       return 0;
->>>>   }
->>>> +static int gdsc_set_hwmode(struct generic_pm_domain *domain, struct 
->>>> device *dev, bool mode)
->>>> +{
->>>> +    struct gdsc *sc = domain_to_gdsc(domain);
->>>> +    int ret;
->>>> +
->>>> +    ret = gdsc_hwctrl(sc, mode);
->>>> +    if (ret)
->>>> +        return ret;
->>>> +
->>>> +    /* Wait for 1usec for mode transition to properly complete */
->>>> +    udelay(1);
->>>
->>> A delay I suspect you don't need - if the HW spec says "takes 1 usec 
->>> for this to take effect" that's 1 usec from io write completion from 
->>> APSS to another system agent.
->>>
->>> You poll for the state transition down below anyway.
->>>
->>> I'd be pretty certain that's a redundant delay.
->>>
->>
->> Thanks Bryan for your review!
->>
->> This 1usec delay is needed every time GDSC is moved in and out of HW 
->> control mode and the reason for same is explained in one of the older 
->> gdsc driver change at below link
->>
->> https://lore.kernel.org/all/1484027679-18397-1-git-send-email-rnayak@codeaurora.org/
->>
-> 
-> Right.
-> 
-> If that is your precedent then you seem to be missing the mb(); between
-> 
-> gdsc_hwctrl();
-> 
-> /* mb(); here */
-> 
-> and this
-> 
-> udelay(1);
-> 
-
-Sorry, earlier I shared the link to base patch series which has mb() 
-used, but in the mainlined series of the same patch mb() is removed as 
-per the review comments.
-
-Please find the mainlined series link:-
-https://lore.kernel.org/all/1485145581-517-1-git-send-email-rnayak@codeaurora.org/
-
-Thanks,
-Jagadeesh
-
+>
+> Signed-off-by: Tengfei Fan <quic_tengfan@quicinc.com>
 > ---
-> bod
+>  arch/arm64/boot/dts/qcom/sm4450.dtsi | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sm4450.dtsi b/arch/arm64/boot/dts/qcom/sm4450.dtsi
+> index 92badfd5b0e1..8d75c4f9731c 100644
+> --- a/arch/arm64/boot/dts/qcom/sm4450.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm4450.dtsi
+> @@ -47,6 +47,7 @@ CPU0: cpu@0 {
+>                         device_type = "cpu";
+>                         compatible = "arm,cortex-a55";
+>                         reg = <0x0 0x0>;
+> +                       clocks = <&cpufreq_hw 0>;
+>                         enable-method = "psci";
+>                         next-level-cache = <&L2_0>;
+>                         power-domains = <&CPU_PD0>;
+> @@ -72,6 +73,7 @@ CPU1: cpu@100 {
+>                         device_type = "cpu";
+>                         compatible = "arm,cortex-a55";
+>                         reg = <0x0 0x100>;
+> +                       clocks = <&cpufreq_hw 0>;
+>                         enable-method = "psci";
+>                         next-level-cache = <&L2_100>;
+>                         power-domains = <&CPU_PD0>;
+> @@ -91,6 +93,7 @@ CPU2: cpu@200 {
+>                         device_type = "cpu";
+>                         compatible = "arm,cortex-a55";
+>                         reg = <0x0 0x200>;
+> +                       clocks = <&cpufreq_hw 0>;
+>                         enable-method = "psci";
+>                         next-level-cache = <&L2_200>;
+>                         power-domains = <&CPU_PD0>;
+> @@ -110,6 +113,7 @@ CPU3: cpu@300 {
+>                         device_type = "cpu";
+>                         compatible = "arm,cortex-a55";
+>                         reg = <0x0 0x300>;
+> +                       clocks = <&cpufreq_hw 0>;
+>                         enable-method = "psci";
+>                         next-level-cache = <&L2_300>;
+>                         power-domains = <&CPU_PD0>;
+> @@ -129,6 +133,7 @@ CPU4: cpu@400 {
+>                         device_type = "cpu";
+>                         compatible = "arm,cortex-a55";
+>                         reg = <0x0 0x400>;
+> +                       clocks = <&cpufreq_hw 0>;
+>                         enable-method = "psci";
+>                         next-level-cache = <&L2_400>;
+>                         power-domains = <&CPU_PD0>;
+> @@ -148,6 +153,7 @@ CPU5: cpu@500 {
+>                         device_type = "cpu";
+>                         compatible = "arm,cortex-a55";
+>                         reg = <0x0 0x500>;
+> +                       clocks = <&cpufreq_hw 0>;
+>                         enable-method = "psci";
+>                         next-level-cache = <&L2_500>;
+>                         power-domains = <&CPU_PD0>;
+> @@ -167,6 +173,7 @@ CPU6: cpu@600 {
+>                         device_type = "cpu";
+>                         compatible = "arm,cortex-a78";
+>                         reg = <0x0 0x600>;
+> +                       clocks = <&cpufreq_hw 1>;
+>                         enable-method = "psci";
+>                         next-level-cache = <&L2_600>;
+>                         power-domains = <&CPU_PD0>;
+> @@ -186,6 +193,7 @@ CPU7: cpu@700 {
+>                         device_type = "cpu";
+>                         compatible = "arm,cortex-a78";
+>                         reg = <0x0 0x700>;
+> +                       clocks = <&cpufreq_hw 1>;
+>                         enable-method = "psci";
+>                         next-level-cache = <&L2_700>;
+>                         power-domains = <&CPU_PD0>;
+> --
+> 2.25.1
+>
+>
+
+
+-- 
+With best wishes
+Dmitry
 
