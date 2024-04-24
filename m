@@ -1,52 +1,63 @@
-Return-Path: <linux-pm+bounces-6980-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-6981-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D1938B05F5
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 11:25:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E011C8B0650
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 11:46:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8B312826C4
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 09:25:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6BA0F1F25687
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 09:46:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FE30158D98;
-	Wed, 24 Apr 2024 09:25:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 608EC158DBD;
+	Wed, 24 Apr 2024 09:46:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="LT83gHWP"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="OncNtkAG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 833F71E4A9;
-	Wed, 24 Apr 2024 09:25:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC02515884A;
+	Wed, 24 Apr 2024 09:46:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713950721; cv=none; b=Y5DJzUOSN34nQwjNWpemINibv3wRgVisbbWzSgM3TMThGwecGLqx/PEOZuYTvKurUL8CpvriDvtqgDFjMts3ig+twuXIiNF53uIr/GaeooHV08MY4twrv6yT888VPWHtYk7d2kDuYIN7+dwWYLWlHmLINP+xA4ZjSH4rSGtgrbI=
+	t=1713951982; cv=none; b=GZO0qcBXR7//jK0WJS45g8rA8k9U8tWxYtc6KQPjAVnY59TVP5IBkcvs6mj2nEhV+/cX3dUy+Y6PO6W0j/I6xejaMACQ3esFYwfuEFOK27fKaklWtwMv/nkmm8zBs0KrppHxTliUajqqFFlB5W2bEmxXrvRgD35VttIDug+4e9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713950721; c=relaxed/simple;
-	bh=V6al9TEnXaXJHHNbaiADnf6F22lLGljjRC8QK+BRDhw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=D4u7TzSHKMQUb0gZUFeAXfdm35HaJKjPalMaXqoUVc3Xbb3LN++QOH2GMDb+560TNHx33xJfl6YeQnaIThA9jEJ+VsfkL6/MHWEFrkT0JC68WzYjLamvx+xpc9QeFDDQCe4OLAY9cMpivSkATBfsoZ+cWct8d+uIy3aWcw+Vd/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=LT83gHWP; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0EC23FF80B;
-	Wed, 24 Apr 2024 09:25:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1713950711;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vCTA/w4Ty3Z+TuBGcS7FPEpzwGTTQsZFVP+xb1fhJmk=;
-	b=LT83gHWPm6HQ0p2getgdOClRu9ZrSrN90V/UvffOrbM2zy3cxnhK2Q/zw7sp73ZV2mpwHC
-	XBR+omg4McDH+2NyyqCuLGUabUz/f5N7AKVkllvgpTP7gRaSDtjdGJlRtpQ3KAWYZyOKfY
-	TAmmxEK9RarVqxbxCSBgcq8J3dAj9F77tP7Ckb7gdDrMIG9LkFdV3TwoSPXcfXWEwwbl7q
-	3DmeWWXlfmBJjFLcwYuNUgHsktY2XnlQOGLTohyEc2UEf5SUmHBhTH+BriDtLxgjYSw+nZ
-	r6yzklMBFspwc46D+c2cwRi85zIgACfAeewXhtCGU+dvFSR58+5lqqTcaxwckQ==
-Message-ID: <22278de4-ade3-45fc-8cd5-dd35043ed6c8@bootlin.com>
-Date: Wed, 24 Apr 2024 11:25:09 +0200
+	s=arc-20240116; t=1713951982; c=relaxed/simple;
+	bh=RVYaFBXBPDQnthdzqRIG0iBp4XMdZ4Os/iRRg38QOI8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=RVbQeCAmk11dgerE0HjwP3mKyIF5V9DNpNp7FU58371gH0Qu3JQUyo9Hn8KtahM16ZIQBzcnzj3sVgrc4f0vv76YdJKMNsqWgxM+Jnu/0Fli8fPktF5aWEg9+mQVhnoGbszFwM8V6unqZuUYKCDb0hGhh+FpjngOCya6riB9uqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=OncNtkAG; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43O6ZRbt008358;
+	Wed, 24 Apr 2024 09:46:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=ENSpFwfSSCRhBncfpf2kpAaKcLVVIBb71rBSrFRLfjg=; b=On
+	cNtkAGGP3Rb0inVjZx0nnXnG6rHIhuPI1hQwR6CtHN2yzmabCx9r9S6BG54naurT
+	1FSZpuVYdbUoq0ptmx5YueljWpTHJKVNbl762WfAhJFj2wGY2KHNTkhdTBo4YUL1
+	Y324yCW7xqI/JNfmx48ViNpFp2tfHDVuz+E1Vq4vpiO2MKk1Mq49QEzKjBjx3Zlx
+	3cr6iozy98qbyDiA+6BHlrdizHsVKfoenzUPCjErLC99x4eYmKrrIVwcyQL2E140
+	edWrdpgX2nBoYxMDXkD0FSHjN7K/gAr59/QaxW52MNUIjF8yy8F0tczfFDwGV5RK
+	jjriJdUNI7kFT33JfeTA==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xpv9fgep4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 24 Apr 2024 09:46:09 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43O9k8Be018171
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 24 Apr 2024 09:46:08 GMT
+Received: from [10.218.5.19] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 24 Apr
+ 2024 02:45:59 -0700
+Message-ID: <dbd1b86c-7b5f-4b92-ab1f-fecfe1486cfc@quicinc.com>
+Date: Wed, 24 Apr 2024 15:15:03 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -54,276 +65,155 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] thermal: k3_j72xx_bandgap: implement suspend/resume
- support
-To: Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc: rui.zhang@intel.com, lukasz.luba@arm.com, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, gregory.clement@bootlin.com,
- thomas.petazzoni@bootlin.com, theo.lebrun@bootlin.com, u-kumar1@ti.com,
- Keerthy <j-keerthy@ti.com>
-References: <20240417120338.910769-1-thomas.richard@bootlin.com>
- <d8c1d7a4-60d0-4940-b604-ee62591fa3e8@linaro.org>
+Subject: Re: [PATCH V5 RESEND 5/5] venus: pm_helpers: Use
+ dev_pm_genpd_set_hwmode to switch GDSC mode on V6
+To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Bjorn Andersson
+	<andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        "Stephen
+ Boyd" <sboyd@kernel.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Mauro Carvalho Chehab
+	<mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J .
+ Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>, Pavel Machek
+	<pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Andy
+ Gross" <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
+        "Satya Priya
+ Kakitapalli" <quic_skakitap@quicinc.com>,
+        Imran Shaik
+	<quic_imrashai@quicinc.com>,
+        Ajit Pandey <quic_ajipan@quicinc.com>
+References: <20240413152013.22307-1-quic_jkona@quicinc.com>
+ <20240413152013.22307-6-quic_jkona@quicinc.com>
+ <5c78ad52-524b-4ad7-b149-0e7252abc2ee@linaro.org>
+ <b96ef82c-4033-43e0-9c1e-347ffb500751@quicinc.com>
+ <a522f25f-bb38-4ae1-8f13-8e56934e5ef5@linaro.org>
 Content-Language: en-US
-From: Thomas Richard <thomas.richard@bootlin.com>
-In-Reply-To: <d8c1d7a4-60d0-4940-b604-ee62591fa3e8@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-GND-Sasl: thomas.richard@bootlin.com
+From: Jagadeesh Kona <quic_jkona@quicinc.com>
+In-Reply-To: <a522f25f-bb38-4ae1-8f13-8e56934e5ef5@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: iutdcThsPua_kmWE2xsdKobXhPj7NIS1
+X-Proofpoint-GUID: iutdcThsPua_kmWE2xsdKobXhPj7NIS1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-04-24_07,2024-04-23_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 priorityscore=1501 phishscore=0 bulkscore=0 mlxlogscore=999
+ spamscore=0 adultscore=0 clxscore=1015 malwarescore=0 impostorscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2404010003 definitions=main-2404240041
 
-On 4/22/24 17:46, Daniel Lezcano wrote:
-> On 17/04/2024 14:03, Thomas Richard wrote:
->> From: Théo Lebrun <theo.lebrun@bootlin.com>
->>
->> This add suspend-to-ram support.
->>
->> The derived_table is kept-as is, so the resume is only about
->> pm_runtime_* calls and restoring the same registers as the probe.
->>
->> Extract the hardware initialization procedure to a function called at
->> both probe-time & resume-time.
->>
->> The probe-time loop is split in two to ensure doing the hardware
->> initialization before registering thermal zones. That ensures our
->> callbacks cannot be called while in bad state.
->>
->> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
->> Acked-by: Keerthy <j-keerthy@ti.com>
->> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
->> ---
->>
->> v3:
->>   - Remove __maybe_unused attributes and use the magic of PTR_IF()
-> 
-> Where are these changes ?
 
-- I removed __maybe_unused attribute for k3_j72xx_bandgap_suspend() and
-k3_j72xx_bandgap_resume()
-- The DEFINE_SIMPLE_DEV_PM_OPS macro is used to declare
-k3_j72xx_bandgap_pm_ops.
-- The pm_sleep_ptr macro is used.
 
-> 
->> v2:
->>   - Fix warnings/errors reported by kernel test robot
+On 4/24/2024 5:46 AM, Bryan O'Donoghue wrote:
+> On 14/04/2024 15:52, Jagadeesh Kona wrote:
 >>
->>   drivers/thermal/k3_j72xx_bandgap.c | 112 ++++++++++++++++++++---------
->>   1 file changed, 79 insertions(+), 33 deletions(-)
 >>
->> diff --git a/drivers/thermal/k3_j72xx_bandgap.c
->> b/drivers/thermal/k3_j72xx_bandgap.c
->> index c74094a86982..a7244e05ed5c 100644
->> --- a/drivers/thermal/k3_j72xx_bandgap.c
->> +++ b/drivers/thermal/k3_j72xx_bandgap.c
->> @@ -178,6 +178,7 @@ struct k3_j72xx_bandgap {
->>       void __iomem *base;
->>       void __iomem *cfg2_base;
->>       struct k3_thermal_data *ts_data[K3_VTM_MAX_NUM_TS];
->> +    int cnt;
->>   };
->>     /* common data structures */
->> @@ -338,24 +339,53 @@ static void print_look_up_table(struct device
->> *dev, int *ref_table)
->>           dev_dbg(dev, "%d       %d %d\n", i, derived_table[i],
->> ref_table[i]);
->>   }
->>   +static void k3_j72xx_bandgap_init_hw(struct k3_j72xx_bandgap *bgp)
->> +{
->> +    struct k3_thermal_data *data;
->> +    int id, high_max, low_temp;
->> +    u32 val;
->> +
->> +    for (id = 0; id < bgp->cnt; id++) {
->> +        data = bgp->ts_data[id];
->> +        val = readl(bgp->cfg2_base + data->ctrl_offset);
->> +        val |= (K3_VTM_TMPSENS_CTRL_MAXT_OUTRG_EN |
->> +            K3_VTM_TMPSENS_CTRL_SOC |
->> +            K3_VTM_TMPSENS_CTRL_CLRZ | BIT(4));
->> +        writel(val, bgp->cfg2_base + data->ctrl_offset);
->> +    }
->> +
->> +    /*
->> +     * Program TSHUT thresholds
->> +     * Step 1: set the thresholds to ~123C and 105C WKUP_VTM_MISC_CTRL2
->> +     * Step 2: WKUP_VTM_TMPSENS_CTRL_j set the MAXT_OUTRG_EN  bit
->> +     *         This is already taken care as per of init
->> +     * Step 3: WKUP_VTM_MISC_CTRL set the ANYMAXT_OUTRG_ALERT_EN  bit
->> +     */
->> +    high_max = k3_j72xx_bandgap_temp_to_adc_code(MAX_TEMP);
->> +    low_temp = k3_j72xx_bandgap_temp_to_adc_code(COOL_DOWN_TEMP);
->> +
->> +    writel((low_temp << 16) | high_max, bgp->cfg2_base +
->> K3_VTM_MISC_CTRL2_OFFSET);
->> +    mdelay(100);
+>> On 4/14/2024 6:09 PM, Bryan O'Donoghue wrote:
+>>> On 13/04/2024 16:20, Jagadeesh Kona wrote:
+>>>> The Venus driver requires vcodec GDSC to be ON in SW mode for clock
+>>>> operations and move it back to HW mode to gain power benefits. Earlier,
+>>>> as there is no interface to switch the GDSC mode from GenPD framework,
+>>>> the GDSC is moved to HW control mode as part of GDSC enable callback 
+>>>> and
+>>>> venus driver is writing to its POWER_CONTROL register to keep the 
+>>>> GDSC ON
+>>>> from SW whereever required. But the POWER_CONTROL register addresses
+>>>> are not constant and can vary across the variants.
+>>>>
+>>>> Also as per the HW recommendation, the GDSC mode switching needs to be
+>>>> controlled from respective GDSC register and this is a uniform approach
+>>>> across all the targets. Hence use dev_pm_genpd_set_hwmode() API which
+>>>> controls GDSC mode switching using its respective GDSC register.
+>>>>
+>>>> In venus V6 variants, the vcodec gdsc gets enabled in SW mode by 
+>>>> default
+>>>> with new HW_CTRL_TRIGGER flag and there is no need to switch it to SW
+>>>> mode again after enable, hence add check to avoid switching gdsc to 
+>>>> SW mode
+>>>> again after gdsc enable. Similarly add check to avoid switching GDSC 
+>>>> to HW
+>>>> mode before disabling the GDSC, so GDSC gets enabled in SW mode in 
+>>>> the next
+>>>> enable.
+>>>>
+>>>> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
+>>>> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+>>>> ---
+>>>
+>>> When I tested this out on sm8250 a few months ago it was broken.
+>>>
+>>> I don't quite see in your commit logs, how the breakage was addressed.
+>>>
+>>> Can you provide some details ?
+>>>
+>>
+>> Thanks Bryan for your review!
+>>
+>> In earlier series, venus driver is switching the vcodec GDSC to HW 
+>> control mode before disabling the GDSC by invoking 
+>> vcodec_control_v4(..., false) in poweroff_coreid(). Due to this, the 
+>> subsequent GDSC enable from venus driver is failing while polling for 
+>> GDSC power ON status, since GDSC is under HW control mode and HW can 
+>> keep the GDSC in disabled state.
+>>
+>> Now a check is added in poweroff_coreid() to avoid switching the GDSC 
+>> to HW control mode before disabling the GDSC for Venus V6 variants 
+>> that use this new API. Hence during the next GDSC enable, GDSC will be 
+>> in SW mode and GDSC will powerup properly.
 > 
->     100ms ?
+> Right so the intention is to have HW GDSC control during playback only - 
+> and then revert to SW control when no stream is active, right ?
 > 
-> Ok, I know you did not introduce this delay. But as it is a suspend /
-> resume, this delay will be called at each resume which is not acceptable
-> given its duration.
+> I tried your series on today's -next.
 > 
-> Please, investigate a way to get rid of this delay
+> Here is -next without your changes
+> 
+> https://drive.google.com/file/d/1PFuLOlEp582rBQUvuwc9PNZUBxn1ioYf/view?usp=sharing
+> 
+> and here is -next with your changes
+> 
+> https://drive.google.com/file/d/1PHR4rZnWUH9Wp2B-itT5yCUXIMOMZrwM/view?usp=sharing
+> 
+> The first time I tried that test the stopping/stuttering was worse.
+> 
+> So yes the original crash was fixed but, this looks like a performance 
+> regression to me.
+> 
 
-I talked to Keerthy, this delay was initially added to be sure the
-thresholds are programmed before enabling the interrupt.
-But for him, this delay is useless.
+Thanks Bryan for testing this series. Can you please confirm if this 
+issue is observed in every run or only seen during the first run? Also 
+please let me know on which platform this issue is observed?
 
-I did the test, I removed the delay and I didn't see any thermal events.
-So we can remove it.
-I'll send a new version without the delay, and I'll mention it in the
-commit message.
+Thanks,
+Jagadeesh
 
-> 
-> 
->> +    writel(K3_VTM_ANYMAXT_OUTRG_ALERT_EN, bgp->cfg2_base +
->> K3_VTM_MISC_CTRL_OFFSET);
->> +}
->> +
->>   struct k3_j72xx_bandgap_data {
->>       const bool has_errata_i2128;
->>   };
->>     static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
->>   {
->> -    int ret = 0, cnt, val, id;
->> -    int high_max, low_temp;
->> -    struct resource *res;
->> +    const struct k3_j72xx_bandgap_data *driver_data;
->> +    struct thermal_zone_device *ti_thermal;
->>       struct device *dev = &pdev->dev;
->> +    bool workaround_needed = false;
->>       struct k3_j72xx_bandgap *bgp;
->>       struct k3_thermal_data *data;
->> -    bool workaround_needed = false;
->> -    const struct k3_j72xx_bandgap_data *driver_data;
->> -    struct thermal_zone_device *ti_thermal;
->> -    int *ref_table;
->>       struct err_values err_vals;
->>       void __iomem *fuse_base;
->> +    int ret = 0, val, id;
->> +    struct resource *res;
->> +    int *ref_table;
-> 
-> No related to the changes but the patch is showing signs the driver
-> needs a code cleanup AFAICT
-> 
->>       const s64 golden_factors[] = {
->>           -490019999999999936,
->> @@ -422,10 +452,10 @@ static int k3_j72xx_bandgap_probe(struct
->> platform_device *pdev)
->>         /* Get the sensor count in the VTM */
->>       val = readl(bgp->base + K3_VTM_DEVINFO_PWR0_OFFSET);
->> -    cnt = val & K3_VTM_DEVINFO_PWR0_TEMPSENS_CT_MASK;
->> -    cnt >>= __ffs(K3_VTM_DEVINFO_PWR0_TEMPSENS_CT_MASK);
->> +    bgp->cnt = val & K3_VTM_DEVINFO_PWR0_TEMPSENS_CT_MASK;
->> +    bgp->cnt >>= __ffs(K3_VTM_DEVINFO_PWR0_TEMPSENS_CT_MASK);
->>   -    data = devm_kcalloc(bgp->dev, cnt, sizeof(*data), GFP_KERNEL);
->> +    data = devm_kcalloc(bgp->dev, bgp->cnt, sizeof(*data), GFP_KERNEL);
->>       if (!data) {
->>           ret = -ENOMEM;
->>           goto err_alloc;
->> @@ -449,8 +479,8 @@ static int k3_j72xx_bandgap_probe(struct
->> platform_device *pdev)
->>       else
->>           init_table(3, ref_table, pvt_wa_factors);
->>   -    /* Register the thermal sensors */
->> -    for (id = 0; id < cnt; id++) {
->> +    /* Precompute the derived table & fill each thermal sensor struct */
->> +    for (id = 0; id < bgp->cnt; id++) {
->>           data[id].bgp = bgp;
->>           data[id].ctrl_offset = K3_VTM_TMPSENS0_CTRL_OFFSET + id * 0x20;
->>           data[id].stat_offset = data[id].ctrl_offset +
->> @@ -470,13 +500,13 @@ static int k3_j72xx_bandgap_probe(struct
->> platform_device *pdev)
->>           else if (id == 0 && !workaround_needed)
->>               memcpy(derived_table, ref_table, TABLE_SIZE * 4);
->>   -        val = readl(data[id].bgp->cfg2_base + data[id].ctrl_offset);
->> -        val |= (K3_VTM_TMPSENS_CTRL_MAXT_OUTRG_EN |
->> -            K3_VTM_TMPSENS_CTRL_SOC |
->> -            K3_VTM_TMPSENS_CTRL_CLRZ | BIT(4));
->> -        writel(val, data[id].bgp->cfg2_base + data[id].ctrl_offset);
->> -
->>           bgp->ts_data[id] = &data[id];
->> +    }
->> +
->> +    k3_j72xx_bandgap_init_hw(bgp);
->> +
->> +    /* Register the thermal sensors */
->> +    for (id = 0; id < bgp->cnt; id++) {
->>           ti_thermal = devm_thermal_of_zone_register(bgp->dev, id,
->> &data[id],
->>                                  &k3_of_thermal_ops);
->>           if (IS_ERR(ti_thermal)) {
->> @@ -486,21 +516,7 @@ static int k3_j72xx_bandgap_probe(struct
->> platform_device *pdev)
->>           }
->>       }
->>   -    /*
->> -     * Program TSHUT thresholds
->> -     * Step 1: set the thresholds to ~123C and 105C WKUP_VTM_MISC_CTRL2
->> -     * Step 2: WKUP_VTM_TMPSENS_CTRL_j set the MAXT_OUTRG_EN  bit
->> -     *         This is already taken care as per of init
->> -     * Step 3: WKUP_VTM_MISC_CTRL set the ANYMAXT_OUTRG_ALERT_EN  bit
->> -     */
->> -    high_max = k3_j72xx_bandgap_temp_to_adc_code(MAX_TEMP);
->> -    low_temp = k3_j72xx_bandgap_temp_to_adc_code(COOL_DOWN_TEMP);
->> -
->> -    writel((low_temp << 16) | high_max, data[0].bgp->cfg2_base +
->> -           K3_VTM_MISC_CTRL2_OFFSET);
->> -    mdelay(100);
->> -    writel(K3_VTM_ANYMAXT_OUTRG_ALERT_EN, data[0].bgp->cfg2_base +
->> -           K3_VTM_MISC_CTRL_OFFSET);
->> +    platform_set_drvdata(pdev, bgp);
->>         print_look_up_table(dev, ref_table);
->>       /*
->> @@ -527,6 +543,35 @@ static void k3_j72xx_bandgap_remove(struct
->> platform_device *pdev)
->>       pm_runtime_disable(&pdev->dev);
->>   }
->>   +static int k3_j72xx_bandgap_suspend(struct device *dev)
->> +{
->> +    pm_runtime_put_sync(dev);
->> +    pm_runtime_disable(dev);
->> +    return 0;
->> +}
->> +
->> +static int k3_j72xx_bandgap_resume(struct device *dev)
->> +{
->> +    struct k3_j72xx_bandgap *bgp = dev_get_drvdata(dev);
->> +    int ret;
->> +
->> +    pm_runtime_enable(dev);
->> +    ret = pm_runtime_get_sync(dev);
->> +    if (ret < 0) {
->> +        pm_runtime_put_noidle(dev);
->> +        pm_runtime_disable(dev);
->> +        return ret;
->> +    }
->> +
->> +    k3_j72xx_bandgap_init_hw(bgp);
->> +
->> +    return 0;
->> +}
->> +
->> +static DEFINE_SIMPLE_DEV_PM_OPS(k3_j72xx_bandgap_pm_ops,
->> +                k3_j72xx_bandgap_suspend,
->> +                k3_j72xx_bandgap_resume);
->> +
->>   static const struct k3_j72xx_bandgap_data
->> k3_j72xx_bandgap_j721e_data = {
->>       .has_errata_i2128 = true,
->>   };
->> @@ -554,6 +599,7 @@ static struct platform_driver
->> k3_j72xx_bandgap_sensor_driver = {
->>       .driver = {
->>           .name = "k3-j72xx-soc-thermal",
->>           .of_match_table    = of_k3_j72xx_bandgap_match,
->> +        .pm = pm_sleep_ptr(&k3_j72xx_bandgap_pm_ops),
->>       },
->>   };
->>   
-> 
--- 
-Thomas Richard, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
 
+> Here's the tree I tested with.
+> 
+> https://git.codelinaro.org/bryan.odonoghue/kernel/-/tree/linux-next-24-05-23-review?ref_type=heads
+> 
+> ---
+> bod
+> 
 
