@@ -1,106 +1,145 @@
-Return-Path: <linux-pm+bounces-7019-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7020-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 435008B0F21
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 17:53:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 420D18B1003
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 18:37:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 086DA28885A
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 15:53:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED1271F26A8D
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 16:37:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D665615FD01;
-	Wed, 24 Apr 2024 15:53:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B46916D4FF;
+	Wed, 24 Apr 2024 16:36:00 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FF6313DBB2;
-	Wed, 24 Apr 2024 15:53:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8607C1598EA;
+	Wed, 24 Apr 2024 16:35:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713973993; cv=none; b=shpI6HKoTwnRdA6pb+NgWa5CMjFvGGAlswLqbYKTOXvdhPTxr+yA7r7cdqCDCvyU+DZpGPYb7p7nyjRAMfJhI07GmAgku2SwyQt1lQTENQ8MAUV6iHgp0fs/brEsMR++2JC4MsfWYhsV18BIp7cBMTfbg+UcW9lbJ5MVJpjksRI=
+	t=1713976560; cv=none; b=ctnFOeO3ye3UBeRVo9MAZbWIYoDs4IXRGaKbBhPRAJOBCL8OXGAwNoWtt0Hptm0wk3rc4jOagqc91zSVXV2O3A1+/9XKaPHLfpSL6McIpToE6PysjoKSM4nzh2wulCcddUtobIX4W3Q90KGJTad/YewtOs9rGNFAee1TSBEml10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713973993; c=relaxed/simple;
-	bh=cqQlTJYlnxpdMp1tQKkUwfXxp9N7FIOvRmzCX75X7js=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LlpxOscILPTWY2s9vNkcCHF2ImJbJMwV48J7ju6t8kJESXBhfdhguXx3I6xh4lSxbKJz7BkE2ongSAM0PAjrB481lfuY7FuCw9PSXT2fdm8eiV+PrU4lFLA0INuV17u7MCBc4k4tln+kX5WogFfh5eGHRI9nEXrXIJRwPh2Y8Gc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 709531063;
-	Wed, 24 Apr 2024 08:53:39 -0700 (PDT)
-Received: from donnerap.manchester.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1D0143F73F;
-	Wed, 24 Apr 2024 08:53:10 -0700 (PDT)
-Date: Wed, 24 Apr 2024 16:53:07 +0100
-From: Andre Przywara <andre.przywara@arm.com>
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Yangtao Li <tiny.windzz@gmail.com>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, Chen-Yu Tsai
- <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland
- <samuel@sholland.org>, linux-pm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
- linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: sun50i: fix error returns in
- dt_has_supported_hw()
-Message-ID: <20240424165307.16f45b21@donnerap.manchester.arm.com>
-In-Reply-To: <9bfe5703-b39b-4d98-9995-f6a7d0ea558d@moroto.mountain>
-References: <9bfe5703-b39b-4d98-9995-f6a7d0ea558d@moroto.mountain>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+	s=arc-20240116; t=1713976560; c=relaxed/simple;
+	bh=UlhmmvF4qokJRQpaGwr/z557sqx6SfWJMcb3qZplI3s=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=PMfWDBL6/CgVxjUKo9rT3yJbC34h557pA1aSL2UonKixnZOLv4qE7vpCBdw7wAdWSbUwbuY3HfFjjOv187pqmvMev9qMLwhbeq2gBRO3ISDSof/TLkV05+qFvXJlQ37TMYbzbbgRudw7wfKp3lCMidV+kiYxlaPxpW5aC2cS7b8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VPl0q61vXz6K5kn;
+	Thu, 25 Apr 2024 00:33:31 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 8886E1406AE;
+	Thu, 25 Apr 2024 00:35:54 +0800 (CST)
+Received: from lhrpeml500001.china.huawei.com (7.191.163.213) by
+ lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Wed, 24 Apr 2024 17:35:54 +0100
+Received: from lhrpeml500001.china.huawei.com ([7.191.163.213]) by
+ lhrpeml500001.china.huawei.com ([7.191.163.213]) with mapi id 15.01.2507.035;
+ Wed, 24 Apr 2024 17:35:54 +0100
+From: Salil Mehta <salil.mehta@huawei.com>
+To: Marc Zyngier <maz@kernel.org>, Jonathan Cameron
+	<jonathan.cameron@huawei.com>
+CC: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
+	<peterz@infradead.org>, "linux-pm@vger.kernel.org"
+	<linux-pm@vger.kernel.org>, "loongarch@lists.linux.dev"
+	<loongarch@lists.linux.dev>, "linux-acpi@vger.kernel.org"
+	<linux-acpi@vger.kernel.org>, "linux-arch@vger.kernel.org"
+	<linux-arch@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
+	<kvmarm@lists.linux.dev>, "x86@kernel.org" <x86@kernel.org>, Russell King
+	<linux@armlinux.org.uk>, "Rafael J . Wysocki" <rafael@kernel.org>, "Miguel
+ Luis" <miguel.luis@oracle.com>, James Morse <james.morse@arm.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>, Catalin Marinas
+	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Linuxarm
+	<linuxarm@huawei.com>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+	"justin.he@arm.com" <justin.he@arm.com>, "jianyong.wu@arm.com"
+	<jianyong.wu@arm.com>
+Subject: RE: [PATCH v7 11/16] irqchip/gic-v3: Add support for ACPI's disabled
+ but 'online capable' CPUs
+Thread-Topic: [PATCH v7 11/16] irqchip/gic-v3: Add support for ACPI's disabled
+ but 'online capable' CPUs
+Thread-Index: AQHakZivrv7wCN4TwkObtNOE7FjxL7F0DvwAgAGo+ICAAaE4AIAALFkAgAAgu/A=
+Date: Wed, 24 Apr 2024 16:35:54 +0000
+Message-ID: <e149e79446be4ed99178eedda3e8a674@huawei.com>
+References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com>
+	<20240418135412.14730-12-Jonathan.Cameron@huawei.com>
+	<20240422114020.0000294f@Huawei.com>	<87plugthim.wl-maz@kernel.org>
+	<20240424135438.00001ffc@huawei.com> <86il06rd19.wl-maz@kernel.org>
+In-Reply-To: <86il06rd19.wl-maz@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
-On Wed, 24 Apr 2024 14:40:11 +0300
-Dan Carpenter <dan.carpenter@linaro.org> wrote:
+>  From: Marc Zyngier <maz@kernel.org>
+>  Sent: Wednesday, April 24, 2024 4:33 PM
+>  To: Jonathan Cameron <jonathan.cameron@huawei.com>
+>  Cc: Thomas Gleixner <tglx@linutronix.de>; Peter Zijlstra
+>  <peterz@infradead.org>; linux-pm@vger.kernel.org;
+>  loongarch@lists.linux.dev; linux-acpi@vger.kernel.org; linux-
+>  arch@vger.kernel.org; linux-kernel@vger.kernel.org; linux-arm-
+>  kernel@lists.infradead.org; kvmarm@lists.linux.dev; x86@kernel.org;
+>  Russell King <linux@armlinux.org.uk>; Rafael J . Wysocki
+>  <rafael@kernel.org>; Miguel Luis <miguel.luis@oracle.com>; James Morse
+>  <james.morse@arm.com>; Salil Mehta <salil.mehta@huawei.com>; Jean-
+>  Philippe Brucker <jean-philippe@linaro.org>; Catalin Marinas
+>  <catalin.marinas@arm.com>; Will Deacon <will@kernel.org>; Linuxarm
+>  <linuxarm@huawei.com>; Ingo Molnar <mingo@redhat.com>; Borislav
+>  Petkov <bp@alien8.de>; Dave Hansen <dave.hansen@linux.intel.com>;
+>  justin.he@arm.com; jianyong.wu@arm.com
+>  Subject: Re: [PATCH v7 11/16] irqchip/gic-v3: Add support for ACPI's
+>  disabled but 'online capable' CPUs
+> =20
+>  On Wed, 24 Apr 2024 13:54:38 +0100,
+>  Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
+>  >
+>  > On Tue, 23 Apr 2024 13:01:21 +0100
+>  > Marc Zyngier <maz@kernel.org> wrote:
+>  >
+>  > > On Mon, 22 Apr 2024 11:40:20 +0100,
+>  > > Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+>  > > >
+>  > > > On Thu, 18 Apr 2024 14:54:07 +0100 Jonathan Cameron
+>  > > > <Jonathan.Cameron@huawei.com> wrote:
+> =20
+>  [...]
+> =20
+>  > > >
+>  > > > > +	/*
+>  > > > > +	 * Capable but disabled CPUs can be brought online later.  Wha=
+t about
+>  > > > > +	 * the redistributor? ACPI doesn't want to say!
+>  > > > > +	 * Virtual hotplug systems can use the MADT's "always-on"  GIC=
+R entries.
+>  > > > > +	 * Otherwise, prevent such CPUs from being brought online.
+>  > > > > +	 */
+>  > > > > +	if (!(gicc->flags & ACPI_MADT_ENABLED)) {
+>  > > > > +		pr_warn_once("CPU %u's redistributor is  inaccessible: this C=
+PU can't be brought online\n", cpu);
+>  > > > > +		set_cpu_present(cpu, false);
+>  > > > > +		set_cpu_possible(cpu, false);
 
-Hi Dan,
+(a digression) shouldn't we be clearing the enabled mask as well?
 
-thanks for having a look!
+                                          set_cpu_enabled(cpu, false);
 
-> The dt_has_supported_hw() function returns type bool.  That means these
-> negative error codes are cast to true but the function should return
-> false instead.
 
-Ouch, of course! I refactored the function during development, but missed
-that part.
-
-> Fixes: fa5aec9561cf ("cpufreq: sun50i: Add support for opp_supported_hw")
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-
-Reviewed-by: Andre Przywara <andre.przywara@arm.com>
-
-Thanks,
-Andre
-
-> ---
->  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> index cd50cea16a87..0b882765cd66 100644
-> --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> @@ -136,11 +136,11 @@ static bool dt_has_supported_hw(void)
->  
->  	cpu_dev = get_cpu_device(0);
->  	if (!cpu_dev)
-> -		return -ENODEV;
-> +		return false;
->  
->  	np = dev_pm_opp_of_get_opp_desc_node(cpu_dev);
->  	if (!np)
-> -		return -ENOENT;
-> +		return false;
->  
->  	for_each_child_of_node(np, opp) {
->  		if (of_find_property(opp, "opp-supported-hw", NULL)) {
-
+Best regards
+Salil
 
