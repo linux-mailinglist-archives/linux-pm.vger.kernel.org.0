@@ -1,126 +1,108 @@
-Return-Path: <linux-pm+bounces-7006-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7007-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E11608B0887
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 13:44:49 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B87538B0895
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 13:46:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F09E1C21361
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 11:44:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A77E3B20F94
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 11:46:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E63315A4AF;
-	Wed, 24 Apr 2024 11:44:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4545215A4B7;
+	Wed, 24 Apr 2024 11:46:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nRG83O82"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RldBBxKw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9C015A4A4;
-	Wed, 24 Apr 2024 11:44:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE77F15A481;
+	Wed, 24 Apr 2024 11:46:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713959086; cv=none; b=kGxK5xGH2Vgmf8i9IAC4MqKdnksWF/jLGcJBbXERkqvYuPAf1EpByvyMAcKeSWIMB9dXBMCTTnhFxlGDKd8BgJPJ0GgOMCsqxwID7ouWBTfiTH5V+zW8AZr/FwFg05AVu5T+Mh+c/QL5/RP4+o0HKugISlK/jq5FGaHb5v+ipAg=
+	t=1713959169; cv=none; b=o8+QoRTWiqpJZFHYR4fitkbm99iGoNIsn9kYK0bpirwLmmgD+3L0H1IijignE5smTa+ZA3sssdC11KcTdi+VuNcPuGkP5kAZCMQti8o0KXTzVzjdDCwyQ5hrzSXSHHy3ES5UOYo/4A6u9Nl530fcrWoLq2ik+7O4OloF0PK+OuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713959086; c=relaxed/simple;
-	bh=xpUTnXpiZhsPhmL4RJ3EPHSMkblKDHr8KkYzdAZ0yCk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ib8iq4TY0XB/3SE1lsRD115gSTtEnoPTsnBBZJkJw6knEEmof+gXbWCjVx43yT81ak9fYZYf/ZgPO228Mvw6H9GfB/a4PB718h7iDNYj9SlomQAoakgiiY8DIfXI1+jdXm2QrMJdFuvzJ8Zna6DNAW9aLwAH945C9NvZZ8577V4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nRG83O82; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713959084; x=1745495084;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=xpUTnXpiZhsPhmL4RJ3EPHSMkblKDHr8KkYzdAZ0yCk=;
-  b=nRG83O82fqFh5ToFKb8WWksDMHNFIoOT0vIw3a97MLnz7KuTgy6424+2
-   vidFjkQaSabVFo6tKvTMYW/9KEXBfVuBoxorKKE/jIY3SDBXcOW8xwagg
-   ojYdMNTXbteJx2yxgaUsMfSVTHYurMw7CSjJNQvXTReHJ0oz2tAvxvQrV
-   gVoAVBI0cWTOOJAVjoQTFQXX9U8z2ETw8osUWYv4IBYorbkmnZ9jTCNNo
-   L4S736J3J34vEXveX+zsXOgz/3q1EwgznmJhMTMBDdsqMI5koeUJfGUpk
-   5jQf4yfBvIZQuRqQ2jEzZ6zYlNRn3r+THZSKohaXFTe77vDJacANzcI5w
-   w==;
-X-CSE-ConnectionGUID: +Yz0J4wjQxWqgwIEaeQ4mQ==
-X-CSE-MsgGUID: ZFekwH78SkiNYD0kuz4ATg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11053"; a="10123653"
-X-IronPort-AV: E=Sophos;i="6.07,226,1708416000"; 
-   d="scan'208";a="10123653"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2024 04:44:43 -0700
-X-CSE-ConnectionGUID: aOxPJhh6Rz+3u9n3Cu24IA==
-X-CSE-MsgGUID: SOx7EidETuuhviBZaSh38A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,226,1708416000"; 
-   d="scan'208";a="47949188"
-Received: from spandruv-mobl4.amr.corp.intel.com (HELO [10.212.109.188]) ([10.212.109.188])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2024 04:44:43 -0700
-Message-ID: <d96da934-a996-418e-a175-4ba463d3916b@linux.intel.com>
-Date: Wed, 24 Apr 2024 04:44:41 -0700
+	s=arc-20240116; t=1713959169; c=relaxed/simple;
+	bh=5LSW3jPy3YfbIsmSL2DQARdEAzwSgLPdgjo0MkCPNrY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=Bz14fc9yx3mvZDZIXXXnwUopN2DprdTwTueNbwi0vHhDbn5Fim84MjQmG4u0GwRTmGXu0wQDYh1+X7PIjEWMnn3mXDB7CzijzVQQojiMPaU64IPeijO785VBV5Os/3asKnA4VBru4gEZoY8wxMn/S8D+BCu/j0w0fvSu7wNrOOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RldBBxKw; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-41b21ed1985so763675e9.3;
+        Wed, 24 Apr 2024 04:46:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713959166; x=1714563966; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sAXuJv4h9OIOAMxzqsiwDTfpjlDMAv2iPJrJHbTkVKM=;
+        b=RldBBxKw7e0mVXdTsqMPhZz/uqILYHUbeaXYqrQpijQ8B7JUSYFUvKjd+gDEomicRX
+         6jY4gBJO512fbsD52HBc4x3VJmKeLJCXOocUpw6pfvz3VqXE533DLOUgXPgkGuy6Y+UZ
+         q9wgSwIEJExXpvOPyeC+lHoFBnfaiMS820fDgiZUgbtWvVUt8HliK1KUYTCCy47ZdAx2
+         maoxeehRrA05b54YdMrkqZWqhPh3SybqQUXtopmh+tIJm/4JipMxXXFYWR0plRHHa/RM
+         KWk3RDlx8YEGnV89guclqG8Gk9Xomj+qhQD7mfX08Uzr53xrVEkkNYdWG2d3eg70gcfS
+         IkfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713959166; x=1714563966;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sAXuJv4h9OIOAMxzqsiwDTfpjlDMAv2iPJrJHbTkVKM=;
+        b=JKhy5Givk4lkFr7fIOBdpT+gtCJ/19PPwJZW/pfT6HL1g54p03Fcfjuyhf+lOh2frk
+         56HYMnWTVPXqPkg7YiF51ZDFVPL0fKJQ2DOQw/8hIkP+v3hy0JLlQHAVz3FJZmcewYQJ
+         zI+dej4R0UOcl1bcvl9U4d2EiuHv52gERPjHyUrUDzJd3FjCKEyi1ilJVJlJR9FTIOK+
+         Z1zd5xKmrhPfjEhG6KJD44mvwqAZc7pV5Ej+kdkFyHjEYShvc+xL8eUTFGFvFYW+jqvu
+         5BwGW/9WOHtdI+R3hnJ6b9lDGpONfLISZ0H8GuEELDIYb4GvVTG/4gk1LUrsCZE9BfbZ
+         jGXQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWtewR//rlQu3pYbgVwSkESw/QqWUJElRYq6tYTQavAF4OcjTzraRUklpd+dZTJovbv5RdJE28CP2uNB88+yLZzsU2/jOmUXrs=
+X-Gm-Message-State: AOJu0YxJpDEYPBQm4eojDDO8UOo1aLI3i3KjmKOQ8c8fZpKGLwX29DMe
+	2fnhz+sBv3f0iMI0dyA9cQ7tu6QrzhVcAVX/x48wbeX9Ivfccm/R
+X-Google-Smtp-Source: AGHT+IG1gNFpMsNB+ZWJ9FTRF+wRkrT5lJrFadOThgECa6M8GBYaWHMJFrLMAhjibeVkKi+Z7rmhyw==
+X-Received: by 2002:a05:600c:358b:b0:416:6af1:27af with SMTP id p11-20020a05600c358b00b004166af127afmr1579428wmq.35.1713959165820;
+        Wed, 24 Apr 2024 04:46:05 -0700 (PDT)
+Received: from aquecedor-3-0.lan ([2001:818:e81c:ce00:7193:3bd:90d8:9d8])
+        by smtp.gmail.com with ESMTPSA id w17-20020a05600c475100b004162d06768bsm27415801wmo.21.2024.04.24.04.46.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Apr 2024 04:46:05 -0700 (PDT)
+Date: Wed, 24 Apr 2024 12:46:03 +0100
+From: =?iso-8859-1?Q?Jos=E9?= Relvas <josemonsantorelvas@gmail.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+	Linux PM <linux-pm@vger.kernel.org>,
+	Mark Pearson <mpearson@lenovo.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v1] ACPI: PM: s2idle: Evaluate all Low-Power S0 Idle _DSM
+ functions
+Message-ID: <Zijw-19v7P69tYBm@aquecedor-3-0.lan>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 14/16] thermal: gov_user_space: Use .trip_crossed()
- instead of .throttle()
-To: Daniel Lezcano <daniel.lezcano@linaro.org>,
- "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- Lukasz Luba <lukasz.luba@arm.com>
-References: <13515747.uLZWGnKmhe@kreacher> <15186663.tv2OnDr8pf@kreacher>
- <ZijNj7DzL9e01Vnt@mai.linaro.org>
- <e565a9c3-9244-4a0b-9ad8-4beebd03d681@linux.intel.com>
- <917f9bec-80f3-4d10-9781-7b27f361101d@linaro.org>
-Content-Language: en-US
-From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <917f9bec-80f3-4d10-9781-7b27f361101d@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <12427214.O9o76ZdvQC@kreacher>
 
+On 4/23/2024 14:19, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Commit 073237281a50 ("ACPI: PM: s2idle: Enable Low-Power S0 Idle MSFT
+> UUID for non-AMD systems") attempted to avoid evaluating the same Low-
+> Power S0 Idle _DSM functions for different UUIDs, but that turns out to
+> be a mistake, because some systems in the field are adversely affected
+> by it.
+> 
+> Address this by allowing  all Low-Power S0 Idle _DSM functions to be
+> evaluated, but still print the message regarding duplication of Low-
+> Power S0 Idle _DSM function sets for different UUIDs.
+> 
+> Fixes: 073237281a50 ("ACPI: PM: s2idle: Enable Low-Power S0 Idle MSFT UUID for non-AMD systems")
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218750
+> Reported-and-tested-by: Mark Pearson <mpearson@lenovo.com>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-On 4/24/24 04:34, Daniel Lezcano wrote:
-> On 24/04/2024 13:32, Srinivas Pandruvada wrote:
->>
->> On 4/24/24 02:14, Daniel Lezcano wrote:
->>> On Wed, Apr 10, 2024 at 07:03:10PM +0200, Rafael J. Wysocki wrote:
->>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>>>
->>>> Notifying user space about trip points that have not been crossed is
->>>> not particuarly useful, so modity the User Space governor to use the
->>>> .trip_crossed() callback, which is only invoked for trips that have 
->>>> been
->>>> crossed, instead of .throttle() that is invoked for all trips in a
->>>> thermal zone every time the zone is updated.
->>>>
->>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>>> ---
->>> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->>>
->>> I would also consider removing this governor which is pointless now 
->>> that we
->>> have the netlink notification mechanism
->>
->> That is a good goal, But, not there yet to deprecate.
->
-> What can be done to deprecate it ?
->
->
-
-First we need to migrate all the existing usage to netlink. We need to 
-add some more netlink notifications. That is relatively easy.
-
-The problem is user space changes are much slower to push than kernel. 
-Kernels changes gets deployed at faster pace in some distributions.
-
-Thanks,
-
-Srinivas
-
-
+FYI, I can confirm that this fixes the regression on my Thinkpad P1 Gen 6.
 
