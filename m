@@ -1,162 +1,229 @@
-Return-Path: <linux-pm+bounces-7025-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7026-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2339D8B1104
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 19:29:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBF778B11DA
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 20:15:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 707FDB27D0E
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 17:27:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1AFF01C22DCB
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 18:15:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1B9716F287;
-	Wed, 24 Apr 2024 17:24:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F29C416F269;
+	Wed, 24 Apr 2024 18:14:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dZug3N2f"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A53416EC12;
-	Wed, 24 Apr 2024 17:24:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50F5216DEC4;
+	Wed, 24 Apr 2024 18:14:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713979495; cv=none; b=IL59b8+N8ryYAjQZeAJG8C2cljknJdVgpwVGLR8x3DQ5Ec8NAydCKIhwkE2XIo27FXSqbc71jR9p66V5QySF0ENMbPYIRe6cnDQFyepv1d5i3LteO8bWvGs6JY/02W/dzstG+9+ULTc5kH64m5aa/tyAMAAHASUdYiCRYu3f2jY=
+	t=1713982492; cv=none; b=TSi+7UpikNQ+f6ahdD3YpNqBxOC9C/5krQtfryfMjx8Yv8ZoHc37WTU3QCHn2EbOIpW2hCY2KiXh3CgZL9KMUPg7+yGuj33CdiSlnRu8eZEDXLv5+JixSBKyKi9ds8IUBYX1nzqnL6Tyj88kznK4heQHn9pEgrPicjU7r+JKbiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713979495; c=relaxed/simple;
-	bh=LKqpVipEJ5RO7oa344mviLVllKDE6mTQjJzr3s4gB5I=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ndfz/xkRVSZfGvdr0jKWg8ap8eZZ1RVWwBjvtkprlWF+Xjw60qjVs0Kajov3UByuTWOFaSJWHxvvbqG1E4CIBT7Iw/hhGhAuhdEG+4n+BKpPy2RqEwMq2F35CEdM9OgBCQ4wHd3HB6+gDTn7xRM5yY7pJI0j1Uj5QWXanO61aeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VPm5J2bxkz6K6Lt;
-	Thu, 25 Apr 2024 01:22:28 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 30DCB140A34;
-	Thu, 25 Apr 2024 01:24:51 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Wed, 24 Apr
- 2024 18:24:50 +0100
-Date: Wed, 24 Apr 2024 18:24:50 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
-	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
-	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-	<x86@kernel.org>, Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki"
-	<rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, "James Morse"
-	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, Jean-Philippe
- Brucker <jean-philippe@linaro.org>, Catalin Marinas
-	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
-	<linuxarm@huawei.com>
-CC: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, "Dave
- Hansen" <dave.hansen@linux.intel.com>, <justin.he@arm.com>,
-	<jianyong.wu@arm.com>
-Subject: Re: [PATCH v7 14/16] arm64: Kconfig: Enable hotplug CPU on arm64 if
- ACPI_PROCESSOR is enabled.
-Message-ID: <20240424182450.0000694f@Huawei.com>
-In-Reply-To: <20240418135412.14730-15-Jonathan.Cameron@huawei.com>
-References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com>
-	<20240418135412.14730-15-Jonathan.Cameron@huawei.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1713982492; c=relaxed/simple;
+	bh=X1kVlmKoykgrGIOBnOPbHS/gm0hWrSVAGeWzcm3MPZU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=RlRhAyQlJTZDvv5VoMw+ms4VmfAYnr8WWPqHwVFtv9ZFMc+ZBsWhLv6+QAJcL+FHKAcXkqWQg/LoZSgk+WudTRLRO5HpdFrajxFB3ELLUky6xU1lTRX81/ASmLHvVoogewcawGexndaRGdZ0LnIWqmSyEsbvr9TqBiweV8RibgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dZug3N2f; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713982491; x=1745518491;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=X1kVlmKoykgrGIOBnOPbHS/gm0hWrSVAGeWzcm3MPZU=;
+  b=dZug3N2fCZAIOypXs6S3WI74tcRUIFaJUfdqrfQV4bfJSLAC4SnaclWO
+   bu5k393M5RpQwDmIDqyUnUjpJgXkIfh+Fpp4YhPr59aBz8+G7re9NxWgB
+   PS2o0AC5uxSM2xO8nxLD8YM8weJAZNV8FWPWnfkkSdii3vNDbuWqBWJXg
+   XHeoS/hlyAAX1VGadElYt9M6SIXO0DhBvKGcziHpaE9ifyK1Uh+2MJSbA
+   HvbYihJS0+k22WVOLRAdNQh1wa0/3GTGB64Z59hWh9cAuXfAY9anQlEp+
+   KgTw1StKDVUT6AbE2jOKePbQTzRVly/WZY71553MNomTQve+7EowotiTV
+   w==;
+X-CSE-ConnectionGUID: che3q4iyQTas822/gbTWZw==
+X-CSE-MsgGUID: 2lEZfe2+T6aSYYetmtCS4A==
+X-IronPort-AV: E=McAfee;i="6600,9927,11054"; a="9481765"
+X-IronPort-AV: E=Sophos;i="6.07,226,1708416000"; 
+   d="scan'208";a="9481765"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2024 11:14:51 -0700
+X-CSE-ConnectionGUID: 78Z+j+XtRWK6NDRiJUbofw==
+X-CSE-MsgGUID: hzHSuhLhRrelVlUjNqqVNg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,226,1708416000"; 
+   d="scan'208";a="29262558"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.105])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2024 11:14:51 -0700
+From: Tony Luck <tony.luck@intel.com>
+To: Borislav Petkov <bp@alien8.de>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Len Brown <lenb@kernel.org>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	patches@lists.linux.dev,
+	Tony Luck <tony.luck@intel.com>,
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH v4 07/71] cpufreq: intel_pstate: Switch to new Intel CPU model defines
+Date: Wed, 24 Apr 2024 11:14:50 -0700
+Message-ID: <20240424181450.41289-1-tony.luck@intel.com>
+X-Mailer: git-send-email 2.44.0
+In-Reply-To: <20240424181245.41141-1-tony.luck@intel.com>
+References: <20240424181245.41141-1-tony.luck@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Content-Transfer-Encoding: 8bit
 
-On Thu, 18 Apr 2024 14:54:10 +0100
-Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
+New CPU #defines encode vendor and family as well as model.
 
-> In order to move arch_register_cpu() to be called via the same path
-> for initially present CPUs described by ACPI and hotplugged CPUs
-> ACPI_HOTPLUG_CPU needs to be enabled.
-> 
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> ---
-> v7: No change.
-> ---
->  arch/arm64/Kconfig       |  1 +
->  arch/arm64/kernel/acpi.c | 16 ++++++++++++++++
->  2 files changed, 17 insertions(+)
-> 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 7b11c98b3e84..fed7d0d54179 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -5,6 +5,7 @@ config ARM64
->  	select ACPI_CCA_REQUIRED if ACPI
->  	select ACPI_GENERIC_GSI if ACPI
->  	select ACPI_GTDT if ACPI
-> +	select ACPI_HOTPLUG_CPU if ACPI_PROCESSOR
->  	select ACPI_IORT if ACPI
->  	select ACPI_REDUCED_HARDWARE_ONLY if ACPI
->  	select ACPI_MCFG if (ACPI && PCI)
-> diff --git a/arch/arm64/kernel/acpi.c b/arch/arm64/kernel/acpi.c
-> index dba8fcec7f33..a74e80d58df3 100644
-> --- a/arch/arm64/kernel/acpi.c
-> +++ b/arch/arm64/kernel/acpi.c
-> @@ -29,6 +29,7 @@
->  #include <linux/pgtable.h>
->  
->  #include <acpi/ghes.h>
-> +#include <acpi/processor.h>
->  #include <asm/cputype.h>
->  #include <asm/cpu_ops.h>
->  #include <asm/daifflags.h>
-> @@ -413,6 +414,21 @@ void arch_reserve_mem_area(acpi_physical_address addr, size_t size)
->  	memblock_mark_nomap(addr, size);
->  }
->  
-> +#ifdef CONFIG_ACPI_HOTPLUG_CPU
-> +int acpi_map_cpu(acpi_handle handle, phys_cpuid_t physid, u32 apci_id,
-> +		 int *pcpu)
-> +{
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/cpufreq/intel_pstate.c | 90 +++++++++++++++++-----------------
+ 1 file changed, 44 insertions(+), 46 deletions(-)
 
-There are shipping firmware's in the wild that have DSDT entries for
-way more CPUs than are actually present and don't bother with niceties like
-providing _STA() methods.
-
-As such, we need to check somewhere that the pcpu after this call is valid.
-
-Given today this only applies to arm64 (as the x86 code has an implementation
-of this function that will replace an invalid ID with a valid one) I'll add
-a small catch here.
-
-	if (*pcpu < 0) {
-		pr_warn("Unable to map from CPU ACPI ID to anything useful\n");
-		return -EINVAL;
-	}
-
-I'll have an entirely polite discussion with the relevant team at somepoint, but
-on the plus side this is a sensible bit of hardening.
-
-Jonathan
-
-p.s. I want all those other cores!!!!
-
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(acpi_map_cpu); /* check why */
-> +
-> +int acpi_unmap_cpu(int cpu)
-> +{
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(acpi_unmap_cpu);
-> +#endif /* CONFIG_ACPI_HOTPLUG_CPU */
-> +
->  #ifdef CONFIG_ACPI_FFH
->  /*
->   * Implements ARM64 specific callbacks to support ACPI FFH Operation Region as
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index dbbf299f4219..685ec80e0af5 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -2402,52 +2402,51 @@ static const struct pstate_funcs knl_funcs = {
+ 	.get_val = core_get_val,
+ };
+ 
+-#define X86_MATCH(model, policy)					 \
+-	X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL, 6, INTEL_FAM6_##model, \
+-					   X86_FEATURE_APERFMPERF, &policy)
++#define X86_MATCH(vfm, policy)					 \
++	X86_MATCH_VFM_FEATURE(vfm, X86_FEATURE_APERFMPERF, &policy)
+ 
+ static const struct x86_cpu_id intel_pstate_cpu_ids[] = {
+-	X86_MATCH(SANDYBRIDGE,		core_funcs),
+-	X86_MATCH(SANDYBRIDGE_X,	core_funcs),
+-	X86_MATCH(ATOM_SILVERMONT,	silvermont_funcs),
+-	X86_MATCH(IVYBRIDGE,		core_funcs),
+-	X86_MATCH(HASWELL,		core_funcs),
+-	X86_MATCH(BROADWELL,		core_funcs),
+-	X86_MATCH(IVYBRIDGE_X,		core_funcs),
+-	X86_MATCH(HASWELL_X,		core_funcs),
+-	X86_MATCH(HASWELL_L,		core_funcs),
+-	X86_MATCH(HASWELL_G,		core_funcs),
+-	X86_MATCH(BROADWELL_G,		core_funcs),
+-	X86_MATCH(ATOM_AIRMONT,		airmont_funcs),
+-	X86_MATCH(SKYLAKE_L,		core_funcs),
+-	X86_MATCH(BROADWELL_X,		core_funcs),
+-	X86_MATCH(SKYLAKE,		core_funcs),
+-	X86_MATCH(BROADWELL_D,		core_funcs),
+-	X86_MATCH(XEON_PHI_KNL,		knl_funcs),
+-	X86_MATCH(XEON_PHI_KNM,		knl_funcs),
+-	X86_MATCH(ATOM_GOLDMONT,	core_funcs),
+-	X86_MATCH(ATOM_GOLDMONT_PLUS,	core_funcs),
+-	X86_MATCH(SKYLAKE_X,		core_funcs),
+-	X86_MATCH(COMETLAKE,		core_funcs),
+-	X86_MATCH(ICELAKE_X,		core_funcs),
+-	X86_MATCH(TIGERLAKE,		core_funcs),
+-	X86_MATCH(SAPPHIRERAPIDS_X,	core_funcs),
+-	X86_MATCH(EMERALDRAPIDS_X,      core_funcs),
++	X86_MATCH(INTEL_SANDYBRIDGE,		core_funcs),
++	X86_MATCH(INTEL_SANDYBRIDGE_X,		core_funcs),
++	X86_MATCH(INTEL_ATOM_SILVERMONT,	silvermont_funcs),
++	X86_MATCH(INTEL_IVYBRIDGE,		core_funcs),
++	X86_MATCH(INTEL_HASWELL,		core_funcs),
++	X86_MATCH(INTEL_BROADWELL,		core_funcs),
++	X86_MATCH(INTEL_IVYBRIDGE_X,		core_funcs),
++	X86_MATCH(INTEL_HASWELL_X,		core_funcs),
++	X86_MATCH(INTEL_HASWELL_L,		core_funcs),
++	X86_MATCH(INTEL_HASWELL_G,		core_funcs),
++	X86_MATCH(INTEL_BROADWELL_G,		core_funcs),
++	X86_MATCH(INTEL_ATOM_AIRMONT,		airmont_funcs),
++	X86_MATCH(INTEL_SKYLAKE_L,		core_funcs),
++	X86_MATCH(INTEL_BROADWELL_X,		core_funcs),
++	X86_MATCH(INTEL_SKYLAKE,		core_funcs),
++	X86_MATCH(INTEL_BROADWELL_D,		core_funcs),
++	X86_MATCH(INTEL_XEON_PHI_KNL,		knl_funcs),
++	X86_MATCH(INTEL_XEON_PHI_KNM,		knl_funcs),
++	X86_MATCH(INTEL_ATOM_GOLDMONT,		core_funcs),
++	X86_MATCH(INTEL_ATOM_GOLDMONT_PLUS,	core_funcs),
++	X86_MATCH(INTEL_SKYLAKE_X,		core_funcs),
++	X86_MATCH(INTEL_COMETLAKE,		core_funcs),
++	X86_MATCH(INTEL_ICELAKE_X,		core_funcs),
++	X86_MATCH(INTEL_TIGERLAKE,		core_funcs),
++	X86_MATCH(INTEL_SAPPHIRERAPIDS_X,	core_funcs),
++	X86_MATCH(INTEL_EMERALDRAPIDS_X,	core_funcs),
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(x86cpu, intel_pstate_cpu_ids);
+ 
+ static const struct x86_cpu_id intel_pstate_cpu_oob_ids[] __initconst = {
+-	X86_MATCH(BROADWELL_D,		core_funcs),
+-	X86_MATCH(BROADWELL_X,		core_funcs),
+-	X86_MATCH(SKYLAKE_X,		core_funcs),
+-	X86_MATCH(ICELAKE_X,		core_funcs),
+-	X86_MATCH(SAPPHIRERAPIDS_X,	core_funcs),
++	X86_MATCH(INTEL_BROADWELL_D,		core_funcs),
++	X86_MATCH(INTEL_BROADWELL_X,		core_funcs),
++	X86_MATCH(INTEL_SKYLAKE_X,		core_funcs),
++	X86_MATCH(INTEL_ICELAKE_X,		core_funcs),
++	X86_MATCH(INTEL_SAPPHIRERAPIDS_X,	core_funcs),
+ 	{}
+ };
+ 
+ static const struct x86_cpu_id intel_pstate_cpu_ee_disable_ids[] = {
+-	X86_MATCH(KABYLAKE,		core_funcs),
++	X86_MATCH(INTEL_KABYLAKE,		core_funcs),
+ 	{}
+ };
+ 
+@@ -3386,14 +3385,13 @@ static inline void intel_pstate_request_control_from_smm(void) {}
+ 
+ #define INTEL_PSTATE_HWP_BROADWELL	0x01
+ 
+-#define X86_MATCH_HWP(model, hwp_mode)					\
+-	X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL, 6, INTEL_FAM6_##model, \
+-					   X86_FEATURE_HWP, hwp_mode)
++#define X86_MATCH_HWP(vfm, hwp_mode)				\
++	X86_MATCH_VFM_FEATURE(vfm, X86_FEATURE_HWP, hwp_mode)
+ 
+ static const struct x86_cpu_id hwp_support_ids[] __initconst = {
+-	X86_MATCH_HWP(BROADWELL_X,	INTEL_PSTATE_HWP_BROADWELL),
+-	X86_MATCH_HWP(BROADWELL_D,	INTEL_PSTATE_HWP_BROADWELL),
+-	X86_MATCH_HWP(ANY,		0),
++	X86_MATCH_HWP(INTEL_BROADWELL_X,	INTEL_PSTATE_HWP_BROADWELL),
++	X86_MATCH_HWP(INTEL_BROADWELL_D,	INTEL_PSTATE_HWP_BROADWELL),
++	X86_MATCH_HWP(INTEL_ANY,		0),
+ 	{}
+ };
+ 
+@@ -3426,15 +3424,15 @@ static const struct x86_cpu_id intel_epp_default[] = {
+ 	 * which can result in one core turbo frequency for
+ 	 * AlderLake Mobile CPUs.
+ 	 */
+-	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L, HWP_SET_DEF_BALANCE_PERF_EPP(102)),
+-	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X, HWP_SET_DEF_BALANCE_PERF_EPP(32)),
+-	X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE_L, HWP_SET_EPP_VALUES(HWP_EPP_POWERSAVE,
+-							HWP_EPP_BALANCE_POWERSAVE, 115, 16)),
++	X86_MATCH_VFM(INTEL_ALDERLAKE_L, HWP_SET_DEF_BALANCE_PERF_EPP(102)),
++	X86_MATCH_VFM(INTEL_SAPPHIRERAPIDS_X, HWP_SET_DEF_BALANCE_PERF_EPP(32)),
++	X86_MATCH_VFM(INTEL_METEORLAKE_L, HWP_SET_EPP_VALUES(HWP_EPP_POWERSAVE,
++		      HWP_EPP_BALANCE_POWERSAVE, 115, 16)),
+ 	{}
+ };
+ 
+ static const struct x86_cpu_id intel_hybrid_scaling_factor[] = {
+-	X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE_L, HYBRID_SCALING_FACTOR_MTL),
++	X86_MATCH_VFM(INTEL_METEORLAKE_L, HYBRID_SCALING_FACTOR_MTL),
+ 	{}
+ };
+ 
+-- 
+2.44.0
 
 
