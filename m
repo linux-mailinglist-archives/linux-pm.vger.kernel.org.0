@@ -1,134 +1,125 @@
-Return-Path: <linux-pm+bounces-7034-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7035-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A1D48B130F
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 21:01:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41FB98B1323
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 21:04:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D2ED1C232C2
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 19:01:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 740701C213BA
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 19:04:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A0F51CD3F;
-	Wed, 24 Apr 2024 19:01:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C7CF1C697;
+	Wed, 24 Apr 2024 19:04:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZYB1BOAu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AOqJHgg7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 985832BAE9;
-	Wed, 24 Apr 2024 19:01:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00EE61D53C;
+	Wed, 24 Apr 2024 19:04:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713985283; cv=none; b=CNxvGcknYoGjnWXJ+iLU8AOWxSLDIG3Elcev6iIi7362oNJj6SriVGuP0J8qoqviwX8itqIVd8RaCMSGwqOdu8VXTkT8rfsqjIJo80HUu5QAULH7OO9T1isrDV7x0IEd2xCO5R2zwjx0TqUxSgCxRhyuCJBkxeE/VtP3eBk7llY=
+	t=1713985449; cv=none; b=AiKpI3evK+lAmAqZL9wKc9oWIIpU/qEWPC5V8/xKodWRvJmkrF5DoRBTsMszzEutk7Wi+ngYYnXKEAlyrvVxDRaqg5N76Qt3KC6EN/ll6THS6B04tliVnjdZrAr+Gjb6frkiHS4rFi7FevN/N5mA+u+RKR4d8wUcmkusNVT1z0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713985283; c=relaxed/simple;
-	bh=wEniXoUp5G9HRaTQlppl6YOqzKstdjiCVhjp8WFbrik=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=B/zfHpAB13hIHWNuQb6I3ENETY2xh6ZjFFAu9aDqnNZxnulsJ2JDQ8+m+Z8tNch+y/5MBTrthigYGjTDdGtKgLXQ5d2fIctaHpg9u7EhCTYxsnSkOwa4l/FmpmCaD6cKTx6OMv4saAlfmCuEaWxyGSBWX5ajV988J+13dvC7uk4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZYB1BOAu; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a55ab922260so27810466b.3;
-        Wed, 24 Apr 2024 12:01:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713985279; x=1714590079; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sYb6lahma9ESsvjNNop/lnhNH+5GGNP092pV3MTMbcg=;
-        b=ZYB1BOAu+a4sZghXiYC2eCwuV3UTKza5sCLf/4sxZexeI5jQFFmn9szf/dtgoTL6OW
-         7cPOTP4ChaJGMY1Jy0yM1NMYBFkojp9kaZJC03plT7dtQ4zqFB4+a4UQ3WsV5fxVHZg+
-         n91fKgnYqE4kQWRLLP5naWjwrumMIH9JlxfWjvslzBwHSA/qxfKLl9WkwslBYafg98TD
-         OkjPZzD7k2IO2KO2ND2B4K59wpCgzUtxNmuK9wtzPSwMODTFzo7GofzHZl3bV4jkC1Gp
-         GaFeWPRDO9VKVCcxq+pTUs+w1gp+veRsQX1DRRZwF3QKCKsiDloKJpZ+2TMELrV0Qpqw
-         PKeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713985279; x=1714590079;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sYb6lahma9ESsvjNNop/lnhNH+5GGNP092pV3MTMbcg=;
-        b=Wp3porqkTeHtSCXFzF/dwtN19xer/C9SIrJ6tRqALcYZynyZthYIemhjT4IT66NJM9
-         8d0F2nrzrX8px7HJPIHJ509Mo8qmbib1rJ/QSX9jHTtD+4sueDx5qR+QeLnYdI2j4IcX
-         RNHgrsKLjvM5xdUrh5l6md8J+29CARy/4JWMKsY8gfsPwOdzLt4p03d/Ksa4nX7tdDvF
-         0PiB9ldxsejVbhJap5YpBuSHdUIHaNi3GhR/KntEvbE3sYT1fdZiyi4iJm9kt9q4Ndj4
-         GKlIQ2og/QurdWqWdLVgFrxX6+3SINZWFsTVzPqN+VpsPAEUjryyNodRETFsYXwZLL7i
-         J8xQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXgxCrtzEkoAgFwhFvFmW4beY7rV84VqcVBRBgYTgnW/dapbQVzCocoFC20IuIZXhDGeNppxWLuYjNTEUezKR1cdSclb2en14SzZUSt/zNYP0I7W/OvXqkwfVqtQ+FPB8XE/0LOEip9+b1wI6DE8PcwBoVbQ1AZbUfSbzeTTlZphRZtwyomjJQ=
-X-Gm-Message-State: AOJu0YyfqFfWpcrW+PWrkOfPSgOIXqxhTaKPoywIrPsdw8ZOWR91cCiE
-	usY9BIoqXmHfMeft8yoQ2d/tmDzAaD4CJ8VnnJqTr8UKvvblVjLt
-X-Google-Smtp-Source: AGHT+IGU+Yholg1eeeqBHS1/XbClARTXKkmiXuj6aUAvmgHd37s0Jp93MObOLF9sK0NFXS2Ld+XqaA==
-X-Received: by 2002:a17:907:7241:b0:a58:a2f7:85e9 with SMTP id ds1-20020a170907724100b00a58a2f785e9mr1130309ejc.34.1713985278550;
-        Wed, 24 Apr 2024 12:01:18 -0700 (PDT)
-Received: from jernej-laptop.localnet (86-58-6-171.dynamic.telemach.net. [86.58.6.171])
-        by smtp.gmail.com with ESMTPSA id hg7-20020a170906f34700b00a4e5a6b57a2sm8624325ejb.163.2024.04.24.12.01.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Apr 2024 12:01:17 -0700 (PDT)
-From: Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To: Andre Przywara <andre.przywara@arm.com>,
- Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Yangtao Li <tiny.windzz@gmail.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, Chen-Yu Tsai <wens@csie.org>,
- Samuel Holland <samuel@sholland.org>, linux-pm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
- linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject:
- Re: [PATCH] cpufreq: sun50i: fix error returns in dt_has_supported_hw()
-Date: Wed, 24 Apr 2024 21:01:16 +0200
-Message-ID: <1882679.tdWV9SEqCh@jernej-laptop>
-In-Reply-To: <9bfe5703-b39b-4d98-9995-f6a7d0ea558d@moroto.mountain>
-References: <9bfe5703-b39b-4d98-9995-f6a7d0ea558d@moroto.mountain>
+	s=arc-20240116; t=1713985449; c=relaxed/simple;
+	bh=lf3gUKAZg+5HWPL/HBuxTOwojliXLX/XwXpqq85sjDU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oDIpBLCGkSFP634GdQqI8dkZxbEce9aAANgzfcsrPwMBMV8jWelnyhSctmt2BqF0Fj01OMnm4LC2yjcXvovyYfAJzYZ5dnoZSdt5SAioOF3m9HSza4IBrwC8zyamjnZiUaWcsvG02J615TX7z006qXoa6Nw3iwMAWOKNq1drwtQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AOqJHgg7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88102C113CD;
+	Wed, 24 Apr 2024 19:04:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713985448;
+	bh=lf3gUKAZg+5HWPL/HBuxTOwojliXLX/XwXpqq85sjDU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AOqJHgg7/rdvu8eCspTWBEqD70ZnfT8SNhnp/IZYYQTTarBB4oqAw/KnEO338S/4f
+	 OzZ3G/GoLvNy55uIm6S3UrKwdJEPyvOlC70Cm0tHmxoTvCNpPYMYuodz4HCgYtYzZd
+	 yPXWHDKaLmyuhUeADnLTMucGYePF9piKD2Y47rfj7e2tcDPuLP5gjWMwuawWDcQHoM
+	 FnVZSdIZEX+3DdyJoySR3+EIBTKiAGXFVoEWpdbESZuuiqkJSXSvB8pQOhtWTbxxtK
+	 aUij5Wxps3qvVBIUB+MHizJDaj2O0r/9m1RWN2Vv52tDJX0QkP77TVo+jFk2fUYwC3
+	 FukUwxLvHsYFw==
+Date: Wed, 24 Apr 2024 12:04:05 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: djakov@kernel.org, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org, matthias.bgg@gmail.com, lgirdwood@gmail.com,
+	broonie@kernel.org, keescook@chromium.org, gustavoars@kernel.org,
+	henryc.chen@mediatek.com, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, kernel@collabora.com,
+	wenst@chromium.org, amergnat@baylibre.com,
+	Dawei Chien <dawei.chien@mediatek.com>
+Subject: Re: [PATCH v5 4/7] soc: mediatek: Add MediaTek DVFS Resource
+ Collector (DVFSRC) driver
+Message-ID: <20240424190405.GA2803128@dev-arch.thelio-3990X>
+References: <20240424095416.1105639-1-angelogioacchino.delregno@collabora.com>
+ <20240424095416.1105639-5-angelogioacchino.delregno@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240424095416.1105639-5-angelogioacchino.delregno@collabora.com>
 
-Dne sreda, 24. april 2024 ob 13:40:11 GMT +2 je Dan Carpenter napisal(a):
-> The dt_has_supported_hw() function returns type bool.  That means these
-> negative error codes are cast to true but the function should return
-> false instead.
+Hi Angelo,
+
+On Wed, Apr 24, 2024 at 11:54:13AM +0200, AngeloGioacchino Del Regno wrote:
+> The Dynamic Voltage and Frequency Scaling Resource Collector (DVFSRC) is a
+> Hardware module used to collect all the requests from both software and the
+> various remote processors embedded into the SoC and decide about a minimum
+> operating voltage and a minimum DRAM frequency to fulfill those requests in
+> an effort to provide the best achievable performance per watt.
 > 
-> Fixes: fa5aec9561cf ("cpufreq: sun50i: Add support for opp_supported_hw")
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-
-Best regards,
-Jernej
-
-> ---
->  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> This hardware IP is capable of transparently performing direct register R/W
+> on all of the DVFSRC-controlled regulators and SoC bandwidth knobs.
 > 
-> diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> index cd50cea16a87..0b882765cd66 100644
-> --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> @@ -136,11 +136,11 @@ static bool dt_has_supported_hw(void)
->  
->  	cpu_dev = get_cpu_device(0);
->  	if (!cpu_dev)
-> -		return -ENODEV;
-> +		return false;
->  
->  	np = dev_pm_opp_of_get_opp_desc_node(cpu_dev);
->  	if (!np)
-> -		return -ENOENT;
-> +		return false;
->  
->  	for_each_child_of_node(np, opp) {
->  		if (of_find_property(opp, "opp-supported-hw", NULL)) {
+> This driver includes support for MT8183, MT8192 and MT8195.
 > 
+> Co-Developed-by: Dawei Chien <dawei.chien@mediatek.com>
+> [Angelo: Partial refactoring and cleanups]
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+...
+>  drivers/soc/mediatek/mtk-dvfsrc.c        | 551 +++++++++++++++++++++++
+...
+> +#define KBPS_TO_MBPS(x)			((x) / 1000)
+...
+> +static void __dvfsrc_set_dram_bw_v1(struct mtk_dvfsrc *dvfsrc, u32 reg,
+> +				    u16 max_bw, u16 min_bw, u64 bw)
+> +{
+> +	u32 new_bw = (u32)div_u64(KBPS_TO_MBPS(bw), 100);
+> +
+> +	/* If bw constraints (in mbps) are defined make sure to respect them */
+> +	if (max_bw)
+> +		new_bw = min(new_bw, max_bw);
+> +	if (min_bw && new_bw > 0)
+> +		new_bw = max(new_bw, min_bw);
+> +
+> +	dvfsrc_writel(dvfsrc, reg, new_bw);
+> +}
 
+Using KBPS_TO_MBPS here results in
 
+  ERROR: modpost: "__aeabi_uldivmod" [drivers/soc/mediatek/mtk-dvfsrc.ko] undefined!
 
+when building ARCH=arm allmodconfig with clang. I did not check to see
+if this is visible with GCC but if it is not, it is only because GCC
+implements certain transformations for constant division that clang may
+or may not have implemented (there was some work on getting all
+transformations that GCC has supported in clang as well but I do not
+think was ever completed). Perhaps KBPS_TO_MBPS() should be dropped and
+the new_bw assignement turned into
 
+  u32 new_bw = (u32)div_u64(bw, 100 * 1000); /* Multiply divisor by 1000 to convert bw from Kbps to Mbps */
+
+or something like that.
+
+Cheers,
+Nathan
 
