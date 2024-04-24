@@ -1,122 +1,126 @@
-Return-Path: <linux-pm+bounces-7005-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7006-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 623CB8B086C
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 13:40:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E11608B0887
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 13:44:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E41A71F2419B
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 11:40:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F09E1C21361
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 11:44:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2743A15A4AA;
-	Wed, 24 Apr 2024 11:40:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E63315A4AF;
+	Wed, 24 Apr 2024 11:44:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="edKYD9Dn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nRG83O82"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75B4815A492
-	for <linux-pm@vger.kernel.org>; Wed, 24 Apr 2024 11:40:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9C015A4A4;
+	Wed, 24 Apr 2024 11:44:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713958820; cv=none; b=frfP/ypFKqFVxNMLjbGkKFbj4g2Mx+OqdS8eM0qKCsKVIGRjy4yp+B2ji8f2n6ifA20mQkO8G8EKQUamoUpgsk1PolfKqBuRxIZf2bTu7AszlqIrGynEhed2thu/NrP1+dwZo6DyiW+f1aZ+X2hpd6wzr6XgI6ztwZIht6Hvu+k=
+	t=1713959086; cv=none; b=kGxK5xGH2Vgmf8i9IAC4MqKdnksWF/jLGcJBbXERkqvYuPAf1EpByvyMAcKeSWIMB9dXBMCTTnhFxlGDKd8BgJPJ0GgOMCsqxwID7ouWBTfiTH5V+zW8AZr/FwFg05AVu5T+Mh+c/QL5/RP4+o0HKugISlK/jq5FGaHb5v+ipAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713958820; c=relaxed/simple;
-	bh=uPxQKTFjx1OojfL3XIvuRwqZqEHhetjhGQ/QNoCE0cs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=dpAQHU4J7MBa3RBhknztr0YwQnMkPHZgzk88AtfaYCQqVN8KbpjP54InTx8zBkMjSQ+SwIyMNlOuq2sNux2S1gIm3vcyhazOkoAIo2Vzn1WOCCW0ftZH3ogIugHjUo2gk+NHQCglvAEjLscmiXzzWkJ1/0hm/AqBEpjwV6ADNFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=edKYD9Dn; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-41b243c20a2so322605e9.2
-        for <linux-pm@vger.kernel.org>; Wed, 24 Apr 2024 04:40:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713958817; x=1714563617; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lWMfbfXnYK3fqv0yrgeedC9giNqOZfecY/EM1i6Y9pw=;
-        b=edKYD9Dn7FaCWOBjpHdZh4kLOcScK13PKLKG9a8zuh+rux5j/0bEp7lbhlhu+P27pk
-         SujBXnQa7jgAn4MzXbVLXsYf0nkEzHgn7hbwkuDpFnxLmwq2lD47B6/yxtRTBIJD/sK0
-         NDCPjDHmye2Cfg8oVuOs6YYRu1h6sfuxvdTr1ruM6+8jFNjFCCAFWqt3Ss4iD4yTfCy6
-         SwouGHq5Ym4i9/2O0zDcQpq/bR5GrWghp/es4enWAe8Quj6XtEUah889VLl7GJ7TjIMg
-         d4SZbm0PK6cRsdRlR38QXJLdvgFJ+TMIloQ0+QYICRDoVGjn5DDHSOovoSZ27sXe3tYa
-         EhTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713958817; x=1714563617;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lWMfbfXnYK3fqv0yrgeedC9giNqOZfecY/EM1i6Y9pw=;
-        b=TwVZmLhvZz6SRgk14GdpTHiBDLPFQdnVjlbM18VBs/y44OZ5BzSDqtqGbvYDioTQT5
-         awbig58eoyLdgeykz4bW8W9H6hB3OlC2Bz0UBKlQ6eC/kSwr/3pqBnyUjMD1DJnV9JlY
-         rCgERRRfi+tiCn69qqONamQa0aFQLeruojw2XaOKaAR+P2zA6AIoIw/VO1yDm/99qISz
-         vOjtFMXQZsAEN/EY5NBT0FjYBj7GaTojdJDAOeFWUD72fTXwva3ED+r68OWcZr3+L47D
-         +AF4blRn+WMb7cNtvvSNUt7YkkOIwZ7qTZscJU/wnP4DPeVWIJvSL7r2L/QE3j4gGke3
-         fG8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVpmX7VMimUk8flBXKiKz6nooQ19nU7lHfj0WWg6lKCLDCQ7ywoGcXwdzpwbLJq3+tLCDlptIYEZjCD0HY1wg/ujEt82Qj3UAU=
-X-Gm-Message-State: AOJu0YxmPJC50tboyIFE43FER8/LmxuG06pCedktn6imL4GUIfXSF94Y
-	VYy491y2FCMxiOtTHGgC6v9ig8Mg8lK78BpvAdVfUzRD5N4bBAWCjE1cw9ZjkrQ=
-X-Google-Smtp-Source: AGHT+IEWJT/8VK6y4z/3yPVqZFVfOmJf5zYfnoJ8CK24bfiYAkNVefNagGs454ZH+JH0euJmK90N9w==
-X-Received: by 2002:a5d:568d:0:b0:34a:9b75:cb95 with SMTP id f13-20020a5d568d000000b0034a9b75cb95mr1449964wrv.37.1713958816645;
-        Wed, 24 Apr 2024 04:40:16 -0700 (PDT)
-Received: from localhost ([102.222.70.76])
-        by smtp.gmail.com with ESMTPSA id d4-20020adfe2c4000000b0034a3a0a753asm15306805wrj.100.2024.04.24.04.40.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Apr 2024 04:40:16 -0700 (PDT)
-Date: Wed, 24 Apr 2024 14:40:11 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Andre Przywara <andre.przywara@arm.com>
-Cc: Yangtao Li <tiny.windzz@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>, linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH] cpufreq: sun50i: fix error returns in dt_has_supported_hw()
-Message-ID: <9bfe5703-b39b-4d98-9995-f6a7d0ea558d@moroto.mountain>
+	s=arc-20240116; t=1713959086; c=relaxed/simple;
+	bh=xpUTnXpiZhsPhmL4RJ3EPHSMkblKDHr8KkYzdAZ0yCk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ib8iq4TY0XB/3SE1lsRD115gSTtEnoPTsnBBZJkJw6knEEmof+gXbWCjVx43yT81ak9fYZYf/ZgPO228Mvw6H9GfB/a4PB718h7iDNYj9SlomQAoakgiiY8DIfXI1+jdXm2QrMJdFuvzJ8Zna6DNAW9aLwAH945C9NvZZ8577V4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nRG83O82; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713959084; x=1745495084;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xpUTnXpiZhsPhmL4RJ3EPHSMkblKDHr8KkYzdAZ0yCk=;
+  b=nRG83O82fqFh5ToFKb8WWksDMHNFIoOT0vIw3a97MLnz7KuTgy6424+2
+   vidFjkQaSabVFo6tKvTMYW/9KEXBfVuBoxorKKE/jIY3SDBXcOW8xwagg
+   ojYdMNTXbteJx2yxgaUsMfSVTHYurMw7CSjJNQvXTReHJ0oz2tAvxvQrV
+   gVoAVBI0cWTOOJAVjoQTFQXX9U8z2ETw8osUWYv4IBYorbkmnZ9jTCNNo
+   L4S736J3J34vEXveX+zsXOgz/3q1EwgznmJhMTMBDdsqMI5koeUJfGUpk
+   5jQf4yfBvIZQuRqQ2jEzZ6zYlNRn3r+THZSKohaXFTe77vDJacANzcI5w
+   w==;
+X-CSE-ConnectionGUID: +Yz0J4wjQxWqgwIEaeQ4mQ==
+X-CSE-MsgGUID: ZFekwH78SkiNYD0kuz4ATg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11053"; a="10123653"
+X-IronPort-AV: E=Sophos;i="6.07,226,1708416000"; 
+   d="scan'208";a="10123653"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2024 04:44:43 -0700
+X-CSE-ConnectionGUID: aOxPJhh6Rz+3u9n3Cu24IA==
+X-CSE-MsgGUID: SOx7EidETuuhviBZaSh38A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,226,1708416000"; 
+   d="scan'208";a="47949188"
+Received: from spandruv-mobl4.amr.corp.intel.com (HELO [10.212.109.188]) ([10.212.109.188])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2024 04:44:43 -0700
+Message-ID: <d96da934-a996-418e-a175-4ba463d3916b@linux.intel.com>
+Date: Wed, 24 Apr 2024 04:44:41 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 14/16] thermal: gov_user_space: Use .trip_crossed()
+ instead of .throttle()
+To: Daniel Lezcano <daniel.lezcano@linaro.org>,
+ "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ Lukasz Luba <lukasz.luba@arm.com>
+References: <13515747.uLZWGnKmhe@kreacher> <15186663.tv2OnDr8pf@kreacher>
+ <ZijNj7DzL9e01Vnt@mai.linaro.org>
+ <e565a9c3-9244-4a0b-9ad8-4beebd03d681@linux.intel.com>
+ <917f9bec-80f3-4d10-9781-7b27f361101d@linaro.org>
+Content-Language: en-US
+From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <917f9bec-80f3-4d10-9781-7b27f361101d@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The dt_has_supported_hw() function returns type bool.  That means these
-negative error codes are cast to true but the function should return
-false instead.
 
-Fixes: fa5aec9561cf ("cpufreq: sun50i: Add support for opp_supported_hw")
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
----
- drivers/cpufreq/sun50i-cpufreq-nvmem.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 4/24/24 04:34, Daniel Lezcano wrote:
+> On 24/04/2024 13:32, Srinivas Pandruvada wrote:
+>>
+>> On 4/24/24 02:14, Daniel Lezcano wrote:
+>>> On Wed, Apr 10, 2024 at 07:03:10PM +0200, Rafael J. Wysocki wrote:
+>>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>>
+>>>> Notifying user space about trip points that have not been crossed is
+>>>> not particuarly useful, so modity the User Space governor to use the
+>>>> .trip_crossed() callback, which is only invoked for trips that have 
+>>>> been
+>>>> crossed, instead of .throttle() that is invoked for all trips in a
+>>>> thermal zone every time the zone is updated.
+>>>>
+>>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>> ---
+>>> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>>>
+>>> I would also consider removing this governor which is pointless now 
+>>> that we
+>>> have the netlink notification mechanism
+>>
+>> That is a good goal, But, not there yet to deprecate.
+>
+> What can be done to deprecate it ?
+>
+>
 
-diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-index cd50cea16a87..0b882765cd66 100644
---- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-+++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-@@ -136,11 +136,11 @@ static bool dt_has_supported_hw(void)
- 
- 	cpu_dev = get_cpu_device(0);
- 	if (!cpu_dev)
--		return -ENODEV;
-+		return false;
- 
- 	np = dev_pm_opp_of_get_opp_desc_node(cpu_dev);
- 	if (!np)
--		return -ENOENT;
-+		return false;
- 
- 	for_each_child_of_node(np, opp) {
- 		if (of_find_property(opp, "opp-supported-hw", NULL)) {
--- 
-2.43.0
+First we need to migrate all the existing usage to netlink. We need to 
+add some more netlink notifications. That is relatively easy.
+
+The problem is user space changes are much slower to push than kernel. 
+Kernels changes gets deployed at faster pace in some distributions.
+
+Thanks,
+
+Srinivas
+
 
 
