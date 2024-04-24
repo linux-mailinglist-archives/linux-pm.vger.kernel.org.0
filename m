@@ -1,251 +1,244 @@
-Return-Path: <linux-pm+bounces-7017-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7018-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C45A18B0D81
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 17:01:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E1A188B0E76
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 17:34:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7BA6F28DE4E
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 15:01:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98D5C28D703
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 15:34:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33D6F15ECF8;
-	Wed, 24 Apr 2024 15:01:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EFB9161308;
+	Wed, 24 Apr 2024 15:33:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="NnWl3tB6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AjojJ9tv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2062F15EFA2
-	for <linux-pm@vger.kernel.org>; Wed, 24 Apr 2024 15:01:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3998B15EFDB;
+	Wed, 24 Apr 2024 15:33:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713970891; cv=none; b=o0SswdDfS9jBnS6AKudnULj3iJw4+4nBCs+KYC8zLqhlm/vkNLcGvCtZQRi2IuSSuhHZ8Lthhw5VDXzlS+wDsyYp3tiDVsG5FuGIwQunpRyjIcRbW58GuxRmDhkh/xRRZIAvl8nwEbjGL2a7BFF8xPO2hRbrFeG4Q/eIpWWB5Ro=
+	t=1713972806; cv=none; b=jGtHUk3DDJ0GlVrrSpOQLtTnOQOSNMZHOgvJ9uveDnCem09gJrrl91d5+bDOC/mSuleGXLvB5ozn0PJWJsh76vKZv+R93n2ddOKgvLZsfkKaQ5yjVFDlpYfDIvQm7CbGCIlawDDy8ycatLP5+tPuxBBgETL4NiZTc2ehvKQjpRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713970891; c=relaxed/simple;
-	bh=0aZRLtNw63kpt7maIuOQ1ENafGyijpJdkxd/8eHO0yk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FXJ4PLUFi2P9Lab6xWgd9xanjfYS0/6sQVBc6FJkGfVIhvM86pU7mceRBH5xaQVc9HZ2+toGFHyF+PuCi6Cua9mUw/jJzW5CW8zlnwuQzpSIm2ttClX4PrH3UAJjcV42dlxa3/g1RdviTtV0lzMPngTmgm7PGnVXVIiUf+IExi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=NnWl3tB6; arc=none smtp.client-ip=209.85.160.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-23981fd7947so2932084fac.3
-        for <linux-pm@vger.kernel.org>; Wed, 24 Apr 2024 08:01:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1713970887; x=1714575687; darn=vger.kernel.org;
-        h=in-reply-to:autocrypt:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bMuDgle5cwUrm8RopWGm4y2/lm4n1iaal71tqT1Vfj4=;
-        b=NnWl3tB6pViifAba8eLM74CF2xFCBd1qj3FlBRWic+y73ddMjF5Vb6rEL1qqMcU3Fp
-         Zkxga3XAfUZB4c1x1Vjve1OOqMw8ufjNiU0pR19F4U2RX6Spa7ivuWyatE5mgWGKqQqv
-         kn+IxTf99Z5E42UZhnOloZ8fn6vJza/YDc1uU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713970887; x=1714575687;
-        h=in-reply-to:autocrypt:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=bMuDgle5cwUrm8RopWGm4y2/lm4n1iaal71tqT1Vfj4=;
-        b=Kn6ycaCT9XdlXjRuIH1clf/R9G2Ao+TR8izqSNRxGsSjlHscLkjEFWLRAIyYy4d4hv
-         Z6y6rNT75vZrA+bVCPo+iHwrFYI6ENn1Els38uKrYXAsU3nZyWVoFya74KX28cXGxtxf
-         KZVpZxBNL8ns1yKk5NLyfI4xlCQtZvK+VcmaenZy1keaITXQsTbT8s/uo4Kg0fR8RK70
-         5RrmWkkWyfM9Hou98Ntj4dG+T87bRPQTXqqo7SIXLu8Wd7YnN4y642GKKNd081ebENGf
-         MNsfK9uQJifBkCE4KXodTwQJ/MiPjW6d9d/nSQY8HyoNL+5xEijd3QOO2gcQOImDkJQF
-         MjlA==
-X-Forwarded-Encrypted: i=1; AJvYcCUlnk4XTnjgRxoZRtHnsv91G0Y+5eZDngfYRjjp9wVKOBKhqIZ8ZMjEbE9gaNYmHYtQl1n/foC/kCYFh8AAPZn97ECdQFvFyzY=
-X-Gm-Message-State: AOJu0Yx12RHi3vdExox3xfrrXfCQ/v/EtbR9+8ThaOcsEk3fOLpjd8/+
-	SnMDeJUbcdJaGxf5rUFpw1URfV6SL2TkxKNd2jkuLxbG9QI8I3pd4EG/2L8orA==
-X-Google-Smtp-Source: AGHT+IEomZZ8SrnoiLE0gvdAFhWhDMVIAqtdyivNg8Vr+AdBq/D+u3oTcSYTw5OcCabxAG2yfmSLiQ==
-X-Received: by 2002:a05:6871:1d1:b0:235:489e:95e9 with SMTP id q17-20020a05687101d100b00235489e95e9mr2804090oad.25.1713970886809;
-        Wed, 24 Apr 2024 08:01:26 -0700 (PDT)
-Received: from [192.168.1.3] (ip68-4-215-93.oc.oc.cox.net. [68.4.215.93])
-        by smtp.gmail.com with ESMTPSA id i15-20020ac8488f000000b00436a8ee913csm6121540qtq.41.2024.04.24.08.01.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Apr 2024 08:01:26 -0700 (PDT)
-Message-ID: <f7dd4aac-ca25-48d9-8e2e-c07df74d7425@broadcom.com>
-Date: Wed, 24 Apr 2024 08:01:23 -0700
+	s=arc-20240116; t=1713972806; c=relaxed/simple;
+	bh=eKJo5gG7zxObnBLQvdDtMfVRz5h7TuiTzRdbx1XUkHM=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Q9mRk/gFAVqM9CFlAzgQ0yNpDzhvOtIiPi6q7CC9scVTAP9Nf52MKsRcHH59mI3/16QH5LCOwwZQEGdjvK6Dj1oGPf2/jcPk6Fb2X+lASUZS+zQoLfXL+q0IF4ERK/Rth0gYyYlT7LVPfuWs+DxwVnrFE0zTSJHMTo2rskdVuaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AjojJ9tv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07AC3C113CD;
+	Wed, 24 Apr 2024 15:33:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713972806;
+	bh=eKJo5gG7zxObnBLQvdDtMfVRz5h7TuiTzRdbx1XUkHM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=AjojJ9tvZTHPOZR/m5u54kBnZ+v5gQoVRJnWRZb383Sp68Ye0+yfUFbFEmXumbr5M
+	 fU0B/yxWBm19YdtzwC5IAPD/LDrg3L7acdSS1QHmkF88ezMp4Cx1G007yY6CiUgS7+
+	 5qsWL2aYC1ehU1F3B12rZr+6awrFfyBSKJq++mg0YfXyrRRqS/d6R5FIgumS7w+T3i
+	 Wbg1yvs31EHYu3O2+FVP+9MhGxgi1l1CcsXkFotK9esfkKMe9wm/LKYaFYdDp9LDwX
+	 tOIIXPg6SyBNza2a5Z3gBjzNM00AJMrILFoS/KCwbC9ldyfTmKZQCyNGSNxRTvq1nH
+	 mQRYlqDADNIxw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1rzecd-007acO-2E;
+	Wed, 24 Apr 2024 16:33:23 +0100
+Date: Wed, 24 Apr 2024 16:33:22 +0100
+Message-ID: <86il06rd19.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>,
+	Peter Zijlstra
+	<peterz@infradead.org>,
+	<linux-pm@vger.kernel.org>,
+	<loongarch@lists.linux.dev>,
+	<linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>,
+	<kvmarm@lists.linux.dev>,
+	<x86@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	"Rafael J . Wysocki"
+	<rafael@kernel.org>,
+	Miguel Luis <miguel.luis@oracle.com>,
+	"James Morse"
+	<james.morse@arm.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe
+ Brucker <jean-philippe@linaro.org>,
+	Catalin Marinas
+	<catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	<linuxarm@huawei.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov
+	<bp@alien8.de>,
+	"Dave Hansen" <dave.hansen@linux.intel.com>,
+	<justin.he@arm.com>,
+	<jianyong.wu@arm.com>
+Subject: Re: [PATCH v7 11/16] irqchip/gic-v3: Add support for ACPI's disabled but 'online capable' CPUs
+In-Reply-To: <20240424135438.00001ffc@huawei.com>
+References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com>
+	<20240418135412.14730-12-Jonathan.Cameron@huawei.com>
+	<20240422114020.0000294f@Huawei.com>
+	<87plugthim.wl-maz@kernel.org>
+	<20240424135438.00001ffc@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpufreq: brcmstb-avs-cpufreq: ISO C90 forbids mixed
- declarations
-To: Portia Stephens <portia.stephens@canonical.com>, mmayer@broadcom.com,
- bcm-kernel-feedback-list@broadcom.com, rafael@kernel.org
-Cc: viresh.kumar@linaro.org, abelova@astralinux.ru, linux-pm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- stephensportia@gmail.com
-References: <20240424050220.889814-1-portia.stephens@canonical.com>
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
- xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
- M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
- JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
- PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
- KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
- AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
- IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
- ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
- bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
- Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
- tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
- TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
- zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
- WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
- IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
- U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
- 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
- pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
- MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
- IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
- gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
- obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
- N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
- CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
- C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
- wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
- EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
- fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
- MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
- 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
- 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <20240424050220.889814-1-portia.stephens@canonical.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000e7938c0616d8f15e"
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: Jonathan.Cameron@huawei.com, tglx@linutronix.de, peterz@infradead.org, linux-pm@vger.kernel.org, loongarch@lists.linux.dev, linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org, linux@armlinux.org.uk, rafael@kernel.org, miguel.luis@oracle.com, james.morse@arm.com, salil.mehta@huawei.com, jean-philippe@linaro.org, catalin.marinas@arm.com, will@kernel.org, linuxarm@huawei.com, mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, justin.he@arm.com, jianyong.wu@arm.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
---000000000000e7938c0616d8f15e
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-
-
-
-On 4/23/2024 10:02 PM, Portia Stephens wrote:
-> There is a compile warning because a NULL pointer check was added before
-> a struct was declared. This moves the NULL pointer check to after the
-> struct is delcared and moves the struct assignment to after the NULL
-> pointer check.
+On Wed, 24 Apr 2024 13:54:38 +0100,
+Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
 > 
-> Fixes: f661017e6d32 ("cpufreq: brcmstb-avs-cpufreq: add check for cpufreq_cpu_get's return value")
+> On Tue, 23 Apr 2024 13:01:21 +0100
+> Marc Zyngier <maz@kernel.org> wrote:
+> 
+> > On Mon, 22 Apr 2024 11:40:20 +0100,
+> > Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+> > > 
+> > > On Thu, 18 Apr 2024 14:54:07 +0100
+> > > Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
 
-No need for a newline between the Fixes: and Signed-off-by: tags, FWIW
+[...]
+
+> > >   
+> > > > +	/*
+> > > > +	 * Capable but disabled CPUs can be brought online later. What about
+> > > > +	 * the redistributor? ACPI doesn't want to say!
+> > > > +	 * Virtual hotplug systems can use the MADT's "always-on" GICR entries.
+> > > > +	 * Otherwise, prevent such CPUs from being brought online.
+> > > > +	 */
+> > > > +	if (!(gicc->flags & ACPI_MADT_ENABLED)) {
+> > > > +		pr_warn_once("CPU %u's redistributor is inaccessible: this CPU can't be brought online\n", cpu);
+> > > > +		set_cpu_present(cpu, false);
+> > > > +		set_cpu_possible(cpu, false);
+> > > > +		return 0;
+> > > > +	}  
+> > 
+> > It seems dangerous to clear those this late in the game, given how
+> > disconnected from the architecture code this is. Are we sure that
+> > nothing has sampled these cpumasks beforehand?
+> 
+> Hi Marc,
+> 
+> Any firmware that does this is being considered as buggy already
+> but given it is firmware and the spec doesn't say much about this,
+> there is always the possibility.
+
+There is no shortage of broken firmware out there, and I expect this
+trend to progress.
+
+> Not much happens between the point where these are setup and
+> the point where the the gic inits and this code runs, but even if careful
+> review showed it was fine today, it will be fragile to future changes.
+> 
+> I'm not sure there is a huge disadvantage for such broken firmware in
+> clearing these masks from the point of view of what is used throughout
+> the rest of the kernel. Here I think we are just looking to prevent the CPU
+> being onlined later.
+
+I totally agree on the goal, I simply question the way you get to it.
 
 > 
-> Signed-off-by: Portia Stephens <portia.stephens@canonical.com>
+> We could add a set_cpu_broken() with appropriate mask.
+> Given this is very arm64 specific I'm not sure Rafael will be keen on
+> us checking such a mask in the generic ACPI code, but we could check it in
+> arch_register_cpu() and just not register the cpu if it matches.
+> That will cover the vCPU hotplug case.
+>
+> Does that sounds sensible, or would you prefer something else?
 
-Acked-by: Florian Fainelli <florian.fainelli@broadcom.com>
 
-> ---
->   drivers/cpufreq/brcmstb-avs-cpufreq.c | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/brcmstb-avs-cpufreq.c b/drivers/cpufreq/brcmstb-avs-cpufreq.c
-> index 1a1857b0a6f4..ea8438550b49 100644
-> --- a/drivers/cpufreq/brcmstb-avs-cpufreq.c
-> +++ b/drivers/cpufreq/brcmstb-avs-cpufreq.c
-> @@ -481,9 +481,12 @@ static bool brcm_avs_is_firmware_loaded(struct private_data *priv)
->   static unsigned int brcm_avs_cpufreq_get(unsigned int cpu)
->   {
->   	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
-> +	struct private_data *priv;
-> +
->   	if (!policy)
->   		return 0;
-> -	struct private_data *priv = policy->driver_data;
-> +
-> +	priv = policy->driver_data;
->   
->   	cpufreq_cpu_put(policy);
->   
+Such a 'broken_rdists' mask is exactly what I have in mind, just
+keeping it private to the GIC driver, and not expose it anywhere else.
+You can then fail the hotplug event early, and avoid changing the
+global masks from within the GIC driver. At least, we don't mess with
+the internals of the kernel, and the CPU is properly marked as dead
+(that mechanism should already work).
+
+I'd expect the handling side to look like this (will not compile, but
+you'll get the idea):
+
+diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+index 6fb276504bcc..e8f02bfd0e21 100644
+--- a/drivers/irqchip/irq-gic-v3.c
++++ b/drivers/irqchip/irq-gic-v3.c
+@@ -1009,6 +1009,9 @@ static int __gic_populate_rdist(struct redist_region *region, void __iomem *ptr)
+ 	u64 typer;
+ 	u32 aff;
+ 
++	if (cpumask_test_cpu(smp_processor_id(), &broken_rdists))
++		return 1;
++
+ 	/*
+ 	 * Convert affinity to a 32bit value that can be matched to
+ 	 * GICR_TYPER bits [63:32].
+@@ -1260,14 +1263,15 @@ static int gic_dist_supports_lpis(void)
+ 		!gicv3_nolpi);
+ }
+ 
+-static void gic_cpu_init(void)
++static int gic_cpu_init(void)
+ {
+ 	void __iomem *rbase;
+-	int i;
++	int ret, i;
+ 
+ 	/* Register ourselves with the rest of the world */
+-	if (gic_populate_rdist())
+-		return;
++	ret = gic_populate_rdist();
++	if (ret)
++		return ret;
+ 
+ 	gic_enable_redist(true);
+ 
+@@ -1286,6 +1290,8 @@ static void gic_cpu_init(void)
+ 
+ 	/* initialise system registers */
+ 	gic_cpu_sys_reg_init();
++
++	return 0;
+ }
+ 
+ #ifdef CONFIG_SMP
+@@ -1295,7 +1301,11 @@ static void gic_cpu_init(void)
+ 
+ static int gic_starting_cpu(unsigned int cpu)
+ {
+-	gic_cpu_init();
++	int ret;
++
++	ret = gic_cpu_init();
++	if (ret)
++		return ret;
+ 
+ 	if (gic_dist_supports_lpis())
+ 		its_cpu_init();
+
+But the question is: do you rely on these masks having been
+"corrected" anywhere else?
+
+Thanks,
+
+	M.
 
 -- 
-Florian
-
---000000000000e7938c0616d8f15e
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
-QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
-UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
-M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
-Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
-14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
-a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
-XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
-RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
-UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
-MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
-BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
-9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
-AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
-UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
-KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
-nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
-Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
-VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
-ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
-CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
-MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
-d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
-hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
-bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
-BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
-KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
-kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
-2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
-3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
-NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
-AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
-LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIFlE88quoLetpIb5
-3l5gPEYJBDnKkbHwcUaqs1B2q+qtMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTI0MDQyNDE1MDEyN1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
-AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQC9D3slWpe9oSQdRzR4EeZOKckK9MbitqjO
-pGtMxQgZ0DiRxDnGfvbKF9atLXgaiOcO4dxssKBv+w4uUzbUP7u5Vl8jtpyxnDBlO+AN6a3c2K1+
-WdKsYJahGO5d3zNaPb/vhdVPrW+oluzsC4FHnny7NZi1mWb6wzDZWABtoKO7TaRYP5GJaenWIOwa
-CPTHED0BJuPzK8S5h94odDcEAGZw8VlqBn462U+xZBhazQDk7z7lkolCjgPNRkJLXuwBcHshuESE
-Tz3gBLxJ8GlbvkKFEYUkvpOpQnvk+u6ZtvH2gyPz6A8ycqrO9XDpcFh82dUvnF5SvbBX/TE+q3Sw
-Jr1O
---000000000000e7938c0616d8f15e--
+Without deviation from the norm, progress is not possible.
 
