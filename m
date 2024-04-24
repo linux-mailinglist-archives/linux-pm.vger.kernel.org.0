@@ -1,125 +1,122 @@
-Return-Path: <linux-pm+bounces-7004-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7005-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FD2E8B0860
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 13:34:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 623CB8B086C
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 13:40:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17332287A11
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 11:34:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E41A71F2419B
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 11:40:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3863715A4A0;
-	Wed, 24 Apr 2024 11:34:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2743A15A4AA;
+	Wed, 24 Apr 2024 11:40:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dyjNgCLI"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="edKYD9Dn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8934A15A491
-	for <linux-pm@vger.kernel.org>; Wed, 24 Apr 2024 11:34:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75B4815A492
+	for <linux-pm@vger.kernel.org>; Wed, 24 Apr 2024 11:40:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713958479; cv=none; b=JG+nV+6NyiVMO1cAX6USHVH9KndaUvKE09qdrCtZ44cmYZwHvgJClyDdsjHKzKmQVFf+MfnaOzfb5RN0cxm/j3iCWFcK0Mpuvyc2wV0BTdCR+Wdhwe20Gn5Umeso5GChLc+59FHjJT1WWXnl3SVYoBTTEHMnbi+f1KX4Y/JNlsM=
+	t=1713958820; cv=none; b=frfP/ypFKqFVxNMLjbGkKFbj4g2Mx+OqdS8eM0qKCsKVIGRjy4yp+B2ji8f2n6ifA20mQkO8G8EKQUamoUpgsk1PolfKqBuRxIZf2bTu7AszlqIrGynEhed2thu/NrP1+dwZo6DyiW+f1aZ+X2hpd6wzr6XgI6ztwZIht6Hvu+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713958479; c=relaxed/simple;
-	bh=YcUfxhUcQApT1mNwyIlAfJBq0C+KxLwY6/CxV7Yz34E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l1XX+syIjRPrOqqgavUMg/21cc3E7//cQwvzT1zjnfXMl1sfmM5nDLADgViz346YP6juNpLmsOTMsUmXiTw/PiRIzXyv0wPRvIDWYJNXcC7p23DADPx5lPdiJhzvOWVWCJrsTd8k644hvVVI6NWH/NwWUV+91NOBK1Ba9U7aek4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dyjNgCLI; arc=none smtp.client-ip=209.85.128.53
+	s=arc-20240116; t=1713958820; c=relaxed/simple;
+	bh=uPxQKTFjx1OojfL3XIvuRwqZqEHhetjhGQ/QNoCE0cs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dpAQHU4J7MBa3RBhknztr0YwQnMkPHZgzk88AtfaYCQqVN8KbpjP54InTx8zBkMjSQ+SwIyMNlOuq2sNux2S1gIm3vcyhazOkoAIo2Vzn1WOCCW0ftZH3ogIugHjUo2gk+NHQCglvAEjLscmiXzzWkJ1/0hm/AqBEpjwV6ADNFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=edKYD9Dn; arc=none smtp.client-ip=209.85.128.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-41af670176cso5547385e9.0
-        for <linux-pm@vger.kernel.org>; Wed, 24 Apr 2024 04:34:37 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-41b243c20a2so322605e9.2
+        for <linux-pm@vger.kernel.org>; Wed, 24 Apr 2024 04:40:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713958476; x=1714563276; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1713958817; x=1714563617; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=k25tPjMFnxZGYgnKJKp0dkB0J/d5Y8BkULxm1XocePE=;
-        b=dyjNgCLI+8hS8qaZyK26/0ZFyeQ+xfIIbktz7Em+kwHxKinVXEZaki3lbDs9vN09RC
-         bBjCXHvKVSIgLIRNdL+jSSA+N+98qhJcgC20Pn8a6Vxrm8wUaw/Lfl31dvkdvpQZJ41p
-         V/j1nvSuAsuIdBxgWjWAmK7MlpSzDFur6m6nv/ExOPOskb4N+pskqD7uzJxgMInQUioo
-         BdCe67LvXk8hngA+tfbJNb3IA73R6B2w4DazvbHU+f66eJyvYaiB2RYsxzxcjMciuTAR
-         FDZ0aDLhpxyM4YHkp921wVLMvrRqpWzyEUrN00knLwx6+gQibRdF9PsrqP2WSCadJRNf
-         dAQQ==
+        bh=lWMfbfXnYK3fqv0yrgeedC9giNqOZfecY/EM1i6Y9pw=;
+        b=edKYD9Dn7FaCWOBjpHdZh4kLOcScK13PKLKG9a8zuh+rux5j/0bEp7lbhlhu+P27pk
+         SujBXnQa7jgAn4MzXbVLXsYf0nkEzHgn7hbwkuDpFnxLmwq2lD47B6/yxtRTBIJD/sK0
+         NDCPjDHmye2Cfg8oVuOs6YYRu1h6sfuxvdTr1ruM6+8jFNjFCCAFWqt3Ss4iD4yTfCy6
+         SwouGHq5Ym4i9/2O0zDcQpq/bR5GrWghp/es4enWAe8Quj6XtEUah889VLl7GJ7TjIMg
+         d4SZbm0PK6cRsdRlR38QXJLdvgFJ+TMIloQ0+QYICRDoVGjn5DDHSOovoSZ27sXe3tYa
+         EhTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713958476; x=1714563276;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1713958817; x=1714563617;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k25tPjMFnxZGYgnKJKp0dkB0J/d5Y8BkULxm1XocePE=;
-        b=EQh8F4VmvPtHMgK6icxGx6IUFzS0jdR9+0kdj84NhPAdu0oGdwMM62Ip8KW95t1Xy8
-         n1n9qXxjy8w6lPWUIKncKsfzs9EWgYPzsTDGF4rrTrCyd+qkoM+6vjstI2eHXbrqncb6
-         ttkfppKoPC63IhjVI2SfIILQlTWDLBvQ8xKZRlSvMPKWJh0IAhUXyMIh65B/ilr4J5IA
-         psHdXvvFY1jsXa/5RX8wuXT4lGGLJXXgbb11lbrLAV0rKkF8YIMYeYBiq+S5debB+Svn
-         s/0FZCpfLtIw7vp/+X6vaeMAlhZBb9jYYsGFgYm83+cgc47jNVm2gUxbSKwtX1qOwrhH
-         87xA==
-X-Gm-Message-State: AOJu0YyNeUGU6sUiBuVvgqA0eXMIe7gPy1MCoTPkjBL8f0dm8qx/uaCc
-	TIH+okqB5OrePH/UCu8ezPsKyU5pJ+IZ8vg9bvZytS1Y37NdInTsssJFbiJDTco=
-X-Google-Smtp-Source: AGHT+IF7nndGnjcSyHSKcy0fsxfNLV5bYy8H6C5JEFkHVts2E5ZYVuz34KpOvWk+i4MbUAfOVCjbxw==
-X-Received: by 2002:a5d:6709:0:b0:341:d3b0:ae7d with SMTP id o9-20020a5d6709000000b00341d3b0ae7dmr1725373wru.45.1713958475772;
-        Wed, 24 Apr 2024 04:34:35 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id ea7-20020a0560000ec700b0033e91509224sm17003566wrb.22.2024.04.24.04.34.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Apr 2024 04:34:35 -0700 (PDT)
-Message-ID: <917f9bec-80f3-4d10-9781-7b27f361101d@linaro.org>
-Date: Wed, 24 Apr 2024 13:34:34 +0200
+        bh=lWMfbfXnYK3fqv0yrgeedC9giNqOZfecY/EM1i6Y9pw=;
+        b=TwVZmLhvZz6SRgk14GdpTHiBDLPFQdnVjlbM18VBs/y44OZ5BzSDqtqGbvYDioTQT5
+         awbig58eoyLdgeykz4bW8W9H6hB3OlC2Bz0UBKlQ6eC/kSwr/3pqBnyUjMD1DJnV9JlY
+         rCgERRRfi+tiCn69qqONamQa0aFQLeruojw2XaOKaAR+P2zA6AIoIw/VO1yDm/99qISz
+         vOjtFMXQZsAEN/EY5NBT0FjYBj7GaTojdJDAOeFWUD72fTXwva3ED+r68OWcZr3+L47D
+         +AF4blRn+WMb7cNtvvSNUt7YkkOIwZ7qTZscJU/wnP4DPeVWIJvSL7r2L/QE3j4gGke3
+         fG8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVpmX7VMimUk8flBXKiKz6nooQ19nU7lHfj0WWg6lKCLDCQ7ywoGcXwdzpwbLJq3+tLCDlptIYEZjCD0HY1wg/ujEt82Qj3UAU=
+X-Gm-Message-State: AOJu0YxmPJC50tboyIFE43FER8/LmxuG06pCedktn6imL4GUIfXSF94Y
+	VYy491y2FCMxiOtTHGgC6v9ig8Mg8lK78BpvAdVfUzRD5N4bBAWCjE1cw9ZjkrQ=
+X-Google-Smtp-Source: AGHT+IEWJT/8VK6y4z/3yPVqZFVfOmJf5zYfnoJ8CK24bfiYAkNVefNagGs454ZH+JH0euJmK90N9w==
+X-Received: by 2002:a5d:568d:0:b0:34a:9b75:cb95 with SMTP id f13-20020a5d568d000000b0034a9b75cb95mr1449964wrv.37.1713958816645;
+        Wed, 24 Apr 2024 04:40:16 -0700 (PDT)
+Received: from localhost ([102.222.70.76])
+        by smtp.gmail.com with ESMTPSA id d4-20020adfe2c4000000b0034a3a0a753asm15306805wrj.100.2024.04.24.04.40.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Apr 2024 04:40:16 -0700 (PDT)
+Date: Wed, 24 Apr 2024 14:40:11 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Andre Przywara <andre.przywara@arm.com>
+Cc: Yangtao Li <tiny.windzz@gmail.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>, linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH] cpufreq: sun50i: fix error returns in dt_has_supported_hw()
+Message-ID: <9bfe5703-b39b-4d98-9995-f6a7d0ea558d@moroto.mountain>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 14/16] thermal: gov_user_space: Use .trip_crossed()
- instead of .throttle()
-Content-Language: en-US
-To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- Lukasz Luba <lukasz.luba@arm.com>
-References: <13515747.uLZWGnKmhe@kreacher> <15186663.tv2OnDr8pf@kreacher>
- <ZijNj7DzL9e01Vnt@mai.linaro.org>
- <e565a9c3-9244-4a0b-9ad8-4beebd03d681@linux.intel.com>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <e565a9c3-9244-4a0b-9ad8-4beebd03d681@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
 
-On 24/04/2024 13:32, Srinivas Pandruvada wrote:
-> 
-> On 4/24/24 02:14, Daniel Lezcano wrote:
->> On Wed, Apr 10, 2024 at 07:03:10PM +0200, Rafael J. Wysocki wrote:
->>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>>
->>> Notifying user space about trip points that have not been crossed is
->>> not particuarly useful, so modity the User Space governor to use the
->>> .trip_crossed() callback, which is only invoked for trips that have been
->>> crossed, instead of .throttle() that is invoked for all trips in a
->>> thermal zone every time the zone is updated.
->>>
->>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>> ---
->> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->>
->> I would also consider removing this governor which is pointless now 
->> that we
->> have the netlink notification mechanism
-> 
-> That is a good goal, But, not there yet to deprecate.
+The dt_has_supported_hw() function returns type bool.  That means these
+negative error codes are cast to true but the function should return
+false instead.
 
-What can be done to deprecate it ?
+Fixes: fa5aec9561cf ("cpufreq: sun50i: Add support for opp_supported_hw")
+Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+---
+ drivers/cpufreq/sun50i-cpufreq-nvmem.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-
+diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+index cd50cea16a87..0b882765cd66 100644
+--- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
++++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+@@ -136,11 +136,11 @@ static bool dt_has_supported_hw(void)
+ 
+ 	cpu_dev = get_cpu_device(0);
+ 	if (!cpu_dev)
+-		return -ENODEV;
++		return false;
+ 
+ 	np = dev_pm_opp_of_get_opp_desc_node(cpu_dev);
+ 	if (!np)
+-		return -ENOENT;
++		return false;
+ 
+ 	for_each_child_of_node(np, opp) {
+ 		if (of_find_property(opp, "opp-supported-hw", NULL)) {
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.43.0
 
 
