@@ -1,117 +1,142 @@
-Return-Path: <linux-pm+bounces-7013-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7014-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E774F8B0B18
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 15:37:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB91D8B0C09
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 16:10:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 99875286813
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 13:37:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1936D1C22B50
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Apr 2024 14:10:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADEA216C854;
-	Wed, 24 Apr 2024 13:33:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="E9r6DHmE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3051A15E1E5;
+	Wed, 24 Apr 2024 14:10:16 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D6BC16C45B
-	for <linux-pm@vger.kernel.org>; Wed, 24 Apr 2024 13:33:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3603215B996;
+	Wed, 24 Apr 2024 14:10:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713965608; cv=none; b=aycLWpTspD16dLWUHWIOdFXWn6XbkHuqWPs/VPu4rP6Kz+FRJZq9L7yNvtXjSgcJbnhFHJ2236yatmxrokvoPeRkedmxwyRW9NjDvpYKUqmew0FN2U48tjREcyxXQzRuXf3N3AGhfJXV9Aa8sbdrva9vRjsb+g38sCdXb6aQeNI=
+	t=1713967816; cv=none; b=gY55RXd1Dr8zYJhyCtK8okBcMiVITpkxeFkkWrW22+rjQOn+SbhxpPUscp9lOKyo0QmtS9J4KyqEiI4zfBzSYL3hDXT+oOT5jccRQ0DqNvUwvo+wJMpnIAZfBEUwfKjQYusTOOeZNtUnzE44Y9Szxq719NL99etzY2yDAMF8000=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713965608; c=relaxed/simple;
-	bh=CYZJM9W2Zf94rPUvddceU9zBJpQcu9n/hjV8sSH5eg8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nuidN/6F4l5ZIC8/ea6fAG8sgj8EqKzGxLhJCSvAZB6RPvjn+/qNRZQ8w34ULHdnZ7bebwxDOilUDUSAhFXH2nUP1XjkLelmaFE0WinNluHVzjtIXxxUcaF2JICQ3UMAFkPLVk4LQntNrFr1/EivKZ/J0PMRHlP9GVybruvT2to=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=E9r6DHmE; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2af37c18c10so185001a91.2
-        for <linux-pm@vger.kernel.org>; Wed, 24 Apr 2024 06:33:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1713965606; x=1714570406; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fab3Tuq9UbIYWyt/yROOhPd6Au0KKupHpH9rbvKSy8M=;
-        b=E9r6DHmE6v6IOfd2vxu3BskovFbVVvj0MfjnpPFxdyrKXjcqeVLgmofxM0M72cc8+E
-         ys923AUHHZCyrdmJUEhD8E6AO4fp/29Mro6rBqYCj6a3sW7zG7NlM03I2wsMn9dYYB+J
-         5y4mD/Xnq2raeASB4bnPtz7dHkiu5NH4UnTYo=
+	s=arc-20240116; t=1713967816; c=relaxed/simple;
+	bh=Y1w31Rvu7zBBDZYiN3Jt/FzqaSd5eiNVxkPtDrQGkuw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=j45/JTXkndJlMf7bZor4DrNTeD73P0heQ7GZ6IsmnXotgJ6Slh/pWczKIgfwhjb33A2RN4DpU6QayvLsMgz33HrGL98zMYLoJEZ1KSzlEFV96a2bFbUsytFaYqMYtDlJW9fsa6TzB9AdDTPDgp2m4A/WroIoKxxxbHoeqm+xFlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-618769020bcso74340767b3.3;
+        Wed, 24 Apr 2024 07:10:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713965606; x=1714570406;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fab3Tuq9UbIYWyt/yROOhPd6Au0KKupHpH9rbvKSy8M=;
-        b=ajv/HHwAMw4B9mV/rvzVt1HhVYrfs1fYna7sZNzR9jqiN1McR/y0Mcx3xHKFKLlVrd
-         yk5vVJbIexUiYPjjoBE4v89o/8W59u06Rscpiu6tXeT2w/9Z6fDR9zjnOs4ZRDYgn/Hy
-         kuIj/vwyHu7Xx0plyk/eVGK1Ew+r/wMXJgc02ASQj11F4KikKw5aihEUZmPD0ZqaMoOs
-         pjwhE3wgYf7zWxcMyIvEQtL9OPBfPn1qKVyYr86K4E6UWTa+BuNqbxWhXU3jB6Hwj3pf
-         mEPwTVnkJFlB2M9RD3W3x1jnTzkf/+Slub24X+HiQQQvxmmYMoX2F3xpUEGbb2vSl1eR
-         wBzw==
-X-Forwarded-Encrypted: i=1; AJvYcCUZURe0vcpq8elxd/B4IERzZMrySAzNLMTagp2dUrxGyguiz+5AKJyL8YgrSRhvaGMx7dAEgWgFbbQJO5DZzX7N4RK+nGc0TX8=
-X-Gm-Message-State: AOJu0Yz2y+zPAK5mvQQVLB1N2+JoLji7O6rW0fvv0ueYNvZN8khhFL+z
-	JWzWQf1Q9e6lfDiXcuuQZJLLck3VqwWoqHyZDVbbvuDE0LDjXBJMYseKbHAf4Zf7U5OECKzHhtm
-	nSIiy5Q==
-X-Google-Smtp-Source: AGHT+IFY24C7A5lVbo4EMu64C08Cj9sss5y8CxkvwTgEPXUiuaAVRDd0iTv9OJBF+htvMtn7t20p9Q==
-X-Received: by 2002:a17:902:7610:b0:1e4:3299:2acf with SMTP id k16-20020a170902761000b001e432992acfmr2640139pll.3.1713965605357;
-        Wed, 24 Apr 2024 06:33:25 -0700 (PDT)
-Received: from [192.168.43.82] ([223.185.79.208])
-        by smtp.gmail.com with ESMTPSA id i9-20020a17090332c900b001e3cfb853a2sm11919457plr.183.2024.04.24.06.33.21
+        d=1e100.net; s=20230601; t=1713967811; x=1714572611;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=79YnAJzLJZsMvO3vMIQ39gqtdUV3uOsjN0bO7lVXx38=;
+        b=bk9zC0YTFdhSHsgBCO9mu9NJsGRiKW6ve6k+CaeP0XxDOkjMyjeWk53rtJxXRMjarj
+         YZ1HR8cGALt9E2DECAmlJsFIDfRhy2kVTck+9ha8fy6iUw4432KWb34XP5k1/nrKdcAY
+         bnDgY7hU0SosG1V2gWYQ9ayNKUNt/mglRIc1utt0zIS6A+qLfC7qmwA09u4yjgpabZND
+         dtISjLVPa4wtMIWDGPMfLdWxmbQdCqQccDnuaJPsMBRCFJOW2EamSftM3S3NmisvnL5w
+         o/gFWvhBdcdVCUPtQpyxctRhHNgDliqb+nE+9/RcoimxmCkWK5RfmXhTZxvF6jv+0Ajc
+         CCLg==
+X-Forwarded-Encrypted: i=1; AJvYcCWWV+vQ1lTPPVWZfhXj9aQRfn5n+tvePAU2qI8uJGYs21D2fxbt3tqhV5qi4epm+MSqx0kxnHBZsxuPG4U+afKqc+oiHUmH/i7nfJ5auWO+nL5tTiE6c/ikRa9HaORw2bHTO6YWjK1EI54MXt0hcuDa+1hsDBSsJnVWhMRZ/JwiAiEqOEkDPTgty2yEtDWg229ea3KKm+e+c5GNgRXSVsG2ZcBBM593vWzK0gVdugBzPQv9MiQNykh9g6871msJtxw=
+X-Gm-Message-State: AOJu0YwsKONd8tyiLADEwHnzzUMlUvuk4Lp+RKmrnVwa1bEZbYqCfp2r
+	4NAx0nsfupaX87SRJHMtjwsCmG3Ur2jIdAVCoLpDb2tbTuXpdp1tST5t3DB4HU8=
+X-Google-Smtp-Source: AGHT+IFWinzHs9h6qxtyF2O3jVZq90sj0NBcIEE35Tmtd8wkjFUiebXvanqDn8L0m2k4qg71zliT8A==
+X-Received: by 2002:a05:690c:6383:b0:618:8b98:f274 with SMTP id hp3-20020a05690c638300b006188b98f274mr2675124ywb.45.1713967811550;
+        Wed, 24 Apr 2024 07:10:11 -0700 (PDT)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id i126-20020a0dc684000000b006158165c606sm3034546ywd.136.2024.04.24.07.10.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Apr 2024 06:33:24 -0700 (PDT)
-Message-ID: <89605a09-3d19-427d-a368-374777449c1b@linuxfoundation.org>
-Date: Wed, 24 Apr 2024 07:33:19 -0600
+        Wed, 24 Apr 2024 07:10:11 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-dc6dcd9124bso6484214276.1;
+        Wed, 24 Apr 2024 07:10:11 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUqqws/wsi2+Fxc+gN2AoBIoIUTfQHxPONIyZognaqInZQefmcu89XA3eJ5RwzrKAaG9n55iVRcxHT4jdocvlvWPMWyXrJysda9EuY5oxepSp6Cnzxcq9jEG29lfJzhXTQXTSkSgPNP4cbKnPB/FwvckwDNm+ZHqtzcoaMok2taoJBJ4kAqN1KLRMSuNANOHBV+PgXl1t656QfjDzjaEbtqIBvJHNFM9+2Y2TGU4NtfHj5lFDmuv6jzR9hrlevHnJ0=
+X-Received: by 2002:a5b:c4c:0:b0:dcd:3a37:bdb1 with SMTP id
+ d12-20020a5b0c4c000000b00dcd3a37bdb1mr2648998ybr.44.1713967811000; Wed, 24
+ Apr 2024 07:10:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] selftests: Make sh helper and power supply test
- POSIX-compliant
-To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
- Shuah Khan <shuah@kernel.org>
-Cc: Sebastian Reichel <sre@kernel.org>,
- Mike Looijmans <mike.looijmans@topic.nl>, kernel@collabora.com,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20240415-supply-selftest-posix-sh-v1-0-328f008d698d@collabora.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240415-supply-selftest-posix-sh-v1-0-328f008d698d@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240422105355.1622177-1-claudiu.beznea.uj@bp.renesas.com> <20240422105355.1622177-7-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20240422105355.1622177-7-claudiu.beznea.uj@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 24 Apr 2024 16:09:58 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXvcRRmCSFB9tM81CjsgyhJ=48WShpqw0cxT7aA=EYNGw@mail.gmail.com>
+Message-ID: <CAMuHMdXvcRRmCSFB9tM81CjsgyhJ=48WShpqw0cxT7aA=EYNGw@mail.gmail.com>
+Subject: Re: [PATCH v4 6/8] clk: renesas: rzg2l: Extend power domain support
+To: Claudiu <claudiu.beznea@tuxon.dev>
+Cc: mturquette@baylibre.com, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, magnus.damm@gmail.com, ulf.hansson@linaro.org, 
+	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 4/15/24 09:32, Nícolas F. R. A. Prado wrote:
-> The patches in this series make the ktap sh helper and the power_supply
-> selftest POSIX-compliant. Tested with bash, dash and busybox ash.
-> 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+On Mon, Apr 22, 2024 at 12:54=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.dev>=
+ wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>
+> RZ/{G2L, V2L, G3S}-based CPG versions have support for saving extra
+> power when clocks are disabled by activating module standby. This is done
+> through MSTOP-specific registers that are part of CPG. Each individual
+> module has one or more bits associated with one MSTOP register (see table
+> "Registers for Module Standby Mode" from HW manuals). Hardware manual
+> associates modules' clocks with one or more MSTOP bits. There are 3
+> mappings available (identified by researching RZ/G2L, RZ/G3S, RZ/V2L HW
+> manuals):
+>
+> case 1: N clocks mapped to N MSTOP bits (with N=3D{0, ..., X})
+> case 2: N clocks mapped to 1 MSTOP bit  (with N=3D{0, ..., X})
+> case 3: N clocks mapped to M MSTOP bits (with N=3D{0, ..., X}, M=3D{0, ..=
+., Y})
+>
+> Case 3 has been currently identified on RZ/V2L for the VCPL4 module.
+>
+> To cover all three cases, the individual platform drivers will provide to
+> clock driver MSTOP register offset and associated bits in this register
+> as a bitmask and the clock driver will apply this bitmask to proper
+> MSTOP register.
+>
+> The MSTOP was implemented through power domains. Platform-specific clock
+> drivers will register an array of type
+> struct rzg2l_cpg_pm_domain_init_data, which will be used to instantiate
+> properly the power domains.
+>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 > ---
-> Nícolas F. R. A. Prado (2):
->        selftests: ktap_helpers: Make it POSIX-compliant
->        selftests: power_supply: Make it POSIX-compliant
-> 
->   tools/testing/selftests/kselftest/ktap_helpers.sh                    | 4 ++--
->   tools/testing/selftests/power_supply/test_power_supply_properties.sh | 2 +-
->   2 files changed, 3 insertions(+), 3 deletions(-)
-> ---
-> base-commit: 7e74ee01d1754156ed3706b61e793fbd46f5cd7b
-> change-id: 20240415-supply-selftest-posix-sh-aee99cf85e8f
-> 
-> Best regards,
+>
+> Changes in v2:
 
-Thank you. Applied the patches to linux-kselftest next for Linux 6.10-rc1
+s/v2/v4/
 
-thanks,
--- Shuah
+> - dropped the pwrdn functionality until it is better understanded;
+>   at the same time kept the code ready for pwrd being added by keeping
+>   struct rzg2l_cpg_pm_domain_conf, DEF_REG_CONF(); please let me know
+>   if you prefer otherwise
+> - @Geert, @Ulf: I dropped your previous Rb tags due to dropping pwrdn
 
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
