@@ -1,108 +1,92 @@
-Return-Path: <linux-pm+bounces-7111-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7108-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB42D8B26B7
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 18:42:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8D4B8B263C
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 18:21:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9605828493F
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 16:42:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 06C621C2134E
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 16:21:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC4DB5338C;
-	Thu, 25 Apr 2024 16:42:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5224014C581;
+	Thu, 25 Apr 2024 16:21:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="mtUdiBGs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IAzpVdfb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2A122E636
-	for <linux-pm@vger.kernel.org>; Thu, 25 Apr 2024 16:42:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E01C2D60A
+	for <linux-pm@vger.kernel.org>; Thu, 25 Apr 2024 16:21:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714063339; cv=none; b=FnJCvWjjbCUnZiIkOqIFb1TkzE9swRCdhev6TjaMAYUl44/Vmy8DZ08CcMmw/qOiB62SGVIElOOexwWPGYHpfAu76OltRH/mJPySltUlChYQBVxx3/nPtKbUinYM5tTJZRnod+fZDJ4zwBmO163hiGkGvTes+Dx5YaCpa5URZ3k=
+	t=1714062065; cv=none; b=qp7BwbAxcTOLtrqGCcPqLLOnOzed2jStKMPEFQUjVjSQXfzG2kGM2Cd+c1tIpwmW8MMHZ/ZWvNk3aOgY3bs+rv+KHJqAcKIv8Bq5b3LI7z8FVFoNMRcv1GXpL90VVTC5aREJMz195pv3BParf0EwZJ66wFMPmu5LZqXZEQsK9xI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714063339; c=relaxed/simple;
-	bh=Q/D/pXTwAfQjRhdoTeFpIBY9vbHFtbsg1krUpeEtO1I=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FLvtSNi202hEnUrIYYIV/Iw3zdw/xNtZajtQ/C880EfH/5bw0KRYGqEBC7WQCtGqh1e63hDDH9RaYId/6S8mynLvUPjUKeMaM7Pj7kxZSothcxtP+BT1bsLwJb6txuEQC+WoZ5LWFmEGSGHZp6uGPvrNMSahbeSM3shwBfLJvRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=mtUdiBGs; arc=none smtp.client-ip=185.70.43.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=2wfsuboutvaw7hlox4qfx64uai.protonmail; t=1714060471; x=1714319671;
-	bh=l6ejzdU+/oJTsZFPqAfrkNNF2qMH3A6mlJ13xMJmIUU=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=mtUdiBGsCrBGGwlAZiHmz9FeQhbxTP52ufvoZLR2FkOCkUvgOKCCx/ios0HZxuj+z
-	 bIZowo0duS37tSX/lMt/3KkW0jCAaF+RCCvMSxhORHB3AGi8paUuXHPI5N8AByQ9Yv
-	 iaUIfiOgaqW/lcOVOfUof735OWGY9Ki81MSDXCB02aldeRQT6rfmjkHCJpfQAWRgO5
-	 hiScGQ7GvgJLzVzSEfVDYp7PixaBHSw8YB03cTXRlmSvJYsS0JGNZ+BEsxcBtAFhnh
-	 OgnfgeseSEXrK06FVrh59KV1l93F8Lc8QQpfpDCb7egAaY0EVkGl0tU2ryWAk1AJsW
-	 5EkTfiQYzgQsw==
-Date: Thu, 25 Apr 2024 15:54:27 +0000
-To: Viresh Kumar <viresh.kumar@linaro.org>
-From: Benno Lossin <benno.lossin@proton.me>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>, linux-pm@vger.kernel.org, Vincent Guittot <vincent.guittot@linaro.org>, Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>, rust-for-linux@vger.kernel.org, Manos Pitsidianakis <manos.pitsidianakis@linaro.org>, Erik Schilling <erik.schilling@linaro.org>, =?utf-8?Q?Alex_Benn=C3=A9e?= <alex.bennee@linaro.org>, Joakim Bech <joakim.bech@linaro.org>, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 3/3] cpufreq: Add Rust based cpufreq-dt driver
-Message-ID: <f02e0c3f-1e24-4ecc-8729-81d99f7543fc@proton.me>
-In-Reply-To: <20240422103050.tiecvamrd5upunou@vireshk-i7>
-References: <cover.1712314032.git.viresh.kumar@linaro.org> <1792467a772b7a8355c6d0cb0cbacfbffff08afd.1712314032.git.viresh.kumar@linaro.org> <4ff5f30b-f2b8-4625-b3cd-ac08e4ffb068@proton.me> <8c4f2053-acbc-4f4a-93de-18f149c80869@proton.me> <20240422103050.tiecvamrd5upunou@vireshk-i7>
-Feedback-ID: 71780778:user:proton
-X-Pm-Message-ID: 5d0be9780b09350ea47be15e0ac7434cd03a4b54
+	s=arc-20240116; t=1714062065; c=relaxed/simple;
+	bh=E+VKUdaq0FUCZfeiJyLi3Y4KMq2RJPywiHyAZXQ7FQA=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=RRgSJEv5jOAyoUc5BEJmF4hs0UDcPpH87tfp4Nr1aUNmlrsIMh5vUE77JeKIkaX4nV4oHR9Rg50exhSMDEca3wi5PObHRTbwoC9/qJmFJ/C/jFZtqHz14KVjfXRAcEpAN5QENzSvZvGJReoFg0L/a0kH6CV3GFD2p2u/LXKYNPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IAzpVdfb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AB53FC113CE
+	for <linux-pm@vger.kernel.org>; Thu, 25 Apr 2024 16:21:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714062064;
+	bh=E+VKUdaq0FUCZfeiJyLi3Y4KMq2RJPywiHyAZXQ7FQA=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=IAzpVdfbE0ge3PHT7/Gg+pwrkh2iwztILLopzgPQ1bLq9kPzjPt4epEGZbq63pmkl
+	 Pg3PsFnjxjLXSpFGHKDOL/PbdaqiTGgaDAgAqmMNt7v/wtPJJkIQqymmupxd+umxpl
+	 dkiKORqMBAqzQuDyKhR2NX7BpBdzltte4qBxH4tnGsXCbo2klRR7b7W9D3rAD7xkCB
+	 x48a3350GIXFySFOMFDDFfpsPloXldHd4GOOburbNaH0KhUv4ftp4RplA2VvwbjmSa
+	 PiE2DDu91pngm3QdMTDKxW0vlAqDBoe9kLkGQklwi5PhBtEo8sTcADnJFxe/sv7M75
+	 ULCTN3A2wlEJA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 9FE66C433E5; Thu, 25 Apr 2024 16:21:04 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 218759] 6.9-rc kernels - with Ryzen 7840HS CPU single core
+ never boosts to max frequency
+Date: Thu, 25 Apr 2024 16:21:04 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mario.limonciello@amd.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218759-137361-lYhOmQQobj@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218759-137361@https.bugzilla.kernel.org/>
+References: <bug-218759-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-On 22.04.24 12:30, Viresh Kumar wrote:
-> On 07-04-24, 10:17, Benno Lossin wrote:
->> On 07.04.24 11:54, Benno Lossin wrote:
->>> On 05.04.24 13:09, Viresh Kumar wrote:
->>>> +// Finds exact supply name from the OF node.
->>>> +fn find_supply_name_exact(np: *mut bindings::device_node, name: &str)=
- -> Option<CString> {
->>>> +    let sname =3D CString::try_from_fmt(fmt!("{}-supply", name)).ok()=
-?;
->>>> +
->>>> +    // SAFETY: The OF node is guaranteed by the C code to be valid.
->>>> +    let pp =3D unsafe { bindings::of_find_property(np, sname.as_ptr()=
- as *mut _, ptr::null_mut()) };
->>>
->>> Drivers should avoid calling `unsafe` code as much as possible. They
->>> also should not be calling `bindings` code directly. Please write (or
->>> find) abstractions for these `unsafe` calls.
->>
->> Having re-read the cover letter, I see that you are already aware of
->> this. If you need any help with creating the abstractions, feel free to
->> reach out!
->=20
-> Thanks Benno. I am not sure what's the right approach here as there
-> are so many missing things (frameworks) I need. Though I don't need
-> full support for them but just a handful of APIs.
->=20
-> And then there is dependency on the generic support for device/driver,
-> platform device/driver, etc.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218759
 
-I don't know exactly what you are referring to, but you can try to reach
-out to other people on our zulip. Splitting the work with others could
-help you :)
+--- Comment #8 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
+Can you please try with preferred core disabled?
 
-Also if the frameworks that you need are particularly difficult to
-upstream, because they have a lot of dependencies, then you can try to
-create something similar to [1].
-
-[1]: https://github.com/Rust-for-Linux/linux/issues/1004
+amd_prefcore=3Ddisable
 
 --=20
-Cheers,
-Benno
+You may reply to this email to add a comment.
 
+You are receiving this mail because:
+You are the assignee for the bug.=
 
