@@ -1,145 +1,313 @@
-Return-Path: <linux-pm+bounces-7112-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7113-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11BB28B26C0
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 18:45:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A50118B26E4
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 18:55:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C1175281CAA
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 16:45:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5818E28537F
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 16:55:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15C0D14D446;
-	Thu, 25 Apr 2024 16:45:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XthInoz8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 149EB14D6E6;
+	Thu, 25 Apr 2024 16:55:36 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7342014D2BF
-	for <linux-pm@vger.kernel.org>; Thu, 25 Apr 2024 16:45:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3982D131746;
+	Thu, 25 Apr 2024 16:55:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714063537; cv=none; b=ZT/t6A0BXpy9Ntnwt2H3TMBAyU+DR4eElJftas/QvkhffuaE1/VoaQswTPyv9g8Fl/CWlMGWnprws89x/ZcsJJgrF/r+dTm2Sd/O2PareNK6tqfdUSw9ghJImmQKc0i3RwBSHlGYDqhPn1oc354kH4I56pqz677lye8KOsOj5Zk=
+	t=1714064136; cv=none; b=sKFNPQ+NmhcjdkuP62mq76Lcfd39SM8+3PtDdAp42/JFGKkdFgiRvi7jQYbeLel3My7I8e1xRN9rVbi570T9Xuu3V8uRk1YulL9RjEnw0bCwfPsbB9SxetSlQ40SYQ8ljlrb33RCiUFSYKsaURHtABZ/8WoTtsjgfO7C0Q7CVIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714063537; c=relaxed/simple;
-	bh=Amc/VhCaPuRfNE4c/UsFD95U+kTr2gWqvp2bPp82p24=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SH9d1ioITJyaENcySKcnObiBDfGsOO1U5Gszmw4Qkz2BREFyw4du5JlWmHPlEpHJET6CN8lZS7CP5Y2CaBhxZFmjupzEkWosyTmqLNDI76vuJBD8CqYhrjjL/pKksO19j8p/iNnmeNc6zS6c7u71v3hjrsZxOPqsX8sKCHnrw4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XthInoz8; arc=none smtp.client-ip=209.85.219.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-de55e876597so1462797276.1
-        for <linux-pm@vger.kernel.org>; Thu, 25 Apr 2024 09:45:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1714063534; x=1714668334; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eWQqHUbAAiSySnIsemSx25Y73dqsXlz6lqamDtL75KQ=;
-        b=XthInoz889q19LIYnd4dxHxjC10noyEEpacYxXANDNN8IDP5XeQXBOtc65TCU7iY9C
-         ZFOdnN9B5DejP/TG0tddktvVu7n9LlH+yFRdVgQBLRcErJF6YaI0HGu5Hyb1hNuQ7Z2W
-         zyZHNFFLmYZH+kKRw2NvM6mfnPh4HZF0CRgpoPKlyIc/96vPx/wKcxHdrhxkwVai5X57
-         8XAmABXiGn+yK2oLWmsr1cWTlYVngSOKUkZll41jNiQRJFxtd2Nj6FZo5k/NA6Eo3sRa
-         LII7x5cyW0/5XOb94tM3OWqlC156LUHRKoUZDUbXRQvkRkYacPFUL4l6hEefmDw4m41V
-         eupQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714063534; x=1714668334;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eWQqHUbAAiSySnIsemSx25Y73dqsXlz6lqamDtL75KQ=;
-        b=H0a4dC9xeutY3oVT7NolhgDWdgo5Q4HZ13VDAmBy/a6UmoUy1KN0mzM4OYHj4cuvQF
-         orTOvVfFVNB+DTiX40gX3gnnQoWQ98hdmCB2Bn8OfNKmKq938p/oisPLreF0o3KDq1ao
-         v125cHdI6FY9RDx8a2KnFV9QbIAm14CJPUTU6bcaZLwWYrJnmrY0fuY/bYLoC1dsA/90
-         r7LNdWcSPfJjJCXcMTjlvC+oChRaYT+MrMZyHAgjd6RYUAERmxWachDi/AS4ypmyRkzM
-         bfJyqreXoTixlYL73zLK4FhzD4DKkR8opLUq9cR5bmH/BaV8bsNFFLeOH0nZlTWc5zDn
-         9hIA==
-X-Forwarded-Encrypted: i=1; AJvYcCX73tWwsz7uT44E82hdSJ0a2wbdMZp+C7cikRV7mPu3LKyGIosMbi2LigGP24H5evG9czT8ZcMYCBdznRXdAlOHQgCqMKByeMU=
-X-Gm-Message-State: AOJu0YyTA6lngAHBHrz++TjM8Fc/WVK35bSmOY2ouptZfQQ5ob1u5lKr
-	xwcPTYOw55YN63KHeK7BioODyXArbB3nuV4/yBOdJj+Lyf9rGwIjyIG5AGXk26UKxDipJWj/qoj
-	mATaF85z+D55JLRoCqxMLwGwKroIXYrLMc4v3Pw==
-X-Google-Smtp-Source: AGHT+IE6E0yGMivLHEIzi4cVQrlqrcgIk/WXjie4Wzsi6F0u2PMmSvmweB2JnuzBk12npMsW/6HfizfFtt+TW3hNbCM=
-X-Received: by 2002:a25:fc11:0:b0:de5:5706:b955 with SMTP id
- v17-20020a25fc11000000b00de55706b955mr243062ybd.4.1714063534487; Thu, 25 Apr
- 2024 09:45:34 -0700 (PDT)
+	s=arc-20240116; t=1714064136; c=relaxed/simple;
+	bh=Wv+cmZ5IUPEpcmXXIlZlfrK9jeGJtrDRrdh31P+6h9U=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sbziDiixjNWlesBeRuWW7oAr23yqeTlkDTnd60KIQ/kL8nwTHccRazXVatCRaPrM3bFHKPn+XbmghDemofpYzNk+8iub3dDC/ZFP8O3kK3dn86S5nVBogUgztTWq7JrnuaRNttRRE/gr3em984Ec/eIhiikOLFM3XZHymyLVfkE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VQMNv1Wtbz6K6H3;
+	Fri, 26 Apr 2024 00:53:03 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 274411400DB;
+	Fri, 26 Apr 2024 00:55:29 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Thu, 25 Apr
+ 2024 17:55:28 +0100
+Date: Thu, 25 Apr 2024 17:55:27 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Marc Zyngier <maz@kernel.org>, <linuxarm@huawei.com>,
+	<linuxarm@huawei.com>
+CC: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
+	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
+	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+	<x86@kernel.org>, Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki"
+	<rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, "James Morse"
+	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, Jean-Philippe
+ Brucker <jean-philippe@linaro.org>, Catalin Marinas
+	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Ingo Molnar
+	<mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+	<dave.hansen@linux.intel.com>, <justin.he@arm.com>, <jianyong.wu@arm.com>
+Subject: Re: [PATCH v7 11/16] irqchip/gic-v3: Add support for ACPI's
+ disabled but 'online capable' CPUs
+Message-ID: <20240425175502.00007def@huawei.com>
+In-Reply-To: <20240425155726.000063f7@huawei.com>
+References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com>
+	<20240418135412.14730-12-Jonathan.Cameron@huawei.com>
+	<20240422114020.0000294f@Huawei.com>
+	<87plugthim.wl-maz@kernel.org>
+	<20240424135438.00001ffc@huawei.com>
+	<86il06rd19.wl-maz@kernel.org>
+	<20240425133150.000009fa@Huawei.com>
+	<20240425155726.000063f7@huawei.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240422105355.1622177-1-claudiu.beznea.uj@bp.renesas.com> <CAMuHMdXHhsdOgTiDdqMwAMvb-m_VBqOcTRPURx_upc2AtmBTfA@mail.gmail.com>
-In-Reply-To: <CAMuHMdXHhsdOgTiDdqMwAMvb-m_VBqOcTRPURx_upc2AtmBTfA@mail.gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 25 Apr 2024 18:44:58 +0200
-Message-ID: <CAPDyKFrhPjuOR5iC+zy+SCJv5yoWU0fX8FfDbt9nrM6VRCjmNw@mail.gmail.com>
-Subject: Re: [PATCH v4 0/8] clk: renesas: rzg2l: Add support for power domains
-To: Geert Uytterhoeven <geert@linux-m68k.org>, Claudiu <claudiu.beznea@tuxon.dev>
-Cc: mturquette@baylibre.com, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, magnus.damm@gmail.com, linux-renesas-soc@vger.kernel.org, 
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Wed, 24 Apr 2024 at 16:34, Geert Uytterhoeven <geert@linux-m68k.org> wro=
-te:
->
-> Hi Ulf,
->
-> On Mon, Apr 22, 2024 at 12:54=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.de=
-v> wrote:
-> > From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> >
-> > Series adds support for power domains on rzg2l driver.
-> >
-> > RZ/G2L kind of devices support a functionality called MSTOP (module
-> > stop/standby). According to hardware manual the module could be switch
-> > to standby after its clocks are disabled. The reverse order of operatio=
-n
-> > should be done when enabling a module (get the module out of standby,
-> > enable its clocks etc).
-> >
-> > In [1] the MSTOP settings were implemented by adding code in driver
-> > to attach the MSTOP state to the IP clocks. But it has been proposed
-> > to implement it as power domain. The result is this series.
-> >
-> > The DT bindings were updated with power domain IDs (plain integers
-> > that matches the DT with driver data structures). The current DT
-> > bindings were updated with module IDs for the modules listed in tables
-> > with name "Registers for Module Standby Mode" (see HW manual) exception
-> > being RZ/G3S where, due to the power down functionality, the DDR,
-> > TZCDDR, OTFDE_DDR were also added.
-> >
-> > Domain IDs were added to all SoC specific bindings.
-> >
-> > Thank you,
-> > Claudiu Beznea
-> >
-> > Changes in v4:
-> > - dropped the pwrdn functionality until it is better understanded
-> > - dropped patch "clk: renesas: rzg2l-cpg: Add suspend/resume
-> >   support for power domains" from v3; this will be replaced
-> >   by propertly calling device_set_wakup_path() in serial console
-> >   driver
-> > - instantiated the watchdog domain in r8a08g045 clock driver; this
-> >   allow applying r9a08g045 clock patch w/o affecting watchdog and later=
-,
-> >   after all good with watchdog patches series at [2], only patch
-> >   "arm64: dts: renesas: r9a08g045: Update #power-domain-cells =3D <1>"
-> >   will need to be applied
->
-> Are you happy with this series?  I would like to queue patches 1-7 in
-> renesas-clk for v6.10 (i.e. this week).
+On Thu, 25 Apr 2024 16:00:17 +0100
+Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
 
-Yes, the series looks good to me! For the series, feel free to add:
+> On Thu, 25 Apr 2024 13:31:50 +0100
+> Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+> 
+> > On Wed, 24 Apr 2024 16:33:22 +0100
+> > Marc Zyngier <maz@kernel.org> wrote:
+> >   
+> > > On Wed, 24 Apr 2024 13:54:38 +0100,
+> > > Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:    
+> > > > 
+> > > > On Tue, 23 Apr 2024 13:01:21 +0100
+> > > > Marc Zyngier <maz@kernel.org> wrote:
+> > > >       
+> > > > > On Mon, 22 Apr 2024 11:40:20 +0100,
+> > > > > Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:      
+> > > > > > 
+> > > > > > On Thu, 18 Apr 2024 14:54:07 +0100
+> > > > > > Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:      
+> > > 
+> > > [...]
+> > >     
+> > > > > >         
+> > > > > > > +	/*
+> > > > > > > +	 * Capable but disabled CPUs can be brought online later. What about
+> > > > > > > +	 * the redistributor? ACPI doesn't want to say!
+> > > > > > > +	 * Virtual hotplug systems can use the MADT's "always-on" GICR entries.
+> > > > > > > +	 * Otherwise, prevent such CPUs from being brought online.
+> > > > > > > +	 */
+> > > > > > > +	if (!(gicc->flags & ACPI_MADT_ENABLED)) {
+> > > > > > > +		pr_warn_once("CPU %u's redistributor is inaccessible: this CPU can't be brought online\n", cpu);
+> > > > > > > +		set_cpu_present(cpu, false);
+> > > > > > > +		set_cpu_possible(cpu, false);
+> > > > > > > +		return 0;
+> > > > > > > +	}        
+> > > > > 
+> > > > > It seems dangerous to clear those this late in the game, given how
+> > > > > disconnected from the architecture code this is. Are we sure that
+> > > > > nothing has sampled these cpumasks beforehand?      
+> > > > 
+> > > > Hi Marc,
+> > > > 
+> > > > Any firmware that does this is being considered as buggy already
+> > > > but given it is firmware and the spec doesn't say much about this,
+> > > > there is always the possibility.      
+> > > 
+> > > There is no shortage of broken firmware out there, and I expect this
+> > > trend to progress.
+> > >     
+> > > > Not much happens between the point where these are setup and
+> > > > the point where the the gic inits and this code runs, but even if careful
+> > > > review showed it was fine today, it will be fragile to future changes.
+> > > > 
+> > > > I'm not sure there is a huge disadvantage for such broken firmware in
+> > > > clearing these masks from the point of view of what is used throughout
+> > > > the rest of the kernel. Here I think we are just looking to prevent the CPU
+> > > > being onlined later.      
+> > > 
+> > > I totally agree on the goal, I simply question the way you get to it.
+> > >     
+> > > > 
+> > > > We could add a set_cpu_broken() with appropriate mask.
+> > > > Given this is very arm64 specific I'm not sure Rafael will be keen on
+> > > > us checking such a mask in the generic ACPI code, but we could check it in
+> > > > arch_register_cpu() and just not register the cpu if it matches.
+> > > > That will cover the vCPU hotplug case.
+> > > >
+> > > > Does that sounds sensible, or would you prefer something else?      
+> > > 
+> > > 
+> > > Such a 'broken_rdists' mask is exactly what I have in mind, just
+> > > keeping it private to the GIC driver, and not expose it anywhere else.
+> > > You can then fail the hotplug event early, and avoid changing the
+> > > global masks from within the GIC driver. At least, we don't mess with
+> > > the internals of the kernel, and the CPU is properly marked as dead
+> > > (that mechanism should already work).
+> > > 
+> > > I'd expect the handling side to look like this (will not compile, but
+> > > you'll get the idea):    
+> > Hi Marc,
+> > 
+> > In general this looks good - but...
+> > 
+> > I haven't gotten to the bottom of why yet (and it might be a side
+> > effect of how I hacked the test by lying in minimal fashion and
+> > just frigging the MADT read functions) but the hotplug flow is only getting
+> > as far as calling __cpu_up() before it seems to enter an infinite loop.
+> > That is it never gets far enough to fail this test.
+> > 
+> > Getting stuck in a psci cpu_on call.  I'm guessing something that
+> > we didn't get to in the earlier gicv3 calls before bailing out is blocking that?
+> > Looks like it gets to
+> > SMCCC smc
+> > and is never seen again.
+> > 
+> > Any ideas on where to look?  The one advantage so far of the higher level
+> > approach is we never tried the hotplug callbacks at all so avoided hitting
+> > that call.  One (little bit horrible) solution that might avoid this would 
+> > be to add another cpuhp state very early on and fail at that stage.
+> > I'm not keen on doing that without a better explanation than I have so far!  
+> 
+> Whilst it still doesn't work I suspect I'm loosing ability to print to the console
+> between that point and somewhat later and real problem is elsewhere.
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Hi again,
 
-Kind regards
-Uffe
+Found it I think.  cpuhp calls between cpu:bringup and ap:online 
+arm made from notify_cpu_starting() are clearly marked as nofail with a comment.
+STARTING must not fail!
+
+https://elixir.bootlin.com/linux/latest/source/kernel/cpu.c#L1642
+
+Whilst I have no immediate idea why that comment is there it is pretty strong
+argument against trying to have the CPUHP_AP_IRQ_GIC_STARTING callback fail
+and expecting it to carry on working :( 
+There would have been a nice print message, but given I don't appear to have
+a working console after that stage I never see it.
+
+So the best I have yet come up with for this is the option of a new callback registered
+in gic_smp_init()
+
+cpuhp_setup_state_nocalls(CPUHP_BP_PREPARE_DYN,
+			  "irqchip/arm/gicv3:checkrdist",
+			  gic_broken_rdist, NULL);
+
+with callback being simply 
+
+static int gic_broken_rdist(unsigned int cpu)
+{
+	if (cpumask_test_cpu(cpu, &broken_rdists))
+		return -EINVAL;
+
+	return 0;
+}
+
+That gets called cpuhp_up_callbacks() and is allows to fail and roll back the steps.
+
+Not particularly satisfying but keeps the logic confined to the gicv3 driver.
+
+What do you think?
+
+Jonathan
+
+> 
+> Jonathan
+> 
+> > 
+> > Thanks,
+> > 
+> > J
+> > 
+> >    
+> > > diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+> > > index 6fb276504bcc..e8f02bfd0e21 100644
+> > > --- a/drivers/irqchip/irq-gic-v3.c
+> > > +++ b/drivers/irqchip/irq-gic-v3.c
+> > > @@ -1009,6 +1009,9 @@ static int __gic_populate_rdist(struct redist_region *region, void __iomem *ptr)
+> > >  	u64 typer;
+> > >  	u32 aff;
+> > >  
+> > > +	if (cpumask_test_cpu(smp_processor_id(), &broken_rdists))
+> > > +		return 1;
+> > > +
+> > >  	/*
+> > >  	 * Convert affinity to a 32bit value that can be matched to
+> > >  	 * GICR_TYPER bits [63:32].
+> > > @@ -1260,14 +1263,15 @@ static int gic_dist_supports_lpis(void)
+> > >  		!gicv3_nolpi);
+> > >  }
+> > >  
+> > > -static void gic_cpu_init(void)
+> > > +static int gic_cpu_init(void)
+> > >  {
+> > >  	void __iomem *rbase;
+> > > -	int i;
+> > > +	int ret, i;
+> > >  
+> > >  	/* Register ourselves with the rest of the world */
+> > > -	if (gic_populate_rdist())
+> > > -		return;
+> > > +	ret = gic_populate_rdist();
+> > > +	if (ret)
+> > > +		return ret;
+> > >  
+> > >  	gic_enable_redist(true);
+> > >  
+> > > @@ -1286,6 +1290,8 @@ static void gic_cpu_init(void)
+> > >  
+> > >  	/* initialise system registers */
+> > >  	gic_cpu_sys_reg_init();
+> > > +
+> > > +	return 0;
+> > >  }
+> > >  
+> > >  #ifdef CONFIG_SMP
+> > > @@ -1295,7 +1301,11 @@ static void gic_cpu_init(void)
+> > >  
+> > >  static int gic_starting_cpu(unsigned int cpu)
+> > >  {
+> > > -	gic_cpu_init();
+> > > +	int ret;
+> > > +
+> > > +	ret = gic_cpu_init();
+> > > +	if (ret)
+> > > +		return ret;
+> > >  
+> > >  	if (gic_dist_supports_lpis())
+> > >  		its_cpu_init();
+> > > 
+> > > But the question is: do you rely on these masks having been
+> > > "corrected" anywhere else?
+> > > 
+> > > Thanks,
+> > > 
+> > > 	M.
+> > >     
+> > 
+> > 
+> > _______________________________________________
+> > linux-arm-kernel mailing list
+> > linux-arm-kernel@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel  
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
 
