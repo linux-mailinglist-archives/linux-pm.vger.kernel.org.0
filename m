@@ -1,65 +1,65 @@
-Return-Path: <linux-pm+bounces-7090-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7089-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0755C8B237A
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 16:06:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF84E8B2378
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 16:06:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2018289542
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 14:06:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8EB8FB295A2
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 14:05:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B23DC149E15;
-	Thu, 25 Apr 2024 14:05:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86250149DF6;
+	Thu, 25 Apr 2024 14:05:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="YOsx9TrP"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="LfmvS7J3"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 904401494B4;
-	Thu, 25 Apr 2024 14:05:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B89D149DEA;
+	Thu, 25 Apr 2024 14:05:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714053953; cv=none; b=i+YuYW0c6WR3ItpwwWr6BviLWbOI9S/c1tiy9TpDD8FxTqDRtS+xwclDAubEukDLBmI4eaGiQjpxh6vCDDLtwjPkGvPZTGmDwo/4k3J7H+wzhVIL7yg0WaC4JDaV+aagZVuQ1XrjolpHi7EsJbHMOJcpvAHImLSBmwv6m2m9nH0=
+	t=1714053952; cv=none; b=mkv0Mv0lSSX5sS674Evg7V1IGs/trTa5GXxLOKlelhsC47ce+bAqt9kOrji0N2S5de89cswIzbZKHV1zdUfXfawyvH7IKw5U2sIYF96W5Qd6rWccTzkPePFtfC7TiTAfb3t+6G1l849AgHsT+qNzze822lMGvgMQITVdt3y6jtQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714053953; c=relaxed/simple;
-	bh=ebRfADZs1o+yNd/fvqPJSHef53fNLOtXAYId2O6fRo0=;
+	s=arc-20240116; t=1714053952; c=relaxed/simple;
+	bh=E81St3CiFeG7Vi2+eI0dzlqZd/MtmDsJUUDYL/ndgOo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=idGvmp+/e4ToBiQDZKlIJbt9jjDGVCeuFLNu7OSPXc84cE9dJYXgj48mRHJX8AGxm1Bq1HJhPSv8qG1oV1d/XMC9V43wQi8ycm2IO7i0fyIQ9S/fdKwTQP8nh80sKbJQtfM+B2tg23s9hn3lW8CWME4F8THk79hOqt/aSd5SA44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=YOsx9TrP reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+	 MIME-Version:Content-Type; b=DYaWqQBd47YBUnOl/JEbxXkuwK42/NXPBTghJ+bwjjKgzPaCnhSpFMfCVITTNzzJNQRSxXMBRjIM5j97io+4R+mN2T4uz9yZPGqkjyg6jMWlM+47J3cvVr9RL++rTuORBX2ZP+JvmX5XTc0aCRn4xrCmSt/NJ44VKPndz/2xqGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=LfmvS7J3 reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
- id bc67e4bdb4ac1050; Thu, 25 Apr 2024 16:05:49 +0200
+ id d6c488403c6a301b; Thu, 25 Apr 2024 16:05:48 +0200
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id E0BA866DF24;
-	Thu, 25 Apr 2024 16:05:48 +0200 (CEST)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id E1B3266DF23;
+	Thu, 25 Apr 2024 16:05:47 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1714053949;
-	bh=ebRfADZs1o+yNd/fvqPJSHef53fNLOtXAYId2O6fRo0=;
+	s=dkim; t=1714053948;
+	bh=E81St3CiFeG7Vi2+eI0dzlqZd/MtmDsJUUDYL/ndgOo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=YOsx9TrP6YkfeoF9osbI9qE0px0EmyAE28zEA48tnAwKFcbxsEg5W5GCk9VFU309r
-	 EI+35UZCJYD7cR63cUKb+TsbLj94xws05d647l+yt8cyJ5/9HkOmy5NwmMxobQ3D6n
-	 bhk7ePwpjugowbXH4mXnDmhq5Ttd69YkYPCGNxL6d+39PSYoT1RR1xSF+XvELUKdEM
-	 +GlPqdB1HyXTF2I7a8FPNM8OnCg9JwwMdxFHW0X9g3YLwlRr7UTxIdvMk81JH7+WwS
-	 sBmGCl3fBCrPm1Mq2M+0T4n/kl7tZya1t7xwoD94BpdXFoFYm2AUs3JV1sDGmGaTYn
-	 uRzsCswJj5OCw==
+	b=LfmvS7J3ZqZG7nQk1LvGq5L+R2wzmbbHiJUshHya/d2okV3J1POEzdKNFQ+sRmPMU
+	 L7RzY7xjfkdD6geBy+ztyN/pdOje1z1nPQBmCQvrHi/DZFIiH/QNbBWfI1zQ9XOPwh
+	 YL1vevwEm9NoRfo3CfhgBQ32T5CRAoCROul/kbowQgKg3mTHtCwfCQjTTF4g3tLjk0
+	 mMD2e0sHYgLNstFrngvuZnWQsG074SJiyc0h/QVw25ed7wH/xcMTK++PQWp9BhmL7u
+	 F1Dfx5LoWHnJtqkO1Mtmt3VhXoHVZpQGIxl5g13Tnqy6KycCk8GJtiQskEAJmV1FhT
+	 DD0oTOt+Eoidg==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>,
  "Rafael J. Wysocki" <rafael@kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
  Daniel Lezcano <daniel.lezcano@linaro.org>
 Subject:
- [PATCH v2 2/3] thermal/debugfs: Pass cooling device state to
- thermal_debug_cdev_add()
-Date: Thu, 25 Apr 2024 16:04:36 +0200
-Message-ID: <1968232.PYKUYFuaPT@kreacher>
+ [PATCH v2 3/3] thermal/debugfs: Avoid printing zero duration for mitigation
+ events in progress
+Date: Thu, 25 Apr 2024 16:05:38 +0200
+Message-ID: <7659098.EvYhyI6sBW@kreacher>
 In-Reply-To: <3297002.44csPzL39Z@kreacher>
 References: <3297002.44csPzL39Z@kreacher>
 Precedence: bulk
@@ -68,132 +68,124 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 195.136.19.94
 X-CLIENT-HOSTNAME: 195.136.19.94
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudeljedgjedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopegurghnihgvlhdrlhgviigt
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudeljedgjedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtqhertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnheptddvfeegledvfedvveevhedvteeffeehvdeuiedukeeiledttefgvdeihffgteetnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopegurghnihgvlhdrlhgviigt
  rghnoheslhhinhgrrhhordhorhhg
 X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+=46rom: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-If cdev_dt_seq_show() runs before the first state transition of a cooling
-device, it will not print any state residency information for it, even
-though it might be reasonably expected to print residency information for
-the initial state of the cooling device.
+If a thermal mitigation event is in progress, its duration value has
+not been updated yet, so 0 will be printed as the event duration by
+tze_seq_show() which is confusing.
 
-For this reason, rearrange the code to get the initial state of a cooling
-device at the registration time and pass it to thermal_debug_cdev_add(),
-so that the latter can create a duration record for that state which will
-allow cdev_dt_seq_show() to print its residency information.
+Avoid doing that by marking the beginning of the event with the
+KTIME_MIN duration value and making tze_seq_show() compute the current
+event duration on the fly, in which case '>' will be printed instead of
+'=3D' in the event duration value field.
 
-Fixes: 755113d76786 ("thermal/debugfs: Add thermal cooling device debugfs information")
-Reported-by: Lukasz Luba <lukasz.luba@arm.com>
+Similarly, for trip points that have been crossed on the down, mark
+the end of mitigation with the KTIME_MAX timestamp value and make
+tze_seq_show() compute the current duration on the fly for the trip
+points still involved in the mitigation, in which cases the duration
+value printed by it will be prepended with a '>' character.
+
+=46ixes: 7ef01f228c9f ("thermal/debugfs: Add thermal debugfs information fo=
+r mitigation episodes")
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/thermal_core.c    |    9 +++++++--
- drivers/thermal/thermal_debugfs.c |   12 ++++++++++--
- drivers/thermal/thermal_debugfs.h |    4 ++--
- 3 files changed, 19 insertions(+), 6 deletions(-)
+=2D--
+ drivers/thermal/thermal_debugfs.c |   39 ++++++++++++++++++++++++++++++++-=
+=2D----
+ 1 file changed, 33 insertions(+), 6 deletions(-)
 
-Index: linux-pm/drivers/thermal/thermal_core.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_core.c
-+++ linux-pm/drivers/thermal/thermal_core.c
-@@ -935,6 +935,7 @@ __thermal_cooling_device_register(struct
- {
- 	struct thermal_cooling_device *cdev;
- 	struct thermal_zone_device *pos = NULL;
-+	unsigned long current_state;
- 	int id, ret;
- 
- 	if (!ops || !ops->get_max_state || !ops->get_cur_state ||
-@@ -972,6 +973,10 @@ __thermal_cooling_device_register(struct
- 	if (ret)
- 		goto out_cdev_type;
- 
-+	ret = cdev->ops->get_cur_state(cdev, &current_state);
-+	if (ret)
-+		goto out_cdev_type;
-+
- 	thermal_cooling_device_setup_sysfs(cdev);
- 
- 	ret = dev_set_name(&cdev->device, "cooling_device%d", cdev->id);
-@@ -985,6 +990,8 @@ __thermal_cooling_device_register(struct
- 		return ERR_PTR(ret);
- 	}
- 
-+	thermal_debug_cdev_add(cdev, current_state);
-+
- 	/* Add 'this' new cdev to the global cdev list */
- 	mutex_lock(&thermal_list_lock);
- 
-@@ -1000,8 +1007,6 @@ __thermal_cooling_device_register(struct
- 
- 	mutex_unlock(&thermal_list_lock);
- 
--	thermal_debug_cdev_add(cdev);
--
- 	return cdev;
- 
- out_cooling_dev:
 Index: linux-pm/drivers/thermal/thermal_debugfs.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_debugfs.c
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=2D-- linux-pm.orig/drivers/thermal/thermal_debugfs.c
 +++ linux-pm/drivers/thermal/thermal_debugfs.c
-@@ -466,8 +466,9 @@ void thermal_debug_cdev_state_update(con
-  * Allocates a cooling device object for debug, initializes the
-  * statistics and create the entries in sysfs.
-  * @cdev: a pointer to a cooling device
-+ * @state: current state of the cooling device
-  */
--void thermal_debug_cdev_add(struct thermal_cooling_device *cdev)
-+void thermal_debug_cdev_add(struct thermal_cooling_device *cdev, int state)
- {
- 	struct thermal_debugfs *thermal_dbg;
- 	struct cdev_debugfs *cdev_dbg;
-@@ -484,9 +485,16 @@ void thermal_debug_cdev_add(struct therm
- 		INIT_LIST_HEAD(&cdev_dbg->durations[i]);
- 	}
- 
--	cdev_dbg->current_state = 0;
-+	cdev_dbg->current_state = state;
- 	cdev_dbg->timestamp = ktime_get();
- 
-+	/*
-+	 * Create a record for the initial cooling device state, so its
-+	 * duration will be printed by cdev_dt_seq_show() as expected if it
-+	 * runs before the first state transition.
-+	 */
-+	thermal_debugfs_cdev_record_get(thermal_dbg, cdev_dbg->durations, state);
+@@ -552,6 +552,7 @@ static struct tz_episode *thermal_debugf
+=20
+ 	INIT_LIST_HEAD(&tze->node);
+ 	tze->timestamp =3D now;
++	tze->duration =3D KTIME_MIN;
+=20
+ 	for (i =3D 0; i < tz->num_trips; i++) {
+ 		tze->trip_stats[i].min =3D INT_MAX;
+@@ -680,6 +681,9 @@ void thermal_debug_tz_trip_down(struct t
+ 	tze->trip_stats[trip_id].duration =3D
+ 		ktime_add(delta, tze->trip_stats[trip_id].duration);
+=20
++	/* Mark the end of mitigation for this trip point. */
++	tze->trip_stats[trip_id].timestamp =3D KTIME_MAX;
 +
- 	debugfs_create_file("trans_table", 0400, thermal_dbg->d_top,
- 			    thermal_dbg, &tt_fops);
- 
-Index: linux-pm/drivers/thermal/thermal_debugfs.h
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_debugfs.h
-+++ linux-pm/drivers/thermal/thermal_debugfs.h
-@@ -2,7 +2,7 @@
- 
- #ifdef CONFIG_THERMAL_DEBUGFS
- void thermal_debug_init(void);
--void thermal_debug_cdev_add(struct thermal_cooling_device *cdev);
-+void thermal_debug_cdev_add(struct thermal_cooling_device *cdev, int state);
- void thermal_debug_cdev_remove(struct thermal_cooling_device *cdev);
- void thermal_debug_cdev_state_update(const struct thermal_cooling_device *cdev, int state);
- void thermal_debug_tz_add(struct thermal_zone_device *tz);
-@@ -14,7 +14,7 @@ void thermal_debug_tz_trip_down(struct t
- void thermal_debug_update_trip_stats(struct thermal_zone_device *tz);
- #else
- static inline void thermal_debug_init(void) {}
--static inline void thermal_debug_cdev_add(struct thermal_cooling_device *cdev) {}
-+static inline void thermal_debug_cdev_add(struct thermal_cooling_device *cdev, int state) {}
- static inline void thermal_debug_cdev_remove(struct thermal_cooling_device *cdev) {}
- static inline void thermal_debug_cdev_state_update(const struct thermal_cooling_device *cdev,
- 						   int state) {}
+ 	/*
+ 	 * This event closes the mitigation as we are crossing the
+ 	 * last trip point the way down.
+@@ -754,15 +758,25 @@ static int tze_seq_show(struct seq_file
+ 	struct thermal_trip_desc *td;
+ 	struct tz_episode *tze;
+ 	const char *type;
++	u64 duration_ms;
+ 	int trip_id;
++	char c;
+=20
+ 	tze =3D list_entry((struct list_head *)v, struct tz_episode, node);
+=20
+=2D	seq_printf(s, ",-Mitigation at %lluus, duration=3D%llums\n",
+=2D		   ktime_to_us(tze->timestamp),
+=2D		   ktime_to_ms(tze->duration));
++	if (tze->duration =3D=3D KTIME_MIN) {
++		/* Mitigation in progress. */
++		duration_ms =3D ktime_to_ms(ktime_sub(ktime_get(), tze->timestamp));
++		c =3D '>';
++	} else {
++		duration_ms =3D ktime_to_ms(tze->duration);
++		c =3D '=3D';
++	}
++
++	seq_printf(s, ",-Mitigation at %lluus, duration%c%llums\n",
++		   ktime_to_us(tze->timestamp), c, duration_ms);
+=20
+=2D	seq_printf(s, "| trip |     type | temp(=C2=B0mC) | hyst(=C2=B0mC) |  d=
+uration  |  avg(=C2=B0mC) |  min(=C2=B0mC) |  max(=C2=B0mC) |\n");
++	seq_printf(s, "| trip |     type | temp(=C2=B0mC) | hyst(=C2=B0mC) |  dur=
+ation   |  avg(=C2=B0mC) |  min(=C2=B0mC) |  max(=C2=B0mC) |\n");
+=20
+ 	for_each_trip_desc(tz, td) {
+ 		const struct thermal_trip *trip =3D &td->trip;
+@@ -794,12 +808,25 @@ static int tze_seq_show(struct seq_file
+ 		else
+ 			type =3D "hot";
+=20
+=2D		seq_printf(s, "| %*d | %*s | %*d | %*d | %*lld | %*d | %*d | %*d |\n",
++		if (trip_stats->timestamp !=3D KTIME_MAX) {
++			/* Mitigation in progress. */
++			ktime_t delta =3D ktime_sub(ktime_get(),
++						  trip_stats->timestamp);
++
++			delta =3D ktime_add(delta, trip_stats->duration);
++			duration_ms =3D ktime_to_ms(delta);
++			c =3D '>';
++		} else {
++			duration_ms =3D ktime_to_ms(trip_stats->duration);
++			c =3D ' ';
++		}
++
++		seq_printf(s, "| %*d | %*s | %*d | %*d | %c%*lld | %*d | %*d | %*d |\n",
+ 			   4 , trip_id,
+ 			   8, type,
+ 			   9, trip->temperature,
+ 			   9, trip->hysteresis,
+=2D			   10, ktime_to_ms(trip_stats->duration),
++			   c, 10, duration_ms,
+ 			   9, trip_stats->avg,
+ 			   9, trip_stats->min,
+ 			   9, trip_stats->max);
 
 
 
