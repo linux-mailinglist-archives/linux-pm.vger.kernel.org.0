@@ -1,171 +1,151 @@
-Return-Path: <linux-pm+bounces-7073-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7074-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DFF58B1F14
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 12:24:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D17E78B1F23
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 12:27:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C1E1C1F24145
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 10:24:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 102401C250DD
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 10:27:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 261598662B;
-	Thu, 25 Apr 2024 10:24:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F16581272A8;
+	Thu, 25 Apr 2024 10:27:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="AwNrnfcH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 155FB85277;
-	Thu, 25 Apr 2024 10:23:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FDC986626;
+	Thu, 25 Apr 2024 10:27:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714040642; cv=none; b=Gga+avrUyHu7GW/Yfo+ZbA/GDulY/k5EFRAAlQY8nc3/nINAVQfrMMnRpKV4AsOL5hzDU09vb1dBVaTLKzgE02NABS0/3PxK/p9R2xzTzVwHFHP3CXYtnFqAj8T8u48MkJp+1bV/Ka03qnPBIns8OTi/KYC7E1YrLjxrWP0vYiE=
+	t=1714040831; cv=none; b=AAVaWxaMToBcsC/KRsDpQOlcIZ0jNmu162AfP5pFXI4yhMnUywUKK/g2DSmpHCdXrIzc+JX+PB5kc7C1hAWy0Q2quTotxqf/ZtWzauBBBUm4qQBDR/i9LYJILLDlos3O0EyNGZuf/C2GcCkNU1Y1R8S4HcP+2x3TsBDwloXY830=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714040642; c=relaxed/simple;
-	bh=wmKTX0hf311FdAlA97nBVl4pjiE0U/L+0ndYEl0pI3U=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YZl3lzLOCZSudKg1Gjk8dtvV/9B0Sjg+ZTUxrRVeGItLMzSxk7cy5edXoiVBlev90LANWkQTWC6C5PDvMrZ1N5pY8sM6ziejP+Tacmq2LN1w77LJtvIxTCe6vvAjcoC4jAYZEzWtOjMaDL7Dw07f49V8uRGUZOx8yh1fTlk+rqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VQBlk33SFz6D9Ct;
-	Thu, 25 Apr 2024 18:23:46 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 65841140736;
-	Thu, 25 Apr 2024 18:23:56 +0800 (CST)
-Received: from localhost (10.122.247.231) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Thu, 25 Apr
- 2024 11:23:55 +0100
-Date: Thu, 25 Apr 2024 11:23:54 +0100
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Salil Mehta <salil.mehta@huawei.com>
-CC: Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Peter
- Zijlstra <peterz@infradead.org>, "linux-pm@vger.kernel.org"
-	<linux-pm@vger.kernel.org>, "loongarch@lists.linux.dev"
-	<loongarch@lists.linux.dev>, "linux-acpi@vger.kernel.org"
-	<linux-acpi@vger.kernel.org>, "linux-arch@vger.kernel.org"
-	<linux-arch@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
-	<kvmarm@lists.linux.dev>, "x86@kernel.org" <x86@kernel.org>, Russell King
-	<linux@armlinux.org.uk>, "Rafael J . Wysocki" <rafael@kernel.org>, "Miguel
- Luis" <miguel.luis@oracle.com>, James Morse <james.morse@arm.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>, Catalin Marinas
-	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Linuxarm
-	<linuxarm@huawei.com>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
-	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
-	"justin.he@arm.com" <justin.he@arm.com>, "jianyong.wu@arm.com"
-	<jianyong.wu@arm.com>
-Subject: Re: [PATCH v7 11/16] irqchip/gic-v3: Add support for ACPI's
- disabled but 'online capable' CPUs
-Message-ID: <20240425112354.00000f26@huawei.com>
-In-Reply-To: <20240424180830.00002a36@Huawei.com>
-References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com>
-	<20240418135412.14730-12-Jonathan.Cameron@huawei.com>
-	<20240422114020.0000294f@Huawei.com>
-	<87plugthim.wl-maz@kernel.org>
-	<20240424135438.00001ffc@huawei.com>
-	<86il06rd19.wl-maz@kernel.org>
-	<e149e79446be4ed99178eedda3e8a674@huawei.com>
-	<20240424180830.00002a36@Huawei.com>
-Organization: Huawei Technologies R&D (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; x86_64-w64-mingw32)
+	s=arc-20240116; t=1714040831; c=relaxed/simple;
+	bh=DOXjsB1uURtz+pGbI/qx6BRXH9Ea1pQq5qQ1TGu1/bc=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G50k8JzHKUNMx9Lq7gChSPCFBOFiRXi2bJv71jDHfyXIFuhc28yrHtKgWAPmqsf1v4fA1wGL52zup9rwe/s0LA5taAL7MQMoM5t4fUfFYO5q5LP3Ctse4vm+x6M+rq//8Eg94hVf30U0Njb5CkuTQavI1IFRqTSojnkPXQniIhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=AwNrnfcH; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43P9wrxW032030;
+	Thu, 25 Apr 2024 10:26:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	date:from:to:cc:subject:message-id:references:mime-version
+	:content-type:in-reply-to; s=qcppdkim1; bh=UdCeznE+3ZycNdbFwpeSn
+	zDyv01X2mNOQtmOavOKyLg=; b=AwNrnfcHa03A8wj9bPcR9fDfR/8jWiNY6KPhd
+	KZyijbAeQpMvqePEG84pU0cTTn1lGcB6J7OHJKUVvqr/qUwjoHQ/y7myzWYm9M2L
+	zfPnl0aj+pAjUwDq4AhKJ8Eo97y+GRG96T/kknLNosh4/qfnXNctUARhrfmqUWCC
+	nplKv+ZvUh7H9Y6VCCmgeqgYbrosaGpaVDQpw2kmebmBGfGvc/Ihg+45wS5OQdBx
+	IgAV88PQbcEaVLDouQMpBcEcP4ymo9NcitH8/oBpJBPmig3bJ/wQuf8FpikCn+di
+	iBmutOOHo2CqpkvrXSW2fIDfQtHuU1r9H8DgR0emj+4rvMAYA==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xqn0wg5pk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 25 Apr 2024 10:26:59 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43PAQws1004198
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 25 Apr 2024 10:26:58 GMT
+Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Thu, 25 Apr 2024 03:26:53 -0700
+Date: Thu, 25 Apr 2024 15:56:49 +0530
+From: Varadarajan Narayanan <quic_varada@quicinc.com>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+CC: <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+        <djakov@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <quic_anusha@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v9 6/6] arm64: dts: qcom: ipq9574: Add icc provider
+ ability to gcc
+Message-ID: <Ziov6bWBXYXJ4Zp8@hu-varada-blr.qualcomm.com>
+References: <20240418092305.2337429-1-quic_varada@quicinc.com>
+ <20240418092305.2337429-7-quic_varada@quicinc.com>
+ <a7194edd-a2c8-46fc-bea1-f26b0960e535@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <a7194edd-a2c8-46fc-bea1-f26b0960e535@linaro.org>
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: CXhqYs3n6ZegyJD28IbldiROFAHASmth
+X-Proofpoint-GUID: CXhqYs3n6ZegyJD28IbldiROFAHASmth
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-04-25_10,2024-04-25_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
+ impostorscore=0 malwarescore=0 phishscore=0 suspectscore=0 mlxscore=0
+ mlxlogscore=999 lowpriorityscore=0 bulkscore=0 spamscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2404010003 definitions=main-2404250075
 
-On Wed, 24 Apr 2024 18:08:30 +0100
-Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+On Tue, Apr 23, 2024 at 02:58:41PM +0200, Konrad Dybcio wrote:
+>
+>
+> On 4/18/24 11:23, Varadarajan Narayanan wrote:
+> > IPQ SoCs dont involve RPM in managing NoC related clocks and
+> > there is no NoC scaling. Linux itself handles these clocks.
+> > However, these should not be exposed as just clocks and align
+> > with other Qualcomm SoCs that handle these clocks from a
+> > interconnect provider.
+> >
+> > Hence include icc provider capability to the gcc node so that
+> > peripherals can use the interconnect facility to enable these
+> > clocks.
+> >
+> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > ---
+>
+> If this is all you do to enable interconnect (which is not the case,
+> as this patch only satisfies the bindings checker, the meaningful
+> change happens in the previous patch) and nothing explodes, this is
+> an apparent sign of your driver doing nothing.
 
-> On Wed, 24 Apr 2024 17:35:54 +0100
-> Salil Mehta <salil.mehta@huawei.com> wrote:
-> 
-> > >  From: Marc Zyngier <maz@kernel.org>
-> > >  Sent: Wednesday, April 24, 2024 4:33 PM
-> > >  To: Jonathan Cameron <jonathan.cameron@huawei.com>
-> > >  Cc: Thomas Gleixner <tglx@linutronix.de>; Peter Zijlstra
-> > >  <peterz@infradead.org>; linux-pm@vger.kernel.org;
-> > >  loongarch@lists.linux.dev; linux-acpi@vger.kernel.org; linux-
-> > >  arch@vger.kernel.org; linux-kernel@vger.kernel.org; linux-arm-
-> > >  kernel@lists.infradead.org; kvmarm@lists.linux.dev; x86@kernel.org;
-> > >  Russell King <linux@armlinux.org.uk>; Rafael J . Wysocki
-> > >  <rafael@kernel.org>; Miguel Luis <miguel.luis@oracle.com>; James Morse
-> > >  <james.morse@arm.com>; Salil Mehta <salil.mehta@huawei.com>; Jean-
-> > >  Philippe Brucker <jean-philippe@linaro.org>; Catalin Marinas
-> > >  <catalin.marinas@arm.com>; Will Deacon <will@kernel.org>; Linuxarm
-> > >  <linuxarm@huawei.com>; Ingo Molnar <mingo@redhat.com>; Borislav
-> > >  Petkov <bp@alien8.de>; Dave Hansen <dave.hansen@linux.intel.com>;
-> > >  justin.he@arm.com; jianyong.wu@arm.com
-> > >  Subject: Re: [PATCH v7 11/16] irqchip/gic-v3: Add support for ACPI's
-> > >  disabled but 'online capable' CPUs
-> > >  
-> > >  On Wed, 24 Apr 2024 13:54:38 +0100,
-> > >  Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:    
-> > >  >
-> > >  > On Tue, 23 Apr 2024 13:01:21 +0100
-> > >  > Marc Zyngier <maz@kernel.org> wrote:
-> > >  >    
-> > >  > > On Mon, 22 Apr 2024 11:40:20 +0100,
-> > >  > > Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:    
-> > >  > > >
-> > >  > > > On Thu, 18 Apr 2024 14:54:07 +0100 Jonathan Cameron
-> > >  > > > <Jonathan.Cameron@huawei.com> wrote:    
-> > >  
-> > >  [...]
-> > >      
-> > >  > > >    
-> > >  > > > > +	/*
-> > >  > > > > +	 * Capable but disabled CPUs can be brought online later.  What about
-> > >  > > > > +	 * the redistributor? ACPI doesn't want to say!
-> > >  > > > > +	 * Virtual hotplug systems can use the MADT's "always-on"  GICR entries.
-> > >  > > > > +	 * Otherwise, prevent such CPUs from being brought online.
-> > >  > > > > +	 */
-> > >  > > > > +	if (!(gicc->flags & ACPI_MADT_ENABLED)) {
-> > >  > > > > +		pr_warn_once("CPU %u's redistributor is  inaccessible: this CPU can't be brought online\n", cpu);
-> > >  > > > > +		set_cpu_present(cpu, false);
-> > >  > > > > +		set_cpu_possible(cpu, false);    
-> > 
-> > (a digression) shouldn't we be clearing the enabled mask as well?
-> > 
-> >                                           set_cpu_enabled(cpu, false);  
-> 
-> FWIW I think not necessary. enabled is only set in register_cpu() and aim here is to
-> never call that for CPUs in this state.
-> 
-> Anyhow, I got distracted by the firmware bug I found whilst trying to test this but
-> now have a test setup that hits this path (once deliberately broken), so will
-> see what we can do about that doesn't have affect those masks.
+It appears to do nothing because, we are just enabling the clock
+provider to also act as interconnect provider. Only when the
+consumers are enabled with interconnect usage, this will create
+paths and turn on the relevant NOC clocks.
 
-This may be relevant with the context of Marc's email.  Don't crop so much!
-However I think we probably don't care. This is bios bug, if we miss report it such
-that userspace thinks it can online something that work work, it probably doesn't
-matter.
+This interconnect will be used by the PCIe and NSS blocks. When
+those patches were posted earlier, they were put on hold until
+interconnect driver is available.
 
-Jonathan
+Once this patch gets in, PCIe for example will make use of icc.
+Please refer to https://lore.kernel.org/linux-arm-msm/20230519090219.15925-5-quic_devipriy@quicinc.com/.
 
-> 
-> Jonathan
-> 
-> 
-> > 
-> > 
-> > Best regards
-> > Salil  
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+The 'pcieX' nodes will include the following entries.
 
+	interconnects = <&gcc MASTER_ANOC_PCIE0 &gcc SLAVE_ANOC_PCIE0>,
+			<&gcc MASTER_SNOC_PCIE0 &gcc SLAVE_SNOC_PCIE0>;
+	interconnect-names = "pcie-mem", "cpu-pcie";
+
+> The expected reaction to "enabling interconnect" without defining the
+> required paths for your hardware would be a crash-on-sync_state, as all
+> unused (from Linux's POV) resources ought to be shut down.
+>
+> Because you lack sync_state, the interconnects silently retain the state
+> that they were left in (which is not deterministic), and that's precisely
+> what we want to avoid.
+
+I tried to set 'sync_state' to icc_sync_state to be invoked and
+didn't see any crash.
+
+Thanks
+Varada
 
