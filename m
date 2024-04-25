@@ -1,113 +1,156 @@
-Return-Path: <linux-pm+bounces-7109-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7110-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44ABE8B263D
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 18:21:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A195D8B26B4
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 18:40:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 01C69283B03
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 16:21:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C66791C21435
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 16:40:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B01514D290;
-	Thu, 25 Apr 2024 16:21:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 275D814D282;
+	Thu, 25 Apr 2024 16:40:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bJ/V4Z0o"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jeCTfEM1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 097772D60A;
-	Thu, 25 Apr 2024 16:21:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D27514A09A
+	for <linux-pm@vger.kernel.org>; Thu, 25 Apr 2024 16:40:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714062105; cv=none; b=mqfQLSfrmwt9j5YrsolTHu+eMuOA5RNrWDRmGJ0Z4MvNoPzaMFjYIflUymxDoh7RwAJ0k9zblTKuFYsUAyAKB/D/fM5a1hCAwzuvNKiLaDofWoqXoDDcRDKTFJqxt0IDroaPz1QODC2Y+ZWd19SGRznxIqz8d68vyflDr9UhVVo=
+	t=1714063234; cv=none; b=fibaewFNt5x8nDMyVkb5z15vd6ZMHdgGvpExqUQaUebkHmdWiA3GT1ZDf+7cAz5cv8W5RKNdpSQy3FLSt0CrCD9zTvIp26rtg5E2NH0pVvFopGvWPjG0Vz+DOCO+7Qam/hzSM0WJR3HZFR0QRZK2YTkp+pd/eaY24BvlEpbO7Yc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714062105; c=relaxed/simple;
-	bh=eNhCNG+DMjObqRB26BLTw1alILboFKx0y4neqkl4G7I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JTotyydE2E7rJxT0WbAvzD/1SArmHd+nAcpGPvmgDJwovYI6kgj3ZSn17hiP1rze71y9rp3aqVNaD910FpcEoIAsrpMpJl8SFbgEtKtwcVTPFY0wylHtsxptukhiboYCG6Z1QJIiaQ26Z8KJXGACGKjjsgkia28TxBEIyG8HhcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bJ/V4Z0o; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95E2EC113CC;
-	Thu, 25 Apr 2024 16:21:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714062104;
-	bh=eNhCNG+DMjObqRB26BLTw1alILboFKx0y4neqkl4G7I=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=bJ/V4Z0oJcOCLOhyzy2NXI/RceqrUY6tt2K2VV7Zgy7FV5+JWpUYhmKf37AbpM+k5
-	 2vpcYQnyq3o7NAESejvUHBILXaOsFwKvWw6X04D6LlSTSrvt5T4MKGwIulKV7YlweH
-	 FZb5jWhu/kGptXh/81RjwCYVk7qveQJS/AYyX+8Vy8vt7iaar9D7yhtrxFhlktqYDx
-	 jFuLYPZe03K//HVxKa4ApoONIoRXpC1fD/Mo/dBWjO1AfR70eVjzQne6Z2NI+347Gv
-	 ucRp0qm+P2nbnLnHr7dC0AvVCNvpuEngzTdb2lpUiutfAUf1BTqyRrITC5S3jf/3C1
-	 okwYxisXQY+Sw==
-Message-ID: <024c4c07-18df-4cab-97e5-30969d189aa8@kernel.org>
-Date: Thu, 25 Apr 2024 19:21:38 +0300
+	s=arc-20240116; t=1714063234; c=relaxed/simple;
+	bh=I0I9OjDY6ZUYLhQWHYC4HdS5DXN9XX3/1jiMOmIL9iY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rbwAjACNNXCPUuWcqeBLHCVlxJK8s2S8WN3JA4GFHHV2DBJAMXGSNtNxWaTS6Ta094reBGMJFenTCho0zBbcD76ATsKB+WWNp85nWuGNqa4tTnfC9vL1f+c7TgwCH6tbhDj2zC10s740EVf4GU+vtygX3u49JdbTQDEHErh9NO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jeCTfEM1; arc=none smtp.client-ip=209.85.219.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-de45dba15feso1469089276.3
+        for <linux-pm@vger.kernel.org>; Thu, 25 Apr 2024 09:40:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1714063231; x=1714668031; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=on0OXtQXZAF4hN5oeel24iXAsrlaEJyKDQRWWo0Y57k=;
+        b=jeCTfEM1GEAUxWddBeDx90ztJGb4g+1SI+T7H7M2QRs4ek4l2GN3Ucg2XM5HCPZY51
+         /aWjYM82FgiJH5QgsUXgi/30l+wWyYduud93Y6YqoZe+p0P/ktHmrXuGxtUEwTvq8HFV
+         ksT6YGcUo/2tjliuDR5HbqpGn69Kr6DysGp2zuSw3jYJfAXwLQRK7CJ9lenzG61ceSKs
+         zDmpvGZ4KwxRIXEjkjGXCbqR7KnFic0iesolCCgRSSfc8FurxfNkbmy2d5fZcuUpg7bz
+         vScelWXfdXjRbwv/v8bmjo9nUdr0CyAgr2NDtZf104gAPsP7M/m1TEKdmV5Rqismtvh5
+         5LAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714063231; x=1714668031;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=on0OXtQXZAF4hN5oeel24iXAsrlaEJyKDQRWWo0Y57k=;
+        b=M9owL40oE0ZcVvsZx9gSoLjD3euXKOii/PSBegTetThLzJQCYyOBSwbUDjjcbCO1AG
+         91VLZQ2P1sCteUdgtZ4YN7GsntIZIffO/aFr/WBV86FNJVs0HXQtfNflPuvBsF8ZGDpg
+         rzLXegmcCU6ZfHuEt1joPIJEy29mnqkFklXTMF/V7WQnGvztQ37LjEEdELfdpQEr22ju
+         ZSmQkNu/tVMpDz6KXCXDTeYZBkySJAy3GbgfXZUsR3pGHF6TbZEdQ1MPg2Y4ViL0hjYu
+         i8hj6YMu6LvsYuqHdGI20QT1izkuSPndR6wwaSKQm1ADrdwj9X1OY6c4qJkiweObuli/
+         /Law==
+X-Forwarded-Encrypted: i=1; AJvYcCWeaV7xE7/xCmTku6LJz/XzcXmhQ8x382CxvzZAHNZjvocBN7QQZz5KRVQg7sCSUESVo2zVv7EJ+5ERMH8nHzqAZJ8RHKGUFLU=
+X-Gm-Message-State: AOJu0YzY7YGZuxZA0cttsUSzxqLFAo9yzdedQbfcAvvWOchZUPYN1bdx
+	X3uF+SPo07WzCkJik8KOq9TdqLCE8MY1W1qhEqm41BudDuD5X5fFK4hpBSG0TFsV/mJD46CP7UV
+	RhjPp5d47BrlnGZhmmubcL4VWcOBXOcK8EyyN9g==
+X-Google-Smtp-Source: AGHT+IFRDwfaHEmXM8hJbg1JGB6lXNf5vDJAZiG9Em8ssKQctqcosbRFy7Xmc+whUbdbZzEUxpYTm7GpckYnJLSaZWg=
+X-Received: by 2002:a05:6902:2413:b0:dcc:2f09:4742 with SMTP id
+ dr19-20020a056902241300b00dcc2f094742mr166378ybb.51.1714063231005; Thu, 25
+ Apr 2024 09:40:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 1/6] interconnect: icc-clk: Allow user to specify
- master/slave ids
-Content-Language: en-US
-To: Varadarajan Narayanan <quic_varada@quicinc.com>,
- Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: andersson@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- dmitry.baryshkov@linaro.org, quic_anusha@quicinc.com,
- linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20240418092305.2337429-1-quic_varada@quicinc.com>
- <20240418092305.2337429-2-quic_varada@quicinc.com>
- <da8fc783-6b2b-495d-ab15-be297b0fa435@linaro.org>
- <ZiowMuNlBsxYQesc@hu-varada-blr.qualcomm.com>
-From: Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <ZiowMuNlBsxYQesc@hu-varada-blr.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240425070936.547100-1-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20240425070936.547100-1-claudiu.beznea.uj@bp.renesas.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 25 Apr 2024 18:39:55 +0200
+Message-ID: <CAPDyKFrC1HbUtnnGhJEG-fUH-DNw7En5Was6D=dND=tmFET7fA@mail.gmail.com>
+Subject: Re: [RFT PATCH v2] serial: core: Call device_set_awake_path() for
+ console port
+To: Claudiu <claudiu.beznea@tuxon.dev>
+Cc: gregkh@linuxfoundation.org, jirislaby@kernel.org, tony@atomide.com, 
+	andriy.shevchenko@linux.intel.com, l.sanfilippo@kunbus.com, 
+	tglx@linutronix.de, geert+renesas@glider.be, peng.fan@nxp.com, 
+	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On 25.04.24 13:28, Varadarajan Narayanan wrote:
-> On Tue, Apr 23, 2024 at 01:00:48AM +0200, Konrad Dybcio wrote:
->>
->>
->> On 4/18/24 11:23, Varadarajan Narayanan wrote:
->>> Presently, icc-clk driver autogenerates the master and slave ids.
->>> However, devices with multiple nodes on the interconnect could
->>> have other constraints and may not match with the auto generated
->>> node ids. Hence, allow the driver to provide the preferred master
->>> and slave ids.
->>>
->>> Also, update clk-cbf-8996 accordingly.
->>>
->>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
->>> ---
->>> v9: squash cbf-msm8996 change into this
->>> v8: Per review feedback, set master/slave ids explicitly. Dont autogenerate
->>>       https://lore.kernel.org/linux-arm-msm/f1b0d280-6986-4055-a611-2caceb15867d@linaro.org/
->>> ---
->>>    drivers/clk/qcom/clk-cbf-8996.c  | 7 ++++++-
->>>    drivers/interconnect/icc-clk.c   | 6 +++---
->>>    include/linux/interconnect-clk.h | 2 ++
->>
->> How is this going to be merged? :/
->>
->> icc-next? clk-next?
-> 
+On Thu, 25 Apr 2024 at 09:09, Claudiu <claudiu.beznea@tuxon.dev> wrote:
+>
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>
+> In case the UART port is used as a console, no_console_suspend is
+> available in bootargs and UART port is part of a software-controlled power
+> domain we need to call device_set_awake_path(). This lets the power
+> domain core code know that this domain should not be powered off
+> during system suspend. Otherwise, the UART port power domain is turned off,
+> nothing is printed while suspending and the suspend/resume process is
+> blocked. This was detected on the Renesas RZ/G3S SoC while adding support
+> for power domains.
+>
+> Based on code investigation, this issue is present on other SoCs (e.g.,
+> Renesas R-Mobile A1 [1], IMX8QXP [2]) and different SoCs have particular
+> implementation to handle it. Due to this the patch added the call of
+> device_set_awake_path() in uart_suspend_port() instead of having it in
+> the platform specific UART driver.
+>
+> [1] https://elixir.bootlin.com/linux/v6.9-rc5/source/drivers/pmdomain/renesas/rmobile-sysc.c#L116
+> [2] https://elixir.bootlin.com/linux/v6.9-rc5/source/drivers/pmdomain/imx/scu-pd.c#L357
+>
+> Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-Merging all patches via Bjorn's clk-qcom tree seems to be the best option, if he agrees of course.
+At least conceptually this makes perfect sense to me. If it's the
+correct place to put it, I trust others to know. Nevertheless, feel
+free to add:
 
-Thanks,
-Georgi
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-> Bjorn,
-> 
-> Can you help answer this.
-> 
-> Thanks
-> Varada
+Kind regards
+Uffe
 
+> ---
+>
+> Changes in v2:
+> - used device_set_awake_path() instead of device_set_wakeup_path()
+> - moved the support in uart_suspend_port() to make it generic for
+>   other drivers
+> - fixed typos in commit description
+> - updated the commit description to reflect the new changes and the fact
+>   that support may be applied to other SoCs
+> - added Suggested-by tag; this was initially proposed by Ulf to move it
+>   in the serial driver then Geert propose to have it more generic in
+>   uart_suspend_port()
+>
+>
+>  drivers/tty/serial/serial_core.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+> index d8d797a7a1e3..6270baab668c 100644
+> --- a/drivers/tty/serial/serial_core.c
+> +++ b/drivers/tty/serial/serial_core.c
+> @@ -2409,6 +2409,7 @@ int uart_suspend_port(struct uart_driver *drv, struct uart_port *uport)
+>                         uport->ops->stop_rx(uport);
+>                         uart_port_unlock_irq(uport);
+>                 }
+> +               device_set_awake_path(uport->dev);
+>                 goto unlock;
+>         }
+>
+> --
+> 2.39.2
+>
 
