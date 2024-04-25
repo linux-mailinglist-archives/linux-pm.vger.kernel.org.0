@@ -1,68 +1,69 @@
-Return-Path: <linux-pm+bounces-7080-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7081-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 958988B21B9
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 14:37:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 46F7D8B2222
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 15:00:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D9E9287774
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 12:37:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0530C284FB5
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 13:00:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C8DA1494B1;
-	Thu, 25 Apr 2024 12:36:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D30011494D1;
+	Thu, 25 Apr 2024 13:00:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V6dZUoYE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hh9dR4xm"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 537C4133408;
-	Thu, 25 Apr 2024 12:36:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC1041494C4;
+	Thu, 25 Apr 2024 13:00:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714048619; cv=none; b=ef6+7iN05XHPJ7X8uzv7jL9bv30xwfZcCBgQGX8FJ8Fj+1izIA5q838CG0pRbKyOw82lzRWFJLBmG2plW2cx5IdZvQqvTPEj6FcmkMzri7Agkcf8gKuIY0zaz/VXAFdJ6ooAXrV9GTqjmcoN9ZpEuV+mNpNFDl907Fn6jlGfW6s=
+	t=1714050019; cv=none; b=W8SvWUaRwkiyFxb9U9mrjtzGROc/NlNcbwBr6pFaq0UApxgsrHigXQDFycwdbx4Tb9klhohbHorwD/0EqAwQlqPNPusZCHKsoLcbPBvbEM+fOU5hW9IRnfbJsM+jjeiynj5JlBt8TOWE0kus/CQ76ifPsIJSHe92Lf4s8bxWv+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714048619; c=relaxed/simple;
-	bh=WPH2vArT6rmPx5cfh1ctX9In3WzdWlO76BEzWfqHfWY=;
+	s=arc-20240116; t=1714050019; c=relaxed/simple;
+	bh=Jrl7YgxIea/FrZp8PD/JLGrIfdU7/cSbjtD/+9nylvQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OvyFUhEW0Z/miqsaqgokCQrZUCkOUMvXQt8fYN+QdOCgYBAswxgCwQZwODxvVYP2v2k3dyR6ag0WBgoS8OBhlQE65UUOwbqWxRECt2ZL5chlsUvWrIJH6S9+SjU7TxLvQVtY0GwFZy+pGsa5cXfCJEGuQZalhZkBLlL+5I66Kmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V6dZUoYE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCB11C2BD10;
-	Thu, 25 Apr 2024 12:36:58 +0000 (UTC)
+	 To:Cc:Content-Type; b=GFPSH5P04mWKoUfcJ7IxW35CEVVsHKwblCLMFzYFhwadqErP3CTo4neIsMIYf/mBNUOIHHTsRH15mgXC/1vlS4auLownceN204oT2h/OGC1jhJvcilcxPU6yqGSPHYvsOI/FQophqgT3o4F/9EtAA9Gh2YVAmO7AJlJKKS+MonU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hh9dR4xm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BD66C3277B;
+	Thu, 25 Apr 2024 13:00:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714048618;
-	bh=WPH2vArT6rmPx5cfh1ctX9In3WzdWlO76BEzWfqHfWY=;
+	s=k20201202; t=1714050019;
+	bh=Jrl7YgxIea/FrZp8PD/JLGrIfdU7/cSbjtD/+9nylvQ=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=V6dZUoYEO7aXsjlSqknmQ5zuX2Au2c33+ZnePrhMd4AvUeYFl9g/+JIT80YGYboHK
-	 PL+KZdWl4Nj8H8PmNMkJQfSL/jP56PFDvJI1SvamDi4bV4CXk9ir386VVTXyZjZirD
-	 wEn8CsEBCn5j2KSPDVifBuVE3wJdjHjFiZc8HPXfBc4kWRG5Y9vBo0owK9s31L9qSj
-	 oUjwM7lhSzw6mCjJugIRtv7OlwcwFNxcTWY7YEIQyNE/m+A9j/NbjWob3mpKX3xblM
-	 tZutuUv9iTMJFrBGnu10t9oVLFBnce5CsnrUZjsMvFmTtbCrNiD8XPiIuPT8mp8mq0
-	 O4T0cr3tC5nIw==
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6ea0a6856d7so113631a34.1;
-        Thu, 25 Apr 2024 05:36:58 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUj2wOj/PkcAb41tV9Ar5ExpqedJcAlKDlYI9BhDhOia+j4aXY1izgmNIV6EZmD/vxg9SMH9o5lYLBv49DF3IbHmBPKSjJBKNWvE0+2agTJVXG2shQSjGh9IWl2+6CvJqdXORLd8JI=
-X-Gm-Message-State: AOJu0YxdadeKHyNUZlbxeDeQ7rkDs48DTns8agaqOSWPodtiG9mptEpb
-	HwXq2o2fsg8VXU/p+qeYRFwc6SHY3QMhdkkHIRyPDllAxKjz5jyvyyOuia3VyQFZzk7fUOGpdIT
-	Z4Iu1qIDIKriKwTNCqSM23v9e+gc=
-X-Google-Smtp-Source: AGHT+IGthMl/Ito+Q6DI6eAj99qeVy30CIPYrVXUmda7A4xZ5NNubvbTlx3YUzPpSLvOh8Q6O9pcaQwADNh9svOjl14=
-X-Received: by 2002:a4a:1a06:0:b0:5af:6d3b:d952 with SMTP id
- 6-20020a4a1a06000000b005af6d3bd952mr698985oof.0.1714048618075; Thu, 25 Apr
- 2024 05:36:58 -0700 (PDT)
+	b=hh9dR4xm4prP0BLliKCNl8d7abHCN7qL86LsIOicC/cRHFkQyLDunvok85agoGaOF
+	 Cr4S3CyaIJZj5M4VGGS9r1eBC2+F24eRPQS78hCM8uoItjBiRyNmtIGpIRI6Y1UKJt
+	 MhG94uQxUeii9q+c1kdk0oArRf71/3GnfSSnbtpqLTBB7lWHuTHnutFkKu+/OnwGPk
+	 7hCRKsekXY7dZ8Y2/YcFesKKtEUi7FCRCZKxB9vqXPZBgzzgXAsDbuYPgaLJKeV6xe
+	 KNiEHS/UTtp939UbV8z36cTqb/cA/xamKSvhQ96D0Jp+fs+IGN0GeKB9EnDyUzpaeU
+	 ibSfh5s00jeSQ==
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-5ad288442bdso155507eaf.3;
+        Thu, 25 Apr 2024 06:00:19 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVv9/WTfN+qjwZNMQVJYrfmhak9YdNeDVSU72RckRH2664KQ6wHCRUrgFY/BSakuXdrLcDhU6+/+GrXZAFjRJ8aCEQpahX62O9sshiuBNwFPZVSmmJOEtR6L1C3yZ1+eqtrL/0RAJM=
+X-Gm-Message-State: AOJu0YxhZfMiqBakIiOQCp87zkyJzkuG3xJjgQdZX/54oeHuMF85ffXu
+	mJc+YfZsTqYPB1/V8//Aelt15I+iwpcprQWc6s/gLUcpIkV8PvM5xk+BuMttwUTMZDXyCU1DdU1
+	dVQ624hmZmVDMfCUAxK6L31SCpRs=
+X-Google-Smtp-Source: AGHT+IEENrDyvzVq1OlQwtnbjz4B/H+1Un+4iNhD0S4KH5d7zTFd2Yv4PeyfIZy4cwPlIE9eGPlHjK+p/t0tXuuNGKY=
+X-Received: by 2002:a05:6870:4183:b0:23b:7ff:91cb with SMTP id
+ y3-20020a056870418300b0023b07ff91cbmr5610112oac.4.1714050018405; Thu, 25 Apr
+ 2024 06:00:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <5774279.DvuYhMxLoT@kreacher> <2181352.irdbgypaU6@kreacher> <e9be06af-48bf-45ec-8d6d-6147d20b6780@arm.com>
-In-Reply-To: <e9be06af-48bf-45ec-8d6d-6147d20b6780@arm.com>
+References: <5774279.DvuYhMxLoT@kreacher> <2181352.irdbgypaU6@kreacher>
+ <e9be06af-48bf-45ec-8d6d-6147d20b6780@arm.com> <CAJZ5v0i=HS_-S3N7ixK=FM0S=7o21cfW5jXMq=AWObwGpUkPdA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0i=HS_-S3N7ixK=FM0S=7o21cfW5jXMq=AWObwGpUkPdA@mail.gmail.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 25 Apr 2024 14:36:46 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0i=HS_-S3N7ixK=FM0S=7o21cfW5jXMq=AWObwGpUkPdA@mail.gmail.com>
-Message-ID: <CAJZ5v0i=HS_-S3N7ixK=FM0S=7o21cfW5jXMq=AWObwGpUkPdA@mail.gmail.com>
+Date: Thu, 25 Apr 2024 15:00:06 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0ik_EqSXzTkowz=ha-U+JU+=KtqEMwD5+r329og2d4t=A@mail.gmail.com>
+Message-ID: <CAJZ5v0ik_EqSXzTkowz=ha-U+JU+=KtqEMwD5+r329og2d4t=A@mail.gmail.com>
 Subject: Re: [PATCH v1 2/3] thermal/debugfs: Pass cooling device state to thermal_debug_cdev_add()
 To: Lukasz Luba <lukasz.luba@arm.com>
 Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, LKML <linux-kernel@vger.kernel.org>, 
@@ -71,53 +72,58 @@ Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Lukasz,
-
-On Thu, Apr 25, 2024 at 12:02=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> =
-wrote:
+On Thu, Apr 25, 2024 at 2:36=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
+g> wrote:
 >
-> Hi Rafael,
+> Hi Lukasz,
 >
-> On 4/23/24 19:00, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> On Thu, Apr 25, 2024 at 12:02=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com=
+> wrote:
 > >
-> > If cdev_dt_seq_show() runs before the first state transition of a cooli=
-ng
-> > device, it will not print any state residency information for it, even
-> > though it might be reasonably expected to print residency information f=
-or
-> > the initial state of the cooling device.
+> > Hi Rafael,
 > >
-> > For this reason, rearrange the code to get the initial state of a cooli=
-ng
-> > device at the registration time and pass it to thermal_debug_cdev_add()=
-,
-> > so that the latter can create a duration record for that state which wi=
-ll
-> > allow cdev_dt_seq_show() to print its residency information.
+> > On 4/23/24 19:00, Rafael J. Wysocki wrote:
+> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >
+> > > If cdev_dt_seq_show() runs before the first state transition of a coo=
+ling
+> > > device, it will not print any state residency information for it, eve=
+n
+> > > though it might be reasonably expected to print residency information=
+ for
+> > > the initial state of the cooling device.
+> > >
+> > > For this reason, rearrange the code to get the initial state of a coo=
+ling
+> > > device at the registration time and pass it to thermal_debug_cdev_add=
+(),
+> > > so that the latter can create a duration record for that state which =
+will
+> > > allow cdev_dt_seq_show() to print its residency information.
+> > >
+> > > Fixes: 755113d76786 ("thermal/debugfs: Add thermal cooling device deb=
+ugfs information")
+> > > Reported-by: Lukasz Luba <lukasz.luba@arm.com>
+> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > ---
+> > >   drivers/thermal/thermal_core.c    |    9 +++++++--
+> > >   drivers/thermal/thermal_debugfs.c |   12 ++++++++++--
+> > >   drivers/thermal/thermal_debugfs.h |    4 ++--
+> > >   3 files changed, 19 insertions(+), 6 deletions(-)
+> > >
 > >
-> > Fixes: 755113d76786 ("thermal/debugfs: Add thermal cooling device debug=
-fs information")
-> > Reported-by: Lukasz Luba <lukasz.luba@arm.com>
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >   drivers/thermal/thermal_core.c    |    9 +++++++--
-> >   drivers/thermal/thermal_debugfs.c |   12 ++++++++++--
-> >   drivers/thermal/thermal_debugfs.h |    4 ++--
-> >   3 files changed, 19 insertions(+), 6 deletions(-)
-> >
+> > I'm trying to test it on my board and do the review, but faced issue.
+> > For some reason I couldn't apply that patch on the latest bleeding-edge
+> > branch.
+> > Could you help me in this please? Is there something missing in the
+> > patch set (like one more fist patch)?
 >
-> I'm trying to test it on my board and do the review, but faced issue.
-> For some reason I couldn't apply that patch on the latest bleeding-edge
-> branch.
-> Could you help me in this please? Is there something missing in the
-> patch set (like one more fist patch)?
+> I messed up the ordering of patches (patch [2/3] should be the last
+> one in the series) and on top of that, you'll need a small rebase on
+> that patch.
+>
+> Sorry about this, I'll send a v2.
 
-I messed up the ordering of patches (patch [2/3] should be the last
-one in the series) and on top of that, you'll need a small rebase on
-that patch.
-
-Sorry about this, I'll send a v2.
-
-Thank you!
+Actually, the ordering was OK, but the rebase of the second patch is
+still needed.  I'll send a v2.
 
