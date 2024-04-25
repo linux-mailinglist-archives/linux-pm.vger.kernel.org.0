@@ -1,54 +1,55 @@
-Return-Path: <linux-pm+bounces-7130-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7128-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4BEE8B28BF
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 21:06:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EC948B28BB
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 21:06:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 12A4FB24253
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 19:06:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3AC49B21F15
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 19:06:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B15A152191;
-	Thu, 25 Apr 2024 19:06:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1D0A1514DD;
+	Thu, 25 Apr 2024 19:06:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="CmOp+Lqg"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="um+4zfWv"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C32D1509B1;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 773861514C9;
 	Thu, 25 Apr 2024 19:06:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714071985; cv=none; b=KzQELSMhSBTMZ49hgMLmg9hUTYKyoyj/vfkf1aN7thNYOuKK6SJF0xTIA/x5OerIJ3ZrWXr6HpIpaoKFVOWB8OsQRScA3ZUal6b0xMBoQiXake0oA8fxXD6xfSYAE+p1YprzoJn/aSo0Io/LESrUIWtslliWvLX/aQ2kdV5zkbM=
+	t=1714071984; cv=none; b=GhXzLHGhKWuDfMKP1QfIngEMTDdcd8AxskhnGOOWaqAcpGoORBrBfwwQOlZcAoe8cOfHg7z13b3YCGSWi+f+exXPEkPP2MEZvdsjt7cQ9GjDxE9UuqPKOf1Rmhd9P47tdI6NCcIma67w7kjYTlh2aPY9Kzd/gQQWGRe01LXnykY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714071985; c=relaxed/simple;
-	bh=2Sb71T+xYEBOgO6OWGpiIk60zH773QV7/5n9WrUs7/s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=kTsZAprh/7eZ/PMu0rGjtpxteX52cITcWa5sBUmOUkRkQdzgXbEzTuQHXJG1t/jDRtUb/7lTl0uwULVGiDaZ+7sYOhiVaUfMj/goi/NvTdaV44EA2MbFSy+krbQq3amZfqABp4Dj6QA0cjkJSkt+ElhNJsUucu2RJ1+GSWzsXc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=CmOp+Lqg reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+	s=arc-20240116; t=1714071984; c=relaxed/simple;
+	bh=rXPHYPL6HdSo2STxUL4eNTS6iDEG81Dn+FvYaRVVUkU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Zd7vEBGUzMySrJmrthwAbrzYWyd8TvXhVKcieduWfm23s3XJN0sR9uJjNWp/cHz/88XTkloNf91TgkdwitSHX9Lx6mcBvV7KMlMKUULfK/X3XIxCSuentMFm1HU3lVq01IKNllz6fyC0LgFh9+MMhIGeEt99WoGMH3Z5tVqBwdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=um+4zfWv; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
- id 521fcd625bb25de9; Thu, 25 Apr 2024 21:06:21 +0200
+ id 5882cd872318962f; Thu, 25 Apr 2024 21:06:20 +0200
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id A7BE766DF24;
-	Thu, 25 Apr 2024 21:06:20 +0200 (CEST)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id E56CF66DF24;
+	Thu, 25 Apr 2024 21:06:19 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1714071981;
-	bh=2Sb71T+xYEBOgO6OWGpiIk60zH773QV7/5n9WrUs7/s=;
-	h=From:To:Cc:Subject:Date;
-	b=CmOp+LqgZo0qzXZJpaY0bkJjuuztK1RHKCi5MNNbQKaraU13J63gUf+6RjbcAYsC0
-	 mzqPBBRDqMZbJKv/nUaXBH7tJbZO2L741U8sGHM4FXuJlBEl7wEeRwk16bYz4VfvF5
-	 /1UFY78DNBQ5neNOjPU7Ubmw8o9kNbY8GEuVe38RIycThkEAJw5W2t5DHMJI5GomV3
-	 xDS7HLfVrENzwA7+6mOUz1ne9bKy8B3GELgeSigF/bxj5hfoRetW12iJvJptE8/kOv
-	 u9WAqEajEAhLX0oQxWUwhpdG1NfAUBV50wQ97zPXk+GvuOLCfB08fQ735g+8ukS8xA
-	 TQCnSVzcsdImQ==
+	s=dkim; t=1714071980;
+	bh=rXPHYPL6HdSo2STxUL4eNTS6iDEG81Dn+FvYaRVVUkU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=um+4zfWv8vZv1ctF7A8GOS2yEy84fICIeqc2Yg8VfsAIBgOgZZ64ZH9mfYN/xTRP4
+	 BuRbiv3nplyzv6owFpB/2P6evwXQU3ihCUsZrJ1E4r40AWXuK4wrt15hFl7mG6tt58
+	 zclig/5MfH5GH+gNwsGOCXcuF2TnQR8inNWg9q2S8fvt+dTrpuwW2NoZrCUlBXfcfe
+	 bddNJexoe7pKz2lbs5BgdqnRaAOo79VkzNkUqwTMjkbUkQc1v75RwV0LnUt3ISl9o6
+	 QBUYny29qtHwZFZ0NUvQvHKc5gbMpzeoYAxoJy5bK5pfzrIugB9uBIuR360+IcjT8W
+	 ajtuAQrRjCfjQ==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: x86 Maintainers <x86@kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
@@ -57,11 +58,11 @@ Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
  "Rafael J. Wysocki" <rafael@kernel.org>,
  Dietmar Eggemann <dietmar.eggemann@arm.com>,
  Ricardo Neri <ricardo.neri@intel.com>, Tim Chen <tim.c.chen@intel.com>
-Subject:
- [RFC][PATCH v1 0/3] x86 / intel_pstate: Set asymmetric CPU capacity on hybrid
- systems
-Date: Thu, 25 Apr 2024 21:03:03 +0200
-Message-ID: <7663799.EvYhyI6sBW@kreacher>
+Subject: [RFC][PATCH v1 1/3] x86/sched: Introduce arch_rebuild_sched_domains()
+Date: Thu, 25 Apr 2024 21:04:02 +0200
+Message-ID: <3567858.iIbC2pHGDl@kreacher>
+In-Reply-To: <7663799.EvYhyI6sBW@kreacher>
+References: <7663799.EvYhyI6sBW@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -73,46 +74,125 @@ Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 195.136.19.94
 X-CLIENT-HOSTNAME: 195.136.19.94
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudeljedgudefgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopedutddprhgtphhtthhopeigkeeisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehtghhlgieslhhinhhuthhrohhnihigrdguvgdprhgtphhtthhopehpvghtvghriiesihhnfhhrrgguvggr
- ugdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=10 Fuz1=10 Fuz2=10
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudeljedgudefgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopedutddprhgtphhtthhopeigkeeisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehtghhlgieslhhinhhuthhrohhnihigrdguvgdprhgtphhtthhopehpvghtvghriiesihhnfhhrrggu
+ vggrugdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=20 Fuz1=20 Fuz2=20
 
-Hi Everyone,
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-The purpose of this series is to provide the scheduler with asymmetric CPU
-capacity information on x86 hybrid systems based on Intel hardware.
+Add arch_rebuild_sched_domains() for rebuilding scheduling domains and
+updating topology on x86 and make the ITMT code use it.
 
-The asymmetric CPU capacity information is important on hybrid systems as it
-allows utilization to be computed for tasks in a consistent way across all
-CPUs in the system, regardless of their capacity.  This, in turn, allows
-the schedutil cpufreq governor to set CPU performance levels consistently
-in the cases when tasks migrate between CPUs of different capacities.  It
-should also help to improve task placement and load balancing decisions on
-hybrid systems and it is key for anything along the lines of EAS.
+First of all, this reduces code duplication somewhat and eliminates
+a need to use an extern variable, but it will also lay the ground for
+future work related to CPU capacity scaling.
 
-The information in question comes from the MSR_HWP_CAPABILITIES register and
-is provided to the scheduler by the intel_pstate driver, as per the changelog
-of patch [3/3].  Patch [2/3] introduces the arch infrastructure needed for
-that (in the form of a per-CPU capacity variable) and patch [1/3] is a
-preliminary code adjustment.
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ arch/x86/include/asm/topology.h |    6 ++++--
+ arch/x86/kernel/itmt.c          |   12 ++++--------
+ arch/x86/kernel/smpboot.c       |   10 +++++++++-
+ 3 files changed, 17 insertions(+), 11 deletions(-)
 
-The changes made by patch [2/3] are very simple, which is why this series is
-being sent as an RFC.  Namely, it increases overhead on non-hybrid as well as
-on hybrid systems which may be regarded as objectionable, even though the
-overhead increase is arguably not significant.  The memory overhead is an
-unsigned long variable per CPU which is not a lot IMV and there is also
-additional memory access overhead at each arch_scale_cpu_capacity() call site
-which I'm not expecting to be noticeable, however.  In any case, the extra
-overhead can be avoided at the cost of making the code a bit more complex
-(for example, the additional per-CPU memory can be allocated dynamically
-on hybrid systems only and a static branch can be used for enabling access
-to it when necessary).  I'm just not sure if the extra complexity is really
-worth it, so I'd like to know the x86 maintainers' take on this.  If you'd
-prefer the overhead to be avoided, please let me know.
-
-Of course, any other feedback on the patches is welcome as well.
-
-Thank you!
+Index: linux-pm/arch/x86/include/asm/topology.h
+===================================================================
+--- linux-pm.orig/arch/x86/include/asm/topology.h
++++ linux-pm/arch/x86/include/asm/topology.h
+@@ -235,8 +235,6 @@ struct pci_bus;
+ int x86_pci_root_bus_node(int bus);
+ void x86_pci_root_bus_resources(int bus, struct list_head *resources);
+ 
+-extern bool x86_topology_update;
+-
+ #ifdef CONFIG_SCHED_MC_PRIO
+ #include <asm/percpu.h>
+ 
+@@ -284,9 +282,13 @@ static inline long arch_scale_freq_capac
+ 
+ extern void arch_set_max_freq_ratio(bool turbo_disabled);
+ extern void freq_invariance_set_perf_ratio(u64 ratio, bool turbo_disabled);
++
++void arch_rebuild_sched_domains(void);
+ #else
+ static inline void arch_set_max_freq_ratio(bool turbo_disabled) { }
+ static inline void freq_invariance_set_perf_ratio(u64 ratio, bool turbo_disabled) { }
++
++static inline void arch_rebuild_sched_domains(void) { }
+ #endif
+ 
+ extern void arch_scale_freq_tick(void);
+Index: linux-pm/arch/x86/kernel/itmt.c
+===================================================================
+--- linux-pm.orig/arch/x86/kernel/itmt.c
++++ linux-pm/arch/x86/kernel/itmt.c
+@@ -54,10 +54,8 @@ static int sched_itmt_update_handler(str
+ 	old_sysctl = sysctl_sched_itmt_enabled;
+ 	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+ 
+-	if (!ret && write && old_sysctl != sysctl_sched_itmt_enabled) {
+-		x86_topology_update = true;
+-		rebuild_sched_domains();
+-	}
++	if (!ret && write && old_sysctl != sysctl_sched_itmt_enabled)
++		arch_rebuild_sched_domains();
+ 
+ 	mutex_unlock(&itmt_update_mutex);
+ 
+@@ -114,8 +112,7 @@ int sched_set_itmt_support(void)
+ 
+ 	sysctl_sched_itmt_enabled = 1;
+ 
+-	x86_topology_update = true;
+-	rebuild_sched_domains();
++	arch_rebuild_sched_domains();
+ 
+ 	mutex_unlock(&itmt_update_mutex);
+ 
+@@ -150,8 +147,7 @@ void sched_clear_itmt_support(void)
+ 	if (sysctl_sched_itmt_enabled) {
+ 		/* disable sched_itmt if we are no longer ITMT capable */
+ 		sysctl_sched_itmt_enabled = 0;
+-		x86_topology_update = true;
+-		rebuild_sched_domains();
++		arch_rebuild_sched_domains();
+ 	}
+ 
+ 	mutex_unlock(&itmt_update_mutex);
+Index: linux-pm/arch/x86/kernel/smpboot.c
+===================================================================
+--- linux-pm.orig/arch/x86/kernel/smpboot.c
++++ linux-pm/arch/x86/kernel/smpboot.c
+@@ -39,6 +39,7 @@
+ 
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
++#include <linux/cpuset.h>
+ #include <linux/init.h>
+ #include <linux/smp.h>
+ #include <linux/export.h>
+@@ -125,7 +126,7 @@ static DEFINE_PER_CPU_ALIGNED(struct mwa
+ int __read_mostly __max_smt_threads = 1;
+ 
+ /* Flag to indicate if a complete sched domain rebuild is required */
+-bool x86_topology_update;
++static bool x86_topology_update;
+ 
+ int arch_update_cpu_topology(void)
+ {
+@@ -135,6 +136,13 @@ int arch_update_cpu_topology(void)
+ 	return retval;
+ }
+ 
++#ifdef CONFIG_X86_64
++void arch_rebuild_sched_domains(void) {
++	x86_topology_update = true;
++	rebuild_sched_domains();
++}
++#endif
++
+ static unsigned int smpboot_warm_reset_vector_count;
+ 
+ static inline void smpboot_setup_warm_reset_vector(unsigned long start_eip)
 
 
 
