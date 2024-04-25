@@ -1,155 +1,109 @@
-Return-Path: <linux-pm+bounces-7071-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7072-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 704318B1EE7
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 12:15:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 229048B1EEF
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 12:16:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B195EB297C5
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 10:15:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 527011C24BDC
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 10:16:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6044D86151;
-	Thu, 25 Apr 2024 10:15:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C3FE86151;
+	Thu, 25 Apr 2024 10:16:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="uzUYTEvv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD82B6EB52;
-	Thu, 25 Apr 2024 10:15:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88E5F6EB52;
+	Thu, 25 Apr 2024 10:16:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714040117; cv=none; b=pRCEKk4ALXI9bL+z2ieJI7del5WD5WtSnjfUt0i3RbBQNcxYVFEwe0kB1x86v/Tmp0v444sBlbkq4wyQSmUxdDlbIzoTl28IgW6Gvg6zKGneDfsmqSXUq1A0MwghYgm4uryllZfVUGd2s7DiOV4vVL1u3AIXE6uQHi4m4NYJhik=
+	t=1714040198; cv=none; b=eV6BDHJWOaGvSQUId656ziVgnvyfjQb+N3WKqgI7IgxRyMkzCHVGKqwlw0nI3zBA5PbD8PTMJqqS2U88smZNZrPDOOvPHpScKmXHfUWb+U+MlgozS+RUjuPIX6IzgnahjqqfYn5qv4V+dL8TcT6IryYNh05JTh9f6GDwS1WtEP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714040117; c=relaxed/simple;
-	bh=+s/Le6r8EFv4cqCtd1Bx2t0YRlTjI4h3wOhaGBCcfnQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eoPe6fdwObDZC/yDHDcmo1nvVxal6CDWtOFbxcadhKgM8VNDg0QbkmpJg13CFKALBwilUnP3WJchAZbsblW6DcrEKppdtXyGL/3qiM091rf/OXWFITboqSe6ouPuBKSLTs/UGGYuFG9EUL29cI1MfZfuHrAIbqepIL+vXaCpRDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2A7D71007;
-	Thu, 25 Apr 2024 03:15:43 -0700 (PDT)
-Received: from [10.1.30.55] (e133047.arm.com [10.1.30.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8F0983F64C;
-	Thu, 25 Apr 2024 03:15:12 -0700 (PDT)
-Message-ID: <9272d284-ec2c-4e35-be90-c8852278b648@arm.com>
-Date: Thu, 25 Apr 2024 11:15:10 +0100
+	s=arc-20240116; t=1714040198; c=relaxed/simple;
+	bh=a6Sn+sWhrhHLnyLvMXI/BR9bFRVdcAoRJvkbmTOd8Ro=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gGbryF4SnagqlOTP+CauuXCjOc5HM3k0zD1w5XE+qqayFBTC43p3XYrdrWlkgLpGrMLO6pKOIXBPX7+8v8NYzHuU51xYnY5Vh5jugOyKvAoTqcTsyWIoXwl7SurHDVTetp8TxgJo23mATrn8TBB/uD+OLPBZ8T4dEBcWEmw4lE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=uzUYTEvv; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=rEzHqrXFU6DDtueUKvIbqzzaqFrI4YVCMEuWV9mWzlo=; b=uzUYTEvvtcVYX/zuDrGYv0v85n
+	mopOn/mI6X1RfhRcI4ARSi6AMKUyUOF9bhbksroSxa/bBf92/0xUETGFczcSuD4ONzc+w3EMLdRSX
+	wG3Q0IKtAlpLP4xy62zGKf5scXGiH4MxQNeDf0riTv0iNaAZbmVYVDIIcF+FxI/NBemrP3PaSfnBi
+	nGU6BX3+ClW7IABB9yeejCI/lI7O9IzTWzeahg/389hcyN7VLDr9SC975vbCrp3Q8DJiV/xvPk/rp
+	r03n5fKR2lKtsZ73HSUug+v+GrI+8gzb4F1Q8s2Q5tYtw2/vA6uDuZ5RqfCjnzSUOyhQzoNguP3UG
+	ixI+eB+Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rzw9W-00000002nvh-22pw;
+	Thu, 25 Apr 2024 10:16:30 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id BEE3B300439; Thu, 25 Apr 2024 12:16:29 +0200 (CEST)
+Date: Thu, 25 Apr 2024 12:16:29 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+	tglx@linutronix.de, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	linux-pm@vger.kernel.org, daniel.lezcano@linaro.org
+Subject: Re: [PATCH 4/4] sched/core: split iowait state into two states
+Message-ID: <20240425101629.GC21980@noisy.programming.kicks-ass.net>
+References: <20240416121526.67022-1-axboe@kernel.dk>
+ <20240416121526.67022-5-axboe@kernel.dk>
+ <20240424100127.GV40213@noisy.programming.kicks-ass.net>
+ <f82fdfa3-8743-4d42-82d4-a4ca9bc24e15@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [linus:master] [timers] 7ee9887703: stress-ng.uprobe.ops_per_sec
- -17.1% regression
-To: Anna-Maria Behnsen <anna-maria@linutronix.de>,
- Oliver Sang <oliver.sang@intel.com>
-Cc: oe-lkp@lists.linux.dev, lkp@intel.com, linux-kernel@vger.kernel.org,
- Thomas Gleixner <tglx@linutronix.de>, ying.huang@intel.com,
- feng.tang@intel.com, fengwei.yin@intel.com,
- Frederic Weisbecker <frederic@kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org
-References: <87zfth3l6y.fsf@somnus>
-Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <87zfth3l6y.fsf@somnus>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f82fdfa3-8743-4d42-82d4-a4ca9bc24e15@arm.com>
 
-On 25/04/2024 09:23, Anna-Maria Behnsen wrote:
-> Hi,
+On Wed, Apr 24, 2024 at 11:08:42AM +0100, Christian Loehle wrote:
+> On 24/04/2024 11:01, Peter Zijlstra wrote:
+> > On Tue, Apr 16, 2024 at 06:11:21AM -0600, Jens Axboe wrote:
+> >> iowait is a bogus metric, but it's helpful in the sense that it allows
+> >> short waits to not enter sleep states that have a higher exit latency
+> >> than would've otherwise have been picked for iowait'ing tasks. However,
+> >> it's harmless in that lots of applications and monitoring assumes that
+> >> iowait is busy time, or otherwise use it as a health metric.
+> >> Particularly for async IO it's entirely nonsensical.
+> > 
+> > Let me get this straight, all of this is about working around
+> > cpuidle menu governor insaity?
+> > 
+> > Rafael, how far along are we with fully deprecating that thing? Yes it
+> > still exists, but should people really be using it still?
+> > 
 > 
-> (adding cpuidle/power people to cc-list)
-> 
-> Oliver Sang <oliver.sang@intel.com> writes:
-> 
->> hi, Frederic Weisbecker,
->>
->> On Tue, Apr 02, 2024 at 12:46:15AM +0200, Frederic Weisbecker wrote:
->>> Le Wed, Mar 27, 2024 at 04:39:17PM +0800, kernel test robot a écrit :
->>>>
->>>>
->>>> Hello,
->>>>
->>>>
->>>> we reported
->>>> "[tip:timers/core] [timers]  7ee9887703:  netperf.Throughput_Mbps -1.2% regression"
->>>> in
->>>> https://lore.kernel.org/all/202403011511.24defbbd-oliver.sang@intel.com/
->>>>
->>>> now we noticed this commit is in mainline and we captured further results.
->>>>
->>>> still include netperf results for complete. below details FYI.
->>>>
->>>>
->>>> kernel test robot noticed a -17.1% regression of stress-ng.uprobe.ops_per_sec
->>>> on:
->>>
->>> The good news is that I can reproduce.
->>> It has made me spot something already:
->>>
->>>    https://lore.kernel.org/lkml/ZgsynV536q1L17IS@pavilion.home/T/#m28c37a943fdbcbadf0332cf9c32c350c74c403b0
->>>
->>> But that's not enough to fix the regression. Investigation continues...
->>
->> Thanks a lot for information! if you want us test any patch, please let us know.
-> 
-> Oliver, I would be happy to see, whether the patch at the end of the
-> message restores the original behaviour also in your test setup. I
-> applied it on 6.9-rc4. This patch is not a fix - it is just a pointer to
-> the kernel path, that might cause the regression. I know, it is
-> probable, that a warning in tick_sched is triggered. This happens when
-> the first timer is alredy in the past. I didn't add an extra check when
-> creating the 'defacto' timer thingy. But existing code handles this
-> problem already properly. So the warning could be ignored here.
-> 
-> For the cpuidle people, let me explain what I oberserved, my resulting
-> assumption and my request for help:
-> 
-> cpuidle governors use expected sleep length values (beside other data)
-> to decide which idle state would be good to enter. The expected sleep
-> length takes the first queued timer of the CPU into account and is
-> provided by tick_nohz_get_sleep_length(). With the timer pull model in
-> place the non pinned timers are not taken into account when there are
-> other CPUs up and running which could handle those timers. This could
-> lead to increased sleep length values. On my system during the stress-ng
-> uprobes test it was in the range of maximum 100us without the patch set
-> and with the patch set the maximum was in a range of 200sec. This is
-> intended behaviour, because timers which could expire on any CPU should
-> expire on the CPU which is busy anyway and the non busy CPU should be
-> able to go idle.
-> 
-> Those increased sleep length values were the only anomalies I could find
-> in the traces with the regression.
-> 
-> I created the patch below which simply fakes the sleep length values
-> that they take all timers of the CPU into account (also the non
-> pinned). This patch kind of restores the behavoir of
-> tick_nohz_get_sleep_length() before the change but still with the timer
-> pull model in place.
-> 
-> With the patch the regression was gone, at least on my system (using
-> cpuidle governor menu but also teo).
+> Well there is also the iowait boost handling in schedutil and intel_pstate
+> which, at least in synthetic benchmarks, does have an effect [1].
 
-I assume the regression is reproducible for both?
-(The original report is using menu for anyone else looking at this)
+Those are cpufreq not cpuidle and at least they don't use nr_iowait. The
+original Changelog mentioned idle states, and I hate on menu for using
+nr_iowait.
 
+> io_uring (the only user of iowait but not iowait_acct) works around both.
 > 
-> So my assumption here is, that cpuidle governors assume that a deeper
-> idle state could be choosen and selecting the deeper idle state makes an
-> overhead when returning from idle. But I have to notice here, that I'm
-> still not familiar with cpuidle internals... So I would be happy about
-> some hints how I can debug/trace cpuidle internals to falsify or verify
-> this assumption.
+> See commit ("8a796565cec3 io_uring: Use io_schedule* in cqring wait")
+> 
+> [1]
+> https://lore.kernel.org/lkml/20240304201625.100619-1-christian.loehle@arm.com/#t
 
-I'd say that sounds correct.
-Comparing cpu_idle_miss would be interesting for both.
+So while I agree with most of the short-commings listed in that set,
+however that patch is quite terrifying.
 
-Regards,
-Christian
-
-> [snip]
+I would prefer to start with something a *lot* simpler. How about a tick
+driven decay of iops count per task. And that whole step array
+*shudder*.
 
