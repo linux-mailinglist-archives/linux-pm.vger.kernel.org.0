@@ -1,62 +1,68 @@
-Return-Path: <linux-pm+bounces-7094-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7095-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC68F8B239C
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 16:12:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60CDE8B23FE
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 16:25:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C0571C208F7
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 14:12:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D33C282A2A
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 14:25:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4714F149DF6;
-	Thu, 25 Apr 2024 14:11:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 345AF14B093;
+	Thu, 25 Apr 2024 14:20:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="YDqbSUUZ"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="ini0VbyF"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BD861494BF;
-	Thu, 25 Apr 2024 14:11:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CB3114A0A9;
+	Thu, 25 Apr 2024 14:20:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714054317; cv=none; b=eR/RvYFar9HapuouFNd6HE+I7VnZuEIALFFLphuWi9JhTOvEZ1VyBIV8fyob58NSjpJmsUkZX2kQhnbysY2F8LHuafljxnn45B+LCYdD3fUOnqR6Fi+LHjdffhd76QLf3gzewacFYGPqjUsMsXBHVQ2rSzO7ulp0v8wjIhGa2t0=
+	t=1714054834; cv=none; b=qhxclAy2dmau+mh+MqIUFSabjOcXA3aegLJXFRVSS4hH/OI/RE3LNPpEzGQMbw5zw40IDoNPXvOpOj01/CqjmlR/RbA4fMsHInZEwCRkVRV9SdbYQZffFL4rUXOYL9muPZDDVVxzTJ7rDf/NfyoMNxODXkdpJP6u1g9Pf93Z4EY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714054317; c=relaxed/simple;
-	bh=KauxnHMHBOw91Q6QFJqIYZ6o7dfUdmnOhULj4HLawgM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YB/aWe8NmIxqI6mSzBGNMrBrh0HqQpnhfID5JVKe10N47Hjw0/utbzbDtYBzjJspUN9KBldfrvoItERIp9Przv9C6La8N1clwWSSJJEHKqn0N2OIIOab+y3SAy999WtC/pFw96EWTyGNBI9vkAJcYsp/U7fqLd1Y54TxgLF5CcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=YDqbSUUZ; arc=none smtp.client-ip=79.96.170.134
+	s=arc-20240116; t=1714054834; c=relaxed/simple;
+	bh=JekMetg/YF071aOgGl/DrEuzh3d8IGL9N+wrQlKfEO8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=QREqstlpPuZz6XToXezUAY06ahm63XI0bqh5JI/78f33VDYnoxIMSLamgps6bBHFdMEUZcXGwwAe6scWsUOJuFPR/XlOYog1DmFun0EF8irHlFxGOkTxvfpo672KH2w+2fUb9XbNgtTYMLOiH6bEsXQC3KyNVZQT2rh9fOni+o8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=ini0VbyF reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
- id 7e8b731d164f542d; Thu, 25 Apr 2024 16:11:53 +0200
+ id 05c7b55a3e2687dd; Thu, 25 Apr 2024 16:20:30 +0200
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id A59F566DF23;
-	Thu, 25 Apr 2024 16:11:52 +0200 (CEST)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id AFECE66DF01;
+	Thu, 25 Apr 2024 16:20:29 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1714054313;
-	bh=KauxnHMHBOw91Q6QFJqIYZ6o7dfUdmnOhULj4HLawgM=;
-	h=From:To:Cc:Subject:Date;
-	b=YDqbSUUZibdd+9YKB0241Ep44y2G2ZSd5sWs99ZJSXIHNDGjWqCwAX0UiFagBKJmS
-	 Um3EEfqvtocF76IO9z8Lo7OnJWfRxUFNjcOgcExwnozp5lHelKnka0v1nm/gFftZ9U
-	 s+Jry418zJoblaW8zqn4/d29dpowt1BvzGtLfeTCGrGC7Kyvonb7OYeAfCeAdlMJNr
-	 rvfQtkNoW6ajIg6KBbP8wu+0hwvJDQrL/xhObbrdBbTqKyC/ySgq1RycZzoP6rF/rX
-	 zex79xkMtMoM/xdyj5K34I+L3BO1nmhVNlARxvd6okHdTVDI2RWkIma3AiLNvg1ohn
-	 DxnTnZy/F1VKw==
+	s=dkim; t=1714054830;
+	bh=JekMetg/YF071aOgGl/DrEuzh3d8IGL9N+wrQlKfEO8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=ini0VbyF7UvGBKz+HxzK+fk/fRgbPxizJ+PdVeO+Tdw11egMVG0nhZXUhg5H8BQHf
+	 ZsdNyYWSjoL9rrMEYCLoO9Hg4Prf28sHrML1iS2AItLw7opD840kfjFBPD+Yq9ZCCV
+	 gdDnbO70s6Ymtmjr8J9w42lgToFRjyGmrfmw2f7yU0HASKMAAKZaPifs2EVTlxhouR
+	 F1Awtj8RGdQOgnFzT/z7s5xQIfCtTR7Ygh0O/RZseekMnnKkeU4GThowGQZBv3p3OU
+	 TIQy0EXga+T6ROHadsqzdXKl9rjQoUtcbEUJeFIr3gOKgGH/Tk41etN/Z9uCXlQ8wP
+	 nxkcnFSJ6YZAg==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
- LKML <linux-kernel@vger.kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Lukasz Luba <lukasz.luba@arm.com>
-Subject: [PATCH v1] thermal: core: Move passive polling management to the core
-Date: Thu, 25 Apr 2024 16:11:52 +0200
-Message-ID: <5938055.MhkbZ0Pkbq@kreacher>
+To: Jens Axboe <axboe@kernel.dk>, Peter Zijlstra <peterz@infradead.org>
+Cc: linux-kernel@vger.kernel.org, tglx@linutronix.de,
+ linux-pm@vger.kernel.org, daniel.lezcano@linaro.org,
+ "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH 4/4] sched/core: split iowait state into two states
+Date: Thu, 25 Apr 2024 16:20:29 +0200
+Message-ID: <8409301.NyiUUSuA9g@kreacher>
+In-Reply-To: <20240424100127.GV40213@noisy.programming.kicks-ass.net>
+References:
+ <20240416121526.67022-1-axboe@kernel.dk>
+ <20240416121526.67022-5-axboe@kernel.dk>
+ <20240424100127.GV40213@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -68,167 +74,26 @@ Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 195.136.19.94
 X-CLIENT-HOSTNAME: 195.136.19.94
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudeljedgjeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgeffhfdujeelhfdtgeffkeetudfhtefhhfeiteethfekvefgvdfgfeeikeeigfehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghl
- rdhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudeljedgjeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepjedprhgtphhtthhopegrgigsohgvsehkvghrnhgvlhdrughkpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhglhigsehlihhnuhhtrhhonhhigidruggvpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhn
+ vghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Wednesday, April 24, 2024 12:01:27 PM CEST Peter Zijlstra wrote:
+> On Tue, Apr 16, 2024 at 06:11:21AM -0600, Jens Axboe wrote:
+> > iowait is a bogus metric, but it's helpful in the sense that it allows
+> > short waits to not enter sleep states that have a higher exit latency
+> > than would've otherwise have been picked for iowait'ing tasks. However,
+> > it's harmless in that lots of applications and monitoring assumes that
+> > iowait is busy time, or otherwise use it as a health metric.
+> > Particularly for async IO it's entirely nonsensical.
+> 
+> Let me get this straight, all of this is about working around
+> cpuidle menu governor insaity?
+> 
+> Rafael, how far along are we with fully deprecating that thing? Yes it
+> still exists, but should people really be using it still?
 
-Passive polling is enabled by setting the 'passive' field in
-struct thermal_zone_device to a positive value so long as the
-'passive_delay_jiffies' field is greater than zero.  It causes
-the thermal core to actively check the thermal zone temperature
-periodically which in theory should be done after crossing a
-passive trip point on the way up in order to allow governors to
-react more rapidly to temperature changes and adjust mitigation
-more precisely.
-
-However, the 'passive' field in struct thermal_zone_device is currently
-managed by governors which is quite problematic.  First of all, only
-two governors, Step-Wise and Power Allocator, update that field at
-all, so the other governors do not benefit from passive polling,
-although in principle they should.  Moreover, if the zone governor is
-changed from, say, Step-Wise to Fair-Share after 'passive' has been
-incremented by the former, it is not going to be reset back to zero by
-the latter even if the zone temperature falls down below all passive
-trip points.
-
-For this reason, make handle_thermal_trip() increment 'passive'
-to enable passive polling for the given thermal zone whenever a
-passive trip point is crossed on the way up and decrement it
-whenever a passive trip point is crossed on the way down.  Also
-remove the 'passive' field updates from governors and additionally
-clear it in thermal_zone_device_init() to prevent passive polling
-from being enabled after a system resume just beacuse it was enabled
-before suspending the system.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-This has been mentioned here:
-
-https://lore.kernel.org/linux-pm/61560bc6-d453-4b0c-a4ea-b375d547b143@linaro.org/
-
-and I need someone to double check if the Power Allocator governor does not
-need to be adjusted more for this change.
-
----
- drivers/thermal/gov_power_allocator.c |   12 +++++++-----
- drivers/thermal/gov_step_wise.c       |   10 ----------
- drivers/thermal/thermal_core.c        |   10 ++++++++--
- 3 files changed, 15 insertions(+), 17 deletions(-)
-
-Index: linux-pm/drivers/thermal/thermal_core.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_core.c
-+++ linux-pm/drivers/thermal/thermal_core.c
-@@ -389,6 +389,9 @@ static void handle_thermal_trip(struct t
- 		if (tz->temperature < trip->temperature - trip->hysteresis) {
- 			list_add(&td->notify_list_node, way_down_list);
- 			td->notify_temp = trip->temperature - trip->hysteresis;
-+
-+			if (trip->type == THERMAL_TRIP_PASSIVE)
-+				tz->passive--;
- 		} else {
- 			td->threshold -= trip->hysteresis;
- 		}
-@@ -402,8 +405,10 @@ static void handle_thermal_trip(struct t
- 		td->notify_temp = trip->temperature;
- 		td->threshold -= trip->hysteresis;
- 
--		if (trip->type == THERMAL_TRIP_CRITICAL ||
--		    trip->type == THERMAL_TRIP_HOT)
-+		if (trip->type == THERMAL_TRIP_PASSIVE)
-+			tz->passive++;
-+		else if (trip->type == THERMAL_TRIP_CRITICAL ||
-+			 trip->type == THERMAL_TRIP_HOT)
- 			handle_critical_trips(tz, trip);
- 	}
- }
-@@ -444,6 +449,7 @@ static void thermal_zone_device_init(str
- 	INIT_DELAYED_WORK(&tz->poll_queue, thermal_zone_device_check);
- 
- 	tz->temperature = THERMAL_TEMP_INVALID;
-+	tz->passive = 0;
- 	tz->prev_low_trip = -INT_MAX;
- 	tz->prev_high_trip = INT_MAX;
- 	list_for_each_entry(pos, &tz->thermal_instances, tz_node)
-Index: linux-pm/drivers/thermal/gov_step_wise.c
-===================================================================
---- linux-pm.orig/drivers/thermal/gov_step_wise.c
-+++ linux-pm/drivers/thermal/gov_step_wise.c
-@@ -93,16 +93,6 @@ static void thermal_zone_trip_update(str
- 		if (instance->initialized && old_target == instance->target)
- 			continue;
- 
--		if (trip->type == THERMAL_TRIP_PASSIVE) {
--			/* If needed, update the status of passive polling. */
--			if (old_target == THERMAL_NO_TARGET &&
--			    instance->target != THERMAL_NO_TARGET)
--				tz->passive++;
--			else if (old_target != THERMAL_NO_TARGET &&
--				 instance->target == THERMAL_NO_TARGET)
--				tz->passive--;
--		}
--
- 		instance->initialized = true;
- 
- 		mutex_lock(&instance->cdev->lock);
-Index: linux-pm/drivers/thermal/gov_power_allocator.c
-===================================================================
---- linux-pm.orig/drivers/thermal/gov_power_allocator.c
-+++ linux-pm/drivers/thermal/gov_power_allocator.c
-@@ -66,6 +66,7 @@ struct power_actor {
-  * struct power_allocator_params - parameters for the power allocator governor
-  * @allocated_tzp:	whether we have allocated tzp for this thermal zone and
-  *			it needs to be freed on unbind
-+ * @update_cdevs:	whether or not update cdevs on the next run
-  * @err_integral:	accumulated error in the PID controller.
-  * @prev_err:	error in the previous iteration of the PID controller.
-  *		Used to calculate the derivative term.
-@@ -84,6 +85,7 @@ struct power_actor {
-  */
- struct power_allocator_params {
- 	bool allocated_tzp;
-+	bool update_cdevs;
- 	s64 err_integral;
- 	s32 prev_err;
- 	u32 sustainable_power;
-@@ -533,7 +535,7 @@ static void reset_pid_controller(struct
- 	params->prev_err = 0;
- }
- 
--static void allow_maximum_power(struct thermal_zone_device *tz, bool update)
-+static void allow_maximum_power(struct thermal_zone_device *tz)
- {
- 	struct power_allocator_params *params = tz->governor_data;
- 	struct thermal_cooling_device *cdev;
-@@ -555,7 +557,7 @@ static void allow_maximum_power(struct t
- 		 */
- 		cdev->ops->get_requested_power(cdev, &req_power);
- 
--		if (update)
-+		if (params->update_cdevs)
- 			__thermal_cdev_update(cdev);
- 
- 		mutex_unlock(&cdev->lock);
-@@ -752,13 +754,13 @@ static void power_allocator_manage(struc
- 
- 	if (trip && tz->temperature < trip->temperature) {
- 		reset_pid_controller(params);
--		allow_maximum_power(tz, tz->passive);
--		tz->passive = 0;
-+		allow_maximum_power(tz);
-+		params->update_cdevs = false;
- 		return;
- 	}
- 
- 	allocate_power(tz, params->trip_max->temperature);
--	tz->passive = 1;
-+	params->update_cdevs = true;
- }
- 
- static struct thermal_governor thermal_gov_power_allocator = {
+Well, they appear to be used to it ...
 
 
 
