@@ -1,238 +1,118 @@
-Return-Path: <linux-pm+bounces-7106-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7107-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8044A8B2591
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 17:48:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0261C8B25C1
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 17:56:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F1841C20A23
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 15:48:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4F0AFB2A67D
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 15:51:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A75FD14BF89;
-	Thu, 25 Apr 2024 15:48:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57A0D14C599;
+	Thu, 25 Apr 2024 15:51:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="hbwfSz8U"
+	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="Mzei7UZm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F4891CF8A;
-	Thu, 25 Apr 2024 15:48:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 881B212B156;
+	Thu, 25 Apr 2024 15:51:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714060083; cv=none; b=T6hllSw5Sph29pYFvGCzqXxAf1bfwqQExOBE7I9hb7l4i3MtIgZZchkPrTk664miTgMBpJqtsSxPeXvpjnQtOGMXMbdbAJV6TQZr3cAwe0E82SntWlGsBkV20mbqiDgd01lOpVOBHlMaU4T8kzYGkfhHvWc/PeyoQYJ4z75tJ+k=
+	t=1714060302; cv=none; b=i7BcfNXO5DdZPZ4QGTtyvHrrBiZwbydFlHvZBr+Zcb1ovNWBB43mnbNfFhvpwjsNDoh+XSayEvt7ibMdDl0gWa/rsN5lo1U30NjAe32ZR2Xftag1NwyajrSyrtUbwcBkml447tQ8JODz4gluk5DZ3rkh6VZzskQtEmV016xFI9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714060083; c=relaxed/simple;
-	bh=vRl3nerpRfMSVNdi2yLByaHezOdTcLaQL5k4oJE5Jx0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=f2j5VgZwKZP0F0S1yv24qZlhiZ52fQ38czseq4w9s3X+8yf9RuX4suoT4BbvNYdv2LEkGAqtQ4RFMP+XEYG4VIkC4UP38muRahMmdFQXWztcYPIlhIEfqtUAZoPmFItkR1JFCwmMs6ZjkzeK5jzDGVzJk4olMqDPT1oZFIVLKWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=hbwfSz8U reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
- id af50854ee9ed0a10; Thu, 25 Apr 2024 17:47:58 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 3308466DF31;
-	Thu, 25 Apr 2024 17:47:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1714060078;
-	bh=vRl3nerpRfMSVNdi2yLByaHezOdTcLaQL5k4oJE5Jx0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=hbwfSz8UspzW8rjFdkmLtLc+FpOwVaJcJDoDJX5jlRmHDixcSCCHcMQqKBElPMAoR
-	 ELou1a6skzjjhL+wLSQBI66gqA8RR10u1twRbCJhIuFbLQeOhhHriR6f/iBt6Unejq
-	 7ztp9wEx3gstD2FCYglWnBNaQ2vnGEiB4aCQxuUuq+f2p9iKx4wPUyOoqWq66SATUu
-	 kysupLnoiHUUTdLnfDoyN362soZb5+a/NamwbGl7sTjlbVV4EdtF+V7VAPFUaYkDqw
-	 Ny5ZY6uoggwt12vnp83TYGXjt9ucy2tWv6lZUI107ObtNZ6rgIFafJLn8qRFZOMuMt
-	 twqwCdyJwa/Lg==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Lukasz Luba <lukasz.luba@arm.com>,
- Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>
-Subject:
- [Alternative][PATCH v1 2/3] thermal/debugfs: Fix two locking issues with
- thermal zone debug
-Date: Thu, 25 Apr 2024 17:47:57 +0200
-Message-ID: <5780690.DvuYhMxLoT@kreacher>
-In-Reply-To: <1888579.tdWV9SEqCh@kreacher>
-References: <12427744.O9o76ZdvQC@kreacher> <1888579.tdWV9SEqCh@kreacher>
+	s=arc-20240116; t=1714060302; c=relaxed/simple;
+	bh=JnNuiwEjp88T0SxNSyjjxPwL8xwkm7/welwhj9Mm3fU=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ju87+G1RaxgroRRaTjWTQj3Gm+Du0kK6HvQQEAwS6adZaax7+E9bAkmm2jfqtIGmtXytisg4n2ojWg2ZNiUNTHcB2Rlou+HbK39fMgoKk6ctXkXHjBc8olMQ72gx4qSwPESrdClP65A6qEmgkV3ohPde8PgGex6UeQUcuYq7tcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=Mzei7UZm; arc=none smtp.client-ip=185.70.40.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=protonmail; t=1714060292; x=1714319492;
+	bh=kVfecRLul1bWESph5bgI+QIEjsAZi68hrnU3YEYNhsU=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=Mzei7UZmRTxq/ydowLnAD+P4ThggwXzpEPGgfRubUFcYtbOKJnxjGIMfuem/SQvIM
+	 +yHk5RLEQPGxp+XREUAiXeGMGWjrGprT0VJ1jj3MH2/b55hvKujgkxco0T7WQlpbLl
+	 yPxwxkPq84udniaYcvemwXAOle5lSAnfzBosSNAQMUWpgB6Oo1uOvo+sd1txeZ8Lo0
+	 qlw+gEwwul2Yo1FzC1OSiwBt1AO7mDOp2atcdcPijyM+M4Cc/lpspQTR5Z11ul9dZS
+	 I4JOWa/3ugKXcZuGKnhA+0u1LyjFwzPZr0Zwj4vKDZ4TvjMVk6Odt2wCipuVBPI8PT
+	 GgiMeTOM3/kZw==
+Date: Thu, 25 Apr 2024 15:51:29 +0000
+To: Viresh Kumar <viresh.kumar@linaro.org>
+From: Benno Lossin <benno.lossin@proton.me>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>, linux-pm@vger.kernel.org, Vincent Guittot <vincent.guittot@linaro.org>, Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>, rust-for-linux@vger.kernel.org, Manos Pitsidianakis <manos.pitsidianakis@linaro.org>, Erik Schilling <erik.schilling@linaro.org>, =?utf-8?Q?Alex_Benn=C3=A9e?= <alex.bennee@linaro.org>, Joakim Bech <joakim.bech@linaro.org>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 1/3] rust: Add bindings for OPP framework
+Message-ID: <5a6542d6-4644-4083-99e4-73de7038fe92@proton.me>
+In-Reply-To: <20240422102415.xvmuja6bdfxgl4pv@vireshk-i7>
+References: <cover.1712314032.git.viresh.kumar@linaro.org> <06bb914eae00671a69b393bf86bb01ddec86c16f.1712314032.git.viresh.kumar@linaro.org> <ff6c7d5e-d6e9-4331-b8cc-eab139160e59@proton.me> <20240422102415.xvmuja6bdfxgl4pv@vireshk-i7>
+Feedback-ID: 71780778:user:proton
+X-Pm-Message-ID: 50e695419f6a03950bbc639587da801f21c5bfea
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudeljedgleefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepfeduudeutdeugfelffduieegiedtueefledvjeegffdttefhhffhtefhleejgfetnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgv
- rhhnvghlrdhorhhgpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 22.04.24 12:24, Viresh Kumar wrote:
+> Thanks for the review Benno. I was waiting for more review comments to
+> come in and hence didn't reply earlier with an update.
+>=20
+> On 07-04-24, 09:54, Benno Lossin wrote:
+>> On 05.04.24 13:09, Viresh Kumar wrote:
+>>> +    clk_names: Option<Pin<Vec<CString>>>,
+>>
+>> Why are you using `Pin<Vec<_>>`? The vector may reallocate the backing
+>> storage at any point in time.
+>=20
+>>> +    /// Sets the configuration with the OPP core.
+>>> +    pub fn set(&mut self, dev: &Device) -> Result<()> {
+>>> +        // Already configured.
+>>> +        if self.token.is_some() {
+>>
+>> Why does the config hold onto this token? Would it make sense to consume
+>> the config and return a `Handle` or `Token` abstraction? Then you don't
+>> need to check if the config has been "used" before.
+>=20
+>>> +#[repr(transparent)]
+>>> +pub struct OPP(*mut bindings::dev_pm_opp);
+>>
+>> I think you should use the `ARef` pattern instead:
+>>
+>>       #[repr(transparent)]
+>>       pub struct OPP(Opaque<bindings::dev_pm_opp>);
+>>
+>>       unsafe impl AlwaysRefCounted for OPP {
+>>           // ...
+>>       }
+>>
+>> Then you can use `ARef<OPP>` everywhere you use `OPP` currently.
+>=20
+> All these comments look good to me. Updated the code with them (not
+> reposting them for now)
 
-With the current thermal zone locking arrangement in the debugfs code,
-user space can open the "mitigations" file for a thermal zone before
-the zone's debugfs pointer is set which will result in a NULL pointer
-dereference in tze_seq_start().
+I currently do not have a lot of time, so I will re-review it when you
+post a new version.
 
-Moreover, thermal_debug_tz_remove() is not called under the thermal
-zone lock, so can run in parallel with the other functions accessing
-the thermal zone's struct thermal_debugfs object.  Then, it may clear
-tz->debugfs after one of those functions has checked it and the
-struct thermal_debugfs object may be freed prematurely.
+> -------------------------8<-------------------------
+>=20
+>  rust/bindings/bindings_helper.h |   1 +
+>  rust/kernel/lib.rs              |   2 +
+>  rust/kernel/opp.rs              | 888 ++++++++++++++++++++++++++++++++
 
-To address the first problem, pass a pointer to the thermal zone's
-struct thermal_debugfs object to debugfs_create_file() in
-thermal_debug_tz_add() and make tze_seq_start(), tze_seq_next(),
-tze_seq_stop(), and tze_seq_show() retrieve it from s->private
-instead of a pointer to the thermal zone object.  This will ensure
-that tz_debugfs will be valid across the "mitigations" file accesses
-until thermal_debugfs_remove_id() called by thermal_debug_tz_remove()
-removes that file.
+One other nice thing that you could do would be to split this patch into
+multiple smaller ones. That makes understanding the pieces a lot easier.
 
-To address the second problem, use tz->lock in thermal_debug_tz_remove()
-around the tz->debugfs value check (in case the same thermal zone is
-removed at the same time in two differet threads) and its reset to NULL.
-
-Fixes: 7ef01f228c9f ("thermal/debugfs: Add thermal debugfs information for mitigation episodes")
-Cc :6.8+ <stable@vger.kernel.org> # 6.8+
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-This is an alternative fix for the issues addressed by
-
-https://lore.kernel.org/linux-pm/1888579.tdWV9SEqCh@kreacher/
-
-and I slightly prefer it, because it is less intrusive and makes
-the thermal zone debug code more consistent with the analogous code
-for cdevs.
-
-Accordingly, I've replace the above with this patch in the
-thermal-core-next branch in linux-pm.git.
-
----
- drivers/thermal/thermal_debugfs.c |   34 ++++++++++++++++++++++------------
- 1 file changed, 22 insertions(+), 12 deletions(-)
-
-Index: linux-pm/drivers/thermal/thermal_debugfs.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_debugfs.c
-+++ linux-pm/drivers/thermal/thermal_debugfs.c
-@@ -139,11 +139,13 @@ struct tz_episode {
-  * we keep track of the current position in the history array.
-  *
-  * @tz_episodes: a list of thermal mitigation episodes
-+ * @tz: thermal zone this object belongs to
-  * @trips_crossed: an array of trip points crossed by id
-  * @nr_trips: the number of trip points currently being crossed
-  */
- struct tz_debugfs {
- 	struct list_head tz_episodes;
-+	struct thermal_zone_device *tz;
- 	int *trips_crossed;
- 	int nr_trips;
- };
-@@ -710,8 +712,7 @@ out:
- 
- static void *tze_seq_start(struct seq_file *s, loff_t *pos)
- {
--	struct thermal_zone_device *tz = s->private;
--	struct thermal_debugfs *thermal_dbg = tz->debugfs;
-+	struct thermal_debugfs *thermal_dbg = s->private;
- 	struct tz_debugfs *tz_dbg = &thermal_dbg->tz_dbg;
- 
- 	mutex_lock(&thermal_dbg->lock);
-@@ -721,8 +722,7 @@ static void *tze_seq_start(struct seq_fi
- 
- static void *tze_seq_next(struct seq_file *s, void *v, loff_t *pos)
- {
--	struct thermal_zone_device *tz = s->private;
--	struct thermal_debugfs *thermal_dbg = tz->debugfs;
-+	struct thermal_debugfs *thermal_dbg = s->private;
- 	struct tz_debugfs *tz_dbg = &thermal_dbg->tz_dbg;
- 
- 	return seq_list_next(v, &tz_dbg->tz_episodes, pos);
-@@ -730,15 +730,15 @@ static void *tze_seq_next(struct seq_fil
- 
- static void tze_seq_stop(struct seq_file *s, void *v)
- {
--	struct thermal_zone_device *tz = s->private;
--	struct thermal_debugfs *thermal_dbg = tz->debugfs;
-+	struct thermal_debugfs *thermal_dbg = s->private;
- 
- 	mutex_unlock(&thermal_dbg->lock);
- }
- 
- static int tze_seq_show(struct seq_file *s, void *v)
- {
--	struct thermal_zone_device *tz = s->private;
-+	struct thermal_debugfs *thermal_dbg = s->private;
-+	struct thermal_zone_device *tz = thermal_dbg->tz_dbg.tz;
- 	struct thermal_trip_desc *td;
- 	struct tz_episode *tze;
- 	const char *type;
-@@ -816,6 +816,8 @@ void thermal_debug_tz_add(struct thermal
- 
- 	tz_dbg = &thermal_dbg->tz_dbg;
- 
-+	tz_dbg->tz = tz;
-+
- 	tz_dbg->trips_crossed = kzalloc(sizeof(int) * tz->num_trips, GFP_KERNEL);
- 	if (!tz_dbg->trips_crossed) {
- 		thermal_debugfs_remove_id(thermal_dbg);
-@@ -824,20 +826,30 @@ void thermal_debug_tz_add(struct thermal
- 
- 	INIT_LIST_HEAD(&tz_dbg->tz_episodes);
- 
--	debugfs_create_file("mitigations", 0400, thermal_dbg->d_top, tz, &tze_fops);
-+	debugfs_create_file("mitigations", 0400, thermal_dbg->d_top,
-+			    thermal_dbg, &tze_fops);
- 
- 	tz->debugfs = thermal_dbg;
- }
- 
- void thermal_debug_tz_remove(struct thermal_zone_device *tz)
- {
--	struct thermal_debugfs *thermal_dbg = tz->debugfs;
-+	struct thermal_debugfs *thermal_dbg;
- 	struct tz_episode *tze, *tmp;
- 	struct tz_debugfs *tz_dbg;
- 	int *trips_crossed;
- 
--	if (!thermal_dbg)
-+	mutex_lock(&tz->lock);
-+
-+	thermal_dbg = tz->debugfs;
-+	if (!thermal_dbg) {
-+		mutex_unlock(&tz->lock);
- 		return;
-+	}
-+
-+	tz->debugfs = NULL;
-+
-+	mutex_unlock(&tz->lock);
- 
- 	tz_dbg = &thermal_dbg->tz_dbg;
- 
-@@ -850,8 +862,6 @@ void thermal_debug_tz_remove(struct ther
- 		kfree(tze);
- 	}
- 
--	tz->debugfs = NULL;
--
- 	mutex_unlock(&thermal_dbg->lock);
- 
- 	thermal_debugfs_remove_id(thermal_dbg);
-
-
+--=20
+Cheers,
+Benno
 
 
