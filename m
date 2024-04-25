@@ -1,247 +1,123 @@
-Return-Path: <linux-pm+bounces-7079-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7080-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AE358B21A7
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 14:32:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 958988B21B9
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 14:37:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5ECB28756E
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 12:32:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D9E9287774
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 12:37:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 901DE1448DA;
-	Thu, 25 Apr 2024 12:32:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C8DA1494B1;
+	Thu, 25 Apr 2024 12:36:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V6dZUoYE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD9D6143894;
-	Thu, 25 Apr 2024 12:31:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 537C4133408;
+	Thu, 25 Apr 2024 12:36:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714048321; cv=none; b=ZRwsdlc5iJ3bboJNEoo+OG3hKf3B6cr4iDCGDh3eTYlpp3gSRROd1T/m6VkQHjA14/2J/WstPc7HaCUNFpQvHQrLemIWkR4E/uY4wVGdIkCiuje/UeVD1xCaAnhtIuMwzRQoQvy+PVNx+L5keyBALOH88CJEKBxmi6vel5W3x04=
+	t=1714048619; cv=none; b=ef6+7iN05XHPJ7X8uzv7jL9bv30xwfZcCBgQGX8FJ8Fj+1izIA5q838CG0pRbKyOw82lzRWFJLBmG2plW2cx5IdZvQqvTPEj6FcmkMzri7Agkcf8gKuIY0zaz/VXAFdJ6ooAXrV9GTqjmcoN9ZpEuV+mNpNFDl907Fn6jlGfW6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714048321; c=relaxed/simple;
-	bh=whSp5cqil5xFhRRdjAyrS5AlI1HyOK8o5KQbJYN9Vbw=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hdrQNu6EeBUW8w1GWL9M3skVllAue6wdaHUBoz+RWvKOk8bVEWI4gnMEmHJ/M147k/PPfCsVeZh0kDQtjrmWG/gsrKR3udj2S4yRspORQArGBuLr+TqSBqvk17hhjNKO74xxOE9KyZRKyayRjyXPV0ZMQYkf3S5xoITFDhN6KUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VQFXp3b2qz6JBTq;
-	Thu, 25 Apr 2024 20:29:30 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id BF8881400DD;
-	Thu, 25 Apr 2024 20:31:52 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Thu, 25 Apr
- 2024 13:31:52 +0100
-Date: Thu, 25 Apr 2024 13:31:50 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Marc Zyngier <maz@kernel.org>
-CC: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
-	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
-	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-	<x86@kernel.org>, Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki"
-	<rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, "James Morse"
-	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, Jean-Philippe
- Brucker <jean-philippe@linaro.org>, Catalin Marinas
-	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
-	<linuxarm@huawei.com>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
-	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
-	<justin.he@arm.com>, <jianyong.wu@arm.com>
-Subject: Re: [PATCH v7 11/16] irqchip/gic-v3: Add support for ACPI's
- disabled but 'online capable' CPUs
-Message-ID: <20240425133150.000009fa@Huawei.com>
-In-Reply-To: <86il06rd19.wl-maz@kernel.org>
-References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com>
-	<20240418135412.14730-12-Jonathan.Cameron@huawei.com>
-	<20240422114020.0000294f@Huawei.com>
-	<87plugthim.wl-maz@kernel.org>
-	<20240424135438.00001ffc@huawei.com>
-	<86il06rd19.wl-maz@kernel.org>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1714048619; c=relaxed/simple;
+	bh=WPH2vArT6rmPx5cfh1ctX9In3WzdWlO76BEzWfqHfWY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OvyFUhEW0Z/miqsaqgokCQrZUCkOUMvXQt8fYN+QdOCgYBAswxgCwQZwODxvVYP2v2k3dyR6ag0WBgoS8OBhlQE65UUOwbqWxRECt2ZL5chlsUvWrIJH6S9+SjU7TxLvQVtY0GwFZy+pGsa5cXfCJEGuQZalhZkBLlL+5I66Kmk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V6dZUoYE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCB11C2BD10;
+	Thu, 25 Apr 2024 12:36:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714048618;
+	bh=WPH2vArT6rmPx5cfh1ctX9In3WzdWlO76BEzWfqHfWY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=V6dZUoYEO7aXsjlSqknmQ5zuX2Au2c33+ZnePrhMd4AvUeYFl9g/+JIT80YGYboHK
+	 PL+KZdWl4Nj8H8PmNMkJQfSL/jP56PFDvJI1SvamDi4bV4CXk9ir386VVTXyZjZirD
+	 wEn8CsEBCn5j2KSPDVifBuVE3wJdjHjFiZc8HPXfBc4kWRG5Y9vBo0owK9s31L9qSj
+	 oUjwM7lhSzw6mCjJugIRtv7OlwcwFNxcTWY7YEIQyNE/m+A9j/NbjWob3mpKX3xblM
+	 tZutuUv9iTMJFrBGnu10t9oVLFBnce5CsnrUZjsMvFmTtbCrNiD8XPiIuPT8mp8mq0
+	 O4T0cr3tC5nIw==
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6ea0a6856d7so113631a34.1;
+        Thu, 25 Apr 2024 05:36:58 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUj2wOj/PkcAb41tV9Ar5ExpqedJcAlKDlYI9BhDhOia+j4aXY1izgmNIV6EZmD/vxg9SMH9o5lYLBv49DF3IbHmBPKSjJBKNWvE0+2agTJVXG2shQSjGh9IWl2+6CvJqdXORLd8JI=
+X-Gm-Message-State: AOJu0YxdadeKHyNUZlbxeDeQ7rkDs48DTns8agaqOSWPodtiG9mptEpb
+	HwXq2o2fsg8VXU/p+qeYRFwc6SHY3QMhdkkHIRyPDllAxKjz5jyvyyOuia3VyQFZzk7fUOGpdIT
+	Z4Iu1qIDIKriKwTNCqSM23v9e+gc=
+X-Google-Smtp-Source: AGHT+IGthMl/Ito+Q6DI6eAj99qeVy30CIPYrVXUmda7A4xZ5NNubvbTlx3YUzPpSLvOh8Q6O9pcaQwADNh9svOjl14=
+X-Received: by 2002:a4a:1a06:0:b0:5af:6d3b:d952 with SMTP id
+ 6-20020a4a1a06000000b005af6d3bd952mr698985oof.0.1714048618075; Thu, 25 Apr
+ 2024 05:36:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+References: <5774279.DvuYhMxLoT@kreacher> <2181352.irdbgypaU6@kreacher> <e9be06af-48bf-45ec-8d6d-6147d20b6780@arm.com>
+In-Reply-To: <e9be06af-48bf-45ec-8d6d-6147d20b6780@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 25 Apr 2024 14:36:46 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0i=HS_-S3N7ixK=FM0S=7o21cfW5jXMq=AWObwGpUkPdA@mail.gmail.com>
+Message-ID: <CAJZ5v0i=HS_-S3N7ixK=FM0S=7o21cfW5jXMq=AWObwGpUkPdA@mail.gmail.com>
+Subject: Re: [PATCH v1 2/3] thermal/debugfs: Pass cooling device state to thermal_debug_cdev_add()
+To: Lukasz Luba <lukasz.luba@arm.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, LKML <linux-kernel@vger.kernel.org>, 
+	Linux PM <linux-pm@vger.kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 24 Apr 2024 16:33:22 +0100
-Marc Zyngier <maz@kernel.org> wrote:
+Hi Lukasz,
 
-> On Wed, 24 Apr 2024 13:54:38 +0100,
-> Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
-> > 
-> > On Tue, 23 Apr 2024 13:01:21 +0100
-> > Marc Zyngier <maz@kernel.org> wrote:
-> >   
-> > > On Mon, 22 Apr 2024 11:40:20 +0100,
-> > > Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:  
-> > > > 
-> > > > On Thu, 18 Apr 2024 14:54:07 +0100
-> > > > Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:  
-> 
-> [...]
-> 
-> > > >     
-> > > > > +	/*
-> > > > > +	 * Capable but disabled CPUs can be brought online later. What about
-> > > > > +	 * the redistributor? ACPI doesn't want to say!
-> > > > > +	 * Virtual hotplug systems can use the MADT's "always-on" GICR entries.
-> > > > > +	 * Otherwise, prevent such CPUs from being brought online.
-> > > > > +	 */
-> > > > > +	if (!(gicc->flags & ACPI_MADT_ENABLED)) {
-> > > > > +		pr_warn_once("CPU %u's redistributor is inaccessible: this CPU can't be brought online\n", cpu);
-> > > > > +		set_cpu_present(cpu, false);
-> > > > > +		set_cpu_possible(cpu, false);
-> > > > > +		return 0;
-> > > > > +	}    
-> > > 
-> > > It seems dangerous to clear those this late in the game, given how
-> > > disconnected from the architecture code this is. Are we sure that
-> > > nothing has sampled these cpumasks beforehand?  
-> > 
-> > Hi Marc,
-> > 
-> > Any firmware that does this is being considered as buggy already
-> > but given it is firmware and the spec doesn't say much about this,
-> > there is always the possibility.  
-> 
-> There is no shortage of broken firmware out there, and I expect this
-> trend to progress.
-> 
-> > Not much happens between the point where these are setup and
-> > the point where the the gic inits and this code runs, but even if careful
-> > review showed it was fine today, it will be fragile to future changes.
-> > 
-> > I'm not sure there is a huge disadvantage for such broken firmware in
-> > clearing these masks from the point of view of what is used throughout
-> > the rest of the kernel. Here I think we are just looking to prevent the CPU
-> > being onlined later.  
-> 
-> I totally agree on the goal, I simply question the way you get to it.
-> 
-> > 
-> > We could add a set_cpu_broken() with appropriate mask.
-> > Given this is very arm64 specific I'm not sure Rafael will be keen on
-> > us checking such a mask in the generic ACPI code, but we could check it in
-> > arch_register_cpu() and just not register the cpu if it matches.
-> > That will cover the vCPU hotplug case.
+On Thu, Apr 25, 2024 at 12:02=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> =
+wrote:
+>
+> Hi Rafael,
+>
+> On 4/23/24 19:00, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > >
-> > Does that sounds sensible, or would you prefer something else?  
-> 
-> 
-> Such a 'broken_rdists' mask is exactly what I have in mind, just
-> keeping it private to the GIC driver, and not expose it anywhere else.
-> You can then fail the hotplug event early, and avoid changing the
-> global masks from within the GIC driver. At least, we don't mess with
-> the internals of the kernel, and the CPU is properly marked as dead
-> (that mechanism should already work).
-> 
-> I'd expect the handling side to look like this (will not compile, but
-> you'll get the idea):
-Hi Marc,
+> > If cdev_dt_seq_show() runs before the first state transition of a cooli=
+ng
+> > device, it will not print any state residency information for it, even
+> > though it might be reasonably expected to print residency information f=
+or
+> > the initial state of the cooling device.
+> >
+> > For this reason, rearrange the code to get the initial state of a cooli=
+ng
+> > device at the registration time and pass it to thermal_debug_cdev_add()=
+,
+> > so that the latter can create a duration record for that state which wi=
+ll
+> > allow cdev_dt_seq_show() to print its residency information.
+> >
+> > Fixes: 755113d76786 ("thermal/debugfs: Add thermal cooling device debug=
+fs information")
+> > Reported-by: Lukasz Luba <lukasz.luba@arm.com>
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >   drivers/thermal/thermal_core.c    |    9 +++++++--
+> >   drivers/thermal/thermal_debugfs.c |   12 ++++++++++--
+> >   drivers/thermal/thermal_debugfs.h |    4 ++--
+> >   3 files changed, 19 insertions(+), 6 deletions(-)
+> >
+>
+> I'm trying to test it on my board and do the review, but faced issue.
+> For some reason I couldn't apply that patch on the latest bleeding-edge
+> branch.
+> Could you help me in this please? Is there something missing in the
+> patch set (like one more fist patch)?
 
-In general this looks good - but...
+I messed up the ordering of patches (patch [2/3] should be the last
+one in the series) and on top of that, you'll need a small rebase on
+that patch.
 
-I haven't gotten to the bottom of why yet (and it might be a side
-effect of how I hacked the test by lying in minimal fashion and
-just frigging the MADT read functions) but the hotplug flow is only getting
-as far as calling __cpu_up() before it seems to enter an infinite loop.
-That is it never gets far enough to fail this test.
+Sorry about this, I'll send a v2.
 
-Getting stuck in a psci cpu_on call.  I'm guessing something that
-we didn't get to in the earlier gicv3 calls before bailing out is blocking that?
-Looks like it gets to
-SMCCC smc
-and is never seen again.
-
-Any ideas on where to look?  The one advantage so far of the higher level
-approach is we never tried the hotplug callbacks at all so avoided hitting
-that call.  One (little bit horrible) solution that might avoid this would 
-be to add another cpuhp state very early on and fail at that stage.
-I'm not keen on doing that without a better explanation than I have so far!
-
-Thanks,
-
-J
-
- 
-> diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
-> index 6fb276504bcc..e8f02bfd0e21 100644
-> --- a/drivers/irqchip/irq-gic-v3.c
-> +++ b/drivers/irqchip/irq-gic-v3.c
-> @@ -1009,6 +1009,9 @@ static int __gic_populate_rdist(struct redist_region *region, void __iomem *ptr)
->  	u64 typer;
->  	u32 aff;
->  
-> +	if (cpumask_test_cpu(smp_processor_id(), &broken_rdists))
-> +		return 1;
-> +
->  	/*
->  	 * Convert affinity to a 32bit value that can be matched to
->  	 * GICR_TYPER bits [63:32].
-> @@ -1260,14 +1263,15 @@ static int gic_dist_supports_lpis(void)
->  		!gicv3_nolpi);
->  }
->  
-> -static void gic_cpu_init(void)
-> +static int gic_cpu_init(void)
->  {
->  	void __iomem *rbase;
-> -	int i;
-> +	int ret, i;
->  
->  	/* Register ourselves with the rest of the world */
-> -	if (gic_populate_rdist())
-> -		return;
-> +	ret = gic_populate_rdist();
-> +	if (ret)
-> +		return ret;
->  
->  	gic_enable_redist(true);
->  
-> @@ -1286,6 +1290,8 @@ static void gic_cpu_init(void)
->  
->  	/* initialise system registers */
->  	gic_cpu_sys_reg_init();
-> +
-> +	return 0;
->  }
->  
->  #ifdef CONFIG_SMP
-> @@ -1295,7 +1301,11 @@ static void gic_cpu_init(void)
->  
->  static int gic_starting_cpu(unsigned int cpu)
->  {
-> -	gic_cpu_init();
-> +	int ret;
-> +
-> +	ret = gic_cpu_init();
-> +	if (ret)
-> +		return ret;
->  
->  	if (gic_dist_supports_lpis())
->  		its_cpu_init();
-> 
-> But the question is: do you rely on these masks having been
-> "corrected" anywhere else?
-> 
-> Thanks,
-> 
-> 	M.
-> 
-
+Thank you!
 
