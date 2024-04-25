@@ -1,243 +1,242 @@
-Return-Path: <linux-pm+bounces-7063-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7064-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3D488B1CC4
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 10:23:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E81088B1DFE
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 11:28:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 76C1F281054
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 08:23:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 171D01C21229
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 09:28:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1769074416;
-	Thu, 25 Apr 2024 08:23:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="j0hGuAZv";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="+YjVG7VT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87C9484D3E;
+	Thu, 25 Apr 2024 09:28:20 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D8F06EB5C;
-	Thu, 25 Apr 2024 08:23:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA40E2E413;
+	Thu, 25 Apr 2024 09:28:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714033403; cv=none; b=MqTw1dzoznjTVEEpgBA3aVS4CIn68f21wfGM0xbqKmvbt+BxKL/Y01X01o+fGO8gj38cJECEBHYuc9y0jBQ+qv2ncFKw6Up/+m4XSXeRTqSjZVKMX2MIxkLYkTFKPORWc1dUWvm7Rdc8raIaLrQnwgKkkUYdm34VZR40tq9u0GY=
+	t=1714037300; cv=none; b=tKPiT+tC2zGPMHws7+ltrS+r4x2Qpnz7u4XtOWTiEDTvgAHQcyyQyGK7Jy0QMjpWwk/fyIJLx5s8zs0gdxEShZuGohxvGJxQRrqSy8EPbcRwdLwDMQBim7rgCwWpi6A4ZXnOIc+uhyprFF+GQy13Mk/qC9aOUkwlN8aw/uyUpa4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714033403; c=relaxed/simple;
-	bh=Rlbxz3u2vqwPstRKBIjl7j1GjBKJegaWgBYk/pt6M8I=;
-	h=From:To:Cc:Subject:In-Reply-To:Date:Message-ID:MIME-Version:
-	 Content-Type; b=N+qcb0oqQBiFoTOTZbe0BfYDRmGI+HpiwFGlzB3VKAN1nHdtrYjSvBuFr6EJFfgLJOrMICuSfLOKKUDKGOKbolm5KFui7+efVhsV7lAg1rpM0iw7DSCTJOQSbRlcRUFvuM+s0iQlSbLIfCPb17hMUUhc9VauJ8RdPipFxndYTgQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=j0hGuAZv; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=+YjVG7VT; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Anna-Maria Behnsen <anna-maria@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1714033398;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:  in-reply-to:in-reply-to;
-	bh=iDsI25uhXnJgqSHJkPPaJgV5jixrLs3A43JUVime1PM=;
-	b=j0hGuAZv4BHeY6RJrinui9eGMNeAQ3FjDt+LW/1JxufcmkVaas/PoeU2TeMlvtA5Bh7hA2
-	/2n4J877BLZeNw/IyH1ZVHbih9T/c1KclkgeRt95AgIBu4RvWlzh8fmGVCXKh+qh+HLDfD
-	0nHUu3VPDzZnuKq2v3pWs4LcdIfyQoeCZuSrs7SV4n9biNvYFiVZpZjvZOFzudRl0yshoI
-	to6noXi+/uOkAH4lwTShrei2I74WTfQL1jafx8tB1m6fTvKwbyUIIOSyK9zUMZsATItMcc
-	UJ/ln4ZA5C9USeUqYKdUoqLD4DbDadeTNFHLgAj9pcPmHhE+fwhKSBc3Q6/4Ww==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1714033398;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:  in-reply-to:in-reply-to;
-	bh=iDsI25uhXnJgqSHJkPPaJgV5jixrLs3A43JUVime1PM=;
-	b=+YjVG7VT68vktrMEWqPmKkx4dIe0VbbXwmlzDMvEeE1YRLq7wpFhUJ0QkLIXWOVKXtieDE
-	xjeliZNJeTmJp5CQ==
-To: Oliver Sang <oliver.sang@intel.com>
-Cc: oe-lkp@lists.linux.dev, lkp@intel.com, linux-kernel@vger.kernel.org,
- Thomas Gleixner <tglx@linutronix.de>, ying.huang@intel.com,
- feng.tang@intel.com, fengwei.yin@intel.com, Frederic Weisbecker
- <frederic@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Daniel
- Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org
-Subject: Re: [linus:master] [timers]  7ee9887703:
- stress-ng.uprobe.ops_per_sec -17.1% regression
-In-Reply-To: <Zgtjdd0C2FzYVBto@xsang-OptiPlex-9020>
-Date: Thu, 25 Apr 2024 10:23:17 +0200
-Message-ID: <87zfth3l6y.fsf@somnus>
+	s=arc-20240116; t=1714037300; c=relaxed/simple;
+	bh=X53gXm9/tqmyC1UcjhNK/jdNzr4IdK5+5LIjav6v2OE=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fRbM/VUDAx7BrG/vu2IsGguX9qsk8yAL4k0PgEdg162Yis3Y564ghuRkPCpih823DDXfzrQI3cUN6E0RLypz7xE56VHZ1+lJ0N5ZtOUvd3tdjWx98GqBIt91UW37yDpmvv+IOtv3Qpf0dKg1bE+jF23ETfaWGgbC5mOZ4NCkn7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VQ9Sl5smhz6K5yT;
+	Thu, 25 Apr 2024 17:25:43 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 39E0F140736;
+	Thu, 25 Apr 2024 17:28:09 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Thu, 25 Apr
+ 2024 10:28:08 +0100
+Date: Thu, 25 Apr 2024 10:28:06 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Marc Zyngier <maz@kernel.org>, <linuxarm@huawei.com>
+CC: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
+	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
+	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+	<x86@kernel.org>, Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki"
+	<rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, "James Morse"
+	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, Jean-Philippe
+ Brucker <jean-philippe@linaro.org>, Catalin Marinas
+	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Ingo Molnar
+	<mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+	<dave.hansen@linux.intel.com>, <justin.he@arm.com>, <jianyong.wu@arm.com>
+Subject: Re: [PATCH v7 11/16] irqchip/gic-v3: Add support for ACPI's
+ disabled but 'online capable' CPUs
+Message-ID: <20240425102806.00003683@Huawei.com>
+In-Reply-To: <20240424135438.00001ffc@huawei.com>
+References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com>
+	<20240418135412.14730-12-Jonathan.Cameron@huawei.com>
+	<20240422114020.0000294f@Huawei.com>
+	<87plugthim.wl-maz@kernel.org>
+	<20240424135438.00001ffc@huawei.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-Hi,
+On Wed, 24 Apr 2024 13:54:38 +0100
+Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
 
-(adding cpuidle/power people to cc-list)
+> On Tue, 23 Apr 2024 13:01:21 +0100
+> Marc Zyngier <maz@kernel.org> wrote:
+> 
+> > On Mon, 22 Apr 2024 11:40:20 +0100,
+> > Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:  
+> > > 
+> > > On Thu, 18 Apr 2024 14:54:07 +0100
+> > > Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
+> > >     
+> > > > From: James Morse <james.morse@arm.com>
+> > > > 
+> > > > To support virtual CPU hotplug, ACPI has added an 'online capable' bit
+> > > > to the MADT GICC entries. This indicates a disabled CPU entry may not
+> > > > be possible to online via PSCI until firmware has set enabled bit in
+> > > > _STA.
+> > > > 
+> > > > This means that a "usable" GIC is one that is marked as either enabled,
+> > > > or online capable. Therefore, change acpi_gicc_is_usable() to check both
+> > > > bits. However, we need to change the test in gic_acpi_match_gicc() back
+> > > > to testing just the enabled bit so the count of enabled distributors is
+> > > > correct.
+> > > > 
+> > > > What about the redistributor in the GICC entry? ACPI doesn't want to say.
+> > > > Assume the worst: When a redistributor is described in the GICC entry,
+> > > > but the entry is marked as disabled at boot, assume the redistributor
+> > > > is inaccessible.
+> > > > 
+> > > > The GICv3 driver doesn't support late online of redistributors, so this
+> > > > means the corresponding CPU can't be brought online either. Clear the
+> > > > possible and present bits.
+> > > > 
+> > > > Systems that want CPU hotplug in a VM can ensure their redistributors
+> > > > are always-on, and describe them that way with a GICR entry in the MADT.
+> > > > 
+> > > > When mapping redistributors found via GICC entries, handle the case
+> > > > where the arch code believes the CPU is present and possible, but it
+> > > > does not have an accessible redistributor. Print a warning and clear
+> > > > the present and possible bits.
+> > > > 
+> > > > Signed-off-by: James Morse <james.morse@arm.com>
+> > > > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> > > > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>    
+> > > 
+> > > +CC Marc,
+> > > 
+> > > Whilst this has been unchanged for a long time, I'm not 100% sure
+> > > we've specifically drawn your attention to it before now.
+> > > 
+> > > Jonathan
+> > >     
+> > > > 
+> > > > ---
+> > > > v7: No Change.
+> > > > ---
+> > > >  drivers/irqchip/irq-gic-v3.c | 21 +++++++++++++++++++--
+> > > >  include/linux/acpi.h         |  3 ++-
+> > > >  2 files changed, 21 insertions(+), 3 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+> > > > index 10af15f93d4d..66132251c1bb 100644
+> > > > --- a/drivers/irqchip/irq-gic-v3.c
+> > > > +++ b/drivers/irqchip/irq-gic-v3.c
+> > > > @@ -2363,11 +2363,25 @@ gic_acpi_parse_madt_gicc(union acpi_subtable_headers *header,
+> > > >  				(struct acpi_madt_generic_interrupt *)header;
+> > > >  	u32 reg = readl_relaxed(acpi_data.dist_base + GICD_PIDR2) & GIC_PIDR2_ARCH_MASK;
+> > > >  	u32 size = reg == GIC_PIDR2_ARCH_GICv4 ? SZ_64K * 4 : SZ_64K * 2;
+> > > > +	int cpu = get_cpu_for_acpi_id(gicc->uid);
+> > > >  	void __iomem *redist_base;
+> > > >  
+> > > >  	if (!acpi_gicc_is_usable(gicc))
+> > > >  		return 0;
+> > > >  
+> > > > +	/*
+> > > > +	 * Capable but disabled CPUs can be brought online later. What about
+> > > > +	 * the redistributor? ACPI doesn't want to say!
+> > > > +	 * Virtual hotplug systems can use the MADT's "always-on" GICR entries.
+> > > > +	 * Otherwise, prevent such CPUs from being brought online.
+> > > > +	 */
+> > > > +	if (!(gicc->flags & ACPI_MADT_ENABLED)) {
+> > > > +		pr_warn_once("CPU %u's redistributor is inaccessible: this CPU can't be brought online\n", cpu);
+> > > > +		set_cpu_present(cpu, false);
+> > > > +		set_cpu_possible(cpu, false);
+> > > > +		return 0;
+> > > > +	}    
+> > 
+> > It seems dangerous to clear those this late in the game, given how
+> > disconnected from the architecture code this is. Are we sure that
+> > nothing has sampled these cpumasks beforehand?  
+> 
+> Hi Marc,
+> 
+> Any firmware that does this is being considered as buggy already
+> but given it is firmware and the spec doesn't say much about this,
+> there is always the possibility.
+> 
+> Not much happens between the point where these are setup and
+> the point where the the gic inits and this code runs, but even if careful
+> review showed it was fine today, it will be fragile to future changes.
+> 
+> I'm not sure there is a huge disadvantage for such broken firmware in
+> clearing these masks from the point of view of what is used throughout
+> the rest of the kernel. Here I think we are just looking to prevent the CPU
+> being onlined later.
+> 
+> We could add a set_cpu_broken() with appropriate mask.
+> Given this is very arm64 specific I'm not sure Rafael will be keen on
+> us checking such a mask in the generic ACPI code, but we could check it in
+> arch_register_cpu() and just not register the cpu if it matches.
+> That will cover the vCPU hotplug case.
+> 
+> Does that sounds sensible, or would you prefer something else?
 
-Oliver Sang <oliver.sang@intel.com> writes:
+Hi Marc
 
-> hi, Frederic Weisbecker,
->
-> On Tue, Apr 02, 2024 at 12:46:15AM +0200, Frederic Weisbecker wrote:
->> Le Wed, Mar 27, 2024 at 04:39:17PM +0800, kernel test robot a =C3=A9crit=
- :
->> >=20
->> >=20
->> > Hello,
->> >=20
->> >=20
->> > we reported
->> > "[tip:timers/core] [timers]  7ee9887703:  netperf.Throughput_Mbps -1.2=
-% regression"
->> > in
->> > https://lore.kernel.org/all/202403011511.24defbbd-oliver.sang@intel.co=
-m/
->> >=20
->> > now we noticed this commit is in mainline and we captured further resu=
-lts.
->> >=20
->> > still include netperf results for complete. below details FYI.
->> >=20
->> >=20
->> > kernel test robot noticed a -17.1% regression of stress-ng.uprobe.ops_=
-per_sec
->> > on:
->>=20
->> The good news is that I can reproduce.
->> It has made me spot something already:
->>=20
->>    https://lore.kernel.org/lkml/ZgsynV536q1L17IS@pavilion.home/T/#m28c37=
-a943fdbcbadf0332cf9c32c350c74c403b0
->>=20
->> But that's not enough to fix the regression. Investigation continues...
->
-> Thanks a lot for information! if you want us test any patch, please let u=
-s know.
+Some experiments later (faking this on a physical board - I never liked
+CPU 120 anyway!) and using a different mask brings it's own minor pain.
 
-Oliver, I would be happy to see, whether the patch at the end of the
-message restores the original behaviour also in your test setup. I
-applied it on 6.9-rc4. This patch is not a fix - it is just a pointer to
-the kernel path, that might cause the regression. I know, it is
-probable, that a warning in tick_sched is triggered. This happens when
-the first timer is alredy in the past. I didn't add an extra check when
-creating the 'defacto' timer thingy. But existing code handles this
-problem already properly. So the warning could be ignored here.
+When all the rest of the CPUs are brought up cpuhp_bringup_mask() is called
+on cpu_present_mask so we need to do a dance in there to use a temporary
+mask with broken cpus removed.  I think it makes sense to cut that out
+at the top of the cpuhp_bringup_mask() pile of actions rather than trying
+to paper over each actual thing that is dying... (looks like an infinite loop
+somewhere but I haven't tracked down where yet).
 
-For the cpuidle people, let me explain what I oberserved, my resulting
-assumption and my request for help:
+I'll spin a patch so you can see what it looks like, but my concern is
+we are just moving the risk from early users of these masks to later cases
+where code assumes cpu_present_mask definitely means they are present.
+That is probably a small set of cases but not nice either.
 
-cpuidle governors use expected sleep length values (beside other data)
-to decide which idle state would be good to enter. The expected sleep
-length takes the first queued timer of the CPU into account and is
-provided by tick_nohz_get_sleep_length(). With the timer pull model in
-place the non pinned timers are not taken into account when there are
-other CPUs up and running which could handle those timers. This could
-lead to increased sleep length values. On my system during the stress-ng
-uprobes test it was in the range of maximum 100us without the patch set
-and with the patch set the maximum was in a range of 200sec. This is
-intended behaviour, because timers which could expire on any CPU should
-expire on the CPU which is busy anyway and the non busy CPU should be
-able to go idle.
+Looks like one of those cases where we need to pick the lesser of two evils
+which is probably still the cpu_broken_mask approach.
 
-Those increased sleep length values were the only anomalies I could find
-in the traces with the regression.
+On plus side if we decide to go back to the original approach having seen
+that I already have the code :)
 
-I created the patch below which simply fakes the sleep length values
-that they take all timers of the CPU into account (also the non
-pinned). This patch kind of restores the behavoir of
-tick_nohz_get_sleep_length() before the change but still with the timer
-pull model in place.
+Jonathan
 
-With the patch the regression was gone, at least on my system (using
-cpuidle governor menu but also teo).
 
-So my assumption here is, that cpuidle governors assume that a deeper
-idle state could be choosen and selecting the deeper idle state makes an
-overhead when returning from idle. But I have to notice here, that I'm
-still not familiar with cpuidle internals... So I would be happy about
-some hints how I can debug/trace cpuidle internals to falsify or verify
-this assumption.
 
-Thanks,
-
-	Anna-Maria
-
----8<----
-diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index 3baf2fbe6848..c0e62c365355 100644
---- a/kernel/time/timer.c
-+++ b/kernel/time/timer.c
-@@ -2027,7 +2027,8 @@ static unsigned long next_timer_interrupt(struct time=
-r_base *base,
- static unsigned long fetch_next_timer_interrupt(unsigned long basej, u64 b=
-asem,
- 						struct timer_base *base_local,
- 						struct timer_base *base_global,
--						struct timer_events *tevt)
-+						struct timer_events *tevt,
-+						struct timer_events *defacto)
- {
- 	unsigned long nextevt, nextevt_local, nextevt_global;
- 	bool local_first;
-@@ -2035,6 +2036,14 @@ static unsigned long fetch_next_timer_interrupt(unsi=
-gned long basej, u64 basem,
- 	nextevt_local =3D next_timer_interrupt(base_local, basej);
- 	nextevt_global =3D next_timer_interrupt(base_global, basej);
-=20
-+	if (defacto) {
-+		if (base_global->timers_pending)
-+			defacto->global =3D basem + (u64)(nextevt_global - basej) * TICK_NSEC;
-+
-+		if (base_local->timers_pending)
-+			defacto->local =3D basem + (u64)(nextevt_local - basej) * TICK_NSEC;
-+	}
-+
- 	local_first =3D time_before_eq(nextevt_local, nextevt_global);
-=20
- 	nextevt =3D local_first ? nextevt_local : nextevt_global;
-@@ -2113,7 +2122,7 @@ void fetch_next_timer_interrupt_remote(unsigned long =
-basej, u64 basem,
- 	lockdep_assert_held(&base_local->lock);
- 	lockdep_assert_held(&base_global->lock);
-=20
--	fetch_next_timer_interrupt(basej, basem, base_local, base_global, tevt);
-+	fetch_next_timer_interrupt(basej, basem, base_local, base_global, tevt, N=
-ULL);
- }
-=20
- /**
-@@ -2228,6 +2237,7 @@ static void timer_use_tmigr(unsigned long basej, u64 =
-basem,
- static inline u64 __get_next_timer_interrupt(unsigned long basej, u64 base=
-m,
- 					     bool *idle)
- {
-+	struct timer_events defacto =3D { .local =3D KTIME_MAX, .global =3D KTIME=
-_MAX };
- 	struct timer_events tevt =3D { .local =3D KTIME_MAX, .global =3D KTIME_MA=
-X };
- 	struct timer_base *base_local, *base_global;
- 	unsigned long nextevt;
-@@ -2250,7 +2260,7 @@ static inline u64 __get_next_timer_interrupt(unsigned=
- long basej, u64 basem,
- 	raw_spin_lock_nested(&base_global->lock, SINGLE_DEPTH_NESTING);
-=20
- 	nextevt =3D fetch_next_timer_interrupt(basej, basem, base_local,
--					     base_global, &tevt);
-+					     base_global, &tevt, &defacto);
-=20
- 	/*
- 	 * If the next event is only one jiffie ahead there is no need to call
-@@ -2319,6 +2329,7 @@ static inline u64 __get_next_timer_interrupt(unsigned=
- long basej, u64 basem,
- 	raw_spin_unlock(&base_global->lock);
- 	raw_spin_unlock(&base_local->lock);
-=20
-+	tevt.local =3D min_t(u64, defacto.local, defacto.global);
- 	return cmp_next_hrtimer_event(basem, tevt.local);
- }
-=20
+> 
+> Jonathan
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> > 
+> > Thanks,
+> > 
+> > 	M.
+> >   
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
 
 
