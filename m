@@ -1,163 +1,208 @@
-Return-Path: <linux-pm+bounces-7132-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7133-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3ED8C8B28CE
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 21:10:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2DAA8B28D9
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 21:14:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D46411F22655
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 19:10:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4B061C2180F
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 19:14:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFDC11509B1;
-	Thu, 25 Apr 2024 19:10:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33F9314F9EA;
+	Thu, 25 Apr 2024 19:14:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s2jW3VcD"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="MjSmMgN4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B671414E2E2;
-	Thu, 25 Apr 2024 19:10:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D8432135A;
+	Thu, 25 Apr 2024 19:14:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714072252; cv=none; b=egnbXKkijnQH88oVrCbP5vbCEZhp0JDVQLW1qtQFEknzlM28qNHshk9GYhdjpAm7JrxiEEN51NPPIEBmd0z59AUXA9EjY9NT1SFlNTwXTmLq/61jlrJvWrfy3sFI7WKBkItGnj9zCAe4gMDmwRMjnpINmaTbqei0alg8vz9naQ8=
+	t=1714072453; cv=none; b=XACtM1W7z1JSB/kXXnM4OTO+0WpLxlj4E0muAZqzAPvpUBtPOevL3Cz9cTYAg6fj49Akr7efx4aRmAyZOae/yFYtOeea5X6ZxAQFL2vz4Dw/rzcf6BCA9J2ZmdXlynMt84DK5F1nBGhduvrRrYC8b3DQn/x+Fr80RZQPS40OPpQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714072252; c=relaxed/simple;
-	bh=WXcfAjQyE0v6RqZ5J2aCr0EewC3+EFNIWMbHw3sJ5zM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YYCAERfSG5SmfcdZgwn6OUVSJUYVrbVDZcylW0RwsWFK5UMKanhhNm1Ua/7aAjPBOd7JueJiQ82j21Wd8/Tv76C7iOBmi9T0sRViag5h0eXXUcUYLfn3ljRdnwwtJ2JTmqdLiYkc0JagnGnBEqomQD7ry/4oIP3aFc0POpO0D9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s2jW3VcD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F09EC32781;
-	Thu, 25 Apr 2024 19:10:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714072252;
-	bh=WXcfAjQyE0v6RqZ5J2aCr0EewC3+EFNIWMbHw3sJ5zM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=s2jW3VcD/t9eROvgbxwv1ZGsL+PkZ751ptleXvdXoP7XQmRRqKPG4i07OSTloS7Qp
-	 42iJufu/tVqU1dtb1AhRZzXc8qPYN7514rrACQkYaFN32yIMcuibFoXSgu12vBxjqu
-	 69nrhrG1IN7Qr7eNFxdlpn7yvDWiFG5OKel5diILK7OyEKcnNMxURemKSNonwv2uYT
-	 VwX0HOUuY+/rns/8DgqH2uICaLj2zROzWkotHa99EJ3sdBiG+cfBrRzI1x2sTeD5JO
-	 pXaP3rzxOBTESrKKYOKD/arXv6W1d7LMLOdgF0kXPsIcMxqT/N7OrvqPbbYsEFBbGh
-	 Su5GseETTDQ+g==
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5ad288442bdso244689eaf.3;
-        Thu, 25 Apr 2024 12:10:52 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV9DgicQ9ydRciJsRzHflP0MCNNsB2lkiJvVilJe5T44ErJgIebJbIncp+Q15THMoaaghNEY/j3EcwwmK6QgGri2Yzt3gsefcivyD89W2URTBKlJWNpBI2xEyOsL3zEVJCA7ojPM4U=
-X-Gm-Message-State: AOJu0Yx1qqqJ8knEuEfHOViYCg9aynlLj6riYe95SaI0icmTX00JVXvF
-	EZMTxmNx5uffTnxtEHUzh4OuOC9cIXM+IK48KLYaM0jL7hdXYBpx3z6s2OEdOpkoRDj972XxueF
-	5x+1L6YHRpCGZhHa8PT7XITB9AUs=
-X-Google-Smtp-Source: AGHT+IGLYJf6oVk4k2UjVhQgKZ54+8xMIutdxxajR6agvZV5YpaRuGSrmigEzNEX0HdwbIsBftxww7oeNJAQCc5KU7o=
-X-Received: by 2002:a05:6808:159e:b0:3c8:4dcb:1e70 with SMTP id
- t30-20020a056808159e00b003c84dcb1e70mr721998oiw.2.1714072251550; Thu, 25 Apr
- 2024 12:10:51 -0700 (PDT)
+	s=arc-20240116; t=1714072453; c=relaxed/simple;
+	bh=c2bvs+0ceImnoVKMJqz/ttZR+eL8yLkggMrcmjgcCe0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ghcVLBXCFJcIQc4YJrE/f82p6NgsBAtESzi5Un8wVaGbsrYOGGv4eCelSXN2VREGUofs5AUtuBsbbyAfZnOFiWUlhnoT5+nGo1PzR7+EnA+5EeGO8gBGOXoB1gNJkCdhV4fEb6jHkWlPXgWk37N19I8g0eyq59Gs4w3zG4BeZZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=MjSmMgN4 reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
+ id 80b2b45d4181e730; Thu, 25 Apr 2024 21:14:09 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 78E3066DF24;
+	Thu, 25 Apr 2024 21:14:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1714072449;
+	bh=c2bvs+0ceImnoVKMJqz/ttZR+eL8yLkggMrcmjgcCe0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=MjSmMgN4zg40I7AtnaUPm7vkLNsWzJc77w8gypBQDqS+qjAT+YLnNGU6mQ9CRbvrV
+	 QYajf1BkFNPKBzjcq4+2ZyfHdC3a5fmvp6yFqd9fP2YrOBXGvfE6tS0ykuQRZW1hUi
+	 9DvEO76kkiDsgXuWCmpPVN/pfnf10BkktRJHUi7uN+K9sq8X08Fb2v4tLhlpkNNdri
+	 D2UUkPwocJKtlAivpvCDkpqh0YPCIGf4B096CbCahfq5w8AuqqWkJDlF7xXRBv6UMw
+	 CxntknCHEI6r75uPZNmEpbYZVHAmEwPPgPNajG5pDLX6n+LnGnGh7Ok/B4BfY/4ua8
+	 WBj+/H+OzJhwQ==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: x86 Maintainers <x86@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Ricardo Neri <ricardo.neri@intel.com>, Tim Chen <tim.c.chen@intel.com>
+Subject:
+ Re: [RFC][PATCH v1 2/3] x86/sched: Introduce arch_rebuild_sched_domains()
+Date: Thu, 25 Apr 2024 21:14:08 +0200
+Message-ID: <2738703.mvXUDI8C0e@kreacher>
+In-Reply-To: <3227587.5fSG56mABF@kreacher>
+References: <7663799.EvYhyI6sBW@kreacher> <3227587.5fSG56mABF@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <5774279.DvuYhMxLoT@kreacher> <2181352.irdbgypaU6@kreacher>
- <e9be06af-48bf-45ec-8d6d-6147d20b6780@arm.com> <CAJZ5v0i=HS_-S3N7ixK=FM0S=7o21cfW5jXMq=AWObwGpUkPdA@mail.gmail.com>
- <CAJZ5v0ik_EqSXzTkowz=ha-U+JU+=KtqEMwD5+r329og2d4t=A@mail.gmail.com>
- <4f21ee21-0178-4d50-a535-4d530baf82d1@arm.com> <CAJZ5v0je44QB=dBObgDd-1pJweXdj5ZC-7sEyrOjyJ+c=n9xPQ@mail.gmail.com>
- <ce95f95d-c004-4814-bdb0-d230731084d3@arm.com>
-In-Reply-To: <ce95f95d-c004-4814-bdb0-d230731084d3@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 25 Apr 2024 21:10:39 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0j_T8FdGtMGDVm0oYNZYOnfuuCRcekiA5zNth-VErutKg@mail.gmail.com>
-Message-ID: <CAJZ5v0j_T8FdGtMGDVm0oYNZYOnfuuCRcekiA5zNth-VErutKg@mail.gmail.com>
-Subject: Re: [PATCH v1 2/3] thermal/debugfs: Pass cooling device state to thermal_debug_cdev_add()
-To: Lukasz Luba <lukasz.luba@arm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
-	LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudeljedgudefiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopedutddprhgtphhtthhopeigkeeisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehtghhlgieslhhinhhuthhrohhnihigrdguvgdprhgtphhtthhopehpvghtvghriiesihhnfhhrrggu
+ vggrugdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=10 Fuz1=10 Fuz2=10
 
-On Thu, Apr 25, 2024 at 8:55=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> w=
-rote:
->
->
->
-> On 4/25/24 19:53, Rafael J. Wysocki wrote:
-> > On Thu, Apr 25, 2024 at 8:42=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.co=
-m> wrote:
-> >>
-> >>
-> >>
-> >> On 4/25/24 14:00, Rafael J. Wysocki wrote:
-> >>> On Thu, Apr 25, 2024 at 2:36=E2=80=AFPM Rafael J. Wysocki <rafael@ker=
-nel.org> wrote:
-> >>>>
-> >>>> Hi Lukasz,
-> >>>>
-> >>>> On Thu, Apr 25, 2024 at 12:02=E2=80=AFPM Lukasz Luba <lukasz.luba@ar=
-m.com> wrote:
-> >>>>>
-> >>>>> Hi Rafael,
-> >>>>>
-> >>>>> On 4/23/24 19:00, Rafael J. Wysocki wrote:
-> >>>>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >>>>>>
-> >>>>>> If cdev_dt_seq_show() runs before the first state transition of a =
-cooling
-> >>>>>> device, it will not print any state residency information for it, =
-even
-> >>>>>> though it might be reasonably expected to print residency informat=
-ion for
-> >>>>>> the initial state of the cooling device.
-> >>>>>>
-> >>>>>> For this reason, rearrange the code to get the initial state of a =
-cooling
-> >>>>>> device at the registration time and pass it to thermal_debug_cdev_=
-add(),
-> >>>>>> so that the latter can create a duration record for that state whi=
-ch will
-> >>>>>> allow cdev_dt_seq_show() to print its residency information.
-> >>>>>>
-> >>>>>> Fixes: 755113d76786 ("thermal/debugfs: Add thermal cooling device =
-debugfs information")
-> >>>>>> Reported-by: Lukasz Luba <lukasz.luba@arm.com>
-> >>>>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >>>>>> ---
-> >>>>>>     drivers/thermal/thermal_core.c    |    9 +++++++--
-> >>>>>>     drivers/thermal/thermal_debugfs.c |   12 ++++++++++--
-> >>>>>>     drivers/thermal/thermal_debugfs.h |    4 ++--
-> >>>>>>     3 files changed, 19 insertions(+), 6 deletions(-)
-> >>>>>>
-> >>>>>
-> >>>>> I'm trying to test it on my board and do the review, but faced issu=
-e.
-> >>>>> For some reason I couldn't apply that patch on the latest bleeding-=
-edge
-> >>>>> branch.
-> >>>>> Could you help me in this please? Is there something missing in the
-> >>>>> patch set (like one more fist patch)?
-> >>>>
-> >>>> I messed up the ordering of patches (patch [2/3] should be the last
-> >>>> one in the series) and on top of that, you'll need a small rebase on
-> >>>> that patch.
-> >>>>
-> >>>> Sorry about this, I'll send a v2.
-> >>>
-> >>> Actually, the ordering was OK, but the rebase of the second patch is
-> >>> still needed.  I'll send a v2.
-> >>
-> >> Thanks, I've seen it. That v2 applies smoothly and runs on the board.
-> >> I'll test it and review.
-> >
-> > Thank you!
-> >
-> > Please also see
-> >
-> > https://lore.kernel.org/linux-pm/12427744.O9o76ZdvQC@kreacher/
-> >
-> > which is actually more urgent because the fixes there address more
-> > serious issues (I would even consider them as 6.9-rc material).
->
-> Yes, I've read that patches' headers and glanced through the code.
-> I'll do the review & testing on them as well today.
+On Thursday, April 25, 2024 9:04:48 PM CEST Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Add arch_rebuild_sched_domains() for rebuilding scheduling domains and
+> updating topology on x86 and make the ITMT code use it.
+> 
+> First of all, this reduces code duplication somewhat and eliminates
+> a need to use an extern variable, but it will also lay the ground for
+> future work related to CPU capacity scaling.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Thanks, much appreciated!
+This obviously is a duplicate of patch [1/3], sorry about this.  My bad.
+
+I'll send the proper patch [2/3] in a reply to this message.
+
+> ---
+>  arch/x86/include/asm/topology.h |    6 ++++--
+>  arch/x86/kernel/itmt.c          |   12 ++++--------
+>  arch/x86/kernel/smpboot.c       |   10 +++++++++-
+>  3 files changed, 17 insertions(+), 11 deletions(-)
+> 
+> Index: linux-pm/arch/x86/include/asm/topology.h
+> ===================================================================
+> --- linux-pm.orig/arch/x86/include/asm/topology.h
+> +++ linux-pm/arch/x86/include/asm/topology.h
+> @@ -235,8 +235,6 @@ struct pci_bus;
+>  int x86_pci_root_bus_node(int bus);
+>  void x86_pci_root_bus_resources(int bus, struct list_head *resources);
+>  
+> -extern bool x86_topology_update;
+> -
+>  #ifdef CONFIG_SCHED_MC_PRIO
+>  #include <asm/percpu.h>
+>  
+> @@ -284,9 +282,13 @@ static inline long arch_scale_freq_capac
+>  
+>  extern void arch_set_max_freq_ratio(bool turbo_disabled);
+>  extern void freq_invariance_set_perf_ratio(u64 ratio, bool turbo_disabled);
+> +
+> +void arch_rebuild_sched_domains(void);
+>  #else
+>  static inline void arch_set_max_freq_ratio(bool turbo_disabled) { }
+>  static inline void freq_invariance_set_perf_ratio(u64 ratio, bool turbo_disabled) { }
+> +
+> +static inline void arch_rebuild_sched_domains(void) { }
+>  #endif
+>  
+>  extern void arch_scale_freq_tick(void);
+> Index: linux-pm/arch/x86/kernel/itmt.c
+> ===================================================================
+> --- linux-pm.orig/arch/x86/kernel/itmt.c
+> +++ linux-pm/arch/x86/kernel/itmt.c
+> @@ -54,10 +54,8 @@ static int sched_itmt_update_handler(str
+>  	old_sysctl = sysctl_sched_itmt_enabled;
+>  	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+>  
+> -	if (!ret && write && old_sysctl != sysctl_sched_itmt_enabled) {
+> -		x86_topology_update = true;
+> -		rebuild_sched_domains();
+> -	}
+> +	if (!ret && write && old_sysctl != sysctl_sched_itmt_enabled)
+> +		arch_rebuild_sched_domains();
+>  
+>  	mutex_unlock(&itmt_update_mutex);
+>  
+> @@ -114,8 +112,7 @@ int sched_set_itmt_support(void)
+>  
+>  	sysctl_sched_itmt_enabled = 1;
+>  
+> -	x86_topology_update = true;
+> -	rebuild_sched_domains();
+> +	arch_rebuild_sched_domains();
+>  
+>  	mutex_unlock(&itmt_update_mutex);
+>  
+> @@ -150,8 +147,7 @@ void sched_clear_itmt_support(void)
+>  	if (sysctl_sched_itmt_enabled) {
+>  		/* disable sched_itmt if we are no longer ITMT capable */
+>  		sysctl_sched_itmt_enabled = 0;
+> -		x86_topology_update = true;
+> -		rebuild_sched_domains();
+> +		arch_rebuild_sched_domains();
+>  	}
+>  
+>  	mutex_unlock(&itmt_update_mutex);
+> Index: linux-pm/arch/x86/kernel/smpboot.c
+> ===================================================================
+> --- linux-pm.orig/arch/x86/kernel/smpboot.c
+> +++ linux-pm/arch/x86/kernel/smpboot.c
+> @@ -39,6 +39,7 @@
+>  
+>  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+>  
+> +#include <linux/cpuset.h>
+>  #include <linux/init.h>
+>  #include <linux/smp.h>
+>  #include <linux/export.h>
+> @@ -125,7 +126,7 @@ static DEFINE_PER_CPU_ALIGNED(struct mwa
+>  int __read_mostly __max_smt_threads = 1;
+>  
+>  /* Flag to indicate if a complete sched domain rebuild is required */
+> -bool x86_topology_update;
+> +static bool x86_topology_update;
+>  
+>  int arch_update_cpu_topology(void)
+>  {
+> @@ -135,6 +136,13 @@ int arch_update_cpu_topology(void)
+>  	return retval;
+>  }
+>  
+> +#ifdef CONFIG_X86_64
+> +void arch_rebuild_sched_domains(void) {
+> +	x86_topology_update = true;
+> +	rebuild_sched_domains();
+> +}
+> +#endif
+> +
+>  static unsigned int smpboot_warm_reset_vector_count;
+>  
+>  static inline void smpboot_setup_warm_reset_vector(unsigned long start_eip)
+> 
+
+
+
+
 
