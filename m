@@ -1,124 +1,124 @@
-Return-Path: <linux-pm+bounces-7076-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7077-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4A178B1F38
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 12:31:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 047968B1F5E
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 12:39:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54B911F226FB
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 10:31:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 46987B26834
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 10:39:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 425421CFA9;
-	Thu, 25 Apr 2024 10:31:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Oil/HACv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AEAF1CFA9;
+	Thu, 25 Apr 2024 10:39:46 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD1CA15E89;
-	Thu, 25 Apr 2024 10:31:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77C52182AE;
+	Thu, 25 Apr 2024 10:39:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714041107; cv=none; b=UKxXu1wIhHScb6PQCxSBezKkjD/r/OSvSbCO2QLRzu52LxriQ7oTcwU46i5jdMPn4ZGkrYCSixPGmKtpy9TU63SERqpCdiFPiaYsWd/6FOKCLZceObMKfXmt/P0nNwGBcfGFQBob34cdce+sSFUuBzOHA8b+eIH9+OZpuiaMhow=
+	t=1714041586; cv=none; b=qQeKNMcAZykEnhbPLi7WEZ/csUThZJ8OoaJd0kD/X3mbmGsHXQczaDMP9XpBStS37vFFvV986cUFzXW30W6GoNUZmLmZJJALfQPFP5BPXt6QD2+weuov2K+3AsjNQNxv/txumHfkGg/iskJqsrwEiHHsZ5dI/iGulqY4ik+BipE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714041107; c=relaxed/simple;
-	bh=5FdZJhSLV3YBJY0uIGY+p0noTEWh+ncuTr2qm2UWf60=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F/RyI+ay25b5ggsbxggcXRxafCiZ28uIlhnC/wL0Fm47omG8DsekyRO4XD1Fm1fUNgk6TC8Vw2SMzoLE2GhQidMBUTR/8wFkjnqNkEmC+tdSus+DwJgSnRiIJuN0hvL5J3TF6km3WGmNthokOIFaXTjQjQueCYz6Fwsau34b/Cg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Oil/HACv; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43P6kEV4025830;
-	Thu, 25 Apr 2024 10:31:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=qcppdkim1; bh=5FdZJhSLV3YBJY0uIGY+p
-	0noTEWh+ncuTr2qm2UWf60=; b=Oil/HACvl+C3Fq4wBV03pBaSFW8J2hqg3NBS2
-	UH3nFwIGyjvdQzCE3n1wJY+gtRSvcCbLBX619DMGa3frsuBMHXDHAu1rnFtrTBTZ
-	RVaQoFoT8MqYyXgp8SfitKWKwieLjxl5cZEb9ndRGRNyqKtMsJalj4XH72e1Ny3C
-	dUaMxfqUDpB/Lf7vMrZeZTkxzWo9zjvoUW1dII5lZUYsVQcRPMDOv9NbjoQ1mtOx
-	ewtdlslKBlPfDJl/YkIBc/OJojUW6EbSWNNAdWpWb33eBCodiAfnVsNLC/NRmRvh
-	JQA5zYI3UyOpkDbmeeuV8YF628uFBAwczBW25AnRXtp5HwjPA==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xqenmt2db-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 25 Apr 2024 10:31:38 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43PAV8Am011510
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 25 Apr 2024 10:31:09 GMT
-Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 25 Apr 2024 03:31:04 -0700
-Date: Thu, 25 Apr 2024 16:00:58 +0530
-From: Varadarajan Narayanan <quic_varada@quicinc.com>
-To: Konrad Dybcio <konrad.dybcio@linaro.org>
-CC: <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <djakov@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <quic_anusha@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v9 4/6] clk: qcom: common: Add interconnect clocks support
-Message-ID: <Ziow4mfCnRiLAFNe@hu-varada-blr.qualcomm.com>
-References: <20240418092305.2337429-1-quic_varada@quicinc.com>
- <20240418092305.2337429-5-quic_varada@quicinc.com>
- <5e2682bc-88cf-4aca-9e7d-205f4cfca989@linaro.org>
+	s=arc-20240116; t=1714041586; c=relaxed/simple;
+	bh=QOQqcsY1p+kptI6Tc0m7bn42wAqmzhfACV714bqm4xA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MWMOsRIn86E8f3hBfzlreX0G161aBSDR16HImjCQ3nPIidRzEoFtSljvcg90DZgot+vU0/DEr2oyR++RfP3Ns88ecK9mz7plSOUH46XNXc/kDvHOyshe1AnmlDpjqw29UvZ3KY/3WE0PHSkY5lDbJYgxiuIl0L2oRNwqnXvPli4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1ED0D1007;
+	Thu, 25 Apr 2024 03:40:12 -0700 (PDT)
+Received: from [10.1.30.55] (e133047.arm.com [10.1.30.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3D4343F64C;
+	Thu, 25 Apr 2024 03:39:42 -0700 (PDT)
+Message-ID: <530475c7-5bba-444c-8045-0e4f8679306e@arm.com>
+Date: Thu, 25 Apr 2024 11:39:40 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <5e2682bc-88cf-4aca-9e7d-205f4cfca989@linaro.org>
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: qAFLsJ1UusYmjjunlgfeFTOBUbJZJmHU
-X-Proofpoint-ORIG-GUID: qAFLsJ1UusYmjjunlgfeFTOBUbJZJmHU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-04-25_10,2024-04-25_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- lowpriorityscore=0 clxscore=1015 adultscore=0 malwarescore=0
- suspectscore=0 priorityscore=1501 mlxlogscore=633 bulkscore=0 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2404010003 definitions=main-2404250076
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 4/4] sched/core: split iowait state into two states
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+ tglx@linutronix.de, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ linux-pm@vger.kernel.org, daniel.lezcano@linaro.org
+References: <20240416121526.67022-1-axboe@kernel.dk>
+ <20240416121526.67022-5-axboe@kernel.dk>
+ <20240424100127.GV40213@noisy.programming.kicks-ass.net>
+ <f82fdfa3-8743-4d42-82d4-a4ca9bc24e15@arm.com>
+ <20240425101629.GC21980@noisy.programming.kicks-ass.net>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <20240425101629.GC21980@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Apr 23, 2024 at 01:05:16AM +0200, Konrad Dybcio wrote:
->
->
-> On 4/18/24 11:23, Varadarajan Narayanan wrote:
-> > Unlike MSM platforms that manage NoC related clocks and scaling
-> > from RPM, IPQ SoCs dont involve RPM in managing NoC related
-> > clocks and there is no NoC scaling.
-> >
-> > However, there is a requirement to enable some NoC interface
-> > clocks for accessing the peripheral controllers present on
-> > these NoCs. Though exposing these as normal clocks would work,
-> > having a minimalistic interconnect driver to handle these clocks
-> > would make it consistent with other Qualcomm platforms resulting
-> > in common code paths. This is similar to msm8996-cbf's usage of
-> > icc-clk framework.
-> >
-> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > ---
->
-> One more thing that we don't seem to have squared out is how to handle
-> .sync_state. We can just jerryrig icc_sync_state in here, but I'm not
-> sure how that goes with some floating ideas of clk_sync_state that have
-> been tried in the past
+On 25/04/2024 11:16, Peter Zijlstra wrote:
+> On Wed, Apr 24, 2024 at 11:08:42AM +0100, Christian Loehle wrote:
+>> On 24/04/2024 11:01, Peter Zijlstra wrote:
+>>> On Tue, Apr 16, 2024 at 06:11:21AM -0600, Jens Axboe wrote:
+>>>> iowait is a bogus metric, but it's helpful in the sense that it allows
+>>>> short waits to not enter sleep states that have a higher exit latency
+>>>> than would've otherwise have been picked for iowait'ing tasks. However,
+>>>> it's harmless in that lots of applications and monitoring assumes that
+>>>> iowait is busy time, or otherwise use it as a health metric.
+>>>> Particularly for async IO it's entirely nonsensical.
+>>>
+>>> Let me get this straight, all of this is about working around
+>>> cpuidle menu governor insaity?
+>>>
+>>> Rafael, how far along are we with fully deprecating that thing? Yes it
+>>> still exists, but should people really be using it still?
+>>>
+>>
+>> Well there is also the iowait boost handling in schedutil and intel_pstate
+>> which, at least in synthetic benchmarks, does have an effect [1].
+> 
+> Those are cpufreq not cpuidle and at least they don't use nr_iowait. The
+> original Changelog mentioned idle states, and I hate on menu for using
+> nr_iowait.
 
-Ok. Will add that and post a new version.
+I'd say they care about any regression, but I'll let Jens answer that.
+The original change also mentions cpufreq and Jens did mention in an
+earlier version that he doesn't care, for them it's all just increased
+latency ;) 
+https://lore.kernel.org/lkml/00d36e83-c9a5-412d-bf49-2e109308d6cd@arm.com/T/#m216536520bc31846aff5875993d22f446a37b297
 
-Thanks
-Varada
+> 
+>> io_uring (the only user of iowait but not iowait_acct) works around both.
+>>
+>> See commit ("8a796565cec3 io_uring: Use io_schedule* in cqring wait")
+>>
+>> [1]
+>> https://lore.kernel.org/lkml/20240304201625.100619-1-christian.loehle@arm.com/#t
+> 
+> So while I agree with most of the short-commings listed in that set,
+> however that patch is quite terrifying.
+
+Not disagreeing with you on that.
+
+> 
+> I would prefer to start with something a *lot* simpler. How about a tick
+> driven decay of iops count per task. And that whole step array
+> *shudder*.
+
+It's an attempt of solving unnecessary boosting based upon what is there for
+us to work with now: iowait wakeups.
+There are many workloads with e.g. > 5000 iowait wakeups per second that don't
+benefit from boosting at all (and therefore it's a complete energy waste).
+I don't see anything obvious how we would attempt to detect non-boost-worthy
+scenarios with a tick driven decay count, but please do elaborate.
+
+(If you *really* care about IO throughput, the task wakeup path is hopefully
+not critical anyway (i.e. you do everything in your power to have IO pending
+during that time) and then we don't need boosting, but just looking
+at a tick-length period doesn't let us distinguish those scenarios AFAICS.)
+
+Regards,
+Christian
 
