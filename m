@@ -1,126 +1,112 @@
-Return-Path: <linux-pm+bounces-7120-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7121-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFA2E8B2816
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 20:18:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 531A78B2844
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 20:42:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D95E2828DB
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 18:18:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F01E11F22125
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 18:42:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1A021514C6;
-	Thu, 25 Apr 2024 18:15:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n68zaVIr"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3C353BBE9;
+	Thu, 25 Apr 2024 18:42:22 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D2FE1514C4
-	for <linux-pm@vger.kernel.org>; Thu, 25 Apr 2024 18:15:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C7893A1BB;
+	Thu, 25 Apr 2024 18:42:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714068921; cv=none; b=MHgfWXIEKyG1BEkj2cySTTyXKu2BvontYmcujSuVoB2sERfPKVYfXNRV2rFBqCUJuWgzAiAhuNmzO0HQLuDyGU5EncvVQFRtxa8HI+1eBya7EIQaGAN48CaRsysgUjmT70Z4PUWDOIVB/qExa3A9KzDpwO4gZ6m9UvQcdVSp1oU=
+	t=1714070542; cv=none; b=gvu+urXQ4TS3c2h//ldnmjuMsdLVNUAJbQTJBo6G9flo90nY3Cv/8hH6hvkCu4AmflirW7GJuVndYJ0BOH/n4XnyzylDuRTvVTbSgk90SD84aEmb3ZJszkfyFPhlV3M9HqY5tYuk8Of7eeq+n3RIsRw6BTPKVYd4mU9t4NqfPiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714068921; c=relaxed/simple;
-	bh=uXMmsb4p7DTew/rARnU7r7GTJtNUG2bQu5F+fa72NLw=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=vB+hyp1uZm1u2M8fK4Yk9Y1vh3B+oekZATT3qh40ZRs/LzAjbL0KNwJ49pR4UyNcmyoOb1m4XmAMqU9KS+2igyL/ijR261IYBSEUIcZit8ECx158LlqCNjabmJ3gk3gHqy5Bi9NgDf/3rlttl0vZTXfd4MFaCLPICBYZmzYZaYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n68zaVIr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2134DC2BBFC
-	for <linux-pm@vger.kernel.org>; Thu, 25 Apr 2024 18:15:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714068921;
-	bh=uXMmsb4p7DTew/rARnU7r7GTJtNUG2bQu5F+fa72NLw=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=n68zaVIrM1mEczmx+JqREWg3Z+6a17AGr6IDZYSWSqExexuSO8vDu5LOuFZE5Jjlk
-	 h/TqEMOh8u2U4NY+dbx//5+lv7n0+zq3CSSczyQ9xUDNOA8aggeDn3n96PPO22m3xJ
-	 aCyfBueJluJc+X1IfM+R3HgspII7rRkLqQKYrg2Mzg8dxTgUS2C8imoS12FgwyW9Xw
-	 K3Ysb0+vOuUg5X7Q4QfO1/2ih1Yr8TqGP2Z8p4SXPFMzDrTuswpcfyy5CroivgQ5a1
-	 05p4Tm7rSjYwh1GNMoQvDckfvuzXSkOJrvPEFl+gLSxYCmRifaFPbMo3PkToNZ3+99
-	 FIEaNJ/GsUtEg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 1A018C433E3; Thu, 25 Apr 2024 18:15:21 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 218759] 6.9-rc kernels - with Ryzen 7840HS CPU single core
- never boosts to max frequency
-Date: Thu, 25 Apr 2024 18:15:20 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: gahabana@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218759-137361-R8WCNE8JMg@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218759-137361@https.bugzilla.kernel.org/>
-References: <bug-218759-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1714070542; c=relaxed/simple;
+	bh=vuWaZ//9gL0kA2Wo2XJ/umK6tfwaAhyZYGGSZGoij/E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NYYRRJz+wiksVAYUKqrtcb/cCciMRpCbGl8YkgwGIVxuqVB7r1en4xaanOSC+EsmsjXDHl1eqpcGYjpMxyN3m+jDKUgmCNr1eIKSLiZYOHRTXeY4qn6gQQbUIUeIgGrMAt7LwYettBYRPc/H0VDkPdNkKP/51Z7Pp+n57rpeqvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B01102F;
+	Thu, 25 Apr 2024 11:42:48 -0700 (PDT)
+Received: from [10.57.75.39] (unknown [10.57.75.39])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7CD553F793;
+	Thu, 25 Apr 2024 11:42:19 -0700 (PDT)
+Message-ID: <4f21ee21-0178-4d50-a535-4d530baf82d1@arm.com>
+Date: Thu, 25 Apr 2024 19:42:17 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 2/3] thermal/debugfs: Pass cooling device state to
+ thermal_debug_cdev_add()
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>
+References: <5774279.DvuYhMxLoT@kreacher> <2181352.irdbgypaU6@kreacher>
+ <e9be06af-48bf-45ec-8d6d-6147d20b6780@arm.com>
+ <CAJZ5v0i=HS_-S3N7ixK=FM0S=7o21cfW5jXMq=AWObwGpUkPdA@mail.gmail.com>
+ <CAJZ5v0ik_EqSXzTkowz=ha-U+JU+=KtqEMwD5+r329og2d4t=A@mail.gmail.com>
+Content-Language: en-US
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAJZ5v0ik_EqSXzTkowz=ha-U+JU+=KtqEMwD5+r329og2d4t=A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218759
 
---- Comment #9 from Gaha (gahabana@gmail.com) ---
-hi , thank you for the suggestions (@Mario),=20
-    I've just tried that as well. Single core workloads still do not go abo=
-ve
-'basic' speeds. In addition to adding 'amd_prefcore=3Ddisable' below i've a=
-lso
-tried adding explicitly to kernel command line amd_pstate various parameters
-(active, guided, passive) 'GRUB_CMDLINE_LINUX_DEFAULT=3D"amd_pstate=3Dguided
-amd_prefcore=3Ddisable iommu=3Dpt quiet " with no change in behaviour
-zh@muc:~$ cat /proc/cmdline
-BOOT_IMAGE=3D/boot/vmlinuz-6.9.0-rc5-zh-250HZ-amdpatches+
-root=3DUUID=3Ddc0bb664-2e43-421d-bd28-96d0332f030c ro amd_prefcore=3Ddisabl=
-e iommu=3Dpt
-quiet
-zh@muc:~$ uname -a
-Linux muc 6.9.0-rc5-zh-250HZ-amdpatches+ #5 SMP PREEMPT_DYNAMIC Thu Apr 25
-11:45:21 CEST 2024 x86_64 x86_64 x86_64 GNU/Linux
-... (In 2nd session am running 'cat /dev/zero >/dev/null')
-zh@muc:~$ lscpu -ae
-CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE    MAXMHZ   MINMHZ       MHZ
-  0    0      0    0 0:0:0:0          yes 4350.0000 400.0000 1815.3290
-  1    0      0    1 1:1:1:0          yes 4350.0000 400.0000 1724.5240
-  2    0      0    2 2:2:2:0          yes 4350.0000 400.0000 2156.9199
-  3    0      0    3 3:3:3:0          yes 4350.0000 400.0000  400.0000
-  4    0      0    4 4:4:4:0          yes 4350.0000 400.0000  400.0000
-  5    0      0    5 5:5:5:0          yes 4350.0000 400.0000 2050.2410
-  6    0      0    6 6:6:6:0          yes 4350.0000 400.0000  400.0000
-  7    0      0    7 7:7:7:0          yes 4350.0000 400.0000  400.0000
-  8    0      0    0 0:0:0:0          yes 4350.0000 400.0000  400.0000
-  9    0      0    1 1:1:1:0          yes 4350.0000 400.0000  400.0000
- 10    0      0    2 2:2:2:0          yes 4350.0000 400.0000  400.0000
- 11    0      0    3 3:3:3:0          yes 4350.0000 400.0000  400.0000
- 12    0      0    4 4:4:4:0          yes 4350.0000 400.0000  400.0000
- 13    0      0    5 5:5:5:0          yes 4350.0000 400.0000  400.0000
- 14    0      0    6 6:6:6:0          yes 4350.0000 400.0000 4315.7319
- 15    0      0    7 7:7:7:0          yes 4350.0000 400.0000  400.0000
 
-I hope this helps ?
+On 4/25/24 14:00, Rafael J. Wysocki wrote:
+> On Thu, Apr 25, 2024 at 2:36 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>>
+>> Hi Lukasz,
+>>
+>> On Thu, Apr 25, 2024 at 12:02 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>>
+>>> Hi Rafael,
+>>>
+>>> On 4/23/24 19:00, Rafael J. Wysocki wrote:
+>>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>>
+>>>> If cdev_dt_seq_show() runs before the first state transition of a cooling
+>>>> device, it will not print any state residency information for it, even
+>>>> though it might be reasonably expected to print residency information for
+>>>> the initial state of the cooling device.
+>>>>
+>>>> For this reason, rearrange the code to get the initial state of a cooling
+>>>> device at the registration time and pass it to thermal_debug_cdev_add(),
+>>>> so that the latter can create a duration record for that state which will
+>>>> allow cdev_dt_seq_show() to print its residency information.
+>>>>
+>>>> Fixes: 755113d76786 ("thermal/debugfs: Add thermal cooling device debugfs information")
+>>>> Reported-by: Lukasz Luba <lukasz.luba@arm.com>
+>>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>> ---
+>>>>    drivers/thermal/thermal_core.c    |    9 +++++++--
+>>>>    drivers/thermal/thermal_debugfs.c |   12 ++++++++++--
+>>>>    drivers/thermal/thermal_debugfs.h |    4 ++--
+>>>>    3 files changed, 19 insertions(+), 6 deletions(-)
+>>>>
+>>>
+>>> I'm trying to test it on my board and do the review, but faced issue.
+>>> For some reason I couldn't apply that patch on the latest bleeding-edge
+>>> branch.
+>>> Could you help me in this please? Is there something missing in the
+>>> patch set (like one more fist patch)?
+>>
+>> I messed up the ordering of patches (patch [2/3] should be the last
+>> one in the series) and on top of that, you'll need a small rebase on
+>> that patch.
+>>
+>> Sorry about this, I'll send a v2.
+> 
+> Actually, the ordering was OK, but the rebase of the second patch is
+> still needed.  I'll send a v2.
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
+Thanks, I've seen it. That v2 applies smoothly and runs on the board.
+I'll test it and review.
 
