@@ -1,118 +1,119 @@
-Return-Path: <linux-pm+bounces-7126-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7130-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E6148B28A8
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 21:01:41 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4BEE8B28BF
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 21:06:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A1EE1C21AD2
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 19:01:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 12A4FB24253
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 19:06:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C22114F9F5;
-	Thu, 25 Apr 2024 19:01:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B15A152191;
+	Thu, 25 Apr 2024 19:06:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Iq9a5Joh"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="CmOp+Lqg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3A1F14D717
-	for <linux-pm@vger.kernel.org>; Thu, 25 Apr 2024 19:01:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C32D1509B1;
+	Thu, 25 Apr 2024 19:06:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714071694; cv=none; b=k5FBb0kel98p9o9EOP0VE2iKlkwcejIQBPZVC5JMDDMopQLn8Vm0Bz3Mqz4BUSP/EvgyngX3fgMm3LpbHpPi0KaTQQ38F75EEHVQ4UXiECkFmKN2fW9hkcjsR7CtykhiKot7pd5bqGEA3uzzeFTcvRjGb9L2VuDl76fcMD7fCeY=
+	t=1714071985; cv=none; b=KzQELSMhSBTMZ49hgMLmg9hUTYKyoyj/vfkf1aN7thNYOuKK6SJF0xTIA/x5OerIJ3ZrWXr6HpIpaoKFVOWB8OsQRScA3ZUal6b0xMBoQiXake0oA8fxXD6xfSYAE+p1YprzoJn/aSo0Io/LESrUIWtslliWvLX/aQ2kdV5zkbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714071694; c=relaxed/simple;
-	bh=JeXz2/TFeNnXiSq/81VOk+f7TlrQg/8jpIhKlDJ3Qcc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=G+2fXxGpNS810dUMbbg62jQbhiLSeVTaU6N1+w/0x0IxTpfIR1GxSZZgaXdktfrt48aD/90vr5yBNmIa7h7AbiPpJmNAzww1qJ90K8AHENjEe4Fuq0CmV7PqnzMdznCjjocgpCy2nzDhwx/z5o/QDpyqvDjAE853ISL51Y+z+dk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Iq9a5Joh; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-51bae805c56so1574101e87.0
-        for <linux-pm@vger.kernel.org>; Thu, 25 Apr 2024 12:01:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1714071691; x=1714676491; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=S+CfDSUKDWMFi6696XWhw/F7Vcz9ViYAQl2uJokcaMA=;
-        b=Iq9a5JohsTpZ1Plw8lZtgNq/zWMOnM/vDa6gZR988KJL3wzjPGq9S1AdIubOwOi8CH
-         NPpmx9mtAibp77SJE81y/Z4W08avKFQ5qUZQ8IR2OfV8DUFBdPKD7igii1OzhoNYfDFr
-         PzqrW1WJmyNn5Z5FOd5FWMytOdAVjucQnXWuo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714071691; x=1714676491;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=S+CfDSUKDWMFi6696XWhw/F7Vcz9ViYAQl2uJokcaMA=;
-        b=W0JkMbMvYc7V/ueERqEjEnXWJNx2pv2dENAFAWHRQrpX7uhLf17hHYWIb9nfdeFuWh
-         e5NhPq+3Hg7rjlgrQBE9ePvNF5RsSdGioaPLyo6u3abvPIxm0yEcnnbGN7ZICjg37t+K
-         TgRipO/knLD3tC4Fmv2NDXL7Kw2LzQp3Qd6eyiUHHq9ie0zOCmXNa8olhof4jEwlgrbi
-         5UgFycmlMeLfmtgjejL4jTSqbcGghZonEYVx5UPTMvdQM2BbnqBdZU4uBKt49cx5z7D3
-         FYVKe75jHoSCfdWhzzFgeQR5Aj9gtg+c80MiwJdEwsP+5EAvuNjusHX5vyJxjHJilDrD
-         8/tg==
-X-Forwarded-Encrypted: i=1; AJvYcCX0gtlSCa0MvXOiRThl7s3BYvpSYHQHGGBVxCNklTpK+aMIwf/LvFHNZKo+QrXasmTTphjwSNGhb5R3ssSGRgphtt0lh/TaUrQ=
-X-Gm-Message-State: AOJu0Yz1aa5s1542EQ8wxZjVg+USUP33yRLWvq6F4SctgprGEqMpTL0q
-	uhuOUvR/L9Q/boDgixR9D9RSQQLkuCOU8M16fjyhyez3khFwv65NzikL1s/LRNlf5b0b0YV9aHI
-	db7Ir5Q==
-X-Google-Smtp-Source: AGHT+IGbu/fC//FrI7fe8XcStRRe+Z8W0Z+AXDr8aDTY6ZLQRIdSgUxT5yGGS89QAPBsnaFgVODyJg==
-X-Received: by 2002:a19:5e1a:0:b0:51a:f1bf:544c with SMTP id s26-20020a195e1a000000b0051af1bf544cmr169322lfb.52.1714071690669;
-        Thu, 25 Apr 2024 12:01:30 -0700 (PDT)
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
-        by smtp.gmail.com with ESMTPSA id k3-20020aa7c383000000b00570439141a0sm9435195edq.3.2024.04.25.12.01.28
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Apr 2024 12:01:29 -0700 (PDT)
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-56c5d05128dso1401395a12.0
-        for <linux-pm@vger.kernel.org>; Thu, 25 Apr 2024 12:01:28 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVKfE6qhkcUfbTqzMAFNTsZRnri/BPeTh0Zym0jo8X4qIVUL2AIVdtAUKCmmvCaGl6HGPJSjWZ/fPdjhbzHywGRJOxS/T0Nnu8=
-X-Received: by 2002:a17:907:76a4:b0:a57:b828:5f4b with SMTP id
- jw4-20020a17090776a400b00a57b8285f4bmr452572ejc.58.1714071688536; Thu, 25 Apr
- 2024 12:01:28 -0700 (PDT)
+	s=arc-20240116; t=1714071985; c=relaxed/simple;
+	bh=2Sb71T+xYEBOgO6OWGpiIk60zH773QV7/5n9WrUs7/s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=kTsZAprh/7eZ/PMu0rGjtpxteX52cITcWa5sBUmOUkRkQdzgXbEzTuQHXJG1t/jDRtUb/7lTl0uwULVGiDaZ+7sYOhiVaUfMj/goi/NvTdaV44EA2MbFSy+krbQq3amZfqABp4Dj6QA0cjkJSkt+ElhNJsUucu2RJ1+GSWzsXc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=CmOp+Lqg reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
+ id 521fcd625bb25de9; Thu, 25 Apr 2024 21:06:21 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id A7BE766DF24;
+	Thu, 25 Apr 2024 21:06:20 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1714071981;
+	bh=2Sb71T+xYEBOgO6OWGpiIk60zH773QV7/5n9WrUs7/s=;
+	h=From:To:Cc:Subject:Date;
+	b=CmOp+LqgZo0qzXZJpaY0bkJjuuztK1RHKCi5MNNbQKaraU13J63gUf+6RjbcAYsC0
+	 mzqPBBRDqMZbJKv/nUaXBH7tJbZO2L741U8sGHM4FXuJlBEl7wEeRwk16bYz4VfvF5
+	 /1UFY78DNBQ5neNOjPU7Ubmw8o9kNbY8GEuVe38RIycThkEAJw5W2t5DHMJI5GomV3
+	 xDS7HLfVrENzwA7+6mOUz1ne9bKy8B3GELgeSigF/bxj5hfoRetW12iJvJptE8/kOv
+	 u9WAqEajEAhLX0oQxWUwhpdG1NfAUBV50wQ97zPXk+GvuOLCfB08fQ735g+8ukS8xA
+	 TQCnSVzcsdImQ==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: x86 Maintainers <x86@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Ricardo Neri <ricardo.neri@intel.com>, Tim Chen <tim.c.chen@intel.com>
+Subject:
+ [RFC][PATCH v1 0/3] x86 / intel_pstate: Set asymmetric CPU capacity on hybrid
+ systems
+Date: Thu, 25 Apr 2024 21:03:03 +0200
+Message-ID: <7663799.EvYhyI6sBW@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAJZ5v0iUUmMUo86vBzYJjL4NjoFzpDwD1+c292aP+T++PLv6vQ@mail.gmail.com>
- <CAHk-=wj8J78-12QfAoKaLdRi2g1=_U7sv02POShjotcJ6t4nzw@mail.gmail.com>
-In-Reply-To: <CAHk-=wj8J78-12QfAoKaLdRi2g1=_U7sv02POShjotcJ6t4nzw@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Thu, 25 Apr 2024 12:01:12 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgg2hknXUtxq8F7caSmbtRNpss0zhDwv505L25dfQBXDA@mail.gmail.com>
-Message-ID: <CAHk-=wgg2hknXUtxq8F7caSmbtRNpss0zhDwv505L25dfQBXDA@mail.gmail.com>
-Subject: Re: [GIT PULL] ACPI fixes for v6.9-rc6
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: ACPI Devel Maling List <linux-acpi@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudeljedgudefgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopedutddprhgtphhtthhopeigkeeisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehtghhlgieslhhinhhuthhrohhnihigrdguvgdprhgtphhtthhopehpvghtvghriiesihhnfhhrrgguvggr
+ ugdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=10 Fuz1=10 Fuz2=10
 
-On Thu, 25 Apr 2024 at 11:58, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> When that macro now has had TWO independent bugs, how about you just
-> write it out with explicit types and without any broken "helpers":
->
->    static inline u64 MASK_VAL(const struct cpc_reg *reg, u64 val)
->    {
->         u64 mask = (1ull << reg->bit_width)-1;
->         return (val >> reg->bit_offset) & mask;
->    }
->
-> which is a few more lines, but doesn't that make it a whole lot more readable?
->
-> And maybe this time, it's not a buggy mess?
+Hi Everyone,
 
-Just to clarify: that was written in the MUA, and entirely untested.
-Somebody should still verify it, but really, with already now two
-bugs, that macro needs fixing for good, and the "for good" should be
-looking at least _something_ like the above.
+The purpose of this series is to provide the scheduler with asymmetric CPU
+capacity information on x86 hybrid systems based on Intel hardware.
 
-And despite needing fixing, I've done the pull, since bug #2 is at
-least less bad than bug#1 was.
+The asymmetric CPU capacity information is important on hybrid systems as it
+allows utilization to be computed for tasks in a consistent way across all
+CPUs in the system, regardless of their capacity.  This, in turn, allows
+the schedutil cpufreq governor to set CPU performance levels consistently
+in the cases when tasks migrate between CPUs of different capacities.  It
+should also help to improve task placement and load balancing decisions on
+hybrid systems and it is key for anything along the lines of EAS.
 
-                   Linus
+The information in question comes from the MSR_HWP_CAPABILITIES register and
+is provided to the scheduler by the intel_pstate driver, as per the changelog
+of patch [3/3].  Patch [2/3] introduces the arch infrastructure needed for
+that (in the form of a per-CPU capacity variable) and patch [1/3] is a
+preliminary code adjustment.
+
+The changes made by patch [2/3] are very simple, which is why this series is
+being sent as an RFC.  Namely, it increases overhead on non-hybrid as well as
+on hybrid systems which may be regarded as objectionable, even though the
+overhead increase is arguably not significant.  The memory overhead is an
+unsigned long variable per CPU which is not a lot IMV and there is also
+additional memory access overhead at each arch_scale_cpu_capacity() call site
+which I'm not expecting to be noticeable, however.  In any case, the extra
+overhead can be avoided at the cost of making the code a bit more complex
+(for example, the additional per-CPU memory can be allocated dynamically
+on hybrid systems only and a static branch can be used for enabling access
+to it when necessary).  I'm just not sure if the extra complexity is really
+worth it, so I'd like to know the x86 maintainers' take on this.  If you'd
+prefer the overhead to be avoided, please let me know.
+
+Of course, any other feedback on the patches is welcome as well.
+
+Thank you!
+
+
+
 
