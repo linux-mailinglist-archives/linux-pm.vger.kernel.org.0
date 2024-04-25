@@ -1,156 +1,247 @@
-Return-Path: <linux-pm+bounces-7083-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7079-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E90E98B22DC
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 15:32:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0AE358B21A7
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 14:32:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 191041C20CEA
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 13:32:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5ECB28756E
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 12:32:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1D9D149C71;
-	Thu, 25 Apr 2024 13:32:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 901DE1448DA;
+	Thu, 25 Apr 2024 12:32:01 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from CHN02-SH0-obe.outbound.protection.partner.outlook.cn (mail-sh0chn02on2130.outbound.protection.partner.outlook.cn [139.219.146.130])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66409149C64;
-	Thu, 25 Apr 2024 13:32:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.146.130
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714051929; cv=fail; b=rXqmMdpETDyn+VZK41IA+2H7eGUbg6AzvTyCUezV40d9XgUPCgRs7IGQYgKKeHoYvfeauO3O0fkJ7e10usFSO0B7c2ulLWLpE5Yv4dMJvodUuMJFHmze/epGafuFv6+o1oGF8eBulTAlZ4Mwu1fU8o3CVpbiXDTM+WxQBLetqKU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714051929; c=relaxed/simple;
-	bh=Gzfjjvx5xUpjsCj0PK5vRaUI55Lg4WbwFr+njiE0qdU=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=dc9Fh4sCCICiqvU2eFE61s6VT9aMTGKpCqtdSfiuQq4H9hLLuGAUClG+6YkjVp/Sr2cbj1ZzGq4XMEMUmH2jQ89HHKBxtbaZFFaSTM8OlzFQU9DjAdPlR/wxzeepCj4Z6bSib662aDN6aMg+mqa6OgOsb4Z0aCcP+ddzzfI/6Cs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.146.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cWYcpuWXIi85T1LbTYZNC006sLjuyd5XUmYu3ljnXLAYFm4S0Yib/0VpWRTNozmrGsIOYJiuREGJ/tNQ/LCQv1iaZLnf846JQN1d5z1Iv0kPe4pyK7Era+7mRbzsR1jLmPy14P6hF7TzoHkjHlIyYumakwnbaaxBHSJJhW02M7Mt1h4obXyKXzWU0xx0RVjqEeF2U8Poy04KgzhP10ujSv3r/JBIbWe1AIRtIzr0GWY4kKh3HatDo797zMntbDXJL+ctwZjkrPQmFPJPRhhsijA6YoYHedr7NbZxvMa5wxEjy6q+nx4IveiNOT4rjMHOL8wQCEkEFSQcnGOBR780ng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4MKf75HbMpPEk95Y+rEAI6Rdi5fP6GtswrPZ1dCC7G0=;
- b=G575VTFqSmqr+tuyr4exWBk0y1jqNSKYucG3AtzlFxwsEyQP/v97On9haOChQQoNiFlqKOX757iuWyETkm+qF/1W2lB1ivVjPMrBTQ5/rNbxt73PlczoBZnem6Dar9nhf0uCg8EbNQKByLEYik3t1F5lNhtpLApV8gJ9eEozjqnhTO9o/EtKKTYPSvpwSKfBj11h0x0ejVwWj5oVKZ/+1wBYcHf/d+QXOubFytXtHqcntS48WmDqFFDVcTGcgrUxb/+S2QAAx8ZWkW3TAQtsNBQUzTUsTw+8wblYkIiQqvNF1rr48iyuD4Pw/+/TZz79YFbRV6u3cbs9uSwuJiiDFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=starfivetech.com; dmarc=pass action=none
- header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=starfivetech.com;
-Received: from SH0PR01MB0841.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c311:20::14) by SH0PR01MB0875.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c311:8::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.44; Thu, 25 Apr
- 2024 11:00:44 +0000
-Received: from SH0PR01MB0841.CHNPR01.prod.partner.outlook.cn
- ([fe80::e0a:f88a:cad1:dc1c]) by SH0PR01MB0841.CHNPR01.prod.partner.outlook.cn
- ([fe80::e0a:f88a:cad1:dc1c%7]) with mapi id 15.20.7472.044; Thu, 25 Apr 2024
- 11:00:44 +0000
-From: Joshua Yeong <joshua.yeong@starfivetech.com>
-To: rafael@kernel.org,
-	viresh.kumar@linaro.org
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Joshua Yeong <joshua.yeong@starfivetech.com>
-Subject: cpufreq: Fix printing large cpu and cpufreq number
-Date: Thu, 25 Apr 2024 19:00:17 +0800
-Message-Id: <20240425110017.75238-1-joshua.yeong@starfivetech.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SH0PR01CA0018.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c311:5::30) To SH0PR01MB0841.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c311:20::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD9D6143894;
+	Thu, 25 Apr 2024 12:31:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1714048321; cv=none; b=ZRwsdlc5iJ3bboJNEoo+OG3hKf3B6cr4iDCGDh3eTYlpp3gSRROd1T/m6VkQHjA14/2J/WstPc7HaCUNFpQvHQrLemIWkR4E/uY4wVGdIkCiuje/UeVD1xCaAnhtIuMwzRQoQvy+PVNx+L5keyBALOH88CJEKBxmi6vel5W3x04=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1714048321; c=relaxed/simple;
+	bh=whSp5cqil5xFhRRdjAyrS5AlI1HyOK8o5KQbJYN9Vbw=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hdrQNu6EeBUW8w1GWL9M3skVllAue6wdaHUBoz+RWvKOk8bVEWI4gnMEmHJ/M147k/PPfCsVeZh0kDQtjrmWG/gsrKR3udj2S4yRspORQArGBuLr+TqSBqvk17hhjNKO74xxOE9KyZRKyayRjyXPV0ZMQYkf3S5xoITFDhN6KUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VQFXp3b2qz6JBTq;
+	Thu, 25 Apr 2024 20:29:30 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id BF8881400DD;
+	Thu, 25 Apr 2024 20:31:52 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Thu, 25 Apr
+ 2024 13:31:52 +0100
+Date: Thu, 25 Apr 2024 13:31:50 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Marc Zyngier <maz@kernel.org>
+CC: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
+	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
+	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+	<x86@kernel.org>, Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki"
+	<rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, "James Morse"
+	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, Jean-Philippe
+ Brucker <jean-philippe@linaro.org>, Catalin Marinas
+	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+	<linuxarm@huawei.com>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+	<justin.he@arm.com>, <jianyong.wu@arm.com>
+Subject: Re: [PATCH v7 11/16] irqchip/gic-v3: Add support for ACPI's
+ disabled but 'online capable' CPUs
+Message-ID: <20240425133150.000009fa@Huawei.com>
+In-Reply-To: <86il06rd19.wl-maz@kernel.org>
+References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com>
+	<20240418135412.14730-12-Jonathan.Cameron@huawei.com>
+	<20240422114020.0000294f@Huawei.com>
+	<87plugthim.wl-maz@kernel.org>
+	<20240424135438.00001ffc@huawei.com>
+	<86il06rd19.wl-maz@kernel.org>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SH0PR01MB0841:EE_|SH0PR01MB0875:EE_
-X-MS-Office365-Filtering-Correlation-Id: 482caf25-b8a9-4ed7-00e6-08dc6516f43b
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	9B0ywQOE8Lgty5cozACEqnVYLqbadgNbK85yvzvasmHvMAIFija2T4wLoXQjPeMqxk8gmM1xuDJndGJ4oDHlwCWT+aVCLlfZK/zqq3n08YdZ0VQCGzex1iLItXEMXEzocj6X6oqXYYB/xQK5rDFjtIJ7hmQVRIWZi6ojhbpnidHMstzkNJUdkHyQImI4hHK8FtJReWaU+Nt2oKJPwXLttmVggZxrQtAzZC8MnmCVhDZ8O3cn56+3zbOW1m3Y5cr1wXIV8cGnl1FhPM/Pf4rUYgNV2Y0QKbKqEpQlr8gUOpNAvhXZpTB9IzyYp2/JsDvHce2QSnp3bCUv/xQgWZzdjwJGi5o51voadsEC8M6DzA4liWLyPOE9SdH4ahe4FRAbcTek/N86jtzrXcH2ktxmu2SLkt7/hgGcw5z3WfnJeBrD458lxXG15RR4uz+3iu3m58eThQ02Cq/TRRxwY9ZO0mbJwCO28pviDickjDb/rdk5OZwfGUnKRJafteXsp1rcmALqn1r6UQod9of6fdUHqK8vv3jFhU9A0ResDQV3u5y12Xs0H5oxqrLT+ydV+XdVFSd+mJXey9CloQj5XrvaRz2RqbbAHqRUIdyoeZxCpRY/H5cnT0JtajPZ2FIK9Qt7
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SH0PR01MB0841.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230031)(366007)(41320700004)(1800799015)(52116005)(38350700005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?ipDg6Ucnps8mS7ZdrVpd/warDX5+zkwfou57ZHWm8t2M8TRi8fyuAqaqs9t9?=
- =?us-ascii?Q?K+B9pajDdmmDyPg6b/FYRO603r8QkWuEdXSQoLFTm28IVKmfFxxliIl8q/f5?=
- =?us-ascii?Q?44ZKR2iokuqI4UWXEymYyLlmbtYrMEM6MU/cPzW6Dn2RDPY8ErDVOd/FAH6A?=
- =?us-ascii?Q?7Z0rsWWDNvRjwDjd2Yqb834LaJhjHiZBH8IP3n9e879yHqhn6WDnT4wjBlEV?=
- =?us-ascii?Q?Fa8Th3O4vgIevqZ2gPPnUtMcJGNlidlDZ5BwYnFSHU31OZ1jcd8H9AvD/tq0?=
- =?us-ascii?Q?rUfEZr3vqWxn9H7eG/7sicBgVuxz7ffxBUALZe1T3EGkw0wAw07tsbZnWN6U?=
- =?us-ascii?Q?4dt3sUKYYhOZAtEtwqOvmlYOBl1Ccz8xxpO+HHjhRyy47PDQt1un8vRk020d?=
- =?us-ascii?Q?mvqTyRD6sKt6LBr1asQUgqz3xewp8VCwIlwfRtS8kGKPepYDk9vH73Eq3jwx?=
- =?us-ascii?Q?JdkLaKCPPoDr0TrARY8VtjTJoNNsNCH1rWHDO4E1zJDMQ0zPehXyAp3iQkgp?=
- =?us-ascii?Q?3YEUw5vOnkk0STk/tBgu2061aWfZhoHo7416cHjkM5S0fzNK8lIm6FFk99iR?=
- =?us-ascii?Q?eJKxb21dVWjcROKGJR+ZvpWQWVvdDG9BZJf+P4Ki9Oci9FUp0vsPiRYdDWjf?=
- =?us-ascii?Q?rvKZv3kruDhUBnSE0MBfyt8iXREiYVsRqa+xPhpojM4LjkHXSJZ+BYoJqvsC?=
- =?us-ascii?Q?O7RH03AhWLHknUGhxWTQLcto56AU01EgedKiEkpeuN90Z40JVtNyfj8toCig?=
- =?us-ascii?Q?Ci5hJAFovc82hHAOPwI2N2Ib6esoE7vWUkDCPx+U1GQsjOJXH4AxTSiszoV9?=
- =?us-ascii?Q?Ob9Bb0WGAINRhA6Xt3hCyxU9ffHNeEXK8aUgsYIilRrhcH16FvXSiIqc6gML?=
- =?us-ascii?Q?FOCB/BtKDZqtn5dU+0jfVhjmlIJEkIihPyTQMH0HLTPr1HL0aWMJTMUSPb7A?=
- =?us-ascii?Q?wpFpnoo5++ybQ50MRoluu/8BORVI8IajsidFLtwEQHVUmP6WH8S5hpGfEtyv?=
- =?us-ascii?Q?Uz2PV8N8+q/lulKJWWl1kdNtjMwp9yWUK4GzXdb92VfyS9Ch+a4fJwkkDClr?=
- =?us-ascii?Q?7hI+8NUZSZUyRtbzqj1JZKFIcvycZ5UDwNgYpAVjrVK/7gtKM2+OXwWVb4M1?=
- =?us-ascii?Q?1ALVCNuLbMxOwjSlamvWz9Og3PzUTp1eE5xOc+3Zvl7cuE2YVEuugyeEYwii?=
- =?us-ascii?Q?iUCNdWVnQy7yKKyfmWTn4fFukXjYBVS/3awkCOLJ+T0y3OP33uNWzjbuOdrj?=
- =?us-ascii?Q?ukWLV8p+im4xiWsy42ucf+rEp2K4H9rBoZbK1QHtFsBJfPIv84bB9zCxNLeO?=
- =?us-ascii?Q?tv5r9v0L33jYyXGJRr4MjQSyzKXlpV6OmwFPU8AG0lxTqT4VqdEBcDyGLiE/?=
- =?us-ascii?Q?+SZgP+AWf9RAqG1+aD5cHGYRCwtNXZ/t8MgD0SmCsLoR9dskZOxVR3U06bIK?=
- =?us-ascii?Q?wIVSIsbxNeF9BIciS86hMw5bF0FSJwjdUyiG5iuM6MZxOj/WtnuGYaqgkadx?=
- =?us-ascii?Q?pAHPoaE9BuVLsA88ycpuBDdWPeimpUOeO+UicReH8wlk4b8mSu6+SkvhE5kF?=
- =?us-ascii?Q?lJAmsokWHGwHxF3TPdVoPJbV1RIssr8fwre2OkvP0hY2icJzitfT+8ouoSPx?=
- =?us-ascii?Q?xNxJ3rxryGpRTODmQSdg7iw=3D?=
-X-OriginatorOrg: starfivetech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 482caf25-b8a9-4ed7-00e6-08dc6516f43b
-X-MS-Exchange-CrossTenant-AuthSource: SH0PR01MB0841.CHNPR01.prod.partner.outlook.cn
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2024 11:00:44.3352
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DcpR6DBlBGGycrsisighptH7JvwWMY3cmhBoNcyKgfLb9IIE/LMRhoQGol1jDytdcZ0dBuDS/CoxCXxAPI4mQetLPqT0xGzhl0TsHrpWdVc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SH0PR01MB0875
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-Fix printing negative number when CPU frequency
-with large number.
+On Wed, 24 Apr 2024 16:33:22 +0100
+Marc Zyngier <maz@kernel.org> wrote:
 
-Signed-off-by: Joshua Yeong <joshua.yeong@starfivetech.com>
----
- drivers/cpufreq/freq_table.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> On Wed, 24 Apr 2024 13:54:38 +0100,
+> Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
+> > 
+> > On Tue, 23 Apr 2024 13:01:21 +0100
+> > Marc Zyngier <maz@kernel.org> wrote:
+> >   
+> > > On Mon, 22 Apr 2024 11:40:20 +0100,
+> > > Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:  
+> > > > 
+> > > > On Thu, 18 Apr 2024 14:54:07 +0100
+> > > > Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:  
+> 
+> [...]
+> 
+> > > >     
+> > > > > +	/*
+> > > > > +	 * Capable but disabled CPUs can be brought online later. What about
+> > > > > +	 * the redistributor? ACPI doesn't want to say!
+> > > > > +	 * Virtual hotplug systems can use the MADT's "always-on" GICR entries.
+> > > > > +	 * Otherwise, prevent such CPUs from being brought online.
+> > > > > +	 */
+> > > > > +	if (!(gicc->flags & ACPI_MADT_ENABLED)) {
+> > > > > +		pr_warn_once("CPU %u's redistributor is inaccessible: this CPU can't be brought online\n", cpu);
+> > > > > +		set_cpu_present(cpu, false);
+> > > > > +		set_cpu_possible(cpu, false);
+> > > > > +		return 0;
+> > > > > +	}    
+> > > 
+> > > It seems dangerous to clear those this late in the game, given how
+> > > disconnected from the architecture code this is. Are we sure that
+> > > nothing has sampled these cpumasks beforehand?  
+> > 
+> > Hi Marc,
+> > 
+> > Any firmware that does this is being considered as buggy already
+> > but given it is firmware and the spec doesn't say much about this,
+> > there is always the possibility.  
+> 
+> There is no shortage of broken firmware out there, and I expect this
+> trend to progress.
+> 
+> > Not much happens between the point where these are setup and
+> > the point where the the gic inits and this code runs, but even if careful
+> > review showed it was fine today, it will be fragile to future changes.
+> > 
+> > I'm not sure there is a huge disadvantage for such broken firmware in
+> > clearing these masks from the point of view of what is used throughout
+> > the rest of the kernel. Here I think we are just looking to prevent the CPU
+> > being onlined later.  
+> 
+> I totally agree on the goal, I simply question the way you get to it.
+> 
+> > 
+> > We could add a set_cpu_broken() with appropriate mask.
+> > Given this is very arm64 specific I'm not sure Rafael will be keen on
+> > us checking such a mask in the generic ACPI code, but we could check it in
+> > arch_register_cpu() and just not register the cpu if it matches.
+> > That will cover the vCPU hotplug case.
+> >
+> > Does that sounds sensible, or would you prefer something else?  
+> 
+> 
+> Such a 'broken_rdists' mask is exactly what I have in mind, just
+> keeping it private to the GIC driver, and not expose it anywhere else.
+> You can then fail the hotplug event early, and avoid changing the
+> global masks from within the GIC driver. At least, we don't mess with
+> the internals of the kernel, and the CPU is properly marked as dead
+> (that mechanism should already work).
+> 
+> I'd expect the handling side to look like this (will not compile, but
+> you'll get the idea):
+Hi Marc,
 
-diff --git a/drivers/cpufreq/freq_table.c b/drivers/cpufreq/freq_table.c
-index c17dc51a5a02..9b9568023f3c 100644
---- a/drivers/cpufreq/freq_table.c
-+++ b/drivers/cpufreq/freq_table.c
-@@ -194,7 +194,7 @@ int cpufreq_table_index_unsorted(struct cpufreq_policy *policy,
- 	}
- 	if (optimal.driver_data > i) {
- 		if (suboptimal.driver_data > i) {
--			WARN(1, "Invalid frequency table: %d\n", policy->cpu);
-+			WARN(1, "Invalid frequency table: %u\n", policy->cpu);
- 			return 0;
- 		}
+In general this looks good - but...
 
-@@ -254,7 +254,7 @@ static ssize_t show_available_freqs(struct cpufreq_policy *policy, char *buf,
- 		if (show_boost ^ (pos->flags & CPUFREQ_BOOST_FREQ))
- 			continue;
+I haven't gotten to the bottom of why yet (and it might be a side
+effect of how I hacked the test by lying in minimal fashion and
+just frigging the MADT read functions) but the hotplug flow is only getting
+as far as calling __cpu_up() before it seems to enter an infinite loop.
+That is it never gets far enough to fail this test.
 
--		count += sprintf(&buf[count], "%d ", pos->frequency);
-+		count += sprintf(&buf[count], "%u ", pos->frequency);
- 	}
- 	count += sprintf(&buf[count], "\n");
+Getting stuck in a psci cpu_on call.  I'm guessing something that
+we didn't get to in the earlier gicv3 calls before bailing out is blocking that?
+Looks like it gets to
+SMCCC smc
+and is never seen again.
 
---
-2.25.1
+Any ideas on where to look?  The one advantage so far of the higher level
+approach is we never tried the hotplug callbacks at all so avoided hitting
+that call.  One (little bit horrible) solution that might avoid this would 
+be to add another cpuhp state very early on and fail at that stage.
+I'm not keen on doing that without a better explanation than I have so far!
+
+Thanks,
+
+J
+
+ 
+> diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+> index 6fb276504bcc..e8f02bfd0e21 100644
+> --- a/drivers/irqchip/irq-gic-v3.c
+> +++ b/drivers/irqchip/irq-gic-v3.c
+> @@ -1009,6 +1009,9 @@ static int __gic_populate_rdist(struct redist_region *region, void __iomem *ptr)
+>  	u64 typer;
+>  	u32 aff;
+>  
+> +	if (cpumask_test_cpu(smp_processor_id(), &broken_rdists))
+> +		return 1;
+> +
+>  	/*
+>  	 * Convert affinity to a 32bit value that can be matched to
+>  	 * GICR_TYPER bits [63:32].
+> @@ -1260,14 +1263,15 @@ static int gic_dist_supports_lpis(void)
+>  		!gicv3_nolpi);
+>  }
+>  
+> -static void gic_cpu_init(void)
+> +static int gic_cpu_init(void)
+>  {
+>  	void __iomem *rbase;
+> -	int i;
+> +	int ret, i;
+>  
+>  	/* Register ourselves with the rest of the world */
+> -	if (gic_populate_rdist())
+> -		return;
+> +	ret = gic_populate_rdist();
+> +	if (ret)
+> +		return ret;
+>  
+>  	gic_enable_redist(true);
+>  
+> @@ -1286,6 +1290,8 @@ static void gic_cpu_init(void)
+>  
+>  	/* initialise system registers */
+>  	gic_cpu_sys_reg_init();
+> +
+> +	return 0;
+>  }
+>  
+>  #ifdef CONFIG_SMP
+> @@ -1295,7 +1301,11 @@ static void gic_cpu_init(void)
+>  
+>  static int gic_starting_cpu(unsigned int cpu)
+>  {
+> -	gic_cpu_init();
+> +	int ret;
+> +
+> +	ret = gic_cpu_init();
+> +	if (ret)
+> +		return ret;
+>  
+>  	if (gic_dist_supports_lpis())
+>  		its_cpu_init();
+> 
+> But the question is: do you rely on these masks having been
+> "corrected" anywhere else?
+> 
+> Thanks,
+> 
+> 	M.
+> 
+
 
