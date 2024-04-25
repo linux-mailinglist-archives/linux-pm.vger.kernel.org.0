@@ -1,86 +1,132 @@
-Return-Path: <linux-pm+bounces-7084-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7085-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A48E8B233C
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 15:56:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64F088B2343
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 15:57:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AECE8B25A6D
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 13:56:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1A5501F2202C
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 13:57:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE885149DE7;
-	Thu, 25 Apr 2024 13:56:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A65E149DE7;
+	Thu, 25 Apr 2024 13:57:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=me.com header.i=@me.com header.b="ghmM1RiL"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="Atb2e8oS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from pv50p00im-ztbu10011701.me.com (pv50p00im-ztbu10011701.me.com [17.58.6.53])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775D0149DE0
-	for <linux-pm@vger.kernel.org>; Thu, 25 Apr 2024 13:56:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65DFA17565;
+	Thu, 25 Apr 2024 13:57:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714053393; cv=none; b=SMT4FxfPCDCtrEkOBaKusYr+K469ayPiyZlbulPF0by+aqCj9M1aheUqYHZdCfA8oJ5FAXgqlPKqQpjZ5DkyzUls+DbZxDRQ6kAP34FX+AJkPjju2l08kvKFvzDtGiq9vK+9du7RGG2zkkxETlq7s4LRg+6Sa2CZ5UiQqHKhUHE=
+	t=1714053459; cv=none; b=tAvh8rJRB6xrZYWMf6Ivq6FTwGw9KpjwvBfP7IThTzPla0fGaO3Ajybh3MeGP0vFiuG47oz9G5xGyUkVbiIu76ZUNRK7VdF5gUe7MrowQxTQo9xuK/ekU6akY7oNeOkfgqP+GbHB+wyShYWuADErUXFhVG1faWl+CijQ7IqrADw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714053393; c=relaxed/simple;
-	bh=7K+Nf6VsdXl6zyASN0NLSdOXvxm4osmhlY7e+F5gksk=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=bjNWehjImoKQWylwqohnGfieumvTmZLfw/t5mXp8uCzFtfBWz+iEqFKqE4D5M8Rx4xpN36bmAp11sO5vosPtcVmlXdXIIEu8mvecM0jLcCLRgWNzH6Dct32iZyarDlfi8agLSDBl9wMDPF9CiMwqqwGtQJKvq8aobSYoRywfdTg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=me.com; spf=pass smtp.mailfrom=me.com; dkim=pass (2048-bit key) header.d=me.com header.i=@me.com header.b=ghmM1RiL; arc=none smtp.client-ip=17.58.6.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=me.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=me.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-	t=1714053391; bh=7K+Nf6VsdXl6zyASN0NLSdOXvxm4osmhlY7e+F5gksk=;
-	h=Content-Type:Mime-Version:Subject:From:Date:Message-Id:To;
-	b=ghmM1RiL2wniVl79VbV1vyEX1i2eISohkaW6uB7INhH2gAcI2m7Bi8orwDpdEN1EZ
-	 OBGDd8eWAk/Um6g+jUVwhE9jLGNBP6MCc4gjoptQDRsSu9QPT+rS+4urTXPlLTkr8D
-	 rHTc4F3MAAhSMhmUOTmk+2GpdYtFFrnYS+/QsnX3fIOV+ywk+tGbDhnesNCeUBWAkK
-	 HylvAAbN8bW5H5kGjjhlJXE8EOCVUzpF/34OPbNDYdGhC/nwsir8GseAGXDyBFbDNg
-	 +lq9xbIrzXF8909SK1oh2Fb7xYKRtEpD/4Y0I6YwUPiY2V3hX1zZnbvbxezDbaH/Tf
-	 s7wFz9acIhD8Q==
-Received: from smtpclient.apple (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
-	by pv50p00im-ztbu10011701.me.com (Postfix) with ESMTPSA id 9B32A74029D;
-	Thu, 25 Apr 2024 13:56:29 +0000 (UTC)
-Content-Type: text/plain;
-	charset=us-ascii
+	s=arc-20240116; t=1714053459; c=relaxed/simple;
+	bh=md7mVEfndKgd7O96TkmoVOmif2jnxJJjZ8nDmaFy5HA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Gubh728yFrlE4YFz/lU8Fv6VpL/DpvxkAGTTo/7K0WeO5HVsnRu9Qk/Ak+eNQfFU7DWHWqasSYs5qvrCfdGhxfSFlAAdpmi4Qie/deMgKNr6VHbDe67Tcn7r+Q894Q1jo2GujN1lRgj6PjkTUiGduBu6FkFPPe9sH0jY5scYdyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=Atb2e8oS reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
+ id 5d17d3ac70c195b5; Thu, 25 Apr 2024 15:57:28 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 17B8C66DF20;
+	Thu, 25 Apr 2024 15:57:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1714053448;
+	bh=md7mVEfndKgd7O96TkmoVOmif2jnxJJjZ8nDmaFy5HA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=Atb2e8oSdOIO1v499cHwBlzv8QMeWj8u2qYdDVdsTpGUgkcRO9TQuHj2LlIqN9qZ9
+	 iyZ6HEfddJIdfCuQwzpLyP85rCSeMqmo5eZazLlgDT33TJvGzUT9sJPP6zOxmEn8O2
+	 F7AlkxQcC7bq4vrxNbuac8F3pcT1utgsh+PSnXj8WXyKYU/r6ilbAgbJLhumCRfA1d
+	 XynsOiIMykJ4vLasOQ/SAjUeFrtg5/buo0+pJF0rO2FZFjfLbMTPE9D1bW4C0q6vGG
+	 V1AAZhh88oYNdkNyDofmWlJQ+w88pumJbsL6OyASds1I51DnQQM57Qkxep4uDlUTh1
+	 EDWALzr27f31w==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Lukasz Luba <lukasz.luba@arm.com>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>
+Subject:
+ [PATCH v1 3/3] thermal/debugfs: Prevent use-after-free from occurring after
+ cdev removal
+Date: Thu, 25 Apr 2024 15:57:12 +0200
+Message-ID: <13503555.uLZWGnKmhe@kreacher>
+In-Reply-To: <12427744.O9o76ZdvQC@kreacher>
+References: <12427744.O9o76ZdvQC@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.500.171.1.1\))
-Subject: Re: cpufreq: Fix printing large cpu and cpufreq number
-From: Thorsten Blum <thorsten.blum@me.com>
-In-Reply-To: <20240425110017.75238-1-joshua.yeong@starfivetech.com>
-Date: Thu, 25 Apr 2024 15:56:16 +0200
-Cc: rafael@kernel.org,
- viresh.kumar@linaro.org,
- linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <15DCD462-940A-487C-9780-5B87BF0B3CE1@me.com>
-References: <20240425110017.75238-1-joshua.yeong@starfivetech.com>
-To: Joshua Yeong <joshua.yeong@starfivetech.com>
-X-Mailer: Apple Mail (2.3774.500.171.1.1)
-X-Proofpoint-ORIG-GUID: hMIv8pj21TZYbU91GXcnwnG2S3Wl4IZ0
-X-Proofpoint-GUID: hMIv8pj21TZYbU91GXcnwnG2S3Wl4IZ0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-04-25_13,2024-04-25_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0 phishscore=0
- clxscore=1011 malwarescore=0 adultscore=0 mlxlogscore=983 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2308100000 definitions=main-2404250102
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudeljedgjedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehrrghf
+ rggvlheskhgvrhhnvghlrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 
-On 25. Apr 2024, at 13:00, Joshua Yeong <joshua.yeong@starfivetech.com> =
-wrote:
->=20
-> Fix printing negative number when CPU frequency
-> with large number.
->=20
-> Signed-off-by: Joshua Yeong <joshua.yeong@starfivetech.com>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Reviewed-by: Thorsten Blum <thorsten.blum@toblux.com>=
+Since thermal_debug_cdev_remove() does not run under cdev->lock, it can
+run in parallel with thermal_debug_cdev_state_update() and it may free
+the struct thermal_debugfs object used by the latter after it has been
+checked against NULL.
+
+If that happens, thermal_debug_cdev_state_update() will access memory
+that has been freed already causing the kernel to crash.
+
+Address this by using cdev->lock in thermal_debug_cdev_remove() around
+the cdev->debugfs value check (in case the same cdev is removed at the
+same time in two differet threads) and its reset to NULL.
+
+Fixes: 755113d76786 ("thermal/debugfs: Add thermal cooling device debugfs information")
+Cc :6.8+ <stable@vger.kernel.org> # 6.8+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/thermal/thermal_debugfs.c |   10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+Index: linux-pm/drivers/thermal/thermal_debugfs.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_debugfs.c
++++ linux-pm/drivers/thermal/thermal_debugfs.c
+@@ -503,15 +503,21 @@ void thermal_debug_cdev_add(struct therm
+  */
+ void thermal_debug_cdev_remove(struct thermal_cooling_device *cdev)
+ {
+-	struct thermal_debugfs *thermal_dbg = cdev->debugfs;
++	struct thermal_debugfs *thermal_dbg;
+ 
++	mutex_lock(&cdev->lock);
++
++	thermal_dbg = cdev->debugfs;
+ 	if (!thermal_dbg)
+ 		return;
+ 
++	cdev->debugfs = NULL;
++
++	mutex_unlock(&cdev->lock);
++
+ 	mutex_lock(&thermal_dbg->lock);
+ 
+ 	thermal_debugfs_cdev_clear(&thermal_dbg->cdev_dbg);
+-	cdev->debugfs = NULL;
+ 
+ 	mutex_unlock(&thermal_dbg->lock);
+ 
+
+
+
 
