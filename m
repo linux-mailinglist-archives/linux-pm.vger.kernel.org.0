@@ -1,123 +1,105 @@
-Return-Path: <linux-pm+bounces-7045-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7046-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FAEE8B1959
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 05:18:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AC9C8B1997
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 05:36:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DEAA0282429
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 03:18:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B96F61F2183B
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 03:36:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D287E1B5A4;
-	Thu, 25 Apr 2024 03:18:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1ACB17550;
+	Thu, 25 Apr 2024 03:36:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="QSiXbH6h"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XwK0NTxB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4554721342;
-	Thu, 25 Apr 2024 03:18:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE0572943C
+	for <linux-pm@vger.kernel.org>; Thu, 25 Apr 2024 03:36:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714015133; cv=none; b=PpU9j9+bq+QRXzrFJr6yKqKJCSJtij0rO199oa711M9caRsjXHrTbLpftLQPvmPM+Wjit7Ko0ck3a7nFa/iNJKSbwGD+i9mLeli5d2MGLA2OKHhx787LtrOV/p2zIWWh4PKWHOerMt1+gKWzounqIMRy+Br+pXLWiypn1wQCWtw=
+	t=1714016212; cv=none; b=KFuJjBTdFRmVgLe9wRE9NOd/8EkaIH9FM4zSBNXktqbGITeMg2C1nKtYLMiZlK2/b+VkjYqD6RVSwnGry5bQi4WXRJ3qGAj4eK39I/LqKjUn0y36wxoyZFKEQqLvGvhuDNmdEbXC4vlYJeGQNzRZSEL+sG6/CYixdviHWNgr7yU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714015133; c=relaxed/simple;
-	bh=fVNg/LfDcq10widsGMVfZ6pCi/NJQcnNmTSeXtJkHJ8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=IwXtETSNxJCfXuXSXMv5/S/X0Erl20wxCxv2Kq3K4iMzzwhKctIJTb3s/rXMZuYhyS5Rv7euHwBPMGW8bQE5x74mja3bUwv+yDKE41osAURb5oVi4bhW1s9I1VWm0qkpKEAz9xhiCjQshrtFPplpCLh5Cl9hrafV6FT0ehl8jZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=QSiXbH6h; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43P2iK6h002152;
-	Thu, 25 Apr 2024 03:18:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=9DbiKCqZCWGi5s3l+CklUzC6YNSKpD3osXoU87041r0=; b=QS
-	iXbH6hKJGUNNP7ltV/VAys9QLAYL8gm6XAAVWGiw6LgaTxfmqstKBzbwlMXhpjqg
-	yzH+L1pinmZV7WYrLSRkqd5nlMX+Oh8DcyEE4/O6khf3TAZFlHr8W+24+9uQ3fhO
-	44zFB4yOVKyvUfKqrkYmgZsu2W4OYUS17QvS7gcqGfnpnzmd/ntHSpi2hbs3DmQt
-	vlmaMGz4RVkhOOTGdKtdkXFgvBY+U0dApi8UFV6jWpdx4a2zq/J3HCgX7vAPjXNh
-	CNuFWkfsQPM8f3S4tL6n2rGlwFjly+qxM4JFUKd2ci//AEESAp5EWEOcOwN86OFG
-	oA/v7+pUqSgusqIM7KxA==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xqengg2e6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 25 Apr 2024 03:18:48 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43P3Il4o028406
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 25 Apr 2024 03:18:47 GMT
-Received: from [10.239.132.204] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 24 Apr
- 2024 20:18:44 -0700
-Message-ID: <9b062d5c-f495-4fc3-8751-6efbea8ad11f@quicinc.com>
-Date: Thu, 25 Apr 2024 11:18:41 +0800
+	s=arc-20240116; t=1714016212; c=relaxed/simple;
+	bh=Yb8YcX2X6xucKUl0217/JKy+FombzZRwFIbe/sVg2yY=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=QBUk/OKSIyUN/g1Yl42kCljvFUozUffP1NjRHVuji5dquvujDLd6fwQB/u8W5xgXfhDkzk9rmu3yNMXLaAVtSrDhwtg5dkymh+NLXAjzaa33+t00ckDf4iVXBDcSPZo6vJrJIiNUlxPI3UQCn5hTQ362aooZJyCOeTjUM8ZGpwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XwK0NTxB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5F069C2BD10
+	for <linux-pm@vger.kernel.org>; Thu, 25 Apr 2024 03:36:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714016212;
+	bh=Yb8YcX2X6xucKUl0217/JKy+FombzZRwFIbe/sVg2yY=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=XwK0NTxBi6H8KD3HPrrn0PGCLcGAtNthG30uODA4AkyrFvGAs14yRNcY8olhBRcPZ
+	 scLC9usiNhVR9fe43rPlmy8e+oAsi7PRRL8ISiKJpLpeq+NKoGPpnYTQE+4+l1SblF
+	 WFge7pD8ENgCxSGmTkamd+osTkCC6n1xyz58J29XoP5B9I3wKO/rV5e8e751qOitMy
+	 Pdfy9Bf68EbgLhWcq7ofwpDdDutink82/4NUMho/RFUV4gLVVkzGp8ym6tVOA3tGNa
+	 CKMgjQqHRUcmTdp721quVJK30Hezb44VJirVFIwpn2QfFSeXDnEJD7+jbKmiK6qO6r
+	 P7iZ1S5UC3Bzg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 413A1C04222; Thu, 25 Apr 2024 03:36:52 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 218705] amd_pstate fails to load on AMD 5950x with Asus ROG
+ CROSSHAIR VIII DARK HERO x570
+Date: Thu, 25 Apr 2024 03:36:51 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: Perry.Yuan@amd.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218705-137361-08aX5RSJ6j@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218705-137361@https.bugzilla.kernel.org/>
+References: <bug-218705-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] arm64: dts: qcom: sm4450: Add cpufreq support
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC: <rafael@kernel.org>, <viresh.kumar@linaro.org>, <robh@kernel.org>,
-        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <manivannan.sadhasivam@linaro.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-References: <20240424101503.635364-1-quic_tengfan@quicinc.com>
- <20240424101503.635364-3-quic_tengfan@quicinc.com>
- <CAA8EJpqGub3LuFPbwcA-MTYN2kY=94YXe=T3-mewYzxgcF-ZMQ@mail.gmail.com>
-From: Tengfei Fan <quic_tengfan@quicinc.com>
-In-Reply-To: <CAA8EJpqGub3LuFPbwcA-MTYN2kY=94YXe=T3-mewYzxgcF-ZMQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: IKoS-Ms86BjY197NdgngmndHRy3fBWjJ
-X-Proofpoint-ORIG-GUID: IKoS-Ms86BjY197NdgngmndHRy3fBWjJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-04-25_02,2024-04-24_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
- mlxlogscore=725 phishscore=0 malwarescore=0 mlxscore=0 impostorscore=0
- lowpriorityscore=0 adultscore=0 priorityscore=1501 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2404010003 definitions=main-2404250023
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218705
 
+--- Comment #6 from Perry Yuan(AMD) (Perry.Yuan@amd.com) ---
+I have confirmed that the CPPC capabilities are valid to enable pstate driv=
+er,
 
-On 4/25/2024 7:41 AM, Dmitry Baryshkov wrote:
-> On Wed, 24 Apr 2024 at 13:16, Tengfei Fan <quic_tengfan@quicinc.com> wrote:
->>
->> Add a description of a SM4450 cpufreq-epss controller and references to
->> it from CPU nodes.
->>
->> Signed-off-by: Tengfei Fan <quic_tengfan@quicinc.com>
->> ---
->>   arch/arm64/boot/dts/qcom/sm4450.dtsi | 29 ++++++++++++++++++++++++++++
->>   1 file changed, 29 insertions(+)
-> 
-> With the next patch being squashed in:
-> 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> 
+1) sudo nano /etc/default/grub
+2) add ``amd_pstate.dyndbg=3D+p`` to kernel command line.
+3) sudo update-grub
+4) sudo reboot
 
+then share below logs to me.
 
-Clock support patch[PATCH 3/3] will be squashed in this patch in the new 
-version patch series.
+# dmesg
+# lscpu -ae
+# cd /sys/devices/system/cpu/cpu0/cpufreq
+# grep -R .
 
+Perry.
 
--- 
-Thx and BRs,
-Tengfei Fan
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
 
