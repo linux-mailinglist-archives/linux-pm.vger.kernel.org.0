@@ -1,313 +1,126 @@
-Return-Path: <linux-pm+bounces-7113-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7114-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A50118B26E4
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 18:55:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 871758B2724
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 19:06:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5818E28537F
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 16:55:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A724DB21823
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 17:06:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 149EB14D6E6;
-	Thu, 25 Apr 2024 16:55:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AE1E14D6FB;
+	Thu, 25 Apr 2024 17:06:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gd9R/kHd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3982D131746;
-	Thu, 25 Apr 2024 16:55:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 641F22B9D9;
+	Thu, 25 Apr 2024 17:06:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714064136; cv=none; b=sKFNPQ+NmhcjdkuP62mq76Lcfd39SM8+3PtDdAp42/JFGKkdFgiRvi7jQYbeLel3My7I8e1xRN9rVbi570T9Xuu3V8uRk1YulL9RjEnw0bCwfPsbB9SxetSlQ40SYQ8ljlrb33RCiUFSYKsaURHtABZ/8WoTtsjgfO7C0Q7CVIY=
+	t=1714064797; cv=none; b=oJAoxatFBtSBlMVTsvo+GAljElABvLeqCCEQzaV0RFSwXLQ3t35Ps3Aa2W8PSTdU3+ZNl0aFnPdoTKgDY9rMgNiyOzon3YV3leKHwTG+ASEB5JNyAiH0XYJ1qz+gOy19vlv859W6XM/6foFEPp1YUeHgUmauxNhXPCIY/mpPR1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714064136; c=relaxed/simple;
-	bh=Wv+cmZ5IUPEpcmXXIlZlfrK9jeGJtrDRrdh31P+6h9U=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sbziDiixjNWlesBeRuWW7oAr23yqeTlkDTnd60KIQ/kL8nwTHccRazXVatCRaPrM3bFHKPn+XbmghDemofpYzNk+8iub3dDC/ZFP8O3kK3dn86S5nVBogUgztTWq7JrnuaRNttRRE/gr3em984Ec/eIhiikOLFM3XZHymyLVfkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VQMNv1Wtbz6K6H3;
-	Fri, 26 Apr 2024 00:53:03 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 274411400DB;
-	Fri, 26 Apr 2024 00:55:29 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Thu, 25 Apr
- 2024 17:55:28 +0100
-Date: Thu, 25 Apr 2024 17:55:27 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Marc Zyngier <maz@kernel.org>, <linuxarm@huawei.com>,
-	<linuxarm@huawei.com>
-CC: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
-	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
-	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-	<x86@kernel.org>, Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki"
-	<rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, "James Morse"
-	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, Jean-Philippe
- Brucker <jean-philippe@linaro.org>, Catalin Marinas
-	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Ingo Molnar
-	<mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
-	<dave.hansen@linux.intel.com>, <justin.he@arm.com>, <jianyong.wu@arm.com>
-Subject: Re: [PATCH v7 11/16] irqchip/gic-v3: Add support for ACPI's
- disabled but 'online capable' CPUs
-Message-ID: <20240425175502.00007def@huawei.com>
-In-Reply-To: <20240425155726.000063f7@huawei.com>
-References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com>
-	<20240418135412.14730-12-Jonathan.Cameron@huawei.com>
-	<20240422114020.0000294f@Huawei.com>
-	<87plugthim.wl-maz@kernel.org>
-	<20240424135438.00001ffc@huawei.com>
-	<86il06rd19.wl-maz@kernel.org>
-	<20240425133150.000009fa@Huawei.com>
-	<20240425155726.000063f7@huawei.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1714064797; c=relaxed/simple;
+	bh=HDbhBCiqnB8FHeOVW16Nyk3NGHSsOYB/sKeG+0xp0KQ=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=DDtn8T8I+pTNlv2TGnbutP2mBlkKRkP8o2gA60ZOm1Ge59NLK/vvyxgni3kQ8x9Gsa4pPWUlPIq8hhBPlpgv7bINMKf3dC2i5HI4YXMd6kLx03ayLJ0kntihsyZwwptLZ0jKq9hyoGl1YRqg75pJMrEAS98nEhF6ARf/8ea90EI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gd9R/kHd; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714064796; x=1745600796;
+  h=from:to:cc:subject:date:message-id;
+  bh=HDbhBCiqnB8FHeOVW16Nyk3NGHSsOYB/sKeG+0xp0KQ=;
+  b=Gd9R/kHdt0uKt0EQ1X8TPoAE6GuGP9LuJ4X20x4yxnTosEVyhgyS6pY/
+   RA9RZyml1Rlw8qG+imxLuDzfSdZzyRRKfh46KWD77PxOVYWZ5y1vXLxJ/
+   xRFzw8oSNvkVQDl0SHZg0iPCn+hVlr5vrTzuLl/QP0gkrud04AG0IsjM+
+   fimtIKtlCYFh/ie5e/MYKpAKNX67CMMl8JMmu1FRckHVBrDUSXD5kFAxF
+   tOmTWKv5a2WKZESljZ14tIorr3UIH7vvJuUDV9nPJ6aGioGiZCn/CeeSt
+   A1Sib/IonjRGNXtqL+qrlFXQTA2blmkNaOTzr4ezzqJHTTW4Up6nteBOg
+   g==;
+X-CSE-ConnectionGUID: harf3TzjQb2h31cDS6XPBA==
+X-CSE-MsgGUID: TDSJkncOSJSAxaERa8Fohw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11055"; a="27225295"
+X-IronPort-AV: E=Sophos;i="6.07,230,1708416000"; 
+   d="scan'208";a="27225295"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2024 10:06:35 -0700
+X-CSE-ConnectionGUID: 64+52qVwSeSh60HeTt8IrQ==
+X-CSE-MsgGUID: DUqBEeidSGaPip9kNYEmag==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,230,1708416000"; 
+   d="scan'208";a="25548553"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orviesa006.jf.intel.com with ESMTP; 25 Apr 2024 10:06:34 -0700
+From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	linux-pm@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Ricardo Neri <ricardo.neri@intel.com>
+Subject: [PATCH v2 0/3] drivers: thermal/hwmon: intel: Use model-specific bitmasks for temperature registers
+Date: Thu, 25 Apr 2024 10:13:08 -0700
+Message-Id: <20240425171311.19519-1-ricardo.neri-calderon@linux.intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Thu, 25 Apr 2024 16:00:17 +0100
-Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+Hi,
 
-> On Thu, 25 Apr 2024 13:31:50 +0100
-> Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
-> 
-> > On Wed, 24 Apr 2024 16:33:22 +0100
-> > Marc Zyngier <maz@kernel.org> wrote:
-> >   
-> > > On Wed, 24 Apr 2024 13:54:38 +0100,
-> > > Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:    
-> > > > 
-> > > > On Tue, 23 Apr 2024 13:01:21 +0100
-> > > > Marc Zyngier <maz@kernel.org> wrote:
-> > > >       
-> > > > > On Mon, 22 Apr 2024 11:40:20 +0100,
-> > > > > Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:      
-> > > > > > 
-> > > > > > On Thu, 18 Apr 2024 14:54:07 +0100
-> > > > > > Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:      
-> > > 
-> > > [...]
-> > >     
-> > > > > >         
-> > > > > > > +	/*
-> > > > > > > +	 * Capable but disabled CPUs can be brought online later. What about
-> > > > > > > +	 * the redistributor? ACPI doesn't want to say!
-> > > > > > > +	 * Virtual hotplug systems can use the MADT's "always-on" GICR entries.
-> > > > > > > +	 * Otherwise, prevent such CPUs from being brought online.
-> > > > > > > +	 */
-> > > > > > > +	if (!(gicc->flags & ACPI_MADT_ENABLED)) {
-> > > > > > > +		pr_warn_once("CPU %u's redistributor is inaccessible: this CPU can't be brought online\n", cpu);
-> > > > > > > +		set_cpu_present(cpu, false);
-> > > > > > > +		set_cpu_possible(cpu, false);
-> > > > > > > +		return 0;
-> > > > > > > +	}        
-> > > > > 
-> > > > > It seems dangerous to clear those this late in the game, given how
-> > > > > disconnected from the architecture code this is. Are we sure that
-> > > > > nothing has sampled these cpumasks beforehand?      
-> > > > 
-> > > > Hi Marc,
-> > > > 
-> > > > Any firmware that does this is being considered as buggy already
-> > > > but given it is firmware and the spec doesn't say much about this,
-> > > > there is always the possibility.      
-> > > 
-> > > There is no shortage of broken firmware out there, and I expect this
-> > > trend to progress.
-> > >     
-> > > > Not much happens between the point where these are setup and
-> > > > the point where the the gic inits and this code runs, but even if careful
-> > > > review showed it was fine today, it will be fragile to future changes.
-> > > > 
-> > > > I'm not sure there is a huge disadvantage for such broken firmware in
-> > > > clearing these masks from the point of view of what is used throughout
-> > > > the rest of the kernel. Here I think we are just looking to prevent the CPU
-> > > > being onlined later.      
-> > > 
-> > > I totally agree on the goal, I simply question the way you get to it.
-> > >     
-> > > > 
-> > > > We could add a set_cpu_broken() with appropriate mask.
-> > > > Given this is very arm64 specific I'm not sure Rafael will be keen on
-> > > > us checking such a mask in the generic ACPI code, but we could check it in
-> > > > arch_register_cpu() and just not register the cpu if it matches.
-> > > > That will cover the vCPU hotplug case.
-> > > >
-> > > > Does that sounds sensible, or would you prefer something else?      
-> > > 
-> > > 
-> > > Such a 'broken_rdists' mask is exactly what I have in mind, just
-> > > keeping it private to the GIC driver, and not expose it anywhere else.
-> > > You can then fail the hotplug event early, and avoid changing the
-> > > global masks from within the GIC driver. At least, we don't mess with
-> > > the internals of the kernel, and the CPU is properly marked as dead
-> > > (that mechanism should already work).
-> > > 
-> > > I'd expect the handling side to look like this (will not compile, but
-> > > you'll get the idea):    
-> > Hi Marc,
-> > 
-> > In general this looks good - but...
-> > 
-> > I haven't gotten to the bottom of why yet (and it might be a side
-> > effect of how I hacked the test by lying in minimal fashion and
-> > just frigging the MADT read functions) but the hotplug flow is only getting
-> > as far as calling __cpu_up() before it seems to enter an infinite loop.
-> > That is it never gets far enough to fail this test.
-> > 
-> > Getting stuck in a psci cpu_on call.  I'm guessing something that
-> > we didn't get to in the earlier gicv3 calls before bailing out is blocking that?
-> > Looks like it gets to
-> > SMCCC smc
-> > and is never seen again.
-> > 
-> > Any ideas on where to look?  The one advantage so far of the higher level
-> > approach is we never tried the hotplug callbacks at all so avoided hitting
-> > that call.  One (little bit horrible) solution that might avoid this would 
-> > be to add another cpuhp state very early on and fail at that stage.
-> > I'm not keen on doing that without a better explanation than I have so far!  
-> 
-> Whilst it still doesn't work I suspect I'm loosing ability to print to the console
-> between that point and somewhat later and real problem is elsewhere.
+Here is v2 of the patchset to use model-specific bitmasks to read TCC
+offset and the digital temperature readout of IA32_[PACKAGE]_THERM_STATUS.
 
-Hi again,
+You can read the cover letter of v1 here [1] for details.
 
-Found it I think.  cpuhp calls between cpu:bringup and ap:online 
-arm made from notify_cpu_starting() are clearly marked as nofail with a comment.
-STARTING must not fail!
+Changes since v1:
+ * Dropped dependency on CONFIG_INTEL_TCC for the coretemp driver.
+   Instead, extend the bitmask to 0xff to accommodate recent processors.
+   (Bit 23 of IA32_[PACKAGE]_THERM_STATUS is likely to be zero in less
+   recent processors.)
+ * Renamed TCC_FAM6_MODEL_TEMP_MASKS as TCC_MODEL_TEMP_MASKS.
+ * Renamed get_tcc_offset_mask() as intel_tcc_get_offset_mask().
+ * Do not export intel_tcc_get_temp_mask() as it is no longer used
+   outside intel_tcc.c
+ * Dropped stub functions for digital temperature readout and TCC
+   offset. They are not needed as users select CONFIG_INTEL_TCC.
 
-https://elixir.bootlin.com/linux/latest/source/kernel/cpu.c#L1642
+I have tested these patches on Alder Lake, Meteor Lake, and Grand Ridge
+systems.
 
-Whilst I have no immediate idea why that comment is there it is pretty strong
-argument against trying to have the CPUHP_AP_IRQ_GIC_STARTING callback fail
-and expecting it to carry on working :( 
-There would have been a nice print message, but given I don't appear to have
-a working console after that stage I never see it.
+These patches apply cleanly on top of the `testing` branches of the
+linux-pm and hwmon repositories.
 
-So the best I have yet come up with for this is the option of a new callback registered
-in gic_smp_init()
+Thanks and BR,
+Ricardo
 
-cpuhp_setup_state_nocalls(CPUHP_BP_PREPARE_DYN,
-			  "irqchip/arm/gicv3:checkrdist",
-			  gic_broken_rdist, NULL);
+[1]. https://lore.kernel.org/linux-pm/20240406010416.4821-1-ricardo.neri-calderon@linux.intel.com/
 
-with callback being simply 
+Ricardo Neri (3):
+  thermal: intel: intel_tcc: Add model checks for temperature registers
+  thermal: intel: intel_tcc_cooling: Use a model-specific bitmask for
+    TCC offset
+  hwmon: (coretemp) Extend the bitmask to read temperature to 0xff
 
-static int gic_broken_rdist(unsigned int cpu)
-{
-	if (cpumask_test_cpu(cpu, &broken_rdists))
-		return -EINVAL;
+ drivers/hwmon/coretemp.c                  |   2 +-
+ drivers/thermal/intel/intel_tcc.c         | 177 +++++++++++++++++++++-
+ drivers/thermal/intel/intel_tcc_cooling.c |   2 +-
+ include/linux/intel_tcc.h                 |   1 +
+ 4 files changed, 175 insertions(+), 7 deletions(-)
 
-	return 0;
-}
-
-That gets called cpuhp_up_callbacks() and is allows to fail and roll back the steps.
-
-Not particularly satisfying but keeps the logic confined to the gicv3 driver.
-
-What do you think?
-
-Jonathan
-
-> 
-> Jonathan
-> 
-> > 
-> > Thanks,
-> > 
-> > J
-> > 
-> >    
-> > > diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
-> > > index 6fb276504bcc..e8f02bfd0e21 100644
-> > > --- a/drivers/irqchip/irq-gic-v3.c
-> > > +++ b/drivers/irqchip/irq-gic-v3.c
-> > > @@ -1009,6 +1009,9 @@ static int __gic_populate_rdist(struct redist_region *region, void __iomem *ptr)
-> > >  	u64 typer;
-> > >  	u32 aff;
-> > >  
-> > > +	if (cpumask_test_cpu(smp_processor_id(), &broken_rdists))
-> > > +		return 1;
-> > > +
-> > >  	/*
-> > >  	 * Convert affinity to a 32bit value that can be matched to
-> > >  	 * GICR_TYPER bits [63:32].
-> > > @@ -1260,14 +1263,15 @@ static int gic_dist_supports_lpis(void)
-> > >  		!gicv3_nolpi);
-> > >  }
-> > >  
-> > > -static void gic_cpu_init(void)
-> > > +static int gic_cpu_init(void)
-> > >  {
-> > >  	void __iomem *rbase;
-> > > -	int i;
-> > > +	int ret, i;
-> > >  
-> > >  	/* Register ourselves with the rest of the world */
-> > > -	if (gic_populate_rdist())
-> > > -		return;
-> > > +	ret = gic_populate_rdist();
-> > > +	if (ret)
-> > > +		return ret;
-> > >  
-> > >  	gic_enable_redist(true);
-> > >  
-> > > @@ -1286,6 +1290,8 @@ static void gic_cpu_init(void)
-> > >  
-> > >  	/* initialise system registers */
-> > >  	gic_cpu_sys_reg_init();
-> > > +
-> > > +	return 0;
-> > >  }
-> > >  
-> > >  #ifdef CONFIG_SMP
-> > > @@ -1295,7 +1301,11 @@ static void gic_cpu_init(void)
-> > >  
-> > >  static int gic_starting_cpu(unsigned int cpu)
-> > >  {
-> > > -	gic_cpu_init();
-> > > +	int ret;
-> > > +
-> > > +	ret = gic_cpu_init();
-> > > +	if (ret)
-> > > +		return ret;
-> > >  
-> > >  	if (gic_dist_supports_lpis())
-> > >  		its_cpu_init();
-> > > 
-> > > But the question is: do you rely on these masks having been
-> > > "corrected" anywhere else?
-> > > 
-> > > Thanks,
-> > > 
-> > > 	M.
-> > >     
-> > 
-> > 
-> > _______________________________________________
-> > linux-arm-kernel mailing list
-> > linux-arm-kernel@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel  
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+-- 
+2.34.1
 
 
