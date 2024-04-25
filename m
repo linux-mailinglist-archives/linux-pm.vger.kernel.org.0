@@ -1,133 +1,120 @@
-Return-Path: <linux-pm+bounces-7117-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7118-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 841B28B272C
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 19:07:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38D2E8B27B3
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 19:46:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F6EF286831
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 17:07:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF89C2862B1
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 17:46:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CED014E2F7;
-	Thu, 25 Apr 2024 17:06:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DE1B14EC4A;
+	Thu, 25 Apr 2024 17:46:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LSxMwlMp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lm2h3KA6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D5E214D714;
-	Thu, 25 Apr 2024 17:06:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E353C14D717;
+	Thu, 25 Apr 2024 17:46:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714064799; cv=none; b=Fm6jPfkFJaXqTelfuG3Rmf4AIOwsd2wfM77XwZeL3g0yGDxEiiXz0vsNQPvM5STY91A2cS3P5ZV10qcuZcha9ImAN+XSLVgG0NSWu4Sm58lWuvkIMzDlVUt6wtddOU9mQXP2Th94RusAvi6VnZ7+iWdzbpm3v/Us1rNar9I7gLo=
+	t=1714067163; cv=none; b=FKa2hChUm+IRNjfJfkHRf8Xy6sEgbyuDvz5ewAm6dsYEynPPQyieJzY2O3j/XzRCucLm5zO72fDeyZX3dgjSk+Ida+F+IQWiofVP7P3hVWsLkUUauJ+MMrxizcMgr0O+7wK0V5g3thKaZF7FCPK9gBdf3W+m8tAydt1CXq5WRfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714064799; c=relaxed/simple;
-	bh=viLFxt1UKi1dyqI1aIAAm7qzEwjgBkF02Wj6Ul74LOg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=RoNa5mlnC/5ke5OV8cfeohHFSuz+nxR79A+8JLEI2IeDqG0kIwluF0jNfYHsydeeyz/0Nmntjiw6wBxbFtBwkUd0gqtKENZCoNd8twZcWwgx0KYV8cIgIcS+o7Ps4oTsheHtJY7OCvp/7DXJUTVlv+y7L394xRy5NAc7m7eJVTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LSxMwlMp; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714064798; x=1745600798;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=viLFxt1UKi1dyqI1aIAAm7qzEwjgBkF02Wj6Ul74LOg=;
-  b=LSxMwlMp3HYil4vH0cQSHLnh32fDysNd+SvG0rc25/7r5mzxMFgjKw0L
-   A1vof1YfE4g11mjW1Se/K8itHmCJ0wmDtuk51k7JDvF/+n0M7FJN0Auug
-   1J7BeMsS1p9D+/hX8+/V0bOkMVqgZut42XCPZvqgLFvEsjDZjImp89OQo
-   0zXvurikM0/+5TVPmh1ESrVfXfQ15scWPP8DyHtgRQete0PFwIFHS9Ts2
-   8ru1kDWEB6A1aj9Ld9Ai68JljDlrbzxGTgU5WNSSQKyC6NI5aIUqS8Xgs
-   RyNyFGPSiHvj+A6gHMhXIwuQ17L16kTbeVFy/M075AWx0Mqu1BgV3oriH
-   A==;
-X-CSE-ConnectionGUID: aDu/UwrgRriZbG3ggQqQVA==
-X-CSE-MsgGUID: 2G9wZ0OJQVi9aCapuu/70A==
-X-IronPort-AV: E=McAfee;i="6600,9927,11055"; a="27225313"
-X-IronPort-AV: E=Sophos;i="6.07,230,1708416000"; 
-   d="scan'208";a="27225313"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2024 10:06:36 -0700
-X-CSE-ConnectionGUID: IsLwwQsIR5OEGidYcPIygw==
-X-CSE-MsgGUID: xGxh8KMGSv+CauYiu7SldA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,230,1708416000"; 
-   d="scan'208";a="25548563"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orviesa006.jf.intel.com with ESMTP; 25 Apr 2024 10:06:35 -0700
-From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	linux-pm@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Ricardo Neri <ricardo.neri@intel.com>
-Subject: [PATCH v2 3/3] hwmon: (coretemp) Extend the bitmask to read temperature to 0xff
-Date: Thu, 25 Apr 2024 10:13:11 -0700
-Message-Id: <20240425171311.19519-4-ricardo.neri-calderon@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20240425171311.19519-1-ricardo.neri-calderon@linux.intel.com>
-References: <20240425171311.19519-1-ricardo.neri-calderon@linux.intel.com>
+	s=arc-20240116; t=1714067163; c=relaxed/simple;
+	bh=u6VHbUgWvnhPzuiFRQi98TDJ5VvKfyf8jXNG9LpvSfk=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=esys6tzNqwvxp/tlaF5stZNlAssAxc+nZETDBzle/3eY/0EDsGqlpYkDChTtjT2D28xFv8JrLK/CScM8V0XeepFst6h1haD2eJoLjNtXd8HBZU0RZB+M9tZ75IBt8dXMEyntTZfvRMBQAyMBdhW1jLUz7w9HXlPkKUj3Ct2RSeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lm2h3KA6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F085C113CC;
+	Thu, 25 Apr 2024 17:46:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714067162;
+	bh=u6VHbUgWvnhPzuiFRQi98TDJ5VvKfyf8jXNG9LpvSfk=;
+	h=From:Date:Subject:To:Cc:From;
+	b=lm2h3KA6eG7H6aTF+EDN+6I5AvJMFwua4IrDnXM/AiX2a++dLRWj+4cLoZZo/BWFK
+	 ORlrdMR4QRSwQcfPVpYgnPd88pRmSXWMh4z9I4eG30Cl4uZA0elkggC7TKnp/DedPw
+	 Ffo0qMglbuQw9EOkalxpTLDwB1qdfcAflg93P92dllXmVPlyIbmvfuvCq7snV5I/XL
+	 yd+tJOIYYcvOvLgJa8si4O3OcX5W9DqYbvJXGvOYNz9vNHqbL4ADTQLHFgmRXrYq44
+	 v0uZvW5+IWreNxR96oxn/ftKB7NTw1HUZmvuThWtk3AL3cXw2Tan2KZevN+lJQKJ+L
+	 iD518n9PePSuw==
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-5ac970dded6so324714eaf.0;
+        Thu, 25 Apr 2024 10:46:02 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWPZBIqm86Nh+RROAG6X4ifEk2mp8t+Ki/HXxoAK4z/vRtjgRlf7hkDJro8RzXgY4Reulk7fp1FPued5KrrmWj2t8xGq1zcYaNV+Wsb4tJphkug2ckxxSk6N1HD9aHvHegZgAwShDQ=
+X-Gm-Message-State: AOJu0YwPi/LnYjqfPIZ+xkLMJuCtT6exXqCuAOqxXKqVbx6skFOzvfqF
+	2NOQy8MppyiEvdVT3fDcVtbgLuEivRXP07+gLRm1G7kiknCcYJ0GJ/V9JWxZ/pLkuz6Y+To8R1O
+	qjyhKyO1cjWV6Q8I93BwvrfvHYRQ=
+X-Google-Smtp-Source: AGHT+IGPajutv1KqTb4cDGtBjIo9HYS6TkwwfhsJ6bmXS7u4fTNJDVzpSMpWTqlnm6R6e9kA4jqZO5Rwhr+dhO6715s=
+X-Received: by 2002:a4a:d247:0:b0:5aa:6b2e:36f0 with SMTP id
+ e7-20020a4ad247000000b005aa6b2e36f0mr575585oos.0.1714067161748; Thu, 25 Apr
+ 2024 10:46:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 25 Apr 2024 19:45:50 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iUUmMUo86vBzYJjL4NjoFzpDwD1+c292aP+T++PLv6vQ@mail.gmail.com>
+Message-ID: <CAJZ5v0iUUmMUo86vBzYJjL4NjoFzpDwD1+c292aP+T++PLv6vQ@mail.gmail.com>
+Subject: [GIT PULL] ACPI fixes for v6.9-rc6
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: ACPI Devel Maling List <linux-acpi@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-The Intel Software Development manual defines the temperature digital
-readout as the bits [22:16] of the IA32_[PACKAGE]_THERM_STATUS registers.
-Bit 23 is specified as reserved.
+Hi Linus,
 
-In recent processors, however, the temperature digital readout uses bits
-[23:16]. In those processors, using the bitmask 0x7f would lead to
-incorrect readings if the temperature deviates from TjMax by more than
-127 degrees Celsius.
+Please pull from the tag
 
-Although not guaranteed, bit 23 is likely to be 0 in processors from a few
-generations ago. The temperature reading would still be correct in those
-processors when using a 0xff bitmask.
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ acpi-6.9-rc6
 
-Model-specific provisions can be made for older processors in which bit 23
-is not 0 should the need arise.
+with top-most commit 2ad984673beef7c3dbe9e3d2cabf046f338fdffc
 
-Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
----
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Lukasz Luba <lukasz.luba@arm.com>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: linux-hwmon@vger.kernel.org
-Cc: linux-pm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: stable@vger.kernel.org # v6.7+
----
-Changes since v1:
- * Corrected wrong sentence in commit message. (Rui)
- * Removed dependency on INTEL_TCC. (Guenter)
----
- drivers/hwmon/coretemp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Merge branch 'acpi-cppc'
 
-diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-index 616bd1a5b864..1b9203b20d70 100644
---- a/drivers/hwmon/coretemp.c
-+++ b/drivers/hwmon/coretemp.c
-@@ -411,7 +411,7 @@ static ssize_t show_temp(struct device *dev,
- 		 * Return it instead of reporting an error which doesn't
- 		 * really help at all.
- 		 */
--		tdata->temp = tjmax - ((eax >> 16) & 0x7f) * 1000;
-+		tdata->temp = tjmax - ((eax >> 16) & 0xff) * 1000;
- 		tdata->last_updated = jiffies;
- 	}
- 
--- 
-2.34.1
+on top of commit ed30a4a51bb196781c8058073ea720133a65596f
 
+ Linux 6.9-rc5
+
+to receive ACPI fixes for 6.9-rc6.
+
+These fix three recent regressions, one introduced while enabling a new
+platform firmware feature for power management, and two introduced by
+a recent CPPC library update.
+
+Specifics:
+
+ - Allow two overlapping Low-Power S0 Idle _DSM function sets to be used
+   at the same time (Rafael Wysocki).
+
+ - Fix bit offset computation in MASK_VAL() macro used for applying
+   a bitmask to a new CPPC register value (Jarred White).
+
+ - Fix access width field usage for PCC registers in CPPC (Vanshidhar
+   Konda).
+
+Thanks!
+
+
+---------------
+
+Jarred White (1):
+      ACPI: CPPC: Fix bit_offset shift in MASK_VAL() macro
+
+Rafael J. Wysocki (1):
+      ACPI: PM: s2idle: Evaluate all Low-Power S0 Idle _DSM functions
+
+Vanshidhar Konda (1):
+      ACPI: CPPC: Fix access width used for PCC registers
+
+---------------
+
+ drivers/acpi/cppc_acpi.c  | 57 ++++++++++++++++++++++++++++++++---------------
+ drivers/acpi/x86/s2idle.c |  8 +++----
+ 2 files changed, 42 insertions(+), 23 deletions(-)
 
