@@ -1,175 +1,204 @@
-Return-Path: <linux-pm+bounces-7043-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7044-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 385618B1866
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 03:20:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0760A8B1954
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 05:17:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8F9D2858FF
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 01:20:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B116A285E9A
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Apr 2024 03:17:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC93BBA4D;
-	Thu, 25 Apr 2024 01:20:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 138D81B812;
+	Thu, 25 Apr 2024 03:17:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="XmdDvHNF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47E232599;
-	Thu, 25 Apr 2024 01:20:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CBB22231C;
+	Thu, 25 Apr 2024 03:17:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714008039; cv=none; b=dNu2qFvD27vmNZQ/YdDmPoIN6pw5xO9OtEP2k2HDJQNug7We9yyJOuyX3nUFmwAgwLh5wEPtq2FqWCdKMiDdJjyHaPfbO5x2JhXXuJZ4a/JjBi0V0L3fwELInkqeP1hgEzlYtClvFcWoIevWITwBH7dwNm+7lIqrxv9h7W1UUJQ=
+	t=1714015054; cv=none; b=U2etjc/dLgI5uLS3A2eFVzSChlzpGEetPLEG6bTbC/aDsGqidwHxqBi3GkWFwuzOGph8ZxGsa2Ml9g6yL9OJSZOxrG1Kbt81tBAP2cESr2JO8bNvf9L/VWQX3Mv2EFC+qASJcH8v5iV1cJEoo5QyppKO+Is/otkxUvG+LgJOpT0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714008039; c=relaxed/simple;
-	bh=zL62D1yctwFMaxehdNJzXgBvgzYkbKTm0HHQpGl9Tf0=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=DxW2UP44elLFzkVpoc12CZW/5IAFWUEAoF56oltxkrUByPP7y1zXfIOHWFU3uuppCXRxBFN0SDh/T/SkeT2J4MehYFHVTx9iUa3eJORZyzXzDPiNyaOIK8cdlaESeQ81kPyQn25zQqrpaH8ovXRb8Szzy1ME1SMvy4r8AXGwYYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.252])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4VPydF6KhCztT1D;
-	Thu, 25 Apr 2024 09:17:21 +0800 (CST)
-Received: from dggpemm500002.china.huawei.com (unknown [7.185.36.229])
-	by mail.maildlp.com (Postfix) with ESMTPS id 4C9A7180080;
-	Thu, 25 Apr 2024 09:20:33 +0800 (CST)
-Received: from [10.174.178.247] (10.174.178.247) by
- dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Thu, 25 Apr 2024 09:20:32 +0800
-Subject: Re: [PATCH v7 04/16] ACPI: processor: Move checks and availability of
- acpi_processor earlier
-To: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-CC: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
-	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
-	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-	<x86@kernel.org>, Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki"
-	<rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, James Morse
-	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, Jean-Philippe
- Brucker <jean-philippe@linaro.org>, Catalin Marinas
-	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Ingo Molnar
-	<mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
-	<dave.hansen@linux.intel.com>, <linuxarm@huawei.com>, <justin.he@arm.com>,
-	<jianyong.wu@arm.com>
-References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com>
- <20240418135412.14730-5-Jonathan.Cameron@huawei.com>
- <0cfc4e2d-65ab-0040-2c7d-fad83f32455b@huawei.com>
- <20240424181857.00000e0f@Huawei.com>
-From: Hanjun Guo <guohanjun@huawei.com>
-Message-ID: <56cdbd13-d7c8-4f02-64f0-216b72847e45@huawei.com>
-Date: Thu, 25 Apr 2024 09:20:31 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+	s=arc-20240116; t=1714015054; c=relaxed/simple;
+	bh=AO537cZ2Lsukt3eGqvguYisrw83+HAERh0Uhw6sZGMI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=u6ViUP01LoiFKpaJUVBAL1RZyJLA1kMCXaLV1rUDaWqLcrz85saUEOb4Cq7xNk+0tmEYKewDnjGi5h23UPw7d3PKDNOqjBdNmLTCc2IyQKhN1Ze+QVv6m1IT9EFrfFbjHHwgF0Ou+Nyu2++S6OJG02m4h0KjdHwVJxrSMkI2g48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=XmdDvHNF; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43P2jSY9021922;
+	Thu, 25 Apr 2024 03:17:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=3QXohaXz49mNqLubAbiZtNkrF0Go0ow3pd2pYAISnRs=; b=Xm
+	dDvHNFC+ydcXz5WAMF4On7OGLZOg3wxM7KG6wpoRmK3X7PYVthvu9eC1Rm3ciecF
+	UzX6Ta3n60JXUCbygFV6tv6nvDip25WNF2VAX2n4Jw16U81umHr8MlLpgBSrwQmi
+	n0F19anoE55beUe/q/+aR3z/IQbn6Jx0q4vW63z4doRObk0O+gKCkOVhv1STDjAQ
+	wyM6LmzTSB0kHJla0OS0pKYqEjsW9hlvMvLYEfDxr03uoFD4wjHRJ/9FAOiBU1+g
+	GUqR/V7MHJFwkrGALwx/o8z8FP1OdBddGWchWxh5OJyyKLKdIp71GDE4+ZzGzBwb
+	FP34Zjf9LDvp7uw1TXwQ==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xqenp826g-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 25 Apr 2024 03:17:25 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43P3HOb4017582
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 25 Apr 2024 03:17:24 GMT
+Received: from [10.239.132.204] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 24 Apr
+ 2024 20:17:22 -0700
+Message-ID: <82372421-2d5f-4706-b7a1-30b098c739d6@quicinc.com>
+Date: Thu, 25 Apr 2024 11:17:19 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20240424181857.00000e0f@Huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-GB
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm4450: Supply clock from cpufreq
+ node to CPUs
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: <rafael@kernel.org>, <viresh.kumar@linaro.org>, <robh@kernel.org>,
+        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <manivannan.sadhasivam@linaro.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
+References: <20240424101503.635364-1-quic_tengfan@quicinc.com>
+ <20240424101503.635364-4-quic_tengfan@quicinc.com>
+ <CAA8EJpqiXqsNq0B6EHnqubPcUzwJ0bc0y3rJ4RfrRimKifPf0Q@mail.gmail.com>
+From: Tengfei Fan <quic_tengfan@quicinc.com>
+In-Reply-To: <CAA8EJpqiXqsNq0B6EHnqubPcUzwJ0bc0y3rJ4RfrRimKifPf0Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500002.china.huawei.com (7.185.36.229)
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: VZqXlrQs8WY4X0bpqyaQ-D_cUlZUNXcO
+X-Proofpoint-ORIG-GUID: VZqXlrQs8WY4X0bpqyaQ-D_cUlZUNXcO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-04-25_02,2024-04-24_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ spamscore=0 adultscore=0 phishscore=0 clxscore=1015 bulkscore=0
+ lowpriorityscore=0 impostorscore=0 mlxscore=0 priorityscore=1501
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2404010003 definitions=main-2404250023
 
-On 2024/4/25 1:18, Jonathan Cameron wrote:
-> On Tue, 23 Apr 2024 19:53:34 +0800
-> Hanjun Guo <guohanjun@huawei.com> wrote:
+
+
+On 4/24/2024 7:23 PM, Dmitry Baryshkov wrote:
+> On Wed, 24 Apr 2024 at 13:17, Tengfei Fan <quic_tengfan@quicinc.com> wrote:
+>>
+>> Qualcomm platforms making use of CPUFreq HW Engine (EPSS/OSM) supply
+>> clocks to the CPU cores. But this relationship is not represented in DTS
+>> so far.
+>>
+>> So let's make cpufreq node as the clock provider and CPU nodes as the
+>> consumers. The clock index for each CPU node is based on the frequency
+>> domain index.
 > 
->>> @@ -232,6 +263,7 @@ static int acpi_processor_get_info(struct acpi_device *device)
->>>    	acpi_status status = AE_OK;
->>>    	static int cpu0_initialized;
->>>    	unsigned long long value;
->>> +	int ret;
->>>    
->>>    	acpi_processor_errata();
->>>    
->>> @@ -316,10 +348,12 @@ static int acpi_processor_get_info(struct acpi_device *device)
->>>    	 *  because cpuid <-> apicid mapping is persistent now.
->>>    	 */
->>>    	if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
->>> -		int ret = acpi_processor_hotadd_init(pr);
->>> +		ret = acpi_processor_hotadd_init(pr, device);
->>>    
->>>    		if (ret)
->>> -			return ret;
->>> +			goto err;
->>> +	} else {
->>> +		acpi_processor_set_per_cpu(pr, device);
->>>    	}
->>>    
->>>    	/*
->>> @@ -357,6 +391,10 @@ static int acpi_processor_get_info(struct acpi_device *device)
->>>    		arch_fix_phys_package_id(pr->id, value);
->>>    
->>>    	return 0;
->>> +
->>> +err:
->>> +	per_cpu(processors, pr->id) = NULL;
->>
->> ...
->>
->>> +	return ret;
->>>    }
->>>    
->>>    /*
->>> @@ -365,8 +403,6 @@ static int acpi_processor_get_info(struct acpi_device *device)
->>>     * (cpu_data(cpu)) values, like CPU feature flags, family, model, etc.
->>>     * Such things have to be put in and set up by the processor driver's .probe().
->>>     */
->>> -static DEFINE_PER_CPU(void *, processor_device_array);
->>> -
->>>    static int acpi_processor_add(struct acpi_device *device,
->>>    					const struct acpi_device_id *id)
->>>    {
->>> @@ -395,28 +431,6 @@ static int acpi_processor_add(struct acpi_device *device,
->>>    	if (result) /* Processor is not physically present or unavailable */
->>>    		return 0;
->>>    
->>> -	BUG_ON(pr->id >= nr_cpu_ids);
->>> -
->>> -	/*
->>> -	 * Buggy BIOS check.
->>> -	 * ACPI id of processors can be reported wrongly by the BIOS.
->>> -	 * Don't trust it blindly
->>> -	 */
->>> -	if (per_cpu(processor_device_array, pr->id) != NULL &&
->>> -	    per_cpu(processor_device_array, pr->id) != device) {
->>> -		dev_warn(&device->dev,
->>> -			"BIOS reported wrong ACPI id %d for the processor\n",
->>> -			pr->id);
->>> -		/* Give up, but do not abort the namespace scan. */
->>> -		goto err;
->>> -	}
->>> -	/*
->>> -	 * processor_device_array is not cleared on errors to allow buggy BIOS
->>> -	 * checks.
->>> -	 */
->>> -	per_cpu(processor_device_array, pr->id) = device;
->>> -	per_cpu(processors, pr->id) = pr;
->>
->> Nit: seems we need to remove the duplicated
->> per_cpu(processors, pr->id) = NULL; in acpi_processor_add():
->>
->> --- a/drivers/acpi/acpi_processor.c
->> +++ b/drivers/acpi/acpi_processor.c
->> @@ -446,7 +446,6 @@ static int acpi_processor_add(struct acpi_device
->> *device,
->>     err:
->>           free_cpumask_var(pr->throttling.shared_cpu_map);
->>           device->driver_data = NULL;
->> -       per_cpu(processors, pr->id) = NULL;
+> Is there any reason why this is not a part of the previous patch?
+
+Before, I understood that clock and cpufreq support are two functions, 
+so they were divided into two patches.
+
+I will squash this patch in cpufreq support patch in the new version 
+patch series.
+
 > 
-> I don't follow.  This path is used if processor_get_info() succeeded and
-> we later fail.  I don't see where the the duplication is?
+>>
+>> Signed-off-by: Tengfei Fan <quic_tengfan@quicinc.com>
+>> ---
+>>   arch/arm64/boot/dts/qcom/sm4450.dtsi | 8 ++++++++
+>>   1 file changed, 8 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sm4450.dtsi b/arch/arm64/boot/dts/qcom/sm4450.dtsi
+>> index 92badfd5b0e1..8d75c4f9731c 100644
+>> --- a/arch/arm64/boot/dts/qcom/sm4450.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sm4450.dtsi
+>> @@ -47,6 +47,7 @@ CPU0: cpu@0 {
+>>                          device_type = "cpu";
+>>                          compatible = "arm,cortex-a55";
+>>                          reg = <0x0 0x0>;
+>> +                       clocks = <&cpufreq_hw 0>;
+>>                          enable-method = "psci";
+>>                          next-level-cache = <&L2_0>;
+>>                          power-domains = <&CPU_PD0>;
+>> @@ -72,6 +73,7 @@ CPU1: cpu@100 {
+>>                          device_type = "cpu";
+>>                          compatible = "arm,cortex-a55";
+>>                          reg = <0x0 0x100>;
+>> +                       clocks = <&cpufreq_hw 0>;
+>>                          enable-method = "psci";
+>>                          next-level-cache = <&L2_100>;
+>>                          power-domains = <&CPU_PD0>;
+>> @@ -91,6 +93,7 @@ CPU2: cpu@200 {
+>>                          device_type = "cpu";
+>>                          compatible = "arm,cortex-a55";
+>>                          reg = <0x0 0x200>;
+>> +                       clocks = <&cpufreq_hw 0>;
+>>                          enable-method = "psci";
+>>                          next-level-cache = <&L2_200>;
+>>                          power-domains = <&CPU_PD0>;
+>> @@ -110,6 +113,7 @@ CPU3: cpu@300 {
+>>                          device_type = "cpu";
+>>                          compatible = "arm,cortex-a55";
+>>                          reg = <0x0 0x300>;
+>> +                       clocks = <&cpufreq_hw 0>;
+>>                          enable-method = "psci";
+>>                          next-level-cache = <&L2_300>;
+>>                          power-domains = <&CPU_PD0>;
+>> @@ -129,6 +133,7 @@ CPU4: cpu@400 {
+>>                          device_type = "cpu";
+>>                          compatible = "arm,cortex-a55";
+>>                          reg = <0x0 0x400>;
+>> +                       clocks = <&cpufreq_hw 0>;
+>>                          enable-method = "psci";
+>>                          next-level-cache = <&L2_400>;
+>>                          power-domains = <&CPU_PD0>;
+>> @@ -148,6 +153,7 @@ CPU5: cpu@500 {
+>>                          device_type = "cpu";
+>>                          compatible = "arm,cortex-a55";
+>>                          reg = <0x0 0x500>;
+>> +                       clocks = <&cpufreq_hw 0>;
+>>                          enable-method = "psci";
+>>                          next-level-cache = <&L2_500>;
+>>                          power-domains = <&CPU_PD0>;
+>> @@ -167,6 +173,7 @@ CPU6: cpu@600 {
+>>                          device_type = "cpu";
+>>                          compatible = "arm,cortex-a78";
+>>                          reg = <0x0 0x600>;
+>> +                       clocks = <&cpufreq_hw 1>;
+>>                          enable-method = "psci";
+>>                          next-level-cache = <&L2_600>;
+>>                          power-domains = <&CPU_PD0>;
+>> @@ -186,6 +193,7 @@ CPU7: cpu@700 {
+>>                          device_type = "cpu";
+>>                          compatible = "arm,cortex-a78";
+>>                          reg = <0x0 0x700>;
+>> +                       clocks = <&cpufreq_hw 1>;
+>>                          enable-method = "psci";
+>>                          next-level-cache = <&L2_700>;
+>>                          power-domains = <&CPU_PD0>;
+>> --
+>> 2.25.1
+>>
+>>
+> 
+> 
 
-It is! Thanks for the clarification.
-
-Thanks
-Hanjun
+-- 
+Thx and BRs,
+Tengfei Fan
 
