@@ -1,143 +1,97 @@
-Return-Path: <linux-pm+bounces-7158-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7159-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C77DF8B31C9
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 09:57:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FECA8B3225
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 10:18:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 678D81F2177B
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 07:57:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 511D01C21B5B
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 08:18:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 922F313C8F0;
-	Fri, 26 Apr 2024 07:57:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7350B13C8F0;
+	Fri, 26 Apr 2024 08:18:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="U+Ug5mSE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="usSjiqWF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA99613C8ED
-	for <linux-pm@vger.kernel.org>; Fri, 26 Apr 2024 07:57:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F75814293
+	for <linux-pm@vger.kernel.org>; Fri, 26 Apr 2024 08:18:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714118254; cv=none; b=A20dfZi+bpw0D3O4jl93qkNmIifuUaMoiL+vKtyV8q9dDRzloXq9inAVoxr6+5Mmxr+/k4c+AYklfykXVklnwiGPW/PWDnJvRbX1ECxxO95ECyX9Bo7+jt1t3NXWoHEVCyxB/PpOYOeiMmtzGXyoDA8CD5o0CdvnyT0m11vSQb4=
+	t=1714119519; cv=none; b=KnrGh7IhZ43y+hw7g7qHyIJg8tZFqyY0Pue8MMuBiCuE4CAPm3+ULBLzqEhW3IkKwlFxhYuAmtmv8v9hl4D2tS7exBwegHZevhu+GgQoqxJO1Qlvghn+sFErJM1F7YcB6pe5mUD9DzJeCv+W7w6sCTTcL/KTdAcVkVE+8CHUtZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714118254; c=relaxed/simple;
-	bh=wCiBODES6hYe6uSEsz1rgi057khv4znYREqrSw4IVQM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=P3TqIOp4QFBwac362DY5mRT6aTH3zJEydBTUzsNrc47jFweNZ7YJoRFZe1k28ZvhABNe21NXJXb7wgz9QF9HNRSF3a8Kth+Dw5Az25HuO2HGfm8+/PevO1LraT7Rj3F946/gn7HxZPyxxkzQSlJfWozg4OzwlwMmtZbiowxDd+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=U+Ug5mSE; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-41a72f3a20dso12499585e9.0
-        for <linux-pm@vger.kernel.org>; Fri, 26 Apr 2024 00:57:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1714118251; x=1714723051; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=392YvKHUy01C2ane9PlBGjbFseGqGwG2sSPnV1+h06o=;
-        b=U+Ug5mSEWLo0n7L40UGxbwAXnimvCa1dlFUN0LYaqh6jbnK5PP+Jqpff7A/Gxe782f
-         mYsAcx+aPgfP/5Cq/QiiitK9T5+b8Hch8ZAO0DF31ZehIhsVyMeioxk8/B6FvY1KfCLb
-         BMp/kIt9C/lSDQkqekr1kz7TSdpxxSacbRO5mVvz3qnRXo1nudbN6WOIXBM2oNRgowOc
-         nlJHszEAbKJnN2TlN2UNyp8UtFaK0/hOhp2pv6eFhQJMKVdxo8UfOFMSzrHkDFRqy8OL
-         88gGp6m2vG0Z0Z7Nq25hqQZTKyDXnWA9kFNm0chhmKQ0oSJ/9crtzYVibBOgc+702h/D
-         u5WQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714118251; x=1714723051;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=392YvKHUy01C2ane9PlBGjbFseGqGwG2sSPnV1+h06o=;
-        b=DQuIMmKFiITtuQoXHZTxT35ZrAIUioJpmcHlG5swoPZoNqgePj85/z+CPDIRxg7siD
-         mDWE9AOSi4i2ywQZckrPZQ80lKhHqUFgIhY5LHUTnacJF23cL/kiL1HKa/0hUgO58eVN
-         /rD9D76KKqtaM20HqulTN3l/uQskllIHy2ays/8QhXQDgdfWApra2eSP9iG3AziuQK9E
-         c334h+mzNhl0M3NXFFw9RQ2eC5J99rMtyI7lfKB0gMi/uVBKOGWDlv5dw/d9L3yYU9Hl
-         dWLaK/qpl8S4zOZDh4THk6z5yXRhMuu4s2jylmmEtMgnGiZiyyYg80rOfkLLhrFamiUb
-         NTAA==
-X-Forwarded-Encrypted: i=1; AJvYcCVL/DswZDRziKKLLtFhXUlXS9wKpei5uYqelU+gYmIHA1/O+w0TSXGYgbCdzBJSnVXcwGrXbDUDXwgyYVyJKBFWnQsgMhuGORU=
-X-Gm-Message-State: AOJu0YxbeOFZw8J38Oiqu/62H/N2TB7pmbNOxKdM8SIQDuAdkYFnOQ7k
-	0d1jc1D3YOYQI1Dm/PkNPKE3NYtzjskt0QznIaJUvA1C+tPophQzVxFu14Y0MEc=
-X-Google-Smtp-Source: AGHT+IHIONkocekx1Nn0xgOaZLdkdZ6ZhZ+MdaNtdhL8VruI6qSiOgyFn8JkOr6Ws3rcaZt3necsIA==
-X-Received: by 2002:a05:600c:19d1:b0:419:f126:a46d with SMTP id u17-20020a05600c19d100b00419f126a46dmr1373777wmq.30.1714118250865;
-        Fri, 26 Apr 2024 00:57:30 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id f7-20020a05600c154700b004190d7126c0sm25350832wmg.38.2024.04.26.00.57.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Apr 2024 00:57:30 -0700 (PDT)
-Message-ID: <35c9dbe9-9166-4358-bfa9-99f205acd8de@linaro.org>
-Date: Fri, 26 Apr 2024 09:57:29 +0200
+	s=arc-20240116; t=1714119519; c=relaxed/simple;
+	bh=3bp6b0U4ROn6e8GNy0y9GjbCo4K6QVUCxLJDTeeIASg=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=His7Ejl3N3JEw4yjTmeMxMnXQZtkVa2L74uXMqpH39OFJc0feRhtPE3hF/v4yEEJTis1GENTKRJ9g8h9PBkafb4zFyLzYgfQ6vc4R3Zwem/wa1/xAnrzkMhtpJdlSiUE07pVqOxirf99VbaRmjSvO4m6yJj9E1i0uxgK31wbfDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=usSjiqWF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D4C7FC2BD10
+	for <linux-pm@vger.kernel.org>; Fri, 26 Apr 2024 08:18:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714119518;
+	bh=3bp6b0U4ROn6e8GNy0y9GjbCo4K6QVUCxLJDTeeIASg=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=usSjiqWFckiBJt6Ku8634QXeUmFnwD5e6ftX/cF0uV+BYc2bDxdA7qklXCICiYXPZ
+	 vjtJq1Gn3hycUsF5eXWpq2sqSO9HhTAcVYA0UQ9eHqi2Apf7mIG+3lhc/wWtL6fZyl
+	 tTcJ65PSCQquyBZJCyi78VjNJrNZQxFXK5MoxsernSAcs7uEnAjyCqZ57A6lSYdp7E
+	 9QSV5ktbQzKZo3yRUEuIfua6TxIqnSaNn8/yz+6TrE0drGloAY+LwnwIT60iONOytz
+	 B2u6e7enXh09l8Hun4YA+CEZHAzr8rMWNG/qcT9n6aSAWSxcwt9rqPoM5C1lwZS1l9
+	 SXEBQqO5bRYIA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id C6B94C433E5; Fri, 26 Apr 2024 08:18:38 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 218759] 6.9-rc kernels - with Ryzen 7840HS CPU single core
+ never boosts to max frequency
+Date: Fri, 26 Apr 2024 08:18:38 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: regressions@leemhuis.info
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218759-137361-IV3F2xT49Y@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218759-137361@https.bugzilla.kernel.org/>
+References: <bug-218759-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/2] thermal: amlogic: introduce A1 SoC family Thermal
- Sensor controller
-Content-Language: en-US
-To: Dmitry Rokosov <ddrokosov@salutedevices.com>, neil.armstrong@linaro.org
-Cc: jbrunet@baylibre.com, mturquette@baylibre.com, khilman@baylibre.com,
- martin.blumenstingl@googlemail.com, glaroque@baylibre.com,
- rafael@kernel.org, rui.zhang@intel.com, lukasz.luba@arm.com,
- robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- kernel@salutedevices.com, rockosov@gmail.com,
- linux-amlogic@lists.infradead.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-References: <20240328191322.17551-1-ddrokosov@salutedevices.com>
- <38ba3618-2a67-4e21-b08d-7e382411e51a@linaro.org>
- <20240417084007.uzg2uc7gwb6mi7bi@CAB-WSD-L081021>
- <20240426073106.3yl2dplvauper3lg@CAB-WSD-L081021>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20240426073106.3yl2dplvauper3lg@CAB-WSD-L081021>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218759
 
-Hi Dmitry,
+--- Comment #13 from The Linux kernel's regression tracker (Thorsten Leemhu=
+is) (regressions@leemhuis.info) ---
+FWIW, a more verbose bisection guide can be found here:
+https://docs.kernel.org/admin-guide/verify-bugs-and-bisect-regressions.html
 
-On 26/04/2024 09:31, Dmitry Rokosov wrote:
-> Hello Neil,
-> 
-> I hope you're doing well. I was wondering if you could assist me with
-> below problem.
-> 
-> I'm a bit confused about which kernel repository the series was applied
-> to. I asked Daniel about it, but unfortunately, I didn't receive any
-> feedback from him. Could you provide some clarification on this matter?
-> 
-> Thank you in advance for your help.
+While at it, let me add this to the regression tracking:
 
-I was OoO the last two weeks.
+#regzbot introduced: v6.8..v6.9-rc5
+#regzbot summary: Ryzen 7840HS CPU single core never boosts to max frequency
 
-Your series is in my tree [1], which is pulled automatically by the 
-linux-pm tree in its bleeding-edge branch.
+--=20
+You may reply to this email to add a comment.
 
-Today, this branch will move to the linux-next branch [2] which will 
-also be pulled by the linux-pm/next branch automatically.
-
-Hope that helps and sorry for the delay to answer
-
-   -- Daniel
-
-[1] 
-https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/bleeding-edge
-
-[2] 
-https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/linux-next
-
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+You are receiving this mail because:
+You are the assignee for the bug.=
 
