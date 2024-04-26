@@ -1,128 +1,139 @@
-Return-Path: <linux-pm+bounces-7167-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7168-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9952C8B33E2
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 11:25:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6A458B33F2
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 11:29:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C6EA284A8D
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 09:25:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 141DC1C2248B
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 09:29:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B93AE13E3F5;
-	Fri, 26 Apr 2024 09:25:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EBFE13E8AE;
+	Fri, 26 Apr 2024 09:28:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EpLXYj4M"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="IUu8nUQ3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F23F13D53D
-	for <linux-pm@vger.kernel.org>; Fri, 26 Apr 2024 09:25:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 257E013E3F5;
+	Fri, 26 Apr 2024 09:28:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714123550; cv=none; b=KYznn9ADoiBlW9RM0KAyvgvjqgubY+9sW903cpvMrSRtqcC0Fcjd3jm5AfJjJflyRE+n72poUP+zwOb7MFVl+iBVbhcBhOBjStIk2vum/yh48BTfapJuCSCe9D1kNy8Fd88BOaAsey2MeNW/HB/Ww5O8VjAxdS3bFoYVynCg5Go=
+	t=1714123739; cv=none; b=DIAR/vqwsEalxte/Y+I09esgAlIxjGzf5R8c0hhXIQK9xfX4CI5eGPLtrpNlJyfkdVgRrYnma0ftmzqwGbJAq3rZ/Rm+6V3ZFtoqZh1hgLRJIMJ+Wl8gdtqYCiD4QJDL6LUZQT41a6cN8AwYbnzUsG+gbJepEG2iTji3MGHsUjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714123550; c=relaxed/simple;
-	bh=v/8fP7ljlfNYu8p9ZmxbNzZV08oGzX9HMMT08K/tl/8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lHjx/CjjrsriSEnQAYyveGDg45rHBOPrrlb99zSEnEwNU4TQfGbqjCY4wq9zfgGE0zHT/UAD3F9+AZd8LrLzWQSA2pKl9EHU+4r+TFJtbT2+DpnVXKU4FUS751R7UBbiCXxu0+QQNBiAzU54gN6b4mFnR0Sb9vEzW0x4KGKSi3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EpLXYj4M; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1714123548;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=aI+0tk0N0rfZ0+RaTapxWMbQJR8XZdeH/fzJ04k7BlA=;
-	b=EpLXYj4Modg5E4H1cHYXLiUvQmHYFUwXMGkBmNlMPmwg4B4X93C5/kdcJMbSYgh8vb3kaV
-	4M/hH0+2obn04u8QRmNkfJOI5E16aZZcQln9QNxf4cLgGiEho9zUhA5KZpmaifM6ogdfxX
-	jcaBs/cjHHbcgiJ/cc8KMreXeIgt06I=
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
- [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-455-BSdo3Bj2NHGNFAN4zJkmWw-1; Fri, 26 Apr 2024 05:25:46 -0400
-X-MC-Unique: BSdo3Bj2NHGNFAN4zJkmWw-1
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-1e2a1619cfcso19136425ad.0
-        for <linux-pm@vger.kernel.org>; Fri, 26 Apr 2024 02:25:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714123545; x=1714728345;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aI+0tk0N0rfZ0+RaTapxWMbQJR8XZdeH/fzJ04k7BlA=;
-        b=FpUdCRIf3Is3GSbTwYof/vZDeDlKbhzc10YBWyAPEWt94bSkAs6B0pQyfSWoPOEH3C
-         gXli8v0uRxxSQuUi+rhQWcvSS1CSueQ0TqT/r/VI/FtZKpZOVCsqiP/9s5uOUInTI0xg
-         iOtw9ZkCsf2xv4AeaF8md0Dd3iP6V/VALenTvNKbv5x5LQif28AQKeKhjh/5XhRpbeuG
-         5b/a47x1tplW25g+kHCF2WzJKuxjYlWO4VSKd/6SM8aJZ2N7Xw5WGOj2ty1OTmagssIM
-         7z6kPoVLqrr++d5/ocKOxv4rDGmm528mmcKysD/vkUOoq+Pl0FferIlm3SRtAJ8PJLuT
-         L31w==
-X-Forwarded-Encrypted: i=1; AJvYcCWg9L3xNtXdfgv5izlRGM5rst18r9zOxmeWzg11wrrfnPOm9qfapBgU4+7wJidq/OQAZNkXMJvYl52Rmr/zPVpf7ooU4Ni55pE=
-X-Gm-Message-State: AOJu0YwtuTDCBNIJDSE+C05ltAPCvvAb7e1FfCzyjsKukANX1Vx1//FY
-	wtGSMyAGwiVSz8rRzhlnxYLznAf0wtlQ+pUBi3Dmi7LiRXuf2DtuC8Z/Enosw/iSZnte5wIWKl1
-	tf/rnisdIt2bwYKBoilDO0Vdn6VeKSFwjgfUyzeNO0VTjmDHdtY7ktFdL
-X-Received: by 2002:a17:902:cec3:b0:1ea:482f:f41e with SMTP id d3-20020a170902cec300b001ea482ff41emr9963269plg.15.1714123545345;
-        Fri, 26 Apr 2024 02:25:45 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEvlGXSv/tKHY50Dw7+RKb6bmu/jV2eWJbng5XCKDvWXp8D8BnGzOt+jBjaEMTVQZ+CP26+DQ==
-X-Received: by 2002:a17:902:cec3:b0:1ea:482f:f41e with SMTP id d3-20020a170902cec300b001ea482ff41emr9963218plg.15.1714123545006;
-        Fri, 26 Apr 2024 02:25:45 -0700 (PDT)
-Received: from [192.168.68.50] ([43.252.112.88])
-        by smtp.gmail.com with ESMTPSA id r3-20020a170902be0300b001e27462b988sm15054500pls.61.2024.04.26.02.25.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Apr 2024 02:25:44 -0700 (PDT)
-Message-ID: <0a96abc4-8205-447d-9e7d-03397de5ada8@redhat.com>
-Date: Fri, 26 Apr 2024 19:25:36 +1000
+	s=arc-20240116; t=1714123739; c=relaxed/simple;
+	bh=/M4fAtIj7fEFz5rRmpHzBh/6ABxKJzdtM1sihXoR3a8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=lID7XmG1amYq/cGcrt2BS+TAFGSby7yPXr5wFtmNPXPJExe/CF2ZnPOQ/LwVT7lRG7eokk401GF4U1uhDqRtrKR1+CK6mqYdBtQTYUfvcfveDWZOnCxOuV/bwl9/usseDNsRzW1fhMsSUHRSgC1r6+qIfwqoUk1HXi3xUeQikzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=IUu8nUQ3 reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
+ id 803d8b87b1d53edd; Fri, 26 Apr 2024 11:28:53 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 0519566DFC1;
+	Fri, 26 Apr 2024 11:28:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1714123733;
+	bh=/M4fAtIj7fEFz5rRmpHzBh/6ABxKJzdtM1sihXoR3a8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=IUu8nUQ39P9qeBS1VyK8+eBytHtImpG0KLbp9j3wwAT997Ql8nXVzlslWkZClngqQ
+	 RVSLrDYwTdrULftNz2XK2a+aH4wxs+Xdls/IzbZUkWNrAvBsxzAvmECXQSdH2lVnn2
+	 vv+5dDogTkxc2iFDzLX+lezdJtrjxSdt7/Y1hC1NgjaoshcQKSrTcD4BtCma3b59JO
+	 R9AbSrzeThK39ab3G8lVk7bxDQSGK/ztrYhhjZm67OigU6k4GtUihe3Fd632haYbIK
+	 +jJMBWXxiIuFfbZwqh/u+Rrio6b/rYNVb4I2kxuK20c66qMtHMLK1dSkQ6JreJfHsi
+	 TMiqVwrvlcTbA==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Lukasz Luba <lukasz.luba@arm.com>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>
+Subject:
+ [PATCH v2 3/3] thermal/debugfs: Prevent use-after-free from occurring after
+ cdev removal
+Date: Fri, 26 Apr 2024 11:28:52 +0200
+Message-ID: <2740417.mvXUDI8C0e@kreacher>
+In-Reply-To: <13503555.uLZWGnKmhe@kreacher>
+References: <12427744.O9o76ZdvQC@kreacher> <13503555.uLZWGnKmhe@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 07/16] ACPI: scan: switch to flags for
- acpi_scan_check_and_detach()
-Content-Language: en-US
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
- Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>,
- linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
- linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- kvmarm@lists.linux.dev, x86@kernel.org, Russell King
- <linux@armlinux.org.uk>, "Rafael J . Wysocki" <rafael@kernel.org>,
- Miguel Luis <miguel.luis@oracle.com>, James Morse <james.morse@arm.com>,
- Salil Mehta <salil.mehta@huawei.com>,
- Jean-Philippe Brucker <jean-philippe@linaro.org>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
-Cc: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, linuxarm@huawei.com,
- justin.he@arm.com, jianyong.wu@arm.com
-References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com>
- <20240418135412.14730-8-Jonathan.Cameron@huawei.com>
-From: Gavin Shan <gshan@redhat.com>
-In-Reply-To: <20240418135412.14730-8-Jonathan.Cameron@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudelledgudeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehrrghf
+ rggvlheskhgvrhhnvghlrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 
-On 4/18/24 23:54, Jonathan Cameron wrote:
-> Precursor patch adds the ability to pass a uintptr_t of flags into
-> acpi_scan_check_and detach() so that additional flags can be
-> added to indicate whether to defer portions of the eject flow.
-> The new flag follows in the next patch.
-> 
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> 
-> ---
-> v7: No change
-> v6: Based on internal feedback switch to less invasive change
->      to using flags rather than a struct.
-> ---
->   drivers/acpi/scan.c | 17 ++++++++++++-----
->   1 file changed, 12 insertions(+), 5 deletions(-)
-> 
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Reviewed-by: Gavin Shan <gshan@redhat.com>
+Since thermal_debug_cdev_remove() does not run under cdev->lock, it can
+run in parallel with thermal_debug_cdev_state_update() and it may free
+the struct thermal_debugfs object used by the latter after it has been
+checked against NULL.
+
+If that happens, thermal_debug_cdev_state_update() will access memory
+that has been freed already causing the kernel to crash.
+
+Address this by using cdev->lock in thermal_debug_cdev_remove() around
+the cdev->debugfs value check (in case the same cdev is removed at the
+same time in two different threads) and its reset to NULL.
+
+Fixes: 755113d76786 ("thermal/debugfs: Add thermal cooling device debugfs information")
+Cc :6.8+ <stable@vger.kernel.org> # 6.8+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+v1 -> v2: Add missing mutex_unlock() (Lukasz).
+
+---
+ drivers/thermal/thermal_debugfs.c |   14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
+
+Index: linux-pm/drivers/thermal/thermal_debugfs.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_debugfs.c
++++ linux-pm/drivers/thermal/thermal_debugfs.c
+@@ -505,15 +505,23 @@ void thermal_debug_cdev_add(struct therm
+  */
+ void thermal_debug_cdev_remove(struct thermal_cooling_device *cdev)
+ {
+-	struct thermal_debugfs *thermal_dbg = cdev->debugfs;
++	struct thermal_debugfs *thermal_dbg;
+ 
+-	if (!thermal_dbg)
++	mutex_lock(&cdev->lock);
++
++	thermal_dbg = cdev->debugfs;
++	if (!thermal_dbg) {
++		mutex_unlock(&cdev->lock);
+ 		return;
++	}
++
++	cdev->debugfs = NULL;
++
++	mutex_unlock(&cdev->lock);
+ 
+ 	mutex_lock(&thermal_dbg->lock);
+ 
+ 	thermal_debugfs_cdev_clear(&thermal_dbg->cdev_dbg);
+-	cdev->debugfs = NULL;
+ 
+ 	mutex_unlock(&thermal_dbg->lock);
+ 
+
+
 
 
