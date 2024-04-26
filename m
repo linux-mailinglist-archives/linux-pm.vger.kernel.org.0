@@ -1,204 +1,112 @@
-Return-Path: <linux-pm+bounces-7176-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7177-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65ECB8B368E
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 13:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 573E68B36B7
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 13:49:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E67641F22A5D
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 11:35:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0600A1F224A5
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 11:49:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06422144D3F;
-	Fri, 26 Apr 2024 11:35:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ry+sMlxs"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 175B914534D;
+	Fri, 26 Apr 2024 11:49:03 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF8A1448DA;
-	Fri, 26 Apr 2024 11:35:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F7283A1B7;
+	Fri, 26 Apr 2024 11:49:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714131342; cv=none; b=hjM9XdHE61JNhsb/66jyTiqaeT9hau6mK6wd5e8OxVFZJEUvfYpeW9wIMBHPZsR4HmZ+Rt3ueazEKREP1UiwGSU1CFSDnrRTQeHCDj0HzyU/oGP18v9czBzle+WbO+M/35mcLyOweJYXSqwOwaTmWEg54cX26okqkgb2Fx+QO/k=
+	t=1714132142; cv=none; b=MYH9GDeI2quZz8MQWm8AMg19p+qWDVs7UTU+sz18jv4DEH3g2LPAn781xy5onEpWwVgqEPquw2vVl9OixWrQBTU4Z7hmIZqbcnnSX/3SLx8gyGe9dyQ6n75MLSbl41ft6bIBp3s0ACI+aude7BoapszGoudBX/gxwzUyVYGRwhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714131342; c=relaxed/simple;
-	bh=/QQwxfaRpu9LMwD7lIaSpN/8sAgx3OeT00gXgYnvfNw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BD3gbOU5S6lcaXy5BtZpBBP8iSOZ00Bs4+Smxc9hF2L5ZNeWbC+irVBLywO3vqX64iX870U935q/YhB8RYKNpgEo2TUQVAS/p5M6V5dt40jY7htfTvP0T+KXaie4wUQvN5XHJEm1RlQ01wa1KJgzaILmEfGS+15bDZOA5s/yQ1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ry+sMlxs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8607C113CD;
-	Fri, 26 Apr 2024 11:35:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714131342;
-	bh=/QQwxfaRpu9LMwD7lIaSpN/8sAgx3OeT00gXgYnvfNw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Ry+sMlxscR2Rbaic+gim6Q5CbqsWmHIZo8+DmPxKArLoPWCBi6VHdWwja6oLjxLeP
-	 SCLaMrCCtMJvgOPZ+qT3YqysiXWkV4dc0wKUTcmNkIXbiycAMqBm46fFkfXVNFWbSZ
-	 afdnMQ4ctbgkw2DnVJAHTnAkzpXY/RMP9zn3wm9vL03OLzan8y0LWytHXUIkmZbWUR
-	 9bCIknDkxwWkYpkOSfnl80TuiwhgLMqheWT6M/NsBlu7HSHOUPtqv5WzlvWhLjugAE
-	 qME9g+38bVrhZNfE+dxEnJbIee46bATBztHTP8GpklJ1vRmhW2EuZOgPm67tQ3z8+6
-	 zYfY/4oQOhW0w==
-Date: Fri, 26 Apr 2024 13:35:39 +0200
-From: Frederic Weisbecker <frederic@kernel.org>
-To: Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc: Christian Loehle <christian.loehle@arm.com>,
-	Oliver Sang <oliver.sang@intel.com>, oe-lkp@lists.linux.dev,
-	lkp@intel.com, linux-kernel@vger.kernel.org,
-	Thomas Gleixner <tglx@linutronix.de>, ying.huang@intel.com,
-	feng.tang@intel.com, fengwei.yin@intel.com,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	linux-pm@vger.kernel.org
-Subject: Re: [linus:master] [timers] 7ee9887703: stress-ng.uprobe.ops_per_sec
- -17.1% regression
-Message-ID: <ZiuRiwOZ1eMOZN5J@pavilion.home>
-References: <87zfth3l6y.fsf@somnus>
- <9272d284-ec2c-4e35-be90-c8852278b648@arm.com>
- <87h6foig4s.fsf@somnus>
+	s=arc-20240116; t=1714132142; c=relaxed/simple;
+	bh=vuIcmnGQq4w4qRhii36oQpxwxZeKTg+NU3UP9tdpmnQ=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=h0CLBWABBF+LonSITg0im/YxbcW6xqv//aok8O8i4miyzA7P//LhcuvK3LySuLwgZLRkzCjWHLJGRk3C9xA8LQlStUT7QUuGhSWiv6L66RkwbeCKyjXOpRTgjzmLjlg5/fAlnd/J3tkF+/Fcn/XNeJUpaRIt+0FB+wgPf83L7Gc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VQrbL5Lklz6DBjc;
+	Fri, 26 Apr 2024 19:48:46 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 46E26140447;
+	Fri, 26 Apr 2024 19:48:58 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Fri, 26 Apr
+ 2024 12:48:57 +0100
+Date: Fri, 26 Apr 2024 12:48:55 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
+	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
+	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+	<x86@kernel.org>, Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki"
+	<rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, "James Morse"
+	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, Jean-Philippe
+ Brucker <jean-philippe@linaro.org>, Catalin Marinas
+	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+	<linuxarm@huawei.com>
+CC: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, "Dave
+ Hansen" <dave.hansen@linux.intel.com>, <justin.he@arm.com>,
+	<jianyong.wu@arm.com>
+Subject: Re: [PATCH v7 08/16] ACPI: Add post_eject to struct
+ acpi_scan_handler for cpu hotplug
+Message-ID: <20240426124836.00006cde@huawei.com>
+In-Reply-To: <20240418135412.14730-9-Jonathan.Cameron@huawei.com>
+References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com>
+	<20240418135412.14730-9-Jonathan.Cameron@huawei.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87h6foig4s.fsf@somnus>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-Le Fri, Apr 26, 2024 at 12:15:47PM +0200, Anna-Maria Behnsen a écrit :
-> Christian Loehle <christian.loehle@arm.com> writes:
-> 
-> > On 25/04/2024 09:23, Anna-Maria Behnsen wrote:
-> >> Hi,
-> >> 
-> >> (adding cpuidle/power people to cc-list)
-> >> 
-> >> Oliver Sang <oliver.sang@intel.com> writes:
-> >> 
-> >>> hi, Frederic Weisbecker,
-> >>>
-> >>> On Tue, Apr 02, 2024 at 12:46:15AM +0200, Frederic Weisbecker wrote:
-> >>>> Le Wed, Mar 27, 2024 at 04:39:17PM +0800, kernel test robot a écrit :
-> >>>>>
-> >>>>>
-> >>>>> Hello,
-> >>>>>
-> >>>>>
-> >>>>> we reported
-> >>>>> "[tip:timers/core] [timers]  7ee9887703:  netperf.Throughput_Mbps -1.2% regression"
-> >>>>> in
-> >>>>> https://lore.kernel.org/all/202403011511.24defbbd-oliver.sang@intel.com/
-> >>>>>
-> >>>>> now we noticed this commit is in mainline and we captured further results.
-> >>>>>
-> >>>>> still include netperf results for complete. below details FYI.
-> >>>>>
-> >>>>>
-> >>>>> kernel test robot noticed a -17.1% regression of stress-ng.uprobe.ops_per_sec
-> >>>>> on:
-> >>>>
-> >>>> The good news is that I can reproduce.
-> >>>> It has made me spot something already:
-> >>>>
-> >>>>    https://lore.kernel.org/lkml/ZgsynV536q1L17IS@pavilion.home/T/#m28c37a943fdbcbadf0332cf9c32c350c74c403b0
-> >>>>
-> >>>> But that's not enough to fix the regression. Investigation continues...
-> >>>
-> >>> Thanks a lot for information! if you want us test any patch, please let us know.
-> >> 
-> >> Oliver, I would be happy to see, whether the patch at the end of the
-> >> message restores the original behaviour also in your test setup. I
-> >> applied it on 6.9-rc4. This patch is not a fix - it is just a pointer to
-> >> the kernel path, that might cause the regression. I know, it is
-> >> probable, that a warning in tick_sched is triggered. This happens when
-> >> the first timer is alredy in the past. I didn't add an extra check when
-> >> creating the 'defacto' timer thingy. But existing code handles this
-> >> problem already properly. So the warning could be ignored here.
-> >> 
-> >> For the cpuidle people, let me explain what I oberserved, my resulting
-> >> assumption and my request for help:
-> >> 
-> >> cpuidle governors use expected sleep length values (beside other data)
-> >> to decide which idle state would be good to enter. The expected sleep
-> >> length takes the first queued timer of the CPU into account and is
-> >> provided by tick_nohz_get_sleep_length(). With the timer pull model in
-> >> place the non pinned timers are not taken into account when there are
-> >> other CPUs up and running which could handle those timers. This could
-> >> lead to increased sleep length values. On my system during the stress-ng
-> >> uprobes test it was in the range of maximum 100us without the patch set
-> >> and with the patch set the maximum was in a range of 200sec. This is
-> >> intended behaviour, because timers which could expire on any CPU should
-> >> expire on the CPU which is busy anyway and the non busy CPU should be
-> >> able to go idle.
-> >> 
-> >> Those increased sleep length values were the only anomalies I could find
-> >> in the traces with the regression.
-> >> 
-> >> I created the patch below which simply fakes the sleep length values
-> >> that they take all timers of the CPU into account (also the non
-> >> pinned). This patch kind of restores the behavoir of
-> >> tick_nohz_get_sleep_length() before the change but still with the timer
-> >> pull model in place.
-> >> 
-> >> With the patch the regression was gone, at least on my system (using
-> >> cpuidle governor menu but also teo).
-> >
-> > I assume the regression is reproducible for both?
-> > (The original report is using menu for anyone else looking at this)
-> 
-> Yes. (at least in my setup)
-> 
-> >> 
-> >> So my assumption here is, that cpuidle governors assume that a deeper
-> >> idle state could be choosen and selecting the deeper idle state makes an
-> >> overhead when returning from idle. But I have to notice here, that I'm
-> >> still not familiar with cpuidle internals... So I would be happy about
-> >> some hints how I can debug/trace cpuidle internals to falsify or verify
-> >> this assumption.
-> >
-> > I'd say that sounds correct.
-> > Comparing cpu_idle_miss would be interesting for both.
-> 
-> 	total nr	above		below
-> "bad":	2518343		2329072		189271
-> "good":	3016019         2960004		56015
-> 
-> -> this is the result of just a single run using:
-> 
->   perf script record -a -e power:cpu_idle_miss /home/anna-maria/src/stress-ng/stress-ng --timeout 60  --times --verify --metrics --no-rand-seed --uprobe 112
-> 
-> 
-> 
-> But beside of this, when running this stress-ng test, the cpus seems to
-> be mostly idle (top tells me). So the question here fore me is, what is
-> the stress in this test and what should the numbers tell we are
-> comparing? It is not totally clear to me even after looking at the code.
+On Thu, 18 Apr 2024 14:54:04 +0100
+Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
 
-I can at least help a bit with that since I stared at stress-uprobe for a while.
-
-A single stress-uprobe thread creates a uprobe trace event to fire everytime
-getpid() is called. Then it does a lot of getpid() calls, which creates uprobes
-events in ftrace and then it does a loop reading /sys/kernel/tracing/trace_pipe
-until the end.
-
-The bogomips measured is the total number of uprobes trace events read from
-trace_pipe.
-
-And since there are 112 threads doing all this at the same time, there is
-probably a lot of contention on trace_pipe rwsem: trace_access_lock() ->
-down_write(). Although what I observed with perf was more about mutex contention
-so there could be another lock somewhere I missed...
-
-Christian may correct me if I'm wrong...
-
-Thanks.
-
-> Thanks,
+> From: James Morse <james.morse@arm.com>
 > 
-> 	Anna-Maria
+> struct acpi_scan_handler has a detach callback that is used to remove
+> a driver when a bus is changed. When interacting with an eject-request,
+> the detach callback is called before _EJ0.
+> 
+> This means the ACPI processor driver can't use _STA to determine if a
+> CPU has been made not-present, or some of the other _STA bits have been
+> changed. acpi_processor_remove() needs to know the value of _STA after
+> _EJ0 has been called.
+> 
+> Add a post_eject callback to struct acpi_scan_handler. This is called
+> after acpi_scan_hot_remove() has successfully called _EJ0. Because
+> acpi_scan_check_and_detach() also clears the handler pointer,
+> it needs to be told if the caller will go on to call
+> acpi_bus_post_eject(), so that acpi_device_clear_enumerated()
+> and clearing the handler pointer can be deferred.
+> An extra flag is added to flags field introduced in the previous
+> patch to achieve this.
+> 
+> Signed-off-by: James Morse <james.morse@arm.com>
+> Reviewed-by: Joanthan Cameron <Jonathan.Cameron@huawei.com>
+
+Gavin's earlier review showed I can't type.
+Fixed up by dropping this RB seeing as I signed off anyway.
+
+> Reviewed-by: Gavin Shan <gshan@redhat.com>
+> Tested-by: Miguel Luis <miguel.luis@oracle.com>
+> Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
+> Tested-by: Jianyong Wu <jianyong.wu@arm.com>
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > 
 
