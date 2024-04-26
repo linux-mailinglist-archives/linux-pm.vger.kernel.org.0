@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-7211-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7212-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A62688B3E33
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 19:32:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0118F8B3E34
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 19:32:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 458F21F2495A
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B0251286465
 	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 17:32:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CEFC16D4CE;
-	Fri, 26 Apr 2024 17:25:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31D6C148854;
+	Fri, 26 Apr 2024 17:27:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mmfCqvJN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mwa6NVSV"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA9E917276D
-	for <linux-pm@vger.kernel.org>; Fri, 26 Apr 2024 17:25:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D7686FD3
+	for <linux-pm@vger.kernel.org>; Fri, 26 Apr 2024 17:27:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714152336; cv=none; b=RRlrR4a9xF/B93a4oTCE8bEhLyxbe4gB/CaoQT9p2XitUMHLZkwhFa7jnUvdVU0c2ooOgJ5aoWxwIMBu7EGVPV/oAjV3VbSLjZauNVISF/73EnkLIE5EYrYLWnZfhM41vnYN1tdHQkvmUNdWoRG2WdK1Y4e9YsKO/oGtVRlO7as=
+	t=1714152444; cv=none; b=O8wi9ApVcvae95G7r8q1Zw/aOuyAem4hoV93/qe6ApKePbZNOfKpxB061wX6yMNm5g7rA86OIr0q0VexmZMVYYXCvbFsKcUyJbsFUdWgj1C8x0qkMAal4K4pOifPYKA9YFWrw9ON/ZiQSoI4BT1wQZkibH+tD4ley27zJReMS1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714152336; c=relaxed/simple;
-	bh=5F8AUtAepzgZwgU2p86bv6smGR4xOdpP/703bjgRIds=;
+	s=arc-20240116; t=1714152444; c=relaxed/simple;
+	bh=5Q8TAP2H0UQO+d9zgqn6l8bubiaVBnpUyPRfCoPCfD4=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=NNIIk8GPdACEnV5hhh0n2TFH9xXvJVTNVIkkomK5vMh81F8ERq12/G0/65fp0WWcsGAgW0/nl4GS5WmBtRk9EnGcLS7HzVzlG+Z3v27R10G0JPyF+CDrMJdGvjH9QTKa/+n5HC9TY3fpzwL3HTgFwRZI7zpRSG5p/8iulC+lfLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mmfCqvJN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 57B0AC2BD11
-	for <linux-pm@vger.kernel.org>; Fri, 26 Apr 2024 17:25:36 +0000 (UTC)
+	 Content-Type:MIME-Version; b=SAaDOZr5SAcJ0l0onz+uD7BvrjLZzWrz2PI7yaU9Zgf61u9bcpgVfFQYsAfAxWLPz3SeIiEmqQb7A/KEvfephOd/kG4uv5pM5df/4yRu3bL3bz1TFcRFEScZGkzIGtW57/yJPkBdf6xsaWt/NYmVbQrET4Le0s8KoKhYQS9v4sY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mwa6NVSV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9A36BC32781
+	for <linux-pm@vger.kernel.org>; Fri, 26 Apr 2024 17:27:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714152336;
-	bh=5F8AUtAepzgZwgU2p86bv6smGR4xOdpP/703bjgRIds=;
+	s=k20201202; t=1714152443;
+	bh=5Q8TAP2H0UQO+d9zgqn6l8bubiaVBnpUyPRfCoPCfD4=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=mmfCqvJNPJLkdvGVgOipMwSHW29b1TzCjOs0RXtGz49ry09MKgnx+1TgcFm4ZixA8
-	 0UIYtyiU3CURpyrR06WTH/UCqHYqk2pFKaPlUQO4bVIQkHSxsc1K6ECdpTYiko2Bbe
-	 aab6kV01M+GIupgJHVTIcXeAoLbO7iQsA8MYKm8WNKaJmAmexHMZeC8cy9QyWGblWR
-	 +O+cPYvp99yHygoakinbPw2MFTpxAs3Qad9kJewDwTUIxw3LuxLEtD3zBBxu/XCErj
-	 U65lF6mjlulvF2IGIZWnSNv05sxMoPsKQt3gu12sH50ewTYlcmouHHh3te+yMqz7qI
-	 N+j3MprEslaQw==
+	b=Mwa6NVSVuaZesiHZti4t9kVGfLAYVnD2cU8gOr8rrkcCfi7oarzAGSI+HZR+zKUEF
+	 hSSAts/2j5/3sVQ+DA266YEv5GwKi4pIWa7e3/jyjf0HxjtGJw2bVcm9EwROGRwmhp
+	 NCK7tipnlfvKKErMFBR167nPrKNGwB1thzR6quHE9TyxyofWLRT6AGuKgW8P8U5Zys
+	 RzFgOJujOw6zVw99UQv6zaxutstawNjm/J+hzuoz5yj82pTiWECjVNj/BkGLKOCfyi
+	 fcmLCTB9Cpjotx20VLmnJ4JYxuvLKefU9NSM7dGfTAUncXGkWYvrOhruEm7DysAIoo
+	 YR+IkyVjGj6WA==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 50B58C433DE; Fri, 26 Apr 2024 17:25:36 +0000 (UTC)
+	id 9396BC433DE; Fri, 26 Apr 2024 17:27:23 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-pm@vger.kernel.org
 Subject: [Bug 218705] amd_pstate fails to load on AMD 5950x with Asus ROG
  CROSSHAIR VIII DARK HERO x570
-Date: Fri, 26 Apr 2024 17:25:35 +0000
+Date: Fri, 26 Apr 2024 17:27:22 +0000
 X-Bugzilla-Reason: AssignedTo
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -62,8 +62,8 @@ X-Bugzilla-Resolution:
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-218705-137361-6bC6XL62Zx@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218705-137361-cK0PhLAKlC@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-218705-137361@https.bugzilla.kernel.org/>
 References: <bug-218705-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,10 +79,14 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D218705
 
---- Comment #19 from Andrei Amuraritei (andamu@posteo.net) ---
-Created attachment 306224
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D306224&action=3Dedit
-cpufreq_grep with amd_pstate=3Dpassive
+--- Comment #20 from Andrei Amuraritei (andamu@posteo.net) ---
+Hi Xiaojian,
+
+Booted with amd_passive and ran the commands. Output attached in files with
+passive in name.
+
+Friendly greetings
+Andrei Amuraritei
 
 --=20
 You may reply to this email to add a comment.
