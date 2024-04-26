@@ -1,282 +1,313 @@
-Return-Path: <linux-pm+bounces-7215-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7216-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 991818B3E8E
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 19:50:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BC288B3EAF
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 19:55:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B53FE1C220A8
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 17:50:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6FC991C22045
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 17:55:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52DD3160783;
-	Fri, 26 Apr 2024 17:49:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEBFE160783;
+	Fri, 26 Apr 2024 17:55:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rT13YVuA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6542214EC4C;
-	Fri, 26 Apr 2024 17:49:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEC3D762EF;
+	Fri, 26 Apr 2024 17:55:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714153798; cv=none; b=awyRfxCOWdxsMXHv/T/mHje/T5/5snki4q0e9Sb9Tk01h8n+B4Vb6FKzZhWUoCvQmjKaXfKH9uR2imUP+LGp2xBxYeHYj6Mje2ifpkH3Wr27VgYoZrDM5BiZlRuZhXf+IZ0W4ZOJ8LjIVL5qS9MgUDJVppe8oq8LUUZateoBw8Q=
+	t=1714154153; cv=none; b=YKjHXvHdb+Nu7pfoSYFfcYbuEZJU1cs0GXqBhnnTvZsljiHVBY8pLgrlK3dqO2Ij9RaaHJ0VbJrQ/55QTMCP2ykB9+IvoKAiCCSZfK/LNxohgvISYADAs2MssSJ6ruXrkqiXuK+bRvJnU5OTH1Njm/Afo9U90QaDDqu8yTziRsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714153798; c=relaxed/simple;
-	bh=erZZi9wDZX0ZOYNS/RLIvpcm6ff+QRDxGu84IpUs1F4=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mpLKZGcSd5BEVQ+clX5o+JPwEgpxef6iJTlVkBWvcbXK5soj12sGzfJbXnDVEBxjsmqVb2lAKqOqamNnINt2zGI3pUzTqBGj3xCy4Ab3qZ6WIP8YTG09LR8anUC3FGJpIJQbS+aesoDmWPEXv1QZWUuqwAsmue/w+DY8ezRwTy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VR0Y95yrxz6JBFj;
-	Sat, 27 Apr 2024 01:47:25 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 8E2B51408F9;
-	Sat, 27 Apr 2024 01:49:51 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Fri, 26 Apr
- 2024 18:49:50 +0100
-Date: Fri, 26 Apr 2024 18:49:49 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Miguel Luis <miguel.luis@oracle.com>
-CC: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
-	<peterz@infradead.org>, "linux-pm@vger.kernel.org"
-	<linux-pm@vger.kernel.org>, "loongarch@lists.linux.dev"
-	<loongarch@lists.linux.dev>, "linux-acpi@vger.kernel.org"
-	<linux-acpi@vger.kernel.org>, "linux-arch@vger.kernel.org"
-	<linux-arch@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
-	<kvmarm@lists.linux.dev>, "x86@kernel.org" <x86@kernel.org>, Russell King
-	<linux@armlinux.org.uk>, "Rafael J . Wysocki" <rafael@kernel.org>, "James
- Morse" <james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>, Catalin Marinas
-	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Marc Zyngier
-	<maz@kernel.org>, Hanjun Guo <guohanjun@huawei.com>, Ingo Molnar
-	<mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
-	<dave.hansen@linux.intel.com>, "linuxarm@huawei.com" <linuxarm@huawei.com>,
-	"justin.he@arm.com" <justin.he@arm.com>, "jianyong.wu@arm.com"
-	<jianyong.wu@arm.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, "Sudeep
- Holla" <sudeep.holla@arm.com>
-Subject: Re: [PATCH v8 01/16] ACPI: processor: Simplify initial onlining to
- use same path for cold and hotplug
-Message-ID: <20240426184949.0000506d@Huawei.com>
-In-Reply-To: <2E688E98-F57F-444F-B326-5206FB6F5C1E@oracle.com>
-References: <20240426135126.12802-1-Jonathan.Cameron@huawei.com>
-	<20240426135126.12802-2-Jonathan.Cameron@huawei.com>
-	<6347020E-CB49-44ED-87B2-3BB2AA2F59E0@oracle.com>
-	<2E688E98-F57F-444F-B326-5206FB6F5C1E@oracle.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1714154153; c=relaxed/simple;
+	bh=Pf7pPVZks5xzzNAo26Zws/OeKXgG3gHu4RXtYM46N9A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=djlRHkf7jdjnU4D7eqBVDccazZtovrDCPWpLjhEcdRYgn5rID6GBXSTnp6fEt0WgQJ34cA132S9CxOUGQn3K3d66lbQ1tRyQuD6xdnAwn9kDGGrV7wcDz7kMkR3KOzvl1ab5dSiNGxSV2xB5YP768PvnOqfxAfpDKxPlCG41mfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rT13YVuA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58CB3C113CD;
+	Fri, 26 Apr 2024 17:55:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714154153;
+	bh=Pf7pPVZks5xzzNAo26Zws/OeKXgG3gHu4RXtYM46N9A=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=rT13YVuAd+8ccqqsaeo+9P3Qc8BDiML7tpLr7wfW9bntsqaw2rdB5xsWWrKvikMqC
+	 eCX9N+G/07ubtvRVIuXLJSU6HUErL29t4evS2P95KiUoQCphl48fRKuDay4W1SbrzS
+	 dsGRN5cG9qgMtMU1ZeMXQWku+C1odaR5jBkY3MwgA4SidP/+SC3qcpHonJ5T8KlNz8
+	 g+Dk+bNhaGz1zzvMf6vVnx10Fp6nzxqw4ripQMV3W5kI96eCtY+L+L0XZ9UkTEkvBP
+	 le+YcR/GiZNvid2rWbhZ+UPc1EgXQgzcg3qiPzRX9UD0I323u0bmEWZSYxa3UVHP3D
+	 SLxi2Pq71NWHA==
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5acf5723325so642551eaf.0;
+        Fri, 26 Apr 2024 10:55:53 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXXU8P0ed1Wn7DZAerrjOi+txVW7I26NOOCqHDu5tPaUm8JbrS8vIZx2ugcu7eVIHzWO1YEjj4orDLrAu5fCShfJw46pgPQF1ak34RoQbhnkzTteeI0DyEB9aslAptbafRQ/DI+m+4=
+X-Gm-Message-State: AOJu0YzEgtZ52YSmL+lBKSSRIpLCLuJuz4WIcLA0LifQNf8lmRQqcNiC
+	X9NFjzISEBqSd9gbWZuDS43UwEZYeRUD5eDXw6UTmjJd53eSX616Q5OPSno9tbIru6SUwexe/Xu
+	RawnsHJwJUX75tK4PshZ46XqNcmA=
+X-Google-Smtp-Source: AGHT+IGfT0gR3dFwO92Z66hwwW4O5HId7nGuyO2CkkjEns+2cLwSmfAD+s1THu68DSpl6Kxo4Ygbj6QNzDEASHW7q1w=
+X-Received: by 2002:a05:6871:6ac:b0:239:9a:d3a4 with SMTP id
+ l44-20020a05687106ac00b00239009ad3a4mr3680726oao.0.1714154152504; Fri, 26 Apr
+ 2024 10:55:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+References: <20240422162040.1502626-1-rui.zhang@intel.com> <20240422162040.1502626-2-rui.zhang@intel.com>
+In-Reply-To: <20240422162040.1502626-2-rui.zhang@intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 26 Apr 2024 19:55:40 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iaf8Own=NuHZuYfVpKPBM-ZYHf-SYEgwsjREg-XfuNbA@mail.gmail.com>
+Message-ID: <CAJZ5v0iaf8Own=NuHZuYfVpKPBM-ZYHf-SYEgwsjREg-XfuNbA@mail.gmail.com>
+Subject: Re: [PATCH V3 1/2] powercap: intel_rapl: Introduce APIs for PMU support
+To: Zhang Rui <rui.zhang@intel.com>
+Cc: rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, srinivas.pandruvada@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 26 Apr 2024 17:21:41 +0000
-Miguel Luis <miguel.luis@oracle.com> wrote:
+On Mon, Apr 22, 2024 at 6:21=E2=80=AFPM Zhang Rui <rui.zhang@intel.com> wro=
+te:
+>
+> Introduce two new APIs rapl_package_add_pmu()/rapl_package_remove_pmu().
+>
+> RAPL driver can invoke these APIs to expose its supported energy
+> counters via perf PMU. The new RAPL PMU is fully compatible with current
+> MSR RAPL PMU, including using the same PMU name and events
+> name/id/unit/scale, etc.
+>
+> For example, use below command
+>  perf stat -e power/energy-pkg/ -e power/energy-ram/ FOO
+> to get the energy consumption if power/energy-pkg/ and power/energy-ram/
+> events are available in the "perf list" output.
+>
+> This does not introduce any conflict because TPMI RAPL is the only user
+> of these APIs currently, and it never co-exists with MSR RAPL.
+>
+> Note that RAPL Packages can be probed/removed dynamically, and the
+> events supported by each TPMI RAPL device can be different. Thus the
+> RAPL PMU support is done on demand, which means
+> 1. PMU is registered only if it is needed by a RAPL Package. PMU events
+>    for unsupported counters are not exposed.
+> 2. PMU is unregistered and registered when a new RAPL Package is probed
+>    and supports new counters that are not supported by current PMU.
+>    For example, on a dual-package system using TPMI RAPL, it is possible
+>    that Package 1 behaves as TPMI domain root and supports Psys domain.
+>    In this case, register PMU without Psys event when probing Package 0,
+>    and re-register the PMU with Psys event when probing Package 1.
+> 3. PMU is unregistered when all registered RAPL Packages don't need PMU.
+>
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> ---
+>  drivers/powercap/intel_rapl_common.c | 578 +++++++++++++++++++++++++++
+>  include/linux/intel_rapl.h           |  32 ++
+>  2 files changed, 610 insertions(+)
+>
+> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/inte=
+l_rapl_common.c
+> index c4302caeb631..1fa45ed8ba0b 100644
+> --- a/drivers/powercap/intel_rapl_common.c
+> +++ b/drivers/powercap/intel_rapl_common.c
+> @@ -15,6 +15,8 @@
+>  #include <linux/list.h>
+>  #include <linux/log2.h>
+>  #include <linux/module.h>
+> +#include <linux/nospec.h>
+> +#include <linux/perf_event.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/powercap.h>
+>  #include <linux/processor.h>
+> @@ -1507,6 +1509,582 @@ static int rapl_detect_domains(struct rapl_packag=
+e *rp)
+>         return 0;
+>  }
+>
+> +#ifdef CONFIG_PERF_EVENTS
+> +
+> +/*
+> + * Support for RAPL PMU
+> + *
+> + * Register a PMU if any of the registered RAPL Packages have the requir=
+ement
+> + * of exposing its energy counters via Perf PMU.
+> + *
+> + * PMU Name:
+> + *     power
+> + *
+> + * Events:
+> + *     Name            Event id        RAPL Domain
+> + *     energy_cores    0x01            RAPL_DOMAIN_PP0
+> + *     energy_pkg      0x02            RAPL_DOMAIN_PACKAGE
+> + *     energy_ram      0x03            RAPL_DOMAIN_DRAM
+> + *     energy_gpu      0x04            RAPL_DOMAIN_PP1
+> + *     energy_psys     0x05            RAPL_DOMAIN_PLATFORM
+> + *
+> + * Unit:
+> + *     Joules
+> + *
+> + * Scale:
+> + *     2.3283064365386962890625e-10
+> + *     The same RAPL domain in different RAPL Packages may have differen=
+t
+> + *     energy units. Use 2.3283064365386962890625e-10 (2^-32) Joules as
+> + *     the fixed unit for all energy counters, and covert each hardware
+> + *     counter increase to N times of PMU event counter increases.
+> + *
+> + * This is fully compatible with the current MSR RAPL PMU. This means th=
+at
+> + * userspace programs like turbostat can use the same code to handle RAP=
+L Perf
+> + * PMU, no matter what RAPL Interface driver (MSR/TPMI, etc) is running
+> + * underlying on the platform.
+> + *
+> + * Note that RAPL Packages can be probed/removed dynamically, and the ev=
+ents
+> + * supported by each TPMI RAPL device can be different. Thus the RAPL PM=
+U
+> + * support is done on demand, which means
+> + * 1. PMU is registered only if it is needed by a RAPL Package. PMU even=
+ts for
+> + *    unsupported counters are not exposed.
+> + * 2. PMU is unregistered and registered when a new RAPL Package is prob=
+ed and
+> + *    supports new counters that are not supported by current PMU.
+> + * 3. PMU is unregistered when all registered RAPL Packages don't need P=
+MU.
+> + */
+> +
+> +struct rapl_pmu {
+> +       struct pmu pmu;                 /* Perf PMU structure */
+> +       u64 timer_ms;                   /* Maximum expiration time to avo=
+id counter overflow */
+> +       unsigned long domain_map;       /* Events supported by current re=
+gistered PMU */
+> +       bool registered;                /* Whether the PMU has been regis=
+tered or not */
+> +};
+> +
+> +static struct rapl_pmu rapl_pmu;
+> +
+> +/* PMU helpers */
+> +
+> +static int get_pmu_cpu(struct rapl_package *rp)
+> +{
+> +       int cpu;
+> +
+> +       if (!rp->has_pmu)
+> +               return nr_cpu_ids;
+> +
+> +       /* Only TPMI RAPL is supported for now */
+> +       if (rp->priv->type !=3D RAPL_IF_TPMI)
+> +               return nr_cpu_ids;
+> +
+> +       /* TPMI RAPL uses any CPU in the package for PMU */
+> +       for_each_online_cpu(cpu)
+> +               if (topology_physical_package_id(cpu) =3D=3D rp->id)
+> +                       return cpu;
+> +
+> +       return nr_cpu_ids;
+> +}
+> +
+> +static bool is_rp_pmu_cpu(struct rapl_package *rp, int cpu)
+> +{
+> +       if (!rp->has_pmu)
+> +               return false;
+> +
+> +       /* Only TPMI RAPL is supported for now */
+> +       if (rp->priv->type !=3D RAPL_IF_TPMI)
+> +               return nr_cpu_ids;
 
-> Hi Jonathan, 
-> 
-> > On 26 Apr 2024, at 16:05, Miguel Luis <miguel.luis@oracle.com> wrote:
-> > 
-> > 
-> >   
-> >> On 26 Apr 2024, at 13:51, Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
-> >> 
-> >> Separate code paths, combined with a flag set in acpi_processor.c to
-> >> indicate a struct acpi_processor was for a hotplugged CPU ensured that
-> >> per CPU data was only set up the first time that a CPU was initialized.
-> >> This appears to be unnecessary as the paths can be combined by letting
-> >> the online logic also handle any CPUs online at the time of driver load.
-> >> 
-> >> Motivation for this change, beyond simplification, is that ARM64
-> >> virtual CPU HP uses the same code paths for hotplug and cold path in
-> >> acpi_processor.c so had no easy way to set the flag for hotplug only.
-> >> Removing this necessity will enable ARM64 vCPU HP to reuse the existing
-> >> code paths.
-> >> 
-> >> Leave noisy pr_info() in place but update it to not state the CPU
-> >> was hotplugged.  
-> 
-> On a second thought, do we want to keep it? Can't we just assume that no 
-> news is good news while keeping the warn right after __acpi_processor_start ?
+As per the comment, this should be false, shouldn't it?
 
-Good question - my inclination was to keep this in place for now as removing
-it would remove a source of information people may expect on x86 hotplug.
+> +
+> +       /* TPMI RAPL uses any CPU in the package for PMU */
+> +       return topology_physical_package_id(cpu) =3D=3D rp->id;
+> +}
+> +
+> +static struct rapl_package_pmu_data *event_to_pmu_data(struct perf_event=
+ *event)
+> +{
+> +       struct rapl_package *rp =3D event->pmu_private;
+> +
+> +       return &rp->pmu_data;
+> +}
+> +
+> +/* PMU event callbacks */
+> +
+> +static u64 event_read_counter(struct perf_event *event)
+> +{
+> +       struct rapl_package *rp =3D event->pmu_private;
+> +       u64 val;
+> +       int ret;
+> +
+> +       /* Return 0 for unsupported events */
+> +       if (event->hw.idx < 0)
+> +               return 0;
+> +
+> +       ret =3D rapl_read_data_raw(&rp->domains[event->hw.idx], ENERGY_CO=
+UNTER, false, &val);
+> +
+> +       /* Return 0 for failed read */
+> +       if (ret)
+> +               return 0;
+> +
+> +       return val;
+> +}
+> +
+> +static void __rapl_pmu_event_start(struct perf_event *event)
+> +{
+> +       struct rapl_package_pmu_data *data =3D event_to_pmu_data(event);
+> +
+> +       if (WARN_ON_ONCE(!(event->hw.state & PERF_HES_STOPPED)))
+> +               return;
+> +
+> +       event->hw.state =3D 0;
+> +
+> +       list_add_tail(&event->active_entry, &data->active_list);
+> +
+> +       local64_set(&event->hw.prev_count, event_read_counter(event));
+> +       if (++data->n_active =3D=3D 1)
+> +               hrtimer_start(&data->hrtimer, data->timer_interval,
+> +                             HRTIMER_MODE_REL_PINNED);
+> +}
+> +
+> +static void rapl_pmu_event_start(struct perf_event *event, int mode)
+> +{
+> +       struct rapl_package_pmu_data *data =3D event_to_pmu_data(event);
+> +       unsigned long flags;
+> +
+> +       raw_spin_lock_irqsave(&data->lock, flags);
+> +       __rapl_pmu_event_start(event);
+> +       raw_spin_unlock_irqrestore(&data->lock, flags);
+> +}
+> +
+> +static u64 rapl_event_update(struct perf_event *event)
+> +{
+> +       struct hw_perf_event *hwc =3D &event->hw;
+> +       struct rapl_package_pmu_data *data =3D event_to_pmu_data(event);
+> +       u64 prev_raw_count, new_raw_count;
+> +       s64 delta, sdelta;
+> +       s64 tmp;
+> +
+> +       do {
+> +               prev_raw_count =3D local64_read(&hwc->prev_count);
+> +               new_raw_count =3D event_read_counter(event);
+> +               tmp =3D local64_cmpxchg(&hwc->prev_count, prev_raw_count,=
+ new_raw_count);
+> +       } while (tmp !=3D prev_raw_count);
 
-Then maybe propose dropping it as overly noisy kernel as a follow up
-patch after this series is merged.  Felt like a potential rat hole I didn't
-want to go down if I could avoid it.
+I think that it is only safe to call this function for draining an
+event going away, because otherwise the above may turn into an endless
+loop, and the function is called under a spinlock.
 
-If any x86 experts want to shout that no one cares then I'll happily drop
-the print.  We've carefully made it so that on arm64 we have no way to tell
-if this is hotplug or normal cpu bring up so we can't just print it on
-hotplug.
+I would add a comment (above the loop) explaining that this is about
+draining, so the counter is expected to stop incrementing shortly.
 
-Jonathan
+The rest of the patch LGTM.
 
-
-> 
-> Miguel
-> 
-> >> 
-> >> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >> Reviewed-by: Hanjun Guo <guohanjun@huawei.com>
-> >> Tested-by: Miguel Luis <miguel.luis@oracle.com>
-> >> Reviewed-by: Gavin Shan <gshan@redhat.com>
-> >> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> >> 
-> >> ---
-> >> v8: No change
-> >> ---
-> >> drivers/acpi/acpi_processor.c   |  1 -
-> >> drivers/acpi/processor_driver.c | 44 ++++++++++-----------------------
-> >> include/acpi/processor.h        |  2 +-
-> >> 3 files changed, 14 insertions(+), 33 deletions(-)
-> >> 
-> >> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-> >> index 7a0dd35d62c9..7fc924aeeed0 100644
-> >> --- a/drivers/acpi/acpi_processor.c
-> >> +++ b/drivers/acpi/acpi_processor.c
-> >> @@ -216,7 +216,6 @@ static int acpi_processor_hotadd_init(struct acpi_processor *pr)
-> >> * gets online for the first time.
-> >> */
-> >> pr_info("CPU%d has been hot-added\n", pr->id);
-> >> - pr->flags.need_hotplug_init = 1;
-> >> 
-> >> out:
-> >> cpus_write_unlock();
-> >> diff --git a/drivers/acpi/processor_driver.c b/drivers/acpi/processor_driver.c
-> >> index 67db60eda370..55782eac3ff1 100644
-> >> --- a/drivers/acpi/processor_driver.c
-> >> +++ b/drivers/acpi/processor_driver.c
-> >> @@ -33,7 +33,6 @@ MODULE_AUTHOR("Paul Diefenbaugh");
-> >> MODULE_DESCRIPTION("ACPI Processor Driver");
-> >> MODULE_LICENSE("GPL");
-> >> 
-> >> -static int acpi_processor_start(struct device *dev);
-> >> static int acpi_processor_stop(struct device *dev);
-> >> 
-> >> static const struct acpi_device_id processor_device_ids[] = {
-> >> @@ -47,7 +46,6 @@ static struct device_driver acpi_processor_driver = {
-> >> .name = "processor",
-> >> .bus = &cpu_subsys,
-> >> .acpi_match_table = processor_device_ids,
-> >> - .probe = acpi_processor_start,
-> >> .remove = acpi_processor_stop,
-> >> };
-> >> 
-> >> @@ -115,12 +113,10 @@ static int acpi_soft_cpu_online(unsigned int cpu)
-> >> * CPU got physically hotplugged and onlined for the first time:
-> >> * Initialize missing things.
-> >> */
-> >> - if (pr->flags.need_hotplug_init) {
-> >> + if (!pr->flags.previously_online) {
-> >> int ret;
-> >> 
-> >> - pr_info("Will online and init hotplugged CPU: %d\n",
-> >> - pr->id);
-> >> - pr->flags.need_hotplug_init = 0;
-> >> + pr_info("Will online and init CPU: %d\n", pr->id);
-> >> ret = __acpi_processor_start(device);
-> >> WARN(ret, "Failed to start CPU: %d\n", pr->id);
-> >> } else {
-> >> @@ -167,9 +163,6 @@ static int __acpi_processor_start(struct acpi_device *device)
-> >> if (!pr)
-> >> return -ENODEV;
-> >> 
-> >> - if (pr->flags.need_hotplug_init)
-> >> - return 0;
-> >> -
-> >> result = acpi_cppc_processor_probe(pr);
-> >> if (result && !IS_ENABLED(CONFIG_ACPI_CPU_FREQ_PSS))
-> >> dev_dbg(&device->dev, "CPPC data invalid or not present\n");
-> >> @@ -185,32 +178,21 @@ static int __acpi_processor_start(struct acpi_device *device)
-> >> 
-> >> status = acpi_install_notify_handler(device->handle, ACPI_DEVICE_NOTIFY,
-> >>    acpi_processor_notify, device);
-> >> - if (ACPI_SUCCESS(status))
-> >> - return 0;
-> >> + if (!ACPI_SUCCESS(status)) {
-> >> + result = -ENODEV;
-> >> + goto err_thermal_exit;
-> >> + }
-> >> + pr->flags.previously_online = 1;
-> >> 
-> >> - result = -ENODEV;
-> >> - acpi_processor_thermal_exit(pr, device);
-> >> + return 0;
-> >> 
-> >> +err_thermal_exit:
-> >> + acpi_processor_thermal_exit(pr, device);
-> >> err_power_exit:
-> >> acpi_processor_power_exit(pr);
-> >> return result;
-> >> }
-> >> 
-> >> -static int acpi_processor_start(struct device *dev)
-> >> -{
-> >> - struct acpi_device *device = ACPI_COMPANION(dev);
-> >> - int ret;
-> >> -
-> >> - if (!device)
-> >> - return -ENODEV;
-> >> -
-> >> - /* Protect against concurrent CPU hotplug operations */
-> >> - cpu_hotplug_disable();
-> >> - ret = __acpi_processor_start(device);
-> >> - cpu_hotplug_enable();
-> >> - return ret;
-> >> -}
-> >> -
-> >> static int acpi_processor_stop(struct device *dev)
-> >> {
-> >> struct acpi_device *device = ACPI_COMPANION(dev);
-> >> @@ -279,9 +261,9 @@ static int __init acpi_processor_driver_init(void)
-> >> if (result < 0)
-> >> return result;
-> >> 
-> >> - result = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
-> >> -   "acpi/cpu-drv:online",
-> >> -   acpi_soft_cpu_online, NULL);
-> >> + result = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
-> >> +   "acpi/cpu-drv:online",
-> >> +   acpi_soft_cpu_online, NULL);
-> >> if (result < 0)
-> >> goto err;
-> >> hp_online = result;
-> >> diff --git a/include/acpi/processor.h b/include/acpi/processor.h
-> >> index 3f34ebb27525..e6f6074eadbf 100644
-> >> --- a/include/acpi/processor.h
-> >> +++ b/include/acpi/processor.h
-> >> @@ -217,7 +217,7 @@ struct acpi_processor_flags {
-> >> u8 has_lpi:1;
-> >> u8 power_setup_done:1;
-> >> u8 bm_rld_set:1;
-> >> - u8 need_hotplug_init:1;
-> >> + u8 previously_online:1;  
-> > 
-> > Reviewed-by: Miguel Luis <miguel.luis@oracle.com>
-> > 
-> > Miguel
-> >   
-> >> };
-> >> 
-> >> struct acpi_processor {
-> >> -- 
-> >> 2.39.2
-> >>   
-> >   
-> 
-
+Thanks!
 
