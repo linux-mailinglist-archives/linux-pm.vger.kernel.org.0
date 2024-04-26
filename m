@@ -1,73 +1,78 @@
-Return-Path: <linux-pm+bounces-7174-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7175-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 036838B3522
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 12:18:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB28E8B3559
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 12:35:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 879D51F22105
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 10:18:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC9AD1C20E0D
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 10:35:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9983B143C4E;
-	Fri, 26 Apr 2024 10:15:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE84359155;
+	Fri, 26 Apr 2024 10:35:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="A2APrOue";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="5U/SVVte"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="iUR0wU8n"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB5E9143899;
-	Fri, 26 Apr 2024 10:15:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E31E21E522;
+	Fri, 26 Apr 2024 10:35:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714126552; cv=none; b=T0fYSAnblfoW0IwZGxkLg/2vKsE1c7Sg4rDNZWjqeErFXdTeIHLp1djLQdVu2FNGpkErCEhKKfM3FL4okd/JWPn+gh7WH0dqI8LLnK9QBtjrKvH4RLnYC/WRdXHUK9xAXQbDHI9necuQGaRPah+tZVNvJhQL90oC/SYTwd+Ds2o=
+	t=1714127720; cv=none; b=Vu08wgPyJ2n/u7umloIKFIHaVuxnJ/Pw7IlIHWMxuUG2rRt/CqqMGk5U0MihYOgyHff5y7ku353iFsi62f8cndWDnFs3xlvwAImnNJw1oY7vP5uB1hzQShmRR3tBODkpFcHNbpEQoQIwKP2btaaEWFnH6cxJRQnah6ZLTyMpihM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714126552; c=relaxed/simple;
-	bh=eczfEPf8+cFClZXypKyENnkZzh1ZDabFL3TAGE42UJ8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=qYoYKINkcT9c0B+hLhCje0FPmyZKPfS63up8hClAZNOKlmXr4FdmojjU6uLyZi94ZK9QRuhJ9hg/K5yuiioMJnK3GVx+MRyucpa41BCCYJHyw17OEs+EbYKQNCspqvSHDa8Gr++i89H1jynF+CYyig0LjS0ycDvXtupckvGIGNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=A2APrOue; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=5U/SVVte; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Anna-Maria Behnsen <anna-maria@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1714126548;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eyQmuETk80+Og3yZd6Uncex8B3lEi+jXfmfyncA+Ljc=;
-	b=A2APrOuetVI6C/yQVZOeesx+RmkjWqSWin3XQdMjtdNHbUXzbewqZrHP3dUtZNUi5A3YqO
-	BehI0HeR0y7Tdze0Nex3Eby6nivnrYwCMk9CgWW3OGgC0x54C0liQpSmp071yxaYduE9Hc
-	2W1dEC0eCFFWIGXkxYFK+a0qwz7sDGicV39vSufc5bKzKD/wTNYvmO3fXh8NDmHtRhsT+H
-	vQFqfKjeKH/vw99E+OmAlPvcpBRQFbbwgoI9rQiLC7HJMiYvP1PA8V3V6/JtmKdRMKnDCV
-	8fFuq4s+TYXBLJDDp+lg4YZdMdUtaN4Ts8i9MdlpBd3L6w27vBElg9OWp7X51Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1714126548;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eyQmuETk80+Og3yZd6Uncex8B3lEi+jXfmfyncA+Ljc=;
-	b=5U/SVVtev+wtSQkVBKpp2wGp4bHkO48NJOAPp3+411brazE8px+0OGRMjOFYL8R9CeCiYc
-	doD/Wd9D/QjUFTCA==
-To: Christian Loehle <christian.loehle@arm.com>, Oliver Sang
- <oliver.sang@intel.com>
-Cc: oe-lkp@lists.linux.dev, lkp@intel.com, linux-kernel@vger.kernel.org,
- Thomas Gleixner <tglx@linutronix.de>, ying.huang@intel.com,
- feng.tang@intel.com, fengwei.yin@intel.com, Frederic Weisbecker
- <frederic@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Daniel
- Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org
-Subject: Re: [linus:master] [timers] 7ee9887703:
- stress-ng.uprobe.ops_per_sec -17.1% regression
-In-Reply-To: <9272d284-ec2c-4e35-be90-c8852278b648@arm.com>
-References: <87zfth3l6y.fsf@somnus>
- <9272d284-ec2c-4e35-be90-c8852278b648@arm.com>
-Date: Fri, 26 Apr 2024 12:15:47 +0200
-Message-ID: <87h6foig4s.fsf@somnus>
+	s=arc-20240116; t=1714127720; c=relaxed/simple;
+	bh=Mtp9ehtRVZxIDdoOzDV8GaQaUy9GU2C0yfvWwfHlaRI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OKs0LQ6nM3nzrpItjqE/w0ODyVMcyfEJbRKlBt4EThF/kZ3/RxzkeYCi2Wx8l9m7B5W2gpIbeRqkH6Vieqm6VvcCZbUr/G6K5Nw34SZ7cfhKQSv/YGOKY0HIHOZwT8wPVXywxUUYsv9aWmtY1kpdhOfSWodHj7jDrItpCINN+5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=iUR0wU8n; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id EDEA640E0192;
+	Fri, 26 Apr 2024 10:35:08 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id ynQ7WOOtbViU; Fri, 26 Apr 2024 10:35:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1714127705; bh=qSDm5h4qqz17fdcEbukQx53WBbOMtdaUi0d1s/MxXUk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iUR0wU8nOx+ZxOL4/mUm4hAtZiqnikuY/CpFluQmj/Mz5qBdajYMD7YgvbgOzjgVJ
+	 IIBWY28HdPoKpmp72R3IzndV0lLQnX0mKGptPK6rhXpJ5WZpRF/jx/oovFlY1oHUgc
+	 py/5ChpS48ggHCKDss/cI8+hjTyGP6slDewMtbhKDZpBhbn18vNI5ysUygUDF/Ca7Y
+	 fFKEqXOzEMkdGkT1jSI2aDDJUIqkQ0AsoXWdmIjGaCMW+TKvOop189/cRTFpcsn2AA
+	 4i+ZhNpqLAte6zOaCnTATsM8Ll78Si3kJUaNlAyVKmebTp730GFPkq6mUOMEtIcLaC
+	 y9BOgPIvy1YqNyb6baLsQ54N5HMqBlTCflbwkpSFEnJz8q4t11RIJXS8+ZsaRj74OT
+	 Qhf9vLLxHH4NKZ348ln845Y+UrtuOK01MUrfnDfh3Fwrx8e2+NjUrkFE+K6ZUbl5IW
+	 on7AP0eh80C7WQ/wgxvaEZWQ6Iwm5uBHROgwUgDUSM5mJP25i1YJD8VaJL6mXJoeNj
+	 VRnKh/C0G5UrFGX1U2SEp/taIVayXIOa/tfBxC4Fc9N+NqnbaX96EZXV3FyHn7DYk8
+	 i2o9xPZ1wdd95Sv8YwHwCRrjbUPupp8qPPkVguwqjT8KEcNObLX6HmabZ4tidsXsQG
+	 94mOBHFTYhpIKbDSwazAT/DQ=
+Received: from zn.tnic (pd953020b.dip0.t-ipconnect.de [217.83.2.11])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id ED06040E0177;
+	Fri, 26 Apr 2024 10:34:52 +0000 (UTC)
+Date: Fri, 26 Apr 2024 12:34:47 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Perry Yuan <perry.yuan@amd.com>
+Cc: rafael.j.wysocki@intel.com, Mario.Limonciello@amd.com,
+	viresh.kumar@linaro.org, Ray.Huang@amd.com, gautham.shenoy@amd.com,
+	Alexander.Deucher@amd.com, Xinmei.Huang@amd.com,
+	Xiaojian.Du@amd.com, Li.Meng@amd.com, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 2/6] cpufreq: amd-pstate: initialize new core
+ precision boost state
+Message-ID: <20240426103447.GAZiuDR7u2d-AXspik@fat_crate.local>
+References: <cover.1714112854.git.perry.yuan@amd.com>
+ <6ea9dc722218a8498e60612cdcd26e99305c16a8.1714112854.git.perry.yuan@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -75,127 +80,35 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+In-Reply-To: <6ea9dc722218a8498e60612cdcd26e99305c16a8.1714112854.git.perry.yuan@amd.com>
 
-Christian Loehle <christian.loehle@arm.com> writes:
+On Fri, Apr 26, 2024 at 02:34:45PM +0800, Perry Yuan wrote:
+> @@ -665,18 +667,31 @@ static int amd_pstate_set_boost(struct cpufreq_policy *policy, int state)
+>  	return 0;
+>  }
+>  
+> -static void amd_pstate_boost_init(struct amd_cpudata *cpudata)
+> +static int amd_pstate_boost_init(struct amd_cpudata *cpudata)
+>  {
+> -	u32 highest_perf, nominal_perf;
+> +	u64 boost_val;
+> +	int ret;
+>  
+> -	highest_perf = READ_ONCE(cpudata->highest_perf);
+> -	nominal_perf = READ_ONCE(cpudata->nominal_perf);
+> +	if (!boot_cpu_has(X86_FEATURE_CPB)) {
 
-> On 25/04/2024 09:23, Anna-Maria Behnsen wrote:
->> Hi,
->>=20
->> (adding cpuidle/power people to cc-list)
->>=20
->> Oliver Sang <oliver.sang@intel.com> writes:
->>=20
->>> hi, Frederic Weisbecker,
->>>
->>> On Tue, Apr 02, 2024 at 12:46:15AM +0200, Frederic Weisbecker wrote:
->>>> Le Wed, Mar 27, 2024 at 04:39:17PM +0800, kernel test robot a =C3=A9cr=
-it :
->>>>>
->>>>>
->>>>> Hello,
->>>>>
->>>>>
->>>>> we reported
->>>>> "[tip:timers/core] [timers]  7ee9887703:  netperf.Throughput_Mbps -1.=
-2% regression"
->>>>> in
->>>>> https://lore.kernel.org/all/202403011511.24defbbd-oliver.sang@intel.c=
-om/
->>>>>
->>>>> now we noticed this commit is in mainline and we captured further res=
-ults.
->>>>>
->>>>> still include netperf results for complete. below details FYI.
->>>>>
->>>>>
->>>>> kernel test robot noticed a -17.1% regression of stress-ng.uprobe.ops=
-_per_sec
->>>>> on:
->>>>
->>>> The good news is that I can reproduce.
->>>> It has made me spot something already:
->>>>
->>>>    https://lore.kernel.org/lkml/ZgsynV536q1L17IS@pavilion.home/T/#m28c=
-37a943fdbcbadf0332cf9c32c350c74c403b0
->>>>
->>>> But that's not enough to fix the regression. Investigation continues...
->>>
->>> Thanks a lot for information! if you want us test any patch, please let=
- us know.
->>=20
->> Oliver, I would be happy to see, whether the patch at the end of the
->> message restores the original behaviour also in your test setup. I
->> applied it on 6.9-rc4. This patch is not a fix - it is just a pointer to
->> the kernel path, that might cause the regression. I know, it is
->> probable, that a warning in tick_sched is triggered. This happens when
->> the first timer is alredy in the past. I didn't add an extra check when
->> creating the 'defacto' timer thingy. But existing code handles this
->> problem already properly. So the warning could be ignored here.
->>=20
->> For the cpuidle people, let me explain what I oberserved, my resulting
->> assumption and my request for help:
->>=20
->> cpuidle governors use expected sleep length values (beside other data)
->> to decide which idle state would be good to enter. The expected sleep
->> length takes the first queued timer of the CPU into account and is
->> provided by tick_nohz_get_sleep_length(). With the timer pull model in
->> place the non pinned timers are not taken into account when there are
->> other CPUs up and running which could handle those timers. This could
->> lead to increased sleep length values. On my system during the stress-ng
->> uprobes test it was in the range of maximum 100us without the patch set
->> and with the patch set the maximum was in a range of 200sec. This is
->> intended behaviour, because timers which could expire on any CPU should
->> expire on the CPU which is busy anyway and the non busy CPU should be
->> able to go idle.
->>=20
->> Those increased sleep length values were the only anomalies I could find
->> in the traces with the regression.
->>=20
->> I created the patch below which simply fakes the sleep length values
->> that they take all timers of the CPU into account (also the non
->> pinned). This patch kind of restores the behavoir of
->> tick_nohz_get_sleep_length() before the change but still with the timer
->> pull model in place.
->>=20
->> With the patch the regression was gone, at least on my system (using
->> cpuidle governor menu but also teo).
->
-> I assume the regression is reproducible for both?
-> (The original report is using menu for anyone else looking at this)
+Repeat after me:
 
-Yes. (at least in my setup)
+Everytime I need to test a X86_FEATURE flag, I will use cpu_feature_enabled()!
+Everytime I need to test a X86_FEATURE flag, I will use cpu_feature_enabled()!
+Everytime I need to test a X86_FEATURE flag, I will use cpu_feature_enabled()!
+Everytime I need to test a X86_FEATURE flag, I ...
 
->>=20
->> So my assumption here is, that cpuidle governors assume that a deeper
->> idle state could be choosen and selecting the deeper idle state makes an
->> overhead when returning from idle. But I have to notice here, that I'm
->> still not familiar with cpuidle internals... So I would be happy about
->> some hints how I can debug/trace cpuidle internals to falsify or verify
->> this assumption.
->
-> I'd say that sounds correct.
-> Comparing cpu_idle_miss would be interesting for both.
+-- 
+Regards/Gruss,
+    Boris.
 
-	total nr	above		below
-"bad":	2518343		2329072		189271
-"good":	3016019         2960004		56015
-
--> this is the result of just a single run using:
-
-  perf script record -a -e power:cpu_idle_miss /home/anna-maria/src/stress-=
-ng/stress-ng --timeout 60  --times --verify --metrics --no-rand-seed --upro=
-be 112
-
-
-
-But beside of this, when running this stress-ng test, the cpus seems to
-be mostly idle (top tells me). So the question here fore me is, what is
-the stress in this test and what should the numbers tell we are
-comparing? It is not totally clear to me even after looking at the code.
-
-Thanks,
-
-	Anna-Maria
-
+https://people.kernel.org/tglx/notes-about-netiquette
 
