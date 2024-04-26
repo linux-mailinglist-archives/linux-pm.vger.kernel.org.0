@@ -1,96 +1,145 @@
-Return-Path: <linux-pm+bounces-7202-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7203-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB2A18B3AEA
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 17:18:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9ECF48B3B08
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 17:20:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 90D741F25019
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 15:18:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D10031C2172E
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 15:20:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1D96156F3F;
-	Fri, 26 Apr 2024 15:12:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5899D14D28C;
+	Fri, 26 Apr 2024 15:14:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FxQYq5yi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="km+b6tIq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B96D149E0B;
-	Fri, 26 Apr 2024 15:12:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ED9C14BFA2;
+	Fri, 26 Apr 2024 15:14:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714144338; cv=none; b=Lc+3SUnLEBjTVUffM9clPxunwNUBGLeyTJuMFx4Lt/3pfXiAOMIBNav3zSSH6HvR/CoXI1EuxBxsZ6BD1M+PhDUD3fj3FFVntT90M/adCjiU5qgBYrJp8RN/8k1RHv21G2VPyFEDZZXBMxAvMR0gUgxJ1Lj1cc+4YaS2HVodfDs=
+	t=1714144481; cv=none; b=ksja+Ouc/0Tp9iH0hwPfIM5ZFXI7RuChDwwTy3Oo6O0jDiKff7cMBn5U9wG1frWVxExyM35JAJZNHDEnE+QEbLXgFyka2rSlBmgDn/6/RHou4DAf0XODFC4XwviiEadCMizi8ICcS6jjit8/W4i4pYM1oCJrZ2NavegELnmGCKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714144338; c=relaxed/simple;
-	bh=Kr7zkCguCy7sd6KYvhCOQrIp4hZGHM6YPuaMgfJqxPc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P3UNlhAP0n0YKhSlqUKAAqmwPY1qsC1Y9luC6glzZNet85VTauJEwxSdE7HADBpxXWLKUCBzRTQQrT+inUlaYSFDDIYdpqm3OlAMRk24jLXiWXxIXBlFqFG9/T76yIiNIfmsMIKTLbW/LNWYKx6QWOtAADvbGr0HuOB7AsnxdRk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FxQYq5yi; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714144337; x=1745680337;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Kr7zkCguCy7sd6KYvhCOQrIp4hZGHM6YPuaMgfJqxPc=;
-  b=FxQYq5yiRC7LP4dgn4cZW60JU7I6AgCJew9LblKfe7HlCVKmhuTDhi1j
-   1kSZSgZhYeyFPLzZsF/t404YqCpJBlvE1fojlcXsnJDypQri+ZbjvTOpM
-   znlBmNEOaNUK0mejty0SxKAnj46g9zc2zKISJDHXDyryUt9A1X4DfYS92
-   b0MszfmzP0HbLcwyzlNhaffsfgYxpo7cATOr4DrYdWFEWiQERpVOarY7o
-   7xxlasBAPuJK9bLdcFC3uh9VXU42PfxwD+GOTpUooqmOkwm/qA1iy9u57
-   U5C6vsgQCmvJnaUjmtwaznVAeA2VtjLQgOMa7kYaWoktgxVoBk6SFOmP2
-   Q==;
-X-CSE-ConnectionGUID: aR5Lcj7oSTSCdvhb78Q6Rg==
-X-CSE-MsgGUID: m4Ior/4ISQaJhW5FXbAQxg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11056"; a="35269947"
-X-IronPort-AV: E=Sophos;i="6.07,232,1708416000"; 
-   d="scan'208";a="35269947"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2024 08:12:16 -0700
-X-CSE-ConnectionGUID: 1Vj0lcevTuKqc1CFgpQSqQ==
-X-CSE-MsgGUID: 3IVWF+mHTcyfIYnSZvM35w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,232,1708416000"; 
-   d="scan'208";a="25520161"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2024 08:12:11 -0700
-Date: Fri, 26 Apr 2024 18:11:56 +0300
-From: Tony Lindgren <tony.lindgren@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Claudiu <claudiu.beznea@tuxon.dev>, gregkh@linuxfoundation.org,
-	jirislaby@kernel.org, tony@atomide.com, l.sanfilippo@kunbus.com,
-	tglx@linutronix.de, geert+renesas@glider.be, ulf.hansson@linaro.org,
-	peng.fan@nxp.com, linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-pm@vger.kernel.org,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [RFT PATCH v2] serial: core: Call device_set_awake_path() for
- console port
-Message-ID: <ZivDpyUgTinFbQh4@black.fi.intel.com>
-References: <20240425070936.547100-1-claudiu.beznea.uj@bp.renesas.com>
- <ZionWJ7ods60zuYX@smile.fi.intel.com>
+	s=arc-20240116; t=1714144481; c=relaxed/simple;
+	bh=//WzziHnNqcmkxi03bLLdDyX60lkCsTbOIScyFVBsNY=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Byj8KMK/PIO2p8eN1Ec7Qiup4yaHEhLzknSyWD9J6ugpxS/GnAtvm3WQEzRY/nmUNokUZaAtvNUnwWseTGufKUGYTLw0t0yIZj4nD5jvNYaQl96SNi0uweKbuXRUMdY7Vk1MQ3KrYCTaS/13b82I3epBuol7MGllAlC6CyGExSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=km+b6tIq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88B91C113CD;
+	Fri, 26 Apr 2024 15:14:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714144480;
+	bh=//WzziHnNqcmkxi03bLLdDyX60lkCsTbOIScyFVBsNY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=km+b6tIq0ulf9lIhA6+EpCgzdNOG8OhZWIPXLRWXb4dyy1CY15QA+tqTPrjCXhSPF
+	 s3A/t2V7K/EXXL55ObKMuTe0KeQkcvL8lHAf4NkYwny/pjKljWKTh8C7w2v3gMCeAP
+	 +WswzMTPVGeA7UyA9Y6xzfLtqAdVD5dHXj95Yw1BdQE7wKSGSeurUWCA1j6ew+Bzgb
+	 Ad+ynfMADgf0ZNJFskgCwWtJAi9oDLJJ8Fuv9eB/08pm+CVJzzdUJtKPAEXyI2Jjjk
+	 rlGFYqo2oE9HD3bFX+O6oE5XSdFmk7VWk5ycyKdK0T7r2s1EZEBRN/cSiVH6vgN6uc
+	 2nZV2F0z/zDMg==
+Received: from 82-132-222-182.dab.02.net ([82.132.222.182] helo=wait-a-minute.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1s0NHX-008GN9-HC;
+	Fri, 26 Apr 2024 16:14:37 +0100
+Date: Fri, 26 Apr 2024 16:14:29 +0100
+Message-ID: <87jzkktaui.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>,
+	Peter Zijlstra
+	<peterz@infradead.org>,
+	<linux-pm@vger.kernel.org>,
+	<loongarch@lists.linux.dev>,
+	<linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>,
+	<kvmarm@lists.linux.dev>,
+	<x86@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	"Rafael J . Wysocki"
+	<rafael@kernel.org>,
+	Miguel Luis <miguel.luis@oracle.com>,
+	James Morse
+	<james.morse@arm.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe
+ Brucker <jean-philippe@linaro.org>,
+	Catalin Marinas
+	<catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Hanjun Guo <guohanjun@huawei.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave
+ Hansen <dave.hansen@linux.intel.com>,
+	<linuxarm@huawei.com>,
+	<justin.he@arm.com>,
+	<jianyong.wu@arm.com>,
+	Lorenzo Pieralisi
+	<lpieralisi@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [PATCH v8 10/16] irqchip/gic-v3: Don't return errors from gic_acpi_match_gicc()
+In-Reply-To: <20240426135126.12802-11-Jonathan.Cameron@huawei.com>
+References: <20240426135126.12802-1-Jonathan.Cameron@huawei.com>
+	<20240426135126.12802-11-Jonathan.Cameron@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZionWJ7ods60zuYX@smile.fi.intel.com>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 82.132.222.182
+X-SA-Exim-Rcpt-To: Jonathan.Cameron@huawei.com, tglx@linutronix.de, peterz@infradead.org, linux-pm@vger.kernel.org, loongarch@lists.linux.dev, linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org, linux@armlinux.org.uk, rafael@kernel.org, miguel.luis@oracle.com, james.morse@arm.com, salil.mehta@huawei.com, jean-philippe@linaro.org, catalin.marinas@arm.com, will@kernel.org, guohanjun@huawei.com, mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, linuxarm@huawei.com, justin.he@arm.com, jianyong.wu@arm.com, lpieralisi@kernel.org, sudeep.holla@arm.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Thu, Apr 25, 2024 at 12:50:16PM +0300, Andy Shevchenko wrote:
-> The rest makes sense to me as we also have an internal hack to achieve
-> something similar in the case of Intel LPSS (8250_dw).
+On Fri, 26 Apr 2024 14:51:20 +0100,
+Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
 > 
-> But I like Tony to comment on this, from my perspective it's good:
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> From: James Morse <james.morse@arm.com>
+> 
+> gic_acpi_match_gicc() is only called via gic_acpi_count_gicr_regions().
+> It should only count the number of enabled redistributors, but it
+> also tries to sanity check the GICC entry, currently returning an
+> error if the Enabled bit is set, but the gicr_base_address is zero.
+> 
+> Adding support for the online-capable bit to the sanity check will
+> complicate it, for no benefit. The existing check implicitly depends on
+> gic_acpi_count_gicr_regions() previous failing to find any GICR regions
+> (as it is valid to have gicr_base_address of zero if the redistributors
+> are described via a GICR entry).
+> 
+> Instead of complicating the check, remove it. Failures that happen at
+> this point cause the irqchip not to register, meaning no irqs can be
+> requested. The kernel grinds to a panic() pretty quickly.
+>
+> Without the check, MADT tables that exhibit this problem are still
+> caught by gic_populate_rdist(), which helpfully also prints what went
+> wrong:
+> | CPU4: mpidr 100 has no re-distributor!
+> 
+> Signed-off-by: James Morse <james.morse@arm.com>
+> Reviewed-by: Gavin Shan <gshan@redhat.com>
+> Tested-by: Miguel Luis <miguel.luis@oracle.com>
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Yes nice, makes sense to me too:
+Reviewed-by: Marc Zyngier <maz@kernel.org>
 
-Reviewed-by: Tony Lindgren <tony.lindgren@linux.intel.com>
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
 
