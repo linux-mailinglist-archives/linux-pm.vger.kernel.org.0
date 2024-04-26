@@ -1,137 +1,143 @@
-Return-Path: <linux-pm+bounces-7157-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7158-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F1428B315A
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 09:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C77DF8B31C9
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 09:57:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B02C31F2296D
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 07:31:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 678D81F2177B
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 07:57:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9607713C3C3;
-	Fri, 26 Apr 2024 07:31:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 922F313C8F0;
+	Fri, 26 Apr 2024 07:57:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b="VZNS7CzH"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="U+Ug5mSE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8295913BC2B;
-	Fri, 26 Apr 2024 07:31:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.18.73.165
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA99613C8ED
+	for <linux-pm@vger.kernel.org>; Fri, 26 Apr 2024 07:57:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714116681; cv=none; b=if1D0EF0SAq3Ow8CINIO7iuRFuA+o2jRScUr69X9wKzUYjO4nYcR2dWrJNJ8Dkmd68KCMB0rxSSWt6xcCTqfH3hqc7GVsjE8H4l6R3PM+nCPDnYr0fvAMmMfZ0noyxQ5+9F/EG16WzbpAa5ueyZvGf6fKpb6JOFHKZbLgsv9NBc=
+	t=1714118254; cv=none; b=A20dfZi+bpw0D3O4jl93qkNmIifuUaMoiL+vKtyV8q9dDRzloXq9inAVoxr6+5Mmxr+/k4c+AYklfykXVklnwiGPW/PWDnJvRbX1ECxxO95ECyX9Bo7+jt1t3NXWoHEVCyxB/PpOYOeiMmtzGXyoDA8CD5o0CdvnyT0m11vSQb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714116681; c=relaxed/simple;
-	bh=bu5G/FK54u1pJ/J+TA5ReeZ6pPyfUo9bcJmqrR9GqrU=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YSTeELJ0TXfWvcIEkTMC+1BtnWE/HFUnTg3trV0g2LgpNOvygCzK6tAQw4zxq77EhAZJWg3jKuIQQZhNvxGehAi/DNctTEW1IXz4CmUk33RTqSuffx6Pomyx3SeHd3oy5jin70qL0IFE26FyfoKuT+7//GQSeY/aoYPmiAL1D/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com; spf=pass smtp.mailfrom=salutedevices.com; dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b=VZNS7CzH; arc=none smtp.client-ip=37.18.73.165
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=salutedevices.com
-Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
-	by mx1.sberdevices.ru (Postfix) with ESMTP id 6A933100003;
-	Fri, 26 Apr 2024 10:31:07 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 6A933100003
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salutedevices.com;
-	s=mail; t=1714116667;
-	bh=1oOjBRwahzipflI9HVMGrMYwyUxQIzND3/Gm6BB3fCE=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
-	b=VZNS7CzH0eVFZrgEc/d7px8hOqwLpYdDOuDyBpOsR0Ps9I+KgQGbqColp8rLO1rI8
-	 BDrTaXF7mVomrXocSLkhnAWJtvCe2+aN4J/ToGC+nGQiWn2pbQQsFUBXZWlW9ufdYx
-	 zQhqSPDpuTgmyixpLHfcikym+cYsjWl+Xwa7zeKaStj9Tfy/FjXbBATI8Zrll2002r
-	 HsDDMt1lz0P64YymnTbVhDpYW4Wm0BiJXBYtPRJWwi0FkBHDlAGqTaxicXNZPq0/WH
-	 Lk1+p5dWeEzxZ4mTwU3XYt4n2LHk+njJ8AeJF1JefqhAPtB29xpLrhVzRxaSE07Zjh
-	 Pe6PQpvnIv3Ag==
-Received: from smtp.sberdevices.ru (p-i-exch-sc-m02.sberdevices.ru [172.16.192.103])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mx1.sberdevices.ru (Postfix) with ESMTPS;
-	Fri, 26 Apr 2024 10:31:07 +0300 (MSK)
-Received: from localhost (100.64.160.123) by p-i-exch-sc-m02.sberdevices.ru
- (172.16.192.103) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Fri, 26 Apr
- 2024 10:31:07 +0300
-Date: Fri, 26 Apr 2024 10:31:06 +0300
-From: Dmitry Rokosov <ddrokosov@salutedevices.com>
-To: Daniel Lezcano <daniel.lezcano@linaro.org>, <neil.armstrong@linaro.org>
-CC: <jbrunet@baylibre.com>, <mturquette@baylibre.com>, <khilman@baylibre.com>,
-	<martin.blumenstingl@googlemail.com>, <glaroque@baylibre.com>,
-	<rafael@kernel.org>, <rui.zhang@intel.com>, <lukasz.luba@arm.com>,
-	<robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-	<conor+dt@kernel.org>, <kernel@salutedevices.com>, <rockosov@gmail.com>,
-	<linux-amlogic@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 0/2] thermal: amlogic: introduce A1 SoC family Thermal
- Sensor controller
-Message-ID: <20240426073106.3yl2dplvauper3lg@CAB-WSD-L081021>
-References: <20240328191322.17551-1-ddrokosov@salutedevices.com>
- <38ba3618-2a67-4e21-b08d-7e382411e51a@linaro.org>
- <20240417084007.uzg2uc7gwb6mi7bi@CAB-WSD-L081021>
+	s=arc-20240116; t=1714118254; c=relaxed/simple;
+	bh=wCiBODES6hYe6uSEsz1rgi057khv4znYREqrSw4IVQM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=P3TqIOp4QFBwac362DY5mRT6aTH3zJEydBTUzsNrc47jFweNZ7YJoRFZe1k28ZvhABNe21NXJXb7wgz9QF9HNRSF3a8Kth+Dw5Az25HuO2HGfm8+/PevO1LraT7Rj3F946/gn7HxZPyxxkzQSlJfWozg4OzwlwMmtZbiowxDd+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=U+Ug5mSE; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-41a72f3a20dso12499585e9.0
+        for <linux-pm@vger.kernel.org>; Fri, 26 Apr 2024 00:57:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1714118251; x=1714723051; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=392YvKHUy01C2ane9PlBGjbFseGqGwG2sSPnV1+h06o=;
+        b=U+Ug5mSEWLo0n7L40UGxbwAXnimvCa1dlFUN0LYaqh6jbnK5PP+Jqpff7A/Gxe782f
+         mYsAcx+aPgfP/5Cq/QiiitK9T5+b8Hch8ZAO0DF31ZehIhsVyMeioxk8/B6FvY1KfCLb
+         BMp/kIt9C/lSDQkqekr1kz7TSdpxxSacbRO5mVvz3qnRXo1nudbN6WOIXBM2oNRgowOc
+         nlJHszEAbKJnN2TlN2UNyp8UtFaK0/hOhp2pv6eFhQJMKVdxo8UfOFMSzrHkDFRqy8OL
+         88gGp6m2vG0Z0Z7Nq25hqQZTKyDXnWA9kFNm0chhmKQ0oSJ/9crtzYVibBOgc+702h/D
+         u5WQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714118251; x=1714723051;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=392YvKHUy01C2ane9PlBGjbFseGqGwG2sSPnV1+h06o=;
+        b=DQuIMmKFiITtuQoXHZTxT35ZrAIUioJpmcHlG5swoPZoNqgePj85/z+CPDIRxg7siD
+         mDWE9AOSi4i2ywQZckrPZQ80lKhHqUFgIhY5LHUTnacJF23cL/kiL1HKa/0hUgO58eVN
+         /rD9D76KKqtaM20HqulTN3l/uQskllIHy2ays/8QhXQDgdfWApra2eSP9iG3AziuQK9E
+         c334h+mzNhl0M3NXFFw9RQ2eC5J99rMtyI7lfKB0gMi/uVBKOGWDlv5dw/d9L3yYU9Hl
+         dWLaK/qpl8S4zOZDh4THk6z5yXRhMuu4s2jylmmEtMgnGiZiyyYg80rOfkLLhrFamiUb
+         NTAA==
+X-Forwarded-Encrypted: i=1; AJvYcCVL/DswZDRziKKLLtFhXUlXS9wKpei5uYqelU+gYmIHA1/O+w0TSXGYgbCdzBJSnVXcwGrXbDUDXwgyYVyJKBFWnQsgMhuGORU=
+X-Gm-Message-State: AOJu0YxbeOFZw8J38Oiqu/62H/N2TB7pmbNOxKdM8SIQDuAdkYFnOQ7k
+	0d1jc1D3YOYQI1Dm/PkNPKE3NYtzjskt0QznIaJUvA1C+tPophQzVxFu14Y0MEc=
+X-Google-Smtp-Source: AGHT+IHIONkocekx1Nn0xgOaZLdkdZ6ZhZ+MdaNtdhL8VruI6qSiOgyFn8JkOr6Ws3rcaZt3necsIA==
+X-Received: by 2002:a05:600c:19d1:b0:419:f126:a46d with SMTP id u17-20020a05600c19d100b00419f126a46dmr1373777wmq.30.1714118250865;
+        Fri, 26 Apr 2024 00:57:30 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id f7-20020a05600c154700b004190d7126c0sm25350832wmg.38.2024.04.26.00.57.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Apr 2024 00:57:30 -0700 (PDT)
+Message-ID: <35c9dbe9-9166-4358-bfa9-99f205acd8de@linaro.org>
+Date: Fri, 26 Apr 2024 09:57:29 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20240417084007.uzg2uc7gwb6mi7bi@CAB-WSD-L081021>
-User-Agent: NeoMutt/20220415
-X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
- p-i-exch-sc-m02.sberdevices.ru (172.16.192.103)
-X-KSMG-Rule-ID: 10
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 184944 [Apr 26 2024]
-X-KSMG-AntiSpam-Version: 6.1.0.4
-X-KSMG-AntiSpam-Envelope-From: ddrokosov@salutedevices.com
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 18 0.3.18 b9d6ada76958f07c6a68617a7ac8df800bc4166c, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, 100.64.160.123:7.1.2;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;salutedevices.com:7.1.1;smtp.sberdevices.ru:5.0.1,7.1.1, FromAlignment: s, ApMailHostAddress: 100.64.160.123
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean
-X-KSMG-LinksScanning: Clean
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2024/04/26 01:49:00 #24972266
-X-KSMG-AntiVirus-Status: Clean, skipped
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/2] thermal: amlogic: introduce A1 SoC family Thermal
+ Sensor controller
+Content-Language: en-US
+To: Dmitry Rokosov <ddrokosov@salutedevices.com>, neil.armstrong@linaro.org
+Cc: jbrunet@baylibre.com, mturquette@baylibre.com, khilman@baylibre.com,
+ martin.blumenstingl@googlemail.com, glaroque@baylibre.com,
+ rafael@kernel.org, rui.zhang@intel.com, lukasz.luba@arm.com,
+ robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ kernel@salutedevices.com, rockosov@gmail.com,
+ linux-amlogic@lists.infradead.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+References: <20240328191322.17551-1-ddrokosov@salutedevices.com>
+ <38ba3618-2a67-4e21-b08d-7e382411e51a@linaro.org>
+ <20240417084007.uzg2uc7gwb6mi7bi@CAB-WSD-L081021>
+ <20240426073106.3yl2dplvauper3lg@CAB-WSD-L081021>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20240426073106.3yl2dplvauper3lg@CAB-WSD-L081021>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hello Neil,
 
-I hope you're doing well. I was wondering if you could assist me with
-below problem.
+Hi Dmitry,
 
-I'm a bit confused about which kernel repository the series was applied
-to. I asked Daniel about it, but unfortunately, I didn't receive any
-feedback from him. Could you provide some clarification on this matter?
-
-Thank you in advance for your help.
-
-On Wed, Apr 17, 2024 at 11:40:07AM +0300, Dmitry Rokosov wrote:
-> Hello Daniel,
+On 26/04/2024 09:31, Dmitry Rokosov wrote:
+> Hello Neil,
 > 
-> Could you please let me know in which repository you have applied this
-> change? I am trying to cherry-pick the original applied commit and apply
-> it to our internal mainline branch instead of the internal commit.
-> However, I am unable to find the applied series in any of the
-> repositories on git.kernel.org.
+> I hope you're doing well. I was wondering if you could assist me with
+> below problem.
 > 
-> On Thu, Apr 04, 2024 at 02:23:21PM +0200, Daniel Lezcano wrote:
-> > On 28/03/2024 20:13, Dmitry Rokosov wrote:
-> > > It is primarily based on the G12A thermal controller, with only a slight
-> > > variation in the offset value of the efuse parameters. Therefore, this
-> > > patch series provides appropriate platform data and dt-bindings to
-> > > ensure proper support.
-> > 
-> > 
-> > Applied, thanks
+> I'm a bit confused about which kernel repository the series was applied
+> to. I asked Daniel about it, but unfortunately, I didn't receive any
+> feedback from him. Could you provide some clarification on this matter?
 > 
+> Thank you in advance for your help.
+
+I was OoO the last two weeks.
+
+Your series is in my tree [1], which is pulled automatically by the 
+linux-pm tree in its bleeding-edge branch.
+
+Today, this branch will move to the linux-next branch [2] which will 
+also be pulled by the linux-pm/next branch automatically.
+
+Hope that helps and sorry for the delay to answer
+
+   -- Daniel
+
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/bleeding-edge
+
+[2] 
+https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/linux-next
+
+
+
 
 -- 
-Thank you,
-Dmitry
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
 
