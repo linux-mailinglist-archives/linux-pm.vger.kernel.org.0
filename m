@@ -1,80 +1,80 @@
-Return-Path: <linux-pm+bounces-7165-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7166-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB86C8B33D6
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 11:23:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33AF88B33DD
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 11:24:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A827A284984
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 09:23:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7664CB22F14
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Apr 2024 09:24:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7612B13E3F5;
-	Fri, 26 Apr 2024 09:23:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0655A13EFF3;
+	Fri, 26 Apr 2024 09:24:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZSfzzAQA"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bWeOtios"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13FF113D89C
-	for <linux-pm@vger.kernel.org>; Fri, 26 Apr 2024 09:23:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82E7213DB88
+	for <linux-pm@vger.kernel.org>; Fri, 26 Apr 2024 09:24:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714123415; cv=none; b=iG+3Nz5EXHO3yAQaxHGwqdisvcDqAB9g+wxoVyyMfZiqcnG/4OhKZgIY/KXPESi9daSy7rgQyDVY6pJXv9AA4Bbna8PZ8jMysowX/vbhgZE+jDVUC3MuxaC+BtozcDKQlQ6JEcgfOwiq38bAWL4r4UEDfJOyEtvy0ozABLcjvAs=
+	t=1714123462; cv=none; b=lL7YYvJJzSHrPIaPudHyewSbffXfOSbGwLdoRU38IgHSLF2tCOtb7Uu4QannIGc8JtafqpJN+etzVZlQsJ2pdFO/18Q1TyNmMKii9WFbeiNz7L8QftpJf8QGzn//TKlyWmzm085RKkfu901Ut5QTNnUopKUaqGmZpf/rdoDaVX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714123415; c=relaxed/simple;
-	bh=Udl46LR7XVoXfrBKhl6mIDBjIxqJOh882IzI0S4UAM4=;
+	s=arc-20240116; t=1714123462; c=relaxed/simple;
+	bh=3prmVvb4CSFrMQtGQGohzxkB5EGRjQF5LNfCJibjaRE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tbbFaNBtS9zCOsXM9ybhZsyfuwQ2gdJIGmlSpQWH6kD5m3xlkqOoxWj/e/zE3ePmk8MVF0O8sadBYbLYJq/Us0PPrgDIye+OWsN65wwr+TMYTIgkkArq0C/I8K2vkAq9ehiae3Ao5LRXaaYiLpC8oLWqJP+mQTbtIYdo0MfNslw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZSfzzAQA; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=YlnfYegfCg8v3PL4KTdar089JM48xRD9x+iAzxaTjE3VOtNndrRqqK4eg8tLQz+jz5fh4DtuCXLFNoobnNihuadAZNMO5kxvvjlWLjvNanEypE+X8HL+ywwv/DVA0o68xSbT7ZVGVw86ucxRFcj77uA1e38Cjn0eNCT2M7EFGmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bWeOtios; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1714123413;
+	s=mimecast20190719; t=1714123459;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=iRAd8wfnSBnkmuLuRNYN/BGd3qvtIlEXRV1WTPss9aM=;
-	b=ZSfzzAQAhgZxujKRSys68q292URUOoGyft6rzm0FWsj8AjanGJnImCJ9fquqF+QBB2kn3a
-	auIT8Hq1RGeG89pk6jOIIhv52DotF6kMMPYP8xFgYeY08t6I2z/tenrEkdit4plEL/XVyd
-	VWMzS7QQwmBQ8tmCuaulartEzrCzLhE=
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
- [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=wDf1iJ0rcFw5r9tjCYtJ1fcG4v1z0nEnImYLXEpzCjM=;
+	b=bWeOtios20C3eqi+Q4VeUWCZXhWTd7xhoCJO6XcYib8pofcXg58PMuBt/wGWhHDsmd7qcm
+	X0JemTsn3VlQxeyN3cPwDoCxkI92oZDfP2ceji57H0/x20hRM5D+uONsZpbB7XYSo4iq9Y
+	kimwgenCglgLBsq4bKVVQiJl2dC5ZSE=
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
+ [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-107-YbWTzpEaM-ev0NdnHJlAYA-1; Fri, 26 Apr 2024 05:23:31 -0400
-X-MC-Unique: YbWTzpEaM-ev0NdnHJlAYA-1
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-1e4b70e0dc9so20403095ad.3
-        for <linux-pm@vger.kernel.org>; Fri, 26 Apr 2024 02:23:31 -0700 (PDT)
+ us-mta-621-jynn26-nP2yo1Z0Q-tV_OA-1; Fri, 26 Apr 2024 05:24:17 -0400
+X-MC-Unique: jynn26-nP2yo1Z0Q-tV_OA-1
+Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-5c6245bc7caso1825245a12.3
+        for <linux-pm@vger.kernel.org>; Fri, 26 Apr 2024 02:24:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714123411; x=1714728211;
+        d=1e100.net; s=20230601; t=1714123456; x=1714728256;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iRAd8wfnSBnkmuLuRNYN/BGd3qvtIlEXRV1WTPss9aM=;
-        b=TvVf2aig38o+CP4dvgyQVMdjjSw6quYbsARRj05AWSRbmclFN8dtjGt8wLbKxDXcyZ
-         maoUO7wXl6GKuB6yGQIIi6ZyA5ZEJ57hwkEH1Rp1NTAhM0fSKSFqJZ3XldpXjl5sp+/P
-         4BIhq55wYWpzL+0crvFznO4Do0HFBq1zPWGkSnTiqMRWVQYCX3c6G2qcmyyEIje6El0K
-         484+s1Vr5FCGBN1B05u0V3Bg6Ud74l8h4/zXcXDNrW1GNlhW7pf6GZ7z1bWxeggHbL2C
-         bkPr+hc1ZBShCFFVp+tEQ/hxXASkvq3y8gec4lUVkLEWjVaK1orQgcrQ+FeyYyooPMkG
-         v21g==
-X-Forwarded-Encrypted: i=1; AJvYcCVR+mBkF1LNLv1w7VFa74MAVLzYGfnrbdFQ1kwe6NaGkVF9yxSOxPx0DcpfxBiPzZN4CYONKowrIHcNllE2fXX4kQGcGtg5A1k=
-X-Gm-Message-State: AOJu0YwyeZqXQ9zjVlnCncpBTezI5pXYkbtgdN8MCD+n0S1+STqfLH70
-	ru+nInexoeA4yhlnyzR0kDFqjIH/KT6Aqxy79TFm3xEXDs7jJ06wxTT5f+kdhkkyvcVXvPRAyNw
-	GzljkBuaawk7+cLCitw3oc2anX4DWqVp95IOD4woz17FXOQ4vCmw0Bhdd
-X-Received: by 2002:a17:903:11c3:b0:1e5:5bd7:87a4 with SMTP id q3-20020a17090311c300b001e55bd787a4mr2283757plh.16.1714123410708;
-        Fri, 26 Apr 2024 02:23:30 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGTmWdacAorvyOh8QQAQnPNEyl/iXm9VdRYljIzI/YjTWhI47bK72rLeP2m/Hny5DHEF82p7g==
-X-Received: by 2002:a17:903:11c3:b0:1e5:5bd7:87a4 with SMTP id q3-20020a17090311c300b001e55bd787a4mr2283739plh.16.1714123410303;
-        Fri, 26 Apr 2024 02:23:30 -0700 (PDT)
+        bh=wDf1iJ0rcFw5r9tjCYtJ1fcG4v1z0nEnImYLXEpzCjM=;
+        b=jwWMF0a0DQq2pyZ0az4D+l8XqmEfKTrxD/zdwGDw4VOTBh2a4ZqpGHa4Y5KmeKPt1Y
+         l9Zfq0EM/sT6ggMcrGBdGaHvYTPB+d4Ibftgb/kLSvLUWfLSRZg7ZTQwbggJPT9gp3p5
+         8bMbdqGG/AOj7TEttmsGJo+Zij7ycN9dM+GpyF6ArWY60d5r25Ud9SA1GwhQZyDp8J1j
+         AcR2Xs5xqki/V+5e6BynZIm7KE/gmcXn5CzQkcS8B1YgrP/HomILJK+te02wtftwGJ4h
+         PlNFeC58op2O2whkBmKGITHoMEyO4tcn9OuQJ+1dDr36CNG2Fx1Z1LXLX8h8wC3ceAgI
+         qi8w==
+X-Forwarded-Encrypted: i=1; AJvYcCWB3IgSOk3nhSETUYEIy4A39jURYIsN3sdzeIo4vY2Kl/duOLAtgxhT4HzC5CaE42lQ4qQUAb4aBrAazyxYK1qGEYneESq4aEQ=
+X-Gm-Message-State: AOJu0YzxYmG73VOZM7mZ/nM8n6ETKB0la55gwRcB8uC7kfxjfpujAPL5
+	/odBelBO5lM9LAqlPktfoenLo+NaFjNIXpaaBe1d0I6bhA5vOwQH44txp46wNIPisG5/qdH/2TM
+	Wb5luddsfQnrqn/S1N6/yaykqTKLVrfD2by6dqdiHMupxgvqDmsBODnr2
+X-Received: by 2002:a05:6a21:3a44:b0:1a7:7b92:e0ed with SMTP id zu4-20020a056a213a4400b001a77b92e0edmr2325184pzb.51.1714123456723;
+        Fri, 26 Apr 2024 02:24:16 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFxVT+GN5mxbf+mMtYjbokc8FhufYwX7eAOxYXMmkBU6lBE5Xi1LluATczohJhaBcs7ECSJrQ==
+X-Received: by 2002:a05:6a21:3a44:b0:1a7:7b92:e0ed with SMTP id zu4-20020a056a213a4400b001a77b92e0edmr2325150pzb.51.1714123456389;
+        Fri, 26 Apr 2024 02:24:16 -0700 (PDT)
 Received: from [192.168.68.50] ([43.252.112.88])
-        by smtp.gmail.com with ESMTPSA id r3-20020a170902be0300b001e27462b988sm15054500pls.61.2024.04.26.02.23.21
+        by smtp.gmail.com with ESMTPSA id r3-20020a170902be0300b001e27462b988sm15054500pls.61.2024.04.26.02.24.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Apr 2024 02:23:29 -0700 (PDT)
-Message-ID: <566817ae-90f0-4ec9-b54e-b9fdb635119e@redhat.com>
-Date: Fri, 26 Apr 2024 19:23:19 +1000
+        Fri, 26 Apr 2024 02:24:15 -0700 (PDT)
+Message-ID: <e3fb151e-8d79-439d-9eea-131a23f1d48c@redhat.com>
+Date: Fri, 26 Apr 2024 19:24:07 +1000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -82,8 +82,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 01/16] ACPI: processor: Simplify initial onlining to
- use same path for cold and hotplug
+Subject: Re: [PATCH v7 03/16] ACPI: processor: Drop duplicated check on _STA
+ (enabled + present)
 Content-Language: en-US
 To: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
  Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>,
@@ -100,40 +100,29 @@ Cc: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
  Dave Hansen <dave.hansen@linux.intel.com>, linuxarm@huawei.com,
  justin.he@arm.com, jianyong.wu@arm.com
 References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com>
- <20240418135412.14730-2-Jonathan.Cameron@huawei.com>
+ <20240418135412.14730-4-Jonathan.Cameron@huawei.com>
 From: Gavin Shan <gshan@redhat.com>
-In-Reply-To: <20240418135412.14730-2-Jonathan.Cameron@huawei.com>
+In-Reply-To: <20240418135412.14730-4-Jonathan.Cameron@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 4/18/24 23:53, Jonathan Cameron wrote:
-> Separate code paths, combined with a flag set in acpi_processor.c to
-> indicate a struct acpi_processor was for a hotplugged CPU ensured that
-> per CPU data was only set up the first time that a CPU was initialized.
-> This appears to be unnecessary as the paths can be combined by letting
-> the online logic also handle any CPUs online at the time of driver load.
+> The ACPI bus scan will only result in acpi_processor_add() being called
+> if _STA has already been checked and the result is that the
+> processor is enabled and present.  Hence drop this additional check.
 > 
-> Motivation for this change, beyond simplification, is that ARM64
-> virtual CPU HP uses the same code paths for hotplug and cold path in
-> acpi_processor.c so had no easy way to set the flag for hotplug only.
-> Removing this necessity will enable ARM64 vCPU HP to reuse the existing
-> code paths.
-> 
-> Leave noisy pr_info() in place but update it to not state the CPU
-> was hotplugged.
-> 
+> Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
 > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > 
 > ---
-> v7: No change.
-> v6: New patch.
-> RFT: I have very limited test resources for x86 and other
-> architectures that may be affected by this change.
+> v7: No change
+> v6: New patch to drop this unnecessary code. Now I think we only
+>      need to explicitly read STA to print a warning in the ARM64
+>      arch_unregister_cpu() path where we want to know if the
+>      present bit has been unset as well.
 > ---
->   drivers/acpi/acpi_processor.c   |  1 -
->   drivers/acpi/processor_driver.c | 44 ++++++++++-----------------------
->   include/acpi/processor.h        |  2 +-
->   3 files changed, 14 insertions(+), 33 deletions(-)
+>   drivers/acpi/acpi_processor.c | 6 ------
+>   1 file changed, 6 deletions(-)
 > 
 
 Reviewed-by: Gavin Shan <gshan@redhat.com>
