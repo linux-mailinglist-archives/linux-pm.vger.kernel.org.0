@@ -1,104 +1,164 @@
-Return-Path: <linux-pm+bounces-7242-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7243-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC2568B4B72
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Apr 2024 13:06:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7000B8B4B82
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Apr 2024 13:28:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1E8A2B20D79
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Apr 2024 11:06:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A0C531C209A2
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Apr 2024 11:28:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB0D154F96;
-	Sun, 28 Apr 2024 11:06:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4216957334;
+	Sun, 28 Apr 2024 11:28:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="AkJlo2HI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Btaefxo1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 218F28480;
-	Sun, 28 Apr 2024 11:06:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05FB042042;
+	Sun, 28 Apr 2024 11:28:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714302374; cv=none; b=n5ozn7QuwEVP47WmPuXrfGX1n/gh94poV9BIUrlZzq8dfDKJmSljB4C2k+aBe07VxHynZbamEftomocodeUVuozUkuhIaSVbgIfFwj2bNXdgjyQ52U2+5VuXAJcSucQI8wkLICGepDtagq0B6DVWnuyZZjmAtSNqI7r5ZhNWACE=
+	t=1714303690; cv=none; b=jCHu45UqSmYVQy1p7R1rEsgfmb64/oJ4CBLqjvGyFK5YDMxBwvWzkXFYFt7EWJdtuXRuNV0bBAxC4HwYgv9cxTecjZVSLF+E1VG82/1Pqr5QGX4xG5UKtjD1n5t2s5oAF4lkQdIk0G5mhBe4LuFgiwDgW2kAfS3SToKdqeT470k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714302374; c=relaxed/simple;
-	bh=UU8SgdFGNOdhG65xRQTliPs03k4M2ugcfAJrcZTffaU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qtqVMDVdNz4ZmFtqg9q4mhQ54oaVpkQXSecg91fyXx4MHZrPOZuik0Ov12NgtvoXcz+XlLtCTT+mrHJxfi5z3F3Q/dJ8Y0QhbStSPZEr7DhikdlIfvVv3Z3T4oay7a+0KndLf20wouQUBJdraABEXAcxAzTZGK6RaRwNZPCrOhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=AkJlo2HI; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id BA68A40E0205;
-	Sun, 28 Apr 2024 11:06:09 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id gcN8NC6Ho0lk; Sun, 28 Apr 2024 11:06:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1714302362; bh=nek46uYbbUwLxdWyYg2mscjnkdU3uUJznYeFluV5IIU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AkJlo2HI0N39m8wdNo6Msjt2VwdAK2LL7lR/d42d3MuLFw6ecUTuHSBAC0iBD1P9f
-	 500SVzdxU8UZ6mTzwCohUdm5WmuT0kZERam1wWDn7YdF4oh85OpernTS3arBreLmxJ
-	 SZHKKsphzN1axwtD92p1ovlvuxSOjHk9En//pFeS7pIJFr1vWn5t6GkK9B+VbjTm/0
-	 Y+mfxDkXmr/GYv1Owp7JnsXroCgA/XEZMy9dRnbInXKv4zJM04WDYlZPaCp4aQEcKq
-	 k+FmgdnH6qxGnIxMcEZSvx83YMLl+KVIjh7rZtCN/tOMr9pgr06l7g0bGxK2X1JMK0
-	 eFPGey2C1WnRvhLJwWs8EcMxUdut9Hq26rxgk07RvoIeQC3B1jPxmQGE1EmovylQkr
-	 XQN6u+627g0DsdJkBDb8OuBboLt8msVpEUgjlTeGzwAF3a+VIZuPAv41hHvrl4xj5p
-	 6qW0dQKFAMxBMvPHSLSdXmyW+meQbqJzwmUTCoLCv3Ih9K68rlJ2DJiOFJ7NDmoJnF
-	 rNfv7m783F502CWZbn9D/EM9gljdqXWrHliNR3NeVZIQ5V3UeEW5HryJB1oXwHqDgR
-	 AA/M1xpNlWndwezO9dIvwLQxkdq5I0sPtV39kIfPKNA5lQ+4HGAHVyhSLxaaT3SlrK
-	 XlWpUTGkEpk5eo3BDwGDp5S4=
-Received: from zn.tnic (pd953020b.dip0.t-ipconnect.de [217.83.2.11])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2160040E016B;
-	Sun, 28 Apr 2024 11:05:55 +0000 (UTC)
-Date: Sun, 28 Apr 2024 13:05:49 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: "Du, Xiaojian" <Xiaojian.Du@amd.com>
-Cc: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>,
-	"Limonciello, Mario" <Mario.Limonciello@amd.com>,
-	"Huang, Ray" <Ray.Huang@amd.com>,
-	"Yuan, Perry" <Perry.Yuan@amd.com>,
-	lkml <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] x86/cpufeatures: Add AMD FAST CPPC feature flag
-Message-ID: <20240428110549.GAZi4tjadYAYgOBhEX@fat_crate.local>
-References: <20240428091133.592333-1-Xiaojian.Du@amd.com>
- <20240428095409.GAZi4cwYxRwQGW_WFq@fat_crate.local>
- <DM4PR12MB5136052EA0F1930B49F91BBCF1142@DM4PR12MB5136.namprd12.prod.outlook.com>
+	s=arc-20240116; t=1714303690; c=relaxed/simple;
+	bh=rJc04lQPGAte3sgRY0zpeVVbUDNqqGYs1de72FW6xAs=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=WL7DzwBEwdT/G5ln1GRke5Ktju4Ho3ChlskFC/dSYBux9v4CPAXAEN7kOkNgkCI3r5irlc+M/YsA4iUp+rcVyKjbsgUIDCPRWgly69AK7uYz3XNy0maF0ey3q+dqN6fzy7rjmxDfuInUMYmZJHXeGjQoCtfwBaViK+9MSm5IiH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Btaefxo1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71E24C113CC;
+	Sun, 28 Apr 2024 11:28:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714303689;
+	bh=rJc04lQPGAte3sgRY0zpeVVbUDNqqGYs1de72FW6xAs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Btaefxo10uErlTPoPMBzc3QSERSMGWTlDvMlrSz90PUhcYtUja0aJH4eJKGek6fJf
+	 PtZQCrETOb541/H5bYGFFkda+JnADdkWOqXsCm5npThloYgFTJUCR0NNXroWbUx55M
+	 xYx9CyZlRwd6ZlMEOMRjD6jIeyFYgDhru/uKNcBCUB3I0WawgBPWl/7MFE1Ozy6olY
+	 AYHFd/1omU+ZP63jEkw2vtrxBrBNlvmrs5SLMZENl2ET1lAAQ1qtjk4hDgfKKMiXHD
+	 qNc1cNAs8A2HJ0CDp2o+STw+a6kt21n3Z1Fru2vOYQJ+4lTtiSX48rT2itnTVkOF8h
+	 CaJ539gHZWg4Q==
+Received: from 82-132-246-56.dab.02.net ([82.132.246.56] helo=wait-a-minute.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1s12hS-008nyp-PJ;
+	Sun, 28 Apr 2024 12:28:07 +0100
+Date: Sun, 28 Apr 2024 12:28:03 +0100
+Message-ID: <87frv5u3p8.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>,
+	Peter Zijlstra
+	<peterz@infradead.org>,
+	<linux-pm@vger.kernel.org>,
+	<loongarch@lists.linux.dev>,
+	<linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>,
+	<kvmarm@lists.linux.dev>,
+	<x86@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	"Rafael J . Wysocki"
+	<rafael@kernel.org>,
+	Miguel Luis <miguel.luis@oracle.com>,
+	"James Morse"
+	<james.morse@arm.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe
+ Brucker <jean-philippe@linaro.org>,
+	Catalin Marinas
+	<catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Hanjun Guo
+	<guohanjun@huawei.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov
+	<bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	<linuxarm@huawei.com>,
+	<justin.he@arm.com>,
+	<jianyong.wu@arm.com>,
+	"Lorenzo\
+ Pieralisi" <lpieralisi@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [PATCH v8 11/16] irqchip/gic-v3: Add support for ACPI's disabled but 'online capable' CPUs
+In-Reply-To: <20240426192858.000033d9@huawei.com>
+References: <20240426135126.12802-1-Jonathan.Cameron@huawei.com>
+	<20240426135126.12802-12-Jonathan.Cameron@huawei.com>
+	<87il04t7j2.wl-maz@kernel.org>
+	<20240426192858.000033d9@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <DM4PR12MB5136052EA0F1930B49F91BBCF1142@DM4PR12MB5136.namprd12.prod.outlook.com>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 82.132.246.56
+X-SA-Exim-Rcpt-To: Jonathan.Cameron@Huawei.com, tglx@linutronix.de, peterz@infradead.org, linux-pm@vger.kernel.org, loongarch@lists.linux.dev, linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org, linux@armlinux.org.uk, rafael@kernel.org, miguel.luis@oracle.com, james.morse@arm.com, salil.mehta@huawei.com, jean-philippe@linaro.org, catalin.marinas@arm.com, will@kernel.org, guohanjun@huawei.com, mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, linuxarm@huawei.com, justin.he@arm.com, jianyong.wu@arm.com, lpieralisi@kernel.org, sudeep.holla@arm.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Sun, Apr 28, 2024 at 10:59:50AM +0000, Du, Xiaojian wrote:
-> Thanks a lot for review, I will modify before submitting.
+On Fri, 26 Apr 2024 19:28:58 +0100,
+Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+> 
+> 
+> I'll not send a formal v9 until early next week, so here is the current state
+> if you have time to take another look before then.
 
-Thanks.
+Don't bother resending this on my account -- you only sent it on
+Friday and there hasn't been much response to it yet. There is still a
+problem (see below), but looks otherwise OK.
 
-Also, please do not top-post on a public ML but put your reply
-underneath, like I just did.
+[...]
 
-That's also explained in those docs I pointed you to.
+> @@ -2363,11 +2381,25 @@ gic_acpi_parse_madt_gicc(union acpi_subtable_headers *header,
+>  				(struct acpi_madt_generic_interrupt *)header;
+>  	u32 reg = readl_relaxed(acpi_data.dist_base + GICD_PIDR2) & GIC_PIDR2_ARCH_MASK;
+>  	u32 size = reg == GIC_PIDR2_ARCH_GICv4 ? SZ_64K * 4 : SZ_64K * 2;
+> +	int cpu = get_cpu_for_acpi_id(gicc->uid);
 
-Thx.
+I already commented that get_cpu_for_acpi_id() can...
+
+>  	void __iomem *redist_base;
+>  
+> -	if (!acpi_gicc_is_usable(gicc))
+> +	/* Neither enabled or online capable means it doesn't exist, skip it */
+> +	if (!(gicc->flags & (ACPI_MADT_ENABLED | ACPI_MADT_GICC_ONLINE_CAPABLE)))
+>  		return 0;
+>  
+> +	/*
+> +	 * Capable but disabled CPUs can be brought online later. What about
+> +	 * the redistributor? ACPI doesn't want to say!
+> +	 * Virtual hotplug systems can use the MADT's "always-on" GICR entries.
+> +	 * Otherwise, prevent such CPUs from being brought online.
+> +	 */
+> +	if (!(gicc->flags & ACPI_MADT_ENABLED)) {
+> +		pr_warn("CPU %u's redistributor is inaccessible: this CPU can't be brought online\n", cpu);
+> +		cpumask_set_cpu(cpu, &broken_rdists);
+
+... return -EINVAL, and then be passed to cpumask_set_cpu(), with
+interesting effects. It shouldn't happen, but I trust anything that
+comes from firmware tables as much as I trust a campaigning
+politician's promises. This should really result in the RD being
+considered unusable, but without affecting any CPU (there is no valid
+CPU the first place).
+
+Another question is what get_cpu_for acpi_id() returns for a disabled
+CPU. A valid CPU number? Or -EINVAL?
+
+Thanks,
+
+	M.
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Without deviation from the norm, progress is not possible.
 
