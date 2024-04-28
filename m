@@ -1,119 +1,131 @@
-Return-Path: <linux-pm+bounces-7244-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7245-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1C6A8B4CF3
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Apr 2024 19:01:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 90E598B4E09
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Apr 2024 23:52:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 648AE1F212F5
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Apr 2024 17:01:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 303E31F210D7
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Apr 2024 21:52:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66B2071B49;
-	Sun, 28 Apr 2024 17:01:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9E4A17D2;
+	Sun, 28 Apr 2024 21:52:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m5C8GRXI"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="BLXW08p/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF7A3138C;
-	Sun, 28 Apr 2024 17:01:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C7F210F1
+	for <linux-pm@vger.kernel.org>; Sun, 28 Apr 2024 21:52:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714323695; cv=none; b=KbauptuJRTb+kUoNBY+puv/1MZcxmjFIDBAVQ47OwA44uD61djt5St+Txn7I7De5+YmWddaVXLoK2EbZUfhKWJ3hC/mgez81wcZCGuz2qoxNSfZl6aGTEaelwMKyMKgd5JR8Btt/+qY2ruGY8imC8XngJnQbrKlgaYbOOEQvd4Y=
+	t=1714341133; cv=none; b=T5vsgjLDHkMSAcO+AxFX+T/Vbt+ivOTJeoF2ua6j+M+88s9YysS2h2/jr0rwqU+0AXQ6liN6qvuEDQVlT/aIop/xdgO+uJqObhi9H2EkJyOvYEP1SxjNLcv1mysCXkCbv1ja2YV7GrF8/5zC1tuh+yCxdo+9CzxqoWxq5xNYXPs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714323695; c=relaxed/simple;
-	bh=ZxixgPrLZnvDJH9QdjxkzUf9JL4vSpsdKc6KwfmMhrI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oEz4zSAa0Q2I3lU/m9teRS4Q+MIwIaU5SIIcAknugEjDBp5WZ++bhJp1oDdblf/7zSDT5cmukMThBb+Nrg8+XeZuiHvlqDzztlDdztGlRPTaG5upf0iixZ2eqW4Jm0tT8Xo1k+0quy2zzUVCe5amDPL5TsebLjXoiq/akgZcz64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m5C8GRXI; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2a6fa7773d3so3052084a91.3;
-        Sun, 28 Apr 2024 10:01:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714323693; x=1714928493; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NDENpsFmdeEfO/qVTeBKBW2vXkBazChMcI6ZwrxhS2w=;
-        b=m5C8GRXIlyOlu4V6/WH3b1f+20t6xeK1IOykH03F/zEMMj0cmj2i/l5GrePL3IOhv+
-         DgSIuJufpqfz4QaLRvCIs7Ae1/MCVpTeWE/aVRs5fWLGa/d8ipwLUI9SUtdG/CrxWUem
-         KUH56FLWN34G81IQrUkbcWLyNVTn2YCtQy8hI4bQrEkWmocfVaWAaHUFW+kDjlz0ryR6
-         EaQfkYXUcZ70GSk97X1sl2oe7vfUfkC2hTRldwab1+XgdEHLEIkZJj19OQtQJ2T6gTWT
-         pcJxgMW9cNVUKYJYiC3+2rzlKB/3nROgnmvMuPcOrfdvpob0BODR7dolGoNukFckXewC
-         aCCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714323693; x=1714928493;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NDENpsFmdeEfO/qVTeBKBW2vXkBazChMcI6ZwrxhS2w=;
-        b=Pv6sNxrr8vf9uWp+Db5qCogVmA1nHwkqF8EW4b1kzF6dqQ2LRHwQolp9y5pg3LMUFm
-         1D4afDc1Pg6rV7D3Fy64beaQaomIjSr96mjmCn/Pm8hAoxpn+EQU73Zq5W760y10YnpW
-         rqjXw8lZfD3xy/KZ4ZbQHRzUs8txXnb5G/xeQj9c4VQ/XqcG7jCdn6iRTS7OcK5Och8C
-         ja01itT8hFmRNjEipWMm5nWK/O7ke3BqiL6YdU8yk4nKD7bced/6PjQAjG7QUXAGGsN4
-         u4D1GQxBsY1PbjS4rGVOW6GA0iHJTQPm6Qvk7DC2S6YJZIT4JuG6FSjlz4jIlycCGA66
-         XXZg==
-X-Forwarded-Encrypted: i=1; AJvYcCW9YprIDLKH9oouXHnO8jxaLhlK5S3oeHZ/DRDNYFcuVslkj3DJn199Uml8KdQ1dNm1heziwWUxGq5Jpf6XCzQxPUVGZlhYeXc/67uGaYi5jxvs5f2+v8BDJH2Cb4VFs04bGSdpOJMcJX3QyPEW04WxIbtn8kDIsOk5xHKJrgqqs6jt3g==
-X-Gm-Message-State: AOJu0YxYUb6nOxlE9SiS+Dl5MQ7FpDleyBCV9hn+DE4565QxUupt+KW4
-	o/4TugI/Y+yUy2w8PMJszBpUbeM3M4zO0d+S++l8p/b1zs+3xHOk
-X-Google-Smtp-Source: AGHT+IGiNGmaG/QByc2uD0fvrWsQmU/2d61xSO4IEMUfGqDYmANEqc95aCKWvOM+k/CcPp5+AiVqFQ==
-X-Received: by 2002:a17:90a:d397:b0:2a2:34d8:ddeb with SMTP id q23-20020a17090ad39700b002a234d8ddebmr7037167pju.22.1714323692991;
-        Sun, 28 Apr 2024 10:01:32 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e14-20020a17090ab38e00b002a03456ccabsm19304471pjr.30.2024.04.28.10.01.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Apr 2024 10:01:31 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 28 Apr 2024 10:01:30 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	Zhang Rui <rui.zhang@intel.com>, Jean Delvare <jdelvare@suse.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Ricardo Neri <ricardo.neri@intel.com>
-Subject: Re: [PATCH v2 3/3] hwmon: (coretemp) Extend the bitmask to read
- temperature to 0xff
-Message-ID: <82999e73-145b-44f0-a5a3-d43eed229ca3@roeck-us.net>
-References: <20240425171311.19519-1-ricardo.neri-calderon@linux.intel.com>
- <20240425171311.19519-4-ricardo.neri-calderon@linux.intel.com>
+	s=arc-20240116; t=1714341133; c=relaxed/simple;
+	bh=Of2hrjEBej+wFL5DBz7y8FJ1CDB4cHgoH4+5UZjvMik=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=WQFaw9VgS4YmoaEeuMooBBErgXqeLgHBsQOs2r3ldRAlGtZNtMBAAAUjqAuqzZ3EPr5Khtr7IgfekXKaXFR7ZR8MrTpDvvv2/7FmsYgQm0DyE1GGi8rwBtdepEFza+6lu39JKYg2b1xYz4IHANYL9LC5ECq7mtnwiDluIs8g+6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=BLXW08p/; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1714341129;
+	bh=LjkGG/qJ3N0NE48xyXny3EMv0MKWKXE2gid2EJtYERU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=BLXW08p/tLyuFbClQ3fWU6PtfXbz9ZCQHGaLkg8c88HAfxSKegETvFbIZ9JSgME53
+	 ZRqWTmFXPrNGLrDBPhuzvDAwarX0vNQZBwogpOW1lUhD1eE5DvctEKWBAigCsqxxen
+	 DIl12HKvkhZKGjSIuFSo1cBaC71ySlQ8ByzWrLIqqhICrFxI0/12u1vQmMrUBX/SMw
+	 5I5+xf0TFADgw5P2WWJNSNWnzmNWx0eENNY8GmpV7SUZdtSUnqDQtFV98DrsewP8dq
+	 3J9NtXs96sj6uQDJhgNBmW4KEOMLJ1RsbKorPyytb5evm2jB2uarS9uG0RFq+5fuX/
+	 lIRkIuYnzxYcA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VSKtd3tLhz4wcR;
+	Mon, 29 Apr 2024 07:52:09 +1000 (AEST)
+Date: Mon, 29 Apr 2024 07:52:08 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Len Brown <lenb@kernel.org>
+Cc: Linux PM list <linux-pm@vger.kernel.org>
+Subject: Re: [GIT PULL] turbostat 2024.04.27 for linux-next
+Message-ID: <20240429075208.79fc86de@canb.auug.org.au>
+In-Reply-To: <CAJvTdKmqJx5nnwfxehRRHrYi7mR=6Y8bbrwL083Ain=MhBQq6g@mail.gmail.com>
+References: <CAJvTdKmqJx5nnwfxehRRHrYi7mR=6Y8bbrwL083Ain=MhBQq6g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240425171311.19519-4-ricardo.neri-calderon@linux.intel.com>
+Content-Type: multipart/signed; boundary="Sig_/n4phAF0ClCC7193psQBeiUd";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Thu, Apr 25, 2024 at 10:13:11AM -0700, Ricardo Neri wrote:
-> The Intel Software Development manual defines the temperature digital
-> readout as the bits [22:16] of the IA32_[PACKAGE]_THERM_STATUS registers.
-> Bit 23 is specified as reserved.
-> 
-> In recent processors, however, the temperature digital readout uses bits
-> [23:16]. In those processors, using the bitmask 0x7f would lead to
-> incorrect readings if the temperature deviates from TjMax by more than
-> 127 degrees Celsius.
-> 
-> Although not guaranteed, bit 23 is likely to be 0 in processors from a few
-> generations ago. The temperature reading would still be correct in those
-> processors when using a 0xff bitmask.
-> 
-> Model-specific provisions can be made for older processors in which bit 23
-> is not 0 should the need arise.
-> 
-> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+--Sig_/n4phAF0ClCC7193psQBeiUd
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Applied.
+Hi Len,
 
-Thanks,
-Guenter
+On Sat, 27 Apr 2024 23:02:12 -0400 Len Brown <lenb@kernel.org> wrote:
+>
+> Please add this branch to linux-next:
+>=20
+> git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git next
+>=20
+> Currently, and in the foreseeable future, I will stage some upstream-bound
+> user-space power management utility work on this branch.
+>=20
+> I do not expect any other trees to touch these files,
+> including Rafael's pm/linux-next branch,
+> and so it should merge without conflicts.
+
+Added from today.
+
+Thanks for adding your subsystem tree as a participant of linux-next.  As
+you may know, this is not a judgement of your code.  The purpose of
+linux-next is for integration testing and to lower the impact of
+conflicts between subsystems in the next merge window.=20
+
+You will need to ensure that the patches/commits in your tree/series have
+been:
+     * submitted under GPL v2 (or later) and include the Contributor's
+        Signed-off-by,
+     * posted to the relevant mailing list,
+     * reviewed by you (or another maintainer of your subsystem tree),
+     * successfully unit tested, and=20
+     * destined for the current or next Linux merge window.
+
+Basically, this should be just what you would send to Linus (or ask him
+to fetch).  It is allowed to be rebased if you deem it necessary.
+
+--=20
+Cheers,
+Stephen Rothwell=20
+sfr@canb.auug.org.au
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/n4phAF0ClCC7193psQBeiUd
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmYuxQgACgkQAVBC80lX
+0GwawQf9HtwUqThMlYwHmDK+p4NJod0+q+D/cz5oDZxtTxhw8VvN/6JhNG4gQ+A7
+dt07n2PnadYXcr6us6MGu4zkoOtKrd20mKwqdadLZPDF8EzCIrMTqsB+ThDR7SeT
+3eRKungWUyRP6SYQ+rs2018LaU/G770nAvZPInqN6OqxSMxRZJ+OEm73vlvQfk32
+IQOy1VGl9T6BIlgI8bn5fFQuUqmitTvOePeFsxpcQ84/RbGwkPBW79mcU0+K2kps
+1FzLDz+FEIw94/6tpSRrMR1o/6ZKxxDu4iaeooG11wikJ0vsO2AL2tPsEIrBHrO2
+mgI2Da/KyaKvXpS0ZGli/0lYVVTydA==
+=gfgP
+-----END PGP SIGNATURE-----
+
+--Sig_/n4phAF0ClCC7193psQBeiUd--
 
