@@ -1,103 +1,117 @@
-Return-Path: <linux-pm+bounces-7230-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7231-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CCF98B48DD
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Apr 2024 00:59:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D30CA8B4944
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Apr 2024 05:02:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8FED6B21544
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Apr 2024 22:59:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 193B21C20BA9
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Apr 2024 03:02:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C857C4EB32;
-	Sat, 27 Apr 2024 22:58:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DdV8GTOO"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9098415C9;
+	Sun, 28 Apr 2024 03:02:27 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3EDD23A6
-	for <linux-pm@vger.kernel.org>; Sat, 27 Apr 2024 22:58:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B1EF15A4
+	for <linux-pm@vger.kernel.org>; Sun, 28 Apr 2024 03:02:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714258736; cv=none; b=cGYZGIVM2OL0eXRVtVjXGBncihTHpXMU46LpIZTMmz7YCOUZpwD37D2SMc1Visxf8Jk6z5xKYKyzDluONsygCmo+p/2SfHkSFmAqz6tp8Fqm+HPUMuGuSV4GmC4tZvQLdjHaVVOmHAcJkN27aJHUgcFoKxaJPEZo+cJS+1v/7lw=
+	t=1714273347; cv=none; b=qlvrEp7OZ3fjezCvHvHEgWOYDoRZp7lFFqhe6/H/w/W9NNorSesXuogrsB0W8+6Kv5AJCqV5cH5omEdvq7YjupyzJKIWYEQtu/uXXTEl8fyLCxq7IudbCM4008NIfYcPJZ0dKIYM3EZxAdjrwGuo7tm4X7guFz6bye9hQcUtNFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714258736; c=relaxed/simple;
-	bh=7RXoeqQyP3/IcKB1JB3PsNxLCxxHenQYpbviNaCkWxM=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=obODg3/U5tREwITciqrnJWnX4bPtbcnTbrgK2jrLOhsC1zLy4xfF+iE+BUhOJRVpXLRBL/T7xGrV0130YmeQKXC7MWfILHtNS9x0FHrFW0UhKOxTKUMSZGeXOSr/mb86JSq9cIXLoMZ/7TVCa66TU0vpEFeXR+F7JniC5BZDswA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DdV8GTOO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 26A84C2BBFC
-	for <linux-pm@vger.kernel.org>; Sat, 27 Apr 2024 22:58:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714258736;
-	bh=7RXoeqQyP3/IcKB1JB3PsNxLCxxHenQYpbviNaCkWxM=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=DdV8GTOOMrpkPczqau0a5Eukw8hg6fXPbLY7XvmIARuRiX4k1gO8RFo9SFsPpR8EI
-	 dGf9FaoxGCS0fueRozYq2i6h++/26S2WSYAE7HpUMB5loW+0lqkkAmTk1n6ocfXpiL
-	 FW11pWjmzSZhCcVdOdWGS2Skwa9BUV+od84RXgajBl61vD46GvydbJKSMBnt5xGAEX
-	 v/F+Q92g5FSXcksB2NDhVnRib6g0xvVUk4rqdJ6wWo5NWaNJ5hbT5r5jWmAQ0bk5Lz
-	 yeSGH/AE5YDavkxI7B59lfp4LuiO02skW3aolLWmVDchC1wg6IEw8V/Q/WSXptQ37M
-	 AlxeJElaWumYA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 198F9C53B50; Sat, 27 Apr 2024 22:58:56 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 218705] amd_pstate fails to load on AMD 5950x with Asus ROG
- CROSSHAIR VIII DARK HERO x570
-Date: Sat, 27 Apr 2024 22:58:55 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: andamu@posteo.net
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218705-137361-we7xNlZ0rb@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218705-137361@https.bugzilla.kernel.org/>
-References: <bug-218705-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1714273347; c=relaxed/simple;
+	bh=BCkZAyvBoteC25Yv5sy/lDpC/HZn+FB3Q+0ffNJoOtw=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=nWDm+/FfdhvtrngapMzh01e347czXukHCzJVscnNO+R7uv3IszFbBaP4VML5S1kLBilDvZIW9mz82jF8Z9q4G+/uuGWsgC1mXN+57wGZwp/KnSMH2ja0zquYDbEZZEHCzE5ntbPr/DBMpdMq9PIBsF3hHmdqFPOzlEoVChyIKko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-5acb90b2a82so2351122eaf.0
+        for <linux-pm@vger.kernel.org>; Sat, 27 Apr 2024 20:02:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714273344; x=1714878144;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5CaGJV+6KKtlNxP4BOy/aTAMDRKxW6rbiCHcRjYXo/E=;
+        b=S0lSQX/SR9VVpxllAY/OySaQQzQn+o9JHV9okzY7lF9J9Id4OJX8e5AjErftNSdin2
+         b4p9LeZRRTSsoYZ5FjtJROpvwy9Qtou3TDzwJpTREXNjPZUwYQDfEpsSb9lcVGra3yBR
+         hExmKRHAqJBg2MEH4wrpiq+K3b/UoNPIXVhoL1hM4++q9ldM4d8Z4NrUjouHACtQNUdw
+         gyvpiUs6XXl/yQBFDGT/ZxEhGUNafMMuGwAhDmABsbfbsSLb7zB11eUOhuPTp5rp+Mve
+         42yzCHWbKob42Gqa8M+j+dXfzBeEcViuxZLb2lxG8rTlcwskCiH23E7QGsOnJnQanfHi
+         ubrA==
+X-Gm-Message-State: AOJu0YyUWZrNDNTQXwldEhOsPCqj08ntM4rb6jOjG2Mai+LWY5FKroVp
+	0imHvPyKR/mz/Z6Y7ms1Bu4zP6axXUIa1EkhwgjMb50Iu/5dB8p1ulVhY/zu6R2/8V+aYbR1s0j
+	aMqNCn5EQprSZaDpR41i3vanL3a7PRIBx
+X-Google-Smtp-Source: AGHT+IHY+YM1Y/wvm5p/OFD53RIDGH7W4dojt3JkrhAWCe7jURvOlLazIGKqjxaUar5kawUSQZ1BheA7jt7rfNS9ayI=
+X-Received: by 2002:a05:6870:b683:b0:234:56db:7c8c with SMTP id
+ cy3-20020a056870b68300b0023456db7c8cmr8039540oab.57.1714273343985; Sat, 27
+ Apr 2024 20:02:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+From: Len Brown <lenb@kernel.org>
+Date: Sat, 27 Apr 2024 23:02:12 -0400
+Message-ID: <CAJvTdKmqJx5nnwfxehRRHrYi7mR=6Y8bbrwL083Ain=MhBQq6g@mail.gmail.com>
+Subject: [GIT PULL] turbostat 2024.04.27 for linux-next
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218705
+Hi Stephen,
+Please add this branch to linux-next:
 
---- Comment #25 from Andrei Amuraritei (andamu@posteo.net) ---
-Hi again,
+git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git next
 
-I meant, amd_pstate did not load automatically, without me specifying a ker=
-nel
-param for it.
+Currently, and in the foreseeable future, I will stage some upstream-bound
+user-space power management utility work on this branch.
 
-The .config values are (Fedora default config):
+I do not expect any other trees to touch these files,
+including Rafael's pm/linux-next branch,
+and so it should merge without conflicts.
 
-grep -rsn  AMD_PSTATE /boot/config-6.8.7-200.fc39.x86_64=20
-700:CONFIG_X86_AMD_PSTATE=3Dy
-701:CONFIG_X86_AMD_PSTATE_DEFAULT_MODE=3D3
-702:CONFIG_X86_AMD_PSTATE_UT=3Dm
+If you pull today, you'll get the changes below.
 
-Thanks.
+thanks!
+-Len
 
---=20
-You may reply to this email to add a comment.
+The following changes since commit a6189a7407795b3f5167ea532ac85931cd26083a:
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+  Merge tag 'turbostat-2024.04.10' of
+git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux (2024-04-10
+13:13:27 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git next
+
+for you to fetch changes up to c9d06640119383d166924f0739cfaaefd442394a:
+
+  tools/power turbostat: version 2024.04.27 (2024-04-27 22:15:48 -0400)
+
+----------------------------------------------------------------
+Len Brown (6):
+      tools/power turbostat: Add "snapshot:" Makefile target
+      tools/power turbostat: Harden probe_intel_uncore_frequency()
+      tools/power turbostat: Remember global max_die_id
+      tools/power turbostat: Survive sparse die_id
+      tools/power turbostat: Add columns for clustered uncore frequency
+      tools/power turbostat: version 2024.04.27
+
+Patryk Wlazlyn (2):
+      tools/power turbostat: Replace _Static_assert with BUILD_BUG_ON
+      tools/power turbostat: Enable non-privileged users to read sysfs counters
+
+Zhang Rui (2):
+      tools/power/turbostat: Enhance ARL/LNL support
+      tools/power/turbostat: Add ARL-H support
+
+ tools/power/x86/turbostat/Makefile    |  27 +-
+ tools/power/x86/turbostat/turbostat.8 |   4 +-
+ tools/power/x86/turbostat/turbostat.c | 485 ++++++++++++++++++++++------------
+ 3 files changed, 343 insertions(+), 173 deletions(-)
 
