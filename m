@@ -1,255 +1,151 @@
-Return-Path: <linux-pm+bounces-7250-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7251-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4ACB08B51F0
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 09:04:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B90C68B5229
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 09:20:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 68CDFB21045
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 07:04:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A1171F21A8A
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 07:20:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD989125AE;
-	Mon, 29 Apr 2024 07:04:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="eGANkATs"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D453E10A25;
+	Mon, 29 Apr 2024 07:18:58 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2077.outbound.protection.outlook.com [40.107.92.77])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F35D71426E;
-	Mon, 29 Apr 2024 07:04:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.77
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714374246; cv=fail; b=PSU1d04ur24BS4ecX8hmFagouw4lLIMV6RHuKT0GvLuL/WfHB49ew/uo/qO3Hvu83DItzum2Ny0Py/440XmfyfNJO56DElQyiWyws29jluewDz+7+N56nONdCrGGXC4TBw+5w9+e+RWlbCCtDEkK/RcvbRHBWUhuIgWys4gmrAk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714374246; c=relaxed/simple;
-	bh=9eqzXa1iwgTiH0uGFLgK/7PZRVtEuk3TwiboFBA75Iw=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ndAheLAIq0ofbOKvJhsDNp2EYhOlwuvggeTd481EPt44MUw6XDDrp5db/os7wVZAWCCEsQ/maZxq3IeGZw5LsMn6OZelOYta2vbbtJyZOMx0O1tvTZC56ASXcV1l5vKzWj1Mmc8v3G5mrBu1fKg65a5+TEzHBA38nbLuZfY6l3M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=eGANkATs; arc=fail smtp.client-ip=40.107.92.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L6elnDvjjgBBaqgDteYAjWx4JXMCmtPfQgpL0giY6SHehDcU83xyqc7QOYVDul4vxAkBWL++hys5dOVYLqaTUqjiZEMJPAfdvA+bZNz1oVW+6rGtQirfPI3/83q3jNW7sRFIwDi6IZfoU4klElegNFbg8FnK5b9CTbuokb/U3Gv+sh19RMIZsf1jK7MJiC0oRL5Cn9/f4EULxxKZcJmmM2421wlhw7B5CjNfC6zpZ7zrDaw99qoO+04neaXJBawfYD5LHgOLPfuYSKsH3x2nYD+fl5zM9RDAQPh1okr3BEQrieNfKHHH+0vfTYEkOf1OFZJcVqReheLPAOpJvRaSeQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WD5keXYSgtpPpkiog9lQQg5mjM17XJl+MtHnlG6oVUc=;
- b=ZSArMo477dW7219D1wd2GDks3ArGZ1mUj5NqckKffAJV17A06PrIncYUhhFtEGPyBB9mRUSeYEfgoghhlOVC6igSgXg64eV9psimfzRjHRIEgqVk2Tj85vKftNo+fq7Fb3xfC9YG98JBa2paKY01edzZ73NUIbnsekDPIckW/JLLV5UGDqBw23GYMp1z7/4f5EKPj37DLOhpDnnvKhVZvqft40Y7Hk0+h9Ss17NGwoTIQPRfbPK8/MldKRb36BgkvKJrJpiCMih4iJpLPSCvsokVOwZKuHxgXq1d4rCJ6v/1UC2tl9clRsKT+y+Vd1o2Po9MAukt9A72jKBblsO2Yg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WD5keXYSgtpPpkiog9lQQg5mjM17XJl+MtHnlG6oVUc=;
- b=eGANkATs8vWnboD2EOhUeNMpdSzSxB21qFtVOTbbjz9Psk1TLaUI667ULu0JSH3B5WGy0xbfiwmW712c9TmF+anH5kQQhMS+f4Yz14ZX5VHBLnza1zP1GwGPqHwyD5Zafcf2ket6Zi16xYmXwNc7dz4Ny35pAZm+GYDYbiwPJFg=
-Received: from MW4PR03CA0112.namprd03.prod.outlook.com (2603:10b6:303:b7::27)
- by SJ2PR12MB7942.namprd12.prod.outlook.com (2603:10b6:a03:4c3::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7519.34; Mon, 29 Apr
- 2024 07:04:01 +0000
-Received: from CO1PEPF000044FA.namprd21.prod.outlook.com
- (2603:10b6:303:b7:cafe::90) by MW4PR03CA0112.outlook.office365.com
- (2603:10b6:303:b7::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7519.34 via Frontend
- Transport; Mon, 29 Apr 2024 07:04:01 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1PEPF000044FA.mail.protection.outlook.com (10.167.241.200) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7519.0 via Frontend Transport; Mon, 29 Apr 2024 07:04:01 +0000
-Received: from jenkins-amdgpu-2666v3.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Mon, 29 Apr 2024 02:03:56 -0500
-From: Xiaojian Du <Xiaojian.Du@amd.com>
-To: <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-CC: <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-	<dave.hansen@linux.intel.com>, <hpa@zytor.com>,
-	<daniel.sneddon@linux.intel.com>, <jpoimboe@kernel.org>,
-	<pawan.kumar.gupta@linux.intel.com>, <sandipan.das@amd.com>,
-	<kai.huang@intel.com>, <perry.yuan@amd.com>, <x86@kernel.org>,
-	<ray.huang@amd.com>, <rafael@kernel.org>, Xiaojian Du <Xiaojian.Du@amd.com>,
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH 2/2] cpufreq: amd-pstate: change cpu freq transition delay for some models
-Date: Mon, 29 Apr 2024 15:03:22 +0800
-Message-ID: <20240429070322.999500-2-Xiaojian.Du@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240429070322.999500-1-Xiaojian.Du@amd.com>
-References: <20240429070322.999500-1-Xiaojian.Du@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 398E128376
+	for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2024 07:18:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1714375138; cv=none; b=FZ8UE0c5/aC03ff3pBnbPHVG4eaLFMDBwiWN/eyBf9/1FCczYY6g10dSYft3CBMqvBLls8JvirKZO5d7ny+MLKztTzVyqo+FfZMC9m+mv2eFCW4QBNUsGE2CG+s3nrvply/4PXAnq0XKyMwZfctHntPqm0B9KyfKkbACiGr1s8s=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1714375138; c=relaxed/simple;
+	bh=XIi5agCWZan+5qkhUPfBdkSE85IbJXDVkWQj19yQfo8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E8hCe4crx9rcsDtx19EFTqCDGEXTjYxFdUVqyl2MdyDlrI7ON+N6r8ZEfeH4LClAnin9G9iFgKQoDNk0gG7jFrzVV4PGqBnvNDQOAsgeOGvH9ohYfCyAaqd0IJSrJ5HL2pgzChvxEUHgwHgOJJVcjmJ6ljBRjyauUhAcZSjqHa8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1s1LHm-0004D0-Kv; Mon, 29 Apr 2024 09:18:50 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1s1LHl-00Ew78-L9; Mon, 29 Apr 2024 09:18:49 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1s1LHl-00BDt1-1q;
+	Mon, 29 Apr 2024 09:18:49 +0200
+Date: Mon, 29 Apr 2024 09:18:49 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Yangtao Li <frank.li@vivo.com>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpuidle: kirkwood: Convert to platform remove callback
+ returning void
+Message-ID: <qwusw4lmmv7iff64l3qcdnnw762xlwag745dw5vhtfxspvsw2r@73ocsqlyhp5e>
+References: <20230712094014.41787-1-frank.li@vivo.com>
+ <20231204115517.zxjgi6ateobjj52d@pengutronix.de>
+ <h2sjdrgs7hwmbucr3rxlpusnkpj5tgq2fx27gijtrglr5ffhs6@s63cp4isu4mx>
+ <fgmvwuzy34cruggah2z7fau4nnfzopuylsgjs6zzdypp26boya@ekrj5myjef5f>
+ <8fd3faf9-0179-425e-a68e-d0dc0a2d7da9@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000044FA:EE_|SJ2PR12MB7942:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1c427d90-20f9-443f-e631-08dc681a8c9f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230031|376005|7416005|1800799015|82310400014|36860700004;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?7Efm2YP8v+cnzbrE5ZBzPStCbLophexcVOBtqoAJNtE+2gGcR71Fb3Bxqv+x?=
- =?us-ascii?Q?oxPmwUJ66LHR9gUdiAQ39uIMDsOPpyy64WJh5UzwWmXcz/5OZgKYkknrFYOP?=
- =?us-ascii?Q?6O6H3aHRVlIJ/oQZUhPPYSRztc3OdNLOKtFPzUJRsJJ8EoTL+rAH8OagQRaR?=
- =?us-ascii?Q?HlLDK6UeTJ34RaFA/uDLP+GNjs2synTo6K5fv4xqBHjTQBkzeTCyjW5k7nA4?=
- =?us-ascii?Q?VqGNNRYsQ8R6FUrv6BfZTZY/SRcIJJm0TmIehAuHY5dHMh01311ksL59wkJy?=
- =?us-ascii?Q?WjiaozYI+ZAHzhn5DKv+EFLv2zpl64PlFR3FEBcQ3Tb5mezr6y81wYxO3pCV?=
- =?us-ascii?Q?0vdaQE2ROsymc4Z7Kt3tBFgaOtGvMKok8ULogGGCdTgX4+RlWWwfUaRfJRRa?=
- =?us-ascii?Q?MlRzyynWvweghkXR187wUO5f8U0GuehfokRR1jzHOCYgpPpxcruUhkkznayV?=
- =?us-ascii?Q?NBYjfRoohnzGCs6ZK0p2GQFc4Sck3oHlPMJACbSqjZToJ3ayPpU2Wzg2RlQI?=
- =?us-ascii?Q?VKUng6xmNxdc0rMz+8jOHdOEvvK7U+7TXNnZmxWS1nfbUYRa4ppM/a0YRNxB?=
- =?us-ascii?Q?xvbWPwUHxJvwF14rF2fnu7W+yVoYrSH/09kydLx97OvvmHSSCjMAOznRVMft?=
- =?us-ascii?Q?4UvksWYVXvwcljWSPE5k0TounovkekBpY9zx6Xv6XFpRzPJlikV/uCZvC7J9?=
- =?us-ascii?Q?fi/ntDQaHJp/8aeS8tUy0/69BeGoaju2FU2EoandA7qbTHoeQh6a924os3OX?=
- =?us-ascii?Q?uMxqI+dTPww989moN1kJwofLXdRy4I/vpk6JDJMxM5hYXRcHBGkYehLc9mvH?=
- =?us-ascii?Q?mo2L5RNwre605aw+BfX1Ct0Xt89BO6V5lQzSxi6uM+gYl7XOSGQBJxZvBFUs?=
- =?us-ascii?Q?2jmOmkPvST2SAfC4SPtb8m+bQ4kVJNFWSHb8/THJ/5aIuXyL+YsZRwJ38dMh?=
- =?us-ascii?Q?xynG0oN+LgCwrQ0ZVnr03A1CjsY80yTTjSjmDoryKKoeTjrC6153Y6rCn1dZ?=
- =?us-ascii?Q?ubse557VqfvMvivAkJX6EyJaEylAAD8IRP3Kkw5wox2/tjUhT+8nxGfDIrgY?=
- =?us-ascii?Q?ZfyWNy8JTrzAYyu1k1uiGY94RPC6THMUFvqtGds5+Yn1HMNrhAsuv5Dm0BYo?=
- =?us-ascii?Q?+pLiS/k4t5X0gOG/sacBMR72YY+kJ3hP8eB4WU+1Qk1w3squ8xDgcMqKntUW?=
- =?us-ascii?Q?SDKiOWAVIRvOpHtpvn5ltGcIWKhj+ZEtgVxkB9xV5jlGDWa8visoYalgYdjB?=
- =?us-ascii?Q?aIthaRNaTFdtKCzQoMfm1pn0vSlbVvBnEMiQsFd6Tftnhf80YujStYYY8j7l?=
- =?us-ascii?Q?ge9uH72zOoF5zGNEtUyGbCBx9AY/UinxgI9JbB8S1pMqNRre3e7w+hleQvs6?=
- =?us-ascii?Q?UCSCGAk=3D?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(376005)(7416005)(1800799015)(82310400014)(36860700004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2024 07:04:01.5776
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1c427d90-20f9-443f-e631-08dc681a8c9f
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CO1PEPF000044FA.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7942
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="k54j2yns3bvhkxf4"
+Content-Disposition: inline
+In-Reply-To: <8fd3faf9-0179-425e-a68e-d0dc0a2d7da9@linaro.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-Some of AMD ZEN4 APU/CPU have support for adjusting the CPU core
-clock more quickly and presicely according to CPU work loading.
-This is advertised by the Fast CPPC x86 feature.
-This change will only be effective in the *passive mode* of
-AMD pstate driver. From the test results of different
-transition delay values, 600us is chosen to make a balance
-between performance and power consumption.
 
-Some test results on AMD Ryzen 7840HS(Phoenix) APU:
+--k54j2yns3bvhkxf4
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-1. Tbench
-(Energy less is better, Throughput more is better,
-PPW--Performance per Watt more is better)
-============= =================== ============== =============== ============== =============== ============== =============== ===============
- Trans Delay   Tbench              governor:schedutil, 3-iterations average
-============= =================== ============== =============== ============== =============== ============== =============== ===============
- 1000us        Clients             1              2               4              8              12             16              32
-               Energy/Joules       2010           2804            8768           17171          16170          15132           15027
-               Throughput/(MB/s)   114            259             1041           3010           3135           4851            4605
-               PPW                 0.0567         0.0923          0.1187         0.1752         0.1938         0.3205          0.3064
- 600us         Clients             1              2               4              8              12             16              32
-               Energy/Joules       2115  (5.22%)  2388  (-14.84%) 10700(22.03%)  16716 (-2.65%) 15939 (-1.43%) 15053 (-0.52%)  15083 (0.37% )
-               Throughput/(MB/s)   122   (7.02%)  234   (-9.65% ) 1188 (14.12%)  3003  (-0.23%) 3143  (0.26% ) 4842  (-0.19%)  4603  (-0.04%)
-               PPW                 0.0576(1.59%)  0.0979(6.07%  ) 0.111(-6.49%)  0.1796(2.51% ) 0.1971(1.70% ) 0.3216(0.34% )  0.3051(-0.42%)
-============= =================== ============== ================ ============= =============== ============== =============== ===============
+Hello Daniel,
 
-2.Dbench
-(Energy less is better, Throughput more is better,
-PPW--Performance per Watt more is better)
-============= =================== ============== =============== ============== =============== ============== =============== ===============
- Trans Delay   Dbench              governor:schedutil, 3-iterations average
-============= =================== ============== =============== ============== =============== ============== =============== ===============
- 1000us        Clients             1             2               4              8               12             16              32
-               Energy/Joules       4890          3779            3567           5157            5611           6500            8163
-               Throughput/(MB/s)   327           167             220            577             775            938             1397
-               PPW                 0.0668        0.0441          0.0616         0.1118          0.1381         0.1443          0.1711
- 600us         Clients             1             2               4              8               12             16              32
-               Energy/Joules       4915  (0.51%) 4912  (29.98%)  3506  (-1.71%) 4907  (-4.85% ) 5011 (-10.69%) 5672  (-12.74%) 8141  (-0.27%)
-               Throughput/(MB/s)   348   (6.42%) 284   (70.06%)  220   (0.00% ) 518   (-10.23%) 712  (-8.13% ) 854   (-8.96% ) 1475  (5.58% )
-               PPW                 0.0708(5.99%) 0.0578(31.07%)  0.0627(1.79% ) 0.1055(-5.64% ) 0.142(2.82%  ) 0.1505(4.30%  ) 0.1811(5.84% )
-============= =================== ============== =============== ============== =============== ============== =============== ===============
+On Tue, Apr 23, 2024 at 09:22:23AM +0200, Daniel Lezcano wrote:
+> On 09/04/2024 18:32, Uwe Kleine-K=F6nig wrote:
+> > On Wed, Mar 06, 2024 at 10:33:06PM +0100, Uwe Kleine-K=F6nig wrote:
+> > > On Mon, Dec 04, 2023 at 12:55:17PM +0100, Uwe Kleine-K=F6nig wrote:
+> > > > On Wed, Jul 12, 2023 at 05:40:13PM +0800, Yangtao Li wrote:
+> > > > > The .remove() callback for a platform driver returns an int which=
+ makes
+> > > > > many driver authors wrongly assume it's possible to do error hand=
+ling by
+> > > > > returning an error code. However the value returned is (mostly) i=
+gnored
+> > > > > and this typically results in resource leaks. To improve here the=
+re is a
+> > > > > quest to make the remove callback return void. In the first step =
+of this
+> > > > > quest all drivers are converted to .remove_new() which already re=
+turns
+> > > > > void.
+> > > > >=20
+> > > > > Trivially convert this driver from always returning zero in the r=
+emove
+> > > > > callback to the void returning variant.
+> > > > >=20
+> > > > > Cc: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > > > > Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> > > >=20
+> > > > Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > > >=20
+> > > > Can you pick this up?
+> > >=20
+> > > This patch isn't in next yet. Is this still on someone's radar for
+> > > application? Would be great if this patch made it into the mainline
+> > > during the upcomming merge window.
+> >=20
+> > It didn't made it into the merge window leading to 6.9-rc1. What are
+> > the chances to get it into v6.10-rc1?
+> >=20
+> > I just checked, the patch was submitted when Linus's tree was just after
+> > v6.5-rc1. So it already missed four merge windows without any maintainer
+> > feedback :-\
+>=20
+> Sorry, it is applied now.
 
-3.Hackbench(less time is better)
-============= =========================== ==========================
-  hackbench     governor:schedutil
-============= =========================== ==========================
-  Trans Delay   Process Mode Ave time(s)  Thread Mode Ave time(s)
-  1000us        14.484                      14.484
-  600us         14.418(-0.46%)              15.41(+6.39%)
-============= =========================== ==========================
+Is it expected that this patch didn't appear in next yet now that you
+applied it?
 
-4.Perf_sched_bench(less time is better)
-============= =================== ============== ============== ============== =============== =============== =============
- Trans Delay  perf_sched_bench    governor:schedutil
-============= =================== ============== ============== ============== =============== =============== =============
-  1000us        Groups             1             2              4              8               12              24
-                AveTime(s)        1.64          2.851          5.878          11.636          16.093          26.395
-  600us         Groups             1             2              4              8               12              24
-                AveTime(s)        1.69(3.05%)   2.845(-0.21%)  5.843(-0.60%)  11.576(-0.52%)  16.092(-0.01%)  26.32(-0.28%)
-============= ================== ============== ============== ============== =============== =============== ==============
+Best regards
+Uwe
 
-5.Sysbench(higher is better)
-============= ================== ============== ================= ============== ================ =============== =================
-  Sysbench    governor:schedutil
-============= ================== ============== ================= ============== ================ =============== =================
-  1000us      Thread             1               2                4              8                12               24
-              Ave events         6020.98         12273.39         24119.82       46171.57         47074.37         47831.72
-  600us       Thread             1               2                4              8                12               24
-              Ave events         6154.82(2.22%)  12271.63(-0.01%) 24392.5(1.13%) 46117.64(-0.12%) 46852.19(-0.47%) 47678.92(-0.32%)
-============= ================== ============== ================= ============== ================ =============== =================
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-In conclusion, a shorter transition delay
-of cpu clock will make a quite positive effect to improve PPW on Dbench test,
-in the meanwhile , keep stable performance on Tbench,
-Hackbench, Perf_sched_bench and Sysbench.
+--k54j2yns3bvhkxf4
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Signed-off-by: Xiaojian Du <Xiaojian.Du@amd.com>
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
----
- drivers/cpufreq/amd-pstate.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 2015c9fcc3c9..8c8594f67af6 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -50,6 +50,7 @@
- 
- #define AMD_PSTATE_TRANSITION_LATENCY	20000
- #define AMD_PSTATE_TRANSITION_DELAY	1000
-+#define AMD_PSTATE_FAST_CPPC_TRANSITION_DELAY	600
- #define AMD_PSTATE_PREFCORE_THRESHOLD	166
- 
- /*
-@@ -868,7 +869,11 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
- 	}
- 
- 	policy->cpuinfo.transition_latency = AMD_PSTATE_TRANSITION_LATENCY;
--	policy->transition_delay_us = AMD_PSTATE_TRANSITION_DELAY;
-+
-+	if (cpu_feature_enabled(X86_FEATURE_FAST_CPPC))
-+		policy->transition_delay_us = AMD_PSTATE_FAST_CPPC_TRANSITION_DELAY;
-+	else
-+		policy->transition_delay_us = AMD_PSTATE_TRANSITION_DELAY;
- 
- 	policy->min = min_freq;
- 	policy->max = max_freq;
--- 
-2.34.1
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmYvSdgACgkQj4D7WH0S
+/k6wZwf/ROJx+4F3jGbsl82pC70qDPklU+HM79ozyDgg8SB0xqzRu0/1nP8qwsCc
+rekrYN4Gh/hQDK0PAzK2Fpr4OSfuAY1uJbl7QKE8XZrsQ+vcoBhNUT0a9A2qt3yP
+OlNlJsebt2UReIzpJcmk3kV/o0skt7pNV+owEry3DNAu7ayDUDkyUTUbhPdSupvx
+F4aUn/o5FnM51EeTIMnr7OjVE5Usjrh9X8kBgfZc0/QbBZc98UrSZWL6hvML+RBH
+ucHgkQiN/B44PlqJM7ItZY4vxln/yT9f187d9ZhUX0AIYiBqY8Cl45nAwdsxuqMB
+v7UESjOmBXS8/CNAeG3SFMKRt6RMxw==
+=Q8H+
+-----END PGP SIGNATURE-----
 
+--k54j2yns3bvhkxf4--
 
