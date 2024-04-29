@@ -1,40 +1,55 @@
-Return-Path: <linux-pm+bounces-7253-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7254-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CF4F8B52A7
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 09:54:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 361C88B52D1
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 10:08:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8366281F55
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 07:54:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C96131F21336
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 08:08:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12D7512E7C;
-	Mon, 29 Apr 2024 07:54:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BCE6168DD;
+	Mon, 29 Apr 2024 08:08:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="DBlSfx9a"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACA4C10A0B;
-	Mon, 29 Apr 2024 07:53:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 605E415E86;
+	Mon, 29 Apr 2024 08:08:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714377241; cv=none; b=EAUJQITDfnt8Qgcsy9ljgR/Cq2d1E6LDngteK54U4/eOlehxobIo5Lf8guvkEWYSi5iae7rQytHGuAzjMlVn1N/2y5AQLmCFF5uKNSCM/2KADhxS/AgOqnpWef58dyAEJoNba99PHm/rxCg/8vVHA7XbUATnJiQLf8rz1vJeUWg=
+	t=1714378106; cv=none; b=JIeyGRgs87OtbaDWcGL3Jx2d7eNmqtQTlNWvC1aj4HCXKtvS8iBEhyZXsOGmamT2pw2twn15HKqriUPGNlHwhtlierPhBQ8Cdq23FESBdqe/nhLkZJjScMststfdaW/ukBYQtzfuFKZoFYK3n5roIMmBcbPhn5bvNlvRKNtlgPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714377241; c=relaxed/simple;
-	bh=qhwQtw+U1S4uCs55SmoK0dXjELgfVw8THmXycVX7OQg=;
+	s=arc-20240116; t=1714378106; c=relaxed/simple;
+	bh=pTjfAPq13MjrIZFyd2W2RPgVaYx79/VZ4aaxirIjUNo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mecKPps6nvcyT0DPV0OFLj7XS51jf4Bw0cwPv1Y/+n09XS0YGinQokR4Zgc9fo4aod2dGfAvR3Z1vLVx1Uk6+cM9P2MiSflVWhSV2qSRZH13HnpuQifMVGLAqzakSV22fjUks2YEIeCuUAGdtKyUctvKfSELfwA+JCV2GAZxuoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 47A502F4;
-	Mon, 29 Apr 2024 00:54:25 -0700 (PDT)
-Received: from [10.57.65.146] (unknown [10.57.65.146])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EE3473F73F;
-	Mon, 29 Apr 2024 00:53:55 -0700 (PDT)
-Message-ID: <3aba1a1d-8ebc-4ee0-9caf-d9baae586db7@arm.com>
-Date: Mon, 29 Apr 2024 08:53:54 +0100
+	 In-Reply-To:Content-Type; b=cslCTY9/iPPQJ6RJx8IAzimkzl8WZIQe6C0cvDd73L5HAL9lCu1IHjYwwJTJoCwqKhUhrxJfh6HXukUeqCmnV42WCe57BGpbSFoQgi89ktBP70O04noT83P9SrsSrjMlu+5ZPaZ/OtAa+IpFxzK09SIyzUTfGp6MjpkQrJjs3NU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=DBlSfx9a; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1714378102;
+	bh=pTjfAPq13MjrIZFyd2W2RPgVaYx79/VZ4aaxirIjUNo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=DBlSfx9abwJOPEHMh/Y9whzwSrts1w/5CpjQJgw9zT6GTidmxkP6wlsMfPqxek9nz
+	 o0H9CpCNFL6/kWNK1gyPD0An9BQVGGlTtQ15KNZgskWP9ZCM0tbnX8igIDccg4fzxQ
+	 lpgMVYh92QIS4eiMxfG7vB82HC+yvpnSyutXs5ztyNBooLWmqksPWsnf2EpHs06NSG
+	 GqRHvwb6nmL30/e9cx3IzTuuMZDWBEv6v4HQtkzuPWfqqewqFlCgAGu6U/vAxpHqJZ
+	 qaO3mPFhIqNU5BNzIzTR6e22k4663rQq21eLqYmT8qHuuXbd+nAPv/XM7lcC6kPYFL
+	 WrpS4Pt2noJVA==
+Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 74902378134F;
+	Mon, 29 Apr 2024 08:08:21 +0000 (UTC)
+Message-ID: <57529d24-8b46-4eed-95ed-463ad3f4190e@collabora.com>
+Date: Mon, 29 Apr 2024 10:08:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,144 +57,88 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [linus:master] [timers] 7ee9887703: stress-ng.uprobe.ops_per_sec
- -17.1% regression
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
- Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc: Oliver Sang <oliver.sang@intel.com>, oe-lkp@lists.linux.dev,
- lkp@intel.com, linux-kernel@vger.kernel.org,
- Thomas Gleixner <tglx@linutronix.de>, ying.huang@intel.com,
- feng.tang@intel.com, fengwei.yin@intel.com,
- Frederic Weisbecker <frederic@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org
-References: <Zgtjdd0C2FzYVBto@xsang-OptiPlex-9020> <87zfth3l6y.fsf@somnus>
- <CAJZ5v0g_GKF8-QK5UdFCpJapf+MK7EouQ7hMTVtPYRjNNyUt+g@mail.gmail.com>
+Subject: Re: [PATCH v5 4/7] soc: mediatek: Add MediaTek DVFS Resource
+ Collector (DVFSRC) driver
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: djakov@kernel.org, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ conor+dt@kernel.org, matthias.bgg@gmail.com, lgirdwood@gmail.com,
+ broonie@kernel.org, keescook@chromium.org, gustavoars@kernel.org,
+ henryc.chen@mediatek.com, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ kernel@collabora.com, wenst@chromium.org, amergnat@baylibre.com,
+ Dawei Chien <dawei.chien@mediatek.com>
+References: <20240424095416.1105639-1-angelogioacchino.delregno@collabora.com>
+ <20240424095416.1105639-5-angelogioacchino.delregno@collabora.com>
+ <20240424190405.GA2803128@dev-arch.thelio-3990X>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0g_GKF8-QK5UdFCpJapf+MK7EouQ7hMTVtPYRjNNyUt+g@mail.gmail.com>
+In-Reply-To: <20240424190405.GA2803128@dev-arch.thelio-3990X>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-
-
-On 4/26/24 17:03, Rafael J. Wysocki wrote:
-> Hi,
+Il 24/04/24 21:04, Nathan Chancellor ha scritto:
+> Hi Angelo,
 > 
-> On Thu, Apr 25, 2024 at 10:23 AM Anna-Maria Behnsen
-> <anna-maria@linutronix.de> wrote:
+> On Wed, Apr 24, 2024 at 11:54:13AM +0200, AngeloGioacchino Del Regno wrote:
+>> The Dynamic Voltage and Frequency Scaling Resource Collector (DVFSRC) is a
+>> Hardware module used to collect all the requests from both software and the
+>> various remote processors embedded into the SoC and decide about a minimum
+>> operating voltage and a minimum DRAM frequency to fulfill those requests in
+>> an effort to provide the best achievable performance per watt.
 >>
->> Hi,
+>> This hardware IP is capable of transparently performing direct register R/W
+>> on all of the DVFSRC-controlled regulators and SoC bandwidth knobs.
 >>
->> (adding cpuidle/power people to cc-list)
+>> This driver includes support for MT8183, MT8192 and MT8195.
 >>
->> Oliver Sang <oliver.sang@intel.com> writes:
->>
->>> hi, Frederic Weisbecker,
->>>
->>> On Tue, Apr 02, 2024 at 12:46:15AM +0200, Frederic Weisbecker wrote:
->>>> Le Wed, Mar 27, 2024 at 04:39:17PM +0800, kernel test robot a écrit :
->>>>>
->>>>>
->>>>> Hello,
->>>>>
->>>>>
->>>>> we reported
->>>>> "[tip:timers/core] [timers]  7ee9887703:  netperf.Throughput_Mbps -1.2% regression"
->>>>> in
->>>>> https://lore.kernel.org/all/202403011511.24defbbd-oliver.sang@intel.com/
->>>>>
->>>>> now we noticed this commit is in mainline and we captured further results.
->>>>>
->>>>> still include netperf results for complete. below details FYI.
->>>>>
->>>>>
->>>>> kernel test robot noticed a -17.1% regression of stress-ng.uprobe.ops_per_sec
->>>>> on:
->>>>
->>>> The good news is that I can reproduce.
->>>> It has made me spot something already:
->>>>
->>>>     https://lore.kernel.org/lkml/ZgsynV536q1L17IS@pavilion.home/T/#m28c37a943fdbcbadf0332cf9c32c350c74c403b0
->>>>
->>>> But that's not enough to fix the regression. Investigation continues...
->>>
->>> Thanks a lot for information! if you want us test any patch, please let us know.
->>
->> Oliver, I would be happy to see, whether the patch at the end of the
->> message restores the original behaviour also in your test setup. I
->> applied it on 6.9-rc4. This patch is not a fix - it is just a pointer to
->> the kernel path, that might cause the regression. I know, it is
->> probable, that a warning in tick_sched is triggered. This happens when
->> the first timer is alredy in the past. I didn't add an extra check when
->> creating the 'defacto' timer thingy. But existing code handles this
->> problem already properly. So the warning could be ignored here.
->>
->> For the cpuidle people, let me explain what I oberserved, my resulting
->> assumption and my request for help:
->>
->> cpuidle governors use expected sleep length values (beside other data)
->> to decide which idle state would be good to enter. The expected sleep
->> length takes the first queued timer of the CPU into account and is
->> provided by tick_nohz_get_sleep_length(). With the timer pull model in
->> place the non pinned timers are not taken into account when there are
->> other CPUs up and running which could handle those timers. This could
->> lead to increased sleep length values. On my system during the stress-ng
->> uprobes test it was in the range of maximum 100us without the patch set
->> and with the patch set the maximum was in a range of 200sec. This is
->> intended behaviour, because timers which could expire on any CPU should
->> expire on the CPU which is busy anyway and the non busy CPU should be
->> able to go idle.
->>
->> Those increased sleep length values were the only anomalies I could find
->> in the traces with the regression.
->>
->> I created the patch below which simply fakes the sleep length values
->> that they take all timers of the CPU into account (also the non
->> pinned). This patch kind of restores the behavoir of
->> tick_nohz_get_sleep_length() before the change but still with the timer
->> pull model in place.
->>
->> With the patch the regression was gone, at least on my system (using
->> cpuidle governor menu but also teo).
->>
->> So my assumption here is, that cpuidle governors assume that a deeper
->> idle state could be choosen and selecting the deeper idle state makes an
->> overhead when returning from idle. But I have to notice here, that I'm
->> still not familiar with cpuidle internals... So I would be happy about
->> some hints how I can debug/trace cpuidle internals to falsify or verify
->> this assumption.
+>> Co-Developed-by: Dawei Chien <dawei.chien@mediatek.com>
+>> [Angelo: Partial refactoring and cleanups]
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ...
+>>   drivers/soc/mediatek/mtk-dvfsrc.c        | 551 +++++++++++++++++++++++
+> ...
+>> +#define KBPS_TO_MBPS(x)			((x) / 1000)
+> ...
+>> +static void __dvfsrc_set_dram_bw_v1(struct mtk_dvfsrc *dvfsrc, u32 reg,
+>> +				    u16 max_bw, u16 min_bw, u64 bw)
+>> +{
+>> +	u32 new_bw = (u32)div_u64(KBPS_TO_MBPS(bw), 100);
+>> +
+>> +	/* If bw constraints (in mbps) are defined make sure to respect them */
+>> +	if (max_bw)
+>> +		new_bw = min(new_bw, max_bw);
+>> +	if (min_bw && new_bw > 0)
+>> +		new_bw = max(new_bw, min_bw);
+>> +
+>> +	dvfsrc_writel(dvfsrc, reg, new_bw);
+>> +}
 > 
-> You can look at the "usage" and "time" numbers for idle states in
+> Using KBPS_TO_MBPS here results in
 > 
-> /sys/devices/system/cpu/cpu*/cpuidle/state*/
+>    ERROR: modpost: "__aeabi_uldivmod" [drivers/soc/mediatek/mtk-dvfsrc.ko] undefined!
 > 
-> The "usage" value is the number of times the governor has selected the
-> given state and the "time" is the total idle time after requesting the
-> given state (ie. the sum of time intervals between selecting that
-> state by the governor and wakeup from it).
+> when building ARCH=arm allmodconfig with clang. I did not check to see
+> if this is visible with GCC but if it is not, it is only because GCC
+> implements certain transformations for constant division that clang may
+> or may not have implemented (there was some work on getting all
+> transformations that GCC has supported in clang as well but I do not
+> think was ever completed). Perhaps KBPS_TO_MBPS() should be dropped and
+> the new_bw assignement turned into
 > 
-> If "usage" decreases for deeper (higher number) idle states relative
-> to its value for shallower (lower number) idle states after applying
-> the test patch, that will indicate that the theory is valid.
+>    u32 new_bw = (u32)div_u64(bw, 100 * 1000); /* Multiply divisor by 1000 to convert bw from Kbps to Mbps */
 
-I agree with Rafael here, this is the first thing to check, those
-statistics. Then, when you see difference in those stats in baseline
-vs. patched version, we can analyze the internal gov decisions
-with help of tracing.
+Thanks, I honestly didn't check clang.
 
-Please also share how many idle states is in those testing platforms.
+Your suggestion looks good, I'll do exactly that.
 
-BTW, this stress-ng app looks like is a good candidate for OSPM
-discussion that we (me & Rafael) are going to conduct this year.
-We are going to talk about QoS for frequency and latency for apps.
-Those governors (in idle, cpufreq, devfreq) try hard to 'recognize' what
-should be best platform setup for particular workloads, but it's really
-tough to get it right w/o user-space help.
+Cheers!
+Angelo
 
-Therefore, beside these proposed fixes for new timers model, we need
-something 'newer' in our Linux, since the HW evolves (e.g. L3 cache
-w/ DVFS in phones) IMO.
+> 
+> or something like that.
+> 
+> Cheers,
+> Nathan
 
-Regards,
-Lukasz
 
