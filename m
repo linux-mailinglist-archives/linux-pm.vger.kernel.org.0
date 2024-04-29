@@ -1,141 +1,254 @@
-Return-Path: <linux-pm+bounces-7297-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7298-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 799E38B63F0
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 22:59:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5CF78B6478
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 23:21:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 343772811B0
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 20:59:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35836287431
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 21:21:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 990BF178CC1;
-	Mon, 29 Apr 2024 20:59:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="byQXqCty"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75E281836C6;
+	Mon, 29 Apr 2024 21:21:40 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C16AD1779BA
-	for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2024 20:59:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62C14181D0E;
+	Mon, 29 Apr 2024 21:21:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714424394; cv=none; b=lQF1mDx5zHtb6WzKfeQ485+YIzJhM+DfaqIjyE61C4I1HVrrZsgKz3MZ7IIIX68PBmUecpMgTpPJydUmY0mWOR7niyo+5G7MCRE/RN15JLp3lHRABKGAZQwSqJCH7xHWQD4MRYZb4C5sLBL4TVmG2Hye83i40ae5fMioY0H2tK8=
+	t=1714425700; cv=none; b=svcgdSUGIshQg6KUU3IwJCpxP6Qil+CVF3JVnVruBS607y1AiDmjd4sj/O0z07VCKQUFnY4S4/e2fjkAD4612mwuYWXFE14icrS7neoKPkaCNItBbIXn7vMQnt7D4eKOmSbAPLtg6XUdMBjOsrKmTSGP02lDRrefhVqwF4z62Qk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714424394; c=relaxed/simple;
-	bh=GOfEDRU6P0ovWrWCU9wtFsIhy74/04c7AX+niJ+qtt4=;
-	h=Date:Subject:In-Reply-To:CC:From:To:Message-ID:Mime-Version:
-	 Content-Type; b=RUm5CFc2GgUVFsbRb7FEIiob1Ij5ptrie6peqQH3mo6a4wMn5u63HQaPSN1fc2HxdBaO+QXAMRcT0gRHAS7RkIra8HwoNGj8oN3teNAVQulf0hzZ4mu/NiiOAOq8xhKJVisf5i9JHoSGEkJgkYlgasKCCsGODvFIddFCWgiZoP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com; spf=pass smtp.mailfrom=dabbelt.com; dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b=byQXqCty; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6ee12766586so3733882b3a.0
-        for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2024 13:59:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1714424392; x=1715029192; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YPb10z2R6QzqCU/Ny7A6YIEMfMl5Kr9JPZ53mPCpdgY=;
-        b=byQXqCtyLlixH+TXDbYgk3c2ARFOcDGc5SKTn0XZF4kSctEh36fupBI10jqdXCotgV
-         0zoW7wfC7UUNzR5I+2XWH7YFML08H+sakz+d5TZiDyy+q7OIz9VrhMWm3jICw1lP7vWV
-         0rjKICLa9uT36BZyvKrxbcfxdi6tczk2/eHaocPUJOSsWB9tnUAV6QpwkHx6xucmb95y
-         kaVd37J+dT2ajGbX5sGy1fcKxhtJ4CW8JbnldmBtLo1FF6MmnHX41vh6c2pOTJAjg7jv
-         77qCbBfXEoqbGW7KOFIsyZKfQke69NBhOna/YVU9fElTd+TgHpTq0gVp/iSB0/maKc7o
-         Frxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714424392; x=1715029192;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YPb10z2R6QzqCU/Ny7A6YIEMfMl5Kr9JPZ53mPCpdgY=;
-        b=QIzYCB4howmdgLqROuVUr4ES2SQdjwS3wSgbHLCQ0KLr21G4aXyVcnsV6JZQ4UPNJj
-         nCZL9UfGwz7W0mcjbrdpJdjR3zEITUUeKB1Xl1jFv4mRim4pr0hMn0LoIq4xJGv1FpGc
-         MoSdtiqDnK/GiSvgKyo7jvXnsrfGdSewkSFfz5fkms9Yle//kfseW8g21UiljJ9RRVpn
-         A9KxVlcNoxr2QxOnFSiXdGmIeOvDq/MDRtrFDOOJj3fSMofEoQ+Qj4tl33KGAY6x3yr3
-         aKYIS2oGxX4COmvX5t27DdkT/T+KA9Q5tcyc6NxXThtXqVDGwFruF0Gf5VRGSWVYQlMu
-         np4A==
-X-Forwarded-Encrypted: i=1; AJvYcCWX745x9hDsSjxKntjaa4rxbXNgnhzevyuFenj5BwAoZLHC85N2FuX/IkFklxRjVJcS/wdnVgN5NHuJzOSAV3PLcZHV4sl16nQ=
-X-Gm-Message-State: AOJu0Yyx7DxzdaWs5edYVixIN1Sb7IgxHN+PJXFQLVHvh77CGzZ5Rad+
-	Qqg3mjYjm4oE9zOGkWWDtWhfYEswldrcZR5jRey3YIPFQ1XPZZUpGmh5IozGzJA=
-X-Google-Smtp-Source: AGHT+IHIKkaYV9ZXxRvvVi+o+bLxYVmWl7xyTt+htZ7i1zC3bt5vINHy15SJmXRoDfBppCvN4VrC3Q==
-X-Received: by 2002:a05:6a00:2e91:b0:6ec:ebe0:e4ba with SMTP id fd17-20020a056a002e9100b006ecebe0e4bamr1023158pfb.9.1714424391806;
-        Mon, 29 Apr 2024 13:59:51 -0700 (PDT)
-Received: from localhost ([192.184.165.199])
-        by smtp.gmail.com with ESMTPSA id fj40-20020a056a003a2800b006f3021367desm13045927pfb.197.2024.04.29.13.59.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Apr 2024 13:59:51 -0700 (PDT)
-Date: Mon, 29 Apr 2024 13:59:51 -0700 (PDT)
-X-Google-Original-Date: Mon, 29 Apr 2024 13:59:47 PDT (-0700)
-Subject:     Re: [PATCH] cpuidle: riscv-sbi: Add cluster_pm_enter()/exit()
-In-Reply-To: <CAPDyKFph3WsZMmALnzBQKE4S_80Ji5h386Wi0vHda37QUsjMtg@mail.gmail.com>
-CC: nick.hu@sifive.com, anup@brainfault.org, rafael@kernel.org,
-  daniel.lezcano@linaro.org, Paul Walmsley <paul.walmsley@sifive.com>, linux-pm@vger.kernel.org,
-  linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, zong.li@sifive.com
-From: Palmer Dabbelt <palmer@dabbelt.com>
-To: ulf.hansson@linaro.org
-Message-ID: <mhng-eea6b80c-4359-46d0-85d9-358bc89e9169@palmer-ri-x1c9>
+	s=arc-20240116; t=1714425700; c=relaxed/simple;
+	bh=AKYwwoQR9CknzQcaa5xw+jnj1z5MmTM/A5lVQmuKnqE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=T7NSuCmzhKzLoBPacuCSN0oO4TOk0GvCvUToobfoADLOP6K9uD+yqFjgr3q7QP4ryTryaBPKo54kaApl2Kb8ComvhnXZ4lCAR0KIi8vvYV3M27KhIcJWqw2Q0/EYe5cWs0Rxw3xXv2xwMz3VIJG75i0Il+dhEv2kF3vWENORJ1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B7F3F2F4;
+	Mon, 29 Apr 2024 14:22:02 -0700 (PDT)
+Received: from [10.57.64.131] (unknown [10.57.64.131])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 380383F793;
+	Mon, 29 Apr 2024 14:21:35 -0700 (PDT)
+Message-ID: <c29247b8-89d4-404a-b294-81f19720e236@arm.com>
+Date: Mon, 29 Apr 2024 22:21:33 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] thermal: core: Move passive polling management to the
+ core
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>
+References: <5938055.MhkbZ0Pkbq@kreacher>
+Content-Language: en-US
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <5938055.MhkbZ0Pkbq@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, 29 Apr 2024 07:32:12 PDT (-0700), ulf.hansson@linaro.org wrote:
-> On Mon, 26 Feb 2024 at 07:51, Nick Hu <nick.hu@sifive.com> wrote:
->>
->> When the cpus in the same cluster are all in the idle state, the kernel
->> might put the cluster into a deeper low power state. Call the
->> cluster_pm_enter() before entering the low power state and call the
->> cluster_pm_exit() after the cluster woken up.
->>
->> Signed-off-by: Nick Hu <nick.hu@sifive.com>
->
-> I was not cced this patch, but noticed that this patch got queued up
-> recently. Sorry for not noticing earlier.
->
-> If not too late, can you please drop/revert it? We should really move
-> away from the CPU cluster notifiers. See more information below.
+Hi Rafael,
 
-Sorry about that, I'll toss it.  I'm testing some other stuff right now 
-so it might miss today's linux-next.
+On 4/25/24 15:11, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Passive polling is enabled by setting the 'passive' field in
+> struct thermal_zone_device to a positive value so long as the
+> 'passive_delay_jiffies' field is greater than zero.  It causes
+> the thermal core to actively check the thermal zone temperature
+> periodically which in theory should be done after crossing a
+> passive trip point on the way up in order to allow governors to
+> react more rapidly to temperature changes and adjust mitigation
+> more precisely.
+> 
+> However, the 'passive' field in struct thermal_zone_device is currently
+> managed by governors which is quite problematic.  First of all, only
+> two governors, Step-Wise and Power Allocator, update that field at
+> all, so the other governors do not benefit from passive polling,
+> although in principle they should.  Moreover, if the zone governor is
+> changed from, say, Step-Wise to Fair-Share after 'passive' has been
+> incremented by the former, it is not going to be reset back to zero by
+> the latter even if the zone temperature falls down below all passive
+> trip points.
+> 
+> For this reason, make handle_thermal_trip() increment 'passive'
+> to enable passive polling for the given thermal zone whenever a
+> passive trip point is crossed on the way up and decrement it
+> whenever a passive trip point is crossed on the way down.  Also
+> remove the 'passive' field updates from governors and additionally
+> clear it in thermal_zone_device_init() to prevent passive polling
+> from being enabled after a system resume just beacuse it was enabled
+> before suspending the system.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> 
+> This has been mentioned here:
+> 
+> https://lore.kernel.org/linux-pm/61560bc6-d453-4b0c-a4ea-b375d547b143@linaro.org/
+> 
+> and I need someone to double check if the Power Allocator governor does not
+> need to be adjusted more for this change.
+> 
+> ---
+>   drivers/thermal/gov_power_allocator.c |   12 +++++++-----
+>   drivers/thermal/gov_step_wise.c       |   10 ----------
+>   drivers/thermal/thermal_core.c        |   10 ++++++++--
+>   3 files changed, 15 insertions(+), 17 deletions(-)
+> 
+> Index: linux-pm/drivers/thermal/thermal_core.c
+> ===================================================================
+> --- linux-pm.orig/drivers/thermal/thermal_core.c
+> +++ linux-pm/drivers/thermal/thermal_core.c
+> @@ -389,6 +389,9 @@ static void handle_thermal_trip(struct t
+>   		if (tz->temperature < trip->temperature - trip->hysteresis) {
+>   			list_add(&td->notify_list_node, way_down_list);
+>   			td->notify_temp = trip->temperature - trip->hysteresis;
+> +
+> +			if (trip->type == THERMAL_TRIP_PASSIVE)
+> +				tz->passive--;
 
->> ---
->>  drivers/cpuidle/cpuidle-riscv-sbi.c | 24 ++++++++++++++++++++++--
->>  1 file changed, 22 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
->> index e8094fc92491..298dc76a00cf 100644
->> --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
->> +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
->> @@ -394,6 +394,7 @@ static int sbi_cpuidle_pd_power_off(struct generic_pm_domain *pd)
->>  {
->>         struct genpd_power_state *state = &pd->states[pd->state_idx];
->>         u32 *pd_state;
->> +       int ret;
->>
->>         if (!state->data)
->>                 return 0;
->> @@ -401,6 +402,10 @@ static int sbi_cpuidle_pd_power_off(struct generic_pm_domain *pd)
->>         if (!sbi_cpuidle_pd_allow_domain_state)
->>                 return -EBUSY;
->>
->> +       ret = cpu_cluster_pm_enter();
->> +       if (ret)
->> +               return ret;
->
-> Rather than using the CPU cluster notifiers, consumers of the genpd
-> can register themselves to receive genpd on/off notifiers.
->
-> In other words, none of this should be needed, right?
->
-> [...]
->
-> Kind regards
-> Uffe
+This gets negative values and than the core switches to fast 'polling'
+mode. The values is decremented from 0 each time the
+thermal_zone_device_enable() is called.
+
+Then IPA is actually called every 100ms after boot w/ low temp,
+while it should 1s.
+
+Please see the logs below:
+'short log' after boot
+----------------------------------------------
+
+[    1.632670] thermal_sys: TZ: tz_id=0 passive-- = -1
+[    1.637984] thermal_sys: TZ: tz_id=0 passive-- = -2
+[    1.643641] thermal_sys: TZ: tz_id=1 passive-- = -1
+----------------------------------------------
+
+long log with call stack dumped
+----------------------------------------------
+
+[    1.632973] thermal_sys: TZ: tz_id=0 passive-- = -1
+[    1.638295] CPU: 4 PID: 1 Comm: swapper/0 Not tainted 6.9.0-rc5+ #28
+[    1.645409] Hardware name: Radxa ROCK 4SE (DT)
+[    1.650376] Call trace:
+[    1.653109]  dump_backtrace+0x9c/0x100
+[    1.657309]  show_stack+0x20/0x38
+[    1.661017]  dump_stack_lvl+0xc0/0xd0
+[    1.665119]  dump_stack+0x18/0x28
+[    1.668828]  __thermal_zone_device_update+0x1fc/0x550
+[    1.674484]  thermal_zone_device_set_mode+0x64/0xc0
+[    1.679943]  thermal_zone_device_enable+0x1c/0x30
+[    1.685206]  thermal_of_zone_register+0x34c/0x590
+[    1.690473]  devm_thermal_of_zone_register+0x6c/0xc0
+[    1.696031]  rockchip_thermal_probe+0x238/0x5e8
+[    1.701106]  platform_probe+0x70/0xe8
+[    1.705208]  really_probe+0xc4/0x278
+[    1.709205]  __driver_probe_device+0x80/0x140
+[    1.714078]  driver_probe_device+0x48/0x130
+[    1.718756]  __driver_attach+0x7c/0x138
+[    1.723045]  bus_for_each_dev+0x80/0xf0
+[    1.727342]  driver_attach+0x2c/0x40
+[    1.731340]  bus_add_driver+0xec/0x1f8
+[    1.735539]  driver_register+0x68/0x138
+[    1.739828]  __platform_driver_register+0x30/0x48
+[    1.745093]  rockchip_thermal_driver_init+0x24/0x38
+[    1.750551]  do_one_initcall+0x50/0x2d8
+[    1.754844]  kernel_init_freeable+0x204/0x440
+[    1.759722]  kernel_init+0x28/0x140
+[    1.763631]  ret_from_fork+0x10/0x20
+[    1.767802] thermal_sys: TZ: tz_id=0 passive-- = -2
+[    1.773086] CPU: 4 PID: 1 Comm: swapper/0 Not tainted 6.9.0-rc5+ #28
+[    1.780196] Hardware name: Radxa ROCK 4SE (DT)
+[    1.785162] Call trace:
+[    1.787893]  dump_backtrace+0x9c/0x100
+[    1.792087]  show_stack+0x20/0x38
+[    1.795795]  dump_stack_lvl+0xc0/0xd0
+[    1.799895]  dump_stack+0x18/0x28
+[    1.803604]  __thermal_zone_device_update+0x1fc/0x550
+[    1.809257]  thermal_zone_device_set_mode+0x64/0xc0
+[    1.814715]  thermal_zone_device_enable+0x1c/0x30
+[    1.819977]  thermal_of_zone_register+0x34c/0x590
+[    1.825242]  devm_thermal_of_zone_register+0x6c/0xc0
+[    1.830799]  rockchip_thermal_probe+0x238/0x5e8
+[    1.835874]  platform_probe+0x70/0xe8
+[    1.839973]  really_probe+0xc4/0x278
+[    1.843972]  __driver_probe_device+0x80/0x140
+[    1.848846]  driver_probe_device+0x48/0x130
+[    1.853524]  __driver_attach+0x7c/0x138
+[    1.857813]  bus_for_each_dev+0x80/0xf0
+[    1.862110]  driver_attach+0x2c/0x40
+[    1.866109]  bus_add_driver+0xec/0x1f8
+[    1.870307]  driver_register+0x68/0x138
+[    1.874597]  __platform_driver_register+0x30/0x48
+[    1.879861]  rockchip_thermal_driver_init+0x24/0x38
+[    1.885317]  do_one_initcall+0x50/0x2d8
+[    1.889609]  kernel_init_freeable+0x204/0x440
+[    1.894486]  kernel_init+0x28/0x140
+[    1.898394]  ret_from_fork+0x10/0x20
+[    1.902879] thermal_sys: TZ: tz_id=1 passive-- = -1
+[    1.908172] CPU: 4 PID: 1 Comm: swapper/0 Not tainted 6.9.0-rc5+ #28
+[    1.915282] Hardware name: Radxa ROCK 4SE (DT)
+[    1.920248] Call trace:
+[    1.922979]  dump_backtrace+0x9c/0x100
+[    1.927176]  show_stack+0x20/0x38
+[    1.930883]  dump_stack_lvl+0xc0/0xd0
+[    1.934982]  dump_stack+0x18/0x28
+[    1.938691]  __thermal_zone_device_update+0x1fc/0x550
+[    1.944342]  thermal_zone_device_set_mode+0x64/0xc0
+[    1.949801]  thermal_zone_device_enable+0x1c/0x30
+[    1.955063]  thermal_of_zone_register+0x34c/0x590
+[    1.960328]  devm_thermal_of_zone_register+0x6c/0xc0
+[    1.965886]  rockchip_thermal_probe+0x238/0x5e8
+[    1.970951]  platform_probe+0x70/0xe8
+[    1.975049]  really_probe+0xc4/0x278
+[    1.979039]  __driver_probe_device+0x80/0x140
+[    1.983911]  driver_probe_device+0x48/0x130
+[    1.988589]  __driver_attach+0x7c/0x138
+[    1.992880]  bus_for_each_dev+0x80/0xf0
+[    1.997176]  driver_attach+0x2c/0x40
+[    2.001173]  bus_add_driver+0xec/0x1f8
+[    2.005372]  driver_register+0x68/0x138
+[    2.009663]  __platform_driver_register+0x30/0x48
+[    2.014927]  rockchip_thermal_driver_init+0x24/0x38
+[    2.020383]  do_one_initcall+0x50/0x2d8
+[    2.024674]  kernel_init_freeable+0x204/0x440
+[    2.029549]  kernel_init+0x28/0x140
+[    2.033456]  ret_from_fork+0x10/0x20
+
+------------------------------------------
+
+
+IMO we should check something like:
+----------------------8<--------------------------
+if (tz->passive)
+	tz->passive--;
+--------------------->8---------------------------
+because we start from '0' as init value.
+
+>   		} else {
+>   			td->threshold -= trip->hysteresis;
+>   		}
+> @@ -402,8 +405,10 @@ static void handle_thermal_trip(struct t
+>   		td->notify_temp = trip->temperature;
+>   		td->threshold -= trip->hysteresis;
+>   
+> -		if (trip->type == THERMAL_TRIP_CRITICAL ||
+> -		    trip->type == THERMAL_TRIP_HOT)
+> +		if (trip->type == THERMAL_TRIP_PASSIVE)
+> +			tz->passive++;
+
+Also, we have to make sure here, that we are align after some change
+and be able to return with value to 0 (to switch to 'passive'
+slow checks).
+
+Regards,
+Lukasz
 
