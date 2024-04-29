@@ -1,100 +1,202 @@
-Return-Path: <linux-pm+bounces-7275-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7276-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A39208B5630
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 13:12:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6C098B5637
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 13:13:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5073C1F21EB1
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 11:12:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D7D731C237ED
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 11:13:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A7E53D56D;
-	Mon, 29 Apr 2024 11:12:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCC593F8EA;
+	Mon, 29 Apr 2024 11:13:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="0Mt11OT6"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KYX0iCqD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432EE5382;
-	Mon, 29 Apr 2024 11:12:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF7C03D970
+	for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2024 11:13:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714389153; cv=none; b=faGwrIXWXQTr84G7BlP+Y0xzr2PaxRLktqBKfV0OPllW0eMQyY0R6cY65Xguf3EH5bAgdoNarBGoCkga8DDoii4c7LSHI3+uP21ZD43GV/QZmlDqf/2XvTGF4+VyGbBCQPI3AJ++IoEN4emkMkYd18ZuPg+Ff0b+wLzOX4jBmTg=
+	t=1714389206; cv=none; b=ahbCREYcC3eOT/Ch47FFXjSGS4cUJ5v2iILhY9xHUwLbOMHsDmHtUQGlKqLII6Fiwwvdn4Xit/uMKmLzczvtvmkoOKOeOnvBwrsbWxdelh7/Pq3xwapdg6FYpzG4x+WYVOScfadXD/RvgDbhSaSj1nX0cDmr11Qb1T7tg3j424k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714389153; c=relaxed/simple;
-	bh=lzTWWW43K3gPneW5OXkC13YOFffiN5E4u6PkjR57FOM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e411DwSFgNmRVFfCjqzlLXonKmKH5d5PSJNgYztD45EByQ12phN3F/WKeESxUzGo2jCZ6RX+frK5dnj1LTwFKUZRYoUz0nuUohZUMQSiZPHtA5Z7C2YjOEGJAcwo6LWCHwuVcZzag5dSp3OxZH5620RF5znhQ/TtISafNAWPpSk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=0Mt11OT6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81E79C113CD;
-	Mon, 29 Apr 2024 11:12:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1714389152;
-	bh=lzTWWW43K3gPneW5OXkC13YOFffiN5E4u6PkjR57FOM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=0Mt11OT6aIJnqNpv2EG5+esj2ff10d/2TtW83Mtchg295Swr52Sx0+R22zVnwrFBS
-	 Wk/9BqAeAStsuGvTAeXGFkTRVQJrIrqYeYuRAFqPAEf0Fu0FJTrlEi4UqM2h0wM494
-	 T/uFCUrjLaEG7o5oV97MWDkSkZdkA/fPrXcns25s=
-Date: Mon, 29 Apr 2024 13:12:30 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Jan Kiszka <jan.kiszka@siemens.com>
-Cc: Sasha Levin <sashal@kernel.org>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>,
-	Christian Marangi <ansuelsmth@gmail.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Johnny Liu <johnliu@nvidia.com>, Jon Hunter <jonathanh@nvidia.com>,
-	Linux PM list <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH 5.10.y] PM / devfreq: Fix buffer overflow in
- trans_stat_show
-Message-ID: <2024042922-fleshed-bonding-648d@gregkh>
-References: <8a59f3b2-48b0-4a62-ab54-61f8d6068cbc@siemens.com>
+	s=arc-20240116; t=1714389206; c=relaxed/simple;
+	bh=T/crSH9DSA8ylB7Et4pCh0oc+2zAxyiMJFqQVdttaQU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=frmCJpDlUG3ZexlkJ1M3MQGOth0AYyIksXj1brfBloWai6lvpYIYsVzvbKJOToVEgVltRRWHSaVKJYVBUnNiJPHX/GBEnkYSbblVHemHz5B6xI1GSqKe6sKLau4DeRHxwR6DB+W2tHUvfNggki5jSyrXFCUF5BE0ZCWT6SS2ZX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KYX0iCqD; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1714389203;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8sJML5s0biiGbCVOwrO3DXEz4jiznSmREmBT1P/exaw=;
+	b=KYX0iCqD3rllL7xcpZWR9F9k5Z4AuSKf1xOPD3bIwNoP8fSdMn+AH6qPkATfDh07p8LR1Q
+	nSUm8O+PtnuZ/bJ/+SGaKx2OxLQyS123LL50QeXDWlWGC1Usegl0aUzZT+3E2fJxBiVCae
+	eJWKJgdHqDinJLrVG3NFKmXST5Ry+r4=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-111-QUVMcSgQNnCAsViHK_X-kw-1; Mon, 29 Apr 2024 07:13:22 -0400
+X-MC-Unique: QUVMcSgQNnCAsViHK_X-kw-1
+Received: by mail-lf1-f72.google.com with SMTP id 2adb3069b0e04-51da1d9cb32so809991e87.3
+        for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2024 04:13:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714389201; x=1714994001;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8sJML5s0biiGbCVOwrO3DXEz4jiznSmREmBT1P/exaw=;
+        b=kRxuYoFBSkFwAAGu5zEeLr+gORM5ElCUBb7SIK8+cV1AEZQ7WRAmOMeaxEK9vzyeHX
+         ReIFKF7XtTbZgzw+x0+i9TUD+rfwIdVcSCseQPJN4WcPf85tNsHe/yROwHahtU8YBEMn
+         //y8PM1pfHPtYcnPBqqmYfeVd+XguQLs9sicS4LS23HJNuRZv4Y6AviMW8/o6+7CAgOB
+         wYV5AzUF9pkfmq+FlbwxFC0dwqvCtj1ivk8ZCpy2CotPeB9DnswAroFcCSNGuAxWLAFV
+         XyRb3/VHJgi6/fkRgBwR88KuzQ6woOB/SBYIJL0/gyX6ZEcqL821xHaF2AoLMHgfS8CD
+         vj9A==
+X-Forwarded-Encrypted: i=1; AJvYcCWKmi7tjLq3vWmpBV9/Djw0m2ha9XKip6TquJQBj93fOaft8jfN6WyrZG/GfbEqSAM3plf4RYIO/rsvGwiNdVxqqxIiDwNmytc=
+X-Gm-Message-State: AOJu0YwGdZ5HJ5eINMCWUav02AquRen55sBnDmaYJVb6gKnkrpDkx3wm
+	bPVZBoAINbGkPatJ04xhp24Wccm7RxBDjYDiXTf34zFcTOaPxn5rIjNjyABBEQKtyyw0hvBsM6r
+	yzGkh9otiYzBgfwK1F8t2oeaL3fuT5dkC3UdPaswpL3+f2SWekJ6ZbyC+
+X-Received: by 2002:ac2:4e03:0:b0:516:cf0a:9799 with SMTP id e3-20020ac24e03000000b00516cf0a9799mr7129194lfr.64.1714389200930;
+        Mon, 29 Apr 2024 04:13:20 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHg7WXBOz5A0aLSEx3ARFvToHVEBe47VUDofaiUeVucK5VTQ3/DUfw1ow8m393Bc5sqQ2amPw==
+X-Received: by 2002:ac2:4e03:0:b0:516:cf0a:9799 with SMTP id e3-20020ac24e03000000b00516cf0a9799mr7129152lfr.64.1714389200211;
+        Mon, 29 Apr 2024 04:13:20 -0700 (PDT)
+Received: from [10.40.98.157] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id ah2-20020a1709069ac200b00a4e393b6349sm13686361ejc.5.2024.04.29.04.13.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Apr 2024 04:13:19 -0700 (PDT)
+Message-ID: <32d7fbec-1b62-4e61-a078-ef7549bc8947@redhat.com>
+Date: Mon, 29 Apr 2024 13:13:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8a59f3b2-48b0-4a62-ab54-61f8d6068cbc@siemens.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 0/6] KTD2026 indicator LED for X86 Xiaomi Pad2
+To: Kate Hsuan <hpa@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+ Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org,
+ platform-driver-x86@vger.kernel.org,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ =?UTF-8?Q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>,
+ linux-kernel@vger.kernel.org, Andy Shevchenko <andy.shevchenko@gmail.com>,
+ Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
+References: <20240424065212.263784-1-hpa@redhat.com>
+Content-Language: en-US
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20240424065212.263784-1-hpa@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sun, Apr 28, 2024 at 10:28:42AM +0200, Jan Kiszka wrote:
-> From: Christian Marangi <ansuelsmth@gmail.com>
-> 
-> [ Upstream commit 08e23d05fa6dc4fc13da0ccf09defdd4bbc92ff4 ]
-> 
-> Fix buffer overflow in trans_stat_show().
-> 
-> Convert simple snprintf to the more secure scnprintf with size of
-> PAGE_SIZE.
-> 
-> Add condition checking if we are exceeding PAGE_SIZE and exit early from
-> loop. Also add at the end a warning that we exceeded PAGE_SIZE and that
-> stats is disabled.
-> 
-> Return -EFBIG in the case where we don't have enough space to write the
-> full transition table.
-> 
-> Also document in the ABI that this function can return -EFBIG error.
-> 
-> Link: https://lore.kernel.org/all/20231024183016.14648-2-ansuelsmth@gmail.com/
-> Cc: stable@vger.kernel.org
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218041
-> Fixes: e552bbaf5b98 ("PM / devfreq: Add sysfs node for representing frequency transition information.")
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
-> ---
-> 
-> Original found by someone at Nvidia. But this backport is based on the 
-> 5.15 commit (796d3fad8c35ee9df9027899fb90ceaeb41b958f) where only a 
-> conflict in sysfs-class-devfreq needed manual resolution.
+Hi All,
 
-Now queued up, thanks.
+On 4/24/24 8:52 AM, Kate Hsuan wrote:
+> This patch added the support for Xiaomi Pad2 indicator LED. This work
+> included:
+> 1. Added the KTD2026 swnode description to describe the LED controller.
+> 2. Migrated the original driver to fwnode to support x86 platform.
+> 3. Support for multi-color LED trigger event.
+> 4. The LED shows orange  when charging and the LED shows green when the
+>    battery is full.
+> 
+> Moreover, the LED trigger is set to the new trigger, called
+> "bq27520-0-charging-orange-full-green" for Xiaomi Pad2 so the LED shows
+> orange when charging and the LED shows green when the battery is full.
 
-greg k-h
+Lee, I believe this series is ready for merging now ?  I've reviewed
+patches 1-2 + 5 and Jacek has reviewed patches 3 + 4.
+
+Patch 5 also has an Acked-by from Sebastian for merging it together
+with the rest of the series.
+
+Can you merge patches 1-5 ?
+
+Patch 6 just changes the value of a device-property (the default-trigger
+string) and I can merge that through the pdx86 tree independent of
+patches 1-5.
+
+Regards,
+
+Hans
+
+
+
+
+
+> 
+> --
+> Changes in v7:
+> 1. Platform: x86-android-tablets: other: Add swnode for Xiaomi pad2
+>    indicator LED was included in Hans' branch.
+> 2. Included the tags from the previous version in the commit message.
+> 3. Fixed the comma issue for the structure initialiser.
+> 
+> Changes in v6:
+> 1. The I2C ID table was moved to a separate patch.
+> 2. The LED shows orange when charging.
+> 3. The trigger name was renamed to charging-orange-full-green.
+> 4. The default trigger of Xiaomi Pad2 is
+>    "bq27520-0-charging-orange-full-green".
+> 
+> Changes in v5:
+> 1. Fix swnode LED color settings.
+> 2. Improve the driver based on the comments.
+> 3. Introduce a LED new API- led_mc_trigger_event() to make the LED
+>    color can be changed according to the trigger.
+> 4. Introduced a new trigger "charging-red-full-green". The LED will be
+>    red when charging and the the LED will be green when the battery is
+>    full.
+> 5. Set the default trigger to "bq27520-0-charging-red-full-green" for
+>    Xiaomi Pad2.
+> 
+> Changes in v4:
+> 1. Fix double casting.
+> 2. Since force casting a pointer value to int will trigger a compiler
+>    warning, the type of num_leds was changed to unsigned long.
+> 
+> Changes in v3:
+> 1. Drop the patch "leds-ktd202x: Skip regulator settings for Xiaomi
+>    pad2"
+> 
+> Changes in v2:
+> 1. Typo and style fixes.
+> 2. The patch 0003 skips all the regulator setup for Xiaomi pad2 since
+>    KTD2026 on Xiaomi pad2 is already powered by BP25890RTWR. So, the
+>    sleep can be removed when removing the module.
+> 
+> 
+> Hans de Goede (2):
+>   leds: core: Add led_mc_set_brightness() function
+>   leds: trigger: Add led_mc_trigger_event() function
+> 
+> Kate Hsuan (4):
+>   leds: rgb: leds-ktd202x: Get device properties through fwnode to
+>     support ACPI
+>   leds: rgb: leds-ktd202x: I2C ID tables for KTD2026 and 2027
+>   power: supply: power-supply-leds: Add charging_orange_full_green
+>     trigger for RGB LED
+>   platform: x86-android-tablets: others: Set the LED trigger to
+>     charging_orange_full_green for Xiaomi pad2
+> 
+>  drivers/leds/led-class-multicolor.c           |  1 +
+>  drivers/leds/led-core.c                       | 31 ++++++++
+>  drivers/leds/led-triggers.c                   | 20 ++++++
+>  drivers/leds/rgb/Kconfig                      |  1 -
+>  drivers/leds/rgb/leds-ktd202x.c               | 72 +++++++++++--------
+>  .../platform/x86/x86-android-tablets/other.c  |  2 +-
+>  drivers/power/supply/power_supply_leds.c      | 26 +++++++
+>  include/linux/leds.h                          | 26 +++++++
+>  include/linux/power_supply.h                  |  2 +
+>  9 files changed, 149 insertions(+), 32 deletions(-)
+> 
+
 
