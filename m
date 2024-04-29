@@ -1,145 +1,220 @@
-Return-Path: <linux-pm+bounces-7286-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7287-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AE9D8B5AE7
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 16:07:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68CD58B5B06
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 16:13:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C7F81C21142
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 14:07:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D27881F214A5
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 14:13:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 510AD823CC;
-	Mon, 29 Apr 2024 14:06:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08AE576F1D;
+	Mon, 29 Apr 2024 14:13:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ynNUlOaN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pRi/v7m6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4E2880603
-	for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2024 14:06:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF1599468;
+	Mon, 29 Apr 2024 14:13:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714399565; cv=none; b=qM7KjxTZu0+Rg5o0qTS6OZFUIVcw19/9sjUYX/MbShr9+yk9oJxsqEMjfdl/C1/CMijceVZVejpQS0RTUBAwHr7ZCEqNL9jbMYV+2eeAmlILbmwf/OAgmY8r5jQ8QQV7KkT/wEil9Ng4FlIiqw+CRr6LaMmUdCW8sA8Yz8tLRZA=
+	t=1714400001; cv=none; b=ri/jecn9OnSYSciJF5a7k406M++DuHJwpD6r8qWSj8H1wwTlRUuuOqlwWVay5RT5S72D8JmSAhNGEngFxNeaccs399Esxga5U1o6WiIqHDaGNx2P1JzBtGu1caCv49cte6kWwir7aZRiVxqRVptmoVtglBcWbSglwWPO6QHyYek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714399565; c=relaxed/simple;
-	bh=bIu8MbW3zdEnNCbcclk/lNsKop9RpekiJmMvuMEBXIQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ssAHddAz6miTYgMw3UhLzvVC7AKL8hyCNeXjQFREWpfAGLS0/WXtKV7Kdki2j7IWGA+V8lXsuCavSsk1hoNMDuMoyE7GrzN7GLsthikYDdlmdbJYkKJv1Vf1IhDGZgWj6f084jYfFqm6A6q/oJUt9k0L0oSoc/2AIJH5sje/kMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ynNUlOaN; arc=none smtp.client-ip=209.85.208.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2e01d666c88so14244501fa.2
-        for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2024 07:06:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1714399561; x=1715004361; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IDwOmSA7MQ7+zytHkA+laGeE0LQljf7L1jWo+P70lko=;
-        b=ynNUlOaNVD7iZgypmP3lZCl0KpXUrvNBCUIpdi1Eha1nepv9lFYNM/v1anteWxOBY+
-         PIf6WkEx/l3Le/oG4cTXCrbJXluBfipnb+wLin7DhzA1oT3fvN6KhjMlozBoOTNwWHhM
-         3J5bK7YUquew17u0XdAY/Y/WH8dfpjj9TqHoNfdHd/R8Hb+j0KwMFDHoQsqQPVSvbP1B
-         NjWReMvfvlCS2Q56EM7yt9YN4EPA+2gXxylUSStP5JijZ0s3u5L/dGDx6alA+290oln/
-         2LV5nrCr1VS37kQvP/bTzGLJKmhE+80adYj/F0ryZWZIsZez2H/hMVWYHXmoFqX5WLD3
-         XOvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714399561; x=1715004361;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IDwOmSA7MQ7+zytHkA+laGeE0LQljf7L1jWo+P70lko=;
-        b=nkE5hmR62J7Ww2+AqV5C4cRhtujSUGsaq4aa4D2nfngdsxn6T7ouIfdkfihAaz3/CP
-         bwgSVcnOb0hWcu/yZogKOG3coKTybtJQLPhey7OXURws4BufImvv6Bx8hN/iB6nlfAt/
-         pMoJg6TiYI+XNr2gnANHJC55/h9VCosq/GW2Y4sbYATJbX/+KPxLjdcrkzELxZGlXvPp
-         iZ/hYsTKU4eFvImMpHyApbbbbwIfqe3VN6BCEDdS1fSZN+KgrDXnkJiWv74x23oy/OFr
-         80dmeCWZ7mF7mG3kGRgGLrgmHPPbELuuzvqD5aj//SrW06gwtRwaLNdaGbJWp85WMJTV
-         /sqA==
-X-Forwarded-Encrypted: i=1; AJvYcCW+tWGTxPpefjRyc27yTS942nuM3knet4aOll5a6pMUYThtU3YgJPc44JIQx6QFi3jWfVDHVBz9vj/vl8wJmHnwt93RRCb7t0A=
-X-Gm-Message-State: AOJu0YzMQ+fS1w1xCvxqc1bLBA+78kS4FCRg2FF879BOHJyE2xz0h0Dd
-	Q6ZjfhcUq3mfsV2hupUqniwc98PzTxUbWhFSQIVo7xwMTqoLhUbP6jEhqB4z/Xc=
-X-Google-Smtp-Source: AGHT+IHp/AQbEYZZdpmQu1KIboKwTFnhRTHy3IUitMBtdTfQEIp1e8p8oPGMBXNXjtBT0xrYq8GO+w==
-X-Received: by 2002:a2e:93d5:0:b0:2dd:6d67:3064 with SMTP id p21-20020a2e93d5000000b002dd6d673064mr6309727ljh.28.1714399560822;
-        Mon, 29 Apr 2024 07:06:00 -0700 (PDT)
-Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id l5-20020a2e9085000000b002d7095bf808sm3636733ljg.128.2024.04.29.07.05.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Apr 2024 07:06:00 -0700 (PDT)
-From: Ulf Hansson <ulf.hansson@linaro.org>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	linux-pm@vger.kernel.org
-Cc: Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-	Nikunj Kela <nkela@quicinc.com>,
-	Prasad Sodagudi <psodagud@quicinc.com>,
-	Maulik Shah <quic_mkshah@quicinc.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-rt-users@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 6/6] cpuidle: psci: Enable the hierarchical topology for s2idle on PREEMPT_RT
-Date: Mon, 29 Apr 2024 16:05:31 +0200
-Message-Id: <20240429140531.210576-7-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240429140531.210576-1-ulf.hansson@linaro.org>
-References: <20240429140531.210576-1-ulf.hansson@linaro.org>
+	s=arc-20240116; t=1714400001; c=relaxed/simple;
+	bh=618JHK33NfWpe17uC+zkMyziNzW0BIM5OKg4SY19Z4o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iHLdib8hjmK1JNF2wnJh0whtn4eYBpY5xMML8bh3Jdv2zXydXCma8kToWMueceahc+/WAHv7DcW1WJ50prkjqxuLdf+mW6Q+Ne2sY6Bde+rJt1dL6gInTRV60WOwydEQUYApj1g+zRlk2SsnvnfV9IgtzUMwGmM3XC5vwKZXpYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pRi/v7m6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A06CDC113CD;
+	Mon, 29 Apr 2024 14:13:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714400001;
+	bh=618JHK33NfWpe17uC+zkMyziNzW0BIM5OKg4SY19Z4o=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=pRi/v7m69mn8YjGwqv5JxC0uIfVArly6v1eFC5p2vwvEERWe47HOeeZv9VFHvg8oy
+	 ceOoJLDgAWB8NlyggIdoUfXpf1IdFvvdtvX1xqGlhs1ymXqGrJuILz5ZgDqb/Tb3uY
+	 cZZTFB3BZ5736Z9/wwc0OD55Qg+f7JhJakp3ufd5XubEM8sNCYpUvY+OdBrmc1F0T2
+	 STml+I0UGIK4YMkQHmzKPdt4RdL/3i3OfBUfYRSkK0yPNlS4aKkoq9NQ9oR09J5mbx
+	 mrMxE6GeYQQOG68nIxBIaH1GiHVidZGwFgN8xHiWQcfe93DuacfCx8pjkSOFPVG1Co
+	 8ieLALYIWNNMQ==
+Message-ID: <c3531f5f-7aaa-4363-8bfe-ac90521d7a0e@kernel.org>
+Date: Mon, 29 Apr 2024 17:13:13 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 4/7] soc: mediatek: Add MediaTek DVFS Resource
+ Collector (DVFSRC) driver
+Content-Language: en-US
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ matthias.bgg@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
+ keescook@chromium.org, gustavoars@kernel.org, henryc.chen@mediatek.com,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, kernel@collabora.com,
+ wenst@chromium.org, amergnat@baylibre.com,
+ Dawei Chien <dawei.chien@mediatek.com>
+References: <20240424095416.1105639-1-angelogioacchino.delregno@collabora.com>
+ <20240424095416.1105639-5-angelogioacchino.delregno@collabora.com>
+From: Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <20240424095416.1105639-5-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-To enable the domain-idle-states to be used during s2idle on a PREEMPT_RT
-based configuration, let's allow the re-assignment of the ->enter_s2idle()
-callback to psci_enter_s2idle_domain_idle_state().
+On 24.04.24 12:54, AngeloGioacchino Del Regno wrote:
+> The Dynamic Voltage and Frequency Scaling Resource Collector (DVFSRC) is a
+> Hardware module used to collect all the requests from both software and the
+> various remote processors embedded into the SoC and decide about a minimum
+> operating voltage and a minimum DRAM frequency to fulfill those requests in
+> an effort to provide the best achievable performance per watt.
+> 
+> This hardware IP is capable of transparently performing direct register R/W
+> on all of the DVFSRC-controlled regulators and SoC bandwidth knobs.
+> 
+> This driver includes support for MT8183, MT8192 and MT8195.
+> 
+> Co-Developed-by: Dawei Chien <dawei.chien@mediatek.com>
+> [Angelo: Partial refactoring and cleanups]
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Similar to s2ram, let's leave the support for CPU hotplug outside
-PREEMPT_RT, as it's depending on using runtime PM. For s2idle, this means
-that an offline CPU's PM domain will remain powered-on. In practise this
-may lead to that a shallower idle-state than necessary gets selected, which
-shouldn't be an issue (besides wasting power).
+Thanks for reviving this patchset!
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
- drivers/cpuidle/cpuidle-psci.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+> ---
+>   drivers/soc/mediatek/Kconfig             |  11 +
+>   drivers/soc/mediatek/Makefile            |   1 +
+>   drivers/soc/mediatek/mtk-dvfsrc.c        | 551 +++++++++++++++++++++++
+>   include/linux/soc/mediatek/dvfsrc.h      |  36 ++
+>   include/linux/soc/mediatek/mtk_sip_svc.h |   3 +
+>   5 files changed, 602 insertions(+)
+>   create mode 100644 drivers/soc/mediatek/mtk-dvfsrc.c
+>   create mode 100644 include/linux/soc/mediatek/dvfsrc.h
+> 
+[..]
+> +++ b/drivers/soc/mediatek/mtk-dvfsrc.c
+> @@ -0,0 +1,551 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2021 MediaTek Inc.
+> + * Copyright (c) 2024 Collabora Ltd.
+> + *                    AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> + */
+> +
+> +#include <linux/arm-smccc.h>
+> +#include <linux/bitfield.h>
+> +#include <linux/iopoll.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/soc/mediatek/dvfsrc.h>
+> +#include <linux/soc/mediatek/mtk_sip_svc.h>
+> +
+> +/* DVFSRC_LEVEL */
+> +#define DVFSRC_V1_LEVEL_TARGET_LEVEL	GENMASK(15, 0)
+> +#define DVFSRC_TGT_LEVEL_IDLE		0x00
+> +#define DVFSRC_V1_LEVEL_CURRENT_LEVEL	GENMASK(31, 16)
+> +
+> +/* DVFSRC_SW_REQ, DVFSRC_SW_REQ2 */
+> +#define DVFSRC_V1_SW_REQ2_DRAM_LEVEL	GENMASK(1, 0)
+> +#define DVFSRC_V1_SW_REQ2_VCORE_LEVEL	GENMASK(3, 2)
+> +
+> +#define DVFSRC_V2_SW_REQ_DRAM_LEVEL	GENMASK(3, 0)
+> +#define DVFSRC_V2_SW_REQ_VCORE_LEVEL	GENMASK(6, 4)
+> +
+> +/* DVFSRC_VCORE */
+> +#define DVFSRC_V2_VCORE_REQ_VSCP_LEVEL	GENMASK(14, 12)
+> +
+> +#define KBPS_TO_MBPS(x)			((x) / 1000)
+> +
+> +#define DVFSRC_POLL_TIMEOUT_US		1000
+> +#define STARTUP_TIME_US			1
+> +
+> +#define MTK_SIP_DVFSRC_INIT		0x0
+> +#define MTK_SIP_DVFSRC_START		0x1
+> +
+> +struct dvfsrc_bw_constraints {
+> +	u16 max_dram_nom_bw;
+> +	u16 max_dram_peak_bw;
+> +	u16 max_dram_hrt_bw;
+> +};
+> +
+> +struct dvfsrc_opp {
+> +	u32 vcore_opp;
+> +	u32 dram_opp;
+> +};
+> +
+> +struct dvfsrc_opp_desc {
+> +	const struct dvfsrc_opp *opps;
+> +	u32 num_opp;
+> +};
+> +
+> +struct dvfsrc_soc_data;
+> +struct mtk_dvfsrc {
+> +	struct device *dev;
+> +	struct platform_device *icc;
+> +	struct platform_device *regulator;
+> +	const struct dvfsrc_soc_data *dvd;
+> +	const struct dvfsrc_opp_desc *curr_opps;
+> +	void __iomem *regs;
+> +	int dram_type;
+> +};
+> +
+> +struct dvfsrc_soc_data {
+> +	const int *regs;
+> +	const struct dvfsrc_opp_desc *opps_desc;
+> +	u32 (*get_target_level)(struct mtk_dvfsrc *dvfsrc);
+> +	u32 (*get_current_level)(struct mtk_dvfsrc *dvfsrc);
+> +	u32 (*get_vcore_level)(struct mtk_dvfsrc *dvfsrc);
+> +	u32 (*get_vscp_level)(struct mtk_dvfsrc *dvfsrc);
+> +	void (*set_dram_bw)(struct mtk_dvfsrc *dvfsrc, u64 bw);
+> +	void (*set_dram_peak_bw)(struct mtk_dvfsrc *dvfsrc, u64 bw);
+> +	void (*set_dram_hrt_bw)(struct mtk_dvfsrc *dvfsrc, u64 bw);
+> +	void (*set_opp_level)(struct mtk_dvfsrc *dvfsrc, u32 level);
+> +	void (*set_vcore_level)(struct mtk_dvfsrc *dvfsrc, u32 level);
+> +	void (*set_vscp_level)(struct mtk_dvfsrc *dvfsrc, u32 level);
+> +	int (*wait_for_opp_level)(struct mtk_dvfsrc *dvfsrc, u32 level);
+> +	int (*wait_for_vcore_level)(struct mtk_dvfsrc *dvfsrc, u32 level);
+> +	const struct dvfsrc_bw_constraints *bw_constraints;
+> +};
+> +
+> +static u32 dvfsrc_readl(struct mtk_dvfsrc *dvfs, u32 offset)
+> +{
+> +	return readl(dvfs->regs + dvfs->dvd->regs[offset]);
+> +}
+> +
+> +static void dvfsrc_writel(struct mtk_dvfsrc *dvfs, u32 offset, u32 val)
+> +{
+> +	writel(val, dvfs->regs + dvfs->dvd->regs[offset]);
+> +}
+> +
+> +#define dvfsrc_rmw(dvfs, offset, val, mask, shift) \
+> +	dvfsrc_writel(dvfs, offset, \
+> +		(dvfsrc_readl(dvfs, offset) & ~(mask << shift)) | (val << shift))
 
-diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-index ad6ce9fe12b4..2562dc001fc1 100644
---- a/drivers/cpuidle/cpuidle-psci.c
-+++ b/drivers/cpuidle/cpuidle-psci.c
-@@ -233,18 +233,17 @@ static int psci_dt_cpu_init_topology(struct cpuidle_driver *drv,
- 
- 	psci_cpuidle_use_syscore = true;
- 
--	/* The hierarchical topology is limited to s2ram on PREEMPT_RT. */
--	if (IS_ENABLED(CONFIG_PREEMPT_RT))
--		return 0;
--
- 	/*
- 	 * Using the deepest state for the CPU to trigger a potential selection
- 	 * of a shared state for the domain, assumes the domain states are all
--	 * deeper states.
-+	 * deeper states. On PREEMPT_RT the hierarchical topology is limited to
-+	 * s2ram and s2idle.
- 	 */
--	drv->states[state_count - 1].enter = psci_enter_domain_idle_state;
- 	drv->states[state_count - 1].enter_s2idle = psci_enter_s2idle_domain_idle_state;
--	psci_cpuidle_use_cpuhp = true;
-+	if (!IS_ENABLED(CONFIG_PREEMPT_RT)) {
-+		drv->states[state_count - 1].enter = psci_enter_domain_idle_state;
-+		psci_cpuidle_use_cpuhp = true;
-+	}
- 
- 	return 0;
- }
--- 
-2.34.1
+Nit: The above macro seems unused?
+
+BR,
+Georgi
+
+> +enum dvfsrc_regs {
+> +	DVFSRC_SW_REQ,
+> +	DVFSRC_SW_REQ2,
+> +	DVFSRC_LEVEL,
+> +	DVFSRC_TARGET_LEVEL,
+> +	DVFSRC_SW_BW,
+> +	DVFSRC_SW_PEAK_BW,
+> +	DVFSRC_SW_HRT_BW,
+> +	DVFSRC_VCORE,
+> +	DVFSRC_REGS_MAX,
+> +};
+> +
 
 
