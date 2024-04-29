@@ -1,72 +1,72 @@
-Return-Path: <linux-pm+bounces-7283-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7284-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E7378B5AE1
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 16:06:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3EF08B5AE3
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 16:06:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5FA62888D9
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 14:06:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3169A1C20340
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 14:06:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 946607E767;
-	Mon, 29 Apr 2024 14:06:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 164777FBC1;
+	Mon, 29 Apr 2024 14:06:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="c/iMwAhf"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ANV24eal"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4ACC7D07A
-	for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2024 14:05:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F2BA7E105
+	for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2024 14:06:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714399560; cv=none; b=C9AeS4wmyb6uZMYIQskJ1feWLwBvH6XCgtMs/R4bWbw6wJqoGtyHKjLrfq9dYZQH5CJBQ6/3mJldCndNJWNwJG0Mcq6BvxsFspj5Oq4QIhMR4K9Nb8cYSR1pAmKaGjzpNUpOm5ztVjaElokQnPeHahzKvE/YUxsp8h0X3Ume87g=
+	t=1714399562; cv=none; b=TDh88nPdGO6htlFWDSUrO6zyfZ+l6zuDiVkH73Yxac47kSc50pflBMmtzDetjxf2x+ZkjVjgkpS0hLxJTmEGWa7aBozepEsVw7YmhiOyZ2GJNs5fCKTu5r5Yf1r8rIEavLRMlWXuRQ+p3KgUYXZGqHGGsrAKHia/XHYAX1K+bWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714399560; c=relaxed/simple;
-	bh=1UeH8qsec/NsG1L4r/jxKyr3U9Kx19UIvj4u750pz7s=;
+	s=arc-20240116; t=1714399562; c=relaxed/simple;
+	bh=jSO/TwF193q6NQysycIGd6vDzmh/SnmSAu4Kev3da7s=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=J7s3oc02rpzFEQqbg1+lkZofwp7Eb8fuSN94chi3ZuAHghPkj8q0sV2UWE7yKpiXtbofespvNs6f6oeczqxS+HQwAPFu6JSxE6dK999efH96X9CBq/wkXj7/EDk1KaLKyJ1mgfNGEF7rSyX5opJFvgXNAkElFOYjQK9Xibgkrd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=c/iMwAhf; arc=none smtp.client-ip=209.85.208.170
+	 MIME-Version; b=ds86KQxI+wTnG3Q88YyxyE9zQws8f8ZWgr7AHnNlYh1dcw1vQjXgCjdUdgwdjvgqExA4Sy+4EdTDbGoAIc7djY+6bDMl0YCY76DKVJqNOj3Qiqyq50t/w2Hk2wTxGeg7B0qebJSvaBxVhRlgAZ0iJp7OWSjm1rq1lgY11pjDdlw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ANV24eal; arc=none smtp.client-ip=209.85.208.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2db13ca0363so71650321fa.3
-        for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2024 07:05:58 -0700 (PDT)
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2d8b2389e73so54144071fa.3
+        for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2024 07:05:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1714399557; x=1715004357; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1714399558; x=1715004358; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AW5irYe0gjQq7lL2yVFdE32QB/2sja742dgELwuFIJk=;
-        b=c/iMwAhfHedZjTaiZxINk9MIxWrW7IwFedzFroyC697A6qVFBcR9ZXmzzLjgSYEDjN
-         pNEE8aDqnj5P+N9LiOchFD1jGyvqZc+SroHpZUFrQeEvlCtUVuqB1WfvbhDl0ouvuiSX
-         +2/D4U0s+fW0MPPHiHeGiGMCIN/1LU79utIzK3MEbNQottQgLklgq2h0NO7EC5RcSt9d
-         G/pvdOsOGKIVQUG9b09YcFdnUi0qQWq1S15Oiw1D68oq+dZDqj+EsBMcDSeBYMTLnTDj
-         TIUtMp0CosUZD5C5IWoG/ff0pnufhY8hL9q9N+sKBcTLEu2mlMmVgWVBoB99RU23LtRd
-         6eXQ==
+        bh=ryk8Yjnwcb/TeAS/NSYC6eu7KpbQ2RMUyBm2Fm6rA9s=;
+        b=ANV24eal42bpfcOfoK6+3lvgO3RLohrNWPsGMfJ9BCyUxF8xkd8fT5B5Gb2oXMyA7X
+         rwiRyNJx5Sh60wn3z/CkEpyLIZIzdqactruq0PJXP9SM4PQkYOZUrlZd2cypR9WzIaT8
+         4e8F8dKDJzLiPZFTifQI53szRQL+O2md4i0SPH0KmTg8ZTwndT59MGEDmBPs8y03fg4B
+         F/LSSDTfj1zWEHcxC2P7RwH8R7CNRlUbaR/Ux3+Yu8OxkMuLyIWhZwzeGMO3kwhe1bFy
+         ABTjdHtsDVj+F561/qjZaXytwDHbLN3BiYgvFIwOoylPL8KSrZZgJle8Jg1fnnv/5W64
+         hJvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714399557; x=1715004357;
+        d=1e100.net; s=20230601; t=1714399558; x=1715004358;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AW5irYe0gjQq7lL2yVFdE32QB/2sja742dgELwuFIJk=;
-        b=LRQTsCJAIaum5taJWBtuMyp95ikmhLe4TY0iorrdo5gBr8tvKOZpymDrdQR8crKkcZ
-         RyQadSocjoTnjqzrZ7/W7GaUuucSqd2THRnV++Du2cdYHES1YJC+TCp4lzYQK4OOUz88
-         yo2ZjSddoy/4nRqE6mT7KKfVYYquSH2yRfUyag7bWZHleU3FtpFHw2CCMdAAyQCEQNK0
-         Ez0h5tmfVsSIf4Vk/yIePydW3lrVPWq5dqVMZk8gvHnvKIcqb7kU9vYVIu21MCniPHHS
-         APodqzJI3lokOaBtwXByZWtmDZ5qwiwDENHbJn0gX4pgW9hQ3Tnxlam+FHmdFqfzsXae
-         J/kg==
-X-Forwarded-Encrypted: i=1; AJvYcCUTdcf2UncvvzxhdlbpLNSZz3/WpDufmZ15U9P6H74FaKPoTCC0drqM/DDQCqukAKWVjejsN/jZolYsnpbkkPQ3agtx17vjV0Y=
-X-Gm-Message-State: AOJu0Yy2kZg6ke4ky+Tmf8P6JLscF9p7zZTKpzS893PoEV4WfI8i8vJB
-	caSBPauA+u5IBUQZRk/NmG4ftoQAV3MXCv8NJ2ANJBtcHa3lzLjEa1V4L+6wnZI=
-X-Google-Smtp-Source: AGHT+IGF1UWUkvnjVr7+ybR1e2V30LVUypzK2Fkn+AyO/pGbJIHureio72OUBUaKULp0nWYCZstvjA==
-X-Received: by 2002:a2e:730c:0:b0:2d8:5af9:90c5 with SMTP id o12-20020a2e730c000000b002d85af990c5mr8482506ljc.39.1714399557079;
-        Mon, 29 Apr 2024 07:05:57 -0700 (PDT)
+        bh=ryk8Yjnwcb/TeAS/NSYC6eu7KpbQ2RMUyBm2Fm6rA9s=;
+        b=f6DSvwMsZgekEw5e33g0BA5cWNpM6RaF+4a/QhN0dSRiXzXZKlQI8nlvRe+VPSWa9r
+         nLraagLSaAHQu1iegMgDmxzILyg5CWWByIVOkEr9sgQLKcTBl4VksNl5AFFp5V93wNJ0
+         mw+ealzp6KYuLoYexMI6n8bTiej3FN9whteoN6FXFGmpQUKTuOZuJEyRgmbkdreHr/tO
+         TNdSkhg4ZzJewg3ZkFFQKXWc20JQ4d8N0qA5PRWVlxNhSz2xTajGhZE+C4BzG4gKLWxG
+         KWc0QryHo05ASVw9rS2zDVGVo0IIE3I6Vva5v2xI/If2nGnnMft60OHdG5AG0P0TSsh0
+         9ZoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXhNjbMQhfChp+bcSVX2l0S21GglH9Y39zuzEB0/eKV4fj7v5v8iFaEQucV0JHdjcZy/l+6JFrK/Dq8YdyuTcsi5JmbTZua5zM=
+X-Gm-Message-State: AOJu0YzfEsdhIwuxkSi+NnDI5QwQs9uleHOuFi2JgMwCPhTTDKDf8vte
+	RZf6Wi+hdiDba1gIwdBF1hMsBCEvZmbeVS/D03+xMdKKHHabfFjFSiUFIgfD12M=
+X-Google-Smtp-Source: AGHT+IHXIApKuUwmhZVbv+qbGSSWrutGduBAYZPG18WJ+SF5X8KY8BLp8xAT7YhpWiZQaddV7NhglA==
+X-Received: by 2002:a2e:be08:0:b0:2e0:2661:77fc with SMTP id z8-20020a2ebe08000000b002e0266177fcmr3590162ljq.39.1714399558442;
+        Mon, 29 Apr 2024 07:05:58 -0700 (PDT)
 Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id l5-20020a2e9085000000b002d7095bf808sm3636733ljg.128.2024.04.29.07.05.56
+        by smtp.gmail.com with ESMTPSA id l5-20020a2e9085000000b002d7095bf808sm3636733ljg.128.2024.04.29.07.05.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Apr 2024 07:05:56 -0700 (PDT)
+        Mon, 29 Apr 2024 07:05:58 -0700 (PDT)
 From: Ulf Hansson <ulf.hansson@linaro.org>
 To: "Rafael J . Wysocki" <rafael@kernel.org>,
 	Sudeep Holla <sudeep.holla@arm.com>,
@@ -81,9 +81,9 @@ Cc: Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
 	linux-rt-users@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 3/6] cpuidle: psci-domain: Enable system-wide suspend on PREEMPT_RT
-Date: Mon, 29 Apr 2024 16:05:28 +0200
-Message-Id: <20240429140531.210576-4-ulf.hansson@linaro.org>
+Subject: [PATCH 4/6] cpuidle: psci: Drop redundant assignment of CPUIDLE_FLAG_RCU_IDLE
+Date: Mon, 29 Apr 2024 16:05:29 +0200
+Message-Id: <20240429140531.210576-5-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240429140531.210576-1-ulf.hansson@linaro.org>
 References: <20240429140531.210576-1-ulf.hansson@linaro.org>
@@ -95,45 +95,29 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The domain-idle-states are currently disabled on a PREEMPT_RT based
-configuration for the cpuidle-psci-domain. To enable them to be used for
-system-wide suspend and in particular during s2idle, let's set the
-GENPD_FLAG_RPM_ALWAYS_ON instead of GENPD_FLAG_ALWAYS_ON for the
-corresponding genpd provider.
-
-In this way, the runtime PM path remains disabled in genpd for its attached
-devices, while powering-on/off the PM domain during system-wide suspend
-becomes allowed.
+When using the hierarchical topology and PSCI OSI-mode we may end up
+overriding the deepest idle-state's ->enter|enter_s2idle() callbacks, but
+there is no point to also re-assign the CPUIDLE_FLAG_RCU_IDLE for the
+idle-state in question, as that has already been set when parsing the
+states from DT. See init_state_node().
 
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- drivers/cpuidle/cpuidle-psci-domain.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ drivers/cpuidle/cpuidle-psci.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
-index fae958794339..ea28b73ef3fb 100644
---- a/drivers/cpuidle/cpuidle-psci-domain.c
-+++ b/drivers/cpuidle/cpuidle-psci-domain.c
-@@ -67,12 +67,16 @@ static int psci_pd_init(struct device_node *np, bool use_osi)
- 
- 	/*
- 	 * Allow power off when OSI has been successfully enabled.
--	 * PREEMPT_RT is not yet ready to enter domain idle states.
-+	 * On a PREEMPT_RT based configuration the domain idle states are
-+	 * supported, but only during system-wide suspend.
+diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
+index 782030a27703..d82a8bc1b194 100644
+--- a/drivers/cpuidle/cpuidle-psci.c
++++ b/drivers/cpuidle/cpuidle-psci.c
+@@ -234,7 +234,6 @@ static int psci_dt_cpu_init_topology(struct cpuidle_driver *drv,
+ 	 * of a shared state for the domain, assumes the domain states are all
+ 	 * deeper states.
  	 */
--	if (use_osi && !IS_ENABLED(CONFIG_PREEMPT_RT))
-+	if (use_osi) {
- 		pd->power_off = psci_pd_power_off;
--	else
-+		if (IS_ENABLED(CONFIG_PREEMPT_RT))
-+			pd->flags |= GENPD_FLAG_RPM_ALWAYS_ON;
-+	} else {
- 		pd->flags |= GENPD_FLAG_ALWAYS_ON;
-+	}
- 
- 	/* Use governor for CPU PM domains if it has some states to manage. */
- 	pd_gov = pd->states ? &pm_domain_cpu_gov : NULL;
+-	drv->states[state_count - 1].flags |= CPUIDLE_FLAG_RCU_IDLE;
+ 	drv->states[state_count - 1].enter = psci_enter_domain_idle_state;
+ 	drv->states[state_count - 1].enter_s2idle = psci_enter_s2idle_domain_idle_state;
+ 	psci_cpuidle_use_cpuhp = true;
 -- 
 2.34.1
 
