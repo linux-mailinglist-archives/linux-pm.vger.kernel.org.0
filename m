@@ -1,160 +1,159 @@
-Return-Path: <linux-pm+bounces-7265-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7266-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1CF48B5596
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 12:41:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9B228B55C8
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 12:50:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7760C1F21F02
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 10:41:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D689AB237D2
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 10:49:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEE32249FF;
-	Mon, 29 Apr 2024 10:40:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBD863A1CB;
+	Mon, 29 Apr 2024 10:49:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="faZ8shbe";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="cmk4WAQo"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jKnJiCly"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 425AA17BB4;
-	Mon, 29 Apr 2024 10:40:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4CC31D68F
+	for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2024 10:49:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714387256; cv=none; b=k4FrCuGA0DSAsMBb0CR682aFhFUOHQ99B8uOJ2uAPmeZMux5n/eO7FWCoQATMZElDYQpgRzCuEMYIRvU5qxKyd11u5JSif/2FlGWmdl3zYUWQVc/IJ119eZaqdxkctw6te5PGo26j2kcQNrFYpQmEUbQv+wasMx4axIc7GyCN6M=
+	t=1714387791; cv=none; b=HqblDjhJNeriIDKoXZoOtlTOGV/m8mtdcO8VZ37kOaLGzuQPd6gPkYrNW35d11AQWBpVeI+c2LnQoA7DsR7uq64rCpfvglEwQjr/ZIATZZqnX/bB02YNpdy0t1+ARt+dA+Xr12DQrK2mkQiZeUAP0NePiIEf61uUQzTKJitiOGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714387256; c=relaxed/simple;
-	bh=y5x7amVJ/sqQKb3JnyAhmkVdBx0ResiB8bNE31f7Bao=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=h+SCl4K13uTAuoa2xpI/gm2YLprjKCbiNWhNaOuSdrAwaVYDEiepFFQ51+exYjS3ofNW5tDggghoOaOAaJe3Ua97fssTs+Jz4Czqj0lbkDBG4DtYFemgVnw3AEO5f18EK87iQ3oVDNwAZg80Mo9s7RVLEzFKIhGwrUV7Lk/oZUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=faZ8shbe; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=cmk4WAQo; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Anna-Maria Behnsen <anna-maria@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1714387253;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=op6A8/PmHmUNQW21h+dT1TGGNeQ/SjvmhaKqAuCSxss=;
-	b=faZ8shbeeWMWVgx2ZidxD1jd7kLbz7E2iHygKQls0+1waERTfbEfYwolZc/p41P4ZfsVFP
-	z2REY2O8xnA8EkVPY0ss8HBZ5E/8DJVLsZEZCqn9kGvJjLJ1aVw2873qele3U3u3is4Kii
-	yt0xJULBB61l0DC3R10DkSwnzcfeiqemtnrYLWT3GcOvtea4xDhdNiCfYlZslVFMaNhSMz
-	tpnC6X9tBzthZ1beqbKuInhRfwMPTCtIlpzO7qtOzwD9j/Wcg01hLYCh30U/xi+9QWmiA4
-	7epGw3fxlxl8Bojp1ProVs39Z/zRx6lRMnou7HsFqt+K7YAgDQWxHmpiE9Ayew==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1714387253;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=op6A8/PmHmUNQW21h+dT1TGGNeQ/SjvmhaKqAuCSxss=;
-	b=cmk4WAQoe/sUuJUi/wV9eWKU6tDCWSxctr3uPrCJ2VkMhIP916S5FWetvBgVtixgiMYnHT
-	bFAv/1Rrnf2y/9CA==
-To: Lukasz Luba <lukasz.luba@arm.com>, "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Oliver Sang <oliver.sang@intel.com>, oe-lkp@lists.linux.dev,
- lkp@intel.com, linux-kernel@vger.kernel.org, Thomas Gleixner
- <tglx@linutronix.de>, ying.huang@intel.com, feng.tang@intel.com,
- fengwei.yin@intel.com, Frederic Weisbecker <frederic@kernel.org>, Daniel
- Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org
-Subject: Re: [linus:master] [timers] 7ee9887703:
- stress-ng.uprobe.ops_per_sec -17.1% regression
-In-Reply-To: <87zftcy0xt.fsf@somnus>
-References: <Zgtjdd0C2FzYVBto@xsang-OptiPlex-9020> <87zfth3l6y.fsf@somnus>
- <CAJZ5v0g_GKF8-QK5UdFCpJapf+MK7EouQ7hMTVtPYRjNNyUt+g@mail.gmail.com>
- <3aba1a1d-8ebc-4ee0-9caf-d9baae586db7@arm.com> <87zftcy0xt.fsf@somnus>
-Date: Mon, 29 Apr 2024 12:40:52 +0200
-Message-ID: <87sez4xxhn.fsf@somnus>
+	s=arc-20240116; t=1714387791; c=relaxed/simple;
+	bh=UJFvPPh0/QlMypN0TnrTOQMDf0epez0uqhSyuMj9eqk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RbR0fB5VY/jMVfC4DnGnhHL/5av+FkwawG8LdtyowgP+OWBRpYkscbW3Z4f4PUVVHPih1mF1zBKSO5qARKSFvBNZ1ROzodrE3TSW3RwZ/slA/UlJCoVLLRs45IGtE3TVH8ZeLNV8pX/w1D4cE7hSdXlNLOAl+hYVgfXkC5B+j7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jKnJiCly; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6eddff25e4eso3619856b3a.3
+        for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2024 03:49:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1714387788; x=1714992588; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=u+iVpNJBX2gJKOKBcpgOxaTNFvPSLwXG51MweiMNRXw=;
+        b=jKnJiClyIDKR1ryiOhdLJ6YyD/KhD+p7gE2Ix2WGW/nRyE1G/cP1/hzqMz8hP7vQ1X
+         WlPsGpBpoAcIHLGTCyQAcWizd8cI8PxXBg3QclkgH8A96eqYFrklL8/5RXwvE5gY6AR1
+         yUMhmnMCGGQ00oyZiqUjJaM1yeJ7DII4oSVYDc/+rA++GIk/qG8SpoikjdDeqE2hK0CQ
+         U5DE/ND7J3NmootVEswVkVvKXY/uQhV5KZEsMv6zruxbJoabs424nfUNEEN50KxZq/7S
+         6DqlcS6PUySFeO9LvA/KPV7+OIx7yO2tCTHZck6a+/Me4Ad/qSz6sJ7Qu4tdpVtoK+AJ
+         vzzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714387788; x=1714992588;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u+iVpNJBX2gJKOKBcpgOxaTNFvPSLwXG51MweiMNRXw=;
+        b=uANqkqyTILX0Tomybzcj6lqoWp2sl7ldzM9v2I/T9nQZl7ZaRQzwbIIhiXsGqkM9SN
+         T5YY5ruY5Q7eRQMHAoRwq273gGn7Am35pu0e1xGYpp8MWToMZdNnY2uohJcSqFreViQa
+         z8p9sX/aMJolnhx2OZBJH2Mq4KsWMeCBJRTVFpTDpTJHLpJ3YRqGQwhYYDah1S5mYS4F
+         LbGW9J14892jjdgY+h+qookgPJq7x659ZSLhu0zsq5Cl2NjUhMSwz8KqGzvWv1kugzPY
+         Q/MDfO2LT8c5JSSraTNRT/371rXYQ/JmH2Hz5R1xeZ3fs+xIijuaadynL6PDK5Idy2sl
+         o7sw==
+X-Forwarded-Encrypted: i=1; AJvYcCW9TJJevPmaAmYG5SeDHSAYwfUflw8aq/qttiFY6Rp0rDi/crisRqVNywvxZQ/fIRYy1w41Bh+9sC9MgWhaKJavBstpKjnRTTg=
+X-Gm-Message-State: AOJu0YzeeMJ1UuyDdARuqxXP8ll1g+Qmqns/c5R2GNqs0u4Z+wXz6odP
+	xWJAzma/MkWQmKDJGpnfhfxY4iL/TbCfy1ZJDKGCoRrdMvZeV4RiGb1LTMcbd2Q=
+X-Google-Smtp-Source: AGHT+IF/8CnN46xmrbPDkOtSJdBW9Qtb34t0WWC6WBtBIZPr1+8/WhFiLRP0oSRWZZcJ7UzLVUxBwg==
+X-Received: by 2002:a05:6a21:78a4:b0:1a5:6a85:8ce9 with SMTP id bf36-20020a056a2178a400b001a56a858ce9mr11659322pzc.12.1714387788049;
+        Mon, 29 Apr 2024 03:49:48 -0700 (PDT)
+Received: from localhost ([122.172.87.52])
+        by smtp.gmail.com with ESMTPSA id g2-20020a170902934200b001e25da6f2f2sm19985099plp.68.2024.04.29.03.49.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Apr 2024 03:49:47 -0700 (PDT)
+Date: Mon, 29 Apr 2024 16:19:45 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: liwei <liwei728@huawei.com>, Ionela Voinescu <ionela.voinescu@arm.com>,
+	Beata Michalska <beata.michalska@arm.com>,
+	Vanshidhar Konda <vanshikonda@os.amperecomputing.com>
+Cc: rafael@kernel.org, al.stone@linaro.org, ashwin.chaugule@linaro.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	liwei391@huawei.com, liaoyu15@huawei.com
+Subject: Re: [PATCH] cpufreq/cppc: changing highest_perf to nominal_perf in
+ cppc_cpufreq_cpu_init()
+Message-ID: <20240429104945.esdukn6ayudgyumc@vireshk-i7>
+References: <20240428092852.1588188-1-liwei728@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240428092852.1588188-1-liwei728@huawei.com>
 
-Anna-Maria Behnsen <anna-maria@linutronix.de> writes:
+CC'ing few folks who are working with the driver.
 
-> Hi,
->
-> Lukasz Luba <lukasz.luba@arm.com> writes:
->> On 4/26/24 17:03, Rafael J. Wysocki wrote:
->>> On Thu, Apr 25, 2024 at 10:23=E2=80=AFAM Anna-Maria Behnsen
->>> <anna-maria@linutronix.de> wrote:
->
-> [...]
->
->>>> So my assumption here is, that cpuidle governors assume that a deeper
->>>> idle state could be choosen and selecting the deeper idle state makes =
-an
->>>> overhead when returning from idle. But I have to notice here, that I'm
->>>> still not familiar with cpuidle internals... So I would be happy about
->>>> some hints how I can debug/trace cpuidle internals to falsify or verify
->>>> this assumption.
->>>=20
->>> You can look at the "usage" and "time" numbers for idle states in
->>>=20
->>> /sys/devices/system/cpu/cpu*/cpuidle/state*/
->>>=20
->>> The "usage" value is the number of times the governor has selected the
->>> given state and the "time" is the total idle time after requesting the
->>> given state (ie. the sum of time intervals between selecting that
->>> state by the governor and wakeup from it).
->>>=20
->>> If "usage" decreases for deeper (higher number) idle states relative
->>> to its value for shallower (lower number) idle states after applying
->>> the test patch, that will indicate that the theory is valid.
->>
->> I agree with Rafael here, this is the first thing to check, those
->> statistics. Then, when you see difference in those stats in baseline
->> vs. patched version, we can analyze the internal gov decisions
->> with help of tracing.
->>
->> Please also share how many idle states is in those testing platforms.
->
-> Thanks Rafael and Lukasz, for the feedback here!
->
-> So I simply added the state usage values for all 112 CPUs and calculated
-> the diff before and after the stress-ng call. The values are from a
-> single run.
->
+On 28-04-24, 17:28, liwei wrote:
+> When turning on turbo, if frequency configuration takes effect slowly,
+> the updated policy->cur may be equal to the frequency configured in
+> governor->limits(), performance governor will not adjust the frequency,
+> configured frequency will remain at turbo-freq.
+> 
+> Simplified call stack looks as follows:
+> cpufreq_register_driver(&cppc_cpufreq_driver)
+> 	...
+> 	cppc_cpufreq_cpu_init()
+> 		cppc_get_perf_caps()
+> 		policy->max = cppc_perf_to_khz(caps, caps->nominal_perf)
+> 			cppc_set_perf(highest_perf) // set highest_perf
+> 			policy->cur = cpufreq_driver->get() // if cur == policy->max
+> 	cpufreq_init_policy()
+> 		...
+> 		cpufreq_start_governor() // governor: performance
+> 			new_freq = cpufreq_driver->get() // if new_freq == policy->max
+> 			if (policy->cur != new_freq)
+> 			cpufreq_out_of_sync(policy, new_freq)
+> 				...
+> 				policy->cur = new_freq
+> 			...
+> 			policy->governor->limits()
+> 				__cpufreq_driver_target(policy->max)
+> 					if (policy->cur==target)
+> 					// generate error, keep set highest_perf
+> 						ret
+> 					cppc_set_perf(target)
+> 
+> Fix this by changing highest_perf to nominal_perf in cppc_cpufreq_cpu_init().
+> 
+> Fixes: 5477fb3bd1e8 ("ACPI / CPPC: Add a CPUFreq driver for use with CPPC")
+> Signed-off-by: liwei <liwei728@huawei.com>
+> ---
+>  drivers/cpufreq/cppc_cpufreq.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index 64420d9cfd1e..db04a82b8a97 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -669,14 +669,14 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
+>  	if (caps->highest_perf > caps->nominal_perf)
+>  		boost_supported = true;
+>  
+> -	/* Set policy->cur to max now. The governors will adjust later. */
+> -	policy->cur = cppc_perf_to_khz(caps, caps->highest_perf);
+> -	cpu_data->perf_ctrls.desired_perf =  caps->highest_perf;
+> +	/* Set policy->cur to norm now. */
+> +	policy->cur = cppc_perf_to_khz(caps, caps->nominal_perf);
+> +	cpu_data->perf_ctrls.desired_perf =  caps->nominal_perf;
+>  
+>  	ret = cppc_set_perf(cpu, &cpu_data->perf_ctrls);
+>  	if (ret) {
+>  		pr_debug("Err setting perf value:%d on CPU:%d. ret:%d\n",
+> -			 caps->highest_perf, cpu, ret);
+> +			 caps->nominal_perf, cpu, ret);
+>  		goto out;
+>  	}
+>  
+> -- 
+> 2.25.1
 
-Now here are the values of the states and the time because I forgot to
-track also the time in the first run:
-
-USAGE		good            bad		bad+patch
-		----            ---             ---------
-state0          115		137		234
-state1          450680		354689		420904
-state2          3092092		2687410		3169438
-
-
-TIME		good            bad		bad+patch
-		----            ---             ---------
-state0		9347		9683		18378
-state1		626029557	562678907	593350108
-state2		6130557768	6201518541	6150403441
-
-
-> good:	57e95a5c4117 ("timers: Introduce function to check timer base
->         is_idle flag")
-> bad:    v6.9-rc4
-> bad+patch: v6.9-rc4 + patch
->
-> I choosed v6.9-rc4 for "bad", to make sure all the timer pull model fixes
-> are applied.
->
-> If I got Raphael right, the values indicate, that my theory is not
-> right...
-
-... but with the time values: CPUs are less often but in total longer in
-state2.
-
-Thanks,
-
-	Anna-Maria
+-- 
+viresh
 
