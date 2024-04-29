@@ -1,202 +1,136 @@
-Return-Path: <linux-pm+bounces-7276-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7277-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6C098B5637
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 13:13:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 188FD8B5653
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 13:18:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D7D731C237ED
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 11:13:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C3F4C282B1A
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 11:18:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCC593F8EA;
-	Mon, 29 Apr 2024 11:13:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCF5B3F9C2;
+	Mon, 29 Apr 2024 11:18:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KYX0iCqD"
+	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="KWFbG9dj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF7C03D970
-	for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2024 11:13:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 293C33DB8E
+	for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2024 11:18:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714389206; cv=none; b=ahbCREYcC3eOT/Ch47FFXjSGS4cUJ5v2iILhY9xHUwLbOMHsDmHtUQGlKqLII6Fiwwvdn4Xit/uMKmLzczvtvmkoOKOeOnvBwrsbWxdelh7/Pq3xwapdg6FYpzG4x+WYVOScfadXD/RvgDbhSaSj1nX0cDmr11Qb1T7tg3j424k=
+	t=1714389502; cv=none; b=TqIx2JBGfIBwTNfsBgGJvUixmEgEuNSzBRiDa5dWj8vA330hIfk1hsFn52rZAEIEouRyBJcSz/cW6vrhJ/eSHtsCdbCgtb1Xf+AX4h/sZxnLPa4kHzjwEYyfpI5CezVeFnk9sgwx/qcwl3n/iWlP6/EUSUh2iugveaGEeDZAwKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714389206; c=relaxed/simple;
-	bh=T/crSH9DSA8ylB7Et4pCh0oc+2zAxyiMJFqQVdttaQU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=frmCJpDlUG3ZexlkJ1M3MQGOth0AYyIksXj1brfBloWai6lvpYIYsVzvbKJOToVEgVltRRWHSaVKJYVBUnNiJPHX/GBEnkYSbblVHemHz5B6xI1GSqKe6sKLau4DeRHxwR6DB+W2tHUvfNggki5jSyrXFCUF5BE0ZCWT6SS2ZX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KYX0iCqD; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1714389203;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8sJML5s0biiGbCVOwrO3DXEz4jiznSmREmBT1P/exaw=;
-	b=KYX0iCqD3rllL7xcpZWR9F9k5Z4AuSKf1xOPD3bIwNoP8fSdMn+AH6qPkATfDh07p8LR1Q
-	nSUm8O+PtnuZ/bJ/+SGaKx2OxLQyS123LL50QeXDWlWGC1Usegl0aUzZT+3E2fJxBiVCae
-	eJWKJgdHqDinJLrVG3NFKmXST5Ry+r4=
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
- [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-111-QUVMcSgQNnCAsViHK_X-kw-1; Mon, 29 Apr 2024 07:13:22 -0400
-X-MC-Unique: QUVMcSgQNnCAsViHK_X-kw-1
-Received: by mail-lf1-f72.google.com with SMTP id 2adb3069b0e04-51da1d9cb32so809991e87.3
-        for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2024 04:13:22 -0700 (PDT)
+	s=arc-20240116; t=1714389502; c=relaxed/simple;
+	bh=8xa84trj/OuvBERyOQRKPGpd53bzPZEwz+4yWpMegVo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lERqAetVsb86uOGZNWRrtgoRQj6iRpXRvnoAY1qA/OLNd2EqwvofXBh6+000aTt2T5aBqcWg4n9a7IXsh2+lU5M3/32Q6Pn5ILM8Q6FpmwjPBFKBr2QQPag2IsjvUzNE0cPXfgWYF2DlmML9shmooYxAy9yoMaXbG3gsqHel9Eo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=KWFbG9dj; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-34d1e6ddb4bso470468f8f.3
+        for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2024 04:18:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1714389499; x=1714994299; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uwDsJlGHU7QiLVD+kND22vviKRi7S24br0n3yPE4cXE=;
+        b=KWFbG9dj7UkjtPcsI5lavdxL+hL9i54r/5Pp6Vmw7k18AMRXLJq2ZsMHJrtk+MuUv4
+         BjBSIq1i1lyJzBUscvc1y1CT+Z8N3OEMRw2zJPtMx1fZU6CLdvV9nw+DJ8CDHvbYtDfI
+         7rq9cvES3hksKYfN+AxrlShoKJij7vhF7Vi0XsEjC83W7czF0fIqB1H4fTpeK0xFt7UO
+         YZjgWez7/lFtQtvceCTlPEJaQgwemhgXEKGzB9ZYcRZJtJL2syv6GawAyo08rVn5MfLx
+         rw0U+fXLyUi71RrRgZ0Dc1U8SymSVTZxAk/uaSoBAmFv320Weaq9aVwLIStarwcDV6tc
+         oFqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714389201; x=1714994001;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8sJML5s0biiGbCVOwrO3DXEz4jiznSmREmBT1P/exaw=;
-        b=kRxuYoFBSkFwAAGu5zEeLr+gORM5ElCUBb7SIK8+cV1AEZQ7WRAmOMeaxEK9vzyeHX
-         ReIFKF7XtTbZgzw+x0+i9TUD+rfwIdVcSCseQPJN4WcPf85tNsHe/yROwHahtU8YBEMn
-         //y8PM1pfHPtYcnPBqqmYfeVd+XguQLs9sicS4LS23HJNuRZv4Y6AviMW8/o6+7CAgOB
-         wYV5AzUF9pkfmq+FlbwxFC0dwqvCtj1ivk8ZCpy2CotPeB9DnswAroFcCSNGuAxWLAFV
-         XyRb3/VHJgi6/fkRgBwR88KuzQ6woOB/SBYIJL0/gyX6ZEcqL821xHaF2AoLMHgfS8CD
-         vj9A==
-X-Forwarded-Encrypted: i=1; AJvYcCWKmi7tjLq3vWmpBV9/Djw0m2ha9XKip6TquJQBj93fOaft8jfN6WyrZG/GfbEqSAM3plf4RYIO/rsvGwiNdVxqqxIiDwNmytc=
-X-Gm-Message-State: AOJu0YwGdZ5HJ5eINMCWUav02AquRen55sBnDmaYJVb6gKnkrpDkx3wm
-	bPVZBoAINbGkPatJ04xhp24Wccm7RxBDjYDiXTf34zFcTOaPxn5rIjNjyABBEQKtyyw0hvBsM6r
-	yzGkh9otiYzBgfwK1F8t2oeaL3fuT5dkC3UdPaswpL3+f2SWekJ6ZbyC+
-X-Received: by 2002:ac2:4e03:0:b0:516:cf0a:9799 with SMTP id e3-20020ac24e03000000b00516cf0a9799mr7129194lfr.64.1714389200930;
-        Mon, 29 Apr 2024 04:13:20 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHg7WXBOz5A0aLSEx3ARFvToHVEBe47VUDofaiUeVucK5VTQ3/DUfw1ow8m393Bc5sqQ2amPw==
-X-Received: by 2002:ac2:4e03:0:b0:516:cf0a:9799 with SMTP id e3-20020ac24e03000000b00516cf0a9799mr7129152lfr.64.1714389200211;
-        Mon, 29 Apr 2024 04:13:20 -0700 (PDT)
-Received: from [10.40.98.157] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id ah2-20020a1709069ac200b00a4e393b6349sm13686361ejc.5.2024.04.29.04.13.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Apr 2024 04:13:19 -0700 (PDT)
-Message-ID: <32d7fbec-1b62-4e61-a078-ef7549bc8947@redhat.com>
-Date: Mon, 29 Apr 2024 13:13:19 +0200
+        d=1e100.net; s=20230601; t=1714389499; x=1714994299;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uwDsJlGHU7QiLVD+kND22vviKRi7S24br0n3yPE4cXE=;
+        b=unqYJZxMEv04MSbbdJ5y89EgRtHn0Cjr5/pTTJHGA6m7nfQDcn00ssgnRSMPT5Cuww
+         Z+6dKxtnimkG+B3HsnQziCXE3kg/l0isg+dK+QsVXFn4Vgnyf4CboXQQkSGjyu+NVPhQ
+         RPPeOAz5kH0ON9YSDXv3hohlY3MvjCfKke0uOYxb9QV+z6U+ehoIOVsN9Q4Bpe/whbMg
+         cWLrO0buvik2PeM/0P1pUSm59ppMhhzEBw+5035dMjOJ6y+U8mxaRECI8OJ5QMdsXrKK
+         G+vU/R002iYSQEhsBQF4ylpRm21KHd6bGDQtzMgdtbQxnbzG9Ixt3VJgIJ9BHu38tju8
+         ebyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVJeqHEhUfOk+o/mvWd2KnfF8tndejgo2uByRMdELSstlzPFb9sANMl0pFWIMKfEASuH8K6DR9KEgruhVKahWUUveURDcYvBdk=
+X-Gm-Message-State: AOJu0YzWdVsA9Eosnj4l2lLOC1OfKb8BbB5HnZvSI5V39XbuATuXg5EW
+	3EHeVaGwHajK1x+4ki621gLFJqkeR9zh5++P9JYqoNIr4ndCuWbiLly9SymlTyg=
+X-Google-Smtp-Source: AGHT+IESIaZKXHhTxatqFCL9Fa90Gl/4hES0owFvuG9oTUJHLtxjWYX9ULzmGc4TJhqz9pbve+0cMg==
+X-Received: by 2002:a5d:4b44:0:b0:34c:9a24:7a40 with SMTP id w4-20020a5d4b44000000b0034c9a247a40mr4607842wrs.56.1714389499309;
+        Mon, 29 Apr 2024 04:18:19 -0700 (PDT)
+Received: from airbuntu (host81-157-90-255.range81-157.btcentralplus.com. [81.157.90.255])
+        by smtp.gmail.com with ESMTPSA id x8-20020a5d60c8000000b0034cf39c64bdsm3229404wrt.101.2024.04.29.04.18.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Apr 2024 04:18:18 -0700 (PDT)
+Date: Mon, 29 Apr 2024 12:18:16 +0100
+From: Qais Yousef <qyousef@layalina.io>
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-kernel@vger.kernel.org,
+	peterz@infradead.org, juri.lelli@redhat.com, mingo@redhat.com,
+	dietmar.eggemann@arm.com, vschneid@redhat.com,
+	vincent.guittot@linaro.org, Johannes.Thumshirn@wdc.com,
+	adrian.hunter@intel.com, ulf.hansson@linaro.org, andres@anarazel.de,
+	asml.silence@gmail.com, linux-pm@vger.kernel.org,
+	linux-block@vger.kernel.org, io-uring@vger.kernel.org
+Subject: Re: [RFC PATCH 2/2] cpufreq/schedutil: Remove iowait boost
+Message-ID: <20240429111816.mqok5biihvy46eba@airbuntu>
+References: <20240304201625.100619-1-christian.loehle@arm.com>
+ <20240304201625.100619-3-christian.loehle@arm.com>
+ <CAJZ5v0gMni0QJTBJXoVOav=kOtQ9W--NyXAgq+dXA+m-bciG8w@mail.gmail.com>
+ <5060c335-e90a-430f-bca5-c0ee46a49249@arm.com>
+ <CAJZ5v0janPrWRkjcLkFeP9gmTC-nVRF-NQCh6CTET6ENy-_knQ@mail.gmail.com>
+ <20240325023726.itkhlg66uo5kbljx@airbuntu>
+ <d99fd27a-dac5-4c71-b644-1213f51f2ba0@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 0/6] KTD2026 indicator LED for X86 Xiaomi Pad2
-To: Kate Hsuan <hpa@redhat.com>, Pavel Machek <pavel@ucw.cz>,
- Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org,
- platform-driver-x86@vger.kernel.org,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- =?UTF-8?Q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>,
- linux-kernel@vger.kernel.org, Andy Shevchenko <andy.shevchenko@gmail.com>,
- Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-References: <20240424065212.263784-1-hpa@redhat.com>
-Content-Language: en-US
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20240424065212.263784-1-hpa@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <d99fd27a-dac5-4c71-b644-1213f51f2ba0@arm.com>
 
-Hi All,
+On 04/19/24 14:42, Christian Loehle wrote:
 
-On 4/24/24 8:52 AM, Kate Hsuan wrote:
-> This patch added the support for Xiaomi Pad2 indicator LED. This work
-> included:
-> 1. Added the KTD2026 swnode description to describe the LED controller.
-> 2. Migrated the original driver to fwnode to support x86 platform.
-> 3. Support for multi-color LED trigger event.
-> 4. The LED shows orange  when charging and the LED shows green when the
->    battery is full.
+> > I think the major thing we need to be careful about is the behavior when the
+> > task is sleeping. I think the boosting will be removed when the task is
+> > dequeued and I can bet there will be systems out there where the BLOCK softirq
+> > being boosted when the task is sleeping will matter.
 > 
-> Moreover, the LED trigger is set to the new trigger, called
-> "bq27520-0-charging-orange-full-green" for Xiaomi Pad2 so the LED shows
-> orange when charging and the LED shows green when the battery is full.
+> Currently I see this mainly protected by the sugov rate_limit_us.
+> With the enqueue's being the dominating cpufreq updates it's not really an
+> issue, the boost is expected to survive the sleep duration, during which it
+> wouldn't be active.
+> I did experiment with some sort of 'stickiness' of the boost to the rq, but
+> it is somewhat of a pain to deal with if we want to remove it once enqueued
+> on a different rq. A sugov 1ms timer is much simpler of course.
+> Currently it's not necessary IMO, but for the sake of being future-proof in
+> terms of more frequent freq updates I might include it in v2.
 
-Lee, I believe this series is ready for merging now ?  I've reviewed
-patches 1-2 + 5 and Jacek has reviewed patches 3 + 4.
-
-Patch 5 also has an Acked-by from Sebastian for merging it together
-with the rest of the series.
-
-Can you merge patches 1-5 ?
-
-Patch 6 just changes the value of a device-property (the default-trigger
-string) and I can merge that through the pdx86 tree independent of
-patches 1-5.
-
-Regards,
-
-Hans
-
-
-
-
+Making sure things work with purpose would be really great. This implicit
+dependency is not great IMHO and make both testing and reasoning about why
+things are good or bad harder when analysing real workloads. Especially by non
+kernel developers.
 
 > 
-> --
-> Changes in v7:
-> 1. Platform: x86-android-tablets: other: Add swnode for Xiaomi pad2
->    indicator LED was included in Hans' branch.
-> 2. Included the tags from the previous version in the commit message.
-> 3. Fixed the comma issue for the structure initialiser.
+> > 
+> > FWIW I do have an implementation for per-task iowait boost where I went a step
+> > further and converted intel_pstate too and like Christian didn't notice
+> > a regression. But I am not sure (rather don't think) I triggered this use case.
+> > I can't tell when the systems truly have per-cpu cpufreq control or just appear
+> > so and they are actually shared but not visible at linux level.
 > 
-> Changes in v6:
-> 1. The I2C ID table was moved to a separate patch.
-> 2. The LED shows orange when charging.
-> 3. The trigger name was renamed to charging-orange-full-green.
-> 4. The default trigger of Xiaomi Pad2 is
->    "bq27520-0-charging-orange-full-green".
-> 
-> Changes in v5:
-> 1. Fix swnode LED color settings.
-> 2. Improve the driver based on the comments.
-> 3. Introduce a LED new API- led_mc_trigger_event() to make the LED
->    color can be changed according to the trigger.
-> 4. Introduced a new trigger "charging-red-full-green". The LED will be
->    red when charging and the the LED will be green when the battery is
->    full.
-> 5. Set the default trigger to "bq27520-0-charging-red-full-green" for
->    Xiaomi Pad2.
-> 
-> Changes in v4:
-> 1. Fix double casting.
-> 2. Since force casting a pointer value to int will trigger a compiler
->    warning, the type of num_leds was changed to unsigned long.
-> 
-> Changes in v3:
-> 1. Drop the patch "leds-ktd202x: Skip regulator settings for Xiaomi
->    pad2"
-> 
-> Changes in v2:
-> 1. Typo and style fixes.
-> 2. The patch 0003 skips all the regulator setup for Xiaomi pad2 since
->    KTD2026 on Xiaomi pad2 is already powered by BP25890RTWR. So, the
->    sleep can be removed when removing the module.
-> 
-> 
-> Hans de Goede (2):
->   leds: core: Add led_mc_set_brightness() function
->   leds: trigger: Add led_mc_trigger_event() function
-> 
-> Kate Hsuan (4):
->   leds: rgb: leds-ktd202x: Get device properties through fwnode to
->     support ACPI
->   leds: rgb: leds-ktd202x: I2C ID tables for KTD2026 and 2027
->   power: supply: power-supply-leds: Add charging_orange_full_green
->     trigger for RGB LED
->   platform: x86-android-tablets: others: Set the LED trigger to
->     charging_orange_full_green for Xiaomi pad2
-> 
->  drivers/leds/led-class-multicolor.c           |  1 +
->  drivers/leds/led-core.c                       | 31 ++++++++
->  drivers/leds/led-triggers.c                   | 20 ++++++
->  drivers/leds/rgb/Kconfig                      |  1 -
->  drivers/leds/rgb/leds-ktd202x.c               | 72 +++++++++++--------
->  .../platform/x86/x86-android-tablets/other.c  |  2 +-
->  drivers/power/supply/power_supply_leds.c      | 26 +++++++
->  include/linux/leds.h                          | 26 +++++++
->  include/linux/power_supply.h                  |  2 +
->  9 files changed, 149 insertions(+), 32 deletions(-)
-> 
+> Please do share your intel_pstate proposal!
 
+This is what I had. I haven't been working on this for the past few months, but
+I remember tried several tests on different machines then without a problem.
+I tried to re-order patches at some point though and I hope I didn't break
+something accidentally and forgot the state.
+
+https://github.com/torvalds/linux/compare/master...qais-yousef:linux:uclamp-max-aggregation
 
