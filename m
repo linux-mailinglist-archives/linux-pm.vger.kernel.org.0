@@ -1,130 +1,100 @@
-Return-Path: <linux-pm+bounces-7274-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7275-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB5EB8B5628
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 13:11:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A39208B5630
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 13:12:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 18522B20AB2
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 11:11:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5073C1F21EB1
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 11:12:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DB2F3D55B;
-	Mon, 29 Apr 2024 11:10:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A7E53D56D;
+	Mon, 29 Apr 2024 11:12:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NtbQ6BR+"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="0Mt11OT6"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E13C829437;
-	Mon, 29 Apr 2024 11:10:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432EE5382;
+	Mon, 29 Apr 2024 11:12:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714389051; cv=none; b=E5QZq5KmrftUyI7fkkFxqwHdG0Lsm1l4Dhyp6FoT2a4fTAX8Uzjrm8bDs3BgZsF7SiNWhqxgoqlKIxv/NkiskeFMygtzfPj9IpNTYFOX8yoBFVaIbXANIABrw2LkO0ml0RgJtqEUPpQOD3lCqeB+zQ2af6TDCs24Vu3qUvixXkY=
+	t=1714389153; cv=none; b=faGwrIXWXQTr84G7BlP+Y0xzr2PaxRLktqBKfV0OPllW0eMQyY0R6cY65Xguf3EH5bAgdoNarBGoCkga8DDoii4c7LSHI3+uP21ZD43GV/QZmlDqf/2XvTGF4+VyGbBCQPI3AJ++IoEN4emkMkYd18ZuPg+Ff0b+wLzOX4jBmTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714389051; c=relaxed/simple;
-	bh=2xFiJF919yl60viNz/D6rBa2ad6gJAgeZZLR7Hj1Xz4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=FRIfFg2W2GX3nXEtnIKzdr1wpfrqqadKR26bPyP8sbQqp74Yr9swdnz23RRk4vpSJmncyGfpSD1TcnSFBA2VVVLhDw/NCxM5qHq5+6G96Y+5hulKsi4ssdn0M2fa2Ydwm3P1udu3+GzOochk+1G6ugmEM6aHpjC7lhEJNwKr0jI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NtbQ6BR+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CAD5C113CD;
-	Mon, 29 Apr 2024 11:10:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714389050;
-	bh=2xFiJF919yl60viNz/D6rBa2ad6gJAgeZZLR7Hj1Xz4=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=NtbQ6BR+Q6bObSUx8Xy+3U7KJk7rjvo0SiKJJiV64cLte2sDBGxR7ZYoECsopVMZk
-	 iMelZgM8RdCYxHVX9qflMGr7vJghokl8CCZ+Ci5FjEII0ks76cQ9u49prljudkEcuT
-	 KYJhgPfo4ZJNeOI2fucX4Rni2gq6t28YKgPZFo40kvCaY7VZgEpA0cT4gWQEsqcLFh
-	 Z4L62mccWoI2I5g0iNY5soR33l5yjmJc4wyK8fqfr0JualFurpILykyzj5xzfQQH8E
-	 cC5TxqWW0EaF1KrZfTnIBUVffV5cowot2AYFWgJ/q9O6BJ4HawdswplAGzxZAPoorh
-	 buOTj07FJZLGA==
-Message-ID: <b1131b1a-5706-4675-8c97-c2e6a58d6be0@kernel.org>
-Date: Mon, 29 Apr 2024 14:10:47 +0300
+	s=arc-20240116; t=1714389153; c=relaxed/simple;
+	bh=lzTWWW43K3gPneW5OXkC13YOFffiN5E4u6PkjR57FOM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e411DwSFgNmRVFfCjqzlLXonKmKH5d5PSJNgYztD45EByQ12phN3F/WKeESxUzGo2jCZ6RX+frK5dnj1LTwFKUZRYoUz0nuUohZUMQSiZPHtA5Z7C2YjOEGJAcwo6LWCHwuVcZzag5dSp3OxZH5620RF5znhQ/TtISafNAWPpSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=0Mt11OT6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81E79C113CD;
+	Mon, 29 Apr 2024 11:12:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1714389152;
+	bh=lzTWWW43K3gPneW5OXkC13YOFffiN5E4u6PkjR57FOM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=0Mt11OT6aIJnqNpv2EG5+esj2ff10d/2TtW83Mtchg295Swr52Sx0+R22zVnwrFBS
+	 Wk/9BqAeAStsuGvTAeXGFkTRVQJrIrqYeYuRAFqPAEf0Fu0FJTrlEi4UqM2h0wM494
+	 T/uFCUrjLaEG7o5oV97MWDkSkZdkA/fPrXcns25s=
+Date: Mon, 29 Apr 2024 13:12:30 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Jan Kiszka <jan.kiszka@siemens.com>
+Cc: Sasha Levin <sashal@kernel.org>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Johnny Liu <johnliu@nvidia.com>, Jon Hunter <jonathanh@nvidia.com>,
+	Linux PM list <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH 5.10.y] PM / devfreq: Fix buffer overflow in
+ trans_stat_show
+Message-ID: <2024042922-fleshed-bonding-648d@gregkh>
+References: <8a59f3b2-48b0-4a62-ab54-61f8d6068cbc@siemens.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 3/6] interconnect: icc-clk: Add devm_icc_clk_register
-Content-Language: en-US
-To: Varadarajan Narayanan <quic_varada@quicinc.com>, andersson@kernel.org,
- mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, konrad.dybcio@linaro.org,
- dmitry.baryshkov@linaro.org, quic_anusha@quicinc.com,
- linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20240429091314.761900-1-quic_varada@quicinc.com>
- <20240429091314.761900-4-quic_varada@quicinc.com>
-From: Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20240429091314.761900-4-quic_varada@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8a59f3b2-48b0-4a62-ab54-61f8d6068cbc@siemens.com>
 
-On 29.04.24 12:13, Varadarajan Narayanan wrote:
-> Wrap icc_clk_register to create devm_icc_clk_register to be
-> able to release the resources properly.
+On Sun, Apr 28, 2024 at 10:28:42AM +0200, Jan Kiszka wrote:
+> From: Christian Marangi <ansuelsmth@gmail.com>
 > 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-
-Acked-by: Georgi Djakov <djakov@kernel.org>
-
-> ---
-> v8: Added Reviewed-by: Dmitry Baryshkov
-> v7: Simplify devm_icc_clk_register implementation as suggested in review
-> v5: Introduced devm_icc_clk_register
-> ---
->   drivers/interconnect/icc-clk.c   | 18 ++++++++++++++++++
->   include/linux/interconnect-clk.h |  2 ++
->   2 files changed, 20 insertions(+)
+> [ Upstream commit 08e23d05fa6dc4fc13da0ccf09defdd4bbc92ff4 ]
 > 
-> diff --git a/drivers/interconnect/icc-clk.c b/drivers/interconnect/icc-clk.c
-> index 2be193fd7d8f..f788db15cd76 100644
-> --- a/drivers/interconnect/icc-clk.c
-> +++ b/drivers/interconnect/icc-clk.c
-> @@ -148,6 +148,24 @@ struct icc_provider *icc_clk_register(struct device *dev,
->   }
->   EXPORT_SYMBOL_GPL(icc_clk_register);
->   
-> +static void devm_icc_release(void *res)
-> +{
-> +	icc_clk_unregister(res);
-> +}
-> +
-> +int devm_icc_clk_register(struct device *dev, unsigned int first_id,
-> +			  unsigned int num_clocks, const struct icc_clk_data *data)
-> +{
-> +	struct icc_provider *prov;
-> +
-> +	prov = icc_clk_register(dev, first_id, num_clocks, data);
-> +	if (IS_ERR(prov))
-> +		return PTR_ERR(prov);
-> +
-> +	return devm_add_action_or_reset(dev, devm_icc_release, prov);
-> +}
-> +EXPORT_SYMBOL_GPL(devm_icc_clk_register);
-> +
->   /**
->    * icc_clk_unregister() - unregister a previously registered clk interconnect provider
->    * @provider: provider returned by icc_clk_register()
-> diff --git a/include/linux/interconnect-clk.h b/include/linux/interconnect-clk.h
-> index 170898faaacb..9bcee3e9c56c 100644
-> --- a/include/linux/interconnect-clk.h
-> +++ b/include/linux/interconnect-clk.h
-> @@ -19,6 +19,8 @@ struct icc_provider *icc_clk_register(struct device *dev,
->   				      unsigned int first_id,
->   				      unsigned int num_clocks,
->   				      const struct icc_clk_data *data);
-> +int devm_icc_clk_register(struct device *dev, unsigned int first_id,
-> +			  unsigned int num_clocks, const struct icc_clk_data *data);
->   void icc_clk_unregister(struct icc_provider *provider);
->   
->   #endif
+> Fix buffer overflow in trans_stat_show().
+> 
+> Convert simple snprintf to the more secure scnprintf with size of
+> PAGE_SIZE.
+> 
+> Add condition checking if we are exceeding PAGE_SIZE and exit early from
+> loop. Also add at the end a warning that we exceeded PAGE_SIZE and that
+> stats is disabled.
+> 
+> Return -EFBIG in the case where we don't have enough space to write the
+> full transition table.
+> 
+> Also document in the ABI that this function can return -EFBIG error.
+> 
+> Link: https://lore.kernel.org/all/20231024183016.14648-2-ansuelsmth@gmail.com/
+> Cc: stable@vger.kernel.org
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218041
+> Fixes: e552bbaf5b98 ("PM / devfreq: Add sysfs node for representing frequency transition information.")
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+> ---
+> 
+> Original found by someone at Nvidia. But this backport is based on the 
+> 5.15 commit (796d3fad8c35ee9df9027899fb90ceaeb41b958f) where only a 
+> conflict in sysfs-class-devfreq needed manual resolution.
 
+Now queued up, thanks.
+
+greg k-h
 
