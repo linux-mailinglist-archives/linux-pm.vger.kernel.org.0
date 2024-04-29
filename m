@@ -1,122 +1,120 @@
-Return-Path: <linux-pm+bounces-7300-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7301-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF5968B65C1
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 00:30:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A42B18B665C
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 01:35:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0A0C5B214AF
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 22:30:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF05F1C21F2F
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2024 23:35:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE921194C78;
-	Mon, 29 Apr 2024 22:30:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15B1B194C7C;
+	Mon, 29 Apr 2024 23:35:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Xi2F+G76"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IIsXhKOn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89CCD2209F
-	for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2024 22:30:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA56B190697;
+	Mon, 29 Apr 2024 23:35:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714429845; cv=none; b=umivc+Ax32ZJfoOICRLLoEfPBs3ZZk1TJRyYTIcP01pLSmhwqenMaJ0MevIkliNWSFduAkozK5JggHa6Be2/6jZM2bTVtDliIEvNgFOAcOp20ZFUecIXJpPyHOtj5fIGYMgvHdCfmBsI4F0Ae4cAGzFQ9bXcaRa+ZAdixlCB0pE=
+	t=1714433712; cv=none; b=gma7uYg5aOrehLyrcC+7ywyVBVHAaKO30LUgX708kwBHtiAJPXlIMn3/0jYi98pL7ijp9q0xqA+MlF+4B1Sz2RsaTO/IU2rMEc85QSxdkLJJ2aKKJSeQQtgSdElr8+1IOn+rSYliR00sgWU+0aPUmHqcpkXM1rcugFhlxcBm6X4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714429845; c=relaxed/simple;
-	bh=1zVdJ2KsLPJPb8/4DKVEbSpiWUOAoDh1TfYhyjNb7Rs=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=nDeljuy82cKdrjuIlNY3X4BNyaHaSEdnHiSWjPs+FIZmWkypLAbiUt6fylPt+pmaLjKbE/IQ+jnXjqS4RqzBlogg7tCBZHuCqhFbOZmInSw1kM9tQkF51/v6aSIouEo00GKMPct8bGh5881WEhKgGoHSCRadmLHR/uVntlvHHvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Xi2F+G76; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-34d7b0dac54so79564f8f.0
-        for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2024 15:30:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1714429841; x=1715034641; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7fi+PA/pQ7WrYDiqEv55H3Awp9wh4xg72V3MGQo82ow=;
-        b=Xi2F+G76ad4gT3tw6TexWUb1ylyAwC0odzVGCYNsSFvDHpraF1INRwtj2iOjWhAdbT
-         Rl6E+xTPdOv8GOS6azet95HaZxpK6/W/YG8C0G4SFvD1HDAYlJsJ9c6WKjCw0C9laoom
-         BOdZL9TJbgfoAoGm0J0ZsH8NrRhh2m4gKYKJJE7ke98lGQUispAfE8CHPGPrDRWXBO7N
-         qXvx9nBafUm+0JmhMv26sv6FACbrP5LuZTHPF9SB+lkD4ZZvdod8lbfXYOVbt1V5qco9
-         iKrClfvNUetAgUsU3zx49Mbv5RuiKYZ+zj1YhEya9etvewmnT0kvQSTWnDvPZ+T4ij/l
-         7Ryw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714429841; x=1715034641;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7fi+PA/pQ7WrYDiqEv55H3Awp9wh4xg72V3MGQo82ow=;
-        b=sVOrjxiIfU8nh+xPh59A0vAO/1G+e91L8LIGaNy3Y8m7rZEVPt4jH6sgEGkPgggZdV
-         sNvlx+NmCa3iPo7Nxyzr/0ROtZrxpmRxObmA8m3kLSctm7YPGM2TIh9/G/iBjkue5uVR
-         8toRIy7LZc6Z48eDk2wQys0Th2QIuIfDekW0p5y6oOF+2ZoUPITwxSW2IYTCLjlUiHTO
-         gcz10Cb7ysVmAQFcJnKeqgcJ85SIrvcHpjGkk6+L1Q9zXZWXgvto3+MzTH8uME7vhq5Y
-         NAaKSAeQGlOGIJJCUaUfagxRRt0EXUaMnqkpYgMNoR5UypPl5Y0+Ixp0Jkjjd2VDa8Qt
-         fodA==
-X-Forwarded-Encrypted: i=1; AJvYcCXXaWhuXNFaoShl317Ry3kh5ypzrnqL8zqsAI/QjZ+f6BbVcthxHRCiQYDpuWeyZPSRdpH+Wi/Q78LCnD6pc2kYTETqYtJIGnc=
-X-Gm-Message-State: AOJu0YwQHUf769hAdrJILG9rIcpj0dkWHPnjNTyU5BkJGiVWVv6YRyHm
-	2zuxHsmFXme53Kb+L6PVPS6+XWQkgGRgn2c/P0m+akX0CqdOclPk7/0eoO020SQ=
-X-Google-Smtp-Source: AGHT+IGnxGNu62EBTl6fRvD1XJEbKx26SE74bwc01QhtcFNA7vNYYwSN/K2doKs8XhuNAGTSrlw79w==
-X-Received: by 2002:a5d:4d8e:0:b0:34d:191f:6b83 with SMTP id b14-20020a5d4d8e000000b0034d191f6b83mr785469wru.13.1714429840760;
-        Mon, 29 Apr 2024 15:30:40 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id i17-20020adfe491000000b0034cc9dcccbdsm5879530wrm.113.2024.04.29.15.30.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Apr 2024 15:30:40 -0700 (PDT)
-Message-ID: <5e2dfd0e-d647-4106-9921-a78ca4b55403@linaro.org>
-Date: Tue, 30 Apr 2024 00:30:39 +0200
+	s=arc-20240116; t=1714433712; c=relaxed/simple;
+	bh=09KM4l96TiB3LSdozRv/22chXIhMd0dxxprNLt4d82A=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=GBgdEBce5QfdRBW7EgodBcYD3jUgzKUt1mwj6ZaGEgQfXn3DbcJ4KV8sdrU1N67IcxmETzg073yWY61W22jefoB4KAB9KuELK+ftIOpDASd4Jqv9E/iJB1jzZbZXI8Kx+F68OQ6gBe/nXZrsAiFKw22nZo+rhLRnxLqJGIlPUOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IIsXhKOn; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714433710; x=1745969710;
+  h=from:to:cc:subject:date:message-id;
+  bh=09KM4l96TiB3LSdozRv/22chXIhMd0dxxprNLt4d82A=;
+  b=IIsXhKOn7qltVz/BF6sjKQ68t4dVMiilDzMERSNMOQcngnSivcKzodJ3
+   7tOMhtUrO6j9BFD+JCmugTfy80ybrCwx2AwJf0TsJLoKK5SJsgSu+3qIE
+   tST1FWeodkmiRTpunB1jX0DuNFEZRVMolb2f1gTkwH1RB6jJyPmJG+SaO
+   f2p5V7y+O9sR8ZLScC8njxmZOqM8mwyDHWDInoEgTr2g2UrDPQ2M4A/7Z
+   cUrwt97ERKnWf/REJ2fs19CCjweRxxOl0D2qDJ1/I1lLnG+apP7eGFE8S
+   M/yjCzQZyuUf2OIGmfdldFL6Op/AzpcUvsqhvixZNy6+sqCDQfzlSzHmO
+   Q==;
+X-CSE-ConnectionGUID: cOHRmrbXRVqQaci5PDEp2g==
+X-CSE-MsgGUID: MbjWfSnkSWSi3r5R7wbBCA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11059"; a="10274507"
+X-IronPort-AV: E=Sophos;i="6.07,240,1708416000"; 
+   d="scan'208";a="10274507"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2024 16:35:09 -0700
+X-CSE-ConnectionGUID: ex2prvGCRZKr/uUMSUQ56Q==
+X-CSE-MsgGUID: GHPdIo1UQferdd5Y6b4Yeg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,240,1708416000"; 
+   d="scan'208";a="26200130"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmviesa009.fm.intel.com with ESMTP; 29 Apr 2024 16:35:08 -0700
+From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc: Zhang Rui <rui.zhang@intel.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Len Brown <len.brown@intel.com>,
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Ricardo Neri <ricardo.neri@intel.com>
+Subject: [PATCH 0/4] intel: thermal: hfi: Add debugfs files for tuning
+Date: Mon, 29 Apr 2024 16:41:48 -0700
+Message-Id: <20240429234152.16230-1-ricardo.neri-calderon@linux.intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux PM mailing list <linux-pm@vger.kernel.org>,
- Yangtao Li <frank.li@vivo.com>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [GIT PULL] cpuidle for ARM for v6.10
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
+Hi,
 
-Hi Rafael,
+HFI uses thermal netlink to relay updated CPU capabilities to user space.
+The delay between an HFI interrupt and its corresponding thermal netlink
+event as well as the number of capabilities updated per event (its payload)
+have been so far hard-coded in intel_hfi.c.
 
-please consider pulling this single patch PR.
+These hard-coded values may not suit all hardware configurations or
+listeners. If the delay is too long, much of the information from
+consecutive hardware updates will be lost. If the delay is too short,
+listeners may be overwhelmed with notifications.
 
-The following changes since commit ed30a4a51bb196781c8058073ea720133a65596f:
+The payload size may cause unnecessary overhead if it is too small, as
+single HFI update is broken up into several thermal netlink events.
 
-   Linux 6.9-rc5 (2024-04-21 12:35:54 -0700)
+Listeners are better placed to decide the value of these parameters. They
+know how quickly they can act on notifications and know better how to
+handle them.
 
-are available in the Git repository at:
+Add a debugfs interface to let listeners experiment with and tune these
+parameters.
 
-   https://git.linaro.org/people/daniel.lezcano/linux.git cpuidle/next
+These patches apply cleanly on top of the testing branch of Rafael's
+linux-pm.
 
-for you to fetch changes up to f9059eb5d73e65c88b88465abed4364dfc7b20b4:
+Thanks and BR,
+Ricardo
 
-   cpuidle: kirkwood: Convert to platform remove callback returning void 
-(2024-04-23 09:21:48 +0200)
+Ricardo Neri (4):
+  thermal: intel: hfi: Rename HFI_UPDATE_INTERVAL
+  thermal: intel: hfi: Tune the HFI thermal netlink event delay via
+    debugfs
+  thermal: intel: hfi: Rename HFI_MAX_THERM_NOTIFY_COUNT
+  thermal: intel: hfi: Tune the number of CPU capabilities per netlink
+    event
 
-Thanks
-
-----------------------------------------------------------------
-Yangtao Li (1):
-       cpuidle: kirkwood: Convert to platform remove callback returning void
-
-  drivers/cpuidle/cpuidle-kirkwood.c | 5 ++---
-  1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/thermal/intel/intel_hfi.c | 117 +++++++++++++++++++++++++++---
+ 1 file changed, 108 insertions(+), 9 deletions(-)
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.34.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
 
