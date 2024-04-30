@@ -1,162 +1,199 @@
-Return-Path: <linux-pm+bounces-7333-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7334-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1053A8B6EF4
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 12:00:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE24A8B6F0E
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 12:05:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 59E47B22CC7
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 10:00:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57D9C1F23F8F
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 10:05:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E3D1129A7B;
-	Tue, 30 Apr 2024 09:59:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 780EF129A6B;
+	Tue, 30 Apr 2024 10:05:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="H0/CIus4"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="a/vVu+Cs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABB40127B70
-	for <linux-pm@vger.kernel.org>; Tue, 30 Apr 2024 09:59:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC8061292D2
+	for <linux-pm@vger.kernel.org>; Tue, 30 Apr 2024 10:05:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714471190; cv=none; b=ECKL3cFEVHqIpjtDL5XpuEyUvtESfzReU9q7oQKEStjl/9dQa/ZCnqbNkSMZXqh+oq7x2zxauZ2OzDndOUz0c9B+eIxlgyTFy8SWs427KmN9bIyKsvX9dbrU0Pd6ZuQel+gwa9ZpE6c/U5gUJ5CibPKcscqIkQAvUUlEUytGGEY=
+	t=1714471539; cv=none; b=hPOM9wN+z8WcsFeQcHQvdA2o3R0A94Iu/txR3eDi08yJ7s7gnO0ndaO9LFaFF6PhVMWmCllspUKwXj8cXN5um9kzVITOMV+xLz+V5pk7PZD+5MPZq3xzvAQYblkaQ2eRtEVnlF2l2TLpseM3lGyFthjNn1RagnDsQSw8AHbsniA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714471190; c=relaxed/simple;
-	bh=ejhjMJ/H/la8vRxMpwy+QTS9RzsFqN/Ot+U9tVzFz+U=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Yn8HdQzvu8K9HDcyun2s4/UCNQErdsGIyZ8zp4Eotcl6A955AP8sK3J8Zs9mKzdksQ/DXfM3RhcVYIgzxM8aU9Eme7HfcqpkTEIrS8Kp+5d4A1du0PKgYVEmaZNRnth5WcxAOjA89wCRl6GoFPnyWbWq43dN4gzuWI2Jx5TJ374=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=H0/CIus4; arc=none smtp.client-ip=209.85.208.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2dd6c14d000so67410001fa.0
-        for <linux-pm@vger.kernel.org>; Tue, 30 Apr 2024 02:59:47 -0700 (PDT)
+	s=arc-20240116; t=1714471539; c=relaxed/simple;
+	bh=yjnf9AHRZqMRj34Tm4uXwc28cPM6Ap6BSJeHaNIbUF0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Jsjr/GcNsRxp6Cv03X+hRUwYzFNtJNn/+q/ZtQMjKJfNdkm7z5P4LESTNKI9fFGiiHRJDXFvERaPMimP+KkzhsZydkM6u8Oa21kWU0icTaMbx9GJNvo70INlxqamepj/GhansbZ9ytDT9bGWrA0TvyAjbS0EjewndkmGwPJnAGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=a/vVu+Cs; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-51d2047220cso3498878e87.1
+        for <linux-pm@vger.kernel.org>; Tue, 30 Apr 2024 03:05:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1714471186; x=1715075986; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=M/lqUZe7iWGhXp3SSU9OPzFuI5U4ZOXzFyEcRUft5AI=;
-        b=H0/CIus4SB+nYZdYRqEpteBz3e6PY5AcLfqX+LjHTNC4llyzU4gLtEloZy8sdUy/of
-         HdAKI/6BQqaZm8TQVJPmi5QXtHIkBQs3c6D8CdU3+X7bE2kqCO3VkG+suMiXB9EmXUV3
-         McBvpPJWiTcmPMtQIsf5vlhDH+Xi1+SHgD4JmsWkXTSPmvkH8F3D0UOL6kENv49ueWoh
-         jnwZV66GwsZ/XLMG4A5tGAOVPPugMq4XI+wpkSEYhb3yiAIfiRR17KdhnANFgtzRDxAX
-         omS39iZHQdIFDER/n54RuyplOmu9usq5Fc0yaDCvxTk/yjjrkdlAJ4OQ2e16dh8FBjdT
-         2Lfg==
+        d=linaro.org; s=google; t=1714471536; x=1715076336; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=0c2r4ftfYh1i1ily+9Iyry9v4Wnv2g5Jvj7DDy6gfK4=;
+        b=a/vVu+Cs50feEULZioEi+k+nDxq02qErhxZqTgON5eMER9w942bejdaUHXsCveG8ie
+         O5bVgldlx+lOIQNZQxcUhTWbkVNpxcMdmKZC095ssw2WRwqWV8X0DaNVudL1dUUwqdp3
+         r2EAsjKIQJrM2ZXQRUH41e9sffrtlzG9H4XpFQdmFpFWj9f9wrbVbe6HZNAU9bfPC6pJ
+         6Rz++k2oPsfT7RU6WQznZnuMyBMAv0ZJN2h43gQV7XoITu+8QYY3cHf2LgCssKrnpcSy
+         9y7TBFvFvkih5MOSAuhQfZ591VnpQSR1QcDnN1HYy6Et0SgiCth7ZlYZzOihkQB/OFYy
+         J7eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714471186; x=1715075986;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=M/lqUZe7iWGhXp3SSU9OPzFuI5U4ZOXzFyEcRUft5AI=;
-        b=myDXCJ2mCmxUWYFsGAG3Q9oyj6RxSn7jTbOmxJY7gltfmxzY0gqAMNoY8a4A+K5ITO
-         yOqaTpH9HDk5x6OMJAhHCPpJn+H9oJ+3MTHMPi6IfQLYHDrVw+2JEAF7d2xx2RSAVH4q
-         XZGRyETWeOe2UDsgrR33se1m3Dep4AbDcWr5Kgxj+m6W/GUYPv9fDoxIP+tA5vDbuF+X
-         NxcDhypocCMhtZ7ZbK1kmZUOHcLvji7VOncBHo6wLGD4wTBXwKx35HIc4ZFvwL0Vjuyh
-         7Wvtiul450ES7PCPnecYy2n3+ELW7wJfu2wytyrHMK0kMZ0eCyFwFvYJw3wbSgk4OrJR
-         0IXg==
-X-Forwarded-Encrypted: i=1; AJvYcCXUlnuCxaadavvPFDOXMsIMj3ReCYKO0x6fCIgJzPN4DnRYh8UoW7TGLxqTXXaGvZoujtHumZKoYgPO3xXicTyXrOBBV4FyIRA=
-X-Gm-Message-State: AOJu0Yyec9eDSn7dJz0zuirnZt1adUDhzmlOUIzQSC9QvR3aI9ITCZhh
-	k8Qjb/dStXuGIDoQZJHyQafIg8FaJvxGjwNJsk2DQmpNeCzaqHfe+lpkZap2Yds=
-X-Google-Smtp-Source: AGHT+IGHzZ1dA5BCORxcKkmsZov6zngxAi94VjevhE7m4ZD65kYUwu+nIIqc4hxd5b22oTtA0hrTZg==
-X-Received: by 2002:a05:651c:4ca:b0:2d9:f7f8:3e87 with SMTP id e10-20020a05651c04ca00b002d9f7f83e87mr11114534lji.32.1714471183887;
-        Tue, 30 Apr 2024 02:59:43 -0700 (PDT)
-Received: from claudiu-X670E-Pro-RS.. ([82.78.167.53])
-        by smtp.gmail.com with ESMTPSA id l37-20020a05600c1d2500b004186f979543sm48725235wms.33.2024.04.30.02.59.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Apr 2024 02:59:43 -0700 (PDT)
-From: Claudiu <claudiu.beznea@tuxon.dev>
-X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
-To: gregkh@linuxfoundation.org,
-	jirislaby@kernel.org,
-	tony@atomide.com,
-	andriy.shevchenko@linux.intel.com,
-	l.sanfilippo@kunbus.com,
-	tglx@linutronix.de,
-	geert+renesas@glider.be,
-	ulf.hansson@linaro.org,
-	peng.fan@nxp.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	claudiu.beznea@tuxon.dev,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Tony Lindgren <tony.lindgren@linux.intel.com>
-Subject: [PATCH v3] serial: core: Call device_set_awake_path() for console port
-Date: Tue, 30 Apr 2024 12:59:30 +0300
-Message-Id: <20240430095930.2806067-1-claudiu.beznea.uj@bp.renesas.com>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20230601; t=1714471536; x=1715076336;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0c2r4ftfYh1i1ily+9Iyry9v4Wnv2g5Jvj7DDy6gfK4=;
+        b=HZWqBKYn8oKddIW1p2VcOOUls1MBv0rX5nlbR3HbcCfB6/RnhKPj01kBWoBjcJP/2f
+         N+ijMjr6a8N8+hLl9tx5oE3FpXsC88m6qPS668m4CfubV0AAorTPXGaEvwUKfTilcyqP
+         QoNjUFQI2lDmnAU2vX8rwJsGsc+vKSCULJ4TWJTxmLz5kvJTEW5YN+wG0saqwAZ8TQcm
+         SPHCihySFmy9H5TiNbfaiGbJi1VYmp7ZG+y0tRP68yQpCevm9uBHIfl32D94HAhj2AMJ
+         ZkToqk2i34qKm2Ccw3Vnlb0fNiYdQEP0gK7fC7oTxyL9Tn3qJyzq4KhoBCD+AHdccaLP
+         MibA==
+X-Forwarded-Encrypted: i=1; AJvYcCXfuO9D+FUfEv5K97YnXPLhwwZo4xn3HGS+cZKZ5qD/8Ks+nq2e1VF+PF50iJBtrdd3utoAvShsM1mgmjMfdTrnucxnbmwybYk=
+X-Gm-Message-State: AOJu0YztFMZPCQxljQuBBjy5rmmPJP8tvEgpFrN5k19QPJVMDsSQerxq
+	Sh6J8IqLc5FnR+5OJwm/RlpSZtHd8j95C59IzQH52laa3FVpmHC07tSUgMuzUZQ=
+X-Google-Smtp-Source: AGHT+IGwoRnxtInvigRnSf3xrL3fTWc2gzyovUQB8J5oNTSn7LjfiqRATlNm+qPBQg6sV5IYrs/Wlg==
+X-Received: by 2002:ac2:5586:0:b0:51c:cfae:afd0 with SMTP id v6-20020ac25586000000b0051ccfaeafd0mr7262972lfg.21.1714471535866;
+        Tue, 30 Apr 2024 03:05:35 -0700 (PDT)
+Received: from [192.168.114.15] (078088045141.garwolin.vectranet.pl. [78.88.45.141])
+        by smtp.gmail.com with ESMTPSA id bv19-20020a170906b1d300b00a58eabf6082sm3724816ejb.199.2024.04.30.03.05.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Apr 2024 03:05:35 -0700 (PDT)
+Message-ID: <27f4f3dd-9375-40cf-8c8f-1c4edf66e31b@linaro.org>
+Date: Tue, 30 Apr 2024 12:05:29 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 6/6] arm64: dts: qcom: ipq9574: Add icc provider
+ ability to gcc
+To: Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc: andersson@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, djakov@kernel.org,
+ dmitry.baryshkov@linaro.org, quic_anusha@quicinc.com,
+ linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20240418092305.2337429-1-quic_varada@quicinc.com>
+ <20240418092305.2337429-7-quic_varada@quicinc.com>
+ <a7194edd-a2c8-46fc-bea1-f26b0960e535@linaro.org>
+ <Ziov6bWBXYXJ4Zp8@hu-varada-blr.qualcomm.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <Ziov6bWBXYXJ4Zp8@hu-varada-blr.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+On 25.04.2024 12:26 PM, Varadarajan Narayanan wrote:
+> On Tue, Apr 23, 2024 at 02:58:41PM +0200, Konrad Dybcio wrote:
+>>
+>>
+>> On 4/18/24 11:23, Varadarajan Narayanan wrote:
+>>> IPQ SoCs dont involve RPM in managing NoC related clocks and
+>>> there is no NoC scaling. Linux itself handles these clocks.
+>>> However, these should not be exposed as just clocks and align
+>>> with other Qualcomm SoCs that handle these clocks from a
+>>> interconnect provider.
+>>>
+>>> Hence include icc provider capability to the gcc node so that
+>>> peripherals can use the interconnect facility to enable these
+>>> clocks.
+>>>
+>>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+>>> ---
+>>
+>> If this is all you do to enable interconnect (which is not the case,
+>> as this patch only satisfies the bindings checker, the meaningful
+>> change happens in the previous patch) and nothing explodes, this is
+>> an apparent sign of your driver doing nothing.
+> 
+> It appears to do nothing because, we are just enabling the clock
+> provider to also act as interconnect provider. Only when the
+> consumers are enabled with interconnect usage, this will create
+> paths and turn on the relevant NOC clocks.
 
-In case the UART port is used as a console, no_console_suspend is
-available in bootargs and UART port is part of a software-controlled power
-domain we need to call device_set_awake_path(). This lets the power
-domain core code know that this domain should not be powered off
-during system suspend. Otherwise, the UART port power domain is turned off,
-nothing is printed while suspending and the suspend/resume process is
-blocked. This was detected on the Renesas RZ/G3S SoC while adding support
-for power domains.
+No, with sync_state it actually does "something" (sets the interconnect
+path bandwidths to zero). And *this* patch does nothing functionally,
+it only makes the dt checker happy.
 
-Based on code investigation (on v6.9-rc5), this issue is present on other
-SoCs (e.g., Renesas R-Mobile A1 [1], IMX8QXP [2]) and different SoCs have
-particular implementation to handle it. Due to this the patch added the
-call of device_set_awake_path() in uart_suspend_port() instead of having
-it in the platform specific UART driver.
+> 
+> This interconnect will be used by the PCIe and NSS blocks. When
+> those patches were posted earlier, they were put on hold until
+> interconnect driver is available.
+> 
+> Once this patch gets in, PCIe for example will make use of icc.
+> Please refer to https://lore.kernel.org/linux-arm-msm/20230519090219.15925-5-quic_devipriy@quicinc.com/.
+> 
+> The 'pcieX' nodes will include the following entries.
+> 
+> 	interconnects = <&gcc MASTER_ANOC_PCIE0 &gcc SLAVE_ANOC_PCIE0>,
+> 			<&gcc MASTER_SNOC_PCIE0 &gcc SLAVE_SNOC_PCIE0>;
+> 	interconnect-names = "pcie-mem", "cpu-pcie";
 
-[1] drivers/pmdomain/renesas/rmobile-sysc.c:116
-[2] drivers/pmdomain/imx/scu-pd.c:357
+Okay. What about USB that's already enabled? And BIMC/MEMNOC?
 
-Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
-Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Tony Lindgren <tony.lindgren@linux.intel.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
----
+> 
+>> The expected reaction to "enabling interconnect" without defining the
+>> required paths for your hardware would be a crash-on-sync_state, as all
+>> unused (from Linux's POV) resources ought to be shut down.
+>>
+>> Because you lack sync_state, the interconnects silently retain the state
+>> that they were left in (which is not deterministic), and that's precisely
+>> what we want to avoid.
+> 
+> I tried to set 'sync_state' to icc_sync_state to be invoked and
+> didn't see any crash.
 
-Changes in v3:
-- remove https links from commit description
-- collected tags
-- removed RFT tag
+Have you confirmed that the registers are actually written to, and with
+correct values?
 
-Changes in v2:
-- used device_set_awake_path() instead of device_set_wakeup_path()
-- moved the support in uart_suspend_port() to make it generic for
-  other drivers
-- fixed typos in commit description
-- updated the commit description to reflect the new changes and the fact
-  that support may be applied to other SoCs
-- added Suggested-by tag; this was initially proposed by Ulf to move it
-  in the serial driver then Geert propose to have it more generic in
-  uart_suspend_port()
-
- drivers/tty/serial/serial_core.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-index 8a76f378c445..84ae70d52b05 100644
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@ -2408,6 +2408,7 @@ int uart_suspend_port(struct uart_driver *drv, struct uart_port *uport)
- 			uport->ops->stop_rx(uport);
- 			uart_port_unlock_irq(uport);
- 		}
-+		device_set_awake_path(uport->dev);
- 		goto unlock;
- 	}
- 
--- 
-2.39.2
-
+Konrad
 
