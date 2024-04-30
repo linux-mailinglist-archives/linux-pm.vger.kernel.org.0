@@ -1,116 +1,100 @@
-Return-Path: <linux-pm+bounces-7331-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7332-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF4638B6E9B
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 11:39:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC2288B6EB8
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 11:44:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1CC531C22AFF
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 09:39:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7BEF41F22E98
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 09:44:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DB38128389;
-	Tue, 30 Apr 2024 09:36:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97083128828;
+	Tue, 30 Apr 2024 09:44:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="NSF4OoFu"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="hxQbr2tY";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="5DsTfBnc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3753FC02;
-	Tue, 30 Apr 2024 09:36:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B2D9FC02;
+	Tue, 30 Apr 2024 09:44:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714469805; cv=none; b=ml/gT+cxCSqEkL6lE/PVjgguobVieWhwxH+iZppBWN9FoItRQwZ0gcyJqel/HjOgsypqVGO2dI+UDLPlIjSx1G87mukvYAvnFujHbmKZZNgMKZv0hT8zJPfi8aHuhJmi0qaJuIxPfPwlCgcowEU39V2sgjS5KZERYBePTcKRsJA=
+	t=1714470262; cv=none; b=aBwNRPZlSN6YxrqVDc+y43BUx9DqkvG5N5517MlngR2UYgkXxK4SI0jmA9IhwKS7r3sZBmMDQun8S5Bvhs2KUAtJmJuLg6Fv2dNQ8UpqXAP3vD6/Wz4AkhVUxfQCmy/pfv/YS/1Oq6qilTxt3aa3pdBGzjHESs2X68VgkqKeyxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714469805; c=relaxed/simple;
-	bh=/x8Zhi2ct4Y6VhAKhc287XA7fVf97CpbCo/XzJpZAe0=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tDjg0sQBK6GEybxyJVEsDmvYoVmsx4te90ublrG28v9xamK6qRuOMag4GnI4btdKyfmNZdYs2LOXacFBs/wdxwZDPjTQypY8orq0qYwiqvijQ1bh3J+nVw+G6pno038Q5oXlLTQxZL3iJy+nWPcNwT118WPo/yS5fVG6RAEigEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=NSF4OoFu; arc=none smtp.client-ip=198.47.23.248
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 43U9aS2v100704;
-	Tue, 30 Apr 2024 04:36:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1714469788;
-	bh=e5EcbOebBnZOxjyjMA63HIyjpRB+ieKp7VwIXBGCGR0=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=NSF4OoFuYkLd4fQOcsBbH41E8TcG8IznJNL4MIu9jBK8chMBVLSUo1NYvyaEYh5PC
-	 9DdoVCLu+Ld6QaSCZrLHt4XGncc+BgR68cdJLn/98UhQG1lxqA1UGd10oAcILhBqXI
-	 dVLHYDQ/KBB9ajKctaZ1gmlEG2l46G4+2+mkcYgU=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 43U9aRNK009592
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 30 Apr 2024 04:36:27 -0500
-Received: from flwvowa02.ent.ti.com (10.64.41.53) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 30
- Apr 2024 04:36:27 -0500
-Received: from DFLE113.ent.ti.com (10.64.6.34) by flwvowa02.ent.ti.com
- (10.64.41.53) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2507.34; Tue, 30 Apr
- 2024 04:36:27 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 30 Apr 2024 04:36:27 -0500
-Received: from localhost (dhruva.dhcp.ti.com [172.24.227.68])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 43U9aQFp019953;
-	Tue, 30 Apr 2024 04:36:27 -0500
-Date: Tue, 30 Apr 2024 15:06:25 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: Justin Stitt <justinstitt@google.com>
-CC: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-hardening@vger.kernel.org>
-Subject: Re: [PATCH] PM: hibernate: replace deprecated strncpy with strscpy
-Message-ID: <20240430093625.qbuaxltkrmlaoiza@dhruva>
-References: <20240429-strncpy-kernel-power-hibernate-c-v1-1-8688f492d3e6@google.com>
+	s=arc-20240116; t=1714470262; c=relaxed/simple;
+	bh=aIsQXx2cN/50Udekd5YIExQDXbNkiZsE9WboBbCOMQk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TW6upqxv/4G83X7LN83q2ZNHIIaNcpfx6cQT/7SLRmWWeprGzCtrPaDZGZtsvwCTcir1eDf6Bn5nqvFDYhacOvZQqjOry1knoUVE/8Rsl5/sHWEW21rX6IDxbYYA+YQbue2gyTExpOZxgASThqkJBCtq4ZX7xEkqk1yU1JZFyXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=hxQbr2tY; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=5DsTfBnc; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Tue, 30 Apr 2024 11:44:11 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1714470253;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bOowKsb3vb6yvE+cHvGM8w7R27xqlmhDeNm22h9uWUE=;
+	b=hxQbr2tYYR6Ee1lJAT7He76rz7uXN6fITztCydq5R0y+2aXyzx8y+6Vo8XqV6nS88lNBRf
+	O8dHd4EW32yeLXJN8c7IKdifsAlO/z0QgYuVXt10ewaEHZegcW665jqMZzWSDTOEsV6fnJ
+	D2v2sjGmwSHsyH+eMnHr9ER3CAys89T2NuTcRDKFHdgCWlieih6ADW0382t8MACk0ufyas
+	PELieLLS62LEZEJy8FVU96XIkb1Jr0GMDe5hw0BihhHKlh8k15qs0GHB/rJ+BUTg3SkykZ
+	deJDPLJbOmfwjOUasL+gCCspLGCL0L92T2ePcmO29MlTjMtEryv846jW3oGUaw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1714470253;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bOowKsb3vb6yvE+cHvGM8w7R27xqlmhDeNm22h9uWUE=;
+	b=5DsTfBnc0PChyayOH2+kxEBXSDG2J4T+waLj2XZspU23YotrwFbDfRM+u0cPo8IfqEAVz0
+	5oX+BJ6diAdjfrAw==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
+	Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+	Nikunj Kela <nkela@quicinc.com>,
+	Prasad Sodagudi <psodagud@quicinc.com>,
+	Maulik Shah <quic_mkshah@quicinc.com>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-rt-users@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/6] pmdomain/cpuidle-psci: Support s2idle/s2ram on
+ PREEMPT_RT
+Message-ID: <20240430094411.HyS2Gecw@linutronix.de>
+References: <20240429140531.210576-1-ulf.hansson@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240429-strncpy-kernel-power-hibernate-c-v1-1-8688f492d3e6@google.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <20240429140531.210576-1-ulf.hansson@linaro.org>
 
-On Apr 29, 2024 at 20:50:30 +0000, Justin Stitt wrote:
-> strncpy() is deprecated for use on NUL-terminated destination strings
-> [1] and as such we should prefer more robust and less ambiguous string
-> interfaces.
+On 2024-04-29 16:05:25 [+0200], Ulf Hansson wrote:
+> The hierarchical PM domain topology and the corresponding domain-idle-states
+> are currently disabled on a PREEMPT_RT based configuration. The main reason is
+> because spinlocks are turned into sleepable locks on PREEMPT_RT, which means
+> genpd and runtime PM can't be use in the atomic idle-path when
+> selecting/entering an idle-state.
 > 
-> This kernel config option is simply assigned with the resume_file
-> buffer. It should be NUL-terminated but not necessarily NUL-padded as
-> per its further usage with other string apis:
-> |	static int __init find_resume_device(void)
-> |	{
-> |		if (!strlen(resume_file))
-> |			return -ENOENT;
-> |
-> |		pm_pr_dbg("Checking hibernation image partition %s\n", resume_file);
+> For s2idle/s2ram this is an unnecessary limitation that this series intends to
+> address. Note that, the support for cpuhotplug is left to future improvements.
+> More information about this are available in the commit messages.
 > 
-> Use strscpy [2] as it guarantees NUL-termination on the destination
-> buffer. Specifically, use the new 2-argument version of strscpy()
-> introduced in Commit e6584c3964f2f ("string: Allow 2-argument
-> strscpy()").
-> 
-> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
-> Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
-> Link: https://github.com/KSPP/linux/issues/90
-> Cc: linux-hardening@vger.kernel.org
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
-> ---
-[...]
+> I have tested this on a Dragonboard 410c.
 
-Reviewed-by: Dhruva Gole <d-gole@ti.com>
+Have you tested this with PREEMPT_RT enabled and if so, which kernel?
 
--- 
-Best regards,
-Dhruva Gole <d-gole@ti.com>
+> Kind regards
+> Ulf Hansson
+
+Sebastian
 
