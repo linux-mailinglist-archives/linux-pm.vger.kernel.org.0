@@ -1,111 +1,171 @@
-Return-Path: <linux-pm+bounces-7347-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7348-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FA408B71D9
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 13:01:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D38518B725C
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 13:07:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B10A28346E
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 11:01:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 111491C22562
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 11:07:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8430112CD98;
-	Tue, 30 Apr 2024 11:01:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GGyug1LK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D95712D209;
+	Tue, 30 Apr 2024 11:07:22 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57BF712C462;
-	Tue, 30 Apr 2024 11:01:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D88BC1E50A;
+	Tue, 30 Apr 2024 11:07:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714474889; cv=none; b=Sm1A0K646qvMSz7KQHerrFX3xwpZdi9f4ZNqCjk5m2feQ7ReMPnTbkCVXdQke+suz+z4jI3KbfSQM4clPvjLy50E6saSufBpYXAm6J9xC4xXJVrw5VRWU2zTcLiJppxcK0HtYP1Tw4ru76DdWMX4RUSUwEcOGY1iX/Qi3yPCVQI=
+	t=1714475242; cv=none; b=JUWz8hmjhlUQBYGWWj+bWn15Q42ztMLCG9fR6Jle3FDAWiZxpC6PcJpdPgYQpZqNPyd0qMqRMHLb32bY+gNFeHYCd5Gmg86zSuNB3BfhdTdHthj9wTF2j5/Hfx0TBSgaf/DTeUDQIlKcjYdh7OPSHklpYPIKyVLnxz+/zgePwlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714474889; c=relaxed/simple;
-	bh=7k26v8spb/SVU8KHpWsFuVmQm5vt6zLCxU8gvvmJook=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=O8dlz9SV9FxXm9X3ylGmlwByoC0VjJlmN1VXHFTu9z/8CdOLNgvPaCnDprlAu7ORyhifHdIzVH8DFIlT1A2I0T4P15ooOnG7Qfzdqhz2TdliRktCOeZB9hT19z+cHRuU5zxCGFMozFWFKuTTCRp/P0xu+8tUQz2x+3xKXYyerc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GGyug1LK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2052CC4AF1D;
-	Tue, 30 Apr 2024 11:01:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714474889;
-	bh=7k26v8spb/SVU8KHpWsFuVmQm5vt6zLCxU8gvvmJook=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=GGyug1LKuNWymH/ERsE/SqyEKJ4tQDhqpB7AQgHS3JmYwT9W4LmsEmygP+76DlGdo
-	 WhGMh2GIqdED2SU1fXEmwwClyPJNOGcfJmBw1uhr9lPaknoR0M35XNdxKCFeYg7wpY
-	 UkBXZx05wD7PFKzzgnYIvRFsDDClcgMNeQftm0lG4ljfQNyV+5siClgSYhnIo4N2m+
-	 c5Wnq8Dm91MAAQcXMapRUR+bza06buUeqnC8T2hUri5biPP8f9fzQlfU4lODvbTmpc
-	 /C4ffB4pOetheQfpS2tRWARniB2bWz99RWGM0EFCYbNGObpf6zTExRcNAY/vYDeT2x
-	 kxTN0xr6+h+Hg==
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-5ac970dded6so1319151eaf.0;
-        Tue, 30 Apr 2024 04:01:29 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWk3yHi3Php4wEkSyjV878+3BZIptycLh7VXPwCn1O+FQ7F84OQsoV44hyA0NwAbD3J/vMzFvhMY2WqXkHdYbt9DNvp+VxTBpqB9veRtZvxCgwb/AzZL1DWhRpY2/UkkRVdlNeDsuXqAYz3QmZjwgyec8DXqid19kH7jFNzTQIsdqhqzJdLzPo=
-X-Gm-Message-State: AOJu0YwCgbDcGa2NJcN8731s0d4RJc8xFPAj/+X9NRchuwobsumLHToX
-	VzQQiSihOXxJ/iPz9FhSUDAWlzgGPq9mHOzTxmlldYVR1ZM2Jky5E6ydG2yDSKSRfJHY1vyMhmv
-	4KXhKuDYEpJTaqtHhSaJEaYQz2SY=
-X-Google-Smtp-Source: AGHT+IFp05rDtY+IvpJ8x7q4pMxAXzR0PMTOyMAy5jx8xIsDl3iRswutRKcNQGaJAEvhKWLxz6FJReMtS8/5Y9j11aQ=
-X-Received: by 2002:a4a:a683:0:b0:5aa:3e4f:f01e with SMTP id
- f3-20020a4aa683000000b005aa3e4ff01emr14418920oom.1.1714474888346; Tue, 30 Apr
- 2024 04:01:28 -0700 (PDT)
+	s=arc-20240116; t=1714475242; c=relaxed/simple;
+	bh=3qxr+TObkd/zG873vQZ3MoGhZ/M55hk6OTuRvE2QsSQ=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=AFqv/67FPfaNyLOMxtwX9zQM/pNn412yk/TKwHAG15kh7SnhUR4X//5SGkrmGKrhFL/MPvBwfj2PozNC2BAaguatnFYWbtYkNT37Mx4z5UDRQCJXb0E6qtOneqWAJNWLQ5DpAhfGBCtupiEiuYp/bgMg2WQOjGK34ESNLGxNUTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VTHQW5wKlz6J6mX;
+	Tue, 30 Apr 2024 19:04:35 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 34773140B2A;
+	Tue, 30 Apr 2024 19:07:16 +0800 (CST)
+Received: from localhost (10.122.247.231) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Tue, 30 Apr
+ 2024 12:07:15 +0100
+Date: Tue, 30 Apr 2024 12:07:14 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Gavin Shan <gshan@redhat.com>
+CC: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
+	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
+	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+	<x86@kernel.org>, Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki"
+	<rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, James Morse
+	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, "Jean-Philippe
+ Brucker" <jean-philippe@linaro.org>, Catalin Marinas
+	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Marc Zyngier
+	<maz@kernel.org>, Hanjun Guo <guohanjun@huawei.com>, Ingo Molnar
+	<mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+	<dave.hansen@linux.intel.com>, <linuxarm@huawei.com>, <justin.he@arm.com>,
+	<jianyong.wu@arm.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, "Sudeep
+ Holla" <sudeep.holla@arm.com>
+Subject: Re: [PATCH v8 05/16] ACPI: processor: Add
+ acpi_get_processor_handle() helper
+Message-ID: <20240430120714.00007ee3@huawei.com>
+In-Reply-To: <63f7c71a-fa01-4604-8fc6-9f52b5b31d6b@redhat.com>
+References: <20240426135126.12802-1-Jonathan.Cameron@huawei.com>
+	<20240426135126.12802-6-Jonathan.Cameron@huawei.com>
+	<63f7c71a-fa01-4604-8fc6-9f52b5b31d6b@redhat.com>
+Organization: Huawei Technologies R&D (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240429-strncpy-kernel-power-hibernate-c-v1-1-8688f492d3e6@google.com>
- <20240430093625.qbuaxltkrmlaoiza@dhruva>
-In-Reply-To: <20240430093625.qbuaxltkrmlaoiza@dhruva>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 30 Apr 2024 13:01:17 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iesjQ2CS8OUDcFzjdRtZVDbOMnBtF5BR6ugx01g55N+A@mail.gmail.com>
-Message-ID: <CAJZ5v0iesjQ2CS8OUDcFzjdRtZVDbOMnBtF5BR6ugx01g55N+A@mail.gmail.com>
-Subject: Re: [PATCH] PM: hibernate: replace deprecated strncpy with strscpy
-To: Dhruva Gole <d-gole@ti.com>, Justin Stitt <justinstitt@google.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-hardening@vger.kernel.org, Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Tue, Apr 30, 2024 at 11:36=E2=80=AFAM Dhruva Gole <d-gole@ti.com> wrote:
->
-> On Apr 29, 2024 at 20:50:30 +0000, Justin Stitt wrote:
-> > strncpy() is deprecated for use on NUL-terminated destination strings
-> > [1] and as such we should prefer more robust and less ambiguous string
-> > interfaces.
-> >
-> > This kernel config option is simply assigned with the resume_file
-> > buffer. It should be NUL-terminated but not necessarily NUL-padded as
-> > per its further usage with other string apis:
-> > |     static int __init find_resume_device(void)
-> > |     {
-> > |             if (!strlen(resume_file))
-> > |                     return -ENOENT;
-> > |
-> > |             pm_pr_dbg("Checking hibernation image partition %s\n", re=
-sume_file);
-> >
-> > Use strscpy [2] as it guarantees NUL-termination on the destination
-> > buffer. Specifically, use the new 2-argument version of strscpy()
-> > introduced in Commit e6584c3964f2f ("string: Allow 2-argument
-> > strscpy()").
-> >
-> > Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#st=
-rncpy-on-nul-terminated-strings [1]
-> > Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en=
-.html [2]
-> > Link: https://github.com/KSPP/linux/issues/90
-> > Cc: linux-hardening@vger.kernel.org
-> > Signed-off-by: Justin Stitt <justinstitt@google.com>
+On Tue, 30 Apr 2024 14:26:06 +1000
+Gavin Shan <gshan@redhat.com> wrote:
+
+> On 4/26/24 23:51, Jonathan Cameron wrote:
+> > If CONFIG_ACPI_PROCESSOR provide a helper to retrieve the
+> > acpi_handle for a given CPU allowing access to methods
+> > in DSDT.
+> > 
+> > Tested-by: Miguel Luis <miguel.luis@oracle.com>
+> > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > 
 > > ---
-> [...]
->
-> Reviewed-by: Dhruva Gole <d-gole@ti.com>
+> > v8: Code simplification suggested by Rafael.
+> >      Fixup ;; spotted by Gavin
+> > ---
+> >   drivers/acpi/acpi_processor.c | 11 +++++++++++
+> >   include/linux/acpi.h          |  7 +++++++
+> >   2 files changed, 18 insertions(+)
+> >   
+> 
+> Reviewed-by: Gavin Shan <gshan@redhat.com>
+> 
+Thanks,
+> > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
+> > index 3b180e21f325..ecc2721fecae 100644
+> > --- a/drivers/acpi/acpi_processor.c
+> > +++ b/drivers/acpi/acpi_processor.c
+> > @@ -35,6 +35,17 @@ EXPORT_PER_CPU_SYMBOL(processors);
+> >   struct acpi_processor_errata errata __read_mostly;
+> >   EXPORT_SYMBOL_GPL(errata);
+> >   
+> > +acpi_handle acpi_get_processor_handle(int cpu)
+> > +{
+> > +	struct acpi_processor *pr;
+> > +
+> > +	pr = per_cpu(processors, cpu);
+> > +	if (pr)
+> > +		return pr->handle;
+> > +
+> > +	return NULL;
+> > +}
+> > +  
+> 
+> Maybe it's worthy to have more check here, something like below.
+> However, it's also fine without the extra check.
 
-Applied as 6.10 material, thanks!
+We could harden this, but for now the call sites are only
+int arch_(un)register_cpu() so if we get there with either
+of these failing something went very wrong.
+
+Maybe if it gets used more widely this defense would be wise.
+
+Jonathan
+
+> 
+> 	if (cpu >= nr_cpu_ids || !cpu_possible(cpu))
+> 		return NULL;
+> 
+> >   static int acpi_processor_errata_piix4(struct pci_dev *dev)
+> >   {
+> >   	u8 value1 = 0;
+> > diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+> > index 34829f2c517a..9844a3f9c4e5 100644
+> > --- a/include/linux/acpi.h
+> > +++ b/include/linux/acpi.h
+> > @@ -309,6 +309,8 @@ int acpi_map_cpu(acpi_handle handle, phys_cpuid_t physid, u32 acpi_id,
+> >   int acpi_unmap_cpu(int cpu);
+> >   #endif /* CONFIG_ACPI_HOTPLUG_CPU */
+> >   
+> > +acpi_handle acpi_get_processor_handle(int cpu);
+> > +
+> >   #ifdef CONFIG_ACPI_HOTPLUG_IOAPIC
+> >   int acpi_get_ioapic_id(acpi_handle handle, u32 gsi_base, u64 *phys_addr);
+> >   #endif
+> > @@ -1077,6 +1079,11 @@ static inline bool acpi_sleep_state_supported(u8 sleep_state)
+> >   	return false;
+> >   }
+> >   
+> > +static inline acpi_handle acpi_get_processor_handle(int cpu)
+> > +{
+> > +	return NULL;
+> > +}
+> > +
+> >   #endif	/* !CONFIG_ACPI */
+> >   
+> >   extern void arch_post_acpi_subsys_init(void);  
+> 
+> Thanks,
+> Gavin
+> 
+
 
