@@ -1,246 +1,155 @@
-Return-Path: <linux-pm+bounces-7337-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7338-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F8B18B6F6E
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 12:17:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C0BA8B6F97
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 12:24:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB3C828292F
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 10:17:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3837D28210C
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 10:24:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FE8A129E6A;
-	Tue, 30 Apr 2024 10:17:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA19313B2A4;
+	Tue, 30 Apr 2024 10:23:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uOMDnN4z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="te5mO2KK"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD5FB128828;
-	Tue, 30 Apr 2024 10:17:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9002D129E72;
+	Tue, 30 Apr 2024 10:23:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714472272; cv=none; b=dYlgXjiiA0PonDuJr0QNdU8MU/VxFQX5xIhDnHbqZM2bNperrIS7Bq2tUCgdmZ15un6CgchdK0XRCUKPWMiRyOaQsgte2O0IlpRn4AMJY/LIwA+na4it7qG8e3OUEOCXCNpGiGJiYxT9upWVQfyYLjmwSV6+3n/G1Z4zrfQwdBw=
+	t=1714472639; cv=none; b=kDBaWzKbTb61Uo58f/txjrE8+aSJZhyqt01+7N6xHs6a3Cv+Q5r2/X7zsVdLFQ5QNsDDjuGoth2CGFN6+4nW6X1GnebRpEC1NAZ7+nZVewd+ZDp5k5Mg/eN3DvTXQlZccvTSqmjEFRXkCdy0ZNTnhxkmplos9S76opyQdouTsDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714472272; c=relaxed/simple;
-	bh=gh1e1+58nQTAHuiHjenBUZr1umrL/earshHRi+u3ptQ=;
+	s=arc-20240116; t=1714472639; c=relaxed/simple;
+	bh=NG4wt3E1qhVSIOTYVEslbj0IbUx4tbqUB/Gh0AJzueI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hm5nN1Egy+DxZkg5cmGn+zR2+/ka7SuShWxlb0/5feok9YdEAJNGLUw7tAWY/vDkswIRqahJZUcPFPlPpVF6l2m9TtnAtnydCtvkDTpmNLdZBVM/juN8ZXYF0k6pxFJyxyjIR5v25GqcPVNlGiXyzK5zG48lkO/6BhkA4084Qlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uOMDnN4z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7080CC4AF19;
-	Tue, 30 Apr 2024 10:17:51 +0000 (UTC)
+	 To:Cc:Content-Type; b=JSJEYLYN/McndSzBpKgcSUxnbTF20EEkA541gI+PCAWOragqsHz1gH5sOmMu9baqGllUjup8+SWfKWUqvu/2frN1R7iRT7znOLo9eWKZzoR30khYuZzndjFPAF35B+rL7Bd7mTrE5YMNM/TWKqfJC0AiF25hUtVuvMKezF8SUQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=te5mO2KK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F39DBC4AF1A;
+	Tue, 30 Apr 2024 10:23:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714472271;
-	bh=gh1e1+58nQTAHuiHjenBUZr1umrL/earshHRi+u3ptQ=;
+	s=k20201202; t=1714472639;
+	bh=NG4wt3E1qhVSIOTYVEslbj0IbUx4tbqUB/Gh0AJzueI=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=uOMDnN4z5lMd6tjSaLzA/DFWBEvDW+SBX4PpUAzvzHJkcTmyc8M7ZBmkZpLQI2Zyn
-	 BnKLXz97gHSXI+FFqxt9Q7MKB1t0bSZ5meSj4zn9x9aQbZpnTcOmwbm+FC5QBepynT
-	 C01hW+5LH2TYdPZFs916JOsvt/kLLt0ZXRmNFBJyVBLhq1F5wKFYNEwEUPiS/M7iDb
-	 SvWO3imquNMFqr9tcgL2T/t0b4mhuj5WBYR1Ln3ThRc6qVdqwl/UzBzDbm8vHLEauf
-	 +WHWwOBIkFxtumcMcwlfY9A2uMGOZCyN1V0ZE8dIcwSDKH+19pi165NhRCjz9hRE63
-	 vTPXCwUJ46PCw==
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5afbcf21abdso314320eaf.1;
-        Tue, 30 Apr 2024 03:17:51 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXgICQFTuGScR8mdFdlMsB8kU+2gCcxNLhvQTToZAwdmHbFL+HxVmDffqPr/tBCCSkmdJ4tyFMfSqEYGpsgIr2QbfFGnP5ZQfFg96WSYSLThpyVRWhZiqNxqctVV+pFTRvAln76AscUZIUoGE8JCPB9nSeL3hGeH607VCf8tC683nRKEtOPPCcBlS1sytzY2NwcjVECftiqDnP1b/TP/w==
-X-Gm-Message-State: AOJu0YylsrJjxHFE5HEjsPb2CJBiOSYH4qTPwms0qtUR333EMTP3DxqN
-	A58+Szfxx8Zj6NfDg+MmSjJwEwdTJ8vBroLL5cSSps3Szs2bMr6NODuprcUvMxRApKW8DyQvjfo
-	wwr+gX7Nua2+NCBBwMxRU8xG7Mjg=
-X-Google-Smtp-Source: AGHT+IFbUf4jSJ2cquloo0eC1JK3eLNbPJXNhvDmh9dDYgHoYqwLG9wYGAGPLglbvHkUXR8LZA+PzrHFJeSP3syddME=
-X-Received: by 2002:a4a:d247:0:b0:5aa:6b2e:36f0 with SMTP id
- e7-20020a4ad247000000b005aa6b2e36f0mr14368609oos.0.1714472270695; Tue, 30 Apr
- 2024 03:17:50 -0700 (PDT)
+	b=te5mO2KKAx3Xxper97DsSGj7zUacskVc35grwLDK/TdU+LjNR4ogJjDUFCueItDbe
+	 pcIC/vMmiJFQrvCYSWsWc4aHiBDFW6gaWYdakvIZhHyF/phEgC53hAyx4JZMSqUBf6
+	 sOaSSGYNcFGBaIzUw0r8kBmBhzrM/z4mtQqP1sWL4Iib3bf8Qa1korZ6rc3uPCjgcG
+	 SWptIAx/GKDvm0JG1r/Mf47UvqoJDivbVNT2XVb+65/rm8rancacKXoisd7O7xOoeW
+	 NTeyVFSVV6Q7aoixN/NhoxViwgbFOdSciFVl7HGAU0ezn0M919cTJM6msI0r9LoRsn
+	 JD4/WfXAVyaEw==
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-5a9ef9ba998so1295979eaf.1;
+        Tue, 30 Apr 2024 03:23:58 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWW/RsCI8ykekUodlBaO50fuZZ0I8S4t2M71G3WF6XMXpKFGFwlC6NkvxKywPBwhzNq6VPRrXExtOxJZ6r+B12o8EDQv+O+w0UzzrbEM2IShl7COm/O67jB8DccB3wfsGY/60krcJU=
+X-Gm-Message-State: AOJu0YzLXiVZvOpd8pN3zkjF7I5YZqm3Hd9n3/ZlUUZAahocoGdYTEoP
+	7Rigt3o8dtMkk4dhHRZ8a+SMk4x6Lnebkad0k9NMvPVuch8Z1FSAeNtbm9S5RveiImehLt/3bkv
+	Q+UMSaDR++OV7eIPp8Fq0RSlfuKI=
+X-Google-Smtp-Source: AGHT+IGl6eXKbVFaA5PHBxunuMobv5CMMLmDt/bSqqUh4kJXyRJLo82vT1vUHNgP3fYA5yTsL+07NfKnrv9ZS07nVfY=
+X-Received: by 2002:a05:6820:e09:b0:5a7:db56:915c with SMTP id
+ el9-20020a0568200e0900b005a7db56915cmr13550801oob.1.1714472638205; Tue, 30
+ Apr 2024 03:23:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240426135126.12802-1-Jonathan.Cameron@huawei.com>
- <20240426135126.12802-5-Jonathan.Cameron@huawei.com> <80a2e07f-ecb2-48af-b2be-646f17e0e63e@redhat.com>
- <20240430102838.00006e04@Huawei.com> <20240430111341.00003dba@huawei.com>
-In-Reply-To: <20240430111341.00003dba@huawei.com>
+References: <20240430074857.2069301-1-perry.yuan@amd.com>
+In-Reply-To: <20240430074857.2069301-1-perry.yuan@amd.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 30 Apr 2024 12:17:38 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0i5jpJswD7KV5RPm_HvzB+B=Rt3gY0s_Z3fn5wbJz0ebw@mail.gmail.com>
-Message-ID: <CAJZ5v0i5jpJswD7KV5RPm_HvzB+B=Rt3gY0s_Z3fn5wbJz0ebw@mail.gmail.com>
-Subject: Re: [PATCH v8 04/16] ACPI: processor: Move checks and availability of
- acpi_processor earlier
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: Gavin Shan <gshan@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Peter Zijlstra <peterz@infradead.org>, linux-pm@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, x86@kernel.org, Russell King <linux@armlinux.org.uk>, 
-	"Rafael J . Wysocki" <rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, 
-	James Morse <james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, 
-	Jean-Philippe Brucker <jean-philippe@linaro.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Hanjun Guo <guohanjun@huawei.com>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, linuxarm@huawei.com, justin.he@arm.com, 
-	jianyong.wu@arm.com, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-	Sudeep Holla <sudeep.holla@arm.com>
+Date: Tue, 30 Apr 2024 12:23:45 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0h73Pacu-70ps22WBNvXG+SCSBoa-j0wERA2tfqf3qs6g@mail.gmail.com>
+Message-ID: <CAJZ5v0h73Pacu-70ps22WBNvXG+SCSBoa-j0wERA2tfqf3qs6g@mail.gmail.com>
+Subject: Re: [PATCH 1/2] cpufreq: amd-pstate: fix code format problems
+To: Perry Yuan <perry.yuan@amd.com>
+Cc: rafael.j.wysocki@intel.com, Mario.Limonciello@amd.com, 
+	viresh.kumar@linaro.org, gautham.shenoy@amd.com, Borislav.Petkov@amd.com, 
+	Ray.Huang@amd.com, Alexander.Deucher@amd.com, Xinmei.Huang@amd.com, 
+	oleksandr@natalenko.name, Xiaojian.Du@amd.com, Li.Meng@amd.com, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 30, 2024 at 12:13=E2=80=AFPM Jonathan Cameron
-<Jonathan.Cameron@huawei.com> wrote:
+On Tue, Apr 30, 2024 at 9:49=E2=80=AFAM Perry Yuan <perry.yuan@amd.com> wro=
+te:
 >
-> On Tue, 30 Apr 2024 10:28:38 +0100
-> Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+> get some code format problems fixed in the amd-pstate driver.
 >
-> > On Tue, 30 Apr 2024 14:17:24 +1000
-> > Gavin Shan <gshan@redhat.com> wrote:
-> >
-> > > On 4/26/24 23:51, Jonathan Cameron wrote:
-> > > > Make the per_cpu(processors, cpu) entries available earlier so that
-> > > > they are available in arch_register_cpu() as ARM64 will need access
-> > > > to the acpi_handle to distinguish between acpi_processor_add()
-> > > > and earlier registration attempts (which will fail as _STA cannot
-> > > > be checked).
-> > > >
-> > > > Reorder the remove flow to clear this per_cpu() after
-> > > > arch_unregister_cpu() has completed, allowing it to be used in
-> > > > there as well.
-> > > >
-> > > > Note that on x86 for the CPU hotplug case, the pr->id prior to
-> > > > acpi_map_cpu() may be invalid. Thus the per_cpu() structures
-> > > > must be initialized after that call or after checking the ID
-> > > > is valid (not hotplug path).
-> > > >
-> > > > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > > >
-> > > > ---
-> > > > v8: On buggy bios detection when setting per_cpu structures
-> > > >      do not carry on.
-> > > >      Fix up the clearing of per cpu structures to remove unwanted
-> > > >      side effects and ensure an error code isn't use to reference t=
-hem.
-> > > > ---
-> > > >   drivers/acpi/acpi_processor.c | 79 +++++++++++++++++++++---------=
------
-> > > >   1 file changed, 48 insertions(+), 31 deletions(-)
-> > > >
-> > > > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_proc=
-essor.c
-> > > > index ba0a6f0ac841..3b180e21f325 100644
-> > > > --- a/drivers/acpi/acpi_processor.c
-> > > > +++ b/drivers/acpi/acpi_processor.c
-> > > > @@ -183,8 +183,38 @@ static void __init acpi_pcc_cpufreq_init(void)=
- {}
-> > > >   #endif /* CONFIG_X86 */
-> > > >
-> > > >   /* Initialization */
-> > > > +static DEFINE_PER_CPU(void *, processor_device_array);
-> > > > +
-> > > > +static bool acpi_processor_set_per_cpu(struct acpi_processor *pr,
-> > > > +                                struct acpi_device *device)
-> > > > +{
-> > > > + BUG_ON(pr->id >=3D nr_cpu_ids);
-> > >
-> > > One blank line after BUG_ON() if we need to follow original implement=
-ation.
-> >
-> > Sure unintentional - I'll put that back.
-> >
-> > >
-> > > > + /*
-> > > > +  * Buggy BIOS check.
-> > > > +  * ACPI id of processors can be reported wrongly by the BIOS.
-> > > > +  * Don't trust it blindly
-> > > > +  */
-> > > > + if (per_cpu(processor_device_array, pr->id) !=3D NULL &&
-> > > > +     per_cpu(processor_device_array, pr->id) !=3D device) {
-> > > > +         dev_warn(&device->dev,
-> > > > +                  "BIOS reported wrong ACPI id %d for the processo=
-r\n",
-> > > > +                  pr->id);
-> > > > +         /* Give up, but do not abort the namespace scan. */
-> > >
-> > > It depends on how the return value is handled by the caller if the na=
-mespace
-> > > is continued to be scanned. The caller can be acpi_processor_hotadd_i=
-nit()
-> > > and acpi_processor_get_info() after this patch is applied. So I think=
- this
-> > > specific comment need to be moved to the caller.
-> >
-> > Good point. This gets messy and was an unintended change.
-> >
-> > Previously the options were:
-> > 1) acpi_processor_get_info() failed for other reasons - this code was n=
-ever called.
-> > 2) acpi_processor_get_info() succeeded without acpi_processor_hotadd_in=
-it (non hotplug)
-> >    this code then ran and would paper over the problem doing a bunch of=
- cleanup under err.
-> > 3) acpi_processor_get_info() succeeded with acpi_processor_hotadd_init =
-called.
-> >    This code then ran and would paper over the problem doing a bunch of=
- cleanup under err.
-> >
-> > We should maintain that or argue cleanly against it.
-> >
-> > This isn't helped the the fact I have no idea which cases we care about=
- for that bios
-> > bug handling.  Do any of those bios's ever do hotplug?  Guess we have t=
-o try and maintain
-> > whatever protection this was offering.
-> >
-> > Also, the original code leaks data in some paths and I have limited ide=
-a
-> > of whether it is intentional or not. So to tidy the issue up that you'v=
-e identified
-> > I'll need to try and make that code consistent first.
-> >
-> > I suspect the only way to do that is going to be to duplicate the alloc=
-ations we
-> > 'want' to leak to deal with the bios bug detection.
-> >
-> > For example acpi_processor_get_info() failing leaks pr and pr->throttli=
-ng.shared_cpu_map
-> > before this series. After this series we need pr to leak because it's u=
-sed for the detection
-> > via processor_device_array.
-> >
-> > I'll work through this but it's going to be tricky to tell if we get ri=
-ght.
-> > Step 1 will be closing the existing leaks and then we will have somethi=
-ng
-> > consistent to build on.
-> >
-> I 'think' that fixing the original leaks makes this all much more straigh=
-t forward.
-> That return 0 for acpi_processor_get_info() never made sense as far as I =
-can tell.
-> The pr isn't used after this point.
+> Changes Made:
 >
-> What about something along lines of.
+> - Fixed incorrect comment format in the functions.
 >
-> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.=
-c
-> index 161c95c9d60a..97cff4492304 100644
-> --- a/drivers/acpi/acpi_processor.c
-> +++ b/drivers/acpi/acpi_processor.c
-> @@ -392,8 +392,10 @@ static int acpi_processor_add(struct acpi_device *de=
-vice,
->         device->driver_data =3D pr;
+> - Removed unnecessary blank line.
 >
->         result =3D acpi_processor_get_info(device);
-> -       if (result) /* Processor is not physically present or unavailable=
- */
-> -               return 0;
-> +       if (result) { /* Processor is not physically present or unavailab=
-le */
-> +               result =3D 0;
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202404271148.HK9yHBlB-lkp@i=
+ntel.com/
+> Signed-off-by: Perry Yuan <perry.yuan@amd.com>
+> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
 
-As per my previous message (just sent) this should be an error code,
-as returning 0 from acpi_processor_add() is generally problematic.
+As this is a resend of a patch that has been posted already, it would
+be good to indicate that somehow.  For example, send the whole series
+as v2 and say in the notes below the changelog that a Reviewed-by tag
+has been added between v1 and v2.  And for the second patch, say that
+it is new in v2.
 
-> +               goto err_free_throttling_mask;
-> +       }
+That said, this particular case is simple enough for me to see what's
+going on right away.
+
+Both patches in the series applied, thanks!
+
+> ---
+>  drivers/cpufreq/amd-pstate.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
 >
->         BUG_ON(pr->id >=3D nr_cpu_ids);
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 83a29b257794..85656342a101 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -792,7 +792,7 @@ static void amd_pstate_update_limits(unsigned int cpu=
+)
+>         mutex_unlock(&amd_pstate_driver_lock);
+>  }
+>
+> -/**
+> +/*
+>   * Get pstate transition delay time from ACPI tables that firmware set
+>   * instead of using hardcode value directly.
+>   */
+> @@ -807,7 +807,7 @@ static u32 amd_pstate_get_transition_delay_us(unsigne=
+d int cpu)
+>         return transition_delay_ns / NSEC_PER_USEC;
+>  }
+>
+> -/**
+> +/*
+>   * Get pstate transition latency value from ACPI tables that firmware
+>   * set instead of using hardcode value directly.
+>   */
+> @@ -822,7 +822,7 @@ static u32 amd_pstate_get_transition_latency(unsigned=
+ int cpu)
+>         return transition_latency;
+>  }
+>
+> -/**
+> +/*
+>   * amd_pstate_init_freq: Initialize the max_freq, min_freq,
+>   *                       nominal_freq and lowest_nonlinear_freq for
+>   *                       the @cpudata object.
+> @@ -843,7 +843,6 @@ static int amd_pstate_init_freq(struct amd_cpudata *c=
+pudata)
+>         u32 boost_ratio, lowest_nonlinear_ratio;
+>         struct cppc_perf_caps cppc_perf;
+>
+> -
+>         ret =3D cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
+>         if (ret)
+>                 return ret;
+> --
+> 2.34.1
+>
 >
 
