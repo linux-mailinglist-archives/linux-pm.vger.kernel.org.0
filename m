@@ -1,136 +1,110 @@
-Return-Path: <linux-pm+bounces-7321-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7322-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68FA58B6AB6
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 08:44:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 161598B6ADA
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 08:48:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23C4A2822E9
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 06:44:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4BE9281A4E
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 06:48:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BCB931A8F;
-	Tue, 30 Apr 2024 06:43:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD56614A9D;
+	Tue, 30 Apr 2024 06:48:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="bw5fozyq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ElIpOFpq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B92D1548FC;
-	Tue, 30 Apr 2024 06:43:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8782E1863B
+	for <linux-pm@vger.kernel.org>; Tue, 30 Apr 2024 06:48:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714459392; cv=none; b=Lu8SqYdvaVW1et780Jstt1VkRIg2/EYgS7+dKtllQovhpoID+BYm4LXszRkhjEWzK4u/Bw/8etxAOkHIv7QKutiI/InlU1LPAIlxBs8KPENchlTL6c4+5sIAj8EP/1tluwFtcNxx8VmCRuHgdvcaw78A+686pBS2HOv5TWFeY+Y=
+	t=1714459734; cv=none; b=swuI3VNXSiOn/28c1QJ3rsG9z6EF3am3iPS+gduEiK3KzOCvmz/vxmH1JdC5l+03rOB+EnuU/Qw81flYe/0XvRkFscULrkPS2vjuGN2ZfR+Co5LPnGiNrXGwYjwweRpmCASeYYWzDDh+QWjGgF/dk2Yn/0SVJ5W0cLPC1T/+grA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714459392; c=relaxed/simple;
-	bh=T6AypkH3WpV7sX0/al8Y8+9eYsNDm9sgfT2ZqgdoI8k=;
+	s=arc-20240116; t=1714459734; c=relaxed/simple;
+	bh=XTF/wZmMzEbbxECv1IzcwPozETrfB7qhtCYqqueL6G8=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LhFECc9usB4chSVQIRI3c8DTqSSQXarYGl+7JekIQwxEEchR47U6OVQnfcu+N6gXx/gigekRxpKFIFa8JRLb2OsYhZLZhaxxgFirdGW4h5Db3jpQvpUFgLTcGfhDKYuBqSpRYBUTg9/DGK3Ruz8Tk+yr7P70T5vs8Mni9bWxymY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=bw5fozyq; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43U3Hsuu015072;
-	Tue, 30 Apr 2024 06:43:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding:content-type; s=
-	qcppdkim1; bh=XQz0y87xjJzpSve+PFnGb8Dxx4cy4BCAlvoWDerKyCU=; b=bw
-	5fozyqV7T0+Ihg8Fx+8PsGHvs7TNuezvT8t5UyLgLFJZ+PD6W6iqJplaLLjEEduk
-	GETcjmQFm0YTMjnCETuND1mZUGXIhydZg4/R5eKHx+lcYzZHtaOE02nain2Dh503
-	dmonTbZ/6ZIeNeWau7MTLpei5hlJEV44MN3IOa63piXVwyde3mqDGjEVG61JU9BU
-	wG4GSsbRLYBorGfIDTV+D66cLazoDZ0YQiCIN6qxXeX/SwpJQF85HBzzCk9ZoYM1
-	97DON8MJBoKjtgjN0/ld3mtRx0VOV+1I/jZ4Q+SntzgGYi2dOqc64B6CgeRb+GLf
-	TrsC8MavzJRAawaAVmUw==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xtqkr8qt6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 30 Apr 2024 06:43:07 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43U6h5BN020109
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 30 Apr 2024 06:43:05 GMT
-Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Mon, 29 Apr 2024 23:43:00 -0700
-From: Varadarajan Narayanan <quic_varada@quicinc.com>
-To: <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <konrad.dybcio@linaro.org>, <djakov@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <quic_varada@quicinc.com>,
-        <quic_anusha@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <bryan.odonoghue@linaro.org>
-Subject: [PATCH v11 6/6] arm64: dts: qcom: ipq9574: Add icc provider ability to gcc
-Date: Tue, 30 Apr 2024 12:12:14 +0530
-Message-ID: <20240430064214.2030013-7-quic_varada@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240430064214.2030013-1-quic_varada@quicinc.com>
-References: <20240430064214.2030013-1-quic_varada@quicinc.com>
+	 Content-Type:MIME-Version; b=MNJVQ8ivBM3azb4SD1zSyZ669UVd7Xk+039PQvh8HLFE1KFGkI/T5M004k6DtJN9JYTvQB1ROAOEtSkX0DKrG9hSkpWMQGQfC2MkExpRpGB2iLC7oPaHWOstF//i59dCHe9I+16NKHrHLCOk/zj820+OsyJPWJAILVXmPuf3cYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ElIpOFpq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0D544C4AF19
+	for <linux-pm@vger.kernel.org>; Tue, 30 Apr 2024 06:48:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714459734;
+	bh=XTF/wZmMzEbbxECv1IzcwPozETrfB7qhtCYqqueL6G8=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=ElIpOFpq/wNPTAGaKEj4LrWoZhJZIxJEx/nzWsQ/gqMNTO0wq0ukrQ1z87ODhZ7rY
+	 9ayxyHIneY8rJm1x/uQxnaANprwenOwu5fRyAX/vP9HeBEyEETTVuPr5/4/vQzAUPm
+	 hkyFhKg0LIWjd0nbH4mRm3akVo2lOaeg9TomvjDUmqGF480J70IwOBXk4gQifMBdnt
+	 z2Om0t5RoqFhonoOQ3ecSQAsVWJc9GbCrIHVGJuNbOs/6v7YF6ij7QVBVOBlHWERWs
+	 i6QFr9uwRrr1C3tcsUeKXwMvTw4KhQscEu2zwrLU77On4zaCbX56tEExp5wdToG7Em
+	 tgkZEgBCyDkFQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id F1180C53B6D; Tue, 30 Apr 2024 06:48:53 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 218705] amd_pstate fails to load on AMD 5950x with Asus ROG
+ CROSSHAIR VIII DARK HERO x570
+Date: Tue, 30 Apr 2024 06:48:53 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: Perry.Yuan@amd.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218705-137361-ar7RzHDzDL@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218705-137361@https.bugzilla.kernel.org/>
+References: <bug-218705-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: hUTFBXm4d2cMlguQjPHsSW-aLL-sLWz_
-X-Proofpoint-ORIG-GUID: hUTFBXm4d2cMlguQjPHsSW-aLL-sLWz_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-04-30_02,2024-04-29_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- suspectscore=0 priorityscore=1501 mlxlogscore=999 malwarescore=0
- phishscore=0 mlxscore=0 clxscore=1015 lowpriorityscore=0 adultscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2404010003 definitions=main-2404300047
 
-IPQ SoCs dont involve RPM in managing NoC related clocks and
-there is no NoC scaling. Linux itself handles these clocks.
-However, these should not be exposed as just clocks and align
-with other Qualcomm SoCs that handle these clocks from a
-interconnect provider.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218705
 
-Hence include icc provider capability to the gcc node so that
-peripherals can use the interconnect facility to enable these
-clocks.
+--- Comment #26 from Perry Yuan(AMD) (Perry.Yuan@amd.com) ---
+(In reply to Andrei Amuraritei from comment #25)
+> Hi again,
+>=20
+> I meant, amd_pstate did not load automatically, without me specifying a
+> kernel param for it.
+>=20
+> The .config values are (Fedora default config):
+>=20
+> grep -rsn  AMD_PSTATE /boot/config-6.8.7-200.fc39.x86_64=20
+> 700:CONFIG_X86_AMD_PSTATE=3Dy
+> 701:CONFIG_X86_AMD_PSTATE_DEFAULT_MODE=3D3
+> 702:CONFIG_X86_AMD_PSTATE_UT=3Dm
+>=20
+> Thanks.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
----
- arch/arm64/boot/dts/qcom/ipq9574.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+Thank you help to share the info, I have found the root cause, working on t=
+he
+fix patch, will send it out after we finish the testing.
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-index 7f2e5cbf3bbb..5b3e69379b1f 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-@@ -8,6 +8,7 @@
- 
- #include <dt-bindings/clock/qcom,apss-ipq.h>
- #include <dt-bindings/clock/qcom,ipq9574-gcc.h>
-+#include <dt-bindings/interconnect/qcom,ipq9574.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/reset/qcom,ipq9574-gcc.h>
- #include <dt-bindings/thermal/thermal.h>
-@@ -306,6 +307,7 @@ gcc: clock-controller@1800000 {
- 			#clock-cells = <1>;
- 			#reset-cells = <1>;
- 			#power-domain-cells = <1>;
-+			#interconnect-cells = <1>;
- 		};
- 
- 		tcsr_mutex: hwlock@1905000 {
--- 
-2.34.1
 
+Perry.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
 
