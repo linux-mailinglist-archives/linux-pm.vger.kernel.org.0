@@ -1,256 +1,202 @@
-Return-Path: <linux-pm+bounces-7344-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7345-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E34C28B70A0
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 12:47:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FB448B70C0
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 12:49:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 12EC01C20A85
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 10:47:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F19121F2227F
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 10:49:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 993A312C530;
-	Tue, 30 Apr 2024 10:47:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB6B112C47A;
+	Tue, 30 Apr 2024 10:49:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mGvXxDPs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gqvwSYSh"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 613C81292C8;
-	Tue, 30 Apr 2024 10:47:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7D8912C46B
+	for <linux-pm@vger.kernel.org>; Tue, 30 Apr 2024 10:49:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714474067; cv=none; b=K6oUQHbDGsEU3GZpCXttlKRGXljevGdUK9BNNxvYoD7L8rKYTCDi0V75yN4fHvoJRWp6mYv60PtlutntAcalyTyalW4thld2ww+ieLtGkKztJh9xsrVNhDGqjIqaYhcjeDENSxyxxdZ3pmdWzd+OxwTa+LKHeXZqSGdT6Wpaq78=
+	t=1714474165; cv=none; b=lTdRlKPMYcImtENzOLk6WX8LEXIa1Wqd1mSxNw2XDhYvYTQRGNTIPesSW/+jIK3U6vDAQVsdTllqAv3Huk3/l694eUYhCVB6LQkQ8ss+VcL78wpP2jZ1aj4VXreXTtKNPb3deG4S3+/wEGaw+BJs3Z9MqeKYUZz6+GPY3V96ThE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714474067; c=relaxed/simple;
-	bh=WZUKSeKyIPsk8d6ycvulrut5Qa11GliUpPCP6FFms4U=;
+	s=arc-20240116; t=1714474165; c=relaxed/simple;
+	bh=T8cnkidlg9nghB5xHXJisqPwOibY8DFOHKnCL4ZoXAw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nxuKy+mS2heE7LEnOQIlArUQJjCkqjREETQR/MFzEeJo8oBQNUPgAW2j/y0oKjXuF+9tFEapJzeWVZSGZZb2BLut2/2P9KlmOKTSkGd6UKtEIMAgKr+ptwgpEOaIoY+qgu6rOirMgfpFdoVklC1FJPhZcxeKtk7+m/G/t2C0JQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mGvXxDPs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39A9BC4AF5F;
-	Tue, 30 Apr 2024 10:47:47 +0000 (UTC)
+	 To:Cc:Content-Type; b=QLjkLGSpomGITiIj7Q7Op6gdXbjBEniEKQTgJKqbgoKAxhfwgqqEwYDNjYz1EpRqDPG3huqkoRVPIlEW2o1IXGvnvtiRtNvUueBvwPdCZSGS2wKFCufQ45Y1MhJ+spuTQnYbDTQmh0fAvbXuB+27iIlfYgo+YMOYcuBXvWZN1RQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gqvwSYSh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94ABCC4AF18
+	for <linux-pm@vger.kernel.org>; Tue, 30 Apr 2024 10:49:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714474067;
-	bh=WZUKSeKyIPsk8d6ycvulrut5Qa11GliUpPCP6FFms4U=;
+	s=k20201202; t=1714474165;
+	bh=T8cnkidlg9nghB5xHXJisqPwOibY8DFOHKnCL4ZoXAw=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=mGvXxDPseshKWHrhk/EJeXU0vbKAkmpT4jipiadYfEt06SESJdnr7pN1XwuX2XKAP
-	 QolD4+xZe394t1sKP3d/WuOd5qF+EUSIiZGg1zknqEDshwq0iyiHBI/YMyMynWgdAx
-	 u5OJjMyNBwLAdgfIfRdCKfzy8oXNku/V63JuL/TL3MNqi6qdXxA3rpJL5BLqu1Emv6
-	 vMK+E8j7Yf1PYaIr87oBrL3G7KvHXuyQAJbZBOJ2Rfz7D/f569l7zZIKPWxPhA1p9a
-	 yrmrpXF3CyD39HRjByGsK1lXLjGt1BvVcQjVZB0LJtPW2PYj56DewQ5lHUyjyGYKGM
-	 havP8C0Hc0PNQ==
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-6ea0a6856d7so804394a34.1;
-        Tue, 30 Apr 2024 03:47:47 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUU62zyOzw/kiGVC6iSrqHCLfqb3vHRv2XbjcjM6Rc01TXYFZ24XBiu7V4cmJ1ldVlEoDC08pQlpWK5+Tl8VDrqKWyyjAX2++hs/2sn7RwRRBkOWTiyhg48TWYzR5lwIupz6IsDQciF6RR11QO+Q1DLhQvAOBNqtV7/6fQJ4j996OTI5tvyI07uL92xodlnWtb7j79ezYq+bBPN64ozWg==
-X-Gm-Message-State: AOJu0Yyzkj/KMMLroO2YLMa/cBeKISxvpUZtGk4xXFLOGgBGq/2f7AyG
-	gIL1VWhKIAPzwUTN+c50dQNDHA7dndJDGh1DC0aabvwoHWZaQ8DIQyXY0VsQXB9hnaJ+PZTOS0Q
-	GSAFM7zeekn5RdHgDSyBtHfbLjps=
-X-Google-Smtp-Source: AGHT+IHNKT5Ik0nUI8b5ABIxeB3JmGV787CqCPuIjHLaEaioVmWruFOWAVvzVNYd9L9saMxym0xKD6S5YvIRDnvFpfI=
-X-Received: by 2002:a4a:9287:0:b0:5af:be60:ccdc with SMTP id
- i7-20020a4a9287000000b005afbe60ccdcmr3602815ooh.0.1714474066271; Tue, 30 Apr
- 2024 03:47:46 -0700 (PDT)
+	b=gqvwSYShZJX1PQn+mcoEEeKtjilnJxVQZdkBa7LIb8Q3uJzud0ZpbTyPZK1QUliBn
+	 GCAko3m2upydGM4mk0GIxi+ButFH5Uzw1MxBnynTuqIU4e+DfNwvN7aSIU6FBeUv+z
+	 iRHOBBViEZgkatnSNlYwlM7yBKunHC71TWlvNV+8CFPPVnZK9wf9Zdoe2gys00yxyj
+	 4YATAnCopZuvUpzQCUdDAv3ugdUH6CpwpSqSBb/08YEA2ih7FveUnClP1y0aqSsCFV
+	 uXPYGhnHw2lGMrEVnG6ZaKviMpF1sw0vNrF9iXeVzwBJiydHr9kxklgPvvckO18R5G
+	 Cx3Vyv65BW06g==
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-3c73b33383bso374253b6e.2
+        for <linux-pm@vger.kernel.org>; Tue, 30 Apr 2024 03:49:25 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXSUqrXyVGT9SsR9XE0viT00WigPtA/C22N0gJYG/2YVyJGz5Xxg1jUX8kcEC7QM+0Ryin7KZ1Bt8SE2iYChTEVg99c29jMBi0=
+X-Gm-Message-State: AOJu0YxZ63UpeOXgaNVWSNJKtnSspyRAJA1tk9nJOD3wAkhIEF/Y6QlD
+	8J7FXsdtihWYu/OQjoI6cx2iwcJHtUMY9XUC/P3iV4JgP6pEspxoY4cZZa4SePrm0/6NtQKhCBU
+	phA4qrVq3gL3puurR7ps29x37GxM=
+X-Google-Smtp-Source: AGHT+IHpknY3v/ER5vp6bS5bWhaIp8v3kh9sPnJr5/+Amtt0Q7w292ehS1zrhZ96TackcV8lSzUwh4H2RWXRdEImRKg=
+X-Received: by 2002:a4a:a7cb:0:b0:5a4:7790:61b4 with SMTP id
+ n11-20020a4aa7cb000000b005a4779061b4mr15219994oom.0.1714474164831; Tue, 30
+ Apr 2024 03:49:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240426135126.12802-1-Jonathan.Cameron@huawei.com>
- <20240426135126.12802-5-Jonathan.Cameron@huawei.com> <80a2e07f-ecb2-48af-b2be-646f17e0e63e@redhat.com>
- <20240430102838.00006e04@Huawei.com> <20240430111341.00003dba@huawei.com>
- <CAJZ5v0i5jpJswD7KV5RPm_HvzB+B=Rt3gY0s_Z3fn5wbJz0ebw@mail.gmail.com> <20240430114534.0000600e@huawei.com>
-In-Reply-To: <20240430114534.0000600e@huawei.com>
+References: <20240430102756.fgar4rdd5s42245l@vireshk-i7>
+In-Reply-To: <20240430102756.fgar4rdd5s42245l@vireshk-i7>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 30 Apr 2024 12:47:34 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hsJBmphEg8gjehtmtzt0Q=Rox1B_qBFrxp15nHvb6o5A@mail.gmail.com>
-Message-ID: <CAJZ5v0hsJBmphEg8gjehtmtzt0Q=Rox1B_qBFrxp15nHvb6o5A@mail.gmail.com>
-Subject: Re: [PATCH v8 04/16] ACPI: processor: Move checks and availability of
- acpi_processor earlier
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Gavin Shan <gshan@redhat.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>, linux-pm@vger.kernel.org, 
-	loongarch@lists.linux.dev, linux-acpi@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org, 
-	Russell King <linux@armlinux.org.uk>, Miguel Luis <miguel.luis@oracle.com>, 
-	James Morse <james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, 
-	Jean-Philippe Brucker <jean-philippe@linaro.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Hanjun Guo <guohanjun@huawei.com>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, linuxarm@huawei.com, justin.he@arm.com, 
-	jianyong.wu@arm.com, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-	Sudeep Holla <sudeep.holla@arm.com>
+Date: Tue, 30 Apr 2024 12:49:13 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gyGWE1RNHaqQom8_hR0mpao44UrrGhmeL_6mdsAFChkQ@mail.gmail.com>
+Message-ID: <CAJZ5v0gyGWE1RNHaqQom8_hR0mpao44UrrGhmeL_6mdsAFChkQ@mail.gmail.com>
+Subject: Re: [GIT PULL] cpufreq/arm updates for 6.10
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 30, 2024 at 12:45=E2=80=AFPM Jonathan Cameron
-<Jonathan.Cameron@huawei.com> wrote:
->
-> On Tue, 30 Apr 2024 12:17:38 +0200
-> "Rafael J. Wysocki" <rafael@kernel.org> wrote:
->
-> > On Tue, Apr 30, 2024 at 12:13=E2=80=AFPM Jonathan Cameron
-> > <Jonathan.Cameron@huawei.com> wrote:
-> > >
-> > > On Tue, 30 Apr 2024 10:28:38 +0100
-> > > Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
-> > >
-> > > > On Tue, 30 Apr 2024 14:17:24 +1000
-> > > > Gavin Shan <gshan@redhat.com> wrote:
-> > > >
-> > > > > On 4/26/24 23:51, Jonathan Cameron wrote:
-> > > > > > Make the per_cpu(processors, cpu) entries available earlier so =
-that
-> > > > > > they are available in arch_register_cpu() as ARM64 will need ac=
-cess
-> > > > > > to the acpi_handle to distinguish between acpi_processor_add()
-> > > > > > and earlier registration attempts (which will fail as _STA cann=
-ot
-> > > > > > be checked).
-> > > > > >
-> > > > > > Reorder the remove flow to clear this per_cpu() after
-> > > > > > arch_unregister_cpu() has completed, allowing it to be used in
-> > > > > > there as well.
-> > > > > >
-> > > > > > Note that on x86 for the CPU hotplug case, the pr->id prior to
-> > > > > > acpi_map_cpu() may be invalid. Thus the per_cpu() structures
-> > > > > > must be initialized after that call or after checking the ID
-> > > > > > is valid (not hotplug path).
-> > > > > >
-> > > > > > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > > > > >
-> > > > > > ---
-> > > > > > v8: On buggy bios detection when setting per_cpu structures
-> > > > > >      do not carry on.
-> > > > > >      Fix up the clearing of per cpu structures to remove unwant=
-ed
-> > > > > >      side effects and ensure an error code isn't use to referen=
-ce them.
-> > > > > > ---
-> > > > > >   drivers/acpi/acpi_processor.c | 79 +++++++++++++++++++++-----=
----------
-> > > > > >   1 file changed, 48 insertions(+), 31 deletions(-)
-> > > > > >
-> > > > > > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_=
-processor.c
-> > > > > > index ba0a6f0ac841..3b180e21f325 100644
-> > > > > > --- a/drivers/acpi/acpi_processor.c
-> > > > > > +++ b/drivers/acpi/acpi_processor.c
-> > > > > > @@ -183,8 +183,38 @@ static void __init acpi_pcc_cpufreq_init(v=
-oid) {}
-> > > > > >   #endif /* CONFIG_X86 */
-> > > > > >
-> > > > > >   /* Initialization */
-> > > > > > +static DEFINE_PER_CPU(void *, processor_device_array);
-> > > > > > +
-> > > > > > +static bool acpi_processor_set_per_cpu(struct acpi_processor *=
-pr,
-> > > > > > +                                struct acpi_device *device)
-> > > > > > +{
-> > > > > > + BUG_ON(pr->id >=3D nr_cpu_ids);
-> > > > >
-> > > > > One blank line after BUG_ON() if we need to follow original imple=
-mentation.
-> > > >
-> > > > Sure unintentional - I'll put that back.
-> > > >
-> > > > >
-> > > > > > + /*
-> > > > > > +  * Buggy BIOS check.
-> > > > > > +  * ACPI id of processors can be reported wrongly by the BIOS.
-> > > > > > +  * Don't trust it blindly
-> > > > > > +  */
-> > > > > > + if (per_cpu(processor_device_array, pr->id) !=3D NULL &&
-> > > > > > +     per_cpu(processor_device_array, pr->id) !=3D device) {
-> > > > > > +         dev_warn(&device->dev,
-> > > > > > +                  "BIOS reported wrong ACPI id %d for the proc=
-essor\n",
-> > > > > > +                  pr->id);
-> > > > > > +         /* Give up, but do not abort the namespace scan. */
-> > > > >
-> > > > > It depends on how the return value is handled by the caller if th=
-e namespace
-> > > > > is continued to be scanned. The caller can be acpi_processor_hota=
-dd_init()
-> > > > > and acpi_processor_get_info() after this patch is applied. So I t=
-hink this
-> > > > > specific comment need to be moved to the caller.
-> > > >
-> > > > Good point. This gets messy and was an unintended change.
-> > > >
-> > > > Previously the options were:
-> > > > 1) acpi_processor_get_info() failed for other reasons - this code w=
-as never called.
-> > > > 2) acpi_processor_get_info() succeeded without acpi_processor_hotad=
-d_init (non hotplug)
-> > > >    this code then ran and would paper over the problem doing a bunc=
-h of cleanup under err.
-> > > > 3) acpi_processor_get_info() succeeded with acpi_processor_hotadd_i=
-nit called.
-> > > >    This code then ran and would paper over the problem doing a bunc=
-h of cleanup under err.
-> > > >
-> > > > We should maintain that or argue cleanly against it.
-> > > >
-> > > > This isn't helped the the fact I have no idea which cases we care a=
-bout for that bios
-> > > > bug handling.  Do any of those bios's ever do hotplug?  Guess we ha=
-ve to try and maintain
-> > > > whatever protection this was offering.
-> > > >
-> > > > Also, the original code leaks data in some paths and I have limited=
- idea
-> > > > of whether it is intentional or not. So to tidy the issue up that y=
-ou've identified
-> > > > I'll need to try and make that code consistent first.
-> > > >
-> > > > I suspect the only way to do that is going to be to duplicate the a=
-llocations we
-> > > > 'want' to leak to deal with the bios bug detection.
-> > > >
-> > > > For example acpi_processor_get_info() failing leaks pr and pr->thro=
-ttling.shared_cpu_map
-> > > > before this series. After this series we need pr to leak because it=
-'s used for the detection
-> > > > via processor_device_array.
-> > > >
-> > > > I'll work through this but it's going to be tricky to tell if we ge=
-t right.
-> > > > Step 1 will be closing the existing leaks and then we will have som=
-ething
-> > > > consistent to build on.
-> > > >
-> > > I 'think' that fixing the original leaks makes this all much more str=
-aight forward.
-> > > That return 0 for acpi_processor_get_info() never made sense as far a=
-s I can tell.
-> > > The pr isn't used after this point.
-> > >
-> > > What about something along lines of.
-> > >
-> > > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_proces=
-sor.c
-> > > index 161c95c9d60a..97cff4492304 100644
-> > > --- a/drivers/acpi/acpi_processor.c
-> > > +++ b/drivers/acpi/acpi_processor.c
-> > > @@ -392,8 +392,10 @@ static int acpi_processor_add(struct acpi_device=
- *device,
-> > >         device->driver_data =3D pr;
-> > >
-> > >         result =3D acpi_processor_get_info(device);
-> > > -       if (result) /* Processor is not physically present or unavail=
-able */
-> > > -               return 0;
-> > > +       if (result) { /* Processor is not physically present or unava=
-ilable */
-> > > +               result =3D 0;
-> >
-> > As per my previous message (just sent) this should be an error code,
-> > as returning 0 from acpi_processor_add() is generally problematic.
-> Ok. I'll switch to that, but as a separate precusor patch. Independent of
-> the memory leak fixes.
+Hi Viresh,
 
-Sure, thank you!
+On Tue, Apr 30, 2024 at 12:28=E2=80=AFPM Viresh Kumar <viresh.kumar@linaro.=
+org> wrote:
+>
+> Hi Rafael,
+>
+> The following changes since commit 4cece764965020c22cff7665b18a0120063590=
+95:
+>
+>   Linux 6.9-rc1 (2024-03-24 14:10:05 -0700)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufr=
+eq-arm-updates-6.10
+>
+> for you to fetch changes up to fde234239d161f958390e41d26cda2bb166f1994:
+>
+>   dt-bindings: cpufreq: cpufreq-qcom-hw: Add SM4450 compatibles (2024-04-=
+26 18:13:41 +0530)
+>
+> ----------------------------------------------------------------
+> ARM cpufreq updates for 6.10
+>
+> - Sun50i: Add support for opp_supported_hw, H616 platform and general
+>   cleaups (Andre Przywara, Martin Botka, Brandon Cheo Fusi, Dan
+>   Carpenter, and Viresh Kumar).
+>
+> - cppc: Fix possible null pointer dereference (Aleksandr Mishin).
+>
+> - Eliminate uses of of_node_put() (Javier Carrasco, and Shivani Gupta).
+>
+> - brcmstb-avs: ISO C90 forbids mixed declarations (Portia Stephens).
+>
+> - mediatek: Add support for MT7988A (Sam Shih).
+>
+> - cpufreq-qcom-hw: Add SM4450 compatibles in DT bindings (Tengfei Fan).
+>
+> ----------------------------------------------------------------
+> Aleksandr Mishin (1):
+>       cppc_cpufreq: Fix possible null pointer dereference
+>
+> Andre Przywara (2):
+>       cpufreq: sun50i: Add support for opp_supported_hw
+>       arm64: dts: allwinner: h616: enable DVFS for all boards
+>
+> Brandon Cheo Fusi (1):
+>       cpufreq: sun50i: Refactor speed bin decoding
+>
+> Dan Carpenter (1):
+>       cpufreq: sun50i: fix error returns in dt_has_supported_hw()
+>
+> Javier Carrasco (3):
+>       cpupfreq: tegra124: eliminate uses of of_node_put()
+>       cpufreq: dt: eliminate uses of of_node_put()
+>       cpufreq: dt-platdev: eliminate uses of of_node_put()
+>
+> Martin Botka (5):
+>       firmware: smccc: Export revision soc_id function
+>       cpufreq: dt-platdev: Blocklist Allwinner H616/618 SoCs
+>       dt-bindings: opp: Describe H616 OPPs and opp-supported-hw
+>       cpufreq: sun50i: Add H616 support
+>       arm64: dts: allwinner: h616: Add CPU OPPs table
+>
+> Portia Stephens (1):
+>       cpufreq: brcmstb-avs-cpufreq: ISO C90 forbids mixed declarations
+>
+> Sam Shih (1):
+>       cpufreq: mediatek: Add support for MT7988A
+>
+> Shivani Gupta (1):
+>       cpufreq: ti: Implement scope-based cleanup in ti_cpufreq_match_node=
+()
+>
+> Tengfei Fan (1):
+>       dt-bindings: cpufreq: cpufreq-qcom-hw: Add SM4450 compatibles
+>
+> Viresh Kumar (1):
+>       cpufreq: sun50i: Fix build warning around snprint()
+>
+>  Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml          =
+        |   2 ++
+>  Documentation/devicetree/bindings/opp/allwinner,sun50i-h6-operating-poin=
+ts.yaml |  87 ++++++++++++++++++++++++++-------------------------
+>  arch/arm64/boot/dts/allwinner/sun50i-h616-bigtreetech-cb1.dtsi          =
+        |   5 +++
+>  arch/arm64/boot/dts/allwinner/sun50i-h616-cpu-opp.dtsi                  =
+        | 115 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
++++++++
+>  arch/arm64/boot/dts/allwinner/sun50i-h616-orangepi-zero2.dts            =
+        |   5 +++
+>  arch/arm64/boot/dts/allwinner/sun50i-h616-x96-mate.dts                  =
+        |   5 +++
+>  arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi                          =
+        |   8 +++++
+>  arch/arm64/boot/dts/allwinner/sun50i-h618-longan-module-3h.dtsi         =
+        |   5 +++
+>  arch/arm64/boot/dts/allwinner/sun50i-h618-orangepi-zero2w.dts           =
+        |   5 +++
+>  arch/arm64/boot/dts/allwinner/sun50i-h618-orangepi-zero3.dts            =
+        |   5 +++
+>  arch/arm64/boot/dts/allwinner/sun50i-h618-transpeed-8k618-t.dts         =
+        |   5 +++
+>  drivers/cpufreq/brcmstb-avs-cpufreq.c                                   =
+        |   5 ++-
+>  drivers/cpufreq/cppc_cpufreq.c                                          =
+        |  14 +++++++--
+>  drivers/cpufreq/cpufreq-dt-platdev.c                                    =
+        |  10 +++---
+>  drivers/cpufreq/cpufreq-dt.c                                            =
+        |  21 ++++---------
+>  drivers/cpufreq/mediatek-cpufreq.c                                      =
+        |  10 ++++++
+>  drivers/cpufreq/sun50i-cpufreq-nvmem.c                                  =
+        | 209 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+++++++++++++++++++++++++++++++++++++++++----------------------
+>  drivers/cpufreq/tegra124-cpufreq.c                                      =
+        |  19 ++++--------
+>  drivers/cpufreq/ti-cpufreq.c                                            =
+        |   4 +--
+>  drivers/firmware/smccc/smccc.c                                          =
+        |   1 +
+>  20 files changed, 420 insertions(+), 120 deletions(-)
+>  create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h616-cpu-opp.dts=
+i
+>
+> --
+
+Pulled, thanks!
 
