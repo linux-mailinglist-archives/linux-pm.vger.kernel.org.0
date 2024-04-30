@@ -1,119 +1,224 @@
-Return-Path: <linux-pm+bounces-7355-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7356-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B0C48B77BC
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 15:59:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EC3E8B797B
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 16:30:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0F111F21FD5
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 13:59:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E3911C22810
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 14:30:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59498172BA8;
-	Tue, 30 Apr 2024 13:58:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="su5ioAEg"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F04E14372B;
+	Tue, 30 Apr 2024 14:24:41 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3219C172BA5;
-	Tue, 30 Apr 2024 13:58:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD415143726;
+	Tue, 30 Apr 2024 14:24:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714485539; cv=none; b=mo278cTPaSuIcxria0YUAAyqWgebD4o809zpNo8ktZwOe9M2RxxUuqU8zd4VP3bs+EJk0UHA/dXn32CRBlv0LunI1rnbgG2+O926f1sL8jleyoNAwS4iRK6DGXX8Fv/x9DLQzj6ObcYM8p5Xy0wXE8qDEo2gTQ5+VRFT8nzkZRw=
+	t=1714487081; cv=none; b=YgV7ATgjQaiT6LI23rJQ/etOFk1QI6Ar5EXNONfYxkwQQEfqOJonahtUQxwIaUwk8nqlN3j33vNFwi+tMiKviyiVzje6nQBeN+X1LcY9NQgsTJNxYc41AQwiRg+jMq3FZYI60arQUSL7rbLVXGgdvVmnFug4mzNAFrFm/ocm5is=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714485539; c=relaxed/simple;
-	bh=h5tVx/WOx/kTAZLHLPVnXLUPYCNpavvsHOekbq3Gtx8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=dtq0Dz9riLdkiWO6+sTzWUnAKsKAALEklFWbMoikAfJOyK94HGiWBxeYJSar0GsbKwoe8Bg7SXcMTYA+nVzDfB7oVm20nCC3xYHt5Ma0UUlMefcacNUdp2yeXOBCp7sdnHV4f+uT6/IYJMBukKhJ9xsAJuk7lLjjtwQJfu/7yTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=su5ioAEg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89BEBC2BBFC;
-	Tue, 30 Apr 2024 13:58:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714485538;
-	bh=h5tVx/WOx/kTAZLHLPVnXLUPYCNpavvsHOekbq3Gtx8=;
-	h=Date:From:To:Cc:Subject:From;
-	b=su5ioAEgUh5upo8euVL1KW9WrtoAeXsCiubBpKF34jyLBJck72SV3c0EFJBwBtA8P
-	 KKCG/T5HoE4oVKs4iE3tuOE/IeOzl2p9do1SgOTzTIjlrjLwc7vQVk4Bt1zKjzxOqf
-	 hDw0D9QQMBmV713VYCDSLSBQjKPNwwMtpavw/75OIn3MCZemxL+rV9yYnU52pJPaY0
-	 TDeKoAHMo1iYd1s8iywub/m8m8RSjIlwRS2xgsXVzvy0YuL4++j2tVbZS0+F0JdDGw
-	 Qw9Nr0iuG1h89ueSyVu90pLPjJMS2uVxxlp0Sc1gaX0V91R7rYbQmGtq6JTUWI/Eme
-	 mkOn3ElgtjoeA==
-Received: by mercury (Postfix, from userid 1000)
-	id 5BA80106074C; Tue, 30 Apr 2024 15:58:56 +0200 (CEST)
-Date: Tue, 30 Apr 2024 15:58:56 +0200
-From: Sebastian Reichel <sre@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [GIT PULL] power-supply changes for 6.9-rc
-Message-ID: <vreefzn65ijap4kxzxgfk5bom7uz5skoy3rn7fktydd7mgavbj@kfhvex76iw2z>
+	s=arc-20240116; t=1714487081; c=relaxed/simple;
+	bh=txofBvXn2dzzeeVZG1Mh2OeSiV89LdIF7obXCzKZA7Q=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YLoFQOr+aof3z3FLFq1GNAX+5yTTQZq1WBN4QcuMpn7fxlBGhLWmUIvxIhBZlHaZLwk8gxkB9T527YuYegeAzJVc/h7+D/ObCAVWQvb30n611uYpWeFDQQd9xqHa+OvM+wpMPYYYg88Ht30VcnwmK4s1ylHgWL3Vhtp73pJSOUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VTMpC2Hyxz6J7KD;
+	Tue, 30 Apr 2024 22:21:55 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 1FC75140C98;
+	Tue, 30 Apr 2024 22:24:36 +0800 (CST)
+Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
+ lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Tue, 30 Apr 2024 15:24:35 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
+	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
+	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+	<x86@kernel.org>, Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki"
+	<rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, James Morse
+	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, Jean-Philippe
+ Brucker <jean-philippe@linaro.org>, Catalin Marinas
+	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Marc Zyngier
+	<maz@kernel.org>, Hanjun Guo <guohanjun@huawei.com>, Gavin Shan
+	<gshan@redhat.com>
+CC: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
+ Hansen <dave.hansen@linux.intel.com>, <linuxarm@huawei.com>,
+	<justin.he@arm.com>, <jianyong.wu@arm.com>
+Subject: [PATCH v9 00/19] ACPI/arm64: add support for virtual cpu hotplug
+Date: Tue, 30 Apr 2024 15:24:15 +0100
+Message-ID: <20240430142434.10471-1-Jonathan.Cameron@huawei.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="uqqpcdjdj7ooh7ah"
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+
+Thanks to Marc, Rafael, Gavin and Miguel for further reviews.
+The remaining potential gap in review is for the couple of arm64 arch
+patches, in particular arch_(un)register_cpu() where I'd love to hear
+from one of the maintainers. (patch 16 in v9)
+
+v9:
+  - 2 new patches to fix up the existing failure paths in processor_add()
+    These then make it easier to close the memory leaks and wrong passing
+    that Gavin noted in the patch to move the processor id validity checks
+    earlier. Thanks to Rafael for help with that.
+  - Harden get_cpu_for_acpi_id() so as to avoid possiblity of getting
+    a null pointer dereference if the mapping hasn't been set up due to
+    an error earlier in boot (probably invalid MPIDR).
+    Handle the resulting error return by not setting the broken_rdists
+    mask bit as we have no way of knowing which one it is. This should
+    not matter as there is no such CPU.
+  - Drop an overly verbose information print.
 
 
---uqqpcdjdj7ooh7ah
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Updated version of James' original introduction.
 
-Hi Linus,
+This series adds what looks like cpuhotplug support to arm64 for use in
+virtual machines. It does this by moving the cpu_register() calls for
+architectures that support ACPI into an arch specific call made from
+the ACPI processor driver.
+ 
+The kubernetes folk really want to be able to add CPUs to an existing VM,
+in exactly the same way they do on x86. The use-case is pre-booting guests
+with one CPU, then adding the number that were actually needed when the
+workload is provisioned.
 
-The following changes since commit 4cece764965020c22cff7665b18a012006359095:
+Wait? Doesn't arm64 support cpuhotplug already!?
+In the arm world, cpuhotplug gets used to mean removing the power from a CPU.
+The CPU is offline, and remains present. For x86, and ACPI, cpuhotplug
+has the additional step of physically removing the CPU, so that it isn't
+present anymore.
+ 
+Arm64 doesn't support this, and can't support it: CPUs are really a slice
+of the SoC, and there is not enough information in the existing ACPI tables
+to describe which bits of the slice also got removed. Without a reference
+machine: adding this support to the spec is a wild goose chase.
+ 
+Critically: everything described in the firmware tables must remain present.
+ 
+For a virtual machine this is easy as all the other bits of 'virtual SoC'
+are emulated, so they can (and do) remain present when a vCPU is 'removed'.
 
-  Linux 6.9-rc1 (2024-03-24 14:10:05 -0700)
+On a system that supports cpuhotplug the MADT has to describe every possible
+CPU at boot. Under KVM, the vGIC needs to know about every possible vCPU before
+the guest is started.
+With these constraints, virtual-cpuhotplug is really just a hypervisor/firmware
+policy about which CPUs can be brought online.
+ 
+This series adds support for virtual-cpuhotplug as exactly that: firmware
+policy. This may even work on a physical machine too; for a guest the part of
+firmware is played by the VMM. (typically Qemu).
+ 
+PSCI support is modified to return 'DENIED' if the CPU can't be brought
+online/enabled yet. The CPU object's _STA method's enabled bit is used to
+indicate firmware's current disposition. If the CPU has its enabled bit clear,
+it will not be registered with sysfs, and attempts to bring it online will
+fail. The notifications that _STA has changed its value then work in the same
+way as physical hotplug, and firmware can cause the CPU to be registered some
+time later, allowing it to be brought online.
+ 
+This creates something that looks like cpuhotplug to user-space and the
+kernel beyond arm64 architecture specific code, as the sysfs
+files appear and disappear, and the udev notifications look the same.
+ 
+One notable difference is the CPU present mask, which is exposed via sysfs.
+Because the CPUs remain present throughout, they can still be seen in that mask.
+This value does get used by webbrowsers to estimate the number of CPUs
+as the CPU online mask is constantly changed on mobile phones.
+ 
+Linux is tolerant of PSCI returning errors, as its always been allowed to do
+that. To avoid confusing OS that can't tolerate this, we needed an additional
+bit in the MADT GICC flags. This series copies ACPI_MADT_ONLINE_CAPABLE, which
+appears to be for this purpose, but calls it ACPI_MADT_GICC_CPU_CAPABLE as it
+has a different bit position in the GICC.
+ 
+This code is unconditionally enabled for all ACPI architectures, though for
+now only arm64 will have deferred the cpu_register() calls.
 
-are available in the Git repository at:
+If folk want to play along at home, you'll need a copy of Qemu that supports this.
+https://github.com/salil-mehta/qemu.git virt-cpuhp-armv8/rfc-v2
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.9-rc
+Replace your '-smp' argument with something like:
+ | -smp cpus=1,maxcpus=3,cores=3,threads=1,sockets=1
+ 
+ then feed the following to the Qemu montior;
+ | (qemu) device_add driver=host-arm-cpu,core-id=1,id=cpu1
+ | (qemu) device_del cpu1
+ 
 
-for you to fetch changes up to 1e0fb113646182e073539db96016b00cfeb18ecc:
+James Morse (7):
+  ACPI: processor: Register deferred CPUs from acpi_processor_get_info()
+  ACPI: Add post_eject to struct acpi_scan_handler for cpu hotplug
+  arm64: acpi: Move get_cpu_for_acpi_id() to a header
+  irqchip/gic-v3: Don't return errors from gic_acpi_match_gicc()
+  irqchip/gic-v3: Add support for ACPI's disabled but 'online capable'
+    CPUs
+  arm64: document virtual CPU hotplug's expectations
+  cpumask: Add enabled cpumask for present CPUs that can be brought
+    online
 
-  power: supply: mt6360_charger: Fix of_match for usb-otg-vbus regulator (2024-04-15 13:31:37 +0200)
+Jean-Philippe Brucker (1):
+  arm64: psci: Ignore DENIED CPUs
 
-----------------------------------------------------------------
-Power Supply Fixes for 6.9 cycle
+Jonathan Cameron (11):
+  ACPI: processor: Simplify initial onlining to use same path for cold
+    and hotplug
+  cpu: Do not warn on arch_register_cpu() returning -EPROBE_DEFER
+  ACPI: processor: Drop duplicated check on _STA (enabled + present)
+  ACPI: processor: Return an error if acpi_processor_get_info() fails in
+    processor_add()
+  ACPI: processor: Fix memory leaks in error paths of processor_add()
+  ACPI: processor: Move checks and availability of acpi_processor
+    earlier
+  ACPI: processor: Add acpi_get_processor_handle() helper
+  ACPI: scan: switch to flags for acpi_scan_check_and_detach()
+  arm64: acpi: Harden get_cpu_for_acpi_id() against missing CPU entry
+  arm64: arch_register_cpu() variant to check if an ACPI handle is now
+    available.
+  arm64: Kconfig: Enable hotplug CPU on arm64 if ACPI_PROCESSOR is
+    enabled.
 
-* mt6360_charger: Fix of_match for usb-otg-vbus regulator
-* rt9455: Fix unused-const-variable for !CONFIG_USB_PHY
+ .../ABI/testing/sysfs-devices-system-cpu      |   6 +
+ Documentation/arch/arm64/cpu-hotplug.rst      |  79 ++++++++++
+ Documentation/arch/arm64/index.rst            |   1 +
+ arch/arm64/Kconfig                            |   1 +
+ arch/arm64/include/asm/acpi.h                 |  12 ++
+ arch/arm64/kernel/acpi.c                      |  22 +++
+ arch/arm64/kernel/acpi_numa.c                 |  11 --
+ arch/arm64/kernel/psci.c                      |   2 +-
+ arch/arm64/kernel/smp.c                       |  59 +++++++-
+ drivers/acpi/acpi_processor.c                 | 135 ++++++++++--------
+ drivers/acpi/processor_core.c                 |   3 +-
+ drivers/acpi/processor_driver.c               |  43 ++----
+ drivers/acpi/scan.c                           |  47 ++++--
+ drivers/base/cpu.c                            |  12 +-
+ drivers/irqchip/irq-gic-v3.c                  |  57 ++++++--
+ include/acpi/acpi_bus.h                       |   1 +
+ include/acpi/processor.h                      |   2 +-
+ include/linux/acpi.h                          |  12 +-
+ include/linux/cpumask.h                       |  25 ++++
+ kernel/cpu.c                                  |   3 +
+ 20 files changed, 402 insertions(+), 131 deletions(-)
+ create mode 100644 Documentation/arch/arm64/cpu-hotplug.rst
 
-----------------------------------------------------------------
-AngeloGioacchino Del Regno (1):
-      power: supply: mt6360_charger: Fix of_match for usb-otg-vbus regulator
+-- 
+2.39.2
 
-Arnd Bergmann (1):
-      power: rt9455: hide unused rt9455_boost_voltage_values
-
- drivers/power/supply/mt6360_charger.c | 2 +-
- drivers/power/supply/rt9455_charger.c | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
-
---uqqpcdjdj7ooh7ah
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIyBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmYw+RYACgkQ2O7X88g7
-+pr76g/4pqjJIQBpeAgQZexr8iZez4hI+lc0Rxpx/oFt6K7kojhpXbLCyVdYowLD
-5g0pYq7jmVfXx8uFJSZxTJxMP7g1F54RhvkLuhvujb45zqU9zPQrLo6KcveVoLqa
-vBlYCJ1+4Ju96uQyIEBnFLMZHPrPQvUJBUbJ/Ia7optmgqIRiVznMOba0eqbhBCl
-wMjhQoZBRriExl82pWVqMMDB0FP6gHq8PB+6ygt5FwqfgKS3bWCMnrEDXKsSxn85
-AS7H69XXAQAwMP91/zaW9epqmuH/tIiafQnIo0/g1R/zCqJSuSUOhvQbg9yLtP0S
-ogWdiIIjXKjdl+EmX1lqEPQCFGo0I4onwonwxneJ5cRoWp7mTd68OSwC83wZfwWS
-CHwAzkyoCeMBiE1/EdWtm26l8+Huow1pcJ92OwxEI+NRR63UsUt9ZEOrj0Ito647
-hrxpzndajUnzXUlvNOl2vuGeztgvgygI4PZphYg8HBJZ3RG2iwI32P/1bPA8tPGh
-O/EWjzO09rHjpSOm1eaZoGyIo2xSQJKug9GYByTR9uOiQ8psfv7lhMcMAvWNCUei
-Ran+8JnYRQL5oKsJ0XxS3Hw580IuBPiYq7GbIsJIKdDLYVDl1BepDXwJw/z22ChK
-ua8cYYiOhu3CNerR9L0h8h8QFZwoAluic65g2VCoepbIUZATrQ==
-=MboO
------END PGP SIGNATURE-----
-
---uqqpcdjdj7ooh7ah--
 
