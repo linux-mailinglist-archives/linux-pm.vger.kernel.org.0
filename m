@@ -1,63 +1,66 @@
-Return-Path: <linux-pm+bounces-7386-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7385-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CFFD8B7C4D
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 17:55:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 983398B7C4B
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 17:55:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4CC221C22D39
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 15:55:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54F6928389E
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 15:55:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD05D17B50B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 419E317A937;
 	Tue, 30 Apr 2024 15:53:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="ep2VdKO2"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="YOrPW0Ji"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1C93178CE7;
-	Tue, 30 Apr 2024 15:53:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E860F175551;
+	Tue, 30 Apr 2024 15:53:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714492394; cv=none; b=ouFposvFP/iMAZt76y7Fh4CpNNgjbPtCugAsgKeE933IoQQxCIN4L5Fh+wFm1szGzGrg1HcIyLX4VIm92R4/VSlKVLb1LWVSCfYEzRrQrZENVVmt46vjuTndu5mGSz2B6j4i54vI++9e2Nblxzxb3AhaGElw4HA0+z+ZDvBOOmE=
+	t=1714492394; cv=none; b=JzXV8Gbdb51uvQ8pMk0/Yx/v9ZxmlVbkFnJoSIxLwducwtAS+G2rQSnqhqBSy7SWZNeqlNp9hNjBpSFN4LdtZ/uKZC3YMxy6T6fz0JKj5Ke74QvFnxZTSztJ+hs4Zb8qaBHXlzJcntKTiLPs7RYkZsMc60AvLUXycqNfeqt9Xsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1714492394; c=relaxed/simple;
-	bh=LLvqpbQxLf9opv/rdgPbavEmuwba7+h6W+1Q7QMyk5M=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hgPy7HWf6a9UTXU9c+td//DYl9NieJ3p9TeQpUw7n+PAyBRp5iyv7zKtAUfttUxDpaP6aCqhoFeS3yCaa4ihBNCfdGQNynNkCd3ObbbJcq2yhwn34gDKKpw6tJYmX0wiHLmLPi66pRVVgREGa/XznQdd8Q/If0Q8S8K3vn3E6Lw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=ep2VdKO2 reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+	bh=5l2heTlDRdh8TNuc+FkR1nWVng8KhgGpiI1+RYy0rFA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tOBoFiKEschEWqCphxzIb2/9bnF4PkpOaxamGnMNs/pUXPk4SwMre9E5rFI9iVnrFlUgEA9AnBSyYODT0TmN3ckHi/EtvM17awP6LMEq/c/E1j5YNC4bQN/q8kc3r0rp4cgHm2Bn9Zgpb+gWplGAGEyIhA+dBiw8IHNR2dEYpN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=YOrPW0Ji reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
- id 570180c77b8bc57f; Tue, 30 Apr 2024 17:53:04 +0200
+ id 81ba361248e88355; Tue, 30 Apr 2024 17:53:04 +0200
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 2EF9D66E643;
-	Tue, 30 Apr 2024 17:53:04 +0200 (CEST)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 795F566E643;
+	Tue, 30 Apr 2024 17:53:03 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1714492384;
-	bh=LLvqpbQxLf9opv/rdgPbavEmuwba7+h6W+1Q7QMyk5M=;
-	h=From:To:Cc:Subject:Date;
-	b=ep2VdKO2v99+ne3JbqSfboDtbheG0YpgUfVdgYCT71vgyXt3NuGVnufHX3/CSr6Dv
-	 m9M8DnpBBrVYWRfGiIsgylr/q1BNtqCmt+KLgwly7RHlZQEzz94DGPnIBgELRxdMG6
-	 26ICIIbxmOn8Y8mxai4pM5f6xeRKqHvlXWXbnCJVCaMnaoV4zIXLk94YVXdG8ixIBn
-	 HeJU9A9+tp3tIlZJRPCd8wJb80hr9Op9ZEDJWKSXVwjvspvsrwi69CgZGtgv5QHvqQ
-	 CX67bMK95xadrxJNlwn9h1ODAgaQKR5ydEmW7db9l7rru/yA766p5MkPV0gZnvYHg8
-	 wAb7bIiXEeWLw==
+	s=dkim; t=1714492383;
+	bh=5l2heTlDRdh8TNuc+FkR1nWVng8KhgGpiI1+RYy0rFA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=YOrPW0JieFZdQhvZEClSjpagZsfdXO87Xq/8vZJ40qdyv+urA3lQC6Z2asE4DvOty
+	 WoIKlVT0x325wYNZAMT83kw+Wh7DWFruBt8NdqPIx9gimm2M6KQCMY41pkNUqy8UAQ
+	 6/V12lsG/WIJBlvybai0mfK1xuV9A7rzT7XycricBiE1tLvbBJCeORrJ0be5p7HW1a
+	 chiI5S1b267iZLAr6KxevVHZlO2tw6q0bpqrQfu+a2hWIvVdfn9TJji/jDtTGo9kJV
+	 doEngK9yhoXgLg1sMs5J1fl0ykJMSGrnvhMl7+Mx63elmDlUfjykiA6bgA0vhF5Lj9
+	 w+zZVTqkgqGcA==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>
 Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
  LKML <linux-kernel@vger.kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>
 Subject:
- [PATCH v2 0/2] thermal: core: Fix  thermal zone initialization and move
- passive polling management to the core
-Date: Tue, 30 Apr 2024 17:44:06 +0200
-Message-ID: <5790995.DvuYhMxLoT@kreacher>
+ [PATCH v2 1/2] thermal: core: Do not call handle_thermal_trip() if zone
+ temperature is invalid
+Date: Tue, 30 Apr 2024 17:45:55 +0200
+Message-ID: <4902888.GXAFRqVoOG@kreacher>
+In-Reply-To: <5790995.DvuYhMxLoT@kreacher>
+References: <5790995.DvuYhMxLoT@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -69,23 +72,42 @@ Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 195.136.19.94
 X-CLIENT-HOSTNAME: 195.136.19.94
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrvddufedgledvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgeffhfdujeelhfdtgeffkeetudfhtefhhfeiteethfekvefgvdfgfeeikeeigfehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhn
- vghlrdhorhhgpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrgh
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrvddufedgledvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehrrghf
+ rggvlheskhgvrhhnvghlrdhorhhg
 X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 
-Hi Everyone,
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-This a v2 of the patch at
+Make __thermal_zone_device_update() bail out if update_temperature()
+fails to update the zone temperature because __thermal_zone_get_temp()
+has returned an error and the current zone temperature is
+THERMAL_TEMP_INVALID (user space receiving netlink thermal messages,
+thermal debug code and thermal governors may get confused otherwise).
 
-https://lore.kernel.org/linux-pm/5938055.MhkbZ0Pkbq@kreacher/
+Fixes: 9ad18043fb35 ("thermal: core: Send trip crossing notifications at init time if needed")
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
 
-with one fix patch added and a couple of changes more in the main patch.
+New patch in v2.
 
-Patch [1/2] fixes the thermal zone initialization in the cases when getting the
-first zone temperature from the sensor is delayed and patch [2/2] is an update
-of the patch above.
+---
+ drivers/thermal/thermal_core.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-Thanks!
+Index: linux-pm/drivers/thermal/thermal_core.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_core.c
++++ linux-pm/drivers/thermal/thermal_core.c
+@@ -487,6 +487,9 @@ void __thermal_zone_device_update(struct
+ 
+ 	update_temperature(tz);
+ 
++	if (tz->temperature == THERMAL_TEMP_INVALID)
++		return;
++
+ 	__thermal_zone_set_trips(tz);
+ 
+ 	tz->notify_event = event;
 
 
 
