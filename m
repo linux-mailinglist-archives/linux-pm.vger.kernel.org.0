@@ -1,116 +1,111 @@
-Return-Path: <linux-pm+bounces-7346-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7347-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6DB48B7178
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 12:56:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FA408B71D9
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 13:01:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 048A31C2261F
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 10:56:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B10A28346E
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 11:01:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C781412CDAE;
-	Tue, 30 Apr 2024 10:56:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8430112CD98;
+	Tue, 30 Apr 2024 11:01:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V3ASAVSY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GGyug1LK"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E2DF12CD9C;
-	Tue, 30 Apr 2024 10:56:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57BF712C462;
+	Tue, 30 Apr 2024 11:01:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714474610; cv=none; b=nPIMSNDoRkSFnEMSWejIq5/RqEEVHkvZgkW3+O954x+QoO8E/9B35ey0g8uuOxi+lLINgB/JvyHUnTbcFtYOhkTThLb0I4u1pH0b+vEAL37z6khz35o2lGrsuEnJPx0mDsN+6GjcC/cYvEYOhMbS3NZbP2OLo5AC3xMj+PzyK20=
+	t=1714474889; cv=none; b=Sm1A0K646qvMSz7KQHerrFX3xwpZdi9f4ZNqCjk5m2feQ7ReMPnTbkCVXdQke+suz+z4jI3KbfSQM4clPvjLy50E6saSufBpYXAm6J9xC4xXJVrw5VRWU2zTcLiJppxcK0HtYP1Tw4ru76DdWMX4RUSUwEcOGY1iX/Qi3yPCVQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714474610; c=relaxed/simple;
-	bh=XAH33yItVNqMlyo9RZ7ksSTi00wu8F/Jv+D4lOiPKCk=;
+	s=arc-20240116; t=1714474889; c=relaxed/simple;
+	bh=7k26v8spb/SVU8KHpWsFuVmQm5vt6zLCxU8gvvmJook=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jVTEWcl8OA/RzQSzjOhtWgS85gSb/Q4SpyjvvOKaUds8ZotsaRLLI1jlsJDiAdxrafmCYZQrt0oc0Jnudt99tG4PBIUr3xuc2NfgHD/BWJR6MRCVBNsQ237hTRlTqgqrlxRqCX82NIYD3xRfdGF0iZCiolVinKBdmSMOQD2wRCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V3ASAVSY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7320AC4AF19;
-	Tue, 30 Apr 2024 10:56:50 +0000 (UTC)
+	 To:Cc:Content-Type; b=O8dlz9SV9FxXm9X3ylGmlwByoC0VjJlmN1VXHFTu9z/8CdOLNgvPaCnDprlAu7ORyhifHdIzVH8DFIlT1A2I0T4P15ooOnG7Qfzdqhz2TdliRktCOeZB9hT19z+cHRuU5zxCGFMozFWFKuTTCRp/P0xu+8tUQz2x+3xKXYyerc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GGyug1LK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2052CC4AF1D;
+	Tue, 30 Apr 2024 11:01:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714474610;
-	bh=XAH33yItVNqMlyo9RZ7ksSTi00wu8F/Jv+D4lOiPKCk=;
+	s=k20201202; t=1714474889;
+	bh=7k26v8spb/SVU8KHpWsFuVmQm5vt6zLCxU8gvvmJook=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=V3ASAVSYicyK5nfyCymotydUKFKGVuUJjCwjICmIY+VpspXrUkr/5M4Nxn1lXT72D
-	 8Hlr+DGUxnKNFyWHtEThB6tserhhMxpde0HWSFPr32Mhm9FML7wYlFct8spGHdZ5FH
-	 QSXEhvOCY/6Fo/3Y1C1RT66tUWoOWq82Wde/siwNEgc7+diB2inyg1uXnaP6z1lhdb
-	 5irBkrAOE1QnPuB6SGB8F4QihsTnLCyqccQxrtLX1vLrgeF8+3tsMUIfX7kmzPXCNN
-	 ZEKHa5v4gUCI1Qm7eKObSoYd70IJc52W9Cqi3giC5fUSymb5W/GhGBgwJJF5YLsbuV
-	 z2gBSfzbht1ig==
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5afbeaa1ea5so70597eaf.1;
-        Tue, 30 Apr 2024 03:56:50 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXd0lWWXcWXjFjO1qlAT4AlGu/9AnHsltZLvEA4zY2yNu/VrNsb+NVqj5KByiHzXkxSSCnu0FfRXiFUkINXC9OsMm8Yg1ZPP7GKBmEG
-X-Gm-Message-State: AOJu0YxlFICr9evt9bWvXRP5XbXyVKmYP9e9pphW7okbUStMInNPswA/
-	/YfQ4+ItemFtEI9M0DtZEKCel4xuaV63NbVv9paONrznHaAgaS6mDTIAqwjgZ2s397GqCEx2EbW
-	oSOloJ4+XvJ/Ypzc8+TmtByHekx0=
-X-Google-Smtp-Source: AGHT+IG/ATavJMauk9VS+AAEjHpqla4Ht7foM/WvE7r/lGTMYiYc06vw/2hj12m0FE1ZT+BKyOW1r08qIIsrKFYBYwM=
-X-Received: by 2002:a4a:ba07:0:b0:5aa:14ff:4128 with SMTP id
- b7-20020a4aba07000000b005aa14ff4128mr13779046oop.1.1714474609646; Tue, 30 Apr
- 2024 03:56:49 -0700 (PDT)
+	b=GGyug1LKuNWymH/ERsE/SqyEKJ4tQDhqpB7AQgHS3JmYwT9W4LmsEmygP+76DlGdo
+	 WhGMh2GIqdED2SU1fXEmwwClyPJNOGcfJmBw1uhr9lPaknoR0M35XNdxKCFeYg7wpY
+	 UkBXZx05wD7PFKzzgnYIvRFsDDClcgMNeQftm0lG4ljfQNyV+5siClgSYhnIo4N2m+
+	 c5Wnq8Dm91MAAQcXMapRUR+bza06buUeqnC8T2hUri5biPP8f9fzQlfU4lODvbTmpc
+	 /C4ffB4pOetheQfpS2tRWARniB2bWz99RWGM0EFCYbNGObpf6zTExRcNAY/vYDeT2x
+	 kxTN0xr6+h+Hg==
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-5ac970dded6so1319151eaf.0;
+        Tue, 30 Apr 2024 04:01:29 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWk3yHi3Php4wEkSyjV878+3BZIptycLh7VXPwCn1O+FQ7F84OQsoV44hyA0NwAbD3J/vMzFvhMY2WqXkHdYbt9DNvp+VxTBpqB9veRtZvxCgwb/AzZL1DWhRpY2/UkkRVdlNeDsuXqAYz3QmZjwgyec8DXqid19kH7jFNzTQIsdqhqzJdLzPo=
+X-Gm-Message-State: AOJu0YwCgbDcGa2NJcN8731s0d4RJc8xFPAj/+X9NRchuwobsumLHToX
+	VzQQiSihOXxJ/iPz9FhSUDAWlzgGPq9mHOzTxmlldYVR1ZM2Jky5E6ydG2yDSKSRfJHY1vyMhmv
+	4KXhKuDYEpJTaqtHhSaJEaYQz2SY=
+X-Google-Smtp-Source: AGHT+IFp05rDtY+IvpJ8x7q4pMxAXzR0PMTOyMAy5jx8xIsDl3iRswutRKcNQGaJAEvhKWLxz6FJReMtS8/5Y9j11aQ=
+X-Received: by 2002:a4a:a683:0:b0:5aa:3e4f:f01e with SMTP id
+ f3-20020a4aa683000000b005aa3e4ff01emr14418920oom.1.1714474888346; Tue, 30 Apr
+ 2024 04:01:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240425110017.75238-1-joshua.yeong@starfivetech.com> <20240429032146.2d3t7bai7k6cotqt@vireshk-i7>
-In-Reply-To: <20240429032146.2d3t7bai7k6cotqt@vireshk-i7>
+References: <20240429-strncpy-kernel-power-hibernate-c-v1-1-8688f492d3e6@google.com>
+ <20240430093625.qbuaxltkrmlaoiza@dhruva>
+In-Reply-To: <20240430093625.qbuaxltkrmlaoiza@dhruva>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 30 Apr 2024 12:56:38 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iY9CQPRWub_Mk3LyZX_41Y_L4Gjm302X=GjcnhRiu1vw@mail.gmail.com>
-Message-ID: <CAJZ5v0iY9CQPRWub_Mk3LyZX_41Y_L4Gjm302X=GjcnhRiu1vw@mail.gmail.com>
-Subject: Re: cpufreq: Fix printing large cpu and cpufreq number
-To: Viresh Kumar <viresh.kumar@linaro.org>, Joshua Yeong <joshua.yeong@starfivetech.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Tue, 30 Apr 2024 13:01:17 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iesjQ2CS8OUDcFzjdRtZVDbOMnBtF5BR6ugx01g55N+A@mail.gmail.com>
+Message-ID: <CAJZ5v0iesjQ2CS8OUDcFzjdRtZVDbOMnBtF5BR6ugx01g55N+A@mail.gmail.com>
+Subject: Re: [PATCH] PM: hibernate: replace deprecated strncpy with strscpy
+To: Dhruva Gole <d-gole@ti.com>, Justin Stitt <justinstitt@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-hardening@vger.kernel.org, Kees Cook <keescook@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 29, 2024 at 5:21=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
-rg> wrote:
+On Tue, Apr 30, 2024 at 11:36=E2=80=AFAM Dhruva Gole <d-gole@ti.com> wrote:
 >
-> On 25-04-24, 19:00, Joshua Yeong wrote:
-> > Fix printing negative number when CPU frequency
-> > with large number.
+> On Apr 29, 2024 at 20:50:30 +0000, Justin Stitt wrote:
+> > strncpy() is deprecated for use on NUL-terminated destination strings
+> > [1] and as such we should prefer more robust and less ambiguous string
+> > interfaces.
 > >
-> > Signed-off-by: Joshua Yeong <joshua.yeong@starfivetech.com>
+> > This kernel config option is simply assigned with the resume_file
+> > buffer. It should be NUL-terminated but not necessarily NUL-padded as
+> > per its further usage with other string apis:
+> > |     static int __init find_resume_device(void)
+> > |     {
+> > |             if (!strlen(resume_file))
+> > |                     return -ENOENT;
+> > |
+> > |             pm_pr_dbg("Checking hibernation image partition %s\n", re=
+sume_file);
+> >
+> > Use strscpy [2] as it guarantees NUL-termination on the destination
+> > buffer. Specifically, use the new 2-argument version of strscpy()
+> > introduced in Commit e6584c3964f2f ("string: Allow 2-argument
+> > strscpy()").
+> >
+> > Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#st=
+rncpy-on-nul-terminated-strings [1]
+> > Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en=
+.html [2]
+> > Link: https://github.com/KSPP/linux/issues/90
+> > Cc: linux-hardening@vger.kernel.org
+> > Signed-off-by: Justin Stitt <justinstitt@google.com>
 > > ---
-> >  drivers/cpufreq/freq_table.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/cpufreq/freq_table.c b/drivers/cpufreq/freq_table.=
-c
-> > index c17dc51a5a02..9b9568023f3c 100644
-> > --- a/drivers/cpufreq/freq_table.c
-> > +++ b/drivers/cpufreq/freq_table.c
-> > @@ -194,7 +194,7 @@ int cpufreq_table_index_unsorted(struct cpufreq_pol=
-icy *policy,
-> >       }
-> >       if (optimal.driver_data > i) {
-> >               if (suboptimal.driver_data > i) {
-> > -                     WARN(1, "Invalid frequency table: %d\n", policy->=
-cpu);
-> > +                     WARN(1, "Invalid frequency table: %u\n", policy->=
-cpu);
-> >                       return 0;
-> >               }
-> >
-> > @@ -254,7 +254,7 @@ static ssize_t show_available_freqs(struct cpufreq_=
-policy *policy, char *buf,
-> >               if (show_boost ^ (pos->flags & CPUFREQ_BOOST_FREQ))
-> >                       continue;
-> >
-> > -             count +=3D sprintf(&buf[count], "%d ", pos->frequency);
-> > +             count +=3D sprintf(&buf[count], "%u ", pos->frequency);
-> >       }
-> >       count +=3D sprintf(&buf[count], "\n");
+> [...]
 >
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
->
-> --
+> Reviewed-by: Dhruva Gole <d-gole@ti.com>
 
-Applied as 6.10 material with edited subject and changelog, thanks!
+Applied as 6.10 material, thanks!
 
