@@ -1,199 +1,224 @@
-Return-Path: <linux-pm+bounces-7334-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7335-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE24A8B6F0E
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 12:05:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32A1B8B6F4E
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 12:12:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57D9C1F23F8F
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 10:05:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DADE428268A
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 10:12:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 780EF129A6B;
-	Tue, 30 Apr 2024 10:05:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8B13129A73;
+	Tue, 30 Apr 2024 10:12:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="a/vVu+Cs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X+vqZZvO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC8061292D2
-	for <linux-pm@vger.kernel.org>; Tue, 30 Apr 2024 10:05:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B635D22618;
+	Tue, 30 Apr 2024 10:12:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714471539; cv=none; b=hPOM9wN+z8WcsFeQcHQvdA2o3R0A94Iu/txR3eDi08yJ7s7gnO0ndaO9LFaFF6PhVMWmCllspUKwXj8cXN5um9kzVITOMV+xLz+V5pk7PZD+5MPZq3xzvAQYblkaQ2eRtEVnlF2l2TLpseM3lGyFthjNn1RagnDsQSw8AHbsniA=
+	t=1714471940; cv=none; b=KTCh2xdqtxFORkcX6DlJW/AeuJxtkGCvr1WHKXJ8qS8xFekV5BGFmqf4KMEytDxINdyXAru/sOo9mroKaYSa9qCpQSNEusoOj4hvO3ebzjULlJK/gRWCBLV/rDQUUWjbj2C/3kQkt4HeUzFZ5iWNQ68s7TH1tHchOz9wqQ/m/rQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714471539; c=relaxed/simple;
-	bh=yjnf9AHRZqMRj34Tm4uXwc28cPM6Ap6BSJeHaNIbUF0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Jsjr/GcNsRxp6Cv03X+hRUwYzFNtJNn/+q/ZtQMjKJfNdkm7z5P4LESTNKI9fFGiiHRJDXFvERaPMimP+KkzhsZydkM6u8Oa21kWU0icTaMbx9GJNvo70INlxqamepj/GhansbZ9ytDT9bGWrA0TvyAjbS0EjewndkmGwPJnAGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=a/vVu+Cs; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-51d2047220cso3498878e87.1
-        for <linux-pm@vger.kernel.org>; Tue, 30 Apr 2024 03:05:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1714471536; x=1715076336; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=0c2r4ftfYh1i1ily+9Iyry9v4Wnv2g5Jvj7DDy6gfK4=;
-        b=a/vVu+Cs50feEULZioEi+k+nDxq02qErhxZqTgON5eMER9w942bejdaUHXsCveG8ie
-         O5bVgldlx+lOIQNZQxcUhTWbkVNpxcMdmKZC095ssw2WRwqWV8X0DaNVudL1dUUwqdp3
-         r2EAsjKIQJrM2ZXQRUH41e9sffrtlzG9H4XpFQdmFpFWj9f9wrbVbe6HZNAU9bfPC6pJ
-         6Rz++k2oPsfT7RU6WQznZnuMyBMAv0ZJN2h43gQV7XoITu+8QYY3cHf2LgCssKrnpcSy
-         9y7TBFvFvkih5MOSAuhQfZ591VnpQSR1QcDnN1HYy6Et0SgiCth7ZlYZzOihkQB/OFYy
-         J7eA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714471536; x=1715076336;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0c2r4ftfYh1i1ily+9Iyry9v4Wnv2g5Jvj7DDy6gfK4=;
-        b=HZWqBKYn8oKddIW1p2VcOOUls1MBv0rX5nlbR3HbcCfB6/RnhKPj01kBWoBjcJP/2f
-         N+ijMjr6a8N8+hLl9tx5oE3FpXsC88m6qPS668m4CfubV0AAorTPXGaEvwUKfTilcyqP
-         QoNjUFQI2lDmnAU2vX8rwJsGsc+vKSCULJ4TWJTxmLz5kvJTEW5YN+wG0saqwAZ8TQcm
-         SPHCihySFmy9H5TiNbfaiGbJi1VYmp7ZG+y0tRP68yQpCevm9uBHIfl32D94HAhj2AMJ
-         ZkToqk2i34qKm2Ccw3Vnlb0fNiYdQEP0gK7fC7oTxyL9Tn3qJyzq4KhoBCD+AHdccaLP
-         MibA==
-X-Forwarded-Encrypted: i=1; AJvYcCXfuO9D+FUfEv5K97YnXPLhwwZo4xn3HGS+cZKZ5qD/8Ks+nq2e1VF+PF50iJBtrdd3utoAvShsM1mgmjMfdTrnucxnbmwybYk=
-X-Gm-Message-State: AOJu0YztFMZPCQxljQuBBjy5rmmPJP8tvEgpFrN5k19QPJVMDsSQerxq
-	Sh6J8IqLc5FnR+5OJwm/RlpSZtHd8j95C59IzQH52laa3FVpmHC07tSUgMuzUZQ=
-X-Google-Smtp-Source: AGHT+IGwoRnxtInvigRnSf3xrL3fTWc2gzyovUQB8J5oNTSn7LjfiqRATlNm+qPBQg6sV5IYrs/Wlg==
-X-Received: by 2002:ac2:5586:0:b0:51c:cfae:afd0 with SMTP id v6-20020ac25586000000b0051ccfaeafd0mr7262972lfg.21.1714471535866;
-        Tue, 30 Apr 2024 03:05:35 -0700 (PDT)
-Received: from [192.168.114.15] (078088045141.garwolin.vectranet.pl. [78.88.45.141])
-        by smtp.gmail.com with ESMTPSA id bv19-20020a170906b1d300b00a58eabf6082sm3724816ejb.199.2024.04.30.03.05.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Apr 2024 03:05:35 -0700 (PDT)
-Message-ID: <27f4f3dd-9375-40cf-8c8f-1c4edf66e31b@linaro.org>
-Date: Tue, 30 Apr 2024 12:05:29 +0200
+	s=arc-20240116; t=1714471940; c=relaxed/simple;
+	bh=NURsOywy6CZA9cVVjd03JDCKuIynBZF1dYZyedRQp4A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MabhvcXM5m4MI1SP9Sak27I6m3FrCSphwbxbcBI8tpJ77Gldtv5f2ME9qCjgng5XXmQbWtkBr0fA+u45ZjVhNPzN8SqsRH/a+k+NHANdgwJweSwRL900Qmy4QxStgnKsK/6LZRcYZfJos6WXNucBR0/Hb+Bk/p9QpS+3+HfnpUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X+vqZZvO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FDFBC4AF1A;
+	Tue, 30 Apr 2024 10:12:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714471940;
+	bh=NURsOywy6CZA9cVVjd03JDCKuIynBZF1dYZyedRQp4A=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=X+vqZZvOjZypgq0mBbFOU/tDwtRlo20JPY8W7/+T5hEB0EU1kBFvrjrXDoD4LVL9U
+	 nXvbZl2/jb3FB5uawtClONaKcEkIhs8Il0/LrR5sGfphOqy0iROZ8iXzElUPONM0YI
+	 JhZnUe1n8K8hiV+HA719XaWokj3xQp8wSlDLpm9IIyOZQ2FfvMiae63ZxnGe5b/U9V
+	 1BQAUSZhoQo8YR8IYNRsg8um71Aa8K92G9QCazzVpJ5LtEq1HmU3DyU4jpJ1eKvunb
+	 HEhkZ5HWCjr9sz+mBoNCAN+HGbn/jSsz8PeeVKXKAWLlTowQ0bWldxkeoa56jXG7k1
+	 NPRWpilKAM0rg==
+Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-6ee5ee29423so181788a34.2;
+        Tue, 30 Apr 2024 03:12:20 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUfJjlaUs1ToTQgIcLWsmfHe+qXBaXo8Q21ZRJqwmTy5fcJLDAMDTtJxmC2Qwwx5bJboEgaWuSP8UfwbM/Wmd3WKOtPNhVIsdy4JPnfUoAXgyFDdgNxig8gdVJF+zpZkqTvDXs4r/EplTjIEJdI0wt5PBx7TUV990la3YVSxMMAeHWbnh3Jrkg9P0JngWs3jHTDgAHvTlKULzQ/xidl9A==
+X-Gm-Message-State: AOJu0YxCoLzMkY90KjGRlEiUJ7OKdOcId/smjQzqditQ948Wz8Now0Gt
+	r50IWN1dhxv1VCjbBijAUJXIJK1ycY1N2oKaSx5BGfW6KbNpItEwiEqFzzM1HdnznoOJFpSY7L+
+	shVEvM6M1CwbLKD4oXQ7Ki2qfTtQ=
+X-Google-Smtp-Source: AGHT+IEkOTp4jMU7eudwtXqkvXjt6cTTGERhb/sNQV/MqoRF8MN5nzaetIoEPLvwr3sNLlYci5wgFWtcOQTdv18nlQ0=
+X-Received: by 2002:a4a:9287:0:b0:5af:be60:ccdc with SMTP id
+ i7-20020a4a9287000000b005afbe60ccdcmr3516316ooh.0.1714471939510; Tue, 30 Apr
+ 2024 03:12:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 6/6] arm64: dts: qcom: ipq9574: Add icc provider
- ability to gcc
-To: Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc: andersson@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, djakov@kernel.org,
- dmitry.baryshkov@linaro.org, quic_anusha@quicinc.com,
- linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20240418092305.2337429-1-quic_varada@quicinc.com>
- <20240418092305.2337429-7-quic_varada@quicinc.com>
- <a7194edd-a2c8-46fc-bea1-f26b0960e535@linaro.org>
- <Ziov6bWBXYXJ4Zp8@hu-varada-blr.qualcomm.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <Ziov6bWBXYXJ4Zp8@hu-varada-blr.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240426135126.12802-1-Jonathan.Cameron@huawei.com>
+ <20240426135126.12802-5-Jonathan.Cameron@huawei.com> <80a2e07f-ecb2-48af-b2be-646f17e0e63e@redhat.com>
+ <20240430102838.00006e04@Huawei.com>
+In-Reply-To: <20240430102838.00006e04@Huawei.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 30 Apr 2024 12:12:07 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iKU8ra9jR+EmgxbuNm=Uwx2m1-8vn_RAZ+aCiUVLe3Pw@mail.gmail.com>
+Message-ID: <CAJZ5v0iKU8ra9jR+EmgxbuNm=Uwx2m1-8vn_RAZ+aCiUVLe3Pw@mail.gmail.com>
+Subject: Re: [PATCH v8 04/16] ACPI: processor: Move checks and availability of
+ acpi_processor earlier
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Gavin Shan <gshan@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Peter Zijlstra <peterz@infradead.org>, linux-pm@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, x86@kernel.org, Russell King <linux@armlinux.org.uk>, 
+	"Rafael J . Wysocki" <rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, 
+	James Morse <james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, 
+	Jean-Philippe Brucker <jean-philippe@linaro.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Hanjun Guo <guohanjun@huawei.com>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, linuxarm@huawei.com, justin.he@arm.com, 
+	jianyong.wu@arm.com, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+	Sudeep Holla <sudeep.holla@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 25.04.2024 12:26 PM, Varadarajan Narayanan wrote:
-> On Tue, Apr 23, 2024 at 02:58:41PM +0200, Konrad Dybcio wrote:
->>
->>
->> On 4/18/24 11:23, Varadarajan Narayanan wrote:
->>> IPQ SoCs dont involve RPM in managing NoC related clocks and
->>> there is no NoC scaling. Linux itself handles these clocks.
->>> However, these should not be exposed as just clocks and align
->>> with other Qualcomm SoCs that handle these clocks from a
->>> interconnect provider.
->>>
->>> Hence include icc provider capability to the gcc node so that
->>> peripherals can use the interconnect facility to enable these
->>> clocks.
->>>
->>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
->>> ---
->>
->> If this is all you do to enable interconnect (which is not the case,
->> as this patch only satisfies the bindings checker, the meaningful
->> change happens in the previous patch) and nothing explodes, this is
->> an apparent sign of your driver doing nothing.
-> 
-> It appears to do nothing because, we are just enabling the clock
-> provider to also act as interconnect provider. Only when the
-> consumers are enabled with interconnect usage, this will create
-> paths and turn on the relevant NOC clocks.
+On Tue, Apr 30, 2024 at 11:28=E2=80=AFAM Jonathan Cameron
+<Jonathan.Cameron@huawei.com> wrote:
+>
+> On Tue, 30 Apr 2024 14:17:24 +1000
+> Gavin Shan <gshan@redhat.com> wrote:
+>
+> > On 4/26/24 23:51, Jonathan Cameron wrote:
+> > > Make the per_cpu(processors, cpu) entries available earlier so that
+> > > they are available in arch_register_cpu() as ARM64 will need access
+> > > to the acpi_handle to distinguish between acpi_processor_add()
+> > > and earlier registration attempts (which will fail as _STA cannot
+> > > be checked).
+> > >
+> > > Reorder the remove flow to clear this per_cpu() after
+> > > arch_unregister_cpu() has completed, allowing it to be used in
+> > > there as well.
+> > >
+> > > Note that on x86 for the CPU hotplug case, the pr->id prior to
+> > > acpi_map_cpu() may be invalid. Thus the per_cpu() structures
+> > > must be initialized after that call or after checking the ID
+> > > is valid (not hotplug path).
+> > >
+> > > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > >
+> > > ---
+> > > v8: On buggy bios detection when setting per_cpu structures
+> > >      do not carry on.
+> > >      Fix up the clearing of per cpu structures to remove unwanted
+> > >      side effects and ensure an error code isn't use to reference the=
+m.
+> > > ---
+> > >   drivers/acpi/acpi_processor.c | 79 +++++++++++++++++++++-----------=
+---
+> > >   1 file changed, 48 insertions(+), 31 deletions(-)
+> > >
+> > > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_proces=
+sor.c
+> > > index ba0a6f0ac841..3b180e21f325 100644
+> > > --- a/drivers/acpi/acpi_processor.c
+> > > +++ b/drivers/acpi/acpi_processor.c
+> > > @@ -183,8 +183,38 @@ static void __init acpi_pcc_cpufreq_init(void) {=
+}
+> > >   #endif /* CONFIG_X86 */
+> > >
+> > >   /* Initialization */
+> > > +static DEFINE_PER_CPU(void *, processor_device_array);
+> > > +
+> > > +static bool acpi_processor_set_per_cpu(struct acpi_processor *pr,
+> > > +                                  struct acpi_device *device)
+> > > +{
+> > > +   BUG_ON(pr->id >=3D nr_cpu_ids);
+> >
+> > One blank line after BUG_ON() if we need to follow original implementat=
+ion.
+>
+> Sure unintentional - I'll put that back.
+>
+> >
+> > > +   /*
+> > > +    * Buggy BIOS check.
+> > > +    * ACPI id of processors can be reported wrongly by the BIOS.
+> > > +    * Don't trust it blindly
+> > > +    */
+> > > +   if (per_cpu(processor_device_array, pr->id) !=3D NULL &&
+> > > +       per_cpu(processor_device_array, pr->id) !=3D device) {
+> > > +           dev_warn(&device->dev,
+> > > +                    "BIOS reported wrong ACPI id %d for the processo=
+r\n",
+> > > +                    pr->id);
+> > > +           /* Give up, but do not abort the namespace scan. */
+> >
+> > It depends on how the return value is handled by the caller if the name=
+space
+> > is continued to be scanned. The caller can be acpi_processor_hotadd_ini=
+t()
+> > and acpi_processor_get_info() after this patch is applied. So I think t=
+his
+> > specific comment need to be moved to the caller.
+>
+> Good point. This gets messy and was an unintended change.
+>
+> Previously the options were:
+> 1) acpi_processor_get_info() failed for other reasons - this code was nev=
+er called.
+> 2) acpi_processor_get_info() succeeded without acpi_processor_hotadd_init=
+ (non hotplug)
+>    this code then ran and would paper over the problem doing a bunch of c=
+leanup under err.
+> 3) acpi_processor_get_info() succeeded with acpi_processor_hotadd_init ca=
+lled.
+>    This code then ran and would paper over the problem doing a bunch of c=
+leanup under err.
+>
+> We should maintain that or argue cleanly against it.
 
-No, with sync_state it actually does "something" (sets the interconnect
-path bandwidths to zero). And *this* patch does nothing functionally,
-it only makes the dt checker happy.
+The return value needs to be propagated to acpi_processor_add() so it
+can decide what to do with it.
 
-> 
-> This interconnect will be used by the PCIe and NSS blocks. When
-> those patches were posted earlier, they were put on hold until
-> interconnect driver is available.
-> 
-> Once this patch gets in, PCIe for example will make use of icc.
-> Please refer to https://lore.kernel.org/linux-arm-msm/20230519090219.15925-5-quic_devipriy@quicinc.com/.
-> 
-> The 'pcieX' nodes will include the following entries.
-> 
-> 	interconnects = <&gcc MASTER_ANOC_PCIE0 &gcc SLAVE_ANOC_PCIE0>,
-> 			<&gcc MASTER_SNOC_PCIE0 &gcc SLAVE_SNOC_PCIE0>;
-> 	interconnect-names = "pcie-mem", "cpu-pcie";
+Now, acpi_processor_add() can only return 1 if the CPU has been
+successfully registered and initialized, so it is regarded as
+available (but it may not be online to start with).
 
-Okay. What about USB that's already enabled? And BIMC/MEMNOC?
+Returning 0 from it may get messy, because acpi_default_enumeration()
+will get called and it will attempt to create a platform device for
+the CPU, so in all cases in which the CPU is not regarded as available
+when acpi_processor_add() returns, it should return an error code (the
+exact value doesn't matter for its caller so long as it is negative).
 
-> 
->> The expected reaction to "enabling interconnect" without defining the
->> required paths for your hardware would be a crash-on-sync_state, as all
->> unused (from Linux's POV) resources ought to be shut down.
->>
->> Because you lack sync_state, the interconnects silently retain the state
->> that they were left in (which is not deterministic), and that's precisely
->> what we want to avoid.
-> 
-> I tried to set 'sync_state' to icc_sync_state to be invoked and
-> didn't see any crash.
+> This isn't helped the the fact I have no idea which cases we care about f=
+or that bios
+> bug handling.  Do any of those bios's ever do hotplug?  Guess we have to =
+try and maintain
+> whatever protection this was offering.
+>
+> Also, the original code leaks data in some paths and I have limited idea
+> of whether it is intentional or not. So to tidy the issue up that you've =
+identified
+> I'll need to try and make that code consistent first.
 
-Have you confirmed that the registers are actually written to, and with
-correct values?
+I agree.
 
-Konrad
+> I suspect the only way to do that is going to be to duplicate the allocat=
+ions we
+> 'want' to leak to deal with the bios bug detection.
+>
+> For example acpi_processor_get_info() failing leaks pr and pr->throttling=
+.shared_cpu_map
+> before this series. After this series we need pr to leak because it's use=
+d for the detection
+> via processor_device_array.
+>
+> I'll work through this but it's going to be tricky to tell if we get righ=
+t.
+> Step 1 will be closing the existing leaks and then we will have something
+> consistent to build on.
+
+Sounds good to me.
 
