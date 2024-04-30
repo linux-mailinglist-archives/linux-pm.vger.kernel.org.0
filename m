@@ -1,116 +1,121 @@
-Return-Path: <linux-pm+bounces-7340-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7341-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E2A78B6FBF
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 12:36:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D7B48B7010
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 12:43:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 491451C20AFC
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 10:36:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F24FD282EDB
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 10:43:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97DF712BF17;
-	Tue, 30 Apr 2024 10:36:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4F1812C48A;
+	Tue, 30 Apr 2024 10:43:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UuSywXzn"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hgBKBiQ6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CF0317727;
-	Tue, 30 Apr 2024 10:36:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A762D12C461
+	for <linux-pm@vger.kernel.org>; Tue, 30 Apr 2024 10:43:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714473364; cv=none; b=p34jYMHBL5pgXI2fgBCRa943XpE5IkAwzKjBq0XU9NYkeJ17XZuNm4xB0TkNA+MyaK0AiiLCT9+ud51D4RPWVA/aKP7nvrv7pCc/KDv/2pRBrGU/MupfMMbZ8eD5HIA+K8OpioA2x3tAY8Y9l8tHIhJaXn252xUVXvrcxkri1P4=
+	t=1714473785; cv=none; b=TurPv7ZN4cw0WvTkf8+EnoolG2azJyjsMLBfNpUJGjeB0FVqJPlJ2YdeF6Ehg3m0HqWK6rquw6JLNq/9PEk0/SLCw8rmtGn12LBgg+uSSH5zD52HuRgIAhOb4+LWSMQdTklcUj+VEbN1PYgnP6OxvHNjD1B8XINvO/77N43wiZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714473364; c=relaxed/simple;
-	bh=dxEYVJ1G2GubDWzrfRvAEde9L0bxzSpTVsMJOzG2ixA=;
+	s=arc-20240116; t=1714473785; c=relaxed/simple;
+	bh=VDUiNpXWuWH30nxODfULOQvMKXg/IncYMLO1roSxJVo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JzHoJVA82ntkET+UZizDDnQlEgQkPRJ0/17LfIm5v39ONLiADDtqoNDFByuqqojdeviMMuFkv42ZQvH2+zrZeBl2UxnoI6UNIAASPrDERQcq8GjJJw5yRjRZ/AzXGXW2y0zzxm2iWgZohk8bDyD0Ts+gebkMzN5tMo+G1wXX974=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UuSywXzn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAB09C4AF14;
-	Tue, 30 Apr 2024 10:36:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714473364;
-	bh=dxEYVJ1G2GubDWzrfRvAEde9L0bxzSpTVsMJOzG2ixA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=UuSywXznCsDTIqFQmOEx7qSXhXLPzwTaOQYF7RQnF8vHYQlXz3urwReSWw3Be7qjD
-	 bClq24aBePj/m/pvuPOEIaxLaB8R1gHMomyamHpn5S3upklUwNBhS0EIL078yl5SGG
-	 I7W7vF2iSRFgFAp1rXxbbQcIIxrImfmXhSXsgJoo2Ko5PuS4HoTyHjn01dT33PxW/I
-	 QwbXM88InurnQyvbWW7512c9vz6Hs+SPQrtQYYvZsq9/6axc2GtLkfltxV5qWyDzFV
-	 G9AbDpg0Hb3/XSWFoOHhHiee1y3rLNtYK2dDMo+CMGQaBn8RJAvbfrEXRK7w0QyVNN
-	 X3Zmi5ACHUzeg==
-Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-3c70418ef53so441297b6e.1;
-        Tue, 30 Apr 2024 03:36:03 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWRrEUjMtCH8kdbTAyR2wfY2K7DLgePb4vint2dr7GQyzzkJos8dBQkOtMYWP213iNhEs8/TkzzpdXRPqhH1Nu7Rw5oy4kzZrTePis/6X4ycizPCBI/YjTlQAArvnHeEhLvM5gnGN8=
-X-Gm-Message-State: AOJu0YxMwvrOq5yxZ6Zhf5cUujowA5tFK9qsGt3RFsnuVKgRW7/3EAGt
-	wv3/fSI4l6B5+h1mte63XYrnzuZTGw2s3SWR0R13vLZWBhiSQxz1HTSCkwTflwKcuSRSerWrDld
-	7J1P+HgWWYQ4sL7r/1uX/ZbIhFHs=
-X-Google-Smtp-Source: AGHT+IFKSNEDHgxMiS9UPx1bYRCjsvOPN1pRKkeX2zU36pfxhcwNL4+l5qIW5sCiyeruv8oekZ1S562kte7GTQTQR/I=
-X-Received: by 2002:a4a:a7cb:0:b0:5a4:7790:61b4 with SMTP id
- n11-20020a4aa7cb000000b005a4779061b4mr15189159oom.0.1714473363224; Tue, 30
- Apr 2024 03:36:03 -0700 (PDT)
+	 To:Cc:Content-Type; b=ugsZ5mGrMgBo6RN1oYkyUi/09V6p5AYFB7DhW2eynmgOlkx/VIwuCs9V6OGUrrjgeT9kQUEEJ0CzuTpxm9tDKg5+vyE/y0VWOHwa7YyKQVkXb6C0TBnby/siCydijDaKVnkL3YsH3TYNpA/y72IgwitYHLg2qflGj0rPsBRQSz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hgBKBiQ6; arc=none smtp.client-ip=209.85.219.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-de477949644so6192222276.1
+        for <linux-pm@vger.kernel.org>; Tue, 30 Apr 2024 03:43:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1714473782; x=1715078582; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VDUiNpXWuWH30nxODfULOQvMKXg/IncYMLO1roSxJVo=;
+        b=hgBKBiQ6ow/n8OZW3ZLET/e5Hlhn3WXBEFfOMuu1LD0jKqcTeKe3DQnDHvMn5Ha+hv
+         kohrmOw0JGz8VMneREkRy/YguN5KgTG5BfhxT0RYzH/R2d8Cx+xiwxzWMufE1KYQ2fs4
+         YK6VE0k1jqzNPzu3fAt1rsh+Nlhw5eoVsQlYN3XTdGL2zoHHgSTguXVhMYvj6+D032VC
+         C8wDw8OSbZe9H32zt3sChUM5a9BhFs15BI0yejCo2lreTk0MZm2P78lzt9Jq95pUxpMr
+         E9oaNLyy7pYrc+/g3gRfwmyK7jrD5Jx4X9ApMrAUw2TiyVZ4bRPZHPti0FBUMVp1Wbkd
+         ktHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714473782; x=1715078582;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VDUiNpXWuWH30nxODfULOQvMKXg/IncYMLO1roSxJVo=;
+        b=Twr+Uh86+3LMEkXMBBahVE+wrd3wv9SKLCQ+cPENdim/R5rVtK/vT2T737sBsTjYGi
+         3s6oA/9p4MpDXWOzCoEdKmLyvklGLW4X2cA14tShQ6rvDj6RUS1Tv/U3JRqVO8vC7tcw
+         RIaQ3UH2ncpThXltDU7jExBgJEocClSvMlIwH1Rk0bJDIdmtNnEhg2y4a+WFhU4i3+cz
+         ZOkflJCPRRWPKxQMkfK6IkUPAxhtixfIHR7YNHg3vm6InZEfjvO12X7yUt8QiiEo61Qo
+         lo2BGq1zZDfo6NO+VtFnfnIO7eOSsVm2DyRvw+6m3u3PQxhff/prMTo6pZJ6ydkgRYSI
+         dMcA==
+X-Forwarded-Encrypted: i=1; AJvYcCVsqN2Znrfmwh1AKBof+lqpTvL8EuKwXq3HUr2YLynK9CTR4txbpegyDXkcXVMyloee7RQzHJQ8jjsbPwpGN6U/96U9m8/vXz0=
+X-Gm-Message-State: AOJu0YyLp+33XgK91p8ggeOYDvAnvaZQXAmtfONUteCvdKWPgjk6VZrD
+	UUEcCD21eyJWx7jfeUB3yk9z7eWcAGYbp12N5TW8yTcEeptohS+St83F7Pp7vcsWdZflYeeJCoW
+	IrztGriDoZ/TUYfQE5scMhuXJRjNWscx0QI7shQ==
+X-Google-Smtp-Source: AGHT+IEPt6rtIomeocZoEOGlgzQPp8Y2RtRShUwpjfR7KXDzI2eA6BTyMW7lGrhOyto4UkFzMQ4YDQUwAAgGlkTl4hE=
+X-Received: by 2002:a25:9347:0:b0:de0:deb0:c363 with SMTP id
+ g7-20020a259347000000b00de0deb0c363mr14176771ybo.31.1714473782698; Tue, 30
+ Apr 2024 03:43:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240429113356.1708284-1-ray.huang@amd.com> <efd9226b-84b4-47e9-bbb9-68bd0194a8ef@amd.com>
-In-Reply-To: <efd9226b-84b4-47e9-bbb9-68bd0194a8ef@amd.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 30 Apr 2024 12:35:52 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hUwKHbpWXfjArujB8FJ9wDc9_Cv5O1Y_DcyWAPHG-v_w@mail.gmail.com>
-Message-ID: <CAJZ5v0hUwKHbpWXfjArujB8FJ9wDc9_Cv5O1Y_DcyWAPHG-v_w@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: cpufreq: amd-pstate: Add co-maintainers and reviewer
-To: Mario Limonciello <mario.limonciello@amd.com>, Huang Rui <ray.huang@amd.com>, 
-	"Gautham R . Shenoy" <gautham.shenoy@amd.com>
-Cc: "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Meng Li <li.meng@amd.com>, 
-	Xiaojian Du <Xiaojian.Du@amd.com>, Perry Yuan <perry.yuan@amd.com>, 
-	Ananth Narayan <ananth.narayan@amd.com>
+References: <20240429140531.210576-1-ulf.hansson@linaro.org> <20240430094411.HyS2Gecw@linutronix.de>
+In-Reply-To: <20240430094411.HyS2Gecw@linutronix.de>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 30 Apr 2024 12:42:26 +0200
+Message-ID: <CAPDyKFpMga4DweVoLdW80mvfGr8vrQ5yNMcU_wgqWQuoLdo6+w@mail.gmail.com>
+Subject: Re: [PATCH 0/6] pmdomain/cpuidle-psci: Support s2idle/s2ram on PREEMPT_RT
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org, 
+	Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>, Nikunj Kela <nkela@quicinc.com>, 
+	Prasad Sodagudi <psodagud@quicinc.com>, Maulik Shah <quic_mkshah@quicinc.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, linux-rt-users@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 29, 2024 at 4:02=E2=80=AFPM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
+On Tue, 30 Apr 2024 at 11:44, Sebastian Andrzej Siewior
+<bigeasy@linutronix.de> wrote:
 >
-> On 4/29/2024 06:33, Huang Rui wrote:
-> > I'm happy to add Gautham and Mario as the co-maintainers, Perry as the
-> > reviewer for amd-pstate driver.
+> On 2024-04-29 16:05:25 [+0200], Ulf Hansson wrote:
+> > The hierarchical PM domain topology and the corresponding domain-idle-states
+> > are currently disabled on a PREEMPT_RT based configuration. The main reason is
+> > because spinlocks are turned into sleepable locks on PREEMPT_RT, which means
+> > genpd and runtime PM can't be use in the atomic idle-path when
+> > selecting/entering an idle-state.
 > >
-> > Signed-off-by: Huang Rui <ray.huang@amd.com>
-> > Cc: Gautham R. Shenoy <gautham.shenoy@amd.com>
-> > Cc: Mario Limonciello <mario.limonciello@amd.com>
-> > Cc: Perry Yuan <perry.yuan@amd.com>
-> > Cc: Ananth Narayan <ananth.narayan@amd.com>
-> > ---
+> > For s2idle/s2ram this is an unnecessary limitation that this series intends to
+> > address. Note that, the support for cpuhotplug is left to future improvements.
+> > More information about this are available in the commit messages.
+> >
+> > I have tested this on a Dragonboard 410c.
 >
-> Thanks Ray!  We of course talked about this offline and I'm happy to
-> step in.  Having coverage of two people is also good for any OOO
-> situation in the future to make sure patches can be reviewed in a timely
-> fashion.
->
-> Acked-by: Mario Limonciello <mario.limonciello@amd.com>
->
-> >
-> > Hi Rafael,
-> >
-> > Recently, I was assigned other task of virtio-gpu support for Xen, so
-> > apology not to review the patches timely. After discussing with our AMD
-> > colleagues, we want to add Gautham and Mario as co-maintainers of this
-> > driver from server and client side. If one of the maintainers ack the
-> > amd-pstate patch, then this patch is good to be accepted from AMD
-> > perspective. And also add Perry as reviewer, he is actively contributin=
-g
-> > the patches on this driver for a long time.
-> >
-> > We will try to keep the patches reviewed on time in future.
+> Have you tested this with PREEMPT_RT enabled and if so, which kernel?
 
-Thank you all, patch applied for 6.10.
+Yes, of course. :-) I should have mentioned this in the cover-letter, sorry.
 
-BTW, patch series "AMD Pstate Driver Core Performance Boost" doesn't
-seem to be ready and given that -rc7 is due this week, I'd rather
-postpone until the 6.11 cycle.
+I have used the linux-rt-devel.git, which had a branch based upon
+v6.8-rc7 a while ago, that I used when I did my tests.
+
+The series needed a small rebase on top of my linux-pm tree [1],
+before I could post it though. I also tested the rebased series, but
+then of course then not with PREEMPT_RT, but to make sure there are no
+regressions.
+
+Kind regards
+Uffe
+
+[1]
+https://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git next
 
