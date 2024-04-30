@@ -1,79 +1,166 @@
-Return-Path: <linux-pm+bounces-7388-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7389-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA64A8B7D1C
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 18:35:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 822918B7D48
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 18:39:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 160F11C20CEA
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 16:35:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDD0D1F222D2
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 16:39:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3320194C6B;
-	Tue, 30 Apr 2024 16:33:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBB2617F370;
+	Tue, 30 Apr 2024 16:38:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DJsxFxrX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CdPI3j+f"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBDF2190692;
-	Tue, 30 Apr 2024 16:33:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2CA017BB2A;
+	Tue, 30 Apr 2024 16:38:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714494798; cv=none; b=EDa8Z9WdEEiNWXXu7nZM9VxhUmMrUFISYwRag0y3OGBy+7lgI//gs+95DXGmZgSZNXnqVQRgXnFCL1SQGiH0TEs8F+kQhcsOgY+9dFH7LQXWFc99QaheHRTbhQ2T+1HWzrPbvXLOUPeRHm2v/rh5QnhqdTTLSzhhu19zQVVSBXI=
+	t=1714495087; cv=none; b=JThwONKuLajeqEkc5qsvkMIqE9uT76C0v+HDooB7hjRJ4EUDjgk3PbW1X4I78eEkAXGocBpcUNWK7Y7U9iFjf1SZ9oMun2QwOGj7hXGT8FwYZyW7z+Ztdi9QwmzR41b/SDdop8h0IyTSRHCpyJDEf8u0hFObInDdYdh1gLIcY7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714494798; c=relaxed/simple;
-	bh=PcbE5PES9xNZ4I4rsUJe/9WnJ5WpSn7r0RsEAjXrn1U=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=PPj8jPubDfrBpTBdxPOr51JVZxtSQKCFIJxQHDIb3aDYtf71juu4DAcBS8YVLk8M6DOaqsrpCm5MJbmaR65Nzu7iJnlCVtjliK5M33WkjaTXePUAFVJMPL7lRqba4z5CSrZKXI0fnkeN+rGekietJ297GtMxYHzqvo95zXCsRjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DJsxFxrX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 593EEC2BBFC;
-	Tue, 30 Apr 2024 16:33:18 +0000 (UTC)
+	s=arc-20240116; t=1714495087; c=relaxed/simple;
+	bh=Ea+j+o7qluZ3aaBqBGHNFexj3b3TayUV5vNIzNDaABo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=F5dyto/fmiYabjWx+YT4RBepLZqnJfWisOxdHm+/AhKgZaeEgH0Vjy1uRbaZzPymH+XcFvpGJlA6CgKsPxOJk6WVZXPZ2LL4xEhZ/gBMazYX8z+RmTIF7lZhB8wxKja2mVHG6uvR0xb0K3M82QjBz8HXeFpPUY8jp04Khr//Rqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CdPI3j+f; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12EA2C2BBFC;
+	Tue, 30 Apr 2024 16:38:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714494798;
-	bh=PcbE5PES9xNZ4I4rsUJe/9WnJ5WpSn7r0RsEAjXrn1U=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=DJsxFxrXrvG9s3U/VKZOq1+fdXe8PI2/m+u6eJhOj2ndtO1Wu8mAA4rtOUkPJiqHy
-	 0D5TROxZVGjRNUbp/PVffNzcELpaDUWCrsjWn+FK0Qw8+fQXQio7f+aVE1qLJKFqds
-	 pNRnPtzi8ioroDdnkp5oSm79tl4qU6LD54vyijrx9ZzCr4ksrIeQXDZEWdRN19s4yL
-	 Vhh7GWCKMG9C7bjIhjQRs0HZT2vv6jR5bKJ54BS2/VGmZHbzwFR9J92tCV6kuBLRzY
-	 McGqYve0GctPPgcZhoSlUaZ7eGZKTqo2YwvPLHi8ECPdBn9fl0+OZ870Vwg2TYBg0c
-	 yGH3/539SZnBw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 467EAC43616;
-	Tue, 30 Apr 2024 16:33:18 +0000 (UTC)
-Subject: Re: [GIT PULL] power-supply changes for 6.9-rc
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <vreefzn65ijap4kxzxgfk5bom7uz5skoy3rn7fktydd7mgavbj@kfhvex76iw2z>
-References: <vreefzn65ijap4kxzxgfk5bom7uz5skoy3rn7fktydd7mgavbj@kfhvex76iw2z>
-X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <vreefzn65ijap4kxzxgfk5bom7uz5skoy3rn7fktydd7mgavbj@kfhvex76iw2z>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.9-rc
-X-PR-Tracked-Commit-Id: 1e0fb113646182e073539db96016b00cfeb18ecc
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 50dffbf771802c4db88de2cb942affa0ada43ad0
-Message-Id: <171449479828.9419.6574092389324799375.pr-tracker-bot@kernel.org>
-Date: Tue, 30 Apr 2024 16:33:18 +0000
-To: Sebastian Reichel <sre@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+	s=k20201202; t=1714495087;
+	bh=Ea+j+o7qluZ3aaBqBGHNFexj3b3TayUV5vNIzNDaABo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CdPI3j+fJEvjdlmQPVgXo3qL61z93kiPiPU0GNMO6P3czlrBXGHu0O7CqbtW1hc9l
+	 b0kfasC3XiEb1jdrIHpCbYfctwchFwn04bFT9tTFyydOPjsIVO64QoyuerTG/mtHWc
+	 f1MQmuDA1ZgE+6qtsvMJvNOYzV2vgey+Mt0Bz1ANY8ZEQSC3vcnMjGKrhPBQyybJ80
+	 FzN/GqlqNxKYAWaqTu4sGINBQ2HfbuDQG6Vu4Zn7vzfSJ7bCmjQ0yv3q+PVjVvvP6c
+	 GEEkw7yk9uFtjwpX9eM+pdS1suoz4V6eKZK+spUuRAZnIrIhqniB6yD8zKvuuR9/bp
+	 apKC0UzuqlvYQ==
+Date: Tue, 30 Apr 2024 18:37:58 +0200
+From: Lorenzo Pieralisi <lpieralisi@kernel.org>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>,
+	Peter Zijlstra <peterz@infradead.org>, linux-pm@vger.kernel.org,
+	loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	x86@kernel.org, Russell King <linux@armlinux.org.uk>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Miguel Luis <miguel.luis@oracle.com>,
+	James Morse <james.morse@arm.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+	Hanjun Guo <guohanjun@huawei.com>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, linuxarm@huawei.com,
+	justin.he@arm.com, jianyong.wu@arm.com,
+	Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [PATCH v8 09/16] arm64: acpi: Move get_cpu_for_acpi_id() to a
+ header
+Message-ID: <ZjEeZkn5J+m086pR@lpieralisi>
+References: <20240426135126.12802-1-Jonathan.Cameron@huawei.com>
+ <20240426135126.12802-10-Jonathan.Cameron@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240426135126.12802-10-Jonathan.Cameron@huawei.com>
 
-The pull request you sent on Tue, 30 Apr 2024 15:58:56 +0200:
+On Fri, Apr 26, 2024 at 02:51:19PM +0100, Jonathan Cameron wrote:
+> From: James Morse <james.morse@arm.com>
+> 
+> ACPI identifies CPUs by UID. get_cpu_for_acpi_id() maps the ACPI UID
+> to the Linux CPU number.
+> 
+> The helper to retrieve this mapping is only available in arm64's NUMA
+> code.
+> 
+> Move it to live next to get_acpi_id_for_cpu().
+> 
+> Signed-off-by: James Morse <james.morse@arm.com>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Reviewed-by: Gavin Shan <gshan@redhat.com>
+> Tested-by: Miguel Luis <miguel.luis@oracle.com>
+> Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
+> Tested-by: Jianyong Wu <jianyong.wu@arm.com>
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> Acked-by: Hanjun Guo <guohanjun@huawei.com>
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> 
+> ---
+> v8: Picked up tags.
+> ---
+>  arch/arm64/include/asm/acpi.h | 11 +++++++++++
+>  arch/arm64/kernel/acpi_numa.c | 11 -----------
+>  2 files changed, 11 insertions(+), 11 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/acpi.h b/arch/arm64/include/asm/acpi.h
+> index 6792a1f83f2a..bc9a6656fc0c 100644
+> --- a/arch/arm64/include/asm/acpi.h
+> +++ b/arch/arm64/include/asm/acpi.h
+> @@ -119,6 +119,17 @@ static inline u32 get_acpi_id_for_cpu(unsigned int cpu)
+>  	return	acpi_cpu_get_madt_gicc(cpu)->uid;
+>  }
+>  
+> +static inline int get_cpu_for_acpi_id(u32 uid)
+> +{
+> +	int cpu;
+> +
+> +	for (cpu = 0; cpu < nr_cpu_ids; cpu++)
+> +		if (uid == get_acpi_id_for_cpu(cpu))
+> +			return cpu;
+> +
+> +	return -EINVAL;
+> +}
+> +
+>  static inline void arch_fix_phys_package_id(int num, u32 slot) { }
+>  void __init acpi_init_cpus(void);
+>  int apei_claim_sea(struct pt_regs *regs);
+> diff --git a/arch/arm64/kernel/acpi_numa.c b/arch/arm64/kernel/acpi_numa.c
+> index e51535a5f939..0c036a9a3c33 100644
+> --- a/arch/arm64/kernel/acpi_numa.c
+> +++ b/arch/arm64/kernel/acpi_numa.c
+> @@ -34,17 +34,6 @@ int __init acpi_numa_get_nid(unsigned int cpu)
+>  	return acpi_early_node_map[cpu];
+>  }
+>  
+> -static inline int get_cpu_for_acpi_id(u32 uid)
+> -{
+> -	int cpu;
+> -
+> -	for (cpu = 0; cpu < nr_cpu_ids; cpu++)
+> -		if (uid == get_acpi_id_for_cpu(cpu))
+> -			return cpu;
+> -
+> -	return -EINVAL;
+> -}
+> -
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.9-rc
+Apologies for the late reply.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/50dffbf771802c4db88de2cb942affa0ada43ad0
+If anything, it may make sense to squash this patch into the commit that
+is actually needing it, lest we might end up with a change that is
+useless if it is taken stand alone.
 
-Thank you!
+That's all there is to say so:
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Reviewed-by: Lorenzo Pieralisi <lpieralisi@kernel.org>
+
+>  static int __init acpi_parse_gicc_pxm(union acpi_subtable_headers *header,
+>  				      const unsigned long end)
+>  {
+> -- 
+> 2.39.2
+> 
 
