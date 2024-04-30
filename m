@@ -1,315 +1,390 @@
-Return-Path: <linux-pm+bounces-7405-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7406-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 653D98B802B
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 20:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C9FE8B804A
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 21:07:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A1BD283CB8
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 18:57:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6CA8281EAD
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 19:07:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FC671836C8;
-	Tue, 30 Apr 2024 18:57:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3068190679;
+	Tue, 30 Apr 2024 19:07:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Tc5CcSYd";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="xYF6JT0E"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QYKfkgWG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E1B717BB1E;
-	Tue, 30 Apr 2024 18:57:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714503461; cv=fail; b=dBdq1vdzubJ2ENYMwNmAqliY02wJFgTCK31IsififYqEaZPNk8WFsBWNOO0JVgJ0s7P6sQNuPtgBOw6q8CrpllF1TUOVPb/EJWsSl7C6a41P8Q7+yVRJHY7Cb3yX4trQfP4mdLUhrvVSgVP5g5LLEqL2Uehj7+MHwQpXClhRmLA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714503461; c=relaxed/simple;
-	bh=FEGzQW6+QB8y4Pmz6Ubm1+sFxjmZomZfD0acXJX71ZU=;
-	h=References:From:To:Cc:Subject:In-reply-to:Message-ID:Date:
-	 Content-Type:MIME-Version; b=ZnIrMSzLrNp83yaKkJwh2kagEtSuDGi1C3e7XJ3GWOdhwLkmCtTjdlK2LCe3n6ZImouItlR5+KvpJf3NU3pRcZVukj9bzhbBlnTW2ByE2kNAF2P1ffK2EOY+FhW4K0hVFxhec0zLHqWTb8Dk6Wd+s0qynErjyyyhOePGxYQVcPc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Tc5CcSYd; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=xYF6JT0E; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 43UHIirG031819;
-	Tue, 30 Apr 2024 18:57:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=references : from :
- to : cc : subject : in-reply-to : message-id : date : content-type :
- mime-version; s=corp-2023-11-20;
- bh=rxuqjcoL+jf5osA2Ri5KiPe2E4WAq5j8FTukf9nMbE4=;
- b=Tc5CcSYdIjp7ZegoehcgG0FqZ7ETnMIcrRKT2pCr9o7sG8NLxvG7ok5CpYvYqVLkhUyl
- uhlri/DkMZt3qhD8WPT+ecSj84z9S+LlS2g1lqHe3ofK7quaZ8vHJb7U+1xQJZB8k8cZ
- OahKS8RAg/e3xj1OsM72ERR8oiSM6is2sM0Rc9rKzjaSaRiNXVS5EbyVT7vat69jlc85
- kAM8OMCWW8SDaxzaIJr7oQJx3uihttWOuknaYvbYRuEmII6EzEpxR634GkPU3cfjK7Z0
- qSTiZYjXtezJRsCjuZiqcH1YGOme4OMjZK8ZOYs8bkFEzkVKQKONEX4bApoob5DQq7L5 vg== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3xrqsewtsd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 30 Apr 2024 18:57:02 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 43UIZfaq011502;
-	Tue, 30 Apr 2024 18:57:01 GMT
-Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam02lp2041.outbound.protection.outlook.com [104.47.51.41])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3xrqt8d45p-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 30 Apr 2024 18:57:01 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=f/GzlfUdK15Ve7ks9yMz9hPa9AB/qB8zIMzstOAAdAhmxE3+qMdHix7+40kjwCz7hdKfplBj17lzGuhUQYmx6jvtU0uvIvvcM23E3CawHual/y41BvRjN8lE7tos0j2ccQY+tb0oGeOeWPhShjtrrzWPbx0DB04kSqg+w8v/YJFvJku/j0MreiXWCcM2IWlRp+Z00zljlBXh5Rnn632FnCXFtWZXR5js48ofi9ksafoVRWYudA7EcSvUX2POhqFipy+K/IF39w/czNLFn3hgvb3VHkOMkxkbEMvh/vzjbA5XTL40izJCnorHPcvzpjWt1Ra7ZJ/6YmWqW7fVKyQ/Uw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rxuqjcoL+jf5osA2Ri5KiPe2E4WAq5j8FTukf9nMbE4=;
- b=UV0ZgBH5Qow75BJ0xLh599fso2vaAPSAjjh73WC+umOcbHbfOMfDd1CXemCfYVKiGxGZMkBKmCjNN/LqSyJ0LbQ+WaHK49knio9J36MsII8VjyR6fT/NF/i0cAe99pVUw4sGSLbmxL1Kk/87k/LoACwWzW0LCHZcXzr0pb+iJyuPjuRAmA3w9V2eg2nC+wxik3y3tLNvLM/cwyL5A//TZBcc+wTImUI5dS+YtlvA342LgW/z5Ah0PQOd2mgiBQO+s6ahfqhXOnLpPY5J1yZ1cxqpJ7pltM3yJT/w8rCL7YAmpTgpcZJzdb5sTrmNfBO0OEUICpuQKuGdnP2J8phD6Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rxuqjcoL+jf5osA2Ri5KiPe2E4WAq5j8FTukf9nMbE4=;
- b=xYF6JT0EQEg26PgMfIkGLvINGOXp2pzRJrQppKS3EaQq3Wo7UHs/J+CRlkKzqj2Dz5eAmag54V9qmXT8OgnehnVGlb2cex/u5MIsdtInrFP5lOAtgPRYR2vhlMMZsZRPOYbSSXenjgop9OkheMdONwXBeUFUoiXXm5woOOA4hPs=
-Received: from CO6PR10MB5409.namprd10.prod.outlook.com (2603:10b6:5:357::14)
- by MW4PR10MB6606.namprd10.prod.outlook.com (2603:10b6:303:228::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7519.35; Tue, 30 Apr
- 2024 18:56:50 +0000
-Received: from CO6PR10MB5409.namprd10.prod.outlook.com
- ([fe80::4104:529:ba06:fcb8]) by CO6PR10MB5409.namprd10.prod.outlook.com
- ([fe80::4104:529:ba06:fcb8%7]) with mapi id 15.20.7519.031; Tue, 30 Apr 2024
- 18:56:50 +0000
-References: <20240430183730.561960-1-ankur.a.arora@oracle.com>
-User-agent: mu4e 1.4.10; emacs 27.2
-From: Ankur Arora <ankur.a.arora@oracle.com>
-To: Ankur Arora <ankur.a.arora@oracle.com>
-Cc: linux-pm@vger.kernel.org, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        pbonzini@redhat.com, wanpengli@tencent.com, vkuznets@redhat.com,
-        rafael@kernel.org, daniel.lezcano@linaro.org, peterz@infradead.org,
-        arnd@arndb.de, lenb@kernel.org, mark.rutland@arm.com,
-        harisokn@amazon.com, joao.m.martins@oracle.com,
-        boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
-Subject: Re: [PATCH 0/9] Enable haltpoll for arm64
-In-reply-to: <20240430183730.561960-1-ankur.a.arora@oracle.com>
-Message-ID: <87y18ubrwv.fsf@oracle.com>
-Date: Tue, 30 Apr 2024 11:56:48 -0700
-Content-Type: text/plain
-X-ClientProxiedBy: MW4PR03CA0298.namprd03.prod.outlook.com
- (2603:10b6:303:b5::33) To CO6PR10MB5409.namprd10.prod.outlook.com
- (2603:10b6:5:357::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3493184122;
+	Tue, 30 Apr 2024 19:07:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1714504072; cv=none; b=tYc8c5G3cE6YX68Lslo9Q7+UcATh9LvyhUI8wiyiofSvRGxayAIjqy2gvcmlnDbY33p86SSa71nxkKHsn8doEMkAhnw9fbJ5JVw/7g1DcoWP1gfMpPZUci1uOeLMyxozo4jM2Tfu3O1cY6CS2nEQ4eRhnUNRq4VHXAsg9nFfsbI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1714504072; c=relaxed/simple;
+	bh=jdZQdtzHlUX2tMN0QcmZaAYJHwpQLuI3w3rBe5Y9zr8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NikNWwEDuBAoEew7vY8YHCPTZSfWrCgp7Nowl7iE+cWMKhb36OIMxgkCVeNekTg9EOvxe96vztM9Nsco5KhI5SG8PsHDLoiYPgD0KdF06vrHW7VGmpLh0ZPv50PGj0Tlsux4s0Xh0Kgc2iVP0P+NIe7WoCdKb4GZTGZjLeoY8QE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QYKfkgWG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 589DFC4AF18;
+	Tue, 30 Apr 2024 19:07:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714504072;
+	bh=jdZQdtzHlUX2tMN0QcmZaAYJHwpQLuI3w3rBe5Y9zr8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=QYKfkgWGYPwxKrUfv93KsSzV5OfrPNHpM/bThrurHrprhhv4LTDaNQ/rwicYQwsK+
+	 WDM7mk0jctOdc9ndzT92A2pxsL6qGgMZ/b0IXq9FmhYomdZrRz97WgOaYpGDytXDaB
+	 JiKszig18g/yUw3bEWBujfwY22ECP+2vMJsvL61NDmvP2KTeK2Gubaz/flMKOc4lrC
+	 GQ2XDFfkOjHUzhSu6zONxf4y0GIwRJVSxhiikDPMusINEkjEUNp6cFYK5G8jS6V2u5
+	 abnbeTBkJK6m82MF/5IjlYLFzdeLGzgejacA0q2dDKK77dlLI1F+dR5DSHJmHdKIbk
+	 6QWaRuA3L+02g==
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6ee5ee29423so328686a34.2;
+        Tue, 30 Apr 2024 12:07:52 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVvgJH2qiro6SrAF4JyOo1Bq3USXaMbchdt4Zqx2rie9N5WBqix6Vgxw01rQEq0xsD6VbQMt2w84kAepGtcOuoiRLzTGwMVGEvVbA/IawVPiJuniA20hkxiK/DwIVLzw+aFs6dSOChJSdLBAWtL2bdhtmsHE79Z1R5kFMtczTnZHbn0Pw==
+X-Gm-Message-State: AOJu0YyubdET82Y+Y7Ig8H3ys3xZrwd6UpKk1NQ+oT+hfEgmxivKnbQ+
+	uBarjW5PXE4AGyOx0DtpjXkagsiarmv1ywYAm3IlJrLPYnX/V0gUOhxh6/JNAhWUQbqxmvDvboI
+	PVpyDAE6i/1PLcGnTD2BNGFjUUZQ=
+X-Google-Smtp-Source: AGHT+IGDfc6zWcy4TFxA5svJDvHpMfY7IBw4Cn1jXgJP++Z4jbGTWNd7QXhRwjObQV5CGpljILDA4Nbv/s0fTYDQR1s=
+X-Received: by 2002:a05:6820:1007:b0:5aa:14ff:4128 with SMTP id
+ v7-20020a056820100700b005aa14ff4128mr349495oor.1.1714504071493; Tue, 30 Apr
+ 2024 12:07:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR10MB5409:EE_|MW4PR10MB6606:EE_
-X-MS-Office365-Filtering-Correlation-Id: dd82d738-11fd-4da3-5ba1-08dc69474b41
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|366007|7416005|1800799015|376005;
-X-Microsoft-Antispam-Message-Info: 
-	=?us-ascii?Q?IbxqIWFqSq0OY5K/DbwJXGk2a56dfTNc/e8tdvhdi2DeFxj6bNIA/OpwUyJs?=
- =?us-ascii?Q?F0S4slXK7EtND02gBt7TSHP9jncVpDv3lhrBH3aWsw2OZbmgd3EEDR6lqFq3?=
- =?us-ascii?Q?Tv5gHSYjDmSb4zZYSu8hzvLHtG80yrJymu7w6xp69gKWG/kCVvR04tkz8Cvs?=
- =?us-ascii?Q?jmC8wb1K2kynQ1+0JqfQnI4EAjkrX7jlavpq23f02BaKL+LrGYPeYLr4StW/?=
- =?us-ascii?Q?26mlAWXfvoK1Lh1BFiWXwI2fJQSfbbl9XQbzcTMQy2hkU7q0jiGdgbKkpWDL?=
- =?us-ascii?Q?Rfp/l9Cv40qsAVetVN0n9w1wcjhgoIYq4oefcdEg0oM7i7O+St3JK864vsCV?=
- =?us-ascii?Q?ZchmvaRh0VGgtl+wm/HXGR76N+c4h0SJhDHYtoRk/X55+gm5FWrSthex4lIl?=
- =?us-ascii?Q?QgPtnHnE0Dc0n0u5UQx6hQfBIpAm7m1nAVyxKSQFGcCdcJmvfN0d6Hrm3TLW?=
- =?us-ascii?Q?HvgI8lKAgV+1rSXhjQRN4Zh2S09QA6ox+IjftNXQbp1UGymYgLKojTnrXBGW?=
- =?us-ascii?Q?6tCg6ccheas4FoizGzzHTw3nivUAom9P0NLCbMze6Q3Ags8DUFF8Rs7NKg8O?=
- =?us-ascii?Q?FrwwIrTYdMVEOPeYS5cI3xD2o7I7g8nJi8ejUc6Clq7AeXeCNDe40ZtRj5xT?=
- =?us-ascii?Q?xPX92GGaAU6+SdWfCwkEQn7pXA9uErYDT7ykdBKATeHhwRblnGQiGcujl3Kx?=
- =?us-ascii?Q?3kr1K3UaUkBT8m6vbx4nmF8prsozTtkQPrFzx0rI27//sKHqPktPzzuHiGcn?=
- =?us-ascii?Q?CvPxppwY+1MgdVjRytinPsWGdbo2SdQ5gkwtqxrCPZ+9R+ZEVopc9KFGT8a7?=
- =?us-ascii?Q?93lqzmbGKJnsKGyA4NxwPBJXqaftJnJLcEQ5xRDkQewvdkaVktiBkHmh8nec?=
- =?us-ascii?Q?bmyyfBvatO4ra5AILlqh71ZezBWgOsRbayWNGk5iaX4alF0rd0NCbRUuZfcq?=
- =?us-ascii?Q?8w+bHSBidMpD6eOO96UFQgKX+kY7VgyFb3lyKWBsAuaQLPlByBXODhxMQ2zX?=
- =?us-ascii?Q?8zPLdggnm5LJq6AJW61PDITNq4GfEeY7FChTi7L+C4O6NtzFymk5YV8PfmMR?=
- =?us-ascii?Q?EyGYz4N2zKk14L7/P0RI5W6joaGOTAuzdV6nFI0p5J3HHH618pDrU2tTMBZV?=
- =?us-ascii?Q?SiflLeBAjrt1hStklRc328Riyo+qL8ZQsifD3dcLi6gM5QVy2ocK0fFRdDdO?=
- =?us-ascii?Q?WnTSMGkzkeRu58pT0D9I9jCWK6Uo4D7kgNSSSj0D4YRuNbS+vyGIZf2HdFzq?=
- =?us-ascii?Q?iBuqd8KCC24MxoBI0R9mxt6MrpuqaeP6lCSz2zPWvQ=3D=3D?=
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR10MB5409.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(7416005)(1800799015)(376005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?us-ascii?Q?qmrEnLHCIgARarzivy1Q5Rp9d8s2YkrMGIZoX3l5VDXSinAP6INM1cCuHJle?=
- =?us-ascii?Q?PiJKujj9iyHqkTglIqPSvtGifnV6j+uqHWz+WTnvtezwNdN5v46nLIpZuDfT?=
- =?us-ascii?Q?Yx65cHIHytumfHsBc91qh782jqYBqc2K6UDl/g7wp42nymuVW6ttiopxJ1l0?=
- =?us-ascii?Q?hX6Tlku/afwqRRHKmD2lSZoMwflenrI0ybCwuWNyU61DwzQodOuw0nkxxzUa?=
- =?us-ascii?Q?qmSDraMTmrzsMdl2I6Qev+yoksBOE+/K1Dbq5ZOQIlaOyMEfuoFfU+mxx5TU?=
- =?us-ascii?Q?22R5o7rIh4HCQdFxHo6SInNX63R5zzvd4fxguTTn5kBtM4w5cf4URWv8WpoL?=
- =?us-ascii?Q?LDbCC2LdDguJFVxsaw0bM/cgBUac0laip6nOBBhjKqKxAyXpv7c9R94ifBbr?=
- =?us-ascii?Q?m5b0NFazhKtZrpKMZd8moN1mzPZ7oDVlgDWZtGI0B00lkX42ponyq2mfd36A?=
- =?us-ascii?Q?uaK/3/T3DVlCp1ymDug8xfsrUeGDBFiY0IHLiKQhWlBxzqRtVDIVaJTmniZD?=
- =?us-ascii?Q?kzM0FIGMF4lP2XxKW7IXq50kFnDetx0muPI3ZO3HOwd7XgNpGyXmNs5SdVCR?=
- =?us-ascii?Q?qiKxEAuP1nYJE9Vu2FB47TuyqySKqlmfCpUmTCXI7jFrtN2OPcJ9cPnLOMsV?=
- =?us-ascii?Q?fG05a/qukQb7vNEaomdT6mQE+zpwJ9gAsKz785N63SWAaxIL4nLNbUSrAiY5?=
- =?us-ascii?Q?kb0PKREVnhrwpeqq2OBol1YxEo0KpVkNorosyMpYLlETNeY0uGGv7rsBAeSs?=
- =?us-ascii?Q?euCxg24zrnhMxlOcgV0mHNmaZhqW6jlSLL0HJAZrru01cv6dzYX4GnodNVLo?=
- =?us-ascii?Q?dlWTFpH2WLaWXIKO3jlsQ10K4n1WZS/2ClM3z2YWe5iE/UDmuNEgcJgA6GT5?=
- =?us-ascii?Q?P8+R7CtN3PFqVX9JLH9PNEvFxocl7vgNjYq+3trbkkh0VyeNFjOtPoIBU/G9?=
- =?us-ascii?Q?g5F2+Em4563Wi5z8BH6UdLDpCmOhdKmZsMhR5hgUoRGRIuuiOjF70qVowYhL?=
- =?us-ascii?Q?m1ySpn0Us6Vpik0OXf7zh4BglbN74jDv96TZA5po5Mlma3dXzlEnvbyDvDje?=
- =?us-ascii?Q?YL0V24DwPS+cNkugTGBBoQR9MPpWiTy+ddD88q9BvPit/RlYAb+RdoguNBU8?=
- =?us-ascii?Q?XMTIcgdth1F7Gy3mAqnoqHsxNCB5daNO5edouHp+NO4Wxc7Fqh3UBSjAl7tR?=
- =?us-ascii?Q?cORM5KVi6mPnqA96DaNjrXQHNW/t6eafFuiq+1KQdHtVXP9y4f7BH3JrjPzi?=
- =?us-ascii?Q?brg+9aKwTpPY5G0DCRZZPFManVUtRdeRYC+fH8hSTsBLn1+yVsQ5I5QHd72m?=
- =?us-ascii?Q?qOMXTB+OFaY9Zv/QdUwYkpHa3tH4WJUsaoL/LD/NlwIS/jpozTe3F05dYKBm?=
- =?us-ascii?Q?pFT5Oe99paVU82eswwB6UVOi5fyH7CYI7b1con01e/4JuOdFLDGipAA0CtDr?=
- =?us-ascii?Q?cjSV/k6XcBauBoYKxE5QeUGPnoPcEaWNr3W9ixbPlXjNZTfHWAFbUEj2NDzK?=
- =?us-ascii?Q?rmH291rNzavTtAekVwj+vS0RWT81xCERFbl/yWSoaN4IZM/GGOj8azff0ffi?=
- =?us-ascii?Q?ZSk43kbf4xVyvOI9sP0h1lb4DNMFy+U5d6EMqDuxaRp7JAqdWI8yivKpkEaR?=
- =?us-ascii?Q?eg=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	Qir7zLj9gnCUTtJz8q9XbsKcVokMzscol1ek0youJf8bXCivDuWB437YyKkQeaKCnbH1fgpfMFQR3AHz4Jc1EgXDjJQUkqNMkwHkifvMDH4DOOK9xBA1e4sK3kBXtWW+u8lPgaVkTK7uKrOeQxoPeA5N3xV0VsjprAyeaZ+Pdf/x+wWoKFQ9xUOrXmX/bMAZxW8+brx2xVnS75b6lbmyJgg7ZpRnkpN9BYgiaGrY1rX6ngBwvkr1azULCRGjOQmu37aDJyf7szQyKk3eNboP4Dy8W9xkDmQItqhEg6jQNDMMZZHMokmKXZ5viz6LzKIQ1WI84cOK9g6hBeVD+/TI1ZCB+TKuNB2OjqvqMvDpJczCIigpZjmb+wpcqn1tx6BsG0d5MCB8oJaYfiFpGNg+xUFD2fHsJsLU8GRbEQJr7U9qgwP9xadtr7J93/aPzq7wMjxqJXUFVmmk2ygdlB0B6JbgPrAyfKY7ZyCLS8mKD/t1jBL7apFN0CmNwWahT6jqN2nXQCxjqSEKjTYUzFnsbpeKyN8Vq6VTSGt+U2RhG/4Fb/0JdFVdhq2pTJu0Q2JaETGCh4WvAz/i6kysfwLRTen8sOvRyhKeuG5eyfcp0F4=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dd82d738-11fd-4da3-5ba1-08dc69474b41
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR10MB5409.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Apr 2024 18:56:50.7067
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dI6gUZl0YyzwdTZRccrBuYYwH/TxaYAV1glcrEr5hg6Lp3/mAsXA3trXQ+2OU9qUK3QFGg4jmL3f64OVNMmiWazoZJlW61KBfE5H3dQqcJ0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB6606
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-04-30_12,2024-04-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 malwarescore=0
- adultscore=0 mlxscore=0 suspectscore=0 phishscore=0 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2404010000 definitions=main-2404300135
-X-Proofpoint-ORIG-GUID: zXfGw4lMc54dAPXrH1AVHx8wb7hAZBBG
-X-Proofpoint-GUID: zXfGw4lMc54dAPXrH1AVHx8wb7hAZBBG
+References: <20240425171311.19519-1-ricardo.neri-calderon@linux.intel.com> <20240425171311.19519-2-ricardo.neri-calderon@linux.intel.com>
+In-Reply-To: <20240425171311.19519-2-ricardo.neri-calderon@linux.intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 30 Apr 2024 21:07:39 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0i4pREX_HPRvxFM209MiwMScxGCYUr0L8XSXfvkrav1_Q@mail.gmail.com>
+Message-ID: <CAJZ5v0i4pREX_HPRvxFM209MiwMScxGCYUr0L8XSXfvkrav1_Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] thermal: intel: intel_tcc: Add model checks for
+ temperature registers
+To: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, Zhang Rui <rui.zhang@intel.com>, 
+	Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org, 
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Ricardo Neri <ricardo.neri@intel.com>, Tony Luck <tony.luck@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Apr 25, 2024 at 7:06=E2=80=AFPM Ricardo Neri
+<ricardo.neri-calderon@linux.intel.com> wrote:
+>
+> The register MSR_TEMPERATURE_TARGET is not architectural. Its fields may =
+be
+> defined differently for each processor model. TCC_OFFSET is an example of
+> such case.
+>
+> Despite being specified as architectural, the registers IA32_[PACKAGE]_
+> THERM_STATUS have become model-specific: in recent processors, the
+> digital temperature readout uses bits [23:16] whereas the Intel Software
+> Developer's manual specifies bits [22:16].
+>
+> Create an array of processor models and their bitmasks for TCC_OFFSET and
+> the digital temperature readout fields. Do not include recent processors.
+> Instead, use the bitmasks of these recent processors as default.
+>
+> Use these model-specific bitmasks when reading TCC_OFFSET or the
+> temperature sensors.
+>
+> Initialize a model-specific data structure during subsys_initcall() to
+> have it ready when thermal drivers are loaded.
+>
+> Expose the new interface intel_tcc_get_offset_mask(). The
+> intel_tcc_cooling driver will use it.
+>
+> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> ---
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Lukasz Luba <lukasz.luba@arm.com>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: linux-hwmon@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: stable@vger.kernel.org # v6.7+
+> ---
+> Changes since v1:
+>  * Renamed TCC_FAM6_MODEL_TEMP_MASKS as TCC_MODEL_TEMP_MASKS. (Rui)
+>  * Renamed get_tcc_offset_mask() as intel_tcc_get_offset_mask(). (Rui)
+>  * Do not export intel_tcc_get_temp_mask() as it is no longer used
+>    outside intel_tcc.c
+>  * Dropped stub functions for digital temperature readout and TCC
+>    offset. They are not needed as users select CONFIG_INTEL_TCC.
+> ---
+>  drivers/thermal/intel/intel_tcc.c | 177 +++++++++++++++++++++++++++++-
+>  include/linux/intel_tcc.h         |   1 +
+>  2 files changed, 173 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/thermal/intel/intel_tcc.c b/drivers/thermal/intel/in=
+tel_tcc.c
+> index 5e8b7f34b395..9943c43c06df 100644
+> --- a/drivers/thermal/intel/intel_tcc.c
+> +++ b/drivers/thermal/intel/intel_tcc.c
+> @@ -6,8 +6,170 @@
+>
+>  #include <linux/errno.h>
+>  #include <linux/intel_tcc.h>
+> +#include <asm/cpu_device_id.h>
+> +#include <asm/intel-family.h>
+>  #include <asm/msr.h>
+>
+> +/**
+> + * struct temp_masks - Bitmasks for temperature readings
+> + * @tcc_offset:                        TCC offset in MSR_TEMPERATURE_TAR=
+GET
+> + * @digital_readout:           Digital readout in MSR_IA32_THERM_STATUS
+> + * @pkg_digital_readout:       Digital readout in MSR_IA32_PACKAGE_THERM=
+_STATUS
+> + *
+> + * Bitmasks to extract the fields of the MSR_TEMPERATURE and IA32_[PACKA=
+GE]_
+> + * THERM_STATUS registers for different processor models.
+> + *
+> + * The bitmask of TjMax is not included in this structure. It is always =
+0xff.
+> + */
+> +struct temp_masks {
+> +       u32 tcc_offset;
+> +       u32 digital_readout;
+> +       u32 pkg_digital_readout;
+> +};
+> +
+> +#define TCC_MODEL_TEMP_MASKS(model, _tcc_offset, _digital_readout,     \
+> +                            _pkg_digital_readout)                      \
+> +       static const struct temp_masks temp_##model __initconst =3D {    =
+ \
+> +               .tcc_offset =3D _tcc_offset,                             =
+ \
+> +               .digital_readout =3D _digital_readout,                   =
+ \
+> +               .pkg_digital_readout =3D _pkg_digital_readout            =
+ \
+> +       }
+> +
+> +TCC_MODEL_TEMP_MASKS(nehalem, 0, 0x7f, 0x7f);
+> +TCC_MODEL_TEMP_MASKS(haswell_x, 0xf, 0x7f, 0x7f);
+> +TCC_MODEL_TEMP_MASKS(broadwell, 0x3f, 0x7f, 0x7f);
+> +TCC_MODEL_TEMP_MASKS(goldmont, 0x7f, 0x7f, 0x7f);
+> +TCC_MODEL_TEMP_MASKS(tigerlake, 0x3f, 0xff, 0xff);
+> +TCC_MODEL_TEMP_MASKS(sapphirerapids, 0x3f, 0x7f, 0xff);
+> +
+> +/* Use these masks for processors not included in @tcc_cpu_ids. */
+> +static struct temp_masks intel_tcc_temp_masks __ro_after_init =3D {
+> +       .tcc_offset =3D 0x7f,
+> +       .digital_readout =3D 0xff,
+> +       .pkg_digital_readout =3D 0xff,
+> +};
+> +
+> +static const struct x86_cpu_id intel_tcc_cpu_ids[] __initconst =3D {
+> +       X86_MATCH_INTEL_FAM6_MODEL(CORE_YONAH,          &temp_nehalem),
+> +       X86_MATCH_INTEL_FAM6_MODEL(CORE2_MEROM,         &temp_nehalem),
+> +       X86_MATCH_INTEL_FAM6_MODEL(CORE2_MEROM_L,       &temp_nehalem),
+> +       X86_MATCH_INTEL_FAM6_MODEL(CORE2_PENRYN,        &temp_nehalem),
+> +       X86_MATCH_INTEL_FAM6_MODEL(CORE2_DUNNINGTON,    &temp_nehalem),
+> +       X86_MATCH_INTEL_FAM6_MODEL(NEHALEM,             &temp_nehalem),
+> +       X86_MATCH_INTEL_FAM6_MODEL(NEHALEM_G,           &temp_nehalem),
+> +       X86_MATCH_INTEL_FAM6_MODEL(NEHALEM_EP,          &temp_nehalem),
+> +       X86_MATCH_INTEL_FAM6_MODEL(NEHALEM_EX,          &temp_nehalem),
+> +       X86_MATCH_INTEL_FAM6_MODEL(WESTMERE,            &temp_nehalem),
+> +       X86_MATCH_INTEL_FAM6_MODEL(WESTMERE_EP,         &temp_nehalem),
+> +       X86_MATCH_INTEL_FAM6_MODEL(WESTMERE_EX,         &temp_nehalem),
+> +       X86_MATCH_INTEL_FAM6_MODEL(SANDYBRIDGE,         &temp_nehalem),
+> +       X86_MATCH_INTEL_FAM6_MODEL(SANDYBRIDGE_X,       &temp_nehalem),
+> +       X86_MATCH_INTEL_FAM6_MODEL(IVYBRIDGE,           &temp_nehalem),
+> +       X86_MATCH_INTEL_FAM6_MODEL(IVYBRIDGE_X,         &temp_haswell_x),
+> +       X86_MATCH_INTEL_FAM6_MODEL(HASWELL,             &temp_nehalem),
+> +       X86_MATCH_INTEL_FAM6_MODEL(HASWELL_X,           &temp_haswell_x),
+> +       X86_MATCH_INTEL_FAM6_MODEL(HASWELL_L,           &temp_nehalem),
+> +       X86_MATCH_INTEL_FAM6_MODEL(HASWELL_G,           &temp_nehalem),
+> +       X86_MATCH_INTEL_FAM6_MODEL(BROADWELL,           &temp_broadwell),
+> +       X86_MATCH_INTEL_FAM6_MODEL(BROADWELL_G,         &temp_broadwell),
+> +       X86_MATCH_INTEL_FAM6_MODEL(BROADWELL_X,         &temp_haswell_x),
+> +       X86_MATCH_INTEL_FAM6_MODEL(BROADWELL_D,         &temp_haswell_x),
+> +       X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE_L,           &temp_broadwell),
+> +       X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE,             &temp_broadwell),
+> +       X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE_X,           &temp_haswell_x),
+> +       X86_MATCH_INTEL_FAM6_MODEL(KABYLAKE_L,          &temp_broadwell),
+> +       X86_MATCH_INTEL_FAM6_MODEL(KABYLAKE,            &temp_broadwell),
+> +       X86_MATCH_INTEL_FAM6_MODEL(COMETLAKE,           &temp_broadwell),
+> +       X86_MATCH_INTEL_FAM6_MODEL(COMETLAKE_L,         &temp_broadwell),
+> +       X86_MATCH_INTEL_FAM6_MODEL(CANNONLAKE_L,        &temp_broadwell),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X,           &temp_broadwell),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,           &temp_broadwell),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ICELAKE,             &temp_broadwell),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_L,           &temp_broadwell),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_NNPI,        &temp_broadwell),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ROCKETLAKE,          &temp_broadwell),
+> +       X86_MATCH_INTEL_FAM6_MODEL(TIGERLAKE_L,         &temp_tigerlake),
+> +       X86_MATCH_INTEL_FAM6_MODEL(TIGERLAKE,           &temp_tigerlake),
+> +       X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,    &temp_sapphirerap=
+ids),
+> +       X86_MATCH_INTEL_FAM6_MODEL(EMERALDRAPIDS_X,     &temp_sapphirerap=
+ids),
+> +       X86_MATCH_INTEL_FAM6_MODEL(LAKEFIELD,           &temp_broadwell),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE,           &temp_tigerlake),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L,         &temp_tigerlake),
+> +       X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,          &temp_tigerlake),
+> +       X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,        &temp_tigerlake),
+> +       X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_S,        &temp_tigerlake),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ATOM_BONNELL,        &temp_nehalem),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ATOM_BONNELL_MID,    &temp_nehalem),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ATOM_SALTWELL,       &temp_nehalem),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ATOM_SALTWELL_MID,   &temp_nehalem),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ATOM_SILVERMONT,     &temp_broadwell),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ATOM_SILVERMONT_D,   &temp_broadwell),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ATOM_SILVERMONT_MID, &temp_broadwell),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ATOM_AIRMONT,        &temp_broadwell),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ATOM_AIRMONT_MID,    &temp_broadwell),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ATOM_AIRMONT_NP,     &temp_broadwell),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT,       &temp_goldmont),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT_D,     &temp_goldmont),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT_PLUS,  &temp_goldmont),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ATOM_TREMONT_D,      &temp_broadwell),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ATOM_TREMONT,        &temp_broadwell),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ATOM_TREMONT_L,      &temp_broadwell),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ATOM_GRACEMONT,      &temp_tigerlake),
+> +       X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNL,        &temp_broadwell),
+> +       X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNM,        &temp_broadwell),
+> +       {}
+> +};
+> +
+> +static int __init intel_tcc_init(void)
+> +{
+> +       const struct x86_cpu_id *id;
+> +
+> +       id =3D x86_match_cpu(intel_tcc_cpu_ids);
+> +       if (id)
+> +               memcpy(&intel_tcc_temp_masks, (const void *)id->driver_da=
+ta,
+> +                      sizeof(intel_tcc_temp_masks));
+> +
+> +       return 0;
+> +}
+> +/*
+> + * Use subsys_initcall to ensure temperature bitmasks are initialized be=
+fore
+> + * the drivers that use this library.
+> + */
+> +subsys_initcall(intel_tcc_init);
+> +
+> +/**
+> + * intel_tcc_get_offset_mask() - Returns the bitmask to read TCC offset
+> + *
+> + * Get the model-specific bitmask to extract TCC_OFFSET from the MSR
+> + * TEMPERATURE_TARGET register. If the mask is 0, it means the processor=
+ does
+> + * not support TCC offset.
+> + *
+> + * Return: The model-specific bitmask for TCC offset.
+> + */
+> +u32 intel_tcc_get_offset_mask(void)
+> +{
+> +       return intel_tcc_temp_masks.tcc_offset;
+> +}
+> +EXPORT_SYMBOL_NS(intel_tcc_get_offset_mask, INTEL_TCC);
+> +
+> +/**
+> + * get_temp_mask() - Returns the model-specific bitmask for temperature
+> + *
+> + * @pkg: true: Package Thermal Sensor. false: Core Thermal Sensor.
+> + *
+> + * Get the model-specific bitmask to extract the temperature reading fro=
+m the
+> + * MSR_IA32_[PACKAGE]_THERM_STATUS register.
+> + *
+> + * Callers must check if the thermal status registers are supported.
+> + *
+> + * Return: The model-specific bitmask for temperature reading
+> + */
+> +static u32 get_temp_mask(bool pkg)
+> +{
+> +       return pkg ? intel_tcc_temp_masks.pkg_digital_readout :
+> +              intel_tcc_temp_masks.digital_readout;
+> +}
+> +
+>  /**
+>   * intel_tcc_get_tjmax() - returns the default TCC activation Temperatur=
+e
+>   * @cpu: cpu that the MSR should be run on, nagative value means any cpu=
+.
+> @@ -56,7 +218,7 @@ int intel_tcc_get_offset(int cpu)
+>         if (err)
+>                 return err;
+>
+> -       return (low >> 24) & 0x3f;
+> +       return (low >> 24) & intel_tcc_temp_masks.tcc_offset;
+>  }
+>  EXPORT_SYMBOL_NS_GPL(intel_tcc_get_offset, INTEL_TCC);
+>
+> @@ -76,7 +238,10 @@ int intel_tcc_set_offset(int cpu, int offset)
+>         u32 low, high;
+>         int err;
+>
+> -       if (offset < 0 || offset > 0x3f)
+> +       if (!intel_tcc_temp_masks.tcc_offset)
+> +               return -ENODEV;
+> +
+> +       if (offset < 0 || offset > intel_tcc_temp_masks.tcc_offset)
+>                 return -EINVAL;
+>
+>         if (cpu < 0)
+> @@ -90,7 +255,7 @@ int intel_tcc_set_offset(int cpu, int offset)
+>         if (low & BIT(31))
+>                 return -EPERM;
+>
+> -       low &=3D ~(0x3f << 24);
+> +       low &=3D ~(intel_tcc_temp_masks.tcc_offset << 24);
+>         low |=3D offset << 24;
+>
+>         if (cpu < 0)
+> @@ -113,8 +278,8 @@ EXPORT_SYMBOL_NS_GPL(intel_tcc_set_offset, INTEL_TCC)=
+;
+>   */
+>  int intel_tcc_get_temp(int cpu, int *temp, bool pkg)
+>  {
+> -       u32 low, high;
+>         u32 msr =3D pkg ? MSR_IA32_PACKAGE_THERM_STATUS : MSR_IA32_THERM_=
+STATUS;
+> +       u32 low, high, mask;
+>         int tjmax, err;
+>
+>         tjmax =3D intel_tcc_get_tjmax(cpu);
+> @@ -132,7 +297,9 @@ int intel_tcc_get_temp(int cpu, int *temp, bool pkg)
+>         if (!(low & BIT(31)))
+>                 return -ENODATA;
+>
+> -       *temp =3D tjmax - ((low >> 16) & 0x7f);
+> +       mask =3D get_temp_mask(pkg);
+> +
+> +       *temp =3D tjmax - ((low >> 16) & mask);
+>
+>         return 0;
+>  }
+> diff --git a/include/linux/intel_tcc.h b/include/linux/intel_tcc.h
+> index 8ff8eabb4a98..fa788817acfc 100644
+> --- a/include/linux/intel_tcc.h
+> +++ b/include/linux/intel_tcc.h
+> @@ -14,5 +14,6 @@ int intel_tcc_get_tjmax(int cpu);
+>  int intel_tcc_get_offset(int cpu);
+>  int intel_tcc_set_offset(int cpu, int offset);
+>  int intel_tcc_get_temp(int cpu, int *temp, bool pkg);
+> +u32 intel_tcc_get_offset_mask(void);
+>
+>  #endif /* __INTEL_TCC_H__ */
+> --
 
-> Subject: Re: [PATCH 0/9] Enable haltpoll for arm64
-
-A correction: please read the subject for the series as [PATCH v5] ...
-
-Missed the version number it while sending out.
-
-Thanks
-Ankur
-
-Ankur Arora <ankur.a.arora@oracle.com> writes:
-
-> This patchset enables the cpuidle-haltpoll driver and its namesake
-> governor on arm64. This is specifically interesting for KVM guests by
-> reducing the IPC latencies.
->
-> Comparing idle switching latencies on an arm64 KVM guest with
-> perf bench sched pipe:
->
->                                      usecs/op       %stdev
->
->   no haltpoll (baseline)               13.48       +-  5.19%
->   with haltpoll                         6.84       +- 22.07%
->
->
-> No change in performance for a similar test on x86:
->
->                                      usecs/op        %stdev
->
->   haltpoll w/ cpu_relax() (baseline)     4.75      +-  1.76%
->   haltpoll w/ smp_cond_load_relaxed()    4.78      +-  2.31%
->
-> Both sets of tests were on otherwise idle systems with guest VCPUs
-> pinned to specific PCPUs. One reason for the higher stdev on arm64
-> is that trapping of the WFE instruction by the host KVM is contingent
-> on the number of tasks on the runqueue.
->
->
-> The patch series is organized in four parts:
->  - patches 1, 2 mangle the config option ARCH_HAS_CPU_RELAX, renaming
->    and moving it from x86 to common architectural code.
->  - next, patches 3-5, reorganize the haltpoll selection and init logic
->    to allow architecture code to select it.
->  - patch 6, reorganizes the poll_idle() loop, switching from using
->    cpu_relax() directly to smp_cond_load_relaxed().
->  - and finally, patches 7-9, add the bits for arm64 support.
->
-> What is still missing: this series largely completes the haltpoll side
-> of functionality for arm64. There are, however, a few related areas
-> that still need to be threshed out:
->
->  - WFET support: WFE on arm64 does not guarantee that poll_idle()
->    would terminate in halt_poll_ns. Using WFET would address this.
->  - KVM_NO_POLL support on arm64
->  - KVM TWED support on arm64: allow the host to limit time spent in
->    WFE.
->
->
-> Changelog:
->
-> v5:
->  - rework the poll_idle() loop around smp_cond_load_relaxed() (review
->    comment from Tomohiro Misono.)
->  - also rework selection of cpuidle-haltpoll. Now selected based
->    on the architectural selection of ARCH_CPUIDLE_HALTPOLL.
->  - arch_haltpoll_supported() (renamed from arch_haltpoll_want()) on
->    arm64 now depends on the event-stream being enabled.
->  - limit POLL_IDLE_RELAX_COUNT on arm64 (review comment from Haris Okanovic)
->  - ARCH_HAS_CPU_RELAX is now renamed to ARCH_HAS_OPTIMIZED_POLL.
->
-> v4 changes from v3:
->  - change 7/8 per Rafael input: drop the parens and use ret for the final check
->  - add 8/8 which renames the guard for building poll_state
->
-> v3 changes from v2:
->  - fix 1/7 per Petr Mladek - remove ARCH_HAS_CPU_RELAX from arch/x86/Kconfig
->  - add Ack-by from Rafael Wysocki on 2/7
->
-> v2 changes from v1:
->  - added patch 7 where we change cpu_relax with smp_cond_load_relaxed per PeterZ
->    (this improves by 50% at least the CPU cycles consumed in the tests above:
->    10,716,881,137 now vs 14,503,014,257 before)
->  - removed the ifdef from patch 1 per RafaelW
->
-> Ankur Arora (4):
->   cpuidle: rename ARCH_HAS_CPU_RELAX to ARCH_HAS_OPTIMIZED_POLL
->   cpuidle-haltpoll: condition on ARCH_CPUIDLE_HALTPOLL
->   arm64: support cpuidle-haltpoll
->   cpuidle/poll_state: limit POLL_IDLE_RELAX_COUNT on arm64
->
-> Joao Martins (4):
->   Kconfig: move ARCH_HAS_OPTIMIZED_POLL to arch/Kconfig
->   cpuidle-haltpoll: define arch_haltpoll_supported()
->   governors/haltpoll: drop kvm_para_available() check
->   arm64: define TIF_POLLING_NRFLAG
->
-> Mihai Carabas (1):
->   cpuidle/poll_state: poll via smp_cond_load_relaxed()
->
->  arch/Kconfig                              |  3 +++
->  arch/arm64/Kconfig                        | 10 ++++++++++
->  arch/arm64/include/asm/cpuidle_haltpoll.h | 21 +++++++++++++++++++++
->  arch/arm64/include/asm/thread_info.h      |  2 ++
->  arch/x86/Kconfig                          |  4 +---
->  arch/x86/include/asm/cpuidle_haltpoll.h   |  1 +
->  arch/x86/kernel/kvm.c                     | 10 ++++++++++
->  drivers/acpi/processor_idle.c             |  4 ++--
->  drivers/cpuidle/Kconfig                   |  5 ++---
->  drivers/cpuidle/Makefile                  |  2 +-
->  drivers/cpuidle/cpuidle-haltpoll.c        |  9 ++-------
->  drivers/cpuidle/governors/haltpoll.c      |  6 +-----
->  drivers/cpuidle/poll_state.c              | 21 ++++++++++++++++-----
->  drivers/idle/Kconfig                      |  1 +
->  include/linux/cpuidle.h                   |  2 +-
->  include/linux/cpuidle_haltpoll.h          |  5 +++++
->  16 files changed, 79 insertions(+), 27 deletions(-)
->  create mode 100644 arch/arm64/include/asm/cpuidle_haltpoll.h
-
-
---
-ankur
+This clashes with the Tony Luck's rework of Intel CPU model defines
+(see https://lore.kernel.org/lkml/20240430164913.73473-1-tony.luck@intel.co=
+m/),
+so I'd rather defer it until commit 2eda374e883a ("x86/mm: Switch to
+new Intel CPU model defines") reaches the mainline and make it use the
+new CPU model defines from the start.
 
