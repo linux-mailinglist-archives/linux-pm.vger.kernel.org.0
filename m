@@ -1,179 +1,116 @@
-Return-Path: <linux-pm+bounces-7339-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7340-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 193D88B6FA6
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 12:28:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E2A78B6FBF
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 12:36:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4A5DC1C21ED0
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 10:28:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 491451C20AFC
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2024 10:36:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD40413D240;
-	Tue, 30 Apr 2024 10:28:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97DF712BF17;
+	Tue, 30 Apr 2024 10:36:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="woGRXCaE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UuSywXzn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D2F8129E98
-	for <linux-pm@vger.kernel.org>; Tue, 30 Apr 2024 10:27:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CF0317727;
+	Tue, 30 Apr 2024 10:36:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714472881; cv=none; b=tbvWwBljPmQt8s1U540Dg2Jqk5GXOnJ0xjs+vlo57cNIF2FVjEFCUIURztaTYg90XEeKPQhM05Btx+lZdmeN9zdLJnFQ7ioADEPqvxojwLd0Bk+pLJI9UOsmfSffocoRp4wi+caKIIS9qBiQOSHmf9v1X2EfGQGl+vObsb9fBSU=
+	t=1714473364; cv=none; b=p34jYMHBL5pgXI2fgBCRa943XpE5IkAwzKjBq0XU9NYkeJ17XZuNm4xB0TkNA+MyaK0AiiLCT9+ud51D4RPWVA/aKP7nvrv7pCc/KDv/2pRBrGU/MupfMMbZ8eD5HIA+K8OpioA2x3tAY8Y9l8tHIhJaXn252xUVXvrcxkri1P4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714472881; c=relaxed/simple;
-	bh=sLk3fEE7NUBFZXPEs25LXUyugPhq8JEdv5ZGrzbOmgU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=QXT3nq9n+FCrhGzIZXJSlQ6bUcVpdUaz2XKol2G3wyaUZORfaJm7OrTwfROZQnt4Se3IisA5VfUff7vLIkljO0qesHURnC1w0UNUqzl0icGNsWUFQrNNC39IFTZKlxxJcfDc7utPHhaAi7BkJ4rmhSQ/0trSBBcpFE0dq49SVlQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=woGRXCaE; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1ec69e3dbcfso370645ad.0
-        for <linux-pm@vger.kernel.org>; Tue, 30 Apr 2024 03:27:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1714472879; x=1715077679; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=23XnMxN3QO0MYdUnPt9/dMrwrGMxZBA4YMh3U1kQE1Y=;
-        b=woGRXCaESBXOwHEH3LM1x8B+tBAaW08qV66cro/rmVfhnHdUpp10Vj8anoYqXpyedr
-         phv8Rp0qNW+8r14kZMFGfnwRGDdWeMjlSwiJqRb+7hs6trVvlE6hlbP2D0gomhihS/AU
-         xoY1rbFCo/V617PTMIic7cALky6FJV6wPPkfFFLylDbKrfLmpuCBLkwAF1TYjD8iVZHf
-         sWDap1I6A8kkNyrsqjBhRaIjxseJ1s1jzFxY7VhxBol7ht6HLmXqMZE3w/4J+0VFprI5
-         qyp8+8HEP9/kH/7nB4oLv2g6mK8hJHfNvC5VTdzzIZwh0lnmN6hsLpnLzaJRbfjCzJze
-         xClQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714472879; x=1715077679;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=23XnMxN3QO0MYdUnPt9/dMrwrGMxZBA4YMh3U1kQE1Y=;
-        b=HgBKBaGQ5GwR0z9YgP1HZ7tPgcw1OS4QU5gLnzArutgEQFCaISba0CiGwljkZr4ZvG
-         wyM4DeIaDFhKp4HN0fjqa6Fj9c/dIsOQZc/QrTzbQJsiSTKoPKPNa8QTfPrjGRCgp/dR
-         r6B6pQnrUEKd0nPlEYYst8Xg77aPQo/C8k9P62HB2gH9wYQEWlBfZOa+M1CmWdvAa/pk
-         8+sWb5QEc+4tazJa7lch7020rYbKPF7rWDDbJzoNDhgkc0U6uAHeRILjqYQmBBfmtB2a
-         gECqc2uZynES3GTykX9fV8DdL+3sfiEYcF0+bI3cDUUiQNuM3M7DqknF+ARQg2VcPzQC
-         2bEQ==
-X-Gm-Message-State: AOJu0Yw9T8B4WNkPyBFj/qzO+zkhC3sWWn7g4BXa0HZdNB7eulks1jjy
-	T+pAhDjiRIX53hkCZqoes/fIL6APcQcPTJ2lgCVRw2fwwglX4s6Bho5iv541tCc=
-X-Google-Smtp-Source: AGHT+IFjlty8sQ8XLelXGYl9f3a6biL5KwxdZVA/9rD2nyRrWfIYJw6pdq9oeas2ik+5/8x6CyLN1A==
-X-Received: by 2002:a17:903:1205:b0:1e4:ccf6:209f with SMTP id l5-20020a170903120500b001e4ccf6209fmr15916378plh.28.1714472879208;
-        Tue, 30 Apr 2024 03:27:59 -0700 (PDT)
-Received: from localhost ([122.172.87.52])
-        by smtp.gmail.com with ESMTPSA id kj3-20020a17090306c300b001e5a1678d62sm22018194plb.63.2024.04.30.03.27.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Apr 2024 03:27:58 -0700 (PDT)
-Date: Tue, 30 Apr 2024 15:57:56 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>
-Subject: [GIT PULL] cpufreq/arm updates for 6.10
-Message-ID: <20240430102756.fgar4rdd5s42245l@vireshk-i7>
+	s=arc-20240116; t=1714473364; c=relaxed/simple;
+	bh=dxEYVJ1G2GubDWzrfRvAEde9L0bxzSpTVsMJOzG2ixA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JzHoJVA82ntkET+UZizDDnQlEgQkPRJ0/17LfIm5v39ONLiADDtqoNDFByuqqojdeviMMuFkv42ZQvH2+zrZeBl2UxnoI6UNIAASPrDERQcq8GjJJw5yRjRZ/AzXGXW2y0zzxm2iWgZohk8bDyD0Ts+gebkMzN5tMo+G1wXX974=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UuSywXzn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAB09C4AF14;
+	Tue, 30 Apr 2024 10:36:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714473364;
+	bh=dxEYVJ1G2GubDWzrfRvAEde9L0bxzSpTVsMJOzG2ixA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=UuSywXznCsDTIqFQmOEx7qSXhXLPzwTaOQYF7RQnF8vHYQlXz3urwReSWw3Be7qjD
+	 bClq24aBePj/m/pvuPOEIaxLaB8R1gHMomyamHpn5S3upklUwNBhS0EIL078yl5SGG
+	 I7W7vF2iSRFgFAp1rXxbbQcIIxrImfmXhSXsgJoo2Ko5PuS4HoTyHjn01dT33PxW/I
+	 QwbXM88InurnQyvbWW7512c9vz6Hs+SPQrtQYYvZsq9/6axc2GtLkfltxV5qWyDzFV
+	 G9AbDpg0Hb3/XSWFoOHhHiee1y3rLNtYK2dDMo+CMGQaBn8RJAvbfrEXRK7w0QyVNN
+	 X3Zmi5ACHUzeg==
+Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-3c70418ef53so441297b6e.1;
+        Tue, 30 Apr 2024 03:36:03 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWRrEUjMtCH8kdbTAyR2wfY2K7DLgePb4vint2dr7GQyzzkJos8dBQkOtMYWP213iNhEs8/TkzzpdXRPqhH1Nu7Rw5oy4kzZrTePis/6X4ycizPCBI/YjTlQAArvnHeEhLvM5gnGN8=
+X-Gm-Message-State: AOJu0YxMwvrOq5yxZ6Zhf5cUujowA5tFK9qsGt3RFsnuVKgRW7/3EAGt
+	wv3/fSI4l6B5+h1mte63XYrnzuZTGw2s3SWR0R13vLZWBhiSQxz1HTSCkwTflwKcuSRSerWrDld
+	7J1P+HgWWYQ4sL7r/1uX/ZbIhFHs=
+X-Google-Smtp-Source: AGHT+IFKSNEDHgxMiS9UPx1bYRCjsvOPN1pRKkeX2zU36pfxhcwNL4+l5qIW5sCiyeruv8oekZ1S562kte7GTQTQR/I=
+X-Received: by 2002:a4a:a7cb:0:b0:5a4:7790:61b4 with SMTP id
+ n11-20020a4aa7cb000000b005a4779061b4mr15189159oom.0.1714473363224; Tue, 30
+ Apr 2024 03:36:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240429113356.1708284-1-ray.huang@amd.com> <efd9226b-84b4-47e9-bbb9-68bd0194a8ef@amd.com>
+In-Reply-To: <efd9226b-84b4-47e9-bbb9-68bd0194a8ef@amd.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 30 Apr 2024 12:35:52 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hUwKHbpWXfjArujB8FJ9wDc9_Cv5O1Y_DcyWAPHG-v_w@mail.gmail.com>
+Message-ID: <CAJZ5v0hUwKHbpWXfjArujB8FJ9wDc9_Cv5O1Y_DcyWAPHG-v_w@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: cpufreq: amd-pstate: Add co-maintainers and reviewer
+To: Mario Limonciello <mario.limonciello@amd.com>, Huang Rui <ray.huang@amd.com>, 
+	"Gautham R . Shenoy" <gautham.shenoy@amd.com>
+Cc: "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Meng Li <li.meng@amd.com>, 
+	Xiaojian Du <Xiaojian.Du@amd.com>, Perry Yuan <perry.yuan@amd.com>, 
+	Ananth Narayan <ananth.narayan@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Rafael,
+On Mon, Apr 29, 2024 at 4:02=E2=80=AFPM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
+>
+> On 4/29/2024 06:33, Huang Rui wrote:
+> > I'm happy to add Gautham and Mario as the co-maintainers, Perry as the
+> > reviewer for amd-pstate driver.
+> >
+> > Signed-off-by: Huang Rui <ray.huang@amd.com>
+> > Cc: Gautham R. Shenoy <gautham.shenoy@amd.com>
+> > Cc: Mario Limonciello <mario.limonciello@amd.com>
+> > Cc: Perry Yuan <perry.yuan@amd.com>
+> > Cc: Ananth Narayan <ananth.narayan@amd.com>
+> > ---
+>
+> Thanks Ray!  We of course talked about this offline and I'm happy to
+> step in.  Having coverage of two people is also good for any OOO
+> situation in the future to make sure patches can be reviewed in a timely
+> fashion.
+>
+> Acked-by: Mario Limonciello <mario.limonciello@amd.com>
+>
+> >
+> > Hi Rafael,
+> >
+> > Recently, I was assigned other task of virtio-gpu support for Xen, so
+> > apology not to review the patches timely. After discussing with our AMD
+> > colleagues, we want to add Gautham and Mario as co-maintainers of this
+> > driver from server and client side. If one of the maintainers ack the
+> > amd-pstate patch, then this patch is good to be accepted from AMD
+> > perspective. And also add Perry as reviewer, he is actively contributin=
+g
+> > the patches on this driver for a long time.
+> >
+> > We will try to keep the patches reviewed on time in future.
 
-The following changes since commit 4cece764965020c22cff7665b18a012006359095:
+Thank you all, patch applied for 6.10.
 
-  Linux 6.9-rc1 (2024-03-24 14:10:05 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufreq-arm-updates-6.10
-
-for you to fetch changes up to fde234239d161f958390e41d26cda2bb166f1994:
-
-  dt-bindings: cpufreq: cpufreq-qcom-hw: Add SM4450 compatibles (2024-04-26 18:13:41 +0530)
-
-----------------------------------------------------------------
-ARM cpufreq updates for 6.10
-
-- Sun50i: Add support for opp_supported_hw, H616 platform and general
-  cleaups (Andre Przywara, Martin Botka, Brandon Cheo Fusi, Dan
-  Carpenter, and Viresh Kumar).
-
-- cppc: Fix possible null pointer dereference (Aleksandr Mishin).
-
-- Eliminate uses of of_node_put() (Javier Carrasco, and Shivani Gupta).
-
-- brcmstb-avs: ISO C90 forbids mixed declarations (Portia Stephens).
-
-- mediatek: Add support for MT7988A (Sam Shih).
-
-- cpufreq-qcom-hw: Add SM4450 compatibles in DT bindings (Tengfei Fan).
-
-----------------------------------------------------------------
-Aleksandr Mishin (1):
-      cppc_cpufreq: Fix possible null pointer dereference
-
-Andre Przywara (2):
-      cpufreq: sun50i: Add support for opp_supported_hw
-      arm64: dts: allwinner: h616: enable DVFS for all boards
-
-Brandon Cheo Fusi (1):
-      cpufreq: sun50i: Refactor speed bin decoding
-
-Dan Carpenter (1):
-      cpufreq: sun50i: fix error returns in dt_has_supported_hw()
-
-Javier Carrasco (3):
-      cpupfreq: tegra124: eliminate uses of of_node_put()
-      cpufreq: dt: eliminate uses of of_node_put()
-      cpufreq: dt-platdev: eliminate uses of of_node_put()
-
-Martin Botka (5):
-      firmware: smccc: Export revision soc_id function
-      cpufreq: dt-platdev: Blocklist Allwinner H616/618 SoCs
-      dt-bindings: opp: Describe H616 OPPs and opp-supported-hw
-      cpufreq: sun50i: Add H616 support
-      arm64: dts: allwinner: h616: Add CPU OPPs table
-
-Portia Stephens (1):
-      cpufreq: brcmstb-avs-cpufreq: ISO C90 forbids mixed declarations
-
-Sam Shih (1):
-      cpufreq: mediatek: Add support for MT7988A
-
-Shivani Gupta (1):
-      cpufreq: ti: Implement scope-based cleanup in ti_cpufreq_match_node()
-
-Tengfei Fan (1):
-      dt-bindings: cpufreq: cpufreq-qcom-hw: Add SM4450 compatibles
-
-Viresh Kumar (1):
-      cpufreq: sun50i: Fix build warning around snprint()
-
- Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml                  |   2 ++
- Documentation/devicetree/bindings/opp/allwinner,sun50i-h6-operating-points.yaml |  87 ++++++++++++++++++++++++++-------------------------
- arch/arm64/boot/dts/allwinner/sun50i-h616-bigtreetech-cb1.dtsi                  |   5 +++
- arch/arm64/boot/dts/allwinner/sun50i-h616-cpu-opp.dtsi                          | 115 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- arch/arm64/boot/dts/allwinner/sun50i-h616-orangepi-zero2.dts                    |   5 +++
- arch/arm64/boot/dts/allwinner/sun50i-h616-x96-mate.dts                          |   5 +++
- arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi                                  |   8 +++++
- arch/arm64/boot/dts/allwinner/sun50i-h618-longan-module-3h.dtsi                 |   5 +++
- arch/arm64/boot/dts/allwinner/sun50i-h618-orangepi-zero2w.dts                   |   5 +++
- arch/arm64/boot/dts/allwinner/sun50i-h618-orangepi-zero3.dts                    |   5 +++
- arch/arm64/boot/dts/allwinner/sun50i-h618-transpeed-8k618-t.dts                 |   5 +++
- drivers/cpufreq/brcmstb-avs-cpufreq.c                                           |   5 ++-
- drivers/cpufreq/cppc_cpufreq.c                                                  |  14 +++++++--
- drivers/cpufreq/cpufreq-dt-platdev.c                                            |  10 +++---
- drivers/cpufreq/cpufreq-dt.c                                                    |  21 ++++---------
- drivers/cpufreq/mediatek-cpufreq.c                                              |  10 ++++++
- drivers/cpufreq/sun50i-cpufreq-nvmem.c                                          | 209 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++----------------------
- drivers/cpufreq/tegra124-cpufreq.c                                              |  19 ++++--------
- drivers/cpufreq/ti-cpufreq.c                                                    |   4 +--
- drivers/firmware/smccc/smccc.c                                                  |   1 +
- 20 files changed, 420 insertions(+), 120 deletions(-)
- create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h616-cpu-opp.dtsi
-
--- 
-viresh
+BTW, patch series "AMD Pstate Driver Core Performance Boost" doesn't
+seem to be ready and given that -rc7 is due this week, I'd rather
+postpone until the 6.11 cycle.
 
