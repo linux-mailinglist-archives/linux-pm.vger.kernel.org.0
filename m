@@ -1,165 +1,196 @@
-Return-Path: <linux-pm+bounces-7417-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7418-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 886D08B8633
-	for <lists+linux-pm@lfdr.de>; Wed,  1 May 2024 09:43:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52E2A8B86CF
+	for <lists+linux-pm@lfdr.de>; Wed,  1 May 2024 10:21:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B8EF61C21582
-	for <lists+linux-pm@lfdr.de>; Wed,  1 May 2024 07:43:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 765AE1C22A06
+	for <lists+linux-pm@lfdr.de>; Wed,  1 May 2024 08:21:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE4C14D9FC;
-	Wed,  1 May 2024 07:43:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C33134EB38;
+	Wed,  1 May 2024 08:21:33 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6541F4EB31;
-	Wed,  1 May 2024 07:43:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89792EED6;
+	Wed,  1 May 2024 08:21:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714549408; cv=none; b=br75AQLMQ5aJbIdAhs/KesBIPU4Z3M87kEKFje7aO2M5Tnkg3KLOs5bNuUOBQyHb/NK+T93gOCMRJIZhmEFB/mfjJynDwt1lV83pCHHF5Hf0VFuua0WKK81+NKy2dbkAeb6tulBP9kOcnw28JjJNQqiHiV0yyzxoLRnBcreWFUc=
+	t=1714551693; cv=none; b=VYqXikMNizsW2gdvsBdYVXmuulIvhlrxSdUNh/BfkjQff0a7Kq1oqWiPKuXJYbIFQoflOzF+X5G4mc8L9eVIrV7V50stxhTJ2GYY6VdfifnrSyirNr1SCG4gHrIBwHACO9KNFx/HvRuv6J+bfs9iMYxFca2a7P0s0doxgCrpo2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714549408; c=relaxed/simple;
-	bh=7nqU/xTAWIKrs6wJO5+o3gQ7Nxw3CcRjC/R068qB5iY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LgzbT+Na/QT2Mr1ytkXhKM1bP59NvIIovMO1PuAYzAfCFLkdUM0+j52ZfIwZhjR0lDs+7OMX5owMgmsQUiImaXMNWfXh/dCNgTnHvjD3cLJuyM7aesKB77JW2/xj3XyPtM4pCFi3SUfPzLAEqA+09SOl9YK8MTvBJbduUPHhJCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 78cd6df2078e11ef9305a59a3cc225df-20240501
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.37,REQID:8fb245b8-d59c-48f8-aa80-f550bdb94b68,IP:20,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-9,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:11
-X-CID-INFO: VERSION:1.1.37,REQID:8fb245b8-d59c-48f8-aa80-f550bdb94b68,IP:20,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-9,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:11
-X-CID-META: VersionHash:6f543d0,CLOUDID:a1f90559195b470bc2f19128ca9783ed,BulkI
-	D:240501142506Y4TZV215,BulkQuantity:1,Recheck:0,SF:72|19|44|64|66|38|24|10
-	2,TC:nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:40,QS:nil,BEC:n
-	il,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
-X-UUID: 78cd6df2078e11ef9305a59a3cc225df-20240501
-Received: from node4.com.cn [(39.156.73.12)] by mailgw.kylinos.cn
-	(envelope-from <xiongxin@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 1203291724; Wed, 01 May 2024 15:43:16 +0800
-Received: from node4.com.cn (localhost [127.0.0.1])
-	by node4.com.cn (NSMail) with SMTP id 79F6E16002082;
-	Wed,  1 May 2024 15:43:05 +0800 (CST)
-X-ns-mid: postfix-6631F289-3125101
-Received: from [10.42.116.201] (unknown [10.42.116.201])
-	by node4.com.cn (NSMail) with ESMTPA id 9EBE216002082;
-	Wed,  1 May 2024 07:43:04 +0000 (UTC)
-Message-ID: <4a1de64c-4be8-450d-9f12-e8ec9ac42778@kylinos.cn>
-Date: Wed, 1 May 2024 15:43:03 +0800
+	s=arc-20240116; t=1714551693; c=relaxed/simple;
+	bh=X8qLkIyTCQ2AZcwKN+u61pO82R+Ot2jZEQ76Gaar5C8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M+nDvJuTQcZbIba8YofN/3BERRzUK/+F419u0o/yB4PAp2UcCtNLTBd7AcKwDHhCyamWndfIsqKDesfqMg5Aupdlj50daVU1wj0c0gxChczZHYBDirEIuDiWDz/puMpAAaNu/93Tv9qKoo0VjPHGHuo7uhMYQHCEg3oXIGlLS4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 46DF12F4;
+	Wed,  1 May 2024 01:21:56 -0700 (PDT)
+Received: from pluto (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3CA3C3F793;
+	Wed,  1 May 2024 01:21:28 -0700 (PDT)
+Date: Wed, 1 May 2024 09:21:25 +0100
+From: Cristian Marussi <cristian.marussi@arm.com>
+To: Sibi Sankar <quic_sibis@quicinc.com>
+Cc: sudeep.holla@arm.com, rafael@kernel.org, viresh.kumar@linaro.org,
+	morten.rasmussen@arm.com, dietmar.eggemann@arm.com,
+	lukasz.luba@arm.com, pierre.gondois@arm.com,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, quic_mdtipton@quicinc.com,
+	linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH V4 2/2] cpufreq: scmi: Register for limit change
+ notifications
+Message-ID: <ZjH7hWnKFcpQ-TXH@pluto>
+References: <20240328074131.2839871-1-quic_sibis@quicinc.com>
+ <20240328074131.2839871-3-quic_sibis@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH -next] PM: hibernate: add retry mechanism for S4 image
- loading failures
-To: Pavel Machek <pavel@ucw.cz>, Xueqin Luo <luoxueqin@kylinos.cn>
-Cc: rafael@kernel.org, len.brown@intel.com, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240501061258.2874092-1-luoxueqin@kylinos.cn>
- <ZjHgLlAC3ArqFLH0@ucw.cz>
-Content-Language: en-US
-From: xiongxin <xiongxin@kylinos.cn>
-In-Reply-To: <ZjHgLlAC3ArqFLH0@ucw.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240328074131.2839871-3-quic_sibis@quicinc.com>
 
-On 2024/5/1 14:24, Pavel Machek wrote:
->> During the S4 resume process, there's a rare chance of image loading
->> failure. We provide three retries to load it successfully. If the
->> recovery fails after these attempts, print out the handle CRC32
->> value. When the CRC32 value obtained on each retry are inconsistent,
->> there may be a memory anomaly. When the values are consistent, it
->> might indicate corrupted swapped memory data.
->>
->> Signed-off-by: Xueqin Luo <luoxueqin@kylinos.cn>
+On Thu, Mar 28, 2024 at 01:11:31PM +0530, Sibi Sankar wrote:
+> Register for limit change notifications if supported and use the throttled
+> frequency from the notification to apply HW pressure.
 > 
-> NAK. If machine is so broken it can't load memory image, it is not
-> safe to  continue.
+
+Hi Sibi,
+
+a bit late on this, sorry.
+
+Just a couple of nitpicks down below.
+
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> ---
 > 
-> 								Pavel
+> v4:
+> * Use a interim variable to show the khz calc. [Lukasz]
+> * Use driver_data to pass on the handle and scmi_dev instead of using
+>   global variables. Dropped Lukasz's Rb due to adding these minor
+>   changes.
+> 
+>  drivers/cpufreq/scmi-cpufreq.c | 44 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
+> index 3b4f6bfb2f4c..d946b7a08258 100644
+> --- a/drivers/cpufreq/scmi-cpufreq.c
+> +++ b/drivers/cpufreq/scmi-cpufreq.c
+> @@ -21,11 +21,18 @@
+>  #include <linux/types.h>
+>  #include <linux/units.h>
+>  
+> +struct scmi_cpufreq_driver_data {
+> +	struct scmi_device *sdev;
+> +	const struct scmi_handle *handle;
+> +};
+> +
+>  struct scmi_data {
+>  	int domain_id;
+>  	int nr_opp;
+>  	struct device *cpu_dev;
+> +	struct cpufreq_policy *policy;
+>  	cpumask_var_t opp_shared_cpus;
+> +	struct notifier_block limit_notify_nb;
+>  };
+>  
+>  static struct scmi_protocol_handle *ph;
+> @@ -174,6 +181,22 @@ static struct freq_attr *scmi_cpufreq_hw_attr[] = {
+>  	NULL,
+>  };
+>  
+> +static int scmi_limit_notify_cb(struct notifier_block *nb, unsigned long event, void *data)
+> +{
+> +	struct scmi_data *priv = container_of(nb, struct scmi_data, limit_notify_nb);
+> +	struct scmi_perf_limits_report *limit_notify = data;
+> +	struct cpufreq_policy *policy = priv->policy;
+> +	unsigned int limit_freq_khz;
+> +
+> +	limit_freq_khz = limit_notify->range_max_freq / HZ_PER_KHZ;
+> +
+> +	policy->max = clamp(limit_freq_khz, policy->cpuinfo.min_freq, policy->cpuinfo.max_freq);
+> +
+> +	cpufreq_update_pressure(policy);
+> +
+> +	return NOTIFY_OK;
+> +}
+> +
+>  static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+>  {
+>  	int ret, nr_opp, domain;
+> @@ -181,6 +204,7 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+>  	struct device *cpu_dev;
+>  	struct scmi_data *priv;
+>  	struct cpufreq_frequency_table *freq_table;
+> +	struct scmi_cpufreq_driver_data *data = cpufreq_get_driver_data();
+>  
+>  	cpu_dev = get_cpu_device(policy->cpu);
+>  	if (!cpu_dev) {
+> @@ -294,6 +318,17 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+>  		}
+>  	}
+>  
+> +	priv->limit_notify_nb.notifier_call = scmi_limit_notify_cb;
+> +	ret = data->handle->notify_ops->devm_event_notifier_register(data->sdev, SCMI_PROTOCOL_PERF,
+> +							SCMI_EVENT_PERFORMANCE_LIMITS_CHANGED,
+> +							&domain,
+> +							&priv->limit_notify_nb);
+> +	if (ret)
+> +		dev_warn(cpu_dev,
 
-Through a large number of tests, we found that when the CRC32 check 
-fails, the retry mechanism may make Image loading successful again. Even 
-if the final loading attempt fails, we can quickly analyze this anomaly 
-by examining the CRC32 values. If the CRC32 values from three attempts 
-are inconsistent, it may indicate a memory leakage issue; if they are 
-consistent, it may suggest changes in data within the disk.
+or &data->sdev->dev which refers to this driver ? which is more informational ? no strong opinion just a question...
 
->> ---
->>   kernel/power/hibernate.c |  8 ++++++++
->>   kernel/power/swap.c      | 14 ++++++++------
->>   2 files changed, 16 insertions(+), 6 deletions(-)
->>
->> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
->> index 43b1a82e800c..d9bcf38221ef 100644
->> --- a/kernel/power/hibernate.c
->> +++ b/kernel/power/hibernate.c
->> @@ -703,6 +703,7 @@ static int load_image_and_restore(void)
->>   {
->>   	int error;
->>   	unsigned int flags;
->> +	int cnt = 0;
->>   
->>   	pm_pr_dbg("Loading hibernation image.\n");
->>   
->> @@ -713,7 +714,14 @@ static int load_image_and_restore(void)
->>   		goto Unlock;
->>   	}
->>   
->> +retry:
->>   	error = swsusp_read(&flags);
->> +	if (error && (cnt++ < 3)) {
->> +		pr_err("Failed to load hibernation image, trying to load again...\n");
->> +		swsusp_free();
->> +		goto retry;
->> +	}
->> +
->>   	swsusp_close();
->>   	if (!error)
->>   		error = hibernation_restore(flags & SF_PLATFORM_MODE);
->> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
->> index 5bc04bfe2db1..4b866c645cd7 100644
->> --- a/kernel/power/swap.c
->> +++ b/kernel/power/swap.c
->> @@ -1489,15 +1489,17 @@ static int load_compressed_image(struct swap_map_handle *handle,
->>   		ret = snapshot_write_finalize(snapshot);
->>   		if (!ret && !snapshot_image_loaded(snapshot))
->>   			ret = -ENODATA;
->> -		if (!ret) {
->> -			if (swsusp_header->flags & SF_CRC32_MODE) {
->> -				if(handle->crc32 != swsusp_header->crc32) {
->> -					pr_err("Invalid image CRC32!\n");
->> -					ret = -ENODATA;
->> -				}
->> +	}
->> +	if (!ret) {
->> +		if (swsusp_header->flags & SF_CRC32_MODE) {
->> +			if (handle->crc32 != swsusp_header->crc32) {
->> +				pr_err("Invalid image CRC32, swsusp header CRC32: %u, handle CRC32: %u\n",
->> +					 swsusp_header->crc32, handle->crc32);
->> +				ret = -ENODATA;
->>   			}
->>   		}
->>   	}
->> +
->>   	swsusp_show_speed(start, stop, nr_to_read, "Read");
->>   out_clean:
->>   	hib_finish_batch(&hb);
->> 2.25.1
+> +			 "failed to register for limits change notifier for domain %d\n", domain);
+> +
+> +	priv->policy = policy;
+> +
+>  	return 0;
+>  
+>  out_free_opp:
+> @@ -366,12 +401,21 @@ static int scmi_cpufreq_probe(struct scmi_device *sdev)
+>  	int ret;
+>  	struct device *dev = &sdev->dev;
+>  	const struct scmi_handle *handle;
+> +	struct scmi_cpufreq_driver_data *data;
+>  
+>  	handle = sdev->handle;
+
+	^^^ ....
+>  
+>  	if (!handle)
+>  		return -ENODEV;
+>  
+> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	data->sdev = sdev;
+> +	data->handle = handle;
+
+	^^^ ... you dont need to pass around handle AND sdev really
+                since you can access the handle from sdev.
+
+> +	scmi_cpufreq_driver.driver_data = data;
+
+This is slightly better, but, as said, does not solve the multi-instance issue...
+...the scmi cpufreq driver remains a driver that works only if instantiated (probed)
+once, given how the CPUFreq core handles cpufreq_driver registration itself...
+
+...just a note about something to work on in the future...NOT a concern for this series.
+
+In general,
+
+LGTM.
+
+Thanks,
+Cristian
 
 
