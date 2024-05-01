@@ -1,185 +1,146 @@
-Return-Path: <linux-pm+bounces-7414-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7415-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C2068B8516
-	for <lists+linux-pm@lfdr.de>; Wed,  1 May 2024 06:45:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AC77D8B8582
+	for <lists+linux-pm@lfdr.de>; Wed,  1 May 2024 08:13:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3EBA01C21ECE
-	for <lists+linux-pm@lfdr.de>; Wed,  1 May 2024 04:45:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF80B1C212AB
+	for <lists+linux-pm@lfdr.de>; Wed,  1 May 2024 06:13:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B22E39AF9;
-	Wed,  1 May 2024 04:45:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A76434C624;
+	Wed,  1 May 2024 06:13:10 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f195.google.com (mail-pg1-f195.google.com [209.85.215.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 898062F875
-	for <linux-pm@vger.kernel.org>; Wed,  1 May 2024 04:45:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAAFA4AEEA;
+	Wed,  1 May 2024 06:13:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714538736; cv=none; b=nbB92akXjxwiLpwvZMzDNH0YoN0W5aoEEdmBRyGaEQZrPx3CryR8OjlLFdXGzbOoy6ujdNG8+KsPBRgiU2lH/pmg9cd1GyX/EtCDdv25tCd+qVcpWGM15OdCajh583/BiNG4OsVPvdI6J3IycAtbTtb3WXzPi0Qw9f5KmyFKKog=
+	t=1714543990; cv=none; b=tNbftATrAR+NZykznyCMbfcj0559Veb16MMRCHJTLp94pN0NwmkX1sn0skCQU++neavODiQIo+CiSycl9vVnMoWSm8cGGFW8XephJzg1ElOoYSy4sqIO5OBI9HMIncRcteDmfpPzfdcR++1qtHBdHYFs5BV1HPBAb0regFzZDcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714538736; c=relaxed/simple;
-	bh=ADAvOlLhHB0HyabmgwZEd82BlyvYDGfuL/onf36CyJg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uPz1PY6Z+5KwG7rYUiwnkn33AVrcnz3As2TmyIdCfVwpa8GDil1QxHT+Uvr9k387epS4RNxRB0uPz6qkptzcfpD/162/YcQMpJLZtmmssY0flA3hvYyqTq//wMg9+5htPHo/gX8bbmBHufjWEXG25ZVHkeL79ukebvTqqHWgBmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+	s=arc-20240116; t=1714543990; c=relaxed/simple;
+	bh=/e9sY+SaMEqXblc2/CW6yINkIpZNGhoFfR3QI6K1TH0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GOId4Sr72ABMl28UnVPaz01DhChWPsQzNPo0m/Mo4Pkf4/2MaO+qaipbL/HvbDtyyo5YHg9bjOxRf8U+H2AUmhwkwuBetQvEMdK1A5MQw55tgF3d9g7jPQ44NVC0XSV7OzGntD7hyKNIXL/hZnlctFk1RgyrJuGwx9s33KBx06w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.215.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 9e825c7e077511ef9305a59a3cc225df-20240501
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.37,REQID:06a82fc0-3bb7-4576-ab58-e580f4a81e90,IP:20,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-9,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:11
-X-CID-INFO: VERSION:1.1.37,REQID:06a82fc0-3bb7-4576-ab58-e580f4a81e90,IP:20,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-9,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:11
-X-CID-META: VersionHash:6f543d0,CLOUDID:483e714d1da3f52ff7b755eeebdac560,BulkI
-	D:2404240053447092KH5R,BulkQuantity:3,Recheck:0,SF:64|66|38|24|72|19|44|10
-	2,TC:nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:40,QS:nil,BEC:n
-	il,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
-X-UUID: 9e825c7e077511ef9305a59a3cc225df-20240501
-Received: from node4.com.cn [(39.156.73.12)] by mailgw.kylinos.cn
-	(envelope-from <xiongxin@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 33441322; Wed, 01 May 2024 12:45:22 +0800
-Received: from node4.com.cn (localhost [127.0.0.1])
-	by node4.com.cn (NSMail) with SMTP id D829A16002082;
-	Wed,  1 May 2024 12:45:11 +0800 (CST)
-X-ns-mid: postfix-6631C8D7-7214731
-Received: from [10.42.116.201] (unknown [10.42.116.201])
-	by node4.com.cn (NSMail) with ESMTPA id 585CF16002082;
-	Wed,  1 May 2024 04:45:11 +0000 (UTC)
-Message-ID: <e30df16c-1af1-4d66-97cc-c0e6620764a6@kylinos.cn>
-Date: Wed, 1 May 2024 12:45:10 +0800
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f195.google.com with SMTP id 41be03b00d2f7-5cdbc4334edso3657519a12.3;
+        Tue, 30 Apr 2024 23:13:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714543985; x=1715148785;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gwS+r/rdI4rV0rumRC/q7YG2Q+QFhBrZIl/mXrqt2Ss=;
+        b=H8nkA85Obcbr9wRBb/PX/C5dNE8YwX9HYL1zSFBmMKw+pVile3I1ohEPd2VHOTIukv
+         Qn2rwltHKzI1LLOJMgxtw9giyVJZcYnu3F0SyhzDt3aYUuqRLfxDtT1XR/GEDQuUrBf9
+         ig5E8ePGIsQf2i8xA/rB8pqrX/ghpDTvrVjUPG42I9IX7aWgDElF1kwyUQHZFfFOhUGD
+         xvzckmhykaLpRr7r1I9njt/uXPgurIzL3Iv+dMvOeQn9ywgBgvZDlzoIrzgxXfjvYDEF
+         S6CD4k+ceagUYIqTXbx3q6FBWlB1TMsYT42zK7+30TItuqgDSf5ostYWblUG+w7roI85
+         Zp/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCU+cxOvqf9YW0UgVACBT1N7bCU6aX3JsvPw/bglR/fOT66D3OhqPwL4Kq8tTrdBsAkMRphHT7cUU8WNGHxUyyefuZIpgARdZb7EA5WM
+X-Gm-Message-State: AOJu0Yxsf1FnKxvvxHlSi5R5hImODQsv4nGL/LZCRnO67ETllEGwPuIb
+	gQMvUetFQ10W62Eb/48X1RcS2Ok1EtXE2I71BmQpa4Taj3Ttg3oL
+X-Google-Smtp-Source: AGHT+IG19nE1xA5Z99xjQL3VY/EbDXAemE7N+EXJ4LUb+J386bdTNChiDMk+PyWgaNhq3ef+gQmMuQ==
+X-Received: by 2002:a05:6a20:2587:b0:1a7:919f:2b60 with SMTP id k7-20020a056a20258700b001a7919f2b60mr1632139pzd.37.1714543985092;
+        Tue, 30 Apr 2024 23:13:05 -0700 (PDT)
+Received: from localhost.localdomain ([111.48.58.10])
+        by smtp.gmail.com with ESMTPSA id w17-20020a1709029a9100b001e2a4663179sm23448382plp.258.2024.04.30.23.13.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Apr 2024 23:13:04 -0700 (PDT)
+From: Xueqin Luo <luoxueqin@kylinos.cn>
+To: rafael@kernel.org,
+	pavel@ucw.cz,
+	len.brown@intel.com
+Cc: linux-pm@vger.kernel.org,
+	xiongxin@kylinos.cn,
+	linux-kernel@vger.kernel.org,
+	Xueqin Luo <luoxueqin@kylinos.cn>
+Subject: [PATCH -next] PM: hibernate: add retry mechanism for S4 image loading failures
+Date: Wed,  1 May 2024 14:12:58 +0800
+Message-Id: <20240501061258.2874092-1-luoxueqin@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] PM: sleep: Optimize the pm_debug_messages_should_print()
- function
-To: Mario Limonciello <mario.limonciello@amd.com>, rafael@kernel.org
-Cc: linux-pm@vger.kernel.org
-References: <20240422093619.118278-1-xiongxin@kylinos.cn>
- <20240423081723.412237-1-xiongxin@kylinos.cn>
- <2f07ea21-c89b-49dc-a7b6-8c4e207d1af7@amd.com>
- <408bbf09-58ef-4d55-ba89-a64dbce25085@kylinos.cn>
- <2b4930ea-c8c9-4743-aa46-f387056f2a1f@amd.com>
-Content-Language: en-US
-From: xiongxin <xiongxin@kylinos.cn>
-In-Reply-To: <2b4930ea-c8c9-4743-aa46-f387056f2a1f@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
+During the S4 resume process, there's a rare chance of image loading
+failure. We provide three retries to load it successfully. If the
+recovery fails after these attempts, print out the handle CRC32
+value. When the CRC32 value obtained on each retry are inconsistent,
+there may be a memory anomaly. When the values are consistent, it
+might indicate corrupted swapped memory data.
 
+Signed-off-by: Xueqin Luo <luoxueqin@kylinos.cn>
+---
+ kernel/power/hibernate.c |  8 ++++++++
+ kernel/power/swap.c      | 14 ++++++++------
+ 2 files changed, 16 insertions(+), 6 deletions(-)
 
-=E5=9C=A8 2024/4/30 22:36, Mario Limonciello =E5=86=99=E9=81=93:
-> On 4/30/2024 03:45, xiongxin wrote:
->>
->> =E5=9C=A8 2024/4/24 00:52, Mario Limonciello =E5=86=99=E9=81=93:
->>> On 4/23/2024 03:17, xiongxin wrote:
->>>> commit cdb8c100d8a4 ("include/linux/suspend.h: Only show pm_pr_dbg
->>>> messages at suspend/resume"), pm_debug_messages_should_print() is
->>>> implemented to determine the output of pm_pr_dbg(), using
->>>> pm_suspend_target_state to identify the suspend process. However, th=
-is
->>>> limits the output range of pm_pr_dbg().
->>>>
->>>> In the suspend process, pm_pr_dbg() is called before setting
->>>> pm_suspend_target_state. As a result, this part of the log cannot be
->>>> output.
->>>>
->>>> pm_pr_dbg() also outputs debug logs for hibernate, but
->>>> pm_suspend_target_state is not set, resulting in hibernate debug log=
-s
->>>> can only be output through dynamic debug, which is very inconvenient=
-.
->>>>
->>>> Currently, remove pm_suspend_target_state from
->>>> pm_debug_messages_should_print() to ensure that sleep and hibernate=20
->>>> main
->>>> logic can output debug normally.
->>>>
->>>> Fixes: cdb8c100d8a4 ("include/linux/suspend.h: Only show pm_pr_dbg=20
->>>> messages at suspend/resume").
->>>> Signed-off-by: xiongxin <xiongxin@kylinos.cn>
->>>> ---
->>>> v2:
->>>> =C2=A0=C2=A0=C2=A0=C2=A0* Resolve the compilation error and re-submi=
-t with the fix
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 patch.
->>>> v1:
->>>> =C2=A0=C2=A0=C2=A0=C2=A0* Revert the commit cdb8c100d8a4 ("include/l=
-inux/suspend.h: Only
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 show pm_pr_dbg messages at suspend/re=
-sume").
->>>> ---
->>>>
->>>> diff --git a/kernel/power/main.c b/kernel/power/main.c
->>>> index a9e0693aaf69..24693599c0bc 100644
->>>> --- a/kernel/power/main.c
->>>> +++ b/kernel/power/main.c
->>>> @@ -613,7 +613,7 @@ bool pm_debug_messages_on __read_mostly;
->>>> =C2=A0 =C2=A0 bool pm_debug_messages_should_print(void)
->>>> =C2=A0 {
->>>> -=C2=A0=C2=A0=C2=A0 return pm_debug_messages_on && pm_suspend_target=
-_state !=3D=20
->>>> PM_SUSPEND_ON;
->>>> +=C2=A0=C2=A0=C2=A0 return pm_debug_messages_on;
->>>> =C2=A0 }
->>>> =C2=A0 EXPORT_SYMBOL_GPL(pm_debug_messages_should_print);
->>>
->>> Did you miss the proposal for fixing this for hibernate by adding the=
-=20
->>> extra variable to monitor?
->>
->> Can I change pm_pr_dbg() in amd_pmc_idlemask_read() to pr_debug()=20
->> based on
->>
->> pm_debug_messages_on condition?
->>
->> I suggest not adding a new variable to this.
->>
->=20
-> I don't understand the opposition to the new variable.
->=20
-> The whole point of /sys/power/pm_debug_messages is so that it's a one=20
-> stop shop to turn on power management related debugging at power state=20
-> but nothing more.
->=20
-> You turn that on and you can get messages from the core and also any=20
-> drivers that want to emit messages during that time.
->=20
-> If changing drivers back to pr_debug that means that users and software=
-=20
-> need to manually turn on BOTH /sys/power/pm_debug_messages as well as=20
-> dynamic debug for any power management related messages.
->=20
-> Whereas if just adding another variable for a condition then just turn=20
-> on the sysfs file for any hibernate or suspend debugging.
+diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+index 43b1a82e800c..d9bcf38221ef 100644
+--- a/kernel/power/hibernate.c
++++ b/kernel/power/hibernate.c
+@@ -703,6 +703,7 @@ static int load_image_and_restore(void)
+ {
+ 	int error;
+ 	unsigned int flags;
++	int cnt = 0;
+ 
+ 	pm_pr_dbg("Loading hibernation image.\n");
+ 
+@@ -713,7 +714,14 @@ static int load_image_and_restore(void)
+ 		goto Unlock;
+ 	}
+ 
++retry:
+ 	error = swsusp_read(&flags);
++	if (error && (cnt++ < 3)) {
++		pr_err("Failed to load hibernation image, trying to load again...\n");
++		swsusp_free();
++		goto retry;
++	}
++
+ 	swsusp_close();
+ 	if (!error)
+ 		error = hibernation_restore(flags & SF_PLATFORM_MODE);
+diff --git a/kernel/power/swap.c b/kernel/power/swap.c
+index 5bc04bfe2db1..4b866c645cd7 100644
+--- a/kernel/power/swap.c
++++ b/kernel/power/swap.c
+@@ -1489,15 +1489,17 @@ static int load_compressed_image(struct swap_map_handle *handle,
+ 		ret = snapshot_write_finalize(snapshot);
+ 		if (!ret && !snapshot_image_loaded(snapshot))
+ 			ret = -ENODATA;
+-		if (!ret) {
+-			if (swsusp_header->flags & SF_CRC32_MODE) {
+-				if(handle->crc32 != swsusp_header->crc32) {
+-					pr_err("Invalid image CRC32!\n");
+-					ret = -ENODATA;
+-				}
++	}
++	if (!ret) {
++		if (swsusp_header->flags & SF_CRC32_MODE) {
++			if (handle->crc32 != swsusp_header->crc32) {
++				pr_err("Invalid image CRC32, swsusp header CRC32: %u, handle CRC32: %u\n",
++					 swsusp_header->crc32, handle->crc32);
++				ret = -ENODATA;
+ 			}
+ 		}
+ 	}
++
+ 	swsusp_show_speed(start, stop, nr_to_read, "Read");
+ out_clean:
+ 	hib_finish_batch(&hb);
+-- 
+2.25.1
 
-Your patch makes the output of pm_pr_dbg() based on the values of=20
-pm_debug_messages_on and pm_suspend_target_state; However,=20
-pm_suspend_target_state's impact domain does not include enter_state()=20
-and hibernate processes;
-
-The patch affects the output of the sleep mainline debug log, which is=20
-very unfriendly to others developers, and it is even more troublesome
-to add a new variable based on your suggestion.
-
-The kernel already has a log output solution based on the value of=20
-pm_suspend_target_state. I will issue a repair patch as follows in
-amd_pmc_idlemask_read():
-
-if (dev && pm_suspend_target_state !=3D PM_SUSPEND_ON)
-	pr_info("SMU idlemask s0i3: 0x%x\n", val);
 
