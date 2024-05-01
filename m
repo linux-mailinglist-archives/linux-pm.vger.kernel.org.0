@@ -1,80 +1,80 @@
-Return-Path: <linux-pm+bounces-7426-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7427-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 520DF8B8910
-	for <lists+linux-pm@lfdr.de>; Wed,  1 May 2024 13:14:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B073F8B8915
+	for <lists+linux-pm@lfdr.de>; Wed,  1 May 2024 13:15:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CCE90B210BA
-	for <lists+linux-pm@lfdr.de>; Wed,  1 May 2024 11:14:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D41941C20E1F
+	for <lists+linux-pm@lfdr.de>; Wed,  1 May 2024 11:15:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 834C558210;
-	Wed,  1 May 2024 11:14:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51AC760BBE;
+	Wed,  1 May 2024 11:15:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cCrtPYnZ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QGRzVFwM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23A7956754
-	for <linux-pm@vger.kernel.org>; Wed,  1 May 2024 11:14:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FBAE55E5C
+	for <linux-pm@vger.kernel.org>; Wed,  1 May 2024 11:15:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714562043; cv=none; b=KvF5n61GSQAUR6slcNVP/DDLU1yaRJ6VrZD+exjcBW4fbQDNMYfoglMNVbhUmKb0sMhc8qeywRoOy07dBZ3s88GeOBHzKrDmJASlKCN4PeLXZ9fvm/TEBcYJXBq9nq8Y9Ga/ivJv9TM4ZfJKtx5+OGk2YH//GuPuIfKcXtzL2fk=
+	t=1714562106; cv=none; b=VpqKFTcPPJuD5ePDK9QGUiXRg3VIJmmJ5QOuI+1TxfiZdJsHBMZzqmBcIKEoOUv34jpPaIA3ygVoNrODR49YJwQ6CEOZOG8m58XYAfse6nPk8c1PcDNqNFBprJKpvjT2wcSqA4mesihkg+++vigPt5K1coGy9sznKhS5Q6eMaDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714562043; c=relaxed/simple;
-	bh=Gn2C+fSEj9oEgEcKRZTFnYTq392nKVc8ox1XVnAtZ4Q=;
+	s=arc-20240116; t=1714562106; c=relaxed/simple;
+	bh=FQodAUfD1JkLmt1uTy5qfN1UspuJsm4imcTHYIOZ1zM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=h+krRlWDqtg+rrnEtVuu0fn9cMq/OJBaeLTVthoIKUoIYz8wX2e0mCSVbYrqFnYRdmYpGRNyKbaRWVBXFWN2dBjlG13F3zfWgrpam+GV2nrMrvmpzxRNdHBnkk0cSSNa6oKcbjlDh1cJBxJho3JhGOEz51H8Umro4xxO7QXcYLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cCrtPYnZ; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=XfJ1x1fVzH9eL70Eml2W22cPA3qknkSxlPiVtHvP+CuOyHx2aweJYwDK4VYZpRXGVWj6Zl+hwEjE0CQqXgC3MbN3wkX/dA9ER7MdU5sUk3brd3zr+BLfMko/g9JckHxVza2TQ0xF0CIsSSpFXVJzdB+1auVk80uCLXLeRyEA5sI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QGRzVFwM; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1714562040;
+	s=mimecast20190719; t=1714562102;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=klJb2Hbg7SNB5TUedK1etVELNa99mZOeY3ik6uIdHp8=;
-	b=cCrtPYnZiWRgYHzxmllroQOT2O32EuArsrHKPmdUEGCXfQlpKMHzFE8IAEkjFtvTuezduJ
-	OJNaTsUUq4nUTXY8qAukcnVP/mBJoTgp3mdI5VcHit6yHsT2VFD4SMk0Lm9vl9nuxm72l7
-	bx+NX13bLrjZvYqa/6DoRSjQcArOxyk=
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
- [209.85.215.199]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=m4zwGvBc/1zudle3Fu3mxvomgwnAp7EzJRWK4hmMCrY=;
+	b=QGRzVFwM4PeI30rFlRkRFuZq6UB3Z4zYRNIcS2thKyTFmGdbjiEqDPFrroi6KN2bo7V+3D
+	N4xNmBi8cBFgecv6LEnhRhKyLupXOaArDxIuQMREqwsMCtXhZMOdDhMxh/6t8YxRDesXQc
+	RZlEsMJbCgdu8r7mfF+LQWsW8vv9uFw=
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
+ [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-208-PnZZwd3wO1GjBSWhp-bKPQ-1; Wed, 01 May 2024 07:13:59 -0400
-X-MC-Unique: PnZZwd3wO1GjBSWhp-bKPQ-1
-Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-5c6245bc7caso6097947a12.3
-        for <linux-pm@vger.kernel.org>; Wed, 01 May 2024 04:13:58 -0700 (PDT)
+ us-mta-185-AWPMfi6rO_Sgcf5mj1CxRQ-1; Wed, 01 May 2024 07:15:01 -0400
+X-MC-Unique: AWPMfi6rO_Sgcf5mj1CxRQ-1
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-2acf6bce4cfso656907a91.0
+        for <linux-pm@vger.kernel.org>; Wed, 01 May 2024 04:15:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714562038; x=1715166838;
+        d=1e100.net; s=20230601; t=1714562100; x=1715166900;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=klJb2Hbg7SNB5TUedK1etVELNa99mZOeY3ik6uIdHp8=;
-        b=Bu0y7MWN8HdpbLJQobaVJnOYrARTXrOTNBRL8XKoPzwQomAASH98yKyN5B2poN3XbP
-         6zOS2V1RKyoqKFw2SJSmgZ9EjAYVq7VPuBCQOQHiINXpCFi/pCi4lB274x9/OSXdujKx
-         TcqjGl+LFdja/B5NuwWtmSEJC4Mt7HOjm0m8OvjC96wn6AG7IvEk/L+q80KPPBolSeIG
-         3T32ThPf633Mr9gXqKROBS/2XO+Fm4zjc7l9ttoaO6AEuA6IV0cisk9rFoMQQ8zGhpn5
-         fOn5yeqHQyNSov55Dex/TYV0wqGz/JGIIp79ezbAsZSpz/WtlRqz3upQZYBlxp5hkt8L
-         a6ZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUMSB5P+KvC/rbCGqyseRysiP9KSnN4p17GTXOL3sk9udXmIzlMrOWxnP7P1VAZw2HBEwDr+J9zob3SuM1wci+ozSfTIHS6MBo=
-X-Gm-Message-State: AOJu0YzyOKE9htEa17F1nEbR5cpebJX5HttdBSTOHYik66oWZd2NAC1s
-	e3kcfRJlJpucfquBA+dYTXmh8xh/3bLlT7FnTF/rEgXvGLWFqNfd0v5XjWv7k3JRciPRmIOtZXR
-	bEo0OneJyzfzyNUdjLusV9oZDvtaywo5oYWjIijibuqOnJzwlqO7fNwMS
-X-Received: by 2002:a05:6a20:551d:b0:1ad:9413:d5c3 with SMTP id ko29-20020a056a20551d00b001ad9413d5c3mr1712248pzb.17.1714562037856;
-        Wed, 01 May 2024 04:13:57 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHk8RZbujTlZAxMHP0HYG36OV8O8L5/EuxcrJRH9h3TeGMjvsyX78a8rPdkWjXbbD+MV6exNg==
-X-Received: by 2002:a05:6a20:551d:b0:1ad:9413:d5c3 with SMTP id ko29-20020a056a20551d00b001ad9413d5c3mr1712231pzb.17.1714562037414;
-        Wed, 01 May 2024 04:13:57 -0700 (PDT)
+        bh=m4zwGvBc/1zudle3Fu3mxvomgwnAp7EzJRWK4hmMCrY=;
+        b=pg7pSBKqCo4lO+9EXDkYbe1EUlJpCYvL2xQJm9WgiZ+NiQ0pBwvEP6G6yprHzMSwYM
+         kLuqyH/BxotMps6qatoQQ4WkD/sVKFM9ShSGbCsA2R2QDSOzk4Op9kQslXnvCfXactvO
+         jjZYyJCCMudc4GB450QpW7EhKNvj1yTstMH9w5gH2TObHwbd8pksdLXH+aVEPQlXJLEB
+         Aqg7pt84yDJ34NSb0pXjpqeqG/76c8OZrvpClJu+P9QR/EyqXJLC53ef1ZC+or16xvqY
+         EIWv5awnBuxhfSZ2Z5ah31fW1aS3tYoTr167ZlT5TbI0d4VA0DZcH8eSSa0pr3rizZuP
+         e5ug==
+X-Forwarded-Encrypted: i=1; AJvYcCUfTYAnL5P8hVtqeqrEAA1XOhjBhZAvCWbwwqPwCUS8mxPFoArDpOf/5HqwZ5Kmk15QwSOxcwjlSiBu0t0iH3REQ1s93hmd7lc=
+X-Gm-Message-State: AOJu0YzbpL3TPalooVTsxVL9DLlWS3KNpkrKn9oHG+HCHGjcOOF0WrwB
+	hnrr6bi319B9f4xA9s9ZKQGjN2agumNv0apMFvwXuGH2iqgIN5iA7/yf6w1FcRRb92GaYS6p8Ay
+	ZvoMj5YQ/TZht3fdeCUR/TChbJp4Yph9E1nVuisn0XngqHvHTXX5amLrt
+X-Received: by 2002:a17:90b:3749:b0:2b3:6898:d025 with SMTP id ne9-20020a17090b374900b002b36898d025mr189483pjb.9.1714562100210;
+        Wed, 01 May 2024 04:15:00 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEgkwe4UKKc3WldVwMV2boi6I+r208XEIsyNzplTWK4MFoORCuavWHQA0/i+SiniS3enNZ28Q==
+X-Received: by 2002:a17:90b:3749:b0:2b3:6898:d025 with SMTP id ne9-20020a17090b374900b002b36898d025mr189419pjb.9.1714562099556;
+        Wed, 01 May 2024 04:14:59 -0700 (PDT)
 Received: from [192.168.68.50] ([43.252.112.88])
-        by smtp.gmail.com with ESMTPSA id h9-20020a17090a050900b002a55198259fsm3245338pjh.0.2024.05.01.04.13.48
+        by smtp.gmail.com with ESMTPSA id h9-20020a17090a050900b002a55198259fsm3245338pjh.0.2024.05.01.04.14.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 May 2024 04:13:56 -0700 (PDT)
-Message-ID: <114fcd7e-33e3-4741-936f-21b0576c59e4@redhat.com>
-Date: Wed, 1 May 2024 21:13:46 +1000
+        Wed, 01 May 2024 04:14:59 -0700 (PDT)
+Message-ID: <27e48da5-e1d0-4e4b-978e-954f1766c350@redhat.com>
+Date: Wed, 1 May 2024 21:14:50 +1000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -82,8 +82,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 17/19] arm64: Kconfig: Enable hotplug CPU on arm64 if
- ACPI_PROCESSOR is enabled.
+Subject: Re: [PATCH v9 19/19] cpumask: Add enabled cpumask for present CPUs
+ that can be brought online
 Content-Language: en-US
 To: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
  Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>,
@@ -101,32 +101,43 @@ Cc: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
  Dave Hansen <dave.hansen@linux.intel.com>, linuxarm@huawei.com,
  justin.he@arm.com, jianyong.wu@arm.com
 References: <20240430142434.10471-1-Jonathan.Cameron@huawei.com>
- <20240430142434.10471-18-Jonathan.Cameron@huawei.com>
+ <20240430142434.10471-20-Jonathan.Cameron@huawei.com>
 From: Gavin Shan <gshan@redhat.com>
-In-Reply-To: <20240430142434.10471-18-Jonathan.Cameron@huawei.com>
+In-Reply-To: <20240430142434.10471-20-Jonathan.Cameron@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 5/1/24 00:24, Jonathan Cameron wrote:
-> In order to move arch_register_cpu() to be called via the same path
-> for initially present CPUs described by ACPI and hotplugged CPUs
-> ACPI_HOTPLUG_CPU needs to be enabled.
+> From: James Morse <james.morse@arm.com>
 > 
-> The protection against invalid IDs in acpi_map_cpu() is needed as
-> at least one production BIOS is in the wild which reports entries
-> in DSDT (with no _STA method, so assumed enabled and present)
-> that don't match MADT.
+> The 'offline' file in sysfs shows all offline CPUs, including those
+> that aren't present. User-space is expected to remove not-present CPUs
+> from this list to learn which CPUs could be brought online.
 > 
+> CPUs can be present but not-enabled. These CPUs can't be brought online
+> until the firmware policy changes, which comes with an ACPI notification
+> that will register the CPUs.
+> 
+> With only the offline and present files, user-space is unable to
+> determine which CPUs it can try to bring online. Add a new CPU mask
+> that shows this based on all the registered CPUs.
+> 
+> Signed-off-by: James Morse <james.morse@arm.com>
 > Tested-by: Miguel Luis <miguel.luis@oracle.com>
+> Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
+> Tested-by: Jianyong Wu <jianyong.wu@arm.com>
+> Acked-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > 
 > ---
-> V9: No change.
-> 
+> v9: No change
 > ---
->   arch/arm64/Kconfig       |  1 +
->   arch/arm64/kernel/acpi.c | 22 ++++++++++++++++++++++
->   2 files changed, 23 insertions(+)
+>   .../ABI/testing/sysfs-devices-system-cpu      |  6 +++++
+>   drivers/base/cpu.c                            | 10 ++++++++
+>   include/linux/cpumask.h                       | 25 +++++++++++++++++++
+>   kernel/cpu.c                                  |  3 +++
+>   4 files changed, 44 insertions(+)
 > 
 
 Reviewed-by: Gavin Shan <gshan@redhat.com>
