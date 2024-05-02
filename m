@@ -1,101 +1,104 @@
-Return-Path: <linux-pm+bounces-7441-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7440-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D2298B9A14
-	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2024 13:31:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD3068B99BC
+	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2024 13:08:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE2F21F23FAB
-	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2024 11:31:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E4DC11C21F4C
+	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2024 11:08:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 013176217D;
-	Thu,  2 May 2024 11:31:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2D605FDDC;
+	Thu,  2 May 2024 11:08:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=wizzup.org header.i=@wizzup.org header.b="m1Cu799q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xch1aCry"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.wizzup.org (mail.wizzup.org [45.80.170.138])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6892C224DD;
-	Thu,  2 May 2024 11:31:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.80.170.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B7735D903;
+	Thu,  2 May 2024 11:08:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714649501; cv=none; b=KIw0l0JGpVlzJYG1deVWXP9lVgy0eB3RXB28B9XDjZFGKqZkIMdmklGblafuThpWd/OlTGuDlsCwpBtHEgOG1nGtYsQcSbivQDwRn95NjdGCxzWFJYAOSgKV9alnltq9IbjCJ1kZ243ZAv4932X2yapDdbTi2cIHrJhnOwZgV6s=
+	t=1714648126; cv=none; b=rxraOPvDiYPxmAAehG7Nfl0sV1YokpkZU9/3zuGXaXVYE/Nt3js0AM7GhafP1tIrSVfcJi0ioWvOdB5iL5e/K01f9fk96+z1gLu5dQDzoDvKJCieBbctfr0SNCqxicZj1PKmTcilwG5zbe//crPDxCqUit6H6LvtqTIwPzMVMQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714649501; c=relaxed/simple;
-	bh=hdlRoJM+2+2KyXCFmBsNc5FwpvzfatObu0siqf41d4k=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=RFhag1lveQgunCOxAgUXWQNmnNOklEAYBcqpU8F4NJK/T2rQSVcPK7RVsz2KiuXw6HaxdzzrCVzz9MrnEg7s/WMVoFuRNrPpeKn9zhz4gqNUA+KSV63VBVUhcJU/ADQF7o3ycI262AIDapYHQZTtZlsznywifzgMZhSSv5Nr5vo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wizzup.org; spf=pass smtp.mailfrom=wizzup.org; dkim=pass (2048-bit key) header.d=wizzup.org header.i=@wizzup.org header.b=m1Cu799q; arc=none smtp.client-ip=45.80.170.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wizzup.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wizzup.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=wizzup.org;
-	s=mail; h=Content-Transfer-Encoding:Content-Type:Subject:From:Cc:To:
-	MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=12nSVpVTm24HoKxg2WwBgVDSsEiN6QR/ZYeATsN2aPc=; b=m1Cu799qtbCNqb3mG5e6opplOR
-	1UkXwfTZTohaT03VE5Brs/WULZnTUkjWDTb5h3HO96dzEiunu4tzoo6E6ZxnQWGFkP/bBR0JvZ5Gx
-	VeYngiiTsXqRBASwZaNW8i3t8e3C9GmUeRK9n/Zyc57KN07WuFeaq+dVxAxIuizJobkarxTe+iTU1
-	gTZfOvbTAZ4erb+w887nS8wpcbnkuCaKTUYqAhe9Do8VLgHVXtoGiqvAWtzRWHJiX1bChQwI6GvZL
-	TJOFV8b0vQsRAxbFpmGoVL9pT36ufOzrmdii+BdgbQrLRP+QkuWGq0bBwCVhHRyzdShH5CyeZLu6Y
-	/Wuq7eRw==;
-Received: from [192.168.178.24] (helo=[0.0.0.0])
-	by mail.wizzup.org with esmtpsa  (TLS1.3) tls TLS_AES_128_GCM_SHA256
-	(Exim 4.96.2)
-	(envelope-from <merlijn@wizzup.org>)
-	id 1s2UlU-0000Bm-0D;
-	Thu, 02 May 2024 11:38:16 +0000
-Message-ID: <657f402f-3c22-48bb-8102-ab35a74444c1@wizzup.org>
-Date: Thu, 2 May 2024 13:04:56 +0200
+	s=arc-20240116; t=1714648126; c=relaxed/simple;
+	bh=8K4ujeYhTAhKF8D1gB1WkqlDa8ad4YIK/nV9mxb+ubU=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=JXuPCBAnnFszEOC/c4P70DAOaTaj2k4e7+hdXzff29wKII+LmbAm8VA3TF/pMcgLD2Sg/bUxnbN+owzARNVTUfze27KRuah18ejAi5eTv9sEMaW0HM90h3WhQKzwF+83+UcijKXft7YtjOPWZz/ZUouK5eCYZbidncoVnsEITOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xch1aCry; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09FB1C32789;
+	Thu,  2 May 2024 11:08:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714648126;
+	bh=8K4ujeYhTAhKF8D1gB1WkqlDa8ad4YIK/nV9mxb+ubU=;
+	h=From:Date:Subject:To:Cc:From;
+	b=Xch1aCryETzgJNn5QhGZcIl+hrYm/8q+8iGpMNSEadG8jdgXj4l8beI0Va8LK+za9
+	 6u6n51Xrji4oNk7v3xY3Hrhvpj/otTcmucJnfftr2ct+s1X2pJSEHYLD7dMUOsCo7j
+	 Yfd3vs6csyzFhdyStor7UThIuuDtW5Mrcs6hLguygfULpyP61PMrwkA0lbbl9dYBY9
+	 7woK1SdHk0yguXtN6Z1jW1tAanAuWmWT/rQo04Q9bUdlv6xIxaR78YJmA86EoZh0PM
+	 PQIPy36ZfU+tTcDO3iesTFsILknaLAV5FVeAjuVZ/XI3p5rsnvcnAuU5WUNg5FcD68
+	 RFZrW7SqGo7DA==
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-5afbcf21abdso853346eaf.1;
+        Thu, 02 May 2024 04:08:46 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWCqKJSiIehH6/vLGJtFAFkB5A4eMzh8+vL2WarH5Xwzl/V+Rs88lOhGnkHd3AY9ECYc2wlb3rpCrQ+6ZkRH+8zGguhl7Om2UD8p7yY
+X-Gm-Message-State: AOJu0YykXYEZ9HBVXEc6qEhHBXdE7H8Yxad+dgW994WidueBDCVu8kdH
+	VQXozpiMy8qwemtCL06efqnVPFWUxbAEesuDg53sGA9PnwrDy6sYC4kOwj8ArbjzCjXStyy34dx
+	4mTINwam63UYASkn2rg4FruDlEPM=
+X-Google-Smtp-Source: AGHT+IF/nIdqFeA4jayC/Sos9U+g1FOb02A/CEFxDNMAhuoOi3HEctyS0uDfUx3Fc/O8DvAf6b84Dou4PbdImKnUN4s=
+X-Received: by 2002:a4a:9887:0:b0:5aa:3e4f:f01e with SMTP id
+ a7-20020a4a9887000000b005aa3e4ff01emr5105162ooj.1.1714648125193; Thu, 02 May
+ 2024 04:08:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: nl, en-US
-To: linux-omap <linux-omap@vger.kernel.org>
-Cc: rafael@kernel.org, viresh.kumar@linaro.org, zhipeng.wang_1@nxp.com,
- Tony Lindgren <tony@atomide.com>,
- Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
- Carl Philipp Klemm <philipp@uvos.xyz>, "Sicelo A . Mhlongo"
- <absicsz@gmail.com>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- linux-pm@vger.kernel.org
-From: Merlijn Wajer <merlijn@wizzup.org>
-Subject: No cpufreq entries with omap2plus_defconfig since "cpufreq:
- dt-platdev: Support building as module" (commit 3b062a08)
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 2 May 2024 13:08:31 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gqRGw3NEOVXH4vwERcy-kO+tihXBmP74UJGEhsTMc_BA@mail.gmail.com>
+Message-ID: <CAJZ5v0gqRGw3NEOVXH4vwERcy-kO+tihXBmP74UJGEhsTMc_BA@mail.gmail.com>
+Subject: [GIT PULL] Thermal control fixes for v6.9-rc7
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+Hi Linus,
 
-I was looking at switching my Motorola Droid 4 phone from Linux 6.1 to 
-Linux 6.6, and it no longer gets any cpufreq entries on boot, and I 
-found cpufreq_dt was no longer loaded. I tried to force the issue by 
-modprobe it, but to no avail. The same issue occurs on the latest 6.9.
+Please pull from the tag
 
-After a bit of digging it looks like the problem is that 
-cpufreq-dt-platdev can be built as a module and when this the case 
-(apparently the default), cpufreq_dt doesn't work. With the 
-omap2plus_defconfig, CONFIG_CPUFREQ_DT_PLATDEV is indeed set to module.
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ thermal-6.9-rc7
 
-When I manually probe cpufreq-dt-platdev and cpufreq_dt, I get the 
-cpufreq_entries back.
+with top-most commit d351eb0ab04c3e8109895fc33250cebbce9c11da
 
-Searching around I found this debian bug report [1] which just flips the 
-CONFIG_CPUFREQ_DT_PLATDEV back to '=y', but I think there might be a 
-deeper issue here.
+ thermal/debugfs: Prevent use-after-free from occurring after cdev removal
 
-Is there a way to define this relationship/dependency for cpufreq-dt, so 
-that it will automatically load this module?
+on top of commit ed30a4a51bb196781c8058073ea720133a65596f
 
-Regards,
-Merlijn
+ Linux 6.9-rc5
 
-[1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050587
+to receive thermal control fixes for 6.9-rc7.
+
+These fix a memory leak and a few locking issues (that may cause the
+kernel to crash in principle if all goes wrong) in the thermal debug
+code introduced during the 6.8 development cycle.
+
+Thanks!
+
+
+---------------
+
+Rafael J. Wysocki (3):
+      thermal/debugfs: Free all thermal zone debug memory on zone removal
+      thermal/debugfs: Fix two locking issues with thermal zone debug
+      thermal/debugfs: Prevent use-after-free from occurring after cdev removal
+
+---------------
+
+ drivers/thermal/thermal_debugfs.c | 59 +++++++++++++++++++++++++++++----------
+ 1 file changed, 45 insertions(+), 14 deletions(-)
 
