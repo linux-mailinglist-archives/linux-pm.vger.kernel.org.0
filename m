@@ -1,219 +1,242 @@
-Return-Path: <linux-pm+bounces-7437-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7438-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F2BB8B994D
-	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2024 12:45:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77A448B9971
+	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2024 12:51:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A10C81C21AF4
-	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2024 10:45:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0933A1F21151
+	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2024 10:51:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A91A5EE8D;
-	Thu,  2 May 2024 10:42:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C4F95A0F8;
+	Thu,  2 May 2024 10:51:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WfG92Vhl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D9225D903;
-	Thu,  2 May 2024 10:42:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DA7357871;
+	Thu,  2 May 2024 10:51:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714646579; cv=none; b=M4INnz3pOsHaY3RMlKxjruD+EyhGO9hcKTM4j4lmFeQco744/Ae/4bjEK80s9lFwGSc7WJVng1cuMrTkqsVOR0uuBwyJm/autyNN1H1M/fNLLi73olHFzWpjEITKsNem41j6j1G4XeKY2kd5fCQt83s1TuoGJo6ri4dC2JH5LH0=
+	t=1714647073; cv=none; b=JFe3fpUXHdqF8onxfC7Uuxadx1Ea1mKnlwz4aIBsU1jf2kP6poI2X2YQ8D5EcufrOjRNnFGPNeorEzFUXscGBgceySS+LEJHBoSzpApbsBVDHKFsJ0xwLAQMvGSTCbfG99lo1beM4zXVx5uAF3DXr3lnCT5zeIj31qWSyCFkqtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714646579; c=relaxed/simple;
-	bh=mWltd/gOE5XsQz1QXZSwePIgn+C1/IEfeyFxSyG5sPE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gPNk4ILcPRX9X5nLEJBsbvt37VUXzHUpojDIClvPRrG20S6Xxn01FkTYHIEfBFDIZFHDPc5KX/L2Bz4Y1Y23LVpQsLWtbOrqNozZB7/vvfdTsT2B+kkdiFX7zokjTU1/FvZvyGolxUzsITxhG9XmS6vIOg8Zhcj40mZdSO8G858=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 886882F4;
-	Thu,  2 May 2024 03:43:22 -0700 (PDT)
-Received: from [192.168.2.88] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4F5AB3F793;
-	Thu,  2 May 2024 03:42:55 -0700 (PDT)
-Message-ID: <050c561c-487e-4e89-a7b2-9752cebc9f46@arm.com>
-Date: Thu, 2 May 2024 12:42:54 +0200
+	s=arc-20240116; t=1714647073; c=relaxed/simple;
+	bh=fR5HOrR6Ubn0xyMbMtSkOFo520Msg119zUjsxH5P3dk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gafMp3MqsTpRpYFA1AebbXC3COJZMcGliW2Up28hZqoXIly7AwmKfEDnvNfD++iy8MH6liaxAOELF+eViOoDYxzKiZ+GCtSrHk+4yGTDH9HeGCb1yORvXY6zFxI+UBTabgd2dxVo7/s/ddQn6DBd0+B5sOg3swZ6wdB8MfSKxxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WfG92Vhl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6257C4AF1D;
+	Thu,  2 May 2024 10:51:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714647072;
+	bh=fR5HOrR6Ubn0xyMbMtSkOFo520Msg119zUjsxH5P3dk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=WfG92VhljYufTAVzjiEUxiwqnY6DgXVPqbaCMi4aX6TnSc4e9lYf4rY951wj0EwKs
+	 TzWxXE2gL6TPynfe+lgn49/utuFcuo8y/5KBq/TmVuak6N/wANYnnlKpJDFXwGGHuw
+	 OusyTsr34eREJFxNJuBpS6JBEGgnI+4ZqBTXiSPwgNez7jfg1RTUNhv4VvQwBxVD51
+	 nhuMHvln038ij22+EkrBhY9gyNj1bntgdGBdiShnWr5m6C8WsH4+L+3KKUSpMcmc8M
+	 rudllHmf+AIb1Ddfdsmpow3HR2bEywqrNmG6Io6Z/X3INpBc4SvPNLBH90CJS96kBA
+	 PXc0Q8fVLmeLQ==
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-5acf5723325so1950631eaf.0;
+        Thu, 02 May 2024 03:51:12 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWwl46nrDyJHV35xPmw65o9lPX9knVmXZNa3p8kmwlzaedd9RUhRuq5q0rBYlC9BeC/3ywcxFyvofJ7Af7c238FUa3XRy/UDVL9WqC0zGvhigVFCc16PaVMh214fKtmYjir129Wl8M=
+X-Gm-Message-State: AOJu0Ywr0LzaeuYM3Xi75gIqlMXDSfgSU0wuYFhSXTEzhdHYJkhi50Th
+	lO3v3OqBpgrgxfTHbgR0VDMwpdxYDqDUXo9KUvrqQ81LFsoYzBetLsSenMvzaRppI0LaVskUs0m
+	0ckXP0q5IFRheaHZsRJUr6o9LB78=
+X-Google-Smtp-Source: AGHT+IGFXvaP04bY4o4omIjRMy+hQgJIqekDcRnbPWRO0R4oPEni7cBtvTk42duDAiYiQCJu3r387iiHQaH64qQBpuY=
+X-Received: by 2002:a05:6820:2b06:b0:5ac:6fc1:c2cb with SMTP id
+ dt6-20020a0568202b0600b005ac6fc1c2cbmr5097901oob.0.1714647072034; Thu, 02 May
+ 2024 03:51:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC][PATCH v1 3/3] cpufreq: intel_pstate: Set asymmetric CPU
- capacity on hybrid systems
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>, x86 Maintainers <x86@kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Ricardo Neri <ricardo.neri@intel.com>, Tim Chen <tim.c.chen@intel.com>
-References: <7663799.EvYhyI6sBW@kreacher> <1799046.VLH7GnMWUR@kreacher>
-From: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Content-Language: en-US
-In-Reply-To: <1799046.VLH7GnMWUR@kreacher>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <89a02410-87c8-47c6-aa50-04dad5b4e585@linaro.org>
+In-Reply-To: <89a02410-87c8-47c6-aa50-04dad5b4e585@linaro.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 2 May 2024 12:50:57 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jVkD2muM_rZ_1nfOukHKaB4LoFheV79YX7v2p+koV4Vg@mail.gmail.com>
+Message-ID: <CAJZ5v0jVkD2muM_rZ_1nfOukHKaB4LoFheV79YX7v2p+koV4Vg@mail.gmail.com>
+Subject: Re: [GIT PULL] thermal drivers for v6.10-rc1
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux PM mailing list <linux-pm@vger.kernel.org>, Lukasz Luba <Lukasz.Luba@arm.com>, 
+	Konrad Dybcio <konrad.dybcio@linaro.org>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+	Raphael Gallais-Pou <rgallaispou@gmail.com>, Priyansh Jain <quic_priyjain@quicinc.com>, 
+	Dmitry Rokosov <ddrokosov@salutedevices.com>, 
+	=?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>, 
+	Hsin-Te Yuan <yuanhsinte@chromium.org>, Aleksandr Mishin <amishin@t-argos.ru>, 
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>, Nicolas Pitre <nicolas.pitre@linaro.org>, 
+	Binbin Zhou <zhoubinbin@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 25/04/2024 21:06, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Make intel_pstate use the HWP_HIGHEST_PERF values from
-> MSR_HWP_CAPABILITIES to set asymmetric CPU capacity information
-> via the previously introduced arch_set_cpu_capacity() on hybrid
-> systems without SMT.
+Hi Daniel,
 
-Are there such systems around? My i7-13700K has P-cores (CPU0..CPU15)
-with SMT.
+On Thu, May 2, 2024 at 11:51=E2=80=AFAM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> Hi Rafael,
+>
+> please consider this pull request for v6.10-rc1
+>
+> The following changes since commit 5c897a9a1237155822183b8979005d06c14a99=
+6a:
+>
+>    Merge back earlier thermal control material for v6.10. (2024-04-19
+> 15:17:21 +0200)
+>
+> are available in the Git repository at:
+>
+>
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
+> tags/thermal-v6.10-rc1
+>
+> for you to fetch changes up to 734b5def91b594d3aa1147d60c45eded139ce2eb:
+>
+>    thermal/drivers/loongson2: Add Loongson-2K2000 support (2024-04-23
+> 12:40:30 +0200)
+>
+> ----------------------------------------------------------------
+> - Add QCM2290 compatible DT bindings for Lmh and fix a null pointer
+>    dereference in the lmh driver in case the SCM is not present (Konrad
+>    Dybcio)
+>
+> - Use the strreplace() function instead of doing it manually in the
+>    Armada driver (Rasmus Villemoes)
+>
+> - Convert st,stih407-thermal to DT schema and fix up missing
+>    properties (Raphael Gallais-Pou)
+>
+> - Add suspend/resume by restoring the context of the tsens sensor
+>    (Priyansh Jain)
+>
+> - Support A1 SoC family Thermal Sensor controller and add the DT
+>    bindings (Dmitry Rokosov)
+>
+> - Improve the temperature approximation calculation and consolidate
+>    the Tj constant into a shared area of the structure instead of
+>    duplicating it on the Rcar Gen3 (Niklas S=C3=B6derlund)
+>
+> - Fix the Mediatek LVTS sensor coefficient for the MT8192 in order to
+> support
+>    it correctly (Hsin-Te Yuan)
+>
+> - Fix a null pointer dereference on the tsens driver when the function
+>    compute_intercept_slope() is called with a null parameter (Aleksandr
+>    Mishin)
+>
+> - Remove some unused fields in struct qpnp_tm_chip and k3_bandgap
+>    (Christophe Jaillet)
+>
+> - Fixup calibration efuse data decoding, consolidate the code by
+>    checking boundaries and refactor some part of the LVTS Mediatek
+>    driver. After setting the scene, add MT8186 and MT8188 along with
+>    the DT bindings (Nicolas Pitre)
+>
+> - Add Loongson-2K2000 support after some minor code adjustements and
+>    providing the DT bindings definition (Binbin Zhou)
+>
+> ----------------------------------------------------------------
+> Aleksandr Mishin (1):
+>        thermal/drivers/tsens: Fix null pointer dereference
+>
+> Binbin Zhou (4):
+>        thermal/drivers/loongson2: Trivial code style adjustment
+>        dt-bindings: thermal: loongson,ls2k-thermal: Add Loongson-2K0500
+> compatible
+>        dt-bindings: thermal: loongson,ls2k-thermal: Fix incorrect
+> compatible definition
+>        thermal/drivers/loongson2: Add Loongson-2K2000 support
+>
+> Christophe JAILLET (2):
+>        thermal/drivers/qcom: Remove some unused fields in struct
+> qpnp_tm_chip
+>        thermal/drivers/k3_bandgap: Remove some unused fields in struct
+> k3_bandgap
+>
+> Dmitry Rokosov (2):
+>        dt-bindings: thermal: amlogic: add support for A1 thermal sensor
+>        thermal/drivers/amlogic: Support A1 SoC family Thermal Sensor
+> controller
+>
+> Hsin-Te Yuan (1):
+>        thermal/drivers/mediatek/lvts_thermal: Add coeff for mt8192
+>
+> Konrad Dybcio (2):
+>        dt-bindings: thermal: lmh: Add QCM2290 compatible
+>        thermal/drivers/qcom/lmh: Check for SCM availability at probe
+>
+> Nicolas Pitre (11):
+>        thermal/drivers/mediatek/lvts_thermal: Retrieve all calibration by=
+tes
+>        thermal/drivers/mediatek/lvts_thermal: Move comment
+>        thermal/drivers/mediatek/lvts_thermal: Remove .hw_tshut_temp
+>        thermal/drivers/mediatek/lvts_thermal: Use offsets for every
+> calibration byte
+>        thermal/drivers/mediatek/lvts_thermal: Guard against efuse data
+> buffer overflow
+>        dt-bindings: thermal: mediatek: Add LVTS thermal controller
+> definition for MT8186
+>        thermal/drivers/mediatek/lvts_thermal: Add MT8186 support
+>        thermal/drivers/mediatek/lvts_thermal: Provision for gt variable
+> location
+>        thermal/drivers/mediatek/lvts_thermal: Allow early empty sensor sl=
+ots
+>        dt-bindings: thermal: mediatek: Add LVTS thermal controller
+> definition for MT8188
+>        thermal/drivers/mediatek/lvts_thermal: Add MT8188 support
+>
+> Niklas S=C3=B6derlund (2):
+>        thermal/drivers/rcar_gen3: Move Tj_T storage to shared private dat=
+a
+>        thermal/drivers/rcar_gen3: Update temperature approximation
+> calculation
+>
+> Priyansh Jain (1):
+>        thermal/drivers/tsens: Add suspend to RAM support for tsens
+>
+> Raphael Gallais-Pou (1):
+>        dt-bindings: thermal: convert st,stih407-thermal to DT schema
+>
+> Rasmus Villemoes (1):
+>        thermal/drivers/armada: Simplify name sanitization
+>
+>   .../bindings/thermal/amlogic,thermal.yaml          |  12 +-
+>   .../bindings/thermal/loongson,ls2k-thermal.yaml    |  24 +-
+>   .../bindings/thermal/mediatek,lvts-thermal.yaml    |   6 +
+>   .../devicetree/bindings/thermal/qcom-lmh.yaml      |  12 +-
+>   .../bindings/thermal/st,stih407-thermal.yaml       |  58 +++
+>   .../devicetree/bindings/thermal/st-thermal.txt     |  32 --
+>   drivers/thermal/amlogic_thermal.c                  |  10 +
+>   drivers/thermal/armada_thermal.c                   |   9 +-
+>   drivers/thermal/k3_bandgap.c                       |   1 -
+>   drivers/thermal/loongson2_thermal.c                | 117 ++++--
+>   drivers/thermal/mediatek/lvts_thermal.c            | 438
+> +++++++++++++++------
+>   drivers/thermal/qcom/lmh.c                         |   3 +
+>   drivers/thermal/qcom/qcom-spmi-temp-alarm.c        |   1 -
+>   drivers/thermal/qcom/tsens-v2.c                    |   1 +
+>   drivers/thermal/qcom/tsens.c                       |  33 +-
+>   drivers/thermal/qcom/tsens.h                       |   5 +
+>   drivers/thermal/rcar_gen3_thermal.c                | 165 ++++----
+>   .../dt-bindings/thermal/mediatek,lvts-thermal.h    |  26 ++
+>   18 files changed, 667 insertions(+), 286 deletions(-)
+>   create mode 100644
+> Documentation/devicetree/bindings/thermal/st,stih407-thermal.yaml
+>   delete mode 100644
+> Documentation/devicetree/bindings/thermal/st-thermal.txt
+>
+> --
 
-> Setting asymmetric CPU capacity is generally necessary to allow the
-> scheduler to compute task sizes in a consistent way across all CPUs
-> in a system where they differ by capacity.  That, in turn, should help
-> to improve task placement and load balancing decisions.  It is also
-> necessary for the schedutil cpufreq governor to operate as expected
-> on hybrid systems where tasks migrate between CPUs of different
-> capacities.
-> 
-> The underlying observation is that intel_pstate already uses
-> MSR_HWP_CAPABILITIES to get CPU performance information which is
-> exposed by it via sysfs and CPU performance scaling is based on it.
-> Thus using this information for setting asymmetric CPU capacity is
-> consistent with what the driver has been doing already.  Moreover,
-> HWP_HIGHEST_PERF reflects the maximum capacity of a given CPU including
-> both the instructions-per-cycle (IPC) factor and the maximum turbo
-> frequency and the units in which that value is expressed are the same
-> for all CPUs in the system, so the maximum capacity ratio between two
-> CPUs can be obtained by computing the ratio of their HWP_HIGHEST_PERF
-> values.  Of course, in principle that capacity ratio need not be
-> directly applicable at lower frequencies, so using it for providing the
-> asymmetric CPU capacity information to the scheduler is a rough
-> approximation, but it is as good as it gets.  Also, measurements
-> indicate that this approximation is not too bad in practice.
+Pulled and added to the thermal branch in linux-pm.git.
 
-So cpu_capacity has a direct mapping to itmt prio. cpu_capacity is itmt
-prio with max itmt prio scaled to 1024.
-
-Running it on i7-13700K (while allowing SMT) gives:
-
-root@gulliver:~# dmesg | grep sched_set_itmt_core_prio
-[    3.957826] sched_set_itmt_core_prio() cpu=0 prio=68
-[    3.990401] sched_set_itmt_core_prio() cpu=1 prio=68
-[    4.015551] sched_set_itmt_core_prio() cpu=2 prio=68
-[    4.040720] sched_set_itmt_core_prio() cpu=3 prio=68
-[    4.065871] sched_set_itmt_core_prio() cpu=4 prio=68
-[    4.091018] sched_set_itmt_core_prio() cpu=5 prio=68
-[    4.116175] sched_set_itmt_core_prio() cpu=6 prio=68
-[    4.141374] sched_set_itmt_core_prio() cpu=7 prio=68
-[    4.166543] sched_set_itmt_core_prio() cpu=8 prio=69
-[    4.196289] sched_set_itmt_core_prio() cpu=9 prio=69
-[    4.214964] sched_set_itmt_core_prio() cpu=10 prio=69
-[    4.239281] sched_set_itmt_core_prio() cpu=11 prio=69
-[    4.263438] sched_set_itmt_core_prio() cpu=12 prio=68
-[    4.283790] sched_set_itmt_core_prio() cpu=13 prio=68
-[    4.308905] sched_set_itmt_core_prio() cpu=14 prio=68
-[    4.331751] sched_set_itmt_core_prio() cpu=15 prio=68
-[    4.356002] sched_set_itmt_core_prio() cpu=16 prio=42
-[    4.381639] sched_set_itmt_core_prio() cpu=17 prio=42
-[    4.395175] sched_set_itmt_core_prio() cpu=18 prio=42
-[    4.425625] sched_set_itmt_core_prio() cpu=19 prio=42
-[    4.449670] sched_set_itmt_core_prio() cpu=20 prio=42
-[    4.479681] sched_set_itmt_core_prio() cpu=21 prio=42
-[    4.506319] sched_set_itmt_core_prio() cpu=22 prio=42
-[    4.523774] sched_set_itmt_core_prio() cpu=23 prio=42
-
-root@gulliver:~# dmesg | grep hybrid_set_cpu_capacity
-[    4.450883] hybrid_set_cpu_capacity() cpu=0 cap=1009
-[    4.455846] hybrid_set_cpu_capacity() cpu=1 cap=1009
-[    4.460806] hybrid_set_cpu_capacity() cpu=2 cap=1009
-[    4.465766] hybrid_set_cpu_capacity() cpu=3 cap=1009
-[    4.470730] hybrid_set_cpu_capacity() cpu=4 cap=1009
-[    4.475699] hybrid_set_cpu_capacity() cpu=5 cap=1009
-[    4.480664] hybrid_set_cpu_capacity() cpu=6 cap=1009
-[    4.485626] hybrid_set_cpu_capacity() cpu=7 cap=1009
-[    4.490588] hybrid_set_cpu_capacity() cpu=9 cap=1024
-[    4.495550] hybrid_set_cpu_capacity() cpu=10 cap=1024
-[    4.500598] hybrid_set_cpu_capacity() cpu=11 cap=1024
-[    4.505649] hybrid_set_cpu_capacity() cpu=12 cap=1009
-[    4.510701] hybrid_set_cpu_capacity() cpu=13 cap=1009
-[    4.515749] hybrid_set_cpu_capacity() cpu=14 cap=1009
-[    4.520802] hybrid_set_cpu_capacity() cpu=15 cap=1009
-[    4.525846] hybrid_set_cpu_capacity() cpu=16 cap=623
-[    4.530810] hybrid_set_cpu_capacity() cpu=17 cap=623
-[    4.535772] hybrid_set_cpu_capacity() cpu=18 cap=623
-[    4.540732] hybrid_set_cpu_capacity() cpu=19 cap=623
-[    4.545690] hybrid_set_cpu_capacity() cpu=20 cap=623
-[    4.550651] hybrid_set_cpu_capacity() cpu=21 cap=623
-[    4.555612] hybrid_set_cpu_capacity() cpu=22 cap=623
-[    4.560571] hybrid_set_cpu_capacity() cpu=23 cap=623
-
-> If the given system is hybrid and non-SMT, the new code disables ITMT
-> support in the scheduler (because it may get in the way of asymmetric CPU
-> capacity code in the scheduler that automatically gets enabled by setting
-> asymmetric CPU capacity) after initializing all online CPUs and finds
-> the one with the maximum HWP_HIGHEST_PERF value.  Next, it computes the
-> capacity number for each (online) CPU by dividing the product of its
-> HWP_HIGHEST_PERF and SCHED_CAPACITY_SCALE by the maximum HWP_HIGHEST_PERF.
-
-SO either CAS at wakeup and in load_balance or SIS at wakeup and ITMT in
-load balance.
-
-> When a CPU goes offline, its capacity is reset to SCHED_CAPACITY_SCALE
-> and if it is the one with the maximum HWP_HIGHEST_PERF value, the
-> capacity numbers for all of the other online CPUs are recomputed.  This
-> also takes care of a cleanup during driver operation mode changes.
-> 
-> Analogously, when a new CPU goes online, its capacity number is updated
-> and if its HWP_HIGHEST_PERF value is greater than the current maximum
-> one, the capacity numbers for all of the other online CPUs are
-> recomputed.
-> 
-> The case when the driver is notified of a CPU capacity change, either
-> through the HWP interrupt or through an ACPI notification, is handled
-> similarly to the CPU online case above, except that if the target CPU
-> is the current highest-capacity one and its capacity is reduced, the
-> capacity numbers for all of the other online CPUs need to be recomputed
-> either.
-> 
-> If the driver's "no_trubo" sysfs attribute is updated, all of the CPU
-> capacity information is computed from scratch to reflect the new turbo
-> status.
-
-So if I do:
-
-echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo
-
-I get:
-
-[ 1692.801368] hybrid_update_cpu_scaling() called
-[ 1692.801381] hybrid_update_cpu_scaling() max_cap_perf=44, max_perf_cpu=0
-[ 1692.801389] hybrid_set_cpu_capacity() cpu=1 cap=1024
-[ 1692.801395] hybrid_set_cpu_capacity() cpu=2 cap=1024
-[ 1692.801399] hybrid_set_cpu_capacity() cpu=3 cap=1024
-[ 1692.801402] hybrid_set_cpu_capacity() cpu=4 cap=1024
-[ 1692.801405] hybrid_set_cpu_capacity() cpu=5 cap=1024
-[ 1692.801408] hybrid_set_cpu_capacity() cpu=6 cap=1024
-[ 1692.801410] hybrid_set_cpu_capacity() cpu=7 cap=1024
-[ 1692.801413] hybrid_set_cpu_capacity() cpu=8 cap=1024
-[ 1692.801416] hybrid_set_cpu_capacity() cpu=9 cap=1024
-[ 1692.801419] hybrid_set_cpu_capacity() cpu=10 cap=1024
-[ 1692.801422] hybrid_set_cpu_capacity() cpu=11 cap=1024
-[ 1692.801425] hybrid_set_cpu_capacity() cpu=12 cap=1024
-[ 1692.801428] hybrid_set_cpu_capacity() cpu=13 cap=1024
-[ 1692.801431] hybrid_set_cpu_capacity() cpu=14 cap=1024
-[ 1692.801433] hybrid_set_cpu_capacity() cpu=15 cap=1024
-[ 1692.801436] hybrid_set_cpu_capacity() cpu=16 cap=605
-[ 1692.801439] hybrid_set_cpu_capacity() cpu=17 cap=605
-[ 1692.801442] hybrid_set_cpu_capacity() cpu=18 cap=605
-[ 1692.801445] hybrid_set_cpu_capacity() cpu=19 cap=605
-[ 1692.801448] hybrid_set_cpu_capacity() cpu=20 cap=605
-[ 1692.801451] hybrid_set_cpu_capacity() cpu=21 cap=605
-[ 1692.801453] hybrid_set_cpu_capacity() cpu=22 cap=605
-[ 1692.801456] hybrid_set_cpu_capacity() cpu=23 cap=605
-
-Turbo on this machine stands only for the cpu_capacity diff 1009 vs 1024?
-
-[...]
-
+Thank you!
 
