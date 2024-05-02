@@ -1,100 +1,101 @@
-Return-Path: <linux-pm+bounces-7439-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7441-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7A0F8B997B
-	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2024 12:54:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D2298B9A14
+	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2024 13:31:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D8F3F1C21250
-	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2024 10:54:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE2F21F23FAB
+	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2024 11:31:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10D705E091;
-	Thu,  2 May 2024 10:54:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 013176217D;
+	Thu,  2 May 2024 11:31:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ADc83FN/"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=wizzup.org header.i=@wizzup.org header.b="m1Cu799q"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.wizzup.org (mail.wizzup.org [45.80.170.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D94C856B7B;
-	Thu,  2 May 2024 10:54:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6892C224DD;
+	Thu,  2 May 2024 11:31:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.80.170.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714647292; cv=none; b=a5VnU6Ilvb5xM73UlvCx+6MhF6Nx80QgL9wQZ9CRNTYmXqlD5oVfg2u9IKPt421PJ7HzwikTZkq5o7cRSDmshmBe6pcS4Tk/O6eXX3ssmyUEIelekcuogNjBbQJn/qgUQ3gmCE4Ldj+bvesZADiIvgyVyzXDxXagc9XUbbu3cW4=
+	t=1714649501; cv=none; b=KIw0l0JGpVlzJYG1deVWXP9lVgy0eB3RXB28B9XDjZFGKqZkIMdmklGblafuThpWd/OlTGuDlsCwpBtHEgOG1nGtYsQcSbivQDwRn95NjdGCxzWFJYAOSgKV9alnltq9IbjCJ1kZ243ZAv4932X2yapDdbTi2cIHrJhnOwZgV6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714647292; c=relaxed/simple;
-	bh=2zMMgDtblAfRMoupiInjzu+rYzRFbq4eE1vS2UNSkZc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=flq1GG2oDWzpLyEMCpUzYgISR++kOw8iNArFN+8qQNNUueZlekGpJMLtohk4qSPAVzdUePeLcYHRhWr0QDSmXw+FAjF1knaR+S6SoK+B5BFvDloDBc9bXQw7KKCiaOY9h/YiK18ZQKx5P1bSaTlD7JhAw9W6GRytWNwrs+T0580=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ADc83FN/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C37EC4AF1A;
-	Thu,  2 May 2024 10:54:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714647291;
-	bh=2zMMgDtblAfRMoupiInjzu+rYzRFbq4eE1vS2UNSkZc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ADc83FN/7InmE8+BsUu87A58zfvwNkMsrp3wz4s0jkj9Bz8Y8xvZgmBG+08zIOZ7m
-	 apI9BXdYfadpsKqS9kGAYRY3vRb7rTc+4ZSgiQGBccNjEoaW8vKZ+vNUujHPv8K/gu
-	 D4q0jywmG4+9Q9TL7+AuPq6WAy8blcKI9si5MqOfOQ8iz5AW6eu0eH2n1htpW9PtTg
-	 i1BwW1nJbstqeGLpLBgutAn6vxi8UgImcIwHVjMZy4Njw7eiNANPc0kkd/Xu7JFNgj
-	 hOccUKBDaVyusO8+zX2qKw/qOWq6gyBKBLsunuSyPUXVe0xjDPfFmpvb5MPyr8bH1H
-	 qCSFx28P7c02w==
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-5b1b03dc01dso360797eaf.3;
-        Thu, 02 May 2024 03:54:51 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUiE4h9xxTsIrpL7lcjDPDbwbGLrEH6m856cdTxkTpbqlaNuNfBAYN6wWI4OGrtVrsuMnZvXKtZWbGXQlokXOz0BAUl4ILC4fd2TfegEpvS3X8NQtkZzdC2XideX2/WXFuUdN04F40=
-X-Gm-Message-State: AOJu0YxGzZ0QwJ3SW/LghhjYNUQoiOuAsoQX48dqEljz1zZJG9SPes1k
-	5+phfGxcg/1Xg24cqVTWZSGS/wBUQAwBpwrxUx4FJmlF+fuWQ6i5RtgdAxM+xAgm/fCPNQDHZd4
-	irTxuL0ah8KZmRzZcjZvP63TgwBY=
-X-Google-Smtp-Source: AGHT+IHTtFLtzAIcPI232H9S3+Qt/XcskxoU14vG/wR76VMfYJzsf+zXY7sqUfPW8wjwo2SXQlV+LiNaIfbgSTg+7og=
-X-Received: by 2002:a4a:2546:0:b0:5a7:db56:915c with SMTP id
- v6-20020a4a2546000000b005a7db56915cmr5724735ooe.1.1714647290569; Thu, 02 May
- 2024 03:54:50 -0700 (PDT)
+	s=arc-20240116; t=1714649501; c=relaxed/simple;
+	bh=hdlRoJM+2+2KyXCFmBsNc5FwpvzfatObu0siqf41d4k=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=RFhag1lveQgunCOxAgUXWQNmnNOklEAYBcqpU8F4NJK/T2rQSVcPK7RVsz2KiuXw6HaxdzzrCVzz9MrnEg7s/WMVoFuRNrPpeKn9zhz4gqNUA+KSV63VBVUhcJU/ADQF7o3ycI262AIDapYHQZTtZlsznywifzgMZhSSv5Nr5vo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wizzup.org; spf=pass smtp.mailfrom=wizzup.org; dkim=pass (2048-bit key) header.d=wizzup.org header.i=@wizzup.org header.b=m1Cu799q; arc=none smtp.client-ip=45.80.170.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wizzup.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wizzup.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=wizzup.org;
+	s=mail; h=Content-Transfer-Encoding:Content-Type:Subject:From:Cc:To:
+	MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=12nSVpVTm24HoKxg2WwBgVDSsEiN6QR/ZYeATsN2aPc=; b=m1Cu799qtbCNqb3mG5e6opplOR
+	1UkXwfTZTohaT03VE5Brs/WULZnTUkjWDTb5h3HO96dzEiunu4tzoo6E6ZxnQWGFkP/bBR0JvZ5Gx
+	VeYngiiTsXqRBASwZaNW8i3t8e3C9GmUeRK9n/Zyc57KN07WuFeaq+dVxAxIuizJobkarxTe+iTU1
+	gTZfOvbTAZ4erb+w887nS8wpcbnkuCaKTUYqAhe9Do8VLgHVXtoGiqvAWtzRWHJiX1bChQwI6GvZL
+	TJOFV8b0vQsRAxbFpmGoVL9pT36ufOzrmdii+BdgbQrLRP+QkuWGq0bBwCVhHRyzdShH5CyeZLu6Y
+	/Wuq7eRw==;
+Received: from [192.168.178.24] (helo=[0.0.0.0])
+	by mail.wizzup.org with esmtpsa  (TLS1.3) tls TLS_AES_128_GCM_SHA256
+	(Exim 4.96.2)
+	(envelope-from <merlijn@wizzup.org>)
+	id 1s2UlU-0000Bm-0D;
+	Thu, 02 May 2024 11:38:16 +0000
+Message-ID: <657f402f-3c22-48bb-8102-ab35a74444c1@wizzup.org>
+Date: Thu, 2 May 2024 13:04:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240430225826.65289-1-srinivas.pandruvada@linux.intel.com> <ZjNdILvlyei-_Z7A@smile.fi.intel.com>
-In-Reply-To: <ZjNdILvlyei-_Z7A@smile.fi.intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 2 May 2024 12:54:36 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gYbn5jGE21RyzfOXCP7onhJSB5_D4fTJKW=Zf=K8zLxA@mail.gmail.com>
-Message-ID: <CAJZ5v0gYbn5jGE21RyzfOXCP7onhJSB5_D4fTJKW=Zf=K8zLxA@mail.gmail.com>
-Subject: Re: [PATCH] thermal: intel: Add missing module description
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: daniel.lezcano@linaro.org, rui.zhang@intel.com, lukasz.luba@arm.com, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Content-Language: nl, en-US
+To: linux-omap <linux-omap@vger.kernel.org>
+Cc: rafael@kernel.org, viresh.kumar@linaro.org, zhipeng.wang_1@nxp.com,
+ Tony Lindgren <tony@atomide.com>,
+ Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
+ Carl Philipp Klemm <philipp@uvos.xyz>, "Sicelo A . Mhlongo"
+ <absicsz@gmail.com>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ linux-pm@vger.kernel.org
+From: Merlijn Wajer <merlijn@wizzup.org>
+Subject: No cpufreq entries with omap2plus_defconfig since "cpufreq:
+ dt-platdev: Support building as module" (commit 3b062a08)
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, May 2, 2024 at 11:30=E2=80=AFAM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Tue, Apr 30, 2024 at 03:58:25PM -0700, Srinivas Pandruvada wrote:
-> > Fix warnings displayed by "make W=3D1" build:
-> >
-> > WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel=
-/intel_soc_dts_iosf.o
-> > WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel=
-/int340x_thermal/processor_thermal_rapl.o
-> > WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel=
-/int340x_thermal/processor_thermal_rfim.o
-> > WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel=
-/int340x_thermal/processor_thermal_mbox.o
-> > WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel=
-/int340x_thermal/processor_thermal_wt_req.o
-> > WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel=
-/int340x_thermal/processor_thermal_wt_hint.o
-> > WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel=
-/int340x_thermal/processor_thermal_power_floor
->
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->
-> Thank you!
+Hi,
 
-Applied as 6.10 material, thank you!
+I was looking at switching my Motorola Droid 4 phone from Linux 6.1 to 
+Linux 6.6, and it no longer gets any cpufreq entries on boot, and I 
+found cpufreq_dt was no longer loaded. I tried to force the issue by 
+modprobe it, but to no avail. The same issue occurs on the latest 6.9.
+
+After a bit of digging it looks like the problem is that 
+cpufreq-dt-platdev can be built as a module and when this the case 
+(apparently the default), cpufreq_dt doesn't work. With the 
+omap2plus_defconfig, CONFIG_CPUFREQ_DT_PLATDEV is indeed set to module.
+
+When I manually probe cpufreq-dt-platdev and cpufreq_dt, I get the 
+cpufreq_entries back.
+
+Searching around I found this debian bug report [1] which just flips the 
+CONFIG_CPUFREQ_DT_PLATDEV back to '=y', but I think there might be a 
+deeper issue here.
+
+Is there a way to define this relationship/dependency for cpufreq-dt, so 
+that it will automatically load this module?
+
+Regards,
+Merlijn
+
+[1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050587
 
