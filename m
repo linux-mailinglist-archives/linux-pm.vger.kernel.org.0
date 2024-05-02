@@ -1,106 +1,174 @@
-Return-Path: <linux-pm+bounces-7432-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7433-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F15C8B932C
-	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2024 03:45:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 371818B935C
+	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2024 04:21:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C489A1F22A1C
-	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2024 01:45:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A25E41F231C0
+	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2024 02:21:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D195B134C6;
-	Thu,  2 May 2024 01:45:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C54BC17997;
+	Thu,  2 May 2024 02:21:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b="EZAY33JE"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="LOtZw5en"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from gentwo.org (gentwo.org [62.72.0.81])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 474733207;
-	Thu,  2 May 2024 01:44:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.72.0.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE7A414F98;
+	Thu,  2 May 2024 02:21:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714614300; cv=none; b=X6OxVT8M5GzmKZlZXfyILrYQdxR7vtCqLVbQrXUeNJ2GNuBb9SScbxENsODQoXZUZU0BuJz9Kb2IIUN64j7Z6leF+/mdSEr9giJEerNnqFhROhgjV5cmRciVq4VzzQNaCOknytLerM06VMfQl3QvkG8/X5sCM1qJx8Dg3lwBfn0=
+	t=1714616496; cv=none; b=C1aV8gA2ElvLsEqUp5vYPP3scHKmGZAvoedi7Y4McOEefM3iTmsiPxY6abMB8ULGYPbgZOS9r2xdZZL47Of+3Dl8+J3gpJEqghVEL0zV79M2oB6oeVhsDWNZu3e3jH22MND/F3tyIq43ifHt2f97LvMMSVRDQUV5LeM9NlSyWHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714614300; c=relaxed/simple;
-	bh=4/6ccF66M6jfy4na42oviYshr2LOBPT25Dm7w4642t4=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=RINtBZzi5mDN6/hWe4eGwUXSNAQ25/oe2pnfYNpguijOedhyIIdEtvPtN0rkuY3yDPjNpY5rAkGUV5FxTijrcaleBiESzoUpbsn/Dq/Iom5oprk3J1a65yNMJz3GS7VlVuFXdOaifU9KOOd4SLiM1ktz0Y9z47uPSRoKEPxjfXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org; spf=pass smtp.mailfrom=gentwo.org; dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b=EZAY33JE; arc=none smtp.client-ip=62.72.0.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
-	s=default; t=1714613623;
-	bh=4/6ccF66M6jfy4na42oviYshr2LOBPT25Dm7w4642t4=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=EZAY33JEALU8XVl7KTq3DxYg/uHLFyAMRvc4XqzUNE64PUsUG/nI+FirEx7DByHNF
-	 ZbpTx75v9UJMxP/IMChibVgFYJup586biteVaVOAQar6SqFbC+LrFD0f4TQQ86BH94
-	 3Uu9sInK+nne4DE4ugGPvNsR2M36BSUVqMBcoPeI=
-Received: by gentwo.org (Postfix, from userid 1003)
-	id F07EF401D5; Wed,  1 May 2024 18:33:42 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-	by gentwo.org (Postfix) with ESMTP id ECB50401C3;
-	Wed,  1 May 2024 18:33:42 -0700 (PDT)
-Date: Wed, 1 May 2024 18:33:42 -0700 (PDT)
-From: "Christoph Lameter (Ampere)" <cl@gentwo.org>
-To: Ankur Arora <ankur.a.arora@oracle.com>
-cc: linux-pm@vger.kernel.org, kvm@vger.kernel.org, 
-    linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-    catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de, 
-    mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com, 
-    pbonzini@redhat.com, wanpengli@tencent.com, vkuznets@redhat.com, 
-    rafael@kernel.org, daniel.lezcano@linaro.org, peterz@infradead.org, 
-    arnd@arndb.de, lenb@kernel.org, mark.rutland@arm.com, harisokn@amazon.com, 
-    joao.m.martins@oracle.com, boris.ostrovsky@oracle.com, 
-    konrad.wilk@oracle.com
-Subject: Re: [PATCH 1/9] cpuidle: rename ARCH_HAS_CPU_RELAX to
- ARCH_HAS_OPTIMIZED_POLL
-In-Reply-To: <20240430183730.561960-2-ankur.a.arora@oracle.com>
-Message-ID: <7473bd3d-f812-e039-24cf-501502206dc9@gentwo.org>
-References: <20240430183730.561960-1-ankur.a.arora@oracle.com> <20240430183730.561960-2-ankur.a.arora@oracle.com>
+	s=arc-20240116; t=1714616496; c=relaxed/simple;
+	bh=0SkoUc/gj2ccBJpeBBjFbDOe8ESeYkfD46hLfmF3o7s=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EHivfB5qeYrRxLNHG7tZ/+IfjhR3jkBTck5Zp4wHo9Lev/x577AoZVmAE182uV5JoIyf3vxbnONRrNTfjgm60/QtsVSxqUvJliAIHaEis0q8nEHhdpeSRnIcxdtEXVe0/OxVEWXuJco7s0KDVLyquAjSi2FlJDYckZ7sXvjYNPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=LOtZw5en; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4420xbLm002676;
+	Thu, 2 May 2024 02:21:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	date:from:to:cc:subject:message-id:references:mime-version
+	:content-type:in-reply-to; s=qcppdkim1; bh=XkgoEJf0wa4jbau0oH/37
+	Shhuh12JPc5AkUPCGbmRJQ=; b=LOtZw5en/66GLjJAShz6IQXkS8+/lZ6x2vXJr
+	21dPuXEWaoJ8wRn6BIsMuTBj5nw+JKodiac26w5DI6SspNWDYgxZ2C6oSwSdrLZj
+	KhzdWcLcO9iCGO6wnwncnnX7OgxCJYINB6yO05zeSPGFwn5w5Lihu3/eC12BOnfI
+	5/R6QGt/9snFeBi+tpzqgrsT/+8Ew5YH/TARMEDcGgJvQW/KIiegVKLMu6JxyGNN
+	M0X2P5Z4qSQs8l63cgwPCriacZA8kQ+h9rZG1hKXCYdHVTxfT2zXfjX4Mjns2Zy/
+	I4dmF1K009GMdvaz5iRyFgeHbVPlFWJNo8ljGLz8AVysQaCSw==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xu71jauy5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 02 May 2024 02:21:17 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4422LHSh029273
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 2 May 2024 02:21:17 GMT
+Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Wed, 1 May 2024 19:21:16 -0700
+Date: Wed, 1 May 2024 19:21:16 -0700
+From: Elliot Berman <quic_eberman@quicinc.com>
+To: Sudeep Holla <sudeep.holla@arm.com>
+CC: Florian Fainelli <florian.fainelli@broadcom.com>,
+        Bjorn Andersson
+	<andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Sebastian
+ Reichel" <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Andy Yan <andy.yan@rock-chips.com>,
+        "Lorenzo
+ Pieralisi" <lpieralisi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        "Satya Durga Srinivasu
+ Prabhala" <quic_satyap@quicinc.com>,
+        Melody Olvera
+	<quic_molvera@quicinc.com>,
+        Shivendra Pratap <quic_spratap@quicinc.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v2 0/4] Implement vendor resets for PSCI SYSTEM_RESET2
+Message-ID: <20240501190823313-0700.eberman@hu-eberman-lv.qualcomm.com>
+References: <20240414-arm-psci-system_reset2-vendor-reboots-v2-0-da9a055a648f@quicinc.com>
+ <Zh5GWqt2oCNHdF_h@bogus>
+ <48f366f5-4a17-474c-a8e3-6d79c9092d62@broadcom.com>
+ <20240419123847.ica22nft3sejqnm7@bogus>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20240419123847.ica22nft3sejqnm7@bogus>
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: V901gX_zoIsSIZykcHNca33lKpbonAM7
+X-Proofpoint-ORIG-GUID: V901gX_zoIsSIZykcHNca33lKpbonAM7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-05-01_16,2024-04-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=999 bulkscore=0 adultscore=0 priorityscore=1501
+ impostorscore=0 phishscore=0 mlxscore=0 lowpriorityscore=0 spamscore=0
+ clxscore=1015 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2404010003 definitions=main-2405020008
 
-On Tue, 30 Apr 2024, Ankur Arora wrote:
+On Fri, Apr 19, 2024 at 01:38:47PM +0100, Sudeep Holla wrote:
+> On Wed, Apr 17, 2024 at 10:50:07AM -0700, Florian Fainelli wrote:
+> > On 4/16/24 02:35, Sudeep Holla wrote:
+> > > On Sun, Apr 14, 2024 at 12:30:23PM -0700, Elliot Berman wrote:
+> > > > The PSCI SYSTEM_RESET2 call allows vendor firmware to define additional
+> > > > reset types which could be mapped to the reboot argument.
+> > > >
+> > > > Setting up reboot on Qualcomm devices can be inconsistent from chipset
+> > > > to chipset.
+> > >
+> > > That doesn't sound good. Do you mean PSCI SYSTEM_RESET doesn't work as
+> > > expected ? Does it mean it is not conformant to the specification ?
+> > >
+> > > > Generally, there is a PMIC register that gets written to
+> > > > decide the reboot type. There is also sometimes a cookie that can be
+> > > > written to indicate that the bootloader should behave differently than a
+> > > > regular boot. These knobs evolve over product generations and require
+> > > > more drivers. Qualcomm firmwares are beginning to expose vendor
+> > > > SYSTEM_RESET2 types to simplify driver requirements from Linux.
+> > > >
+> > >
+> > > Why can't this be fully userspace driven ? What is the need to keep the
+> > > cookie in the DT ?
+> > >
+> > >
+> >
+> > Using the second example in the Device Tree:
+> >
+> > mode-bootloader = <1 2>;
+> >
+> > are you suggesting that within psci_vendor_sys_reset2() we would look at the
+> > data argument and assume that we have something like this in memory:
+> >
+> > const char *cmd = data;
+> >
+> > cmd[] = "bootloader 2"
+> >
+> > where "bootloader" is the reboot command, and "2" is the cookie? From an
+> > util-linux, busybox, toybox, etc. we would have to concatenate those
+> > arguments with a space, but I suppose that would be doable.
+> >
+> 
+> Yes that was my thought when I wrote the email. But since I have looked at
+> existing bindings and support in the kernel in little more detail I would say.
+> So I am not sure what would be the better choice for PSCI SYSTEM_RESET2
+> especially when there is some ground support to build.
+> 
+> So I am open for alternatives including this approach.
 
-> ARCH_HAS_CPU_RELAX is a bit of a misnomer since all architectures
-> define cpu_relax(). Not all, however, have a performant version, with
-> some only implementing it as a compiler barrier.
->
-> In contexts that this config option is used, it is expected to provide
-> an architectural primitive that can be used as part of a polling
-> mechanism -- one that would be cheaper than spinning in a tight loop.
+If we can't go with the DT approach, my preference would be to go with a
+bootconfig and sysfs for controlling the mappings, although I don't
+think userspace need/should control the mappings of cmd -> cookies.
 
-The intend of cpu_relax() is not a polling mechanism. Initial AFAICT it 
-was introduced on x86 as the REP NOP instruction. Aka as PAUSE. And it was 
-part of a spin loop. So there was no connection to polling anything.
+I wanted to check if you are okay with proceeding with the reboot-mode
+DT bindings approach unless we have some other better standard? If yes,
+do you have any preference based on Konrad's comment [1]? I can send out
+v3 with the couple comments from Dmitry and Krzysztof's addressed.
 
-The intend was to make the processor aware that we are in a spin loop. 
-Various processors have different actions that they take upon encountering 
-such a cpu relax operation.
+Thanks,
+Elliot
 
-The polling (WFE/WFI) available on ARM (and potentially other platforms) 
-is a different mechanism that is actually intended to reduce the power 
-requirement of the processor until a certain condition is met and that 
-check is done in hardware.
-
-These are not the same and I think we need both config options.
-
-The issues that you have with WFET later in the patchset arise from not 
-making this distinction.
-
-The polling (waiting for an event) could be implemented for a 
-processor not supporting that in hardware by using a loop that 
-checks for the condition and then does a cpu_relax().
-
-With that you could f.e. support the existing cpu_relax() and also have 
-some form of cpu_poll() interface.
-
+[1]: https://lore.kernel.org/all/20240419123847.ica22nft3sejqnm7@bogus/
 
