@@ -1,174 +1,105 @@
-Return-Path: <linux-pm+bounces-7433-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7434-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 371818B935C
-	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2024 04:21:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9728D8B97B8
+	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2024 11:30:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A25E41F231C0
-	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2024 02:21:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 66FCA285B4C
+	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2024 09:30:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C54BC17997;
-	Thu,  2 May 2024 02:21:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1F3553E3B;
+	Thu,  2 May 2024 09:30:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="LOtZw5en"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KrfzZMut"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE7A414F98;
-	Thu,  2 May 2024 02:21:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED7BA2C6BC;
+	Thu,  2 May 2024 09:30:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714616496; cv=none; b=C1aV8gA2ElvLsEqUp5vYPP3scHKmGZAvoedi7Y4McOEefM3iTmsiPxY6abMB8ULGYPbgZOS9r2xdZZL47Of+3Dl8+J3gpJEqghVEL0zV79M2oB6oeVhsDWNZu3e3jH22MND/F3tyIq43ifHt2f97LvMMSVRDQUV5LeM9NlSyWHA=
+	t=1714642216; cv=none; b=an3O2OyNJ0qlqLQwYfLvcli8Jlp4iFlHtBeWtLlrv4PXfjCW2ZSn9Bsbnvxgz7JBGo7iTRJGUIjg57RtSYXXeAOPBs27RfXItdqtLzDX5zoYFcx0428qbltGAh22k6VMQAIKiJ22vsL4dAhyIuha6OsnqWqilLtqfriKAZjB6Jw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714616496; c=relaxed/simple;
-	bh=0SkoUc/gj2ccBJpeBBjFbDOe8ESeYkfD46hLfmF3o7s=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EHivfB5qeYrRxLNHG7tZ/+IfjhR3jkBTck5Zp4wHo9Lev/x577AoZVmAE182uV5JoIyf3vxbnONRrNTfjgm60/QtsVSxqUvJliAIHaEis0q8nEHhdpeSRnIcxdtEXVe0/OxVEWXuJco7s0KDVLyquAjSi2FlJDYckZ7sXvjYNPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=LOtZw5en; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4420xbLm002676;
-	Thu, 2 May 2024 02:21:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=qcppdkim1; bh=XkgoEJf0wa4jbau0oH/37
-	Shhuh12JPc5AkUPCGbmRJQ=; b=LOtZw5en/66GLjJAShz6IQXkS8+/lZ6x2vXJr
-	21dPuXEWaoJ8wRn6BIsMuTBj5nw+JKodiac26w5DI6SspNWDYgxZ2C6oSwSdrLZj
-	KhzdWcLcO9iCGO6wnwncnnX7OgxCJYINB6yO05zeSPGFwn5w5Lihu3/eC12BOnfI
-	5/R6QGt/9snFeBi+tpzqgrsT/+8Ew5YH/TARMEDcGgJvQW/KIiegVKLMu6JxyGNN
-	M0X2P5Z4qSQs8l63cgwPCriacZA8kQ+h9rZG1hKXCYdHVTxfT2zXfjX4Mjns2Zy/
-	I4dmF1K009GMdvaz5iRyFgeHbVPlFWJNo8ljGLz8AVysQaCSw==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xu71jauy5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 02 May 2024 02:21:17 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4422LHSh029273
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 2 May 2024 02:21:17 GMT
-Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 1 May 2024 19:21:16 -0700
-Date: Wed, 1 May 2024 19:21:16 -0700
-From: Elliot Berman <quic_eberman@quicinc.com>
-To: Sudeep Holla <sudeep.holla@arm.com>
-CC: Florian Fainelli <florian.fainelli@broadcom.com>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Sebastian
- Reichel" <sre@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Andy Yan <andy.yan@rock-chips.com>,
-        "Lorenzo
- Pieralisi" <lpieralisi@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        "Satya Durga Srinivasu
- Prabhala" <quic_satyap@quicinc.com>,
-        Melody Olvera
-	<quic_molvera@quicinc.com>,
-        Shivendra Pratap <quic_spratap@quicinc.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v2 0/4] Implement vendor resets for PSCI SYSTEM_RESET2
-Message-ID: <20240501190823313-0700.eberman@hu-eberman-lv.qualcomm.com>
-References: <20240414-arm-psci-system_reset2-vendor-reboots-v2-0-da9a055a648f@quicinc.com>
- <Zh5GWqt2oCNHdF_h@bogus>
- <48f366f5-4a17-474c-a8e3-6d79c9092d62@broadcom.com>
- <20240419123847.ica22nft3sejqnm7@bogus>
+	s=arc-20240116; t=1714642216; c=relaxed/simple;
+	bh=JpCJBKENug99JXbw+5TXRfM0ZuevAoPOLpbNNp9xdiw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DhyCFoc79E7qIGDu61R5va3gn2X4D4KYXsmQ8RAxUO3OGKBf5imFcGllSYmoRq8reCERt74gszGYI1VxKTf0sBkuLDsKOt6Z+Jtxcng8k0RxHu1yN/JaCdGNMx8gWlaGjCY3QXtaGwrlH6nW8IIn+vvn0mZf122PiaFcPbaYhSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KrfzZMut; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714642215; x=1746178215;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JpCJBKENug99JXbw+5TXRfM0ZuevAoPOLpbNNp9xdiw=;
+  b=KrfzZMutOtY9bzJUhHlhBaPC4lTpxjFkB8CqUVBB8mru0TlXCwNlHG4n
+   gpTT32T+SHos1FadG2M+6R6a4HI1pdjRxBx93o4j9d6AFZFHefhRJyzmu
+   pVIUh4k3wMVk5cJp7934/5VRlEq3FgrVlrJLWDUh+g9M/TvgDdwYNoIm4
+   sos9IteF6nGs7CE5eAeXZNca3Pkv/Bfe/BgIHKLCK4j6rDmd2Co9pvFsE
+   S75jRyRVh9TaZW9wTzQ+5JuE0/ZGe0AaGQtdQAandM8/t/L8aOxGOJaoP
+   9/kB0KkL8lMJJ2h0BPF11TpSDNv5Ygzb4j+GQe1Pebhv4L9OhFSReUeOo
+   Q==;
+X-CSE-ConnectionGUID: smkmGoyASVy66C665nL72w==
+X-CSE-MsgGUID: oxjR+YY8SdaNct0nXDwhhg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11061"; a="21091128"
+X-IronPort-AV: E=Sophos;i="6.07,247,1708416000"; 
+   d="scan'208";a="21091128"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2024 02:30:14 -0700
+X-CSE-ConnectionGUID: WOErYpKFRVmzkl7OuZHlEQ==
+X-CSE-MsgGUID: 0Tp+Ac+pSnmNfZtlBulmFQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,247,1708416000"; 
+   d="scan'208";a="27467729"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orviesa006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2024 02:30:12 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1s2SlU-00000003GNr-3YmU;
+	Thu, 02 May 2024 12:30:08 +0300
+Date: Thu, 2 May 2024 12:30:08 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
+	lukasz.luba@arm.com, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thermal: intel: Add missing module description
+Message-ID: <ZjNdILvlyei-_Z7A@smile.fi.intel.com>
+References: <20240430225826.65289-1-srinivas.pandruvada@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240419123847.ica22nft3sejqnm7@bogus>
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: V901gX_zoIsSIZykcHNca33lKpbonAM7
-X-Proofpoint-ORIG-GUID: V901gX_zoIsSIZykcHNca33lKpbonAM7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-05-01_16,2024-04-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=999 bulkscore=0 adultscore=0 priorityscore=1501
- impostorscore=0 phishscore=0 mlxscore=0 lowpriorityscore=0 spamscore=0
- clxscore=1015 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2404010003 definitions=main-2405020008
+In-Reply-To: <20240430225826.65289-1-srinivas.pandruvada@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Fri, Apr 19, 2024 at 01:38:47PM +0100, Sudeep Holla wrote:
-> On Wed, Apr 17, 2024 at 10:50:07AM -0700, Florian Fainelli wrote:
-> > On 4/16/24 02:35, Sudeep Holla wrote:
-> > > On Sun, Apr 14, 2024 at 12:30:23PM -0700, Elliot Berman wrote:
-> > > > The PSCI SYSTEM_RESET2 call allows vendor firmware to define additional
-> > > > reset types which could be mapped to the reboot argument.
-> > > >
-> > > > Setting up reboot on Qualcomm devices can be inconsistent from chipset
-> > > > to chipset.
-> > >
-> > > That doesn't sound good. Do you mean PSCI SYSTEM_RESET doesn't work as
-> > > expected ? Does it mean it is not conformant to the specification ?
-> > >
-> > > > Generally, there is a PMIC register that gets written to
-> > > > decide the reboot type. There is also sometimes a cookie that can be
-> > > > written to indicate that the bootloader should behave differently than a
-> > > > regular boot. These knobs evolve over product generations and require
-> > > > more drivers. Qualcomm firmwares are beginning to expose vendor
-> > > > SYSTEM_RESET2 types to simplify driver requirements from Linux.
-> > > >
-> > >
-> > > Why can't this be fully userspace driven ? What is the need to keep the
-> > > cookie in the DT ?
-> > >
-> > >
-> >
-> > Using the second example in the Device Tree:
-> >
-> > mode-bootloader = <1 2>;
-> >
-> > are you suggesting that within psci_vendor_sys_reset2() we would look at the
-> > data argument and assume that we have something like this in memory:
-> >
-> > const char *cmd = data;
-> >
-> > cmd[] = "bootloader 2"
-> >
-> > where "bootloader" is the reboot command, and "2" is the cookie? From an
-> > util-linux, busybox, toybox, etc. we would have to concatenate those
-> > arguments with a space, but I suppose that would be doable.
-> >
+On Tue, Apr 30, 2024 at 03:58:25PM -0700, Srinivas Pandruvada wrote:
+> Fix warnings displayed by "make W=1" build:
 > 
-> Yes that was my thought when I wrote the email. But since I have looked at
-> existing bindings and support in the kernel in little more detail I would say.
-> So I am not sure what would be the better choice for PSCI SYSTEM_RESET2
-> especially when there is some ground support to build.
-> 
-> So I am open for alternatives including this approach.
+> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/intel_soc_dts_iosf.o
+> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/int340x_thermal/processor_thermal_rapl.o
+> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.o
+> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.o
+> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/int340x_thermal/processor_thermal_wt_req.o
+> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/int340x_thermal/processor_thermal_wt_hint.o
+> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/int340x_thermal/processor_thermal_power_floor
 
-If we can't go with the DT approach, my preference would be to go with a
-bootconfig and sysfs for controlling the mappings, although I don't
-think userspace need/should control the mappings of cmd -> cookies.
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-I wanted to check if you are okay with proceeding with the reboot-mode
-DT bindings approach unless we have some other better standard? If yes,
-do you have any preference based on Konrad's comment [1]? I can send out
-v3 with the couple comments from Dmitry and Krzysztof's addressed.
+Thank you!
 
-Thanks,
-Elliot
+-- 
+With Best Regards,
+Andy Shevchenko
 
-[1]: https://lore.kernel.org/all/20240419123847.ica22nft3sejqnm7@bogus/
+
 
