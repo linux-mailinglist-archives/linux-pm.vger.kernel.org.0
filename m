@@ -1,105 +1,193 @@
-Return-Path: <linux-pm+bounces-7434-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7435-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9728D8B97B8
-	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2024 11:30:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76E048B97C7
+	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2024 11:31:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 66FCA285B4C
-	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2024 09:30:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 99EC31C22A9D
+	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2024 09:31:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1F3553E3B;
-	Thu,  2 May 2024 09:30:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C169855C3C;
+	Thu,  2 May 2024 09:31:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KrfzZMut"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="YIOO6VEH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED7BA2C6BC;
-	Thu,  2 May 2024 09:30:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9915153373;
+	Thu,  2 May 2024 09:31:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714642216; cv=none; b=an3O2OyNJ0qlqLQwYfLvcli8Jlp4iFlHtBeWtLlrv4PXfjCW2ZSn9Bsbnvxgz7JBGo7iTRJGUIjg57RtSYXXeAOPBs27RfXItdqtLzDX5zoYFcx0428qbltGAh22k6VMQAIKiJ22vsL4dAhyIuha6OsnqWqilLtqfriKAZjB6Jw=
+	t=1714642278; cv=none; b=OiQmRTrIaS6lrtrebV+8DC+caxvbhwildh6flScYkujCGriq84TD5LsGKuVEeGL1kyRKnex30kzkdWhJBb6mlwjgbhB/hk1H+Fsxr4xD/TfvlsVmhirtPZntA6UVAqMrHDXpWUbH7cjyJufhz4X/omS0X6p/YHX0mO9DcDPb/8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714642216; c=relaxed/simple;
-	bh=JpCJBKENug99JXbw+5TXRfM0ZuevAoPOLpbNNp9xdiw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DhyCFoc79E7qIGDu61R5va3gn2X4D4KYXsmQ8RAxUO3OGKBf5imFcGllSYmoRq8reCERt74gszGYI1VxKTf0sBkuLDsKOt6Z+Jtxcng8k0RxHu1yN/JaCdGNMx8gWlaGjCY3QXtaGwrlH6nW8IIn+vvn0mZf122PiaFcPbaYhSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KrfzZMut; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714642215; x=1746178215;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JpCJBKENug99JXbw+5TXRfM0ZuevAoPOLpbNNp9xdiw=;
-  b=KrfzZMutOtY9bzJUhHlhBaPC4lTpxjFkB8CqUVBB8mru0TlXCwNlHG4n
-   gpTT32T+SHos1FadG2M+6R6a4HI1pdjRxBx93o4j9d6AFZFHefhRJyzmu
-   pVIUh4k3wMVk5cJp7934/5VRlEq3FgrVlrJLWDUh+g9M/TvgDdwYNoIm4
-   sos9IteF6nGs7CE5eAeXZNca3Pkv/Bfe/BgIHKLCK4j6rDmd2Co9pvFsE
-   S75jRyRVh9TaZW9wTzQ+5JuE0/ZGe0AaGQtdQAandM8/t/L8aOxGOJaoP
-   9/kB0KkL8lMJJ2h0BPF11TpSDNv5Ygzb4j+GQe1Pebhv4L9OhFSReUeOo
-   Q==;
-X-CSE-ConnectionGUID: smkmGoyASVy66C665nL72w==
-X-CSE-MsgGUID: oxjR+YY8SdaNct0nXDwhhg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11061"; a="21091128"
-X-IronPort-AV: E=Sophos;i="6.07,247,1708416000"; 
-   d="scan'208";a="21091128"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2024 02:30:14 -0700
-X-CSE-ConnectionGUID: WOErYpKFRVmzkl7OuZHlEQ==
-X-CSE-MsgGUID: 0Tp+Ac+pSnmNfZtlBulmFQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,247,1708416000"; 
-   d="scan'208";a="27467729"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2024 02:30:12 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1s2SlU-00000003GNr-3YmU;
-	Thu, 02 May 2024 12:30:08 +0300
-Date: Thu, 2 May 2024 12:30:08 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
-	lukasz.luba@arm.com, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thermal: intel: Add missing module description
-Message-ID: <ZjNdILvlyei-_Z7A@smile.fi.intel.com>
-References: <20240430225826.65289-1-srinivas.pandruvada@linux.intel.com>
+	s=arc-20240116; t=1714642278; c=relaxed/simple;
+	bh=S9nKncTosJNtyw2fp8qJOuPt58/MGn3btQW/Tmk2CNI=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=omzBpLBBHYjRgxd6xJR7Ex6GUHcnSqQUaKJs94O/W+22l1lyurzTEe8N4NXj4NaQWBUpjsGGoPbo6sPGs3PLr+kLTUZ9k1xtOsEOklZypGQmzmZ5dKkh80/zC5W1L4T0xwwunoslm11g00h2WghgQ14OETrLzCjdg6tQmbo07Ro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=YIOO6VEH; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4429Jhjo016657;
+	Thu, 2 May 2024 09:31:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	date:from:to:cc:subject:message-id:references:mime-version
+	:content-type:in-reply-to; s=qcppdkim1; bh=v5c/xzuoMbwgLTcT01z9I
+	raUvhuoSBUQKktz1b968Xw=; b=YIOO6VEH6ekLYPiopTBdm3D7pDqfUWzV0MvSM
+	hVEnz1X+Qin/RrMNRK8CHdWZEx8s0++v1Y1hQ0NE6XhQZAeekqIet5YzH3TXFNOZ
+	OVYOABl3qMJaPWgIELxdWC8AsLXzkm/XLttAwOd70zR/brw9jVIJkpyCkq/lDxl7
+	gPDPgN5vv7KQ0od3sC24ZaG0ID1NppOhEOxVwAwZmSl215w4BV0gq50teK13vOGz
+	9ShQIK7rl1tclqkvuRMPcKdChO6rwrkSMRjw91fEPciU2ayTBN76FDtZB0WGBZh4
+	NuMTEz5xZPQtGkRqhuLWBA3E/xM8nCCrwS2EZWz0b5M79EgYQ==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xv6q0r6c3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 02 May 2024 09:31:06 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4429V3vm024061
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 2 May 2024 09:31:03 GMT
+Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Thu, 2 May 2024 02:30:58 -0700
+Date: Thu, 2 May 2024 15:00:54 +0530
+From: Varadarajan Narayanan <quic_varada@quicinc.com>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+CC: <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+        <djakov@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <quic_anusha@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v9 6/6] arm64: dts: qcom: ipq9574: Add icc provider
+ ability to gcc
+Message-ID: <ZjNdTmmXucjtRxJt@hu-varada-blr.qualcomm.com>
+References: <20240418092305.2337429-1-quic_varada@quicinc.com>
+ <20240418092305.2337429-7-quic_varada@quicinc.com>
+ <a7194edd-a2c8-46fc-bea1-f26b0960e535@linaro.org>
+ <Ziov6bWBXYXJ4Zp8@hu-varada-blr.qualcomm.com>
+ <27f4f3dd-9375-40cf-8c8f-1c4edf66e31b@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20240430225826.65289-1-srinivas.pandruvada@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <27f4f3dd-9375-40cf-8c8f-1c4edf66e31b@linaro.org>
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: f32cUZJHVPOeDkNbmNDX5tkaGpQ2T_YX
+X-Proofpoint-GUID: f32cUZJHVPOeDkNbmNDX5tkaGpQ2T_YX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-05-01_16,2024-05-02_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 bulkscore=0 priorityscore=1501 spamscore=0
+ mlxlogscore=999 malwarescore=0 phishscore=0 adultscore=0 clxscore=1015
+ mlxscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2404010003 definitions=main-2405020058
 
-On Tue, Apr 30, 2024 at 03:58:25PM -0700, Srinivas Pandruvada wrote:
-> Fix warnings displayed by "make W=1" build:
-> 
-> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/intel_soc_dts_iosf.o
-> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/int340x_thermal/processor_thermal_rapl.o
-> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.o
-> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.o
-> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/int340x_thermal/processor_thermal_wt_req.o
-> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/int340x_thermal/processor_thermal_wt_hint.o
-> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/thermal/intel/int340x_thermal/processor_thermal_power_floor
+On Tue, Apr 30, 2024 at 12:05:29PM +0200, Konrad Dybcio wrote:
+> On 25.04.2024 12:26 PM, Varadarajan Narayanan wrote:
+> > On Tue, Apr 23, 2024 at 02:58:41PM +0200, Konrad Dybcio wrote:
+> >>
+> >>
+> >> On 4/18/24 11:23, Varadarajan Narayanan wrote:
+> >>> IPQ SoCs dont involve RPM in managing NoC related clocks and
+> >>> there is no NoC scaling. Linux itself handles these clocks.
+> >>> However, these should not be exposed as just clocks and align
+> >>> with other Qualcomm SoCs that handle these clocks from a
+> >>> interconnect provider.
+> >>>
+> >>> Hence include icc provider capability to the gcc node so that
+> >>> peripherals can use the interconnect facility to enable these
+> >>> clocks.
+> >>>
+> >>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> >>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> >>> ---
+> >>
+> >> If this is all you do to enable interconnect (which is not the case,
+> >> as this patch only satisfies the bindings checker, the meaningful
+> >> change happens in the previous patch) and nothing explodes, this is
+> >> an apparent sign of your driver doing nothing.
+> >
+> > It appears to do nothing because, we are just enabling the clock
+> > provider to also act as interconnect provider. Only when the
+> > consumers are enabled with interconnect usage, this will create
+> > paths and turn on the relevant NOC clocks.
+>
+> No, with sync_state it actually does "something" (sets the interconnect
+> path bandwidths to zero). And *this* patch does nothing functionally,
+> it only makes the dt checker happy.
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+I understand.
 
-Thank you!
+> > This interconnect will be used by the PCIe and NSS blocks. When
+> > those patches were posted earlier, they were put on hold until
+> > interconnect driver is available.
+> >
+> > Once this patch gets in, PCIe for example will make use of icc.
+> > Please refer to https://lore.kernel.org/linux-arm-msm/20230519090219.15925-5-quic_devipriy@quicinc.com/.
+> >
+> > The 'pcieX' nodes will include the following entries.
+> >
+> > 	interconnects = <&gcc MASTER_ANOC_PCIE0 &gcc SLAVE_ANOC_PCIE0>,
+> > 			<&gcc MASTER_SNOC_PCIE0 &gcc SLAVE_SNOC_PCIE0>;
+> > 	interconnect-names = "pcie-mem", "cpu-pcie";
+>
+> Okay. What about USB that's already enabled? And BIMC/MEMNOC?
 
--- 
-With Best Regards,
-Andy Shevchenko
+For USB, the GCC_ANOC_USB_AXI_CLK is enabled as part of the iface
+clock. Hence, interconnect is not specified there.
 
+MEMNOC to System NOC interfaces seem to be enabled automatically.
+Software doesn't have to turn on or program specific clocks.
 
+> >> The expected reaction to "enabling interconnect" without defining the
+> >> required paths for your hardware would be a crash-on-sync_state, as all
+> >> unused (from Linux's POV) resources ought to be shut down.
+> >>
+> >> Because you lack sync_state, the interconnects silently retain the state
+> >> that they were left in (which is not deterministic), and that's precisely
+> >> what we want to avoid.
+> >
+> > I tried to set 'sync_state' to icc_sync_state to be invoked and
+> > didn't see any crash.
+>
+> Have you confirmed that the registers are actually written to, and with
+> correct values?
+
+I tried the following combinations:-
+
+1. Top of tree linux-next + This patch set
+
+	* icc_sync_state called
+	* No crash or hang observed
+	* From /sys/kernel/debug/clk/clk_summary can see the
+	  relevant clocks are set to the expected rates (compared
+	  with downstream kernel)
+
+2. Top of tree linux-next + This patch set + PCIe enablement
+
+	* icc_sync_state NOT called
+	* No crash or hang observed
+	* From /sys/kernel/debug/clk/clk_summary can see the
+	  relevant clocks are set to the expected rates (compared
+	  with downstream kernel)
+
+Does this answer your question? Please let me know if you were
+looking for some other information.
+
+Thanks
+Varada
 
