@@ -1,137 +1,128 @@
-Return-Path: <linux-pm+bounces-7492-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7493-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7985A8BB35F
-	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 20:42:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09EE68BB413
+	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 21:32:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25C7328417A
-	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 18:42:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9E602873EE
+	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 19:32:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 796322E3E0;
-	Fri,  3 May 2024 18:42:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E07B1586F5;
+	Fri,  3 May 2024 19:31:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b="DOvt3rmv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OVzAA6FI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE58E57C8A;
-	Fri,  3 May 2024 18:42:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.89.224.132
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52973158A3B
+	for <linux-pm@vger.kernel.org>; Fri,  3 May 2024 19:31:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714761751; cv=none; b=NpzXaDXVRSWi5qn4p9jzwJRMxNAiFd56+TsGyERgrUspYhCnFwxaUQm3dWVlJNduUCtIaDJGv/R+NUyT8E1mOlDlz6UeJERg+uJXZJvqm5peU1qX+hk4mcWeWt07IHWrkRUQRkwmXCuKfOLp7H6YI5HpuzpcirNMs+SpZoa8JQc=
+	t=1714764683; cv=none; b=qqwqm1pM8tNJPams9YDF80IkRfR12SDMN9KXhO02ZIAYhhJh8Zkbt3bkGLoOagiRPC6vYhRPaAtB5VyQqJ0yyxj/4lNdzEIEK1/rijre531A5zFFtVYhG0QVEav1Tql9LXsxSddiRRWLtEQP6q6KV0qx/O3N5U5cnXo2b6AZJA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714761751; c=relaxed/simple;
-	bh=6avGVeH0i3gUjukyCFF0pre8Nb9L4gOhXeEBFHfW1qo=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JVi4qpifGy9Tqkoluas9iEUV7X7u9iXCJHC5Vf2TgbJNy8k23wh7cb+dfizJx4FdOPC9s/BUuph5pLzywqhuWotB3NrR8I8uFfz2DzqgghITBfiD9wrBVYEr/OVIdwOBdKCiyspA8gf8q3EHbqshUkL5k782trAV73tfO+iSIY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com; spf=pass smtp.mailfrom=salutedevices.com; dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b=DOvt3rmv; arc=none smtp.client-ip=45.89.224.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=salutedevices.com
-Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
-	by mx1.sberdevices.ru (Postfix) with ESMTP id C70B3120002;
-	Fri,  3 May 2024 21:42:22 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru C70B3120002
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salutedevices.com;
-	s=mail; t=1714761742;
-	bh=9Z5eFlWXbAJBTHJC3tQ6YnOuDNtTKSSh4w04Pc+er9s=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
-	b=DOvt3rmvyGMhAYPBAyyGp6AgE7/vb6Ij8xaP4FrJBwSqatI/r5bOwQ7uWrWVMmmxe
-	 J04eJdZis9P3a4qlg4ym5Z1p9mpmVSmySRWD2MKaFYNpQyaFEFgH+IdeJa+/wgRczk
-	 6nq6dIz2EjVXbp1jMx+eX4y5bJFZYK03iehel75EYkFQExfbaV11tdKOZvxcYx1d2j
-	 rJ1wayes7Vbr/x+ma8ul7/lrRocJvNMAWPBp8DvZY8foYW2DonxLn9kEDW2xZ6Sw1i
-	 m2+JwjG/9Xx6n7+ITPdpFxdQJNEFlTomeE05l/KaB7OjC+2Qm3WdFOjQreJb9KymsP
-	 svlVUnad/R9AQ==
-Received: from smtp.sberdevices.ru (p-i-exch-sc-m02.sberdevices.ru [172.16.192.103])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mx1.sberdevices.ru (Postfix) with ESMTPS;
-	Fri,  3 May 2024 21:42:22 +0300 (MSK)
-Received: from localhost (100.64.160.123) by p-i-exch-sc-m02.sberdevices.ru
- (172.16.192.103) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Fri, 3 May
- 2024 21:42:22 +0300
-Date: Fri, 3 May 2024 21:42:22 +0300
-From: Dmitry Rokosov <ddrokosov@salutedevices.com>
-To: <neil.armstrong@linaro.org>
-CC: <jbrunet@baylibre.com>, <mturquette@baylibre.com>, <khilman@baylibre.com>,
-	<martin.blumenstingl@googlemail.com>, <glaroque@baylibre.com>,
-	<rafael@kernel.org>, <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
-	<lukasz.luba@arm.com>, <robh+dt@kernel.org>,
-	<krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-	<kernel@salutedevices.com>, <rockosov@gmail.com>,
-	<linux-amlogic@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 0/3] arm64: dts: amlogic: a1: introduce thermal setup
-Message-ID: <20240503184222.cqka6nmjxhezfhtg@CAB-WSD-L081021>
-References: <20240328192645.20914-1-ddrokosov@salutedevices.com>
+	s=arc-20240116; t=1714764683; c=relaxed/simple;
+	bh=nF/C+g9ztUnCXc/Uq7bixeDsLAC8/fmvOYNiEzitKGA=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=Iqz939mxt9QULn7c8kOlKz0FpKcc9AyAIkdsl/LWPUibzZP2Dg0VeuIzrVLSgkz2bfsYztjorqI6DTXkSLT1b6yB8qgU4SqJYFlf1NqZWTuhqRo6jUNXiUXBbBN6cwH18MfCmMEbXsysF1rcbtvuJrCZHiBAW/+kz1EO/xrfJR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OVzAA6FI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CBB07C4AF18
+	for <linux-pm@vger.kernel.org>; Fri,  3 May 2024 19:31:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714764682;
+	bh=nF/C+g9ztUnCXc/Uq7bixeDsLAC8/fmvOYNiEzitKGA=;
+	h=From:To:Subject:Date:From;
+	b=OVzAA6FIEysCzrhcE/kwqGN8KVuxnnsk11wRUTEZosoppxn+TdxW7hYMZph5EJF8s
+	 BKLK100Tdb7Zw09cT6xyB1om9t7yh9M4st/iOCgri3GGJKg+kEWU7sRBlLBBmOPDSE
+	 8XAoKGPa9VBsrznW6MmWeIgDlEGMZUORntoX7/mbEnZO4ZcX1R8xtF3u0FHgE2Q9Sj
+	 o9YXntewO1OI3IyO6PWfjzisBOgNagvAutX9SsMysNou573Au0iZotqAhd8EwZNroN
+	 1S2zKM4D14mceSYQKMqFfBOKkCYTUTNHanHv2gYfIxjRg0K7aUA4Im0zdPNR6uu2YP
+	 H+FjCJpm7qWpA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id BB44EC53B6B; Fri,  3 May 2024 19:31:22 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 218805] New: CPU stuck to low frequency after resume from sleep
+Date: Fri, 03 May 2024 19:31:22 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: bogdan.nicolae@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ cf_regression
+Message-ID: <bug-218805-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20240328192645.20914-1-ddrokosov@salutedevices.com>
-User-Agent: NeoMutt/20220415
-X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
- p-i-exch-sc-m02.sberdevices.ru (172.16.192.103)
-X-KSMG-Rule-ID: 10
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 185053 [May 03 2024]
-X-KSMG-AntiSpam-Version: 6.1.0.4
-X-KSMG-AntiSpam-Envelope-From: ddrokosov@salutedevices.com
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 19 0.3.19 07c7fa124d1a1dc9662cdc5aace418c06ae99d2b, {Tracking_uf_ne_domains}, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, lore.kernel.org:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;smtp.sberdevices.ru:7.1.1,5.0.1;salutedevices.com:7.1.1;100.64.160.123:7.1.2, FromAlignment: s, ApMailHostAddress: 100.64.160.123
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean, bases: 2024/05/03 14:55:00
-X-KSMG-LinksScanning: Clean, bases: 2024/05/03 14:55:00
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2024/05/03 16:56:00 #25080849
-X-KSMG-AntiVirus-Status: Clean, skipped
 
-Hello Neil,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218805
 
-A1 Thermal Sensor was applied to linux-pm for v6.10-rc1:
+            Bug ID: 218805
+           Summary: CPU stuck to low frequency after resume from sleep
+           Product: Power Management
+           Version: 2.5
+          Hardware: Intel
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P3
+         Component: cpufreq
+          Assignee: linux-pm@vger.kernel.org
+          Reporter: bogdan.nicolae@gmail.com
+        Regression: No
 
-https://lore.kernel.org/all/89a02410-87c8-47c6-aa50-04dad5b4e585@linaro.org/
+Kernel version: 6.8.7 #1 SMP PREEMPT_DYNAMIC
 
-Could you please advise if it's enough to proceed with this series? Or
-do I need to do something more?
+Problem: On initial boot, everything works fine. After suspend-resume,
+intel_cpufreq policy is stuck well below hardware limits (1.32 Ghz instead =
+of
+3.30 Ghz), as seen below. Manually trying to raise the upper limit is not
+possible.
 
-On Thu, Mar 28, 2024 at 10:26:34PM +0300, Dmitry Rokosov wrote:
-> This patch series introduces thermal sensor declaration to the Meson A1
-> common dtsi file. It also sets up thermal zones for the AD402 reference
-> board. It depends on the series with A1 thermal support at [1].
-> 
-> Changes v2 since v1 at [2]:
->     - provide Neil RvB for cooling-cells dts patch
->     - purge unnecessary 'amlogic,a1-thermal' fallback
-> 
-> Links:
-> [1] - https://lore.kernel.org/all/20240328191322.17551-1-ddrokosov@salutedevices.com/
-> [2] - https://lore.kernel.org/all/20240328134459.18446-1-ddrokosov@salutedevices.com/
-> 
-> Signed-off-by: Dmitry Rokosov <ddrokosov@salutedevices.com>
-> 
-> Dmitry Rokosov (3):
->   arm64: dts: amlogic: a1: add cooling-cells for DVFS feature
->   arm64: dts: amlogic: a1: introduce cpu temperature sensor
->   arm64: dts: amlogic: ad402: setup thermal-zones
-> 
->  .../arm64/boot/dts/amlogic/meson-a1-ad402.dts | 45 +++++++++++++++++++
->  arch/arm64/boot/dts/amlogic/meson-a1.dtsi     | 13 ++++++
->  2 files changed, 58 insertions(+)
+analyzing CPU 5:
+  driver: intel_cpufreq
+  CPUs which run at the same hardware frequency: 5
+  CPUs which need to have their frequency coordinated by software: 5
+  maximum transition latency: 20.0 us
+  hardware limits: 1.20 GHz - 3.30 GHz
+  available cpufreq governors: conservative ondemand userspace powersave
+performance schedutil
+  current policy: frequency should be within 1.20 GHz and 1.32 GHz.
+                  The governor "schedutil" may decide which speed to use
+                  within this range.
+  current CPU frequency: Unable to call hardware
+  current CPU frequency: 1.10 GHz (asserted by call to kernel)
+  boost state support:
+    Supported: yes
+    Active: yes
+    25500 MHz max turbo 4 active cores
+    25500 MHz max turbo 3 active cores
+    25500 MHz max turbo 2 active cores
+    25500 MHz max turbo 1 active cores
 
--- 
-Thank you,
-Dmitry
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
 
