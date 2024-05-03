@@ -1,195 +1,103 @@
-Return-Path: <linux-pm+bounces-7490-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7491-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 700DD8BB1EF
-	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 19:53:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCB078BB32F
+	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 20:31:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8B571B22C4C
-	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 17:53:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 09EB41C21F8C
+	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 18:31:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CF0615884D;
-	Fri,  3 May 2024 17:52:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fHBnhkNf"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E21D91598E6;
+	Fri,  3 May 2024 18:30:13 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76C02158219;
-	Fri,  3 May 2024 17:52:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DB1A158D9A;
+	Fri,  3 May 2024 18:30:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714758763; cv=none; b=ErlMyvl619DK31vKE543BjtUqNNIBrfHXke6DIChK3Va1gRlR/28pcsqhZruYNGdpJexeY7nyfHPoAzQxSOOefcaRjxvU4FxH9gI8k+DZ6gHfFa98h9JDMZPLNxRt6uLtPxwXDFvcbfuJ4rRZ6C8XyuRUyrJdFaU3CKVffzsjTo=
+	t=1714761013; cv=none; b=q5dAfP4xCQdZt+zB/GmqryzNMvLMY3qbNDUL7wy2njegmLviGhHBVipY3s3Sdl+0uk/QcZwte+U5JOCjhO2luGqL7MM1ccRIx7arnxk75VvxwLLnlgxvqNX5WJ12NlIWqxwUXBS/1QhUo6VpmtB0gb+LhzwzQugO/3yWhGWpgGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714758763; c=relaxed/simple;
-	bh=lzVnrSjci3YdZbJDcigjVDnutqYD0vEbfrujcq5AHHs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Kx6rgwmJDiz1z7RcsAdiTZLNOOY2vlw52ChjQ1R64gapawoNZS9Cctckp0WGy6RGtbDzpp119WXmcqEl7LNFjK8y+R0ld03VVkcBYjSp5LzZrZVN14jIzkZ8ml5c37wUL2S91/uI4te3xzENHr4o+Y6CMNyiW9JX5C/o9bRRwG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fHBnhkNf; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a5894c1d954so462406166b.1;
-        Fri, 03 May 2024 10:52:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714758760; x=1715363560; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nDa0e4iujX0ACKE4cFSjYtiiXZ+21EvsOzvNajBTvcI=;
-        b=fHBnhkNfFgY0EOvMbeVCSgUkK7B04ewgHLaKvupBI1FHbml3mOuJNEtp4z3KnDfxnP
-         q/kpD0T4HiVuwFL0hzy/8ZE73zCE3GgCyoFHSwTqzKksgDaMMNnLm7kFmEHveYVR5Src
-         YXEmQyX5QUeLdOF5PQ8IsAyZ6QXAPeue/CP1RzyBIg2hZYlVNhpb0Pm2ab+X6946Y+an
-         x9LMs8Tnwo02wbyE+f8xZQQLQdkv1XJVdJ6N3fdMRQxPd6fU8rl5s1h4axpsQAkYCDCT
-         h/8VKiGbPhwq56kNy+kXIdjb6pvFeQwx72K2b75ExFzx+K7llCFwQH68VOTtfKfSFU9o
-         gkqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714758760; x=1715363560;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nDa0e4iujX0ACKE4cFSjYtiiXZ+21EvsOzvNajBTvcI=;
-        b=LEAj6ZkKB/Gzuip3jB6vw7KmUtWNXJb/CnZrFKXCl53KJttPngkg6zRoUdkNqEyEsI
-         FncKm1W2eqF38E3HUDbQffM0tPOtwZ8c3/MqfHwQYspzZcneeQTMiuKmtQZZL50ocqdN
-         9L4NL5nrZfivnMGMUGzUU9r1T+dOqUSRVihH3Rt48iOeR+XHcJ0mTcatMXKiU5gPQmzV
-         l5YrsJPl4tAgBiftbHy7h/CUlVjvKGZrUhGP3ke/Cuisj9suOMzSOIEEwiN7qCSfFmHn
-         4qSPIaPz5b8VwplAQf25mEjQtJdo251Fu8LWaaU/9/kHVZ12d5HlUVfnC5Vl6CHA9z1N
-         y13w==
-X-Forwarded-Encrypted: i=1; AJvYcCUKfcPbNup11HdOgEIuDb30/ppXFEml47MxXTiR9wpbmDethXSNwaMdepGZV5l/R/xE6zD5l4m3pgN3nIwt3XdhtxBaItTAoJzLKyN9
-X-Gm-Message-State: AOJu0Yy4sgNylC9OgJUrFGg9xvoB/S6GdsZGsVICfGsnowSkJ3O1HfVZ
-	QjIc/MN9VQZ4+qdoPJEyjDQB1+xPX8yLIkpXn4h3kIw84KdNkaovYFLSc2wcOjE=
-X-Google-Smtp-Source: AGHT+IFONK2j7f1Ty9XVR60wDESk+CJEsa1zFEF6TM1ALYU3+/t6lQ5A3HkIW/azPODD5tAnbepFfw==
-X-Received: by 2002:a50:9549:0:b0:572:3483:8a27 with SMTP id v9-20020a509549000000b0057234838a27mr2688603eda.33.1714758759958;
-        Fri, 03 May 2024 10:52:39 -0700 (PDT)
-Received: from [127.0.1.1] (84-115-213-47.cable.dynamic.surfer.at. [84.115.213.47])
-        by smtp.gmail.com with ESMTPSA id q28-20020a50aa9c000000b00572469a7948sm1968368edc.45.2024.05.03.10.52.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 May 2024 10:52:39 -0700 (PDT)
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date: Fri, 03 May 2024 19:52:33 +0200
-Subject: [PATCH 2/2] cpufreq: sun50i: replace of_node_put() with automatic
- cleanup handler
+	s=arc-20240116; t=1714761013; c=relaxed/simple;
+	bh=u7xb8XgMeGPLuSoLlchm5v+UliifwUuELHsYAKkW38I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Kb5DXpE6Ody9GCtu/aamuybdCXv0/I6/9ogqmxk0wCD2RqdRU9qzV5USP7Grg/gb9wJUL3G3ev9RH4fZVsKiZF3o30tIJCfLEKfHWNmTVTkXo8s2Np8/Oj+SW0Xbn+2M4ecGxiCZr8nqGb9XZjzL6vqs5zSfgmKVf5wMig5eNVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3EBFA13D5;
+	Fri,  3 May 2024 11:30:35 -0700 (PDT)
+Received: from [192.168.2.88] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6E1B73F762;
+	Fri,  3 May 2024 11:30:07 -0700 (PDT)
+Message-ID: <0b849052-0eb1-4085-aa65-73b7451cd6ba@arm.com>
+Date: Fri, 3 May 2024 20:29:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC][PATCH v1 3/3] cpufreq: intel_pstate: Set asymmetric CPU
+ capacity on hybrid systems
+To: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, x86 Maintainers
+ <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ Linux PM <linux-pm@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Ricardo Neri <ricardo.neri@intel.com>, Tim Chen <tim.c.chen@intel.com>
+References: <7663799.EvYhyI6sBW@kreacher> <1799046.VLH7GnMWUR@kreacher>
+ <050c561c-487e-4e89-a7b2-9752cebc9f46@arm.com>
+ <20240503033242.GA14835@ranerica-svr.sc.intel.com>
+From: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Content-Language: en-US
+In-Reply-To: <20240503033242.GA14835@ranerica-svr.sc.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240503-sun50i-cpufreq-nvmem-cleanup-v1-2-0a2352cac46b@gmail.com>
-References: <20240503-sun50i-cpufreq-nvmem-cleanup-v1-0-0a2352cac46b@gmail.com>
-In-Reply-To: <20240503-sun50i-cpufreq-nvmem-cleanup-v1-0-0a2352cac46b@gmail.com>
-To: Yangtao Li <tiny.windzz@gmail.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Viresh Kumar <viresh.kumar@linaro.org>, Chen-Yu Tsai <wens@csie.org>, 
- Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Samuel Holland <samuel@sholland.org>, 
- Andre Przywara <andre.przywara@arm.com>, 
- Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org, 
- Javier Carrasco <javier.carrasco.cruz@gmail.com>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1714758755; l=2545;
- i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
- bh=lzVnrSjci3YdZbJDcigjVDnutqYD0vEbfrujcq5AHHs=;
- b=EOd+5S8zrky1F+pf72NRCJOPHcqlppmlIu7H4SxMTuZa8DO0mns86VbChhQoq1UQhqm1esOuH
- iDf9qDV2t7qDx8DC46feRuLOrY1zGZIHAzv0ufxTYPAlC0XNm2P0FzB
-X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
- pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
 
-Make use of the __free() cleanup handler to automatically free nodes
-when they get out of scope.
+On 03/05/2024 05:32, Ricardo Neri wrote:
+> On Thu, May 02, 2024 at 12:42:54PM +0200, Dietmar Eggemann wrote:
+>> On 25/04/2024 21:06, Rafael J. Wysocki wrote:
+>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>
+>>> Make intel_pstate use the HWP_HIGHEST_PERF values from
+>>> MSR_HWP_CAPABILITIES to set asymmetric CPU capacity information
+>>> via the previously introduced arch_set_cpu_capacity() on hybrid
+>>> systems without SMT.
+>>
+>> Are there such systems around? My i7-13700K has P-cores (CPU0..CPU15)
+>> with SMT.
+> 
+> We have been experimenting with nosmt in the kernel command line.
 
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
----
- drivers/cpufreq/sun50i-cpufreq-nvmem.c | 25 ++++++++-----------------
- 1 file changed, 8 insertions(+), 17 deletions(-)
+OK.
 
-diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-index ef83e4bf2639..eb47c193269c 100644
---- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-+++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-@@ -131,14 +131,14 @@ static const struct of_device_id cpu_opp_match_list[] = {
- static bool dt_has_supported_hw(void)
- {
- 	bool has_opp_supported_hw = false;
--	struct device_node *np;
- 	struct device *cpu_dev;
- 
- 	cpu_dev = get_cpu_device(0);
- 	if (!cpu_dev)
- 		return false;
- 
--	np = dev_pm_opp_of_get_opp_desc_node(cpu_dev);
-+	struct device_node *np __free(device_node) =
-+		dev_pm_opp_of_get_opp_desc_node(cpu_dev);
- 	if (!np)
- 		return false;
- 
-@@ -149,8 +149,6 @@ static bool dt_has_supported_hw(void)
- 		}
- 	}
- 
--	of_node_put(np);
--
- 	return has_opp_supported_hw;
- }
- 
-@@ -165,7 +163,6 @@ static int sun50i_cpufreq_get_efuse(void)
- 	const struct sunxi_cpufreq_data *opp_data;
- 	struct nvmem_cell *speedbin_nvmem;
- 	const struct of_device_id *match;
--	struct device_node *np;
- 	struct device *cpu_dev;
- 	u32 *speedbin;
- 	int ret;
-@@ -174,19 +171,18 @@ static int sun50i_cpufreq_get_efuse(void)
- 	if (!cpu_dev)
- 		return -ENODEV;
- 
--	np = dev_pm_opp_of_get_opp_desc_node(cpu_dev);
-+	struct device_node *np __free(device_node) =
-+		dev_pm_opp_of_get_opp_desc_node(cpu_dev);
- 	if (!np)
- 		return -ENOENT;
- 
- 	match = of_match_node(cpu_opp_match_list, np);
--	if (!match) {
--		of_node_put(np);
-+	if (!match)
- 		return -ENOENT;
--	}
-+
- 	opp_data = match->data;
- 
- 	speedbin_nvmem = of_nvmem_cell_get(np, NULL);
--	of_node_put(np);
- 	if (IS_ERR(speedbin_nvmem))
- 		return dev_err_probe(cpu_dev, PTR_ERR(speedbin_nvmem),
- 				     "Could not get nvmem cell\n");
-@@ -301,14 +297,9 @@ MODULE_DEVICE_TABLE(of, sun50i_cpufreq_match_list);
- 
- static const struct of_device_id *sun50i_cpufreq_match_node(void)
- {
--	const struct of_device_id *match;
--	struct device_node *np;
--
--	np = of_find_node_by_path("/");
--	match = of_match_node(sun50i_cpufreq_match_list, np);
--	of_node_put(np);
-+	struct device_node *np __free(device_node) = of_find_node_by_path("/");
- 
--	return match;
-+	return of_match_node(sun50i_cpufreq_match_list, np);
- }
- 
- /*
+[...]
 
--- 
-2.40.1
+>>> If the given system is hybrid and non-SMT, the new code disables ITMT
+>>> support in the scheduler (because it may get in the way of asymmetric CPU
+>>> capacity code in the scheduler that automatically gets enabled by setting
+>>> asymmetric CPU capacity) after initializing all online CPUs and finds
+>>> the one with the maximum HWP_HIGHEST_PERF value.  Next, it computes the
+>>> capacity number for each (online) CPU by dividing the product of its
+>>> HWP_HIGHEST_PERF and SCHED_CAPACITY_SCALE by the maximum HWP_HIGHEST_PERF.
+>>
+>> SO either CAS at wakeup and in load_balance or SIS at wakeup and ITMT in
+>> load balance.
+> 
+> May I know what CAS and SIS stand for?
 
+Capacity Aware Scheduling and Select_Idle_Sibling().
+
+Either   select_idle_sibling() -> select_idle_capacity()         (1)
+
+or       select_idle_sibling() -> select_idle_cpu() /* nosmt */  (2)
+
+So my system with now 'nosmt' goes (1).
 
