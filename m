@@ -1,104 +1,145 @@
-Return-Path: <linux-pm+bounces-7469-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7470-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0190E8BA750
-	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 09:03:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82F388BA830
+	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 09:59:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 23F001C20C83
-	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 07:03:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 38AFE282BFD
+	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 07:59:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4132E1465A4;
-	Fri,  3 May 2024 07:03:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D60B1482EC;
+	Fri,  3 May 2024 07:59:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CqRaGi4j"
+	dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b="fpFYMV31"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15A401E491;
-	Fri,  3 May 2024 07:03:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 575131465B5;
+	Fri,  3 May 2024 07:59:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.89.224.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714719808; cv=none; b=oysx/Tj5yEfuoQqHMfzBa1AaE6OX1jfnUgOBiRACWEqV8Bjb0oqhcKEjcVQdrAozZRb7Idwf75SZS6iv+SDI6Arw3oWT3Xo7FGk/F8nrbX2sHKjFbSb+WBE9crpwf/lXUU5dGxQL1DPLZ/Mb/3PoCseqB3BPpBM2f70Ue8rK6ZA=
+	t=1714723156; cv=none; b=bHkcykX++i2bmlZKV/Umn5l9XU3kvmcZIo1vUCUoQ5+hUYDv1FlEQ4Gei6EqYLOpazBBoCfzwFn832StsJZpIux6DaHC/nlUoNZY59+1mlRrOumhuSuI2f/vrhEABbRAhEEGa8ii9mwIv7W8bLnPFPgAqI38sINLtrmQF0Yo7hU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714719808; c=relaxed/simple;
-	bh=uw8g/pSgrfWfO0FiEhsyhGR4QN/3Mzn7J1v74hc0kRc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fsLqxGJWrln9SiB/LeE/BEJD1Q4FCr+K1OfKHLhe/yXgkCHnJIP3oWGqK2IejTYbfkjN3ZOBsmo8wDEw9X4jYm5mJ282xpRrKi5M0Sx4fuNCbbh7EUbkfLOyxQ/t8oXKMqvW+Ew2Nkd5Nt8q2zmYRSl882YEmABkmnKSdJDmnAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CqRaGi4j; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34D88C116B1;
-	Fri,  3 May 2024 07:03:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714719807;
-	bh=uw8g/pSgrfWfO0FiEhsyhGR4QN/3Mzn7J1v74hc0kRc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CqRaGi4jB2Tm2sAd5wvCrrKMhCOm90bkCMJ+4G7P+423toFlYyKt42Tf/BTr6USAL
-	 PT9aa7UIAJPmeaGNjotuJyaiqiqT0A2GYcEpuY490hCnit/FY5N/TzsyjJMMpduzoV
-	 Tqts3nnoMG2bV03W9bojJAdjsA6ytprau3pF1Pz2EymNvnAj0KtjhvGzlrAyaVOJkI
-	 2V6CMoc7p++cWIF9H82guLN7hEZVbGfflpN8bCR48iYjz4PykTwOv7g+0XjJSFEnd4
-	 Y4trNiUrDIFmvqQdKxMfgoMkGFRh6PdN2EXkwQP/OZKXsDaM8SBrfJZj2heMX3ktXb
-	 beeLL0qMNxixw==
-Date: Fri, 3 May 2024 08:03:22 +0100
-From: Lee Jones <lee@kernel.org>
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Andy Shevchenko <andy@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-	Kate Hsuan <hpa@redhat.com>, Sebastian Reichel <sre@kernel.org>,
-	platform-driver-x86@vger.kernel.org,
-	=?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>,
-	linux-leds@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v8 3/7] leds: rgb: leds-ktd202x: Initialize mutex earlier
-Message-ID: <20240503070322.GA1227636@google.com>
-References: <20240502211425.8678-1-hdegoede@redhat.com>
- <20240502211425.8678-4-hdegoede@redhat.com>
- <CAHp75VdSHGXuvGtPBuQSeDLTg0FjPNStcgG3-p07cfVLi_D_YA@mail.gmail.com>
- <88d18069-3327-463e-afa6-b80645dfbb7f@redhat.com>
+	s=arc-20240116; t=1714723156; c=relaxed/simple;
+	bh=f7H+OF65L/hmMeYTdnOeeM0VJ0Havz3E8X5ne5zG0X0=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fxfXw8iOEeMRPtYo7owbuoqrLQVelU/eR/fcVfMD2pGyXrO7lYP+REcdf8EUstUt6MQYMgCAQEU49DVxEZ6MpiiLH1faIDpPmm6IOH99bEQNuoeszjJEnxpWcqd4yhxNpfcyFIMH/n02JffUdg7gsyIynABmotkFepHqNZEU6hk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com; spf=pass smtp.mailfrom=salutedevices.com; dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b=fpFYMV31; arc=none smtp.client-ip=45.89.224.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=salutedevices.com
+Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
+	by mx1.sberdevices.ru (Postfix) with ESMTP id 314C012000C;
+	Fri,  3 May 2024 10:52:56 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 314C012000C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salutedevices.com;
+	s=mail; t=1714722776;
+	bh=vPYAXAEpU06TIJUWj2rEgevmEmcxPqtBx4Bo9O+8NsY=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
+	b=fpFYMV31LZZ4ynG08Pe03cA8a9KzeMzVOBBPvA7yhE4GkpadK25lCQuKD2i2VquMz
+	 Yz2DhND7KNfEk2+ltk4DG2n5sHRn/ShXRUyQBX5z9Vtq/SzCVzCDXnu9WFmmsJPx48
+	 8HvcyN8as4yWi9tBk9eSuA3QviSdPYK2y5i8T9XOvrLluchZWqS3KvWT8nEmmMbGKI
+	 tbTiIsbUOP7BUvWAOvkkDjZapdbfl2s/lJPO9H7UBpNw9HFaXqduhJbwm6j/zoYJxD
+	 82MWVXvE5/336Red8Oe25+0pqPkLKRhcuELTb2VJ0iOdTsbKXVG3CxND1nltay1lBr
+	 /xQsNWMXw7uwA==
+Received: from smtp.sberdevices.ru (p-i-exch-sc-m02.sberdevices.ru [172.16.192.103])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx1.sberdevices.ru (Postfix) with ESMTPS;
+	Fri,  3 May 2024 10:52:55 +0300 (MSK)
+Received: from localhost (100.64.160.123) by p-i-exch-sc-m02.sberdevices.ru
+ (172.16.192.103) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Fri, 3 May
+ 2024 10:52:55 +0300
+Date: Fri, 3 May 2024 10:52:55 +0300
+From: Dmitry Rokosov <ddrokosov@salutedevices.com>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+CC: <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
+	<mturquette@baylibre.com>, <khilman@baylibre.com>,
+	<martin.blumenstingl@googlemail.com>, <glaroque@baylibre.com>,
+	<rafael@kernel.org>, <rui.zhang@intel.com>, <lukasz.luba@arm.com>,
+	<robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+	<conor+dt@kernel.org>, <kernel@salutedevices.com>, <rockosov@gmail.com>,
+	<linux-amlogic@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 0/2] thermal: amlogic: introduce A1 SoC family Thermal
+ Sensor controller
+Message-ID: <20240503075221.suupx27777tvhdvu@CAB-WSD-L081021>
+References: <20240328191322.17551-1-ddrokosov@salutedevices.com>
+ <38ba3618-2a67-4e21-b08d-7e382411e51a@linaro.org>
+ <20240417084007.uzg2uc7gwb6mi7bi@CAB-WSD-L081021>
+ <20240426073106.3yl2dplvauper3lg@CAB-WSD-L081021>
+ <35c9dbe9-9166-4358-bfa9-99f205acd8de@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <88d18069-3327-463e-afa6-b80645dfbb7f@redhat.com>
+In-Reply-To: <35c9dbe9-9166-4358-bfa9-99f205acd8de@linaro.org>
+User-Agent: NeoMutt/20220415
+X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
+ p-i-exch-sc-m02.sberdevices.ru (172.16.192.103)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 185030 [May 03 2024]
+X-KSMG-AntiSpam-Version: 6.1.0.4
+X-KSMG-AntiSpam-Envelope-From: ddrokosov@salutedevices.com
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 19 0.3.19 07c7fa124d1a1dc9662cdc5aace418c06ae99d2b, {Tracking_uf_ne_domains}, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;salutedevices.com:7.1.1;git.kernel.org:7.1.1;127.0.0.199:7.1.2;smtp.sberdevices.ru:5.0.1,7.1.1;100.64.160.123:7.1.2, FromAlignment: s, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean, bases: 2024/05/03 06:33:00
+X-KSMG-LinksScanning: Clean, bases: 2024/05/03 06:33:00
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2024/05/03 04:34:00 #25076274
+X-KSMG-AntiVirus-Status: Clean, skipped
 
-On Fri, 03 May 2024, Hans de Goede wrote:
+Hello Daniel,
 
-> Hi,
+On Fri, Apr 26, 2024 at 09:57:29AM +0200, Daniel Lezcano wrote:
 > 
-> On 5/3/24 5:43 AM, Andy Shevchenko wrote:
-> > On Fri, May 3, 2024 at 12:14 AM Hans de Goede <hdegoede@redhat.com> wrote:
-> >>
-> >> The mutex must be initialized before the LED class device is registered
-> >> otherwise there is a race where it may get used before it is initialized:
-> >>
-> >>  DEBUG_LOCKS_WARN_ON(lock->magic != lock)
-> >>  WARNING: CPU: 2 PID: 2045 at kernel/locking/mutex.c:587 __mutex_lock
-> >>  ...
-> >>  RIP: 0010:__mutex_lock+0x7db/0xc10
-> >>  ...
-> >>  set_brightness_delayed_set_brightness.part.0+0x17/0x60
-> >>  set_brightness_delayed+0xf1/0x100
-> >>  process_one_work+0x222/0x5a0
-> > 
-> > ...
-> > 
-> >> +       mutex_init(&chip->mutex);
-> > 
-> > devm_mutex_init() ?
+> Hi Dmitry,
 > 
-> That is not in Torvald's tree yet.
+> On 26/04/2024 09:31, Dmitry Rokosov wrote:
+> > Hello Neil,
+> > 
+> > I hope you're doing well. I was wondering if you could assist me with
+> > below problem.
+> > 
+> > I'm a bit confused about which kernel repository the series was applied
+> > to. I asked Daniel about it, but unfortunately, I didn't receive any
+> > feedback from him. Could you provide some clarification on this matter?
+> > 
+> > Thank you in advance for your help.
+> 
+> I was OoO the last two weeks.
+> 
+> Your series is in my tree [1], which is pulled automatically by the linux-pm
+> tree in its bleeding-edge branch.
+> 
+> Today, this branch will move to the linux-next branch [2] which will also be
+> pulled by the linux-pm/next branch automatically.
+> 
+> Hope that helps and sorry for the delay to answer
+> 
+>   -- Daniel
+> 
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/bleeding-edge
+> 
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/linux-next
 
-Neither is this.  :)
-
-Since we're nearly at -rc7, I think it's safe to say you have time.
+Thanks a lot for the update! Now I see the patches in the above repos.
 
 -- 
-Lee Jones [李琼斯]
+Thank you,
+Dmitry
 
