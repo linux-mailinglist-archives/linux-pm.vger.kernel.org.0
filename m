@@ -1,104 +1,94 @@
-Return-Path: <linux-pm+bounces-7472-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7473-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 779008BAAA2
-	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 12:19:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A62688BAB5D
+	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 13:08:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 329BD285B71
-	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 10:19:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 110EAB21190
+	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 11:08:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 984CE14F9FA;
-	Fri,  3 May 2024 10:19:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03BD31514C1;
+	Fri,  3 May 2024 11:08:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DA3+D+AX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q5/51rsH"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EDB814F9E3;
-	Fri,  3 May 2024 10:19:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1FBF14EC5E
+	for <linux-pm@vger.kernel.org>; Fri,  3 May 2024 11:08:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714731553; cv=none; b=aE7ulha3Ha0r4bc/iI37/5xo0dToV/8xEpv2CfaB0SLpfxmu4uEcQlpifg0e9yf9k1VyiVJ+xt2UXnqZdivmpPUijwxCnaULGf2yuswpPPDQBKkrqtd605LPVCwFd2BKRa1VX6uiY//EWERxuwmSHyki//K4QK+9yjtBmZezA6w=
+	t=1714734522; cv=none; b=iFmf0SD8SsK3v4fVPdXyDvhp4Xcv4RuuvWnwoVYKv/W6IkYeN1GnKzLXrTyCgWCt7YG1T1rcgRU+GHXmpVZVTC5Ci42I/+FP/SrxDR/1PXdUKhP0qCu4tiwCFlQ8LmnN+rjE1s62Zu3HnmHkIapNKEOJgwnR0uZh06GjcD5RFiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714731553; c=relaxed/simple;
-	bh=w6EbXMLbZy+Iq3jqd1Fpizg4P9aa3UkGFXgdsxOAiOE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Afc21NHHB2wb0FJ/JDm0jKI1oU/4r7VNe/EkMb8gxYJFAGCJUdWnMSWlBW20AviIu+QOIYUauAa1lV5+n/5QSOzGfYpNwEz4PnZ7fX0RsA4oikgmH7mhjeDZ1Wcq4yX9JPfVsMSi7T+Yvp8zneJbF3aZdobmC/q8mJPHIrXt4+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DA3+D+AX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD506C116B1;
-	Fri,  3 May 2024 10:19:11 +0000 (UTC)
+	s=arc-20240116; t=1714734522; c=relaxed/simple;
+	bh=xN1renRfqfmDMF0hg5/Fs+0aZnQgi9hYKGqYh6qlG88=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=MF9ll8UyGXqRl2DUF4L8zIKh4K5LkRjU0Dw4LZLt27D2a6CfxsThd/27H88Tm4S0dX16z7K96wkabS6kDRV43ty2WvkVA71/C/rKkMJOftI7p6lPsYv13lN7vlJBESq+LtH5r4gmPFzhv4RnJlRC33EI9l8dME8Gj2kAM87IClY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q5/51rsH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3848EC4AF18
+	for <linux-pm@vger.kernel.org>; Fri,  3 May 2024 11:08:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714731552;
-	bh=w6EbXMLbZy+Iq3jqd1Fpizg4P9aa3UkGFXgdsxOAiOE=;
-	h=From:To:Cc:Subject:Date:From;
-	b=DA3+D+AXpjojEMciQeTe1i220pdfpQ2s1jKP7ixvlbzkYFvSXkQvoPyPp0SVVAZkg
-	 grs9jC0mqBlOKno9ibb889SH+1MH88nYrYntgKf/2isFppzu5+zWc8IoseCy4udfio
-	 2AEWS5a1gGu23Ir4M0vUDkFSaoV6b88EehNn2qraBQluFSugljkD+CxvZeMCuVp3Cb
-	 1aAZsA3YFnCV2R9BHPlABwcGuQgui1+Kp29Wze9wUxoLBOrwaycnB+taHiJFVYZBnv
-	 WxEy3GHXWCUPytWLRC5lqdF4h9VrtyunwF8vLdoMQkPKOeKHaKOIe91PhG1hNNjwHc
-	 meRsB9t7qUz8Q==
-From: Georgi Djakov <djakov@kernel.org>
-To: gregkh@linuxfoundation.org
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	djakov@kernel.org
-Subject: [GIT PULL] interconnect changes for 6.10
-Date: Fri,  3 May 2024 13:19:01 +0300
-Message-Id: <20240503101901.1681356-1-djakov@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	s=k20201202; t=1714734522;
+	bh=xN1renRfqfmDMF0hg5/Fs+0aZnQgi9hYKGqYh6qlG88=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=Q5/51rsHHy7fRvK8T/AAkcECG499uP7cPvak4efS18ZgGLfWvYboazhlmdY5kDwpr
+	 3t4RdjfiXk/LxLR5AaJGh3tRaK/y0/MzHQseHpu7nIwEvEhMQwVQTIhzsbNlo4SfX1
+	 9XP162kuyrFvhfCF+1PMv/IngkcOXLJfEIfLQtUlrV9wNn+JRobyujKmoRUbp5Oj8W
+	 GTeqK0vHEyaxOEFVFcPfi5bLfjCIHDQxgWPyT9vE/Y+KraOUmKicRTJ97Scv+CNnGp
+	 NJXcgq9+1u/e3jxkgp/yp5YTje1r/rACJqSA7C3zSeQNh4977ZK/G9BY6Xg3xhMukE
+	 MUEOinflmXk3Q==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 28496C16A72; Fri,  3 May 2024 11:08:42 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 218759] 6.9-rc kernels - with Ryzen 7840HS CPU single core
+ never boosts to max frequency
+Date: Fri, 03 May 2024 11:08:41 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mario.limonciello@amd.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218759-137361-GpLmKWA62Q@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218759-137361@https.bugzilla.kernel.org/>
+References: <bug-218759-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Hello Greg,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218759
 
-This is the pull request with interconnect changes for the v6.10-rc1 merge
-window. It contains tiny clean-up and fix. As always, the summary is
-in the signed tag.
+--- Comment #17 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
+Perry is on leave right now for Labor Day so I'll update the status.
 
-The patches have been in linux-next for more than a week with no reported
-issues. Please pull into char-misc-next when possible.
+The fix is developed but under internal code review at the moment. I don't
+expect it to make 6.9 but it's small enough we can aim for it to go to 6.9.=
+y.
 
-Thanks,
-Georgi
+--=20
+You may reply to this email to add a comment.
 
-The following changes since commit 4cece764965020c22cff7665b18a012006359095:
-
-  Linux 6.9-rc1 (2024-03-24 14:10:05 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.10-rc1
-
-for you to fetch changes up to 230d05b1179f6ce6f8dc8a2b99eba92799ac22d7:
-
-  interconnect: qcom: qcm2290: Fix mas_snoc_bimc QoS port assignment (2024-04-11 20:46:26 +0300)
-
-----------------------------------------------------------------
-interconnect changes for 6.10
-
-This pull request contains the interconnect changes for the 6.10-rc1 merge
-window. It contains some small driver changes listed below:
-
-Driver changes:
-- Cleanup sm6115 QoS port numbering.
-- Fix incorrect port value in qcm2290 driver.
-
-Signed-off-by: Georgi Djakov <djakov@kernel.org>
-
-----------------------------------------------------------------
-Konrad Dybcio (2):
-      interconnect: qcom: sm6115: Unspaghettify SNoC QoS port numbering
-      interconnect: qcom: qcm2290: Fix mas_snoc_bimc QoS port assignment
-
- drivers/interconnect/qcom/qcm2290.c |  2 +-
- drivers/interconnect/qcom/sm6115.c  | 33 ++++----
- 2 files changed, 19 insertions(+), 16 deletions(-)
+You are receiving this mail because:
+You are the assignee for the bug.=
 
