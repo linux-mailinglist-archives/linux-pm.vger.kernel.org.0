@@ -1,71 +1,71 @@
-Return-Path: <linux-pm+bounces-7484-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7485-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1D758BB03B
-	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 17:46:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCFBD8BB03E
+	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 17:46:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C534F1C22695
-	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 15:46:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F3D01B21F63
+	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 15:46:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82945154455;
-	Fri,  3 May 2024 15:45:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E99E152DFE;
+	Fri,  3 May 2024 15:46:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="rPaxwx6D"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="uJgIVgtN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F291B6FDC
-	for <linux-pm@vger.kernel.org>; Fri,  3 May 2024 15:45:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A98152E827
+	for <linux-pm@vger.kernel.org>; Fri,  3 May 2024 15:46:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714751154; cv=none; b=RFgogDOA24rZtNOFKXEwITGCo5UtlW/Y378nn0CUeFMVN1I7ogN+/LhLOg1jUfv/AVNazAmSmL05Lt8kZfH2FQ9oDsg/OqtYyAlC43pownm7H6m8oik9oowiYNkHw9PP6SldPqWJHuoRuRn4zUu57WoDVKuNWPsahWMTqmRxlaA=
+	t=1714751196; cv=none; b=fZ3AWmrfxMATj7fGtli/j1AAgDZ3IkpXrvE2jq6rCf6frkcy8DKoMVDzmIZHNGuCkzY6CNKfynrX1RxMRLvLo+3s1jGUQEbgx1OjkX3x1hMMZIRfdWuD7bB9GsKIanK2JinutL5ag8TScwpge103TYEFNCJEleIRvOWjrPN6xTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714751154; c=relaxed/simple;
-	bh=fUaq/OER+1YjX7jh3aDlC30fid4qNUAszsmop75G2ys=;
+	s=arc-20240116; t=1714751196; c=relaxed/simple;
+	bh=ZbkeRSrkCPNwDcLhX1qJ1sjDEzYFshDiprBjhPwS3Lw=;
 	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=Ks66u0B1KhQodPmqwluwLllUu26d146YCnAkbjGgnehnHkbKiVfAD6W8bUuEFi/+l4jTLDXELPYfq7NWLfFNdyhXJdE8/85O0h4Pw7dDCSGMyq9eF1p5Zcvuaqc5OkDmXUaYilygn/dF2Huwkx7EC0Uz77QjGMNqLIv1STPDhl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=rPaxwx6D; arc=none smtp.client-ip=209.85.210.53
+	 MIME-Version:Content-Type; b=CxgGnUFD2s9bKTSjzPXY/sQ8BjvDIg7PeFdgBx0jGfFIxc77lkb4XCj3KA5ws/56ni6MwJ+8nm4D/Jafo6H1GORzLycCA3xyR88QuT/wj0U770BvOZDQ1xpv6rPvkfeK1DBp2vnGeh7f6MRDT/YAI34/9jtWuCifIPqsnFL3jYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=uJgIVgtN; arc=none smtp.client-ip=209.85.160.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6ee55714625so1736276a34.0
-        for <linux-pm@vger.kernel.org>; Fri, 03 May 2024 08:45:50 -0700 (PDT)
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-43ae9962c17so16848531cf.3
+        for <linux-pm@vger.kernel.org>; Fri, 03 May 2024 08:46:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1714751150; x=1715355950; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1714751193; x=1715355993; darn=vger.kernel.org;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lhI9yrOs8CfZH6O0uthOl9q2oyvn0I4hgTlooPx6s7Q=;
-        b=rPaxwx6DJCEo6CUA20OMZUF35MjlOl+EFkK5300JgUFzLIVGq4EFjQPa4LVOsZu7gG
-         x0CRgZIkRgvxYmEYkTj1a/Hy1zETcHn3XJQXNCLrlIjwuPFygzerJTi0Y0qKxS2a5BWQ
-         16anriBIRu+FBTyeBMIdZ297P8ZKbG4jZd5Bbt7PxCc/jpT0ae5pAoeazuum8wSJGhdW
-         9Wpgq8doFsIoIUYpnkcNsELgQAO7blmD2Rc9bJLy+nG+iPADj1s9COHB4StC7+TxDeLR
-         hmrECD1W/ovaITlgFufLWrUhMX8g2ASAN4rAaS1gVCFpBZlX2GgE90+fv+8WxUtKJUMj
-         3Q4Q==
+        bh=DD3fGBfG9/zPLRqWphhAvLBiOO/6wCBUgxf5dozP1a8=;
+        b=uJgIVgtNU1GTc3ydKfGZuINqMF6LvaqfNZb2a+xn/P3kFf7WZNGz5Cnbi/J88oC4h0
+         FvHtdJf4zVGwYKfSmAlWDqOYAhpga7XliewbAddRvavO9+QqS8RmvSMgPgl5r1DxBFU+
+         OVlJx72xcmJOvxWof6/UFHW0XJRALm9HZMB4aAraqjns2g+bFqDZoKWZxOVYmyRUJWLI
+         +hvg2LhIdBA4WJfHqmQ2GT6QA6gGTqMP7f1gecV2lCymKRwsMKK31TVOFhEVbjWBUeQs
+         Ep7qxttAZhqCDOHW1gL7bPoe4Eva7s+SkFs7I79wNz3rTADF913qB9PBCYsQupovy64c
+         pAEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714751150; x=1715355950;
+        d=1e100.net; s=20230601; t=1714751193; x=1715355993;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lhI9yrOs8CfZH6O0uthOl9q2oyvn0I4hgTlooPx6s7Q=;
-        b=e9eyXX0rDUS5RpTZIaYWeKnLvogMZRwZ69gOmURSW426/zgW8lQzIieRVL6B2k5yQs
-         mo6oultINNqf1KbIvTXO28Fsk4s+afB6t2Y9qYqXwZlTttOrIYuUKrR2ejVy2POEhNqr
-         at+rR+rJVIfde5bA1lvDtiQ0YgWsEsXupJPaxZ/H4X76jcydofaWKcT39DMKIP77A7Ap
-         T4pMCPLmCVbA8amHag0t4aFbLho9GS2/0Vnk8/2eKpAMDeX9fGU6qipDY0kIMwHS+Jqu
-         gCXeH4+oFbtppZDTdRZv6/b0Dlkm0yYSpsXJB7p8tc0NJ8XOgKigcauve3d9ScGe1+L3
-         Fs0g==
-X-Forwarded-Encrypted: i=1; AJvYcCXlbjhO1BnhVFgb74/hat/q1fe+9j79Ks/sSeA7twetFaHmJrfJ4ovqUVCdOLaTQ0/2lV1ZTFB/x+DlW60gmjGLXb9PROOco84=
-X-Gm-Message-State: AOJu0YxSDXuwgG1WWeD+XT6pdr6UNsDvk9Q5QQf2CnXvLrryGpE15xhr
-	d893SztoSGAUcMDkbj7Q5E2AxX/aonqDdZ2iZFKvxZLf4SZq17GY4S4dMp+Rn9Q=
-X-Google-Smtp-Source: AGHT+IG+DHh8GvHSrOBGw3RTRskRbLb5djVyMax1LElsUz89VQIsBT1Casz2tEAHJdHp4BCTsvIuZw==
-X-Received: by 2002:a05:6830:1212:b0:6eb:c365:e68e with SMTP id r18-20020a056830121200b006ebc365e68emr3519049otp.25.1714751149969;
-        Fri, 03 May 2024 08:45:49 -0700 (PDT)
+        bh=DD3fGBfG9/zPLRqWphhAvLBiOO/6wCBUgxf5dozP1a8=;
+        b=DZJFnB3ZBGWKAEYUjHKEleUNmr6yiLa/dioAFBB9omlQjkh+xWqUwR0qLdsPpImi1b
+         JlDxNy81iEPLPck5Cxag1+NmHDiNmkFHFBddxLGm77z9JHsvWq6bLo/4nAdIVr4JQ91y
+         XXseV2GQ/oUdbe7zdYfUOv13Lr6Eg9CZj2cprn7Sk6mKBy5jLOMbMo33JfnAG3Lqfs8O
+         WDA56f3Evq4dcR+Aay+FIT/iWsSNYP4w4nAe4fCXWMLMP/pVPHGR3LlNG23LJhtODyPJ
+         /fI8OffbgdUqOAq4OjOjYAMDfO6lh4pxYYkEC/mEU+W2E+p9w3LTeqrGh3QssWV41YEk
+         UQKA==
+X-Forwarded-Encrypted: i=1; AJvYcCV9MPaX4DAfUUtJD9LcRpNn3Wm3nkB3p2zHPFFaqXtiUbmE9mZ4elxXUPRJsK0uMRIGRf0Oif+SnjTiGfsShtlHJOfLkBeAVgU=
+X-Gm-Message-State: AOJu0YyA1wyvTKi1Mihezg0x7/I+NgceWwQ/U3IGZTaix2IWMgN3PLJX
+	EppazdTxq1qdAeuY2/t3kR8S5BitpSKSGsbgEI1LZXAit2kfsE8PPL3sjqHc/iw=
+X-Google-Smtp-Source: AGHT+IHvorLKVldcwPuXub3vxQ9aDpAAyxM3M6JDKLRxX/G+y4VOONQbkGOltiMGMq6o1FuWaPwO5Q==
+X-Received: by 2002:ac8:7f01:0:b0:437:87f9:5ad2 with SMTP id f1-20020ac87f01000000b0043787f95ad2mr2820051qtk.45.1714751193620;
+        Fri, 03 May 2024 08:46:33 -0700 (PDT)
 Received: from xanadu (modemcable018.15-162-184.mc.videotron.ca. [184.162.15.18])
-        by smtp.gmail.com with ESMTPSA id h12-20020a05620a10ac00b0079285113b99sm23092qkk.50.2024.05.03.08.45.49
+        by smtp.gmail.com with ESMTPSA id dr12-20020a05622a528c00b0043c58b6d941sm1703704qtb.42.2024.05.03.08.46.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 May 2024 08:45:49 -0700 (PDT)
-Date: Fri, 3 May 2024 11:45:48 -0400 (EDT)
+        Fri, 03 May 2024 08:46:33 -0700 (PDT)
+Date: Fri, 3 May 2024 11:46:32 -0400 (EDT)
 From: Nicolas Pitre <npitre@baylibre.com>
 To: Julien Panis <jpanis@baylibre.com>
 cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
@@ -75,11 +75,11 @@ cc: "Rafael J. Wysocki" <rafael@kernel.org>,
     AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
     linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 2/2] thermal/drivers/mediatek/lvts_thermal: Fix wrong
- lvts_ctrl index
-In-Reply-To: <20240503-mtk-thermal-lvts-ctrl-idx-fix-v1-2-f605c50ca117@baylibre.com>
-Message-ID: <qppo2o23-40r4-956p-9n35-p0556sp32spq@onlyvoer.pbz>
-References: <20240503-mtk-thermal-lvts-ctrl-idx-fix-v1-0-f605c50ca117@baylibre.com> <20240503-mtk-thermal-lvts-ctrl-idx-fix-v1-2-f605c50ca117@baylibre.com>
+Subject: Re: [PATCH 1/2] thermal/drivers/mediatek/lvts_thermal: Remove unused
+ members from struct lvts_ctrl_data
+In-Reply-To: <20240503-mtk-thermal-lvts-ctrl-idx-fix-v1-1-f605c50ca117@baylibre.com>
+Message-ID: <n7os6420-s4n1-1874-6qs4-409818807pnq@onlyvoer.pbz>
+References: <20240503-mtk-thermal-lvts-ctrl-idx-fix-v1-0-f605c50ca117@baylibre.com> <20240503-mtk-thermal-lvts-ctrl-idx-fix-v1-1-f605c50ca117@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -90,84 +90,30 @@ Content-Type: text/plain; charset=US-ASCII
 
 On Fri, 3 May 2024, Julien Panis wrote:
 
-> In 'lvts_should_update_thresh()' and 'lvts_ctrl_start()' functions,
-> the parameter passed to 'lvts_for_each_valid_sensor()' macro is always
-> 'lvts_ctrl->lvts_data->lvts_ctrl'. In other words, the array index 0
-> is systematically passed as 'struct lvts_ctrl_data' type item, even
-> when another item should be consumed instead.
+> In struct lvts_ctrl_data, num_lvts_sensor and cal_offset[] are not used.
 > 
-> Hence, the 'valid_sensor_mask' value which is selected can be wrong
-> because unrelated to the 'struct lvts_ctrl_data' type item that should
-> be used. Hence, some thermal zone can be registered for a sensor 'i'
-> that does not actually exist. Because of the invalid address used
-> as 'lvts_sensor[i].msr', this situation ends up with a crash in
-> 'lvts_get_temp()' function, where this 'msr' pointer is passed to
-> 'readl_poll_timeout()' function. The following message is output:
-> "Unable to handle kernel NULL pointer dereference at virtual
-> address <msr>", with <msr> = 0.
-> 
-> This patch fixes the issue.
-> 
-> Fixes: 11e6f4c31447 ("thermal/drivers/mediatek/lvts_thermal: Allow early empty sensor slots")
 > Signed-off-by: Julien Panis <jpanis@baylibre.com>
 
 Reviewed-by: Nicolas Pitre <npitre@baylibre.com>
 
+
 > ---
->  drivers/thermal/mediatek/lvts_thermal.c | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
+>  drivers/thermal/mediatek/lvts_thermal.c | 2 --
+>  1 file changed, 2 deletions(-)
 > 
 > diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-> index 18a796386cd0..d7df6f09938b 100644
+> index 86b2f44355ac..18a796386cd0 100644
 > --- a/drivers/thermal/mediatek/lvts_thermal.c
 > +++ b/drivers/thermal/mediatek/lvts_thermal.c
-> @@ -116,9 +116,9 @@ struct lvts_ctrl_data {
->  			      ((s2) ? BIT(2) : 0) | \
->  			      ((s3) ? BIT(3) : 0))
+> @@ -105,8 +105,6 @@ struct lvts_sensor_data {
 >  
-> -#define lvts_for_each_valid_sensor(i, lvts_ctrl_data) \
-> +#define lvts_for_each_valid_sensor(i, lvts_ctrl) \
->  	for ((i) = 0; (i) < LVTS_SENSOR_MAX; (i)++) \
-> -		if (!((lvts_ctrl_data)->valid_sensor_mask & BIT(i))) \
-> +		if (!((lvts_ctrl)->valid_sensor_mask & BIT(i))) \
->  			continue; \
->  		else
->  
-> @@ -145,6 +145,7 @@ struct lvts_ctrl {
->  	const struct lvts_data *lvts_data;
->  	u32 calibration[LVTS_SENSOR_MAX];
->  	u32 hw_tshut_raw_temp;
-> +	u8 valid_sensor_mask;
+>  struct lvts_ctrl_data {
+>  	struct lvts_sensor_data lvts_sensor[LVTS_SENSOR_MAX];
+> -	int cal_offset[LVTS_SENSOR_MAX];
+> -	int num_lvts_sensor;
+>  	u8 valid_sensor_mask;
+>  	int offset;
 >  	int mode;
->  	void __iomem *base;
->  	int low_thresh;
-> @@ -356,7 +357,7 @@ static bool lvts_should_update_thresh(struct lvts_ctrl *lvts_ctrl, int high)
->  	if (high > lvts_ctrl->high_thresh)
->  		return true;
->  
-> -	lvts_for_each_valid_sensor(i, lvts_ctrl->lvts_data->lvts_ctrl)
-> +	lvts_for_each_valid_sensor(i, lvts_ctrl)
->  		if (lvts_ctrl->sensors[i].high_thresh == lvts_ctrl->high_thresh
->  		    && lvts_ctrl->sensors[i].low_thresh == lvts_ctrl->low_thresh)
->  			return false;
-> @@ -617,6 +618,8 @@ static int lvts_sensor_init(struct device *dev, struct lvts_ctrl *lvts_ctrl,
->  		lvts_sensor[i].high_thresh = INT_MIN;
->  	};
->  
-> +	lvts_ctrl->valid_sensor_mask = lvts_ctrl_data->valid_sensor_mask;
-> +
->  	return 0;
->  }
->  
-> @@ -1112,7 +1115,7 @@ static int lvts_ctrl_start(struct device *dev, struct lvts_ctrl *lvts_ctrl)
->  	u32 *sensor_bitmap = lvts_ctrl->mode == LVTS_MSR_IMMEDIATE_MODE ?
->  			     sensor_imm_bitmap : sensor_filt_bitmap;
->  
-> -	lvts_for_each_valid_sensor(i, lvts_ctrl->lvts_data->lvts_ctrl) {
-> +	lvts_for_each_valid_sensor(i, lvts_ctrl) {
->  
->  		int dt_id = lvts_sensors[i].dt_id;
->  
 > 
 > -- 
 > 2.37.3
