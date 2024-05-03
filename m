@@ -1,103 +1,137 @@
-Return-Path: <linux-pm+bounces-7491-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7492-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCB078BB32F
-	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 20:31:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7985A8BB35F
+	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 20:42:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 09EB41C21F8C
-	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 18:31:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25C7328417A
+	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 18:42:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E21D91598E6;
-	Fri,  3 May 2024 18:30:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 796322E3E0;
+	Fri,  3 May 2024 18:42:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b="DOvt3rmv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DB1A158D9A;
-	Fri,  3 May 2024 18:30:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE58E57C8A;
+	Fri,  3 May 2024 18:42:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.89.224.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714761013; cv=none; b=q5dAfP4xCQdZt+zB/GmqryzNMvLMY3qbNDUL7wy2njegmLviGhHBVipY3s3Sdl+0uk/QcZwte+U5JOCjhO2luGqL7MM1ccRIx7arnxk75VvxwLLnlgxvqNX5WJ12NlIWqxwUXBS/1QhUo6VpmtB0gb+LhzwzQugO/3yWhGWpgGM=
+	t=1714761751; cv=none; b=NpzXaDXVRSWi5qn4p9jzwJRMxNAiFd56+TsGyERgrUspYhCnFwxaUQm3dWVlJNduUCtIaDJGv/R+NUyT8E1mOlDlz6UeJERg+uJXZJvqm5peU1qX+hk4mcWeWt07IHWrkRUQRkwmXCuKfOLp7H6YI5HpuzpcirNMs+SpZoa8JQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714761013; c=relaxed/simple;
-	bh=u7xb8XgMeGPLuSoLlchm5v+UliifwUuELHsYAKkW38I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Kb5DXpE6Ody9GCtu/aamuybdCXv0/I6/9ogqmxk0wCD2RqdRU9qzV5USP7Grg/gb9wJUL3G3ev9RH4fZVsKiZF3o30tIJCfLEKfHWNmTVTkXo8s2Np8/Oj+SW0Xbn+2M4ecGxiCZr8nqGb9XZjzL6vqs5zSfgmKVf5wMig5eNVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3EBFA13D5;
-	Fri,  3 May 2024 11:30:35 -0700 (PDT)
-Received: from [192.168.2.88] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6E1B73F762;
-	Fri,  3 May 2024 11:30:07 -0700 (PDT)
-Message-ID: <0b849052-0eb1-4085-aa65-73b7451cd6ba@arm.com>
-Date: Fri, 3 May 2024 20:29:51 +0200
+	s=arc-20240116; t=1714761751; c=relaxed/simple;
+	bh=6avGVeH0i3gUjukyCFF0pre8Nb9L4gOhXeEBFHfW1qo=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JVi4qpifGy9Tqkoluas9iEUV7X7u9iXCJHC5Vf2TgbJNy8k23wh7cb+dfizJx4FdOPC9s/BUuph5pLzywqhuWotB3NrR8I8uFfz2DzqgghITBfiD9wrBVYEr/OVIdwOBdKCiyspA8gf8q3EHbqshUkL5k782trAV73tfO+iSIY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com; spf=pass smtp.mailfrom=salutedevices.com; dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b=DOvt3rmv; arc=none smtp.client-ip=45.89.224.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=salutedevices.com
+Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
+	by mx1.sberdevices.ru (Postfix) with ESMTP id C70B3120002;
+	Fri,  3 May 2024 21:42:22 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru C70B3120002
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salutedevices.com;
+	s=mail; t=1714761742;
+	bh=9Z5eFlWXbAJBTHJC3tQ6YnOuDNtTKSSh4w04Pc+er9s=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
+	b=DOvt3rmvyGMhAYPBAyyGp6AgE7/vb6Ij8xaP4FrJBwSqatI/r5bOwQ7uWrWVMmmxe
+	 J04eJdZis9P3a4qlg4ym5Z1p9mpmVSmySRWD2MKaFYNpQyaFEFgH+IdeJa+/wgRczk
+	 6nq6dIz2EjVXbp1jMx+eX4y5bJFZYK03iehel75EYkFQExfbaV11tdKOZvxcYx1d2j
+	 rJ1wayes7Vbr/x+ma8ul7/lrRocJvNMAWPBp8DvZY8foYW2DonxLn9kEDW2xZ6Sw1i
+	 m2+JwjG/9Xx6n7+ITPdpFxdQJNEFlTomeE05l/KaB7OjC+2Qm3WdFOjQreJb9KymsP
+	 svlVUnad/R9AQ==
+Received: from smtp.sberdevices.ru (p-i-exch-sc-m02.sberdevices.ru [172.16.192.103])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx1.sberdevices.ru (Postfix) with ESMTPS;
+	Fri,  3 May 2024 21:42:22 +0300 (MSK)
+Received: from localhost (100.64.160.123) by p-i-exch-sc-m02.sberdevices.ru
+ (172.16.192.103) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Fri, 3 May
+ 2024 21:42:22 +0300
+Date: Fri, 3 May 2024 21:42:22 +0300
+From: Dmitry Rokosov <ddrokosov@salutedevices.com>
+To: <neil.armstrong@linaro.org>
+CC: <jbrunet@baylibre.com>, <mturquette@baylibre.com>, <khilman@baylibre.com>,
+	<martin.blumenstingl@googlemail.com>, <glaroque@baylibre.com>,
+	<rafael@kernel.org>, <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
+	<lukasz.luba@arm.com>, <robh+dt@kernel.org>,
+	<krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+	<kernel@salutedevices.com>, <rockosov@gmail.com>,
+	<linux-amlogic@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 0/3] arm64: dts: amlogic: a1: introduce thermal setup
+Message-ID: <20240503184222.cqka6nmjxhezfhtg@CAB-WSD-L081021>
+References: <20240328192645.20914-1-ddrokosov@salutedevices.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC][PATCH v1 3/3] cpufreq: intel_pstate: Set asymmetric CPU
- capacity on hybrid systems
-To: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, x86 Maintainers
- <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- Linux PM <linux-pm@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Peter Zijlstra <peterz@infradead.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Ricardo Neri <ricardo.neri@intel.com>, Tim Chen <tim.c.chen@intel.com>
-References: <7663799.EvYhyI6sBW@kreacher> <1799046.VLH7GnMWUR@kreacher>
- <050c561c-487e-4e89-a7b2-9752cebc9f46@arm.com>
- <20240503033242.GA14835@ranerica-svr.sc.intel.com>
-From: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Content-Language: en-US
-In-Reply-To: <20240503033242.GA14835@ranerica-svr.sc.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20240328192645.20914-1-ddrokosov@salutedevices.com>
+User-Agent: NeoMutt/20220415
+X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
+ p-i-exch-sc-m02.sberdevices.ru (172.16.192.103)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 185053 [May 03 2024]
+X-KSMG-AntiSpam-Version: 6.1.0.4
+X-KSMG-AntiSpam-Envelope-From: ddrokosov@salutedevices.com
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 19 0.3.19 07c7fa124d1a1dc9662cdc5aace418c06ae99d2b, {Tracking_uf_ne_domains}, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, lore.kernel.org:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;smtp.sberdevices.ru:7.1.1,5.0.1;salutedevices.com:7.1.1;100.64.160.123:7.1.2, FromAlignment: s, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean, bases: 2024/05/03 14:55:00
+X-KSMG-LinksScanning: Clean, bases: 2024/05/03 14:55:00
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2024/05/03 16:56:00 #25080849
+X-KSMG-AntiVirus-Status: Clean, skipped
 
-On 03/05/2024 05:32, Ricardo Neri wrote:
-> On Thu, May 02, 2024 at 12:42:54PM +0200, Dietmar Eggemann wrote:
->> On 25/04/2024 21:06, Rafael J. Wysocki wrote:
->>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>>
->>> Make intel_pstate use the HWP_HIGHEST_PERF values from
->>> MSR_HWP_CAPABILITIES to set asymmetric CPU capacity information
->>> via the previously introduced arch_set_cpu_capacity() on hybrid
->>> systems without SMT.
->>
->> Are there such systems around? My i7-13700K has P-cores (CPU0..CPU15)
->> with SMT.
+Hello Neil,
+
+A1 Thermal Sensor was applied to linux-pm for v6.10-rc1:
+
+https://lore.kernel.org/all/89a02410-87c8-47c6-aa50-04dad5b4e585@linaro.org/
+
+Could you please advise if it's enough to proceed with this series? Or
+do I need to do something more?
+
+On Thu, Mar 28, 2024 at 10:26:34PM +0300, Dmitry Rokosov wrote:
+> This patch series introduces thermal sensor declaration to the Meson A1
+> common dtsi file. It also sets up thermal zones for the AD402 reference
+> board. It depends on the series with A1 thermal support at [1].
 > 
-> We have been experimenting with nosmt in the kernel command line.
-
-OK.
-
-[...]
-
->>> If the given system is hybrid and non-SMT, the new code disables ITMT
->>> support in the scheduler (because it may get in the way of asymmetric CPU
->>> capacity code in the scheduler that automatically gets enabled by setting
->>> asymmetric CPU capacity) after initializing all online CPUs and finds
->>> the one with the maximum HWP_HIGHEST_PERF value.  Next, it computes the
->>> capacity number for each (online) CPU by dividing the product of its
->>> HWP_HIGHEST_PERF and SCHED_CAPACITY_SCALE by the maximum HWP_HIGHEST_PERF.
->>
->> SO either CAS at wakeup and in load_balance or SIS at wakeup and ITMT in
->> load balance.
+> Changes v2 since v1 at [2]:
+>     - provide Neil RvB for cooling-cells dts patch
+>     - purge unnecessary 'amlogic,a1-thermal' fallback
 > 
-> May I know what CAS and SIS stand for?
+> Links:
+> [1] - https://lore.kernel.org/all/20240328191322.17551-1-ddrokosov@salutedevices.com/
+> [2] - https://lore.kernel.org/all/20240328134459.18446-1-ddrokosov@salutedevices.com/
+> 
+> Signed-off-by: Dmitry Rokosov <ddrokosov@salutedevices.com>
+> 
+> Dmitry Rokosov (3):
+>   arm64: dts: amlogic: a1: add cooling-cells for DVFS feature
+>   arm64: dts: amlogic: a1: introduce cpu temperature sensor
+>   arm64: dts: amlogic: ad402: setup thermal-zones
+> 
+>  .../arm64/boot/dts/amlogic/meson-a1-ad402.dts | 45 +++++++++++++++++++
+>  arch/arm64/boot/dts/amlogic/meson-a1.dtsi     | 13 ++++++
+>  2 files changed, 58 insertions(+)
 
-Capacity Aware Scheduling and Select_Idle_Sibling().
-
-Either   select_idle_sibling() -> select_idle_capacity()         (1)
-
-or       select_idle_sibling() -> select_idle_cpu() /* nosmt */  (2)
-
-So my system with now 'nosmt' goes (1).
+-- 
+Thank you,
+Dmitry
 
