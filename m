@@ -1,195 +1,173 @@
-Return-Path: <linux-pm+bounces-7460-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7461-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF9B88BA396
-	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 01:00:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CAC18BA4EE
+	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 03:30:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93A2F281D0E
-	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2024 23:00:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD7A31C21B9A
+	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 01:30:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E83851C2A5;
-	Thu,  2 May 2024 23:00:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZHpoxtnX"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2103C101F2;
+	Fri,  3 May 2024 01:29:59 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C61D38462;
-	Thu,  2 May 2024 23:00:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CD9E101EC
+	for <linux-pm@vger.kernel.org>; Fri,  3 May 2024 01:29:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714690808; cv=none; b=LT08oESKhHWsN76alBOjN1VRFKrK17XyxromMtqBJzacJsyWlOP8thIimLQ1HdY06y6HR4bw17EI7PcxiT6RGVIBtGG2/eI+NXDXbHpq9WJmn6yH7a317kBP3VvfuZ+RPAFMIiJdOwsF9X3c1opkPbi9gqJm05Be+uEIqo4LKGA=
+	t=1714699799; cv=none; b=YNYLGzby8qakMSr9N+YNIaPIp8Y57JBcff4p85oYgQ9+vwoF/msKkrt9RNQHWKaSNZ0DlVye4TiTkR4JhMIO5gIv2iTdnlkwUm/vgJdfswMsUWO1ePArD+9jr7ULws9fEsz0WHRhQA88K0MajUkqTVvIlktDUeWTtATqFhkWjJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714690808; c=relaxed/simple;
-	bh=ULrNGlwF7hwzc/IdKsuerfb8QwWWn7G+RVpYCuLN2Gg=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=ID5UtHiLK0M/xvzlez7J3qdTOoqJqP30X0dJtADSnfRwnPyuONj7XvUnn2UAtIBYTxMDUHCSLEcqDEqmdcf10C1VhT7EgDzd3nAE/af78fz5OY33jkwo8JFYTHWcpSDB2c4h1CYq6gogk9+UKz/cY4Dmxt+7WTlWhj+vTNpFCVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZHpoxtnX; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714690807; x=1746226807;
-  h=date:from:to:cc:subject:message-id;
-  bh=ULrNGlwF7hwzc/IdKsuerfb8QwWWn7G+RVpYCuLN2Gg=;
-  b=ZHpoxtnXwzp2e5Lk0k6MHvbOKmafzPNDFhEuf3NVEt9lKyBak0zzjFA8
-   7MGr7mjN1pVU+0JHW8gCOozxmjC8Y2ixkJ8IM3eggXhOeJsOhpu6gCvDc
-   g6EI9gGQ43r29XfRuKe/xrIM53e8dpk3xcny0SffcA1IhM/i51Y6W3+xv
-   NwtMyPI+Kw66G0CL71KXS8TxVZZqamBKY9he3OXvFCHFRdSImJ7uwWDl0
-   W4abN8xFQZa/2bji5CvBXM2IHzrPXbHbnajcH5YPtT34gTHav0jDdOGoW
-   EoSl8oQJ+X717jr6OrAlH/V+2eZe/o0N9OPHLAD78Mn1jYcYNoGc7qjdm
-   g==;
-X-CSE-ConnectionGUID: 77KB1HKFQXODBTfAuIdZFQ==
-X-CSE-MsgGUID: DCMUyHRTSdWoRvbSqRoQ7A==
-X-IronPort-AV: E=McAfee;i="6600,9927,11062"; a="28020387"
-X-IronPort-AV: E=Sophos;i="6.07,247,1708416000"; 
-   d="scan'208";a="28020387"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2024 16:00:06 -0700
-X-CSE-ConnectionGUID: rjI0SOaZQyeZqJnEZUdGPw==
-X-CSE-MsgGUID: 3NAbiVTARw+rFLgmwiUJAQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,247,1708416000"; 
-   d="scan'208";a="27681676"
-Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 02 May 2024 16:00:04 -0700
-Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s2fPF-000B6q-38;
-	Thu, 02 May 2024 23:00:01 +0000
-Date: Fri, 03 May 2024 06:59:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- e01d13af3b69fdb9f26affc2451afd90f764fa14
-Message-ID: <202405030618.VacMeDkE-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1714699799; c=relaxed/simple;
+	bh=dMjeMlM25rxtnU3drusMB38fe3VxHwTgoP0hohfF/WI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=j3k9ChbYTNW8zwc3Fc3BLT2jURn4Htka0KrAFsrlbJ4tA12xiuhTIjWVNw69WvoAwoZ7YCFPdQkUSKvfojYrouIiHWTNuznL0aLvRvv4w++4TqRWVm6GroeEv8Ci/9CIFDT0HJw0BgDRoEq1aizSeWINtmtbsQ1zKn5T77ywziQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 9cf40c3608ec11ef9305a59a3cc225df-20240503
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.37,REQID:0f95b689-2641-4d0f-a1fb-650f2a262013,IP:30,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-9,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:21
+X-CID-INFO: VERSION:1.1.37,REQID:0f95b689-2641-4d0f-a1fb-650f2a262013,IP:30,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-9,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:21
+X-CID-META: VersionHash:6f543d0,CLOUDID:a72b91e9828466f48c0e588ae7ccaaa9,BulkI
+	D:2404240053447092KH5R,BulkQuantity:5,Recheck:0,SF:19|44|64|66|38|24|72|10
+	2,TC:nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:40,QS:nil,BEC:n
+	il,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_FSD,TF_CID_SPAM_FSI,TF_CID_SPAM_SNR
+X-UUID: 9cf40c3608ec11ef9305a59a3cc225df-20240503
+Received: from node4.com.cn [(39.156.73.12)] by mailgw.kylinos.cn
+	(envelope-from <xiongxin@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 1657420701; Fri, 03 May 2024 09:29:41 +0800
+Received: from node4.com.cn (localhost [127.0.0.1])
+	by node4.com.cn (NSMail) with SMTP id CAE8716002083;
+	Fri,  3 May 2024 09:29:35 +0800 (CST)
+X-ns-mid: postfix-66343DFF-7420412
+Received: from [10.42.116.201] (unknown [10.42.116.201])
+	by node4.com.cn (NSMail) with ESMTPA id 9A19A16002082;
+	Fri,  3 May 2024 01:29:34 +0000 (UTC)
+Message-ID: <4b077ec7-d9da-44fc-a083-1c27afff7e72@kylinos.cn>
+Date: Fri, 3 May 2024 09:29:34 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] PM: sleep: Optimize the pm_debug_messages_should_print()
+ function
+To: Mario Limonciello <mario.limonciello@amd.com>, rafael@kernel.org
+Cc: linux-pm@vger.kernel.org
+References: <20240422093619.118278-1-xiongxin@kylinos.cn>
+ <20240423081723.412237-1-xiongxin@kylinos.cn>
+ <2f07ea21-c89b-49dc-a7b6-8c4e207d1af7@amd.com>
+ <408bbf09-58ef-4d55-ba89-a64dbce25085@kylinos.cn>
+ <2b4930ea-c8c9-4743-aa46-f387056f2a1f@amd.com>
+ <e30df16c-1af1-4d66-97cc-c0e6620764a6@kylinos.cn>
+ <1714698149088349.0.seg@mailgw.kylinos.cn>
+Content-Language: en-US
+From: xiongxin <xiongxin@kylinos.cn>
+In-Reply-To: <1714698149088349.0.seg@mailgw.kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: e01d13af3b69fdb9f26affc2451afd90f764fa14  Merge branch 'thermal-intel' into bleeding-edge
+On 2024/5/3 03:04, Mario Limonciello wrote:
+>=20
+>>>> Can I change pm_pr_dbg() in amd_pmc_idlemask_read() to pr_debug()=20
+>>>> based on
+>>>>
+>>>> pm_debug_messages_on condition?
+>>>>
+>>>> I suggest not adding a new variable to this.
+>>>>
+>>>
+>>> I don't understand the opposition to the new variable.
+>>>
+>>> The whole point of /sys/power/pm_debug_messages is so that it's a one=
+=20
+>>> stop shop to turn on power management related debugging at power=20
+>>> state but nothing more.
+>>>
+>>> You turn that on and you can get messages from the core and also any=20
+>>> drivers that want to emit messages during that time.
+>>>
+>>> If changing drivers back to pr_debug that means that users and=20
+>>> software need to manually turn on BOTH /sys/power/pm_debug_messages=20
+>>> as well as dynamic debug for any power management related messages.
+>>>
+>>> Whereas if just adding another variable for a condition then just=20
+>>> turn on the sysfs file for any hibernate or suspend debugging.
+>>
+>> Your patch makes the output of pm_pr_dbg() based on the values of=20
+>> pm_debug_messages_on and pm_suspend_target_state; However,=20
+>> pm_suspend_target_state's impact domain does not include enter_state()=
+=20
+>> and hibernate processes;
+>>
+>> The patch affects the output of the sleep mainline debug log, which is=
+=20
+>> very unfriendly to others developers, and it is even more troublesome
+>> to add a new variable based on your suggestion.
+>=20
+> Why is adding a new variable more troublesome?=C2=A0 We're talking abou=
+t a=20
+> one line change and then it can run in more power management situations=
+.
 
-elapsed time: 723m
+Please check the patch you submitted: cdb8c100d8a4=20
+(include/linux/suspend.h: Only show pm_pr_dbg messages at=20
+suspend/resume). The patch you submit and merge limits the scope of what=20
+pm_pr_dbg() can output, that is, you modify the original capability of=20
+pm_pr_dbg().
 
-configs tested: 101
-configs skipped: 3
+All I'm doing is trying to get pm_pr_dbg() back to its original output=20
+capacity.This is not an innovative technique, so why consider adding a=20
+variable to change the thinking of other developers who have already=20
+mastered pm_pr_dbg()?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+>=20
+>>
+>> The kernel already has a log output solution based on the value of=20
+>> pm_suspend_target_state. I will issue a repair patch as follows in
+>> amd_pmc_idlemask_read():
+>>
+>> if (dev && pm_suspend_target_state !=3D PM_SUSPEND_ON)
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pr_info("SMU idlemask s0i3: 0x%x\n", val=
+);
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20240503   gcc  
-arc                   randconfig-002-20240503   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                   randconfig-001-20240503   clang
-arm                   randconfig-002-20240503   clang
-arm                   randconfig-003-20240503   clang
-arm                   randconfig-004-20240503   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240503   clang
-arm64                 randconfig-002-20240503   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240503   clang
-i386         buildonly-randconfig-002-20240503   clang
-i386         buildonly-randconfig-003-20240503   gcc  
-i386         buildonly-randconfig-004-20240503   gcc  
-i386         buildonly-randconfig-005-20240503   gcc  
-i386         buildonly-randconfig-006-20240503   clang
-i386                                defconfig   clang
-i386                  randconfig-001-20240503   gcc  
-i386                  randconfig-002-20240503   clang
-i386                  randconfig-003-20240503   clang
-i386                  randconfig-004-20240503   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64                              defconfig   gcc  
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
+My previous suggestion was not considered reasonable, so I slightly=20
+modified it as follows:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+if (dev && pm_suspend_target_state !=3D PM_SUSPEND_ON)
+	pm_pr_dbg(SMU idlemask s0i3: 0x%x\n", val)
+
+This is still based on /sys/power/pm_debug_messages, but does not change=20
+the original logic of pm_pr_dbg().
+
+>=20
+> But then this is going to be really noisy still for the general purpose=
+=20
+> users.
+>=20
+> The point of pm_pr_dbg() is that it only outputs the debugging message=20
+> when /sys/power/pm_debug_messages is set.
+>=20
+> 99% of people don't need this message, but when someone comes to say "i=
+t=20
+> doesn't work!" changing one sysfs file gets me a lot more data about=20
+> /why/ it doesn't work without compromising everyone else's logs.
+
+
+
 
