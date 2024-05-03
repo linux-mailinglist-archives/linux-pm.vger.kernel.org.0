@@ -1,173 +1,179 @@
-Return-Path: <linux-pm+bounces-7461-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7462-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CAC18BA4EE
-	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 03:30:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EC3C8BA571
+	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 04:56:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD7A31C21B9A
-	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 01:30:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA7A71F22653
+	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2024 02:56:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2103C101F2;
-	Fri,  3 May 2024 01:29:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53A421BF2A;
+	Fri,  3 May 2024 02:55:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WXsYY1Wy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CD9E101EC
-	for <linux-pm@vger.kernel.org>; Fri,  3 May 2024 01:29:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22873F4FB
+	for <linux-pm@vger.kernel.org>; Fri,  3 May 2024 02:55:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714699799; cv=none; b=YNYLGzby8qakMSr9N+YNIaPIp8Y57JBcff4p85oYgQ9+vwoF/msKkrt9RNQHWKaSNZ0DlVye4TiTkR4JhMIO5gIv2iTdnlkwUm/vgJdfswMsUWO1ePArD+9jr7ULws9fEsz0WHRhQA88K0MajUkqTVvIlktDUeWTtATqFhkWjJU=
+	t=1714704954; cv=none; b=b3Ob7rdP6/ANc/fAC25gcEDBiMTg85UYKRlRAdgvFeiljIlSY6Xo+Pp5E+jU9OsefzQhiXay2u9L7cCSmUh73EjOUse3r9JklmSV6rab1/Sz8eXDLlZIsgX13o2XGm4+0CzKWPulUqI4c1Qp12CkC50VgryD4bv3jHaMhB27CjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714699799; c=relaxed/simple;
-	bh=dMjeMlM25rxtnU3drusMB38fe3VxHwTgoP0hohfF/WI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=j3k9ChbYTNW8zwc3Fc3BLT2jURn4Htka0KrAFsrlbJ4tA12xiuhTIjWVNw69WvoAwoZ7YCFPdQkUSKvfojYrouIiHWTNuznL0aLvRvv4w++4TqRWVm6GroeEv8Ci/9CIFDT0HJw0BgDRoEq1aizSeWINtmtbsQ1zKn5T77ywziQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 9cf40c3608ec11ef9305a59a3cc225df-20240503
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.37,REQID:0f95b689-2641-4d0f-a1fb-650f2a262013,IP:30,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-9,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:21
-X-CID-INFO: VERSION:1.1.37,REQID:0f95b689-2641-4d0f-a1fb-650f2a262013,IP:30,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-9,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:21
-X-CID-META: VersionHash:6f543d0,CLOUDID:a72b91e9828466f48c0e588ae7ccaaa9,BulkI
-	D:2404240053447092KH5R,BulkQuantity:5,Recheck:0,SF:19|44|64|66|38|24|72|10
-	2,TC:nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:40,QS:nil,BEC:n
-	il,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_FSD,TF_CID_SPAM_FSI,TF_CID_SPAM_SNR
-X-UUID: 9cf40c3608ec11ef9305a59a3cc225df-20240503
-Received: from node4.com.cn [(39.156.73.12)] by mailgw.kylinos.cn
-	(envelope-from <xiongxin@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 1657420701; Fri, 03 May 2024 09:29:41 +0800
-Received: from node4.com.cn (localhost [127.0.0.1])
-	by node4.com.cn (NSMail) with SMTP id CAE8716002083;
-	Fri,  3 May 2024 09:29:35 +0800 (CST)
-X-ns-mid: postfix-66343DFF-7420412
-Received: from [10.42.116.201] (unknown [10.42.116.201])
-	by node4.com.cn (NSMail) with ESMTPA id 9A19A16002082;
-	Fri,  3 May 2024 01:29:34 +0000 (UTC)
-Message-ID: <4b077ec7-d9da-44fc-a083-1c27afff7e72@kylinos.cn>
-Date: Fri, 3 May 2024 09:29:34 +0800
+	s=arc-20240116; t=1714704954; c=relaxed/simple;
+	bh=jT5s7YWR+A/p4LavrGBG6VAx4FlLFrdIZ9nf8Q/OMQ0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=k3176WVzNWnz84rWECRI/7rcs3iqN6BUVYT57onRSuo/LRA5/B3yrh6ufNMyqtXDHg1F4t4Fm/isX9wkF+a5Lb57VLreCtQ+HmP0jj3gjhSmh/Z9h6JVyAPEnYE/8nu7cUqKINrPSJAEna/yEVGCTdneI0UuKi54DkceiKUHQpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WXsYY1Wy; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1714704951;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=PwYPftRdc+ypJrZIwEf9pDQCg1OQOYFdRop7yZ9w5nc=;
+	b=WXsYY1Wykbcy660Y46AN+FLrEmWSzIbjzMe8ZEclUz9viI6FufaNCubHMaMQwQkPwSmf3j
+	6sufh8mE+ayF9abZ8SN3Yxg+8FIMU3JY5iVHZ2IKVL681+vrDtT+zSHW06FP6+mFOrG2Dd
+	HNvr93R6C1K8Ldp6n7kJYDP4VbbEE6I=
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
+ [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-440-FB7xoXOOPm6ER7v_6aCxhA-1; Thu, 02 May 2024 22:55:48 -0400
+X-MC-Unique: FB7xoXOOPm6ER7v_6aCxhA-1
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-2b2738ce656so3279902a91.0
+        for <linux-pm@vger.kernel.org>; Thu, 02 May 2024 19:55:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714704947; x=1715309747;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PwYPftRdc+ypJrZIwEf9pDQCg1OQOYFdRop7yZ9w5nc=;
+        b=m22lnyJMBP+5rYabO8jsmCXz7v3i2lJAiHT7Br31VVFiQFqvxE3gODVV8XzCEV1pnA
+         4GEUdyQf08SKBqF8wSU0jHNaYJzJwp3g0qf1MwAYRjmK2m03qaHqEvuUNxhFlZW9Y5cX
+         0sThWx0BqaGC1Dpjb57rcH3A8p57pB7Z/1s7xx7dko/1Kp9T6A+is5xbQqDdG+5PQldI
+         JiRC/hD9vGr5uUuBHbr/lKBJddAOYA6QhMRlZQA1TFUUq6DOyXNN37NvPxjlN57tyh1F
+         uLMWPpeZbPySFZJeaBvxICbz8AfxQDuOoHZJcSSc1QAKnup6sgv+IsFl+Wk/lQXcEowm
+         ywtA==
+X-Forwarded-Encrypted: i=1; AJvYcCXOcQRPganwveTQ+HGFHgbpwC53ynXmotqNKD4dJVnxL2YHvQM9nkIMnWkIWtmj1n6V2ZZE4Oa+gf6uRnhQVCGAZlcmG88RVJo=
+X-Gm-Message-State: AOJu0Yyo6j71u8Ku8qyln85oXzLjaWxk3rKr8lju3Dl7ziEWoDzSDR7h
+	IzHFgROJK47gNzoLo4wKv4yP304pNL2zYTp5BrcmM6MVhkPe7kTTAdc3Vd4Nl9X0rkAAoVyEy1S
+	51smzJVBmDQIoWDZnlAHiyqpHxT0jEo7VggwXGKq5USV5fjERDLuxMuBrmTWbPHUGjJkSA2CQBX
+	Zhg+Mr5hi2QtMnuXV09NSsLxQUSDjN24A=
+X-Received: by 2002:a17:90b:1487:b0:2b2:9660:7d44 with SMTP id js7-20020a17090b148700b002b296607d44mr1487486pjb.25.1714704947133;
+        Thu, 02 May 2024 19:55:47 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGwF7yIf+v2KN0XWVj2yqlaGxRq0b/5Y9aBa/NRwhgqBjRU0s+VYd3wqnkkstVZyYiuuahaMVp6cWCPQy+n1PM=
+X-Received: by 2002:a17:90b:1487:b0:2b2:9660:7d44 with SMTP id
+ js7-20020a17090b148700b002b296607d44mr1487476pjb.25.1714704946751; Thu, 02
+ May 2024 19:55:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] PM: sleep: Optimize the pm_debug_messages_should_print()
- function
-To: Mario Limonciello <mario.limonciello@amd.com>, rafael@kernel.org
-Cc: linux-pm@vger.kernel.org
-References: <20240422093619.118278-1-xiongxin@kylinos.cn>
- <20240423081723.412237-1-xiongxin@kylinos.cn>
- <2f07ea21-c89b-49dc-a7b6-8c4e207d1af7@amd.com>
- <408bbf09-58ef-4d55-ba89-a64dbce25085@kylinos.cn>
- <2b4930ea-c8c9-4743-aa46-f387056f2a1f@amd.com>
- <e30df16c-1af1-4d66-97cc-c0e6620764a6@kylinos.cn>
- <1714698149088349.0.seg@mailgw.kylinos.cn>
-Content-Language: en-US
-From: xiongxin <xiongxin@kylinos.cn>
-In-Reply-To: <1714698149088349.0.seg@mailgw.kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+References: <20240424065212.263784-1-hpa@redhat.com> <20240424065212.263784-3-hpa@redhat.com>
+ <3e103075-c170-42e3-928b-41d3bb11e6e8@redhat.com>
+In-Reply-To: <3e103075-c170-42e3-928b-41d3bb11e6e8@redhat.com>
+From: Kate Hsuan <hpa@redhat.com>
+Date: Fri, 3 May 2024 10:55:35 +0800
+Message-ID: <CAEth8oEbJZwUVeghgDpM3DzddY7DvGOnfXVMgQNrXG4XLr1y=Q@mail.gmail.com>
+Subject: Re: [PATCH v7 2/6] leds: rgb: leds-ktd202x: I2C ID tables for KTD2026
+ and 2027
+To: Hans de Goede <hdegoede@redhat.com>
+Cc: Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org, 
+	platform-driver-x86@vger.kernel.org, 
+	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	=?UTF-8?Q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>, 
+	linux-kernel@vger.kernel.org, Andy Shevchenko <andy.shevchenko@gmail.com>, 
+	Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On 2024/5/3 03:04, Mario Limonciello wrote:
->=20
->>>> Can I change pm_pr_dbg() in amd_pmc_idlemask_read() to pr_debug()=20
->>>> based on
->>>>
->>>> pm_debug_messages_on condition?
->>>>
->>>> I suggest not adding a new variable to this.
->>>>
->>>
->>> I don't understand the opposition to the new variable.
->>>
->>> The whole point of /sys/power/pm_debug_messages is so that it's a one=
-=20
->>> stop shop to turn on power management related debugging at power=20
->>> state but nothing more.
->>>
->>> You turn that on and you can get messages from the core and also any=20
->>> drivers that want to emit messages during that time.
->>>
->>> If changing drivers back to pr_debug that means that users and=20
->>> software need to manually turn on BOTH /sys/power/pm_debug_messages=20
->>> as well as dynamic debug for any power management related messages.
->>>
->>> Whereas if just adding another variable for a condition then just=20
->>> turn on the sysfs file for any hibernate or suspend debugging.
->>
->> Your patch makes the output of pm_pr_dbg() based on the values of=20
->> pm_debug_messages_on and pm_suspend_target_state; However,=20
->> pm_suspend_target_state's impact domain does not include enter_state()=
-=20
->> and hibernate processes;
->>
->> The patch affects the output of the sleep mainline debug log, which is=
-=20
->> very unfriendly to others developers, and it is even more troublesome
->> to add a new variable based on your suggestion.
->=20
-> Why is adding a new variable more troublesome?=C2=A0 We're talking abou=
-t a=20
-> one line change and then it can run in more power management situations=
-.
+Hi,
 
-Please check the patch you submitted: cdb8c100d8a4=20
-(include/linux/suspend.h: Only show pm_pr_dbg messages at=20
-suspend/resume). The patch you submit and merge limits the scope of what=20
-pm_pr_dbg() can output, that is, you modify the original capability of=20
-pm_pr_dbg().
+On Mon, Apr 29, 2024 at 7:08=E2=80=AFPM Hans de Goede <hdegoede@redhat.com>=
+ wrote:
+>
+> Hi,
+>
+> On 4/24/24 8:52 AM, Kate Hsuan wrote:
+>
+> Maybe start the commit message with:
+>
+> Add an i2c_device_id id_table to match manually instantiated
+> (non device-tree / ACPI instantiated) KTD202x controllers as
+> found on some x86 boards.
+>
+> ?
 
-All I'm doing is trying to get pm_pr_dbg() back to its original output=20
-capacity.This is not an innovative technique, so why consider adding a=20
-variable to change the thinking of other developers who have already=20
-mastered pm_pr_dbg()?
+Thank you for reviewing it.
+I'll revise the commit message in the v8 patch.
 
->=20
->>
->> The kernel already has a log output solution based on the value of=20
->> pm_suspend_target_state. I will issue a repair patch as follows in
->> amd_pmc_idlemask_read():
->>
->> if (dev && pm_suspend_target_state !=3D PM_SUSPEND_ON)
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pr_info("SMU idlemask s0i3: 0x%x\n", val=
-);
-
-My previous suggestion was not considered reasonable, so I slightly=20
-modified it as follows:
-
-if (dev && pm_suspend_target_state !=3D PM_SUSPEND_ON)
-	pm_pr_dbg(SMU idlemask s0i3: 0x%x\n", val)
-
-This is still based on /sys/power/pm_debug_messages, but does not change=20
-the original logic of pm_pr_dbg().
-
->=20
-> But then this is going to be really noisy still for the general purpose=
-=20
-> users.
->=20
-> The point of pm_pr_dbg() is that it only outputs the debugging message=20
-> when /sys/power/pm_debug_messages is set.
->=20
-> 99% of people don't need this message, but when someone comes to say "i=
-t=20
-> doesn't work!" changing one sysfs file gets me a lot more data about=20
-> /why/ it doesn't work without compromising everyone else's logs.
+>
+> > This table shows the maximum support LED channel for KTD2026 and KTD-20=
+27.
+> > The 3-channel LED controller KTD2026 controls R/G/B three LEDs. The
+> > 4-channel LED controller KTD2027 controls R/G/B and flashing LEDs.
+>
+> Other then that this looks good to me:
+>
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+>
+> Regards,
+>
+> Hans
+>
+>
+>
+> >
+> > Datasheet: https://www.kinet-ic.com/uploads/KTD2026-7-04h.pdf
+> > Signed-off-by: Kate Hsuan <hpa@redhat.com>
+> > ---
+> >  drivers/leds/rgb/leds-ktd202x.c | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> >
+> > diff --git a/drivers/leds/rgb/leds-ktd202x.c b/drivers/leds/rgb/leds-kt=
+d202x.c
+> > index f1c810c415a4..60ca6ec34336 100644
+> > --- a/drivers/leds/rgb/leds-ktd202x.c
+> > +++ b/drivers/leds/rgb/leds-ktd202x.c
+> > @@ -606,6 +606,13 @@ static void ktd202x_shutdown(struct i2c_client *cl=
+ient)
+> >       regmap_write(chip->regmap, KTD202X_REG_RESET_CONTROL, KTD202X_RST=
+R_RESET);
+> >  }
+> >
+> > +static const struct i2c_device_id ktd202x_id[] =3D {
+> > +     {"ktd2026", KTD2026_NUM_LEDS},
+> > +     {"ktd2027", KTD2027_NUM_LEDS},
+> > +     {}
+> > +};
+> > +MODULE_DEVICE_TABLE(i2c, ktd202x_id);
+> > +
+> >  static const struct of_device_id ktd202x_match_table[] =3D {
+> >       { .compatible =3D "kinetic,ktd2026", .data =3D (void *)KTD2026_NU=
+M_LEDS },
+> >       { .compatible =3D "kinetic,ktd2027", .data =3D (void *)KTD2027_NU=
+M_LEDS },
+> > @@ -621,6 +628,7 @@ static struct i2c_driver ktd202x_driver =3D {
+> >       .probe =3D ktd202x_probe,
+> >       .remove =3D ktd202x_remove,
+> >       .shutdown =3D ktd202x_shutdown,
+> > +     .id_table =3D ktd202x_id,
+> >  };
+> >  module_i2c_driver(ktd202x_driver);
+> >
+>
 
 
+--=20
+BR,
+Kate
 
 
