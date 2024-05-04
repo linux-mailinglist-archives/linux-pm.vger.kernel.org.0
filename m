@@ -1,60 +1,60 @@
-Return-Path: <linux-pm+bounces-7505-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7503-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 614998BBD2C
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CC468BBD2B
 	for <lists+linux-pm@lfdr.de>; Sat,  4 May 2024 18:41:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 851EA1C20E09
-	for <lists+linux-pm@lfdr.de>; Sat,  4 May 2024 16:41:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6332FB21462
+	for <lists+linux-pm@lfdr.de>; Sat,  4 May 2024 16:41:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AC565A79B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 586F858AC3;
 	Sat,  4 May 2024 16:41:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="chp06knC"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YCK0Rvlz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A3A75A0FE
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CABA753361
 	for <linux-pm@vger.kernel.org>; Sat,  4 May 2024 16:41:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714840890; cv=none; b=LSopPkqewvYjacWWiCnXkVzh79cb7ERFk0UVSrqjGLBK/5p24NxBorr0nIbaNLeEbb5w9qpecoRcMwSUR3dTgdRXbSagJyobQVNEfyvQWRCx5iXwEkGD4KRA5QWF6UItQUAsa2sp6IjBYxcRVNFmIDucleCXTf8qgEmPV8cXZnA=
+	t=1714840890; cv=none; b=QThWmsYepGFabD3qYrn3eDdUidw4GZde6F8fLHgdD9B36u5ySPu5je/1X2nYbUDfYbw2PRHBg2CrfnDkOAva26S+E8UWGyvKqqJjbrzPDSfQoUOOYuYvX1SksQRmDY8jMDp3F8CeRch4stSuQnrwgIjQn/i6qKlRlUwF2R0n4A8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1714840890; c=relaxed/simple;
-	bh=oAaOX0mFkfF8Lep1L6RVIQKgGo7OyX39Zj3ebHl9mck=;
+	bh=5rSI6KNjYGDtmtl+QEPb+3Xm6sOYaNSP5UQLYni0s1g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GJuCK/kt03QxnNvNB+CIeWU404GKNTl0BzdnG698XN+RoA3XzxSuQo0iYhMeB9s+m6Nxc5yA1fib1rFgja6g1lsv+gdDEhyyJKIOxq/aChv7ee2s+XeIUVn/qf97wbsnRGFrtfcd6BFLVWG2UmhLf+VorJk6/AuGy171ntUyYd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=chp06knC; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=kHWMAyq4dGDoYVmP3W9wTIi4t/7s5ONsIuw3aJ1Opo1LCDdAw8N2Mo7738QXW61OC1EhFtLnFLmef+Xy3iaiNqGnejhrk5V1Zi7IuHPk4VzivnBr7okBUMiMolIplmXhPq6YfgkFSPNBJMLCFjS/UhDcxIOzHwEOXWDj4G6mLeo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YCK0Rvlz; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1714840888;
+	s=mimecast20190719; t=1714840887;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=vFBingpjpDfRwTxUlurQ7OennTtxWuPwkEFGn/JyEKY=;
-	b=chp06knCNXWR6INDhDf7+WHVwjjyQy7BmEhTUKuJUE9Lqjr1CVFvUt3cKq7SG+DfHeWFUm
-	BZivmMnbLeGQmUZeFo/JlK3dPfKY5Yop8zQv391EKg0VjQTilBVWN1YVqHyTArWfqODznu
-	yAym1s90L35dKSgHBoTTh3l9UoPLZnA=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-639-anHJ6G1yMM2kiju7hY5tnA-1; Sat,
- 04 May 2024 12:41:24 -0400
-X-MC-Unique: anHJ6G1yMM2kiju7hY5tnA-1
+	bh=neQpUmMTVRy/ge3nnnYttmc7IrWyiPpmnFd2224kk0Y=;
+	b=YCK0Rvlzy5cXEjWnx9wyZ7WuD1/cMRCUFJp5iBm3HdqZPUYIICCFEbOk6XPimUwiAJ7rgW
+	NGssPJX7SHX2UtIZFqsyb5bcm6TpXhZU8OVxBpekcPbUPw/WzFV0gJdPUbHgzZZN9XXydL
+	nfpGFBPPGu5lUcnV7L8Q7PWM/zKrehM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-588-qd2kxRX3PVKYT0_n1Q5h_Q-1; Sat, 04 May 2024 12:41:25 -0400
+X-MC-Unique: qd2kxRX3PVKYT0_n1Q5h_Q-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9D4021C03150;
-	Sat,  4 May 2024 16:41:23 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 43D9C8032FA;
+	Sat,  4 May 2024 16:41:25 +0000 (UTC)
 Received: from localhost.localdomain (unknown [10.39.192.41])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 32454EC685;
-	Sat,  4 May 2024 16:41:21 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id CA433EC680;
+	Sat,  4 May 2024 16:41:23 +0000 (UTC)
 From: Hans de Goede <hdegoede@redhat.com>
 To: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
 	Andy Shevchenko <andy@kernel.org>,
@@ -68,9 +68,9 @@ Cc: Hans de Goede <hdegoede@redhat.com>,
 	linux-leds@vger.kernel.org,
 	linux-pm@vger.kernel.org,
 	Jacek Anaszewski <jacek.anaszewski@gmail.com>
-Subject: [PATCH v9 4/7] leds: core: Add led_mc_set_brightness() function
-Date: Sat,  4 May 2024 18:41:02 +0200
-Message-ID: <20240504164105.114017-5-hdegoede@redhat.com>
+Subject: [PATCH v9 5/7] leds: trigger: Add led_mc_trigger_event() function
+Date: Sat,  4 May 2024 18:41:03 +0200
+Message-ID: <20240504164105.114017-6-hdegoede@redhat.com>
 In-Reply-To: <20240504164105.114017-1-hdegoede@redhat.com>
 References: <20240504164105.114017-1-hdegoede@redhat.com>
 Precedence: bulk
@@ -82,127 +82,72 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
 
-Add a new led_mc_set_brightness() function for in kernel color/brightness
-changing of multi-color LEDs.
-
-led-class-multicolor can be build as a module and led_mc_set_brightness()
-will have the builtin callers, so put led_mc_set_brightness() inside
-led-core instead, just like how led_set_brightness() is part of the core
-and not of the led-class object.
-
-This also adds a new LED_MULTI_COLOR led_classdev flag to allow
-led_mc_set_brightness() to verify that it is operating on a multi-color
-LED classdev, avoiding casting the passed in LED classdev to a multi-color
-LED classdev, when it actually is not a multi-color LED.
+Add a new led_mc_trigger_event() function for triggers which want to
+change the color of a multi-color LED based on their trigger conditions.
 
 Reviewed-by: Jacek Anaszewski <jacek.anaszewski@gmail.com>
 Reviewed-by: Andy Shevchenko <andy@kernel.org>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/leds/led-class-multicolor.c |  1 +
- drivers/leds/led-core.c             | 31 +++++++++++++++++++++++++++++
- include/linux/leds.h                | 20 +++++++++++++++++++
- 3 files changed, 52 insertions(+)
+ drivers/leds/led-triggers.c | 20 ++++++++++++++++++++
+ include/linux/leds.h        |  6 ++++++
+ 2 files changed, 26 insertions(+)
 
-diff --git a/drivers/leds/led-class-multicolor.c b/drivers/leds/led-class-multicolor.c
-index ec62a4811613..df01c0e66c8b 100644
---- a/drivers/leds/led-class-multicolor.c
-+++ b/drivers/leds/led-class-multicolor.c
-@@ -134,6 +134,7 @@ int led_classdev_multicolor_register_ext(struct device *parent,
- 		return -EINVAL;
- 
- 	led_cdev = &mcled_cdev->led_cdev;
-+	led_cdev->flags |= LED_MULTI_COLOR;
- 	mcled_cdev->led_cdev.groups = led_multicolor_groups;
- 
- 	return led_classdev_register_ext(parent, led_cdev, init_data);
-diff --git a/drivers/leds/led-core.c b/drivers/leds/led-core.c
-index 89c9806cc97f..ef7d1c6767ca 100644
---- a/drivers/leds/led-core.c
-+++ b/drivers/leds/led-core.c
-@@ -8,6 +8,7 @@
-  */
- 
- #include <linux/kernel.h>
-+#include <linux/led-class-multicolor.h>
- #include <linux/leds.h>
- #include <linux/list.h>
- #include <linux/module.h>
-@@ -362,6 +363,36 @@ int led_set_brightness_sync(struct led_classdev *led_cdev, unsigned int value)
+diff --git a/drivers/leds/led-triggers.c b/drivers/leds/led-triggers.c
+index f0f5c925b23f..6d535a7fd075 100644
+--- a/drivers/leds/led-triggers.c
++++ b/drivers/leds/led-triggers.c
+@@ -394,6 +394,26 @@ void led_trigger_event(struct led_trigger *trig,
  }
- EXPORT_SYMBOL_GPL(led_set_brightness_sync);
+ EXPORT_SYMBOL_GPL(led_trigger_event);
  
-+/*
-+ * This is a led-core function because just like led_set_brightness()
-+ * it is used in the kernel by e.g. triggers.
-+ */
-+void led_mc_set_brightness(struct led_classdev *led_cdev,
-+			   unsigned int *intensity_value, unsigned int num_colors,
-+			   unsigned int brightness)
++void led_mc_trigger_event(struct led_trigger *trig,
++			  unsigned int *intensity_value, unsigned int num_colors,
++			  enum led_brightness brightness)
 +{
-+	struct led_classdev_mc *mcled_cdev;
-+	unsigned int i;
++	struct led_classdev *led_cdev;
 +
-+	if (!(led_cdev->flags & LED_MULTI_COLOR)) {
-+		dev_err_once(led_cdev->dev, "error not a multi-color LED\n");
++	if (!trig)
 +		return;
++
++	rcu_read_lock();
++	list_for_each_entry_rcu(led_cdev, &trig->led_cdevs, trig_list) {
++		if (!(led_cdev->flags & LED_MULTI_COLOR))
++			continue;
++
++		led_mc_set_brightness(led_cdev, intensity_value, num_colors, brightness);
 +	}
-+
-+	mcled_cdev = lcdev_to_mccdev(led_cdev);
-+	if (num_colors != mcled_cdev->num_colors) {
-+		dev_err_once(led_cdev->dev, "error num_colors mismatch %u != %u\n",
-+			     num_colors, mcled_cdev->num_colors);
-+		return;
-+	}
-+
-+	for (i = 0; i < mcled_cdev->num_colors; i++)
-+		mcled_cdev->subled_info[i].intensity = intensity_value[i];
-+
-+	led_set_brightness(led_cdev, brightness);
++	rcu_read_unlock();
 +}
-+EXPORT_SYMBOL_GPL(led_mc_set_brightness);
++EXPORT_SYMBOL_GPL(led_mc_trigger_event);
 +
- int led_update_brightness(struct led_classdev *led_cdev)
- {
- 	int ret;
+ static void led_trigger_blink_setup(struct led_trigger *trig,
+ 			     unsigned long delay_on,
+ 			     unsigned long delay_off,
 diff --git a/include/linux/leds.h b/include/linux/leds.h
-index db6b114bb3d9..e80a185e255a 100644
+index e80a185e255a..acd0aafd603c 100644
 --- a/include/linux/leds.h
 +++ b/include/linux/leds.h
-@@ -107,6 +107,7 @@ struct led_classdev {
- #define LED_BRIGHT_HW_CHANGED	BIT(21)
- #define LED_RETAIN_AT_SHUTDOWN	BIT(22)
- #define LED_INIT_DEFAULT_TRIGGER BIT(23)
-+#define LED_MULTI_COLOR		BIT(24)
- 
- 	/* set_brightness_work / blink_timer flags, atomic, private. */
- 	unsigned long		work_flags;
-@@ -373,6 +374,25 @@ void led_set_brightness(struct led_classdev *led_cdev, unsigned int brightness);
-  */
- int led_set_brightness_sync(struct led_classdev *led_cdev, unsigned int value);
- 
-+/**
-+ * led_mc_set_brightness - set mc LED color intensity values and brightness
-+ * @led_cdev: the LED to set
-+ * @intensity_value: array of per color intensity values to set
-+ * @num_colors: amount of entries in intensity_value array
-+ * @brightness: the brightness to set the LED to
-+ *
-+ * Set a multi-color LED's per color intensity values and brightness.
-+ * If necessary, this cancels the software blink timer. This function is
-+ * guaranteed not to sleep.
-+ *
-+ * Calling this function on a non multi-color led_classdev or with the wrong
-+ * num_colors value is an error. In this case an error will be logged once
-+ * and the call will do nothing.
-+ */
-+void led_mc_set_brightness(struct led_classdev *led_cdev,
-+			   unsigned int *intensity_value, unsigned int num_colors,
-+			   unsigned int brightness);
-+
- /**
-  * led_update_brightness - update LED brightness
-  * @led_cdev: the LED to query
+@@ -507,6 +507,9 @@ void led_trigger_register_simple(const char *name,
+ 				struct led_trigger **trigger);
+ void led_trigger_unregister_simple(struct led_trigger *trigger);
+ void led_trigger_event(struct led_trigger *trigger,  enum led_brightness event);
++void led_mc_trigger_event(struct led_trigger *trig,
++			  unsigned int *intensity_value, unsigned int num_colors,
++			  enum led_brightness brightness);
+ void led_trigger_blink(struct led_trigger *trigger, unsigned long delay_on,
+ 		       unsigned long delay_off);
+ void led_trigger_blink_oneshot(struct led_trigger *trigger,
+@@ -543,6 +546,9 @@ static inline void led_trigger_register_simple(const char *name,
+ static inline void led_trigger_unregister_simple(struct led_trigger *trigger) {}
+ static inline void led_trigger_event(struct led_trigger *trigger,
+ 				enum led_brightness event) {}
++static inline void led_mc_trigger_event(struct led_trigger *trig,
++				unsigned int *intensity_value, unsigned int num_colors,
++				enum led_brightness brightness) {}
+ static inline void led_trigger_blink(struct led_trigger *trigger,
+ 				      unsigned long delay_on,
+ 				      unsigned long delay_off) {}
 -- 
 2.44.0
 
