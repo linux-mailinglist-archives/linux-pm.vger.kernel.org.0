@@ -1,64 +1,46 @@
-Return-Path: <linux-pm+bounces-7509-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7512-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BBE18BC32C
-	for <lists+linux-pm@lfdr.de>; Sun,  5 May 2024 21:07:35 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CBAC8BC3CA
+	for <lists+linux-pm@lfdr.de>; Sun,  5 May 2024 22:57:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C13C22814F0
-	for <lists+linux-pm@lfdr.de>; Sun,  5 May 2024 19:07:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AA437B2176F
+	for <lists+linux-pm@lfdr.de>; Sun,  5 May 2024 20:57:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC4EA6CDCE;
-	Sun,  5 May 2024 19:07:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E6D27602F;
+	Sun,  5 May 2024 20:57:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ByPslHNq"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="Jv/P4lby"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E789E2D60A;
-	Sun,  5 May 2024 19:07:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B44067174F;
+	Sun,  5 May 2024 20:57:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714936048; cv=none; b=o6H1mt1d0QUULQ0NTcxAcYJwYMgnQez/URORiuBpv7HVfHgIyaZnzYY6VJzrZ96gDyAWYdnL5DG+obdtnDjsPoqJDdp6dnsTbWeEAlSr4HWuqDzayD6CYdbS4jFTqyblkf2Mh7s3A6KiOYT+Rr9pNy1ocT8sDGRVkxCuJDhEdmk=
+	t=1714942631; cv=none; b=j6u+cG9N7zHTevFAv27eFIKm7V8PrCK3KE/qmevlI7IaDeXQZgIBegFz+fxcogw4m9lZL+XzAUzGBtnE/W96OTSTByIe4SRPlhJ0vGaxl1FwilHgKJDO+aVZcRezquSjeD2hucwKTvc3KbT84sQhHkU8cta83YPOR2Rq7rPh1Ok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714936048; c=relaxed/simple;
-	bh=szmmLD1H/yLONpMiDrT0u1oFFCwgq8o/2sETDaKXb5o=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=jvBLd/vXMY3lYoURH7tcgaopy/D29ciz0qSI+jSmOMhWWiii7vv8ACcwt+1JsBGwz26nRcp1HBb1Wul/SXjfKb2S9EXBy5Z+x4qfJH/dCZuHxiSBV4Aj/ecDNC49XPFfP2xLQO7FeFJiUgEhCGg1AZ123tKDmvZRfGKytmIjh50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ByPslHNq; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 445J59tw002953;
-	Sun, 5 May 2024 19:07:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:date:subject:mime-version:content-type
-	:content-transfer-encoding:message-id:to:cc; s=qcppdkim1; bh=9Pf
-	w+fy0XFrWu040MiyBr71x0qncZZp6Lk8F3FLG2fk=; b=ByPslHNq3jvHcAbZmhM
-	MeF0BC0JJamxQ6iemZtflyznpzm2Ww18DLvwt3LoFRNmLJ8gTR+dzQJGwhwdJ6as
-	nv/rBtBqKYu3zckBcKeLU7akJqDE8HiRynKarwUdTeiFFQ1nHgGXFyj0wXIXC3D4
-	Cvs1SUEYa8HZdlDz3f11qNDhOmPrv+D7/dSxO05+4jPg0aP/g751/2GH7IsFBVVi
-	dwIg7ONvsAEFbgkN6f3ePmO8yZeKbWmffr6v6YWKMCDqDBM01Vn5dhszbPtYqZ9K
-	3Mv2IIORXSxK/mWuhqcVYcjGrFnJ40NzJTb6vaVuRHq4ZnNDqJxVzcANKTirlTku
-	Dig==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xwd8722eh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 05 May 2024 19:07:14 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 445J7DC7020183
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 5 May 2024 19:07:13 GMT
-Received: from [169.254.0.1] (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Sun, 5 May 2024
- 12:07:13 -0700
-From: Jeff Johnson <quic_jjohnson@quicinc.com>
-Date: Sun, 5 May 2024 12:07:12 -0700
-Subject: [PATCH] cpufreq: intel_pstate: fix struct cpudata::epp_cached
- kernel-doc
+	s=arc-20240116; t=1714942631; c=relaxed/simple;
+	bh=B0W+vFhgmBSPGwdf0igAW7QleTkDZUuNRB40wVINrOw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Wt+quEHsKpvVuPYjzurAV1PNBrR5VMHV1IGMHZ/75IlDIPiSKRDeYfPqh+zZWmtTAOxBZi4mRCl6K3xRFQkbtUEbvH3HQNV7gUto8qvF6pHRrDR3heqvpChH9DzLxXXsj2e6U2kCdZjRMro//NaIDqQelSPt88ZjF5BSy1LmHWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=Jv/P4lby; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1714942625;
+	bh=B0W+vFhgmBSPGwdf0igAW7QleTkDZUuNRB40wVINrOw=;
+	h=From:Subject:Date:To:Cc:From;
+	b=Jv/P4lbyVhju4wdemX7EsNEco9WGqnhVjNx+vIJol7hWrCK9rt3eSxG2Ky9J3v/Rh
+	 W1y7KeJRPdYB68CQHxCHNrX0fxGvjb73qT57qg3SSKkEof4Pl3C/o3yIy9SPTtW/vY
+	 MoZXNNIjTyh0DbYdox7xHnS8q6zx/C5P5OdYP7MA=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH 0/2] platform/chrome: cros_ec_framework_laptop: new driver
+Date: Sun, 05 May 2024 22:56:33 +0200
+Message-Id: <20240505-cros_ec-framework-v1-0-402662d6276b@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -66,62 +48,58 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20240505-epp_cached-kdoc-v1-1-c03800fe0d63@quicinc.com>
-X-B4-Tracking: v=1; b=H4sIAN/YN2YC/x3MQQrCMBBG4auUWTuQtnahVxGR6eSvGcQ0TESE0
- rsbXX6L9zaqcEOlc7eR423V1tzQHzrSJPkOtthMQxiOYQoTo5SbiiZEfsRVWVTCqcc4yiLUquJ
- Y7PM/Xq7Ns1Tw7JI1/T5PqS847fsXqmNeCXoAAAA=
-To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown
-	<lenb@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar
-	<viresh.kumar@linaro.org>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jeff Johnson
-	<quic_jjohnson@quicinc.com>
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAIHyN2YC/x3MQQqAIBBA0avErBNGsYKuEhFiUw2RxggVhHdPW
+ r7F/y8kEqYEffWC0MWJYyjQdQV+c2ElxXMxGDQWG2yUl5gm8moRd9AdZVcaqTWdt61DB6U7hRZ
+ +/ucw5vwBxkfUWWMAAAA=
+To: Lee Jones <lee@kernel.org>, Benson Leung <bleung@chromium.org>, 
+ Guenter Roeck <groeck@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev, 
+ Mario Limonciello <mario.limonciello@amd.com>, 
+ "Dustin L. Howett" <dustin@howett.net>, Sebastian Reichel <sre@kernel.org>, 
+ linux-pm@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.13.0
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: W9ipNlg63xv7LTPfCWtzPAjHPyOMC1P2
-X-Proofpoint-GUID: W9ipNlg63xv7LTPfCWtzPAjHPyOMC1P2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-05-05_13,2024-05-03_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- clxscore=1011 priorityscore=1501 phishscore=0 mlxlogscore=999
- suspectscore=0 impostorscore=0 bulkscore=0 mlxscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2404010003 definitions=main-2405050083
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1714942624; l=1281;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=B0W+vFhgmBSPGwdf0igAW7QleTkDZUuNRB40wVINrOw=;
+ b=7SZMtKOLZiVnP8Zkzw94Pl6b5MmUhbhM+5g2NJXEdNPaEewFzxPoG8scSAC27+vjXJbhN/osb
+ 0O9Tr3zm8f3DsK4grjYsmdjSsAhnUUHg37cbW0ergdGO/6RpQVoxsWj
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-make C=1 currently gives the following warning:
+Framework Laptops are using embedded controller firmware based on the
+ChromeOS EC project.
+In addition to the standard upstream commands some vendor-specific
+commands are implemented.
 
-drivers/cpufreq/intel_pstate.c:262: warning: Function parameter or struct member 'epp_cached' not described in 'cpudata'
+Add a driver that implements battery charge thresholds using these
+custom commands.
 
-Add the missing ":" to fix the trivial kernel-doc syntax error.
+Patch 1 adds the general scaffolding and device binding.
+Patch 2 implements the battery charge thresholds.
 
-Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+This series is based on
+https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git for-next
+
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- drivers/cpufreq/intel_pstate.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thomas Weißschuh (2):
+      platform/chrome: cros_ec_framework_laptop: introduce driver
+      platform/chrome: cros_ec_framework_laptop: implement battery charge thresholds
 
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index dbbf299f4219..7ddf05c9ba88 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -213,7 +213,7 @@ struct global_params {
-  * @epp_policy:		Last saved policy used to set EPP/EPB
-  * @epp_default:	Power on default HWP energy performance
-  *			preference/bias
-- * @epp_cached		Cached HWP energy-performance preference value
-+ * @epp_cached:		Cached HWP energy-performance preference value
-  * @hwp_req_cached:	Cached value of the last HWP Request MSR
-  * @hwp_cap_cached:	Cached value of the last HWP Capabilities MSR
-  * @last_io_update:	Last time when IO wake flag was set
-
+ MAINTAINERS                                        |   5 +
+ drivers/mfd/cros_ec_dev.c                          |  13 ++
+ drivers/platform/chrome/Kconfig                    |  11 ++
+ drivers/platform/chrome/Makefile                   |   1 +
+ drivers/platform/chrome/cros_ec_framework_laptop.c | 173 +++++++++++++++++++++
+ 5 files changed, 203 insertions(+)
 ---
-base-commit: 2c4d8e19cf060744a9db466ffbaea13ab37f25ca
-change-id: 20240505-epp_cached-kdoc-aca091e33afa
+base-commit: 2fbe479c0024e1c6b992184a799055e19932aa48
+change-id: 20240505-cros_ec-framework-10e627c46a0a
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
 
 
