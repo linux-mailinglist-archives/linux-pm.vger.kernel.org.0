@@ -1,201 +1,113 @@
-Return-Path: <linux-pm+bounces-7515-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7516-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D01AE8BC5CD
-	for <lists+linux-pm@lfdr.de>; Mon,  6 May 2024 04:39:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53FAD8BC75A
+	for <lists+linux-pm@lfdr.de>; Mon,  6 May 2024 08:10:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5ED6E28176C
-	for <lists+linux-pm@lfdr.de>; Mon,  6 May 2024 02:39:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D18EA1F212DB
+	for <lists+linux-pm@lfdr.de>; Mon,  6 May 2024 06:10:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0AB610A26;
-	Mon,  6 May 2024 02:39:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3898B4879B;
+	Mon,  6 May 2024 06:10:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="Nq7NwWfy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 978DC181;
-	Mon,  6 May 2024 02:39:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D358481B1;
+	Mon,  6 May 2024 06:10:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714963168; cv=none; b=Z+C5vjfLa3AsBstpJFYYmqRJ3ZacOD+nmlq6A7l0ODufhrBicMLiEAzSr+1jcIxVDuOwJtN7csd62YWJsi4QGX4nOrW5kO9UCqjFU52L8xIFVT2fF9G/HOPZhu4RVF22QmbSdfU8czcHYCf24bQj8A3NqrXaFs5E2VrtZK743E8=
+	t=1714975805; cv=none; b=dpRn0fw/mnFcnu3M1J8Z8TYrpLGV2V/TYJbeAawlLo5mUmTpI4TUS9CzoBSt9GabPlrGE/E3z1nR9W5KhocatOzoHmTRseTGpLM0NK9qT/jMmPmZJ4hnsl5yekgjjhK9qkObJyBUywut8oBomL/sMzJ3VR4DI6k80la29ck80GY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714963168; c=relaxed/simple;
-	bh=yUj4FVG11bJferK/7H08PTUjooXrvrHykqiMmLpF/3E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=CX2ltAIweM8QLA9yoRWb9CRIelGsYwgjh5PrsUOUkz6RGAMoSKYI8osVjxPtovnUK2+vvnrxQC2YTYPZFgknJZe0hm1pvcEHf76vz8RVASrgXTXnQ5z2uAxA0blF7VKgsgtf0vIBHR8FnSXzth5sYNWoAnBTvwImFmHV7pJYqjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.112])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4VXlWL6T2sz1HBjZ;
-	Mon,  6 May 2024 10:20:46 +0800 (CST)
-Received: from dggpemm500018.china.huawei.com (unknown [7.185.36.111])
-	by mail.maildlp.com (Postfix) with ESMTPS id 0DDFE1402D0;
-	Mon,  6 May 2024 10:22:01 +0800 (CST)
-Received: from [10.174.178.96] (10.174.178.96) by
- dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Mon, 6 May 2024 10:22:00 +0800
-Message-ID: <5c7426ab-71ef-4279-8235-69f5646af8f9@huawei.com>
-Date: Mon, 6 May 2024 10:21:59 +0800
+	s=arc-20240116; t=1714975805; c=relaxed/simple;
+	bh=sTMZwmVGPyNKhVYaypjAEtdGkY8Q2/gSqqldEhiPQqk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ahVSeLmz/Jwcdhyx2M/DA2q6pdDvU0YgJGvujK+/WgsCH9mCn4FN/1V3CXv2JanZoCQbYqZhhDxxMSjGFLnqLOGCvKbnAhmFWwi22nGgn9j1xkbe3eDXnk7DAc6aF9Nj2GZKZh+Cf8PeJvbccWt9zcnIRWmSfaDPNdGOluGiJdg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=Nq7NwWfy; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1714975798;
+	bh=sTMZwmVGPyNKhVYaypjAEtdGkY8Q2/gSqqldEhiPQqk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Nq7NwWfyIHEM9rx4m3EW9x7iHW5HxdwFIn3MhCb1fe4y1YRqXbJfAfMZwfHMGWH8i
+	 o43//nU43fPNTKQicGKJkjceFsXt6in8V9spgOouL5ttXQJU0/4B0B1bOYzga/KFDE
+	 7Iurd9ZEwDVR1y70bCHQj/5yfM/X5WBu6Vk7OKK0=
+Date: Mon, 6 May 2024 08:09:56 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Lee Jones <lee@kernel.org>, Benson Leung <bleung@chromium.org>, 
+	Guenter Roeck <groeck@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev, 
+	Mario Limonciello <mario.limonciello@amd.com>, "Dustin L. Howett" <dustin@howett.net>, 
+	Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 0/2] platform/chrome: cros_ec_framework_laptop: new driver
+Message-ID: <613369f9-42c5-4a59-b83f-45bd1773ffe4@t-8ch.de>
+References: <20240505-cros_ec-framework-v1-0-402662d6276b@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpufreq/cppc: changing highest_perf to nominal_perf in
- cppc_cpufreq_cpu_init()
-To: Pierre Gondois <pierre.gondois@arm.com>, Viresh Kumar
-	<viresh.kumar@linaro.org>, Ionela Voinescu <ionela.voinescu@arm.com>, Beata
- Michalska <beata.michalska@arm.com>, Vanshidhar Konda
-	<vanshikonda@os.amperecomputing.com>
-CC: <rafael@kernel.org>, <al.stone@linaro.org>, <ashwin.chaugule@linaro.org>,
-	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<liwei391@huawei.com>, <liaoyu15@huawei.com>
-References: <20240428092852.1588188-1-liwei728@huawei.com>
- <20240429104945.esdukn6ayudgyumc@vireshk-i7>
- <06e3fd1a-a4c0-4be5-840c-e5ba276fe253@arm.com>
-From: "liwei (JK)" <liwei728@huawei.com>
-In-Reply-To: <06e3fd1a-a4c0-4be5-840c-e5ba276fe253@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500018.china.huawei.com (7.185.36.111)
+In-Reply-To: <20240505-cros_ec-framework-v1-0-402662d6276b@weissschuh.net>
 
+On 2024-05-05 22:56:33+0000, Thomas Weißschuh wrote:
+> Framework Laptops are using embedded controller firmware based on the
+> ChromeOS EC project.
+> In addition to the standard upstream commands some vendor-specific
+> commands are implemented.
+> 
+> Add a driver that implements battery charge thresholds using these
+> custom commands.
 
+It turns out that standard ChromesOS EC defines EC_CMD_CHARGE_CONTROL.
+The kernel headers however only define v1 of the protocol, which is very
+limited.
 
-在 2024/5/3 22:19, Pierre Gondois 写道:
-> Hello Liwei,
-> The change itself seems ok, but I'm not sure I understand what the
-> issue is exactly.
-> 
-> On 4/29/24 12:49, Viresh Kumar wrote:
->> CC'ing few folks who are working with the driver.
->>
->> On 28-04-24, 17:28, liwei wrote:
->>> When turning on turbo, if frequency configuration takes effect slowly,
->>> the updated policy->cur may be equal to the frequency configured in
->>> governor->limits(), performance governor will not adjust the frequency,
->>> configured frequency will remain at turbo-freq.
->>>
->>> Simplified call stack looks as follows:
->>> cpufreq_register_driver(&cppc_cpufreq_driver)
->>>     ...
->>>     cppc_cpufreq_cpu_init()
->>>         cppc_get_perf_caps()
->>>         policy->max = cppc_perf_to_khz(caps, caps->nominal_perf)
->>>             cppc_set_perf(highest_perf) // set highest_perf
->>>             policy->cur = cpufreq_driver->get() // if cur == policy->max
-> 
-> During the driver initialization, we have:
-> cppc_cpufreq_cpu_init()
-> \-policy->max = cppc_perf_to_khz(caps, caps->nominal_perf)
-> \-policy->cur = cppc_perf_to_khz(caps, caps->highest_perf);
-> \-cpu_data->perf_ctrls.desired_perf = caps->highest_perf;
-> \-cppc_set_perf(cpu, &cpu_data->perf_ctrls); // set freq to highest_perf
-> so here:
-> policy->max = nominal_freq
-> policy->cur = highest_freq
-> 
-> 
-> And then for the cpufreq framework:
-> cpufreq_online()
-> // IIUC there is some delay here, so policy->cur = nominal_freq ?
-> // i.e. the freq. was requested to change to the highest_freq,
-> // but the change is not effective yet ?
-> \-policy->cur = cpufreq_driver->get(policy->cpu);
-> \-cpufreq_init_policy()
->    \-cpufreq_set_policy()
->      \-cpufreq_start_governor()
->        \-cpufreq_verify_current_freq()
->          \-new_freq = cpufreq_driver->get(policy->cpu); // new_freq = 
-> nominal_freq ?
->          \-if (policy->cur != new_freq)
->          \-  cpufreq_out_of_sync()
->            \- policy->cur = new_freq;
->      \-cpufreq_start_governor()
->        \-cpufreq_gov_performance_limits()
->          \-__cpufreq_driver_target(target_freq=policy->max) // with 
-> policy->max = nominal_freq ?
->            \-if (target_freq == policy->cur)
->            \-  // do nothing
-> 
-> I am not sure I understand when you are turning the turbo on with:
-> # echo 1 > /sys/devices/system/cpu/cpufreq/boost
-> 
-> Or do you mean that turbo is available but not turned on ?
-> 
+But in the upstream firmware repo there is a v3 which is much better.
 
-Sorry, my description is not clear enough. The scenario described above 
-is during the kernel initialization process, turbo is available but 
-boost is not turned on.
+The Framework laptop only implements v2 which is also fine.
+Given that v3 was only introduced late last year, it seems better to
+stick to v2 anyways for now.
 
-I found this problem is to read 
-/sys/devices/system/cpu/cpufreq/policyX/cpuinfo_cur_freq directly after 
-OS startup, and found that some frequencies are in turbo state and 
-/sys/devices/system/cpu/cpufreq/boost has not been modified, its value 
-is still 0.
+So please disregard Patch 2, I'll see on how to use this via a normal
+cros_ec driver.
 
-LiWei
+There are some other Framework-only features that will use Patch 1,
+so feedback for that would still be good.
+
+> Patch 1 adds the general scaffolding and device binding.
+> Patch 2 implements the battery charge thresholds.
 > 
-> Regards,
-> Pierre
+> This series is based on
+> https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git for-next
 > 
->>>     cpufreq_init_policy()
->>>         ...
->>>         cpufreq_start_governor() // governor: performance
->>>             new_freq = cpufreq_driver->get() // if new_freq == 
->>> policy->max
->>>             if (policy->cur != new_freq)
->>>             cpufreq_out_of_sync(policy, new_freq)
->>>                 ...
->>>                 policy->cur = new_freq
->>>             ...
->>>             policy->governor->limits()
->>>                 __cpufreq_driver_target(policy->max)
->>>                     if (policy->cur==target)
->>>                     // generate error, keep set highest_perf
->>>                         ret
->>>                     cppc_set_perf(target)
->>>
->>> Fix this by changing highest_perf to nominal_perf in 
->>> cppc_cpufreq_cpu_init().
->>>
->>> Fixes: 5477fb3bd1e8 ("ACPI / CPPC: Add a CPUFreq driver for use with 
->>> CPPC")
->>> Signed-off-by: liwei <liwei728@huawei.com>
->>> ---
->>>   drivers/cpufreq/cppc_cpufreq.c | 8 ++++----
->>>   1 file changed, 4 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/drivers/cpufreq/cppc_cpufreq.c 
->>> b/drivers/cpufreq/cppc_cpufreq.c
->>> index 64420d9cfd1e..db04a82b8a97 100644
->>> --- a/drivers/cpufreq/cppc_cpufreq.c
->>> +++ b/drivers/cpufreq/cppc_cpufreq.c
->>> @@ -669,14 +669,14 @@ static int cppc_cpufreq_cpu_init(struct 
->>> cpufreq_policy *policy)
->>>       if (caps->highest_perf > caps->nominal_perf)
->>>           boost_supported = true;
->>> -    /* Set policy->cur to max now. The governors will adjust later. */
->>> -    policy->cur = cppc_perf_to_khz(caps, caps->highest_perf);
->>> -    cpu_data->perf_ctrls.desired_perf =  caps->highest_perf;
->>> +    /* Set policy->cur to norm now. */
->>> +    policy->cur = cppc_perf_to_khz(caps, caps->nominal_perf);
->>> +    cpu_data->perf_ctrls.desired_perf =  caps->nominal_perf;
->>>       ret = cppc_set_perf(cpu, &cpu_data->perf_ctrls);
->>>       if (ret) {
->>>           pr_debug("Err setting perf value:%d on CPU:%d. ret:%d\n",
->>> -             caps->highest_perf, cpu, ret);
->>> +             caps->nominal_perf, cpu, ret);
->>>           goto out;
->>>       }
->>> -- 
->>> 2.25.1
->>
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> ---
+> Thomas Weißschuh (2):
+>       platform/chrome: cros_ec_framework_laptop: introduce driver
+>       platform/chrome: cros_ec_framework_laptop: implement battery charge thresholds
+> 
+>  MAINTAINERS                                        |   5 +
+>  drivers/mfd/cros_ec_dev.c                          |  13 ++
+>  drivers/platform/chrome/Kconfig                    |  11 ++
+>  drivers/platform/chrome/Makefile                   |   1 +
+>  drivers/platform/chrome/cros_ec_framework_laptop.c | 173 +++++++++++++++++++++
+>  5 files changed, 203 insertions(+)
+> ---
+> base-commit: 2fbe479c0024e1c6b992184a799055e19932aa48
+> change-id: 20240505-cros_ec-framework-10e627c46a0a
+> 
+> Best regards,
+> -- 
+> Thomas Weißschuh <linux@weissschuh.net>
+> 
 
