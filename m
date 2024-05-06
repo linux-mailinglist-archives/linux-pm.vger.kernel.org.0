@@ -1,65 +1,66 @@
-Return-Path: <linux-pm+bounces-7534-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7535-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F100B8BCEB7
-	for <lists+linux-pm@lfdr.de>; Mon,  6 May 2024 15:09:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 579798BCEB9
+	for <lists+linux-pm@lfdr.de>; Mon,  6 May 2024 15:11:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 61B481F2496C
-	for <lists+linux-pm@lfdr.de>; Mon,  6 May 2024 13:09:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 438B9B2025F
+	for <lists+linux-pm@lfdr.de>; Mon,  6 May 2024 13:11:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0E0B6EB76;
-	Mon,  6 May 2024 13:09:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76A46745D9;
+	Mon,  6 May 2024 13:11:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="FlxtB5b8"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="2HfSu3eO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2081.outbound.protection.outlook.com [40.107.243.81])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2043.outbound.protection.outlook.com [40.107.244.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2110A44C66;
-	Mon,  6 May 2024 13:09:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4595D15A5;
+	Mon,  6 May 2024 13:11:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.43
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715000954; cv=fail; b=IZaSvV7/P7Uvd8z21ImtaYvSllRIn/tqcSpyI9D6Ky6p6EUTUIGhdAYNVKfxVg9YKepIJn1jmvjolQlwPwAqoD5LzRhwSEqkyTqL83rwVYw4iHuuaaVZf0UdYXK2F1SfsUm+l1hWAA4kpEQ5We0BR98r0zTG6LXwWZOz8MzKO5s=
+	t=1715001065; cv=fail; b=Q2xE047qhmfuP0DkjNk9xKdgHwga/Z+x5VGhRZyAWEOZ+majL6fM+8mzXGpHvqGSWaFirbVxXVzANybu9lwL/ZhRftfi5PH+AogFmRpm97Ax+aMHqpaZWLmJDQK3DL4UL9Hc/GaEtQaRRmXLp8OsqCf5qWdJlDmzUacDvw9++ek=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715000954; c=relaxed/simple;
-	bh=rGeY4iCc3LgkhlHIeDTWEWwN1+wqHg46ky4n1JuMOXY=;
+	s=arc-20240116; t=1715001065; c=relaxed/simple;
+	bh=I2WZx05G43wpMpGhtNvK45mTlTVdRySVeR3zh3m9Evc=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=gT6A7GSDWyeV8+wGgjAohymCWQdABsFqo0KwRNlZS/CxWVrp6XBkMfMUD7Un8tCDJW1fmhsWPfRix65m6FhcX0e5+hgaGNtHkFoUgzUpXPzrzhAPOros6JdC3V+5WnSKUNUPMW0rs7nSCDaXMk+QV60Q64QIokZ1iqZGvMNOPvg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=FlxtB5b8; arc=fail smtp.client-ip=40.107.243.81
+	 Content-Type:MIME-Version; b=lTcgV+MoUbuoMDQJXn9fA8MExFRzpKQCyDkI3ZGd/nQ5aKFchcxsTNu91i4g+fla/NxJq98jIQ7D/IhKg3FwGqN8jU6rRYg9Dk34LYntJHQdqh3YosVBwuok0QR/uRBrFjqXn2fsbrYswlieDOjIVl5IKTsLZtxCnF4pAjT/7k8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=2HfSu3eO; arc=fail smtp.client-ip=40.107.244.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oGuVXsjDsWkyGnaoUI79QkIa8Sgt6J5yvXaWI8g/kVwDPouBUwwN+CpoaPEuiCD7fvXEe2lJMh6QhWgOQet8/xjc8Gc1jSvoMtIcAhVMbmLXbPQGIObmasUN5QYQfMayC5zqI23wcrhBa5sfoeOvaSG2ef3YE61cn88kcoXyKTfkf7ijdBqOSt8olbpJiBrOJR/m4LaEqIk9XpRq43iCvl7tMXLz1Hmcqr32gcdv9r2J9dFZJf5owlreEWcIHBdmbrrzRVngUXVcZlfeTUizjwUmd4Ud9Iq1zMtU/5wDU00rILf5hHKlpULflT+i/0Q1Z9mvon7rav8Wmb2KNZL1gA==
+ b=BrNG5xAFmJaM+FNETJRtIDDhijNkpxcRfjlps1QlE4UCYtKRlNPYxbN5gskZLdgTl0QHSiHX/jRbzet8JWrTLTE9t9urIDBaXUPJtgNxsDeA/2B8CHV4IZajPQSKvES5yr5ZdSYuHk2dwtaJ1/Ugffs8ZbyX2ZvgcWA8c7Y2/Ew3KPofBXwOaWyy8yQTskdkLQz2JQxncmI6VxRhYD/mJ3jsf6foZTf4rbtuKW8y9ljqsTFf/qYSZeXtHUM+UUX665J7KaJSjWdLP616NUM96t5N79HNf70NZUu9HVn/rOdwyiDtXVEr0WfKPYyh1lgk5DQXtSQQO8f2AN731VlVcw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3Q2IBjsxeIoBEtJGf/NnlB7NeNc6qAmN3Hhj+1x852A=;
- b=klgatMu1ISh8ScoqDy3RBWluYfGsgr1KZWN8q4vyhpzDUXNVD49gADjPMpFtDfcapj/IVQpy9TxMLEdYzCEbfuvUAo5m7dOrNNGihSy4tdf4OXZ2epv5ZM0SCA+Wg9EVUuSwBeyrBB6BMGGsHH9gituWupsOWidzB3np87iZkCUX/4RxzFGU/u1Luim2DwiejCVmJBcV8yrNUVi7ah9nKwQPeHIsKX1cGDYWo9R/R8mQAobjQbUFidGGHzgYELkMAXcOT7SxMq2GJyAeLj18eWng2GBguPo+QZy2gUnkHGtP/MPGGRKq944F1NUAcz/oNryEY2kCymk6OW9HioZZGA==
+ bh=aS7/e5ZXiGxR9u7yL12xU0hnIRnwCAC4NSddNp0uWQk=;
+ b=kvppR1bToCuiOkxJ+byKUF5dWcZIvPif35DsXitHp5EyNyTzZ55kG4970+iagGVPAqasVqTPpkSpPDSXvQcgaFu/4ddtZz24l61aXfUif6Oh+wQjESxOZoDznz1clCu9s3rvH1lWtCGwmX34LCP4mHdWGBBF4iCTdOJ6uF40W2Ki4TGE/wG0veF6ywNc/ElNewH39amudVsn9Nr6mreen8ewGxX45+mCM9/3v5DwrjHz+0hk/HIIV3jQ0Z8aDAtNA4QsuBASHEzQ7qKAntXTtBEOPZDLjaAfsqefhMe9zisWilHw1y8yEQ70jeeVOLw9m/n9UrROXzox+YV+Bvw0+A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3Q2IBjsxeIoBEtJGf/NnlB7NeNc6qAmN3Hhj+1x852A=;
- b=FlxtB5b8xkPexq1EpFtp2KKyTAGe0olYzHk4iss3Rf4PijhSeslCQViB107gkMN1rH0reo9cuqPtV7uderqFivqSKsn0H53uoKHRIpkuz9TGLWmvXPXkk+Cq0regc5kAUtMjoUyE3tq/8e79qgp7wL3VjZP+7aYXWTreEHUbwDw=
+ bh=aS7/e5ZXiGxR9u7yL12xU0hnIRnwCAC4NSddNp0uWQk=;
+ b=2HfSu3eOxCQe9hXG34OUOqkDqOnLbuFCjiukach0g1EDQfgVKnUTK277tJKLLy9Omp0tCPlzP4Dw83JsDnQIJsccMh/RxBNMqc8Pc+sxISwirWK/U9nanKcMp5PTdhJ3AUm5+3EnY5zr9IoEeXY+fGaKm+qjz/rqWMWq4hSeJiQ=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by LV3PR12MB9144.namprd12.prod.outlook.com (2603:10b6:408:19d::10) with
+ by SJ0PR12MB5609.namprd12.prod.outlook.com (2603:10b6:a03:42c::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.42; Mon, 6 May
- 2024 13:09:10 +0000
+ 2024 13:11:00 +0000
 Received: from MN0PR12MB6101.namprd12.prod.outlook.com
  ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
  ([fe80::37ee:a763:6d04:81ca%6]) with mapi id 15.20.7544.041; Mon, 6 May 2024
- 13:09:10 +0000
-Message-ID: <a7ae8fc0-5e53-487a-86c6-f49dc6623688@amd.com>
-Date: Mon, 6 May 2024 08:09:07 -0500
+ 13:11:00 +0000
+Message-ID: <84c58078-93a4-406a-8abb-9054854e54a0@amd.com>
+Date: Mon, 6 May 2024 08:10:58 -0500
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] platform/chrome: cros_ec_framework_laptop: new driver
+Subject: Re: [PATCH 1/2] platform/chrome: cros_ec_framework_laptop: introduce
+ driver
 To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
  Lee Jones <lee@kernel.org>, Benson Leung <bleung@chromium.org>,
  Guenter Roeck <groeck@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>
@@ -67,14 +68,14 @@ Cc: linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
  "Dustin L. Howett" <dustin@howett.net>, Sebastian Reichel <sre@kernel.org>,
  linux-pm@vger.kernel.org
 References: <20240505-cros_ec-framework-v1-0-402662d6276b@weissschuh.net>
- <613369f9-42c5-4a59-b83f-45bd1773ffe4@t-8ch.de>
+ <20240505-cros_ec-framework-v1-1-402662d6276b@weissschuh.net>
 Content-Language: en-US
 From: "Limonciello, Mario" <mario.limonciello@amd.com>
-In-Reply-To: <613369f9-42c5-4a59-b83f-45bd1773ffe4@t-8ch.de>
+In-Reply-To: <20240505-cros_ec-framework-v1-1-402662d6276b@weissschuh.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SA9PR03CA0016.namprd03.prod.outlook.com
- (2603:10b6:806:20::21) To MN0PR12MB6101.namprd12.prod.outlook.com
+X-ClientProxiedBy: SN4PR0501CA0018.namprd05.prod.outlook.com
+ (2603:10b6:803:40::31) To MN0PR12MB6101.namprd12.prod.outlook.com
  (2603:10b6:208:3cb::10)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -83,152 +84,264 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|LV3PR12MB9144:EE_
-X-MS-Office365-Filtering-Correlation-Id: bd3f255f-38c7-4dc5-f1c5-08dc6dcdb7c1
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|SJ0PR12MB5609:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4a950818-c05b-4b43-894e-08dc6dcdf99d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|7416005|1800799015|366007|376005;
+X-Microsoft-Antispam: BCL:0;ARA:13230031|1800799015|376005|7416005|366007;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?SGcyWmFNQ1JhSGtSR1dSUG9DdFhIeDRWaUVGV3VpTzlmOUZYbGdtdmM1UzRr?=
- =?utf-8?B?UkFiTStvRTU4dzk3M3d0LzA3SEs3UmIvRW1CakpybHIrNE50WHMyTVNnb2NP?=
- =?utf-8?B?QkpnVTF2cS8ydUgrazZtYjcwS3RqOVBXMnM1T0FYMDdFblVsdkxjN2hOMTVo?=
- =?utf-8?B?UVl2SkUxZ0ZWVHI0c05BVFZ2YWxJWElyYngxdXlaSjg0R3BVYjdIR1B0L25o?=
- =?utf-8?B?ZTYxc3ZxODJLSDA1MWcrc3ZvbmFXaDh2ZFdNWVE3K290c2F0WDVuRTNBbndM?=
- =?utf-8?B?bmxxSEdIbkVqbktTRGV2ZzlpK3JwcFhJcXZZOW9RMlYrNThoeFEzTU16NFRB?=
- =?utf-8?B?cEFFOVkyRDVqSVp6QTF5VFhuMVVYdGJod3dza0ZLaDJYLzJYWHc0RXRtdW9s?=
- =?utf-8?B?SHJpbGNYbHFEcithMW4wdGFrRm9RNUtXdzFUTFg5UXVtZkgwMFI0L0RQVDBu?=
- =?utf-8?B?TG5PMURranpyVTlFeWF6VHU0RUpxajM3MkpmTnBpYVNIZ3ZTb1ZNUDJYL212?=
- =?utf-8?B?bTc3bVgxbHhqMmNicnQ0bWIzcktUS3V6dXBPZDNuVFVqa2o0bGJ3UmZQNFhF?=
- =?utf-8?B?QVBvVmZDa2RHTkJHK2ZEVUU0ZW5GYkxWYWJJT2U1U1g0MUJ6Y1pzays2RGI4?=
- =?utf-8?B?YXEreGprRlEwM1NxUlBXaDBXRXZMOHRaUGovMW9OY0xoR3ZSbGc4RDlOZ0U3?=
- =?utf-8?B?clYwK2s2Z2VucjlHNFdkWmxFUld0UksyQ1JqUE9vZWdsMit6VDV4Y1g1YytC?=
- =?utf-8?B?SHMwZVdsb2taM2MrcXhaTk9PdlZtRlozdEtYeVp3eE5kcWN3a3VDNVlMUG13?=
- =?utf-8?B?SUM5YWx2U0xtU3VCalA3N3pJL0tWeGoyR2NyRXhzNkRoK3N1S3BnUUVSY3RX?=
- =?utf-8?B?elJsaTFSOUZSOTk2MHQvem5heWZTTm5ERkxxd0lCMXFCbmNpVVJrRHgwbzFu?=
- =?utf-8?B?UTVIVzF6ZVoxMnpaaVZ6NUZweUFWWmoxQm9valFFWitvWkxSSGFNSkE1blRr?=
- =?utf-8?B?bFcxSis5UC9KbTR4c1RjWUtsVVRjQ0lZeEM1Zi9jRlg0SWc4RzF0WTR4Wmx2?=
- =?utf-8?B?QWhGQWY1RWErNGo5d0ZjRFU0Vk81MjBBUG1mYXdjZ0N0Qk1JMWV0MlNTdHFa?=
- =?utf-8?B?aHpDNmdISVZPSjNKc3U4MlkvNFZrTHNKOFJPc0M0NWk0dG9nbitKa0t1b21W?=
- =?utf-8?B?anprWUtpWGNyWW91empnOVp6TCtuMEN5YTRGQXlkQkFWbkxaYzh6aXQxYlox?=
- =?utf-8?B?Tk4xU0xha2ZQakFCTXVUZC93SmJGdXVtVWZJd0x3Q2JKbFBkbE1oSzFJdnpO?=
- =?utf-8?B?Z3o0K2VhQjArV1BNbWZJRGJtRjBDdUNVcDlTTURyQ0RlWjF6QTQxa1ZLOE1Z?=
- =?utf-8?B?R05RWFh1TnovalRCbnBSa3NhRi9iVDk5Z08rbHdZOTU5QmJPR21lVE83NmRt?=
- =?utf-8?B?VzV3bU1SQXNJTDVRT0VDNkc3ME1VWGxFV05xNVJPOWtHenVGTGZtRmxrMnFV?=
- =?utf-8?B?dGxTbkhMWkhvTnVSa0ZsODJOR1FqaVQ1enNnRmhhNnJaazBqUkdxdWVsZXdE?=
- =?utf-8?B?MEJKaVBCTjVscmVDck4vazhpVGZ6cDJUdStvb3lRSTh6WVNpVU1sYXFkUzlI?=
- =?utf-8?B?ZVQ5UEF1WXE1ZXhkYmdMQ3ZMekt1QmZLRDZrVnBDbnRTMURIOWQ3Z21IZlZH?=
- =?utf-8?B?YUhqcTV4UWxiNnBhVkdnNzVJSWJLcVg3K1g5WmRBS09tM0JUVW5nVTRnPT0=?=
+	=?utf-8?B?WWZoTFdWVENhUGVLSk1sMEZkQlFacldWZWZmNzI5RUtRek90NXRKQUExUDd3?=
+ =?utf-8?B?aFQ1VzVLS0FMOFNJVlExYUxoM1haMmpkMTZSbVB2SEUyc3EyWXJ4eW1UUXRS?=
+ =?utf-8?B?cXhkWnZLcUhwUDJ5bUltcjZTWnhhL0hvMzJrNlJjNGhiNUxvMXY2cUE3RFRS?=
+ =?utf-8?B?ZEFVMVRIQnFDUStMbnpRQ2pCWmdoMHc0aUFmRkNOc3R1R1BRRm5PSVlmVHVJ?=
+ =?utf-8?B?SHkrb0tMRmcrSUxYVldqV2xZNmduNXk4MlJGMkkzN2JmNlpRdm5KTzl2eCtL?=
+ =?utf-8?B?MzNQUmJmdWxpNFFiZkZ5QTZDdkt1blNjTGZOZ0NFblkvbnQ5NENNeUwrV0xv?=
+ =?utf-8?B?N3hvQ0duK3N5a0RuQW55cFVZWW8zVElpRHhxNHhuV0d6MDdUQTVtRitQeVhJ?=
+ =?utf-8?B?ZnFCeklCNjdaMVpTUzc3S05aWURnVUY4bVBnby8yS3pzZlRLdVM2RXhNRDNr?=
+ =?utf-8?B?K0lXZ01sZXVCSmpWK0Z2dWZhWFdTS1gzYkp4MDl4QjdsZW5Wc1BtOUNnM0Fj?=
+ =?utf-8?B?UHlERytTM1NteDdYVHYzeTJvM1pYMTArcUoweklNb0pncVJ6bnJBUlgwNmVT?=
+ =?utf-8?B?WnRSV1A4dlp1Q0o1S0hZZzV5d2hybDJ4WjJENTFDc3RqdHpTUkZYcWxXSnVz?=
+ =?utf-8?B?YXUyVERha1ZsUEJIM2xtWmYxekRmeU0zRkdGSkE5c2lScWpLcDg0Yjkwc1FB?=
+ =?utf-8?B?TUxhZzh4ZmlFcDBzNC9DekVFby9FejN6L2N0MUJZbG1LaTdPMFBpU0hRSU9T?=
+ =?utf-8?B?alJHdFk3V2E1ODJVdkRSMnc4VmlRL29XRmtNM0tvUG9HbWRPRjB1SHcrTi9P?=
+ =?utf-8?B?dUVBUFdOWlYzM0NuRUxaZXhQTnJSVkhKdEs3UTh3WWtwa0NEeVVuaXVGVzdF?=
+ =?utf-8?B?eDJqZ1ZwMEhnY1BpSzhCT1E1MTlXaHI2Z3N3bGhDM3hqR0VCZlVEbGRGS2dY?=
+ =?utf-8?B?c1lCSVNuNGQ5RkxjZTVkWTUvN3MyZUZ3TVZhVGN0bkxzZTRCOVQzek1jWGs2?=
+ =?utf-8?B?TEVIYlo0b1JCSVFrTmdNSlBycERDZFF3ZDlxeDl4UTFOS3VMYjA0akwzbEcy?=
+ =?utf-8?B?V2U4RnlrbWhVQWltbkxuU2NSZlZKNGk3Wk9pQ1BzRlZuT3F0ZVNzN2lJSHJV?=
+ =?utf-8?B?bUFybjh0NzFuS2Y1cWY0ZWhJYWxSbE1uTUFsb2RYUTk0eXpUYzEvWjlWaGsr?=
+ =?utf-8?B?L0pkVWdrdllkc0dsc3NsMjg1V2ErVldNTUwwN0s1WVozNngzY3BkeWFOK3ly?=
+ =?utf-8?B?WlJNbmM1bFJkM2c1NUpFOVIwZ0dHVUQ1RlVCQjJtcFAxZ25Ub0Z3NTQrd0t5?=
+ =?utf-8?B?TGpuaXFNRUxmWS9UTWhxRzc3Tm8xOS9lQXVnT0NtcWFobWhjaTV6LzF6cm1t?=
+ =?utf-8?B?ZEtuWDdQa0dSeXNpNkhsZnQ0Q3NlOVVrUVY0ZjE0eThUaE16TDgwSWNzTWRl?=
+ =?utf-8?B?SG54bWo2ZFRpQ0xRaGs1R1VmOHJFY3k1N01NUmxaNnRyVnorOUQ3L2k1bSth?=
+ =?utf-8?B?RC9QbDVIOTJ4dTZTejI5MWdRbG9lMzU0N000K0N6Nm9iY0wvaTJVZkRtdGxj?=
+ =?utf-8?B?OUVMRk5FTTBjMzZVcVVVNGZiOVZXTkdNMExkYlNYNnFmMzFjWjlVKzhqVTdC?=
+ =?utf-8?B?NUlqM0JKZ0orNzM5L3BRTkE1NW5mUmRJQTlqVmpmbHpSM3BZL2NObGs0MklP?=
+ =?utf-8?B?U0hTYVh5ZGhxSExvVHFoTE9JdHZJUGxMZmtaREh5R1hsN3FxRWpSZExBPT0=?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7416005)(1800799015)(366007)(376005);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(376005)(7416005)(366007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Mk9PdzF1MzdWcTdCdTNEQU9jMitUaFNzZWlWRmR3NER4K0crMzdkWDErdlR4?=
- =?utf-8?B?c21WbGhPUTIyRWo3ZU9SbTlqanBkTEY3Y2xQZ2Y4a1lvTWtIdGZwd25hRVVv?=
- =?utf-8?B?SlRkMUhPNjlFdUFvVmpRVm5rdmJLQlFXL0xLUFluMGZUN3hYVU5FZkJrd21C?=
- =?utf-8?B?aGExUjVXSmh2OVlEWWZBVkF4TSs5WlVEVFZaTFNiMkhHSFRPNUxZNnN0TXFs?=
- =?utf-8?B?bk1ZcW9rdWdYditMYWFTSWMybWtEb1RsaEV5SVl0bjliSjhQWEd1ZWJzL3lo?=
- =?utf-8?B?bjRPeVc0ZTE5eXRIaTVhajJWdVRkOXF6NTlvcXgzN2UrL3dPQVdTMEp4Rmwy?=
- =?utf-8?B?QXI4VU0xQ2tLVkIwdGg4cEF2eW54aVIzWW9EY24yY2dJNm9HZkExVkVxWkkx?=
- =?utf-8?B?STk2VWxmaFlkYlNhUnBucXE2MVZ6QlJ0MDNiNlhBN0Y2eTh4Mlc1dlNWVmlU?=
- =?utf-8?B?S2ZwcG5PaUQ0N21FM3g5R3Y4YnZ2dnNnc0ZlUFFMMVE3T2dJMGhhNkMvaVAx?=
- =?utf-8?B?eVhvYUtibVRPS3lIdDlpSS9jakJZczZGTVBMeHhtUUJaODhHOXJ0eWNzSE5h?=
- =?utf-8?B?S2hQRVQ0OXZZeExHa09ld1hsUDhhVUYxVXJkZFdtaCtjcStLWkxlc3ZpUlZs?=
- =?utf-8?B?c1NsR1dTR091dWp0aG9yL1laTWdURE5MUGJ4QVBiYS85RFdSTEZBdk94VXhl?=
- =?utf-8?B?VG9WR2pOeUxxVUdhdnVZejZDbS9xMGdqVlpMc3NZKzhzZ243UVRLQ2Jpa096?=
- =?utf-8?B?MHZidldldWxWMk1HTllGTnVFRW1vTXY0Qk5GYXd3MTdIS0UzeldRTGtvRUpV?=
- =?utf-8?B?Q2NyZXRFWGsrbUN6L3VDczlVVnp1N084bExxamVrMGZ3T2tjWDVCanZmZDdQ?=
- =?utf-8?B?cUJ6bms5VlhOajU2azFuVU9CODhYN2pBeVZVME1zWkpmdmlBV3poRE9TM3Rh?=
- =?utf-8?B?UmRCZGc2ZmIvbXMyU3ArVDJTaS9jaU5qcGlQbUxaOHArMFlvcDdCS0VIamJW?=
- =?utf-8?B?OEhsZWRxa1hJYTdqT3RxTmhYTzNOOTQwYUxFcllzZ2hUSU9NT2l0QVBOWUVD?=
- =?utf-8?B?MVRWemU0YUlqNEw2dldTM0szWTVFY0p3MDJuSVpuS1Q3ODlwUUdlNWNnMGMx?=
- =?utf-8?B?SGhjYzhLZkh6ZEwwRVFkQWREeEsvQXcreGo0Zi9yV0N3ejAyRW5NMVlaL1JX?=
- =?utf-8?B?MmpZQzJpTlVtUEgxR0NNYTBiWDBFTGY1dTV0aVNZYm9scGxYQjBQbVRZQ1Q5?=
- =?utf-8?B?S2tvK0I1bzMrS3h2SU9lcnhEUlFMaUthUVY0bVh3UDk4Y21GM2QyRzFjb0s4?=
- =?utf-8?B?RWtzTGNJZGRoUHNyWUsxRUdaVTVtYkxwZGN1Y2MyUFRWc2JrdXZvZnpxVytv?=
- =?utf-8?B?S281eVpWZ0tGejEyS3oxbmxGTnJIMVhTemVHR3pUSEpGeG1KYVJhVzhwa0dZ?=
- =?utf-8?B?T3JpK0UrZ2U4SW9Nb2RUTWlaNWFyMlgzVkxhWmNXU1M3ZmFia1RMd0NvZHha?=
- =?utf-8?B?SG1maHhBRktwakMycXg5YndQYWtvYjdxUHluSExOWS9aTHZWL1JvQUhOSGJl?=
- =?utf-8?B?ejJNUnNLdnJZTzRTMWdzdEJaUGVMTVhqYzZZUkNzU2dLL3ZhM0d3TlFtZXFp?=
- =?utf-8?B?dWRSOFJrMWVPdkhSQ2lyRTJnQ3ZaanRjN0VVMmJDdjJGSWlXZnlxK0htRGNx?=
- =?utf-8?B?ZFZnT2hEUHJVM2NmYi9iaDA0dlVtTWw2b0xUODJuc2IxbG9wSU9jNW1NR21w?=
- =?utf-8?B?bHdsUkgrNFlUazdsTnRCbzZ2Y2V3RzREZHVhZ2ZvWjltcWptSndoUUFRMHNr?=
- =?utf-8?B?VXQvNHp6d25sS2laTEk0Q0tROXdqK2c4Sk1ybHdCUm9PTDJZdGlSNTVLd2sz?=
- =?utf-8?B?Qk10aUZJUzJWY2RON1MxV282VnVNbW1WVWNXTHBCOTMxNkF4QWhlRlgwcDla?=
- =?utf-8?B?Q1Vja2wwN0NEUnFnR0pZd3ZycVhwK21tRFpGT21TY2t3bVVQeSs3czZ0V1h0?=
- =?utf-8?B?cnpzbGtYaWhQNnRLOENVYWI2dFpPVUtkdWxQRVlZdmhuNmMxRUREd2F3cndu?=
- =?utf-8?B?enRSK2dleGJLd1hPK2FiODBCS2k0SEZ4Q0RBWlNiZUg2aDRJOXJXejU3QUha?=
- =?utf-8?Q?3rWuDtlgfqtc92M0ZOJOl0452?=
+	=?utf-8?B?cVNvVEt6dEMzYjJrSHg3ZG1QRXVEd29UaFI2VVZkTU5ZUDV1dm00WUpBVGor?=
+ =?utf-8?B?V20wOXZ4V3NNNzVGaGduNDVLaGsrWHR5R2ZaTEtxQ1E3c2hwbDU3ME9QYjFL?=
+ =?utf-8?B?YkZ0ajU4L0pETCtrVnJKZkk1QkE2NktpaVBCQUpXdmRYZWw2Z1RPa2tRM0JH?=
+ =?utf-8?B?MnlVSmVJZWxad0ZlMkZ4RElxQklDUHl2YTMyNFVsRk02bG1FRUltTXRVY2JD?=
+ =?utf-8?B?Q0FwWkN2c3ViY2FCTWpDN3VQaVliSnlNVm0yK0xjU2xGZU0zQm5XUlpMS2RR?=
+ =?utf-8?B?aTJOM1ZGTEkzZFJqT3RENkNKZVZtY1RDd1VnbUltZzVYelFRdXV2Rk9sM2sx?=
+ =?utf-8?B?cVpHYmZNNnlHT2xDaUVCa1dSUStsL0hjMnd1cUNwUUNBMTZxMU5PaTdWTnJ0?=
+ =?utf-8?B?aGhhWkJ6Z3hBUVhCQ1YwVmFIOHBMQXhadklNU1dDM09PRnhTN0Y3VDBXSVk4?=
+ =?utf-8?B?SE9vaUhQUFlPM1FHMGxDejhhRmIyaHYyaWlXQnVRa3pPM084WjZCUjRMM0dU?=
+ =?utf-8?B?U3V5ZXowMFc3S2JuVFJ4Z2Z6THZmZW5WZXpuaVlZUlhRUXQ5R1pzUkczb3Aw?=
+ =?utf-8?B?YmcvS0kvbGlXdTFXOXZubkxpczg1cGMybDkrSlRtVTFLN002VFNkRDhNb2Jy?=
+ =?utf-8?B?YWlESEpvMGtoUlVyMEZtdTlnWVJWMmNucVJySERtRVo1K0FMWUwzc2U5K1FH?=
+ =?utf-8?B?b0lHczhnc1ErNUdGS2lqbGUvSXo2cWE0cHJtbjEzeWJFdjNiNHJsbThkcmZ3?=
+ =?utf-8?B?WW9xL0xidG9NNGUrRDE3TDNJNGRPbFBuUG9tMTlzTHFuTjZTMHowMW5zd2hD?=
+ =?utf-8?B?dnU5UjN2MTM2bG42TENHMXBKLzhNOHRPaHU2N1R2NHI5NTFGMnQ4QmtYay9K?=
+ =?utf-8?B?alpUU3ZjUytLeTFoQytYSDJQTnZaVnZaL2orNi96UFZEaDB5SmZSalRidjRR?=
+ =?utf-8?B?RFdSY2QzUHpvdGxnWHJWd1ZIZnQybHEyN08zVmRKSXhEYU1BRlh5Q1lYYk1D?=
+ =?utf-8?B?UkppOCtwTExlbUU3NDkyOStOOW9EYS9vT296YmN6RDBNdXZlenlLREFBemhX?=
+ =?utf-8?B?a2lucTdYaldYK0JCRk9JNkRJNU11T3hqc2JYY3phcHAvNzVUaGxDN1dWU0hO?=
+ =?utf-8?B?Y0tGbHZPY043aDUwK0hrYTFZak5vT0RWMXlTbXNRNms5RlRDSHF1VmNodTdl?=
+ =?utf-8?B?U1ZqcmlLeHhYS3VFUkNCRlVwQ0dFUXpTNVhhaUVXTDM4a2lUalBQc3ljaGRF?=
+ =?utf-8?B?bXBWdkZtdW01TkJjWkFJM2ZyWTQvL3dvMmlzUU81bzUzVHM5dXJHTVRQVFo0?=
+ =?utf-8?B?RER2ZFVIblhLM1JCOTNrc1lsbndNclBJRjVpU3lrWDZXdTE2bCtvbjdNZE5z?=
+ =?utf-8?B?dGRKWkgrL2E4NXZyY2JjcEE2eFBkaGZvRnBObU5HSlNJbVVhck44OSs1Y3Z4?=
+ =?utf-8?B?MFhoNWdhNkN1eG1qK2FWT1Jla3FISzMrUEFkaGkya1p5bzZFNWNWVWYxWEY2?=
+ =?utf-8?B?YllOaW85bUFwS2d5OFVXNmQxL2NaTVF1clJGMHhYMktYQ3ZNbFlEeHNpWUtP?=
+ =?utf-8?B?V2RQSUVROXlWSkFHYlFmTnlDVFFTbkJRYmU4WUR4VTZrRzR0OGMzQ0RhMTg1?=
+ =?utf-8?B?dnFTNmhiMmRoNDRFL1FCZ3laZ2NPSjZ4am9Ma1Z4cUtKNk5nRzkvb0IvOUhQ?=
+ =?utf-8?B?cFNGMFR4eEJJSFRYRTBJQ2FqaGRIT0ZTcTR0NzFURjN6R2JQUkVrdmo5OUlH?=
+ =?utf-8?B?dFZFR1djMnhxc29SdGZRM1d5TVY3VWkrbHdqT3ZiZEozSnErbnRmdmdtc0xY?=
+ =?utf-8?B?SGtvRTdIYlFuNWJKcDZiTWltclFiOHlqQWtPTXJwWFNWU0t2NlVSNnlaUFRu?=
+ =?utf-8?B?Q0YyRkllWVJldmZtdnNMSklIU0FGMW94Y1lKa0ZhUklrdXU4eHlMdUdTdDhs?=
+ =?utf-8?B?OXYwTlRJTG5MVXZNSUxsenRzcDNrRkhFelRMNVhkZDF5UG9GSzBQRU1CV3N2?=
+ =?utf-8?B?VytaS0QzQjNWcWY2MjFFVmVuaWJwdVlFM2RUOEM4OXoxZ1lqSXgzMHpqdXhn?=
+ =?utf-8?B?Y2ZWNUNHVS9RWmw2QkdsWmsvbFlVSnNTS0lEOU51Z3pHQ3NrYlJscDMwaVpE?=
+ =?utf-8?Q?g0fNKeFKk/AelA5aoeUQpHMeZ?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bd3f255f-38c7-4dc5-f1c5-08dc6dcdb7c1
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4a950818-c05b-4b43-894e-08dc6dcdf99d
 X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2024 13:09:09.9978
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2024 13:11:00.4991
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lKcWseJJqIzPaxSaMywo5d5ttcmhR46kUDXtmmXb5W3WYtwTA+dnwd0Qwgpgw25BCsTaS5YmD2N+sjItKatJlw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR12MB9144
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4CpCdjcunnMgg8p+rZV7Hs9S5lC8iETWtXdcZtCGmx29+tbWqHx0Mxk/1S0Ic1G4t/pUVoPtySgqtq24s+mV9w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5609
 
 
 
-On 5/6/2024 1:09 AM, Thomas Weißschuh wrote:
-> On 2024-05-05 22:56:33+0000, Thomas Weißschuh wrote:
->> Framework Laptops are using embedded controller firmware based on the
->> ChromeOS EC project.
->> In addition to the standard upstream commands some vendor-specific
->> commands are implemented.
->>
->> Add a driver that implements battery charge thresholds using these
->> custom commands.
+On 5/5/2024 3:56 PM, Thomas Weißschuh wrote:
+> Framework Laptops are using embedded controller firmware based on the
+> ChromeOS EC project.
+> In addition to the standard upstream commands, some vendor-specific
+> ones are implemented.
 > 
-> It turns out that standard ChromesOS EC defines EC_CMD_CHARGE_CONTROL.
-> The kernel headers however only define v1 of the protocol, which is very
-> limited.
+> Add a driver for those custom EC commands.
 > 
-> But in the upstream firmware repo there is a v3 which is much better.
+> At first, provide an empty driver that only takes care of scaffolding and
+> device binding.
+> Further patches will add functionality to the driver.
 > 
-> The Framework laptop only implements v2 which is also fine.
-> Given that v3 was only introduced late last year, it seems better to
-> stick to v2 anyways for now.
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> ---
+>   MAINTAINERS                                        |  5 ++
+>   drivers/mfd/cros_ec_dev.c                          | 13 ++++++
+>   drivers/platform/chrome/Kconfig                    | 11 +++++
+>   drivers/platform/chrome/Makefile                   |  1 +
+>   drivers/platform/chrome/cros_ec_framework_laptop.c | 53 ++++++++++++++++++++++
+>   5 files changed, 83 insertions(+)
 > 
-> So please disregard Patch 2, I'll see on how to use this via a normal
-> cros_ec driver.
-> 
-> There are some other Framework-only features that will use Patch 1,
-> so feedback for that would still be good.
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index c23fda1aa1f0..60699c289757 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4988,6 +4988,11 @@ S:	Maintained
+>   F:	Documentation/devicetree/bindings/sound/google,cros-ec-codec.yaml
+>   F:	sound/soc/codecs/cros_ec_codec.*
+>   
+> +CHROMEOS EC FRAMEWORK LAPTOP EXTENSIONS
+> +M:	Thomas Weißschuh <linux@weissschuh.net>
+> +S:	Maintained
+> +F:	drivers/platform/chrome/cros_ec_framework_laptop.c
+> +
+>   CHROMEOS EC SUBDRIVERS
+>   M:	Benson Leung <bleung@chromium.org>
+>   R:	Guenter Roeck <groeck@chromium.org>
+> diff --git a/drivers/mfd/cros_ec_dev.c b/drivers/mfd/cros_ec_dev.c
+> index a52d59cc2b1e..0a36e77e5039 100644
+> --- a/drivers/mfd/cros_ec_dev.c
+> +++ b/drivers/mfd/cros_ec_dev.c
+> @@ -145,6 +145,10 @@ static const struct mfd_cell cros_ec_vbc_cells[] = {
+>   	{ .name = "cros-ec-vbc", }
+>   };
+>   
+> +static const struct mfd_cell cros_ec_framework_cells[] = {
+> +	{ .name = "cros-ec-framework", }
+> +};
+> +
+>   static void cros_ec_class_release(struct device *dev)
+>   {
+>   	kfree(to_cros_ec_dev(dev));
+> @@ -299,6 +303,15 @@ static int ec_device_probe(struct platform_device *pdev)
+>   				 retval);
+>   	}
+>   
+> +	 /* The EC on Framework laptops implements some nonstandard features */
 
-What other kinds of features do you have in mind?
+I don't think there is a spec really for cros_ec is there?  I think it 
+will depend upon what features you're talking about if this is the right 
+way to go.
 
-Considering your above finding I think it's better to put patch 1 into 
-the series of "other framework only features" that will use it so it's 
-clearer if it's the best way or not.
+The reason I say this is that maybe some of the same kinds of features 
+will make sense for chromebooks that use cros_ec in the future and thus 
+they should be "generic" cros_ec mfd cells to probe for in some way.
 
+> +	if (dmi_match(DMI_SYS_VENDOR, "Framework")) {
+> +		retval = mfd_add_hotplug_devices(ec->dev, cros_ec_framework_cells,
+> +						 ARRAY_SIZE(cros_ec_framework_cells));
+> +		if (retval)
+> +			dev_warn(ec->dev, "failed to add framework laptop devices: %d\n",
+> +				 retval);
+> +	}
+> +
+>   	return 0;
+>   
+>   failed:
+> diff --git a/drivers/platform/chrome/Kconfig b/drivers/platform/chrome/Kconfig
+> index 073616b5b5a0..ff69ee226606 100644
+> --- a/drivers/platform/chrome/Kconfig
+> +++ b/drivers/platform/chrome/Kconfig
+> @@ -239,6 +239,17 @@ config CROS_EC_TYPEC
+>   	  To compile this driver as a module, choose M here: the module will be
+>   	  called cros-ec-typec.
+>   
+> +config CROS_EC_FRAMEWORK_LAPTOP
+> +	tristate "ChromeOS EC Framework Laptop extensions"
+> +	depends on MFD_CROS_EC_DEV
+> +	default MFD_CROS_EC_DEV
+> +	help
+> +	  If you say Y here, you get support for using Framework Laptop-specific extensions
+> +	  of the Chrome OS EC.
+> +
+> +	  To compile this driver as a module, choose M here: the module will be
+> +	  called cros_ec_framework_laptop.
+> +
+>   config CROS_HPS_I2C
+>   	tristate "ChromeOS HPS device"
+>   	depends on HID && I2C && PM
+> diff --git a/drivers/platform/chrome/Makefile b/drivers/platform/chrome/Makefile
+> index 2dcc6ccc2302..ce6aac620086 100644
+> --- a/drivers/platform/chrome/Makefile
+> +++ b/drivers/platform/chrome/Makefile
+> @@ -10,6 +10,7 @@ obj-$(CONFIG_CHROMEOS_PRIVACY_SCREEN)	+= chromeos_privacy_screen.o
+>   obj-$(CONFIG_CHROMEOS_PSTORE)		+= chromeos_pstore.o
+>   obj-$(CONFIG_CHROMEOS_TBMC)		+= chromeos_tbmc.o
+>   obj-$(CONFIG_CROS_EC)			+= cros_ec.o
+> +obj-$(CONFIG_CROS_EC_FRAMEWORK_LAPTOP)	+= cros_ec_framework_laptop.o
+>   obj-$(CONFIG_CROS_EC_I2C)		+= cros_ec_i2c.o
+>   obj-$(CONFIG_CROS_EC_ISHTP)		+= cros_ec_ishtp.o
+>   obj-$(CONFIG_CROS_TYPEC_SWITCH)		+= cros_typec_switch.o
+> diff --git a/drivers/platform/chrome/cros_ec_framework_laptop.c b/drivers/platform/chrome/cros_ec_framework_laptop.c
+> new file mode 100644
+> index 000000000000..8a8bf039fa9c
+> --- /dev/null
+> +++ b/drivers/platform/chrome/cros_ec_framework_laptop.c
+> @@ -0,0 +1,53 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + *  ChromesOS EC driver for Framework laptop
+> + *
+> + *  Copyright (C) 2024 Thomas Weißschuh <linux@weissschuh.net>
+> + */
+> +#include <linux/kernel.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_data/cros_ec_proto.h>
+> +#include <linux/platform_device.h>
+> +
+> +#define DRV_NAME	"cros-ec-framework"
+> +
+> +struct cros_fwk_priv {
+> +	struct cros_ec_device *cros_ec;
+> +};
+> +
+> +static int cros_fwk_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct cros_ec_dev *ec_dev = dev_get_drvdata(dev->parent);
+> +	struct cros_ec_device *cros_ec = ec_dev->ec_dev;
+> +	struct cros_fwk_priv *priv;
+> +
+> +	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->cros_ec = cros_ec;
+> +
+> +	platform_set_drvdata(pdev, priv);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct platform_device_id cros_fwk_id[] = {
+> +	{ DRV_NAME, 0 },
+> +	{ }
+> +};
+> +
+> +static struct platform_driver cros_fwk_driver = {
+> +	.driver.name	= DRV_NAME,
+> +	.probe		= cros_fwk_probe,
+> +	.id_table	= cros_fwk_id,
+> +};
+> +
+> +module_platform_driver(cros_fwk_driver);
+> +
+> +MODULE_DEVICE_TABLE(platform, cros_fwk_id);
+> +MODULE_DESCRIPTION("ChromeOS EC Framework Laptop extensions");
+> +MODULE_AUTHOR("Thomas Weißschuh <linux@weissschuh.net");
+> +MODULE_LICENSE("GPL");
 > 
->> Patch 1 adds the general scaffolding and device binding.
->> Patch 2 implements the battery charge thresholds.
->>
->> This series is based on
->> https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git for-next
->>
->> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
->> ---
->> Thomas Weißschuh (2):
->>        platform/chrome: cros_ec_framework_laptop: introduce driver
->>        platform/chrome: cros_ec_framework_laptop: implement battery charge thresholds
->>
->>   MAINTAINERS                                        |   5 +
->>   drivers/mfd/cros_ec_dev.c                          |  13 ++
->>   drivers/platform/chrome/Kconfig                    |  11 ++
->>   drivers/platform/chrome/Makefile                   |   1 +
->>   drivers/platform/chrome/cros_ec_framework_laptop.c | 173 +++++++++++++++++++++
->>   5 files changed, 203 insertions(+)
->> ---
->> base-commit: 2fbe479c0024e1c6b992184a799055e19932aa48
->> change-id: 20240505-cros_ec-framework-10e627c46a0a
->>
->> Best regards,
->> -- 
->> Thomas Weißschuh <linux@weissschuh.net>
->>
 
