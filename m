@@ -1,273 +1,275 @@
-Return-Path: <linux-pm+bounces-7537-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7538-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E87A8BCEED
-	for <lists+linux-pm@lfdr.de>; Mon,  6 May 2024 15:29:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61E1D8BD076
+	for <lists+linux-pm@lfdr.de>; Mon,  6 May 2024 16:40:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B5104B20E0B
-	for <lists+linux-pm@lfdr.de>; Mon,  6 May 2024 13:29:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE4781F223FA
+	for <lists+linux-pm@lfdr.de>; Mon,  6 May 2024 14:40:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79C52763FD;
-	Mon,  6 May 2024 13:29:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AA541534E9;
+	Mon,  6 May 2024 14:39:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="GKRp77bh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IgDeKL0c"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2081.outbound.protection.outlook.com [40.107.92.81])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EEC6763F0;
-	Mon,  6 May 2024 13:29:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.81
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715002158; cv=fail; b=E95uW+QXtImirjbkIbR86HmKJx7M9vkARWmQMfjaFitJr342fH9h4mEwq7gv+5ysKsuW/KpKB02PVql05jfxHtdjf2SfUsd21njO8KlOQzeEQ/1k6guVF3sPYhiIj7NcH08ZWrovWaZAgEM2pXdYvg30uhh6QRgLEMZDoJabwN4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715002158; c=relaxed/simple;
-	bh=0zjAMuWKYQscHoLMW7ixqNyEmL1OtNLiLXmdhPV9FKU=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=Ek8clnl1UfEkxmLDw/dUsIQWiSxqIgDOc6YJbGUCchsAMrgTUjJHcrxzJwWvsYY3UydQ+fgg+woNjxHNbBZ+WMj1ohj6qgY9txqA2tRlKsVgcTQhYRUph8Q41CNQFwIPuxx7kcLkeGAdAdHHIGqVUP5edmi1tlWy/RPijHAXjhk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=GKRp77bh; arc=fail smtp.client-ip=40.107.92.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aALu8x5I9QX5xOf1AcEXADmHjqgRXlELpE2dSK24ljYspC2zQHBpn7uMP859rDFbrNIMzQlzvG1hDYgKnTAXwIVwr2PX2AQv/2ddgMNFdF/Uc9AB4zzHul0/0oAXTlQ6vVBiXeK+iVymEU7ysF6hSjG1EQZENhpIusRMRFn5aEEvTpcZrFtPMn0Dhl30wTXzyW3Xl80lwhZj6sekKM1XM32B4XGTbMbAzPwlLGRRnvM52reXb4vqnO9uzx7TOD5Sv5U9m1ttTu4psxVYgAUi7q8pPzheGEYST3koxWUA5sFZ6rEA+xpP2JPBsXXMmfHpuV6jKo5RxLEyi8g5mxF7yw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bzdp7Rz8cHt+3PacvRjoDNwbMCoeQz2SnhmPAxOwJdw=;
- b=ddCB80vyDmkhUmLFKz4kW86YdE+G7xiJ2gEBH0MDeSLNyUupjnUvysfak8ypoTUEFmCXGDObn29S8RcaFLnod2EqAl2BCkeobQYfp8lKVwdOP7876kJfwBWsm7Tbzxf+7AgalyJQ+bEattSbay3TxkolQ9K6NcPzlgtZBfn8mcn0E+8drja2Fa5RNLKf/jz+h6DhNjPLzTl4/A9QyQ1yU6s99G0KAHqXPltFToOvI9IaMn2F8Nd+6XDd35vHjUxc4udeQ9Q4fxNv2JG+liMP/8hEKonWag6NNFEx4uuEZ8jFPmc1Ptme3xdp5lfzpjFHTGF0ZmKjNTANKI4teiZ26w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bzdp7Rz8cHt+3PacvRjoDNwbMCoeQz2SnhmPAxOwJdw=;
- b=GKRp77bhili3l/FJRcwLya3oI1v1eGUFPyUtQCRgXG00yN8bdQ9jpZv+yWN1LJTDKG4stfINzEkMyBAIGNfhKF+lvJTdR2UPqthVgWcQOHuEQHEpxdJSh0o0sANjwaKcBOdZ9OkQszNNJkS7FNSleyabYCMUhpOLEdosA9jtN4c=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by MW4PR12MB7465.namprd12.prod.outlook.com (2603:10b6:303:212::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.42; Mon, 6 May
- 2024 13:29:13 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca%6]) with mapi id 15.20.7544.041; Mon, 6 May 2024
- 13:29:13 +0000
-Message-ID: <6e97ca41-c730-4bac-89db-d3cfdfa7d8b2@amd.com>
-Date: Mon, 6 May 2024 08:29:10 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 6/7] cpufreq: amd-pstate: introduce per CPU frequency
- boost control
-To: Perry Yuan <perry.yuan@amd.com>
-Cc: Alexander.Deucher@amd.com, Xinmei.Huang@amd.com, Xiaojian.Du@amd.com,
- Li.Meng@amd.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- rafael.j.wysocki@intel.com, Borislav.Petkov@amd.com, gautham.shenoy@amd.com,
- viresh.kumar@linaro.org, Ray.Huang@amd.com
-References: <cover.1714989803.git.perry.yuan@amd.com>
- <2d200d0fb4135465e81b9213de940e31a7b88dce.1714989803.git.perry.yuan@amd.com>
-Content-Language: en-US
-From: "Limonciello, Mario" <mario.limonciello@amd.com>
-In-Reply-To: <2d200d0fb4135465e81b9213de940e31a7b88dce.1714989803.git.perry.yuan@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: DM6PR11CA0037.namprd11.prod.outlook.com
- (2603:10b6:5:14c::14) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D644381211;
+	Mon,  6 May 2024 14:39:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715006396; cv=none; b=JTZkTpDyB9GmYytUgi2ZRhrHBshZLTymDNz8QvffLigbu7R0UTB51vuQ0dkksx24w1TQCznJ0dHFqPRgX/9Hs+rzcPXy78fCMLUrcB3fkmRNVzSFmepYaF+bJHngd0yxgEJF8FSe8HiouQC9oDAt1IyADxNsbfcc6sbFLJSb2XE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715006396; c=relaxed/simple;
+	bh=U89OZGncNJqtcKnTD8yZONNz0dl0mlPs8Onkjf2z9oU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=l+ObCtyPD/Jomt3tDJxKUrkzMpSzefjAbzCFd+w/A1rtEP7b001UoYIEUhUWrSOxzbO6R0x/bnKKtKCSxH1HUzPhu68punONQlutXolW79etvyJ7IR2ohS1oB3T7VWIA6SBiFlajxbXoggqa2Vpmuvz7ck7PKqMzYb2EDrtKhWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IgDeKL0c; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D173C4AF66;
+	Mon,  6 May 2024 14:39:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715006396;
+	bh=U89OZGncNJqtcKnTD8yZONNz0dl0mlPs8Onkjf2z9oU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=IgDeKL0cpjzfJbaNPT86QJ0DsZk9TsOdyIiGBkI8F3OlF+I4N/LbY70guPQWYyTL6
+	 hOuvrFsNl4leSRNNAES06vVxFlXqmfSBV5n+CdkFKBDSQ1jVHTrweNS5hXGJPuWOHe
+	 Pf04vdXEaiOeWQ3jkd+iaBGCsEjeS9RdkluplZkv45lvbvdfQyKSrCGI4cw5jgQq2s
+	 nwlOCMKFvrBfB5jUzWxcDeUb18xSgy/MaM405FkMcO7n0QYEUrk/qjoItmqq+f78BI
+	 9tw+SB6aZceKlc2IxOnDZ/BV+aptewhvWTQzGncpD/Zs9zQ7bA+8lDXuzuPmv3HtRj
+	 XxdcrcpDS71fQ==
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5b2013d0090so505165eaf.2;
+        Mon, 06 May 2024 07:39:56 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUvQli4jcVOGFKABqD5BlefXL9W9p5DKp10FDPMk6C9bStR94ncVgKceAPr2tMbs2meo2loYjZOpgjbYARY4C5J2LUhMTZqT4Acc/SHWZO4I89FJbiiXIUjzrFClJQMa+g7pKvm08I=
+X-Gm-Message-State: AOJu0YxaUcqGcu8XyTHC6Ub3bGaIEmKiHYrRyM1z6mW/adR2FJqiyD19
+	lQaIpj+f+oWl3YC3ZrK70Mgw2xFXmZ+wuw/K32cp7uxQakBr7HzW+XUKkL4z0SkAJTP1SF8wmQF
+	2Pq2/fnJ2LyrK9l5EnR2seNhwznQ=
+X-Google-Smtp-Source: AGHT+IHQb7ROo7x8++ilFyCxyeBFZ0R/kRLgV7Bruzs0BV/uieit4rIL8b2KIH0YXq2Vn6eog2needrZOQNDCw/o2+E=
+X-Received: by 2002:a05:6820:3309:b0:5b1:ff38:5ee0 with SMTP id
+ fd9-20020a056820330900b005b1ff385ee0mr6042005oob.1.1715006395650; Mon, 06 May
+ 2024 07:39:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|MW4PR12MB7465:EE_
-X-MS-Office365-Filtering-Correlation-Id: 66aaab12-857f-44e3-b0b6-08dc6dd08510
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|1800799015|376005|366007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?SDBZS1ZVZkxDM2diYjlUejBzWG1GODhCV3ZwdndqRjNLWFM2MlVtR3pPY0J5?=
- =?utf-8?B?L25NM0g1RWRqbitnUWtkT1pRVkYzYjlmUStIaFVDbUw5MCt4WXBEeEJDTmZv?=
- =?utf-8?B?OHJFdWNUZHZRMUV1YTNNVXgyR1Y3MHNjYjFGdlBIeE9pdzUySHppM3hMd2J3?=
- =?utf-8?B?NHExUDRRbW5Gc0VyNC96NkxZbnY3Si9CbU4xbmlTTUpiQ2xZbVlkUFhyVHVD?=
- =?utf-8?B?VVN5Qzd1cFlPS011ZUlVdnlmakozTU0zd0dQSSt0OW5ZYW1DVE9SNVU5cVBP?=
- =?utf-8?B?N3F3UFozdFhqdTEwbVFDTCt4VlFUSEpUck5iQnllWXNNcCtBTkl6d3B2azFu?=
- =?utf-8?B?ajdTQTRHTmVhMml6WXN2L0VVbHBaMU5vaUhLMVpxVEpEeWVWc1l4S2c5OVVl?=
- =?utf-8?B?b210V0hPVTdEZXM1cldpQnhaZ29VR3p2alNjZlZKNzUwcTRsVnh3eHFGWldl?=
- =?utf-8?B?TUZUR2xEendyekFkY0h6cmJiZnlTNVJtUmFOSmxkblFKOE1RN0JBL2hEZHQ2?=
- =?utf-8?B?SlhPaEZLbEdSUWNscndsN211SlpEdjNFd2hmZ3VwTzZCMGRuNi9keDdSVk1E?=
- =?utf-8?B?ZXlZYytyYXdyT2wwcGtiV3V4ak1JM3NhR3IxcUdSakRSNzhXeTdrSlJlQ2hq?=
- =?utf-8?B?T1JXZldRQmtQRTdMc2gycDliNGFhSm52L3hoK0pTSHBLMjRzdXcwMDRYdFNj?=
- =?utf-8?B?MUdXRC81WkE1WnJ3azZRUVAxODBjSWlYbDkzcGJNYVVHRXo5T2tHS0l6S3FO?=
- =?utf-8?B?TXJXOHlieWtpVVlwYXdBSVJhUlFNUFhrZFQwTU5wdVlXY1Y3eHllQ0tjZG8r?=
- =?utf-8?B?dVRkd0xaNXpTNS9MbnhHS2hJcnNTNkRTU3lYZDBaaFhlR0dYM0l6WmJ6SDdR?=
- =?utf-8?B?UzVsMHF6bEkwRElyakxBUWgyV1kzbWJTNldFMlM5NUQ0SnErazdIVzJUcGFK?=
- =?utf-8?B?Z0g4YWJ3VVFDT1BWREQzM09zRVpvNjdWMzZrTWwvYkhpNi82SVAydzdaMUVF?=
- =?utf-8?B?bW0xa3RzM0M0S3lJTFJNUnkzUHM1d1IvQlUzeUJMMElNR0JpbHR6eC9WN29E?=
- =?utf-8?B?N0ZJVVFVbHhYRmFYRWh4RmR2b3BIS3RDMVlKOGVqeGF2OWthLyt0TDBYb0hT?=
- =?utf-8?B?L1M3WmZjcVlIam1hTE9PMi92RFRBZnl6ZXo4VUMvcDBNM1FoTHYxNG5rVEVP?=
- =?utf-8?B?K24vUnV3QitkcUgyUkJyQ05JQzE2em1ycTk2c24vNFBuTnJVZysyM2FKWVhP?=
- =?utf-8?B?bFBlVEhXRys2ekZCYTJEenZxOEZBZHdKK1Q4MEc3K1E0eVlIb1krTTRJZTNC?=
- =?utf-8?B?c3pRdXlpU1MzN1hnQnh0QndvL0UrZDlsN2tFNnNlTXFkc2pUUmY2N2tpazBE?=
- =?utf-8?B?bUdXcG9OU2NOQUpBSEVyNjFVZk9UZEw5dGdCK1lKVS82elZEUGhjNjJ2Q0dm?=
- =?utf-8?B?aUhUNHA1bjNEL3J4VnFPOTZQL3hpOVg0ajJmWmpETW1MSlBxa3g1ckpMVVhp?=
- =?utf-8?B?VzFvZlVpakJ2RWxmTkhBZ1RWQ09xUzEwM2NlbTRTWHhUKzU3dUZ2S0pLVWFa?=
- =?utf-8?B?VytVekNVU0VmVEpaSnYxSWUzTHRxUjRsdm9SQzRhcGZ0anhETGlBSnNJZHVK?=
- =?utf-8?B?S2VCakZGUG84WWJDZXhkbXRxbEpLaGR1Y1R4UEdKNFEwQitOTnhJZGlPdXJm?=
- =?utf-8?B?bFNQZS8zeDNUT041VHRFS05RTmtYY3hTV0J1STVSREExcGRXRWxmTzJBPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(376005)(366007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?M24vZ2kvVWtjZ3crUXMrSmlKRDA1bndKcWJCaDRiSVhtNDRQVTJjTUt5Tk1X?=
- =?utf-8?B?ZHpQNExNRUhyT3Y4YjIyQUI0bGp4VkRZSkVmK3N6eDFad1NidDF2Z2g5UjBw?=
- =?utf-8?B?aHJLdkR6Z1dTRFJFbUdiYzNDK3lqMjJoUk5IUFRnMHNBeHg4VVMvVEV4UU43?=
- =?utf-8?B?bzRJejVMdWt0Y2JqU3VJank1WjZhZE1DSG9mMlQ4a2FkaXhNWmNsRnlzanZq?=
- =?utf-8?B?RE5BTzZUdU1NSWUzdWl6SmFrWFVmZ2w5NnM3MTlDVmVyZUxQS29wVitJTkNS?=
- =?utf-8?B?ZUdnYzU2aVZyV2NGeHJCV1Vjcm5FOGhuMTlNdG5aTUYzSXQyRFp2eS84WEtq?=
- =?utf-8?B?b1IvVDZUOThPcUlJMFA0N0wrYm42T3RwTmd1Vm1hdWsyZ2ZDa3V3UzRQQWJh?=
- =?utf-8?B?clZBV1lLT2E0aHNTQjJVRHlYbkV2YlFncjZzQ1U3aWhzUkZQc3dWdEJFUzcy?=
- =?utf-8?B?VGpxWGVYNGI2aXpyR3NBMjBIcXZVOHlkU2FvKzhzM0VDeS9QVHJRTWk5OVRS?=
- =?utf-8?B?NWNJZGgrbTg4MEFqTWcvSStBWWJVeEpWS1hBRmdqUHBsV2tzS09iQTFtREUy?=
- =?utf-8?B?dndDQkljZ1NDTGVmd3pCMVcrc3lMWHVYQWdnenZOMFd6enhNemc2N29ReDVN?=
- =?utf-8?B?N0kyTTJkMlNSaTBqRjNSR1F0Vkd5Q1dKQml1MWhQTTdPeVZyY2lMTUU4eTFp?=
- =?utf-8?B?ME1JNFlkdWhyckVoQWZQSzZTUVVtYVkzUW9jWU5WKzVwNVJQOU5ZaGdUT0Jh?=
- =?utf-8?B?SFMvV290SDZmNkROOEpRMGdncXRpanBISDJnVFdNTkluZFRsZXh0T0FkK3Nw?=
- =?utf-8?B?RjBzbVpnZGZsV0xLWXNlalFMb3RabS8zWUVPeGN6cFFWejErdzRtbXlRdEJh?=
- =?utf-8?B?aGZudWlqNkxBWm1ORnR4d1RzR2JvUklwb29lUWdneU5OcEJiRklwYUZlaWNX?=
- =?utf-8?B?MnVyVGxCVWpJY1YyS0c0a1RLQWpRNlJLVXZTbmY5TURxWDlzUmt6cGg2bTli?=
- =?utf-8?B?cDVNUlRzWVkvQVFFSUhxbnJEWjhObi9GUmI0cGpvY2JvUE5ZZFNwUHArN3M4?=
- =?utf-8?B?OEZ4QW5adnVhUm9BcHBhd2YvTjJaMWFXVU5kWlJjcWlGOXdnVTJhQ2E2OHBS?=
- =?utf-8?B?bDJwWjhtMWRyS2tBR1RUZVhSU0taTTNHY2Z3dmgxTHNsT1V4eENzNS94VDJT?=
- =?utf-8?B?VFphcU9wS1dRZzVuMVB4b0ZMVk8ySndXRDZNYS91eTBadk1mekxtNm9RR3h5?=
- =?utf-8?B?NElOUVdZU2RFblowVjZXb2ZNdUk1NnpSakljSE1aTlQ1Y3QyaHl0Nk1ZS0xo?=
- =?utf-8?B?Q1ZyUnVWVnp0VTlQa3dzR2tiWi83Y0xxc2tUeFdxcGV5QVNPQk55c3paYjlo?=
- =?utf-8?B?b1BEVlgraHpDQkpNUXk5RU1jSzR2TjRLWVZMTHhjT2dnbGdoRG5zYXdiRC8y?=
- =?utf-8?B?MmtqcmY2TlJkd0ZuSEs1d0VnWnY0QlVnQUhPeXFnRXBVNnFoOVl3NCtDdDhs?=
- =?utf-8?B?R1kzUjZJTmFEMEZqZWxZMDBRK2ZXWFp2ZWlVVE1DdzNkam1NV0JiTnBMOWNI?=
- =?utf-8?B?NmxzUmlpSnpJd0JRcFdiNmp1MXk1S3JIZTNnRU15bVVhSUp3NVdFQzllMWJR?=
- =?utf-8?B?eTBsYzR2aXRXdGovbzFPM1VUWTBBZlgzYjNHMHBPYkcwTjM3ODlpNzlZam4w?=
- =?utf-8?B?blU5ZWZiSUtZUDlZS3VPMnp4c2pidkQzZXd4L3JrT1g3bzlzd3NPbGdNT3hH?=
- =?utf-8?B?UnBobTh1NzFEVG40dDFSU1ZaUTBtN0NjQVNCNHEwN3d6SUlaRENkY3NFWnlN?=
- =?utf-8?B?bzVMTU9QQ3JDUGVjNm5Jbzhscnlkc05PeEZCK2NNNWdRZ0ZPYXhlcnU2Wktl?=
- =?utf-8?B?RE1VQWg0NXdDeWV2cEF1aERxUXlzVTI1bithcUZNRlpxMWV6QXc3dk91Qkk4?=
- =?utf-8?B?NjlwL3N4R3plNklPS2s4d1NQOHVjQTNJU0NBblNBdFR4TTNtVjd4Nm1kUTNx?=
- =?utf-8?B?SjQxN0RiTllJNHdwdzRweEZQQm1CUSt2cldsOU5zMTBlNml0R3RSdmdWdngw?=
- =?utf-8?B?VjMvVnhVMy9teisvSDRndVBFNFg1T2pGVkJnekFYRE5rc2V4YVpXUVZnS01y?=
- =?utf-8?Q?3K+QjtMfxuO4YXAkVuzphezBb?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 66aaab12-857f-44e3-b0b6-08dc6dd08510
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2024 13:29:13.4214
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uOr8kGQI5BLUo6yUIIAWtpDvYJQGVpOEFVi0rTxXfAZ4hMwnkFAsLx/A8YRTz77nY1UyyvAiWd3aCnFxHdqevA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7465
+References: <7663799.EvYhyI6sBW@kreacher> <1799046.VLH7GnMWUR@kreacher> <050c561c-487e-4e89-a7b2-9752cebc9f46@arm.com>
+In-Reply-To: <050c561c-487e-4e89-a7b2-9752cebc9f46@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 6 May 2024 16:39:44 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hGiwoytVmVr=h8JJ1yf5KTcr+p7BrRgSUM-L_X6fciUA@mail.gmail.com>
+Message-ID: <CAJZ5v0hGiwoytVmVr=h8JJ1yf5KTcr+p7BrRgSUM-L_X6fciUA@mail.gmail.com>
+Subject: Re: [RFC][PATCH v1 3/3] cpufreq: intel_pstate: Set asymmetric CPU
+ capacity on hybrid systems
+To: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, x86 Maintainers <x86@kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Ricardo Neri <ricardo.neri@intel.com>, 
+	Tim Chen <tim.c.chen@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, May 2, 2024 at 12:43=E2=80=AFPM Dietmar Eggemann
+<dietmar.eggemann@arm.com> wrote:
+>
+> On 25/04/2024 21:06, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Make intel_pstate use the HWP_HIGHEST_PERF values from
+> > MSR_HWP_CAPABILITIES to set asymmetric CPU capacity information
+> > via the previously introduced arch_set_cpu_capacity() on hybrid
+> > systems without SMT.
+>
+> Are there such systems around? My i7-13700K has P-cores (CPU0..CPU15)
+> with SMT.
 
+As Ricardo said, nosmt is one way to run without SMT.  Another one is
+to disable SMT in the BIOS setup.
 
-On 5/6/2024 5:19 AM, Perry Yuan wrote:
-> Add a new sysfs attribute file to support per CPU frequency boost
-> control, allowing individual CPUs to enable or disable CPB separately.
+Anyway, the point here is that with SMT, accurate tracking of task
+utilization is rather hopeless.
 
-I don't think it should be "both" global and per CPU.  It should be one 
-or the other (and I think per CPU is better).
+> > Setting asymmetric CPU capacity is generally necessary to allow the
+> > scheduler to compute task sizes in a consistent way across all CPUs
+> > in a system where they differ by capacity.  That, in turn, should help
+> > to improve task placement and load balancing decisions.  It is also
+> > necessary for the schedutil cpufreq governor to operate as expected
+> > on hybrid systems where tasks migrate between CPUs of different
+> > capacities.
+> >
+> > The underlying observation is that intel_pstate already uses
+> > MSR_HWP_CAPABILITIES to get CPU performance information which is
+> > exposed by it via sysfs and CPU performance scaling is based on it.
+> > Thus using this information for setting asymmetric CPU capacity is
+> > consistent with what the driver has been doing already.  Moreover,
+> > HWP_HIGHEST_PERF reflects the maximum capacity of a given CPU including
+> > both the instructions-per-cycle (IPC) factor and the maximum turbo
+> > frequency and the units in which that value is expressed are the same
+> > for all CPUs in the system, so the maximum capacity ratio between two
+> > CPUs can be obtained by computing the ratio of their HWP_HIGHEST_PERF
+> > values.  Of course, in principle that capacity ratio need not be
+> > directly applicable at lower frequencies, so using it for providing the
+> > asymmetric CPU capacity information to the scheduler is a rough
+> > approximation, but it is as good as it gets.  Also, measurements
+> > indicate that this approximation is not too bad in practice.
+>
+> So cpu_capacity has a direct mapping to itmt prio. cpu_capacity is itmt
+> prio with max itmt prio scaled to 1024.
 
-> 
-> The new sysfs attribute file is located at below path,
-> `/sys/devices/system/cpu/cpuX/cpufreq/amd_pstate_boost_cpb`,
-> where `X` represents the CPU number.
-> 
-> To disable CPB for a specific CPU, you can use the following command:
-> $ sudo bash -c "echo 0 > /sys/devices/system/cpu/cpuX/cpufreq/amd_pstate_boost_cpb"
-> 
-> After disabling CPB, the CPU frequency will no longer boost beyond
-> the base frequency for that particular CPU.
-> 
-> for example:
-> ----------------------------------------------------------------------
-> CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE    MAXMHZ   MINMHZ       MHZ
->    0    0      0    0 0:0:0:0          yes 4208.0000 400.0000 1666.7740
->    1    0      0    0 0:0:0:0          yes 4208.0000 400.0000  400.0000
-> 
-> ----------------------------------------------------------------------
-> $ sudo bash -c "echo 0 > /sys/devices/system/cpu/cpu0/cpufreq/amd_pstate_boost_cpb"
-> 
-> CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE    MAXMHZ   MINMHZ       MHZ
->    0    0      0    0 0:0:0:0          yes 3501.0000 400.0000 4154.3140
->    1    0      0    0 0:0:0:0          yes 4208.0000 400.0000  400.0000
-> 
-> Please be aware that modifying the global variable
-> `amd_pstate_global_params.cpb_boost` will overwrite the individual CPU settings.
-> 
-> Signed-off-by: Perry Yuan <perry.yuan@amd.com>
-> ---
->   drivers/cpufreq/amd-pstate.c | 27 +++++++++++++++++++++++++++
->   1 file changed, 27 insertions(+)
-> 
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 11bce2c1db32..44531711a5fa 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -1371,6 +1371,30 @@ static int amd_pstate_cpu_boost(int cpu, bool state)
->   	return ret < 0 ? ret : 0;
->   }
->   
-> +static ssize_t show_amd_pstate_boost_cpb(struct cpufreq_policy *policy, char *buf)
-> +{
-> +	struct amd_cpudata *cpudata = policy->driver_data;
-> +	bool boost_val;
-> +
-> +	boost_val = READ_ONCE(cpudata->boost_state);
-> +
-> +	return sysfs_emit(buf, "%u\n", boost_val);
-> +}
-> +
-> +static ssize_t store_amd_pstate_boost_cpb(
-> +		struct cpufreq_policy *policy, const char *buf, size_t count)
-> +{
-> +	bool boost_val;
-> +	int ret;
-> +
-> +	if (sscanf(buf, "%d", &boost_val) != 1)
-> +		return -EINVAL;
-> +
-> +	ret = amd_pstate_cpu_boost(policy->cpu, boost_val);
-> +
-> +	return ret < 0 ? ret : count;
-> +}
-> +
->   static ssize_t cpb_boost_show(struct device *dev,
->   			   struct device_attribute *attr, char *buf)
->   {
-> @@ -1416,6 +1440,7 @@ cpufreq_freq_attr_ro(amd_pstate_prefcore_ranking);
->   cpufreq_freq_attr_ro(amd_pstate_hw_prefcore);
->   cpufreq_freq_attr_rw(energy_performance_preference);
->   cpufreq_freq_attr_ro(energy_performance_available_preferences);
-> +cpufreq_freq_attr_rw(amd_pstate_boost_cpb);
->   static DEVICE_ATTR_RW(status);
->   static DEVICE_ATTR_RO(prefcore);
->   static DEVICE_ATTR_RW(cpb_boost);
-> @@ -1426,6 +1451,7 @@ static struct freq_attr *amd_pstate_attr[] = {
->   	&amd_pstate_highest_perf,
->   	&amd_pstate_prefcore_ranking,
->   	&amd_pstate_hw_prefcore,
-> +	&amd_pstate_boost_cpb,
->   	NULL,
->   };
->   
-> @@ -1437,6 +1463,7 @@ static struct freq_attr *amd_pstate_epp_attr[] = {
->   	&amd_pstate_hw_prefcore,
->   	&energy_performance_preference,
->   	&energy_performance_available_preferences,
-> +	&amd_pstate_boost_cpb,
->   	NULL,
->   };
->   
+Right.
+
+The choice to make the ITMT prio reflect the capacity is deliberate,
+although this code works with values retrieved via CPPC (which are the
+same as the HWP_CAP values in the majority of cases but not always).
+
+> Running it on i7-13700K (while allowing SMT) gives:
+>
+> root@gulliver:~# dmesg | grep sched_set_itmt_core_prio
+> [    3.957826] sched_set_itmt_core_prio() cpu=3D0 prio=3D68
+> [    3.990401] sched_set_itmt_core_prio() cpu=3D1 prio=3D68
+> [    4.015551] sched_set_itmt_core_prio() cpu=3D2 prio=3D68
+> [    4.040720] sched_set_itmt_core_prio() cpu=3D3 prio=3D68
+> [    4.065871] sched_set_itmt_core_prio() cpu=3D4 prio=3D68
+> [    4.091018] sched_set_itmt_core_prio() cpu=3D5 prio=3D68
+> [    4.116175] sched_set_itmt_core_prio() cpu=3D6 prio=3D68
+> [    4.141374] sched_set_itmt_core_prio() cpu=3D7 prio=3D68
+> [    4.166543] sched_set_itmt_core_prio() cpu=3D8 prio=3D69
+> [    4.196289] sched_set_itmt_core_prio() cpu=3D9 prio=3D69
+> [    4.214964] sched_set_itmt_core_prio() cpu=3D10 prio=3D69
+> [    4.239281] sched_set_itmt_core_prio() cpu=3D11 prio=3D69
+
+CPUs 8 - 10 appear to be "favored cores" that can turbo up higher than
+the other P-cores.
+
+> [    4.263438] sched_set_itmt_core_prio() cpu=3D12 prio=3D68
+> [    4.283790] sched_set_itmt_core_prio() cpu=3D13 prio=3D68
+> [    4.308905] sched_set_itmt_core_prio() cpu=3D14 prio=3D68
+> [    4.331751] sched_set_itmt_core_prio() cpu=3D15 prio=3D68
+> [    4.356002] sched_set_itmt_core_prio() cpu=3D16 prio=3D42
+> [    4.381639] sched_set_itmt_core_prio() cpu=3D17 prio=3D42
+> [    4.395175] sched_set_itmt_core_prio() cpu=3D18 prio=3D42
+> [    4.425625] sched_set_itmt_core_prio() cpu=3D19 prio=3D42
+> [    4.449670] sched_set_itmt_core_prio() cpu=3D20 prio=3D42
+> [    4.479681] sched_set_itmt_core_prio() cpu=3D21 prio=3D42
+> [    4.506319] sched_set_itmt_core_prio() cpu=3D22 prio=3D42
+> [    4.523774] sched_set_itmt_core_prio() cpu=3D23 prio=3D42
+>
+> root@gulliver:~# dmesg | grep hybrid_set_cpu_capacity
+> [    4.450883] hybrid_set_cpu_capacity() cpu=3D0 cap=3D1009
+> [    4.455846] hybrid_set_cpu_capacity() cpu=3D1 cap=3D1009
+> [    4.460806] hybrid_set_cpu_capacity() cpu=3D2 cap=3D1009
+> [    4.465766] hybrid_set_cpu_capacity() cpu=3D3 cap=3D1009
+> [    4.470730] hybrid_set_cpu_capacity() cpu=3D4 cap=3D1009
+> [    4.475699] hybrid_set_cpu_capacity() cpu=3D5 cap=3D1009
+> [    4.480664] hybrid_set_cpu_capacity() cpu=3D6 cap=3D1009
+> [    4.485626] hybrid_set_cpu_capacity() cpu=3D7 cap=3D1009
+> [    4.490588] hybrid_set_cpu_capacity() cpu=3D9 cap=3D1024
+> [    4.495550] hybrid_set_cpu_capacity() cpu=3D10 cap=3D1024
+> [    4.500598] hybrid_set_cpu_capacity() cpu=3D11 cap=3D1024
+
+And the "favored cores" get the max capacity.
+
+> [    4.505649] hybrid_set_cpu_capacity() cpu=3D12 cap=3D1009
+> [    4.510701] hybrid_set_cpu_capacity() cpu=3D13 cap=3D1009
+> [    4.515749] hybrid_set_cpu_capacity() cpu=3D14 cap=3D1009
+> [    4.520802] hybrid_set_cpu_capacity() cpu=3D15 cap=3D1009
+> [    4.525846] hybrid_set_cpu_capacity() cpu=3D16 cap=3D623
+> [    4.530810] hybrid_set_cpu_capacity() cpu=3D17 cap=3D623
+> [    4.535772] hybrid_set_cpu_capacity() cpu=3D18 cap=3D623
+> [    4.540732] hybrid_set_cpu_capacity() cpu=3D19 cap=3D623
+> [    4.545690] hybrid_set_cpu_capacity() cpu=3D20 cap=3D623
+> [    4.550651] hybrid_set_cpu_capacity() cpu=3D21 cap=3D623
+> [    4.555612] hybrid_set_cpu_capacity() cpu=3D22 cap=3D623
+> [    4.560571] hybrid_set_cpu_capacity() cpu=3D23 cap=3D623
+>
+> > If the given system is hybrid and non-SMT, the new code disables ITMT
+> > support in the scheduler (because it may get in the way of asymmetric C=
+PU
+> > capacity code in the scheduler that automatically gets enabled by setti=
+ng
+> > asymmetric CPU capacity) after initializing all online CPUs and finds
+> > the one with the maximum HWP_HIGHEST_PERF value.  Next, it computes the
+> > capacity number for each (online) CPU by dividing the product of its
+> > HWP_HIGHEST_PERF and SCHED_CAPACITY_SCALE by the maximum HWP_HIGHEST_PE=
+RF.
+>
+> SO either CAS at wakeup and in load_balance or SIS at wakeup and ITMT in
+> load balance.
+
+Yup, at least for this version of the patch.
+
+> > When a CPU goes offline, its capacity is reset to SCHED_CAPACITY_SCALE
+> > and if it is the one with the maximum HWP_HIGHEST_PERF value, the
+> > capacity numbers for all of the other online CPUs are recomputed.  This
+> > also takes care of a cleanup during driver operation mode changes.
+> >
+> > Analogously, when a new CPU goes online, its capacity number is updated
+> > and if its HWP_HIGHEST_PERF value is greater than the current maximum
+> > one, the capacity numbers for all of the other online CPUs are
+> > recomputed.
+> >
+> > The case when the driver is notified of a CPU capacity change, either
+> > through the HWP interrupt or through an ACPI notification, is handled
+> > similarly to the CPU online case above, except that if the target CPU
+> > is the current highest-capacity one and its capacity is reduced, the
+> > capacity numbers for all of the other online CPUs need to be recomputed
+> > either.
+> >
+> > If the driver's "no_trubo" sysfs attribute is updated, all of the CPU
+> > capacity information is computed from scratch to reflect the new turbo
+> > status.
+>
+> So if I do:
+>
+> echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo
+>
+> I get:
+>
+> [ 1692.801368] hybrid_update_cpu_scaling() called
+> [ 1692.801381] hybrid_update_cpu_scaling() max_cap_perf=3D44, max_perf_cp=
+u=3D0
+> [ 1692.801389] hybrid_set_cpu_capacity() cpu=3D1 cap=3D1024
+> [ 1692.801395] hybrid_set_cpu_capacity() cpu=3D2 cap=3D1024
+> [ 1692.801399] hybrid_set_cpu_capacity() cpu=3D3 cap=3D1024
+> [ 1692.801402] hybrid_set_cpu_capacity() cpu=3D4 cap=3D1024
+> [ 1692.801405] hybrid_set_cpu_capacity() cpu=3D5 cap=3D1024
+> [ 1692.801408] hybrid_set_cpu_capacity() cpu=3D6 cap=3D1024
+> [ 1692.801410] hybrid_set_cpu_capacity() cpu=3D7 cap=3D1024
+> [ 1692.801413] hybrid_set_cpu_capacity() cpu=3D8 cap=3D1024
+> [ 1692.801416] hybrid_set_cpu_capacity() cpu=3D9 cap=3D1024
+> [ 1692.801419] hybrid_set_cpu_capacity() cpu=3D10 cap=3D1024
+> [ 1692.801422] hybrid_set_cpu_capacity() cpu=3D11 cap=3D1024
+> [ 1692.801425] hybrid_set_cpu_capacity() cpu=3D12 cap=3D1024
+> [ 1692.801428] hybrid_set_cpu_capacity() cpu=3D13 cap=3D1024
+> [ 1692.801431] hybrid_set_cpu_capacity() cpu=3D14 cap=3D1024
+> [ 1692.801433] hybrid_set_cpu_capacity() cpu=3D15 cap=3D1024
+> [ 1692.801436] hybrid_set_cpu_capacity() cpu=3D16 cap=3D605
+> [ 1692.801439] hybrid_set_cpu_capacity() cpu=3D17 cap=3D605
+> [ 1692.801442] hybrid_set_cpu_capacity() cpu=3D18 cap=3D605
+> [ 1692.801445] hybrid_set_cpu_capacity() cpu=3D19 cap=3D605
+> [ 1692.801448] hybrid_set_cpu_capacity() cpu=3D20 cap=3D605
+> [ 1692.801451] hybrid_set_cpu_capacity() cpu=3D21 cap=3D605
+> [ 1692.801453] hybrid_set_cpu_capacity() cpu=3D22 cap=3D605
+> [ 1692.801456] hybrid_set_cpu_capacity() cpu=3D23 cap=3D605
+>
+> Turbo on this machine stands only for the cpu_capacity diff 1009 vs 1024?
+
+Not really.
+
+The capacity of the fastest CPU is always 1024 and the capacities of
+all of the other CPUs are adjusted to that.
+
+When turbo is disabled, the capacity of the "favored cores" is the
+same as for the other P-cores (i.e. 1024) and the capacity of E-cores
+is relative to that.
+
+Of course, this means that task placement may be somewhat messed up
+after disabling or enabling turbo (which is a global switch), but I
+don't think that there is a way to avoid it.
 
