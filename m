@@ -1,81 +1,80 @@
-Return-Path: <linux-pm+bounces-7535-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7536-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 579798BCEB9
-	for <lists+linux-pm@lfdr.de>; Mon,  6 May 2024 15:11:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3CF38BCEE8
+	for <lists+linux-pm@lfdr.de>; Mon,  6 May 2024 15:27:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 438B9B2025F
-	for <lists+linux-pm@lfdr.de>; Mon,  6 May 2024 13:11:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 02B5B1C22483
+	for <lists+linux-pm@lfdr.de>; Mon,  6 May 2024 13:27:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76A46745D9;
-	Mon,  6 May 2024 13:11:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5172D6D1AE;
+	Mon,  6 May 2024 13:27:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="2HfSu3eO"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="UmRBzgK+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2043.outbound.protection.outlook.com [40.107.244.43])
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2050.outbound.protection.outlook.com [40.107.92.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4595D15A5;
-	Mon,  6 May 2024 13:11:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C09CFBF0;
+	Mon,  6 May 2024 13:27:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715001065; cv=fail; b=Q2xE047qhmfuP0DkjNk9xKdgHwga/Z+x5VGhRZyAWEOZ+majL6fM+8mzXGpHvqGSWaFirbVxXVzANybu9lwL/ZhRftfi5PH+AogFmRpm97Ax+aMHqpaZWLmJDQK3DL4UL9Hc/GaEtQaRRmXLp8OsqCf5qWdJlDmzUacDvw9++ek=
+	t=1715002075; cv=fail; b=fY+JhpFCTAYSwV8UIj8NKkpwPFjnzT917G6b2257PAJx4PnL5bTKJeV+ZCIV0ScPbpXPlEmDt2vzRjSQDd8LwdzcveXm4r18CDUhOXty5rQ45inUFoYCZJOXxwNwbKV6ioN7qSK6LYE147RTxYbuTej+Efbv+xl5ZHXtOcz6JWI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715001065; c=relaxed/simple;
-	bh=I2WZx05G43wpMpGhtNvK45mTlTVdRySVeR3zh3m9Evc=;
+	s=arc-20240116; t=1715002075; c=relaxed/simple;
+	bh=ixJknFuoqAHLa5lcXTW/noioQErh/IEqAsenPFFpFIo=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=lTcgV+MoUbuoMDQJXn9fA8MExFRzpKQCyDkI3ZGd/nQ5aKFchcxsTNu91i4g+fla/NxJq98jIQ7D/IhKg3FwGqN8jU6rRYg9Dk34LYntJHQdqh3YosVBwuok0QR/uRBrFjqXn2fsbrYswlieDOjIVl5IKTsLZtxCnF4pAjT/7k8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=2HfSu3eO; arc=fail smtp.client-ip=40.107.244.43
+	 Content-Type:MIME-Version; b=cICByyM50M4zw5Kq01VXNePg0xEtcRKTH/87qa6KqRizwoOtYIxVdIzutRpKq2nihMstbPQLc2/ivGcjujBvwZQeoB9q9URQVZfS/1UgRP7ZYRuJ0mb9fdhVrUqO8lzmfd6xtp3pdrtUXEZfpKgomkGl1Q+fxrEtrpqt/+EEn7w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=UmRBzgK+; arc=fail smtp.client-ip=40.107.92.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BrNG5xAFmJaM+FNETJRtIDDhijNkpxcRfjlps1QlE4UCYtKRlNPYxbN5gskZLdgTl0QHSiHX/jRbzet8JWrTLTE9t9urIDBaXUPJtgNxsDeA/2B8CHV4IZajPQSKvES5yr5ZdSYuHk2dwtaJ1/Ugffs8ZbyX2ZvgcWA8c7Y2/Ew3KPofBXwOaWyy8yQTskdkLQz2JQxncmI6VxRhYD/mJ3jsf6foZTf4rbtuKW8y9ljqsTFf/qYSZeXtHUM+UUX665J7KaJSjWdLP616NUM96t5N79HNf70NZUu9HVn/rOdwyiDtXVEr0WfKPYyh1lgk5DQXtSQQO8f2AN731VlVcw==
+ b=GqKOL9+rUgRMgpgl8yh3BDq6nPRfnwJnhu3J65lkmLIiKw+wJHNekcp1GHxbuWePoWophAReD+KhNzLO+qQaXtAAL5RcraF/dh2xduLLrHXlnengr/n1p6KDlFNy2TeyKAFJsZFbczvNzMIcc4kxJIIDM3a5lZjd7xm3CXnmaQtcvEIzjvlXGxVyA8vC2CnB2Liw4pT2VgVtiW2lQzO4fH+aH4dU2cQ6te6+NIrt5wIyAe7h+k0JwVySpFQQe7RiGF5HYyw5hhPB/7iWIgM/ZtlGo8qaPdgdlIM3bRXHI+zujKkoutIddBsbBdUHzT8tX5KFPwSSnPAynOVCJfkG0g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aS7/e5ZXiGxR9u7yL12xU0hnIRnwCAC4NSddNp0uWQk=;
- b=kvppR1bToCuiOkxJ+byKUF5dWcZIvPif35DsXitHp5EyNyTzZ55kG4970+iagGVPAqasVqTPpkSpPDSXvQcgaFu/4ddtZz24l61aXfUif6Oh+wQjESxOZoDznz1clCu9s3rvH1lWtCGwmX34LCP4mHdWGBBF4iCTdOJ6uF40W2Ki4TGE/wG0veF6ywNc/ElNewH39amudVsn9Nr6mreen8ewGxX45+mCM9/3v5DwrjHz+0hk/HIIV3jQ0Z8aDAtNA4QsuBASHEzQ7qKAntXTtBEOPZDLjaAfsqefhMe9zisWilHw1y8yEQ70jeeVOLw9m/n9UrROXzox+YV+Bvw0+A==
+ bh=X8RMmcNxpUxd0GEWx4so1DCCXV6AwBajy3ac6MAxK2E=;
+ b=PXY3+lMzOrgIVKQOzG5ME4sk5XQ+Ko9BUOaRbk0+L4XjTDgxMKI4cBi5NoRo7Z5Iao4xXf3EBTlq8zjJcKtolE3J56JcgXWvou5nCJZ/fsKz9OLs5oSdr9OqYUEEjGuT7ppuVvfS1g33dbJLByJaMnLR3svD+zmRrf7TjPCQP425tCNA87g1be582gfdltjWWF5SEw+/OtmK3w8vlA/nEbEOjV2L7stDu0hi2B0K58d2yFu9Im3lvnIccZ4eP8b9bh+ZtwtBnE6Nfcmusgl0RRt2h3voPeCGPeBztdk1bGM9mq8UoR0XuDk0zxQRn+prYh6po6kfBs9yx2RI+3K/Fw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aS7/e5ZXiGxR9u7yL12xU0hnIRnwCAC4NSddNp0uWQk=;
- b=2HfSu3eOxCQe9hXG34OUOqkDqOnLbuFCjiukach0g1EDQfgVKnUTK277tJKLLy9Omp0tCPlzP4Dw83JsDnQIJsccMh/RxBNMqc8Pc+sxISwirWK/U9nanKcMp5PTdhJ3AUm5+3EnY5zr9IoEeXY+fGaKm+qjz/rqWMWq4hSeJiQ=
+ bh=X8RMmcNxpUxd0GEWx4so1DCCXV6AwBajy3ac6MAxK2E=;
+ b=UmRBzgK+FARum909CMsGd8feqRCy2ofQ9VcqL1UgFjy8WpOmUu+oA+nkmjkzEd/naOF1gADfbX7UdRc7NRcHVdkNPHX0gnOJQECZUOGFCDCJhq/Lm32afP3YFZ/cmC3sx7maTZelpVhWm7Iy9cdekyeWWIyDfCSAAk1CO759rpA=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by SJ0PR12MB5609.namprd12.prod.outlook.com (2603:10b6:a03:42c::12) with
+ by MW4PR12MB7465.namprd12.prod.outlook.com (2603:10b6:303:212::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.42; Mon, 6 May
- 2024 13:11:00 +0000
+ 2024 13:27:47 +0000
 Received: from MN0PR12MB6101.namprd12.prod.outlook.com
  ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
  ([fe80::37ee:a763:6d04:81ca%6]) with mapi id 15.20.7544.041; Mon, 6 May 2024
- 13:11:00 +0000
-Message-ID: <84c58078-93a4-406a-8abb-9054854e54a0@amd.com>
-Date: Mon, 6 May 2024 08:10:58 -0500
+ 13:27:46 +0000
+Message-ID: <6d9dd5fb-0352-44dd-abd6-47d3ea050ba6@amd.com>
+Date: Mon, 6 May 2024 08:27:43 -0500
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] platform/chrome: cros_ec_framework_laptop: introduce
- driver
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Lee Jones <lee@kernel.org>, Benson Leung <bleung@chromium.org>,
- Guenter Roeck <groeck@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
- "Dustin L. Howett" <dustin@howett.net>, Sebastian Reichel <sre@kernel.org>,
- linux-pm@vger.kernel.org
-References: <20240505-cros_ec-framework-v1-0-402662d6276b@weissschuh.net>
- <20240505-cros_ec-framework-v1-1-402662d6276b@weissschuh.net>
+Subject: Re: [PATCH v9 3/7] cpufreq: amd-pstate: implement cpb_boost sysfs
+ entry for boost control
+To: Perry Yuan <perry.yuan@amd.com>
+Cc: Alexander.Deucher@amd.com, Xinmei.Huang@amd.com, Xiaojian.Du@amd.com,
+ Li.Meng@amd.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ rafael.j.wysocki@intel.com, Borislav.Petkov@amd.com, gautham.shenoy@amd.com,
+ viresh.kumar@linaro.org, Ray.Huang@amd.com
+References: <cover.1714989803.git.perry.yuan@amd.com>
+ <d69d52290ec7ab4073b266348b3d7c0adf13ee30.1714989803.git.perry.yuan@amd.com>
 Content-Language: en-US
 From: "Limonciello, Mario" <mario.limonciello@amd.com>
-In-Reply-To: <20240505-cros_ec-framework-v1-1-402662d6276b@weissschuh.net>
+In-Reply-To: <d69d52290ec7ab4073b266348b3d7c0adf13ee30.1714989803.git.perry.yuan@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SN4PR0501CA0018.namprd05.prod.outlook.com
- (2603:10b6:803:40::31) To MN0PR12MB6101.namprd12.prod.outlook.com
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: DM6PR02CA0161.namprd02.prod.outlook.com
+ (2603:10b6:5:332::28) To MN0PR12MB6101.namprd12.prod.outlook.com
  (2603:10b6:208:3cb::10)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -84,264 +83,301 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|SJ0PR12MB5609:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4a950818-c05b-4b43-894e-08dc6dcdf99d
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|MW4PR12MB7465:EE_
+X-MS-Office365-Filtering-Correlation-Id: f88a100a-e2e6-4bb6-961f-08dc6dd05123
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|1800799015|376005|7416005|366007;
+X-Microsoft-Antispam: BCL:0;ARA:13230031|1800799015|376005|366007;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?WWZoTFdWVENhUGVLSk1sMEZkQlFacldWZWZmNzI5RUtRek90NXRKQUExUDd3?=
- =?utf-8?B?aFQ1VzVLS0FMOFNJVlExYUxoM1haMmpkMTZSbVB2SEUyc3EyWXJ4eW1UUXRS?=
- =?utf-8?B?cXhkWnZLcUhwUDJ5bUltcjZTWnhhL0hvMzJrNlJjNGhiNUxvMXY2cUE3RFRS?=
- =?utf-8?B?ZEFVMVRIQnFDUStMbnpRQ2pCWmdoMHc0aUFmRkNOc3R1R1BRRm5PSVlmVHVJ?=
- =?utf-8?B?SHkrb0tMRmcrSUxYVldqV2xZNmduNXk4MlJGMkkzN2JmNlpRdm5KTzl2eCtL?=
- =?utf-8?B?MzNQUmJmdWxpNFFiZkZ5QTZDdkt1blNjTGZOZ0NFblkvbnQ5NENNeUwrV0xv?=
- =?utf-8?B?N3hvQ0duK3N5a0RuQW55cFVZWW8zVElpRHhxNHhuV0d6MDdUQTVtRitQeVhJ?=
- =?utf-8?B?ZnFCeklCNjdaMVpTUzc3S05aWURnVUY4bVBnby8yS3pzZlRLdVM2RXhNRDNr?=
- =?utf-8?B?K0lXZ01sZXVCSmpWK0Z2dWZhWFdTS1gzYkp4MDl4QjdsZW5Wc1BtOUNnM0Fj?=
- =?utf-8?B?UHlERytTM1NteDdYVHYzeTJvM1pYMTArcUoweklNb0pncVJ6bnJBUlgwNmVT?=
- =?utf-8?B?WnRSV1A4dlp1Q0o1S0hZZzV5d2hybDJ4WjJENTFDc3RqdHpTUkZYcWxXSnVz?=
- =?utf-8?B?YXUyVERha1ZsUEJIM2xtWmYxekRmeU0zRkdGSkE5c2lScWpLcDg0Yjkwc1FB?=
- =?utf-8?B?TUxhZzh4ZmlFcDBzNC9DekVFby9FejN6L2N0MUJZbG1LaTdPMFBpU0hRSU9T?=
- =?utf-8?B?alJHdFk3V2E1ODJVdkRSMnc4VmlRL29XRmtNM0tvUG9HbWRPRjB1SHcrTi9P?=
- =?utf-8?B?dUVBUFdOWlYzM0NuRUxaZXhQTnJSVkhKdEs3UTh3WWtwa0NEeVVuaXVGVzdF?=
- =?utf-8?B?eDJqZ1ZwMEhnY1BpSzhCT1E1MTlXaHI2Z3N3bGhDM3hqR0VCZlVEbGRGS2dY?=
- =?utf-8?B?c1lCSVNuNGQ5RkxjZTVkWTUvN3MyZUZ3TVZhVGN0bkxzZTRCOVQzek1jWGs2?=
- =?utf-8?B?TEVIYlo0b1JCSVFrTmdNSlBycERDZFF3ZDlxeDl4UTFOS3VMYjA0akwzbEcy?=
- =?utf-8?B?V2U4RnlrbWhVQWltbkxuU2NSZlZKNGk3Wk9pQ1BzRlZuT3F0ZVNzN2lJSHJV?=
- =?utf-8?B?bUFybjh0NzFuS2Y1cWY0ZWhJYWxSbE1uTUFsb2RYUTk0eXpUYzEvWjlWaGsr?=
- =?utf-8?B?L0pkVWdrdllkc0dsc3NsMjg1V2ErVldNTUwwN0s1WVozNngzY3BkeWFOK3ly?=
- =?utf-8?B?WlJNbmM1bFJkM2c1NUpFOVIwZ0dHVUQ1RlVCQjJtcFAxZ25Ub0Z3NTQrd0t5?=
- =?utf-8?B?TGpuaXFNRUxmWS9UTWhxRzc3Tm8xOS9lQXVnT0NtcWFobWhjaTV6LzF6cm1t?=
- =?utf-8?B?ZEtuWDdQa0dSeXNpNkhsZnQ0Q3NlOVVrUVY0ZjE0eThUaE16TDgwSWNzTWRl?=
- =?utf-8?B?SG54bWo2ZFRpQ0xRaGs1R1VmOHJFY3k1N01NUmxaNnRyVnorOUQ3L2k1bSth?=
- =?utf-8?B?RC9QbDVIOTJ4dTZTejI5MWdRbG9lMzU0N000K0N6Nm9iY0wvaTJVZkRtdGxj?=
- =?utf-8?B?OUVMRk5FTTBjMzZVcVVVNGZiOVZXTkdNMExkYlNYNnFmMzFjWjlVKzhqVTdC?=
- =?utf-8?B?NUlqM0JKZ0orNzM5L3BRTkE1NW5mUmRJQTlqVmpmbHpSM3BZL2NObGs0MklP?=
- =?utf-8?B?U0hTYVh5ZGhxSExvVHFoTE9JdHZJUGxMZmtaREh5R1hsN3FxRWpSZExBPT0=?=
+	=?utf-8?B?eHIyUjUxVDVTNS9lZloyZUNRUkdqU1VHRzNUMENpZC9tSjR2QzcvYmZyRGxX?=
+ =?utf-8?B?eEFiZjh0NStzTkFFQzRuNmYzaGhzRUJIenpKVG56R3hJcmwzY1FkTWdpZGFu?=
+ =?utf-8?B?UldWNWl5aEdmNlFwdFFaUDFFT2xtenJwVmNydnFvemp5cTdISTRIeWZMSVd5?=
+ =?utf-8?B?TzZGc2RmeDJtT1FhUzVlMW5RVXU3ZzNJeEh5WEwzOUZ0R0V2Rk1sV05iMXVK?=
+ =?utf-8?B?bkhuV1Rjdy9pZnAzNUYvbFF6MXREYjBpc2RyR1l5aXhWcnpUWmk5K05rUTZC?=
+ =?utf-8?B?dzVVMW5pME5VOVdSRCthT3ZNVmpGOXJnWWhhd0Fva1pPTjFJc3AxZHpJRjF0?=
+ =?utf-8?B?R1Z6SVBvVGNrN1NuM3VuL3k0WmF2THArYjRHQmlLQXVlYWdncEg3TGJuVGRN?=
+ =?utf-8?B?WTJMeitBOFJlYVZIMTR1eG9hdVE4a1F6OVhBcVNYOWU5bHZITzZSVEFvMTVx?=
+ =?utf-8?B?R2lvd0JTWjdVQ1pmU2xwVmlXNWVTODlwTmwyYTBPZk1wVW1KRWtYN2JWS2hQ?=
+ =?utf-8?B?RmlrRmRKVkhpVlBwWTc1cXdVT09ZN05SWVFCSzI4dVpuZjFUelZpVnVTNFhX?=
+ =?utf-8?B?RGs1ME9Cby8zWCtLaHdtdXBWc25JUEJGajRtbHhKZTZhRHNOQXVGOFJlemVG?=
+ =?utf-8?B?QW1rWEh2a3VpT3k0dWhpSFhOaFVrL1ZNczN6ZGk1WFdBbElac1k1QnZPeTZR?=
+ =?utf-8?B?V25OdnpVVXZFWjl6bFFDY205YjA0VlB1QlR0MWt1Qmc3YWNzMzRMQU1nWGNp?=
+ =?utf-8?B?WnlTck9acVphQzdBMjBGSW91OFB6VGVSclI3TGxwN0VzZDZpam5IbU55aDdl?=
+ =?utf-8?B?R1crajhpQzJ3akhyUm91cEk4dWNFZnBkUlphcjhTV3g5NlUrcHBoTXl1azl5?=
+ =?utf-8?B?bzduNnYrY3BSckRqallkL2ZKU3IwdWE3TUFuRC9qYXRtMXdEQy9ZR1JGbnZv?=
+ =?utf-8?B?ZGI4Ykhlc21VZFZYTEZKa1RkaTYxaHQxSERLZHRUQXFBUUtwaHRCV2NVM3Qv?=
+ =?utf-8?B?K2s5dEZSa2NFRVJvRmhVRlA4ZTdxSjN1OWdRdDBlQ0hBdFB4UGZmUzhZNXhU?=
+ =?utf-8?B?emg5T01iWmJnRFQ3cEZ0SlBHRGJVR3VpZmZ3dWhkR1pzK1BUanJGaENvNTB3?=
+ =?utf-8?B?dmtSS0NnK1ZSS3RoSnRyOFYzNGtLczA4SFB0L2U5RFN3d3M5TW1CYmtzcmo3?=
+ =?utf-8?B?N1JEcC9raG5xM3NEQU9KWnlucHpxbGw1WS9oeGlLM1laQXhzaVBYSWFuOG95?=
+ =?utf-8?B?QlZtUlRidXZSVzhWbXVMNkVxYXJWVkpXbU0vZ3ZzU1pLZSs1bHIvK1RreVBL?=
+ =?utf-8?B?UkxiQklIOXFOT09KdjB5OTk5c21aN05vT056RVlqeEtIaktjMkYyL1dHQ3Jy?=
+ =?utf-8?B?RjJGbkM2Q1E2bnlXeTdhdTB6emJXREh5eTV1NnhiRDZDMWNQQWxVNjUxbktK?=
+ =?utf-8?B?eFFiWENtaFFiYTl3RTlXM1J6eGcwVWM5VTJ4alJubDd6RXJZbndHaTllSzVO?=
+ =?utf-8?B?RzAwNnRicmt4Y1p5dmVvM2xuNDdlRWxUTjNnazhCN2N6WjJqdFRHeUx5TTQy?=
+ =?utf-8?B?Qy83cVU5bERFOVhUVFpBUndRQzVtd1gzQXVQbjFSOXlNdnJiQk1CYTBqNG9E?=
+ =?utf-8?Q?rLkjCWqQofcX6+EZPtqCdKRR8TWjDCZ9VZfXULesty68=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(376005)(7416005)(366007);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(376005)(366007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?cVNvVEt6dEMzYjJrSHg3ZG1QRXVEd29UaFI2VVZkTU5ZUDV1dm00WUpBVGor?=
- =?utf-8?B?V20wOXZ4V3NNNzVGaGduNDVLaGsrWHR5R2ZaTEtxQ1E3c2hwbDU3ME9QYjFL?=
- =?utf-8?B?YkZ0ajU4L0pETCtrVnJKZkk1QkE2NktpaVBCQUpXdmRYZWw2Z1RPa2tRM0JH?=
- =?utf-8?B?MnlVSmVJZWxad0ZlMkZ4RElxQklDUHl2YTMyNFVsRk02bG1FRUltTXRVY2JD?=
- =?utf-8?B?Q0FwWkN2c3ViY2FCTWpDN3VQaVliSnlNVm0yK0xjU2xGZU0zQm5XUlpMS2RR?=
- =?utf-8?B?aTJOM1ZGTEkzZFJqT3RENkNKZVZtY1RDd1VnbUltZzVYelFRdXV2Rk9sM2sx?=
- =?utf-8?B?cVpHYmZNNnlHT2xDaUVCa1dSUStsL0hjMnd1cUNwUUNBMTZxMU5PaTdWTnJ0?=
- =?utf-8?B?aGhhWkJ6Z3hBUVhCQ1YwVmFIOHBMQXhadklNU1dDM09PRnhTN0Y3VDBXSVk4?=
- =?utf-8?B?SE9vaUhQUFlPM1FHMGxDejhhRmIyaHYyaWlXQnVRa3pPM084WjZCUjRMM0dU?=
- =?utf-8?B?U3V5ZXowMFc3S2JuVFJ4Z2Z6THZmZW5WZXpuaVlZUlhRUXQ5R1pzUkczb3Aw?=
- =?utf-8?B?YmcvS0kvbGlXdTFXOXZubkxpczg1cGMybDkrSlRtVTFLN002VFNkRDhNb2Jy?=
- =?utf-8?B?YWlESEpvMGtoUlVyMEZtdTlnWVJWMmNucVJySERtRVo1K0FMWUwzc2U5K1FH?=
- =?utf-8?B?b0lHczhnc1ErNUdGS2lqbGUvSXo2cWE0cHJtbjEzeWJFdjNiNHJsbThkcmZ3?=
- =?utf-8?B?WW9xL0xidG9NNGUrRDE3TDNJNGRPbFBuUG9tMTlzTHFuTjZTMHowMW5zd2hD?=
- =?utf-8?B?dnU5UjN2MTM2bG42TENHMXBKLzhNOHRPaHU2N1R2NHI5NTFGMnQ4QmtYay9K?=
- =?utf-8?B?alpUU3ZjUytLeTFoQytYSDJQTnZaVnZaL2orNi96UFZEaDB5SmZSalRidjRR?=
- =?utf-8?B?RFdSY2QzUHpvdGxnWHJWd1ZIZnQybHEyN08zVmRKSXhEYU1BRlh5Q1lYYk1D?=
- =?utf-8?B?UkppOCtwTExlbUU3NDkyOStOOW9EYS9vT296YmN6RDBNdXZlenlLREFBemhX?=
- =?utf-8?B?a2lucTdYaldYK0JCRk9JNkRJNU11T3hqc2JYY3phcHAvNzVUaGxDN1dWU0hO?=
- =?utf-8?B?Y0tGbHZPY043aDUwK0hrYTFZak5vT0RWMXlTbXNRNms5RlRDSHF1VmNodTdl?=
- =?utf-8?B?U1ZqcmlLeHhYS3VFUkNCRlVwQ0dFUXpTNVhhaUVXTDM4a2lUalBQc3ljaGRF?=
- =?utf-8?B?bXBWdkZtdW01TkJjWkFJM2ZyWTQvL3dvMmlzUU81bzUzVHM5dXJHTVRQVFo0?=
- =?utf-8?B?RER2ZFVIblhLM1JCOTNrc1lsbndNclBJRjVpU3lrWDZXdTE2bCtvbjdNZE5z?=
- =?utf-8?B?dGRKWkgrL2E4NXZyY2JjcEE2eFBkaGZvRnBObU5HSlNJbVVhck44OSs1Y3Z4?=
- =?utf-8?B?MFhoNWdhNkN1eG1qK2FWT1Jla3FISzMrUEFkaGkya1p5bzZFNWNWVWYxWEY2?=
- =?utf-8?B?YllOaW85bUFwS2d5OFVXNmQxL2NaTVF1clJGMHhYMktYQ3ZNbFlEeHNpWUtP?=
- =?utf-8?B?V2RQSUVROXlWSkFHYlFmTnlDVFFTbkJRYmU4WUR4VTZrRzR0OGMzQ0RhMTg1?=
- =?utf-8?B?dnFTNmhiMmRoNDRFL1FCZ3laZ2NPSjZ4am9Ma1Z4cUtKNk5nRzkvb0IvOUhQ?=
- =?utf-8?B?cFNGMFR4eEJJSFRYRTBJQ2FqaGRIT0ZTcTR0NzFURjN6R2JQUkVrdmo5OUlH?=
- =?utf-8?B?dFZFR1djMnhxc29SdGZRM1d5TVY3VWkrbHdqT3ZiZEozSnErbnRmdmdtc0xY?=
- =?utf-8?B?SGtvRTdIYlFuNWJKcDZiTWltclFiOHlqQWtPTXJwWFNWU0t2NlVSNnlaUFRu?=
- =?utf-8?B?Q0YyRkllWVJldmZtdnNMSklIU0FGMW94Y1lKa0ZhUklrdXU4eHlMdUdTdDhs?=
- =?utf-8?B?OXYwTlRJTG5MVXZNSUxsenRzcDNrRkhFelRMNVhkZDF5UG9GSzBQRU1CV3N2?=
- =?utf-8?B?VytaS0QzQjNWcWY2MjFFVmVuaWJwdVlFM2RUOEM4OXoxZ1lqSXgzMHpqdXhn?=
- =?utf-8?B?Y2ZWNUNHVS9RWmw2QkdsWmsvbFlVSnNTS0lEOU51Z3pHQ3NrYlJscDMwaVpE?=
- =?utf-8?Q?g0fNKeFKk/AelA5aoeUQpHMeZ?=
+	=?utf-8?B?SUdqd2pjQjhieHpocGNyY2RmajFqSmN2bElRSFI4UC9vTEpCYzJNSTBHRmpW?=
+ =?utf-8?B?cEZ1aHdEVEZ1a3lTNTVwNWVzc3B1ZWpFYjdzT2g2S2NXV0VzdlFsU2c2Q0d0?=
+ =?utf-8?B?M1JRMzFJVTd5c1hRQVpVbGo1NEZvR0I5OXVCdS84cjdrMEdpUXB1QlhjZ1NV?=
+ =?utf-8?B?dTNDMlFhOGwxa3ZxYmNScVRmN0VBc081WVYzbmUwTjRGTCs4OU1MZmFWNjRt?=
+ =?utf-8?B?V3JsKyswdVl4NTZnUVpQSHZyWUlwSGJJMEkwc2pzeVl4b01YaW9Zc1NrNUVh?=
+ =?utf-8?B?S3JhbnduT0QzcFFHeUpjSVp6RU14L0VSS1l2VHY4ci9qak5iQzZOMVc5NE5k?=
+ =?utf-8?B?ZDJRTTFTOXJEZXRFdmpERkVPTzdFQ245TjV6cm9LczkvSkxOMG9RUTJsVzRi?=
+ =?utf-8?B?WnFKMlN4Z2hQNXJBT2JuZEk3ZjIvU0dlNmVkMkdvWHdmcjRzQWRCRUkwVGhM?=
+ =?utf-8?B?amV1QUQzWHl0WmFJWnAybVFrQVJTZ2xmTEhIU2x5UFFMZm1PRXc2QXBYdGhH?=
+ =?utf-8?B?bWNsYXdFYlQ0cHg4SzdkRCtVSFQ0TXl2aWw1MnVzd01uOEMyVnBIWDQ3UlFJ?=
+ =?utf-8?B?b2trRWJOcUpZQVFxUjJJUGFZMHJTbU9KM2NVYXJmL0R4TDFXNFg2UktyemJQ?=
+ =?utf-8?B?OFpWdE1EU3RhNm5NWWtXSDFIRzUvM3l3M2ZqeWFkZG05czg1MFRHOU91RjdL?=
+ =?utf-8?B?bzNDYUVOU0NZUWxpcHVPcjc4eThHQmJvM2U1K1NCL3ZGcEFDbnpCemIyakZ5?=
+ =?utf-8?B?WmpTdXJUcVlhOXNBMnpZb00yREp3ZmtWZmRIVGo4UUVKVlFlU0hjNFhOOWR4?=
+ =?utf-8?B?TUVwOVdRZ055c1FMT0hteWprTEp2MTJOK3hld2h3M1pES3B2WWJOTURScDN5?=
+ =?utf-8?B?UCtiQTQ2NTRvSnFKVGN2NnZleWV4b1E5bWZnckNZckFOT2gvc3poNVpJTDRx?=
+ =?utf-8?B?RlE3R3JydmdWY3JObDcybHhJQW9kOTQveDlUbjJUemxJWmI0aE5xZGdTR1Fa?=
+ =?utf-8?B?QWU3NmJsNzBjODRkWEl2NkVkQll5Ym8xeUJZRUJ1NndHUzN4MWYyTGFSQmtQ?=
+ =?utf-8?B?MWo0YjU4WVNHTE92VHN3ZzRWU1lsMEJxTUxDYS96a1hza1QwWHJ6eFVjT3lP?=
+ =?utf-8?B?elNvM28wYjk4cExHL3ROV3QyczgzaWh4RWw3cjFHVktXaG1SR040OWsrUGZa?=
+ =?utf-8?B?TXZpVlNOeS9qUFd6ekJvbmk0a2RveG9tYTM1d3MwTFV4SHBrbUZwSjlTRWgw?=
+ =?utf-8?B?U0FqNHE4VzcrYlVWWHFJZWREVit4a016bGxUQlRDU0J1SCtwUHdERDNGWXdC?=
+ =?utf-8?B?d1dkelVmSzdZc2pLdFNJazg3U3JoY3o0bE1Cbm82WUtSSmFZS29ZK0d6Y0xi?=
+ =?utf-8?B?dXlsa1lvQ3gzOFhyNjUwM2JRNEFPMWwxNkplRFZKZ1FpUUtPdzh5anc5eVc1?=
+ =?utf-8?B?UkFSVFExLzNSOHUyYkVZcVpvbGJ1emFXcVgrMGliUzRoLzZpRDQvd2dSZWM5?=
+ =?utf-8?B?Q3l4WW02T3AyZmtLRUlGV1hpVmhGOUZxQTVZVGc4bDJZbDMzYjJrYWV4L25W?=
+ =?utf-8?B?Q0p0TE1TZ1NSZ2ZkVE1yWHZhcHBUTHlMRVNhanZUR3ExSXQ3WVUrMk13dnZo?=
+ =?utf-8?B?WkV0eFNCQ1llQUgxZVE2K0tyUXlTdHF4UklxMDJLMnF4MmFFZ1JjOGlkeHJM?=
+ =?utf-8?B?ZTdGOHl3NkJMamwrNnBkTjNiazdKanZ5TkNvRmtjTTkvM3JNOUNpTnd1V2Yw?=
+ =?utf-8?B?WGw5azhZdVNNalFQTEcxUjFXM0YrQ3ZlQ0ZLdW9VUHJCVkJaOWNQd0FoNURL?=
+ =?utf-8?B?QjgwTWlGS3FkRkx1OHpXa1ZNN1JFN3FwQm9KbEtHNkNGT2gzTXA4NnVHZWE2?=
+ =?utf-8?B?Z1RUeGdHb0ozY0l2UzBhZTVSejIzb1ZxUjVzU21iTkQvTHJYZEJoZitIaCtw?=
+ =?utf-8?B?alpFcmhwRDBsTXBpVzZtWEdIRFVyOXRMWlowQVFHWDRaS2ZKNGdiMWltWDEw?=
+ =?utf-8?B?Nnl6SXA2QzhFMWdrSTlWdFNXa1JQd3FpR2wvcVR4S2RaM0JGK25zSFg0VEN2?=
+ =?utf-8?B?dW0rcm9CQloyVjgvWjhhNUxpWWJFWnBJMEd1cHB0TUxiSkQveStVWWRmT2NI?=
+ =?utf-8?Q?vQhGSW7iaigyqH7LgfMkeNhxt?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4a950818-c05b-4b43-894e-08dc6dcdf99d
+X-MS-Exchange-CrossTenant-Network-Message-Id: f88a100a-e2e6-4bb6-961f-08dc6dd05123
 X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2024 13:11:00.4991
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2024 13:27:46.3617
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4CpCdjcunnMgg8p+rZV7Hs9S5lC8iETWtXdcZtCGmx29+tbWqHx0Mxk/1S0Ic1G4t/pUVoPtySgqtq24s+mV9w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5609
+X-MS-Exchange-CrossTenant-UserPrincipalName: UrQfF/Ug0Rj05YTvm2AQPRWLnacAmgC3hiJBR3+EjpG94FoFnbfyBQ0kAk1a1h/ZpEmQtH6bpkAd+VzEG+TYNw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7465
 
 
 
-On 5/5/2024 3:56 PM, Thomas Weißschuh wrote:
-> Framework Laptops are using embedded controller firmware based on the
-> ChromeOS EC project.
-> In addition to the standard upstream commands, some vendor-specific
-> ones are implemented.
+On 5/6/2024 5:19 AM, Perry Yuan wrote:
+> From: Perry Yuan <Perry.Yuan@amd.com>
 > 
-> Add a driver for those custom EC commands.
+> With this new sysfs entry `cpb_boost`created, user can change CPU boost
+> state dynamically under `active`, `guided` and `passive` modes.
+> And the highest perf and frequency will also be updated as the boost
+> state changing.
 > 
-> At first, provide an empty driver that only takes care of scaffolding and
-> device binding.
-> Further patches will add functionality to the driver.
+> 0): check current boost state
+> cat /sys/devices/system/cpu/amd_pstate/cpb_boost
 > 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> 1): disable CPU boost
+> sudo bash -c "echo 0 > /sys/devices/system/cpu/amd_pstate/cpb_boost"
+> 
+> 2): enable CPU boost
+> sudo bash -c "echo 1 > /sys/devices/system/cpu/amd_pstate/cpb_boost"
+> 
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217931
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217618
+> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+
+As I mentioned in v8, I think this makes more sense as a "per CPU 
+attribute".  You're already changing the MSR for each CPU when you 
+change the global one.
+
+I think the only global member should be whether CPB is supported and 
+you can use this for the visibility of the file each CPU.
+
+Could you justify why it's better as a global amd-ptate "driver 
+attribute" still?
+
 > ---
->   MAINTAINERS                                        |  5 ++
->   drivers/mfd/cros_ec_dev.c                          | 13 ++++++
->   drivers/platform/chrome/Kconfig                    | 11 +++++
->   drivers/platform/chrome/Makefile                   |  1 +
->   drivers/platform/chrome/cros_ec_framework_laptop.c | 53 ++++++++++++++++++++++
->   5 files changed, 83 insertions(+)
+>   drivers/cpufreq/amd-pstate-ut.c |   2 +-
+>   drivers/cpufreq/amd-pstate.c    | 114 +++++++++++++++++++++++++++++++-
+>   include/linux/amd-pstate.h      |   1 +
+>   3 files changed, 115 insertions(+), 2 deletions(-)
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index c23fda1aa1f0..60699c289757 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -4988,6 +4988,11 @@ S:	Maintained
->   F:	Documentation/devicetree/bindings/sound/google,cros-ec-codec.yaml
->   F:	sound/soc/codecs/cros_ec_codec.*
+> diff --git a/drivers/cpufreq/amd-pstate-ut.c b/drivers/cpufreq/amd-pstate-ut.c
+> index f04ae67dda37..b3601b0e6dd3 100644
+> --- a/drivers/cpufreq/amd-pstate-ut.c
+> +++ b/drivers/cpufreq/amd-pstate-ut.c
+> @@ -226,7 +226,7 @@ static void amd_pstate_ut_check_freq(u32 index)
+>   			goto skip_test;
+>   		}
 >   
-> +CHROMEOS EC FRAMEWORK LAPTOP EXTENSIONS
-> +M:	Thomas Weißschuh <linux@weissschuh.net>
-> +S:	Maintained
-> +F:	drivers/platform/chrome/cros_ec_framework_laptop.c
-> +
->   CHROMEOS EC SUBDRIVERS
->   M:	Benson Leung <bleung@chromium.org>
->   R:	Guenter Roeck <groeck@chromium.org>
-> diff --git a/drivers/mfd/cros_ec_dev.c b/drivers/mfd/cros_ec_dev.c
-> index a52d59cc2b1e..0a36e77e5039 100644
-> --- a/drivers/mfd/cros_ec_dev.c
-> +++ b/drivers/mfd/cros_ec_dev.c
-> @@ -145,6 +145,10 @@ static const struct mfd_cell cros_ec_vbc_cells[] = {
->   	{ .name = "cros-ec-vbc", }
->   };
->   
-> +static const struct mfd_cell cros_ec_framework_cells[] = {
-> +	{ .name = "cros-ec-framework", }
-> +};
-> +
->   static void cros_ec_class_release(struct device *dev)
->   {
->   	kfree(to_cros_ec_dev(dev));
-> @@ -299,6 +303,15 @@ static int ec_device_probe(struct platform_device *pdev)
->   				 retval);
+> -		if (cpudata->boost_supported) {
+> +		if (amd_pstate_global_params.cpb_boost) {
+>   			if ((policy->max == cpudata->max_freq) ||
+>   					(policy->max == cpudata->nominal_freq))
+>   				amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_PASS;
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index f7dab0f7b452..f81fd61dd2a9 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -686,8 +686,10 @@ static int amd_pstate_boost_init(struct amd_cpudata *cpudata)
 >   	}
 >   
-> +	 /* The EC on Framework laptops implements some nonstandard features */
-
-I don't think there is a spec really for cros_ec is there?  I think it 
-will depend upon what features you're talking about if this is the right 
-way to go.
-
-The reason I say this is that maybe some of the same kinds of features 
-will make sense for chromebooks that use cros_ec in the future and thus 
-they should be "generic" cros_ec mfd cells to probe for in some way.
-
-> +	if (dmi_match(DMI_SYS_VENDOR, "Framework")) {
-> +		retval = mfd_add_hotplug_devices(ec->dev, cros_ec_framework_cells,
-> +						 ARRAY_SIZE(cros_ec_framework_cells));
-> +		if (retval)
-> +			dev_warn(ec->dev, "failed to add framework laptop devices: %d\n",
-> +				 retval);
+>   	amd_pstate_global_params.cpb_supported = !(boost_val & MSR_K7_HWCR_CPB_DIS);
+> -	if (amd_pstate_global_params.cpb_supported)
+> +	if (amd_pstate_global_params.cpb_supported) {
+>   		current_pstate_driver->boost_enabled = true;
+> +		cpudata->boost_state = true;
+> +	}
+>   
+>   	amd_pstate_global_params.cpb_boost = amd_pstate_global_params.cpb_supported;
+>   
+> @@ -1293,6 +1295,114 @@ static ssize_t prefcore_show(struct device *dev,
+>   	return sysfs_emit(buf, "%s\n", str_enabled_disabled(amd_pstate_prefcore));
+>   }
+>   
+> +static int amd_pstate_cpu_boost_update(struct cpufreq_policy *policy, bool on)
+> +{
+> +	struct amd_cpudata *cpudata = policy->driver_data;
+> +	struct cppc_perf_ctrls perf_ctrls;
+> +	u32 highest_perf, nominal_perf, nominal_freq, max_freq;
+> +	int ret;
+> +
+> +	if (!policy) {
+> +		pr_err("policy is null\n");
+> +		return -ENODATA;
 > +	}
 > +
->   	return 0;
->   
->   failed:
-> diff --git a/drivers/platform/chrome/Kconfig b/drivers/platform/chrome/Kconfig
-> index 073616b5b5a0..ff69ee226606 100644
-> --- a/drivers/platform/chrome/Kconfig
-> +++ b/drivers/platform/chrome/Kconfig
-> @@ -239,6 +239,17 @@ config CROS_EC_TYPEC
->   	  To compile this driver as a module, choose M here: the module will be
->   	  called cros-ec-typec.
->   
-> +config CROS_EC_FRAMEWORK_LAPTOP
-> +	tristate "ChromeOS EC Framework Laptop extensions"
-> +	depends on MFD_CROS_EC_DEV
-> +	default MFD_CROS_EC_DEV
-> +	help
-> +	  If you say Y here, you get support for using Framework Laptop-specific extensions
-> +	  of the Chrome OS EC.
+> +	highest_perf = READ_ONCE(cpudata->highest_perf);
+> +	nominal_perf = READ_ONCE(cpudata->nominal_perf);
+> +	nominal_freq = READ_ONCE(cpudata->nominal_freq);
+> +	max_freq = READ_ONCE(cpudata->max_freq);
 > +
-> +	  To compile this driver as a module, choose M here: the module will be
-> +	  called cros_ec_framework_laptop.
+> +	if (boot_cpu_has(X86_FEATURE_CPPC)) {
+> +		u64 value = READ_ONCE(cpudata->cppc_req_cached);
 > +
->   config CROS_HPS_I2C
->   	tristate "ChromeOS HPS device"
->   	depends on HID && I2C && PM
-> diff --git a/drivers/platform/chrome/Makefile b/drivers/platform/chrome/Makefile
-> index 2dcc6ccc2302..ce6aac620086 100644
-> --- a/drivers/platform/chrome/Makefile
-> +++ b/drivers/platform/chrome/Makefile
-> @@ -10,6 +10,7 @@ obj-$(CONFIG_CHROMEOS_PRIVACY_SCREEN)	+= chromeos_privacy_screen.o
->   obj-$(CONFIG_CHROMEOS_PSTORE)		+= chromeos_pstore.o
->   obj-$(CONFIG_CHROMEOS_TBMC)		+= chromeos_tbmc.o
->   obj-$(CONFIG_CROS_EC)			+= cros_ec.o
-> +obj-$(CONFIG_CROS_EC_FRAMEWORK_LAPTOP)	+= cros_ec_framework_laptop.o
->   obj-$(CONFIG_CROS_EC_I2C)		+= cros_ec_i2c.o
->   obj-$(CONFIG_CROS_EC_ISHTP)		+= cros_ec_ishtp.o
->   obj-$(CONFIG_CROS_TYPEC_SWITCH)		+= cros_typec_switch.o
-> diff --git a/drivers/platform/chrome/cros_ec_framework_laptop.c b/drivers/platform/chrome/cros_ec_framework_laptop.c
-> new file mode 100644
-> index 000000000000..8a8bf039fa9c
-> --- /dev/null
-> +++ b/drivers/platform/chrome/cros_ec_framework_laptop.c
-> @@ -0,0 +1,53 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + *  ChromesOS EC driver for Framework laptop
-> + *
-> + *  Copyright (C) 2024 Thomas Weißschuh <linux@weissschuh.net>
-> + */
-> +#include <linux/kernel.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_data/cros_ec_proto.h>
-> +#include <linux/platform_device.h>
+> +		value &= ~GENMASK_ULL(7, 0);
+> +		value |= on ? highest_perf : nominal_perf;
+> +		WRITE_ONCE(cpudata->cppc_req_cached, value);
 > +
-> +#define DRV_NAME	"cros-ec-framework"
+> +		wrmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ, value);
+> +	} else {
+> +		perf_ctrls.max_perf = on ? highest_perf : nominal_perf;
+> +		ret = cppc_set_epp_perf(cpudata->cpu, &perf_ctrls, 1);
+> +		if (ret) {
+> +			cpufreq_cpu_release(policy);
+> +			pr_debug("failed to set energy perf value (%d)\n", ret);
+> +			return ret;
+> +		}
+> +	}
 > +
-> +struct cros_fwk_priv {
-> +	struct cros_ec_device *cros_ec;
-> +};
+> +	if (on)
+> +		policy->cpuinfo.max_freq = max_freq;
+> +	else
+> +		policy->cpuinfo.max_freq = nominal_freq * 1000;
 > +
-> +static int cros_fwk_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct cros_ec_dev *ec_dev = dev_get_drvdata(dev->parent);
-> +	struct cros_ec_device *cros_ec = ec_dev->ec_dev;
-> +	struct cros_fwk_priv *priv;
+> +	policy->max = policy->cpuinfo.max_freq;
 > +
-> +	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
+> +	if (cppc_state == AMD_PSTATE_PASSIVE) {
+> +		ret = freq_qos_update_request(&cpudata->req[1],
+> +				      policy->cpuinfo.max_freq);
+> +	}
 > +
-> +	priv->cros_ec = cros_ec;
-> +
-> +	platform_set_drvdata(pdev, priv);
-> +
-> +	return 0;
+> +	return ret;
 > +}
 > +
-> +static const struct platform_device_id cros_fwk_id[] = {
-> +	{ DRV_NAME, 0 },
-> +	{ }
-> +};
+> +static int amd_pstate_cpu_boost(int cpu, bool state)
+> +{
+> +	int ret;
+> +	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+> +	struct amd_cpudata *cpudata = policy->driver_data;
 > +
-> +static struct platform_driver cros_fwk_driver = {
-> +	.driver.name	= DRV_NAME,
-> +	.probe		= cros_fwk_probe,
-> +	.id_table	= cros_fwk_id,
-> +};
+> +	if (!policy) {
+> +		pr_err("policy is NULL\n");
+> +		ret = -ENODATA;
+> +		goto err_exit;
+> +	}
 > +
-> +module_platform_driver(cros_fwk_driver);
+> +	ret = amd_pstate_cpu_boost_update(policy, state);
+> +	refresh_frequency_limits(policy);
+> +	cpudata->boost_state = !!state;
 > +
-> +MODULE_DEVICE_TABLE(platform, cros_fwk_id);
-> +MODULE_DESCRIPTION("ChromeOS EC Framework Laptop extensions");
-> +MODULE_AUTHOR("Thomas Weißschuh <linux@weissschuh.net");
-> +MODULE_LICENSE("GPL");
-> 
+> +err_exit:
+> +	cpufreq_cpu_put(policy);
+> +	return ret < 0 ? ret : 0;
+> +}
+> +
+> +static ssize_t cpb_boost_show(struct device *dev,
+> +			   struct device_attribute *attr, char *buf)
+> +{
+> +	return sysfs_emit(buf, "%u\n", amd_pstate_global_params.cpb_boost);
+> +}
+> +
+> +static ssize_t cpb_boost_store(struct device *dev, struct device_attribute *b,
+> +			    const char *buf, size_t count)
+> +{
+> +	bool new_state;
+> +	ssize_t ret;
+> +	int cpu;
+> +
+> +	if (!amd_pstate_global_params.cpb_supported) {
+> +		pr_err("Boost mode is not supported by this processor or SBIOS\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	ret = kstrtobool(buf, &new_state);
+> +	if (ret)
+> +		return ret;
+> +
+> +	mutex_lock(&amd_pstate_driver_lock);
+> +	for_each_present_cpu(cpu) {
+> +		ret = amd_pstate_cpu_boost(cpu, new_state);
+> +		if (ret < 0) {
+> +			pr_warn("failed to update cpu boost for CPU%d (%d)\n", cpu, ret);
+> +			goto err_exit;
+> +		}
+> +	}
+> +	amd_pstate_global_params.cpb_boost = !!new_state;
+> +
+> +err_exit:
+> +	mutex_unlock(&amd_pstate_driver_lock);
+> +	return ret < 0 ? ret : count;
+> +}
+> +
+>   cpufreq_freq_attr_ro(amd_pstate_max_freq);
+>   cpufreq_freq_attr_ro(amd_pstate_lowest_nonlinear_freq);
+>   
+> @@ -1303,6 +1413,7 @@ cpufreq_freq_attr_rw(energy_performance_preference);
+>   cpufreq_freq_attr_ro(energy_performance_available_preferences);
+>   static DEVICE_ATTR_RW(status);
+>   static DEVICE_ATTR_RO(prefcore);
+> +static DEVICE_ATTR_RW(cpb_boost);
+>   
+>   static struct freq_attr *amd_pstate_attr[] = {
+>   	&amd_pstate_max_freq,
+> @@ -1327,6 +1438,7 @@ static struct freq_attr *amd_pstate_epp_attr[] = {
+>   static struct attribute *pstate_global_attributes[] = {
+>   	&dev_attr_status.attr,
+>   	&dev_attr_prefcore.attr,
+> +	&dev_attr_cpb_boost.attr,
+>   	NULL
+>   };
+>   
+> diff --git a/include/linux/amd-pstate.h b/include/linux/amd-pstate.h
+> index 8ba5dd4d3405..56f616a5cd0f 100644
+> --- a/include/linux/amd-pstate.h
+> +++ b/include/linux/amd-pstate.h
+> @@ -106,6 +106,7 @@ struct amd_cpudata {
+>   	u32	policy;
+>   	u64	cppc_cap1_cached;
+>   	bool	suspended;
+> +	bool	boost_state;
+>   };
+>   
+>   /*
 
