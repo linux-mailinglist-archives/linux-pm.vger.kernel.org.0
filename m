@@ -1,108 +1,185 @@
-Return-Path: <linux-pm+bounces-7520-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7521-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39F278BCAF5
-	for <lists+linux-pm@lfdr.de>; Mon,  6 May 2024 11:42:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DC728BCB95
+	for <lists+linux-pm@lfdr.de>; Mon,  6 May 2024 12:05:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3E211F23566
-	for <lists+linux-pm@lfdr.de>; Mon,  6 May 2024 09:42:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D701A1F22D1E
+	for <lists+linux-pm@lfdr.de>; Mon,  6 May 2024 10:05:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF68A1422CA;
-	Mon,  6 May 2024 09:41:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE936142629;
+	Mon,  6 May 2024 10:05:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Zt7VphGZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11B32142624;
-	Mon,  6 May 2024 09:41:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10BDB4205F;
+	Mon,  6 May 2024 10:05:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714988518; cv=none; b=VqtlwvZZaH0ykO+zx7rndVCAnBdl17W3Qep1D/RESVEqr7VGVwmUPtCOM9JuONDFLGxhPxaZm/wKiI4a6R/eaRZhfdZqbfmC9x72s4Sm0uendpsLenhDbUfFyBo0ScbM4e5zEy959VF1D+y41HobU1+u9W6Y3Erw+XmPUPtkU5E=
+	t=1714989927; cv=none; b=CuDlAJGIWJ1nYIj9OfbUbA5TIYesrpo6AtCqIZHUTMOrZoewcYX/sqAD4Z4bFlOy+wZ6dJ4ANSj+7FR95o3oFS8XezR5QrAPzyHUMTo1uhUWFL6ma9gbNALe7R/yH7E1bWYVbLxriPRX80w8sBeTZqq7xjQQ+oxYYVlppzos5Jk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714988518; c=relaxed/simple;
-	bh=+lHk3VtGSNSiz+wqOUZKtrJy7J/Ahy/OEilvl9DQpXU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JvtYm8mqt2hat7UF+PKE9pE0+7oyFff6Jawd7EKZVycQ5ynoTvO7VhBKlsZi8jg8sFUqosdJi0l7sAHhJKOTCY6IlpxuBCB0jLV10yZquHPAFHNd3Fd0oGhHHefdy0RBNuWj0pzMCOYjPMdmCCCa72MljVOFQ91GfZ5XrMo1UVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 33FF0106F;
-	Mon,  6 May 2024 02:42:19 -0700 (PDT)
-Received: from [10.57.66.153] (unknown [10.57.66.153])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B40893F793;
-	Mon,  6 May 2024 02:41:51 -0700 (PDT)
-Message-ID: <67159a18-3923-4345-bff8-ade49cc769ba@arm.com>
-Date: Mon, 6 May 2024 10:41:52 +0100
+	s=arc-20240116; t=1714989927; c=relaxed/simple;
+	bh=PMC3ofutk9JYD37ah6GDWluGJeD9/vKLh7tqGvV6Wko=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kKloFXxTPohlxEc+75kiLDGB+EdDV84rmv4hd1oftwtvVrEJ7d/oLX0YWQ/gMwVr+vRjLI8PMuII+x+ITjlAh1M0g+OkhwhhD9URLhag2yxYhLZZaj4n/EMgcq3Wn1Dt/vda8MId8v4J0gTkuM2aDQbid5poTSyLFy0MYc5MFOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Zt7VphGZ; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=gujvUI0jJiy6Uc9SM3tuP8isJLFkBNShH34rayX/gjo=; b=Zt7VphGZw/XbV3in9sMkbdqs6i
+	DwJx/nLZJJZCbciPUllM2ReQnRuJd1CtECfrw1HqokhXeznibZE0ZCacmim4zEzhaJ18FnWX+mRCQ
+	+0NaOR8bpvR1InY533f+A7kHhx42/RvF5D5tDqIzQapK6sm7TK4d5qAZcmnnwt5q+4EN45F4zJTtn
+	VslpYSI5iUN/GUdaUig2QP+B2/lDr4D5dqtag/FHzN1tu4yl0U1ENY3kOFqVjmPx0pRsIanlBMZiZ
+	PtMvVhveUCGLc/GOkRsNhADWH6soXkJ1IOpIoR8C5C+1ACx8PA3il82I+dWRHun3x8K+u7lwIYYm0
+	+i1jChLQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1s3vDZ-00000001fVA-1ytr;
+	Mon, 06 May 2024 10:05:10 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 1A972300362; Mon,  6 May 2024 12:05:09 +0200 (CEST)
+Date: Mon, 6 May 2024 12:05:09 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Qais Yousef <qyousef@layalina.io>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Daniel Bristot de Oliveira <bristot@redhat.com>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Christian Loehle <christian.loehle@arm.com>,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] sched: Consolidate cpufreq updates
+Message-ID: <20240506100509.GL40213@noisy.programming.kicks-ass.net>
+References: <20240505233103.168766-1-qyousef@layalina.io>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] thermal/cpufreq: increment i in
- cpufreq_get_requested_power()
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Amit Daniel Kachhap <amit.kachhap@gmail.com>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- kernel-janitors@vger.kernel.org
-References: <a7c1fe73-b40e-437c-8ccb-7b3baad04df7@moroto.mountain>
-Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <a7c1fe73-b40e-437c-8ccb-7b3baad04df7@moroto.mountain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240505233103.168766-1-qyousef@layalina.io>
 
-Hi Dan,
+On Mon, May 06, 2024 at 12:31:03AM +0100, Qais Yousef wrote:
 
-On 5/4/24 12:25, Dan Carpenter wrote:
-> We accidentally deleted the "i++" as part of a cleanup.  Restore it.
-> 
-> Fixes: 3f7ced7ac9af ("drivers/thermal/cpufreq_cooling : Refactor thermal_power_cpu_get_power tracing")
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-> ---
-> This is based on static analysis and not tested.
+> +static inline void update_cpufreq_ctx_switch(struct rq *rq, struct task_struct *prev)
+> +{
+> +#ifdef CONFIG_CPU_FREQ
+> +	unsigned int flags = 0;
+> +
+> +#ifdef CONFIG_SMP
+> +	if (unlikely(current->sched_class == &stop_sched_class))
+> +		return;
+> +#endif
 
-Thank you for the patch. I have analyzed the code and why it
-haven't trigger an issue when I was testing it.
+why do we care about the stop class? It shouldn't, in general, consume a
+lot of cycles.
 
-I looks like the function get_load() which is called above that 'i++'
-and takes the 'i' as the last argument is compiled in 2 versions:
-1. for SMP system and the last argument 'cpu_idx' is ignored
-2. for !SMP where we use the last argument 'cpu_idx' which is 'i'
-value. Although, for !SMP system we only have 1 cpu, thus the
-initialized 'int i = 0' at the beginning of that
-cpufreq_get_requested_power() is used correctly.
-The loop for !SMP goes only once.
+> +
+> +	if (unlikely(current->sched_class == &idle_sched_class))
+> +		return;
 
-> 
->   drivers/thermal/cpufreq_cooling.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
-> index 280071be30b1..a074192896de 100644
-> --- a/drivers/thermal/cpufreq_cooling.c
-> +++ b/drivers/thermal/cpufreq_cooling.c
-> @@ -249,6 +249,7 @@ static int cpufreq_get_requested_power(struct thermal_cooling_device *cdev,
->   			load = 0;
->   
->   		total_load += load;
-> +		i++;
->   	}
->   
->   	cpufreq_cdev->last_load = total_load;
+And why do we care about idle? Specifically this test doesn't capture
+force-idle threads. Notably see is_idle_task().
 
-Would you agree that I will keep you as 'Reported-by' and send a
-separate patch to change that !SMP code completely in that
-get_load() function and get rid of the 'cpu_idx' argument?
-Or I'm happy that you can develop such code and I can review it.
-It's up to you.
+> +
+> +	if (unlikely(task_has_idle_policy(current)))
+> +		return;
+> +
+> +	if (likely(fair_policy(current->policy))) {
+> +
+> +		if (unlikely(current->in_iowait)) {
+> +			flags |= SCHED_CPUFREQ_IOWAIT | SCHED_CPUFREQ_FORCE_UPDATE;
+> +			goto force_update;
+> +		}
+> +
+> +#ifdef CONFIG_SMP
+> +		/*
+> +		 * Allow cpufreq updates once for every update_load_avg() decay.
+> +		 */
+> +		if (unlikely(rq->cfs.decayed)) {
+> +			rq->cfs.decayed = false;
+> +			goto force_update;
+> +		}
+> +#endif
+> +		return;
+> +	}
+> +
+> +	/*
+> +	 * RT and DL should always send a freq update. But we can do some
+> +	 * simple checks to avoid it when we know it's not necessary.
+> +	 */
+> +	if (rt_task(current) && rt_task(prev)) {
 
-Regards,
-Lukasz
+IIRC dl tasks also match rt_task, so your else clause might not work the
+way you've intended.
+
+> +#ifdef CONFIG_UCLAMP_TASK
+> +		unsigned long curr_uclamp_min = uclamp_eff_value(current, UCLAMP_MIN);
+> +		unsigned long prev_uclamp_min = uclamp_eff_value(prev, UCLAMP_MIN);
+> +
+> +		if (curr_uclamp_min == prev_uclamp_min)
+> +#endif
+> +			return;
+> +	} else if (dl_task(current) && current->dl.flags & SCHED_FLAG_SUGOV) {
+
+Notably DL tasks also match rt_task(), so I don't think this clause
+exactly does as you expect. Also, isn't the flags check sufficient on
+it's own?
+
+> +		/* Ignore sugov kthreads, they're responding to our requests */
+> +		return;
+> +	}
+> +
+> +	flags |= SCHED_CPUFREQ_FORCE_UPDATE;
+> +
+> +force_update:
+> +	cpufreq_update_util(rq, flags);
+> +#endif
+> +}
+
+But over-all the thing seems very messy, mixing sched_class, policy and
+prio based selection methods.
+
+Can't this be cleaned up somewhat?
+
+
+Notably, if you structure it something like so:
+
+	if (fair_policy(current)) {
+		...
+		return;
+	}
+
+	if (rt_policy(current)) {
+		if (dl_task(current) && current->dl.flags & SCHED_FLAG_SUGOV)
+			return;
+		if (rt_policy(prev) && uclamps_match(current, prev))
+			return;
+		...
+		return;
+	}
+
+	/* everybody else gets nothing */
+	return;
+
+You get a lot less branches in the common paths, no?
+
+
+
 
