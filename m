@@ -1,61 +1,61 @@
-Return-Path: <linux-pm+bounces-7561-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7562-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4E588BDC4A
-	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2024 09:18:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F05B8BDC4C
+	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2024 09:18:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 99924283433
-	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2024 07:18:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 718701C20E50
+	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2024 07:18:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D98613D28C;
-	Tue,  7 May 2024 07:16:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D367713D502;
+	Tue,  7 May 2024 07:16:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="SWu85vLU"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="rKrCyx1P"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2059.outbound.protection.outlook.com [40.107.95.59])
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2079.outbound.protection.outlook.com [40.107.223.79])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E89F13D254;
-	Tue,  7 May 2024 07:16:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.95.59
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52F3F13D2B6;
+	Tue,  7 May 2024 07:16:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.79
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715066184; cv=fail; b=gnQ18xjQqg9USPtriIajycXrnhNF7ZMCSdfhZZCQwh2SrAx6Wr5T1AHz/KcVq3Dpd4NnzYZ6KrAngTlu0JSD+CXZvhqcAIfesbAITpOD8KLJ3isgfs+4u/AYguKps6HkMdm2LabtRIDFlKcK9WeydvPulIcWkwiQkKlvLGE5TFk=
+	t=1715066188; cv=fail; b=s2ORrjbblMItyMG15iqPv8+8soIntoAlhdhkVDgAIUaqnmb4xlySAwTzFXWXhq2Y6Zmt1r3M3w29Wy5ZkVmf6vLumRmUIY5MBuIiyrqwQ7Fc4Uy52iI2eJ9A8Oi6qTYcJ9ce3kT7NITHtEoILpumvymQHn92v2FTaJO96sFi40Q=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715066184; c=relaxed/simple;
-	bh=u9n9VSKXSgelXHISVKhJFIJou0knZpyuom1aaVNUA1k=;
+	s=arc-20240116; t=1715066188; c=relaxed/simple;
+	bh=TLoxMH9aFz1cPLVUfCtE2k7PHi6e0ZHCGJ1DkwvgEKE=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DEsbnjSIT2p3jNftUky4OdlE9H2aXETXzXXpNbsWmgjAvAiPoEcLCX6KhDiq9DksH9N/GgV/Jy54Q8XNHJ0a5H2YO/m/eYs00pbmoIjpHM/qt1a5iqenMbq0cR5yJkm+WhKRTiygay24DmQmxFGcWKUfl76ip0Lf3iG61Wkfj0I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=SWu85vLU; arc=fail smtp.client-ip=40.107.95.59
+	 MIME-Version:Content-Type; b=KIqiL7RQcqbQa7Jq0eR+q+1KIOC9q4QrPjRQarxLgLO0x1SVthYgS53nQtQi9ZwcLZV5EYnMX/goNAWBdVM7JM9oeK/AAu3+dF6iSUKLrxuXJWCUzawb95N44Yat0GfMrrM91HaGPaUiXuIMNWYltlUeFslG2PGr7M4yCIcv6RU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=rKrCyx1P; arc=fail smtp.client-ip=40.107.223.79
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GJ6m0ycHRS6zLz/dDbpH1TvdijFNEtba2DhjDdd6KIvMqxPECPmSDNPY3UgXfeNEiTcPabPvyacK7+zXApHSroHPs0QWY9KXsji4yI37UUrd81Dx7GLDaMwwke/XrYcwnvTSA67BMti0Gyhs/hEaIk7VDhh5uu1T1IkEaMu6+0JnyF8F3/FXyBT1pIiqP0LEXWXYmYSGqFjkYTIB14u36dUFObD6/hIXfatlgrT5VJIEczKhZcCVNjcZwQg9xxAt3O34MgicCPjIo5qq+nhGuExg0XBVCntQEkgpMyXlLn5u00LbZaDA4LcnvCDRDktjYQKv+cXTw7YnRjVkN0kS9g==
+ b=ZX9F0n4VZEADgUIo2bO/ZV4hAuOLaCgY6k2shQUMR2uvAX7R0/NuqEVWXdkxs6k6BO5gc1P9Qb9+unZln3IaS7DCEjWkBRF8AB8pCr+7d1X0Jx4qxjIH/IC5cIUIYu47onJoPaJAQ1iAxxuhJ52nFxMlyTyINVOSAryYFQfust4WHna8Cru+DogdS0BmOXKDyjolk5ODt7fXk9nizFtXbM0eNAWbFoH4mSifE1eHWafNzUjrLJjORBdtK2yqS4CMbtt2vTfIOiq7AuL1OnYAEHjj4wb2xHiGKtND8s++/j2ugj2fyK3PqgbBCLW3RDR3KlYVLPCJmF0P16g0cJEJ4g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YStj2QG72WU8qakFXMgACbjQSIFUw5eEpm6YP1Ob2hU=;
- b=GcA8plV2dm/bc1ZabWboE/OQg/Zv0NK/ZxQB4Lopj16aJOdtY3F1qurR8Y0R8gfV1UtCQGT73/CzOE36VF7syECHZeyhPXvIdn1RmF/5w3FVOu4vCjmXHmgGhMQVkwVhAgcshLHilwn5qSAA9+pBBVxz1xWZEwE/mOxXS6MKnyYBMdWFB+bJgfrE9TYFUk6WpF27ClZfEBD0EIEn7ZJZ37ZIAlInZ+BNVj/Qo0iFBPTpo6kLMYkSWEWrrTpQg2WUIQ5oDSMBt1ktMeJ6tr3gUScoj5wLszBD15ONFPb85R/+UMPofldMjGY2PpK1GVXhlkFDiuPib+6qRd2R9umKrQ==
+ bh=YMPx1cRg8UfwFMcg1y2QFi8lQuWs0j0a/OJAERN8rEc=;
+ b=fvVIr5sPTQB78jAHarvgDWjCA0BmPUqDiHa/VNeqHH+AmvIJdTHnwaWtUtReBG662GqUfAXdCNUOHrCCrfFCjWz302zGYEIHRJ31/9A0n7uh6s1vwNeqJbf82lpcbMXREpFgyCqmtEcI2s9v+7Fh3Q3HEEBNMS92wb6iTxS6XAsXW0Pxy3hR9EXME4vvtRdwTrhjs/wGRAyeJRsQKE3/7Fz6Liqydpxd/QfvNlPwXsbroeRpa8fTIkP56ebXIR1slFy3uD7tuDcQ0nD5tQR7PUl5iMcfBR8fR8pFjn7LJDAUQ+HjbC9ljmiRmgKh1U3x6Z0VoHcfCJ5YK3EyhLMT/A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YStj2QG72WU8qakFXMgACbjQSIFUw5eEpm6YP1Ob2hU=;
- b=SWu85vLU9b6rh+5VpTu5JmmNZqZBYcVM2B7PQAFDcrKRZ9+blgm/znqc3Dyue/+VZU8UcadN4R3whj8hDe4GHS2fi2q+PXHFfamSStT7DE07fBgj5F4GFbmxT63w5PPEIKpCsgMtjbRtAFGf44fUgMGgfW72RYYfSaQ8L2RQoq8=
-Received: from DM6PR02CA0123.namprd02.prod.outlook.com (2603:10b6:5:1b4::25)
- by SJ2PR12MB8158.namprd12.prod.outlook.com (2603:10b6:a03:4f7::13) with
+ bh=YMPx1cRg8UfwFMcg1y2QFi8lQuWs0j0a/OJAERN8rEc=;
+ b=rKrCyx1PfDcufmLgHivj2sYOGin5BYfPdZfb03/pT+ZN4zyFGXFW/U1bt8p/qHUsIi8czPS6XIxBxclqDpHvzt6s27RiEmCaaIAdxellN93j1oDCklhdWWuFcLFBpOlwmA7lzmL2tk/4iS+ZONbs/czPN338VCBJyPJocuFajKc=
+Received: from DM6PR07CA0077.namprd07.prod.outlook.com (2603:10b6:5:337::10)
+ by PH0PR12MB5680.namprd12.prod.outlook.com (2603:10b6:510:146::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.42; Tue, 7 May
- 2024 07:16:19 +0000
-Received: from DS1PEPF0001709A.namprd05.prod.outlook.com
- (2603:10b6:5:1b4:cafe::af) by DM6PR02CA0123.outlook.office365.com
- (2603:10b6:5:1b4::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.43 via Frontend
- Transport; Tue, 7 May 2024 07:16:19 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.43; Tue, 7 May
+ 2024 07:16:23 +0000
+Received: from DS1PEPF0001709D.namprd05.prod.outlook.com
+ (2603:10b6:5:337:cafe::9e) by DM6PR07CA0077.outlook.office365.com
+ (2603:10b6:5:337::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.42 via Frontend
+ Transport; Tue, 7 May 2024 07:16:23 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -63,13 +63,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DS1PEPF0001709A.mail.protection.outlook.com (10.167.18.104) with Microsoft
+ DS1PEPF0001709D.mail.protection.outlook.com (10.167.18.107) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7544.18 via Frontend Transport; Tue, 7 May 2024 07:16:19 +0000
+ 15.20.7544.18 via Frontend Transport; Tue, 7 May 2024 07:16:22 +0000
 Received: from pyuan-Chachani-VN.amd.com (10.180.168.240) by
  SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Tue, 7 May 2024 02:16:15 -0500
+ 15.1.2507.35; Tue, 7 May 2024 02:16:19 -0500
 From: Perry Yuan <perry.yuan@amd.com>
 To: <rafael.j.wysocki@intel.com>, <Mario.Limonciello@amd.com>,
 	<viresh.kumar@linaro.org>, <Ray.Huang@amd.com>, <gautham.shenoy@amd.com>,
@@ -77,9 +77,9 @@ To: <rafael.j.wysocki@intel.com>, <Mario.Limonciello@amd.com>,
 CC: <Alexander.Deucher@amd.com>, <Xinmei.Huang@amd.com>,
 	<Xiaojian.Du@amd.com>, <Li.Meng@amd.com>, <linux-pm@vger.kernel.org>,
 	<linux-kernel@vger.kernel.org>
-Subject: [PATCH 09/11] cpufreq: amd-pstate: implement heterogeneous core topology for highest performance initialization
-Date: Tue, 7 May 2024 15:15:25 +0800
-Message-ID: <731a28ea8dda4ca1db64f673c87770de4646290b.1715065568.git.perry.yuan@amd.com>
+Subject: [PATCH 10/11] cpufreq: amd-pstate: fix the highest frequency issue which limit performance
+Date: Tue, 7 May 2024 15:15:26 +0800
+Message-ID: <c8feaf14acbe2e8288a5e8e927b8da479819bc71.1715065568.git.perry.yuan@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1715065568.git.perry.yuan@amd.com>
 References: <cover.1715065568.git.perry.yuan@amd.com>
@@ -95,233 +95,100 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF0001709A:EE_|SJ2PR12MB8158:EE_
-X-MS-Office365-Filtering-Correlation-Id: 496c1030-cbd6-48c9-8393-08dc6e6597b9
+X-MS-TrafficTypeDiagnostic: DS1PEPF0001709D:EE_|PH0PR12MB5680:EE_
+X-MS-Office365-Filtering-Correlation-Id: 14eec558-7428-4d0a-51b0-08dc6e6599c8
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230031|1800799015|376005|36860700004|82310400017;
+	BCL:0;ARA:13230031|36860700004|1800799015|376005|82310400017;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?zr6V89/jx+7+JpTuLEDGLHKDVG0hY9HQmE9buP4SOD9tGUYWeeDV51BezQh5?=
- =?us-ascii?Q?dBv+YO2YAFc0NozY2TsRgNGYLS8BXJEQgb23SQHxTYt8hC4mQN7YLmGE2ZIE?=
- =?us-ascii?Q?eBYuRh/3TkltjL0gEQVi63A1GCmSSR1IxKyuTmHmBFVZDPWgOeBc5hMmAf4z?=
- =?us-ascii?Q?x0Q/r0X3dsX1+DDW30OgFOrWbVjd7SpN8C74B15i9Q7T9RXa3C11AwTFLw9G?=
- =?us-ascii?Q?hINSAomRpXcmeNi3JU7c5Kupii9ipLnCg1Dj/++WfHH8mdRsvV1DM3J/cYbL?=
- =?us-ascii?Q?aKLAVR9XUA2OnjC6oNAeQ5eLvgPLHS2Ids81/beWQQ94AOlJTrr1iRtWqMUf?=
- =?us-ascii?Q?0QvTB8UEojEQ/jSTdLLt7ueC2yGbraRU0TFoouaRYBkxXbWlVn04XFQHCZxs?=
- =?us-ascii?Q?Q5IOYkfW4iPYTorzek9wO7PjhbNkGREtoA3N5mrai4WbRGvgkfjjcPBjhpEI?=
- =?us-ascii?Q?hDJICr0PFRMKWWhg03gtq6E78Z75JvVSTYwlLCRJRdULIuvlSdVOczIDM3Zz?=
- =?us-ascii?Q?0M28ECpIze3J751sG9Lk6kcIEOUUVDYT9alrZox4CRc9lO6Pdo7C7F9WPD08?=
- =?us-ascii?Q?BbGGrvgqRoQPhtcPnE3Eyuru094qVAmPkvoVGNRhakTA5bD9AN3zLgkDmeEK?=
- =?us-ascii?Q?XkwoNPNjUzE8hPNx9uPUNtePcymkwVRQTeDLHwkiZjo4eIffhtLog88tIfZ8?=
- =?us-ascii?Q?pStVoKVvUS/SqJweZAn1sCKRXo48fNbavCXt94sjRuf7T0GXvvMaf3ESJNy9?=
- =?us-ascii?Q?w2OT0tvfPk6/viW5V+RqFHDVmdnJGDGrfJ5MMfvKE/Hk88VvuUYbZOoatGke?=
- =?us-ascii?Q?Pb8+9JL0Fz1icHdAg6u/J1L6vGnN2IoU0+7fcPOnd9Gjmi9t/x3AlOyxeCWV?=
- =?us-ascii?Q?IbJ6wCB2NRYbk5VhO2VgNw0wELVQDb0ItvbKZvgKbN+GS6V0dF9jRqtYN6qj?=
- =?us-ascii?Q?ZpRzYBjM9KcHenYao3kBuEBKghXGS1fYojRyLLZgmHc5/HNLca/VvxY5rLRI?=
- =?us-ascii?Q?IDbaQo2DkdyoSkxXZblbYKYOnoSaz2kMIk3gyHxuFLMk/LjCxE8pQZKTcNgV?=
- =?us-ascii?Q?5riFz22eV4pw3P3OUlB+WjqxqMvEwiKVRERzNmMt1npRidcDrFePNbkpTd8s?=
- =?us-ascii?Q?EI6L88TkOW/gud8LrrPU4ihV3/jw6v47Nwic7VWFkqepeIvVtw3e5rY5TMaO?=
- =?us-ascii?Q?uZn+oiscMael+3PEAI3U/liRsy6sLRldHZONnJZiDJy9rQgAhWjmlcK+WvPn?=
- =?us-ascii?Q?9RkQW7z8PWAtvoYP8Z3H3WqWdmaVHF3bIJ8vLBKTVhOm9iQ75PcfSlV6e17z?=
- =?us-ascii?Q?nwco+1yGUu7V6IvMMrLeoC70faM4d2hzPe3kD77w3ocZOCZbZVgxuhg8Ga1K?=
- =?us-ascii?Q?hEDaBnORK+wZMyUqRCcvHPOhD7Ja?=
+	=?us-ascii?Q?mmyP1hIfFpU92Q3YoXJhDyr/Q73DL1qv4L2uU/rM4g4w/aQa221kn0a8P3sj?=
+ =?us-ascii?Q?uMZDIecH9MxoFhk4NK6G95Ds6WUZNqok8s+ks8FHR9sIkaVp/8/v3PyVwNBs?=
+ =?us-ascii?Q?VooZiZujE/mqWGDdO8fIMsjaKKvvHvwTbcEQapt0WfLJKOyjm0lyYdZMimE3?=
+ =?us-ascii?Q?Ep4C42PnxZ2luwYz6Jo4ZBisz1Z4XSv/01eBI8n6DAX7SiPzoOEADIo+SXdw?=
+ =?us-ascii?Q?SUkD96mnD801xzEiMbnFCcpcN+qdZ7PjW5oPiDBWbnc2MvbOHUdPTubrG+3Z?=
+ =?us-ascii?Q?T+i715c30N9s0Q9Qx9xjwO6qvQ+KCvwbasynmiMJh7n8csMuW/r96zHi4BVd?=
+ =?us-ascii?Q?tohWxhiaTbAFEsv3RL2irwHfi/dtnuxR0c7/R2DbHCasfhYjOf8eK8DM6P3p?=
+ =?us-ascii?Q?WSsV0dAXvw7vyTX+CQGdtug0xMnJzD4PhBBLpIBJJ0kNqzzotNb0ZfunRhIq?=
+ =?us-ascii?Q?drBN0DBbdOBjllHBoMo7q5XjR/BwXCoe5J9wxFyTOBZmIDrT1F4U+bsRB7UC?=
+ =?us-ascii?Q?mYDHyIDl+jMAg2B0IIis+KYpWk+zb/FmMEyJK1inV/W1TJShMnDWoiUz38NH?=
+ =?us-ascii?Q?jMpN04f/eiBjMDiNuyJXkHtONY44xv+h8wx4zcBtoiHqf2pXXlZkv82nswtX?=
+ =?us-ascii?Q?zA9QKCyDfwagqML5FgeyrUCx9PZvhNvQKPgjKcFPUjzBz3BDiFKHfGm6wulv?=
+ =?us-ascii?Q?2pEzzMs2/Gpg7gy6yhEXqt35ddxtxnDVTu7cBoPZiHdVuRwfPjEWVVEoGRva?=
+ =?us-ascii?Q?JJKNdwOH/ZkD5jBBANSKjR6VVMY0q2KbIokxgz1hSj/UGtJU8HOamfWNIXKH?=
+ =?us-ascii?Q?rG93aBM4FTsIp+rMrGuMtA/Xz5Ze0VqRFidcnDW9EL0JXkGoo0pq8igcIT5E?=
+ =?us-ascii?Q?ilrlWa7/zZAhzSXiJZkadPESGqoMCWksN+VgB3pauMoQWhsRMOES4agBR85Q?=
+ =?us-ascii?Q?HpnBDA2o+QB8GGK1N+NwNP6zCk6gm0ssAtaC2YR6f1YqDFMxwZZ0iV9NT8UQ?=
+ =?us-ascii?Q?RTjV5R1IU+Y7aI9B0F3I9RZgls/CGr49XOiVit1GLeNlNn0uaE8mB5p/kxSa?=
+ =?us-ascii?Q?S+FENpL6C1Nn2mxxN26G22KyyMbFQhN29Sf1T0BtfWFTlEABGj0RhRkVgArb?=
+ =?us-ascii?Q?wUzuLfm+MMMB4wJj1Zg/V1qUejx10yZMjg83ESwMOk/Yj2Tq3VRLOm01QVYu?=
+ =?us-ascii?Q?B2HW6oIrVJCbTLiTSmBqa0/p/ePi05cvlMlFx9MplIiqgR6YinLGhbiux65W?=
+ =?us-ascii?Q?RYszusUF4486FXsBXmLJnO2BGwApdwFGwHdGWttH9f2EafbH5EdIHnwRncR5?=
+ =?us-ascii?Q?D+bXSkBSwonP/rWXJ3KYqLD6?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(1800799015)(376005)(36860700004)(82310400017);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(36860700004)(1800799015)(376005)(82310400017);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 May 2024 07:16:19.5256
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 May 2024 07:16:22.9780
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 496c1030-cbd6-48c9-8393-08dc6e6597b9
+X-MS-Exchange-CrossTenant-Network-Message-Id: 14eec558-7428-4d0a-51b0-08dc6e6599c8
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	DS1PEPF0001709A.namprd05.prod.outlook.com
+	DS1PEPF0001709D.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8158
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5680
 
-Introduces an optimization to the AMD-Pstate driver by implementing
-a heterogeneous core topology for the initialization of the highest
-performance value while driver loading.
-There are two type cores designed including performance core and
-efficiency Core. each core type has different highest performance value
-and highest frequency initialized by power firmware, `amd_pstate` driver
-need to identify the core types and set correct highest perf value.
+To address the performance drop issue, an optimization has been implemented.
+The incorrect highest performance value previously set by the low-level power
+firmware for AMD CPUs with Family ID 0x19 and Model ID ranging from 0x70 to 0x7F
+series has been identified as the cause.
 
-X86_FEATURE_HETERO_CORE_TOPOLOGY is used to identify whether the
-processor support heterogeneous core type by reading CPUID leaf
-Fn_0x80000026_EAX and bit 30. if the bit is set as one, then amd_pstate
-driver will check EBX 30:28 bits to get the core type.
+To resolve this, a check has been implemented to accurately determine the CPU family
+and model ID. The correct highest performance value is now set and the performance
+drop caused by the incorrect highest performance value are eliminated.
 
-Value Description:
-0h Performance Core.
-1h Efficiency Core.
+Before the fix, the highest frequency was set to 4200MHz, now it is set
+to 4971MHz which is correct.
 
-https://www.amd.com/content/dam/amd/en/documents/processor-tech-docs/programmer-references/24593.pdf
-PDF p274
+CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE    MAXMHZ   MINMHZ       MHZ
+  0    0      0    0 0:0:0:0          yes 4971.0000 400.0000  400.0000
+  1    0      0    0 0:0:0:0          yes 4971.0000 400.0000  400.0000
+  2    0      0    1 1:1:1:0          yes 4971.0000 400.0000 4865.8140
+  3    0      0    1 1:1:1:0          yes 4971.0000 400.0000  400.0000
+
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218759
 Signed-off-by: Perry Yuan <perry.yuan@amd.com>
 ---
- arch/x86/include/asm/processor.h |  2 ++
- arch/x86/kernel/cpu/amd.c        | 19 ++++++++++
- drivers/cpufreq/amd-pstate.c     | 62 ++++++++++++++++++++++++--------
- include/linux/amd-pstate.h       |  8 +++++
- 4 files changed, 77 insertions(+), 14 deletions(-)
+ drivers/cpufreq/amd-pstate.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-index 811548f131f4..30d1900bb7e0 100644
---- a/arch/x86/include/asm/processor.h
-+++ b/arch/x86/include/asm/processor.h
-@@ -683,10 +683,12 @@ static inline u32 per_cpu_l2c_id(unsigned int cpu)
- extern u32 amd_get_highest_perf(void);
- extern void amd_clear_divider(void);
- extern void amd_check_microcode(void);
-+extern int amd_get_this_core_type(void);
- #else
- static inline u32 amd_get_highest_perf(void)		{ return 0; }
- static inline void amd_clear_divider(void)		{ }
- static inline void amd_check_microcode(void)		{ }
-+static inline int amd_get_this_core_type(void)		{ }
- #endif
- 
- extern unsigned long arch_align_stack(unsigned long sp);
-diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
-index 307302af0aee..67966bdcde65 100644
---- a/arch/x86/kernel/cpu/amd.c
-+++ b/arch/x86/kernel/cpu/amd.c
-@@ -1219,3 +1219,22 @@ void noinstr amd_clear_divider(void)
- 		     :: "a" (0), "d" (0), "r" (1));
- }
- EXPORT_SYMBOL_GPL(amd_clear_divider);
-+
-+#define X86_CPU_TYPE_ID_SHIFT	28
-+
-+/**
-+ * amd_get_this_core_type - Get the type of this heterogeneous CPU
-+ *
-+ * Returns the CPU type [31:28] (i.e., performance or efficient) of
-+ * a CPU in the processor.
-+ * If the processor has no core type support, returns -1.
-+ */
-+
-+int amd_get_this_core_type(void)
-+{
-+	if (!cpu_feature_enabled(X86_FEATURE_HETERO_CORE_TOPOLOGY))
-+		return -1;
-+
-+	return cpuid_ebx(0x80000026) >> X86_CPU_TYPE_ID_SHIFT;
-+}
-+EXPORT_SYMBOL_GPL(amd_get_this_core_type);
 diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 7145248b38ec..7fe8a8fc6227 100644
+index 7fe8a8fc6227..3ff381c4edf7 100644
 --- a/drivers/cpufreq/amd-pstate.c
 +++ b/drivers/cpufreq/amd-pstate.c
-@@ -50,7 +50,9 @@
- 
- #define AMD_PSTATE_TRANSITION_LATENCY	20000
- #define AMD_PSTATE_TRANSITION_DELAY	1000
--#define AMD_PSTATE_PREFCORE_THRESHOLD	166
-+#define CPPC_HIGHEST_PERF_EFFICIENT		132
-+#define CPPC_HIGHEST_PERF_PERFORMANCE		196
-+#define CPPC_HIGHEST_PERF_DEFAULT		166
- 
- /*
-  * TODO: We need more time to fine tune processors with shared memory solution
-@@ -326,6 +328,49 @@ static inline int amd_pstate_enable(bool enable)
- 	return static_call(amd_pstate_enable)(enable);
- }
- 
-+static void get_this_core_type(void *data)
-+{
-+	int *cpu_type = data;
-+
-+	*cpu_type = amd_get_this_core_type();
-+}
-+
-+static int amd_pstate_get_cpu_type(int cpu)
-+{
-+	int cpu_type = 0;
-+
-+	smp_call_function_single(cpu, get_this_core_type, &cpu_type, 1);
-+
-+	return cpu_type;
-+}
-+
-+static u32 amd_pstate_highest_perf_set(struct amd_cpudata *cpudata)
-+{
-+	u32 highest_perf;
-+	int core_type;
-+
-+	core_type = amd_pstate_get_cpu_type(cpudata->cpu);
-+	pr_debug("core_type %d found\n", core_type);
-+
-+	switch (core_type) {
-+	case CPU_CORE_TYPE_NO_HETERO_SUP:
-+		highest_perf = CPPC_HIGHEST_PERF_DEFAULT;
-+		break;
-+	case CPU_CORE_TYPE_PERFORMANCE:
-+		highest_perf = CPPC_HIGHEST_PERF_PERFORMANCE;
-+		break;
-+	case CPU_CORE_TYPE_EFFICIENCY:
-+		highest_perf = CPPC_HIGHEST_PERF_EFFICIENT;
-+		break;
-+	default:
-+		highest_perf = CPPC_HIGHEST_PERF_DEFAULT;
-+		WARN_ONCE(true, "WARNING: Undefined core type found");
-+		break;
-+	}
-+
-+    return highest_perf;
-+}
-+
- static int pstate_init_perf(struct amd_cpudata *cpudata)
+@@ -348,6 +348,7 @@ static u32 amd_pstate_highest_perf_set(struct amd_cpudata *cpudata)
  {
- 	u64 cap1;
-@@ -336,15 +381,7 @@ static int pstate_init_perf(struct amd_cpudata *cpudata)
- 	if (ret)
- 		return ret;
+ 	u32 highest_perf;
+ 	int core_type;
++	struct cpuinfo_x86 *c = &cpu_data(0);
  
--	/* For platforms that do not support the preferred core feature, the
--	 * highest_pef may be configured with 166 or 255, to avoid max frequency
--	 * calculated wrongly. we take the AMD_CPPC_HIGHEST_PERF(cap1) value as
--	 * the default max perf.
--	 */
--	if (cpudata->hw_prefcore)
--		highest_perf = AMD_PSTATE_PREFCORE_THRESHOLD;
--	else
--		highest_perf = AMD_CPPC_HIGHEST_PERF(cap1);
-+	highest_perf = amd_pstate_highest_perf_set(cpudata);
- 
- 	WRITE_ONCE(cpudata->highest_perf, highest_perf);
- 	WRITE_ONCE(cpudata->max_limit_perf, highest_perf);
-@@ -365,10 +402,7 @@ static int cppc_init_perf(struct amd_cpudata *cpudata)
- 	if (ret)
- 		return ret;
- 
--	if (cpudata->hw_prefcore)
--		highest_perf = AMD_PSTATE_PREFCORE_THRESHOLD;
--	else
--		highest_perf = cppc_perf.highest_perf;
-+	highest_perf = amd_pstate_highest_perf_set(cpudata);
- 
- 	WRITE_ONCE(cpudata->highest_perf, highest_perf);
- 	WRITE_ONCE(cpudata->max_limit_perf, highest_perf);
-diff --git a/include/linux/amd-pstate.h b/include/linux/amd-pstate.h
-index d58fc022ec46..869d916003f1 100644
---- a/include/linux/amd-pstate.h
-+++ b/include/linux/amd-pstate.h
-@@ -134,4 +134,12 @@ struct quirk_entry {
- 	u32 lowest_freq;
- };
- 
-+/* defined by CPUID_Fn80000026_EBX BIT [31:28] */
-+enum amd_core_type {
-+	CPU_CORE_TYPE_NO_HETERO_SUP = -1,
-+	CPU_CORE_TYPE_PERFORMANCE = 0,
-+	CPU_CORE_TYPE_EFFICIENCY = 1,
-+	CPU_CORE_TYPE_UNDEFINED = 2,
-+};
-+
- #endif /* _LINUX_AMD_PSTATE_H */
+ 	core_type = amd_pstate_get_cpu_type(cpudata->cpu);
+ 	pr_debug("core_type %d found\n", core_type);
+@@ -355,6 +356,13 @@ static u32 amd_pstate_highest_perf_set(struct amd_cpudata *cpudata)
+ 	switch (core_type) {
+ 	case CPU_CORE_TYPE_NO_HETERO_SUP:
+ 		highest_perf = CPPC_HIGHEST_PERF_DEFAULT;
++		/*
++		 * For AMD CPUs with Family ID 19H and Model ID range 0x70 to 0x7F,
++		 * the highest performance level is set to 196.
++		 * https://bugzilla.kernel.org/show_bug.cgi?id=218759
++		 */
++		if (c->x86 == 0x19 && (c->x86_model >= 0x70 && c->x86_model <= 0x7F))
++			highest_perf = CPPC_HIGHEST_PERF_PERFORMANCE;
+ 		break;
+ 	case CPU_CORE_TYPE_PERFORMANCE:
+ 		highest_perf = CPPC_HIGHEST_PERF_PERFORMANCE;
 -- 
 2.34.1
 
