@@ -1,179 +1,210 @@
-Return-Path: <linux-pm+bounces-7550-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7551-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECE4A8BDB2E
-	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2024 08:11:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8DB38BDBF5
+	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2024 08:59:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2EC3281CF6
-	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2024 06:11:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F285B20AAF
+	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2024 06:59:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 457086EB7D;
-	Tue,  7 May 2024 06:11:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DC3578C8A;
+	Tue,  7 May 2024 06:59:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="d0S05ZBx"
+	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="LLeAHoMD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2089.outbound.protection.outlook.com [40.107.114.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8810F6D1C8;
-	Tue,  7 May 2024 06:11:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715062271; cv=none; b=XrzVa3ZBCqznoBvKo+z45fIKrD5maqUDYC8wlyHJp86yT0fQ/pMrc8x2wOAsF4S4oJXtkEUDT10GPjhvzOwgsLYKF9wFWO/XEk/65h6o+/V6Peke5W12y1e8/fFZYbI5v05ECv1p0AYsrDMp2HpCGw8lw2kTM9Ql/4I5tySoWZw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715062271; c=relaxed/simple;
-	bh=aOz9fe41WAKNxF6hfkGSEIu6azwOFn4nkwJSjri5io4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tTkZsOcgi44QUl4nEDk+kQleKpszcYwzgWYRB0q22OZ6q6s7slu7G5KLMBa3N9j3X2mM9dAUCcMLuV3mWuBXEW/eqZ1cq71TvqxkBddvhunaXkftgNT0U1DlP7bw7HVncXXVOOiDaRiVIFLY4COrykTxSyr3Xumw+AawCmbIs0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=d0S05ZBx; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1715062265;
-	bh=aOz9fe41WAKNxF6hfkGSEIu6azwOFn4nkwJSjri5io4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=d0S05ZBxRizCGgFtKbQ7BtcO+yYMGuBiYUmrS2xORY55741JGhtObzfNA8rTfLGk+
-	 9J0XF+qHkeklti47dfmnUxFvdzO6At3vTtBjx3I59GGcYvwdOwbqm/OOAEN+ZIb/67
-	 OnCT5Vi9jUFNHV1c4oT6/bYZrhuEFfXy3ClXgoc8=
-Date: Tue, 7 May 2024 08:11:04 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Dustin Howett <dustin@howett.net>
-Cc: "Limonciello, Mario" <mario.limonciello@amd.com>, 
-	Lee Jones <lee@kernel.org>, Benson Leung <bleung@chromium.org>, 
-	Guenter Roeck <groeck@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, linux-kernel@vger.kernel.org, 
-	chrome-platform@lists.linux.dev, Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 0/2] platform/chrome: cros_ec_framework_laptop: new driver
-Message-ID: <99ae4866-a8cd-408c-8227-006f96f14dc7@t-8ch.de>
-References: <20240505-cros_ec-framework-v1-0-402662d6276b@weissschuh.net>
- <613369f9-42c5-4a59-b83f-45bd1773ffe4@t-8ch.de>
- <a7ae8fc0-5e53-487a-86c6-f49dc6623688@amd.com>
- <e716716e-87fe-46f5-8ea9-5f649f1da11b@t-8ch.de>
- <CA+BfgNJzazn55wUMzjX=thqZGYz0LYU4cnO1Pn8U80B5FrSvxQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C229178C85;
+	Tue,  7 May 2024 06:59:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.114.89
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715065146; cv=fail; b=i+l0QprXeCOLnTkmFS0eMYE1zL5ymKW+/ZjcEwM4W0REPMTM8rHcJElSCb0h3a/Dsm+y93u3DRgu6KLnE4Hu5xiWizlq6v/ZZ4hHEFuVgqYqgKZT/6tdILeUEhwiLArfcRQjWSFlyT2WiWFCV7ydTNH8PevA3Iiu10/3jggKH7w=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715065146; c=relaxed/simple;
+	bh=1XGHNII/F3Zyv46m+E1tSqlWQmNyxMjH2XFdQFhNtvI=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=dnza33B5HsGIdkjZME0bV56JoWaXDaFwelqmFvo+GrnY4vuhx0+Fw5EG403lpE5zO2l7QRbi9ozX/NH+strYCNBvEstieuatNlQIMfynSgjb8IX2eLl/udTwdGAWVNfQOadqH3guo4gXyREDqQ2DbvOoGycxpyquS6rHbbNPDzo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=LLeAHoMD; arc=fail smtp.client-ip=40.107.114.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Sr/LR7DLKpz4Af+AUgQqATT4VMIBwTzz9GxQWrK2ktt3s19rQDBGXvTcQpg7DDJ+lBxWKvTf+kAdAaIwz3zx/2SEDOAvdrAgIZeby6HhKLZUj/F54Ey8bSdmewPwtvYAsw6Kfp9edaqC54HtcH/kGALZfwDSR/3rZUjFByKi9/dcVFvkvU3SY6wBP5eEuDbwNAMYJ8TjJiZKMvx5ntPoADn1KwEcZXbEiA5U2czpqHgPlL5nLh4aEa8w/EDJ8Dt+JMHVbx/siQ82SeiLmXqSYg0dqN5oc5VXO4Sjoq3FpZfY4QXUIM1u4yAFwcSm7KCtWT2EfVuxXgFpFjFccYzB2w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1XGHNII/F3Zyv46m+E1tSqlWQmNyxMjH2XFdQFhNtvI=;
+ b=EFWH5yvkz7KuSORUX+vO9J/fvbLWYYm62pd3F/t8vamqXI1UKd4vb/FlKkQdWn6ww2J4jG35mJl+/uJsDOFLSRK1K1yi5YyePdgZM40P+3QXRj+YL0/H3/QIUHOeaJaziFxXIPnOYaCC+n4I/JDPDdgA1crywhFrMhDaeoTTD76Gw7ypcSEg7fdCmin18JMCJ7xnnBZ24XgrSqqIAV2ZMjaImGe9vp/ff6CSbxGPnIy6p2ieUrdUBEVzB+XpQ+xc7jR6JFLkLMHv7vEreVaO3jOTcN1voqmZvHWdCjZpadfTOgeGK/0KbpM0Cr4XYxze05zD/jSAYKeHh1xUngIVZQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1XGHNII/F3Zyv46m+E1tSqlWQmNyxMjH2XFdQFhNtvI=;
+ b=LLeAHoMDILE3URLWeCE56lkUDqZMTYFbV4j8ia1IffNDh5RVHwjLATWoFVtkmRdaCaGZ/OCFnVvhX0oQLFFd2t0DmYYUqae8+x3JDrl3i8g6z16hzRAD7lR5z1HWjDSmC3uPQqN1bRJynE+CXiOjGWHfMzSZKBJBsnXltujZuZ4=
+Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com (2603:1096:400:3d0::7)
+ by TYCPR01MB11685.jpnprd01.prod.outlook.com (2603:1096:400:378::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.41; Tue, 7 May
+ 2024 06:59:00 +0000
+Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com
+ ([fe80::500e:ab62:e02b:994e]) by TY3PR01MB11346.jpnprd01.prod.outlook.com
+ ([fe80::500e:ab62:e02b:994e%4]) with mapi id 15.20.7544.036; Tue, 7 May 2024
+ 06:58:59 +0000
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: =?utf-8?B?TmlrbGFzIFPDtmRlcmx1bmQ=?=
+	<niklas.soderlund+renesas@ragnatech.se>, "Rafael J. Wysocki"
+	<rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui
+	<rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+CC: "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH 0/2] thermal: renesas: Group drivers and update
+ dependencies
+Thread-Topic: [PATCH 0/2] thermal: renesas: Group drivers and update
+ dependencies
+Thread-Index: AQHan8vRpexXaPlV7UqiiRgpLmZlMbGLWEMg
+Date: Tue, 7 May 2024 06:58:59 +0000
+Message-ID:
+ <TY3PR01MB113465D9CD7906936C5AC6DD686E42@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+References: <20240506154011.344324-1-niklas.soderlund+renesas@ragnatech.se>
+In-Reply-To: <20240506154011.344324-1-niklas.soderlund+renesas@ragnatech.se>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TY3PR01MB11346:EE_|TYCPR01MB11685:EE_
+x-ms-office365-filtering-correlation-id: fe4dfc9e-4876-48a7-ea8b-08dc6e632bf4
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230031|366007|376005|1800799015|38070700009;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?L0ZBMXVUazBkeGlDc1BTMlFLbUd5RlY5UkF1d3pkZDFkVWFESElOaGNEcXpP?=
+ =?utf-8?B?OEFIYWx5VkJQM25VYXpuclphcTlVc1J3NWNETGw4ZURuODJnUjE4MEIyUmYv?=
+ =?utf-8?B?Skx1NjVPaHZ2OWVMRHJvU29UejRmemRkUGQ1RjFQRlFaWDY0RUN1QzJmaWJo?=
+ =?utf-8?B?UkJyY21sTmplRXBIVW1tQ3ExRnpCVDhZYlY1VnpDa0xEVExOakJyNmFZY3ZS?=
+ =?utf-8?B?YVRpTVMrbnowS1IwOWF3YzFlMUdGM2E0ZDBCdVJNVEt1NFpVamh2RXNVcmRk?=
+ =?utf-8?B?c2lYNDdhNk1DREhMNEk2Q25maG12U1MxRG82S1hVdTh4T2JiRlFadlhFMUhU?=
+ =?utf-8?B?VWlLV29PZDk2ZDlKR1pTbjgydFh0eWdlcW1DVXR6Q2dqSFV4NU9LQjhna3Zz?=
+ =?utf-8?B?MklIcm1yWEdDOWxoM2wzZTdJY1RrQklmczU0bDhQczB0OEtucnMvUU8yZ2l5?=
+ =?utf-8?B?cGd0b0JwQ3lhZUVYODRvWDBOSmNhcm1vajhSRXFVUFJOZGJkRDhjWGZjVTZp?=
+ =?utf-8?B?SlhjdUFwUmlEemJ0SnQyZlpPSEVvdEJ2dVlCVTFNUFlLcTVqNFVld25QTnU0?=
+ =?utf-8?B?UllUYTNKUlA2SE52eUhZOEsvdTZtS2FFVXFnQXpkaEYwbDdXQUh6MVY4bHE3?=
+ =?utf-8?B?Vzg2bjBCc0I1bC82QXlzd3d6dWVlM1dYSHBqWXVQR3JZUC9tdS9BZlpNVUM2?=
+ =?utf-8?B?MlI2L0dSejlmOTVraUFnWlFadFdYeXlYRVovTXNKQVhITyt2b1VLMHRoTlVR?=
+ =?utf-8?B?cjE3NVg3NHp4SCtEcUY0T1YyQzBEcUNpU0hLTHRaRzBHSkRJdFB5NWV0VkFh?=
+ =?utf-8?B?SXRaZjZjcVIzT1FwQTd2TmZnTElzR2t6c0E0Qkg5QkJsWDRGbWVsUFZCRzgx?=
+ =?utf-8?B?R2cvU3FLRDFoazN2bGpGaStBZGU4bmRCN0x5WmV6QXN0QXIrNGlOT3d3c0xW?=
+ =?utf-8?B?K0Rqdi9WSTBSeHlwTmdqVTRBNWZ5Z3FhVkZLSTlvL1VIaDlpdTNaMHZYTk5Z?=
+ =?utf-8?B?ZGphdjFkRTRTT0tFVUN5cWtTVSttYTVIWnBkeXR4bktWblBaZDc3NVZpYXZO?=
+ =?utf-8?B?Zm83V2pUNlVOaXdPU1NZSjFiQVZKVjRLYzkxamcvR3BVL1hZZ1g5cVRCV0tl?=
+ =?utf-8?B?bStSK1dlaDBEdERiazlBcHZuaUdvL1U3S1NhRm45aDZuNTdscmZVZlVmN3hK?=
+ =?utf-8?B?cFA5NEY5cWwwL1RFa3c3MlJVTTVadDhwa0YwLytzS1hCN25KMTZSWjB4RGVm?=
+ =?utf-8?B?K3NWVVNjS2FhQmhQWldmNUZWTUhPTC9lYkF5My9tYVRlU05nSWFJTjBIL3R3?=
+ =?utf-8?B?UTE2c2IvL1B2K3grN3REV2liQ0NmN0I4MnVQNXNJQm1aTXRYektyeFVKM0Nx?=
+ =?utf-8?B?Y0h1MjRjTnc2U1dKWnh3eEFmU3dXRGlncnRHTUVFTS9DcVZJWGNuelphMk9w?=
+ =?utf-8?B?ZXZxTTJ3WnJGd3gzdE1lZlBGNlNkNWtvZjluWGpZMkUxcjUyOWxYcHRNY3RG?=
+ =?utf-8?B?UVgvQ1Y3R0YvZ1hpOEJOODVaQmRIcVFvZ01IaGVNWCthMkxxV3MvYTg0YWNH?=
+ =?utf-8?B?b0VBcmsrekdFRFJMY0k2aDUvZDZuTkYyUWJlVFRnUkVTK0xxejFPYVhPSWhH?=
+ =?utf-8?B?bTNJOWt4QmFraUxXRDZjOHF0MUV0ZEx4YXRTbDdNVGVzRVU5dUFEbEE2aUFq?=
+ =?utf-8?B?WjN6OTVLd3k2RVZxR3FENnVVdng2b1Q4RXVqbkdNSXBsQzdPVURWNlBVZDNq?=
+ =?utf-8?B?SFErRXJHRmZ2Z09WNlB0Y0VPQ0VKWEZ5RXBqeTZLNm15Z0ljd2NDTGE5ZUR6?=
+ =?utf-8?B?Q0t2TjlnZFNPTXVuazc4Zz09?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY3PR01MB11346.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(376005)(1800799015)(38070700009);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?OCtDVzJ0VnpHWFVaWDNTWHJaMFRZUTcrOVNNVStrYzBTb3l0WUUrWHY2Sm43?=
+ =?utf-8?B?cXhML2xtVlRhdUJhTWtjSWpENFhneGsxVnJYNTVhMnFxYmtVSlUvamdXTWdR?=
+ =?utf-8?B?WHRDeFdkMFU2cm5CNTdNMEZLMHY2elhLQjhLWnFEaWdlTDJKdVpwMVU4NzZz?=
+ =?utf-8?B?V1hLVGc5RGtPQWdhSjBENnlkbW5ONjRvTTJrOTMwcS9sMXN0NW80dXQ5bWhQ?=
+ =?utf-8?B?bU1WL1grSG5Xa0JzU3pqOTVLMm9WK2RDblRFcGlXUXI1RGUvdmZtYmJmU2N1?=
+ =?utf-8?B?REJuSTNWUHpEZStSQ0RjWEpWaTZNZTd0WGFud1ppV2M3SHgwbmRBYjFiMW9F?=
+ =?utf-8?B?dk5JOWNDcForNng1S2FvT0dSZ250dG95bHZoR0lMUHduZUp2M0FVN2hCUW1J?=
+ =?utf-8?B?d2RCa05TTndRZEpZRkJXUGJmQ2w1U3o3anNGMStLMDdVdC94cUQyd3hPcTRB?=
+ =?utf-8?B?RGFLby9CMUZSUnRxYUNncERVMUYyR2xTdi85bTFCanVZaldYSGxjVDR1VU1R?=
+ =?utf-8?B?WkdpOVpsRUhsdDE2YlF0VXNrTzZGRW5VMlhFdkdiNE1JQTA2UWlwS1Y5TDJw?=
+ =?utf-8?B?ZHNpRFZuM0dmUmxSSFBUcWJIbHNoNy9qbHZuWXdPOEVVaTZ6bWRvdWRvSHJF?=
+ =?utf-8?B?ZzcwRXdyeFBsTUkwQ0g5dlhpNWI2c0FBQ1VmWTlKUGdLblloT2V5L2I0UStl?=
+ =?utf-8?B?cFJjdEZZcWo0dVRzOU4xNVNSWDAzSVdrNkJoaUtQSGFGN015UHRNdHpKRjQ5?=
+ =?utf-8?B?YWdibVZHODg1WE0vSlpFdzkwL21TamZWN056dEVWVGVidDR4TjdzTTQzWTVI?=
+ =?utf-8?B?VnhzMTFXNllSNWJmdE1Zb3NhUmNwT3VBSnI2dUR5OXZwU21BdWE0TUdCcVc2?=
+ =?utf-8?B?NmQ3Si85VGNhTXcvSE5nTEhIYmF3Smwxbk83a1FocUJBSWVXWFFZUkVteHhC?=
+ =?utf-8?B?elRMVGNneGl0bXI1bnluc3MyMGJwc0d4c3Y3UGlSSWR2QXYrK0dyNGJ4eDE2?=
+ =?utf-8?B?K3c3Z1pRZmhCVTdEa0d3QittQVIxRytmaFhTRTZVV2R1M2lTN0RuV1M2aGJK?=
+ =?utf-8?B?M1loY3RxaXRGVXBvOVRPOENMOWI4ek56MStXb0NkcVVxQVIyU1YvQkN5ZlFM?=
+ =?utf-8?B?dlQ4WFFLLzMyV3dXSnlvRUZsTlNjbGNUN2lpSnUrTEdCVmIzeXp4b2VpU21x?=
+ =?utf-8?B?NDl0VEtNMlZOOFRKSGkrNk9McGFtYnA3cVpnaWFZbkROVi80ZVZuNkt4ck1D?=
+ =?utf-8?B?Q2R6K2lKdnI1cjJHbEUxNWRUcjk4T0FaTnEwdFlDY2dtbS9NQ3lxWUt6NHBy?=
+ =?utf-8?B?Yko0cytMVjF2QWZDVmlRZjhBemRIeWxZTHN1amE4T2lBbWpxR1JJQnE4Zk5m?=
+ =?utf-8?B?bHBWVXo5YkIxcWk3NU5oNXIwVzNVYVE0dDBWLzczVjdSbHJ3MC8vaCs1Uk9u?=
+ =?utf-8?B?REliRmIzQStqSm52ZUZ5NWZCT1NYbnM4NThxKytHeDBCOGtPNU9rRjBJY1RQ?=
+ =?utf-8?B?RmRXdTdxTnU1aUFxLzBQNkI0aDhtajcxTm91RWVtTWM5cGplS2ZmZTdhSGNO?=
+ =?utf-8?B?SENWMytJM014emN1YW9tN1E5OFFIZG9XZm0xcnkrTU4yK21HNkp4Qk1NcStt?=
+ =?utf-8?B?QStuaGdsVU81Z2ZlUDZ4dHJUVEQ4cXh6Y0R3MHZ0aVptZzV1YWR4UnIzQ0Q0?=
+ =?utf-8?B?OGZ5R2hSbkt5cXROSTZ6US9jTm5NYzFvRitYRXRuSVFGeHl4anZxWCtsRW84?=
+ =?utf-8?B?ekZIMzBNL0tYTHRUWTdwbmJhZUpQKytTY0RtUTR0dVNyYUhidnRQTW4rY1pJ?=
+ =?utf-8?B?UG1HYTdMQUlJbVg2dS9WaitrcllQY2xlRCtiRVdYTCs3KytqSWR2eVl6MVA5?=
+ =?utf-8?B?YjZaWFRUdWVzR0xGODNSUm9nTERNVGM5T3lYajNpUlZUbVJXU2VLdEQ4U0s4?=
+ =?utf-8?B?eXdhQWFMRUtTZ1Q5SzV3OVhidklkclZpSW9HUmJ5cVgvTEFLYmx2bXEvQWx6?=
+ =?utf-8?B?enQ1UllHZkw0MWtyRGZzeXJoRVkvMUd6REhRa3ZIK0FEWm9WVS9wOEpTVEhu?=
+ =?utf-8?B?ZXhOMUhDZ0FrV0plMTUwRk9oaDd3b0xPYU1LRTNtWGQ3UDJFS0FzZGF1QmRX?=
+ =?utf-8?B?MThRM0VyS3dOK2hwNmVpY0tlM1RaV0tlZVl0RXFPUEJaY3owS1hzMnlySVBq?=
+ =?utf-8?B?YlE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+BfgNJzazn55wUMzjX=thqZGYz0LYU4cnO1Pn8U80B5FrSvxQ@mail.gmail.com>
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TY3PR01MB11346.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fe4dfc9e-4876-48a7-ea8b-08dc6e632bf4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 May 2024 06:58:59.7411
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ZbUTjWl+glDA//EA8juQB7dtK2L8mpCEkg73wiPpCs9ngDEZ61As1ojQGrQWd9DS6qtDG9BLKgMFHC6ta+GeyRKZEfK5rdDTrgjnEVKpv58=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB11685
 
-Hi Dustin,
-
-On 2024-05-06 13:29:32+0000, Dustin Howett wrote:
-> On Mon, May 6, 2024 at 12:43 PM Thomas Weißschuh <linux@weissschuh.net> wrote:
-> > On 2024-05-06 08:09:07+0000, Limonciello, Mario wrote:
-> > > On 5/6/2024 1:09 AM, Thomas Weißschuh wrote:
-> > > > On 2024-05-05 22:56:33+0000, Thomas Weißschuh wrote:
-> > > > > Framework Laptops are using embedded controller firmware based on the
-> > > > > ChromeOS EC project.
-> > > > > In addition to the standard upstream commands some vendor-specific
-> > > > > commands are implemented.
-> > > > >
-> > > > > Add a driver that implements battery charge thresholds using these
-> > > > > custom commands.
-> > > >
-> > > > It turns out that standard ChromesOS EC defines EC_CMD_CHARGE_CONTROL.
-> > > > The kernel headers however only define v1 of the protocol, which is very
-> > > > limited.
-> > > >
-> > > > But in the upstream firmware repo there is a v3 which is much better.
-> > > >
-> > > > The Framework laptop only implements v2 which is also fine.
-> > > > Given that v3 was only introduced late last year, it seems better to
-> > > > stick to v2 anyways for now.
-> > > >
-> > > > So please disregard Patch 2, I'll see on how to use this via a normal
-> > > > cros_ec driver.
-> > > >
-> > > > There are some other Framework-only features that will use Patch 1,
-> > > > so feedback for that would still be good.
-> > >
-> > > What other kinds of features do you have in mind?
-> >
-> 
-> Definitely privacy switch reporting belongs in a driver like this.
-
-If it can't be done via one of the upstream CrOS EC commands, surely.
-
-> Overall, I'm not sure about making it a subjugate driver under the
-> cros_ec_mfd virtual "bus"... even though a lot of the features take a
-> dependency on cros_ec.
-> Doing so centralizes the work in the platform-chrome tree and may
-> serve as a guidepost for any future laptop OEMs that derive their
-> embedded controller firmware from ChromeOS's.
-> If the owners of this tree sign off on that, that's awesome! I'd be
-> concerned about making it all their responsibility.
-
-Yes, some guidance from the maintainers will be great.
-
-> I may be a bit biased, as I have been working on a driver of my own[1]
-> for this purpose. It currently supports battery charge limiting[3],
-> reporting fan speed via hwmon, the keyboard backlight[2], and has an
-> open pull request that exposes the status of the privacy switches.
-
-I have taken a look at that driver but wasn't fond of the fact that it
-is not using cros_ec mfd. Taking a reference on a completely different
-device looks iffy to me and in violation of the device hierarchy.
-
-FYI I have completely non-Framework-specific implementations for
-keyboard backlight [0], charge limiting [1] and hwmon [2].
-(I didn't look at the privacy switches yet, maybe there is a generic
-solution)
-(I'm currently polishing [1] and [2], any feedback already would also be
-much appreciated)
-
-All of them work correctly on my Framework 13 AMD, Firmware 3.05.
-These standard APIs are more powerful than the Framework-only ones.
-
-Charge control can do start_threshold, stop_threshold and
-charge_behaviour. Hwmon can do fans and temperature sensors.
-
-Keyboard backlight just reuses the existing mainline driver.
-
-> It is destined--once I find the time to clean it up--for
-> drivers\platforms\x86 instead of ...\chrome.
-> 
-> This may be a good place for us to combine our efforts!
-
-Surely!
-
-Personally I only have the AMD 13 device (Azalea),
-so I can't test anything else.
-And I'd like to focus on the mainline-compatible APIs (first).
-
-Feel free to contact me (privately?) if you have any suggestions.
-
-> [1] https://github.com/DHowett/framework-laptop-kmod
-> [2] I found that the Azalea did not report its keyboard backlight
-> values through the standard cros ec KBLIGHT interface like hx20/30
-> did, so the driver as it stands implements a fallback that uses the
-> raw PWM state. I'm sure that you'd've noticed this if it was still
-> true... so I am always happy to drop an unnecessary workaround. :)
-
-For me the posted driver under [0] works as expected.
-
-> [3] Which I believe still requires a special host command and is not
-> integrated into the charge manager, at least as of Azalea/Lotus and
-> _definitely_ not as of hx20/30!
-
-This also works for me correctly with [1].
-Do you know if there are plans by Framework to move the older devices to
-a newer firmware?
-This would also make their own maintenance work easier in the future,
-especially considering their commitment to software longevity[3].
-
-> [..]
-
-Thomas
-
-[0] https://lore.kernel.org/lkml/20240505-cros_ec-kbd-led-framework-v1-1-bfcca69013d2@weissschuh.net/
-[1] https://git.sr.ht/~t-8ch/linux/tree/b4/cros_ec-charge-control
-[2] https://git.sr.ht/~t-8ch/linux/tree/b4/cros_ec-hwmon
-[3] https://frame.work/de/en/blog/enabling-software-longevity
+SGkgTmlrbGFzLA0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IE5pa2xh
+cyBTw7ZkZXJsdW5kIDxuaWtsYXMuc29kZXJsdW5kK3JlbmVzYXNAcmFnbmF0ZWNoLnNlPg0KPiBT
+dWJqZWN0OiBbUEFUQ0ggMC8yXSB0aGVybWFsOiByZW5lc2FzOiBHcm91cCBkcml2ZXJzIGFuZCB1
+cGRhdGUgZGVwZW5kZW5jaWVzDQo+IA0KPiBIZWxsbywNCj4gDQo+IFRoaXMgc21hbGwgc2VyaWVz
+IG1vdmVzIGFuZCBncm91cHMgYWxsIHJlbmVzYXMgdGhlcm1hbCBkcml2ZXJzIGluIGEgdmVuZG9y
+IGRpcmVjdG9yeSBhcyBkb25lIGJ5DQo+IHNvbWUgb3RoZXIgdmVuZG9ycy4gVGhlIGlkZWEgaXMg
+dG8gbWFrZSBpdCBlYXNpZXIgdG8gc3BvdCBpc3N1ZXMgdGhleSBhcmUgd29ya2VkIG9uIGJ5IHRo
+ZSBzYW1lIHNldA0KPiBvZiBwZW9wbGUuDQo+IA0KPiBQYXRjaCAyLzIgZml4IHN1Y2ggYW4gaXNz
+dWUgd2hlcmUgb25lIGRlcGVuZGVuY3kgd2FzIG1pc3NlZCBmb3Igb25lIHRoZSBkcml2ZXJzLg0K
+PiANCj4gQEJpanU6IFRoZXJlIGlzIG5vIGVudHJ5IGZvciByemcybF90aGVybWFsIGluIE1BSU5U
+QUlORVJTLiBTaG91bGQgd2UgdXBkYXRlIHRoYXQgd2l0aCBhbiBlbnRyeSBmb3INCj4geW91Pw0K
+DQpZZXMgUGxlYXNlLg0KDQpUaGFua3MsDQpCaWp1DQoNCj4gDQo+IE5pa2xhcyBTw7ZkZXJsdW5k
+ICgyKToNCj4gICB0aGVybWFsOiByZW5lc2FzOiBHcm91cCBhbGwgcmVuZXNhcyB0aGVybWFsIGRy
+aXZlcnMgdG9nZXRoZXINCj4gICB0aGVybWFsOiByZW5lc2FzOiByY2FyOiBBZGQgZGVwZW5kZW5j
+eSBvbiBPRg0KPiANCj4gIE1BSU5UQUlORVJTICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICB8ICA0ICstLQ0KPiAgZHJpdmVycy90aGVybWFsL0tjb25maWcgICAgICAgICAgICAgICAg
+ICAgICAgIHwgMjggKystLS0tLS0tLS0tLS0tLS0tLQ0KPiAgZHJpdmVycy90aGVybWFsL01ha2Vm
+aWxlICAgICAgICAgICAgICAgICAgICAgIHwgIDQgKy0tDQo+ICBkcml2ZXJzL3RoZXJtYWwvcmVu
+ZXNhcy9LY29uZmlnICAgICAgICAgICAgICAgfCAyOCArKysrKysrKysrKysrKysrKysrDQo+ICBk
+cml2ZXJzL3RoZXJtYWwvcmVuZXNhcy9NYWtlZmlsZSAgICAgICAgICAgICAgfCAgNSArKysrDQo+
+ICAuLi4vdGhlcm1hbC97ID0+IHJlbmVzYXN9L3JjYXJfZ2VuM190aGVybWFsLmMgfCAgMiArLSAg
+ZHJpdmVycy90aGVybWFsL3sgPT4NCj4gcmVuZXNhc30vcmNhcl90aGVybWFsLmMgIHwgIDIgKy0g
+IGRyaXZlcnMvdGhlcm1hbC97ID0+IHJlbmVzYXN9L3J6ZzJsX3RoZXJtYWwuYyB8ICAyICstDQo+
+ICA4IGZpbGVzIGNoYW5nZWQsIDQxIGluc2VydGlvbnMoKyksIDM0IGRlbGV0aW9ucygtKSAgY3Jl
+YXRlIG1vZGUgMTAwNjQ0DQo+IGRyaXZlcnMvdGhlcm1hbC9yZW5lc2FzL0tjb25maWcgIGNyZWF0
+ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL3RoZXJtYWwvcmVuZXNhcy9NYWtlZmlsZSAgcmVuYW1lDQo+
+IGRyaXZlcnMvdGhlcm1hbC97ID0+IHJlbmVzYXN9L3JjYXJfZ2VuM190aGVybWFsLmMgKDk5JSkg
+IHJlbmFtZSBkcml2ZXJzL3RoZXJtYWwveyA9Pg0KPiByZW5lc2FzfS9yY2FyX3RoZXJtYWwuYyAo
+OTklKSAgcmVuYW1lIGRyaXZlcnMvdGhlcm1hbC97ID0+IHJlbmVzYXN9L3J6ZzJsX3RoZXJtYWwu
+YyAoOTklKQ0KPiANCj4gLS0NCj4gMi40NS4wDQoNCg==
 
