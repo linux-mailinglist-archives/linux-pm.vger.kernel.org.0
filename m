@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-7606-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7607-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88C018BEC0D
-	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2024 20:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CBE558BEC26
+	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2024 21:02:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA3A51C21979
-	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2024 18:58:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 095AD1C23305
+	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2024 19:02:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC45E16D9DD;
-	Tue,  7 May 2024 18:57:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7BFF16DEA0;
+	Tue,  7 May 2024 19:01:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ayfn0d4Y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rmW8Ry13"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5F9316C84E
-	for <linux-pm@vger.kernel.org>; Tue,  7 May 2024 18:57:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 828EA16D9A7
+	for <linux-pm@vger.kernel.org>; Tue,  7 May 2024 19:01:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715108277; cv=none; b=Rz/oykKuZb6iYRXF8urSl0qOoxDBusIrMrZ+ahYcDavmR7VOX8EAdQuz975W7AFsWGGFtRDO6/k7kY98kjXukZYHEZLjD0al/phuX9B4CfTuFBmn1SdQn97GT0gXWSlNtdx/LkcM+YpAWw6Mj9kxx13jUZkocolGM3cAD7waLhU=
+	t=1715108510; cv=none; b=oC7ir6Aa7t/NLTr1bkDXOdQb9T8s/bdYc8xSAFYjS5VgN+R2Dqt2ebL0tosNFXlRPdI05IaRPsyunQq3pdC5B0VezBdKJ7NbPoqJiRaM3NfUZYBXuRd6YhwKWog1lRrFH2esBT27Xgj0o75IcRXtpHnY9rDGIoTPgnByPJeLWQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715108277; c=relaxed/simple;
-	bh=k2AoWh8ROQADU1QnYwBZ8gFT3W9qfGQ3+UO2V0WJcHs=;
+	s=arc-20240116; t=1715108510; c=relaxed/simple;
+	bh=k3ChrTFsSDJ03gYOBcxJs3wIvGIT+tI845+0+aMWKMU=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=n/u30SyXoGXBqVomcGrampgCadhy6QoJWakYfkHsHmG4QS97WhDgB9M0C7w4ykBOSU8wv6qPgb3pV+d0AS3Ot9/apBtUEizc3Hi0IKHvv4t1JIsgKtQNzYjH9bHxtNCf1dQMGH+3yCaTItX+nmFbsBenqR3ucaZ2kk8/5fHrKxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ayfn0d4Y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 959D5C4AF18
-	for <linux-pm@vger.kernel.org>; Tue,  7 May 2024 18:57:57 +0000 (UTC)
+	 Content-Type:MIME-Version; b=iypHEuMahOvVH00H3qqhYYphgDh1LlbctzoHvkhEX7JiglQuZD4iX0Ew2dCI9SDmD6BGj+6+mmpKXBNuY0FxtP7HBfq+RXeZ4CRTSahbrT/bbFVul5DjL+EPduboOP8LVaDpW/RcEuDBqaQP1OwRb1e9UGeL+jecBGJ5o7NnbTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rmW8Ry13; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2A588C4AF66
+	for <linux-pm@vger.kernel.org>; Tue,  7 May 2024 19:01:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715108277;
-	bh=k2AoWh8ROQADU1QnYwBZ8gFT3W9qfGQ3+UO2V0WJcHs=;
+	s=k20201202; t=1715108510;
+	bh=k3ChrTFsSDJ03gYOBcxJs3wIvGIT+tI845+0+aMWKMU=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=Ayfn0d4Yli8Rli5VzsTtWxzBtSc/WHVLLQ/xj8Zd7wP0EPusQwyqqxQy+LGTeFxkf
-	 N0vcKRygFV0xWJkkobIOrVDKufT0B84PJDwpNt6WuuyxQRBLlBn2j5jy3pS2gXrU1R
-	 /qbsUByLAoSVWDRy2lr+9CB7A1C1Ltpu4G0aqA7VmxoX+AsJp3eYWQWGyfsRVBGnqT
-	 gagz0knP+d/FdSsoPVKhDUl1kkJmdEx/z/hYAINcKq/RS/IgyGDBv0Ai4xLC7ysXCq
-	 olRPYt6ItaMfU766hHKiqa/vmP+fl3AXfPd7cC1ydBjOq0s+BjjTFM/M3EIluuGU0a
-	 bUU0c5YAovDJA==
+	b=rmW8Ry13DWoh+I2FLM7TtOKE6MVvK1RoTBM+lUMSi+Nobom42mu5IREzoDMp3TTE1
+	 bCWN+j/9L5u/TcPeik/8gurUfYblBV/wQKCHsqaiNJwAQTJPGJQ1iiiAOFsabbJ7wn
+	 4VbNyKyutqT3RARTxDHlpA30UDKINef01rRzLxeGGW+TINHEXVGtoB5focmo59apgP
+	 bLZCovaB1h9dtG2wbdc7Yd3jdVWQtCn526Noe8HobpbWsmMAr75L2kqeRZUU8ItFNF
+	 b1AmHPQZN86L0Be5GC+/56xfIPv8jltRC+xR/ioyhK6/1uAKvpHo/g+vJgdfcHqbWY
+	 s0G7v28e6vhQw==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 8E50DC53B6D; Tue,  7 May 2024 18:57:57 +0000 (UTC)
+	id 19554C53B6B; Tue,  7 May 2024 19:01:50 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-pm@vger.kernel.org
 Subject: [Bug 218759] 6.9-rc kernels - with Ryzen 7840HS CPU single core
  never boosts to max frequency
-Date: Tue, 07 May 2024 18:57:57 +0000
+Date: Tue, 07 May 2024 19:01:49 +0000
 X-Bugzilla-Reason: AssignedTo
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -57,13 +57,13 @@ X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
 X-Bugzilla-Who: mario.limonciello@amd.com
-X-Bugzilla-Status: NEW
+X-Bugzilla-Status: ASSIGNED
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Assigned-To: mario.limonciello@amd.com
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218759-137361-1zRuroBpdF@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: bug_status assigned_to
+Message-ID: <bug-218759-137361-Q9nOwUnFuM@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-218759-137361@https.bugzilla.kernel.org/>
 References: <bug-218759-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,14 +79,12 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D218759
 
---- Comment #34 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
-Great! It should apply equally to all modes.  If there is a regression with=
- any
-other mode it should be a different root cause.
+Mario Limonciello (AMD) (mario.limonciello@amd.com) changed:
 
-If you feel comfortable doing so please add a "Tested-by" tag publicly on t=
-he
-link I posted, instructions at bottom of the page.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+           Assignee|linux-pm@vger.kernel.org    |mario.limonciello@amd.com
 
 --=20
 You may reply to this email to add a comment.
