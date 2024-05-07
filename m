@@ -1,90 +1,57 @@
-Return-Path: <linux-pm+bounces-7549-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7550-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22C698BD8C4
-	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2024 02:57:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECE4A8BDB2E
+	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2024 08:11:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 84A0D1F21CC2
-	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2024 00:57:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2EC3281CF6
+	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2024 06:11:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C494015A4;
-	Tue,  7 May 2024 00:57:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 457086EB7D;
+	Tue,  7 May 2024 06:11:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="uOq+zuT5"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="d0S05ZBx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC28910FA
-	for <linux-pm@vger.kernel.org>; Tue,  7 May 2024 00:57:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8810F6D1C8;
+	Tue,  7 May 2024 06:11:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715043426; cv=none; b=JuOnx1QRlXB50nEOcBCNTxKDCwyVXe7ZrTZgBfHEVRIJvBp61gga2ZZESq7iN14gyVgtZSTP9NoBFPn+F+ScULtAhMjuDvz8DzCpQzKMm2Gp4LuGjeQSjPpFlsYot44JCHGczaicwZNm7WYDEoUyER2ZD2p0K4USh02P9W3Qe34=
+	t=1715062271; cv=none; b=XrzVa3ZBCqznoBvKo+z45fIKrD5maqUDYC8wlyHJp86yT0fQ/pMrc8x2wOAsF4S4oJXtkEUDT10GPjhvzOwgsLYKF9wFWO/XEk/65h6o+/V6Peke5W12y1e8/fFZYbI5v05ECv1p0AYsrDMp2HpCGw8lw2kTM9Ql/4I5tySoWZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715043426; c=relaxed/simple;
-	bh=Zw8IK4Keg4Oc7elbEtugi4fDOS7vRLszl4fUoQe2ADU=;
+	s=arc-20240116; t=1715062271; c=relaxed/simple;
+	bh=aOz9fe41WAKNxF6hfkGSEIu6azwOFn4nkwJSjri5io4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tBlcpZNsGYqO5FFFa5ld7DGhKgH9lbQxkblSh4F/QRXGSnp3LZtmhfH3wpWdpHBi0Gs3jSDFb1SLJpwQe3sG915YkEukT8lCJN9iaOPYnJqc7MSTp4PUXh3ASmN86AXg3p8y1Q9PeJgC0xLMPLLauwvFiwWJCMKxl4TAqwlFL/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=uOq+zuT5; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-41b79451145so19044385e9.3
-        for <linux-pm@vger.kernel.org>; Mon, 06 May 2024 17:57:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1715043423; x=1715648223; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sMmZF0AOULHWz7K5sI+Gjh6ormvmra+lWWm5ydpM0vo=;
-        b=uOq+zuT5k1bRDD7EJymLnHPNY/UWD8Rx6zcXHTb8EWt/aKGRQLD/+NFQ7TUET6n8Gu
-         O/s79AUY6bcu3Ch+rM7pvwi5TyCQzFDOFZEmMbsiWOuxd3cuQcC83s48bLSQlvurlEV3
-         RTgqgwhFggPFK1Wxlk4TA/T1KVQ9Uk6A2WeZU1s/K7uLS+5xJGU+1CxS3hg/Z5SL3U90
-         ggUB7Ww2O4to+SoVEy1LqUxKM3iCXfA39Wp+1O3vYzZnMyFiox5soOS+/p/3QgL/zZ3H
-         gQcoqKaVvCW4QSuqyoTyqiVj1lYJv9irkqQxy9qSr8oC2c+vEdNfrmtB7oB/OCPwl20n
-         Rc1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715043423; x=1715648223;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sMmZF0AOULHWz7K5sI+Gjh6ormvmra+lWWm5ydpM0vo=;
-        b=WYrCsuiDf684/iN5hkMRzsdzt+CEgHGMj20iTksRtAq4AKSY2Ue2nvzsTxcU+gstqf
-         3bitZh80V507IIZqn84VfQwjgWM3pENgFuJx8wVsV1+++QLn2O11RqUpZe9TcwQ1Qh+m
-         oczskwRRP1sGNxxij+6CUcjVCkbIHvar4mvqGKZoR/wn3aTjw8yzzJ6V719WxhdcDHdh
-         UQh2jzm0raJ0FrGjXiNsrtvcW49u2xTwlR6qf/BXNNiDANdRdb0guWPPO7r63lKZJY65
-         ycKqot3FPE5ke2IT62qBOFMrzeVqIGaTCkJ+6Iy78crgVrE+8be3oQyzMmtotdojCIqC
-         CHrg==
-X-Forwarded-Encrypted: i=1; AJvYcCVCSkQEuL4/YCXZc8Uy5py24V79UAEBwh3QcvGb2xLWNmsC2rTJFKQpCQ5AKazx18fCmIPN53vMnLaPSBdBDJ4/C3b1mapHh8k=
-X-Gm-Message-State: AOJu0YwXdb0R1BFTwpAvKmFD71HFADF1ietHkllC1zsqZbJ5nqax+QPU
-	roEvKbAynKWkUWDEr4C69cG1m9yh+fKsBO2uAwHZ9M/QZLT2kMas3TA1/U+qYNE=
-X-Google-Smtp-Source: AGHT+IHDq/r/e2PEjBaRLdu8UmyqB0m3Y57CsH6ZD4urWyJ2XpIhDjGebxgMbe7km9B2sArJT0Am1A==
-X-Received: by 2002:a05:600c:1d28:b0:41c:2931:e670 with SMTP id l40-20020a05600c1d2800b0041c2931e670mr9298095wms.2.1715043422944;
-        Mon, 06 May 2024 17:57:02 -0700 (PDT)
-Received: from airbuntu (host81-157-90-255.range81-157.btcentralplus.com. [81.157.90.255])
-        by smtp.gmail.com with ESMTPSA id m37-20020a05600c3b2500b0041816c3049csm17640865wms.11.2024.05.06.17.57.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 May 2024 17:57:01 -0700 (PDT)
-Date: Tue, 7 May 2024 01:56:59 +0100
-From: Qais Yousef <qyousef@layalina.io>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Daniel Bristot de Oliveira <bristot@redhat.com>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Christian Loehle <christian.loehle@arm.com>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] sched: Consolidate cpufreq updates
-Message-ID: <20240507005659.d4rzzaoq3isanndf@airbuntu>
-References: <20240505233103.168766-1-qyousef@layalina.io>
- <20240506100509.GL40213@noisy.programming.kicks-ass.net>
+	 Content-Type:Content-Disposition:In-Reply-To; b=tTkZsOcgi44QUl4nEDk+kQleKpszcYwzgWYRB0q22OZ6q6s7slu7G5KLMBa3N9j3X2mM9dAUCcMLuV3mWuBXEW/eqZ1cq71TvqxkBddvhunaXkftgNT0U1DlP7bw7HVncXXVOOiDaRiVIFLY4COrykTxSyr3Xumw+AawCmbIs0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=d0S05ZBx; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1715062265;
+	bh=aOz9fe41WAKNxF6hfkGSEIu6azwOFn4nkwJSjri5io4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=d0S05ZBxRizCGgFtKbQ7BtcO+yYMGuBiYUmrS2xORY55741JGhtObzfNA8rTfLGk+
+	 9J0XF+qHkeklti47dfmnUxFvdzO6At3vTtBjx3I59GGcYvwdOwbqm/OOAEN+ZIb/67
+	 OnCT5Vi9jUFNHV1c4oT6/bYZrhuEFfXy3ClXgoc8=
+Date: Tue, 7 May 2024 08:11:04 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Dustin Howett <dustin@howett.net>
+Cc: "Limonciello, Mario" <mario.limonciello@amd.com>, 
+	Lee Jones <lee@kernel.org>, Benson Leung <bleung@chromium.org>, 
+	Guenter Roeck <groeck@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, linux-kernel@vger.kernel.org, 
+	chrome-platform@lists.linux.dev, Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 0/2] platform/chrome: cros_ec_framework_laptop: new driver
+Message-ID: <99ae4866-a8cd-408c-8227-006f96f14dc7@t-8ch.de>
+References: <20240505-cros_ec-framework-v1-0-402662d6276b@weissschuh.net>
+ <613369f9-42c5-4a59-b83f-45bd1773ffe4@t-8ch.de>
+ <a7ae8fc0-5e53-487a-86c6-f49dc6623688@amd.com>
+ <e716716e-87fe-46f5-8ea9-5f649f1da11b@t-8ch.de>
+ <CA+BfgNJzazn55wUMzjX=thqZGYz0LYU4cnO1Pn8U80B5FrSvxQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -93,204 +60,120 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240506100509.GL40213@noisy.programming.kicks-ass.net>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+BfgNJzazn55wUMzjX=thqZGYz0LYU4cnO1Pn8U80B5FrSvxQ@mail.gmail.com>
 
-On 05/06/24 12:05, Peter Zijlstra wrote:
-> On Mon, May 06, 2024 at 12:31:03AM +0100, Qais Yousef wrote:
+Hi Dustin,
+
+On 2024-05-06 13:29:32+0000, Dustin Howett wrote:
+> On Mon, May 6, 2024 at 12:43 PM Thomas Weißschuh <linux@weissschuh.net> wrote:
+> > On 2024-05-06 08:09:07+0000, Limonciello, Mario wrote:
+> > > On 5/6/2024 1:09 AM, Thomas Weißschuh wrote:
+> > > > On 2024-05-05 22:56:33+0000, Thomas Weißschuh wrote:
+> > > > > Framework Laptops are using embedded controller firmware based on the
+> > > > > ChromeOS EC project.
+> > > > > In addition to the standard upstream commands some vendor-specific
+> > > > > commands are implemented.
+> > > > >
+> > > > > Add a driver that implements battery charge thresholds using these
+> > > > > custom commands.
+> > > >
+> > > > It turns out that standard ChromesOS EC defines EC_CMD_CHARGE_CONTROL.
+> > > > The kernel headers however only define v1 of the protocol, which is very
+> > > > limited.
+> > > >
+> > > > But in the upstream firmware repo there is a v3 which is much better.
+> > > >
+> > > > The Framework laptop only implements v2 which is also fine.
+> > > > Given that v3 was only introduced late last year, it seems better to
+> > > > stick to v2 anyways for now.
+> > > >
+> > > > So please disregard Patch 2, I'll see on how to use this via a normal
+> > > > cros_ec driver.
+> > > >
+> > > > There are some other Framework-only features that will use Patch 1,
+> > > > so feedback for that would still be good.
+> > >
+> > > What other kinds of features do you have in mind?
+> >
 > 
-> > +static inline void update_cpufreq_ctx_switch(struct rq *rq, struct task_struct *prev)
-> > +{
-> > +#ifdef CONFIG_CPU_FREQ
-> > +	unsigned int flags = 0;
-> > +
-> > +#ifdef CONFIG_SMP
-> > +	if (unlikely(current->sched_class == &stop_sched_class))
-> > +		return;
-> > +#endif
+> Definitely privacy switch reporting belongs in a driver like this.
+
+If it can't be done via one of the upstream CrOS EC commands, surely.
+
+> Overall, I'm not sure about making it a subjugate driver under the
+> cros_ec_mfd virtual "bus"... even though a lot of the features take a
+> dependency on cros_ec.
+> Doing so centralizes the work in the platform-chrome tree and may
+> serve as a guidepost for any future laptop OEMs that derive their
+> embedded controller firmware from ChromeOS's.
+> If the owners of this tree sign off on that, that's awesome! I'd be
+> concerned about making it all their responsibility.
+
+Yes, some guidance from the maintainers will be great.
+
+> I may be a bit biased, as I have been working on a driver of my own[1]
+> for this purpose. It currently supports battery charge limiting[3],
+> reporting fan speed via hwmon, the keyboard backlight[2], and has an
+> open pull request that exposes the status of the privacy switches.
+
+I have taken a look at that driver but wasn't fond of the fact that it
+is not using cros_ec mfd. Taking a reference on a completely different
+device looks iffy to me and in violation of the device hierarchy.
+
+FYI I have completely non-Framework-specific implementations for
+keyboard backlight [0], charge limiting [1] and hwmon [2].
+(I didn't look at the privacy switches yet, maybe there is a generic
+solution)
+(I'm currently polishing [1] and [2], any feedback already would also be
+much appreciated)
+
+All of them work correctly on my Framework 13 AMD, Firmware 3.05.
+These standard APIs are more powerful than the Framework-only ones.
+
+Charge control can do start_threshold, stop_threshold and
+charge_behaviour. Hwmon can do fans and temperature sensors.
+
+Keyboard backlight just reuses the existing mainline driver.
+
+> It is destined--once I find the time to clean it up--for
+> drivers\platforms\x86 instead of ...\chrome.
 > 
-> why do we care about the stop class? It shouldn't, in general, consume a
-> lot of cycles.
-> 
-> > +
-> > +	if (unlikely(current->sched_class == &idle_sched_class))
-> > +		return;
-> 
-> And why do we care about idle? Specifically this test doesn't capture
-> force-idle threads. Notably see is_idle_task().
+> This may be a good place for us to combine our efforts!
 
-It's just We don't want these tasks to 'pollute' cpufreq updates since they
-shouldn't care or contribute to what frequency the CPU should be running at.
+Surely!
 
-Yes I missed the is_idle_task() from the exclusion list - which can be
-simplified as you suggest later.
+Personally I only have the AMD 13 device (Azalea),
+so I can't test anything else.
+And I'd like to focus on the mainline-compatible APIs (first).
 
-> 
-> > +
-> > +	if (unlikely(task_has_idle_policy(current)))
-> > +		return;
-> > +
-> > +	if (likely(fair_policy(current->policy))) {
-> > +
-> > +		if (unlikely(current->in_iowait)) {
-> > +			flags |= SCHED_CPUFREQ_IOWAIT | SCHED_CPUFREQ_FORCE_UPDATE;
-> > +			goto force_update;
-> > +		}
-> > +
-> > +#ifdef CONFIG_SMP
-> > +		/*
-> > +		 * Allow cpufreq updates once for every update_load_avg() decay.
-> > +		 */
-> > +		if (unlikely(rq->cfs.decayed)) {
-> > +			rq->cfs.decayed = false;
-> > +			goto force_update;
-> > +		}
-> > +#endif
-> > +		return;
-> > +	}
-> > +
-> > +	/*
-> > +	 * RT and DL should always send a freq update. But we can do some
-> > +	 * simple checks to avoid it when we know it's not necessary.
-> > +	 */
-> > +	if (rt_task(current) && rt_task(prev)) {
-> 
-> IIRC dl tasks also match rt_task, so your else clause might not work the
-> way you've intended.
-> 
-> > +#ifdef CONFIG_UCLAMP_TASK
-> > +		unsigned long curr_uclamp_min = uclamp_eff_value(current, UCLAMP_MIN);
-> > +		unsigned long prev_uclamp_min = uclamp_eff_value(prev, UCLAMP_MIN);
-> > +
-> > +		if (curr_uclamp_min == prev_uclamp_min)
-> > +#endif
-> > +			return;
-> > +	} else if (dl_task(current) && current->dl.flags & SCHED_FLAG_SUGOV) {
-> 
-> Notably DL tasks also match rt_task(), so I don't think this clause
+Feel free to contact me (privately?) if you have any suggestions.
 
-Hmm yes. dl priority is negative and rt_task() will capture this. Shouldn't we
-fix the function? Can send a separate patch.
+> [1] https://github.com/DHowett/framework-laptop-kmod
+> [2] I found that the Azalea did not report its keyboard backlight
+> values through the standard cros ec KBLIGHT interface like hx20/30
+> did, so the driver as it stands implements a fallback that uses the
+> raw PWM state. I'm sure that you'd've noticed this if it was still
+> true... so I am always happy to drop an unnecessary workaround. :)
 
-	static inline int rt_task(struct task_struct *p)
-	{
-		return rt_prio(p->prio) && !dl_prio();
-	}
+For me the posted driver under [0] works as expected.
 
-> exactly does as you expect. Also, isn't the flags check sufficient on
-> it's own?
+> [3] Which I believe still requires a special host command and is not
+> integrated into the charge manager, at least as of Azalea/Lotus and
+> _definitely_ not as of hx20/30!
 
-I considered this, but opted to keep the dl_task() reservedly assuming access
-to dl structure should only be considered valid for dl tasks. It seemed safer
-to me against potential future changes to the access pattern.
+This also works for me correctly with [1].
+Do you know if there are plans by Framework to move the older devices to
+a newer firmware?
+This would also make their own maintenance work easier in the future,
+especially considering their commitment to software longevity[3].
 
-Happy to drop it if this is too reserved.
+> [..]
 
-> 
-> > +		/* Ignore sugov kthreads, they're responding to our requests */
-> > +		return;
-> > +	}
-> > +
-> > +	flags |= SCHED_CPUFREQ_FORCE_UPDATE;
-> > +
-> > +force_update:
-> > +	cpufreq_update_util(rq, flags);
-> > +#endif
-> > +}
-> 
-> But over-all the thing seems very messy, mixing sched_class, policy and
-> prio based selection methods.
+Thomas
 
-Yeah, I started with basic conditions and started walking my way on what things
-should be excluded. We don't have fair_task() so used fair_policy() and out of
-habit continued to use rt/dl_task() without realizing the caveat you
-highlighted.
-
-> 
-> Can't this be cleaned up somewhat?
-> 
-> 
-> Notably, if you structure it something like so:
-> 
-> 	if (fair_policy(current)) {
-> 		...
-> 		return;
-> 	}
-> 
-> 	if (rt_policy(current)) {
-> 		if (dl_task(current) && current->dl.flags & SCHED_FLAG_SUGOV)
-> 			return;
-> 		if (rt_policy(prev) && uclamps_match(current, prev))
-> 			return;
-> 		...
-> 		return;
-> 	}
-> 
-> 	/* everybody else gets nothing */
-> 	return;
-> 
-> You get a lot less branches in the common paths, no?
-
-Yes. How about this? Since stopper class appears as RT, we should still check
-for this class specifically.
-
-Thanks!
-
---->8---
-
-static inline void update_cpufreq_ctx_switch(struct rq *rq, struct task_struct *prev)
-{
-#ifdef CONFIG_CPU_FREQ
-	if (likely(fair_policy(current->policy))) {
-
-		if (unlikely(current->in_iowait)) {
-			cpufreq_update_util(rq, SCHED_CPUFREQ_IOWAIT | SCHED_CPUFREQ_FORCE_UPDATE);
-			return;
-		}
-
-#ifdef CONFIG_SMP
-		/*
-		 * Allow cpufreq updates once for every update_load_avg() decay.
-		 */
-		if (unlikely(rq->cfs.decayed)) {
-			rq->cfs.decayed = false;
-			cpufreq_update_util(rq, 0);
-			return;
-		}
-#endif
-		return;
-	}
-
-	/*
-	 * RT and DL should always send a freq update. But we can do some
-	 * simple checks to avoid it when we know it's not necessary.
-	 */
-	if (task_is_realtime(current)) {
-		if (dl_task(current) && current->dl.flags & SCHED_FLAG_SUGOV) {
-			/* Ignore sugov kthreads, they're responding to our requests */
-			return;
-		}
-
-		if (rt_task(current) && rt_task(prev)) {
-#ifdef CONFIG_UCLAMP_TASK
-			unsigned long curr_uclamp_min = uclamp_eff_value(current, UCLAMP_MIN);
-			unsigned long prev_uclamp_min = uclamp_eff_value(prev, UCLAMP_MIN);
-
-			if (curr_uclamp_min == prev_uclamp_min)
-#endif
-				return;
-		}
-
-#ifdef CONFIG_SMP
-		if (unlikely(current->sched_class == &stop_sched_class))
-			return;
-#endif
-
-		cpufreq_update_util(rq, SCHED_CPUFREQ_FORCE_UPDATE);
-		return;
-	}
-
-	/* Everything else shouldn't trigger a cpufreq update */
-	return;
-#endif
-}
+[0] https://lore.kernel.org/lkml/20240505-cros_ec-kbd-led-framework-v1-1-bfcca69013d2@weissschuh.net/
+[1] https://git.sr.ht/~t-8ch/linux/tree/b4/cros_ec-charge-control
+[2] https://git.sr.ht/~t-8ch/linux/tree/b4/cros_ec-hwmon
+[3] https://frame.work/de/en/blog/enabling-software-longevity
 
