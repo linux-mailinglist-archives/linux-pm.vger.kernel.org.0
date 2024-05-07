@@ -1,104 +1,107 @@
-Return-Path: <linux-pm+bounces-7584-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7585-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A0BE8BE2E6
-	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2024 15:01:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04A938BE2F0
+	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2024 15:05:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C9F04B20C2B
-	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2024 13:01:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35DBE1C21B65
+	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2024 13:05:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F56515D5C9;
-	Tue,  7 May 2024 13:00:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ADEB15B995;
+	Tue,  7 May 2024 13:05:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XSxVLJHp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AVAjNaNm"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A34615D5A3
-	for <linux-pm@vger.kernel.org>; Tue,  7 May 2024 13:00:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3A0A15B150;
+	Tue,  7 May 2024 13:05:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715086802; cv=none; b=ZLPsCVt6oFhRmKi1G/xOb+6LB+/c0xfNZR2xIIWqLaO9NKYH6f9Dw2j25u9EKwtqN1+K9mkkxsmAJWY5cwdK9zwmyDWZZC4rzEiguIp+OA7dxrhcxICQhr9Qph3fH/Eoi1XWUOi/ZkFeujip1V8A2wiIfoQVms0eX0VaLFfDE68=
+	t=1715087138; cv=none; b=B3+6gi6t3Iyr9GI7qZE4ijpHP+0A9wzrK/xjLr559HLhGum+HUyrr+4sofV5cHKswhJiwNmSOy/aLT3SOUoWFrlLPDrR0D2khxFajaTOlYf7RruciWDQlj/LUelEjuFHH9lwwKQoMEXjJ6mEhhGklYkaMmXmH6auK566MMhaV78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715086802; c=relaxed/simple;
-	bh=cMNf9Lgr0NRsD4oeuHJYe1ithcK/F9szuGnaDrK7g4U=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=dlBdUTYxDaGiZqcYyolNOFeTUgklgKPaDpiRy8Yjqu+5xyLeBGQn2KuUVB9IwASbuWnvutVvnc4IEczS8zJvJk6kCS47hjg/0udgMZ1pN0ywznsos/fN1OU7s9ShziShrOM+S8Tv/kSS/X3qIYDQgATNQ+D8IHdq42LsxN9Q/4o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XSxVLJHp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B22CCC4AF66
-	for <linux-pm@vger.kernel.org>; Tue,  7 May 2024 13:00:01 +0000 (UTC)
+	s=arc-20240116; t=1715087138; c=relaxed/simple;
+	bh=Z8VMtHJyfVYcVZJH2yLQCtvZuapbpiYbq5cmW07OS1s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=G/KCYSS5NOgwbt3n0agZjoaT489e0pFKIU//Wxk0G6nbXWm/DH31ITV+/hd3C+HduuAfUKAAD+aBHUqDM3KivW30eWUWu6YF1MCkPCbZmrwKSw/fqYKzNCJFFEZ1N9a3q8wCv4neg8bv31HDVE7AP1DRwmStxMRcoO/3MPzmL9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AVAjNaNm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BBF1C3277B;
+	Tue,  7 May 2024 13:05:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715086801;
-	bh=cMNf9Lgr0NRsD4oeuHJYe1ithcK/F9szuGnaDrK7g4U=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=XSxVLJHplnt+m+VrSym4lkFwamWmtsps82jJ4LEAmp1TOQj4BPDzoU5sxydOvwXPs
-	 ZnzPpgKBTrrrTMFwoIehTGJZgi4dtkXgeUxy6m4K7ysM1WqjGnKCq25Wzl3YJVZAII
-	 ujXc33Q3YC3tDzn5P9D/DOFDGHC8X5t/AWu0I6D4llkiJk+stCjEAG3mB5rtzImu7/
-	 IG8zeZbp/HUXsyX0HDU93+OH9F51oNIeJtynrMRQijNZACyuJLQ0liugUzP2/vxqYk
-	 0SNM1nbIcvy41Nj10pgy2mdx4CWwaStOTMM45yepLXilvk1blR2kN0Hvbc9IT9Pr1C
-	 8xzjgmLAVDgQw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 9AC9AC16A72; Tue,  7 May 2024 13:00:01 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 218759] 6.9-rc kernels - with Ryzen 7840HS CPU single core
- never boosts to max frequency
-Date: Tue, 07 May 2024 13:00:01 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: gahabana@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218759-137361-nAaK7LNO2h@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218759-137361@https.bugzilla.kernel.org/>
-References: <bug-218759-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1715087137;
+	bh=Z8VMtHJyfVYcVZJH2yLQCtvZuapbpiYbq5cmW07OS1s=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=AVAjNaNmc9Th7GIHT6/yzrj/n0Wke58WvBFb1nfjLFtMmMxjFy1+CbmpVUoDi+51b
+	 ZDWI9UiCqD2uD2Bu/MlqHVc8rKzSxQ7udgBmU6hBeu/D/tdRyR/zszsFYtbyS3D+S1
+	 wHzu3yEQ1rDxpZTQ+4xcRUSw+yzh6N4klVaYb0ADJAxQyyRe58iF//ofKhhm465gJo
+	 JwBVnCqdt2KcEjV8CGZuvWavnDEbnhYRJ7uAH9QSj6ZvMO6r6/3zwHs0Si0ld5zu5P
+	 3Gwg5soZadpRYxMLkge0qdFRs1mLmXkj0wxvSb2YWlvkCDJ8sJ5JapcgDzSgiOdX0U
+	 XplQlT2V1armw==
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-5a9ef9ba998so740167eaf.1;
+        Tue, 07 May 2024 06:05:37 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXtqr67YCynhv0SGE0Ar3+uybgiO9HfDzmu6yPOVpFNVDh0zAdGEj65oM1muz93qQBFx2YOY4JrJihK2NoFpUbce8PYhsRBZxE9vaDF7BCJRXRNqMYDdKQ9lg181UKUeN+xZjZH0hc=
+X-Gm-Message-State: AOJu0Yxgp+Ai2/2iT7k4Sp2RJfpb3LfP8E0K2A5+8AzJwSNM18QXemIM
+	5zHGcJzQ7hq/WsNCJisy418JtgiGC1jm/X8f/oqLF94Krt+f0ICCggxR0aZuKG8OKgsV2q8ouoD
+	xS39pyBNiplDLB5NIh+Xr4Uc1/MA=
+X-Google-Smtp-Source: AGHT+IEfljPaDk5f6tWjsMdb88ycr4+1AhpQrlLpvrmnQTEHHTOwZrN7Rjbk2i0MevVO/5xs8WCh1mn/4QirEKgQE4s=
+X-Received: by 2002:a4a:c805:0:b0:5b2:89f:452 with SMTP id s5-20020a4ac805000000b005b2089f0452mr6095425ooq.1.1715087136751;
+ Tue, 07 May 2024 06:05:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240505-epp_cached-kdoc-v1-1-c03800fe0d63@quicinc.com>
+In-Reply-To: <20240505-epp_cached-kdoc-v1-1-c03800fe0d63@quicinc.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 7 May 2024 15:05:25 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gOA2cTk4vDq2H=BwNWMo62QHnfUtHL86gSCYYxykVbGA@mail.gmail.com>
+Message-ID: <CAJZ5v0gOA2cTk4vDq2H=BwNWMo62QHnfUtHL86gSCYYxykVbGA@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: fix struct cpudata::epp_cached kernel-doc
+To: Jeff Johnson <quic_jjohnson@quicinc.com>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Len Brown <lenb@kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218759
+On Sun, May 5, 2024 at 9:07=E2=80=AFPM Jeff Johnson <quic_jjohnson@quicinc.=
+com> wrote:
+>
+> make C=3D1 currently gives the following warning:
+>
+> drivers/cpufreq/intel_pstate.c:262: warning: Function parameter or struct=
+ member 'epp_cached' not described in 'cpudata'
+>
+> Add the missing ":" to fix the trivial kernel-doc syntax error.
+>
+> Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+> ---
+>  drivers/cpufreq/intel_pstate.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstat=
+e.c
+> index dbbf299f4219..7ddf05c9ba88 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -213,7 +213,7 @@ struct global_params {
+>   * @epp_policy:                Last saved policy used to set EPP/EPB
+>   * @epp_default:       Power on default HWP energy performance
+>   *                     preference/bias
+> - * @epp_cached         Cached HWP energy-performance preference value
+> + * @epp_cached:                Cached HWP energy-performance preference =
+value
+>   * @hwp_req_cached:    Cached value of the last HWP Request MSR
+>   * @hwp_cap_cached:    Cached value of the last HWP Capabilities MSR
+>   * @last_io_update:    Last time when IO wake flag was set
+>
+> ---
 
---- Comment #27 from Gaha (gahabana@gmail.com) ---
-(In reply to Mario Limonciello (AMD) from comment #26)
-> But that might need patch 9 too, we'll have to see what really makes sense
-> for stable.
-
-Thank you Mario!  I tried applying only 10 or 9&10 (git am -i
-./patchfromperry.mbx) and it fails in the same way.
-
-Have even played with previous other pstate patches (latest versions of tho=
-se
-mentioned at the top of this thread that Perry mentioned may help) - with no
-avail.
-
-So my question is please the same:
- *** to which source version these patches correspond to and what are the
-prerequiste patches (if any) ? ***
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
+Applied as 6.10 material, thanks!
 
