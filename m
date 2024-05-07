@@ -1,68 +1,68 @@
-Return-Path: <linux-pm+bounces-7611-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7612-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABC728BECBF
-	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2024 21:40:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CE598BEE8B
+	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2024 23:04:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF41F1C20D6F
-	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2024 19:40:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C43C9B20BCE
+	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2024 21:03:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C89E16DEDE;
-	Tue,  7 May 2024 19:40:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 587A071B4B;
+	Tue,  7 May 2024 21:03:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FhiMiAzK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EXyyqppP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F6F91607A7;
-	Tue,  7 May 2024 19:40:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FA9218733E;
+	Tue,  7 May 2024 21:03:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715110852; cv=none; b=n1DdMaQ1qQyqai9k0kgQk1EaW/CUUIzNArzNu3BpUrUgIiubbxMdN0AfDdYzBdb2jkVvJGfYS27vn+j9IbiBDBuvt9c7ssjrGPWt9A/Ygm/4+HpwF8yBG22C7ymrDfRphFqOZCvGqHspHv8LfhZwfGyaRoPj+ymUgzRq42dryr4=
+	t=1715115836; cv=none; b=S2Xom2y/XN9jocpoy2DzUKnV5fENPC7AHA9oTEUKYdV6WRrTsFYgzpa3mzmvsTthh4UR0WgA/xaoJ5Ncew5KIhR1CmbwoAz8rudw4a0YwzJ5jZc8jd0uFIfrgh2owfHiS4lKM+YbaVxrBRy1t5CNj2mn7+yMHGqxUu6tU+Qel2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715110852; c=relaxed/simple;
-	bh=MCExTJG3akmiqgdJUA5kJ/OATvP+QAosuc1ov3k7V+c=;
+	s=arc-20240116; t=1715115836; c=relaxed/simple;
+	bh=uZ71m/kwDwRcripH7bKNsl6xLu8fmn/hVKonljdgE9U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j4jMY/QUPk+utLElD3hL/YYIB6ItehvVy+BvVCpaxRbkctErvCFsQmHo2tOOD2BE9MfbLU0837DpBjt3DayiJusfcog+BEK5PW3Jq9ta40048AhoBsRXFtZmaNIQgm7Vu5581+m3W0QgDvBbrpCtsp/hhPWiCD2Et8Y2RGkiplo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FhiMiAzK; arc=none smtp.client-ip=192.198.163.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=mAH8hdfZ6VhwvoJzQ+YxSlqkKXwbjq9QYGBQ00JwYG/1btvxZ5XQPywmt9L8csIaHq59Dkhm7FbydyvEI8KiH7ClOoOeT0BXAYfVKoDu32xelIbOAgj446OU8+k5stgN4wvj2E35/W4wvVGDIps0B59U5pMRJxoMzrnKAyJ1bT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EXyyqppP; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715110851; x=1746646851;
+  t=1715115834; x=1746651834;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=MCExTJG3akmiqgdJUA5kJ/OATvP+QAosuc1ov3k7V+c=;
-  b=FhiMiAzKzp9Pyw7Ury6W+oQpayy/m4jbQqooeLi5NPObYdrsfguSJs9r
-   /6Ob+rlSPa69sC1XflJn4eHoQciN4uCWZ099zG5ZdnvEYJ9sbmNUuj3z/
-   Tq6TcLA/6+zB5XSh90gQE+f2WBrqULdJ6aTOhDMI5/HC1AESu3jloRqwZ
-   akLvVkmTLngbfbuXpNUFjLeMuNYjKvuV6NdFpS1HT+eistn+Tiz43brYU
-   GCfyXrmSTORTZqIUVAL23TPqSjkuJZuXNxuXwy4xmpVCMlbqayy91b2ZL
-   Yt+Z/H1iZQAlj0+etE2+4zlL+jYHAdaFizYhvBKwvUWbH2d/fdBaQIeA3
-   A==;
-X-CSE-ConnectionGUID: WOEjvb68TNmwiJ/WEd8Dcw==
-X-CSE-MsgGUID: 6r4edEg/Rp6ycUsAp5mtng==
-X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="11090829"
+  bh=uZ71m/kwDwRcripH7bKNsl6xLu8fmn/hVKonljdgE9U=;
+  b=EXyyqppPHYi1Qnooq1wGzDj5YEfxHuTgAQXBOFwY4UKzP1ja84weDhGE
+   hdljMbASp6tpMLRFwKDM0LUr2jhqX+DFopORBPdfLkDXq1mW8+KbakJxZ
+   ynttMFnS082hXMHU0VUuEl30WWsVTTQIOM4cVqy5/FC7MbQd4WbMF1UAo
+   ucdZ7+ESoXu7R71dJh23oduPkPmf94lhurzV+YDufHsJ3snzykVHZtPvK
+   1d586bO2dN6NzjTkFWsYmZTaMhZFn3CS1AFtxliuoL5qShThzKTT0cObZ
+   j7iBqjV3se0iftIRkOUbL2d3vlXH9YqfT0MOeNngHRpW3dHtQCHmfiZTx
+   g==;
+X-CSE-ConnectionGUID: YeIt3wINSe+aiw7IYxgnxA==
+X-CSE-MsgGUID: 39ifkPcMQt2HtrqVaSkq3Q==
+X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="21501920"
 X-IronPort-AV: E=Sophos;i="6.08,143,1712646000"; 
-   d="scan'208";a="11090829"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2024 12:40:51 -0700
-X-CSE-ConnectionGUID: eQlpIZTvSc2/iNhGnLU2gg==
-X-CSE-MsgGUID: ayGnskz1RQCwXKHjxXL3MQ==
+   d="scan'208";a="21501920"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2024 14:03:53 -0700
+X-CSE-ConnectionGUID: 14eykIzKTU+9AHBltx9qaA==
+X-CSE-MsgGUID: eA/kVNQTRA2X46TcXvJQ3Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,143,1712646000"; 
-   d="scan'208";a="28600902"
+   d="scan'208";a="33465546"
 Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 07 May 2024 12:40:47 -0700
+  by orviesa005.jf.intel.com with ESMTP; 07 May 2024 14:03:49 -0700
 Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1s4Qg9-0002ae-00;
-	Tue, 07 May 2024 19:40:45 +0000
-Date: Wed, 8 May 2024 03:40:14 +0800
+	id 1s4RyV-0002dE-0S;
+	Tue, 07 May 2024 21:03:47 +0000
+Date: Wed, 8 May 2024 05:02:50 +0800
 From: kernel test robot <lkp@intel.com>
 To: Perry Yuan <perry.yuan@amd.com>, rafael.j.wysocki@intel.com,
 	Mario.Limonciello@amd.com, viresh.kumar@linaro.org,
@@ -70,10 +70,10 @@ To: Perry Yuan <perry.yuan@amd.com>, rafael.j.wysocki@intel.com,
 Cc: oe-kbuild-all@lists.linux.dev, Alexander.Deucher@amd.com,
 	Xinmei.Huang@amd.com, Xiaojian.Du@amd.com, Li.Meng@amd.com,
 	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 09/11] cpufreq: amd-pstate: implement heterogeneous core
- topology for highest performance initialization
-Message-ID: <202405080340.n0nVlmfY-lkp@intel.com>
-References: <731a28ea8dda4ca1db64f673c87770de4646290b.1715065568.git.perry.yuan@amd.com>
+Subject: Re: [PATCH 01/11] cpufreq: amd-pstate: optimiza the initial
+ frequency values verification
+Message-ID: <202405080431.BPU6Yg9s-lkp@intel.com>
+References: <0049ad44052b051cf57d1059bf71b7ce227a5f21.1715065568.git.perry.yuan@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -82,7 +82,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <731a28ea8dda4ca1db64f673c87770de4646290b.1715065568.git.perry.yuan@amd.com>
+In-Reply-To: <0049ad44052b051cf57d1059bf71b7ce227a5f21.1715065568.git.perry.yuan@amd.com>
 
 Hi Perry,
 
@@ -97,61 +97,114 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Perry-Yuan/cpufreq-amd-pstate-optimiza-the-initial-frequency-values-verification/20240507-151930
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/731a28ea8dda4ca1db64f673c87770de4646290b.1715065568.git.perry.yuan%40amd.com
-patch subject: [PATCH 09/11] cpufreq: amd-pstate: implement heterogeneous core topology for highest performance initialization
-config: i386-buildonly-randconfig-005-20240507 (https://download.01.org/0day-ci/archive/20240508/202405080340.n0nVlmfY-lkp@intel.com/config)
-compiler: gcc-11 (Ubuntu 11.4.0-4ubuntu1) 11.4.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240508/202405080340.n0nVlmfY-lkp@intel.com/reproduce)
+patch link:    https://lore.kernel.org/r/0049ad44052b051cf57d1059bf71b7ce227a5f21.1715065568.git.perry.yuan%40amd.com
+patch subject: [PATCH 01/11] cpufreq: amd-pstate: optimiza the initial frequency values verification
+config: x86_64-randconfig-102-20240507 (https://download.01.org/0day-ci/archive/20240508/202405080431.BPU6Yg9s-lkp@intel.com/config)
+compiler: gcc-13 (Ubuntu 13.2.0-4ubuntu3) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240508/202405080431.BPU6Yg9s-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405080340.n0nVlmfY-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405080431.BPU6Yg9s-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from arch/x86/include/asm/cpufeature.h:5,
-                    from arch/x86/include/asm/thread_info.h:59,
-                    from include/linux/thread_info.h:60,
-                    from include/linux/spinlock.h:60,
-                    from include/linux/swait.h:7,
-                    from include/linux/completion.h:12,
-                    from include/linux/crypto.h:15,
-                    from arch/x86/kernel/asm-offsets.c:9:
-   arch/x86/include/asm/processor.h: In function 'amd_get_this_core_type':
->> arch/x86/include/asm/processor.h:690:1: warning: no return statement in function returning non-void [-Wreturn-type]
-     690 | static inline int amd_get_this_core_type(void)          { }
-         | ^~~~~~
---
-   In file included from arch/x86/include/asm/cpufeature.h:5,
-                    from arch/x86/include/asm/thread_info.h:59,
-                    from include/linux/thread_info.h:60,
-                    from include/linux/spinlock.h:60,
-                    from include/linux/swait.h:7,
-                    from include/linux/completion.h:12,
-                    from include/linux/crypto.h:15,
-                    from arch/x86/kernel/asm-offsets.c:9:
-   arch/x86/include/asm/processor.h: In function 'amd_get_this_core_type':
->> arch/x86/include/asm/processor.h:690:1: warning: no return statement in function returning non-void [-Wreturn-type]
-     690 | static inline int amd_get_this_core_type(void)          { }
-         | ^~~~~~
+   drivers/cpufreq/amd-pstate.c: In function 'amd_pstate_cpu_init':
+>> drivers/cpufreq/amd-pstate.c:899:33: warning: variable 'nominal_freq' set but not used [-Wunused-but-set-variable]
+     899 |         int min_freq, max_freq, nominal_freq, ret;
+         |                                 ^~~~~~~~~~~~
+   drivers/cpufreq/amd-pstate.c: In function 'amd_pstate_epp_cpu_init':
+   drivers/cpufreq/amd-pstate.c:1350:33: warning: variable 'nominal_freq' set but not used [-Wunused-but-set-variable]
+    1350 |         int min_freq, max_freq, nominal_freq, ret;
+         |                                 ^~~~~~~~~~~~
 
 
-vim +690 arch/x86/include/asm/processor.h
+vim +/nominal_freq +899 drivers/cpufreq/amd-pstate.c
 
-   680	
-   681	#ifdef CONFIG_CPU_SUP_AMD
-   682	extern u32 amd_get_highest_perf(void);
-   683	extern void amd_clear_divider(void);
-   684	extern void amd_check_microcode(void);
-   685	extern int amd_get_this_core_type(void);
-   686	#else
-   687	static inline u32 amd_get_highest_perf(void)		{ return 0; }
-   688	static inline void amd_clear_divider(void)		{ }
-   689	static inline void amd_check_microcode(void)		{ }
- > 690	static inline int amd_get_this_core_type(void)		{ }
-   691	#endif
-   692	
+5547c0ebfc2efd Perry Yuan        2024-04-25  896  
+ec437d71db77a1 Huang Rui         2021-12-24  897  static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
+ec437d71db77a1 Huang Rui         2021-12-24  898  {
+5c3fd1edaa8b4c Perry Yuan        2024-04-30 @899  	int min_freq, max_freq, nominal_freq, ret;
+ec437d71db77a1 Huang Rui         2021-12-24  900  	struct device *dev;
+ec437d71db77a1 Huang Rui         2021-12-24  901  	struct amd_cpudata *cpudata;
+ec437d71db77a1 Huang Rui         2021-12-24  902  
+919f4557696939 Wyes Karny        2022-11-17  903  	/*
+919f4557696939 Wyes Karny        2022-11-17  904  	 * Resetting PERF_CTL_MSR will put the CPU in P0 frequency,
+919f4557696939 Wyes Karny        2022-11-17  905  	 * which is ideal for initialization process.
+919f4557696939 Wyes Karny        2022-11-17  906  	 */
+919f4557696939 Wyes Karny        2022-11-17  907  	amd_perf_ctl_reset(policy->cpu);
+ec437d71db77a1 Huang Rui         2021-12-24  908  	dev = get_cpu_device(policy->cpu);
+ec437d71db77a1 Huang Rui         2021-12-24  909  	if (!dev)
+ec437d71db77a1 Huang Rui         2021-12-24  910  		return -ENODEV;
+ec437d71db77a1 Huang Rui         2021-12-24  911  
+ec437d71db77a1 Huang Rui         2021-12-24  912  	cpudata = kzalloc(sizeof(*cpudata), GFP_KERNEL);
+ec437d71db77a1 Huang Rui         2021-12-24  913  	if (!cpudata)
+ec437d71db77a1 Huang Rui         2021-12-24  914  		return -ENOMEM;
+ec437d71db77a1 Huang Rui         2021-12-24  915  
+ec437d71db77a1 Huang Rui         2021-12-24  916  	cpudata->cpu = policy->cpu;
+ec437d71db77a1 Huang Rui         2021-12-24  917  
+f3a052391822b7 Meng Li           2024-01-19  918  	amd_pstate_init_prefcore(cpudata);
+f3a052391822b7 Meng Li           2024-01-19  919  
+ec437d71db77a1 Huang Rui         2021-12-24  920  	ret = amd_pstate_init_perf(cpudata);
+ec437d71db77a1 Huang Rui         2021-12-24  921  	if (ret)
+41271016dfa4a0 Huang Rui         2021-12-24  922  		goto free_cpudata1;
+ec437d71db77a1 Huang Rui         2021-12-24  923  
+5547c0ebfc2efd Perry Yuan        2024-04-25  924  	ret = amd_pstate_init_freq(cpudata);
+5547c0ebfc2efd Perry Yuan        2024-04-25  925  	if (ret)
+5547c0ebfc2efd Perry Yuan        2024-04-25  926  		goto free_cpudata1;
+5547c0ebfc2efd Perry Yuan        2024-04-25  927  
+3cbbe8871a2fb8 Gautham R. Shenoy 2024-04-25  928  	min_freq = READ_ONCE(cpudata->min_freq);
+3cbbe8871a2fb8 Gautham R. Shenoy 2024-04-25  929  	max_freq = READ_ONCE(cpudata->max_freq);
+3cbbe8871a2fb8 Gautham R. Shenoy 2024-04-25  930  	nominal_freq = READ_ONCE(cpudata->nominal_freq);
+ec437d71db77a1 Huang Rui         2021-12-24  931  
+069a2bb8c48c43 Perry Yuan        2024-04-25  932  	policy->cpuinfo.transition_latency = amd_pstate_get_transition_latency(policy->cpu);
+069a2bb8c48c43 Perry Yuan        2024-04-25  933  	policy->transition_delay_us = amd_pstate_get_transition_delay_us(policy->cpu);
+ec437d71db77a1 Huang Rui         2021-12-24  934  
+ec437d71db77a1 Huang Rui         2021-12-24  935  	policy->min = min_freq;
+ec437d71db77a1 Huang Rui         2021-12-24  936  	policy->max = max_freq;
+ec437d71db77a1 Huang Rui         2021-12-24  937  
+ec437d71db77a1 Huang Rui         2021-12-24  938  	policy->cpuinfo.min_freq = min_freq;
+ec437d71db77a1 Huang Rui         2021-12-24  939  	policy->cpuinfo.max_freq = max_freq;
+ec437d71db77a1 Huang Rui         2021-12-24  940  
+ec437d71db77a1 Huang Rui         2021-12-24  941  	/* It will be updated by governor */
+ec437d71db77a1 Huang Rui         2021-12-24  942  	policy->cur = policy->cpuinfo.min_freq;
+ec437d71db77a1 Huang Rui         2021-12-24  943  
+e059c184da47e9 Huang Rui         2021-12-24  944  	if (boot_cpu_has(X86_FEATURE_CPPC))
+1d215f0319c206 Huang Rui         2021-12-24  945  		policy->fast_switch_possible = true;
+1d215f0319c206 Huang Rui         2021-12-24  946  
+41271016dfa4a0 Huang Rui         2021-12-24  947  	ret = freq_qos_add_request(&policy->constraints, &cpudata->req[0],
+41271016dfa4a0 Huang Rui         2021-12-24  948  				   FREQ_QOS_MIN, policy->cpuinfo.min_freq);
+41271016dfa4a0 Huang Rui         2021-12-24  949  	if (ret < 0) {
+41271016dfa4a0 Huang Rui         2021-12-24  950  		dev_err(dev, "Failed to add min-freq constraint (%d)\n", ret);
+41271016dfa4a0 Huang Rui         2021-12-24  951  		goto free_cpudata1;
+41271016dfa4a0 Huang Rui         2021-12-24  952  	}
+41271016dfa4a0 Huang Rui         2021-12-24  953  
+41271016dfa4a0 Huang Rui         2021-12-24  954  	ret = freq_qos_add_request(&policy->constraints, &cpudata->req[1],
+41271016dfa4a0 Huang Rui         2021-12-24  955  				   FREQ_QOS_MAX, policy->cpuinfo.max_freq);
+41271016dfa4a0 Huang Rui         2021-12-24  956  	if (ret < 0) {
+41271016dfa4a0 Huang Rui         2021-12-24  957  		dev_err(dev, "Failed to add max-freq constraint (%d)\n", ret);
+41271016dfa4a0 Huang Rui         2021-12-24  958  		goto free_cpudata2;
+41271016dfa4a0 Huang Rui         2021-12-24  959  	}
+41271016dfa4a0 Huang Rui         2021-12-24  960  
+febab20caebac9 Wyes Karny        2023-11-17  961  	cpudata->max_limit_freq = max_freq;
+febab20caebac9 Wyes Karny        2023-11-17  962  	cpudata->min_limit_freq = min_freq;
+ec437d71db77a1 Huang Rui         2021-12-24  963  
+ec437d71db77a1 Huang Rui         2021-12-24  964  	policy->driver_data = cpudata;
+ec437d71db77a1 Huang Rui         2021-12-24  965  
+41271016dfa4a0 Huang Rui         2021-12-24  966  	amd_pstate_boost_init(cpudata);
+abd61c08ef349a Perry Yuan        2023-01-31  967  	if (!current_pstate_driver->adjust_perf)
+abd61c08ef349a Perry Yuan        2023-01-31  968  		current_pstate_driver->adjust_perf = amd_pstate_adjust_perf;
+41271016dfa4a0 Huang Rui         2021-12-24  969  
+ec437d71db77a1 Huang Rui         2021-12-24  970  	return 0;
+ec437d71db77a1 Huang Rui         2021-12-24  971  
+41271016dfa4a0 Huang Rui         2021-12-24  972  free_cpudata2:
+41271016dfa4a0 Huang Rui         2021-12-24  973  	freq_qos_remove_request(&cpudata->req[0]);
+41271016dfa4a0 Huang Rui         2021-12-24  974  free_cpudata1:
+ec437d71db77a1 Huang Rui         2021-12-24  975  	kfree(cpudata);
+ec437d71db77a1 Huang Rui         2021-12-24  976  	return ret;
+ec437d71db77a1 Huang Rui         2021-12-24  977  }
+ec437d71db77a1 Huang Rui         2021-12-24  978  
 
 -- 
 0-DAY CI Kernel Test Service
