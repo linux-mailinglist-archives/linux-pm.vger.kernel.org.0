@@ -1,306 +1,216 @@
-Return-Path: <linux-pm+bounces-7637-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7639-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4790E8BF8F9
-	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 10:44:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56B4C8BF9AD
+	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 11:42:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B15851F21AA3
-	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 08:44:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 797D91C217A4
+	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 09:42:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8C29535AA;
-	Wed,  8 May 2024 08:44:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B627762D7;
+	Wed,  8 May 2024 09:42:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=natalenko.name header.i=@natalenko.name header.b="C1WtybD9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from prime.voidband.net (prime.voidband.net [199.247.17.104])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695FC9476;
-	Wed,  8 May 2024 08:44:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B2551DFE8;
+	Wed,  8 May 2024 09:42:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.247.17.104
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715157864; cv=none; b=eWsJrTOETcxfyvZBZRLzfDJ+S8/Qp2nD2zcWPvwXIY029nR7SnfbM2oYpFuQ8io5XqB+OfDXNNLFjGk4Sczi7O4sMVhnWfPVO3Lrc2+jmkx27svcn0rA11g1mwFi6oRrRh8idJr6xUmdRqcWEfxD8g0QU1HydoBygf0DDxoMbck=
+	t=1715161344; cv=none; b=onh4ycT5O1FzqKlEST2ACBpnllUtzV3czkBJCKfN35r3iUwxukXkaFx0SV3uua0UWD5HdDLlWYWU3fu/ynwXNBkTo1Y2MX3ykzOxwr/LRP55fCwS4I3PtCYizc/eQX3OJbr7yuSaC6c8bMgy5wKxp4E+TeM+kMcqD8vUP3NSJhQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715157864; c=relaxed/simple;
-	bh=T5zecpj4li0OuIWBMVUt5WCfBkgXJbSbJgxIbR51vqs=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SRswTxxyLC8rm9PIKjNZp+4cp1VyJ6qoFVNYchE1oZIF5QCfKiXwcpwl1PyLAexLWSFVud7jiqq8OsKCeg4HZji0EmJ5Ughbcj9x1K2hpiZpNUuICauGyl129Q6kxIxuZBMBGeKALhVGBK+C7qKT/y6MOKMQ5w5/wu/oR5Knrb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VZ7sK1b83z6K6Kl;
-	Wed,  8 May 2024 16:41:09 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 44CD0140B54;
-	Wed,  8 May 2024 16:44:14 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 8 May
- 2024 09:44:13 +0100
-Date: Wed, 8 May 2024 09:44:11 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
-	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
-	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-	<x86@kernel.org>, Russell King <linux@armlinux.org.uk>, Miguel Luis
-	<miguel.luis@oracle.com>, James Morse <james.morse@arm.com>, Salil Mehta
-	<salil.mehta@huawei.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
-	Marc Zyngier <maz@kernel.org>, Hanjun Guo <guohanjun@huawei.com>, "Gavin
- Shan" <gshan@redhat.com>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
-	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
-	<linuxarm@huawei.com>, <justin.he@arm.com>, <jianyong.wu@arm.com>
-Subject: Re: [PATCH v9 06/19] ACPI: processor: Move checks and availability
- of acpi_processor earlier
-Message-ID: <20240508094411.00001b92@Huawei.com>
-In-Reply-To: <CAJZ5v0g-Aenoj5H+pNPtoqTgV5U7K5RGNjdOnqobqxkyL5NMVQ@mail.gmail.com>
-References: <20240430142434.10471-1-Jonathan.Cameron@huawei.com>
-	<20240430142434.10471-7-Jonathan.Cameron@huawei.com>
-	<CAJZ5v0g-Aenoj5H+pNPtoqTgV5U7K5RGNjdOnqobqxkyL5NMVQ@mail.gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1715161344; c=relaxed/simple;
+	bh=tpHBLYwWAXWzFJOiiqPNurkj4onSKHEuQPtc+N0ukQ0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=VfsK94TT9j5ZRhedqF6cA9oH7BBYdpCz2sa6Kk0C2kLLE807oDrwRa3dQqRPnapBSS9DmhLxJXhLl1xz9mwflCxe5uRtNPvGt2sM5LLqFK2FHlwHmfZv6UCH1xY2SB/k5ZoNnHJoewpYNijrWP04YpUpGeB+OJuB2FACaFjBWeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=natalenko.name; spf=pass smtp.mailfrom=natalenko.name; dkim=pass (1024-bit key) header.d=natalenko.name header.i=@natalenko.name header.b=C1WtybD9; arc=none smtp.client-ip=199.247.17.104
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=natalenko.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=natalenko.name
+Received: from spock.localnet (unknown [94.142.239.106])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by prime.voidband.net (Postfix) with ESMTPSA id BE1EC62DD101;
+	Wed, 08 May 2024 11:34:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+	s=dkim-20170712; t=1715160896;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ITaU40SFRGKxHYojpCSGh4eL/ryxiwlKRxY2NrN5Zus=;
+	b=C1WtybD9FCqWeBqrKKxR6GaNxYDNixDpsr8122tNc9qjBkBxdK5+OZSBm8d/iIzRSScW8I
+	aZ2o+kiJy0d3sa3ZgBToBB5vwIe5Hk6WobBHabirTBFjky7OBc17eYz9MGPXAM4RJWnTP+
+	avQsxBdHVgLbQwRtbyM8GLhENTKHRek=
+From: Oleksandr Natalenko <oleksandr@natalenko.name>
+To: rafael.j.wysocki@intel.com, Mario.Limonciello@amd.com,
+ viresh.kumar@linaro.org, Ray.Huang@amd.com, gautham.shenoy@amd.com,
+ Borislav.Petkov@amd.com, Perry Yuan <perry.yuan@amd.com>
+Cc: Alexander.Deucher@amd.com, Xinmei.Huang@amd.com, Xiaojian.Du@amd.com,
+ Li.Meng@amd.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject:
+ Re: [PATCH v10 6/7] cpufreq: amd-pstate: introduce per CPU frequency boost
+ control
+Date: Wed, 08 May 2024 11:34:21 +0200
+Message-ID: <12430678.O9o76ZdvQC@natalenko.name>
+In-Reply-To:
+ <49204c6d4a334c0bfbc589dda79b5cd7c4c28b7c.1715152592.git.perry.yuan@amd.com>
+References:
+ <cover.1715152592.git.perry.yuan@amd.com>
+ <49204c6d4a334c0bfbc589dda79b5cd7c4c28b7c.1715152592.git.perry.yuan@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="nextPart5776929.DvuYhMxLoT";
+ micalg="pgp-sha256"; protocol="application/pgp-signature"
+
+--nextPart5776929.DvuYhMxLoT
 Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
+From: Oleksandr Natalenko <oleksandr@natalenko.name>
+Date: Wed, 08 May 2024 11:34:21 +0200
+Message-ID: <12430678.O9o76ZdvQC@natalenko.name>
+MIME-Version: 1.0
 
-On Tue, 7 May 2024 21:04:26 +0200
-"Rafael J. Wysocki" <rafael@kernel.org> wrote:
+Hello.
 
-> On Tue, Apr 30, 2024 at 4:27=E2=80=AFPM Jonathan Cameron
-> <Jonathan.Cameron@huawei.com> wrote:
-> >
-> > Make the per_cpu(processors, cpu) entries available earlier so that
-> > they are available in arch_register_cpu() as ARM64 will need access
-> > to the acpi_handle to distinguish between acpi_processor_add()
-> > and earlier registration attempts (which will fail as _STA cannot
-> > be checked).
-> >
-> > Reorder the remove flow to clear this per_cpu() after
-> > arch_unregister_cpu() has completed, allowing it to be used in
-> > there as well.
-> >
-> > Note that on x86 for the CPU hotplug case, the pr->id prior to
-> > acpi_map_cpu() may be invalid. Thus the per_cpu() structures
-> > must be initialized after that call or after checking the ID
-> > is valid (not hotplug path).
-> >
-> > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com> =20
+On st=C5=99eda 8. kv=C4=9Btna 2024 9:21:11, SEL=C4=8C Perry Yuan wrote:
+> Add a new sysfs attribute file to support per CPU frequency boost
+> control, allowing individual CPUs to enable or disable CPB separately.
 >=20
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> The new sysfs attribute file is located at below path,
+> `/sys/devices/system/cpu/cpuX/cpufreq/boost`,
+> where `X` represents the CPU number.
 >=20
-> One nit below.
+> To disable CPB for a specific CPU, you can use the following command:
+> $ sudo bash -c "echo 0 > /sys/devices/system/cpu/cpuX/cpufreq/boost"
+>=20
+> After disabling CPB, the CPU frequency will no longer boost beyond
+> the base frequency for that particular CPU.
+>=20
+> for example:
+> ----------------------------------------------------------------------
+> CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE    MAXMHZ   MINMHZ       MHZ
+>   0    0      0    0 0:0:0:0          yes 4208.0000 400.0000 1666.7740
+>   1    0      0    0 0:0:0:0          yes 4208.0000 400.0000  400.0000
+>=20
+> ----------------------------------------------------------------------
+> $ sudo bash -c "echo 0 > /sys/devices/system/cpu/cpu0/cpufreq/boost"
+>=20
+> CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE    MAXMHZ   MINMHZ       MHZ
+>   0    0      0    0 0:0:0:0          yes 3501.0000 400.0000 4154.3140
+>   1    0      0    0 0:0:0:0          yes 4208.0000 400.0000  400.0000
+>=20
+> Please be aware that modifying the global variable
+> `amd_pstate_global_params.cpb_boost` will overwrite the individual CPU se=
+ttings.
+>=20
+> Signed-off-by: Perry Yuan <perry.yuan@amd.com>
+> ---
+>  drivers/cpufreq/amd-pstate.c | 27 +++++++++++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+>=20
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 11bce2c1db32..cb0055e7c842 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -1371,6 +1371,30 @@ static int amd_pstate_cpu_boost(int cpu, bool stat=
+e)
+>  	return ret < 0 ? ret : 0;
+>  }
+> =20
+> +static ssize_t show_boost(struct cpufreq_policy *policy, char *buf)
+> +{
+> +	struct amd_cpudata *cpudata =3D policy->driver_data;
+> +	bool boost_val;
+> +
+> +	boost_val =3D READ_ONCE(cpudata->boost_state);
+> +
+> +	return sysfs_emit(buf, "%u\n", boost_val);
+> +}
+> +
+> +static ssize_t store_boost(
+> +		struct cpufreq_policy *policy, const char *buf, size_t count)
+> +{
+> +	bool boost_val;
+> +	int ret;
+> +
+> +	if (sscanf(buf, "%d", &boost_val) !=3D 1)
 
-Thanks.  Given timing, this is looking like 6.11 material.
-I'll tidy this up and post a v10 in a couple of weeks (so around
-rc1 time). Maybe we'll pick up some more tags for the ARM
-specific bits in the meantime.
+This will generate warning. IIUC, sscanf() doesn't work with booleans direc=
+tly, so you'd probably want to read the value into an (unsigned) integer, a=
+nd then cast it to bool.
 
-Thanks for all your help!
+> +		return -EINVAL;
+> +
+> +	ret =3D amd_pstate_cpu_boost(policy->cpu, boost_val);
+> +
+> +	return ret < 0 ? ret : count;
+> +}
+> +
+>  static ssize_t cpb_boost_show(struct device *dev,
+>  			   struct device_attribute *attr, char *buf)
+>  {
+> @@ -1416,6 +1440,7 @@ cpufreq_freq_attr_ro(amd_pstate_prefcore_ranking);
+>  cpufreq_freq_attr_ro(amd_pstate_hw_prefcore);
+>  cpufreq_freq_attr_rw(energy_performance_preference);
+>  cpufreq_freq_attr_ro(energy_performance_available_preferences);
+> +cpufreq_freq_attr_rw(boost);
+>  static DEVICE_ATTR_RW(status);
+>  static DEVICE_ATTR_RO(prefcore);
+>  static DEVICE_ATTR_RW(cpb_boost);
+> @@ -1426,6 +1451,7 @@ static struct freq_attr *amd_pstate_attr[] =3D {
+>  	&amd_pstate_highest_perf,
+>  	&amd_pstate_prefcore_ranking,
+>  	&amd_pstate_hw_prefcore,
+> +	&boost,
+>  	NULL,
+>  };
+> =20
+> @@ -1437,6 +1463,7 @@ static struct freq_attr *amd_pstate_epp_attr[] =3D {
+>  	&amd_pstate_hw_prefcore,
+>  	&energy_performance_preference,
+>  	&energy_performance_available_preferences,
+> +	&boost,
+>  	NULL,
+>  };
+> =20
+>=20
 
-Jonathan
 
->=20
-> > ---
-> > v9: Add back a blank line accidentally removed in code move.
-> >     Fix up error returns so that the new cleanup in processor_add()
-> >     is triggered on detection of the bios bug.
-> >     Combined with the previous 2 patches, should solve the leak
-> >     that Gavin identified.
-> > ---
-> >  drivers/acpi/acpi_processor.c | 80 +++++++++++++++++++++--------------
-> >  1 file changed, 49 insertions(+), 31 deletions(-)
-> >
-> > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processo=
-r.c
-> > index 16e36e55a560..4a79b42d649e 100644
-> > --- a/drivers/acpi/acpi_processor.c
-> > +++ b/drivers/acpi/acpi_processor.c
-> > @@ -183,8 +183,38 @@ static void __init acpi_pcc_cpufreq_init(void) {}
-> >  #endif /* CONFIG_X86 */
-> >
-> >  /* Initialization */
-> > +static DEFINE_PER_CPU(void *, processor_device_array);
-> > +
-> > +static bool acpi_processor_set_per_cpu(struct acpi_processor *pr,
-> > +                                      struct acpi_device *device)
-> > +{
-> > +       BUG_ON(pr->id >=3D nr_cpu_ids);
-> > +
-> > +       /*
-> > +        * Buggy BIOS check.
-> > +        * ACPI id of processors can be reported wrongly by the BIOS.
-> > +        * Don't trust it blindly
-> > +        */
-> > +       if (per_cpu(processor_device_array, pr->id) !=3D NULL &&
-> > +           per_cpu(processor_device_array, pr->id) !=3D device) {
-> > +               dev_warn(&device->dev,
-> > +                        "BIOS reported wrong ACPI id %d for the proces=
-sor\n",
-> > +                        pr->id);
-> > +               return false;
-> > +       }
-> > +       /*
-> > +        * processor_device_array is not cleared on errors to allow bug=
-gy BIOS
-> > +        * checks.
-> > +        */
-> > +       per_cpu(processor_device_array, pr->id) =3D device;
-> > +       per_cpu(processors, pr->id) =3D pr;
-> > +
-> > +       return true;
-> > +}
-> > +
-> >  #ifdef CONFIG_ACPI_HOTPLUG_CPU
-> > -static int acpi_processor_hotadd_init(struct acpi_processor *pr)
-> > +static int acpi_processor_hotadd_init(struct acpi_processor *pr,
-> > +                                     struct acpi_device *device)
-> >  {
-> >         int ret;
-> >
-> > @@ -198,8 +228,16 @@ static int acpi_processor_hotadd_init(struct acpi_=
-processor *pr)
-> >         if (ret)
-> >                 goto out;
-> >
-> > +       if (!acpi_processor_set_per_cpu(pr, device)) {
-> > +               ret =3D -EINVAL;
-> > +               acpi_unmap_cpu(pr->id);
-> > +               goto out;
-> > +       }
-> > +
-> >         ret =3D arch_register_cpu(pr->id);
-> >         if (ret) {
-> > +               /* Leave the processor device array in place to detect =
-buggy bios */
-> > +               per_cpu(processors, pr->id) =3D NULL;
-> >                 acpi_unmap_cpu(pr->id);
-> >                 goto out;
-> >         }
-> > @@ -217,7 +255,8 @@ static int acpi_processor_hotadd_init(struct acpi_p=
-rocessor *pr)
-> >         return ret;
-> >  }
-> >  #else
-> > -static inline int acpi_processor_hotadd_init(struct acpi_processor *pr)
-> > +static inline int acpi_processor_hotadd_init(struct acpi_processor *pr,
-> > +                                            struct acpi_device *device)
-> >  {
-> >         return -ENODEV;
-> >  }
-> > @@ -316,10 +355,13 @@ static int acpi_processor_get_info(struct acpi_de=
-vice *device)
-> >          *  because cpuid <-> apicid mapping is persistent now.
-> >          */
-> >         if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
-> > -               int ret =3D acpi_processor_hotadd_init(pr);
-> > +               int ret =3D acpi_processor_hotadd_init(pr, device);
-> >
-> >                 if (ret)
-> >                         return ret;
-> > +       } else {
-> > +               if (!acpi_processor_set_per_cpu(pr, device))
-> > +                       return -EINVAL;
-> >         } =20
->=20
-> This looks a bit odd.
->=20
-> I would make acpi_processor_set_per_cpu() return 0 on success and
-> -EINVAL on failure and the above would become
->=20
-> if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id))
->          ret =3D acpi_processor_hotadd_init(pr, device);
-> else
->         ret =3D acpi_processor_set_per_cpu(pr, device);
->=20
-> if (ret)
->         return ret;
->=20
-> (and of course ret needs to be defined at the beginning of the function).
->=20
-> >
-> >         /*
-> > @@ -365,8 +407,6 @@ static int acpi_processor_get_info(struct acpi_devi=
-ce *device)
-> >   * (cpu_data(cpu)) values, like CPU feature flags, family, model, etc.
-> >   * Such things have to be put in and set up by the processor driver's =
-.probe().
-> >   */
-> > -static DEFINE_PER_CPU(void *, processor_device_array);
-> > -
-> >  static int acpi_processor_add(struct acpi_device *device,
-> >                                         const struct acpi_device_id *id)
-> >  {
-> > @@ -395,28 +435,6 @@ static int acpi_processor_add(struct acpi_device *=
-device,
-> >         if (result) /* Processor is not physically present or unavailab=
-le */
-> >                 goto err_clear_driver_data;
-> >
-> > -       BUG_ON(pr->id >=3D nr_cpu_ids);
-> > -
-> > -       /*
-> > -        * Buggy BIOS check.
-> > -        * ACPI id of processors can be reported wrongly by the BIOS.
-> > -        * Don't trust it blindly
-> > -        */
-> > -       if (per_cpu(processor_device_array, pr->id) !=3D NULL &&
-> > -           per_cpu(processor_device_array, pr->id) !=3D device) {
-> > -               dev_warn(&device->dev,
-> > -                       "BIOS reported wrong ACPI id %d for the process=
-or\n",
-> > -                       pr->id);
-> > -               /* Give up, but do not abort the namespace scan. */
-> > -               goto err_clear_driver_data;
-> > -       }
-> > -       /*
-> > -        * processor_device_array is not cleared on errors to allow bug=
-gy BIOS
-> > -        * checks.
-> > -        */
-> > -       per_cpu(processor_device_array, pr->id) =3D device;
-> > -       per_cpu(processors, pr->id) =3D pr;
-> > -
-> >         dev =3D get_cpu_device(pr->id);
-> >         if (!dev) {
-> >                 result =3D -ENODEV;
-> > @@ -470,10 +488,6 @@ static void acpi_processor_remove(struct acpi_devi=
-ce *device)
-> >         device_release_driver(pr->dev);
-> >         acpi_unbind_one(pr->dev);
-> >
-> > -       /* Clean up. */
-> > -       per_cpu(processor_device_array, pr->id) =3D NULL;
-> > -       per_cpu(processors, pr->id) =3D NULL;
-> > -
-> >         cpu_maps_update_begin();
-> >         cpus_write_lock();
-> >
-> > @@ -481,6 +495,10 @@ static void acpi_processor_remove(struct acpi_devi=
-ce *device)
-> >         arch_unregister_cpu(pr->id);
-> >         acpi_unmap_cpu(pr->id);
-> >
-> > +       /* Clean up. */
-> > +       per_cpu(processor_device_array, pr->id) =3D NULL;
-> > +       per_cpu(processors, pr->id) =3D NULL;
-> > +
-> >         cpus_write_unlock();
-> >         cpu_maps_update_done();
-> >
-> > --
-> > 2.39.2
-> > =20
+=2D-=20
+Oleksandr Natalenko (post-factum)
+--nextPart5776929.DvuYhMxLoT
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEZUOOw5ESFLHZZtOKil/iNcg8M0sFAmY7Rx0ACgkQil/iNcg8
+M0sozhAAwBKs7R6wasSZh5RwWS9z9V5g2aOMfwlMXNbXWMxVHZsq8E/rncUtUJ5b
+jjjvAYGBFcW4Z+5WWU8OTQr82MpTiXfPs7A5lSz6vbrkuF2dGfWPdrXFmA1xv1Nw
+SrDjQSNkzB7U3/wUFjADu5yyaORBMRrCGCl6CktG4Cnoe6pRi1tLndNqPjp7xiHm
+blZJTNvs7V7KV2tTpMPYgPKAadkuMfEURI7grBqe0kfy8r1z6HHQmkJVHCfoa3RF
+oHiwFcBBZJ3bAUG2ps/V8dsNcStYWvgDQHuKMO1ZGwvx0L3JMhY8hKFIzb92i2El
+51u9zAa81QZEnEr4BjvqRIdRuH+4QkQ07gXjsmfxQwGmhJgpGTlqUoHBLUXNyD6U
+QZpfWsltaKpLf3ilhc/OTXclHe4eg3/hMhNUNTCg1ThKKgSRG/QCLE3vS80F2tdL
+Vc1RehzmUdFfxLPN+6In+w+i9eQqzrKelXME1NGOoETKyLtxu4UvUOxw+Ux8/jTD
+Dh9mRRFAaeiPuKnH+Eu7X1dCoCZ9flByhOJKABZO9Q3LQ3bvNUzJHEHVDsSmiKZ0
+2a0FkEuC/kRwUnr1rARFjHzxoFZh94gMewyqCCehgAH1iB4dYNzHZHkDXJi1z/dD
+IrwctWnfVHmwTLQmx7u/4qXoTwvoxAyf4QDvhcZIlq4D5CYz1g0=
+=SI1r
+-----END PGP SIGNATURE-----
+
+--nextPart5776929.DvuYhMxLoT--
+
+
 
 
