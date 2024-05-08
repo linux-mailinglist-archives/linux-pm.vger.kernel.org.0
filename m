@@ -1,186 +1,234 @@
-Return-Path: <linux-pm+bounces-7634-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7635-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B10088BF6F8
-	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 09:23:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A2D38BF82D
+	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 10:10:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 676DE284037
-	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 07:23:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DDB5C1F21EA4
+	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 08:10:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE56247A5C;
-	Wed,  8 May 2024 07:21:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 183BB3FBBD;
+	Wed,  8 May 2024 08:10:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="pDqkYm2T"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bTkOMCKY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2052.outbound.protection.outlook.com [40.107.92.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AE4745BE3;
-	Wed,  8 May 2024 07:21:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715152917; cv=fail; b=OvohLq1qtsNi0HCYmWAcXKKiFzd7WoWmJN0kIQv6SvvL2NhtivxdGpHJ9V96X41LUbW77UPZmMJm9H4iz52UQ17GxNUOQnU3m8O+6LaVbziEkUgmCBkYcqImkAAHgh9hezDGzTwEN7kLbOYCg/L/KI934HwwUTKYiVMfriBS8pA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715152917; c=relaxed/simple;
-	bh=591R1c5qWNY+ywR8H9LuF3YeddORv0F+tC41BSUsTms=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZyJK9i0vRqtbQAtslr0GpfQUk1LqMYDJWALcSHmsqtkhOkotU+dJYBiMq97yd2tK2DM7bo7/6RJgrS4SQTvgPpiOg9qFq65kT/ZUpMjUCuXAs9V2Vg7hkGdys22BtHzVnaluM0Cc++Q+MYxq5GcUcykyfFmXJWtvovFafqoRP0k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=pDqkYm2T; arc=fail smtp.client-ip=40.107.92.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aHjRHUWXLB/8hJ2uubvH26/gBi9tOHR70zmG3vO+Be/Sfo/Nsf6GeFAIKztDQb+Aq4nb/fIg3NSOEY0QXosfIScJAw94ugKWM39zH6Ar6eq+1E5XqrMAUcWbIzVIL0m399SC7xNuFtm5urCXsLsClBKoLlErCTOXWXDeN4Ckz2Ov5kswYH6qQPDWwDvOSkMi2fG0wAdZTuyx45z2WB4dm/mxoE/09v68zvFWsAXkajxhPW6Pn8oz70/4UsZ/U7blaCvst2O0LlLsSrtUWIYHav7nOwOuHl3hOybV2sxThcVlCiNxX3m8kzC16YzUPcrswx6opH6s7xF589U88rgsiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=94xdj5VxKlsKg7KcTOXiwELEZ8njjN5NlNAXdX4qank=;
- b=lqG1EcRzqpMhe/fr2syjB9DanRQTp0oYwxYCJzK/HMJbSvvOvXDQ3wX5TbQUy2pp2enVwYfrZV9kWCsk3is8ktomAzYfG5v2bSgU85hSspPCeSYac937yR1rfuWCcYkYNrRaA65Pb1bX97N10x+JPijYCmj1Ryn3CyLgJX5zq4djV025rYC/td3Cxh1TYmKwcHnjjWGIwWPx6S0szgi21AXKHmb6QAAyFZonIvwUbI/6xWW6qWsa+5mQ0g7vYlvGi8lzQeNm5kBJbytJsdICMLFz4KUxRiD1VSr/vdfJtZWgmYMZhFtaIwIZsqhUmOPgIkbtfnLDRIo4KVlmPWsfmA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=94xdj5VxKlsKg7KcTOXiwELEZ8njjN5NlNAXdX4qank=;
- b=pDqkYm2TjOKeYfhuDB27Cop4M2z0oR1FDFFjf7N/aHLg6oieGBZI+tQHY5/dFSN5wT1+vRv8A9oBZ1IWT0OWPaaXGVQCauzoQagGIEOlNs55nJHivnmernrtT+QHUuYrY357pVxXn7UyAFhiZTF0hlNl4mqBcSennyHDA3iALEw=
-Received: from BL1P222CA0023.NAMP222.PROD.OUTLOOK.COM (2603:10b6:208:2c7::28)
- by LV8PR12MB9083.namprd12.prod.outlook.com (2603:10b6:408:18c::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.42; Wed, 8 May
- 2024 07:21:53 +0000
-Received: from BL02EPF0001A102.namprd05.prod.outlook.com
- (2603:10b6:208:2c7:cafe::37) by BL1P222CA0023.outlook.office365.com
- (2603:10b6:208:2c7::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.43 via Frontend
- Transport; Wed, 8 May 2024 07:21:53 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL02EPF0001A102.mail.protection.outlook.com (10.167.241.134) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7544.18 via Frontend Transport; Wed, 8 May 2024 07:21:53 +0000
-Received: from pyuan-Chachani-VN.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Wed, 8 May 2024 02:21:49 -0500
-From: Perry Yuan <perry.yuan@amd.com>
-To: <rafael.j.wysocki@intel.com>, <Mario.Limonciello@amd.com>,
-	<viresh.kumar@linaro.org>, <Ray.Huang@amd.com>, <gautham.shenoy@amd.com>,
-	<Borislav.Petkov@amd.com>
-CC: <Alexander.Deucher@amd.com>, <Xinmei.Huang@amd.com>,
-	<Xiaojian.Du@amd.com>, <Li.Meng@amd.com>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: [PATCH v10 7/7] Documentation: cpufreq: amd-pstate: update doc for Per CPU boost control method
-Date: Wed, 8 May 2024 15:21:12 +0800
-Message-ID: <8661e4fb9a0473bbe74fd9ad008e19380743b46d.1715152592.git.perry.yuan@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1715152592.git.perry.yuan@amd.com>
-References: <cover.1715152592.git.perry.yuan@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A9193D96D
+	for <linux-pm@vger.kernel.org>; Wed,  8 May 2024 08:10:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715155833; cv=none; b=BdL206hlfOvwEyflJzSfcj+WT1+JqW0DP5rsZG8d/I+drwP+bo9vSJRE2TsHzO5RT8jBfGjbTncV4iKJULZRb4/0Ojc3IDxMDT4c3sIIKn3C6zrBz0nr1Mdw9zo2rpfzlzNiknt1XHYmJKqADlCbJcFfXOn5wXtWQz4AyHZ6KVM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715155833; c=relaxed/simple;
+	bh=yDdWDsmhU8mOYZ99K64v5ZtUCmcCbDJ3z/nVF/28VME=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PAzSVMzl4AYX39VwJIOIuUgM1anE8SwcyM5AWRc2nwt5bSbQR/+E8p4GNydPrgjtl+FzZl+gcR4Lte02GSie9azhg/ba1AVpN8LYoFQCn1pAjLOhHBy8DA380NEbk9wmP6VW2IrYOSRkYIXaKcv/5+z20hbFuWOt5uKJQbklZsQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bTkOMCKY; arc=none smtp.client-ip=209.85.219.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-de59daab3f3so4255187276.3
+        for <linux-pm@vger.kernel.org>; Wed, 08 May 2024 01:10:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1715155830; x=1715760630; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=hDil2ZnVWcb5vp45cry1hHQo0ylQ9Dttur8ChmQtHdc=;
+        b=bTkOMCKYsk+gYYnKHVYMEdKUHaTSk9qPwcT5Bkxtwq5LQ2rSO0QOmoRfHdqVwXfgAx
+         KPUz49rNSHNXz4Og1SCb/eDaH6n47DrdHIGoPYsTP860Gb4ArLfT5C2TM/ZvQbm2s1Y9
+         bTO/nhXOJYTwT3FmB4DV1o6wX+PzuirJ33jdrb1x0dFZXSURYPapbahQSD/Oy6saZfD+
+         I6DxLOYvXeOoRyudYWMIH5iF9uytiCYyb/gCvZeF0pfA27UGh6TwAYoljgEvLHcsZxJm
+         IP5Wo6Zh+YodvFpamtqJR2zI6mO2QBOmPOvLxHE7mNeV0A0GKbgX0sHA2Sg4kN8G9iRM
+         8ENQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715155830; x=1715760630;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hDil2ZnVWcb5vp45cry1hHQo0ylQ9Dttur8ChmQtHdc=;
+        b=D4gDlLDGNmYM5G43L7xNwiEXgM5G8ONYjVrubEtFlXfpxi+GD9mubfNvY8SI/D1S2h
+         PPQYLlbytD8zvuNJ3QgnkywWK47Ec78YXlKvUFyU5/D/Y3v+5Ji7m0enUiRJoBuwweiB
+         5snh3cVljx+2N2N0Fr5e054JOr2MzAOna4Oj7a2FM0oX/BrZeVcYRIRwuVRzdXOqFUxy
+         KHa5Z3XNodiPq/shH3UlInqadJTEb7czgOdFQCnLodOS79BNNcUo9UOA/FrTFtKeM5ja
+         mYN0eoQIBS0Oqan8mF5nmjN+Irs8e+VuP9E3uOwpmLIEKodAEM2T7zktS03IrqdDTpZQ
+         O+/g==
+X-Forwarded-Encrypted: i=1; AJvYcCWlrQMBsMwGFqM/2hfuUcmf4BvgpTPb3RPnVzrKDVWL1U1fT7t55t3xfUT88bOGxWwpD9MchmV8Bt9G/hYI6vDs3QngMfg6JvU=
+X-Gm-Message-State: AOJu0YwxRERBnqIQO71Vn1HhKUq88MPoShohzTJ9a47vgBaWS4P7shSs
+	QJsGMYFro8wA7y/p6QDlxfzzWy5S+RKdctsLAPUvmSCfuvN7JYU9ULGVJOYc8OwFtNTy59ERHDJ
+	p68mAp45ICgOYIQdqvDOhkUqIxOM7bIRV10PJfg==
+X-Google-Smtp-Source: AGHT+IHCYOkOb4GRkecIOgxE4jNRIrOhLbYw42i8TBkgZ/yh1zPVDtP2VZreSBEEiDOF5QRtA2ZAv967VqXp6nKpg5A=
+X-Received: by 2002:a05:6902:46:b0:de5:a2de:9453 with SMTP id
+ 3f1490d57ef6-debb9d4ac68mr2095872276.17.1715155830352; Wed, 08 May 2024
+ 01:10:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0001A102:EE_|LV8PR12MB9083:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8faaa045-d2f5-4aab-619f-08dc6f2f88ff
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230031|36860700004|376005|1800799015|82310400017;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?HnB/L8eGNBYaJluCpFdAlGpDfZo+UVhh6ovq2B4pfSDBwTNmU6c4aTVXDgij?=
- =?us-ascii?Q?nnlo8coqJk6okib8IapT8Xp+6pMedbNOFPVDUr1+Fqzs8yt4KYzJVqkfkxCr?=
- =?us-ascii?Q?pvRcEElr8vKhqBuKKkTGlWRtQ/meBm516Cu5dg69Ria2tS69iSk2Y42O9WFv?=
- =?us-ascii?Q?KTSqIPEMqvX29k2+bEJQCBAlRSZicQ1NaeOmSvwNyIG9scvxss8Na1a7JtGE?=
- =?us-ascii?Q?MtWZRG4SJcUNMZ/99G5htw8En/GWzyeLPtz2sgmwmS2KnX7yMnK98t/Y1WDh?=
- =?us-ascii?Q?WoX1JfrLjBT2Q1vmPLiRy/XoCkGc7ujsZm2diZJvimNvKq9SHWvchOdpn+Zh?=
- =?us-ascii?Q?iitV4m4gJ0lCtALLDG+UlCorvJ0OLO6T5Q2RRPeQC8tjpH1BJLNZsTVfpdK+?=
- =?us-ascii?Q?lwWdGtg17tPgym/FVOwhmlX69zgd1WSI3mhKaxZtW9AKq/fBBo5yXrNlGYIv?=
- =?us-ascii?Q?d8K07uUj7Qp61l9+SCAQeynrFZaduP6btV4O32Je/58YVnmRe1R1+Oqgj/x9?=
- =?us-ascii?Q?7RhfkbLygP89gcKRZbp1c8FbRlEb3tae3AzWlX2flo/lwPX24ABRSz6prL49?=
- =?us-ascii?Q?5XhRcz/1yzLINWyPYrn2rOc7ueLtCr0EBQysvtEE8j4AWx5foJZfSObG4SC6?=
- =?us-ascii?Q?5pjxiv+DNnQQp0wUGFkSNZPdK97jiFJ5/oe4T1VvogABKBEsgW2rYKEknkaq?=
- =?us-ascii?Q?T6hK27qk0LYCCSHiyDUWYYVZ1qMineqKFoZnsoWsT8zp+giJ6ThezgqqrGF2?=
- =?us-ascii?Q?ouS1qvpo1ts6BcHctfFt3Yo9R2s8w4d7cnMqAx4jznWKsOV9wk6Q3zjcYjSQ?=
- =?us-ascii?Q?7+myLZxUkz9iw4cMH5AZTXzmNGH0uPIqVBmUtAdVhRKYn0RHQWACEYkjhd9R?=
- =?us-ascii?Q?WKullb8fYWM1LEeoL77c6goGag5jlMD6hoQM4W0l331XSkrxzgqJ0D1h4Hvt?=
- =?us-ascii?Q?hBCxVX1qz4Zlb0I/V9/cSkxCVFz4CdFaYHVpCbcWoLB2Y+RB6USsjquxERvE?=
- =?us-ascii?Q?OOfCVZ9a7ZCojiLju0ieZKiVdtRze1sbJl0/BElAmYr3QFQjeGrh1HPD5AP8?=
- =?us-ascii?Q?BkytbKOA+3U5k2oRmQABRG2GDAHCzaTT1f4jc3cWNSeyjBeVrZjE+ecxi8tz?=
- =?us-ascii?Q?o8n6bAOSD4YEr19sCMTVt1ZfG46znfoedF3km65oreAL5PfKaww6akYUllRi?=
- =?us-ascii?Q?sdiiM6X7PAZoCZD1zkO9sns8l1MHkYMzU5X4OlXw4+asFmaBByOca14iJAbD?=
- =?us-ascii?Q?5F3nttPhk9qsFOFl+Qc0CL0hxx3NsqMgqarVyr7flkWrNOBAeVP6eHS2PCgc?=
- =?us-ascii?Q?09cw193LjfvWUwAZsTJAzifiSBMdfEGCDG3ybsaKQjdCYYXpXwptEXSpDvYx?=
- =?us-ascii?Q?dSklzKND7bMTPpeOoFni+8J+CI0S?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(36860700004)(376005)(1800799015)(82310400017);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2024 07:21:53.1883
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8faaa045-d2f5-4aab-619f-08dc6f2f88ff
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL02EPF0001A102.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9083
+References: <20240418092305.2337429-1-quic_varada@quicinc.com>
+ <20240418092305.2337429-7-quic_varada@quicinc.com> <a7194edd-a2c8-46fc-bea1-f26b0960e535@linaro.org>
+ <Ziov6bWBXYXJ4Zp8@hu-varada-blr.qualcomm.com> <27f4f3dd-9375-40cf-8c8f-1c4edf66e31b@linaro.org>
+ <ZjNdTmmXucjtRxJt@hu-varada-blr.qualcomm.com> <c015b3a5-2213-4ebd-b960-d97ed1fe7062@kernel.org>
+ <ZjshR0ekcn0gxwOa@hu-varada-blr.qualcomm.com>
+In-Reply-To: <ZjshR0ekcn0gxwOa@hu-varada-blr.qualcomm.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Wed, 8 May 2024 11:10:18 +0300
+Message-ID: <CAA8EJpqENsojPQmCbma_nQLEZq8nK1fz1K0JdtvLd=kPrH_DBw@mail.gmail.com>
+Subject: Re: [PATCH v9 6/6] arm64: dts: qcom: ipq9574: Add icc provider
+ ability to gcc
+To: Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc: Georgi Djakov <djakov@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, andersson@kernel.org, 
+	mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, quic_anusha@quicinc.com, 
+	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Updates the documentation in `amd-pstate.rst` to include information about the
-per CPU boost control feature. Users can now enable or disable the Core Performance
-Boost (CPB) feature on individual CPUs using the `boost` sysfs attribute.
+On Wed, 8 May 2024 at 09:53, Varadarajan Narayanan
+<quic_varada@quicinc.com> wrote:
+>
+> On Fri, May 03, 2024 at 04:51:04PM +0300, Georgi Djakov wrote:
+> > Hi Varada,
+> >
+> > Thank you for your work on this!
+> >
+> > On 2.05.24 12:30, Varadarajan Narayanan wrote:
+> > > On Tue, Apr 30, 2024 at 12:05:29PM +0200, Konrad Dybcio wrote:
+> > > > On 25.04.2024 12:26 PM, Varadarajan Narayanan wrote:
+> > > > > On Tue, Apr 23, 2024 at 02:58:41PM +0200, Konrad Dybcio wrote:
+> > > > > >
+> > > > > >
+> > > > > > On 4/18/24 11:23, Varadarajan Narayanan wrote:
+> > > > > > > IPQ SoCs dont involve RPM in managing NoC related clocks and
+> > > > > > > there is no NoC scaling. Linux itself handles these clocks.
+> > > > > > > However, these should not be exposed as just clocks and align
+> > > > > > > with other Qualcomm SoCs that handle these clocks from a
+> > > > > > > interconnect provider.
+> > > > > > >
+> > > > > > > Hence include icc provider capability to the gcc node so that
+> > > > > > > peripherals can use the interconnect facility to enable these
+> > > > > > > clocks.
+> > > > > > >
+> > > > > > > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > > > > > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > > > > > > ---
+> > > > > >
+> > > > > > If this is all you do to enable interconnect (which is not the case,
+> > > > > > as this patch only satisfies the bindings checker, the meaningful
+> > > > > > change happens in the previous patch) and nothing explodes, this is
+> > > > > > an apparent sign of your driver doing nothing.
+> > > > >
+> > > > > It appears to do nothing because, we are just enabling the clock
+> > > > > provider to also act as interconnect provider. Only when the
+> > > > > consumers are enabled with interconnect usage, this will create
+> > > > > paths and turn on the relevant NOC clocks.
+> > > >
+> > > > No, with sync_state it actually does "something" (sets the interconnect
+> > > > path bandwidths to zero). And *this* patch does nothing functionally,
+> > > > it only makes the dt checker happy.
+> > >
+> > > I understand.
+> > >
+> > > > > This interconnect will be used by the PCIe and NSS blocks. When
+> > > > > those patches were posted earlier, they were put on hold until
+> > > > > interconnect driver is available.
+> > > > >
+> > > > > Once this patch gets in, PCIe for example will make use of icc.
+> > > > > Please refer to https://lore.kernel.org/linux-arm-msm/20230519090219.15925-5-quic_devipriy@quicinc.com/.
+> > > > >
+> > > > > The 'pcieX' nodes will include the following entries.
+> > > > >
+> > > > >         interconnects = <&gcc MASTER_ANOC_PCIE0 &gcc SLAVE_ANOC_PCIE0>,
+> > > > >                         <&gcc MASTER_SNOC_PCIE0 &gcc SLAVE_SNOC_PCIE0>;
+> > > > >         interconnect-names = "pcie-mem", "cpu-pcie";
+> > > >
+> > > > Okay. What about USB that's already enabled? And BIMC/MEMNOC?
+> > >
+> > > For USB, the GCC_ANOC_USB_AXI_CLK is enabled as part of the iface
+> > > clock. Hence, interconnect is not specified there.
+> > >
+> > > MEMNOC to System NOC interfaces seem to be enabled automatically.
+> > > Software doesn't have to turn on or program specific clocks.
+> > >
+> > > > > > The expected reaction to "enabling interconnect" without defining the
+> > > > > > required paths for your hardware would be a crash-on-sync_state, as all
+> > > > > > unused (from Linux's POV) resources ought to be shut down.
+> > > > > >
+> > > > > > Because you lack sync_state, the interconnects silently retain the state
+> > > > > > that they were left in (which is not deterministic), and that's precisely
+> > > > > > what we want to avoid.
+> > > > >
+> > > > > I tried to set 'sync_state' to icc_sync_state to be invoked and
+> > > > > didn't see any crash.
+> > > >
+> > > > Have you confirmed that the registers are actually written to, and with
+> > > > correct values?
+> > >
+> > > I tried the following combinations:-
+> > >
+> > > 1. Top of tree linux-next + This patch set
+> > >
+> > >     * icc_sync_state called
+> > >     * No crash or hang observed
+> > >     * From /sys/kernel/debug/clk/clk_summary can see the
+> > >       relevant clocks are set to the expected rates (compared
+> > >       with downstream kernel)
+> > >
+> > > 2. Top of tree linux-next + This patch set + PCIe enablement
+> > >
+> > >     * icc_sync_state NOT called
+> >
+> > If sync_state() is not being called, that usually means that there
+> > are interconnect consumers that haven't probed successfully (PCIe?)
+> > or their dependencies. That can be checked in /sys/class/devlink/.../status
+> > But i am not sure how this works for PCI devices however.
+> >
+> > You can also manually force a call to sync_state by writing "1" to
+> > the interconnect provider's /sys/devices/.../state_synced
+> >
+> > Anyway, the question is if PCIe and NSS work without this driver?
+>
+> No.
+>
+> > If they work, is this because the clocks are turned on by default
+> > or by the boot loader?
+>
+> Initially, the PCIe/NSS driver enabled these clocks directly
+> by having them in their DT nodes itself. Based on community
+> feedback this was removed and after that PCIe/NSS did not work.
+>
+> > Then if an interconnect path (clock) gets disabled either when we
+> > reach a sync_state (with no bandwidth requests) or we explicitly
+> > call icc_set_bw() with 0 bandwidth values, i would expect that
+> > these PCIe and NSS devices would not function anymore (it might
+> > save some power etc) and if this is unexpected we should see a
+> > a crash or hang...
+> >
+> > Can you confirm this?
+>
+> With ICC enabled, icc_set_bw (with non-zero values) is called by
+> PCIe and NSS drivers. Haven't checked with icc_set_bw with zero
+> values.
+>
+> PCIe:   qcom_pcie_probe -> qcom_pcie_icc_init -> icc_set_bw
+> NSS:    ppe_icc_init -> icc_set_bw
+>
+> I believe sync_state is not getting called since there is a
+> non-zero set bandwidth request. Which seems to be aligned with
+> your explanation.
 
-Signed-off-by: Perry Yuan <perry.yuan@amd.com>
----
- Documentation/admin-guide/pm/amd-pstate.rst | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+This doesn't look correct. sync_state is being called once all
+consumers are probed. It doesn't matter whether those consumers have
+non-zero bandwidth requests or no.
 
-diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-index bcc0d9404c18..98e43c53c387 100644
---- a/Documentation/admin-guide/pm/amd-pstate.rst
-+++ b/Documentation/admin-guide/pm/amd-pstate.rst
-@@ -281,6 +281,26 @@ integer values defined between 0 to 255 when EPP feature is enabled by platform
- firmware, if EPP feature is disabled, driver will ignore the written value
- This attribute is read-write.
- 
-+``boost``
-+The `boost` sysfs attribute provides control over the CPU core
-+performance boost, allowing users to manage the maximum frequency limitation
-+of the CPU. This attribute can be used to enable or disable the boost feature
-+on individual CPUs.
-+
-+When the boost feature is enabled, the CPU can dynamically increase its frequency
-+beyond the base frequency, providing enhanced performance for demanding workloads.
-+On the other hand, disabling the boost feature restricts the CPU to operate at the
-+base frequency, which may be desirable in certain scenarios to prioritize power
-+efficiency or manage temperature.
-+
-+To manipulate the `boost` attribute, users can write a value of `0` to disable the
-+boost or `1` to enable it, for the respective CPU using the sysfs path
-+`/sys/devices/system/cpu/cpuX/cpufreq/boost`, where `X` represents the CPU number.
-+
-+It is important to note that modifying the global variable
-+`amd_pstate_global_params.cpb_boost` will override the individual CPU settings.
-+
-+
- Other performance and frequency values can be read back from
- ``/sys/devices/system/cpu/cpuX/acpi_cppc/``, see :ref:`cppc_sysfs`.
- 
+
 -- 
-2.34.1
-
+With best wishes
+Dmitry
 
