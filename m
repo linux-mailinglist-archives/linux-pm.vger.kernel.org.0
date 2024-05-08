@@ -1,60 +1,60 @@
-Return-Path: <linux-pm+bounces-7618-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7620-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68C288BF501
-	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 05:37:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C6A48BF504
+	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 05:37:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0932B1F22ED5
-	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 03:37:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8DE211C237C9
+	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 03:37:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1A0417559;
-	Wed,  8 May 2024 03:37:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C819617BCC;
+	Wed,  8 May 2024 03:37:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MuDWTmBH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PWP4irtH"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2C461427B;
-	Wed,  8 May 2024 03:37:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49371171A2;
+	Wed,  8 May 2024 03:37:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715139425; cv=none; b=Ffj5GwWJBYr8aJ6QuwzkahKQYZy5THcqN1dMAbSDWH9hJZ2LWClSnV7kX0mBDGVKz2pTt19e0DKpFeHmRlqEAPXqfmjIs+2bnmpOjdiQ7W/YZQlMPmHLVSWMDBreRiI0S5Si1VAgWUEI0Wm7ZF2tdsspgPgXeCSDkHREsOtc9+A=
+	t=1715139426; cv=none; b=ElKtybpoMkxXBgc2qUjlKgxaIbbJss5qFJS7E5tMUyg5zSfNVI0zwqIaBu9iymor7m0k++ik1LnDWVzWnSHll5bhSLLYAPF8I7z5c1ioLWX04ihQ6Yu3uzSAg4caAuLVVBMtftNRflu9FUH6icSrakLEhFs4hhVm/Hmct3ypKtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715139425; c=relaxed/simple;
-	bh=4EtO7Ihxo5VDSVZMZHwbrvD7dG2Ao6rUGaoUS1eTOZQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=t4jn4iKRZ/M0oIaaQMe+6EZB5C/ViKdTA8bc+ZEAOaekk3+OLFC7cB60E4QrSwCSOLtYijCLFDmKOMmw1Lf/H3DLtZkrcpvA191di5CHOewegGADOG6ST3IPozLuCD3CBmbSTURl72FTHdJzErUrbX0OdX8KvsW879Zr05gZwA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MuDWTmBH; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1715139426; c=relaxed/simple;
+	bh=VX4j3o8PuAumvX98LolK5x0BnWOyxYhPrqsi65acJqo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=H7QvClJp8UNtN9vRWX0Jkl8cWXZUAoklY5vEf7YZvkbqqi8A/D9o3rrYKoGzr6rL/7jd9R3In30qweLzcgXSh0dB4I6bjY69TE+vcZdqg9rn22OyaNbOFkIe1gtghY40lwitE3NC5YphznfDKa956cV7x64ZqtvkgyK13vXvHKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PWP4irtH; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715139423; x=1746675423;
+  t=1715139425; x=1746675425;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=4EtO7Ihxo5VDSVZMZHwbrvD7dG2Ao6rUGaoUS1eTOZQ=;
-  b=MuDWTmBHvTsWhbrxOEr96olWQjMkMNZE5s/xYt2ckswYhjfqk3NkMj3X
-   P+oM9UyacdOdR/mtUXS/FYBXN/abFCSdpir1n+R35IjKiEgE9k9fn48Ub
-   dQFjBTULSRtJ5U5Prf4IXNzofp5oJJbUlCR60IWZcZQpYGgJ7Jx/xn7Va
-   l3x7vPM2t/Ur0ri1QGRS16F1u2AX3IH1fvymvHXRatjrp57b/PrJemHmx
-   29TfQaMaOaeuPUHQY/ye9NReJnsVC/uGP+/P5bO5/m7DbWCbPxwmTQKkb
-   h5k8Thf7U4V1fLK8fTjxkDkZ6xn5ThY94K1xRdfUV1uDsjchlIR0oyOnE
-   Q==;
-X-CSE-ConnectionGUID: Uoj6XVXxTRObfBrEF1RRqA==
-X-CSE-MsgGUID: LlhtH1cARlS+ek2T2xA0KA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="10820909"
+  bh=VX4j3o8PuAumvX98LolK5x0BnWOyxYhPrqsi65acJqo=;
+  b=PWP4irtHuQ108ZNBr7YuB4alK36lD8S9r+ieInP4BDA3WyOn8508usPG
+   frfX8bA9ZekPjNQE0EwdmBtgW4YaS1MvnffTNG8JHDxVF3wOVYkGI9dZ2
+   07ZJIUgu7kD9oNZF2h4+eyHAUT3XfqdAxTLzfVZIviF0lL7sMHTluEaou
+   6oOdEFXVLsAqbyznPEu0h84CW2KLC0o+NjOwaGzDzojwAzGLGFIWRjmBX
+   ESfnS5BfdfelUjiS5gRH/owDCG9PcPXN7KsBKLXn7HcfbmtJccf3gxVCP
+   JitxFgm1k+72dlyViBeVInkJZuyU5cgsSNiymIy3pGcJJoQZEMG0WJsPa
+   A==;
+X-CSE-ConnectionGUID: ZNtiUPYrS6unZkD3KADRkg==
+X-CSE-MsgGUID: Iq+ZyGcDSEegd77kbALTaQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="10820910"
 X-IronPort-AV: E=Sophos;i="6.08,144,1712646000"; 
-   d="scan'208";a="10820909"
+   d="scan'208";a="10820910"
 Received: from orviesa005.jf.intel.com ([10.64.159.145])
   by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2024 20:36:54 -0700
-X-CSE-ConnectionGUID: OquyvCiyTdmGzQr/C/CbLg==
-X-CSE-MsgGUID: 5s7cCh53TsC+p/h9jzDOtw==
+X-CSE-ConnectionGUID: YyQ012U5RCqIHJrpvyf/sQ==
+X-CSE-MsgGUID: 98kccrMhRkq07nRyGxlmfA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,144,1712646000"; 
-   d="scan'208";a="33551927"
+   d="scan'208";a="33551931"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
   by orviesa005.jf.intel.com with ESMTP; 07 May 2024 20:36:53 -0700
 From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
@@ -66,9 +66,9 @@ Cc: Zhang Rui <rui.zhang@intel.com>,
 	linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Ricardo Neri <ricardo.neri@intel.com>
-Subject: [PATCH v2 2/4] thermal: intel: hfi: Shorten the thermal netlink event delay to 100ms
-Date: Tue,  7 May 2024 20:43:50 -0700
-Message-Id: <20240508034352.18414-3-ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v2 3/4] thermal: intel: hfi: Rename HFI_MAX_THERM_NOTIFY_COUNT
+Date: Tue,  7 May 2024 20:43:51 -0700
+Message-Id: <20240508034352.18414-4-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20240508034352.18414-1-ricardo.neri-calderon@linux.intel.com>
 References: <20240508034352.18414-1-ricardo.neri-calderon@linux.intel.com>
@@ -78,21 +78,12 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 
-The delay between an HFI interrupt and its corresponding thermal netlink
-event has so far been hard-coded to CONFIG_HZ jiffies (1 second). This
-delay is too long for hardware that generates updates every tens of
-milliseconds.
+When processing a hardware update, HFI generates as many thermal netlink
+events as needed to relay all the updated CPU capabilities to user space.
+The constant HFI_MAX_THERM_NOTIFY_COUNT is the number of CPU capabilities
+updated per each of those events.
 
-The HFI driver uses a delayed workqueue to send thermal netlink events. No
-subsequent events will be sent if there is pending work.
-
-As a result, much of the information of consecutive hardware updates will
-be lost if the workqueue delay is too long. User space entities may act on
-obsolete data. If the delay is too short, multiple events may overwhelm
-listeners.
-
-Set the delay to 100ms to strike a balance between too many and too few
-events. Use milliseconds instead of jiffies to improve readability.
+Give this constant a more descriptive name.
 
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
@@ -104,34 +95,44 @@ Cc: linux-pm@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 ---
 Changes since v1:
- * Dropped the debugfs interface. Instead, updated the delay from 1s to
-   100ms.
+ * None
 ---
- drivers/thermal/intel/intel_hfi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/thermal/intel/intel_hfi.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-index e2b82d71ab6b..d82b8788b0f8 100644
+index d82b8788b0f8..c6658f8c5cca 100644
 --- a/drivers/thermal/intel/intel_hfi.c
 +++ b/drivers/thermal/intel/intel_hfi.c
-@@ -166,7 +166,7 @@ static struct hfi_features hfi_features;
- static DEFINE_MUTEX(hfi_instance_lock);
+@@ -167,7 +167,7 @@ static DEFINE_MUTEX(hfi_instance_lock);
  
  static struct workqueue_struct *hfi_updates_wq;
--#define HFI_UPDATE_DELAY		HZ
-+#define HFI_UPDATE_DELAY_MS		100
- #define HFI_MAX_THERM_NOTIFY_COUNT	16
+ #define HFI_UPDATE_DELAY_MS		100
+-#define HFI_MAX_THERM_NOTIFY_COUNT	16
++#define HFI_THERMNL_CAPS_PER_EVENT	16
  
  static void get_hfi_caps(struct hfi_instance *hfi_instance,
-@@ -322,7 +322,7 @@ void intel_hfi_process_event(__u64 pkg_therm_status_msr_val)
- 	raw_spin_unlock(&hfi_instance->event_lock);
+ 			 struct thermal_genl_cpu_caps *cpu_caps)
+@@ -218,14 +218,14 @@ static void update_capabilities(struct hfi_instance *hfi_instance)
  
- 	queue_delayed_work(hfi_updates_wq, &hfi_instance->update_work,
--			   HFI_UPDATE_DELAY);
-+			   msecs_to_jiffies(HFI_UPDATE_DELAY_MS));
- }
+ 	get_hfi_caps(hfi_instance, cpu_caps);
  
- static void init_hfi_cpu_index(struct hfi_cpu_info *info)
+-	if (cpu_count < HFI_MAX_THERM_NOTIFY_COUNT)
++	if (cpu_count < HFI_THERMNL_CAPS_PER_EVENT)
+ 		goto last_cmd;
+ 
+-	/* Process complete chunks of HFI_MAX_THERM_NOTIFY_COUNT capabilities. */
++	/* Process complete chunks of HFI_THERMNL_CAPS_PER_EVENT capabilities. */
+ 	for (i = 0;
+-	     (i + HFI_MAX_THERM_NOTIFY_COUNT) <= cpu_count;
+-	     i += HFI_MAX_THERM_NOTIFY_COUNT)
+-		thermal_genl_cpu_capability_event(HFI_MAX_THERM_NOTIFY_COUNT,
++	     (i + HFI_THERMNL_CAPS_PER_EVENT) <= cpu_count;
++	     i += HFI_THERMNL_CAPS_PER_EVENT)
++		thermal_genl_cpu_capability_event(HFI_THERMNL_CAPS_PER_EVENT,
+ 						  &cpu_caps[i]);
+ 
+ 	cpu_count = cpu_count - i;
 -- 
 2.34.1
 
