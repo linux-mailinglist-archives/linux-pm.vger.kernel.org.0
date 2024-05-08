@@ -1,60 +1,60 @@
-Return-Path: <linux-pm+bounces-7620-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7617-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C6A48BF504
-	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 05:37:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 778118BF4FF
+	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 05:37:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8DE211C237C9
-	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 03:37:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31EBD281260
+	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 03:37:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C819617BCC;
-	Wed,  8 May 2024 03:37:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFF4C15E88;
+	Wed,  8 May 2024 03:37:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PWP4irtH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fde7jpnD"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49371171A2;
-	Wed,  8 May 2024 03:37:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FE0414A9F;
+	Wed,  8 May 2024 03:37:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715139426; cv=none; b=ElKtybpoMkxXBgc2qUjlKgxaIbbJss5qFJS7E5tMUyg5zSfNVI0zwqIaBu9iymor7m0k++ik1LnDWVzWnSHll5bhSLLYAPF8I7z5c1ioLWX04ihQ6Yu3uzSAg4caAuLVVBMtftNRflu9FUH6icSrakLEhFs4hhVm/Hmct3ypKtM=
+	t=1715139424; cv=none; b=kzz36w2WIMV1YD5WBuWwDGegfGRXFMDkZzZ5w4WByoS63kb8mFX+9Lv/EcVntO+SG7dCm4ooXf9MW3NVG83cQcyhCSjcbw3pzweYyo9u7IOuXFSefuSVg1mk4+zeGHwJd9cC9CrR+anyQex7Nj8nBRtcOb41Eh2upp8w2hFxqxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715139426; c=relaxed/simple;
-	bh=VX4j3o8PuAumvX98LolK5x0BnWOyxYhPrqsi65acJqo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=H7QvClJp8UNtN9vRWX0Jkl8cWXZUAoklY5vEf7YZvkbqqi8A/D9o3rrYKoGzr6rL/7jd9R3In30qweLzcgXSh0dB4I6bjY69TE+vcZdqg9rn22OyaNbOFkIe1gtghY40lwitE3NC5YphznfDKa956cV7x64ZqtvkgyK13vXvHKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PWP4irtH; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1715139424; c=relaxed/simple;
+	bh=K+HG7L12mRkwMo3ylUVsmFfW2pNh/hN2w+jXyyLa2fE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=qQAIbkslFMsw1QzGBpKw0baDhxS3pWsirA3QZjbdAg2vqB/5S1Ey72UHqMLjl7f9KnkcHBJIac6vg1CJmLwARisr6RlmlY9EnSSoS+H8U9fktnR1vt6+gQtk0x6MlopFMB5KnNRH9bdSOKf1Cl0EuZGyyseKtFQ7L22dohYceIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fde7jpnD; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715139425; x=1746675425;
+  t=1715139423; x=1746675423;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=VX4j3o8PuAumvX98LolK5x0BnWOyxYhPrqsi65acJqo=;
-  b=PWP4irtHuQ108ZNBr7YuB4alK36lD8S9r+ieInP4BDA3WyOn8508usPG
-   frfX8bA9ZekPjNQE0EwdmBtgW4YaS1MvnffTNG8JHDxVF3wOVYkGI9dZ2
-   07ZJIUgu7kD9oNZF2h4+eyHAUT3XfqdAxTLzfVZIviF0lL7sMHTluEaou
-   6oOdEFXVLsAqbyznPEu0h84CW2KLC0o+NjOwaGzDzojwAzGLGFIWRjmBX
-   ESfnS5BfdfelUjiS5gRH/owDCG9PcPXN7KsBKLXn7HcfbmtJccf3gxVCP
-   JitxFgm1k+72dlyViBeVInkJZuyU5cgsSNiymIy3pGcJJoQZEMG0WJsPa
-   A==;
-X-CSE-ConnectionGUID: ZNtiUPYrS6unZkD3KADRkg==
-X-CSE-MsgGUID: Iq+ZyGcDSEegd77kbALTaQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="10820910"
+  bh=K+HG7L12mRkwMo3ylUVsmFfW2pNh/hN2w+jXyyLa2fE=;
+  b=fde7jpnDp4N09pNphklmarcMSCAKieauw0waH99wgd979x7uv5eh/vbC
+   QbAg/gCZjpTGmX19g+vDGxDwFV0Ur+1h1FM4E9ph8WBghiX8uZA0xQrjz
+   gn/LZPTNsf6c/ddWwxOG3BQmZlu7QsQR/qtZWvDoU4D2g8S/57HvnnVBk
+   bntPt5u4ZG7VIljT4GTI9IN71J1wL3BgvrBgtHtph3xk9WcGrOskDav6F
+   DttqEE7180FmyUh4R5gJj2cW5s81oRLLxjclkL+BB+aKEjywzp/O3PMto
+   0HSJ0tmrigmBZ/YJLW03VqqFRMewxsjtB0j+cGPzm2+xHxw+w8zCZzSK2
+   Q==;
+X-CSE-ConnectionGUID: p76twJoiR9el0vK9PW66kg==
+X-CSE-MsgGUID: 5isWQIReQlOFtBA+hYYelQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="10820911"
 X-IronPort-AV: E=Sophos;i="6.08,144,1712646000"; 
-   d="scan'208";a="10820910"
+   d="scan'208";a="10820911"
 Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2024 20:36:54 -0700
-X-CSE-ConnectionGUID: YyQ012U5RCqIHJrpvyf/sQ==
-X-CSE-MsgGUID: 98kccrMhRkq07nRyGxlmfA==
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2024 20:36:55 -0700
+X-CSE-ConnectionGUID: K6MZavhyS/Wv84QMfOZ7uw==
+X-CSE-MsgGUID: 5qRDoizsQuKXKBRfgiCGeQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,144,1712646000"; 
-   d="scan'208";a="33551931"
+   d="scan'208";a="33551935"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
   by orviesa005.jf.intel.com with ESMTP; 07 May 2024 20:36:53 -0700
 From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
@@ -66,9 +66,9 @@ Cc: Zhang Rui <rui.zhang@intel.com>,
 	linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Ricardo Neri <ricardo.neri@intel.com>
-Subject: [PATCH v2 3/4] thermal: intel: hfi: Rename HFI_MAX_THERM_NOTIFY_COUNT
-Date: Tue,  7 May 2024 20:43:51 -0700
-Message-Id: <20240508034352.18414-4-ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v2 4/4] thermal: intel: hfi: Increase the number of CPU capabilities per netlink event
+Date: Tue,  7 May 2024 20:43:52 -0700
+Message-Id: <20240508034352.18414-5-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20240508034352.18414-1-ricardo.neri-calderon@linux.intel.com>
 References: <20240508034352.18414-1-ricardo.neri-calderon@linux.intel.com>
@@ -78,12 +78,15 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 
-When processing a hardware update, HFI generates as many thermal netlink
-events as needed to relay all the updated CPU capabilities to user space.
-The constant HFI_MAX_THERM_NOTIFY_COUNT is the number of CPU capabilities
-updated per each of those events.
+The number of updated CPU capabilities per netlink event is hard-coded to
+16. On systems with more than 16 CPUs (a common case), it takes more than
+one thermal netlink event to relay all the new capabilities after an HFI
+interrupt. This adds unnecessary overhead to both the kernel and user space
+entities.
 
-Give this constant a more descriptive name.
+Increase the number of CPU capabilities updated per event to 64. Any system
+with 64 CPUs or less can now update all the capabilities in a single
+thermal netlink event.
 
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
@@ -94,45 +97,26 @@ Cc: Zhang Rui <rui.zhang@intel.com>
 Cc: linux-pm@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 ---
-Changes since v1:
- * None
+Changes since v2:
+ * Dropped the debugfs interface. Instead, increased the size of the
+   thermal netlink message size to 64 CPU capabilities.
 ---
- drivers/thermal/intel/intel_hfi.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/thermal/intel/intel_hfi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-index d82b8788b0f8..c6658f8c5cca 100644
+index c6658f8c5cca..a180a98bb9f1 100644
 --- a/drivers/thermal/intel/intel_hfi.c
 +++ b/drivers/thermal/intel/intel_hfi.c
 @@ -167,7 +167,7 @@ static DEFINE_MUTEX(hfi_instance_lock);
  
  static struct workqueue_struct *hfi_updates_wq;
  #define HFI_UPDATE_DELAY_MS		100
--#define HFI_MAX_THERM_NOTIFY_COUNT	16
-+#define HFI_THERMNL_CAPS_PER_EVENT	16
+-#define HFI_THERMNL_CAPS_PER_EVENT	16
++#define HFI_THERMNL_CAPS_PER_EVENT	64
  
  static void get_hfi_caps(struct hfi_instance *hfi_instance,
  			 struct thermal_genl_cpu_caps *cpu_caps)
-@@ -218,14 +218,14 @@ static void update_capabilities(struct hfi_instance *hfi_instance)
- 
- 	get_hfi_caps(hfi_instance, cpu_caps);
- 
--	if (cpu_count < HFI_MAX_THERM_NOTIFY_COUNT)
-+	if (cpu_count < HFI_THERMNL_CAPS_PER_EVENT)
- 		goto last_cmd;
- 
--	/* Process complete chunks of HFI_MAX_THERM_NOTIFY_COUNT capabilities. */
-+	/* Process complete chunks of HFI_THERMNL_CAPS_PER_EVENT capabilities. */
- 	for (i = 0;
--	     (i + HFI_MAX_THERM_NOTIFY_COUNT) <= cpu_count;
--	     i += HFI_MAX_THERM_NOTIFY_COUNT)
--		thermal_genl_cpu_capability_event(HFI_MAX_THERM_NOTIFY_COUNT,
-+	     (i + HFI_THERMNL_CAPS_PER_EVENT) <= cpu_count;
-+	     i += HFI_THERMNL_CAPS_PER_EVENT)
-+		thermal_genl_cpu_capability_event(HFI_THERMNL_CAPS_PER_EVENT,
- 						  &cpu_caps[i]);
- 
- 	cpu_count = cpu_count - i;
 -- 
 2.34.1
 
