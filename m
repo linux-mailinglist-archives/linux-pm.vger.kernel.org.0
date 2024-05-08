@@ -1,228 +1,273 @@
-Return-Path: <linux-pm+bounces-7624-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7625-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 147868BF5B8
-	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 07:47:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34E328BF5E0
+	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 08:03:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4806BB2401C
-	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 05:47:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD4B4285256
+	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 06:03:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ECE717557;
-	Wed,  8 May 2024 05:47:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4FF617BAE;
+	Wed,  8 May 2024 06:03:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="jVEqE/sk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P1y/PYff"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2080.outbound.protection.outlook.com [40.107.236.80])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 465521758E;
-	Wed,  8 May 2024 05:47:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.80
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715147254; cv=fail; b=T88faf61vtp/1DGzD/0UpscASnh04wzN/g3506ndtk7NXrYjqbgWxR+S+GBwHONSOZe8N3U1bpKcG0QwABF1eLNqtdfU6OMSVr0lki80aNHjYFmBUz9kGjfT/VEPQpRLs1hDww5+e7PIRnlxgwU2jq5x11OzgWjiyjwCPdSSzmw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715147254; c=relaxed/simple;
-	bh=lPGRnsawY9E9gPH6BROgU5TVvLcUAsQhwSekPioRTOw=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=dMAfPcf5IYh93DCkG7sh9Jx5s/4LmNkPx4T+GjpI/TR/2C9KqsnAc01RQ2tO7hRcLBkS3MJBYO5EBaFazD5FPMDWIEwfBo6mM4uyf+GyWiP69pORswbSKp9s6fUEfCmqAXcExD47Yg7CrhfJlxUi3IVkeaJ5yyvBql22ynjek2Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=jVEqE/sk; arc=fail smtp.client-ip=40.107.236.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eVm1xNrPmbSBenCWjJUdvtowgM4vGuN5H4zFe91Lt2AGt903VyAKcuGwrU5wsrjxq3cfPTh3xpoRcp3WTMOdZc1z34huAzT6MnKnLY5/HUUitztNFUNJ0h+Mjbj/C1ZCI2tvwRyMbFPoaU+MHKDYoAsXxulLrMHUfVnErjwfrASgi4DxqYHKgQAqPQ0uVQGcuuZjZxMOQUxMRVqFeCtiTcWg05apPRsyeh7uX6ufhXNb2Mmd3pgtU0iTX7zY6lQOUiMkxTpagWeLSiY0TiPECEimGVL2CY1s1BaWMmgPR9jk9ywmuXHoerMD7/7C+z/x6c4CKCWyh1j5yi9IjYHNoA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VgYjpO3GWH30dQp4sbqnn3AgduwFrMxEqM+n7Jt30+A=;
- b=Mu/ZJrW+i1/rDXEJ5kcyHf1DR8L0djhdnw2R2tKOSAncw/WGJ3eCB572PXtSYh6HP/JuO96DkuVhj7VmXG/KT/S2ZD/WtdUBdffEQyRuQD11aWtB7wdCWNiYwmcok23ej47Qq7cvpuEyBL70Hc0WCs98/oXdzqjkHNiduuUg7ar2Bv6+ZCeTvT5XuL7KUHykZe+D7RE/RBqgmRJ3RRAledCvJHqgHi5D7klm8/JBOaEDfkVEHzS8QzRrSbZpRLQIfI0t2jiHjfTTMwUXvujkuFm6gh3vmW/XVfYuqb9Tvzj8Tnx7fbVcerXQzGvAsvSa0alHV92kk2KWZHALMhUewQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VgYjpO3GWH30dQp4sbqnn3AgduwFrMxEqM+n7Jt30+A=;
- b=jVEqE/skmADw+E+w9KjMDAMuW7fxpPhD5rqxoPl/s3qwL+6w1flZClOvhsu/NjamulDV1gPXr/qUxl1Jz2QlLtII6bR3ZHif9m7vXTMMTnu92gxWt7qWlyAst7Q3pp+R3QwDLfhAGacaShWdsOUvaMwft/xOii/S2qLiu63DSO0=
-Received: from CH2PR07CA0008.namprd07.prod.outlook.com (2603:10b6:610:20::21)
- by IA1PR12MB8191.namprd12.prod.outlook.com (2603:10b6:208:3f3::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.41; Wed, 8 May
- 2024 05:47:27 +0000
-Received: from DS3PEPF000099D7.namprd04.prod.outlook.com
- (2603:10b6:610:20:cafe::a8) by CH2PR07CA0008.outlook.office365.com
- (2603:10b6:610:20::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.20 via Frontend
- Transport; Wed, 8 May 2024 05:47:27 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DS3PEPF000099D7.mail.protection.outlook.com (10.167.17.8) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7544.18 via Frontend Transport; Wed, 8 May 2024 05:47:26 +0000
-Received: from pyuan-Chachani-VN.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Wed, 8 May 2024 00:47:23 -0500
-From: Perry Yuan <perry.yuan@amd.com>
-To: <rafael.j.wysocki@intel.com>, <Mario.Limonciello@amd.com>,
-	<viresh.kumar@linaro.org>, <Ray.Huang@amd.com>, <gautham.shenoy@amd.com>,
-	<Borislav.Petkov@amd.com>
-CC: <Alexander.Deucher@amd.com>, <Xinmei.Huang@amd.com>,
-	<Xiaojian.Du@amd.com>, <Li.Meng@amd.com>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: [PATCH] cpufreq: amd-pstate: fix the highest frequency issue which limit performance
-Date: Wed, 8 May 2024 13:47:03 +0800
-Message-ID: <20240508054703.3728337-1-perry.yuan@amd.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8135E179A8;
+	Wed,  8 May 2024 06:03:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715148192; cv=none; b=BsNOM0O8V2MkYyH+6q/9vlgv2ovvRd4jmJ7zbF3zYk+82JOJVgHWE1t8dG2+2lAvKZIxMIrWS4v82nqb2jiqcg7sBThkik4+3v71S4KVzPwTIiCb7WJwTNTpnJG0TnQp7TQ9UPYAL7Z1tb1OyeXilwgaKNev9cVm7K0nd4VT9n0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715148192; c=relaxed/simple;
+	bh=xb/2OJywJOKPl0Mtt1eqlqutvHNKPEBLt99xDTEiaII=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=eqkvG1TV5qYjsSCVY8+7Nsqot+jx7xtqUh4+SOAEhVD3hqD/HgEWuvQl+vsnos7sLs+/+I2CEZdl0e2KALu/74PkaNXF37Cz2Qp1+SGD/HH1zf4I5VvpyJDi48YvyYKOuX2UXIGsYFDUxDF/jCIiozab5a8sezb0gC/7O6XaOkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P1y/PYff; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715148190; x=1746684190;
+  h=date:from:to:cc:subject:message-id;
+  bh=xb/2OJywJOKPl0Mtt1eqlqutvHNKPEBLt99xDTEiaII=;
+  b=P1y/PYffmRQ1AYkZV+8s/WmpKFYjQkfLOR88SXbt5l/IU7jv5Uqp2m+d
+   YQFDNqWsEaAjsA1QzPJ+zwEX+3ojH5sXiM4t8uF0vWJKKF0gpOMPVo93H
+   lHAxlL2XMZTHJcIkM/n2OpHWwfVyY8H6vlBHysy9Mmy4q0dLjikDJ0rTu
+   q5D7Afck/4r5xpUIct0ZmadjVuE6owVNQB4A2r1sXXVP0h2VymsnjzwtQ
+   PZwoocXA0L9IqzP7AfMLRLrF8j1fNkPPrmqBGBsDfSKPg5T4u0f4vIOfC
+   rlSXCEF4iHVchHnYrMxcw8u/UV4DZtKtQBiN+oGeyo7b/Q4Y8maTldCtA
+   w==;
+X-CSE-ConnectionGUID: o47bIJHfRDKjyXk+j4qFcg==
+X-CSE-MsgGUID: Mf3oVjrkRxSHG/PuxWZR8g==
+X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="11145972"
+X-IronPort-AV: E=Sophos;i="6.08,144,1712646000"; 
+   d="scan'208";a="11145972"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2024 23:03:09 -0700
+X-CSE-ConnectionGUID: Iw7RNTCeShyZY8HsdFeLJw==
+X-CSE-MsgGUID: vtWPO9r1QJi41d73qqIvCg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,144,1712646000"; 
+   d="scan'208";a="33599994"
+Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 07 May 2024 23:03:08 -0700
+Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s4aOP-00033Z-2x;
+	Wed, 08 May 2024 06:03:05 +0000
+Date: Wed, 08 May 2024 14:02:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ b1a788a966458325d86d7fe59e2fc0e190be607d
+Message-ID: <202405081456.FTTdtRCg-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS3PEPF000099D7:EE_|IA1PR12MB8191:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5215b864-01de-43dd-8324-08dc6f2257a1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230031|376005|36860700004|1800799015|82310400017;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Cy+3ZDnvAIpgUqdNOFuUBldXgW4PS6xJzSe7bQbfcNrmDpxsO69vLK+iA3oc?=
- =?us-ascii?Q?nee3fG8AxyQbXaNvqpEwqVSdYvrpntDpT8O9UXPyzcpM3KCk6r9G/f16SudP?=
- =?us-ascii?Q?RFZyjIHyINEey+TZldo6T3qxhar2Ai32oTAHMyyfPzPUouiv/PYFB75iqHxV?=
- =?us-ascii?Q?hUavPO95egjrYy6/plRb27DtKNgw9d2wHrA3sU06KyuehzAhzWRxknE3G8GL?=
- =?us-ascii?Q?UHhZDXJaiXfiq2Unr/SqKVT6KXoa7sBlqVgmZUU32GIWPMsxQMV/0ZVOX/LR?=
- =?us-ascii?Q?Z4l9OtZlFTnx/hxcmDEJ8hBVdrywIC2y5XMeJbuJTSB9OXfXaGtkpuM6shEh?=
- =?us-ascii?Q?/mTFXUoQHlpxyisSi5RYqy1vk+MuK0dIS2BxJFA3VrH5BRNjWQvvTzG9lHPL?=
- =?us-ascii?Q?WFsUzLfw/407JAMjHdbK9+MD5EHhuCS8UA29Yh8+eL0whCGupNHQL0XjYwYj?=
- =?us-ascii?Q?zs4aGgxaYfESzXp/x9lxgAxzBenah2zqGkRhQ6k16IaADnKv1IwBpWcNjGdV?=
- =?us-ascii?Q?O3KIOpxapa+FhVF2XmASYJu8jb4u6SzJtTPtv89ah7Zh6mQBqDqrRgm2XHxp?=
- =?us-ascii?Q?BjaP0+yXFsVd7+V4LgZrJQ4OeW9TXGrcFRKgKQYaaN1f5gAu8BAOEmpx8uJn?=
- =?us-ascii?Q?RMiDmTzvkyYC+WitSNfDjVca9NPDK/9BIy2R4+WOMFT3ss+LIfmcPfR/LTL/?=
- =?us-ascii?Q?NLbKvJxOA0lMLdvkFrkKI3YsagKo/+YxuIZsgWxjpsDEPzPFSKIwpVXiTHAO?=
- =?us-ascii?Q?BuO9WQRn8gKin43aEqCai1+Pctcdj0B+IWe8GZHce4jE3kBpBy4iPlBy6TNM?=
- =?us-ascii?Q?1wXLSYVyfgaNi3myQiZJjINmTnndo0J6v62qXN+FTWz00S7p5QNUg+3apev+?=
- =?us-ascii?Q?KHfDyK3AflugFBU0/Lsk6Bep0+ItNk1D9YxkRMt7VJ4kzThd0AlLuICp70E+?=
- =?us-ascii?Q?IFxEFltrRL9tuKyg+H7TMpQq7xrgnafGx0sHt+N6c18rHVhXwTRS77XCCPS+?=
- =?us-ascii?Q?EyCcN+MH5bUlbujwtRDAelc79AWl+p5RvnmBsZNy987RQBn/h9WMkdoL8/IT?=
- =?us-ascii?Q?mSf+RBp1a4YFLWWR3KLhfT60IPAl42cLMgdKfshboEwzDLTPAH80v/KL18NW?=
- =?us-ascii?Q?VCH8XIPBqlNYJB3ijN7jdNAPehf/GTQ1OmG5erCi+z/rwMYdoYZGU9xtQ7vB?=
- =?us-ascii?Q?LeVbwZOfqnR/UyRes5YeSRR2Ev6FpU0maSS9w8WdFaT19JhRsaUmpkFU3NxZ?=
- =?us-ascii?Q?cUEnahibU3eTSMIvLKsaeeTnBw7xwaVW+F/OQX4a6wCs7JEMHkhKpiomo0BC?=
- =?us-ascii?Q?4mwXcoEZ/u1VsApqNMTLUbER?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(376005)(36860700004)(1800799015)(82310400017);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2024 05:47:26.8760
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5215b864-01de-43dd-8324-08dc6f2257a1
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DS3PEPF000099D7.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8191
 
-To address the performance drop issue, an optimization has been
-implemented. The incorrect highest performance value previously set by the
-low-level power firmware for AMD CPUs with Family ID 0x19 and Model ID
-ranging from 0x70 to 0x7F series has been identified as the cause.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: b1a788a966458325d86d7fe59e2fc0e190be607d  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
 
-To resolve this, a check has been implemented to accurately determine the
-CPU family and model ID. The correct highest performance value is now set
-and the performance drop caused by the incorrect highest performance value
-are eliminated.
+elapsed time: 1000m
 
-Before the fix, the highest frequency was set to 4200MHz, now it is set
-to 4971MHz which is correct.
+configs tested: 179
+configs skipped: 3
 
-CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE    MAXMHZ   MINMHZ       MHZ
-  0    0      0    0 0:0:0:0          yes 4971.0000 400.0000  400.0000
-  1    0      0    0 0:0:0:0          yes 4971.0000 400.0000  400.0000
-  2    0      0    1 1:1:1:0          yes 4971.0000 400.0000 4865.8140
-  3    0      0    1 1:1:1:0          yes 4971.0000 400.0000  400.0000
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-v1->v2:
- * add test by flag from Gaha Bana
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20240508   gcc  
+arc                   randconfig-002-20240508   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   clang
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm                       imx_v6_v7_defconfig   clang
+arm                   randconfig-001-20240508   gcc  
+arm                   randconfig-002-20240508   clang
+arm                   randconfig-003-20240508   clang
+arm                   randconfig-004-20240508   clang
+arm                         s3c6400_defconfig   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240508   gcc  
+arm64                 randconfig-002-20240508   clang
+arm64                 randconfig-003-20240508   gcc  
+arm64                 randconfig-004-20240508   clang
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240508   gcc  
+csky                  randconfig-002-20240508   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20240508   clang
+hexagon               randconfig-002-20240508   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20240508   clang
+i386         buildonly-randconfig-002-20240508   clang
+i386         buildonly-randconfig-003-20240508   gcc  
+i386         buildonly-randconfig-004-20240508   gcc  
+i386         buildonly-randconfig-005-20240508   clang
+i386         buildonly-randconfig-006-20240508   gcc  
+i386                                defconfig   clang
+i386                  randconfig-001-20240508   gcc  
+i386                  randconfig-002-20240508   clang
+i386                  randconfig-003-20240508   clang
+i386                  randconfig-004-20240508   gcc  
+i386                  randconfig-005-20240508   clang
+i386                  randconfig-006-20240508   gcc  
+i386                  randconfig-011-20240508   gcc  
+i386                  randconfig-012-20240508   gcc  
+i386                  randconfig-013-20240508   clang
+i386                  randconfig-014-20240508   clang
+i386                  randconfig-015-20240508   clang
+i386                  randconfig-016-20240508   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20240508   gcc  
+loongarch             randconfig-002-20240508   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                     decstation_defconfig   gcc  
+mips                           ip27_defconfig   gcc  
+mips                      loongson3_defconfig   gcc  
+mips                          rb532_defconfig   clang
+mips                   sb1250_swarm_defconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240508   gcc  
+nios2                 randconfig-002-20240508   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20240508   gcc  
+parisc                randconfig-002-20240508   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                        cell_defconfig   gcc  
+powerpc                      ppc40x_defconfig   clang
+powerpc                      ppc44x_defconfig   clang
+powerpc               randconfig-001-20240508   clang
+powerpc               randconfig-002-20240508   gcc  
+powerpc               randconfig-003-20240508   clang
+powerpc                     taishan_defconfig   clang
+powerpc64             randconfig-001-20240508   gcc  
+powerpc64             randconfig-002-20240508   gcc  
+powerpc64             randconfig-003-20240508   gcc  
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+riscv                 randconfig-001-20240508   gcc  
+riscv                 randconfig-002-20240508   gcc  
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+s390                  randconfig-001-20240508   clang
+s390                  randconfig-002-20240508   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                        edosk7760_defconfig   gcc  
+sh                    randconfig-001-20240508   gcc  
+sh                    randconfig-002-20240508   gcc  
+sh                           se7619_defconfig   gcc  
+sparc                            alldefconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                       sparc32_defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20240508   gcc  
+sparc64               randconfig-002-20240508   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20240508   gcc  
+um                    randconfig-002-20240508   clang
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-001-20240508   clang
+x86_64       buildonly-randconfig-002-20240508   clang
+x86_64       buildonly-randconfig-003-20240508   clang
+x86_64       buildonly-randconfig-004-20240508   clang
+x86_64       buildonly-randconfig-005-20240508   gcc  
+x86_64       buildonly-randconfig-006-20240508   clang
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20240508   gcc  
+x86_64                randconfig-002-20240508   clang
+x86_64                randconfig-003-20240508   clang
+x86_64                randconfig-004-20240508   gcc  
+x86_64                randconfig-005-20240508   gcc  
+x86_64                randconfig-006-20240508   gcc  
+x86_64                randconfig-011-20240508   clang
+x86_64                randconfig-012-20240508   clang
+x86_64                randconfig-013-20240508   gcc  
+x86_64                randconfig-014-20240508   gcc  
+x86_64                randconfig-015-20240508   clang
+x86_64                randconfig-016-20240508   gcc  
+x86_64                randconfig-071-20240508   gcc  
+x86_64                randconfig-072-20240508   gcc  
+x86_64                randconfig-073-20240508   clang
+x86_64                randconfig-074-20240508   gcc  
+x86_64                randconfig-075-20240508   gcc  
+x86_64                randconfig-076-20240508   clang
+x86_64                          rhel-8.3-rust   clang
+xtensa                            allnoconfig   gcc  
+xtensa                generic_kc705_defconfig   gcc  
+xtensa                randconfig-001-20240508   gcc  
+xtensa                randconfig-002-20240508   gcc  
 
-Fixes: f3a052391822 ("cpufreq: amd-pstate: Enable amd-pstate preferred core support")
-Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218759
-Signed-off-by: Perry Yuan <perry.yuan@amd.com>
-Co-developed-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Tested-by: Gaha Bana <gahabana@gmail.com>
----
- drivers/cpufreq/amd-pstate.c | 22 +++++++++++++++++++---
- 1 file changed, 19 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 2db095867d03..6a342b0c0140 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -50,7 +50,8 @@
- 
- #define AMD_PSTATE_TRANSITION_LATENCY	20000
- #define AMD_PSTATE_TRANSITION_DELAY	1000
--#define AMD_PSTATE_PREFCORE_THRESHOLD	166
-+#define CPPC_HIGHEST_PERF_PERFORMANCE	196
-+#define CPPC_HIGHEST_PERF_DEFAULT	166
- 
- /*
-  * TODO: We need more time to fine tune processors with shared memory solution
-@@ -326,6 +327,21 @@ static inline int amd_pstate_enable(bool enable)
- 	return static_call(amd_pstate_enable)(enable);
- }
- 
-+static u32 amd_pstate_highest_perf_set(struct amd_cpudata *cpudata)
-+{
-+	struct cpuinfo_x86 *c = &cpu_data(0);
-+
-+	/*
-+	 * For AMD CPUs with Family ID 19H and Model ID range 0x70 to 0x7f,
-+	 * the highest performance level is set to 196.
-+	 * https://bugzilla.kernel.org/show_bug.cgi?id=218759
-+	 */
-+	if (c->x86 == 0x19 && (c->x86_model >= 0x70 && c->x86_model <= 0x7f))
-+		return CPPC_HIGHEST_PERF_PERFORMANCE;
-+
-+	return CPPC_HIGHEST_PERF_DEFAULT;
-+}
-+
- static int pstate_init_perf(struct amd_cpudata *cpudata)
- {
- 	u64 cap1;
-@@ -342,7 +358,7 @@ static int pstate_init_perf(struct amd_cpudata *cpudata)
- 	 * the default max perf.
- 	 */
- 	if (cpudata->hw_prefcore)
--		highest_perf = AMD_PSTATE_PREFCORE_THRESHOLD;
-+		highest_perf = amd_pstate_highest_perf_set(cpudata);
- 	else
- 		highest_perf = AMD_CPPC_HIGHEST_PERF(cap1);
- 
-@@ -366,7 +382,7 @@ static int cppc_init_perf(struct amd_cpudata *cpudata)
- 		return ret;
- 
- 	if (cpudata->hw_prefcore)
--		highest_perf = AMD_PSTATE_PREFCORE_THRESHOLD;
-+		highest_perf = amd_pstate_highest_perf_set(cpudata);
- 	else
- 		highest_perf = cppc_perf.highest_perf;
- 
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
