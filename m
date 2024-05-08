@@ -1,212 +1,180 @@
-Return-Path: <linux-pm+bounces-7612-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7613-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CE598BEE8B
-	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2024 23:04:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D1778BF436
+	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 03:45:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C43C9B20BCE
-	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2024 21:03:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E3B0CB21914
+	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 01:45:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 587A071B4B;
-	Tue,  7 May 2024 21:03:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54FB98F5B;
+	Wed,  8 May 2024 01:45:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EXyyqppP"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="gM+fwaD4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FA9218733E;
-	Tue,  7 May 2024 21:03:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC60D1A2C2C;
+	Wed,  8 May 2024 01:45:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715115836; cv=none; b=S2Xom2y/XN9jocpoy2DzUKnV5fENPC7AHA9oTEUKYdV6WRrTsFYgzpa3mzmvsTthh4UR0WgA/xaoJ5Ncew5KIhR1CmbwoAz8rudw4a0YwzJ5jZc8jd0uFIfrgh2owfHiS4lKM+YbaVxrBRy1t5CNj2mn7+yMHGqxUu6tU+Qel2o=
+	t=1715132752; cv=none; b=OR1OWbcHQ04hRVz+kL9ubD7hgYkYdvWNSoBJOWxcZnPjTKwBPyPpKYnjCDMtabYQWTuMakFtaLnCAOOXboMJrPVq4KvdBQR/s0HISkvpwrCHne96QV06hVG7o/ze6g4g1JgpFRPsSHElN4NfnyuaVZp0p4NaTlex1M/qPA9j0Qo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715115836; c=relaxed/simple;
-	bh=uZ71m/kwDwRcripH7bKNsl6xLu8fmn/hVKonljdgE9U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mAH8hdfZ6VhwvoJzQ+YxSlqkKXwbjq9QYGBQ00JwYG/1btvxZ5XQPywmt9L8csIaHq59Dkhm7FbydyvEI8KiH7ClOoOeT0BXAYfVKoDu32xelIbOAgj446OU8+k5stgN4wvj2E35/W4wvVGDIps0B59U5pMRJxoMzrnKAyJ1bT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EXyyqppP; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715115834; x=1746651834;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uZ71m/kwDwRcripH7bKNsl6xLu8fmn/hVKonljdgE9U=;
-  b=EXyyqppPHYi1Qnooq1wGzDj5YEfxHuTgAQXBOFwY4UKzP1ja84weDhGE
-   hdljMbASp6tpMLRFwKDM0LUr2jhqX+DFopORBPdfLkDXq1mW8+KbakJxZ
-   ynttMFnS082hXMHU0VUuEl30WWsVTTQIOM4cVqy5/FC7MbQd4WbMF1UAo
-   ucdZ7+ESoXu7R71dJh23oduPkPmf94lhurzV+YDufHsJ3snzykVHZtPvK
-   1d586bO2dN6NzjTkFWsYmZTaMhZFn3CS1AFtxliuoL5qShThzKTT0cObZ
-   j7iBqjV3se0iftIRkOUbL2d3vlXH9YqfT0MOeNngHRpW3dHtQCHmfiZTx
-   g==;
-X-CSE-ConnectionGUID: YeIt3wINSe+aiw7IYxgnxA==
-X-CSE-MsgGUID: 39ifkPcMQt2HtrqVaSkq3Q==
-X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="21501920"
-X-IronPort-AV: E=Sophos;i="6.08,143,1712646000"; 
-   d="scan'208";a="21501920"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2024 14:03:53 -0700
-X-CSE-ConnectionGUID: 14eykIzKTU+9AHBltx9qaA==
-X-CSE-MsgGUID: eA/kVNQTRA2X46TcXvJQ3Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,143,1712646000"; 
-   d="scan'208";a="33465546"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 07 May 2024 14:03:49 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s4RyV-0002dE-0S;
-	Tue, 07 May 2024 21:03:47 +0000
-Date: Wed, 8 May 2024 05:02:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Perry Yuan <perry.yuan@amd.com>, rafael.j.wysocki@intel.com,
-	Mario.Limonciello@amd.com, viresh.kumar@linaro.org,
-	Ray.Huang@amd.com, gautham.shenoy@amd.com, Borislav.Petkov@amd.com
-Cc: oe-kbuild-all@lists.linux.dev, Alexander.Deucher@amd.com,
-	Xinmei.Huang@amd.com, Xiaojian.Du@amd.com, Li.Meng@amd.com,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/11] cpufreq: amd-pstate: optimiza the initial
- frequency values verification
-Message-ID: <202405080431.BPU6Yg9s-lkp@intel.com>
-References: <0049ad44052b051cf57d1059bf71b7ce227a5f21.1715065568.git.perry.yuan@amd.com>
+	s=arc-20240116; t=1715132752; c=relaxed/simple;
+	bh=4xlj5SmF8Y4YtN11odRrshnX4/XsOJ/kKNfAOIt7Q18=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aBBLzhWOhmIGeZGcL0+6Vp4uh3qyGRSM0YZWUPN5Jqe+mDlZFGv9E4WrZMa4EfOZHEXED37gHN2xOB0mlwmfDRccDCQv/gBE+akvBUCVM62IS6S0hVIJXbHOmfmJP+2hK0a4aT7Uz99EvRRB/1JuA4Bn1i1dynm4VG+44HxY8h0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=gM+fwaD4; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4480ifnH026818;
+	Wed, 8 May 2024 01:45:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	date:from:to:cc:subject:message-id:references:mime-version
+	:content-type:in-reply-to; s=qcppdkim1; bh=gG/Mg01aPwawcgX1ZVQCj
+	4coaePzrbjJoyz1wJasTvE=; b=gM+fwaD4tM0RjtfcYP1LWQ1VSIkhBTZNNANjy
+	Sptr9LGGs/PtP8gR2bUulFwbKfVWwD3YOYgBJdBY8+oyIDFUUgN43qdi0M2MHSHv
+	pByZCJJ/wnFTKK3Vb9eYePJjfw3luxta1AhHMALayDeigr0wRktauvnCpKKX/DVV
+	9fDDmhZZxQvbZbEk4MCLkUwIuxG4Tc0q8ZeC9mxWM82/yLpWcwXq/KL0QugtcL7U
+	6Ucs81QnVhWzBgI7HdbCsdvHrjd1B0xiL2PdQ+ePlU6bTJFliV5SSzgTianFLfVD
+	EE+eXS6A01iICRXHu0BInZm/KnWenljpuwr7bKOYosSJJeIXA==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xysg9gqfa-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 08 May 2024 01:45:32 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4481jVtg012762
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 8 May 2024 01:45:31 GMT
+Received: from hu-mdtipton-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Tue, 7 May 2024 18:45:31 -0700
+Date: Tue, 7 May 2024 18:45:30 -0700
+From: Mike Tipton <quic_mdtipton@quicinc.com>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+CC: Bjorn Andersson <andersson@kernel.org>, Georgi Djakov <djakov@kernel.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Marijn Suijten
+	<marijn.suijten@somainline.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Stephan Gerhold
+	<stephan@gerhold.net>,
+        <quic_okukatla@quicinc.com>
+Subject: Re: [PATCH 4/4] interconnect: qcom: icc-rpm: Remodel how QoS
+ settings are stored
+Message-ID: <20240508014530.GB25316@hu-mdtipton-lv.qualcomm.com>
+References: <20240326-topic-rpm_icc_qos_cleanup-v1-0-357e736792be@linaro.org>
+ <20240326-topic-rpm_icc_qos_cleanup-v1-4-357e736792be@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <0049ad44052b051cf57d1059bf71b7ce227a5f21.1715065568.git.perry.yuan@amd.com>
+In-Reply-To: <20240326-topic-rpm_icc_qos_cleanup-v1-4-357e736792be@linaro.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: OLkM26eJWXmNATBEUBk8KNyTob3b5lWa
+X-Proofpoint-ORIG-GUID: OLkM26eJWXmNATBEUBk8KNyTob3b5lWa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-05-07_16,2024-05-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
+ bulkscore=0 mlxscore=0 suspectscore=0 impostorscore=0 lowpriorityscore=0
+ adultscore=0 spamscore=0 priorityscore=1501 clxscore=1011 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2405010000
+ definitions=main-2405080011
 
-Hi Perry,
+Hi Konrad,
 
-kernel test robot noticed the following build warnings:
+On Tue, Mar 26, 2024 at 08:42:35PM +0100, Konrad Dybcio wrote:
+> Currently, the QoS settings are stored in the node data, even though
+> they're a property of the bus/provider instead. Moreover, they are only
+> needed during the probe step, so they can be easily moved into struct
+> qcom_icc_desc.
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on rafael-pm/bleeding-edge next-20240507]
-[cannot apply to tip/x86/core linus/master v6.9-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The QoS settings *are* fundamentally a property of the node. The nodes
+are 1:1 with the NOC ports. And the QoS settings tune the priority of
+the data coming out of those ports. So, logically speaking, the QoS data
+does belong in the node structs along with the rest of the data for that
+node and port.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Perry-Yuan/cpufreq-amd-pstate-optimiza-the-initial-frequency-values-verification/20240507-151930
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/0049ad44052b051cf57d1059bf71b7ce227a5f21.1715065568.git.perry.yuan%40amd.com
-patch subject: [PATCH 01/11] cpufreq: amd-pstate: optimiza the initial frequency values verification
-config: x86_64-randconfig-102-20240507 (https://download.01.org/0day-ci/archive/20240508/202405080431.BPU6Yg9s-lkp@intel.com/config)
-compiler: gcc-13 (Ubuntu 13.2.0-4ubuntu3) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240508/202405080431.BPU6Yg9s-lkp@intel.com/reproduce)
+Only a subset of NOC ports support configurable QoS, but for those ports
+that do it's a property of the port itself. Those settings impact just
+that specific port and nothing else.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405080431.BPU6Yg9s-lkp@intel.com/
+The current method of directly embedding the qcom_icc_qos_data struct
+into qcom_icc_node isn't optimal, since that data is irrelevant for
+ports that don't support it. So, the size could be optimized by
+converting qcom_icc_node::qos into a pointer instead. But I don't think
+we should separate the QoS settings from node struct entirely. It makes
+it very difficult to understand which QoS settings are impacting which
+port.
 
-All warnings (new ones prefixed by >>):
+For example...
 
-   drivers/cpufreq/amd-pstate.c: In function 'amd_pstate_cpu_init':
->> drivers/cpufreq/amd-pstate.c:899:33: warning: variable 'nominal_freq' set but not used [-Wunused-but-set-variable]
-     899 |         int min_freq, max_freq, nominal_freq, ret;
-         |                                 ^~~~~~~~~~~~
-   drivers/cpufreq/amd-pstate.c: In function 'amd_pstate_epp_cpu_init':
-   drivers/cpufreq/amd-pstate.c:1350:33: warning: variable 'nominal_freq' set but not used [-Wunused-but-set-variable]
-    1350 |         int min_freq, max_freq, nominal_freq, ret;
-         |                                 ^~~~~~~~~~~~
+>  
+> diff --git a/drivers/interconnect/qcom/msm8996.c b/drivers/interconnect/qcom/msm8996.c
+> index 788131400cd1..96c8ea8edd7a 100644
+> --- a/drivers/interconnect/qcom/msm8996.c
+> +++ b/drivers/interconnect/qcom/msm8996.c
+> @@ -43,11 +43,7 @@ static struct qcom_icc_node mas_pcie_0 = {
+>  	.buswidth = 8,
+>  	.mas_rpm_id = 65,
+>  	.slv_rpm_id = -1,
+> -	.qos.ap_owned = true,
+> -	.qos.qos_mode = NOC_QOS_MODE_FIXED,
+> -	.qos.areq_prio = 1,
+> -	.qos.prio_level = 1,
+> -	.qos.qos_port = 0,
+> +	.ap_owned = true,
+>  	.num_links = ARRAY_SIZE(mas_a0noc_common_links),
+>  	.links = mas_a0noc_common_links
+>  };
 
+[...]
 
-vim +/nominal_freq +899 drivers/cpufreq/amd-pstate.c
+>  
+> +static const struct qcom_icc_qos_data a0noc_qos_data[] = {
+> +	{
+> +		.qos_port = 0,
+> +		.qos_mode = NOC_QOS_MODE_FIXED,
+> +		.areq_prio = 1,
+> +		.prio_level = 1,
+> +		.urg_fwd_en = false,
+> +		.limit_commands = false,
+> +	}, {
 
-5547c0ebfc2efd Perry Yuan        2024-04-25  896  
-ec437d71db77a1 Huang Rui         2021-12-24  897  static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
-ec437d71db77a1 Huang Rui         2021-12-24  898  {
-5c3fd1edaa8b4c Perry Yuan        2024-04-30 @899  	int min_freq, max_freq, nominal_freq, ret;
-ec437d71db77a1 Huang Rui         2021-12-24  900  	struct device *dev;
-ec437d71db77a1 Huang Rui         2021-12-24  901  	struct amd_cpudata *cpudata;
-ec437d71db77a1 Huang Rui         2021-12-24  902  
-919f4557696939 Wyes Karny        2022-11-17  903  	/*
-919f4557696939 Wyes Karny        2022-11-17  904  	 * Resetting PERF_CTL_MSR will put the CPU in P0 frequency,
-919f4557696939 Wyes Karny        2022-11-17  905  	 * which is ideal for initialization process.
-919f4557696939 Wyes Karny        2022-11-17  906  	 */
-919f4557696939 Wyes Karny        2022-11-17  907  	amd_perf_ctl_reset(policy->cpu);
-ec437d71db77a1 Huang Rui         2021-12-24  908  	dev = get_cpu_device(policy->cpu);
-ec437d71db77a1 Huang Rui         2021-12-24  909  	if (!dev)
-ec437d71db77a1 Huang Rui         2021-12-24  910  		return -ENODEV;
-ec437d71db77a1 Huang Rui         2021-12-24  911  
-ec437d71db77a1 Huang Rui         2021-12-24  912  	cpudata = kzalloc(sizeof(*cpudata), GFP_KERNEL);
-ec437d71db77a1 Huang Rui         2021-12-24  913  	if (!cpudata)
-ec437d71db77a1 Huang Rui         2021-12-24  914  		return -ENOMEM;
-ec437d71db77a1 Huang Rui         2021-12-24  915  
-ec437d71db77a1 Huang Rui         2021-12-24  916  	cpudata->cpu = policy->cpu;
-ec437d71db77a1 Huang Rui         2021-12-24  917  
-f3a052391822b7 Meng Li           2024-01-19  918  	amd_pstate_init_prefcore(cpudata);
-f3a052391822b7 Meng Li           2024-01-19  919  
-ec437d71db77a1 Huang Rui         2021-12-24  920  	ret = amd_pstate_init_perf(cpudata);
-ec437d71db77a1 Huang Rui         2021-12-24  921  	if (ret)
-41271016dfa4a0 Huang Rui         2021-12-24  922  		goto free_cpudata1;
-ec437d71db77a1 Huang Rui         2021-12-24  923  
-5547c0ebfc2efd Perry Yuan        2024-04-25  924  	ret = amd_pstate_init_freq(cpudata);
-5547c0ebfc2efd Perry Yuan        2024-04-25  925  	if (ret)
-5547c0ebfc2efd Perry Yuan        2024-04-25  926  		goto free_cpudata1;
-5547c0ebfc2efd Perry Yuan        2024-04-25  927  
-3cbbe8871a2fb8 Gautham R. Shenoy 2024-04-25  928  	min_freq = READ_ONCE(cpudata->min_freq);
-3cbbe8871a2fb8 Gautham R. Shenoy 2024-04-25  929  	max_freq = READ_ONCE(cpudata->max_freq);
-3cbbe8871a2fb8 Gautham R. Shenoy 2024-04-25  930  	nominal_freq = READ_ONCE(cpudata->nominal_freq);
-ec437d71db77a1 Huang Rui         2021-12-24  931  
-069a2bb8c48c43 Perry Yuan        2024-04-25  932  	policy->cpuinfo.transition_latency = amd_pstate_get_transition_latency(policy->cpu);
-069a2bb8c48c43 Perry Yuan        2024-04-25  933  	policy->transition_delay_us = amd_pstate_get_transition_delay_us(policy->cpu);
-ec437d71db77a1 Huang Rui         2021-12-24  934  
-ec437d71db77a1 Huang Rui         2021-12-24  935  	policy->min = min_freq;
-ec437d71db77a1 Huang Rui         2021-12-24  936  	policy->max = max_freq;
-ec437d71db77a1 Huang Rui         2021-12-24  937  
-ec437d71db77a1 Huang Rui         2021-12-24  938  	policy->cpuinfo.min_freq = min_freq;
-ec437d71db77a1 Huang Rui         2021-12-24  939  	policy->cpuinfo.max_freq = max_freq;
-ec437d71db77a1 Huang Rui         2021-12-24  940  
-ec437d71db77a1 Huang Rui         2021-12-24  941  	/* It will be updated by governor */
-ec437d71db77a1 Huang Rui         2021-12-24  942  	policy->cur = policy->cpuinfo.min_freq;
-ec437d71db77a1 Huang Rui         2021-12-24  943  
-e059c184da47e9 Huang Rui         2021-12-24  944  	if (boot_cpu_has(X86_FEATURE_CPPC))
-1d215f0319c206 Huang Rui         2021-12-24  945  		policy->fast_switch_possible = true;
-1d215f0319c206 Huang Rui         2021-12-24  946  
-41271016dfa4a0 Huang Rui         2021-12-24  947  	ret = freq_qos_add_request(&policy->constraints, &cpudata->req[0],
-41271016dfa4a0 Huang Rui         2021-12-24  948  				   FREQ_QOS_MIN, policy->cpuinfo.min_freq);
-41271016dfa4a0 Huang Rui         2021-12-24  949  	if (ret < 0) {
-41271016dfa4a0 Huang Rui         2021-12-24  950  		dev_err(dev, "Failed to add min-freq constraint (%d)\n", ret);
-41271016dfa4a0 Huang Rui         2021-12-24  951  		goto free_cpudata1;
-41271016dfa4a0 Huang Rui         2021-12-24  952  	}
-41271016dfa4a0 Huang Rui         2021-12-24  953  
-41271016dfa4a0 Huang Rui         2021-12-24  954  	ret = freq_qos_add_request(&policy->constraints, &cpudata->req[1],
-41271016dfa4a0 Huang Rui         2021-12-24  955  				   FREQ_QOS_MAX, policy->cpuinfo.max_freq);
-41271016dfa4a0 Huang Rui         2021-12-24  956  	if (ret < 0) {
-41271016dfa4a0 Huang Rui         2021-12-24  957  		dev_err(dev, "Failed to add max-freq constraint (%d)\n", ret);
-41271016dfa4a0 Huang Rui         2021-12-24  958  		goto free_cpudata2;
-41271016dfa4a0 Huang Rui         2021-12-24  959  	}
-41271016dfa4a0 Huang Rui         2021-12-24  960  
-febab20caebac9 Wyes Karny        2023-11-17  961  	cpudata->max_limit_freq = max_freq;
-febab20caebac9 Wyes Karny        2023-11-17  962  	cpudata->min_limit_freq = min_freq;
-ec437d71db77a1 Huang Rui         2021-12-24  963  
-ec437d71db77a1 Huang Rui         2021-12-24  964  	policy->driver_data = cpudata;
-ec437d71db77a1 Huang Rui         2021-12-24  965  
-41271016dfa4a0 Huang Rui         2021-12-24  966  	amd_pstate_boost_init(cpudata);
-abd61c08ef349a Perry Yuan        2023-01-31  967  	if (!current_pstate_driver->adjust_perf)
-abd61c08ef349a Perry Yuan        2023-01-31  968  		current_pstate_driver->adjust_perf = amd_pstate_adjust_perf;
-41271016dfa4a0 Huang Rui         2021-12-24  969  
-ec437d71db77a1 Huang Rui         2021-12-24  970  	return 0;
-ec437d71db77a1 Huang Rui         2021-12-24  971  
-41271016dfa4a0 Huang Rui         2021-12-24  972  free_cpudata2:
-41271016dfa4a0 Huang Rui         2021-12-24  973  	freq_qos_remove_request(&cpudata->req[0]);
-41271016dfa4a0 Huang Rui         2021-12-24  974  free_cpudata1:
-ec437d71db77a1 Huang Rui         2021-12-24  975  	kfree(cpudata);
-ec437d71db77a1 Huang Rui         2021-12-24  976  	return ret;
-ec437d71db77a1 Huang Rui         2021-12-24  977  }
-ec437d71db77a1 Huang Rui         2021-12-24  978  
+How can I tell that these a0noc_qos_data[0] settings are for the
+mas_pcie_0 port? It's not possible from the code anymore. *We* could
+figure it out internally by looking at the NOC SWI to determine the
+qos_port index. But this should be obvious from the code itself.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> +		.qos_port = 1,
+> +		.qos_mode = NOC_QOS_MODE_FIXED,
+> +		.areq_prio = 1,
+> +		.prio_level = 1,
+> +		.urg_fwd_en = false,
+> +		.limit_commands = false,
+> +	}, {
+> +		.qos_port = 2,
+> +		.qos_mode = NOC_QOS_MODE_FIXED,
+> +		.areq_prio = 1,
+> +		.prio_level = 1,
+> +		.urg_fwd_en = false,
+> +		.limit_commands = false,
+> +	},
+> +};
+> +
 
