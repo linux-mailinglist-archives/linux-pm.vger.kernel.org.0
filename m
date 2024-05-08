@@ -1,119 +1,147 @@
-Return-Path: <linux-pm+bounces-7668-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7669-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C50668C037F
-	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 19:44:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB6368C0385
+	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 19:45:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 02A351C20400
-	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 17:44:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2BA1E1F2128D
+	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 17:45:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29F5512A142;
-	Wed,  8 May 2024 17:43:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TjSS6GNw"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A28F127E34;
+	Wed,  8 May 2024 17:45:29 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBD62127B5D;
-	Wed,  8 May 2024 17:43:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B493F79E1
+	for <linux-pm@vger.kernel.org>; Wed,  8 May 2024 17:45:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715190234; cv=none; b=O7WbpG7Nj3NRkZOks5BlYS1aim77lSdukNb+otx5IONPa+8yEKJCmp32wCu8UQZy5bxiB8eh1DrfmCdZ4EUvhKOzVDLD4uG/7+rJpbNcN5t5X+UEGCVCJf9+/2j4nfuXRmW3lfnsjJCjLCw5ZpgeKORTRvS6eSBCNQy/2sjyqd0=
+	t=1715190329; cv=none; b=RTW7Dx4wnzQgwEriVKHrwD8V7ELQyp0ET0aeU5cki5S0/yxm1hfr30He0t36sSEk18TRrsCKkWjouhm/baL0Lb4MsNcj6kyM+QU63oLvmPvx5l3TBKID256l1s4C3xFEKYIOao07dLG46YkNh4mAQFqzzIFm3MBA/f02//kuoPs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715190234; c=relaxed/simple;
-	bh=GlmaXEpUPEAQv38l0+uXNYHgdFDEfZFJKr1OuTg/q14=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=md2S6h+X430ZdB74RNi3cAWP8BeK9Ux2+3U8dvq49rnqDeI+cbbDDKB5UO0X2BRUtpQq+D9Zq0RDA0+QIlJRdWsUthb4V2eOj2KYC3O6yX/xAoeNus2Fe6ijpVhWieajkYSuoy5BABZvYlj4MXHiQbQJeXy6Eh7u3jQCFny8Gsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TjSS6GNw; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6f45f1179c3so46814b3a.3;
-        Wed, 08 May 2024 10:43:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715190232; x=1715795032; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M2iBgujy0OnahX2J/HXjxE27YjCfQEv+29oMFARQDLY=;
-        b=TjSS6GNwfjGPWkQULp0DM1GGyowNnzxy0/1tzOLbqacZH1WLJVSNzkebMTWwi4ky7B
-         zU6pfDb2dr5x086gDq45SiEkKwWgJxNxZ3QD986quani5ywmJxeZMpsVXsSZvnzwtr66
-         ZsQyfyftQ3bIrJJDjo0t95NGQmjybg5o4Z2iYm6+GQOMDXV+iCnJHlsmeS4t2ZIZZnE0
-         KQVAbgOxykpnp/TfXiewpUgmV6Q+R9LDsqRr6QCuqFHsbZic+tZW7KCkatiMcbk4SLVO
-         rv0+wQESfpQb6HMbHo2JZgq4Obj0gdODADI4fQ1aqoU+vog89deKm7cAXa6y0hukk7Qk
-         sO1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715190232; x=1715795032;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=M2iBgujy0OnahX2J/HXjxE27YjCfQEv+29oMFARQDLY=;
-        b=uCCWa15RzP+sksSyfDN9yU6AeXztPO4qQbwkLXj68vGBp72Bi2xz7v6C6A/bkL6kde
-         eKnwiuGXgfyFZ7NaSLP/AnmaZQ2oLDc7cV13LzCUYUe1ODZ0yVP97XXaev977d82lyX9
-         5beFuNL+GJqvx+bzulnXE0CE/MaGa7JwqlFISboN9dt7J/JOcUVR4PVHo7jb7OgAIWa3
-         X2eqNkCYR+fljBKK4Wm7GX+oN/AHZvaEztmOE59uodqnJQNxVBGzQUyCV+avwGXll7N1
-         sQxppTl1SOaJVUsBlifWjXZ0GeWOc+o7CBtk1/TC7DJFkS2vrCFu28FGMpRRYD2N/qN4
-         SzEg==
-X-Forwarded-Encrypted: i=1; AJvYcCUhW/VZL07OJFLQ2q0xAKBaBepHlz+w+YKH9PKL1ABls8mIcHXRNVsLGy5KM8c3LpY6kSq60Mnsrggcwvhp2iZ/YTzn2AWE58Q79e9yqEPNgRimkBZi63njDuqpS3zky64oABMLG9iDw8z6NgxkuGn8aoISDK0yj5nKeswtWnY=
-X-Gm-Message-State: AOJu0YwspZUptIxs0i6N6pafbGP4bjjYmT74TSx/tVo1lFRJcvrwBLbO
-	hCduTsUVOGijgZEEhNm6ZzAFTSiiXDzC9ie16jital62HWm9HbdeawAY/IdhPFoUfKB7s92s4gB
-	ZEktS0yAxIU27JGKZ//lu29V7dSk=
-X-Google-Smtp-Source: AGHT+IFNCDDSAiSeJeoQ+30FLHwPJeK88LACkFxqTrxmJnoIsjAJHHUfvL9LP70Z6C6Vj3Ca1UikUQhh+pxiYdXUWaI=
-X-Received: by 2002:a05:6a21:2d85:b0:1ae:13f0:9bfa with SMTP id
- adf61e73a8af0-1afc8db7e93mr3770555637.44.1715190231927; Wed, 08 May 2024
- 10:43:51 -0700 (PDT)
+	s=arc-20240116; t=1715190329; c=relaxed/simple;
+	bh=xixW1XrE6XUNfkUYsLnbxkjo7KyBQ68cdDDJ1LsQW7E=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Cw+6cRYD8hMJJ4tApgzeyOmTqqaFhkvFs1OCKMQOdmvFU8dzkkufyc1IR/2VmbMDhauWgDfpsifbPUe04ar6sYbG5xw3fCMxhnhRQYza2YbxVJM3NxMHECoft7hqpV5/9tERzqz+rgCQxDDwIXxOmFQZ/L0eZLDtLya0FBobTvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <l.stach@pengutronix.de>)
+	id 1s4lM3-0007bJ-Bb; Wed, 08 May 2024 19:45:23 +0200
+Message-ID: <8636fb8d9809aaafbd8274ec0dbfc250e1113c73.camel@pengutronix.de>
+Subject: Re: iMX8M Mini suspend/resume hanging on imx8m_blk_ctrl_power_on()
+From: Lucas Stach <l.stach@pengutronix.de>
+To: Adam Ford <aford173@gmail.com>, vitor <ivitro@gmail.com>
+Cc: linux-pm@vger.kernel.org, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	vitor.soares@toradex.com, ulf.hansson@linaro.org, shawnguo@kernel.org, 
+	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, 
+	rafael@kernel.org, geert+renesas@glider.be, peng.fan@nxp.com, 
+	linus.walleij@linaro.org, u.kleine-koenig@pengutronix.de, marex@denx.de
+Date: Wed, 08 May 2024 19:45:22 +0200
+In-Reply-To: <CAHCN7xJF1=BNgh=wpsyd6WP=haOq2UdCYEt2AaL7rGfhDUh6CQ@mail.gmail.com>
+References: <fccbb040330a706a4f7b34875db1d896a0bf81c8.camel@gmail.com>
+	 <4e781d80fbec0db13555456ab8af6bdae6dee168.camel@gmail.com>
+	 <CAHCN7xJF1=BNgh=wpsyd6WP=haOq2UdCYEt2AaL7rGfhDUh6CQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240418155151.355133-1-ivitro@gmail.com> <20240508174048.GA5257@francesco-nb>
-In-Reply-To: <20240508174048.GA5257@francesco-nb>
-From: Adam Ford <aford173@gmail.com>
-Date: Wed, 8 May 2024 12:43:38 -0500
-Message-ID: <CAHCN7xLnSEPzvsWbm-+JquJrpOfMFwaE3Hd26Qhv_WqGaweUaA@mail.gmail.com>
-Subject: Re: [PATCH v1] pmdomain: imx8m-blk-ctrl: fix suspend/resume order
-To: Francesco Dolcini <francesco@dolcini.it>
-Cc: Vitor Soares <ivitro@gmail.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Vitor Soares <vitor.soares@toradex.com>, linux-pm@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	stable@vger.kernel.org, Lucas Stach <l.stach@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-On Wed, May 8, 2024 at 12:40=E2=80=AFPM Francesco Dolcini <francesco@dolcin=
-i.it> wrote:
->
-> On Thu, Apr 18, 2024 at 04:51:51PM +0100, Vitor Soares wrote:
-> > From: Vitor Soares <vitor.soares@toradex.com>
-> >
-> > During the probe, the genpd power_dev is added to the dpm_list after
-> > blk_ctrl due to its parent/child relationship. Making the blk_ctrl
-> > suspend after and resume before the genpd power_dev.
-> >
-> > As a consequence, the system hangs when resuming the VPU due to the
-> > power domain dependency.
-> >
-> > To ensure the proper suspend/resume order, add a device link betweem
-> > blk_ctrl and genpd power_dev. It guarantees genpd power_dev is suspende=
-d
-> > after and resumed before blk-ctrl.
-> >
->
-> Cc: Adam Ford
+Hi Adam,
 
-Thanks!  This is what I was thinking from the other thread.  I just
-didn't see this one.
+Am Mittwoch, dem 08.05.2024 um 12:30 -0500 schrieb Adam Ford:
+> On Fri, Apr 5, 2024 at 10:09=E2=80=AFAM vitor <ivitro@gmail.com> wrote:
+> >=20
+> > Hi,
+> >=20
+> > On Thu, 2024-04-04 at 16:53 +0100, vitor wrote:
+> > > Greetings,
+> > >=20
+> > > I'm trying to suspend/resume our Verdin iMX8M Mini with VPU IP using
+> > > the latest 6.9.0-rc2 Kernel. While the system can suspend without
+> > > issues, it hangs on the resume routine. After some investigation, I
+> > > can
+> > > see the Kernel hanging on imx8m_blk_ctrl_power_on()[1] while resuming
+> > > the hantro-vpu power domain.
+> > >=20
+> > > Any hint about that?
+> > >=20
+> > > [1]
+> > > https://elixir.bootlin.com/linux/v6.9-rc2/source/drivers/pmdomain/imx
+> > > /imx8m-blk-ctrl.c#L101
+> > >=20
+> >=20
+> + Lucas
+>=20
+> > Looking at other child nodes of the pgc node, pgc_vpu_[g1|g2|h1] seems
+> > to be nested into pgc_vpumix.
+> >=20
+>=20
+> On the surface, that's how it appears and it would be consistent with
+> how the GPU's work with the GPC's for each GPU calling the gpumix.
+> However, the VPU's all reference the vpu_blk_ctrl which itself
+> references the vpumix.
+>=20
+> Lucas,
+>=20
+> You seem to know this driver pretty well.  Do you expect the G1, G2,
+> and H1 PGC's to all reference the vpumix, or do you expect the
+> vpu_blk_ctrl to enable/disable the vpumix?
+>=20
+Nope, that's incorrect, as discussed here:
+https://lore.kernel.org/all/9ce35b9bb5a15891f6bd01bd54b7dc84b3ba4021.camel@=
+pengutronix.de/
 
+>=20
+>=20
+> > After applying the following changes to imx8mm.dtsi, the suspend/resume
+> > is working.
+> >=20
+> >=20
+> > @@ -739,16 +739,19 @@ pgc_vpumix: power-domain@6 {
+> >         pgc_vpu_g1: power-domain@7 {
+> >                 #power-domain-cells =3D <0>;
+> >                 reg =3D <IMX8MM_POWER_DOMAIN_VPUG1>;
+> > +               power-domains =3D <&pgc_vpumix>;
+> >         };
+> >=20
+> >         pgc_vpu_g2: power-domain@8 {
+> >                 #power-domain-cells =3D <0>;
+> >                 reg =3D <IMX8MM_POWER_DOMAIN_VPUG2>;
+> > +               power-domains =3D <&pgc_vpumix>;
+> >         };
+> >=20
+> >         pgc_vpu_h1: power-domain@9 {
+> >                 #power-domain-cells =3D <0>;
+> >                 reg =3D <IMX8MM_POWER_DOMAIN_VPUH1>;
+> > +               power-domains =3D <&pgc_vpumix>;
+> >         };
+> >=20
+> >=20
+> > I will prepare the patch to send in the next couple of days.
+>=20
+> Please CC me when post the patch, and I can run some tests on my hardware=
+.
 
-adam
->
-> Francesco
->
+The correct patch is already out:
+https://lore.kernel.org/all/20240418155151.355133-1-ivitro@gmail.com/
+
+Regards,
+Lucas
 
