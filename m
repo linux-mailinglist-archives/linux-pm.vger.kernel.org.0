@@ -1,71 +1,201 @@
-Return-Path: <linux-pm+bounces-7648-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7649-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 564078BFF1B
-	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 15:44:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2CAD8BFF59
+	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 15:48:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C3091F209E2
-	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 13:44:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DAE091C21090
+	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2024 13:48:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89A5F86AD6;
-	Wed,  8 May 2024 13:42:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AE3184DE4;
+	Wed,  8 May 2024 13:48:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PVmfRhZi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E0008615C;
-	Wed,  8 May 2024 13:42:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDC0047F5B;
+	Wed,  8 May 2024 13:48:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715175721; cv=none; b=U/3HaWDg9qx1S/RM91HXGObl8ZAXVNe8l5PaM2TQD8yhxWEXI6UCgkdAp6qJrgse6JvkAmtKGs/2Wp2A2CR5zV6xMnxpIVVewbi9XkHnC/UeTZcUVgBoY0Sjyg298eaYEEkRUkEfldC2gbbojjsCCf61IvzI556QL/GBUo7OC3M=
+	t=1715176089; cv=none; b=XMY8BD6zYnIE9z1lKnM+4r34I8uq/47mGAP8L/05cTF90Cl7ufMZGep/PrTNoQCUzA9I5OnFXAda2MgyRIhON696i20BXJXR894yMI0NlhidsGkMCd+wtwMB6apvJBDqg9wEXUggIz6wQqCyYaQrr62XCPSdgsrtS5ARDQGJ4mI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715175721; c=relaxed/simple;
-	bh=Z3UoGjcVQojEIaroYcDyo95FKDRaXFaw6zcSksTz3Tg=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=YtZaB/RNSEVZtm/gmwF+1J2Q96jCQvVepr4PwOAwPjsZ+L8ENr0nwj9p2izN4Jj9ttlC1DZXGoyBLebGEykMHPQtjWZFjJUp2XtIGXqxo6nayjbbKPAY+uBsvRsgjz9wCPEAd37q9dqLBjSaBoObEvCoeDKWiB7SzRO7DoJPNBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VZGXR5Wghz4xDB;
-	Wed,  8 May 2024 23:41:59 +1000 (AEST)
-From: Michael Ellerman <patch-notifications@ellerman.id.au>
-To: Michael Ellerman <mpe@ellerman.id.au>, Christophe Leroy <christophe.leroy@csgroup.eu>, Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Cc: Nicholas Piggin <npiggin@gmail.com>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-pm@vger.kernel.org, linux@ew.tq-group.com
-In-Reply-To: <20240124105031.45734-1-matthias.schiffer@ew.tq-group.com>
-References: <20240124105031.45734-1-matthias.schiffer@ew.tq-group.com>
-Subject: Re: [PATCH] powerpc: rename SPRN_HID2 define to SPRN_HID2_750FX
-Message-Id: <171517558558.165093.2026366324457459260.b4-ty@ellerman.id.au>
-Date: Wed, 08 May 2024 23:39:45 +1000
+	s=arc-20240116; t=1715176089; c=relaxed/simple;
+	bh=o8MlCnJP8bgcB/yWFMkAmnuntNXYkbwNsmq2xn17rNk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=fALN+9+tlQ2p+dNZvVBTcfmHdac6MP8fc7faCNYjTHE0PVPfXUvXmHi2shq1safJMPVDH12QXgI1zeeYi/MgTMIn5V7b1UUgkKQo9ykl5P7ctEGcAsjfGO7UdHyNQZ7Mh/tgZ4S/+Vs8SbQAw/fIP7pc5CAJqShPlglap+4+IHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PVmfRhZi; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715176088; x=1746712088;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=o8MlCnJP8bgcB/yWFMkAmnuntNXYkbwNsmq2xn17rNk=;
+  b=PVmfRhZi71vszTabbXVMnGqpxn6DzYp1UlQvJD/UDq4KKhOozRIn/W4c
+   hwJdHIykaOlbJQeuaanhCfugp1aiW3OgM890vsjWTKhoRqJEQ91u0hkfP
+   uG/P6WAHyy+zIQ3hE601HlAdL4tFxqIlmoy0MvElu+9/hy+OATojZXTvK
+   zmmtbwxvj22kNw/SN8bPQ1MZpiFO+SyEXwEjkPB7JNqTYjM5HLRKWwpBw
+   YK6yQg5KN5pASrgG6UYfzdXJTB+cwhFLwFqi1dQ/6CfAa+ZUv+ZZDawdf
+   8pcsUKEM71DYLkVUiOqk28Z7J8af+Dw2aZRP65Vv5lZZ9NlDo03bdlRTU
+   A==;
+X-CSE-ConnectionGUID: Yj5JbxaETNGc/QKGQpY2Mw==
+X-CSE-MsgGUID: VV5mUQ7pSpGWT5sz5lABIg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="10906373"
+X-IronPort-AV: E=Sophos;i="6.08,145,1712646000"; 
+   d="scan'208";a="10906373"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 06:48:07 -0700
+X-CSE-ConnectionGUID: 778/91ZOTzSFUe1Tk5HqIg==
+X-CSE-MsgGUID: YsJcJliKTz2LSrYMxqmCfw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,145,1712646000"; 
+   d="scan'208";a="28855104"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.80])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 06:48:02 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To: linux-pci@vger.kernel.org,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Alexandru Gagniuc <mr.nuke.me@gmail.com>,
+	Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	linux-pm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Amit Kucheria <amitk@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v5 0/8] PCI: Add PCIe bandwidth controller
+Date: Wed,  8 May 2024 16:47:36 +0300
+Message-Id: <20240508134744.52134-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, 24 Jan 2024 11:50:31 +0100, Matthias Schiffer wrote:
-> This register number is hardware-specific, rename it for clarity.
-> 
-> FIXME comments are added in a few places where it seems like the wrong
-> register is used. As I can't test this, only the rename is done with no
-> functional change.
-> 
-> 
-> [...]
+Hi all,
 
-Applied to powerpc/next.
+This series adds PCIe bandwidth controller (bwctrl) and associated PCIe
+cooling driver to the thermal core side for limiting PCIe Link Speed
+due to thermal reasons. PCIe bandwidth controller is a PCI express bus
+port service driver. A cooling device is created for each port the
+service driver finds if they support changing speeds.
 
-[1/1] powerpc: rename SPRN_HID2 define to SPRN_HID2_750FX
-      https://git.kernel.org/powerpc/c/ad679719d7020a200c4a10248ebb3bbb374d423d
+This series only adds support for controlling PCIe Link Speed.
+Controlling PCIe Link Width might also be useful but AFAIK, there is no
+mechanism for that until PCIe 6.0 (L0p) so Link Width throttling is not
+added by this series.
 
-cheers
+bwctrl is built on top of BW notifications revert. The changes are
+based on top of target quirk fixes [1].
+
+[1] https://lore.kernel.org/linux-pci/alpine.DEB.2.21.2402092125070.2376@angie.orcam.me.uk/
+
+v5:
+- Removed patches: LNKCTL2 RMW driver patches went in separately
+- Refactor pcie_update_link_speed() to read LNKSTA + add __ variant
+  for hotplug that has LNKSTA value at hand
+- Make series fully compatible with the Target Speed quirk
+	- LBMS counter added, quirk falls back to LBMS bit when bwctrl =n
+	- Separate LBMS patch from set target speed patches
+- Always provide pcie_bwctrl_change_speed() even if bwctrl =n so drivers
+  don't need to come up their own version (also required by the Target
+  Speed quirk)
+- Remove devm_* (based on Lukas' comment on some other service
+  driver patch)
+- Convert to use cleanup.h
+- Renamed functions/struct to have shorter names
+
+v4:
+- Merge Port's and Endpoint's Supported Link Speeds Vectors into
+  supported_speeds in the struct pci_bus
+- Reuse pcie_get_speed_cap()'s code for pcie_get_supported_speeds()
+- Setup supported_speeds with PCI_EXP_LNKCAP2_SLS_2_5GB when no
+  Endpoint exists
+- Squash revert + add bwctrl patches into one
+- Change to use threaded IRQ + IRQF_ONESHOT
+- Enable also LABIE / LABS
+- Convert Link Speed selection to use bit logic instead of loop
+- Allocate before requesting IRQ during probe
+- Use devm_*()
+- Use u8 for speed_conv array instead of u16
+- Removed READ_ONCE()
+- Improve changelogs, comments, and Kconfig
+- Name functions slightly more consistently
+- Use bullet list for RMW protected registers in docs
+
+v3:
+- Correct hfi1 shortlog prefix
+- Improve error prints in hfi1
+- Add L: linux-pci to the MAINTAINERS entry
+
+v2:
+- Adds LNKCTL2 to RMW safe list in Documentation/PCI/pciebus-howto.rst
+- Renamed cooling devices from PCIe_Port_* to PCIe_Port_Link_Speed_* in
+  order to plan for possibility of adding Link Width cooling devices
+  later on
+- Moved struct thermal_cooling_device declaration to the correct patch
+- Small tweaks to Kconfig texts
+- Series rebased to resolve conflict (in the selftest list)
+
+Ilpo Järvinen (8):
+  PCI: Protect Link Control 2 Register with RMW locking
+  PCI: Store all PCIe Supported Link Speeds
+  PCI: Refactor pcie_update_link_speed()
+  PCI/quirks: Abstract LBMS seen check into own function
+  PCI/bwctrl: Re-add BW notification portdrv as PCIe BW controller
+  PCI/bwctrl: Add API to set PCIe Link Speed
+  thermal: Add PCIe cooling driver
+  selftests/pcie_bwctrl: Create selftests
+
+ Documentation/PCI/pciebus-howto.rst           |  14 +-
+ MAINTAINERS                                   |   9 +
+ drivers/pci/hotplug/pciehp_hpc.c              |   2 +-
+ drivers/pci/hotplug/pciehp_pci.c              |   2 +
+ drivers/pci/pci.c                             |  59 ++-
+ drivers/pci/pci.h                             |  31 +-
+ drivers/pci/pcie/Kconfig                      |  12 +
+ drivers/pci/pcie/Makefile                     |   1 +
+ drivers/pci/pcie/bwctrl.c                     | 340 ++++++++++++++++++
+ drivers/pci/pcie/portdrv.c                    |   9 +-
+ drivers/pci/pcie/portdrv.h                    |  10 +-
+ drivers/pci/probe.c                           |  20 +-
+ drivers/pci/quirks.c                          |  25 +-
+ drivers/pci/remove.c                          |   3 +
+ drivers/thermal/Kconfig                       |  10 +
+ drivers/thermal/Makefile                      |   2 +
+ drivers/thermal/pcie_cooling.c                |  84 +++++
+ include/linux/pci-bwctrl.h                    |  28 ++
+ include/linux/pci.h                           |  18 +
+ include/uapi/linux/pci_regs.h                 |   1 +
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/pcie_bwctrl/Makefile  |   2 +
+ .../pcie_bwctrl/set_pcie_cooling_state.sh     | 122 +++++++
+ .../selftests/pcie_bwctrl/set_pcie_speed.sh   |  67 ++++
+ 24 files changed, 824 insertions(+), 48 deletions(-)
+ create mode 100644 drivers/pci/pcie/bwctrl.c
+ create mode 100644 drivers/thermal/pcie_cooling.c
+ create mode 100644 include/linux/pci-bwctrl.h
+ create mode 100644 tools/testing/selftests/pcie_bwctrl/Makefile
+ create mode 100755 tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh
+ create mode 100755 tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh
+
+-- 
+2.39.2
+
 
