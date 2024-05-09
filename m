@@ -1,65 +1,65 @@
-Return-Path: <linux-pm+bounces-7700-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7699-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D0508C155B
-	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2024 21:19:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C67BD8C1558
+	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2024 21:19:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA722283188
-	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2024 19:19:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1D1C1C21BE5
+	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2024 19:19:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C36DE85266;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AA637F49A;
 	Thu,  9 May 2024 19:17:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="D9U60wo3"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="qfSfNs0k"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7445880BFA;
-	Thu,  9 May 2024 19:17:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE43380604;
+	Thu,  9 May 2024 19:17:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715282275; cv=none; b=EQ9UUO0sML0Y7QievCeAPhBCfTOyyJUybse7kR2r7Xcrc08TuClagTcVY5Xhfb1EdHz1HDj4plmm0XSxMF99a8MwzKDFcaN1Smv1LiZZe39vvL88mu5YoUWTrvu/ezHOX7EIhwRFHVcIKu+wjYzxGaAPj7v8q4EFAcpr93ELH2U=
+	t=1715282275; cv=none; b=T+kTv2vZZKOAXa5AZTZdhwawiJDiGosslYuxR042T8hvn3dyEd4NeayWPdm3qsejsr8oOpfK4lhjaVSt68wWGckpvAgfveI5HS9o0yswsaBLWoT5Y4yMhY30Ky23qKMEgKPTtponQHFwp2t6rqDfIvdxhhNMjfMdGElS7TvAqmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1715282275; c=relaxed/simple;
-	bh=ZsUvE8bCFSM2mKEbiGx8vW2UaEuMB+r0WfdCWDI78Lk=;
+	bh=gyTf0mMiLoT/1Ze1j88d+hcLga2cI0BYwKUz0zqJIdI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gyX+vPbX/BIU9oyzcJshp88n1FQ3ceHbBCueik0V5x6gdICWKMH5hrwQzqOTltU8cLsfolnBWrDXux8gcBBQLxIAP7SGunsJcsG+tVxrdWoQyHShkc1KiEl63Gh2i+DtoUJ7n5XNwBAE/mLzACDe8G02Y+L0Ys/E6hkMdQka6ds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=D9U60wo3 reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+	 MIME-Version:Content-Type; b=GP8kkvLTMMqq5RAsBd8Dr0BJkag2DWkOwK8be4H1OZfrQ0Nk9AQ3GTnCx+DwTwIATyAdmiEsW6OMsCEsDs0zrLo3c4V8/ZdpIBnBnr4lois9c07ba8KmgCJftgPdgIMsWXDq0FbmK44DQ7IjDK8S5eViaP5HBFj1ggtTr68P11s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=qfSfNs0k reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
- id 1147030c55151564; Thu, 9 May 2024 21:17:46 +0200
+ id efbe846cf3d5481b; Thu, 9 May 2024 21:17:45 +0200
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 91F20A524E7;
-	Thu,  9 May 2024 21:17:45 +0200 (CEST)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id B788DA524E7;
+	Thu,  9 May 2024 21:17:44 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1715282266;
-	bh=ZsUvE8bCFSM2mKEbiGx8vW2UaEuMB+r0WfdCWDI78Lk=;
+	s=dkim; t=1715282265;
+	bh=gyTf0mMiLoT/1Ze1j88d+hcLga2cI0BYwKUz0zqJIdI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=D9U60wo3wUp6f2xw5u+ffvM0RmHBMAEGdbIaV+ClmIgSRoCtYfDQI55Kq7rkVlwn8
-	 obtOvtJKqW92u1BkLQf0C7A9DU6+WjtQ5rIoUtT7OOOI+KOmEXa5eG1+f9AczJ+8QL
-	 KbuIoruV/z8m3wkyr0/o21xjMcMLquiAmBMWgtQv0cHOFTB94IO6shrTxWAfQ1vByV
-	 3GXhkADOJMRKGPfQN2wEtlvZjHxFrBLHb3+sdnJZVT9/tHaTtK5FHJhrPurlZ6TbNS
-	 7TeG1SGrDUc/n+6ks8QiBA3kegPbrBgiJBruD5+wZS0wOd59KnGY+FXeFYxZmcj4fx
-	 JQwov6Xh3r0Tg==
+	b=qfSfNs0kJ+GuMqFx7Vq9boJKfTRyZq7Kvd1D6hssL4ZdzOoxKho+/ruYcjrUDYRo/
+	 T14R+V6qrJ6O29ZyXbPkRUMadInZTMb3INLT4C+awyvx212R/WyYrBkhzRn+sp7/bZ
+	 t9Ne+9/JhA2If6jUxuFl3DrPy+My/5tVeQ15Xs/l70YzVzhn1bmEz8Fs/d/vW80rvO
+	 zic7JGRxY7vSOQ5n6aCgI7W/1exN0rJUHl94vXxkiG+SpwHrSETWVYKYhCb6caR7fv
+	 TYA3TkT2KRWJt1JKGMyKK0QI4LiVQf5bBzHtvgdOEWId4QPOl5m4sgeb/4cSApASc5
+	 z+wFKhmOoQf2A==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>,
  "Rafael J. Wysocki" <rafael@kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
  Daniel Lezcano <daniel.lezcano@linaro.org>
 Subject:
- [PATCH v1 1/7] thermal/debugfs: Use helper to update trip point overstepping
- duration
-Date: Thu, 09 May 2024 21:09:51 +0200
-Message-ID: <4924137.31r3eYUQgx@kreacher>
+ [PATCH v1 2/7] thermal/debugfs: Do not extend mitigation episodes beyond
+ system resume
+Date: Thu, 09 May 2024 21:12:01 +0200
+Message-ID: <2330375.ElGaqSPkdT@kreacher>
 In-Reply-To: <12438864.O9o76ZdvQC@kreacher>
 References: <12438864.O9o76ZdvQC@kreacher>
 Precedence: bulk
@@ -79,65 +79,95 @@ X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Add a helper for updating trip point overstepping duration to be called
-from thermal_debug_tz_trip_down().
-
-Subsequently, it will also be used during resume from system-wide
-suspend.
-
-No intentional functional impact.
+Because thermal zone handling by the thermal core is started from
+scratch during resume from system-wide suspend, prevent the debug
+code from extending mitigation episodes beyond that point by ending
+the mitigation episode currently in progress, if any, for each thermal
+zone.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/thermal/thermal_debugfs.c |   22 +++++++++++++---------
- 1 file changed, 13 insertions(+), 9 deletions(-)
+ drivers/thermal/thermal_core.c    |    1 +
+ drivers/thermal/thermal_debugfs.c |   36 ++++++++++++++++++++++++++++++++++++
+ drivers/thermal/thermal_debugfs.h |    2 ++
+ 3 files changed, 39 insertions(+)
 
+Index: linux-pm/drivers/thermal/thermal_core.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_core.c
++++ linux-pm/drivers/thermal/thermal_core.c
+@@ -1619,6 +1619,7 @@ static void thermal_zone_device_resume(s
+ 
+ 	tz->suspended = false;
+ 
++	thermal_debug_tz_resume(tz);
+ 	thermal_zone_device_init(tz);
+ 	__thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+ 
 Index: linux-pm/drivers/thermal/thermal_debugfs.c
 ===================================================================
 --- linux-pm.orig/drivers/thermal/thermal_debugfs.c
 +++ linux-pm/drivers/thermal/thermal_debugfs.c
-@@ -645,14 +645,24 @@ unlock:
- 	mutex_unlock(&thermal_dbg->lock);
+@@ -922,3 +922,39 @@ void thermal_debug_tz_remove(struct ther
+ 	thermal_debugfs_remove_id(thermal_dbg);
+ 	kfree(trips_crossed);
  }
- 
-+static void tz_episode_close_trip(struct tz_episode *tze, int trip_id, ktime_t now)
++
++void thermal_debug_tz_resume(struct thermal_zone_device *tz)
 +{
-+	struct trip_stats *trip_stats = &tze->trip_stats[trip_id];
-+	ktime_t delta = ktime_sub(now, trip_stats->timestamp);
-+
-+	trip_stats->duration = ktime_add(delta, trip_stats->duration);
-+	/* Mark the end of mitigation for this trip point. */
-+	trip_stats->timestamp = KTIME_MAX;
-+}
-+
- void thermal_debug_tz_trip_down(struct thermal_zone_device *tz,
- 				const struct thermal_trip *trip)
- {
- 	struct thermal_debugfs *thermal_dbg = tz->debugfs;
-+	int trip_id = thermal_zone_trip_id(tz, trip);
++	struct thermal_debugfs *thermal_dbg = tz->debugfs;
 +	ktime_t now = ktime_get();
- 	struct tz_episode *tze;
- 	struct tz_debugfs *tz_dbg;
--	ktime_t delta, now = ktime_get();
--	int trip_id = thermal_zone_trip_id(tz, trip);
- 	int i;
- 
- 	if (!thermal_dbg)
-@@ -687,13 +697,7 @@ void thermal_debug_tz_trip_down(struct t
- 
- 	tze = list_first_entry(&tz_dbg->tz_episodes, struct tz_episode, node);
- 
--	delta = ktime_sub(now, tze->trip_stats[trip_id].timestamp);
--
--	tze->trip_stats[trip_id].duration =
--		ktime_add(delta, tze->trip_stats[trip_id].duration);
--
--	/* Mark the end of mitigation for this trip point. */
--	tze->trip_stats[trip_id].timestamp = KTIME_MAX;
-+	tz_episode_close_trip(tze, trip_id, now);
- 
- 	/*
- 	 * This event closes the mitigation as we are crossing the
++	struct tz_debugfs *tz_dbg;
++	struct tz_episode *tze;
++	int i;
++
++	if (!thermal_dbg)
++		return;
++
++	mutex_lock(&thermal_dbg->lock);
++
++	tz_dbg = &thermal_dbg->tz_dbg;
++
++	if (!tz_dbg->nr_trips)
++		goto out;
++
++	/*
++	 * A mitigation episode was in progress before the preceding system
++	 * suspend transition, so close it because the zone handling is starting
++	 * over from scratch.
++	 */
++	tze = list_first_entry(&tz_dbg->tz_episodes, struct tz_episode, node);
++
++	for (i = 0; i < tz_dbg->nr_trips; i++)
++		tz_episode_close_trip(tze, tz_dbg->trips_crossed[i], now);
++
++	tze->duration = ktime_sub(now, tze->timestamp);
++
++	tz_dbg->nr_trips = 0;
++
++out:
++	mutex_unlock(&thermal_dbg->lock);
++}
+Index: linux-pm/drivers/thermal/thermal_debugfs.h
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_debugfs.h
++++ linux-pm/drivers/thermal/thermal_debugfs.h
+@@ -7,6 +7,7 @@ void thermal_debug_cdev_remove(struct th
+ void thermal_debug_cdev_state_update(const struct thermal_cooling_device *cdev, int state);
+ void thermal_debug_tz_add(struct thermal_zone_device *tz);
+ void thermal_debug_tz_remove(struct thermal_zone_device *tz);
++void thermal_debug_tz_resume(struct thermal_zone_device *tz);
+ void thermal_debug_tz_trip_up(struct thermal_zone_device *tz,
+ 			      const struct thermal_trip *trip);
+ void thermal_debug_tz_trip_down(struct thermal_zone_device *tz,
+@@ -20,6 +21,7 @@ static inline void thermal_debug_cdev_st
+ 						   int state) {}
+ static inline void thermal_debug_tz_add(struct thermal_zone_device *tz) {}
+ static inline void thermal_debug_tz_remove(struct thermal_zone_device *tz) {}
++static inline void thermal_debug_tz_resume(struct thermal_zone_device *tz) {}
+ static inline void thermal_debug_tz_trip_up(struct thermal_zone_device *tz,
+ 					    const struct thermal_trip *trip) {};
+ static inline void thermal_debug_tz_trip_down(struct thermal_zone_device *tz,
 
 
 
