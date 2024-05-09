@@ -1,259 +1,241 @@
-Return-Path: <linux-pm+bounces-7679-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7680-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4485A8C0E8C
-	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2024 12:51:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 219D58C0EF1
+	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2024 13:39:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B0BBC1F2303F
-	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2024 10:51:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 76FA6B2128A
+	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2024 11:39:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7670C12FB38;
-	Thu,  9 May 2024 10:51:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2501B13172F;
+	Thu,  9 May 2024 11:39:43 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail115-171.sinamail.sina.com.cn (mail115-171.sinamail.sina.com.cn [218.30.115.171])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADEAE12F592
-	for <linux-pm@vger.kernel.org>; Thu,  9 May 2024 10:51:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=218.30.115.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7CF71311B6;
+	Thu,  9 May 2024 11:39:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715251890; cv=none; b=tD/Jq2a3FAbGirMjkDoXio0Lr4Twy2Wx8aMEMamyOCGOahAsoPqed+Wb3+b8BmaZX7+a+UwmKfI3SWAhW0Kw29BQ7Nuns1bdyxnW5Gcw1Wkk2KBeMg6F7dPV07pWZ+QrlOb9lIOA3bg3g9mxO6217QWTU4rp2P0rl/+M51BbOrk=
+	t=1715254783; cv=none; b=TDE5Z95wLkNDU0U8ks1gXXXTi8Bq1UqZFXneCGV0UTZRRjgTehiLfbEHlYF8o19nMmQ7jWbKpNoY1w1MHMmaQJO11jXCKj27wL0g7zUwbdg+5xz/mQ9CYoR82RFJbQjJwDJDEzmof/ZV7BwnieIYWFk77xY6nrpQUmPwkgszn+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715251890; c=relaxed/simple;
-	bh=c1hPixAJvj3AHl/3CV8F+R2t09WL5v2tVYkTtNhiEpM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IAikkcTw3Ob6TWP8yIZt4JNAgvb8+bOFjBiIekTyNx6AF7F9CP2KOPngbn0EKLAL3CAOjQnRskIZ82M+bRqwWypAAzi1xAwc42Au2Q+LlmdJVhDPL4nSZ/O0T2LbEoDu57U0LkomLVp3PtrnzIT+jSUlTb4WZ5YtPSl42qlJEsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sina.com; spf=pass smtp.mailfrom=sina.com; arc=none smtp.client-ip=218.30.115.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sina.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sina.com
-X-SMAIL-HELO: localhost.localdomain
-Received: from unknown (HELO localhost.localdomain)([113.118.68.141])
-	by sina.com (172.16.235.25) with ESMTP
-	id 663CAA1900006869; Thu, 9 May 2024 18:49:00 +0800 (CST)
-X-Sender: hdanton@sina.com
-X-Auth-ID: hdanton@sina.com
-Authentication-Results: sina.com;
-	 spf=none smtp.mailfrom=hdanton@sina.com;
-	 dkim=none header.i=none;
-	 dmarc=none action=none header.from=hdanton@sina.com
-X-SMAIL-MID: 29018234210318
-X-SMAIL-UIID: DA2DDA9809B844E8B5B5CAF31DD56CD1-20240509-184900-1
-From: Hillf Danton <hdanton@sina.com>
-To: Amir Goldstein <amir73il@gmail.com>
-Cc: syzbot <syzbot+4c493dcd5a68168a94b2@syzkaller.appspotmail.com>,
-	linux-fsdevel@vger.kernel.org,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	linux-kernel@vger.kernel.org,
-	syzkaller-bugs@googlegroups.com,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>,
-	linux-pm@vger.kernel.org
-Subject: Re: [syzbot] [kernfs?] possible deadlock in kernfs_seq_start
-Date: Thu,  9 May 2024 18:48:48 +0800
-Message-Id: <20240509104848.2403-1-hdanton@sina.com>
-In-Reply-To: <CAOQ4uxhDBbSh-4xbLgS=e6LtaZe2-E9Scgb9uP4ysCZEGG2skA@mail.gmail.com>
-References: <00000000000091228c0617eaae32@google.com> <20240508231904.2259-1-hdanton@sina.com>
+	s=arc-20240116; t=1715254783; c=relaxed/simple;
+	bh=6Qz4bjICzh8uyecfY7r4wrMMeVHl212hxAyi45Z/xbU=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ujV1NUjwEpmXqJ5p9ougAE/bj/BAxWIUIduejl9epJgyqidR7CnSZB/y1hzStvLQvROw257f993nhb23JarAh2Zjp+QsSep/UgI9qPQCL+SIz6LPTpObpIu5vtRbk9i6TqAga63u4fNKwWHzQsM5BID1/JFFE8uFRLEGsSkvpbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VZqmB0G1rz6DBQ1;
+	Thu,  9 May 2024 19:39:06 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id ACF4F1400D9;
+	Thu,  9 May 2024 19:39:36 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Thu, 9 May
+ 2024 12:39:36 +0100
+Date: Thu, 9 May 2024 12:39:34 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+CC: <linux-pci@vger.kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, "Lorenzo
+ Pieralisi" <lorenzo.pieralisi@arm.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof =?UTF-8?Q?Wilczy=C5=84ski?= <kw@linux.com>, Lukas Wunner
+	<lukas@wunner.de>, Alexandru Gagniuc <mr.nuke.me@gmail.com>, "Krishna
+ chaitanya chundru" <quic_krichai@quicinc.com>, Srinivas Pandruvada
+	<srinivas.pandruvada@linux.intel.com>, "Rafael J. Wysocki"
+	<rafael@kernel.org>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>, Christophe
+ JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH v5 5/8] PCI/bwctrl: Re-add BW notification portdrv as
+ PCIe BW controller
+Message-ID: <20240509123934.0000496b@Huawei.com>
+In-Reply-To: <20240508134744.52134-6-ilpo.jarvinen@linux.intel.com>
+References: <20240508134744.52134-1-ilpo.jarvinen@linux.intel.com>
+	<20240508134744.52134-6-ilpo.jarvinen@linux.intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Thu, 9 May 2024 09:37:24 +0300 Amir Goldstein <amir73il@gmail.com>
-> On Thu, May 9, 2024 at 2:19 AM Hillf Danton <hdanton@sina.com> wrote:
-> > On Tue, 07 May 2024 22:36:18 -0700
-> > > syzbot has found a reproducer for the following issue on:
-> > >
-> > > HEAD commit:    dccb07f2914c Merge tag 'for-6.9-rc7-tag' of git://git.kern..
-> > > git tree:       upstream
-> > > console+strace: https://syzkaller.appspot.com/x/log.txt?x=137daa6c980000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=9d7ea7de0cb32587
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=4c493dcd5a68168a94b2
-> > > compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1134f3c0980000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1367a504980000
-> > >
-> > > Downloadable assets:
-> > > disk image: https://storage.googleapis.com/syzbot-assets/ea1961ce01fe/disk-dccb07f2.raw.xz
-> > > vmlinux: https://storage.googleapis.com/syzbot-assets/445a00347402/vmlinux-dccb07f2.xz
-> > > kernel image: https://storage.googleapis.com/syzbot-assets/461aed7c4df3/bzImage-dccb07f2.xz
-> > >
-> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > Reported-by: syzbot+4c493dcd5a68168a94b2@syzkaller.appspotmail.com
-> > >
-> > > ======================================================
-> > > WARNING: possible circular locking dependency detected
-> > > 6.9.0-rc7-syzkaller-00012-gdccb07f2914c #0 Not tainted
-> > > ------------------------------------------------------
-> > > syz-executor149/5078 is trying to acquire lock:
-> > > ffff88802a978888 (&of->mutex){+.+.}-{3:3}, at: kernfs_seq_start+0x53/0x3b0 fs/kernfs/file.c:154
-> > >
-> > > but task is already holding lock:
-> > > ffff88802d80b540 (&p->lock){+.+.}-{3:3}, at: seq_read_iter+0xb7/0xd60 fs/seq_file.c:182
-> > >
-> > > which lock already depends on the new lock.
-> > >
-> > >
-> > > the existing dependency chain (in reverse order) is:
-> > >
-> > > -> #4 (&p->lock){+.+.}-{3:3}:
-> > >        lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5754
-> > >        __mutex_lock_common kernel/locking/mutex.c:608 [inline]
-> > >        __mutex_lock+0x136/0xd70 kernel/locking/mutex.c:752
-> > >        seq_read_iter+0xb7/0xd60 fs/seq_file.c:182
-> > >        call_read_iter include/linux/fs.h:2104 [inline]
-> > >        copy_splice_read+0x662/0xb60 fs/splice.c:365
-> > >        do_splice_read fs/splice.c:985 [inline]
-> > >        splice_file_to_pipe+0x299/0x500 fs/splice.c:1295
-> > >        do_sendfile+0x515/0xdc0 fs/read_write.c:1301
-> > >        __do_sys_sendfile64 fs/read_write.c:1362 [inline]
-> > >        __se_sys_sendfile64+0x17c/0x1e0 fs/read_write.c:1348
-> > >        do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-> > >        do_syscall_64+0xf5/0x240 arch/x86/entry/common.c:83
-> > >        entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> > >
-> > > -> #3 (&pipe->mutex){+.+.}-{3:3}:
-> > >        lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5754
-> > >        __mutex_lock_common kernel/locking/mutex.c:608 [inline]
-> > >        __mutex_lock+0x136/0xd70 kernel/locking/mutex.c:752
-> > >        iter_file_splice_write+0x335/0x14e0 fs/splice.c:687
-> > >        backing_file_splice_write+0x2bc/0x4c0 fs/backing-file.c:289
-> > >        ovl_splice_write+0x3cf/0x500 fs/overlayfs/file.c:379
-> > >        do_splice_from fs/splice.c:941 [inline]
-> > >        do_splice+0xd77/0x1880 fs/splice.c:1354
+On Wed,  8 May 2024 16:47:41 +0300
+Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com> wrote:
 
-		file_start_write(out);
-		ret = do_splice_from(ipipe, out, &offset, len, flags);
-		file_end_write(out);
+> This mostly reverts the commit b4c7d2076b4e ("PCI/LINK: Remove
+> bandwidth notification"). An upcoming commit extends this driver
+> building PCIe bandwidth controller on top of it.
+>=20
+> The PCIe bandwidth notification were first added in the commit
+> e8303bb7a75c ("PCI/LINK: Report degraded links via link bandwidth
+> notification") but later had to be removed. The significant changes
+> compared with the old bandwidth notification driver include:
+>=20
+> 1) Don't print the notifications into kernel log, just keep the Link
+>    Speed cached into the struct pci_bus updated. While somewhat
+>    unfortunate, the log spam was the source of complaints that
+>    eventually lead to the removal of the bandwidth notifications driver
+>    (see the links below for further information).
+>=20
+> 2) Besides the Link Bandwidth Management Interrupt, enable also Link
+>    Autonomous Bandwidth Interrupt to cover the other source of
+>    bandwidth changes.
+>=20
+> 3) Use threaded IRQ with IRQF_ONESHOT to handle Bandwidth Notification
+>    Interrupts to address the problem fixed in the commit 3e82a7f9031f
+>    ("PCI/LINK: Supply IRQ handler so level-triggered IRQs are acked")).
+>=20
+> 4) Handle Link Speed updates robustly. Refresh the cached Link Speed
+>    when enabling Bandwidth Notification Interrupts, and solve the race
+>    between Link Speed read and LBMS/LABS update in
+>    pcie_bwnotif_irq_thread().
+>=20
+> 5) Use concurrency safe LNKCTL RMW operations.
+>=20
+> 6) The driver is now called PCIe bwctrl (bandwidth controller) instead
+>    of just bandwidth notifications because of increased scope and
+>    functionality within the driver.
+>=20
+> 7) Coexist with the Target Link Speed quirk in
+>    pcie_failed_link_retrain(). Provide LBMS counting API for it.
+>=20
+> 8) Tweaks to variable/functions names for consistency and length
+>    reasons.
+>=20
+> Bandwidth Notifications enable the cur_bus_speed in the struct pci_bus
+> to keep track PCIe Link Speed changes.
+>=20
+> Link: https://lore.kernel.org/all/20190429185611.121751-1-helgaas@kernel.=
+org/
+> Link: https://lore.kernel.org/linux-pci/20190501142942.26972-1-keith.busc=
+h@intel.com/
+> Link: https://lore.kernel.org/linux-pci/20200115221008.GA191037@google.co=
+m/
+> Suggested-by: Lukas Wunner <lukas@wunner.de> # Building bwctrl on top of =
+bwnotif
+> Signed-off-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
 
-The correct locking order is
+A few trivial things inline. Either way LGTM
 
-		sb_writers
-		inode lock
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-> > >        __do_splice fs/splice.c:1436 [inline]
-> > >        __do_sys_splice fs/splice.c:1652 [inline]
-> > >        __se_sys_splice+0x331/0x4a0 fs/splice.c:1634
-> > >        do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-> > >        do_syscall_64+0xf5/0x240 arch/x86/entry/common.c:83
-> > >        entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> > >
-> > > -> #2 (sb_writers#4){.+.+}-{0:0}:
-> > >        lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5754
-> > >        percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
-> > >        __sb_start_write include/linux/fs.h:1664 [inline]
-> > >        sb_start_write+0x4d/0x1c0 include/linux/fs.h:1800
-> > >        mnt_want_write+0x3f/0x90 fs/namespace.c:409
+> diff --git a/drivers/pci/pcie/Makefile b/drivers/pci/pcie/Makefile
+> index 6461aa93fe76..6357bc219632 100644
+> --- a/drivers/pci/pcie/Makefile
+> +++ b/drivers/pci/pcie/Makefile
+> @@ -12,4 +12,5 @@ obj-$(CONFIG_PCIEAER_INJECT)	+=3D aer_inject.o
+>  obj-$(CONFIG_PCIE_PME)		+=3D pme.o
+>  obj-$(CONFIG_PCIE_DPC)		+=3D dpc.o
+>  obj-$(CONFIG_PCIE_PTM)		+=3D ptm.o
+> +obj-$(CONFIG_PCIE_BWCTRL)	+=3D bwctrl.o
+>  obj-$(CONFIG_PCIE_EDR)		+=3D edr.o
+> diff --git a/drivers/pci/pcie/bwctrl.c b/drivers/pci/pcie/bwctrl.c
+> new file mode 100644
+> index 000000000000..5afc533dd0a9
+> --- /dev/null
+> +++ b/drivers/pci/pcie/bwctrl.c
+> @@ -0,0 +1,185 @@
 
-but inverse order occurs here.
+> +
+> +static irqreturn_t pcie_bwnotif_irq_thread(int irq, void *context)
+> +{
+> +	struct pcie_device *srv =3D context;
+> +	struct pcie_bwctrl_data *data =3D get_service_data(srv);
+> +	struct pci_dev *port =3D srv->port;
+> +	u16 link_status, events;
+> +	int ret;
+> +
+> +	ret =3D pcie_capability_read_word(port, PCI_EXP_LNKSTA, &link_status);
+> +	events =3D link_status & (PCI_EXP_LNKSTA_LBMS | PCI_EXP_LNKSTA_LABS);
+> +
+> +	if (ret !=3D PCIBIOS_SUCCESSFUL || !events)
+> +		return IRQ_NONE;
 
-> > >        ovl_create_object+0x13b/0x370 fs/overlayfs/dir.c:629
-> > >        lookup_open fs/namei.c:3497 [inline]
-> > >        open_last_lookups fs/namei.c:3566 [inline]
-> > >        path_openat+0x1425/0x3240 fs/namei.c:3796
-> > >        do_filp_open+0x235/0x490 fs/namei.c:3826
-> > >        do_sys_openat2+0x13e/0x1d0 fs/open.c:1406
-> > >        do_sys_open fs/open.c:1421 [inline]
-> > >        __do_sys_open fs/open.c:1429 [inline]
-> > >        __se_sys_open fs/open.c:1425 [inline]
-> > >        __x64_sys_open+0x225/0x270 fs/open.c:1425
-> > >        do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-> > >        do_syscall_64+0xf5/0x240 arch/x86/entry/common.c:83
-> > >        entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> > >
-> > > -> #1 (&ovl_i_mutex_dir_key[depth]){++++}-{3:3}:
-> > >        lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5754
-> > >        down_read+0xb1/0xa40 kernel/locking/rwsem.c:1526
-> > >        inode_lock_shared include/linux/fs.h:805 [inline]
-> > >        lookup_slow+0x45/0x70 fs/namei.c:1708
-> > >        walk_component+0x2e1/0x410 fs/namei.c:2004
-> > >        lookup_last fs/namei.c:2461 [inline]
-> > >        path_lookupat+0x16f/0x450 fs/namei.c:2485
-> > >        filename_lookup+0x256/0x610 fs/namei.c:2514
-> > >        kern_path+0x35/0x50 fs/namei.c:2622
-> > >        lookup_bdev+0xc5/0x290 block/bdev.c:1136
-> > >        resume_store+0x1a0/0x710 kernel/power/hibernate.c:1235
-> > >        kernfs_fop_write_iter+0x3a1/0x500 fs/kernfs/file.c:334
-> > >        call_write_iter include/linux/fs.h:2110 [inline]
-> > >        new_sync_write fs/read_write.c:497 [inline]
-> > >        vfs_write+0xa84/0xcb0 fs/read_write.c:590
-> > >        ksys_write+0x1a0/0x2c0 fs/read_write.c:643
-> > >        do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-> > >        do_syscall_64+0xf5/0x240 arch/x86/entry/common.c:83
-> > >        entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> > >
-> > > -> #0 (&of->mutex){+.+.}-{3:3}:
-> > >        check_prev_add kernel/locking/lockdep.c:3134 [inline]
-> > >        check_prevs_add kernel/locking/lockdep.c:3253 [inline]
-> > >        validate_chain+0x18cb/0x58e0 kernel/locking/lockdep.c:3869
-> > >        __lock_acquire+0x1346/0x1fd0 kernel/locking/lockdep.c:5137
-> > >        lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5754
-> > >        __mutex_lock_common kernel/locking/mutex.c:608 [inline]
-> > >        __mutex_lock+0x136/0xd70 kernel/locking/mutex.c:752
-> > >        kernfs_seq_start+0x53/0x3b0 fs/kernfs/file.c:154
-> > >        traverse+0x14f/0x550 fs/seq_file.c:106
-> > >        seq_read_iter+0xc5e/0xd60 fs/seq_file.c:195
-> > >        call_read_iter include/linux/fs.h:2104 [inline]
-> > >        copy_splice_read+0x662/0xb60 fs/splice.c:365
-> > >        do_splice_read fs/splice.c:985 [inline]
-> > >        splice_file_to_pipe+0x299/0x500 fs/splice.c:1295
-> > >        do_sendfile+0x515/0xdc0 fs/read_write.c:1301
-> > >        __do_sys_sendfile64 fs/read_write.c:1362 [inline]
-> > >        __se_sys_sendfile64+0x17c/0x1e0 fs/read_write.c:1348
-> > >        do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-> > >        do_syscall_64+0xf5/0x240 arch/x86/entry/common.c:83
-> > >        entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> > >
-> > > other info that might help us debug this:
-> > >
-> > > Chain exists of:
-> > >   &of->mutex --> &pipe->mutex --> &p->lock
-> > >
-> > >  Possible unsafe locking scenario:
-> > >
-> > >        CPU0                    CPU1
-> > >        ----                    ----
-> > >   lock(&p->lock);
-> > >                                lock(&pipe->mutex);
-> > >                                lock(&p->lock);
-> > >   lock(&of->mutex);
-> > >
-> > >  *** DEADLOCK ***
-> >
-> > This shows 16b52bbee482 ("kernfs: annotate different lockdep class for
-> > of->mutex of writable files") is a bandaid.
-> 
-> Well, nobody said that it fixes the root cause.
-> But the annotation fix is correct, because the former report was
-> really false positive one.
-> 
-> The root cause is resume_store() doing vfs path lookup.
+Trivial, but nicer to not use link_status if it is garbage (even briefly)
+Only a couple of lines more to keep it clean.
 
-resume_store() looks innocent before locking order above is explained.
+	ret =3D pcie...
+	if (ret !=3D PCI_BIOS_SUCCESSFUL)
+		return IRQ_NONE;
 
-> If we could deprecate this allegedly unneeded UAPI we should.
-> 
-> That said, all those lockdep warnings indicate a possible deadlock
-> if someone tries to hibernate into an overlayfs file.
-> 
-> If root tries to do that then, this is either an attack or stupidity.
-> Either Way the news flash from this report is "root may be able
-> to deadlock kernel on purpose"
-> Not very exciting and not likely to happen in the real world.
-> 
-> The remaining question is what to do about the lockdep reports.
-> 
-> Questions to PM maintainers:
-> Any chance to deprecate writing path to /sys/power/resume?
-> Userspace should have no problem getting the same done
-> with writing dev number.
-> 
-> Thanks,
-> Amir.
+	events =3D ...
+	if (!events)
+		return IRQ_NONE;
+
+> +
+> +	if (events & PCI_EXP_LNKSTA_LBMS)
+> +		atomic_inc(&data->lbms_count);
+> +
+> +	pcie_capability_write_word(port, PCI_EXP_LNKSTA, events);
+> +
+> +	/*
+> +	 * Interrupts will not be triggered from any further Link Speed
+> +	 * change until LBMS is cleared by the write. Therefore, re-read the
+> +	 * speed (inside pcie_update_link_speed()) after LBMS has been
+> +	 * cleared to avoid missing link speed changes.
+> +	 */
+> +	pcie_update_link_speed(port->subordinate);
+> +
+> +	return IRQ_HANDLED;
+> +}
+
+> +
+> +static int pcie_bwnotif_probe(struct pcie_device *srv)
+> +{
+> +	struct pci_dev *port =3D srv->port;
+> +	int ret;
+> +
+> +	struct pcie_bwctrl_data *data __free(kfree) =3D
+> +				kzalloc(sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	set_service_data(srv, data);
+> +
+> +	ret =3D request_threaded_irq(srv->irq, NULL, pcie_bwnotif_irq_thread,
+> +				   IRQF_SHARED | IRQF_ONESHOT, "PCIe bwctrl", srv);
+> +	if (ret)
+> +		return ret;
+> +
+> +	port->link_bwctrl =3D no_free_ptr(data);
+> +	pcie_bwnotif_enable(srv);
+> +	pci_info(port, "enabled with IRQ %d\n", srv->irq);
+
+Rather noisy given this is easy enough to establish via other paths.
+pci_dbg() maybe?
+
+> +
+> +	return 0;
+> +}
+> +
+> +static void pcie_bwnotif_remove(struct pcie_device *srv)
+> +{
+> +	struct pcie_bwctrl_data *data =3D get_service_data(srv);
+> +
+> +	scoped_guard(rwsem_write, &pcie_bwctrl_remove_rwsem)
+> +		srv->port->link_bwctrl =3D NULL;
+> +
+> +	pcie_bwnotif_disable(srv->port);
+
+Trivial but I'd like a comment to say why this needs to be done after
+the link_bwctrl =3D NULL above (or if not, move it before that.
+That puts the tear down slightly out of order vs set up.
+
+> +	free_irq(srv->irq, srv);
+> +	kfree(data);
+> +}
+> +
+
 
