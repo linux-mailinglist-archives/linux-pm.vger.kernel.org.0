@@ -1,281 +1,179 @@
-Return-Path: <linux-pm+bounces-7676-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7677-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 835B58C0B95
-	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2024 08:37:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 828C38C0BAA
+	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2024 08:48:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47114284182
-	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2024 06:37:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B43721C2247F
+	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2024 06:48:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4D6384A51;
-	Thu,  9 May 2024 06:37:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 100D31272B7;
+	Thu,  9 May 2024 06:48:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gzp/3DTR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CDUPRgcS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F21256BFBA;
-	Thu,  9 May 2024 06:37:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B7717C0AB;
+	Thu,  9 May 2024 06:48:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715236658; cv=none; b=lQPQgV30tuBw0VTZocBLzvYnDRktQg/ATbE+PcLFjDNeCHWZqSg7sOBTK3amsAz2ANS0ZcHGVk1a8deNKAwzAZ/A6puHPwYqkDGL6jrE/q15cEbL+5vxbUeZE62kXJMbAp2Gr6FY/RSDt1aYyGe1o7a7VHpuMCCcy5WLnbBAzOY=
+	t=1715237298; cv=none; b=GnGm8bxVnIVA5MoVO5ulLLC0vmPJbjOrAZ+aVRUALS9noyU2olab+akVCuENOWCxgVc87K3/UKWFIdk5z8LzfwXIrTKVSinilSop/QnjCcLAC70rPwHcgFeKXo3L8Pm1Knb1DJXmeoKm2Vlc0JxdnIYVOmrYV1SloeaSKumq6kQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715236658; c=relaxed/simple;
-	bh=Akg5whRj2QGmbvPvHgB25GZBRjh1cvr6RrXGnT4DqCc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oFGziYKR5CB+BZtDMAW/8pI7cvB7AndbiUiazNCY3t7qus9gl1PqYHtXREcbwAvl1FF+qMfPLbwDp44ejhpF95FY6M5Y/oq7hjPY/78DRbF1b2dV0MYggkV35sPmL/SVoLePJr0yJ0yj1pcOqpe9OFoo26d5v7bkZHgBqFNfGsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gzp/3DTR; arc=none smtp.client-ip=209.85.222.180
+	s=arc-20240116; t=1715237298; c=relaxed/simple;
+	bh=9fO7Sh5EZvY64yUxjL2+G14A1JjtaSjuLrIZNlIVsr4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=j6lpEtuKora+trukyx/sk8HmAzMjr+9Cl06UGXp0fXVe6o1nhKWHr3F4pk3al2Lnm4E9EDBHp3I+s3UeIVaDJrPZyZFpdCue0Thoxh4hrWDRz1HHrvP7UIIqM/Toazb5ETJ53+uyw0Sopr18GZbJr/v00J4xNCCNMBSyf1g0OD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CDUPRgcS; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-792b8d30075so39883685a.1;
-        Wed, 08 May 2024 23:37:36 -0700 (PDT)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1eeabda8590so3728975ad.0;
+        Wed, 08 May 2024 23:48:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715236656; x=1715841456; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QI9uwec4nuyNAqQnoLxDJ9/EbsfR0pHHmIB5P+DqmdY=;
-        b=gzp/3DTRlKX/78pXH/0u9jxl9b6miECsQjwxrfiU8/uz2UqwT2R6g0aIEiXerVj5iF
-         o4b6KZ6OQ64VjmbBHJF8uzbfLoHBeseKy+fwMHojvw9DJ19PCdNA+6qXkpKrK4ez1GZW
-         Z7fL4IZY2nxXeIl861pHrYstzq73T8onERVwM1isXd5V/WdfpfOeeCV+PlaFLwoHCZRp
-         E9Q1Rwa/kP6YGvMpML9hK9/CUaNRfU3nxnP9H0RhEZNaH0d+64utuc2TR1ZgIs+X05H2
-         LwozWdOslrjmrYnXlO6Y7sfH87UcB7mbfTG+2s8qSrvQv7VZIJpGZFJWJ5j36uWvsTNA
-         RX2Q==
+        d=gmail.com; s=20230601; t=1715237296; x=1715842096; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jZJ/qPvhWmaN0bPAlkl54j0+0U9B8BSbeBplUAy1OJA=;
+        b=CDUPRgcSqfh3fEqXSLLVUrtUUgLjvBBTDLKpN2V3AcO58FV7Fs7YVVUUPffa/DGohX
+         OsOQvKtbtnJx35xexgZqyXx/idaJvE9jhcETVo1NRc9jCZZdHWlCOCFTSpEVGPU9aAMO
+         /JU+5AKMUiYE3YOM7lcunrP3EffMdPJZgIOkHYTX0jKwSm8di5GJ6hsPsEUWdbtP138G
+         TWfIj0KAzRWZgwrndxjGu4XBPsH53zzXobYktTmKmrHH6U7aIfOXkN7IeRRJUpWyl9iS
+         viSX6fbWp7VV7FkI3XfUEmfAtOV7fBag7RLLUhRNu0JXUKzpov350hQnbTKMEykvK9qZ
+         IbUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715236656; x=1715841456;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QI9uwec4nuyNAqQnoLxDJ9/EbsfR0pHHmIB5P+DqmdY=;
-        b=WwbVpoAMcRNDZzeVhGtRC1G9YdaG7+aFvlJtAkTN1W0TJP7ihPiK3WflGE5w/hlooX
-         7ROQi1cfpkhI3PW/KjW6y2plJb4sV5U16T3Ht3TezY9vBspGl6YKah3aLdwuOLRuWSru
-         fMIp+bKgP1hxuJPFXfE0k3KpuSuQzlKhZfpImtS/Y20coi4+bffVRO87KqCTo5NPkeN8
-         849u38XLx0695JjJRHwnCigitzYYr7lZzxzEnJC0cd9tEvw0jNizRSCbJXxsCCC3GaGQ
-         qUHrbWJwl+oUvc6xtQGxwMi1whBrK4X66xHilkrAGVaMS3gvYTTwsfdRC1zkyPadMzyA
-         loCA==
-X-Forwarded-Encrypted: i=1; AJvYcCUwl33QBes8aTrgVXYoLfEH7dZyTdrdru3a36A1gDEvBIDorHMDZl/9LVyjdLkXZJv7Yp3i1QCVkVqQaPl8xzTjoA4RVgkMUq+9CqIuWjdQTwImKl/u4YN2+wmD+etIoZ0el2+D+BdSVsRScF1S9DEHrApAyXHY2BVL7u2ZCNBeghvU0uie
-X-Gm-Message-State: AOJu0YztFIq19Zo8YLG4VHcDEL/FLsQ8n5BGELuy8XAV3wx1q5lcbirg
-	V0wwvtGu+g6tSggfzI/eRoVqH2dzmm2fihbFFW24AUSiYwOJxpMWOSkBVx7RgAbvfOQ68wi+Q6A
-	jdnfoZGdaFvgYEHIaz6y0YRrFWJg=
-X-Google-Smtp-Source: AGHT+IH/qgRxII3Zx4cRkBk0LgU5uRTIb7BPZXca50dCgMQzU31PdjlKN1qdZUQ2W37SSD2D7y/lO1+Q/QRay7gI1Zw=
-X-Received: by 2002:a05:6214:c84:b0:69b:12a0:295c with SMTP id
- 6a1803df08f44-6a1514e044bmr53184366d6.57.1715236655681; Wed, 08 May 2024
- 23:37:35 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1715237296; x=1715842096;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jZJ/qPvhWmaN0bPAlkl54j0+0U9B8BSbeBplUAy1OJA=;
+        b=RPlE8r6gwbd9p7ojpXEf62NTXJNHX5u269y6krgF8Zmymtu+JPBIGafMdaA2o6YA8i
+         B+XGtYd1nlj6YLwxSTRrfuWtWWx+ZFeA9ZWg3QW1+4ODZzWOqb0v2APb9ja5Z2uusr6C
+         /KKQbFaQg1B6tRJT4NpUBpC527ASm675k19rHNuWvQNI8eZmNQqKn7WBnnS1RPJUUjGk
+         r7dDIARcMsyhmurUrh2VKxDKaUcgI8OarU7b7oL2Wunn8OuytAR49Dec6IH60sSDBPeo
+         jhULk8AnEeaRj0F+qmn+F1xcNxEkWcV4XMUpMNqxCnZ6Qkzq4t0wG5ilf61f+9+3jd0F
+         zCPg==
+X-Forwarded-Encrypted: i=1; AJvYcCVxdCf47EIElc2egvPLHXosQiToi70pCQdoDq5JjmdgkaiX6N6Dj5pfRfuMS84l5BpFx85EBAxsyBFWXzNdefSuOjhx6uoOT8Rnj/OjtIUFVpIhYnMe03ZhxjL1q5rvnsS9dLTuwHMirBuEasAX6IZRkljx1gDT5osqFuYRzd4+18IJmbCUR38OPg==
+X-Gm-Message-State: AOJu0YwH+YhL+gh7uZTZ/fE8ZcI+vH0xEFf2MNaSubJJ4Bcy8pfgFY8c
+	gH3yr/ZwWgA3mhPAP1wWpkON5Oq0lmUR1RvYyUR3AJNyTGONTqST
+X-Google-Smtp-Source: AGHT+IHuANNmgdYBKLvlqBD4TQvuUL2BgBfhsM6ZChKBoBdTPu/89MPDHwGCEaMcOqarwXUh+xlqsw==
+X-Received: by 2002:a17:903:2451:b0:1eb:57a9:53f1 with SMTP id d9443c01a7336-1eeb03a56a8mr59339955ad.1.1715237295838;
+        Wed, 08 May 2024 23:48:15 -0700 (PDT)
+Received: from localhost.localdomain ([113.30.217.222])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0bf31da2sm6685885ad.165.2024.05.08.23.48.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 May 2024 23:48:15 -0700 (PDT)
+From: Anand Moon <linux.amoon@gmail.com>
+To: Chanwoo Choi <cw00.choi@samsung.com>,
+	MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Kyungmin Park <kyungmin.park@samsung.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>
+Cc: Anand Moon <linux.amoon@gmail.com>,
+	linux-pm@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v4] PM / devfreq: exynos: Use Use devm_clk_get_enabled() helpers
+Date: Thu,  9 May 2024 12:17:48 +0530
+Message-ID: <20240509064754.10082-1-linux.amoon@gmail.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <00000000000091228c0617eaae32@google.com> <20240508231904.2259-1-hdanton@sina.com>
-In-Reply-To: <20240508231904.2259-1-hdanton@sina.com>
-From: Amir Goldstein <amir73il@gmail.com>
-Date: Thu, 9 May 2024 09:37:24 +0300
-Message-ID: <CAOQ4uxhDBbSh-4xbLgS=e6LtaZe2-E9Scgb9uP4ysCZEGG2skA@mail.gmail.com>
-Subject: Re: [syzbot] [kernfs?] possible deadlock in kernfs_seq_start
-To: Hillf Danton <hdanton@sina.com>
-Cc: syzbot <syzbot+4c493dcd5a68168a94b2@syzkaller.appspotmail.com>, 
-	linux-fsdevel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>, 
-	linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-CC: linux-pm
+The devm_clk_get_enabled() helpers:
+    - call devm_clk_get()
+    - call clk_prepare_enable() and register what is needed in order to
+     call clk_disable_unprepare() when needed, as a managed resource.
 
-On Thu, May 9, 2024 at 2:19=E2=80=AFAM Hillf Danton <hdanton@sina.com> wrot=
-e:
->
-> On Tue, 07 May 2024 22:36:18 -0700
-> > syzbot has found a reproducer for the following issue on:
-> >
-> > HEAD commit:    dccb07f2914c Merge tag 'for-6.9-rc7-tag' of git://git.k=
-ern..
-> > git tree:       upstream
-> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=3D137daa6c980=
-000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D9d7ea7de0cb=
-32587
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=3D4c493dcd5a681=
-68a94b2
-> > compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for D=
-ebian) 2.40
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1134f3c09=
-80000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D1367a504980=
-000
-> >
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/ea1961ce01fe/d=
-isk-dccb07f2.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/445a00347402/vmli=
-nux-dccb07f2.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/461aed7c4df3=
-/bzImage-dccb07f2.xz
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the co=
-mmit:
-> > Reported-by: syzbot+4c493dcd5a68168a94b2@syzkaller.appspotmail.com
-> >
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
-> > WARNING: possible circular locking dependency detected
-> > 6.9.0-rc7-syzkaller-00012-gdccb07f2914c #0 Not tainted
-> > ------------------------------------------------------
-> > syz-executor149/5078 is trying to acquire lock:
-> > ffff88802a978888 (&of->mutex){+.+.}-{3:3}, at: kernfs_seq_start+0x53/0x=
-3b0 fs/kernfs/file.c:154
-> >
-> > but task is already holding lock:
-> > ffff88802d80b540 (&p->lock){+.+.}-{3:3}, at: seq_read_iter+0xb7/0xd60 f=
-s/seq_file.c:182
-> >
-> > which lock already depends on the new lock.
-> >
-> >
-> > the existing dependency chain (in reverse order) is:
-> >
-> > -> #4 (&p->lock){+.+.}-{3:3}:
-> >        lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5754
-> >        __mutex_lock_common kernel/locking/mutex.c:608 [inline]
-> >        __mutex_lock+0x136/0xd70 kernel/locking/mutex.c:752
-> >        seq_read_iter+0xb7/0xd60 fs/seq_file.c:182
-> >        call_read_iter include/linux/fs.h:2104 [inline]
-> >        copy_splice_read+0x662/0xb60 fs/splice.c:365
-> >        do_splice_read fs/splice.c:985 [inline]
-> >        splice_file_to_pipe+0x299/0x500 fs/splice.c:1295
-> >        do_sendfile+0x515/0xdc0 fs/read_write.c:1301
-> >        __do_sys_sendfile64 fs/read_write.c:1362 [inline]
-> >        __se_sys_sendfile64+0x17c/0x1e0 fs/read_write.c:1348
-> >        do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-> >        do_syscall_64+0xf5/0x240 arch/x86/entry/common.c:83
-> >        entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> >
-> > -> #3 (&pipe->mutex){+.+.}-{3:3}:
-> >        lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5754
-> >        __mutex_lock_common kernel/locking/mutex.c:608 [inline]
-> >        __mutex_lock+0x136/0xd70 kernel/locking/mutex.c:752
-> >        iter_file_splice_write+0x335/0x14e0 fs/splice.c:687
-> >        backing_file_splice_write+0x2bc/0x4c0 fs/backing-file.c:289
-> >        ovl_splice_write+0x3cf/0x500 fs/overlayfs/file.c:379
-> >        do_splice_from fs/splice.c:941 [inline]
-> >        do_splice+0xd77/0x1880 fs/splice.c:1354
-> >        __do_splice fs/splice.c:1436 [inline]
-> >        __do_sys_splice fs/splice.c:1652 [inline]
-> >        __se_sys_splice+0x331/0x4a0 fs/splice.c:1634
-> >        do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-> >        do_syscall_64+0xf5/0x240 arch/x86/entry/common.c:83
-> >        entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> >
-> > -> #2 (sb_writers#4){.+.+}-{0:0}:
-> >        lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5754
-> >        percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
-> >        __sb_start_write include/linux/fs.h:1664 [inline]
-> >        sb_start_write+0x4d/0x1c0 include/linux/fs.h:1800
-> >        mnt_want_write+0x3f/0x90 fs/namespace.c:409
-> >        ovl_create_object+0x13b/0x370 fs/overlayfs/dir.c:629
-> >        lookup_open fs/namei.c:3497 [inline]
-> >        open_last_lookups fs/namei.c:3566 [inline]
-> >        path_openat+0x1425/0x3240 fs/namei.c:3796
-> >        do_filp_open+0x235/0x490 fs/namei.c:3826
-> >        do_sys_openat2+0x13e/0x1d0 fs/open.c:1406
-> >        do_sys_open fs/open.c:1421 [inline]
-> >        __do_sys_open fs/open.c:1429 [inline]
-> >        __se_sys_open fs/open.c:1425 [inline]
-> >        __x64_sys_open+0x225/0x270 fs/open.c:1425
-> >        do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-> >        do_syscall_64+0xf5/0x240 arch/x86/entry/common.c:83
-> >        entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> >
-> > -> #1 (&ovl_i_mutex_dir_key[depth]){++++}-{3:3}:
-> >        lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5754
-> >        down_read+0xb1/0xa40 kernel/locking/rwsem.c:1526
-> >        inode_lock_shared include/linux/fs.h:805 [inline]
-> >        lookup_slow+0x45/0x70 fs/namei.c:1708
-> >        walk_component+0x2e1/0x410 fs/namei.c:2004
-> >        lookup_last fs/namei.c:2461 [inline]
-> >        path_lookupat+0x16f/0x450 fs/namei.c:2485
-> >        filename_lookup+0x256/0x610 fs/namei.c:2514
-> >        kern_path+0x35/0x50 fs/namei.c:2622
-> >        lookup_bdev+0xc5/0x290 block/bdev.c:1136
-> >        resume_store+0x1a0/0x710 kernel/power/hibernate.c:1235
-> >        kernfs_fop_write_iter+0x3a1/0x500 fs/kernfs/file.c:334
-> >        call_write_iter include/linux/fs.h:2110 [inline]
-> >        new_sync_write fs/read_write.c:497 [inline]
-> >        vfs_write+0xa84/0xcb0 fs/read_write.c:590
-> >        ksys_write+0x1a0/0x2c0 fs/read_write.c:643
-> >        do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-> >        do_syscall_64+0xf5/0x240 arch/x86/entry/common.c:83
-> >        entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> >
-> > -> #0 (&of->mutex){+.+.}-{3:3}:
-> >        check_prev_add kernel/locking/lockdep.c:3134 [inline]
-> >        check_prevs_add kernel/locking/lockdep.c:3253 [inline]
-> >        validate_chain+0x18cb/0x58e0 kernel/locking/lockdep.c:3869
-> >        __lock_acquire+0x1346/0x1fd0 kernel/locking/lockdep.c:5137
-> >        lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5754
-> >        __mutex_lock_common kernel/locking/mutex.c:608 [inline]
-> >        __mutex_lock+0x136/0xd70 kernel/locking/mutex.c:752
-> >        kernfs_seq_start+0x53/0x3b0 fs/kernfs/file.c:154
-> >        traverse+0x14f/0x550 fs/seq_file.c:106
-> >        seq_read_iter+0xc5e/0xd60 fs/seq_file.c:195
-> >        call_read_iter include/linux/fs.h:2104 [inline]
-> >        copy_splice_read+0x662/0xb60 fs/splice.c:365
-> >        do_splice_read fs/splice.c:985 [inline]
-> >        splice_file_to_pipe+0x299/0x500 fs/splice.c:1295
-> >        do_sendfile+0x515/0xdc0 fs/read_write.c:1301
-> >        __do_sys_sendfile64 fs/read_write.c:1362 [inline]
-> >        __se_sys_sendfile64+0x17c/0x1e0 fs/read_write.c:1348
-> >        do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-> >        do_syscall_64+0xf5/0x240 arch/x86/entry/common.c:83
-> >        entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> >
-> > other info that might help us debug this:
-> >
-> > Chain exists of:
-> >   &of->mutex --> &pipe->mutex --> &p->lock
-> >
-> >  Possible unsafe locking scenario:
-> >
-> >        CPU0                    CPU1
-> >        ----                    ----
-> >   lock(&p->lock);
-> >                                lock(&pipe->mutex);
-> >                                lock(&p->lock);
-> >   lock(&of->mutex);
-> >
-> >  *** DEADLOCK ***
->
-> This shows 16b52bbee482 ("kernfs: annotate different lockdep class for
-> of->mutex of writable files") is a bandaid.
+This simplifies the code and avoids the calls to clk_disable_unprepare().
 
-Well, nobody said that it fixes the root cause.
-But the annotation fix is correct, because the former report was
-really false positive one.
+While at it, use dev_err_probe consistently, and use its return value
+to return the error code.
 
-The root cause is resume_store() doing vfs path lookup.
-If we could deprecate this allegedly unneeded UAPI we should.
+Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+---
+V4 - wrap up the error messagee within 80 char
+v3 - No change
+v2 - No change
+---
+ drivers/devfreq/exynos-bus.c | 22 +++++-----------------
+ 1 file changed, 5 insertions(+), 17 deletions(-)
 
-That said, all those lockdep warnings indicate a possible deadlock
-if someone tries to hibernate into an overlayfs file.
+diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
+index 00118580905a..7d06c476d8e9 100644
+--- a/drivers/devfreq/exynos-bus.c
++++ b/drivers/devfreq/exynos-bus.c
+@@ -160,7 +160,6 @@ static void exynos_bus_exit(struct device *dev)
+ 	platform_device_unregister(bus->icc_pdev);
+ 
+ 	dev_pm_opp_of_remove_table(dev);
+-	clk_disable_unprepare(bus->clk);
+ 	dev_pm_opp_put_regulators(bus->opp_token);
+ }
+ 
+@@ -171,7 +170,6 @@ static void exynos_bus_passive_exit(struct device *dev)
+ 	platform_device_unregister(bus->icc_pdev);
+ 
+ 	dev_pm_opp_of_remove_table(dev);
+-	clk_disable_unprepare(bus->clk);
+ }
+ 
+ static int exynos_bus_parent_parse_of(struct device_node *np,
+@@ -247,23 +245,16 @@ static int exynos_bus_parse_of(struct device_node *np,
+ 	int ret;
+ 
+ 	/* Get the clock to provide each bus with source clock */
+-	bus->clk = devm_clk_get(dev, "bus");
+-	if (IS_ERR(bus->clk)) {
+-		dev_err(dev, "failed to get bus clock\n");
+-		return PTR_ERR(bus->clk);
+-	}
+-
+-	ret = clk_prepare_enable(bus->clk);
+-	if (ret < 0) {
+-		dev_err(dev, "failed to get enable clock\n");
+-		return ret;
+-	}
++	bus->clk = devm_clk_get_enabled(dev, "bus");
++	if (IS_ERR(bus->clk))
++		return dev_err_probe(dev, PTR_ERR(bus->clk),
++				"failed to get bus clock\n");
+ 
+ 	/* Get the freq and voltage from OPP table to scale the bus freq */
+ 	ret = dev_pm_opp_of_add_table(dev);
+ 	if (ret < 0) {
+ 		dev_err(dev, "failed to get OPP table\n");
+-		goto err_clk;
++		return ret;
+ 	}
+ 
+ 	rate = clk_get_rate(bus->clk);
+@@ -281,8 +272,6 @@ static int exynos_bus_parse_of(struct device_node *np,
+ 
+ err_opp:
+ 	dev_pm_opp_of_remove_table(dev);
+-err_clk:
+-	clk_disable_unprepare(bus->clk);
+ 
+ 	return ret;
+ }
+@@ -453,7 +442,6 @@ static int exynos_bus_probe(struct platform_device *pdev)
+ 
+ err:
+ 	dev_pm_opp_of_remove_table(dev);
+-	clk_disable_unprepare(bus->clk);
+ err_reg:
+ 	dev_pm_opp_put_regulators(bus->opp_token);
+ 
+-- 
+2.44.0
 
-If root tries to do that then, this is either an attack or stupidity.
-Either Way the news flash from this report is "root may be able
-to deadlock kernel on purpose"
-Not very exciting and not likely to happen in the real world.
-
-The remaining question is what to do about the lockdep reports.
-
-Questions to PM maintainers:
-Any chance to deprecate writing path to /sys/power/resume?
-Userspace should have no problem getting the same done
-with writing dev number.
-
-Thanks,
-Amir.
 
