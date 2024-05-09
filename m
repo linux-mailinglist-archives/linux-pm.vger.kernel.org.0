@@ -1,194 +1,168 @@
-Return-Path: <linux-pm+bounces-7694-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7701-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36D1B8C1549
-	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2024 21:17:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 299978C1746
+	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2024 22:26:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D57192831EA
-	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2024 19:17:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D40F01F21FCA
+	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2024 20:26:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E94E7F7DB;
-	Thu,  9 May 2024 19:17:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9414784A3B;
+	Thu,  9 May 2024 20:05:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="kUmRIt4R"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="gy43XoG5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.smtpout.orange.fr (smtp-17.smtpout.orange.fr [80.12.242.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE3ED653;
-	Thu,  9 May 2024 19:17:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ADDA8405C;
+	Thu,  9 May 2024 20:05:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715282271; cv=none; b=HTk9RJiV/MUFu4ilKV03PBBmTRqE5x3D0oq7jeNsAe2PKg9HaUDXiwVzuHPGR+ESkV6zqbVVJDtoEEcsNB89C8Z0BSGgdZd6YmmA6bc96ra9gLA+EEHLJ+r68mLe+LpPdz2lFcZXBsHfms+WM820aSNPsvV7J0Knf44WgoNXnfg=
+	t=1715285111; cv=none; b=jKY4Mfg0eaLrJr/WrdVgdlgAk6pRArPNGl8cBMO4unQxT+l3Jq+LBgfYbwpfZETRF0KWqt+Lr3KyxP3CXBaV3o4HvUB9YRsS7ADJKiG7XMJigiR67yLjZx73L++GIY6z0HZ022yBBRpZMAzLZuKHJTdREvpDWNriRE8zVdOyiP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715282271; c=relaxed/simple;
-	bh=TsOA66Gxd9P6ysQ1zUnV2UVgf3AWyGQEfUnpoMtH47U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pTKPQjT/q+iuoegMYV1Feu/QN5LMxOQkqEvfwCaZxMnSfDXIZrndRmf/1SATTAeknptY0n8EUhYVb6DHeZ4Ub9CT0KJr1mAtFUeFrMeq6y+f1wLtIqxwph0SbPn++ktT1En8qEREpFV9T7Wy/oK79FqOqf8h7WjOUlpcSCp7TXE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=kUmRIt4R; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.0.0)
- id 99a7b61e84f11913; Thu, 9 May 2024 21:17:41 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id CD22BA524E7;
-	Thu,  9 May 2024 21:17:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1715282261;
-	bh=TsOA66Gxd9P6ysQ1zUnV2UVgf3AWyGQEfUnpoMtH47U=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=kUmRIt4RYlSxxlAIvKiABrMyj8MMmrFeSsDoBtXDcuTM4hnKpPy7I1+bGhny3Ih+x
-	 BuOz+rwk29f6OEwKnel+pERJA1YLxNgpfvxlGzftmyOR+DuXpzb2X8NWx2saQ0qWcc
-	 m54skSN48mTpP8Em6n6ewYryZlZ0UaTPFkEVkRzs7JrZrIsFPaCfhuB7un7ZXMA/lp
-	 gQUhiJwz3F00hMzXrdqF8D+Zd+jmFAnINTD+U+CKwIL1ewsIjCbfLaqe0IsoPPSkht
-	 HOPK05I4I2DDizL7UTUXnmvIGA/+0AMtI10hWkFgBzeEuB1zvrH18cXSG6jJrkRA2a
-	 x7WBsWGq5nvPQ==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
- Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [PATCH v1 7/7] thermal: trip: Use common set of trip type names
-Date: Thu, 09 May 2024 21:17:25 +0200
-Message-ID: <2272195.iZASKD2KPV@kreacher>
-In-Reply-To: <12438864.O9o76ZdvQC@kreacher>
-References: <12438864.O9o76ZdvQC@kreacher>
+	s=arc-20240116; t=1715285111; c=relaxed/simple;
+	bh=+OQRrox4NiFSzWCAahZ6m6z1qcTCIJu3cMe6d9XV/4c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=a1qNLMnzRrY03Dd6c/bMRAYrn8KQuBU9jLkY58PBaL4VFeM4iQJo+8Wme15Yh68uZp9oZYKH5UizblIIi89ucUkz3Hn9yMY7fE2PJ4TVUkwz/Rc6kTV47M9wgnwGp7qNn/YKR92/Di/YClmPnXP0CTxTJSXOv/1eD+Bpjm5rZTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=gy43XoG5; arc=none smtp.client-ip=80.12.242.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [192.168.1.37] ([86.243.17.157])
+	by smtp.orange.fr with ESMTPA
+	id 5A0hsrFbhk6QC5A0hsoqMR; Thu, 09 May 2024 22:05:01 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1715285101;
+	bh=qX1DtiA+PUQHRn3nGRgzieMrVDQkAdDkg4WRPoC1ywM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=gy43XoG56J30hlSWRVxCtOVjO+dv2aixkqyHA8acv4TEvVWK2o7y8K7yQn869TRC+
+	 uC4GAeHtsDzUCkvNxURGSSEg3oaBojbjYEsg46lQm7Iho87LQ7iNRsKt/8/Ylpu2pn
+	 3p1auesTJw3otin1+94vVd59NLW5gaEaM5uRjCIqxQKxn9dPDpNI25F6+tFmfv7bP9
+	 9/KzmUe7fXLSa535HO+aKf+57bPecDA6C1SSkXsvmAyAlfSHUWukgcj9EdcPdq1fuu
+	 MYjaBoi/hE3i5RVyNPoyz+U2JtPWPk0SZZDMyaON/10cV4RqQns3REKpmsiMYpne1I
+	 UiNcdFX3zuWqg==
+X-ME-Helo: [192.168.1.37]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 09 May 2024 22:05:01 +0200
+X-ME-IP: 86.243.17.157
+Message-ID: <d2943958-ac80-4158-8e7c-b5493ab713f8@wanadoo.fr>
+Date: Thu, 9 May 2024 22:04:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrvdefvddgudefvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtohepuggrnhhivghlrdhlvgii
- tggrnhhosehlihhnrghrohdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4] PM / devfreq: exynos: Use Use devm_clk_get_enabled()
+ helpers
+To: Anand Moon <linux.amoon@gmail.com>, Chanwoo Choi <cw00.choi@samsung.com>,
+ MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>,
+ Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>
+Cc: linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20240509064754.10082-1-linux.amoon@gmail.com>
+Content-Language: en-MW
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20240509064754.10082-1-linux.amoon@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Le 09/05/2024 à 08:47, Anand Moon a écrit :
+> The devm_clk_get_enabled() helpers:
+>      - call devm_clk_get()
+>      - call clk_prepare_enable() and register what is needed in order to
+>       call clk_disable_unprepare() when needed, as a managed resource.
+> 
+> This simplifies the code and avoids the calls to clk_disable_unprepare().
+> 
+> While at it, use dev_err_probe consistently, and use its return value
+> to return the error code.
+> 
+> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> ---
+> V4 - wrap up the error messagee within 80 char
+> v3 - No change
+> v2 - No change
+> ---
+>   drivers/devfreq/exynos-bus.c | 22 +++++-----------------
+>   1 file changed, 5 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
+> index 00118580905a..7d06c476d8e9 100644
+> --- a/drivers/devfreq/exynos-bus.c
+> +++ b/drivers/devfreq/exynos-bus.c
+> @@ -160,7 +160,6 @@ static void exynos_bus_exit(struct device *dev)
+>   	platform_device_unregister(bus->icc_pdev);
+>   
+>   	dev_pm_opp_of_remove_table(dev);
+> -	clk_disable_unprepare(bus->clk);
+>   	dev_pm_opp_put_regulators(bus->opp_token);
+>   }
+>   
+> @@ -171,7 +170,6 @@ static void exynos_bus_passive_exit(struct device *dev)
+>   	platform_device_unregister(bus->icc_pdev);
+>   
+>   	dev_pm_opp_of_remove_table(dev);
+> -	clk_disable_unprepare(bus->clk);
+>   }
+>   
+>   static int exynos_bus_parent_parse_of(struct device_node *np,
+> @@ -247,23 +245,16 @@ static int exynos_bus_parse_of(struct device_node *np,
+>   	int ret;
+>   
+>   	/* Get the clock to provide each bus with source clock */
+> -	bus->clk = devm_clk_get(dev, "bus");
+> -	if (IS_ERR(bus->clk)) {
+> -		dev_err(dev, "failed to get bus clock\n");
+> -		return PTR_ERR(bus->clk);
+> -	}
+> -
+> -	ret = clk_prepare_enable(bus->clk);
+> -	if (ret < 0) {
+> -		dev_err(dev, "failed to get enable clock\n");
+> -		return ret;
+> -	}
+> +	bus->clk = devm_clk_get_enabled(dev, "bus");
+> +	if (IS_ERR(bus->clk))
+> +		return dev_err_probe(dev, PTR_ERR(bus->clk),
+> +				"failed to get bus clock\n");
+>   
+>   	/* Get the freq and voltage from OPP table to scale the bus freq */
+>   	ret = dev_pm_opp_of_add_table(dev);
+>   	if (ret < 0) {
+>   		dev_err(dev, "failed to get OPP table\n");
+> -		goto err_clk;
+> +		return ret;
+>   	}
+>   
+>   	rate = clk_get_rate(bus->clk);
+> @@ -281,8 +272,6 @@ static int exynos_bus_parse_of(struct device_node *np,
+>   
+>   err_opp:
+>   	dev_pm_opp_of_remove_table(dev);
+> -err_clk:
+> -	clk_disable_unprepare(bus->clk);
+>   
+>   	return ret;
+>   }
+> @@ -453,7 +442,6 @@ static int exynos_bus_probe(struct platform_device *pdev)
+>   
+>   err:
+>   	dev_pm_opp_of_remove_table(dev);
+> -	clk_disable_unprepare(bus->clk);
+>   err_reg:
+>   	dev_pm_opp_put_regulators(bus->opp_token);
+>   
 
-Use the same set of trip type names in sysfs and in the thermal debug
-code output.
+Hi,
 
-No intentional functional impact.
+if the patch is correct, I think that clk in struct exynos_bus can be 
+easily be removed as well.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/thermal_core.h    |    2 ++
- drivers/thermal/thermal_debugfs.c |   10 +---------
- drivers/thermal/thermal_sysfs.c   |   13 +------------
- drivers/thermal/thermal_trip.c    |   15 +++++++++++++++
- 4 files changed, 19 insertions(+), 21 deletions(-)
-
-Index: linux-pm/drivers/thermal/thermal_trip.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_trip.c
-+++ linux-pm/drivers/thermal/thermal_trip.c
-@@ -9,6 +9,21 @@
-  */
- #include "thermal_core.h"
- 
-+static const char *trip_type_names[] = {
-+	[THERMAL_TRIP_ACTIVE] = "active",
-+	[THERMAL_TRIP_PASSIVE] = "passive",
-+	[THERMAL_TRIP_HOT] = "hot",
-+	[THERMAL_TRIP_CRITICAL] = "critical",
-+};
-+
-+const char *thermal_trip_type_name(enum thermal_trip_type trip_type)
-+{
-+	if (trip_type < THERMAL_TRIP_ACTIVE || trip_type > THERMAL_TRIP_CRITICAL)
-+		return "unknown";
-+
-+	return trip_type_names[trip_type];
-+}
-+
- int for_each_thermal_trip(struct thermal_zone_device *tz,
- 			  int (*cb)(struct thermal_trip *, void *),
- 			  void *data)
-Index: linux-pm/drivers/thermal/thermal_core.h
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_core.h
-+++ linux-pm/drivers/thermal/thermal_core.h
-@@ -240,6 +240,8 @@ void thermal_governor_update_tz(struct t
- #define trip_to_trip_desc(__trip)	\
- 	container_of(__trip, struct thermal_trip_desc, trip)
- 
-+const char *thermal_trip_type_name(enum thermal_trip_type trip_type);
-+
- void __thermal_zone_set_trips(struct thermal_zone_device *tz);
- int thermal_zone_trip_id(const struct thermal_zone_device *tz,
- 			 const struct thermal_trip *trip);
-Index: linux-pm/drivers/thermal/thermal_sysfs.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_sysfs.c
-+++ linux-pm/drivers/thermal/thermal_sysfs.c
-@@ -88,18 +88,7 @@ trip_point_type_show(struct device *dev,
- 	if (sscanf(attr->attr.name, "trip_point_%d_type", &trip_id) != 1)
- 		return -EINVAL;
- 
--	switch (tz->trips[trip_id].trip.type) {
--	case THERMAL_TRIP_CRITICAL:
--		return sprintf(buf, "critical\n");
--	case THERMAL_TRIP_HOT:
--		return sprintf(buf, "hot\n");
--	case THERMAL_TRIP_PASSIVE:
--		return sprintf(buf, "passive\n");
--	case THERMAL_TRIP_ACTIVE:
--		return sprintf(buf, "active\n");
--	default:
--		return sprintf(buf, "unknown\n");
--	}
-+	return sprintf(buf, "%s\n", thermal_trip_type_name(tz->trips[trip_id].trip.type));
- }
- 
- static ssize_t
-Index: linux-pm/drivers/thermal/thermal_debugfs.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_debugfs.c
-+++ linux-pm/drivers/thermal/thermal_debugfs.c
-@@ -774,7 +774,6 @@ static int tze_seq_show(struct seq_file
- 	struct thermal_zone_device *tz = thermal_dbg->tz_dbg.tz;
- 	struct thermal_trip_desc *td;
- 	struct tz_episode *tze;
--	const char *type;
- 	u64 duration_ms;
- 	int trip_id;
- 	char c;
-@@ -818,13 +817,6 @@ static int tze_seq_show(struct seq_file
- 		if (trip_stats->min == INT_MAX)
- 			continue;
- 
--		if (trip->type == THERMAL_TRIP_PASSIVE)
--			type = "passive";
--		else if (trip->type == THERMAL_TRIP_ACTIVE)
--			type = "active";
--		else
--			type = "hot";
--
- 		if (trip_stats->timestamp != KTIME_MAX) {
- 			/* Mitigation in progress. */
- 			ktime_t delta = ktime_sub(ktime_get(),
-@@ -840,7 +832,7 @@ static int tze_seq_show(struct seq_file
- 
- 		seq_printf(s, "| %*d | %*s | %*d | %*d | %c%*lld | %*d | %*d |\n",
- 			   4 , trip_id,
--			   8, type,
-+			   8, thermal_trip_type_name(trip->type),
- 			   9, trip->temperature,
- 			   9, trip->hysteresis,
- 			   c, 11, duration_ms,
-
-
-
+CJ
 
