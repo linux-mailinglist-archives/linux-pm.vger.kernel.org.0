@@ -1,241 +1,190 @@
-Return-Path: <linux-pm+bounces-7685-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7686-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 870298C0FBC
-	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2024 14:40:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44D138C1185
+	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2024 16:52:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00EFE1F23907
-	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2024 12:40:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E352D28318B
+	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2024 14:52:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 998F414E2FA;
-	Thu,  9 May 2024 12:40:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A81D14A612;
+	Thu,  9 May 2024 14:52:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="DZXGrH3c"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RRy4DqfX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30DBA146D7B
-	for <linux-pm@vger.kernel.org>; Thu,  9 May 2024 12:40:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B3CC3A8CB;
+	Thu,  9 May 2024 14:52:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715258412; cv=none; b=ARoJgWOQ0KRmKs2R1n+PeGEk68L6ZWqJEQk1NT2D3FRJ8VJ/VxUhDxvbWCJgiWZZWWgQ8ViKdzR6PaH+U1vadGWabmoj5hrHR5xr4bX+t6uaXXmTPfOF+iNhNbWBxQqiEZtDRbaQ3y+y4jfQ/bF+HT6LM8cIyPtRg1I57/G1mAg=
+	t=1715266356; cv=none; b=S5sU9AyMvKhH/dSEYG9XQ/1vuIe7RCIsXO+tUWRgEBiTXSQH5Ci3q6UAQJhp6wxR2rRCa96GBG92aPXNjy0LyGoJLdFDRz06eFMfMyKXtqIH4XqNpKd+gs2gWqNgC0eC7KUJTphofayFoj7OWwCY75rs7Dc467KCFd275RBsMHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715258412; c=relaxed/simple;
-	bh=xTHG5e7wz8J6iLM/stIhVyAx6r42yfR/HuZsBWOWjW4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lQMeoQSkn8a/IOTLPkEFrgBoqbWmL+3mzAYNGj3TGFtu2H3odXQkErvqDoBiaSjRapTjFSXxnr+njGpkpQZP0uzNLGMNVGNvHCgA3lZce6b2mN5Vv4SdZTm1LtzQU2MH8B/HUlYAtDUwbq2L9ia+9GDqHsqSKsFv9EislZdk4TE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=DZXGrH3c; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-41fd5dc0439so2989855e9.0
-        for <linux-pm@vger.kernel.org>; Thu, 09 May 2024 05:40:09 -0700 (PDT)
+	s=arc-20240116; t=1715266356; c=relaxed/simple;
+	bh=HNc9XbbgS2dUmbPVOOp70WxEHGidcNobnCHsVzb0ViM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oJC0SfgdsTot0rz30DkM8Ixil12JCYWjMd9gbF6e13ZYpCTRPwkhFZm6W/LnTAls7doR188sVS85q8LvleEPZiR+DyJCD8CFtKav4lXARb0UqEoBvCnOmCk3E1/BjSKNqRf8qj8d4cv6OPXTU/LVBzEGW+piNOnQ9/p1XObaLsg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RRy4DqfX; arc=none smtp.client-ip=209.85.222.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-792c031ffdeso47082785a.2;
+        Thu, 09 May 2024 07:52:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1715258408; x=1715863208; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PZts/U5mGFM2WkbRCutnzJZzymYo1b+PUsTv+EIiaYU=;
-        b=DZXGrH3cJqbFsjiRZ4n5kVH9aRrKunjRe+K72dZiiJQsJJC1v/lw99VK5DyHUKj4yM
-         AdJmvry0L36o3mEBf5DZpQfdXcKeXYrKIUUDK29Y2jDNSNS5Lfp4UvY5yn+sxS+JhbQU
-         H6jbyLKSDiE33Ca3GjGyk7UBzBA21azH8GlbPkGMbRS0egtyvS7n4PB/nPzwKACwTHxj
-         IXOA+YdUxLFL9V6Zd8UGudsqA+pN0mHUt0beWhwD7BSHyqI2YcvoeAxwkGrc/hlVrBGY
-         KjXeP3/JB49GE/a9fVti/7fr2ovVlwJmzgctKUOwEnSDW1BHYjXWMaOvVvUl+g93J/Af
-         rTaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715258408; x=1715863208;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1715266353; x=1715871153; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PZts/U5mGFM2WkbRCutnzJZzymYo1b+PUsTv+EIiaYU=;
-        b=Hfk0/lgqyRC9C5GhI4CSd1v3utJPORJ/cnxAu3TcsPOAAOepzn7O6LmpdIFmaQ0jBU
-         6xHNwNaqF8S2mdzMsyTB13eARJ2Bi8MX0d+kYXPEnTsdejYYwaEeu1PvyUN0sCNi1/1j
-         Mza2Kp8RWwfzaHq5I/ABJz71WPyJ4COCEwgMICVc63GYH/9yFaWJSkXcCEanMMUIbh3I
-         1aG4M2YmUTlmzesYKZT7FLeT5DkofdIGIf6J/aBf4E9xL/7RD7cmZNEy/X6QD7ZGEf0Y
-         J7zs/6CrzroydfDMHaGZMWJ03c33v++z8dWaJjKRkhqtlXrnwDH3PBWD/8EMG6LSIi+u
-         60Jg==
-X-Forwarded-Encrypted: i=1; AJvYcCVXiLAfQdhF2XEXjEHfYCp9xI0/cjfhDIaEirA3Srke6ZZnj1OEC14Ykv0oqEkK7qX68vSuAQOmFOn0v9XaGVUB3o4EKZM69wU=
-X-Gm-Message-State: AOJu0Yy0KYEWzcGTo7Ka/0F7/GlBzrPHr1bqGecMWel7qE687vBwjD/M
-	GGLg2qV/xYT3CubCO7lnkqJ/f2e5EANwN0ZB3gVA3E3uQNp0UUl/ZtTo+95LKNo=
-X-Google-Smtp-Source: AGHT+IHycysr3LR0p1aS/61wWEema4MLP7hieGNFHOrzW6tyzEZx8KJKEtoxQrlw6lWqUPhdcy1ccA==
-X-Received: by 2002:a05:600c:5116:b0:41f:d4e1:5abc with SMTP id 5b1f17b1804b1-41fd4e15bb1mr9300075e9.8.1715258407921;
-        Thu, 09 May 2024 05:40:07 -0700 (PDT)
-Received: from airbuntu (92.40.184.205.threembb.co.uk. [92.40.184.205])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-41f8811110asm60817755e9.35.2024.05.09.05.40.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 May 2024 05:40:07 -0700 (PDT)
-Date: Thu, 9 May 2024 13:40:03 +0100
-From: Qais Yousef <qyousef@layalina.io>
-To: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Daniel Bristot de Oliveira <bristot@redhat.com>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Christian Loehle <christian.loehle@arm.com>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] sched: Consolidate cpufreq updates
-Message-ID: <20240509124003.hsuatsid4vtjpzhv@airbuntu>
-References: <20240505233103.168766-1-qyousef@layalina.io>
- <CAKfTPtDvBAFauUfyWZhYRUz6f42iMAJcwcdDDQh+V8+QfDwc2Q@mail.gmail.com>
- <20240507110809.a45amdmhy5vr5cuw@airbuntu>
- <CAKfTPtDHWBKfksW4jQJ3KZVb7_GDXLZB1F7auYVZE1ddyDpgYQ@mail.gmail.com>
+        bh=IhlR7+SOVypTDb9MtbmoK6AZhtMXL00cn78hl+eDd+o=;
+        b=RRy4DqfXIexXSN1xBhHlbLpH+ZfqMMuHCiDglXipDDDd9Zja2gJ4y0eW/N+kvuHZvY
+         zet/uAEhyYaipW3rhhkBYCm0bUZIOvsaft9AIiDDN4TuAVW9+kFyV9y67srz9LDSzZMx
+         ireoMAzDr/sF0i7aneydSuKBVO1K+3G/w76rTT2s99WvPVkFWQaFbelkHjFYRXYUpdm/
+         xJirafV/EBEq1FQUDziHPO+PUU897xTD7z2ZqUggSaVgNlYlC1T1thL8LsRpk0dR/Z5i
+         2SXZrgGvp1IRBvi/F3SwmlEv63nrHkMz5XsnbK4KWm943mQjiQQNMLPU4p/WW+54OQE0
+         vdaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715266353; x=1715871153;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IhlR7+SOVypTDb9MtbmoK6AZhtMXL00cn78hl+eDd+o=;
+        b=NTCbCPG0tqwJtJpQ6hBQyMyR1PSGaRbglNqnBORffRnl9j3ukzqaFu+5sZHmiZEIYT
+         HNpOY8Pthlh4hPVkRLflbBiw2PflLfn95+QMuvLWIsX2YaNx/G6/QXyuCb0Kn5WZGCZE
+         NzU8MgwMVpSaA1l6+vZ5HWvJMB7gvU/BFrEWLc2xgaeEEqK9wXhn5dUjG66wXfut8Qhl
+         vayKX7HobW4N3s9z8Y3uzIwcb4rlPScIDI+ML/1dXHhRLvJZ5LSIdM7Kc+mwi7/bMs5i
+         BrBs6+qj8td2yZbGmup3qh+KRW9Ay7r72MQplcIiFEIoxhU7LZlPAfizeOsmX6BiNSeK
+         qV3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXCYnW9O0Sgx+Gotmz2d9pVIASpTBenR66lhvZCwBC1mhrZbwFzTohLECYByWM0vQOPSN8Lpgc7iDcY9iiXCyTqs4urkT8IOQPubuDRR7UfCnX3+eZlND5H8c0y+ZjZyDtg4gVL7zGLdBWmONfK9SXFImxNlYhekiBoavS7PzDCxnLAh7ub
+X-Gm-Message-State: AOJu0YzXjr9GSlSpngzwFBfRpwmv8SOU+f7TvldzS0waH6WlNePjy1X9
+	PybxtxBxiBCfgRQANwld8TzxkufF3yVj+2/Mx0eQXExJ121x2C44eCqJUtBnmszbyplF5rzQs2T
+	5U0qYaJdANoxxBbDksho1MHVIJ/M=
+X-Google-Smtp-Source: AGHT+IFIEc05OqxcxSaNYPjKcycOmNxclvYY9HSZOIMajfAr/kWSClbeiNApoVPlOyfgpL25BlczauH8RUoLGBRyLuY=
+X-Received: by 2002:a05:6214:c63:b0:6a0:b3cc:ee0f with SMTP id
+ 6a1803df08f44-6a1514c26c2mr57720126d6.43.1715266352877; Thu, 09 May 2024
+ 07:52:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtDHWBKfksW4jQJ3KZVb7_GDXLZB1F7auYVZE1ddyDpgYQ@mail.gmail.com>
+References: <00000000000091228c0617eaae32@google.com> <20240508231904.2259-1-hdanton@sina.com>
+ <CAOQ4uxhDBbSh-4xbLgS=e6LtaZe2-E9Scgb9uP4ysCZEGG2skA@mail.gmail.com> <20240509104848.2403-1-hdanton@sina.com>
+In-Reply-To: <20240509104848.2403-1-hdanton@sina.com>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Thu, 9 May 2024 17:52:21 +0300
+Message-ID: <CAOQ4uxg8karas=5JxmCg0P5Wxhfzn41evgs_OUxd1GxBRpb4zQ@mail.gmail.com>
+Subject: Re: [syzbot] [kernfs?] possible deadlock in kernfs_seq_start
+To: Hillf Danton <hdanton@sina.com>
+Cc: syzbot <syzbot+4c493dcd5a68168a94b2@syzkaller.appspotmail.com>, 
+	linux-fsdevel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>, 
+	linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 05/07/24 14:53, Vincent Guittot wrote:
-> On Tue, 7 May 2024 at 13:08, Qais Yousef <qyousef@layalina.io> wrote:
-> >
-> > On 05/07/24 10:58, Vincent Guittot wrote:
-> > > On Mon, 6 May 2024 at 01:31, Qais Yousef <qyousef@layalina.io> wrote:
+On Thu, May 9, 2024 at 1:49=E2=80=AFPM Hillf Danton <hdanton@sina.com> wrot=
+e:
+>
+> On Thu, 9 May 2024 09:37:24 +0300 Amir Goldstein <amir73il@gmail.com>
+> > On Thu, May 9, 2024 at 2:19=E2=80=AFAM Hillf Danton <hdanton@sina.com> =
+wrote:
+> > > On Tue, 07 May 2024 22:36:18 -0700
+> > > > syzbot has found a reproducer for the following issue on:
 > > > >
-> > > > Improve the interaction with cpufreq governors by making the
-> > > > cpufreq_update_util() calls more intentional.
+> > > > HEAD commit:    dccb07f2914c Merge tag 'for-6.9-rc7-tag' of git://g=
+it.kern..
+> > > > git tree:       upstream
+> > > > console+strace: https://syzkaller.appspot.com/x/log.txt?x=3D137daa6=
+c980000
+> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D9d7ea7d=
+e0cb32587
+> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=3D4c493dcd5=
+a68168a94b2
+> > > > compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils f=
+or Debian) 2.40
+> > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1134f=
+3c0980000
+> > > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D1367a50=
+4980000
 > > > >
-> > > > At the moment we send them when load is updated for CFS, bandwidth for
-> > > > DL and at enqueue/dequeue for RT. But this can lead to too many updates
-> > > > sent in a short period of time and potentially be ignored at a critical
-> > > > moment due to the rate_limit_us in schedutil.
+> > > > Downloadable assets:
+> > > > disk image: https://storage.googleapis.com/syzbot-assets/ea1961ce01=
+fe/disk-dccb07f2.raw.xz
+> > > > vmlinux: https://storage.googleapis.com/syzbot-assets/445a00347402/=
+vmlinux-dccb07f2.xz
+> > > > kernel image: https://storage.googleapis.com/syzbot-assets/461aed7c=
+4df3/bzImage-dccb07f2.xz
 > > > >
-> > > > For example, simultaneous task enqueue on the CPU where 2nd task is
-> > > > bigger and requires higher freq. The trigger to cpufreq_update_util() by
-> > > > the first task will lead to dropping the 2nd request until tick. Or
-> > > > another CPU in the same policy triggers a freq update shortly after.
+> > > > IMPORTANT: if you fix the issue, please add the following tag to th=
+e commit:
+> > > > Reported-by: syzbot+4c493dcd5a68168a94b2@syzkaller.appspotmail.com
 > > > >
-> > > > Updates at enqueue for RT are not strictly required. Though they do help
-> > > > to reduce the delay for switching the frequency and the potential
-> > > > observation of lower frequency during this delay. But current logic
-> > > > doesn't intentionally (at least to my understanding) try to speed up the
-> > > > request.
+> > > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D
+> > > > WARNING: possible circular locking dependency detected
+> > > > 6.9.0-rc7-syzkaller-00012-gdccb07f2914c #0 Not tainted
+> > > > ------------------------------------------------------
+> > > > syz-executor149/5078 is trying to acquire lock:
+> > > > ffff88802a978888 (&of->mutex){+.+.}-{3:3}, at: kernfs_seq_start+0x5=
+3/0x3b0 fs/kernfs/file.c:154
 > > > >
-> > > > To help reduce the amount of cpufreq updates and make them more
-> > > > purposeful, consolidate them into these locations:
+> > > > but task is already holding lock:
+> > > > ffff88802d80b540 (&p->lock){+.+.}-{3:3}, at: seq_read_iter+0xb7/0xd=
+60 fs/seq_file.c:182
 > > > >
-> > > > 1. context_switch()
-> > >
-> > > I don't see any cpufreq update when switching from idle to CFS. We
-> >
-> > You mean SCHED_IDLE to SCHED_NORMAL, right? Yes, if we switch policies even
-> > from fair to RT an update could be missed.
-> 
-> No I mean going out of idle. On an idle cpu, nothing happens at CFS
-> task wakeup and we have to wait for the next tick to apply the new
-> freq. This happens for both short task with uclamp min or long
-> running/sleeping task (i.e. with high util_est)
+> > > > which lock already depends on the new lock.
+> > > >
+> > > >
+> > > > the existing dependency chain (in reverse order) is:
+> > > >
+> > > > -> #4 (&p->lock){+.+.}-{3:3}:
+> > > >        lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5754
+> > > >        __mutex_lock_common kernel/locking/mutex.c:608 [inline]
+> > > >        __mutex_lock+0x136/0xd70 kernel/locking/mutex.c:752
+> > > >        seq_read_iter+0xb7/0xd60 fs/seq_file.c:182
+> > > >        call_read_iter include/linux/fs.h:2104 [inline]
+> > > >        copy_splice_read+0x662/0xb60 fs/splice.c:365
+> > > >        do_splice_read fs/splice.c:985 [inline]
+> > > >        splice_file_to_pipe+0x299/0x500 fs/splice.c:1295
+> > > >        do_sendfile+0x515/0xdc0 fs/read_write.c:1301
+> > > >        __do_sys_sendfile64 fs/read_write.c:1362 [inline]
+> > > >        __se_sys_sendfile64+0x17c/0x1e0 fs/read_write.c:1348
+> > > >        do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+> > > >        do_syscall_64+0xf5/0x240 arch/x86/entry/common.c:83
+> > > >        entry_SYSCALL_64_after_hwframe+0x77/0x7f
+> > > >
+> > > > -> #3 (&pipe->mutex){+.+.}-{3:3}:
+> > > >        lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5754
+> > > >        __mutex_lock_common kernel/locking/mutex.c:608 [inline]
+> > > >        __mutex_lock+0x136/0xd70 kernel/locking/mutex.c:752
+> > > >        iter_file_splice_write+0x335/0x14e0 fs/splice.c:687
+> > > >        backing_file_splice_write+0x2bc/0x4c0 fs/backing-file.c:289
+> > > >        ovl_splice_write+0x3cf/0x500 fs/overlayfs/file.c:379
+> > > >        do_splice_from fs/splice.c:941 [inline]
+> > > >        do_splice+0xd77/0x1880 fs/splice.c:1354
+>
+>                 file_start_write(out);
+>                 ret =3D do_splice_from(ipipe, out, &offset, len, flags);
+>                 file_end_write(out);
+>
+> The correct locking order is
+>
+>                 sb_writers
 
-And without my patch you see a freq change? If no stats were updated to cause
-a decay, we will skip the cpufreq update at this context switch.
+This is sb of overlayfs
 
-I'll audit the code again in case I missed a place where there's a decay. You
-could be hitting a race condition with update_blocked_avg() sending a cpufreq
-update and this could cause the context switch cpufreq update to be dropped by
-rate limit.. You could try to reduce your rate_limit_us to see if this helps.
+>                 inode lock
 
-I'll try to reproduce and investigate. FWIW, I did test this on M1 mac mini and
-pixel device running speedometer and some iowait workloads and didn't observe
-problems.
+This is real inode
 
-> 
-> >
-> > I'll need to think more about it, but I think adding an update when we switch
-> > policies in the syscall looks sufficient to me, if the task is on rq already.
-> > Agreed?
-> >
-> > > have to wait for the next tick to get a freq update whatever the value
-> > > of util_est and uclamp
-> > >
-> > > > 2. task_tick_fair()
-> > >
-> > > Updating only during tick is ok with a tick at 1000hz/1000us when we
-> > > compare it with the1048us slice of pelt but what about 4ms or even
-> > > 10ms tick ? we can have an increase of almost 200 in 10ms
-> >
-> > IMHO the current code can still fail with these setups to update frequencies in
-> > time. If there's a single task on the rq, then the only freq update will happen
-> > at tick. So this is an existing problem.
-> 
-> But any newly enqueued task can trigger a freq update without waiting
-> 1/4/10ms whereas we need to wait for next tick with this patch
+See comment above ovl_lockdep_annotate_inode_mutex_key()
+for more details.
 
-But it is racy. By deferring the decision (sampling point) we ensure better the
-RUNNING task is reflecting the current state of the rq taken into account any
-past events.
-
-Note if there's no enqueue/dequeue, the problem is not fixed either way. If we
-get two consecutive enqueues, the 2nd one will be dropped. And we'll end up
-with delays.
-
-I think this way we'd be just more consistently failing or working.
-
-Systems with high rate_limit_us or TICK generally should ask for generous
-headroom and I think this is the best way to address this issue in a scalable
-way. People with fast systems/configurations can be more exact and frequent in
-their requests. Systems/configurations that are slow will tend to exaggerate
-each request to cater for the slow response. But the requests themselves are
-done at better defined points of time. That's my hope at least, so I appreciate
-the reviews :)
-
-My other hope is that by doing the sampling at context switch we can better
-handle uclamp and iowait boost requests which requires special cpufreq
-constrains to be applied for this specifically RUNNING task. Ultimately leading
-to removing uclamp max() aggregation at enqueue/dequeue.
-
-> 
-> >
-> > The way I see it is that setting such high TICK values implies low
-> > responsiveness by definition. So the person who selects this setup needs to
-> > cater that their worst case scenario is that and be happy with it. And this
-> > worst case scenario does not change.
-> >
-> > That said, the right way to cater for this is via my other series to remove the
-> > magic margins. DVFS headroom should rely on TICK value to ensure we run at
-> > adequate frequency until the next worst case scenario update, which relies on
-> > TICK. Which is sufficient to handle util_est changes. See below for uclamp.
-> >
-> > Wake up preemption should cause context switches to happen sooner than a tick
-> > too as we add more tasks on the rq. So I think the worst case scenario is not
-> > really changing that much. In my view, it's better to be consistent about the
-> > behavior.
-> >
-> > >
-> > > > 3. {attach, detach}_entity_load_avg()
-> > >
-> > > At enqueue/dequeue, the util_est will be updated and can make cpu
-> > > utilization quite different especially with long sleeping tasks. The
-> > > same applies for uclamp_min/max hints of a newly enqueued task. We
-> > > might end up waiting 4/10ms depending of the tick period.
-> >
-> > uclamp_min is a property of the task. And waiting for the task that needs the
-> > boost to run is fine IMHO. And I am actually hoping to remove uclamp max()
-> 
-> But you will delay all CPU work and the running time fo the task
-
-uclamp_min shouldn't cause other tasks to run faster? From my perspective this
-is wasting power actually as what we want is only this task to run faster.
-
-If the task wants better wake up latency (which I assume what you're referring
-to by making things run faster then this task should get to RUNNING faster)
-then we need to annotate this separately IMHO. We shouldn't rely on the boost
-which is there to ensure this tasks gets work done at an acceptable rate, not
-to impact its wake up latency.
-
-> 
-> And what about util_est ?
-
-Hmm yeah this won't cause cfs_rq.decayed to trigger so we could miss it at
-context switch. And could be what's causing the issue you're seeing above.
+Thanks,
+Amir.
 
