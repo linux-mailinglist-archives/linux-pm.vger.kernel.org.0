@@ -1,175 +1,181 @@
-Return-Path: <linux-pm+bounces-7709-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7710-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 535828C2108
-	for <lists+linux-pm@lfdr.de>; Fri, 10 May 2024 11:35:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 586B88C212D
+	for <lists+linux-pm@lfdr.de>; Fri, 10 May 2024 11:41:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D68AB1F2250C
-	for <lists+linux-pm@lfdr.de>; Fri, 10 May 2024 09:35:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D43801F22619
+	for <lists+linux-pm@lfdr.de>; Fri, 10 May 2024 09:41:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74E2B1635C1;
-	Fri, 10 May 2024 09:35:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A0A71635B1;
+	Fri, 10 May 2024 09:40:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dfo5KVau"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D4Tp99ij"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 911C3161320
-	for <linux-pm@vger.kernel.org>; Fri, 10 May 2024 09:35:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2FB015B108;
+	Fri, 10 May 2024 09:40:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715333726; cv=none; b=KY6UdS6WwhCqkxYmuaC6ufl4lrqQeAPVqoz/NZkT5GjaXDHNO/tNPuk65UfF/H7vF/pV8IFQ8XWbFmR1EOVMk0lBRVyxRxnrFdyHyMaFcNEw5LnBf1qW5ddTJCVu+oJK8JHOhsGcm6xQLwJeluhDzZHuFbhiiO+/shSP9NOdqvI=
+	t=1715334057; cv=none; b=nBS9iyhh8MwOqgytjlAJ3IIem2WnxDXoJQ3NUsl5Tg3lzj3B7MA3ZCWZAWvuFYi7m7uYj/e9wWRMZB8FlvRJvfkr1ABncgWmFvtUgk8nRmryKfi0ApCsFPBt1MH4KB58ufJZvyrXFW/pSMkg9GvJrWq1WppiPBqt18Pn6SbH5OY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715333726; c=relaxed/simple;
-	bh=74mWvHLl9kkJWCjJ9c/58+OLihHsC5x2Bv4lj2v1YJw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gjKyuotIk9hOmUXKDdrTL1dfORPeEgJFMI4e+jNunIntIqErt6LUvXow6bbVZ8uE+edVJ4VcprbCtE77jwjvqXbEi8A48kUdBtp4rc0Lphi2Cv23jdRokj88cBSpwq9lu2gDre2xDaRP0pn4uHZIIUKBDiQRdOg4X/jd9F+fXnw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dfo5KVau; arc=none smtp.client-ip=209.85.219.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-dc6cbe1ac75so1345744276.1
-        for <linux-pm@vger.kernel.org>; Fri, 10 May 2024 02:35:23 -0700 (PDT)
+	s=arc-20240116; t=1715334057; c=relaxed/simple;
+	bh=omwIVooKj2lhfiK2OyYV/ShnqtuKeUSCLFPStJaY/u4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Xcnx9z2QYMZhn0l9C48q9+R6LRo4S+kh0vfOd8OC2mDfK2uyOGEHzekancE6rwTqrfGugq4WaVBXv030jjH4Sr1Ief4WlBfQD3AHXTGQIUmPpSzA975IvYbax40UZlYOTh6osLJb6iEkUyJXXsOu8NBkL55q2sVGTld06GUf8S0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D4Tp99ij; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-6f47787a0c3so1658360b3a.0;
+        Fri, 10 May 2024 02:40:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1715333722; x=1715938522; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ddAlHrV+azsymE+SBA7AG/w8GBAmFQuP9eNGcQBlcU4=;
-        b=dfo5KVaubq5BNK8KxOFO6OpXSqVEzSSNKPTtJJv3fFzCERqmY76eqwz9L3BfWmebDr
-         I9iy13RfJq8ACb+U2WT6fN9L4cyoBKYeRZnjZlYwlYWNlYWt0oDFbedAbT0xu/Tbvh78
-         lBuIEgnodFKPijQ+YjNWqFAOeB69WeV8hgy/2BE8JDqDNkkUaX+NDsu5F/mkdcsotnKb
-         3izG1hFNFy/e0HtBgMYX+leWCAtNzXyqGDUXXzimBQBvzXXhbyD7TqCtCpApXqdyyp9n
-         IWFTu936lXj7BHTlQZBCIvhemrRyNEonNoidkA0YBsOijVetEOoa0cjRleqvRsLeXb35
-         EM/A==
+        d=gmail.com; s=20230601; t=1715334055; x=1715938855; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RkRaYasEXgqE/p0OdCATEgprTM8CbZFE90OPXfYhKMQ=;
+        b=D4Tp99ijdwPXk8U6YAzzWsie0Apx0Rlv1bPJ2wOHb20bpAoP8A7A1oqSpZvyJO8BVH
+         ApYswZu2pQ124+K48RFoS7MErIUdnCjqGzmI1NE3Z5pNNTmEanAMPjJVdQmCzweEzHFK
+         LjWaRjBiitsFNzKhuQFrNsGMxC8ykGAAi7OoVCk8UKUJG2To2Y8mYCUPqg06h2txJzVM
+         36mDGHhMZ5tRkxevHrZgYv1WV3j/NsT+B8T1GHjnbeuaO0DqcXHcDsaboJJfnHsYgUg9
+         W+HZcjQJ6x8XWRWmZcsnMv6VjF5+k+0s4kVF0iH8l8w4mYuGor08zjA8QCqph9n/GR98
+         ihFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715333722; x=1715938522;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1715334055; x=1715938855;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ddAlHrV+azsymE+SBA7AG/w8GBAmFQuP9eNGcQBlcU4=;
-        b=Ct2t7wPPUwU8EX4F6RIRi8qNbUVqFX3fVJbmprotR6AfRfuMymyJ1R0l731rwxNzXS
-         P45W7egKMbbtztNhX/vqTS1T3tasrf+aJkZmIn/115i6UeRGOV6fB5F6T12tWK0PZoNf
-         jQGDOLEMo/LFIHaEI1NIPmxqMXYmHPsFbdpfM5BOJ822C/FR88MYI7HrVcRMCKlF+VJ7
-         V51AVg5oK0wX4IhyKeJqj/H9DbnXM9TmfHm59b6uRdYCugYxvtzZf3DdxVxMzkllFcbm
-         v1Xl2pb34StR7Yy9VCA0J9AHAoTlPinEKyBWG3mWrnUvRxr8WgbwaxghPU0aDAxqN1ni
-         4Pjw==
-X-Forwarded-Encrypted: i=1; AJvYcCXcV7E7Lh+rQE7/bhHl6/viBT8kcvDX9O7XgBE9XUQ0yjN8aT9SFMxc3IXlsMnpdgL9PtFypimCbBYalmJiYW/rIpoPZ93+A5k=
-X-Gm-Message-State: AOJu0YyKyjzC1KWLmIgS26FklZSTwey5v5yCMA4t4K8Kt9cBMzPHg245
-	Tsg//ixGupcNtrQGwt4ZWAurZZiVgjMjjzz0lEukXYQRdsJA+BsUyoJqu1r4gTP0sGobYFVevFl
-	aJM9ClSmnQOiWjavG7cCYJuTRLFn75/D7DnbuQA==
-X-Google-Smtp-Source: AGHT+IHe8KfUCxU0IUa3DtzKN6/EJhPBEHnlzpdRmt0ugkIOFNcugGXnt2P8F6W7CAtLpVfZDsqHHaqcjOrR3KSrOQ0=
-X-Received: by 2002:a5b:2d1:0:b0:de5:bc2e:467e with SMTP id
- 3f1490d57ef6-debcfb4e0b0mr3992499276.3.1715333722592; Fri, 10 May 2024
- 02:35:22 -0700 (PDT)
+        bh=RkRaYasEXgqE/p0OdCATEgprTM8CbZFE90OPXfYhKMQ=;
+        b=FwXmdWY4bziP6HnbPFBlreJIzQmuYwrnXpcWAnFnQkLg9crJ8/ZJe9goZJYpHdGm7B
+         TaIqSfow8h3EFJOB/v2e0QlcJp15cP3o8K0oxu9bOjHjitAEiC7a2JI/Y0Jk5Ne/H1VU
+         9G8nSf5qvaz2vBLfvokhOF0EkzIQUSS0fRqXQWKhPKMsHic5/UVohVd57RqZIfNevM5l
+         eGR22FlvIeeWXQhOELJ7nopWJeBrGwAf2PB8LQyj3B+OoqMuLZiRzHW0FTjlPwNQJPv7
+         7LKRDbwYA5pspUsKVdWi6z5caPoEt+cZ+GQtmhjzWRoVpjE+u4ZqvE6z3EMsNkeNPUQX
+         PL0w==
+X-Forwarded-Encrypted: i=1; AJvYcCUjDwoDhiKH4OL+cVs2W1b740C/CDeFmxZLcF8uqXL2IKSAEEPzqXwtXRN21Vp7zyCRSsjjvhsbn7vJakQ40HWWnonn4nKrO5msM9SAQvYvSk21626Q+asAkNZjDUY0Ivn+4hVd/z7Uqhyo1cQxoiskQGULouYHmE/38UpexsaldUVCcb2sB1xgHQ==
+X-Gm-Message-State: AOJu0Yw1zBAWMRzaODMjYB4J1oQ3xwVMRNS6zIF1v9/fyeNvoCZzXsB6
+	+j5SLU62F8eHMbnfCxlIQe0G3wIybgHP/x+E4/s4GY5/VFAW1yTa
+X-Google-Smtp-Source: AGHT+IH0qhnOyz8bzZsEARgaFLjiq9X1vf+A71YpS9o0PB1YNYRGjZdOMaaTV2N8Jxrn2cF+sK4F8w==
+X-Received: by 2002:a05:6a00:3ccd:b0:6f3:ebc4:4406 with SMTP id d2e1a72fcca58-6f4e026b878mr2506655b3a.7.1715334054910;
+        Fri, 10 May 2024 02:40:54 -0700 (PDT)
+Received: from localhost.localdomain ([113.30.217.222])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f4d2ade28asm2554518b3a.139.2024.05.10.02.40.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 May 2024 02:40:54 -0700 (PDT)
+From: Anand Moon <linux.amoon@gmail.com>
+To: Chanwoo Choi <cw00.choi@samsung.com>,
+	MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Kyungmin Park <kyungmin.park@samsung.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>
+Cc: Anand Moon <linux.amoon@gmail.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	linux-pm@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v5 1/2] PM / devfreq: exynos: Use Use devm_clk_get_enabled() helpers
+Date: Fri, 10 May 2024 15:10:24 +0530
+Message-ID: <20240510094034.12493-1-linux.amoon@gmail.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240418155151.355133-1-ivitro@gmail.com>
-In-Reply-To: <20240418155151.355133-1-ivitro@gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Fri, 10 May 2024 11:34:46 +0200
-Message-ID: <CAPDyKFr9Vzgm2C6Z57Bg5mUQxg5LK6goN2og3+RC3BkTZjiqJw@mail.gmail.com>
-Subject: Re: [PATCH v1] pmdomain: imx8m-blk-ctrl: fix suspend/resume order
-To: Vitor Soares <ivitro@gmail.com>, Lucas Stach <l.stach@pengutronix.de>
-Cc: Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Vitor Soares <vitor.soares@toradex.com>, linux-pm@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu, 18 Apr 2024 at 17:52, Vitor Soares <ivitro@gmail.com> wrote:
->
-> From: Vitor Soares <vitor.soares@toradex.com>
->
-> During the probe, the genpd power_dev is added to the dpm_list after
-> blk_ctrl due to its parent/child relationship. Making the blk_ctrl
-> suspend after and resume before the genpd power_dev.
->
-> As a consequence, the system hangs when resuming the VPU due to the
-> power domain dependency.
->
-> To ensure the proper suspend/resume order, add a device link betweem
-> blk_ctrl and genpd power_dev. It guarantees genpd power_dev is suspended
-> after and resumed before blk-ctrl.
+The devm_clk_get_enabled() helpers:
+    - call devm_clk_get()
+    - call clk_prepare_enable() and register what is needed in order to
+     call clk_disable_unprepare() when needed, as a managed resource.
 
-Before discussing $subject patch, would you mind explaining to me why
-imx8m-blk-ctrl needs to use the ->suspend() callback at all?
+This simplifies the code and avoids the calls to clk_disable_unprepare().
 
-Looking closer at that code (imx8m_blk_ctrl_suspend()), it calls
-pm_runtime_get_sync() for devices to power on "everything". Why isn't
-that managed by the consumer drivers (on a case by case basis) that
-are managing the devices that are attached to the genpds instead?
+While at it, use dev_err_probe consistently, and use its return value
+to return the error code.
 
-Kind regards
-Uffe
+Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+---
+v5 - No change
+V4 - wrap up the error messagee within 80 char
+v3 - No change
+v2 - No change
+---
+ drivers/devfreq/exynos-bus.c | 22 +++++-----------------
+ 1 file changed, 5 insertions(+), 17 deletions(-)
 
->
-> Cc: <stable@vger.kernel.org>
-> Closes: https://lore.kernel.org/all/fccbb040330a706a4f7b34875db1d896a0bf81c8.camel@gmail.com/
-> Link: https://lore.kernel.org/all/20240409085802.290439-1-ivitro@gmail.com/
-> Fixes: 2684ac05a8c4 ("soc: imx: add i.MX8M blk-ctrl driver")
-> Suggested-by: Lucas Stach <l.stach@pengutronix.de>
-> Signed-off-by: Vitor Soares <vitor.soares@toradex.com>
-> ---
->
-> This is a new patch, but is a follow-up of:
-> https://lore.kernel.org/all/20240409085802.290439-1-ivitro@gmail.com/
->
-> As suggested by Lucas, we are addressing this PM issue in the imx8m-blk-ctrl
-> driver instead of in the imx8mm.dtsi.
->
->  drivers/pmdomain/imx/imx8m-blk-ctrl.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
->
-> diff --git a/drivers/pmdomain/imx/imx8m-blk-ctrl.c b/drivers/pmdomain/imx/imx8m-blk-ctrl.c
-> index ca942d7929c2..cd0d2296080d 100644
-> --- a/drivers/pmdomain/imx/imx8m-blk-ctrl.c
-> +++ b/drivers/pmdomain/imx/imx8m-blk-ctrl.c
-> @@ -283,6 +283,20 @@ static int imx8m_blk_ctrl_probe(struct platform_device *pdev)
->                         goto cleanup_pds;
->                 }
->
-> +               /*
-> +                * Enforce suspend/resume ordering by making genpd power_dev a
-> +                * provider of blk-ctrl. Genpd power_dev is suspended after and
-> +                * resumed before blk-ctrl.
-> +                */
-> +               if (!device_link_add(dev, domain->power_dev, DL_FLAG_STATELESS)) {
-> +                       ret = -EINVAL;
-> +                       dev_err_probe(dev, ret,
-> +                                     "failed to link to %s\n", data->name);
-> +                       pm_genpd_remove(&domain->genpd);
-> +                       dev_pm_domain_detach(domain->power_dev, true);
-> +                       goto cleanup_pds;
-> +               }
-> +
->                 /*
->                  * We use runtime PM to trigger power on/off of the upstream GPC
->                  * domain, as a strict hierarchical parent/child power domain
-> @@ -324,6 +338,7 @@ static int imx8m_blk_ctrl_probe(struct platform_device *pdev)
->         of_genpd_del_provider(dev->of_node);
->  cleanup_pds:
->         for (i--; i >= 0; i--) {
-> +               device_link_remove(dev, bc->domains[i].power_dev);
->                 pm_genpd_remove(&bc->domains[i].genpd);
->                 dev_pm_domain_detach(bc->domains[i].power_dev, true);
->         }
-> @@ -343,6 +358,7 @@ static void imx8m_blk_ctrl_remove(struct platform_device *pdev)
->         for (i = 0; bc->onecell_data.num_domains; i++) {
->                 struct imx8m_blk_ctrl_domain *domain = &bc->domains[i];
->
-> +               device_link_remove(&pdev->dev, domain->power_dev);
->                 pm_genpd_remove(&domain->genpd);
->                 dev_pm_domain_detach(domain->power_dev, true);
->         }
-> --
-> 2.34.1
->
+diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
+index 00118580905a..7d06c476d8e9 100644
+--- a/drivers/devfreq/exynos-bus.c
++++ b/drivers/devfreq/exynos-bus.c
+@@ -160,7 +160,6 @@ static void exynos_bus_exit(struct device *dev)
+ 	platform_device_unregister(bus->icc_pdev);
+ 
+ 	dev_pm_opp_of_remove_table(dev);
+-	clk_disable_unprepare(bus->clk);
+ 	dev_pm_opp_put_regulators(bus->opp_token);
+ }
+ 
+@@ -171,7 +170,6 @@ static void exynos_bus_passive_exit(struct device *dev)
+ 	platform_device_unregister(bus->icc_pdev);
+ 
+ 	dev_pm_opp_of_remove_table(dev);
+-	clk_disable_unprepare(bus->clk);
+ }
+ 
+ static int exynos_bus_parent_parse_of(struct device_node *np,
+@@ -247,23 +245,16 @@ static int exynos_bus_parse_of(struct device_node *np,
+ 	int ret;
+ 
+ 	/* Get the clock to provide each bus with source clock */
+-	bus->clk = devm_clk_get(dev, "bus");
+-	if (IS_ERR(bus->clk)) {
+-		dev_err(dev, "failed to get bus clock\n");
+-		return PTR_ERR(bus->clk);
+-	}
+-
+-	ret = clk_prepare_enable(bus->clk);
+-	if (ret < 0) {
+-		dev_err(dev, "failed to get enable clock\n");
+-		return ret;
+-	}
++	bus->clk = devm_clk_get_enabled(dev, "bus");
++	if (IS_ERR(bus->clk))
++		return dev_err_probe(dev, PTR_ERR(bus->clk),
++				"failed to get bus clock\n");
+ 
+ 	/* Get the freq and voltage from OPP table to scale the bus freq */
+ 	ret = dev_pm_opp_of_add_table(dev);
+ 	if (ret < 0) {
+ 		dev_err(dev, "failed to get OPP table\n");
+-		goto err_clk;
++		return ret;
+ 	}
+ 
+ 	rate = clk_get_rate(bus->clk);
+@@ -281,8 +272,6 @@ static int exynos_bus_parse_of(struct device_node *np,
+ 
+ err_opp:
+ 	dev_pm_opp_of_remove_table(dev);
+-err_clk:
+-	clk_disable_unprepare(bus->clk);
+ 
+ 	return ret;
+ }
+@@ -453,7 +442,6 @@ static int exynos_bus_probe(struct platform_device *pdev)
+ 
+ err:
+ 	dev_pm_opp_of_remove_table(dev);
+-	clk_disable_unprepare(bus->clk);
+ err_reg:
+ 	dev_pm_opp_put_regulators(bus->opp_token);
+ 
+-- 
+2.44.0
+
 
