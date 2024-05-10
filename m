@@ -1,119 +1,159 @@
-Return-Path: <linux-pm+bounces-7716-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7717-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C15F8C23AB
-	for <lists+linux-pm@lfdr.de>; Fri, 10 May 2024 13:37:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 062E38C2553
+	for <lists+linux-pm@lfdr.de>; Fri, 10 May 2024 15:02:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B8C8B1F23F7D
-	for <lists+linux-pm@lfdr.de>; Fri, 10 May 2024 11:37:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 982051F21BFE
+	for <lists+linux-pm@lfdr.de>; Fri, 10 May 2024 13:02:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0B0217089A;
-	Fri, 10 May 2024 11:33:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF13E12882D;
+	Fri, 10 May 2024 13:01:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="crVkqiIA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail114-240.sinamail.sina.com.cn (mail114-240.sinamail.sina.com.cn [218.30.114.240])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F38B616F29C
-	for <linux-pm@vger.kernel.org>; Fri, 10 May 2024 11:33:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=218.30.114.240
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4850A127E27
+	for <linux-pm@vger.kernel.org>; Fri, 10 May 2024 13:01:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715340822; cv=none; b=uZCYK8e9UTNvWdRnAmQ82N7wwlI1nQYk4+RuqIRpq5e+lM7pS1az+p2yDIW34prNaq++9ydQMFSB0+zangO0mqKKfT/uTdTzYIPYm6lynKxsaFhZgcdpLaah8QZ8LNXp0V4X0F+F2Zi/s54rb+IvkIfOWWjeJ5kU3VonX6ooKXA=
+	t=1715346081; cv=none; b=BcyqHLvVNTuzZ3+1fNFUhnTSkXCeZ8RY2XEAQ4/Pdj8dqyFgn4GVEmN0UdhE0LBGLWjkysu3B3cyo1R07tbb4jX0SdnLmQFhXaOrb8KtGmAhVCVpl5qOOFyXCf5SPgb2d1/RO2p0BYLcLZd+i/4+qKIOSp6Rm7GLvWYNjgJ6pJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715340822; c=relaxed/simple;
-	bh=kWpB3hlt/N31SYsdYtQFsLZZ1ccECn5dZ0BwMIjrR7Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=e+JU0f06Qvm1IVhSHCXvqIgu3yI6kgK6hvFKZ1t3F7zhDXu2q0IeX+L8w7MCGEEGPDfoFrgqDmFbb3VT4QpuABwwLJaTjYGYFnfLuhjR1WqBfd5ATOLhXk9XpV/oORcFqYLt3fI+jpu1Z8wNdDt0Voa0bEn14wEQ399aYc1/+XQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sina.com; spf=pass smtp.mailfrom=sina.com; arc=none smtp.client-ip=218.30.114.240
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sina.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sina.com
-X-SMAIL-HELO: localhost.localdomain
-Received: from unknown (HELO localhost.localdomain)([116.24.9.62])
-	by sina.com (172.16.235.24) with ESMTP
-	id 663E060600000C3E; Fri, 10 May 2024 19:33:28 +0800 (CST)
-X-Sender: hdanton@sina.com
-X-Auth-ID: hdanton@sina.com
-Authentication-Results: sina.com;
-	 spf=none smtp.mailfrom=hdanton@sina.com;
-	 dkim=none header.i=none;
-	 dmarc=none action=none header.from=hdanton@sina.com
-X-SMAIL-MID: 73734345089264
-X-SMAIL-UIID: A9B4E614A6134A958D504D06E0FA46DC-20240510-193328-1
-From: Hillf Danton <hdanton@sina.com>
-To: Amir Goldstein <amir73il@gmail.com>
-Cc: syzbot <syzbot+4c493dcd5a68168a94b2@syzkaller.appspotmail.com>,
-	linux-fsdevel@vger.kernel.org,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	linux-kernel@vger.kernel.org,
-	syzkaller-bugs@googlegroups.com,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>,
-	linux-pm@vger.kernel.org
-Subject: Re: [syzbot] [kernfs?] possible deadlock in kernfs_seq_start
-Date: Fri, 10 May 2024 19:33:17 +0800
-Message-Id: <20240510113317.2573-1-hdanton@sina.com>
-In-Reply-To: <20240509232613.2459-1-hdanton@sina.com>
-References: 
+	s=arc-20240116; t=1715346081; c=relaxed/simple;
+	bh=xsCgUTQujSpA87EGwezOFO4IkwKTUzAnJXwXCKepl10=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=JiWTctq0wyibtiHX+JGsG+qlpn5LXZ92kzjiadLmlUQBLhusAjB7hBJNJg/SBpmI6Dgjrod6IbJ6k03h14l7UYNYRZwMyb7unlVcK+98NA6fTqf8U1MfKUAmfoHNQISQO3aR7l1WFKeXfAx1rKToMjteSGHAZBtWNu91KGTplSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=crVkqiIA; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-34d99ec52e1so1491206f8f.3
+        for <linux-pm@vger.kernel.org>; Fri, 10 May 2024 06:01:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1715346076; x=1715950876; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=EuOqAb8ZpUuVP1mrlb2cKpurEJ0bRaZYBd2TNR0xxGs=;
+        b=crVkqiIAkpGhPg2PhxnH0MUtf8I7DlEpb8NReO57skFh+IvC+Yjv6AktbtO9kx9haU
+         4vhDBC262Gz9JSV2G72rTPyM5tisB8lO1NvoteP4ZGlxqFygM13S+5AKjwtl8da6Pw/j
+         WkCc3d5Gh9lNkBxE3x4eeGwWhT5cevrdkJ/3Es7Y6ZYjQ+DrtE/QJ4ynVVLq334rRviT
+         Yy2KJJ2bUI8bV50DjDnHyw9PMOnnu7w1sNzccwyTTYL87vUgKXNfIBlKjcOqgQ0BITAP
+         AtdowtOyXSedQF89v33akaewvf/M9E+p2fi1Ohwd5Qqsx4IokQe9RnpqwFzb1Ecgs/1O
+         Zrmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715346076; x=1715950876;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EuOqAb8ZpUuVP1mrlb2cKpurEJ0bRaZYBd2TNR0xxGs=;
+        b=BS/le/khBve+2O9yqWNQBUhUrCrmp4vz8UPdgpYe8bm1Bva4z4AWd/yfJEB1rL/IIN
+         l6AkzwwgnrowRn3NoyVmDJhNd3MpAKTMJ0KQCKBBCm7aCthBLxw7zGrCgNHmWEh96pPi
+         5tX7UZjXlqCfYT0QzTK/2f/JQau7XRTY0YWCpiRmO5XvL5qqVQBwbp0HJbku7QW7b1RW
+         3epzlmNBiFM3uT1HwJzAjAIsUm5O6S6C85J0DCiMfCdJMia0XPNrBZomp0HJMTx9svAV
+         F3RjknSg8mtHB+WmeKfOrGumvCOvHjE5J03kinCpuEgur4xpEpbW6CtTZsU0cp+rjALN
+         jZjw==
+X-Forwarded-Encrypted: i=1; AJvYcCX6bZYRRscmd1cWsdHISfqWd7cSIJR8XwPAhzFd8gd0j+4HaGMbum9ji6olGAH7TRedgKMac/9zqolW6bPBmS4xMGiPAIvZED0=
+X-Gm-Message-State: AOJu0YxydZIVmgSj+WpaWSyA7iS+/x8xuT1ekn6hOYysdsX0K2zv9AMR
+	8Yl6E7LtAutP1CsI2UcVsZ9BtzgSSL7YzC5/1PPjamynV4UuEedjVUriOwwBgZE=
+X-Google-Smtp-Source: AGHT+IH4l5dMeOQQ9CIlOmZviv3DR34gB+WFmPnfVAb0EORzuTaQVImXvg2bsbUFlg3yyxbsNPswOQ==
+X-Received: by 2002:a05:6000:440e:b0:350:4c83:d669 with SMTP id ffacd0b85a97d-3504c83d8d8mr1455017f8f.1.1715346075781;
+        Fri, 10 May 2024 06:01:15 -0700 (PDT)
+Received: from [192.168.0.3] ([176.61.106.227])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3502baad04dsm4512060f8f.81.2024.05.10.06.01.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 May 2024 06:01:15 -0700 (PDT)
+Message-ID: <d2e55523-f8fd-4cbe-909c-57de241107e8@linaro.org>
+Date: Fri, 10 May 2024 14:01:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V5 RESEND 5/5] venus: pm_helpers: Use
+ dev_pm_genpd_set_hwmode to switch GDSC mode on V6
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>,
+ Jagadeesh Kona <quic_jkona@quicinc.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+ Vikash Garodia <quic_vgarodia@quicinc.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>, "Rafael J . Wysocki"
+ <rafael@kernel.org>, Kevin Hilman <khilman@kernel.org>,
+ Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Andy Gross <agross@kernel.org>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Abel Vesa <abel.vesa@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-pm@vger.kernel.org, Taniya Das <quic_tdas@quicinc.com>,
+ Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
+ Imran Shaik <quic_imrashai@quicinc.com>,
+ Ajit Pandey <quic_ajipan@quicinc.com>
+References: <20240413152013.22307-1-quic_jkona@quicinc.com>
+ <20240413152013.22307-6-quic_jkona@quicinc.com>
+ <5c78ad52-524b-4ad7-b149-0e7252abc2ee@linaro.org>
+ <b96ef82c-4033-43e0-9c1e-347ffb500751@quicinc.com>
+ <a522f25f-bb38-4ae1-8f13-8e56934e5ef5@linaro.org>
+ <dbd1b86c-7b5f-4b92-ab1f-fecfe1486cfc@quicinc.com>
+ <621dbaaa-6b86-45b5-988e-a6d9c39b13d7@linaro.org>
+ <d36c1163-a3f0-4034-a430-91986e5bbce8@linaro.org>
+ <ef194e5c-f136-4dba-bfe0-2c6439892e34@linaro.org>
+Content-Language: en-US
+In-Reply-To: <ef194e5c-f136-4dba-bfe0-2c6439892e34@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, 10 May 2024 07:26:13 +0800 Hillf Danton <hdanton@sina.com> wrote:
-> On Thu, 9 May 2024 17:52:21 +0300 Amir Goldstein <amir73il@gmail.com>
-> > On Thu, May 9, 2024 at 1:49 PM Hillf Danton <hdanton@sina.com> wrote:
-> > >
-> > > The correct locking order is
-> > >
-> > >                 sb_writers
-> > 
-> > This is sb of overlayfs
-> > 
-> > >                 inode lock
-> > 
-> > This is real inode
-> > 
-> WRT sb_writers the order
+On 01/05/2024 10:14, Bryan O'Donoghue wrote:
+> On 30/04/2024 21:01, Konrad Dybcio wrote:
+>> On 24.04.2024 11:50 AM, Bryan O'Donoghue wrote:
+>>> On 24/04/2024 10:45, Jagadeesh Kona wrote:
+>>>>
+>>>> Thanks Bryan for testing this series. Can you please confirm if this 
+>>>> issue is observed in every run or only seen during the first run? 
+>>>> Also please let me know on which platform this issue is observed?
+>>>>
+>>>> Thanks,
+>>>> Jagadeesh
+>>>
+>>> rb5/sm8250
+>>>
+>>> My observation was on a previous _boot_ the stuttering was worse. 
+>>> There is in the video capture three times that I count where the 
+>>> video halts briefly, I guess we need to vote or set an OPP so the 
+>>> firmware knows not to power-collapse quite so aggressively.
+>>
+>> We seem to be having some qualcomm-wide variance on perf/pwr usage on 
+>> some
+>> odd boots.. Any chance you could try like 5 times and see if it was a 
+>> fluke?
+>>
+>> Konrad
 > 
-> 	lock inode parent
-> 	lock inode kid
+> Sure.
 > 
-> becomes
-> 	lock inode kid
-> 	sb_writers
-> 	lock inode parent 
+> The first time I tried it, it was much worse.
 > 
-> given call trace
+> The second time, captured in the video is only noticeable because I was 
+> *looking* for this specific error i.e. I don't think I would have 
+> noticed the error on the second run, had I not seen the first run.
 > 
-> > -> #2 (sb_writers#4){.+.+}-{0:0}:
-> >        lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5754
-> >        percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
-> >        __sb_start_write include/linux/fs.h:1664 [inline]
-> >        sb_start_write+0x4d/0x1c0 include/linux/fs.h:1800
-> >        mnt_want_write+0x3f/0x90 fs/namespace.c:409
-> >        ovl_create_object+0x13b/0x370 fs/overlayfs/dir.c:629
-> >        lookup_open fs/namei.c:3497 [inline]
-> >        open_last_lookups fs/namei.c:3566 [inline]
+> I'll find some time to do 5x with and 5x without.
 > 
-> and code snippet [1]
-> 
-> 	if (open_flag & O_CREAT)
-> 		inode_lock(dir->d_inode);
-> 	else
-> 		inode_lock_shared(dir->d_inode);
-> 	dentry = lookup_open(nd, file, op, got_write);
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/fs/namei.c?id=dccb07f2914c#n3566
+> ---
+> bod
 
-JFYI simply cutting off mnt_want_write() in ovl_create_object() survived
-the syzpot repro [2], so acquiring sb_writers with inode locked at least
-in the lookup path makes trouble.
+ping bod please remember to do this thanks
 
-[2] https://lore.kernel.org/lkml/000000000000975906061817416b@google.com/
+---
+bod
 
