@@ -1,73 +1,74 @@
-Return-Path: <linux-pm+bounces-7707-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7708-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2CD88C20E7
-	for <lists+linux-pm@lfdr.de>; Fri, 10 May 2024 11:28:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B80D8C20F1
+	for <lists+linux-pm@lfdr.de>; Fri, 10 May 2024 11:31:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F0C12821DF
-	for <lists+linux-pm@lfdr.de>; Fri, 10 May 2024 09:28:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 536391C21B9D
+	for <lists+linux-pm@lfdr.de>; Fri, 10 May 2024 09:31:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB7E516089A;
-	Fri, 10 May 2024 09:28:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6858161936;
+	Fri, 10 May 2024 09:31:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Z1KWDMqE"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kFwaHIaZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF4E1160877
-	for <linux-pm@vger.kernel.org>; Fri, 10 May 2024 09:28:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4A9D160781
+	for <linux-pm@vger.kernel.org>; Fri, 10 May 2024 09:31:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715333309; cv=none; b=YOGKz/byHgt4qSqLUoil8RWA5H6tG95x1ivqdBCZ+RrXujimzqRR77XVslSb5Xm/p6mCpw8xaxuoTFwfF7ywjprRiMYOOZmcmxbLQ3lbtUeStbcjtbrQWO9Je30j4zuZqoWgdbGgnyw/r7+LfLISmR23X6M3V90Bfe5pwHRWiU0=
+	t=1715333480; cv=none; b=Gcr9VrFq7j7QRqPykV81tGddYvMwABxcXUb6k+5/FdIOOfxlrCSBtUpcEEj73j/z1AJM4iX4JCxJOKd9wIc/w0MmbFl2chL9hEJS4JGbxKo8Vl8PYniyAvjvPR9gcruuLZRGpAdKepNbtZ6xIcjNPeLvC4Yn6VF3SjVErZVNiqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715333309; c=relaxed/simple;
-	bh=npkEZI4MXw4nJIcvLl+P2EYGWqMbLDMcOWgp259eNj0=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=fjFaBjhbfQgQd+o8ouLx2B/RMhrOt/4GOHz1Igy9flpi8A18Kh+jN6/VM0hVIGMI+McNho6L0CehUI7CsFflfIFvb4n/SA/y+PBNIMbFGo9VvVvQGKrF5fAGyfLR6k3j8758Ec4T2KmzGjhZ9V5X3gtiWbd9abb7rUpB9+gkd6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Z1KWDMqE; arc=none smtp.client-ip=209.85.128.50
+	s=arc-20240116; t=1715333480; c=relaxed/simple;
+	bh=1ehQiSaLFczQ3C6ndSykL9Q3gPDGYGKLOk6Q+lqp86A=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=Ps2GJ7rxN/1XfovmvgngLVQf0nyblOeJNYJG7b7YSNjwBU4w0snBHETagbiisMYJ4HSAHMqmRNyK8axnym5X1x6FG5spCkI5GrCetJJ5W6cNRGgNHbWmPAVdrym7MAAD+GaePC+2g8Vfx5uOMM8BOy6GVEO/pJb7Y712L426Jvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kFwaHIaZ; arc=none smtp.client-ip=209.85.208.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-41ffad2426eso3033255e9.3
-        for <linux-pm@vger.kernel.org>; Fri, 10 May 2024 02:28:27 -0700 (PDT)
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2db13ca0363so26762991fa.3
+        for <linux-pm@vger.kernel.org>; Fri, 10 May 2024 02:31:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1715333306; x=1715938106; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1715333476; x=1715938276; darn=vger.kernel.org;
         h=content-transfer-encoding:subject:from:cc:to:content-language
          :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wH7osSqVMbrj6VsQFgjVp/pbaHR3TYk56MkptLMlbMo=;
-        b=Z1KWDMqEGTg05/IsaK+D13jdU9ATHxjCul6A4xYZBsEKWffNSjp78oaw3Nsu8HV0uP
-         0PMsr0nx4SghSmGeCOQc+8OJ36lr9bX3WuEMprzaEdZ0xk/ru3A9A7qKq5T9Xoj1gjAc
-         lNZeryYvwf2GIpAgB278Y5SfT/8/tRvPbmoy6jObEb5oc5L1EUWaYOu9zlqIFQ56dNn1
-         4YF6B5x3BHU8oUalfb24IskQrxs+/wOiRJQVxXCqYKnRS7Z6LuGr2Jbdgj+Jz7yu8TfY
-         6jCbWuumDIiceJt/dJ9jtXTTLejOTOzDdOmAqCQTTb8wBax2zoMR94x4C3fv+YMra33s
-         a0Hg==
+        bh=ip9PXkybLaEQBt70OiQvM7t2Y6c0e0LYBsAJfrulXVg=;
+        b=kFwaHIaZXlJni+jFnwmsDmenwTvoGQE4QjtOfXqJCOu9sT1vKjheN4//UTMPCGVFap
+         NXZ4CdkZLcOtv0ExoioaHd/SSBM/8UfAVzM49hK4+TvdxaWKPH2YZxescCYVPac7cuxR
+         SWj8btGXUarmMG9upY/cZUrwWBU/fDC7Vft6+NxVsm08wDw5ShjpgsEtJ3BlycaTl8v1
+         pCESfXzqARAVw8WOsekkHi2CR2vUcZuCQ7kSkdtYIlhA3isH55si5q2V9PqpKQPA04vL
+         FTUOtSYfx0qW6pdCFOxXy7Fp/mV3sqh54sP6nMjgDXKTFSF9Ld4i90fQAGj6ouTWFWvD
+         mxDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715333306; x=1715938106;
+        d=1e100.net; s=20230601; t=1715333476; x=1715938276;
         h=content-transfer-encoding:subject:from:cc:to:content-language
          :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=wH7osSqVMbrj6VsQFgjVp/pbaHR3TYk56MkptLMlbMo=;
-        b=dDTR7QSANGp1oAn8QpfG4Gn+y8y4I/hQTVp5U/gupFaqIR7PJl2k7fVGGT4Ezvljme
-         Z04iKunR7tycMeaZvkMeGz0Hoid54hiyFUd8oTdshujzqybJfTJgz7A3xmZnwKxLfHdT
-         uiJAHDvmkl3lB4mMOu0U/gRwJQCO02uy2/fnr7ILRuYhzafZ8+8fULnL7xOyMLPc39VV
-         RwMzZlh9n4khEn8jW2uu5Ddsgb3eQT4PS2fbXF56vD01koM95TUTj8rIvDlFXrXtC4O3
-         8Ov55h7YxV2N2F/f3gdEG1U0So1kFP64HNm2GspMAXMs+UlhQXXeEDIw+n/e7q2PoCzV
-         ldxg==
-X-Forwarded-Encrypted: i=1; AJvYcCVNQpAqgHJHS0+LQNYDIO0lCmQeIuozX/3SKu7FEeIrvjibNEnSMPoEFVpz2HlYJpe8KvqGdYnIsOXRy7c+H1UTpbXgKLYr3rU=
-X-Gm-Message-State: AOJu0YwAEp8NDv5LLhkVfkgY9l1evvyDaNZKsdT6tJbijwOIglHChxVH
-	GZ0EWidV/pU7U2Gp8yh6AXmXLJA5/8vxi4uaODG9Fd6N6BgkeJRQVxD4SPx5Qjs=
-X-Google-Smtp-Source: AGHT+IG/8TWcbU3oR2gbc1O+Jdy2h/xcTp99F0XzD8u9YQqAeOagcu6s3MA7ns0AfEWm4csQl3AdLg==
-X-Received: by 2002:adf:fd0b:0:b0:346:1443:27ea with SMTP id ffacd0b85a97d-3504aa6886dmr1678726f8f.68.1715333306012;
-        Fri, 10 May 2024 02:28:26 -0700 (PDT)
+        bh=ip9PXkybLaEQBt70OiQvM7t2Y6c0e0LYBsAJfrulXVg=;
+        b=vIG2f3/UGegNLSLTXDf7VEETVmqOM5/ArGVSDJvBseRo3hWchOYZ0q1zzq36ECnAHA
+         EiMCLf3PbpX6Kp0+BWaOaL8VBAGUzgCtuTsCcBoXn1BUiVONWkLibIG8cqxGmgRv5oH1
+         3XRPpPDpJPDJYfkwFMm9m4ZCXgWGo+2TDDLtcBE3iCw4bCwF5Umry9NTfpU+47c8P36Q
+         kup5o7YeyAfQ6m5F3vz4c5O2rBhNfkHm3oOW85m55Eztg/JN1p6yPyw0O0bzDhQD+mPj
+         9Y2wwpJ+lTLEEVKKbK7iuCiRenOWTKk2mK2yZys/OmhFawrlaKDTMMbtDceq1C1kGll8
+         OJaw==
+X-Forwarded-Encrypted: i=1; AJvYcCUZmCobGcufzUWFrODrp0GfEr1zDhc/cB2EbAD9Orv9ND9Fb2PD3DqXDN7qGMoray58gbeMR5AP1nClp7a3AYH7AqzWYqLQc/I=
+X-Gm-Message-State: AOJu0YwzKvckYBDgPKulkHoDqwICLnD2yVokBRprTJkk62APAE4dF4RB
+	C08SPBC/pG24gs8ccEQ8Y58xyhpc7xJMJ1BqHjMyhm0KjKtEWuIQDM5wShBZVV17fHeOjXl/o+4
+	H
+X-Google-Smtp-Source: AGHT+IEZZ3gctK+UwoQfw400JNbhCfb08v2O49Hv9AYMy0UQAMPf+n7QDhJV7nrN9/3uu7FCqeg62A==
+X-Received: by 2002:a05:651c:149:b0:2e2:9842:a9d3 with SMTP id 38308e7fff4ca-2e52039dc3emr15242551fa.46.1715333475863;
+        Fri, 10 May 2024 02:31:15 -0700 (PDT)
 Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-41fcc6fd84bsm57306335e9.44.2024.05.10.02.28.24
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-41fccee92c7sm58720425e9.34.2024.05.10.02.31.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 May 2024 02:28:25 -0700 (PDT)
-Message-ID: <69f74548-147b-43e3-acaf-8b62c51f131d@linaro.org>
-Date: Fri, 10 May 2024 11:28:22 +0200
+        Fri, 10 May 2024 02:31:15 -0700 (PDT)
+Message-ID: <7ca1c46a-93e6-4f67-bee3-623cb56764fa@linaro.org>
+Date: Fri, 10 May 2024 11:31:12 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -79,25 +80,24 @@ Content-Language: en-US
 To: Thomas Gleixner <tglx@linutronix.de>
 Cc: Geert Uytterhoeven <geert+renesas@glider.be>,
  Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
- Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
  Stephen Boyd <swboyd@chromium.org>,
  Linux PM mailing list <linux-pm@vger.kernel.org>,
  Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 From: Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [GIT PULL] timer drivers material for v6.10-rc1
+Subject: [GIT PULL] timer drivers for v6.10-rc1
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 Hi Thomas,
 
-please consider pulling the following changes since commit 
+Please consider the following changes since commit 
 ddd9120983c3efbcaa3a4c7777da1440f8ce27d8:
 
    rust: time: doc: Add missing C header links (2024-05-01 00:04:47 +0200)
 
 are available in the Git repository at:
 
-   ssh://git@git.linaro.org/people/daniel.lezcano/linux.git 
+   https://git.linaro.org/people/daniel.lezcano/linux.git 
 tags/timers-v6.10-rc1
 
 for you to fetch changes up to 2030a7e11f161b4067bd4eadd984cdb36446fcca:
@@ -139,8 +139,6 @@ const
   drivers/clocksource/renesas-ostm.c                        | 3 ++-
   drivers/clocksource/timer-ti-dm.c                         | 1 -
   4 files changed, 5 insertions(+), 3 deletions(-)
-
-
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
