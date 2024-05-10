@@ -1,112 +1,243 @@
-Return-Path: <linux-pm+bounces-7702-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7703-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38D2B8C19F0
-	for <lists+linux-pm@lfdr.de>; Fri, 10 May 2024 01:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B0FEB8C1CC3
+	for <lists+linux-pm@lfdr.de>; Fri, 10 May 2024 05:07:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4661283494
-	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2024 23:32:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65BE9280F1D
+	for <lists+linux-pm@lfdr.de>; Fri, 10 May 2024 03:07:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D291112FF6B;
-	Thu,  9 May 2024 23:31:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9CD4148846;
+	Fri, 10 May 2024 03:06:57 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail115-80.sinamail.sina.com.cn (mail115-80.sinamail.sina.com.cn [218.30.115.80])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 075DB12D776
-	for <linux-pm@vger.kernel.org>; Thu,  9 May 2024 23:31:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=218.30.115.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A934714882B;
+	Fri, 10 May 2024 03:06:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715297518; cv=none; b=T6uIT9OJUUi6EAFS8mq+qeJNBJCX510qWprkfzksgKqRold0/QXrTnpMPhNl+TwfE/b+YvhPgE+e4SLsNmyFdVnOzUGji3FUMC8zxGv5eZPMQZRbnWeLfF8H36wexn38m/W8qyCjZj5HS8sGFT88/LxGpmVcoJPjgo69LPeSpkU=
+	t=1715310417; cv=none; b=D37B++FTzF1ixfrF0ytYj2JoZ4QYRXf0PbWY9DfiVRYIAw2CUHN/IhUdMIOlUYb/5c8QjMXMI1GAACoG5bTCzpOJpkBCxRUPmEDDdt4iDRUQusNV3cZzeVgPJo9189PhYkqB1NSIRT7of8XDBzc+knh9qR4e5yQ/uvSviL8DfTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715297518; c=relaxed/simple;
-	bh=V+rCr67uHkl0wFx0HPMuybpjVQOyY8Iy1PgN91wLt/8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rsJs3Ckl7FiX671TPlYkfavtDntlojZgDARrDe50R+4dkXsAMOFFZwT+JMrburovyRYWA+RXAMN65YIt9x6mLiYgPmpBvovA9MGsMi0UW7KdbcwxDgWQ1c8HEgOH6NePsh5JRUv22wHID7Vy1e8vWu/qLj9zfuncZ2yJF8NlthM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sina.com; spf=pass smtp.mailfrom=sina.com; arc=none smtp.client-ip=218.30.115.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sina.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sina.com
-X-SMAIL-HELO: localhost.localdomain
-Received: from unknown (HELO localhost.localdomain)([116.24.9.62])
-	by sina.com (10.75.12.45) with ESMTP
-	id 663D5B9E00002727; Thu, 10 May 2024 07:26:26 +0800 (CST)
-X-Sender: hdanton@sina.com
-X-Auth-ID: hdanton@sina.com
-Authentication-Results: sina.com;
-	 spf=none smtp.mailfrom=hdanton@sina.com;
-	 dkim=none header.i=none;
-	 dmarc=none action=none header.from=hdanton@sina.com
-X-SMAIL-MID: 90088931457849
-X-SMAIL-UIID: EC1BAA6034F24FC3BF2264438E715D3A-20240510-072626-1
-From: Hillf Danton <hdanton@sina.com>
-To: Amir Goldstein <amir73il@gmail.com>
-Cc: syzbot <syzbot+4c493dcd5a68168a94b2@syzkaller.appspotmail.com>,
-	linux-fsdevel@vger.kernel.org,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	linux-kernel@vger.kernel.org,
-	syzkaller-bugs@googlegroups.com,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>,
-	linux-pm@vger.kernel.org
-Subject: Re: [syzbot] [kernfs?] possible deadlock in kernfs_seq_start
-Date: Fri, 10 May 2024 07:26:13 +0800
-Message-Id: <20240509232613.2459-1-hdanton@sina.com>
-In-Reply-To: <CAOQ4uxg8karas=5JxmCg0P5Wxhfzn41evgs_OUxd1GxBRpb4zQ@mail.gmail.com>
-References: 
+	s=arc-20240116; t=1715310417; c=relaxed/simple;
+	bh=dIqiVjHurELLJ7PCOwbTi79bOof0c/G+LGiyT31FLJw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=f06yNH8zCGiziOxmVzFqR52Eefs8qeTxM333yGg9otyTfpAq8ilRd63RJvmOacBur6o8BkWutOuOOtC0gM5cyXE6msWukhZ1KjP8wfpHZsJu9QYV6V/6lqw2NVuXUMtC0/jr17mKa3F9mz0y8bwv/Z0XXP6UoGcmUPZeEWD66nk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.48])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4VbDKJ0K7czCrWj;
+	Fri, 10 May 2024 11:05:40 +0800 (CST)
+Received: from dggpemm500018.china.huawei.com (unknown [7.185.36.111])
+	by mail.maildlp.com (Postfix) with ESMTPS id E558C18007A;
+	Fri, 10 May 2024 11:06:51 +0800 (CST)
+Received: from [10.174.178.96] (10.174.178.96) by
+ dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Fri, 10 May 2024 11:06:51 +0800
+Message-ID: <be312b75-eede-44f5-b7f3-b50f50c6fb56@huawei.com>
+Date: Fri, 10 May 2024 11:06:50 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] cpufreq/cppc: changing highest_perf to nominal_perf in
+ cppc_cpufreq_cpu_init()
+To: Ionela Voinescu <ionela.voinescu@arm.com>, Viresh Kumar
+	<viresh.kumar@linaro.org>
+CC: Beata Michalska <beata.michalska@arm.com>, Vanshidhar Konda
+	<vanshikonda@os.amperecomputing.com>, <rafael@kernel.org>,
+	<al.stone@linaro.org>, <ashwin.chaugule@linaro.org>,
+	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<liwei391@huawei.com>, <liaoyu15@huawei.com>
+References: <20240428092852.1588188-1-liwei728@huawei.com>
+ <20240429104945.esdukn6ayudgyumc@vireshk-i7> <ZjoBrF4bAK5ukm7H@arm.com>
+From: "liwei (JK)" <liwei728@huawei.com>
+In-Reply-To: <ZjoBrF4bAK5ukm7H@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500018.china.huawei.com (7.185.36.111)
 
-On Thu, 9 May 2024 17:52:21 +0300 Amir Goldstein <amir73il@gmail.com>
-> On Thu, May 9, 2024 at 1:49 PM Hillf Danton <hdanton@sina.com> wrote:
-> >
-> > The correct locking order is
-> >
-> >                 sb_writers
+Hello,
+
+Thanks for for your reply.
+
+Maybe my description has caused you some misunderstandings, please allow 
+me to supplement the description
+
+在 2024/5/7 18:25, Ionela Voinescu 写道:
+> Hi,
 > 
-> This is sb of overlayfs
+> Thanks for adding me to this.
 > 
-> >                 inode lock
+> On Monday 29 Apr 2024 at 16:19:45 (+0530), Viresh Kumar wrote:
+>> CC'ing few folks who are working with the driver.
+>>
+>> On 28-04-24, 17:28, liwei wrote:
+>>> When turning on turbo, if frequency configuration takes effect slowly,
+>>> the updated policy->cur may be equal to the frequency configured in
+>>> governor->limits(), performance governor will not adjust the frequency,
+>>> configured frequency will remain at turbo-freq.
+>>>
+>>> Simplified call stack looks as follows:
+>>> cpufreq_register_driver(&cppc_cpufreq_driver)
+>>> 	...
+>>> 	cppc_cpufreq_cpu_init()
+>>> 		cppc_get_perf_caps()
+>>> 		policy->max = cppc_perf_to_khz(caps, caps->nominal_perf)
+>>> 			cppc_set_perf(highest_perf) // set highest_perf
+>>> 			policy->cur = cpufreq_driver->get() // if cur == policy->max
+>>> 	cpufreq_init_policy()
+>>> 		...
+>>> 		cpufreq_start_governor() // governor: performance
+>>> 			new_freq = cpufreq_driver->get() // if new_freq == policy->max
+>>> 			if (policy->cur != new_freq)
+>>> 			cpufreq_out_of_sync(policy, new_freq)
+>>> 				...
+>>> 				policy->cur = new_freq
+> I believe the problem is here   ^^^^^^^^^^^^^^^^^^^^^^.
 > 
-> This is real inode
+> cpufreq_verify_current_freq() should not update policy->cur unless a
+> request to change frequency has actually reached the driver. I believe
+> policy->cur should always reflect the request, not the actual current
+> frequency of the CPU.
 > 
-WRT sb_writers the order
+> Given that new_freq is the current (hardware) frequency of the CPU,
+> obtained via .get(), it can be the nominal frequency, as it is in your
+> case, or any frequency, if there is any firmware/hardware capping in
+> place.
+> 
+> This causes the issue in your scenario, in which __cpufreq_driver_target()
+> filters the request from the governor as it finds it equal to policy->cur,
+> and it believes it's already set by hardware.
+> 
+> This causes another issue in which scaling_cur_freq, which for some
+> systems returns policy->cur, ends up returning the hardware frequency of
+> the CPUs, and not the last frequency request, as it should:
+> 
+> "scaling_cur_freq
+> Current frequency of all of the CPUs belonging to this policy (in kHz).
+> 
+> In the majority of cases, this is the frequency of the last P-state
+> requested by the scaling driver from the hardware using the scaling
+> interface provided by it, which may or may not reflect the frequency
+> the CPU is actually running at (due to hardware design and other
+> limitations)." [1]
+> 
+> Therefore policy->cur gets polluted with the hardware frequency of the
+> CPU sampled at that one time, and this affects governor decisions, as
+> in your case, and scaling_cur_freq feedback as well. This bad value will
+> not change until there's another .target() or cpufreq_out_of_sync()
+> call, which will never happen for fixed frequency governors like the
+> performance governor.
+> 
+> Thanks,
+> Ionela.
+> 
 
-	lock inode parent
-	lock inode kid
+In the above function calling process, the frequency is obtained twice. 
+The first time is in cpufreq_online(), and the second time is in 
+cpufreq_verify_current_freq().
 
-becomes
-	lock inode kid
-	sb_writers
-	lock inode parent 
+When the frequency configuration takes effect slowly, the kernel cannot 
+sense when the frequency configuration takes effect. It may take effect 
+before the frequency is read twice, between the frequencies read twice, 
+or after the frequency is read twice.
 
-given call trace
+|------------------|--------------------|---------------------|
+set highest_freq  get()               get()                target()
 
-> -> #2 (sb_writers#4){.+.+}-{0:0}:
->        lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5754
->        percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
->        __sb_start_write include/linux/fs.h:1664 [inline]
->        sb_start_write+0x4d/0x1c0 include/linux/fs.h:1800
->        mnt_want_write+0x3f/0x90 fs/namespace.c:409
->        ovl_create_object+0x13b/0x370 fs/overlayfs/dir.c:629
->        lookup_open fs/namei.c:3497 [inline]
->        open_last_lookups fs/namei.c:3566 [inline]
+If it takes effect before two read operations, there will be no problem.
 
-and code snippet [1]
+If it takes effect between two read operations, policy->cur will be 
+updated in cpufreq_verify_current_freq(), the execution path is as follows:
+new_freq = cpufreq_driver->get() //  new_freq = turbo_freq
+	if (policy->cur != new_freq)
+		cpufreq_out_of_sync(policy, new_freq)
+			...
+			policy->cur = new_freq // cur = turbo_freq
+...
+__cpufreq_driver_target(policy->max)
+	cppc_set_perf(target) // policy->cur!=target
 
-	if (open_flag & O_CREAT)
-		inode_lock(dir->d_inode);
-	else
-		inode_lock_shared(dir->d_inode);
-	dentry = lookup_open(nd, file, op, got_write);
+Reconfigure frequency to policy->max.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/fs/namei.c?id=dccb07f2914c#n3566
+If policy->cur is not set to turbo_freq after two read operations, 
+policy->cur will not be updated in cpufreq_verify_current_freq(), the 
+execution path is as follows:
+new_freq = cpufreq_driver->get() //  new_freq == policy->cur
+	if (policy->cur != new_freq)
+...
+__cpufreq_driver_target(policy->max)
+	ret // policy->cur==target
+
+Configured frequency will remain at turbo-freq.
+
+When reading scaling_cur_freq, the frequency value that may be read is 
+policy->cur. If arch does not implement arch_freq_get_on_cpu(), and the 
+registered cpufreq_driver does not define setpolicy()/get(), the 
+frequency will not be obtained through the get() and will directly feed 
+back policy->cur. If the above problem occurs, no exception will be 
+detected when reading scaling_cur_freq. But reading cpuinfo_cur_freq 
+will reacquire the frequency through the get() interface and feedback 
+the newly acquired frequency value.
+
+Thanks
+liwei
+
+> 
+> [1] https://docs.kernel.org/admin-guide/pm/cpufreq.html
+> 
+>>> 			...
+>>> 			policy->governor->limits()
+>>> 				__cpufreq_driver_target(policy->max)
+>>> 					if (policy->cur==target)
+>>> 					// generate error, keep set highest_perf
+>>> 						ret
+>>> 					cppc_set_perf(target)
+>>>
+>>> Fix this by changing highest_perf to nominal_perf in cppc_cpufreq_cpu_init().
+>>>
+>>> Fixes: 5477fb3bd1e8 ("ACPI / CPPC: Add a CPUFreq driver for use with CPPC")
+>>> Signed-off-by: liwei <liwei728@huawei.com>
+>>> ---
+>>>   drivers/cpufreq/cppc_cpufreq.c | 8 ++++----
+>>>   1 file changed, 4 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+>>> index 64420d9cfd1e..db04a82b8a97 100644
+>>> --- a/drivers/cpufreq/cppc_cpufreq.c
+>>> +++ b/drivers/cpufreq/cppc_cpufreq.c
+>>> @@ -669,14 +669,14 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
+>>>   	if (caps->highest_perf > caps->nominal_perf)
+>>>   		boost_supported = true;
+>>>   
+>>> -	/* Set policy->cur to max now. The governors will adjust later. */
+>>> -	policy->cur = cppc_perf_to_khz(caps, caps->highest_perf);
+>>> -	cpu_data->perf_ctrls.desired_perf =  caps->highest_perf;
+>>> +	/* Set policy->cur to norm now. */
+>>> +	policy->cur = cppc_perf_to_khz(caps, caps->nominal_perf);
+>>> +	cpu_data->perf_ctrls.desired_perf =  caps->nominal_perf;
+>>>   
+>>>   	ret = cppc_set_perf(cpu, &cpu_data->perf_ctrls);
+>>>   	if (ret) {
+>>>   		pr_debug("Err setting perf value:%d on CPU:%d. ret:%d\n",
+>>> -			 caps->highest_perf, cpu, ret);
+>>> +			 caps->nominal_perf, cpu, ret);
+>>>   		goto out;
+>>>   	}
+>>>   
+>>> -- 
+>>> 2.25.1
+>>
+>> -- 
+>> viresh
 
