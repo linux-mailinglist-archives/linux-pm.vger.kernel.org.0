@@ -1,179 +1,98 @@
-Return-Path: <linux-pm+bounces-7736-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7737-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC2E08C2F48
-	for <lists+linux-pm@lfdr.de>; Sat, 11 May 2024 05:15:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89C558C2F85
+	for <lists+linux-pm@lfdr.de>; Sat, 11 May 2024 06:33:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE3822832C7
-	for <lists+linux-pm@lfdr.de>; Sat, 11 May 2024 03:15:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 957361C20F34
+	for <lists+linux-pm@lfdr.de>; Sat, 11 May 2024 04:33:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 975EF335D3;
-	Sat, 11 May 2024 03:15:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43CCD1F932;
+	Sat, 11 May 2024 04:33:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="z1a/pyhb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4132421A04;
-	Sat, 11 May 2024 03:15:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.121.34.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB9117571
+	for <linux-pm@vger.kernel.org>; Sat, 11 May 2024 04:33:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715397314; cv=none; b=VZIgq5K8EUe00GcumMtTgm6CZQoIxhsNaWWiTH3MRiuTGYctKjk6mtJyPbFmzFYbf2aft7CEgXXh40QhTEDVBHfvGNZbiuwWv/v0wy88fiH2pJe/O0K4O0cbVmiUbTBOmgYPmpycMH0zqHejoXj3ZdQm6HCV11rlCiLRNHTwnWs=
+	t=1715402028; cv=none; b=FIUG5D9zOOZy+bGR+Uqp3IMjq9k19r4PZbR5gnbvuSI1dtjPUAmq2JI3EAluV0BrWk9WfPYdtokqXMoMcVdkuAXaAlNs6WGpa7ZxThbbeDSbfSchFbXdj3yJBzORyrSDvnxjgsFMzU9i7U5EI5SKTFKrEaYTQJTarO5H2Oa6NJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715397314; c=relaxed/simple;
-	bh=7hKBsyDeJ3WJA3XhH1oHn62d0U8OLqzso5Esv3yvRT8=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=XyWz0qYKhCV2uAHhT7ZvAzYKFADoCDjWJc5NLx01MUj5VslGEg8Y5EaVzRYC5e02tkYKMmVh4Fu7YL35Y70C07vO2al+WHF3xDViaBF6OL1U+xwhj9BO0b6JApJrjBOpBXznVMRDesHYf5hqtG4y9+cF8feXYkJporTfI7IFfaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; arc=none smtp.client-ip=92.121.34.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 1C2EC1A02A7;
-	Sat, 11 May 2024 05:15:04 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 8116F1A07A8;
-	Sat, 11 May 2024 05:15:03 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id BB0BA181D0FC;
-	Sat, 11 May 2024 11:15:00 +0800 (+08)
-From: Shengjiu Wang <shengjiu.wang@nxp.com>
-To: ulf.hansson@linaro.org,
-	heiko@sntech.de,
-	u.kleine-koenig@pengutronix.de,
-	geert+renesas@glider.be,
-	rafael@kernel.org,
-	linux-pm@vger.kernel.org,
-	abelvesa@kernel.org,
-	peng.fan@nxp.com,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	shawnguo@kernel.org,
-	s.hauer@pengutronix.de,
-	kernel@pengutronix.de,
-	festevam@gmail.com,
-	imx@lists.linux.dev,
-	shengjiu.wang@gmail.com,
-	frank.li@nxp.com,
-	mkl@pengutronix.de,
-	linus.walleij@linaro.org
-Cc: linux-clk@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3] pmdomain: imx: gpcv2: Add delay after power up handshake
-Date: Sat, 11 May 2024 10:55:25 +0800
-Message-Id: <1715396125-3724-1-git-send-email-shengjiu.wang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-X-Virus-Scanned: ClamAV using ClamSMTP
+	s=arc-20240116; t=1715402028; c=relaxed/simple;
+	bh=iR0XyjTDqqc4Wjjno2PBiK6F4GzoKq4vOnOceQyaYl8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZaTHWeEbQosLvyeLzYIu1yoE+J8zzWT/ocgT/lNdrO2p9yjWlzyscBSvmiqFC97v7zyQFy1udv0oYDuhLosM6aKN9QU4mPduWHjf8GNpwnuKVElta8qY58N+7tQuSt5iSCjmXdAmIRukgPTTfqiXk2e7aDTwcen6LvPviGBe1LA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=z1a/pyhb; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a59cdf7cd78so676796066b.0
+        for <linux-pm@vger.kernel.org>; Fri, 10 May 2024 21:33:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1715402025; x=1716006825; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=iR0XyjTDqqc4Wjjno2PBiK6F4GzoKq4vOnOceQyaYl8=;
+        b=z1a/pyhbKByCLHpA2wu6VNPnaa+Qi13AdMPwcS6pTEzWhvroq4Y6uU1xvEwXo0qrFc
+         F1O87gPYoHEeV3bLlgeTSMeaJ3LyZm49JJjHI7ZrJY/7YlLPVJkzrlWfwN3YkMk83GPw
+         IyXDj69JD6Jud5UPDUVK5D0uA1hErCyWePP0W2kq4NJprvjFnn3N/V7sNXIN3ubd0on6
+         nNnXJL8mOd9ooS6ATQienkQqRYAojYhCknuKhTfX//SPm9cX2lhN2LRSUICKbI7OO3Ap
+         I0lWxGfRR1yw7tBzwWi4hLPt7ezNufm9iSbI1cS9gD/8A7uGPhttAUjyhxWppallzCHw
+         FHxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715402025; x=1716006825;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iR0XyjTDqqc4Wjjno2PBiK6F4GzoKq4vOnOceQyaYl8=;
+        b=YmEgILPJg1fC+8wWtxgHJJhyCZyNuZZgxktgEMVVHXs8dmk11fN5HxnyPeH5ez0uLH
+         aWIF7IcT2iO17TQBSrjzXXp0Wznz9AhwKAYeHND5/MUv1jgrtKfNh8JHuGW2OOZrqd59
+         0EBhroURDamyqHRkJ6+afLm3SFXObO6TEKfs2GQuggDEoRazKIzINowpkVamhP58TkT3
+         eo2xZqh3lNFxazzytoE2i6bejlyo/SemXgoYLjR/aWrA7crUT3DdriqiEKlMQLeF6ueg
+         7S2tgxykch6+7Qk4sGSpwNBctMEwrU1dNggOgDc8/UYGZbKmm1CS4poCtMw/nLa3szKH
+         OOcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUfZm9W/ovGya3sZJmx71ltLBoplJm6a0+uwDPyMfxi6NcuWRcE+VJVbkY9/je1ReWZrX02QQQQgq4fk05975ggO9dEiuY0jmM=
+X-Gm-Message-State: AOJu0Yx7B5miPArBUUyDFlS7IEHe6IX/F+LQPn8FXtwtSPIMH/utcBVT
+	cR1h6kcEnDO2oilHApaBENtXskQNwIq7Fn/vgVZIbVBFxpPqrZthSnv9lJqwt2LFEhVhghH2GmK
+	isHGTwnoiodTcaLJU8EKwW6BMyfnk4/gsgHM9/A==
+X-Google-Smtp-Source: AGHT+IEcfSlcjly2piGh73gfy+/TpqxiTmB3jyv23ofh2Ef+M8gbCZem3TQII8uGWq0wSZKXW4p616cTMjJVi9MfduM=
+X-Received: by 2002:a17:906:dac3:b0:a59:b6a8:4d74 with SMTP id
+ a640c23a62f3a-a5a2d3bebeemr350201066b.0.1715402024326; Fri, 10 May 2024
+ 21:33:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <2eb72832e852c80e5c11cd69e7d2f14cefd8b1cb.1712903998.git.viresh.kumar@linaro.org>
+ <e6fc06eb-fe52-4cb3-b412-a602369ee875@leemhuis.info> <CAPDyKFoHoKK-RZsGwnZhbW9_ZRQtL1MFZBuVVLMx-MxL2cQQbw@mail.gmail.com>
+ <7c6df194-fce1-401a-98c5-c903d78627c4@leemhuis.info> <CAPDyKFqKRy6zJdBpK3bNTvkvAjty691-Vi_HV3E5CeqgRAWGmA@mail.gmail.com>
+In-Reply-To: <CAPDyKFqKRy6zJdBpK3bNTvkvAjty691-Vi_HV3E5CeqgRAWGmA@mail.gmail.com>
+From: Viresh Kumar <viresh.kumar@linaro.org>
+Date: Sat, 11 May 2024 10:03:33 +0530
+Message-ID: <CAKohpomKbhdXRgFxxbg-_hG5EFZT0LrvfQcrwjQPon6AZNbGag@mail.gmail.com>
+Subject: Re: [PATCH V2] OPP: Fix required_opp_tables for multiple genpds using
+ same table
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Linux regressions mailing list <regressions@lists.linux.dev>, Viresh Kumar <vireshk@kernel.org>, 
+	Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	linux-pm@vger.kernel.org, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Vladimir Lypak <vladimir.lypak@gmail.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-AudioMix BLK-CTRL on i.MX8MP encountered an accessing register issue
-after power up.
+On Fri, 10 May 2024 at 16:14, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> I wasn't sure of the level of urgency in this case, as I don't think
+> we have that many DTSes upstream that could hit this case.
+>
+> But nevermind, it should be easy to revert/replace the change when we
+> have something better to take over. Viresh, feel pick this up - or let
+> me know if you prefer me to pick it.
 
-[    2.181035] Kernel panic - not syncing: Asynchronous SError Interrupt
-[    2.181038] CPU: 1 PID: 48 Comm: kworker/u16:2 Not tainted 6.9.0-rc5-next-20240424-00003-g21cec88845c6 #171
-[    2.181047] Hardware name: NXP i.MX8MPlus EVK board (DT)
-[    2.181050] Workqueue: events_unbound deferred_probe_work_func
-[    2.181064] Call trace:
-[...]
-[    2.181142]  arm64_serror_panic+0x6c/0x78
-[    2.181149]  do_serror+0x3c/0x70
-[    2.181157]  el1h_64_error_handler+0x30/0x48
-[    2.181164]  el1h_64_error+0x64/0x68
-[    2.181171]  clk_imx8mp_audiomix_runtime_resume+0x34/0x44
-[    2.181183]  __genpd_runtime_resume+0x30/0x80
-[    2.181195]  genpd_runtime_resume+0x110/0x244
-[    2.181205]  __rpm_callback+0x48/0x1d8
-[    2.181213]  rpm_callback+0x68/0x74
-[    2.181224]  rpm_resume+0x468/0x6c0
-[    2.181234]  __pm_runtime_resume+0x50/0x94
-[    2.181243]  pm_runtime_get_suppliers+0x60/0x8c
-[    2.181258]  __driver_probe_device+0x48/0x12c
-[    2.181268]  driver_probe_device+0xd8/0x15c
-[    2.181278]  __device_attach_driver+0xb8/0x134
-[    2.181290]  bus_for_each_drv+0x84/0xe0
-[    2.181302]  __device_attach+0x9c/0x188
-[    2.181312]  device_initial_probe+0x14/0x20
-[    2.181323]  bus_probe_device+0xac/0xb0
-[    2.181334]  deferred_probe_work_func+0x88/0xc0
-[    2.181344]  process_one_work+0x150/0x290
-[    2.181357]  worker_thread+0x2f8/0x408
-[    2.181370]  kthread+0x110/0x114
-[    2.181381]  ret_from_fork+0x10/0x20
-[    2.181391] SMP: stopping secondary CPUs
-
-According to comments in power up handshake:
-
-	/* request the ADB400 to power up */
-	if (domain->bits.hskreq) {
-		regmap_update_bits(domain->regmap, domain->regs->hsk,
-				   domain->bits.hskreq, domain->bits.hskreq);
-
-		/*
-		 * ret = regmap_read_poll_timeout(domain->regmap, domain->regs->hsk, reg_val,
-		 *				  (reg_val & domain->bits.hskack), 0,
-		 *				  USEC_PER_MSEC);
-		 * Technically we need the commented code to wait handshake. But that needs
-		 * the BLK-CTL module BUS clk-en bit being set.
-		 *
-		 * There is a separate BLK-CTL module and we will have such a driver for it,
-		 * that driver will set the BUS clk-en bit and handshake will be triggered
-		 * automatically there. Just add a delay and suppose the handshake finish
-		 * after that.
-		 */
-	}
-
-The BLK-CTL module needs to add delay to wait for a handshake request finished.
-For some BLK-CTL module (eg. AudioMix on i.MX8MP) doesn't have BUS clk-en
-bit, it is better to add delay in this driver, as the BLK-CTL module doesn't
-need to care about how it is powered up.
-
-regmap_read_bypassed() is to make sure the above write IO transaction already
-reaches target before udelay().
-
-Fixes: 1496dd413b2e ("clk: imx: imx8mp: Add pm_runtime support for power saving")
-Reported-by: Francesco Dolcini <francesco@dolcini.it>
-Closes: https://lore.kernel.org/all/66293535.170a0220.21fe.a2e7@mx.google.com/
-Suggested-by: Frank Li <frank.li@nxp.com>
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
----
-changes in v3:
-- move change to gpcv2.c, as it is more reasonable to let power driver
-  to handle such power issue, suggested by Frank Li
-
-changes in v2:
-- reduce size of panic log in commit message
-
- drivers/pmdomain/imx/gpcv2.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/drivers/pmdomain/imx/gpcv2.c b/drivers/pmdomain/imx/gpcv2.c
-index 4b828d74a606..856eaac0ec14 100644
---- a/drivers/pmdomain/imx/gpcv2.c
-+++ b/drivers/pmdomain/imx/gpcv2.c
-@@ -393,6 +393,17 @@ static int imx_pgc_power_up(struct generic_pm_domain *genpd)
- 		 * automatically there. Just add a delay and suppose the handshake finish
- 		 * after that.
- 		 */
-+
-+		/*
-+		 * For some BLK-CTL module (eg. AudioMix on i.MX8MP) doesn't have BUS
-+		 * clk-en bit, it is better to add delay here, as the BLK-CTL module
-+		 * doesn't need to care about how it is powered up.
-+		 *
-+		 * regmap_read_bypassed() is to make sure the above write IO transaction
-+		 * already reaches target before udelay()
-+		 */
-+		regmap_read_bypassed(domain->regmap, domain->regs->hsk, &reg_val);
-+		udelay(5);
- 	}
- 
- 	/* Disable reset clocks for all devices in the domain */
--- 
-2.34.1
-
+Please apply, while I enjoy my holidays :)
 
