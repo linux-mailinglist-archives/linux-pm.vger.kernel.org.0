@@ -1,100 +1,121 @@
-Return-Path: <linux-pm+bounces-7757-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7758-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4E8C8C3B03
-	for <lists+linux-pm@lfdr.de>; Mon, 13 May 2024 07:43:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D62DF8C3BBA
+	for <lists+linux-pm@lfdr.de>; Mon, 13 May 2024 09:11:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB9561C20EFA
-	for <lists+linux-pm@lfdr.de>; Mon, 13 May 2024 05:43:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8CFDE1F214A1
+	for <lists+linux-pm@lfdr.de>; Mon, 13 May 2024 07:11:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 030C8146588;
-	Mon, 13 May 2024 05:43:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="YVkG6mJA"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87AEC146A67;
+	Mon, 13 May 2024 07:11:20 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from l2mail1.panix.com (l2mail1.panix.com [166.84.1.75])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F271CD3D;
-	Mon, 13 May 2024 05:43:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.75
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E0631FA1;
+	Mon, 13 May 2024 07:11:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715579014; cv=none; b=IoD9VWKUHMML5WpjTfaFYu5ZYVR4NUwmo8IlBQm6FjvuZvljnQCVTJChWBOpm9pAtI0kvKs6cteDIBWM7UgY/NZxD54FeCxyy6JKd1MmiqPlWsQjcYy6XSxuKYTXdHsJvYjnrFc+r1ucfi6sY86PiYfMUj7ZoJV5tCADsURiuiM=
+	t=1715584280; cv=none; b=fREOTropJUkaB3MCac7+LcL/P1J3Z1RxhphHRbchhBUjLAMnE94wlrC9ELxOrfgbm0SuRZ7pvcbl854vi6oE6DN0dk2Xby8ZJrrQjmvtgSD1sLMxIeziTUjmodv1WZMOoxA3YzvHRglaECHrYP29WyjyxIP1+O4P5OTWWc3ZHRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715579014; c=relaxed/simple;
-	bh=FSWuB8V/ziHZXymqKaREbNvUpk0luMlL6NoUqq2UHIQ=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=ZBnHi+tGEyxEbIayFTU/tHwXYveNblq9BMiJ0mREK2tJazfAMr0ZSt1aQRPv3qZEOZ8P2kLeSAEjgWFZuBvU3iNfHZqRe8jcAbhlvXlLhCLniIKU98tHUOE4VY6q2v68z7ydTE+QhWTKlXkCuRIkJRm+04j0fdpr/dHK1WU0NxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=YVkG6mJA; arc=none smtp.client-ip=166.84.1.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
-Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (1024 bits) server-digest SHA256)
-	(No client certificate requested)
-	by l2mail1.panix.com (Postfix) with ESMTPS id 4Vd7Fk1wslzDRb;
-	Mon, 13 May 2024 01:24:10 -0400 (EDT)
-Received: from xps-9320 (ip72-219-82-239.oc.oc.cox.net [72.219.82.239])
-	by mailbackend.panix.com (Postfix) with ESMTPSA id 4Vd7FQ3sSlzFhw;
-	Mon, 13 May 2024 01:23:54 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
-	t=1715577836; bh=FSWuB8V/ziHZXymqKaREbNvUpk0luMlL6NoUqq2UHIQ=;
-	h=Date:From:Reply-To:To:cc:Subject:In-Reply-To:References;
-	b=YVkG6mJAcCDWq9LZch2Xv+mEpNd/ogPeCa6xG0YBPZ/EmtfS2n1y2mJWIhLL8JZDW
-	 i3ENakYG/ZWVMXB2pCouZWDaM8ycJKhJq3DmrDR0yrhiyjMptAEuPNz6m3tRXNThko
-	 sNZzBIK2J670YfkM9fRXiGJaV/hyOI1yiWIMP+yY=
-Date: Sun, 12 May 2024 22:23:53 -0700 (PDT)
-From: "Kenneth R. Crudup" <kenny@panix.com>
-Reply-To: "Kenneth R. Crudup" <kenny@panix.com>
-To: Bjorn Helgaas <helgaas@kernel.org>
-cc: "David E. Box" <david.e.box@linux.intel.com>, 
-    Mika Westerberg <mika.westerberg@linux.intel.com>, vidyas@nvidia.com, 
-    bhelgaas@google.com, kai.heng.feng@canonical.com, 
-    andrea.righi@canonical.com, vicamo.yang@canonical.com, 
-    Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>, 
-    "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
-    =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-    Ricky WU <ricky_wu@realtek.com>, 
-    Mario Limonciello <mario.limonciello@amd.com>, linux-pm@vger.kernel.org, 
-    linux-pci@vger.kernel.org, Thomas Witt <kernel@witt.link>, 
-    Matthew Garrett <mjg59@srcf.ucam.org>
-Subject: Re: My AlderLake Dell (XPS-9320) needs these patches to get full
- standby/low-power modes
-In-Reply-To: <20231227000338.GA1484308@bhelgaas>
-Message-ID: <7288cce6-288e-7e13-ca9-865e69287e48@panix.com>
-References: <20231227000338.GA1484308@bhelgaas>
-Errors-To: kenny@panix.com
+	s=arc-20240116; t=1715584280; c=relaxed/simple;
+	bh=glRC5TjXjhhrxkAHmlNZMWpW9427EGBuCtEjLQxCZ34=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iFc739zrgyQW1pOZa27x/PtWdmL5wolRHTOtifdQNl3dCa6pLC0h2WznKgHSo8C6HjoCuT3KoYWSW0mU8BcUP1VD8Cjv/pbcHvhyaOLux+rTib+hs+FVrO6BzJbkvGz1XFR0qrARBp7pVFjOtxfbQT77qHGFDXdvsbwockmOePA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1C3511007;
+	Mon, 13 May 2024 00:11:43 -0700 (PDT)
+Received: from [10.57.65.102] (unknown [10.57.65.102])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7F03F3F7A6;
+	Mon, 13 May 2024 00:11:16 -0700 (PDT)
+Message-ID: <39e15eef-f7fd-4e16-bc74-7f1c6820fe6a@arm.com>
+Date: Mon, 13 May 2024 08:11:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/6] thermal: sysfs: Trigger zone temperature updates
+ on sysfs reads
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Zhang Rui <rui.zhang@intel.com>
+References: <13518388.uLZWGnKmhe@kreacher> <3304112.44csPzL39Z@kreacher>
+Content-Language: en-US
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <3304112.44csPzL39Z@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+Hi Rafael,
 
-On Sat, 4 Nov 2023, Kenneth R. Crudup wrote:
+On 5/10/24 15:13, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Reading the zone temperature via sysfs causes the driver callback to
+> be invoked, but it does not cause the thermal zone object to be updated.
+> 
+> This is problematic if the zone temperature read via sysfs differs from
+> the temperature value stored in the thermal zone object as it may cause
+> the kernel and user space to act against each other in some cases.
+> 
+> For this reason, make temp_show() trigger a zone temperature update if
+> the temperature returned by thermal_zone_get_temp() is different from
+> the temperature value stored in the thermal zone object.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>   drivers/thermal/thermal_core.c  |    2 +-
+>   drivers/thermal/thermal_sysfs.c |    3 +++
+>   2 files changed, 4 insertions(+), 1 deletion(-)
+> 
+> Index: linux-pm/drivers/thermal/thermal_sysfs.c
+> ===================================================================
+> --- linux-pm.orig/drivers/thermal/thermal_sysfs.c
+> +++ linux-pm/drivers/thermal/thermal_sysfs.c
+> @@ -42,6 +42,9 @@ temp_show(struct device *dev, struct dev
+>   	if (ret)
+>   		return ret;
+>   
+> +	if (temperature != READ_ONCE(tz->temperature))
+> +		thermal_zone_device_update(tz, THERMAL_EVENT_TEMP_SAMPLE);
 
-> I'd bisected it to the following commits (in this order):
-> 4ff116d0d5fd PCI/ASPM: Save L1 PM Substates Capability for suspend/resume
-> 5e85eba6f50d PCI/ASPM: Refactor L1 PM Substates Control Register programming
+That's a bit problematic because it will trigger
+governor->manage()
 
-So the good news is the above two have made it into (the recently-released) 6.9!
+In case of IPA governor we relay on constant polling
+period. We estimate the past power usage and current
+thermal budget, to derive the next period power budget
+for devices. I don't know if the internal PID algorithm
+will be resilient enough to compensate this asynchronous
+trigger caused from user-space.
 
-Now I'm rooting for these last three:
+We choose the period to be at least 1 frame (e.g. ~16ms)
+to have good avg usage of CPUs and GPU. TBH I don't know
+what would happen if someone reads the temp after e.g. 1ms
+of last IPA trigger, but some devices (e.g. GPU) wasn't
+loaded in that last 1ms delta...
+I'm a bit more relaxed about CPUs because we use utilization
+signal from runqueues (like the TEO util gov). That's a moving
+avg signal which should keep some history, like low-pass
+filter, so information is more resilient in that case.
 
-> 1a0102a08f20 UBUNTU: SAUCE: PCI/ASPM: Enable ASPM for links under VMD domain
-> 47c7bfd31514 UBUNTU: SAUCE: PCI/ASPM: Enable LTR for endpoints behind VMD
-> 154d48da2c57 UBUNTU: SAUCE: vmd: fixup bridge ASPM by driver name instead
+Could we think about that IPA constant period usage?
+I think I understand the proposal of your patch.
+We might add a filter inside IPA to ignore such async
+triggers in the .manage() callback.
+What do you think?
 
-Applying (refactored for 6.8+ versions) of these last three enable full power
-savings for 6.9 .
-
-        -Kenny, fingers crossed
-
--- 
-Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange County CA
+Regards,
+Lukasz
 
