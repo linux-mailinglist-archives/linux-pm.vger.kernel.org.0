@@ -1,61 +1,61 @@
-Return-Path: <linux-pm+bounces-7752-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7751-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFAB68C3A09
-	for <lists+linux-pm@lfdr.de>; Mon, 13 May 2024 04:09:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18C608C3A08
+	for <lists+linux-pm@lfdr.de>; Mon, 13 May 2024 04:09:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15A872813FE
-	for <lists+linux-pm@lfdr.de>; Mon, 13 May 2024 02:09:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 844571F21D68
+	for <lists+linux-pm@lfdr.de>; Mon, 13 May 2024 02:09:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE47E137932;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E4A813441E;
 	Mon, 13 May 2024 02:08:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="x825lKCO"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="TKF9sss4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2075.outbound.protection.outlook.com [40.107.237.75])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2074.outbound.protection.outlook.com [40.107.243.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A568137915;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62DCD137925;
 	Mon, 13 May 2024 02:08:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.75
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.74
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715566092; cv=fail; b=MVLGkEFTnB1iiYi3z0OyW5DhO/YIi04s7xy6k8CkPJrpQ0vyFAn5aREqnDIyIkVyCaLfJXQmvIj4G/Q4oIOCkzW1VOpeJ3VQbIdS21aY3AzDoST7mq1Lx79kqhG45LLlNLruWTYZ2ncplNrDD8YTraSEYdJKY5Pmb/B7w1eMKkE=
+	t=1715566091; cv=fail; b=a+JScYWhNS8pr1r5gog4M+diVIW2LSbA1bvk8grHZ6u3iPXZ80AluHOFUjg98shZFOLki4B5fznFOvXqu1XsGjX+zJkKFn/HHuwtUyKb9nvqOY8H9NyNwzwtWcNfhcDe1LGXWVG7KMiFbDl3E1XhZDN1XIcC3yCID+qZ9io5yio=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715566092; c=relaxed/simple;
-	bh=cOXMENuVdaADztOx21wcB1GoqOtFGByhFz28UNsMN+E=;
+	s=arc-20240116; t=1715566091; c=relaxed/simple;
+	bh=Iu2aHbPVK8RZOypYFtPNDVV0ZJvURXShuUm3UYraMjw=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=T1flgnPDCIku8vgAmikHP89gjbi9kWQGRyNSxBnj/msmK7YP22gvtoldlPTKDEchtQA6BjmAj3M+qAIS4cM0pvqrUrXSxmSqFWENmLe0ul8LhqsxpZzVvjRWIz3SXUK1esbe02yslfw18bB5QR7yEDM/5+eeRTiDUORI/LCZUGg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=x825lKCO; arc=fail smtp.client-ip=40.107.237.75
+	 MIME-Version:Content-Type; b=sfo4s5cPNSG/CMm/UikeH80bp1iAhV/kFL7v6eRF3DoTpsXC8VDwXuj3a+ws2ysCzI0GTT2r0lDxdD1KuqW6ezF1f8n0neJVAGWDzdzzFavAkMiOQXM1B99HdbUj0Qa+cH17XmeQM5JR/Q5OD8KIAaZE4AB5wYWD+CQg2ni1mtg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=TKF9sss4; arc=fail smtp.client-ip=40.107.243.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OewzRbC9iNcWXtNTp0FV7oUtKMB9/giuU9cCjLLNfhqylX8WGb7jjzml0EKYLQEFqoAGf+7XQWEjAxNoDkxV9BxyfvN7AmcvRgXP4ualqPtCYB0D24vrzJyaB8XQkqlepDA9NjvUjsaCAimDdOGV/0PL09v28FTGACyfAKx8U0lYyFeXFR2ztoh8JPkLumcZP4AH+DDsXiXltf3f3X5rr1+3ZWefWwXCrXtc40V6jG3czAB3KKb8kB/qEtDE4xDH5voto6oxaYUceZrjSCU5rHjL15CBo3/adlEcdNGtO5k1r/p9vhfZvgAfim7IMqFJrOEegoJPLuXAqb4BHh6ryQ==
+ b=OHl2ozrHspe1VQRXOKGjESMKEyZf93XZ8aJlZ8Qe64KMroVnTMFHL8q87ZaUopHeBCDwGsFQlD8u5T6ESI8jJS16SFxcr24Kt795jmHmQc5qLs9/8Bhd/na78a1O9wNTBmwg20fP8A3lEFCBy4JRrCwkvcflNrp3wxly7U8h0S396jeTbtgQ2+E754KvquP3gTdmL2fAVD6J3qBVKta72M4FcjgrkKdSdB4bl1w7G93fNrxtXhZ+x5Eh2/Bmd1WAI1QBLuFyDOgH31PLiYto0IH9rUwEDl/sTCkGOlsdHLV1Bv923D/ejBFOHo9Uqs1P1Dv+YEA5zJxUf8dHtLPTVQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EOf+kiEqDJ4292Jkplvh6XWxS5iJPzeS85DFnIYQ+ac=;
- b=RtM8WwCQl6Qc2VkcN0rEpmxJL+6Z9/it/8+fClscaQ7Fb5AHmmqrHU/50JyXrfaSOyfu6wbBCRwX19J00x3LswlQpr0zHyZTip0S+I+Z5GkAcIadGSUpbB6jRAo92/TG98ykRmbpYV8LCYvJvCZcFSd2MJMyep54a7fKJhtxhaMSOx0rvMDyrkWVozz0Wt9qzc/Agr89xdYbI0E7ANj62BLAJO8jBbLOUjhMYhjmaNp+jbc1gElyyNTmgo5TtRuURGjsLTANAgEQCLD2S5u77AzpS7pooxsyMMcCIgxZ7Kr4fSXHaumqzJiqk3OiWqDJzZpMeqPSWg86BvXdB+bZrw==
+ bh=9vrcY8j2MM3yB5PQpMNIyq8UzZcb4H4sVlIytplIX4Q=;
+ b=mat41avM8tBVy1PWBZZ+bK8Dm6MxcfQ1qcRb31dQO9ZQ/1yIw+IabwbAe3RLudlOt9sDN8pn8aMICxd/dcKEc1sYSv0sk7NaqP+o7/Rek8zn/8WPgCv34E0HnZv5dVMOLzDuBn31vG3JBM4ZUHZY1VaggQU3Oknw0vZiVEMQrZRnVAZ572PHGH/Fog/DF0m17du8ipNq0UmuPM4h68Gv5uWFbKuNTRZxd2BF8PYzc2/VhwEAfqFUzpQ+9mPFZ2BLlILvCyXTQqRXm01kAaWIbDPayoXDFlqfMBghraTkvjt5wSNmfD9dyn7YIkHbdeCpWxv7YI/2+eXSBAklXqazPQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EOf+kiEqDJ4292Jkplvh6XWxS5iJPzeS85DFnIYQ+ac=;
- b=x825lKCOxy2tVHrhO/m3E4gJhN4CckDfIjwT1ODLAmCQ5TnbBCn4SzflyE359ZQmLAEZG7l83+BLAjYotJmAyCEk2XmWUFW3lDUrLCSn8Mis+OgCBH5ALxnqggOp0AylJxmD4QcrP7DbFa6xG6Z0nPR7OzPXN5jljbd+hWImlD4=
-Received: from SJ0PR13CA0181.namprd13.prod.outlook.com (2603:10b6:a03:2c3::6)
- by BY5PR12MB4177.namprd12.prod.outlook.com (2603:10b6:a03:201::14) with
+ bh=9vrcY8j2MM3yB5PQpMNIyq8UzZcb4H4sVlIytplIX4Q=;
+ b=TKF9sss4lFmDfKif3KCUYfSHsllZH3a0h0xTjEtr3LZs4TmOKAI2nKhhO8AsSkgTkzgQdi6l4pj0JNTiTR9Hklfif+hsd1hR+FYZzS2sZ8VoHkWVQk/DSR167PCvL7HhpROsNLHWgtG53PUTkmLCkD0GQ8Qz5aL/3kThDd1NLZE=
+Received: from SJ0PR13CA0189.namprd13.prod.outlook.com (2603:10b6:a03:2c3::14)
+ by PH7PR12MB6000.namprd12.prod.outlook.com (2603:10b6:510:1dc::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.55; Mon, 13 May
- 2024 02:08:05 +0000
+ 2024 02:08:08 +0000
 Received: from SJ1PEPF00001CDE.namprd05.prod.outlook.com
- (2603:10b6:a03:2c3:cafe::fe) by SJ0PR13CA0181.outlook.office365.com
- (2603:10b6:a03:2c3::6) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10b6:a03:2c3:cafe::bb) by SJ0PR13CA0189.outlook.office365.com
+ (2603:10b6:a03:2c3::14) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7587.22 via Frontend
- Transport; Mon, 13 May 2024 02:08:05 +0000
+ Transport; Mon, 13 May 2024 02:08:07 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -65,20 +65,20 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  SJ1PEPF00001CDE.mail.protection.outlook.com (10.167.242.6) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7587.21 via Frontend Transport; Mon, 13 May 2024 02:08:05 +0000
+ 15.20.7587.21 via Frontend Transport; Mon, 13 May 2024 02:08:07 +0000
 Received: from pyuan-Chachani-VN.amd.com (10.180.168.240) by
  SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Sun, 12 May 2024 21:08:00 -0500
+ 15.1.2507.35; Sun, 12 May 2024 21:08:04 -0500
 From: Perry Yuan <perry.yuan@amd.com>
 To: <Mario.Limonciello@amd.com>, <gautham.shenoy@amd.com>,
 	<Ray.Huang@amd.com>, <Borislav.Petkov@amd.com>
 CC: <rafael.j.wysocki@intel.com>, <Alexander.Deucher@amd.com>,
 	<Xinmei.Huang@amd.com>, <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>,
 	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 05/10] Documentation: PM: amd-pstate: add debugging section for driver loading failure
-Date: Mon, 13 May 2024 10:07:23 +0800
-Message-ID: <d18eb3b0574de5c93fde348bf14b6548282989c3.1715356532.git.perry.yuan@amd.com>
+Subject: [PATCH v2 06/10] Documentation: PM: amd-pstate: add guided mode to the Operation mode
+Date: Mon, 13 May 2024 10:07:24 +0800
+Message-ID: <fddc124ee098bbf735c25431a68a2ed4f7c59ce1.1715356532.git.perry.yuan@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1715356532.git.perry.yuan@amd.com>
 References: <cover.1715356532.git.perry.yuan@amd.com>
@@ -94,85 +94,73 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CDE:EE_|BY5PR12MB4177:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6840d32f-ac07-461a-0e9c-08dc72f186a8
+X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CDE:EE_|PH7PR12MB6000:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7794f2d8-fee2-43c2-0ef0-08dc72f1884e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230031|1800799015|376005|36860700004|82310400017;
+	BCL:0;ARA:13230031|1800799015|36860700004|376005|82310400017;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?CHw3pZd6G7NMu8gvH5b8HXw3+AcyaUaq4/GC3+uUPv1iEHPDikgEPcWbjuKy?=
- =?us-ascii?Q?nkwsa13I9/lhThek8FRUIz2YrOquHEc0bQoYKTr9yRXKizt4AGRTir0UQf8y?=
- =?us-ascii?Q?qtoIicw0dYKVaOJGVGKh3oZJc3P4DhCl43sljdl5cnrjHgNGXk8GcHAiONU7?=
- =?us-ascii?Q?YGNRSGw975bY8SZwTC8NJ/wOFtyXAidi2YvctukBOw/4+C+OhtbRGLgZDqel?=
- =?us-ascii?Q?1YgFdewWVKiWbHZwUwBI38qD2fvi5LOfZN35YQdCCSPq+sbPoYL5juITRcte?=
- =?us-ascii?Q?7xvLwuGaGZ6DmuqScFyEZAN8IqMkReUK/B+J7VJz103goTtWx37jvYyPQBfT?=
- =?us-ascii?Q?inZUpLvVa20ZXVvSIFaxgdlnS1kP0aH8wmGvFk3WTA26FOZS8V6fNRdHABTP?=
- =?us-ascii?Q?Rr9bGby6bcRzT15YAThkEjWC63dVhgW0wgzueuQAHGIURAC0weD7A+l87eZG?=
- =?us-ascii?Q?I8CkX+7IrtaZrLZw71az6ROlaHuppfwZzNWPXrVUsqhVQYRwV47dt9j8iWB6?=
- =?us-ascii?Q?dyXTON6kUppwu6fcukaINyvJQal2q175sDJoEHkiP6bGtMGFFmpOEi1ABymD?=
- =?us-ascii?Q?CDJo01zlNnMD02+o4TM5F+uT+x7OFtjdi1IalHMSqfeDAtmWZKqjxtF2jAB+?=
- =?us-ascii?Q?tHBHpUmqWu+EMMUI5IBuAPt2nQUX8a5MFltJXoVI+OHIZGb6FwsdZMgBMYaw?=
- =?us-ascii?Q?ouTjv7XvbLObZ83mRvWGXBT1J43H+gPVkruXztsWXspK7ooCLoUFYGpxFoPn?=
- =?us-ascii?Q?OAgY+ct/nJVT0n2mUi+TQI4Au3gDUtOAleESaa8BmL9pHt9Jlv8ejzoRtA6B?=
- =?us-ascii?Q?x30TD6Hvl6y5cI7mdEIFtwUj+vTBSlmUbxp5g+Gs77ffM3RzUEkZ2I48mB9z?=
- =?us-ascii?Q?dXjn4ifYKfIrLQxE4hhjktn2mB7B8nbH4K7hPhsDtlPmYvRrLfznzMUdYcak?=
- =?us-ascii?Q?EXTmPFESE3cZA2kZWF6qDqwDsUA1S0IDDCWITa6rNNYuTfzlS5mMaySEPG04?=
- =?us-ascii?Q?VWxijrEI569DDG3U2h/LkXCnYOFUTuOx+bXPowoLX0yDJseWFreGLttUv90q?=
- =?us-ascii?Q?Z0lkocbPbhkCdGDJ5eIfdiGoASZXYjfHrexv39bAxLUymV2QCDeZ8XxAwcM/?=
- =?us-ascii?Q?knrhIRo4Ku/TrRSS/PwLqFZZPGcxZ3oWH8SRuxVa3BJA/Ps5aDJkpcTB0UB7?=
- =?us-ascii?Q?KuKomLwwBfSkDyzD7YqN37Og6gxX+pqcGfML1U4qy5H0w+i1RNG9ZvgiZ8wt?=
- =?us-ascii?Q?1XHMpehxAnNJeoBmGqj0LW1vT/wLEeNtgzRGU42J58D2jA+LshDq8dl8Uk63?=
- =?us-ascii?Q?jrrd6yglCgEiapEkWaFEVDEM99dlO5DEgPtSbaDt5kSalKlTLu6jQJ62KJ+j?=
- =?us-ascii?Q?aORecKqZZ1XekkT8dNTCQ0oFONEo?=
+	=?us-ascii?Q?L/xtjcQ8aKoTV7QYPK/BkOCOA1CJHcrPOjfkxzJDRNdZX8M/GJjPZ+L34oBL?=
+ =?us-ascii?Q?LLQ2d4C9gGyIZatXJC+F2bjvPLE3VshcHdxWT4ipUJEdg4vN6S4/JrmZkYpM?=
+ =?us-ascii?Q?DY2DwaTpB4n6MnJ+j7ixWQUig4A4cBcpW2deGnHk1qHvCUWJTboM6V3kzvoB?=
+ =?us-ascii?Q?xsKIEUninVhxHJC55EsuiDZtCewdnEeD9ViNxCbQhaseHouQSXmpxaZFHU+9?=
+ =?us-ascii?Q?X87a0Smwvn2yJtDXhVMd2+p7AVKLRX3rIhXdD0uYb4o0nGeY7E3QhW2je47G?=
+ =?us-ascii?Q?vOPNjksuVzBWFt7huhLMDpkiidWyJeSepVegFvRMDCth0I7YZcgZvZIO/JDU?=
+ =?us-ascii?Q?ik9WmA1ZfV9WRlJ9AX8zsdJj4z1b3Q/f9XLeM7isk2WTpuNatje51LtdwoX/?=
+ =?us-ascii?Q?5JhnD2U3ttQDteFaRJWUk5RkVe1HJTCrom/4B9/1JJY11AZP6im5NH1HSNE5?=
+ =?us-ascii?Q?0DkF2FG8g8BqbCWck7wM+RcfFCX8vm+2QyVDzBOPYuhn7WgaghqXJHB7mLee?=
+ =?us-ascii?Q?LTLdQjGZ0OhSeYdRRZWun1cZENNvO/8rvpoXB4M3NJjZEvsvxdbtjYo/r6eU?=
+ =?us-ascii?Q?oPZzZ59F4eXWhJjRb1Lepj1TiFMJLaljdqtLT41IhcOfpMXWdJQTTwO1Yxog?=
+ =?us-ascii?Q?yMuqRSXFugnklPL0KfRb7aPeh7Y/KGiIoH3e33AXo35EG3vgBkvXO0iypAiL?=
+ =?us-ascii?Q?Uy+C7JSI0JeiVbzHuVEHHU0UeRAnlBXS1gJ+9prglMCAnDlhhEDH96tGHKa2?=
+ =?us-ascii?Q?H+vkZXxsS9bu/2V+WoEhlU0/G+Ax+plAMryOtxPqvbkDDaXxkot1afKiYzX7?=
+ =?us-ascii?Q?nCfxr2tp1Fb/f161wMM3X/7BhUe8HvOxhATiIJ8NvqKk1zgmXnm8t89oorPk?=
+ =?us-ascii?Q?+c+kaD7YjCSJ7w+k1cp8u5jp+E38lc46nAAa7+WaR4b8kzFP0ZcFtK3OS64Z?=
+ =?us-ascii?Q?yIEHQo/mfcokcd7NAf0cvwZ+JqH1AzDqua34OXhKy2usjPz2lDOQNdFaBq1q?=
+ =?us-ascii?Q?jih10Rc8qpHLPgvyEaXpEpFGeohBlQpis5265CmkacQA3KCksXYopBvSMaBb?=
+ =?us-ascii?Q?v/ON3QOeuHd55k9uEdQe9MyjjuIgVVOVf7Ei8Nn5qN+Sa4UZatwGxK5Ar+mj?=
+ =?us-ascii?Q?0rafCOp1zmK4vqhe9xjYmVqVS6+4Pph70tv7ufdT3hOVsnIPkw8PXI2TLOx/?=
+ =?us-ascii?Q?rYSFlG4GucP6v1VgEpdxa2l/o7cBWqm6O2THeILt3DJ8YDe3BocxI6AlpPlw?=
+ =?us-ascii?Q?xt4Xzos/LgStBUjo4oYC4KJaXvd1DAeHc/K4wja1ydWCzld7ISfHDWPKiiwH?=
+ =?us-ascii?Q?GlS80DF/g67kl1CgOyGa1HIyURy9+arOzW9r2Izh/HQ+W/pdoVw+XSWnlWJS?=
+ =?us-ascii?Q?IsQFjBgy65kGFGUSij8iP3RowwYR?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(1800799015)(376005)(36860700004)(82310400017);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(1800799015)(36860700004)(376005)(82310400017);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 May 2024 02:08:05.0519
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 May 2024 02:08:07.8019
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6840d32f-ac07-461a-0e9c-08dc72f186a8
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7794f2d8-fee2-43c2-0ef0-08dc72f1884e
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	SJ1PEPF00001CDE.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4177
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6000
 
-To address issues with the loading of the amd-pstate driver on certain platforms,
-It needs to enable dynamic debugging to capture debug messages during the driver
-loading process. By adding "amd_pstate.dyndbg=+p cppc_acpi.dyndbg=+p  loglevel=4 debug
-amd_pstate=active" to the kernel command line, driver debug logging is enabled.
+the guided mode is also supported, so the operation mode should include
+that mode as well.
 
+Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
 Signed-off-by: Perry Yuan <perry.yuan@amd.com>
 ---
- Documentation/admin-guide/pm/amd-pstate.rst | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ Documentation/admin-guide/pm/amd-pstate.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-index 1e0d101b020a..de83e742738e 100644
+index de83e742738e..7eb35ad21c7d 100644
 --- a/Documentation/admin-guide/pm/amd-pstate.rst
 +++ b/Documentation/admin-guide/pm/amd-pstate.rst
-@@ -472,6 +472,19 @@ operations for the new ``amd-pstate`` module with this tool. ::
- Diagnostics and Tuning
- =======================
+@@ -406,7 +406,7 @@ control its functionality at the system level.  They are located in the
+ ``/sys/devices/system/cpu/amd_pstate/`` directory and affect all CPUs.
  
-+Debugging AMD P-State Driver Loading Issues
-+------------------------------------------
-+
-+On some platforms, there may be issues with the loading of the amd-pstate driver.
-+To capture debug messages for issue analysis, users can add below parameter,
-+"amd_pstate.dyndbg=+p cppc_acpi.dyndbg=+p debug"
-+to the kernel command line. This will enable dynamic debugging and allow better
-+analysis and troubleshooting of the driver loading process.
-+
-+Please note that adding this parameter will only enable debug logging during the
-+driver loading phase and may affect system behavior. Use this option with caution
-+and only for debugging purposes.
-+
- Trace Events
- --------------
+ ``status``
+-	Operation mode of the driver: "active", "passive" or "disable".
++	Operation mode of the driver: "active", "passive", "guided" or "disable".
  
+ 	"active"
+ 		The driver is functional and in the ``active mode``
 -- 
 2.34.1
 
