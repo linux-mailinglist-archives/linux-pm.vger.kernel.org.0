@@ -1,249 +1,232 @@
-Return-Path: <linux-pm+bounces-7799-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7800-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 524EE8C4EF1
-	for <lists+linux-pm@lfdr.de>; Tue, 14 May 2024 12:25:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B60E8C4F0D
+	for <lists+linux-pm@lfdr.de>; Tue, 14 May 2024 12:32:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9D438B20A4F
-	for <lists+linux-pm@lfdr.de>; Tue, 14 May 2024 10:25:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCEB41F212A3
+	for <lists+linux-pm@lfdr.de>; Tue, 14 May 2024 10:32:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B664F12FF86;
-	Tue, 14 May 2024 09:40:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7D191386C8;
+	Tue, 14 May 2024 09:50:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="nUybUr9i"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="gLhPoCXh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2ABC41C92;
-	Tue, 14 May 2024 09:40:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 350A21386B5
+	for <linux-pm@vger.kernel.org>; Tue, 14 May 2024 09:50:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715679650; cv=none; b=Lv4J2ojccTtVx2ia+DxcyHCPfnt5mJjmFgvlNUoDWn8bFN3yaSyt4wcdLMxdMSQlsS2eTO0qnAo9Y3HwY+GPrnJTWJCfHniISuouT6fZMwq3WN2xo4APqaAqcagCW1P99x9yX3HD8ZWcPfKxaQtUZMOlUAVInu0lvu7p6z4dP+s=
+	t=1715680249; cv=none; b=btxhCvgvV1jCvUz48nH7OHdW+Oh/3VORgr23iDsDfbzeU8AgBhJfrwHJtWNTKf610F00gfyUuk3iRh2sxuQ9bFbipucIe64Y1ZjpU0/vzXjCGa535/OY44vgE10sedzHA9oi9rYSl50eNeYXIiCaP278JG4L//ku53oclqs9N34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715679650; c=relaxed/simple;
-	bh=fUsD6LUTdjE3pAPXHLqyl5dRHGqYcANQ1LUVv9dUdZA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=EXKrTFBYwD2P4DiotIOY5a11tZvs0Ugplwh/GKizdle0Qq2uYYttHVhVvQpHD1gruV1JDNZs1pNE4VAHGdnYs14zfFWKtueqEg9dOg7GIBAxrG5/ydsnOiIe9nNDQkf38cUqJt27JsKEsSzPuwZMPzZQo3YR9tlERBjDnuCFvl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=nUybUr9i; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44E7tsc4027298;
-	Tue, 14 May 2024 09:40:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=mi2RdJrkmKsN8ltJ5aUEwLAREuBftGQxjpo5hXDRxgg=; b=nU
-	ybUr9iEsxZRQjD1S24T59fGP4OSgAcKLjwUywOCertkq9k7S2Vzjav+5/AgN1DWD
-	hsufoytciMEqmICSQKMR1cV+ehP1L+b3WACSYxc2VkLMIZQC6xeI5fML6PEvioW8
-	wTub8zgwarkgFS+BNkkZqvLIq4zRbWYxj7BJct0yFN9PR0AHY1JIdr9x+CpcNfES
-	9gg3I9w408tgQ5+kSTG5v5KYNwizQ2EoEzc5Q4c42BV5QzxLapi7ftDdwxivaw6s
-	YddBaXql/yzxj153u2fkE8+YOk7TIQ/miRHfKi6m1yFTam3Pzaw+9rlg2Y1Zd6gv
-	jn78Je17KqUsBtohO3dw==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3y1y9mdy6y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 May 2024 09:40:37 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 44E9eZfl030697
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 May 2024 09:40:35 GMT
-Received: from [10.131.33.37] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 14 May
- 2024 02:40:31 -0700
-Message-ID: <d7fbc261-39a1-57a3-6891-ae2de63368d0@quicinc.com>
-Date: Tue, 14 May 2024 15:10:28 +0530
+	s=arc-20240116; t=1715680249; c=relaxed/simple;
+	bh=TCkx6SaxQ1bT0hwpMFkeJTA63KBdnOB9RyvhqZLO2qY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dDDgHPtZkpqUYoMdbgVJtWJ05qn9cdgY80nmdaOVOd0+TkEp43pdOr9tHLLUQCRjDWztElNrJzKnZXZq3/qlR70iJ/XXA/x4zlthFwNKwxlmTrgTAYi2R2MfbAwzKJb/A/d9RUJ9X/y67igJCmm46IBOCcrK+19WL9Qv3mD+9xI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=gLhPoCXh; arc=none smtp.client-ip=209.85.167.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-3c997f50805so1921941b6e.0
+        for <linux-pm@vger.kernel.org>; Tue, 14 May 2024 02:50:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1715680246; x=1716285046; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0wKHm6XT5EYm6vl/df7llbv2ZznYvQVbeTCwxvcThXU=;
+        b=gLhPoCXh74TKJF46R2uNADuVzoDDobTXPFvICkjTqHemUIlkrZ04pow8cDTLxFzrQ/
+         Zn4r745jQulc6tYvCPUPT8v8wLl3yfER42aEcM98c+4+QmDtREUELOPLU17r+WZn8r7x
+         qRn9Wv/1I4NzNix4Lu4twgRBUKjxIpdfj/Sb/7xFncQR0I5X2HHOtraWaL547peP+a0R
+         O3/sq35ubxHeQ4ymEIZ1mA7Xoh5ZmXyc0PhB706rWN20bZUZ2ZmAJ+nRUGnLfpzSXbUW
+         jWPaDfOHRNRIsDtXuTmlBErsrolx2O9EqqpwpWf9FWrkP1UJytUhFuOMbD5k1houMCxf
+         rhKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715680246; x=1716285046;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0wKHm6XT5EYm6vl/df7llbv2ZznYvQVbeTCwxvcThXU=;
+        b=vMA6ASg9uboGEVwWgRcRj9HxSe4Me/oySkh1qDlgZH2iLUzZn/NLywoOr7corlHTWU
+         dB+QFH+LTPVaq6wnlhvVAwt1trw+wV3gA7yfL/YKv25ODpjL5gupwmsklEmqyG7PBcRq
+         pXqP9tOL+YU0FU33ni9P0i41hnx27fHdkFY7HtId9OMFQHvG86fKXRyBpPshWYHJat2D
+         ujprepz2okiXGZ9/06jPtCffTx2F8Uyoo5QEqMTe/IQGcEN2UDasVuoNZz9+gDMIe4ix
+         ccNqDeBQO5BZEVb40/e+QK1LjAIlfIqxh434CPUu+QV+JMF4Na4sGGLSerG6gAcl3wdV
+         ao0A==
+X-Forwarded-Encrypted: i=1; AJvYcCXu61zMrJv9rclFcyXD6GNtppyge+LHAXNhyO5GsTbiqRmKf6vD8rbCBv+/qcBMlbI9kYOWgtUlK2sKFI5z9pvbhcvFVCc0lBY=
+X-Gm-Message-State: AOJu0Yy6vBYmNVkBkCygouK5x794YGVtsv5qK5CGi5SnRExxZ9FI56Uo
+	nx8ybHDbjMnDkNaogqhKTIuQvzQRd/0wGORZ2M1Qx7qeQt9gCHjXm1zuyq1UCXS4XMMBAgnII0p
+	4DguTdkiD3EcAzVLyMXRjFpnDnEQEYMBYHe9wVg==
+X-Google-Smtp-Source: AGHT+IFZlGka49AMpZnqeQG/0/xoWz38eoC8WUNBIFRNqyMEzju7A9//UVdvie1NQ5rKtQlwZbm11YMHm3N4CSBDIj8=
+X-Received: by 2002:a05:6808:3099:b0:3c7:21b4:6e1 with SMTP id
+ 5614622812f47-3c996c688b8mr6596851b6e.2.1715680244711; Tue, 14 May 2024
+ 02:50:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V4 2/2] cpufreq: scmi: Register for limit change
- notifications
-Content-Language: en-US
-To: Cristian Marussi <cristian.marussi@arm.com>
-CC: <sudeep.holla@arm.com>, <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <morten.rasmussen@arm.com>, <dietmar.eggemann@arm.com>,
-        <lukasz.luba@arm.com>, <pierre.gondois@arm.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_mdtipton@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>
-References: <20240328074131.2839871-1-quic_sibis@quicinc.com>
- <20240328074131.2839871-3-quic_sibis@quicinc.com> <ZjH7hWnKFcpQ-TXH@pluto>
-From: Sibi Sankar <quic_sibis@quicinc.com>
-In-Reply-To: <ZjH7hWnKFcpQ-TXH@pluto>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 7BftsmZAxynvjVdMmba2KZ8pb45XmQ0V
-X-Proofpoint-ORIG-GUID: 7BftsmZAxynvjVdMmba2KZ8pb45XmQ0V
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-05-14_04,2024-05-10_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
- priorityscore=1501 lowpriorityscore=0 spamscore=0 phishscore=0
- malwarescore=0 suspectscore=0 impostorscore=0 clxscore=1011 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2405010000 definitions=main-2405140068
+References: <20240226065113.1690534-1-nick.hu@sifive.com> <CAPDyKFph3WsZMmALnzBQKE4S_80Ji5h386Wi0vHda37QUsjMtg@mail.gmail.com>
+ <CAKddAkDcdaXKzpcKN=LCCx9S4Trv+joLX2s=nyhzaRtM5HorqA@mail.gmail.com>
+ <CAKddAkC6N=Cfo0z+F8herKTuJzCyt_MA0vWNbLCr6CbQnj0y8g@mail.gmail.com> <CAPDyKFr_M0NDH0gaunBpybnALOFfz4LpX4_JW2GCUxjwGzdZsg@mail.gmail.com>
+In-Reply-To: <CAPDyKFr_M0NDH0gaunBpybnALOFfz4LpX4_JW2GCUxjwGzdZsg@mail.gmail.com>
+From: Nick Hu <nick.hu@sifive.com>
+Date: Tue, 14 May 2024 17:50:34 +0800
+Message-ID: <CAKddAkC5CRX+ZTh=MgzPYU72SY13+AQYhknhV_CC+=XX9=DKyg@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: riscv-sbi: Add cluster_pm_enter()/exit()
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: palmer@dabbelt.com, anup@brainfault.org, rafael@kernel.org, 
+	daniel.lezcano@linaro.org, paul.walmsley@sifive.com, linux-pm@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	zong.li@sifive.com, Cyan Yang <cyan.yang@sifive.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Hi Ulf,
 
+Thank you for your valuable suggestion.
+I sincerely apologize for the delay in responding to your message. We
+have diligently worked on experimenting with the suggestion you
+provided.
 
-On 5/1/24 13:51, Cristian Marussi wrote:
-> On Thu, Mar 28, 2024 at 01:11:31PM +0530, Sibi Sankar wrote:
->> Register for limit change notifications if supported and use the throttled
->> frequency from the notification to apply HW pressure.
->>
-> 
-> Hi Sibi,
-> 
-> a bit late on this, sorry.
-> 
-> Just a couple of nitpicks down below.
-> 
->> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
->> ---
->>
->> v4:
->> * Use a interim variable to show the khz calc. [Lukasz]
->> * Use driver_data to pass on the handle and scmi_dev instead of using
->>    global variables. Dropped Lukasz's Rb due to adding these minor
->>    changes.
->>
->>   drivers/cpufreq/scmi-cpufreq.c | 44 ++++++++++++++++++++++++++++++++++
->>   1 file changed, 44 insertions(+)
->>
->> diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
->> index 3b4f6bfb2f4c..d946b7a08258 100644
->> --- a/drivers/cpufreq/scmi-cpufreq.c
->> +++ b/drivers/cpufreq/scmi-cpufreq.c
->> @@ -21,11 +21,18 @@
->>   #include <linux/types.h>
->>   #include <linux/units.h>
->>   
->> +struct scmi_cpufreq_driver_data {
->> +	struct scmi_device *sdev;
->> +	const struct scmi_handle *handle;
->> +};
->> +
->>   struct scmi_data {
->>   	int domain_id;
->>   	int nr_opp;
->>   	struct device *cpu_dev;
->> +	struct cpufreq_policy *policy;
->>   	cpumask_var_t opp_shared_cpus;
->> +	struct notifier_block limit_notify_nb;
->>   };
->>   
->>   static struct scmi_protocol_handle *ph;
->> @@ -174,6 +181,22 @@ static struct freq_attr *scmi_cpufreq_hw_attr[] = {
->>   	NULL,
->>   };
->>   
->> +static int scmi_limit_notify_cb(struct notifier_block *nb, unsigned long event, void *data)
->> +{
->> +	struct scmi_data *priv = container_of(nb, struct scmi_data, limit_notify_nb);
->> +	struct scmi_perf_limits_report *limit_notify = data;
->> +	struct cpufreq_policy *policy = priv->policy;
->> +	unsigned int limit_freq_khz;
->> +
->> +	limit_freq_khz = limit_notify->range_max_freq / HZ_PER_KHZ;
->> +
->> +	policy->max = clamp(limit_freq_khz, policy->cpuinfo.min_freq, policy->cpuinfo.max_freq);
->> +
->> +	cpufreq_update_pressure(policy);
->> +
->> +	return NOTIFY_OK;
->> +}
->> +
->>   static int scmi_cpufreq_init(struct cpufreq_policy *policy)
->>   {
->>   	int ret, nr_opp, domain;
->> @@ -181,6 +204,7 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
->>   	struct device *cpu_dev;
->>   	struct scmi_data *priv;
->>   	struct cpufreq_frequency_table *freq_table;
->> +	struct scmi_cpufreq_driver_data *data = cpufreq_get_driver_data();
->>   
->>   	cpu_dev = get_cpu_device(policy->cpu);
->>   	if (!cpu_dev) {
->> @@ -294,6 +318,17 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
->>   		}
->>   	}
->>   
->> +	priv->limit_notify_nb.notifier_call = scmi_limit_notify_cb;
->> +	ret = data->handle->notify_ops->devm_event_notifier_register(data->sdev, SCMI_PROTOCOL_PERF,
->> +							SCMI_EVENT_PERFORMANCE_LIMITS_CHANGED,
->> +							&domain,
->> +							&priv->limit_notify_nb);
->> +	if (ret)
->> +		dev_warn(cpu_dev,
-> 
-> or &data->sdev->dev which refers to this driver ? which is more informational ? no strong opinion just a question...
+As per your recommendation, we have incorporated the "power-domains=3D<>
+property" into the consumer's node, resulting in modifications to the
+DTS as illustrated below:
 
-Pointing to the driver is better given that we already pass on domain
-info.
+cpus {
+    ...
+     domain-idle-states {
+           CLUSTER_SLEEP:cluster-sleep {
+                        compatible =3D "domain-idle-state";
+                        ...
+            }
+     }
+     power-domains {
+            ...
+            ...
+            CLUSTER_PD: clusterpd {
+                    domain-idle-states =3D <&CLUSTER_SLEEP>;
+            };
+     }
+}
+soc {
+      deviceA@xxx{
+             ...
+             power-domains =3D <&CLUSTER_PD>;
+             ...
+      }
+}
 
-> 
->> +			 "failed to register for limits change notifier for domain %d\n", domain);
->> +
->> +	priv->policy = policy;
->> +
->>   	return 0;
->>   
->>   out_free_opp:
->> @@ -366,12 +401,21 @@ static int scmi_cpufreq_probe(struct scmi_device *sdev)
->>   	int ret;
->>   	struct device *dev = &sdev->dev;
->>   	const struct scmi_handle *handle;
->> +	struct scmi_cpufreq_driver_data *data;
->>   
->>   	handle = sdev->handle;
-> 
-> 	^^^ ....
->>   
->>   	if (!handle)
->>   		return -ENODEV;
->>   
->> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
->> +	if (!data)
->> +		return -ENOMEM;
->> +
->> +	data->sdev = sdev;
->> +	data->handle = handle;
-> 
-> 	^^^ ... you dont need to pass around handle AND sdev really
->                  since you can access the handle from sdev.
-> 
->> +	scmi_cpufreq_driver.driver_data = data;
+However, this adjustment has led to an issue where the probe for
+'deviceA' is deferred by 'device_links_check_suppliers()' within
+'really_probe()'. In an attempt to mitigate this issue, we
+experimented with a workaround by adding the attribute
+"status=3D"disabled"" to the 'CLUSTER_PD' node. This action aimed to
+prevent the creation of a device link between 'deviceA' and
+'CLUSTER_PD'. Nevertheless, we remain uncertain about the
+appropriateness of this solution.
 
-Ack setting sdev as driver data would suffice. Will fix it in the next
-re-spin.
+Do you have suggestions on how to effectively address this issue?
 
--Sibi
+Regards,
+Nick
 
-> 
-> This is slightly better, but, as said, does not solve the multi-instance issue...
-> ...the scmi cpufreq driver remains a driver that works only if instantiated (probed)
-> once, given how the CPUFreq core handles cpufreq_driver registration itself...
-> 
-> ...just a note about something to work on in the future...NOT a concern for this series.
-> 
-> In general,
-> 
-> LGTM.
-> 
-> Thanks,
-> Cristian
-> 
+On Tue, Apr 30, 2024 at 4:13=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org=
+> wrote:
+>
+> On Mon, 29 Apr 2024 at 18:26, Nick Hu <nick.hu@sifive.com> wrote:
+> >
+> > On Tue, Apr 30, 2024 at 12:22=E2=80=AFAM Nick Hu <nick.hu@sifive.com> w=
+rote:
+> > >
+> > > Hi Ulf
+> > >
+> > > On Mon, Apr 29, 2024 at 10:32=E2=80=AFPM Ulf Hansson <ulf.hansson@lin=
+aro.org> wrote:
+> > > >
+> > > > On Mon, 26 Feb 2024 at 07:51, Nick Hu <nick.hu@sifive.com> wrote:
+> > > > >
+> > > > > When the cpus in the same cluster are all in the idle state, the =
+kernel
+> > > > > might put the cluster into a deeper low power state. Call the
+> > > > > cluster_pm_enter() before entering the low power state and call t=
+he
+> > > > > cluster_pm_exit() after the cluster woken up.
+> > > > >
+> > > > > Signed-off-by: Nick Hu <nick.hu@sifive.com>
+> > > >
+> > > > I was not cced this patch, but noticed that this patch got queued u=
+p
+> > > > recently. Sorry for not noticing earlier.
+> > > >
+> > > > If not too late, can you please drop/revert it? We should really mo=
+ve
+> > > > away from the CPU cluster notifiers. See more information below.
+> > > >
+> > > > > ---
+> > > > >  drivers/cpuidle/cpuidle-riscv-sbi.c | 24 ++++++++++++++++++++++-=
+-
+> > > > >  1 file changed, 22 insertions(+), 2 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidl=
+e/cpuidle-riscv-sbi.c
+> > > > > index e8094fc92491..298dc76a00cf 100644
+> > > > > --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
+> > > > > +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
+> > > > > @@ -394,6 +394,7 @@ static int sbi_cpuidle_pd_power_off(struct ge=
+neric_pm_domain *pd)
+> > > > >  {
+> > > > >         struct genpd_power_state *state =3D &pd->states[pd->state=
+_idx];
+> > > > >         u32 *pd_state;
+> > > > > +       int ret;
+> > > > >
+> > > > >         if (!state->data)
+> > > > >                 return 0;
+> > > > > @@ -401,6 +402,10 @@ static int sbi_cpuidle_pd_power_off(struct g=
+eneric_pm_domain *pd)
+> > > > >         if (!sbi_cpuidle_pd_allow_domain_state)
+> > > > >                 return -EBUSY;
+> > > > >
+> > > > > +       ret =3D cpu_cluster_pm_enter();
+> > > > > +       if (ret)
+> > > > > +               return ret;
+> > > >
+> > > > Rather than using the CPU cluster notifiers, consumers of the genpd
+> > > > can register themselves to receive genpd on/off notifiers.
+> > > >
+> > > > In other words, none of this should be needed, right?
+> > > >
+> > > Thanks for the feedback!
+> > > Maybe I miss something, I'm wondering about a case like below:
+> > > If we have a shared L2 cache controller inside the cpu cluster power
+> > > domain and we add this controller to be a consumer of the power
+> > > domain, Shouldn't the genpd invoke the domain idle only after the
+> > > shared L2 cache controller is suspended?
+> > > Is there a way that we can put the L2 cache down while all cpus in th=
+e
+> > > same cluster are idle?
+> > > > [...]
+> > Sorry, I made some mistake in my second question.
+> > Update the question here:
+> > Is there a way that we can save the L2 cache states while all cpus in t=
+he
+> > same cluster are idle and the cluster could be powered down?
+>
+> If the L2 cache is a consumer of the cluster, the consumer driver for
+> the L2 cache should register for genpd on/off notifiers.
+>
+> The device representing the L2 cache needs to be enabled for runtime
+> PM, to be taken into account correctly by the cluster genpd. In this
+> case, the device should most likely remain runtime suspended, but
+> instead rely on the genpd on/off notifiers to understand when
+> save/restore of the cache states should be done.
+>
+> Kind regards
+> Uffe
 
