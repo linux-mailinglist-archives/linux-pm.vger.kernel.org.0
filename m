@@ -1,34 +1,34 @@
-Return-Path: <linux-pm+bounces-7840-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7844-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD0B08C4F7B
-	for <lists+linux-pm@lfdr.de>; Tue, 14 May 2024 12:48:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF67A8C4F83
+	for <lists+linux-pm@lfdr.de>; Tue, 14 May 2024 12:49:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D6C7B1F2318F
-	for <lists+linux-pm@lfdr.de>; Tue, 14 May 2024 10:48:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 68CD5281D7D
+	for <lists+linux-pm@lfdr.de>; Tue, 14 May 2024 10:48:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 836AD14038E;
-	Tue, 14 May 2024 10:19:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 176E51411C2;
+	Tue, 14 May 2024 10:19:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="w0KfWbfF";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="SrFtHyNO"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="pLU7lTaz";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="7I+fc7h8"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C155A13FD7A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C14213FD65
 	for <linux-pm@vger.kernel.org>; Tue, 14 May 2024 10:19:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715681946; cv=none; b=era0Ina5IA9P1t+nh+VkMEcWvhJbvEV/ILmSsQ8cJvUZX/G2VP3AP8Z10wLlmFHSk1aHLbpZscrRr7TApfWIdRhtjVF4FdOQJqp1V7G3/VYfJW7JbEra5c7nF/FMUaasmZMbNqCdhp4FD2JRp5z5mI3Xo/4wnkhYKXxM1sdS9v8=
+	t=1715681947; cv=none; b=KiR6veC2eEJiwaQ8PWOQGFXPddWTZo534FcTq1mPYsavoLnfuhRfKuV59zK/WTKBzSdMBzWyyFVcp9c8ITfuFyS6zALVT0yVJpQY9UqwQHJVMNC98fOYBGe+xOOt/+56fesIPAe+P9YQWdvEo+yc1Vr0nMNE1eP8uk21Afy9Ibg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715681946; c=relaxed/simple;
-	bh=kX/E8g8Kl85cpQw7TenzVgpFOohrLfh6KB1znuxzgI0=;
-	h=Date:From:To:Subject:Cc:MIME-Version:Message-ID:Content-Type; b=XaGIOU+vO7U/jtsQCphkMll8qxOl/4QRcGbWp09jcIEahOe/D2eo0l2bqkJBQIbDMQ5jseAnyww+x5vJDCnnBvAl7cNXbgSevm9FnHwMoEqJ2E3QnVXmrmZRrvDTxWdvpCAkTvAD6kw7eYrBLQ5gzL0rf3hBxfFZ27hJep1HqBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=w0KfWbfF; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=SrFtHyNO; arc=none smtp.client-ip=193.142.43.55
+	s=arc-20240116; t=1715681947; c=relaxed/simple;
+	bh=3sIykLCXLNnQKWPz+Lc42z14/MaVVPql1+nUXJV8ZMM=;
+	h=Date:From:To:Subject:Cc:MIME-Version:Message-ID:Content-Type; b=ddU0rqy+6+VMxaLItXvgwfZaCtIZN7tD4K+rmaiLRftO7Oc5aIoR+McQbz8GLLq8IwMch0eYdQ4JnYTljKkdFbnZ9TWX9CIih9e//rnnsocS5MgzDfmtA2lCwhtDZIgyP/DcezN8GjCXJOIW6IDmguChEUJjCQV7hXyrLYkF+b0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=pLU7lTaz; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=7I+fc7h8; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Date: Tue, 14 May 2024 10:18:57 -0000
@@ -37,28 +37,27 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
 	h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
 	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
 	 content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-	bh=StqtemzdtfZoP6Je0SXnq7xGigmu2vZeMunuA+m9NQ0=;
-	b=w0KfWbfFTbVVPorLyG1aB0WKxBEr+OYFI6k8gGkmIaOwUfBLhe0KCfYQVZNyEchcLcTlvu
-	4JulvSnXycb2MxxEFbgSuf8mGgt/MW04KRlwz1kr70+XtaHZIGrwy5GY/R9nuGj9Yl2Ped
-	ATIxSfyvk/F1FZdad0nAAXDizfee4Vlo4WHwfkP165TxqxY67ON6Sqom7XEaU/RP8VDfIR
-	G4T7Gr4lUP03caCvPtxFh/2by5zJGgxSP0QAqpZM2tqje3W/tTO7xuoGTJL5H5WIH9ccfR
-	BQGPeT5clQX+q1kL3lLIKpoVM0ghqQcLq7KLNU6zL1rDvIJREaGBJsHe/GztOw==
+	bh=V5nqonGXTzg1PTYj2lngB0Uu6BQce0wripvogN6RyrI=;
+	b=pLU7lTazcMf6zlrYytw8uE1BDWsNgC+6lQauXVPSJlYFUrA0j1fVaKbsIPK4cxAUUvaiAk
+	Tdp7dlYrrFb6hc691khSTCLVwxrJ1u4EWPOk6myRQavkIPxyIny1F4jzKNf7PJ+faH/2Vd
+	+D4B6DKlfP/wMIHfCi2XFZy6Kq8oR/W5G/nmxjKNnLBA+10vbLdUCEJkr9AglbQBkW6FuE
+	PU0bQOv/6/c6l07WfrqhOtXh0bAS2aC02Ce/Cb/C5tcBUdSNsWtICpx/8ulREXn0jpD0PY
+	2ZY0IrKqR6H0YFWgi/XsjcFSC3HzdpIKkKcmqFJphb5jeNs2Sqneh0Vn2ruOCQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020e; t=1715681937;
 	h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
 	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
 	 content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-	bh=StqtemzdtfZoP6Je0SXnq7xGigmu2vZeMunuA+m9NQ0=;
-	b=SrFtHyNOeKRmsHQy+aDZW6WMhF8N2XlYtBs9nN1RzeQ3tk+aYJ4LmKfHHXbF7FYuDWsGf0
-	iX00d3PEPoSRldDw==
-From: "thermal-bot for Justin Stitt" <tip-bot2@linutronix.de>
+	bh=V5nqonGXTzg1PTYj2lngB0Uu6BQce0wripvogN6RyrI=;
+	b=7I+fc7h8z7Yz4BqQoY7p62YqAxPfaycTcRPuiXf7yyC5WzIy//WkL4QVUhMaMs5hXnsSAd
+	EVSHclxIUDbw5VBA==
+From: "thermal-bot for Stanislaw Gruszka" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To: linux-pm@vger.kernel.org
-Subject: [thermal: thermal/fixes] thermal: intel: int340x_thermal: replace
- deprecated strncpy() with strscpy()
-Cc: Justin Stitt <justinstitt@google.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+Subject:
+ [thermal: thermal/fixes] thermal: intel: hfi: Enable HFI only when required
+Cc: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
  "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, rui.zhang@intel.com,
  daniel.lezcano@linaro.org, amitk@kernel.org
 Precedence: bulk
@@ -67,7 +66,7 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <171568193743.10875.13256773729291529190.tip-bot2@tip-bot2>
+Message-ID: <171568193756.10875.8404713759324928045.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe:
  Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
@@ -77,63 +76,191 @@ Content-Transfer-Encoding: 7bit
 
 The following commit has been merged into the thermal/fixes branch of thermal:
 
-Commit-ID:     03fa9a3ad1d61992a2105aeb1062b349f1a85012
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//03fa9a3ad1d61992a2105aeb1062b349f1a85012
-Author:        Justin Stitt <justinstitt@google.com>
-AuthorDate:    Mon, 18 Mar 2024 22:36:10 
+Commit-ID:     b33f3d2677b8ddd7a3aba2b02497422a1d2c2a01
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//b33f3d2677b8ddd7a3aba2b02497422a1d2c2a01
+Author:        Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+AuthorDate:    Fri, 23 Feb 2024 16:59:42 +01:00
 Committer:     Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-CommitterDate: Wed, 27 Mar 2024 14:57:44 +01:00
+CommitterDate: Wed, 27 Mar 2024 14:50:26 +01:00
 
-thermal: intel: int340x_thermal: replace deprecated strncpy() with strscpy()
+thermal: intel: hfi: Enable HFI only when required
 
-strncpy() is deprecated for use on NUL-terminated destination strings
-[1] and as such we should prefer more robust and less ambiguous string
-interfaces.
+Enable and disable hardware feedback interface (HFI) when user space
+handler is present. For example, enable HFI, when intel-speed-select or
+Intel Low Power daemon is running and subscribing to thermal netlink
+events. When user space handlers exit or remove subscription for
+thermal netlink events, disable HFI.
 
-psvt->limit.string can only be 8 bytes so let's use the appropriate size
-macro ACPI_LIMIT_STR_MAX_LEN.
+Summary of changes:
 
-Neither psvt->limit.string or psvt_user[i].limit.string requires the
-NUL-padding behavior that strncpy() provides as they have both been
-filled with NUL-bytes prior to the string operation.
-|	memset(&psvt->limit, 0, sizeof(u64));
-and
-| 	psvt_user = kzalloc(psvt_len, GFP_KERNEL);
+ - Register a thermal genetlink notifier
 
-Let's use `strscpy` [2] due to the fact that it guarantees
-NUL-termination on the destination buffer without unnecessarily
-NUL-padding.
+ - In the notifier, process THERMAL_NOTIFY_BIND and THERMAL_NOTIFY_UNBIND
+   reason codes to count number of thermal event group netlink multicast
+   clients. If thermal netlink group has any listener enable HFI on all
+   packages. If there are no listener disable HFI on all packages.
 
-Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings # [1]
-Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html [2]
-Link: https://github.com/KSPP/linux/issues/90
-Signed-off-by: Justin Stitt <justinstitt@google.com>
-Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+- When CPU is online, instead of blindly enabling HFI, check if
+  the thermal netlink group has any listener. This will make sure that
+  HFI is not enabled by default during boot time.
+
+- Actual processing to enable/disable matches what is done in
+  suspend/resume callbacks. Create two functions hfi_enable_instance()
+  and hfi_disable_instance(), which can be called from the netlink
+  notifier callback and suspend/resume callbacks.
+
+Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/thermal/intel/intel_hfi.c | 97 +++++++++++++++++++++++++++---
+ 1 file changed, 89 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
-index dc519a6..4b4a4d6 100644
---- a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
-+++ b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
-@@ -309,7 +309,7 @@ static int acpi_parse_psvt(acpi_handle handle, int *psvt_count, struct psvt **ps
+diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
+index 40d664a..fbc7f0c 100644
+--- a/drivers/thermal/intel/intel_hfi.c
++++ b/drivers/thermal/intel/intel_hfi.c
+@@ -159,6 +159,7 @@ struct hfi_cpu_info {
+ static DEFINE_PER_CPU(struct hfi_cpu_info, hfi_cpu_info) = { .index = -1 };
  
- 		if (knob->type == ACPI_TYPE_STRING) {
- 			memset(&psvt->limit, 0, sizeof(u64));
--			strncpy(psvt->limit.string, psvt_ptr->limit.str_ptr, knob->string.length);
-+			strscpy(psvt->limit.string, psvt_ptr->limit.str_ptr, ACPI_LIMIT_STR_MAX_LEN);
- 		} else {
- 			psvt->limit.integer = psvt_ptr->limit.integer;
- 		}
-@@ -468,7 +468,7 @@ static int fill_psvt(char __user *ubuf)
- 		psvt_user[i].unlimit_coeff = psvts[i].unlimit_coeff;
- 		psvt_user[i].control_knob_type = psvts[i].control_knob_type;
- 		if (psvt_user[i].control_knob_type == ACPI_TYPE_STRING)
--			strncpy(psvt_user[i].limit.string, psvts[i].limit.string,
-+			strscpy(psvt_user[i].limit.string, psvts[i].limit.string,
- 				ACPI_LIMIT_STR_MAX_LEN);
- 		else
- 			psvt_user[i].limit.integer = psvts[i].limit.integer;
+ static int max_hfi_instances;
++static int hfi_clients_nr;
+ static struct hfi_instance *hfi_instances;
+ 
+ static struct hfi_features hfi_features;
+@@ -477,8 +478,11 @@ void intel_hfi_online(unsigned int cpu)
+ enable:
+ 	cpumask_set_cpu(cpu, hfi_instance->cpus);
+ 
+-	/* Enable this HFI instance if this is its first online CPU. */
+-	if (cpumask_weight(hfi_instance->cpus) == 1) {
++	/*
++	 * Enable this HFI instance if this is its first online CPU and
++	 * there are user-space clients of thermal events.
++	 */
++	if (cpumask_weight(hfi_instance->cpus) == 1 && hfi_clients_nr > 0) {
+ 		hfi_set_hw_table(hfi_instance);
+ 		hfi_enable();
+ 	}
+@@ -573,18 +577,33 @@ static __init int hfi_parse_features(void)
+ 	return 0;
+ }
+ 
+-static void hfi_do_enable(void)
++/*
++ * If concurrency is not prevented by other means, the HFI enable/disable
++ * routines must be called under hfi_instance_lock."
++ */
++static void hfi_enable_instance(void *ptr)
++{
++	hfi_set_hw_table(ptr);
++	hfi_enable();
++}
++
++static void hfi_disable_instance(void *ptr)
++{
++	hfi_disable();
++}
++
++static void hfi_syscore_resume(void)
+ {
+ 	/* This code runs only on the boot CPU. */
+ 	struct hfi_cpu_info *info = &per_cpu(hfi_cpu_info, 0);
+ 	struct hfi_instance *hfi_instance = info->hfi_instance;
+ 
+ 	/* No locking needed. There is no concurrency with CPU online. */
+-	hfi_set_hw_table(hfi_instance);
+-	hfi_enable();
++	if (hfi_clients_nr > 0)
++		hfi_enable_instance(hfi_instance);
+ }
+ 
+-static int hfi_do_disable(void)
++static int hfi_syscore_suspend(void)
+ {
+ 	/* No locking needed. There is no concurrency with CPU offline. */
+ 	hfi_disable();
+@@ -593,8 +612,58 @@ static int hfi_do_disable(void)
+ }
+ 
+ static struct syscore_ops hfi_pm_ops = {
+-	.resume = hfi_do_enable,
+-	.suspend = hfi_do_disable,
++	.resume = hfi_syscore_resume,
++	.suspend = hfi_syscore_suspend,
++};
++
++static int hfi_thermal_notify(struct notifier_block *nb, unsigned long state,
++			      void *_notify)
++{
++	struct thermal_genl_notify *notify = _notify;
++	struct hfi_instance *hfi_instance;
++	smp_call_func_t func = NULL;
++	unsigned int cpu;
++	int i;
++
++	if (notify->mcgrp != THERMAL_GENL_EVENT_GROUP)
++		return NOTIFY_DONE;
++
++	if (state != THERMAL_NOTIFY_BIND && state != THERMAL_NOTIFY_UNBIND)
++		return NOTIFY_DONE;
++
++	mutex_lock(&hfi_instance_lock);
++
++	switch (state) {
++	case THERMAL_NOTIFY_BIND:
++		if (++hfi_clients_nr == 1)
++			func = hfi_enable_instance;
++		break;
++	case THERMAL_NOTIFY_UNBIND:
++		if (--hfi_clients_nr == 0)
++			func = hfi_disable_instance;
++		break;
++	}
++
++	if (!func)
++		goto out;
++
++	for (i = 0; i < max_hfi_instances; i++) {
++		hfi_instance = &hfi_instances[i];
++		if (cpumask_empty(hfi_instance->cpus))
++			continue;
++
++		cpu = cpumask_any(hfi_instance->cpus);
++		smp_call_function_single(cpu, func, hfi_instance, true);
++	}
++
++out:
++	mutex_unlock(&hfi_instance_lock);
++
++	return NOTIFY_OK;
++}
++
++static struct notifier_block hfi_thermal_nb = {
++	.notifier_call = hfi_thermal_notify,
+ };
+ 
+ void __init intel_hfi_init(void)
+@@ -628,10 +697,22 @@ void __init intel_hfi_init(void)
+ 	if (!hfi_updates_wq)
+ 		goto err_nomem;
+ 
++	/*
++	 * Both thermal core and Intel HFI can not be build as modules.
++	 * As kernel build-in drivers they are initialized before user-space
++	 * starts, hence we can not miss BIND/UNBIND events when applications
++	 * add/remove thermal multicast group to/from a netlink socket.
++	 */
++	if (thermal_genl_register_notifier(&hfi_thermal_nb))
++		goto err_nl_notif;
++
+ 	register_syscore_ops(&hfi_pm_ops);
+ 
+ 	return;
+ 
++err_nl_notif:
++	destroy_workqueue(hfi_updates_wq);
++
+ err_nomem:
+ 	for (j = 0; j < i; ++j) {
+ 		hfi_instance = &hfi_instances[j];
 
