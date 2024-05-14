@@ -1,79 +1,80 @@
-Return-Path: <linux-pm+bounces-7815-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7823-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CE768C4F61
-	for <lists+linux-pm@lfdr.de>; Tue, 14 May 2024 12:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DF4D88C4F69
+	for <lists+linux-pm@lfdr.de>; Tue, 14 May 2024 12:47:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C08D11C2083F
-	for <lists+linux-pm@lfdr.de>; Tue, 14 May 2024 10:47:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1CF871C211BF
+	for <lists+linux-pm@lfdr.de>; Tue, 14 May 2024 10:47:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46E388612E;
-	Tue, 14 May 2024 10:19:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EEF013E404;
+	Tue, 14 May 2024 10:19:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="A1Blf9nG";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="rThBAkE5"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="vxCqEhj1";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="yQ9p1cBD"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C96984DFD
-	for <linux-pm@vger.kernel.org>; Tue, 14 May 2024 10:18:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A6C986252
+	for <linux-pm@vger.kernel.org>; Tue, 14 May 2024 10:19:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715681941; cv=none; b=o+MmlITbtqkbW5wSaGvmqxdkPLd4duautASDN3y/Q8Ta5M8reRZE3KrQ1KXnzVZnsea6ZL6jeMF8cfF7J8t0j5AzszoYIIYKKxeLlc3a0MWpiLTYf6aC8KaN2FLaIUNd85xh9Vu/Q5XC/AjINLEnuoaD9e8KNn5n9phzY2/OK34=
+	t=1715681943; cv=none; b=OIo+p4Kmnteu94J9/NbsFR3iNnqV+97WSjUuRwzrt7IzFyxRsvwVgA/fS7jjuOVfdQOP/YrVuPyMNiUfJhjCZrM7bFycD8oncmxsDl+o6RfwUw1Bx+oEw0vnp0M0blJpsG/TwDnnK27Crxa49Ic+qKGMR47Bgx0Wy0suubZd60Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715681941; c=relaxed/simple;
-	bh=HyCYB3x3uiB+HkUAxxXiRCyBIFfGmU8/1s2qFCvUc7s=;
+	s=arc-20240116; t=1715681943; c=relaxed/simple;
+	bh=e3pkUqW+y9iM2xDtXxefQZcrAEQGRbXOKqYFFrc+AAQ=;
 	h=Date:From:To:Subject:Cc:In-Reply-To:References:MIME-Version:
-	 Message-ID:Content-Type; b=aawZTCb8gOcv2z6JR6x1Lu0mGRJ6Ao9Jso67vZrIZ0ytDjXElj5Cxn6gb/VTjRKocPEI6IFXaWqyPS4dNLtb+P9jIaPGYXZo6/KteY3MA2XDqeh/1T63lEwoyoAhZRW+E7GTFS/eK2OJKHwwEvkEHGXfcZ83KIhbbJpp5subwOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=A1Blf9nG; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=rThBAkE5; arc=none smtp.client-ip=193.142.43.55
+	 Message-ID:Content-Type; b=kBcF8hYX4HkTEF7jhihlnjeCyJAJyXPMYxxEpaf+YijcKiiZTmp0xWLOv2vLE5N8rdhR7+F0aFOD7ee/Rtm9A7om3guTm+Y3yWUufZ87q4+wS42iyu0B0ewQSbdLux3w2I6qOUX2GeqwNY3/oTyCgGHg5pWg2bVHHjZw36QP3pQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=vxCqEhj1; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=yQ9p1cBD; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Date: Tue, 14 May 2024 10:18:54 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1715681934;
+	s=2020; t=1715681935;
 	h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
 	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
 	 content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=skfK60GLVDoJAl1ByTiNSu50LPZmAz43qbxSE9GRf9U=;
-	b=A1Blf9nGrDUi01n8nifANFbLF/jTf5BqcrQrastRNOO8rLRdot4HNq/WExG0MHP5N2SzNQ
-	WIfVurwbVA+hligCiks/UQFPKdI13wFN6EGwPFUEpKl3Mu1r6F0Ggr01bMcIwyKenCNZuE
-	YqWXqTxiIt470Pq57c4qYk3Xu+z8bZJHO2w9sjd1gl4ipQkL8haaHDToDXHNiQn9ZFLRxj
-	CKuxSe46tdOfbeSnkVvw324jpI9LMfHtcIdD7xbMf96OU8K/XWbcZa2wizXR80k3UNZgIu
-	+V1wydprh/1s5/b4YtK2N8rk2AcptrNwKgcdJtrjorLqZn+/AGVzzu9UQXeXnA==
+	bh=FRlaFW4YRpDw+nQfQtPKLo2nDCwa5aBmAApKz5YPkvY=;
+	b=vxCqEhj1ONc1osHAdc5OjquLVeO5vhlI3ElWmpUY68Sam1U6ViTvIGV3RN4RubG2xKGuL7
+	vlPPkwkFcQIwAASuwfrF1LooEh2cw2s+9UujI11cQMWqbD88SBzCFJ/RSyj4K1K4/TgLMv
+	AeGO6rHHePRP/H6mOsF/a2yiT4ejv8K0WJpEVyP03iU5PfF5igWA6sHd5Tm1aGVFKgGV8U
+	CnPv2Ra/5YZKk1w0yA4+yM1ERTEDGRtyMloh0GYRyuL69WVf6kf1Rynr1ZuqyeNF1QkKt8
+	QLhvVorfBF8CMN+EY4AwC4Hc2mnzKDGQJTaz8KQA8pFK7S/NajM0E2fXLA2BUQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1715681934;
+	s=2020e; t=1715681935;
 	h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
 	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
 	 content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=skfK60GLVDoJAl1ByTiNSu50LPZmAz43qbxSE9GRf9U=;
-	b=rThBAkE5HxR+dN3cxd5lqi7Vry0umTISGKJ79My+mOgx9ryovDeESQQTFIXGBHxLInpi7x
-	mIV9fZ7B3zWWfsCg==
-From: "thermal-bot for Nicolas Pitre" <tip-bot2@linutronix.de>
+	bh=FRlaFW4YRpDw+nQfQtPKLo2nDCwa5aBmAApKz5YPkvY=;
+	b=yQ9p1cBD9rYNNtBdX/1ljAH3YspGZtZWfFklgL5xN0FC0WuKaDc2MN0nf0YOt6XB3VuvQt
+	qGFynAOSNx2j50Cw==
+From: "thermal-bot for Aleksandr Mishin" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To: linux-pm@vger.kernel.org
-Subject: [thermal: thermal/fixes] thermal/drivers/mediatek/lvts_thermal: Use
- offsets for every calibration byte
-Cc: Nicolas Pitre <npitre@baylibre.com>,
+Subject:
+ [thermal: thermal/fixes] thermal/drivers/tsens: Fix null pointer dereference
+Cc: Aleksandr Mishin <amishin@t-argos.ru>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>,
  Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com,
  amitk@kernel.org
-In-Reply-To: <20240402032729.2736685-5-nico@fluxnic.net>
-References: <20240402032729.2736685-5-nico@fluxnic.net>
+In-Reply-To: <20240411114021.12203-1-amishin@t-argos.ru>
+References: <20240411114021.12203-1-amishin@t-argos.ru>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <171568193413.10875.7813116617054289650.tip-bot2@tip-bot2>
+Message-ID: <171568193478.10875.18119058876006595938.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe:
  Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
@@ -83,322 +84,42 @@ Content-Transfer-Encoding: 7bit
 
 The following commit has been merged into the thermal/fixes branch of thermal:
 
-Commit-ID:     5b3367e28a2c47d74bd566b96854ef0de3caa6d7
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//5b3367e28a2c47d74bd566b96854ef0de3caa6d7
-Author:        Nicolas Pitre <npitre@baylibre.com>
-AuthorDate:    Mon, 01 Apr 2024 23:25:38 -04:00
+Commit-ID:     d998ddc86a27c92140b9f7984ff41e3d1d07a48f
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//d998ddc86a27c92140b9f7984ff41e3d1d07a48f
+Author:        Aleksandr Mishin <amishin@t-argos.ru>
+AuthorDate:    Thu, 11 Apr 2024 14:40:21 +03:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
 CommitterDate: Tue, 23 Apr 2024 12:40:29 +02:00
 
-thermal/drivers/mediatek/lvts_thermal: Use offsets for every calibration byte
+thermal/drivers/tsens: Fix null pointer dereference
 
-Current code assumes calibration values are always stored contiguously
-in host endian order. A future patch will prove this wrong.
+compute_intercept_slope() is called from calibrate_8960() (in tsens-8960.c)
+as compute_intercept_slope(priv, p1, NULL, ONE_PT_CALIB) which lead to null
+pointer dereference (if DEBUG or DYNAMIC_DEBUG set).
+Fix this bug by adding null pointer check.
 
-Let's specify the offset for each calibration byte instead.
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
+Fixes: dfc1193d4dbd ("thermal/drivers/tsens: Replace custom 8960 apis with generic apis")
+Signed-off-by: Aleksandr Mishin <amishin@t-argos.ru>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/20240402032729.2736685-5-nico@fluxnic.net
+Link: https://lore.kernel.org/r/20240411114021.12203-1-amishin@t-argos.ru
 ---
- drivers/thermal/mediatek/lvts_thermal.c | 164 +++++++++++++----------
- 1 file changed, 99 insertions(+), 65 deletions(-)
+ drivers/thermal/qcom/tsens.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-index 08cf379..9e6ed8b 100644
---- a/drivers/thermal/mediatek/lvts_thermal.c
-+++ b/drivers/thermal/mediatek/lvts_thermal.c
-@@ -100,6 +100,7 @@ static int golden_temp_offset;
+diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+index 1c9df4f..e76e230 100644
+--- a/drivers/thermal/qcom/tsens.c
++++ b/drivers/thermal/qcom/tsens.c
+@@ -265,7 +265,7 @@ void compute_intercept_slope(struct tsens_priv *priv, u32 *p1,
+ 	for (i = 0; i < priv->num_sensors; i++) {
+ 		dev_dbg(priv->dev,
+ 			"%s: sensor%d - data_point1:%#x data_point2:%#x\n",
+-			__func__, i, p1[i], p2[i]);
++			__func__, i, p1[i], p2 ? p2[i] : 0);
  
- struct lvts_sensor_data {
- 	int dt_id;
-+	u8 cal_offsets[3];
- };
- 
- struct lvts_ctrl_data {
-@@ -665,8 +666,9 @@ static int lvts_sensor_init(struct device *dev, struct lvts_ctrl *lvts_ctrl,
-  * <-----ap--tc#3-----> <-----sensor#7-----> <-----sensor#8----->
-  *  0x40 | 0x41 | 0x42 | 0x43 | 0x44 | 0x45 | 0x46 | 0x47 | 0x48
-  *
-- * The data description gives the offset of the calibration data in
-- * this bytes stream for each sensor.
-+ * Note: In some cases, values don't strictly follow a little endian ordering.
-+ * The data description gives byte offsets constituting each calibration value
-+ * for each sensor.
-  */
- static int lvts_calibration_init(struct device *dev, struct lvts_ctrl *lvts_ctrl,
- 					const struct lvts_ctrl_data *lvts_ctrl_data,
-@@ -674,9 +676,15 @@ static int lvts_calibration_init(struct device *dev, struct lvts_ctrl *lvts_ctrl
- {
- 	int i;
- 
--	for (i = 0; i < lvts_ctrl_data->num_lvts_sensor; i++)
--		memcpy(&lvts_ctrl->calibration[i],
--		       efuse_calibration + lvts_ctrl_data->cal_offset[i], 3);
-+	for (i = 0; i < lvts_ctrl_data->num_lvts_sensor; i++) {
-+		const struct lvts_sensor_data *sensor =
-+					&lvts_ctrl_data->lvts_sensor[i];
-+
-+		lvts_ctrl->calibration[i] =
-+			(efuse_calibration[sensor->cal_offsets[0]] << 0) +
-+			(efuse_calibration[sensor->cal_offsets[1]] << 8) +
-+			(efuse_calibration[sensor->cal_offsets[2]] << 16);
-+	}
- 
- 	return 0;
- }
-@@ -1299,23 +1307,29 @@ static void lvts_remove(struct platform_device *pdev)
- 
- static const struct lvts_ctrl_data mt7988_lvts_ap_data_ctrl[] = {
- 	{
--		.cal_offset = { 0x00, 0x04, 0x08, 0x0c },
- 		.lvts_sensor = {
--			{ .dt_id = MT7988_CPU_0 },
--			{ .dt_id = MT7988_CPU_1 },
--			{ .dt_id = MT7988_ETH2P5G_0 },
--			{ .dt_id = MT7988_ETH2P5G_1 }
-+			{ .dt_id = MT7988_CPU_0,
-+			  .cal_offsets = { 0x00, 0x01, 0x02 } },
-+			{ .dt_id = MT7988_CPU_1,
-+			  .cal_offsets = { 0x04, 0x05, 0x06 } },
-+			{ .dt_id = MT7988_ETH2P5G_0,
-+			  .cal_offsets = { 0x08, 0x09, 0x0a } },
-+			{ .dt_id = MT7988_ETH2P5G_1,
-+			  .cal_offsets = { 0x0c, 0x0d, 0x0e } }
- 		},
- 		.num_lvts_sensor = 4,
- 		.offset = 0x0,
- 	},
- 	{
--		.cal_offset = { 0x14, 0x18, 0x1c, 0x20 },
- 		.lvts_sensor = {
--			{ .dt_id = MT7988_TOPS_0},
--			{ .dt_id = MT7988_TOPS_1},
--			{ .dt_id = MT7988_ETHWARP_0},
--			{ .dt_id = MT7988_ETHWARP_1}
-+			{ .dt_id = MT7988_TOPS_0,
-+			   .cal_offsets = { 0x14, 0x15, 0x16 } },
-+			{ .dt_id = MT7988_TOPS_1,
-+			   .cal_offsets = { 0x18, 0x19, 0x1a } },
-+			{ .dt_id = MT7988_ETHWARP_0,
-+			   .cal_offsets = { 0x1c, 0x1d, 0x1e } },
-+			{ .dt_id = MT7988_ETHWARP_1,
-+			   .cal_offsets = { 0x20, 0x21, 0x22 } }
- 		},
- 		.num_lvts_sensor = 4,
- 		.offset = 0x100,
-@@ -1356,32 +1370,37 @@ static int lvts_resume(struct device *dev)
- 
- static const struct lvts_ctrl_data mt8192_lvts_mcu_data_ctrl[] = {
- 	{
--		.cal_offset = { 0x04, 0x08 },
- 		.lvts_sensor = {
--			{ .dt_id = MT8192_MCU_BIG_CPU0 },
--			{ .dt_id = MT8192_MCU_BIG_CPU1 }
-+			{ .dt_id = MT8192_MCU_BIG_CPU0,
-+			  .cal_offsets = { 0x04, 0x05, 0x06 } },
-+			{ .dt_id = MT8192_MCU_BIG_CPU1,
-+			  .cal_offsets = { 0x08, 0x09, 0x0a } }
- 		},
- 		.num_lvts_sensor = 2,
- 		.offset = 0x0,
- 		.mode = LVTS_MSR_FILTERED_MODE,
- 	},
- 	{
--		.cal_offset = { 0x0c, 0x10 },
- 		.lvts_sensor = {
--			{ .dt_id = MT8192_MCU_BIG_CPU2 },
--			{ .dt_id = MT8192_MCU_BIG_CPU3 }
-+			{ .dt_id = MT8192_MCU_BIG_CPU2,
-+			  .cal_offsets = { 0x0c, 0x0d, 0x0e } },
-+			{ .dt_id = MT8192_MCU_BIG_CPU3,
-+			  .cal_offsets = { 0x10, 0x11, 0x12 } }
- 		},
- 		.num_lvts_sensor = 2,
- 		.offset = 0x100,
- 		.mode = LVTS_MSR_FILTERED_MODE,
- 	},
- 	{
--		.cal_offset = { 0x14, 0x18, 0x1c, 0x20 },
- 		.lvts_sensor = {
--			{ .dt_id = MT8192_MCU_LITTLE_CPU0 },
--			{ .dt_id = MT8192_MCU_LITTLE_CPU1 },
--			{ .dt_id = MT8192_MCU_LITTLE_CPU2 },
--			{ .dt_id = MT8192_MCU_LITTLE_CPU3 }
-+			{ .dt_id = MT8192_MCU_LITTLE_CPU0,
-+			  .cal_offsets = { 0x14, 0x15, 0x16 } },
-+			{ .dt_id = MT8192_MCU_LITTLE_CPU1,
-+			  .cal_offsets = { 0x18, 0x19, 0x1a } },
-+			{ .dt_id = MT8192_MCU_LITTLE_CPU2,
-+			  .cal_offsets = { 0x1c, 0x1d, 0x1e } },
-+			{ .dt_id = MT8192_MCU_LITTLE_CPU3,
-+			  .cal_offsets = { 0x20, 0x21, 0x22 } }
- 		},
- 		.num_lvts_sensor = 4,
- 		.offset = 0x200,
-@@ -1390,39 +1409,44 @@ static const struct lvts_ctrl_data mt8192_lvts_mcu_data_ctrl[] = {
- };
- 
- static const struct lvts_ctrl_data mt8192_lvts_ap_data_ctrl[] = {
--		{
--		.cal_offset = { 0x24, 0x28 },
-+	{
- 		.lvts_sensor = {
--			{ .dt_id = MT8192_AP_VPU0 },
--			{ .dt_id = MT8192_AP_VPU1 }
-+			{ .dt_id = MT8192_AP_VPU0,
-+			  .cal_offsets = { 0x24, 0x25, 0x26 } },
-+			{ .dt_id = MT8192_AP_VPU1,
-+			  .cal_offsets = { 0x28, 0x29, 0x2a } }
- 		},
- 		.num_lvts_sensor = 2,
- 		.offset = 0x0,
- 	},
- 	{
--		.cal_offset = { 0x2c, 0x30 },
- 		.lvts_sensor = {
--			{ .dt_id = MT8192_AP_GPU0 },
--			{ .dt_id = MT8192_AP_GPU1 }
-+			{ .dt_id = MT8192_AP_GPU0,
-+			  .cal_offsets = { 0x2c, 0x2d, 0x2e } },
-+			{ .dt_id = MT8192_AP_GPU1,
-+			  .cal_offsets = { 0x30, 0x31, 0x32 } }
- 		},
- 		.num_lvts_sensor = 2,
- 		.offset = 0x100,
- 	},
- 	{
--		.cal_offset = { 0x34, 0x38 },
- 		.lvts_sensor = {
--			{ .dt_id = MT8192_AP_INFRA },
--			{ .dt_id = MT8192_AP_CAM },
-+			{ .dt_id = MT8192_AP_INFRA,
-+			  .cal_offsets = { 0x34, 0x35, 0x36 } },
-+			{ .dt_id = MT8192_AP_CAM,
-+			  .cal_offsets = { 0x38, 0x39, 0x3a } },
- 		},
- 		.num_lvts_sensor = 2,
- 		.offset = 0x200,
- 	},
- 	{
--		.cal_offset = { 0x3c, 0x40, 0x44 },
- 		.lvts_sensor = {
--			{ .dt_id = MT8192_AP_MD0 },
--			{ .dt_id = MT8192_AP_MD1 },
--			{ .dt_id = MT8192_AP_MD2 }
-+			{ .dt_id = MT8192_AP_MD0,
-+			  .cal_offsets = { 0x3c, 0x3d, 0x3e } },
-+			{ .dt_id = MT8192_AP_MD1,
-+			  .cal_offsets = { 0x40, 0x41, 0x42 } },
-+			{ .dt_id = MT8192_AP_MD2,
-+			  .cal_offsets = { 0x44, 0x45, 0x46 } }
- 		},
- 		.num_lvts_sensor = 3,
- 		.offset = 0x300,
-@@ -1431,30 +1455,35 @@ static const struct lvts_ctrl_data mt8192_lvts_ap_data_ctrl[] = {
- 
- static const struct lvts_ctrl_data mt8195_lvts_mcu_data_ctrl[] = {
- 	{
--		.cal_offset = { 0x04, 0x07 },
- 		.lvts_sensor = {
--			{ .dt_id = MT8195_MCU_BIG_CPU0 },
--			{ .dt_id = MT8195_MCU_BIG_CPU1 }
-+			{ .dt_id = MT8195_MCU_BIG_CPU0,
-+			  .cal_offsets = { 0x04, 0x05, 0x06 } },
-+			{ .dt_id = MT8195_MCU_BIG_CPU1,
-+			  .cal_offsets = { 0x07, 0x08, 0x09 } }
- 		},
- 		.num_lvts_sensor = 2,
- 		.offset = 0x0,
- 	},
- 	{
--		.cal_offset = { 0x0d, 0x10 },
- 		.lvts_sensor = {
--			{ .dt_id = MT8195_MCU_BIG_CPU2 },
--			{ .dt_id = MT8195_MCU_BIG_CPU3 }
-+			{ .dt_id = MT8195_MCU_BIG_CPU2,
-+			  .cal_offsets = { 0x0d, 0x0e, 0x0f } },
-+			{ .dt_id = MT8195_MCU_BIG_CPU3,
-+			  .cal_offsets = { 0x10, 0x11, 0x12 } }
- 		},
- 		.num_lvts_sensor = 2,
- 		.offset = 0x100,
- 	},
- 	{
--		.cal_offset = { 0x16, 0x19, 0x1c, 0x1f },
- 		.lvts_sensor = {
--			{ .dt_id = MT8195_MCU_LITTLE_CPU0 },
--			{ .dt_id = MT8195_MCU_LITTLE_CPU1 },
--			{ .dt_id = MT8195_MCU_LITTLE_CPU2 },
--			{ .dt_id = MT8195_MCU_LITTLE_CPU3 }
-+			{ .dt_id = MT8195_MCU_LITTLE_CPU0,
-+			  .cal_offsets = { 0x16, 0x17, 0x18 } },
-+			{ .dt_id = MT8195_MCU_LITTLE_CPU1,
-+			  .cal_offsets = { 0x19, 0x1a, 0x1b } },
-+			{ .dt_id = MT8195_MCU_LITTLE_CPU2,
-+			  .cal_offsets = { 0x1c, 0x1d, 0x1e } },
-+			{ .dt_id = MT8195_MCU_LITTLE_CPU3,
-+			  .cal_offsets = { 0x1f, 0x20, 0x21 } }
- 		},
- 		.num_lvts_sensor = 4,
- 		.offset = 0x200,
-@@ -1462,39 +1491,44 @@ static const struct lvts_ctrl_data mt8195_lvts_mcu_data_ctrl[] = {
- };
- 
- static const struct lvts_ctrl_data mt8195_lvts_ap_data_ctrl[] = {
--		{
--		.cal_offset = { 0x25, 0x28 },
-+	{
- 		.lvts_sensor = {
--			{ .dt_id = MT8195_AP_VPU0 },
--			{ .dt_id = MT8195_AP_VPU1 }
-+			{ .dt_id = MT8195_AP_VPU0,
-+			  .cal_offsets = { 0x25, 0x26, 0x27 } },
-+			{ .dt_id = MT8195_AP_VPU1,
-+			  .cal_offsets = { 0x28, 0x29, 0x2a } }
- 		},
- 		.num_lvts_sensor = 2,
- 		.offset = 0x0,
- 	},
- 	{
--		.cal_offset = { 0x2e, 0x31 },
- 		.lvts_sensor = {
--			{ .dt_id = MT8195_AP_GPU0 },
--			{ .dt_id = MT8195_AP_GPU1 }
-+			{ .dt_id = MT8195_AP_GPU0,
-+			  .cal_offsets = { 0x2e, 0x2f, 0x30 } },
-+			{ .dt_id = MT8195_AP_GPU1,
-+			  .cal_offsets = { 0x31, 0x32, 0x33 } }
- 		},
- 		.num_lvts_sensor = 2,
- 		.offset = 0x100,
- 	},
- 	{
--		.cal_offset = { 0x37, 0x3a, 0x3d },
- 		.lvts_sensor = {
--			{ .dt_id = MT8195_AP_VDEC },
--			{ .dt_id = MT8195_AP_IMG },
--			{ .dt_id = MT8195_AP_INFRA },
-+			{ .dt_id = MT8195_AP_VDEC,
-+			  .cal_offsets = { 0x37, 0x38, 0x39 } },
-+			{ .dt_id = MT8195_AP_IMG,
-+			  .cal_offsets = { 0x3a, 0x3b, 0x3c } },
-+			{ .dt_id = MT8195_AP_INFRA,
-+			  .cal_offsets = { 0x3d, 0x3e, 0x3f } }
- 		},
- 		.num_lvts_sensor = 3,
- 		.offset = 0x200,
- 	},
- 	{
--		.cal_offset = { 0x43, 0x46 },
- 		.lvts_sensor = {
--			{ .dt_id = MT8195_AP_CAM0 },
--			{ .dt_id = MT8195_AP_CAM1 }
-+			{ .dt_id = MT8195_AP_CAM0,
-+			  .cal_offsets = { 0x43, 0x44, 0x45 } },
-+			{ .dt_id = MT8195_AP_CAM1,
-+			  .cal_offsets = { 0x46, 0x47, 0x48 } }
- 		},
- 		.num_lvts_sensor = 2,
- 		.offset = 0x300,
+ 		if (!priv->sensor[i].slope)
+ 			priv->sensor[i].slope = SLOPE_DEFAULT;
 
