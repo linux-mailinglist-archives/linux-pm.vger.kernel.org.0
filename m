@@ -1,232 +1,230 @@
-Return-Path: <linux-pm+bounces-7800-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7801-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B60E8C4F0D
-	for <lists+linux-pm@lfdr.de>; Tue, 14 May 2024 12:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C29E8C4F44
+	for <lists+linux-pm@lfdr.de>; Tue, 14 May 2024 12:43:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCEB41F212A3
-	for <lists+linux-pm@lfdr.de>; Tue, 14 May 2024 10:32:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A4F671F21BD5
+	for <lists+linux-pm@lfdr.de>; Tue, 14 May 2024 10:43:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7D191386C8;
-	Tue, 14 May 2024 09:50:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="gLhPoCXh"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9925513C91C;
+	Tue, 14 May 2024 10:10:25 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from isrv.corpit.ru (isrv.corpit.ru [86.62.121.231])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 350A21386B5
-	for <linux-pm@vger.kernel.org>; Tue, 14 May 2024 09:50:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F82C168C7;
+	Tue, 14 May 2024 10:10:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=86.62.121.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715680249; cv=none; b=btxhCvgvV1jCvUz48nH7OHdW+Oh/3VORgr23iDsDfbzeU8AgBhJfrwHJtWNTKf610F00gfyUuk3iRh2sxuQ9bFbipucIe64Y1ZjpU0/vzXjCGa535/OY44vgE10sedzHA9oi9rYSl50eNeYXIiCaP278JG4L//ku53oclqs9N34=
+	t=1715681425; cv=none; b=BCokygStNRxjjppZfZJ9hM5YV/URHcbQv8x1SL3fCMEykzB/HKzLHZb4wQbUKA+PrMH707a/OidfGH7/PlJLF4rMemrgMj5+fU4kqa9PUSweQwJxE7fKZ0Uj10V4OVG1J7SBLDDNffZ7cQU1VHc5WOl1NIjR5WtmkKW4d5C2Pyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715680249; c=relaxed/simple;
-	bh=TCkx6SaxQ1bT0hwpMFkeJTA63KBdnOB9RyvhqZLO2qY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dDDgHPtZkpqUYoMdbgVJtWJ05qn9cdgY80nmdaOVOd0+TkEp43pdOr9tHLLUQCRjDWztElNrJzKnZXZq3/qlR70iJ/XXA/x4zlthFwNKwxlmTrgTAYi2R2MfbAwzKJb/A/d9RUJ9X/y67igJCmm46IBOCcrK+19WL9Qv3mD+9xI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=gLhPoCXh; arc=none smtp.client-ip=209.85.167.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-3c997f50805so1921941b6e.0
-        for <linux-pm@vger.kernel.org>; Tue, 14 May 2024 02:50:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1715680246; x=1716285046; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0wKHm6XT5EYm6vl/df7llbv2ZznYvQVbeTCwxvcThXU=;
-        b=gLhPoCXh74TKJF46R2uNADuVzoDDobTXPFvICkjTqHemUIlkrZ04pow8cDTLxFzrQ/
-         Zn4r745jQulc6tYvCPUPT8v8wLl3yfER42aEcM98c+4+QmDtREUELOPLU17r+WZn8r7x
-         qRn9Wv/1I4NzNix4Lu4twgRBUKjxIpdfj/Sb/7xFncQR0I5X2HHOtraWaL547peP+a0R
-         O3/sq35ubxHeQ4ymEIZ1mA7Xoh5ZmXyc0PhB706rWN20bZUZ2ZmAJ+nRUGnLfpzSXbUW
-         jWPaDfOHRNRIsDtXuTmlBErsrolx2O9EqqpwpWf9FWrkP1UJytUhFuOMbD5k1houMCxf
-         rhKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715680246; x=1716285046;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0wKHm6XT5EYm6vl/df7llbv2ZznYvQVbeTCwxvcThXU=;
-        b=vMA6ASg9uboGEVwWgRcRj9HxSe4Me/oySkh1qDlgZH2iLUzZn/NLywoOr7corlHTWU
-         dB+QFH+LTPVaq6wnlhvVAwt1trw+wV3gA7yfL/YKv25ODpjL5gupwmsklEmqyG7PBcRq
-         pXqP9tOL+YU0FU33ni9P0i41hnx27fHdkFY7HtId9OMFQHvG86fKXRyBpPshWYHJat2D
-         ujprepz2okiXGZ9/06jPtCffTx2F8Uyoo5QEqMTe/IQGcEN2UDasVuoNZz9+gDMIe4ix
-         ccNqDeBQO5BZEVb40/e+QK1LjAIlfIqxh434CPUu+QV+JMF4Na4sGGLSerG6gAcl3wdV
-         ao0A==
-X-Forwarded-Encrypted: i=1; AJvYcCXu61zMrJv9rclFcyXD6GNtppyge+LHAXNhyO5GsTbiqRmKf6vD8rbCBv+/qcBMlbI9kYOWgtUlK2sKFI5z9pvbhcvFVCc0lBY=
-X-Gm-Message-State: AOJu0Yy6vBYmNVkBkCygouK5x794YGVtsv5qK5CGi5SnRExxZ9FI56Uo
-	nx8ybHDbjMnDkNaogqhKTIuQvzQRd/0wGORZ2M1Qx7qeQt9gCHjXm1zuyq1UCXS4XMMBAgnII0p
-	4DguTdkiD3EcAzVLyMXRjFpnDnEQEYMBYHe9wVg==
-X-Google-Smtp-Source: AGHT+IFZlGka49AMpZnqeQG/0/xoWz38eoC8WUNBIFRNqyMEzju7A9//UVdvie1NQ5rKtQlwZbm11YMHm3N4CSBDIj8=
-X-Received: by 2002:a05:6808:3099:b0:3c7:21b4:6e1 with SMTP id
- 5614622812f47-3c996c688b8mr6596851b6e.2.1715680244711; Tue, 14 May 2024
- 02:50:44 -0700 (PDT)
+	s=arc-20240116; t=1715681425; c=relaxed/simple;
+	bh=mQ4j8DX0pdzmtd3n4jRgJ6RT+qOBApB+mJhv5bHU10g=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=XjaUwIuM615zyhh4wSWqCL82SC7Kd63i5nd5OrJDRe3zsq4CjuKvtGXkjjkTe1DYQdJlhenr0eCGUZ4E6C6CkCAlS2gnqgRmlQRPMXZQOg4qiaRPamKkVe0b6hp+51MhyjLKtKMYpncQuq/I7Bf/OY3omAcYuO+E4VwJz9nrxBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tls.msk.ru; spf=pass smtp.mailfrom=tls.msk.ru; arc=none smtp.client-ip=86.62.121.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tls.msk.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tls.msk.ru
+Received: from tsrv.corpit.ru (tsrv.tls.msk.ru [192.168.177.2])
+	by isrv.corpit.ru (Postfix) with ESMTP id 30C7566924;
+	Tue, 14 May 2024 13:10:30 +0300 (MSK)
+Received: from [192.168.177.130] (mjt.wg.tls.msk.ru [192.168.177.130])
+	by tsrv.corpit.ru (Postfix) with ESMTP id AB948CE535;
+	Tue, 14 May 2024 13:10:20 +0300 (MSK)
+Message-ID: <0060cbfc-738a-44a8-8b39-b190fcc5076a@tls.msk.ru>
+Date: Tue, 14 May 2024 13:10:20 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240226065113.1690534-1-nick.hu@sifive.com> <CAPDyKFph3WsZMmALnzBQKE4S_80Ji5h386Wi0vHda37QUsjMtg@mail.gmail.com>
- <CAKddAkDcdaXKzpcKN=LCCx9S4Trv+joLX2s=nyhzaRtM5HorqA@mail.gmail.com>
- <CAKddAkC6N=Cfo0z+F8herKTuJzCyt_MA0vWNbLCr6CbQnj0y8g@mail.gmail.com> <CAPDyKFr_M0NDH0gaunBpybnALOFfz4LpX4_JW2GCUxjwGzdZsg@mail.gmail.com>
-In-Reply-To: <CAPDyKFr_M0NDH0gaunBpybnALOFfz4LpX4_JW2GCUxjwGzdZsg@mail.gmail.com>
-From: Nick Hu <nick.hu@sifive.com>
-Date: Tue, 14 May 2024 17:50:34 +0800
-Message-ID: <CAKddAkC5CRX+ZTh=MgzPYU72SY13+AQYhknhV_CC+=XX9=DKyg@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: riscv-sbi: Add cluster_pm_enter()/exit()
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: palmer@dabbelt.com, anup@brainfault.org, rafael@kernel.org, 
-	daniel.lezcano@linaro.org, paul.walmsley@sifive.com, linux-pm@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	zong.li@sifive.com, Cyan Yang <cyan.yang@sifive.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+To: linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Language: en-US
+From: Michael Tokarev <mjt@tls.msk.ru>
+Subject: kernel null-ptr deref after hibernation on thinkpad t495s -
+ acpi_cpufreq failure
+Autocrypt: addr=mjt@tls.msk.ru; keydata=
+ xsBLBETIiwkBCADh3cFB56BQYPjtMZCfK6PSLR8lw8EB20rsrPeJtd91IoNZlnCjSoxd9Th1
+ bLUR8YlpRJ2rjc6O1Bc04VghqUOHgS/tYt8vLjcGWixzdhSLJgPDK3QQZPAvBjMbCt1B6euC
+ WuD87Pv5Udlpnzf4aMwxkgfTusx+ynae/o+T5r7tXD+isccbC3SiGhmAPxFyY3zGcFk4+Rxc
+ 0tP8YY2FWE/baHu+lBDTUN79efWAkHhex1XzVZsV7ZD16rzDbXFK5m6ApvGJWlr5YDEEydTF
+ WwmvwBfr4OINVxzEG/ujNiG4fpMf2NsnFGyB9aSbFjXZevB4qWkduYYW+xpK1EryszHtAAYp
+ zSBNaWNoYWVsIFRva2FyZXYgPG1qdEB0bHMubXNrLnJ1PsLAlgQTAQoAQAIbAwYLCQgHAwIE
+ FQIIAwQWAgMBAh4BAheAAhkBFiEEbuGV0Yhuj/uBDUMkRXzgoIBEZcUFAmBbcjwFCS5e6jMA
+ CgkQRXzgoIBEZcUTIQgA1hPsOF82pXxbcJXBMc4zB9OQu4AlnZvERoGyw7I2222QzaN3RFuj
+ Fia//mapXzpIQNF08l/AA6cx+CKPeGnXwyZfF9fLa4RfifmdNKME8C00XlqnoJDZBGzq8yMy
+ LAKDxl9OQWFcDwDxV+irg5U3fbtNVhvV0kLbS2TyQ0aU5w60ERS2NcyDWplOo7AOzZWChcA4
+ UFf78oVdZdCW8YDtU0uQFhA9moNnrePy1HSFqduxnlFHEI+fDj/TiOm2ci48b8SBBJOIJFjl
+ SBgH8+SfT9ZqkzhN9vh3YJ49831NwASVm0x1rDHcIwWD32VFZViZ3NjehogRNH9br0PSUYOC
+ 3s7ATQRX2BjLAQgAnak3m0imYOkv2tO/olULFa686tlwuvl5kL0NWCdGQeXv2uMxy36szcrh
+ K1uYhpiQv4r2qNd8BJtYlnYIK16N8GBdkplaDIHcBMbU4t+6bQzEIJIaWoq1hzakmHHngE2a
+ pNMnUf/01GFvCRPlv3imkujE/5ILbagjtdyJaHF0wGOSlTnNT4W8j+zPJ/XK0I5EVQwtbmoc
+ GY62LKxxz2pID6sPZV4zQVY4JdUQaFvOz1emnBxakkt0cq3Qnnqso1tjiy7vyH9CAwPR/48W
+ fpK6dew4Fk+STYtBeixOTfSUS8qRS/wfpUeNa5RnEdTtFQ9IcjpQ/nPrvJJsu9FqwlpjMwAR
+ AQABwsBlBBgBCAAPBQJX2BjLAhsMBQkSzAMAAAoJEEV84KCARGXFUKcH/jqKETECkbyPktdP
+ cWVqw2ZIsmGxMkIdnZTbPwhORseGXMHadQODayhU9GWfCDdSPkWDWzMamD+qStfl9MhlVT60
+ HTbo6wu1W/ogUS70qQPTY9IfsvAj6f8TlSlK0eLMa3s2UxL2oe5FkNs2CnVeRlr4Yqvp/ZQV
+ 6LXtew4GPRrmplUT/Cre9QIUqR4pxYCQaMoOXQQw3Y0csBwoDYUQujn3slbDJRIweHoppBzT
+ rM6ZG5ldWQN3n3d71pVuv80guylX8+TSB8Mvkqwb5I36/NAFKl0CbGbTuQli7SmNiTAKilXc
+ Y5Uh9PIrmixt0JrmGVRzke6+11mTjVlio/J5dCM=
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Ulf,
+Hi!
 
-Thank you for your valuable suggestion.
-I sincerely apologize for the delay in responding to your message. We
-have diligently worked on experimenting with the suggestion you
-provided.
+I'm trying to debug a resume-from-hibernation issue on an AMD-based (AMD Ryzen 5 PRO 3500U)
+Thinkpad 495s laptop.  So far, it works mostly okay with 'shutdown' mode but not with
+'platform', giving an OOPS at resume.  'shutdown' mode has its own issues though, which
+basically prevents it from being useful (namely, thinkpad_acpi module fails to enable
+power button after resume), so I'm trying to get `platform' mode to work.
 
-As per your recommendation, we have incorporated the "power-domains=3D<>
-property" into the consumer's node, resulting in modifications to the
-DTS as illustrated below:
+The OOPS at resume is like this: http://www.corpit.ru/mjt/tmp/screendump_2024-05-14_11-32-37.jpg
+Unfortunately it's a picture (taken with my cellphone), not in a text form.
 
-cpus {
-    ...
-     domain-idle-states {
-           CLUSTER_SLEEP:cluster-sleep {
-                        compatible =3D "domain-idle-state";
-                        ...
-            }
-     }
-     power-domains {
-            ...
-            ...
-            CLUSTER_PD: clusterpd {
-                    domain-idle-states =3D <&CLUSTER_SLEEP>;
-            };
-     }
-}
-soc {
-      deviceA@xxx{
-             ...
-             power-domains =3D <&CLUSTER_PD>;
-             ...
-      }
-}
+This is when the system is fully booted (without the graphics driver).  It turned out
+I can use another way to trigger the same OOPS, namely:
 
-However, this adjustment has led to an issue where the probe for
-'deviceA' is deferred by 'device_links_check_suppliers()' within
-'really_probe()'. In an attempt to mitigate this issue, we
-experimented with a workaround by adding the attribute
-"status=3D"disabled"" to the 'CLUSTER_PD' node. This action aimed to
-prevent the creation of a device link between 'deviceA' and
-'CLUSTER_PD'. Nevertheless, we remain uncertain about the
-appropriateness of this solution.
+  - boot into initrd, with minimal set of modules, and do hibernate/resume cycle in there
+  - let it boot further
+  - once it tries to load acpi_cpufreq module, it gets the same OOPS.
 
-Do you have suggestions on how to effectively address this issue?
+So it looks like hibernate/resume cycle changes something in ACPI and makes acpi_cpufreq
+module confused - either when it's already loaded (happens at resume), or when it gets
+loaded for the first time *after* the resume.  I think some ACPI table dump (before-after)
+might be needed here, which one?
 
-Regards,
-Nick
+Here's the whole dmesg (including OOPs) from this one: http://www.corpit.ru/mjt/tmp/dmesg-oops.txt
 
-On Tue, Apr 30, 2024 at 4:13=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org=
-> wrote:
->
-> On Mon, 29 Apr 2024 at 18:26, Nick Hu <nick.hu@sifive.com> wrote:
-> >
-> > On Tue, Apr 30, 2024 at 12:22=E2=80=AFAM Nick Hu <nick.hu@sifive.com> w=
-rote:
-> > >
-> > > Hi Ulf
-> > >
-> > > On Mon, Apr 29, 2024 at 10:32=E2=80=AFPM Ulf Hansson <ulf.hansson@lin=
-aro.org> wrote:
-> > > >
-> > > > On Mon, 26 Feb 2024 at 07:51, Nick Hu <nick.hu@sifive.com> wrote:
-> > > > >
-> > > > > When the cpus in the same cluster are all in the idle state, the =
-kernel
-> > > > > might put the cluster into a deeper low power state. Call the
-> > > > > cluster_pm_enter() before entering the low power state and call t=
-he
-> > > > > cluster_pm_exit() after the cluster woken up.
-> > > > >
-> > > > > Signed-off-by: Nick Hu <nick.hu@sifive.com>
-> > > >
-> > > > I was not cced this patch, but noticed that this patch got queued u=
-p
-> > > > recently. Sorry for not noticing earlier.
-> > > >
-> > > > If not too late, can you please drop/revert it? We should really mo=
-ve
-> > > > away from the CPU cluster notifiers. See more information below.
-> > > >
-> > > > > ---
-> > > > >  drivers/cpuidle/cpuidle-riscv-sbi.c | 24 ++++++++++++++++++++++-=
--
-> > > > >  1 file changed, 22 insertions(+), 2 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidl=
-e/cpuidle-riscv-sbi.c
-> > > > > index e8094fc92491..298dc76a00cf 100644
-> > > > > --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
-> > > > > +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
-> > > > > @@ -394,6 +394,7 @@ static int sbi_cpuidle_pd_power_off(struct ge=
-neric_pm_domain *pd)
-> > > > >  {
-> > > > >         struct genpd_power_state *state =3D &pd->states[pd->state=
-_idx];
-> > > > >         u32 *pd_state;
-> > > > > +       int ret;
-> > > > >
-> > > > >         if (!state->data)
-> > > > >                 return 0;
-> > > > > @@ -401,6 +402,10 @@ static int sbi_cpuidle_pd_power_off(struct g=
-eneric_pm_domain *pd)
-> > > > >         if (!sbi_cpuidle_pd_allow_domain_state)
-> > > > >                 return -EBUSY;
-> > > > >
-> > > > > +       ret =3D cpu_cluster_pm_enter();
-> > > > > +       if (ret)
-> > > > > +               return ret;
-> > > >
-> > > > Rather than using the CPU cluster notifiers, consumers of the genpd
-> > > > can register themselves to receive genpd on/off notifiers.
-> > > >
-> > > > In other words, none of this should be needed, right?
-> > > >
-> > > Thanks for the feedback!
-> > > Maybe I miss something, I'm wondering about a case like below:
-> > > If we have a shared L2 cache controller inside the cpu cluster power
-> > > domain and we add this controller to be a consumer of the power
-> > > domain, Shouldn't the genpd invoke the domain idle only after the
-> > > shared L2 cache controller is suspended?
-> > > Is there a way that we can put the L2 cache down while all cpus in th=
-e
-> > > same cluster are idle?
-> > > > [...]
-> > Sorry, I made some mistake in my second question.
-> > Update the question here:
-> > Is there a way that we can save the L2 cache states while all cpus in t=
-he
-> > same cluster are idle and the cluster could be powered down?
->
-> If the L2 cache is a consumer of the cluster, the consumer driver for
-> the L2 cache should register for genpd on/off notifiers.
->
-> The device representing the L2 cache needs to be enabled for runtime
-> PM, to be taken into account correctly by the cluster genpd. In this
-> case, the device should most likely remain runtime suspended, but
-> instead rely on the genpd on/off notifiers to understand when
-> save/restore of the cache states should be done.
->
-> Kind regards
-> Uffe
+The OOPs part:
+
+[  267.784456] acpi_cpufreq: overriding BIOS provided _PSD data
+[  267.787251] ACPI: button: Power Button [PWRB]
+[  267.790096] input: Lid Switch as /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0D:00/input/input101
+[  267.791742] ACPI Error: Null stack entry at 00000000bc5560e1 (20220331/exresop-139)
+[  267.792943] ACPI Error: AE_AML_INTERNAL, While resolving operands for [OpcodeName unavailable] (20220331/dswexec-431)
+[  267.794270] ACPI Error: Aborting method \_PR.C003._PPC due to previous error (AE_AML_INTERNAL) (20220331/psparse-529)
+[  267.795403] ACPI: \_PR_.C003: _PPC evaluation failed: AE_AML_INTERNAL
+[  267.796803] BUG: kernel NULL pointer dereference, address: 0000000000000008
+[  267.797993] #PF: supervisor read access in kernel mode
+[  267.799224] #PF: error_code(0x0000) - not-present page
+[  267.800323] PGD 0 P4D 0
+[  267.801382] Oops: 0000 [#1] PREEMPT SMP NOPTI
+[  267.802551] CPU: 1 PID: 351 Comm: (udev-worker) Not tainted 6.1.0-21-amd64 #1  Debian 6.1.90-1
+[  267.803753] Hardware name: LENOVO 20QKS0EQ0N/20QKS0EQ0N, BIOS R13ET56W(1.30 ) 03/01/2024
+[  267.804806] RIP: 0010:acpi_ex_resolve_multiple+0x2d/0x2c0
+[  267.805923] Code: 00 00 41 56 49 89 fe 41 55 49 89 d5 41 54 49 89 cc 55 53 48 89 f3 48 83 ec 18 65 48 8b 04 25 28 00 00 00 48 89 44 24 10 31 c0 
+<0f> b6 46 08 48 89 34 24 48 89 74 24 08 3c 0e 0f 84 28 01 00 00 3c
+[  267.807081] RSP: 0018:ffffb5ae41147958 EFLAGS: 00010246
+[  267.808016] RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffffb5ae411479a8
+[  267.808978] RDX: ffffb5ae411479a4 RSI: 0000000000000000 RDI: ffff8eb084d9e800
+[  267.809953] RBP: 0000000000000000 R08: ffffb5ae411479a8 R09: ffff8eb08591beb0
+[  267.810071] ACPI: button: Lid Switch [LID]
+[  267.811148] R10: 000000000000000f R11: ffffb5ae41147a00 R12: ffffb5ae411479a8
+[  267.811151] R13: ffffb5ae411479a4 R14: ffff8eb084d9e800 R15: ffffd5ae3fb35f48
+[  267.811154] FS:  00007f64c7196900(0000) GS:ffff8eb330a40000(0000) knlGS:0000000000000000
+[  267.815792] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  267.816957] CR2: 0000000000000008 CR3: 0000000100d46000 CR4: 00000000003506e0
+[  267.818133] Call Trace:
+[  267.819255]  <TASK>
+[  267.820397]  ? __die_body.cold+0x1a/0x1f
+[  267.821538]  ? page_fault_oops+0xd2/0x2b0
+[  267.822434]  ? __alloc_pages+0x1dc/0x330
+[  267.823514]  ? exc_page_fault+0x70/0x170
+[  267.824577]  ? asm_exc_page_fault+0x22/0x30
+[  267.826045]  ? acpi_ex_resolve_multiple+0x2d/0x2c0
+[  267.827495]  acpi_ex_opcode_1A_0T_1R+0x241/0x5a0
+[  267.828655]  acpi_ds_exec_end_op+0x27e/0x510
+[  267.829865]  acpi_ps_complete_final_op+0xa4/0x190
+[  267.831062]  acpi_ps_parse_loop+0x2ed/0x6a0
+[  267.832320]  acpi_ps_parse_aml+0x7c/0x3d0
+[  267.833382]  acpi_ps_execute_method+0x13b/0x270
+[  267.834435]  acpi_ns_evaluate+0x1ee/0x2d0
+[  267.835479]  acpi_evaluate_object+0x149/0x2f0
+[  267.836517]  acpi_evaluate_integer+0x6b/0xf0
+[  267.837544]  acpi_processor_get_platform_limit+0x43/0x140
+[  267.838564]  acpi_processor_register_performance+0x5d/0xd0
+[  267.839566]  acpi_cpufreq_cpu_init+0x13c/0x8e0 [acpi_cpufreq]
+[  267.840562]  ? srso_return_thunk+0x5/0x10
+[  267.841540]  ? __kmalloc_node+0x4c/0x150
+[  267.842516]  cpufreq_online+0x36a/0xa40
+[  267.843480]  cpufreq_add_dev+0x77/0x90
+[  267.844427]  subsys_interface_register+0x162/0x170
+[  267.845366]  ? srso_return_thunk+0x5/0x10
+[  267.846296]  cpufreq_register_driver+0x161/0x2c0
+[  267.847230]  acpi_cpufreq_init+0x285/0x1000 [acpi_cpufreq]
+[  267.848173]  ? 0xffffffffc08e1000
+[  267.849101]  do_one_initcall+0x59/0x220
+[  267.850029]  do_init_module+0x4a/0x1f0
+[  267.850942]  __do_sys_finit_module+0xac/0x120
+[  267.851862]  do_syscall_64+0x55/0xb0
+[  267.852768]  ? srso_return_thunk+0x5/0x10
+[  267.853662]  ? do_user_addr_fault+0x1b0/0x580
+[  267.854564]  ? srso_return_thunk+0x5/0x10
+[  267.855315]  ? exit_to_user_mode_prepare+0x44/0x1f0
+[  267.856050]  entry_SYSCALL_64_after_hwframe+0x6e/0xd8
+[  267.856776] RIP: 0033:0x7f64c7421719
+[  267.857538] Code: 08 89 e8 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 
+<48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d b7 06 0d 00 f7 d8 64 89 01 48
+[  267.858475] RSP: 002b:00007fff3dc0e5a8 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
+[  267.859383] RAX: ffffffffffffffda RBX: 00005555866ba500 RCX: 00007f64c7421719
+[  267.860190] RDX: 0000000000000000 RSI: 00007f64c7552efd RDI: 0000000000000006
+[  267.861013] RBP: 00007f64c7552efd R08: 0000000000000000 R09: 00005555865deff0
+[  267.861836] R10: 0000000000000006 R11: 0000000000000246 R12: 0000000000020000
+[  267.862680] R13: 0000000000000000 R14: 00005555866b6de0 R15: 00007fff3dc0e810
+[  267.863523]  </TASK>
+
+The acpi-related stack trace is exactly the same as on the picture.
+
+This is current debian bookworm kernel, with debug symbols at
+http://deb.debian.org/debian/pool/main/l/linux/linux-image-6.1.0-21-amd64-dbg_6.1.90-1_amd64.deb
+and actual source at
+http://deb.debian.org/debian/pool/main/l/linux/linux-source-6.1_6.1.90-1_all.deb
+
+I tried multiple kernels starting at 4.19.0 and up to 6.7, - all behave in a similar way.
+I'll try current 6.8 kernel next and see if that also shows the issue.
+
+Here's the key points (hopefully) from the OOPs:
+
+(gdb) l *acpi_ex_opcode_1A_0T_1R+0x241
+0xffffffff8160d241 is in acpi_ex_opcode_1A_0T_1R (drivers/acpi/acpica/exoparg1.c:710).
+705			 * get the associated object, not its value.
+706			 */
+707	
+708			/* Get the base object */
+709	
+710			status =
+711			    acpi_ex_resolve_multiple(walk_state, operand[0], &type,
+712						     &temp_desc);
+713			if (ACPI_FAILURE(status)) {
+714				goto cleanup;
+
+(gdb) l *acpi_ex_resolve_multiple+0x2d
+0xffffffff8160f04d is in acpi_ex_resolve_multiple (drivers/acpi/acpica/exresolv.c:307).
+302	acpi_ex_resolve_multiple(struct acpi_walk_state *walk_state,
+303				 union acpi_operand_object *operand,
+304				 acpi_object_type *return_type,
+305				 union acpi_operand_object **return_desc)
+306	{
+307		union acpi_operand_object *obj_desc = ACPI_CAST_PTR(void, operand);  <== BOOM
+308		struct acpi_namespace_node *node =
+309		    ACPI_CAST_PTR(struct acpi_namespace_node, operand);
+310		acpi_object_type type;
+311		acpi_status status;
+
+Please help with further debugging/fixing this.  I have almost no experience in this field.
+
+Thanks, and please excuse me for a somewhat long(ish) post, -
+hopefully it's mostly to the point anyway :)
+
+/mjt
+-- 
+GPG Key transition (from rsa2048 to rsa4096) since 2024-04-24.
+New key: rsa4096/61AD3D98ECDF2C8E  9D8B E14E 3F2A 9DD7 9199  28F1 61AD 3D98 ECDF 2C8E
+Old key: rsa2048/457CE0A0804465C5  6EE1 95D1 886E 8FFB 810D  4324 457C E0A0 8044 65C5
+Transition statement: http://www.corpit.ru/mjt/gpg-transition-2024.txt
 
