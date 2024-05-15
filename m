@@ -1,131 +1,96 @@
-Return-Path: <linux-pm+bounces-7863-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7864-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4C798C61A1
-	for <lists+linux-pm@lfdr.de>; Wed, 15 May 2024 09:24:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3287C8C61F9
+	for <lists+linux-pm@lfdr.de>; Wed, 15 May 2024 09:45:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 02BBE1C21CE2
-	for <lists+linux-pm@lfdr.de>; Wed, 15 May 2024 07:24:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F09F1C20EF3
+	for <lists+linux-pm@lfdr.de>; Wed, 15 May 2024 07:45:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A80004C62E;
-	Wed, 15 May 2024 07:22:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5789D4654B;
+	Wed, 15 May 2024 07:45:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KEJ3pu+6"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="RHqAEhS4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA08755C3B;
-	Wed, 15 May 2024 07:22:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 859FA4F88C;
+	Wed, 15 May 2024 07:45:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715757767; cv=none; b=L/kifiqOTfr1JcXCsTl21uVY1CANSbPzcRBqEd+mMNP8iq5A93Zxa164eb8K1H9m5KErOS1M7isVtM0TczrWSZ3yZ5jaJz1j5J7tzsNMXjJIZ2qnXEO1E8MDj/ecfu8F59PeUUp7IsiR5cDjq+hXYTSha857SYfwK1f/3EBtR3A=
+	t=1715759105; cv=none; b=YAHEsvpASG27XchLQe9o13T8zPl6DHfUuRoO1w/AvjfWeW6Rxz9ep8uyh+5l8Sv3DYLQ41Vy61Lw/xTanUpt0G5vmyevXmTeoKx+uDRH9fFlYGReWlO46W0ZqT80EAGdviiLSf8Mp2dKcLjRs6UHY5DTu+2YFkVlGxLlzfKN2I4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715757767; c=relaxed/simple;
-	bh=YYVK4RKso1daeoRIfgcpHOGP02pbyujQXd14HOeOJKQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qwQQkzwJzCmAR3cPVfWiaE+hREDhT7CQLieJpwJtPcK9RsButQjiDB79dPN1G1gNyHqwCwHdiD97l/RhoRc/KZQOWapB3nBZYQp/bn6zATzKgibV3jQewIomjpds00onCV+uMnNFkE/5o4mYuDlcBO0DIumCB7glcgMxtxEfoao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KEJ3pu+6; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715757766; x=1747293766;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YYVK4RKso1daeoRIfgcpHOGP02pbyujQXd14HOeOJKQ=;
-  b=KEJ3pu+6pf0suhfyABsfLe/8lx+3/Mjb1yV9RjD85hIB5opvtdkeGAPb
-   Z77HfUzMaKmQz6cy2oYb1nyN6aJVQBS9a9NXaO6fIAqAIUJbRQQpqLanY
-   CMyvUWmEMy2AraACaznz/BDxf7S2BRLk37S/fzO/fy2I5KtblCSf1ApiE
-   vsNqAIXy4zd4bLNKfOrr5ltaXCiXCCCXIIinrBbe+1Knt/78zAmwFsFQA
-   CYTrFQEDgCw+WWVwmoMNkqetQ5BLXGRATtifDe6Mh8muIbXD2awXgIZ1H
-   RMjpVbcKzapeeJRftoChcqH1lUsYQnj0Bkl0zG/JnfEXzPIYZrKk+3Fse
-   g==;
-X-CSE-ConnectionGUID: nTMNZKffRF+66z3RS+nGyA==
-X-CSE-MsgGUID: 5lLRZqrJSWSMF48jUWqA6g==
-X-IronPort-AV: E=McAfee;i="6600,9927,11073"; a="11657742"
-X-IronPort-AV: E=Sophos;i="6.08,161,1712646000"; 
-   d="scan'208";a="11657742"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2024 00:22:45 -0700
-X-CSE-ConnectionGUID: HqIFPuDXQGKGnsQxC6Os6Q==
-X-CSE-MsgGUID: xxQiwBrtSf2Afa0HFCYydg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,161,1712646000"; 
-   d="scan'208";a="54163895"
-Received: from standuka-mobl.amr.corp.intel.com (HELO desk) ([10.209.83.91])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2024 00:22:46 -0700
-Date: Wed, 15 May 2024 00:22:31 -0700
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: Kalle Valo <kvalo@kernel.org>, Borislav Petkov <bp@alien8.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>, x86@kernel.org,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	regressions@lists.linux.dev,
-	Jeff Johnson <quic_jjohnson@quicinc.com>,
-	Daniel Sneddon <daniel.sneddon@linux.intel.com>
+	s=arc-20240116; t=1715759105; c=relaxed/simple;
+	bh=781is5sCzVEcf+PuXtwPR7ViQ/edRF2GcLrPcLEgq9w=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=L3l3z+IESW2MBs2BenrMaz9RF1+qw7Xeo0wNEDulopiO5OnYZSA2c6monLUEilYeFKkSyBS3yjhHHPhr/x11l+lI3reSKO89Vmh1OC1iE0X6Kdw2ibXuTNd44qkVd6sfOpdqflEs/4/NhbeFAvkK7QsxVlpW8FkZas7bJ0aqOG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=RHqAEhS4; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 316E440E0244;
+	Wed, 15 May 2024 07:45:00 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id vHFZ3dmOPuUD; Wed, 15 May 2024 07:44:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1715759096; bh=Q+7syvfoeI5ZTmMPwK0pFi6q5i6DepQzJ/1ixFIPyu8=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=RHqAEhS49auvryHUQf1mmkXRharCjwDnALA1yj7CIXKW4W3haCDsVEMrelPVvtAR9
+	 mBSr5/rTOR1a9uniDNzIPC6eyXdXmK9o3pMpuly3xvOkrrI+xcS5D5gH6kQuINgW3u
+	 RZhYGu846QxAwZR1ghBOL+X+vPvZ7ohTdgMZ6uoBOiZtEyXwuv3VdAwT1RbF2lr4Wv
+	 56fRrFi/wYWOafRc7bjBtYhuvqEo7Cw8VKpiJ09KWVX2BUSyl2QBHng8jhzZ2m1ORO
+	 /pXXFGNqWNpyyPuOrO2+XRU+kD8MzTB6wo3o5q62hsxLT3baPJzLmA03PLJIckclEB
+	 56T5SDoUCxIq7BICj3iLh2cuosb4SJzB3hNWW4yADKhVWKBWsPhzLvBsT8ZRt9i9kO
+	 xwCDlsleT0X/CS87ixbBsgmaWdWUBynBOzTof9mtjsv4Q2wCu1rvzxEGz5MA431uQ1
+	 aNXqxy1GxIuPXFOVhnL9OOb68b/azofcwze9w9ae8e++RW6mfmli8TiJPiNnpS2Hou
+	 kQpyznUzIKNbmnKDDYNoOd+xN9ecPVc/rAxm5r8vBq72KoPisv4HYlDlO6Y74SjpKO
+	 CC7qb3zKuX15AhKRi+jcuA5nhJcZKpn6D+WYaypcceXDkavOL4/yXAxuC8jV6qiEvH
+	 9AZB5MnUtitGndAXSwI57zFI=
+Received: from [IPv6:::1] (p200300Ea973A34f4499cB1fe0C65A759.dip0.t-ipconnect.de [IPv6:2003:ea:973a:34f4:499c:b1fe:c65:a759])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EB2BC40E016A;
+	Wed, 15 May 2024 07:44:42 +0000 (UTC)
+Date: Wed, 15 May 2024 09:44:42 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+ Dave Hansen <dave.hansen@intel.com>
+CC: Kalle Valo <kvalo@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, x86@kernel.org,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ regressions@lists.linux.dev, Jeff Johnson <quic_jjohnson@quicinc.com>,
+ Daniel Sneddon <daniel.sneddon@linux.intel.com>
 Subject: Re: [regression] suspend stress test stalls within 30 minutes
-Message-ID: <20240515072231.z3wlyoblyc34ldmr@desk>
-References: <87o79cjjik.fsf@kernel.org>
- <20240511184847.GCZj-9j2sh1Akpt9iS@fat_crate.local>
- <20240511184945.GDZj-9yaOEWqf1ng8u@fat_crate.local>
- <87h6f4jdrq.fsf@kernel.org>
- <878r0djxgc.fsf@kernel.org>
- <874jb0jzx5.fsf@kernel.org>
- <feaefaae-e25b-4a48-b6be-e20054f2c8df@intel.com>
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20240515072231.z3wlyoblyc34ldmr@desk>
+References: <87o79cjjik.fsf@kernel.org> <20240511184847.GCZj-9j2sh1Akpt9iS@fat_crate.local> <20240511184945.GDZj-9yaOEWqf1ng8u@fat_crate.local> <87h6f4jdrq.fsf@kernel.org> <878r0djxgc.fsf@kernel.org> <874jb0jzx5.fsf@kernel.org> <feaefaae-e25b-4a48-b6be-e20054f2c8df@intel.com> <20240515072231.z3wlyoblyc34ldmr@desk>
+Message-ID: <529C9374-DA6F-49C8-9B32-91741800F8E4@alien8.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <feaefaae-e25b-4a48-b6be-e20054f2c8df@intel.com>
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 14, 2024 at 09:10:07AM -0700, Dave Hansen wrote:
-> On 5/14/24 06:17, Kalle Valo wrote:
-> > The kernel we use in our ath11k testing has almost all kernel debug
-> > features enabled so I decided disable all of them, which unsurprisingly
-> > also fixed my suspend problems. So maybe this is something which happens
-> > only when MITIGATION_IBRS_ENTRY and some debug option from 'Kernel
-> > hacking' are both enabled?
-> 
-> I had my money on DEBUG_ENTRY, but it doesn't look like you ever had it
-> enabled.
-> 
-> I've got basically two theories:
-> 
-> One, the IBRS value is getting mucked up somewhere, either that %r15
-> value is getting stepped on or the per-cpu value is corrupt and the
-> WRMSR #GP's, causing the hang.
-> 
-> Two, IBRS_{ENTER,EXIT} is called in a "wrong" context somewhere.  Either
-> it is clobbering something it shouldn't or it is assuming something is
-> in place that is not (like a valid stack).
-> 
-> But the whole "'sudo shutdown -h now' then suspend somehow immediately
-> unstalls" thing is really perplexing.  I hope Pawan has some ideas.
+On May 15, 2024 9:22:31 AM GMT+02:00, Pawan Gupta <pawan=2Ekumar=2Egupta@li=
+nux=2Eintel=2Ecom> wrote:
+> Other interesting thing to try is cmdline
+>"dis_ucode_ldr"=2E
 
-Nothing promising yet. I now have the system with the same model, but the
-system is only booting in recovery mode with the config attached with the
-report.
-
-Kalle, I wanted to try reverting the below commits:
-
-aa1567a7e644 ("intel_idle: Add ibrs_off module parameter to force-disable IBRS")
-1e4d3001f59f ("x86/entry: Harden return-to-user")
-c516213726fb ("x86/entry: Optimize common_interrupt_return()")
-
-... but I haven't reproduced the issue yet.
-
-FYI, cmdline "spectre_v2=off" should have the same effect as
-CONFIG_IBRS_ENTRY=n. Other interesting thing to try is cmdline
-"dis_ucode_ldr".
+Right, is his microcode revision 0xf4 the right one for that model?
+--=20
+Sent from a small device: formatting sucks and brevity is inevitable=2E 
 
