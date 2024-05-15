@@ -1,98 +1,147 @@
-Return-Path: <linux-pm+bounces-7876-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7877-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD8FA8C6ADD
-	for <lists+linux-pm@lfdr.de>; Wed, 15 May 2024 18:47:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B24CB8C6CB1
+	for <lists+linux-pm@lfdr.de>; Wed, 15 May 2024 21:17:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5EA3AB21A4E
-	for <lists+linux-pm@lfdr.de>; Wed, 15 May 2024 16:47:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E249C1C2200C
+	for <lists+linux-pm@lfdr.de>; Wed, 15 May 2024 19:17:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01E4B2209B;
-	Wed, 15 May 2024 16:47:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 885F0159562;
+	Wed, 15 May 2024 19:17:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eT5MO/e+"
+	dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b="REkKWhWu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C869B13AF2;
-	Wed, 15 May 2024 16:47:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FECA446AC;
+	Wed, 15 May 2024 19:17:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.18.73.165
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715791632; cv=none; b=JY9Dki69JmPTozSm+sbpReHRxGdiHBbS+V1rqWeShwtWav6SrdOB8i8Y2quHYC4JcyjtM3dWfHUFcdANp6lKZg4cPp+5XF70h2Fogyn3oDu0AauSmeX5IQQIrcepbOEZj8+50f6F5Q5CP2UWDpjFmsGU5rNz0ZLr25cslF8ZkdE=
+	t=1715800636; cv=none; b=XOtDbixheeAHo2rwNOJFE9Q4hRJQvz74lktCpK5R9ro4hyYOLMIZgvd5fy8wEe1p97bB5jrppnF45ZTABgIOE/jWSYGa2pEympLG+3CsW77qX0TVlgOA1D/SXJRf7uqpzqNuW5J0OIQTxLqNcnTzpRvEBFt2SWE2l6aa3PhRDEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715791632; c=relaxed/simple;
-	bh=L/odyKRqQsrv3oMwpmj6d9cuWoQyg51kBDJD34sAGr0=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=paEtcxi6NHW2lL5ayFm8kFpI4wijLnDdcV/9b1gJw2ggfbrbB0c2kCyfOIVuPhH9dIrhd43L5CkddMfkq9o4BXH7iHWpTFRNrabvPzM+41CM1uWMjq8pp/QvnWqRiec2PkmjgcCli01ihYmJegaoksyao0Q5YYxYgWwqeVaU4Rw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eT5MO/e+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75DD8C116B1;
-	Wed, 15 May 2024 16:47:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715791632;
-	bh=L/odyKRqQsrv3oMwpmj6d9cuWoQyg51kBDJD34sAGr0=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-	b=eT5MO/e+DuumA9oMFQ9ZaTktyhxlRRRzWRiIX2wplPGehs2D88jJbyIoc9KnuoIHB
-	 JhbaCPaHy8QYnyomzo+zfQ9eq/XILH6OWCj/adi/lrSNoMjib0hgnB1koW+ATZjN6j
-	 Kdct0Zf9Bcu7OjZrVpn5Bxrv84X1Pk/50m+9reCOiEPzjG5AIrMMvHO9tMkIfO/s+O
-	 VQWFxBhYqAjmovGZWop5fcJfQGLiRHrOwDeuSP90oHeZA9u97Lzz8vQfWa7RcUc9fo
-	 /QL8GI07k1GyD8ggSDMu7zr2wLCRRunbrgeK38Iv7Y/YNmmCAHhadC7QAZ+bZFVmn3
-	 EV0c+zVCWWhGw==
-From: Kalle Valo <kvalo@kernel.org>
-To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc: Borislav Petkov <bp@alien8.de>,  Dave Hansen <dave.hansen@intel.com>,
-  Thomas Gleixner <tglx@linutronix.de>,  Ingo Molnar <mingo@redhat.com>,
-  Dave Hansen <dave.hansen@linux.intel.com>,  "Rafael J. Wysocki"
- <rafael@kernel.org>,  x86@kernel.org,  linux-pm@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  regressions@lists.linux.dev,  Jeff Johnson
- <quic_jjohnson@quicinc.com>,  Daniel Sneddon
- <daniel.sneddon@linux.intel.com>
-Subject: Re: [regression] suspend stress test stalls within 30 minutes
-References: <87o79cjjik.fsf@kernel.org>
-	<20240511184847.GCZj-9j2sh1Akpt9iS@fat_crate.local>
-	<20240511184945.GDZj-9yaOEWqf1ng8u@fat_crate.local>
-	<87h6f4jdrq.fsf@kernel.org> <878r0djxgc.fsf@kernel.org>
-	<874jb0jzx5.fsf@kernel.org>
-	<feaefaae-e25b-4a48-b6be-e20054f2c8df@intel.com>
-	<20240515072231.z3wlyoblyc34ldmr@desk>
-	<529C9374-DA6F-49C8-9B32-91741800F8E4@alien8.de>
-	<20240515162747.6shmaoelc4mt7nro@desk>
-Date: Wed, 15 May 2024 19:47:05 +0300
-In-Reply-To: <20240515162747.6shmaoelc4mt7nro@desk> (Pawan Gupta's message of
-	"Wed, 15 May 2024 09:27:47 -0700")
-Message-ID: <878r0bhvjq.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+	s=arc-20240116; t=1715800636; c=relaxed/simple;
+	bh=V6B1o7vP2U1mB+39DQXD0JAC2U9kKIj4ljLZL1FbBX8=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BrcEUo/S4PU0HPUVxkzHMyhkLnugnsXJ/1xHx4+4KzfVvyFmjioalISWU8OgHHZTvzfbBdAIDdGXywEf1DiPTw2rw0KXFg2VZcvh74hsfg5d0MrvyFAQomM5Cktxd1Cm4gPWb2BlTTy5yrCB2Wa+Fg0C2UUIdKYmfvVsowXPdoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com; spf=pass smtp.mailfrom=salutedevices.com; dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b=REkKWhWu; arc=none smtp.client-ip=37.18.73.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=salutedevices.com
+Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
+	by mx1.sberdevices.ru (Postfix) with ESMTP id 7888B10002F;
+	Wed, 15 May 2024 22:17:12 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 7888B10002F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salutedevices.com;
+	s=mail; t=1715800632;
+	bh=0753sID6h0JKAX7uW58+tc82AGYS+dbom4wraQwXJOU=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
+	b=REkKWhWurHkxfjqqLrnnr+zsQd9y9VC1UnwvBMKYK7xIKSIr1+XAGpvMK7HDH62bN
+	 c0jYuV963J2dT1XvTQgJwqCsKLP7aM4E+KE9A2DoQcb7706m19AMxvfnKNtfSNTPWc
+	 0azZeDbWEzUfUKEOcf28OlThCiCg9+gqzI577WpaEIqlZQSJhQ19YFjbFk/1Ep/8c0
+	 3D49RcCwzW1nDY/K9mjoCgNrXlcPdIXcIe+vQ7rtta06WIG2Nbn79B7qiy2jXXa9yP
+	 O5PzxUJMfYoJtCkVCCWtRj5ahX+jCGE30OxGG8B6ryh+T7qGpRZhUdLZLQO07ghoeX
+	 omxh0ktXh66sA==
+Received: from smtp.sberdevices.ru (p-i-exch-sc-m02.sberdevices.ru [172.16.192.103])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx1.sberdevices.ru (Postfix) with ESMTPS;
+	Wed, 15 May 2024 22:17:12 +0300 (MSK)
+Received: from localhost (100.64.160.123) by p-i-exch-sc-m02.sberdevices.ru
+ (172.16.192.103) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 15 May
+ 2024 22:17:11 +0300
+Date: Wed, 15 May 2024 22:17:11 +0300
+From: Dmitry Rokosov <ddrokosov@salutedevices.com>
+To: <neil.armstrong@linaro.org>
+CC: <jbrunet@baylibre.com>, <mturquette@baylibre.com>, <khilman@baylibre.com>,
+	<martin.blumenstingl@googlemail.com>, <glaroque@baylibre.com>,
+	<rafael@kernel.org>, <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
+	<lukasz.luba@arm.com>, <robh+dt@kernel.org>,
+	<krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+	<kernel@salutedevices.com>, <rockosov@gmail.com>,
+	<linux-amlogic@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 0/3] arm64: dts: amlogic: a1: introduce thermal setup
+Message-ID: <20240515191711.3bltbh536pntnvdg@CAB-WSD-L081021>
+References: <20240328192645.20914-1-ddrokosov@salutedevices.com>
+ <20240503184222.cqka6nmjxhezfhtg@CAB-WSD-L081021>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20240503184222.cqka6nmjxhezfhtg@CAB-WSD-L081021>
+User-Agent: NeoMutt/20220415
+X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
+ p-i-exch-sc-m02.sberdevices.ru (172.16.192.103)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 185260 [May 15 2024]
+X-KSMG-AntiSpam-Version: 6.1.0.4
+X-KSMG-AntiSpam-Envelope-From: ddrokosov@salutedevices.com
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 20 0.3.20 743589a8af6ec90b529f2124c2bbfc3ce1d2f20f, {Tracking_uf_ne_domains}, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, salutedevices.com:7.1.1;smtp.sberdevices.ru:7.1.1,5.0.1;127.0.0.199:7.1.2;100.64.160.123:7.1.2;lore.kernel.org:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1, FromAlignment: s, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean, bases: 2024/05/15 12:35:00
+X-KSMG-LinksScanning: Clean, bases: 2024/05/15 18:39:00
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2024/05/15 13:12:00 #25231738
+X-KSMG-AntiVirus-Status: Clean, skipped
 
-Pawan Gupta <pawan.kumar.gupta@linux.intel.com> writes:
+Hello Neil,
 
-> On Wed, May 15, 2024 at 09:44:42AM +0200, Borislav Petkov wrote:
->> On May 15, 2024 9:22:31 AM GMT+02:00, Pawan Gupta <pawan.kumar.gupta@linux.intel.com> wrote:
->> > Other interesting thing to try is cmdline
->> >"dis_ucode_ldr".
->> 
->> Right, is his microcode revision 0xf4 the right one for that model?
->
-> 0xf4 microcode is not the latest one, the latest is 0xf8:
->
-> https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/blob/main/intel-ucode/06-9e-09
->
-> Kalle, can you please try with 0xf8 and see if the issue is still present?
+Excuse me, pls ping.
 
-I can't test right now but I'll try to find time later this week, I will
-also reply to other emails then.
+On Fri, May 03, 2024 at 09:42:22PM +0300, Dmitry Rokosov wrote:
+> Hello Neil,
+> 
+> A1 Thermal Sensor was applied to linux-pm for v6.10-rc1:
+> 
+> https://lore.kernel.org/all/89a02410-87c8-47c6-aa50-04dad5b4e585@linaro.org/
+> 
+> Could you please advise if it's enough to proceed with this series? Or
+> do I need to do something more?
+> 
+> On Thu, Mar 28, 2024 at 10:26:34PM +0300, Dmitry Rokosov wrote:
+> > This patch series introduces thermal sensor declaration to the Meson A1
+> > common dtsi file. It also sets up thermal zones for the AD402 reference
+> > board. It depends on the series with A1 thermal support at [1].
+> > 
+> > Changes v2 since v1 at [2]:
+> >     - provide Neil RvB for cooling-cells dts patch
+> >     - purge unnecessary 'amlogic,a1-thermal' fallback
+> > 
+> > Links:
+> > [1] - https://lore.kernel.org/all/20240328191322.17551-1-ddrokosov@salutedevices.com/
+> > [2] - https://lore.kernel.org/all/20240328134459.18446-1-ddrokosov@salutedevices.com/
+> > 
+> > Signed-off-by: Dmitry Rokosov <ddrokosov@salutedevices.com>
+> > 
+> > Dmitry Rokosov (3):
+> >   arm64: dts: amlogic: a1: add cooling-cells for DVFS feature
+> >   arm64: dts: amlogic: a1: introduce cpu temperature sensor
+> >   arm64: dts: amlogic: ad402: setup thermal-zones
+> > 
+> >  .../arm64/boot/dts/amlogic/meson-a1-ad402.dts | 45 +++++++++++++++++++
+> >  arch/arm64/boot/dts/amlogic/meson-a1.dtsi     | 13 ++++++
+> >  2 files changed, 58 insertions(+)
+> 
+> -- 
+> Thank you,
+> Dmitry
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Thank you,
+Dmitry
 
