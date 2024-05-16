@@ -1,358 +1,171 @@
-Return-Path: <linux-pm+bounces-7904-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7905-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEF888C73EA
-	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2024 11:35:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2A748C740E
+	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2024 11:46:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94D8228636C
-	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2024 09:35:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 135DF2860C7
+	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2024 09:46:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29FF6144D38;
-	Thu, 16 May 2024 09:34:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 996F5143860;
+	Thu, 16 May 2024 09:46:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WwKTJGvM"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="V9C9aDvj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60826144D21;
-	Thu, 16 May 2024 09:34:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0353143862
+	for <linux-pm@vger.kernel.org>; Thu, 16 May 2024 09:45:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715852059; cv=none; b=nD3hUz5yw9kBcROKSMl+4TZCBjbFgjHT6auXm29FIcmJ1OwWvG9K21xRPj4qcnaOm69UHmaV5Q2p923y0kGHaqlj5WXVdTJjtj0Q2FOiuGJA6Jh28SgIUyISsrN7GNUtSkWEExSdv1Ow+LkhGJ8inf01oreyTfOjDVrg+3Iexqw=
+	t=1715852761; cv=none; b=lTJi5bfNzH0iViPoryTE1j9TW4dB80jGyt9URU+L/baHqI7NiaEsFualxpiFL2BcKXRK3pgWKMW3S36iLxgW29RRWJ2jEUna7ryfPSMg0Tx1wJ8i1eSSq33JLhi+uHlxNi19nzAeHOQ206/CItWHGCt8vQlRHvKExlbETd/T8sI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715852059; c=relaxed/simple;
-	bh=z1bEIZI1MNH9EenT73hgXO8ZkeN9edr3Kn7/hFxax9s=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jHxUgiMTZKui6/Y4mn2uK1TSyPFzw6OyRQ4jCIabVoc9OScXE2E2egzwkKkhWN8lJyhDv1V9dAMV8vdcqEdLbPnU6fCnxuGbzxETRUqWPFY4WAo3nmZG17ZHINZq2xNQCmvNGvJbJOYtSQ3Ruf52lbek5fe3pLglRC3GFXQ9VJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WwKTJGvM; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715852058; x=1747388058;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=z1bEIZI1MNH9EenT73hgXO8ZkeN9edr3Kn7/hFxax9s=;
-  b=WwKTJGvMoaUzp5sPvSHn5q9a0y7KZngHUGw7Q/nrIq8SGlv7nza46Dbz
-   yvIfsemrHUWje8//c23juv1aSa/neS7t0w3jr3zZct+aTsgEfu5MeqpI2
-   rpxOcYk5bXvhlRJVMtb5LqkYDF7x9A1XkrDPoHL30BMCGXRfY7ZXcUseC
-   GKQrIavVjxwkf8+ScaMV//jSwRTavTGHK3yJQWEp+7IQwtJJVtUQUMwMe
-   Du59dridf3ba9iQpbxQQgV1K7RRK94DRZX83zlp2GhQXXvPu/jYAMkwjA
-   WQR4mW3S1ZjyUr4Yr3nhkoQWzteskEKXDvABAal72Bx6OezjDGeosjE2/
-   A==;
-X-CSE-ConnectionGUID: KtqkfFNXScKEi1l3TUWgGQ==
-X-CSE-MsgGUID: FlRa8US+SQ+qF3IsKyCC7g==
-X-IronPort-AV: E=McAfee;i="6600,9927,11074"; a="23355097"
-X-IronPort-AV: E=Sophos;i="6.08,164,1712646000"; 
-   d="scan'208";a="23355097"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2024 02:34:17 -0700
-X-CSE-ConnectionGUID: cgN1CT//SLyjTRQzX4ZGLg==
-X-CSE-MsgGUID: P/22DOGFQF6FiIs41t5lyg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,164,1712646000"; 
-   d="scan'208";a="31372510"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.108])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2024 02:34:12 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To: linux-pci@vger.kernel.org,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-	Rob Herring <robh@kernel.org>,
-	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-	"Maciej W . Rozycki" <macro@orcam.me.uk>,
-	Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Alexandru Gagniuc <mr.nuke.me@gmail.com>,
-	Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	linux-pm@vger.kernel.org,
-	Shuah Khan <shuah@kernel.org>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Amit Kucheria <amitk@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH v6 8/8] selftests/pcie_bwctrl: Create selftests
-Date: Thu, 16 May 2024 12:32:22 +0300
-Message-Id: <20240516093222.1684-9-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240516093222.1684-1-ilpo.jarvinen@linux.intel.com>
-References: <20240516093222.1684-1-ilpo.jarvinen@linux.intel.com>
+	s=arc-20240116; t=1715852761; c=relaxed/simple;
+	bh=sk30qgPUSP5VMpqNvzfTm4tREso0iPAES3Zy5BrkDD4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DzR6hO2gfgK2hlCbYH4bwNIs8cu/WEBNKG0UVY2icg0C8U8F9j5cNaJi54w//VTF7iiyjtvprVgSd6AG89qhoaoWV7pL5Czk/OKGFAY7b3j+e/EpDGAJJhGprmQDoausY4I0BRyuw9BtaZ2zK43Os1eRFDIIXuXbZ/7Kh4CyRTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=V9C9aDvj; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-34de61b7ca4so5476501f8f.2
+        for <linux-pm@vger.kernel.org>; Thu, 16 May 2024 02:45:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1715852758; x=1716457558; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gfUhSrVZG2CLLkDQLu8KJ8fPEH7JKufyK+L488gLenI=;
+        b=V9C9aDvjybqcPUa8l0dImZlcq2ZJ98HsfbJdLjwvpKrMZgR8OgZygcs9v+mNSEdlCN
+         r5ivaCVYeNbFIz3wAFLguv+U/sxYcuyK0W86fR3b5IUWWrsEH5Na68g/uyVxu7HDNFu3
+         w7maLV4UqZ1OvYxm36hGMsSD1qq8I0UxuU2fdod6zSEjwZA0sj3K5/lm+xOpCnJzoJ5l
+         D6/wl5Lz72t/5fqZTy1IEKHlW3IYxNlS1DKjyocSMyMaGlruAioxC/TZouQMMH4I6kCM
+         WjWI7sPxLSMClMR3DeKoKWCoJXJ5+h5073OXmZpu1jtU6yV+HboGAnRlULkY5p9ifhTW
+         6ydQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715852758; x=1716457558;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gfUhSrVZG2CLLkDQLu8KJ8fPEH7JKufyK+L488gLenI=;
+        b=g1zz3Cmtcch3Rlm1gjQDrT7eWyyKeCMB35jzjmk5BzhMCsQdUEQ4VJ8JWZSX5ycYLb
+         ieQNiXb4H672EwY5p6vSKZFzDMvLVQCanIb07+YIDluXOBRd8K6ZyJsaMkpvM31qf0pI
+         WmLSMjJvRufz7H/Ii3aboW28VOABf3xZdZv9IeALEyZSFbf9jFPw7Xtb/XEgkAwjwkZs
+         HOVgO33zjjbNvVRjSP4awfEq5DEGq1AF27ApZ+mEBolizkR98LUgNTOq6pG9vmF8L7g0
+         7RJFT1Z/GcrgdGS3WL+I28Ps4DNq2gw6cxuoGL5O/WvCkuovbf1v5AOAgIGkSa4VRlr4
+         OxUg==
+X-Forwarded-Encrypted: i=1; AJvYcCV0qObDUuVJw1v2F/6BbEVZfm6KNXbaBzTSDXWBpB0u7H7Poe8YSvrOVBB3jjNEE8rVz1YDV0Y1cVMaviqNBM8ZGKSgyJUbmMA=
+X-Gm-Message-State: AOJu0YwkTv45PFJqxrFJrE0vpndJq5pdVAbAILly3xFUao9Lgv29kqzw
+	gV3y2GiEJgD9GZ7sHiAOpR3WXMO6ZBSJ1g9JuaVyxfqb+dDvvjKmlhpRkm3ktJw=
+X-Google-Smtp-Source: AGHT+IHOI2nq9U7R2THlqTlle6ZvaaiGSKn/bBTzfUSdjpTQ3Q9wafLDNp9Iz6mIii2pvyTa1FD8CA==
+X-Received: by 2002:a5d:52cf:0:b0:34a:e73a:67a1 with SMTP id ffacd0b85a97d-3504a956039mr16342164f8f.56.1715852757928;
+        Thu, 16 May 2024 02:45:57 -0700 (PDT)
+Received: from [10.91.0.199] ([149.14.240.163])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3502bbc4b41sm18515232f8f.113.2024.05.16.02.45.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 May 2024 02:45:57 -0700 (PDT)
+Message-ID: <65a94273-7fa5-4352-a24b-a08a1f244f99@linaro.org>
+Date: Thu, 16 May 2024 11:45:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/6] thermal: sysfs: Trigger zone temperature updates
+ on sysfs reads
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Lukasz Luba <lukasz.luba@arm.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Zhang Rui <rui.zhang@intel.com>
+References: <13518388.uLZWGnKmhe@kreacher> <3304112.44csPzL39Z@kreacher>
+ <39e15eef-f7fd-4e16-bc74-7f1c6820fe6a@arm.com>
+ <CAJZ5v0gZJE6jfa8_9LgDdjYotY+crLH1JJXHdAWREPz4SJ305A@mail.gmail.com>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0gZJE6jfa8_9LgDdjYotY+crLH1JJXHdAWREPz4SJ305A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Create selftests for PCIe BW control through the PCIe cooling device
-sysfs interface.
 
-First, the BW control selftest finds the PCIe Port to test with. By
-default, the PCIe Port with the highest Link Speed is selected but
-another PCIe Port can be provided with -d parameter.
+Hi Rafael,
 
-The actual test steps the cur_state of the cooling device one-by-one
-from max_state to what the cur_state was initially. The speed change
-is confirmed by observing the current_link_speed for the corresponding
-PCIe Port.
+On 16/05/2024 11:04, Rafael J. Wysocki wrote:
+> Hi Lukasz,
+> 
+> On Mon, May 13, 2024 at 9:11 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>> Hi Rafael,
+>>
+>> On 5/10/24 15:13, Rafael J. Wysocki wrote:
+>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>
+>>> Reading the zone temperature via sysfs causes the driver callback to
+>>> be invoked, but it does not cause the thermal zone object to be updated.
+>>>
+>>> This is problematic if the zone temperature read via sysfs differs from
+>>> the temperature value stored in the thermal zone object as it may cause
+>>> the kernel and user space to act against each other in some cases.
+>>>
+>>> For this reason, make temp_show() trigger a zone temperature update if
+>>> the temperature returned by thermal_zone_get_temp() is different from
+>>> the temperature value stored in the thermal zone object.
 
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- MAINTAINERS                                   |   1 +
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/pcie_bwctrl/Makefile  |   2 +
- .../pcie_bwctrl/set_pcie_cooling_state.sh     | 122 ++++++++++++++++++
- .../selftests/pcie_bwctrl/set_pcie_speed.sh   |  67 ++++++++++
- 5 files changed, 193 insertions(+)
- create mode 100644 tools/testing/selftests/pcie_bwctrl/Makefile
- create mode 100755 tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh
- create mode 100755 tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3a94ae81b13f..5a3b69515256 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17106,6 +17106,7 @@ S:	Supported
- F:	drivers/pci/pcie/bwctrl.c
- F:	drivers/thermal/pcie_cooling.c
- F:	include/linux/pci-bwctrl.h
-+F:	tools/testing/selftests/pcie_bwctrl/
- 
- PCIE DRIVER FOR AMAZON ANNAPURNA LABS
- M:	Jonathan Chocron <jonnyc@amazon.com>
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index e1504833654d..ac0bc8af4123 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -65,6 +65,7 @@ TARGETS += net/openvswitch
- TARGETS += net/tcp_ao
- TARGETS += netfilter
- TARGETS += nsfs
-+TARGETS += pcie_bwctrl
- TARGETS += perf_events
- TARGETS += pidfd
- TARGETS += pid_namespace
-diff --git a/tools/testing/selftests/pcie_bwctrl/Makefile b/tools/testing/selftests/pcie_bwctrl/Makefile
-new file mode 100644
-index 000000000000..3e84e26341d1
---- /dev/null
-+++ b/tools/testing/selftests/pcie_bwctrl/Makefile
-@@ -0,0 +1,2 @@
-+TEST_PROGS = set_pcie_cooling_state.sh
-+include ../lib.mk
-diff --git a/tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh b/tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh
-new file mode 100755
-index 000000000000..9df606552af3
---- /dev/null
-+++ b/tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh
-@@ -0,0 +1,122 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+
-+SYSFS=
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+retval=0
-+skipmsg="skip all tests:"
-+
-+PCIEPORTTYPE="PCIe_Port_Link_Speed"
-+
-+prerequisite()
-+{
-+	local ports
-+
-+	if [ $UID != 0 ]; then
-+		echo $skipmsg must be run as root >&2
-+		exit $ksft_skip
-+	fi
-+
-+	SYSFS=`mount -t sysfs | head -1 | awk '{ print $3 }'`
-+
-+	if [ ! -d "$SYSFS" ]; then
-+		echo $skipmsg sysfs is not mounted >&2
-+		exit $ksft_skip
-+	fi
-+
-+	if ! ls $SYSFS/class/thermal/cooling_device* > /dev/null 2>&1; then
-+		echo $skipmsg thermal cooling devices missing >&2
-+		exit $ksft_skip
-+	fi
-+
-+	ports=`grep -e "^$PCIEPORTTYPE" $SYSFS/class/thermal/cooling_device*/type | wc -l`
-+	if [ $ports -eq 0 ]; then
-+		echo $skipmsg pcie cooling devices missing >&2
-+		exit $ksft_skip
-+	fi
-+}
-+
-+testport=
-+find_pcie_port()
-+{
-+	local patt="$1"
-+	local pcieports
-+	local max
-+	local cur
-+	local delta
-+	local bestdelta=-1
-+
-+	pcieports=`grep -l -F -e "$patt" /sys/class/thermal/cooling_device*/type`
-+	if [ -z "$pcieports" ]; then
-+		return
-+	fi
-+	pcieports=${pcieports//\/type/}
-+	# Find the port with the highest PCIe Link Speed
-+	for port in $pcieports; do
-+		max=`cat $port/max_state`
-+		cur=`cat $port/cur_state`
-+		delta=$((max-cur))
-+		if [ $delta -gt $bestdelta ]; then
-+			testport="$port"
-+			bestdelta=$delta
-+		fi
-+	done
-+}
-+
-+sysfspcidev=
-+find_sysfs_pci_dev()
-+{
-+	local typefile="$1/type"
-+	local pcidir
-+
-+	pcidir="$SYSFS/bus/pci/devices/`sed -e "s|^${PCIEPORTTYPE}_||g" $typefile`"
-+
-+	if [ -r "$pcidir/current_link_speed" ]; then
-+		sysfspcidev="$pcidir/current_link_speed"
-+	fi
-+}
-+
-+usage()
-+{
-+	echo "Usage $0 [ -d dev ]"
-+	echo -e "\t-d: PCIe port BDF string (e.g., 0000:00:04.0)"
-+}
-+
-+pattern="$PCIEPORTTYPE"
-+parse_arguments()
-+{
-+	while getopts d:h opt; do
-+		case $opt in
-+			h)
-+				usage "$0"
-+				exit 0
-+				;;
-+			d)
-+				pattern="$PCIEPORTTYPE_$OPTARG"
-+				;;
-+			*)
-+				usage "$0"
-+				exit 0
-+				;;
-+		esac
-+	done
-+}
-+
-+parse_arguments "$@"
-+prerequisite
-+find_pcie_port "$pattern"
-+if [ -z "$testport" ]; then
-+	echo $skipmsg "pcie cooling device not found from sysfs" >&2
-+	exit $ksft_skip
-+fi
-+find_sysfs_pci_dev "$testport"
-+if [ -z "$sysfspcidev" ]; then
-+	echo $skipmsg "PCIe port device not found from sysfs" >&2
-+	exit $ksft_skip
-+fi
-+
-+./set_pcie_speed.sh "$testport" "$sysfspcidev"
-+retval=$?
-+
-+exit $retval
-diff --git a/tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh b/tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh
-new file mode 100755
-index 000000000000..584596949312
---- /dev/null
-+++ b/tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh
-@@ -0,0 +1,67 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+
-+set -e
-+
-+TESTNAME=set_pcie_speed
-+
-+declare -a PCIELINKSPEED=(
-+	"2.5 GT/s PCIe"
-+	"5.0 GT/s PCIe"
-+	"8.0 GT/s PCIe"
-+	"16.0 GT/s PCIe"
-+	"32.0 GT/s PCIe"
-+	"64.0 GT/s PCIe"
-+)
-+
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+retval=0
-+
-+coolingdev="$1"
-+statefile="$coolingdev/cur_state"
-+maxfile="$coolingdev/max_state"
-+linkspeedfile="$2"
-+
-+oldstate=`cat $statefile`
-+maxstate=`cat $maxfile`
-+
-+set_state()
-+{
-+	local state=$1
-+	local linkspeed
-+	local expected_linkspeed
-+
-+	echo $state > $statefile
-+
-+	sleep 1
-+
-+	linkspeed="`cat $linkspeedfile`"
-+	expected_linkspeed=$((maxstate-state))
-+	expected_str="${PCIELINKSPEED[$expected_linkspeed]}"
-+	if [ ! "${expected_str}" = "${linkspeed}" ]; then
-+		echo "$TESTNAME failed: expected: ${expected_str}; got ${linkspeed}"
-+		retval=1
-+	fi
-+}
-+
-+cleanup_skip ()
-+{
-+	set_state $oldstate
-+	exit $ksft_skip
-+}
-+
-+trap cleanup_skip EXIT
-+
-+echo "$TESTNAME: testing states $maxstate .. $oldstate with $coolingdev"
-+for i in $(seq $maxstate -1 $oldstate); do
-+	set_state "$i"
-+done
-+
-+trap EXIT
-+if [ $retval -eq 0 ]; then
-+	echo "$TESTNAME [PASS]"
-+else
-+	echo "$TESTNAME [FAIL]"
-+fi
-+exit $retval
+The hwmon system is doing something similar and I'm not sure we want to 
+mimic the same behavior.
+
+Just to summarize:
+
+1. There is a polling delay set
+
+This polling delay gives the sampling rate the thermal zone is 
+monitored. The temperature is updated at each 'delay' tick
+
+2. There is no polling delay set
+
+The system relies on the interrupts to tell when a temperature reaches a 
+threshold.
+
+
+On the other side, if the governor is in-kernel, then we should not read 
+the temperature of the thermal zones because it is the job of the kernel 
+to do that.
+
+Actually we can assume the temperature information exported to the 
+userspace is a courtesy of the kernel when this one is managing the 
+thermal zone.
+
+If there is no governor associated to the thermal zone because there is 
+no cooling device associated to the defined trip points, then we can 
+assume it is up to the userspace to monitor the thermal zone.
+
+Furthermore, the hwmon gives the temperature information with the 
+caching and because of that it is not possible for a thermal daemon to 
+correctly handle a thermal zone.
+
+That said, I would say we don't want the userspace to influence the 
+thermal zone monitoring in any manner.
+
+ From my POV, we should keep the code as it is.
+
+The description of the change says "it may cause the kernel and user 
+space to act against each other in some cases". Is it possible to give 
+the cases when that can happen ?
+
+
+
+
 -- 
-2.39.2
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
 
