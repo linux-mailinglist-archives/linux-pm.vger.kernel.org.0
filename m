@@ -1,171 +1,118 @@
-Return-Path: <linux-pm+bounces-7888-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7889-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BDCE8C71A7
-	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2024 08:31:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3540F8C71CC
+	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2024 09:03:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CC300B20EAF
-	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2024 06:31:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E11B81F21C76
+	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2024 07:03:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E94752F3B;
-	Thu, 16 May 2024 06:31:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F1272942A;
+	Thu, 16 May 2024 07:03:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="Gf3YsIP3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iZc1Srpw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01olkn2022.outbound.protection.outlook.com [40.92.53.22])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE776249F7;
-	Thu, 16 May 2024 06:31:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.53.22
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715841085; cv=fail; b=A70J8WzhEY3JAuJvGc6sDRdo+/PU0QVl12L7rJEKtP/iqt39uGqYuKbpPW/14EI4OqeSbKDsPVxhrAsx0KxGVZxIoNhDG1IuJ0UB87181UTmS0QJFIqJ+JCQ570PDDMJvtqHLpzg+i9RBlsnZV/Vlaf716n3HPBNTPOS1z2Ned4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715841085; c=relaxed/simple;
-	bh=mg9LK5E8arpRzuntSzUD23+A4wrpv38IYIuexGQgy0A=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=So8McXZqdfnuU4yNJamgCOv6eL5qNfWV9QI9wZTzVPdPIum9d/579vg4GW6nCjd0uNERNsEW3qBnYbUBOFlrhnp5AuqT0YpzNdpfBA+akvJZzu0TzLzEx5VAOd4N6xKXiJCrxaT/8VgLqURSEqLL1CWRABUlbZfHoxB6e3jnr0E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=Gf3YsIP3; arc=fail smtp.client-ip=40.92.53.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NOVDVVLa7rox/i6Aii5XO0m1Suyich/4uYstLHBjyszChtcehp88+EVyC6L/z3aAnsal+2S7iAzBAZrUV9E5QKBqxWdXCL6Wq0JnZXLlgqbE3rkItK48K5hLBY8oU0v4TYa/uaH2CYJl5M4TNyQ7efRGzbnKXJ4nYuJp8ewuD5fbsp5M2lMFTk1OOw1+NAJKSnCeh/IGCDuFW9+7USbi9qYcZ0vg62hNiGO90jm3I6JA14STjA3aW+1cZt8iZHE85zysxaSCCS+ldU9PSLCN4xX4nqQ6B8RIArtofFNUwSvSV0OKYqWxdZl8kh7n8k3rZc2D2Ofv/TnBolfZwIpNQg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sa2VERR4mp9uAE47rBzsUUrUySBsgd8Lx3lAkLh1WWU=;
- b=jlHIb10h6HrgcHgSjCSXBSeuxRWu85lKMnSR1VutPSVZgUWM03JeRFjgR5Y8P5DBWAqM7oi0Det3dYfAJjA+kO1Em+qJ6DN/R8VAfIPhcd4O+cwckrpCDg5GfD2vz63g39N6yM7hhiHHU64eX9K5PKtyZ8mMAP5W1uBmGBMpBb/AG+Wrfoe4RJ/czhQYXE4pBoDJCnDMASNaBKoeWuZTrmZXdhqxsQjiMnBDSsKgQKEUsZqzA+YnIwR0ftdig7xedlMBQ4YPvQGUCVCDH9+oHTMh0ePDBaHv+uLj4+mDtfYg/a/Tdhv/OYnk9RVxFSPH/+m8Zfu7VstZEQSaJNXhSw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sa2VERR4mp9uAE47rBzsUUrUySBsgd8Lx3lAkLh1WWU=;
- b=Gf3YsIP3EzyvhZ2pSgLuyLt6xypnrTse3rQ6bQUmzGg6AxCGSrVV6uQpM8cRTG3Q+rrS/EutDo04FttGRSjyhFotlpXNvtoe/Ne+gpFLUXp+eH63K5HX5NoNLBZEOte0jjoJWh9ziZ/5IwQZB1r5EqwaqUdviTZMStiuRJR729Oht0ay2WNyYjuyEpcN1RCExW6aqFQFlalF5aAIDOwSiIzb1KC4RMUbaOZOddzyFHtgg3pdve4104YAQoh42mrCr9x7lOsC9B0BfFc/Pim3oFj9K+D+sHxkXbDVdsF2Om0xX9r08AfCQCaNWNRoEBgWIjjjF0d4x9JjvZbsRrGw/w==
-Received: from PUZPR01MB5120.apcprd01.prod.exchangelabs.com
- (2603:1096:301:110::8) by SEZPR01MB5631.apcprd01.prod.exchangelabs.com
- (2603:1096:101:133::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.55; Thu, 16 May
- 2024 06:31:19 +0000
-Received: from PUZPR01MB5120.apcprd01.prod.exchangelabs.com
- ([fe80::c050:3818:262f:8ddd]) by PUZPR01MB5120.apcprd01.prod.exchangelabs.com
- ([fe80::c050:3818:262f:8ddd%7]) with mapi id 15.20.7587.026; Thu, 16 May 2024
- 06:31:19 +0000
-From: zhida312@outlook.com
-To: rafael@kernel.org,
-	viresh.kumar@linaro.org
-Cc: Peng Ma <andypma@tencent.com>,
-	Huang Rui <ray.huang@amd.com>,
-	"Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Perry Yuan <perry.yuan@amd.com>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v4] cpufreq: amd-pstate: fix the memory to free after epp exist
-Date: Thu, 16 May 2024 14:30:42 +0800
-Message-ID:
- <PUZPR01MB5120A03DFF0EA1CE70E7334E92ED2@PUZPR01MB5120.apcprd01.prod.exchangelabs.com>
-X-Mailer: git-send-email 2.41.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN: [FJq1E+vmtPpi4bHJd2zwQlENxYiAS/IO]
-X-ClientProxiedBy: BYAPR03CA0033.namprd03.prod.outlook.com
- (2603:10b6:a02:a8::46) To PUZPR01MB5120.apcprd01.prod.exchangelabs.com
- (2603:1096:301:110::8)
-X-Microsoft-Original-Message-ID:
- <20240516063105.1167452-1-zhida312@outlook.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CCF425570;
+	Thu, 16 May 2024 07:03:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715843005; cv=none; b=lZ8RjKc7OJ+V/G6HIRA0GWnhSSeAraKfOR4JBd4Gm6BVUUsuPe8yijxuj52BOTa0RIaMKlQ5hYy7KHHbSuIZYlm7agAiY7kALYhd7RYG0ti4cfyuzUwP57J8PyLRjhr6VbKK1R52OClRq5YCz93oF0LqQb7W+qPeoCzTqrmZTXE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715843005; c=relaxed/simple;
+	bh=+/dHCk2+/e+u3IYcLkP466CAIjDYqJ2ulQ+tRU+hsBg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N6Ff6EMqaOqYPhgt2u+M2MWalOApXJ/Hf2GSnqgxZDS9OBVPAFoLM21LCF2FiQBivj6XLwxHFyOiMMgAJh5SZT8dWor0ReIPGAibUt48aRcfRJ2MrsbFpNNP3SFuO1xLSv6QIQVgONyFENgJf8WTyPkcSJxbcrKFBU4AHXwxw5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iZc1Srpw; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715843003; x=1747379003;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+/dHCk2+/e+u3IYcLkP466CAIjDYqJ2ulQ+tRU+hsBg=;
+  b=iZc1SrpwfsHdNiGtiG2C/VNleWdNA+HoDjmDz1flBjSZUpWgp+9s0pZG
+   1M/u6StUBLEgRpI090T6c8QkdTNT53l57wFBb6bMw83HvRf0P/OX+44Tj
+   YO1gigUzJV2OcfIrkagF7ba5Lpf8lBl7XmI2FvGMs4BxqZ5aNbXv8ULpz
+   TwSZ4pvWGL/7He/K+QytmgoO/DtziChspC/934bQXIGiwVs2BGwXr+s6y
+   JLrAmaOR51yvue4oTRK7OPSRY7gnU4AF8r9dM9Lqa6JPhTzRDIofsCa6p
+   FTK0BZHg4HO3GsgfnJVhDHwoJFyycUQlfWDAnrSGIzu4v4AoDqCwlzlcr
+   w==;
+X-CSE-ConnectionGUID: 5DgPWDYAQG25iPmfm8yqbQ==
+X-CSE-MsgGUID: uK2MH+//RYevo679ocMAfQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11074"; a="29430511"
+X-IronPort-AV: E=Sophos;i="6.08,163,1712646000"; 
+   d="scan'208";a="29430511"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2024 00:03:23 -0700
+X-CSE-ConnectionGUID: 0ELDhARxTkWZf9KkB3h9LQ==
+X-CSE-MsgGUID: uKCOrT1lTpqHz4ociGgnSQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,163,1712646000"; 
+   d="scan'208";a="62163266"
+Received: from josephjo-mobl1.amr.corp.intel.com (HELO desk) ([10.212.146.49])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2024 00:03:23 -0700
+Date: Thu, 16 May 2024 00:03:15 -0700
+From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To: Kalle Valo <kvalo@kernel.org>
+Cc: Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>, x86@kernel.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	regressions@lists.linux.dev,
+	Jeff Johnson <quic_jjohnson@quicinc.com>,
+	Daniel Sneddon <daniel.sneddon@linux.intel.com>
+Subject: Re: [regression] suspend stress test stalls within 30 minutes
+Message-ID: <20240516070315.swz2golcrfp3uvfd@desk>
+References: <20240511184847.GCZj-9j2sh1Akpt9iS@fat_crate.local>
+ <20240511184945.GDZj-9yaOEWqf1ng8u@fat_crate.local>
+ <87h6f4jdrq.fsf@kernel.org>
+ <878r0djxgc.fsf@kernel.org>
+ <874jb0jzx5.fsf@kernel.org>
+ <feaefaae-e25b-4a48-b6be-e20054f2c8df@intel.com>
+ <20240515072231.z3wlyoblyc34ldmr@desk>
+ <529C9374-DA6F-49C8-9B32-91741800F8E4@alien8.de>
+ <20240515162747.6shmaoelc4mt7nro@desk>
+ <878r0bhvjq.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PUZPR01MB5120:EE_|SEZPR01MB5631:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0da696aa-a3fc-4134-f789-08dc7571cbc0
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|461199019|3420499023|3430499023|3412199016|440099019;
-X-Microsoft-Antispam-Message-Info:
-	h0P7PnGR38AHDFjqpMFOcssxBILATwipyVbyTUZxS93OSntWi0ZidyY5phXc7rEzFalpRVQW75VWA6WSvsw9mlzUvfTeE+Gq+jqxFXDXrVMW8awB6nku38ZFE1eOwc27z/badYYZo/8nxQNWQZHvgbFAeso73qwPdXj9y5K4ouv5//naJQp3AgzP+aeebaARKCbg6pXZ4x1AXbz6WFn4+x72imUXS8eAqW8eZvtE+3NbIh4CL8adHcS0+sD/F85VYjDujxDucSntd4A9LdvWsjn9DkIWhHDE7btpJ1D+FwyFxqb6Vh4GEIKw+niZBzV3wUXXr+IEDhR9B7X+SHR2bFcHdH9kUdAuuUvVoAIGRyGMY659H3P62OuwrJhqQ0mNrmUru+jgRNAPTMPClOsaZ+4ZW9GSxYsLEco2u2eIUayvTvlG7ni784fNfNP5RxRWH48Hu4IqTTuzIfCkZS6JoYgWc0er8++DAmAwLkBQuZpTp84OVadMCGs18BPjrxGsGhC2V7RN2JglK479CXN+LRXeJ76NOal+IA8PJ5iJDoXcS+tOXPIXAcEDH+38aPi0
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Xs+bLdftHqayGpIcRp7K+9gZ/rmuwL/6SaejWVWzifs5Kv+9g7NVtMVdCrSN?=
- =?us-ascii?Q?xbH69up2QKdW+TEvp0QGGtXge6XPkEfizBRKP4SjBeo0uBMPcFl38pACfFO9?=
- =?us-ascii?Q?NvnO3zEz+qQtk7vH6MU5Qa/dieFMLjUARtAgPGssAaY7gGbfcDBDgQCBw6op?=
- =?us-ascii?Q?gaqleRJd/+pspSU+qdZ/NJKJJ+96fGQ1punhUJGjnykY9ijNj9NMWG8BYALQ?=
- =?us-ascii?Q?r/VvdFMjVMxH1bFqPgezQshb8E2pyEjbuDecow58DCy4a5ISttIjOAmlxhCQ?=
- =?us-ascii?Q?yBs7C849t/hHQ9uyoj/Yak2b1F/6jSyQdZ0s6W84gXRjbaTkc1atMJCMad3y?=
- =?us-ascii?Q?hWwzx8lUE7BGuoE/HQ4M8avaT/Prv7c9RHRtV5WOWQeZO7f1vx8suveiz5eH?=
- =?us-ascii?Q?XyEroTr87waLupQOebbJoyYYtA10ZldeSACWh4j//uA1nMlBnyPOsWX5Vx1A?=
- =?us-ascii?Q?oys+HI80iMOHoXBfpAznKUAUa+GOC0QBdu5GOJtfhj81uty+ai1wy96L88tl?=
- =?us-ascii?Q?Q+4Y/jmbUcU24mWPNr9cENHaNOStfJO6riF+Yj+W6utJoyDzGzz3WyrHfVju?=
- =?us-ascii?Q?taqbgNpYod5k0+lFTBL8tWLMVY2q7SbbmHpD5wl7GgLnuYQx3QquHvumECbM?=
- =?us-ascii?Q?lVuv9SYb5oTbsIvJAIp3DWb7pxEW+3/XFt1+kLPZehkQ00VwICqg1hSnbZSj?=
- =?us-ascii?Q?C1K8kPcwRlhz+VV73QenSctiZ6XZwo/myYTScsN9QziRVgOqVW9AZ3H/Wygq?=
- =?us-ascii?Q?quEeRTeysIh4jRQrmI5KWUMN+Ojnu93rMnD6yxPjAUsWk3pV8lDY8lgxTxBs?=
- =?us-ascii?Q?gXMJwhQijbkc1gIfmIpvlqLjglIBUbdEvyAT100oPKzuRvHi42Lo5Xex0siE?=
- =?us-ascii?Q?wr6hv+2aWJhKl/Z4hB5DPA1oFDIETVtG12CW9bl8K1IueBrLMXMI+mxYgKhB?=
- =?us-ascii?Q?hpP9U4zyyGaTVOEYDgmQBhXz0CeKBhkqCzeIeS+oMnOrq9hO4oFeFC5wYP3Z?=
- =?us-ascii?Q?Lane9hgEsxtIP45njgXHMdR3r+JvWXGJZdiuaZS/c+Y77hzEWBGaMyvj2vfM?=
- =?us-ascii?Q?YAZMrZImHp/VXTYbPNfPw4Klj5ckPTeQ34zkK15R8eJ/yt1mOK83HZcsObX/?=
- =?us-ascii?Q?g/rcXFikuCube6RmR0SNEZuvf5jUjsrtK/dfKBfsC8vRN6hBis7lFcBIa6l2?=
- =?us-ascii?Q?Xs66cE4C+W5uaSPNSPErE0wRFXoXxoq+myso9+Sk2UA8fO6MMFXbXH5hHEY?=
- =?us-ascii?Q?=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0da696aa-a3fc-4134-f789-08dc7571cbc0
-X-MS-Exchange-CrossTenant-AuthSource: PUZPR01MB5120.apcprd01.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2024 06:31:19.3634
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR01MB5631
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <878r0bhvjq.fsf@kernel.org>
 
-From: andypma <andypma.tencent.com>
+On Wed, May 15, 2024 at 07:47:05PM +0300, Kalle Valo wrote:
+> Pawan Gupta <pawan.kumar.gupta@linux.intel.com> writes:
+> 
+> > On Wed, May 15, 2024 at 09:44:42AM +0200, Borislav Petkov wrote:
+> >> On May 15, 2024 9:22:31 AM GMT+02:00, Pawan Gupta <pawan.kumar.gupta@linux.intel.com> wrote:
+> >> > Other interesting thing to try is cmdline
+> >> >"dis_ucode_ldr".
+> >> 
+> >> Right, is his microcode revision 0xf4 the right one for that model?
+> >
+> > 0xf4 microcode is not the latest one, the latest is 0xf8:
+> >
+> > https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/blob/main/intel-ucode/06-9e-09
+> >
+> > Kalle, can you please try with 0xf8 and see if the issue is still present?
+> 
+> I can't test right now but I'll try to find time later this week, I will
+> also reply to other emails then.
 
-the cpudata memory from kzmalloc in epp init function is
-not free after epp exist, so we should free it.
-
-Signed-off-by: Peng Ma <andypma@tencent.com>
-
-Changes from v3 to v4:
-	update subject used git command "git format-patch -1 -v x"
-
-Changes from v2 to v3:
-	update Signed-off-by to Peng Ma <andypma@tencent.com>.
-	set a space between if and "(".
-
-Changes from v1 to v2:
-	check whether it is empty before releasing
-	set driver_data is NULL after free
----
- drivers/cpufreq/amd-pstate.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 6a342b0c0140..1b7e82a0ad2e 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -1441,6 +1441,13 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
- 
- static int amd_pstate_epp_cpu_exit(struct cpufreq_policy *policy)
- {
-+	struct amd_cpudata *cpudata = policy->driver_data;
-+
-+	if (cpudata) {
-+		kfree(cpudata);
-+		policy->driver_data = NULL;
-+	}
-+
- 	pr_debug("CPU %d exiting\n", policy->cpu);
- 	return 0;
- }
--- 
-2.41.0
-
+After switching to a different machine (same model/stepping as yours) I am
+able to boot with the config you shared. Also changed the microcode to 0xf4
+so as to match your setup. I am running the suspend test now and will
+update in the morning if I could reproduce the hang.
 
