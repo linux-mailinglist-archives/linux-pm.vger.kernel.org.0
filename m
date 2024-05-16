@@ -1,44 +1,44 @@
-Return-Path: <linux-pm+bounces-7919-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7920-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 336588C7C85
-	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2024 20:31:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 590BB8C7C8B
+	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2024 20:32:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D6BD91F22EDF
-	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2024 18:31:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE4041F236B6
+	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2024 18:32:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F490156F28;
-	Thu, 16 May 2024 18:28:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59790156C60;
+	Thu, 16 May 2024 18:32:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="CwU2n6eV"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="XtAJMIjX"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59563156C7C;
-	Thu, 16 May 2024 18:28:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2871C4688;
+	Thu, 16 May 2024 18:32:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715884100; cv=none; b=BzlV2T8Ns8SEDgN+DqmhmXufEx6hocw5S9ePWlCijcoUAJZ1O/04DCOiXB09wXd+YlIxJO/qOtznoskO+OucdZzl4JKZ+zfWgSCJSjZjglY9Jftpvg+trk3pTCCM8pQKyd2lKl8ag+w1oTZ3hVxpsK6MA5ZCPk7D3rSBlpuWLYw=
+	t=1715884370; cv=none; b=Uhp0dykh7ILVz+HnUFauaHRArAdlBovdbgb3tQAk9TdayaKVlKbn7ignKLf04uHJIlkGe0rUoJeVAn5aJH4zvgzBpspowdBlboDJuso8ioDDmB9HmeFWM4x4qUd9wxtaBlgfqAvSLQ96/oTTqbPl/lN6ACT/CmGPNryNOMIXAh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715884100; c=relaxed/simple;
-	bh=sT5rh3M+x1YJYckp/JlnwaL9GidKt++aphUT4lC1FnU=;
+	s=arc-20240116; t=1715884370; c=relaxed/simple;
+	bh=DlzrQS/rXH0P2O50Ihqdlyok5DY6gfoePae3FLr3hOA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xyt8pBeLvJ+B8EnYYRkCADcXoDFlxVxOzpRqfZ1NvDbRUyFKJci7++fHTeb/RLeutHfQjUtaGKr5m8U+lh0vcvD16LdGWY+Z5oxlty+reaLziwKWsIWuVJ6xAVXgc4RQS+Ad+IEvFAqol0+VFCbSV+xDnD5f57AOp9qX6gWOlF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=CwU2n6eV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BC99C4DE1B;
-	Thu, 16 May 2024 18:28:19 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=pFNwwhkb54iKNNftvUDqq9jDI+hN0LWsdnS/GHTlqDr6GlUXFLx0v7bt/BkuNv6dGLoHI1EcQFY/QEkNpUtL5xvn9CgHYtKUaD/a+kAcpidaOSXMQXJ8sQ5f/wMFRgZL7LI7h0Ml2CYGtq9XyFVJpP7Xo+eZIQKjhCXCCOR6eTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=XtAJMIjX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18C6BC32782;
+	Thu, 16 May 2024 18:32:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1715884099;
-	bh=sT5rh3M+x1YJYckp/JlnwaL9GidKt++aphUT4lC1FnU=;
+	s=korg; t=1715884369;
+	bh=DlzrQS/rXH0P2O50Ihqdlyok5DY6gfoePae3FLr3hOA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CwU2n6eVL6NNCAgVieVMspD5xWKrfd4OQgqj3WrEwdlG6PoaKeIxdU3Nl+vyMBQI9
-	 aECP/pmMps/AXBG2ymUF9F2xlzxsOY/W018DVcO3dYu2pSP9wo5eQo/i8ox8Gk8gLl
-	 +x83O4W6y/LIIff5vLbn7YgmPlSw09nvi2tYfLic=
-Date: Thu, 16 May 2024 20:28:16 +0200
+	b=XtAJMIjX7JrluUUNTzTkGhkceQz3rJG6GX8ksOMSOt1FLX9AlTtI68YtbI0A3xwL1
+	 jm7ELQb0o4keHev+r70V28K9H8FVbaOzS1d2EzqMOGnIrGMBhQVUexn5xOU6beua2M
+	 4kt26wDOTbakn6f8dNkWchRS6o3E4OtXBpQDbn7o=
+Date: Thu, 16 May 2024 20:32:46 +0200
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
 Cc: Andrew Morton <akpm@linux-foundation.org>,
@@ -46,7 +46,7 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	linux-kernel@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
 	linux-pm@vger.kernel.org
 Subject: Re: [PATCH RFC] kobject_uevent: notify uevent sysfs file on changes
-Message-ID: <2024051634-replica-unbalance-b39d@gregkh>
+Message-ID: <2024051618-creation-mutilator-c871@gregkh>
 References: <20240516-uevent-sysfs-notify-v1-1-2ebb39930c09@weissschuh.net>
  <2024051640-earthen-granite-0847@gregkh>
  <74e7cc7b-3b3f-4dae-bcb2-7eb4f9d478cd@t-8ch.de>
@@ -78,40 +78,22 @@ On Thu, May 16, 2024 at 07:41:07PM +0200, Thomas Weißschuh wrote:
 > 
 > It requires netlink or libudev which is not available or ergonimic for
 > all userspace programs.
-
-But that's the api involved for this thing.
-
 > Shellscripts, simple C applications, programing languages without
 > access to netlink/libudev.
-
-You can have a shellscript run for every uevent if that's all you have,
-why not just do that?
-
+> 
 > I noticed this when using the "Waybar" application[0] and missing power
 > supply event updates. Both me and the authors of Waybar expected sysfs
 > notifications to work for uevent files.
-> 
-> Using sysfs notifications looks like an easy quality-of-life
-> improvement.
-> 
-> > > Enable these notifications, so that the "uevent" file can be used
-> > > together with inotify and friends.
-> > 
-> > uevent files are meant to be listened to by the uevent itself, why not do
-> > that?
-> 
-> I can't parse this sentence, sorry. Could you elaborate?
 
-The uevent file just mirrors what was sent in the uevent.  It isn't
-there to be polled, it's just there to be read if you want the
-information later on for some reason (i.e. coldplugging).
+"Waybar" is anything but a "simple C application", the dependancy chain
+it has is quite huge, adding libudev should be very easy, and probably
+already there.  Oh look, it is there, upower already brings it in, so no
+need to worry about adding another dependancy.
 
-I recommend just using libudev to register for the events, don't try to
-parse the files yourself, that way is madness :)
-
-Or register for the netlink events you care about, you can filter very
-easily that way to only get the ones you want, that's why the netlink
-interface is used.
+So I think maybe just using the library already in the program might be
+simplest, even simpler than attempting to use inotify and friends (as
+you don't have to figure out the actual file that you care about, gudev
+has that information already for you, abstracted away properly.)
 
 thanks,
 
