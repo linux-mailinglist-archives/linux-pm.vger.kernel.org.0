@@ -1,238 +1,127 @@
-Return-Path: <linux-pm+bounces-7930-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7931-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBFE38C8427
-	for <lists+linux-pm@lfdr.de>; Fri, 17 May 2024 11:50:41 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2BE38C843A
+	for <lists+linux-pm@lfdr.de>; Fri, 17 May 2024 11:51:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF79B1C22760
-	for <lists+linux-pm@lfdr.de>; Fri, 17 May 2024 09:50:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F323B22304
+	for <lists+linux-pm@lfdr.de>; Fri, 17 May 2024 09:51:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83F0B2C6B2;
-	Fri, 17 May 2024 09:50:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9F3C1C294;
+	Fri, 17 May 2024 09:51:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="aqPS27rf";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="ybHcdzif";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="aqPS27rf";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="ybHcdzif"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rTPI1yah"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50DE724B34;
-	Fri, 17 May 2024 09:50:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E61552C68F
+	for <linux-pm@vger.kernel.org>; Fri, 17 May 2024 09:51:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715939427; cv=none; b=O4xq5yuQ28+cp3xEKAI3QWWFbn5Dz4WzUQ06C3sswhNsPfcYD0nUAQo4DY3xiKJ/9CP67P6kBucgLyilSJIHnHHE4z7dVnytfiqe2kCzDemJ75K8XyApr/EmTI4jF32HpI/km67OngFpVmeDJaW3/dsXEqtP5bqoE+JY67hRlyA=
+	t=1715939464; cv=none; b=AuM0PQeDCRIIModj9LlVPq4ENEwUr2YTGr+NH8BnlhAXDp9KVfN3o9p9MwGv5h4lErzvlOKVK6XupMPV4juONc9LH1vpOKvOgu3MR1rPz+NcSWXVXGQCafF9Q67HrqZOQV0dHPdJ0cgDFDiG2ItzGuRR86R20lXo7WxhlGRkJU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715939427; c=relaxed/simple;
-	bh=fH748Fp39+O/lxgUrh9rhN64OkwK7uTA4acwzoyb8i0=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=H+2+gI0oSJRdPj14eLzxvbVR6e79738QtYfx2VDCCdilIIM/OTo8vtzhzfPBWXiKyGsUIc7WXPbwVAAmubUiG0kDJFGsVMGCvyNX3JyVQyoiamOM6Zw9VXPjlDNVJ7yj4wamOw5KsKwikutUqe/wLB3Q9yiaghIbwEyOivewIKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=aqPS27rf; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=ybHcdzif; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=aqPS27rf; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=ybHcdzif; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 6034E37344;
-	Fri, 17 May 2024 09:50:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1715939422; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8jfFpRbNQ4JylrNPf/Ju6XAY6qQjrc+0U9vxW7VwdqA=;
-	b=aqPS27rfYVOIlQYJQqRWN1OB2KuGqplKO0xASvAy99Em1LNhKAq/Z45rrmqOfomt6ymSXF
-	OiEv1bW+ZdpI213w3TR/RlpBxADCOtSoygZG2IWVCeRjyU7fk9xYWgYywcz+IS9+rfxp20
-	iBC1DT09pzE+KgT4PXFcXk6IVt2gReU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1715939422;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8jfFpRbNQ4JylrNPf/Ju6XAY6qQjrc+0U9vxW7VwdqA=;
-	b=ybHcdzifmrWaHz4fudlW6TywmF4wPptrNP5A3fPjgJZxiNP8yysPTURMY+P9YDVx2v+UNY
-	h72YrP3bBg//bVBQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1715939422; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8jfFpRbNQ4JylrNPf/Ju6XAY6qQjrc+0U9vxW7VwdqA=;
-	b=aqPS27rfYVOIlQYJQqRWN1OB2KuGqplKO0xASvAy99Em1LNhKAq/Z45rrmqOfomt6ymSXF
-	OiEv1bW+ZdpI213w3TR/RlpBxADCOtSoygZG2IWVCeRjyU7fk9xYWgYywcz+IS9+rfxp20
-	iBC1DT09pzE+KgT4PXFcXk6IVt2gReU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1715939422;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8jfFpRbNQ4JylrNPf/Ju6XAY6qQjrc+0U9vxW7VwdqA=;
-	b=ybHcdzifmrWaHz4fudlW6TywmF4wPptrNP5A3fPjgJZxiNP8yysPTURMY+P9YDVx2v+UNY
-	h72YrP3bBg//bVBQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 3DB2D13991;
-	Fri, 17 May 2024 09:50:21 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id rHjlDV0oR2boBwAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Fri, 17 May 2024 09:50:21 +0000
-Date: Fri, 17 May 2024 11:50:38 +0200
-Message-ID: <87r0e0zs0h.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
-	Linux trace kernel
- <linux-trace-kernel@vger.kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers 
- <mathieu.desnoyers@efficios.com>,
-	Linus Torvalds 
- <torvalds@linux-foundation.org>,
-	linuxppc-dev@lists.ozlabs.org,
-	kvm@vger.kernel.org,
-	linux-block@vger.kernel.org,
-	linux-cxl@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	amd-gfx@lists.freedesktop.org,
-	intel-gfx@lists.freedesktop.org,
-	intel-xe@lists.freedesktop.org,
-	linux-arm-msm@vger.kernel.org,
-	freedreno@lists.freedesktop.org,
-	virtualization@lists.linux.dev,
-	linux-rdma@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	iommu@lists.linux.dev,
-	linux-tegra@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-hyperv@vger.kernel.org,
-	ath10k@lists.infradead.org,
-	linux-wireless@vger.kernel.org,
-	ath11k@lists.infradead.org,
-	ath12k@lists.infradead.org,
-	brcm80211@lists.linux.dev,
-	brcm80211-dev-list.pdl@broadcom.com,
-	linux-usb@vger.kernel.org,
-	linux-bcachefs@vger.kernel.org,
-	linux-nfs@vger.kernel.org,
-	ocfs2-devel@lists.linux.dev,
-	linux-cifs@vger.kernel.org,
-	linux-xfs@vger.kernel.org,
-	linux-edac@vger.kernel.org,
-	selinux@vger.kernel.org,
-	linux-btrfs@vger.kernel.org,
-	linux-erofs@lists.ozlabs.org,
-	linux-f2fs-devel@lists.sourceforge.net,
-	linux-hwmon@vger.kernel.org,
-	io-uring@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-wpan@vger.kernel.org,
-	dev@openvswitch.org,
-	linux-s390@vger.kernel.org,
-	tipc-discussion@lists.sourceforge.net,
-	Julia 
- Lawall <Julia.Lawall@inria.fr>
-Subject: Re: [PATCH] tracing/treewide: Remove second parameter of __assign_str()
-In-Reply-To: <20240516133454.681ba6a0@rorschach.local.home>
-References: <20240516133454.681ba6a0@rorschach.local.home>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	s=arc-20240116; t=1715939464; c=relaxed/simple;
+	bh=umr6x9k3m9I3EaMQpZAla3HYIuVCB+b9qLGvmHWWLBg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VBfdOVvLmFXGAzYkAAhVBjfAvbM9CEMBVIHnDpjwOCTA4tae+9z48/0n7+GFOgc4wEvLElxrGtpu1AZsV9TYdUEL/Bs26CZd8UHNtcdVpVcIKPB/d/klY3ltIK6eDnq+hTJ90AxfJiWcl7qW574Ca6Web9Ufj07h2HPf55h5I2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rTPI1yah; arc=none smtp.client-ip=209.85.208.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2e428242a38so23119501fa.2
+        for <linux-pm@vger.kernel.org>; Fri, 17 May 2024 02:51:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1715939461; x=1716544261; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2L8RSK1UXgr12jXF9ubAdgAxLZaIH1liHhgWTNSlMsQ=;
+        b=rTPI1yahKw340MOh4dMjhEOumBv0MWiuBtO2W5foCpzRzHU3y8UvXclEBXMugf3XrL
+         Fr/y0bSFF4gcc9doIAFEQG+I0yY7iH7UUVgtF+c9qSp2UeMgFJQ3dlGQXiO6XFJbeZG+
+         t4YnbNLaNsQt8+NMvQdQk1ik7Zrlo1A76KOnKbQ0sXdNhuteDIgfESCk0t8/+P0hB959
+         /Y31YEDuTIiPFjv5sjaei1Ev46H/PPnpTebcv7T3tAlK7wb3heAxJ/nc+Iz8R3NUyYgl
+         7stW1aM1gWNbjlPrDcYSJKU+UMvTyGzvNZ5cJAT/xexD3419pUI9QDVIR/fS+HUQkVkM
+         F3dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715939461; x=1716544261;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2L8RSK1UXgr12jXF9ubAdgAxLZaIH1liHhgWTNSlMsQ=;
+        b=thkcOGa/BF0c5GsGpB8+DuS0TA+Cu2Atwr4kIR22T27K9oyWDkKEE4Nguhgx86O80F
+         zZejI5aMCEEWWSBJGc3Pp1Ij9RyYIC8GSdsWXVIfasA7XTwS+opTsplcp9Mktg6FKSiD
+         oI/o7/x+BIA8s0k1AZWTpTQwVS4AIucU7DbmVRJ1iU3NpUhXbBVjEL3uvHDml/7Z7/Ys
+         h0nUD1xmOnkjfRfeZcyW1fv+ek0x+4Q8fBLQ4FDVwvXEY8U0cwIJhD3yFhjhST+YOfKj
+         vfhK4fcdNxlSRzKHPoPrLjmQhYzEE/NaR7pyppDHQOKa/z9VICnijffQC+hqJdYUmvpP
+         v85w==
+X-Forwarded-Encrypted: i=1; AJvYcCUKtYlwuhJQhgJ/yWl+/nNjR+O9UjjXFztSO0TkQ5wc7SS50J9AJn+mSdfwaniJFXn7P2W2DR+ThdpazSlZPo+CpuJ+rKZS2eA=
+X-Gm-Message-State: AOJu0YzwRXhw+UGONs1yFIcAbEn6fQjAmjTr/ZY9WwpZBIp9ka9JL1/6
+	nglRBxphrvdgHA+VKEL1GDzusXMxllmr3+JhOU8BRLv4PQk7PcaZ4wCVBO94OMQ=
+X-Google-Smtp-Source: AGHT+IE/i6HrkK9a32WnwA2ipdftjxu8Y3Zxt+EzO3KENJBumi5p2N0H8j3JeSeqai45ufNVMCWpLQ==
+X-Received: by 2002:a05:651c:546:b0:2e5:4c78:1227 with SMTP id 38308e7fff4ca-2e54c7812famr187118681fa.31.1715939460955;
+        Fri, 17 May 2024 02:51:00 -0700 (PDT)
+Received: from localhost ([149.14.240.163])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5cfbd73547sm147700966b.171.2024.05.17.02.51.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 May 2024 02:51:00 -0700 (PDT)
+Date: Fri, 17 May 2024 11:50:58 +0200
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Icenowy Zheng <uwu@icenowy.me>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Kang Chen <void0red@hust.edu.cn>, Dongliang Mu <dzm91@hust.edu.cn>,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 0/2] thermal/drivers/mediatek: fix a regression affecting
+ other subsystems
+Message-ID: <6b643d19-bdd9-4c35-a775-b8e3c21b75f5@suswa.mountain>
+References: <20230529162056.3786301-1-uwu@icenowy.me>
+ <40546a57-27ac-8bf9-a2d8-77f7d4ab4aad@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Level: 
-X-Spamd-Result: default: False [-1.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	R_RATELIMIT(0.00)[to_ip_from(RL6rcqepr6awpd9qb5xxedoiwq)];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[50];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[efficios.com:email,inria.fr:email,imap1.dmz-prg2.suse.org:helo,suse.de:email,goodmis.org:email,linux-foundation.org:email]
-X-Spam-Score: -1.80
-X-Spam-Flag: NO
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <40546a57-27ac-8bf9-a2d8-77f7d4ab4aad@linaro.org>
 
-On Thu, 16 May 2024 19:34:54 +0200,
-Steven Rostedt wrote:
+On Tue, Jun 13, 2023 at 10:44:51AM +0200, Daniel Lezcano wrote:
+> On 29/05/2023 18:20, Icenowy Zheng wrote:
+> > In the commit I reverted as the first commit of this patchset, the
+> > of_iomap function call, which allows multiple mapping of the same
+> > physical memory space, is replaced to calling devm_of_iomap, which
+> > registers exclusivity, and on my system (mt8173-elm), preventing display
+> > from working.
+> > 
+> > So I reverted it, and to really solve the problem that the original
+> > commit wants to solve, I read the source of auxadc-thermal and realized
+> > that the address of these two memory blocks are not saved after probe,
+> > and they're only used when initializing the thermal sensors. This leads
+> > to my final fix, which is the second commit here, that adds of_iounmap
+> > just to the probe function.
+> > 
+> > Icenowy Zheng (2):
+> >    Revert "thermal/drivers/mediatek: Use devm_of_iomap to avoid resource
+> >      leak in mtk_thermal_probe"
+> >    thermal/drivers/mediatek: unmap foreign MMIO after probing
+> > 
+> >   drivers/thermal/mediatek/auxadc_thermal.c | 46 ++++++++++++-----------
+> >   1 file changed, 24 insertions(+), 22 deletions(-)
 > 
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> 
-> [
->    This is a treewide change. I will likely re-create this patch again in
->    the second week of the merge window of v6.10 and submit it then. Hoping
->    to keep the conflicts that it will cause to a minimum.
-> ]
-> 
-> With the rework of how the __string() handles dynamic strings where it
-> saves off the source string in field in the helper structure[1], the
-> assignment of that value to the trace event field is stored in the helper
-> value and does not need to be passed in again.
-> 
-> This means that with:
-> 
->   __string(field, mystring)
-> 
-> Which use to be assigned with __assign_str(field, mystring), no longer
-> needs the second parameter and it is unused. With this, __assign_str()
-> will now only get a single parameter.
-> 
-> There's over 700 users of __assign_str() and because coccinelle does not
-> handle the TRACE_EVENT() macro I ended up using the following sed script:
-> 
->   git grep -l __assign_str | while read a ; do
->       sed -e 's/\(__assign_str([^,]*[^ ,]\) *,[^;]*/\1)/' $a > /tmp/test-file;
->       mv /tmp/test-file $a;
->   done
-> 
-> I then searched for __assign_str() that did not end with ';' as those
-> were multi line assignments that the sed script above would fail to catch.
-> 
-> Note, the same updates will need to be done for:
-> 
->   __assign_str_len()
->   __assign_rel_str()
->   __assign_rel_str_len()
-> 
-> I tested this with both an allmodconfig and an allyesconfig (build only for both).
-> 
-> [1] https://lore.kernel.org/linux-trace-kernel/20240222211442.634192653@goodmis.org/
-> 
-> Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> Cc: Julia Lawall <Julia.Lawall@inria.fr>
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> I'll apply only the revert and let you revisit the patch 2 which could be
+> improved.
 
-For the sound part
-Acked-by: Takashi Iwai <tiwai@suse.de>
+What's the issue with patch 2/2?  It looks okay to me.
 
+regards,
+dan carpenter
 
-thanks,
-
-Takashi
 
