@@ -1,115 +1,216 @@
-Return-Path: <linux-pm+bounces-7933-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7934-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67CB28C84EE
-	for <lists+linux-pm@lfdr.de>; Fri, 17 May 2024 12:36:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F6228C853D
+	for <lists+linux-pm@lfdr.de>; Fri, 17 May 2024 13:07:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C1595281086
-	for <lists+linux-pm@lfdr.de>; Fri, 17 May 2024 10:34:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 150741F22E31
+	for <lists+linux-pm@lfdr.de>; Fri, 17 May 2024 11:07:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B828134BF;
-	Fri, 17 May 2024 10:34:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="d7gBPE0E"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 413F13B78B;
+	Fri, 17 May 2024 11:06:54 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8EF9282FB
-	for <linux-pm@vger.kernel.org>; Fri, 17 May 2024 10:34:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C82AA3AC2F;
+	Fri, 17 May 2024 11:06:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715942087; cv=none; b=mItkmO5vqVNSVV08uzIBFzLAvhBW760KvthLDfa7UG0owD58NqQK58tP4T0SYW0FGVqOd5bvB0oQ5JJiQI5ZyyxZLDTYcVrAB89nvKfbq6AGDZ7rawzJO0B9WrWlzjKwFB3uQazuyL6ftED2J2qgF+Kq7C9UVUaFdD6qmUE3xI8=
+	t=1715944014; cv=none; b=o9h7UuFLwclua4HHETKcjNOpFZtRZ5j8eRoZqRSf+1jmdLN67y9uVyte4PnYZN7px7dnbdO7T98BHFMue6bwSBnKrvkug9lhRjNWec3xpQpSXFD1iIZd/Evq/bJuf+oShecvqycBcNnszPcsE1VNS6z9wqEV2S4HFhRc4fWteqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715942087; c=relaxed/simple;
-	bh=DC1JfrU+y0WCfid8J6lB6psRFxQrSNp2hUjCgZuzkHw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=QLEl4PnS9OeQKsui8Kv1UGYHcQ1sKacu44dcXLbXihY4cgatepsElNpfiZUxYPyKiFVqP9eesXSOuq8dX5N9NVEsUjRmNAX0V6Fqx0fAupuvOTIId9OUzd2Q46yZmmgtg70mnsgHBv8KXWguYNgGvJOCV+QHY2ckOcvWmpk8Zis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=d7gBPE0E; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a59c448b44aso446997266b.2
-        for <linux-pm@vger.kernel.org>; Fri, 17 May 2024 03:34:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1715942084; x=1716546884; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=74OCuFSfJYPZklSbssiMGFodlyWfsiRW9fSWN1NjjPs=;
-        b=d7gBPE0EiYwedqpQpwBmS6TtxDlAp5zVM6bfyAVdgl73ddjqugmrFhWijAs6vlxMKU
-         A57UCDHym4wtzGIHiG6ZxnbNLjpniJ9ek5eiIBseqsovzcc5aY4F1HlQ8iH5dCEa/A5/
-         cOazj/cmDiyr6UQtqDF7A8PwbipXavA7dfiqDrAKdwO9QZ8WZ87dVsUuCUUx/5nBsplz
-         q357oj2W5iywWnOYn/e96Lckm3BvFE8KuDHwLVU4TtcsHU81RPK7lnG4wsMM0YahXcjD
-         0Rhi28zR8ocS0FSSZRHMXGWpAxYkGYhJI/ATbbvaEd8DvWS54DLdpDX8+AUd/HTvW4xs
-         tE/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715942084; x=1716546884;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=74OCuFSfJYPZklSbssiMGFodlyWfsiRW9fSWN1NjjPs=;
-        b=clXUSdic6Ye1rtvAkCsNnTmZReeCZZujsLYghd8TDahKyZM1r8F4olVFOlTMnDlcin
-         MiOjkMG8PyMmV/DSuvYwP2et5cHXVFHwmWYCvVkMizeFjfJalgUYCOzFBHyXCLvNPS9f
-         NshU3MlLs8tRELWhHxmUtNUT1uL7jVVYcj7d1JaW2k8W8D1g2q0u833WycyVKcSyn5yx
-         TwsQgH5scvHaobbMXnVL2/7FqtQNFCqLFYvzLXl/U15vnvc1ej722ITNh9V1gyY6e8al
-         3NqAMQTzCe8GdqXg5AgbV477CckU3t8xfLa6Jo3dP+kfvhO+emnYu2d5R11zlqLlIJLL
-         zsgg==
-X-Gm-Message-State: AOJu0Yye0N2x4VvHnwgql3Sub83uxw5TGr0ByxIlbQN9MMCH3P9DCWL5
-	ix/1f07cYnKISht9BlNzv1d7UcUuST4mHT5WRWFGGP8A1jXVO3qY8RcZm3vuxJQ=
-X-Google-Smtp-Source: AGHT+IH8a8wKS7WPfuCevEnGME0SzYbiJBZJriC9fhug3tEWZ9vpStUbsuM0KAIOBNhbS2yrMf9ENg==
-X-Received: by 2002:a17:906:aad1:b0:a59:c23d:85d2 with SMTP id a640c23a62f3a-a5a2d66b4b8mr1358225566b.55.1715942083756;
-        Fri, 17 May 2024 03:34:43 -0700 (PDT)
-Received: from localhost ([149.14.240.163])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5a17b17fdesm1104290466b.220.2024.05.17.03.34.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 May 2024 03:34:43 -0700 (PDT)
-Date: Fri, 17 May 2024 12:34:40 +0200
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: [GIT PULL] OPP updates for 6.10
-Message-ID: <20240517103440.p7tlrthhy4mc6n6o@viresh-thinkpad>
+	s=arc-20240116; t=1715944014; c=relaxed/simple;
+	bh=Iflwst1YHxCba42648JKAgwhZA6cooCNF0L2d6gxE9Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kI4UlyDuwfgw87NPZisBT9QXmk3h8GEbybXPfSY/0Iox+rO+MY/C62HgYiLiw36LMcDhqjEpNwDHy1R4rR5ZHMtER/Lz8f2P8QP11/kiAvRvWTLv+WXkfeoxvW31JVcqQy0W1kLtZ5uq7bWYXH7WwpgswWgKTIW9aYEfzP89U10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DBA791424;
+	Fri, 17 May 2024 04:07:13 -0700 (PDT)
+Received: from [10.57.3.11] (unknown [10.57.3.11])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6DA2F3F7A6;
+	Fri, 17 May 2024 04:06:47 -0700 (PDT)
+Message-ID: <b4036b48-7d04-4bba-b405-f64ee309e874@arm.com>
+Date: Fri, 17 May 2024 12:06:45 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4] sched: Consolidate cpufreq updates
+To: Qais Yousef <qyousef@layalina.io>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+ Ingo Molnar <mingo@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Juri Lelli <juri.lelli@redhat.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall
+ <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+ Daniel Bristot de Oliveira <bristot@redhat.com>,
+ Valentin Schneider <vschneid@redhat.com>,
+ Christian Loehle <christian.loehle@arm.com>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240516204802.846520-1-qyousef@layalina.io>
+Content-Language: en-US
+From: Hongyan Xia <hongyan.xia2@arm.com>
+In-Reply-To: <20240516204802.846520-1-qyousef@layalina.io>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Rafael,
+On 16/05/2024 21:48, Qais Yousef wrote:
+> Improve the interaction with cpufreq governors by making the
+> cpufreq_update_util() calls more intentional.
+> 
+> At the moment we send them when load is updated for CFS, bandwidth for
+> DL and at enqueue/dequeue for RT. But this can lead to too many updates
+> sent in a short period of time and potentially be ignored at a critical
+> moment due to the rate_limit_us in schedutil.
+> 
+> For example, simultaneous task enqueue on the CPU where 2nd task is
+> bigger and requires higher freq. The trigger to cpufreq_update_util() by
+> the first task will lead to dropping the 2nd request until tick. Or
+> another CPU in the same policy triggers a freq update shortly after.
+> 
+> Updates at enqueue for RT are not strictly required. Though they do help
+> to reduce the delay for switching the frequency and the potential
+> observation of lower frequency during this delay. But current logic
+> doesn't intentionally (at least to my understanding) try to speed up the
+> request.
+> 
+> To help reduce the amount of cpufreq updates and make them more
+> purposeful, consolidate them into these locations:
+> 
+> 1. context_switch()
+> 2. task_tick_fair()
+> 3. update_blocked_averages()
+> 4. on syscall that changes policy or uclamp values
+> 
+> The update at context switch should help guarantee that DL and RT get
+> the right frequency straightaway when they're RUNNING. As mentioned
+> though the update will happen slightly after enqueue_task(); though in
+> an ideal world these tasks should be RUNNING ASAP and this additional
+> delay should be negligible. For fair tasks we need to make sure we send
+> a single update for every decay for the root cfs_rq. Any changes to the
+> rq will be deferred until the next task is ready to run, or we hit TICK.
+> But we are guaranteed the task is running at a level that meets its
+> requirements after enqueue.
+> 
+> To guarantee RT and DL tasks updates are never missed, we add a new
+> SCHED_CPUFREQ_FORCE_UPDATE to ignore the rate_limit_us. If we are
+> already running at the right freq, the governor will end up doing
+> nothing, but we eliminate the risk of the task ending up accidentally
+> running at the wrong freq due to rate_limit_us.
+> 
+> Similarly for iowait boost, we ignore rate limits. We also handle a case
+> of a boost reset prematurely by adding a guard in sugov_iowait_apply()
+> to reduce the boost after 1ms which seems iowait boost mechanism relied
+> on rate_limit_us and cfs_rq.decay preventing any updates to happen soon
+> after iowait boost.
+> 
+> The new SCHED_CPUFREQ_FORCE_UPDATE should not impact the rate limit
+> time stamps otherwise we can end up delaying updates for normal
+> requests.
+> 
+> As a simple optimization, we avoid sending cpufreq updates when
+> switching from RT to another RT as RT tasks run at max freq by default.
+> If CONFIG_UCLAMP_TASK is enabled, we can do a simple check to see if
+> uclamp_min is different to avoid unnecessary cpufreq update as most RT
+> tasks are likely to be running at the same performance level, so we can
+> avoid unnecessary overhead of forced updates when there's nothing to do.
+> 
+> We also ensure to ignore cpufreq udpates for sugov workers at context
+> switch. It doesn't make sense for the kworker that applies the frequency
+> update (which is a DL task) to trigger a frequency update itself.
+> 
+> The update at task_tick_fair will guarantee that the governor will
+> follow any updates to load for tasks/CPU or due to new enqueues/dequeues
+> to the rq. Since DL and RT always run at constant frequencies and have
+> no load tracking, this is only required for fair tasks.
+> 
+> The update at update_blocked_averages() will ensure we decay frequency
+> as the CPU becomes idle for long enough.
+> 
+> If the currently running task changes its policy or uclamp values, we
+> ensure we follow up with cpufreq update to ensure we follow up with any
+> potential new perf requirements based on the new change.
+> 
+> [...]
+> 
+> diff --git a/include/linux/sched/cpufreq.h b/include/linux/sched/cpufreq.h
+> index bdd31ab93bc5..2d0a45aba16f 100644
+> --- a/include/linux/sched/cpufreq.h
+> +++ b/include/linux/sched/cpufreq.h
+> @@ -8,7 +8,8 @@
+>    * Interface between cpufreq drivers and the scheduler:
+>    */
+>   
+> -#define SCHED_CPUFREQ_IOWAIT	(1U << 0)
+> +#define SCHED_CPUFREQ_IOWAIT		(1U << 0)
+> +#define SCHED_CPUFREQ_FORCE_UPDATE	(1U << 1) /* ignore transition_delay_us */
+>   
+>   #ifdef CONFIG_CPU_FREQ
+>   struct cpufreq_policy;
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 1a914388144a..d0c97a66627a 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -152,6 +152,9 @@ const_debug unsigned int sysctl_sched_nr_migrate = SCHED_NR_MIGRATE_BREAK;
+>   
+>   __read_mostly int scheduler_running;
+>   
+> +static __always_inline void
+> +update_cpufreq_ctx_switch(struct rq *rq, struct task_struct *prev);
+> +
+>   #ifdef CONFIG_SCHED_CORE
+>   
+>   DEFINE_STATIC_KEY_FALSE(__sched_core_enabled);
+> @@ -1958,7 +1961,7 @@ static bool uclamp_reset(const struct sched_attr *attr,
+>   	return false;
+>   }
+>   
+> -static void __setscheduler_uclamp(struct task_struct *p,
+> +static void __setscheduler_uclamp(struct rq *rq, struct task_struct *p,
+>   				  const struct sched_attr *attr)
+>   {
+>   	enum uclamp_id clamp_id;
+> @@ -1980,7 +1983,6 @@ static void __setscheduler_uclamp(struct task_struct *p,
+>   			value = uclamp_none(clamp_id);
+>   
+>   		uclamp_se_set(uc_se, value, false);
+> -
+>   	}
+>   
+>   	if (likely(!(attr->sched_flags & SCHED_FLAG_UTIL_CLAMP)))
+> @@ -1997,6 +1999,13 @@ static void __setscheduler_uclamp(struct task_struct *p,
+>   		uclamp_se_set(&p->uclamp_req[UCLAMP_MAX],
+>   			      attr->sched_util_max, true);
+>   	}
+> +
+> +	/*
+> +	 * Updating uclamp values has impact on freq, ensure it is taken into
+> +	 * account.
+> +	 */
+> +	if (task_current(rq, p))
+> +		update_cpufreq_ctx_switch(rq, NULL);
 
-The following changes since commit 4cece764965020c22cff7665b18a012006359095:
+Do we care about updating the frequency here? p is dequeued during the 
+__setscheduler_uclamp() call, so I think it's better to do this after 
+the uclamp() call and after enqueue_task(), so that uclamp_rq_inc() 
+comes into effect.
 
-  Linux 6.9-rc1 (2024-03-24 14:10:05 -0700)
+Also, do we want to limit the update to task_current()? Updating a 
+uclamp_min of a task on this rq (even though it is not current) should 
+raise the minimum OPP for the whole rq. An example is that if a 
+uclamp_min task gets enqueued, the uclamp_min should kick in even if 
+this task isn't immediately run and the current task isn't this task.
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/opp-updates-6.10
-
-for you to fetch changes up to 2a56c462fe5a2ee61d38e2d7b772bee56115a00c:
-
-  OPP: Fix required_opp_tables for multiple genpds using same table (2024-05-17 12:22:46 +0200)
-
-----------------------------------------------------------------
-OPP Updates for 6.10
-
-- Fix required_opp_tables for multiple genpds using same table (Viresh
-  Kumar).
-
-----------------------------------------------------------------
-Viresh Kumar (1):
-      OPP: Fix required_opp_tables for multiple genpds using same table
-
- drivers/opp/core.c        | 31 ++++++++++++++++++++++++++++++-
- drivers/pmdomain/core.c   | 10 ++++++++++
- include/linux/pm_domain.h |  6 ++++++
- 3 files changed, 46 insertions(+), 1 deletion(-)
-
---
-Viresh
+>   }
+>   
+>   static void uclamp_fork(struct task_struct *p)
+> [...]
 
