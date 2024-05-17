@@ -1,98 +1,109 @@
-Return-Path: <linux-pm+bounces-7943-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7944-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57AA48C8AE6
-	for <lists+linux-pm@lfdr.de>; Fri, 17 May 2024 19:24:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A95868C8AF4
+	for <lists+linux-pm@lfdr.de>; Fri, 17 May 2024 19:26:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8936A1C2154B
-	for <lists+linux-pm@lfdr.de>; Fri, 17 May 2024 17:24:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 64889281AC5
+	for <lists+linux-pm@lfdr.de>; Fri, 17 May 2024 17:26:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A285E13DDAF;
-	Fri, 17 May 2024 17:23:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04CB913E028;
+	Fri, 17 May 2024 17:26:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gB/SYknI"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="DI2/sOIS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74FB413DBBB;
-	Fri, 17 May 2024 17:23:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84BF313DB9B;
+	Fri, 17 May 2024 17:26:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715966638; cv=none; b=DBCu7BIwJAsrllDiu3tX/uNwkX9visQVaAycPB5VI2ofd3Whj2oDjkBucEN2vZV6vKh0wbf78FuYDP/y+an/7eo+mjEQ53tJnfZD7/WqEciumw2AS991YFMA35aNixJF+sN8SydZjb5C3f9HzfcKbyY3uFeWm/2iFIUylRE9lH8=
+	t=1715966788; cv=none; b=QCDVWAOGYOrGcl+SZ6nb9DO61bVI0fpD9M5PjN0FZzyq4ut5G7qZ5u7SKPE4udVjCqV+h0gDO202fggt2vJulQGanR6DjEvpKocGixZxyJYxiba78RUe6R3v9f0ilkRDzPFePwADRZImiwikgE2b8ctK8llVYH7zEVAiEi8yjYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715966638; c=relaxed/simple;
-	bh=TZU3z8IWnx7CUMuj79eonsqv+gjyOnE3Wi/7eRQVMV8=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=FebMrFfmRO6hoxuwvY4xYAbPIg1Dd7qkezUCW21BzYbMZ6a9uKY9eAahv2iIDGJE+dA6r2/DGHy24xckrBojozco2Jo3yMwm8WNQlSBUuyrB/s+XuyriekuoPNBCdNxrapV1zIpN7y8DId96HjnW8umWCXlqywGQKOskf9yTOp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gB/SYknI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DED1C32781;
-	Fri, 17 May 2024 17:23:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715966638;
-	bh=TZU3z8IWnx7CUMuj79eonsqv+gjyOnE3Wi/7eRQVMV8=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-	b=gB/SYknIfX9sI4KFtCfwEgWuqQGrimVZmGjZQHRaW3A+VyvlafCF9LF/uWJhxRRR+
-	 OT/WiL+wwMkEv8ztFZ7uO98Lx+Qg+RSasTD8ucxZxxmVJhjfPw0KwEjhdPDbX4G+zf
-	 PmDfZ1HnhrQE88VUwYCXFnKbCMIP5w/k/EIIP1kEAraC+T8ctXAqNTEDjHIEfGz8GV
-	 eWkDYty8VCkwLU8X5qoeF+NgsESdbdmjf3dtzD/yFO/ASpd54/Yf+s9n7FyH4lVNJm
-	 9PwinlTjoYe8kKUBG+z2QPd3qijcOrj3OhXYw8jGsgiCRlaU1X51Bg7XEQ+s1kVB3z
-	 WuCKF5jMLhDtQ==
-From: Kalle Valo <kvalo@kernel.org>
-To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc: Borislav Petkov <bp@alien8.de>,  Dave Hansen <dave.hansen@intel.com>,
-  Thomas Gleixner <tglx@linutronix.de>,  Ingo Molnar <mingo@redhat.com>,
-  Dave Hansen <dave.hansen@linux.intel.com>,  "Rafael J. Wysocki"
- <rafael@kernel.org>,  x86@kernel.org,  linux-pm@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  regressions@lists.linux.dev,  Jeff Johnson
- <quic_jjohnson@quicinc.com>,  Daniel Sneddon
- <daniel.sneddon@linux.intel.com>
+	s=arc-20240116; t=1715966788; c=relaxed/simple;
+	bh=L01yknndEnuYphVPNzv32AM8AKWTkpUwEh/WTz0L6Vg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cQjAbkGL4PnCf155+PjvlAAembYClG9TDgR3AIWEFANr1iUJK/ixAAAsZGL6+5MEGGZoNpz6TB9lIOZ0CX3UQ/FbCJnxPYr1sVR7IC0vGWSv8NYFZzN3RrMg84adwFNKB/Osv5sH1UmfStTmaBq6MhRvaBLQBJuthHKSkRDRkIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=DI2/sOIS; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 6FF8840E01E8;
+	Fri, 17 May 2024 17:26:24 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id QUTAxFpwmxTl; Fri, 17 May 2024 17:26:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1715966780; bh=JxAsV7mx2TJYX+9cLdcRXg8LbfpFXpxmKwDrIX6yx2Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DI2/sOISPGLdODF0BiGocWEe/0U2MNVG8oNI+5pw4AX0o3DocNcEi2jD28MsRvtly
+	 LLfpEjN2T0Eh6AZE5KUZfA5/t0wiQ/p0pJXeXz5jCCiJOrwMiqrVpFmDpaFBkPfu8n
+	 zNKfbCYRm3x1HiNnw7Vx0kgVZgqiVLEaY2pipCEj+Dj0th9shVMPJhIFcHEHfDXPEK
+	 WdnGLssQYNWw4prkWdEgsVXM407HYRxxxdQv6oJhFl88uqyfsoPsI6my01zVwmFVGK
+	 i4Vvt2Kje2+NfihI7muhCq3ukKA+l+/JQ2RUU9Db/cH1pXBmcs5H+oltqJn+sEwKMs
+	 Tq4raj3xeDDQ9GGwisXKDd0XLB5yhUa30bxtEqJQYZrw1gylg2T7yziWnfnq/FpSYT
+	 y6DjTjIx//ixAdBFj+JYXBEQe/roXr7LToeSf3DXSZRGtlENmqLFTUfJwP2GobgZDV
+	 MXdaW/MZ5i35OCiKryPq6MvUKyaHeIAlO0wDuRA+bI60UsGRA0gaDmOBT1SJY1kO9T
+	 qoIOmIQnRDPs8BURUKBrkkMFhHVHfnP1eeXiPcyggk00pq42mr31bwex7k9hQa8/a+
+	 ijjVw3w6MRUmSqEiEJosV+NfW1CNX1+SSjm6HK7nEklPBRWX6n+jzYw1hf2aUyGIOt
+	 ggrnG3vW0HjE0rbC/dR/iImg=
+Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DEB4440E0244;
+	Fri, 17 May 2024 17:26:08 +0000 (UTC)
+Date: Fri, 17 May 2024 19:26:03 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Kalle Valo <kvalo@kernel.org>
+Cc: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>, x86@kernel.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	regressions@lists.linux.dev,
+	Jeff Johnson <quic_jjohnson@quicinc.com>
 Subject: Re: [regression] suspend stress test stalls within 30 minutes
+Message-ID: <20240517172603.GEZkeTK246tBvGEtgF@fat_crate.local>
 References: <87o79cjjik.fsf@kernel.org>
-	<20240511184847.GCZj-9j2sh1Akpt9iS@fat_crate.local>
-	<20240511184945.GDZj-9yaOEWqf1ng8u@fat_crate.local>
-	<87h6f4jdrq.fsf@kernel.org> <878r0djxgc.fsf@kernel.org>
-	<874jb0jzx5.fsf@kernel.org>
-	<feaefaae-e25b-4a48-b6be-e20054f2c8df@intel.com>
-	<20240515072231.z3wlyoblyc34ldmr@desk>
-	<529C9374-DA6F-49C8-9B32-91741800F8E4@alien8.de>
-	<20240515162747.6shmaoelc4mt7nro@desk>
-Date: Fri, 17 May 2024 20:23:53 +0300
-In-Reply-To: <20240515162747.6shmaoelc4mt7nro@desk> (Pawan Gupta's message of
-	"Wed, 15 May 2024 09:27:47 -0700")
-Message-ID: <87eda0fj2u.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+ <20240511184847.GCZj-9j2sh1Akpt9iS@fat_crate.local>
+ <20240511184945.GDZj-9yaOEWqf1ng8u@fat_crate.local>
+ <87h6f4jdrq.fsf@kernel.org>
+ <878r0djxgc.fsf@kernel.org>
+ <874jb0jzx5.fsf@kernel.org>
+ <20240514160555.GCZkOL41oB3hBt45eO@fat_crate.local>
+ <87msoofjg1.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87msoofjg1.fsf@kernel.org>
 
-Pawan Gupta <pawan.kumar.gupta@linux.intel.com> writes:
+On Fri, May 17, 2024 at 08:15:58PM +0300, Kalle Valo wrote:
+> So the weird part is that when the bug happens (ie. suspend stalls) I
+> can access the box normally using ssh and I don't see anything special
+> in dmesg. Below is a full copy of dmesg output after the suspend
+> stalled. Do note that I copied this dmesg before I updated microcode so
+> it will still show the old microcode version.
 
-> On Wed, May 15, 2024 at 09:44:42AM +0200, Borislav Petkov wrote:
->> On May 15, 2024 9:22:31 AM GMT+02:00, Pawan Gupta
->> <pawan.kumar.gupta@linux.intel.com> wrote:
->> > Other interesting thing to try is cmdline
->> >"dis_ucode_ldr".
->> 
->> Right, is his microcode revision 0xf4 the right one for that model?
->
-> 0xf4 microcode is not the latest one, the latest is 0xf8:
->
-> https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/blob/main/intel-ucode/06-9e-09
->
-> Kalle, can you please try with 0xf8 and see if the issue is still present?
+Does that mean that you'd still see the stall even with the latest
+microcode revision 0xf8?
 
-I updated to this version:
+-- 
+Regards/Gruss,
+    Boris.
 
-[   11.907565] microcode: Current revision: 0x000000f8
-[   11.907614] microcode: Updated early from: 0x000000ea
-
-But unfortunately no luck, the suspend still fails after 29 loops.
+https://people.kernel.org/tglx/notes-about-netiquette
 
