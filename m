@@ -1,164 +1,283 @@
-Return-Path: <linux-pm+bounces-7969-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7970-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB4988C92FC
-	for <lists+linux-pm@lfdr.de>; Sun, 19 May 2024 00:07:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 249828C9318
+	for <lists+linux-pm@lfdr.de>; Sun, 19 May 2024 01:58:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 667F5B20D49
-	for <lists+linux-pm@lfdr.de>; Sat, 18 May 2024 22:07:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7DB4E2819BF
+	for <lists+linux-pm@lfdr.de>; Sat, 18 May 2024 23:58:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 385C56CDCA;
-	Sat, 18 May 2024 22:07:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DB9E6CDC5;
+	Sat, 18 May 2024 23:58:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="ToFpam+K"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IrXP8Y4r"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D4388F49;
-	Sat, 18 May 2024 22:07:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86C7A2BB10;
+	Sat, 18 May 2024 23:58:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716070053; cv=none; b=cA22B4yoBylDpZ02Lo3iBDrICKu/cvuC8JLg9mIzvBnel92skxeRl7KkHpWRtGwATmS3u/28/UrQ4mnKMxnLbp63Miv1NWcGuPB7GPvWdNa0WtZr18KrQ6jC9pUxSfIs4dBMARrDdpmBviZcyYnZXsYuvYo0WdqNa9pDP69HeI0=
+	t=1716076702; cv=none; b=Pq6voGlXXn8VXfhaXuDdCeT+ZTqw+91vu1R9eYonRiJ4B0z+AYA4uru/kRPUMikUg6LFjpQ2tLOerklqBKwQX/8g0oXGp7222UX+hH+ulhXGrgrdGqESHUpFAGOhFeNtSf3o0KIE8J8oFmmsk61a6CZTeTWes6DGl8OrgFsoc04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716070053; c=relaxed/simple;
-	bh=7WZoC8Cv9EUhQkWgeAytRxfMcPYt+SStwinFuIc4Sy0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mcTf/3ryJ3n49G3o9uh+GAR3WwtwYVhRr7oVyT7zsOoVEjCPGcaGNLcRlfCge0p7gw2knjCjlCeCJzyZi3XFIszFSemuQg2CnuKJVzQXENBSrm+8jW2KlKPmyzrN5SQ7e0tbYdqjSHXG42k5odG9iyN/NI4QQDBbk5tZxBG3o/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=ToFpam+K; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1716070044;
-	bh=7WZoC8Cv9EUhQkWgeAytRxfMcPYt+SStwinFuIc4Sy0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ToFpam+KIVz5AUTeBcEhAT2PgruryZpzQ+fU+2O06JwRPsg4+BLVX+SbUuenIbL6A
-	 H/4KG0Z3F1C6ODmhqsmKO3GqTbiFKWD9hJ00qc2fsyw17QZEmaW0o+IBEcQ0kpS81V
-	 TVpnC3iHkPUq6hvJXKiy8vlr3ZWntMT27nbldhUA=
-Date: Sun, 19 May 2024 00:07:24 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: stable@vger.kernel.org
-Cc: rafael.j.wysocki@intel.com, Mario.Limonciello@amd.com, 
-	viresh.kumar@linaro.org, Ray.Huang@amd.com, gautham.shenoy@amd.com, 
-	Borislav.Petkov@amd.com, Alexander.Deucher@amd.com, Xinmei.Huang@amd.com, 
-	Xiaojian.Du@amd.com, Li.Meng@amd.com, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Perry Yuan <perry.yuan@amd.com>
-Subject: Re: [PATCH] cpufreq: amd-pstate: fix the highest frequency issue
- which limit performance
-Message-ID: <4212df0b-5797-42a8-9c64-3e03851293b5@t-8ch.de>
-References: <20240508054703.3728337-1-perry.yuan@amd.com>
+	s=arc-20240116; t=1716076702; c=relaxed/simple;
+	bh=hUuO83VTsg6Q0anihtSJN3ZBuP/mQUktYTTX0keTdOo=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=RnzuW3aCZdezdGjcpF6Z+UsOh2AHnZF8vjaPoHqJxhLWdAmv4IHLKn+ogmBaTWwUS1n77ACD4b233p0XYCy+uCzmHwplw45cvWibqxzp1xRVE9HQNv5jBIq7ANinxrBf6ind6xuZ0NIR6ju9tzOv7zOwgb1q7WdojfN8tv87woE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IrXP8Y4r; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716076700; x=1747612700;
+  h=date:from:to:cc:subject:message-id;
+  bh=hUuO83VTsg6Q0anihtSJN3ZBuP/mQUktYTTX0keTdOo=;
+  b=IrXP8Y4rOTPrqvEvOHevKsBYxkFr5R1YLqagh9MaqXC17um6lqb0vxu0
+   pmWvkbcn3mSj2fvcnbmcS3Tso3bAa4wAa0y7p4a4XJd5LSkb+h/YzjE21
+   pkF6ACvL2XPUZ3G4baCwy0Hnoga9b52NOus/5ar3pam27A/pxs6Kj+AtR
+   9Qc+vlKsWY2p8KEdP3ys6MBfHp/KcyzTlPrGl/slWLuyrS50xXl8ffrrD
+   Yd/VZQUzXT5ilLlqX79VmytIVDs2XV71NzCwnuiQGiC4EER75/m7EDP63
+   +eVj6O/exv0rut7EUq+FUdE9BxCQ0uByS1QTonsYmYu9/6FpZAp2c241i
+   A==;
+X-CSE-ConnectionGUID: 7Yvfm2YFReiB/7wN7Xfn6w==
+X-CSE-MsgGUID: yzOWMtw1TlKmdOebZHRjvg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11076"; a="12357169"
+X-IronPort-AV: E=Sophos;i="6.08,171,1712646000"; 
+   d="scan'208";a="12357169"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2024 16:58:19 -0700
+X-CSE-ConnectionGUID: pb4Z4KcaR/WZD8G7Kalx7Q==
+X-CSE-MsgGUID: ZlCB4qoWSzOKMTxMlsg1QA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,171,1712646000"; 
+   d="scan'208";a="37068714"
+Received: from unknown (HELO 108735ec233b) ([10.239.97.151])
+  by orviesa004.jf.intel.com with ESMTP; 18 May 2024 16:58:17 -0700
+Received: from kbuild by 108735ec233b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s8TwL-0002kk-2J;
+	Sat, 18 May 2024 23:58:14 +0000
+Date: Sun, 19 May 2024 07:57:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 21a69bf121e949e34af454cceff48889016e4e41
+Message-ID: <202405190747.667VFERD-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240508054703.3728337-1-perry.yuan@amd.com>
 
-Hi stable team,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 21a69bf121e949e34af454cceff48889016e4e41  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
 
-Please backport the mainline commit
-bf202e654bfa ("cpufreq: amd-pstate: fix the highest frequency issue which limits performance")
-to the 6.9 stable series.
+Warning ids grouped by kconfigs:
 
-It fixes a performance regression on AMD Phoenix platforms.
+gcc_recent_errors
+`-- x86_64-randconfig-161-20240518
+    `-- drivers-opp-core.c-_opp_attach_genpd()-warn:missing-unwind-goto
+clang_recent_errors
+`-- i386-randconfig-141-20240518
+    `-- drivers-opp-core.c-_opp_attach_genpd()-warn:missing-unwind-goto
 
-It was meant to get into the 6.9 release or the stable branch shortly
-after, but apparently that didn't happen.
+elapsed time: 726m
 
-On 2024-05-08 13:47:03+0000, Perry Yuan wrote:
-> To address the performance drop issue, an optimization has been
-> implemented. The incorrect highest performance value previously set by the
-> low-level power firmware for AMD CPUs with Family ID 0x19 and Model ID
-> ranging from 0x70 to 0x7F series has been identified as the cause.
-> 
-> To resolve this, a check has been implemented to accurately determine the
-> CPU family and model ID. The correct highest performance value is now set
-> and the performance drop caused by the incorrect highest performance value
-> are eliminated.
-> 
-> Before the fix, the highest frequency was set to 4200MHz, now it is set
-> to 4971MHz which is correct.
-> 
-> CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE    MAXMHZ   MINMHZ       MHZ
->   0    0      0    0 0:0:0:0          yes 4971.0000 400.0000  400.0000
->   1    0      0    0 0:0:0:0          yes 4971.0000 400.0000  400.0000
->   2    0      0    1 1:1:1:0          yes 4971.0000 400.0000 4865.8140
->   3    0      0    1 1:1:1:0          yes 4971.0000 400.0000  400.0000
-> 
-> v1->v2:
->  * add test by flag from Gaha Bana
-> 
-> Fixes: f3a052391822 ("cpufreq: amd-pstate: Enable amd-pstate preferred core support")
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218759
-> Signed-off-by: Perry Yuan <perry.yuan@amd.com>
-> Co-developed-by: Mario Limonciello <mario.limonciello@amd.com>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> Tested-by: Gaha Bana <gahabana@gmail.com>
-> ---
->  drivers/cpufreq/amd-pstate.c | 22 +++++++++++++++++++---
->  1 file changed, 19 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 2db095867d03..6a342b0c0140 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -50,7 +50,8 @@
->  
->  #define AMD_PSTATE_TRANSITION_LATENCY	20000
->  #define AMD_PSTATE_TRANSITION_DELAY	1000
-> -#define AMD_PSTATE_PREFCORE_THRESHOLD	166
-> +#define CPPC_HIGHEST_PERF_PERFORMANCE	196
-> +#define CPPC_HIGHEST_PERF_DEFAULT	166
->  
->  /*
->   * TODO: We need more time to fine tune processors with shared memory solution
-> @@ -326,6 +327,21 @@ static inline int amd_pstate_enable(bool enable)
->  	return static_call(amd_pstate_enable)(enable);
->  }
->  
-> +static u32 amd_pstate_highest_perf_set(struct amd_cpudata *cpudata)
-> +{
-> +	struct cpuinfo_x86 *c = &cpu_data(0);
-> +
-> +	/*
-> +	 * For AMD CPUs with Family ID 19H and Model ID range 0x70 to 0x7f,
-> +	 * the highest performance level is set to 196.
-> +	 * https://bugzilla.kernel.org/show_bug.cgi?id=218759
-> +	 */
-> +	if (c->x86 == 0x19 && (c->x86_model >= 0x70 && c->x86_model <= 0x7f))
-> +		return CPPC_HIGHEST_PERF_PERFORMANCE;
-> +
-> +	return CPPC_HIGHEST_PERF_DEFAULT;
-> +}
-> +
->  static int pstate_init_perf(struct amd_cpudata *cpudata)
->  {
->  	u64 cap1;
-> @@ -342,7 +358,7 @@ static int pstate_init_perf(struct amd_cpudata *cpudata)
->  	 * the default max perf.
->  	 */
->  	if (cpudata->hw_prefcore)
-> -		highest_perf = AMD_PSTATE_PREFCORE_THRESHOLD;
-> +		highest_perf = amd_pstate_highest_perf_set(cpudata);
->  	else
->  		highest_perf = AMD_CPPC_HIGHEST_PERF(cap1);
->  
-> @@ -366,7 +382,7 @@ static int cppc_init_perf(struct amd_cpudata *cpudata)
->  		return ret;
->  
->  	if (cpudata->hw_prefcore)
-> -		highest_perf = AMD_PSTATE_PREFCORE_THRESHOLD;
-> +		highest_perf = amd_pstate_highest_perf_set(cpudata);
->  	else
->  		highest_perf = cppc_perf.highest_perf;
->  
-> -- 
-> 2.34.1
-> 
+configs tested: 180
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                            hsdk_defconfig   gcc  
+arc                   randconfig-001-20240518   gcc  
+arc                   randconfig-002-20240518   gcc  
+arc                           tb10x_defconfig   gcc  
+arc                    vdk_hs38_smp_defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   clang
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm                          ep93xx_defconfig   clang
+arm                      footbridge_defconfig   clang
+arm                           omap1_defconfig   gcc  
+arm                   randconfig-001-20240518   gcc  
+arm                   randconfig-002-20240518   clang
+arm                   randconfig-003-20240518   gcc  
+arm                   randconfig-004-20240518   gcc  
+arm                        spear3xx_defconfig   clang
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240518   clang
+arm64                 randconfig-002-20240518   gcc  
+arm64                 randconfig-003-20240518   clang
+arm64                 randconfig-004-20240518   clang
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240518   gcc  
+csky                  randconfig-002-20240518   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20240518   clang
+hexagon               randconfig-002-20240518   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20240518   gcc  
+i386         buildonly-randconfig-002-20240518   gcc  
+i386         buildonly-randconfig-003-20240518   gcc  
+i386         buildonly-randconfig-004-20240518   clang
+i386         buildonly-randconfig-005-20240518   clang
+i386         buildonly-randconfig-006-20240518   gcc  
+i386                                defconfig   clang
+i386                  randconfig-001-20240518   clang
+i386                  randconfig-002-20240518   clang
+i386                  randconfig-003-20240518   gcc  
+i386                  randconfig-004-20240518   gcc  
+i386                  randconfig-005-20240518   clang
+i386                  randconfig-006-20240518   gcc  
+i386                  randconfig-011-20240518   gcc  
+i386                  randconfig-012-20240518   clang
+i386                  randconfig-013-20240518   clang
+i386                  randconfig-014-20240518   gcc  
+i386                  randconfig-015-20240518   clang
+i386                  randconfig-016-20240518   gcc  
+loongarch                        alldefconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20240518   gcc  
+loongarch             randconfig-002-20240518   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240518   gcc  
+nios2                 randconfig-002-20240518   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20240518   gcc  
+parisc                randconfig-002-20240518   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                      pasemi_defconfig   clang
+powerpc                      ppc40x_defconfig   clang
+powerpc               randconfig-001-20240518   clang
+powerpc               randconfig-002-20240518   clang
+powerpc               randconfig-003-20240518   clang
+powerpc                      tqm8xx_defconfig   clang
+powerpc64             randconfig-001-20240518   gcc  
+powerpc64             randconfig-002-20240518   gcc  
+powerpc64             randconfig-003-20240518   clang
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+riscv                 randconfig-001-20240518   gcc  
+riscv                 randconfig-002-20240518   clang
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+s390                  randconfig-001-20240518   clang
+s390                  randconfig-002-20240518   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                         ap325rxa_defconfig   gcc  
+sh                                  defconfig   gcc  
+sh                             espt_defconfig   gcc  
+sh                          r7785rp_defconfig   gcc  
+sh                    randconfig-001-20240518   gcc  
+sh                    randconfig-002-20240518   gcc  
+sh                           se7712_defconfig   gcc  
+sh                             sh03_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20240518   gcc  
+sparc64               randconfig-002-20240518   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20240518   clang
+um                    randconfig-002-20240518   gcc  
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-001-20240518   gcc  
+x86_64       buildonly-randconfig-002-20240518   clang
+x86_64       buildonly-randconfig-003-20240518   clang
+x86_64       buildonly-randconfig-004-20240518   clang
+x86_64       buildonly-randconfig-005-20240518   clang
+x86_64       buildonly-randconfig-006-20240518   clang
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20240518   clang
+x86_64                randconfig-002-20240518   clang
+x86_64                randconfig-003-20240518   gcc  
+x86_64                randconfig-004-20240518   gcc  
+x86_64                randconfig-005-20240518   gcc  
+x86_64                randconfig-006-20240518   clang
+x86_64                randconfig-011-20240518   gcc  
+x86_64                randconfig-012-20240518   gcc  
+x86_64                randconfig-013-20240518   clang
+x86_64                randconfig-014-20240518   gcc  
+x86_64                randconfig-015-20240518   clang
+x86_64                randconfig-016-20240518   clang
+x86_64                randconfig-071-20240518   clang
+x86_64                randconfig-072-20240518   clang
+x86_64                randconfig-073-20240518   gcc  
+x86_64                randconfig-074-20240518   clang
+x86_64                randconfig-075-20240518   gcc  
+x86_64                randconfig-076-20240518   gcc  
+x86_64                          rhel-8.3-rust   clang
+xtensa                            allnoconfig   gcc  
+xtensa                randconfig-001-20240518   gcc  
+xtensa                randconfig-002-20240518   gcc  
+xtensa                    smp_lx200_defconfig   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
