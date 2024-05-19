@@ -1,90 +1,106 @@
-Return-Path: <linux-pm+bounces-7971-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7974-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E9D28C937D
-	for <lists+linux-pm@lfdr.de>; Sun, 19 May 2024 07:32:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BFC08C93BE
+	for <lists+linux-pm@lfdr.de>; Sun, 19 May 2024 09:50:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 913A9B20E10
-	for <lists+linux-pm@lfdr.de>; Sun, 19 May 2024 05:32:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE88E1F21468
+	for <lists+linux-pm@lfdr.de>; Sun, 19 May 2024 07:50:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63266E554;
-	Sun, 19 May 2024 05:32:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1E45182BB;
+	Sun, 19 May 2024 07:50:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="iyzWNVs3"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="Lz6vhAyR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1783F9450;
-	Sun, 19 May 2024 05:32:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9850F1798C;
+	Sun, 19 May 2024 07:50:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716096771; cv=none; b=BrDYgMDAqPvwpASrwHwhxCi0Sf7gm/78b4eNXlSxw7arVtszkcwed+zKniK0EhIVmQdXJZb10kVOKTc8tk92mm8qs1fTuUH+NsFSs0PWaN48iYTdfdGaWqjp8A77plY8HKXkJ6v+8VnNb5JTJmvc1P9qFmfyZ3xrUxxsIuNZseE=
+	t=1716105051; cv=none; b=cK6Upe99mwFGfkgPsSSpJuJVZYRdH5dnOxxpdZlDRWUZ7QccL3dZPwOXivRatLIBCnJPKZYgOSEFvdFCEnguvv6ulWLX7s0nTqhIKOG0fiupvAYWkYpydqtZWOWoGSzN21le/HSOrRb79vSOQUgfgKNJwdJh3tNj0RYIBD/AWUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716096771; c=relaxed/simple;
-	bh=Xkll09NzcXRMEDvaUMAQDVObEDOYOIOCqOZFJSdiRRM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ENcfSXgu1lQP2Q59LRWwV7i2AIS4G/cD4XjT08MCvRHggfsx/X0xJsIXu47TOuI8LBs5o+FSv6YY9q3XKIXd4e7T7/h2Iryd++rM3W7/6H2U/kneCbjLHxLhXBCpkx4bWd2+ffvvOPPaOPpzyFygyArIDXfeG6NxUaMXwSphDE4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=iyzWNVs3; arc=none smtp.client-ip=80.237.130.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:
-	Content-Type:Content-Transfer-Encoding:Content-ID:Content-Description:
-	In-Reply-To:References; bh=Xkll09NzcXRMEDvaUMAQDVObEDOYOIOCqOZFJSdiRRM=;
-	t=1716096769; x=1716528769; b=iyzWNVs3/WRHnF5ipGL1O+iembIf6lYZM71+rTuV0PUqMR9
-	ZCFCXTsGGthU2DT0JYuV8i9tjs3sRHhvOXMyHIQWjv7klZSdZtgboPPjnY1t2LZ76iVcuqzhxJyFq
-	pwjn7vJY3oYfIFKKuSmQTtp+gjinTPwLZPghYA+4CKR9xukw40Vbw6kzD9JckV5wYE+PsAuXgnow+
-	nrM0iXqnx3XFziCY33ZHa3nL2wQkQikfd4rqUdrRWfqSDdoNsUUeFvOMwdwMa/1OuvfYB+vLdd31g
-	V8wHd3rh1jRL4qGH5zazZKW+qI5Z/J4ySh+oDXIUkUzJI/4eQxpPvVyaas3sq2Ow==;
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	id 1s8ZA6-0003gZ-7X; Sun, 19 May 2024 07:32:46 +0200
-Message-ID: <7ed1e3ca-2160-4c52-a19e-8b5f2a90a0ff@leemhuis.info>
-Date: Sun, 19 May 2024 07:32:45 +0200
+	s=arc-20240116; t=1716105051; c=relaxed/simple;
+	bh=XEvMTmyejA92HfvXwRaxygi2nQZ9IXfpiRQKTfYa1uM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=KkiqvbAjZS6JiV8eJ18GrGdEXJ8ucAcnz5k9qRwGAJlVtWC3ODGi72/00NsTuSGU15hwvPgkdaUsH5P8FDNqlGeaTU+tLGNkaxGvNqlGsNdR+1ssfcZA2VM2jMQo4WSBAUfAv6aB/AudyOtCrKinz5aB/zeox+2n3S4tIAdNXjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=Lz6vhAyR; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1716105046;
+	bh=XEvMTmyejA92HfvXwRaxygi2nQZ9IXfpiRQKTfYa1uM=;
+	h=From:Subject:Date:To:Cc:From;
+	b=Lz6vhAyRZm7CuzS8wdtwgjMUo8XB/5KHpbUcsaSq+94dlgB4TDQqwOIKCObCim666
+	 cTqI4w5dS+kz8j/TyqQxZ3IMS5V3wePBgH7Fomub/ypcuDJlTSzyrAmHHp1eUFKHWJ
+	 8K2kTnOH4wDC1d413AEuGkhUQvYCy/CygfSC9jwc=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH 0/3] ChromeOS Embedded Controller charge control driver
+Date: Sun, 19 May 2024 09:50:18 +0200
+Message-Id: <20240519-cros_ec-charge-control-v1-0-baf305dc79b8@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpufreq: amd-pstate: fix the highest frequency issue
- which limit performance
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- stable@vger.kernel.org
-Cc: rafael.j.wysocki@intel.com, Mario.Limonciello@amd.com,
- viresh.kumar@linaro.org, Ray.Huang@amd.com, gautham.shenoy@amd.com,
- Borislav.Petkov@amd.com, Alexander.Deucher@amd.com, Xinmei.Huang@amd.com,
- Xiaojian.Du@amd.com, Li.Meng@amd.com, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, Perry Yuan <perry.yuan@amd.com>
-References: <20240508054703.3728337-1-perry.yuan@amd.com>
- <4212df0b-5797-42a8-9c64-3e03851293b5@t-8ch.de>
-From: "Linux regression tracking (Thorsten Leemhuis)"
- <regressions@leemhuis.info>
-Content-Language: en-US, de-DE
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <4212df0b-5797-42a8-9c64-3e03851293b5@t-8ch.de>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1716096769;d0a3a4cb;
-X-HE-SMSGID: 1s8ZA6-0003gZ-7X
+X-B4-Tracking: v=1; b=H4sIADqvSWYC/x2MWwqAMAzAriL9drCJe+BVRERm1YJs0okI4t0tf
+ oaQPFCQCQt01QOMFxXKScDUFcRtSisqmoWh0U2rrXYqci4jRiWWxcacTs67csE64zHgHDxIfDA
+ udP/jfnjfD0qbOMRoAAAA
+To: Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
+ Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas@weissschuh.net>
+Cc: chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, 
+ linux-pm@vger.kernel.org, Mario Limonciello <mario.limonciello@amd.com>, 
+ Dustin Howett <dustin@howett.net>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1716105045; l=1339;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=XEvMTmyejA92HfvXwRaxygi2nQZ9IXfpiRQKTfYa1uM=;
+ b=bzQAuhT2HoodDD+paM1bjPmpJqZ4jNyPrci8hFaTGj9Heh/GjTuliLL9JarHQMzpFm2NMAJj9
+ EvS9NyxYVEKDABUcyKwKCh1rVS1gsdb52BLgON2Kvm8nHu0Ta2eLx2u
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-On 19.05.24 00:07, Thomas Weißschuh wrote:
+Add a power supply driver that supports charge thresholds and behaviour
+configuration.
 
-> Please backport the mainline commit
-> bf202e654bfa ("cpufreq: amd-pstate: fix the highest frequency issue which limits performance")
-> to the 6.9 stable series.
-> [...]
+This is a complete rework of
+"platform/chrome: cros_ec_framework_laptop: new driver" [0], which used
+Framework specific EC commands.
 
-FWIW, that commit already queued, as can be seen here:
+The driver propsed in this series only uses upstream CrOS functionality.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git/tree/queue-6.9
+Tested on a Framework 13 AMD, Firmware 3.05.
 
-Ciao, Thorsten
+[0] https://lore.kernel.org/lkml/20240505-cros_ec-framework-v1-0-402662d6276b@weissschuh.net/
+
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Thomas Weißschuh (3):
+      platform/chrome: Update binary interface for EC-based charge control
+      power: supply: add ChromeOS EC based charge control driver
+      mfd: cros_ec: Register charge control subdevice
+
+ MAINTAINERS                                    |   6 +
+ drivers/mfd/cros_ec_dev.c                      |   1 +
+ drivers/power/supply/Kconfig                   |  12 ++
+ drivers/power/supply/Makefile                  |   1 +
+ drivers/power/supply/cros_charge-control.c     | 279 +++++++++++++++++++++++++
+ include/linux/platform_data/cros_ec_commands.h |  44 +++-
+ 6 files changed, 341 insertions(+), 2 deletions(-)
+---
+base-commit: 0450d2083be6bdcd18c9535ac50c55266499b2df
+change-id: 20240506-cros_ec-charge-control-685617e8ed87
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
+
 
