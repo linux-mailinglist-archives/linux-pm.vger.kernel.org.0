@@ -1,79 +1,85 @@
-Return-Path: <linux-pm+bounces-7976-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7977-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CBD38C9613
-	for <lists+linux-pm@lfdr.de>; Sun, 19 May 2024 21:37:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB79B8C96A4
+	for <lists+linux-pm@lfdr.de>; Sun, 19 May 2024 23:04:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F351328116A
-	for <lists+linux-pm@lfdr.de>; Sun, 19 May 2024 19:37:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 998471F210F6
+	for <lists+linux-pm@lfdr.de>; Sun, 19 May 2024 21:04:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C19006F06B;
-	Sun, 19 May 2024 19:36:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JYIH4C9h"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0610448CC7;
+	Sun, 19 May 2024 21:04:13 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 968A86E61A;
-	Sun, 19 May 2024 19:36:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E4B026AEC;
+	Sun, 19 May 2024 21:04:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716147417; cv=none; b=P+W60z/4QjuYafJB4+aKBuNIAMFeF/F0HcDtuYXplWTez1zoheYhwgOg77OH2iuri+6QEFVaLpyGPAGmRNQrKsFICrcgh5Lbl4dpnWyWFjMp8ruoMRKPZ7bp7awxhYecjlZgZQPWa4wT4pc55H/GVvRermPXu+qp+97TgXuM8xA=
+	t=1716152652; cv=none; b=u9lp1lx8C5lwTVudZpg9Cdg7jFQV68SNQ+glPQOb/WJTdgm/fv+h9kc1nYvuToJ1ICk0yx05a7fwbcJ+sSl/4mQR6z1JFwFSVuzVrC71iyLjWbtaCBx4CUNKn1qzxHQ/7QTjjSATiT/FLTeIdVm9wxh/GJssCF9EFwpK4sSBT5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716147417; c=relaxed/simple;
-	bh=YEgeFgOE7zY5OBbYvBi1KKhLjKSOsdLUG+jQ+L5T8JM=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=hENhoSwY4+cQb7jiIZHbWSGEpSIvHbeNabW+VeIlPpoBtpoWdbRqdcpnPfxcsXJVW8yFAUI/UKMs1XhdRHDviwYbGKd8EYXXbYhyCQWT26XiS850z/gMAT9/j9t/YKXDhgZ8j5sf4qJDOeBEpjiFnhpJ4R+Mm5q5mp0i17NYYSg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JYIH4C9h; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 777F0C4AF0F;
-	Sun, 19 May 2024 19:36:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716147417;
-	bh=YEgeFgOE7zY5OBbYvBi1KKhLjKSOsdLUG+jQ+L5T8JM=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=JYIH4C9hZXdxv9W554YKPwzDDtspYZb5DG2q651AqgKWXI2pldw24fsSQ2FklY9Iq
-	 9U0WtyGDh7O+P7fjvbGQMBwPuRRQJjynx6xEEds7bIYzJe8Dd/qZiJs5Lm1DIjLEmw
-	 YMnBqdyJ4hsAYgSuUi6lpzN9NzGE7UAuxxGVA6BXidR9EdkHWTJ/0osmNZlUYeMkEV
-	 pAlDGbBCyAAjX460N1R+g0dgeGnRVVf/zOrehvWkVuvdg54hoEPtGeYtBht17vAXkt
-	 NUFv9B87Wz+ZPtyrVUgdHL0QWZAoTNC4Hm7MEWAytbkyzm7QiNO/VEPf5oR2ovREKz
-	 zciAcgi5XJjKw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6EEBCC54BB2;
-	Sun, 19 May 2024 19:36:57 +0000 (UTC)
-Subject: Re: [GIT PULL] Turbostat 2024.05.10 for Linux-6.10-merge
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <CAJvTdKmgOCBUX=O4VvuVZfnXVpZcm5vDU6DtAYykuhBH7+-7ow@mail.gmail.com>
-References: <CAJvTdKmgOCBUX=O4VvuVZfnXVpZcm5vDU6DtAYykuhBH7+-7ow@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJvTdKmgOCBUX=O4VvuVZfnXVpZcm5vDU6DtAYykuhBH7+-7ow@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git tags/turbostat-for-Linux-6.10-merge-window
-X-PR-Tracked-Commit-Id: 256d218ec6aea99855dc5c54af550fcff96fc732
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: a90f1cd105c6c5c246f07ca371d873d35b78c7d9
-Message-Id: <171614741745.6582.271007367077030497.pr-tracker-bot@kernel.org>
-Date: Sun, 19 May 2024 19:36:57 +0000
-To: Len Brown <lenb@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Linux PM list <linux-pm@vger.kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+	s=arc-20240116; t=1716152652; c=relaxed/simple;
+	bh=d9zC13sd+PcOp2vUU2yC7M1ViEVGOliY1ayJq7D3KmI=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=DGxaBhvH3r1XGjCdT+alrEB02Enyos6yEiqFepoINZwcrOyY4Sv7newVk5P/6vWJE6lsnRB1yK++w6v3a6ITCPljGGFQ1txSdBs/vxReWn3fQWiPY7x3EB+yQjmdn7kjIdYXd1DacNyZJtqFZSn9evFmAgfhLDNaSc4tjPX6oO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F261F1007;
+	Sun, 19 May 2024 14:04:26 -0700 (PDT)
+Received: from [10.57.85.2] (unknown [10.57.85.2])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 701D73F762;
+	Sun, 19 May 2024 14:04:01 -0700 (PDT)
+Message-ID: <0ce2d536-1125-4df8-9a5b-0d5e389cd8af@arm.com>
+Date: Sun, 19 May 2024 22:03:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Qais Yousef <qyousef@layalina.io>, kajetan.puchalski@arm.com,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>
+From: Christian Loehle <christian.loehle@arm.com>
+Subject: [PATCH] cpuidle: teo: fix underflow of recent intercepts
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The pull request you sent on Sat, 18 May 2024 11:56:57 -0400:
+The recent counter of each cpuidle state bin reflects the number of
+recent intercepts. It's decremented and incremented accordingly.
+The decrement was never checked for 0, therefore underflowing into a
+value teo cannot easily recover from.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git tags/turbostat-for-Linux-6.10-merge-window
+The underflow lead to deeper idle states being skipped because teo
+assumed interception was likely and it preferring shallower states.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/a90f1cd105c6c5c246f07ca371d873d35b78c7d9
+Fixes: 77577558f25d ("cpuidle: teo: Rework most recent idle duration values treatment")
+Signed-off-by: Christian Loehle <christian.loehle@arm.com>
+---
+ drivers/cpuidle/governors/teo.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thank you!
-
+diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
+index 7244f71c59c5..42fb2771e35d 100644
+--- a/drivers/cpuidle/governors/teo.c
++++ b/drivers/cpuidle/governors/teo.c
+@@ -290,7 +290,8 @@ static void teo_update(struct cpuidle_driver *drv, struct cpuidle_device *dev)
+ 	if (cpu_data->next_recent_idx >= NR_RECENT)
+ 		cpu_data->next_recent_idx = 0;
+ 
+-	if (cpu_data->recent_idx[i] >= 0)
++	if (cpu_data->recent_idx[i] >= 0 &&
++			cpu_data->state_bins[cpu_data->recent_idx[i]].recent)
+ 		cpu_data->state_bins[cpu_data->recent_idx[i]].recent--;
+ 
+ 	/*
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.34.1
 
