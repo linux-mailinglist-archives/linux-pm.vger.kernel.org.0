@@ -1,89 +1,90 @@
-Return-Path: <linux-pm+bounces-7982-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7983-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF4FE8C995A
-	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2024 09:33:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 427618C995F
+	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2024 09:35:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 647351F2152C
-	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2024 07:33:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EFAB2280F9E
+	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2024 07:35:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BA7218C3B;
-	Mon, 20 May 2024 07:33:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7EA21B7F4;
+	Mon, 20 May 2024 07:35:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tEXDjBz5"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GPHSzAEO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E29031C6A0
-	for <linux-pm@vger.kernel.org>; Mon, 20 May 2024 07:33:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6571618EA8
+	for <linux-pm@vger.kernel.org>; Mon, 20 May 2024 07:35:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716190424; cv=none; b=pVRBw+MlyKbTaLhIFFUSvCfWPQY9pNT7mlWCaxgG/v5dK+sSWZLhXHI7yvMH+cAB+KCRxlsM718OhyGzhBKsCZ2LZdai3BsCBE890VUc7E6Q7zybzWMkgSZWjQEUJHNnQxpryFZ+oItyfBjUvAfuaTP98juxUruH0Tl2PKtQumU=
+	t=1716190526; cv=none; b=kPrMnNuZqa8FIeQo/8psrqftBwseccnnALRikJ/SiJJ7QbDXDOkzsrDplPX0+vfrmG7gXL5h/A3rWRzV6NWrEt99wXpSw0dlsJEEPsWJ25eCrjn2A/A1/8DoJHsuWaywd/OhP0fclDsMuNZVGP2RK2GRcxIVq5RqmluUjT3IOIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716190424; c=relaxed/simple;
-	bh=WeixK4Kgn0MvKplzBTKjFtE2DZaxPq1ICJ/opiDshY4=;
+	s=arc-20240116; t=1716190526; c=relaxed/simple;
+	bh=CreGSXMBFRDdh+HIhlg2OcR+mWGxYmJCDZEvadFcUiU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uraShK7I2bSW7QoDH8DaGyGR38Atgzr0BLKUPhzNw1+oxHyEtuUvjB51LH6mKiH9vYGjbWhMJsr5k23COJ3gShHOI7d3NJ+wWw5Y4NNpncOfKd4GOiYnZFoNELH6j8xt0TSQrhTvblvk+ahcsiWoYpeuWj9LRcMxPRKi0ImEYQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tEXDjBz5; arc=none smtp.client-ip=209.85.210.46
+	 Content-Type:Content-Disposition:In-Reply-To; b=tH07j8fFEhxW2OaLe6vEf/5Wme2cLVZq2+kbb8tr3kB5E62f4je0OqLbwjXGiw7Tw1+dyVgWmfT1UYjsPBE0IhZ+uoXXHV8kWSx1Ktw7SWdqCI1S3sR6KRX+Jz82Z6B5jeV872TFXSQhoWS/5kRemKuSV8VWNe9UmGsUAc0b01M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GPHSzAEO; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-6f0f87f9545so1900650a34.2
-        for <linux-pm@vger.kernel.org>; Mon, 20 May 2024 00:33:42 -0700 (PDT)
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1f2ecea41deso56684115ad.1
+        for <linux-pm@vger.kernel.org>; Mon, 20 May 2024 00:35:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1716190422; x=1716795222; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1716190525; x=1716795325; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jTHkzAvMu+l8UyjO4kbcmDDhuFxHapp+W1C8XEMNXN4=;
-        b=tEXDjBz5X6HIDXH/APEZKYUsx9z8++QOoTgXg1mStvoc9Ktlj2ZHefg99GLYWaPiDe
-         sUrOgi/t0cfGfOBQwkS9kfRz8VcEyi5gJj6sWrqQ6W80b/a/LtlrteLrPWHv+4AAOgsk
-         m05rMOipT9nBQIMp+1aPwqS5Ieb2w3qbZAfFiRS/mXaUJYEw7f3Kpq7otnGNao/r+T3v
-         Eq1psNVOp9Flx8MQcBJ03nQkJjS5WcC6dSv1PqI45UGBYosD6vofoUzbnqZe0gOGG6Ls
-         7GwkHGCyNuBK+KyKQqTHZKwNh2hjCqBG9NuB3WfYYfEBCPnPsyA0axjpu7lo4aHPQI1G
-         G+rA==
+        bh=TdeskcQGCOqUgsMYL0wvQIQkx8Opxo9clxqEYF92eYc=;
+        b=GPHSzAEOfrDshMyMDR1sf1Hx1I+UK5XRkpI/RG+LDkJO/JgO9YcUuvUakpaXJI3Qtc
+         V4XPrGCWDT6HHXZTuzAJjJ5ts7GfpHM8wHtnCvhh8NuaQKj1j8zFFB6cu5STuEiGyDOF
+         KGdWa3FOmu0Ggdl5/aRjY79jNGVDnHgIIT8DworrQOYWoFG3tRZ6JHCy9b3B0NBTpksd
+         ln9V4OSmmZzj+6YGQB0YWtiAcSpXw28Y1FtbqVN6DbmMFGDReMbrApjOaX4LZwy0LcDn
+         PiumhBgMJvKtvydlOeAGw4SFUMghvWvtXr8rjTDe6S0V5sNReBLjxBZBtf7how/kAftA
+         CU6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716190422; x=1716795222;
+        d=1e100.net; s=20230601; t=1716190525; x=1716795325;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jTHkzAvMu+l8UyjO4kbcmDDhuFxHapp+W1C8XEMNXN4=;
-        b=MSm86ipclPEeFqlvkKENF5646zomvIr92yhk3ijViPqXjf79AtVgruH/p/sqgckDEh
-         vNCbgPznnVKmJLk8lEu6e+xNZD8ZRhBgSVdnPmT3bU2nFSat66Nbpj84AfPxg9swPD7V
-         kgwfXh6HsHkUKh47dOEdjpq4l5ruykTD3E99uJdCBYEnB7OYrPZfTTJk74o3CaZBlf1N
-         ynzt/iMwPgF25W5n/E96t7Bl3Dd3NFPBP2PPbqDCt8EfnlGH8c0HsZlY9JAR4ELwMaUf
-         3YRcFU9FvWSFv/H2Xx3u9eN4fw2dJ1JEU5lcjBCLySyAwPIwCAWe5jsl9d0g7T1voEaV
-         NhZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWdaaN/Xvxn69z806nYpJAJ88+QU5JFJjdSd7qBsieR9m3YQ7xhaA+2T75vKhsTbsZiW8/BbRzGRdCmijMd8zSCg+QT+enpADk=
-X-Gm-Message-State: AOJu0Yy1SHgx+ZbHuUse+cL1guGBb4wNRQQoRY0vdFuam4J8fTYjMaXT
-	w/NrOiKM3G0zEGj2nwlePLQMOc4Vpi6AR0QSJG4EntOXaKOGBcyI4UtjQbAlFb4=
-X-Google-Smtp-Source: AGHT+IG7YMk/8WZfU70jkrguYTPefZ2BNfU/qrbtxJO+K7HFLFtKIi73g49AXVItMr7hLaQS5M2OgA==
-X-Received: by 2002:a05:6870:40c8:b0:23d:49b4:6718 with SMTP id 586e51a60fabf-24172bc060emr33527554fac.32.1716190421955;
-        Mon, 20 May 2024 00:33:41 -0700 (PDT)
+        bh=TdeskcQGCOqUgsMYL0wvQIQkx8Opxo9clxqEYF92eYc=;
+        b=Qgkl840VxFQdQkowDURW8zbNgs7uCBN7BWkdzXcEUvcnoKA381yj+AGO8u6ijdSCiC
+         T4GVjxfp5QZm177R0YeqowMxBr0TCfLmL15zRtcCT17hp/Cy5n4Qs4PwF9vXp9bmFipM
+         n0e6e6Bibk8IIGvpG52Zbzxec7oOFrf62X2H0nLWTXSjYxNWlrrf8zLwS+d14oqVA7c6
+         ox40FSH657SccQBqWobkui87UB0tZqLDU8eDMsqLynH7EY5HLjXyL+MO/9My3bXjSmQg
+         mfBPr4oUizUjGAQQaiKPhWZQDPzD/udednn9mQxCLA7rraLBZDGNJ2Qv7POjPEHbSQPy
+         Tq4A==
+X-Forwarded-Encrypted: i=1; AJvYcCWUMstNa7U86/GXSX+CS9xXIrnj4Ia6791C7Jac6SuBgopGBxXRKFQm9Vju/vndimR3ZNmtCY30XOvCSvyyWLF2fKKeXs9aQ6c=
+X-Gm-Message-State: AOJu0YwZmDNG7VVwf0bSQ74m5S3p1HCuMA2s2QTu8v3UqK9QEG4W2HEw
+	CUOygchNHOsZ1wTe25cMV1s+dk7v3kt7GVGdwRrPztzcS2Ev0bZzkblzG7uDdVk=
+X-Google-Smtp-Source: AGHT+IHPnUMf1hHaC0TYUlsq97fbQdCCRP95VeDkuaFDGW9CA2YAIYyeywDjHu54+bcWgGQVcpgq7w==
+X-Received: by 2002:a05:6a20:c78c:b0:1af:cb89:15d7 with SMTP id adf61e73a8af0-1afde1035a8mr32774233637.27.1716190524677;
+        Mon, 20 May 2024 00:35:24 -0700 (PDT)
 Received: from localhost ([122.172.82.13])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f4d2af52b4sm19106876b3a.174.2024.05.20.00.33.41
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2bd7f6c90f0sm1214435a91.2.2024.05.20.00.35.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 May 2024 00:33:41 -0700 (PDT)
-Date: Mon, 20 May 2024 13:03:39 +0530
+        Mon, 20 May 2024 00:35:24 -0700 (PDT)
+Date: Mon, 20 May 2024 13:05:22 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Andre Przywara <andre.przywara@arm.com>
-Cc: Javier Carrasco <javier.carrasco.cruz@gmail.com>,
-	Yangtao Li <tiny.windzz@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] cpufreq: sun50i: fix memory leak in
- dt_has_supported_hw()
-Message-ID: <20240520073339.rf6laivnglmww3bf@vireshk-i7>
-References: <20240503-sun50i-cpufreq-nvmem-cleanup-v1-0-0a2352cac46b@gmail.com>
- <20240503-sun50i-cpufreq-nvmem-cleanup-v1-1-0a2352cac46b@gmail.com>
- <20240510174937.0a710104@donnerap.manchester.arm.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Linux regressions mailing list <regressions@lists.linux.dev>,
+	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Vladimir Lypak <vladimir.lypak@gmail.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2] OPP: Fix required_opp_tables for multiple genpds
+ using same table
+Message-ID: <20240520073522.3nhy4x6fnrqxay6x@vireshk-i7>
+References: <2eb72832e852c80e5c11cd69e7d2f14cefd8b1cb.1712903998.git.viresh.kumar@linaro.org>
+ <e6fc06eb-fe52-4cb3-b412-a602369ee875@leemhuis.info>
+ <CAPDyKFoHoKK-RZsGwnZhbW9_ZRQtL1MFZBuVVLMx-MxL2cQQbw@mail.gmail.com>
+ <7c6df194-fce1-401a-98c5-c903d78627c4@leemhuis.info>
+ <CAPDyKFqKRy6zJdBpK3bNTvkvAjty691-Vi_HV3E5CeqgRAWGmA@mail.gmail.com>
+ <CAKohpomKbhdXRgFxxbg-_hG5EFZT0LrvfQcrwjQPon6AZNbGag@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -92,37 +93,20 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240510174937.0a710104@donnerap.manchester.arm.com>
+In-Reply-To: <CAKohpomKbhdXRgFxxbg-_hG5EFZT0LrvfQcrwjQPon6AZNbGag@mail.gmail.com>
 
-On 10-05-24, 17:49, Andre Przywara wrote:
-> On Fri, 03 May 2024 19:52:32 +0200
-> Javier Carrasco <javier.carrasco.cruz@gmail.com> wrote:
-> > diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> > index 0b882765cd66..ef83e4bf2639 100644
-> > --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> > +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> > @@ -131,7 +131,7 @@ static const struct of_device_id cpu_opp_match_list[] = {
-> >  static bool dt_has_supported_hw(void)
-> >  {
-> >  	bool has_opp_supported_hw = false;
-> > -	struct device_node *np, *opp;
-> > +	struct device_node *np;
+On 11-05-24, 10:03, Viresh Kumar wrote:
+> On Fri, 10 May 2024 at 16:14, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > I wasn't sure of the level of urgency in this case, as I don't think
+> > we have that many DTSes upstream that could hit this case.
+> >
+> > But nevermind, it should be easy to revert/replace the change when we
+> > have something better to take over. Viresh, feel pick this up - or let
+> > me know if you prefer me to pick it.
+> 
+> Please apply, while I enjoy my holidays :)
 
-Why is the opp pointer removed ?
-
-> >  	struct device *cpu_dev;
-> >  
-> >  	cpu_dev = get_cpu_device(0);
-> > @@ -142,7 +142,7 @@ static bool dt_has_supported_hw(void)
-> >  	if (!np)
-> >  		return false;
-> >  
-> > -	for_each_child_of_node(np, opp) {
-> > +	for_each_child_of_node_scoped(np, opp) {
-> >  		if (of_find_property(opp, "opp-supported-hw", NULL)) {
-> >  			has_opp_supported_hw = true;
-> >  			break;
-> > 
+Merged to Rafael's tree already now.
 
 -- 
 viresh
