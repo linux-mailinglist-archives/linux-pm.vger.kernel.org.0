@@ -1,160 +1,112 @@
-Return-Path: <linux-pm+bounces-8003-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8004-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81A198CA2D8
-	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2024 21:44:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFE698CA343
+	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2024 22:25:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 97CCA1C2151E
-	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2024 19:44:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AAB96282320
+	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2024 20:25:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7226136E22;
-	Mon, 20 May 2024 19:44:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 302CB1384BD;
+	Mon, 20 May 2024 20:25:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H0MZ8AYf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UDG3ockg"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A2931AAC4;
-	Mon, 20 May 2024 19:44:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F17EB138493;
+	Mon, 20 May 2024 20:25:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716234288; cv=none; b=qh5fIyzZUeHQCzNV4snCl/yeCmdfdqsxpi++8SReVBiz9ETOe4SFNlGLGnK6y+SMKxFdhZBBwARq2O6saPRmaYDxx5KyNxE1RvA8IBDEQp012KwbHGTCOA6oOFeyfNrVnCRdJ+hKgx3QWjYP+NP6EyaPwSSCpNEFlACA56ZFl+o=
+	t=1716236719; cv=none; b=dVD2BfGcuqVX/s1bROJ8F4nXb2hmuzdjWd/ZFeEv+n1RG+17QgKFw5+cZNd8bZHHVJ14A9O3X5kOLgK2q4Vkbm8E+9tyC70mk8yxUrphMFbkiNHQ3R/AR4Vap3d1jjGo28suNJvXlhhSZka5+SmpS6beL0QFRDrDeW99DvkmzaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716234288; c=relaxed/simple;
-	bh=10RuVPJyv0cb0NDS7drH+ekYsGtckzk+dNuzrvyX0L4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OBqq1wZyQZ6VzR1VS+EKMgHxG+xINSXjr1m1V/QIMrq5M3sF8NoMdrrpN4Nu4/SoKny9PNBfqlBeJKmn2jpqZYrjVF5AqWHrnkO7HziUZaSiwseU9vI7OVc7s3h/L6MW7OqgjCp+/039axn7OneBcJqbWVodxRDzD/JiHeIK38A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H0MZ8AYf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7A28C2BD10;
-	Mon, 20 May 2024 19:44:47 +0000 (UTC)
+	s=arc-20240116; t=1716236719; c=relaxed/simple;
+	bh=YWuHbthd0gLxLRAKME12JVYB8XhoGfFLh8UaRj4ZA5A=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=YT55SMSGPSuIxiJcPZQll0PXDjQa9xZluRtaqXLmSLJAwt8wwWUcVUXuj5tVGerTne98zdhfbwCSe70s+OlZHGFW/Gk5bltnWIG+NLVqtenTkGVdEs9SA3oI2bROo2n1lATBQhuoT11U54npU29FtFPLpCiZ0eMquEv4g7sNVoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UDG3ockg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A390C2BD10;
+	Mon, 20 May 2024 20:25:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716234288;
-	bh=10RuVPJyv0cb0NDS7drH+ekYsGtckzk+dNuzrvyX0L4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H0MZ8AYfLzpSg33qbrY/GlyIG7TurBlDzvbW4IM97qpgkf2laz8xA37tYK5x9I7/F
-	 Fb63qN2NBIaLGXlyEAAjtRRtn3zDT1DBUUY3S50NdbEXmtWHKw13QML7rTjyzAfVWK
-	 N4sSl5dfqO/xO4Ln0xZZglAyYbVxRaDTxCTfYkv/4ntiAJspw/E2IsAfvtghiKGfbV
-	 8hoM2kLaBTA9imNTw9ufAODojkpgsbbeTuE3cSPcsM02ftgk3V9LhzFM6hiEIsvaHx
-	 dXRvOmkHy/vf1NQ4agWEWHmfiPd0KaM0lGyoGFoFFW6sf4JV8qTKC/uskgsn74yo81
-	 axIBT7WkDWwRA==
-Date: Mon, 20 May 2024 14:44:46 -0500
-From: Rob Herring <robh@kernel.org>
-To: Elliot Berman <quic_eberman@quicinc.com>
-Cc: Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Andy Yan <andy.yan@rock-chips.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
-	Melody Olvera <quic_molvera@quicinc.com>,
-	Shivendra Pratap <quic_spratap@quicinc.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v3 2/4] dt-bindings: arm: Document reboot mode magic
-Message-ID: <20240520194446.GA1368012-robh@kernel.org>
-References: <20240515-arm-psci-system_reset2-vendor-reboots-v3-0-16dd4f9c0ab4@quicinc.com>
- <20240515-arm-psci-system_reset2-vendor-reboots-v3-2-16dd4f9c0ab4@quicinc.com>
+	s=k20201202; t=1716236718;
+	bh=YWuHbthd0gLxLRAKME12JVYB8XhoGfFLh8UaRj4ZA5A=;
+	h=Date:From:Subject:To:Cc:From;
+	b=UDG3ockg4g2ME/lkrL8ASupa9NPVk2RO9Ns1ckkTalgdP4y9MBDXdlNEH4kY6FYvr
+	 NRzV1O0Lt6qfJmRA+EOLy16AaiOf7nkvPvkHdKhTmTu9HFfyKoCLF7Z/OjFcGg9VYV
+	 6YebW/gsiUn4VxrJB/JmHE7/R45C5fPPqknMJYks8h9SFZCRqj8RjSCB0GShEoV2Xi
+	 MOBgCw8C2BPYOwq3iU7OUmBtzeWhIWOgweJDF8mJwGf5gnVjU50CirvbgR+XMZAyBY
+	 FaoV38+09MdsNFnvo2PmXZ+io+5TIeqXdb9W9oxF+9GSt2IJVhOsJhnFhwW79Mkjmc
+	 EzSXJ6WfBSjtQ==
+Message-ID: <59680f48-df89-431a-98b9-b1cafd3ad353@kernel.org>
+Date: Mon, 20 May 2024 22:25:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240515-arm-psci-system_reset2-vendor-reboots-v3-2-16dd4f9c0ab4@quicinc.com>
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US, pt-BR, it-IT
+From: Daniel Bristot de Oliveira <bristot@kernel.org>
+Subject: [CFP] Scheduling Micro-conference at Linux Plumbers 2024
+To: LKML <linux-kernel@vger.kernel.org>,
+ linux-rt-users <linux-rt-users@vger.kernel.org>, linux-pm@vger.kernel.org
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Mel Gorman <mgorman@suse.de>,
+ Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Valentin Schneider <vschneid@redhat.com>, Ben Segall <bsegall@google.com>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, May 15, 2024 at 04:09:45PM -0700, Elliot Berman wrote:
-> Add bindings to describe vendor-specific reboot modes. Values here
-> correspond to valid parameters to vendor-specific reset types in PSCI
-> SYSTEM_RESET2 call.
-> 
-> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-> ---
->  Documentation/devicetree/bindings/arm/psci.yaml | 43 +++++++++++++++++++++++--
->  1 file changed, 41 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/psci.yaml b/Documentation/devicetree/bindings/arm/psci.yaml
-> index cbb012e217ab..47b5bbe540ce 100644
-> --- a/Documentation/devicetree/bindings/arm/psci.yaml
-> +++ b/Documentation/devicetree/bindings/arm/psci.yaml
-> @@ -137,8 +137,34 @@ allOf:
->        required:
->          - cpu_off
->          - cpu_on
-> -
-> -additionalProperties: false
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: arm,psci-1.0
-> +    then:
-> +      properties:
-> +        reset-types:
+The scheduler is at the core of Linux performance. With different
+topologies and workloads, giving the user the best experience possible
+is challenging, from low latency to high throughput and from small
+power-constrained devices to HPC.
 
-The normal structure is declare all properties and nodes at the top 
-level (outside of if/then schemas) and then add restrictions with 
-if/then schemas. 
+The following accomplishments have been made as a result of last
+year’s micro-conference:
 
-> +          type: object
-> +          $ref: /schemas/power/reset/reboot-mode.yaml#
+  - Progress on proxy execution
+        https://lore.kernel.org/lkml/20240224001153.2584030-1-jstultz@google.com/
+  - Progress on system pressure
+        https://lore.kernel.org/lkml/170073688055.398.12687414937207369825.tip-bot2@tip-bot2/
+        https://lore.kernel.org/lkml/20240220145947.1107937-1-vincent.guittot@linaro.org/
+  - Progress in the DL server
+  - The EEVDF scheduler and improvements in latency
+  - Progress on adding tracepoints for IPI
 
-             additionalProperties: false
+Ideas of topics to be discussed include (but are not limited to):
 
-and a blank line
+ - Improve responsiveness for CFS tasks
+ - The improvements on the EEVDF scheduler proposal
+ - Impact of new topology on CFS, including hybrid or heterogeneous system
+ - Taking into account task profile with IPCC or uclamp
+ - Locking improvements – e.g., proxy execution
+ - Improvements on SCHED_DEADLINE
+ - Tooling for debugging scheduling
 
-> +          properties:
-> +            # "mode-normal" is just SYSTEM_RESET
-> +            mode-normal: false
-> +          patternProperties:
-> +            "^mode-.*$":
-> +              items:
-> +                maxItems: 2
-> +              description: |
-> +                Describes a vendor-specific reset type. The string after "mode-"
-> +                maps a reboot mode to the parameters in the PSCI SYSTEM_RESET2 call.
-> +
-> +                Parameters are named mode-xxx = <type[, cookie]>, where xxx
-> +                is the name of the magic reboot mode, type is the lower 31 bits
-> +                of the reset_type, and, optionally, the cookie value. If the cookie
-> +                is not provided, it is defaulted to zero.
-> +                The 31st bit (vendor-resets) will be implicitly set by the driver.
-> +
-> +unevaluatedProperties: false
->  
->  examples:
->    - |+
-> @@ -261,4 +287,17 @@ examples:
->          domain-idle-states = <&CLUSTER_RET>, <&CLUSTER_PWRDN>;
->        };
->      };
-> +
-> +  - |+
-> +
-> +    // Case 5: SYSTEM_RESET2 vendor resets
-> +    psci {
-> +      compatible = "arm,psci-1.0";
-> +      method = "smc";
-> +
-> +      reset-types {
-> +        mode-edl = <0>;
-> +        mode-bootloader = <1 2>;
-> +      };
-> +    };
->  ...
-> 
-> -- 
-> 2.34.1
-> 
+*We will consider the submissions until July 12th, AoE.*
+
+It is fine if you have a new topic missing from the list. People are
+encouraged to submit any topic related to real-time and scheduling.
+The goal is to discuss open problems, preferably with patch set
+submissions already in discussion on LKML. The presentations are
+concise, and the central portion of the time should be given to
+the debate – thus, the importance of having an open and relevant
+problem with people in the community engaged in the solution.
+
+This email has a list of people in Bcc, based on a list of
+commit authors in sched/locking/power/time. It is far from being
+complete. So, please forward this message to the people on
+your team working on scheduling-related topics.
+
+-- Daniel, on behalf of the organizers: Vincent Guittot, Juri Lelli,
+Steven Rostedt and myself.
 
