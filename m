@@ -1,158 +1,111 @@
-Return-Path: <linux-pm+bounces-7984-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7985-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E25A8C9994
-	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2024 09:56:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BA518C99CE
+	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2024 10:26:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 197A528193E
-	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2024 07:56:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D60AD1C20C8E
+	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2024 08:26:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD81A1C286;
-	Mon, 20 May 2024 07:56:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SJb2g5eB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BC671BC58;
+	Mon, 20 May 2024 08:26:45 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50A9718E1F
-	for <linux-pm@vger.kernel.org>; Mon, 20 May 2024 07:56:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 545E0182DB;
+	Mon, 20 May 2024 08:26:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716191764; cv=none; b=l8rnSRJwynWuWeXu9masiaSRKEmv+9pTNf/58prvONUpcaQjtUClD7UHcYvE19Be8bDXxTkAGotUrFzsJ9jbZq3Sa2QjvZHglxalgoU1Yh4w2c4q4NwLLYmo5zojcknmUgvbIbDxGr70NC0nsu57RR2VFlgYteOrRDn3KHcl4YA=
+	t=1716193605; cv=none; b=RvZwSEYbGbs8gHiBfPGwoRO31B/pPaybWHT46Ynpq4hCx8Y0G5GkszZZ7nUJx0dM+S5lzS2VwKMiQtJYJfMogfncJTF258wds181J4DEBvu4hH6LFOd20Z/z+kNJN4W5mHvspTNipAL20xFfNccQ6ISN9lpgbtBGNysw+tOTlfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716191764; c=relaxed/simple;
-	bh=NzbThhFBtnQcvtXqqCfxwQoatoZOjMc4GUjlMRM+wAo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kGls08FmrRily47zAWLMvC7LabLKawMfEfvORwnW0t92Lf9kqeFClF91QsXMtZI1/Fa8xjzUFOJGM56glJQipKGhlHTglb4g7WOqWaFz0If4KVAqDGihANawaqM8g9xpXueGUqLjNeY7SH/ebMb3s8HPtPTScEUza5FK4de8lA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SJb2g5eB; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1f0537e39b3so64354205ad.3
-        for <linux-pm@vger.kernel.org>; Mon, 20 May 2024 00:56:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1716191761; x=1716796561; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kb5X/YYmza7mi0laloABn7ifgNcKsYXBPYlhNhqZXcg=;
-        b=SJb2g5eBrNpoTNrv+XzbWRJbrKglYIvosQJrmdD4cxEdVvlVQQu7EFSBNtNm6Qlvoh
-         fE7xmAsx8NpcOxSApm2fXaMySSxCWCWNyVm8OMluluecOcMy0aDr1tOTS+MpkLEgWUYZ
-         0JkH9Dj4j1Km1tprE+yGIjby73Q1smApiLEd+Rjjy4BhI+TsV5iRR0mTwZ4MccwB23uO
-         6Wde6ulCrR/TGb/2IlrC3sIdbyR7tAEJop+c5PHnhbMB5cB2y4Dq5i/4lqbRIkNyNcBV
-         7qcqeyEGrtFovjOZgb1xXaNl5+3kXQqxuWPs61xL5bj/jxXgP6t86f7dCMQLWwsPKa0s
-         tidQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716191761; x=1716796561;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Kb5X/YYmza7mi0laloABn7ifgNcKsYXBPYlhNhqZXcg=;
-        b=GwEG9sAJqP32vL0Ipnai4EEbfyks7Dmt2YgWDIsfWcAmSjKp8Dmh6yYuzr4FlxMBth
-         8yDmfuYgmLywZ42RGzKPf+zaqbc03blBVT/6k82sqPxSZb2GULW7GzXsISuUwuGwJV6r
-         KzU5SyF4pOWZxadnSo/I+AxRvfOy1a44F2+Uv4kvcaPO+TFyJh/qMC+tgofiGUDYv9ci
-         nTgVmGaieE3jKbQCewdrwkIelamN43ZQ1uG/DlMJFUo3qbFWET9y0RKeJjmwZX1QKa1M
-         JTCBTBSD5Risu6LExaTXU0xYdfWpOgFLYKLzHZLHgWNXl+eTYfyOo3ffA7ttILhN5UVk
-         y6NQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXM8ehXMis1juCex0fNQ6NxeOx5RVNrwUoKzPJR9nPdnjxf8yv0BueICWRJL5SS/mhPf/wspjjiHxkH8tOhmthFzHb792Ixbqw=
-X-Gm-Message-State: AOJu0YyzMXox9kxWGlGZtTOSEjkYRm10TJu7E81aL+ZPdvXNpPtrYS2m
-	A0tvVY3TbE5gWyg0KehuWRJJF/PCH7Pe9ey4LsJPp/DwaQIXpMHL5CngV4Qwfgs=
-X-Google-Smtp-Source: AGHT+IEj5fXNVm5Sr5l+LzOeMhTgwOtdJ0S4mFL1Q0mrihvqNpsrmaA4uGWDRNmFdeyo7AgBJ9hHSQ==
-X-Received: by 2002:a17:902:c94a:b0:1f0:958c:7cfe with SMTP id d9443c01a7336-1f0958c7d91mr152807055ad.67.1716191761568;
-        Mon, 20 May 2024 00:56:01 -0700 (PDT)
-Received: from localhost ([122.172.82.13])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0b9d164dsm196268075ad.52.2024.05.20.00.56.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 May 2024 00:56:00 -0700 (PDT)
-Date: Mon, 20 May 2024 13:25:58 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: chizhiling@163.com
-Cc: rafael@kernel.org, linux-pm@vger.kernel.org,
-	Chi Zhiling <chizhiling@kylinos.cn>
-Subject: Re: [PATCH] cpufreq: add a check for unsupported CPU frequencies
-Message-ID: <20240520075558.ytbeguk7v2mt7p4p@vireshk-i7>
-References: <20240515022037.818078-1-chizhiling@163.com>
+	s=arc-20240116; t=1716193605; c=relaxed/simple;
+	bh=0dPuaAUfJq5Ff9j1D+i4NZ2UxHkBIoSc3A5G/S0n7y0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Y1DtENN3Yy8tu1yD5NLV2ARbWWAj1GOp824sUTZfaIIYpRhwFsV3cDjSJy7oni+OYObltOnoxA9iwv6z/ZRLi/gTlZmgLtmWgpx5zs7qAcYDoV2J+xVL2fq37pdIqgzaFyRpOZWHc4rV3pAF415YA8LaLUYYrG0a4qlQkXgOinI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6AAF9FEC;
+	Mon, 20 May 2024 01:27:05 -0700 (PDT)
+Received: from donnerap.manchester.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D09223F766;
+	Mon, 20 May 2024 01:26:39 -0700 (PDT)
+Date: Mon, 20 May 2024 09:26:23 +0100
+From: Andre Przywara <andre.przywara@arm.com>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Javier Carrasco <javier.carrasco.cruz@gmail.com>, Yangtao Li
+ <tiny.windzz@gmail.com>, "Rafael J. Wysocki" <rafael@kernel.org>, Chen-Yu
+ Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel
+ Holland <samuel@sholland.org>, Jonathan Cameron
+ <Jonathan.Cameron@huawei.com>, linux-pm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] cpufreq: sun50i: fix memory leak in
+ dt_has_supported_hw()
+Message-ID: <20240520092623.6ce850e1@donnerap.manchester.arm.com>
+In-Reply-To: <20240520073339.rf6laivnglmww3bf@vireshk-i7>
+References: <20240503-sun50i-cpufreq-nvmem-cleanup-v1-0-0a2352cac46b@gmail.com>
+	<20240503-sun50i-cpufreq-nvmem-cleanup-v1-1-0a2352cac46b@gmail.com>
+	<20240510174937.0a710104@donnerap.manchester.arm.com>
+	<20240520073339.rf6laivnglmww3bf@vireshk-i7>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240515022037.818078-1-chizhiling@163.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 15-05-24, 10:20, chizhiling@163.com wrote:
-> From: Chi Zhiling <chizhiling@kylinos.cn>
-> 
-> When user wants to control the CPU frequency on their own,
-> if they write an unsupported frequency to the
-> scaling_min_freq/scaling_max_freq node, the execution will not report an
-> error, which will make the user think that the execution is successful.
-> 
-> So, this patch add a check to return an error if an unsupported frequency
-> is written.
-> 
-> Testing:
-> CPU supported frequency [min, max] = [800000, 4600000]
-> 
-> before patch:
-> root: echo 0 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
-> root: echo 5000000 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
-> root: echo 0 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
-> root: echo 5000000 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
-> root:
-> 
-> after patch:
-> root: echo 0 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
-> -bash: echo: Invalid argument
-> root: echo 5000000 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
-> -bash: echo: Invalid argument
-> root: echo 0 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
-> -bash: echo: Invalid argument
-> root: echo 5000000 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
-> -bash: echo: Invalid argument
-> root:
-> 
-> Signed-off-by: Chi Zhiling <chizhiling@kylinos.cn>
-> ---
->  drivers/cpufreq/freq_table.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/cpufreq/freq_table.c b/drivers/cpufreq/freq_table.c
-> index 10e80d912b8d..416826d582a4 100644
-> --- a/drivers/cpufreq/freq_table.c
-> +++ b/drivers/cpufreq/freq_table.c
-> @@ -76,6 +76,11 @@ int cpufreq_frequency_table_verify(struct cpufreq_policy_data *policy,
->  	pr_debug("request for verification of policy (%u - %u kHz) for cpu %u\n",
->  					policy->min, policy->max, policy->cpu);
->  
-> +	if (policy->min > policy->max ||
-> +	    policy->max > policy->cpuinfo.max_freq ||
-> +	    policy->min < policy->cpuinfo.min_freq)
-> +		return -EINVAL;
-> +
+On Mon, 20 May 2024 13:03:39 +0530
+Viresh Kumar <viresh.kumar@linaro.org> wrote:
 
-I think the current behavior (of not reporting errors) is what we
-really wanted and that's why it is written that way. The kernel
-doesn't want to enforce any min/max that the user can set, the kernel
-will just get it in line with the current hardware limits.
+Hi,
 
-For example consider this case for a platform with following frequency
-range, 1 ghz, 1.1 ghz, 1.2 ghz, 1.3 ghz (boost only).
+> On 10-05-24, 17:49, Andre Przywara wrote:
+> > On Fri, 03 May 2024 19:52:32 +0200
+> > Javier Carrasco <javier.carrasco.cruz@gmail.com> wrote:  
+> > > diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> > > index 0b882765cd66..ef83e4bf2639 100644
+> > > --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> > > +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> > > @@ -131,7 +131,7 @@ static const struct of_device_id cpu_opp_match_list[] = {
+> > >  static bool dt_has_supported_hw(void)
+> > >  {
+> > >  	bool has_opp_supported_hw = false;
+> > > -	struct device_node *np, *opp;
+> > > +	struct device_node *np;  
+> 
+> Why is the opp pointer removed ?
 
-Lets say boost is disabled, at this point cpuinfo.max_freq is 1.2 ghz.
-The user does this:
+Because it's now declared *inside* the for_each_child_of_node_scoped loop
+below, courtesy of this new macro. The idea is that by doing so, any
+"break;" will exit the scope, triggering the cleanup routine. The loop
+running till "the end" will also make "opp" exit its scope, triggering the
+same routine.
 
-root: echo 1300000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+Cheers,
+Andre
 
-With your change this will fail, but we really want to record this
-into policy->max. As the user can enable the boost frequency now,
-which will make cpuinfo.max_freq to 1.3 ghz and user isn't required to
-set scaling_max_freq again.
+> 
+> > >  	struct device *cpu_dev;
+> > >  
+> > >  	cpu_dev = get_cpu_device(0);
+> > > @@ -142,7 +142,7 @@ static bool dt_has_supported_hw(void)
+> > >  	if (!np)
+> > >  		return false;
+> > >  
+> > > -	for_each_child_of_node(np, opp) {
+> > > +	for_each_child_of_node_scoped(np, opp) {
+> > >  		if (of_find_property(opp, "opp-supported-hw", NULL)) {
+> > >  			has_opp_supported_hw = true;
+> > >  			break;
+> > >   
+> 
 
--- 
-viresh
 
