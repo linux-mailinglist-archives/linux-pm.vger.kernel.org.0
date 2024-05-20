@@ -1,85 +1,89 @@
-Return-Path: <linux-pm+bounces-7981-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7982-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91BEA8C9933
-	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2024 09:19:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF4FE8C995A
+	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2024 09:33:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED4621F210F5
-	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2024 07:19:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 647351F2152C
+	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2024 07:33:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C2B618C3B;
-	Mon, 20 May 2024 07:19:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BA7218C3B;
+	Mon, 20 May 2024 07:33:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ET+R8R74"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tEXDjBz5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98901E576
-	for <linux-pm@vger.kernel.org>; Mon, 20 May 2024 07:19:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E29031C6A0
+	for <linux-pm@vger.kernel.org>; Mon, 20 May 2024 07:33:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716189559; cv=none; b=VzOhv3kj+i6nkS2fo5iBJcEEQjiBdlRapr6YdCDJMtM1FSjAzFlMwaMhDZCvi9qHd6H821racC+lC8JiBilihjgDp0c3Vy6mWYuGoRyobR44wdJXH3159eLAWWPh0w90sJc5zL5N6Nf7BKZ9cWzeRq8kkjOwCgzohoIlT3PHkSw=
+	t=1716190424; cv=none; b=pVRBw+MlyKbTaLhIFFUSvCfWPQY9pNT7mlWCaxgG/v5dK+sSWZLhXHI7yvMH+cAB+KCRxlsM718OhyGzhBKsCZ2LZdai3BsCBE890VUc7E6Q7zybzWMkgSZWjQEUJHNnQxpryFZ+oItyfBjUvAfuaTP98juxUruH0Tl2PKtQumU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716189559; c=relaxed/simple;
-	bh=TtXBp/y1GJ993Y2IImPK83yaJTrKtBSiVf0gbVNi4Fw=;
+	s=arc-20240116; t=1716190424; c=relaxed/simple;
+	bh=WeixK4Kgn0MvKplzBTKjFtE2DZaxPq1ICJ/opiDshY4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JNuU6M10U13B8eJv1Orxz0tTgJ3apS6f6auOn572QHk++UyvhR2xMMtERYDvPOOhV8bEajlOF02peTz8hxYIcAUbEv2xI/KpWkhzIWUEvjU2x/PXB3rgqj0IKyz3AMyHLP6B+tMl6kBZW9E53Qjkze9phI1oe5hJQiaBnOx+7AY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ET+R8R74; arc=none smtp.client-ip=209.85.214.174
+	 Content-Type:Content-Disposition:In-Reply-To; b=uraShK7I2bSW7QoDH8DaGyGR38Atgzr0BLKUPhzNw1+oxHyEtuUvjB51LH6mKiH9vYGjbWhMJsr5k23COJ3gShHOI7d3NJ+wWw5Y4NNpncOfKd4GOiYnZFoNELH6j8xt0TSQrhTvblvk+ahcsiWoYpeuWj9LRcMxPRKi0ImEYQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tEXDjBz5; arc=none smtp.client-ip=209.85.210.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1ee42b97b32so66280985ad.2
-        for <linux-pm@vger.kernel.org>; Mon, 20 May 2024 00:19:18 -0700 (PDT)
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-6f0f87f9545so1900650a34.2
+        for <linux-pm@vger.kernel.org>; Mon, 20 May 2024 00:33:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1716189558; x=1716794358; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1716190422; x=1716795222; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8y4kuhNsW46WW9yuHhh+VXBJRBrezkcZVwyuntDPHmY=;
-        b=ET+R8R74FHqdMda7gwL2lzdL5rjR1XdF5H+ewKW9umw4Wl3P6Xp+gHwA7b/EmkE1Cd
-         fDFKZcVuInB09b9qm2lo9k5TRoKnVkWuKGibSvX3c1+UN4KzoBjF6N9+7gxfOj+wO1W2
-         66eaRrr6O7nP7n4RwHAWJDTUWtYxp43eQ51nm+EZikab6y6fCLWwrcEIuI1eU/3m94BQ
-         siNXzXrUAdzN5J0gpQ5JfhwYWo8kqq3I3nWgc/Aoah9rYjdq62HZS86P+aOl+RPfGaLH
-         b2qpZTjsfPdYSsx8ccwnvjSD99VQ+poop4OjYAXJHHvtzbcaGUPSnKXGnKQgCDhJdK86
-         LmAw==
+        bh=jTHkzAvMu+l8UyjO4kbcmDDhuFxHapp+W1C8XEMNXN4=;
+        b=tEXDjBz5X6HIDXH/APEZKYUsx9z8++QOoTgXg1mStvoc9Ktlj2ZHefg99GLYWaPiDe
+         sUrOgi/t0cfGfOBQwkS9kfRz8VcEyi5gJj6sWrqQ6W80b/a/LtlrteLrPWHv+4AAOgsk
+         m05rMOipT9nBQIMp+1aPwqS5Ieb2w3qbZAfFiRS/mXaUJYEw7f3Kpq7otnGNao/r+T3v
+         Eq1psNVOp9Flx8MQcBJ03nQkJjS5WcC6dSv1PqI45UGBYosD6vofoUzbnqZe0gOGG6Ls
+         7GwkHGCyNuBK+KyKQqTHZKwNh2hjCqBG9NuB3WfYYfEBCPnPsyA0axjpu7lo4aHPQI1G
+         G+rA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716189558; x=1716794358;
+        d=1e100.net; s=20230601; t=1716190422; x=1716795222;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8y4kuhNsW46WW9yuHhh+VXBJRBrezkcZVwyuntDPHmY=;
-        b=TTV8qyoaBx56duI/KADf941Nk8Enppr1ratf5niXhzBNXUwzP9W9plkW0ahNerryPc
-         G2GqwWw9w37DN0aE+PeEphcqAqPcYo+1t36hVp9k9PD888VSIYcMV86Q4pWE8DS4AoNF
-         nt25U102wFOcvRSJBnwe3dIMpCJjePvijAAqDX+I1/6sEu3A0UAdlylS8LcooYTew2T3
-         a91sD2g154dRCAasuKVWIyBHN15S1vhUF77BLIXc5M/2oif21rzDDLVbJk/rrpSMacpT
-         34Wt/VyzsMFHOb1ewDJm1a/6+/Z0hL/BLep3xURkD4W8D0M1VoUQ5CrAFIq7sjYIBWy+
-         McVw==
-X-Forwarded-Encrypted: i=1; AJvYcCXrXgCyf7lCwVaAKY7tKuomLoKHYnsOJAXeHDkEShLYFYwMoZnCjK5ffsAOh2s3Z/W4KPeGme4GswWi7JPI9iBkIUnHVBzTD6Y=
-X-Gm-Message-State: AOJu0Yw48V5O9Y3SdBckcC+70W6ctr7lL1ZmOoUFB2WplTuLrgeCyIPp
-	rsIQFRRYsvmfbfE3SMTEmCgdZMp5RiOdJLuG6Xsw1ckM3Rgj4/HWzcEESprjm8U=
-X-Google-Smtp-Source: AGHT+IEEFl66WKoPGpgvD+Rqu7WM6o+8q8tAnwmX9Dq9HIkUrcJTIhG1B4gLnlTZWm0iYncA4fOuZA==
-X-Received: by 2002:a17:90a:e7ce:b0:2bd:820b:7863 with SMTP id 98e67ed59e1d1-2bd820b7aa8mr1147725a91.18.1716189557840;
-        Mon, 20 May 2024 00:19:17 -0700 (PDT)
+        bh=jTHkzAvMu+l8UyjO4kbcmDDhuFxHapp+W1C8XEMNXN4=;
+        b=MSm86ipclPEeFqlvkKENF5646zomvIr92yhk3ijViPqXjf79AtVgruH/p/sqgckDEh
+         vNCbgPznnVKmJLk8lEu6e+xNZD8ZRhBgSVdnPmT3bU2nFSat66Nbpj84AfPxg9swPD7V
+         kgwfXh6HsHkUKh47dOEdjpq4l5ruykTD3E99uJdCBYEnB7OYrPZfTTJk74o3CaZBlf1N
+         ynzt/iMwPgF25W5n/E96t7Bl3Dd3NFPBP2PPbqDCt8EfnlGH8c0HsZlY9JAR4ELwMaUf
+         3YRcFU9FvWSFv/H2Xx3u9eN4fw2dJ1JEU5lcjBCLySyAwPIwCAWe5jsl9d0g7T1voEaV
+         NhZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWdaaN/Xvxn69z806nYpJAJ88+QU5JFJjdSd7qBsieR9m3YQ7xhaA+2T75vKhsTbsZiW8/BbRzGRdCmijMd8zSCg+QT+enpADk=
+X-Gm-Message-State: AOJu0Yy1SHgx+ZbHuUse+cL1guGBb4wNRQQoRY0vdFuam4J8fTYjMaXT
+	w/NrOiKM3G0zEGj2nwlePLQMOc4Vpi6AR0QSJG4EntOXaKOGBcyI4UtjQbAlFb4=
+X-Google-Smtp-Source: AGHT+IG7YMk/8WZfU70jkrguYTPefZ2BNfU/qrbtxJO+K7HFLFtKIi73g49AXVItMr7hLaQS5M2OgA==
+X-Received: by 2002:a05:6870:40c8:b0:23d:49b4:6718 with SMTP id 586e51a60fabf-24172bc060emr33527554fac.32.1716190421955;
+        Mon, 20 May 2024 00:33:41 -0700 (PDT)
 Received: from localhost ([122.172.82.13])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2b62884b837sm21341342a91.20.2024.05.20.00.19.16
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f4d2af52b4sm19106876b3a.174.2024.05.20.00.33.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 May 2024 00:19:17 -0700 (PDT)
-Date: Mon, 20 May 2024 12:49:15 +0530
+        Mon, 20 May 2024 00:33:41 -0700 (PDT)
+Date: Mon, 20 May 2024 13:03:39 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Merlijn Wajer <merlijn@wizzup.org>
-Cc: linux-omap <linux-omap@vger.kernel.org>, rafael@kernel.org,
-	zhipeng.wang_1@nxp.com, Tony Lindgren <tony@atomide.com>,
-	Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-	Carl Philipp Klemm <philipp@uvos.xyz>,
-	"Sicelo A . Mhlongo" <absicsz@gmail.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	linux-pm@vger.kernel.org
-Subject: Re: No cpufreq entries with omap2plus_defconfig since "cpufreq:
- dt-platdev: Support building as module" (commit 3b062a08)
-Message-ID: <20240520071915.knnmxkjtajbnw7sp@vireshk-i7>
-References: <657f402f-3c22-48bb-8102-ab35a74444c1@wizzup.org>
+To: Andre Przywara <andre.przywara@arm.com>
+Cc: Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+	Yangtao Li <tiny.windzz@gmail.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] cpufreq: sun50i: fix memory leak in
+ dt_has_supported_hw()
+Message-ID: <20240520073339.rf6laivnglmww3bf@vireshk-i7>
+References: <20240503-sun50i-cpufreq-nvmem-cleanup-v1-0-0a2352cac46b@gmail.com>
+ <20240503-sun50i-cpufreq-nvmem-cleanup-v1-1-0a2352cac46b@gmail.com>
+ <20240510174937.0a710104@donnerap.manchester.arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -88,43 +92,37 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <657f402f-3c22-48bb-8102-ab35a74444c1@wizzup.org>
+In-Reply-To: <20240510174937.0a710104@donnerap.manchester.arm.com>
 
-On 02-05-24, 13:04, Merlijn Wajer wrote:
-> Hi,
-> 
-> I was looking at switching my Motorola Droid 4 phone from Linux 6.1 to Linux
-> 6.6, and it no longer gets any cpufreq entries on boot, and I found
-> cpufreq_dt was no longer loaded. I tried to force the issue by modprobe it,
-> but to no avail. The same issue occurs on the latest 6.9.
-> 
-> After a bit of digging it looks like the problem is that cpufreq-dt-platdev
-> can be built as a module and when this the case (apparently the default),
-> cpufreq_dt doesn't work. With the omap2plus_defconfig,
-> CONFIG_CPUFREQ_DT_PLATDEV is indeed set to module.
-> 
-> When I manually probe cpufreq-dt-platdev and cpufreq_dt, I get the
-> cpufreq_entries back.
-> 
-> Searching around I found this debian bug report [1] which just flips the
-> CONFIG_CPUFREQ_DT_PLATDEV back to '=y', but I think there might be a deeper
-> issue here.
-> 
-> Is there a way to define this relationship/dependency for cpufreq-dt, so
-> that it will automatically load this module?
+On 10-05-24, 17:49, Andre Przywara wrote:
+> On Fri, 03 May 2024 19:52:32 +0200
+> Javier Carrasco <javier.carrasco.cruz@gmail.com> wrote:
+> > diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> > index 0b882765cd66..ef83e4bf2639 100644
+> > --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> > +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> > @@ -131,7 +131,7 @@ static const struct of_device_id cpu_opp_match_list[] = {
+> >  static bool dt_has_supported_hw(void)
+> >  {
+> >  	bool has_opp_supported_hw = false;
+> > -	struct device_node *np, *opp;
+> > +	struct device_node *np;
 
-Does this fix it for you ?
+Why is the opp pointer removed ?
 
-diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-index 100760259f70..bb48b674be5e 100644
---- a/drivers/cpufreq/cpufreq-dt-platdev.c
-+++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-@@ -233,4 +233,5 @@ static int __init cpufreq_dt_platdev_init(void)
-                               sizeof(struct cpufreq_dt_platform_data)));
- }
- core_initcall(cpufreq_dt_platdev_init);
-+MODULE_ALIAS("platform:cpufreq-dt");
- MODULE_LICENSE("GPL");
+> >  	struct device *cpu_dev;
+> >  
+> >  	cpu_dev = get_cpu_device(0);
+> > @@ -142,7 +142,7 @@ static bool dt_has_supported_hw(void)
+> >  	if (!np)
+> >  		return false;
+> >  
+> > -	for_each_child_of_node(np, opp) {
+> > +	for_each_child_of_node_scoped(np, opp) {
+> >  		if (of_find_property(opp, "opp-supported-hw", NULL)) {
+> >  			has_opp_supported_hw = true;
+> >  			break;
+> > 
 
 -- 
 viresh
