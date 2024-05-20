@@ -1,108 +1,94 @@
-Return-Path: <linux-pm+bounces-7998-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-7999-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26B088C9F7D
-	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2024 17:17:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 836998C9FA4
+	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2024 17:26:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 581831C213A4
-	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2024 15:17:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AEFCF1C203D6
+	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2024 15:26:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1978136649;
-	Mon, 20 May 2024 15:17:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24799136E26;
+	Mon, 20 May 2024 15:26:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="UEJRy9kw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YULAkX04"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 147611E49D;
-	Mon, 20 May 2024 15:17:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEF44136E1A
+	for <linux-pm@vger.kernel.org>; Mon, 20 May 2024 15:26:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716218262; cv=none; b=mT83pLHu8+iEnUA4DJxxg78ERiJwxJl3PtqBdLtZnCh/F7dbXYNKAQ8pYwGbwYpV1SA21FyCIZBKijVEcKB4B36027OAOMCaD3Bk6I/C332DOvwRsBD38cKhWWa5txiiTxNVUTrGzIVgFE3Wq1OYY8FUuRqnl+eHhpmVKiBxJ3E=
+	t=1716218787; cv=none; b=pLCaG0w3cFq1rwwi1IbLfIDVgzThrJdrv2cLSqaDEc+Bb8VGl2ep5isdV0vReyWbp83m9Cr8t9VDEbijm3gR6L76Hq1bjuHF48/NHZja25AyGhYBEb6ujjpwN7fjP6hpfkKlJQ5ylPOCxpcARvevcZxGQ/8wrxoe8odRSErRwc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716218262; c=relaxed/simple;
-	bh=uOtGIokG1ej2tjKbqGupcKq5GCu2h9Y/Z6vGZV0u5Xs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=q8xYehKOZBPvODU0a7s+/wE08O+ZRfQmL+CuvpPtbrz8eu19337EvBmd4SIaKxs2J6JBKNUxmNsHmLA831gXTyIomUFrpWU6Dv2M97WECQKmKIaiMu6VY+ItJwK+aMiyBTrXSgqwh5Qy5wF1cw3Ku8a7N5NirpiPpAhLDS675n8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=UEJRy9kw; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1716218259;
-	bh=uOtGIokG1ej2tjKbqGupcKq5GCu2h9Y/Z6vGZV0u5Xs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=UEJRy9kw6Npf7mH1E9bD3EIuQBame++rtyXg98us58+Q5wDNSXd+3ZunPzuNYT6Q/
-	 4fXLAANOecpWvIoGki2FE25wKASJzcIG66ffpZJ//fnGnglhMn1MxhI85R5DHbf2EE
-	 u0SbmVsFH6yrYm9CJpiGOxyqU7YN8Kk/lajgx+FxijhA3I4pxnRgKfzuhwoZ0hJb3F
-	 3nBjfBn//3QToBasV5/TXI3+JmNyL/VaI7tzKaU8D/oAS0AQfysZFHIeOjKVJlNqGU
-	 sO8N98F4CNw31ZjhOSNGSG85apx3031BocjAGZHQUzcxI+OJYpcMFjo6xA249T0Eqd
-	 ir4O31HVWGm7Q==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id EB98637810F1;
-	Mon, 20 May 2024 15:17:38 +0000 (UTC)
-Message-ID: <42c247c8-f4d6-4adb-a44e-218acfef6dce@collabora.com>
-Date: Mon, 20 May 2024 17:17:38 +0200
+	s=arc-20240116; t=1716218787; c=relaxed/simple;
+	bh=v32zhVEaXS3AwZcX+nN2+alW1RWNxhAbTkEVOkUfKkk=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=VDmoZ9RUUqByXJyAYLGIYiuOn+/1cY0qZHPIQt+cd6rVrkw0AqQRDSAtbHSqHZNqbIw9QEyT5lk2Ou2ZKkpGDJkZQaBo4RIIzOxS3ZphO5OYn2nQbeDGCjlAEFYBWtuoAKQ7YpBBtJsUW1RzSSrU3XFxaXxdK9YE6YKGl/1He5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YULAkX04; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 60EA2C4AF0A
+	for <linux-pm@vger.kernel.org>; Mon, 20 May 2024 15:26:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716218786;
+	bh=v32zhVEaXS3AwZcX+nN2+alW1RWNxhAbTkEVOkUfKkk=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=YULAkX046tNTSyy+oCa9w/JBs6rLiBAGlK7NVP/AkNGg9Z33UyCOxNg1itsfBo5P0
+	 t5QHROlX3p76+bjQK/F4+CYErge/O+ozIgCmQcTLSZv+7TdZ6wVsg69k7PFj1j4CH2
+	 ggHY5lTtNag9qZE3wIgvxUVkaWWMud2hBc4cc5zQakTL6Qty6dqis17sdz4zHOnQE2
+	 bko2Xer8/H5LlRFmQCaD5+krERrbW5twby4WzQhQWW01mA/8/YFPlYpYlbJIQg/ity
+	 Uxh2TvXsZdvH2o588uikcjate75nCUqoo0uOwIGEphnNi0rnqAkWxGWJAsEIb35HMH
+	 9JeMSVUx8pYCA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 50A03C53BB9; Mon, 20 May 2024 15:26:26 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 218686] Fail to set energy_performance_preference of amd
+ processor on asus ga403uv
+Date: Mon, 20 May 2024 15:26:26 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: Perry.Yuan@amd.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: DOCUMENTED
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218686-137361-c4Jdu3HbEj@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218686-137361@https.bugzilla.kernel.org/>
+References: <bug-218686-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 00/15] Mediatek thermal sensor driver support for
- MT8186 and MT8188
-To: Julien Panis <jpanis@baylibre.com>, Nicolas Pitre <nico@fluxnic.net>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org,
- linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
-Cc: Nicolas Pitre <npitre@baylibre.com>
-References: <20240402032729.2736685-1-nico@fluxnic.net>
- <981a8748-16d0-4744-b097-aa9dd14c63a8@collabora.com>
- <13468147-6853-4bd8-bd3d-d1f1927133fa@baylibre.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <13468147-6853-4bd8-bd3d-d1f1927133fa@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-Il 20/05/24 15:18, Julien Panis ha scritto:
-> On 4/23/24 11:22, AngeloGioacchino Del Regno wrote:
->> Il 02/04/24 05:25, Nicolas Pitre ha scritto:
->>> This is a bunch of patches to support the MT8186 and MT8188 thermal
->>> sensor configurations. Several changes are needed to cope with oddities
->>> these SOCs implement.
->>>
->>> All values (calibration data offsets, etc.) were lifted and adapted from
->>> the vendor driver source code.
->>>
->>
->> I picked patches 7 and 12 (and also fixed them) introducing the nodes for the
->> LVTS controllers, but will not pick 9 and 15, as they're either missing thermal
->> zones and/or using the wrong names; let's wait for the next cycle for those, as
->> I will also be able to add the SVS on top (needs a bit of time for testing),
->> getting both SoCs complete on the LVTS side, without rushing.
->>
->> Cheers,
->> Angelo
->>
-> 
-> What do you mean by "missing" thermal zones ? (is there some reference
-> code somewhere listing them, or whatever ? how can I know which ones are
-> missing ?)
-> 
-> It seems to me that Nico took into account your comment about 'tzone_name'
-> and fixed these names in v3 ('cpu-little0-thermal', ...). Are they still wrong ?
-> 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218686
 
-Check mt8195.dtsi ;-)
+--- Comment #48 from Perry Yuan(AMD) (Perry.Yuan@amd.com) ---
+The BIOS release will take longer time than you expected, it is really
+depending on the customer request and vendor schedule.
+Anyway, I will check from internal channel for this.=20
 
-Cheers
+Perry.
 
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
 
