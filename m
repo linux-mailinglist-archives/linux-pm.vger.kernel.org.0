@@ -1,115 +1,100 @@
-Return-Path: <linux-pm+bounces-8018-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8019-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 295D68CAAE3
-	for <lists+linux-pm@lfdr.de>; Tue, 21 May 2024 11:37:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8C3E8CAB4D
+	for <lists+linux-pm@lfdr.de>; Tue, 21 May 2024 11:54:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8A9E282196
-	for <lists+linux-pm@lfdr.de>; Tue, 21 May 2024 09:37:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A169E1F218B8
+	for <lists+linux-pm@lfdr.de>; Tue, 21 May 2024 09:54:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D178E5E22C;
-	Tue, 21 May 2024 09:37:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B0D76A8D2;
+	Tue, 21 May 2024 09:54:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h8wsZLv2"
+	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="UUfABhN3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A96875B69E;
-	Tue, 21 May 2024 09:37:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AB9A6BB20;
+	Tue, 21 May 2024 09:54:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716284226; cv=none; b=BWGHCwalHGjSmyU9o7g7UL8tctWlVq/8D0e9saeq1ScCrwkUVthJCd4RZRRBwQ6i/mjzCB2dXvh5tzzD5ZRMqVYGL5Zu4oNmLdrGlg3G8B2qLTGbGmD1lKG5+EDGk/Qw3Ae5HqpeciIA2wDmBvRWMgUDx+f6Q6t2bvE2jdVuaQE=
+	t=1716285260; cv=none; b=qIRvMEBfsGIAnkFhLnkPnqNNduxB+RT+MvF2VaUAbGZ7HBUhUjQzdVFhLXfnvL+vuwEnjzeG+yDL38kTVghUkqH1H+Gp07ILAMsMx/fPnDsSlOzSm6TKTJR3qqEtPsYFOExBPjQB/qK2SvJ4ECQwsl/Mo4Sy41ZdsyYRrOlv2xw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716284226; c=relaxed/simple;
-	bh=51eR1Mm32okdNkVftwRrT3s8ijpMtFpB600/Wy9e8jM=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=YgYkiAlqWVdNpnFmDRjZAvq52ObO45syn4FUCOeEUwZEdKFGCta0Eqtxcvk3UktEyT28MowSv7W/nL+be5VLwA5Udj4YlQ66J/Gck8EOr+rgevlpUnyLOsKMA3Vm13Az6/XT5NnAjvwGuwcZu8LVy1daZCk+CEhlA8TxF2CAUkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h8wsZLv2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DC28C4AF09;
-	Tue, 21 May 2024 09:37:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716284226;
-	bh=51eR1Mm32okdNkVftwRrT3s8ijpMtFpB600/Wy9e8jM=;
-	h=From:Date:Subject:To:Cc:From;
-	b=h8wsZLv2bDLAhYjUOE0CqDonwDDXxZZtn9ZeSKtgF6yN1RLJ/y8lffMiDF13s1k3R
-	 oMByAhyJSUUflABe7C4b03DLAtXtBrEbEdmfl+pBQlMDB8hJxAZi6WNJGAyVMngJjn
-	 FG60t7NYdx/tVKdr5piea7nB+9gz/YT8/7BS04PcX6COIa5U0UKCcUod+jYuzQrwUl
-	 HuSKANVBkLkvpM9kJokYTSVwperXLZ1OdQmU7BB+oX2uLtznfdgLwi5iPfiDzuU29N
-	 EMGZ4XfkvjBecX6quAQkHzKBsjYYICkOtxkwQGz/Cv6oT+z5Mb1tjq6DVcsPNWcx/N
-	 Y+IiwRJ7XYTVQ==
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-5b2dd35212fso422549eaf.3;
-        Tue, 21 May 2024 02:37:06 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU3ozokHULznuDUY8nZHfnAM2DiPkO8CreA+7QnTjJ6e+UFH6KOY7hOpq6faMlnlr/qtpCqULQGXQOgCZCODn0Qe+wkjyAEzKoadIsU
-X-Gm-Message-State: AOJu0YwC+9PHvut766CbLnJEB9znZV+vVtR2OxIwAyqP1PWhWQo5GeMO
-	pQjlvY3QMAIJPYZ8tL9B4IVW4tYwWM15+sw618HVIa5mkNzT7KybZYXt30ieO84XiOelSO+osF/
-	aSOweOJX4TWrqeOwq6eQm9r3P+9c=
-X-Google-Smtp-Source: AGHT+IGXlS5rTx7M4oSu+lw61Mytxa0MGjdd/IfXU6OK5sxzxwkUlSLRJUjT5KtyKpxVihYTtI8IRMgKrhLelG4UQBM=
-X-Received: by 2002:a4a:de14:0:b0:5aa:3e4f:f01e with SMTP id
- 006d021491bc7-5b28193cc74mr32764113eaf.1.1716284225360; Tue, 21 May 2024
- 02:37:05 -0700 (PDT)
+	s=arc-20240116; t=1716285260; c=relaxed/simple;
+	bh=kIBK/TXl0EdrSBki4Xtx0zg3YhBsx/YlEAh607eYTTo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QwPhaYRnvk4hoKX7lir/dQcFmY0KxWHNEBCLA9Gws0ZeZELktr6hkkc+xK5fq0Qt8pQHfjgyZBgKqF/luSpi1Wyd0e0kJ8TCG0EAZkNBdmFuky5VLJ1q+3B6GXn+Ph9KOwhb1mzQhsg3SiZYR1MnJJbZujMK9hFzB5pGqGWovw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=UUfABhN3; arc=none smtp.client-ip=217.194.8.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
+Received: from francesco-nb (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+	by mail11.truemail.it (Postfix) with ESMTPA id 6E0CC206CE;
+	Tue, 21 May 2024 11:54:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
+	s=default; t=1716285248;
+	bh=YrMaapKOCmWxZh7K2wOvL1ZSRLa5q+qreSWpLytaCas=; h=From:To:Subject;
+	b=UUfABhN3Se2UKhxDPzbGrtxI32ZpyPyoyFZZA62pFnr53HioNzOA7RG8mUAnXACuY
+	 gW2Ypyywpc07swpvIvUkGADqzcCmzanqwfI4JzTk+0toWJVp/S9TMQMlQfOqDZ19aL
+	 zaoGH0jaBqHpLQESBW+w+wT7pzj69sAGISSSRceIrgBOWwjecAE1W9ha+fqgqKx1SS
+	 WpozmnlCGyGD5V8Ofn2tvqsQLdeuemI9qR6aJjgdT8oHc5zE1IrfhRjSBavMTOj703
+	 NdyMCoWPHOJlIbej8I4Q1HkmKSIdJL1QIHS7gHJZVRSGq3jeiyM8Y/QO3XmUHZcPPS
+	 Nujkt7Hynhx1g==
+Date: Tue, 21 May 2024 11:54:02 +0200
+From: Francesco Dolcini <francesco@dolcini.it>
+To: Shengjiu Wang <shengjiu.wang@nxp.com>, regressions@lists.linux.dev,
+	Stephen Boyd <sboyd@kernel.org>, ulf.hansson@linaro.org
+Cc: ulf.hansson@linaro.org, heiko@sntech.de, u.kleine-koenig@pengutronix.de,
+	geert+renesas@glider.be, rafael@kernel.org,
+	linux-pm@vger.kernel.org, abelvesa@kernel.org, peng.fan@nxp.com,
+	mturquette@baylibre.com, sboyd@kernel.org, shawnguo@kernel.org,
+	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+	imx@lists.linux.dev, shengjiu.wang@gmail.com, frank.li@nxp.com,
+	mkl@pengutronix.de, linus.walleij@linaro.org,
+	linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] pmdomain: imx: gpcv2: Add delay after power up
+ handshake
+Message-ID: <20240521095402.GA11937@francesco-nb>
+References: <1715396125-3724-1-git-send-email-shengjiu.wang@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 21 May 2024 11:36:54 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0irEVCJcq=x6FXEpRh_KW2NwFD6At=2KU-Jc-Qs_se5jw@mail.gmail.com>
-Message-ID: <CAJZ5v0irEVCJcq=x6FXEpRh_KW2NwFD6At=2KU-Jc-Qs_se5jw@mail.gmail.com>
-Subject: [GIT PULL] Power management fixes for v6.10-rc1
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1715396125-3724-1-git-send-email-shengjiu.wang@nxp.com>
 
-Hi Linus,
+Hello Stephen and Ulf, 
 
-Please pull from the tag
+On Sat, May 11, 2024 at 10:55:25AM +0800, Shengjiu Wang wrote:
+> AudioMix BLK-CTRL on i.MX8MP encountered an accessing register issue
+> after power up.
+> 
+> [    2.181035] Kernel panic - not syncing: Asynchronous SError Interrupt
+...
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-6.10-rc1-2
+> Fixes: 1496dd413b2e ("clk: imx: imx8mp: Add pm_runtime support for power saving")
+> Reported-by: Francesco Dolcini <francesco@dolcini.it>
 
-with top-most commit dee8f20e61aea655a43b74e5b65bcc6fbc69df7b
+Any chances to get this into mainline with some priority?
 
- Merge branch 'pm-cpufreq'
+If in your opinion the fix is not correct I can just send a revert of
+the buggy commit.
 
-on top of commit 0c181b1d97dc4deaa902da46740e412c0d0bf9fb
+I reported the bug 4 weeks ago, the same day the broken commit was
+merged into -next [1], now we have a regression in mainline that is
+preventing booting with a kernel panic and because of that our whole CI
+is not able to test anything and therefore preventing us to look into
+any other regression.
 
- Merge tag 'pm-6.10-rc1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+Thanks,
+Francesco
 
-to receive power management fixes for 6.10-rc1.
-
-These fix the amd-pstate driver and the operating performance point
-(OPP) handling related to generic PM domains.
-
-Specifics:
-
- - Fix a memory leak in the exit path of amd-pstate (Peng Ma).
-
- - Fix required_opp_tables handling in the cases when multiple generic
-   PM domains share one OPP table (Viresh Kumar).
-
-Thanks!
-
-
----------------
-
-Peng Ma (1):
-      cpufreq: amd-pstate: fix memory leak on CPU EPP exit
-
-Viresh Kumar (1):
-      OPP: Fix required_opp_tables for multiple genpds using same table
-
----------------
-
- drivers/cpufreq/amd-pstate.c |  7 +++++++
- drivers/opp/core.c           | 31 ++++++++++++++++++++++++++++++-
- drivers/pmdomain/core.c      | 10 ++++++++++
- include/linux/pm_domain.h    |  6 ++++++
- 4 files changed, 53 insertions(+), 1 deletion(-)
+[1] https://lore.kernel.org/all/20240424164725.GA18760@francesco-nb/
 
