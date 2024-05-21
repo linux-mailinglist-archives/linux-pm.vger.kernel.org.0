@@ -1,143 +1,96 @@
-Return-Path: <linux-pm+bounces-8011-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8012-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17E338CA7F2
-	for <lists+linux-pm@lfdr.de>; Tue, 21 May 2024 08:20:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A8238CA8C5
+	for <lists+linux-pm@lfdr.de>; Tue, 21 May 2024 09:18:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 94869B21DD3
-	for <lists+linux-pm@lfdr.de>; Tue, 21 May 2024 06:20:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA45C282227
+	for <lists+linux-pm@lfdr.de>; Tue, 21 May 2024 07:18:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF417225D4;
-	Tue, 21 May 2024 06:20:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 903AF41A94;
+	Tue, 21 May 2024 07:18:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="OfuB3+2w"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fyNfx8Tk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D1C6219ED
-	for <linux-pm@vger.kernel.org>; Tue, 21 May 2024 06:20:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE8F179BD
+	for <linux-pm@vger.kernel.org>; Tue, 21 May 2024 07:18:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716272422; cv=none; b=M/jpqnH0fHr/N6f3+KgkgM05MR53pwbjR5ILOvc0jNVYuW79OmuRjozScyEA9hxqHG23y1ybSr6JR0I6qbrDjQFQW8h96pDmqjHWnkBYMv/7sBwN+TNy5AKj4jLp1O5MBLgts3fyqiXJVjyqFMqSE12Ee5MLeprjj0jDSA0aS5E=
+	t=1716275901; cv=none; b=OjMycJAJL99D5COhJOe1gIPo7NFmvyvMM1BttfLrjLhxt2Ra6URtyJPcQ9/sEf6GaSExQRE+uBc4Gz7s1qlUAWB3A/cwOJ8/aHuRUn7jMdd17RminBTuJ26lupmcML1BmebLzD5wXpgFFLMgq6raMcACIy67EdH6jxmndix/TDg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716272422; c=relaxed/simple;
-	bh=6BZUhcqjL/RDEOPLPEo2clmfPNGGzQtLf1UcRAWyZ9k=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=cvf8pQuJ2pRdA3NddQJwA8fXC8L3GI/orRDOB3PO43Dmy+4PWu/2BpW5Tb9srVXcC59Ay4PF0UDnhNdnJq1ARoCaqEdvGDZvqWPSJ9/fgpb9BIMf0U40piLCbHJZ3r+VbefBMRhPFkVOuShNEIlW8W2IntPUzMgZHYbSlHW/kqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=OfuB3+2w; arc=none smtp.client-ip=117.135.210.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=CWIIV
-	4GUEqaTGKIqatiR5yz6kVykBw1VoLJ1j6G/tXA=; b=OfuB3+2wmF3u16SrlxWfl
-	rbCCXsM5OzGP9Di8NEh702JJM0tv2D/fVPFl+WU465OJpovagDrnHj4KVMmYA6BQ
-	X9S2KYIL0D5G2gnN/pEGWGkLKbBNTVCDG6NBbYR/+i4wbQfULzowZBb1LxX8XI2G
-	/lMX37YSey6KvtLppp5lkQ=
-Received: from localhost.localdomain (unknown [111.48.58.10])
-	by gzga-smtp-mta-g1-2 (Coremail) with SMTP id _____wD3v5rTPExmJE9nEA--.10425S2;
-	Tue, 21 May 2024 14:19:00 +0800 (CST)
-From: chizhiling@163.com
-To: viresh.kumar@linaro.org
-Cc: chizhiling@163.com,
-	chizhiling@kylinos.cn,
-	linux-pm@vger.kernel.org,
-	rafael@kernel.org
-Subject: Re: [PATCH] cpufreq: add a check for unsupported CPU frequencies
-Date: Tue, 21 May 2024 14:18:54 +0800
-Message-Id: <20240521061854.3821527-1-chizhiling@163.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20240520075558.ytbeguk7v2mt7p4p@vireshk-i7>
-References: <20240520075558.ytbeguk7v2mt7p4p@vireshk-i7>
+	s=arc-20240116; t=1716275901; c=relaxed/simple;
+	bh=9L3gEfiyPOON8Om3nPWEz7HEmDXH7JqN24SNVEtZOfY=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=JNUxawZggMyJ7lyoM3cNnxTJigXqLE3G5jb8/swLJgMWZmnCCDUMESxwGUaJrGfORN6Lh8kQ4eDeA5IxNpoZfZ/BbpMvzg99FU8CP5fRII28n/10jNsl3jYqOQDwlnc5fSRK80/k7YmwFINiFe5uKGFUjpaI/o9eBGQr+VprJWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fyNfx8Tk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4C34AC32782
+	for <linux-pm@vger.kernel.org>; Tue, 21 May 2024 07:18:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716275901;
+	bh=9L3gEfiyPOON8Om3nPWEz7HEmDXH7JqN24SNVEtZOfY=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=fyNfx8Tk2rzsOyAQX+RfILQWMfi8CpTQSsc3l2Wbu3moCy7CXk3eQoa1XQvh8tX5h
+	 561i8bSleZwpDindUlQbMScOzNPRooSn/Yu6cPMaCV0IAeHzkq+DVKCPswM0TPfFqJ
+	 lhT6LzH0+T470b++EbWZYH+nmP6OK8YON4q/FcqT9GycDVowTSiUImtBfhP1mFbGqH
+	 UQzDXLw8k1JgKV7yhmdQQUbpP3cigWr8clhWrX1djweWr3dTPhvuMx6OyhylarMN60
+	 wQwAwXbr5auD5GUx40o1Zp9Zweu9ixKz+YYuahotpD2rwtvlsGxuLEI1fmua1alBKl
+	 98JT/bOQDjUMQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 3DC58C53BB7; Tue, 21 May 2024 07:18:21 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 218865] NULL pointer reference if X86_AMD_PSTATE_DEFAULT_MODE=1
+ on a AMD CPU that supports CPPC
+Date: Tue, 21 May 2024 07:18:20 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: aros@gmx.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-218865-137361-rW1DNCzGAx@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218865-137361@https.bugzilla.kernel.org/>
+References: <bug-218865-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3v5rTPExmJE9nEA--.10425S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxWFy7uF4rZryUtF1xKFy5XFb_yoW5CrW7pF
-	WY9F4qkry8Xa1DC3y7Ww1jg3W5u3ZrZ347GryYg34Fywn8CF90ga47KF17W3Wkur45Cayf
-	ZryDtayIqF15GaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JU1yxtUUUUU=
-X-CM-SenderInfo: hfkl6xxlol0wi6rwjhhfrp/xtbBZhnlnWV4HVerVAAAsv
 
-On 20 May 2024 13:25:58, Viresh Kumar wrote:
-> On 15-05-24, 10:20, chizhiling@163.com wrote:
-> > From: Chi Zhiling <chizhiling@kylinos.cn>
-> > 
-> > When user wants to control the CPU frequency on their own,
-> > if they write an unsupported frequency to the
-> > scaling_min_freq/scaling_max_freq node, the execution will not report an
-> > error, which will make the user think that the execution is successful.
-> > 
-> > So, this patch add a check to return an error if an unsupported frequency
-> > is written.
-> > 
-> > Testing:
-> > CPU supported frequency [min, max] = [800000, 4600000]
-> > 
-> > before patch:
-> > root: echo 0 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
-> > root: echo 5000000 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
-> > root: echo 0 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
-> > root: echo 5000000 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
-> > root:
-> > 
-> > after patch:
-> > root: echo 0 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
-> > -bash: echo: Invalid argument
-> > root: echo 5000000 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
-> > -bash: echo: Invalid argument
-> > root: echo 0 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
-> > -bash: echo: Invalid argument
-> > root: echo 5000000 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
-> > -bash: echo: Invalid argument
-> > root:
-> > 
-> > Signed-off-by: Chi Zhiling <chizhiling@kylinos.cn>
-> > ---
-> >  drivers/cpufreq/freq_table.c | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> > 
-> > diff --git a/drivers/cpufreq/freq_table.c b/drivers/cpufreq/freq_table.c
-> > index 10e80d912b8d..416826d582a4 100644
-> > --- a/drivers/cpufreq/freq_table.c
-> > +++ b/drivers/cpufreq/freq_table.c
-> > @@ -76,6 +76,11 @@ int cpufreq_frequency_table_verify(struct cpufreq_policy_data *policy,
-> >  	pr_debug("request for verification of policy (%u - %u kHz) for cpu %u\n",
-> >  					policy->min, policy->max, policy->cpu);
-> >  
-> > +	if (policy->min > policy->max ||
-> > +	    policy->max > policy->cpuinfo.max_freq ||
-> > +	    policy->min < policy->cpuinfo.min_freq)
-> > +		return -EINVAL;
-> > +
-> 
-> I think the current behavior (of not reporting errors) is what we
-> really wanted and that's why it is written that way. The kernel
-> doesn't want to enforce any min/max that the user can set, the kernel
-> will just get it in line with the current hardware limits.
-> 
-> For example consider this case for a platform with following frequency
-> range, 1 ghz, 1.1 ghz, 1.2 ghz, 1.3 ghz (boost only).
-> 
-> Lets say boost is disabled, at this point cpuinfo.max_freq is 1.2 ghz.
-> The user does this:
-> 
-> root: echo 1300000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
-> 
-> With your change this will fail, but we really want to record this
-> into policy->max. As the user can enable the boost frequency now,
-> which will make cpuinfo.max_freq to 1.3 ghz and user isn't required to
-> set scaling_max_freq again.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218865
 
+Artem S. Tashkinov (aros@gmx.com) changed:
 
-You explained it very clearly, thank you for your reply.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |Perry.Yuan@amd.com
 
--- 
-Chi.
+--- Comment #2 from Artem S. Tashkinov (aros@gmx.com) ---
+Perry please take a look.
 
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
 
