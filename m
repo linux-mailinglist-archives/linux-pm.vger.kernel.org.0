@@ -1,155 +1,110 @@
-Return-Path: <linux-pm+bounces-8015-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8016-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A65868CA8E9
-	for <lists+linux-pm@lfdr.de>; Tue, 21 May 2024 09:28:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3070F8CA927
+	for <lists+linux-pm@lfdr.de>; Tue, 21 May 2024 09:41:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1EE8B1F216ED
-	for <lists+linux-pm@lfdr.de>; Tue, 21 May 2024 07:28:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6177B1C20DE7
+	for <lists+linux-pm@lfdr.de>; Tue, 21 May 2024 07:41:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B5014F217;
-	Tue, 21 May 2024 07:28:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBC5C51034;
+	Tue, 21 May 2024 07:41:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aoUTJCf0"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="G76J0h5B"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 152DB179BD
-	for <linux-pm@vger.kernel.org>; Tue, 21 May 2024 07:28:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 826FF54277
+	for <linux-pm@vger.kernel.org>; Tue, 21 May 2024 07:41:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716276486; cv=none; b=Lx9mRh8T9oFtoX5qx+xaKQ/yKgznVnlm00ri2szTpZnUPdKO+3b2xpfaWKMjTSYzvdp1fO2DMZJcP8EEv26TncUxrrPsbEko9ehjCrVmtwxTv1HM9tw+v/AQasQpM8yW3IlFjAnOYY+HhmnyUM+t7MojV37cBBo/bM+nCJ4wS24=
+	t=1716277301; cv=none; b=Buj+VKGdxRinDeoYTdbcZ6aPv7Ir6z3UjjsJ8VIVyIe7j5vkB09tdvcNd/kljadft5CX4eBCDEZLwge2FfaxSo5Bzl58n/1gr2ZTzNjA4GnbSRODUHpIKvILkAYmtWCEb06Vo+QnreIC0sBIb8vwQ8WCPJy4bE9bTfLkr5ZRBW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716276486; c=relaxed/simple;
-	bh=rBasFPBW5J/MJijGBrhK1ZaxPm5hHJKKqEsPJvY6dPs=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Uwh7NrweHhrKBSIzlzOsM0L5FkSB1vnia5F43cEcKVp6AaykFH+Kt9Wp2DbB8rGv3ca5ceyKI/+zzymc3BwJvyGiW/XkKiARSPYsUU5PoUrl1/XmOWKhU/KKHO2drllrbaakcppfALU7DLQYbtz/17BlHG//AgiTxDbnf+2Dc4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aoUTJCf0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 86C31C4AF08
-	for <linux-pm@vger.kernel.org>; Tue, 21 May 2024 07:28:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716276485;
-	bh=rBasFPBW5J/MJijGBrhK1ZaxPm5hHJKKqEsPJvY6dPs=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=aoUTJCf0np7K8jhfx7KKu466IwvFoDZ8Pn/SE/ULmxKSk0FbLfE1D4XUlJu0fwO37
-	 aQHycOHhPqCZgOrcAFtbYPIl8n9egnH+aPaFCLMFj87SATv2HSFiPgLCJFU++I6phv
-	 hl9Mr0GvYAZuVy/J+rkQVTmFFbAGw3nKWbZfH+zORgVrcIRRYE481AY+Eui22SfaHf
-	 nB+TwgkKQE1n95moykO4kqJcFkUdJ7soRqYCR4bCVMgHT1H1iwAScEB7WTRsxERTjr
-	 x11HDxRoKe6OVJ0RrQTy80dqJ0fKl+azUt2x+dC8Txi7xg39zCsetQnTgPQTItmKa0
-	 UbiHcd9fhVgFw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 742F3C53BB7; Tue, 21 May 2024 07:28:05 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 218865] NULL pointer reference if X86_AMD_PSTATE_DEFAULT_MODE=1
- on a AMD CPU that supports CPPC
-Date: Tue, 21 May 2024 07:28:05 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: Perry.Yuan@amd.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218865-137361-GBjLfMaa6u@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218865-137361@https.bugzilla.kernel.org/>
-References: <bug-218865-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1716277301; c=relaxed/simple;
+	bh=mjtELKkUwfrpNggY/xDLDUgrykHboLmzHpj/LSUmYww=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NKwWrSmKAooLCvtveaJQtKokT5Roh8gmNZU0eIXh2fUmCnYaBeYSkpunyFuxRyNp/Di9qMmZuR1EEhf1ffX0h9CjmgIccImCmWAw36zCVyPK/pPvNt/16tVHhFI+SibQM8t0Vg470xJUv5DxdSOIeHPe5ETmF3degiSrHjNl/x8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=G76J0h5B; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1f304533064so10798315ad.0
+        for <linux-pm@vger.kernel.org>; Tue, 21 May 2024 00:41:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1716277300; x=1716882100; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RTurDbUPbvkS6PUjuhL+IuKT0RxpYi0vhPM0kCjr1C0=;
+        b=G76J0h5BGRX9xvU3gGzDJtFCSoXpLf5MgNTMrQ+9y2T5CQiWAmAJnvRA99FoUsCV76
+         hH+Fpz110gU9ns7DT9De/f6ga1ZB4ERuZcb201e+NxQH75x8/S41P+uIFAKK+su1mSZ5
+         R8P9F5uRpuD65fyJJaej1qN3I4qfBpz63JcUt0DJPpUqwGgHNwlNpIH1vcB4JOMwwXZB
+         uh4f2V+LF7F8D2HZQKXwohuliRAL6XFWJlZptsZmTIeJDjJR4pnpo/GAFcQL+qa+F7VN
+         yKO2O+zd+Wz03SwAWE2VNM76lmiJVrQ9E4cBK/mgI4PnrsmZSG5Xh28B9rwn2ec12RiO
+         E8fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716277300; x=1716882100;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RTurDbUPbvkS6PUjuhL+IuKT0RxpYi0vhPM0kCjr1C0=;
+        b=omYHi/XhHh00zLW2aibunBepZBqmCUJH/GogaTiNbKjYBd2Gm1DptnfCwp936W3m2T
+         jBI6BhsiPwnrTmjaxhuT7wuqN7Jbu5+rVTTfF4tyPi4YqRiEg8IZle3Ot9eC8eQC9ud3
+         t0hsmHhQf+TIfBJsUMGbpMG1CRrySmsvqX/d6KXKyI9u7Wyd4Bij8g2oVnjAZwWz3vj7
+         FM5soYWY0G6/S5lR6gV86GpeVFywMZjPC3NEzs90pI52+WqB7MgvCXuBMkyvXvpcTQ9y
+         ddwku2uhmj8Eajeecz/XLNicI4QueMHJaCb2XIZafEPyovEBYcgpfHXth967bpDgQ2AS
+         QhtQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWQh7GKSQUFwlBxc3aFS0ql9sX1RD14D7RZwsT/9dceByeePGLUStekUAGGQ70G3KU0BIL3bJIQ2C53DT4FKjQ4Z4wsKp3HOvU=
+X-Gm-Message-State: AOJu0Yw3J3/upK8rEvtiG2bHFf95EDkC3T8CWSbzL9po9KVFNEt0Zmrn
+	22CM34t2oW7e7w/lrjANfMh4F/z8ERmWEAPQIDHmxBDq5xSc9piDZA3NaBGi4BM=
+X-Google-Smtp-Source: AGHT+IF44Xi0aDyYujmDzZKwTTyNDVJcAd8OezFjpsoezFltxjzyFbaz9O76NbyQkXwu4OlPguIFRQ==
+X-Received: by 2002:a17:902:ce8e:b0:1f3:81c:c17 with SMTP id d9443c01a7336-1f3081c5fc2mr48526185ad.23.1716277299740;
+        Tue, 21 May 2024 00:41:39 -0700 (PDT)
+Received: from localhost ([122.172.82.13])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0c137fc2sm215397955ad.258.2024.05.21.00.41.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 May 2024 00:41:39 -0700 (PDT)
+Date: Tue, 21 May 2024 13:11:37 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: David Dai <davidai@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Saravana Kannan <saravanak@google.com>,
+	Quentin Perret <qperret@google.com>,
+	Masami Hiramatsu <mhiramat@google.com>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Pavan Kondeti <quic_pkondeti@quicinc.com>,
+	Gupta Pankaj <pankaj.gupta@amd.com>, Mel Gorman <mgorman@suse.de>,
+	kernel-team@android.com, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 0/2] Improve VM CPUfreq and task placement behavior
+Message-ID: <20240521074137.eip3jcnu6yhryrgq@vireshk-i7>
+References: <20240521043102.2786284-1-davidai@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240521043102.2786284-1-davidai@google.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218865
+On 20-05-24, 21:30, David Dai wrote:
+> v5 -> v6:
+> -Updated driver to use .target instead of .target_index
 
---- Comment #4 from Perry Yuan(AMD) (Perry.Yuan@amd.com) ---
-(In reply to Matthew Stapleton from comment #0)
-> I recently deployed a custom kernel build with X86_AMD_PSTATE_DEFAULT_MODE
-> set to 1 (Disabled) to a newer AMD system: AMD Ryzen 3 4100 that supports
-> cppc and got a NULL pointer reference crash so I had to add
-> amd_pstate=3Dactive on that system to get it to boot.  The same kernel bo=
-ots
-> fine on older AMD systems that don't support cppc.
->=20
-> The kernel is 6.6.22
->=20
-> This is what I think is happening when no amd_pstate parameter has been
-> specified although I haven't tested a patch yet:
-> in function: amd_pstate_init the cppc_state starts as AMD_PSTATE_UNDEFINE=
-D.
->=20
-> On older systems that don't support CPPC, !boot_cpu_has(X86_FEATURE_CPPC)
-> tests true so "driver load is disabled, boot with specific mode to enable
-> this" is printed and -ENODEV is returned.
->=20
-> On the newer systems that support CPPC , it goes on to "ret =3D
-> amd_pstate_set_driver(CONFIG_X86_AMD_PSTATE_DEFAULT_MODE);" .  Then
-> amd_pstate_set_driver sees AMD_PSTATE_DISABLE , prints "driver is explici=
-tly
-> disabled" , doesn't assign a driver to current_pstate_driver, but still
-> returns 0.  So then the switch statement in amd_pstate_init breaks and th=
-en
-> I suspect it crashes at "current_pstate_driver->adjust_perf =3D
-> amd_pstate_adjust_perf;" just below the switch statement.
->=20
-> If this is the case, maybe adjusting amd_pstate_set_driver to return -ENO=
-DEV
-> if cppc_state =3D=3D AMD_PSTATE_DISABLE might fix the problem.
->=20
-> Here is some of the crash output (manually typed from a photo):
-> amd_pstate: driver is explicitly disabled
-> BUG: kernel NULL pointer deference, address: 0000000000000050
-> ...
-> ? __die+0x1a/0x60
-> ? page_fault_oops+0x17c/0x4a0
-> ? _prb_read_valid+0x263/0x2e0
-> ? exc_page_fault+0x33f/0x610
-> ? prb_read_valid+0x12/0x20
-> ? asm_exc_page_fault+0x22/0x30
-> ? amd_pstate_init+0x90/0x260
-> ? amd_pstate_param+0xb0/0xb0
-> do_one_initcall+0x82/0x2c0
-> kernel_init_freeable+0x1af/0x260
-> ? rest_init+0xb0/0xb0
-> kernel_init+0x11/0x1b0
-> ret_from_fork+0x2b/0x40
-> ? rest_init+0xb0/0xb0
-> ret_from_fork_asm+0x11/0x20
+May have missed the discussion, but why is this done ?
 
-Could you try the patch lately posted while I am trying to find a system to
-reproduce?
-https://lore.kernel.org/lkml/9b31fbcdfd4e4f00c3302f45e655aa43589b224c.17153=
-56532.git.perry.yuan@amd.com/
-
-I have changed the mode selection code a bit, it will be great if you can h=
-elp
-to try this on your system,  if the issue still can be reproduced, I will n=
-eed
-to chang the patch accordingly.
-thanks.
-
-Perry.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
+-- 
+viresh
 
