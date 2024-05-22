@@ -1,108 +1,120 @@
-Return-Path: <linux-pm+bounces-8044-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8045-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F348B8CC394
-	for <lists+linux-pm@lfdr.de>; Wed, 22 May 2024 16:53:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E53D18CC396
+	for <lists+linux-pm@lfdr.de>; Wed, 22 May 2024 16:56:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4D799B20E77
-	for <lists+linux-pm@lfdr.de>; Wed, 22 May 2024 14:53:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F4FA283A45
+	for <lists+linux-pm@lfdr.de>; Wed, 22 May 2024 14:56:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D34BF1C683;
-	Wed, 22 May 2024 14:53:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2EFA1CAA6;
+	Wed, 22 May 2024 14:56:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p2KQaD9i"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sOGTz7oy"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8C418645
-	for <linux-pm@vger.kernel.org>; Wed, 22 May 2024 14:53:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE4831C683;
+	Wed, 22 May 2024 14:56:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716389605; cv=none; b=UY2Eh/XZZTqAX7tsNpWdfKrHjCFYsGA4L0udnOM+drKx6v0TCTFi/i7gC2CYBCME16ogfjjvi3RDvMt2RP9LgoGqwIL5xIoNJ2JrxUCMb0nsiLTPFWD80zvCV1JfDXPnH/IyX/Y4GZNiiwXd4z67CftD8uBW/r3kbaGrNFZVTgQ=
+	t=1716389798; cv=none; b=Az2Pr0oDNEi61pJhYTOvY5y+yYZdEJYRKHGSpMoogNePyNqKmczi8xFa5CIUFOv8bcyjt6wCLNqvxwV93bY0Jhd38p5GRj4KcWN/NuAziEd6ReZ/U464SuvKKh2e1OYjsNPKQZwQCYHKxTfnBy7s1xgpjjnS8zM/G9QLmFZhGQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716389605; c=relaxed/simple;
-	bh=B2g7VjM/pDPqyPbdWUk6I18xsPBV8XhidZ4Uhc66X4s=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=WsrE0XKvhHro7nz0442qAjtCSnY5DB7fJvYyHl+43ddLC6j+99meWR8lk/mk9kyMb+uEwkRuzlqW3MsLs4Gfmqz5C15lSXYR+z0QI/brSmT++YNMAXJmbcrpdGFc/8M5RiVKw4IPupwLyNb/o1tlELtJ2RjQN6Oz6kQe/ylrcw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p2KQaD9i; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4BE0BC32782
-	for <linux-pm@vger.kernel.org>; Wed, 22 May 2024 14:53:25 +0000 (UTC)
+	s=arc-20240116; t=1716389798; c=relaxed/simple;
+	bh=zWm8NiSY2+aawW2KRUHKXAJ/95lx4gCIUjpIrTP/ufc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rpsbRBpFn1DdU6Z8C8EFWjiCeF1mqpDuqKtURQKNujy2nmvr5oRpqWxBG9ZkxWltaw5pLdaQXDwXUS1yuwyVQJPf84tP4sYoP+PCpfh7LpMI0VvE5Pn0kQTd6OoxY1anCsHJgvFx8F+qHP7PRyeyKQMGRPPWv10XFu87haNn1N8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sOGTz7oy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 415E3C2BBFC;
+	Wed, 22 May 2024 14:56:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716389605;
-	bh=B2g7VjM/pDPqyPbdWUk6I18xsPBV8XhidZ4Uhc66X4s=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=p2KQaD9ioYT19qIWqjB08f/vkvPcTd52FVpuEa/oyb7OYmSe/JEGUrWsPPRxM2DGp
-	 NLW4+7kDGA9dvm7BRqqjkK275qBFn6wEN8cljNA9ae1eaClgiviXnvIyNavyFn2XDB
-	 msjlRw4YDf3TbIcz/pLbdSvXcJSflXhWK0oy7aghVncIoEFu/+deDdnI164bMXXDHo
-	 2p61dzO18wTAqHlUwReAMQXgJYIyGBOfXWw4VHb050BTJoH29MhzTWhiP3Qi0C5AVY
-	 lxBPZdh9qzGAc2Y2VrlkPPz9tA7FjJ0yTRSGGUYMi1VT/Ik+vJ1MUch2hQRSZSw/kw
-	 UiZswgTsLUWCg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 435F6C53B73; Wed, 22 May 2024 14:53:25 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 218686] Fail to set energy_performance_preference of amd
- processor on asus ga403uv
-Date: Wed, 22 May 2024 14:53:24 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: Perry.Yuan@amd.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: DOCUMENTED
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218686-137361-KQWLCjghzL@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218686-137361@https.bugzilla.kernel.org/>
-References: <bug-218686-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1716389798;
+	bh=zWm8NiSY2+aawW2KRUHKXAJ/95lx4gCIUjpIrTP/ufc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sOGTz7oynf65RXL6PVaStX562gyTyqhuRcDAIstxAgUBzOyhuqL9yJvvd1on9/nyv
+	 2POi+KESaZ7+I1qt3oo8po9UUfh1Y1clhy+vtovEWSrXmtX4ORJHWVQE1abZ+SdTHd
+	 qv2umpzSHjBXMTTiGYbq4lJ1r6e8+l/Cek2UlHdoca/16QAn0WPvI7VxA9PymwLMpt
+	 q/Vu7I5TUwCiScpmepGhVnIRhRJonYO2/e4jwzh7aEFTRkGV32sjmW2Epfk9gASBdi
+	 90yeF0mQGFjHZpttSXuC0+gC6dXSrB1UzV4Q1iUDrf13hGLkjWhW+35KEY/mzNUkU3
+	 /NZbFLelIBbnQ==
+Date: Wed, 22 May 2024 07:56:37 -0700
+From: "Darrick J. Wong" <djwong@kernel.org>
+To: Sukrit Bhatnagar <Sukrit.Bhatnagar@sony.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+	Christian Brauner <brauner@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-xfs@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: Re: [PATCH 2/2] mm: swap: print starting physical block offset in
+ swapon
+Message-ID: <20240522145637.GV25518@frogsfrogsfrogs>
+References: <20240522074658.2420468-1-Sukrit.Bhatnagar@sony.com>
+ <20240522074658.2420468-3-Sukrit.Bhatnagar@sony.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240522074658.2420468-3-Sukrit.Bhatnagar@sony.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218686
+On Wed, May 22, 2024 at 04:46:58PM +0900, Sukrit Bhatnagar wrote:
+> When a swapfile is created for hibernation purposes, we always need
+> the starting physical block offset, which is usually determined using
+> userspace commands such as filefrag.
 
---- Comment #50 from Perry Yuan(AMD) (Perry.Yuan@amd.com) ---
-(In reply to Mike from comment #49)
-> Hi All,
->=20
-> I have the same ga403uv system.
->=20
-> watch -d cat /sys/devices/system/cpu/cpu*/acpi_cppc/feedback_ctrs
->=20
-> Returns changing values, does't this mean cppc is active?
->=20
-> Mike.
+If you always need this value, then shouldn't it be exported via sysfs
+or somewhere so that you can always get to it?  The kernel ringbuffer
+can overwrite log messages, swapfiles can get disabled, etc.
 
-Hi Mike,
+> It would be good to have that value printed when we do swapon and get
+> that value directly from dmesg.
+> 
+> Signed-off-by: Sukrit Bhatnagar <Sukrit.Bhatnagar@sony.com>
+> ---
+>  mm/swapfile.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/swapfile.c b/mm/swapfile.c
+> index f6ca215fb92f..53c9187d5fbe 100644
+> --- a/mm/swapfile.c
+> +++ b/mm/swapfile.c
+> @@ -3264,8 +3264,9 @@ SYSCALL_DEFINE2(swapon, const char __user *, specialfile, int, swap_flags)
+>  		  (swap_flags & SWAP_FLAG_PRIO_MASK) >> SWAP_FLAG_PRIO_SHIFT;
+>  	enable_swap_info(p, prio, swap_map, cluster_info);
+>  
+> -	pr_info("Adding %uk swap on %s.  Priority:%d extents:%d across:%lluk %s%s%s%s\n",
+> +	pr_info("Adding %uk swap on %s. Priority:%d extents:%d start:%llu across:%lluk %s%s%s%s\n",
+>  		K(p->pages), name->name, p->prio, nr_extents,
+> +		(unsigned long long)first_se(p)->start_block,
 
-Could you share the output of below commands on your system?
+Last time I looked, start_block was in units of PAGE_SIZE, despite
+add_swap_extent confusingly (ab)using the sector_t type.  Wherever you
+end up reporting this value, it ought to be converted to something more
+common (like byte offset or 512b-block offset).
 
-sudo rdmsr 0xc00102b3 -a
-sudo rdmsr 0xc00102b0 -a
-sudo rdmsr 0xc00102b1 -a
-sudo cpuid -l 0x80000008 -r
+Also ... if this is a swap *file* then reporting the path and the
+physical storage device address is not that helpful.  Exposing the block
+device major/minor and block device address would be much more useful,
+wouldn't it?
 
---=20
-You may reply to this email to add a comment.
+(Not that I have any idea what the "suspend process" in the cover letter
+refers to -- suspend and hibernate have been broken on xfs forever...)
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+--D
+
+>  		K((unsigned long long)span),
+>  		(p->flags & SWP_SOLIDSTATE) ? "SS" : "",
+>  		(p->flags & SWP_DISCARDABLE) ? "D" : "",
+> -- 
+> 2.34.1
+> 
+> 
 
