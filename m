@@ -1,148 +1,129 @@
-Return-Path: <linux-pm+bounces-8057-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8058-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1ADBB8CC76E
-	for <lists+linux-pm@lfdr.de>; Wed, 22 May 2024 21:45:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAEA78CC83C
+	for <lists+linux-pm@lfdr.de>; Wed, 22 May 2024 23:50:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C094C282436
-	for <lists+linux-pm@lfdr.de>; Wed, 22 May 2024 19:45:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 108D71C212D7
+	for <lists+linux-pm@lfdr.de>; Wed, 22 May 2024 21:50:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F606142E68;
-	Wed, 22 May 2024 19:45:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FAD7146013;
+	Wed, 22 May 2024 21:50:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gp9t78h5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sjk1LAZj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68A75A929;
-	Wed, 22 May 2024 19:45:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D3F80045;
+	Wed, 22 May 2024 21:50:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716407148; cv=none; b=mhEJxP3BIy3WkBJAkIjZUz5B89yc8cTPwo6tmuDdPb39r3S2lZGaPvtkWZijrDFes8kC9mXxx+iOEBVW2YLcwGCl8Vqp1gKoxqOdlZlmk9Wnw44lOrDTbejg7qXeyMsnIV4bdAHLJ+lBtb2P6fgMZyIaBuimv3tD+NxczTP96dM=
+	t=1716414628; cv=none; b=OKOI3zQxjsheTMYQ/k/7CWmwmaAiQ2ebwxvTv0ZZR6fePpEA1Iqr6w40k40ldXEYHO/nn4yRFmvtySi/bhkymAlmu/dZg9l6DRvFxobqeTac2XWy+1VF6A0D5qurkSY5uhS+gjZRwQq7fgono0gQWSbfGuxsyWfgPmaNqJ3bfX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716407148; c=relaxed/simple;
-	bh=VNy3X1gCkM1Q2lQt+/I2zG7AyOiV6ah49bD+X8inkw4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YE5uGjShWOn9mPS2FNIpX4NvWwInQwzbB86sHTzq+j+6jlPRMt6YAKbcEknjbJTBvY0pbeQAOd5uchq0MHPonuje4zZib6ITxOROo3NlC158mHTMg7ZWwhP9HDZWWH/iH9XsRphJFp7yvIFM+/qbcTMIubBvy0jyJ9jz1dPAAVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gp9t78h5; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716407147; x=1747943147;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VNy3X1gCkM1Q2lQt+/I2zG7AyOiV6ah49bD+X8inkw4=;
-  b=Gp9t78h57p+ribgoWSp6DYpU7YLPAd8Bp0T5TxtBNTyTTs6Lz2CgnUJx
-   CSyobItc5FgGJGQPMSIgp91ELpKtkR4j3mnT9cBFKQf87tAeB0/Goeogk
-   lrBZ4i5gl4RQ+C2AHsj2OWD4FOAitmpnWuEQDdu4pY/ywuzbKNo3l37RE
-   NcOk9aKXD900Dt1p7Sm9CFhZT3FpmcJSNn+F8t/8EYTXG9lUik+VAA8Mm
-   xy+yAss4xhWxPK4c+9CSE7FZKe022yWeMwxsNv1y9Q+XPXC++edpK2Th0
-   oV+o28t4Id8pEQNrLp61mlWZRvc9h9u0H/z9ZYYkM9wnmkUm5F/Jg5z+u
-   A==;
-X-CSE-ConnectionGUID: mafGFH3KRBKPvFzw0r3fUw==
-X-CSE-MsgGUID: EN1rdK+bSkC0keokfFFThA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11080"; a="23822285"
-X-IronPort-AV: E=Sophos;i="6.08,181,1712646000"; 
-   d="scan'208";a="23822285"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2024 12:45:46 -0700
-X-CSE-ConnectionGUID: rp48xsGlTcSri1Fl61eRFg==
-X-CSE-MsgGUID: jvSo1K/UT1echsxPpGbLqw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,181,1712646000"; 
-   d="scan'208";a="37883105"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 22 May 2024 12:45:41 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s9ru7-0001vN-0N;
-	Wed, 22 May 2024 19:45:39 +0000
-Date: Thu, 23 May 2024 03:45:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Xiaojian Du <Xiaojian.Du@amd.com>, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, tglx@linutronix.de,
-	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-	hpa@zytor.com, daniel.sneddon@linux.intel.com, jpoimboe@kernel.org,
-	pawan.kumar.gupta@linux.intel.com, sandipan.das@amd.com,
-	kai.huang@intel.com, perry.yuan@amd.com, x86@kernel.org,
-	ray.huang@amd.com, rafael@kernel.org,
-	Xiaojian Du <Xiaojian.Du@amd.com>,
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH v2 2/2] cpufreq: amd-pstate: change cpu freq transition
- delay for some models
-Message-ID: <202405230325.UPlOikDm-lkp@intel.com>
-References: <b2c8fb2da41f9fb21f095f67d99cbdbd0aa34091.1716356681.git.Xiaojian.Du@amd.com>
+	s=arc-20240116; t=1716414628; c=relaxed/simple;
+	bh=L//sNRivVqdwa73OnOET5hl3cywNzWVR2sKrxJQ9x1g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tryyKkHVGqZIsTDTv1jWjt8VSRTbExmnObAyoLdo2SKVkYM/mLXqMvaNwiPLBjiLTjSkGrFgrnB0EhHJsWaPNKXqpaOpGGbtGSBlAuCT8rTEItVT/o8aSnddsq/Eq8QnOSznkSzt+DvFb0s8kSgkJX3tlVeKR8TFD+JXlo2lb44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sjk1LAZj; arc=none smtp.client-ip=209.85.161.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5b2cc8c4b8aso3799275eaf.1;
+        Wed, 22 May 2024 14:50:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1716414625; x=1717019425; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zBAoZG0al1m+JA3ktgdRMgrP5Z9mDaaNRS9hpWp/qPE=;
+        b=Sjk1LAZjtZs+b40oEpf7JiLOvy5Urg2UkTNObNysI8K7UUfiQZsDXON9b762IJ0sWJ
+         kkAOt0cKgWLo/lwBEZbQr9xlAWlGxCREwweOecVrF7BBzH4iPVipxzlGhYW6gH3gBkZk
+         LxTFzWy4ERDgH2VDqjLziskc7u2lWnUdj8E/IIbZHbCvOakns5F8ttFeJMauiBRiwv2D
+         iLnK9YlnG8L5364Jc6V2DGhB8Yb4OFW4VK584jAFUP49fd7j8Lr5N5qQc/TZ5Oy3UDgj
+         qAqE6tcVxsT/3elFFc1dGEogjswTqET37ovKKwSv/RW29pQ5CsgXJBRO7NwXdlgh3rOs
+         hCXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716414625; x=1717019425;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zBAoZG0al1m+JA3ktgdRMgrP5Z9mDaaNRS9hpWp/qPE=;
+        b=LatPJjkny4duWvFfsLZLIqQVBNcA+2KR/L8zNCB1skpQnWoZYgencpf0ZJewSmSHv+
+         lFjHdTth1OpohkSNCoHkcsvLWz84PBva6zUb5mx8U3+jxN2OXQSxutMGUGEsWCuIGTJv
+         jOUfr2eI4KFlfO4kz1Dyd9NLDnnG+9iEkJACltaJH4wqzUZIvs1Hnp/jyvs8WqkK1+YK
+         Uz1t29rKNYJeiZeKUdeyHqyyYzuoqlJHx7GT37NgqpEo6HVTS8KYe9pye5OGKuQOJg08
+         DQWWSZHwHTqBf861YYL9RTQKrVndpN7yStzQR0yy6SHrOeXiv6MAqHo27FtHCfW0YPlN
+         DSzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUtkssaxYVDs28rBJZ95+XIdAAtVqx0fttzKSAvS7gWhGrqP59/v75q5hnYBNAnhIhaE0ATySZpZBr/1h9oPSWFwhPT0RKG15/OMSng7ufVrFtChv8fo9sM+TPsVGdzcPPAb1huzXVFMNaB/HVTTXz5R5hPXbbWWHSDTEA3TG3kTFIgAu3d
+X-Gm-Message-State: AOJu0YzpeQqVQJK1zU4Kgq5FgsfysyQJYVQ15ltl6zbT3dip5peWAQnZ
+	RQQOShGewHGkO6YpNiaQWqJGnossI3UHxrK7eKQP+1XYIWb0g05fKvr8qg==
+X-Google-Smtp-Source: AGHT+IEJ5Jxw6Dx7ysWEw9SOQIKtcpP6HWnvE1UIWEcK7zpJ4dBNansEqpDAUp5l6zKniQsabf2Azw==
+X-Received: by 2002:a05:6359:704b:b0:18d:9e5f:aaec with SMTP id e5c5f4694b2df-1979213ec36mr296068055d.31.1716414624804;
+        Wed, 22 May 2024 14:50:24 -0700 (PDT)
+Received: from localhost ([2a00:79e1:2e00:1301:e1c5:6354:b45d:8ffc])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f677a20c6bsm13037190b3a.129.2024.05.22.14.50.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 May 2024 14:50:23 -0700 (PDT)
+From: Rob Clark <robdclark@gmail.com>
+To: dri-devel@lists.freedesktop.org
+Cc: freedreno@lists.freedesktop.org,
+	linux-arm-msm@vger.kernel.org,
+	Will Deacon <will@kernel.org>,
+	Rob Clark <robdclark@chromium.org>,
+	Boris Brezillon <boris.brezillon@collabora.com>,
+	iommu@lists.linux.dev (open list:IOMMU SUBSYSTEM),
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Joao Martins <joao.m.martins@oracle.com>,
+	Joerg Roedel <jroedel@suse.de>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	linux-arm-kernel@lists.infradead.org (moderated list:ARM SMMU DRIVERS),
+	linux-kernel@vger.kernel.org (open list),
+	linux-pm@vger.kernel.org (open list:POWER MANAGEMENT CORE),
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Sean Paul <sean@poorly.run>
+Subject: [PATCH v3 0/2] io-pgtable-arm + drm/msm: Extend iova fault debugging
+Date: Wed, 22 May 2024 14:50:03 -0700
+Message-ID: <20240522215014.26007-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.45.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b2c8fb2da41f9fb21f095f67d99cbdbd0aa34091.1716356681.git.Xiaojian.Du@amd.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Xiaojian,
+From: Rob Clark <robdclark@chromium.org>
 
-kernel test robot noticed the following build warnings:
+This series extends io-pgtable-arm with a method to retrieve the page
+table entries traversed in the process of address translation, and then
+beefs up drm/msm gpu devcore dump to include this (and additional info)
+in the devcore dump.
 
-[auto build test WARNING on tip/master]
-[also build test WARNING on rafael-pm/linux-next rafael-pm/bleeding-edge linus/master next-20240522]
-[cannot apply to tip/x86/core tip/auto-latest v6.9]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+This is a respin of https://patchwork.freedesktop.org/series/94968/
+(minus a patch that was already merged)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Xiaojian-Du/cpufreq-amd-pstate-change-cpu-freq-transition-delay-for-some-models/20240522-135241
-base:   tip/master
-patch link:    https://lore.kernel.org/r/b2c8fb2da41f9fb21f095f67d99cbdbd0aa34091.1716356681.git.Xiaojian.Du%40amd.com
-patch subject: [PATCH v2 2/2] cpufreq: amd-pstate: change cpu freq transition delay for some models
-config: x86_64-randconfig-006-20240522 (https://download.01.org/0day-ci/archive/20240523/202405230325.UPlOikDm-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240523/202405230325.UPlOikDm-lkp@intel.com/reproduce)
+v2: Fix an armv7/32b build error in the last patch
+v3: Incorperate Will Deacon's suggestion to make the interface
+    callback based.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405230325.UPlOikDm-lkp@intel.com/
+Rob Clark (2):
+  iommu/io-pgtable-arm: Add way to debug pgtable walk
+  drm/msm: Extend gpu devcore dumps with pgtbl info
 
-All warnings (new ones prefixed by >>):
-
->> drivers/cpufreq/amd-pstate.c:824:3: warning: add explicit braces to avoid dangling else [-Wdangling-else]
-     824 |                 else
-         |                 ^
-   1 warning generated.
-
-
-vim +824 drivers/cpufreq/amd-pstate.c
-
-   811	
-   812	/*
-   813	 * Get pstate transition delay time from ACPI tables that firmware set
-   814	 * instead of using hardcode value directly.
-   815	 */
-   816	static u32 amd_pstate_get_transition_delay_us(unsigned int cpu)
-   817	{
-   818		u32 transition_delay_ns;
-   819	
-   820		transition_delay_ns = cppc_get_transition_latency(cpu);
-   821		if (transition_delay_ns == CPUFREQ_ETERNAL)
-   822			if (cpu_feature_enabled(X86_FEATURE_FAST_CPPC))
-   823				return AMD_PSTATE_FAST_CPPC_TRANSITION_DELAY;
- > 824			else
-   825				return AMD_PSTATE_TRANSITION_DELAY;
-   826	
-   827		return transition_delay_ns / NSEC_PER_USEC;
-   828	}
-   829	
+ drivers/gpu/drm/msm/adreno/adreno_gpu.c | 10 +++++
+ drivers/gpu/drm/msm/msm_gpu.c           | 22 +++++++++++
+ drivers/gpu/drm/msm/msm_gpu.h           |  8 ++++
+ drivers/gpu/drm/msm/msm_iommu.c         | 18 +++++++++
+ drivers/gpu/drm/msm/msm_mmu.h           |  5 ++-
+ drivers/iommu/io-pgtable-arm.c          | 50 ++++++++++++++++++++-----
+ include/linux/io-pgtable.h              |  4 ++
+ 7 files changed, 107 insertions(+), 10 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.45.1
+
 
