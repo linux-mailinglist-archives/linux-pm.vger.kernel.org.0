@@ -1,116 +1,148 @@
-Return-Path: <linux-pm+bounces-8056-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8057-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D9908CC63B
-	for <lists+linux-pm@lfdr.de>; Wed, 22 May 2024 20:22:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1ADBB8CC76E
+	for <lists+linux-pm@lfdr.de>; Wed, 22 May 2024 21:45:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0826A282015
-	for <lists+linux-pm@lfdr.de>; Wed, 22 May 2024 18:22:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C094C282436
+	for <lists+linux-pm@lfdr.de>; Wed, 22 May 2024 19:45:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80321145B10;
-	Wed, 22 May 2024 18:22:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F606142E68;
+	Wed, 22 May 2024 19:45:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Fb4K7RV+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gp9t78h5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3CB6762FF
-	for <linux-pm@vger.kernel.org>; Wed, 22 May 2024 18:22:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68A75A929;
+	Wed, 22 May 2024 19:45:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716402151; cv=none; b=X8rz2WXd48GUObGVHPnYCAOSfx3iMDwMvHZU5lzpeoN0mibPtparf3Jw6dPKKwujtCglnF9eohtaqVKBYTOb2HbCG6xU3Jp2sQm1cvCCMmIE6LH/ZVCPtsJqnjXcao1IDV0VR4bJ+Colhb8VgL/LhZ59wYc6G3ydVEbztELRV0o=
+	t=1716407148; cv=none; b=mhEJxP3BIy3WkBJAkIjZUz5B89yc8cTPwo6tmuDdPb39r3S2lZGaPvtkWZijrDFes8kC9mXxx+iOEBVW2YLcwGCl8Vqp1gKoxqOdlZlmk9Wnw44lOrDTbejg7qXeyMsnIV4bdAHLJ+lBtb2P6fgMZyIaBuimv3tD+NxczTP96dM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716402151; c=relaxed/simple;
-	bh=ZFK6u4Fa5zvVRsR5pPiIVXF/YDHCjWe6si/6yyn/Lng=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=H/yE6SBmaE3ZmDohv91Ni6dTg8pb8s1Iru9ABliiVfo2dwcL2RTnxdvgthGIvOdlchZvu0pc8npxB9Bf553HjkqTLV1vpwUR8/xqBUSFOXkFQLkGJQW11O28HZRMqPtWA4aYs5DR1OzFhKTl9VTU7pvdk4God4lfEVFb2x3A88w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Fb4K7RV+; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-42016c8db2aso11150375e9.0
-        for <linux-pm@vger.kernel.org>; Wed, 22 May 2024 11:22:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1716402148; x=1717006948; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZFK6u4Fa5zvVRsR5pPiIVXF/YDHCjWe6si/6yyn/Lng=;
-        b=Fb4K7RV+rhQPofbyviCdQE6SPCroqZr/XDfiRJizjk4YH7xicEC/5G4QpWG4JC+Elh
-         GMv89EQyom+0El0f1+g9UKgJAfmQ2Za5RIMvwUP4Vkc0KJ3ZvuNDAopHpAldIH/3AZnK
-         GQTLeyTonh696l2/o983ZiIFISQXgojSzGAtL1U4fCKwku9S/aOU2GEEw1wL6hOKJkJV
-         CY+mo2oRPnxzBcDY4c0b/yw+tF73CJbMrnqCzsvGl3l+I3RcsV0RbpvVl4b7NkD9y9y2
-         KFjWhBGXOIWhTQbcid0TwXIFf8r6Us06APki1LiWw8BVmNI4uCIhwQmBrMeH0zB9tSs6
-         r/MQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716402148; x=1717006948;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZFK6u4Fa5zvVRsR5pPiIVXF/YDHCjWe6si/6yyn/Lng=;
-        b=es9vLj1hTaMWOx77TqGeop2mUHg2rz7DTOPl0mDF9AJeYwfTxpACCFgQT812KaUVnQ
-         p3023YrlFEYbcpUDNY1leAIr2CLYt40gJ3Y72E15RLu3LM+4/YSZC1MxXUfQcM+b1fo2
-         lPR9ft4Qne6bWjMk/FIaribQ0ptY30vpoCfF1vXy+cwM7cgV6fKA+I+GgyFjsNyLAP0q
-         zONrpKOknw3xF28wtBnpMRhqzjlHrORFVsGFT/87mQGep3LTTy9UUeXNJEGRMnjfcR2s
-         uWSxc+HuRBAL7jbUtvoblFc9sppNKPD/0HRRnpdoHppuokcAXbt36tIrQ8ruzaImDlX0
-         rbTg==
-X-Forwarded-Encrypted: i=1; AJvYcCXYp5U/59oz01jWj57JKpqvryX7zHCJ2Q/99Rm3iczCoYb2bkNOW8+B12TBnEm+VEoQQo0srv62/ddO+s0PVgnGHmE9HGHYc3U=
-X-Gm-Message-State: AOJu0YxXNbOELYkWLSbfBKBWFmssi9orzLVe87MOtoUmiZXNCzs9ouR0
-	vG5nnJW87r05dyJxjH+4DH6NVeRmmJZXrTcPr2fXAsMxyMTTggAA57/iLfzSaNF1GeQGWrhV1Qc
-	dfOx4mY2W9Tjw0qP6LELp4AOeGlB6PtN+wMdZ
-X-Google-Smtp-Source: AGHT+IEqHrhvngq0QbJdNPXcNp4cNgyuDl9fbQnATErpVY20xw7tN2DbVz6qiqx0xfhTGgjKnsrIXyee4iHwgZnXnsI=
-X-Received: by 2002:a5d:6903:0:b0:354:c934:efa0 with SMTP id
- ffacd0b85a97d-354d8d85254mr2020590f8f.48.1716402147986; Wed, 22 May 2024
- 11:22:27 -0700 (PDT)
+	s=arc-20240116; t=1716407148; c=relaxed/simple;
+	bh=VNy3X1gCkM1Q2lQt+/I2zG7AyOiV6ah49bD+X8inkw4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YE5uGjShWOn9mPS2FNIpX4NvWwInQwzbB86sHTzq+j+6jlPRMt6YAKbcEknjbJTBvY0pbeQAOd5uchq0MHPonuje4zZib6ITxOROo3NlC158mHTMg7ZWwhP9HDZWWH/iH9XsRphJFp7yvIFM+/qbcTMIubBvy0jyJ9jz1dPAAVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gp9t78h5; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716407147; x=1747943147;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VNy3X1gCkM1Q2lQt+/I2zG7AyOiV6ah49bD+X8inkw4=;
+  b=Gp9t78h57p+ribgoWSp6DYpU7YLPAd8Bp0T5TxtBNTyTTs6Lz2CgnUJx
+   CSyobItc5FgGJGQPMSIgp91ELpKtkR4j3mnT9cBFKQf87tAeB0/Goeogk
+   lrBZ4i5gl4RQ+C2AHsj2OWD4FOAitmpnWuEQDdu4pY/ywuzbKNo3l37RE
+   NcOk9aKXD900Dt1p7Sm9CFhZT3FpmcJSNn+F8t/8EYTXG9lUik+VAA8Mm
+   xy+yAss4xhWxPK4c+9CSE7FZKe022yWeMwxsNv1y9Q+XPXC++edpK2Th0
+   oV+o28t4Id8pEQNrLp61mlWZRvc9h9u0H/z9ZYYkM9wnmkUm5F/Jg5z+u
+   A==;
+X-CSE-ConnectionGUID: mafGFH3KRBKPvFzw0r3fUw==
+X-CSE-MsgGUID: EN1rdK+bSkC0keokfFFThA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11080"; a="23822285"
+X-IronPort-AV: E=Sophos;i="6.08,181,1712646000"; 
+   d="scan'208";a="23822285"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2024 12:45:46 -0700
+X-CSE-ConnectionGUID: rp48xsGlTcSri1Fl61eRFg==
+X-CSE-MsgGUID: jvSo1K/UT1echsxPpGbLqw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,181,1712646000"; 
+   d="scan'208";a="37883105"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by fmviesa003.fm.intel.com with ESMTP; 22 May 2024 12:45:41 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s9ru7-0001vN-0N;
+	Wed, 22 May 2024 19:45:39 +0000
+Date: Thu, 23 May 2024 03:45:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Xiaojian Du <Xiaojian.Du@amd.com>, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, tglx@linutronix.de,
+	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+	hpa@zytor.com, daniel.sneddon@linux.intel.com, jpoimboe@kernel.org,
+	pawan.kumar.gupta@linux.intel.com, sandipan.das@amd.com,
+	kai.huang@intel.com, perry.yuan@amd.com, x86@kernel.org,
+	ray.huang@amd.com, rafael@kernel.org,
+	Xiaojian Du <Xiaojian.Du@amd.com>,
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [PATCH v2 2/2] cpufreq: amd-pstate: change cpu freq transition
+ delay for some models
+Message-ID: <202405230325.UPlOikDm-lkp@intel.com>
+References: <b2c8fb2da41f9fb21f095f67d99cbdbd0aa34091.1716356681.git.Xiaojian.Du@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240521043102.2786284-1-davidai@google.com> <20240521074137.eip3jcnu6yhryrgq@vireshk-i7>
-In-Reply-To: <20240521074137.eip3jcnu6yhryrgq@vireshk-i7>
-From: David Dai <davidai@google.com>
-Date: Wed, 22 May 2024 11:22:16 -0700
-Message-ID: <CABN1KC+pGd2zev+mkzavpHNV5P1A8gPEPKgvKocB+dzEyKyniA@mail.gmail.com>
-Subject: Re: [PATCH v6 0/2] Improve VM CPUfreq and task placement behavior
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Sudeep Holla <sudeep.holla@arm.com>, Saravana Kannan <saravanak@google.com>, 
-	Quentin Perret <qperret@google.com>, Masami Hiramatsu <mhiramat@google.com>, Will Deacon <will@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Pavan Kondeti <quic_pkondeti@quicinc.com>, 
-	Gupta Pankaj <pankaj.gupta@amd.com>, Mel Gorman <mgorman@suse.de>, kernel-team@android.com, 
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b2c8fb2da41f9fb21f095f67d99cbdbd0aa34091.1716356681.git.Xiaojian.Du@amd.com>
 
-Hi Viresh,
+Hi Xiaojian,
 
-On Tue, May 21, 2024 at 12:41=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.=
-org> wrote:
->
-> On 20-05-24, 21:30, David Dai wrote:
-> > v5 -> v6:
-> > -Updated driver to use .target instead of .target_index
->
-> May have missed the discussion, but why is this done ?
+kernel test robot noticed the following build warnings:
 
-Since the driver now queries the device for frequency info, the
-interface allows for the VMM(Virtual Machine Manager) to optionally
-use tables depending on the use case. Target is used in the driver to
-support both configurations where either the table is used or if only
-max_perf is used(where the guest can vote from [1-max_perf]).
+[auto build test WARNING on tip/master]
+[also build test WARNING on rafael-pm/linux-next rafael-pm/bleeding-edge linus/master next-20240522]
+[cannot apply to tip/x86/core tip/auto-latest v6.9]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks,
-David
->
-> --
-> viresh
+url:    https://github.com/intel-lab-lkp/linux/commits/Xiaojian-Du/cpufreq-amd-pstate-change-cpu-freq-transition-delay-for-some-models/20240522-135241
+base:   tip/master
+patch link:    https://lore.kernel.org/r/b2c8fb2da41f9fb21f095f67d99cbdbd0aa34091.1716356681.git.Xiaojian.Du%40amd.com
+patch subject: [PATCH v2 2/2] cpufreq: amd-pstate: change cpu freq transition delay for some models
+config: x86_64-randconfig-006-20240522 (https://download.01.org/0day-ci/archive/20240523/202405230325.UPlOikDm-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240523/202405230325.UPlOikDm-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405230325.UPlOikDm-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/cpufreq/amd-pstate.c:824:3: warning: add explicit braces to avoid dangling else [-Wdangling-else]
+     824 |                 else
+         |                 ^
+   1 warning generated.
+
+
+vim +824 drivers/cpufreq/amd-pstate.c
+
+   811	
+   812	/*
+   813	 * Get pstate transition delay time from ACPI tables that firmware set
+   814	 * instead of using hardcode value directly.
+   815	 */
+   816	static u32 amd_pstate_get_transition_delay_us(unsigned int cpu)
+   817	{
+   818		u32 transition_delay_ns;
+   819	
+   820		transition_delay_ns = cppc_get_transition_latency(cpu);
+   821		if (transition_delay_ns == CPUFREQ_ETERNAL)
+   822			if (cpu_feature_enabled(X86_FEATURE_FAST_CPPC))
+   823				return AMD_PSTATE_FAST_CPPC_TRANSITION_DELAY;
+ > 824			else
+   825				return AMD_PSTATE_TRANSITION_DELAY;
+   826	
+   827		return transition_delay_ns / NSEC_PER_USEC;
+   828	}
+   829	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
