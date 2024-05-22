@@ -1,93 +1,89 @@
-Return-Path: <linux-pm+bounces-8058-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8061-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAEA78CC83C
-	for <lists+linux-pm@lfdr.de>; Wed, 22 May 2024 23:50:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95F558CC951
+	for <lists+linux-pm@lfdr.de>; Thu, 23 May 2024 01:01:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 108D71C212D7
-	for <lists+linux-pm@lfdr.de>; Wed, 22 May 2024 21:50:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 32CAEB21051
+	for <lists+linux-pm@lfdr.de>; Wed, 22 May 2024 23:01:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FAD7146013;
-	Wed, 22 May 2024 21:50:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECBFC149C58;
+	Wed, 22 May 2024 23:01:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sjk1LAZj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U6hBxvy5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D3F80045;
-	Wed, 22 May 2024 21:50:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3256D1E4AF;
+	Wed, 22 May 2024 23:01:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716414628; cv=none; b=OKOI3zQxjsheTMYQ/k/7CWmwmaAiQ2ebwxvTv0ZZR6fePpEA1Iqr6w40k40ldXEYHO/nn4yRFmvtySi/bhkymAlmu/dZg9l6DRvFxobqeTac2XWy+1VF6A0D5qurkSY5uhS+gjZRwQq7fgono0gQWSbfGuxsyWfgPmaNqJ3bfX8=
+	t=1716418901; cv=none; b=dUkd7sXOxv6ZOAMXxG2AEa3KKcE383VoDR6rwxJfk7g7MGHdYeNzhbc7Qy0QYN39I35ml2qnfjQ+LuX0r2Ko4tEiKxjxys8UChCxpA8x5JlvfbEye+0unYKNbw4iAqmrpLW0aeF8U1N48Mlwf2Zz7kqugW7Sc4iwEmrLMbijADo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716414628; c=relaxed/simple;
-	bh=L//sNRivVqdwa73OnOET5hl3cywNzWVR2sKrxJQ9x1g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tryyKkHVGqZIsTDTv1jWjt8VSRTbExmnObAyoLdo2SKVkYM/mLXqMvaNwiPLBjiLTjSkGrFgrnB0EhHJsWaPNKXqpaOpGGbtGSBlAuCT8rTEItVT/o8aSnddsq/Eq8QnOSznkSzt+DvFb0s8kSgkJX3tlVeKR8TFD+JXlo2lb44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sjk1LAZj; arc=none smtp.client-ip=209.85.161.52
+	s=arc-20240116; t=1716418901; c=relaxed/simple;
+	bh=ZI8SE+5RcL5NzI8JtaeoVv2eUoKGGwt83fNG7B44Wns=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=oqW/CsqmHo3qjdDZeyc/F/funK9sZD7LdrNdePrwU1FUrwXkZh7+sxZhXzNnlIVvRujxeBNpyaSvaqkRzc864dqfEDQqSnROSeq/Dklr8vzXY6Vjy8oubFz8EgGEyINjhR/twsAFWwQajwy+xC83llIAKLbBM+nxSD38lW6yFnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U6hBxvy5; arc=none smtp.client-ip=209.85.210.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5b2cc8c4b8aso3799275eaf.1;
-        Wed, 22 May 2024 14:50:25 -0700 (PDT)
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-6f12ed79fdfso2679810a34.0;
+        Wed, 22 May 2024 16:01:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716414625; x=1717019425; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1716418898; x=1717023698; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zBAoZG0al1m+JA3ktgdRMgrP5Z9mDaaNRS9hpWp/qPE=;
-        b=Sjk1LAZjtZs+b40oEpf7JiLOvy5Urg2UkTNObNysI8K7UUfiQZsDXON9b762IJ0sWJ
-         kkAOt0cKgWLo/lwBEZbQr9xlAWlGxCREwweOecVrF7BBzH4iPVipxzlGhYW6gH3gBkZk
-         LxTFzWy4ERDgH2VDqjLziskc7u2lWnUdj8E/IIbZHbCvOakns5F8ttFeJMauiBRiwv2D
-         iLnK9YlnG8L5364Jc6V2DGhB8Yb4OFW4VK584jAFUP49fd7j8Lr5N5qQc/TZ5Oy3UDgj
-         qAqE6tcVxsT/3elFFc1dGEogjswTqET37ovKKwSv/RW29pQ5CsgXJBRO7NwXdlgh3rOs
-         hCXw==
+        bh=0DCCVIVKZCZnK5pAwPpme5XVnB4z9KDueXfUHNAsHuI=;
+        b=U6hBxvy5lxcCYJun+PC62MmWdjcH1YzUDCNXhzdf2o/PJxCtoJJQWQab8PbQbTv9PZ
+         iPZ2w71vdWnnSZzSI7BqwnmWoyH284rsDoR8hik2CgZ2rmHyKiZMR9F97Sm6fT1hya5J
+         eiEIvrXm/vD02CuwORzD8K9ALoHFbLxuFdHxxkDrLGrAGMNl9GqSIf0ToTXYHyLgSHjN
+         RJVw9qtGJATP9+Wy3xYPGxVlvSwGAAb9ELYkV+bSp6a/AKtmt/4hOCGzufQ2v0Sm5vk5
+         5WMfNrWelJR2HrfNgI+a30Mke8nS2j489P4sGmqcg/QdWGAseyfvp6KYiqGbvkpeZTKx
+         tuxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716414625; x=1717019425;
+        d=1e100.net; s=20230601; t=1716418898; x=1717023698;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zBAoZG0al1m+JA3ktgdRMgrP5Z9mDaaNRS9hpWp/qPE=;
-        b=LatPJjkny4duWvFfsLZLIqQVBNcA+2KR/L8zNCB1skpQnWoZYgencpf0ZJewSmSHv+
-         lFjHdTth1OpohkSNCoHkcsvLWz84PBva6zUb5mx8U3+jxN2OXQSxutMGUGEsWCuIGTJv
-         jOUfr2eI4KFlfO4kz1Dyd9NLDnnG+9iEkJACltaJH4wqzUZIvs1Hnp/jyvs8WqkK1+YK
-         Uz1t29rKNYJeiZeKUdeyHqyyYzuoqlJHx7GT37NgqpEo6HVTS8KYe9pye5OGKuQOJg08
-         DQWWSZHwHTqBf861YYL9RTQKrVndpN7yStzQR0yy6SHrOeXiv6MAqHo27FtHCfW0YPlN
-         DSzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUtkssaxYVDs28rBJZ95+XIdAAtVqx0fttzKSAvS7gWhGrqP59/v75q5hnYBNAnhIhaE0ATySZpZBr/1h9oPSWFwhPT0RKG15/OMSng7ufVrFtChv8fo9sM+TPsVGdzcPPAb1huzXVFMNaB/HVTTXz5R5hPXbbWWHSDTEA3TG3kTFIgAu3d
-X-Gm-Message-State: AOJu0YzpeQqVQJK1zU4Kgq5FgsfysyQJYVQ15ltl6zbT3dip5peWAQnZ
-	RQQOShGewHGkO6YpNiaQWqJGnossI3UHxrK7eKQP+1XYIWb0g05fKvr8qg==
-X-Google-Smtp-Source: AGHT+IEJ5Jxw6Dx7ysWEw9SOQIKtcpP6HWnvE1UIWEcK7zpJ4dBNansEqpDAUp5l6zKniQsabf2Azw==
-X-Received: by 2002:a05:6359:704b:b0:18d:9e5f:aaec with SMTP id e5c5f4694b2df-1979213ec36mr296068055d.31.1716414624804;
-        Wed, 22 May 2024 14:50:24 -0700 (PDT)
-Received: from localhost ([2a00:79e1:2e00:1301:e1c5:6354:b45d:8ffc])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f677a20c6bsm13037190b3a.129.2024.05.22.14.50.23
+        bh=0DCCVIVKZCZnK5pAwPpme5XVnB4z9KDueXfUHNAsHuI=;
+        b=Pbc/hPaPz40kkHX+0uweGvtWNF2v9D1TkrloRbdhTvqQRsbiXELwMWtl5v6aDkli/N
+         idQY3sP3nL7V+B195A/waOZKQcY85p+wyXjZ7KteWjDSlF4GWHNnkSitDSCECiUNbVO7
+         KKHaC6I18L7p49JvtIyiiHEv+DybfS99MScXVswYpQOR6BzSRa8dLfnfJ4GoYTmrMNab
+         /MUMDWDgvnzgLicsdwQwN/XATPRcLGW5bPcROvEsxCshulv5fSKl6nQnPvqMmncnZ8r6
+         4yt9eIbl20QDd5n29aYepcH/XYhaVWgBs9osWGFzpUQxbxyIDw2hZU8MqPCJG8U8eOEo
+         HObw==
+X-Forwarded-Encrypted: i=1; AJvYcCXX0mDsgjolqN9zVLHPXhdNxBHvmJgVZI8expGLuPfABZpcWvWC7SUN/qVWppuw5hbJ7iNS64lJaYUGLMHjQ0M3rQfHz8Sp0Qw=
+X-Gm-Message-State: AOJu0YzUJ0a7GlP2RVyLV24YO3yRZm7zKAKLrVA9oRMo+TvQP/7fdDxa
+	sbIcJHEI3pRjSJnjzTlBp7TkTn7zKBFAC7a01yBZNDykQ/xdNdLG
+X-Google-Smtp-Source: AGHT+IHE8GNAndI69E9kReGSefDiGX4ZLLqWsmj4GbxgZPksd1egdS0/t9n5NmQ12/Prm5QDgXbBaA==
+X-Received: by 2002:a9d:6a48:0:b0:6f1:2341:348b with SMTP id 46e09a7af769-6f665c26a0fmr3996465a34.3.1716418897805;
+        Wed, 22 May 2024 16:01:37 -0700 (PDT)
+Received: from localhost.localdomain ([75.28.21.198])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-6f0ff995ccdsm4155936a34.34.2024.05.22.16.01.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 May 2024 14:50:23 -0700 (PDT)
-From: Rob Clark <robdclark@gmail.com>
-To: dri-devel@lists.freedesktop.org
-Cc: freedreno@lists.freedesktop.org,
-	linux-arm-msm@vger.kernel.org,
-	Will Deacon <will@kernel.org>,
-	Rob Clark <robdclark@chromium.org>,
-	Boris Brezillon <boris.brezillon@collabora.com>,
-	iommu@lists.linux.dev (open list:IOMMU SUBSYSTEM),
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Joao Martins <joao.m.martins@oracle.com>,
-	Joerg Roedel <jroedel@suse.de>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	linux-arm-kernel@lists.infradead.org (moderated list:ARM SMMU DRIVERS),
-	linux-kernel@vger.kernel.org (open list),
-	linux-pm@vger.kernel.org (open list:POWER MANAGEMENT CORE),
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Sean Paul <sean@poorly.run>
-Subject: [PATCH v3 0/2] io-pgtable-arm + drm/msm: Extend iova fault debugging
-Date: Wed, 22 May 2024 14:50:03 -0700
-Message-ID: <20240522215014.26007-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.45.1
+        Wed, 22 May 2024 16:01:37 -0700 (PDT)
+From: Chris Morgan <macroalpha82@gmail.com>
+To: linux-sunxi@lists.linux.dev
+Cc: devicetree@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	broonie@kernel.org,
+	lgirdwood@gmail.com,
+	lee@kernel.org,
+	samuel@sholland.org,
+	jernej.skrabec@gmail.com,
+	wens@csie.org,
+	conor+dt@kernel.org,
+	krzk+dt@kernel.org,
+	robh@kernel.org,
+	sre@kernel.org,
+	Chris Morgan <macromorgan@hotmail.com>
+Subject: [PATCH 0/4] AXP717: Add USB Power Supply
+Date: Wed, 22 May 2024 18:01:28 -0500
+Message-Id: <20240522230132.364915-1-macroalpha82@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -96,34 +92,31 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Rob Clark <robdclark@chromium.org>
+From: Chris Morgan <macromorgan@hotmail.com>
 
-This series extends io-pgtable-arm with a method to retrieve the page
-table entries traversed in the process of address translation, and then
-beefs up drm/msm gpu devcore dump to include this (and additional info)
-in the devcore dump.
+This series adds support for the AXP717 USB power supply. I will be
+adding support for the battery in a future patch series.
 
-This is a respin of https://patchwork.freedesktop.org/series/94968/
-(minus a patch that was already merged)
+Note this series depends on the "regulator: Fix AXP717 PMIC support"
+series which is still pending [1].
 
-v2: Fix an armv7/32b build error in the last patch
-v3: Incorperate Will Deacon's suggestion to make the interface
-    callback based.
+[1] https://lore.kernel.org/linux-sunxi/20240418000736.24338-1-andre.przywara@arm.com/
 
-Rob Clark (2):
-  iommu/io-pgtable-arm: Add way to debug pgtable walk
-  drm/msm: Extend gpu devcore dumps with pgtbl info
+Chris Morgan (4):
+  mfd: axp20x: AXP717: Correct MODULE_ENABLE_CONTROL register name
+  dt-bindings: mfd: x-powers,axp20x-usb-power-supply: add AXP717
+  power: supply: axp20x_usb_power: Add support for AXP717
+  arm64: dts: allwinner: Anbernic RG35XX: add AXP717 USB power
 
- drivers/gpu/drm/msm/adreno/adreno_gpu.c | 10 +++++
- drivers/gpu/drm/msm/msm_gpu.c           | 22 +++++++++++
- drivers/gpu/drm/msm/msm_gpu.h           |  8 ++++
- drivers/gpu/drm/msm/msm_iommu.c         | 18 +++++++++
- drivers/gpu/drm/msm/msm_mmu.h           |  5 ++-
- drivers/iommu/io-pgtable-arm.c          | 50 ++++++++++++++++++++-----
- include/linux/io-pgtable.h              |  4 ++
- 7 files changed, 107 insertions(+), 10 deletions(-)
+ .../x-powers,axp20x-usb-power-supply.yaml     |   1 +
+ .../sun50i-h700-anbernic-rg35xx-2024.dts      |   5 +
+ drivers/mfd/axp20x.c                          |  19 +-
+ drivers/power/supply/axp20x_usb_power.c       | 216 +++++++++++++++++-
+ drivers/regulator/axp20x-regulator.c          |   2 +-
+ include/linux/mfd/axp20x.h                    |  20 +-
+ 6 files changed, 256 insertions(+), 7 deletions(-)
 
 -- 
-2.45.1
+2.34.1
 
 
