@@ -1,125 +1,126 @@
-Return-Path: <linux-pm+bounces-8071-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8072-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC34B8CCC61
-	for <lists+linux-pm@lfdr.de>; Thu, 23 May 2024 08:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 255868CCC8A
+	for <lists+linux-pm@lfdr.de>; Thu, 23 May 2024 08:51:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88B87283B4D
-	for <lists+linux-pm@lfdr.de>; Thu, 23 May 2024 06:40:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AB4D8281F9D
+	for <lists+linux-pm@lfdr.de>; Thu, 23 May 2024 06:51:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3B6A13C677;
-	Thu, 23 May 2024 06:40:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A6D513C907;
+	Thu, 23 May 2024 06:51:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QLZIBZSY"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fCKm2ZqA"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93FA82D05E;
-	Thu, 23 May 2024 06:40:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C07A113C8F2;
+	Thu, 23 May 2024 06:51:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716446411; cv=none; b=PuFoX4cdO0L8UU3iQrBNHV+AxyS+QsGTXYrOfLn20Z//NW1zNswjJfYJ7fedjygZM+5WB6mtZOBNjIabq7ijT9ZNalKinPsLkH28+UvA8jaZBuar93aBuugtgRzwa4Jm7OqHKgpaKq0LyhFYayanBgCBeDdiAeCS8YJq3ODdAFs=
+	t=1716447112; cv=none; b=Xvd+77JDLi6cJKMaO1jp3T7KT/GCYC+97lIXRc0J0qLoHoZEOqWwV8d1BNQXmEO74kvz7gkfamHg8OKNzRhy2xrIuLkYQtcZ2td8TFJcT2G5LgwCtb8GwRofTgiVe6QeEFJcKQ111AgbWktqPEoYnNASt8VKrf3AVVsTj/OsdbE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716446411; c=relaxed/simple;
-	bh=vLTlRcACJx6QXddfpUkOy5VJFCfm6cvBgs6G/9CFvFA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bAZ2onyNalaS53RaGkicoUhNNmIIDwHVyoQjgEP/pIFWaNwmIIL9a+DU6yBvbAYkYidKwujVjM/MGoSQ/lnBmjRCfdvpqgoMCp2aRHFf5BD/ZFCAifGpRE9K9Xis3xKXq+QIPOVdTW9azOSGoj6p1wniGaCrLpb+tdshphf1udE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QLZIBZSY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F8B4C2BD10;
-	Thu, 23 May 2024 06:40:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716446411;
-	bh=vLTlRcACJx6QXddfpUkOy5VJFCfm6cvBgs6G/9CFvFA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=QLZIBZSYr3wbnI1iZUCtlVTiNHVBrOX3koKzTbot4L3cyN+/MIJzkR+8DqQumTF13
-	 ZlyR1zRjvnl9xsSjACvc1jkHYD0/DSEzNzEHEDUcDN4XiyZlxOtj23yRVcDEkfvAfO
-	 3ftZZQvxGfth/fPk6pzBU/c2a7umTq9Sj2mhlhDc8fN/uruwXTqfqyGrnh+fGXsC7Q
-	 Iwq3mO+p8bg+DIBeqIw1wvhxaWrmx56WTnWJYRF5glEy7XUO/9WmwG2EI7zceLdboS
-	 xcRhTNjC02GBB2YcAloRnrhdnQbb1kRRqJC3hc8rixofQ8WmopkL4R3HcC/uvgaWJ5
-	 bumZDEK1MiL8w==
-Message-ID: <00118436-5b37-4aeb-92fa-030538d411bc@kernel.org>
-Date: Thu, 23 May 2024 08:40:03 +0200
+	s=arc-20240116; t=1716447112; c=relaxed/simple;
+	bh=vxr2mkzYP8mbnwy26aQJbbvOzWaMQB/nx4kIMYC3W1A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=naNIdBjZ4yCzP5Rt4fkmQnliJKrcdXD4YrcYoWrDgwVt+fjfHfaGVXmk9WsMndufH2vUb9TX8NQLdaBuOqF+JIdcEjxs8T7iq0h1oPIi5UTlhOyXrFbsH4zeF1Edhv+YEIWTdL82DcXo8ZqRmOM14GQqo2ogQ468Rp3j9r4Ro9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fCKm2ZqA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01670C2BD10;
+	Thu, 23 May 2024 06:51:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1716447112;
+	bh=vxr2mkzYP8mbnwy26aQJbbvOzWaMQB/nx4kIMYC3W1A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fCKm2ZqAe71lxfgsC1I+obtVtvkM6KQ988dCXcZSItgRCne5xkpE9HqIVIHKcURGn
+	 OWi/X6qgvW381+OQ/PkhE0Gztw5g2taRrf+tH/4CpccMpg/oFdYXTYk3bx4mTg2JQF
+	 If/tlvTZPws+h4VEuXiCei21esZR+7aawIwmlyDM=
+Date: Thu, 23 May 2024 08:51:49 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Lukas Wunner <lukas@wunner.de>, "Rafael J. Wysocki" <rafael@kernel.org>,
+	linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+	linuxppc-dev@lists.ozlabs.org, linux-acpi@vger.kernel.org,
+	Jean Delvare <jdelvare@suse.com>, Ard Biesheuvel <ardb@kernel.org>,
+	linux-efi@vger.kernel.org, Zhenyu Wang <zhenyuw@linux.intel.com>,
+	Zhi Wang <zhi.wang.linux@gmail.com>,
+	intel-gvt-dev@lists.freedesktop.org,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	linux-pm@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+	linux-modules@vger.kernel.org
+Subject: Re: [PATCH 2/2] treewide: Use sysfs_bin_attr_simple_read() helper
+Message-ID: <2024052334-nape-wanting-0a2a@gregkh>
+References: <cover.1712410202.git.lukas@wunner.de>
+ <92ee0a0e83a5a3f3474845db6c8575297698933a.1712410202.git.lukas@wunner.de>
+ <e12b0027-b199-4de7-b83d-668171447ccc@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] dt-bindings: mfd: x-powers,axp20x-usb-power-supply:
- add AXP717
-To: Chris Morgan <macroalpha82@gmail.com>, linux-sunxi@lists.linux.dev
-Cc: devicetree@vger.kernel.org, linux-pm@vger.kernel.org, broonie@kernel.org,
- lgirdwood@gmail.com, lee@kernel.org, samuel@sholland.org,
- jernej.skrabec@gmail.com, wens@csie.org, conor+dt@kernel.org,
- krzk+dt@kernel.org, robh@kernel.org, sre@kernel.org,
- Chris Morgan <macromorgan@hotmail.com>
-References: <20240522230132.364915-1-macroalpha82@gmail.com>
- <20240522230132.364915-3-macroalpha82@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240522230132.364915-3-macroalpha82@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e12b0027-b199-4de7-b83d-668171447ccc@roeck-us.net>
 
-On 23/05/2024 01:01, Chris Morgan wrote:
-> From: Chris Morgan <macromorgan@hotmail.com>
+On Wed, May 22, 2024 at 07:51:35PM -0700, Guenter Roeck wrote:
+> Hi,
 > 
-> Add binding for the AXP717 USB power supply.
+> On Sat, Apr 06, 2024 at 03:52:02PM +0200, Lukas Wunner wrote:
+> > Deduplicate ->read() callbacks of bin_attributes which are backed by a
+> > simple buffer in memory:
+> > 
+> > Use the newly introduced sysfs_bin_attr_simple_read() helper instead,
+> > either by referencing it directly or by declaring such bin_attributes
+> > with BIN_ATTR_SIMPLE_RO() or BIN_ATTR_SIMPLE_ADMIN_RO().
+> > 
+> > Aside from a reduction of LoC, this shaves off a few bytes from vmlinux
+> > (304 bytes on an x86_64 allyesconfig).
+> > 
+> > No functional change intended.
+> > 
 > 
-> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
-> ---
+> Not really; see below.
+> 
+> > Signed-off-by: Lukas Wunner <lukas@wunner.de>
+> > Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+> > ---
+> ...
+> > index da79760..5193fae 100644
+> > --- a/init/initramfs.c
+> > +++ b/init/initramfs.c
+> > @@ -575,15 +575,7 @@ static int __init initramfs_async_setup(char *str)
+> >  #include <linux/initrd.h>
+> >  #include <linux/kexec.h>
+> >  
+> > -static ssize_t raw_read(struct file *file, struct kobject *kobj,
+> > -			struct bin_attribute *attr, char *buf,
+> > -			loff_t pos, size_t count)
+> > -{
+> > -	memcpy(buf, attr->private + pos, count);
+> > -	return count;
+> > -}
+> > -
+> > -static BIN_ATTR(initrd, 0440, raw_read, NULL, 0);
+> > +static BIN_ATTR(initrd, 0440, sysfs_bin_attr_simple_read, NULL, 0);
+> >  
+> 
+> sysfs_bin_attr_simple_read is only declared and available if CONFIG_SYSFS=y.
+> With m68k:m5208evb_defconfig + CONFIG_BLK_DEV_INITRD=y, this results in
+> 
+> /opt/buildbot/slave/qemu-m68k/build/init/initramfs.c:578:31:
+> 	error: 'sysfs_bin_attr_simple_read' undeclared here (not in a function)
+> 
+> This happens because CONFIG_SYSFS=n and there is no dummy function for
+> sysfs_bin_attr_simple_read(). Presumably the problem will be seen for all
+> configurations with CONFIG_BLK_DEV_INITRD=y and CONFIG_SYSFS=n.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Lukas, can you send a patch adding a dummy function?
 
-Best regards,
-Krzysztof
+thanks,
 
+greg k-h
 
