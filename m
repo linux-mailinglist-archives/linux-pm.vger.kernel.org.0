@@ -1,104 +1,129 @@
-Return-Path: <linux-pm+bounces-8088-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8089-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D7FC8CDB03
-	for <lists+linux-pm@lfdr.de>; Thu, 23 May 2024 21:45:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF9748CDBED
+	for <lists+linux-pm@lfdr.de>; Thu, 23 May 2024 23:25:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE1E9282CDB
-	for <lists+linux-pm@lfdr.de>; Thu, 23 May 2024 19:45:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCF3C1C2300F
+	for <lists+linux-pm@lfdr.de>; Thu, 23 May 2024 21:25:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC4B484A30;
-	Thu, 23 May 2024 19:45:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24DBC127E0F;
+	Thu, 23 May 2024 21:25:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ucw.cz header.i=@ucw.cz header.b="gnqzY1q2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QWIfwZbT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792B18061B;
-	Thu, 23 May 2024 19:45:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.255.230.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CBDB126F37;
+	Thu, 23 May 2024 21:25:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716493550; cv=none; b=pw5btizX7bnl9+GOEDqtanEtCSlFBrGInCkcm0dFmvclflLWAsl8boFGK39DbHUGuCPVti53jSM25yo5595H6n7q/gX1KVeGh2PeLd7dsMbiMJX2PNQ1j8WttKaL9QE40lmarb1sn5xJTdo6fyVdTxzSO6G+f01RSKhigZfOhm0=
+	t=1716499511; cv=none; b=kMAR6qDXYoXVr43uMf2m/YTZOs9JJtyxYVXOG+W1i7ZPWhNQKhUUdkpIg89C+evyE4s2jiAYUXByZ7zrKB8rcBCOyooeJTOkFOZKcTHWHmj6IC7kRfOPi6akJovMIqKMvF9jldnjzKLzbjJzPtOFVJr7BvC6HWJPzIgrfjbw1+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716493550; c=relaxed/simple;
-	bh=suW3GGRHrjJIcAY7OW7Ok5VFj60O4sU6Cm3t0FyJG/U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ec/BgClSRyqG7FT0eZhkBPzgQ8Baq6Npjfj5UTwu5qyCV8jftzrCoZGxvJOUXfaOHZBXt6kHPZL8gOfRInT9QAQiGgV7GnqHWrFMCl+7sn8hph4VLdIxVsdI3pfgONTxiz2+ho0NabNT/TVNzG6MoqajuAgubWt/JxrY1qP8k2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ucw.cz; spf=pass smtp.mailfrom=ucw.cz; dkim=pass (1024-bit key) header.d=ucw.cz header.i=@ucw.cz header.b=gnqzY1q2; arc=none smtp.client-ip=46.255.230.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ucw.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ucw.cz
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-	id 102131C0093; Thu, 23 May 2024 21:45:44 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-	t=1716493544;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5bgmiF1OU1Nbz7ymvjKqnLxWQ/rqAzYMDHgcf+JIeIo=;
-	b=gnqzY1q2qxuY04uz4lhAFpzGKfBhzyoCNZswDSWL7JTPNGCkGwRRiP2C2iOIYzGFKk02h3
-	zICksWzbKD2PbrkaXkha+Hp6oLPHsnHe68aoZHLEofvjs6Tuq7osJSwDb4R1yqgKGDdHwP
-	Enbo1nY19hwC0WFcisGawecfK3SfgTA=
-Date: Thu, 23 May 2024 21:45:43 +0200
-From: Pavel Machek <pavel@ucw.cz>
-To: Sukrit Bhatnagar <Sukrit.Bhatnagar@sony.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	"Darrick J. Wong" <djwong@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-xfs@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH 0/2] Improve dmesg output for swapfile+hibernation
-Message-ID: <Zk+c532nfSCcjx+u@duo.ucw.cz>
-References: <20240522074658.2420468-1-Sukrit.Bhatnagar@sony.com>
+	s=arc-20240116; t=1716499511; c=relaxed/simple;
+	bh=VHdjSkKxWm5rfyGLl7Yk8K1zO0mB7odDFsgg9+Tfu8s=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=qic4VedKoX/kUbbmtxTMynylGZgeeiE/qgZAxi9xLfAmEf6FuxvitJkQxc/uliXjR1FbsJowm7GqaEHpLOs+NcErr0U9znxey0ozroHfFIY2V0ce3Ggj0jWvZieMPRl/1NK1VS6gWkCkfO8yyVrg129wkBGxNA8TQVjgC0iWobk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QWIfwZbT; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-354f5fb80d5so1311176f8f.2;
+        Thu, 23 May 2024 14:25:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1716499507; x=1717104307; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=U+I9c44cbx3EWc9H7lfkabZH5dwju+xdfdQpItJBfjY=;
+        b=QWIfwZbTOC0zEO33zgidA8aomQoEMAc7IufXEgzDrQWlv2hpHckHBomumWqhpxlAAc
+         tn7C5qtv8anrIYE2UiYgfl5wormneDaRUjwrvUEdm/Zn02Cxtg23cr4E9cEM7GeEtAmD
+         rHtoqE7JrmCjnYdwASNQ+nRdH7mLmY66sT5fwFExmLNBWz6dQBahc+96V/byn7iRBW43
+         FyuoUYbRsw1V64l4NoqQW153QfP+zcuHU/llMWFtFtTr5bgKcZkn2O/wuiLzleC+MMnr
+         UHHYecMQElpyQpXdM0fzKiY2WKWAuCFVV3XdDhIrnTiollXHdJ2LAfVoUYbM8z3P00Sq
+         aHQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716499507; x=1717104307;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=U+I9c44cbx3EWc9H7lfkabZH5dwju+xdfdQpItJBfjY=;
+        b=TJTWdFdE8khAB8/NpCLRVqnNZoP7F62l3LB+Fnn8Y04aQY/ADBEEP4gjtqRaBYlkWs
+         Y6Ljpybjb0dqScqytWpfkNMqJQhr1rYsqqL/rIVo9bd/MIdlCVHPoEgYtCZVIPmpsL3J
+         /0a9c5WE9fFKPgqKtF++c8cnWMo6ujgwXZybLptSNh/AykBZK8YghygVDFTMZszpMp+d
+         t6WDlQ7+Hs1Km8OPGh78dfEXzfZddh7OnjyS1WmYRH3GxqiBNko7CptOIMoGg8+tXvE+
+         Y1uA/Yg0PcJkvdSq3u11mZiKagq1sumRqYR0AIeQ4rzfvBlv3PNCJJmHFrYjwKPV43Js
+         SC3w==
+X-Forwarded-Encrypted: i=1; AJvYcCUufJrHGoGi0Nc58UaBXSHMZHcDBE61rcwfLR8MUXKlXksb5boMdURnZLVzztX6h+xWfS9Xew+ksYjYsVRJqLC7QQH1pwfJQK38QxbGNO0MmgDpCoVX9rPHrD4/59c07qo01OLxsH+RkRCAk/FlBFlv+U9+wEgO78Jd72rkNpE=
+X-Gm-Message-State: AOJu0YzQaSqxT5dNFdm9mhaEpO95aTUilPD9Mq3S85sFRG5XefwjvzoD
+	eLIK0cdgklZP3bkj1hrgmo6MeH7B2+ZCoH2nFtsKuRxB1XPU4mmyzehjuAJ3zXY=
+X-Google-Smtp-Source: AGHT+IH8OD5gV8/1smKKDoZX9EgdPWl5N+fjjkenQw6jr7OYD/hRr8503cKcLcTN5wI0POCJ16VABQ==
+X-Received: by 2002:a05:600c:54c4:b0:421:17d:1ec1 with SMTP id 5b1f17b1804b1-421089f9d92mr2601535e9.18.1716499506783;
+        Thu, 23 May 2024 14:25:06 -0700 (PDT)
+Received: from [127.0.1.1] (84-115-212-250.cable.dynamic.surfer.at. [84.115.212.250])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-421089ae976sm2522955e9.38.2024.05.23.14.25.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 May 2024 14:25:06 -0700 (PDT)
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Subject: [PATCH 0/2] cpufreq: qcom-nvmem: fix memory leaks and add auto
+ device node cleanup
+Date: Thu, 23 May 2024 23:24:58 +0200
+Message-Id: <20240523-qcom-cpufreq-nvmem_memleak-v1-0-e57795c7afa7@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="2vHzQoJ74uUpPseM"
-Content-Disposition: inline
-In-Reply-To: <20240522074658.2420468-1-Sukrit.Bhatnagar@sony.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACq0T2YC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDUyNj3cLk/Fzd5ILStKLUQt28stzU3HggzklNzNY1SzKzMDJMSTI1SjJ
+ UAhpQUJSallkBNjw6trYWAK274S1sAAAA
+To: Ilia Lin <ilia.lin@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Viresh Kumar <viresh.kumar@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>, stable@vger.kernel.org
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1716499505; l=1291;
+ i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
+ bh=VHdjSkKxWm5rfyGLl7Yk8K1zO0mB7odDFsgg9+Tfu8s=;
+ b=14d9eQKhZyHNHy3nsPQ8V1gTIq1GdV//SoUiwVSvFMrNQfJq/NT5EnqCuIOUXdL29hOEemMpn
+ 1x9zo3p7LKYAt1mKWn9Bwdn+AKuTBdXDc4saqt3Npwyf1jsQKQphVHX
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
 
+There are a number of error paths in the probe function that do not call
+of_node_put() to decrement the np device node refcount, leading to
+memory leaks if those errors occur.
 
---2vHzQoJ74uUpPseM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In order to ease backporting, the fix has been divided into two patches:
+the first one simply adds the missing calls to of_node_put(), and the
+second one adds the __free() macro to the existing device nodes to
+remove the need for of_node_put(), ensuring that the same bug will not
+arise in the future.
 
-Hi!
+The issue was found by chance while analyzing the code, and I do not
+have the hardware to test it beyond compiling and static analysis tools.
+Although the issue is clear and the fix too, if someone wants to
+volunteer to test the series with real hardware, it would be great.
 
-> While trying to use a swapfile for hibernation, I noticed that the suspend
-> process was failing when it tried to search for the swap to use for snaps=
-hot.
-> I had created the swapfile on ext4 and got the starting physical block of=
-fset
-> using the filefrag command.
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+---
+Javier Carrasco (2):
+      cpufreq: qcom-nvmem: fix memory leaks in probe error paths
+      cpufreq: qcom-nvmem: eliminate uses of of_node_put()
 
-How is swapfile for hibernation supposed to work? I'm afraid that
-can't work, and we should just not allow hibernation if there's
-anything else than just one swap partition.
+ drivers/cpufreq/qcom-cpufreq-nvmem.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
+---
+base-commit: 3689b0ef08b70e4e03b82ebd37730a03a672853a
+change-id: 20240523-qcom-cpufreq-nvmem_memleak-6b6821db52b1
 
 Best regards,
-								Pavel
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
+-- 
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
---2vHzQoJ74uUpPseM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZk+c5wAKCRAw5/Bqldv6
-8tcBAKCDy74KhiOm4q60gSEHa8GDlI+zgQCfb5XaPSZ5oKNmTg/9KAjVG3czEZY=
-=6unp
------END PGP SIGNATURE-----
-
---2vHzQoJ74uUpPseM--
 
