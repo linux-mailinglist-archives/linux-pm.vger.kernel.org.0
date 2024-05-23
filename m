@@ -1,139 +1,131 @@
-Return-Path: <linux-pm+bounces-8086-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8087-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1D968CD873
-	for <lists+linux-pm@lfdr.de>; Thu, 23 May 2024 18:32:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1221C8CD976
+	for <lists+linux-pm@lfdr.de>; Thu, 23 May 2024 19:52:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 986E92824B6
-	for <lists+linux-pm@lfdr.de>; Thu, 23 May 2024 16:32:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E233DB21ADA
+	for <lists+linux-pm@lfdr.de>; Thu, 23 May 2024 17:52:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AC3E1804A;
-	Thu, 23 May 2024 16:31:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E066937143;
+	Thu, 23 May 2024 17:52:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fJp6Xc4x"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ex5zyySz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 905651BC39;
-	Thu, 23 May 2024 16:31:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF642628D;
+	Thu, 23 May 2024 17:52:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716481916; cv=none; b=WDbtRssZ7Z5nUjpgTTy5whlikpcoej5AaLdKplRO5wQhDfdMCzRQXbyFopv2Kbqnw1l5G9QtkeKvAPJWrp4EmMipI81Vjpe8875dEW0d7WMi3fTrC+C4UZtCt5bni3HK8V1atLne4yUGzR2i2JNiqzfMOkoUc1MzzVnwrgxJRXo=
+	t=1716486752; cv=none; b=TQdQLtNtGPo41vyHd6GDaF/4YE7Jh6Ny6kh1/Okh9lnRTuEonfBkZCVQDCQeTnXi7UpJOwuulKduP01RcrV0CfOk3Oh9EWeoCTpMjRSbeIPKAz0OfoEoDAcMT2uksVwTsZsg2faT3jNJYpPma2F9g6gzPtzZYmfRPstYZRd7JHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716481916; c=relaxed/simple;
-	bh=BIV4oelLREsw1BHdiAVnVRU0aKkmcra+o9gjdpAyFV4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uJuftAozJk7MsQSJFH+ttkY32P/Gx6Ed3YOMFk/jAvqldtNJODmT/yRB7VXnmd6kxaC3DPOsIUyx6LWxMZiIIh2DO/G64bP+SIiR/JufDBtnIIO0tSOmQ1Ia0rkSs5jvyOcWfdSwvvKtx/X6jeQYrnGABpmHQdZtueEZG8KphzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fJp6Xc4x; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716481914; x=1748017914;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=BIV4oelLREsw1BHdiAVnVRU0aKkmcra+o9gjdpAyFV4=;
-  b=fJp6Xc4xOor6IKa3Oh70l2NK2d0CjB6G2FWlyoVhsgG3TVQ4+/zXTFTM
-   i92R+dPfwfG+EHPsPyeLCCR7I8RspCz5K72pypKNADayMi0rAMsNbMn8X
-   lPiqpiBffSpZw9LtNfcVYQPEoRRFgUhsmsyRJRP48MeJVxOPDkQugGLer
-   yD8F/U/JHBNvrH+TTM+udmoOQZl90TAKkFQCS84N/9TEN5qGJkL21o+1C
-   tiTUYCbx6YLvEPLnSovmz8XnNbbWLbq9UGUofV8TAHgbMcboVG1pKGTnZ
-   mdBOWQiuojH13C0bH7XTqoK/z7W037OxLpmbn+FygZ2uBCrVFgjH8So4C
-   A==;
-X-CSE-ConnectionGUID: /zL5pCHBSKylQfmxldJYKA==
-X-CSE-MsgGUID: dcRcnhcVTrO4n8KO6tyTyA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11081"; a="12990880"
-X-IronPort-AV: E=Sophos;i="6.08,183,1712646000"; 
-   d="scan'208";a="12990880"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2024 09:31:54 -0700
-X-CSE-ConnectionGUID: TKPBX1INQzCGxw1D2USyNw==
-X-CSE-MsgGUID: Ab2krLjGRyuQnHQIVXw/iA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,183,1712646000"; 
-   d="scan'208";a="33790563"
-Received: from kinlongk-desk.amr.corp.intel.com (HELO [10.125.110.49]) ([10.125.110.49])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2024 09:31:52 -0700
-Message-ID: <5c14a151-25c9-41f5-af65-d2a8ffe548fa@intel.com>
-Date: Thu, 23 May 2024 09:31:51 -0700
+	s=arc-20240116; t=1716486752; c=relaxed/simple;
+	bh=sJKyceLK2hp3R2DtYdyiGb4AR1HaM8zgJkN3aJUGyEY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=diABjeGLe/KL4sHVWnoWEP9M3FyeVPLFjFgNnVoWfjnKA1mRs2dLVW4fYj1VgEdTeqsVJXeZ9SP+if16l8c5/AK9jbESCbVT/MDU9Mi5KLu8KBSr/6s4Drts62v3zlB7GTIR1+eklZM2OLGwOQjcWm+XKkiSf+exZ8wiRgcuUgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ex5zyySz; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2bf5ba9b1ceso63218a91.0;
+        Thu, 23 May 2024 10:52:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1716486750; x=1717091550; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=G6bfu+bhhkfLjZgMfcumMPy+A+KJDQ31ZI+nlFrepqo=;
+        b=Ex5zyySzfOmkVC1CDlb/mbSUCaLiLpdkgYsNz22xUTp/b/ZZfAGGKlORP3j6ZYN/6u
+         PNUOgs0HgWiL95i/ov8fRzIiCagu5YVzRyzyZO/DbfUf9KqxEYtIa//s8vsDfjtc+zcE
+         LIIpcWdrxqZkyX2tkvVAmLAy/chlRXXpntJVicKszXH1doUQZGC664QTyeczU+B3p0+r
+         V2D35sxLvfQZG3+i6jBmJxdiOUVqs0uBd+IDCS2CY7U+Jvzaha7+egUGPRopstq9bMnG
+         phG26aSnntjO27H2FFZoy2yG/0cZpZq/004rSwuJEMAsGH7bO67+TPyLfrdaArbsWr/y
+         LJgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716486750; x=1717091550;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=G6bfu+bhhkfLjZgMfcumMPy+A+KJDQ31ZI+nlFrepqo=;
+        b=X/67ALb4CUcXSWkEgtMyuu29QOWsBxcz3N+cxo2F/dL5rwDrt+7hLx1e0YpS3eGXyP
+         t0JkfyT6s6uFfnrvKUlQeg5986WxbgjNgW9k49OZ2WnYe1h2a63wLr3+wVNLHhxYeVi+
+         cVr/rRpNe5qi9xAJgbAS4wz+F/m5h/6bs1Pg9Gp4pJv0u6YR5Os5mo4rDtFMmDVGRdqg
+         mV9PumBuO7n7pq0BGqcSqv8LZBHmHSrBiUHLh5r30gCnPIQD4eQBuRF7R9lU70Z2Qrya
+         BPv7k3OjEz0wu4bOdudXODUuTiaNmL9HNSlfEgvT2VtFycoraariReDYDh+l54zR5U8T
+         kvnA==
+X-Forwarded-Encrypted: i=1; AJvYcCXKc/VJt5GwafH1m5AwnAaVywjE9aisJQih3tbXran9YdsOMI2qnWuAGt9Zy0mysVb86KezTxtf/B4p12qpDb9FeaFFWzWoluAdgGjsp/PwVieHDu4mVCiejBaw7IagaZHlIlDLPs4=
+X-Gm-Message-State: AOJu0YxA9a84oFaMBycIMrYrdJmEDomqpaFBDEvT5wYdTOfaSZGAdKw1
+	cPwBeSFWc4q+hOZjzG+gHbU8V9OzjGCFIE2PLRrAy3ORQ18vRDPVuwtXYw==
+X-Google-Smtp-Source: AGHT+IHvfjzUer2CoBJAM367aQfyuIiKPe9JX5y3lgO0SB5+ywdrrZbwTN4dupnWt0YKqTjVHdV00w==
+X-Received: by 2002:a17:90a:1788:b0:2ae:6e16:da91 with SMTP id 98e67ed59e1d1-2bd9f461d5fmr5924366a91.29.1716486749999;
+        Thu, 23 May 2024 10:52:29 -0700 (PDT)
+Received: from localhost ([2a00:79e1:2e00:1301:e1c5:6354:b45d:8ffc])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2bdda058d7asm1825463a91.55.2024.05.23.10.52.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 May 2024 10:52:29 -0700 (PDT)
+From: Rob Clark <robdclark@gmail.com>
+To: dri-devel@lists.freedesktop.org
+Cc: linux-arm-msm@vger.kernel.org,
+	freedreno@lists.freedesktop.org,
+	Will Deacon <will@kernel.org>,
+	Rob Clark <robdclark@chromium.org>,
+	Boris Brezillon <boris.brezillon@collabora.com>,
+	iommu@lists.linux.dev (open list:IOMMU SUBSYSTEM),
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Joao Martins <joao.m.martins@oracle.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	linux-arm-kernel@lists.infradead.org (moderated list:ARM SMMU DRIVERS),
+	linux-kernel@vger.kernel.org (open list),
+	linux-pm@vger.kernel.org (open list:POWER MANAGEMENT CORE),
+	Lu Baolu <baolu.lu@linux.intel.com>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Sean Paul <sean@poorly.run>
+Subject: [PATCH v4 0/2] io-pgtable-arm + drm/msm: Extend iova fault debugging
+Date: Thu, 23 May 2024 10:52:20 -0700
+Message-ID: <20240523175227.117984-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.45.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] x86/cpufeatures: Add AMD FAST CPPC feature flag
-To: Xiaojian Du <Xiaojian.Du@amd.com>, linux-kernel@vger.kernel.org,
- x86@kernel.org, linux-pm@vger.kernel.org
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, hpa@zytor.com, daniel.sneddon@linux.intel.com,
- jpoimboe@kernel.org, pawan.kumar.gupta@linux.intel.com,
- sandipan.das@amd.com, kai.huang@intel.com, ray.huang@amd.com,
- rafael@kernel.org, Perry.Yuan@amd.com, gautham.shenoy@amd.com,
- Borislav.Petkov@amd.com, mario.limonciello@amd.com
-References: <691ec6cf79788e6db919965f787505434b072fac.1716444920.git.Xiaojian.Du@amd.com>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <691ec6cf79788e6db919965f787505434b072fac.1716444920.git.Xiaojian.Du@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 5/22/24 23:16, Xiaojian Du wrote:
->  #define X86_FEATURE_BHI_CTRL		(21*32+ 2) /* "" BHI_DIS_S HW control available */
->  #define X86_FEATURE_CLEAR_BHB_HW	(21*32+ 3) /* "" BHI_DIS_S HW control enabled */
->  #define X86_FEATURE_CLEAR_BHB_LOOP_ON_VMEXIT (21*32+ 4) /* "" Clear branch history at vmexit using SW loop */
-> +#define X86_FEATURE_FAST_CPPC		(21*32 + 5) /* "" AMD Fast CPPC */
+From: Rob Clark <robdclark@chromium.org>
 
-It'd be nice to expand the CPPC acronym at least _once_.
+This series extends io-pgtable-arm with a method to retrieve the page
+table entries traversed in the process of address translation, and then
+beefs up drm/msm gpu devcore dump to include this (and additional info)
+in the devcore dump.
 
-Also, this is used _once_ at boot and not exposed in /proc/cpuinfo.  Is
-it even worth defining an X86_FEATURE_ for it?
+This is a respin of https://patchwork.freedesktop.org/series/94968/
+(minus a patch that was already merged)
+
+v2: Fix an armv7/32b build error in the last patch
+v3: Incorperate Will Deacon's suggestion to make the interface
+    callback based.
+v4: Actually wire up the callback
+
+Rob Clark (2):
+  iommu/io-pgtable-arm: Add way to debug pgtable walk
+  drm/msm: Extend gpu devcore dumps with pgtbl info
+
+ drivers/gpu/drm/msm/adreno/adreno_gpu.c | 10 +++++
+ drivers/gpu/drm/msm/msm_gpu.c           | 22 +++++++++++
+ drivers/gpu/drm/msm/msm_gpu.h           |  8 ++++
+ drivers/gpu/drm/msm/msm_iommu.c         | 18 +++++++++
+ drivers/gpu/drm/msm/msm_mmu.h           |  5 ++-
+ drivers/iommu/io-pgtable-arm.c          | 51 ++++++++++++++++++++-----
+ include/linux/io-pgtable.h              |  4 ++
+ 7 files changed, 108 insertions(+), 10 deletions(-)
+
+-- 
+2.45.1
+
 
