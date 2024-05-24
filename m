@@ -1,148 +1,180 @@
-Return-Path: <linux-pm+bounces-8093-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8094-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6D658CDCE5
-	for <lists+linux-pm@lfdr.de>; Fri, 24 May 2024 00:35:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 247F48CE2DF
+	for <lists+linux-pm@lfdr.de>; Fri, 24 May 2024 11:04:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 04934B2263E
-	for <lists+linux-pm@lfdr.de>; Thu, 23 May 2024 22:35:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A309E1F22882
+	for <lists+linux-pm@lfdr.de>; Fri, 24 May 2024 09:04:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3A9912837C;
-	Thu, 23 May 2024 22:35:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44DD5129A99;
+	Fri, 24 May 2024 09:04:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oGbr5+uS"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="WmGquE8f"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22E4C7E766;
-	Thu, 23 May 2024 22:35:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B73A5127E2A
+	for <linux-pm@vger.kernel.org>; Fri, 24 May 2024 09:04:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716503709; cv=none; b=UE3gdNlkkiNdHN4UkwG5qTks9ucCCYnEpqhUzJ6A02T5K1wQW1GZaE2yH3bdifkQij7iddHJu9LAHWpZkcdm6iRjzoct6casEQ/xdEn6iakfJde5w3i5xOvjla9SspwCA0dtOCWMJcqmNIhlsjwXtW3OcMn7loZxFwZXcX3ob7s=
+	t=1716541486; cv=none; b=PYgtAEESTvIBCib5e51ZdrmMudfpaYkIfiInrEtaGafufj/ZUF0APB7wg2RCZ/Ks9SVO4ZMUy4JnbgAP6TpiFHcPT0dIpsjHUCKfRARMfehlHTixlQVVJWQAQurJt9RQxczxaGyInGxUTkFZKYrX0UJxsZmLKZHEVHTbcp3o3ik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716503709; c=relaxed/simple;
-	bh=ZQptd+OO0ItLP5kvR5qOd72R0dOqNNH+K7BlscVW4Vw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tk3THvj5JzJU36fGctzP1xX2aqY0+tSaCDb9X+UJrA7K48V3LB53LhvhckeZiwAHKibXwtQqPVZRK7Y//8duEmOG5btWRdrIksuWOuD4V4L3rs5P8Rhb61id4DajiuomotHU9ngtLa+3YYuEXxNpFvY9d+3TpsmNVDOSnrK8yiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oGbr5+uS; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716503708; x=1748039708;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZQptd+OO0ItLP5kvR5qOd72R0dOqNNH+K7BlscVW4Vw=;
-  b=oGbr5+uSYAoxc22LWRgt4sXM1lSZMK7UW+4W7TCOYojFvApXFHax0F9w
-   kkq5TPJNzryIl20sQ7xqWnPZkOdpConNFi86Z/tbM1S6kHxS2jzpoGi7w
-   SPsYFsRuONmyWZgPB2I/mP10YFOnQCNcxMTCR/n1ZC3qC6xL4UOy2f1zn
-   iCy/d5UQbC3qonOZzedj4AZgUvcPwlqyEvsvyKBpEB23Gwd+L3Oqt6/OS
-   R1XMMAS0mGYas7E+pATKGPg3LpKEkI+wylu0D0awa0yr1xnWoliGtCQb+
-   EYmbyGjOyNIGtCpYGZDO1t5HYFfR5n3OHSxrh+phVe4wGCW4DU9FVJX9p
-   A==;
-X-CSE-ConnectionGUID: 7y608XeVRO2QehalQQB9pA==
-X-CSE-MsgGUID: PSsN2TLqQYu41+y0xtjPBg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11081"; a="35375205"
-X-IronPort-AV: E=Sophos;i="6.08,183,1712646000"; 
-   d="scan'208";a="35375205"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2024 15:35:07 -0700
-X-CSE-ConnectionGUID: mZlFUw8eRuuilkVNQYWBhg==
-X-CSE-MsgGUID: +amaWa7gTOC4OsjWndT2Nw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,183,1712646000"; 
-   d="scan'208";a="34311784"
-Received: from jbalogun-mobl.amr.corp.intel.com (HELO desk) ([10.212.227.156])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2024 15:35:07 -0700
-Date: Thu, 23 May 2024 15:35:01 -0700
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: Xiaojian Du <Xiaojian.Du@amd.com>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org, linux-pm@vger.kernel.org,
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, hpa@zytor.com,
-	daniel.sneddon@linux.intel.com, jpoimboe@kernel.org,
-	sandipan.das@amd.com, kai.huang@intel.com, ray.huang@amd.com,
-	rafael@kernel.org, Perry.Yuan@amd.com, gautham.shenoy@amd.com,
-	Borislav.Petkov@amd.com, mario.limonciello@amd.com
-Subject: Re: [PATCH v3 1/2] x86/cpufeatures: Add AMD FAST CPPC feature flag
-Message-ID: <20240523223501.k2bcmvmfbvbxiuf6@desk>
-References: <691ec6cf79788e6db919965f787505434b072fac.1716444920.git.Xiaojian.Du@amd.com>
- <691ec6cf79788e6db919965f787505434b072fac.1716444920.git.Xiaojian.Du@amd.com>
+	s=arc-20240116; t=1716541486; c=relaxed/simple;
+	bh=mfDmkw0HIx+IomXuMfp9apB/0evtliDnYultANgR4zI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=cE0q1zbNEvqLgEEWAdWruFIS4tzrU+fmWer25oozG7/bj6bnFDXjJ3Xq20vohwSlSXRwt64zdYDAZAKXoSecvXdzd6cwlgm0vxdy53S2vGCQS/pa1P2WK5BDAwtpEpl7BsZxEJ13sGr6J/3HR8syoO3VoOr6WcAij2OKKpm6g+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=WmGquE8f; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-42108822e3cso2862125e9.0
+        for <linux-pm@vger.kernel.org>; Fri, 24 May 2024 02:04:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1716541481; x=1717146281; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9rV9T03dAOKaYLU4JhJP/yk7xRhqLtFBoRnbRFTh0Cw=;
+        b=WmGquE8fKltw+x2EFLPi4WwR6V9pnmstSrnH9gcISG0DF9C/+jsrQshY4SfdwcBc57
+         ETQS3KjGAbSK+Db8xYTfnqDjBiOF7lRB+nsdMNrv9kGSFoe/vEhVPdjazFxhv9HvZ0az
+         c39Tl0Z1GqYbAeo4l9BkgaqCusmNMN0lqJtiuYYMaHaQRRkdyzGigf3X7VhvSNECiX0H
+         1w/AqiRab22Hslz4oc97iw2PFL8FWm7LwTemuTri/cL1haB3c7dT25Swc1cMCTkr3kLo
+         zjCw4t5g1wkefgKWVqWJBLuQXASrd+4SrBu1Op6zn8+foacMXMzjjt2XnGAc3LCTGwyN
+         Fvxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716541481; x=1717146281;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9rV9T03dAOKaYLU4JhJP/yk7xRhqLtFBoRnbRFTh0Cw=;
+        b=dTG3qLMb/K7EzUfpRiUkg80thb7qYbQiLLHrTBihtP2xfpugd0TZZ/U9n2Zjg2V1+C
+         ECAPeH39glWwtbmaM6JyppnvLbPZezhzMnyStl1AuotPbieuVau85RcGlGU+wRuP2NNy
+         OUcXiHdW0p1GAZmWir6mIjOL+b937QFHUllMDk6SjGfMEQ2wp16UpIaRyzWgO9qwivNT
+         CSle3/bWKyII0d0ir3jztekkCLv6gcOZud1nGzMGCnZGuFQgQQG4ch+40aNCWowz9vOh
+         TIbZRb31yyl6oHeMaLlhmwGvEm9l9kAHhwFSeJHgOAlMBHVLmb2ivTJp3KOiTHKsHXgs
+         bByw==
+X-Forwarded-Encrypted: i=1; AJvYcCWPcuUXzwyBr7os2FWtoiedHZrCaTW2MAad0eCvibQek/3uAJmiUZ9AhGqW4ABU6toJdwuRksPRk79HYd95IyY+6JbgbkWi/Y4=
+X-Gm-Message-State: AOJu0Yxh3DHvTh9X1pFUILFntw75PqTdLAYvvrNb5trvT+QxxRV/dnI2
+	Hg19pKn8OLI8hxOYq7ZEO0FSvEakZDAlXj5DDRlcSqm57jMz6d1gjCWUOt02b/k=
+X-Google-Smtp-Source: AGHT+IF7CQjZGEs3LnbK5/SUvoBlO1GBsf01qMc/AU90RdPkZ7/4pI6JpfohZZtS8F0E8KnZ0DDcnA==
+X-Received: by 2002:a05:600c:46c8:b0:41f:ae5a:c72f with SMTP id 5b1f17b1804b1-421015a5fc5mr40923795e9.1.1716541481069;
+        Fri, 24 May 2024 02:04:41 -0700 (PDT)
+Received: from [127.0.1.1] ([84.102.31.250])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42100f163a8sm47273045e9.13.2024.05.24.02.04.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 May 2024 02:04:40 -0700 (PDT)
+From: Julien Panis <jpanis@baylibre.com>
+Subject: [PATCH v5 0/6] Mediatek thermal sensor driver support for MT8186
+ and MT8188
+Date: Fri, 24 May 2024 11:04:33 +0200
+Message-Id: <20240524-mtk-thermal-mt818x-dtsi-v5-0-56f8579820e7@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <691ec6cf79788e6db919965f787505434b072fac.1716444920.git.Xiaojian.Du@amd.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACFYUGYC/3WNzQ6CMBCEX4Xs2TUtFiiefA/Doa2LbOTHtA2BE
+ N7dSuLR23yTzDcbBPJMAa7ZBp5mDjyNCYpTBq4z45OQH4khF7kSRS5wiC+MHfnB9ClrqRd8xMB
+ Izlwq3da2NALS+u2p5eUw35vEHYc4+fU4mtW3/TnlX+esUKCtJVFZaSWlu1mz9mw9nd00QLPv+
+ wdkDEJBwQAAAA==
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, 
+ Nicolas Pitre <npitre@baylibre.com>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+ linux-pm@vger.kernel.org, Julien Panis <jpanis@baylibre.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1716541478; l=3306;
+ i=jpanis@baylibre.com; s=20230526; h=from:subject:message-id;
+ bh=mfDmkw0HIx+IomXuMfp9apB/0evtliDnYultANgR4zI=;
+ b=hrtC52UcUaT+pplwH+tZsJghD1tr1rDCfrQA55d38kaALKgzhDIy+7+8Eik+Me5NQqxH+Ab/w
+ HxQjT4VnR4wD0YPNNGFMWaGIXofHdFhivEgBaTbUyTAYtRe0tozS+xv
+X-Developer-Key: i=jpanis@baylibre.com; a=ed25519;
+ pk=8eSM4/xkiHWz2M1Cw1U3m2/YfPbsUdEJPCWY3Mh9ekQ=
 
-On Thu, May 23, 2024 at 02:16:59PM +0800, Xiaojian Du wrote:
-> From: Perry Yuan <perry.yuan@amd.com>
-> 
-> Some AMD Zen 4 processors support a new feature FAST CPPC which
-> allows for a faster CPPC loop due to internal architectual
-> enhancements. The goal of this faster loop is higher performance
-> at the same power consumption.
-> 
-> Reference:
-> See the page 99 of PPR for AMD Family 19h Model 61h rev.B1, docID 56713
-> 
-> Signed-off-by: Perry Yuan <perry.yuan@amd.com>
-> Signed-off-by: Xiaojian Du <Xiaojian.Du@amd.com>
-> Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
-> ---
->  arch/x86/include/asm/cpufeatures.h | 1 +
->  arch/x86/kernel/cpu/scattered.c    | 1 +
->  2 files changed, 2 insertions(+)
-> 
-> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-> index 3c7434329661..6c128d463a14 100644
-> --- a/arch/x86/include/asm/cpufeatures.h
-> +++ b/arch/x86/include/asm/cpufeatures.h
-> @@ -470,6 +470,7 @@
->  #define X86_FEATURE_BHI_CTRL		(21*32+ 2) /* "" BHI_DIS_S HW control available */
->  #define X86_FEATURE_CLEAR_BHB_HW	(21*32+ 3) /* "" BHI_DIS_S HW control enabled */
->  #define X86_FEATURE_CLEAR_BHB_LOOP_ON_VMEXIT (21*32+ 4) /* "" Clear branch history at vmexit using SW loop */
-> +#define X86_FEATURE_FAST_CPPC		(21*32 + 5) /* "" AMD Fast CPPC */
->  
->  /*
->   * BUG word(s)
-> diff --git a/arch/x86/kernel/cpu/scattered.c b/arch/x86/kernel/cpu/scattered.c
-> index af5aa2c754c2..9c273c231f56 100644
-> --- a/arch/x86/kernel/cpu/scattered.c
-> +++ b/arch/x86/kernel/cpu/scattered.c
-> @@ -51,6 +51,7 @@ static const struct cpuid_bit cpuid_bits[] = {
->  	{ X86_FEATURE_PERFMON_V2,	CPUID_EAX,  0, 0x80000022, 0 },
->  	{ X86_FEATURE_AMD_LBR_V2,	CPUID_EAX,  1, 0x80000022, 0 },
->  	{ X86_FEATURE_AMD_LBR_PMC_FREEZE,	CPUID_EAX,  2, 0x80000022, 0 },
-> +	{ X86_FEATURE_FAST_CPPC,	CPUID_EDX,  15, 0x80000007, 0 },
+This is a bunch of patches to support the MT8186 and MT8188 thermal
+sensor configurations.
 
-This list is sorted by the leaf level, so position of this entry should be
-higher:
+Since the patches of v3 were applied except those related to the SoC
+device trees, this series includes mainly patches for 'mt8186.dtsi'
+and 'mt8188.dtsi'. Due to some thermal zone renaming in these 2 device
+trees, the related definitions were also renamed in the dt-bindings and
+in the driver.
 
-diff --git a/arch/x86/kernel/cpu/scattered.c b/arch/x86/kernel/cpu/scattered.c
-index af5aa2c754c2..09e0e40dce6c 100644
---- a/arch/x86/kernel/cpu/scattered.c
-+++ b/arch/x86/kernel/cpu/scattered.c
-@@ -45,6 +45,7 @@ static const struct cpuid_bit cpuid_bits[] = {
- 	{ X86_FEATURE_HW_PSTATE,	CPUID_EDX,  7, 0x80000007, 0 },
- 	{ X86_FEATURE_CPB,		CPUID_EDX,  9, 0x80000007, 0 },
- 	{ X86_FEATURE_PROC_FEEDBACK,    CPUID_EDX, 11, 0x80000007, 0 },
-+	{ X86_FEATURE_FAST_CPPC,	CPUID_EDX, 15, 0x80000007, 0 },
- 	{ X86_FEATURE_MBA,		CPUID_EBX,  6, 0x80000008, 0 },
- 	{ X86_FEATURE_SMBA,		CPUID_EBX,  2, 0x80000020, 0 },
- 	{ X86_FEATURE_BMEC,		CPUID_EBX,  3, 0x80000020, 0 },
+[RFC] When PATCH 1/6 and 2/6 are squashed, checkpatch raises this WARNING:
+"DT binding docs and includes should be a separate patch." That's why I
+split them in this v5. The problem is that the driver can't be compiled
+any more at PATCH 1/6. It needs PATCH 2/6 to be compiled. Should the
+checkpatch warning be ignored here ? Should I finally squash PATCH 1/6
+and PATCH 2/6 ?
 
->  	{ 0, 0, 0, 0, 0 }
->  };
->  
-> -- 
-> 2.34.1
-> 
+[NOTE] Before being applied, PATCH 6/6 needs a 'gpu' node in 'mt8188.dtsi',
+but this node does not exist yet. A series will be submitted by Angelo to
+add this GPU support in MT8188.
+
+Signed-off-by: Julien Panis <jpanis@baylibre.com>
+---
+Changes in v5:
+- Rename some thermal zones
+  (mfg -> gpu / soc1 -> adsp / soc2 -> vdo / soc3 -> infra).
+- Add cooling-device for GPUs.
+- Link to v4: https://lore.kernel.org/r/20240521-mtk-thermal-mt818x-dtsi-v4-0-b91ee678411c@baylibre.com
+
+Changes in v4:
+- Fix wrong thermal zone names.
+- Lower 'polling-delay-passive' values.
+- Set 'hysteresis' value to 0 for 'critical' trips.
+- Add a 'hot' trip point in between 'passive' and 'critical' trips.
+- Link to v3: https://lore.kernel.org/all/20240402032729.2736685-1-nico@fluxnic.net/
+
+Changes in v3:
+- use meaningful name for binding index definitions
+- reuse LVTS_COEFF_*_MT7988 on MT8186 per reviewer request
+- do similarly for MT8188 that now reuses LVTS_COEFF_*_MT8195
+- use thermal zone names the svs driver wants
+- adjust some DT node names and iospace length
+- remove variable .hw_tshut_temp as it is constant across all SOCs
+- Link to v2: https://lore.kernel.org/all/20240318212428.3843952-1-nico@fluxnic.net/
+
+Changes in v2:
+- renamed CPU cluster thermal zones in DT
+- fixed logic to cope with empty controller slots at the beginning
+- isolated bindings to their own patches
+- added MT8188 default thermal zones
+- Link to v1: https://lore.kernel.org/all/20240111223020.3593558-1-nico@fluxnic.net/T/
+
+---
+Julien Panis (2):
+      dt-bindings: thermal: mediatek: Rename thermal zone definitions for MT8186 and MT8188
+      thermal/drivers/mediatek/lvts_thermal: Use renamed thermal zone definitions for MT8186 and MT8188
+
+Nicolas Pitre (4):
+      arm64: dts: mediatek: mt8186: add lvts definitions
+      arm64: dts: mediatek: mt8186: add default thermal zones
+      arm64: dts: mediatek: mt8188: add lvts definitions
+      arm64: dts: mediatek: mt8188: add default thermal zones
+
+ arch/arm64/boot/dts/mediatek/mt8186.dtsi           | 316 ++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt8188.dtsi           | 481 +++++++++++++++++++++
+ drivers/thermal/mediatek/lvts_thermal.c            |  12 +-
+ .../dt-bindings/thermal/mediatek,lvts-thermal.h    |  12 +-
+ 4 files changed, 809 insertions(+), 12 deletions(-)
+---
+base-commit: 632483ea8004edfadd035de36e1ab2c7c4f53158
+change-id: 20240520-mtk-thermal-mt818x-dtsi-eca378f9b6a0
+
+Best regards,
+-- 
+Julien Panis <jpanis@baylibre.com>
+
 
