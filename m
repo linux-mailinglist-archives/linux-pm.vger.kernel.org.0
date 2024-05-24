@@ -1,239 +1,154 @@
-Return-Path: <linux-pm+bounces-8104-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8106-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC29D8CE587
-	for <lists+linux-pm@lfdr.de>; Fri, 24 May 2024 14:54:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DF268CE710
+	for <lists+linux-pm@lfdr.de>; Fri, 24 May 2024 16:32:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AA50BB2095A
-	for <lists+linux-pm@lfdr.de>; Fri, 24 May 2024 12:54:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8EFD51C223B5
+	for <lists+linux-pm@lfdr.de>; Fri, 24 May 2024 14:32:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0C2786628;
-	Fri, 24 May 2024 12:54:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97F0212C7E8;
+	Fri, 24 May 2024 14:31:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="u+FkYJZ+"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="uODYvmaR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D6F53BBDE
-	for <linux-pm@vger.kernel.org>; Fri, 24 May 2024 12:54:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D846142AB7
+	for <linux-pm@vger.kernel.org>; Fri, 24 May 2024 14:31:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716555274; cv=none; b=jH96yu9+Tr0ICCYQUD73zqeUOjnjr1ojR7xtggyiBF0jiEtZfWPlLiD8jLf25yJc0/8ry/jsrJMukIUReBc4SAM65ThAqnBdDXJvGCRocMnXt0aDmEcvCDVdFDjPGGT7p3OLCTVoqFd9/zsK+LoMj673Eunfay3VkbHsrfpcIrc=
+	t=1716561119; cv=none; b=PrKxYA3kuYiQNAY9q1AuiiKE1aN9MTCb5nLRw2jFHxTG3F+qZXS/QCYEygKD6E219QRxnNhreFzwitZhH5pHWGWs3DT/1WrlGpg3tuKwY7LesxfZSXtUvyFqfkyX+j8EAj5DlIOqAPf7y0GXL4/JJGl4xWZaoAwpuEUN+iRM4WU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716555274; c=relaxed/simple;
-	bh=2Q87jTyD/yahS92t5urdkFnj9lWgA8pkg+6R0zo54pM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XSfUfZVMNasjtQoZlgXOrJqZgGw4eubw1bw4PJCErXM6Q6k/DVIMaqETkFyPF1lFfv9r25qXvr6+ps2AVS8sfN+3I4qtDd3PYWmzIsupXb13n2bgp8uFH6J4WULR3kReIKDpjrHOAdVDuO8mVhYdi+8PHEve+aH0hi8nxiSWbNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=u+FkYJZ+; arc=none smtp.client-ip=209.85.166.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
-Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-36ddf683ad7so23754605ab.2
-        for <linux-pm@vger.kernel.org>; Fri, 24 May 2024 05:54:32 -0700 (PDT)
+	s=arc-20240116; t=1716561119; c=relaxed/simple;
+	bh=eii+NoZyNpw84hy2WXOgeXt6oQHQp1jBKy2ascwjxfI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SlHCD3icuAO7JYAsmYsx7Rv8F62echUdF5RXCiEMlYaa6L/ORegT/LZNQU4dIhq5OOHgij+g6pO5Mjp/YASTECCGg+9bqshhycool+8avzM5ywbdG81CONfXYVOscC/3oAg+dc8kh3WQKwEz4I2S9ajptb/I9F3BzV+59adB3ug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=uODYvmaR; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-351d309bbecso6160113f8f.2
+        for <linux-pm@vger.kernel.org>; Fri, 24 May 2024 07:31:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1716555272; x=1717160072; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MxmDLiLsd5ua2H7Oam6e1zqnDQkQ25mJBA16oWnpxYY=;
-        b=u+FkYJZ+VJyMo2mGe63D+Dp/95+eDIx/MnSo623ZuYzp8yzHNbzGjTt730HJYfRIln
-         zHeNSLvLpgL+zaCFzTswgHStVvyP4goL6BSS9s0H29t8oCR2BqKEQIgUiqiZ9EdZrhVK
-         +gM3xNR0JYKsubmaxrNWK7nxAei9amlxZQs5t+47XXVBMXy0oKKYhed/mWVoeX3PIY8A
-         6YcUGC19YbNjigXAGhGy7gHFjsDi4cvgPg3WHcvRCsQGpYeRhbHRvgnNtUoOGT1OUc+A
-         gMcz+MByevlTbxxdw28feWsCF6Mha86G/izo3GWrM7TLbOaFPlGnt6m8KBOXUABrY2hQ
-         ihrA==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1716561114; x=1717165914; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IuS2wqmAAZkhpsH6k38Gnd81bprVdYOR/AWVKTibeV4=;
+        b=uODYvmaRBzdSapqXKW2RnYSBHCKL5BszyD8CoWobZnHUiC6/z6JKygsEf2BrCh8wuG
+         pCLIYwPEelmqmiePdCzgQvj8kFLoC1KBHoyfzdm2MG4TTIl49iVk7Ux52QOCU6tADg+m
+         bQevVJc0oPU4s9DaM8cVkCYE8XdAp/J+j/j8l8JAQQB5l6EDPczIX1eRVkuhZXfnTH4R
+         B/OahwhgbjRJzo+TVIOAgtFmkhXHnKpCqG7PJ/50CEhEPRQzcKL5NAoZZgdiUsy5Bs2w
+         XMEFYw6xYZi6XD5pPEFYIvf1QUSi0p8CgyAonZj2XJRxota++sad6QbwCvWIlOh8Oarq
+         OVeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716555272; x=1717160072;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MxmDLiLsd5ua2H7Oam6e1zqnDQkQ25mJBA16oWnpxYY=;
-        b=Ci4Ta7WA/sMA4UaVmCzXbKLS42CWT+/V3rfUduhfviBFR+OfX+OhqlHksQGqE7unfC
-         ojjo0C0XNbRC3Y8dTCjngNfM+Z4hEiYhqVIsiEhFlv1lZ6pOIwm3bbtSt+hNvAs8LbtF
-         bDcMM6MiwZxvqkTjoa50lZe8ufJWfQhycR78ffqUq5t2AtFjV8U8bEzxsioDGNbkfGif
-         vEHu0iapG6vPj2H38qUGUGOaZwJtoQW+LwX5RIhJBfPYn2/cUGSn0JRpZIi5+53Oi0cZ
-         KKpvmJ8duY/LdfcaNPxUQ+UKE88SOrvRSirc4cY193+PXTnuDu/nr3rXT8piIfK9ZubV
-         TY4w==
-X-Forwarded-Encrypted: i=1; AJvYcCXrxdomUj38ph90wvZZU3C4OcCafv38na7wnn2KyndBl3ukahuZas3aKntIMGT3LPiD1ghQYezmLjOjm0/Ca6bVALpXN2ZoV5I=
-X-Gm-Message-State: AOJu0YwEZi1FXIk1N/QVfWK8cmX33PjvYk80oMPZjcX20m7IhEnmRxnW
-	NXSZvsE6xDa1gUczpNCb8/BqpV3MSo+QKdbm4+ukveVubSQmlhHq66aEQbGC/7Xy0QeLE0/Bl8B
-	jd5GjudBtShJ85CKWgZvO+zWnHU6ntQYP4+2BDw==
-X-Google-Smtp-Source: AGHT+IG706oHtTX6EHJGP+6O0ueOX8hKEYHRAtlMxjdpa5kaBBkruy70OydInrBDfoTThdPlUAB7QfD2yRnjk92tjac=
-X-Received: by 2002:a05:6e02:1a09:b0:36b:2731:83ce with SMTP id
- e9e14a558f8ab-3737b2c5874mr24957655ab.8.1716555272176; Fri, 24 May 2024
- 05:54:32 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1716561114; x=1717165914;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IuS2wqmAAZkhpsH6k38Gnd81bprVdYOR/AWVKTibeV4=;
+        b=HUgY7nyqbgOaRzdkDABNWGgB+0m/AL9rnG3hQWe3gLI4cTLFefJFVEKXwkmx/W5X0s
+         +O9T4nVFaOqzaxzjwRowo+epnewQvqLEsgeqPcYv0nHRyWecxHP7p5MhFcIxkBrVmZBK
+         QueBNoNPIbKqWRkLxlaZJisxPFrZb9PY2Nf1mcRSsuTnNgrUoW9YlqkZpLt7AxnPNbGc
+         NOBxpE6Zy/mUCpVqoXglQDB03V6ULUdUsysvd4dUGg3d+21wQkiPy03sH68shgnWTxOe
+         aU6PmmswWug8KG6g2+zQvtTsKB39jZn61/nITGz5EZpZuVQeWra4g5s6VmUoDwdLHsfK
+         nQeg==
+X-Forwarded-Encrypted: i=1; AJvYcCUgR1p3jo3oIf4YFM9bqtMRm1CF2xif5ASVGjgdWkqos56VgaMnuwEPwrBUiysoWYWW0pAcOFThURO734rc/eZ18M6pkHPCm4s=
+X-Gm-Message-State: AOJu0Yw3KbLFtQnmRnQLdGBBemB/cKgUoKooMnMgv83jghMxa2mFYZi1
+	inTxTPWLbejTE8xkOLpMgzKSyuPldbNVEjGjMlWSmCJ2bDztt70pskkcd9NV1I8=
+X-Google-Smtp-Source: AGHT+IEbdJCC5eZIR1rygjjmZd59Z//WDDRE/R79C+N8FU4t05p2Z6OsfVsrR6DQ5hJAV1a4vSOhAQ==
+X-Received: by 2002:a5d:5221:0:b0:351:b56e:8bc3 with SMTP id ffacd0b85a97d-3552fe02a52mr1924254f8f.53.1716561114161;
+        Fri, 24 May 2024 07:31:54 -0700 (PDT)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3557a090c2bsm1719611f8f.59.2024.05.24.07.31.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 May 2024 07:31:53 -0700 (PDT)
+From: Alexandre Bailon <abailon@baylibre.com>
+To: rafael@kernel.org,
+	daniel.lezcano@linaro.org,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org
+Cc: rui.zhang@intel.com,
+	lukasz.luba@arm.com,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alexandre Bailon <abailon@baylibre.com>
+Subject: [PATCH v3 0/6] thermal: Add support of multiple sensors
+Date: Fri, 24 May 2024 16:31:44 +0200
+Message-ID: <20240524143150.610949-1-abailon@baylibre.com>
+X-Mailer: git-send-email 2.44.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240226065113.1690534-1-nick.hu@sifive.com> <CAPDyKFph3WsZMmALnzBQKE4S_80Ji5h386Wi0vHda37QUsjMtg@mail.gmail.com>
- <CAKddAkDcdaXKzpcKN=LCCx9S4Trv+joLX2s=nyhzaRtM5HorqA@mail.gmail.com>
- <CAKddAkC6N=Cfo0z+F8herKTuJzCyt_MA0vWNbLCr6CbQnj0y8g@mail.gmail.com>
- <CAPDyKFr_M0NDH0gaunBpybnALOFfz4LpX4_JW2GCUxjwGzdZsg@mail.gmail.com>
- <CAKddAkC5CRX+ZTh=MgzPYU72SY13+AQYhknhV_CC+=XX9=DKyg@mail.gmail.com>
- <CAAhSdy1SDd=VUqDQA0T5n9LwHo=3uGzFq1dUcbDFcB3aBdaioA@mail.gmail.com>
- <CAAhSdy33DcNw+pbDRrR=hBH86kwvu3xZbomQby8XhRXcc-exqQ@mail.gmail.com>
- <CAKddAkBrP2iQBC+aY1Xw5pssBpiQZe4V-6ww5m8hbKP6V0jzLg@mail.gmail.com>
- <CAAhSdy12-_Hdb-WVrs8kyfCy_OQA0p27DS6TOV87dh9HODrU_Q@mail.gmail.com>
- <CAKddAkCQOvnci-bzKx1pBUJh5t1uPT-wNXGH1WyqDyb5qR_Scg@mail.gmail.com>
- <CAK9=C2V2xYwi4wK2+e=z7NF8Ph7+LxvWh4J4TmQrbVfSfpO-Ag@mail.gmail.com> <CAPDyKFo6PiWmwtHTfRCWK95RgQShfuR+G2cZm0D1Ad-at_MWmg@mail.gmail.com>
-In-Reply-To: <CAPDyKFo6PiWmwtHTfRCWK95RgQShfuR+G2cZm0D1Ad-at_MWmg@mail.gmail.com>
-From: Anup Patel <anup@brainfault.org>
-Date: Fri, 24 May 2024 18:24:20 +0530
-Message-ID: <CAAhSdy3VVbOjMZR_De3D6hC0XwgjwpRzxU=Xpf=OOULfTYOxOw@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: riscv-sbi: Add cluster_pm_enter()/exit()
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Anup Patel <apatel@ventanamicro.com>, Nick Hu <nick.hu@sifive.com>, palmer@dabbelt.com, 
-	rafael@kernel.org, daniel.lezcano@linaro.org, paul.walmsley@sifive.com, 
-	linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, zong.li@sifive.com, 
-	Cyan Yang <cyan.yang@sifive.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, May 24, 2024 at 4:11=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org=
-> wrote:
->
-> On Fri, 17 May 2024 at 06:39, Anup Patel <apatel@ventanamicro.com> wrote:
-> >
-> > On Thu, May 16, 2024 at 9:40=E2=80=AFAM Nick Hu <nick.hu@sifive.com> wr=
-ote:
-> > >
-> > > Hi Anup
-> > >
-> > > On Wed, May 15, 2024 at 9:46=E2=80=AFPM Anup Patel <anup@brainfault.o=
-rg> wrote:
-> > > >
-> > > > Hi Nick,
-> > > >
-> > > > On Wed, May 15, 2024 at 5:45=E2=80=AFPM Nick Hu <nick.hu@sifive.com=
-> wrote:
-> > > > >
-> > > > > Hi Anup,
-> > > > >
-> > > > > Thank you for your guidance.
-> > > > > After enabling the debug message, we found a way to solve the pro=
-blem
-> > > > > by the following steps:
-> > > > > 1. Add a compatible string in 'power-domains' node otherwise it w=
-on't
-> > > > > be the supplier of the consumers. (See of_link_to_phandle())
-> > > >
-> > > > Hmm, requiring a compatible string is odd. Where should we document
-> > > > this compatible string ?
-> > > >
-> > > Sorry, this is my fault. I didn't include some updates in
-> > > of_link_to_phandle(). This led some misunderstandings here.
-> > > You are right, we don't need it.
-> > > The supplier will be linked to the CLUSTER_PD node.
-> > >
-> > > > > 2. Move the 'power-domains' node outside the 'cpus' node otherwis=
-e it
-> > > > > won't be added to the device hierarchy by device_add().
-> > > > > 3. Update the cpuidle-riscv-sbi driver to get the pds_node from
-> > > > > '/power-domains'.
-> > > >
-> > > > By adding a compatible string and moving the "power-domains" node
-> > > > outside, you are simply forcing the OF framework to populate device=
-s.
-> > > >
-> > > > How about manually creating platform_device for each power-domain
-> > > > DT node using of_platform_device_create() in sbi_pd_init() ?
-> > > >
-> > > Thanks for the suggestion! We have test the solution and it could wor=
-k.
-> > > We was wondering if it's feasible for us to relocate the
-> > > 'power-domains' node outside of the /cpus? The CLUSTER_PD might
-> > > encompass not only the CPUs but also other components within the
-> > > cluster.
-> >
-> > The cpuidle-riscv-sbi driver expects "power-domains" DT node
-> > under "/cpus" DT node because this driver only deals with power
-> > domains related to CPU cluster or CPU cache-hierarchy. It does
-> > make sense to define L2/L3 power domains under
-> > "/cpus/power-domain" since these are related to CPUs.
-> >
-> > Moving the CPU "power-domains" DT node directly under "/" or
-> > somewhere else would mean that it covers system-wide power
-> > domains which is not true.
->
-> I understand your point, but I am not convinced that the power-domains
-> need to belong to the "cpus" node. Ideally, the power-domain describes
-> the power-rail and the interface to manage the CPUs, this can surely
-> be described outside the "cpus" node - even if there are only CPUs
-> that are using it.
->
-> Moreover, moving forward, one should not be surprised if it turns out
-> that a platform has other devices than the CPUs, sharing the same
-> power-rail as the CPU cluster. At least, we have that for arm/psci
-> [1].
+Following this comment [1], this updates thermal_of to support multiple
+sensors.
 
-For non-CPU power domains, we are working on a messaging
-specification (RPMI) [1]. The supervisor software might have
-direct access to a RPMI transport or it can send RPMI messages
-via SBI MPXY extension [2].
+This series intends to add support of thermal aggregation.
+One use case for it is using the IPA in the case we have
+multiple sensors for one performance domain.
 
-If power-rails on a platform are shared between CPUs and
-devices then the platform can:
+This has been tested on the mt8195 using s-tui.
+To test and validate, we heat up the CPU and the heat sink.
+At some point, we run benchmark tests with different configurations:
+- Mediatek kernel (IPA + their own thermal aggregation)
+- Mainline kernel
+- Mainline kernel with IPA and aggregation enabled
+With the IPA and the aggregation enabled, we get the best performances
+with the most stable CPU temperature.
 
-1) Use SBI HSM for CPUs and use RPMI for devices. The
-DT bindings for device power-domains based on RPMI are
-still work-in-progress. If there are multiple supervisor domains
-(aka system level partitions) created by SBI implementation or
-some partitioning hypervisor then the RPMI messages can be
-arbitraged by SBI implementation using SBI MPXY extension.
-The SBI MPXY extension also allows sharing the same RPMI
-transport between machine-mode (firmware) and supervisor-mode.
+The aggregation is configured and enabled using device tree.
+One thermal zone has to be created with a list of sensors.
+It will take care of registering a thermal zone for each sensors.
+The cooling device will only be registered with the aggregating thermal zone.
 
-2) Use its own platform specific power-domain driver for both
-CPUs and devices (basically don't use the SBI HSM and RPMI).
-In this case, there won't be any controlled access (or arbitration)
-of power rails across supervisor domains.
+There are still something important missing: a way to check that all
+aggregated sensors are part of the same performance domain.
+So far, I don't see how this should be done. Some recommendations would be
+appreciated.
 
->
-> >
-> > I suggest we continue using "/cpus/power-domains" DT node
-> > only for power domains related to CPU clusters or CPU
-> > cache-hierarchy.
-> >
-> > For system wide power domains of SoC devices, we can either:
-> > 1) Use device power domains through the SBI MPXY extension
-> >     via different driver
-> > 2) Use a platform specific driver
-> >
-> > >
-> > > We also look at cpuidle_psci_domain driver and it seems Arm doesn't
-> > > create the devices for each subnode of psci domain.
-> > > Is there any reason that they don't need it?
->
-> We don't need it for arm as we have a separate node for PSCI and its
-> power-domains [2]. Moreover, we have a separate driver that manages
-> the power-domain (cpuidle-psci-domain).
+Changes in v2:
+- Rebased on 6.7
+- Seperated generic multi sensor and dt specfic code
+- Simplified the code
+- Drop min / max and only do weighted average (seems more adequate for IPA)
 
-Unlike the ARM world, we don't have any DT node for SBI in
-the RISC-V world because the SBI is always there. Due to this,
-the SBI HSM CPU idle driver (this driver) currently looks for
-CPU "power-domains" under "/cpus" DT node because the
-SBI HSM extension only deals with CPU states.
+Changes in v3:
+- Rebased on 6.9
+- Reworked the way to register a multi sensor thermal zone
+  - Only one thermal zone to define in device tree
+- Max has been re-added
+- Enabled it on mt8195
 
->
-> [...]
->
-> [1] arch/arm64/boot/dts/qcom/sc7280.dtsi (search for "CLUSTER_PD")
-> [2] Documentation/devicetree/bindings/arm/psci.yaml
->
-> Kind regards
-> Uffe
+[1]: https://patchwork.kernel.org/comment/24723927/
 
-[1] https://github.com/riscv-non-isa/riscv-rpmi
-[2] https://docs.google.com/document/d/1Ivej3u6uQgVdJHnjrbqgUwE1Juy75d4uYCj=
-WrdNjeAg/edit?usp=3Dsharing
+Alexandre Bailon (6):
+  dt-bindings: thermal: Restore the thermal-sensors property
+  thermal: Add support of multi sensors to thermal_core
+  thermal: Add support of multi sensors to thermal_of
+  dt-bindings: thermal: Add a property to select the aggregation type
+  thermal: of: Parse aggregation property to select the aggegration type
+  ARM64: mt8195: Use thermal aggregation for big and little cpu
 
-Best regards,
-Anup
+ .../bindings/thermal/thermal-zones.yaml       |  13 +-
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 212 ++---------
+ drivers/thermal/Makefile                      |   1 +
+ drivers/thermal/thermal_core.h                |  15 +
+ drivers/thermal/thermal_multi.c               | 332 ++++++++++++++++++
+ drivers/thermal/thermal_of.c                  | 282 ++++++++++++++-
+ include/uapi/linux/thermal.h                  |   5 +
+ 7 files changed, 663 insertions(+), 197 deletions(-)
+ create mode 100644 drivers/thermal/thermal_multi.c
+
+-- 
+2.44.1
+
 
