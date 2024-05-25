@@ -1,50 +1,49 @@
-Return-Path: <linux-pm+bounces-8119-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8120-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D9358CF080
-	for <lists+linux-pm@lfdr.de>; Sat, 25 May 2024 19:44:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A1A88CF085
+	for <lists+linux-pm@lfdr.de>; Sat, 25 May 2024 19:44:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5CE6D1C20CD3
-	for <lists+linux-pm@lfdr.de>; Sat, 25 May 2024 17:44:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E45091F212FC
+	for <lists+linux-pm@lfdr.de>; Sat, 25 May 2024 17:44:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D53451272C4;
-	Sat, 25 May 2024 17:44:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CBFA127B75;
+	Sat, 25 May 2024 17:44:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z/LyQBBo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gdfncoOc"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A608C1272A5;
-	Sat, 25 May 2024 17:44:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6697A127B5C;
+	Sat, 25 May 2024 17:44:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716659043; cv=none; b=UIblE4I8vxFiqsOUN3oE0oBnhCpXmOofRnJMx6JjphHbSk8X/cnfZjI0ixSiR6xTfgS6+f0JugsYiSpDK/tttRP8UAJixTshnCifeQAc0fU4rs9V/O+iqjkZIkInf6w7qUS2boid/NHa6qhUEeqZnZt4tUM5VsEK1Bzd6xBt6Qw=
+	t=1716659044; cv=none; b=roTrJBrpAi392Hgi/ngpOCcsrSmxt7gbPTFT7m04ZdMz/IHjAb6OFnMdMVjHis8Cgb9Xxxb84Elq1rD8J1d2U5lM/pvwkREX4Ir+rT5rGo54gY+u4S75T012NnZ6H2304nIKndMyzMOtiK8bBevVL5AvJzVV1Oa68cLbsKnRe6A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716659043; c=relaxed/simple;
-	bh=P+vJCczUY3dk8/unavIL2fvZZqVUYcIJl5YLds9SMFI=;
+	s=arc-20240116; t=1716659044; c=relaxed/simple;
+	bh=HNiHtLdUEdjz0assJiHmGmiqtn89HULmn3jqnezzWXU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Eh0owNgHa1/pCI5aWbhNwhc0sZm6do+ncxzyXcwaYh8Dh4YF+GtPqcsjN3DEYt3a7kmnBLAfAaMm7pz/Aibb/8lv7Jlu4RL5JjWZ/7pw8Ye/1jkYPmROdxq2L/sAethasz65fAoxPtadtM7dHfOFXSYnXVxvEjShAHdlLmVaNRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z/LyQBBo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ED83C32782;
-	Sat, 25 May 2024 17:44:02 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=qZvy0AMxucMxRhtfqqZNPyFp9zPpbOTFFrB2nx3sWrjXUjnfa7TQZrSYR8DsG2URmS9xFev1Jt3mK1y16MDpnm+hhVvxcjncfA9MPKMegOvvNdD8y+W9zYNPpJbxMXX3s5C6jpmTVPoGmI3OjsuJfmHBn/xFLCqUXE1suECRiy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gdfncoOc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6011FC4AF0D;
+	Sat, 25 May 2024 17:44:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716659043;
-	bh=P+vJCczUY3dk8/unavIL2fvZZqVUYcIJl5YLds9SMFI=;
+	s=k20201202; t=1716659044;
+	bh=HNiHtLdUEdjz0assJiHmGmiqtn89HULmn3jqnezzWXU=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Z/LyQBBoqo8GMNRunZfsuL+F/NE1rMIztgS4AihWuP7G3Bm9q4yjX6GeYtX0L+sLv
-	 iBVNKL5eS6QrVXsn26+ZbLYI4a5BQaeAGeXiUoFn0IEUa6GgCHXiA3YXg+fbHOwirl
-	 vRZEDSvur46DiuFZYbh2/wJBngvjBOGs6E1gkOolpyvmqErBO/1Ufsxd27V/6939jS
-	 kS+dU2fCZqLgL+1xqIfXDdr4m8UfcUJ1PBfmMlGYv0QiqlkXECdDJRga729EQ/MLp8
-	 U9JLE7kmD8dvKQYt6LXANROv8J8h5ZnqVnJPp8lAf9IyN2pzv98B7pnU9PDAvdXIEv
-	 bLohl9lILaf4g==
+	b=gdfncoOctOLFLGM6C69sr94DL8gYniadCepe+lLmLlVHVgv98lh4MeB/LMEXCNX4r
+	 HjvbvvICeeiCKONUbsDs2HM9tcjlkd6aJtIQnk8npqZ70ooNU1JuiYxJOLzpZvdgNh
+	 0VB/mJhPekdaiWtEdSChCOOG/xNOIxnYFyRJN5UNYaHhEhR78XDRSRe5cWdnNxnOL5
+	 Vdhs8XncaRjnI8vcJKOfyhADFUkQZx0IUuHCEkI8GKt/fYup2fgYSndex8nFNG6jEq
+	 8HY/VHkZIqFk6yc8jEBhQxbp7T9YLZZu98waUKCU7KYSV5yeqoY6bmHUMHs+LN3sfo
+	 l3HVSOO6ySWZQ==
 From: Bjorn Andersson <andersson@kernel.org>
-Date: Sat, 25 May 2024 10:48:50 -0700
-Subject: [PATCH 1/2] dt-bindings: cpufreq: cpufreq-qcom-hw: Add sc8180x
- compatible
+Date: Sat, 25 May 2024 10:48:51 -0700
+Subject: [PATCH 2/2] arm64: dts: qcom: sc8180x: Correct cpufreq compatible
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -53,7 +52,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240525-sc8180x-cpufreq-compatible-v1-1-febf0f17909c@quicinc.com>
+Message-Id: <20240525-sc8180x-cpufreq-compatible-v1-2-febf0f17909c@quicinc.com>
 References: <20240525-sc8180x-cpufreq-compatible-v1-0-febf0f17909c@quicinc.com>
 In-Reply-To: <20240525-sc8180x-cpufreq-compatible-v1-0-febf0f17909c@quicinc.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>, 
@@ -67,46 +66,47 @@ Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
  Bjorn Andersson <quic_bjorande@quicinc.com>
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=openpgp-sha256; l=931;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=790;
  i=quic_bjorande@quicinc.com; h=from:subject:message-id;
- bh=Awx9vuYaQbdLEk4RVNWSFP2WE+nYrg+P7w+DEF6Koiw=;
- b=owEBgwJ8/ZANAwAIAQsfOT8Nma3FAcsmYgBmUiSCOe2GaLz1XifiP3IoXFgwSYEOPLK5dutL/
- AjU88tY2jKJAkkEAAEIADMWIQQF3gPMXzXqTwlm1SULHzk/DZmtxQUCZlIkghUcYW5kZXJzc29u
- QGtlcm5lbC5vcmcACgkQCx85Pw2ZrcWEQRAAtaa4fKmtHEO4Ww8Iog2PcLT8rMsM+I82efBCJJs
- CU0aFNvCsQw+wVwMinXFq8yasrEjO4fuzZVtO21dCzANV9bHQAFQvGLan+r1rYvvgek5DlZ16i5
- uY/7Gi1HqLMUllxPjmNPFy9AoEwJBUg9bKfb3ZR7d7luEYiLIow9cUuOVa0dzlL6k+peOlUDlkp
- Fg8Uegi6A8DuWeBwYwuQ0NoyJJvaJ1mmHI8k69vy4HyKQiOtAr4quqRtODkbQHrXU4Zb27VmttZ
- TRNDTvAsJM0CBbyF1JeTMhPdikCzuLeF1vAxm84Co+GGNAfAlmHZ8guPCc2Ewt/M+ZaPFruzyJY
- /XtdOEfA1YVHb993dMzyPGXYNrpkUwKOMI/zgpLCJ+oaUUiTmL8qBaerTky1/6gOmJSxga4HceM
- ef79RuEq/HlzywwJmdogK3dQFF7aTXEfvLmGM8l558MkCA/0CuwN6ojMBhfGYxzLRObrvg5mzM1
- lAZyt8FH+bU1T4r1Uea9D1Rs+EYUCX5HkqvYCDoFu+VdhRALug3w+DGFNfvR/XnRkuqAn8YcQHS
- j0HBcjOoC1x6RGRsawNYnu9ia/rU/8gEKttdZeyYTTRZWOgz6/RPXkLf3aGgw1rc4othsQB07OG
- AF1yzp3zEoWf5v9ZCTKKcHkv5WkfsJoUaq63SrcE65sY=
+ bh=jJ9PlPAVPbDwptK3g1ut0SqhJtYZOjzmxrSBU2Uiy5g=;
+ b=owEBgwJ8/ZANAwAIAQsfOT8Nma3FAcsmYgBmUiSCM798n6Sq+MRNBoZDwHH0PAiHXXn48slOF
+ UX9uUPkz0mJAkkEAAEIADMWIQQF3gPMXzXqTwlm1SULHzk/DZmtxQUCZlIkghUcYW5kZXJzc29u
+ QGtlcm5lbC5vcmcACgkQCx85Pw2ZrcW+6g/9H2ptTEncCbj/RBuk7mTC8cHokNX8XFXBwRV3eq5
+ MSWaR+RsKYTjz1cPy0k6Bh+FtyV9LssBkWT2L4RzH4XKiwIEFIpPOW1SdqX2Uc3mEWvwVRmTJXv
+ jcDrOW6O7T01ysXVVELV3tVo+0qUVpXkahl/G8G5PRzZHCluWH62RsP4Ysee1s8oqDSjO0Sl/rT
+ FxmIoKnXlv0dvbFvk+cGd5kR0k9EY9Gr5JJy39cwUmk1wi/ngPCfg99ithc6UkFl0ZAUb9zJMAU
+ JB3fw/RqjFRZ6bHc/SRruIpHmVXi3E9E+M4OFkT9eBhX0pYBlDl5UED6JlM3LZlAE7KDKyN3tsI
+ WwRJIwVHtGe4UOxVKDdIP86Ukzk8z9Yh7aTWtrpaVKghbCk/jhMJV+Ib5ehfmig0eVM1Km25CDi
+ ZY4tAHI2wzzIIm7f9vdem1785hxpyaZ7Ad1m+lJ3skeIutQ5EpF8TQjf/YhgbkMDm94Dhrsj+ga
+ tAwiLPWsU+qk58GgYoeliOJzLSM88YQRSwu/uHriK9JbpOlCPCURC9bvRTqqgHTbmLmG4JkMA+I
+ plBRef4ihJKxY3tnqL0BMZEeJk1HbC9DoHD73AVGFW5AIAR0ANWIpPHC7eFH3QhJjFqavcK9Bdc
+ nwY0dxEOP1fGWkVFOYwVte/HOQ32az1EicUhk7v3aiNs=
 X-Developer-Key: i=quic_bjorande@quicinc.com; a=openpgp;
  fpr=05DE03CC5F35EA4F0966D5250B1F393F0D99ADC5
 
 From: Bjorn Andersson <quic_bjorande@quicinc.com>
 
-The SC8180X platform has a EPSS block, add a compatible for the SC8180X
-platform.
+The Qualcomm EPSS CPUfreq binding requires a platform-specific
+compatible, add this.
 
 Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 ---
- Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/boot/dts/qcom/sc8180x.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-index 1e9797f96410..24c02ee33266 100644
---- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-+++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-@@ -36,6 +36,7 @@ properties:
-               - qcom,qdu1000-cpufreq-epss
-               - qcom,sa8775p-cpufreq-epss
-               - qcom,sc7280-cpufreq-epss
-+              - qcom,sc8180x-cpufreq-epss
-               - qcom,sc8280xp-cpufreq-epss
-               - qcom,sdx75-cpufreq-epss
-               - qcom,sm4450-cpufreq-epss
+diff --git a/arch/arm64/boot/dts/qcom/sc8180x.dtsi b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
+index 067712310560..1f103cb54f99 100644
+--- a/arch/arm64/boot/dts/qcom/sc8180x.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
+@@ -3733,7 +3733,7 @@ lmh@18358800 {
+ 		};
+ 
+ 		cpufreq_hw: cpufreq@18323000 {
+-			compatible = "qcom,cpufreq-hw";
++			compatible = "qcom,sc8180x-cpufreq-epss", "qcom,cpufreq-epss";
+ 			reg = <0 0x18323000 0 0x1400>, <0 0x18325800 0 0x1400>;
+ 			reg-names = "freq-domain0", "freq-domain1";
+ 
 
 -- 
 2.43.0
