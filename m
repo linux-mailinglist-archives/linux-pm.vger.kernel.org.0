@@ -1,211 +1,183 @@
-Return-Path: <linux-pm+bounces-8186-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8187-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51E2F8D0676
-	for <lists+linux-pm@lfdr.de>; Mon, 27 May 2024 17:45:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8A5D8D0692
+	for <lists+linux-pm@lfdr.de>; Mon, 27 May 2024 17:50:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7523C1C223C8
-	for <lists+linux-pm@lfdr.de>; Mon, 27 May 2024 15:45:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 51D071F227C3
+	for <lists+linux-pm@lfdr.de>; Mon, 27 May 2024 15:50:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 302FA61FD8;
-	Mon, 27 May 2024 15:45:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE17561FDB;
+	Mon, 27 May 2024 15:50:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="IwehchWC"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NlCrMjwQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2068.outbound.protection.outlook.com [40.107.94.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CCE026292;
-	Mon, 27 May 2024 15:45:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.68
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716824736; cv=fail; b=Rd44YEppg6NB8xMPXWft/iu263XqHtyXEb9qchh9nIGV7T1QTWEa0PUnRKsGqX55I77kQNvhsqBLTimyEUa1gRjfpFBr6hhXhPIhS3j9E1Baq7mXCo6CaijSqITMpY5U8UGxKNbkqBCnFEX+jHkgu1cvm1dDf9EiWnoFfBdPpeY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716824736; c=relaxed/simple;
-	bh=5u09ktOlF8cTqlzFKS5PzPp7j+CwC6s7Vw/RSBuO4m8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=hoahKGXWUCkvVjKpVXTZ3eAWRDDKoxaxFvXw6RYf8KvDghW0xi81pZ8k1793+Nm1Rgu5u8N4QRsxUNTbBNdMRTGraNZjMDXY0ZxAzLLDdDPdElQ3YIi4ixfdg4p+iB38SHqWh2Baz9mc01T0B/WDPG5AiYuZPHHw79Za65UEDj0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=IwehchWC; arc=fail smtp.client-ip=40.107.94.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XfnfIKley2Z1HSejidh7x6pJ0HRP3rRfvZ9Z8k/YV3Esi61el75SCZEC/44ykiatbCMgbzDJawqMh+rGywpTpK4CaC9bppF1U0direkqOOkmorsRY0BVJyfv3gvP8uf8GVWJK732rCARdiw0pbRYYNMSHPhPeZV6wIQ2/TxIPXoHH5K6H173PkFmHKwyMa1gcJLnICfjFUX94rHLnDjOUoQqkNrd7N17oxWv/r7izkisZdoVzPa8ky5d3quBOk80Yay/z87B1S0jSRXRCsFCLWlBrgdP0VtZ4QpnXtIggEHb2LjKKZVyGLKkGTsxQ9R5WGplGjTgJWJSynTHncB6fw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BX0gdfU4UYutgW7hyuwEsIyvqaZdThbGw33r+PJHkGg=;
- b=RQKqzLB67N2He/VC2r6A5szmQw2BCnxAeeWKge9gdr6U2Kgl5ngbVL0jm3uVphJJ54jnH6NjrANwpjt+zAx7vcXaBGDGyeyi6PLvjlQ4biODoBff24Lo8dNhR3TZlC7rt7u0rrTLb1kbrlTT39KCe2/2fHOyD/rbX1rFK3/HUdfTtqj9FJcqpPqfmYDn4xJpkzlSOqF9Z2TQdBYBcpTNogmDQ62JonMNp0c5cU+2RG38VRjrvdHyPhKHN5b64E43Y+744CxktJtpTtQ5unvFHrJMILkE40VvuL6ThidlLZuGmuJfqmJZFhCLWD8TeatKM8QiD9IqXA+wXQzbMe6ojQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BX0gdfU4UYutgW7hyuwEsIyvqaZdThbGw33r+PJHkGg=;
- b=IwehchWCL3CGdbt950Ij/l5cTK8dNlBnSI9E+LN5ZapfmOT6d5CkVPeJL1EyHbXro0OWUlpo8Wm8bzIuwyf03qzdfMyaD/w8Duy7praMvFG58UvN2LEAfBDQ/ZOWwbNDuvlZ3lf5GU6dqzLnVLlwsTU6ghjlKQ417pqo7mZW38A=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS7PR12MB8252.namprd12.prod.outlook.com (2603:10b6:8:ee::7) by
- IA1PR12MB7520.namprd12.prod.outlook.com (2603:10b6:208:42f::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7611.29; Mon, 27 May 2024 15:45:32 +0000
-Received: from DS7PR12MB8252.namprd12.prod.outlook.com
- ([fe80::2d0c:4206:cb3c:96b7]) by DS7PR12MB8252.namprd12.prod.outlook.com
- ([fe80::2d0c:4206:cb3c:96b7%4]) with mapi id 15.20.7611.025; Mon, 27 May 2024
- 15:45:31 +0000
-Date: Mon, 27 May 2024 21:15:29 +0530
-From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>, rafael@kernel.org,
-	ray.huang@amd.com, viresh.kumar@linaro.org, ananth.narayan@amd.com,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Perry.Yuan@amd.com
-Subject: Re: [PATCH] cpufreq: amd-pstate: Fix the inconsistency in max
- frequency units
-Message-ID: <ZlSqmYDaPNE8jybO@BLR-5CG11610CF.amd.com>
-References: <20240527051128.110091-1-Dhananjay.Ugwekar@amd.com>
- <929aec0d-690b-4277-90b0-d0b4adb437d3@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <929aec0d-690b-4277-90b0-d0b4adb437d3@amd.com>
-X-ClientProxiedBy: PN3PR01CA0096.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:9b::13) To DS7PR12MB8252.namprd12.prod.outlook.com
- (2603:10b6:8:ee::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C51317E8EC
+	for <linux-pm@vger.kernel.org>; Mon, 27 May 2024 15:50:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1716825012; cv=none; b=erDyqLiRlN30fzOzSkGXewfjsefgdajBYFKQgRtiMAqqlFXK4q2fMByDZRDWDdlRXDpgObCd/yhQKJrVA7zEwmavmScRKL0JT7Js4JUNne6vTLXP6KgWg/Zlb8oOvGg9IkgST7lXqpo9H4JYvAtNmp5fDQNpHK6V8kaW1WvYAt0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1716825012; c=relaxed/simple;
+	bh=QEVBEBeoLu1qRUKBYjQiNumSKenUDGegDS+c+15cKuA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uppgxhv4is5j7jLwRUmjOYFzL7CBrleR2R5zJqqkkQ292UAZnOswmeoqk7D0Z9i/OPwonKfvZgy6d8vguYQjk775Z1MQLfTbG9MFHMvW6f55MDLaI+UnxlGowdTMjBfaQnwOv3T0u+5IwG3ssbEf9voBtmVdsSiQYVknuP7ZOys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NlCrMjwQ; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4201986d60aso45885355e9.3
+        for <linux-pm@vger.kernel.org>; Mon, 27 May 2024 08:50:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1716825008; x=1717429808; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vRTFXuzZ+rWg2zq6mq+6BNpvfeAhX7RSk5XZvpGlJNY=;
+        b=NlCrMjwQq5KMbFS4LmvgEVmBke5G6rQ8h0yIxUouBiEthXluSXbUIj57k2fdlom9kU
+         +RDZG0Z5L3WC050QFJuicQOdSE6jMJpD+9htgt0+gD9Xf9bCXI/v+b0AYNUwfnNYBiSI
+         QibXDDMYQGW0YmP2vvFsMXQXlxMNt2qXMO+pl0+Bogtfg0LfwhOX0AIACFvzkGeTrNzM
+         Be89/IZzxDt7M8VaK84ci5J9eUwe5QHZl4Ur723Z4Hm3DyUPmD63SqvJrMM/KiNFmiC9
+         Bk/BG60Wet0DUTXBiLZUhz7DC6cvqwqTL7RHj48Lmhv1JPibVV4392kTNcqaz4Am9fEh
+         x6vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716825008; x=1717429808;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vRTFXuzZ+rWg2zq6mq+6BNpvfeAhX7RSk5XZvpGlJNY=;
+        b=YqRMRY65gQtBeVIaMKQT7rxW5jWkA6EhZp4RvMZ5LyVHlOuc/gt9uk6tj9NGHeA0rA
+         vfgiDPXta7jwy3FIe3XoL1R828NfiKfWpDIB875w0lXj1qRwDD5z5apsvbTHLYDr7Xsw
+         gvcqmusKVFayY6UEHPx/26dYdii+S0aODCR92fpVAWdLdxiUdx9EebhhYjX7N5/IYSq9
+         WdmDp7t/j1DET/h3cORcBEBzncxmSXPpLTz5Uwn9tGFjgnmuRdMeaYs3xyGbekVjsmEC
+         cgW+KU6fdOiQNuAypn0/9QG2YCkm9BioKtIKPRkta63s2Hv7Xb+i/ziNDxvHbyw/2aKV
+         P/Fw==
+X-Gm-Message-State: AOJu0Yx3szXOTlAJ59foBX6wjhWYN0A8Um424sDBV8yBOQazn6VHblXj
+	7CMCfWlMMatksGkPhk6VcxTOIA1BI5zKEAoYo+HFVU4B7CSL1elvgXq5jnv53zRE3xXVoeHCBsJ
+	CnFI=
+X-Google-Smtp-Source: AGHT+IHXRGef1ol9MvY7YSEgTiE7wg0hIRGUYCN1bP2hyXZkM/8YaLQoqonMAkN25HJi5u4F8XX9yw==
+X-Received: by 2002:a05:600c:6a82:b0:41b:fad8:45de with SMTP id 5b1f17b1804b1-42108a0032dmr69821095e9.30.1716825008413;
+        Mon, 27 May 2024 08:50:08 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-421089707b7sm113154715e9.15.2024.05.27.08.50.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 May 2024 08:50:08 -0700 (PDT)
+Message-ID: <084eb643-f410-4e66-9561-4dcf5924dab7@linaro.org>
+Date: Mon, 27 May 2024 17:50:07 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB8252:EE_|IA1PR12MB7520:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1a7969f2-3124-4aa1-b3bc-08dc7e640a57
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|366007|376005|1800799015;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?n3x3q+x3NEkY8zhXKXAYc86AhY7r5a7o0FBnocOsU3G6b4Uvl8nDdnTd8wCT?=
- =?us-ascii?Q?rJJNtwKW+MG5zj4ATH1vv7pG38y+AAoLeoKAWgrA0Jd7fJpPYLm8HPEKrnIF?=
- =?us-ascii?Q?JqClEhiRAuakFB2AkgjBrbjVwVGlZ7ehQnEcL8wN23zk2OuE4PXny0GD7/Ro?=
- =?us-ascii?Q?SiENuB26Aa12Sc5aqDWIL9+cv5dktHukOQfpbJNhGTg7P/lNE4+Htr5UdrbP?=
- =?us-ascii?Q?vcA+BJuRjqHKb+Yih3Oa4b9g4T3W4bWHUHAxB1MfnKjSLuZcjIwsEF+Svoff?=
- =?us-ascii?Q?gRlgwVXhYOo1cjBISoqrjfLFR5+q8/b4HpO0DxwlRrNGSfMPLyaK3RykStzF?=
- =?us-ascii?Q?Egg1FMEYY1Px60MeUivptP04AfLtkjELyox7Clybt/5RVXMMoZ2+df4CB4hw?=
- =?us-ascii?Q?38i65EZKw93IZVA4koXsz6UdvptiyRwvn9et6LrYtVc+LC+uqHRNYos+RT4J?=
- =?us-ascii?Q?vQ8PoA+hb+Wwpr9EqIRfa030CmJnuotD9+uIYQ0BEjr6W6PG/FzUSYPAEOS3?=
- =?us-ascii?Q?edBTyJRk+bzpsfeMW7IleV9XBsoO1yFKmeIpCDd5ErIfbvD6tDDCXjy5udyh?=
- =?us-ascii?Q?Pzv7NFNbS7EDslI9ws/7Z5EQ0r0yu+rcl5RPpBZzmP3yNxjUdk8nwscVBOh1?=
- =?us-ascii?Q?FQHZ+i8mvtphrYsZtazoKGTG8a9It17Ra220lojTvCAqtLvAU4AhUxYzzLVw?=
- =?us-ascii?Q?gW5TcXybVnZvSxd8y+MkxvuO4zP7Gx0Kyeb8Wq8uJPNfGmAaupRuCtn1pJ7K?=
- =?us-ascii?Q?xSmHA3rDzyb9sStSrn/ZPXqVMz6ptx4CG48ooS73Ph8QM/7RBJZ6AkvDHAxY?=
- =?us-ascii?Q?2mFqQ3pLh2tTV7r7BygW/kiWwCzog0F89HLLjIqLW/Yzc7165/WyQFpqTQ0r?=
- =?us-ascii?Q?FbJBQaG7TrskZZECavapY/9Dkt9SaL7+CuUZ0lu/NdoqNpCM7XEEkKmMO7+G?=
- =?us-ascii?Q?7c2hyZzcM1BxE8AHU7LJ4P78n4Z5CSP0ffA9nDZs/r+TGos2TCefc/P9Nhop?=
- =?us-ascii?Q?tQdFkoGcYXj6TMWZuSj8YhnaPFKLiq+ksfzEMmoeca3NToelgLFq7A4PlaaZ?=
- =?us-ascii?Q?TOmdQgZfhGH9+kuM09eUHLK8HSWZx05S++kH7XN+4/w21zORNz11u44zhNhY?=
- =?us-ascii?Q?V7ICwspUfimo6f0GxTCYHx4hboeAVowsOvWtE2Y7zci6xiaVoc9c9LkuatUn?=
- =?us-ascii?Q?4Xuw2OST8DR4EQfQAdpV+1BlJCa1Mvz+MZLb1mF6vQ+BzqJRvcUaRubmjHbU?=
- =?us-ascii?Q?X7NQx8VGeRy6eZhX+nPoaPvK39X1Xgyv4S+7W4mHSg=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB8252.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(376005)(1800799015);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?WozrBNoG9EdkR/KrwkvJbF0OGUsLPxll9o2FlWA7PHWHobfIc/owYtWs0+v9?=
- =?us-ascii?Q?uYOOuq89mbjhoGkcor6wmFNtyRAuiFSpF7qrT4KOhXX5AZ+SZbwuGBJjeTsi?=
- =?us-ascii?Q?CJHKDoo5ddx6pFl+ymVGUEdcDfNcI9x3DqRdrEaXFAHbZjPfSTwHcLpMA/B0?=
- =?us-ascii?Q?eCtarnUAaPJyAXmK+EdHYsjXfqma9gCFv7ilVp2+vgBJgeCvbv9Ysz7eq7YK?=
- =?us-ascii?Q?va6cMlxJHmL3JQBvwHxU5ChqtuhKXIOYSHQqprKhXRX9jtmSrN6sOR7XMjUO?=
- =?us-ascii?Q?z3GN6NG3Ui0YfgHXeWH+5QsKFXSN8GmeCmFxoTwJ4VbwsnJyfcdf4gBzs6aH?=
- =?us-ascii?Q?i81YfVkdOPv31llZ5VHnp3SHvzcbOnX3079lHezHoFxMRGg+/5tFhc4l5N70?=
- =?us-ascii?Q?eo0QzkDzJKg80sFiL8+ITnf8FZkrq4KY1igIIGfXqF+e8OLPOOvNfzraBNcX?=
- =?us-ascii?Q?EVbetRyzXutoBHXkveUjBOCVoRMgnP6B1pbAYjh8zY9k+q6gOcnJEeNpax3g?=
- =?us-ascii?Q?W4hRo3Q6vn7FbCsjpbGw4ghTq+kcDac31CR2Il16G6WaCdj5R2/UFdXk2OoM?=
- =?us-ascii?Q?8xIyFvVlvRY9StC3gJ6BWPkrkcWMzXlgb6aCykqA9KTptDZ9uc+QbVRNYc+N?=
- =?us-ascii?Q?EIeU+XxB2WWciW6W3j/vFT15f/BR0/32ITvc6n6TFgyVWgyNifZc2K9YAO5P?=
- =?us-ascii?Q?m5uzTx6xbBbEIPkJ4ROEo6TBt6uYeVrNubAzu4g8iM6dN+64XZzqrwICAtO/?=
- =?us-ascii?Q?JsRg2bDg4/RFcMiP319rRP5UNm8atWkxSgmOwjyqT9WZR3hldiJzCYXkvjYA?=
- =?us-ascii?Q?Yi/X01SlCTOWzfqf9Hs7xTw5JqcJjW04qdHBdSbBug2sh3hPUouEL4DnmYd+?=
- =?us-ascii?Q?APGehVxrddUOILtyRwc2ROfX/NgwbcdDF+kdBxXeFg8m7FCy1Uncd2JcJ1kO?=
- =?us-ascii?Q?qCfcV4P8bB/Cwe1UeBr8IV6IsxfvctItPT0g0Liq2n1GfYi1w/BrcStwJ9pj?=
- =?us-ascii?Q?fvvYQO5xQMLnjFE+/fnjA4SbDN130fTPqoD/Dr9asgVtaVjDsMHTTIatFVg0?=
- =?us-ascii?Q?fN4S7RSlujSrcUtUJ2jizwCEns7tK0BVt7Bv+tfxvdmQOJRfEaIdneRo0gEh?=
- =?us-ascii?Q?qbm7ARAwbYwsZbqAh3i0/V9CWC8QQRuB3beOVACWJMH6Tx1tTNTa9o8NRh8F?=
- =?us-ascii?Q?QPL04hDbL0lcFgj2DjRWA6yz+DnPtsjtfRqJ2kzmUSBgTK8y843m36YRucBk?=
- =?us-ascii?Q?SkXXj8NuXWBTJ+lHaDAb6yCqnCK5SC0J9gH7waHfHtAKht7NDwEuZI5OteGl?=
- =?us-ascii?Q?ho/umeYgOmAxIefwSCVDdcwPcZR2exMLiESZ+3bf6raEnUX9jmb8H6Vs/UL/?=
- =?us-ascii?Q?W0Z8LcPscnDQUuTi4FPcEmOQH+G4lUvojiBGxR/UPP/Rz31zOg3GZ1mnv08u?=
- =?us-ascii?Q?TqEept6Kdr6ay8IqAFsc7MakeQsbQSMqu2tcgyfwxej7Rguel/aTLX4+E5gu?=
- =?us-ascii?Q?tceBFGfhPm2+3SWPuxOdbdteAqIt2OL4u5Qim+rVhqU4W5F+7hkRn/C6TJd9?=
- =?us-ascii?Q?YGfllxJ146mstiLTx/0UqB0Z1z7tUNqKIFYY41a1?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1a7969f2-3124-4aa1-b3bc-08dc7e640a57
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB8252.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 May 2024 15:45:31.8624
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: S8Bfe6hTlTwoX4agAIwYpi6qzIotJ+Rf6Vzmh5B/zB1iRZPEPaiVs9mj1BV4QA0pb6PXViMcxR3a8yz2X5v7Xg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7520
+User-Agent: Mozilla Thunderbird
+Subject: Re: powercap ABI clarification
+Content-Language: en-US
+To: "Zhang, Rui" <rui.zhang@intel.com>,
+ "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>
+Cc: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+References: <59e5a949-ef20-4f11-a0a7-247c457f1dd3@linaro.org>
+ <9c97e4f8549744b1e2464a3b632f0716514ff55c.camel@intel.com>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <9c97e4f8549744b1e2464a3b632f0716514ff55c.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+On 27/05/2024 16:19, Zhang, Rui wrote:
+> On Mon, 2024-05-27 at 14:55 +0200, Daniel Lezcano wrote:
+>>
+>> Hi Srinivas,
+>>
+>> the powercap ABI exports some constraint files. Even if I suspect
+>> their
+>> semantic it is not really clear how they should behave.
+>>
+>>         │   ├──constraint_0_name
+>>         │   ├──constraint_0_power_limit_uw
+>>         │   ├──constraint_0_time_window_us
+>>         │   ├──constraint_1_name
+>>         │   ├──constraint_1_power_limit_uw
+>>         │   ├──constraint_1_time_window_us
+>>
+>> Are the constraints controller specific? I mean, each controller
+>> defines
+>> their constraints? Or is it supposed to behave the same way whatever
+>> the
+>> controller?
+> 
+> Currently we have three controllers, MSR RAPL, MMIO RAPL and TPMI RAPL.
+> They are actually the same feature (RAPL) via different register
+> Interfaces.
+> So their behaviors are consistent.
+
+They are consistent because they are RAPL based but there are more 
+controllers, like DTPM and SCMI.
+
+Are the constraints semantic defined or is it up to the backend to 
+decide the behavior ?
+
+>> Is the time window giving the duration of the power_limit_uw
+>> constraint?
+>> Or is it an average power during this time window?
+> 
+> The average power during this time window.
+> The constraint is always effective after we set it.
+
+Thanks for confirming.
+
+>> What is the purpose of min|max_time_window_us?
+> 
+> It is the upper/lower limit for users to set a meaningful time window.
+
+I'm not sure to get it.
+
+For example, on my laptop, there is:
+
+constraint_0_max_power_uw = 15000000
+constraint_0_power_limit_uw = 200000000
+constraint_0_time_windows_us = 31981569
+constraint_0_name = long_term
+
+There is no constraint_0_max_time_window_us
+
+How to interpret this constraint 0 ?
+
+What means "long_term" ?
+
+Is it possible to give an example ?
 
 
-On Mon, May 27, 2024 at 09:40:21AM -0500, Mario Limonciello wrote:
-> On 5/27/2024 00:11, Dhananjay Ugwekar wrote:
-> > The nominal frequency in cpudata is maintained in MHz whereas all other
-> > frequencies are in KHz. This means we have to convert nominal frequency
-> > value to KHz before we do any interaction with other frequency values.
-> > 
-> > In amd_pstate_set_boost(), this conversion from MHz to KHz is missed,
-> > fix that.
-> > 
-> > Tested on a AMD Zen4 EPYC server
-> > 
-> > Before:
-> > $ cat /sys/devices/system/cpu/cpufreq/policy*/scaling_max_freq | uniq
-> > 2151
-> > $ cat /sys/devices/system/cpu/cpufreq/policy*/cpuinfo_min_freq | uniq
-> > 400000
-> > $ cat /sys/devices/system/cpu/cpufreq/policy*/scaling_cur_freq | uniq
-> > 2151
-> > 409422
-> > 
-> > After:
-> > $ cat /sys/devices/system/cpu/cpufreq/policy*/scaling_max_freq | uniq
-> > 2151000
-> > $ cat /sys/devices/system/cpu/cpufreq/policy*/cpuinfo_min_freq | uniq
-> > 400000
-> > $ cat /sys/devices/system/cpu/cpufreq/policy*/scaling_cur_freq | uniq
-> > 2151000
-> > 1799527
-> > 
+>> Can we set several constraints or are they mutually exclusive?
 > 
-> Cc: stable@vger.kernel.org
+> My understanding is that they can both take effect.
+> "Two power limits can be specified, corresponding to time windows of
+> different sizes. Each power limit provides inde-
+> pendent clamping control that would permit the processor cores to go
+> below OS-requested state to meet the power
+> limits."
 > 
-> > Fixes: ec437d71db77 ("cpufreq: amd-pstate: Introduce a new AMD P-State driver to support future processors")
-> > Signed-off-by: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
-> 
-> Acked-by: Mario Limonciello <mario.limonciello@amd.com>
+>>
+>> Is there any documentation describing with more details the ABIs?
+>>
+> Interesting, I just found this one,
+> Documentation/ABI/testing/sysfs-class-powercap, should we move it to
+> stable? Other than that, I don't know.
 
-Acked-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+Yes, I've seen this documentation but it does not really help. It 
+describes the ABI but fails to give some details. May I refer to the 
+RAPL documentation to understand the powercap framework ?
 
-> 
-> > ---
-> >   drivers/cpufreq/amd-pstate.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> > index 1b7e82a0ad2e..cde3b91b4422 100644
-> > --- a/drivers/cpufreq/amd-pstate.c
-> > +++ b/drivers/cpufreq/amd-pstate.c
-> > @@ -669,7 +669,7 @@ static int amd_pstate_set_boost(struct cpufreq_policy *policy, int state)
-> >   	if (state)
-> >   		policy->cpuinfo.max_freq = cpudata->max_freq;
-> >   	else
-> > -		policy->cpuinfo.max_freq = cpudata->nominal_freq;
-> > +		policy->cpuinfo.max_freq = cpudata->nominal_freq * 1000;
-> >   	policy->max = policy->cpuinfo.max_freq;
-> 
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
 
