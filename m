@@ -1,136 +1,186 @@
-Return-Path: <linux-pm+bounces-8151-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8152-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E751D8CFDE3
-	for <lists+linux-pm@lfdr.de>; Mon, 27 May 2024 12:10:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 742C08CFE1F
+	for <lists+linux-pm@lfdr.de>; Mon, 27 May 2024 12:30:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 238601C206A2
-	for <lists+linux-pm@lfdr.de>; Mon, 27 May 2024 10:10:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1275B1F2340E
+	for <lists+linux-pm@lfdr.de>; Mon, 27 May 2024 10:30:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24CE7DF60;
-	Mon, 27 May 2024 10:09:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4251D13B29B;
+	Mon, 27 May 2024 10:29:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ntTR+4Gc"
+	dkim=pass (2048-bit key) header.d=trvn.ru header.i=@trvn.ru header.b="ridocHYy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3A5C13AA44
-	for <linux-pm@vger.kernel.org>; Mon, 27 May 2024 10:09:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7036113D281;
+	Mon, 27 May 2024 10:29:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.87.146.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716804598; cv=none; b=Fpk7TOxm/9rmtNgvdmXlbBinBKpmZ2EBGa9dtN9wfAoXZctuVYJm0+P6FqVsiIxiluNrh0SpYW3faW9eC28ciUaBNAeIe2SUsMBOMst2ymz6KmnFCiSXiOXr+lw6PmcknAdti/h3T+pFQwbPGAyNj9JwszsoZx2EEII7mW1+itg=
+	t=1716805746; cv=none; b=OSsvU8tBvfoDNniP2ZOqoWdE8ZPdcgtDZfu8YDRC37kcbtRe084CRI5kK9N70o0dRToG8qMJXR9Tw5dlwwVbNMQYnypTD3Bo5BPZ43NT4w/M1kyZZczW0X0FrBKGZ8ozdx1e0pEEVuZNSLd0eeicGTAht/XFymNQzpgmtDaR+3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716804598; c=relaxed/simple;
-	bh=S4C6X63LbSw8re51khQi6Qd1GSIV56U1GMnF3wp12ng=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=s96qss+2OIhXZEDjYH4vWChzJEefgUNKgFB4MLqdieP/VgoqF1AJ99rdyvmATtqtU2qcryCLRCZhdZOPBY5zxZ++yObqt/ShW4gXrCF+3ckFjFGctBYHem+fgHIfpAUgPee9Kk72nKt1GfwFa9JO90tMVm5nYie/P0RoNYDXCj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ntTR+4Gc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7B364C4AF08
-	for <linux-pm@vger.kernel.org>; Mon, 27 May 2024 10:09:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716804597;
-	bh=S4C6X63LbSw8re51khQi6Qd1GSIV56U1GMnF3wp12ng=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=ntTR+4GcNIN/1HLOtVkilc0be8uFLGnhHQPfXd5tZOy4tlwFksEqmwOrJq7HapZA+
-	 /gSwbpQueuVXfWgw6w9Uc/NTC7/GXU81aips+ym3piopqJ0LxnqZuI26RTa3JVYuek
-	 l767VG++okmaKUKMqbgq6OSLlNGmGC4pOjgkXs0b2vQ9Qz4YuafzvEW0HF5AwqvSgt
-	 3QSbZyMTfzlSuQxrEWcjkP39cJM2DD9QVDTRNhZ/uujy28YxV05CMSQQS2pfRH/Pv9
-	 eCJbjcixT70G88TBFJjK3uvf+ZsJ6SHmb5niwgXqnk8WbeytmJXVYE8Fhyn95iDSON
-	 T5E+mSdf3vxpQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 70F3AC53BBF; Mon, 27 May 2024 10:09:57 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 218686] Fail to set energy_performance_preference of amd
- processor on asus ga403uv
-Date: Mon, 27 May 2024 10:09:57 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: Perry.Yuan@amd.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: DOCUMENTED
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218686-137361-xGEPmup2yI@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218686-137361@https.bugzilla.kernel.org/>
-References: <bug-218686-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1716805746; c=relaxed/simple;
+	bh=ZAOnZNIPCZ/gjfi2EqP8pXMwOx3RdNya75v5ylcZQ6c=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=TzUkMy8KbiZqGKPaBsljkj4zUVQ6zbSgFqpcN8INnsSQX316PJny4+iP6hD2FPKlm3ZRcqcQVc1Byr59WOqnqK7OEeoDd5DU4AgVwT66dufy84LcRspznnXpMH+LSe/j+y6oQs/0iArj9rCB9flonL0MxqHkkGw5ZLZKk2sV41Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=trvn.ru; spf=pass smtp.mailfrom=trvn.ru; dkim=pass (2048-bit key) header.d=trvn.ru header.i=@trvn.ru header.b=ridocHYy; arc=none smtp.client-ip=194.87.146.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=trvn.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trvn.ru
+Received: from authenticated-user (box.trvn.ru [194.87.146.52])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+	(No client certificate requested)
+	by box.trvn.ru (Postfix) with ESMTPSA id 283C2401B5;
+	Mon, 27 May 2024 15:21:31 +0500 (+05)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
+	t=1716805292; bh=ZAOnZNIPCZ/gjfi2EqP8pXMwOx3RdNya75v5ylcZQ6c=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ridocHYydGXxMzSw/4pmPPWYPapNbiLLDE25aOUH1yhRhqE9IxNCaygl7dmOhLvCu
+	 kfM7xS/lbMNMw/2UJ4se499cJTUropO7SxQVqXnkeEQlQxRyp/9VTqXzg16bnEijfs
+	 IHYiHStZPIA1pcEPsCINtqdueHIA969sfhk+BuCikO7BTUkWycZCY7+n8gtorHnkX2
+	 eP+FnETfN6HL4lc3uPpUFXCKQS/zMBU9tgpYlkXroBji92nHZAhM9HryJhvB71Gki/
+	 FZJx0S/x/EDP/GwgU+gPPxFGMOAJPq1Y2u8OF9T7RO7heMsl0piZ0PpjYNH+vqNXFf
+	 +sKjYJVMEd4Rw==
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Date: Mon, 27 May 2024 15:21:27 +0500
+From: Nikita Travkin <nikita@trvn.ru>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, Hans de Goede
+ <hdegoede@redhat.com>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?=
+ <ilpo.jarvinen@linux.intel.com>, Bryan O'Donoghue
+ <bryan.odonoghue@linaro.org>, Heikki Krogerus
+ <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Konrad Dybcio <konrad.dybcio@linaro.org>,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org, Krzysztof
+ Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v3 1/6] dt-bindings: power: supply: Add Lenovo Yoga C630
+ EC
+In-Reply-To: <20240527-yoga-ec-driver-v3-1-327a9851dad5@linaro.org>
+References: <20240527-yoga-ec-driver-v3-0-327a9851dad5@linaro.org>
+ <20240527-yoga-ec-driver-v3-1-327a9851dad5@linaro.org>
+Message-ID: <f05953c74f2bf58256306eb3d554ae0b@trvn.ru>
+X-Sender: nikita@trvn.ru
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218686
+Dmitry Baryshkov писал(а) 27.05.2024 15:03:
+> From: Bjorn Andersson <andersson@kernel.org>
+> 
+> Add binding for the Embedded Controller found in the Qualcomm
+> Snapdragon-based Lenovo Yoga C630.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  .../bindings/power/supply/lenovo,yoga-c630-ec.yaml | 83 ++++++++++++++++++++++
+>  1 file changed, 83 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/power/supply/lenovo,yoga-c630-ec.yaml b/Documentation/devicetree/bindings/power/supply/lenovo,yoga-c630-ec.yaml
+> new file mode 100644
+> index 000000000000..52a302850743
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/lenovo,yoga-c630-ec.yaml
+> @@ -0,0 +1,83 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/supply/lenovo,yoga-c630-ec.yaml#
 
---- Comment #55 from Perry Yuan(AMD) (Perry.Yuan@amd.com) ---
-(In reply to xiaojian.du from comment #53)
-> (In reply to Dacian B from comment #52)
-> > Hello Perry, Mike,
-> >=20
-> > So, i've stumbled upon this thread regarding the amd-pstate driver and
-> after
-> > hours of bashing my head against the wall, i can confirm that i face a
-> > similar issue, but in my case its even worse since i use a chinese lapt=
-op
-> > (so bios updates are kinda out of the question...).
-> > I dont want to upset anyone, but to me at least AMD kinda dropped the b=
-all
-> > on this CPPC thing, since it should (at least in my opinion) be enabled=
- by
-> > default and not up to the vendors.
-> > I will be following this thread if anything comes up...
-> >=20
-> > Kind regards D
->=20
-> Yeah, totally understand you, but vendors has their process to release th=
-eir
-> production BIOS, it takes time.
-> Like, you know, diff vendors will cut off their BIOS fucntions to deploy =
-on
-> diff models of baseboard.
+Should this binding join aspire1 one in bindings/platform ?
 
-(In reply to Dacian B from comment #52)
-> Hello Perry, Mike,
->=20
-> So, i've stumbled upon this thread regarding the amd-pstate driver and af=
-ter
-> hours of bashing my head against the wall, i can confirm that i face a
-> similar issue, but in my case its even worse since i use a chinese laptop
-> (so bios updates are kinda out of the question...).
-> I dont want to upset anyone, but to me at least AMD kinda dropped the ball
-> on this CPPC thing, since it should (at least in my opinion) be enabled by
-> default and not up to the vendors.
-> I will be following this thread if anything comes up...
->=20
-> Kind regards D
+Nikita
 
-CPPC is enabled by default on most of the systems as I know, asus ga403uv is
-using an older version BIOS PI which not have enabled CPPC yet, AMD has
-requested vendors to upgrade BIOS to new version. Before the pstate driver
-enabled, you can load acpi_cpufreq driver as short term solution.=20
-
-Perry.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Lenovo Yoga C630 Embedded Controller.
+> +
+> +maintainers:
+> +  - Bjorn Andersson <andersson@kernel.org>
+> +
+> +description:
+> +  The Qualcomm Snapdragon-based Lenovo Yoga C630 has an Embedded Controller
+> +  (EC) which handles things such as battery and USB Type-C. This binding
+> +  describes the interface, on an I2C bus, to this EC.
+> +
+> +properties:
+> +  compatible:
+> +    const: lenovo,yoga-c630-ec
+> +
+> +  reg:
+> +    const: 0x70
+> +
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 0
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +patternProperties:
+> +  '^connector@[01]$':
+> +    $ref: /schemas/connector/usb-connector.yaml#
+> +
+> +    properties:
+> +      reg:
+> +        maxItems: 1
+> +
+> +    unevaluatedProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |+
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c1 {
+> +        clock-frequency = <400000>;
+> +
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        embedded-controller@70 {
+> +            compatible = "lenovo,yoga-c630-ec";
+> +            reg = <0x70>;
+> +
+> +            interrupts-extended = <&tlmm 20 IRQ_TYPE_LEVEL_HIGH>;
+> +
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            connector@0 {
+> +                compatible = "usb-c-connector";
+> +                reg = <0>;
+> +                power-role = "source";
+> +                data-role = "host";
+> +            };
+> +
+> +            connector@1 {
+> +                compatible = "usb-c-connector";
+> +                reg = <1>;
+> +                power-role = "source";
+> +                data-role = "host";
+> +            };
+> +        };
+> +    };
+> +...
 
