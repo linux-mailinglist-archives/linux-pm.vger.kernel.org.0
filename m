@@ -1,75 +1,75 @@
-Return-Path: <linux-pm+bounces-8133-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8134-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7ADDB8CF99A
-	for <lists+linux-pm@lfdr.de>; Mon, 27 May 2024 08:56:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C72338CF99E
+	for <lists+linux-pm@lfdr.de>; Mon, 27 May 2024 08:57:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F7BC1C20F32
-	for <lists+linux-pm@lfdr.de>; Mon, 27 May 2024 06:56:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F21D28128C
+	for <lists+linux-pm@lfdr.de>; Mon, 27 May 2024 06:57:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48DF5134B0;
-	Mon, 27 May 2024 06:56:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9DB817552;
+	Mon, 27 May 2024 06:56:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nygGisJo"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WhgABS/M"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A532D17BCA
-	for <linux-pm@vger.kernel.org>; Mon, 27 May 2024 06:56:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1648528379
+	for <linux-pm@vger.kernel.org>; Mon, 27 May 2024 06:56:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716792964; cv=none; b=rJFw5nA9r9uLvfGTZj2wqcFXZyQxcMbgMsFpqTWnZ2v8MRCJ9/6HivpLiQ5idnVwfm5whU1Io7S9nvdR3Tpl46SqIOnvUAO3oLK9N//dy0tE1FUTIKABU9Akg418KBd1gbIy6TeHfLv3r3PoNAbEC/U3OkWCj0jI0AHPVaWmyJ0=
+	t=1716793017; cv=none; b=quKZOrTXAtrwRpjo84b4uJFqRsOmpN8ivNpKlASu72NZ/zKsYIs4jqwWcGtV5B+RBOjE0PmJoDpDZUXAEmQoAnWLZwIwXl39IcRstrB1VSBXckW8TfAqu2UXTO/ysssv9E86dHUFyaWvvlr9V8zxIYW9cYbT+iihugBJ0aOGLD4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716792964; c=relaxed/simple;
-	bh=61H+vlKkZBEfdQTaQTfeY9m5+DEAKkGHLIuZYqlPlPw=;
+	s=arc-20240116; t=1716793017; c=relaxed/simple;
+	bh=Ip3HyV+TwixV9ZJHQtqhXEVzHgpB9zQHR+NAaT+7PG8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=su0eJki+ZnvTuD67SscplEuS6ZdbB6hQOHnjumffXWc2wlU42Sb+HMY3daSWVw15S/HkLjOFyg+e96iyEnrxYs9xm0Cq4Fz7YZhoM1jS5mSBNZ0AgXh4jL9/8Ip77AT4Yu/xR6STURFJHgA1Ahq35Qh20eDe9qchcTDbklaQcOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nygGisJo; arc=none smtp.client-ip=209.85.208.43
+	 In-Reply-To:Content-Type; b=rbAPOZqh2dhiHydBAQGiF3hq2U8kh/TG4di/hNX4VczM7YZwLyeEDtlST5WCyu94EE7IxLsSN8+DLxSfyPIK26Qa78A5ZNNqrWs8XsyHNbDcM2utMERfoxCr9bW+HSCMUf5OmpxV6fdYVq6TK0hOXc48TwZNdxmyWXLT1dipxHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WhgABS/M; arc=none smtp.client-ip=209.85.167.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-578517cab9eso3295270a12.2
-        for <linux-pm@vger.kernel.org>; Sun, 26 May 2024 23:56:02 -0700 (PDT)
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5296232e00bso3036310e87.3
+        for <linux-pm@vger.kernel.org>; Sun, 26 May 2024 23:56:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1716792961; x=1717397761; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1716793014; x=1717397814; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=etkOs+jLo9IMGYwxyaUB61TS4Whlbe7itmHxGWKZyYc=;
-        b=nygGisJoa+oPJ4M6ehM4KbpLbs0MvbQgfY/18eo0SyoRXQITKSfzmVHQd/4zb6U6cG
-         VZYw0IQ1WRLh9n/NscVE/gfmJolM34q4nlAk5Pxlk6nRpqIIkLtSwpzsNE+XFQhqa6nj
-         48AjHNbNRBE/L8i+rl3etjqtIBdJlPlXyB83mpryaIQD+RMRCKgjxsoU6Qj6gwY2rLcv
-         7JFvIucnRHD2niLHBijmbPGDyvaJgBzLx4dz2z8mnr2aeYVUYKueWe4l4VavfvogVF+H
-         G4ZSeGGi6tThPEH+lYCk2gCqjs9ELCbN/Wx3TM78LIu37MKgZS89Y6rIkoV9qHiJaUyf
-         NG1w==
+        bh=gZ09OIEijtK7C2A3jYTqDcFl+COEux6T8i6drV3crdQ=;
+        b=WhgABS/MNGu+bQUmPyhuxHNFsuW6Yn4TtL5wDgDiXuS19/7VBZqcIUveff49LS7iT0
+         YH+8DNoByzTHahQe/QXhzkqBnTRoMWhpWXyouZ1iL1DsEflWjvXfo3pC5I2t8znt6VBn
+         MRS1HZNFP5H2MN8biligUIN196ungPL1kQpGDH2roOJMt7qWpIrMwy0D4lSIZLDU4xFs
+         tpKxzKUGWO4JCBji+rZtuJmfaKg/MkSmZIsq+JDyfPcdS0ffjNErGI0I5cXclSIHQOEb
+         QndD9nTERRXrx67UBkkaJLHhqYXOtUl+oqJ/dE5qWUmsy/YzOpCmilMpmI9gCZmw21iy
+         JKQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716792961; x=1717397761;
+        d=1e100.net; s=20230601; t=1716793014; x=1717397814;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=etkOs+jLo9IMGYwxyaUB61TS4Whlbe7itmHxGWKZyYc=;
-        b=Go5dJtj/Ye0s1QXvx4/liiUJi/TREWYEfHUALWlFXZQfWKqmMk16ePnx3HIhxabJCG
-         xzFQ146ZtimtQfslyYNojZ/AQKiaj6zUh1cifgLvt80rpmIo39qmHx/kBuWdQdCDwCaF
-         yLvWuZuFDbCd+YQWzqBBe8BXwXa/uG/1HGj0T9gNshkKlRZ1DiLvp7xD1WH+umMntq6j
-         jeZVnP656zh7eHQuH2/354oWFAiE1X/HTIpKUgol/ouRg0rw22Qe4XduTceaeSrHXUD0
-         KG8gx6Q6IBK84QIZBpXI16GRjylm2YRmov2HATr0yX9tcPy62Ml4YnaLGwkVBoJ49muZ
-         aY8g==
-X-Forwarded-Encrypted: i=1; AJvYcCWdLkWsuXOvelPzHQS6BrVhvZLGC4cz/mqNuP1N7kw/cBF6Dd5H/wK+sn5HjkXShIz7/8FK+EsSnMizwsowmgBkrtZIXokB9q0=
-X-Gm-Message-State: AOJu0YxWdOpVoLyCdEumyqPhwWC9F5UpnpMVhvlYoUSd6qKAVgGv0j8r
-	osM0UvO7XkorhpoSu69uLyNK/2X52zjPYIlvFVLjVDRNg7b8U61OLTJ82g7RSHA=
-X-Google-Smtp-Source: AGHT+IEF1T16EqVwdVzeLJAbMgIiLuIr9wyvpSiUxanNtjQeD6NNm5m86Em0jKlY/9Gc5EL/QFJDBA==
-X-Received: by 2002:a50:9305:0:b0:56f:e75b:839a with SMTP id 4fb4d7f45d1cf-57851970dedmr5410157a12.1.1716792961009;
-        Sun, 26 May 2024 23:56:01 -0700 (PDT)
+        bh=gZ09OIEijtK7C2A3jYTqDcFl+COEux6T8i6drV3crdQ=;
+        b=ZP985TFP9WSXWCvAK37uNU+XWGLnE43SXVPP7YLPgAd6PGzn2d3/1JhWONTWe3Xio3
+         gO0qP52WiM2eXlJCACudwMB/1qkDSBTFjzeUJoONJOsOvdosXNOspVsOHon+zLSaxIEM
+         cJCanUPB+JveslrZyw8avKfuFtGQiU5KJZOQVuA1lwjjyrV+nnXwntY725vDeXPUj7aS
+         hbzZrEZFC7Liv5UhoYM+zDeWvFn6o52IlRlcDEGyBOY0TwIJwjpwX5Y3/2Mugbd2niRB
+         2BUgB4z+GS+KBI+WrZKtXhCP1xgRnzx7b8fHvT1vUu8S5Fp3E9eOseJ/+v7CNGLat3Ly
+         LVFg==
+X-Forwarded-Encrypted: i=1; AJvYcCU28a8J/nIlCo/XKpG7pnFA0QFGDS1MPzvoKg0sHXd3I56W0KB3utWlkSkwIr1tq48649XH0Xwj6D0K7KDH7w23faFPoTZzV9U=
+X-Gm-Message-State: AOJu0Ywjpoy8hRbtKCS8Bls5824buWBvVr96C/Uy0GvvDrG3o4pW42PW
+	/brvZQRS/rEcV7wsF+vaV0q1pIP5aC3PumvWOT8rqujJJsum6hP/e9Vhl7eQOsQ=
+X-Google-Smtp-Source: AGHT+IEksji+C8SdKEcN0/ERudcieW1rIvO6gteM7TN0sGfhxja4qB8gUnNjhftbdS6zTM1idUY6OQ==
+X-Received: by 2002:a05:6512:110f:b0:51c:6c59:627e with SMTP id 2adb3069b0e04-529661f2c34mr6606138e87.42.1716793014216;
+        Sun, 26 May 2024 23:56:54 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.206.169])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-579d5e3f995sm806996a12.64.2024.05.26.23.55.59
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a626c81773bsm458298366b.30.2024.05.26.23.56.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 May 2024 23:56:00 -0700 (PDT)
-Message-ID: <824a9871-1fd4-4b92-a3b5-e57a126dac53@linaro.org>
-Date: Mon, 27 May 2024 08:55:58 +0200
+        Sun, 26 May 2024 23:56:53 -0700 (PDT)
+Message-ID: <1b691b03-1d2c-48ee-9907-dc043ea1ed5d@linaro.org>
+Date: Mon, 27 May 2024 08:56:52 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,15 +77,15 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/6] dt-bindings: thermal: Add a property to select the
- aggregation type
+Subject: Re: [PATCH v3 6/6] ARM64: mt8195: Use thermal aggregation for big and
+ little cpu
 To: Alexandre Bailon <abailon@baylibre.com>, rafael@kernel.org,
  daniel.lezcano@linaro.org, robh+dt@kernel.org,
  krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
 Cc: rui.zhang@intel.com, lukasz.luba@arm.com, linux-pm@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20240524143150.610949-1-abailon@baylibre.com>
- <20240524143150.610949-5-abailon@baylibre.com>
+ <20240524143150.610949-7-abailon@baylibre.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Language: en-US
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
@@ -132,39 +132,33 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240524143150.610949-5-abailon@baylibre.com>
+In-Reply-To: <20240524143150.610949-7-abailon@baylibre.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 24/05/2024 16:31, Alexandre Bailon wrote:
-> This adds a new property named "aggregation" that could be used to
-> select the aggregation type when there are multiple sensors assigned
-> to a thermal zone.
+> This uses the thermal aggregation for the mt8195 to get the maximal
+> temperature of big and little cpu clusters.
 > 
 > Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
 > ---
->  .../devicetree/bindings/thermal/thermal-zones.yaml        | 8 ++++++++
->  1 file changed, 8 insertions(+)
+>  arch/arm64/boot/dts/mediatek/mt8195.dtsi | 212 +++--------------------
+>  1 file changed, 27 insertions(+), 185 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-> index fa7a72e2ba44..e6e4b46773e3 100644
-> --- a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-> @@ -111,6 +111,14 @@ patternProperties:
->            coefficients are ordered and are matched with sensors by means of the
->            sensor ID. Additional coefficients are interpreted as constant offset.
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> index 5d8b68f86ce4..8aa2bf142622 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> @@ -3600,50 +3600,31 @@ dp_tx: dp-tx@1c600000 {
+>  	};
 >  
-> +      aggregation:
-> +        $ref: /schemas/types.yaml#/definitions/string
-> +        enum:
-> +          - avg
-> +          - max
-> +        description:
-> +          Aggregation type to use compute a temperature from multiple sensors.
+>  	thermal_zones: thermal-zones {
+> -		cpu0-thermal {
+> +		cpu-little {
 
-Hm, why exactly this is a property of hardware? Why on one board you
-would like to average and on other use max? I can only think of a case
-that some sensors give inaccurate data. Otherwise it is OS policy.
+How is it related to the commit?
+
+Does not look tested. You just introduced warnings.
 
 Best regards,
 Krzysztof
