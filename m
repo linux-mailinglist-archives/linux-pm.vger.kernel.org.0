@@ -1,45 +1,48 @@
-Return-Path: <linux-pm+bounces-8161-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8162-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B85C8D003B
-	for <lists+linux-pm@lfdr.de>; Mon, 27 May 2024 14:41:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03AAF8D005F
+	for <lists+linux-pm@lfdr.de>; Mon, 27 May 2024 14:47:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 27891284FB0
-	for <lists+linux-pm@lfdr.de>; Mon, 27 May 2024 12:41:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 34F741C20DD1
+	for <lists+linux-pm@lfdr.de>; Mon, 27 May 2024 12:47:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C171315ECC8;
-	Mon, 27 May 2024 12:41:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0406D15E5D6;
+	Mon, 27 May 2024 12:47:40 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [195.130.132.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from weierstrass.telenet-ops.be (weierstrass.telenet-ops.be [195.130.137.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2DB115DBCA
-	for <linux-pm@vger.kernel.org>; Mon, 27 May 2024 12:41:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89B2813AA2A
+	for <linux-pm@vger.kernel.org>; Mon, 27 May 2024 12:47:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.137.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716813690; cv=none; b=j35H4xGHEG8k6RFjagnO3n/GBq/+jXrtPtACEda4yNhbbmvVf9mtYYA3isn3DGa1ci2V0iIrK5LIXR4Vw6Kcjzois1BWki+S7RbM8CDpOnW3Brjr0CYwWT1AVtr0wFV5TiD26XsHrvdiESQzfdFSwPL+4tSy48Orfogoy/1IHYw=
+	t=1716814059; cv=none; b=FiUunCC6i8X5PgO8BPqsXrO9OPszGgBSxff/Xa3w1rRWka7SbimnVh3zdR4iM0vfciINu46U+b0UDLOC4qRcDckrhBZcgn1Y7nLz2aT1sBLbXirD7HANRFM8hB2vVjBVOpu/dF1nfL+lEZIDB1ZcHOBUyrAG5ZgRTpWtLmWwbbc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716813690; c=relaxed/simple;
-	bh=DKPGT9zCwjT97JfwUeLGsvdXWvcfL2iqAGQFqV9g4PU=;
+	s=arc-20240116; t=1716814059; c=relaxed/simple;
+	bh=/6WTDSc5iLDDk2l/Y6xCKmU+DGYC5Ga9O6+yrTK+INs=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ljS74c94XsO9+ZXQ4a9XG2ZZ62kCUys3BWrnVpEJH26xybuynex0CLa7sR2uVchRLJ2kJC9dg1ekdnfw+CNe6YVtA0JnPlzKv55h14Y4wejIiH7SQJZ7dSI8FX9OnMfhPP4AFaBoenHnLQw13CJ5h0ZIT+ceM3VHmk4cLAYOpQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.52
+	 MIME-Version; b=SsMwT8ap5eCt3G9W17tk7/JnOZvitzclzfRJeAN4RIBnLvaPttnIw7j/bYrtw1sA0IHnLuWKuufGNbnvUqH8MoF9VUATxOS+j3HjpQNo+813XXxgL3kjibadlO2YD/WtODMRCoMHGDGtGhB54B+Zz/NTCrKqOBW6zT7GREktOxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.137.81
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
+	by weierstrass.telenet-ops.be (Postfix) with ESMTPS id 4VnwHq2Dcgz4x72C
+	for <linux-pm@vger.kernel.org>; Mon, 27 May 2024 14:41:27 +0200 (CEST)
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:c993:5573:f894:7353])
-	by xavier.telenet-ops.be with bizsmtp
-	id UChF2C0052nC7mg01ChFB4; Mon, 27 May 2024 14:41:25 +0200
+	by michel.telenet-ops.be with bizsmtp
+	id UChF2C0022nC7mg06ChFXw; Mon, 27 May 2024 14:41:19 +0200
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtp (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1sBZeD-00CfTf-5D;
-	Mon, 27 May 2024 14:41:14 +0200
+	id 1sBZeD-00CfTk-6G;
+	Mon, 27 May 2024 14:41:15 +0200
 Received: from geert by rox.of.borg with local (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1sBZf8-003hdc-TN;
+	id 1sBZf8-003hdh-UO;
 	Mon, 27 May 2024 14:41:14 +0200
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Ulf Hansson <ulf.hansson@linaro.org>,
@@ -56,9 +59,9 @@ Cc: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH/RFC 2/3] pmdomain: core: Avoid earlycon power-down
-Date: Mon, 27 May 2024 14:41:12 +0200
-Message-Id: <7c5c0c8a10b8f755e5a75c7836b43cac63762eec.1716811405.git.geert+renesas@glider.be>
+Subject: [PATCHPATCH 3/3] pmdomain: renesas: rmobile-sysc: Remove serial console handling
+Date: Mon, 27 May 2024 14:41:13 +0200
+Message-Id: <f7e9a5e163046511ed63f6832eac4474beea6513.1716811405.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1716811405.git.geert+renesas@glider.be>
 References: <cover.1716811405.git.geert+renesas@glider.be>
@@ -70,110 +73,112 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-If the earlycon serial port's PM Domain is shared with another device,
-and that other device is runtime-suspended before the full serial driver
-has overtaken earlycon, the serial port's PM Domain will be disabled
-inadvertently.  Any subsequent serial console output will cause a crash
-or system lock-up.
+Since commit a47cf07f60dcb02d ("serial: core: Call
+device_set_awake_path() for console port"), the serial driver properly
+handles the case where the serial console is part of the awake path, so
+the special serial console handling can be removed from the R-Mobile
+SYSC PM Domain driver.
 
-Avoid this by introducing a new flag to handle a PM domain that must be
-kept powered-on during early boot, and by setting this flag if the PM
-Domain contains the serial console.
-
-Note that the PM Domain can still be powered off later, when the serial
-port's power state agrees, e.g. during s2ram without no_console_suspend.
+The PM Domain containing the serial port can now be powered down when
+none of its devices are in use.  Before, it was only powered down during
+s2ram without no_console_suspend.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- drivers/pmdomain/core.c   | 24 ++++++++++++++++++++++--
- include/linux/pm_domain.h |  4 ++++
- 2 files changed, 26 insertions(+), 2 deletions(-)
+ drivers/pmdomain/renesas/rmobile-sysc.c | 33 +------------------------
+ 1 file changed, 1 insertion(+), 32 deletions(-)
 
-diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-index 342779464c0d7e84..97b9b50257eb354c 100644
---- a/drivers/pmdomain/core.c
-+++ b/drivers/pmdomain/core.c
-@@ -22,6 +22,7 @@
- #include <linux/export.h>
- #include <linux/cpu.h>
- #include <linux/debugfs.h>
-+#include <linux/serial_core.h>
+diff --git a/drivers/pmdomain/renesas/rmobile-sysc.c b/drivers/pmdomain/renesas/rmobile-sysc.c
+index 0b77f37787d58f48..cc1f6f8b7a746850 100644
+--- a/drivers/pmdomain/renesas/rmobile-sysc.c
++++ b/drivers/pmdomain/renesas/rmobile-sysc.c
+@@ -10,7 +10,6 @@
+  *  Copyright (C) 2011 Magnus Damm
+  */
+ #include <linux/clk/renesas.h>
+-#include <linux/console.h>
+ #include <linux/delay.h>
+ #include <linux/io.h>
+ #include <linux/iopoll.h>
+@@ -31,8 +30,6 @@
  
- #define GENPD_RETRY_MAX_MS	250		/* Approximate */
+ struct rmobile_pm_domain {
+ 	struct generic_pm_domain genpd;
+-	struct dev_power_governor *gov;
+-	int (*suspend)(void);
+ 	void __iomem *base;
+ 	unsigned int bit_shift;
+ };
+@@ -49,13 +46,6 @@ static int rmobile_pd_power_down(struct generic_pm_domain *genpd)
+ 	unsigned int mask = BIT(rmobile_pd->bit_shift);
+ 	u32 val;
  
-@@ -129,6 +130,7 @@ static const struct genpd_lock_ops genpd_spin_ops = {
- #define genpd_is_cpu_domain(genpd)	(genpd->flags & GENPD_FLAG_CPU_DOMAIN)
- #define genpd_is_rpm_always_on(genpd)	(genpd->flags & GENPD_FLAG_RPM_ALWAYS_ON)
- #define genpd_is_opp_table_fw(genpd)	(genpd->flags & GENPD_FLAG_OPP_TABLE_FW)
-+#define genpd_is_early_on(genpd)	(genpd->flags & GENPD_FLAG_EARLY_ON)
+-	if (rmobile_pd->suspend) {
+-		int ret = rmobile_pd->suspend();
+-
+-		if (ret)
+-			return ret;
+-	}
+-
+ 	if (readl(rmobile_pd->base + PSTR) & mask) {
+ 		writel(mask, rmobile_pd->base + SPDCR);
  
- static inline bool irq_safe_dev_in_sleep_domain(struct device *dev,
- 		const struct generic_pm_domain *genpd)
-@@ -725,8 +727,9 @@ static int genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
- 	 * (2) When the domain has a subdomain being powered on.
- 	 */
- 	if (genpd_is_always_on(genpd) ||
--			genpd_is_rpm_always_on(genpd) ||
--			atomic_read(&genpd->sd_count) > 0)
-+	    (genpd_is_early_on(genpd) && system_state < SYSTEM_RUNNING) ||
-+	    genpd_is_rpm_always_on(genpd) ||
-+	    atomic_read(&genpd->sd_count) > 0)
- 		return -EBUSY;
+@@ -98,7 +88,6 @@ static int rmobile_pd_power_up(struct generic_pm_domain *genpd)
+ static void rmobile_init_pm_domain(struct rmobile_pm_domain *rmobile_pd)
+ {
+ 	struct generic_pm_domain *genpd = &rmobile_pd->genpd;
+-	struct dev_power_governor *gov = rmobile_pd->gov;
  
- 	/*
-@@ -2367,6 +2370,10 @@ int of_genpd_add_provider_simple(struct device_node *np,
- 
- 	genpd->dev.of_node = np;
- 
-+	if (earlycon_power_domains &&
-+	    np->phandle == be32_to_cpup(earlycon_power_domains))
-+		genpd->flags |= GENPD_FLAG_EARLY_ON;
-+
- 	/* Parse genpd OPP table */
- 	if (!genpd_is_opp_table_fw(genpd) && genpd->set_performance_state) {
- 		ret = dev_pm_opp_of_add_table(&genpd->dev);
-@@ -2447,6 +2454,19 @@ int of_genpd_add_provider_onecell(struct device_node *np,
- 		genpd->has_provider = true;
+ 	genpd->flags |= GENPD_FLAG_PM_CLK | GENPD_FLAG_ACTIVE_WAKEUP;
+ 	genpd->attach_dev = cpg_mstp_attach_dev;
+@@ -110,22 +99,12 @@ static void rmobile_init_pm_domain(struct rmobile_pm_domain *rmobile_pd)
+ 		__rmobile_pd_power_up(rmobile_pd);
  	}
  
-+	if (earlycon_power_domains && earlycon_power_domains_ncells == 2 &&
-+	    np->phandle == be32_to_cpup(earlycon_power_domains)) {
-+		struct of_phandle_args genpdspec = {
-+			.np = np,
-+			.args_count = 1,
-+			.args[0] = be32_to_cpup(earlycon_power_domains + 1),
-+		};
-+
-+		genpd = data->xlate(&genpdspec, data);
-+		if (!IS_ERR(genpd))
-+			genpd->flags |= GENPD_FLAG_EARLY_ON;
-+	}
-+
- 	ret = genpd_add_provider(np, data->xlate, data);
- 	if (ret < 0)
- 		goto error;
-diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-index 772d3280d35fafa2..012d58ffc7059e0d 100644
---- a/include/linux/pm_domain.h
-+++ b/include/linux/pm_domain.h
-@@ -92,6 +92,9 @@ struct dev_pm_domain_list {
-  * GENPD_FLAG_OPP_TABLE_FW:	The genpd provider supports performance states,
-  *				but its corresponding OPP tables are not
-  *				described in DT, but are given directly by FW.
-+ *
-+ * GENPD_FLAG_EARLY_ON:		Instructs genpd to keep the PM domain powered
-+ *				on during early boot.
-  */
- #define GENPD_FLAG_PM_CLK	 (1U << 0)
- #define GENPD_FLAG_IRQ_SAFE	 (1U << 1)
-@@ -101,6 +104,7 @@ struct dev_pm_domain_list {
- #define GENPD_FLAG_RPM_ALWAYS_ON (1U << 5)
- #define GENPD_FLAG_MIN_RESIDENCY (1U << 6)
- #define GENPD_FLAG_OPP_TABLE_FW	 (1U << 7)
-+#define GENPD_FLAG_EARLY_ON	 (1U << 8)
+-	pm_genpd_init(genpd, gov ? : &simple_qos_governor, false);
+-}
+-
+-static int rmobile_pd_suspend_console(void)
+-{
+-	/*
+-	 * Serial consoles make use of SCIF hardware located in this domain,
+-	 * hence keep the power domain on if "no_console_suspend" is set.
+-	 */
+-	return console_suspend_enabled ? 0 : -EBUSY;
++	pm_genpd_init(genpd, &simple_qos_governor, false);
+ }
  
- enum gpd_status {
- 	GENPD_STATE_ON = 0,	/* PM domain is on */
+ enum pd_types {
+ 	PD_NORMAL,
+ 	PD_CPU,
+-	PD_CONSOLE,
+ 	PD_DEBUG,
+ 	PD_MEMCTL,
+ };
+@@ -184,10 +163,6 @@ static void __init get_special_pds(void)
+ 	for_each_of_cpu_node(np)
+ 		add_special_pd(np, PD_CPU);
+ 
+-	/* PM domain containing console */
+-	if (of_stdout)
+-		add_special_pd(of_stdout, PD_CONSOLE);
+-
+ 	/* PM domains containing other special devices */
+ 	for_each_matching_node_and_match(np, special_ids, &id)
+ 		add_special_pd(np, (uintptr_t)id->data);
+@@ -227,12 +202,6 @@ static void __init rmobile_setup_pm_domain(struct device_node *np,
+ 		pd->genpd.flags |= GENPD_FLAG_ALWAYS_ON;
+ 		break;
+ 
+-	case PD_CONSOLE:
+-		pr_debug("PM domain %s contains serial console\n", name);
+-		pd->gov = &pm_domain_always_on_gov;
+-		pd->suspend = rmobile_pd_suspend_console;
+-		break;
+-
+ 	case PD_DEBUG:
+ 		/*
+ 		 * This domain contains the Coresight-ETM hardware block and
 -- 
 2.34.1
 
