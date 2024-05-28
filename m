@@ -1,75 +1,75 @@
-Return-Path: <linux-pm+bounces-8289-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8290-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6CFC8D23FB
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 21:07:55 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E3AB8D2400
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 21:08:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3BB73B23FEA
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 19:07:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CB593B243D3
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 19:08:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3126174EFC;
-	Tue, 28 May 2024 19:04:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 097F117F383;
+	Tue, 28 May 2024 19:04:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="B1ikVS7I"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="18vF/H1N"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C02817B517
-	for <linux-pm@vger.kernel.org>; Tue, 28 May 2024 19:03:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C2CF17BB1F
+	for <linux-pm@vger.kernel.org>; Tue, 28 May 2024 19:04:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716923041; cv=none; b=HqWBPA+wqHmjrwY4xrQjCClFraTeyySYW+Kp3gyQbIxFExijG+6NWH3yzAAFWD5TzqQuKdCIv4AJrTcwlHOI7/edhl+h2Qtqri3avHRpPkFtB66Nrc3oCrfk0v/zDcJd2wUf4knOlbgHCgpJ5iMXr1qqsbuWObEK5sjsTN2kRZM=
+	t=1716923042; cv=none; b=S7QLYP0HjlhqLOn9Q2ENtrtfxXGXKcsJKkqainzNri1+p0juTuJSJvvjIPRHvAtZcLHVappr9pylKaPsSIcjIk8mawaWW0ieRhmO/TaLB3WboFfUN1sJZUcTWQUOnE5mFdJVz4tW1Qh4kH0zomCaqLozFSM8nCvcqp4krVGkPwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716923041; c=relaxed/simple;
-	bh=KXsav3Jcr8SLGaU5WbaTFgydaNa2pSIrTbrR0OSHXYY=;
+	s=arc-20240116; t=1716923042; c=relaxed/simple;
+	bh=jrWvLmZO2MtdJqQKczs4xaZxwtXkNl3nBncTzCBRW7M=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=gpNBjaMBIdcvqlAvYT3Q1jENY7thG0LRP0v4Xzqwrmibgc0cfULcDpTSI9qjOWw9QTYAN5fPzDf23DCaQ+90seaP5D1L3gNaegJU0UZThgtXc9Id1hcgxlRb+f6BBhfR/DwcPO6ZFS2PX+YUVb0awR0P4uZ8dUegwqBVH7JJEPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=B1ikVS7I; arc=none smtp.client-ip=209.85.128.44
+	 In-Reply-To:To:Cc; b=ir0oyLg/v3kjx9dNHkoVHNi15cRQl8HQC5QJuSBulkdcUV+ZtxanmwpaCvER3oJ4HdYH0p1WoEhltIvCbB8QgzF6zDtlHR1J34GWRdxYJ4pEfESimhaLQhnPuF1KFcYCSDM1rhaVHldfM2kxFHDcDfwKt5+FB5zemiaLucpFL4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=18vF/H1N; arc=none smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4210aa00c94so8933995e9.1
-        for <linux-pm@vger.kernel.org>; Tue, 28 May 2024 12:03:58 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-354f8a0cd08so1128783f8f.2
+        for <linux-pm@vger.kernel.org>; Tue, 28 May 2024 12:03:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1716923037; x=1717527837; darn=vger.kernel.org;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1716923038; x=1717527838; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=lLa27fvWZ3xHzK1QFpz+dfI8TGigIxfiGyK3xtryc0c=;
-        b=B1ikVS7IU4Xg2hL42cx2c5INv54CDVb+gBMYSGVxwzAeTtOnUsfHQLuGyaQnw6br7v
-         H4jqxVHCh0JTC8Es5eJoDcWeCb3KLyn8eLbXA0TXN9QS6KaqvmG0uKbAzTUsyKY7+N9X
-         cUCOjja6DpsCR6t4SnIxKAYECksKQMQTuFMm+F75n4gVhQ14z3+moPILeJkyTTHE/Y23
-         xQ5SYWYrQwkCNlJ1BdH4KAwe9JgCm28G/Vuwvg+zDIsS7I7sHeXtXThqifmNHf8otp0R
-         phrFDK1z9CxhN4bJat94w7csztxmJFf1CNU+ljWjR3sqOj/VSXzDIEnd+O/QmNr2GQfB
-         v/eg==
+        bh=0VDWyB/Vt2yrqLkBETRDxRFnPzrcfXm1ptbgVUZY5Cc=;
+        b=18vF/H1NaZmw4aWRa+TIaVI3tccavDpUpUo+IlfuedW6kPJ7wKIAzlaxX6g1pmB88u
+         nb+OUPfdz9KlPLjXMv+jlYJLKl+Js+ryIFL8/Hem8peC5m3/NSlEi7lvjdrEyEw3KJ4l
+         2JoJVNri2Plryw1gjYUaFynPf+2zJ/v7LEnFEkwkuJOpulmuqR3ZlI7Wa+dAe+z48Bjk
+         5fH62JHgdNAU+HT7AmqW1O+mfTr3W14AKTbdwi6WrsHToSEKF9+pkE3drtltrLX7N2CY
+         jh0fV9m/OqAanC1u0JHuaj8GU6Ld0+ZxLlKPuL/e3blGEFOED1YXNlqV6fOXLLydzCSP
+         5ebQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716923037; x=1717527837;
+        d=1e100.net; s=20230601; t=1716923038; x=1717527838;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lLa27fvWZ3xHzK1QFpz+dfI8TGigIxfiGyK3xtryc0c=;
-        b=JU8/VFTMnwL7kvBIwwmmms+6SKE1Zoz2d5p8l4Gq0Iv6R6RL6TSFk/jyJIZ236yekq
-         Qjh5Lf5wqD2Hx8UptqB1/zTsdP561Xp8Qu7X5gZYn4Dx1XiBXjIL8L92niseHfu48/Cs
-         tYjtvl+zwSn748HeKXInnhASNL7Ro2LKC2zIHCXwqcKZ/sr6VloyrD8EuORE1J2GCLsR
-         RnxrwktSYeXy0YwR1lMiIvg1EhGzGfrAr8ExF8byPxbN8R8almnIcT66pPuKim6qAmTH
-         X4SCUWo4r1cnp1CwdzjJOtEpVl5LSdoIMxfLoTZVfJ8nEe/Yj3QEKoS2Vx3SZqzYVUOe
-         16NQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXpoInjn498MVChSVDdVIGHNAKzD7VKR/lXwAH9fmHNXSTiKmtj2qIUGYOPOLZpTH3xs5MjUoDbPfdR17Eay1vXSav8nHGbrK4=
-X-Gm-Message-State: AOJu0YyGkWXhhAbq25Q6NG1wf58vtzV68Ha3C2cEFoHRDlnO6uixv/MV
-	d+ZU3yS2s36B88ZUV99r69Yxufo2N/+8DWAj7JTJMyHpajYDPh3+De/Q7ka6bfM=
-X-Google-Smtp-Source: AGHT+IGoCzWaS7M9ghnvAci7Ksdr02C5X0xku+g9bCWhaRV3dAa+VUwjLce7VBhVr4MskeyIPIu73Q==
-X-Received: by 2002:a7b:ce8c:0:b0:41b:cb18:e24b with SMTP id 5b1f17b1804b1-421089d2d7amr87487655e9.9.1716923037195;
-        Tue, 28 May 2024 12:03:57 -0700 (PDT)
+        bh=0VDWyB/Vt2yrqLkBETRDxRFnPzrcfXm1ptbgVUZY5Cc=;
+        b=XHSTeJ/fFv94AqndKPamXLGl+mXrN8DZAtgl+rMMsLSRp3kCZ/pN2XIqNyaeSIhD0D
+         liIfCYglzY6+l4FDu9eYAnded54oigsuTPW3DVpb17HwKXMlFTjV5daI+Asb+M02nbIK
+         hP9X9GSRKeiZdemdPhRKpRc0N60BBvHeyDLBP4Emaw/yLA4s92YWSKpTsWp4vHQ+aeox
+         TwLHbubkphtu/W9Aa6D6FFErBFNjUs8YltzCymCw/QsyXJXPADddWRC0T0Yz+vqOWUJS
+         y9IRTX6F8T1YyJoV0LEaXNnMTTD89tXZLAmYen0VgMUrwNSpfmqQoKvp88azTgAEGHnR
+         qYCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU48lAhe1cvN705AbRv33dqmESt57ZFgsrj22t1XXDIBsZFB4D2Gc6SpkAtPETZMI1P5Hv62FTDFme3m+m2rabwB7SBRUQ6Y7c=
+X-Gm-Message-State: AOJu0YzeQquBEJ5jKhB27344f41TrYdF8XAOGld0ATAVe5zOZP7bh+Yq
+	lgdgWh5F6eoJ9gHMAy5VXWMfPge4MTb/W91929UeR2JFlhUQGyAcKwpLaZKpiZ8=
+X-Google-Smtp-Source: AGHT+IG9twxX4gmVpSWSmG7lOy0d9ZrPVsGdDc+r3+3Lc27UTT9Q1CmlcQrzBygReRw0K065n4Yd5w==
+X-Received: by 2002:a5d:4b02:0:b0:354:fafc:b8a0 with SMTP id ffacd0b85a97d-3552f4fc7a9mr8612295f8f.59.1716923038550;
+        Tue, 28 May 2024 12:03:58 -0700 (PDT)
 Received: from [127.0.1.1] ([2a01:cb1d:75a:e000:93eb:927a:e851:8a2f])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42100ee954bsm183895415e9.4.2024.05.28.12.03.55
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42100ee954bsm183895415e9.4.2024.05.28.12.03.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 May 2024 12:03:56 -0700 (PDT)
+        Tue, 28 May 2024 12:03:58 -0700 (PDT)
 From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Tue, 28 May 2024 21:03:15 +0200
-Subject: [PATCH v8 07/17] arm64: dts: qcom: sm8650-qrd: add the Wifi node
+Date: Tue, 28 May 2024 21:03:16 +0200
+Subject: [PATCH v8 08/17] arm64: dts: qcom: sm8650-hdk: add the Wifi node
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -78,7 +78,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240528-pwrseq-v8-7-d354d52b763c@linaro.org>
+Message-Id: <20240528-pwrseq-v8-8-d354d52b763c@linaro.org>
 References: <20240528-pwrseq-v8-0-d354d52b763c@linaro.org>
 In-Reply-To: <20240528-pwrseq-v8-0-d354d52b763c@linaro.org>
 To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
@@ -106,45 +106,42 @@ Cc: linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-pci@vger.kernel.org, 
  Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, kernel@quicinc.com
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3708;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3087;
  i=bartosz.golaszewski@linaro.org; h=from:subject:message-id;
- bh=CTlF2PNNDKg3EHqzuBhLG4C20XnWl+M+qvvHDXFzICc=;
- b=owEBbQKS/ZANAwAKARGnLqAUcddyAcsmYgBmViqOCasMtV+U3OiBytvnFUjf7QPlMy0DZWpFp
- bK6na7SRHOJAjMEAAEKAB0WIQQWnetsC8PEYBPSx58Rpy6gFHHXcgUCZlYqjgAKCRARpy6gFHHX
- cuQ/EADjIhEEPA5J8QYcTFkc56bRpWrArA5URK9C7G54AR8GRnMkHClAQ8SuJeONZlIaADyfMxR
- e3YrgCacVGd3yFqxz8ddZJl3zs7mkR4NugIWGYZrkXbTqPyyEihWhGdPAoDvqt3+F/rA5AyLADA
- LsOWSAKwsJGdlhoipb8qKL8wJ9nqtoWX02nnRiiDyanFTfAJodDu11n2tU6SsnJhpraa6dwzgSW
- YZC9uDnyQpX1iWp1ulEWP2NeRg8YgAC9g0tpI+MxZanJWn4s/TpWl/181+pvvsMEBXc5/APMRxB
- gkAhUlSGiaxArWJjB7HMTaug3INxGN8Ik4RnGPip2aiV3bOI+xLhU/5Wag0NhfO9CmHSm9M3GMa
- JeaTzNbdscOt2TBmHmoYy9WJJOyRlq7ZGn6H6rb3lag841ueXexgO6Iw8+HYqdVzFTQtmrpbcZq
- Sd7xwcyDoSjAoT3IhRSBblLX0UxnL2EPUe4vPDb/9VgKRJhLhTDqVsBgA5A/fgbfQxh4Z77yw5Z
- GgAKpa8Fesz5arVgs0SXPC3JWcEkwNa4cW84vnptOvCIk9GnS1TPK2k6Z3w+I9S8aZDy7073tTU
- TiLAs66lNa3OqJxblLX93+GuxbfT31v79HjTGtEs4qdPv8lbNJJV/EXkuwJ8QMOBbSrBB9cMNsF
- 66h12Wl2a7d1bCw==
+ bh=GaOLcgqKs3ODvq3/O85YU+fUTNT/9BH1gk6I0XDm4C4=;
+ b=owEBbQKS/ZANAwAKARGnLqAUcddyAcsmYgBmViqOxHFm5d147/MDXDrwmptWoxDAkiT5npxCb
+ gY47vDCaTyJAjMEAAEKAB0WIQQWnetsC8PEYBPSx58Rpy6gFHHXcgUCZlYqjgAKCRARpy6gFHHX
+ cvP1D/wIgiQjjyJuS6U9yFSU+MJwzhaoKoc0oAiOUbxzKiS420zoqAtf73o/YAgjY8Yl2L8tkqT
+ si1ZXxwSu3SMF4QkuIvgnl8TqhdpZQLDDefO+eTZPc30SrWAmneqprcoxSniaSqH88Gy+fmVdYD
+ /tJOLoUlRCqhrO01qpEh5En7YlFZw5hIE69gBYYBUfymd1fL6M/qww9KTWl2+4VmA9T4BEojAMc
+ OBUY7pkTCZh4pO5qnF344tnURP1fjnXYWCu/sqfNbcweD9qkKh7m4XGTRRIu3COhA1pftKIw17J
+ 4r8e5cV/2krtZvM7+lk804+AQdJEt3eBHHSohpvztL4I8XYh+7Zen6VVvTQ4MCnjMgCJgtEIBbG
+ z6jE1c3DkF6GoukSmD36VxeO8snL77G2P8Pp3EzHBhTYA2uo+TGaNYX+geEcpYaVPSTz9/F3VDw
+ a0U0/PnXejrCtMSuNKGiP56dSU0w6iExXHuWYpbAJPCxnMfjH05oV0UOFTt+o4wVdIGYsaPyaIi
+ NTqH4Bk8ZOnxZMtNZs7+UZ8ygv+ObJ/jaDsQnGMcLjlvX/qZa9eR0pIf6NReqsq4qaau6yKuQs9
+ o9IkFdLwaEL9FW9hukAAXye3EWxSePyl05MMCTkTxbpuOBIVZFsWkTm2LFhtAiajJmX8bghkpZ0
+ qLBJ0EahJamjp5A==
 X-Developer-Key: i=bartosz.golaszewski@linaro.org; a=openpgp;
  fpr=169DEB6C0BC3C46013D2C79F11A72EA01471D772
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+From: Neil Armstrong <neil.armstrong@linaro.org>
 
 Describe the ath12k WLAN on-board the WCN7850 module present on the
 board.
 
-[Neil: authored the initial version of the change]
-Co-developed-by: Neil Armstrong <neil.armstrong@linaro.org>
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sm8650-qrd.dts | 89 +++++++++++++++++++++++++++++++++
- arch/arm64/boot/dts/qcom/sm8650.dtsi    |  2 +-
- 2 files changed, 90 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/qcom/sm8650-hdk.dts | 89 +++++++++++++++++++++++++++++++++
+ 1 file changed, 89 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8650-qrd.dts b/arch/arm64/boot/dts/qcom/sm8650-qrd.dts
-index 98f6a272ce5a..6e3c4d8dcc19 100644
---- a/arch/arm64/boot/dts/qcom/sm8650-qrd.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8650-qrd.dts
-@@ -203,6 +203,71 @@ wcd_codec_headset_in: endpoint {
- 			};
- 		};
+diff --git a/arch/arm64/boot/dts/qcom/sm8650-hdk.dts b/arch/arm64/boot/dts/qcom/sm8650-hdk.dts
+index 7f2dbada63b5..b824b805ace2 100644
+--- a/arch/arm64/boot/dts/qcom/sm8650-hdk.dts
++++ b/arch/arm64/boot/dts/qcom/sm8650-hdk.dts
+@@ -266,6 +266,71 @@ wcd939x: audio-codec {
+ 
+ 		#sound-dai-cells = <1>;
  	};
 +
 +	wcn7850-pmu {
@@ -214,7 +211,7 @@ index 98f6a272ce5a..6e3c4d8dcc19 100644
  };
  
  &apps_rsc {
-@@ -844,6 +909,23 @@ &pcie0 {
+@@ -894,6 +959,23 @@ &pcie0 {
  	status = "okay";
  };
  
@@ -238,7 +235,7 @@ index 98f6a272ce5a..6e3c4d8dcc19 100644
  &pcie0_phy {
  	vdda-phy-supply = <&vreg_l1i_0p88>;
  	vdda-pll-supply = <&vreg_l3i_1p2>;
-@@ -1138,6 +1220,13 @@ wcd_default: wcd-reset-n-active-state {
+@@ -1154,6 +1236,13 @@ wcd_default: wcd-reset-n-active-state {
  		bias-disable;
  		output-low;
  	};
@@ -252,19 +249,6 @@ index 98f6a272ce5a..6e3c4d8dcc19 100644
  };
  
  &uart14 {
-diff --git a/arch/arm64/boot/dts/qcom/sm8650.dtsi b/arch/arm64/boot/dts/qcom/sm8650.dtsi
-index d7c432552233..0fb971169f38 100644
---- a/arch/arm64/boot/dts/qcom/sm8650.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8650.dtsi
-@@ -2289,7 +2289,7 @@ &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ALWAYS>,
- 
- 			status = "disabled";
- 
--			pcie@0 {
-+			pcieport0: pcie@0 {
- 				device_type = "pci";
- 				reg = <0x0 0x0 0x0 0x0 0x0>;
- 				bus-range = <0x01 0xff>;
 
 -- 
 2.43.0
