@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-8262-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8261-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80D658D2203
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 18:54:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B86F8D2201
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 18:54:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1D6C2B244EC
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 16:54:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 97EBA1F23AA3
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 16:54:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14414173352;
-	Tue, 28 May 2024 16:54:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82E6817333F;
+	Tue, 28 May 2024 16:54:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="FC+N34PE"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="nMLigcU7"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06D9A172BD5;
-	Tue, 28 May 2024 16:54:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42ECB172BCE;
+	Tue, 28 May 2024 16:54:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716915266; cv=none; b=iFL8PJvU4iKlkE1HizyKel7zFGYOthmlQwaGgUebYoaeiYtk6tIIbh9NzedXTKlUniIUDeNonOPYhtVHJMAsDVtH5qR8GqcBmWiWrVt+9yNaTkrA0XyfFEoR94erqx+yyJQSrwCE4yxDay8PWCa5vEcXQvHeqo50XhXbW1t0rCU=
+	t=1716915265; cv=none; b=IejxRGSyF6yGhBKw9OkS0tWk59iZlVWQL0xUIVTceMAnm94UweK6QfRrMmQ3ke0DfPcF0FAUbQDbFgau3xoW13lW8F7r8GwOSa5DmZxGK8NxC8fKzjRIMA9r6P6e1E2TyFZ8S+0K7rYHlzX45HUZ3SDQ+8MYvPjrqqpkJG06ej8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716915266; c=relaxed/simple;
-	bh=8XIYogP3QOocTXaYFjvA1ITRN9o8M4WWA9w3jjM1ifQ=;
+	s=arc-20240116; t=1716915265; c=relaxed/simple;
+	bh=ZFY3hO8BREpKs43Exr0jP3HTgfME6rUtFCseLnYt4NY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=isixggLuW7IOUck4MYt80p5HGPUJV9rYWMC8TY4itXerBmEl5h2XRvLp+q6I844M1zEhL6yDkfEH6oW7Q6jP2H/OgXOnaiPQ1W7R1BpVuJ8oYKr6ir/KuSafsJAz8m7ruesEhNop2qkNJUnGgGGnDe61qj0emHSWbtodLWVvjI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=FC+N34PE reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+	 MIME-Version:Content-Type; b=J/717L455Pufuzg8tcPfsHNWJdJl3RkXRT6j4KlfC7oLVhtfzDbgnigFu/Eph1qYk4KkwkRrVs0NYD0d9p0CtzAhAlQHUGJ6KiuimlcX5X6mtBjmyEsh4sXwGSrgVjPv65zDFKCu6RFzSkLx8ODzjq2Yd+84Q0ubjJPdSAMOYRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=nMLigcU7 reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.1.0)
- id 5c2a131d28357f4b; Tue, 28 May 2024 18:54:22 +0200
+ id b21576a730ce3ccd; Tue, 28 May 2024 18:54:21 +0200
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 5C7E66A5036;
-	Tue, 28 May 2024 18:54:21 +0200 (CEST)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 51A176A5036;
+	Tue, 28 May 2024 18:54:20 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1716915261;
-	bh=8XIYogP3QOocTXaYFjvA1ITRN9o8M4WWA9w3jjM1ifQ=;
+	s=dkim; t=1716915260;
+	bh=ZFY3hO8BREpKs43Exr0jP3HTgfME6rUtFCseLnYt4NY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=FC+N34PEHvn0DUdSE9pceaXChjVgRnrzzFHpKNiuWrNjoQS8VDUnUAZ2AvV/lbFO4
-	 c20/SUjPmxj/jFGmqgKdDQ1OOJrk/olhC2lrLAFzRbmg+64NKHHUgCCi3URM9XR760
-	 OFrMW2WnEIce8NbaJjEMJ8rp80Ezyi6uaTTcJeA9d1z69DE7FkzbjxqiMiFbpuRfdY
-	 V0iZuUiXvsim/B0YzItGd7eNFb5nkdyKAE+P9GlP8Nbe58iUQq+i6eec+LDf8sjkf6
-	 blcXcHxMAr3Wl+ywMLFDERyXIFDwWuG56VSQ10a7R94u6ktu25aJYgprdYDKY/khJP
-	 MXxbnHBpZbPuA==
+	b=nMLigcU7ug2y+P4XHklGwrB02zjHc+cTZW2HD4J+X7V44Uj9uojou4dOT2f+/i5f8
+	 HD/x6BE0SCBMyJ9mLvE/JhS79NHz8HKh29psC0Vw30/7hiHU4M/PdKLC24rdTNWusD
+	 vtPU6MTLjq/yf4yUAQssDb0dziD6VE33wdpjosM4jIv01AEpyZoFylQ5K7FuEO8Vqc
+	 Dits19LIHwSO3RJzhLEAtbgjJV8DXLuIffhEYH+o0BtuU52ELzvvQgW8Pc4izdbL4n
+	 /qYR6yMqTU3fUqPmE1CGtUF6N9R9siAorey2SRuXAiyWt9/Bq5Vub0FPGpTzs1Y0l1
+	 f9vqN6dNbiwBQ==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>,
@@ -58,10 +58,10 @@ Cc: LKML <linux-kernel@vger.kernel.org>,
  Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
  Zhang Rui <rui.zhang@intel.com>
 Subject:
- [PATCH v2 3/5] thermal: trip: Use READ_ONCE() for lockless access to trip
- properties
-Date: Tue, 28 May 2024 18:52:13 +0200
-Message-ID: <1902136.tdWV9SEqCh@kreacher>
+ [PATCH v2 4/5] thermal: gov_bang_bang: Drop unnecessary cooling device target
+ state checks
+Date: Tue, 28 May 2024 18:54:01 +0200
+Message-ID: <3312910.44csPzL39Z@kreacher>
 In-Reply-To: <12458899.O9o76ZdvQC@kreacher>
 References: <12458899.O9o76ZdvQC@kreacher>
 Precedence: bulk
@@ -81,12 +81,12 @@ X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-When accessing trip temperature and hysteresis without locking, it is
-better to use READ_ONCE() to prevent compiler optimizations possibly
-affecting the read from being applied.
+Some cooling device target state checks in bang_bang_control()
+done before setting the new target state are not necessary after
+recent changes, so drop them.
 
-Of course, for the READ_ONCE() to be effective, WRITE_ONCE() needs to
-be used when updating their values.
+Also avoid updating the target state before checking it for
+unexpected values.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
@@ -94,54 +94,41 @@ Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 v1 -> v2: Rebase.
 
 ---
- drivers/thermal/thermal_sysfs.c |    6 +++---
- drivers/thermal/thermal_trip.c  |    2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/thermal/gov_bang_bang.c |   14 +++-----------
+ 1 file changed, 3 insertions(+), 11 deletions(-)
 
-Index: linux-pm/drivers/thermal/thermal_sysfs.c
+Index: linux-pm/drivers/thermal/gov_bang_bang.c
 ===================================================================
---- linux-pm.orig/drivers/thermal/thermal_sysfs.c
-+++ linux-pm/drivers/thermal/thermal_sysfs.c
-@@ -139,7 +139,7 @@ trip_point_temp_show(struct device *dev,
- 	if (sscanf(attr->attr.name, "trip_point_%d_temp", &trip_id) != 1)
- 		return -EINVAL;
+--- linux-pm.orig/drivers/thermal/gov_bang_bang.c
++++ linux-pm/drivers/thermal/gov_bang_bang.c
+@@ -57,24 +57,16 @@ static void bang_bang_control(struct the
+ 		if (instance->trip != trip)
+ 			continue;
  
--	return sprintf(buf, "%d\n", tz->trips[trip_id].trip.temperature);
-+	return sprintf(buf, "%d\n", READ_ONCE(tz->trips[trip_id].trip.temperature));
- }
+-		if (instance->target == THERMAL_NO_TARGET)
+-			instance->target = 0;
+-
+-		if (instance->target != 0 && instance->target != 1) {
++		if (instance->target != 0 && instance->target != 1 &&
++		    instance->target != THERMAL_NO_TARGET)
+ 			pr_debug("Unexpected state %ld of thermal instance %s in bang-bang\n",
+ 				 instance->target, instance->name);
  
- static ssize_t
-@@ -163,7 +163,7 @@ trip_point_hyst_store(struct device *dev
- 	trip = &tz->trips[trip_id].trip;
+-			instance->target = 1;
+-		}
+-
+ 		/*
+ 		 * Enable the fan when the trip is crossed on the way up and
+ 		 * disable it when the trip is crossed on the way down.
+ 		 */
+-		if (instance->target == 0 && crossed_up)
+-			instance->target = 1;
+-		else if (instance->target == 1 && !crossed_up)
+-			instance->target = 0;
++		instance->target = crossed_up;
  
- 	if (hyst != trip->hysteresis) {
--		trip->hysteresis = hyst;
-+		WRITE_ONCE(trip->hysteresis, hyst);
+ 		dev_dbg(&instance->cdev->device, "target=%ld\n", instance->target);
  
- 		thermal_zone_trip_updated(tz, trip);
- 	}
-@@ -183,7 +183,7 @@ trip_point_hyst_show(struct device *dev,
- 	if (sscanf(attr->attr.name, "trip_point_%d_hyst", &trip_id) != 1)
- 		return -EINVAL;
- 
--	return sprintf(buf, "%d\n", tz->trips[trip_id].trip.hysteresis);
-+	return sprintf(buf, "%d\n", READ_ONCE(tz->trips[trip_id].trip.hysteresis));
- }
- 
- static ssize_t
-Index: linux-pm/drivers/thermal/thermal_trip.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_trip.c
-+++ linux-pm/drivers/thermal/thermal_trip.c
-@@ -161,7 +161,7 @@ void thermal_zone_set_trip_temp(struct t
- 	if (trip->temperature == temp)
- 		return;
- 
--	trip->temperature = temp;
-+	WRITE_ONCE(trip->temperature, temp);
- 	thermal_notify_tz_trip_change(tz, trip);
- 
- 	if (temp == THERMAL_TEMP_INVALID) {
 
 
 
