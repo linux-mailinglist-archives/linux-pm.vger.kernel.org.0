@@ -1,145 +1,90 @@
-Return-Path: <linux-pm+bounces-8267-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8268-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FDB68D2238
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 19:14:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95C198D2282
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 19:34:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 93DC3B22B78
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 17:14:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B3B6286314
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 17:34:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00105173359;
-	Tue, 28 May 2024 17:13:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17F3F1CFB6;
+	Tue, 28 May 2024 17:34:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bMFZs+x7"
+	dkim=pass (2048-bit key) header.d=cachyos.org header.i=@cachyos.org header.b="oxJuOQtP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ptr1337.dev (mail.ptr1337.dev [202.61.224.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5BC817333F;
-	Tue, 28 May 2024 17:13:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A0762563;
+	Tue, 28 May 2024 17:34:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.61.224.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716916439; cv=none; b=LSBWWlYEVK6pIpvh7M/Vr7rci9b7yCBHIZGV2fjE4pWULQ/W4awiyljjBxKrRkls8LNYSHrLozbJNHHTBsofqQlYbzihPVWqLzEDPbaA9e78R5MZg78a8Y3EsJqgUUwp6ucVB3f6iTFniSbyYzZiESFKzZqtve82KJv4uM3u6j0=
+	t=1716917668; cv=none; b=lpp10KrvZUpLFWKeCWwUWJLjEY0HhBvyNhz5KtDEN0Zb6Bs+PIfpCy4Z59DaExG1L+lnzYrQV+y1bGHjrVZrgRweSxDsaxrzpmCt4o9jp6Oawy+RWtc/zCN/Su2eVSblcH5z6G6+mJFXdaboA7dGMfJoZH/aKln+HQbfsDv7W6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716916439; c=relaxed/simple;
-	bh=BF+bAtAxxwKCW4DJkeefBZDu0K+wuFNxBHFCPnA8enU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rtXAs8aDfiVjAwkGMxjkvt/L1fnsFpPTjH3QEWc1zqp/q47QQzelGEUHXOT9R2vLBEBAucDmpd4ff+pqNdjKDgRSfet4rzle9ZejgDOOtkRZjvH4lQc1f2NftksbOreyjlJPuT7xBcdL42ElgKSDfgVlDtuhJA0wYOMFI23IlTQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bMFZs+x7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1717C3277B;
-	Tue, 28 May 2024 17:13:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716916439;
-	bh=BF+bAtAxxwKCW4DJkeefBZDu0K+wuFNxBHFCPnA8enU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bMFZs+x7bluwgOhDpFWlsScecIjnUIpA8wwy44nKxYfhDp21ArJ9EGTXYy1VxEqF1
-	 x9TXpM9QxBZGm4o1v1LqS9mcped9va6UK0lmdFFjkVQ9ubrudgoiehZ3Lz7aYPrcDS
-	 CZcV2KWPGVRc9MF9lJzhe3nDHeJLsvlpYexFNRC/2rCxoOXnChmiFs16/e7IXF/nqt
-	 F+AaJqFSCY3pOPE41ePOAPSLd5WO3qXFyNJl/Bc8i7b3U3AI+tfMNrgblQ08Yw03i1
-	 ZEfdCsCbwqcPqzrlId7esYThtQvQQznFeYTPpondJK/woStogcP0VwGFHXeCNnFk87
-	 kQ0K44ux1N8jg==
-Date: Tue, 28 May 2024 12:13:56 -0500
-From: Bjorn Andersson <andersson@kernel.org>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Hans de Goede <hdegoede@redhat.com>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	Nikita Travkin <nikita@trvn.ru>
-Subject: Re: [PATCH v3 6/6] arm64: dts: qcom: c630: Add Embedded Controller
- node
-Message-ID: <njgvpbk4b26qs7zp675xdlmh3pcha6pm2vvvhyrxvrimtltgfx@slyweemaxmhs>
-References: <20240527-yoga-ec-driver-v3-0-327a9851dad5@linaro.org>
- <20240527-yoga-ec-driver-v3-6-327a9851dad5@linaro.org>
- <bbsdvqjo2ikljnuvupolpdfstsaegfqyg2ct7bt24evcorcfjt@3fw5eicxxuik>
- <CAA8EJpr9i=+uJGqxeeVYKwJeMqzQFg6FvqnChKNQqXLLVcB66w@mail.gmail.com>
+	s=arc-20240116; t=1716917668; c=relaxed/simple;
+	bh=Jo4q+rtPtpqg8nO8+3pGwO34OAH8uHmnEy4GW8MT9us=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SJ/rRdz1KfSjCr9QDmaRRTYvgch0BQUhFyLMRQQAYoOj1Vd/zPLblGDUUeMxeRlkdIZQMlDOA9HJmyL9Rnkz4r+XhWqMCra4a1ZBqPRxcd0fs1PxsPTrhvuG+pN2WaJlD0Y38SW4hkqzlLABpwJQ71uNr1Hfr1bRyjJW6WoAZH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cachyos.org; spf=pass smtp.mailfrom=cachyos.org; dkim=pass (2048-bit key) header.d=cachyos.org header.i=@cachyos.org header.b=oxJuOQtP; arc=none smtp.client-ip=202.61.224.105
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cachyos.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cachyos.org
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 90A6B280599;
+	Tue, 28 May 2024 19:25:15 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cachyos.org; s=dkim;
+	t=1716917117; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:content-language:in-reply-to:references;
+	bh=1m27YV+Npck5o3cnPSRggNl9DizV4QqsbBxedq/OX7g=;
+	b=oxJuOQtP3DddR9rb03nGWWVzDKWL+KtZLYMn/g24eoSPt+zLXXbtGp1HFvbk2uJ+M/vqW/
+	xY/5OAKSJT8/RhDPXkkl1nlPOrsmBCB5b+Tzcri3f9MN0inkJMq5i4y6mB3SGs7gwYJep0
+	oUS1R7weJZlcTF0KDeNkHtLrDTQrZXheAYLg7FGAAt7M1/ocMW0nQi9d/JcB7yd1+5famC
+	VTuK73AiiuIZVaJDgwHhhCAU9QcdkARXaSLyCDyMgwj5tda6UN4CpKOdRjrQEzunLmgyZh
+	fI73bFCti5PyP0CaCy+q4M/RFtBLuzOGDVlXLsIfUl8V8h5NJ1UyCT5JYfaLCA==
+Message-ID: <e14333bb-fa2c-4d14-a2d7-d29c19c18ea5@cachyos.org>
+Date: Tue, 28 May 2024 19:25:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAA8EJpr9i=+uJGqxeeVYKwJeMqzQFg6FvqnChKNQqXLLVcB66w@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] cpufreq: amd-pstate: Fix the inconsistency in max
+ frequency units
+To: "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
+ Mario Limonciello <mario.limonciello@amd.com>
+Cc: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>, rafael@kernel.org,
+ ray.huang@amd.com, viresh.kumar@linaro.org, ananth.narayan@amd.com,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, Perry.Yuan@amd.com
+References: <20240527051128.110091-1-Dhananjay.Ugwekar@amd.com>
+ <929aec0d-690b-4277-90b0-d0b4adb437d3@amd.com>
+ <ZlSqmYDaPNE8jybO@BLR-5CG11610CF.amd.com>
+Content-Language: en-US
+From: Peter Jung <ptr1337@cachyos.org>
+Organization: CachyOS
+In-Reply-To: <ZlSqmYDaPNE8jybO@BLR-5CG11610CF.amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Tue, May 28, 2024 at 06:12:58PM GMT, Dmitry Baryshkov wrote:
-> On Tue, 28 May 2024 at 18:06, Bjorn Andersson <andersson@kernel.org> wrote:
-> >
-> > On Mon, May 27, 2024 at 01:03:51PM GMT, Dmitry Baryshkov wrote:
-> > > From: Bjorn Andersson <andersson@kernel.org>
-> >
-> > Please align this with the S-o-b - feel free to use either form.
-> 
-> Ack. I'll check what went wrong.
-> 
-> >
-> > >
-> > > The Embedded Controller in the Lenovo Yoga C630 is accessible on &i2c1
-> > > and provides battery and adapter status, as well as altmode
-> > > notifications for the second USB Type-C port.
-> > >
-> > > Add a definition for the EC.
-> > >
-> > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > > ---
-> > >  .../boot/dts/qcom/sdm850-lenovo-yoga-c630.dts      | 76 ++++++++++++++++++++++
-> > >  1 file changed, 76 insertions(+)
-> > >
-> > > diff --git a/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts b/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
-> > > index 47dc42f6e936..d975f78eb3ab 100644
-> > > --- a/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
-> > > +++ b/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
-> > > @@ -370,6 +370,66 @@ zap-shader {
-> > >  &i2c1 {
-> > >       status = "okay";
-> > >       clock-frequency = <400000>;
-> > > +
-> > > +     embedded-controller@70 {
-> > > +             compatible = "lenovo,yoga-c630-ec";
-> > > +             reg = <0x70>;
-> > > +
-> > > +             interrupts-extended = <&tlmm 20 IRQ_TYPE_LEVEL_HIGH>;
-> > > +
-> > > +             pinctrl-names = "default";
-> > > +             pinctrl-0 = <&ec_int_state>;
-> > > +
-> > > +             #address-cells = <1>;
-> > > +             #size-cells = <0>;
-> > > +
-> > > +             connector@0 {
-> > > +                     compatible = "usb-c-connector";
-> > > +                     reg = <0>;
-> > > +                     power-role = "dual";
-> > > +                     data-role = "host";
-> >
-> > I was under the impression that this port is wired directly to the SoC
-> > and as such this would support data role switching as well.
-> >
-> > No concern with that, but just out of curiosity, is this not the case?
-> 
-> It is wired through the external Type-C port controller RTS5437, which
-> also controls the vbus pins, etc. The UCSI firmware reports both ports
-> as host-only and doesn't implement data role switching. So, having it
-> as "host" is a safe bet.
-> 
+ > > > Fixes: ec437d71db77 ("cpufreq: amd-pstate: Introduce a new AMD 
+P-State driver to support future processors")
+ > > > Signed-off-by: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
+ > >
+ > > Acked-by: Mario Limonciello <mario.limonciello@amd.com>
+ >
+ > Acked-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
 
-Thanks for the explanation, that makes sense.
 
-> I must admit, I also hoped to be able to use this port in gadget mode,
-> but it seems to be nearly impossible.
-> 
+Tested-by: Peter Jung <ptr1337@cachyos.org>
 
-Someone must have managed to use the device in peripheral mode to get
-the firmware on there originally...just saying... ;)
+Fixes also an introduced regression in amd-pstate=passive reporting 
+wrong frequency values.
 
-Regards,
-Bjorn
+Also, see[1]
+
+[1]https://github.com/CachyOS/linux-cachyos/issues/253#issuecomment-2135659124
+
 
