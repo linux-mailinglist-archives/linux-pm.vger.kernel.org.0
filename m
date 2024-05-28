@@ -1,129 +1,97 @@
-Return-Path: <linux-pm+bounces-8211-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8212-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AE6F8D11E5
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 04:22:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC9A48D12D7
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 05:38:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CCC0C1C2149D
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 02:22:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD6A81C22368
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 03:38:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3667C25761;
-	Tue, 28 May 2024 02:19:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC4A013E029;
+	Tue, 28 May 2024 03:33:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pubh5gTS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LpcHrd3p"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A3157D07E;
-	Tue, 28 May 2024 02:19:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E07F13DDD1;
+	Tue, 28 May 2024 03:33:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716862771; cv=none; b=Uh++vxn4KeGfY+c4/rkhRj3np9Y1ubRVCV3OWgZMbPoDGJmYiiBXtkLdJ4pgl0ixel16dxk+djL9EEroUspVqTYATAd8uEWVe1geOf4ayYIHctNEUXgTJIczmbfEMQuf42oNOS1hT5oTqnbQss4ZkF7alVIX3y0o8y3AOLXFamo=
+	t=1716867188; cv=none; b=BIM0F9WifTbaAG38mV/Z6flj0Ys0W5J4wICQ2IOmjfwP41aUkNgnteehb9x+Z8NeTL324wvYIA5UlM884jMzhvLoNBBpplmbrnN8uoucpBm4UCa2dxhobEE2dvlRIpLE405vOuwR0LnMcOt+6esJhFcSro6DqZm9bBRrQAs580I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716862771; c=relaxed/simple;
-	bh=KtRYK3bJlvylD1F2ct8tuxgRHVingUc7qzHhXbE94vk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XoCm6K9vMCGSDpRTIOas5dRJkZVJhBuqqxjpiSkI7uVK945GuX6KfoLnEBBllMGdKxSJW8F/Iq3fx5sTpSShH+5lNtYLErV+w/P7M9FWRtXV3/rMJ4krJmUrvpr55D/f4Oex9Tm8tP+tOGUDHR8DgLt72j3DxRX2JHT5yqFOQio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pubh5gTS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42A9FC2BBFC;
-	Tue, 28 May 2024 02:19:29 +0000 (UTC)
+	s=arc-20240116; t=1716867188; c=relaxed/simple;
+	bh=dmkQhH726QV4tXqveyEfM0J2Tr7bkFkZbQJeAmuA30k=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=OETJ8Akf0aX5C9uqT1S9irdkHUmIw2UjMLdRzxXOijhKf0tNut2g5kCJjHDNNjmjwFT0G2GyIyNgENUlTGgVfKqfMd/sYmDCiItdJp6+DokN1nucpsr0B4VFT1bdLL1HSd8no+IqTt8USdE07r/OBJYnGcm9sp8sVhVbuj479JI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LpcHrd3p; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F747C32786;
+	Tue, 28 May 2024 03:33:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716862770;
-	bh=KtRYK3bJlvylD1F2ct8tuxgRHVingUc7qzHhXbE94vk=;
-	h=From:To:Cc:Subject:Date:From;
-	b=pubh5gTSrmY4AorCR/QlhnO7kn0fErF12QfG0/SfOgtbnTaZt+rT2TIWZ2tVv+BKo
-	 SNk+jghMGTD/5AMxQ1xs99XMskahceeibgr8Y8l1/y3rllUcxxDIVQHFq323dn/O3/
-	 yUINhwNq9nELHoiB8dekG+WeQKlJwSZZHjgeLoDx/fdkilHZt4BT+yPWhOuwjHYFpR
-	 YxiwCEaWG8U7V2Dn6MKVhKr95ifoqqFxMTWWBLCe/5SCG3EJGUUUi6d3EtWHVbC6kS
-	 egRajvw6KTb+DSTHFHVu7cOMwNJZIlsxVunABDjHq7Ew0rUx29GaN3URr4G8IMP7q6
-	 WzjDfvIJpnvGA==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Tzung-Bi Shih <tzungbi@kernel.org>,
-	Benson Leung <bleung@chromium.org>,
-	Prashant Malani <pmalani@chromium.org>,
+	s=k20201202; t=1716867188;
+	bh=dmkQhH726QV4tXqveyEfM0J2Tr7bkFkZbQJeAmuA30k=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=LpcHrd3peNExvtrcA/QbYMeqt/gPihJJRkcbhvnJo5IAsKHwL7BitrnYh9N5ZMlcc
+	 C6LL4vC7xx0yyUnd6/DZFdO+j3HJwFRRBj85TpJDpngQ3ZBPq7mFdt568RZxHzV4q/
+	 7LzfR0vo2fkvJ49nII060HF/jXzTZqEQOyoeC8uSOWzaNieJ0ZEaNKlm8xhhSXW5Bm
+	 I92ljfyc+ydTqxWeztKsm+6QzUBvoAiL14ank/Hkt839kmTedx3Ms53F5jY+ordVKR
+	 tjfAdVwrREflyoEcakJi6RA8r6W4ulNyxkGFUsn8kEQyKcWSVKdZvdD87SyYZrmhi8
+	 oRvwtwbagss4Q==
+From: Bjorn Andersson <andersson@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Ilia Lin <ilia.lin@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+Cc: linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
 	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	Sasha Levin <sashal@kernel.org>,
-	sre@kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19] power: supply: cros_usbpd: provide ID table for avoiding fallback match
-Date: Mon, 27 May 2024 22:19:27 -0400
-Message-ID: <20240528021927.3905602-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	Mukesh Ojha <quic_mojha@quicinc.com>
+Subject: Re: [PATCH v2 0/3] Add support for the IPQ5321 SoC
+Date: Mon, 27 May 2024 22:32:28 -0500
+Message-ID: <171686715170.523693.6781951899387448559.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.44.0
+In-Reply-To: <20240325-ipq5321-sku-support-v2-0-f30ce244732f@quicinc.com>
+References: <20240325-ipq5321-sku-support-v2-0-f30ce244732f@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.19.315
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-From: Tzung-Bi Shih <tzungbi@kernel.org>
 
-[ Upstream commit 0f8678c34cbfdc63569a9b0ede1fe235ec6ec693 ]
+On Mon, 25 Mar 2024 21:19:47 +0530, Kathiravan Thirumoorthy wrote:
+> IPQ5321 SoC belong to IPQ5332 family. Add the SoC ID and the cpufreq
+> support. Maximum cpufreq for IPQ5321 is 1.1GHZ, which is determined
+> based on the eFuse.
+> 
+> Viresh is okay to merge the cpufreq change via qcom tree[1] and provided
+> his Ack.
+> 
+> [...]
 
-Instead of using fallback driver name match, provide ID table[1] for the
-primary match.
+Applied, thanks!
 
-[1]: https://elixir.bootlin.com/linux/v6.8/source/drivers/base/platform.c#L1353
+[1/3] dt-bindings: arm: qcom,ids: Add SoC ID for IPQ5321
+      commit: 27c42e925323b975a64429e313b0cf5c0c02a411
+[2/3] soc: qcom: socinfo: Add SoC ID for IPQ5321
+      commit: 8ddfb4a8e093689859184abf52fe15cd2523c6b9
+[3/3] cpufreq: qcom-nvmem: add support for IPQ5321
+      commit: 14ef045bbd27430dc92c8b4613caaf41e82f47e0
 
-Reviewed-by: Benson Leung <bleung@chromium.org>
-Reviewed-by: Prashant Malani <pmalani@chromium.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
-Link: https://lore.kernel.org/r/20240401030052.2887845-4-tzungbi@kernel.org
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/power/supply/cros_usbpd-charger.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/power/supply/cros_usbpd-charger.c b/drivers/power/supply/cros_usbpd-charger.c
-index 74b5914abbf7e..123a5572fe5b1 100644
---- a/drivers/power/supply/cros_usbpd-charger.c
-+++ b/drivers/power/supply/cros_usbpd-charger.c
-@@ -5,6 +5,7 @@
-  * Copyright (c) 2014 - 2018 Google, Inc
-  */
- 
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/mfd/cros_ec.h>
- #include <linux/mfd/cros_ec_commands.h>
-@@ -530,16 +531,22 @@ static int cros_usbpd_charger_resume(struct device *dev)
- static SIMPLE_DEV_PM_OPS(cros_usbpd_charger_pm_ops, NULL,
- 			 cros_usbpd_charger_resume);
- 
-+static const struct platform_device_id cros_usbpd_charger_id[] = {
-+	{ DRV_NAME, 0 },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(platform, cros_usbpd_charger_id);
-+
- static struct platform_driver cros_usbpd_charger_driver = {
- 	.driver = {
- 		.name = DRV_NAME,
- 		.pm = &cros_usbpd_charger_pm_ops,
- 	},
--	.probe = cros_usbpd_charger_probe
-+	.probe = cros_usbpd_charger_probe,
-+	.id_table = cros_usbpd_charger_id,
- };
- 
- module_platform_driver(cros_usbpd_charger_driver);
- 
- MODULE_LICENSE("GPL");
- MODULE_DESCRIPTION("ChromeOS EC USBPD charger");
--MODULE_ALIAS("platform:" DRV_NAME);
+Best regards,
 -- 
-2.43.0
-
+Bjorn Andersson <andersson@kernel.org>
 
