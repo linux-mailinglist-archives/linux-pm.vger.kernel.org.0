@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-8261-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8260-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B86F8D2201
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 18:54:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BC278D21FF
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 18:54:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 97EBA1F23AA3
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 16:54:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 581BF1C21A6E
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 16:54:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82E6817333F;
-	Tue, 28 May 2024 16:54:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6CF017332A;
+	Tue, 28 May 2024 16:54:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="nMLigcU7"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="YJH4dREI"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42ECB172BCE;
-	Tue, 28 May 2024 16:54:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A2AA171E44;
+	Tue, 28 May 2024 16:54:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716915265; cv=none; b=IejxRGSyF6yGhBKw9OkS0tWk59iZlVWQL0xUIVTceMAnm94UweK6QfRrMmQ3ke0DfPcF0FAUbQDbFgau3xoW13lW8F7r8GwOSa5DmZxGK8NxC8fKzjRIMA9r6P6e1E2TyFZ8S+0K7rYHlzX45HUZ3SDQ+8MYvPjrqqpkJG06ej8=
+	t=1716915264; cv=none; b=RZP6Jvz/2q23p2juERjhHkL03p4obP7DBGD88s3GjwVzgLk/8V5aPPNabSOMg3TiZ4hLQG7aSl7DVrTWg3xRKimFuEOtKR5gPdz873tgjQFnYqRtKlx/0j2/bqMx6OY/o70C9th51VW5bVU3+X874Zy317cwj2yqQ1J2V5qeqa8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716915265; c=relaxed/simple;
-	bh=ZFY3hO8BREpKs43Exr0jP3HTgfME6rUtFCseLnYt4NY=;
+	s=arc-20240116; t=1716915264; c=relaxed/simple;
+	bh=vn9XxyYsOXd3b8Z5/62CmIgn6KJhgsWt9QkmG3kKn8c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=J/717L455Pufuzg8tcPfsHNWJdJl3RkXRT6j4KlfC7oLVhtfzDbgnigFu/Eph1qYk4KkwkRrVs0NYD0d9p0CtzAhAlQHUGJ6KiuimlcX5X6mtBjmyEsh4sXwGSrgVjPv65zDFKCu6RFzSkLx8ODzjq2Yd+84Q0ubjJPdSAMOYRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=nMLigcU7 reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+	 MIME-Version:Content-Type; b=S7+piFPNT+tj4SazaNyGryiR0VWEeNWfZvIt7ssm3XnvjcafRvzgjTA7tVPzI9InbtQff1lwysStC1QM39UpwvbjYmznsZ1aS8C/e80H9s7kCn2dW2pAH4Bg4Fr7wqpYq5d8v2hOX0E536tSW5HTPT5PunYGzust8nyHobH3kks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=YJH4dREI reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.1.0)
- id b21576a730ce3ccd; Tue, 28 May 2024 18:54:21 +0200
+ id f373c1def34ea047; Tue, 28 May 2024 18:54:20 +0200
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 51A176A5036;
-	Tue, 28 May 2024 18:54:20 +0200 (CEST)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 718306A5036;
+	Tue, 28 May 2024 18:54:19 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1716915260;
-	bh=ZFY3hO8BREpKs43Exr0jP3HTgfME6rUtFCseLnYt4NY=;
+	s=dkim; t=1716915259;
+	bh=vn9XxyYsOXd3b8Z5/62CmIgn6KJhgsWt9QkmG3kKn8c=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=nMLigcU7ug2y+P4XHklGwrB02zjHc+cTZW2HD4J+X7V44Uj9uojou4dOT2f+/i5f8
-	 HD/x6BE0SCBMyJ9mLvE/JhS79NHz8HKh29psC0Vw30/7hiHU4M/PdKLC24rdTNWusD
-	 vtPU6MTLjq/yf4yUAQssDb0dziD6VE33wdpjosM4jIv01AEpyZoFylQ5K7FuEO8Vqc
-	 Dits19LIHwSO3RJzhLEAtbgjJV8DXLuIffhEYH+o0BtuU52ELzvvQgW8Pc4izdbL4n
-	 /qYR6yMqTU3fUqPmE1CGtUF6N9R9siAorey2SRuXAiyWt9/Bq5Vub0FPGpTzs1Y0l1
-	 f9vqN6dNbiwBQ==
+	b=YJH4dREI8/Vr8uo1uwGWWHDErIuzLs2mdWD56iPWcETlbRPWL2Nxwpd/gTaUu6bvd
+	 jlFCtHivPCgzBRe2YRDU5LU2vi01FWKPiZ1fI3xG6H3wjROiueyepojkLXNgd/qm+s
+	 w7692MnIvi1pAIqsgvub12lBW4Y9zYVwC/RnHbe65mNbeOT6JfpAe1or9P3bDlmVmF
+	 w9fXNzHUXgz79EHQkAubVNgFYhl5VFEMvqKUPBF12OV91OhW25Gp6MJkY5GSflnRUT
+	 vKRFHmY2J0KJagmGdZrH+DdGGfEoz9SSJevLeCxMv+PM3zf8cNK1Z8FLZDAocf+oZt
+	 lGwOrG9RcjsMQ==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>,
@@ -58,10 +58,10 @@ Cc: LKML <linux-kernel@vger.kernel.org>,
  Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
  Zhang Rui <rui.zhang@intel.com>
 Subject:
- [PATCH v2 4/5] thermal: gov_bang_bang: Drop unnecessary cooling device target
- state checks
-Date: Tue, 28 May 2024 18:54:01 +0200
-Message-ID: <3312910.44csPzL39Z@kreacher>
+ [PATCH v2 5/5] thermal: core: Avoid calling .trip_crossed() for critical and
+ hot trips
+Date: Tue, 28 May 2024 18:54:11 +0200
+Message-ID: <8392684.T7Z3S40VBb@kreacher>
 In-Reply-To: <12458899.O9o76ZdvQC@kreacher>
 References: <12458899.O9o76ZdvQC@kreacher>
 Precedence: bulk
@@ -81,12 +81,9 @@ X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Some cooling device target state checks in bang_bang_control()
-done before setting the new target state are not necessary after
-recent changes, so drop them.
-
-Also avoid updating the target state before checking it for
-unexpected values.
+Invoking the governor .trip_crossed() callback for critical and hot
+trips is pointless because they are handled directly by the core,
+so make thermal_governor_trip_crossed() avoid doing that.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
@@ -94,41 +91,23 @@ Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 v1 -> v2: Rebase.
 
 ---
- drivers/thermal/gov_bang_bang.c |   14 +++-----------
- 1 file changed, 3 insertions(+), 11 deletions(-)
+ drivers/thermal/thermal_core.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-Index: linux-pm/drivers/thermal/gov_bang_bang.c
+Index: linux-pm/drivers/thermal/thermal_core.c
 ===================================================================
---- linux-pm.orig/drivers/thermal/gov_bang_bang.c
-+++ linux-pm/drivers/thermal/gov_bang_bang.c
-@@ -57,24 +57,16 @@ static void bang_bang_control(struct the
- 		if (instance->trip != trip)
- 			continue;
- 
--		if (instance->target == THERMAL_NO_TARGET)
--			instance->target = 0;
--
--		if (instance->target != 0 && instance->target != 1) {
-+		if (instance->target != 0 && instance->target != 1 &&
-+		    instance->target != THERMAL_NO_TARGET)
- 			pr_debug("Unexpected state %ld of thermal instance %s in bang-bang\n",
- 				 instance->target, instance->name);
- 
--			instance->target = 1;
--		}
--
- 		/*
- 		 * Enable the fan when the trip is crossed on the way up and
- 		 * disable it when the trip is crossed on the way down.
- 		 */
--		if (instance->target == 0 && crossed_up)
--			instance->target = 1;
--		else if (instance->target == 1 && !crossed_up)
--			instance->target = 0;
-+		instance->target = crossed_up;
- 
- 		dev_dbg(&instance->cdev->device, "target=%ld\n", instance->target);
- 
+--- linux-pm.orig/drivers/thermal/thermal_core.c
++++ linux-pm/drivers/thermal/thermal_core.c
+@@ -463,6 +463,9 @@ static void thermal_governor_trip_crosse
+ 					  const struct thermal_trip *trip,
+ 					  bool crossed_up)
+ {
++	if (trip->type == THERMAL_TRIP_HOT || trip->type == THERMAL_TRIP_CRITICAL)
++		return;
++
+ 	if (governor->trip_crossed)
+ 		governor->trip_crossed(tz, trip, crossed_up);
+ }
 
 
 
