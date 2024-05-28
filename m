@@ -1,269 +1,119 @@
-Return-Path: <linux-pm+bounces-8303-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8304-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A157D8D2554
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 22:00:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D6EB8D256B
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 22:05:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5421C28199B
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 20:00:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6BF751C234ED
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 20:05:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAC26178363;
-	Tue, 28 May 2024 20:00:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9945B17839E;
+	Tue, 28 May 2024 20:05:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="owCVVocN"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="m0yBI/G9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9136E29402;
-	Tue, 28 May 2024 20:00:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40D4217838A;
+	Tue, 28 May 2024 20:05:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716926453; cv=none; b=aMyetZNLczYP+hUdizCNDSrEyMmIdLNn2f7HoPverYBTkZ1RreSbzC9At+TD87wn2dljY4tQ7vDrOoRvU5oFlv+IaMt6V4TCPBtfJxcy4GWmzsACg8uFayIQHN9LyqfeJ6IhuvEKyP9FXMZg3MiM1FG9YskDRMwb1j0NvtJvKHk=
+	t=1716926718; cv=none; b=i87adYjdZ++0iCAFsTr0mNHwJulQYiFjrll8vtHmtwbtL9m000Q8ErfjcAur9XS98l4WiGiTnbMGTpojNtqIjs+SZCYutMXZjBp6Vadm6XTFUmU8e93QM4CVt6thabfCO949NheEu9QtzBFxBpUScRO4hXyUjFSszSgeYqC6OWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716926453; c=relaxed/simple;
-	bh=nTbDhwyviaLMbfaJtiOxxx3LkcPgQ3xSCNmD1vg86bc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pnN9HbOjcwumjUKl7ZXc/hYANa7ZolbzFA67232K+YOzcxfKfb5hm6qQVypuM/jHc1Pc5zp34shnUzMiLVGxOgAgAsqCbl08eHbHxktR7wt2xCN0ADOHq2CPCfa7+oay8tNH8WZv1mV2zaq/+/1fRoefpOF1Ilq8o0g/FXkpjWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=owCVVocN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0171CC32786;
-	Tue, 28 May 2024 20:00:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716926453;
-	bh=nTbDhwyviaLMbfaJtiOxxx3LkcPgQ3xSCNmD1vg86bc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=owCVVocN8NuAMtXNRgBZCZEwTvdQgWHpV6mACAUokIiIrngzZfjuB3G9VyJrF646h
-	 fCdLJF/pw+uYGcJVHiivPj9lXGa6est3vPsUl6I7qjWSdV/CeqqGUWk3/zcE9eEhh/
-	 7EQyGb6H/HaI9r461E4YKqVCNbjUjF+GUUYc6PI2woCnSrNUtNZODMEac/EDR3V3Wh
-	 Ehzzr/PWHRo4MxDWkgn+b75H4AnSF7iLpcjytXTjQr9A71tr68vPLrjbr2hNj2Hun+
-	 pD9zuzMmuacu/fE76SvZoDAuRx2xNz3IkgIP1BooALKCtTh+gbxhuiZUxya0Uuj57B
-	 g9f74EizWzWaA==
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-5b2fbe85f82so191202eaf.1;
-        Tue, 28 May 2024 13:00:52 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVOirMGAHOUMeWR7jxe6w/1D2jn5z2GaQYF7VoMTzXHqirhscs2+90njtukflOdrIPUacG0QSadSMuJdE7im2GepGXdW5NqQUas2JvKo+VdbHuX7upiSEZJo4I0RYMhyBPCXa16Z5E=
-X-Gm-Message-State: AOJu0YxEGl7t7P3ixH6GO3RVm/ss9Ad2We12MiZb6JoaYaU4xEjKowuF
-	ipUWgxeNvZWIGB1pbAQlIvtwWo1UuLB7bUAEdzRAp8r7SZ+7QQhxARt37gcrg0Jod3V2zr1XlBV
-	tmM7x2vKXcuuBVQugGjedwEWl2cE=
-X-Google-Smtp-Source: AGHT+IHllD0tfHn/GT604/S3e6+vho1OzOixWyheh0PHIwshIZefDo1hz6aL0GVlHXEZ/M7BizLCS7+NA7hMMir+LUs=
-X-Received: by 2002:a4a:ba86:0:b0:5b2:8017:fb68 with SMTP id
- 006d021491bc7-5b95cde3ec5mr14458580eaf.0.1716926452133; Tue, 28 May 2024
- 13:00:52 -0700 (PDT)
+	s=arc-20240116; t=1716926718; c=relaxed/simple;
+	bh=iiKhQmFNByPcXspe2bsUME4YrkiJ8ckmRbNWS2vPbdk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=bxO2fLk8HggoeZ2a/4/oiur5Tgqab5pjIXkT8jK/QneBS4NWcCCl2vuoKhPr0au528jdRWfYl9W/v8GfM1uPh/MdVGIHZjTb0Q22GdLdZkcc1pjDIgbRgvw94/FEFxvlmIXwbwlQA8EYWDTTUb+bXW/tQnwiEGoVyy2CgSNDBeQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=m0yBI/G9; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1716926707;
+	bh=iiKhQmFNByPcXspe2bsUME4YrkiJ8ckmRbNWS2vPbdk=;
+	h=From:Subject:Date:To:Cc:From;
+	b=m0yBI/G9ILhDGIJkxe7P9EpwJ20bJPNKxEvHfJg1Efujskaxc+Se7rywCsZxcmUSF
+	 z91W2HK1FUICl9XkN0CBIPbe/blJH+bm/rLRrlztzUrS0nj6r0FhwPM5YMA1rra5oH
+	 sQekHa8N3cXk8QZTVVxz++umRFGJ8TG6UH7z7MGs=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH v2 0/3] ChromeOS Embedded Controller charge control driver
+Date: Tue, 28 May 2024 22:04:09 +0200
+Message-Id: <20240528-cros_ec-charge-control-v2-0-81fb27e1cff4@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240528121124.3588248-1-arnd@kernel.org> <0edd0485-274a-4b3f-8ecb-60708963db8a@amd.com>
-In-Reply-To: <0edd0485-274a-4b3f-8ecb-60708963db8a@amd.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 28 May 2024 22:00:40 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iqkR24RjiXET6qKRHeOLxYqKSgrpsp_N87wuJrtdTcAg@mail.gmail.com>
-Message-ID: <CAJZ5v0iqkR24RjiXET6qKRHeOLxYqKSgrpsp_N87wuJrtdTcAg@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: amd-pstate: remove global header file
-To: Mario Limonciello <mario.limonciello@amd.com>, Arnd Bergmann <arnd@kernel.org>
-Cc: Huang Rui <ray.huang@amd.com>, "Gautham R. Shenoy" <gautham.shenoy@amd.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Perry Yuan <perry.yuan@amd.com>, Wyes Karny <wyes.karny@amd.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Meng Li <li.meng@amd.com>, Swapnil Sapkal <swapnil.sapkal@amd.com>, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIALk4VmYC/3WNwQ6CMBBEf4Xs2ZoWBYon/8MQA2Wxm5iW7CJqC
+ P9uJV49vpnMmwUEmVDglC3AOJNQDAnyXQbOt+GGivrEkOv8qAtdKsdRruhUajm1LoaJ412Vtih
+ NhRZ7W0Eaj4wDvTbxpUnsSabI7+1nNt/0pzT1P+VslFZdOxx00buq7uz5iSQizj/8PuAEzbquH
+ 1mzYn3BAAAA
+To: Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
+ Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas@weissschuh.net>
+Cc: chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, 
+ linux-pm@vger.kernel.org, Mario Limonciello <mario.limonciello@amd.com>, 
+ Dustin Howett <dustin@howett.net>, 
+ Stephen Horvath <s.horvath@outlook.com.au>, 
+ Rajas Paranjpe <paranjperajas@gmail.com>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1716926706; l=1698;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=iiKhQmFNByPcXspe2bsUME4YrkiJ8ckmRbNWS2vPbdk=;
+ b=a838ZxPgon4i1+SbW6pRgcmX7Q4jxi4EREHrFP59RVRrYS3/X8/W6oq1lFgF0JRqFmaFpFHHF
+ O9s2L3hAktuDk4hHDHjiZg9pNRasJDuP7jZKhL1hBgrN+AAVwOWD6rk
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-On Tue, May 28, 2024 at 7:49=E2=80=AFPM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
->
-> On 5/28/2024 07:09, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > When extra warnings are enabled, gcc points out a global variable
-> > definition in a header:
-> >
-> > In file included from drivers/cpufreq/amd-pstate-ut.c:29:
-> > include/linux/amd-pstate.h:123:27: error: 'amd_pstate_mode_string' defi=
-ned but not used [-Werror=3Dunused-const-variable=3D]
-> >    123 | static const char * const amd_pstate_mode_string[] =3D {
-> >        |                           ^~~~~~~~~~~~~~~~~~~~~~
-> >
-> > This header is only included from two files in the same directory,
-> > and one of them uses only a single definition from it, so clean it
-> > up by moving most of the contents into the driver that uses them,
-> > and making shared bits a local header file.
-> >
-> > Fixes: 36c5014e5460 ("cpufreq: amd-pstate: optimize driver working mode=
- selection in amd_pstate_param()")
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->
-> Thanks!
->
-> Acked-by: Mario Limonciello <mario.limonciello@amd.com>
+Add a power supply driver that supports charge thresholds and behaviour
+configuration.
 
-Applied as 6.10-rc material, thanks!
+This is a complete rework of
+"platform/chrome: cros_ec_framework_laptop: new driver" [0], which used
+Framework specific EC commands.
 
-> > ---
-> >   MAINTAINERS                                   |  1 -
-> >   drivers/cpufreq/amd-pstate-ut.c               |  3 +-
-> >   drivers/cpufreq/amd-pstate.c                  | 34 ++++++++++++++++++=
--
-> >   .../linux =3D> drivers/cpufreq}/amd-pstate.h    | 33 ----------------=
---
-> >   4 files changed, 35 insertions(+), 36 deletions(-)
-> >   rename {include/linux =3D> drivers/cpufreq}/amd-pstate.h (82%)
-> >
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 070a39b2b098..35a75ab8ef05 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -1107,7 +1107,6 @@ L:      linux-pm@vger.kernel.org
-> >   S:  Supported
-> >   F:  Documentation/admin-guide/pm/amd-pstate.rst
-> >   F:  drivers/cpufreq/amd-pstate*
-> > -F:   include/linux/amd-pstate.h
-> >   F:  tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
-> >
-> >   AMD PTDMA DRIVER
-> > diff --git a/drivers/cpufreq/amd-pstate-ut.c b/drivers/cpufreq/amd-psta=
-te-ut.c
-> > index f04ae67dda37..fc275d41d51e 100644
-> > --- a/drivers/cpufreq/amd-pstate-ut.c
-> > +++ b/drivers/cpufreq/amd-pstate-ut.c
-> > @@ -26,10 +26,11 @@
-> >   #include <linux/module.h>
-> >   #include <linux/moduleparam.h>
-> >   #include <linux/fs.h>
-> > -#include <linux/amd-pstate.h>
-> >
-> >   #include <acpi/cppc_acpi.h>
-> >
-> > +#include "amd-pstate.h"
-> > +
-> >   /*
-> >    * Abbreviations:
-> >    * amd_pstate_ut: used as a shortform for AMD P-State unit test.
-> > diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.=
-c
-> > index 1b7e82a0ad2e..91993647e09e 100644
-> > --- a/drivers/cpufreq/amd-pstate.c
-> > +++ b/drivers/cpufreq/amd-pstate.c
-> > @@ -36,7 +36,6 @@
-> >   #include <linux/delay.h>
-> >   #include <linux/uaccess.h>
-> >   #include <linux/static_call.h>
-> > -#include <linux/amd-pstate.h>
-> >   #include <linux/topology.h>
-> >
-> >   #include <acpi/processor.h>
-> > @@ -46,6 +45,8 @@
-> >   #include <asm/processor.h>
-> >   #include <asm/cpufeature.h>
-> >   #include <asm/cpu_device_id.h>
-> > +
-> > +#include "amd-pstate.h"
-> >   #include "amd-pstate-trace.h"
-> >
-> >   #define AMD_PSTATE_TRANSITION_LATENCY       20000
-> > @@ -53,6 +54,37 @@
-> >   #define CPPC_HIGHEST_PERF_PERFORMANCE       196
-> >   #define CPPC_HIGHEST_PERF_DEFAULT   166
-> >
-> > +#define AMD_CPPC_EPP_PERFORMANCE             0x00
-> > +#define AMD_CPPC_EPP_BALANCE_PERFORMANCE     0x80
-> > +#define AMD_CPPC_EPP_BALANCE_POWERSAVE               0xBF
-> > +#define AMD_CPPC_EPP_POWERSAVE                       0xFF
-> > +
-> > +/*
-> > + * enum amd_pstate_mode - driver working mode of amd pstate
-> > + */
-> > +enum amd_pstate_mode {
-> > +     AMD_PSTATE_UNDEFINED =3D 0,
-> > +     AMD_PSTATE_DISABLE,
-> > +     AMD_PSTATE_PASSIVE,
-> > +     AMD_PSTATE_ACTIVE,
-> > +     AMD_PSTATE_GUIDED,
-> > +     AMD_PSTATE_MAX,
-> > +};
-> > +
-> > +static const char * const amd_pstate_mode_string[] =3D {
-> > +     [AMD_PSTATE_UNDEFINED]   =3D "undefined",
-> > +     [AMD_PSTATE_DISABLE]     =3D "disable",
-> > +     [AMD_PSTATE_PASSIVE]     =3D "passive",
-> > +     [AMD_PSTATE_ACTIVE]      =3D "active",
-> > +     [AMD_PSTATE_GUIDED]      =3D "guided",
-> > +     NULL,
-> > +};
-> > +
-> > +struct quirk_entry {
-> > +     u32 nominal_freq;
-> > +     u32 lowest_freq;
-> > +};
-> > +
-> >   /*
-> >    * TODO: We need more time to fine tune processors with shared memory=
- solution
-> >    * with community together.
-> > diff --git a/include/linux/amd-pstate.h b/drivers/cpufreq/amd-pstate.h
-> > similarity index 82%
-> > rename from include/linux/amd-pstate.h
-> > rename to drivers/cpufreq/amd-pstate.h
-> > index d58fc022ec46..e6a28e7f4dbf 100644
-> > --- a/include/linux/amd-pstate.h
-> > +++ b/drivers/cpufreq/amd-pstate.h
-> > @@ -1,7 +1,5 @@
-> >   /* SPDX-License-Identifier: GPL-2.0-only */
-> >   /*
-> > - * linux/include/linux/amd-pstate.h
-> > - *
-> >    * Copyright (C) 2022 Advanced Micro Devices, Inc.
-> >    *
-> >    * Author: Meng Li <li.meng@amd.com>
-> > @@ -12,11 +10,6 @@
-> >
-> >   #include <linux/pm_qos.h>
-> >
-> > -#define AMD_CPPC_EPP_PERFORMANCE             0x00
-> > -#define AMD_CPPC_EPP_BALANCE_PERFORMANCE     0x80
-> > -#define AMD_CPPC_EPP_BALANCE_POWERSAVE               0xBF
-> > -#define AMD_CPPC_EPP_POWERSAVE                       0xFF
-> > -
-> >   /********************************************************************=
-*
-> >    *                        AMD P-state INTERFACE                      =
- *
-> >    ********************************************************************=
-*/
-> > @@ -108,30 +101,4 @@ struct amd_cpudata {
-> >       bool    suspended;
-> >   };
-> >
-> > -/*
-> > - * enum amd_pstate_mode - driver working mode of amd pstate
-> > - */
-> > -enum amd_pstate_mode {
-> > -     AMD_PSTATE_UNDEFINED =3D 0,
-> > -     AMD_PSTATE_DISABLE,
-> > -     AMD_PSTATE_PASSIVE,
-> > -     AMD_PSTATE_ACTIVE,
-> > -     AMD_PSTATE_GUIDED,
-> > -     AMD_PSTATE_MAX,
-> > -};
-> > -
-> > -static const char * const amd_pstate_mode_string[] =3D {
-> > -     [AMD_PSTATE_UNDEFINED]   =3D "undefined",
-> > -     [AMD_PSTATE_DISABLE]     =3D "disable",
-> > -     [AMD_PSTATE_PASSIVE]     =3D "passive",
-> > -     [AMD_PSTATE_ACTIVE]      =3D "active",
-> > -     [AMD_PSTATE_GUIDED]      =3D "guided",
-> > -     NULL,
-> > -};
-> > -
-> > -struct quirk_entry {
-> > -     u32 nominal_freq;
-> > -     u32 lowest_freq;
-> > -};
-> > -
-> >   #endif /* _LINUX_AMD_PSTATE_H */
->
+The driver propsed in this series only uses upstream CrOS functionality.
+
+Tested on a Framework 13 AMD, Firmware 3.05.
+
+[0] https://lore.kernel.org/lkml/20240505-cros_ec-framework-v1-0-402662d6276b@weissschuh.net/
+
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Changes in v2:
+- Accept "0" as charge_start_threshold
+- Don't include linux/kernel.h
+- Only bind to the first found battery
+- Import EC_CMD_CHARGE_CONTROL v3 headers
+- Add support for v1 and v3 commands
+- Sort mfd cell entry alphabetically
+- Link to v1: https://lore.kernel.org/r/20240519-cros_ec-charge-control-v1-0-baf305dc79b8@weissschuh.net
+
+---
+Thomas Weißschuh (3):
+      platform/chrome: Update binary interface for EC-based charge control
+      power: supply: add ChromeOS EC based charge control driver
+      mfd: cros_ec: Register charge control subdevice
+
+ MAINTAINERS                                    |   6 +
+ drivers/mfd/cros_ec_dev.c                      |   1 +
+ drivers/power/supply/Kconfig                   |  12 +
+ drivers/power/supply/Makefile                  |   1 +
+ drivers/power/supply/cros_charge-control.c     | 353 +++++++++++++++++++++++++
+ include/linux/platform_data/cros_ec_commands.h |  49 +++-
+ 6 files changed, 420 insertions(+), 2 deletions(-)
+---
+base-commit: e0cce98fe279b64f4a7d81b7f5c3a23d80b92fbc
+change-id: 20240506-cros_ec-charge-control-685617e8ed87
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
+
 
