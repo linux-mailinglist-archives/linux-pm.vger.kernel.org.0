@@ -1,221 +1,154 @@
-Return-Path: <linux-pm+bounces-8301-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8302-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 387498D2548
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 21:56:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28B488D254C
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 21:58:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ECF632902A4
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 19:56:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE359290837
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 19:58:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D41917837A;
-	Tue, 28 May 2024 19:56:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2A07178382;
+	Tue, 28 May 2024 19:58:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="bde+UQcB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W+OAbSM0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C35431A60;
-	Tue, 28 May 2024 19:56:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C640D178372;
+	Tue, 28 May 2024 19:58:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716926186; cv=none; b=VdnHZmCeluCKdgQ/l2DcLE1kVMW4sOLQPouK+wv1808HDoqPHSZ6maVmZb5E2Y7UfNhjXpj0FOHQDqwlXtswe/Fv1ZmkAhf3D130evyUs4DgzF6N6PxYGPVNOx2PpD4l0SM3tONqS3uTkQTX3q9zW4TyTgiO/qlTJTVER+lA8NA=
+	t=1716926283; cv=none; b=qJv4HWFguycOCsXUaV1t7PVRtwh3/cZKK8hZ+My0hZMl0Res1w8LmGh2BVYnSFgoNNX9a6bBzvfSOrCUziJ9pUfQuFIgLIt4SrRyojV7xez4WHYBTltPYqnwg5Fkjw3HET+/4jBXpJ+po0x1UO0sNTc/Atva81Eseokd93x+3uo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716926186; c=relaxed/simple;
-	bh=8epW/QFJvHhVzhIz2U+4mF0PmxPK/CRJXwLf/jmU9L4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=UNjQwsL3XdCG9XNUSLzmCdI9RfcXA/fXZUEm+eqrXpqXAg9eYqTYmfzFWIjO446FVjAZx8WKXrqhNCiQNpV25HlvadZncpZAByW0i1X6c7MQQLiPKDMML+j1nzJ+u5SFhqHPzugBZJwv3yMK2lm+XM8asXoTFBUnq/iU++f6Pqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=bde+UQcB; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44SBgJO4024256;
-	Tue, 28 May 2024 19:56:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	ss6qpj70lx4SSpC0e8leTpGEkEBXzU/46li19BBg28g=; b=bde+UQcBuGKkl4fn
-	HpFDu6uOJIohYY/zhogjojymsxVzn7wWvkqH7FHrUYEPj+Fon1luIEOVbo4C24BO
-	0QN11Zs+fzskjb+5k3d6xAWtjVD99N+wHXRHqvWxTgKY1kLke/Pyz0vOaLrL+ygk
-	yxu9imsr7yi7PFObTBf/S/k/uG04pPuzbgJiBaM3F+oXib+AKrA/IqyNdn2jqHdC
-	rXvQZWlTTTD1C71KfaL9OCWv1oyUkcP3C9PYMPGQzFZmaE/ERGJSB9tjDzJD2JRb
-	jVYxCCWg/50zeg3mNM453Ze0x8T0FxeUpK8TY38H48K6sYOpL6+WRhlEOKrn+oBf
-	joaPtw==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ybadx75qs-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 28 May 2024 19:56:01 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 44SJtxFG021884
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 28 May 2024 19:55:59 GMT
-Received: from [10.110.83.142] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 28 May
- 2024 12:55:59 -0700
-Message-ID: <52dce8d3-acfa-4f2c-92d0-c25aa59d6526@quicinc.com>
-Date: Tue, 28 May 2024 12:55:58 -0700
+	s=arc-20240116; t=1716926283; c=relaxed/simple;
+	bh=BZlSwuttDPw9S9+xlwtc5/DNO6T6WU/rzwVlBiGJZJY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ShGq6ZyUExZAmVeO0226HWEYf8pMOsu9f2l2Yu3V4QZ15hqrQawre/e1tCURGVcYIs6qsh/wNSVeui8e6lFCVCSIyHz5O9aVynU39VWiW19y0ZK1d3Ldau8UoafartWBG4fAac3fTMj52eEeSINlUDaTkovzDspDkf6gtmGeILs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W+OAbSM0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CC8AC32786;
+	Tue, 28 May 2024 19:58:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716926283;
+	bh=BZlSwuttDPw9S9+xlwtc5/DNO6T6WU/rzwVlBiGJZJY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=W+OAbSM0A/BaV3StQPVI1WdF2UWFKuReytJe3cR/rVYbeVX5pTYv1sUodh8WAjSac
+	 VTqwOu7uYLtO/MfClEvTFskJoPIZWxbetOMyVaV9aZ/gQOttZJ6Hc0k59F6nsUwNc3
+	 bfRwG4N/8+4N1AHKKlTkXOEKZ5IpCvf3AKDXnVeyA0zRLv00PByTXustEVm7s7X8Nv
+	 3uLtEyBEd4SSk85AMKQDjw7ulj6cBfOi9lDyWqH69TFFBrjnmQmirO+EQpCUYnigrz
+	 z9BDbe5PFQ8XaxFA8dE6Dd3JtVOrNtjYouQCWxF34HR6JbIByX5bh4FsCJ7IR64Y5G
+	 USw2t+bDMboaQ==
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-24ffb6ee0f4so33807fac.0;
+        Tue, 28 May 2024 12:58:03 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVkTXyWD3+MX679GIohMb62YdYTiD7XsG9nBVRsjMx9rXcd+5kNLySG/V6kLOCdP23PD2zINRkPAkmQr/BahixKqkaOA9kyx85xNyc8Nbejhqbj9vxNwP4hxbYWDkA9QBB+npU98KdOMGu3EMEZF44fgrcHw+UzvWqZwgpzSm/jy822
+X-Gm-Message-State: AOJu0YyTv2qRgPGm/j2bbOYNB5+bV7IXlpTPwwE1CJ5KTYIwaaxOczhA
+	fgFo5dLIBNp6hT6lCj0dbH16D5zcyviU3YKbwlghs8OullzyGgpj5++WMIA19DImRlrA61z/09W
+	a1RfUPm8cfE04ZY9HiIS7OV3TGo8=
+X-Google-Smtp-Source: AGHT+IHhJdeeDpS76IDj68NZSHlaeZBVsNJkwgWvAhU1PNPDrzgrgarPIYTNLvW7O8ElosU15zALYFfGTD9297NASQM=
+X-Received: by 2002:a05:6870:d888:b0:24c:b2d0:bfff with SMTP id
+ 586e51a60fabf-24cb2d0c0camr12861111fac.2.1716926282655; Tue, 28 May 2024
+ 12:58:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/7] pmdomain: core: Enable s2idle for CPU PM domains
- on PREEMPT_RT
-To: Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J . Wysocki"
-	<rafael@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>, <linux-pm@vger.kernel.org>
-CC: Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Nikunj Kela
-	<nkela@quicinc.com>,
-        Prasad Sodagudi <psodagud@quicinc.com>,
-        Maulik Shah
-	<quic_mkshah@quicinc.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-rt-users@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20240527142557.321610-1-ulf.hansson@linaro.org>
- <20240527142557.321610-2-ulf.hansson@linaro.org>
-Content-Language: en-US
-From: Nikunj Kela <quic_nkela@quicinc.com>
-In-Reply-To: <20240527142557.321610-2-ulf.hansson@linaro.org>
+References: <20240526-acpi-ac-changed-v1-1-f4b5997753bb@weissschuh.net> <r5x24fxz5cbyd4laoteq577toqfblfmy4btn4c6o6rrl7godeu@4fgsimcubzrd>
+In-Reply-To: <r5x24fxz5cbyd4laoteq577toqfblfmy4btn4c6o6rrl7godeu@4fgsimcubzrd>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 28 May 2024 21:57:51 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hNs5vSMuPgtg=tbu=4Y1UHeGUnGM7Fo_LgjZmP1SqkZg@mail.gmail.com>
+Message-ID: <CAJZ5v0hNs5vSMuPgtg=tbu=4Y1UHeGUnGM7Fo_LgjZmP1SqkZg@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: AC: Properly notify powermanagement core about changes
+To: Sebastian Reichel <sebastian.reichel@collabora.com>, 
+	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Rajas Paranjpe <paranjperajas@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: cyEDIH1xDygla6iRX7ooHFmnl_q1DzTC
-X-Proofpoint-GUID: cyEDIH1xDygla6iRX7ooHFmnl_q1DzTC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
- definitions=2024-05-28_14,2024-05-28_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 phishscore=0
- impostorscore=0 bulkscore=0 mlxlogscore=999 malwarescore=0
- priorityscore=1501 mlxscore=0 suspectscore=0 spamscore=0
- lowpriorityscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2405170001 definitions=main-2405280149
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, May 27, 2024 at 11:43=E2=80=AFPM Sebastian Reichel
+<sebastian.reichel@collabora.com> wrote:
+>
+> Hi,
+>
+> On Sun, May 26, 2024 at 11:40:01PM +0200, Thomas Wei=C3=9Fschuh wrote:
+> > The powermanagement core does various actions when a power-supply chang=
+es.
+> > It calls into notifiers, LED triggers, other power supplies and emits a=
+n uevent.
+> >
+> > To make sure that all these actions happen properly call power_supply_c=
+hanged().
+> >
+> > Reported-by: Rajas Paranjpe <paranjperajas@gmail.com>
+> > Closes: https://github.com/MrChromebox/firmware/issues/420#issuecomment=
+-2132251318
+> > Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+> > ---
+>
+> Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+>
+> -- Sebastian
+>
+> >  drivers/acpi/ac.c  | 4 ++--
+> >  drivers/acpi/sbs.c | 4 ++--
+> >  2 files changed, 4 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/acpi/ac.c b/drivers/acpi/ac.c
+> > index 2d4a35e6dd18..09a87fa222c7 100644
+> > --- a/drivers/acpi/ac.c
+> > +++ b/drivers/acpi/ac.c
+> > @@ -145,7 +145,7 @@ static void acpi_ac_notify(acpi_handle handle, u32 =
+event, void *data)
+> >                                                 dev_name(&adev->dev), e=
+vent,
+> >                                                 (u32) ac->state);
+> >               acpi_notifier_call_chain(adev, event, (u32) ac->state);
+> > -             kobject_uevent(&ac->charger->dev.kobj, KOBJ_CHANGE);
+> > +             power_supply_changed(ac->charger);
+> >       }
+> >  }
+> >
+> > @@ -268,7 +268,7 @@ static int acpi_ac_resume(struct device *dev)
+> >       if (acpi_ac_get_state(ac))
+> >               return 0;
+> >       if (old_state !=3D ac->state)
+> > -             kobject_uevent(&ac->charger->dev.kobj, KOBJ_CHANGE);
+> > +             power_supply_changed(ac->charger);
+> >
+> >       return 0;
+> >  }
+> > diff --git a/drivers/acpi/sbs.c b/drivers/acpi/sbs.c
+> > index 94e3c000df2e..dc8164b182dc 100644
+> > --- a/drivers/acpi/sbs.c
+> > +++ b/drivers/acpi/sbs.c
+> > @@ -610,7 +610,7 @@ static void acpi_sbs_callback(void *context)
+> >       if (sbs->charger_exists) {
+> >               acpi_ac_get_present(sbs);
+> >               if (sbs->charger_present !=3D saved_charger_state)
+> > -                     kobject_uevent(&sbs->charger->dev.kobj, KOBJ_CHAN=
+GE);
+> > +                     power_supply_changed(sbs->charger);
+> >       }
+> >
+> >       if (sbs->manager_present) {
+> > @@ -622,7 +622,7 @@ static void acpi_sbs_callback(void *context)
+> >                       acpi_battery_read(bat);
+> >                       if (saved_battery_state =3D=3D bat->present)
+> >                               continue;
+> > -                     kobject_uevent(&bat->bat->dev.kobj, KOBJ_CHANGE);
+> > +                     power_supply_changed(bat->bat);
+> >               }
+> >       }
+> >  }
+> >
+> > ---
 
-On 5/27/2024 7:25 AM, Ulf Hansson wrote:
-> To allow a genpd provider for a CPU PM domain to enter a domain-idle-state
-> during s2idle on a PREEMPT_RT based configuration, we can't use the regular
-> spinlock, as they are turned into sleepable locks on PREEMPT_RT.
->
-> To address this problem, let's convert into using the raw spinlock, but
-> only for genpd providers that have the GENPD_FLAG_CPU_DOMAIN bit set. In
-> this way, the lock can still be acquired/released in atomic context, which
-> is needed in the idle-path for PREEMPT_RT.
->
-> Do note that the genpd power-on/off notifiers may also be fired during
-> s2idle, but these are already prepared for PREEMPT_RT as they are based on
-> the raw notifiers. However, consumers of them may need to adopt accordingly
-> to work properly on PREEMPT_RT.
->
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> ---
->
-> Changes in v2:
-> 	- None.
->
-> ---
->  drivers/pmdomain/core.c   | 47 ++++++++++++++++++++++++++++++++++++++-
->  include/linux/pm_domain.h |  5 ++++-
->  2 files changed, 50 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-> index 623d15b68707..072e6bdb6ee6 100644
-> --- a/drivers/pmdomain/core.c
-> +++ b/drivers/pmdomain/core.c
-> @@ -117,6 +117,48 @@ static const struct genpd_lock_ops genpd_spin_ops = {
->  	.unlock = genpd_unlock_spin,
->  };
->  
-> +static void genpd_lock_raw_spin(struct generic_pm_domain *genpd)
-> +	__acquires(&genpd->raw_slock)
-> +{
-> +	unsigned long flags;
-> +
-> +	raw_spin_lock_irqsave(&genpd->raw_slock, flags);
-> +	genpd->raw_lock_flags = flags;
-> +}
-> +
-> +static void genpd_lock_nested_raw_spin(struct generic_pm_domain *genpd,
-> +					int depth)
-> +	__acquires(&genpd->raw_slock)
-> +{
-> +	unsigned long flags;
-> +
-> +	raw_spin_lock_irqsave_nested(&genpd->raw_slock, flags, depth);
-> +	genpd->raw_lock_flags = flags;
-> +}
-> +
-> +static int genpd_lock_interruptible_raw_spin(struct generic_pm_domain *genpd)
-> +	__acquires(&genpd->raw_slock)
-> +{
-> +	unsigned long flags;
-> +
-> +	raw_spin_lock_irqsave(&genpd->raw_slock, flags);
-> +	genpd->raw_lock_flags = flags;
-> +	return 0;
-> +}
-> +
-> +static void genpd_unlock_raw_spin(struct generic_pm_domain *genpd)
-> +	__releases(&genpd->raw_slock)
-> +{
-> +	raw_spin_unlock_irqrestore(&genpd->raw_slock, genpd->raw_lock_flags);
-> +}
-> +
-> +static const struct genpd_lock_ops genpd_raw_spin_ops = {
-> +	.lock = genpd_lock_raw_spin,
-> +	.lock_nested = genpd_lock_nested_raw_spin,
-> +	.lock_interruptible = genpd_lock_interruptible_raw_spin,
-> +	.unlock = genpd_unlock_raw_spin,
-> +};
-> +
->  #define genpd_lock(p)			p->lock_ops->lock(p)
->  #define genpd_lock_nested(p, d)		p->lock_ops->lock_nested(p, d)
->  #define genpd_lock_interruptible(p)	p->lock_ops->lock_interruptible(p)
-> @@ -2079,7 +2121,10 @@ static void genpd_free_data(struct generic_pm_domain *genpd)
->  
->  static void genpd_lock_init(struct generic_pm_domain *genpd)
->  {
-> -	if (genpd->flags & GENPD_FLAG_IRQ_SAFE) {
-> +	if (genpd->flags & GENPD_FLAG_CPU_DOMAIN) {
-> +		raw_spin_lock_init(&genpd->raw_slock);
-> +		genpd->lock_ops = &genpd_raw_spin_ops;
-> +	} else if (genpd->flags & GENPD_FLAG_IRQ_SAFE) {
-
-Hi Ulf, though you are targeting only CPU domains for now, I wonder if
-FLAG_IRQ_SAFE will be a better choice?  The description of the flag says
-it is safe for atomic context which won't be the case for PREEMPT_RT? 
-
-
->  		spin_lock_init(&genpd->slock);
->  		genpd->lock_ops = &genpd_spin_ops;
->  	} else {
-> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-> index f24546a3d3db..0d7fc47de3bc 100644
-> --- a/include/linux/pm_domain.h
-> +++ b/include/linux/pm_domain.h
-> @@ -194,8 +194,11 @@ struct generic_pm_domain {
->  			spinlock_t slock;
->  			unsigned long lock_flags;
->  		};
-> +		struct {
-> +			raw_spinlock_t raw_slock;
-> +			unsigned long raw_lock_flags;
-> +		};
->  	};
-> -
->  };
->  
->  static inline struct generic_pm_domain *pd_to_genpd(struct dev_pm_domain *pd)
+Applied as 6.10-rc material, thanks!
 
