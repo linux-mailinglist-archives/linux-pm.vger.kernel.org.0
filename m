@@ -1,201 +1,148 @@
-Return-Path: <linux-pm+bounces-8247-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8256-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D81448D1F49
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 16:52:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F0268D1F87
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 17:03:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F281284DD4
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 14:52:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 02C4E28398E
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 15:03:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A60B3170822;
-	Tue, 28 May 2024 14:52:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF0FE173324;
+	Tue, 28 May 2024 15:01:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="lzqO1xNX"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="R/EZWHZH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E22731DA32;
-	Tue, 28 May 2024 14:52:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A182B171E5A;
+	Tue, 28 May 2024 15:01:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716907961; cv=none; b=QkM6rHyefeuhnYXRGb8YY8Rnk/uDG0n35U5VG3VHMjtypZw7l5gxIdWC1veJP637GYTja4f7LmAUsRrBGLBCQWdcmbamCxvpGl6+MmHUboE213ZNvD3urV0GsFflOWwiRkNOe9yGg0sgb6nKcMqcNQUiww6ENnGV1ub0zDyTH5M=
+	t=1716908476; cv=none; b=WQShctUmjjrzMy5L8ekOA48nxlRtMSZ2G+u8Ux92VV8IfAd/7/zWeZ7jzysl5Re0hriHJPXwlT3JwDJ6MyP/0HCsL61FLAM6O9cNtT0GWaLePS+9WiC2A5+xX9R2zMRi77qOf6pjtOxrUT/mlYjD/Ml0QRWYOfv+7mEpu/Om9mE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716907961; c=relaxed/simple;
-	bh=lH2MumRnI7l3YLRPeM7BwNfpMOBnQbE+uH7AvcbBSzg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=pboIPhcriS5ei5K73aLwvWy161vLt3mjetZDvcP/sUeSTp0bOBhqVy+fpwCfYanbcM0Vqk1xYHkMYuTJbQWdnGB+c4jV1n+0vdJOkXMSj6qKa6O82ajywLjpXj2FhxHb8rTjKL8Bgdk+YDm1ppFLD94A0YR+aU4Lp3U1BlTkRjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=lzqO1xNX; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44SAUXuZ009025;
-	Tue, 28 May 2024 14:52:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	dWcKuFlpB9O0H+5h3Iazox/MW/EgYPo9bqGQKEr5kUM=; b=lzqO1xNXDXJt9YKE
-	hdiB10isAAW9ccHigQT2WQmnzqTjysTUNgCm2QEo2ykZf1g8rkpGR3RkPUQqMX0W
-	xc7JwTKbYMu7o+9UvpnqadVao/Unpi4EM4eGCzB0AOv3ZYfGvPzaXmi+keFn0W0d
-	RUdL38EibXG8jQz2tIvXOvfX5Hly1GO0oepCyzQSwupbZpYkOKyKiDc1py1TQ7Aw
-	CZwA/0dkqk9kYhGPDvsX9aCSO7MvnHitYFgYINOs8+gpEqtqO8XAhhsU4WoRrJE2
-	Em5kFDnI4Mr69FjClK95qLTKLMo09K0kdgVHpXsOh3K715g8A11AcLSbqo29jCf0
-	CYaEow==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yba0g6eqh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 28 May 2024 14:52:33 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 44SEqWT2007769
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 28 May 2024 14:52:32 GMT
-Received: from [10.50.34.189] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 28 May
- 2024 07:52:26 -0700
-Message-ID: <434c6cfa-cede-4e62-a785-35a81ae0d30d@quicinc.com>
-Date: Tue, 28 May 2024 20:22:22 +0530
+	s=arc-20240116; t=1716908476; c=relaxed/simple;
+	bh=FSNgCECoeipF7QJrKj0OQsIro4RU4GPgTuHQfjCTmdY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Ghwr9SqeT60UCBNdSk2oq8BqVEoDNEgUpz5zaPE4Yja92yKKSnJBDJYc1uK1aFYUlXFPA+kddR8a3apMLuGv4T58tWREf/ntavo0E1LaVI+GVmUi7JdB52b8mATK94/Jxic7MuGSp8BNdP5ppkl8DAE1U2zNY5qbXl3kPJIwKt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=R/EZWHZH reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.1.0)
+ id 4b9514b018a67f6a; Tue, 28 May 2024 17:01:06 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 3EF996A5015;
+	Tue, 28 May 2024 17:01:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1716908466;
+	bh=FSNgCECoeipF7QJrKj0OQsIro4RU4GPgTuHQfjCTmdY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=R/EZWHZHf6ejzo2gyftXS9K4ildPLTfkd8YoNdpusaqlm0xQVf4nmDJ1yKWlTs9FN
+	 eNGGI1Jd702nVdpys2NsD8Am10d38qPUVMFCh7qN5zCT0BFb4xpEqFj2d/VthvDo5a
+	 PdQFV2r1hunZ14uI+Cus3l47a4dSk7GS8U7SKteS5dgQ2+BNgy4n6IIMmW7hNRiI90
+	 mHMHq8etAoJFjS8Y3FVtr3YpDmTVuDDaIWeRFfQh//Il5nfixKesQ0i91qdKc7N+Fb
+	 SjXxCTQyWDEIzPK793E5x351rZFsSp2VzudkFvcnQ+9/ISkGLUB8+vgurSYEVHIdC1
+	 EabAYVHLPIgqw==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject:
+ [PATCH v2 1/8] thermal/debugfs: Use helper to update trip point overstepping
+ duration
+Date: Tue, 28 May 2024 16:52:50 +0200
+Message-ID: <4933647.31r3eYUQgx@kreacher>
+In-Reply-To: <5794974.DvuYhMxLoT@kreacher>
+References: <5794974.DvuYhMxLoT@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/4] interconnect: qcom: icc-rpmh: Add QoS
- configuration support
-To: Mike Tipton <quic_mdtipton@quicinc.com>,
-        Konrad Dybcio
-	<konrad.dybcio@linaro.org>
-CC: Bjorn Andersson <andersson@kernel.org>, Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "Kees Cook" <keescook@chromium.org>,
-        <cros-qcom-dts-watchers@chromium.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>, <quic_rlaggysh@quicinc.com>
-References: <20240325181628.9407-1-quic_okukatla@quicinc.com>
- <20240325181628.9407-2-quic_okukatla@quicinc.com>
- <d59896bb-a559-4013-a615-37bb43278b2e@linaro.org>
- <91f59477-1799-4db6-bcc2-3f0c5225d1c8@quicinc.com>
- <0a58e05a-7bf5-459a-b202-66d88c095b45@linaro.org>
- <20240508023716.GD25316@hu-mdtipton-lv.qualcomm.com>
-Content-Language: en-US
-From: Odelu Kukatla <quic_okukatla@quicinc.com>
-In-Reply-To: <20240508023716.GD25316@hu-mdtipton-lv.qualcomm.com>
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ht2cKHlyZnYYLulXR3pVrVp17xeQlZIp
-X-Proofpoint-ORIG-GUID: ht2cKHlyZnYYLulXR3pVrVp17xeQlZIp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
- definitions=2024-05-28_10,2024-05-28_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- priorityscore=1501 bulkscore=0 phishscore=0 adultscore=0 spamscore=0
- mlxlogscore=984 malwarescore=0 lowpriorityscore=0 clxscore=1011
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2405170001 definitions=main-2405280111
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrvdejkedgheehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopegurghnihgvlhdrlhgviigt
+ rghnoheslhhinhgrrhhordhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 
-Hi Konrad,
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-On 5/8/2024 8:07 AM, Mike Tipton wrote:
-> On Sat, Apr 13, 2024 at 09:31:47PM +0200, Konrad Dybcio wrote:
->> On 3.04.2024 10:45 AM, Odelu Kukatla wrote:
->>>
->>>
->>> On 3/27/2024 2:26 AM, Konrad Dybcio wrote:
->>>> On 25.03.2024 7:16 PM, Odelu Kukatla wrote:
->>>>> It adds QoS support for QNOC device and includes support for
->>>>> configuring priority, priority forward disable, urgency forwarding.
->>>>> This helps in priortizing the traffic originating from different
->>>>> interconnect masters at NoC(Network On Chip).
->>>>>
->>>>> Signed-off-by: Odelu Kukatla <quic_okukatla@quicinc.com>
->>>>> ---
->>
->> [...]
->>
->>>>> @@ -70,6 +102,7 @@ struct qcom_icc_node {
->>>>>  	u64 max_peak[QCOM_ICC_NUM_BUCKETS];
->>>>>  	struct qcom_icc_bcm *bcms[MAX_BCM_PER_NODE];
->>>>>  	size_t num_bcms;
->>>>> +	const struct qcom_icc_qosbox *qosbox;
->>>>
->>>> I believe I came up with a better approach for storing this.. see [1]
->>>>
->>>> Konrad
->>>>
->>>> [1] https://lore.kernel.org/linux-arm-msm/20240326-topic-rpm_icc_qos_cleanup-v1-4-357e736792be@linaro.org/
-> 
-> Note that I replied to this patch series as well. Similar comments here
-> for how that approach would apply to icc-rpmh.
-> 
->>>>
->>>
->>> I see in this series, QoS parameters are moved into struct qcom_icc_desc. 
->>> Even though we program QoS at Provider/Bus level, it is property of the node/master connected to a Bus/NoC.
->>
->> I don't see how it could be the case, we're obviously telling the controller which
->> endpoints have priority over others, not telling nodes whether the data they
->> transfer can omit the queue.
-> 
-> The QoS settings tune the priority of data coming out of a specific port
-> on the NOC. The nodes are 1:1 with the ports. Yes, this does tell the
-> NOC which ports have priority over others. But that's done by
-> configuring each port's priority in their own port-specific QoS
-> registers.
-> 
->>
->>> It will be easier later to know which master's QoS we are programming if we add in node data.
->>> Readability point of view,  it might be good to keep QoS parameters in node data.  
->>
->> I don't agree here either, with the current approach we've made countless mistakes
->> when converting the downstream data (I have already submitted some fixes with more
->> in flight), as there's tons of jumping around the code to find what goes where.
-> 
-> I don't follow why keeping the port's own QoS settings in that port's
-> struct results in more jumping around. It should do the opposite, in
-> fact. If someone wants to know the QoS settings applied to the qhm_qup0
-> port, then they should be able to look directly in the qhm_qup0 struct.
-> Otherwise, if it's placed elsewhere then they'd have to jump elsewhere
-> to find what that logical qhm_qup0-related data is set to.
-> 
-> If it *was* placed elsewhere, then we'd still need some logical way to
-> map between that separate location and the node it's associated with.
-> Which is a problem with your patch for cleaning up the icc-rpm QoS. In
-> its current form, it's impossible to identify which QoS settings apply
-> to which logical node (without detailed knowledge of the NOC register
-> layout).
-> 
-> Keeping this data with the node struct reduces the need for extra layers
-> of mapping between the QoS settings and the node struct. It keeps all
-> the port-related information all together in one place.
-> 
-> I did like your earlier suggestion of using a compound literal to
-> initialize the .qosbox pointers, such that we don't need a separate
-> top-level variable defined for them. They're only ever referenced by a
-> single node, so there's no need for them to be separate variables.
-> 
-> But I don't see the logic in totally separating the QoS data from the
-> port it's associated with.
-> 
->>
-I will update the patch as per your suggestion of keeping .qosbox initialization inside *qcom_icc_node* structure.
-I will post next version with this update and addressing other comments from v4.
+Add a helper for updating trip point overstepping duration to be called
+from thermal_debug_tz_trip_down().
 
-Thanks,
-Odelu
+Subsequently, it will also be used during resume from system-wide
+suspend.
 
->> Konrad
+No intentional functional impact.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+v1 -> v2: Rebase.
+
+---
+ drivers/thermal/thermal_debugfs.c |   22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
+
+Index: linux-pm/drivers/thermal/thermal_debugfs.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_debugfs.c
++++ linux-pm/drivers/thermal/thermal_debugfs.c
+@@ -653,14 +653,24 @@ unlock:
+ 	mutex_unlock(&thermal_dbg->lock);
+ }
+ 
++static void tz_episode_close_trip(struct tz_episode *tze, int trip_id, ktime_t now)
++{
++	struct trip_stats *trip_stats = &tze->trip_stats[trip_id];
++	ktime_t delta = ktime_sub(now, trip_stats->timestamp);
++
++	trip_stats->duration = ktime_add(delta, trip_stats->duration);
++	/* Mark the end of mitigation for this trip point. */
++	trip_stats->timestamp = KTIME_MAX;
++}
++
+ void thermal_debug_tz_trip_down(struct thermal_zone_device *tz,
+ 				const struct thermal_trip *trip)
+ {
+ 	struct thermal_debugfs *thermal_dbg = tz->debugfs;
++	int trip_id = thermal_zone_trip_id(tz, trip);
++	ktime_t now = ktime_get();
+ 	struct tz_episode *tze;
+ 	struct tz_debugfs *tz_dbg;
+-	ktime_t delta, now = ktime_get();
+-	int trip_id = thermal_zone_trip_id(tz, trip);
+ 	int i;
+ 
+ 	if (!thermal_dbg)
+@@ -695,13 +705,7 @@ void thermal_debug_tz_trip_down(struct t
+ 
+ 	tze = list_first_entry(&tz_dbg->tz_episodes, struct tz_episode, node);
+ 
+-	delta = ktime_sub(now, tze->trip_stats[trip_id].timestamp);
+-
+-	tze->trip_stats[trip_id].duration =
+-		ktime_add(delta, tze->trip_stats[trip_id].duration);
+-
+-	/* Mark the end of mitigation for this trip point. */
+-	tze->trip_stats[trip_id].timestamp = KTIME_MAX;
++	tz_episode_close_trip(tze, trip_id, now);
+ 
+ 	/*
+ 	 * This event closes the mitigation as we are crossing the
+
+
+
 
