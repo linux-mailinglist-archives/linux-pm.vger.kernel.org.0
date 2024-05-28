@@ -1,284 +1,72 @@
-Return-Path: <linux-pm+bounces-8298-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8300-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D34948D244F
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 21:12:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 756AF8D245C
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 21:16:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5DDB01F250D2
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 19:12:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 147E71F2A316
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 19:16:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75F77181BAB;
-	Tue, 28 May 2024 19:04:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21FCD178369;
+	Tue, 28 May 2024 19:09:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="IHeNNx2v"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AmoNzAPG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04905181CEC
-	for <linux-pm@vger.kernel.org>; Tue, 28 May 2024 19:04:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD5C8171E59;
+	Tue, 28 May 2024 19:09:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716923057; cv=none; b=Hv2PkoiEmPZkS5ivtunUwX4YGTwQl+d2UPX7+utBxkC5ZkPKp42dFVibtwtl2YTedPR7Ce8KoeI9Y9h5uf2th7U3SZIx/N/pL58XkrmAHKa/6SOKyOiTvxlKXjTXSX/Ard9rNbdyGOJWa56g9peZUOSrVagGKJIXtuatuPcrPfE=
+	t=1716923370; cv=none; b=dkdwX7QwUdPq1zV25EX13kHlsR04gFeDwZdocqJ0hy8aHnDCNt9EyC37lNom/ApUrz3CmiSq/E/BLf1dtf4mYS4wBXJ3eDjtxGJOS2t3kqFa6chEKaXGyhLRxN65TDQi1zTEC/TvjXfPrw5kY1eIDIxRO7U49VQXbEol3PLxdsk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716923057; c=relaxed/simple;
-	bh=Skor7xEGEh3YcJ5UBApdq5xrdz4KCiu9TqBrmMget58=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=vFV2k/R+uScHulz3KL2DA4GrtA4Ax91YK0aQIq6Vd9Up4HQGw3XdwXRPafOPDTKkRYDIQkDFYCMkyO2KaRPrpC5/Ky0OkUNbVAumLLeAfzQZHEDkdZbm9ZE01mTsOt5TuS1zfcx0dtlqFT5WkGOkb5uM45SIKKfLB5D1TtFCH/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=IHeNNx2v; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4211245e889so9392695e9.2
-        for <linux-pm@vger.kernel.org>; Tue, 28 May 2024 12:04:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1716923051; x=1717527851; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+ytTEWiXKbIuQ8DpZG6ZoIYYrAybeCYmHd6/M4lW1Rs=;
-        b=IHeNNx2vEwBEPGywqD6Ug6c/wA20A1aq8R04/NvX9bxRoEyIOLKATK+qb2x5PJBZQW
-         y7j6CLtNF3vbdc/+CJL7LXzvwddoWuAliHngpiQ2KhwnPe3jKLTRxPYmVBXBuagzLO3y
-         vDjg0EHEfUlk6b/RhPbSEz8DCNvJUaAqaNQOaLiNWGogyS9a/LM0jr9dz1RH61M6/Wm3
-         Dxs9dYZA18l9SG9c9I99B3RrMWB/9ML1u3jcQGx31i77rb2prRQCf8Lko5qL53ABJ+KP
-         m5FSVX1RmFL3qrSU7zAmhZd6RDqyZmii9wCNRszB4H/sZpvKf2PfReRYys3OLQNJ/ahG
-         3OMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716923051; x=1717527851;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+ytTEWiXKbIuQ8DpZG6ZoIYYrAybeCYmHd6/M4lW1Rs=;
-        b=RzPCd1bA5P/AC8TYdyNWReccKSfyI2vGtgPY1cJQg0ygMQXGKEd9EjE4El+OV3qdnJ
-         EDC2nbXWdxfiqG8yRk7AMImZ9Im6/zGFIdlaO3DUrbtc/czXYXcRwPTwusJdwHEtj4Y1
-         UdTbq/M83qRu08SoSoSQg7V+OzSyyKH5+ZSlbpnSCGrz9qEdqBo/f6bUODYpFdlis6iQ
-         i0Xk4EgVpObo7J5Iv5iX9CjwYQy+wnAkRxRXjJOVKlSeQJw8HKFnMkPVXP5/WFdxlZyA
-         JacOFVBp6EKMkUN9Al7ptFjXtoX3+Qx0esse59K8K/xet4o7S9y2U+CqtF7wmn3aFlnw
-         q9hA==
-X-Forwarded-Encrypted: i=1; AJvYcCUREYJkg7MeJzcFQ2wXvErTwv6KiO7rPLWEOJdWLnJ+3wp2/qd9iRFJMYRSDsv/Yafib3L+5Ej7PKiBv4o3IfMj47Pw7MraMJ0=
-X-Gm-Message-State: AOJu0Yzp92iiON/sODkMlJBPRZ5iv1sHO29HFQMI3zXPW+6JU0ztBNQ0
-	nIC3fOmWYSF0eQ/fDZZ51z8TsfRuieiMZNlsRx2eO6mXypU+m6ZQpts8iIknFXc=
-X-Google-Smtp-Source: AGHT+IGr9Ojgwytm4iX9gfeC7HKGDwhCWclljkq1atIIKWkwjLAAGni1lUy44ltShGgL2ph8z+vsKQ==
-X-Received: by 2002:a05:600c:3646:b0:418:f991:713f with SMTP id 5b1f17b1804b1-421089ffb20mr103408325e9.23.1716923050945;
-        Tue, 28 May 2024 12:04:10 -0700 (PDT)
-Received: from [127.0.1.1] ([2a01:cb1d:75a:e000:93eb:927a:e851:8a2f])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42100ee954bsm183895415e9.4.2024.05.28.12.04.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 May 2024 12:04:10 -0700 (PDT)
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Tue, 28 May 2024 21:03:25 +0200
-Subject: [PATCH v8 17/17] Bluetooth: qca: use the power sequencer for
- QCA6390
+	s=arc-20240116; t=1716923370; c=relaxed/simple;
+	bh=TXpIOoXYGmt2pBtqg047ViZFwCKWKQ4ykKIKvnN77vU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CluQqAarjvuFy96NwUe7KkYyXlFnhfY778xo/8d/VEgo+4fykMm84kzs8y98jROO5jcypKf3tpdD43LaK2vBrUoAkeRCgbwgV2cJSrzCQ1tMS33wKfzt5hlf6Luf1MwrJ7O06oZZCXNu4aCHx8CEcLvZH7FlwRj7Wx9Xh0XyPcM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AmoNzAPG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E94BEC3277B;
+	Tue, 28 May 2024 19:09:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716923369;
+	bh=TXpIOoXYGmt2pBtqg047ViZFwCKWKQ4ykKIKvnN77vU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=AmoNzAPG5OwWLUnUTGJZOanCQpM32jwGBiGV4Kj4DqPwhtvLBjX7A3wqKxlxsCTWE
+	 4YlTKJUUMXV5uh6+0WPRfwCkH273a1cf0bd5KJpsqdkMUyjI6Vgtfz1tnOzv9bb0IH
+	 pMIQ8j+lj9q4gKVtxV33VbBEs7s44f0JV+UutHCBHJeOxjqLgUm1R9HpH/wGhKV05q
+	 Tr3TqW24CFEenXZNnu4wZ5SQQw1yk33QrWKJC/VFE/kzwHVqEjPvoMDBH3Bh/1I71B
+	 V7tsnBW37DNfRz4Y/6LLe430oK/3rEAzLFnvf7ROuluDFMibMDvOjr8B9MyGzvce2H
+	 RwlYJMYFmJ7FQ==
+Date: Tue, 28 May 2024 12:09:28 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Linux Memory Management List
+ <linux-mm@kvack.org>, amd-gfx@lists.freedesktop.org, bpf@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+ intel-xe@lists.freedesktop.org, linux-btrfs@vger.kernel.org,
+ linux-hardening@vger.kernel.org, linux-mtd@lists.infradead.org,
+ linux-pm@vger.kernel.org, netdev@vger.kernel.org,
+ nouveau@lists.freedesktop.org
+Subject: Re: [linux-next:master] BUILD REGRESSION
+ 6dc544b66971c7f9909ff038b62149105272d26a
+Message-ID: <20240528120928.633cca9d@kernel.org>
+In-Reply-To: <202405290242.YsJ4ENkU-lkp@intel.com>
+References: <202405290242.YsJ4ENkU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240528-pwrseq-v8-17-d354d52b763c@linaro.org>
-References: <20240528-pwrseq-v8-0-d354d52b763c@linaro.org>
-In-Reply-To: <20240528-pwrseq-v8-0-d354d52b763c@linaro.org>
-To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Marcel Holtmann <marcel@holtmann.org>, 
- Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Balakrishna Godavarthi <quic_bgodavar@quicinc.com>, 
- Rocky Liao <quic_rjliao@quicinc.com>, Kalle Valo <kvalo@kernel.org>, 
- Jeff Johnson <jjohnson@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konrad.dybcio@linaro.org>, 
- Bartosz Golaszewski <brgl@bgdev.pl>, Bjorn Helgaas <bhelgaas@google.com>, 
- Srini Kandagatla <srinivas.kandagatla@linaro.org>, 
- Elliot Berman <quic_eberman@quicinc.com>, 
- Caleb Connolly <caleb.connolly@linaro.org>, 
- Neil Armstrong <neil.armstrong@linaro.org>, 
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
- Alex Elder <elder@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-bluetooth@vger.kernel.org, 
- netdev@vger.kernel.org, linux-wireless@vger.kernel.org, 
- ath11k@lists.infradead.org, Jeff Johnson <quic_jjohnson@quicinc.com>, 
- ath12k@lists.infradead.org, linux-pm@vger.kernel.org, 
- linux-pci@vger.kernel.org, 
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, kernel@quicinc.com, 
- Amit Pundir <amit.pundir@linaro.org>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4086;
- i=bartosz.golaszewski@linaro.org; h=from:subject:message-id;
- bh=Avu9/iVEa5ctX7rSEGjhhAJegGiSsgTxVFrmV4sVK2k=;
- b=owEBbQKS/ZANAwAKARGnLqAUcddyAcsmYgBmViqRYDzteYvAvkaLJmNfsrKlAel2gGnpKi/5k
- H2AxTd99D2JAjMEAAEKAB0WIQQWnetsC8PEYBPSx58Rpy6gFHHXcgUCZlYqkQAKCRARpy6gFHHX
- ckx9D/sF6bFK+4+MkxmVs/T0n/IO5FL1tM3ik55oKT13+sSCJ4etW/LbZ5eF91APL859kZG3Y6W
- aFAaNVzjgQTfd/2Q+bdlYL+X9emJuU0T7CXKFlN/N2HrbLlQT9AXmeC4FOi3biUJQK4LOyyDetH
- ojSyoma/VJrnHuurJaQOl80ddoFm5gfzDPJvGzvqwbLTPLLtj1jiwOBhDtMIcPhnFrwueBx9UO3
- 0mCe4phl3MBCwVXmAfnsptIIOSJfilhDsFBdQrHCjqwoBcx+anp9JSJZqfjgEr5ahSNdF4R2bTN
- UBOPXXy9xT0LF+knaYZmBYhqglZ+3VRgdLhCsZm9ffXWTB1Q870+0/dbQCo/ny+7lserGXAXNw3
- z9TJDLJTlOiBiFGdpckN/3ewdubjN8H5JUcDLp/YdaFA3mFZzlDtMzlsmHulkqwPScyE8TTm4VD
- SNcmx60s52eJ43l2F5+keL0lTvd9gDdsDA/RZOspWAcBiibzNVTl24eV24FslRKfGV2Sw0rPuKy
- 3U1FMSrCoUNY1Hv6Tolz1jvLmUxbHQJhGngh0qcq1QPhqF95guvxrjzM8CxlguFHCq9Da+tbOyv
- hxD4fuyfxGNL8/BKI4Tnpm5PbytBKdCT8UyZMGhabSscZmYqkeInoWiGFptllVdWGU4qH/HMDTh
- QySNU7YTsh9KDsw==
-X-Developer-Key: i=bartosz.golaszewski@linaro.org; a=openpgp;
- fpr=169DEB6C0BC3C46013D2C79F11A72EA01471D772
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Wed, 29 May 2024 02:19:47 +0800 kernel test robot wrote:
+> |   `-- net-ipv6-route.c-rt6_fill_node()-error:we-previously-assumed-dst-could-be-null-(see-line-)
 
-Use the pwrseq subsystem's consumer API to run the power-up sequence for
-the Bluetooth module of the QCA6390 package.
-
-Tested-by: Amit Pundir <amit.pundir@linaro.org>
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
- drivers/bluetooth/hci_qca.c | 74 ++++++++++++++++++++++++++++++++++++---------
- 1 file changed, 59 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-index 384a2bbbf303..de4f88d835cb 100644
---- a/drivers/bluetooth/hci_qca.c
-+++ b/drivers/bluetooth/hci_qca.c
-@@ -28,6 +28,7 @@
- #include <linux/of.h>
- #include <linux/acpi.h>
- #include <linux/platform_device.h>
-+#include <linux/pwrseq/consumer.h>
- #include <linux/regulator/consumer.h>
- #include <linux/serdev.h>
- #include <linux/mutex.h>
-@@ -214,6 +215,7 @@ struct qca_power {
- 	struct regulator_bulk_data *vreg_bulk;
- 	int num_vregs;
- 	bool vregs_on;
-+	struct pwrseq_desc *pwrseq;
- };
- 
- struct qca_serdev {
-@@ -1684,6 +1686,27 @@ static bool qca_wakeup(struct hci_dev *hdev)
- 	return wakeup;
- }
- 
-+static int qca_port_reopen(struct hci_uart *hu)
-+{
-+	int ret;
-+
-+	/* Now the device is in ready state to communicate with host.
-+	 * To sync host with device we need to reopen port.
-+	 * Without this, we will have RTS and CTS synchronization
-+	 * issues.
-+	 */
-+	serdev_device_close(hu->serdev);
-+	ret = serdev_device_open(hu->serdev);
-+	if (ret) {
-+		bt_dev_err(hu->hdev, "failed to open port");
-+		return ret;
-+	}
-+
-+	hci_uart_set_flow_control(hu, false);
-+
-+	return 0;
-+}
-+
- static int qca_regulator_init(struct hci_uart *hu)
- {
- 	enum qca_btsoc_type soc_type = qca_soc_type(hu);
-@@ -1752,21 +1775,7 @@ static int qca_regulator_init(struct hci_uart *hu)
- 		break;
- 	}
- 
--	/* Now the device is in ready state to communicate with host.
--	 * To sync host with device we need to reopen port.
--	 * Without this, we will have RTS and CTS synchronization
--	 * issues.
--	 */
--	serdev_device_close(hu->serdev);
--	ret = serdev_device_open(hu->serdev);
--	if (ret) {
--		bt_dev_err(hu->hdev, "failed to open port");
--		return ret;
--	}
--
--	hci_uart_set_flow_control(hu, false);
--
--	return 0;
-+	return qca_port_reopen(hu);
- }
- 
- static int qca_power_on(struct hci_dev *hdev)
-@@ -1794,6 +1803,17 @@ static int qca_power_on(struct hci_dev *hdev)
- 		ret = qca_regulator_init(hu);
- 		break;
- 
-+	case QCA_QCA6390:
-+		qcadev = serdev_device_get_drvdata(hu->serdev);
-+		ret = pwrseq_power_on(qcadev->bt_power->pwrseq);
-+		if (ret)
-+			return ret;
-+
-+		ret = qca_port_reopen(hu);
-+		if (ret)
-+			return ret;
-+		break;
-+
- 	default:
- 		qcadev = serdev_device_get_drvdata(hu->serdev);
- 		if (qcadev->bt_en) {
-@@ -2168,6 +2188,10 @@ static void qca_power_shutdown(struct hci_uart *hu)
- 		}
- 		break;
- 
-+	case QCA_QCA6390:
-+		pwrseq_power_off(qcadev->bt_power->pwrseq);
-+		break;
-+
- 	default:
- 		gpiod_set_value_cansleep(qcadev->bt_en, 0);
- 	}
-@@ -2309,12 +2333,25 @@ static int qca_serdev_probe(struct serdev_device *serdev)
- 	case QCA_WCN6750:
- 	case QCA_WCN6855:
- 	case QCA_WCN7850:
-+	case QCA_QCA6390:
- 		qcadev->bt_power = devm_kzalloc(&serdev->dev,
- 						sizeof(struct qca_power),
- 						GFP_KERNEL);
- 		if (!qcadev->bt_power)
- 			return -ENOMEM;
-+		break;
-+	default:
-+		break;
-+	}
- 
-+	switch (qcadev->btsoc_type) {
-+	case QCA_WCN3988:
-+	case QCA_WCN3990:
-+	case QCA_WCN3991:
-+	case QCA_WCN3998:
-+	case QCA_WCN6750:
-+	case QCA_WCN6855:
-+	case QCA_WCN7850:
- 		qcadev->bt_power->dev = &serdev->dev;
- 		err = qca_init_regulators(qcadev->bt_power, data->vregs,
- 					  data->num_vregs);
-@@ -2360,6 +2397,13 @@ static int qca_serdev_probe(struct serdev_device *serdev)
- 		}
- 		break;
- 
-+	case QCA_QCA6390:
-+		qcadev->bt_power->pwrseq = devm_pwrseq_get(&serdev->dev,
-+							   "bluetooth");
-+		if (IS_ERR(qcadev->bt_power->pwrseq))
-+			return PTR_ERR(qcadev->bt_power->pwrseq);
-+		fallthrough;
-+
- 	default:
- 		qcadev->bt_en = devm_gpiod_get_optional(&serdev->dev, "enable",
- 					       GPIOD_OUT_LOW);
-
--- 
-2.43.0
-
+Is there a way for us to mark this as false positive?
 
