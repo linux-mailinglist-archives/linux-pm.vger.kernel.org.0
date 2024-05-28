@@ -1,154 +1,269 @@
-Return-Path: <linux-pm+bounces-8302-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8303-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28B488D254C
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 21:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A157D8D2554
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 22:00:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE359290837
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 19:58:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5421C28199B
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 20:00:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2A07178382;
-	Tue, 28 May 2024 19:58:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAC26178363;
+	Tue, 28 May 2024 20:00:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W+OAbSM0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="owCVVocN"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C640D178372;
-	Tue, 28 May 2024 19:58:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9136E29402;
+	Tue, 28 May 2024 20:00:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716926283; cv=none; b=qJv4HWFguycOCsXUaV1t7PVRtwh3/cZKK8hZ+My0hZMl0Res1w8LmGh2BVYnSFgoNNX9a6bBzvfSOrCUziJ9pUfQuFIgLIt4SrRyojV7xez4WHYBTltPYqnwg5Fkjw3HET+/4jBXpJ+po0x1UO0sNTc/Atva81Eseokd93x+3uo=
+	t=1716926453; cv=none; b=aMyetZNLczYP+hUdizCNDSrEyMmIdLNn2f7HoPverYBTkZ1RreSbzC9At+TD87wn2dljY4tQ7vDrOoRvU5oFlv+IaMt6V4TCPBtfJxcy4GWmzsACg8uFayIQHN9LyqfeJ6IhuvEKyP9FXMZg3MiM1FG9YskDRMwb1j0NvtJvKHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716926283; c=relaxed/simple;
-	bh=BZlSwuttDPw9S9+xlwtc5/DNO6T6WU/rzwVlBiGJZJY=;
+	s=arc-20240116; t=1716926453; c=relaxed/simple;
+	bh=nTbDhwyviaLMbfaJtiOxxx3LkcPgQ3xSCNmD1vg86bc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ShGq6ZyUExZAmVeO0226HWEYf8pMOsu9f2l2Yu3V4QZ15hqrQawre/e1tCURGVcYIs6qsh/wNSVeui8e6lFCVCSIyHz5O9aVynU39VWiW19y0ZK1d3Ldau8UoafartWBG4fAac3fTMj52eEeSINlUDaTkovzDspDkf6gtmGeILs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W+OAbSM0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CC8AC32786;
-	Tue, 28 May 2024 19:58:03 +0000 (UTC)
+	 To:Cc:Content-Type; b=pnN9HbOjcwumjUKl7ZXc/hYANa7ZolbzFA67232K+YOzcxfKfb5hm6qQVypuM/jHc1Pc5zp34shnUzMiLVGxOgAgAsqCbl08eHbHxktR7wt2xCN0ADOHq2CPCfa7+oay8tNH8WZv1mV2zaq/+/1fRoefpOF1Ilq8o0g/FXkpjWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=owCVVocN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0171CC32786;
+	Tue, 28 May 2024 20:00:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716926283;
-	bh=BZlSwuttDPw9S9+xlwtc5/DNO6T6WU/rzwVlBiGJZJY=;
+	s=k20201202; t=1716926453;
+	bh=nTbDhwyviaLMbfaJtiOxxx3LkcPgQ3xSCNmD1vg86bc=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=W+OAbSM0A/BaV3StQPVI1WdF2UWFKuReytJe3cR/rVYbeVX5pTYv1sUodh8WAjSac
-	 VTqwOu7uYLtO/MfClEvTFskJoPIZWxbetOMyVaV9aZ/gQOttZJ6Hc0k59F6nsUwNc3
-	 bfRwG4N/8+4N1AHKKlTkXOEKZ5IpCvf3AKDXnVeyA0zRLv00PByTXustEVm7s7X8Nv
-	 3uLtEyBEd4SSk85AMKQDjw7ulj6cBfOi9lDyWqH69TFFBrjnmQmirO+EQpCUYnigrz
-	 z9BDbe5PFQ8XaxFA8dE6Dd3JtVOrNtjYouQCWxF34HR6JbIByX5bh4FsCJ7IR64Y5G
-	 USw2t+bDMboaQ==
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-24ffb6ee0f4so33807fac.0;
-        Tue, 28 May 2024 12:58:03 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVkTXyWD3+MX679GIohMb62YdYTiD7XsG9nBVRsjMx9rXcd+5kNLySG/V6kLOCdP23PD2zINRkPAkmQr/BahixKqkaOA9kyx85xNyc8Nbejhqbj9vxNwP4hxbYWDkA9QBB+npU98KdOMGu3EMEZF44fgrcHw+UzvWqZwgpzSm/jy822
-X-Gm-Message-State: AOJu0YyTv2qRgPGm/j2bbOYNB5+bV7IXlpTPwwE1CJ5KTYIwaaxOczhA
-	fgFo5dLIBNp6hT6lCj0dbH16D5zcyviU3YKbwlghs8OullzyGgpj5++WMIA19DImRlrA61z/09W
-	a1RfUPm8cfE04ZY9HiIS7OV3TGo8=
-X-Google-Smtp-Source: AGHT+IHhJdeeDpS76IDj68NZSHlaeZBVsNJkwgWvAhU1PNPDrzgrgarPIYTNLvW7O8ElosU15zALYFfGTD9297NASQM=
-X-Received: by 2002:a05:6870:d888:b0:24c:b2d0:bfff with SMTP id
- 586e51a60fabf-24cb2d0c0camr12861111fac.2.1716926282655; Tue, 28 May 2024
- 12:58:02 -0700 (PDT)
+	b=owCVVocN8NuAMtXNRgBZCZEwTvdQgWHpV6mACAUokIiIrngzZfjuB3G9VyJrF646h
+	 fCdLJF/pw+uYGcJVHiivPj9lXGa6est3vPsUl6I7qjWSdV/CeqqGUWk3/zcE9eEhh/
+	 7EQyGb6H/HaI9r461E4YKqVCNbjUjF+GUUYc6PI2woCnSrNUtNZODMEac/EDR3V3Wh
+	 Ehzzr/PWHRo4MxDWkgn+b75H4AnSF7iLpcjytXTjQr9A71tr68vPLrjbr2hNj2Hun+
+	 pD9zuzMmuacu/fE76SvZoDAuRx2xNz3IkgIP1BooALKCtTh+gbxhuiZUxya0Uuj57B
+	 g9f74EizWzWaA==
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-5b2fbe85f82so191202eaf.1;
+        Tue, 28 May 2024 13:00:52 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVOirMGAHOUMeWR7jxe6w/1D2jn5z2GaQYF7VoMTzXHqirhscs2+90njtukflOdrIPUacG0QSadSMuJdE7im2GepGXdW5NqQUas2JvKo+VdbHuX7upiSEZJo4I0RYMhyBPCXa16Z5E=
+X-Gm-Message-State: AOJu0YxEGl7t7P3ixH6GO3RVm/ss9Ad2We12MiZb6JoaYaU4xEjKowuF
+	ipUWgxeNvZWIGB1pbAQlIvtwWo1UuLB7bUAEdzRAp8r7SZ+7QQhxARt37gcrg0Jod3V2zr1XlBV
+	tmM7x2vKXcuuBVQugGjedwEWl2cE=
+X-Google-Smtp-Source: AGHT+IHllD0tfHn/GT604/S3e6+vho1OzOixWyheh0PHIwshIZefDo1hz6aL0GVlHXEZ/M7BizLCS7+NA7hMMir+LUs=
+X-Received: by 2002:a4a:ba86:0:b0:5b2:8017:fb68 with SMTP id
+ 006d021491bc7-5b95cde3ec5mr14458580eaf.0.1716926452133; Tue, 28 May 2024
+ 13:00:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240526-acpi-ac-changed-v1-1-f4b5997753bb@weissschuh.net> <r5x24fxz5cbyd4laoteq577toqfblfmy4btn4c6o6rrl7godeu@4fgsimcubzrd>
-In-Reply-To: <r5x24fxz5cbyd4laoteq577toqfblfmy4btn4c6o6rrl7godeu@4fgsimcubzrd>
+References: <20240528121124.3588248-1-arnd@kernel.org> <0edd0485-274a-4b3f-8ecb-60708963db8a@amd.com>
+In-Reply-To: <0edd0485-274a-4b3f-8ecb-60708963db8a@amd.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 28 May 2024 21:57:51 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hNs5vSMuPgtg=tbu=4Y1UHeGUnGM7Fo_LgjZmP1SqkZg@mail.gmail.com>
-Message-ID: <CAJZ5v0hNs5vSMuPgtg=tbu=4Y1UHeGUnGM7Fo_LgjZmP1SqkZg@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: AC: Properly notify powermanagement core about changes
-To: Sebastian Reichel <sebastian.reichel@collabora.com>, 
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Rajas Paranjpe <paranjperajas@gmail.com>
+Date: Tue, 28 May 2024 22:00:40 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iqkR24RjiXET6qKRHeOLxYqKSgrpsp_N87wuJrtdTcAg@mail.gmail.com>
+Message-ID: <CAJZ5v0iqkR24RjiXET6qKRHeOLxYqKSgrpsp_N87wuJrtdTcAg@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: amd-pstate: remove global header file
+To: Mario Limonciello <mario.limonciello@amd.com>, Arnd Bergmann <arnd@kernel.org>
+Cc: Huang Rui <ray.huang@amd.com>, "Gautham R. Shenoy" <gautham.shenoy@amd.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Perry Yuan <perry.yuan@amd.com>, Wyes Karny <wyes.karny@amd.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Meng Li <li.meng@amd.com>, Swapnil Sapkal <swapnil.sapkal@amd.com>, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 27, 2024 at 11:43=E2=80=AFPM Sebastian Reichel
-<sebastian.reichel@collabora.com> wrote:
+On Tue, May 28, 2024 at 7:49=E2=80=AFPM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
 >
-> Hi,
+> On 5/28/2024 07:09, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > When extra warnings are enabled, gcc points out a global variable
+> > definition in a header:
+> >
+> > In file included from drivers/cpufreq/amd-pstate-ut.c:29:
+> > include/linux/amd-pstate.h:123:27: error: 'amd_pstate_mode_string' defi=
+ned but not used [-Werror=3Dunused-const-variable=3D]
+> >    123 | static const char * const amd_pstate_mode_string[] =3D {
+> >        |                           ^~~~~~~~~~~~~~~~~~~~~~
+> >
+> > This header is only included from two files in the same directory,
+> > and one of them uses only a single definition from it, so clean it
+> > up by moving most of the contents into the driver that uses them,
+> > and making shared bits a local header file.
+> >
+> > Fixes: 36c5014e5460 ("cpufreq: amd-pstate: optimize driver working mode=
+ selection in amd_pstate_param()")
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 >
-> On Sun, May 26, 2024 at 11:40:01PM +0200, Thomas Wei=C3=9Fschuh wrote:
-> > The powermanagement core does various actions when a power-supply chang=
-es.
-> > It calls into notifiers, LED triggers, other power supplies and emits a=
-n uevent.
-> >
-> > To make sure that all these actions happen properly call power_supply_c=
-hanged().
-> >
-> > Reported-by: Rajas Paranjpe <paranjperajas@gmail.com>
-> > Closes: https://github.com/MrChromebox/firmware/issues/420#issuecomment=
--2132251318
-> > Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
-> > ---
+> Thanks!
 >
-> Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
->
-> -- Sebastian
->
-> >  drivers/acpi/ac.c  | 4 ++--
-> >  drivers/acpi/sbs.c | 4 ++--
-> >  2 files changed, 4 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/acpi/ac.c b/drivers/acpi/ac.c
-> > index 2d4a35e6dd18..09a87fa222c7 100644
-> > --- a/drivers/acpi/ac.c
-> > +++ b/drivers/acpi/ac.c
-> > @@ -145,7 +145,7 @@ static void acpi_ac_notify(acpi_handle handle, u32 =
-event, void *data)
-> >                                                 dev_name(&adev->dev), e=
-vent,
-> >                                                 (u32) ac->state);
-> >               acpi_notifier_call_chain(adev, event, (u32) ac->state);
-> > -             kobject_uevent(&ac->charger->dev.kobj, KOBJ_CHANGE);
-> > +             power_supply_changed(ac->charger);
-> >       }
-> >  }
-> >
-> > @@ -268,7 +268,7 @@ static int acpi_ac_resume(struct device *dev)
-> >       if (acpi_ac_get_state(ac))
-> >               return 0;
-> >       if (old_state !=3D ac->state)
-> > -             kobject_uevent(&ac->charger->dev.kobj, KOBJ_CHANGE);
-> > +             power_supply_changed(ac->charger);
-> >
-> >       return 0;
-> >  }
-> > diff --git a/drivers/acpi/sbs.c b/drivers/acpi/sbs.c
-> > index 94e3c000df2e..dc8164b182dc 100644
-> > --- a/drivers/acpi/sbs.c
-> > +++ b/drivers/acpi/sbs.c
-> > @@ -610,7 +610,7 @@ static void acpi_sbs_callback(void *context)
-> >       if (sbs->charger_exists) {
-> >               acpi_ac_get_present(sbs);
-> >               if (sbs->charger_present !=3D saved_charger_state)
-> > -                     kobject_uevent(&sbs->charger->dev.kobj, KOBJ_CHAN=
-GE);
-> > +                     power_supply_changed(sbs->charger);
-> >       }
-> >
-> >       if (sbs->manager_present) {
-> > @@ -622,7 +622,7 @@ static void acpi_sbs_callback(void *context)
-> >                       acpi_battery_read(bat);
-> >                       if (saved_battery_state =3D=3D bat->present)
-> >                               continue;
-> > -                     kobject_uevent(&bat->bat->dev.kobj, KOBJ_CHANGE);
-> > +                     power_supply_changed(bat->bat);
-> >               }
-> >       }
-> >  }
-> >
-> > ---
+> Acked-by: Mario Limonciello <mario.limonciello@amd.com>
 
 Applied as 6.10-rc material, thanks!
+
+> > ---
+> >   MAINTAINERS                                   |  1 -
+> >   drivers/cpufreq/amd-pstate-ut.c               |  3 +-
+> >   drivers/cpufreq/amd-pstate.c                  | 34 ++++++++++++++++++=
+-
+> >   .../linux =3D> drivers/cpufreq}/amd-pstate.h    | 33 ----------------=
+--
+> >   4 files changed, 35 insertions(+), 36 deletions(-)
+> >   rename {include/linux =3D> drivers/cpufreq}/amd-pstate.h (82%)
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 070a39b2b098..35a75ab8ef05 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -1107,7 +1107,6 @@ L:      linux-pm@vger.kernel.org
+> >   S:  Supported
+> >   F:  Documentation/admin-guide/pm/amd-pstate.rst
+> >   F:  drivers/cpufreq/amd-pstate*
+> > -F:   include/linux/amd-pstate.h
+> >   F:  tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
+> >
+> >   AMD PTDMA DRIVER
+> > diff --git a/drivers/cpufreq/amd-pstate-ut.c b/drivers/cpufreq/amd-psta=
+te-ut.c
+> > index f04ae67dda37..fc275d41d51e 100644
+> > --- a/drivers/cpufreq/amd-pstate-ut.c
+> > +++ b/drivers/cpufreq/amd-pstate-ut.c
+> > @@ -26,10 +26,11 @@
+> >   #include <linux/module.h>
+> >   #include <linux/moduleparam.h>
+> >   #include <linux/fs.h>
+> > -#include <linux/amd-pstate.h>
+> >
+> >   #include <acpi/cppc_acpi.h>
+> >
+> > +#include "amd-pstate.h"
+> > +
+> >   /*
+> >    * Abbreviations:
+> >    * amd_pstate_ut: used as a shortform for AMD P-State unit test.
+> > diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.=
+c
+> > index 1b7e82a0ad2e..91993647e09e 100644
+> > --- a/drivers/cpufreq/amd-pstate.c
+> > +++ b/drivers/cpufreq/amd-pstate.c
+> > @@ -36,7 +36,6 @@
+> >   #include <linux/delay.h>
+> >   #include <linux/uaccess.h>
+> >   #include <linux/static_call.h>
+> > -#include <linux/amd-pstate.h>
+> >   #include <linux/topology.h>
+> >
+> >   #include <acpi/processor.h>
+> > @@ -46,6 +45,8 @@
+> >   #include <asm/processor.h>
+> >   #include <asm/cpufeature.h>
+> >   #include <asm/cpu_device_id.h>
+> > +
+> > +#include "amd-pstate.h"
+> >   #include "amd-pstate-trace.h"
+> >
+> >   #define AMD_PSTATE_TRANSITION_LATENCY       20000
+> > @@ -53,6 +54,37 @@
+> >   #define CPPC_HIGHEST_PERF_PERFORMANCE       196
+> >   #define CPPC_HIGHEST_PERF_DEFAULT   166
+> >
+> > +#define AMD_CPPC_EPP_PERFORMANCE             0x00
+> > +#define AMD_CPPC_EPP_BALANCE_PERFORMANCE     0x80
+> > +#define AMD_CPPC_EPP_BALANCE_POWERSAVE               0xBF
+> > +#define AMD_CPPC_EPP_POWERSAVE                       0xFF
+> > +
+> > +/*
+> > + * enum amd_pstate_mode - driver working mode of amd pstate
+> > + */
+> > +enum amd_pstate_mode {
+> > +     AMD_PSTATE_UNDEFINED =3D 0,
+> > +     AMD_PSTATE_DISABLE,
+> > +     AMD_PSTATE_PASSIVE,
+> > +     AMD_PSTATE_ACTIVE,
+> > +     AMD_PSTATE_GUIDED,
+> > +     AMD_PSTATE_MAX,
+> > +};
+> > +
+> > +static const char * const amd_pstate_mode_string[] =3D {
+> > +     [AMD_PSTATE_UNDEFINED]   =3D "undefined",
+> > +     [AMD_PSTATE_DISABLE]     =3D "disable",
+> > +     [AMD_PSTATE_PASSIVE]     =3D "passive",
+> > +     [AMD_PSTATE_ACTIVE]      =3D "active",
+> > +     [AMD_PSTATE_GUIDED]      =3D "guided",
+> > +     NULL,
+> > +};
+> > +
+> > +struct quirk_entry {
+> > +     u32 nominal_freq;
+> > +     u32 lowest_freq;
+> > +};
+> > +
+> >   /*
+> >    * TODO: We need more time to fine tune processors with shared memory=
+ solution
+> >    * with community together.
+> > diff --git a/include/linux/amd-pstate.h b/drivers/cpufreq/amd-pstate.h
+> > similarity index 82%
+> > rename from include/linux/amd-pstate.h
+> > rename to drivers/cpufreq/amd-pstate.h
+> > index d58fc022ec46..e6a28e7f4dbf 100644
+> > --- a/include/linux/amd-pstate.h
+> > +++ b/drivers/cpufreq/amd-pstate.h
+> > @@ -1,7 +1,5 @@
+> >   /* SPDX-License-Identifier: GPL-2.0-only */
+> >   /*
+> > - * linux/include/linux/amd-pstate.h
+> > - *
+> >    * Copyright (C) 2022 Advanced Micro Devices, Inc.
+> >    *
+> >    * Author: Meng Li <li.meng@amd.com>
+> > @@ -12,11 +10,6 @@
+> >
+> >   #include <linux/pm_qos.h>
+> >
+> > -#define AMD_CPPC_EPP_PERFORMANCE             0x00
+> > -#define AMD_CPPC_EPP_BALANCE_PERFORMANCE     0x80
+> > -#define AMD_CPPC_EPP_BALANCE_POWERSAVE               0xBF
+> > -#define AMD_CPPC_EPP_POWERSAVE                       0xFF
+> > -
+> >   /********************************************************************=
+*
+> >    *                        AMD P-state INTERFACE                      =
+ *
+> >    ********************************************************************=
+*/
+> > @@ -108,30 +101,4 @@ struct amd_cpudata {
+> >       bool    suspended;
+> >   };
+> >
+> > -/*
+> > - * enum amd_pstate_mode - driver working mode of amd pstate
+> > - */
+> > -enum amd_pstate_mode {
+> > -     AMD_PSTATE_UNDEFINED =3D 0,
+> > -     AMD_PSTATE_DISABLE,
+> > -     AMD_PSTATE_PASSIVE,
+> > -     AMD_PSTATE_ACTIVE,
+> > -     AMD_PSTATE_GUIDED,
+> > -     AMD_PSTATE_MAX,
+> > -};
+> > -
+> > -static const char * const amd_pstate_mode_string[] =3D {
+> > -     [AMD_PSTATE_UNDEFINED]   =3D "undefined",
+> > -     [AMD_PSTATE_DISABLE]     =3D "disable",
+> > -     [AMD_PSTATE_PASSIVE]     =3D "passive",
+> > -     [AMD_PSTATE_ACTIVE]      =3D "active",
+> > -     [AMD_PSTATE_GUIDED]      =3D "guided",
+> > -     NULL,
+> > -};
+> > -
+> > -struct quirk_entry {
+> > -     u32 nominal_freq;
+> > -     u32 lowest_freq;
+> > -};
+> > -
+> >   #endif /* _LINUX_AMD_PSTATE_H */
+>
 
