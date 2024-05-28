@@ -1,45 +1,45 @@
-Return-Path: <linux-pm+bounces-8208-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8209-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 478CA8D11D2
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 04:21:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F24A8D11D8
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 04:21:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE2D61F25A62
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 02:21:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 717101C21A2A
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 02:21:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86DEF4D112;
-	Tue, 28 May 2024 02:19:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95DD420330;
+	Tue, 28 May 2024 02:19:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lzAp/D3W"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cA+9oh26"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DB954D108;
-	Tue, 28 May 2024 02:19:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 691E36A33B;
+	Tue, 28 May 2024 02:19:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716862752; cv=none; b=UWRGfJJ86fdFBeGPjufZu+q0ifQKmXF/chJLCnIJ7K+A1UCk0tE7CUMV8dvfNAgRYOx/Gv4W5eeEog3hXDNFWBEY/JuTsumOjhrKXqkJmMdAW7bd8w1loLxFoExsaP3x4eUkNkakjH/AT1SOJoXsjEQy3Ddau5gblUGNvqjG9W4=
+	t=1716862759; cv=none; b=fdEl65yH1FYDpzEdLiPdlucrMY6ckXC7ycIDE9M8uTggdJUb6/lP2EjxrQtn5RKBHIxW7bj2jtsxW9Dg2uXQJ+Ad9HwHNSb1pPPx5WdoBDhrY/low+vlWV6y/2M0se3c3cR5Bt9eQUHfooEWQ3RUOgVYPCXUjeGWW8tHsjH5ey8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716862752; c=relaxed/simple;
-	bh=fwEiQiX4cnxFfIKH2+2+aLGcHFwRzp3EH0PqQdljIpQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FMggcuOHcVOUXnmEc6MNZkkJl/VM02mvg7iuQY55GBZl0Ua7EYHbvOQaAghMcAzuv1Zhb5U/DSMd9hi+R6jtbvCsLbQyTapzYGINEv30yRuXAShkRP8l9JOlP3GkHiirrXqGMnoTrrHOMaJAli46e4Yn1vGKlTcn/qZiw75Ouug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lzAp/D3W; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1DD8C32786;
-	Tue, 28 May 2024 02:19:10 +0000 (UTC)
+	s=arc-20240116; t=1716862759; c=relaxed/simple;
+	bh=FZCY3iTAJh1S9EP9/Qn1j7myPIFxD/sPPvDvlpMXCJA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qLOjTkUHVYXN6yFgIcj1VzpriSpEkX/jAeGfSvzC7kKYZcKoaoBxLFZi4XgFqmTRSVzxQ3qA1FSJfOieVCkt85Ko2PfGzk+V+THuONjOyGxYJVQ9tUNanTae4LKpZ/jkUh2QwtB+PLxLzZ1q9dro/dMHkJkCogCAwErbYUMMFIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cA+9oh26; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18A08C2BBFC;
+	Tue, 28 May 2024 02:19:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716862752;
-	bh=fwEiQiX4cnxFfIKH2+2+aLGcHFwRzp3EH0PqQdljIpQ=;
+	s=k20201202; t=1716862759;
+	bh=FZCY3iTAJh1S9EP9/Qn1j7myPIFxD/sPPvDvlpMXCJA=;
 	h=From:To:Cc:Subject:Date:From;
-	b=lzAp/D3WWQz6BDlfRFe7EbAGGBL8+HyTEzA88fY1vXptyaOWBMkkTBXBfbs/ouZzi
-	 9he0rut9sApdQJOhiL4qPmyGglsZ32RJbCP+QH2xICEKBJFIVGA+1BlvdtNx9d0F1a
-	 KyyJ/MCCKQJBFKMHbyAkqGlqYxD5lkzHZTbqhBAo5YJBnT8IvdwWwUvaxwA+6D7/Jq
-	 kxMyPi18Wttk6K3QDwzt1nDeNXhBRVpxQNHz7ZOFBaKkE6m73XsHr6opwXVH7JBuUi
-	 DAkrP6vl/1E6i6jMJe6gP0UWxCXMi9yWCNg1NDPZqLywYWbFg6+QluWZrKiB2Mfl1z
-	 ms+WuAs2Oi7SA==
+	b=cA+9oh26Gf7hQZEyhiH7EFDBKi1xAeUnU0CEzV1PMcFyZxOFJt8G26F1lmhtL52QT
+	 +KBx3u9PjqAIXhJt4/PwH1S/2nQOFM5Io8N5B7rfKbJJXfE8/cSbPx6K9lHqCnLsVS
+	 ouBp4ZRzs19sAaxWnx+ZvKb4i5noTlOfYanCUhUYRhfZoLsKfkrVuBjp34ISlg93Ze
+	 yhPuauGxZ3mE6U6tPg5DcMeLZeUbUPDzg7A0hrYUR0UsMcKKZ5Zib8KL4pgA5WOrQs
+	 z3apg/PhLzgEjKNN8PKVr+CEUjkAsvnDAVh5OinRM3U0BP59EmbDsAtbP+oSfTO5vQ
+	 Mv+GhiggCKPkg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -51,9 +51,9 @@ Cc: Tzung-Bi Shih <tzungbi@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
 	sre@kernel.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 1/2] power: supply: cros_usbpd: provide ID table for avoiding fallback match
-Date: Mon, 27 May 2024 22:19:07 -0400
-Message-ID: <20240528021909.3905362-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 1/2] power: supply: cros_usbpd: provide ID table for avoiding fallback match
+Date: Mon, 27 May 2024 22:19:13 -0400
+Message-ID: <20240528021915.3905424-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.92
+X-stable-base: Linux 5.15.160
 Content-Transfer-Encoding: 8bit
 
 From: Tzung-Bi Shih <tzungbi@kernel.org>
@@ -87,7 +87,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 9 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/power/supply/cros_usbpd-charger.c b/drivers/power/supply/cros_usbpd-charger.c
-index b6c96376776a9..8008e31c0c098 100644
+index 0a4f02e4ae7ba..d7ee1eb9ca880 100644
 --- a/drivers/power/supply/cros_usbpd-charger.c
 +++ b/drivers/power/supply/cros_usbpd-charger.c
 @@ -5,6 +5,7 @@
