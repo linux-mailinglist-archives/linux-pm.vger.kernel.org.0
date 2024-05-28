@@ -1,110 +1,135 @@
-Return-Path: <linux-pm+bounces-8219-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8220-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40B8A8D13EA
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 07:31:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 703F48D13F5
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 07:36:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EBC3D1F23F4C
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 05:31:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 99614B2101C
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 05:36:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B13E338DCC;
-	Tue, 28 May 2024 05:31:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1A6F38DCC;
+	Tue, 28 May 2024 05:36:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="coYRafhQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eiHVdzww"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35C284F1F2
-	for <linux-pm@vger.kernel.org>; Tue, 28 May 2024 05:31:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EF0B17E8FF;
+	Tue, 28 May 2024 05:36:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716874287; cv=none; b=ZIdljoFuBKs89pAvhht9gD/S+SbUJel8KglTJtGafRBOFFilPXnC3bmigaX3g92SyRVSfYYZkx8//IuXtk8rpaKfAp3pT2EEVYjKGjHCflTzg54L9Vd6yJbakkAQ8cp5vMYRr1kLyg/jdn1Ut+f4NWeuB2hJGcLq0qGCsmbndtQ=
+	t=1716874569; cv=none; b=N30g7RiLhUgiSJO/sIiKamlCa5HG6zScTgRr7EPJD/90TctOELgmxfQ0aYzPl1cIZDfeXnTQ8/R5jm7LhjS3U75H8gNW90kS503yu8N6Y2fxB1rrIXG7O6l/+sHP2eRYlK4fyeXVvqJpF8USzHx2BZb9qw9T03JeARxIC4WO9Vs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716874287; c=relaxed/simple;
-	bh=HyQLjZEpd9wwdN20s4cZ6BruH/hZKkcc3iKQN6LiTVw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KkzSeJsVZ6fQrFtqcpmjhvOqnDZ1UZ3Y1jML2rU29fpz1y7uz/XpueLyE0m7nheD+zHEFpW+erXj4hOohob4z34mRbnLS83MRJiw1znHgj8kEx38RVvqVfuosOJykAhkrszGfQDpDm7WBQgZORlg59+X6EKyY0P6Ewe3LEtyuyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=coYRafhQ; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2bfb6668ad5so322749a91.0
-        for <linux-pm@vger.kernel.org>; Mon, 27 May 2024 22:31:25 -0700 (PDT)
+	s=arc-20240116; t=1716874569; c=relaxed/simple;
+	bh=nwW0zyqZWUJuD2uDG8iZdvx4hg2SDrpgyeNcNil+xZo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Y07KCDhY75i7RCOp3fm2kEMZmAQ3xQA0rMNUtF2QFEQfpsuc3+u2nzZ6yBw/MruZoI0ypsjwspkcXEwhDG2OC7vMyZ+wGMMat2Kv/V3iRKJxtKBu3Gv60q51tGt2QJtrvFw2VJswqL5+4MIS1gjzW8ruN7Uq9AP1ofxuEB9rXvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eiHVdzww; arc=none smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-5238fe0cfc9so377229e87.0;
+        Mon, 27 May 2024 22:36:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1716874285; x=1717479085; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9hvPgmffj4Wj06vdVO18Z5LSO2FFEsKmLvRZE6+/qIo=;
-        b=coYRafhQcdlkUxMpwjQWk91T7cwG/0FsJ9QyoNq08+8VJ53ZMQ/bt4WwhvQU12lGTk
-         6gU5VxqkVkoJhTu+7qMOooJM+5doGC3cfSSoZCPg1EFN5vD5Y47lAPI69EG16S74RBPH
-         VR8Ct5PEkc//IDX2Pr+teporNm51VYGs13V/o5KIXAgSwTDMntYq9FmofknRefIXPEof
-         55QyCn+kqbidwGkBTBsdt5ZMrI0SfiYjn2kqIvvj//FIaGXuWcAuFtwgyG5NiN97U5Cl
-         C/WK/Et9W93AeauutbRlLNVxK4QjhysdCmYWgu1aaG4vN/cUtPAImbA65FwMtlRbdQv2
-         SU9Q==
+        d=gmail.com; s=20230601; t=1716874566; x=1717479366; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zQ5YRsvHvoBAdRC3HVPp9qo9wscCEvcT4K5gwwVeDRU=;
+        b=eiHVdzww+ixEe7ATEMmrma3m6/UHossdDPeCmuCYB+Qc25a7EB/CZSE16UpmvFwvjK
+         w+gwOK2nR2Zb6mgpPRIWxiuT7gqMfasZ2gUUOekhNYJqdKvqmTgHfDkwu9sdjSinsNEE
+         tpVdrKqtI+Qa3Kx6oN3LV+MsGYDwHuMnx2WHsVNRs20ud1wYL5oIbTN2+dGjlT+zcE9o
+         XNcAQxfWOHQqbv709TbEQdBoOz5yc+A23iA7fKN7CHFmEy2opfJJrjoMp7NA47CfKjZh
+         5ZOP3HyNIqu+GN5vGFGM4PHIgQIQibUUiCBtrOEvQbOGoA+duyJUS5aCC73sTh0h/ohf
+         ppQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716874285; x=1717479085;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9hvPgmffj4Wj06vdVO18Z5LSO2FFEsKmLvRZE6+/qIo=;
-        b=Atb0y/8XBssFvW2Yd3zn7rF9hFu5DQqtBoCentVqA3LfC08L4MS/cA/tyqeJ7UEJmG
-         FE/TA5gX0xr5LSzPt/5VZtTK1frK4nJW4a+Gzl977fViUzXs1rgXo2j58z7k8C+ApBtC
-         HsTM5bh7Y0kE2AH10DYHD/M62HJUhytvX7a3Pmff88Fa7fm7yERtB4PrAVbKoRMOA6fe
-         +V+GuPOK19P6yHPrpPmQ6phqhpYUYuupmKlaoVEHiTgxwwG45bLycotQamJ105BqNNOs
-         n0aj/OTVmcinP1fFyCren2jwQyRduYgibh9SI8v42Bzy88yNoUWedNav9pzLp2bNvi4J
-         V9QQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV8KzRFwM0m+vu22iKlSLez0l9JHvykxBue5PHTx9eFmrT2LQYBjjWA4WjgxXUyn2OHwN0r5Zirzz6+HG6D7PiekjZtZ5RhgkQ=
-X-Gm-Message-State: AOJu0YyVtxNoxw3EeYzFA1FKqhR6RsKJJpnjqgVEmgGyPKvbaoETuPav
-	oX5wW1dMJ2sQjngkjSPMkvTrGi1FHZlKtrG24kvZwxNVFhg7NOANCxSLKsxCUaFd1RA9U3g0b0X
-	D
-X-Google-Smtp-Source: AGHT+IH3eeCklWFIBgjuU2ajwASNK+Fln476Y1+Xt+QjngmUQhquOGzUKnaJQt7MCEQySQmbSAajXg==
-X-Received: by 2002:a17:90b:3754:b0:2b4:fcfd:780e with SMTP id 98e67ed59e1d1-2bf5f75124fmr9077103a91.49.1716874285301;
-        Mon, 27 May 2024 22:31:25 -0700 (PDT)
-Received: from localhost ([122.172.82.13])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2bf5f511a92sm6769359a91.24.2024.05.27.22.31.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 May 2024 22:31:24 -0700 (PDT)
-Date: Tue, 28 May 2024 11:01:22 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: oe-kbuild@lists.linux.dev, lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-	linux-acpi@vger.kernel.org, devel@acpica.org,
-	linux-pm@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
-Subject: Re: [rafael-pm:bleeding-edge 11/15] drivers/opp/core.c:2447
- _opp_attach_genpd() warn: missing unwind goto?
-Message-ID: <20240528053122.pzfkdig6k4kga2yz@vireshk-i7>
-References: <3d73f08e-8305-4ad8-8327-adaaf96ac673@moroto.mountain>
+        d=1e100.net; s=20230601; t=1716874566; x=1717479366;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zQ5YRsvHvoBAdRC3HVPp9qo9wscCEvcT4K5gwwVeDRU=;
+        b=hEQ3Yr1d2m65sZi1S5uoUw91E+mLMdMeWyA+cRVZ7LsOM6jBXmK5vV5A5MPi+URkBe
+         xxiE4bfi8Xbes0BDvhc3e/hrC+QXDW6mJLm8VbWOU68pHHF2nXl1YYD0QcFB8+1gnjZm
+         Nw45hdOKDaN4V2bJUOvum96GBPtNIEYa/2gMxMkgUNj6IMraSCH/nk5+GMOhOH6qx19y
+         zTTt2YStZrwwr0OBokRtaE0BYVmupHfIUbCS6rf3XQac724XvmuBZf6MSvVOmVnhUbm6
+         b6p5pBfJ5JeeDbTYVjWnbR8KTYkPYbmJMQAf0XSUieJHtb+AnOV2hxwwxnNieFKOkbOk
+         VUXQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUnOE68tZjsKsl0UtPvz/MuIj34NNgwhRVVmwY4nbYDfv5zXymPocYlbfrEYp2qWHTLhPS2WpxvJraKuanpOoKNtPidLtW6Ive0PCQj
+X-Gm-Message-State: AOJu0Yxux6H0r2nnr8LWBwZ4DNvdIXnIg5vTNFmwXt/RZLRs4CaLud0B
+	YVKMvCxrJqKUS1twIyfFel0MICpfXNtXm4zqHLCBb+u5B24UFaFYQ7DpsA==
+X-Google-Smtp-Source: AGHT+IGReGPOSVoMpusxH7TfsFf0PJuifsnWkIwYw6r1iQmpNfbsbr4kIn1cZE8/HPAqNKOewGcz9A==
+X-Received: by 2002:ac2:4d08:0:b0:51f:fdd3:b673 with SMTP id 2adb3069b0e04-527f15cc5a5mr4347094e87.34.1716874565894;
+        Mon, 27 May 2024 22:36:05 -0700 (PDT)
+Received: from ?IPV6:2a10:a5c0:800d:dd00:8cfe:d6e7:6701:9dfd? ([2a10:a5c0:800d:dd00:8cfe:d6e7:6701:9dfd])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5297066b730sm855379e87.134.2024.05.27.22.36.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 May 2024 22:36:05 -0700 (PDT)
+Message-ID: <d34509fa-09e7-4bb4-8d2a-0561e4b0ef26@gmail.com>
+Date: Tue, 28 May 2024 08:36:03 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3d73f08e-8305-4ad8-8327-adaaf96ac673@moroto.mountain>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] power: supply: bd99954: remove unused struct
+ 'battery_data'
+To: linux@treblig.org, linus.walleij@linaro.org, sre@kernel.org
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240528000634.196707-1-linux@treblig.org>
+ <20240528000634.196707-2-linux@treblig.org>
+Content-Language: en-US, en-GB
+From: Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <20240528000634.196707-2-linux@treblig.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 23-05-24, 15:50, Dan Carpenter wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-> head:   fe07fa9fa1115e0979b89a90ae8594794ac2f63f
-> commit: 2a56c462fe5a2ee61d38e2d7b772bee56115a00c [11/15] OPP: Fix required_opp_tables for multiple genpds using same table
-> config: i386-randconfig-141-20240517 (https://download.01.org/0day-ci/archive/20240518/202405180016.4fbn86bm-lkp@intel.com/config)
-> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+On 5/28/24 03:06, linux@treblig.org wrote:
+> From: "Dr. David Alan Gilbert" <linux@treblig.org>
 > 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-> | Closes: https://lore.kernel.org/r/202405180016.4fbn86bm-lkp@intel.com/
+> 'battery_data' is unused since the original
+> commit 0902f8366491 ("power: supply: Support ROHM bd99954 charger").
 > 
-> New smatch warnings:
-> drivers/opp/core.c:2447 _opp_attach_genpd() warn: missing unwind goto?
+> Remove it.
+> 
+> Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
 
-Sent a fix. Thanks.
+Acked-by: Matti Vaittinen <mazziesaccount@gmail.com>
+
+Thanks!
+
+> ---
+>   drivers/power/supply/bd99954-charger.c | 7 -------
+>   1 file changed, 7 deletions(-)
+> 
+> diff --git a/drivers/power/supply/bd99954-charger.c b/drivers/power/supply/bd99954-charger.c
+> index 1ed1d9f99fb3..54bf88262510 100644
+> --- a/drivers/power/supply/bd99954-charger.c
+> +++ b/drivers/power/supply/bd99954-charger.c
+> @@ -70,13 +70,6 @@
+>   
+>   #include "bd99954-charger.h"
+>   
+> -struct battery_data {
+> -	u16 precharge_current;	/* Trickle-charge Current */
+> -	u16 fc_reg_voltage;	/* Fast Charging Regulation Voltage */
+> -	u16 voltage_min;
+> -	u16 voltage_max;
+> -};
+> -
+>   /* Initial field values, converted to initial register values */
+>   struct bd9995x_init_data {
+>   	u16 vsysreg_set;	/* VSYS Regulation Setting */
 
 -- 
-viresh
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
 
