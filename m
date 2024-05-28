@@ -1,192 +1,217 @@
-Return-Path: <linux-pm+bounces-8236-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8237-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAF608D16E5
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 11:08:14 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D84558D16EB
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 11:08:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1AE1F1C2212A
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 09:08:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 32143B23EB2
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2024 09:08:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D319313D29A;
-	Tue, 28 May 2024 09:08:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F55613D242;
+	Tue, 28 May 2024 09:08:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IUcK+Hhs"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UZSVBu3V"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66ADE13C900
-	for <linux-pm@vger.kernel.org>; Tue, 28 May 2024 09:08:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CFFD4EB2E
+	for <linux-pm@vger.kernel.org>; Tue, 28 May 2024 09:08:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716887287; cv=none; b=rvFBxgogy7QPxMyNUWbuQ03+cTav71jUkXbuQZnp5yMdPHU3EpYIy9w1nAR8Tt7QpO8xnnslkHzIbGmXfj9NlIEc8y0mPbcG1u34vH8Vj+MG5dN2WgLculs6FrJkWLRyzhnfRXPUbFH5NxcnX4zu6JOuP8klgaRK0zoPyR6xLuU=
+	t=1716887329; cv=none; b=HUz5w+wt01AAUKXWMAw3Kmk1ORqy9GKegMRLmxQnDIdumozsCEztLjLtRkqxyYHU+oybch6vg3txVsz+uyOgr0199ZwcuytODcq5Z7+dJ+zmoEF++L8UrmtMi9OAU+BAi/p0UFoWne42XxcaupT8zBg69DOHJS4VrQax0cyxqOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716887287; c=relaxed/simple;
-	bh=9+CGOjqCFI8cBZqMQUSyJVRaj598mOEhBKpeMA2uMMY=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Wz29aSc85Q4kZXizOZo4mDZBKrpyLCkdrHZKlSj3bs853A5g/E/azQL18dW/bC77tLg6RJn3TamrZrABZRtyWkgrcSGcamhLMksueUsf8yU9qQGBoVqnsYCV4yiPwYRs4977BpAbhtOQKSs4vNLF9o3cWq7bEDH12zfaJV3QfoQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IUcK+Hhs; arc=none smtp.client-ip=209.85.128.42
+	s=arc-20240116; t=1716887329; c=relaxed/simple;
+	bh=pyP8rDh+w0C8gcPL7MoR95ziGLdrYH6TSPb+59IRlkQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Iv50g40b1xYy13A5Xk9tgLNmSfYqRSrQZ4LFkZKxQm/OsvfJ629/m4FoW/LegVJCl93e2+PVCf36DhOLiKh9wIWlb9YuIE+elVMIvPrm/+9kcsvL/THyw1u8RUCk60EuZ5aLdxR0776WvFnyFVEnzbgctGlJYs8GyT3QNHYjYbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UZSVBu3V; arc=none smtp.client-ip=209.85.215.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4210aa012e5so4662565e9.0
-        for <linux-pm@vger.kernel.org>; Tue, 28 May 2024 02:08:05 -0700 (PDT)
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-681953ad4f2so454437a12.2
+        for <linux-pm@vger.kernel.org>; Tue, 28 May 2024 02:08:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1716887284; x=1717492084; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=a3SQwXIIXHjRM5uNeBKtEGihfqD66qoKItzKJ4EdXAo=;
-        b=IUcK+Hhs1shSX/so/CSGKdfwUlBwf+/zKWTFhP4T44UQK2MCURsKkU56ec+C86Uof1
-         QfvkBtKXm9MK3gc9vakfiSAqp7BesOtlhMKAL1tOwriQMQdCMfbNC7L2zeROeZXJCLgG
-         v80QdUVfZhllyakBy2mgx2a7PBrEroKK3VZGgLmB1kFfnL83ax9cvQOSCtmbbzra/F/q
-         imEVG7xIhKjA9kAY0UoRmCXZ+UhfkjkIWiexXcBRn9syGI8xQBiCXu+jTOWgIZeqD8TR
-         NPgb5vh6gZa9HtnLwHlYGiKqtllc+aP2FKE66Y7x5ggzorKSAoIVrgGvbiK9qeC9CiRK
-         N2YA==
+        d=linaro.org; s=google; t=1716887327; x=1717492127; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mzsEUsWkD7l7X1wafx1iQHAi5RdHqsVhvTOLNp+TkVA=;
+        b=UZSVBu3VdiG6Tba7Inw+HkssZLIH04SwbZZPu5efeXW2lwbxd3uEsD7gCZe42Duo//
+         doVpqVXgVP0Q4jQ+9jVDi2glPEGvYvt16Rqn8eDlMWqhWk39RPAC9ljzFJyOnd6DL50/
+         hyGSaQXf92zxDtF/N6ww7Ktg7++4YarhNSHRp2u+fT+aA6YyKMbOzIeiJvojTq9QsbKC
+         kY6qF93TdmghxY9/GjswYcONMsnfyXwpJOxoElhlzddqKyV4c/D+0BZDOQzMPmPLUotn
+         sSmSdQcPN2LIupLhIWqhyMIalHI9n6KUMjIeQZC0RXaFBc2wYZtwXqUfsYCDOU2zWeia
+         8I4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716887284; x=1717492084;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=a3SQwXIIXHjRM5uNeBKtEGihfqD66qoKItzKJ4EdXAo=;
-        b=SGue7UdK92WLZzVMUWvqrNzxZGbnmQK1cJVLjN/bOucXGs0DVzNpyLWpZrqYG9Tz57
-         q8T5uScIIIoSU8xLgeKJ0R2Hra8XKgvJwt0FBhjyC2zakkffuGFMqRRkquVc+gwH8nSX
-         RjsP6ktoL+f0GFuPqILwtQ3gDVVlRv41/9Km4m91MjXaUryYcZOUoDUrndMgqThF+9QU
-         sDHqpKyB+QVpD0Vt3EHzyaNft1sTQ2wfbBhCqEz0SCc5UrtQ5odI0ERHm55fO32ph39P
-         uN8uLBj3unW/O6MeB93Vy537AB0KhzuDBi/k4hs8Zi7xriBzn9gDpaklkrLQCuY83Uu9
-         ujlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUGI7vkAXHkhfJx08A79SeTxYzskPmum6OBlEESgslR2N0Er/4bwUxom3hRba6+Ggi1pxXwm/3pSDnD2b3LYSOcnbQx+ZUHihQ=
-X-Gm-Message-State: AOJu0YzQ1IuygL/49+T0D1fWRjnEJjZr7EDgMatZJCkmWkNUzIQmjfm1
-	avdZaYcZHSy5dCd6e3JaxNX9pQVdQKlTkvql2PWcDMPAsoOrVPMPrNeMWJtgqE8=
-X-Google-Smtp-Source: AGHT+IEe5BlH9PQdZyM3Yr+PHsNxwDNOOPiWSviwZgKb7/NFJzJaatF7rZUzlXn8gDyUKiEed9NoCA==
-X-Received: by 2002:a05:600c:4f03:b0:41b:a8e8:3ff6 with SMTP id 5b1f17b1804b1-42108a59341mr95487685e9.11.1716887283658;
-        Tue, 28 May 2024 02:08:03 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:8f19:f965:3f93:6385? ([2a01:e0a:982:cbb0:8f19:f965:3f93:6385])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-421089ae96bsm135209155e9.35.2024.05.28.02.08.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 May 2024 02:08:03 -0700 (PDT)
-Message-ID: <fbafc16d-d6fa-4c57-8fc8-a1db09d03e05@linaro.org>
-Date: Tue, 28 May 2024 11:08:02 +0200
+        d=1e100.net; s=20230601; t=1716887327; x=1717492127;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mzsEUsWkD7l7X1wafx1iQHAi5RdHqsVhvTOLNp+TkVA=;
+        b=GueSBRPOvcQ5JackI+QsMMR4cA0+UQFPLePzC+b2xzMtxN41joiS9aqWuKArvHaNni
+         pYhCCmnB7Nd6XAC7bCe4zUHPlQ8FLVD/KBxVDWo9PIEQZN+/Vvq1mKXxGULw8h+TP2z9
+         HH9aUGfVnktVYNYMLDktuLJ2R+ef7iMer7SUKAMknAHPt21mgGSIH6d17tFvTUT/7V9D
+         kCHIzlcYPvKS2MaYXEH510BMJVkJoiuXDoGm046aZ3UR4PfVe2k8crYkAz8SRhWOane7
+         noKIRaEwLhGR/8VaPjFWyxkvHsB2YetdrMpWrvOUPStccRBfIMB+3Ir0xqzD3mjoOd4k
+         c2mg==
+X-Forwarded-Encrypted: i=1; AJvYcCVdEmOhGM5a0imkgwZOEebYSAou4DXAcknpvwbkqrsqHI2iah1sX2FgzEWQ1vkyAXBI5OglTtalIejbgnpCl7wgAxG7PsjbPBI=
+X-Gm-Message-State: AOJu0Yx6zwxHqzgcxCYBikQp8v1Nlw9B+RMkJxE51ovfl20uphBi1eGq
+	6OSTLHWsDorynmvkwsMQiGZdS3UD0CYj7p9lenc7I6QYxfS7KcRbGGByYX/kN61wBZHnuHlAUxk
+	Zm1RxpW/h/kJu1PMg83WvLLtA6LdvkHd02HIHRQ==
+X-Google-Smtp-Source: AGHT+IEpp2xFUfFsrKyY0Fn1X3JerpHWf7v4Pyi+GEGyAWb87x5Vdhb6hTTfWmqiLOeY09bymWn5SMCp3zl5C/IeOp8=
+X-Received: by 2002:a17:90a:e558:b0:2bd:b43f:4b with SMTP id
+ 98e67ed59e1d1-2bf5f2053abmr10123355a91.31.1716887326972; Tue, 28 May 2024
+ 02:08:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 3/3] arm64: dts: amlogic: a4: add power domain controller
- node
-To: Xianwei Zhao <xianwei.zhao@amlogic.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Kevin Hilman <khilman@baylibre.com>,
- Jerome Brunet <jbrunet@baylibre.com>,
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
- Jianxin Pan <jianxin.pan@amlogic.com>, Ulf Hansson <ulf.hansson@linaro.org>
-Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20240528-a4_secpowerdomain-v1-0-2a9d7df9b128@amlogic.com>
- <20240528-a4_secpowerdomain-v1-3-2a9d7df9b128@amlogic.com>
- <c97b12bb-8b56-4129-a292-588226a0ec42@linaro.org>
- <70083d10-483e-4daf-a408-020f0147c5cf@amlogic.com>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <70083d10-483e-4daf-a408-020f0147c5cf@amlogic.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240328074131.2839871-1-quic_sibis@quicinc.com> <20240328074131.2839871-3-quic_sibis@quicinc.com>
+In-Reply-To: <20240328074131.2839871-3-quic_sibis@quicinc.com>
+From: Vincent Guittot <vincent.guittot@linaro.org>
+Date: Tue, 28 May 2024 11:08:35 +0200
+Message-ID: <CAKfTPtDtnCm2NqhiXZLODXH5A9Hc9ryP==3LFZUcNnKE4J+PEg@mail.gmail.com>
+Subject: Re: [PATCH V4 2/2] cpufreq: scmi: Register for limit change notifications
+To: Sibi Sankar <quic_sibis@quicinc.com>
+Cc: sudeep.holla@arm.com, cristian.marussi@arm.com, rafael@kernel.org, 
+	viresh.kumar@linaro.org, morten.rasmussen@arm.com, dietmar.eggemann@arm.com, 
+	lukasz.luba@arm.com, pierre.gondois@arm.com, 
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, quic_mdtipton@quicinc.com, 
+	linux-arm-msm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 28/05/2024 11:00, Xianwei Zhao wrote:
-> Hi Neil,
->     Thanks for your quickly reply.
-> 
-> On 2024/5/28 16:46, Neil Armstrong wrote:
->> [ EXTERNAL EMAIL ]
->>
->> On 28/05/2024 10:39, Xianwei Zhao via B4 Relay wrote:
->>> From: Xianwei Zhao <xianwei.zhao@amlogic.com>
->>>
->>> Add power domain controller node for Amlogic A4 SoC
->>>
->>> Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
->>> ---
->>>   arch/arm64/boot/dts/amlogic/amlogic-a4-common.dtsi | 4 ++++
->>>   arch/arm64/boot/dts/amlogic/amlogic-a4.dtsi        | 5 +++++
->>>   2 files changed, 9 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/amlogic/amlogic-a4-common.dtsi b/arch/arm64/boot/dts/amlogic/amlogic-a4-common.dtsi
->>> index b6106ad4a072..eebde77ae5b4 100644
->>> --- a/arch/arm64/boot/dts/amlogic/amlogic-a4-common.dtsi
->>> +++ b/arch/arm64/boot/dts/amlogic/amlogic-a4-common.dtsi
->>> @@ -27,6 +27,10 @@ xtal: xtal-clk {
->>>               #clock-cells = <0>;
->>>       };
->>>
->>> +     sm: secure-monitor {
->>> +             compatible = "amlogic,meson-gxbb-sm";
->>> +     };
->>> +
->>>       soc {
->>>               compatible = "simple-bus";
->>>               #address-cells = <2>;
->>> diff --git a/arch/arm64/boot/dts/amlogic/amlogic-a4.dtsi b/arch/arm64/boot/dts/amlogic/amlogic-a4.dtsi
->>> index 73ca1d7eed81..917c05219b9c 100644
->>> --- a/arch/arm64/boot/dts/amlogic/amlogic-a4.dtsi
->>> +++ b/arch/arm64/boot/dts/amlogic/amlogic-a4.dtsi
->>> @@ -37,4 +37,9 @@ cpu3: cpu@3 {
->>>                       enable-method = "psci";
->>>               };
->>>       };
->>> +
->>> +     pwrc: power-controller {
->>> +             compatible = "amlogic,a4-pwrc";
->>> +             #power-domain-cells = <1>;
->>> +     };
->>
->> pwrc is supposed to be a child of secure-monitor.
->>
-> Considered writing it like this when I wrote this.
-> 
-> Here are two approaches: one is to include secure-monitor in the comm dtsi and fill power-controller by aliases in dtsi of each chip, while the other is to directly include secure-monitor in the dtsi of each chip. Which one do you suggest?
+Hi Sibi,
 
-The bindings mandates it to be a child of the secure monitor.
+On Thu, 28 Mar 2024 at 08:42, Sibi Sankar <quic_sibis@quicinc.com> wrote:
+>
+> Register for limit change notifications if supported and use the throttled
+> frequency from the notification to apply HW pressure.
+>
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> ---
+>
+> v4:
+> * Use a interim variable to show the khz calc. [Lukasz]
+> * Use driver_data to pass on the handle and scmi_dev instead of using
+>   global variables. Dropped Lukasz's Rb due to adding these minor
+>   changes.
+>
+>  drivers/cpufreq/scmi-cpufreq.c | 44 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+>
+> diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
+> index 3b4f6bfb2f4c..d946b7a08258 100644
+> --- a/drivers/cpufreq/scmi-cpufreq.c
+> +++ b/drivers/cpufreq/scmi-cpufreq.c
+> @@ -21,11 +21,18 @@
+>  #include <linux/types.h>
+>  #include <linux/units.h>
+>
+> +struct scmi_cpufreq_driver_data {
+> +       struct scmi_device *sdev;
+> +       const struct scmi_handle *handle;
+> +};
+> +
+>  struct scmi_data {
+>         int domain_id;
+>         int nr_opp;
+>         struct device *cpu_dev;
+> +       struct cpufreq_policy *policy;
+>         cpumask_var_t opp_shared_cpus;
+> +       struct notifier_block limit_notify_nb;
+>  };
+>
+>  static struct scmi_protocol_handle *ph;
+> @@ -174,6 +181,22 @@ static struct freq_attr *scmi_cpufreq_hw_attr[] = {
+>         NULL,
+>  };
+>
+> +static int scmi_limit_notify_cb(struct notifier_block *nb, unsigned long event, void *data)
+> +{
+> +       struct scmi_data *priv = container_of(nb, struct scmi_data, limit_notify_nb);
+> +       struct scmi_perf_limits_report *limit_notify = data;
+> +       struct cpufreq_policy *policy = priv->policy;
+> +       unsigned int limit_freq_khz;
+> +
+> +       limit_freq_khz = limit_notify->range_max_freq / HZ_PER_KHZ;
+> +
+> +       policy->max = clamp(limit_freq_khz, policy->cpuinfo.min_freq, policy->cpuinfo.max_freq);
+> +
+> +       cpufreq_update_pressure(policy);
 
-Neil
+I noticed your patch while looking for other things in the archive but
+I don't think this is the right way to do it.
 
-> 
->> Neil
->>
->>>   };
->>>
->>
+cpufreq_update_pressure() aims to set to the scheduler the aggregation
+of all cappings set to cpufreq through the pm_qos and
+freq_qos_add_request(). Calling this function directly in scmi
+notification callback will overwrite the pm_qos aggregation. And at
+the opposite, any update of a pm_qos constraint will overwrite scmi
+notification. Instead you should better set a pm_qos constraint like
+others
 
+> +
+> +       return NOTIFY_OK;
+> +}
+> +
+>  static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+>  {
+>         int ret, nr_opp, domain;
+> @@ -181,6 +204,7 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+>         struct device *cpu_dev;
+>         struct scmi_data *priv;
+>         struct cpufreq_frequency_table *freq_table;
+> +       struct scmi_cpufreq_driver_data *data = cpufreq_get_driver_data();
+>
+>         cpu_dev = get_cpu_device(policy->cpu);
+>         if (!cpu_dev) {
+> @@ -294,6 +318,17 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+>                 }
+>         }
+>
+> +       priv->limit_notify_nb.notifier_call = scmi_limit_notify_cb;
+> +       ret = data->handle->notify_ops->devm_event_notifier_register(data->sdev, SCMI_PROTOCOL_PERF,
+> +                                                       SCMI_EVENT_PERFORMANCE_LIMITS_CHANGED,
+> +                                                       &domain,
+> +                                                       &priv->limit_notify_nb);
+> +       if (ret)
+> +               dev_warn(cpu_dev,
+> +                        "failed to register for limits change notifier for domain %d\n", domain);
+> +
+> +       priv->policy = policy;
+> +
+>         return 0;
+>
+>  out_free_opp:
+> @@ -366,12 +401,21 @@ static int scmi_cpufreq_probe(struct scmi_device *sdev)
+>         int ret;
+>         struct device *dev = &sdev->dev;
+>         const struct scmi_handle *handle;
+> +       struct scmi_cpufreq_driver_data *data;
+>
+>         handle = sdev->handle;
+>
+>         if (!handle)
+>                 return -ENODEV;
+>
+> +       data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> +       if (!data)
+> +               return -ENOMEM;
+> +
+> +       data->sdev = sdev;
+> +       data->handle = handle;
+> +       scmi_cpufreq_driver.driver_data = data;
+> +
+>         perf_ops = handle->devm_protocol_get(sdev, SCMI_PROTOCOL_PERF, &ph);
+>         if (IS_ERR(perf_ops))
+>                 return PTR_ERR(perf_ops);
+> --
+> 2.34.1
+>
+>
 
