@@ -1,127 +1,145 @@
-Return-Path: <linux-pm+bounces-8347-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8348-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63F968D3121
-	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 10:26:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87EBD8D319F
+	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 10:37:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F0D1293312
-	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 08:26:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B68E28344F
+	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 08:37:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8EE016C6A0;
-	Wed, 29 May 2024 08:23:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1AE4169ACA;
+	Wed, 29 May 2024 08:33:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="yMEtW+84"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="llMMIBaE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 707916D1AB
-	for <linux-pm@vger.kernel.org>; Wed, 29 May 2024 08:23:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 045DB169AC1
+	for <linux-pm@vger.kernel.org>; Wed, 29 May 2024 08:33:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716970986; cv=none; b=lkFeWl1PRj5tzn08mDN5f7jILTV59s1HhNhG7s5UVyy7t+Ota8GJf3hAWtYMw6IkoV+fIWJ9X3Yf9wHqFEm/r8ZHAwgpsleS4/emHwjQkgodyE887ghEl2xYUqYB6TTZy8Ce9+k6aNvde0+9X9gxkiyNYL1QSNSV34ACZU0hYcM=
+	t=1716971595; cv=none; b=tsCKAlhVEzUilap6EgCebCILfwfoCvHWVzbMFeEpvlb8x3Z/vorB76CjKL5XqAkxJwXjgthVNALBiwf3J4UE63asw+Pl7mx4gmMG8I0f3tJ4b5MJNOLV3TI8DXofYWl8I9yaaglhrgLNjb6zgZo+zhbBd7m8Wh1OIZcSVIY/yrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716970986; c=relaxed/simple;
-	bh=v1feN2NUrI9P5EUMAciZLEbJjEX1j1A38in4ikzn1wk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sAx0rvs1RV1F2vq4eThamYIhEGv+WkV697mtmj92vfuECLQMaU2CUNvBto9Lw3WggtYyc1km031p8Gz2YdvUrYXCz6G8V0Rm/Kg5Ahq7G7PYBfANukLE5Au+bdHmJVdbxLnpT1h7G03xViRAyVmGNeV+0N2lTeBX/Q+KGfqY/0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=yMEtW+84; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-420180b59b7so15435035e9.0
-        for <linux-pm@vger.kernel.org>; Wed, 29 May 2024 01:23:03 -0700 (PDT)
+	s=arc-20240116; t=1716971595; c=relaxed/simple;
+	bh=srXhUFh5PL3ztOWujk+vtJukyejJQvhmVjmJXbT1D9o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dzfBOjHQQh5C/A63h7pZ0ta7QVYYjbT7EToJQNKnPkBm/+v9IT81rJMz1g0S25M7xtte5j5VRKeV2REBMkuj0yaKJ+k1wd6dPrYTofIQboAMKJfOBMxXcYMQFF22Kwl/ko15upP4rfjmYgEn7tFPHU6OQdH3/uSyhUPD9vWA0Po=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=llMMIBaE; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-52ac99930c6so639207e87.0
+        for <linux-pm@vger.kernel.org>; Wed, 29 May 2024 01:33:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1716970982; x=1717575782; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Cyv9PovJHSSHJvMucpyIOkl77eWjr0heW5XICt5+8X4=;
-        b=yMEtW+84oVmUaG2flLfTP6tMxeq92w9NNWMWzXdcsTo3boft9KnTjJLGGBehofyIVH
-         iDsH5jdVccdpz3WE14xGFcR6GYZCRutEckW4YUjTCSaNAiDtWKB/utXN4Rg3WXDJeeNP
-         mCa0cPB4skWZV4YCTVNR2GmUNHwT6Qidv0E/sQkkjTO0WgCSKQbo+jmKaerx7z6a5Cac
-         wN8j4h/yF/3dOAM88hwLoAQZo3a1KigQv3vdrRqpIEJd7PfT1pWuVn3NdpJeh3cVDxuW
-         ONW/kejCX0nkzRl3MAwWPVEC61lY6M8/y2PNl3t83SfCDWM/CmXO1zR8HHZeM9n/V8NR
-         cJeQ==
+        d=chromium.org; s=google; t=1716971592; x=1717576392; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P/LaRze2iReVdITozRxpSW8O9Q/FJCbbeSJegkgQVeM=;
+        b=llMMIBaE/32bu3ymUDYXso8809Ry1gOm5W6d8jfh+OpTOjwP55z1aF4SaricXu0KxU
+         Sde8xVBPeORQbWCI12AZqHETPCCVjdOmwM/2cKGhvUOBrSXXBwQNktJET764omdD4QP2
+         0udO88jZ0kiHrh6lSEG/497W54YuR/Tod3/64=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716970982; x=1717575782;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cyv9PovJHSSHJvMucpyIOkl77eWjr0heW5XICt5+8X4=;
-        b=W2eKxpdGbXHqCrucxqMZf20HRDcLX3kiyDHhWq7Wqaogdnuf24+R1+Dmi62jkZgwvS
-         ADzLIhVeVoIrKiPjKakh3I7xtJNMLyDkOGTIjKyznztSDKh1omm3kf8uo5lE3uCwAdQA
-         0VS/uJR6c9wzxrxgT2cjko2pGa98M5day4SyOROf50kS6gTrXC7E2YNMxP6i5pTdqd5F
-         ohfNEyx+vVPkWTG5pcmdSTfwh+sE9X58mAe8jIr/th7PEfFzuZ+IwCUA13syIw4tall7
-         GdC26wmYlOu6/XRD2Slldj583w+xzKntlAR/RRbeGqjl8t3vADXDogkDnAYiQZl9QkRH
-         a+gQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUpqjj3mZB6q5fyAfhh+1hO2TMsTFKUh+YL2EKF0lbHqNzbcrb8PvGT35CBgyh5SU+jB/cEiNwHyn5+FKf/1F5tZpTI/D7y6rI=
-X-Gm-Message-State: AOJu0Yzbg43DeFcmRIVxQOJOojWrqbbd7cF0eQc99vw/mgclJ5fI/Iy/
-	3XrHzUjU6cp1y2fhlpjVMkrXhbV2LF9qZJ05+WtJA72FXWQvxWUzFbsM+37odY0=
-X-Google-Smtp-Source: AGHT+IH+woaE6GlA+cs5xDP5OfdceRBKfbkhD/cWJbIr1gI4V+CXAq4EQPV6Kc26S2O+apzzp1XHog==
-X-Received: by 2002:a05:600c:474f:b0:421:10e4:7f6b with SMTP id 5b1f17b1804b1-42110e47fd9mr78062025e9.27.1716970981790;
-        Wed, 29 May 2024 01:23:01 -0700 (PDT)
-Received: from [10.1.5.19] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3582917b222sm9606959f8f.93.2024.05.29.01.23.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 May 2024 01:23:00 -0700 (PDT)
-Message-ID: <1c83bd93-92b3-4986-a154-69ae792e57ba@baylibre.com>
-Date: Wed, 29 May 2024 10:23:00 +0200
+        d=1e100.net; s=20230601; t=1716971592; x=1717576392;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=P/LaRze2iReVdITozRxpSW8O9Q/FJCbbeSJegkgQVeM=;
+        b=HqvQXf6iCtHfuCv7kT5zy5sg2drugK6hfGfX+xI3XvrPnV+UxHyLeWr68mIKFNLO1/
+         L0ItbpmC3BW51M9BCNJizB/q9eGTv7L6QnHm8ORXmwo6+mv+E2fIY+hCMnTzUAGoaClb
+         kRMJ2UJ7gp4fQszXm+w4n5P0XXOgT5QkPassS7M+UH3oKs06DhZZfNYXMoFD3H2HuKry
+         Pn9LOs8kym4oxSQqFGyjWt7d9w3BpUppR6K02HVkeFtQclEjctQLS29No8ssSGdyCqLj
+         Z4Aciw5VPPnI5keUSPD6arheF7Dh8rnDsq7S5agcx8xwVq1ypAua0KBb2AwUb/zXtWrJ
+         o2CQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXrqJCZq49LbiZzwaUtqNO+oZo+sWvJQQuc3Bu94mA2CM5pJEvLaTNfLtH7Z2KNVFuzMVq674fGdPNzoXoGGcgJZdP3Z1r6Pys=
+X-Gm-Message-State: AOJu0YxRywZnizTbrzMMu4F8Ios0OEk91Yi6QbJIZNJvnyAOD+TAxC4m
+	Ovt6zzx6iPlqL9UoLKP0jXNcaO47LY6byDIm70tBdmWfkxb1b727BPex5DrqLa3cjVnS4kKpFaT
+	aqPYhQJvSDW3SCan2YU5eGagafVsclzss4nOw
+X-Google-Smtp-Source: AGHT+IHcO+FygnC0TbWkPGa0nLxOhGY7/OgenVpFufgaX9HqoJKiSuswBtm8hAFMkn+oyxq2QoDGhVBhj3hQ94XJHIU=
+X-Received: by 2002:a05:6512:4da:b0:52b:78c5:b058 with SMTP id
+ 2adb3069b0e04-52b78c5b216mr44428e87.17.1716971592060; Wed, 29 May 2024
+ 01:33:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/6] thermal: Add support of multi sensors to
- thermal_core
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, rafael@kernel.org,
- daniel.lezcano@linaro.org, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
-Cc: rui.zhang@intel.com, lukasz.luba@arm.com, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240524143150.610949-1-abailon@baylibre.com>
- <20240524143150.610949-3-abailon@baylibre.com>
- <834e18c7-21b6-400e-aa61-a4f591027620@linaro.org>
-Content-Language: en-US
-From: Alexandre Bailon <abailon@baylibre.com>
-In-Reply-To: <834e18c7-21b6-400e-aa61-a4f591027620@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240529-mtk-thermal-mt818x-dtsi-v6-0-0c71478a9c37@baylibre.com>
+ <20240529-mtk-thermal-mt818x-dtsi-v6-4-0c71478a9c37@baylibre.com> <75826085-fd59-466a-b1de-b4c323c801c1@collabora.com>
+In-Reply-To: <75826085-fd59-466a-b1de-b4c323c801c1@collabora.com>
+From: Chen-Yu Tsai <wenst@chromium.org>
+Date: Wed, 29 May 2024 16:33:01 +0800
+Message-ID: <CAGXv+5FPG4ob3mTU0Utm8Wgk0_ZLw=NLPbfFerWh4OUeAz7UHw@mail.gmail.com>
+Subject: Re: [PATCH v6 4/6] arm64: dts: mediatek: mt8186: add default thermal zones
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	Julien Panis <jpanis@baylibre.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Nicolas Pitre <npitre@baylibre.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org, 
+	Krzysztof Kozlowski <krzk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, May 29, 2024 at 4:17=E2=80=AFPM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Il 29/05/24 07:57, Julien Panis ha scritto:
+> > From: Nicolas Pitre <npitre@baylibre.com>
+> >
+> > Inspired by the vendor kernel but adapted to the upstream thermal
+> > driver version.
+> >
+> > Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
+> > Signed-off-by: Julien Panis <jpanis@baylibre.com>
+>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
+ora.com>
 
+I'm getting some crazy readings which would cause the machine to
+immediately shutdown during boot. Anyone else see this? Or maybe
+my device has bad calibration data?
 
-On 5/27/24 09:00, Krzysztof Kozlowski wrote:
-> On 24/05/2024 16:31, Alexandre Bailon wrote:
->> This adds support of multi sensors to thermal.
->> Currently, this only support the get_temp operation.
->> This returns an average temperature of all the sensors.
->> If defined, a coefficient is applied to the value read from the sensor
->> before computing the average.
->>
->> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
->> ---
->>   drivers/thermal/Makefile        |   1 +
->>   drivers/thermal/thermal_core.h  |  15 ++
->>   drivers/thermal/thermal_multi.c | 332 ++++++++++++++++++++++++++++++++
->>   include/uapi/linux/thermal.h    |   5 +
->>   4 files changed, 353 insertions(+)
->>   create mode 100644 drivers/thermal/thermal_multi.c
-> 
-> This does not really build...
-Sorry for that. I have not rebased and tested my patches on the latest 
-master commit. I will be more careful for the V4.
+gpu_thermal-virtual-0
+Adapter: Virtual device
+temp1:       +229.7 C
 
-Best regards,
-Alexandre
-> 
-> 
-> ../drivers/thermal/thermal_multi.c:249:38: error: initialization of ‘struct thermal_trip *’ from incompatible pointer type ‘struct thermal_trip_desc *’ [-Werror=incompatible-pointer-types]
-> 
-> Best regards,
-> Krzysztof
-> 
+nna_thermal-virtual-0
+Adapter: Virtual device
+temp1:       +229.7 C
+
+cpu_big0_thermal-virtual-0
+Adapter: Virtual device
+temp1:         -7.2 C
+
+cpu_little2_thermal-virtual-0
+Adapter: Virtual device
+temp1:       +157.2 C
+
+cpu_little0_thermal-virtual-0
+Adapter: Virtual device
+temp1:       -277.1 C
+
+adsp_thermal-virtual-0
+Adapter: Virtual device
+temp1:       +229.7 C
+
+cpu_big1_thermal-virtual-0
+Adapter: Virtual device
+temp1:       +229.7 C
+
+cam_thermal-virtual-0
+Adapter: Virtual device
+temp1:        +45.4 C
+
+cpu_little1_thermal-virtual-0
+Adapter: Virtual device
+temp1:       -241.8 C
 
