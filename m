@@ -1,98 +1,181 @@
-Return-Path: <linux-pm+bounces-8353-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8354-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A65018D32CF
-	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 11:20:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5F7C8D33C2
+	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 11:56:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6211E284278
-	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 09:20:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 03140284F3C
+	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 09:56:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D0A215B10C;
-	Wed, 29 May 2024 09:20:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8F61174EE4;
+	Wed, 29 May 2024 09:56:02 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [195.130.137.90])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80157169AE6
-	for <linux-pm@vger.kernel.org>; Wed, 29 May 2024 09:20:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.137.90
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D968516A360
+	for <linux-pm@vger.kernel.org>; Wed, 29 May 2024 09:55:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716974426; cv=none; b=tR77xt7qoxQz2LIEPuJe8NVpF8oIldsvnsCEOFP2/qxQLmwrnjzpPPFPrKWhhyNvOW0NS8fd2UP4EJ8AJzllsacc7B2Mq/pTW0i3u2UDpFVZBmPnTajNI9HoD3Akm7FXGQqKQ8q18d++zAC1lQuQSB3siZ1h+jnuiL3wk0ZjZi8=
+	t=1716976562; cv=none; b=YcV0hIi+Yr3sE152glw9nvc5jWT+RWANjQN90bevhnGOjTCQpGDdUweXGy1CPhtgMVIk9TznE/ntitBw0BC/kku5giGw2AWosS1RSeZatzg53C/j7YI5tl5MSGGG+hPv48s+G5x1yv6QJYKfy5ajkbc1u67H3RUz6Cx1Ny9QMnI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716974426; c=relaxed/simple;
-	bh=uowYDMqIB1KmJevzx4fTL6lHelcSpl7NP7eoM23uqFw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=K49pRHUcYehYfnUMwcdyK/54RVqzgtJ3hYyep9EX9uFwgXom3wGD6kWWrx0qZsx4DDQObBzqc7tYAFZgAcACR8XjDx7Xqma2g4ugJXc4Te1rtuG0sh6EABXJVncJvqr6rzGg/RvTc/gPoKyKxUwi3R2CyLuMRsbNAdH8XUmhJ/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.137.90
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:1b01:1838:131c:4de4])
-	by albert.telenet-ops.be with bizsmtp
-	id UxLM2C0043VPV9V06xLM7B; Wed, 29 May 2024 11:20:21 +0200
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtp (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1sCFSs-00GGAG-Q4;
-	Wed, 29 May 2024 11:20:21 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1sCFTp-008wFX-6j;
-	Wed, 29 May 2024 11:20:21 +0200
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: linux-pm@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] pmdomain: renesas: rmobile-sysc: Use for_each_child_of_node_scoped()
-Date: Wed, 29 May 2024 11:20:20 +0200
-Message-Id: <5e684d7b236904e5f79324a5e5357c2930f7402d.1716974368.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1716976562; c=relaxed/simple;
+	bh=ITQ/z1zIzrYZ4Xd1fZmZm4bgCItj5Q61mHuXHgbtJug=;
+	h=Message-ID:Date:MIME-Version:From:Cc:To:Subject:Content-Type; b=ut8ebyrPorG8lTsEKmkJdl335kZig8QFn58prFiPFqXA6tx7eUi7wi/Tm3WN1lyGB6IpMLnjbJ+rSZQJduT34uJ5R2SL/PoJE2gZANnSM9ym0of0EgUlJdjo7tHB4/cYyPY+k7TrcEObKgJWnN24k2fpAC5/5692Z0rQH+Uft+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [192.168.0.3] (ip5f5af7f7.dynamic.kabel-deutschland.de [95.90.247.247])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id C3DAC61E5FE01;
+	Wed, 29 May 2024 11:55:41 +0200 (CEST)
+Message-ID: <83326c68-e1f9-43b3-8cc4-6cf88cfbdbfa@molgen.mpg.de>
+Date: Wed, 29 May 2024 11:55:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+Cc: Mike Jones <mike@mjones.io>, Hans de Goede <hdegoede@redhat.com>
+To: linux-pm@vger.kernel.org
+Subject: Dell XPS 13 9360 (Kaby Lake): Power button LED stays sporadically
+ trying to S0ix suspend
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Use the scoped variant of for_each_child_of_node() to simplify cleanup
-handling.
+Dear Linux folks,
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/pmdomain/renesas/rmobile-sysc.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/pmdomain/renesas/rmobile-sysc.c b/drivers/pmdomain/renesas/rmobile-sysc.c
-index cc1f6f8b7a746850..5a1d2da465fb2c6f 100644
---- a/drivers/pmdomain/renesas/rmobile-sysc.c
-+++ b/drivers/pmdomain/renesas/rmobile-sysc.c
-@@ -237,9 +237,7 @@ static int __init rmobile_add_pm_domains(void __iomem *base,
- 					 struct device_node *parent,
- 					 struct generic_pm_domain *genpd_parent)
- {
--	struct device_node *np;
--
--	for_each_child_of_node(parent, np) {
-+	for_each_child_of_node_scoped(parent, np) {
- 		struct rmobile_pm_domain *pd;
- 		u32 idx = ~0;
- 
-@@ -248,10 +246,8 @@ static int __init rmobile_add_pm_domains(void __iomem *base,
- 		}
- 
- 		pd = kzalloc(sizeof(*pd), GFP_KERNEL);
--		if (!pd) {
--			of_node_put(np);
-+		if (!pd)
- 			return -ENOMEM;
--		}
- 
- 		pd->genpd.name = np->name;
- 		pd->base = base;
--- 
-2.34.1
+On the Intel Kaby Lake Dell XPS 13 9360, I have been using ACPI S3 
+(`mem_sleep_default=deep`) over S0ix since starting to use the device 
+over half a year in October/November 2023 due to the feeling, that the 
+battery was drained a lot more with S0ix.
 
+Looking into other problems, cf. *Dell XPS 13 9360: 
+`slp_s0_residency_usec` stays 0* [1], I was pointed to S0ix self test 
+tools [2], and now test s2idle sporadically. Today, with Linux 
+6.10.0-rc1-00021-ge0cce98fe279, I did
+
+     $ echo s2idle | sudo tee /sys/power/mem_sleep
+
+and suspended the system from the GNOME Shell menu. The screen turned 
+black, but the power button LED stayed on, so I believe it didn’t really 
+suspend. Pressing a keyboard key did nothing – maybe expected. Pressing 
+the power button it resumed. The logs contain:
+
+     [    0.000000] Linux version 6.10.0-rc1-00021-ge0cce98fe279 
+(build@bohemianrhapsody.molgen.mpg.de) (gcc (Debian 13.2.0-25) 13.2.0, 
+GNU ld (GNU Binutils for Debian) 2.42) #167 SMP PREEMPT_DYNAMIC Wed May 
+29 06:05:16 CEST 2024
+     [    0.000000] Command line: 
+BOOT_IMAGE=/vmlinuz-6.10.0-rc1-00021-ge0cce98fe279 
+root=UUID=32e29882-d94d-4a92-9ee4-4d03002bfa29 ro quiet pci=noaer 
+mem_sleep_default=deep log_buf_len=8M cryptomgr.notests
+     [    0.000000] DMI: Dell Inc. XPS 13 9360/0596KF, BIOS 2.21.0 
+06/02/2022
+     […]
+     [ 2917.885886] PM: suspend entry (s2idle)
+     [ 2917.893434] Filesystems sync: 0.007 seconds
+     [ 2917.895608] Freezing user space processes
+     [ 2917.897114] Freezing user space processes completed (elapsed 
+0.001 seconds)
+     [ 2917.897117] OOM killer disabled.
+     [ 2917.897118] Freezing remaining freezable tasks
+     [ 2917.898487] Freezing remaining freezable tasks completed 
+(elapsed 0.001 seconds)
+     [ 2917.898490] printk: Suspending console(s) (use 
+no_console_suspend to debug)
+     [ 2918.091771] ACPI: EC: interrupt blocked
+     [ 2956.317686] intel_pch_thermal 0000:00:14.2: Wakeup event 
+detected, abort cooling
+     [ 2956.350676] ACPI: EC: interrupt unblocked
+     [ 2956.589690] usb 1-3: reset full-speed USB device number 2 using 
+xhci_hcd
+     [ 2956.616448] r8152 4-1.2:1.0 enx18dbf22dccf3: carrier on
+     [ 2956.741393] OOM killer enabled.
+     [ 2956.741402] Restarting tasks ... done.
+     [ 2956.744243] random: crng reseeded on system resumption
+     [ 2956.745947] mei_hdcp 
+0000:00:16.0-b638ab7e-94e2-4ea2-a552-d1c54b627f04: bound 0000:00:02.0 
+(ops i915_hdcp_ops [i915])
+     [ 2956.833723] PM: suspend exit
+     [ 2956.887812] Process accounting resumed
+
+Testing a later again, it worked, that means the power button LED turned 
+off.
+
+     [ 7977.402744] PM: suspend entry (s2idle)
+     [ 7977.410894] Filesystems sync: 0.008 seconds
+     [ 7977.414415] Freezing user space processes
+     [ 7977.415982] Freezing user space processes completed (elapsed 
+0.001 seconds)
+     [ 7977.415985] OOM killer disabled.
+     [ 7977.415986] Freezing remaining freezable tasks
+     [ 7977.417507] Freezing remaining freezable tasks completed 
+(elapsed 0.001 seconds)
+     [ 7977.417524] printk: Suspending console(s) (use 
+no_console_suspend to debug)
+     [ 7977.637987] ACPI: EC: interrupt blocked
+     [ 7977.641470] intel_pch_thermal 0000:00:14.2: CPU-PCH is cool [44C]
+     [ 7979.244068] ACPI: EC: interrupt unblocked
+     [ 7979.489907] usb 1-3: reset full-speed USB device number 2 using 
+xhci_hcd
+     [ 7979.510653] r8152 4-1.2:1.0 enx18dbf22dccf3: carrier on
+     [ 7979.644236] OOM killer enabled.
+     [ 7979.644243] Restarting tasks ... done.
+     [ 7979.648330] random: crng reseeded on system resumption
+     [ 7979.649654] mei_hdcp 
+0000:00:16.0-b638ab7e-94e2-4ea2-a552-d1c54b627f04: bound 0000:00:02.0 
+(ops i915_hdcp_ops [i915])
+     [ 7979.745631] PM: suspend exit
+     [ 7979.799159] Process accounting resumed
+
+The difference is:
+
+1.  LED stays on:
+
+         intel_pch_thermal 0000:00:14.2: Wakeup event detected, abort 
+cooling
+
+2.  LED turns off:
+
+         intel_pch_thermal 0000:00:14.2: CPU-PCH is cool [44C]
+
+Does intel_pch_thermal prevent the system from S0ix suspending, so the 
+LED stays on until the device is cooled down? If so, could this be 
+better logged, so users know, what is going on. The driver description 
+only says, that reading capabilities are provided:
+
+     config INTEL_PCH_THERMAL
+             tristate "Intel PCH Thermal Reporting Driver"
+             depends on X86 && PCI
+             select ACPI_THERMAL_LIB if ACPI
+             help
+               Enable this to support thermal reporting on certain intel 
+PCHs.
+               Thermal reporting device will provide temperature reading,
+               programmable trip points and other information.
+
+If intel_pch_thermal does *not* prevent the system from reaching S0ix 
+state, can you please point me to the correct subsystem to report this to?
+
+
+Kind regards,
+
+Paul
+
+
+[1]: 
+https://lore.kernel.org/platform-driver-x86/38fc334a-7c8c-4e43-bf63-6ac9aa882a2f@molgen.mpg.de/
+[2]: https://github.com/intel/S0ixSelftestTool/
 
