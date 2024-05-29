@@ -1,151 +1,174 @@
-Return-Path: <linux-pm+bounces-8350-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8351-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 125608D3274
-	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 11:01:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 173038D32A1
+	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 11:12:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35D9E1C22DAD
-	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 09:01:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BF4282822A0
+	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 09:12:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63DAA167DAB;
-	Wed, 29 May 2024 09:01:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0D57169378;
+	Wed, 29 May 2024 09:12:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="jb1q293q"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9424D1E888;
-	Wed, 29 May 2024 09:01:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D896515D5A3
+	for <linux-pm@vger.kernel.org>; Wed, 29 May 2024 09:12:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716973306; cv=none; b=L+bIaX74EHXMfDEUygE5TJ3qpbwhXIm2ns6//TxhKdrmK7edXpOUBc4qxVQ/xGD/InjLRWCAnhCYTKtbqOVVnscMKYuq9qXIMOZirvQmbLCqkIImOlbpuIZ8I9NamWCUFQJ/Mxix00wUpsk+axw7inpp2PeAlof76gF2ABqFNqI=
+	t=1716973940; cv=none; b=a643zu+LlLZANfB9idtMcjkKyJeYdjM8ed6XPWOxqrN6wGcmPYNbI53GBwC+dE9uNyVChrRdBhhX8HDi7NulBnjNYEtU9ltphc746rDgP+6QglEUxTg9IjiQM9GjifmF7uBSVQGkikdYHJl84gyjDMJf6VC+to42ZaBzjAaeXwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716973306; c=relaxed/simple;
-	bh=wq6Q5U9qIc0wVfPUvIazA+e9F1mn1D2Z4oXYmue4Ipo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KM6B451ZKUZH12aLtfj0s6gDwSbWe5nKMXy75lNgvj9E9ezK1TGsLJ4Tm/9WlZwcY5/xEXRo3ZTSBlnQquT9C707dtNY4sxv0iNn8tFBjNtSfKWH1u5GJjIq46x0IlgcEbMB87YBjcumIwayMW+bA0nzRXcydgcWx+lYBfpI8Ek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-df771db8b24so1737163276.3;
-        Wed, 29 May 2024 02:01:44 -0700 (PDT)
+	s=arc-20240116; t=1716973940; c=relaxed/simple;
+	bh=0QL4BvsTjLA5ayAniWR5sm/TXQpiVSWPTQlZGz10zV8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QWIC5zkSXOVXV5JrSym2QtCTOLapnUQZmC1qmXP6aZmHdp3J1xU87sHIZGBR75EoIgjcHf6Q2OLB5MozJuX+cS7LtkPJDqdVIPvEk+6d1k9ip/5EsH5XhmbnBOegHryzbVXzmBRHMtJF4OkNC6zNuFSy5WVkTR2I4HEVYwpfg/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=jb1q293q; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-35502a992c9so1907234f8f.3
+        for <linux-pm@vger.kernel.org>; Wed, 29 May 2024 02:12:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1716973936; x=1717578736; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ciTtYKEbBr+vQK3oiFVI2dnU7hwIdnBzRqy3mCB0PTM=;
+        b=jb1q293qI9vAJoHURlEOf8Cn5tWvv9VkArgEGFlrCELK3M8icQFATwhEr37FtPp5iC
+         9SqN3QzOaWuikA760gUPv3+Px6Trv1+Lr/TY1GbBr80Ox3xJ4di+zvwwCDM1OPbmlRFg
+         CPOZiOiS0On4+VoM4h0k7CEBdL24ExtsmOKxDNLHgemLsp1YdnDG/Fiy45pERJsN56PK
+         HDddmZT9hQkK7RjhnI1C4Z37P6mAEoR8LBAvtPiFPTW5hyLvLLIEsA6a4HdvIwD6u51O
+         ye8yhxaoxny5FI0SiHj7WcBNNtfNxx5Sz7p7HNY2/tpopVG+kryUuRZG8IIY6JZIoANJ
+         jENw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716973302; x=1717578102;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KnYuIo1n1oD5QX7J07WFDaga5vIEVHxJRsHJ8yWO98A=;
-        b=srzF4XauBhGx3v9W7ihZ874tqY6/cY4tnfPyu6DPkjlLREC+oH1zgGhXZ8H72kbGqE
-         JYujLxLlQUjcNDcHRVXe0A9a4lDWolEdf9ZDKBdQy+l6RZam0yK6yaBbBzeI0T6PexqY
-         ECUfQVMqhwrgAU5hv0SqQlOFau+23lHyY9DtykMopNCEbLKzS0+XfMtyB/diY9mkMaO+
-         kJFkYxWro1klBxmJ+888Qkm20FdvQFMMnjbi/3duVgiWEgnANy0AABcJlurBFq7KOiLJ
-         KRBNtnLUfTQpCKlIECbSd2Yx+kKN38U0QF1RWWXQvrSwEoN4ZStRM2d0OAKuyzRJiUYo
-         GsaQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXleI+4HMS3egI2rz/THTxvP56VqQjeM16D2VvTLD/gNxhg7VCbOgeQaLk1S87toZgPjlgWzxj1ZqBpDue5f6DDqtp0beDRJdBUHYqD0R4QL4Hl5Af+In/iHwv2Va7sxW/esqZoerfe5OCml8mhiMhLUeZ8JlaP/+cLD3Nnmwmca14t8cYemXGnWxb4ZGrlowtF5Vr8V1sdqZ3oCgASIqPveeXxtueqUiUDvOiKLEnYDe68EAvbNd3reu2mF2Yj/C26nrQ=
-X-Gm-Message-State: AOJu0YyfGRAOX6+bnwMDu/JUZOurEgUCOiWHI2Ppvl3MxsmShq2r+9PT
-	hjFZKHuX6T33Eo2y7l+Ei//lWAJ31sAdvd8gkxoAY64CCNdQIe8RpBwLBlm2n/8=
-X-Google-Smtp-Source: AGHT+IG1N3AmKZnNB7pxmFQEEWkmIBZaiEFCGdmbClIb8hwogzic7RLgZvMcDvl83mbqJR2oUGmFoQ==
-X-Received: by 2002:a25:8c03:0:b0:de6:1494:f144 with SMTP id 3f1490d57ef6-df7721a7766mr13396377276.28.1716973297477;
-        Wed, 29 May 2024 02:01:37 -0700 (PDT)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-dfa482bd39fsm173285276.37.2024.05.29.02.01.37
+        d=1e100.net; s=20230601; t=1716973936; x=1717578736;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ciTtYKEbBr+vQK3oiFVI2dnU7hwIdnBzRqy3mCB0PTM=;
+        b=qnU56CGcgbWgl20r2RfBWKsOs53Ecn8fVjgCLvL/+Eff43EnS9Q8Ff6EopPmLyE4WW
+         deIiK9lwUoA/b9O+KnulPbVjk9Qe2+oQhzEWq/prOvFL/gthGMIqLw8PtOH4bdrgJMD1
+         +1FsinInKz36ZFjCalY5M/h7Pzm9EeyIu4fIe/V5bLbe4vQxhSkqZJKlrCDxZk1MVa+O
+         6yXzikgG2+oPjCz+yi0+Xd8QhNrNyx5Q5x7P3Yzbqq/lDP0dJBbmbzEt8kW2DEnN96EN
+         nhkFtq4jIZWW3XBmzJodkZzEF1qw5R+Qmb4xqbhW86dD0+/lRKGBzkIlwcm+x6DiN/ku
+         mVoA==
+X-Forwarded-Encrypted: i=1; AJvYcCXMAgRKbm7t58ms8x0StAVluIWUYQSDxa3pvbKI6qxT0uGRtw7H2pR+mMvv41kOENxW/mDEAu/7zvMfhu+cw8yvM/MeV8D+kbY=
+X-Gm-Message-State: AOJu0Yw6Thok9O7paQ9tlUfDeQUo4aPXtPVmnbN6yp7I2VsmIYUjkZTA
+	ngBtzucakJLDmytTCksUTIy4TgiUs36WOgcKXMGkNU0SsqSYQM9ntDg9ItwZ2qo=
+X-Google-Smtp-Source: AGHT+IGzTz+2XrrYGSweYUU8ur8Euj8k3ViZtqjUVGNlAHrRa8447ANMpaIZTurk5qHKqtB4e2nxWA==
+X-Received: by 2002:adf:ee0e:0:b0:354:e729:c101 with SMTP id ffacd0b85a97d-35527056972mr12104266f8f.12.1716973936132;
+        Wed, 29 May 2024 02:12:16 -0700 (PDT)
+Received: from [192.168.1.70] ([84.102.31.110])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3557a1c92f8sm14111197f8f.67.2024.05.29.02.12.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 May 2024 02:01:37 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-62a2424ecb8so16712377b3.1;
-        Wed, 29 May 2024 02:01:37 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUit2zCbakmG6A0AbA5CeRTuIYODupvJG1rU96PoCvZ5fukmm28XZzsQxcpl2etweQZrkOv7k8vO+GSZJhc1oYh/5+NPLloj+dRlbYkOZA4oX2rmLUFXmqkqAfVnsLEO4JFYhhWMU1cfZsByICDLHiaMzCuHE0vQOu59MGvGJbJ3+GLqqTnIXnRnD01xxtA50btf8fwXs2GyBD/P8ca7vkCYQWJVxLiNI7gKHqnZEtR6fbaMXCfRCL+iNqYzDHsSOsNdRc=
-X-Received: by 2002:a25:b202:0:b0:dfa:4ce2:3315 with SMTP id
- 3f1490d57ef6-dfa4ce234f0mr828856276.38.1716973296714; Wed, 29 May 2024
- 02:01:36 -0700 (PDT)
+        Wed, 29 May 2024 02:12:15 -0700 (PDT)
+Message-ID: <808db317-4cee-426b-a840-013a5e03098d@baylibre.com>
+Date: Wed, 29 May 2024 11:12:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1716811405.git.geert+renesas@glider.be> <efd9397662ff743f95298ca6aad4efdfa0ba1962.1716811405.git.geert+renesas@glider.be>
-In-Reply-To: <efd9397662ff743f95298ca6aad4efdfa0ba1962.1716811405.git.geert+renesas@glider.be>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 29 May 2024 11:01:25 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUxXQca5MzP9fGjVoUWbOvSekwRp_+HMTT618yD8wc=tw@mail.gmail.com>
-Message-ID: <CAMuHMdUxXQca5MzP9fGjVoUWbOvSekwRp_+HMTT618yD8wc=tw@mail.gmail.com>
-Subject: Re: [PATCH/RFC 1/3] earlycon: Export clock and PM Domain info from FDT
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, 
-	Peng Fan <peng.fan@nxp.com>, linux-pm@vger.kernel.org, linux-serial@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 4/6] arm64: dts: mediatek: mt8186: add default thermal
+ zones
+To: Chen-Yu Tsai <wenst@chromium.org>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
+ <matthias.bgg@gmail.com>, Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Nicolas Pitre <npitre@baylibre.com>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+ Krzysztof Kozlowski <krzk@kernel.org>
+References: <20240529-mtk-thermal-mt818x-dtsi-v6-0-0c71478a9c37@baylibre.com>
+ <20240529-mtk-thermal-mt818x-dtsi-v6-4-0c71478a9c37@baylibre.com>
+ <75826085-fd59-466a-b1de-b4c323c801c1@collabora.com>
+ <CAGXv+5FPG4ob3mTU0Utm8Wgk0_ZLw=NLPbfFerWh4OUeAz7UHw@mail.gmail.com>
+Content-Language: en-US
+From: Julien Panis <jpanis@baylibre.com>
+In-Reply-To: <CAGXv+5FPG4ob3mTU0Utm8Wgk0_ZLw=NLPbfFerWh4OUeAz7UHw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, May 27, 2024 at 2:41=E2=80=AFPM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
-> Earlycon relies on the serial port to be initialized by the firmware
-> and/or bootloader.  Linux is not aware of any hardware dependencies that
-> must be met to keep the port working, and thus cannot guarantee they
-> stay met, until the full serial driver takes over.
+On 5/29/24 10:33, Chen-Yu Tsai wrote:
+> On Wed, May 29, 2024 at 4:17 PM AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com> wrote:
+>> Il 29/05/24 07:57, Julien Panis ha scritto:
+>>> From: Nicolas Pitre <npitre@baylibre.com>
+>>>
+>>> Inspired by the vendor kernel but adapted to the upstream thermal
+>>> driver version.
+>>>
+>>> Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
+>>> Signed-off-by: Julien Panis <jpanis@baylibre.com>
+>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> I'm getting some crazy readings which would cause the machine to
+> immediately shutdown during boot. Anyone else see this? Or maybe
+> my device has bad calibration data?
 >
-> E.g. all unused clocks and unused PM Domains are disabled in a late
-> initcall.  As this happens after the full serial driver has taken over,
-> the serial port's clock and/or PM Domain are no longer deemed unused,
-> and this is typically not a problem.
+> gpu_thermal-virtual-0
+> Adapter: Virtual device
+> temp1:       +229.7 C
 >
-> However, if the serial port's clock or PM Domain is shared with another
-> device, and that other device is runtime-suspended before the full
-> serial driver has probed, the serial port's clock and/or PM Domain will
-> be disabled inadvertently.  Any subsequent serial console output will
-> cause a crash or system lock-up.
+> nna_thermal-virtual-0
+> Adapter: Virtual device
+> temp1:       +229.7 C
 >
-> Provide a mechanism to let the clock and/or PM Domain subsystem or
-> drivers handle this, by exporting the clock and PM Domain dependencies
-> for the serial port, as available in the system's device tree.
-> Note that as this is done during early boot-up, the device_node
-> structure pointing to the earlycon console is not yet created, so this
-> has to resort to raw property data.
+> cpu_big0_thermal-virtual-0
+> Adapter: Virtual device
+> temp1:         -7.2 C
 >
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-> --- a/include/linux/serial_core.h
-> +++ b/include/linux/serial_core.h
-> @@ -954,6 +954,16 @@ static const bool earlycon_acpi_spcr_enable EARLYCON=
-_USED_OR_UNUSED;
->  static inline int setup_earlycon(char *buf) { return 0; }
->  #endif
+> cpu_little2_thermal-virtual-0
+> Adapter: Virtual device
+> temp1:       +157.2 C
 >
-> +#ifdef CONFIG_OF_EARLY_FLATTREE
+> cpu_little0_thermal-virtual-0
+> Adapter: Virtual device
+> temp1:       -277.1 C
+>
+> adsp_thermal-virtual-0
+> Adapter: Virtual device
+> temp1:       +229.7 C
+>
+> cpu_big1_thermal-virtual-0
+> Adapter: Virtual device
+> temp1:       +229.7 C
+>
+> cam_thermal-virtual-0
+> Adapter: Virtual device
+> temp1:        +45.4 C
+>
+> cpu_little1_thermal-virtual-0
+> Adapter: Virtual device
+> temp1:       -241.8 C
 
-This should include a check  for CONFIG_SERIAL_EARLYCON.
+It's likely that your device has bad calibration data indeed. We observed the same
+behavior on the mt8186 device we used (a Corsola) and finally realized that the
+golden temperature was 0 (device not properly calibrated).
 
-> +extern const __be32 *earlycon_clocks, *earlycon_power_domains;
-> +extern int earlycon_clocks_ncells, earlycon_power_domains_ncells;
-> +#else
-> +#define earlycon_clocks                        NULL
-> +#define earlycon_clocks_ncells         0
-> +#define earlycon_power_domains         NULL
-> +#define earlycon_power_domains_ncells  0
-> +#endif
-> +
->  /* Variant of uart_console_registered() when the console_list_lock is he=
-ld. */
->  static inline bool uart_console_registered_locked(struct uart_port *port=
-)
->  {
+To make a comparison, we run chromiumos v5.15 and dmesg output was:
+'This sample is not calibrated, fake !!'
+Additional debugging revealed that the golden temp was actually 0. As a result,
+chromiumos v5.15 does not use the calibration data. It uses some default values
+instead. That's why you can observe good temperatures with chromiumos v5.15
+even with a device that is not calibrated.
 
-Gr{oetje,eeting}s,
+This feature is not implemented in the driver upstream, so you need a device
+properly calibrated to get good temperatures with it. When we forced this
+driver using the default values used by chromiumos v5.15 instead of real calib
+data (temporarily, just for testing), the temperatures were good.
 
-                        Geert
+Please make sure your device is properly calibrated: 0 < golden temp < 62.
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+Julien
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
 
