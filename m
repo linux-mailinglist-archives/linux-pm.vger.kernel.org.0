@@ -1,229 +1,178 @@
-Return-Path: <linux-pm+bounces-8357-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8358-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAA678D34E2
-	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 12:49:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F7BC8D35FB
+	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 14:06:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5ED10287AD8
-	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 10:49:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 14D11287F68
+	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 12:06:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B2D816EBEF;
-	Wed, 29 May 2024 10:49:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2568180A83;
+	Wed, 29 May 2024 12:06:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="kHMKpuyu"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="YZhTN61t"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DEB71667C1
-	for <linux-pm@vger.kernel.org>; Wed, 29 May 2024 10:49:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14DB97317C;
+	Wed, 29 May 2024 12:06:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716979792; cv=none; b=L8YoF2T73vHykm9two+On7u9fnf+KHccBqZcPp4kkTzOp0tVa05UwFuVE+j37PuzYe7sKFnyGYos3rr5RO3qFRItIcVMz2rDp4iwRRib3Mhp3Ms9gEu5+hz/MoTlcZVBEN7978rIe/FUD4Hea25vy6PfatK4vdPKKDRKibAQljc=
+	t=1716984377; cv=none; b=RP9E/14aCt3EjpRD8wyK+4aEZmdHcWt/ffhRJboHLlGdBiw4Ft+1MWY7jazKXc8TKgzFMC6CkbkjhukYygmydbLBAbuvQlyfjA7BiT3APFgxz/M4cSPOjLhP9/YmXKwEOViiE75x8Gj/GoyCqODwlTbXy5QNvqyT+NM6ppVY9sE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716979792; c=relaxed/simple;
-	bh=Pr/U/nVNuU9P9EoTL2TtKbrFCdG3F3QLoKpQx2KMmgw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rY7YjwV4DMmzXIIzN6Rv9jn94tI4scWMpxsSwvm5qUVAizkJ9A47ul5oVoB9c22IXaNmN62LXg7fwXQzeYDkDeQNnRjvM5oB+Sa2zwT9hpOMS0ZO0eEmAfLfyVFeXkD1mc6cj2xM3CpX0QYhv9vA5a1O0xO2/NDAu0GTSQ9RiyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=kHMKpuyu; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4210aa0154eso10460725e9.0
-        for <linux-pm@vger.kernel.org>; Wed, 29 May 2024 03:49:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1716979789; x=1717584589; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1/gFwOMitDXUQkYesnOGOUX+glSBcKx0J8m0m0l5u9g=;
-        b=kHMKpuyuWee29Pz6TesobX2TFgdYVTeUuRbn1LZFeL6RGkCvva2hbQ8NMD0SoX4TYv
-         ANyfWqoAyxG+VQVcstoQdmwdINfnsJpSy+NNrV35K06hBX8dVRFcw8eDiaz5/6OSaNxo
-         mcpRTRcBSiyCtUoGCtBwQMjTrFi6UrWW8YAlzWgi6TrCAmJ/tzuhgMflYdaL//2JlcAZ
-         49Tq2CO6y0JTs6vP8EigezdGPfaBO4nIPTsMLm4QOqDIXnmQ5srv8SWgMel41UiXU+40
-         zmK7omzwu+ES3bzp5yPO3dQS6NllIK5eAHTGPxtm2unrEYZYbJFvJTAkGSwhxWO9f8vu
-         zuwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716979789; x=1717584589;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1/gFwOMitDXUQkYesnOGOUX+glSBcKx0J8m0m0l5u9g=;
-        b=sp9TMioZoHXrKChtQDDdwp7oN/SZKXlfKhBDa6mwMOeagX3D6M4vkEVpIpqiklnSFE
-         kaa+A6aULyn8Godccb+EjKg6vv7fnMyFXaSl/yyOfrKmP6E2qKauN1Oe2Kr8pIrr8fg9
-         DEr+Yr0fubmfFek5Zk2IyJy6NjSoTWC8RW2cDpKYFag16uUedfDFm9m/EWg7BR6SjkA5
-         0ashrdfJZIktQqDD9Rm9ftChF23vwrcy7bkzHM1i4NiaRx5mv84kI3R+QFBxUI88i7i5
-         /alhZOZVQX24eyA4n1qEXquaPqFAGUMM3b50V8DOqpo4dAJ3srtFIY9vNNP10s9IyBNU
-         7qVA==
-X-Forwarded-Encrypted: i=1; AJvYcCUeZMJETf9wyF5RXISH4aVM2FqzRw7TtZRWNX1lR+Z5Yh0B2PZn/MhRlRIVC6DUfqr5E62i33fDoRF+AiC68AfviIpK2RT2mbI=
-X-Gm-Message-State: AOJu0YzrF1OhRT99DOtKRY8zo9mqH+6CGhQhb0tYAjGIE27VVR1GstO1
-	wfIiu6DaCdtFvWJ6lIgYI71gxh+Cyn8qVdkFEv10Wf3py9k4iWPgLrDP2ABIN+g=
-X-Google-Smtp-Source: AGHT+IFyD/h5Hjxn5U5yKEN3VlaeOR/orKuvJr0VbxqBrufFoLdNJn3gbTOUdAoBrtJITGT96SwuaQ==
-X-Received: by 2002:a05:600c:1391:b0:421:1e47:f809 with SMTP id 5b1f17b1804b1-4211e47f831mr52391005e9.36.1716979788856;
-        Wed, 29 May 2024 03:49:48 -0700 (PDT)
-Received: from airbuntu (host81-157-90-255.range81-157.btcentralplus.com. [81.157.90.255])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42108966b58sm176585235e9.3.2024.05.29.03.49.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 May 2024 03:49:48 -0700 (PDT)
-Date: Wed, 29 May 2024 11:49:47 +0100
-From: Qais Yousef <qyousef@layalina.io>
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: Questions about transition latency and LATENCY_MULTIPLIER
-Message-ID: <20240529104947.o3pnahmcm7wzi6jb@airbuntu>
-References: <20240528012110.n6se3mapwxgqa3r2@airbuntu>
- <20240529070947.4zxcdnu32d2u7cny@vireshk-i7>
+	s=arc-20240116; t=1716984377; c=relaxed/simple;
+	bh=Kam7GlrgaXVFK23XrEQCDs7nyWMWsFNSiXp7twV37rk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Wlt3prJ1YVURHP8zKMfmOlJnhwOC7YXciWSDsf03bJWYpiXlCPeAxpRogs0iTwq8DIwhhldqSZVuFz69uoqT6wLwZKyIiC79sS6+Gj0qPpxmJuw4n6luklc+p0PKv53sFNPbYJ6WV0x2kjRCdPfL7TVljltI5nR9+siH50Wt2lM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=YZhTN61t; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1716984373;
+	bh=Kam7GlrgaXVFK23XrEQCDs7nyWMWsFNSiXp7twV37rk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=YZhTN61tKJzQX2QRKsKJdg0qMXjNOgIKplP84ePEYUqM/Vzyo+YLquJ3+JKPqGczB
+	 HoulKRjZSwvmt5Rz3qazylvOEk+kXQns6p/icwwKZuURhfchSdXTFW/PcayaDFCI17
+	 EBj0vvpfOFsZz/g6VIB9d4otAOk1mJ3396Q+lpP+IIA8Mf4XawXWH08ozY9fT1VJRI
+	 jGiPhijsyo0ij+lC9ZnVS886LAYZz5XScl1pVAYGZYjt7tl5FXycHU0S/DXlJ3OIhe
+	 GmFCVOShbR4r5lIwoiRrV1wKkYRWmKVEebiTtNsGaXTGt9Uj0HFuf4dugAZGkEGYa2
+	 a8ReS6O0g27Bw==
+Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id E2C45378216D;
+	Wed, 29 May 2024 12:06:12 +0000 (UTC)
+Message-ID: <ad047631-16b8-42ce-8a8d-1429e6af4517@collabora.com>
+Date: Wed, 29 May 2024 14:06:12 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240529070947.4zxcdnu32d2u7cny@vireshk-i7>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 4/6] arm64: dts: mediatek: mt8186: add default thermal
+ zones
+To: Julien Panis <jpanis@baylibre.com>, Chen-Yu Tsai <wenst@chromium.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
+ <matthias.bgg@gmail.com>, Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Nicolas Pitre <npitre@baylibre.com>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+ Krzysztof Kozlowski <krzk@kernel.org>
+References: <20240529-mtk-thermal-mt818x-dtsi-v6-0-0c71478a9c37@baylibre.com>
+ <20240529-mtk-thermal-mt818x-dtsi-v6-4-0c71478a9c37@baylibre.com>
+ <75826085-fd59-466a-b1de-b4c323c801c1@collabora.com>
+ <CAGXv+5FPG4ob3mTU0Utm8Wgk0_ZLw=NLPbfFerWh4OUeAz7UHw@mail.gmail.com>
+ <808db317-4cee-426b-a840-013a5e03098d@baylibre.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <808db317-4cee-426b-a840-013a5e03098d@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Viresh
-
-On 05/29/24 12:39, Viresh Kumar wrote:
-> HI Qais,
+Il 29/05/24 11:12, Julien Panis ha scritto:
+> On 5/29/24 10:33, Chen-Yu Tsai wrote:
+>> On Wed, May 29, 2024 at 4:17 PM AngeloGioacchino Del Regno
+>> <angelogioacchino.delregno@collabora.com> wrote:
+>>> Il 29/05/24 07:57, Julien Panis ha scritto:
+>>>> From: Nicolas Pitre <npitre@baylibre.com>
+>>>>
+>>>> Inspired by the vendor kernel but adapted to the upstream thermal
+>>>> driver version.
+>>>>
+>>>> Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
+>>>> Signed-off-by: Julien Panis <jpanis@baylibre.com>
+>>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> I'm getting some crazy readings which would cause the machine to
+>> immediately shutdown during boot. Anyone else see this? Or maybe
+>> my device has bad calibration data?
+>>
+>> gpu_thermal-virtual-0
+>> Adapter: Virtual device
+>> temp1:       +229.7 C
+>>
+>> nna_thermal-virtual-0
+>> Adapter: Virtual device
+>> temp1:       +229.7 C
+>>
+>> cpu_big0_thermal-virtual-0
+>> Adapter: Virtual device
+>> temp1:         -7.2 C
+>>
+>> cpu_little2_thermal-virtual-0
+>> Adapter: Virtual device
+>> temp1:       +157.2 C
+>>
+>> cpu_little0_thermal-virtual-0
+>> Adapter: Virtual device
+>> temp1:       -277.1 C
+>>
+>> adsp_thermal-virtual-0
+>> Adapter: Virtual device
+>> temp1:       +229.7 C
+>>
+>> cpu_big1_thermal-virtual-0
+>> Adapter: Virtual device
+>> temp1:       +229.7 C
+>>
+>> cam_thermal-virtual-0
+>> Adapter: Virtual device
+>> temp1:        +45.4 C
+>>
+>> cpu_little1_thermal-virtual-0
+>> Adapter: Virtual device
+>> temp1:       -241.8 C
 > 
-> On 28-05-24, 02:21, Qais Yousef wrote:
-> > Hi
-> > 
-> > I am trying to understanding the reason behind the usage of LATENCY_MULTIPLIER
-> > to create transition_delay_us. It is set to 1000 by default and when I tried to
-> > dig into the history I couldn't reach the original commit as the code has gone
-> > through many transformations and I gave up finding the first commit that
-> > introduced it.
+> It's likely that your device has bad calibration data indeed. We observed the same
+> behavior on the mt8186 device we used (a Corsola) and finally realized that the
+> golden temperature was 0 (device not properly calibrated).
 > 
-> The changes came along with the initial commits for conservative and ondemand
-> governors, i.e. before 2005.
-
-Thanks for the tip!
-
+> To make a comparison, we run chromiumos v5.15 and dmesg output was:
+> 'This sample is not calibrated, fake !!'
+> Additional debugging revealed that the golden temp was actually 0. As a result,
+> chromiumos v5.15 does not use the calibration data. It uses some default values
+> instead. That's why you can observe good temperatures with chromiumos v5.15
+> even with a device that is not calibrated.
 > 
-> > Generally I am seeing that rate_limit_us in schedutil (which is largely
-> > influenced by this multiplier on most/all systems I am working on) is too high
-> > compared to the cpuinfo_transition_latency reported by the driver
-> > 
-> > For example on my M1 mac mini I get 50 and 56us. rate_limit_us is 10ms (on 6.8
-> > kernel, should become 2ms after my fix)
-> > 
-> > 	$ grep . /sys/devices/system/cpu/cpufreq/policy*/cpuinfo_transition_latency
-> > 	/sys/devices/system/cpu/cpufreq/policy0/cpuinfo_transition_latency:50000
-> > 	/sys/devices/system/cpu/cpufreq/policy4/cpuinfo_transition_latency:56000
-> > 
-> > AMD Ryzen it reads 0, and end up with LATENCY_MULTIPLIER (1000 = 1ms) as
-> > the rate_limit_us.
-> > 
-> > On Intel I5 I get 20us but rate_limit is 5ms which is requested explicitly by
-> > intel_pstate driver
-> > 
-> > 	$ grep . /sys/devices/system/cpu/cpufreq/policy*/cpuinfo_transition_latency
-> > 	/sys/devices/system/cpu/cpufreq/policy0/cpuinfo_transition_latency:20000
-> > 	/sys/devices/system/cpu/cpufreq/policy1/cpuinfo_transition_latency:20000
-> > 	/sys/devices/system/cpu/cpufreq/policy2/cpuinfo_transition_latency:20000
-> > 	/sys/devices/system/cpu/cpufreq/policy3/cpuinfo_transition_latency:20000
-> > 	/sys/devices/system/cpu/cpufreq/policy4/cpuinfo_transition_latency:20000
-> > 	/sys/devices/system/cpu/cpufreq/policy5/cpuinfo_transition_latency:20000
-> > 	/sys/devices/system/cpu/cpufreq/policy6/cpuinfo_transition_latency:20000
-> > 	/sys/devices/system/cpu/cpufreq/policy7/cpuinfo_transition_latency:20000
-> > 
-> > The question I have is that why so high? If hardware got so good, why can't we
-> > leverage the hardware's fast ability to change frequencies more often?
+> This feature is not implemented in the driver upstream, so you need a device
+> properly calibrated to get good temperatures with it. When we forced this
+> driver using the default values used by chromiumos v5.15 instead of real calib
+> data (temporarily, just for testing), the temperatures were good.
 > 
-> From my understanding, this is about not changing the frequency too often.
-> That's all. And it was historical and probably we didn't get better numbers with
-> this reduced to a lower value later on as well.
+> Please make sure your device is properly calibrated: 0 < golden temp < 62.
 > 
-> > This is important because due to uclamp usage, we can end up with less gradual
-> > transition between frequencies and we can jump up and down more often. And the
-> > smaller this value is, this means the better we can handle fast transition to
-> > boost or cap frequencies based on task's requirements when it context switches.
-> > But the rate limit generally is too high for the hardware and wanted to
-> > understand if this is pure historical or we still have reasons to worry about?
-> 
-> Maybe Rafael knows other reasons, but this is all I remember.
-> 
-> > From what I've seen so far, it seems to me this higher rate limit is helping
-> > performance as bursty tasks are more likely to find the CPU running at higher
-> > frequencies due to this behavior. I think this is something I can help these
-> > bursty tasks with without relying accidentally on this being higher.
-> > 
-> > Is there any worry on using cpuinfo_transition_latency as is if the driver
-> > doesn't provide transition_delay_us?
-> 
-> Won't we keep changing the frequency continuously in that case ? Or am I
-> misunderstanding something ?
 
-I have schedutil in mind, and it shouldn't. Other governors maybe. Should it be
-up to the governor to scale this then?
+Wait wait wait wait.
 
-For schedutil it shouldn't because utilization changes gradually. But we could
-have events where tasks migrate between policies and if this task has big
-util_avg then we can have big jumps. If this migration frequency is often, then
-yeah we can end up with scenarios. But isn't this desired? We want the previous
-policy to bring the frequency down ASAP to save power, and the new policy to go
-up in frequency to accommodate for the new task.
+What's up with that calibration data stuff?
 
-Only issue I see is !fast_switch case schedutil needs to put some additional
-delay due to kworker triggering and performing the actual request.
+If there's any device that cannot use the calibration data, we need a way to
+recognize whether the provided data (read from efuse, of course) is valid,
+otherwise we're creating an important regression here.
 
-I haven't been looking at other governors to be honest. But if I am to propose
-something I'll make sure they are not impacted.
+"This device is unlucky" is not a good reason to have this kind of regression.
 
-> 
-> > And does the kernel/driver contract need to cater for errors in driver's
-> > ability to serve the request? Can our request silently be ignored by the
-> > hardware?
-> 
-> cpufreq core maintains its state machine and the failures are used to inform the
-> user and / or stop DVFS. It is useful for a clean approach, not sure what we
-> will get / miss by ignoring the errors..
+Since - as far as I understand - downstream can recognize that, upstream should
+do the same.
+I'd be okay with refusing to even probe this driver on such devices for the
+moment being, as those are things that could be eventually handled on a second
+part series, even though I would prefer a kind of on-the-fly calibration or
+anyway something that would still make the unlucky ones to actually have good
+readings *right now*.
 
-Ah, I am not requesting to ignore the error. I am worried it can be ignored
-silently. Looks like this is not the case.
+Though, the fact that you assert that you observed this behavior on one of your
+devices and *still decided to send that upstream* is, in my opinion, unacceptable.
 
-> 
-> > Not necessarily due to rate limit being ignored, but for any other
-> > reason? It is important for Linux to know what frequency we're actually running
-> > at.
-> 
-> One is that we report to userspace two frequencies:
-> - scaling_cur_freq: The frequency that the software thinks the hardware runs at
->   (last requested freq i.e.)
-> 
-> - cpuinfo_cur_freq: The real frequency hardware is running at. Can be calculated
->   using counters, etc.
-> 
-> And there will be tools which are using them. So these are required.
-
-I was just trying to check with more frequent requests whether we are more
-likely to encounter errors. And if we'd fail safe then as knowing the current
-frequency is important for utilization invariance and EAS in general.
-
-I'll look more at cpufreq core paths to verify. If you have big concerns please
-let me know as I'm curious to explore how we can make things more responsive
-but having heads up of the pitfalls would be much appreciated.
-
-Thanks for the answers!
-
-
-Cheers
-
---
-Qais Yousef
-
-> 
-> > Some hardware gives the ability to read a counter to discover that. But
-> > a lot of systems rely on the fact that the request we sent is actually
-> > honoured. But failures can mean things like EAS will misbehave.
-> 
-> -- 
-> viresh
+Regards,
+Angelo
 
