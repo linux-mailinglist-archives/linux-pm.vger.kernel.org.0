@@ -1,186 +1,184 @@
-Return-Path: <linux-pm+bounces-8336-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8337-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52CEE8D2DA5
-	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 08:54:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC5748D2DD3
+	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 09:09:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 703271C22961
-	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 06:54:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 382D31F24B94
+	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 07:09:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D5D316133B;
-	Wed, 29 May 2024 06:54:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FED11649BE;
+	Wed, 29 May 2024 07:09:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hotmail.com header.i=@hotmail.com header.b="bIoDEBfW"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qLzVCfvm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01olkn2036.outbound.protection.outlook.com [40.92.98.36])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 259A815CD4C;
-	Wed, 29 May 2024 06:54:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.98.36
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716965659; cv=fail; b=Df5Y3wPEaaNrIF1c/pRHo736s0AI3ciR8oCu1VnLfezrTt6GdpYQQHhhOoIGxZtv9ixwaUampIlcXHWkYCBtcpQdprgaSf5PI2BRduphu+Vc4/LutVeShb01QalgJ+EBKjq+MKOXzIUnHN0KQeK8btZP5Mrrvu+r3ZR1ynUEmW0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716965659; c=relaxed/simple;
-	bh=Q9zxIMyciiB0tr1jX5wiE07pgDBEcY6V+CuNRU1uB7I=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=KFLK8SfLN+BdJeDFrn1xovpht4hn2NgxwZQ5k6aiv07Pecbaxg21xE3cTHGPZ+CB643veTUrqjHX7xgNhHewd7ta6IOP0a0MbHo42ZaXuoApdaTZ9SPEmxx9zlPotIBrEjYivcwKpfnizr01NHYcNucSYmnWnbYQ1xdWaBs45iI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.com; spf=pass smtp.mailfrom=hotmail.com; dkim=pass (2048-bit key) header.d=hotmail.com header.i=@hotmail.com header.b=bIoDEBfW; arc=fail smtp.client-ip=40.92.98.36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hotmail.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oNx6YIh0dRcu6Ekn54/ylvBEGCfholshQEfOWj5U0mqDQVw02sEGNNNV7VmuFB2towsjdOeA30mOyAqwvm1P6iH/Ewudsgs2Tbbo3XRGfOw9B6PG5WepBtcqn/SKYhkdUeeYRRH78OMZMl+AiONhGbb1KjRoKjjk9Z7AJLpPqNsoJledxpdQ470y6Sqioio4GbEZJYB5hGaLOksXM6u8gq74QT70U+SvCU7pXjApsd8fsLkTNeZHbbwbOhn6YM4t84ipTGJqDiqSGgLGIEj1xNleturupmvMLYunhj8DNidmSunai0woROGLOqB5WLhBCtm8+Ltt8V/9jXtlutsXFw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KPJTzzu/t1pYizWWMuQGSEH2N7dG+jbX1FboLzjMOWY=;
- b=VryWZi2jph8Jpiy0wgh4o/W7qDZv78Mpg1oDPxuAd76iMDdsM/TbWuw+IhE0Cfh9yDgq1NwTvz67b9ZG60JYC+Gn1WcJE6vsP6YTCCXlKaiA9yVFVig/GUgRirS2FrT1PtW7OG466RmdbLmm+yqYc+qC1GhwWEQDxLEVQw/OG9XtMa0aJVhbZxUfksM3Q+flM71aBkrMVY53JZtcvVk/KVcOko9ABMRXjvMu1Um10eVP6a8vFVc5QndvnOvHXoiHkma4xBl/rRa1ZIc5uhLO25ckXlMMBSvJB7/jd+lNFpIii5HozwYvddNLw7lcyGmcPvQCba2+2/kYfHWT5sbG2A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KPJTzzu/t1pYizWWMuQGSEH2N7dG+jbX1FboLzjMOWY=;
- b=bIoDEBfWy10WCzfX7lxjkod1WbVCczu3dFXHoeOOWM1Y2ilqkKqUuiMqp6VyIu69Dxt8ul4wQwg5LnPUq3YvwsRmw+ySd6zEdPVhAii0F4XClZilniLpaJhelB01mARGzIDOeZkCjGppUWhw945w/eztc47tVSLCQQY8rB4sS8cF8RRztH7fqpzxvn1Uis2jlahDEJiphFTk2OhNE+r4XgntjmhWwMcBg0MKfPzpHsrkNgxNDKovUllfD0bjF0G1F0IEXOY7c2BrExAWptsT86SqwVYc0la9GUBxGEt15WqN3rKM+lkPhyzq3l/FaMs/Whjb73ceE3bGvXfy7J2Xaw==
-Received: from TYCP286MB2486.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:221::11)
- by OS9P286MB4255.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:2c4::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.17; Wed, 29 May
- 2024 06:54:14 +0000
-Received: from TYCP286MB2486.JPNP286.PROD.OUTLOOK.COM
- ([fe80::8048:573b:c353:1c19]) by TYCP286MB2486.JPNP286.PROD.OUTLOOK.COM
- ([fe80::8048:573b:c353:1c19%5]) with mapi id 15.20.7611.030; Wed, 29 May 2024
- 06:54:14 +0000
-Message-ID:
- <TYCP286MB248669BCAD7A7E54C5071EF9B1F22@TYCP286MB2486.JPNP286.PROD.OUTLOOK.COM>
-Date: Wed, 29 May 2024 14:53:41 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] cpufreq/cppc: Take policy->cur into judge when set
- target
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: rafael@kernel.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, Riwen Lu <luriwen@kylinos.cn>
-References: <TYCP286MB24861BA890594C119892FB3DB1F22@TYCP286MB2486.JPNP286.PROD.OUTLOOK.COM>
- <20240529053652.pzcjoyor7i23qc4i@vireshk-i7>
-Content-Language: en-US
-From: Riwen Lu <luriwen@hotmail.com>
-In-Reply-To: <20240529053652.pzcjoyor7i23qc4i@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TMN: [LZitFs6A8tzJQQsQMA8rUK7BpxGEp3HY]
-X-ClientProxiedBy: SI2PR04CA0006.apcprd04.prod.outlook.com
- (2603:1096:4:197::13) To TYCP286MB2486.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:221::11)
-X-Microsoft-Original-Message-ID:
- <8c6c40d7-85b0-431b-9429-069c47a44d8c@hotmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7279916192F
+	for <linux-pm@vger.kernel.org>; Wed, 29 May 2024 07:09:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1716966593; cv=none; b=uhVOBNxjqwBmfNgNBS201Ps+cjEoYGYHDj80gJnASC7s9d6fR4b3sFEFtmrC3C+Xg4pT+/hJ31Lb9Vhmij+wmQoQ+p9jObiUff1rtyaKKKFt2jG8koSSsG5IGSgWf5/dooqlFp4W5/z6ehkls4r3nbx+0AE5x+oY60dqPhcAVgo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1716966593; c=relaxed/simple;
+	bh=XfaFWKu7oi4Neymy5/WAUYtnx6Hwuj7EMkKj1osWQxY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uPHhQgRc+XURzw72lM2lrPo84vK6IEp9gswOSbfxiCUsSjji95tpjGsaYF889EYyWHkk6Uoii9sbA27ZSwqTcFa1QqntHojQ2G3zc7RaZD1WJU13rDNI76hXFY8krKWk3O2rpeavaAxPFdKWD0zWpGQyi19vchcyGqaclQ/59wI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qLzVCfvm; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1f449f09476so3645475ad.1
+        for <linux-pm@vger.kernel.org>; Wed, 29 May 2024 00:09:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1716966590; x=1717571390; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YfBLr2Fq0mXBI98PC9MxWEJ6lX7NEiIePEepGikvn2Q=;
+        b=qLzVCfvmBO50vwXYmETujCr2L5xuJhnhC7GMfYE3N6A7E6Szh4OoKCkIk7PBPuhIjc
+         4pwoRYAVz8kpBo0NLwTalAOX04CZXsE9u/74uIj+BbeW82xithArOGgmr6EFYuZp4RuW
+         PLEYE2/dTe4U+3t8BTtDVWurUtnpav+toBccoTrRWqRUwCXB2tAvcW88/CD1nfpx35rG
+         2wsRn3W6TmrZ4voI3bZcfqyzoqMFenunRQH23FWrLfXlacstx2jH4dri1axY47Lp2CXC
+         9wzPcB4ZBfsdgLSnoHcJ0/KMbgm0dd/lcKeIEv/ME7bIK4O6dTlXVHquGImnjrMArIFz
+         kBzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716966590; x=1717571390;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YfBLr2Fq0mXBI98PC9MxWEJ6lX7NEiIePEepGikvn2Q=;
+        b=GRGIME8vjXMqCS9RpJcHbesql9w+h9agsel8l5Py6hjDFCj0IpFy4Vlve8nCDS+JPK
+         J3Kc4+S/lg+tvK6f6Rd8zSWVQmRA+v9MNo/kOLRlhvGd2BFJGUExb8fg2rE4kbVn/FVp
+         G65ctEhzy8PeQCO1cMCoRu7hZVZ1ZIRpbteKo847JuIhufsung9NtEgQpDMJ5w2hgDmr
+         1Rua/AsUnTPACBvVIbfENmnHD35XGM++2upI3suZ4jzt3wAC0ai38TIe7nqwxkK41wth
+         RkmYJ0U+37he0/5EKwPucwiyNS07lkxqLJnavE8ZCQI1gGOyT7baKCNFLFSXaw7HNqZz
+         b/bw==
+X-Forwarded-Encrypted: i=1; AJvYcCUDchZhrlHD3LJPwjhS33Iyd7dXgMgiKxE+3Q8acn+0T7Z33/uO4YZLQY5x+UZ+QqJBawG0PM4xu9/u2eX2VTglGOL5W7IWyHo=
+X-Gm-Message-State: AOJu0YyX8fm/SdKnw2tpVCllzsupDyi8YWgRhSHosRCYvi8lbimU7RA2
+	9ZojG3ZmjagO/j8MhZpnhDVSWt/CBaiJhD0xkaMl+eMror1/ViRbUoSvWTHBPMM=
+X-Google-Smtp-Source: AGHT+IHTai1Wf/bfUCzbnNhmze+7eirkLIlslk7bczKV8arj21k0uHlqRjM8dak5Buu6wHOSQM9dhg==
+X-Received: by 2002:a17:902:db09:b0:1f5:e4ea:9869 with SMTP id d9443c01a7336-1f5e4ea9b7bmr3831925ad.9.1716966590325;
+        Wed, 29 May 2024 00:09:50 -0700 (PDT)
+Received: from localhost ([122.172.82.13])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f47737d71csm67837305ad.303.2024.05.29.00.09.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 May 2024 00:09:49 -0700 (PDT)
+Date: Wed, 29 May 2024 12:39:47 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Qais Yousef <qyousef@layalina.io>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: Questions about transition latency and LATENCY_MULTIPLIER
+Message-ID: <20240529070947.4zxcdnu32d2u7cny@vireshk-i7>
+References: <20240528012110.n6se3mapwxgqa3r2@airbuntu>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYCP286MB2486:EE_|OS9P286MB4255:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9bfb21a3-2621-4411-3238-08dc7fac26b8
-X-Microsoft-Antispam: BCL:0;ARA:14566002|461199019|440099019|3412199016;
-X-Microsoft-Antispam-Message-Info:
-	3eSCsCaDahFxJKYelFD9FK/Btqo9zE0oh4X8mZO8Qw+eQ2JtqaY2IAOCd2rQUr/UYMlmCpwRTxEXhtYUEz1Kuyp2Pe8QYMc0jF7UOrR5SMRmOnlHdHjxYG/S9gW7qfKchQF7HxzcZwGwITWkYhMv7EwJUZU+hAXnLOT6DauNcP9iLbJjRe6t/S5a/TmG9fzNZ6+u4LsJF3aRXiS/gE++5DVJHWezQYgFLxi34qnt7nICOub3VcWKFd7HzgrFnFMN3TvOVOVfXDxdSfQfd13x1jwum+yl/7b7fdI9LQ/769rDb/BdWqXL/f7vmvx552t66pe/x0FmGNVyvbc8P1Cfho2qnIJE8NYerkMmIaco2xOhDyNsIBsFhlXX+s59tSB5Ur9UOLxnPkSKlVv8jYgyrIet4STPWdtHcae3hWKXZMdvPWBdofkahgC99kVvqEKWGTc6INxo4s7eLCmDl9Mh3tv+71S58Wn5psvsK0f16MqV6/s/L/6hLZK1ZdxeGoWB0HnuQ4swxP825O5dJu+69uzfUujdrJ/+kikDU/GKrVlkoDryRjQopBg3Wx+D8Ho1
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?REVlTjhybDM3VCtxcWNMbWp1TUR2eitteWpOWStEQWt2ZkNMMFlrQy9hZWdx?=
- =?utf-8?B?dUJWQXB4ano4eFhTWDFoR1QwaEFNNWVEU0hSR1N6a2gwalVidnlQM0YzSEZW?=
- =?utf-8?B?MEZBSWlzSXowZTgrMlNHd3BSRVBMWm10eElqQW5LWlhydkJtbmRSSm1KQk5n?=
- =?utf-8?B?RmgyTkgzb3d6eXQ3c2xwVjh3NCtzaHU0ZDZyYmJpYlZiMHkwUC9MWDZEM1NB?=
- =?utf-8?B?R1QzYnlBbFZIa0I2L01hd1NhaXRZNXBTNzM0Z040Tzc3cExjSWg1RmxWdjl5?=
- =?utf-8?B?dm1sRnBmWmxKZDZXNWJkb0xoVmh3KzZGK013cVp6OU9hbUdPM214V0tMTDVs?=
- =?utf-8?B?NDk3YWVUWExFYUVnSEVTSlBtUklEZjVBT2VKT1g2WnRiYU1WMGFseGZpM2hi?=
- =?utf-8?B?TkRsSmdFbXc1QW9BOTFRNVpUSE9NdklqUGg3TnI2UGl3eHR4N2Nhb1BnbVhl?=
- =?utf-8?B?eW40em4veUpHS0hPcENiR0ozY0U2UTdHTzAzUmV1NnlsODJCRUhkdWo5a1dK?=
- =?utf-8?B?dmFlR214ejZ0N0h0WU9YWDNIYVdTQnN3VlM2eEhoVmFQcE9vRVJuN3RTTktz?=
- =?utf-8?B?T0xFbHBtSUNvTzZwelNrOFBCUldQblQzenFaKzBwYjdRUWNCY3lRcVFVMG9J?=
- =?utf-8?B?Yk9nRmNWTlM2SGRIY0Y3ZEpJdCtyUGtVRWdmclVlRDV2L3lvdG10SVhmRyt5?=
- =?utf-8?B?M1lIU3JYekNpc3JUNERtcHh1b3dDYk1rRkdPWkxlZUFRZFJJZ2h6RnRNRXFR?=
- =?utf-8?B?aFdPRWgxUW9aL3ZEalFsNHAyT2ZWZzJWWGdneFZINHJ4aHIrWjFFeGxYM3I1?=
- =?utf-8?B?cmVwaFRXWGZ5STB0cVYwcTFSa2lTZm5mZTluUmJtRUZ6RDdCL2RpRFhxV0Vn?=
- =?utf-8?B?ZzI3aFdpdHFvdHJiajRIRnlmZUFSZC84V1hSS0JjdVZuUlJObEFJRnhmQzhz?=
- =?utf-8?B?Q201Y3NJK251RHFzeDVjV1dRcVNwOC95Vy9LUld4UTJZWGF3M1p2QUpWVmps?=
- =?utf-8?B?dGdvZVBRdE1PWmtYZkJsTE9sWDUyVlA5aU5IQnJ1ay9iK2tMcjgrR25zSk1W?=
- =?utf-8?B?T3FvY2Y4SWhSK0ZXOENsWXFIMDFiem9zc1VENlhYNXNValBBbTlKYmlmbzhB?=
- =?utf-8?B?c0JTU09wSHN2V0ZrQWpod0ozaHp1TFg4MDV5TFQ1NXppNG1BTFJWV2lQZ1Fj?=
- =?utf-8?B?Rmw2amt2VU5mckxMazJ0dTV6VzljaVhxR3I0elluV0ZxZXV2QnhYT0EzS0Zl?=
- =?utf-8?B?aHFtRkdwSWFKQ1gyN0JqZGRWZENhblF5YS8zZTB0akdCbFJSREJ6Sk45M2FJ?=
- =?utf-8?B?czdDb3dwMnVRNEJFeDRGWkdPRnprSXFydVVlUnZSRXJxN2JrRGFNUW1vRXdH?=
- =?utf-8?B?STY0RGZiYjJhTGhBcWh4MkhnTktWaExVWFhNOWNTbWtseWFnVVA4MDhRRElz?=
- =?utf-8?B?aW9XL2FUQnllVjh6V2VUR0NpSi9OVHZJZ2R4Y0swOG93VkFoNTdhalJBenQ4?=
- =?utf-8?B?U2lOcmxzcEswZ0lxbzBvL3ZrM2xTNmlNNFpVdm9LSVNwc21CdWJOY2dLRXZC?=
- =?utf-8?B?Y3U4Qno3ZlM1ck1YQmNHclJuNGNSNi80Tm1UczZ1MHhjRjh3VGF5YiszZlJp?=
- =?utf-8?Q?viBj2FkkJbu83Wl3RbNk/IqOAmjv0K8msPqxFkgY3oM0=3D?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-05f45.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9bfb21a3-2621-4411-3238-08dc7fac26b8
-X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB2486.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 May 2024 06:54:14.2828
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS9P286MB4255
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240528012110.n6se3mapwxgqa3r2@airbuntu>
 
-在 2024/5/29 13:36, Viresh Kumar 写道:
-> On 29-05-24, 11:22, Riwen Lu wrote:
->> From: Riwen Lu <luriwen@kylinos.cn>
->>
->> There is a case that desired_perf is exactly the same with the old perf,
->> but the actual current freq is not. Add a judgment condition to return
->> only when the three values are exactly the same.
->>
->> This happened in S3 while the cpufreq governor is set to powersave.
->> During resume process, the CPU frequency is adjusted to the highest
->> perf. For the booting CPU, there's a warning that "CPU frequency out of
->> sync:", because the policy->cur is the lowest_perf while the actual
->> current frequency is the highest_perf that obtained via
->> cppc_cpufreq_get_rate(), then set policy->cur to highest_perf. The
->> governor->limits() intent to configure the CPU frequency to lowest_perf
->> and the governor->target() returned because the desired_perf is equal to
->> cpu->perf_ctrls.desired_perf leaving the actual current frequency and
->> policy->cur are remain the highest_perf. Add a judgement that if
->> policy->cur is the same with desired_perf to decide whther to return.
->>
->> Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
->>
->> ---
->> v1 -> v2:
->>   - Update commit message and email.
->> ---
->>   drivers/cpufreq/cppc_cpufreq.c | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
->> index 15f1d41920a3..802f7c7c0ad8 100644
->> --- a/drivers/cpufreq/cppc_cpufreq.c
->> +++ b/drivers/cpufreq/cppc_cpufreq.c
->> @@ -296,7 +296,8 @@ static int cppc_cpufreq_set_target(struct cpufreq_policy *policy,
->>   
->>   	desired_perf = cppc_khz_to_perf(&cpu_data->perf_caps, target_freq);
->>   	/* Return if it is exactly the same perf */
->> -	if (desired_perf == cpu_data->perf_ctrls.desired_perf)
->> +	if (desired_perf == cpu_data->perf_ctrls.desired_perf &&
->> +	    desired_perf == policy->cur)
+HI Qais,
+
+On 28-05-24, 02:21, Qais Yousef wrote:
+> Hi
 > 
->  From my earlier understanding, desired_perf is a derived interpretation of the
-> frequency and isn't an actual frequency value which can be compared with
-> policy->cur.
+> I am trying to understanding the reason behind the usage of LATENCY_MULTIPLIER
+> to create transition_delay_us. It is set to 1000 by default and when I tried to
+> dig into the history I couldn't reach the original commit as the code has gone
+> through many transformations and I gave up finding the first commit that
+> introduced it.
+
+The changes came along with the initial commits for conservative and ondemand
+governors, i.e. before 2005.
+
+> Generally I am seeing that rate_limit_us in schedutil (which is largely
+> influenced by this multiplier on most/all systems I am working on) is too high
+> compared to the cpuinfo_transition_latency reported by the driver
 > 
-> Shouldn't we compare policy->cur with target_freq instead ? If yes, than the
-> core must already be doing that somewhere I guess.
+> For example on my M1 mac mini I get 50 and 56us. rate_limit_us is 10ms (on 6.8
+> kernel, should become 2ms after my fix)
 > 
-Yes, you are right， I didn't think it through. In this circumstance, the 
-policy->cur is the highest frequency, desired_perf converted from 
-target_freq is the same with cpu_data->perf_ctrls.desired_perf which 
-shouldn't.
+> 	$ grep . /sys/devices/system/cpu/cpufreq/policy*/cpuinfo_transition_latency
+> 	/sys/devices/system/cpu/cpufreq/policy0/cpuinfo_transition_latency:50000
+> 	/sys/devices/system/cpu/cpufreq/policy4/cpuinfo_transition_latency:56000
+> 
+> AMD Ryzen it reads 0, and end up with LATENCY_MULTIPLIER (1000 = 1ms) as
+> the rate_limit_us.
+> 
+> On Intel I5 I get 20us but rate_limit is 5ms which is requested explicitly by
+> intel_pstate driver
+> 
+> 	$ grep . /sys/devices/system/cpu/cpufreq/policy*/cpuinfo_transition_latency
+> 	/sys/devices/system/cpu/cpufreq/policy0/cpuinfo_transition_latency:20000
+> 	/sys/devices/system/cpu/cpufreq/policy1/cpuinfo_transition_latency:20000
+> 	/sys/devices/system/cpu/cpufreq/policy2/cpuinfo_transition_latency:20000
+> 	/sys/devices/system/cpu/cpufreq/policy3/cpuinfo_transition_latency:20000
+> 	/sys/devices/system/cpu/cpufreq/policy4/cpuinfo_transition_latency:20000
+> 	/sys/devices/system/cpu/cpufreq/policy5/cpuinfo_transition_latency:20000
+> 	/sys/devices/system/cpu/cpufreq/policy6/cpuinfo_transition_latency:20000
+> 	/sys/devices/system/cpu/cpufreq/policy7/cpuinfo_transition_latency:20000
+> 
+> The question I have is that why so high? If hardware got so good, why can't we
+> leverage the hardware's fast ability to change frequencies more often?
+
+From my understanding, this is about not changing the frequency too often.
+That's all. And it was historical and probably we didn't get better numbers with
+this reduced to a lower value later on as well.
+
+> This is important because due to uclamp usage, we can end up with less gradual
+> transition between frequencies and we can jump up and down more often. And the
+> smaller this value is, this means the better we can handle fast transition to
+> boost or cap frequencies based on task's requirements when it context switches.
+> But the rate limit generally is too high for the hardware and wanted to
+> understand if this is pure historical or we still have reasons to worry about?
+
+Maybe Rafael knows other reasons, but this is all I remember.
+
+> From what I've seen so far, it seems to me this higher rate limit is helping
+> performance as bursty tasks are more likely to find the CPU running at higher
+> frequencies due to this behavior. I think this is something I can help these
+> bursty tasks with without relying accidentally on this being higher.
+> 
+> Is there any worry on using cpuinfo_transition_latency as is if the driver
+> doesn't provide transition_delay_us?
+
+Won't we keep changing the frequency continuously in that case ? Or am I
+misunderstanding something ?
+
+> And does the kernel/driver contract need to cater for errors in driver's
+> ability to serve the request? Can our request silently be ignored by the
+> hardware?
+
+cpufreq core maintains its state machine and the failures are used to inform the
+user and / or stop DVFS. It is useful for a clean approach, not sure what we
+will get / miss by ignoring the errors..
+
+> Not necessarily due to rate limit being ignored, but for any other
+> reason? It is important for Linux to know what frequency we're actually running
+> at.
+
+One is that we report to userspace two frequencies:
+- scaling_cur_freq: The frequency that the software thinks the hardware runs at
+  (last requested freq i.e.)
+
+- cpuinfo_cur_freq: The real frequency hardware is running at. Can be calculated
+  using counters, etc.
+
+And there will be tools which are using them. So these are required.
+
+> Some hardware gives the ability to read a counter to discover that. But
+> a lot of systems rely on the fact that the request we sent is actually
+> honoured. But failures can mean things like EAS will misbehave.
+
+-- 
+viresh
 
