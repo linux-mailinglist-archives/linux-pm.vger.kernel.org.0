@@ -1,64 +1,82 @@
-Return-Path: <linux-pm+bounces-8380-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8381-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D3198D3829
-	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 15:44:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3646A8D386A
+	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 15:53:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF3C11C2421A
-	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 13:44:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AB221B27924
+	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 13:53:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E87431BC2F;
-	Wed, 29 May 2024 13:44:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF1CB1CAA2;
+	Wed, 29 May 2024 13:53:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XuSJbFjw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCB5B1AAC4;
-	Wed, 29 May 2024 13:44:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83B351C6A0;
+	Wed, 29 May 2024 13:53:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716990279; cv=none; b=WTkevjaQmatKMQjwIo7iBK4oLNJw4jaeqSe+aW66Wj3vGzup3yt2R50vt8A+LZ3Rpn0z7AQD+2DjxKwpnv7Kg7pUVNvAU9lBdYfJYiPb6UcVrJz4CLHghbOf3z+pDTX6xTtRLMWEVj55dAFIKm61FQQB1+jm4fVryFOEI/Kb358=
+	t=1716990785; cv=none; b=bWaL6dAjOAdtwZM61nANb3w4IkqmsaD5F+OiJcfTf91IN7xHpvA5nPZL7ESOC1HzYsEpbTiKsK2rPLNU4b6NgswTXXc6JX3CVDPNIMVE8soxcX1raJ1oU7kuwaU4S+uBNAJbZrfK5TtDosLU2VeqFGiDIpaujmeAhlxpv4cBMfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716990279; c=relaxed/simple;
-	bh=tpOZebi5gYFEPnOKS6P6ZzB6ILaLUkjqHU1zmyOyxWo=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ltqjPjMFYidFp8L5yY/sUq05EJDb8PNMovaw35x2CZ91QHciY2K/rvqNPP47FOjkqvJid18m0xPr4SE1kHRcrjMNp6bQuQqcCQrcORjiodf1AO7C2VQYweq6cr8E6Fv5hWMZ+Vg7D+n2Mlj5LOUyv5g21n9DXa/w5+Q+Xh7VLYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Vq9W749fgz6JBH1;
-	Wed, 29 May 2024 21:40:35 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id B719A140B3C;
-	Wed, 29 May 2024 21:44:34 +0800 (CST)
-Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
- lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Wed, 29 May 2024 14:44:34 +0100
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>, Catalin
- Marinas <catalin.marinas@arm.com>, <linux-acpi@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>
-CC: Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>,
-	Peter Zijlstra <peterz@infradead.org>, <loongarch@lists.linux.dev>,
-	<x86@kernel.org>, Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki"
-	<rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, James Morse
-	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, Jean-Philippe
- Brucker <jean-philippe@linaro.org>, Hanjun Guo <guohanjun@huawei.com>, Gavin
- Shan <gshan@redhat.com>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
-	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
-	<linuxarm@huawei.com>, <justin.he@arm.com>, <jianyong.wu@arm.com>
-Subject: [PATCH v10 19/19] cpumask: Add enabled cpumask for present CPUs that can be brought online
-Date: Wed, 29 May 2024 14:34:46 +0100
-Message-ID: <20240529133446.28446-20-Jonathan.Cameron@huawei.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240529133446.28446-1-Jonathan.Cameron@huawei.com>
-References: <20240529133446.28446-1-Jonathan.Cameron@huawei.com>
+	s=arc-20240116; t=1716990785; c=relaxed/simple;
+	bh=MeITpEwUXih4cKm/2q1Fo2pjThG6jQN8OoV/4+Cv+IQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Ej4RHS0Nf2ZZ8VNKCgmpHnAjeMdC32MRMhqyYYeVXdk87eBptLP1gohfMsvFj2j/2pzPEJB+sroFUTGfpbGaNmrFNyq5JKwZm/30F+3AuV79o45huq13eJ4H6B8kCwof66IiBmoa0OKJJ3Ef3+Q+RMSlt0XLuUChgKi7XyEzILw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XuSJbFjw; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-681953ad4f2so1625277a12.2;
+        Wed, 29 May 2024 06:53:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1716990784; x=1717595584; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HYcaquZqfIygBp+Hz1qQPQQ7rOnstZmIu5jK+NQIEkE=;
+        b=XuSJbFjwMRgbicOwWAIw0JRypGjX3F5l1P9ObWEqJs3InNbcYEzK2cvqP3+iP9A/ft
+         DjLgbMKl7jySO0YTxnaqRGiBFR0szi+8MmHjxAi0yKpeH+r9bAs2tO9crHAvNpw63Lvx
+         kFyxhbj0rH3Vp9WbWgLXxCyLSxEVUBLLbGmSFQ1giQtcUeybF0CBmfzIqszm986Jz0Sf
+         uBKB3W1Pmddpul0GX8aqanSLAuFjv06zxVYi+vXe9Tft6h3un9/2ovfyCAmBKt3bO/kw
+         ayBXZsgramLj+Pe2WcmdFlWERP+/XaCu7bEPM/GEDrkK+MNwUuGtE/IaPfpoT0T6LRhS
+         wJvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716990784; x=1717595584;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HYcaquZqfIygBp+Hz1qQPQQ7rOnstZmIu5jK+NQIEkE=;
+        b=UL5j1Qe/3frROgx/FhkxGS+oRxwrUhnUXqYwdxuH/xWgLXKQGQNujGtp65TZJGf3Oa
+         TPwb/jFs7HvRzZAt7aZITP5N3X0TDX2yDGKC2Kjsq7ajngSgnmUkKT8bfbH6DCpfO5vy
+         jw781p6TNaRa3TmHsomRDTvWOqjht4h5axfRXRFXeD5TaIv56fL5ioZAws4Uipgv/okC
+         Sz2uQWGliJGwvz9L/09oASdMejq81UTp+qUbc5ILJUh1U1xpsp6GInD6L9cBP9/WQr1c
+         ZL0dckm/QXs+yJOhI5i5PncMbAy9n8+VG73gTWtUdpNByMPyAUmCZ7An//el0nRuxpj/
+         67AA==
+X-Forwarded-Encrypted: i=1; AJvYcCVcBkMI4l2yGwOVtkRWLjVknHCMbGyAFdKUW9RlWrjoZTSjkPbhrvYb8JIuEjluFig5hSlMockuqzGQecD8ktCJ3L4Nq0g4eNUxaa4LV3IkZCS8mH1sCUeoEpFbPVqbWbtVCkFjPBM=
+X-Gm-Message-State: AOJu0Yyh1jxPAO/DPiQfAQyxuaxUxWy5cNeK/hZ3IyJct3emjHR22jSF
+	2xSLk5yPG3wKfoT7hbFz2A0ag3UGWxe0mQMbyEJrqDT76x2S/veh
+X-Google-Smtp-Source: AGHT+IH0WFmsVE6mCRqRMqG+ExFQPwO76qjoaiGYyZKkxoTh3+r57ZLSyAeGpmI1GTPxce/BHcYmyQ==
+X-Received: by 2002:a05:6a21:3995:b0:1b2:15ae:fad7 with SMTP id adf61e73a8af0-1b215aefd07mr16478425637.59.1716990783764;
+        Wed, 29 May 2024 06:53:03 -0700 (PDT)
+Received: from liu-System-Product-Name.hitronhub.home (123-192-80-75.dynamic.kbronet.com.tw. [123.192.80.75])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-701e30ef392sm2202868b3a.126.2024.05.29.06.53.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 May 2024 06:53:03 -0700 (PDT)
+From: Chia-Hao Liu <a0921444212@gmail.com>
+To: lukasz.luba@arm.com
+Cc: rafael@kernel.org,
+	daniel.lezcano@linaro.org,
+	rui.zhang@intel.com,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Chia-Hao Liu <a0921444212@gmail.com>
+Subject: [PATCH 2/2] drivers: thermal: fix zero weighted request power
+Date: Wed, 29 May 2024 21:52:47 +0800
+Message-Id: <20240529135247.12737-1-a0921444212@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -66,200 +84,38 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
 
-From: James Morse <james.morse@arm.com>
+When the product of weight and req_power is less than 1024,
+the `frac_to_int()` macro causes the weighted_req_power to
+become zero, it will cause granted_power to be zero.
+To address issue, I add a check:
+If the weight is less than 1024, frac_to_int() is not applied
+to avoid setting the weighted_req_power to zero.
 
-The 'offline' file in sysfs shows all offline CPUs, including those
-that aren't present. User-space is expected to remove not-present CPUs
-from this list to learn which CPUs could be brought online.
-
-CPUs can be present but not-enabled. These CPUs can't be brought online
-until the firmware policy changes, which comes with an ACPI notification
-that will register the CPUs.
-
-With only the offline and present files, user-space is unable to
-determine which CPUs it can try to bring online. Add a new CPU mask
-that shows this based on all the registered CPUs.
-
-Signed-off-by: James Morse <james.morse@arm.com>
-Tested-by: Miguel Luis <miguel.luis@oracle.com>
-Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
-Tested-by: Jianyong Wu <jianyong.wu@arm.com>
-Acked-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Reviewed-by: Gavin Shan <gshan@redhat.com>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Chia-Hao Liu <a0921444212@gmail.com>
 ---
- .../ABI/testing/sysfs-devices-system-cpu      |  6 +++++
- drivers/base/cpu.c                            | 10 ++++++++
- include/linux/cpumask.h                       | 25 +++++++++++++++++++
- kernel/cpu.c                                  |  3 +++
- 4 files changed, 44 insertions(+)
+ drivers/thermal/gov_power_allocator.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
-index e7e160954e79..53ed1a803422 100644
---- a/Documentation/ABI/testing/sysfs-devices-system-cpu
-+++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
-@@ -694,3 +694,9 @@ Description:
- 		(RO) indicates whether or not the kernel directly supports
- 		modifying the crash elfcorehdr for CPU hot un/plug and/or
- 		on/offline changes.
-+
-+What:		/sys/devices/system/cpu/enabled
-+Date:		Nov 2022
-+Contact:	Linux kernel mailing list <linux-kernel@vger.kernel.org>
-+Description:
-+		(RO) the list of CPUs that can be brought online.
-diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
-index 1487cd9761a4..b57326fd48d4 100644
---- a/drivers/base/cpu.c
-+++ b/drivers/base/cpu.c
-@@ -95,6 +95,7 @@ void unregister_cpu(struct cpu *cpu)
- {
- 	int logical_cpu = cpu->dev.id;
+diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+index 336b48745..c878cbb62 100644
+--- a/drivers/thermal/gov_power_allocator.c
++++ b/drivers/thermal/gov_power_allocator.c
+@@ -434,10 +434,10 @@ static void allocate_power(struct thermal_zone_device *tz, int control_temp)
+ 		else
+ 			weight = instance->weight;
+         
+-        if (weight < 1024) 
+-		    pa->weighted_req_power = weight * pa->req_power;
++		if (weight < 1024)
++			pa->weighted_req_power = weight * pa->req_power;
+ 		else
+-            pa->weighted_req_power = frac_to_int(weight * pa->req_power);
++			pa->weighted_req_power = frac_to_int(weight * pa->req_power);
  
-+	set_cpu_enabled(logical_cpu, false);
- 	unregister_cpu_under_node(logical_cpu, cpu_to_node(logical_cpu));
- 
- 	device_unregister(&cpu->dev);
-@@ -273,6 +274,13 @@ static ssize_t print_cpus_offline(struct device *dev,
- }
- static DEVICE_ATTR(offline, 0444, print_cpus_offline, NULL);
- 
-+static ssize_t print_cpus_enabled(struct device *dev,
-+				  struct device_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%*pbl\n", cpumask_pr_args(cpu_enabled_mask));
-+}
-+static DEVICE_ATTR(enabled, 0444, print_cpus_enabled, NULL);
-+
- static ssize_t print_cpus_isolated(struct device *dev,
- 				  struct device_attribute *attr, char *buf)
- {
-@@ -413,6 +421,7 @@ int register_cpu(struct cpu *cpu, int num)
- 	register_cpu_under_node(num, cpu_to_node(num));
- 	dev_pm_qos_expose_latency_limit(&cpu->dev,
- 					PM_QOS_RESUME_LATENCY_NO_CONSTRAINT);
-+	set_cpu_enabled(num, true);
- 
- 	return 0;
- }
-@@ -494,6 +503,7 @@ static struct attribute *cpu_root_attrs[] = {
- 	&cpu_attrs[2].attr.attr,
- 	&dev_attr_kernel_max.attr,
- 	&dev_attr_offline.attr,
-+	&dev_attr_enabled.attr,
- 	&dev_attr_isolated.attr,
- #ifdef CONFIG_NO_HZ_FULL
- 	&dev_attr_nohz_full.attr,
-diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-index 23686bed441d..954d4adc8f81 100644
---- a/include/linux/cpumask.h
-+++ b/include/linux/cpumask.h
-@@ -93,6 +93,7 @@ static inline void set_nr_cpu_ids(unsigned int nr)
-  *
-  *     cpu_possible_mask- has bit 'cpu' set iff cpu is populatable
-  *     cpu_present_mask - has bit 'cpu' set iff cpu is populated
-+ *     cpu_enabled_mask  - has bit 'cpu' set iff cpu can be brought online
-  *     cpu_online_mask  - has bit 'cpu' set iff cpu available to scheduler
-  *     cpu_active_mask  - has bit 'cpu' set iff cpu available to migration
-  *
-@@ -125,11 +126,13 @@ static inline void set_nr_cpu_ids(unsigned int nr)
- 
- extern struct cpumask __cpu_possible_mask;
- extern struct cpumask __cpu_online_mask;
-+extern struct cpumask __cpu_enabled_mask;
- extern struct cpumask __cpu_present_mask;
- extern struct cpumask __cpu_active_mask;
- extern struct cpumask __cpu_dying_mask;
- #define cpu_possible_mask ((const struct cpumask *)&__cpu_possible_mask)
- #define cpu_online_mask   ((const struct cpumask *)&__cpu_online_mask)
-+#define cpu_enabled_mask   ((const struct cpumask *)&__cpu_enabled_mask)
- #define cpu_present_mask  ((const struct cpumask *)&__cpu_present_mask)
- #define cpu_active_mask   ((const struct cpumask *)&__cpu_active_mask)
- #define cpu_dying_mask    ((const struct cpumask *)&__cpu_dying_mask)
-@@ -1075,6 +1078,7 @@ extern const DECLARE_BITMAP(cpu_all_bits, NR_CPUS);
- #else
- #define for_each_possible_cpu(cpu) for_each_cpu((cpu), cpu_possible_mask)
- #define for_each_online_cpu(cpu)   for_each_cpu((cpu), cpu_online_mask)
-+#define for_each_enabled_cpu(cpu)   for_each_cpu((cpu), cpu_enabled_mask)
- #define for_each_present_cpu(cpu)  for_each_cpu((cpu), cpu_present_mask)
- #endif
- 
-@@ -1092,6 +1096,15 @@ set_cpu_possible(unsigned int cpu, bool possible)
- 		cpumask_clear_cpu(cpu, &__cpu_possible_mask);
- }
- 
-+static inline void
-+set_cpu_enabled(unsigned int cpu, bool can_be_onlined)
-+{
-+	if (can_be_onlined)
-+		cpumask_set_cpu(cpu, &__cpu_enabled_mask);
-+	else
-+		cpumask_clear_cpu(cpu, &__cpu_enabled_mask);
-+}
-+
- static inline void
- set_cpu_present(unsigned int cpu, bool present)
- {
-@@ -1173,6 +1186,7 @@ static __always_inline unsigned int num_online_cpus(void)
- 	return raw_atomic_read(&__num_online_cpus);
- }
- #define num_possible_cpus()	cpumask_weight(cpu_possible_mask)
-+#define num_enabled_cpus()	cpumask_weight(cpu_enabled_mask)
- #define num_present_cpus()	cpumask_weight(cpu_present_mask)
- #define num_active_cpus()	cpumask_weight(cpu_active_mask)
- 
-@@ -1181,6 +1195,11 @@ static inline bool cpu_online(unsigned int cpu)
- 	return cpumask_test_cpu(cpu, cpu_online_mask);
- }
- 
-+static inline bool cpu_enabled(unsigned int cpu)
-+{
-+	return cpumask_test_cpu(cpu, cpu_enabled_mask);
-+}
-+
- static inline bool cpu_possible(unsigned int cpu)
- {
- 	return cpumask_test_cpu(cpu, cpu_possible_mask);
-@@ -1205,6 +1224,7 @@ static inline bool cpu_dying(unsigned int cpu)
- 
- #define num_online_cpus()	1U
- #define num_possible_cpus()	1U
-+#define num_enabled_cpus()	1U
- #define num_present_cpus()	1U
- #define num_active_cpus()	1U
- 
-@@ -1218,6 +1238,11 @@ static inline bool cpu_possible(unsigned int cpu)
- 	return cpu == 0;
- }
- 
-+static inline bool cpu_enabled(unsigned int cpu)
-+{
-+	return cpu == 0;
-+}
-+
- static inline bool cpu_present(unsigned int cpu)
- {
- 	return cpu == 0;
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index 563877d6c28b..a2f3ad276814 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -3069,6 +3069,9 @@ EXPORT_SYMBOL(__cpu_possible_mask);
- struct cpumask __cpu_online_mask __read_mostly;
- EXPORT_SYMBOL(__cpu_online_mask);
- 
-+struct cpumask __cpu_enabled_mask __read_mostly;
-+EXPORT_SYMBOL(__cpu_enabled_mask);
-+
- struct cpumask __cpu_present_mask __read_mostly;
- EXPORT_SYMBOL(__cpu_present_mask);
- 
+ 		ret = cdev->ops->state2power(cdev, instance->lower,
+ 					     &pa->max_power);
 -- 
-2.39.2
+2.34.1
 
 
