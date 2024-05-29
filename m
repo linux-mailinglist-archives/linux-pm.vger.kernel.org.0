@@ -1,266 +1,151 @@
-Return-Path: <linux-pm+bounces-8349-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8350-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 490E78D3238
-	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 10:51:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 125608D3274
+	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 11:01:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CBBF01F22E93
-	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 08:51:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35D9E1C22DAD
+	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 09:01:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D44E16EC0C;
-	Wed, 29 May 2024 08:45:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EBiS39IU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63DAA167DAB;
+	Wed, 29 May 2024 09:01:46 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39F9A16EC0B;
-	Wed, 29 May 2024 08:45:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9424D1E888;
+	Wed, 29 May 2024 09:01:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716972359; cv=none; b=FgFTsYAxId0wQ7SQyUqc5PhxVXe4uRguVMoNctEfpcSBMzsp3IGkgFspKK6WrVGZWSQ8CkLwVc1Ao4oQ1rrZEs3NAYvWGYJeqmJDjFtVOlif04gqnYy+BXZmQfGruMvWRootZyS7lhj8Qj4m3/1cvOpnmM606ahxAiMOPU7SMzQ=
+	t=1716973306; cv=none; b=L+bIaX74EHXMfDEUygE5TJ3qpbwhXIm2ns6//TxhKdrmK7edXpOUBc4qxVQ/xGD/InjLRWCAnhCYTKtbqOVVnscMKYuq9qXIMOZirvQmbLCqkIImOlbpuIZ8I9NamWCUFQJ/Mxix00wUpsk+axw7inpp2PeAlof76gF2ABqFNqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716972359; c=relaxed/simple;
-	bh=9esejL+ycUpTTiZZHGWyfo2BiLq39OntVgYYsmLOHWk=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=i4RcqCtK3rAQNbCEvtmsHcqWolVInoa3AqIOfHTz+DeTiCjrcMoWa/+gVyOIedcD5vjJxrbPaBzPzn10SmFXD7gqsqPUZH2LN/kkWRFEWj6Qv7Gi0j2xlkzgAf0+LDY3dAr/oY63/9bNLxQiIGe61BiSehYgGEWWaY54bI7Lkto=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EBiS39IU; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716972357; x=1748508357;
-  h=date:from:to:cc:subject:message-id;
-  bh=9esejL+ycUpTTiZZHGWyfo2BiLq39OntVgYYsmLOHWk=;
-  b=EBiS39IU7zwCXa1B/dcSUuRCfwyaPKfm5CBux+q6BCKX4GRknT8rztAY
-   JhLeM6SCzxHqTrbKf7Fv88m8zD85m/06rrSiA1fv7MzHvy8NgTfcRD1GS
-   lIKxXzLTePVSczQ81EQjuJ/RQidBDcFKgl95LstfWiouti+dSDpGRjhr/
-   kLo8ku+HbV0B045wGOeajBOAGKH+oWfwoGeKrZHZf2jrG38X1xrqD6WwB
-   eSOGwaexqhad6AfGFLJpe+qi1I5Ylnje9AOUZvKDfKzmfcuBXDsTqczdr
-   xbId72Sav7kFXKHscHcuqDnFnKH3RixHOYTbGH9sTDMDxiJYbteDRxkKd
-   A==;
-X-CSE-ConnectionGUID: KjD5U430SCqN89Kr/SJKEQ==
-X-CSE-MsgGUID: YaRhs7HCRZqwUvyeaXlffg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11085"; a="11745579"
-X-IronPort-AV: E=Sophos;i="6.08,197,1712646000"; 
-   d="scan'208";a="11745579"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2024 01:45:57 -0700
-X-CSE-ConnectionGUID: 6eZxO7ywQ2iwtUXpaq6pZQ==
-X-CSE-MsgGUID: KIlCdXKBTZSPv4hYC9iFfA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,197,1712646000"; 
-   d="scan'208";a="39880955"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 29 May 2024 01:45:55 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sCEwJ-000DMP-0g;
-	Wed, 29 May 2024 08:45:47 +0000
-Date: Wed, 29 May 2024 16:43:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 8861dd6820e1889554cf1f91c85e05312c85151b
-Message-ID: <202405291614.dU3pWySt-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1716973306; c=relaxed/simple;
+	bh=wq6Q5U9qIc0wVfPUvIazA+e9F1mn1D2Z4oXYmue4Ipo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KM6B451ZKUZH12aLtfj0s6gDwSbWe5nKMXy75lNgvj9E9ezK1TGsLJ4Tm/9WlZwcY5/xEXRo3ZTSBlnQquT9C707dtNY4sxv0iNn8tFBjNtSfKWH1u5GJjIq46x0IlgcEbMB87YBjcumIwayMW+bA0nzRXcydgcWx+lYBfpI8Ek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-df771db8b24so1737163276.3;
+        Wed, 29 May 2024 02:01:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716973302; x=1717578102;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KnYuIo1n1oD5QX7J07WFDaga5vIEVHxJRsHJ8yWO98A=;
+        b=srzF4XauBhGx3v9W7ihZ874tqY6/cY4tnfPyu6DPkjlLREC+oH1zgGhXZ8H72kbGqE
+         JYujLxLlQUjcNDcHRVXe0A9a4lDWolEdf9ZDKBdQy+l6RZam0yK6yaBbBzeI0T6PexqY
+         ECUfQVMqhwrgAU5hv0SqQlOFau+23lHyY9DtykMopNCEbLKzS0+XfMtyB/diY9mkMaO+
+         kJFkYxWro1klBxmJ+888Qkm20FdvQFMMnjbi/3duVgiWEgnANy0AABcJlurBFq7KOiLJ
+         KRBNtnLUfTQpCKlIECbSd2Yx+kKN38U0QF1RWWXQvrSwEoN4ZStRM2d0OAKuyzRJiUYo
+         GsaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXleI+4HMS3egI2rz/THTxvP56VqQjeM16D2VvTLD/gNxhg7VCbOgeQaLk1S87toZgPjlgWzxj1ZqBpDue5f6DDqtp0beDRJdBUHYqD0R4QL4Hl5Af+In/iHwv2Va7sxW/esqZoerfe5OCml8mhiMhLUeZ8JlaP/+cLD3Nnmwmca14t8cYemXGnWxb4ZGrlowtF5Vr8V1sdqZ3oCgASIqPveeXxtueqUiUDvOiKLEnYDe68EAvbNd3reu2mF2Yj/C26nrQ=
+X-Gm-Message-State: AOJu0YyfGRAOX6+bnwMDu/JUZOurEgUCOiWHI2Ppvl3MxsmShq2r+9PT
+	hjFZKHuX6T33Eo2y7l+Ei//lWAJ31sAdvd8gkxoAY64CCNdQIe8RpBwLBlm2n/8=
+X-Google-Smtp-Source: AGHT+IG1N3AmKZnNB7pxmFQEEWkmIBZaiEFCGdmbClIb8hwogzic7RLgZvMcDvl83mbqJR2oUGmFoQ==
+X-Received: by 2002:a25:8c03:0:b0:de6:1494:f144 with SMTP id 3f1490d57ef6-df7721a7766mr13396377276.28.1716973297477;
+        Wed, 29 May 2024 02:01:37 -0700 (PDT)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-dfa482bd39fsm173285276.37.2024.05.29.02.01.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 May 2024 02:01:37 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-62a2424ecb8so16712377b3.1;
+        Wed, 29 May 2024 02:01:37 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUit2zCbakmG6A0AbA5CeRTuIYODupvJG1rU96PoCvZ5fukmm28XZzsQxcpl2etweQZrkOv7k8vO+GSZJhc1oYh/5+NPLloj+dRlbYkOZA4oX2rmLUFXmqkqAfVnsLEO4JFYhhWMU1cfZsByICDLHiaMzCuHE0vQOu59MGvGJbJ3+GLqqTnIXnRnD01xxtA50btf8fwXs2GyBD/P8ca7vkCYQWJVxLiNI7gKHqnZEtR6fbaMXCfRCL+iNqYzDHsSOsNdRc=
+X-Received: by 2002:a25:b202:0:b0:dfa:4ce2:3315 with SMTP id
+ 3f1490d57ef6-dfa4ce234f0mr828856276.38.1716973296714; Wed, 29 May 2024
+ 02:01:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <cover.1716811405.git.geert+renesas@glider.be> <efd9397662ff743f95298ca6aad4efdfa0ba1962.1716811405.git.geert+renesas@glider.be>
+In-Reply-To: <efd9397662ff743f95298ca6aad4efdfa0ba1962.1716811405.git.geert+renesas@glider.be>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 29 May 2024 11:01:25 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUxXQca5MzP9fGjVoUWbOvSekwRp_+HMTT618yD8wc=tw@mail.gmail.com>
+Message-ID: <CAMuHMdUxXQca5MzP9fGjVoUWbOvSekwRp_+HMTT618yD8wc=tw@mail.gmail.com>
+Subject: Re: [PATCH/RFC 1/3] earlycon: Export clock and PM Domain info from FDT
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Saravana Kannan <saravanak@google.com>, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, 
+	Peng Fan <peng.fan@nxp.com>, linux-pm@vger.kernel.org, linux-serial@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 8861dd6820e1889554cf1f91c85e05312c85151b  Merge branch 'pm-tools' into bleeding-edge
+On Mon, May 27, 2024 at 2:41=E2=80=AFPM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+> Earlycon relies on the serial port to be initialized by the firmware
+> and/or bootloader.  Linux is not aware of any hardware dependencies that
+> must be met to keep the port working, and thus cannot guarantee they
+> stay met, until the full serial driver takes over.
+>
+> E.g. all unused clocks and unused PM Domains are disabled in a late
+> initcall.  As this happens after the full serial driver has taken over,
+> the serial port's clock and/or PM Domain are no longer deemed unused,
+> and this is typically not a problem.
+>
+> However, if the serial port's clock or PM Domain is shared with another
+> device, and that other device is runtime-suspended before the full
+> serial driver has probed, the serial port's clock and/or PM Domain will
+> be disabled inadvertently.  Any subsequent serial console output will
+> cause a crash or system lock-up.
+>
+> Provide a mechanism to let the clock and/or PM Domain subsystem or
+> drivers handle this, by exporting the clock and PM Domain dependencies
+> for the serial port, as available in the system's device tree.
+> Note that as this is done during early boot-up, the device_node
+> structure pointing to the earlycon console is not yet created, so this
+> has to resort to raw property data.
+>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-elapsed time: 725m
+> --- a/include/linux/serial_core.h
+> +++ b/include/linux/serial_core.h
+> @@ -954,6 +954,16 @@ static const bool earlycon_acpi_spcr_enable EARLYCON=
+_USED_OR_UNUSED;
+>  static inline int setup_earlycon(char *buf) { return 0; }
+>  #endif
+>
+> +#ifdef CONFIG_OF_EARLY_FLATTREE
 
-configs tested: 172
-configs skipped: 4
+This should include a check  for CONFIG_SERIAL_EARLYCON.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> +extern const __be32 *earlycon_clocks, *earlycon_power_domains;
+> +extern int earlycon_clocks_ncells, earlycon_power_domains_ncells;
+> +#else
+> +#define earlycon_clocks                        NULL
+> +#define earlycon_clocks_ncells         0
+> +#define earlycon_power_domains         NULL
+> +#define earlycon_power_domains_ncells  0
+> +#endif
+> +
+>  /* Variant of uart_console_registered() when the console_list_lock is he=
+ld. */
+>  static inline bool uart_console_registered_locked(struct uart_port *port=
+)
+>  {
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                         haps_hs_defconfig   gcc  
-arc                            hsdk_defconfig   gcc  
-arc                   randconfig-001-20240529   gcc  
-arc                   randconfig-002-20240529   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                       omap2plus_defconfig   gcc  
-arm                   randconfig-001-20240529   gcc  
-arm                   randconfig-002-20240529   gcc  
-arm                   randconfig-003-20240529   gcc  
-arm                   randconfig-004-20240529   gcc  
-arm                           sunxi_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-002-20240529   clang
-arm64                 randconfig-003-20240529   gcc  
-arm64                 randconfig-004-20240529   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240529   gcc  
-csky                  randconfig-002-20240529   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240529   clang
-hexagon               randconfig-002-20240529   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240529   clang
-i386         buildonly-randconfig-002-20240529   gcc  
-i386         buildonly-randconfig-003-20240529   gcc  
-i386         buildonly-randconfig-004-20240529   clang
-i386         buildonly-randconfig-005-20240529   gcc  
-i386         buildonly-randconfig-006-20240529   clang
-i386                                defconfig   clang
-i386                  randconfig-001-20240529   clang
-i386                  randconfig-002-20240529   gcc  
-i386                  randconfig-003-20240529   gcc  
-i386                  randconfig-004-20240529   gcc  
-i386                  randconfig-005-20240529   clang
-i386                  randconfig-006-20240529   clang
-i386                  randconfig-011-20240529   clang
-i386                  randconfig-012-20240529   clang
-i386                  randconfig-013-20240529   clang
-i386                  randconfig-014-20240529   gcc  
-i386                  randconfig-015-20240529   clang
-i386                  randconfig-016-20240529   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240529   gcc  
-loongarch             randconfig-002-20240529   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                        bcm47xx_defconfig   clang
-mips                 decstation_r4k_defconfig   gcc  
-mips                     loongson1b_defconfig   clang
-mips                      malta_kvm_defconfig   gcc  
-mips                           mtx1_defconfig   clang
-mips                        omega2p_defconfig   clang
-mips                           xway_defconfig   clang
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240529   gcc  
-nios2                 randconfig-002-20240529   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240529   gcc  
-parisc                randconfig-002-20240529   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc               randconfig-001-20240529   clang
-powerpc               randconfig-002-20240529   clang
-powerpc               randconfig-003-20240529   clang
-powerpc                     redwood_defconfig   clang
-powerpc64             randconfig-001-20240529   gcc  
-powerpc64             randconfig-002-20240529   clang
-powerpc64             randconfig-003-20240529   clang
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                 randconfig-001-20240529   gcc  
-riscv                 randconfig-002-20240529   clang
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-001-20240529   clang
-s390                  randconfig-002-20240529   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                        dreamcast_defconfig   gcc  
-sh                        edosk7760_defconfig   gcc  
-sh                    randconfig-001-20240529   gcc  
-sh                    randconfig-002-20240529   gcc  
-sh                           se7780_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          alldefconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240529   gcc  
-sparc64               randconfig-002-20240529   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20240529   clang
-um                    randconfig-002-20240529   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240529   gcc  
-x86_64       buildonly-randconfig-002-20240529   clang
-x86_64       buildonly-randconfig-003-20240529   clang
-x86_64       buildonly-randconfig-004-20240529   gcc  
-x86_64       buildonly-randconfig-005-20240529   clang
-x86_64       buildonly-randconfig-006-20240529   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240529   gcc  
-x86_64                randconfig-002-20240529   clang
-x86_64                randconfig-003-20240529   clang
-x86_64                randconfig-004-20240529   clang
-x86_64                randconfig-005-20240529   gcc  
-x86_64                randconfig-006-20240529   gcc  
-x86_64                randconfig-011-20240529   gcc  
-x86_64                randconfig-012-20240529   gcc  
-x86_64                randconfig-013-20240529   clang
-x86_64                randconfig-014-20240529   gcc  
-x86_64                randconfig-015-20240529   gcc  
-x86_64                randconfig-016-20240529   clang
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-xtensa                randconfig-001-20240529   gcc  
-xtensa                randconfig-002-20240529   gcc  
+Gr{oetje,eeting}s,
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
