@@ -1,185 +1,167 @@
-Return-Path: <linux-pm+bounces-8398-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8399-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B97B8D41A9
-	for <lists+linux-pm@lfdr.de>; Thu, 30 May 2024 01:08:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D156A8D42AA
+	for <lists+linux-pm@lfdr.de>; Thu, 30 May 2024 03:06:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7EA2E1C21090
-	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2024 23:08:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 805F52853AC
+	for <lists+linux-pm@lfdr.de>; Thu, 30 May 2024 01:06:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 186311CB31C;
-	Wed, 29 May 2024 23:08:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3591E556;
+	Thu, 30 May 2024 01:06:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yg+tCyZv"
+	dkim=pass (2048-bit key) header.d=hotmail.com header.i=@hotmail.com header.b="MF7RyiLw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01olkn2027.outbound.protection.outlook.com [40.92.98.27])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ABFB16E876
-	for <linux-pm@vger.kernel.org>; Wed, 29 May 2024 23:08:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717024110; cv=none; b=TpLeUPvO3lrw+iKqNfyHJQ+l56AxFZ4OSp8KBAGPwK7aOPVHGNSTlzR/mdeZEv2rHJIo8ks4+7d3W5XnYtSF66DjLrXY6hrsdaEEiTgFvT9bOZU63mpCJYXrz3uTGve39nUlUPY0D4MTldC9rA3mlWjgiM44wV2rel0xqQ4u6qs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717024110; c=relaxed/simple;
-	bh=CCWh6NYRKHYzDC7XZv5BsVhTKdznZ4KQzj617z7Ck/Q=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=jh7U7t5EflqNRjNvMqYnLwNpe1EDqTj04kTiLEiMb6Ua4YXrlgHM8NADuIXob/Vze86zgq9+Se2TCtESKAe6eGzKYxtvuhi4rzAGwuPSKchFVyYLoijuIg4j5J7e+q6+bZYcJizVFD2pL7IUe0yP28Lydh2N0pNrvv1uO3miwjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yg+tCyZv; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717024108; x=1748560108;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version;
-  bh=CCWh6NYRKHYzDC7XZv5BsVhTKdznZ4KQzj617z7Ck/Q=;
-  b=Yg+tCyZvuo81VB63waQpgcCcQxxol5shOcfxmWAEGKXcExFUGwrTNd3C
-   OTGpKJ5NDC32VJ0cnV/FBgtErCbWE2F6lYKy5JtbJ43/+DWyFhxzR0rTd
-   wwKqG8mlwqS0Nk1U3yxlSR8I3a9F82L+U2NW0vb9LZ8+i1AuR/Rvr0+K6
-   wN9QbizB9oYs4STG/dAFodxGTxh0hVgPDunsZCyJfjrO19DFHL2h+3oQx
-   ugyrvS67iryucLE7qR4/ULSctW/5+pJ0jS3C0HpqUpcU/MNpIfEmcmeR9
-   Wn8JCvbMmBdsnC4N1cozKYiKo2h0DtKST5MqZizf6Y/wEVPeDwvcja4CO
-   g==;
-X-CSE-ConnectionGUID: dnIOQOPfQnWDVciYavbaeQ==
-X-CSE-MsgGUID: SimUPrtzQPu559wtx36fHA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11087"; a="24879037"
-X-IronPort-AV: E=Sophos;i="6.08,199,1712646000"; 
-   d="scan'208,223";a="24879037"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2024 16:08:27 -0700
-X-CSE-ConnectionGUID: CRk1+L/kQeKT20requMVXw==
-X-CSE-MsgGUID: 3xakXye3RrG+BJMb9GYKbA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,199,1712646000"; 
-   d="scan'208,223";a="40064769"
-Received: from gavinb-mobl.gar.corp.intel.com (HELO mpiske-mobl2.gar.corp.intel.com) ([10.213.75.20])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2024 16:08:24 -0700
-Message-ID: <ca47b6f812175ea60f6ad615274223aa7fee295d.camel@linux.intel.com>
-Subject: Re: intel_pstate_get_hwp_cap on wrong CPU
-From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
-	linux-pm@vger.kernel.org
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
- Thomas Gleixner <tglx@linutronix.de>, Viresh Kumar <viresh.kumar@linaro.org>
-Date: Wed, 29 May 2024 16:08:19 -0700
-In-Reply-To: <20240529155740.Hq2Hw7be@linutronix.de>
-References: <20240529155740.Hq2Hw7be@linutronix.de>
-Content-Type: multipart/mixed; boundary="=-j4e2AdDeO86OgoN1rdxp"
-User-Agent: Evolution 3.50.0-1 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE58BDDC5;
+	Thu, 30 May 2024 01:06:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.98.27
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717031214; cv=fail; b=m9SUQqj2UsKoa4gFs5QUvdujUF5f2t/1nK4vLsujsDIbhkoSx7wxCSdvkUrTzV4MKLkAPM9mimprI84LMp6INPKLFvkv4HWHYX/+4MPsWWcqnCdUaOTLN00XP/h5NQ76DASJsypLRw/DhFiix/nD9YE4ii4SYmBuT7wB4AFORiA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717031214; c=relaxed/simple;
+	bh=03mnA7OV7YVYq/JkrXfDbiaIaiPakOLY3In/uZy1NqY=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=ghOzqCzazLxwDweY4MvMFifcEgUwpa0ajxeT42ffVYs5G7pOpFTncAdmAUfGT1Rl5kRTgzLKFg/y/E8GSaOrhYnxogrugKLCbYWyNlP7lnBVhnfQiZb0QVPvSchwKkmBi0rixgn1rByFzEAj8M5dxKAn0/pibFL6hLfOFm30C8I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.com; spf=pass smtp.mailfrom=hotmail.com; dkim=pass (2048-bit key) header.d=hotmail.com header.i=@hotmail.com header.b=MF7RyiLw; arc=fail smtp.client-ip=40.92.98.27
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hotmail.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=L5UB8ThtMf767xexev7s/g933hee2EKTdrvdJUCpq3ohfy3PM9sHv4DhrqJCC3eEHG0/ayWo2JAups0s0p4s3t8LFsNG4S+6phNLjJsZjq5i7iOCL4DBk3wvFxWgA2XZeoPYW/mNRBeSAh2yODfC5xoL1gxSRGaUIISeoku9sSYse+Xy+2+4gXsExgtaFdkuUMAVuMCHGYBPCGsswJHuHkqbxD8jqqzeus2ETHJbTQ3xxrPcWzKrcsDufDAF4FVSV4FXzeBcjTKwz+THqZqNgikiDgcDBf+oBfXuZrpnqeQnJUuLdied5CrXK6De+jcX5bPKFWjiRSPjoXbVTlWgNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QOZivlHArkNyEr0rq1WxuWTUaO7PLbYnc5pnMXYxESE=;
+ b=Od20RDWvQcHPjyrJEjKjBLk439HmInvN1sIaXRZt71VUqn5eFrHW11BK9RIGDKmlm0TmGKq9OczFjiShMun1IN8ylkfqYyTa4P8rtiSodNfj9zDukxS89OxZlZFLij14cjo6DN/6TIvxW+T8LF2JQzEo0lArMX9ze1Rv219T6BExE4iIb4flucgZb9nQfiNgZNNa/h5ykYV6oX2mkaYdKc7Ll5pZ5bFbX9ak/TxcDG3K3nZRDd55ug6XC57Rh15F5v4vE/P0mKyQw6+EVbM8NUJO23K7PRsPlswwagkLxpES4pWbvXJVBsqZE314StgrxHRAEyFfTdu4a3by5Q3TsA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QOZivlHArkNyEr0rq1WxuWTUaO7PLbYnc5pnMXYxESE=;
+ b=MF7RyiLwK4RJQyXe9tIWhaLx/fVe1L41RkHHmbOQW2q3m2fhG+krXNCuXr6uim9tTCR4ROJs0QeT6gr9Q5ibS3EiaibMd8DHPupU5g19BGgmaHixfkkPAecHKvH7IAV1jPrmu6VbLEeE4GZBsMbNqItDiyM2xwnoxTtuP1Z5/WAINUngG+4nnJhXMg7y81Z6dPTN7mcJq75+2rPFHeE7qb7Vr50yE0VZcxT7qCO8DxFRPSPU9o2V//p2aM9N9mqaaNck4Ke96cFbTUmGPNU53VBn6AK/Qv6U9vxNIJSg4AFftx3SfIUHbSGNIx9CUbFeQMq1veN3iDsaJJ/yysgIyA==
+Received: from TYCP286MB2486.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:221::11)
+ by TYVP286MB3168.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:2ad::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.21; Thu, 30 May
+ 2024 01:06:50 +0000
+Received: from TYCP286MB2486.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::8048:573b:c353:1c19]) by TYCP286MB2486.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::8048:573b:c353:1c19%6]) with mapi id 15.20.7633.018; Thu, 30 May 2024
+ 01:06:50 +0000
+Message-ID:
+ <TYCP286MB2486B1D734F8E2D74BFBEEB1B1F32@TYCP286MB2486.JPNP286.PROD.OUTLOOK.COM>
+Date: Thu, 30 May 2024 09:06:43 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] cpufreq/cppc: Take policy->cur into judge when set
+ target
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: rafael@kernel.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Riwen Lu <luriwen@kylinos.cn>
+References: <TYCP286MB24861BA890594C119892FB3DB1F22@TYCP286MB2486.JPNP286.PROD.OUTLOOK.COM>
+ <20240529053652.pzcjoyor7i23qc4i@vireshk-i7>
+ <TYCP286MB248669BCAD7A7E54C5071EF9B1F22@TYCP286MB2486.JPNP286.PROD.OUTLOOK.COM>
+ <20240529071244.vwognqagaa4347dm@vireshk-i7>
+Content-Language: en-US
+From: Riwen Lu <luriwen@hotmail.com>
+In-Reply-To: <20240529071244.vwognqagaa4347dm@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TMN: [sD+EsY3wpkz8D/ftSxW5ot3dKP9DjZcC]
+X-ClientProxiedBy: SG3P274CA0010.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::22)
+ To TYCP286MB2486.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:221::11)
+X-Microsoft-Original-Message-ID:
+ <11e96f77-7dec-4c38-af87-0703ebf79a88@hotmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYCP286MB2486:EE_|TYVP286MB3168:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8b830da3-5d1f-46e3-1637-08dc8044c8e7
+X-Microsoft-Antispam: BCL:0;ARA:14566002|461199019|3412199016|440099019;
+X-Microsoft-Antispam-Message-Info:
+	3R0sEPX7XrdMsQNboWlJPwzXS8V71JQ2vP9QstYmzt5oPEhgrYaIZtNVXmzf3CME33QdiRqmjphS/61lhuKuc8s0tWJKT3yqLvhHuB9jsNCNR4TgfVm98F2i+5PNTZdVATXx/kkA+wKDad8SpfnZm9K2L0GIDZYVKCF83jfc5ULKb+kRreSOSC4Y9nVSMYwvWzCVhA+PdcvcaP7+aJuA5JCpxcnFwv4vTczKOb9oidp/rMtZtz1Q9/J8HofN7rUvIz5cPeoEvg9X5qp+tk8znsaOuLVZYyqoIogREvx9KEcCR9XMOQz2505uEOOsPU3uGT1j5G/pv237UmddgrXcQ2Lr0uIof2oFE9DrBcY0Br+vzAjpEbHEYacIuUOFKzdz1+lvW/rzcETbN93XDEoDg83kG8LALjrlO3ZbAfj8UQekzlgBKG0UNYgYFjmXOUlYgNOI/5kvK0bJndZl3ODMjuixDEK8Yc1WAHOpObRtbDJxeLQJdGIHjr0lpL2+LeDEml1SbwZd8tJC5lQA9+4vHldwJyN3N2FMtyTZhOnl5QpUzBNhU5tarjBpLow3p1Bd
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?V1R3dWZXd2NJQUdSbHMzL0p4N2Q4N1BPWTdYN1VPYzRTdzVTNFQzeHRXMVAx?=
+ =?utf-8?B?cVMyNTBSTmN3bytQQzVSME1oVGt2N0hLblZnS0JBeEJQY1ZkR05OcCtqaVky?=
+ =?utf-8?B?c1RrNWRBQU1nd0dLS2pUU3NGb0IrOWVmVGRzYUZsa2oyVkRzQUR2L2JOK0RD?=
+ =?utf-8?B?T3RUdmY4Z1pEc013NDhzMHJLeGhyNWliNlZ3a3o1VGo2MnQvNUVRdTZvUVpG?=
+ =?utf-8?B?akRyWWh6eVRxUzd2d0Y4d1ppa29JelRGZTVyUHFOWUQyaUV1aUJucG94R0xH?=
+ =?utf-8?B?aDh5Vjk3OFg0cm9TZ09QSVJwa09mcVRIekhrNnhMd2dRZjl1RWh5a1oyazhP?=
+ =?utf-8?B?RWFBbFIvUGNHTjNnNWxFZWZBeTF4SjRBUzMzRWhOSVFFb2t3TUNUeU85VFho?=
+ =?utf-8?B?M2J5QWxmTmhXK3ZyVzJVZ1EyL1FRVDE5a2ZqN0Y0em5Sb1VmQkc1bzJPLzlZ?=
+ =?utf-8?B?azlZc1IvQUl6TGZURGZ0S21jNUJjclZFQ0pJT0lnV0pDdzVkcmRVaVVHT0s4?=
+ =?utf-8?B?bWg2c25yRVpqMjRENnY5K2x1ZHk0bHNiYkJYSWplZndINjVBaE1MYnlSRTd4?=
+ =?utf-8?B?Nk1aTlVSM01jZFJJME5CbzNOdnZHa01EYzBKU2RWUEhYMDhJSkt5bmhZY2l0?=
+ =?utf-8?B?c01JSlZFbmVUSndjOGU2cjdZZFdrSTFEeTgwZ09YbTdDczVKOHk4Q1o0ODht?=
+ =?utf-8?B?TTlHSVBEWG51b1ZKc1lxSE9uRk9SbDJodXZnMFZVWmc3QkQ2Z2VsdTlqcmI4?=
+ =?utf-8?B?enJyUkE4QVZyTjdWVE5iVTd2TURHVUlYa3diTjNiVytMZEJDWmpmN1pRQzF2?=
+ =?utf-8?B?L1J6anVVaHF0WVN0TlVnVklCNXg3V0w4RllSc2swbTJDd0xJSFFLN1Q5NHhD?=
+ =?utf-8?B?bGg0cVR5RW0yWXI0Z25peWdJSFUwRVk0THNrRGcrMTlYbkIyYnJKOHk1cDBM?=
+ =?utf-8?B?T1phbXRyYUc2OGNrUWk0MHJVMDFYZVU1MXgwb2ZCVVdCZVlvK0EwUndBVTZ5?=
+ =?utf-8?B?VURMZ3J3alBOMElPUFhjRDRLYU0ycWVHc1g1UjFvVDBibXgzMC9RMXFPOUF5?=
+ =?utf-8?B?S1dEaGdHN21OTVVmVGVNSVpMWE1IdTRFNlo3M2hTaU1mcUROeHNKdHN0Unp3?=
+ =?utf-8?B?cVZHbHZ1YmZLYVFKUEZxRWtVeGhja0h5QUdxZUkySnptVXlRZ2cvcjdFeHRU?=
+ =?utf-8?B?eWZIdTZTK2pEakYvTHVBUDd3MFlnaUdlN2VYRWtvMkxDQkRoZERvQzhjYThm?=
+ =?utf-8?B?eElPUXUzNyt5dERwU0gydmFLM3kvUnE5MTBRYlNpTkJkaG9GSm9jRWNndkM5?=
+ =?utf-8?B?SUpNV2pKcjhQZVZNMFZqajUvUUFuekxzdEcxdldlWTBwQXcyREllRkFIbzBu?=
+ =?utf-8?B?cFdPQTVWaTlqL2ttQ2N6YTV5aVB6cnl2eWF1bk04b1VDL3VpTWNyc2Z2dThl?=
+ =?utf-8?B?c1RUWnFhYVRVSnV5dE9xVEN4ME5aUWs4L1dvUTljc0pJcnRsNmxNTXBmZjJk?=
+ =?utf-8?B?STkzNlFKYkRJMWpySFZQZ0k1bGdnRVRKajcwWmlLSWxEOTkzZmpIeHV5L2JR?=
+ =?utf-8?B?c1IzT0dlWlZsT0dONTBjbGcxY3BuNmtpem5DcVhLNSs2dkRQL3doWWVnZzJH?=
+ =?utf-8?Q?gnFfWF43xVckORAuMF9o3FAPQmXVXBefyEN4Wv2kHEJ4=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-05f45.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8b830da3-5d1f-46e3-1637-08dc8044c8e7
+X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB2486.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2024 01:06:50.0049
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYVP286MB3168
 
---=-j4e2AdDeO86OgoN1rdxp
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+在 2024/5/29 15:12, Viresh Kumar 写道:
+> On 29-05-24, 14:53, Riwen Lu wrote:
+>> Yes, you are right， I didn't think it through. In this circumstance, the
+>> policy->cur is the highest frequency, desired_perf converted from
+>> target_freq is the same with cpu_data->perf_ctrls.desired_perf which
+>> shouldn't.
+> 
+> Please investigate more and see where the real problem is.
+> 
+The boot CPU's frequency would be configured to the highest perf when 
+powered on from S3 even though the policy governor is powersave.
 
-Hi Sebastian,
+In cpufreq resume process, the booting CPU's new_freq obtained via 
+.get() is the highest frequency, while the policy->cur and 
+cpu->perf_ctrls.desired_perf are in the lowest level(powersave 
+governor). Causing the warning: "CPU frequency out of sync:", and set 
+policy->cur to new_freq. Then the governor->limits() calls 
+cppc_cpufreq_set_target() to configures the CPU frequency and returns 
+directly because the desired_perf converted from target_freq and 
+cpu->perf_ctrls.desired_perf are the same and both are the lowest_perf.
 
+The problem is that the cpu->perf_ctrls.desired_perf is the lowest_perf 
+but it should be the highest_perf.
 
-On Wed, 2024-05-29 at 17:57 +0200, Sebastian Andrzej Siewior wrote:
-> Hi,
->=20
-> this just popped up:
-> > [ 6538.614568] unchecked MSR access error: RDMSR from 0x771 at rIP:
-
-Please check if the attached change fixes?
-
-Thanks,
-Srinivas
-
-
-> > 0xffffffff817d2250 (__rdmsr_on_cpu+0x20/0x50)
-> > [ 6538.625714] Call Trace:
-> > [ 6538.629156]=C2=A0 <TASK>
-> > [ 6538.675067]=C2=A0 generic_exec_single+0x58/0x120
-> > [ 6538.680236]=C2=A0 smp_call_function_single+0xbf/0x110
-> > [ 6538.696333]=C2=A0 rdmsrl_on_cpu+0x46/0x60
-> > [ 6538.700894]=C2=A0 intel_pstate_get_hwp_cap+0x1b/0x70
-> > [ 6538.706420]=C2=A0 intel_pstate_update_limits+0x2a/0x60
-> > [ 6538.712110]=C2=A0 acpi_processor_notify+0xb7/0x140
-> > [ 6538.717479]=C2=A0 acpi_ev_notify_dispatch+0x3b/0x60
-> > [ 6538.722910]=C2=A0 acpi_os_execute_deferred+0xf/0x20
-> > [ 6538.728346]=C2=A0 process_one_work+0x13d/0x350
-> > [ 6538.733342]=C2=A0 worker_thread+0x2c2/0x3d0
-> > [ 6538.743066]=C2=A0 kthread+0xca/0x100
-> > [ 6538.751844]=C2=A0 ret_from_fork+0x2c/0x40
-> > [ 6538.761073]=C2=A0 ret_from_fork_asm+0x11/0x20
-> > [ 6538.765993]=C2=A0 </TASK>
->=20
-> > root@h:~# grep . /sys/devices/system/cpu/intel_pstate/*
-> > /sys/devices/system/cpu/intel_pstate/max_perf_pct:100
-> > /sys/devices/system/cpu/intel_pstate/min_perf_pct:36
-> > /sys/devices/system/cpu/intel_pstate/no_turbo:0
-> > /sys/devices/system/cpu/intel_pstate/num_pstates:4294967285
-> ^ =3D> -EAGAIN
->=20
-> > /sys/devices/system/cpu/intel_pstate/status:passive
-> > /sys/devices/system/cpu/intel_pstate/turbo_pct:0
->=20
-> > # cpupower frequency-info
-> > analyzing CPU 0:
-> > =C2=A0driver: intel_cpufreq
-> =E2=80=A6
->=20
-> from turbostat:
-> > CPUID(0): GenuineIntel 0xf CPUID levels
-> > CPUID(1): family:model:stepping 0x6:3f:4 (6:63:4) microcode 0x1a
-> > CPUID(0x80000000): max_extended_levels: 0x80000008
-> > CPUID(1): SSE3 MONITOR SMX EIST TM2 TSC MSR ACPI-TM HT TM
-> > CPUID(6): APERF, TURBO, DTS, PTM, No-HWP, No-HWPnotify, No-
-> > HWPwindow, No-HWPepp, No-HWPpkg, EPB
-> > cpu4: MSR_IA32_MISC_ENABLE: 0x00850089 (TCC EIST MWAIT PREFETCH
-> > TURBO)
-> > CPUID(7): No-SGX No-Hybrid
->=20
-> This is v6.10.0-rc1.
->=20
-> Sebastian
->=20
-
-
---=-j4e2AdDeO86OgoN1rdxp
-Content-Disposition: attachment;
-	filename="0001-cpufreq-intel_pstate-Fix-unchecked-HWP-MSR-access.patch"
-Content-Type: text/x-patch;
-	name="0001-cpufreq-intel_pstate-Fix-unchecked-HWP-MSR-access.patch";
-	charset="UTF-8"
-Content-Transfer-Encoding: base64
-
-RnJvbSBmODVhODM1MDhlZjAyOWJjZWFmOTE5MmNiNjQ4ZDY2ZjMyYjYxZDAyIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBTcmluaXZhcyBQYW5kcnV2YWRhIDxzcmluaXZhcy5wYW5kcnV2
-YWRhQGxpbnV4LmludGVsLmNvbT4KRGF0ZTogV2VkLCAyOSBNYXkgMjAyNCAxNTozMDo0OSAtMDcw
-MApTdWJqZWN0OiBbUEFUQ0hdIGNwdWZyZXE6IGludGVsX3BzdGF0ZTogRml4IHVuY2hlY2tlZCBI
-V1AgTVNSIGFjY2VzcwoKSFdQIE1TUiAweDc3MSBjYW4gYmUgb25seSByZWFkIG9uIGEgQ1BVIHdo
-aWNoIHN1cHBvcnRzIEhXUCBhbmQgZW5hYmxlZC4KSGVuY2UgaW50ZWxfcHN0YXRlX2dldF9od3Bf
-Y2FwKCkgY2FuIG9ubHkgYmUgY2FsbGVkIHdoZW4gaHdwX2FjdGl2ZSBpcwp0cnVlLgoKUmVwb3J0
-ZWQtYnk6IFNlYmFzdGlhbiBSZWljaGVsIDxzZWJhc3RpYW4ucmVpY2hlbEBjb2xsYWJvcmEuY29t
-PgpDbG9zZXM6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4LXBtLzIwMjQwNTI5MTU1NzQw
-LkhxMkh3N2JlQGxpbnV0cm9uaXguZGUvCkZpeGVzOiBlODIxN2I0YmVjZTMgKCJjcHVmcmVxOiBp
-bnRlbF9wc3RhdGU6IFVwZGF0ZSB0aGUgbWF4aW11bSBDUFUgZnJlcXVlbmN5IGNvbnNpc3RlbnRs
-eSIpClNpZ25lZC1vZmYtYnk6IFNyaW5pdmFzIFBhbmRydXZhZGEgPHNyaW5pdmFzLnBhbmRydXZh
-ZGFAbGludXguaW50ZWwuY29tPgotLS0KIGRyaXZlcnMvY3B1ZnJlcS9pbnRlbF9wc3RhdGUuYyB8
-IDMgKystCiAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCgpk
-aWZmIC0tZ2l0IGEvZHJpdmVycy9jcHVmcmVxL2ludGVsX3BzdGF0ZS5jIGIvZHJpdmVycy9jcHVm
-cmVxL2ludGVsX3BzdGF0ZS5jCmluZGV4IDRiOTg2YzA0NDc0MS4uNjVkM2Y3OTEwNGJkIDEwMDY0
-NAotLS0gYS9kcml2ZXJzL2NwdWZyZXEvaW50ZWxfcHN0YXRlLmMKKysrIGIvZHJpdmVycy9jcHVm
-cmVxL2ludGVsX3BzdGF0ZS5jCkBAIC0xMTUzLDcgKzExNTMsOCBAQCBzdGF0aWMgdm9pZCBpbnRl
-bF9wc3RhdGVfdXBkYXRlX3BvbGljaWVzKHZvaWQpCiBzdGF0aWMgdm9pZCBfX2ludGVsX3BzdGF0
-ZV91cGRhdGVfbWF4X2ZyZXEoc3RydWN0IGNwdWRhdGEgKmNwdWRhdGEsCiAJCQkJCSAgIHN0cnVj
-dCBjcHVmcmVxX3BvbGljeSAqcG9saWN5KQogewotCWludGVsX3BzdGF0ZV9nZXRfaHdwX2NhcChj
-cHVkYXRhKTsKKwlpZiAoaHdwX2FjdGl2ZSkKKwkJaW50ZWxfcHN0YXRlX2dldF9od3BfY2FwKGNw
-dWRhdGEpOwogCiAJcG9saWN5LT5jcHVpbmZvLm1heF9mcmVxID0gUkVBRF9PTkNFKGdsb2JhbC5u
-b190dXJibykgPwogCQkJY3B1ZGF0YS0+cHN0YXRlLm1heF9mcmVxIDogY3B1ZGF0YS0+cHN0YXRl
-LnR1cmJvX2ZyZXE7Ci0tIAoyLjI1LjEKCg==
-
-
---=-j4e2AdDeO86OgoN1rdxp--
+In my opinion, desired_perf and cpu->perf_ctrls.desired_perf represent 
+the target_freq and policy->cur respectively. Since target_freq and 
+policy->cur have been compared in __cpufreq_driver_target(), there's no 
+need to compare desired_perf and cpu->perf_ctrls.desired_perf again in 
+cppc_cpufreq_set_target().
+So, maybe we can remove the following logic in cppc_cpufreq_set_target().
+/* Return if it is exactly the same perf */
+if (desired_perf == cpu_data->perf_ctrls.desired_perf)
+	return ret;
 
