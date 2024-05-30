@@ -1,60 +1,60 @@
-Return-Path: <linux-pm+bounces-8435-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8436-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2B7E8D5671
-	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 01:46:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FB448D5678
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 01:48:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 771562847F4
-	for <lists+linux-pm@lfdr.de>; Thu, 30 May 2024 23:46:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8956BB2563F
+	for <lists+linux-pm@lfdr.de>; Thu, 30 May 2024 23:47:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 994A216F0D0;
-	Thu, 30 May 2024 23:46:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DC5717C7DF;
+	Thu, 30 May 2024 23:47:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="TtuioQlD"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="PqHlxpMY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12olkn2044.outbound.protection.outlook.com [40.92.23.44])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12olkn2100.outbound.protection.outlook.com [40.92.23.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BFD721350;
-	Thu, 30 May 2024 23:46:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.23.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66E2A5674D;
+	Thu, 30 May 2024 23:47:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.23.100
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717112773; cv=fail; b=hf9Yn1CNF65qUjmuaAjl62rlmrHhJ0YFwQkWAvjqTp+Au7ofOdzKx4aSJOCskBBeGo4n5qZJXioonjLOe3qtXtqcd4gkxquIoz3Hu0IXWAO6NInQyC7KDc3yTCQxUDUuiR+l0sP7t4YOyy3vs/xgi2s1rDVNYQHi1mhw4Hk4AUw=
+	t=1717112873; cv=fail; b=IUs48QL8/f48LXNPd729pJZrz9ax2MP5q0mLF53/rkBiXqr4OT2eYUuwuxn3W0pPvgFijlmCLoqr2DDZPLOUIAli+IoDqRq2oSrYqCA+4BVlMC/JtgunBAW/Q+hPzpZuHZ+gdnS0vS3W/ktItlP8uoiwavFMa/QSxsD104dCFPI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717112773; c=relaxed/simple;
-	bh=Gy+EtIdQ4KN5T0pNpvLeYTygBNTOhxL75l8sd54a2cA=;
+	s=arc-20240116; t=1717112873; c=relaxed/simple;
+	bh=2YDyrTvknXVvXoWHACskoH5h+Mgt+S+Qgw5MW6scNVM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=fq3d3NW2eX7tfY+5xZsQzlFweK/dBS4dDsB+1Fssrrsh4/hXRtATgE+R404gzXbvfQgUxXZ6+CjTby0+8hEYoZiymySGjRJdapCWcEu+8qaBIvZSFKZgHxHE1TPkeFBKy56xYva8RZzrq93mRn92eiz0IzcziIzp4ezEVfPztX8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=TtuioQlD; arc=fail smtp.client-ip=40.92.23.44
+	 Content-Disposition:In-Reply-To:MIME-Version; b=shkaP5hbzg47l/Sgc3cvs6x+wpLP4nW8UDcbNQrvt0HxUHOau4McxRzHHGlkT2XE55oQiLkHyoJsD7X/tsJv3pGc7qbuhhzgi/SRohqhdTdQkf0n5f+6Gt0my4u0vKj2LJRQi/3WSTjG5J3LtA1GxjrSTKv59UtfZURwshnTQSc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=PqHlxpMY; arc=fail smtp.client-ip=40.92.23.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F4OGsZ3ZN4CQ2To5fNurUCZGDVOB027Rl4y63hZxREHWYHD8kUE2Z4TFqsKamhicloiLPAD420b93CxTkW/i9+HeiFzow7gpb1BxBYaHoC5byhDsqk64/dNibTvhEZ4H69qCxrj6ZJ0MBghtHDLL5M09A8iYxqQUyFtNMeyiVwpTRkkg32lnQCOhk14T+ICVnPnURO4OeC4h76XrsJFspT89JrtNS5luSP3AGPxoXzofVfBRJds07CbpZjDAnlHOhKTTkhztGfJwv4oLdFLuD8jJTDoO/vXwuMuy0v0u1WW6pwuorMS7VFMXB4+AQhv3noy1Lgh8I18oytYG86Eonw==
+ b=cQj6ILA41jbV87SLJD5ARsKEkxEv75w5QVYfblObIV4JfFmOBX84cWUTpe9ynLmjUKUXkUP++x8IJzJ6L10adYXRuyix3Lz5c0huU4HYw6WTc5BdQn6XaorjjaGrNNO/bTmszCfhzKv+lN4jkNNYNSPlx0TKNMwyAYW3eATTm8+sIucD16bfAjEus8ZF2ArVMdWIy2JghTS2QmootitwqGwqt9YnpdrtIaojMw17PJkVuzLWnXv0wu/0vAprRZatPFbMLBcM5TeC4ogYzFhYQRaebQT2ILahkdZRt9u3CH/qF2u2r5dEhAEJz25cxYZodur0vaYPCEzZV0T5ru8PWQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TLJtRiTZ+ZC9VHiFfvAb1AC5HieMc9+M/3XHzD3UX68=;
- b=nKmMmexAvMAtTqiVHicVeT7u+ec1WnCbaXOJSc3n31C6ZdhdcUgUOAKtsjtSa2L62jpm+tkUpi148gjZhoePe6OCMh1NvF9uOIfxT+tpPHuxxhxNguUhB15cg6XBUN7qGRFElhaynYzRXJuIZL7FbHbWmMbcXsErnXo1xmPxFLvLYvKZHivplwmzC0dbvbMT+tH9DUvN6Gg0/kcd9JdsyrKH07bkLTSsdAOYMrrEzKgKyulBguzdXAvfZzLYsnU3UUBECcaWLom4JMlcY/ASxb8z8iz3w6rtUuHuxSsY95Y12JZ+UCqSUI+PSgdRNcpiW2/ZcOe/QthtIXYDlsY3Qg==
+ bh=OQgO6oRA/vibXE1YVmCbX2sFf7ZvqnT6RgYAynPz9Qc=;
+ b=QEvlmgNA5eVReHna1SGc4Qnunig+J4UiORlSA5n+zpoXFe3gV/UhXZM/O9r/2CBsiEiH2oNxZgBblXJD4wfU9xeIlPdWbKZDhhDdlExI/DVcxMJ5I3eOLfB0zg1dVT6D68eWe6idhkABma3hfaClt8a9MTH4tYwHKK8YZ0xTVg5RBP1uLtj/isrj5CcaCTy1gBhNVqrvnC8CLeTTRPguVPzohDFmfIUsfget0/YSORUFeZIIQUx4mrjnbEW8b8uhIjR0nxS4jv2b1NxkGhNgQri73mFX9f+hZLA/8cKJ2G/tQ7PXSabyam8VePSd72NY7b65iOArn3A+UycT4I2kqg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TLJtRiTZ+ZC9VHiFfvAb1AC5HieMc9+M/3XHzD3UX68=;
- b=TtuioQlD5pEdJ9/bW8Nxg762Rqu4BLhqNnpLBQpPbrzOfwvr/68iUEjIyYcI9/dS1akaZtcGXxh5SSH1+waM5kxmWIaHEuC8naf2stqIwdXknLHK1dMn9ttP93xwETk3Tt0bp+y48vo0iz88+PsRPmX2mdvS6Xi8WE3cH/2TqucQgW4oVb5Rgt5aTss8K+ElCSSC/oKIfqJTSed6zs/rNWsrOmouuRiAURu7UkT4+AFQpvZmXPtT2BP/9ruspqmWRh421523rMB/A4nFvJuinvD6jIl4GqU7XmtNodIuez+XmtjsOP3mtO2Ql7lKhl6l/svYWcHlT4f220eymXnlLQ==
+ bh=OQgO6oRA/vibXE1YVmCbX2sFf7ZvqnT6RgYAynPz9Qc=;
+ b=PqHlxpMYJ/V5WbrR7D/+h63VWRiwqXo465WQNRZHrL0ngAOYclySaXE54/XaQu2lzsm+SczBWNNsfH0N0JcDYtzSKtz8P7ZTPg4VSgTfGpsyWCE+pivjeZy1PcdwDcVkwlnp0PyAOqDDu/3b8XTvrccxotTIJsNNgrZzOe5hu0Hm8C1+t2PuqkZVrp2QBLo7QS7HJWpBNraEgkSS2L3E5CeAkzaoRnjguj8E8tbc1EygGnkfGBZu2e8wq7H50/d7EGotZHDFH3lfoa8Oz6+FQJtW41rY4ZKSezV6F8m4bAhqcWgr9dGsWcDFpVUdY6aTXleDPO/NuX7YfBP+Mn3CwQ==
 Received: from PH7PR20MB4962.namprd20.prod.outlook.com (2603:10b6:510:1fa::6)
  by CY5PR20MB4928.namprd20.prod.outlook.com (2603:10b6:930:3c::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.19; Thu, 30 May
- 2024 23:46:09 +0000
+ 2024 23:47:49 +0000
 Received: from PH7PR20MB4962.namprd20.prod.outlook.com
  ([fe80::b5de:b82:43d9:4e8c]) by PH7PR20MB4962.namprd20.prod.outlook.com
  ([fe80::b5de:b82:43d9:4e8c%6]) with mapi id 15.20.7633.017; Thu, 30 May 2024
- 23:46:09 +0000
-Date: Fri, 31 May 2024 07:45:37 +0800
+ 23:47:49 +0000
+Date: Fri, 31 May 2024 07:47:34 +0800
 From: Inochi Amaoto <inochiama@outlook.com>
 To: Haylen Chu <heylenay@outlook.com>, 
 	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
@@ -65,20 +65,21 @@ To: Haylen Chu <heylenay@outlook.com>,
 	Albert Ou <aou@eecs.berkeley.edu>, Jisheng Zhang <jszhang@kernel.org>
 Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 3/3] thermal: cv180x: Add cv180x thermal driver support
+Subject: Re: [PATCH 2/3] riscv: dts: sophgo: cv18xx: Add sensor device and
+ thermal zone
 Message-ID:
- <IA1PR20MB49533177BEFC431FC16D1AB8BBF32@IA1PR20MB4953.namprd20.prod.outlook.com>
+ <PH7PR20MB4962FF8B101A968B38565827BBF32@PH7PR20MB4962.namprd20.prod.outlook.com>
 References: <SEYPR01MB422119B40F4CF05B823F93DCD7F32@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
- <SEYPR01MB4221BEBBF659F8495BF0E831D7F32@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
+ <SEYPR01MB42213647922C5B93C8D3DF0AD7F32@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <SEYPR01MB4221BEBBF659F8495BF0E831D7F32@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
-X-TMN: [jLRA/bHeQyuJB4O2an7L6WJ5zaNGrnnBx+lX7J2hvPE=]
-X-ClientProxiedBy: TYAPR04CA0015.apcprd04.prod.outlook.com
- (2603:1096:404:15::27) To IA1PR20MB4953.namprd20.prod.outlook.com
- (2603:10b6:208:3af::19)
+In-Reply-To: <SEYPR01MB42213647922C5B93C8D3DF0AD7F32@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
+X-TMN: [B9T20Lx7OXSGmexspownEz4j9oq+lwm5RrcZoWFCJtA=]
+X-ClientProxiedBy: TYCPR01CA0058.jpnprd01.prod.outlook.com
+ (2603:1096:405:2::22) To PH7PR20MB4962.namprd20.prod.outlook.com
+ (2603:10b6:510:1fa::6)
 X-Microsoft-Original-Message-ID:
- <yk7uex55z3tvuujyg5fs3deadv6pg4atxxagqz2trga2gj7nww@wacs3qg7joxs>
+ <un2fe7534cy6htpjaftgfqpvifqgxww5nk6mpgdgusb7zz2mi5@wr7j54xg6vob>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -88,40 +89,40 @@ MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PH7PR20MB4962:EE_|CY5PR20MB4928:EE_
-X-MS-Office365-Filtering-Correlation-Id: 60beeff7-cc67-4449-b84d-08dc8102a55a
+X-MS-Office365-Filtering-Correlation-Id: de45c376-5d88-49d6-bf40-08dc8102e9a6
 X-Microsoft-Antispam:
 	BCL:0;ARA:14566002|461199019|3412199016|440099019|1710799017;
 X-Microsoft-Antispam-Message-Info:
-	P7qcfp+sGRL2jqezugDwY9R6zD1/kv38nKBnmU0alKKmEQ+JqzTMVg8s85njMDZqADZcd+aUG9No1gNJ/tOZ04u3TtN0o/BeLKSafLovyyffaLKcsxZVT3/7MCr/ykpHUGqOC1NLrjKWPZg768ms9G2Te+jo7Ml9EWhdIXi6GW/3S9UZgDAc/2jHJm19Q6GtOGvAX3ue7B1ZyBAqmyEZNfJ94d5JPSff+bQViVSWXW6iTSXZp88zXgiE/BQ4dS1Ucn3ICpNrfKp25nGjbAJa36KtszL2Q6VmwmhPTBQhJMv/eYihUcWmm3+FpRMKpAf5oh8qXrvM/dlN7hq8P0tbimDqL0UX5DE3SwrJJu1LY3RhyAcWFFbG2EoJ9DU+WS4sXct3kKy7bBtXz/x8yOt9K32fW0xuCF/yDJ2oMIc6BU6hit480ZEcrWxs+ka+Niqx37QESX7Qw49A0OSh6sUWOx7d7zOcFo4pa1OGGoMz0I4qvL0fi40fE3PohwTabmdJ99Ye+v2uo0WYLHz1A6FxTEH4nEU3MwoVQBHcL3czVJEisf01RNSQgNlJTdybDGqjq1Dg8q9EQ8uo5b6K32mDh+sVwIsiUv28gl8g+Ecq9l7PTyQnrGyyVuoj/tT9XdGV
+	MPb7TmSjI+zJJVEikvDUfmDRyF2XdiD+agd6VGajTGjNTSqymoT4gkENq7Uhi3aSLO5Px1jVLbk6buTWMemzTDv/X7iyfHTM2UhQkddxfFG9BvqF8DPeI2eRz51iFL6kwTy5wxdSeLEn3eI48qk4apBJ1yGk6p0a/nUe3mDEzfhcMX1lz4xzxye69UdhJB3W5kFA2Z0h+O+edZiOZTZlNC2j6k2TCf/4wjPGHEUR7VKHsmKpLqETYs/AG8TB+Cnf+joqPj2R0GEJH2KGgPapcG+njKy7Jj4ebexNowPd7CY3q1Q9EngsOSrSSeSBHjNbupuo6K0pvSP8A36ckwmSSLymltI8FM8uNja5QJhanqvykBuhjDX+qg0SAOeUhimkCjBrFYn/B52n+gdcL+A57atUpGJ0nV8VQTurP36q+EZ3U7NrfwswE9bbQRxPKpUYeyk2S1Z2jlpCJiITYegutByJ8Nh9yk478PfidtQv+e60mm9gkGkVbwfxwK6KmC6t50HGkWIbtk2GsT3luo1Cosawz8aMSfYJffxNfrKg6tgdOleXV29N3sRioe7k0olIPN6DX7m7NgXiePG78mET3ClcBr+/UR0ewISYHvW0PH0kGpPd/P2KGh+T4C0ihxel
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?JBiRf2rWC+TD7RQ18ECwSl7x0CNsyVHUeXsUqubpnOfl+eQB1D18b1MT/UST?=
- =?us-ascii?Q?qydU8ehLWwkUqZsL6Oqgbqd8lSxzM0e/JoMX7yB91IXjKqAhymK7/hg722Zg?=
- =?us-ascii?Q?PU1pKgbOBYGk1pv1rP5g7LCCN5B1ctb3vz8a/4LYGu42ONXYp/cME7Q/kx7+?=
- =?us-ascii?Q?o6uRjk7Uo8ZeIkXnxMb8mUFRddr7UF7Moagkdmu8EbFTE27YKYQ8HiIE97Df?=
- =?us-ascii?Q?8aUqtfiJwl75NjnKQVuxMdmlSy3PQcJugGXQfn8OD9xOh51uFoFE4iKsu7i5?=
- =?us-ascii?Q?Bdgs1uffOOyc7sFReu99UWHwHXBG1Q6OPGfDwDS5hpofcq8fg1M3cOkPPC3d?=
- =?us-ascii?Q?M6Xb/5W5FLQRXpjGCM6rAfjjxarvvGTrCI2fd+437PFRuKUGxmdB3PnVc4mm?=
- =?us-ascii?Q?ilJrHGKlS/W0zMg95uZf1rwh/ZVh++DHLHh+DDQ57QvO4DZk7jrXZ6B6zkff?=
- =?us-ascii?Q?JGuNlAm3D8ukECT7kxQ9U0vP/atv9vXmR3G3gode6Qe4nTrfF7vj+28ENq4A?=
- =?us-ascii?Q?8nJbLWuHAdq5/k5f2dTak+UMCFbX4pZosLDIiAhBnJc9UsnQnhPUZ4ZeHgIz?=
- =?us-ascii?Q?eYCSVGgJKdxUQKwqnkSGtbYJ+xEpgOfP0inpiAjAqsexIvtPdT09xrByJVNx?=
- =?us-ascii?Q?rkqbHd5K4yh4+wRXuVm+d403waeeya1LE6ZP7fl3W5W8ilv3BrFXTVWchomS?=
- =?us-ascii?Q?JF0VsFlzq7eDvJsBV3H/8njQdMr7Gxe6A9OsNPQZZXD1gf4RDMWLxa1WSTMr?=
- =?us-ascii?Q?CoFA22sWHEc/yyZnTa8JeTDGmz4I7NvSlBP1peBBOIkKpYaNg0xUpL1wfJzh?=
- =?us-ascii?Q?/SHrMeluba4J8jHA/5hsaFxJnw93mPebzzi5WwkseWQ6ASEwyY8oBvridiTr?=
- =?us-ascii?Q?7pVGSx6/ZcI2Erh9BkwIjH+B1uL2fFNv7UdsneSV7322Junsd6B1rP2FNjJ5?=
- =?us-ascii?Q?LhGWexBv3H5sQPARRPehNkfYlANmX7hGZ0kFDSs2qoqyqAkWrMmz2tHvPG/R?=
- =?us-ascii?Q?LWtPbB0RPunKgbQP6KGkORAhfcDvSbeYVAzZeliRBaymWSGLpGvHvSG4wtKs?=
- =?us-ascii?Q?+ngVsXQ7o/o0CsvkJYWEDBQrLguEx2kJrtNO62g4EcgSZSipSt5D79ItHYd+?=
- =?us-ascii?Q?3Tl4Ip9F4tD//hczek0Lt15pOcCrsaJKMubkrZYCrjfVmah/EAKDqOWPLKxO?=
- =?us-ascii?Q?NXmFpJMQ3UEsUl9Ue7zaIOX0GOADTHyAxcrNQPvds1+opv/KU7WTSDnABjE2?=
- =?us-ascii?Q?94Ym/jb3GjPeneV0jLHp?=
+	=?us-ascii?Q?a1CWmI6lqVcL4IwKCeLt0708k4vV6qADQesNsv4R74sEzgjHfQ5EMGZr59kw?=
+ =?us-ascii?Q?fwuya5zdL4ymGwEF2T7deIUlcz0jI3V0xCYiuLu+t4MDKGzJtqHX53KYF0Mt?=
+ =?us-ascii?Q?rUNsozA80wAt5uwvRHSY+ab2YoGzKj4MwtkNQDJwDw/edKqExCtoSMjJzptV?=
+ =?us-ascii?Q?Jg+5NwFVw7xFkdVNwVxseQgg6uACUssU/YEC1Y9W0DjVXVlGjn3Rl58CWHNR?=
+ =?us-ascii?Q?z0nHyeNob7jw3a760RQb4H2Ir8t3vY3Dr9b9xkwrrBLrV2A0EXnwlhxVY0Uk?=
+ =?us-ascii?Q?d3OjPDxfGY1/hsm+SvHG3FObE5SggbY90ujQLGAnkUKYMWnipgbkT990ly48?=
+ =?us-ascii?Q?lKpizdj17eXqPi5rGZWPOJEYg6wzO0ZNuJTCkI0uhQMLW8Ls3HlUHJX/B1ZY?=
+ =?us-ascii?Q?vfv7sWLa9RSiNZkXDYC2cFgy3GEZ//Dxwbcs6W2xjUbnS2/aHPb5miwA5Vg4?=
+ =?us-ascii?Q?cCzvs382mpjB1qLCuNFYuSY2ihu/EwIFpKpQMAPfYE9XLbeEEQ019dpH9Rzi?=
+ =?us-ascii?Q?ZzWcN09lhAg8yLYSPEpmPy5yZbirieuV+mpdgti3BDeCZjppdl7kBFi4NLrZ?=
+ =?us-ascii?Q?nkffhO/2vDhEGRLdVpiJkYFrG+td18xG69jn9MkWHFXR3h/bmy7BoFhD2j5T?=
+ =?us-ascii?Q?LZZxYCz8crCjYQHvGxTGVCev/Zf5Ni4FztimXrxKLVFsgG4OvhrSnBBlBDJZ?=
+ =?us-ascii?Q?CRuOFCr8c5Eg63o8RrFDtKbkcfroMipomgbJTiAqTN1uHjpJdqG71y7iYsHP?=
+ =?us-ascii?Q?WON5MUxPo2gpI1jWPeGvR8KMxOEneex7N+J8mh5Fz29PD8p7pCzlpNJ+l/Nw?=
+ =?us-ascii?Q?VApKc6BrMgkn+FGcVQ8antP9gezL7MkhA1hguWxAgWw4ZvicbpIPy6uhfwAL?=
+ =?us-ascii?Q?o4v5SeFBxET7ei6Ab9d8Zb8NrD2zMJQfswyZokvEQOdTDRnfIq8xNjQkJw1C?=
+ =?us-ascii?Q?dfLr2ZNHza13w4EunnYNpokwV5l8Lr7arf8yrPk0D1cldocyaWADZXngUits?=
+ =?us-ascii?Q?ioffYBswsSq4gbK+Ggq2el7bR3a0+gshWzHD9yjcEoaq8JWL6KS5JMqfDu4y?=
+ =?us-ascii?Q?GPstCFfyf5EuqQVRV0uYpBAcbpFRkCxZV+mykhYBPkHOQ0PZJvcNuYlmIlWB?=
+ =?us-ascii?Q?yPEMpPDNQ89d5V4EMRH9gc6v6tR+QSvbYqjXqrJaVdqssYBmmv9vIPWVRDX9?=
+ =?us-ascii?Q?JjiK06pD3AoTBrKXeK+CCEjoZcnAXlvug+ebJZd9GidB72H/BiuicfW9R5Dj?=
+ =?us-ascii?Q?osp9FCLjcjkEy35dkyJT?=
 X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 60beeff7-cc67-4449-b84d-08dc8102a55a
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR20MB4953.namprd20.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: de45c376-5d88-49d6-bf40-08dc8102e9a6
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR20MB4962.namprd20.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2024 23:46:09.2483
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2024 23:47:49.1513
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -129,284 +130,65 @@ X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
 	00000000-0000-0000-0000-000000000000
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR20MB4928
 
-On Thu, May 30, 2024 at 01:48:27PM GMT, Haylen Chu wrote:
-> Add support for cv180x SoCs integrated thermal sensors.
+On Thu, May 30, 2024 at 01:48:26PM GMT, Haylen Chu wrote:
+> Add common sensor device and thermal zones for Sophgo CV18xx SoCs.
 > 
 > Signed-off-by: Haylen Chu <heylenay@outlook.com>
 > ---
->  drivers/thermal/Kconfig          |   6 +
->  drivers/thermal/Makefile         |   1 +
->  drivers/thermal/cv180x_thermal.c | 210 +++++++++++++++++++++++++++++++
->  3 files changed, 217 insertions(+)
->  create mode 100644 drivers/thermal/cv180x_thermal.c
+>  arch/riscv/boot/dts/sophgo/cv18xx.dtsi | 36 ++++++++++++++++++++++++++
+>  1 file changed, 36 insertions(+)
 > 
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index 204ed89a3ec9..f53c973a361d 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -514,4 +514,10 @@ config LOONGSON2_THERMAL
->  	  is higher than the high temperature threshold or lower than the low
->  	  temperature threshold, the interrupt will occur.
->  
-> +config CV180X_THERMAL
-> +	tristate "Temperature sensor driver for Sophgo CV180X"
-> +	help
-> +	  If you say yes here you get support for thermal sensor integrated in
-> +	  Sophgo CV180X SoCs.
+> diff --git a/arch/riscv/boot/dts/sophgo/cv18xx.dtsi b/arch/riscv/boot/dts/sophgo/cv18xx.dtsi
+> index 891932ae470f..dfb4bb6eb319 100644
+> --- a/arch/riscv/boot/dts/sophgo/cv18xx.dtsi
+> +++ b/arch/riscv/boot/dts/sophgo/cv18xx.dtsi
+> @@ -310,5 +310,41 @@ clint: timer@74000000 {
+>  			reg = <0x74000000 0x10000>;
+>  			interrupts-extended = <&cpu0_intc 3>, <&cpu0_intc 7>;
+>  		};
 > +
->  endif
-> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> index 5cdf7d68687f..5b59bde8a579 100644
-> --- a/drivers/thermal/Makefile
-> +++ b/drivers/thermal/Makefile
-> @@ -65,3 +65,4 @@ obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
->  obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
->  obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
->  obj-$(CONFIG_LOONGSON2_THERMAL)	+= loongson2_thermal.o
-> +obj-$(CONFIG_CV180X_THERMAL)	+= cv180x_thermal.o
-> diff --git a/drivers/thermal/cv180x_thermal.c b/drivers/thermal/cv180x_thermal.c
-> new file mode 100644
-> index 000000000000..618e031b4515
-> --- /dev/null
-> +++ b/drivers/thermal/cv180x_thermal.c
-> @@ -0,0 +1,210 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2021 CVITEK Inc.
-
-There is no CVITEK anyway, use SOPHGO instead. 
-
-> + * Copyright (C) 2024 Haylen Chu <heylenay@outlook.com>
-> + */
-> +
-> +#include <linux/bits.h>
-> +#include <linux/clk.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/io.h>
-> +#include <linux/thermal.h>
+> +		soc_temp: thermal-sensor@30e0000 {
+> +			compatible = "sophgo,cv180x-thermal";
+> +			reg = <0x30e0000 0x100>;
+> +			clocks = <&clk CLK_TEMPSEN>;
+> +			clock-names = "clk_tempsen";
+> +			#thermal-sensor-cells = <0>;
+> +		};
+> +	};
 > +
 
-> +#define TEMPSEN_VERSION					0x0
-> +#define TEMPSEN_CTRL					0x4
-> +#define TEMPSEN_CTRL_EN					BIT(0)
-> +#define TEMPSEN_CTRL_SEL_MASK				GENMASK(7, 4)
-> +#define TEMPSEN_CTRL_SEL_OFFSET				4
-> +#define TEMPSEN_STATUS					0x8
-> +#define TEMPSEN_SET					0xc
-> +#define TEMPSEN_SET_CHOPSEL_MASK			GENMASK(5, 4)
-> +#define TEMPSEN_SET_CHOPSEL_OFFSET			4
-> +#define TEMPSEN_SET_CHOPSEL_128T			0
-> +#define TEMPSEN_SET_CHOPSEL_256T			1
-> +#define TEMPSEN_SET_CHOPSEL_512T			2
-> +#define TEMPSEN_SET_CHOPSEL_1024T			3
-> +#define TEMPSEN_SET_ACCSEL_MASK				GENMASK(7, 6)
-> +#define TEMPSEN_SET_ACCSEL_OFFSET			6
-> +#define TEMPSEN_SET_ACCSEL_512T				0
-> +#define TEMPSEN_SET_ACCSEL_1024T			1
-> +#define TEMPSEN_SET_ACCSEL_2048T			2
-> +#define TEMPSEN_SET_ACCSEL_4096T			3
-> +#define TEMPSEN_SET_CYC_CLKDIV_MASK			GENMASK(15, 8)
-> +#define TEMPSEN_SET_CYC_CLKDIV_OFFSET			8
-> +#define TEMPSEN_INTR_EN					0x10
-> +#define TEMPSEN_INTR_CLR				0x14
-> +#define TEMPSEN_INTR_STA				0x18
-> +#define TEMPSEN_INTR_RAW				0x1c
-> +#define TEMPSEN_RESULT(n)				(0x20 + (n) * 4)
-> +#define TEMPSEN_RESULT_RESULT_MASK			GENMASK(12, 0)
-> +#define TEMPSEN_RESULT_MAX_RESULT_MASK			GENMASK(28, 16)
-> +#define TEMPSEN_RESULT_CLR_MAX_RESULT			BIT(31)
-> +#define TEMPSEN_AUTO_PERIOD				0x64
-> +#define TEMPSEN_AUTO_PERIOD_AUTO_CYCLE_MASK		GENMASK(23, 0)
-> +#define TEMPSEN_AUTO_PERIOD_AUTO_CYCLE_OFFSET		0
+> +	thermal-zones {
+> +		soc-thermal-0 {
+> +			polling-delay-passive	= <1000>;
+> +			polling-delay		= <1000>;
+> +			thermal-sensors		= <&soc_temp>;
+> +
+> +			trips {
+> +				soc_passive: soc-passive {
+> +					temperature	= <75000>;
+> +					hysteresis	= <5000>;
+> +					type		= "passive";
+> +				};
+> +
+> +				soc_hot: soc-hot {
+> +					temperature	= <85000>;
+> +					hysteresis	= <5000>;
+> +					type		= "hot";
+> +				};
+> +
+> +				soc_critical: soc-critical {
+> +					temperature	= <100000>;
+> +					hysteresis	= <0>;
+> +					type		= "critical";
+> +				};
+> +			};
+> +		};
+>  	};
 
-I suggest adding extra indent to the register value macro. It is too hard to
-identify which one is register offset, which one it register value.
+Move this to the cpu specific file. Different cpu should have different
+thermal-zones.
 
-> +
-> +struct cv180x_thermal_zone {
-> +	struct device *dev;
-> +	void __iomem *base;
-> +	struct clk *clk_tempsen;
-> +};
-> +
-
-> +static void cv180x_thermal_init(struct cv180x_thermal_zone *ctz)
-> +{
-> +	void __iomem *base = ctz->base;
-> +	u32 regval;
-> +
-> +	writel(readl(base + TEMPSEN_INTR_RAW), base + TEMPSEN_INTR_CLR);
-> +	writel(TEMPSEN_RESULT_CLR_MAX_RESULT, base + TEMPSEN_RESULT(0));
-> +
-> +	regval = readl(base + TEMPSEN_SET);
-> +	regval &= ~TEMPSEN_SET_CHOPSEL_MASK;
-> +	regval &= ~TEMPSEN_SET_ACCSEL_MASK;
-> +	regval &= ~TEMPSEN_SET_CYC_CLKDIV_MASK;
-> +	regval |= TEMPSEN_SET_CHOPSEL_1024T << TEMPSEN_SET_CHOPSEL_OFFSET;
-> +	regval |= TEMPSEN_SET_ACCSEL_2048T  << TEMPSEN_SET_ACCSEL_OFFSET;
-> +	regval |= 0x31 << TEMPSEN_SET_CYC_CLKDIV_OFFSET;
-> +	writel(regval, base + TEMPSEN_SET);
-> +
-> +	regval = readl(base + TEMPSEN_AUTO_PERIOD);
-> +	regval &= ~TEMPSEN_AUTO_PERIOD_AUTO_CYCLE_MASK;
-> +	regval |= 0x100000 << TEMPSEN_AUTO_PERIOD_AUTO_CYCLE_OFFSET;
-> +	writel(regval, base + TEMPSEN_AUTO_PERIOD);
-> +
-> +	regval = readl(base + TEMPSEN_CTRL);
-> +	regval &= ~TEMPSEN_CTRL_SEL_MASK;
-> +	regval |= 1 << TEMPSEN_CTRL_SEL_OFFSET;
-> +	regval |= TEMPSEN_CTRL_EN;
-> +	writel(regval, base + TEMPSEN_CTRL);
-> +}
-
-The sensors of CV1800 support various periods, I think you should add
-support for all of them and let user select them. The configuration
-you use now can be left as the default.
-
-> +
-> +static void cv180x_thermal_deinit(struct cv180x_thermal_zone *ct)
-> +{
-> +	void __iomem *base = ct->base;
-> +	u32 regval;
-> +
-> +	regval = readl(base + TEMPSEN_CTRL);
-> +	regval &= ~(TEMPSEN_CTRL_SEL_MASK | TEMPSEN_CTRL_EN);
-> +	writel(regval, base + TEMPSEN_CTRL);
-> +
-> +	writel(readl(base + TEMPSEN_INTR_RAW), base + TEMPSEN_INTR_CLR);
-> +}
-> +
-
-> +static int calc_temp(uint32_t result)
-
-Add "cv180x" prefix.
-
-> +{
-> +	return ((result * 1000) * 716 / 2048 - 273000);
-> +}
-
-Why these magic number, I have not see any info in the document. 
-
-> +
-> +static int cv180x_get_temp(struct thermal_zone_device *tdev, int *temperature)
-> +{
-> +	struct cv180x_thermal_zone *ctz = thermal_zone_device_priv(tdev);
-> +	void __iomem *base = ctz->base;
-> +	u32 result;
-> +
-> +	result = readl(base + TEMPSEN_RESULT(0)) & TEMPSEN_RESULT_RESULT_MASK;
-> +	*temperature = calc_temp(result);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct thermal_zone_device_ops cv180x_thermal_ops = {
-> +	.get_temp = cv180x_get_temp,
-> +};
-> +
-> +static const struct of_device_id cv180x_thermal_of_match[] = {
-> +	{
-> +		.compatible = "sophgo,cv180x-thermal",
-> +	},
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, cv180x_thermal_of_match);
-> +
-> +static int cv180x_thermal_probe(struct platform_device *pdev)
-> +{
-> +	struct cv180x_thermal_zone *ctz;
-> +	struct thermal_zone_device *tz;
-> +	struct resource *res;
-> +
-> +	ctz = devm_kzalloc(&pdev->dev, sizeof(*ctz), GFP_KERNEL);
-> +	if (!ctz)
-> +		return -ENOMEM;
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	ctz->base = devm_ioremap_resource(&pdev->dev, res);
-> +	if (IS_ERR(ctz->base))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(ctz->base),
-> +				     "failed to map tempsen registers\n");
-> +
-> +	ctz->clk_tempsen = devm_clk_get(&pdev->dev, "clk_tempsen");
-> +	if (IS_ERR(ctz->clk_tempsen))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(ctz->clk_tempsen),
-> +				     "failed to get clk_tempsen\n");
-> +
-> +	clk_prepare_enable(ctz->clk_tempsen);
-> +
-> +	ctz->dev = &pdev->dev;
-> +
-> +	cv180x_thermal_init(ctz);
-> +
-> +	platform_set_drvdata(pdev, ctz);
-
-Set this after register thermal zone.
-
-> +
-> +	tz = devm_thermal_of_zone_register(&pdev->dev, 0, ctz,
-> +					   &cv180x_thermal_ops);
-> +	if (IS_ERR(tz))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(tz),
-> +				     "failed to register thermal zone\n");
-> +
-> +	return 0;
-> +}
-> +
-> +static int cv180x_thermal_remove(struct platform_device *pdev)
-> +{
-> +	struct cv180x_thermal_zone *ctz = platform_get_drvdata(pdev);
-> +
-> +	cv180x_thermal_deinit(ctz);
-> +	clk_disable_unprepare(ctz->clk_tempsen);
-> +
-> +	return 0;
-> +}
-> +
-> +#ifdef CONFIG_PM_SLEEP
-> +static int cv180x_thermal_suspend(struct device *dev)
-> +{
-> +	struct cv180x_thermal_zone *ctz = dev_get_drvdata(dev);
-> +
-> +	cv180x_thermal_deinit(ctz);
-> +	clk_disable_unprepare(ctz->clk_tempsen);
-> +
-> +	return 0;
-> +}
-> +
-> +static int cv180x_thermal_resume(struct device *dev)
-> +{
-> +	struct cv180x_thermal_zone *ctz = dev_get_drvdata(dev);
-> +
-> +	clk_prepare_enable(ctz->clk_tempsen);
-> +	cv180x_thermal_init(ctz);
-> +
-> +	return 0;
-> +}
-> +#endif /* CONFIG_PM_SLEEP */
-
-Use __maybe_unused may be more clear with SIMPLE_DEV_PM_OPS.
-
-> +
-> +static SIMPLE_DEV_PM_OPS(cv180x_thermal_pm_ops,
-> +			 cv180x_thermal_suspend, cv180x_thermal_resume);
-> +
-> +static struct platform_driver cv180x_thermal_driver = {
-> +	.probe = cv180x_thermal_probe,
-> +	.remove = cv180x_thermal_remove,
-> +	.driver = {
-> +		.name = "cv180x-thermal",
-> +		.pm = &cv180x_thermal_pm_ops,
-> +		.of_match_table = cv180x_thermal_of_match,
-> +	},
-> +};
-> +
-> +module_platform_driver(cv180x_thermal_driver);
-> +
-> +MODULE_AUTHOR("Haylen Chu <heylenay@outlook.com>");
-> +MODULE_LICENSE("GPL");
+>  };
 > -- 
 > 2.45.1
 > 
