@@ -1,76 +1,76 @@
-Return-Path: <linux-pm+bounces-8409-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8410-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB2A78D479D
-	for <lists+linux-pm@lfdr.de>; Thu, 30 May 2024 10:57:12 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 106FA8D47A2
+	for <lists+linux-pm@lfdr.de>; Thu, 30 May 2024 10:57:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7161F282D94
-	for <lists+linux-pm@lfdr.de>; Thu, 30 May 2024 08:57:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 86C60B241D8
+	for <lists+linux-pm@lfdr.de>; Thu, 30 May 2024 08:57:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2CD9176AB5;
-	Thu, 30 May 2024 08:56:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF04B3DABFA;
+	Thu, 30 May 2024 08:56:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RyK9vlvF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KGe/RBV7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 387CA15218D;
-	Thu, 30 May 2024 08:56:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9987176AAD;
+	Thu, 30 May 2024 08:56:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717059391; cv=none; b=e3lmsk6BXFaE4KtJqbjyZrRF71eYMcX9R/l9oTlc4qbMD0xb3IKrb8n8PbGiZeoR5Khb6YT14Uidras3Bwi9JRlt4M1Uy73kKYdfYFrMLw5KOwtYnt3F90O8tHu4SxSb6MdloD29Hzav9lbWVxHf5NORSilzYil0uRLG76HxSo4=
+	t=1717059393; cv=none; b=qg4QOEczU8y7gik/x7GJVcnfIn8rbLLFa4n6yo4ylz5Sjk8NedsVG+R6PFoPPhvDTmypshoeK/0DoTUpHr1DxEUrvxuZ/grMb8hb2le5q4V+tsXX4FKHalNHfuevkxTsp3rgTsyF0zCtYlGX4QSdK2u1hgMy2zg4P/wBAD8nVw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717059391; c=relaxed/simple;
-	bh=xgN5sPCevFL3dsnXeVkOmW6b6l95Xb66gcGeR/Rr6O4=;
+	s=arc-20240116; t=1717059393; c=relaxed/simple;
+	bh=lvdySO4g1Iq+BvNlPqD2DOaKCv3w2CKbmZOppf2fdkE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ggempJO5EFJ7VbavUzsjtgJOhH+fwqjYUCGVsMK3tKyXFcOGcs9ZAuvtGmqiryeAH1kdEmYEuh4i5KjfutKFBJMyrqHl16N3oxO0tynGU/SSuVzvcUd9HVgQlNMZe2CR2HaEFrjDQlj3XTa81LE5Kwdi8gtb+izye5XppWy9Uho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RyK9vlvF; arc=none smtp.client-ip=209.85.218.42
+	 In-Reply-To:To:Cc; b=Fl1EfwoTS8Gbx2sKY/n/aIMdNHZ67SSmuFoVzcGReuhHVgV9PVhMyGNI+euVUdqZC1K6dEXeD3reAefNUQHlDp+eCwnvIBt/wPUsgrUZe58XrN5Ssq3DkokjZ7qN8XnsH3vZaIYycFuUyGY8wrDIciCLke0R9J5U6G1VOFLIZgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KGe/RBV7; arc=none smtp.client-ip=209.85.218.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a633ec1cecdso48753966b.2;
-        Thu, 30 May 2024 01:56:29 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a63036f2daaso54437566b.1;
+        Thu, 30 May 2024 01:56:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717059388; x=1717664188; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1717059390; x=1717664190; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=4u0mVIC+TF9G0asIIdA4dwFhaqzCvDfO1MH0BIe1340=;
-        b=RyK9vlvFC3oc9Ue506cRR7Nkbi1gn86JLxK9czoyL7InQVbWwWZ8AZnxzApR7wnVZ/
-         EfNUyXxk/PnbEQjwLC8zBVcg+4C+CnkmIK01VAoFy4TKZv76m6THMkyqATANFtvnAYah
-         YRmg6hOisapUGseSTKm0pbWOyFSHAt+vchmowk2Es4/MkoBZlzTI417EJNqLEvDAJOcu
-         Edh9im9+7R97lfEA0oKVXhos9IqP6g1F8yGc5UdonX9qikwhDrA/oF68oQUJ8Uy4/WAq
-         pnOMo1TG1fGo6B5EOIR5mq1zqfW9PKxQxb/e3WQyAZN4aiWi7Fk52AQaQYAm0nmaQiq8
-         iSlQ==
+        bh=pH6IEdvPsyMn2z81M00M9CRQyqxS5gUsz993GDmOU5c=;
+        b=KGe/RBV75ZcFlbq1s2s5SGBvVR5Uu/CYkSncDklpl+6/Kx5No6cQWpibUezKDkNE+m
+         7F8iJntpjFIwFC0b5RNBr/AJwoZ6ZVIG6ahLLZCPpbtF3T/VpLxfuJOyJvJvZbHXJxue
+         LQncPRLlv5QAPQ4xoYYDBATp9gmFwFrZs6KsMsoABdQ79ShpbAHdSOACyPYT6kigp5oz
+         J0WWT50f0pBZ8JvSjosCbHQ2R6JMqZfxBCoYHe8saT1kxDhMGI5XUTW7CAyow3AEnHYy
+         CHjwfVHbRR3xIHluX0QZnH9cSFAwqknOBy7MWICh2uYLvX6Ot12mhRFg/OPSj4lbWO4T
+         U6Tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717059388; x=1717664188;
+        d=1e100.net; s=20230601; t=1717059390; x=1717664190;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4u0mVIC+TF9G0asIIdA4dwFhaqzCvDfO1MH0BIe1340=;
-        b=Byp9ubXFyi4+n88GlTwK530qrasMa5hqfKfRCTxR3/fcp9VBcsTvXeHLWL1KUeNhg8
-         QULp4HMOO1OiH7Q/WwHmLT4nmtnEJY5hB4eXolS6wng571Q2gcwT/NcssJ4DC3oc+VOw
-         VZP84sEyyPKshRl1aNYx2D2sJytRDz5WQvg2zDtg/PXrLhPW9SP4YM6rKPhotQkb+his
-         7bE59sZLbGx7XRJUck3mDfl1tvqXXaAlRMY/ktEZVIHpt1Y9LubXIdol8kHV327CU3v4
-         siLoz0S/YRhrRLnc/u1LZW2ZxCQlkPQaXBmZZcM5m68dqbnPYKzcIpJMqdx6BdWgk0OQ
-         Dydg==
-X-Forwarded-Encrypted: i=1; AJvYcCUS1S8uYk4ZhKdlRjHj9jPFFFCrBh/rQf1iKFrHjvEE1wX4O3SKR9/7OfYjJvcZEDzn5FnFmeir7aiCoUo3w2p2C+HmYevFjpNJ5xGC0bX/wCI4IUAqNWRk7rkV41o/dFHVVuwHs274pt8KRDCdrgkdV62dwVTGyAnx5Yop6JzUOq3DvEy6Jyln4dyNtiE0otyYcPXbL5Kd4KnPimzfI14dQ6hYWUM=
-X-Gm-Message-State: AOJu0YzpPF8EdcUC0bOUIHuI7stt8YqSEfJrkGUUypURoaNsROQgggbe
-	FblTCjC2CV+TL+P+OMrJJUgCU/rdiQsxNx8XF5WuScKl9stxowjE
-X-Google-Smtp-Source: AGHT+IEyP2TS9/8Qy85Y+45YpmvtAjOgeIsLUmtMQMYTPbaD2wIPFr75VbxtQQSyD6Y5jnCC90wdSA==
-X-Received: by 2002:a17:906:1b46:b0:a66:b9a8:74ad with SMTP id a640c23a62f3a-a66b9a87be9mr10297266b.10.1717059388537;
-        Thu, 30 May 2024 01:56:28 -0700 (PDT)
+        bh=pH6IEdvPsyMn2z81M00M9CRQyqxS5gUsz993GDmOU5c=;
+        b=b9+tkW61xLOiEixJQr47OqOHR0M89I94Ghkp9Xvc4iIpfa5KYyHinfBltnq56b1AXf
+         0aCkB/YgY7u393BHPvWaHMnOwj0GeoRS40EIOYW8AbQq+P3QYBIDFGAHTLCUSeEDB8d6
+         OMZyWnTWzbP4Yy0svsSP+hSE8ULtqsXRuu2+ADiQMKJ1/w3XlBSaNBNDRqTFgLpVzGag
+         rD8HmZp5SvezYTHq6o0JyWqJKDpd1Qo/PzLVqUbtMQ+G8fvcxcMqnbpuAe3zto9YDfa9
+         ZmQ04y3J5vw0+5tL5pgq18DnBcWb1yxX7rse9whz0afCqdJH+ZFnoPcRn+2iJbez3a4/
+         fJMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWOKvJ5VrkXN5GmZmHVNZh/SgihEdUkCD9ZL2EsuPDkmGe30qPv1jSDHfc11EIsyS49cULOSj/LF/IvB1wOJecM5MQ0sEP7PzwR89iZRGhInhMRGLMfP94huOVyS2roJMLJ/U/W8ai6yELxw8Xrs/grg8te7jdCuxWAAagOhCxguQx+6XwAmdqnbAk93pNKUa8RReg6hHbclyxa8YLnm37SBzIobvA=
+X-Gm-Message-State: AOJu0YzoelcD7O7PXY6k5jRL4sV4vM6rYQSrbpUlb8rcMT+LaR9CsWnP
+	4ea9DFMYSgNtJlH0bz767D3uo6VMkJor8PJ4dTeiCX9gqpUsIi/a
+X-Google-Smtp-Source: AGHT+IGnGk2ljLwZ0u8xsY1XXY1Hnt1SDUWhWdbiRrxUqPljltWq596nPnHiBYXJnSz/3lFgR53uBA==
+X-Received: by 2002:a17:906:3517:b0:a5a:44e:2b87 with SMTP id a640c23a62f3a-a65e8e5c113mr91117566b.21.1717059389889;
+        Thu, 30 May 2024 01:56:29 -0700 (PDT)
 Received: from hex.my.domain (83.8.128.191.ipv4.supernova.orange.pl. [83.8.128.191])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a626cc500a1sm798430166b.125.2024.05.30.01.56.27
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a626cc500a1sm798430166b.125.2024.05.30.01.56.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 May 2024 01:56:28 -0700 (PDT)
+        Thu, 30 May 2024 01:56:29 -0700 (PDT)
 From: Artur Weber <aweber.kernel@gmail.com>
-Date: Thu, 30 May 2024 10:55:52 +0200
-Subject: [PATCH RFC 02/11] dt-bindings: power: supply: max77693: Add
- maxim,usb-connector property
+Date: Thu, 30 May 2024 10:55:53 +0200
+Subject: [PATCH RFC 03/11] mfd: max77693: Add defines for charger current
+ control
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -79,7 +79,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240530-max77693-charger-extcon-v1-2-dc2a9e5bdf30@gmail.com>
+Message-Id: <20240530-max77693-charger-extcon-v1-3-dc2a9e5bdf30@gmail.com>
 References: <20240530-max77693-charger-extcon-v1-0-dc2a9e5bdf30@gmail.com>
 In-Reply-To: <20240530-max77693-charger-extcon-v1-0-dc2a9e5bdf30@gmail.com>
 To: Krzysztof Kozlowski <krzk@kernel.org>, 
@@ -95,41 +95,53 @@ Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
  Denis 'GNUtoo' Carikli <GNUtoo@cyberdimension.org>, 
  Artur Weber <aweber.kernel@gmail.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1717059384; l=1063;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1717059384; l=1496;
  i=aweber.kernel@gmail.com; s=20231030; h=from:subject:message-id;
- bh=xgN5sPCevFL3dsnXeVkOmW6b6l95Xb66gcGeR/Rr6O4=;
- b=9yUpKW0zqhfzMTUuyPlJgp1hjyMIPUsM3qmJQhpwZ9btkMmUIBqVTeVX28r/iJnLYrbkUOH0g
- scqSoAnh1wjB/Y4IQa9qUWVeaaQLf439Ykk2wto1MP50v5dqmKzcqqc
+ bh=z92q56T3bzz9gRYE5sI8p34kLQvFNqoO5fMHOAH6pLc=;
+ b=gqZVt0FTts2q85yDzL1R1OZGFpStHpJyMFNtSjLotVPYPTtwzJ9bXD5+s1WXj8u9Dm092xERY
+ 1xicc/PZ5NnAJu1w4t2Pfvq6kpgMbO1ljOYg9eieohJFy/G5VpO+Md3
 X-Developer-Key: i=aweber.kernel@gmail.com; a=ed25519;
  pk=RhDBfWbJEHqDibXbhNEBAnc9FMkyznGxX/hwfhL8bv8=
 
-Allow for specifying a USB connector to use for charger type/OTG cable
-detection.
+From: Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>
 
-The way this is done is inspired by the rt5033-charger implementation.
+This prepares for an updated regulator and charger driver. The defines
+are needed to set the maximum input current and the fast charge
+current.
 
+Signed-off-by: Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>
+[GNUtoo@cyberdimension.org: small fix]
+Signed-off-by: Denis 'GNUtoo' Carikli <GNUtoo@cyberdimension.org>
+[Artur: swap hardcoded ILIM values for DEFAULT_FAST_CHARGE_CURRENT]
 Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
 ---
- Documentation/devicetree/bindings/power/supply/maxim,max77693.yaml | 6 ++++++
+ include/linux/mfd/max77693-private.h | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max77693.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max77693.yaml
-index 4f80cc5418f5..e5b29a8aed56 100644
---- a/Documentation/devicetree/bindings/power/supply/maxim,max77693.yaml
-+++ b/Documentation/devicetree/bindings/power/supply/maxim,max77693.yaml
-@@ -71,6 +71,12 @@ properties:
-     enum: [4300000, 4700000, 4800000, 4900000]
-     default: 4300000
+diff --git a/include/linux/mfd/max77693-private.h b/include/linux/mfd/max77693-private.h
+index 54444ff2a5de..4570646e2f33 100644
+--- a/include/linux/mfd/max77693-private.h
++++ b/include/linux/mfd/max77693-private.h
+@@ -145,6 +145,8 @@ enum max77693_pmic_reg {
+ #define DEFAULT_THERMAL_REGULATION_TEMP		100
+ /* microamps */
+ #define DEFAULT_BATTERY_OVERCURRENT		3500000
++/* microamps */
++#define DEFAULT_FAST_CHARGE_CURRENT		500000
+ /* microvolts */
+ #define DEFAULT_CHARGER_INPUT_THRESHOLD_VOLT	4300000
  
-+  maxim,usb-connector:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      USB connector to use for charger type/OTG cable detection. Phandle
-+      to a USB connector according to usb-connector.yaml.
+@@ -217,6 +219,10 @@ enum max77693_charger_battery_state {
+ #define CHG_CNFG_01_CHGRSTRT_MASK	(0x3 << CHG_CNFG_01_CHGRSTRT_SHIFT)
+ #define CHG_CNFG_01_PQEN_MAKS		BIT(CHG_CNFG_01_PQEN_SHIFT)
+ 
++/* MAX77693_CHG_REG_CHG_CNFG_02 register */
++#define CHG_CNFG_02_CC_SHIFT		0
++#define CHG_CNFG_02_CC_MASK		0x3F
 +
- required:
-   - compatible
- 
+ /* MAX77693_CHG_REG_CHG_CNFG_03 register */
+ #define CHG_CNFG_03_TOITH_SHIFT		0
+ #define CHG_CNFG_03_TOTIME_SHIFT	3
 
 -- 
 2.45.1
