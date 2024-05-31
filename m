@@ -1,192 +1,142 @@
-Return-Path: <linux-pm+bounces-8442-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8443-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F1D98D5D3D
-	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 10:55:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3E948D5D55
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 10:57:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 624A11C2316F
-	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 08:55:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E865CB23547
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 08:57:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89694156643;
-	Fri, 31 May 2024 08:54:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A18AF224E8;
+	Fri, 31 May 2024 08:57:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WiqmmxjY"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tiKDy1B2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D3AB15575F;
-	Fri, 31 May 2024 08:54:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEAF52262B
+	for <linux-pm@vger.kernel.org>; Fri, 31 May 2024 08:57:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717145670; cv=none; b=IkJlsxg+mxL88aXyIdINS+S5pJPu5SGfl4H3zlADUfqngRlnMoL1qlO/v4PbHXRpe84pAwjRnyFJul6k/vwrDdLrKToXiT43zao0h02evKt1WI8I9XFzIrYmhssWNmrUqepfok9tVsDvTfyf1a/fmkotDr2DSGrnazmvx+Yvhkw=
+	t=1717145863; cv=none; b=n4kPcuySZ/P4XKP+HI3qz0dQmkjsRerTypC40qqXR1sGqSPav1kX187Mk/ILsyqo/W27d8ctWyYEhiltonI9lnsnIEVVkCy0j2ysBWLLhmyetjSDl1WdkKr8G5asFtnICDeTQg/jnWW9NLQyfr1XJuH2ljA5+LkwTQCPp4+NCAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717145670; c=relaxed/simple;
-	bh=uijlGJY6BcCp523uz+W92tg5mFXHcK2n0gXkKfnsWEw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qzZ0sXeykDyiLrxetTCxGHFem7PuYOKFXwyKM0A81Z1TA45PfdQeFkQdxq4+pfLalUDwECQ4nxp3j4DQdsmG0dVxpWYuwnafU7RcGf5jOegWvgun8zDLyBYnoLnPwIKvZdSFRrFDwqWaILePxiTH89k5AdClm0yMNdrE6dgO984=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WiqmmxjY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1A57C116B1;
-	Fri, 31 May 2024 08:54:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717145670;
-	bh=uijlGJY6BcCp523uz+W92tg5mFXHcK2n0gXkKfnsWEw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=WiqmmxjY1PWyVw3yg7otIA46yI6jHI6rRAui3aSxPiSYKF4PG7pcrg3ZJn1CsYsCo
-	 3JJaOHasd5iXECvgNWcI1MXSfM61QnCZvs6aZlqAUr9+TKWJHo4HdNYf9pkvmTS6v2
-	 2om5RAswO+N2kPymiUJPNgUuga9RF0oI3NilLjTvEOj6Zz/AF75mzwIA70MWXCVMwJ
-	 fL4Zg0hNKwsuVFyQKaCDn0LkLZ7ZX8VmWeS+UuLn+dx+fCYWjbYMi7AZnR5VHHJYBR
-	 ndAmFJxYetME6vNF8ZhEJyKR2PnjEiewTTVEB6oMzYEFMwzNfgSCnQabeCmMLrbr6l
-	 9me4noA7o8MOQ==
-Message-ID: <1624f2f0-0a2d-4918-a129-84dca6da9af8@kernel.org>
-Date: Fri, 31 May 2024 10:54:24 +0200
+	s=arc-20240116; t=1717145863; c=relaxed/simple;
+	bh=jGp5xMVbjd0tUmykpevDlhzB7AOsvsUsk6fB4tAJBRs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Cm9G7rGbrc6yIxJwq3aBHs0ncXkVAvr7Zq68ziHEY4BiK7B9ipDr262Z/2XBS/Pvh21heaCK0x5tlyY389KjsUj3iY+i+CvzNyVE3rbSnrlyA7Ajt5035dAK3aRRfKGbee2dNS4p4LXXeRRcwkQ+hoWQSgNOkSwsRX1ihDcSs04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tiKDy1B2; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2c1b45206abso988374a91.1
+        for <linux-pm@vger.kernel.org>; Fri, 31 May 2024 01:57:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1717145861; x=1717750661; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=nPlAccRu1ht0ugLS/YX5R85LXm4AvuNcIW8FJ60Xapc=;
+        b=tiKDy1B2hwFCqw6xuI3fWATDtD3MomsjOn2FlwD1SnPrzBOdxV/w8s7Zb5rkAoR+C9
+         7YgbN5QzrEkrWOToAQJ3XFjNPeYEk07Lqk8a12l6i7+W6C7u4jIOcaTlVXq2NhxwUCPg
+         gFdfuPJ3eyJ0hxHZnfB0ro/3LLVoz7qSqUkVLDKGuM6rFqDRnNiZACt8sL1vclKQuLmf
+         v3sBRq1bUyS6Ro5K8Yt0uyH4ObkjqiDkYXdcq0Bbs1ayXKXZSSlIhhr6lkS4kN7P44mf
+         o7QdSvYXB5nw8GtvWQsUfaWi8Dboxt7J/7Ibgtw5rrNTnVQ8490QigWXFGuKeq4eCJPx
+         hpgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717145861; x=1717750661;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nPlAccRu1ht0ugLS/YX5R85LXm4AvuNcIW8FJ60Xapc=;
+        b=DNDsr+QUg/zpNXp1oDo1X+Meg9XvbSEHJU4tlvBYlrwLRyA0p0tT1ZjMmzMqn0AyKZ
+         Im3B/MNbdxdg5SuRtYQDrrg5Mqgb1UVIVBJrS1oTjn4y+Bsu+ggiCAOGvCnKwxUhIJpN
+         WnLUT6WG424A4NWyf3OneMlKPjCPjxaVHGWloGiBrXMTQbPUF1hrkigxtT4kvt2+kHVc
+         B19YElhWenXaYhkhKioOUIc3YHCUctl+6HxMqSjWhvP7mIMq/GBWrG1s0MWkLOgkdge4
+         +HxbPzL9Bh7htliqjd5m/rGM7fDSFU8+N1rn9m8EJjkm+2QOuS3tbG8yFBj50a+8swMI
+         EUGQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUOs65sk5Go/Sk8mtdxeKq1migRUsTsSDI8NKFq0qrImc79kTGZlv0esN8zgNFakKJWbzmybrZJcDgYR6e9zY3F0NJ/goMco8s=
+X-Gm-Message-State: AOJu0YwlZdZK6Qi7v4uL35r67eaglTg7a1k3xvPJpz/VC4s5DqEgjSyJ
+	LglwXtrWUc109GJK9hJhdGfOXHbeM60ZximgNmKmmhNGocqsZZ8Zi2x1oha0NAcAaBJ+2vnfHIs
+	71s1OkpcX35CGeAbngLTCJXjYZ5P3fGwWoZutkA==
+X-Google-Smtp-Source: AGHT+IEk0xAq4H6amqfMwetzDZJPVGDcv7FZKBb2l9gcvP6xSw2q5lzmYnt2+a5eGjhW4z3tZcMHkEzVbz+bKslsKVY=
+X-Received: by 2002:a17:90a:bf16:b0:2be:9547:41a8 with SMTP id
+ 98e67ed59e1d1-2c1dc5d9f17mr1081334a91.48.1717145860631; Fri, 31 May 2024
+ 01:57:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] dt-bindings: thermal: sophgo,cv180x-thermal: Add
- Sophgo CV180x thermal
-To: Haylen Chu <heylenay@outlook.com>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
- Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Chen Wang <unicorn_wang@outlook.com>,
- Inochi Amaoto <inochiama@outlook.com>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Jisheng Zhang <jszhang@kernel.org>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-References: <SEYPR01MB422119B40F4CF05B823F93DCD7F32@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
- <SEYPR01MB4221BD44992A23E2B0061023D7F32@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <SEYPR01MB4221BD44992A23E2B0061023D7F32@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20230105145159.1089531-1-kajetan.puchalski@arm.com>
+ <20230105145159.1089531-3-kajetan.puchalski@arm.com> <20230711175814.zfavcn7xn3ia5va4@airbuntu>
+ <ZLZ/btJw5LNVxVy8@e126311.manchester.arm.com> <20230718132432.w5xoxbqm54jmu6n5@airbuntu>
+ <20230917010516.54dgcmms44wyfrvx@airbuntu> <CAKfTPtA6ZzRR-zMN7sodOW+N_P+GqwNv4tGR+aMB5VXRT2b5bg@mail.gmail.com>
+ <d54d6115-a4d6-466b-a4a2-9c064194f06e@arm.com> <CAKfTPtB21aY9cgi5dSHB0jRp6pE85AfGcHrHjrcpMwi3fJL0FA@mail.gmail.com>
+ <4cd905e8-594e-4858-89df-a501184ee521@arm.com>
+In-Reply-To: <4cd905e8-594e-4858-89df-a501184ee521@arm.com>
+From: Vincent Guittot <vincent.guittot@linaro.org>
+Date: Fri, 31 May 2024 10:57:27 +0200
+Message-ID: <CAKfTPtCUZfpunq1C9n=3tkjsSSdmd8jhf6kR523NONKvEcxOpQ@mail.gmail.com>
+Subject: Re: [PATCH v6 2/2] cpuidle: teo: Introduce util-awareness
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: Lukasz Luba <lukasz.luba@arm.com>, Kajetan Puchalski <kajetan.puchalski@arm.com>, rafael@kernel.org, 
+	daniel.lezcano@linaro.org, Dietmar.Eggemann@arm.com, dsmythies@telus.net, 
+	yu.chen.surf@gmail.com, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Qais Yousef <qyousef@layalina.io>
+Content-Type: text/plain; charset="UTF-8"
 
-On 30/05/2024 15:48, Haylen Chu wrote:
-> Add devicetree binding documentation for thermal sensors integrated in
-> Sophgo CV180X SoCs.
-> 
-> Signed-off-by: Haylen Chu <heylenay@outlook.com>
-> ---
->  .../thermal/sophgo,cv180x-thermal.yaml        | 46 +++++++++++++++++++
->  1 file changed, 46 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/sophgo,cv180x-thermal.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/sophgo,cv180x-thermal.yaml b/Documentation/devicetree/bindings/thermal/sophgo,cv180x-thermal.yaml
-> new file mode 100644
-> index 000000000000..0364ae6c1055
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/sophgo,cv180x-thermal.yaml
-> @@ -0,0 +1,46 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/sophgo,cv180x-thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Sophgo CV180x on-SoC Thermal Sensor
-> +
-> +maintainers:
-> +  - Haylen Chu <heylenay@outlook.com>
-> +
-> +description: Binding for Sophgo CV180x on-SoC thermal sensor
-> +
-> +properties:
-> +  compatible:
-> +    items:
+On Wed, 29 May 2024 at 15:09, Christian Loehle <christian.loehle@arm.com> wrote:
+>
+> On 5/28/24 15:07, Vincent Guittot wrote:
+> > On Tue, 28 May 2024 at 11:59, Lukasz Luba <lukasz.luba@arm.com> wrote:
+> >>
+> >> Hi Vincent,
+> >>
+> >> On 5/28/24 10:29, Vincent Guittot wrote:
+> >>> Hi All,
+> >>>
+> >>> I'm quite late on this thread but this patchset creates a major
+> >>> regression for psci cpuidle driver when using the OSI mode (OS
+> >>> initiated mode).  In such a case, cpuidle driver takes care only of
+> >>> CPUs power state and the deeper C-states ,which includes cluster and
+> >>> other power domains, are handled with power domain framework. In such
+> >>> configuration ,cpuidle has only 2 c-states : WFI and cpu off states
+> >>> and others states that include the clusters, are managed by genpd and
+> >>> its governor.
+> >>>
+> >>> This patch selects cpuidle c-state N-1 as soon as the utilization is
+> >>> above CPU capacity / 64 which means at most a level of 16 on the big
+> >>> core but can be as low as 4 on little cores. These levels are very low
+> >>> and the main result is that as soon as there is very little activity
+> >>> on a CPU, cpuidle always selects WFI states whatever the estimated
+> >>> sleep duration and which prevents any deeper states. Another effect is
+> >>> that it also keeps the tick firing every 1ms in my case.
+> >>
+> >> Thanks for reporting this.
+> >> Could you add what regression it's causing, please?
+> >> Performance or higher power?
+> >
+> > It's not a perf but rather a power regression. I don't have a power
+> > counter so it's difficult to give figures but I found it while running
+> > a unitary test below on my rb5:
+> > run 500us every 19457ms on medium core (uclamp_min: 600).
+>
+> Is that supposed to say 19.457ms?
 
-Drop items
+Yes, it's a mistake.  it's 19.457ms I forgot to put the dot when
+copying the value from the rt-app json file
 
-> +      - enum:
-> +          - sophgo,cv180x-thermal
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  '#thermal-sensor-cells':
-> +    const: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +        #include <dt-bindings/clock/sophgo,cv1800.h>
-
-Use 4 spaces for example indentation.
-
-> +        soc_temp: temperature_sensor@30e0000 {
-
-No underscores, but hyphens. Drop label.
-
-> +                compatible = "sophgo,cv180x-thermal";
-> +                reg = <0x30e0000 0x100>;
-> +                clocks = <&clk CLK_TEMPSEN>;
-> +                clock-names = "clk_tempsen";
-
-You did not bother to test it, right?
-
-
-Best regards,
-Krzysztof
-
+> (Because below you say idle time is >18ms and total test time 5sec)
+> Is the utilisation more like 1/20000 or 1/20?
+> In any case what you describe is probably an issue, I'll try to reproduce.
+> Note also my findings here:
+> https://lore.kernel.org/lkml/0ce2d536-1125-4df8-9a5b-0d5e389cd8af@arm.com/
+>
+> Kind Regards,
+> Christian
+>
 
