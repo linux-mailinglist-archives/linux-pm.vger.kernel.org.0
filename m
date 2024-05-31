@@ -1,80 +1,80 @@
-Return-Path: <linux-pm+bounces-8471-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8472-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 759928D61A9
-	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 14:25:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0AD38D62DA
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 15:21:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0506D1F25CF7
-	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 12:25:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E1D2C1C26D3D
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 13:21:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E204158865;
-	Fri, 31 May 2024 12:25:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC6DB158A18;
+	Fri, 31 May 2024 13:21:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M+oidtya"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ao1VJfh6"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF66B15884F
-	for <linux-pm@vger.kernel.org>; Fri, 31 May 2024 12:25:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55575156F42
+	for <linux-pm@vger.kernel.org>; Fri, 31 May 2024 13:21:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717158323; cv=none; b=ktCASx4sWxR8iNkonOBgvqEZf68lcLq627JNDrndjRO9me5bxbbHSsEtudlnXu6pfp+1yfJ53LQHRwshlzdZ5h1TnxVmfqICb1LUMKGu5sYMyEUMhxL+NEF3Yaivi6ASKcRpuvIm27zg/U97arH1BfMYfQwnS71yGi8vXxBNV7A=
+	t=1717161684; cv=none; b=Oayh3MmWUYEkSNfm2R0Tl0ibc4t0OQnrOS1+kpQzEsU8HQW24M+Dej1tay2AxPlUML5damMJ/vt2bKUfgjPwJyCcYgHeM1ctcXpADh/UgSpUwhqCNXwlQ2jqj614nFlkaOxV+sua6HJKkpxNSndgGBL7DKkfvtwObh9nmH6kbFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717158323; c=relaxed/simple;
-	bh=529H4seeYbvq1uFn776ChzJIAtVLr8Fs7W9zkeFaNSo=;
+	s=arc-20240116; t=1717161684; c=relaxed/simple;
+	bh=BGxzdP1LU6/rLSPmLtADgtL4qNfC9pzy+cIzsaqjp7A=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gCOYCzPjlKAUjkXff88xzDSzPE1IQueCpXxuqRGG7aKWtI3MGF3yOaUCS4uqAInrdd5bPOgZZVFHRobSO6Kz/I42G1q82wa/wUFZxRX84fYyKACyTTPCvwRk8roSfHXLKboRwDpjw3ANtGQvw2jVyqyhsdOGSKr87rcz1t4/GOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=M+oidtya; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=lq8uBg1FmrFN6AD4YuPP2dSeBnHQ24pOnfQRoK8bRIkrQnmDUruQjHu5ftbTU7RIGxF2l8Zd26x4EYFUQhEY+RUYzldLwITA9cPaSGCqMc2k8tCdOnHLtWgiOvrE/Y8aN6+vJmJfPdFGObPnQGbnSVQjEG8sJlOB4bPmDCT2ckk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ao1VJfh6; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1717158320;
+	s=mimecast20190719; t=1717161682;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=7f/MkaaHIZ/0UQbdKRkwJXei2osLqgSgM+3SS6lRxnE=;
-	b=M+oidtyaU0tyNFFr2mrWvMWUNcPpsfKTb6NxoZRp7OQBaN8n8nMsE1SjC36VD/tNcDxp72
-	1hq+/1etBJYV6xJJtch4BMjzkDHIG8tnPDZECBmzcw4wkI3vlt4UWAaN8pBnBdzb5effH0
-	PDu74TnZhUA1mkUISD6vFbZw1nJBcYk=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=sQVKLcWxao+N5Q5pGL2UjNphknqTq2DjrXrXkSkpiWY=;
+	b=Ao1VJfh6+IuAxYpvJbrpilubdI890YVmViEqLdwgLHgwC3sF5QHh7e/er8XC5lFRrm5zr7
+	DJzLglm/1QMs4/5hvXsrDUDRxlVZ0CzGyON209u0Q84WEIL2WutL0eauIvRfoon3ffMp4K
+	QYyngJvsrp79izmb6CedxLpcY8qAQWM=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-660-k3VTMJSeNvWG84dBBHq1sQ-1; Fri, 31 May 2024 08:25:18 -0400
-X-MC-Unique: k3VTMJSeNvWG84dBBHq1sQ-1
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-a67e55a460bso71069366b.0
-        for <linux-pm@vger.kernel.org>; Fri, 31 May 2024 05:25:18 -0700 (PDT)
+ us-mta-540-NMQvLe1HPOut4w77sauUcw-1; Fri, 31 May 2024 09:21:21 -0400
+X-MC-Unique: NMQvLe1HPOut4w77sauUcw-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-a6266ffd419so79776566b.1
+        for <linux-pm@vger.kernel.org>; Fri, 31 May 2024 06:21:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717158317; x=1717763117;
+        d=1e100.net; s=20230601; t=1717161679; x=1717766479;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7f/MkaaHIZ/0UQbdKRkwJXei2osLqgSgM+3SS6lRxnE=;
-        b=VGcp4yNYRsEukMqX7tNv+5Os1N6bKe/ojbnGNobe70HXKfEiPTVmBENpaRXJulyAWZ
-         uE/9Dd2RNP2CZpM+dhdv2GHAMrQ5exBkZoCRRbtJ8pJgsMNpKkgsfoToFjb2V256dlhy
-         HkCsosa3rmEastuD1NNZ5SP2CSyU1XgrWdKcj1rhqXo1MNhXZNF3j0kwybDbZg6VmaY0
-         k1AcrJ+Q9XxUmDs8yCzLxGyUMIncPlSZwGezFCHYtxYGPRKd+ySpJNAFcvtZbx9yKB6m
-         OKuLWcgIfDzUY4hqPkZAnXs2hRNV79JNgITNNSQHxJMfYfpM43gMEfH0riWjBc+ZX/Ph
-         IG+A==
-X-Forwarded-Encrypted: i=1; AJvYcCUfQjpmx98BS6W+6i5JOwk0VrpXnH1CTC4BBbQC9uV8QfZ+QNwoIzLeNPoZteeOL07EFdQhPnHwkqhbfmFum0To3W1jXMHpO9A=
-X-Gm-Message-State: AOJu0YyHjAkhFadexn87dXbbcPw31fpCqN6vfWxgAN9BlWRjd+bxTNTs
-	ussRgCZG5vpMQdBajDORHrM/oiqZK2yx/J6RjE9/lPXkk9LCFhuOt2neryJINFxhxmaIHqmJ3jk
-	atpC0JWkOs2u/mbyEDfjRh6puKgeq8UgBPON5kpay/B+XnFClKe8DL802nuBrVIAV
-X-Received: by 2002:a17:906:a15a:b0:a5a:89a8:49c5 with SMTP id a640c23a62f3a-a681ad5f82amr142182666b.33.1717158317117;
-        Fri, 31 May 2024 05:25:17 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IExfS1dkDGEGudj90bkTUvQMUyLMW0+Kw0G5nFA1ynYxXnH/uibl5HIooxlqKX2HCbVWFGoiA==
-X-Received: by 2002:a17:906:a15a:b0:a5a:89a8:49c5 with SMTP id a640c23a62f3a-a681ad5f82amr142180966b.33.1717158316663;
-        Fri, 31 May 2024 05:25:16 -0700 (PDT)
+        bh=sQVKLcWxao+N5Q5pGL2UjNphknqTq2DjrXrXkSkpiWY=;
+        b=NcIVSGW7In6esjfejJTElLzw7pBhehUYrayatJ74yjnChvT2XVUv/l24dXPFhJ5Orh
+         x5eoACnn3mgcC7TTgTQYSpJsFYj7fPieeu1yAx5cphnexrjLuXBwxFDwt1vAE8z6D5+Q
+         geXUNYuUEuLGO3Kd/NjGOXrABSe5Pee6pI326i5ewKI+qiWZlUx3xXtX2FdjzH5ONg9U
+         a2ejB/6jAd+P5jUJiU/31N9lcT/Z9A3YGTfoVBT7GRnposuDkK1R03noq0Zarg1NNVso
+         B29kIZsCIhA/rMCr1aYVIC3vdgVprFbWpfJI5g6OMwi5OA08p0w/BtG7knfpiVyU+Jxd
+         4xSA==
+X-Forwarded-Encrypted: i=1; AJvYcCW+QsN+aum2DTE1/jdxzp0oHBZK7rRFyaiTbOQPUZ27991G1/LVCNQ3Q7yHsKHXMQGOibLsawukGsVgDiHoZtYAHFaD0xYiLFQ=
+X-Gm-Message-State: AOJu0YyQc5M0ASbsU/fupBJjLbeYJ6y3SWif3L7LigV/b7CRrlnrTsiy
+	xTZHoN1UWZZwzQvxKbQHcz1/XfEC2OhdMTHXEDCGprTHumjIeWQWbCSZNcKKpBSxzq+4EPvQnSi
+	hdKgSMS6TU+8fYGn7/C8OSo+UrZrpF1vT/QUopwAV8FSTvwrBfMzMlKHo
+X-Received: by 2002:a17:906:2b52:b0:a65:f74b:9c82 with SMTP id a640c23a62f3a-a681ff4502amr130278166b.19.1717161678881;
+        Fri, 31 May 2024 06:21:18 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE9y4AB1mWRlhxrEBdQgWUHLIXUYNT7bkS0gRgQO37XHZjO6QKmp3jxSFrFEBZWdkALjovEPw==
+X-Received: by 2002:a17:906:2b52:b0:a65:f74b:9c82 with SMTP id a640c23a62f3a-a681ff4502amr130276266b.19.1717161678424;
+        Fri, 31 May 2024 06:21:18 -0700 (PDT)
 Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a67eac7a340sm81192466b.159.2024.05.31.05.25.15
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a67e73f9a63sm86899166b.68.2024.05.31.06.21.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 May 2024 05:25:16 -0700 (PDT)
-Message-ID: <f38782d7-84c4-44c2-9f62-0c75aa5e511d@redhat.com>
-Date: Fri, 31 May 2024 14:25:15 +0200
+        Fri, 31 May 2024 06:21:17 -0700 (PDT)
+Message-ID: <41f08583-ad6e-4a48-be3c-964a34af83a5@redhat.com>
+Date: Fri, 31 May 2024 15:21:16 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -82,8 +82,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] power: supply: power-supply-leds: Add
- power_supply_[un]register_led_trigger()
+Subject: Re: [PATCH 3/3] power: supply: power-supply-leds: Add activate()
+ callback to triggers
 To: Andy Shevchenko <andy@kernel.org>
 Cc: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
  Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
@@ -91,83 +91,39 @@ Cc: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
  platform-driver-x86@vger.kernel.org, =?UTF-8?Q?Andr=C3=A9_Apitzsch?=
  <git@apitzsch.eu>, linux-leds@vger.kernel.org, linux-pm@vger.kernel.org
 References: <20240510194012.138192-1-hdegoede@redhat.com>
- <20240510194012.138192-2-hdegoede@redhat.com>
- <Zj59zito2FILn9qD@smile.fi.intel.com>
+ <20240510194012.138192-4-hdegoede@redhat.com>
+ <Zj5-gmaS4-IglyW4@smile.fi.intel.com>
 Content-Language: en-US, nl
 From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <Zj59zito2FILn9qD@smile.fi.intel.com>
+In-Reply-To: <Zj5-gmaS4-IglyW4@smile.fi.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi Andy,
+Hi,
 
-Thank you for the review.
-
-On 5/10/24 10:04 PM, Andy Shevchenko wrote:
-> On Fri, May 10, 2024 at 09:40:10PM +0200, Hans de Goede wrote:
->> Add power_supply_[un]register_led_trigger() helper functions.
+On 5/10/24 10:07 PM, Andy Shevchenko wrote:
+> On Fri, May 10, 2024 at 09:40:12PM +0200, Hans de Goede wrote:
+>> Add an activate() callback to the power-supply LED triggers so that
+>> the LED being activated will properly reflect the current power-supply
+>> state for power-supply devices which are already fully registered
+>> when the trigger gets activated.
 >>
->> The primary goal of this is as a preparation patch for adding an activate
->> callback to the power-supply LED triggers to ensure that power-supply
->> LEDs get the correct initial value when the LED gets registered after
->> the power_supply has been registered (this will use the psy back pointer).
+>> This fixes e.g. wrong LED state (1) when the LED gets registered
+>> after the power-supply device.
 >>
->> There also is quite a lot of code duplication in the existing LED trigger
->> registration in the form of the kasprintf() for the name-template for each
->> trigger + related error handling. This duplication is removed by these
->> new helpers.
+>> 1) Until the psy driver has a reason to call power_supply_changed()
+>>    which may take quite a while
 > 
 > ...
 > 
->> +	err = led_trigger_register(&psy_trig->trig);
->> +	if (err)
->> +		goto err_free_name;
-> 
-> 
->> +err_free_name:
->> +	kfree(psy_trig->trig.name);
->> +err_free_trigger:
->> +	kfree(psy_trig);
->> +	return -ENOMEM;
-> 
-> Why not ret?
-
-Fixed for v2.
-
-
-> ...
-> 
->> +static int power_supply_create_bat_triggers(struct power_supply *psy)
+>> +static int power_supply_led_trigger_activate(struct led_classdev *led_cdev)
 >> +{
->> +	int err = 0;
->> +
->> +	err |= power_supply_register_led_trigger(psy, "%s-charging-or-full",
->> +						 &psy->charging_full_trig);
->> +	err |= power_supply_register_led_trigger(psy, "%s-charging",
->> +						 &psy->charging_trig);
->> +	err |= power_supply_register_led_trigger(psy, "%s-full",
->> +						 &psy->full_trig);
->> +	err |= power_supply_register_led_trigger(psy, "%s-charging-blink-full-solid",
->> +						 &psy->charging_blink_full_solid_trig);
->> +	err |= power_supply_register_led_trigger(psy, "%s-charging-orange-full-green",
->> +						 &psy->charging_orange_full_green_trig);
+>> +	struct power_supply_led_trigger *psy_trig =
+>> +		container_of(led_cdev->trigger, struct power_supply_led_trigger, trig);
 > 
-> Why not using the similar approach as you have done in v4l2 CCI?
+> Second time same container_of(), perhaps a helper [macro]?
 
-That is a good idea I've done that for v2.
-
->> +	if (err) {
->> +		power_supply_remove_bat_triggers(psy);
->> +		/*
->> +		 * led_trigger_register() may also return -EEXIST but that should
->> +		 * never happen with the dynamically generated psy trigger names.
->> +		 */
-> 
-> Maybe this comment should be above and here just return err; (but see above remark).
-
-With the err propagation approach from v4l2 CCI this can now simply return err
-since that now correctly reflects the first error (and any following calls
-are made no-ops).
+Ack, fixed for v2.
 
 Regards,
 
@@ -176,11 +132,10 @@ Hans
 
 
 > 
->> +		return -ENOMEM;
->> +	}
->> +
+>> +	/* Sync current power-supply state to LED being activated */
+>> +	power_supply_update_leds(psy_trig->psy);
 >> +	return 0;
->>  }
+>> +}
 > 
 
 
