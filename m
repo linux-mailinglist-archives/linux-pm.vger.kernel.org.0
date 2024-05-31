@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-8451-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8452-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51B6B8D5E8C
-	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 11:38:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D5818D5EC2
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 11:47:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 826DE1C20AA0
-	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 09:38:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1238B2845A5
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 09:47:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A4561353FE;
-	Fri, 31 May 2024 09:38:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC22513A25F;
+	Fri, 31 May 2024 09:47:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gi6nMyNK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MtJccM8H"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0014824BB;
-	Fri, 31 May 2024 09:38:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B05878C69;
+	Fri, 31 May 2024 09:47:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717148295; cv=none; b=s5pDZ2oan7uqOnkbUX9pV5RjPkDA2L6FuqhVJTYhV1N8T5y9mPj6jwmLr7LS/wVaWTRct0teG1fhA6ffhZLbRIXGJw6mQ3PnEbjVL2cjPbBmCPNW85KWBjXeRf+fVK7gWL8Z/WBjQS8JWVDmXwyfgzAzZwhnz+KqOiPVu9BxHfE=
+	t=1717148873; cv=none; b=cqUrW1sLEC8Dp6t3veMGzC67jEkh/Q7l+maAMO9U+HEdZa9Xm/LfS541F4/ZGCqy5kkNndr4z3l+OWjZH8y1T/ePifaXhKJ4uF1Qu0KHoaTwj2pqKeaTvlLIV0bc/2bBH8kCHDPdGy7fsbSeM/KEgY8LkfQKTPeK4qItEd6dB1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717148295; c=relaxed/simple;
-	bh=YxVvcwn7KPFqOZKuAvYV4ti/Nrw31MQ0GJUDhzn3o20=;
+	s=arc-20240116; t=1717148873; c=relaxed/simple;
+	bh=0AqNLvKpg/geJIUQwuuG7BWkHpEirvzj8sd+Eo2HCbs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iP91wNxPF5RkSrROsL8mwDBI0FzOFwUyaVQgtHSlptiqYTrM9+HKSgEABoTw0wKHCziZSIVCHnNpLw0PA0CewWGTYCh/etsbUaWp0rL+5qNKqPS9dIDS18e73en1WggTe0lAtQf3V2EtyC9dHzYq3J25DApE9+ghJlnw2kwqwuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gi6nMyNK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E268C116B1;
-	Fri, 31 May 2024 09:38:11 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=NZjxZkkdJ+SGdHIOx8QYI7Xzennq5DBZwJ9xoIyktb2SfwwIV4qiutWbP60/M6XujJxiXYUw/fVXay7lP+QmhytnU4oWsRt9OPY0nq9FV0n3NILT5SNeVAC3KopCA0MtwqPnX246HbXJP6cA1kmTm5U+l30iRzh9pKEx+8Q9NCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MtJccM8H; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B96BCC116B1;
+	Fri, 31 May 2024 09:47:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717148295;
-	bh=YxVvcwn7KPFqOZKuAvYV4ti/Nrw31MQ0GJUDhzn3o20=;
+	s=k20201202; t=1717148873;
+	bh=0AqNLvKpg/geJIUQwuuG7BWkHpEirvzj8sd+Eo2HCbs=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Gi6nMyNKEsRU4337gE67jRP21RCmhomu4Qj1IR/xxIw/DQII3P8dgudwZlkPzSxer
-	 81iNYdt6LJ0Fvxy3OolSLZH43n4QXq9YAlgLffQz0Z+emtQL5un9j1APJpGFdgjrZ7
-	 UWtI4ceK5NsCPcCu3KQhPPWM/+xNe58FWTu28jzNkVjbYfoUt5r8gAdnmAqg7OaaII
-	 w59DjOTphJbxzV+5dLEF/a3jgyzqaaZqsrc0z76luX3mykpAAypajlu3Q64ukG3gNr
-	 Y6WKszhh34n9GhWjC0AYkrHFtDbU6mK1dFzRB3n0xiOU4yWwQ/aN6ntPSOvdwLgB9i
-	 Jd7V7FlWhVVjg==
-Message-ID: <3b3beca0-80f7-4a20-93d0-01af89fcf508@kernel.org>
-Date: Fri, 31 May 2024 11:38:09 +0200
+	b=MtJccM8H82DKhcLR/0SkystafddpIZhrxib+SWKxcXaZro5clMJtZ3dh5yqthHZBp
+	 KQmoZWs7/Po4lA53a3Vzrpbzt98YufIqh0UlM1pkenZA7zUsM8POH3QzPibMcLU6pn
+	 TvWKkv+TshtkwIMCAlw/htI2QM2t9Bfm/NlgGwUVZiLTlWVY6Mzj0Su/QdMuwM7luS
+	 3b19+bjNwR1bfNv0HoMI/0EYiRjmIsYlgntnO2ysAO75Ls8BNDX8vDYso1tDa4ozu0
+	 a3+BUL0KOHR3SodPbesbZLQKPJAUZ+enEYdZYmWqx8giq3xMZGLtIR2t01gFtE1nIx
+	 8lTcO3iDTjnig==
+Message-ID: <d740ff64-2de6-424c-9fc0-f1064f8c4f8b@kernel.org>
+Date: Fri, 31 May 2024 11:47:46 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 05/11] power: supply: max77693: Expose
- INPUT_CURRENT_LIMIT and CURRENT_MAX
+Subject: Re: [PATCH RFC 06/11] power: supply: max77693: Set charge current
+ limits during init
 To: Artur Weber <aweber.kernel@gmail.com>,
  Chanwoo Choi <cw00.choi@samsung.com>
 Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -64,7 +64,7 @@ Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
  Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>,
  Denis 'GNUtoo' Carikli <GNUtoo@cyberdimension.org>
 References: <20240530-max77693-charger-extcon-v1-0-dc2a9e5bdf30@gmail.com>
- <20240530-max77693-charger-extcon-v1-5-dc2a9e5bdf30@gmail.com>
+ <20240530-max77693-charger-extcon-v1-6-dc2a9e5bdf30@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -110,7 +110,7 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240530-max77693-charger-extcon-v1-5-dc2a9e5bdf30@gmail.com>
+In-Reply-To: <20240530-max77693-charger-extcon-v1-6-dc2a9e5bdf30@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
@@ -122,28 +122,71 @@ On 30/05/2024 10:55, Artur Weber wrote:
 > - CHGIN input current limit (which controls current going into the
 >   charger through the cable, and is managed by the CHARGER regulator).
 > 
-
-
-
-> +	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-> +		ret = max77693_get_input_current_limit(chg, &val->intval);
-> +		break;
-> +	case POWER_SUPPLY_PROP_CURRENT_MAX:
-> +		ret = max77693_get_fast_charge_current(regmap, &val->intval);
-> +		break;
->  	case POWER_SUPPLY_PROP_MODEL_NAME:
->  		val->strval = max77693_charger_model;
->  		break;
-> @@ -680,6 +727,11 @@ static int max77693_charger_probe(struct platform_device *pdev)
->  	chg->dev = &pdev->dev;
->  	chg->max77693 = max77693;
+> Add functions for setting both of the values, and set them to a
+> safe default value of 500mA at initialization.
+> 
+> The default value for the fast charge current limit can be modified
+> by setting the maxim,fast-charge-current-microamp DT property; the
+> CHGIN input current limit will be set up later in the charger detection
+> mechanism.
+> 
+> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
+> ---
+>  drivers/power/supply/max77693_charger.c | 45 +++++++++++++++++++++++++++++++++
+>  1 file changed, 45 insertions(+)
+> 
+> diff --git a/drivers/power/supply/max77693_charger.c b/drivers/power/supply/max77693_charger.c
+> index 894c35b750b3..d59b1524b0a4 100644
+> --- a/drivers/power/supply/max77693_charger.c
+> +++ b/drivers/power/supply/max77693_charger.c
+> @@ -28,6 +28,7 @@ struct max77693_charger {
+>  	u32 min_system_volt;
+>  	u32 thermal_regulation_temp;
+>  	u32 batttery_overcurrent;
+> +	u32 fast_charge_current;
+>  	u32 charge_input_threshold_volt;
+>  };
 >  
-> +	chg->regu = devm_regulator_get(chg->dev, "CHARGER");
-> +	if (IS_ERR(chg->regu))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(chg->regu),
-> +				     "failed to get charger regulator\n");\
+> @@ -591,6 +592,35 @@ static int max77693_set_batttery_overcurrent(struct max77693_charger *chg,
+>  			CHG_CNFG_12_B2SOVRC_MASK, data);
+>  }
+>  
+> +static int max77693_set_input_current_limit(struct max77693_charger *chg,
+> +		unsigned int uamp)
+> +{
+> +	dev_dbg(chg->dev, "CHGIN input current limit: %u\n", uamp);
 
-This breaks users... and where is the binding?
+That's quite useless debug. It duplicates
+max77693_set_fast_charge_current(). Just drop entire wrapper.
+
+> +
+> +	return regulator_set_current_limit(chg->regu, (int)uamp, (int)uamp);
+> +}
+> +
+> +static int max77693_set_fast_charge_current(struct max77693_charger *chg,
+> +		unsigned int uamp)
+> +{
+> +	unsigned int data;
+> +
+> +	data = (uamp / 1000) * 10 / 333; /* 0.1A/3 steps */
+> +
+> +	if (data > CHG_CNFG_02_CC_MASK) {
+> +		dev_err(chg->dev, "Wrong value for fast charge current\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	data <<= CHG_CNFG_02_CC_SHIFT;
+> +
+> +	dev_dbg(chg->dev, "Fast charge current: %u (0x%x)\n", uamp, data);
+> +
+> +	return regmap_update_bits(chg->max77693->regmap,
+> +			MAX77693_CHG_REG_CHG_CNFG_02,
+> +			CHG_CNFG_02_CC_MASK, data);
+
+I am surprised that you set current limit via regulator but actual
+charging current value here. I think both should go to regulator in such
+case.
+> 
 
 Best regards,
 Krzysztof
