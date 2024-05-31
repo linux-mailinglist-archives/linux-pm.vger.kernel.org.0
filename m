@@ -1,142 +1,101 @@
-Return-Path: <linux-pm+bounces-8443-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8444-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3E948D5D55
-	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 10:57:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 091318D5DEA
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 11:13:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E865CB23547
-	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 08:57:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 898D81F27221
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 09:13:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A18AF224E8;
-	Fri, 31 May 2024 08:57:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E14078297;
+	Fri, 31 May 2024 09:13:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tiKDy1B2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a69MXn73"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEAF52262B
-	for <linux-pm@vger.kernel.org>; Fri, 31 May 2024 08:57:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F395C2262B
+	for <linux-pm@vger.kernel.org>; Fri, 31 May 2024 09:13:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717145863; cv=none; b=n4kPcuySZ/P4XKP+HI3qz0dQmkjsRerTypC40qqXR1sGqSPav1kX187Mk/ILsyqo/W27d8ctWyYEhiltonI9lnsnIEVVkCy0j2ysBWLLhmyetjSDl1WdkKr8G5asFtnICDeTQg/jnWW9NLQyfr1XJuH2ljA5+LkwTQCPp4+NCAU=
+	t=1717146794; cv=none; b=CfSgQFC2/6NNZ38+kNzBDD4kb31IYU640vEoRxuhCZcPwS5JWNu9Jl0HU6vL9T5z93O4NoQVLKRYTU3oLUzCjMY0/6Xcn0yi899cZH36neD/zd7GGM7PVQh97Qfs+FNMkEUnowG4nmWv6TiGKOcmvkiRAPgnYp88h51o/rVjyfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717145863; c=relaxed/simple;
-	bh=jGp5xMVbjd0tUmykpevDlhzB7AOsvsUsk6fB4tAJBRs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Cm9G7rGbrc6yIxJwq3aBHs0ncXkVAvr7Zq68ziHEY4BiK7B9ipDr262Z/2XBS/Pvh21heaCK0x5tlyY389KjsUj3iY+i+CvzNyVE3rbSnrlyA7Ajt5035dAK3aRRfKGbee2dNS4p4LXXeRRcwkQ+hoWQSgNOkSwsRX1ihDcSs04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tiKDy1B2; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2c1b45206abso988374a91.1
-        for <linux-pm@vger.kernel.org>; Fri, 31 May 2024 01:57:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1717145861; x=1717750661; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nPlAccRu1ht0ugLS/YX5R85LXm4AvuNcIW8FJ60Xapc=;
-        b=tiKDy1B2hwFCqw6xuI3fWATDtD3MomsjOn2FlwD1SnPrzBOdxV/w8s7Zb5rkAoR+C9
-         7YgbN5QzrEkrWOToAQJ3XFjNPeYEk07Lqk8a12l6i7+W6C7u4jIOcaTlVXq2NhxwUCPg
-         gFdfuPJ3eyJ0hxHZnfB0ro/3LLVoz7qSqUkVLDKGuM6rFqDRnNiZACt8sL1vclKQuLmf
-         v3sBRq1bUyS6Ro5K8Yt0uyH4ObkjqiDkYXdcq0Bbs1ayXKXZSSlIhhr6lkS4kN7P44mf
-         o7QdSvYXB5nw8GtvWQsUfaWi8Dboxt7J/7Ibgtw5rrNTnVQ8490QigWXFGuKeq4eCJPx
-         hpgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717145861; x=1717750661;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nPlAccRu1ht0ugLS/YX5R85LXm4AvuNcIW8FJ60Xapc=;
-        b=DNDsr+QUg/zpNXp1oDo1X+Meg9XvbSEHJU4tlvBYlrwLRyA0p0tT1ZjMmzMqn0AyKZ
-         Im3B/MNbdxdg5SuRtYQDrrg5Mqgb1UVIVBJrS1oTjn4y+Bsu+ggiCAOGvCnKwxUhIJpN
-         WnLUT6WG424A4NWyf3OneMlKPjCPjxaVHGWloGiBrXMTQbPUF1hrkigxtT4kvt2+kHVc
-         B19YElhWenXaYhkhKioOUIc3YHCUctl+6HxMqSjWhvP7mIMq/GBWrG1s0MWkLOgkdge4
-         +HxbPzL9Bh7htliqjd5m/rGM7fDSFU8+N1rn9m8EJjkm+2QOuS3tbG8yFBj50a+8swMI
-         EUGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUOs65sk5Go/Sk8mtdxeKq1migRUsTsSDI8NKFq0qrImc79kTGZlv0esN8zgNFakKJWbzmybrZJcDgYR6e9zY3F0NJ/goMco8s=
-X-Gm-Message-State: AOJu0YwlZdZK6Qi7v4uL35r67eaglTg7a1k3xvPJpz/VC4s5DqEgjSyJ
-	LglwXtrWUc109GJK9hJhdGfOXHbeM60ZximgNmKmmhNGocqsZZ8Zi2x1oha0NAcAaBJ+2vnfHIs
-	71s1OkpcX35CGeAbngLTCJXjYZ5P3fGwWoZutkA==
-X-Google-Smtp-Source: AGHT+IEk0xAq4H6amqfMwetzDZJPVGDcv7FZKBb2l9gcvP6xSw2q5lzmYnt2+a5eGjhW4z3tZcMHkEzVbz+bKslsKVY=
-X-Received: by 2002:a17:90a:bf16:b0:2be:9547:41a8 with SMTP id
- 98e67ed59e1d1-2c1dc5d9f17mr1081334a91.48.1717145860631; Fri, 31 May 2024
- 01:57:40 -0700 (PDT)
+	s=arc-20240116; t=1717146794; c=relaxed/simple;
+	bh=c263vXYHiWk+Mw02i7/cpcfrzd/X0DnIqISYl7Q+chY=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=W254MC+IECt6y5KxTxnEOT5ivUCD6h1c5pXC1qwGsDiHvYjr1b/9k3yj73SGAr2ZU/J5nz/bjxMX+/Olu7Q5qg5vUTH8BOugaHMyaUCAX3BvQeisfAcBIo2rODyNsQ2TBHoCgrUfurRnCWq8u1yHDZxGjcdKAXDb8XcLbTn1yzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a69MXn73; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717146794; x=1748682794;
+  h=from:to:cc:subject:date:message-id;
+  bh=c263vXYHiWk+Mw02i7/cpcfrzd/X0DnIqISYl7Q+chY=;
+  b=a69MXn73TwIPs6H46WSKRfCVdlIH+pHWtGN5/P6dRnDxWDInAUlVFfrh
+   Gnx19y00JiC1yeASbPBvyGy9TrEao2pdxXT16WFMTuOaAw4sI+9zdY5iC
+   kFF8jOkb3EDr2h3iSohJ2GTnLK128VMp+TeAlSrXLrpuWJ4qQPM6aIPh1
+   QnDQJM3aMIWS8xvp3HBk2Z+JkgYgjYXzS2xQpbIaCnMfPeOREPI1OAw7x
+   p7Z7FoWjcWz8xTF66N2RlkUhmCQYFPWvQlCHkV4/q63a7ppoetIvyGXT1
+   I+5J1yWcDKWUU5+xnmidlG94BMJboXrPo4Z+Fkjf2f3whdxNkmMsDo+VP
+   w==;
+X-CSE-ConnectionGUID: hdnFseelTwOlTkDs8j+fKw==
+X-CSE-MsgGUID: yRKr0N8ITpyIsi/skQOHxg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11088"; a="13807211"
+X-IronPort-AV: E=Sophos;i="6.08,203,1712646000"; 
+   d="scan'208";a="13807211"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 02:13:13 -0700
+X-CSE-ConnectionGUID: JmYjMXQsQkee7Bu6S4qrLw==
+X-CSE-MsgGUID: qJEvNjWOR6mBc2bLIFwMgA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,203,1712646000"; 
+   d="scan'208";a="73589707"
+Received: from wopr.jf.intel.com ([10.54.75.146])
+  by orviesa001.jf.intel.com with ESMTP; 31 May 2024 02:13:12 -0700
+From: Todd Brandt <todd.e.brandt@intel.com>
+To: linux-pm@vger.kernel.org,
+	rafael.j.wysocki@intel.com,
+	rjw@rjwysocki.net
+Cc: todd.e.brandt@linux.intel.com,
+	todd.e.brandt@intel.com
+Subject: [PATCH 0/2] pm-graph v5.12
+Date: Fri, 31 May 2024 02:13:08 -0700
+Message-Id: <cover.1717146154.git.todd.e.brandt@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20230105145159.1089531-1-kajetan.puchalski@arm.com>
- <20230105145159.1089531-3-kajetan.puchalski@arm.com> <20230711175814.zfavcn7xn3ia5va4@airbuntu>
- <ZLZ/btJw5LNVxVy8@e126311.manchester.arm.com> <20230718132432.w5xoxbqm54jmu6n5@airbuntu>
- <20230917010516.54dgcmms44wyfrvx@airbuntu> <CAKfTPtA6ZzRR-zMN7sodOW+N_P+GqwNv4tGR+aMB5VXRT2b5bg@mail.gmail.com>
- <d54d6115-a4d6-466b-a4a2-9c064194f06e@arm.com> <CAKfTPtB21aY9cgi5dSHB0jRp6pE85AfGcHrHjrcpMwi3fJL0FA@mail.gmail.com>
- <4cd905e8-594e-4858-89df-a501184ee521@arm.com>
-In-Reply-To: <4cd905e8-594e-4858-89df-a501184ee521@arm.com>
-From: Vincent Guittot <vincent.guittot@linaro.org>
-Date: Fri, 31 May 2024 10:57:27 +0200
-Message-ID: <CAKfTPtCUZfpunq1C9n=3tkjsSSdmd8jhf6kR523NONKvEcxOpQ@mail.gmail.com>
-Subject: Re: [PATCH v6 2/2] cpuidle: teo: Introduce util-awareness
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: Lukasz Luba <lukasz.luba@arm.com>, Kajetan Puchalski <kajetan.puchalski@arm.com>, rafael@kernel.org, 
-	daniel.lezcano@linaro.org, Dietmar.Eggemann@arm.com, dsmythies@telus.net, 
-	yu.chen.surf@gmail.com, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Qais Yousef <qyousef@layalina.io>
-Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 29 May 2024 at 15:09, Christian Loehle <christian.loehle@arm.com> wrote:
->
-> On 5/28/24 15:07, Vincent Guittot wrote:
-> > On Tue, 28 May 2024 at 11:59, Lukasz Luba <lukasz.luba@arm.com> wrote:
-> >>
-> >> Hi Vincent,
-> >>
-> >> On 5/28/24 10:29, Vincent Guittot wrote:
-> >>> Hi All,
-> >>>
-> >>> I'm quite late on this thread but this patchset creates a major
-> >>> regression for psci cpuidle driver when using the OSI mode (OS
-> >>> initiated mode).  In such a case, cpuidle driver takes care only of
-> >>> CPUs power state and the deeper C-states ,which includes cluster and
-> >>> other power domains, are handled with power domain framework. In such
-> >>> configuration ,cpuidle has only 2 c-states : WFI and cpu off states
-> >>> and others states that include the clusters, are managed by genpd and
-> >>> its governor.
-> >>>
-> >>> This patch selects cpuidle c-state N-1 as soon as the utilization is
-> >>> above CPU capacity / 64 which means at most a level of 16 on the big
-> >>> core but can be as low as 4 on little cores. These levels are very low
-> >>> and the main result is that as soon as there is very little activity
-> >>> on a CPU, cpuidle always selects WFI states whatever the estimated
-> >>> sleep duration and which prevents any deeper states. Another effect is
-> >>> that it also keeps the tick firing every 1ms in my case.
-> >>
-> >> Thanks for reporting this.
-> >> Could you add what regression it's causing, please?
-> >> Performance or higher power?
-> >
-> > It's not a perf but rather a power regression. I don't have a power
-> > counter so it's difficult to give figures but I found it while running
-> > a unitary test below on my rb5:
-> > run 500us every 19457ms on medium core (uclamp_min: 600).
->
-> Is that supposed to say 19.457ms?
+pm-graph v5.12
 
-Yes, it's a mistake.  it's 19.457ms I forgot to put the dot when
-copying the value from the rt-app json file
+Code revamp for python3.12:
+ sleepgraph/bootgraph function correctly in python3.12 but include a slew
+ of deprecation warnings for unsupported regexes. This patch fixes up all
+ the strings in the code so that it comforms with python3.12 standards.
 
-> (Because below you say idle time is >18ms and total test time 5sec)
-> Is the utilisation more like 1/20000 or 1/20?
-> In any case what you describe is probably an issue, I'll try to reproduce.
-> Note also my findings here:
-> https://lore.kernel.org/lkml/0ce2d536-1125-4df8-9a5b-0d5e389cd8af@arm.com/
->
-> Kind Regards,
-> Christian
->
+Other updates:
+- fix S3 suspend fail double run by using fp.flush to /sys/power/state
+- when running turbostat print the return value
+- handle case where html files have binary data
+- max issues in summary-issues is now 100 (in case there are thousands)
+- add backup to dmidecode, use /sys/class/dmi/id/ in case /dev/mem fails
+- update summary page to use full mode (disk-platform instead of disk)
+
+Todd Brandt (2):
+  pm-graph v5.12, fixes
+  pm-graph v5.12, code revamp for python3.12
+
+ tools/power/pm-graph/bootgraph.py  |   16 +-
+ tools/power/pm-graph/sleepgraph.py | 1098 ++++++++++++++--------------
+ 2 files changed, 571 insertions(+), 543 deletions(-)
+
+-- 
+2.17.1
+
 
