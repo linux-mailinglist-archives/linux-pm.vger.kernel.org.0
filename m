@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-8447-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8448-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93A128D5DEE
-	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 11:14:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3E028D5DF9
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 11:15:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2FF1C1F246C3
-	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 09:14:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 993161F25BDB
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 09:15:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68D87156F5D;
-	Fri, 31 May 2024 09:14:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08EE07441F;
+	Fri, 31 May 2024 09:15:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QpLGQNYc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EfT5/H4t"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 377361369B9;
-	Fri, 31 May 2024 09:14:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCE054D131;
+	Fri, 31 May 2024 09:15:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717146868; cv=none; b=N8CoO9oj6lfTCqas5JOGoMgm2pcezI4YSO4c5VI4Qjle4CRm1pl78mGTt8dy13NF3oe4A9AMUSZv3ovAZTnQc5WR2pBASY1CBSMCBeEQ9nG7S8Q/DGEHCPEzFT7fsZdkcgNuSZB7GrjevBo9FbXJ+gw5K19LOUWfxrQGGKH5yVI=
+	t=1717146925; cv=none; b=nvsbK7ktCt1/pW1XexTfYtrKSlEAZ5Tdrkok/EdNmHgbTaYhShxY0nbV/PbssmKS8Am2/wBgj0sJ7HBhc1SAh6zh8hbA3XH6NKi1/at2TvypKU3Qftvw4MuNXfiUIjwSzdx9cJzjf6UhYgUfXcaB0pqP8xh+uA0NPOqmTml+vGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717146868; c=relaxed/simple;
-	bh=Tw+2sPxaKR2hs+Rkn3j4IJUNis1j2kQv/UmDtVkxuDA=;
+	s=arc-20240116; t=1717146925; c=relaxed/simple;
+	bh=PyR0XjPdnkaxswAyYJJbl/Iobpv9s0NKRAixdimfjk4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r0bgT/pVgMmvO8IAYTQqPvbPAR575FQAQLQTzS4Xxkca09Ec0yEcmAUVW4iq0M+rKjiTJ8BS3mlbH0eUrIbBKLcks8nU2gbgOoL3zV2v+ZLrVZSfnzB5nyzU8AIPTJHeen6Sn4yqvJbnWLKwIEWFbMJS0T/W/7x47PM+d2lx1Cs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QpLGQNYc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE89FC116B1;
-	Fri, 31 May 2024 09:14:23 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=UtmxUwOlbiztUq8ILiSILPP8yuF/9GHUjWf20vkjkqJNU7A1/KAFkTIoqXNQQT7wV8VsUwVFnhGoJz4tA1dC9s4AjcmfshGxlUfPQNgSj3TOg34WthEowP5Yis1KR6T+MmxFZN1MUCVMyQpJOWzo7u2C54rzN887SS8ks0LxDdw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EfT5/H4t; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F91CC116B1;
+	Fri, 31 May 2024 09:15:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717146867;
-	bh=Tw+2sPxaKR2hs+Rkn3j4IJUNis1j2kQv/UmDtVkxuDA=;
+	s=k20201202; t=1717146925;
+	bh=PyR0XjPdnkaxswAyYJJbl/Iobpv9s0NKRAixdimfjk4=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=QpLGQNYcAqR0ZljXcz2Hg4eLiq0OeJRIYu1shudrCpCVUgip+urSZ6r7DbOnQWdXP
-	 hjdbwYVh3enRT6SJWs1dfMAohF17rfaBjzisQtiQXuodSJeWb0t92MI64W+NRwETpA
-	 ZIhTIY3h4e4WrdOHlxcBgi7zFiOEw6amDt7lzcOURfxKLYf09k1pDjfCnMVgSfXHtg
-	 6ScaOlqRBWeB00Mpab3cFjZtJvyZzxIMJXiDsoNK4SWvI7tu1EH3XqSbMhVIAAV0c4
-	 loKI84LBGkyKDDeRWtDyRPJ37Wis9034A/ZYaQe4XUN5ZRvy/L8PWog0iWlCNP8I+a
-	 KR/Srj6yHeNzQ==
-Message-ID: <9871cd74-2526-44a3-9986-8810bc733602@kernel.org>
-Date: Fri, 31 May 2024 11:14:21 +0200
+	b=EfT5/H4tC/WrtDz+i+BizRaZnhIlHUrRFbR1aIVTnDuCDssYRtb/ghCBPlmeNeEqz
+	 gAaR+FsB7pM987JJTI2V8iPx6rebNzFb7QKUi1AxkkZszJGfyXt3rXMM5i9li1NIzX
+	 9p0t/S4yl15eVqPagYAmPkR0FTTKKhHVz5yx+mdEZWX6codYJKed99JTAjv9fIvtx0
+	 NZ6QRl4IfMRcSQ2se4aM9TzVuwEYKuTiEEti2QK6/GUzJicK1idmBXVMPekh+sf9W+
+	 dfqJNgK4ti3VvVD41gmCXMgmHjnhrbgCjJ4mmchLT7VOWjVE0BUPYqSv4nKHKXvx5l
+	 L9utNymb1jgbw==
+Message-ID: <2adcdb22-4524-4c5e-b2cc-66de1e8a2fd4@kernel.org>
+Date: Fri, 31 May 2024 11:15:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 03/11] mfd: max77693: Add defines for charger current
- control
+Subject: Re: [PATCH RFC 02/11] dt-bindings: power: supply: max77693: Add
+ maxim,usb-connector property
 To: Artur Weber <aweber.kernel@gmail.com>,
  Chanwoo Choi <cw00.choi@samsung.com>
 Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -64,9 +64,9 @@ Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
  Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>,
  Denis 'GNUtoo' Carikli <GNUtoo@cyberdimension.org>
 References: <20240530-max77693-charger-extcon-v1-0-dc2a9e5bdf30@gmail.com>
- <20240530-max77693-charger-extcon-v1-3-dc2a9e5bdf30@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <20240530-max77693-charger-extcon-v1-2-dc2a9e5bdf30@gmail.com>
 Content-Language: en-US
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -110,29 +110,21 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240530-max77693-charger-extcon-v1-3-dc2a9e5bdf30@gmail.com>
+In-Reply-To: <20240530-max77693-charger-extcon-v1-2-dc2a9e5bdf30@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 30/05/2024 10:55, Artur Weber wrote:
-> From: Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>
+> Allow for specifying a USB connector to use for charger type/OTG cable
+> detection.
 > 
-> This prepares for an updated regulator and charger driver. The defines
-> are needed to set the maximum input current and the fast charge
-> current.
+> The way this is done is inspired by the rt5033-charger implementation.
 > 
-> Signed-off-by: Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>
-> [GNUtoo@cyberdimension.org: small fix]
-> Signed-off-by: Denis 'GNUtoo' Carikli <GNUtoo@cyberdimension.org>
-> [Artur: swap hardcoded ILIM values for DEFAULT_FAST_CHARGE_CURRENT]
 > Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
 > ---
->  include/linux/mfd/max77693-private.h | 6 ++++++
->  1 file changed, 6 insertions(+)
 
-Please squash it with the next patch using the defines. Having just
-defines is not really a "change" on its own (I know that AMD will
-disagree but they are wrong...).
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
