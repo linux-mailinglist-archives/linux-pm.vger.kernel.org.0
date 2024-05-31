@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-8450-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8451-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCC538D5E80
-	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 11:37:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51B6B8D5E8C
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 11:38:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78430284DFF
-	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 09:37:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 826DE1C20AA0
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 09:38:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0433F13790F;
-	Fri, 31 May 2024 09:36:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A4561353FE;
+	Fri, 31 May 2024 09:38:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MCfqgmR3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gi6nMyNK"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C780184FD0;
-	Fri, 31 May 2024 09:36:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0014824BB;
+	Fri, 31 May 2024 09:38:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717148168; cv=none; b=YMKvgVMEFP69ix1RdyDaeZDj78Y6qm8a8seUnQGN3rq9H37B2GyMiwCpVsbEkJBYo5LQNEVE14H+c5u8/GvGs4Cgdz4tak8Sup5lFdMan8cxmANRcunRDgSLh+g91G+C8fA2YSmPEXIpSQxWG6ENVfYwuoIqWxU7hyCZ38Qw8yY=
+	t=1717148295; cv=none; b=s5pDZ2oan7uqOnkbUX9pV5RjPkDA2L6FuqhVJTYhV1N8T5y9mPj6jwmLr7LS/wVaWTRct0teG1fhA6ffhZLbRIXGJw6mQ3PnEbjVL2cjPbBmCPNW85KWBjXeRf+fVK7gWL8Z/WBjQS8JWVDmXwyfgzAzZwhnz+KqOiPVu9BxHfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717148168; c=relaxed/simple;
-	bh=hjqpZqhxJvDfjD8kwH0+FCDk3zq0ugnG8d05CejLRmY=;
+	s=arc-20240116; t=1717148295; c=relaxed/simple;
+	bh=YxVvcwn7KPFqOZKuAvYV4ti/Nrw31MQ0GJUDhzn3o20=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aGz29cWEhxnz8a08OWXBZMHtmpu6FLHorFLKRprTCudSOust1uT6ZLObOXDvdYOq2WZhMKc7b1GKlT2wWSL/j2Mh3BXKcw6/MfK8S7Q2DwoK7Gam63HnI2zk6q5nXWKH5AJmvVwFQPpDhZQv7sDObH/EcvyFX1QL6PD+bVhQATU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MCfqgmR3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58DCDC32786;
-	Fri, 31 May 2024 09:36:04 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=iP91wNxPF5RkSrROsL8mwDBI0FzOFwUyaVQgtHSlptiqYTrM9+HKSgEABoTw0wKHCziZSIVCHnNpLw0PA0CewWGTYCh/etsbUaWp0rL+5qNKqPS9dIDS18e73en1WggTe0lAtQf3V2EtyC9dHzYq3J25DApE9+ghJlnw2kwqwuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gi6nMyNK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E268C116B1;
+	Fri, 31 May 2024 09:38:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717148168;
-	bh=hjqpZqhxJvDfjD8kwH0+FCDk3zq0ugnG8d05CejLRmY=;
+	s=k20201202; t=1717148295;
+	bh=YxVvcwn7KPFqOZKuAvYV4ti/Nrw31MQ0GJUDhzn3o20=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=MCfqgmR3IHRrH8Gqy9l/YMsoA1MtE5d9Rbr6d3hoIC6x4RuJnrkhMrBv9CiBb/oYP
-	 1Uo7fsFauG5I6SwcvUM1vUsl4TAJk3IVX5FHMDXWSpI8pwb7o7kOU+nTVknWFAodQ/
-	 d/bibpcjSlEYT/XnXygKcHDhwr0d2X2RV2B+ATvPWZAsHLoTFkhOu3VKXbY3KrYsTJ
-	 TNCnyok8VtaeF/uyJU2HsRdr4u3aGzeG1A5K404TgCm2dNdB2a4laZm7XSooqluEJV
-	 cJaNrG989wRkTbYVvfslwiYoIfBTgNjzgyZx6cmG2RbVn9R8j0Zoo/r5HMzHtFFLjd
-	 xQG1GhoFwRENg==
-Message-ID: <033f7073-abf8-4bd7-96b9-171ca1eb6429@kernel.org>
-Date: Fri, 31 May 2024 11:36:02 +0200
+	b=Gi6nMyNKEsRU4337gE67jRP21RCmhomu4Qj1IR/xxIw/DQII3P8dgudwZlkPzSxer
+	 81iNYdt6LJ0Fvxy3OolSLZH43n4QXq9YAlgLffQz0Z+emtQL5un9j1APJpGFdgjrZ7
+	 UWtI4ceK5NsCPcCu3KQhPPWM/+xNe58FWTu28jzNkVjbYfoUt5r8gAdnmAqg7OaaII
+	 w59DjOTphJbxzV+5dLEF/a3jgyzqaaZqsrc0z76luX3mykpAAypajlu3Q64ukG3gNr
+	 Y6WKszhh34n9GhWjC0AYkrHFtDbU6mK1dFzRB3n0xiOU4yWwQ/aN6ntPSOvdwLgB9i
+	 Jd7V7FlWhVVjg==
+Message-ID: <3b3beca0-80f7-4a20-93d0-01af89fcf508@kernel.org>
+Date: Fri, 31 May 2024 11:38:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 04/11] mfd: max77693: Add defines for OTG control
+Subject: Re: [PATCH RFC 05/11] power: supply: max77693: Expose
+ INPUT_CURRENT_LIMIT and CURRENT_MAX
 To: Artur Weber <aweber.kernel@gmail.com>,
  Chanwoo Choi <cw00.choi@samsung.com>
 Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -63,9 +64,9 @@ Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
  Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>,
  Denis 'GNUtoo' Carikli <GNUtoo@cyberdimension.org>
 References: <20240530-max77693-charger-extcon-v1-0-dc2a9e5bdf30@gmail.com>
- <20240530-max77693-charger-extcon-v1-4-dc2a9e5bdf30@gmail.com>
-Content-Language: en-US
+ <20240530-max77693-charger-extcon-v1-5-dc2a9e5bdf30@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -109,33 +110,40 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240530-max77693-charger-extcon-v1-4-dc2a9e5bdf30@gmail.com>
+In-Reply-To: <20240530-max77693-charger-extcon-v1-5-dc2a9e5bdf30@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 30/05/2024 10:55, Artur Weber wrote:
-> These three bits are used to enable OTG control in the charger
-> driver. Add them in preparation for an updated driver.
+> There are two charger current limit registers:
 > 
-> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
-> ---
->  include/linux/mfd/max77693-private.h | 3 +++
->  1 file changed, 3 insertions(+)
+> - Fast charge current limit (which controls current going from the
+>   charger to the battery);
+> - CHGIN input current limit (which controls current going into the
+>   charger through the cable, and is managed by the CHARGER regulator).
 > 
-> diff --git a/include/linux/mfd/max77693-private.h b/include/linux/mfd/max77693-private.h
-> index 4570646e2f33..4448b024255d 100644
-> --- a/include/linux/mfd/max77693-private.h
-> +++ b/include/linux/mfd/max77693-private.h
-> @@ -209,7 +209,10 @@ enum max77693_charger_battery_state {
->  
->  /* MAX77693 CHG_CNFG_00 register */
->  #define CHG_CNFG_00_CHG_MASK		0x1
-> +#define CHG_CNFG_00_OTG_MASK		0x2
->  #define CHG_CNFG_00_BUCK_MASK		0x4
-> +#define CHG_CNFG_00_BOOST_MASK		0x8
-> +#define CHG_CNFG_00_DIS_MUIC_CTRL_MASK	0x20
 
-Please squash.
+
+
+> +	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
+> +		ret = max77693_get_input_current_limit(chg, &val->intval);
+> +		break;
+> +	case POWER_SUPPLY_PROP_CURRENT_MAX:
+> +		ret = max77693_get_fast_charge_current(regmap, &val->intval);
+> +		break;
+>  	case POWER_SUPPLY_PROP_MODEL_NAME:
+>  		val->strval = max77693_charger_model;
+>  		break;
+> @@ -680,6 +727,11 @@ static int max77693_charger_probe(struct platform_device *pdev)
+>  	chg->dev = &pdev->dev;
+>  	chg->max77693 = max77693;
+>  
+> +	chg->regu = devm_regulator_get(chg->dev, "CHARGER");
+> +	if (IS_ERR(chg->regu))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(chg->regu),
+> +				     "failed to get charger regulator\n");\
+
+This breaks users... and where is the binding?
 
 Best regards,
 Krzysztof
