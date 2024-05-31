@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-8487-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8488-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 972B68D679D
-	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 19:05:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E5BE8D67A1
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 19:06:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C7A061C24CBA
-	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 17:05:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1230D283FAF
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 17:05:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A098316F83D;
-	Fri, 31 May 2024 17:05:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2733E16FF26;
+	Fri, 31 May 2024 17:05:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hhBlNw8X"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TxDVehbV"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BE66770F3
-	for <linux-pm@vger.kernel.org>; Fri, 31 May 2024 17:05:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02FBB16F83D
+	for <linux-pm@vger.kernel.org>; Fri, 31 May 2024 17:05:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717175142; cv=none; b=mzwkm0bFXrXLjsa2NYtG6N4kgD7OfLiu5XJt8yGLlR26/HyC7paQ7ccTw5fXEM38BHrqOnqimVlzc0l7K5L09GRhoxflNMVtrp7buPZsPj6euIif3Esi9y6znsY1aTieZpE2V3REUK+tRJiYoSo6NwcE5jGRLnprN5XDRKj3JvE=
+	t=1717175158; cv=none; b=nr0KsgJCUb1qpkuv2SPxD9xfE5iB+75O1bGIe09YCeXDtuZNvQkCzy3nrh8oTLtUicj1YlWwEqRX6zMAnn8czGMTiAAvCazCYi4hF8rUalB5ceqbXsRHQwIemj3FmMYnJIZpyqGFdNQQKveoHAe1zpjwQ1LIK1B+2vdIGgWWOAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717175142; c=relaxed/simple;
-	bh=NcS0b9gtFKNlsKo1hS4Yf9umQioTDdCIr98YgKhS8YQ=;
-	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=Sht72rijoXKg1kcJbZ1s4LlHJ0t9Kzkhdtg9R7IGIwJ8JjreaIr4EJdciq30E/yf9y+QRonO/Ail4Olb/EAXQDY5X5IezwXWfnvhAlRh1miiYK2G7rUYcBmlQjiBNIFdc01ggtb/558xJFy1JXDdV3Ge60F5pQkaj6Ag7svgz+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hhBlNw8X; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 07C7BC32786
-	for <linux-pm@vger.kernel.org>; Fri, 31 May 2024 17:05:41 +0000 (UTC)
+	s=arc-20240116; t=1717175158; c=relaxed/simple;
+	bh=YdjLhqcRvge5AiubYgBpZiLU3M6uyaEmiA+cZB6ip/k=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=mgq0/3tYMU89052CUxKo0clKbdpYQ/QI+DgxJuxlExslbFL03A9VZKw3CvxwSwBuX9cluLdiI/V8T261lREkySFzMXarC5ghHiP/EccCKeU68vHpANd9E4PjI5MitagaS4pTFsJ0vdvkt7yhgtGYNcNY6b3lK2nC4V0NnDh5Ki4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TxDVehbV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8A654C2BD10
+	for <linux-pm@vger.kernel.org>; Fri, 31 May 2024 17:05:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717175141;
-	bh=NcS0b9gtFKNlsKo1hS4Yf9umQioTDdCIr98YgKhS8YQ=;
-	h=From:To:Subject:Date:From;
-	b=hhBlNw8X5wMG+8IY6tSO+fs57ANSy/ZpPtdqA4amQnAZ87u/2Q/U1QoykXXIW/YqO
-	 TysaMo1Gqv4yJvJDl8Y8cU0wO+J/34HEOYxXQwx01GhwEeIZ8vrAyLp041BB0YRtUW
-	 crhBPZPlgudobzN1pXWq/4/s0+bw4Jc7IwbiLYTwj3SIFycJS1dGihWBr9omtWwndx
-	 DRXPxc9J68l66xT5ussB0SQ9ePcS6WqHSfYzM6FUFdNOnLGMmWNWqJWE79nv56ySAZ
-	 Gmsx7KfYm3pDBUnJyQTH4e581Yga7LmB4q+hBPNXLZPaFQSk58tK0RIKxd8ymQVNpT
-	 eGRKApFufPhmQ==
+	s=k20201202; t=1717175157;
+	bh=YdjLhqcRvge5AiubYgBpZiLU3M6uyaEmiA+cZB6ip/k=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=TxDVehbVoqw+y9Ort8GntXvmMw1CoED3c97nBjxJNh23/MFlpK2x05y47xJUhMgFD
+	 OtAnzYAbd51E5piTOfxcZa4S3LAm+mqmBFxfvT0z44trJx6yRaAbnKx7S31C47vTmk
+	 g0Zal0lN+6UWFS/QlGeRcOa/kGgu8i4Csv5/w1Uc5VLPWhHD5eGxdwxT78NwQ+TUCL
+	 NHPryYWc7YNzeqeKNJA5pgU4WbYnbNPV9v6ds8Qf4j9qmJtM/Z8FxepiAhGp+hsyPa
+	 oixqe9hejSDBeXd6ehv2qDIEdIii0Yr7AvvbV+8d9ul9s6f0pIn1La9dh0jTxHein4
+	 GZ5iJZ3UU53cw==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id EA594C53B7E; Fri, 31 May 2024 17:05:40 +0000 (UTC)
+	id 8110EC53B7F; Fri, 31 May 2024 17:05:57 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-pm@vger.kernel.org
-Subject: [Bug 218919] New: My machine enter automaticaly in ondemand but my
- kernel config have default CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE enable by
- default
-Date: Fri, 31 May 2024 17:05:40 +0000
+Subject: [Bug 218919] My machine enter automaticaly in ondemand but my kernel
+ config have default CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE enable by default
+Date: Fri, 31 May 2024 17:05:57 +0000
 X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: new
+X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: Power Management
 X-Bugzilla-Component: cpufreq
@@ -62,10 +62,10 @@ X-Bugzilla-Resolution:
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter
- cf_regression
-Message-ID: <bug-218919-137361@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: cf_kernel_version
+Message-ID: <bug-218919-137361-2310JlW9lR@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218919-137361@https.bugzilla.kernel.org/>
+References: <bug-218919-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Bugzilla-URL: https://bugzilla.kernel.org/
@@ -79,57 +79,11 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D218919
 
-            Bug ID: 218919
-           Summary: My machine enter automaticaly in ondemand but my
-                    kernel config have default
-                    CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE enable by
-                    default
-           Product: Power Management
-           Version: 2.5
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P3
-         Component: cpufreq
-          Assignee: linux-pm@vger.kernel.org
-          Reporter: ionut_n2001@yahoo.com
-        Regression: No
+sander44 (ionut_n2001@yahoo.com) changed:
 
-Hi Kernel Team,
-
-I notice this today:
-
-```
-analyzing CPU 6:
-  driver: intel_cpufreq
-  CPUs which run at the same hardware frequency: 6
-  CPUs which need to have their frequency coordinated by software: 6
-  maximum transition latency: 20.0 us.
-  hardware limits: 800 MHz - 5.00 GHz
-  available cpufreq governors: conservative, ondemand, userspace, powersave,
-performance, schedutil
-  current policy: frequency should be within 800 MHz and 5.00 GHz.
-                  The governor "ondemand" may decide which speed to use
-                  within this range.
-  current CPU frequency is 800 MHz.
-
-```
-
-Ondemand is enabled on boot, but in my kernel config i have
-CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE at default option.
-
-CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=3Dy
-
-I think is not correctly this.
-
-Reproduce:
-1. intel_pstate=3Dpassive
-2. intel_pstate=3Ddisable
-2. intel_pstate=3Dno_hwp
-4. acpi_cpufreq
-
-I not have installed userspace controller for scheduler.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+     Kernel Version|                            |6.8.11
 
 --=20
 You may reply to this email to add a comment.
