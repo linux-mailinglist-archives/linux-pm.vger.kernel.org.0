@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-8449-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8450-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D6BE8D5E74
-	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 11:36:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCC538D5E80
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 11:37:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E92012874A0
-	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 09:36:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78430284DFF
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 09:37:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B538E1422DC;
-	Fri, 31 May 2024 09:35:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0433F13790F;
+	Fri, 31 May 2024 09:36:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VQRxhkFJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MCfqgmR3"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 802CA1422B0;
-	Fri, 31 May 2024 09:35:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C780184FD0;
+	Fri, 31 May 2024 09:36:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717148157; cv=none; b=eFdStR/qYEMQizhY0eHjTL9PdFUIFt7iPTobnxPfnIw0WrjMH6Opq2cmGUOvp8ded5/yDhrcr5yweB763GTLi6K6zMtMhD5FVHgMKw/4ElP+poJIcUZp3Z0frXurmHcCAMoppcaljRwZW2QcMyPo8C2oSwZjKwsIdTLr+0kZVDw=
+	t=1717148168; cv=none; b=YMKvgVMEFP69ix1RdyDaeZDj78Y6qm8a8seUnQGN3rq9H37B2GyMiwCpVsbEkJBYo5LQNEVE14H+c5u8/GvGs4Cgdz4tak8Sup5lFdMan8cxmANRcunRDgSLh+g91G+C8fA2YSmPEXIpSQxWG6ENVfYwuoIqWxU7hyCZ38Qw8yY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717148157; c=relaxed/simple;
-	bh=M9iotevpDU/o3TMTgKTS90BntOakcpY6VSqqLQo/pA8=;
+	s=arc-20240116; t=1717148168; c=relaxed/simple;
+	bh=hjqpZqhxJvDfjD8kwH0+FCDk3zq0ugnG8d05CejLRmY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Z29tV1y9qyXyjmw0Beg3w5mHi4/siazVW+i2NQAuDG4ZAlw6JioCIpAXsH7bIt3vl7fXLqVIAZEl0sBt2WLl7z2gK/SmV0t8rtOQPOGVHpb/nIHO6w7Ar1/6HW4m1saY8PBZmQyozukuBp6FKqcKE300oxYnMcEYMy38UVuwZJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VQRxhkFJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0F18C32789;
-	Fri, 31 May 2024 09:35:52 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=aGz29cWEhxnz8a08OWXBZMHtmpu6FLHorFLKRprTCudSOust1uT6ZLObOXDvdYOq2WZhMKc7b1GKlT2wWSL/j2Mh3BXKcw6/MfK8S7Q2DwoK7Gam63HnI2zk6q5nXWKH5AJmvVwFQPpDhZQv7sDObH/EcvyFX1QL6PD+bVhQATU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MCfqgmR3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58DCDC32786;
+	Fri, 31 May 2024 09:36:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717148157;
-	bh=M9iotevpDU/o3TMTgKTS90BntOakcpY6VSqqLQo/pA8=;
+	s=k20201202; t=1717148168;
+	bh=hjqpZqhxJvDfjD8kwH0+FCDk3zq0ugnG8d05CejLRmY=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=VQRxhkFJspheZFOjv3ZF81NhzfizwmAm7rs3YiMQYH+kqonLL2GLKcSH0JZJqo7To
-	 Ux8RB6raG2M0pLduAUmT+zBatQMjtJcJ5jdcudfNUZuElXbeuGQaxugujT9vcVk1el
-	 8sNqFlBhT+sjTzOpqgsVSF5QKiE11imGxBcSYqx+qsV8Dx4V5ruwjETLWrBiTjeCm2
-	 Uwcq2SDVkuizqPFxtwbZxWFYifjQYSJnCc1Eym4qboyg8WSgtJfEEbfpAGZPtAxCCZ
-	 Wpu+oRRVZ4I3OFPsD/9iGaCCSBlTk2yDY5wlP8evmhynQHBsm9KACM9IeFbkA87xup
-	 19LH1R+pEtRig==
-Message-ID: <0fad4a9f-918b-4396-9b7c-aa6d55f401c6@kernel.org>
-Date: Fri, 31 May 2024 11:35:50 +0200
+	b=MCfqgmR3IHRrH8Gqy9l/YMsoA1MtE5d9Rbr6d3hoIC6x4RuJnrkhMrBv9CiBb/oYP
+	 1Uo7fsFauG5I6SwcvUM1vUsl4TAJk3IVX5FHMDXWSpI8pwb7o7kOU+nTVknWFAodQ/
+	 d/bibpcjSlEYT/XnXygKcHDhwr0d2X2RV2B+ATvPWZAsHLoTFkhOu3VKXbY3KrYsTJ
+	 TNCnyok8VtaeF/uyJU2HsRdr4u3aGzeG1A5K404TgCm2dNdB2a4laZm7XSooqluEJV
+	 cJaNrG989wRkTbYVvfslwiYoIfBTgNjzgyZx6cmG2RbVn9R8j0Zoo/r5HMzHtFFLjd
+	 xQG1GhoFwRENg==
+Message-ID: <033f7073-abf8-4bd7-96b9-171ca1eb6429@kernel.org>
+Date: Fri, 31 May 2024 11:36:02 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 01/11] dt-bindings: power: supply: max77693: Add fast
- charge current property
+Subject: Re: [PATCH RFC 04/11] mfd: max77693: Add defines for OTG control
 To: Artur Weber <aweber.kernel@gmail.com>,
  Chanwoo Choi <cw00.choi@samsung.com>
 Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -64,9 +63,9 @@ Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
  Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>,
  Denis 'GNUtoo' Carikli <GNUtoo@cyberdimension.org>
 References: <20240530-max77693-charger-extcon-v1-0-dc2a9e5bdf30@gmail.com>
- <20240530-max77693-charger-extcon-v1-1-dc2a9e5bdf30@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <20240530-max77693-charger-extcon-v1-4-dc2a9e5bdf30@gmail.com>
 Content-Language: en-US
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -110,35 +109,33 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240530-max77693-charger-extcon-v1-1-dc2a9e5bdf30@gmail.com>
+In-Reply-To: <20240530-max77693-charger-extcon-v1-4-dc2a9e5bdf30@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 30/05/2024 10:55, Artur Weber wrote:
-> Add the maxim,fast-charge-current-microamp property, used to specify the
-> current limit to use for fast charge (when plugged into a wall charger).
+> These three bits are used to enable OTG control in the charger
+> driver. Add them in preparation for an updated driver.
 > 
 > Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
 > ---
->  Documentation/devicetree/bindings/power/supply/maxim,max77693.yaml | 7 +++++++
->  1 file changed, 7 insertions(+)
+>  include/linux/mfd/max77693-private.h | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max77693.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max77693.yaml
-> index f5fd53debbc8..4f80cc5418f5 100644
-> --- a/Documentation/devicetree/bindings/power/supply/maxim,max77693.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/maxim,max77693.yaml
-> @@ -56,6 +56,13 @@ properties:
->      maximum: 3500000
->      default: 3500000
+> diff --git a/include/linux/mfd/max77693-private.h b/include/linux/mfd/max77693-private.h
+> index 4570646e2f33..4448b024255d 100644
+> --- a/include/linux/mfd/max77693-private.h
+> +++ b/include/linux/mfd/max77693-private.h
+> @@ -209,7 +209,10 @@ enum max77693_charger_battery_state {
 >  
-> +  maxim,fast-charge-current-microamp:
-> +    description:
-> +      Current to use for fast charge in uA.
-> +    minimum: 60000
-> +    maximum: 2580000
-> +    default: 500000
+>  /* MAX77693 CHG_CNFG_00 register */
+>  #define CHG_CNFG_00_CHG_MASK		0x1
+> +#define CHG_CNFG_00_OTG_MASK		0x2
+>  #define CHG_CNFG_00_BUCK_MASK		0x4
+> +#define CHG_CNFG_00_BOOST_MASK		0x8
+> +#define CHG_CNFG_00_DIS_MUIC_CTRL_MASK	0x20
 
-That's a property of monitored-battery (and there is such there).
+Please squash.
 
 Best regards,
 Krzysztof
