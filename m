@@ -1,146 +1,124 @@
-Return-Path: <linux-pm+bounces-8492-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8493-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68D738D6C9E
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Jun 2024 00:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DBC4E8D6C9F
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Jun 2024 01:00:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23FF3288B0A
-	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 22:52:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75D252897C9
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 23:00:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F36382490;
-	Fri, 31 May 2024 22:52:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DDBD82D72;
+	Fri, 31 May 2024 23:00:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W2J+cUbZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a3Y7BDn/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E64193207;
-	Fri, 31 May 2024 22:52:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81A22824BD;
+	Fri, 31 May 2024 23:00:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717195928; cv=none; b=Lf52oMzNvTqAdx2hqCBiwLrB8Led9kghcA2RATQop2iaLiCWKWoJOIbu0tuerPLIVcmoZ08VdSXK82ssuR5u83d1qhekSHCHmd0+pZsE34uirFma80mZUTAAeM8uOgBFcYKEoKFKBF9CiIALNF4sLAYDmAr8ykyN3vu61F1Ov2o=
+	t=1717196417; cv=none; b=Y6SLu9WuQIjGSMU1TxWtn7XNYD4E/pWwyFxykYRM5uLXCYlsxBlsCJprR5VUBigFM+BSuh+0Fl0yh2XcupqU5UYdTi7Gg2JVt1S7ADj12x4mDssu8yWNcR0OpZPoRoa5WuDxbkGht9vqghzmcTQaLZnfzAkeTGqmFZ4PQ5ijwFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717195928; c=relaxed/simple;
-	bh=GBPyE45nrogn+zGrWB4VZvx6JNf2uRpYn1HKgzi4c/g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=scHmt9brjuADklW1Seh9YzqaRJzxi6zekfZTCVNXdkIWjVF6e2FG9tWcn5FAH53r2zeIHmh8RwJdZKj3o29WpR1dD0pHm31etsccRva1t/zO4mIgc2WmIxQ2HnWScsdsOKgX5YXw3wvzodvxDZ5Tj1fbAt+wpW8mjXFiGgFRCUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W2J+cUbZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5112C116B1;
-	Fri, 31 May 2024 22:52:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717195927;
-	bh=GBPyE45nrogn+zGrWB4VZvx6JNf2uRpYn1HKgzi4c/g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=W2J+cUbZIsYSalGWrDl6d2BjMNMrhWmwUj+BGYt8Hd5IxN0AKx8/aZYCMzBQC3AdW
-	 o2bw656fonhCXD5IGM3M8SEtkhTJ2iEBf06wVVIhiXsSgXe1x/xjoPTbF3L4zjhxDk
-	 XFkZYWfdi5eW3l93r9vFq9DvrWtWlBTBoZg1Iz/3HAMrfCxk3tll5YENIe7GutmbOp
-	 y/KtkNO2PdRq3px3sbgf8kL9wNanCYR5JgG1D0O5xwTJsMBB2z4cbvVoGiElE+mJTN
-	 H4YJP7NtUxKNacrHNX6aII4WVRjrkp34yyJCS4w6gjP/lRWejyV1QhY0xyDHPHFAqJ
-	 MY+bM7iYu1s6Q==
-Date: Fri, 31 May 2024 17:52:04 -0500
-From: Bjorn Andersson <andersson@kernel.org>
-To: Taniya Das <quic_tdas@quicinc.com>
-Cc: Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Andy Gross <agross@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, quic_jkona@quicinc.com, 
-	quic_imrashai@quicinc.com
-Subject: Re: [PATCH] pmdomain: qcom: rpmhpd: Skip retention level for Power
- Domains
-Message-ID: <4dap2yus4dvn6u25foq4dc3bpejxpgxqlhqqgxd3jpkcpewo6z@t3mt72ggwieu>
-References: <20240531114148.8550-1-quic_tdas@quicinc.com>
+	s=arc-20240116; t=1717196417; c=relaxed/simple;
+	bh=UBKKEvM9H27lQntnnS2zBRYXzaOTwI7iiVKSj/re3/E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YyWPqcxf4brdD8xeML2r7Tphj1M8XYwGQ2YvUPNNCwscHskPlkp0sBX+FAE/gSav2CtZGMuSabdMzlaIt9e0qu6fyuu79ZTRM17jCY9kr+4ybhwpBEtBl8X05V4my6sfOKyJqMM5woR27iO4tkjBPyoq5WYriIqpgdsjnHAUtJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a3Y7BDn/; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717196412; x=1748732412;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=UBKKEvM9H27lQntnnS2zBRYXzaOTwI7iiVKSj/re3/E=;
+  b=a3Y7BDn/tzgIoMEPgQyXFyKmPZdnEctDzOxbNxcC37XWUXbco6dbHUj4
+   blYcOoN/SaFUHviitBZa0HEA/W3N/5M6LJxa9V68sdTOQD83W/vf+ZjWI
+   2Qw1HYfHWUySOHWx6r+kpaFyuXNI2Az4VoCMU+lY/WF6K7ogWpbrDn1K8
+   xhqL2K4JxRKMH47jjVLKKeoi4PrD+yiDd1ciF0yOKjyO/aJyBCUeibEFj
+   bbhGQ1lzEALCHchEPa+E5yBWSaRI14nNDYl10XhQkma2kOVJJgDuBJc17
+   ApRrUDSuWRijR9xl0deUQK54wDRGOXKNaPf0dNtjZ9qGV995hMCkDhLI4
+   w==;
+X-CSE-ConnectionGUID: qO0d2jO4TbiMx6GH0xzu7Q==
+X-CSE-MsgGUID: eGATJ6nWSlygH5XJdv16NA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11089"; a="13514278"
+X-IronPort-AV: E=Sophos;i="6.08,205,1712646000"; 
+   d="scan'208";a="13514278"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 16:00:11 -0700
+X-CSE-ConnectionGUID: Q352bnSrRZi8XXTsWTcQTA==
+X-CSE-MsgGUID: ViEn5M/oRPm/8BztsJPpEw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,205,1712646000"; 
+   d="scan'208";a="41226739"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.19])
+  by orviesa005.jf.intel.com with ESMTP; 31 May 2024 16:00:10 -0700
+From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To: rafael@kernel.org,
+	viresh.kumar@linaro.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [PATCH] cpufreq: intel_pstate: Fix unchecked HWP MSR access
+Date: Fri, 31 May 2024 16:00:04 -0700
+Message-ID: <20240531230004.1334127-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240531114148.8550-1-quic_tdas@quicinc.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, May 31, 2024 at 05:11:48PM GMT, Taniya Das wrote:
-> In the cases where the power domain connected to logics is allowed to
-> transition from a level(L)-->power collapse(0)-->retention(1) or
-> vice versa retention(1)-->power collapse(0)-->level(L)  will cause the
-> logic to lose the configurations. The ARC does not support retention
-> to collapse transition on MxC rails.
-> 
-> The targets from SM8450 onwards the PLL logics of clock controllers are
-> connected to MxC rails and the recommended configurations are carried
-> out during the clock controller probes. The MxC transition as mentioned
-> above should be skipped to ensure the PLL settings are intact across
-> clock controller power on & off.
-> 
-> On older generation of targets which supports only Mx the logic is never
-> collapsed and it is parked always at RETENTION, thus this issue is never
-> observed on those targets.
-> 
+Fix unchecked MSR access error for processors with no HWP support. On
+such processors, maximum frequency can be changed by the system firmware
+using ACPI event ACPI_PROCESSOR_NOTIFY_HIGEST_PERF_CHANGED. This results
+in accessing HWP MSR 0x771.
 
-Cc: stable@vger.kernel.org # v5.17
-Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+Call Trace:
+	<TASK>
+	generic_exec_single+0x58/0x120
+	smp_call_function_single+0xbf/0x110
+	rdmsrl_on_cpu+0x46/0x60
+	intel_pstate_get_hwp_cap+0x1b/0x70
+	intel_pstate_update_limits+0x2a/0x60
+	acpi_processor_notify+0xb7/0x140
+	acpi_ev_notify_dispatch+0x3b/0x60
 
-Regards,
-Bjorn
+HWP MSR 0x771 can be only read on a CPU which supports HWP and enabled.
+Hence intel_pstate_get_hwp_cap() can only be called when hwp_active is
+true.
 
-> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
-> ---
->  drivers/pmdomain/qcom/rpmhpd.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> ---
->  drivers/pmdomain/qcom/rpmhpd.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/pmdomain/qcom/rpmhpd.c b/drivers/pmdomain/qcom/rpmhpd.c
-> index de9121ef4216..d2cb4271a1ca 100644
-> --- a/drivers/pmdomain/qcom/rpmhpd.c
-> +++ b/drivers/pmdomain/qcom/rpmhpd.c
-> @@ -40,6 +40,7 @@
->   * @addr:		Resource address as looped up using resource name from
->   *			cmd-db
->   * @state_synced:	Indicator that sync_state has been invoked for the rpmhpd resource
-> + * @skip_retention_level: Indicate that retention level should not be used for the power domain
->   */
->  struct rpmhpd {
->  	struct device	*dev;
-> @@ -56,6 +57,7 @@ struct rpmhpd {
->  	const char	*res_name;
->  	u32		addr;
->  	bool		state_synced;
-> +	bool            skip_retention_level;
->  };
->  
->  struct rpmhpd_desc {
-> @@ -173,6 +175,7 @@ static struct rpmhpd mxc = {
->  	.pd = { .name = "mxc", },
->  	.peer = &mxc_ao,
->  	.res_name = "mxc.lvl",
-> +	.skip_retention_level = true,
->  };
->  
->  static struct rpmhpd mxc_ao = {
-> @@ -180,6 +183,7 @@ static struct rpmhpd mxc_ao = {
->  	.active_only = true,
->  	.peer = &mxc,
->  	.res_name = "mxc.lvl",
-> +	.skip_retention_level = true,
->  };
->  
->  static struct rpmhpd nsp = {
-> @@ -819,6 +823,9 @@ static int rpmhpd_update_level_mapping(struct rpmhpd *rpmhpd)
->  		return -EINVAL;
->  
->  	for (i = 0; i < rpmhpd->level_count; i++) {
-> +		if (rpmhpd->skip_retention_level && buf[i] == RPMH_REGULATOR_LEVEL_RETENTION)
-> +			continue;
-> +
->  		rpmhpd->level[i] = buf[i];
->  
->  		/* Remember the first corner with non-zero level */
-> -- 
-> 2.17.1
-> 
+Reported-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Closes: https://lore.kernel.org/linux-pm/20240529155740.Hq2Hw7be@linutronix.de/
+Fixes: e8217b4bece3 ("cpufreq: intel_pstate: Update the maximum CPU frequency consistently")
+Tested-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+ drivers/cpufreq/intel_pstate.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index 4b986c044741..65d3f79104bd 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -1153,7 +1153,8 @@ static void intel_pstate_update_policies(void)
+ static void __intel_pstate_update_max_freq(struct cpudata *cpudata,
+ 					   struct cpufreq_policy *policy)
+ {
+-	intel_pstate_get_hwp_cap(cpudata);
++	if (hwp_active)
++		intel_pstate_get_hwp_cap(cpudata);
+ 
+ 	policy->cpuinfo.max_freq = READ_ONCE(global.no_turbo) ?
+ 			cpudata->pstate.max_freq : cpudata->pstate.turbo_freq;
+-- 
+2.25.1
+
 
