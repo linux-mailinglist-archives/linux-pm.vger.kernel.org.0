@@ -1,145 +1,204 @@
-Return-Path: <linux-pm+bounces-8483-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8484-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91AB88D651B
-	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 17:04:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C7178D6568
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 17:13:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 497E728E5F6
-	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 15:04:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 793F8B2CA05
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 15:06:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC9506CDCC;
-	Fri, 31 May 2024 15:04:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 914B26F2EB;
+	Fri, 31 May 2024 15:06:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j0r8HZ6w"
+	dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b="hSlGC0q5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EFA07483;
-	Fri, 31 May 2024 15:04:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4AA97483
+	for <linux-pm@vger.kernel.org>; Fri, 31 May 2024 15:06:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717167878; cv=none; b=H5mSkYy5HK+xBnJayNziBkzgkGiUVpfVDvNeqlDVmxsiJxXV3EfPGhbfeT2tWXeS5WnQDrljuTCsDjWFDJC23fZC5KqxQ6qRoj6q0F5+gFf/UYACx/NWryRN9yXIUX5w2EdDINPxD2OcCKX33QF/oTozcJ5V5/J3MhzrI9I8kFY=
+	t=1717167976; cv=none; b=Hcraf8Y66KMC/MkCrKOqeJv7/0OUWT+zBzXUVQxjuUcfaQN3OZCb760A4z0p/nhPyqfrVGyFFaNuo8hUcOkoklGhqGsCv1FZL9AWNUavTNaYsYvcGr3lhPsowcj9ZuM3+sGQdj/9jcqLlreSKFjMGo3NiLqbU2V4xDOce5fRTx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717167878; c=relaxed/simple;
-	bh=WlONLvUzuGAWpIFAckDTFmIFip9XIDRJ004IX70Pa7c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WHnqOsz2O+eramLF9Mz7mz+eeIstvj0tlrdTx9wmfBqgBpg2Ocvl4BjqT9n/PLNzpZYxW6AmG4HHHoWcyYPcYbpwAZ1FLeCPJCEmBat8nwnn925ZE1hToQnxWoQAzasQGO8b2snwHcLAcaCmm5Tw9H5yBJ3HIMPjulWGF2HAuT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j0r8HZ6w; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C353DC116B1;
-	Fri, 31 May 2024 15:04:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717167878;
-	bh=WlONLvUzuGAWpIFAckDTFmIFip9XIDRJ004IX70Pa7c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=j0r8HZ6wRlWQ8R7CpmEvEMHRZ8f5m4JQa4hyyRFq+uqUEAYINjfc7wUw8O4xqvvhl
-	 f/EBqTzaVIiGe+3P3TVXsSSDEFY04V8CmIPLCl4A6mGInJRmUd4uxt+lOCOzoS//lT
-	 5OctIOrg7J0+8y++Kwh5uEfiXKvD0ZJtZJBJAINyOHE4uK12UuawnUeAzmTIPx3Itg
-	 h3PN0MiYCKmOKTv9TvRoYUuH8yT2Khhc9Y7+g8/XeP6GKXbAQv9hVyaW+Q0x0sKhdF
-	 zLMYwfZT8TwziirNpOt94sJlBoq7rFPcf8jceK2odSb5rMf3UWT+OQvHDvHjt5nQyX
-	 OeR1OKATPKrYw==
-Date: Fri, 31 May 2024 16:04:32 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Haylen Chu <heylenay@outlook.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Chen Wang <unicorn_wang@outlook.com>,
-	Inochi Amaoto <inochiama@outlook.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Jisheng Zhang <jszhang@kernel.org>, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 1/3] dt-bindings: thermal: sophgo,cv180x-thermal: Add
- Sophgo CV180x thermal
-Message-ID: <20240531-oyster-duct-9eaf5f3e6f35@spud>
-References: <SEYPR01MB422119B40F4CF05B823F93DCD7F32@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
- <SEYPR01MB4221BD44992A23E2B0061023D7F32@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
- <1624f2f0-0a2d-4918-a129-84dca6da9af8@kernel.org>
+	s=arc-20240116; t=1717167976; c=relaxed/simple;
+	bh=oAsirbDJMkVo6kb6NwpvBmP1eMzhBz0gfaiI/XVgtfM=;
+	h=From:To:Cc:References:In-Reply-To:Subject:Date:Message-ID:
+	 MIME-Version:Content-Type; b=pZDRZSX3rrpzDWg3zrvAw+oF2cVhZsYjwgEFz5O6wD9zKSdGi8yunlYuOR2g4yzGvvQ4MmQ9DoZ//NZnCPEUrPUFu1dAKeGvnXPiyZ3DdllQC0c3ushtz4/5O5P7sKebxZaCx2IeSrvUIELJHk8LzhPTweYDj4TnYKrjcEfivMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=telus.net; spf=pass smtp.mailfrom=telus.net; dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b=hSlGC0q5; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=telus.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=telus.net
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1f44b45d6abso15126775ad.0
+        for <linux-pm@vger.kernel.org>; Fri, 31 May 2024 08:06:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google; t=1717167974; x=1717772774; darn=vger.kernel.org;
+        h=content-language:thread-index:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mW3mTTO64IQux68SvBpLSNFg5/t3Gc8RBFFNZihPeKo=;
+        b=hSlGC0q50Hm/9Pv4FcX2naYDHNCji3uyq/kkWVNGyNDcYpnU63yICrHzvOTdM/xEKt
+         OYWEF1aJylb/0uGrnrHSVSddkzhUeUvmgUB28urLJHU5lkov3XwHHtYk6FSP/b3V+ctY
+         QGRbWkuYObuB6hz3NEp6J5W+ci1JD2emrYi4nQuCpH7L97EChpHCwmsbwHWv+QXJyuuw
+         9aHrtxcqmYeiCKmE2wQODS0knoCpgaoLeIZAG+jI0QXxR0IjermDBX8asW9UqxnDAq79
+         8Zrf12kPiXEvcSrZSXTwvXJpC5KskvF5T0N/c4JzKYQH5NwNo5C8K3M9/67rnXu4fyFD
+         pfyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717167974; x=1717772774;
+        h=content-language:thread-index:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mW3mTTO64IQux68SvBpLSNFg5/t3Gc8RBFFNZihPeKo=;
+        b=kutF6VUjpYLhs7vayDsVLDCxkLgsx9g2c8yG9VmWs7pSOX/ZT25Czse1r4qXtdsFfU
+         k1gsTuAtkOXLCO+B4fEYjfK2CmE7yffLdnUKqqtf89p31pot3FLS8sBXcjoCY084s78s
+         rk/0czFuAnqvMjiC13UAQoMPDVniFpeXAO7BbFBU6wtrkJTNySP35nRd1Plt0msLST9E
+         aSQchym/HKe6sj94NLnYsjDxkxSWpzcKsKy2rYP9yAVaSET5KM2e3UqXxMm2nDw1MxCT
+         HhzVwcwABxpQ5r+KFZeoBnhaYgDUPbTS/077iW0xYLhnjJuv3ZlMPuecooV+JZHOYyxk
+         NRDw==
+X-Gm-Message-State: AOJu0YwHIZPiRs9bNUAZ8BtFzb4C6XG79v4O/k/X2vBt1bSVnAvsl/jQ
+	v52Vj5/U2xAkSoaHDfdJxyQTABbBD7tXUnn8kxWc0C9pwpy8i9wSupl7gbsZXXg=
+X-Google-Smtp-Source: AGHT+IE+UU30BCrMcJf+V77oeyAJu9zmyFk43BULL6DDKE8sdWHZw9dH5jr+mG4O4DCpX78UjNPo+g==
+X-Received: by 2002:a17:902:8ec2:b0:1f4:5dc0:5fe8 with SMTP id d9443c01a7336-1f636fecca4mr18114265ad.15.1717167973716;
+        Fri, 31 May 2024 08:06:13 -0700 (PDT)
+Received: from DougS18 (s66-183-142-209.bc.hsia.telus.net. [66.183.142.209])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6323f6d97sm17266305ad.218.2024.05.31.08.06.12
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 31 May 2024 08:06:13 -0700 (PDT)
+From: "Doug Smythies" <dsmythies@telus.net>
+To: "'Billes Tibor'" <tbilles@gmx.com>,
+	<rafael@kernel.org>
+Cc: <linux-pm@vger.kernel.org>,
+	<daniel.lezcano@linaro.org>,
+	"Doug Smythies" <dsmythies@telus.net>
+References: <3f71747b-f852-4ee0-b384-cf46b2aefa3f@gmx.com>
+In-Reply-To: <3f71747b-f852-4ee0-b384-cf46b2aefa3f@gmx.com>
+Subject: RE: Bisected regression, maximum frequency drops after sleep
+Date: Fri, 31 May 2024 08:06:14 -0700
+Message-ID: <001601dab36c$14d47a00$3e7d6e00$@telus.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="+uuAo5InwkaQdoaN"
-Content-Disposition: inline
-In-Reply-To: <1624f2f0-0a2d-4918-a129-84dca6da9af8@kernel.org>
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQIVTsJQ65NlNGVFqU5YwIYpfzfmVrE8No4w
+Content-Language: en-ca
+
+Hi,
+
+FWIW (For What It's Worth),
+There is a poster on one of the Linux forums [1]
+with the exact same processor,  i7-4710HQ,
+with, apparently, the exact same issue.
+
+... Doug
+
+On 2024.05.30 12:40 Tibor wrote:
+
+> Hi,
+>
+> I noticed an issue, that with every sleep-wake cycle, the maximum frequency of
+> the CPU drops further down. For example, my CPU has a maximum (turbo) frequency
+> of 3.5 Ghz, on first boot, this is the case. I put the laptop to sleep, wake it
+> up later, and now it reports only 2.1 Ghz as maximum frequency. After the next
+> cycle it reports 1.4 Ghz. A reboot restores the original maximum frequency.
+>
+> Details:
+> My CPU is an Intel Core i7-4710HQ. On bootup the
+> "grep -H . /sys/devices/system/cpu/cpufreq/policy0/*" command tell me this:
+> /sys/devices/system/cpu/cpufreq/policy0/affected_cpus:0
+> /sys/devices/system/cpu/cpufreq/policy0/cpuinfo_max_freq:3500000
+> /sys/devices/system/cpu/cpufreq/policy0/cpuinfo_min_freq:800000
+> /sys/devices/system/cpu/cpufreq/policy0/cpuinfo_transition_latency:20000
+> /sys/devices/system/cpu/cpufreq/policy0/related_cpus:0
+> /sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors:conservative ondemand userspace powersave performance schedutil
+> /sys/devices/system/cpu/cpufreq/policy0/scaling_cur_freq:900000
+> /sys/devices/system/cpu/cpufreq/policy0/scaling_driver:intel_cpufreq
+> /sys/devices/system/cpu/cpufreq/policy0/scaling_governor:ondemand
+> /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq:3500000
+> /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq:800000
+> /sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed:<unsupported>
+>
+> After sleep:
+> /sys/devices/system/cpu/cpufreq/policy0/affected_cpus:0
+> /sys/devices/system/cpu/cpufreq/policy0/cpuinfo_max_freq:3500000
+> /sys/devices/system/cpu/cpufreq/policy0/cpuinfo_min_freq:800000
+> /sys/devices/system/cpu/cpufreq/policy0/cpuinfo_transition_latency:20000
+> /sys/devices/system/cpu/cpufreq/policy0/related_cpus:0
+> /sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors:conservative ondemand userspace powersave performance schedutil
+> /sys/devices/system/cpu/cpufreq/policy0/scaling_cur_freq:904557
+> /sys/devices/system/cpu/cpufreq/policy0/scaling_driver:intel_cpufreq
+> /sys/devices/system/cpu/cpufreq/policy0/scaling_governor:ondemand
+> /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq:2100000
+> /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq:800000
+> /sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed:<unsupported>
+>
+> Notice the scaling_max_freq file says different frequencies. I tried writing
+> the scaling_max_freq file, it allows me to lower the maximum available
+> frequency, does not allow to raise back to 3.5 Ghz, it only raises back to
+> 2.1 Ghz (in this case).
+>
+> If I keep repeating this sleep-wake cycle, the scaling_max_freq reaches its
+> minimum at 1.4 Ghz, but the actual available frequency continues to drop, in
+> the following example to around 550 Mhz which is even below scaling_min_freq.
+> This was taken under full load, notice the value of scaling_cur_freq:
+>
+> /sys/devices/system/cpu/cpufreq/policy0/affected_cpus:0
+> /sys/devices/system/cpu/cpufreq/policy0/cpuinfo_max_freq:3500000
+> /sys/devices/system/cpu/cpufreq/policy0/cpuinfo_min_freq:800000
+> /sys/devices/system/cpu/cpufreq/policy0/cpuinfo_transition_latency:20000
+> /sys/devices/system/cpu/cpufreq/policy0/related_cpus:0
+> /sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors:conservative ondemand userspace powersave performance schedutil
+> /sys/devices/system/cpu/cpufreq/policy0/scaling_cur_freq:553861
+> /sys/devices/system/cpu/cpufreq/policy0/scaling_driver:intel_cpufreq
+> /sys/devices/system/cpu/cpufreq/policy0/scaling_governor:ondemand
+> /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq:1400000
+> /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq:800000
+> /sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed:<unsupported>
+>
+> I first noticed this when updating my kernel from 6.6.12 to 6.7.1. Since then
+> I've been trying to bisecting it, after a few failed attempts I think I came
+> reasonably close, this commit came out as the first bad one:
+>
+> commit 950210887670cbb7d2eb9af6fb743b70f1a1ebdc (refs/bisect/bad)
+> Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Date:   Tue Sep 19 20:54:37 2023 +0200
+>
+>    thermal: core: Drop trips_disabled bitmask
+>    
+>    After recent changes, thermal_zone_get_trip() cannot fail, as invoked
+>    from thermal_zone_device_register_with_trips(), so the only role of
+>    the trips_disabled bitmask is struct thermal_zone_device is to make
+>    handle_thermal_trip() skip trip points whose temperature was initially
+>    zero.  However, since the unit of temperature in the thermal core is
+>    millicelsius, zero may very well be a valid temperature value at least
+>    in some usage scenarios and the trip temperature may as well change
+>    later.  Thus there is no reason to permanently disable trip points
+>    with initial temperature equal to zero.
+>    
+>    Accordingly, drop the trips_disabled bitmask along with the code
+>    related to it.
+>    
+>    Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>    Tested-by: Ido Schimmel <idosch@nvidia.com>
+>    Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>
+> I also tested a recent stable kernel, 6.9.2 and it is still dropping the maximum
+> frequency after sleep.
+>
+> Can someone help me find the cause of this issue? Is there something I can do to
+> help debug this?
+>
+> Thanks in advance,
+> Tibor
+
+[1] https://ubuntuforums.org/showthread.php?t=2498097
 
 
---+uuAo5InwkaQdoaN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, May 31, 2024 at 10:54:24AM +0200, Krzysztof Kozlowski wrote:
-> On 30/05/2024 15:48, Haylen Chu wrote:
-> > Add devicetree binding documentation for thermal sensors integrated in
-> > Sophgo CV180X SoCs.
-> >=20
-> > Signed-off-by: Haylen Chu <heylenay@outlook.com>
-> > ---
-> >  .../thermal/sophgo,cv180x-thermal.yaml        | 46 +++++++++++++++++++
-> >  1 file changed, 46 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/thermal/sophgo,cv=
-180x-thermal.yaml
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/thermal/sophgo,cv180x-th=
-ermal.yaml b/Documentation/devicetree/bindings/thermal/sophgo,cv180x-therma=
-l.yaml
-> > new file mode 100644
-> > index 000000000000..0364ae6c1055
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/thermal/sophgo,cv180x-thermal.y=
-aml
-> > @@ -0,0 +1,46 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/thermal/sophgo,cv180x-thermal.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Sophgo CV180x on-SoC Thermal Sensor
-> > +
-> > +maintainers:
-> > +  - Haylen Chu <heylenay@outlook.com>
-> > +
-> > +description: Binding for Sophgo CV180x on-SoC thermal sensor
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
->=20
-> Drop items
->=20
-> > +      - enum:
-> > +          - sophgo,cv180x-thermal
-
-And a soc-specific compatible too please.
-
-Thanks,
-Conor.
-
---+uuAo5InwkaQdoaN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZlnnAAAKCRB4tDGHoIJi
-0qptAP4qGy3UQyXxXeohA72UPBX2kjoA0eFZmEQmtys4kbms9gEAlrIcVuX9VmxR
-vRHaOBCFCMp9dhqbo/U7804CHW3NYgM=
-=annq
------END PGP SIGNATURE-----
-
---+uuAo5InwkaQdoaN--
 
