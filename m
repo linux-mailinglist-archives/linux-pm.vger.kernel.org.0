@@ -1,195 +1,303 @@
-Return-Path: <linux-pm+bounces-8436-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8437-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FB448D5678
-	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 01:48:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E61CB8D56E3
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 02:23:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8956BB2563F
-	for <lists+linux-pm@lfdr.de>; Thu, 30 May 2024 23:47:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B5701F24267
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2024 00:23:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DC5717C7DF;
-	Thu, 30 May 2024 23:47:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA2961103;
+	Fri, 31 May 2024 00:22:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="PqHlxpMY"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VXLlzU0i"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12olkn2100.outbound.protection.outlook.com [40.92.23.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66E2A5674D;
-	Thu, 30 May 2024 23:47:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.23.100
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717112873; cv=fail; b=IUs48QL8/f48LXNPd729pJZrz9ax2MP5q0mLF53/rkBiXqr4OT2eYUuwuxn3W0pPvgFijlmCLoqr2DDZPLOUIAli+IoDqRq2oSrYqCA+4BVlMC/JtgunBAW/Q+hPzpZuHZ+gdnS0vS3W/ktItlP8uoiwavFMa/QSxsD104dCFPI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717112873; c=relaxed/simple;
-	bh=2YDyrTvknXVvXoWHACskoH5h+Mgt+S+Qgw5MW6scNVM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=shkaP5hbzg47l/Sgc3cvs6x+wpLP4nW8UDcbNQrvt0HxUHOau4McxRzHHGlkT2XE55oQiLkHyoJsD7X/tsJv3pGc7qbuhhzgi/SRohqhdTdQkf0n5f+6Gt0my4u0vKj2LJRQi/3WSTjG5J3LtA1GxjrSTKv59UtfZURwshnTQSc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=PqHlxpMY; arc=fail smtp.client-ip=40.92.23.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cQj6ILA41jbV87SLJD5ARsKEkxEv75w5QVYfblObIV4JfFmOBX84cWUTpe9ynLmjUKUXkUP++x8IJzJ6L10adYXRuyix3Lz5c0huU4HYw6WTc5BdQn6XaorjjaGrNNO/bTmszCfhzKv+lN4jkNNYNSPlx0TKNMwyAYW3eATTm8+sIucD16bfAjEus8ZF2ArVMdWIy2JghTS2QmootitwqGwqt9YnpdrtIaojMw17PJkVuzLWnXv0wu/0vAprRZatPFbMLBcM5TeC4ogYzFhYQRaebQT2ILahkdZRt9u3CH/qF2u2r5dEhAEJz25cxYZodur0vaYPCEzZV0T5ru8PWQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OQgO6oRA/vibXE1YVmCbX2sFf7ZvqnT6RgYAynPz9Qc=;
- b=QEvlmgNA5eVReHna1SGc4Qnunig+J4UiORlSA5n+zpoXFe3gV/UhXZM/O9r/2CBsiEiH2oNxZgBblXJD4wfU9xeIlPdWbKZDhhDdlExI/DVcxMJ5I3eOLfB0zg1dVT6D68eWe6idhkABma3hfaClt8a9MTH4tYwHKK8YZ0xTVg5RBP1uLtj/isrj5CcaCTy1gBhNVqrvnC8CLeTTRPguVPzohDFmfIUsfget0/YSORUFeZIIQUx4mrjnbEW8b8uhIjR0nxS4jv2b1NxkGhNgQri73mFX9f+hZLA/8cKJ2G/tQ7PXSabyam8VePSd72NY7b65iOArn3A+UycT4I2kqg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OQgO6oRA/vibXE1YVmCbX2sFf7ZvqnT6RgYAynPz9Qc=;
- b=PqHlxpMYJ/V5WbrR7D/+h63VWRiwqXo465WQNRZHrL0ngAOYclySaXE54/XaQu2lzsm+SczBWNNsfH0N0JcDYtzSKtz8P7ZTPg4VSgTfGpsyWCE+pivjeZy1PcdwDcVkwlnp0PyAOqDDu/3b8XTvrccxotTIJsNNgrZzOe5hu0Hm8C1+t2PuqkZVrp2QBLo7QS7HJWpBNraEgkSS2L3E5CeAkzaoRnjguj8E8tbc1EygGnkfGBZu2e8wq7H50/d7EGotZHDFH3lfoa8Oz6+FQJtW41rY4ZKSezV6F8m4bAhqcWgr9dGsWcDFpVUdY6aTXleDPO/NuX7YfBP+Mn3CwQ==
-Received: from PH7PR20MB4962.namprd20.prod.outlook.com (2603:10b6:510:1fa::6)
- by CY5PR20MB4928.namprd20.prod.outlook.com (2603:10b6:930:3c::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.19; Thu, 30 May
- 2024 23:47:49 +0000
-Received: from PH7PR20MB4962.namprd20.prod.outlook.com
- ([fe80::b5de:b82:43d9:4e8c]) by PH7PR20MB4962.namprd20.prod.outlook.com
- ([fe80::b5de:b82:43d9:4e8c%6]) with mapi id 15.20.7633.017; Thu, 30 May 2024
- 23:47:49 +0000
-Date: Fri, 31 May 2024 07:47:34 +0800
-From: Inochi Amaoto <inochiama@outlook.com>
-To: Haylen Chu <heylenay@outlook.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD6D1367
+	for <linux-pm@vger.kernel.org>; Fri, 31 May 2024 00:22:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717114975; cv=none; b=h5imoUB5IROpKVVJigVhmy6Bps63znb111h7qUh18vQ9ikBBuSgytISOVTA3sCzyA3HcuT3R5UPJ+CtpPNg+h+bC7qb7HFJnBGIqEF0f4JitbCBLGG+w2E1S6080uTWCGsYvW9DtWbygoxYODFyAhycYqu4eqoag9qBFX4+9zg4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717114975; c=relaxed/simple;
+	bh=a+MTHRbQZmyET4RE0SkjiFYdjs368VfVHQLAD7aFXJg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iPWzHN04ikW8L6IgBlP7/lDV2F7/ZFbmLUWkwTHtahbL+naNLoqOooqewVzahoQO1wjR8bruWtlAbQdKvi8Sqdqw/7TARxaF6PJhT/VJuVtiwtNWMstd7sY1XagBGywXHctZx2aHYKi/DP3wAMArEjzAI2EjHuRrq4sV1OGiJ2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VXLlzU0i; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-52961b77655so1761724e87.2
+        for <linux-pm@vger.kernel.org>; Thu, 30 May 2024 17:22:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1717114971; x=1717719771; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0yVVKFhmIVyi/gwbSmn3VSSTQQqssFlSlOSpKOH7IJg=;
+        b=VXLlzU0i3WzR4ZBScI9I1du86ITe1/++yytMBiCicYyoFgn5TWyQP/KBM8rBaX7bEm
+         K6X0Y/FBV6iTa4pyok/4/JubT0CDILaA5q55YO2zSgSzDNvnyW7ILJXs/9jvvJnr4ZRP
+         yw1cCmjHxxmzHZh146HwrENngKNQAeCVBVfqSkYavcbv8N2b6X0PDxz3gBNIQKI+sEPZ
+         OwHgrhkFNezkr9m9VWel7Xj1tXPB0d5sbw+mNgfcdU5jxiyWRi63hLABcUzGKRc2hRYM
+         KYPyiyrLFw/RkGnIzHA4ic+kRP6NT2wj2TbJKroz2MCM5Tn0GJwDRuijKAovNCAB8e0s
+         Y9cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717114971; x=1717719771;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0yVVKFhmIVyi/gwbSmn3VSSTQQqssFlSlOSpKOH7IJg=;
+        b=s/dhmCuGrfO/iQlV7uLzhVmh844QQQURbfeUDu5U7Pl/lVH6A5RhsYaeeOYUFNTiK6
+         mn7jW3SWY+RJA3TdhC22tk2Lj2aAxieS7/cCPnYBy+Z0PEoB1kFHvMi+ov6iQDB1Jx21
+         TKEj965WYpKP9is2o08mAAYTboZwttc6jN0KDzeEXpw0/BWpwdxmzmMwjVETS2pZkkeV
+         RPFpStaCHQm2uE+ixj7/D5gwJpUim96duGpLeDaYBkzzpa4QxW49dWnYc8crcFF0m4Dg
+         b+ppYcON3znm4CMrp9yXs/V8IosBvwUxqeBLFWqq6Kvqdazida01uZ3KqGMn/WJAup3+
+         P3jw==
+X-Forwarded-Encrypted: i=1; AJvYcCVx6vUUYvcUW/vrvD0CPuJAmsf+u9gO8C7dmOM6Px8qD3iTitG6etGp9QyXVSkvfSK82VL9QCgZkJhtn5XhKUIOVkgrvdccCmw=
+X-Gm-Message-State: AOJu0Yzw0AUQC+I2AenO8drgC26lS9Y+Od13EyjJnCuq+abNQmixcQZ+
+	P7ZcmO9BXegO66Vz+XQ61HMV4q6JrIkFRZl4E7MxWsdjzl6pozwDrbR5KLJWdxY=
+X-Google-Smtp-Source: AGHT+IGwyTjaK7sTOD0lwTEcc8h2FpDlgvXSpJCoPLo5Nq2Xn4TWRqpsowc5anXlgkfZ9x1bVaT+CA==
+X-Received: by 2002:a19:7519:0:b0:523:9811:b0d6 with SMTP id 2adb3069b0e04-52b8959c577mr100931e87.15.1717114970664;
+        Thu, 30 May 2024 17:22:50 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyyykxt-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::227])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52b84d34cdasm135780e87.50.2024.05.30.17.22.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 May 2024 17:22:49 -0700 (PDT)
+Date: Fri, 31 May 2024 03:22:48 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
 	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@outlook.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Jisheng Zhang <jszhang@kernel.org>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 2/3] riscv: dts: sophgo: cv18xx: Add sensor device and
- thermal zone
-Message-ID:
- <PH7PR20MB4962FF8B101A968B38565827BBF32@PH7PR20MB4962.namprd20.prod.outlook.com>
-References: <SEYPR01MB422119B40F4CF05B823F93DCD7F32@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
- <SEYPR01MB42213647922C5B93C8D3DF0AD7F32@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SEYPR01MB42213647922C5B93C8D3DF0AD7F32@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
-X-TMN: [B9T20Lx7OXSGmexspownEz4j9oq+lwm5RrcZoWFCJtA=]
-X-ClientProxiedBy: TYCPR01CA0058.jpnprd01.prod.outlook.com
- (2603:1096:405:2::22) To PH7PR20MB4962.namprd20.prod.outlook.com
- (2603:10b6:510:1fa::6)
-X-Microsoft-Original-Message-ID:
- <un2fe7534cy6htpjaftgfqpvifqgxww5nk6mpgdgusb7zz2mi5@wr7j54xg6vob>
+	Bjorn Andersson <andersson@kernel.org>, Hans de Goede <hdegoede@redhat.com>, 
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	Nikita Travkin <nikita@trvn.ru>
+Subject: Re: [PATCH v4 3/6] usb: typec: ucsi: add Lenovo Yoga C630 glue driver
+Message-ID: <bo6jvoew3s37g753nclbx3badpnnhxs53myuaqb3whr5zb4tf3@fcra5ic6y6wo>
+References: <20240528-yoga-ec-driver-v4-0-4fa8dfaae7b6@linaro.org>
+ <20240528-yoga-ec-driver-v4-3-4fa8dfaae7b6@linaro.org>
+ <afed0bee-de6e-4e86-8437-0518c616bd2c@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR20MB4962:EE_|CY5PR20MB4928:EE_
-X-MS-Office365-Filtering-Correlation-Id: de45c376-5d88-49d6-bf40-08dc8102e9a6
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|461199019|3412199016|440099019|1710799017;
-X-Microsoft-Antispam-Message-Info:
-	MPb7TmSjI+zJJVEikvDUfmDRyF2XdiD+agd6VGajTGjNTSqymoT4gkENq7Uhi3aSLO5Px1jVLbk6buTWMemzTDv/X7iyfHTM2UhQkddxfFG9BvqF8DPeI2eRz51iFL6kwTy5wxdSeLEn3eI48qk4apBJ1yGk6p0a/nUe3mDEzfhcMX1lz4xzxye69UdhJB3W5kFA2Z0h+O+edZiOZTZlNC2j6k2TCf/4wjPGHEUR7VKHsmKpLqETYs/AG8TB+Cnf+joqPj2R0GEJH2KGgPapcG+njKy7Jj4ebexNowPd7CY3q1Q9EngsOSrSSeSBHjNbupuo6K0pvSP8A36ckwmSSLymltI8FM8uNja5QJhanqvykBuhjDX+qg0SAOeUhimkCjBrFYn/B52n+gdcL+A57atUpGJ0nV8VQTurP36q+EZ3U7NrfwswE9bbQRxPKpUYeyk2S1Z2jlpCJiITYegutByJ8Nh9yk478PfidtQv+e60mm9gkGkVbwfxwK6KmC6t50HGkWIbtk2GsT3luo1Cosawz8aMSfYJffxNfrKg6tgdOleXV29N3sRioe7k0olIPN6DX7m7NgXiePG78mET3ClcBr+/UR0ewISYHvW0PH0kGpPd/P2KGh+T4C0ihxel
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?a1CWmI6lqVcL4IwKCeLt0708k4vV6qADQesNsv4R74sEzgjHfQ5EMGZr59kw?=
- =?us-ascii?Q?fwuya5zdL4ymGwEF2T7deIUlcz0jI3V0xCYiuLu+t4MDKGzJtqHX53KYF0Mt?=
- =?us-ascii?Q?rUNsozA80wAt5uwvRHSY+ab2YoGzKj4MwtkNQDJwDw/edKqExCtoSMjJzptV?=
- =?us-ascii?Q?Jg+5NwFVw7xFkdVNwVxseQgg6uACUssU/YEC1Y9W0DjVXVlGjn3Rl58CWHNR?=
- =?us-ascii?Q?z0nHyeNob7jw3a760RQb4H2Ir8t3vY3Dr9b9xkwrrBLrV2A0EXnwlhxVY0Uk?=
- =?us-ascii?Q?d3OjPDxfGY1/hsm+SvHG3FObE5SggbY90ujQLGAnkUKYMWnipgbkT990ly48?=
- =?us-ascii?Q?lKpizdj17eXqPi5rGZWPOJEYg6wzO0ZNuJTCkI0uhQMLW8Ls3HlUHJX/B1ZY?=
- =?us-ascii?Q?vfv7sWLa9RSiNZkXDYC2cFgy3GEZ//Dxwbcs6W2xjUbnS2/aHPb5miwA5Vg4?=
- =?us-ascii?Q?cCzvs382mpjB1qLCuNFYuSY2ihu/EwIFpKpQMAPfYE9XLbeEEQ019dpH9Rzi?=
- =?us-ascii?Q?ZzWcN09lhAg8yLYSPEpmPy5yZbirieuV+mpdgti3BDeCZjppdl7kBFi4NLrZ?=
- =?us-ascii?Q?nkffhO/2vDhEGRLdVpiJkYFrG+td18xG69jn9MkWHFXR3h/bmy7BoFhD2j5T?=
- =?us-ascii?Q?LZZxYCz8crCjYQHvGxTGVCev/Zf5Ni4FztimXrxKLVFsgG4OvhrSnBBlBDJZ?=
- =?us-ascii?Q?CRuOFCr8c5Eg63o8RrFDtKbkcfroMipomgbJTiAqTN1uHjpJdqG71y7iYsHP?=
- =?us-ascii?Q?WON5MUxPo2gpI1jWPeGvR8KMxOEneex7N+J8mh5Fz29PD8p7pCzlpNJ+l/Nw?=
- =?us-ascii?Q?VApKc6BrMgkn+FGcVQ8antP9gezL7MkhA1hguWxAgWw4ZvicbpIPy6uhfwAL?=
- =?us-ascii?Q?o4v5SeFBxET7ei6Ab9d8Zb8NrD2zMJQfswyZokvEQOdTDRnfIq8xNjQkJw1C?=
- =?us-ascii?Q?dfLr2ZNHza13w4EunnYNpokwV5l8Lr7arf8yrPk0D1cldocyaWADZXngUits?=
- =?us-ascii?Q?ioffYBswsSq4gbK+Ggq2el7bR3a0+gshWzHD9yjcEoaq8JWL6KS5JMqfDu4y?=
- =?us-ascii?Q?GPstCFfyf5EuqQVRV0uYpBAcbpFRkCxZV+mykhYBPkHOQ0PZJvcNuYlmIlWB?=
- =?us-ascii?Q?yPEMpPDNQ89d5V4EMRH9gc6v6tR+QSvbYqjXqrJaVdqssYBmmv9vIPWVRDX9?=
- =?us-ascii?Q?JjiK06pD3AoTBrKXeK+CCEjoZcnAXlvug+ebJZd9GidB72H/BiuicfW9R5Dj?=
- =?us-ascii?Q?osp9FCLjcjkEy35dkyJT?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: de45c376-5d88-49d6-bf40-08dc8102e9a6
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR20MB4962.namprd20.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2024 23:47:49.1513
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR20MB4928
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <afed0bee-de6e-4e86-8437-0518c616bd2c@linaro.org>
 
-On Thu, May 30, 2024 at 01:48:26PM GMT, Haylen Chu wrote:
-> Add common sensor device and thermal zones for Sophgo CV18xx SoCs.
+On Wed, May 29, 2024 at 04:41:40PM +0100, Bryan O'Donoghue wrote:
+> On 28/05/2024 21:44, Dmitry Baryshkov wrote:
+> > The Lenovo Yoga C630 WOS laptop provides implements UCSI interface in
+> > the onboard EC. Add glue driver to interface the platform's UCSI
+> > implementation.
+> > 
+> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > ---
+> >   drivers/usb/typec/ucsi/Kconfig          |   9 ++
+> >   drivers/usb/typec/ucsi/Makefile         |   1 +
+> >   drivers/usb/typec/ucsi/ucsi_yoga_c630.c | 189 ++++++++++++++++++++++++++++++++
+> >   3 files changed, 199 insertions(+)
+> > 
+> > diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
+> > index bdcb1764cfae..680e1b87b152 100644
+> > --- a/drivers/usb/typec/ucsi/Kconfig
+> > +++ b/drivers/usb/typec/ucsi/Kconfig
+> > @@ -69,4 +69,13 @@ config UCSI_PMIC_GLINK
+> >   	  To compile the driver as a module, choose M here: the module will be
+> >   	  called ucsi_glink.
+> > +config UCSI_LENOVO_YOGA_C630
+> > +	tristate "UCSI Interface Driver for Lenovo Yoga C630"
+> > +	depends on EC_LENOVO_YOGA_C630
+> > +	help
+> > +	  This driver enables UCSI support on the Lenovo Yoga C630 laptop.
+> > +
+> > +	  To compile the driver as a module, choose M here: the module will be
+> > +	  called ucsi_yoga_c630.
+> > +
+> >   endif
+> > diff --git a/drivers/usb/typec/ucsi/Makefile b/drivers/usb/typec/ucsi/Makefile
+> > index b4679f94696b..aed41d23887b 100644
+> > --- a/drivers/usb/typec/ucsi/Makefile
+> > +++ b/drivers/usb/typec/ucsi/Makefile
+> > @@ -21,3 +21,4 @@ obj-$(CONFIG_UCSI_ACPI)			+= ucsi_acpi.o
+> >   obj-$(CONFIG_UCSI_CCG)			+= ucsi_ccg.o
+> >   obj-$(CONFIG_UCSI_STM32G0)		+= ucsi_stm32g0.o
+> >   obj-$(CONFIG_UCSI_PMIC_GLINK)		+= ucsi_glink.o
+> > +obj-$(CONFIG_UCSI_LENOVO_YOGA_C630)	+= ucsi_yoga_c630.o
+> > diff --git a/drivers/usb/typec/ucsi/ucsi_yoga_c630.c b/drivers/usb/typec/ucsi/ucsi_yoga_c630.c
+> > new file mode 100644
+> > index 000000000000..ca1ab5c81b87
+> > --- /dev/null
+> > +++ b/drivers/usb/typec/ucsi/ucsi_yoga_c630.c
+> > @@ -0,0 +1,189 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Copyright (c) 2022-2024, Linaro Ltd
+> > + * Authors:
+> > + *    Bjorn Andersson
+> > + *    Dmitry Baryshkov
+> > + */
+> > +#include <linux/auxiliary_bus.h>
+> > +#include <linux/module.h>
+> > +#include <linux/platform_data/lenovo-yoga-c630.h>
+> > +
+> > +#include "ucsi.h"
+> > +
+> > +struct yoga_c630_ucsi {
+> > +	struct yoga_c630_ec *ec;
+> > +	struct ucsi *ucsi;
+> > +	struct notifier_block nb;
+> > +	struct completion complete;
+> > +	unsigned long flags;
+> > +#define UCSI_C630_COMMAND_PENDING	0
+> > +#define UCSI_C630_ACK_PENDING		1
+> > +	u16 version;
+> > +};
+> > +
+> > +static  int yoga_c630_ucsi_read(struct ucsi *ucsi, unsigned int offset,
+> > +				void *val, size_t val_len)
+> > +{
+> > +	struct yoga_c630_ucsi *uec = ucsi_get_drvdata(ucsi);
+> > +	u8 buf[YOGA_C630_UCSI_READ_SIZE];
+> > +	int ret;
+> > +
+> > +	ret = yoga_c630_ec_ucsi_read(uec->ec, buf);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	if (offset == UCSI_VERSION) {
+> > +		memcpy(val, &uec->version, min(val_len, sizeof(uec->version)));
+> > +		return 0;
+> > +	}
+> > +
+> > +	if (offset == UCSI_CCI)
+> > +		memcpy(val, buf,
+> > +		       min(val_len, YOGA_C630_UCSI_CCI_SIZE));
+> > +	else if (offset == UCSI_MESSAGE_IN)
+> > +		memcpy(val, buf + YOGA_C630_UCSI_CCI_SIZE,
+> > +		       min(val_len, YOGA_C630_UCSI_DATA_SIZE));
 > 
-> Signed-off-by: Haylen Chu <heylenay@outlook.com>
-> ---
->  arch/riscv/boot/dts/sophgo/cv18xx.dtsi | 36 ++++++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
+> For some reason I believe multi-lines like this, including function calls
+> that are split over lines should be encapsulated with {}
 > 
-> diff --git a/arch/riscv/boot/dts/sophgo/cv18xx.dtsi b/arch/riscv/boot/dts/sophgo/cv18xx.dtsi
-> index 891932ae470f..dfb4bb6eb319 100644
-> --- a/arch/riscv/boot/dts/sophgo/cv18xx.dtsi
-> +++ b/arch/riscv/boot/dts/sophgo/cv18xx.dtsi
-> @@ -310,5 +310,41 @@ clint: timer@74000000 {
->  			reg = <0x74000000 0x10000>;
->  			interrupts-extended = <&cpu0_intc 3>, <&cpu0_intc 7>;
->  		};
-> +
-> +		soc_temp: thermal-sensor@30e0000 {
-> +			compatible = "sophgo,cv180x-thermal";
-> +			reg = <0x30e0000 0x100>;
-> +			clocks = <&clk CLK_TEMPSEN>;
-> +			clock-names = "clk_tempsen";
-> +			#thermal-sensor-cells = <0>;
-> +		};
-> +	};
-> +
-
-> +	thermal-zones {
-> +		soc-thermal-0 {
-> +			polling-delay-passive	= <1000>;
-> +			polling-delay		= <1000>;
-> +			thermal-sensors		= <&soc_temp>;
-> +
-> +			trips {
-> +				soc_passive: soc-passive {
-> +					temperature	= <75000>;
-> +					hysteresis	= <5000>;
-> +					type		= "passive";
-> +				};
-> +
-> +				soc_hot: soc-hot {
-> +					temperature	= <85000>;
-> +					hysteresis	= <5000>;
-> +					type		= "hot";
-> +				};
-> +
-> +				soc_critical: soc-critical {
-> +					temperature	= <100000>;
-> +					hysteresis	= <0>;
-> +					type		= "critical";
-> +				};
-> +			};
-> +		};
->  	};
-
-Move this to the cpu specific file. Different cpu should have different
-thermal-zones.
-
->  };
-> -- 
-> 2.45.1
+> else if(x) {
+>     memcpy(x,y,
+>            z);
+> }
 > 
+> If checkpatch doesn't complain about it feel free not to do that though.
+
+No, checkpatch --strict doesn't complain
+
+> 
+> > +	else
+> > +		return -EINVAL;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static  int yoga_c630_ucsi_async_write(struct ucsi *ucsi, unsigned int offset,
+> > +				       const void *val, size_t val_len)
+> > +{
+> > +	struct yoga_c630_ucsi *uec = ucsi_get_drvdata(ucsi);
+> > +
+> > +	if (offset != UCSI_CONTROL ||
+> > +	    val_len != YOGA_C630_UCSI_WRITE_SIZE)
+> > +		return -EINVAL;
+> > +
+> > +	return yoga_c630_ec_ucsi_write(uec->ec, val);
+> > +}
+> > +
+> > +static  int yoga_c630_ucsi_sync_write(struct ucsi *ucsi, unsigned int offset,
+> > +				      const void *val, size_t val_len)
+> > +{
+> > +	struct yoga_c630_ucsi *uec = ucsi_get_drvdata(ucsi);
+> > +	bool ack = UCSI_COMMAND(*(u64 *)val) == UCSI_ACK_CC_CI;
+> > +	int ret;
+> > +
+> > +	if (ack)
+> > +		set_bit(UCSI_C630_ACK_PENDING, &uec->flags);
+> > +	else
+> > +		set_bit(UCSI_C630_COMMAND_PENDING, &uec->flags);
+> > +
+> > +	reinit_completion(&uec->complete);
+> > +
+> > +	ret = yoga_c630_ucsi_async_write(ucsi, offset, val, val_len);
+> > +	if (ret)
+> > +		goto out_clear_bit;
+> > +
+> > +	if (!wait_for_completion_timeout(&uec->complete, 5 * HZ))
+> > +		ret = -ETIMEDOUT;
+> > +
+> > +out_clear_bit:
+> > +	if (ack)
+> > +		clear_bit(UCSI_C630_ACK_PENDING, &uec->flags);
+> > +	else
+> > +		clear_bit(UCSI_C630_COMMAND_PENDING, &uec->flags);
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +const struct ucsi_operations yoga_c630_ucsi_ops = {
+> > +	.read = yoga_c630_ucsi_read,
+> > +	.sync_write = yoga_c630_ucsi_sync_write,
+> > +	.async_write = yoga_c630_ucsi_async_write,
+> > +};
+> > +
+> > +static int yoga_c630_ucsi_notify(struct notifier_block *nb,
+> > +				 unsigned long action, void *data)
+> > +{
+> > +	struct yoga_c630_ucsi *uec = container_of(nb, struct yoga_c630_ucsi, nb);
+> > +	u32 cci;
+> > +	int ret;
+> > +
+> > +	if (action == LENOVO_EC_EVENT_USB || action == LENOVO_EC_EVENT_HPD) {
+> > +		ucsi_connector_change(uec->ucsi, 1);
+> > +		return NOTIFY_OK;
+> > +	}
+> > +
+> > +	if (action != LENOVO_EC_EVENT_UCSI)
+> > +		return NOTIFY_DONE;
+> 
+> Is this disjunction on action a good candidate for a switch(){}
+
+Ack, refactored the function by extracting the UCSI notification code
+and then using the switch-case.
+
+> > +
+> > +	ret = uec->ucsi->ops->read(uec->ucsi, UCSI_CCI, &cci, sizeof(cci));
+> > +	if (ret)
+> > +		return NOTIFY_DONE;
+> > +
+> > +	if (UCSI_CCI_CONNECTOR(cci))
+> > +		ucsi_connector_change(uec->ucsi, UCSI_CCI_CONNECTOR(cci));
+> > +
+> > +	if (cci & UCSI_CCI_ACK_COMPLETE &&
+> > +	    test_bit(UCSI_C630_ACK_PENDING, &uec->flags))
+> > +		complete(&uec->complete);
+> > +	if (cci & UCSI_CCI_COMMAND_COMPLETE &&
+> > +	    test_bit(UCSI_C630_COMMAND_PENDING, &uec->flags))
+> > +		complete(&uec->complete);
+> 
+> IMO these multi-line clauses should end up with a {} around the complete
+> even though its not required.
+> 
+> Emphasis on the O.
+
+I added an empty line inbetween, then it's easier to comprehent event
+without curly brackets.
+
+> 
+> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+
+-- 
+With best wishes
+Dmitry
 
