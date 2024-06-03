@@ -1,205 +1,144 @@
-Return-Path: <linux-pm+bounces-8533-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8534-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41CF28D881A
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2024 19:39:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F10A8D8828
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2024 19:44:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C6F82848FD
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2024 17:39:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E86401F21C0C
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2024 17:44:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D198137748;
-	Mon,  3 Jun 2024 17:39:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFD9313791A;
+	Mon,  3 Jun 2024 17:44:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gn/afc5o"
+	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="T6t9OcPu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from xry111.site (xry111.site [89.208.246.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 576E012EBE9
-	for <linux-pm@vger.kernel.org>; Mon,  3 Jun 2024 17:39:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F8DB137902;
+	Mon,  3 Jun 2024 17:44:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717436392; cv=none; b=s+bub3iAluc+Lgmqyrpx48zq0p/nxfkeIY/eM8d8JJIcDSltScJPIOtkicqAw2uUDix8GQVnji0XnjCI3bG22eRIGBt21ST5dhMXmQavWupnIzTzjEZrpPZUu0V4TTwYWWaR11Xm58Yq7q87Yy0daewofw+x5bvayTh4WUMj+yI=
+	t=1717436657; cv=none; b=qDiUAMfoBdaS9JwMlCbxjxB5QbesdmS9h21R14dmotMw1kZ+JLbzoFbH3m4VTyYaYoPIMhJXQ1D0CWh4bG3SO9gyQ3ramivcSD0g4AeYTjPQ0VHKGfXafWF0M2u1uSHOOC4k6I4Iv17tHjteELL+c0vUhEbxu0/m3XxmgJ0x1Ds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717436392; c=relaxed/simple;
-	bh=FvlMxv0T/LBnYjqL54nk2EuJ+zFycq5NUOh/EHY0N5c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hq/BFV2jochg0NRPv8V4Lk+L9nyghfdhrox86LiUNXqRFvo06cLCm1roJvur0h6QisFIL1tKrh/rgDejX1zPKU/0WFoJFzCzTQ5d38vu2VKe6xt0IrxGlLlYXxXf+jw0y7hpaC+TpWbRXu0o60XtnTl53SDlKZy5kbF1AIl/oVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gn/afc5o; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8805C2BD10
-	for <linux-pm@vger.kernel.org>; Mon,  3 Jun 2024 17:39:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717436391;
-	bh=FvlMxv0T/LBnYjqL54nk2EuJ+zFycq5NUOh/EHY0N5c=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Gn/afc5owtsF2DJZPZ+sZz32KnL9d11T07tMsrsD9jhxUMbqsp+uBKpMh2Hk8GcHa
-	 4GKRQWKAIY2NmK/KPOhVK8UnAzPPnCiw2AWb4RaOVsQWmQy3mKABddGeb5XBeF6Lbe
-	 bHLwHDItFOYPXotNI37HHktW1Y/e4AbvDRvLoEo9VUMhwQw64085bIKInhNxl5tltx
-	 NO6RXRTBE9nXg0roCZ8RkK05I0tL18XiZGMsJ0bFsvx2o/wASUJ5h2b0xZIrljnve5
-	 bMUqXZRNIMX9uIOU6StLRhl2cSc0lIuklfkpKfZdgBzR1EPl97H23To2uKYVj8RByR
-	 8xuK/rPMrGZrQ==
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5b99ba97d89so438565eaf.1
-        for <linux-pm@vger.kernel.org>; Mon, 03 Jun 2024 10:39:51 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVcpCzPOlXZmGcDMFeUbAw4vk+TNrHkIfgyw5zfBuadbJuSRm554rcMrodH+jQggtjK0Nt08sOGTTyP0VvJGBwAOKJ5VFcSsNk=
-X-Gm-Message-State: AOJu0Yy5S0TCoCCW2XwUbNk17b9Br3oY8b7WUXzqQfUx5ltTPKoItH0b
-	KlE7whfrQK1rcKDvKbSaHgf4IIBPN6ljnfpzK+PZRHsa0oPVFSZ5k8JacKsPca3UQQv0A02LXV5
-	cD+9MMmnHAZUxJIGFOhhHZiWKgjI=
-X-Google-Smtp-Source: AGHT+IGayJoPYxqAZ84PFMYp7FcW9iF8VmPyrILvv9KozQhd084EFLirjoKAXf95/uXi1pmo/womXUbS5O8/DmZE5oM=
-X-Received: by 2002:a05:6870:36d5:b0:24f:ee85:2c9e with SMTP id
- 586e51a60fabf-2508bde6735mr11537572fac.5.1717436390900; Mon, 03 Jun 2024
- 10:39:50 -0700 (PDT)
+	s=arc-20240116; t=1717436657; c=relaxed/simple;
+	bh=tmo0LZxMdzvSoYgPSGhR2ipRgjphQMohkpxHGkKaTFU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pOeONbOkdIeITjrFl27thMZZTeaabhFZC3bhsYrc2RXDrgHCuc9Brd7lXVm85BtTuRLd9SlKdlctqdyDRECYv35HbYLdwIBkMtqxCoIlnNmBmlJ99R1dwyBiICeZMoWawQ3CsTlnXezu/Q4oWbKdc8pcDd5wmiaa+/AU2qRLmUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=T6t9OcPu; arc=none smtp.client-ip=89.208.246.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+	s=default; t=1717436654;
+	bh=tmo0LZxMdzvSoYgPSGhR2ipRgjphQMohkpxHGkKaTFU=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=T6t9OcPue/Gq30YaSX3aQDQfihwjieNxwm9BETQhPd6cp27uZzkYR6KpHHXtbgxlk
+	 ezvofmMb0AxhkLkXaR+Atu74hu8NHWywohAoSI0Hx5FxeDdAdNuTOgY7yW91FxHN63
+	 oMeETO6JsnHpVo9tzQudIXoLnsGM/9Ap9Wak20J4=
+Received: from [IPv6:240e:358:117b:e900:dc73:854d:832e:4] (unknown [IPv6:240e:358:117b:e900:dc73:854d:832e:4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+	(Client did not present a certificate)
+	(Authenticated sender: xry111@xry111.site)
+	by xry111.site (Postfix) with ESMTPSA id 0FD8A66E7C;
+	Mon,  3 Jun 2024 13:44:12 -0400 (EDT)
+Message-ID: <48eba83030e155f703b4248e9c1ae65aa44b1a83.camel@xry111.site>
+Subject: Re: [PATCH v1 2/6] cpufreq: intel_pstate: Do not update
+ global.turbo_disabled after initialization
+From: Xi Ruoyao <xry111@xry111.site>
+To: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>, "Rafael J.
+ Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>
+Date: Tue, 04 Jun 2024 01:44:08 +0800
+In-Reply-To: <c3526e7a0e80ec1a3a011259c38ab4b772040ea4.camel@linux.intel.com>
+References: <13494237.uLZWGnKmhe@kreacher> <8366982.T7Z3S40VBb@kreacher>
+	 <bf3ebf1571a4788e97daf861eb493c12d42639a3.camel@xry111.site>
+	 <6d5ee74605bd9574baa5ed111cb54e959414437a.camel@linux.intel.com>
+	 <6ebadacd8aaa307a5766cdb1b4d4a5c69acd87ac.camel@xry111.site>
+	 <30a30c5107a47a2cc3fd39306728f70dd649d7fe.camel@linux.intel.com>
+	 <f382e06635b3b52841d1e0c11dcf639d225edae0.camel@xry111.site>
+	 <29d69252dcdc398f147c9139a8666d09e7bd831d.camel@linux.intel.com>
+	 <0324bc3a88654855719cd48a5ed69a34eea31037.camel@xry111.site>
+	 <c3526e7a0e80ec1a3a011259c38ab4b772040ea4.camel@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.2 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <3f71747b-f852-4ee0-b384-cf46b2aefa3f@gmx.com>
-In-Reply-To: <3f71747b-f852-4ee0-b384-cf46b2aefa3f@gmx.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 3 Jun 2024 19:39:39 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0i2GHh6xYH14G0pX7kBsamEM6eyAKCCj26VxH9aqFthzw@mail.gmail.com>
-Message-ID: <CAJZ5v0i2GHh6xYH14G0pX7kBsamEM6eyAKCCj26VxH9aqFthzw@mail.gmail.com>
-Subject: Re: Bisected regression, maximum frequency drops after sleep
-To: Billes Tibor <tbilles@gmx.com>
-Cc: rafael@kernel.org, linux-pm@vger.kernel.org, daniel.lezcano@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Mon, 2024-06-03 at 10:11 -0700, srinivas pandruvada wrote:
+> On Mon, 2024-06-03 at 21:12 +0800, Xi Ruoyao wrote:
+> > On Sun, 2024-06-02 at 16:11 -0700, srinivas pandruvada wrote:
+> >=20
+> > /* snip */
+> >=20
+> > > What is the output of:
+> > > grep . /sys/devices/system/cpu/intel_pstate/*
+> > >=20
+> > > Also=C2=A0
+> > > rdmsr 0x771
+> > > rdmsr 0x774
+> > >=20
+> > >=20
+> > > Try these three patches. Don't worry about the commit description
+> > > for
+> > > this issue.
+> >=20
+> > Unfortunately they still do not fix the issue for me.
+> >=20
+> > The outputs of grep and rdmsr commands are initially:
+> >=20
+> > /sys/devices/system/cpu/intel_pstate/hwp_dynamic_boost:0
+> > /sys/devices/system/cpu/intel_pstate/max_perf_pct:100
+> > /sys/devices/system/cpu/intel_pstate/min_perf_pct:9
+> > /sys/devices/system/cpu/intel_pstate/no_turbo:1
+> > /sys/devices/system/cpu/intel_pstate/num_pstates:41
+> > /sys/devices/system/cpu/intel_pstate/status:active
+> > /sys/devices/system/cpu/intel_pstate/turbo_pct:33
+> > rdmsr 0x771: 10d1f2c
+> > rdmsr 0x774: 1f04
+> >=20
+> > But it then changes to:
+> >=20
+> > /sys/devices/system/cpu/intel_pstate/hwp_dynamic_boost:0
+> > /sys/devices/system/cpu/intel_pstate/max_perf_pct:100
+> > /sys/devices/system/cpu/intel_pstate/min_perf_pct:9
+> > /sys/devices/system/cpu/intel_pstate/no_turbo:1
+> > /sys/devices/system/cpu/intel_pstate/num_pstates:41
+> > /sys/devices/system/cpu/intel_pstate/status:active
+> > /sys/devices/system/cpu/intel_pstate/turbo_pct:33
+> > rdmsr 0x771: 10c1f2c
+> > rdmsr 0x774: 1f04
+> >=20
+> > It seems only the output of rdmsr 0x771 has changed.=C2=A0 And if I rea=
+d
+> > the
+> > SDM correctly it's a "Most_Efficient_Performance" change.
+> That is fine.
+>=20
+> We don't have any notifications either via ACPI or via HWP interrupt.
+> I think it was working by chance before this change as by the cpufreq
+> core is trying to set policy, the turbo is enabled by the firmware.
+>=20
+> What is this laptop make and model?
 
-On Thu, May 30, 2024 at 9:40=E2=80=AFPM Billes Tibor <tbilles@gmx.com> wrot=
-e:
->
-> Hi,
->
-> I noticed an issue, that with every sleep-wake cycle, the maximum frequen=
-cy of
-> the CPU drops further down. For example, my CPU has a maximum (turbo) fre=
-quency
-> of 3.5 Ghz, on first boot, this is the case. I put the laptop to sleep, w=
-ake it
-> up later, and now it reports only 2.1 Ghz as maximum frequency. After the=
- next
-> cycle it reports 1.4 Ghz. A reboot restores the original maximum frequenc=
-y.
->
-> Details:
-> My CPU is an Intel Core i7-4710HQ. On bootup the
-> "grep -H . /sys/devices/system/cpu/cpufreq/policy0/*" command tell me thi=
-s:
-> /sys/devices/system/cpu/cpufreq/policy0/affected_cpus:0
-> /sys/devices/system/cpu/cpufreq/policy0/cpuinfo_max_freq:3500000
-> /sys/devices/system/cpu/cpufreq/policy0/cpuinfo_min_freq:800000
-> /sys/devices/system/cpu/cpufreq/policy0/cpuinfo_transition_latency:20000
-> /sys/devices/system/cpu/cpufreq/policy0/related_cpus:0
-> /sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors:conse=
-rvative ondemand userspace powersave performance schedutil
-> /sys/devices/system/cpu/cpufreq/policy0/scaling_cur_freq:900000
-> /sys/devices/system/cpu/cpufreq/policy0/scaling_driver:intel_cpufreq
-> /sys/devices/system/cpu/cpufreq/policy0/scaling_governor:ondemand
-> /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq:3500000
-> /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq:800000
-> /sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed:<unsupported>
->
-> After sleep:
-> /sys/devices/system/cpu/cpufreq/policy0/affected_cpus:0
-> /sys/devices/system/cpu/cpufreq/policy0/cpuinfo_max_freq:3500000
-> /sys/devices/system/cpu/cpufreq/policy0/cpuinfo_min_freq:800000
-> /sys/devices/system/cpu/cpufreq/policy0/cpuinfo_transition_latency:20000
-> /sys/devices/system/cpu/cpufreq/policy0/related_cpus:0
-> /sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors:conse=
-rvative ondemand userspace powersave performance schedutil
-> /sys/devices/system/cpu/cpufreq/policy0/scaling_cur_freq:904557
-> /sys/devices/system/cpu/cpufreq/policy0/scaling_driver:intel_cpufreq
-> /sys/devices/system/cpu/cpufreq/policy0/scaling_governor:ondemand
-> /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq:2100000
-> /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq:800000
-> /sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed:<unsupported>
->
-> Notice the scaling_max_freq file says different frequencies. I tried writ=
-ing
-> the scaling_max_freq file, it allows me to lower the maximum available
-> frequency, does not allow to raise back to 3.5 Ghz, it only raises back t=
-o
-> 2.1 Ghz (in this case).
->
-> If I keep repeating this sleep-wake cycle, the scaling_max_freq reaches i=
-ts
-> minimum at 1.4 Ghz, but the actual available frequency continues to drop,=
- in
-> the following example to around 550 Mhz which is even below scaling_min_f=
-req.
-> This was taken under full load, notice the value of scaling_cur_freq:
->
-> /sys/devices/system/cpu/cpufreq/policy0/affected_cpus:0
-> /sys/devices/system/cpu/cpufreq/policy0/cpuinfo_max_freq:3500000
-> /sys/devices/system/cpu/cpufreq/policy0/cpuinfo_min_freq:800000
-> /sys/devices/system/cpu/cpufreq/policy0/cpuinfo_transition_latency:20000
-> /sys/devices/system/cpu/cpufreq/policy0/related_cpus:0
-> /sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors:conse=
-rvative ondemand userspace powersave performance schedutil
-> /sys/devices/system/cpu/cpufreq/policy0/scaling_cur_freq:553861
-> /sys/devices/system/cpu/cpufreq/policy0/scaling_driver:intel_cpufreq
-> /sys/devices/system/cpu/cpufreq/policy0/scaling_governor:ondemand
-> /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq:1400000
-> /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq:800000
-> /sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed:<unsupported>
->
->
-> I first noticed this when updating my kernel from 6.6.12 to 6.7.1. Since =
-then
-> I've been trying to bisecting it, after a few failed attempts I think I c=
-ame
-> reasonably close, this commit came out as the first bad one:
->
-> commit 950210887670cbb7d2eb9af6fb743b70f1a1ebdc (refs/bisect/bad)
-> Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Date:   Tue Sep 19 20:54:37 2023 +0200
->
->     thermal: core: Drop trips_disabled bitmask
->
->     After recent changes, thermal_zone_get_trip() cannot fail, as invoked
->     from thermal_zone_device_register_with_trips(), so the only role of
->     the trips_disabled bitmask is struct thermal_zone_device is to make
->     handle_thermal_trip() skip trip points whose temperature was initiall=
-y
->     zero.  However, since the unit of temperature in the thermal core is
->     millicelsius, zero may very well be a valid temperature value at leas=
-t
->     in some usage scenarios and the trip temperature may as well change
->     later.  Thus there is no reason to permanently disable trip points
->     with initial temperature equal to zero.
->
->     Accordingly, drop the trips_disabled bitmask along with the code
->     related to it.
->
->     Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->     Tested-by: Ido Schimmel <idosch@nvidia.com>
->     Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->
-> I also tested a recent stable kernel, 6.9.2 and it is still dropping the =
-maximum
-> frequency after sleep.
->
-> Can someone help me find the cause of this issue? Is there something I ca=
-n do to
-> help debug this?
+It's a Hasee X5-2021S5H.
 
-It looks like one of the thermal zones on this system has a trip point
-whose temperature is initialized to 0 which used to be disabled before
-the change above and now it is not and it is processed during resume
-from system sleep.
+Hasee is known for producing some laptops very cheap but often having
+"minor" issues.  So I guess the firmware is doing some stupid thing.
 
-If this is the case, the thermal zone in question needs to be
-identified and its driver adjusted to set the trip point's temperature
-to invalid to start with.
+But turbo works just fine on Windows 11 so it'd be better if we could
+make it work for Linux too.
 
-Please send the output of the following two commands from your system:
 
-$ grep '.*' /sys/class/thermal/thermal_zone*/type
-$ grep '.*' /sys/class/thermal/thermal_zone*/trip_point_*
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
 
