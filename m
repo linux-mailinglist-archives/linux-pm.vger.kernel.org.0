@@ -1,205 +1,204 @@
-Return-Path: <linux-pm+bounces-8528-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8529-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35E628D8440
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2024 15:43:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B70F8D8484
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2024 15:59:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E0A38289F47
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2024 13:43:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 30FD128A93B
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2024 13:59:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89D0312D766;
-	Mon,  3 Jun 2024 13:43:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E75712E1D7;
+	Mon,  3 Jun 2024 13:59:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R83iDg97"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lYDdyh9D"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634151E4A2;
-	Mon,  3 Jun 2024 13:43:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD0C512E1C6
+	for <linux-pm@vger.kernel.org>; Mon,  3 Jun 2024 13:59:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717422205; cv=none; b=VNzpkXupP0HO0brBlj2DMY83YnoABM1I5NuIhTpPDKIyYiiMI0E6CCPTZUuzWL89I3s3/l3YYeXzjemBMyPV8XeXNBvvzJrbm/xMirEhs4xXDEiJpTmdr2gGBa5k6PnWLbMzGvYW+ZeInC2FHlzUVDImpV/SfjSQXND7LBbuWWA=
+	t=1717423167; cv=none; b=otvxJeFEFtZt5qSDB5Q+NU6cpZ0oycGsHoAV0HBz6a3VMiU8xN4XmKkdMxfhect9eGxxGuIn9WF15ztfrFd3EsQROgO0iplVmfGkrE0Q82q8U49eyZ3vuE5cOZuQqJflGK7liSovhhrwbxM9yHYJHzSvL4ZtH12ix+WVsAaL9bo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717422205; c=relaxed/simple;
-	bh=h8Ofj8K4e+BTkQzzttTwJ0M9l8oUEQowz/5cfcCkpdI=;
+	s=arc-20240116; t=1717423167; c=relaxed/simple;
+	bh=cp0EWn+6r/LDs36eodL94/fGja5GAeIBzCYRxpW1QoQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BiBSnRcZJOZhkR5WftOYhWUIdbRgSeMRgNdA/GxbGkgSLLI04/UOKFktPku/xU45JtdLpqzVXYFCg1ocKBTlaUNc8HnMgmPR4LVmqKxMYx63zulukUMVgzggKx+k0C8kGVjKV317Jj18PsqA1C5FAtie3iiD7lQk0NyALt3AB40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R83iDg97; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1A86C32781;
-	Mon,  3 Jun 2024 13:43:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717422205;
-	bh=h8Ofj8K4e+BTkQzzttTwJ0M9l8oUEQowz/5cfcCkpdI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=R83iDg979Ny/Cvx771e038nDC1MGkQ1EybRvGkDJw6MDEwWgPagdhBHwfZtX85TbL
-	 t9EmPK7tTZrYANH4qj2Adsdt9Iv1I+xsWcj4FJ+cmZiG9KRTQcTogz1/Rz/s3T3tPw
-	 fzmLG2X0ziqDBUhJn9CWBwfnZ/6O82MTRjJ2LuX+UgxWqqzuyEnNdz6+ANpD1Ug+mP
-	 LznIiZ5kBQHQnaGfVbBvaSRJofT3DnCqvxUqkfYTmQFfM7W0oo8kGjNvODN0L4q+HT
-	 MniI+I7RTysD9lQrESjP859D2tNzL4Jhw/XGlY4KeMdjBMg/Sb/N4LsMeQBB8S3Ps7
-	 PlCfGnYD552wg==
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-5ba3201c209so65403eaf.3;
-        Mon, 03 Jun 2024 06:43:24 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXpVXNE1xT3CWNCc5axe36fSeNn5mJvVJXF/hT5RgeFz3BBU/UKLCH4h+OG4FxEl804p9t8Tq6pcz+5biWwmcLWP74ljGLOXHWSTbPRskvDAYQQIe2ZqDBUnSZ5GPEiUsy2Ucrl5Dk=
-X-Gm-Message-State: AOJu0YzfAcaYWSm9CX9i35QqjI9+nDrQGuxFBbjNPWmNAkn4FfmdOlqD
-	SZrlQ9pyxq+foNKiyrZtUx7g4C8DfG11Jns6f3e1RpmZrUGppj2t/SRIszgs/d6cS9Uo48LW/OH
-	0EK8qixvCR1SsbHT6WSJbjjjWLTQ=
-X-Google-Smtp-Source: AGHT+IEWM5TA89pH8jZ9tKeiIYCH61QlC02EvkKdKvNEBD5hfm/gUVpb0gbCxz8WjGrxQGu4C9AolcAgJC8MA1fn0BI=
-X-Received: by 2002:a05:6820:d86:b0:5af:be60:ccdc with SMTP id
- 006d021491bc7-5ba053a8cebmr9838281eaf.0.1717422204079; Mon, 03 Jun 2024
- 06:43:24 -0700 (PDT)
+	 To:Cc:Content-Type; b=W/VfrnVvubaMdbcRL1XpE8xtcF21qJey98hIGHLqz5PyOmgPfSJU3hsk5A3RUOtjr5B+WyU2BYnh/tCBLDG0LNwmDrIx2jLnx8fQP5ee0Qu2kaOarkzBoGxsmJz3D3lEdzYul3eOGuRdyPSlHkxI2bopnJdTfB5ES/OvWpnMT1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lYDdyh9D; arc=none smtp.client-ip=209.85.219.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-dfa727d47c1so2827265276.0
+        for <linux-pm@vger.kernel.org>; Mon, 03 Jun 2024 06:59:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1717423164; x=1718027964; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=o2BkymhQ/db2q0Xr2SvTMdgw34Lx4ntfmiWk5iS8ce4=;
+        b=lYDdyh9DSxC8f0IuGLcT7CDeWTvZcmaYqLJrGECfN4NcTa8cQnzervbRRG+b4DDgK3
+         2RUASGHSsZZamZV1/zQD6R0lpRpvSIE0s20ZFXE+vTNth+1Zh7Wsd89Gc/m42s5yplWz
+         XJ0wo0s5cM0X5ZKj5QtpTN+o8HlcJ/aEOsZ37e7W+KyBQsUgA0ERXjUl/zDNfhaaProM
+         EuRNEFIPZ+LDBlIEOkwL6N0S1qzbyvdoMGfE8xGqZztuzMmLzK78T0TsxCvHa5tUmXqX
+         sTe0XC7LvAAaKvW63yWK3iwZjZ46A9MQ11KHgo0TM46ULrkCtwshujEp8rZfyL8YvsWp
+         aTfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717423164; x=1718027964;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o2BkymhQ/db2q0Xr2SvTMdgw34Lx4ntfmiWk5iS8ce4=;
+        b=OMUhWsMKvI7bqPv8klFtf0iVas1TebD36TwQAz49PHlW4wv3RP3ZalAwc1uCTS9qSQ
+         M7Ig8yXgGHyLZEcInNVtmB5pZLFoiYDrCTiusVIrvuLW952etxnF9gaO37LqCz7XiPqo
+         PeUVzzDEQURM23vShZZ6GTo0siJCP0ggxKDFShn0ZoywlGa7dBoLr/Wg7JuZ3nWpbr1T
+         A/lYPTnsIaY4u/pxFsRbt8Wy2A7qg/d/QPJ0LVL9gB3u0skAS6FaRuHG4FiehM8T6O0s
+         XmNPr4oRwZ91yV1ETDijVQTouOHDFeEiw7wWbzG0jGkJRr7kwHmqJGHVzKKzNwvoa6rG
+         gPew==
+X-Forwarded-Encrypted: i=1; AJvYcCW89TBbgBCEgxUwWMCAWYaUg+3RPn8EFBuW1zo4dwvsH4phzt8sAY3ZMLqK/ZTb+RC5PhJPvxIBEBrpvgVn43va5HFMzB+EfMQ=
+X-Gm-Message-State: AOJu0Yyj99oPQyCygsBHwkof+EWR7nOqZ+S2S9VMLwnyYZyX0wNCthZ1
+	CcSzc6nc9hIcD/zdltsdbUBYenK0h2X0Y0em1plHkWlwAKYK2qj2amHL6hjIhE5Yu7Jig1Q2EH2
+	rHdMcu1w+QFUDtT6WV7Crdej+u9jhSxpPDF76cg==
+X-Google-Smtp-Source: AGHT+IE+Sp67UTouHkbbALinQ0QcvpOUd55hi+8TrM3/1VlCwjirTrjQWAm0YMJPdgvUF3kqgf48s/3BvbWC4dkjd7A=
+X-Received: by 2002:a05:6902:260c:b0:de6:dcd:20ae with SMTP id
+ 3f1490d57ef6-dfa73c229e7mr10000393276.27.1717423163818; Mon, 03 Jun 2024
+ 06:59:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240603081331.3829278-1-beata.michalska@arm.com>
- <20240603081331.3829278-2-beata.michalska@arm.com> <20240603114811.oio3uemniib5uaa2@vireshk-i7>
-In-Reply-To: <20240603114811.oio3uemniib5uaa2@vireshk-i7>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 3 Jun 2024 15:43:12 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0j1bqhmKrJirw+WgEVDdszZ9xQSgmfazVKMVa8H6_5TSw@mail.gmail.com>
-Message-ID: <CAJZ5v0j1bqhmKrJirw+WgEVDdszZ9xQSgmfazVKMVa8H6_5TSw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] cpufreq: Rewire arch specific feedback for cpuinfo/scaling_cur_freq
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Beata Michalska <beata.michalska@arm.com>, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, rafael@kernel.org, len.brown@intel.com, 
-	ionela.voinescu@arm.com, vanshikonda@os.amperecomputing.com, 
-	sumitg@nvidia.com
+References: <20240527142557.321610-1-ulf.hansson@linaro.org>
+ <20240527142557.321610-2-ulf.hansson@linaro.org> <52dce8d3-acfa-4f2c-92d0-c25aa59d6526@quicinc.com>
+ <CAPDyKFq0V9ke30zYAGzS1aU0yq49DdfDkfYzxkLBZuaVGsyGDA@mail.gmail.com> <24570028-42cf-43b1-95f2-b6f48233bef9@quicinc.com>
+In-Reply-To: <24570028-42cf-43b1-95f2-b6f48233bef9@quicinc.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Mon, 3 Jun 2024 15:58:47 +0200
+Message-ID: <CAPDyKFoOxa1tmzxY4jrbPET5RKF6s-OAfYV=eZY9sPrJMR6jaQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/7] pmdomain: core: Enable s2idle for CPU PM domains
+ on PREEMPT_RT
+To: Nikunj Kela <quic_nkela@quicinc.com>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org, 
+	Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>, Nikunj Kela <nkela@quicinc.com>, 
+	Prasad Sodagudi <psodagud@quicinc.com>, Maulik Shah <quic_mkshah@quicinc.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, linux-rt-users@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 3, 2024 at 1:48=E2=80=AFPM Viresh Kumar <viresh.kumar@linaro.or=
-g> wrote:
+On Thu, 30 May 2024 at 16:23, Nikunj Kela <quic_nkela@quicinc.com> wrote:
 >
-> Hi Beata,
 >
-> Thanks for taking this forward.
->
-> On 03-06-24, 09:13, Beata Michalska wrote:
-> > Some architectures provide a way to determine an average frequency over
-> > a certain period of time, based on available performance monitors (AMU =
-on
-> > ARM or APERF/MPERf on x86). With those at hand, enroll arch_freq_get_on=
-_cpu
-> > into cpuinfo_cur_freq policy sysfs attribute handler, which is expected=
- to
-> > represent the current frequency of a given CPU,as obtained by the hardw=
-are.
-> > This is the type of feedback that counters do provide.
->
-> Please add blank line between paragraphs, it makes it easier to read
-> them.
->
-> > At the same time, keep the scaling_cur_freq attribute align with the do=
-cs
-> > and make it provide most recently requested frequency, still allowing t=
-o
-> > fallback to using arch_freq_get_on_cpu for cases when cpuinfo_cur_freq =
-is
-> > not available.
->
-> Please split this patch into two parts, they are very distinct changes
-> and should be kept separate.
->
-> > Signed-off-by: Beata Michalska <beata.michalska@arm.com>
-> > ---
-> >  drivers/cpufreq/cpufreq.c | 8 ++++++--
-> >  1 file changed, 6 insertions(+), 2 deletions(-)
+> On 5/30/2024 1:15 AM, Ulf Hansson wrote:
+> > On Tue, 28 May 2024 at 21:56, Nikunj Kela <quic_nkela@quicinc.com> wrote:
+> >>
+> >> On 5/27/2024 7:25 AM, Ulf Hansson wrote:
+> >>> To allow a genpd provider for a CPU PM domain to enter a domain-idle-state
+> >>> during s2idle on a PREEMPT_RT based configuration, we can't use the regular
+> >>> spinlock, as they are turned into sleepable locks on PREEMPT_RT.
+> >>>
+> >>> To address this problem, let's convert into using the raw spinlock, but
+> >>> only for genpd providers that have the GENPD_FLAG_CPU_DOMAIN bit set. In
+> >>> this way, the lock can still be acquired/released in atomic context, which
+> >>> is needed in the idle-path for PREEMPT_RT.
+> >>>
+> >>> Do note that the genpd power-on/off notifiers may also be fired during
+> >>> s2idle, but these are already prepared for PREEMPT_RT as they are based on
+> >>> the raw notifiers. However, consumers of them may need to adopt accordingly
+> >>> to work properly on PREEMPT_RT.
+> >>>
+> >>> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> >>> ---
+> >>>
+> >>> Changes in v2:
+> >>>       - None.
+> >>>
+> >>> ---
+> >>>  drivers/pmdomain/core.c   | 47 ++++++++++++++++++++++++++++++++++++++-
+> >>>  include/linux/pm_domain.h |  5 ++++-
+> >>>  2 files changed, 50 insertions(+), 2 deletions(-)
+> >>>
+> >>> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+> >>> index 623d15b68707..072e6bdb6ee6 100644
+> >>> --- a/drivers/pmdomain/core.c
+> >>> +++ b/drivers/pmdomain/core.c
+> >>> @@ -117,6 +117,48 @@ static const struct genpd_lock_ops genpd_spin_ops = {
+> >>>       .unlock = genpd_unlock_spin,
+> >>>  };
+> >>>
+> >>> +static void genpd_lock_raw_spin(struct generic_pm_domain *genpd)
+> >>> +     __acquires(&genpd->raw_slock)
+> >>> +{
+> >>> +     unsigned long flags;
+> >>> +
+> >>> +     raw_spin_lock_irqsave(&genpd->raw_slock, flags);
+> >>> +     genpd->raw_lock_flags = flags;
+> >>> +}
+> >>> +
+> >>> +static void genpd_lock_nested_raw_spin(struct generic_pm_domain *genpd,
+> >>> +                                     int depth)
+> >>> +     __acquires(&genpd->raw_slock)
+> >>> +{
+> >>> +     unsigned long flags;
+> >>> +
+> >>> +     raw_spin_lock_irqsave_nested(&genpd->raw_slock, flags, depth);
+> >>> +     genpd->raw_lock_flags = flags;
+> >>> +}
+> >>> +
+> >>> +static int genpd_lock_interruptible_raw_spin(struct generic_pm_domain *genpd)
+> >>> +     __acquires(&genpd->raw_slock)
+> >>> +{
+> >>> +     unsigned long flags;
+> >>> +
+> >>> +     raw_spin_lock_irqsave(&genpd->raw_slock, flags);
+> >>> +     genpd->raw_lock_flags = flags;
+> >>> +     return 0;
+> >>> +}
+> >>> +
+> >>> +static void genpd_unlock_raw_spin(struct generic_pm_domain *genpd)
+> >>> +     __releases(&genpd->raw_slock)
+> >>> +{
+> >>> +     raw_spin_unlock_irqrestore(&genpd->raw_slock, genpd->raw_lock_flags);
+> >>> +}
+> >>> +
+> >>> +static const struct genpd_lock_ops genpd_raw_spin_ops = {
+> >>> +     .lock = genpd_lock_raw_spin,
+> >>> +     .lock_nested = genpd_lock_nested_raw_spin,
+> >>> +     .lock_interruptible = genpd_lock_interruptible_raw_spin,
+> >>> +     .unlock = genpd_unlock_raw_spin,
+> >>> +};
+> >>> +
+> >>>  #define genpd_lock(p)                        p->lock_ops->lock(p)
+> >>>  #define genpd_lock_nested(p, d)              p->lock_ops->lock_nested(p, d)
+> >>>  #define genpd_lock_interruptible(p)  p->lock_ops->lock_interruptible(p)
+> >>> @@ -2079,7 +2121,10 @@ static void genpd_free_data(struct generic_pm_domain *genpd)
+> >>>
+> >>>  static void genpd_lock_init(struct generic_pm_domain *genpd)
+> >>>  {
+> >>> -     if (genpd->flags & GENPD_FLAG_IRQ_SAFE) {
+> >>> +     if (genpd->flags & GENPD_FLAG_CPU_DOMAIN) {
+> >>> +             raw_spin_lock_init(&genpd->raw_slock);
+> >>> +             genpd->lock_ops = &genpd_raw_spin_ops;
+> >>> +     } else if (genpd->flags & GENPD_FLAG_IRQ_SAFE) {
+> >> Hi Ulf, though you are targeting only CPU domains for now, I wonder if
+> >> FLAG_IRQ_SAFE will be a better choice?  The description of the flag says
+> >> it is safe for atomic context which won't be the case for PREEMPT_RT?
+> > You have a point!
 > >
-> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > index a45aac17c20f..3b0eabe4a983 100644
-> > --- a/drivers/cpufreq/cpufreq.c
-> > +++ b/drivers/cpufreq/cpufreq.c
-> > @@ -758,7 +758,8 @@ static ssize_t show_scaling_cur_freq(struct cpufreq=
-_policy *policy, char *buf)
-> >       ssize_t ret;
-> >       unsigned int freq;
-> >
-> > -     freq =3D arch_freq_get_on_cpu(policy->cpu);
-> > +     freq =3D !cpufreq_driver->get ? arch_freq_get_on_cpu(policy->cpu)
-> > +                                 : 0;
+> > However, we also need to limit the use of raw spinlocks, from
+> > PREEMPT_RT point of view. In other words, just because a genpd
+> > provider is capable of executing its callbacks in atomic context,
+> > doesn't always mean that it should use raw spinlocks too.
 >
-> This is getting trickier than I thought as I dived into more details
-> of all the changes to the file.
->
-> Rafael,
->
-> We probably need to decide on a policy for these two files, it is
-> getting a bit confusing.
->
-> cpuinfo_cur_freq:
->
-> The purpose of this file is abundantly clear. This returns the best
-> possible guess of the current hardware frequency. It should rely on
-> arch_freq_get_on_cpu() or ->get() to get the value.
+> Got it! Thanks. Maybe in future, if there is a need, a new GENPD FLAG
+> for RT, something like GENPD_FLAG_IRQ_SAFE_RT, can be added to address this.
 
-Let me quote the documentation:
+Yes, I agree, something along those lines would make sense.
 
-"This is expected to be the frequency the hardware actually runs at.
-If that frequency cannot be determined, this attribute should not be
-present."
+BTW, did you manage to get some time to test the series on your end?
 
-In my reading, this has nothing to do with arch_freq_get_on_cpu(), at
-least on x86.
-
-> Perhaps we can
-> make this available all the time, instead of conditionally on ->get()
-> callback (which isn't present for intel-pstate for example).
-
-We could, but then on x86 there is no expectation that this file will
-be present and changing this may introduce significant confusion
-because of the way it is documented (which would need to be changed,
-but people might be forgiven for failing to notice the change of
-interpretation of this file).
-
-> scaling_cur_freq:
->
-> This should better reflect the last requested frequency, but since a
-> significant time now it is trying to show what cpuinfo_cur_freq shows.
-
-Well, not really.
-
-> commit c034b02e213d ("cpufreq: expose scaling_cur_freq sysfs file for set=
-_policy() drivers")
-> commit f8475cef9008 ("x86: use common aperfmperf_khz_on_cpu() to calculat=
-e KHz using APERF/MPERF")
-
-"In the majority of cases, this is the frequency of the last P-state
-requested by the scaling driver from the hardware using the scaling
-interface provided by it, which may or may not reflect the frequency
-the CPU is actually running at (due to hardware design and other
-limitations).
-
-Some architectures (e.g. x86) may attempt to provide information more
-precisely reflecting the current CPU frequency through this attribute,
-but that still may not be the exact current CPU frequency as seen by
-the hardware at the moment."
-
-So the problem is that on Intel x86 with HWP and intel_pstate in the
-active mode, say, "the frequency of the last P-state requested by the
-scaling driver from the hardware" is actually never known, so exposing
-it via scaling_cur_freq is not possible.
-
-Moreover, because cpuinfo_cur_freq is not present at all in that case,
-scaling_cur_freq is the only way to allow user space to get an idea
-about the CPU current frequency.  I don't think it can be changed now
-without confusing users.
-
-> What should we do ? I wonder if we will break some userspace tools
-> (which may have started relying on these changes).
-
-We will.
-
-IIUC, it is desirable to expose "the frequency of the last P-state
-requested by the scaling driver from the hardware" via
-scaling_cur_freq on ARM, but it is also desirable to expose an
-approximation of the actual current CPU frequency, so the only way to
-do that without confusing the heck out of everybody downstream would
-be to introduce a new attribute for this purpose and document it
-precisely.
+Kind regards
+Uffe
 
