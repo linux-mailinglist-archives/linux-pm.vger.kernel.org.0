@@ -1,146 +1,162 @@
-Return-Path: <linux-pm+bounces-8588-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8589-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06ED58FB974
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2024 18:47:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49B4F8FB9A6
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2024 18:57:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B6971F26971
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2024 16:47:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0264D284E9D
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2024 16:57:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07D63148FE6;
-	Tue,  4 Jun 2024 16:47:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D59E14900F;
+	Tue,  4 Jun 2024 16:57:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="ADuKDlrc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AZfSA1xJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BAF014883E
-	for <linux-pm@vger.kernel.org>; Tue,  4 Jun 2024 16:47:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AEB72AF16;
+	Tue,  4 Jun 2024 16:57:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717519640; cv=none; b=Y++aX2pMeM0dIuYwF5+fEuUcJVLDOvOApi3UsAu3lHBsinSDBEY6qLnFOf+NJFu0ZXo11y7lyc2Z2SW6gQVJZw+eDsmUmDUA9VszApL/7jVOX3kfHGWkFFw7bqK+I3ku9YUNKpV1ibIvrC/r1yBItpZRtm+c/tXloMG/Hzo4D5Q=
+	t=1717520241; cv=none; b=tAnt1S789e3LdagUFY9dQUYo1OqzWUryqhrRoAu6KrQvG+bPLDkLLdX/wY5lMW7oDOyu5XyW5PLLWb6A+I+fi9lSJ9DbAdKngcEj1C6GUvnzhC4JExE5La+ucfVNwkEBsTZPRMVZOK4W809YNHGiR8LpwBHFXpzWjqHu9ZNF3Z0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717519640; c=relaxed/simple;
-	bh=fEeSbzfW7og883E6MMBCf0UFNWwK83m/m3pTbV2VcBY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=M+J6sC9VroKSTrv7QtC44+NmqNCtdw7r3/MazbMePHVyvIag8KgmtsSz0Fg+kFRuhElagZqpbEqQhKR1Qc4mJvI94npS4XFyYHlJUIwN7LITsxcLa9t2WoVE3ueJ2sUPj+wlk1Xyo1KPcDI2WxmnkI3xKrJMNOb2ACKKPiP5aKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=ADuKDlrc; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-57a1fe63947so5312607a12.1
-        for <linux-pm@vger.kernel.org>; Tue, 04 Jun 2024 09:47:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1717519636; x=1718124436; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=f0ESKMQFpm4YiLCeUzvQbkRJki5AHo+qK/u6Y+vz6Y8=;
-        b=ADuKDlrccR1+FOA3CSFbfFHd9K/1iH0yRLokQ49zmFbqIS0VeZbn17bOmDR1QPEOMT
-         NYZQCIIt5HUHsk+1ToqccBRKdYX0x2REoSsP+Ar4n0eKQJGYhHpLw0zFBxfpwd2s7DpM
-         gKP3R6/NPYQaDqOc5L8mcJwTQBIudy68im0ksOtqII+1xbqFLHgJeAoFFRiQvwna6jU+
-         /c7BmJe1Jf52oulH4oVhEaE46ETd6S62H+t/kThHyrkLh0VkMBMEggFfZPqp35oB1oYb
-         zUESbLMvskpmzUsFiQXmV/wkEKzAQMJP6DreLVaSsARfIJX9Yh0nDRIFfZ9MyK8IYJOe
-         q15w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717519636; x=1718124436;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f0ESKMQFpm4YiLCeUzvQbkRJki5AHo+qK/u6Y+vz6Y8=;
-        b=YUsw85AmsWaI+TNY8J3zs6Rl9UZ90hlRoIL6Nb7DCgSog7p5cpi+ZsZw+2BtevYSL6
-         oeu/3I8XFUhMBeN+agwri0M2wQJfQ49JO/wrnRmu40GiyxIlNaWoCs410Wd+yCDy0tn9
-         InzLG8UjNE2rcUxtXbo9TzatSEsSHyvrxdg7IAzIpEaU6VEjeGjeI87W2/mNU0yDWqTW
-         7M9v60CF439XKwYN1LTy2CH4AaE9xKIwIOhOslNt0D6cV/88fVa8/UMJ+Z6ZJxZ+df6l
-         d16E/3visLras3YNN1KgmuMeg4cmaki3Sj8YsfbKZKmZM+3epBEC/2j03YRNfyyRQgzl
-         222A==
-X-Gm-Message-State: AOJu0YybDFA25pROrVw1GK5/ePBiRjgHUqhwdS7+m+L2prBlq39U/wJP
-	2goDwvYAiWOlL9qKNDEN1IQtW8inUYOmQQEJbuXiahDufLGN+90n2tb21qkZEygT3DIJIIui+Fm
-	T
-X-Google-Smtp-Source: AGHT+IFEPd0Vtbd+VXJMfTA36KaKJHIzdgkRVLIFSS5iHePEF4hFxrrXE82EzlfPdPNon9Pquk4nwQ==
-X-Received: by 2002:a50:a411:0:b0:57a:4b31:5d7c with SMTP id 4fb4d7f45d1cf-57a8b6b7e3dmr105648a12.19.1717519635848;
-        Tue, 04 Jun 2024 09:47:15 -0700 (PDT)
-Received: from [127.0.1.1] ([84.102.31.231])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57a3968bdb7sm7291358a12.46.2024.06.04.09.47.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jun 2024 09:47:15 -0700 (PDT)
-From: Julien Panis <jpanis@baylibre.com>
-Date: Tue, 04 Jun 2024 18:46:58 +0200
-Subject: [PATCH v2] thermal/drivers/mediatek/lvts_thermal: Return error in
- case of invalid efuse data
+	s=arc-20240116; t=1717520241; c=relaxed/simple;
+	bh=8d5FrD3zoZXY2kRruuxHEQtoIcximE7vznRzibmSxHg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=BpzRQl1fHMLVNpqh27Jk1itlpsoTVCzhujvSWInWsiycTIjfroV2OulKKlcEjCVZQFWAxkzLRy9qRj2zLmddC5XdI6Bxr/MbYCSf6zN9D0kdvbgKQW4BshoqHg/7k8pTtgsULilytp4Qp92v4gw8E3r/4aZLVliHdkVmhLZgKA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AZfSA1xJ; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717520239; x=1749056239;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=8d5FrD3zoZXY2kRruuxHEQtoIcximE7vznRzibmSxHg=;
+  b=AZfSA1xJ++t8oLpCyNGkXfcxTAWLTvISdk1bCCg/L9AOxWcHff5iGM9y
+   VT1q7swskDPMDRoQckFa3e3msQJ54tAmj4qY6nZlCQudQeA1m6zSb/uHW
+   tKRhz+NkhwOU2C8FxEygi4yc5ULeSqy2TZzeDvuJoX8c7PLbA/HDTpbId
+   Wgn13X7B+yv6AvlghRSQ4yz2bVcQVWsa8fqJ6chCAOabkIfHjpxb3pBuT
+   WucN5TGIV5+4iP66xmFHO34JJm3jbyuYktzACm0GwF1/ydfsEtlSe/7MR
+   LndTmmULUI5cCE7Bgw5rAVc1wV5+YrJIYp3Qg+CKVvPhIe8ahSUSgGBda
+   Q==;
+X-CSE-ConnectionGUID: wuvU5ZzlRo6bbm6A0vCCfw==
+X-CSE-MsgGUID: WiITed4wRQm1zPVAlesTEg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11093"; a="24658814"
+X-IronPort-AV: E=Sophos;i="6.08,214,1712646000"; 
+   d="scan'208";a="24658814"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2024 09:57:19 -0700
+X-CSE-ConnectionGUID: rIdYWhGMQ4O2e7AiyxFRFw==
+X-CSE-MsgGUID: owmQ4ar9QN+6e9E2Ti2HHA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,214,1712646000"; 
+   d="scan'208";a="41734897"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.19])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2024 09:57:18 -0700
+Message-ID: <651d11578646200cdb0a91c46ed09a22f29e94a0.camel@linux.intel.com>
+Subject: Re: [PATCH v1 2/6] cpufreq: intel_pstate: Do not update
+ global.turbo_disabled after initialization
+From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Xi Ruoyao <xry111@xry111.site>, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+  Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Date: Tue, 04 Jun 2024 09:56:36 -0700
+In-Reply-To: <CAJZ5v0jBBgjBny0Ps9bvHc7q1Un_6sdudpNL0==Z5HB+gHH0Hw@mail.gmail.com>
+References: <13494237.uLZWGnKmhe@kreacher> <8366982.T7Z3S40VBb@kreacher>
+	 <bf3ebf1571a4788e97daf861eb493c12d42639a3.camel@xry111.site>
+	 <6d5ee74605bd9574baa5ed111cb54e959414437a.camel@linux.intel.com>
+	 <6ebadacd8aaa307a5766cdb1b4d4a5c69acd87ac.camel@xry111.site>
+	 <30a30c5107a47a2cc3fd39306728f70dd649d7fe.camel@linux.intel.com>
+	 <f382e06635b3b52841d1e0c11dcf639d225edae0.camel@xry111.site>
+	 <29d69252dcdc398f147c9139a8666d09e7bd831d.camel@linux.intel.com>
+	 <0324bc3a88654855719cd48a5ed69a34eea31037.camel@xry111.site>
+	 <c3526e7a0e80ec1a3a011259c38ab4b772040ea4.camel@linux.intel.com>
+	 <48eba83030e155f703b4248e9c1ae65aa44b1a83.camel@xry111.site>
+	 <CAJZ5v0jjLgG3VY_kBYc4mTrL2ybD2LfBTk2_H7xY0+Aq5g827A@mail.gmail.com>
+	 <f34c20ae3feac0e3570125f124e440d51c5e4d9b.camel@linux.intel.com>
+	 <1da736da33a61de92314934ecf7fa0420d6d6b81.camel@linux.intel.com>
+	 <aa643910265b9d92a397d5148b31d37b2c421b8b.camel@xry111.site>
+	 <63e98f2151ef64de92cf7e3da796937755ea5552.camel@linux.intel.com>
+	 <258ce61c155c28937620f6abe57a39f2b4b0ff56.camel@xry111.site>
+	 <101b903e58f2ebae60934edc374c7cda09f83de1.camel@linux.intel.com>
+	 <CAJZ5v0jBBgjBny0Ps9bvHc7q1Un_6sdudpNL0==Z5HB+gHH0Hw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240604-mtk-thermal-calib-check-v2-1-8f258254051d@baylibre.com>
-X-B4-Tracking: v=1; b=H4sIAAFFX2YC/4WNSw7CMAxEr1J5jVGShi5YcQ/UReK6xOoPJVVEV
- fXuhF6A5ZvRvNkhcRROcK92iJwlyTIXMJcKKLj5xShdYTDKWNWoGqd1wDVwnNyI5EbxSIFpQO8
- Mk7FOU22grN+Re/mc5mdbOEhal7idR1n/0v/OrFHjrWt8r6yy2tLDu63Uka+0TNAex/EFcms9U
- sEAAAA=
-To: "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Nicolas Pitre <npitre@baylibre.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
- Julien Panis <jpanis@baylibre.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1717519634; l=1587;
- i=jpanis@baylibre.com; s=20230526; h=from:subject:message-id;
- bh=fEeSbzfW7og883E6MMBCf0UFNWwK83m/m3pTbV2VcBY=;
- b=cLEAzCE+q/hlZXnwOs3Z0gAUMVPvwZApsPRLT5AzjW3HNJ27YxRfcwRnYZkWI5avHQFon6E/2
- GGk0D05B68pCh+oeaWZfQt7ze5LG8FokCaZHE17FRCX+sMr2p3SF0kY
-X-Developer-Key: i=jpanis@baylibre.com; a=ed25519;
- pk=8eSM4/xkiHWz2M1Cw1U3m2/YfPbsUdEJPCWY3Mh9ekQ=
 
-This patch prevents from registering thermal entries and letting the
-driver misbehave if efuse data is invalid. A device is not properly
-calibrated if the golden temperature is zero.
+On Tue, 2024-06-04 at 18:46 +0200, Rafael J. Wysocki wrote:
+> On Tue, Jun 4, 2024 at 6:41=E2=80=AFPM srinivas pandruvada
+> <srinivas.pandruvada@linux.intel.com> wrote:
+> >=20
+> > On Tue, 2024-06-04 at 18:32 +0800, Xi Ruoyao wrote:
+> > > On Tue, 2024-06-04 at 03:29 -0700, srinivas pandruvada wrote:
+> > > > On Tue, 2024-06-04 at 17:30 +0800, Xi Ruoyao wrote:
+> > > > > On Mon, 2024-06-03 at 21:31 -0700, srinivas pandruvada wrote:
+> > > > >=20
+> > > > > > > > Second, a delayed work can be added to check the MSR
+> > > > > > > > long
+> > > > > > > > enough
+> > > > > > > > after
+> > > > > > > > initialization and update global.turbo_disabled if it
+> > > > > > > > is 1.
+> > > > > > > > However,
+> > > > > > > > that would require some code surgery.
+> > > > > > >=20
+> > > > > > Something like the attached which does same way as user
+> > > > > > space
+> > > > > > no_turbo
+> > > > > > update.
+> > > > >=20
+> > > > > > =C2=A0static int intel_pstate_register_driver(struct
+> > > > > > cpufreq_driver
+> > > > > > *driver)
+> > > > > > =C2=A0{
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int ret;
+> > > > > > @@ -3114,6 +3137,9 @@ static int
+> > > > > > intel_pstate_register_driver(struct cpufreq_driver *driver)
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 global.turbo_disable=
+d =3D turbo_is_disabled();
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 global.no_turbo =3D =
+global.turbo_disabled;
+> > > > > >=20
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (global.turbo_disabled=
+)
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 schedule_delayed_work(&turbo_work, HZ);
+> > > > > > +
+> > > > >=20
+> > > > > I have to change it to 20 * HZ to make it work for me.=C2=A0 15 *
+> > > > > HZ
+> > > > > does
+> > > > > not
+> > > > > work.
+> > > >=20
+> > > > Is there any consistency or it is changing every time?
+> > >=20
+> > > It seems consistent.
+> > With such a delay, I am not sure how this even worked before.
+> > Can you revert the patch in question and use kernel dynamic debug
+> > dyndbg=3D"file intel_pstate.c +p" kernel command line and collect log
+> > for
+> > 30 seconds?
+>=20
+> I think that it worked because the MSR was read every time
+> intel_pstate ran, so it got updated at one point and stayed that way.
 
-Fixes: f5f633b18234 ("thermal/drivers/mediatek: Add the Low Voltage Thermal Sensor driver")
-Signed-off-by: Julien Panis <jpanis@baylibre.com>
----
-Guard against invalid calibration data, following this discussion:
-https://lore.kernel.org/all/ad047631-16b8-42ce-8a8d-1429e6af4517@collabora.com/
----
-Changes in v2:
-- Add Fixes tag.
-- Link to v1: https://lore.kernel.org/r/20240603-mtk-thermal-calib-check-v1-1-5d6bf040414c@baylibre.com
----
- drivers/thermal/mediatek/lvts_thermal.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+But here HWP in active mode is getting used. So it should have fewer
+request calls to set accept via cpufreq set_policy()
 
-diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-index 0bb3a495b56e..185d5a32711f 100644
---- a/drivers/thermal/mediatek/lvts_thermal.c
-+++ b/drivers/thermal/mediatek/lvts_thermal.c
-@@ -769,7 +769,11 @@ static int lvts_golden_temp_init(struct device *dev, u8 *calib,
- 	 */
- 	gt = (((u32 *)calib)[0] >> lvts_data->gt_calib_bit_offset) & 0xff;
- 
--	if (gt && gt < LVTS_GOLDEN_TEMP_MAX)
-+	/* A zero value for gt means that device has invalid efuse data */
-+	if (!gt)
-+		return -ENODATA;
-+
-+	if (gt < LVTS_GOLDEN_TEMP_MAX)
- 		golden_temp = gt;
- 
- 	golden_temp_offset = golden_temp * 500 + lvts_data->temp_offset;
-
----
-base-commit: 632483ea8004edfadd035de36e1ab2c7c4f53158
-change-id: 20240603-mtk-thermal-calib-check-ba2ec24a1c32
-
-Best regards,
--- 
-Julien Panis <jpanis@baylibre.com>
+ callback or with some HWP interrupt.
 
 
