@@ -1,172 +1,114 @@
-Return-Path: <linux-pm+bounces-8546-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8547-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C37B08FA698
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2024 01:43:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F1498FA757
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2024 03:13:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B2362873D9
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2024 23:43:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B8D321C236C4
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2024 01:13:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC26013D27C;
-	Mon,  3 Jun 2024 23:43:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0C498C1F;
+	Tue,  4 Jun 2024 01:13:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="MrbGUOIA"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="a87amCzr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 389E513D25F;
-	Mon,  3 Jun 2024 23:43:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C1CE8BEE;
+	Tue,  4 Jun 2024 01:13:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717458185; cv=none; b=REhVzomy+BdBWEyO2TTXIWWzbaKIhvy+4xBngvDRKMfaR8QWxZ91O29YbHzuldLiaKN2o1DD2kddgX3Bi2ghNDQdO1upr5AqzJffPXFdj1NrGwyT6npC4DJv+OLayQ0jq+b2NkeM20hO0Je5OinJD8zp1IzUu0gtAFWILlXw9k0=
+	t=1717463596; cv=none; b=CubXfo93oIpovywrK8BbaBfBxCnfRWDrm2IE0uiNS0WtF0+dsRQZvcQehgyXvkf7ZE3bL79BRskBGwQvReOynYAKxCtvO4+3rFXIg5SlxergLACcuXtqF3WwyQFHfPBGI341jfFwORWQZeQfOBeJls0Pp6s4YoTAUKbb2L7l4VM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717458185; c=relaxed/simple;
-	bh=53fQuKYZZtXT7cR92uUaUEjQHBqiDVfL8vWkByJoNzk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=Odvvrl9a60GUabpZ8/yo0G3EKT6JPJAPAYghO0nZzjk//xgPl1lAEZwCf/swMbmaTvSh/vqsron1sqKP1CrOIavj1O2Pl+N7VAES166tE4LwHDEEvlbsPof90/5UXruiy0/b7h4XJTFlbhp3DU9WioyYF/df+6Oga1/I/QuUVWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=MrbGUOIA; arc=none smtp.client-ip=205.220.168.131
+	s=arc-20240116; t=1717463596; c=relaxed/simple;
+	bh=ivWSIXQ03RUpEzamFDdjRbL9edghLIKo2coTate4x68=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=M+MWhpy7wWDxrIdiLqBzXkIjtiNO66HWHm4uZFv5NcQFHcis2aAN3e9Zu0G/dj3ncUeucPJzPRhEHV6LLJjGSoxVmaR1L5DZWfmeJ/a88LB5+yFIkylq7r85hWsTSq9PPAd7HxsiUm72D9ESHB37qIrcj/mLgrwVidp+4v9tOuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=a87amCzr; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 453L4V1k031125;
-	Mon, 3 Jun 2024 23:42:50 GMT
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 453BAMNO014994;
+	Tue, 4 Jun 2024 01:13:09 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=71tCYSv6wOqxXZ/r6UR9yB
-	38tyMXZmPGp5fIJM2z7ko=; b=MrbGUOIAKxfO+Or3eL29yvKJmbu3HjprBTM+pL
-	EK+G+1bspcGg1D8/+ILVfJts6VZM18xB2PoepCixPq4Ts0mqeJIHYFfXFeTz2guo
-	oMMbNilFQfFBD0MM15s1pYbOc3URwU5K14Hf9mQL/FW6d5JlBZPIMD2H1Noqgbsb
-	lOc2A1LscafafhNV3q1hr7nBsQYFzed9BvuxtL9li9UT3TaWSRZEc0AX/1YQWY06
-	HaXnHx6bODcayKHENfPA6mJu3/qru6wfMlpFuQDQbe23R7T0yNpm38OPZjo0la/b
-	OnMj+Vy95p3AxFgiBHBhcRhi0B6d9uP5Xq3z55L4q0mECvcQ==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yfw6v5dwm-1
+	:mime-version:subject:to; s=qcppdkim1; bh=dzpP5fauMwOrMst2EJAjYi
+	mAjDO41S6iKyRxp7EtFUo=; b=a87amCzrHfnbz7yXuDyCQGWPNi5FU+pCyVkugK
+	Jwa2B5Tgi6mhtlzeDgjxt2DsuTds/RXNFebTXLzrf1bm1/W8VgEscIeZ6jp8g9QM
+	8/pIPYPeU4DpOkw0crDOKjh0MSQJGjQ90Bqv4UW6C8CjGtFnVVgwninXiwuzRHgW
+	JCBqcHPRJA5RdztKvI9FHrITNGJ4+SjFTrArWQdGeWLaX5pkf6SGmonxzhV7bPB8
+	TmyOVez3GgoNr7weA9TJYinGdYUurlrI2CPj0GuF1yDhuL4nRaQ7lwOmtqKeJAtU
+	7A16Pmo6PklB3I127OphupYkPyMm9gr+RXAI5ro20i2/MOOQ==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yfw3r5mr4-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 03 Jun 2024 23:42:50 +0000 (GMT)
+	Tue, 04 Jun 2024 01:13:09 +0000 (GMT)
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 453NgnEp024045
+	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4541D7M9023231
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 3 Jun 2024 23:42:49 GMT
-Received: from [169.254.0.1] (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 3 Jun 2024
- 16:42:49 -0700
-From: Jeff Johnson <quic_jjohnson@quicinc.com>
-Date: Mon, 3 Jun 2024 16:42:48 -0700
-Subject: [PATCH] interconnect: imx: add missing MODULE_DESCRIPTION() macros
+	Tue, 4 Jun 2024 01:13:07 GMT
+Received: from hu-sibis-blr.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Mon, 3 Jun 2024 18:13:02 -0700
+From: Sibi Sankar <quic_sibis@quicinc.com>
+To: <andersson@kernel.org>, <konrad.dybcio@linaro.org>, <djakov@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <srinivas.kandagatla@linaro.org>
+CC: <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <quic_rgottimu@quicinc.com>, <quic_kshivnan@quicinc.com>,
+        <quic_sibis@quicinc.com>, <conor+dt@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <abel.vesa@linaro.org>
+Subject: [PATCH 0/4] arm64: dts: qcom: x1e80100: Enable bwmon and fastrpc support
+Date: Tue, 4 Jun 2024 06:41:53 +0530
+Message-ID: <20240604011157.2358019-1-quic_sibis@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20240603-md-interconnect-imx-v1-1-348a9205506c@quicinc.com>
-X-B4-Tracking: v=1; b=H4sIAPhUXmYC/x3MwQrCMAyA4VcZORuoaxH0VcRDm2ZbwGbSTimMv
- bvR43f4/x0aV+EGt2GHyh9psqrhfBqAlqgzo2QzjG4M7uI8loyiG1daVZk2lNIxeCZKPlx9ymD
- lq/Ik/X+9P8wpNsZUo9Lyez1F3x1LbLaB4/gCepcqqIQAAAA=
-To: Georgi Djakov <djakov@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        "Sascha Hauer" <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team
-	<kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-CC: <linux-pm@vger.kernel.org>, <imx@lists.linux.dev>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <kernel-janitors@vger.kernel.org>,
-        Jeff Johnson <quic_jjohnson@quicinc.com>
-X-Mailer: b4 0.13.0
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: gaTp2YX5HM4QLrN-CWxhi2IhdJr0qC6K
-X-Proofpoint-ORIG-GUID: gaTp2YX5HM4QLrN-CWxhi2IhdJr0qC6K
+X-Proofpoint-ORIG-GUID: xc0BQ0jdKc_T1iT9wYeDwW0QYM7TlWaJ
+X-Proofpoint-GUID: xc0BQ0jdKc_T1iT9wYeDwW0QYM7TlWaJ
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
  definitions=2024-06-03_17,2024-05-30_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
- impostorscore=0 mlxscore=0 suspectscore=0 adultscore=0 lowpriorityscore=0
- clxscore=1011 spamscore=0 priorityscore=1501 mlxlogscore=999 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2405170001
- definitions=main-2406030192
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
+ lowpriorityscore=0 suspectscore=0 adultscore=0 spamscore=0 mlxscore=0
+ clxscore=1011 priorityscore=1501 malwarescore=0 mlxlogscore=652
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2405170001 definitions=main-2406040008
 
-make allmodconfig && make W=1 C=1 reports:
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx-interconnect.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx8mm-interconnect.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx8mq-interconnect.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx8mn-interconnect.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx8mp-interconnect.o
+This patch series enables bwmon and fastrpc support on X1E80100 SoCs.
 
-Add the missing invocations of the MODULE_DESCRIPTION() macro.
+This series applies on:
+next-20240603 + https://lore.kernel.org/lkml/20240603205859.2212225-1-quic_sibis@quicinc.com/
 
-Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
----
- drivers/interconnect/imx/imx.c    | 1 +
- drivers/interconnect/imx/imx8mm.c | 1 +
- drivers/interconnect/imx/imx8mn.c | 1 +
- drivers/interconnect/imx/imx8mp.c | 1 +
- drivers/interconnect/imx/imx8mq.c | 1 +
- 5 files changed, 5 insertions(+)
+Sibi Sankar (4):
+  dt-bindings: interconnect: qcom,msm8998-bwmon: Add X1E80100 BWMON
+    instances
+  soc: qcom: icc-bwmon: Allow for interrupts to be shared across
+    instances
+  arm64: dts: qcom: x1e80100: Add BWMONs
+  arm64: dts: qcom: x1e80100: Add fastrpc nodes
 
-diff --git a/drivers/interconnect/imx/imx.c b/drivers/interconnect/imx/imx.c
-index 979ed610f704..9511f80cf041 100644
---- a/drivers/interconnect/imx/imx.c
-+++ b/drivers/interconnect/imx/imx.c
-@@ -334,4 +334,5 @@ void imx_icc_unregister(struct platform_device *pdev)
- }
- EXPORT_SYMBOL_GPL(imx_icc_unregister);
- 
-+MODULE_DESCRIPTION("Interconnect framework driver for i.MX SoC");
- MODULE_LICENSE("GPL v2");
-diff --git a/drivers/interconnect/imx/imx8mm.c b/drivers/interconnect/imx/imx8mm.c
-index 8c40f4182263..a36aaaf106ae 100644
---- a/drivers/interconnect/imx/imx8mm.c
-+++ b/drivers/interconnect/imx/imx8mm.c
-@@ -96,5 +96,6 @@ static struct platform_driver imx8mm_icc_driver = {
- 
- module_platform_driver(imx8mm_icc_driver);
- MODULE_AUTHOR("Alexandre Bailon <abailon@baylibre.com>");
-+MODULE_DESCRIPTION("Interconnect framework driver for i.MX8MM SoC");
- MODULE_LICENSE("GPL v2");
- MODULE_ALIAS("platform:imx8mm-interconnect");
-diff --git a/drivers/interconnect/imx/imx8mn.c b/drivers/interconnect/imx/imx8mn.c
-index fa3d4f97dfa4..2a97c74e875b 100644
---- a/drivers/interconnect/imx/imx8mn.c
-+++ b/drivers/interconnect/imx/imx8mn.c
-@@ -86,4 +86,5 @@ static struct platform_driver imx8mn_icc_driver = {
- module_platform_driver(imx8mn_icc_driver);
- MODULE_ALIAS("platform:imx8mn-interconnect");
- MODULE_AUTHOR("Leonard Crestez <leonard.crestez@nxp.com>");
-+MODULE_DESCRIPTION("Interconnect framework driver for i.MX8MN SoC");
- MODULE_LICENSE("GPL v2");
-diff --git a/drivers/interconnect/imx/imx8mp.c b/drivers/interconnect/imx/imx8mp.c
-index d218bb47757a..86d4c1517b26 100644
---- a/drivers/interconnect/imx/imx8mp.c
-+++ b/drivers/interconnect/imx/imx8mp.c
-@@ -249,5 +249,6 @@ static struct platform_driver imx8mp_icc_driver = {
- 
- module_platform_driver(imx8mp_icc_driver);
- MODULE_AUTHOR("Peng Fan <peng.fan@nxp.com>");
-+MODULE_DESCRIPTION("Interconnect framework driver for i.MX8MP SoC");
- MODULE_LICENSE("GPL");
- MODULE_ALIAS("platform:imx8mp-interconnect");
-diff --git a/drivers/interconnect/imx/imx8mq.c b/drivers/interconnect/imx/imx8mq.c
-index 8bbd672b346e..f817d24aeefb 100644
---- a/drivers/interconnect/imx/imx8mq.c
-+++ b/drivers/interconnect/imx/imx8mq.c
-@@ -97,4 +97,5 @@ static struct platform_driver imx8mq_icc_driver = {
- module_platform_driver(imx8mq_icc_driver);
- MODULE_ALIAS("platform:imx8mq-interconnect");
- MODULE_AUTHOR("Leonard Crestez <leonard.crestez@nxp.com>");
-+MODULE_DESCRIPTION("Interconnect framework driver for i.MX8MQ SoC");
- MODULE_LICENSE("GPL v2");
+ .../interconnect/qcom,msm8998-bwmon.yaml      |   2 +
+ arch/arm64/boot/dts/qcom/x1e80100.dtsi        | 325 ++++++++++++++++++
+ drivers/soc/qcom/icc-bwmon.c                  |   3 +-
+ 3 files changed, 329 insertions(+), 1 deletion(-)
 
----
-base-commit: a693b9c95abd4947c2d06e05733de5d470ab6586
-change-id: 20240603-md-interconnect-imx-43eccb3493bd
+-- 
+2.34.1
 
 
