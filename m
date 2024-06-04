@@ -1,72 +1,60 @@
-Return-Path: <linux-pm+bounces-8567-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8568-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D03FB8FAFDD
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2024 12:30:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0BA08FAFE0
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2024 12:32:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A78A283782
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2024 10:30:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F3321F24013
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2024 10:32:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C74BC144D3B;
-	Tue,  4 Jun 2024 10:29:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD8F81420B7;
+	Tue,  4 Jun 2024 10:32:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lbs4N7Zk"
+	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="RIBclG0j"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from xry111.site (xry111.site [89.208.246.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B1B029401;
-	Tue,  4 Jun 2024 10:29:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A2872566;
+	Tue,  4 Jun 2024 10:32:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717496987; cv=none; b=n0a5AMqRmYw8Zqgp750JdoYOSV3/0BgwPfwTcUiVKfOIEAoN7WStvk7URariV6bMsPiPnR8cy3NS54RvGLXAn3GT6mOg5w+mi2ySioymjKxuaqtlmh3M1dIQBLeqSdPlrXnD+qBik2GN5/4S8NltTgxmaYs0OCFUWNjO/8bPKds=
+	t=1717497153; cv=none; b=L9RGQRhJmcUX+2QECU+kgV3XbfNz4lns9Z5U0YSe8Jzn99Hj1ynivmGQ+FAyyyop7PmPRxvJqsSyj9LDHMRtNlzJI7eUwavmYp+4CeYDEX19bDvF5qA6FH9u73OphBaoqLa7zwuTvAhp/V3jl84EbF323f7lAS8GRwm+zaNOA9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717496987; c=relaxed/simple;
-	bh=YnGXqvFYemOK4oAa8u+jvIolcn9ttr1HWGnsulGYRQw=;
+	s=arc-20240116; t=1717497153; c=relaxed/simple;
+	bh=wpcAi4enpYzd0kfnEOi1NkxVY22NtCkMLmxRw+8RjlU=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=IGvtDARW7hiEYp0jIDHzKEr7ntsBhIB4OMa3OEJqn2NilyILfW0gZGRFZCGTYfcNWL4/GXjOWshpVYTewaJR88owLWoeo6+Stvpri+i+5pefoxysTkLIZy2selgzEscTKrSMODkMpA/eP6X7T5HOUKjHHyuAv4F91V7ctVp2WyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lbs4N7Zk; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717496986; x=1749032986;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=YnGXqvFYemOK4oAa8u+jvIolcn9ttr1HWGnsulGYRQw=;
-  b=lbs4N7Zk5R0Bw1CdoHPNqqw9mUyXxY9qEHoOd8E6bj7KSci06H9sP17u
-   gagjqcChxpfTaImnDCPqEqVuu2WEpmu6L/N7hkSdbJIeAOelZMHkbmS1f
-   sUr8TNa0L6I3L+laJHf+3ubAEmStTW7Z88t2b6mM3jKFtgjKpJD0j77aq
-   uQ6PbgRYttuW4Ru2ter5/Bd2ktITq1KuLZIkb4Iu+wHXm/d9bIbaehSqW
-   sh7UDJgQQaCxqQzv3FN9J1v75ZwKlziUrQ51LDEDC9FC2UTaHW5rwhs2+
-   Ib6gauv15MfChznK/yrlMGuw0FYbFE1xybazV9hfT8MQutemBCGJAFK2D
-   A==;
-X-CSE-ConnectionGUID: A23+fNJrQfCA4WwN/NHDJQ==
-X-CSE-MsgGUID: 2YCpqckRS3mxfypKwEZYyg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11092"; a="13874763"
-X-IronPort-AV: E=Sophos;i="6.08,213,1712646000"; 
-   d="scan'208";a="13874763"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2024 03:29:45 -0700
-X-CSE-ConnectionGUID: bQeZwrfRQTqQ7akfNCvZdQ==
-X-CSE-MsgGUID: CzaMVoSjToGuY7h0sNMbrw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,213,1712646000"; 
-   d="scan'208";a="37788938"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.19])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2024 03:29:45 -0700
-Message-ID: <63e98f2151ef64de92cf7e3da796937755ea5552.camel@linux.intel.com>
+	 Content-Type:MIME-Version; b=tN+aFtWUKxXPCSWgpi8nP5WmHj5ARo/Q3/45aCiElgjOfuuprBflhU7kdq7PtjbZNpXPxoDw8DD51bysRes90TY9lV4ApCUujsVQ0bCMUB1WOgigsa9FEpJve1/HWvhxCnKHrk44N0xLZRH5hr9BC7KAtnt9KKtOCAspJceV3AY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=RIBclG0j; arc=none smtp.client-ip=89.208.246.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+	s=default; t=1717497149;
+	bh=wpcAi4enpYzd0kfnEOi1NkxVY22NtCkMLmxRw+8RjlU=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=RIBclG0jB9B/SJn7h9s0YCp/Shiu3cAgG5q/J0IZWtD4Lm7DMtXAgMJnvArNJX+ln
+	 nKSDw+r1n1FPj4OOwd/+WyLRVxKK3lxFwMPZXk/nEgYCsOHnUmYEnYBKWVNXmhqU4G
+	 ZrdgLIlSRU/fejwzMpA9WBnWmRcSEjaRxuLQYHH8=
+Received: from [127.0.0.1] (unknown [IPv6:2001:470:683e::1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+	(Client did not present a certificate)
+	(Authenticated sender: xry111@xry111.site)
+	by xry111.site (Postfix) with ESMTPSA id 32D826591E;
+	Tue,  4 Jun 2024 06:32:28 -0400 (EDT)
+Message-ID: <258ce61c155c28937620f6abe57a39f2b4b0ff56.camel@xry111.site>
 Subject: Re: [PATCH v1 2/6] cpufreq: intel_pstate: Do not update
  global.turbo_disabled after initialization
-From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To: Xi Ruoyao <xry111@xry111.site>, "Rafael J. Wysocki" <rafael@kernel.org>
+From: Xi Ruoyao <xry111@xry111.site>
+To: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>, "Rafael J.
+ Wysocki" <rafael@kernel.org>
 Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM
  <linux-pm@vger.kernel.org>,  LKML <linux-kernel@vger.kernel.org>
-Date: Tue, 04 Jun 2024 03:29:45 -0700
-In-Reply-To: <aa643910265b9d92a397d5148b31d37b2c421b8b.camel@xry111.site>
+Date: Tue, 04 Jun 2024 18:32:25 +0800
+In-Reply-To: <63e98f2151ef64de92cf7e3da796937755ea5552.camel@linux.intel.com>
 References: <13494237.uLZWGnKmhe@kreacher> <8366982.T7Z3S40VBb@kreacher>
 	 <bf3ebf1571a4788e97daf861eb493c12d42639a3.camel@xry111.site>
 	 <6d5ee74605bd9574baa5ed111cb54e959414437a.camel@linux.intel.com>
@@ -81,9 +69,10 @@ References: <13494237.uLZWGnKmhe@kreacher> <8366982.T7Z3S40VBb@kreacher>
 	 <f34c20ae3feac0e3570125f124e440d51c5e4d9b.camel@linux.intel.com>
 	 <1da736da33a61de92314934ecf7fa0420d6d6b81.camel@linux.intel.com>
 	 <aa643910265b9d92a397d5148b31d37b2c421b8b.camel@xry111.site>
+	 <63e98f2151ef64de92cf7e3da796937755ea5552.camel@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+User-Agent: Evolution 3.52.2 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -91,45 +80,48 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Tue, 2024-06-04 at 17:30 +0800, Xi Ruoyao wrote:
-> On Mon, 2024-06-03 at 21:31 -0700, srinivas pandruvada wrote:
+On Tue, 2024-06-04 at 03:29 -0700, srinivas pandruvada wrote:
+> On Tue, 2024-06-04 at 17:30 +0800, Xi Ruoyao wrote:
+> > On Mon, 2024-06-03 at 21:31 -0700, srinivas pandruvada wrote:
+> >=20
+> > > > > Second, a delayed work can be added to check the MSR long
+> > > > > enough
+> > > > > after
+> > > > > initialization and update global.turbo_disabled if it is 1.=20
+> > > > > However,
+> > > > > that would require some code surgery.
+> > > >=20
+> > > Something like the attached which does same way as user space
+> > > no_turbo
+> > > update.
+> >=20
+> > > =C2=A0static int intel_pstate_register_driver(struct cpufreq_driver
+> > > *driver)
+> > > =C2=A0{
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int ret;
+> > > @@ -3114,6 +3137,9 @@ static int
+> > > intel_pstate_register_driver(struct cpufreq_driver *driver)
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0global.turbo_disabled=
+ =3D turbo_is_disabled();
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0global.no_turbo =3D g=
+lobal.turbo_disabled;
+> > > =C2=A0
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (global.turbo_disabled)
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0schedule_delayed_work(&turbo_work, HZ);
+> > > +
+> >=20
+> > I have to change it to 20 * HZ to make it work for me.=C2=A0 15 * HZ do=
+es
+> > not
+> > work.
 >=20
-> > > > Second, a delayed work can be added to check the MSR long
-> > > > enough
-> > > > after
-> > > > initialization and update global.turbo_disabled if it is 1.=20
-> > > > However,
-> > > > that would require some code surgery.
-> > >=20
-> > Something like the attached which does same way as user space
-> > no_turbo
-> > update.
->=20
-> > =C2=A0static int intel_pstate_register_driver(struct cpufreq_driver
-> > *driver)
-> > =C2=A0{
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int ret;
-> > @@ -3114,6 +3137,9 @@ static int
-> > intel_pstate_register_driver(struct cpufreq_driver *driver)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0global.turbo_disabled =
-=3D turbo_is_disabled();
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0global.no_turbo =3D glo=
-bal.turbo_disabled;
-> > =C2=A0
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (global.turbo_disabled)
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0schedule_delayed_work(&turbo_work, HZ);
-> > +
->=20
-> I have to change it to 20 * HZ to make it work for me.=C2=A0 15 * HZ does
-> not
-> work.
+> Is there any consistency or it is changing every time?
 
-Is there any consistency or it is changing every time?
+It seems consistent.
 
-Thanks,
-Srinivas
 
->=20
-
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
 
