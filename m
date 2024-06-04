@@ -1,254 +1,266 @@
-Return-Path: <linux-pm+bounces-8555-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8556-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC8C08FA939
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2024 06:31:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53DED8FAAB8
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2024 08:27:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8CE302837B6
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2024 04:31:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A1578B235AD
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2024 06:27:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FB1B13D2AA;
-	Tue,  4 Jun 2024 04:31:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10CDC13DBA0;
+	Tue,  4 Jun 2024 06:27:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mdMAT8XX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e1LGcJSQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F3104C6E;
-	Tue,  4 Jun 2024 04:31:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A12E65F;
+	Tue,  4 Jun 2024 06:27:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717475486; cv=none; b=UUoaf7jJqCEiK51aSfcJ/vEOqFoT2ify4z6Iiq8HqGYSRcJoDZMm0oLI7w9RtJCVGJS/NAnAd/zLEXcd9OywTXeIcE56JXX8ejpWFeVdXDyRp+WGs4qbjK/oOMzTYel212DtVYLYXoJVj8bLaroO+joBssN/eBHUYDM8c0ywEOI=
+	t=1717482453; cv=none; b=GJGyHGn/QLyJXSx3B5VIRoUcplBmdeeF4HQMgSfvaE+thBmtRHK/Gwa6L2mcY81WKjMvzViDwS60ounxt0NrSRr0g2ppMcc/eF3DAV+o6ALhqJlwEAuoICyjj2K4SuA9fYVh37AuVy3LjcutUPP+Mxf1L43A14XvNwChVWYWUls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717475486; c=relaxed/simple;
-	bh=ZOIhYMK45qMAdlxWSgbaH5uMu9B2w0q6QufDWFxPaYo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=BLVVHCIGlV8dWgQbNMUa88Hr1F98NqOgVpeaKQIxBnygHf4a7sSrH78QuAXTI2AlYhRYiSktfeCt52v5ObwnwjALFn7YffsnaFHitlBBWGqW54Pm1EZJwe9D75W14EI445odXbCnwPTDHjXzZnkX8g4EoVR7lpnjv5pqXH0QVnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mdMAT8XX; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1717482453; c=relaxed/simple;
+	bh=X4u0YpDyGN4nCMNs7fkbt4yVU2N8nuR/5MvPUtHU5IQ=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=mdgnj8vfMUlqhyZC+VUbjpBmR1yFq9rGcdKI+BJxzSSRbzy8aY5ZfVkUSL8zUdWG2PItnRPk03YMg1H115tkix5qnKvPShKjvDdr3Y2O6VfJN4JxODsVvVdJ6N7wOcge0f16Juk8oCy8wRb6zekV5y0bMg+lIV7p8kwT61TaWV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e1LGcJSQ; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717475485; x=1749011485;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version;
-  bh=ZOIhYMK45qMAdlxWSgbaH5uMu9B2w0q6QufDWFxPaYo=;
-  b=mdMAT8XXdixP6su3nn77gqzdO2TB0h6dTEvIN8eGFXs/RNbDOPTDnH2y
-   SPWRegI2I3QwfNzSy3Oi6pY22d4RKQoHDb+urowp0ZkQPQgml0OLNiRnp
-   1MEpmO6tyXCZYxwdax6MOVtsVfJWUk7jxIjyTZuxkCUNCo76WwqXDedcx
-   MKsZYopgXysdEiHwJc/XEo+qLhOah3keVuyP/IGCkYtzU6WsIBNHeEpKD
-   84XUshDXvvCIm+dVrfbslg6Ls9809ief9krHqjk8sutwqLzl2eWLSprBP
-   l2NiMQPQIrrBbefgwI3oYPvSpxbwkzPMhTaGDq+7WyHDwAFQTM/q6WWrU
-   A==;
-X-CSE-ConnectionGUID: kNg2+DwCQWWLGEePQS/lVw==
-X-CSE-MsgGUID: xzTL6kKfSCSNXRYEh0N9+w==
-X-IronPort-AV: E=McAfee;i="6600,9927,11092"; a="17823698"
+  t=1717482451; x=1749018451;
+  h=date:from:to:cc:subject:message-id;
+  bh=X4u0YpDyGN4nCMNs7fkbt4yVU2N8nuR/5MvPUtHU5IQ=;
+  b=e1LGcJSQuUuVKqN2zkgNZexp0HNBSCiva1cLp0hGk7/nbmgx9sGu/UOV
+   W0iBpTG+dJIkg9qWBNGUQEdhF+aDWglZLjWnuaPwodqHo3+B0TlSGSh2H
+   W42faUQ1Q1MtxN0pdbsizS/MyRdTLoBNEfqJexxO3DfS6WZVynu44vr0v
+   90ReHEh9n/+THT5MnNvOsvGBhGvUF/cF1ttUShQYIjwpzuqQ9iiCfaGmY
+   1iehlpdSM2AaedqtQ/xVzer74BFjCZWhkFz8il1A6oJU14t/8JCOck8RF
+   d1uXMlQY1uqhjIOqLE/TkcArBaVU2NSMkz5lHpJA4NtuRrBhvrjoK5Kt4
+   g==;
+X-CSE-ConnectionGUID: HVMEMDe1S16cdcbQYz3k1Q==
+X-CSE-MsgGUID: iwLzrBUGSvSwpYQvGNGhtA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11092"; a="36524585"
 X-IronPort-AV: E=Sophos;i="6.08,213,1712646000"; 
-   d="diff'?scan'208";a="17823698"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2024 21:31:24 -0700
-X-CSE-ConnectionGUID: jHw8XOoWT56vplntm1N45Q==
-X-CSE-MsgGUID: AKzgQc4XQHm+3U/nPmkM1w==
+   d="scan'208";a="36524585"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2024 23:27:30 -0700
+X-CSE-ConnectionGUID: JLH9DIOFThm6mnU1Wi7R8w==
+X-CSE-MsgGUID: 6DCSTeSMRvyJUgswQBM05g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,213,1712646000"; 
-   d="diff'?scan'208";a="42039354"
-Received: from lduvvuri-mobl4.gar.corp.intel.com ([10.213.76.60])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2024 21:31:15 -0700
-Message-ID: <1da736da33a61de92314934ecf7fa0420d6d6b81.camel@linux.intel.com>
-Subject: Re: [PATCH v1 2/6] cpufreq: intel_pstate: Do not update
- global.turbo_disabled after initialization
-From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Xi Ruoyao <xry111@xry111.site>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM
- <linux-pm@vger.kernel.org>,  LKML <linux-kernel@vger.kernel.org>
-Date: Mon, 03 Jun 2024 21:31:05 -0700
-In-Reply-To: <f34c20ae3feac0e3570125f124e440d51c5e4d9b.camel@linux.intel.com>
-References: <13494237.uLZWGnKmhe@kreacher> <8366982.T7Z3S40VBb@kreacher>
-	 <bf3ebf1571a4788e97daf861eb493c12d42639a3.camel@xry111.site>
-	 <6d5ee74605bd9574baa5ed111cb54e959414437a.camel@linux.intel.com>
-	 <6ebadacd8aaa307a5766cdb1b4d4a5c69acd87ac.camel@xry111.site>
-	 <30a30c5107a47a2cc3fd39306728f70dd649d7fe.camel@linux.intel.com>
-	 <f382e06635b3b52841d1e0c11dcf639d225edae0.camel@xry111.site>
-	 <29d69252dcdc398f147c9139a8666d09e7bd831d.camel@linux.intel.com>
-	 <0324bc3a88654855719cd48a5ed69a34eea31037.camel@xry111.site>
-	 <c3526e7a0e80ec1a3a011259c38ab4b772040ea4.camel@linux.intel.com>
-	 <48eba83030e155f703b4248e9c1ae65aa44b1a83.camel@xry111.site>
-	 <CAJZ5v0jjLgG3VY_kBYc4mTrL2ybD2LfBTk2_H7xY0+Aq5g827A@mail.gmail.com>
-	 <f34c20ae3feac0e3570125f124e440d51c5e4d9b.camel@linux.intel.com>
-Content-Type: multipart/mixed; boundary="=-1DKVhCk43lRzjNd4C31L"
-User-Agent: Evolution 3.50.0-1 
+   d="scan'208";a="37761601"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by orviesa007.jf.intel.com with ESMTP; 03 Jun 2024 23:27:28 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sENdl-000MeV-2v;
+	Tue, 04 Jun 2024 06:27:25 +0000
+Date: Tue, 04 Jun 2024 14:26:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ bee90ea64016cea44f68649393bfe8e8c0c7fb0a
+Message-ID: <202406041430.r5WLYa8l-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
---=-1DKVhCk43lRzjNd4C31L
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: bee90ea64016cea44f68649393bfe8e8c0c7fb0a  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
 
-On Mon, 2024-06-03 at 11:47 -0700, srinivas pandruvada wrote:
-> On Mon, 2024-06-03 at 20:32 +0200, Rafael J. Wysocki wrote:
-> > On Mon, Jun 3, 2024 at 7:44=E2=80=AFPM Xi Ruoyao <xry111@xry111.site>
-> > wrote:
-> > >=20
-> > > On Mon, 2024-06-03 at 10:11 -0700, srinivas pandruvada wrote:
-> > > > On Mon, 2024-06-03 at 21:12 +0800, Xi Ruoyao wrote:
-> > > > > On Sun, 2024-06-02 at 16:11 -0700, srinivas pandruvada wrote:
-> > > > >=20
-> > > > > /* snip */
-> > > > >=20
-> > > > > > What is the output of:
-> > > > > > grep . /sys/devices/system/cpu/intel_pstate/*
-> > > > > >=20
-> > > > > > Also
-> > > > > > rdmsr 0x771
-> > > > > > rdmsr 0x774
-> > > > > >=20
-> > > > > >=20
-> > > > > > Try these three patches. Don't worry about the commit
-> > > > > > description
-> > > > > > for
-> > > > > > this issue.
-> > > > >=20
-> > > > > Unfortunately they still do not fix the issue for me.
-> > > > >=20
-> > > > > The outputs of grep and rdmsr commands are initially:
-> > > > >=20
-> > > > > /sys/devices/system/cpu/intel_pstate/hwp_dynamic_boost:0
-> > > > > /sys/devices/system/cpu/intel_pstate/max_perf_pct:100
-> > > > > /sys/devices/system/cpu/intel_pstate/min_perf_pct:9
-> > > > > /sys/devices/system/cpu/intel_pstate/no_turbo:1
-> > > > > /sys/devices/system/cpu/intel_pstate/num_pstates:41
-> > > > > /sys/devices/system/cpu/intel_pstate/status:active
-> > > > > /sys/devices/system/cpu/intel_pstate/turbo_pct:33
-> > > > > rdmsr 0x771: 10d1f2c
-> > > > > rdmsr 0x774: 1f04
-> > > > >=20
-> > > > > But it then changes to:
-> > > > >=20
-> > > > > /sys/devices/system/cpu/intel_pstate/hwp_dynamic_boost:0
-> > > > > /sys/devices/system/cpu/intel_pstate/max_perf_pct:100
-> > > > > /sys/devices/system/cpu/intel_pstate/min_perf_pct:9
-> > > > > /sys/devices/system/cpu/intel_pstate/no_turbo:1
-> > > > > /sys/devices/system/cpu/intel_pstate/num_pstates:41
-> > > > > /sys/devices/system/cpu/intel_pstate/status:active
-> > > > > /sys/devices/system/cpu/intel_pstate/turbo_pct:33
-> > > > > rdmsr 0x771: 10c1f2c
-> > > > > rdmsr 0x774: 1f04
-> > > > >=20
-> > > > > It seems only the output of rdmsr 0x771 has changed.=C2=A0 And if
-> > > > > I
-> > > > > read
-> > > > > the
-> > > > > SDM correctly it's a "Most_Efficient_Performance" change.
-> > > > That is fine.
-> > > >=20
-> > > > We don't have any notifications either via ACPI or via HWP
-> > > > interrupt.
-> > > > I think it was working by chance before this change as by the
-> > > > cpufreq
-> > > > core is trying to set policy, the turbo is enabled by the
-> > > > firmware.
-> > > >=20
-> > > > What is this laptop make and model?
-> > >=20
-> > > It's a Hasee X5-2021S5H.
-> > >=20
-> > > Hasee is known for producing some laptops very cheap but often
-> > > having
-> > > "minor" issues.=C2=A0 So I guess the firmware is doing some stupid
-> > > thing.
-> > >=20
-> > > But turbo works just fine on Windows 11 so it'd be better if we
-> > > could
-> > > make it work for Linux too.
-> >=20
-> > In principle, there are two things that can be done about this.
-> >=20
-> > First, MSR_IA32_MISC_ENABLE_TURBO_DISABLE on this system can be
-> > ignored altogether, but that would require adding a quirk.
-> >=20
-> > Second, a delayed work can be added to check the MSR long enough
-> > after
-> > initialization and update global.turbo_disabled if it is 1.=C2=A0
-> > However,
-> > that would require some code surgery.
->=20
-Something like the attached which does same way as user space no_turbo
-update.
+elapsed time: 787m
 
-Thanks,
-Srinivas
+configs tested: 172
+configs skipped: 3
 
-> I was about to send this suggestion.
->=20
-> For the first one we can always program the HWP_REQ.max to
-> HWP_CAP.max
-> and=C2=A0 let hardware do the clipping. But this is not friendly to
-> passive
-> mode. But display of scalig_max_freq still should reflect the
-> reality.
->=20
->=20
-> Thanks,
-> Srinivas
->=20
-> >=20
->=20
->=20
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20240604   gcc  
+arc                   randconfig-002-20240604   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   clang
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm                            dove_defconfig   gcc  
+arm                   milbeaut_m10v_defconfig   clang
+arm                   randconfig-001-20240604   clang
+arm                   randconfig-002-20240604   gcc  
+arm                   randconfig-003-20240604   clang
+arm                   randconfig-004-20240604   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240604   clang
+arm64                 randconfig-002-20240604   gcc  
+arm64                 randconfig-003-20240604   gcc  
+arm64                 randconfig-004-20240604   clang
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240604   gcc  
+csky                  randconfig-002-20240604   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20240604   clang
+hexagon               randconfig-002-20240604   clang
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20240604   gcc  
+i386         buildonly-randconfig-002-20240604   clang
+i386         buildonly-randconfig-003-20240604   clang
+i386         buildonly-randconfig-004-20240604   gcc  
+i386         buildonly-randconfig-005-20240604   clang
+i386         buildonly-randconfig-006-20240604   clang
+i386                                defconfig   clang
+i386                  randconfig-001-20240604   clang
+i386                  randconfig-002-20240604   clang
+i386                  randconfig-003-20240604   clang
+i386                  randconfig-004-20240604   clang
+i386                  randconfig-005-20240604   gcc  
+i386                  randconfig-006-20240604   gcc  
+i386                  randconfig-011-20240604   clang
+i386                  randconfig-012-20240604   gcc  
+i386                  randconfig-013-20240604   gcc  
+i386                  randconfig-014-20240604   clang
+i386                  randconfig-015-20240604   clang
+i386                  randconfig-016-20240604   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20240604   gcc  
+loongarch             randconfig-002-20240604   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                          ath79_defconfig   gcc  
+mips                         bigsur_defconfig   gcc  
+mips                          malta_defconfig   gcc  
+mips                        omega2p_defconfig   clang
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240604   gcc  
+nios2                 randconfig-002-20240604   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20240604   gcc  
+parisc                randconfig-002-20240604   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                 canyonlands_defconfig   clang
+powerpc                      obs600_defconfig   clang
+powerpc                     powernv_defconfig   gcc  
+powerpc               randconfig-001-20240604   gcc  
+powerpc               randconfig-002-20240604   gcc  
+powerpc               randconfig-003-20240604   gcc  
+powerpc64             randconfig-001-20240604   gcc  
+powerpc64             randconfig-002-20240604   gcc  
+powerpc64             randconfig-003-20240604   clang
+riscv                            allmodconfig   clang
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   clang
+riscv                               defconfig   clang
+riscv                 randconfig-001-20240604   clang
+riscv                 randconfig-002-20240604   gcc  
+s390                             alldefconfig   gcc  
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+s390                  randconfig-001-20240604   clang
+s390                  randconfig-002-20240604   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                            hp6xx_defconfig   gcc  
+sh                          landisk_defconfig   gcc  
+sh                    randconfig-001-20240604   gcc  
+sh                    randconfig-002-20240604   gcc  
+sh                          rsk7201_defconfig   gcc  
+sh                              ul2_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-001-20240604   clang
+x86_64       buildonly-randconfig-002-20240604   clang
+x86_64       buildonly-randconfig-003-20240604   gcc  
+x86_64       buildonly-randconfig-004-20240604   clang
+x86_64       buildonly-randconfig-005-20240604   gcc  
+x86_64       buildonly-randconfig-006-20240604   clang
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20240604   clang
+x86_64                randconfig-002-20240604   gcc  
+x86_64                randconfig-003-20240604   gcc  
+x86_64                randconfig-004-20240604   gcc  
+x86_64                randconfig-005-20240604   gcc  
+x86_64                randconfig-006-20240604   gcc  
+x86_64                randconfig-011-20240604   clang
+x86_64                randconfig-012-20240604   clang
+x86_64                randconfig-013-20240604   clang
+x86_64                randconfig-014-20240604   clang
+x86_64                randconfig-015-20240604   clang
+x86_64                randconfig-016-20240604   clang
+x86_64                randconfig-071-20240604   clang
+x86_64                randconfig-072-20240604   gcc  
+x86_64                randconfig-073-20240604   gcc  
+x86_64                randconfig-074-20240604   clang
+x86_64                randconfig-075-20240604   clang
+x86_64                randconfig-076-20240604   clang
+x86_64                          rhel-8.3-rust   clang
+xtensa                            allnoconfig   gcc  
+xtensa                  cadence_csp_defconfig   gcc  
 
---=-1DKVhCk43lRzjNd4C31L
-Content-Disposition: attachment; filename="delayed_turbo_check.diff"
-Content-Type: text/x-patch; name="delayed_turbo_check.diff"; charset="UTF-8"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvY3B1ZnJlcS9pbnRlbF9wc3RhdGUuYyBiL2RyaXZlcnMvY3B1
-ZnJlcS9pbnRlbF9wc3RhdGUuYwppbmRleCA2NWQzZjc5MTA0YmQuLjhkNjFmZjI2MWM2MSAxMDA2
-NDQKLS0tIGEvZHJpdmVycy9jcHVmcmVxL2ludGVsX3BzdGF0ZS5jCisrKyBiL2RyaXZlcnMvY3B1
-ZnJlcS9pbnRlbF9wc3RhdGUuYwpAQCAtMTMwNSw3ICsxMzA1LDcgQEAgc3RhdGljIHNzaXplX3Qg
-c3RvcmVfbm9fdHVyYm8oc3RydWN0IGtvYmplY3QgKmEsIHN0cnVjdCBrb2JqX2F0dHJpYnV0ZSAq
-YiwKIAlpZiAobm9fdHVyYm8gPT0gZ2xvYmFsLm5vX3R1cmJvKQogCQlnb3RvIHVubG9ja19kcml2
-ZXI7CiAKLQlpZiAoZ2xvYmFsLnR1cmJvX2Rpc2FibGVkKSB7CisJaWYgKFJFQURfT05DRShnbG9i
-YWwudHVyYm9fZGlzYWJsZWQpKSB7CiAJCXByX25vdGljZV9vbmNlKCJUdXJibyBkaXNhYmxlZCBi
-eSBCSU9TIG9yIHVuYXZhaWxhYmxlIG9uIHByb2Nlc3NvclxuIik7CiAJCWNvdW50ID0gLUVQRVJN
-OwogCQlnb3RvIHVubG9ja19kcml2ZXI7CkBAIC0xNzYyLDcgKzE3NjIsNyBAQCBzdGF0aWMgdTY0
-IGF0b21fZ2V0X3ZhbChzdHJ1Y3QgY3B1ZGF0YSAqY3B1ZGF0YSwgaW50IHBzdGF0ZSkKIAl1MzIg
-dmlkOwogCiAJdmFsID0gKHU2NClwc3RhdGUgPDwgODsKLQlpZiAoUkVBRF9PTkNFKGdsb2JhbC5u
-b190dXJibykgJiYgIWdsb2JhbC50dXJib19kaXNhYmxlZCkKKwlpZiAoUkVBRF9PTkNFKGdsb2Jh
-bC5ub190dXJibykgJiYgIVJFQURfT05DRShnbG9iYWwudHVyYm9fZGlzYWJsZWQpKQogCQl2YWwg
-fD0gKHU2NCkxIDw8IDMyOwogCiAJdmlkX2ZwID0gY3B1ZGF0YS0+dmlkLm1pbiArIG11bF9mcCgK
-QEAgLTE5MjcsNyArMTkyNyw3IEBAIHN0YXRpYyB1NjQgY29yZV9nZXRfdmFsKHN0cnVjdCBjcHVk
-YXRhICpjcHVkYXRhLCBpbnQgcHN0YXRlKQogCXU2NCB2YWw7CiAKIAl2YWwgPSAodTY0KXBzdGF0
-ZSA8PCA4OwotCWlmIChSRUFEX09OQ0UoZ2xvYmFsLm5vX3R1cmJvKSAmJiAhZ2xvYmFsLnR1cmJv
-X2Rpc2FibGVkKQorCWlmIChSRUFEX09OQ0UoZ2xvYmFsLm5vX3R1cmJvKSAmJiAhUkVBRF9PTkNF
-KGdsb2JhbC50dXJib19kaXNhYmxlZCkpCiAJCXZhbCB8PSAodTY0KTEgPDwgMzI7CiAKIAlyZXR1
-cm4gdmFsOwpAQCAtMzEwMiw2ICszMTAyLDI5IEBAIHN0YXRpYyB2b2lkIGludGVsX3BzdGF0ZV9k
-cml2ZXJfY2xlYW51cCh2b2lkKQogCWludGVsX3BzdGF0ZV9kcml2ZXIgPSBOVUxMOwogfQogCitz
-dGF0aWMgdm9pZCBjaGVja190dXJib193b3JrX2hhbmRsZXIoc3RydWN0IHdvcmtfc3RydWN0ICp3
-b3JrKQoreworCWJvb2wgbm9fdHVyYm87CisJCisJbm9fdHVyYm8gPSB0dXJib19pc19kaXNhYmxl
-ZCgpOworCisJaWYgKG5vX3R1cmJvKQorCQlyZXR1cm47CisKKwkvKiBTYW1lIHByb2Nlc3Npbmcg
-YXMgc3lzZnMgbm9fdHVyYm8gdXBkYXRlICovCisJbXV0ZXhfbG9jaygmaW50ZWxfcHN0YXRlX2Ry
-aXZlcl9sb2NrKTsKKworCVdSSVRFX09OQ0UoZ2xvYmFsLnR1cmJvX2Rpc2FibGVkLCBub190dXJi
-byk7CisJV1JJVEVfT05DRShnbG9iYWwubm9fdHVyYm8sIG5vX3R1cmJvKTsKKworCWludGVsX3Bz
-dGF0ZV91cGRhdGVfbGltaXRzX2Zvcl9hbGwoKTsKKwlhcmNoX3NldF9tYXhfZnJlcV9yYXRpbyhm
-YWxzZSk7CisKKwltdXRleF91bmxvY2soJmludGVsX3BzdGF0ZV9kcml2ZXJfbG9jayk7Cit9CisK
-K0RFQ0xBUkVfREVMQVlFRF9XT1JLKHR1cmJvX3dvcmssIGNoZWNrX3R1cmJvX3dvcmtfaGFuZGxl
-cik7CisKIHN0YXRpYyBpbnQgaW50ZWxfcHN0YXRlX3JlZ2lzdGVyX2RyaXZlcihzdHJ1Y3QgY3B1
-ZnJlcV9kcml2ZXIgKmRyaXZlcikKIHsKIAlpbnQgcmV0OwpAQCAtMzExNCw2ICszMTM3LDkgQEAg
-c3RhdGljIGludCBpbnRlbF9wc3RhdGVfcmVnaXN0ZXJfZHJpdmVyKHN0cnVjdCBjcHVmcmVxX2Ry
-aXZlciAqZHJpdmVyKQogCWdsb2JhbC50dXJib19kaXNhYmxlZCA9IHR1cmJvX2lzX2Rpc2FibGVk
-KCk7CiAJZ2xvYmFsLm5vX3R1cmJvID0gZ2xvYmFsLnR1cmJvX2Rpc2FibGVkOwogCisJaWYgKGds
-b2JhbC50dXJib19kaXNhYmxlZCkKKwkJc2NoZWR1bGVfZGVsYXllZF93b3JrKCZ0dXJib193b3Jr
-LCBIWik7CisKIAlhcmNoX3NldF9tYXhfZnJlcV9yYXRpbyhnbG9iYWwudHVyYm9fZGlzYWJsZWQp
-OwogCiAJaW50ZWxfcHN0YXRlX2RyaXZlciA9IGRyaXZlcjsK
-
-
---=-1DKVhCk43lRzjNd4C31L--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
