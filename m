@@ -1,241 +1,339 @@
-Return-Path: <linux-pm+bounces-8612-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8613-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33E1F8FC23C
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 05:41:06 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEAD48FC2B5
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 06:29:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A14291F248E8
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 03:41:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 31992B249C9
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 04:29:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BABB7345C;
-	Wed,  5 Jun 2024 03:41:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A44A135A4E;
+	Wed,  5 Jun 2024 04:29:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="Wc+ugUzK"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="0G0o//Gd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11olkn2103.outbound.protection.outlook.com [40.92.18.103])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2059.outbound.protection.outlook.com [40.107.243.59])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BBF02207A;
-	Wed,  5 Jun 2024 03:40:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.18.103
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5540F2C95;
+	Wed,  5 Jun 2024 04:29:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.59
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717558860; cv=fail; b=Py0W4h5zNvqZ35KDMsVbO9SDQFwG7OSBNMCMgwZj5eJ1GDGpsQjI89r0aZpsqOPBhlEqVsrx7lbplMt6s7vQ/kD10ljz5XSVugHDf3taq6Z+7AVQXhsdKBXo3OeOUwqXSWOaM5B2n/BQL+5pyfnm3mDfMeDDXp7C0K8Y4uKNKHU=
+	t=1717561771; cv=fail; b=KnqL6eJH/haXjjwpHK8KRVO7rHs2i0YwjM0wGfESy6GJaSukL6l1XoMeuRK3y6x8awgHEWpdV7asSKdx/OvWcipZt3+LJrChEL2j2dTncHv4AP7nb1bQhrrnCfLkY7oNdGoirq86jOK84W0PXnumBCLSEujnYuDRvGh3vsw8wj8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717558860; c=relaxed/simple;
-	bh=PNdp6XUiy9UKgqD8cYx5RV7RT8YiVnGooNOwSHUZKvw=;
+	s=arc-20240116; t=1717561771; c=relaxed/simple;
+	bh=mLvyYxESEhyylShyrEkBDaSEuWU+jnm8i3Qa9s4x4BI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=j5rZLw7tGozSVk5nsb29LDpKTDt2rF2df5+2y2XtoY0vxObrmEqaPxQ/MGCJGhKeSzGmrIfsVlACHSRft3sJuz9dhuLtFhEE2SPhl/DaSpFTaCwWUuzzFAcAYoJ9vFAR4YjAOFW+twjzQNEdUFtMBLzLUlYoGgy2otgI7Ez6jyo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=Wc+ugUzK; arc=fail smtp.client-ip=40.92.18.103
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+	 Content-Disposition:In-Reply-To:MIME-Version; b=bDOb2tlWSjvenfzGgNzVArN38dFnmEmtbzwXyAj1ET5If45+7DeGMOH2oCUf8KpJLs11JstSQ/SuqroGiezhTHLDmJzu//j8ctrXFsxuwmlqZNKDgP3GHDEx1NM2fO9nbXBj5ipu6F23yv6sX9VKFY1YAw7if8Y00jcXIzGkArY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=0G0o//Gd; arc=fail smtp.client-ip=40.107.243.59
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XJ2cmhgH8EVPcoqqKQAXkf7rZ5RTzKuUt7AvrVAOV8LLyrq953D5y8nBpWZ1At5MvncoS5O+Kxiq/603Hg6fPOx1uVDjemYCwBwhnkWsLpE/Amiqp8rCr9fSgIpCH40O59N+Hf6TekPgIEEIlM2vChJB3IRvvNbX2e8b/aGeg399ejRrpKU+YEn7OqfzUAkrp1gsPRJRvWmR/6OtEqnloaq/N6YZN+9h2SbEgoPipDJkjx9QjVzeznUBOHzQeNpDpTG6Wsw7Eue3rGCxYzubmre7Pzpe+67wE27/iOVh9XaIu2cz+fYD7CmW+Y5qwhjOKMafIRXUIceKYcOeP1lhtQ==
+ b=XUSesPNpWuyLTwtXZCqzkSjqzDRZ/SVR/0V/C31z01relle05+Vb+08NPPgXADBmMKz3KHKisVrcwHjAYK/uZ9mCuN5GNeRxNRR29c4PGPl19H6TrtJ/db4MQBibvL1xFzSAiLlKuakTeocIQXlbgODyy9CpGhfz58sIGaoEqEbkOOiS7ONwcpMSIDvSd4Qk18xMUmNRVne1HwGZJKPSreY8t4w5L3HfDDxYuY05hnOCHjxbIdCd3FUuCZHT+l4tRzoYazbppvTW/jDOi+dhU9itiJyHp1QYQjApZpRxNog0D5O2Dz7lY4dhxDFGW1SoOg9Npgra/ZarQqWa/AYk1Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=13h8JSv8C+aryVss/0R1vLSvXBCAiRRR5+4CaHK7GIw=;
- b=E+Tr6kk5WqcopE7imSzvaPYtxEpk0F/bLkPC/qLpBL+wIpjErz+XYUItjLuQOhhd4UxOGCP9YXedAoJWKIlT+IMnGkFyatHAEfc8TOCdUcKijV3BJZSVwS/N3Ok/2yWoOnwD0/keZC6Px+f8PGXPMHrIIfyKmnQ/hBxxQTykSz6D9S37fuMdzyYLaYZE1rfhcfY2keUi6N1rxJyLjkO8AbL/i9ORXonEZtXZXtt0QKcdFfoIMmihhF3fbQOjP4sk66cJNhUCwvp1N3Z0SFYiDb/odZgq/A3UxwVcv2VDVYXPBCCPSNSfhyX1YBeR51KrImd/vglquy5D7IXcfG9i1w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
+ bh=ZxgcLqg7K6tYbiI1YLFLI8WZj2voyoRV28JFaVuKhvc=;
+ b=VpV4m2TPfXtsaRmotkM+ZMvc5b/65DhwWPpE/azv2ccweNK3ZV1TuXyUCncbyGcwJ5wdnQqgDOrc8by0lVAdD2+7bTTr1mhCid66rW5y1K6VGzXGvRirMFLlkvTOd+lhltAdgk/ijQNLQsJtu6Xbi5+JyKIWtafIkNBz+9Q1ipAJwR6KMvXXYPhavjmDMSlVds6BC7z50j1nhRm4UZOo2gxv7vZ+3ooQz9ImxFopPgxhmm4+Av+JeveJK2QjnFlE3jodEjRo4rm/UaUIyhAkLsoF9tVEB/EGzLEUbhGHLrQKUrcMj4rzRd18jN9p4d3clrW3ekEsSEh7XReCt9AubQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=13h8JSv8C+aryVss/0R1vLSvXBCAiRRR5+4CaHK7GIw=;
- b=Wc+ugUzKVfSPFQeEjpVx0o0q6GPX6QOI6HP+vkT9UNXwi+hiw5h+10b73r1v209no2La6f3fpbYz77AYX4G8aKMmZpiRckWsT28w8z+Wk9ydrX2vrgc2UJTIOUXW0f2CreAHczYMW9ANkyYZ4/kTnhVHdcCrcLJGv4PlnHKkOhtoKgpaLqckODGCzwe3xGrrOJ4NPuuVCDN/9lfBvAUMgiET998tb084kUIYNLg9UH4Uyx+jQ8beFabhiH9obtYPOM84GzvtBZzelGCVfBdMSeqm6yyRCM0TyKSx/OfZhbO0A+uhmUFIiU6K94zspF/gqf+ba0jrznTEyk8LqPvUiQ==
-Received: from IA1PR20MB4953.namprd20.prod.outlook.com (2603:10b6:208:3af::19)
- by SJ2PR20MB7106.namprd20.prod.outlook.com (2603:10b6:a03:568::20) with
+ bh=ZxgcLqg7K6tYbiI1YLFLI8WZj2voyoRV28JFaVuKhvc=;
+ b=0G0o//Gdp9QnQxsEoSJzHZdh7c6wgKJvjqNALcHtN41Ybz0y84N95k85SzbmhhHd2HEI/waBbMs0MFbkmWKT1MLNfD4dYxdsHBAuCUV16+blX8MPmO9F/gSS0EIGfPZodyR4H4aifGrGJ/FW71cUoA9LGo74dXqBuFuP6DUYLLg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS7PR12MB8252.namprd12.prod.outlook.com (2603:10b6:8:ee::7) by
+ CH3PR12MB9430.namprd12.prod.outlook.com (2603:10b6:610:1cd::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.27; Wed, 5 Jun
- 2024 03:40:55 +0000
-Received: from IA1PR20MB4953.namprd20.prod.outlook.com
- ([fe80::ab0b:c0d3:1f91:d149]) by IA1PR20MB4953.namprd20.prod.outlook.com
- ([fe80::ab0b:c0d3:1f91:d149%6]) with mapi id 15.20.7633.021; Wed, 5 Jun 2024
- 03:40:55 +0000
-Date: Wed, 5 Jun 2024 11:40:32 +0800
-From: Inochi Amaoto <inochiama@outlook.com>
-To: Haylen Chu <heylenay@outlook.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@outlook.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Jisheng Zhang <jszhang@kernel.org>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: thermal: sophgo,cv180x-thermal: Add
- Sophgo CV180x thermal
-Message-ID:
- <IA1PR20MB49531F55C8D7DC5D0050CAF9BBF92@IA1PR20MB4953.namprd20.prod.outlook.com>
-References: <SG2PR01MB4218013241B3EED779D3BAE8D7F82@SG2PR01MB4218.apcprd01.prod.exchangelabs.com>
- <SG2PR01MB42189977B4172405F5704CC4D7F82@SG2PR01MB4218.apcprd01.prod.exchangelabs.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.31; Wed, 5 Jun
+ 2024 04:29:23 +0000
+Received: from DS7PR12MB8252.namprd12.prod.outlook.com
+ ([fe80::2d0c:4206:cb3c:96b7]) by DS7PR12MB8252.namprd12.prod.outlook.com
+ ([fe80::2d0c:4206:cb3c:96b7%5]) with mapi id 15.20.7633.021; Wed, 5 Jun 2024
+ 04:29:23 +0000
+Date: Wed, 5 Jun 2024 09:58:21 +0530
+From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Corey Minyard <minyard@acm.org>,
+	Allen Pais <apais@linux.microsoft.com>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	Perry Yuan <perry.yuan@amd.com>,
+	Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Nuno Sa <nuno.sa@analog.com>, Guenter Roeck <linux@roeck-us.net>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Heiner Kallweit <hkallweit1@gmail.com>, Lee Jones <lee@kernel.org>,
+	Samuel Holland <samuel@sholland.org>,
+	Elad Nachman <enachman@marvell.com>,
+	Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
+	Johannes Berg <johannes.berg@intel.com>,
+	Gregory Greenman <gregory.greenman@intel.com>,
+	Benjamin Berg <benjamin.berg@intel.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Robert Richter <rrichter@amd.com>, Vinod Koul <vkoul@kernel.org>,
+	Chunfeng Yun <chunfeng.yun@mediatek.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Nikita Kravets <teackot@gmail.com>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Stanley Chang <stanley_chang@realtek.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Abdel Alkuor <abdelalkuor@geotab.com>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	Eric Biggers <ebiggers@google.com>,
+	Kees Cook <keescook@chromium.org>, Ingo Molnar <mingo@kernel.org>,
+	"Steven Rostedt (Google)" <rostedt@goodmis.org>,
+	Daniel Bristot de Oliveira <bristot@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Hugh Dickins <hughd@google.com>, Abel Wu <wuyun.abel@bytedance.com>,
+	John Johansen <john.johansen@canonical.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Stefan Berger <stefanb@linux.ibm.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Eric Snowberg <eric.snowberg@oracle.com>,
+	Takashi Iwai <tiwai@suse.de>,
+	Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+	Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+	Mark Brown <broonie@kernel.org>,
+	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+	keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+	linux-acpi@vger.kernel.org, linux-ide@vger.kernel.org,
+	openipmi-developer@lists.sourceforge.net, linux-clk@vger.kernel.org,
+	linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-tegra@vger.kernel.org,
+	linux-pm@vger.kernel.org, qat-linux@intel.com,
+	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+	intel-xe@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-leds@vger.kernel.org, linux-sunxi@lists.linux.dev,
+	linux-omap@vger.kernel.org, linux-mmc@vger.kernel.org,
+	linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+	linux-wireless@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+	linux-gpio@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+	linux-staging@lists.linux.dev, linux-usb@vger.kernel.org,
+	linux-fbdev@vger.kernel.org, linux-bcachefs@vger.kernel.org,
+	linux-hardening@vger.kernel.org, cgroups@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-mm@kvack.org,
+	apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
+	linux-integrity@vger.kernel.org, alsa-devel@alsa-project.org,
+	linux-sound@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	David Howells <dhowells@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>, Sergey Shtylyov <s.shtylyov@omp.ru>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	Daniel Scally <djrscally@gmail.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Peter De Schrijver <pdeschrijver@nvidia.com>,
+	Prashant Gaikwad <pgaikwad@nvidia.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Huang Rui <ray.huang@amd.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
+	Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>,
+	Danilo Krummrich <dakr@redhat.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Pavel Machek <pavel@ucw.cz>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Tony Lindgren <tony@atomide.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Hu Ziji <huziji@marvell.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Potnuri Bharat Teja <bharat@chelsio.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Miri Korenblit <miriam.rachel.korenblit@intel.com>,
+	Kalle Valo <kvalo@kernel.org>,
+	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+	Oliver O'Halloran <oohall@gmail.com>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	JC Kuo <jckuo@nvidia.com>, Andrew Lunn <andrew@lunn.ch>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Sebastian Reichel <sre@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Helge Deller <deller@gmx.de>, Brian Foster <bfoster@redhat.com>,
+	Zhihao Cheng <chengzhihao1@huawei.com>, Tejun Heo <tj@kernel.org>,
+	Zefan Li <lizefan.x@bytedance.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Daniel Bristot de Oliveira <bristot@redhat.com>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Jason Baron <jbaron@akamai.com>, Jim Cromie <jim.cromie@gmail.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Clemens Ladisch <clemens@ladisch.de>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v1 1/1] treewide: Align match_string() with
+ sysfs_match_string()
+Message-ID: <Zl/pZXNss8vQfEh+@BLR-5CG11610CF.amd.com>
+References: <20240603211538.289765-1-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <SG2PR01MB42189977B4172405F5704CC4D7F82@SG2PR01MB4218.apcprd01.prod.exchangelabs.com>
-X-TMN: [8ekmFjTTmlPllXHjrSEc46WFV6AEi36InaF0FevdR+I=]
-X-ClientProxiedBy: PU1PR06CA0014.apcprd06.prod.outlook.com
- (2603:1096:803:2a::26) To IA1PR20MB4953.namprd20.prod.outlook.com
- (2603:10b6:208:3af::19)
-X-Microsoft-Original-Message-ID:
- <3jrgrutu53rpi56nxjjxwd2uyqxht7u3t6razcellfqupjfpnl@doo6nmag2qcs>
+In-Reply-To: <20240603211538.289765-1-andriy.shevchenko@linux.intel.com>
+X-ClientProxiedBy: PN2PR01CA0094.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:27::9) To DS7PR12MB8252.namprd12.prod.outlook.com
+ (2603:10b6:8:ee::7)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA1PR20MB4953:EE_|SJ2PR20MB7106:EE_
-X-MS-Office365-Filtering-Correlation-Id: a3031572-d67b-4530-6684-08dc85114e0f
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|461199019|1602099003|3412199016|440099019|1710799017;
+X-MS-TrafficTypeDiagnostic: DS7PR12MB8252:EE_|CH3PR12MB9430:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2d71100c-5903-4196-bc10-08dc85181329
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|376005|7416005|366007|1800799015;
 X-Microsoft-Antispam-Message-Info:
-	osITZA57Ve2iY89ytYx8uu3dq1KlurkoU4ZmAOrsvXzbdXUnKIi+2B5k5NCcGY45OMj9EXGn334e2GcRfaQsQlDKxdwmzU+Jl1fEIKWOpzGbJUjffriGbB4Kdw81CgFuQmu9Wll7N8szF4MqJRuzsaDsE9rz9ZRo+a7n34w9wzNSD+0bcmLyhJvFhmWjm43AOvGmHPuyde2tl7t+9F0NByxyZro1oV5MxDRNrjRnJVG2fUkC70EPtRpi2IOiMQQDZ+2KHoiYAMM6J0RJZwrJBbtrPh5C50LPvHMgiVAtRr2uwIIgTY42bdF79qY2qeLgrNWs4xkghnlV7Si+NMmCU4CHry5nzNj7PfUec6sGaTCYyEH9nP0/rVU8JXBMmn8TWRZiVMqVOpJjCaHCnmz3eF9GzEj6B4wmO+YymL/jJ6VeidUpbjV3FRpJ8ZqPPkSkvfWx2+6aCLohEg+C7Inw2vwNJdUzlpj4/f1KcmHq1S9yJJ16Fz1kNW5RgfuYnUDC1tX+/OVTjmwEP+DhBZRixcFPp1f9uPVt079DgyEPr3ABrTzRC0hfXO8jWoVRAIV8Lrpbio5XgWwEWUh9NK5CcSeeX9IJejIKcJOot7J4htYG0j1oe4EdrOWOFZX07qR6+/mKTJS7LIEGlMQ3QV8K0BVP2kjvLA2xewpkiT3YpUzoJWbjtK0ZozNVI11svYX4EKVgMWKi+r5oN4KhClPNYQ==
+	=?us-ascii?Q?TR0jt3DjeeeFlYLQoRK2wd4FGN/qTr3M/0NhgRSmV5FTXAZ/ChFE6dOz2WlR?=
+ =?us-ascii?Q?RMMO0TSe0y8fX1FvMswwuB+Cw60xsR/r2B6JGTzFTYMaOAlt5qr0Kw4dqx18?=
+ =?us-ascii?Q?B3M3dPGzwmuEkZ2i/PORnH1Cjs2NmVTdzgoFgVFqKQflM1JAQCxAA9I/qzC0?=
+ =?us-ascii?Q?VI8dDTCeGJmS+hax3H3F4akhZOMB0f+5BkkSgjxqXHBMWkPR9eri5q9IBOvx?=
+ =?us-ascii?Q?Z3M1sWhtFry/KKRr0Pvjhskfk+NoT0YCbToQSLouR0cdVTAH5r3/GKup/o2u?=
+ =?us-ascii?Q?cwJFq49a0/YJPWMoEAUI/L2xszblWBYyt0K5elmhE+lH1jLNEw6hIzcLmv3A?=
+ =?us-ascii?Q?DztytQo5qICQJZGeuA233IM9ydL4Qpvs80AIrFwCzqNewrZhIYgkkJ3GnsOl?=
+ =?us-ascii?Q?Zc0AJmn8U8Aw33tTmX5arFSnJN9oQp490Uf3s9anqeuoghN6buuBp/5xvQMN?=
+ =?us-ascii?Q?/RzcO35GTG7kUsBIGFh2Ex1O19OaMEXr1O6mJO0lmc8b+tXLRsF5zW8Q/gqQ?=
+ =?us-ascii?Q?akFY40YyeLmyAwo+bkXA6sPanw8a9PvWG/zFDP38yiQeOdRebEkB+jBZce/j?=
+ =?us-ascii?Q?BfX5CIn90PerZLVEFS4yIbqmUY+/js7wShwpwgfcIkEzmTZF0bAzefevYNoi?=
+ =?us-ascii?Q?8y+KJtQf6D7CC+pX10F6SFuYecSVWcScT7hX0fbfJJ6wVFcrRmz0i5jhq5GB?=
+ =?us-ascii?Q?2X/FNw6jSOk8mwF3KPNnIgYOoTkwEEdQRJ11/hDkLnC1JJ8OLTtamMVGb0EE?=
+ =?us-ascii?Q?cbfYvjgvKdh3w0m5poiM8jzzPgwfE0M1+/gdkppes1u3JSSODPXT0+AhKrD3?=
+ =?us-ascii?Q?EEdzHGvifIuMCazilW7+/+/7EdmfCTxuhalrwTTbBsDhtcR1jowTiVnAqvfY?=
+ =?us-ascii?Q?LzuZG5kqPuKS73GxjsdktcxxEVZQKsyKHLJQpSmQm3w7SXVRb/ZBgkVVz66s?=
+ =?us-ascii?Q?OgdHAIdmWaQx5Q63Zed5XcNHLbs3mrE5jKn4/fmEV9zKgn8/bZ++UYVPCJNG?=
+ =?us-ascii?Q?zmmd/DPwjRPYCMvLEbRnIOXmN8z78SRpaLmGzgrjIiMZkQ3IP8UO+8amN6qH?=
+ =?us-ascii?Q?eF/55RKpY92DJATflwhDgATB1W+WKQKBuwf/blgiDMBzigIhxVRyE1+s3L+A?=
+ =?us-ascii?Q?wdRvspgSjX4RAgj12RcvlubO+A70SF9bl2NGtpiNgMs/9Oq/UYXheWS1lSoi?=
+ =?us-ascii?Q?atWMI67YH/k29faGl1/3Knvf6FotIQV2H2s8rg8h0XcxexD+ijz3AEurgXfB?=
+ =?us-ascii?Q?epr1lSlgUoFVFZIVqym7GXtC4IPyfz9pV/R7KriAUwk6wNLM8vEsCYV/5zlm?=
+ =?us-ascii?Q?dIFCftoggNuzpEQyyuv66T8Y?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB8252.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(7416005)(366007)(1800799015);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?ZvYCtHjqq8m8rNIXHzcHrg4XYmup3MMcUwySpBrihuWSaj4S3nE+/oDta1gS?=
- =?us-ascii?Q?9fxvDTIZ/7YknnJ9+z/PgzDJOIPjkLaWOH9VIDbrdfRIovTqDy3OAw1NpUnH?=
- =?us-ascii?Q?syFlVst3i2hi3wdBm68A1rqPRrXtpvhpS7vM0+x3yqW+9jlubNqRemQTW8xR?=
- =?us-ascii?Q?gBd/fILaacj7GXHTGJ3TUS00IFtun0c9acJL5ftGT3ErhYY+K0JRlIh6D/+B?=
- =?us-ascii?Q?tR9jp3waVTON+3XKNtALdRW7+Ecj5YaLicJ3YeUaZIfQocxWotAH1jOfvG2E?=
- =?us-ascii?Q?XehYdh22PIio2BY3KMQssT68QV8x2l557wl9VWSSS3w6HXMhwAMhZlfTTOLs?=
- =?us-ascii?Q?MBGVxjDt2k6QQYCUJkRAfldu85TIbJyKbVadCU3BmcCPhJ0vdwclccvcOezG?=
- =?us-ascii?Q?gp2wBpA3TgP1YwrE2F/6bel1OR1w7vUff8ipDZvvIStbfGQSYbxllNGfL+NL?=
- =?us-ascii?Q?xQrzp+PnlQJusPloswGq1oO5tP1fU7fHQepuebjR8DXUEy3YxvoyQmuKtq/D?=
- =?us-ascii?Q?Lh8h8Ctnh7+80MCGKHRsh9GloBRwhU0aYkqiiRgRnj6/xH+ebSHSDIy0ivqA?=
- =?us-ascii?Q?kX5bjORMXwU/y5pp+53DrdXFYySs+3/0mCOHoyGqB77U3YIUuQgJcEEUI5A5?=
- =?us-ascii?Q?ju2LZxdMiSmXGqZHKlYA+4/G7xuhJ5EBbqGECTECDjyZ4aWTzUZ1bCG+wAEm?=
- =?us-ascii?Q?8nTs8owfjF8ILXxPytzmrGpNu9ZHVHSFRB5q7i4O5Dn6r8GLvmUN9YPdRUYd?=
- =?us-ascii?Q?zGv13tSV2FWn7Od2cgt47M7lTDyFaNpjZxzx6XvKCmkK25oRd1Po/LUtOKd+?=
- =?us-ascii?Q?x+lIBk4Pb5a6zbPiLNjfrOA5wHrz5XtnhsFeA4bVK7iM48GWCnIJEACdNW8t?=
- =?us-ascii?Q?RSTJboOWI3anVvPeDxffV3vpk6exPSOF5K5YzTLccqEefvc6AzAmOgbosNuJ?=
- =?us-ascii?Q?jt0QiN7rjxdGExhrKaP745SlGktwMzNB1hJUKXz51bRPRtkJl+/2DY3m7PuV?=
- =?us-ascii?Q?ebhZVqgY3ufipNBYx2qxoizmWDD97yepU7whdDwfwd3weLDA050u6S5zkD+j?=
- =?us-ascii?Q?mHzp3JIhiKHise/7ln5IyxQ0ykey4CNlh6rCaCPmTrVH1uRUPW5ddfF9QET4?=
- =?us-ascii?Q?4l44hs7HKAE9IcZ0+ix/KCEOO/AEhFjYSNExzmBo3XttAw3Xn7PEGkk16x1k?=
- =?us-ascii?Q?RkfmqNYw5loTotWsQJJal1Lo53xmhhJ5CQw06GP/QVzkHLZZxlNlaa8A/uhr?=
- =?us-ascii?Q?ftm/HdJCbSH3LcFPkkcq?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a3031572-d67b-4530-6684-08dc85114e0f
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR20MB4953.namprd20.prod.outlook.com
+	=?us-ascii?Q?GoEdR4M+NZV+gKBBU5jniAj8lrECAZQQk3XbFhYOIwRnrIO+C48lXqYmxP9C?=
+ =?us-ascii?Q?ABtJTJKrksvKKp6yNN7qFBOUY/JMS0LE04sI6aPhOWnCHQZlnXHGzwxOyT0P?=
+ =?us-ascii?Q?CPbdaa01A8jfqaijmYok1y+TqtaczhSq6kN54tvmHkaS/J106nTP1hDsGzjC?=
+ =?us-ascii?Q?/HKFK4vtvNvM55/0uBFf8C64xGRLLTgHHSxpCRUi2l8V4/x5yA2m+oR7fg9g?=
+ =?us-ascii?Q?vk8i6cHhYIZl/r8BmLiaWsv1/Xlk4K3eXtg+qbqohsgxnqxsI7FD3DBsABW3?=
+ =?us-ascii?Q?yWtS9XOWnFjb6U8VGOTMPoWIhkPnbS5BWx4Dmygal+rw0vdKBeIU9xp4HFTE?=
+ =?us-ascii?Q?M1xNNMx3YSvTEGB/PlMmBtQHw6ohmjrfiQC6+hfbw49ny4ND+lCfDG+S6PFg?=
+ =?us-ascii?Q?VkFlkvwMTpUc6LIcFCndyw8b2LVdtval2XZ9M6JAn/eH4nHQ0vfXkbGt5ZAX?=
+ =?us-ascii?Q?LXo+J/wdsAZ93jy12SZ48fv9gIAcjnu5a7HNskesrUFCX7dYxtZ/ZiPIjsoT?=
+ =?us-ascii?Q?1UBuk6emMfPDh6N99+IKpPeTUNOplNtO/0ua78EyuQefuDRwKwvc5R6hItzz?=
+ =?us-ascii?Q?bDpthfat7YjslVru9QKw+T8AcFibvwQDF2n8r10KADE6xuGFWgJozb5/Brsq?=
+ =?us-ascii?Q?yfDUNaJg9puRhk3USkMXA97/MmsQJbUMuX2kyihsEenzWI9RKzH8glPGu8Q9?=
+ =?us-ascii?Q?Z6BJt7+CqZ88qxLx/w21QrHyergJGC49N/+gt0ggTcQBg+0HESWBdXK0N4om?=
+ =?us-ascii?Q?kJ5qP2+iCsDkYVPOuLPRs/wXEy+5POFQs/wNn7Z4M8TIcvlHM+KDalPM8z+J?=
+ =?us-ascii?Q?hf1STfPPbV5GUTOo8wm7TjUdUfEM8k1CQ66ueIFNW0X73NG0AjvMAPe8AF9Z?=
+ =?us-ascii?Q?BD6EroIlOma+zBp741WtpUnw14lf8Sg63mfwIG8mBabAW4PGRLHSB/Gy2xkp?=
+ =?us-ascii?Q?CMmXirRjt3g0Qz0XVwj6pvVjn3I/Nzq3MaCaRmrAZ6noneNXMMXjtGug08de?=
+ =?us-ascii?Q?lT2XHdgyD7ZSuby/Taie6RLRQP1oWErvwxZIftsLrejZuc28mVBijETAhxXW?=
+ =?us-ascii?Q?MDX3EPL3wVbEgGeeCjuenD1eUlqSnvpKTdaQaRT3xtUpJuiZ5BEGw96toTPT?=
+ =?us-ascii?Q?XPNue4VPzxqTxOfQSgVKCgE/OasJblcEgfZJqGBaPMYqZbGaK+0C20EEl4FM?=
+ =?us-ascii?Q?L3OLf951ueg1DSuh0oSvpYIy3GQk7cB74NZoR5D/UzoETTeu/H5TxVlzLGSe?=
+ =?us-ascii?Q?JAFs8QJIJIZIPhvJPxyrcUiiyhqkBgl4Jd1KExuYHG+hXbV71/Ed3qeISyyw?=
+ =?us-ascii?Q?WphVOY8CNz/ZJOr3teXBeN2vF3j/e8PoRLwJPeZAYUDsi0fnk2jzW5CFRJDa?=
+ =?us-ascii?Q?MpYvvJGgly7jDmrlewBYgikmX/1NJYPs1dwit9yYP0qPdOkyRtssX6fV1DDQ?=
+ =?us-ascii?Q?pfZEH9Z5qZuaYTuEjkReM+t8okSJ4JPh7iLiMQ/dMA+nMTjHJAaKv7bQQCZp?=
+ =?us-ascii?Q?4xwIyBNdZrVLoXWlY4/mISFkNd64rTH0NN2fIZ6ZlTsMzZEjGaqjdvbjd6ms?=
+ =?us-ascii?Q?jT8Q5Nfg/U2HzGQfaZnH6/JVvNz+UdEnsDcQx4YI?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2d71100c-5903-4196-bc10-08dc85181329
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB8252.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2024 03:40:55.2855
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2024 04:29:22.9168
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR20MB7106
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: T1dxbax+ztSvrRDMCEYhc4X8/u/IH6yJ+Lu/KrmdUjAtcefr09pt0ngCNQOZd3mreFJef3FdCvf/gZpFaihJhA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9430
 
-On Tue, Jun 04, 2024 at 12:54:19PM GMT, Haylen Chu wrote:
-> Add devicetree binding documentation for thermal sensors integrated in
-> Sophgo CV180X SoCs.
-> 
-> Signed-off-by: Haylen Chu <heylenay@outlook.com>
-> ---
->  .../thermal/sophgo,cv180x-thermal.yaml        | 82 +++++++++++++++++++
->  1 file changed, 82 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/sophgo,cv180x-thermal.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/sophgo,cv180x-thermal.yaml b/Documentation/devicetree/bindings/thermal/sophgo,cv180x-thermal.yaml
-> new file mode 100644
-> index 000000000000..1c3a6f74ff1d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/sophgo,cv180x-thermal.yaml
-> @@ -0,0 +1,82 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/sophgo,cv180x-thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Sophgo CV180x on-SoC Thermal Sensor
-> +
-> +maintainers:
-> +  - Haylen Chu <heylenay@outlook.com>
-> +
-> +description: Binding for Sophgo CV180x on-SoC thermal sensor
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - sophgo,cv1800-thermal
-> +      - sophgo,cv180x-thermal
-> +
+On Sun, Jun 02, 2024 at 06:57:12PM +0300, Andy Shevchenko wrote:
+> Make two APIs look similar. Hence convert match_string() to be
+> a 2-argument macro. In order to avoid unneeded churn, convert
+> all users as well. There is no functional change intended.
 
-Is this necessary? I don't find any change between the sensor of these.
 
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    description: The thermal sensor clock
-> +
-> +  clock-names:
-> +    const: clk_tempsen
-> +
-> +  accumulation-period:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: Accumulation period for a sample
-> +    oneOf:
-> +      - const: 0
-> +        description: 512 ticks
-> +      - const: 1
-> +        description: 1024 ticks
-> +      - const: 2
-> +        description: 2048 ticks
-> +      - const: 3
-> +        description: 4096 ticks
-> +    default: 2
-> +
-> +  chop-period:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: ADC chop period
-> +    oneOf:
-> +      - const: 0
-> +        description: 128 ticks
-> +      - const: 1
-> +        description: 256 ticks
-> +      - const: 2
-> +        description: 512 ticks
-> +      - const: 3
-> +        description: 1024 ticks
-> +    default: 3
-> +
-> +  sample-cycle-us:
-> +    description: Period between samples
-> +    default: 1000000
-> +
-> +  '#thermal-sensor-cells':
-> +    const: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +        #include <dt-bindings/clock/sophgo,cv1800.h>
-> +        thermal-sensor@30e0000 {
-> +            compatible = "sophgo,cv180x-thermal";
-> +            reg = <0x30e0000 0x100>;
-> +            clocks = <&clk CLK_TEMPSEN>;
-> +            clock-names = "clk_tempsen";
-> +            #thermal-sensor-cells = <0>;
-> +        };
-> +...
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 1b7e82a0ad2e..b6f52f44625f 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -1117,9 +1117,9 @@ static ssize_t store_energy_performance_preference(
+>  	if (ret != 1)
+>  		return -EINVAL;
+>  
+> -	ret = match_string(energy_perf_strings, -1, str_preference);
+> +	ret = __match_string(energy_perf_strings, -1, str_preference);
+>  	if (ret < 0)
+> -		return -EINVAL;
+> +		return ret;
+>  
+>  	mutex_lock(&amd_pstate_limits_lock);
+>  	ret = amd_pstate_set_energy_pref_index(cpudata, ret);
 
-Where is the interrupt number? The sensors does support the interrupt,
-but I don't see you describe it in the binding.
 
-> -- 
-> 2.45.2
-> 
+For drivers/cpufreq/amd-pstate.c
+
+Acked-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+
+--
+Thanks and Regards
+gautham.
 
