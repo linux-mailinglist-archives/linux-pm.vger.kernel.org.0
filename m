@@ -1,108 +1,165 @@
-Return-Path: <linux-pm+bounces-8610-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8611-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F5DD8FC146
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 03:28:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F26E08FC18E
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 04:13:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 22E1EB24528
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 01:28:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 60B4FB21B56
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 02:13:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79FF1EAFA;
-	Wed,  5 Jun 2024 01:28:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBAB260B96;
+	Wed,  5 Jun 2024 02:13:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=howett-net.20230601.gappssmtp.com header.i=@howett-net.20230601.gappssmtp.com header.b="tt+FT3lL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q03Z8iZE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17AEBD266
-	for <linux-pm@vger.kernel.org>; Wed,  5 Jun 2024 01:28:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ED3728379;
+	Wed,  5 Jun 2024 02:13:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717550891; cv=none; b=BaggXCTM9lM7QsTSg7614i3mEKHAbnps2+V1scFo5u4Wf9MrfgQutu5J7u6LMJdGzsqmXKavoIsHGrO2VkgTD0fmVjAEMRErTlwxoM+C2zTIwVZbu4yDVkPbub+tMxzD9sPXOdjZFNjp3AONfxc2eEMKJM7PpGKBs7J9ubaCTPQ=
+	t=1717553629; cv=none; b=fpbsUTalx9GhqQ3+snXjKxt0U4dpg+ANbPow8aeIp3XH6vKmMBk+wDkSdhCKFK3gpjn88Yc1Gm2CiwYlMiYiNItby8K02EPs73xqELiKIq0dK01Hl8TW8ouX4/fzDRu9gVV8Va5A+h8lRgt1u3misefOiR+8jhADhlwzmbVHm9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717550891; c=relaxed/simple;
-	bh=1aAtN/3z/CC+KoX4/Uc468gsc1Odb+4pk0TbWNTH5rk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mLvtDaZCabK4LK7sFYXejZghHTWuSKCHTh/rBA/ez7K//Zn+G2rGAdsgUyv3ITiIi92JY15JaHksBwzMZ2qyiUCdom3W8JAErDy9V9otLnV67lSS3pB270tKnUQSBx+9E2ElFsqVdPDoujNh/mYikuKTln8z9Bl4lq5oH+dxAMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=howett.net; spf=none smtp.mailfrom=howett.net; dkim=pass (2048-bit key) header.d=howett-net.20230601.gappssmtp.com header.i=@howett-net.20230601.gappssmtp.com header.b=tt+FT3lL; arc=none smtp.client-ip=209.85.219.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=howett.net
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=howett.net
-Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-dfa7fafa0c0so388297276.0
-        for <linux-pm@vger.kernel.org>; Tue, 04 Jun 2024 18:28:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=howett-net.20230601.gappssmtp.com; s=20230601; t=1717550889; x=1718155689; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1aAtN/3z/CC+KoX4/Uc468gsc1Odb+4pk0TbWNTH5rk=;
-        b=tt+FT3lLTJnj8aN+o0+xOkQN/JTcTWZWIjXbRRUlHf8Kr8jVb8sdC5FgSH2wPr9qU6
-         381P/7uuhx3VU8IpbzRyy+x+sC7vIGyaq4YI89Oo+XqNuY1b1QbjlkvqcLtlO52+KjTu
-         X8zeWgbUqqy1fg3h41yXtLHC/AH1E71YWG3FbgRTltc7wZtE0atG3CeDFruc1tJTQTfG
-         PZSGhc51KhJgF1VGI17A/3IBhilLEjbnXg1QYmEPnJFM35BuK0sQ+N5n1sOfw+CxINZo
-         MjGNYklVk5Ega603pbts7+IF1WQxVkdsdp/9uEsXZnIDgjaKSfFZspGy8EVe3UeysmLS
-         NIDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717550889; x=1718155689;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1aAtN/3z/CC+KoX4/Uc468gsc1Odb+4pk0TbWNTH5rk=;
-        b=koXqnxkHn+wNpy72gRaILMqaD0WAYdARR89JBRyqX0C8xHNIq7soTdPw0OaU/4C1p2
-         CkNIzo1a74+OtlIALOTIS/IC4jT+fnjI1pjk/R3+Gssc3G7VS3IZ7nlhT8UY0eNDHT03
-         7GEKpf7LV0vY8vPzAofVyYbDW9GitK2Q9foj7o2y8X+dZSq2b4LFK+EHHJyaXNb1C911
-         LHjmwANlthyKy5ItiJysNTX3zKTk5Si522jv96HZ2bk19FWQEnObjqSEIMDH31NI1K9/
-         CQFOx3L/b1U6tYn5z5ov7eb7e87y4nCY3RW78OavOJi7OE2g286RabcEb3TyBTnRiBKT
-         qDRQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXSbGH4tGxUDEeRu5LkqlzfqIJZb07xuAh/wlibjYk2HylhuPYuw2LG2fybanJPVXRZp/rLTcNSyeBd8wxn3giCEh1YlzKe1Fc=
-X-Gm-Message-State: AOJu0YxoNMav5KJ2IcqL8kKXJrsjFReiomFjnjEQTfH6vxbwCahVZLzW
-	jEiZRt7AUh5bXjSVDx8hN3r/mGry0/MPAXbe17D4DYR5CwbWrpDOQaxbDfRYLwkjiBsS/bNRKQL
-	1w1EWFrfh13lHzpt7+pQWbcT3UQy0CGfe44gI
-X-Google-Smtp-Source: AGHT+IH5b1wkP6S8DAEsGopYfUuPnn0CZWaw+8yynTwvbj2MBk6B92RfrPC2tnzyTU88t/RNBKA5stTuHDy5P/ggUWk=
-X-Received: by 2002:a25:bcc6:0:b0:df7:92ed:365e with SMTP id
- 3f1490d57ef6-dfac97ce463mr1085810276.26.1717550888977; Tue, 04 Jun 2024
- 18:28:08 -0700 (PDT)
+	s=arc-20240116; t=1717553629; c=relaxed/simple;
+	bh=xaa7l1NfnZNvrR1Y11Ee4Az8s1RlaLtd+KTNnjfYqG8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=VLVS4SE5uS3KcTAcIVd7bFSGRCCgBs9A7xF+b7tOajUMt+n6SCiuuxkmEaxIS4j17oM98VPK3ZFtnrApfSKCqCXsutpZX+B9/K4vX2uU6lcjec6ORp558G18Uk45AiDU3MZFox1+NAXinx5l0DnMJ2MBVd7g22hRutbLu9XXaAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q03Z8iZE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A75CC2BBFC;
+	Wed,  5 Jun 2024 02:13:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717553628;
+	bh=xaa7l1NfnZNvrR1Y11Ee4Az8s1RlaLtd+KTNnjfYqG8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=Q03Z8iZEAuY+QpAQHiYOYDag25Z34ERDCiAYcBkiKQdauJxt5+QKHpAgoc8HAD8IF
+	 dD/nXOcaTCagWd/1XZXh8gzjyqR5OtebZ2lNNGU9a+SoyRVKfJ8cVBxiUwNwPHruKT
+	 Q+7IugR43QmE4UrgtdS2LdWlyfCnrzCizKvWzFyTLqqsNVW+kwhZwehbx7zvfljAU4
+	 ZLr/yL5pnsAh//MMHcnQnrkXaDnxnxbKvBEQBoxbvQqgiAaaO73CgbyeBAc5Xx80mk
+	 1EilMt/qEfeXAjM0hBw1bsbOcS2glyUzslXYlj0apDfdpLZUeP/3hoKSjIgQcVlyqZ
+	 84+Oi2MPblg7w==
+Date: Tue, 4 Jun 2024 21:13:46 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Marcel Holtmann <marcel@holtmann.org>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Balakrishna Godavarthi <quic_bgodavar@quicinc.com>,
+	Rocky Liao <quic_rjliao@quicinc.com>, Kalle Valo <kvalo@kernel.org>,
+	Jeff Johnson <jjohnson@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Srini Kandagatla <srinivas.kandagatla@linaro.org>,
+	Elliot Berman <quic_eberman@quicinc.com>,
+	Caleb Connolly <caleb.connolly@linaro.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Alex Elder <elder@kernel.org>, linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+	linux-wireless@vger.kernel.org, ath11k@lists.infradead.org,
+	Jeff Johnson <quic_jjohnson@quicinc.com>,
+	ath12k@lists.infradead.org, linux-pm@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	kernel@quicinc.com, Amit Pundir <amit.pundir@linaro.org>
+Subject: Re: [PATCH v8 16/17] PCI/pwrctl: add a PCI power control driver for
+ power sequenced devices
+Message-ID: <20240605021346.GA746121@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240528-cros_ec-charge-control-v2-0-81fb27e1cff4@weissschuh.net>
- <CA+BfgNJByawxkZukaCXYcmOo_K9aQ0W1x8B6Y+Hyg_fZaJ4axw@mail.gmail.com> <5baf3caf-dc09-4829-96db-2666fc902710@t-8ch.de>
-In-Reply-To: <5baf3caf-dc09-4829-96db-2666fc902710@t-8ch.de>
-From: Dustin Howett <dustin@howett.net>
-Date: Tue, 4 Jun 2024 20:27:57 -0500
-Message-ID: <CA+BfgN+LE3YyF3te4m8sWbtH85tU+ERUDW7YR_BFecusVTAWWw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] ChromeOS Embedded Controller charge control driver
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
-	Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>, chrome-platform@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Mario Limonciello <mario.limonciello@amd.com>, Stephen Horvath <s.horvath@outlook.com.au>, 
-	Rajas Paranjpe <paranjperajas@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA8EJpomPLQmQbW8w3_ms_NMKHoSPcqBa7f2OhNTTOUSdB+9Eg@mail.gmail.com>
 
-On Mon, Jun 3, 2024 at 3:59=E2=80=AFPM Thomas Wei=C3=9Fschuh <linux@weisssc=
-huh.net> wrote:
->
-> Can you try disabling all of the Framework-specific charge control
-> settings and test again?
-> Probably the different, disparate logics in the Framework ECs are
-> conflicting with each other.
+On Wed, Jun 05, 2024 at 02:34:52AM +0300, Dmitry Baryshkov wrote:
+> On Wed, 5 Jun 2024 at 02:23, Bjorn Helgaas <helgaas@kernel.org> wrote:
+> >
+> > On Tue, May 28, 2024 at 09:03:24PM +0200, Bartosz Golaszewski wrote:
+> > > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> > >
+> > > Add a PCI power control driver that's capable of correctly powering up
+> > > devices using the power sequencing subsystem. The first users of this
+> > > driver are the ath11k module on QCA6390 and ath12k on WCN7850.
 
-Fascinating! This board does indeed support charge limiting through
-both interfaces. It looks like the most recently set one wins for a
-time.
+> > > +static const struct of_device_id pci_pwrctl_pwrseq_of_match[] = {
+> > > +     {
+> > > +             /* ATH11K in QCA6390 package. */
+> > > +             .compatible = "pci17cb,1101",
+> > > +             .data = "wlan",
+> > > +     },
+> > > +     {
+> > > +             /* ATH12K in WCN7850 package. */
+> > > +             .compatible = "pci17cb,1107",
+> > > +             .data = "wlan",
+> > > +     },
+> >
+> > IIUC, "pci17cb,1101" and "pci17cb,1107" exist partly so we can check
+> > that a DTS conforms to the schema, e.g., a "pci17cb,1101" node
+> > contains all the required regulators.  For that use, we obviously need
+> > a very specific "compatible" string.
+> >
+> > Is there any opportunity to add a more generic "compatible" string in
+> > addition to those so this list doesn't have to be updated for every
+> > PMU?  The .data here is "wlan" in both cases, and for this purpose, we
+> > don't care whether it's "pci17cb,1101" or "pci17cb,1107".
+> 
+> These two devices have different set of regulators and different
+> requirements to power them on.
 
-The UEFI setup utility only sets the framework-specific charge limit value.
+Right, but I don't think pci_pwrctl_pwrseq_probe() knows about those
+different sets.  It basically looks like:
 
-We should probably find some way to converge them, for all of the
-supported Framework Laptop programs.
+  pci_pwrctl_pwrseq_probe(struct platform_device *pdev)
+  {
+    struct pci_pwrctl_pwrseq_data *data;
+    struct device *dev = &pdev->dev;
 
-> Thomas
+    data->pwrseq = devm_pwrseq_get(dev, of_device_get_match_data(dev));
+    pwrseq_power_on(data->pwrseq);
+    data->ctx.dev = dev;
+    devm_pci_pwrctl_device_set_ready(dev, &data->ctx);
+  }
+
+I think of_device_get_match_data(dev) will return "wlan" for both
+"pci17cb,1101" and "pci17cb,1107", so devm_pwrseq_get(),
+pwrseq_power_on(), and devm_pci_pwrctl_device_set_ready() don't see
+the distinction between them.
+
+Of course, they also get "dev", so they can find the device-specifc
+stuff that way, but I think that's on the drivers/power/sequencing/
+side, not in this pci-pwrctl-pwrseq driver itself.
+
+So what if there were a more generic "compatible" string, e.g., if the
+DT contained something like this:
+
+  wifi@0 {
+    compatible = "pci17cb,1101", "wlan-pwrseq";
+    ...
+  }
+
+and pci_pwrctl_pwrseq_of_match[] had this:
+
+  { .compatible = "wlan-pwrseq", .data = "wlan", }
+
+Wouldn't this pci-pwrctl-pwrseq driver work the same?  I'm not a DT
+whiz, so likely I'm missing something, but it would be nice if we
+didn't have to update this very generic-looking driver to add every
+device that needs it.
+
+Bjorn
 
