@@ -1,145 +1,104 @@
-Return-Path: <linux-pm+bounces-8620-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8621-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C19168FC764
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 11:13:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A4878FC7FD
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 11:38:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5C6AFB25D2E
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 09:13:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC8041F21AA3
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 09:38:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BBCC18FC6F;
-	Wed,  5 Jun 2024 09:13:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE586192B81;
+	Wed,  5 Jun 2024 09:34:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="2SVO9602"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="VKIh4okJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEAFF18FC64
-	for <linux-pm@vger.kernel.org>; Wed,  5 Jun 2024 09:13:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4A1F18FDDD;
+	Wed,  5 Jun 2024 09:34:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717578799; cv=none; b=iPZYf3mALnCXmguQLeRFOb2BUJUq2WmhIeH4YvT94Is3zTTnDMvm63f3IIrEQ1N0lwC4jVajvuMUWLxQuhlmvk6jYRgDqi99LSvlM6kV49O6E6gJPs4KwT3hDBKDWvMS+RqtXaW+pvIUhGZ81TFJilbuwD75QcynZVC9A2kCRAI=
+	t=1717580043; cv=none; b=CJcNCJYDrmllfHL6tSwynrr6igXjwN2XPlK6baLoDMGPmc9ChwFLXgNukED3LfJgFN48RirRAhPm0PNmMDBwilasccT6NCDfx3TrahBTE+juASyRn7Mx4UyoTgQFT8vZs2/p0a6T1hJvybpmLyvl09WS1/iWbOdfmFzKxajP4Jg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717578799; c=relaxed/simple;
-	bh=AFakv71kM06p0q3oYAQzeRow8V15P35z1h8kfitwLYA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RaZaL0pvyxx1tbxcj2LYKTC5m339digYtK4f+CDLLh9yk+VcS/MvmLZ+YlFW/eipUfypes8TxfZBR4aNFJV83t0vV2hqfDW6GgljQRWw+eZfic2gM+2hk2X/z9hBhgqop2eqPOn0AqLjXgGteoKM9g6sCqGiWjbvies++KqfOR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=2SVO9602; arc=none smtp.client-ip=209.85.208.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2e72224c395so58350961fa.3
-        for <linux-pm@vger.kernel.org>; Wed, 05 Jun 2024 02:13:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1717578796; x=1718183596; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3c4YFpd8Fm+Esjyb3eXLbvb26s9zAJBJ0sBTmfOcoOQ=;
-        b=2SVO96020zsJW3oJBymyp4e6hfylB/HZFX48nO1GS+XKJVBKQq0wdZsIUdelO4ZyKe
-         SQu0FXL/8HyyEj+CJk3nsUpE6PycFoeR8rrHr465kRj5JHqfgScdEXHzZC34rBbigV+b
-         EH3kFuP2zyWGGjd91iSqrfikkXRu2M5Z5boa+1iEVT032LUU768k/3GpyJ9CFBmKJJsC
-         5I0lAlaoagW20dzf/3vzsjRMNR5bgeLPWssU/99Yhyxv/4rA63N1jc84nG1XrLSBiCh5
-         9KDm4lokoOLPbb1HfUztacDkq7cVE4iDKGqYzK7RRUKk23O4DD3GOq6iJawg7HEulqdJ
-         /RqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717578796; x=1718183596;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3c4YFpd8Fm+Esjyb3eXLbvb26s9zAJBJ0sBTmfOcoOQ=;
-        b=PLqW5cqESdQXI0QzkY5C1iPIP1YToOaotDSNd4JTZn+qqJRYbVQBcseg9K5X0xF8lj
-         TCLNOIOo1AsRtMj4A3Fo4POpD//jI8pmJ3ucUamKLeRjIx6EqX1cbqIVV02Lh9ayMwn7
-         l36+cIEy3wjWuqmREYoaevlww+iSE8oY4sjTuZ07DsgRY41aKUxHerQt/dR8pN1zPv8J
-         iz112ondt19F+KtbswPMr5fn6+K6TNC9nV48Su2OgkWF5ZrAcg+pzWgblkLiXiWTqF3g
-         U8MlE0IAV23VAjKI2B+VzxlSCu6wy5D0k8KnqPcEFXVwioVDVW4VbDQuoEnKexg0schK
-         yUqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXBPSYA0IY8yAH2W3hnRMWx0FDBzsCvb1yEn1zgVkAMWTYjrs8bSzyOmOXpOkzkaxjtx1C51KwJYT5xgUkABQa9W1/DMa4uWo4=
-X-Gm-Message-State: AOJu0YycfBX9RFRVxZMu4nfzUZO0EsdNUi3N4ir7nlPtoqbc3I1vuhtR
-	s0Hql3cMUuBACMlN8ujZeuNlZmG5SHBbYYb94pr+RfRSPlg6S0oK15Hg8OY7DMIrRD0sWklWAcp
-	4bHtci3bUiq7gJj7PxBi6C7Pqoju9flPNoxn7qQ==
-X-Google-Smtp-Source: AGHT+IE63vGTd6+j21cBJUHSJYSLK2xCKb5rCCgsCKhs4EXyLEAsob0AZ/LylbrE5cvmoYjm+qi2nvoKP8Y3gZgS3f0=
-X-Received: by 2002:a05:651c:30f:b0:2ea:7e50:6c94 with SMTP id
- 38308e7fff4ca-2eac79c1bbdmr8705551fa.16.1717578795960; Wed, 05 Jun 2024
- 02:13:15 -0700 (PDT)
+	s=arc-20240116; t=1717580043; c=relaxed/simple;
+	bh=o3s3eeCGuDiHinRfMmQ6kt6dHWRjaZ0xd0fUvfgcYWs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=C0PnWgXPunl/HgRREFkcS5qRlLfO3I5qfIgQV7sZ1cGx3oOTEOzx1x9bJJE3Lm3d3dN1oWu7P9I0QMZgSeYGiz8uQGlOMSC1wgRPB52k8FOuZLX4L40K9xKxEQZQVIbLLYvHEsyn11fPf3JQqLKQLCbVIoHn29TxYg5qqg63KWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=VKIh4okJ; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1717580039;
+	bh=o3s3eeCGuDiHinRfMmQ6kt6dHWRjaZ0xd0fUvfgcYWs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VKIh4okJIDtWmWBa7iTGOvpbQKYWknJRrrEAEZ1ZPvZ8/fUCJiClTbmuRqQV2xWlD
+	 fClu3im9eqq4vN0HSAl9XCTAaUBg4Mj/B6QLlyI0uu+WOZ8NfJUzHDt4ToePa4VEsu
+	 uGq9TycDfo/HLCuKTnPFbZsfBAUcNM2KImuxDrmo=
+Date: Wed, 5 Jun 2024 11:33:58 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Dustin Howett <dustin@howett.net>
+Cc: Benson Leung <bleung@chromium.org>, 
+	Guenter Roeck <groeck@chromium.org>, Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>, 
+	chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Mario Limonciello <mario.limonciello@amd.com>, Stephen Horvath <s.horvath@outlook.com.au>, 
+	Rajas Paranjpe <paranjperajas@gmail.com>
+Subject: Re: [PATCH v2 0/3] ChromeOS Embedded Controller charge control driver
+Message-ID: <a527a3fd-1458-43cc-aac0-0b360beeb349@t-8ch.de>
+References: <20240528-cros_ec-charge-control-v2-0-81fb27e1cff4@weissschuh.net>
+ <CA+BfgNJByawxkZukaCXYcmOo_K9aQ0W1x8B6Y+Hyg_fZaJ4axw@mail.gmail.com>
+ <5baf3caf-dc09-4829-96db-2666fc902710@t-8ch.de>
+ <CA+BfgN+LE3YyF3te4m8sWbtH85tU+ERUDW7YR_BFecusVTAWWw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240528-pwrseq-v8-1-d354d52b763c@linaro.org> <20240604173021.GA732838@bhelgaas>
-In-Reply-To: <20240604173021.GA732838@bhelgaas>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Wed, 5 Jun 2024 11:13:04 +0200
-Message-ID: <CAMRc=MeNPvZUyu6rtsWtdvXFmOOpmjKCEpkoc5zBfJy6qBpxrg@mail.gmail.com>
-Subject: Re: [PATCH v8 01/17] regulator: dt-bindings: describe the PMU module
- of the QCA6390 package
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Balakrishna Godavarthi <quic_bgodavar@quicinc.com>, Rocky Liao <quic_rjliao@quicinc.com>, 
-	Kalle Valo <kvalo@kernel.org>, Jeff Johnson <jjohnson@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Srini Kandagatla <srinivas.kandagatla@linaro.org>, 
-	Elliot Berman <quic_eberman@quicinc.com>, Caleb Connolly <caleb.connolly@linaro.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
-	Alex Elder <elder@kernel.org>, linux-arm-msm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, ath11k@lists.infradead.org, 
-	Jeff Johnson <quic_jjohnson@quicinc.com>, ath12k@lists.infradead.org, 
-	linux-pm@vger.kernel.org, linux-pci@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, kernel@quicinc.com, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+BfgN+LE3YyF3te4m8sWbtH85tU+ERUDW7YR_BFecusVTAWWw@mail.gmail.com>
 
-On Tue, Jun 4, 2024 at 7:30=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.org> w=
-rote:
->
-> On Tue, May 28, 2024 at 09:03:09PM +0200, Bartosz Golaszewski wrote:
-> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On 2024-06-04 20:27:57+0000, Dustin Howett wrote:
+> On Mon, Jun 3, 2024 at 3:59 PM Thomas Weißschuh <linux@weissschuh.net> wrote:
 > >
-> > The QCA6390 package contains discreet modules for WLAN and Bluetooth. T=
-hey
->
-> s/discreet/discrete/
->
-> > are powered by the Power Management Unit (PMU) that takes inputs from t=
-he
-> > host and provides LDO outputs. This document describes this module.
->
-> LDO?  Again below, but maybe this is obvious to everybody.
->
+> > Can you try disabling all of the Framework-specific charge control
+> > settings and test again?
+> > Probably the different, disparate logics in the Framework ECs are
+> > conflicting with each other.
+> 
+> Fascinating! This board does indeed support charge limiting through
+> both interfaces. It looks like the most recently set one wins for a
+> time.
 
-Yes, this is an acceptable abbreviation to use, it's all over the
-bindings and regulator drivers.
+If it is the most recent one, shouldn't the driver have worked?
+What does "for a time" mean?
+I'm using only the upstream EC command and that seems to work fine.
 
-> "This document describes this module" seems possibly unnecessary.
->
-> > +description:
-> > +  The QCA6390 package contains discreet modules for WLAN and Bluetooth=
-. They
->
-> s/discreet/discrete/
->
-> > +  are powered by the Power Management Unit (PMU) that takes inputs fro=
-m the
-> > +  host and provides LDO outputs. This document describes this module.
->
-> > +  vddpcie1p3-supply:
-> > +    description: VDD_PCIE_1P3 supply regulator handle<S-Del>
->
-> s/<S-Del>// ?
+> The UEFI setup utility only sets the framework-specific charge limit value.
+> 
+> We should probably find some way to converge them, for all of the
+> supported Framework Laptop programs.
 
-Eek, bad copy-paste.
+In the long term, Framework should align their implementation with
+upstream CrOS EC and either drop their custom command or make it a thin
+wrapper around the normal the upstream command.
 
-Bart
+(As you are familiar with EC programming maybe you want to tackle this?)
+
+Until then I think we can detect at probe-time if the Framework APIs are
+available and use them to disable the Framework-specific mechanism.
+Then the CrOS EC commands should be usable.
+
+The drawback is, that userspace using the Framework APIs will break
+the driver. That userspace would need to migrate to the standard UAPI.
+
+Also the settings set in the firmware would be ignored at that point.
+
+I don't want to use the functionality of the Framework command because
+it's less featureful and I really hope it will go away at some point.
 
