@@ -1,299 +1,265 @@
-Return-Path: <linux-pm+bounces-8650-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8651-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BEEF8FD0A0
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 16:17:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A0D38FD0D0
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 16:27:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2FE541F21C0A
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 14:17:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B1EF29078F
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 14:27:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC22A17BCB;
-	Wed,  5 Jun 2024 14:17:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IItoganz"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 479731BC59;
+	Wed,  5 Jun 2024 14:26:53 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C230219D889;
-	Wed,  5 Jun 2024 14:17:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40B6E2232A;
+	Wed,  5 Jun 2024 14:26:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717597066; cv=none; b=H/aYyp3D9bsGBXwbZQo6qfvKl55pqufClvXIggqltCWiDo2dK/JD9WrNkxE0ei8aV/xoOMqSFfBs39oJiWGgbILfSDEI/SjQqi7wPhPLHpzFBot4B9hz9mgHJrepYlgc3tu87zWqKO80YBlkl6obM6/Gs5PxphTZwQcXvmK5fU4=
+	t=1717597613; cv=none; b=q/nb82RDriTnoWtvfIaAUqaFj128voB/vDcemyhz3nmPWu8ELiOFYojhWBsetjKy3S4fp5yzE8gPseShXbIsxBtlTwPSl7//hwafZ1JZzZVnebf7Slcgh16fPsXRVwG8WRTk2tdZap6GZDbZuie8HPTKyVwVT8dN9b9xpRzoRxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717597066; c=relaxed/simple;
-	bh=XEx/RmLIAYzNyNyRLPZfdvmzntgVOQycajzJ1rdomLo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=leO6HSKmax8X/6KjeU8FRozdFp//xZq1V3leg0C/bgvFz4urJQTAL/2y1LzHeCV4PbAxoDDASOyIgHGeYgJKVCzu5hahdi1nloJCjoJBu7LXzHpbaLu+ukoCLoEtDEHTtpNQ5BAvuZ+1xyxR16is+L4YgM4JTSos7/zjHY0dVqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IItoganz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55F0EC32782;
-	Wed,  5 Jun 2024 14:17:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717597066;
-	bh=XEx/RmLIAYzNyNyRLPZfdvmzntgVOQycajzJ1rdomLo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=IItoganzLnx0lSwTSZIHuhQhh9O5JJ0bM1Bsa8/zvIK1CJb/oftCjbeBNCPDaBnbP
-	 KEzP7mM7r2ThKIKnYWXAHR7m6RCdj9mhakmpBTif8brruizBiJpiJC/02N2Q+nk13h
-	 OK/gnO7gOLQ6/EXHHDyzXJsnfn3ZXawD9oyfHJigMWU5eHacEYHM4q+ptgc5jhxKwm
-	 stHox8ATBR4qHK9fIoLHPOgJlfbU88Czk5JH6BGUn/b2mzHHkjZuUbjaNEluygb4ZS
-	 guYBQ92b0jm6f4XOKVP2CXrO8owT1sr7aLJ8GOBM68pdDudVnCnSvzNhwxnI8zqwjc
-	 Ef6uIAPZg6zrA==
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-5ba8e1b9018so18225eaf.0;
-        Wed, 05 Jun 2024 07:17:46 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWLMHaBf4+2j0qKO1cRSanQqR8u+IZ+Tvl6I1vBgW7JFBEQ6P/4VxVWpfZ9F5B5iwB1u0nKttXBzQIO4Q0lU3CMryxIS9RU/bAJfj8UTv6nXXie48O07n+sC8fOrENmHQxG34ZWd9E=
-X-Gm-Message-State: AOJu0Yw7aMw8R0JEjOcQWJeyPyNNpLocp1hozhDwWTKVHxcni7T5vff4
-	REoHpnixSHSgtPbdRZkA5pnD0ydKZ8HQ6P8l/YjkNh6xgiuXIx/wKxXwutOynGyU2dpa0+8RRpc
-	MCTlh7KvWl/NHBYqbzFJjZkkrGdI=
-X-Google-Smtp-Source: AGHT+IGDu6kwEQ0DTB9/+Bnljb2JjaovmKHQ6zpd9xLNAkVHUxl1PjvZohg0OWijUcexk+5pWFxsv909XanZ1RZ5Czw=
-X-Received: by 2002:a4a:a7c9:0:b0:5ba:6669:ba6e with SMTP id
- 006d021491bc7-5ba78ff8903mr2780302eaf.1.1717597065543; Wed, 05 Jun 2024
- 07:17:45 -0700 (PDT)
+	s=arc-20240116; t=1717597613; c=relaxed/simple;
+	bh=X0481Qyu0SAywl4VJKM/mkw0HUGfQx0Ts30P/vuKVZ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aha6dFwlC6uq8/WE7/bcSzxEZuqZJnGJZWbqrgvIjl+JjaPDQ6+lU/iB9QA8orrJ+w5s91vyubUezqEtEPvRdApd5usYw1B1U0+cuwbc048nKGnQNMuuXCH6nBfKm0poACcjtJFxcfttDn4SZMctyZy4J/vG691siqkgG5lgLQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7F2BE339;
+	Wed,  5 Jun 2024 07:27:14 -0700 (PDT)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.2.80.58])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BFBC03F792;
+	Wed,  5 Jun 2024 07:26:49 -0700 (PDT)
+Date: Wed, 5 Jun 2024 15:26:48 +0100
+From: Ionela Voinescu <ionela.voinescu@arm.com>
+To: "liwei (JK)" <liwei728@huawei.com>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>,
+	Beata Michalska <beata.michalska@arm.com>,
+	Vanshidhar Konda <vanshikonda@os.amperecomputing.com>,
+	rafael@kernel.org, al.stone@linaro.org, ashwin.chaugule@linaro.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	liwei391@huawei.com, liaoyu15@huawei.com
+Subject: Re: [PATCH] cpufreq/cppc: changing highest_perf to nominal_perf in
+ cppc_cpufreq_cpu_init()
+Message-ID: <ZmB1qKucR5fXk100@arm.com>
+References: <20240428092852.1588188-1-liwei728@huawei.com>
+ <20240429104945.esdukn6ayudgyumc@vireshk-i7>
+ <ZjoBrF4bAK5ukm7H@arm.com>
+ <be312b75-eede-44f5-b7f3-b50f50c6fb56@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240603081331.3829278-1-beata.michalska@arm.com>
- <20240603081331.3829278-2-beata.michalska@arm.com> <20240603114811.oio3uemniib5uaa2@vireshk-i7>
- <CAJZ5v0j1bqhmKrJirw+WgEVDdszZ9xQSgmfazVKMVa8H6_5TSw@mail.gmail.com> <ZmAjfyGWtti17WiO@arm.com>
-In-Reply-To: <ZmAjfyGWtti17WiO@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 5 Jun 2024 16:17:32 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jyYZh45tngb176yhvWdS+KEurNM7=scF6HArU54_u0Fw@mail.gmail.com>
-Message-ID: <CAJZ5v0jyYZh45tngb176yhvWdS+KEurNM7=scF6HArU54_u0Fw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] cpufreq: Rewire arch specific feedback for cpuinfo/scaling_cur_freq
-To: Beata Michalska <beata.michalska@arm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, len.brown@intel.com, 
-	ionela.voinescu@arm.com, vanshikonda@os.amperecomputing.com, 
-	sumitg@nvidia.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <be312b75-eede-44f5-b7f3-b50f50c6fb56@huawei.com>
 
-On Wed, Jun 5, 2024 at 10:36=E2=80=AFAM Beata Michalska <beata.michalska@ar=
-m.com> wrote:
->
-> On Mon, Jun 03, 2024 at 03:43:12PM +0200, Rafael J. Wysocki wrote:
-> > On Mon, Jun 3, 2024 at 1:48=E2=80=AFPM Viresh Kumar <viresh.kumar@linar=
-o.org> wrote:
-> > >
-> > > Hi Beata,
-> > >
-> > > Thanks for taking this forward.
-> > >
-> > > On 03-06-24, 09:13, Beata Michalska wrote:
-> > > > Some architectures provide a way to determine an average frequency =
-over
-> > > > a certain period of time, based on available performance monitors (=
-AMU on
-> > > > ARM or APERF/MPERf on x86). With those at hand, enroll arch_freq_ge=
-t_on_cpu
-> > > > into cpuinfo_cur_freq policy sysfs attribute handler, which is expe=
-cted to
-> > > > represent the current frequency of a given CPU,as obtained by the h=
-ardware.
-> > > > This is the type of feedback that counters do provide.
-> > >
-> > > Please add blank line between paragraphs, it makes it easier to read
-> > > them.
-> > >
-> > > > At the same time, keep the scaling_cur_freq attribute align with th=
-e docs
-> > > > and make it provide most recently requested frequency, still allowi=
-ng to
-> > > > fallback to using arch_freq_get_on_cpu for cases when cpuinfo_cur_f=
-req is
-> > > > not available.
-> > >
-> > > Please split this patch into two parts, they are very distinct change=
-s
-> > > and should be kept separate.
-> > >
-> > > > Signed-off-by: Beata Michalska <beata.michalska@arm.com>
-> > > > ---
-> > > >  drivers/cpufreq/cpufreq.c | 8 ++++++--
-> > > >  1 file changed, 6 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > > > index a45aac17c20f..3b0eabe4a983 100644
-> > > > --- a/drivers/cpufreq/cpufreq.c
-> > > > +++ b/drivers/cpufreq/cpufreq.c
-> > > > @@ -758,7 +758,8 @@ static ssize_t show_scaling_cur_freq(struct cpu=
-freq_policy *policy, char *buf)
-> > > >       ssize_t ret;
-> > > >       unsigned int freq;
-> > > >
-> > > > -     freq =3D arch_freq_get_on_cpu(policy->cpu);
-> > > > +     freq =3D !cpufreq_driver->get ? arch_freq_get_on_cpu(policy->=
-cpu)
-> > > > +                                 : 0;
-> > >
-> > > This is getting trickier than I thought as I dived into more details
-> > > of all the changes to the file.
-> > >
-> > > Rafael,
-> > >
-> > > We probably need to decide on a policy for these two files, it is
-> > > getting a bit confusing.
-> > >
-> > > cpuinfo_cur_freq:
-> > >
-> > > The purpose of this file is abundantly clear. This returns the best
-> > > possible guess of the current hardware frequency. It should rely on
-> > > arch_freq_get_on_cpu() or ->get() to get the value.
-> >
-> > Let me quote the documentation:
-> >
-> > "This is expected to be the frequency the hardware actually runs at.
-> > If that frequency cannot be determined, this attribute should not be
-> > present."
-> >
-> > In my reading, this has nothing to do with arch_freq_get_on_cpu(), at
-> > least on x86.
-> My reading on this (and I might be wrong) is that for x86,
-> arch_freq_get_on_cpu() is utilizing the APERF/MPERF registers to get
-> a rough/average frequency and as such it does, in a way, get a hw feedbac=
-k
-> and it does somewhat fall under "frequency the hardware actually runs at"=
-.
+Hi,
 
-But it is not expected to somewhat fall under that definition, it is
-expected to be exactly the frequency the CPU is running at when the
-file is accessed.
-
-In the past, there was hardware that could provide that information.
-
-> Because it is an average value, it might not provide an instant view on
-> current frequency, but either way, the value provided here migh be a bit =
-off
-> anyway.
-
-Well, not just a bit.  It may be off completely.
-
-> But then, we could adjust the timewidnow being used to make it more
-> accurate.
-
-Not on x86 AFAICS because the time window is the scheduler tick period.
-
-On x86 it is better to use a utility like turbostat to measure
-frequency instead of the cpufreq sysfs (or /proc/cpuinfo for that
-matter).
-
-> I might be looking at it the wrong way though.
-> >
-> > > Perhaps we can
-> > > make this available all the time, instead of conditionally on ->get()
-> > > callback (which isn't present for intel-pstate for example).
-> >
-> > We could, but then on x86 there is no expectation that this file will
-> > be present and changing this may introduce significant confusion
-> > because of the way it is documented (which would need to be changed,
-> > but people might be forgiven for failing to notice the change of
-> > interpretation of this file).
-> >
-> > > scaling_cur_freq:
-> > >
-> > > This should better reflect the last requested frequency, but since a
-> > > significant time now it is trying to show what cpuinfo_cur_freq shows=
-.
-> >
-> > Well, not really.
-> >
-> > > commit c034b02e213d ("cpufreq: expose scaling_cur_freq sysfs file for=
- set_policy() drivers")
-> > > commit f8475cef9008 ("x86: use common aperfmperf_khz_on_cpu() to calc=
-ulate KHz using APERF/MPERF")
-> >
-> > "In the majority of cases, this is the frequency of the last P-state
+On Friday 10 May 2024 at 11:06:50 (+0800), liwei (JK) wrote:
+> Hello,
+> 
+> Thanks for for your reply.
+> 
+> Maybe my description has caused you some misunderstandings, please allow me
+> to supplement the description
+> 
+> 在 2024/5/7 18:25, Ionela Voinescu 写道:
+> > Hi,
+> > 
+> > Thanks for adding me to this.
+> > 
+> > On Monday 29 Apr 2024 at 16:19:45 (+0530), Viresh Kumar wrote:
+> > > CC'ing few folks who are working with the driver.
+> > > 
+> > > On 28-04-24, 17:28, liwei wrote:
+> > > > When turning on turbo, if frequency configuration takes effect slowly,
+> > > > the updated policy->cur may be equal to the frequency configured in
+> > > > governor->limits(), performance governor will not adjust the frequency,
+> > > > configured frequency will remain at turbo-freq.
+> > > > 
+> > > > Simplified call stack looks as follows:
+> > > > cpufreq_register_driver(&cppc_cpufreq_driver)
+> > > > 	...
+> > > > 	cppc_cpufreq_cpu_init()
+> > > > 		cppc_get_perf_caps()
+> > > > 		policy->max = cppc_perf_to_khz(caps, caps->nominal_perf)
+> > > > 			cppc_set_perf(highest_perf) // set highest_perf
+> > > > 			policy->cur = cpufreq_driver->get() // if cur == policy->max
+> > > > 	cpufreq_init_policy()
+> > > > 		...
+> > > > 		cpufreq_start_governor() // governor: performance
+> > > > 			new_freq = cpufreq_driver->get() // if new_freq == policy->max
+> > > > 			if (policy->cur != new_freq)
+> > > > 			cpufreq_out_of_sync(policy, new_freq)
+> > > > 				...
+> > > > 				policy->cur = new_freq
+> > I believe the problem is here   ^^^^^^^^^^^^^^^^^^^^^^.
+> > 
+> > cpufreq_verify_current_freq() should not update policy->cur unless a
+> > request to change frequency has actually reached the driver. I believe
+> > policy->cur should always reflect the request, not the actual current
+> > frequency of the CPU.
+> > 
+> > Given that new_freq is the current (hardware) frequency of the CPU,
+> > obtained via .get(), it can be the nominal frequency, as it is in your
+> > case, or any frequency, if there is any firmware/hardware capping in
+> > place.
+> > 
+> > This causes the issue in your scenario, in which __cpufreq_driver_target()
+> > filters the request from the governor as it finds it equal to policy->cur,
+> > and it believes it's already set by hardware.
+> > 
+> > This causes another issue in which scaling_cur_freq, which for some
+> > systems returns policy->cur, ends up returning the hardware frequency of
+> > the CPUs, and not the last frequency request, as it should:
+> > 
+> > "scaling_cur_freq
+> > Current frequency of all of the CPUs belonging to this policy (in kHz).
+> > 
+> > In the majority of cases, this is the frequency of the last P-state
 > > requested by the scaling driver from the hardware using the scaling
 > > interface provided by it, which may or may not reflect the frequency
 > > the CPU is actually running at (due to hardware design and other
-> > limitations).
-> >
-> > Some architectures (e.g. x86) may attempt to provide information more
-> > precisely reflecting the current CPU frequency through this attribute,
-> > but that still may not be the exact current CPU frequency as seen by
-> > the hardware at the moment."
-> >
-> > So the problem is that on Intel x86 with HWP and intel_pstate in the
-> > active mode, say, "the frequency of the last P-state requested by the
-> > scaling driver from the hardware" is actually never known, so exposing
-> > it via scaling_cur_freq is not possible.
-> >
-> > Moreover, because cpuinfo_cur_freq is not present at all in that case,
-> > scaling_cur_freq is the only way to allow user space to get an idea
-> > about the CPU current frequency.  I don't think it can be changed now
-> > without confusing users.
-> >
-> What's your take on leaving the scaling_cur_freq to resolve to
-> arch_freq_get_on_cpu() when cpuinfo_cur_freq is not present ?
+> > limitations)." [1]
+> > 
+> > Therefore policy->cur gets polluted with the hardware frequency of the
+> > CPU sampled at that one time, and this affects governor decisions, as
+> > in your case, and scaling_cur_freq feedback as well. This bad value will
+> > not change until there's another .target() or cpufreq_out_of_sync()
+> > call, which will never happen for fixed frequency governors like the
+> > performance governor.
+> > 
+> > Thanks,
+> > Ionela.
+> > 
+> 
+> In the above function calling process, the frequency is obtained twice. The
+> first time is in cpufreq_online(), and the second time is in
+> cpufreq_verify_current_freq().
+> 
+> When the frequency configuration takes effect slowly, the kernel cannot
+> sense when the frequency configuration takes effect. It may take effect
+> before the frequency is read twice, between the frequencies read twice, or
+> after the frequency is read twice.
+> 
+> |------------------|--------------------|---------------------|
+> set highest_freq  get()               get()                target()
+> 
+> If it takes effect before two read operations, there will be no problem.
+> 
+> If it takes effect between two read operations, policy->cur will be updated
+> in cpufreq_verify_current_freq(), the execution path is as follows:
+> new_freq = cpufreq_driver->get() //  new_freq = turbo_freq
+> 	if (policy->cur != new_freq)
+> 		cpufreq_out_of_sync(policy, new_freq)
+> 			...
+> 			policy->cur = new_freq // cur = turbo_freq
+> ...
+> __cpufreq_driver_target(policy->max)
+> 	cppc_set_perf(target) // policy->cur!=target
+> 
+> Reconfigure frequency to policy->max.
+> 
+> If policy->cur is not set to turbo_freq after two read operations,
+> policy->cur will not be updated in cpufreq_verify_current_freq(), the
+> execution path is as follows:
+> new_freq = cpufreq_driver->get() //  new_freq == policy->cur
+> 	if (policy->cur != new_freq)
+> ...
+> __cpufreq_driver_target(policy->max)
+> 	ret // policy->cur==target
+> 
+> Configured frequency will remain at turbo-freq.
+> 
+> When reading scaling_cur_freq, the frequency value that may be read is
+> policy->cur. If arch does not implement arch_freq_get_on_cpu(), and the
+> registered cpufreq_driver does not define setpolicy()/get(), the frequency
+> will not be obtained through the get() and will directly feed back
+> policy->cur. If the above problem occurs, no exception will be detected when
+> reading scaling_cur_freq. But reading cpuinfo_cur_freq will reacquire the
+> frequency through the get() interface and feedback the newly acquired
+> frequency value.
 
-IIUC that's what happens right now on x86 and I don't see major
-problems with it.
+Thank you for the details. I did understand the problem, but I believe
+the underlying cause is cpufreq_out_of_sync() setting policy->cur to the
+current frequency and not keeping the value of the last frequency
+request.
 
-> This way nothing will change for the intel_pstate + HWP
-> but it will allow using the info provided by arch_freq_get_on_cpu() for
-> cpuinfo_cur_freq if one is provided and it will automatically ignore it f=
-or
-> scaling_cur_freq ? Though I guess it falls under "making all confused" th=
-at you
-> have described donw the line.
+@Viresh, do you happen to know the reason behind this?
 
-Well, it does.
+There are multiple issues caused by this, detailed at [1] (your patch),
+[2] (the other issue described by me above), and more recently [3].
 
-> > > What should we do ? I wonder if we will break some userspace tools
-> > > (which may have started relying on these changes).
-> >
-> > We will.
-> >
-> > IIUC, it is desirable to expose "the frequency of the last P-state
-> > requested by the scaling driver from the hardware" via
-> > scaling_cur_freq on ARM, but it is also desirable to expose an
-> > approximation of the actual current CPU frequency, so the only way to
-> > do that without confusing the heck out of everybody downstream would
-> > be to introduce a new attribute for this purpose and document it
-> > precisely.
->
-> What would introducing new attribute mean for scaling_cur_freq on x86 the=
-n ?
+I agree that your code is a good fix for [1] and [3] is a fix for both
+[2] and [3], if I'm not mistaken, but to me these are "tweaks" that
+bypass the fundamental issue in the cpufreq core and I would not be
+surprised to see other issues in the future caused by this, and not
+covered by the fixes at [1] and [3].
 
-Nothing to start with, but later it might be possible to make it only
-work for drivers that don't implement ->setpolicy(), ie. when
-policy->cur is well defined, so scaling_cur_freq, if it were present,
-would only return the last frequency requested by the driver.
+This being said, I would like to see these issues fixed, even by [1] and
+[3], if fixing the underlying cause is not feasible (or at least not
+easy to evaluate).
 
-> I do assume we would leave cpuinfo_cur_freq untouched without calling
-> arch_freq_get_on_cpu() (as it is now). Then keeping scaling_cur_freq to a=
-ctually
-> use it - what would be the 3rd attribute meaning, if:
-> - cpuinfo_cur_freq -> actual freq as seen by the hardware (but not the
->   counters?)
+[1] https://lore.kernel.org/lkml/20240428092852.1588188-1-liwei728@huawei.com/
+[2] https://lore.kernel.org/lkml/3e6077bb-907c-057f-0896-d0a5814a4229@nvidia.com/
+[3] https://lore.kernel.org/lkml/TYCP286MB2486B1D734F8E2D74BFBEEB1B1F32@TYCP286MB2486.JPNP286.PROD.OUTLOOK.COM/
 
-This is to be used only when the hardware can tell what frequency the
-CPU is running at when it is asked for that value.
+Hope it helps,
+Ionela.
 
-> - scaling_cur_freq -> last requested frequency and for some cases, feedba=
-ck from
->   counters
-
-Yes, but see above - I would prefer to limit it to the last requested
-frequency in the future.
-
-> - whatever_name_we_will_come_with -> average frequency based on counters =
-?
-
-Yes.
-
->   not always available
-
-None of them would be always present, but at least one of them would
-be present on any system.
-
->  It is still bit confusing.
-
-Fair enough.
+> 
+> Thanks
+> liwei
+> 
+> > 
+> > [1] https://docs.kernel.org/admin-guide/pm/cpufreq.html
+> > 
+> > > > 			...
+> > > > 			policy->governor->limits()
+> > > > 				__cpufreq_driver_target(policy->max)
+> > > > 					if (policy->cur==target)
+> > > > 					// generate error, keep set highest_perf
+> > > > 						ret
+> > > > 					cppc_set_perf(target)
+> > > > 
+> > > > Fix this by changing highest_perf to nominal_perf in cppc_cpufreq_cpu_init().
+> > > > 
+> > > > Fixes: 5477fb3bd1e8 ("ACPI / CPPC: Add a CPUFreq driver for use with CPPC")
+> > > > Signed-off-by: liwei <liwei728@huawei.com>
+> > > > ---
+> > > >   drivers/cpufreq/cppc_cpufreq.c | 8 ++++----
+> > > >   1 file changed, 4 insertions(+), 4 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> > > > index 64420d9cfd1e..db04a82b8a97 100644
+> > > > --- a/drivers/cpufreq/cppc_cpufreq.c
+> > > > +++ b/drivers/cpufreq/cppc_cpufreq.c
+> > > > @@ -669,14 +669,14 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
+> > > >   	if (caps->highest_perf > caps->nominal_perf)
+> > > >   		boost_supported = true;
+> > > > -	/* Set policy->cur to max now. The governors will adjust later. */
+> > > > -	policy->cur = cppc_perf_to_khz(caps, caps->highest_perf);
+> > > > -	cpu_data->perf_ctrls.desired_perf =  caps->highest_perf;
+> > > > +	/* Set policy->cur to norm now. */
+> > > > +	policy->cur = cppc_perf_to_khz(caps, caps->nominal_perf);
+> > > > +	cpu_data->perf_ctrls.desired_perf =  caps->nominal_perf;
+> > > >   	ret = cppc_set_perf(cpu, &cpu_data->perf_ctrls);
+> > > >   	if (ret) {
+> > > >   		pr_debug("Err setting perf value:%d on CPU:%d. ret:%d\n",
+> > > > -			 caps->highest_perf, cpu, ret);
+> > > > +			 caps->nominal_perf, cpu, ret);
+> > > >   		goto out;
+> > > >   	}
+> > > > -- 
+> > > > 2.25.1
+> > > 
+> > > -- 
+> > > viresh
 
