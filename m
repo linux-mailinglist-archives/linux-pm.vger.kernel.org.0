@@ -1,86 +1,129 @@
-Return-Path: <linux-pm+bounces-8632-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8633-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D33B28FC9A4
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 13:04:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B96848FC9EE
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 13:12:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F2C81F21672
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 11:04:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D96441C241C4
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 11:12:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26016191481;
-	Wed,  5 Jun 2024 11:04:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9AB6192B60;
+	Wed,  5 Jun 2024 11:12:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="K6C2/xpd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aXvanTAi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8985618C34B;
-	Wed,  5 Jun 2024 11:04:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99FEA49645;
+	Wed,  5 Jun 2024 11:12:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717585492; cv=none; b=iqKAUIO6QuuWzpoGeTTEw2aLPlPoFPgaZTZ6VUpkVLKDZkk0RwFdgpwkTOQe9yvPsqtldzwO0+nnEib6aSCXyLK5ynkvbUVtUguPfM1joIECLk0xVQIFo5Bto6YisC3kEkIxCcOIhQJr8cochS53jTZLUrcEqjg2GN5f1FXcPyc=
+	t=1717585969; cv=none; b=IguG7bvOn1mvxk2FUp8si5mTrOl7IqibKr5xldbr5qOCWt2/A8UavpnFvMJTW4HfSgFj139WIznbCmei8I0IfPJh32LUTF2fHCiy4f8BXXU1ymYdfWGvMbFqeUdsImDQSnm+6PmAWCzqPtIfuWjA5leV91hhE3w+SouPF5JjUM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717585492; c=relaxed/simple;
-	bh=2hjwVFmRoFTS6oZrCvJYjFdWpPR5DTpzZ9n/nHhVnwY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RWgIOwC+ElMp1fDLG9icLTGCwUan+ueNaGx/QB/hIHgEr+qP9Kz95G+vE9h8FvN3ZyWN4BNPUkKrphbg1XRrxioB5xF7IRwswJxUwlAQkvEfj8YLchpvVQkRTQfhwj1xL+vw6KRHXTZTTz4Z2rjFo5dzbKt8YSX9VdLRptanaPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=K6C2/xpd; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1717585488;
-	bh=2hjwVFmRoFTS6oZrCvJYjFdWpPR5DTpzZ9n/nHhVnwY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=K6C2/xpdswwfBcJ8pX0D/sIOIMtdjmRjwYmn35v/F8f0QIDfOZcoqicTE54jQQWgZ
-	 AY/FakYDMcM+W+0L00enXMR5z/k9QQcZ0f9wRUqU5v2OjDnXzBGsOuybbAzYxTT5PU
-	 z9pxSfHjs61kj98JKzuE/b9Fgap9ekEkRdhK5ja9jSN5dIOnRrMiNNvYGcbNLoMUgl
-	 QUhKYTrAkR3RFY5+90iNHLJ1I5Vn6o4ijxdlvti8wGzcwQbolMp+d2gcoK4KXxGbAR
-	 /Mta48PsVYCfMWCdQ/t2AiikgaDoMqRr8oy0S1BFdr/IB1oN5wWy1P//6Dv1bAXX4H
-	 a3WALSnj1I7hQ==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id DA8DE37808FA;
-	Wed,  5 Jun 2024 11:04:47 +0000 (UTC)
-Message-ID: <c7162cb8-6a80-44c7-9dcd-830e5c8331e6@collabora.com>
-Date: Wed, 5 Jun 2024 13:04:47 +0200
+	s=arc-20240116; t=1717585969; c=relaxed/simple;
+	bh=yYAj163noFkob5L7lXkiWLT1nMsl/P7iRUgZ6mMxCvg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X/r3kWxi2xCG8MAIY1VVw2Z9EgybVDDoP767z1HRJCDACWEWpVeeyLbateOhqauwcazigChQd4g5b985hp3PWyrIpkQuZeLgtqn5C8nMJQwBr69O5dKDVO+czkTc9n/e+gag9odWfLz6SqoBsSiNlQ92stc2HDI1yN6+SfprJFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aXvanTAi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 314C4C32786;
+	Wed,  5 Jun 2024 11:12:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717585969;
+	bh=yYAj163noFkob5L7lXkiWLT1nMsl/P7iRUgZ6mMxCvg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aXvanTAihYAPX/RJQpmYDHZb43VOd2kMMK/Hi3Ffzhpmrs+iX8mOmJ93cqF6ZQO+9
+	 N2AH7FCTKu9GBr/SW4Bq0kfYXgJFDRpUPxsEdC1GLTxmBbsus3CmJKx4XXuBlBoOF4
+	 y/daZufRlf0Q2x2hYGl5PgYltv3WUuuWQqCOl31qsY826eQOplQep9OWxxhrHkoIYT
+	 NIApGI8rmQzjAtznelf2nu7sLBeNs31TUjBI1tef6CBmq2dqgRNDBH6NgyCPiT+eeF
+	 SrvdpFtgm3dYC0phg7owIH7IrrmbD6dIvyh5itRgsCZ14/J3QgOUUan3e+WDH2HL5R
+	 w+KruQVRvX7/Q==
+Date: Wed, 5 Jun 2024 12:12:38 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Bjorn Helgaas <helgaas@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Marcel Holtmann <marcel@holtmann.org>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Balakrishna Godavarthi <quic_bgodavar@quicinc.com>,
+	Rocky Liao <quic_rjliao@quicinc.com>, Kalle Valo <kvalo@kernel.org>,
+	Jeff Johnson <jjohnson@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Srini Kandagatla <srinivas.kandagatla@linaro.org>,
+	Elliot Berman <quic_eberman@quicinc.com>,
+	Caleb Connolly <caleb.connolly@linaro.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Alex Elder <elder@kernel.org>, linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+	linux-wireless@vger.kernel.org, ath11k@lists.infradead.org,
+	Jeff Johnson <quic_jjohnson@quicinc.com>,
+	ath12k@lists.infradead.org, linux-pm@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	kernel@quicinc.com,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v8 01/17] regulator: dt-bindings: describe the PMU module
+ of the QCA6390 package
+Message-ID: <21a00ea1-1749-4fcc-87cd-1af8876a7efd@sirena.org.uk>
+References: <20240528-pwrseq-v8-1-d354d52b763c@linaro.org>
+ <20240604173021.GA732838@bhelgaas>
+ <CAMRc=MeNPvZUyu6rtsWtdvXFmOOpmjKCEpkoc5zBfJy6qBpxrg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] thermal/drivers/mediatek/lvts_thermal: Return error in
- case of invalid efuse data
-To: Julien Panis <jpanis@baylibre.com>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
- Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- Nicolas Pitre <npitre@baylibre.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
-References: <20240604-mtk-thermal-calib-check-v2-1-8f258254051d@baylibre.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20240604-mtk-thermal-calib-check-v2-1-8f258254051d@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Ja+GgII04rJlrfXo"
+Content-Disposition: inline
+In-Reply-To: <CAMRc=MeNPvZUyu6rtsWtdvXFmOOpmjKCEpkoc5zBfJy6qBpxrg@mail.gmail.com>
+X-Cookie: Simulated picture.
 
-Il 04/06/24 18:46, Julien Panis ha scritto:
-> This patch prevents from registering thermal entries and letting the
-> driver misbehave if efuse data is invalid. A device is not properly
-> calibrated if the golden temperature is zero.
-> 
-> Fixes: f5f633b18234 ("thermal/drivers/mediatek: Add the Low Voltage Thermal Sensor driver")
-> Signed-off-by: Julien Panis <jpanis@baylibre.com>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+--Ja+GgII04rJlrfXo
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Jun 05, 2024 at 11:13:04AM +0200, Bartosz Golaszewski wrote:
+> On Tue, Jun 4, 2024 at 7:30=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.org>=
+ wrote:
+
+> > LDO?  Again below, but maybe this is obvious to everybody.
+
+> Yes, this is an acceptable abbreviation to use, it's all over the
+> bindings and regulator drivers.
+
+Vastly more people are going to understand LDO than would be able to
+expand the acronym.
+
+--Ja+GgII04rJlrfXo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZgSCUACgkQJNaLcl1U
+h9ByZgf/TG0Lj2GpWhjqjqffaI1t0B0aafiDHRBlSOkaq9el1b4FEPEjjrECf1Qh
+ne5c8PYSt81tN22LJRsh4gK53Ff9ziSn2l0KjKes7LCUwu58zAXDKgrsji++9+Vw
+vqxnhPdP5to25T28H3ds9QoF2jluYqiT/aQXtpRxZWWkO2xHYZ7eAwJe0vOn4rx8
+cqMEBHu9a57G8kN5BIs6cwaNmwlorGxdPKyLdXx3F6+3NvqtbvHGT9XDAkIU+GtC
+2QjuqiW8jM+xvSVYi+ALcYY0djf8Q7J8gmhyQaZa6UNFwO1H8AibziDOF9X7v7nB
+oouRPtsj7Oma2IMcaDj8MW3Ry5Jhsw==
+=tpqW
+-----END PGP SIGNATURE-----
+
+--Ja+GgII04rJlrfXo--
 
