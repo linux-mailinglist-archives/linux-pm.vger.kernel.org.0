@@ -1,107 +1,112 @@
-Return-Path: <linux-pm+bounces-8658-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8659-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 844CE8FD484
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 19:58:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 918E18FD49B
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 20:00:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ED0BAB26176
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 17:58:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2808128AAE1
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 18:00:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28C11195382;
-	Wed,  5 Jun 2024 17:58:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B457A19538F;
+	Wed,  5 Jun 2024 18:00:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hd1mkKZU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ev+J06Sc"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFFCE194AFC;
-	Wed,  5 Jun 2024 17:57:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0A419D8B8;
+	Wed,  5 Jun 2024 18:00:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717610280; cv=none; b=GLvsdviSoEyb8ytTqkTCEDBLvAyeWt+/p9TbRx6uLZ/17UlL5cJPuLM4Yemne2s4FdoFXTkvqWeUFrW2ASbBIAauYK7aS2C3404vESZ4rxlddD875oHJU+IIKyQSlt9lLF/AQCNxwsUaX5oIuA99RyfIaxYv8rv8Q/mRnZNvA2I=
+	t=1717610401; cv=none; b=oJN2b15H6pXyD5DY731PAfCHJkynrbxyGu0OdDH4WMg4mLFzVj6Q/iEcWNMevxKByXt6dtnmiw7yGZVpcqmxlhcKnaLoz1cuBrv1vFzxfzleySezeT6S1noTr8MbazpJZo3IUs/1aHd6X+OrY08OmOS44xAiESXBlYmJAE7lUPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717610280; c=relaxed/simple;
-	bh=7651KFw0eV+sZCBg3Xgw24WdzXcHIYOFgb2Cy9igrRI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=YIaFdSluSpJaGSiqVimeNPBF+CTq5/vvZRlsGxv5j/U7otp7ZZ/NrN/Ga7BjeudNGvgutNHNR0GZ4bTJHeZMbfpliSNqSAMY3NbMJLc2TOj7aLW1jm+UEGZzESKbIHdZLNbUjIK0DGQVZVaIER9IEaxGxYqcUwn37VEmnJBrMlc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hd1mkKZU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65200C32782;
-	Wed,  5 Jun 2024 17:57:59 +0000 (UTC)
+	s=arc-20240116; t=1717610401; c=relaxed/simple;
+	bh=ZmEl4JWAj2FG1oQ1+kuvRgAe6HgB+Cyw6yp68j9Li64=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=GwdV62LkeFMlF2utbW+V9KBlLsfdDm1jkA4LfHyOVR5sE3mw4QqtjxiavPGoXpq5undVWaS8LFtkrLpkv0eM0GpeS1YxlK5X2W+Y8Ad0RACagIpziWxc+eJ3g5pU8t8P1xwV8s+VNdf+7ojYTjMFcXpIBfGp467DmkzsWEiZGUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ev+J06Sc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1123CC32781;
+	Wed,  5 Jun 2024 18:00:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717610279;
-	bh=7651KFw0eV+sZCBg3Xgw24WdzXcHIYOFgb2Cy9igrRI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=hd1mkKZUhqQqGSBxCm4GPev0yQ2EhyJ/hnZS0yvgyGtNfBS8om6Bq1RE4ifOd6gI5
-	 D8VetdPBrhbibxq/5zOvS8onnXu1R6FCGyyoHUAXd3cSpnu85JqX7ckJNf2pyzbUzY
-	 MjxiEshiMdJkwl+wJpE22c15NY/CKktbPbdboJBMrgBWeTJiL9h8JinLCNuaox9GSo
-	 GtwR57MNbDomombf3jMBJI8juBUZct7vfnfRdKjGTgIv6mmyHFEsR4tVai8f8qe9p8
-	 EV670UDpwwOhsKCdGYgA+ho+/AM5EFh1w+wIiD5pu1QB2ephfYREjVAwQiUgGBsrXl
-	 G4RSCtSn6mpuA==
-Date: Wed, 5 Jun 2024 12:57:57 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Marcel Holtmann <marcel@holtmann.org>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Balakrishna Godavarthi <quic_bgodavar@quicinc.com>,
-	Rocky Liao <quic_rjliao@quicinc.com>, Kalle Valo <kvalo@kernel.org>,
-	Jeff Johnson <jjohnson@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-	Elliot Berman <quic_eberman@quicinc.com>,
-	Caleb Connolly <caleb.connolly@linaro.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Alex Elder <elder@kernel.org>, linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-	linux-wireless@vger.kernel.org, ath11k@lists.infradead.org,
-	Jeff Johnson <quic_jjohnson@quicinc.com>,
-	ath12k@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	kernel@quicinc.com, Amit Pundir <amit.pundir@linaro.org>
-Subject: Re: [PATCH v8 15/17] PCI/pwrctl: add PCI power control core code
-Message-ID: <20240605175757.GA733809@bhelgaas>
+	s=k20201202; t=1717610401;
+	bh=ZmEl4JWAj2FG1oQ1+kuvRgAe6HgB+Cyw6yp68j9Li64=;
+	h=From:Date:Subject:To:Cc:From;
+	b=Ev+J06ScNqvBKONyjyxrUTTaoxb9g4GoVIG0CCsvQjwveFn6HbdM7YEJtoe6175cF
+	 h+ktGTjDwpokr7wZjOT62pjFtn+sr3mqcRPyl5Id6ekBD5/YhIjp/K0Z9CmC8e/+1E
+	 mtEv1dFFQjfD2Ob6cF164jgOMNYmhz0owUAg7MYuyVGvGL1mYATB4vFu3AsTWSpd3o
+	 jCMer9H5YQyZ289Iuox9GBzlP2yScg0EvneCF//i0d6hsqXBQyDBOj6GFpwS0BeCqN
+	 85lAE4phafSN7dHshFz3Dy5qMyDcj8NDg7yl9pV6NrOZkzlYgeEBTez9BSAB1KvpfC
+	 fWYLXZhfhCtHw==
+Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-6f93fe6d11aso959a34.2;
+        Wed, 05 Jun 2024 11:00:01 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVO2vXt1ctFgcSTKEm895nvC+xqqlVDAM5lFHyM6B3+dpLg82dOpKUt3CXOAEaZXe7YRoIYoey0EiArjWChjy8hnklHHiqB3GtZsmcQ
+X-Gm-Message-State: AOJu0YycQ1FMnCpapkR1/3FywgwWpn/O+2m3udSyxbgzjX9+ODBprGHt
+	Sp6aSI4Hb43bNReYfI+q4uU+eI6VDH0H9lK7vWrIiLoy9YrHJuAgkNF/rk0+ijIVBQzUi9mm0Df
+	YCXXpH765Byk1zNtxoLCiL8+mUMk=
+X-Google-Smtp-Source: AGHT+IF2Pdi8fFZ2KKDRvw90LKYizodqyqQ5AFX2NWSjiEUg1yQhAuiF+e3Tx6x1KY7dDEtKpWd28Dd+wAtf7FD42H4=
+X-Received: by 2002:a05:6870:502:b0:24f:c164:2cd7 with SMTP id
+ 586e51a60fabf-25122313e24mr3275078fac.4.1717610400331; Wed, 05 Jun 2024
+ 11:00:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240528-pwrseq-v8-15-d354d52b763c@linaro.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 5 Jun 2024 19:59:48 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jzcHmN-B3z1pajYi-NhD=igUi=RYrU9dkvBgoy6ZRdiQ@mail.gmail.com>
+Message-ID: <CAJZ5v0jzcHmN-B3z1pajYi-NhD=igUi=RYrU9dkvBgoy6ZRdiQ@mail.gmail.com>
+Subject: [GIT PULL] Thermal control fixes for v6.10-rc3
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, May 28, 2024 at 09:03:23PM +0200, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> Some PCI devices must be powered-on before they can be detected on the
-> bus. Introduce a simple framework reusing the existing PCI OF
-> infrastructure.
-> 
-> The way this works is: a DT node representing a PCI device connected to
-> the port can be matched against its power control platform driver. If
-> the match succeeds, the driver is responsible for powering-up the device
-> and calling pcie_pwrctl_device_set_ready() which will trigger a PCI bus
+Hi Linus,
 
-s/pcie_pwrctl_device_set_ready/pci_pwrctl_device_set_ready/
+Please pull from the tag
 
-> rescan as well as subscribe to PCI bus notifications.
-> 
-> When the device is detected and created, we'll make it consume the same
-> DT node that the platform device did. When the device is bound, we'll
-> create a device link between it and the parent power control device.
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ thermal-6.10-rc3
+
+with top-most commit ae2170d6ea96e652c7fb5689f1980986bf48b7b8
+
+ thermal: trip: Trigger trip down notifications when trips involved in
+mitigation become invalid
+
+on top of commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0
+
+ Linux 6.10-rc1
+
+to receive thermal control fixes for 6.10-rc3.
+
+These fix issues related to the handling of invalid trip points in the
+thermal core and in the thermal debug code that have been overlooked by
+some recent thermal control core changes.
+
+Thanks!
+
+
+---------------
+
+Rafael J. Wysocki (4):
+      thermal/debugfs: Print initial trip temperature and hysteresis
+in tze_seq_show()
+      thermal/debugfs: Allow tze_seq_show() to print statistics for
+invalid trips
+      thermal: core: Introduce thermal_trip_crossed()
+      thermal: trip: Trigger trip down notifications when trips
+involved in mitigation become invalid
+
+---------------
+
+ drivers/thermal/thermal_core.c    | 35 +++++++++++++++++++++++++----------
+ drivers/thermal/thermal_core.h    |  2 ++
+ drivers/thermal/thermal_debugfs.c | 18 +++++++++++-------
+ drivers/thermal/thermal_trip.c    | 20 ++++++++++++--------
+ 4 files changed, 50 insertions(+), 25 deletions(-)
 
