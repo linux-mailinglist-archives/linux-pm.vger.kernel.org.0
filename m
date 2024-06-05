@@ -1,104 +1,201 @@
-Return-Path: <linux-pm+bounces-8621-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8622-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A4878FC7FD
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 11:38:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11C918FC802
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 11:39:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC8041F21AA3
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 09:38:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A89B9282D94
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 09:38:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE586192B81;
-	Wed,  5 Jun 2024 09:34:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB3E9192B9D;
+	Wed,  5 Jun 2024 09:34:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="VKIh4okJ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dHiEOcww"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4A1F18FDDD;
-	Wed,  5 Jun 2024 09:34:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1C3E190040
+	for <linux-pm@vger.kernel.org>; Wed,  5 Jun 2024 09:34:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717580043; cv=none; b=CJcNCJYDrmllfHL6tSwynrr6igXjwN2XPlK6baLoDMGPmc9ChwFLXgNukED3LfJgFN48RirRAhPm0PNmMDBwilasccT6NCDfx3TrahBTE+juASyRn7Mx4UyoTgQFT8vZs2/p0a6T1hJvybpmLyvl09WS1/iWbOdfmFzKxajP4Jg=
+	t=1717580092; cv=none; b=jWsrY8HCLnjA0sTj3Cp11htA/sA9ts/bmJn5Mt3LjkNVG0uqk4r9EdJqDGg9Xstq8nHiMKlqEo54Cldzc4KVolwBHzBcckXXDyeCDIRyzzurx5kxdT66DN3Cqba78c7581bdAu4rsFAre/58XY1WRHmm+u3h4GDLFMh3/1dsofU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717580043; c=relaxed/simple;
-	bh=o3s3eeCGuDiHinRfMmQ6kt6dHWRjaZ0xd0fUvfgcYWs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C0PnWgXPunl/HgRREFkcS5qRlLfO3I5qfIgQV7sZ1cGx3oOTEOzx1x9bJJE3Lm3d3dN1oWu7P9I0QMZgSeYGiz8uQGlOMSC1wgRPB52k8FOuZLX4L40K9xKxEQZQVIbLLYvHEsyn11fPf3JQqLKQLCbVIoHn29TxYg5qqg63KWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=VKIh4okJ; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1717580039;
-	bh=o3s3eeCGuDiHinRfMmQ6kt6dHWRjaZ0xd0fUvfgcYWs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VKIh4okJIDtWmWBa7iTGOvpbQKYWknJRrrEAEZ1ZPvZ8/fUCJiClTbmuRqQV2xWlD
-	 fClu3im9eqq4vN0HSAl9XCTAaUBg4Mj/B6QLlyI0uu+WOZ8NfJUzHDt4ToePa4VEsu
-	 uGq9TycDfo/HLCuKTnPFbZsfBAUcNM2KImuxDrmo=
-Date: Wed, 5 Jun 2024 11:33:58 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Dustin Howett <dustin@howett.net>
-Cc: Benson Leung <bleung@chromium.org>, 
-	Guenter Roeck <groeck@chromium.org>, Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>, 
-	chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Mario Limonciello <mario.limonciello@amd.com>, Stephen Horvath <s.horvath@outlook.com.au>, 
-	Rajas Paranjpe <paranjperajas@gmail.com>
-Subject: Re: [PATCH v2 0/3] ChromeOS Embedded Controller charge control driver
-Message-ID: <a527a3fd-1458-43cc-aac0-0b360beeb349@t-8ch.de>
-References: <20240528-cros_ec-charge-control-v2-0-81fb27e1cff4@weissschuh.net>
- <CA+BfgNJByawxkZukaCXYcmOo_K9aQ0W1x8B6Y+Hyg_fZaJ4axw@mail.gmail.com>
- <5baf3caf-dc09-4829-96db-2666fc902710@t-8ch.de>
- <CA+BfgN+LE3YyF3te4m8sWbtH85tU+ERUDW7YR_BFecusVTAWWw@mail.gmail.com>
+	s=arc-20240116; t=1717580092; c=relaxed/simple;
+	bh=VyMzcl86epfd+4JJGD/brazuobQXR4TW+Im54cfRqwo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=A1ApY4LFVPEha0jNr8oWVU87/K65XvuobbSDwUrUdHBFdpQTU8cWvo7ZAwWi9WxNpM62z7bJsegdjZFhsCgB8mzwTz6uMYmvq1ywPOdQrYKXj6/iYXdASut8pBqUi8gWhkJ/PxxNdmZK86m0bA6HBx0aPEYHYAhGgLZT2rnq0nI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dHiEOcww; arc=none smtp.client-ip=209.85.219.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-df771b6cf71so2141317276.2
+        for <linux-pm@vger.kernel.org>; Wed, 05 Jun 2024 02:34:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1717580090; x=1718184890; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=30NObruWx5GMlzINttF9ReWXSPJzl5BeuLrf410WPvU=;
+        b=dHiEOcwwuTLPAfYeOBtsVP/FZJxtxu1GtHzC46rdRec8WsXNQ+14+jYF+g6J3PUFwk
+         AnWuu9pMSnqSNg5SV31NNHk0JZqDDvtgyZKc6AyEgoh1ii4sGTkY/Akdt/86Vz6oXrU1
+         nYEqKXiAkP55s1P2Me3xjTMOsa8Xw2jzuK6I3FtZLcN9Rd3WqjUMDBhsxKo+D4TqEeQn
+         /87PrKq8oPGrixS9WbfIGLGjtmTAkN3MlmPC3zWyIU8wb88rY+W6Sd+87fFaQ1zvrgbu
+         l0CFQmQeyw3EDvMbuAIcukPnw0tc6wX7ZTWjlxBbuH1eA3/KiVpM9OQaqsBUv0wgGpuS
+         XXXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717580090; x=1718184890;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=30NObruWx5GMlzINttF9ReWXSPJzl5BeuLrf410WPvU=;
+        b=bUrZotq2ovHvi9PO5gDLsDZ0hoUeZC6lJw6oI9mv5YVMZ4VMkfPPWMTzu1RSX/0act
+         qN8MJqUOJhdATYOH2fuHF70Sv+fSj91SMzTwml2gfKyUcakEE/2gjO7pGd/uURgexO4+
+         u68ZAezPlDRDXfvnAIWlGvwln2ALvPazw0WNyWQZTfpS5SNqaHI1D7EuB0n4oxxbocTy
+         +SA//RHphzjYgdm3eil2xo8DbfGCCKzMaYaeW7GyqpY/BIVWysGLJlQ0vloLZ6EvxBxo
+         M7vZEgnaKh2Z3jWKH9289JB/u4ur+WFSehrbG/FLebWwChB6/89yuk+Y7q6b00yl7WyD
+         n0QQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVqiiNduTnSB4UjKEBw7tn69QgSCeIkk31qHWYQbb+S8p9RJmE4OO8ADBkFzKZ3DzCN4A18CFgEThRE5pWi+CocsdGcmO0iwwc=
+X-Gm-Message-State: AOJu0Ywk0Bg5ocevxqkalCMTVrgiIPzs1BmbaeZVX9GXrM1Sa2LAn0uK
+	c4mxbLTogaainFTdCs7N50EXrheN/gbviUko4LGogT/jz2PJTqkLl7AnyvmMKAJHPKUHq6BC7RP
+	ipC1LSU5T0qGNI5nXX+/1kF/v/S0XIkjjFXw35w==
+X-Google-Smtp-Source: AGHT+IENn27TkQR5CPy5b+3mp3LqBCxwf+D6LxicigJ400S8hL5xvE513TM1EYAaeZPC26ci4uwXc/peFjpCSi2lwcg=
+X-Received: by 2002:a05:6902:230f:b0:df7:97d4:b790 with SMTP id
+ 3f1490d57ef6-dfaca9bd66cmr2065639276.18.1717580089668; Wed, 05 Jun 2024
+ 02:34:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+BfgN+LE3YyF3te4m8sWbtH85tU+ERUDW7YR_BFecusVTAWWw@mail.gmail.com>
+References: <cover.1716811405.git.geert+renesas@glider.be>
+In-Reply-To: <cover.1716811405.git.geert+renesas@glider.be>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Wed, 5 Jun 2024 11:34:13 +0200
+Message-ID: <CAPDyKFpa4LZF3eN7x-NT+b9=dKB3Oe6RY8RAyetdRBSR1-LQoQ@mail.gmail.com>
+Subject: Re: [PATCH/RFC 0/3] pmdomain: renesas: rmobile-sysc: Remove serial
+ console handling
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
+	"Rafael J . Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Saravana Kannan <saravanak@google.com>, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, 
+	Peng Fan <peng.fan@nxp.com>, linux-pm@vger.kernel.org, linux-serial@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, 
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 2024-06-04 20:27:57+0000, Dustin Howett wrote:
-> On Mon, Jun 3, 2024 at 3:59 PM Thomas Weißschuh <linux@weissschuh.net> wrote:
-> >
-> > Can you try disabling all of the Framework-specific charge control
-> > settings and test again?
-> > Probably the different, disparate logics in the Framework ECs are
-> > conflicting with each other.
-> 
-> Fascinating! This board does indeed support charge limiting through
-> both interfaces. It looks like the most recently set one wins for a
-> time.
++ Tomi
 
-If it is the most recent one, shouldn't the driver have worked?
-What does "for a time" mean?
-I'm using only the upstream EC command and that seems to work fine.
+On Mon, 27 May 2024 at 14:41, Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+>
+>         Hi all,
+>
+> Since commit a47cf07f60dcb02d ("serial: core: Call
+> device_set_awake_path() for console port"), the serial driver properly
+> handles the case where the serial console is part of the awake path, and
+> it looked like we could start removing special serial console handling
+> from PM Domain drivers like the R-Mobile SYSC PM Domain driver.
+> Unfortunately the devil is in the details, as usual...
+>
+> Earlycon relies on the serial port to be initialized by the firmware
+> and/or bootloader.  Linux is not aware of any hardware dependencies that
+> must be met to keep the port working, and thus cannot guarantee they
+> stay met, until the full serial driver takes over.
+>
+> E.g. all unused clocks and unused PM Domains are disabled in a late
+> initcall.  As this happens after the full serial driver has taken over,
+> the serial port's clock and/or PM Domain are no longer deemed unused,
+> and this is typically not a problem.
+>
+> However, if the serial port's clock or PM Domain is shared with another
+> device, and that other device is runtime-suspended before the full
+> serial driver has probed, the serial port's clock and/or PM Domain will
+> be disabled inadvertently.  Any subsequent serial console output will
+> cause a crash or system lock-up.  E.g. on R/SH-Mobile SoCs, the serial
+> ports share their PM Domain with several other I/O devices.  After the
+> use of pwm (Armadillo-800-EVA) or i2c (KZM-A9-GT) during early boot,
+> before the full serial driver takes over, the PM Domain containing the
+> early serial port is powered down, causing a lock-up when booted with
+> "earlycon".
 
-> The UEFI setup utility only sets the framework-specific charge limit value.
-> 
-> We should probably find some way to converge them, for all of the
-> supported Framework Laptop programs.
+Hi Geert,
 
-In the long term, Framework should align their implementation with
-upstream CrOS EC and either drop their custom command or make it a thin
-wrapper around the normal the upstream command.
+Thanks for the detailed description of the problem! As pointed out in
+regards to another similar recent patch [1], this is indeed a generic
+problem, not limited to the serial console handling.
 
-(As you are familiar with EC programming maybe you want to tackle this?)
+At Linaro Connect a few weeks ago I followed up with Saravana from the
+earlier discussions at LPC last fall. We now have a generic solution
+for genpd drafted on plain paper, based on fw_devlink and the
+->sync_state() callback. I am currently working on the genpd series,
+while Saravana will re-spin the series (can't find the link to the
+last version) for the clock framework. Ideally, we want these things
+to work in a very similar way.
 
-Until then I think we can detect at probe-time if the Framework APIs are
-available and use them to disable the Framework-specific mechanism.
-Then the CrOS EC commands should be usable.
+That said, allow me to post the series for genpd in a week or two to
+see if it can solve your problem too, for the serial console.
 
-The drawback is, that userspace using the Framework APIs will break
-the driver. That userspace would need to migrate to the standard UAPI.
+Kind regards
+Uffe
 
-Also the settings set in the firmware would be ignored at that point.
+[1]
+https://lore.kernel.org/linux-arm-kernel/CAPDyKFqShuq98qV5nSPzSqwLLUZ7LxLvp1eihGRBkU4qUKdWwQ@mail.gmail.com/
 
-I don't want to use the functionality of the Framework command because
-it's less featureful and I really hope it will go away at some point.
+>
+> This RFC patch series aims to provide a mechanism for handling this, and
+> to fix it for the PM Domain case:
+>   1. The first patch provides a mechanism to let the clock and/or PM
+>      Domain subsystem or drivers handle this, by exporting the clock and
+>      PM Domain dependencies for the serial port, as available in the
+>      system's device tree,
+>   2. The second patch introduces a new flag to handle a PM domain that
+>      must be kept powered-on during early boot, and by setting this flag
+>      if the PM Domain contains the serial console (originally I handled
+>      this inside rmobile-sysc, but it turned out to be easy to
+>      generalize this to other platforms in the core PM Domain code).
+>   3. The third patch removes the no longer needed special console
+>      handling from the R-Mobile SYSC PM Domain driver.
+>
+> I did not fix the similar clock issue, as it is more complex (there can
+> be multiple clocks, and each clock provider can have its own value of
+> #clock-cells), and I do not need it for Renesas ARM platforms.
+
+I will defer to Sarvana here, but ideally his series for the clock
+framework should solve this case too.
+
+>
+> This has been tested on the APE6-EVM, Armadillo-800-EVA, and KZM-A9-GT
+> development boards, with and without earlycon, including s2ram with and
+> without no_console_suspend.
+>
+> Notes:
+>   - This should not be needed on RZ/G3S, where each serial port device
+>     has its own PM Domain,
+>   - drivers/clk/imx/clk.c and drivers/pmdomain/imx/scu-pd.c have special
+>     handling for the of_stdout device, but is probably not affected, as
+>     each serial port seems to share its PM Domain only with the serial
+>     port's clock controller.
+>
+> Thanks for your comments!
+>
+> Geert Uytterhoeven (3):
+>   earlycon: Export clock and PM Domain info from FDT
+>   pmdomain: core: Avoid earlycon power-down
+>   pmdomain: renesas: rmobile-sysc: Remove serial console handling
+>
+>  drivers/pmdomain/core.c                 | 24 ++++++++++++++++--
+>  drivers/pmdomain/renesas/rmobile-sysc.c | 33 +------------------------
+>  drivers/tty/serial/earlycon.c           | 14 ++++++++++-
+>  include/linux/pm_domain.h               |  4 +++
+>  include/linux/serial_core.h             | 10 ++++++++
+>  5 files changed, 50 insertions(+), 35 deletions(-)
+>
+> --
+
+Kind regards
+Uffe
 
