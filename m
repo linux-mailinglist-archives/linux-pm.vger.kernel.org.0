@@ -1,187 +1,234 @@
-Return-Path: <linux-pm+bounces-8654-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8655-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D9A38FD445
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 19:47:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93E338FD465
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 19:54:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9EE1C1C2359D
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 17:47:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B1A5288FC4
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 17:54:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAAB313AA3A;
-	Wed,  5 Jun 2024 17:47:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFF64194AEC;
+	Wed,  5 Jun 2024 17:54:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ByLcuP2U"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kzecBLOc"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6541D19D894;
-	Wed,  5 Jun 2024 17:47:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1471139D00;
+	Wed,  5 Jun 2024 17:54:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717609636; cv=none; b=UYkbtbugsXwD4sWTNHn+Uall40N3ZHwIpxoG6UDUbJsHbsHfjCtoTOVeFZKciGmmXMi7zl7xWwWUQZ6sLcx47aaia0WTeYsLfXUzZAWvi99tLeIR4cz/XSMCVDbuGWNHbzPcRoltNWVpWpOrZSlvHvIhMYV4wNM8N8BmJaoMMU8=
+	t=1717610063; cv=none; b=NhvOC+iaXtLUoBHFQEzjKt5JwTaM+FIbLWltUzkUeNdxIzYn7g44LwKeUPuVPcJrap6fFhkFSxJwUNauZisUsh1kMfcLS3KjEm0POMuvkMcUFJI8qhSfi9qWgBeePVpaLF5LSTkDo+h6hMQQZfVJqQ/tjCuXyliqVOzJitrz76k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717609636; c=relaxed/simple;
-	bh=TquLKd0gVLtuXLEtJC/CPqTotKpWkwDo4bpISXh1os4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=eNg6Vwv2WMTM7bciuKwQiwsWeCHpTt0dh3pwjtI1QiOByyBY/6ZPFTI0en1hkbr15YwdKqkfbxVNLT0BdWBXaSgkMtFzWNNOXHYcne5BLLWC04y3tvzvB0/ldRz6apGpDTdCQNMx3S/i9SSeC/X5LM15/e4TdTO+PxNv/31VCvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ByLcuP2U; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 990ADC2BD11;
-	Wed,  5 Jun 2024 17:47:15 +0000 (UTC)
+	s=arc-20240116; t=1717610063; c=relaxed/simple;
+	bh=A8lg5hz+MBOmGn5ya8/fL07rjZlvK77wfF8N5N6s7aA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Zw7l+VPUFnMy9cweBbFe61Z97h6x0dEbNEISpPzADJyKHLROg3eHtbQCPSi35BW3WTd0KQ+ZiXRwPUNgWT6RsgyXsbVGhKXiJe7tZR3tbR4hzE3eFlS9YRAWQpHZCs5XxA1xtH1ZMtiO1QFTowWC7dJgPYT16+HYUMz5hhvuZuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kzecBLOc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83FD8C2BD11;
+	Wed,  5 Jun 2024 17:54:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717609635;
-	bh=TquLKd0gVLtuXLEtJC/CPqTotKpWkwDo4bpISXh1os4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=ByLcuP2UMGfSLhV/gWgXJ82ryuTS1kHeyVL5PHdJ9MrxDAp/gdaVsb1SKLlVBuVd3
-	 fq0LpFK9smWEc2THwgiZAWoDCGhkuM8KzBRsH9loW2F/M0MzpkOqRD2sfGue6P/MxA
-	 QaEsd4pbfouIw47SbmMmVe5dlPtQVXQGEXgs7WzzaeBb06hrzsg0oUfsfZ941Pq6cN
-	 Y00sluayyGEZe86UJWMDtmxP8mxPYOYHUuclqYJRPdTu9shy3nr84VKzZsnAWbTcPc
-	 KADXMJK5MyM6Xm7e8uRFSwux6qHIYB9qdjPapN4JWHWjC9ihRa87GxdnD9tkHrfqF4
-	 ReQSAnxjbkAlw==
-Date: Wed, 5 Jun 2024 12:47:13 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+	s=k20201202; t=1717610063;
+	bh=A8lg5hz+MBOmGn5ya8/fL07rjZlvK77wfF8N5N6s7aA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kzecBLOcSILnskzdHSvhm2It8XC1bmx/lcsBrKDsKX86PvaXgBWRFa+xUD+26xIDJ
+	 SFLQxn9UDgsrp4y3e0Z5nFYhTT7ekyNHbCLr0SdhIW65m2vpMRx6F0d/NPshS8EMrx
+	 zqb/c+X8v94QIWOmN2HEBoNa6qS4LwJ975bk9cvo5njY6qQeBc5ZMhMgyeGXH7XZQg
+	 Ef1v0hQqrcvRZllDwbxnBId9n/YCOlQBVNMy8AILyg9CSA0KxGSID5u/smQ7CTXpBY
+	 clssyHfC1PN+jDBiD/uEHld7OX9xG2nBBuLqc4TYAEVS0JX179I6RUhDBubBIjDPM0
+	 935ce12yzNZIA==
+Date: Wed, 5 Jun 2024 18:54:17 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Inochi Amaoto <inochiama@outlook.com>
+Cc: Haylen Chu <heylenay@outlook.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Marcel Holtmann <marcel@holtmann.org>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Balakrishna Godavarthi <quic_bgodavar@quicinc.com>,
-	Rocky Liao <quic_rjliao@quicinc.com>, Kalle Valo <kvalo@kernel.org>,
-	Jeff Johnson <jjohnson@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-	Elliot Berman <quic_eberman@quicinc.com>,
-	Caleb Connolly <caleb.connolly@linaro.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Alex Elder <elder@kernel.org>, linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-	linux-wireless@vger.kernel.org, ath11k@lists.infradead.org,
-	Jeff Johnson <quic_jjohnson@quicinc.com>,
-	ath12k@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	kernel@quicinc.com, Amit Pundir <amit.pundir@linaro.org>
-Subject: Re: [PATCH v8 16/17] PCI/pwrctl: add a PCI power control driver for
- power sequenced devices
-Message-ID: <20240605174713.GA767261@bhelgaas>
+	Chen Wang <unicorn_wang@outlook.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Jisheng Zhang <jszhang@kernel.org>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: thermal: sophgo,cv180x-thermal: Add
+ Sophgo CV180x thermal
+Message-ID: <20240605-tightwad-janitor-82cfceb1469d@spud>
+References: <SG2PR01MB4218013241B3EED779D3BAE8D7F82@SG2PR01MB4218.apcprd01.prod.exchangelabs.com>
+ <SG2PR01MB42189977B4172405F5704CC4D7F82@SG2PR01MB4218.apcprd01.prod.exchangelabs.com>
+ <IA1PR20MB49531F55C8D7DC5D0050CAF9BBF92@IA1PR20MB4953.namprd20.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="zOo6vMANsZN3Leyq"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMRc=Mckab1QYoBuE3iSv0x+GEjFNBQS5Hw_Mry=r7h5XGHZEQ@mail.gmail.com>
+In-Reply-To: <IA1PR20MB49531F55C8D7DC5D0050CAF9BBF92@IA1PR20MB4953.namprd20.prod.outlook.com>
 
-On Wed, Jun 05, 2024 at 10:47:32AM +0200, Bartosz Golaszewski wrote:
-> On Wed, Jun 5, 2024 at 4:13 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Wed, Jun 05, 2024 at 02:34:52AM +0300, Dmitry Baryshkov wrote:
-> > > On Wed, 5 Jun 2024 at 02:23, Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > On Tue, May 28, 2024 at 09:03:24PM +0200, Bartosz Golaszewski wrote:
-> > > > > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> > > > >
-> > > > > Add a PCI power control driver that's capable of correctly powering up
-> > > > > devices using the power sequencing subsystem. The first users of this
-> > > > > driver are the ath11k module on QCA6390 and ath12k on WCN7850.
-> >
-> > > > > +static const struct of_device_id pci_pwrctl_pwrseq_of_match[] = {
-> > > > > +     {
-> > > > > +             /* ATH11K in QCA6390 package. */
-> > > > > +             .compatible = "pci17cb,1101",
-> > > > > +             .data = "wlan",
-> > > > > +     },
-> > > > > +     {
-> > > > > +             /* ATH12K in WCN7850 package. */
-> > > > > +             .compatible = "pci17cb,1107",
-> > > > > +             .data = "wlan",
-> > > > > +     },
-> > > >
-> > > > IIUC, "pci17cb,1101" and "pci17cb,1107" exist partly so we can check
-> > > > that a DTS conforms to the schema, e.g., a "pci17cb,1101" node
-> > > > contains all the required regulators.  For that use, we obviously need
-> > > > a very specific "compatible" string.
-> > > >
-> > > > Is there any opportunity to add a more generic "compatible" string in
-> > > > addition to those so this list doesn't have to be updated for every
-> > > > PMU?  The .data here is "wlan" in both cases, and for this purpose, we
-> > > > don't care whether it's "pci17cb,1101" or "pci17cb,1107".
-> > >
-> > > These two devices have different set of regulators and different
-> > > requirements to power them on.
-> >
-> > Right, but I don't think pci_pwrctl_pwrseq_probe() knows about those
-> > different sets.  It basically looks like:
-> >
-> >   pci_pwrctl_pwrseq_probe(struct platform_device *pdev)
-> >   {
-> >     struct pci_pwrctl_pwrseq_data *data;
-> >     struct device *dev = &pdev->dev;
-> >
-> >     data->pwrseq = devm_pwrseq_get(dev, of_device_get_match_data(dev));
-> >     pwrseq_power_on(data->pwrseq);
-> >     data->ctx.dev = dev;
-> >     devm_pci_pwrctl_device_set_ready(dev, &data->ctx);
-> >   }
-> >
-> > I think of_device_get_match_data(dev) will return "wlan" for both
-> > "pci17cb,1101" and "pci17cb,1107", so devm_pwrseq_get(),
-> > pwrseq_power_on(), and devm_pci_pwrctl_device_set_ready() don't see
-> > the distinction between them.
-> 
-> These are only the first two users of this generic driver. We may end
-> up adding more that will use different targets or even extend the
-> match data with additional fields.
 
-If that were the only reason, I would suggest waiting to add the
-specific device strings until we need the functionality, but it sounds
-like there are other stronger reasons.
+--zOo6vMANsZN3Leyq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > Of course, they also get "dev", so they can find the device-specifc
-> > stuff that way, but I think that's on the drivers/power/sequencing/
-> > side, not in this pci-pwrctl-pwrseq driver itself.
-> >
-> > So what if there were a more generic "compatible" string, e.g., if the
-> > DT contained something like this:
-> >
-> >   wifi@0 {
-> >     compatible = "pci17cb,1101", "wlan-pwrseq";
-> 
-> What even is "pwrseq" in the context of the hardware description? DT
-> maintainers would like to have a word with you. :)
+On Wed, Jun 05, 2024 at 11:40:32AM +0800, Inochi Amaoto wrote:
+> On Tue, Jun 04, 2024 at 12:54:19PM GMT, Haylen Chu wrote:
+> > Add devicetree binding documentation for thermal sensors integrated in
+> > Sophgo CV180X SoCs.
+> >=20
+> > Signed-off-by: Haylen Chu <heylenay@outlook.com>
+> > ---
+> >  .../thermal/sophgo,cv180x-thermal.yaml        | 82 +++++++++++++++++++
+> >  1 file changed, 82 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/thermal/sophgo,cv=
+180x-thermal.yaml
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/thermal/sophgo,cv180x-th=
+ermal.yaml b/Documentation/devicetree/bindings/thermal/sophgo,cv180x-therma=
+l.yaml
+> > new file mode 100644
+> > index 000000000000..1c3a6f74ff1d
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/thermal/sophgo,cv180x-thermal.y=
+aml
+> > @@ -0,0 +1,82 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/thermal/sophgo,cv180x-thermal.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Sophgo CV180x on-SoC Thermal Sensor
+> > +
+> > +maintainers:
+> > +  - Haylen Chu <heylenay@outlook.com>
+> > +
+> > +description: Binding for Sophgo CV180x on-SoC thermal sensor
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - sophgo,cv1800-thermal
+> > +      - sophgo,cv180x-thermal
+> > +
+>=20
+> Is this necessary? I don't find any change between the sensor of these.
 
-There are "compatible" strings like "simple-bus", "simple-mfd", and
-"syscon" that allow drivers to bind and provide generic functionality
-when they don't need to know the exact hardware.
+"cv180x" isn't even a real device. Either we have a compatible that
+matches an actual SoC and use it everywhere, or we add ones for each SoC
+and have a fallback to cv1800.
 
-> > and pci_pwrctl_pwrseq_of_match[] had this:
-> >
-> >   { .compatible = "wlan-pwrseq", .data = "wlan", }
-> >
-> > Wouldn't this pci-pwrctl-pwrseq driver work the same?  I'm not a DT
-> > whiz, so likely I'm missing something, but it would be nice if we
-> > didn't have to update this very generic-looking driver to add every
-> > device that needs it.
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    description: The thermal sensor clock
+> > +
+> > +  clock-names:
+> > +    const: clk_tempsen
 
-Do you have any other ideas to reduce the churn in this file?  It just
-seems weird to have to add an ID to this file without adding any
-actual code or data related to it.
+clock-names is not useful here as there's only one clock.
+"clk_tempsen" sounds more like the name for this clock at the provider
+than at the consumer anyway.
 
-We should probably also add a pattern to MAINTAINERS so
-get_maintainers.pl on this file will show you as a maintainer.
+> > +
+> > +  accumulation-period:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    description: Accumulation period for a sample
+> > +    oneOf:
+> > +      - const: 0
+> > +        description: 512 ticks
+> > +      - const: 1
+> > +        description: 1024 ticks
+> > +      - const: 2
+> > +        description: 2048 ticks
+> > +      - const: 3
+> > +        description: 4096 ticks
+> > +    default: 2
+> > +
+> > +  chop-period:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    description: ADC chop period
 
-Bjorn
+What's a "chop" and why is either this or the accumulation-period a
+fixed property of the hardware? Shouldn't this choice really be up to
+the user?
+
+> > +    oneOf:
+> > +      - const: 0
+> > +        description: 128 ticks
+> > +      - const: 1
+> > +        description: 256 ticks
+> > +      - const: 2
+> > +        description: 512 ticks
+> > +      - const: 3
+> > +        description: 1024 ticks
+
+Can we just make the number of ticks the unit here, and above?
+Also, a "oneOf: - const" structure is just an enum.
+
+> > +    default: 3
+> > +
+> > +  sample-cycle-us:
+> > +    description: Period between samples
+> > +    default: 1000000
+
+No constraints?
+
+Thanks,
+Conor.
+
+> > +
+> > +  '#thermal-sensor-cells':
+> > +    const: 0
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - clocks
+> > +  - clock-names
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +        #include <dt-bindings/clock/sophgo,cv1800.h>
+> > +        thermal-sensor@30e0000 {
+> > +            compatible =3D "sophgo,cv180x-thermal";
+> > +            reg =3D <0x30e0000 0x100>;
+> > +            clocks =3D <&clk CLK_TEMPSEN>;
+> > +            clock-names =3D "clk_tempsen";
+> > +            #thermal-sensor-cells =3D <0>;
+> > +        };
+> > +...
+>=20
+> Where is the interrupt number? The sensors does support the interrupt,
+> but I don't see you describe it in the binding.
+>=20
+> > --=20
+> > 2.45.2
+> >=20
+
+--zOo6vMANsZN3Leyq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZmCmSQAKCRB4tDGHoIJi
+0lO6AP9sW5xE2Dz5LvNJjPgXDWtF96Y9pG6mweRGMoUn50K5aQEAibhcLwbeJFd5
+S4Ye7d9hhxUVcwTpWFotGEFVBPZPlAk=
+=GiCK
+-----END PGP SIGNATURE-----
+
+--zOo6vMANsZN3Leyq--
 
