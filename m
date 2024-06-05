@@ -1,212 +1,212 @@
-Return-Path: <linux-pm+bounces-8618-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8619-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 448D08FC6C8
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 10:42:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 719788FC6E5
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 10:47:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 21819B2AB80
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 08:36:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 44FE51C20B84
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 08:47:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23AD849639;
-	Wed,  5 Jun 2024 08:36:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B73214AD03;
+	Wed,  5 Jun 2024 08:47:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="yzvJC92G"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 219F31946CD;
-	Wed,  5 Jun 2024 08:36:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B92E7344C
+	for <linux-pm@vger.kernel.org>; Wed,  5 Jun 2024 08:47:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717576583; cv=none; b=s47MoA4PJ6DchIuNntPs0S8qNXOPCxb/Ynw9NrC/CbsdSnvHJwTXJJZKRwNY/bFtnlL5wdXMlzW7hiEzFOScDhlEc3Rzi9inDJPicVy5cjAkm9r2kTaMG1nZPxfH3OqvwjAM1H7E2RDDIE1vq8xMbgn73czodllaeXlX/WZdUqs=
+	t=1717577267; cv=none; b=MGzk3aCtUke7MoD+HJFchR/WfNsokKATkQR+i5v7KPaSCq9mqB/Kg57UmDRiGmBB+nqVwfrAF10XicQcwzW9DAOJV+GmGgqTIbjdJTKWxP7cFp5jBQ8tt5mSTAsN4eC5NBAUmA7kzVZIrs6USLbOjVY8Z65j1YJie0/CWe+WSwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717576583; c=relaxed/simple;
-	bh=+bHUNQ5M5IR38v2t2j7DBP43t3xuf9K3LOgjqNKeaZY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BQ0lvaXg2CwsioAUnrYEuHdo70P9A3O0VM1Fhg7lbD3V21+NoW1fwYDk0BR/UhXzk7CfvL8S7Ch5+eXrAL+fhBmVtb7KugEwtC+4CrfSGtpvPloMTd6HEUV95oyF2FK6LvxdhblehtCn6GKCT6fP/mRMD6x9QcN9lrU6PFBF/Ag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CCE2DDA7;
-	Wed,  5 Jun 2024 01:36:44 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 31BA53F762;
-	Wed,  5 Jun 2024 01:36:18 -0700 (PDT)
-Date: Wed, 5 Jun 2024 10:36:15 +0200
-From: Beata Michalska <beata.michalska@arm.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, len.brown@intel.com,
-	ionela.voinescu@arm.com, vanshikonda@os.amperecomputing.com,
-	sumitg@nvidia.com
-Subject: Re: [PATCH 1/1] cpufreq: Rewire arch specific feedback for
- cpuinfo/scaling_cur_freq
-Message-ID: <ZmAjfyGWtti17WiO@arm.com>
-References: <20240603081331.3829278-1-beata.michalska@arm.com>
- <20240603081331.3829278-2-beata.michalska@arm.com>
- <20240603114811.oio3uemniib5uaa2@vireshk-i7>
- <CAJZ5v0j1bqhmKrJirw+WgEVDdszZ9xQSgmfazVKMVa8H6_5TSw@mail.gmail.com>
+	s=arc-20240116; t=1717577267; c=relaxed/simple;
+	bh=uSKkoIGoa2SrkckhNzNgT8KTYQPaLTtB710iSC/tAE0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ReZVw4uiKPJ5gqQbQR44VwZ6IC0pKb/NwC1eEoOF5d6PDnTre1taCL4usD4GeAODwnFwgGMr4btxrD6ZoJYRqD5jXwDn1XMM7DUV9QRSY0PVXh5O8iHNvRFiJgVnBwAJy6kSxF5P5qDCgmHH8WdfNx/Wxly7DhDopAM+pTN48sQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=yzvJC92G; arc=none smtp.client-ip=209.85.208.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2eaccc0979cso2534131fa.3
+        for <linux-pm@vger.kernel.org>; Wed, 05 Jun 2024 01:47:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1717577264; x=1718182064; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nPra9VnPeBiNtl2fHAj/AHY/htZJd5zpefm5z/7mvlE=;
+        b=yzvJC92GX+CnQx7m4LPXyXYsNpBvK/idur5bYDpywh8Go7jQHrXy2gFaqm1K9hDcp+
+         RxJgnqtVk1pwaF88JnMjI68vVZuPrK3wPVivjqPPQrjHbPT8EqHKLt+7THl2eNqqUtku
+         A3Xz6vhJGFl1D+NVsA+4ugRneDGyK/wDAjILU/Trg1wqc9c4y+tcvmoD0PJuKKNqmoWY
+         NHoh1GL1anfB2oaJlnMuNZsi1syUrrgOdDe3NRxMe08Q+pd1IsXVryykPVrFCVT0avuf
+         W3WSu/oCgsVzfqKlx+V4PK4jmd6hAlfYSzFa5murwfQd4FvoqTlDsVOdCC6wTyvn3YGq
+         qpsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717577264; x=1718182064;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nPra9VnPeBiNtl2fHAj/AHY/htZJd5zpefm5z/7mvlE=;
+        b=dkYiP1CIaUQtF3699jx6sSnojFpy/RaW3F1f/u9ZumXZE5LvOTVyQK9YVotLXYO5oP
+         Hsyb8kDS1OTPJ3rfSYsX3qp3kVrk/sFsL8qj5cM1yAQh5bRB6sE3Rjmjw+nCZ3ZHmsDj
+         uoUw7aX9DxUV9rl+b6y7B0ajZEKujo0Q9x6Fxkb6V3b8+v2JRyj5QXdxXkedAqAv/53l
+         d0Zib6/N6w6nUqi2JWRBakpJGpmbuzX7zWkYRnd55lSew/1lc0PKk10DN5RGH+Y3oCGU
+         1VYL+5SfjXkdiDrhFQjkuyCTQdsAYN4Y/1yCZZ1MsM6pnS2Jzbx7W+FXM407x6kBqvQD
+         6BOg==
+X-Forwarded-Encrypted: i=1; AJvYcCVuUCFy2/FiS7RyLjrCQjuutZsunfHeu5HQ88jQtTu56/L+dNaVuR6tTxHK1Fk90h6/uTALKy8iX0ZdsFwjA+hBpsdVwbN7kyM=
+X-Gm-Message-State: AOJu0YxkZ0LoWSkQuC/oYOrhLTdMBXmY3Svx2uWouQt9dq4rCbgZKnq0
+	/fLlI6He5BX5Et8xihI4g2L8dtIThNfuTw5B7IgPm6McMenzsTQtFdOuPj8NzAJVM1CKyu+k6om
+	xl5ms2fmErJQjS1/7iog7eGidonroYkQqpe15rA==
+X-Google-Smtp-Source: AGHT+IFvAhNmZjR8e0W7tisE1L2rItCbACVQEOeSPIHCQ/2JT5Lzac0kUX9ZWXyqBUxDLGDW1jONb8JYHYsrWH/7fyo=
+X-Received: by 2002:a2e:7a0a:0:b0:2da:b59c:a94b with SMTP id
+ 38308e7fff4ca-2eac7a2299fmr11245531fa.25.1717577263571; Wed, 05 Jun 2024
+ 01:47:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0j1bqhmKrJirw+WgEVDdszZ9xQSgmfazVKMVa8H6_5TSw@mail.gmail.com>
+References: <CAA8EJpomPLQmQbW8w3_ms_NMKHoSPcqBa7f2OhNTTOUSdB+9Eg@mail.gmail.com>
+ <20240605021346.GA746121@bhelgaas>
+In-Reply-To: <20240605021346.GA746121@bhelgaas>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Wed, 5 Jun 2024 10:47:32 +0200
+Message-ID: <CAMRc=Mckab1QYoBuE3iSv0x+GEjFNBQS5Hw_Mry=r7h5XGHZEQ@mail.gmail.com>
+Subject: Re: [PATCH v8 16/17] PCI/pwrctl: add a PCI power control driver for
+ power sequenced devices
+To: Bjorn Helgaas <helgaas@kernel.org>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Balakrishna Godavarthi <quic_bgodavar@quicinc.com>, Rocky Liao <quic_rjliao@quicinc.com>, 
+	Kalle Valo <kvalo@kernel.org>, Jeff Johnson <jjohnson@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Srini Kandagatla <srinivas.kandagatla@linaro.org>, 
+	Elliot Berman <quic_eberman@quicinc.com>, Caleb Connolly <caleb.connolly@linaro.org>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Alex Elder <elder@kernel.org>, 
+	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-bluetooth@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-wireless@vger.kernel.org, 
+	ath11k@lists.infradead.org, Jeff Johnson <quic_jjohnson@quicinc.com>, 
+	ath12k@lists.infradead.org, linux-pm@vger.kernel.org, 
+	linux-pci@vger.kernel.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, kernel@quicinc.com, 
+	Amit Pundir <amit.pundir@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 03, 2024 at 03:43:12PM +0200, Rafael J. Wysocki wrote:
-> On Mon, Jun 3, 2024 at 1:48 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> >
-> > Hi Beata,
-> >
-> > Thanks for taking this forward.
-> >
-> > On 03-06-24, 09:13, Beata Michalska wrote:
-> > > Some architectures provide a way to determine an average frequency over
-> > > a certain period of time, based on available performance monitors (AMU on
-> > > ARM or APERF/MPERf on x86). With those at hand, enroll arch_freq_get_on_cpu
-> > > into cpuinfo_cur_freq policy sysfs attribute handler, which is expected to
-> > > represent the current frequency of a given CPU,as obtained by the hardware.
-> > > This is the type of feedback that counters do provide.
-> >
-> > Please add blank line between paragraphs, it makes it easier to read
-> > them.
-> >
-> > > At the same time, keep the scaling_cur_freq attribute align with the docs
-> > > and make it provide most recently requested frequency, still allowing to
-> > > fallback to using arch_freq_get_on_cpu for cases when cpuinfo_cur_freq is
-> > > not available.
-> >
-> > Please split this patch into two parts, they are very distinct changes
-> > and should be kept separate.
-> >
-> > > Signed-off-by: Beata Michalska <beata.michalska@arm.com>
-> > > ---
-> > >  drivers/cpufreq/cpufreq.c | 8 ++++++--
-> > >  1 file changed, 6 insertions(+), 2 deletions(-)
+On Wed, Jun 5, 2024 at 4:13=E2=80=AFAM Bjorn Helgaas <helgaas@kernel.org> w=
+rote:
+>
+> On Wed, Jun 05, 2024 at 02:34:52AM +0300, Dmitry Baryshkov wrote:
+> > On Wed, 5 Jun 2024 at 02:23, Bjorn Helgaas <helgaas@kernel.org> wrote:
 > > >
-> > > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > > index a45aac17c20f..3b0eabe4a983 100644
-> > > --- a/drivers/cpufreq/cpufreq.c
-> > > +++ b/drivers/cpufreq/cpufreq.c
-> > > @@ -758,7 +758,8 @@ static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
-> > >       ssize_t ret;
-> > >       unsigned int freq;
+> > > On Tue, May 28, 2024 at 09:03:24PM +0200, Bartosz Golaszewski wrote:
+> > > > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> > > >
+> > > > Add a PCI power control driver that's capable of correctly powering=
+ up
+> > > > devices using the power sequencing subsystem. The first users of th=
+is
+> > > > driver are the ath11k module on QCA6390 and ath12k on WCN7850.
+>
+> > > > +static const struct of_device_id pci_pwrctl_pwrseq_of_match[] =3D =
+{
+> > > > +     {
+> > > > +             /* ATH11K in QCA6390 package. */
+> > > > +             .compatible =3D "pci17cb,1101",
+> > > > +             .data =3D "wlan",
+> > > > +     },
+> > > > +     {
+> > > > +             /* ATH12K in WCN7850 package. */
+> > > > +             .compatible =3D "pci17cb,1107",
+> > > > +             .data =3D "wlan",
+> > > > +     },
 > > >
-> > > -     freq = arch_freq_get_on_cpu(policy->cpu);
-> > > +     freq = !cpufreq_driver->get ? arch_freq_get_on_cpu(policy->cpu)
-> > > +                                 : 0;
+> > > IIUC, "pci17cb,1101" and "pci17cb,1107" exist partly so we can check
+> > > that a DTS conforms to the schema, e.g., a "pci17cb,1101" node
+> > > contains all the required regulators.  For that use, we obviously nee=
+d
+> > > a very specific "compatible" string.
+> > >
+> > > Is there any opportunity to add a more generic "compatible" string in
+> > > addition to those so this list doesn't have to be updated for every
+> > > PMU?  The .data here is "wlan" in both cases, and for this purpose, w=
+e
+> > > don't care whether it's "pci17cb,1101" or "pci17cb,1107".
 > >
-> > This is getting trickier than I thought as I dived into more details
-> > of all the changes to the file.
-> >
-> > Rafael,
-> >
-> > We probably need to decide on a policy for these two files, it is
-> > getting a bit confusing.
-> >
-> > cpuinfo_cur_freq:
-> >
-> > The purpose of this file is abundantly clear. This returns the best
-> > possible guess of the current hardware frequency. It should rely on
-> > arch_freq_get_on_cpu() or ->get() to get the value.
-> 
-> Let me quote the documentation:
-> 
-> "This is expected to be the frequency the hardware actually runs at.
-> If that frequency cannot be determined, this attribute should not be
-> present."
-> 
-> In my reading, this has nothing to do with arch_freq_get_on_cpu(), at
-> least on x86.
-My reading on this (and I might be wrong) is that for x86,
-arch_freq_get_on_cpu() is utilizing the APERF/MPERF registers to get
-a rough/average frequency and as such it does, in a way, get a hw feedback
-and it does somewhat fall under "frequency the hardware actually runs at".
-Because it is an average value, it might not provide an instant view on
-current frequency, but either way, the value provided here migh be a bit off
-anyway. But then, we could adjust the timewidnow being used to make it more
-accurate. I might be looking at it the wrong way though.
-> 
-> > Perhaps we can
-> > make this available all the time, instead of conditionally on ->get()
-> > callback (which isn't present for intel-pstate for example).
-> 
-> We could, but then on x86 there is no expectation that this file will
-> be present and changing this may introduce significant confusion
-> because of the way it is documented (which would need to be changed,
-> but people might be forgiven for failing to notice the change of
-> interpretation of this file).
-> 
-> > scaling_cur_freq:
-> >
-> > This should better reflect the last requested frequency, but since a
-> > significant time now it is trying to show what cpuinfo_cur_freq shows.
-> 
-> Well, not really.
-> 
-> > commit c034b02e213d ("cpufreq: expose scaling_cur_freq sysfs file for set_policy() drivers")
-> > commit f8475cef9008 ("x86: use common aperfmperf_khz_on_cpu() to calculate KHz using APERF/MPERF")
-> 
-> "In the majority of cases, this is the frequency of the last P-state
-> requested by the scaling driver from the hardware using the scaling
-> interface provided by it, which may or may not reflect the frequency
-> the CPU is actually running at (due to hardware design and other
-> limitations).
-> 
-> Some architectures (e.g. x86) may attempt to provide information more
-> precisely reflecting the current CPU frequency through this attribute,
-> but that still may not be the exact current CPU frequency as seen by
-> the hardware at the moment."
-> 
-> So the problem is that on Intel x86 with HWP and intel_pstate in the
-> active mode, say, "the frequency of the last P-state requested by the
-> scaling driver from the hardware" is actually never known, so exposing
-> it via scaling_cur_freq is not possible.
-> 
-> Moreover, because cpuinfo_cur_freq is not present at all in that case,
-> scaling_cur_freq is the only way to allow user space to get an idea
-> about the CPU current frequency.  I don't think it can be changed now
-> without confusing users.
-> 
-What's your take on leaving the scaling_cur_freq to resolve to
-arch_freq_get_on_cpu() when cpuinfo_cur_freq is not present ?
-This way nothing will change for the intel_pstate + HWP
-but it will allow using the info provided by arch_freq_get_on_cpu() for
-cpuinfo_cur_freq if one is provided and it will automatically ignore it for
-scaling_cur_freq ? Though I guess it falls under "making all confused" that you
-have described donw the line.
+> > These two devices have different set of regulators and different
+> > requirements to power them on.
+>
+> Right, but I don't think pci_pwrctl_pwrseq_probe() knows about those
+> different sets.  It basically looks like:
+>
+>   pci_pwrctl_pwrseq_probe(struct platform_device *pdev)
+>   {
+>     struct pci_pwrctl_pwrseq_data *data;
+>     struct device *dev =3D &pdev->dev;
+>
+>     data->pwrseq =3D devm_pwrseq_get(dev, of_device_get_match_data(dev));
+>     pwrseq_power_on(data->pwrseq);
+>     data->ctx.dev =3D dev;
+>     devm_pci_pwrctl_device_set_ready(dev, &data->ctx);
+>   }
+>
+> I think of_device_get_match_data(dev) will return "wlan" for both
+> "pci17cb,1101" and "pci17cb,1107", so devm_pwrseq_get(),
+> pwrseq_power_on(), and devm_pci_pwrctl_device_set_ready() don't see
+> the distinction between them.
+>
 
-> > What should we do ? I wonder if we will break some userspace tools
-> > (which may have started relying on these changes).
-> 
-> We will.
-> 
-> IIUC, it is desirable to expose "the frequency of the last P-state
-> requested by the scaling driver from the hardware" via
-> scaling_cur_freq on ARM, but it is also desirable to expose an
-> approximation of the actual current CPU frequency, so the only way to
-> do that without confusing the heck out of everybody downstream would
-> be to introduce a new attribute for this purpose and document it
-> precisely.
-What would introducing new attribute mean for scaling_cur_freq on x86 then ?
-I do assume we would leave cpuinfo_cur_freq untouched without calling
-arch_freq_get_on_cpu() (as it is now). Then keeping scaling_cur_freq to actually
-use it - what would be the 3rd attribute meaning, if:
-- cpuinfo_cur_freq -> actual freq as seen by the hardware (but not the
-  counters?)
-- scaling_cur_freq -> last requested frequency and for some cases, feedback from
-  counters
-- whatever_name_we_will_come_with -> average frequency based on counters ?
-  not always available
+These are only the first two users of this generic driver. We may end
+up adding more that will use different targets or even extend the
+match data with additional fields.
 
- It is still bit confusing.
+> Of course, they also get "dev", so they can find the device-specifc
+> stuff that way, but I think that's on the drivers/power/sequencing/
+> side, not in this pci-pwrctl-pwrseq driver itself.
+>
+> So what if there were a more generic "compatible" string, e.g., if the
+> DT contained something like this:
+>
+>   wifi@0 {
+>     compatible =3D "pci17cb,1101", "wlan-pwrseq";
 
- ---
- BR
- Beata
+What even is "pwrseq" in the context of the hardware description? DT
+maintainers would like to have a word with you. :)
+
+>     ...
+>   }
+>
+> and pci_pwrctl_pwrseq_of_match[] had this:
+>
+>   { .compatible =3D "wlan-pwrseq", .data =3D "wlan", }
+>
+> Wouldn't this pci-pwrctl-pwrseq driver work the same?  I'm not a DT
+> whiz, so likely I'm missing something, but it would be nice if we
+> didn't have to update this very generic-looking driver to add every
+> device that needs it.
+>
+
+Device-tree describes hardware, not the implementation. You can see
+elsewhere in this series that we have the PMU described as a PMIC on
+the device tree but we never register with the regulator subsystem nor
+do we create actual regulators in C. The HW description does not have
+to match the C implementation 1:1 but has to be accurate. There's not
+such HW component as "wlan-pwrseq". If you want a good example of such
+generic fallback - it'll be the C45 ethernet PHYs as they actually
+exist: there's a HW definition of what a broader C45 PHY is, even
+though it can be extended in concrete HW designs.
+
+I'd leave this as is.
+
+Bart
 
