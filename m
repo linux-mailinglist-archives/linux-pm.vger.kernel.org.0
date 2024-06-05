@@ -1,119 +1,114 @@
-Return-Path: <linux-pm+bounces-8649-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8648-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B384E8FD056
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 16:02:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECC658FD048
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 15:59:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 66D261F2504C
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 14:02:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B4911F213CC
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 13:59:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A62319D8BE;
-	Wed,  5 Jun 2024 14:02:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D59EF19D8A0;
+	Wed,  5 Jun 2024 13:59:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=trvn.ru header.i=@trvn.ru header.b="cXg/Qwk3"
+	dkim=pass (2048-bit key) header.d=toblux-com.20230601.gappssmtp.com header.i=@toblux-com.20230601.gappssmtp.com header.b="IrsW0K7U"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6D8F53BE;
-	Wed,  5 Jun 2024 14:02:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.87.146.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F22EC132
+	for <linux-pm@vger.kernel.org>; Wed,  5 Jun 2024 13:59:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717596162; cv=none; b=bNKNikUKwUG9R4UYT8wC7iABafZciS1fOD6RW6EWIYG90JPwbhmJh54yuqpppxLJrC1pScR8I4DSVePWgLTek8bnWcrMh/LeclzwVHrPffUNNzMaNHewlmUzD1sma5a3FJoCJnloRA/iE/F+D6NZhegRHSv0i2YPrTMbMrWz0AU=
+	t=1717595954; cv=none; b=aEWlZl6QE5ZXSO2HJgcVMZe9HdykBu+23k87YGOFyFJlEi6obe2c0TMigmLWLlhw4nk1UxFkmdUUFQATnlF72QnVih2KPAaM3o7fMasn4lcfckaOo6LSwHQbJZ5PSqExZSkeTZ4CoAYdQSB1ZlAuk/BRKQSxaNVJtU4UbudAmQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717596162; c=relaxed/simple;
-	bh=4tC7k/l/xaI7nEusPHODhnaab9GGYBzhfIcMqHGnSBw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=rHNVbpyAjtZx79G3YWoLiK46xE9+kE63H57kYoltZLG0s/Vq7ny5CFoYvOcL9pP6uuBUdftM5eZLpe8Pvu0zg6c8MJF+GF7pW2ReWUyd+Kc3ZxlGpMLpZ7D7JyfnS4aFcBaVTtIKtcSKKV9FTTuKk2kXiFODVzhFAXesPXngsi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=trvn.ru; spf=pass smtp.mailfrom=trvn.ru; dkim=pass (2048-bit key) header.d=trvn.ru header.i=@trvn.ru header.b=cXg/Qwk3; arc=none smtp.client-ip=194.87.146.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=trvn.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trvn.ru
-Received: from authenticated-user (box.trvn.ru [194.87.146.52])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-	(No client certificate requested)
-	by box.trvn.ru (Postfix) with ESMTPSA id 9DD8A403AB;
-	Wed,  5 Jun 2024 18:54:08 +0500 (+05)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-	t=1717595649; bh=4tC7k/l/xaI7nEusPHODhnaab9GGYBzhfIcMqHGnSBw=;
-	h=From:Date:Subject:To:Cc:From;
-	b=cXg/Qwk3EzhoriIdpzqlP9fr/j5w5TSKi2y+BLTN05Yb1R66oancKd2aVtZfLAPNE
-	 RIh+pmYIZzlpds+8Y4nnlJbGEJ9kKmIk9/5YeCznbE3CMbJTFe/Q4dtikUaeBfFo2A
-	 2A/DB/m91qECmc99dZRBM2P0H5+wTgLnLBSwuQ7D/mtixWENP1lADWn1r53wK21Zda
-	 LlNOY/nP9e0CoC/tHxQmOGNf4BDsDtsOg7SYMhvZXEcIn3A56URDThQw3FPQEg8TRY
-	 eW8EGidml8b/3lsFFsNblFnR9UoYfJiHi+jGFwxVHpJ4BmmZyBg/1Sjy839Snm+0GA
-	 /4x29iZnZG4rg==
-From: Nikita Travkin <nikita@trvn.ru>
-Date: Wed, 05 Jun 2024 18:53:27 +0500
-Subject: [PATCH] power: supply: rt5033: Bring back i2c_set_clientdata
+	s=arc-20240116; t=1717595954; c=relaxed/simple;
+	bh=WgVMfOwr+lb81KNfDZXODRkHqQvGZmUuRLDuLFM+IW8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bK2Vb26q6JQRwAv4V0Vl8XlDlaYrkW2KS8OeNgoksRpkDP8ttomlPPR574xoufgv9/5iyBDaEGu4rJ5QITiMC2p3qmjsENnGFOzgoXGi0RZ/Hzu5H0wZXy5X8HmO1MRKb97ojIEyrPgCevoJvtdvXfZ8HF5dS1Ii+vkZW/ozUuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toblux.com; spf=none smtp.mailfrom=toblux.com; dkim=pass (2048-bit key) header.d=toblux-com.20230601.gappssmtp.com header.i=@toblux-com.20230601.gappssmtp.com header.b=IrsW0K7U; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toblux.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=toblux.com
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-57a50fecbadso5131779a12.3
+        for <linux-pm@vger.kernel.org>; Wed, 05 Jun 2024 06:59:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=toblux-com.20230601.gappssmtp.com; s=20230601; t=1717595951; x=1718200751; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q3b6sb+dUnnbQYXNCjvucpa2vf6o7PmjgOhfbEICrVU=;
+        b=IrsW0K7UbEy5aPUUh6EYZDv4n/ECGLo8l7ALYkJyei4zRZbMTif/oKssfOIOhIails
+         cl++eyTqq/wZDJbwB4UMw0OPpGcM0ubwK4XP0bouEH2xQBrLdhrpfhbQmj4IIV8RkeRw
+         KMsc/bDLLCaLCw+yGwV2WDJe4C+FFfc+Y4ahRp3tmO64/fW/Ch9NRwnILItl6C+NUj7F
+         BGfEq4HJvKqMWs/NECNrGxrRYOSLy1oVmddU5UkJ3RCXoQ/6YdayBca6qpni+IzRcU4y
+         lyitMikxCgT+uMvBS27uqWP5WBiYvGKnl/4tv7SaV2MtE2zVgta2Ve/bXE3nZiokspDI
+         TbjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717595951; x=1718200751;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q3b6sb+dUnnbQYXNCjvucpa2vf6o7PmjgOhfbEICrVU=;
+        b=ZOBh2nwSOr0dhgIUnOygTQzt70Td8Ij3Upd2sOcCQhcKG40QLfoRhNEmg/lqLgQk9u
+         eva97BvKcUfpUhVAbdY/fAhISMZ21a+5hXzEbuOSi9PJmI7g8tEP5u16KE1g+b+Aw+Ee
+         AsQUFvmLRo+KMy8OZ4dOn1pz0pBMK7bWdNrwxr0pM4ueRxOH9iwMRAsZ2l0kA0HuWErS
+         5+0+0lJ+sTVFsb9N+HjRe4BeQPtZavqExXyCO/M9i8g3qJJ4vwfXKGRpks/HfPPgMHjT
+         UcWMpxY4/SYSMNOD8vxY2HHKkyivs/DIhQwUrAkyZZrfKMve/hnZiHSPFI018o373sou
+         XwNA==
+X-Gm-Message-State: AOJu0YxRPXGwKrmabQzqq9oK1z4w+QLMHjHe1x1MIaNFcFK7oSkDzRQM
+	dR8K3aijxCubDAUyPeDUXF+SKwx9+P6nb8zcM8JPzuGYzaNDcgbYNP4/9HBmGPA=
+X-Google-Smtp-Source: AGHT+IHmH5RsPYE1cbZ38d8c9INCJwl1umxTvg+kJxY6yNyYlnXMqCwnXzVeMObamPFKig8E4mdpvA==
+X-Received: by 2002:a17:906:b852:b0:a68:b49e:4745 with SMTP id a640c23a62f3a-a69a0266a6bmr173120666b.70.1717595951458;
+        Wed, 05 Jun 2024 06:59:11 -0700 (PDT)
+Received: from debian.fritz.box. (aftr-82-135-80-164.dynamic.mnet-online.de. [82.135.80.164])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a67e73f9a81sm774163466b.71.2024.06.05.06.59.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jun 2024 06:59:11 -0700 (PDT)
+From: Thorsten Blum <thorsten.blum@toblux.com>
+To: rafael@kernel.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Thorsten Blum <thorsten.blum@toblux.com>
+Subject: [PATCH] powercap: idle_inject: Simplify if condition
+Date: Wed,  5 Jun 2024 15:58:42 +0200
+Message-Id: <20240605135841.97446-1-thorsten.blum@toblux.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240605-rt5033-null-clientdata-v1-1-558d710eeb4d@trvn.ru>
-X-B4-Tracking: v=1; b=H4sIANZtYGYC/x3MwQqFIBBA0V+JWb+BKbWiX3m0kJxqQCzUIoj+P
- Wl5FvfekDgKJxiqGyKfkmQLBfWvgmm1YWEUVwwNNZpaMhizIaUwHN7j5IVDdjZbVJ1Wru2dIW2
- hxHvkWa5v/B+f5wXkdU1kaAAAAA==
-To: Sebastian Reichel <sre@kernel.org>, Andrew Davis <afd@ti.com>
-Cc: Sebastian Reichel <sebastian.reichel@collabora.com>, 
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Raymond Hackley <raymondhackley@protonmail.com>, 
- Nikita Travkin <nikita@trvn.ru>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1247; i=nikita@trvn.ru;
- h=from:subject:message-id; bh=4tC7k/l/xaI7nEusPHODhnaab9GGYBzhfIcMqHGnSBw=;
- b=owEBbQKS/ZANAwAIAUMc7O4oGb91AcsmYgBmYG39B7ZCwIhVYTdCPuf4mGkF+mxAOWBxH+Xz5
- zozxiJIb0SJAjMEAAEIAB0WIQTAhK9UUj+qg34uxUdDHOzuKBm/dQUCZmBt/QAKCRBDHOzuKBm/
- dY2VD/41zDgPzecjjbDCgZ5DKznW8U4I9X1N6D5K3rzsr+HvrUS5xcLURkwj57tgGHSrN0u6mLa
- GXMzKqPPrOukvnPoflzrDgEUy18eSOYJBELjQeRL+MEJkZRfnKRr7F4E9JaL5bgrCEwpJLFNIaS
- GDa7iS1QT7klCd9kmh0unlIsvgDMlL5q3us/VwciXD6DaqJFirU/psUcU+LN3tDtMu/W+niGwWz
- htRoNwP4oS7Gs5g8NFc/CMxGHmYglsDFIwwBo7Ksl31njzyC7UWVxKDvKo1k6NU+diuF4hysVI2
- rZhXk2y4/0EfIMrAdN0YEpq0JoJzqotCXhDheeDhnOAsmWoWDhepGJYP3wxEKGwxM06O1IrTipf
- LW+/ZpS+bLlId89jNrNeC0DbiWF0LyIgMfXCZxilEIiZHYpjhTJFDPqpAFWRaRoCWT9oLquwxi3
- SD2ir2YTniNnQAPLAf6ynZiWu6dDzylzOAor4EoXdq0mWUd6Atv1bshu6Cx6iBiKWZMMp97oVau
- xYyTflXOd32lzHyadKJLspIlPwJXDiRf0alXW3lJ4scgtDx1TYCtSUOAvZjqy1tLX9a2CiCGF/n
- hXUBokUhtb6h33M+jG7hWjaFfh2OHF4lHez8r2jPkMLQRv9IjnjaHHmfHR17SXMzO17WW44NJQh
- EUm5pB2cbPckL7g==
-X-Developer-Key: i=nikita@trvn.ru; a=openpgp;
- fpr=C084AF54523FAA837E2EC547431CECEE2819BF75
+Content-Transfer-Encoding: 8bit
 
-Commit 3a93da231c12 ("power: supply: rt5033: Use devm_power_supply_register() helper")
-reworked the driver to use devm. While at it, the i2c_set_clientdata
-was dropped along with the remove callback. Unfortunately other parts
-of the driver also rely on i2c clientdata so this causes kernel oops.
+The if condition !A || A && B can be simplified to !A || B.
 
-Bring the call back to fix the driver.
+Fixes the following Coccinelle/coccicheck warning reported by
+excluded_middle.cocci:
 
-Fixes: 3a93da231c12 ("power: supply: rt5033: Use devm_power_supply_register() helper")
-Tested-by: Raymond Hackley <raymondhackley@protonmail.com>
-Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+	WARNING !A || A && B is equivalent to !A || B
+
+Compile-tested only.
+
+Signed-off-by: Thorsten Blum <thorsten.blum@toblux.com>
 ---
- drivers/power/supply/rt5033_battery.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/powercap/idle_inject.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/power/supply/rt5033_battery.c b/drivers/power/supply/rt5033_battery.c
-index 32eafe2c00af..7a27b262fb84 100644
---- a/drivers/power/supply/rt5033_battery.c
-+++ b/drivers/power/supply/rt5033_battery.c
-@@ -159,6 +159,7 @@ static int rt5033_battery_probe(struct i2c_client *client)
- 		return -EINVAL;
- 	}
+diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
+index e18a2cc4e46a..bafc59904ed3 100644
+--- a/drivers/powercap/idle_inject.c
++++ b/drivers/powercap/idle_inject.c
+@@ -127,7 +127,7 @@ static enum hrtimer_restart idle_inject_timer_fn(struct hrtimer *timer)
+ 	struct idle_inject_device *ii_dev =
+ 		container_of(timer, struct idle_inject_device, timer);
  
-+	i2c_set_clientdata(client, battery);
- 	psy_cfg.of_node = client->dev.of_node;
- 	psy_cfg.drv_data = battery;
+-	if (!ii_dev->update || (ii_dev->update && ii_dev->update()))
++	if (!ii_dev->update || ii_dev->update())
+ 		idle_inject_wakeup(ii_dev);
  
-
----
-base-commit: 234cb065ad82915ff8d06ce01e01c3e640b674d2
-change-id: 20240605-rt5033-null-clientdata-3743d68d504a
-
-Best regards,
+ 	duration_us = READ_ONCE(ii_dev->run_duration_us);
 -- 
-Nikita Travkin <nikita@trvn.ru>
+2.39.2
 
 
