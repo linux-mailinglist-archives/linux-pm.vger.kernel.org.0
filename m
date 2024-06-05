@@ -1,112 +1,162 @@
-Return-Path: <linux-pm+bounces-8659-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8660-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 918E18FD49B
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 20:00:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 129768FD55C
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 20:10:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2808128AAE1
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 18:00:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 518C91F29B9A
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2024 18:10:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B457A19538F;
-	Wed,  5 Jun 2024 18:00:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55B8F168A9;
+	Wed,  5 Jun 2024 18:04:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ev+J06Sc"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="MlehV81c"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0A419D8B8;
-	Wed,  5 Jun 2024 18:00:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5488B672
+	for <linux-pm@vger.kernel.org>; Wed,  5 Jun 2024 18:04:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717610401; cv=none; b=oJN2b15H6pXyD5DY731PAfCHJkynrbxyGu0OdDH4WMg4mLFzVj6Q/iEcWNMevxKByXt6dtnmiw7yGZVpcqmxlhcKnaLoz1cuBrv1vFzxfzleySezeT6S1noTr8MbazpJZo3IUs/1aHd6X+OrY08OmOS44xAiESXBlYmJAE7lUPA=
+	t=1717610670; cv=none; b=G/Ol09gmunewwvjUlSBY0SXVbsuBuZyC2kitp2J55x5PqQ96ABkUmE/1bTAe6hy5isToyff/b2zRqzddaWfgjyPrjFMZZ8cbaSFTdlAhLJPBl/MXcH4gFXFN81++LQGpAgvjWGZJM0vruTDNWEmY6UrMi+rvQ8VTbKIKJWsJkN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717610401; c=relaxed/simple;
-	bh=ZmEl4JWAj2FG1oQ1+kuvRgAe6HgB+Cyw6yp68j9Li64=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=GwdV62LkeFMlF2utbW+V9KBlLsfdDm1jkA4LfHyOVR5sE3mw4QqtjxiavPGoXpq5undVWaS8LFtkrLpkv0eM0GpeS1YxlK5X2W+Y8Ad0RACagIpziWxc+eJ3g5pU8t8P1xwV8s+VNdf+7ojYTjMFcXpIBfGp467DmkzsWEiZGUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ev+J06Sc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1123CC32781;
-	Wed,  5 Jun 2024 18:00:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717610401;
-	bh=ZmEl4JWAj2FG1oQ1+kuvRgAe6HgB+Cyw6yp68j9Li64=;
-	h=From:Date:Subject:To:Cc:From;
-	b=Ev+J06ScNqvBKONyjyxrUTTaoxb9g4GoVIG0CCsvQjwveFn6HbdM7YEJtoe6175cF
-	 h+ktGTjDwpokr7wZjOT62pjFtn+sr3mqcRPyl5Id6ekBD5/YhIjp/K0Z9CmC8e/+1E
-	 mtEv1dFFQjfD2Ob6cF164jgOMNYmhz0owUAg7MYuyVGvGL1mYATB4vFu3AsTWSpd3o
-	 jCMer9H5YQyZ289Iuox9GBzlP2yScg0EvneCF//i0d6hsqXBQyDBOj6GFpwS0BeCqN
-	 85lAE4phafSN7dHshFz3Dy5qMyDcj8NDg7yl9pV6NrOZkzlYgeEBTez9BSAB1KvpfC
-	 fWYLXZhfhCtHw==
-Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-6f93fe6d11aso959a34.2;
-        Wed, 05 Jun 2024 11:00:01 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVO2vXt1ctFgcSTKEm895nvC+xqqlVDAM5lFHyM6B3+dpLg82dOpKUt3CXOAEaZXe7YRoIYoey0EiArjWChjy8hnklHHiqB3GtZsmcQ
-X-Gm-Message-State: AOJu0YycQ1FMnCpapkR1/3FywgwWpn/O+2m3udSyxbgzjX9+ODBprGHt
-	Sp6aSI4Hb43bNReYfI+q4uU+eI6VDH0H9lK7vWrIiLoy9YrHJuAgkNF/rk0+ijIVBQzUi9mm0Df
-	YCXXpH765Byk1zNtxoLCiL8+mUMk=
-X-Google-Smtp-Source: AGHT+IF2Pdi8fFZ2KKDRvw90LKYizodqyqQ5AFX2NWSjiEUg1yQhAuiF+e3Tx6x1KY7dDEtKpWd28Dd+wAtf7FD42H4=
-X-Received: by 2002:a05:6870:502:b0:24f:c164:2cd7 with SMTP id
- 586e51a60fabf-25122313e24mr3275078fac.4.1717610400331; Wed, 05 Jun 2024
- 11:00:00 -0700 (PDT)
+	s=arc-20240116; t=1717610670; c=relaxed/simple;
+	bh=s8KVP578g4tIAvF7jUKxEjt/8ys8vUdXttVcAIBlKWM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Mq1q+h5vx2HtboYksCY6Lwa/iq1tTVMdgUsBeOuIkvbd9Eo9hYuv0Mib1Mr0H/HUfopNWuecYkhAyzd7XBSnKflCWs83ejrpqzKGjzqD7jQNnkfm3jQ17dX0KXzVluB3s3oxdfRyD0fhgezJUH5OvxBzJ1hvb5R/lqZoh8FZAUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=MlehV81c; arc=none smtp.client-ip=209.85.208.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2eacd7e7ad7so1463891fa.3
+        for <linux-pm@vger.kernel.org>; Wed, 05 Jun 2024 11:04:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1717610667; x=1718215467; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ox0cTDoj9EAdvqJSQWodBv8pPoGx05u+NIZ/qY+c1Hw=;
+        b=MlehV81c+11vhzUjBsl7/PQu+rxcZy6u+ypfU2se7cXJWojH1uKKOsllA5AFp6Gt4Y
+         sMlf0tNoqFB374baOdRT6/Q8mb1nH8A9QDIsd9f4LPfMTttMR2MviXjLQhF+llWPtB1D
+         L4SmR4X+KRLqAWuBfrRnEnFhDn/QH6uH4ZZ+5Iipi5RObbqsWrPkZoagZysf50bQh29s
+         NJD1k4FMNIRVKMSSThaLRyWhIEwEZU8rTjTj05xtSN9H/LjOAEQn5OrIZnsxhTWZl1Ic
+         +U1R2dO5EV0KnDqDLrH7FgVOI8wP8VgwFhmGkXLFEBj+VE5AFDlTPhqev7Z0bnSMox0J
+         NAqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717610667; x=1718215467;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ox0cTDoj9EAdvqJSQWodBv8pPoGx05u+NIZ/qY+c1Hw=;
+        b=Jjz1WHzhpa7I0+mrHOkKkk+DyZNMzsud8jlhr8bunDubRp7pUXP8wPspksQYsaN6ym
+         a8EZ1dgnhYMg64YlbvKfF3l8OogMtbkEFerzhggcRWvgZIviY90hsPB/OgFoDcv5Nptp
+         bd9xVI74wo2MOMtFTtpf+HW2BcELp1owYZ+5SwRv3QebTv9xY9rBqecgzbkDq0CaFZyv
+         tgUtt0epUd3igXIUDde/6TcZ+9YSMwgnPu2yt76+NaQocImVjyJTffHfE2fMgiBc9aR+
+         lcERpcOhaUvoM4W95wFu6TQCBD021bEO5tzfUKSuTZJlUKWR7Na3Qy/0PZIoy06Uav5y
+         7ahQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVZt8nTfPMDPeRPWrIZ04vqvPNAw19RjV5u+CLSR0xZGkmkPazPQFUxuhkhz+AdCF92XG2IPNVTRefYsiDsbZDaLfyEvye4huA=
+X-Gm-Message-State: AOJu0Yx0RVw53usfZDlUkxVP6jdYFCZNlkv/4/z2ys/h4nf8O8LQSv+q
+	REglO6TBiP7p8PAFzF9gFyLfXDg7tSIL3bklGppOo04sAh7/D/8IGBVwjUPo0u7bSh829fkhGSM
+	UUM8QhBqSjqGImJeuEUfLdG0rN5oLw8GLu4JgSA==
+X-Google-Smtp-Source: AGHT+IHXq8dGpJoU2dr2zBFCKOEvbFdkmlsdgV/Jz6JlWy3+wkJEsY7up5jQ+fPM273H+nj67WDMFnp7tdG9g6BvQ40=
+X-Received: by 2002:a2e:b00a:0:b0:2ea:7726:4a77 with SMTP id
+ 38308e7fff4ca-2eac7a72b8emr19843541fa.35.1717610666844; Wed, 05 Jun 2024
+ 11:04:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 5 Jun 2024 19:59:48 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jzcHmN-B3z1pajYi-NhD=igUi=RYrU9dkvBgoy6ZRdiQ@mail.gmail.com>
-Message-ID: <CAJZ5v0jzcHmN-B3z1pajYi-NhD=igUi=RYrU9dkvBgoy6ZRdiQ@mail.gmail.com>
-Subject: [GIT PULL] Thermal control fixes for v6.10-rc3
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
+References: <CAMRc=Mckab1QYoBuE3iSv0x+GEjFNBQS5Hw_Mry=r7h5XGHZEQ@mail.gmail.com>
+ <20240605174713.GA767261@bhelgaas>
+In-Reply-To: <20240605174713.GA767261@bhelgaas>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Wed, 5 Jun 2024 20:04:15 +0200
+Message-ID: <CAMRc=MehAkEGJmCXi1uad1f7jZAT60OQ2N0jX7AMka4rS9OjDg@mail.gmail.com>
+Subject: Re: [PATCH v8 16/17] PCI/pwrctl: add a PCI power control driver for
+ power sequenced devices
+To: Bjorn Helgaas <helgaas@kernel.org>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Balakrishna Godavarthi <quic_bgodavar@quicinc.com>, Rocky Liao <quic_rjliao@quicinc.com>, 
+	Kalle Valo <kvalo@kernel.org>, Jeff Johnson <jjohnson@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Srini Kandagatla <srinivas.kandagatla@linaro.org>, 
+	Elliot Berman <quic_eberman@quicinc.com>, Caleb Connolly <caleb.connolly@linaro.org>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Alex Elder <elder@kernel.org>, 
+	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-bluetooth@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-wireless@vger.kernel.org, 
+	ath11k@lists.infradead.org, Jeff Johnson <quic_jjohnson@quicinc.com>, 
+	ath12k@lists.infradead.org, linux-pm@vger.kernel.org, 
+	linux-pci@vger.kernel.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, kernel@quicinc.com, 
+	Amit Pundir <amit.pundir@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Linus,
+On Wed, Jun 5, 2024 at 7:47=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.org> w=
+rote:
+>
+> > >
+> > >   wifi@0 {
+> > >     compatible =3D "pci17cb,1101", "wlan-pwrseq";
+> >
+> > What even is "pwrseq" in the context of the hardware description? DT
+> > maintainers would like to have a word with you. :)
+>
+> There are "compatible" strings like "simple-bus", "simple-mfd", and
+> "syscon" that allow drivers to bind and provide generic functionality
+> when they don't need to know the exact hardware.
+>
 
-Please pull from the tag
+There's a difference however: a "simple bus" is a thing. A "simple
+multifunction device" is also an actual thing. A "pwrseq" or
+"power-sequencer" is not a thing, it's a functionality. And we don't
+describe it in device-tree. Rob has said before that he regrets having
+merged the mmc pwrseq bindings back in the day and that he wouldn't do
+it again now because it describes what HW does and not what it is. In
+this case the PMU is simply a PMIC and the bindings I'm proposing
+describe it as such. But what you're proposing is even worse: this is
+the ath1x module of the larger chipset (power sequencee rather than
+sequencer) so naming it "wlan-pwrseq" makes absolutely no sense at
+all. It's a PCI device whose ID is 0x17cb1101 and the device tree
+describes it as such.
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- thermal-6.10-rc3
+> > > and pci_pwrctl_pwrseq_of_match[] had this:
+> > >
+> > >   { .compatible =3D "wlan-pwrseq", .data =3D "wlan", }
+> > >
+> > > Wouldn't this pci-pwrctl-pwrseq driver work the same?  I'm not a DT
+> > > whiz, so likely I'm missing something, but it would be nice if we
+> > > didn't have to update this very generic-looking driver to add every
+> > > device that needs it.
+>
+> Do you have any other ideas to reduce the churn in this file?  It just
+> seems weird to have to add an ID to this file without adding any
+> actual code or data related to it.
+>
 
-with top-most commit ae2170d6ea96e652c7fb5689f1980986bf48b7b8
+Is it really that much churn though? You'd save 4 lines of code? I
+think this is premature optimization, we'll see about unifying it when
+we have several models supported, right now with two, I'd just leave
+it as is and not seek perfection.
 
- thermal: trip: Trigger trip down notifications when trips involved in
-mitigation become invalid
+> We should probably also add a pattern to MAINTAINERS so
+> get_maintainers.pl on this file will show you as a maintainer.
+>
 
-on top of commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0
+Makes sense.
 
- Linux 6.10-rc1
+Bartosz
 
-to receive thermal control fixes for 6.10-rc3.
-
-These fix issues related to the handling of invalid trip points in the
-thermal core and in the thermal debug code that have been overlooked by
-some recent thermal control core changes.
-
-Thanks!
-
-
----------------
-
-Rafael J. Wysocki (4):
-      thermal/debugfs: Print initial trip temperature and hysteresis
-in tze_seq_show()
-      thermal/debugfs: Allow tze_seq_show() to print statistics for
-invalid trips
-      thermal: core: Introduce thermal_trip_crossed()
-      thermal: trip: Trigger trip down notifications when trips
-involved in mitigation become invalid
-
----------------
-
- drivers/thermal/thermal_core.c    | 35 +++++++++++++++++++++++++----------
- drivers/thermal/thermal_core.h    |  2 ++
- drivers/thermal/thermal_debugfs.c | 18 +++++++++++-------
- drivers/thermal/thermal_trip.c    | 20 ++++++++++++--------
- 4 files changed, 50 insertions(+), 25 deletions(-)
+> Bjorn
 
