@@ -1,161 +1,238 @@
-Return-Path: <linux-pm+bounces-8734-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8735-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27A4D8FF398
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 19:21:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8C948FF3B6
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 19:28:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A0AD1C265A8
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 17:21:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1BB251F27E90
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 17:28:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5150B1990AB;
-	Thu,  6 Jun 2024 17:21:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D1771990CE;
+	Thu,  6 Jun 2024 17:28:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="dhda/dQ/"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yXB3t5wM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04olkn2018.outbound.protection.outlook.com [40.92.75.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9037A198E90;
-	Thu,  6 Jun 2024 17:21:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.75.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717694489; cv=fail; b=aVP45UwSWMYaZ7haJXJAwgDX8HQSBzbENPRewp67gyifKRuTg4zFXlcB/1+xp61Tk344JRR4vrCe9a+ybr+RVYHT3DI43EIaBGkNRdLP6ZDZrgIiO2ChPVdUc4nHWo5plxYGT8ByfePbYP0eau4Mk2yb19M+xVEj8TZzKyiBMvk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717694489; c=relaxed/simple;
-	bh=VZGERjzbL60MzoqjfiAJ3AEI6UBzN3vih0OviVL0Uok=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=VocbVHQETxc7ckTd83qbqjGEAep8HdptW3kYGKjJ6PenTPOP+S72+pWiYWId2L7DrguTYzQmoDrc+zls//uaeYRFvSstKS2gs8NIE7FDjkafdTRe7BOyq5VEZmQezwOqLCKtEyN+daqLKq/0/jPl50P0jQeoDkUpwrhlMPTqzYI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=dhda/dQ/; arc=fail smtp.client-ip=40.92.75.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZMZG4pEjETNEUZyL2/yneHirfUyrCpcIo1Xcpy7QYwmXTDpRURwKS90iuhrPeV6+Bj5E/0QYwYWOq8+PBEKcqXJoziopdW50LCywYzCn7yPDx+A1pBSmFTxrZMwUkVZ4Ci/unwroNKSwEH+iU6nOWL4nNIkYvUZYXRQVO3kUykafrYa3YmJf4hpNknPC/LNlf9uZaHPPZQAPMapkvuYAWthuEXseRZeGeXRiomZ0bJoA/EzxagdaDD69xnTal5ojWgRi4HEMPKK56+Iv44TWntgio0ltV6rpkkfh0gDp2hLBQVCvvqTtXbUfGvAZ95vbde8UHgEuOllbmrvEYYOdng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zyO4tSKZqFwRg1zNY4P33R6TDcVqkS4+rIZOFFxcFxg=;
- b=alMqjxqRzJqu/8YM6gYfoYxjfWeHcUpQtfONv8Qjq4ayYzpPnOUezhc+/kAdl5NCzuB2aJJ8VkOytLFFSV13gv8eXqHwX6mh0UUUnjjZqJrRmTXiStnK0El7KMD2EoQych5LHkRUtFkAshnu7hs0QfHlGYfqum0ptrdGbAx5Wq2X0RG5r0BCYbOSre8vCMSqvGo3P3Jq3U4qPWOAT78AXFQ7u8zZ8VZLRBywf0XOlFW1vNcXALNUnZsRBmVzS1Aa9IuK2zoemA80wWbUBOiM5P6Ntu3jgGYRdBHiOR4tFXsNNGXrCWlcu5rn9+GQ5407Nd4gMgCRWxK3Zx/aJUOvHw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zyO4tSKZqFwRg1zNY4P33R6TDcVqkS4+rIZOFFxcFxg=;
- b=dhda/dQ/OJfHrsF2fNef1zqC+N6BEaXgveuFKN+B6xkMeVwm7QqtPqeh3BGLD4spdwfCG+dHhjn/JXY0psvDiU62U4h77xuFsR/6RITk9C9OcDTlb04G7255oQJmRX90uF/wbODY9IFhPRscB1i43ZbHgdF3g5NxONHvoQEc/M27vPwlXL9T1/CQfsCEX+C4OGXySqdeEf1c8A4P6OW2uFDsu5/gw2+4F//0ZOiZgngF0UZi4wKqIOlXc7zorTq+JGTKTDOBJ8dgJUXvnt0mLMlYAPCfV9a2BVv72VByOd9AjM6etUEuap1gIySrqRvONoI+Yh7J3UyWyb0XAgcMXw==
-Received: from AS8PR02MB7237.eurprd02.prod.outlook.com (2603:10a6:20b:3f1::10)
- by PA6PR02MB10849.eurprd02.prod.outlook.com (2603:10a6:102:3d3::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.31; Thu, 6 Jun
- 2024 17:21:24 +0000
-Received: from AS8PR02MB7237.eurprd02.prod.outlook.com
- ([fe80::409b:1407:979b:f658]) by AS8PR02MB7237.eurprd02.prod.outlook.com
- ([fe80::409b:1407:979b:f658%5]) with mapi id 15.20.7633.033; Thu, 6 Jun 2024
- 17:21:24 +0000
-From: Erick Archer <erick.archer@outlook.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
-	Erick Archer <erick.archer@outlook.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Kees Cook <keescook@chromium.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Justin Stitt <justinstitt@google.com>
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH] thermal: int3400: Use sizeof(*pointer) instead of sizeof(type)
-Date: Thu,  6 Jun 2024 19:21:06 +0200
-Message-ID:
- <AS8PR02MB723748EF627AEB253C437FD48BFA2@AS8PR02MB7237.eurprd02.prod.outlook.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN: [FmGoVqeLnBqQlYolfgiRZAtXZrDID43L]
-X-ClientProxiedBy: MA2P292CA0026.ESPP292.PROD.OUTLOOK.COM (2603:10a6:250::12)
- To AS8PR02MB7237.eurprd02.prod.outlook.com (2603:10a6:20b:3f1::10)
-X-Microsoft-Original-Message-ID:
- <20240606172106.7052-1-erick.archer@outlook.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD6B21990B0
+	for <linux-pm@vger.kernel.org>; Thu,  6 Jun 2024 17:28:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717694899; cv=none; b=DMOvwdLBGhItUWeB01yiWSPPS9HaXi7p5Z4oAWpvexsnrdk6GLFFC74zqK2bQwdoz6agkcNkXDb+TVovEDY0iTSPorwLwyqCuequ/tgxZAbUFA/PU0QyVeOaQujr/wTULV/QiwcB0z7pjXhwdtWSRoqWf20uZEXl8VCNlyvhaGg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717694899; c=relaxed/simple;
+	bh=VyaTOddNCzEFJ/NEh/9NuxV4q03NkvdncMSoKRh5+1c=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=cY1Db9peM7+7dTnbw/aoCBkc8Arprm3jKyeL9MHTTzWttaA6f9R9/9xqwxJm/a8LX8hsLlUluk68rId+LqS8TUIegCXukd6NRYtXnnuYmC4c8I88mpVUVNGoxIVaacNcT6eRIbzsgNWaCsHATM4MTmf5htuvLXLqm86YbPQLuto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--isaacmanjarres.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yXB3t5wM; arc=none smtp.client-ip=209.85.219.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--isaacmanjarres.bounces.google.com
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-df796aaa57dso1842828276.1
+        for <linux-pm@vger.kernel.org>; Thu, 06 Jun 2024 10:28:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1717694897; x=1718299697; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=HgRRo88YfpvYO7wSKqGlPrXzX3q2dRMuM6tAFdbCFr0=;
+        b=yXB3t5wMDrrw9Run39TOpZ+h7Q9lnvAdfioCbhEPhYFAnzgBB/p8LAM6xEIwvn1iYs
+         cES716Y24+eXYnCQKVPpcVAr6lfWv/DDNkD8VA38RbZ31MqgIZzpEJjN44YPpLLS7U1V
+         A+POHMK/vfWvgXPHrdS5DblevpYFDQpHf0SmAz8reI6Rn/7Zmz1rDP2/Sdvdrwe2W79M
+         krjzFD8WbymCUhkcnDCd+jF81aOKKvm21EynQXnw4jORFca19oupSsbs37UfAdM0ISih
+         GxVJyg4vkuSZ62miKHMxjvD3tmWtyAgsTjhKpDHU+YqY5qI7rb7j6JKzqceOkO1INYgt
+         fSjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717694897; x=1718299697;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HgRRo88YfpvYO7wSKqGlPrXzX3q2dRMuM6tAFdbCFr0=;
+        b=XWV/DeMNm7MutY134oFxy2k6+bmlCnFQHMdyDzuZmTNuzxAlK7l1L5HYAmj5kNO1am
+         RbRBTObcWRjMDKUu3Yy3wSWetYTHZtGfxeDrEc5MK6Dexrzz5HgT095+gD+65wTUt47e
+         u79QwH9NwfPoNZifqN1Ni8EDtfdVLzJ0LrXlfDW95LgIZdYCj2gWRR31AcUB/nKj0KWb
+         c1BoX1003nL6PLcK5+Mf0Tvvc+iCaYOHFBxJeCLBazfRe3j0iFxOHk8/qlxI3CwqSFw3
+         kCa/q0MQzVo2PP0xrJ80c0hA4BjK74WLDQvAZ7XrDVEP/GTs+08XnjbSRL5bnMYiLTut
+         +ALQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUZFAPE7gdimOhXsh9fkHyWZNQqeOftcp/8JmYbeAL4Pd7U1qRYqHeom+j6xMo3cdhwuJD2ubzMndrzftCV3dbHj/UiFmv6pB4=
+X-Gm-Message-State: AOJu0YyHnat+VlvR6rFbpphRYY6alAj74A09W/m8GWHBYlVtTtNVlAcd
+	pPl2h/VdS82sskZM7S5Q2rOwD9tGdtthReh/DBVq1/GELuYglhgD/I2nikVce5MqLaCj/+d4lSH
+	fLk8tyWbkQiuZOAtZvjpauNJHskLbf0dHvQ==
+X-Google-Smtp-Source: AGHT+IGmL/ci+QUeD78WXo0hxk1uBw/HJGmZ0Y2PniemChSJPTzIQcW9M9adT9vpi4Jwi6aRAmFxTkLHJQdDOs8cEtopoQ==
+X-Received: from isaacmanjarres.irv.corp.google.com ([2620:15c:2d:3:662b:6cb2:952a:1074])
+ (user=isaacmanjarres job=sendgmr) by 2002:a25:b28a:0:b0:df7:7a90:26c1 with
+ SMTP id 3f1490d57ef6-dfaf667f667mr10303276.13.1717694896769; Thu, 06 Jun 2024
+ 10:28:16 -0700 (PDT)
+Date: Thu,  6 Jun 2024 10:28:11 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8PR02MB7237:EE_|PA6PR02MB10849:EE_
-X-MS-Office365-Filtering-Correlation-Id: bbecf4f0-7755-427e-50a8-08dc864d1609
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|461199019|3412199016|440099019|1710799017;
-X-Microsoft-Antispam-Message-Info:
-	sOB3l3i+W7XmA+NMywdXKshUulJxelHUAy6scUqOScGIj/E+5ZkhBH8B4pmHl/BXzJBwY8TGhnkW9GHpOCK3I4qK3x5ixgaw0dzlNAc7qKgUe5b7f9flXo2ZryhD54OPoIK7jazG6m8zqvmftb/jaw1jBlCIfymKJBL4wf4k5YFZKVQApXRfSdVi9QX8kGc25U1zPNTXSZ9H+Eesn/fOQ65NwyxWsjQjqLkyYIW8rsRKoxpzNL71iYfKbn/SsT+Z5OaJcMJ5a8rjTPukmd3gloE0ueTV+CF2bZdmVEuJqG2dh/qV533Mqd88PYMf9IJ5+EuW1f3qQUN3pv/jvxrcWqUE52V3QyxVP6CKHVfjIXNupyfEgOlMDUyCnwKMiIMIHbygNMIbJWFqkNiZRu3WMrulE9z7cSVPBhNutG/NVxrG690DbbSPGBaHSwNgrho2ZN9O8WxnQiRgW2HIN1cB/ZAu7u9R2H1Dm5UXdk/zNYyiKcvgX2GUfHfj/sPu2+Vs198Vj7LbuITllqt4d/k7ezck4KFmCmm4oCjFLlvH2ZS0l+a7itIsLaC9bU/qrn0/fg2xt8sBkllFS6m3+rW/Zaam7dXY5pINzElZSrOvL+EpuDynkSE1ZDIOe9DdXyGx
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?YN2fIkrhV/0qcT/sOqFlI5NxBXYcFbwJr6hDrHxmQHMjfkVRSvO/zjVJp+Nk?=
- =?us-ascii?Q?czOe2rMsS88T8XTmfLI2I/qXHETZo5tzfOVn2DgBsLYr5AmmZYJlvYu87VvF?=
- =?us-ascii?Q?vFRDQrVPhY3NI114nEXXOaegkizgrxvR/fA5e/89e7IjysI6Sjmn18h9bOpL?=
- =?us-ascii?Q?LBgTCNHxrV2OWwZj1gK9uu+f1VlBySqvEsXK8ix04XGVtQs8BIeV4yo1/fhZ?=
- =?us-ascii?Q?5fz7un6G5RoGbz26IEOTL/eldVXiFkJ2b2GsE1ZcNwuWuPYYq2lipocLnWPK?=
- =?us-ascii?Q?SNJp1YVxQ6R9YvnCTTW9HFRm/iznqCBdVw8/e7j9ukVaUD29iBnbEQJIaSDG?=
- =?us-ascii?Q?lmyEHbQxE+pK4kDSZuoIB/B9GeEpivsy215ga7qowSjIG3CxfxUdsjxSFkDL?=
- =?us-ascii?Q?uVGx32jq48jE6Uq5XT63Ah698ZgBsIGqkzpbaJyKtjcNhMAH1krWGVMEo2aA?=
- =?us-ascii?Q?3zewXR16wB4GhayPAYf1ass99SO101ZS0Dy4HbUyFqRUnxWuCWgjGJQzE1pi?=
- =?us-ascii?Q?JYdhDom1dn8VAX1oOayZpWFOcOyBWyK28s/byf3cHaaYzfjnlGbhEAkmrnOt?=
- =?us-ascii?Q?ZB3+eaix4+RW47E47WHCVTWjHmyyESjHaXO9pvdXtfCGpbzDfklA9ymekVCf?=
- =?us-ascii?Q?4AGMl4dbQNNbRao7SvdKId0EnWi8mRJRVt8ZyeDZET9HLgfJObXfqddYRJRJ?=
- =?us-ascii?Q?11LJkKbb0fW3fn4Zt14hS9XLXsXc4Ih08FYHgYc2lv3egpW4KyGtNMQ13rdY?=
- =?us-ascii?Q?qzpTuiEogu3NA4KpzvitbZMSsWB1++xr+Znz2K/vS4BF29agL3Dx2kEEvNMz?=
- =?us-ascii?Q?oTG3xM1hgowMCMFwn9h0KfRFWg05BJFH080gtQwqV1j3c/xmYfR10c4dkIuo?=
- =?us-ascii?Q?oPfAugferRX8vRYpSOOw8zo1yLdEi5SCBeCyINXDoiQwhmjtxUX5XdA2+Im5?=
- =?us-ascii?Q?7/yQx1Yr2GTKrM22oS9nnCBXzFGE4/GLo3HroDS+RXn9UOWos5oQLb/xw+7F?=
- =?us-ascii?Q?tL+JF9gy15VcKcjFnkmLLvcewhBhBLTA39EM6uhid8p8BhqKLraN6JfjsOYu?=
- =?us-ascii?Q?CbDgtI2fUPyqN8KyEw+sa39MvMf21W9H1CZLmZHi9thH/IjENE5e8Tips20L?=
- =?us-ascii?Q?iG9sNWP+xdTfPTs6fCd1NLmVkUCo9OnHm70uVaojsNwmde/UhhBM3TRlqdpP?=
- =?us-ascii?Q?HW3s2bgs/0Tj3CWXWrWy76QpvUpFCuU1Fr/NxCyruKz6UZRBKH+gpLg4rote?=
- =?us-ascii?Q?wAlkJCrBm0df8KFQMuvf?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bbecf4f0-7755-427e-50a8-08dc864d1609
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR02MB7237.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2024 17:21:24.2706
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA6PR02MB10849
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.45.2.505.gda0bf45e8d-goog
+Message-ID: <20240606172813.2755930-1-isaacmanjarres@google.com>
+Subject: [PATCH v5] fs: Improve eventpoll logging to stop indicting timerfd
+From: "Isaac J. Manjarres" <isaacmanjarres@google.com>
+To: tglx@linutronix.de, "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, 
+	Len Brown <len.brown@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>
+Cc: saravanak@google.com, Manish Varma <varmam@google.com>, 
+	Kelly Rossmoyer <krossmo@google.com>, "Isaac J . Manjarres" <isaacmanjarres@google.com>, kernel-team@android.com, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-It is preferred to use sizeof(*pointer) instead of sizeof(type)
-due to the type of the variable can change and one needs not
-change the former (unlike the latter). This patch has no effect
-on runtime behavior.
+From: Manish Varma <varmam@google.com>
 
-Signed-off-by: Erick Archer <erick.archer@outlook.com>
+timerfd doesn't create any wakelocks, but eventpoll can.  When it does,
+it names them after the underlying file descriptor, and since all
+timerfd file descriptors are named "[timerfd]" (which saves memory on
+systems like desktops with potentially many timerfd instances), all
+wakesources created as a result of using the eventpoll-on-timerfd idiom
+are called... "[timerfd]".
+
+However, it becomes impossible to tell which "[timerfd]" wakesource is
+affliated with which process and hence troubleshooting is difficult.
+
+This change addresses this problem by changing the way eventpoll
+wakesources are named:
+
+1) the top-level per-process eventpoll wakesource is now named
+"epollN:P" (instead of just "eventpoll"), where N is a unique ID token,
+and P is the PID of the creating process.
+2) individual per-underlying-file descriptor eventpoll wakesources are
+now named "epollitemN:P.F", where N is a unique ID token and P is PID
+of the creating process and F is the name of the underlying file
+descriptor.
+
+Co-developed-by: Kelly Rossmoyer <krossmo@google.com>
+Signed-off-by: Kelly Rossmoyer <krossmo@google.com>
+Signed-off-by: Manish Varma <varmam@google.com>
+Co-developed-by: Isaac J. Manjarres <isaacmanjarres@google.com>
+Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
 ---
- drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/base/power/wakeup.c | 12 +++++++++---
+ fs/eventpoll.c              | 11 +++++++++--
+ include/linux/pm_wakeup.h   |  8 ++++----
+ 3 files changed, 22 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-index fa96972266e4..b0c0f0ffdcb0 100644
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -571,7 +571,7 @@ static int int3400_thermal_probe(struct platform_device *pdev)
- 	if (!adev)
- 		return -ENODEV;
+ v1 -> v2:
+ - Renamed instance count to wakesource_create_id to better describe
+   its purpose.
+ - Changed the wakeup source naming convention for wakeup sources
+   created by eventpoll to avoid changing the timerfd names.
+ - Used the PID of the process instead of the process name for the
+   sake of uniqueness when creating wakeup sources.
+
+v2 -> v3:
+ - Changed wakeup_source_register() to take in a format string
+   and arguments to avoid duplicating code to construct wakeup
+   source names.
+ - Moved the definition of wakesource_create_id so that it is
+   always defined to fix an compilation error.
+
+v3 -> v4:
+ - Changed the naming convention for the top-level epoll wakeup
+   sources to include an ID for uniqueness. This is needed in
+   cases where a process is using two epoll fds.
+ - Edited commit log to reflect new changes and add new tags.
+
+v4 -> v5:
+ - Added the format attribute to the wakeup_source_register()
+   function to address a warning from the kernel test robot:
+   https://lore.kernel.org/all/202406050504.UvdlPAQ0-lkp@intel.com/
+
+diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+index 752b417e8129..04a808607b62 100644
+--- a/drivers/base/power/wakeup.c
++++ b/drivers/base/power/wakeup.c
+@@ -209,13 +209,19 @@ EXPORT_SYMBOL_GPL(wakeup_source_remove);
+ /**
+  * wakeup_source_register - Create wakeup source and add it to the list.
+  * @dev: Device this wakeup source is associated with (or NULL if virtual).
+- * @name: Name of the wakeup source to register.
++ * @fmt: format string for the wakeup source name
+  */
+-struct wakeup_source *wakeup_source_register(struct device *dev,
+-					     const char *name)
++__printf(2, 3) struct wakeup_source *wakeup_source_register(struct device *dev,
++							    const char *fmt, ...)
+ {
+ 	struct wakeup_source *ws;
+ 	int ret;
++	char name[128];
++	va_list args;
++
++	va_start(args, fmt);
++	vsnprintf(name, sizeof(name), fmt, args);
++	va_end(args);
  
--	priv = kzalloc(sizeof(struct int3400_thermal_priv), GFP_KERNEL);
-+	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
- 		return -ENOMEM;
+ 	ws = wakeup_source_create(name);
+ 	if (ws) {
+diff --git a/fs/eventpoll.c b/fs/eventpoll.c
+index f53ca4f7fced..941df15208a4 100644
+--- a/fs/eventpoll.c
++++ b/fs/eventpoll.c
+@@ -338,6 +338,7 @@ static void __init epoll_sysctls_init(void)
+ #define epoll_sysctls_init() do { } while (0)
+ #endif /* CONFIG_SYSCTL */
  
++static atomic_t wakesource_create_id  = ATOMIC_INIT(0);
+ static const struct file_operations eventpoll_fops;
+ 
+ static inline int is_file_epoll(struct file *f)
+@@ -1545,15 +1546,21 @@ static int ep_create_wakeup_source(struct epitem *epi)
+ {
+ 	struct name_snapshot n;
+ 	struct wakeup_source *ws;
++	pid_t task_pid;
++	int id;
++
++	task_pid = task_pid_nr(current);
+ 
+ 	if (!epi->ep->ws) {
+-		epi->ep->ws = wakeup_source_register(NULL, "eventpoll");
++		id = atomic_inc_return(&wakesource_create_id);
++		epi->ep->ws = wakeup_source_register(NULL, "epoll:%d:%d", id, task_pid);
+ 		if (!epi->ep->ws)
+ 			return -ENOMEM;
+ 	}
+ 
++	id = atomic_inc_return(&wakesource_create_id);
+ 	take_dentry_name_snapshot(&n, epi->ffd.file->f_path.dentry);
+-	ws = wakeup_source_register(NULL, n.name.name);
++	ws = wakeup_source_register(NULL, "epollitem%d:%d.%s", id, task_pid, n.name.name);
+ 	release_dentry_name_snapshot(&n);
+ 
+ 	if (!ws)
+diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
+index 76cd1f9f1365..1fb6dca981c2 100644
+--- a/include/linux/pm_wakeup.h
++++ b/include/linux/pm_wakeup.h
+@@ -99,8 +99,8 @@ extern struct wakeup_source *wakeup_source_create(const char *name);
+ extern void wakeup_source_destroy(struct wakeup_source *ws);
+ extern void wakeup_source_add(struct wakeup_source *ws);
+ extern void wakeup_source_remove(struct wakeup_source *ws);
+-extern struct wakeup_source *wakeup_source_register(struct device *dev,
+-						    const char *name);
++extern __printf(2, 3) struct wakeup_source *wakeup_source_register(struct device *dev,
++								   const char *fmt, ...);
+ extern void wakeup_source_unregister(struct wakeup_source *ws);
+ extern int wakeup_sources_read_lock(void);
+ extern void wakeup_sources_read_unlock(int idx);
+@@ -140,8 +140,8 @@ static inline void wakeup_source_add(struct wakeup_source *ws) {}
+ 
+ static inline void wakeup_source_remove(struct wakeup_source *ws) {}
+ 
+-static inline struct wakeup_source *wakeup_source_register(struct device *dev,
+-							   const char *name)
++static inline __printf(2, 3) struct wakeup_source *wakeup_source_register(struct device *dev,
++									  const char *fmt, ...)
+ {
+ 	return NULL;
+ }
 -- 
-2.25.1
+2.45.2.505.gda0bf45e8d-goog
 
 
