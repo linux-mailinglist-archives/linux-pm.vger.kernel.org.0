@@ -1,180 +1,170 @@
-Return-Path: <linux-pm+bounces-8730-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8731-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E4358FF2AE
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 18:39:12 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E5C08FF368
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 19:12:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F1481C20EEC
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 16:39:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B8CB3B261B6
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 17:05:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDD44198845;
-	Thu,  6 Jun 2024 16:39:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BE3D196DA2;
+	Thu,  6 Jun 2024 17:05:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LrmS2OSU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="psnUEsSe"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18B3043ACB
-	for <linux-pm@vger.kernel.org>; Thu,  6 Jun 2024 16:39:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2EA43AC2E;
+	Thu,  6 Jun 2024 17:05:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717691946; cv=none; b=kQumir4RYzGXfOqWnuIIAG/gkIiHMrkKZm7bkQ073qUX9wTqyWBv/1YKhyMQDu2vW5VqGyFgjiOOlK4YXJUTb5q+z7tLD/CZZuSKuWto62JTqu52ePzVVSfbedTjmaW4NN0UsAI69HMlHSzmkCPvz5fwzXRWLi3JC9akUv3KrTs=
+	t=1717693537; cv=none; b=DDwviDSluJwGo/NJpjQNFAAvIm3rYMGBL8hGF319VfErBNGI/HtSTbTHgjPLUd+VNusnD1waku1FTaoxFmb7mgPn2c8SIm7C7PJVI0SMLAHi3j77wIgVUujWrjBz+X8ehPbw920YhWMqAaqzYztLGzyp2pHkSgmYEoI3D9+gRKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717691946; c=relaxed/simple;
-	bh=0sUhzePxA5ILJh6kcxhT9jhNMheNOJsBhpMUA+zrAr4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FU3QaZUEqZY2OiRKpRYjqPHvAqShmgEPlPIT7vVFtCAmF55GyXHr3wYrjB7aiPn4Yu3IwevrZbb46Kb937gPHOlyM88W4P719lDcSt7kk++0n8jmaOR25lX8XZd4PVwW8+airos8lw5pW8OtQzob4DaRAZ8HMLKVB9IPbeI13lw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LrmS2OSU; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4215b0bffe1so7076875e9.0
-        for <linux-pm@vger.kernel.org>; Thu, 06 Jun 2024 09:39:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1717691943; x=1718296743; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BXdSRq/xXQtY4fK65pJyyKeGGdpvh+lT4zYhLPfTB4c=;
-        b=LrmS2OSUCUbTBiodfAgWSYWBnMDqVBYu654UCCncw8BnmKEab2fmtG3UBUnMs/iZ4U
-         Y6rR4or+YvlJn3ET8aiaNNIMcJh8yC2MqGvhYuFS9fM/aGPSHmwYXKdaSbKfCFfsOdU2
-         mdkhX48BAncBwkaRhRb3JlYBtUyqkoz+iL6HwJpYZEvxVScQtXMKno38jZpOzuLt0leq
-         w50y1EQSsgPA0+YNZK36o9GjH8ixnSawCSVNUnzlLZRqCJGYBm5bHo7Ciyt6E0SG2HS7
-         vVzeFAOPa7hESOy3Zaa0LmlnB1sHGLAsWo63dAkbMTRo7r2iM9HXh7mr0oFH1CJR//B0
-         vUQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717691943; x=1718296743;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BXdSRq/xXQtY4fK65pJyyKeGGdpvh+lT4zYhLPfTB4c=;
-        b=HXN50NZ4niGx2f5h+Ah0jtqxMnKECwvzo2kxzwZQgSRZVnrxJBuYXsmRcK+xN2bbvB
-         hKn1HRQEQIXwCFn99GlyuNCjFgxdQIOvXbBBCx+lrZqabcKiazCNQG9HQqKuEJKCMeAg
-         Wv88DgqhA6ys4gD3ZqbohJ8NzS5qYnvrRfQkQm0m92PxWmjOyDFnxhrl5khxPg71kdKa
-         5rfK6J92qS2+7HHGZzHahwXGpGJ/MjDLvpQhDp8qnMpR7s/pJ17p7jB4JqneeaBWAP1M
-         XzikvEPMFz4InTGLQcdKXE1zQ0wksm6PT8bTVwKxtHhP54leGn03nIAhuhZLHmHCy049
-         FNiQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWOGIeAVLHf9OphqhPo9Ge75cUibb775ty9Cf1FCifJHOnvHCrw0Alp9GDp638tWLKMRYwx5T/+EFN0KMp3syB3uInJwKJ7+tw=
-X-Gm-Message-State: AOJu0YyZX0COGeaWXCmAtuw8y0A1fN2ioaEB4eDwRG7eE1sOuxTTd0J3
-	euiYfSVU8ZSVhJcZrXeyc8ec2K/uLUcf95A5yutPs11mUqGHEKxSanMT7H5CRT1gqKFosM1Kpez
-	GZwk=
-X-Google-Smtp-Source: AGHT+IFtjI2uG5kxWT0xfMI3B/djVg1/Aj63CZXkzzrEcegz3u68SQVBpTCW8tUcw72ZesSgllhIjA==
-X-Received: by 2002:adf:ed52:0:b0:355:b9d2:4667 with SMTP id ffacd0b85a97d-35efea6fa89mr211455f8f.29.1717691943486;
-        Thu, 06 Jun 2024 09:39:03 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:f9a9:3740:b905:9995? ([2a05:6e02:1041:c10:f9a9:3740:b905:9995])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-35ef5d4a827sm1984629f8f.36.2024.06.06.09.39.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jun 2024 09:39:03 -0700 (PDT)
-Message-ID: <a5476bdb-da6f-40d5-baa9-fa2caea72e3d@linaro.org>
-Date: Thu, 6 Jun 2024 18:39:02 +0200
+	s=arc-20240116; t=1717693537; c=relaxed/simple;
+	bh=12E14gZ2QAVnMNIwYrxVZwM9VywDI+b+6wOtVi7+4Qc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PACHe4Eiu2zBpHI086vYyhZVNvg++dvdCiMcD++kCXBFTKJ/5kBkzl1hzGd6b4LWXOmoc93Rl+oDCp5LcbxcBAl9ZaTIVbXrBBU4fgHR79UaIGHnz2a5anSzbBNzBbCwIlZZSECqDymFIRhpBcILGeW4p3fAlvbT8/L+qJ0sTyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=psnUEsSe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0329C32782;
+	Thu,  6 Jun 2024 17:05:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717693536;
+	bh=12E14gZ2QAVnMNIwYrxVZwM9VywDI+b+6wOtVi7+4Qc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=psnUEsSea+eKkkjw5n7TpdK5/LBJ1+DobMAK6WYLPPxBBfQ+EBq0vBV2RZiU4D7I0
+	 fcoIzRVXWRhVpXPqbryYVLeyDUuVhgBNuKNLES386QFENIiVFrER26zRLtKVolmLuQ
+	 rw5B4f3jLDzwsQhNE570Q+IUuDKD1m61O3LRD0Q5TwQrqyPgxtY63n6FsQhCnmD2yS
+	 MwvQ5RxGe6jq5oEdp/RGBRodueLukB2iS2YIDY8XzkjlPOFzj1OJLETDI6g2ZTIeIY
+	 hAepgIuESGPbYrZOe7w4pI8H+InLbYomIEWsrIAYdLdxOKpVElqruG0/RY5P5iV9Yr
+	 3DXThSnx6yBMg==
+Date: Thu, 6 Jun 2024 18:05:30 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Haylen Chu <heylenay@outlook.com>
+Cc: Inochi Amaoto <inochiama@outlook.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Jisheng Zhang <jszhang@kernel.org>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: thermal: sophgo,cv180x-thermal: Add
+ Sophgo CV180x thermal
+Message-ID: <20240606-reaction-thirsting-8c22d1b5ab72@spud>
+References: <SG2PR01MB4218013241B3EED779D3BAE8D7F82@SG2PR01MB4218.apcprd01.prod.exchangelabs.com>
+ <SG2PR01MB42189977B4172405F5704CC4D7F82@SG2PR01MB4218.apcprd01.prod.exchangelabs.com>
+ <IA1PR20MB49531F55C8D7DC5D0050CAF9BBF92@IA1PR20MB4953.namprd20.prod.outlook.com>
+ <20240605-tightwad-janitor-82cfceb1469d@spud>
+ <SEYPR01MB4221F0E46F600E013974F21BD7FA2@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] thermal: core: Do not fail cdev registration because
- of invalid initial state
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- Linux PM <linux-pm@vger.kernel.org>, Laura Nao <laura.nao@collabora.com>
-Cc: Linux ACPI <linux-acpi@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Zhang Rui <rui.zhang@intel.com>
-References: <6056838.lOV4Wx5bFT@kreacher>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <6056838.lOV4Wx5bFT@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-
-On 06/06/2024 18:08, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> It is reported that commit 31a0fa0019b0 ("thermal/debugfs: Pass cooling
-> device state to thermal_debug_cdev_add()") causes the ACPI fan driver
-> to fail probing on some systems which turns out to be due to the _FST
-> control method returning an invalid value until _FSL is first evaluated
-> for the given fan.  If this happens, the .get_cur_state() cooling device
-> callback returns an error and __thermal_cooling_device_register() fails
-> as uses that callback after commit 31a0fa0019b0.
-> 
-> Arguably, _FST should not return an invalid value even if it is
-> evaluated before _FSL, so this may be regarded as a platform firmware
-> issue, but at the same time it is not a good enough reason for failing
-> the cooling device registration where the initial cooling device state
-> is only needed to initialize a thermal debug facility.
-> 
-> Accordingly, modify __thermal_cooling_device_register() to avoid calling
-> thermal_debug_cdev_add() instead of returning an error if the initial
-> .get_cur_state() callback invocation fails.
-> 
-> Fixes: 31a0fa0019b0 ("thermal/debugfs: Pass cooling device state to thermal_debug_cdev_add()")
-> Closes: https://lore.kernel.org/linux-acpi/20240530153727.843378-1-laura.nao@collabora.com
-> Reported-by: Laura Nao <laura.nao@collabora.com>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
-> 
-> v1 -> v2:
->     * Instead of making the thermal debug code effectively ignore the invalid
->       initial cooling device state, simply don't register thermal debugfs for
->       a cooling device if its initial state returned by the driver's
->       .get_cur_state() is invalid (Daniel).
-> 
-> Laura, please test this one even though I don't see why it wouldn't work for
-> you if the v1 did.
-> 
-> ---
->   drivers/thermal/thermal_core.c |    5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> Index: linux-pm/drivers/thermal/thermal_core.c
-> ===================================================================
-> --- linux-pm.orig/drivers/thermal/thermal_core.c
-> +++ linux-pm/drivers/thermal/thermal_core.c
-> @@ -1001,7 +1001,7 @@ __thermal_cooling_device_register(struct
->   
->   	ret = cdev->ops->get_cur_state(cdev, &current_state);
->   	if (ret)
-> -		goto out_cdev_type;
-> +		current_state = ULONG_MAX;
-
-Why not move the section ? So we end up below.
-
->   
->   	thermal_cooling_device_setup_sysfs(cdev);
->   
-> @@ -1016,7 +1016,8 @@ __thermal_cooling_device_register(struct
->   		return ERR_PTR(ret);
->   	}
->   
-> -	thermal_debug_cdev_add(cdev, current_state);
-> +	if (current_state <= cdev->max_state)
-> +		thermal_debug_cdev_add(cdev, current_state);
-
-	ret = cdev->ops->get_cur_state(cdev, &current_state);
-	if (!ret)
-		thermal_debug_cdev_add(cdev, current_state);
-
-Additionally a comment here to explain why get_cur_state can fail and 
-telling it is up to the driver to fix its routine?
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="xNgNBLWP/RMLxW5/"
+Content-Disposition: inline
+In-Reply-To: <SEYPR01MB4221F0E46F600E013974F21BD7FA2@SEYPR01MB4221.apcprd01.prod.exchangelabs.com>
 
 
->   	/* Add 'this' new cdev to the global cdev list */
->   	mutex_lock(&thermal_list_lock);
-> 
-> 
-> 
+--xNgNBLWP/RMLxW5/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+On Thu, Jun 06, 2024 at 01:32:46PM +0000, Haylen Chu wrote:
+> On Wed, Jun 05, 2024 at 06:54:17PM +0100, Conor Dooley wrote:
+> > > > +  accumulation-period:
+> > > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > > +    description: Accumulation period for a sample
+> > > > +    oneOf:
+> > > > +      - const: 0
+> > > > +        description: 512 ticks
+> > > > +      - const: 1
+> > > > +        description: 1024 ticks
+> > > > +      - const: 2
+> > > > +        description: 2048 ticks
+> > > > +      - const: 3
+> > > > +        description: 4096 ticks
+> > > > +    default: 2
+> > > > +
+> > > > +  chop-period:
+> > > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > > +    description: ADC chop period
+> >=20
+> > What's a "chop" and why is either this or the accumulation-period a
+> > fixed property of the hardware? Shouldn't this choice really be up to
+> > the user?
+>=20
+> The chop-period is an ADC parameter.
+>=20
+> Both accumulation-period and chop-period specify how the sensor
+> measures temperature. Making these parameters up to end users brings
+> extra unnecessary code complexity. Being configurable for each board
+> should be enough and other thermal drivers have been doing things in
+> this way.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Other systems may well have properties for this, but something being
+done in the past doesn't mean it might be the right thing to do now.
+I don't really buy that this is something you set to a fixed value per
+board, but rather the use case of a particular board would factor into
+whether or not you would want to use a shorter or longer accumulation
+period.
 
+> > > > +    oneOf:
+> > > > +      - const: 0
+> > > > +        description: 128 ticks
+> > > > +      - const: 1
+> > > > +        description: 256 ticks
+> > > > +      - const: 2
+> > > > +        description: 512 ticks
+> > > > +      - const: 3
+> > > > +        description: 1024 ticks
+> >=20
+> > Can we just make the number of ticks the unit here, and above?
+> > Also, a "oneOf: - const" structure is just an enum.
+>=20
+> I do not catch your idea. These values directly map to raw register
+> configuration, which simplify the implementation a lot.
+
+It should be trivial to convert them to register values in your driver.
+
+> > > > +    default: 3
+> > > > +
+> > > > +  sample-cycle-us:
+> > > > +    description: Period between samples
+> > > > +    default: 1000000
+> > No constraints?
+>=20
+> Sample cycle is more flexible because of hardware designing.
+
+It quite likely has constraints, flexible or not. Is the hardware
+capable of both 1 us and uint32_max us?
+
+Thanks,
+Conor.
+
+--xNgNBLWP/RMLxW5/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZmHsWgAKCRB4tDGHoIJi
+0vG7AP48IalU1RGZ/KbtaGu/vPghK4eP4Nk9f7t4VJwKdTosBwD9F3Yrkl2G2Ylr
+82IeEwZmoQQrxmHthTZEV+dAIf6BJQk=
+=4835
+-----END PGP SIGNATURE-----
+
+--xNgNBLWP/RMLxW5/--
 
