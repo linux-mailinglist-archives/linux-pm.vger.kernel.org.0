@@ -1,75 +1,75 @@
-Return-Path: <linux-pm+bounces-8714-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8715-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CEF88FE869
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 16:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 91A878FE86F
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 16:07:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 240901C25878
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 14:06:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93FA21C246B9
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 14:07:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F10C196C97;
-	Thu,  6 Jun 2024 14:06:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86B74196C6D;
+	Thu,  6 Jun 2024 14:07:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="luh/ZlY6"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="c7SBjxGH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D1DF196C72
-	for <linux-pm@vger.kernel.org>; Thu,  6 Jun 2024 14:06:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D52AD19643E
+	for <linux-pm@vger.kernel.org>; Thu,  6 Jun 2024 14:07:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717682769; cv=none; b=lZAErstDf5CqcKFwI8uLQ2L7QgWsBsNYZ0k2h+a32Y+M6wjvqBqt9Eroog9axrjxJXQ1mud97iJxQrFfGP8xg3TlEcF5p/+0ygliCD6ttc/9bjj/b1cOnqyQIBc3kZw4xfAvfcUE00cii5gktMaBvZfuYO/4EjRUvl9RILHWOXs=
+	t=1717682850; cv=none; b=N+6478aMim4XEwy4fLw68ZLg5pb9Nvh+w63mhEOPod4b5clwlnrYTiFnbtgJem9r0t66wPmwvUBUBjGa6xeldOCJTR7udsnmJ5oggMCj9elYWcg2NsJTdiuXWkEHi610s6MNjO/60RjbH2YqUrq3aU6hh8qXLbixMzhx1kbVgU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717682769; c=relaxed/simple;
-	bh=0XIaO8VC8/Cr25KGmS0Cf8z2nqAra51paSuynMDMkSA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GTl/76HqTN1+7uZFhP0ZbHKMgfuwXHdnnDnbqJqyImK6aOUnsjw/ZZVAKQ8zSkSoTom4jrXltaSEYtCUiV0UtveaUpBlTo57OrtUM0dDsQmlQ9sVQC72gsxK0sJqixjCSwOQNv5lylZMPcbeIEMVI110jZdk+bUXeAPKCChlkhA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=luh/ZlY6; arc=none smtp.client-ip=209.85.208.53
+	s=arc-20240116; t=1717682850; c=relaxed/simple;
+	bh=4hNVwq7cQHTyBDF20Y8fpBPc7zzCmTIUwUsM/ZBouxc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=opEuYYi0qN1Dpj0/JWxtXmi/pE4+vqPfeGzSHl1xRzFA6bFPNUZEIzN5KnbcM4796O5+s33GOA9CQ2/8c4DhjD5WDY6BZ4GIy0S3ZHwMsYUzaHLEQx91kAfC0/4ba44wSsxaBPQO1LfJenj47brW2kP26M6VzLW7bL+SDJASkfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=c7SBjxGH; arc=none smtp.client-ip=209.85.218.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-57a1fe63a96so1207811a12.0
-        for <linux-pm@vger.kernel.org>; Thu, 06 Jun 2024 07:06:06 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a6269885572so380453166b.1
+        for <linux-pm@vger.kernel.org>; Thu, 06 Jun 2024 07:07:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1717682765; x=1718287565; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1717682847; x=1718287647; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=vQKb19ONiS07YwbhzyqTZ4NVaKzqW4YHDAO1Nu9VvEE=;
-        b=luh/ZlY6dJvTVX+ZmD4u7Vjkfi8G833l5e9dYSiFv5pIXEj5aN745++PCX2h39PRAK
-         o/Cfr0sZDk36ykEHjIYuB+HeQtzUzJlN1RNay63ryX6iADoTe4R7AYKoU2yy4i2Z/eej
-         nVGfcSoVblDQt1OnN19JON5s8sJw16/Z8hPXdLCLZYLfJZmwmzBsAqKPCTtj0FQOgsbo
-         DEqQzL8P7DhxaiCipM4spw59v6vs1DS9HzNZ/p3z0PRSBttvaI1gtMXT8uYLo2BzdwXb
-         kpvOfxGCpe4eZAFEDGrRIDPJHnaV7ZppNSCjYym3/EOAJvHfbYXW/5wbzWvJGkyKgUek
-         hLAg==
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=WuYJQB/gpV+Bc6GPW32Ein19OoVtrm6WSZM3VYy51qc=;
+        b=c7SBjxGHFa+SkS9v9Wezr2GzfjN2D80NzAMw4SvhK2b3o6z9HzcLT7vNAnidK2AUI0
+         hF0XgnqdWWblA0qYLKS8hJdTalqnx7/GH48m6mLr/WttzFWucrnKMXJ715smZzK5lTqR
+         ovknSKZZ2wDcPVMSzNaqYy9ptt41M3jSbKfgtA7+bDhjdnYnbvtog9nNnYZS0WPh9gpY
+         aqoyEd6ZUHfgRAZqB7PmufRmHJJTetxOt09EASgeQ/alVcohbdixTQaO0Ut5e8Fc8Zrw
+         hcQHnzbW1ESbhfvqf5ywcTq9BuanNIaktlo7725Jk3Yzyy/WyCullVjS7IHhXsFt46ks
+         7fng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717682765; x=1718287565;
+        d=1e100.net; s=20230601; t=1717682847; x=1718287647;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vQKb19ONiS07YwbhzyqTZ4NVaKzqW4YHDAO1Nu9VvEE=;
-        b=jCmys5+ajgnGHFjubodOAZ6DdOQQPzcMXTwZO2vsqb4FLBtrZCg6gVkkcdjBug3mFP
-         Ac+38mfJTEMmgDGxF8EzPx3DNHIA71PVP6oxRvJ/GIjyc/AhiZD3H9683CImYV6gahJ9
-         hDPvIzs7YD7T5thFWoX3vXde9AJZFprdJXuUvtHm+koEQS42CBolNOlizWg6i+4QcfnI
-         4or6TsUb4wUWjF6MAg2OMGwbNdKDCTTwvLBBMM0j2wEQTSjLnpft8vsRiBXcJK2Qb2BK
-         Pf2WUhVj/aMGQTAUU3tJ8QIYj8YtRdJz7+WsCdK4Gqdtqd5mbaoSBUlu/kvOOopVWTSt
-         b2hg==
-X-Forwarded-Encrypted: i=1; AJvYcCXr0W7e1p8PaXn8o0DZm3mMkYWVSpRw9GOQSLWIvPy69232dDACZpetqKX12fq4tgFkksK4B6L7icAUpiB3Tz5fBaVwqSvDRrY=
-X-Gm-Message-State: AOJu0YzM+dA8hUx6q2zT4kcH9TIO+0U0hP2/s94MbZI+SPF68od70DzG
-	C1Up8jNB5jV/0Hz6RBCBIAScxhSBHoss5PUdbhRJXPiKQPuRLuKblbVCBdnS52o=
-X-Google-Smtp-Source: AGHT+IHMBu9F3fZBohRfOXGBJmwL+dUO/U6UFuk7SvnfrU+SXs+rB4HE/CdJVvunmmD5Lrwi01e+sw==
-X-Received: by 2002:a50:ab0d:0:b0:57a:79c2:e9d5 with SMTP id 4fb4d7f45d1cf-57a8b6ac6c0mr3439122a12.18.1717682764777;
-        Thu, 06 Jun 2024 07:06:04 -0700 (PDT)
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WuYJQB/gpV+Bc6GPW32Ein19OoVtrm6WSZM3VYy51qc=;
+        b=q2CkxfcLLSnA9Winy3zgqL/qxKNFa3cZzXkMqxy+ihUghNcb7wi/Bx8XAjYWfDlQiL
+         sSuyW6VLrTkKkbwPo6NfcfQM2gnCFhRfTeHJJOE/v3vx12BnLIsJb0pzfYlQwYeWrV8C
+         vdtCW1PPTpGBgvIxhvUR2t91CINPAR1iafRYIWt7GC5nBiDbDfpzhXA9kEuTCmQUChWM
+         rAdKoqAMNcFheOstmSCV+W4WC621vu6Hd6qfyWJlt1xFjoQlhosXXkbSzCGcaDN3j3+m
+         cQ+TeKqBRcSuei3rlw4xhBf69r7jAjXMoKGAj7Zka/vnErOL5erypStrGWt4OTYAehlW
+         qSFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCURCv4aKnP5w6BRL6xeIY0tkVZov4iqese2U/i7WI1q3GyaX9Ih0KQsGcK0ksWkytKRxRJy7I+X+ZkUXSl7DBsSSpGknHV/pcs=
+X-Gm-Message-State: AOJu0YwpDqUbXx1MTiO8kC3g0Ob1Lpw0UJusxboUli1ig40yQvXtXVU2
+	WcsQ7CcvUw6xkAIu6eAE14itHXb2YHsiZMQvHtcwxjEynz5+E7NJpWZpWRhdnnk=
+X-Google-Smtp-Source: AGHT+IEJuB2kN44q8dic1aobVJvgm0GkwA2QTBAqO7TjvoBitMWf4fmH36skjlZte8txrFIr5rt98g==
+X-Received: by 2002:a17:906:459c:b0:a59:be21:3587 with SMTP id a640c23a62f3a-a6c75f94214mr232595466b.8.1717682845919;
+        Thu, 06 Jun 2024 07:07:25 -0700 (PDT)
 Received: from [192.168.128.139] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57aadcbf568sm1166892a12.0.2024.06.06.07.06.02
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6c8072ac5asm101513266b.219.2024.06.06.07.07.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jun 2024 07:06:04 -0700 (PDT)
-Message-ID: <1a08ef42-b52f-4c97-90d7-e7fdee7725b4@linaro.org>
-Date: Thu, 6 Jun 2024 16:06:01 +0200
+        Thu, 06 Jun 2024 07:07:25 -0700 (PDT)
+Message-ID: <90bb9256-d54d-4e01-aa06-4184e2b95d48@linaro.org>
+Date: Thu, 6 Jun 2024 16:07:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,25 +77,16 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 6/6] arm64: dts: qcom: ipq9574: Add icc provider
- ability to gcc
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc: Georgi Djakov <djakov@kernel.org>, andersson@kernel.org,
+Subject: Re: [PATCH v11 0/6] Add interconnect driver for IPQ9574 SoC
+To: Varadarajan Narayanan <quic_varada@quicinc.com>, andersson@kernel.org,
  mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, quic_anusha@quicinc.com,
+ krzk+dt@kernel.org, conor+dt@kernel.org, djakov@kernel.org,
+ dmitry.baryshkov@linaro.org, quic_anusha@quicinc.com,
  linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20240418092305.2337429-1-quic_varada@quicinc.com>
- <20240418092305.2337429-7-quic_varada@quicinc.com>
- <a7194edd-a2c8-46fc-bea1-f26b0960e535@linaro.org>
- <Ziov6bWBXYXJ4Zp8@hu-varada-blr.qualcomm.com>
- <27f4f3dd-9375-40cf-8c8f-1c4edf66e31b@linaro.org>
- <ZjNdTmmXucjtRxJt@hu-varada-blr.qualcomm.com>
- <c015b3a5-2213-4ebd-b960-d97ed1fe7062@kernel.org>
- <ZjshR0ekcn0gxwOa@hu-varada-blr.qualcomm.com>
- <CAA8EJpqENsojPQmCbma_nQLEZq8nK1fz1K0JdtvLd=kPrH_DBw@mail.gmail.com>
+ linux-pm@vger.kernel.org, bryan.odonoghue@linaro.org
+References: <20240430064214.2030013-1-quic_varada@quicinc.com>
+ <ZjXrTywO6+iRaEYk@hu-varada-blr.qualcomm.com>
 Content-Language: en-US
 From: Konrad Dybcio <konrad.dybcio@linaro.org>
 Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
@@ -133,149 +124,45 @@ Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
  nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
  izWDgYvmBE8=
-In-Reply-To: <CAA8EJpqENsojPQmCbma_nQLEZq8nK1fz1K0JdtvLd=kPrH_DBw@mail.gmail.com>
+In-Reply-To: <ZjXrTywO6+iRaEYk@hu-varada-blr.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 8.05.2024 10:10 AM, Dmitry Baryshkov wrote:
-> On Wed, 8 May 2024 at 09:53, Varadarajan Narayanan
-> <quic_varada@quicinc.com> wrote:
->>
->> On Fri, May 03, 2024 at 04:51:04PM +0300, Georgi Djakov wrote:
->>> Hi Varada,
->>>
->>> Thank you for your work on this!
->>>
->>> On 2.05.24 12:30, Varadarajan Narayanan wrote:
->>>> On Tue, Apr 30, 2024 at 12:05:29PM +0200, Konrad Dybcio wrote:
->>>>> On 25.04.2024 12:26 PM, Varadarajan Narayanan wrote:
->>>>>> On Tue, Apr 23, 2024 at 02:58:41PM +0200, Konrad Dybcio wrote:
->>>>>>>
->>>>>>>
->>>>>>> On 4/18/24 11:23, Varadarajan Narayanan wrote:
->>>>>>>> IPQ SoCs dont involve RPM in managing NoC related clocks and
->>>>>>>> there is no NoC scaling. Linux itself handles these clocks.
->>>>>>>> However, these should not be exposed as just clocks and align
->>>>>>>> with other Qualcomm SoCs that handle these clocks from a
->>>>>>>> interconnect provider.
->>>>>>>>
->>>>>>>> Hence include icc provider capability to the gcc node so that
->>>>>>>> peripherals can use the interconnect facility to enable these
->>>>>>>> clocks.
->>>>>>>>
->>>>>>>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->>>>>>>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
->>>>>>>> ---
->>>>>>>
->>>>>>> If this is all you do to enable interconnect (which is not the case,
->>>>>>> as this patch only satisfies the bindings checker, the meaningful
->>>>>>> change happens in the previous patch) and nothing explodes, this is
->>>>>>> an apparent sign of your driver doing nothing.
->>>>>>
->>>>>> It appears to do nothing because, we are just enabling the clock
->>>>>> provider to also act as interconnect provider. Only when the
->>>>>> consumers are enabled with interconnect usage, this will create
->>>>>> paths and turn on the relevant NOC clocks.
->>>>>
->>>>> No, with sync_state it actually does "something" (sets the interconnect
->>>>> path bandwidths to zero). And *this* patch does nothing functionally,
->>>>> it only makes the dt checker happy.
->>>>
->>>> I understand.
->>>>
->>>>>> This interconnect will be used by the PCIe and NSS blocks. When
->>>>>> those patches were posted earlier, they were put on hold until
->>>>>> interconnect driver is available.
->>>>>>
->>>>>> Once this patch gets in, PCIe for example will make use of icc.
->>>>>> Please refer to https://lore.kernel.org/linux-arm-msm/20230519090219.15925-5-quic_devipriy@quicinc.com/.
->>>>>>
->>>>>> The 'pcieX' nodes will include the following entries.
->>>>>>
->>>>>>         interconnects = <&gcc MASTER_ANOC_PCIE0 &gcc SLAVE_ANOC_PCIE0>,
->>>>>>                         <&gcc MASTER_SNOC_PCIE0 &gcc SLAVE_SNOC_PCIE0>;
->>>>>>         interconnect-names = "pcie-mem", "cpu-pcie";
->>>>>
->>>>> Okay. What about USB that's already enabled? And BIMC/MEMNOC?
->>>>
->>>> For USB, the GCC_ANOC_USB_AXI_CLK is enabled as part of the iface
->>>> clock. Hence, interconnect is not specified there.
->>>>
->>>> MEMNOC to System NOC interfaces seem to be enabled automatically.
->>>> Software doesn't have to turn on or program specific clocks.
->>>>
->>>>>>> The expected reaction to "enabling interconnect" without defining the
->>>>>>> required paths for your hardware would be a crash-on-sync_state, as all
->>>>>>> unused (from Linux's POV) resources ought to be shut down.
->>>>>>>
->>>>>>> Because you lack sync_state, the interconnects silently retain the state
->>>>>>> that they were left in (which is not deterministic), and that's precisely
->>>>>>> what we want to avoid.
->>>>>>
->>>>>> I tried to set 'sync_state' to icc_sync_state to be invoked and
->>>>>> didn't see any crash.
->>>>>
->>>>> Have you confirmed that the registers are actually written to, and with
->>>>> correct values?
->>>>
->>>> I tried the following combinations:-
->>>>
->>>> 1. Top of tree linux-next + This patch set
->>>>
->>>>     * icc_sync_state called
->>>>     * No crash or hang observed
->>>>     * From /sys/kernel/debug/clk/clk_summary can see the
->>>>       relevant clocks are set to the expected rates (compared
->>>>       with downstream kernel)
->>>>
->>>> 2. Top of tree linux-next + This patch set + PCIe enablement
->>>>
->>>>     * icc_sync_state NOT called
->>>
->>> If sync_state() is not being called, that usually means that there
->>> are interconnect consumers that haven't probed successfully (PCIe?)
->>> or their dependencies. That can be checked in /sys/class/devlink/.../status
->>> But i am not sure how this works for PCI devices however.
->>>
->>> You can also manually force a call to sync_state by writing "1" to
->>> the interconnect provider's /sys/devices/.../state_synced
->>>
->>> Anyway, the question is if PCIe and NSS work without this driver?
->>
->> No.
->>
->>> If they work, is this because the clocks are turned on by default
->>> or by the boot loader?
->>
->> Initially, the PCIe/NSS driver enabled these clocks directly
->> by having them in their DT nodes itself. Based on community
->> feedback this was removed and after that PCIe/NSS did not work.
->>
->>> Then if an interconnect path (clock) gets disabled either when we
->>> reach a sync_state (with no bandwidth requests) or we explicitly
->>> call icc_set_bw() with 0 bandwidth values, i would expect that
->>> these PCIe and NSS devices would not function anymore (it might
->>> save some power etc) and if this is unexpected we should see a
->>> a crash or hang...
->>>
->>> Can you confirm this?
->>
->> With ICC enabled, icc_set_bw (with non-zero values) is called by
->> PCIe and NSS drivers. Haven't checked with icc_set_bw with zero
->> values.
->>
->> PCIe:   qcom_pcie_probe -> qcom_pcie_icc_init -> icc_set_bw
->> NSS:    ppe_icc_init -> icc_set_bw
->>
->> I believe sync_state is not getting called since there is a
->> non-zero set bandwidth request. Which seems to be aligned with
->> your explanation.
+On 4.05.2024 10:01 AM, Varadarajan Narayanan wrote:
+> Bjorn,
 > 
-> This doesn't look correct. sync_state is being called once all
-> consumers are probed. It doesn't matter whether those consumers have
-> non-zero bandwidth requests or no.
+>> On Tue, Apr 30, 2024 at 12:12:08PM +0530, Varadarajan Narayanan wrote:
+>> MSM platforms manage NoC related clocks and scaling from RPM.
+>> However, in IPQ SoCs, RPM is not involved in managing NoC
+>> related clocks and there is no NoC scaling.
+>>
+>> However, there is a requirement to enable some NoC interface
+>> clocks for the accessing the peripherals present in the
+>> system. Hence add a minimalistic interconnect driver that
+>> establishes a path from the processor/memory to those peripherals
+>> and vice versa.
+>>
+>> Change icc-clk driver to take master and slave ids instead
+>> of auto generating.
+>>
+>> Currently, drivers/clk/qcom/clk-cbf-8996.c is the only user of
+>> icc-clk. And, it had exactly one master and one slave node.
+>> For this the auto generated master (= 1) and slave (= 0) was
+>> enough.
+>>
+>> However, when drivers/clk/qcom/gcc-ipq9574.c wanted to make use
+>> of the icc-clk framework, it had more number of master and slave
+>> nodes and the auto generated ids did not suit the usage.
+>>
+>> ---
+>> v11:	No code changes
+>> 	Commit log changed for the first patch
+>> 	Added Acked-By: to 3 patches
+> 
+> Can this be included in your driver changes for 6.10?
 
-/sys/kernel/debug/devices_deferred may have some useful info, too
+FWIW there is still an open discussion at v9
+<CAA8EJpqENsojPQmCbma_nQLEZq8nK1fz1K0JdtvLd=kPrH_DBw@mail.gmail.com>
 
 Konrad
 
