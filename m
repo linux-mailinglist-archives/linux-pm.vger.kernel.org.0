@@ -1,206 +1,148 @@
-Return-Path: <linux-pm+bounces-8677-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8678-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 747D18FDD92
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 05:41:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6D8E8FDEAB
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 08:26:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19659284511
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 03:41:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 37F011F21DD1
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 06:26:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4240E1DDC9;
-	Thu,  6 Jun 2024 03:41:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBC4E73164;
+	Thu,  6 Jun 2024 06:25:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Xe89Cy/L"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="ap+aB7M7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29B2619D89B;
-	Thu,  6 Jun 2024 03:41:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 690D12E3E5;
+	Thu,  6 Jun 2024 06:25:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717645296; cv=none; b=JpqHNtC4mMzdLI5wQbMuCzHxH6t33Z++bNZUDMrabJ3aQHO7BHfdtLsGDsyBLnrZXkgYrG6rojhDFf5bT2zpiMCZScM89t4FGo744C42+h9NqmQ4SZ6Fl07FbB19G0jnY21wgGRmAw4ZOiBti8IjCSI4EPDNkgbPZsbdQS2Ahq0=
+	t=1717655156; cv=none; b=uUl5Aoemt+xfkajQtvFKjMlrLc3/kyDBW9x1CU9IWTZLUxWx4UTYhHcptTcshLHa5djoHapv/rleQbPrriz5Pga71NC5Dd7woYdBsEwTm51gf6nAOG1qlBeb4LpMb79Jf7SmsVBC8by1HCz0PuIHxGgL8RtPET8Cv6krxEQ0Qag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717645296; c=relaxed/simple;
-	bh=7i6qlJ4MQazUo2BFSri14hrv8zTgFKAa/wwxkpGrDJs=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=DG0633jwNqWzRETbUtRnRWhJ/Hqk91ZULRiEd5l9uLc/MitdgKnRQKgI2uHgfpV+ClNTkhguVyaGMwl750iCZfJ2GIe0bhspvrdpjDYhZy7vWxlRLWMHhsnW1/OYzIvX4g2CcfZKBQwQjKhCpAC5wMDJnP+pf/TGa0hOa+jvK8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Xe89Cy/L; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717645294; x=1749181294;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=7i6qlJ4MQazUo2BFSri14hrv8zTgFKAa/wwxkpGrDJs=;
-  b=Xe89Cy/LicprldoK/VTM7H8g3JAdQTBlVbJgYUTm8U4TlXvenqpVPIH8
-   uAvgjRbcRwKxHx4JJjBUGHlamUxjO2LXEYtvYu8v4agLxuuLBA1UNhPeK
-   N87AYK3V06319hyAilmDlFEUOJrlZo+Zhtz3w4ZUFSqeA8QuiMeLhxzzk
-   5Od/U66tOPRE4vroYaDvgDk+j78LfsqZfYS4JMgnQ2rh90KatA2e6kNRb
-   6BIWn/sBwnhWQBO+V8XhRAy8O+oezJsrS9/puJr0TJGh6YbM0ncW0AZ8z
-   voC0mNS2gfuZWn+ztpxMKa8cgptNGUIA+FQUOSn111Sp51XKe0v9UkS/c
-   Q==;
-X-CSE-ConnectionGUID: LV54aqIzSceklVXX3f6AYw==
-X-CSE-MsgGUID: FLYnXbuGQoSiC4yHM2JTtQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11094"; a="14248354"
-X-IronPort-AV: E=Sophos;i="6.08,218,1712646000"; 
-   d="scan'208";a="14248354"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2024 20:41:33 -0700
-X-CSE-ConnectionGUID: mAneGKfXSCeDwblX/sRntw==
-X-CSE-MsgGUID: 65NTedZASW2d6VIZBDyesg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,218,1712646000"; 
-   d="scan'208";a="37828634"
-Received: from kbommu-mobl3.gar.corp.intel.com ([10.213.76.177])
-  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2024 20:41:30 -0700
-Message-ID: <cf24f2193c16ed070e5ec3b2f601650eb5b867ed.camel@linux.intel.com>
-Subject: Re: [PATCH v1] thermal: core: Do not fail cdev registration because
- of invalid initial state
-From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM
- <linux-pm@vger.kernel.org>
-Cc: Linux ACPI <linux-acpi@vger.kernel.org>, LKML
- <linux-kernel@vger.kernel.org>,  Lukasz Luba <lukasz.luba@arm.com>, Zhang
- Rui <rui.zhang@intel.com>, Daniel Lezcano <daniel.lezcano@linaro.org>,
- Laura Nao <laura.nao@collabora.com>
-Date: Wed, 05 Jun 2024 20:41:22 -0700
-In-Reply-To: <4569763.LvFx2qVVIh@kreacher>
-References: <4569763.LvFx2qVVIh@kreacher>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.0-1 
+	s=arc-20240116; t=1717655156; c=relaxed/simple;
+	bh=Wfeg8GAi9GwSyPrICtL0MY874pcQ+nuX+//SQF4Q63U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R+aSEPRVkltBXQe7RYZWPI4074npWMZWrH+YrbR5eRcFnVIiaLEt4BCRsFkttawp4PcNfAcZ/sI3nVRYmNbB0WDKFQi9hCpTvLF4kIMUbE6/agC6nywhGY6iBQHt7sFKTdrIZL399M1NrQJae5ZdPGHKqJkF0xCbt+eZreHk9qw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=ap+aB7M7; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1717655145;
+	bh=Wfeg8GAi9GwSyPrICtL0MY874pcQ+nuX+//SQF4Q63U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ap+aB7M7eNNAVWFNB2wesEkU4e+ielGbEoJAtWC2AXSaK71bYdLmrZz2sBOxDf+oy
+	 gPIdX+GOTSLEqMs4oG9uMHcRo2QJP9Zy1aPaPP12FbdZFFgKY+JOUm7Td/j/o1t+lr
+	 IoQOALg1kOo23Xw3657kI//xdH6vkp8ZqcrygMyA=
+Date: Thu, 6 Jun 2024 08:25:45 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Mario Limonciello <mario.limonciello@amd.com>, 
+	Matt Hartley <matt.hartley@gmail.com>
+Cc: Dustin Howett <dustin@howett.net>, Benson Leung <bleung@chromium.org>, 
+	Guenter Roeck <groeck@chromium.org>, Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>, 
+	chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Stephen Horvath <s.horvath@outlook.com.au>, Rajas Paranjpe <paranjperajas@gmail.com>
+Subject: Re: [PATCH v2 0/3] ChromeOS Embedded Controller charge control driver
+Message-ID: <ed6e5fd4-2be1-4a72-8041-5087ebc93203@t-8ch.de>
+References: <20240528-cros_ec-charge-control-v2-0-81fb27e1cff4@weissschuh.net>
+ <CA+BfgNJByawxkZukaCXYcmOo_K9aQ0W1x8B6Y+Hyg_fZaJ4axw@mail.gmail.com>
+ <5baf3caf-dc09-4829-96db-2666fc902710@t-8ch.de>
+ <CA+BfgN+LE3YyF3te4m8sWbtH85tU+ERUDW7YR_BFecusVTAWWw@mail.gmail.com>
+ <a527a3fd-1458-43cc-aac0-0b360beeb349@t-8ch.de>
+ <db20a640-5323-4866-9968-c57391fbb6bc@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <db20a640-5323-4866-9968-c57391fbb6bc@amd.com>
 
-On Wed, 2024-06-05 at 21:17 +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->=20
-> It is reported that commit 31a0fa0019b0 ("thermal/debugfs: Pass
-> cooling
-> device state to thermal_debug_cdev_add()") causes the ACPI fan driver
-> to fail probing on some systems which turns out to be due to the _FST
-> control method returning an invalid value until _FSL is first
-> evaluated
-> for the given fan.=C2=A0 If this happens, the .get_cur_state() cooling
-> device
-> callback returns an error and __thermal_cooling_device_register()
-> fails
-> as uses that callback after commit 31a0fa0019b0.
->=20
-> Arguably, _FST should not return an inavlid
-s/inavlid/invalid
++Matt, the Linux support lead for Framework.
 
-Thanks,
-Srinivas
+Hi Matt,
 
->  value even if it is
-> evaluated before _FSL, so this may be regarded as a platform firmware
-> issue, but at the same time it is not a good enough reason for
-> failing
-> the cooling device registration where the initial cooling device
-> state
-> is only needed to initialize a thermal debug facility.
->=20
-> Accordingly, modify __thermal_cooling_device_register() to pass a
-> negative state value to thermal_debug_cdev_add() instead of failing
-> if the initial .get_cur_state() callback invocation fails and adjust
-> the thermal debug code to ignore negative cooling device state
-> values.
->=20
-> Fixes: 31a0fa0019b0 ("thermal/debugfs: Pass cooling device state to
-> thermal_debug_cdev_add()")
-> Closes:
-> https://lore.kernel.org/linux-acpi/20240530153727.843378-1-laura.nao@coll=
-abora.com
-> Reported-by: Laura Nao <laura.nao@collabora.com>
-> Tested-by: Laura Nao <laura.nao@collabora.com>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
-> =C2=A0drivers/thermal/thermal_core.c=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 11 +=
-++++++----
-> =C2=A0drivers/thermal/thermal_debugfs.c |=C2=A0=C2=A0=C2=A0 7 ++++++-
-> =C2=A02 files changed, 13 insertions(+), 5 deletions(-)
->=20
-> Index: linux-pm/drivers/thermal/thermal_core.c
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> --- linux-pm.orig/drivers/thermal/thermal_core.c
-> +++ linux-pm/drivers/thermal/thermal_core.c
-> @@ -964,7 +964,8 @@ __thermal_cooling_device_register(struct
-> =C2=A0{
-> =C2=A0	struct thermal_cooling_device *cdev;
-> =C2=A0	struct thermal_zone_device *pos =3D NULL;
-> -	unsigned long current_state;
-> +	unsigned long val;
-> +	int current_state;
-> =C2=A0	int id, ret;
-> =C2=A0
-> =C2=A0	if (!ops || !ops->get_max_state || !ops->get_cur_state ||
-> @@ -1002,9 +1003,11 @@ __thermal_cooling_device_register(struct
-> =C2=A0	if (ret)
-> =C2=A0		goto out_cdev_type;
-> =C2=A0
-> -	ret =3D cdev->ops->get_cur_state(cdev, &current_state);
-> -	if (ret)
-> -		goto out_cdev_type;
-> +	ret =3D cdev->ops->get_cur_state(cdev, &val);
-> +	if (!ret && val >=3D 0 && val <=3D INT_MAX)
-> +		current_state =3D val;
-> +	else
-> +		current_state =3D -1;
-> =C2=A0
-> =C2=A0	thermal_cooling_device_setup_sysfs(cdev);
-> =C2=A0
-> Index: linux-pm/drivers/thermal/thermal_debugfs.c
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> --- linux-pm.orig/drivers/thermal/thermal_debugfs.c
-> +++ linux-pm/drivers/thermal/thermal_debugfs.c
-> @@ -421,6 +421,8 @@ void thermal_debug_cdev_state_update(con
-> =C2=A0	cdev_dbg =3D &thermal_dbg->cdev_dbg;
-> =C2=A0
-> =C2=A0	old_state =3D cdev_dbg->current_state;
-> +	if (old_state < 0)
-> +		goto unlock;
-> =C2=A0
-> =C2=A0	/*
-> =C2=A0	 * Get the old state information in the durations list. If
-> @@ -463,6 +465,7 @@ void thermal_debug_cdev_state_update(con
-> =C2=A0
-> =C2=A0	cdev_dbg->total++;
-> =C2=A0
-> +unlock:
-> =C2=A0	mutex_unlock(&thermal_dbg->lock);
-> =C2=A0}
-> =C2=A0
-> @@ -499,7 +502,9 @@ void thermal_debug_cdev_add(struct therm
-> =C2=A0	 * duration will be printed by cdev_dt_seq_show() as
-> expected if it
-> =C2=A0	 * runs before the first state transition.
-> =C2=A0	 */
-> -	thermal_debugfs_cdev_record_get(thermal_dbg, cdev_dbg-
-> >durations, state);
-> +	if (state >=3D 0)
-> +		thermal_debugfs_cdev_record_get(thermal_dbg,
-> cdev_dbg->durations,
-> +						state);
-> =C2=A0
-> =C2=A0	debugfs_create_file("trans_table", 0400, thermal_dbg->d_top,
-> =C2=A0			=C2=A0=C2=A0=C2=A0 thermal_dbg, &tt_fops);
->=20
->=20
->=20
->=20
+below we are discussing on how to implement charge controls for ChromeOS
+EC devices including Framework laptops in mainline Linux.
+Some feedback would be great.
 
+On 2024-06-05 15:32:33+0000, Mario Limonciello wrote:
+> On 6/5/2024 04:33, Thomas Weißschuh wrote:
+> > On 2024-06-04 20:27:57+0000, Dustin Howett wrote:
+> > > On Mon, Jun 3, 2024 at 3:59 PM Thomas Weißschuh <linux@weissschuh.net> wrote:
+> > > > 
+> > > > Can you try disabling all of the Framework-specific charge control
+> > > > settings and test again?
+> > > > Probably the different, disparate logics in the Framework ECs are
+> > > > conflicting with each other.
+> > > 
+> > > Fascinating! This board does indeed support charge limiting through
+> > > both interfaces. It looks like the most recently set one wins for a
+> > > time.
+> > 
+> > If it is the most recent one, shouldn't the driver have worked?
+> > What does "for a time" mean?
+> > I'm using only the upstream EC command and that seems to work fine.
+> > 
+> > > The UEFI setup utility only sets the framework-specific charge limit value.
+> > > 
+> > > We should probably find some way to converge them, for all of the
+> > > supported Framework Laptop programs.
+> > 
+> > In the long term, Framework should align their implementation with
+> > upstream CrOS EC and either drop their custom command or make it a thin
+> > wrapper around the normal the upstream command.
+> > 
+> > (As you are familiar with EC programming maybe you want to tackle this?)
+> > 
+> > Until then I think we can detect at probe-time if the Framework APIs are
+> > available and use them to disable the Framework-specific mechanism.
+> > Then the CrOS EC commands should be usable.
+> > 
+> > The drawback is, that userspace using the Framework APIs will break
+> > the driver. That userspace would need to migrate to the standard UAPI.
+> 
+> How does userspace access the Framework APIs?  Surely it needs to go through
+> the kernel?  Could you "filter" the userspace calls to block them?
+> 
+> For example this is something that currently happens in the dell-pc driver
+> to block userspace from doing thermal calls and instead guide people to the
+> proper API that the driver exports.
+
+This would work when userspace uses /dev/cros_ec.
+But the EC can also used via raw port IO which wouldn't be covered.
+Given that /dev/cros_ec wasn't usable on Framework AMD until v6.9 it's
+not unlikely users are using that.
+
+And technically both aproaches would break userspace.
+
+Another aproach would be to not load the module on Framework devices
+which implement their custom command (overwritable by module parameter).
+
+Framework unifies the implementation of their command with the core
+CrOS EC logic so both commands work on the same data.
+The custom command is adapted to also implement a new command version.
+This is completely transparent as the old version will continue to work.
+
+We update the Linux driver to recognize that new command version, know
+that they are now compatible and probe the driver.
+
+Newer devices could also drop the custom command and the driver would
+start working.
+
+This scheme requires some cooperation from Framework, though.
+
+> > 
+> > Also the settings set in the firmware would be ignored at that point.
+> > 
+> > I don't want to use the functionality of the Framework command because
+> > it's less featureful and I really hope it will go away at some point.
+> 
 
