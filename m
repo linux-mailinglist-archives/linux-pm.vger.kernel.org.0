@@ -1,131 +1,127 @@
-Return-Path: <linux-pm+bounces-8741-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8742-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 156A88FF5C7
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 22:20:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EEE18FF602
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 22:38:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E22F288DDD
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 20:20:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9BF01283CAE
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 20:38:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19A217346D;
-	Thu,  6 Jun 2024 20:20:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCB4919A284;
+	Thu,  6 Jun 2024 20:35:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VPY3czMJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NtSOyU2G"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F6A371B27
-	for <linux-pm@vger.kernel.org>; Thu,  6 Jun 2024 20:20:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4351A199E9C;
+	Thu,  6 Jun 2024 20:35:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717705257; cv=none; b=tXzzYQO/UXS1kKwmUnGpmaP76m5ABHHYTw8hx4kQlH9BV0Ne5jG0W9MHVzsxiNbIo4iRMWZYppZpeBhsYbNCAvNeLHHTzvTgEoo2deaux8qiGNNtmEZn8gP3j5CJAuhDKaT0CX42Q5anYhPjE+BVcRdTl9xgZmvczZpea02uF/k=
+	t=1717706114; cv=none; b=gjQNEmrkFP3/MbH6Pj9OJMfCFfeyPz/k+k0OyEZhAsGSH1/zR6KaieTgiNL/IhclCzi4dUqctSmfE7x3fwetO4sbY8/Ul0HLnNGoGGmys99lSsCsLCRTPL2UHODwqiy+9l4R7A/RwVnKgj2zLofetiS9CLHmdZdY6dV/2RiIXVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717705257; c=relaxed/simple;
-	bh=ZhN5psr88O1rTZYnaj0Pp6eojbRqBJN+Mq+LrsdNdOI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eUk/uxueprWdkny31CErw2UbdOCPTdAKNbn/N7NL8aCU4zfX/Bvjlx/dGUVMIRdCd09/Jm1n0brtjQ/VV50uk0wPX0ty+ZbMgyCw61EVMBKkhio0VC8MZs0LdEH17P566yBs42UuPYDSWXJ13n7eT3+I5dbDxy3VEgN8HWCKj/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VPY3czMJ; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-52b912198a6so1783113e87.0
-        for <linux-pm@vger.kernel.org>; Thu, 06 Jun 2024 13:20:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1717705253; x=1718310053; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=83UooEInBqzhI2DlCSt/csP7JuwUOhdJysD+ewzTrGo=;
-        b=VPY3czMJ3YejXbhqCZ9aBdOLp6TvNZcxgEm59A0kdPfyU46Jc2JGICqxrFhqjmcWC0
-         G5smW9rvX8Tc4sv89t4ZZ3LKMdYltI9p9AOFpVxPWeJkTxczd189ZFZXnHATg4StWRIE
-         8i92JcUnhdWMchcVvHPFEW0i74qtynEelcagmJKlCf9ng2ruI4F6kqvQoTlHagU3qBsl
-         VLCeFwV6TGNYAfuMjyfvIC4Wi2mEu55hczNFF1KIgFYm9oWF9WMsro3qaiCQEYfwOAeT
-         G9wL6+NM+yk5pVKgxBRuuLmqU3SI7TonNHbSuJhOgRuOVSpGh4jxNNJthwmxECt9dIFO
-         LegQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717705253; x=1718310053;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=83UooEInBqzhI2DlCSt/csP7JuwUOhdJysD+ewzTrGo=;
-        b=V59EAtxR0ul5W6/4Re3bl9pwWelP6P7evjdhwQx1xSHssIh1VVmwDPdES4Ql9JC8g7
-         Ii0QfOBQ4mws4a9vOuR0cyUspPxBSq1Z5ZPlQ72HSjt4blEkW3Ga1ih6hDCiEx1n04Qo
-         rknolm0dAQT+P/0otqfI3lUGuYF5d4BPfU0i3tj3vimng6GEgN83Kh3bMRPJVDOrlVjU
-         VbB6ia8bQz68RZRF24nIMhbgri1p2d+VuBni9mYeCdpe8VltcHBfJz1Z9tn1Pqn4jfvi
-         Bf1Nde3s2SYb9va+vdr2F5KFj8ipRwPKxcGWsQU2r9oyLppaCudAYVoLf5+75+90mHb6
-         EwJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUfLDt22qJR/NcgDhHE4HKE+TehE9nFOk6rbt9lBypXlpcB0f3cKltr6+cxWxGmN8A89lLATCB3e1Kq9I9f1m87HjGTbQoo2Xo=
-X-Gm-Message-State: AOJu0Yw8ADsfSYBncrgiGXIRkuQstQ+rqdisw40N2KkKOgXvddRWPmKO
-	sCXogiIcfeyYJ2j+++m4trz05qZuaUdUqlxHA2X15JQW3ty4DkazLUjMgcqOH5A=
-X-Google-Smtp-Source: AGHT+IEdG8vgcBO9N+bQsEADxiJZEJ8P0VduttpUVKLHZAp+J5ZqcCuSthLDPZi8nT7v2tqh/BTMPA==
-X-Received: by 2002:a05:6512:3e01:b0:520:ed4e:2203 with SMTP id 2adb3069b0e04-52bb9f64915mr689722e87.8.1717705253100;
-        Thu, 06 Jun 2024 13:20:53 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:f9a9:3740:b905:9995? ([2a05:6e02:1041:c10:f9a9:3740:b905:9995])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4214a4aab93sm70618805e9.0.2024.06.06.13.20.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jun 2024 13:20:52 -0700 (PDT)
-Message-ID: <710ce159-728b-4dec-854c-bbfd6b4bf6bf@linaro.org>
-Date: Thu, 6 Jun 2024 22:20:51 +0200
+	s=arc-20240116; t=1717706114; c=relaxed/simple;
+	bh=nhXf8eSvkloqZ8P33sV7YhNFzeOdKj1NPqkLgfGyFUo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VV3pK+gkqB9SbGfXhUnMElrhe7bJ4m7fWUG+5316nZnV7zRpfBBP+CbHBFch10lb+jQ5o6Gbaa9u9OaBcKnTsfydv3diSvU9TWTcEnL/rYGzUkNFiwpUTeZHFDnyYSXqYDlEvCJoArVun0D3JY5s0/iuK+vFajZNF5QDqBqVUiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NtSOyU2G; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717706113; x=1749242113;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nhXf8eSvkloqZ8P33sV7YhNFzeOdKj1NPqkLgfGyFUo=;
+  b=NtSOyU2GlskTjdkW35wJLO8bFKRss7o0LISea/6Vsr/wL+tFQ5xMD3ok
+   ohhyFoJc5VugvMBNnYdx1745MuMZ4DWJ0jUXKS/4Ss7+Y8BjU6TbFSrdJ
+   cul+vF9qDtZ9TQ+16BzxhlUwF5/bU0PRjeqfaCtN718Mvt2mCqrJ+WVZo
+   H7JW4+dgr3xQScIy/E60dl8BfSTfaW4Knk153bFMQ2ZE+JFI8VodEA99l
+   qderpFrRmHsHfVnStvkWrq8HFs9XXWpUx7jD1Hp2EbT3/rRDqlTNfByKZ
+   SSIrBQbXEy+47bs87kTA9JY/qPLEZGF1vOmVATojbmx41pkIexitUk89M
+   w==;
+X-CSE-ConnectionGUID: zKiADPyFT4eQ15aKmyDh4Q==
+X-CSE-MsgGUID: gXK4MDd4RJemSEmCTYBJuA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11095"; a="14244964"
+X-IronPort-AV: E=Sophos;i="6.08,219,1712646000"; 
+   d="scan'208";a="14244964"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2024 13:35:11 -0700
+X-CSE-ConnectionGUID: 95PXqdiHRVqk7lnI60X+eA==
+X-CSE-MsgGUID: MDjjan1aTiS9rovMoWiiCQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,219,1712646000"; 
+   d="scan'208";a="37943332"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by fmviesa007.fm.intel.com with ESMTP; 06 Jun 2024 13:35:07 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sFJpB-0003gH-1a;
+	Thu, 06 Jun 2024 20:35:05 +0000
+Date: Fri, 7 Jun 2024 04:34:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Haylen Chu <heylenay@outlook.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Inochi Amaoto <inochiama@outlook.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Jisheng Zhang <jszhang@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org, Haylen Chu <heylenay@outlook.com>
+Subject: Re: [PATCH v2 2/3] riscv: dts: sophgo: cv18xx: Add sensor device and
+ thermal zone
+Message-ID: <202406070442.HO8jNHCo-lkp@intel.com>
+References: <SG2PR01MB42184CFE2C3D3E210CC6F7DAD7F82@SG2PR01MB4218.apcprd01.prod.exchangelabs.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] thermal: core: Do not fail cdev registration because
- of invalid initial state
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- Linux PM <linux-pm@vger.kernel.org>, Laura Nao <laura.nao@collabora.com>
-Cc: Linux ACPI <linux-acpi@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Zhang Rui <rui.zhang@intel.com>
-References: <12456961.O9o76ZdvQC@kreacher>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <12456961.O9o76ZdvQC@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <SG2PR01MB42184CFE2C3D3E210CC6F7DAD7F82@SG2PR01MB4218.apcprd01.prod.exchangelabs.com>
 
-On 06/06/2024 20:14, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Subject: [PATCH v3] thermal: core: Do not fail cdev registration because of invalid initial state
-> 
-> It is reported that commit 31a0fa0019b0 ("thermal/debugfs: Pass cooling
-> device state to thermal_debug_cdev_add()") causes the ACPI fan driver
-> to fail probing on some systems which turns out to be due to the _FST
-> control method returning an invalid value until _FSL is first evaluated
-> for the given fan.  If this happens, the .get_cur_state() cooling device
-> callback returns an error and __thermal_cooling_device_register() fails
-> as uses that callback after commit 31a0fa0019b0.
-> 
-> Arguably, _FST should not return an invalid value even if it is
-> evaluated before _FSL, so this may be regarded as a platform firmware
-> issue, but at the same time it is not a good enough reason for failing
-> the cooling device registration where the initial cooling device state
-> is only needed to initialize a thermal debug facility.
-> 
-> Accordingly, modify __thermal_cooling_device_register() to avoid
-> calling thermal_debug_cdev_add() instead of returning an error if the
-> initial .get_cur_state() callback invocation fails.
-> 
-> Fixes: 31a0fa0019b0 ("thermal/debugfs: Pass cooling device state to thermal_debug_cdev_add()")
-> Closes: https://lore.kernel.org/linux-acpi/20240530153727.843378-1-laura.nao@collabora.com
-> Reported-by: Laura Nao <laura.nao@collabora.com>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
+Hi Haylen,
 
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on rafael-pm/thermal]
+[also build test WARNING on robh/for-next linus/master v6.10-rc2 next-20240606]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Haylen-Chu/dt-bindings-thermal-sophgo-cv180x-thermal-Add-Sophgo-CV180x-thermal/20240604-205916
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+patch link:    https://lore.kernel.org/r/SG2PR01MB42184CFE2C3D3E210CC6F7DAD7F82%40SG2PR01MB4218.apcprd01.prod.exchangelabs.com
+patch subject: [PATCH v2 2/3] riscv: dts: sophgo: cv18xx: Add sensor device and thermal zone
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d7d2d4f53fc79b4b58e8d8d08151b577c3699d4a)
+dtschema version: 2024.6.dev1+g833054f
+reproduce: (https://download.01.org/0day-ci/archive/20240607/202406070442.HO8jNHCo-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406070442.HO8jNHCo-lkp@intel.com/
+
+dtcheck warnings: (new ones prefixed by >>)
+>> arch/riscv/boot/dts/sophgo/cv1800b-milkv-duo.dtb: thermal-zones: 'soc-thermal-0' does not match any of the regexes: '^[a-zA-Z][a-zA-Z0-9\\-]{1,12}-thermal$', 'pinctrl-[0-9]+'
+   	from schema $id: http://devicetree.org/schemas/thermal/thermal-zones.yaml#
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
