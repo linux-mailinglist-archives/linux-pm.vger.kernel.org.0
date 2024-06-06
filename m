@@ -1,40 +1,75 @@
-Return-Path: <linux-pm+bounces-8710-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8711-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 116208FE6A0
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 14:36:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5FAB8FE725
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 15:07:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F3751C2586A
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 12:36:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 74AA41F26788
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 13:07:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9E3D195985;
-	Thu,  6 Jun 2024 12:36:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2801B195F19;
+	Thu,  6 Jun 2024 13:07:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pxwKEkMC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28A6D13F014;
-	Thu,  6 Jun 2024 12:36:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DAB9195B3F
+	for <linux-pm@vger.kernel.org>; Thu,  6 Jun 2024 13:07:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717677408; cv=none; b=s3/9TX3b9hs2jYBL99Iyqb8HCl54KQs211MteWqtJGis9TWglIGFa2Z34N/Frgxc+h24qvT0CIJ87UhoTzE9hKJ8gfG6tg6GgA2eAJN4kjzBJJzwU8q3D+xSFER8+iJRJ+hgGEyquEddW7mUbPhWvc+WFS+RK1raAwUW26Z+xjU=
+	t=1717679251; cv=none; b=Jlje12xQcxdHUVzni1NSIp9sj3cTNEOLcjYsO7l1vEbdNwpXJwzDBrJ0pyxKj6XchO6HO4RapZk0gsm/J8nXJL2FpWdAsw9ux3Nw6lpmqPi2sKETG10xGXQqFxNaNTfcOZklz8mrT1gvOHKh1ZEy+/Aq70WD43qfwjrUaN16W0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717677408; c=relaxed/simple;
-	bh=l6l6PWRPX6gzWzEzbrByaLKIK1Qw30ViidRoyvSAnDc=;
+	s=arc-20240116; t=1717679251; c=relaxed/simple;
+	bh=BdMDCKYOciFtZo4PTTUMFab4UVUl6ecIp67QhNGiFxE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d0ggQP17YsNj4uI3XS5sZSPzYw52hhEOnSLsJM1Uahtb+4j3uJV+HVMupEcA2Fiye5jILxeZkvabQeBeGUwNw7yuEW0N0teynBJxelLrZs/iRhjF2P7ZoPkMXmwup302g+uBJxZfHSfTLjllcXIOjsdBD8W0afbOfJpV7UC4dDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BA94C2F4;
-	Thu,  6 Jun 2024 05:37:09 -0700 (PDT)
-Received: from [10.1.28.63] (e127648.arm.com [10.1.28.63])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EF92B3F64C;
-	Thu,  6 Jun 2024 05:36:43 -0700 (PDT)
-Message-ID: <75fc12cc-b343-4dfd-a142-398a77042d98@arm.com>
-Date: Thu, 6 Jun 2024 13:36:42 +0100
+	 In-Reply-To:Content-Type; b=P/SfzIGzU4pK7o0m9fVCMAsoXxkpWBobWxnOvWqqRE+VJixlG4CG+3xyorz9CYMFgMrFYKBpnuy6IRe1D3GRDyij75ynEypik8s08dP7UiMB69oXRMiyjZl8XA8APYWnmXHk7X3bp8Ws5nEJTlcPwlIxhvLvDJ1vyByTcujT9Vc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pxwKEkMC; arc=none smtp.client-ip=209.85.208.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2eaac465915so9304401fa.1
+        for <linux-pm@vger.kernel.org>; Thu, 06 Jun 2024 06:07:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1717679247; x=1718284047; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9xqbTDU5EddtC0TrVAfeU+ERNe8gfqyFv4sZpg6VCoU=;
+        b=pxwKEkMCAXQ3w1PmZGCLFJPg73nrIiAPKJ09kyo49i0sr85KLCvLJ1iGVUpouQPxRK
+         VtoYUCN/QXLqsdurv1iapN+4l6ku+A7trXHNZCu3LMfJhXstzUuj+pEbAA3gqaTnQ2L3
+         yAVINfg0dsSQzCuA+ep21dnQAjJmLgzdVd1f3W/LWMzCXplErGog/26QuCbai80e5mku
+         kC7R7eJQNfDF5/w74oTXWwI9C9kE37U3apw+oFiG2ewAbScm2OVbzX5YuIsxFfxAZi/G
+         Y4L5YASTKUKdITRxEc2NoBHqk87NfI4sa5b0OL68oA6J9wKMpJ7cA7yaZKPa5+eqeZSB
+         CdVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717679247; x=1718284047;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9xqbTDU5EddtC0TrVAfeU+ERNe8gfqyFv4sZpg6VCoU=;
+        b=WuDRblrSVH2UpqoKJcm7CgTOhdpDutHcbEsqIkwHhRNir1JtCpgjmx4tu2W7gYJN0l
+         YQXPhZzPk+2eDACjOYjCDoGVANu+Abxf67kb3hdjR0/rOAMR7wtQ6oj686C3pdxNRdby
+         SJIrDYnT18YHR/he6/shOR7BdteV9LUe6jh7MCXGyCRCEWjwvWxCMifllBRq5oVXTXD4
+         Dw3O+wktRQrLQ/DrxZVTbZ4zRh2Skst5HFlwgQMTx7BrlsadasVLmC7oXAM3QNb9dNBn
+         9oawSPQNx7++AxgFFHTFoR8WJ8qMLi4p4PJm8AButWYyYhjwOzHRhEXmrUgOxPETk6Oo
+         6VMw==
+X-Forwarded-Encrypted: i=1; AJvYcCXDX8DPCDgv7AGIdqSXZzj+ztTSv3vkQ/ViQAH0ihbwIVRpNvVAO8z5mWNEyVI2jTd5XaGVELT3hTQ0r5clE5BFh0Fgzlu9MFk=
+X-Gm-Message-State: AOJu0YzD0idFG8k9QYfUnQ3b538tS9ispdhOu2nfxUvEpiTA1AWN5IIp
+	+HeLFv08vdUi0nDuteFcyRH6e3XJW4uohtph4jab69KCY50SR+2k6vsVYwuXqWAOmXRtTmnbLf/
+	zc6c=
+X-Google-Smtp-Source: AGHT+IGlDZLXub3zByy5p0lR4DbNs9Rf06mpjjFumk2zfzKdHZ7Rvj7G7Qjl3dOWAdV+S5AdUp9Xhg==
+X-Received: by 2002:a2e:9c07:0:b0:2e9:8ac8:b0c4 with SMTP id 38308e7fff4ca-2eac7a6ed32mr28518321fa.49.1717679247427;
+        Thu, 06 Jun 2024 06:07:27 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:f9a9:3740:b905:9995? ([2a05:6e02:1041:c10:f9a9:3740:b905:9995])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4215c19e67fsm21943435e9.2.2024.06.06.06.07.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jun 2024 06:07:26 -0700 (PDT)
+Message-ID: <5f93f034-f781-47e0-b8ce-3c8407a709f7@linaro.org>
+Date: Thu, 6 Jun 2024 15:07:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,142 +77,63 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/6] cpuidle: teo: fixes and improvements
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- vincent.guittot@linaro.org, qyousef@layalina.io, peterz@infradead.org,
- daniel.lezcano@linaro.org, anna-maria@linutronix.de,
- kajetan.puchalski@arm.com, lukasz.luba@arm.com, dietmar.eggemann@arm.com
-References: <20240606090050.327614-1-christian.loehle@arm.com>
- <db984b92-549a-46e1-ae3a-0e1fb4f2e5b2@arm.com>
- <CAJZ5v0jmg4Vz4=pDoaZmToBGMxMoVDt8qDm-+RMHCh46nPW31Q@mail.gmail.com>
+Subject: Re: [PATCH v1] thermal: core: Do not fail cdev registration because
+ of invalid initial state
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: Linux ACPI <linux-acpi@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Zhang Rui <rui.zhang@intel.com>, Laura Nao <laura.nao@collabora.com>
+References: <4569763.LvFx2qVVIh@kreacher>
 Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <CAJZ5v0jmg4Vz4=pDoaZmToBGMxMoVDt8qDm-+RMHCh46nPW31Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <4569763.LvFx2qVVIh@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 6/6/24 13:29, Rafael J. Wysocki wrote:
-> On Thu, Jun 6, 2024 at 1:59 PM Christian Loehle
-> <christian.loehle@arm.com> wrote:
->>
->> On 6/6/24 10:00, Christian Loehle wrote:
->>> Hi all,
->>> so my investigation into teo lead to the following fixes and
->>> improvements. Logically they are mostly independent, that's why this
->>> cover letter is quite short, details are in the patches.
->>>
->>> 1/6:
->>> As discussed, the utilization threshold is too high, while
->>> there are benefits in certain workloads, there are quite a few
->>> regressions, too.
->>> 2/6:
->>> Especially with the new util threshold, stopping tick makes little
->>> sense when utilized is detected, so don't.
->>> 3/6:
->>> Particularly with WFI, even if it's the only state, stopping the tick
->>> has benefits, so enable that in the early bail out.
->>> 4/6:
->>> Stopping the tick with 0 cost (if the idle state dictates it) is too
->>> aggressive IMO, so add 1ms constant cost.
->>> XXX: This has the issue of now being counted as idle_miss, so we could
->>> consider adding this to the states, too, but the simple implementation
->>> of this would have the downside that the cost is added to deeper states
->>> even if the tick is already off.
->>> 5/6:
->>> Remove the 'recent' intercept logic, see my findings in:
->>> https://lore.kernel.org/lkml/0ce2d536-1125-4df8-9a5b-0d5e389cd8af@arm.com/
->>> I haven't found a way to salvage this properly, so I removed it.
->>> The regular intercept seems to decay fast enough to not need this, but
->>> we could change it if that turns out to be the case.
->>> 6/6:
->>> The rest of the intercept logic had issues, too.
->>> See the commit.
->>>
->>> TODO: add some measurements of common workloads and some simple sanity
->>> tests (like Vincent described in low utilization workloads if the
->>> state selection looks reasonable).
->>> I have some, but more (and more standardized) would be beneficial.
->>>
->>> Happy for anyone to take a look and test as well.
->>>
->>> Some numbers for context:
->>> Maybe some numbers for context, I'll probably add them to the cover letter.
->>>
->>> Comparing:
->>> - IO workload (intercept heavy).
->>> - Timer workload very low utilization (check for deepest state)
->>> - hackbench (high utilization)
->>> all on RK3399 with CONFIG_HZ=100.
->>> target_residencies: 1, 900, 2000
->>>
->>> 1. IO workload, 5 runs, results sorted, in read IOPS.
->>> fio --minimal --time_based --name=fiotest --filename=/dev/nvme0n1 --runtime=30 --rw=randread --bs=4k --ioengine=psync --iodepth=1 --direct=1 | cut -d \; -f 8;
->>>
->>> teo fixed:
->>> /dev/nvme0n1
->>> [4597, 4673, 4727, 4741, 4756]
->>> /dev/mmcblk2
->>> [5753, 5832, 5837, 5911, 5949]
->>> /dev/mmcblk1
->>> [2059, 2062, 2070, 2071, 2080]
->>>
->>> teo mainline:
->>> /dev/nvme0n1
->>> [3793, 3825, 3846, 3865, 3964]
->>> /dev/mmcblk2
->>> [3831, 4110, 4154, 4203, 4228]
->>> /dev/mmcblk1
->>> [1559, 1564, 1596, 1611, 1618]
->>>
->>> menu:
->>> /dev/nvme0n1
->>> [2571, 2630, 2804, 2813, 2917]
->>> /dev/mmcblk2
->>> [4181, 4260, 5062, 5260, 5329]
->>> /dev/mmcblk1
->>> [1567, 1581, 1585, 1603, 1769]
->>>
->>> 2. Timer workload (through IO for my convenience ;) )
->>> Results in read IOPS, fio same as above.
->>> echo "0 2097152 zero" | dmsetup create dm-zeros
->>> echo "0 2097152 delay /dev/mapper/dm-zeros 0 50" | dmsetup create dm-slow
->>> (Each IO is delayed by timer of 50ms, should be mostly in state2)
->>>
->>> teo fixed:
->>> 3269 cpu_idle total
->>> 48 cpu_idle_miss
->>> 30 cpu_idle_miss above
->>> 18 cpu_idle_miss below
->>>
->>> teo mainline:
->>> 3221 cpu_idle total
->>> 1269 cpu_idle_miss
->>> 22 cpu_idle_miss above
->>> 1247 cpu_idle_miss below
->>>
->>> menu:
->>> 3433 cpu_idle total
->>> 114 cpu_idle_miss
->>> 61 cpu_idle_miss above
->>> 53 cpu_idle_miss below
->>>
->>> Residencies:
->>
->> Hmm, maybe actually including them would've been helpful too:
->> (Over 5s workload, only showing LITTLE cluster)
->> teo fixed:
->> idle_state
->> 2.0     4.813378
->> -1.0    0.210820
+On 05/06/2024 21:17, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Just to clarify, what does -1.0 mean here?
+> It is reported that commit 31a0fa0019b0 ("thermal/debugfs: Pass cooling
+> device state to thermal_debug_cdev_add()") causes the ACPI fan driver
+> to fail probing on some systems which turns out to be due to the _FST
+> control method returning an invalid value until _FSL is first evaluated
+> for the given fan.  If this happens, the .get_cur_state() cooling device
+> callback returns an error and __thermal_cooling_device_register() fails
+> as uses that callback after commit 31a0fa0019b0.
+> 
+> Arguably, _FST should not return an inavlid value even if it is
+> evaluated before _FSL, so this may be regarded as a platform firmware
+> issue, but at the same time it is not a good enough reason for failing
+> the cooling device registration where the initial cooling device state
+> is only needed to initialize a thermal debug facility.
+> 
+> Accordingly, modify __thermal_cooling_device_register() to pass a
+> negative state value to thermal_debug_cdev_add() instead of failing
+> if the initial .get_cur_state() callback invocation fails and adjust
+> the thermal debug code to ignore negative cooling device state values.
+> 
+> Fixes: 31a0fa0019b0 ("thermal/debugfs: Pass cooling device state to thermal_debug_cdev_add()")
+> Closes: https://lore.kernel.org/linux-acpi/20240530153727.843378-1-laura.nao@collabora.com
+> Reported-by: Laura Nao <laura.nao@collabora.com>
+> Tested-by: Laura Nao <laura.nao@collabora.com>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Good point, I should've mentioned.
-This adds up the residencies just from the trace event cpu_idle.
--1 stands for PWR_EVENT_EXIT i.e. non-idle, it's quite useful
-if we're talking absolute numbers but idle state ratios.
-tldr: the time the CPU isn't in any idle state.
+As it is a driver issue, it should be fixed in the driver, not in the 
+core code. The resulting code logic in the core is trying to deal with 
+bad driver behavior, it does not really seem appropriate.
 
-> [snip]
+The core code has been clean up from the high friction it had with the 
+legacy ACPI code. It would be nice to continue it this direction.
+
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
 
