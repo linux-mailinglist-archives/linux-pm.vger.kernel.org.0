@@ -1,168 +1,145 @@
-Return-Path: <linux-pm+bounces-8715-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8716-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91A878FE86F
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 16:07:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DE22A8FEDD0
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 16:39:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93FA21C246B9
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 14:07:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E28D91C23604
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 14:39:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86B74196C6D;
-	Thu,  6 Jun 2024 14:07:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1388A19E7EA;
+	Thu,  6 Jun 2024 14:18:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="c7SBjxGH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VF7kITSp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D52AD19643E
-	for <linux-pm@vger.kernel.org>; Thu,  6 Jun 2024 14:07:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC21A1BD515;
+	Thu,  6 Jun 2024 14:18:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717682850; cv=none; b=N+6478aMim4XEwy4fLw68ZLg5pb9Nvh+w63mhEOPod4b5clwlnrYTiFnbtgJem9r0t66wPmwvUBUBjGa6xeldOCJTR7udsnmJ5oggMCj9elYWcg2NsJTdiuXWkEHi610s6MNjO/60RjbH2YqUrq3aU6hh8qXLbixMzhx1kbVgU8=
+	t=1717683529; cv=none; b=CE4H9Diw48VxjKmnT/XvTMpLKA/oilg0dML+VJWYyElflynTWIYajCuIPP/0wRVRHYy9RwBmQ8N91oyQqvIR9x7fN/U+aci4S1ZtL2z1X2W+2vFDwGHVhTyzjijpFFdGuEo/lOyoqumhpcF+osVUXQUhc83D+yb1dxD3nDB8ves=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717682850; c=relaxed/simple;
-	bh=4hNVwq7cQHTyBDF20Y8fpBPc7zzCmTIUwUsM/ZBouxc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=opEuYYi0qN1Dpj0/JWxtXmi/pE4+vqPfeGzSHl1xRzFA6bFPNUZEIzN5KnbcM4796O5+s33GOA9CQ2/8c4DhjD5WDY6BZ4GIy0S3ZHwMsYUzaHLEQx91kAfC0/4ba44wSsxaBPQO1LfJenj47brW2kP26M6VzLW7bL+SDJASkfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=c7SBjxGH; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a6269885572so380453166b.1
-        for <linux-pm@vger.kernel.org>; Thu, 06 Jun 2024 07:07:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1717682847; x=1718287647; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=WuYJQB/gpV+Bc6GPW32Ein19OoVtrm6WSZM3VYy51qc=;
-        b=c7SBjxGHFa+SkS9v9Wezr2GzfjN2D80NzAMw4SvhK2b3o6z9HzcLT7vNAnidK2AUI0
-         hF0XgnqdWWblA0qYLKS8hJdTalqnx7/GH48m6mLr/WttzFWucrnKMXJ715smZzK5lTqR
-         ovknSKZZ2wDcPVMSzNaqYy9ptt41M3jSbKfgtA7+bDhjdnYnbvtog9nNnYZS0WPh9gpY
-         aqoyEd6ZUHfgRAZqB7PmufRmHJJTetxOt09EASgeQ/alVcohbdixTQaO0Ut5e8Fc8Zrw
-         hcQHnzbW1ESbhfvqf5ywcTq9BuanNIaktlo7725Jk3Yzyy/WyCullVjS7IHhXsFt46ks
-         7fng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717682847; x=1718287647;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WuYJQB/gpV+Bc6GPW32Ein19OoVtrm6WSZM3VYy51qc=;
-        b=q2CkxfcLLSnA9Winy3zgqL/qxKNFa3cZzXkMqxy+ihUghNcb7wi/Bx8XAjYWfDlQiL
-         sSuyW6VLrTkKkbwPo6NfcfQM2gnCFhRfTeHJJOE/v3vx12BnLIsJb0pzfYlQwYeWrV8C
-         vdtCW1PPTpGBgvIxhvUR2t91CINPAR1iafRYIWt7GC5nBiDbDfpzhXA9kEuTCmQUChWM
-         rAdKoqAMNcFheOstmSCV+W4WC621vu6Hd6qfyWJlt1xFjoQlhosXXkbSzCGcaDN3j3+m
-         cQ+TeKqBRcSuei3rlw4xhBf69r7jAjXMoKGAj7Zka/vnErOL5erypStrGWt4OTYAehlW
-         qSFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCURCv4aKnP5w6BRL6xeIY0tkVZov4iqese2U/i7WI1q3GyaX9Ih0KQsGcK0ksWkytKRxRJy7I+X+ZkUXSl7DBsSSpGknHV/pcs=
-X-Gm-Message-State: AOJu0YwpDqUbXx1MTiO8kC3g0Ob1Lpw0UJusxboUli1ig40yQvXtXVU2
-	WcsQ7CcvUw6xkAIu6eAE14itHXb2YHsiZMQvHtcwxjEynz5+E7NJpWZpWRhdnnk=
-X-Google-Smtp-Source: AGHT+IEJuB2kN44q8dic1aobVJvgm0GkwA2QTBAqO7TjvoBitMWf4fmH36skjlZte8txrFIr5rt98g==
-X-Received: by 2002:a17:906:459c:b0:a59:be21:3587 with SMTP id a640c23a62f3a-a6c75f94214mr232595466b.8.1717682845919;
-        Thu, 06 Jun 2024 07:07:25 -0700 (PDT)
-Received: from [192.168.128.139] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6c8072ac5asm101513266b.219.2024.06.06.07.07.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jun 2024 07:07:25 -0700 (PDT)
-Message-ID: <90bb9256-d54d-4e01-aa06-4184e2b95d48@linaro.org>
-Date: Thu, 6 Jun 2024 16:07:23 +0200
+	s=arc-20240116; t=1717683529; c=relaxed/simple;
+	bh=YYYTroV05/ffOg/2MOMOK0Q5DM2WQSttah0HBo7odRE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZOry2x2Z5lACgNISTWQqV5mEtHfL0gy4xJBru44Dn9jr8xeP6/JVXB/9VJljA5BEjaxt4KYPson2Y31C01UuDDCM74AZwoZRkzThW4pdCFYQlmHfxtZ6bF/zemMqCvv3FW/GFpQ3i1m6+VFA8m0Jp817dcydoAq+aNBIFk4BxCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VF7kITSp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7247AC4AF07;
+	Thu,  6 Jun 2024 14:18:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717683528;
+	bh=YYYTroV05/ffOg/2MOMOK0Q5DM2WQSttah0HBo7odRE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=VF7kITSpIgY4KyL8V/XPxYu/IHtOPcdTwdWxZP2r5ILxJxElcMkknv5n3mvF93KOO
+	 ijiTMwphiy4NYiId6FlPGGZ+L10ztLFctBtLUvMFABVYnlBQVC7PQ4ZJ/qri38egdH
+	 Ati0bxx0t9CkBNXst0FYgn0BARCknxK0b98t1y+nvAsNkEXqsTtkYZF91JPn8Nm8eY
+	 nqsVVxrWeCcubzNUCXv9pZMiv7AXijdt+6n1EmBbA8QdHvYiY5bz++zNmfVosMkxmi
+	 ErabVl3pDXRUrIj0gUkmUQOY5GXXTYQyAYH0Zopgr9pGn6eqjr40W9hlJPRNSSLp6E
+	 2/SnFxRpOyNKQ==
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5b3364995b4so147269eaf.0;
+        Thu, 06 Jun 2024 07:18:48 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWE9gmlsPhixLihakg/zgPv4kzNJlVICb0ygsTtQlXUK/rwNX6kwGe6kENBWFaJ8hMYBq08JMadRQjtdZRY8gFmAoCLcxusDyunuFTAnrSJFK4BH0Tp4a9ZPpNAoemeMrxCUwiZBJkHmZsx6oUEFFp7BNfhV1DTxQMPlMtAaLgRzXYO
+X-Gm-Message-State: AOJu0YwmzjHbDQYU2XjCvFq651WaZz7bwpM7tihqqcnVaOsxtPnub7FB
+	TKMchCsLzBJnJGG0yF74vKizsCgZ3rLGil+xZjJU+HRkanP+bjA69rfzRCQw9+tcZazfKjNPqjT
+	6dVUeOwDLued27wRFrO2njUm49k0=
+X-Google-Smtp-Source: AGHT+IEEqwqBmCZCeoe/yLOk2KEOkJIrsXRc8sijomiJ3iojMq0et9jelM+hJiW+6Z50VoXmGC2Msr9e8Srp5+thjZ8=
+X-Received: by 2002:a05:6820:2b02:b0:5b2:7e47:e914 with SMTP id
+ 006d021491bc7-5ba78d3bb71mr442464eaf.0.1717683527592; Thu, 06 Jun 2024
+ 07:18:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 0/6] Add interconnect driver for IPQ9574 SoC
-To: Varadarajan Narayanan <quic_varada@quicinc.com>, andersson@kernel.org,
- mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, djakov@kernel.org,
- dmitry.baryshkov@linaro.org, quic_anusha@quicinc.com,
- linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, bryan.odonoghue@linaro.org
-References: <20240430064214.2030013-1-quic_varada@quicinc.com>
- <ZjXrTywO6+iRaEYk@hu-varada-blr.qualcomm.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <ZjXrTywO6+iRaEYk@hu-varada-blr.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <4569763.LvFx2qVVIh@kreacher> <5f93f034-f781-47e0-b8ce-3c8407a709f7@linaro.org>
+ <CAJZ5v0hkOvYL66D+tCRJxbp=XqV59yeZ0dA1Kxoczkcpe5X9sA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hkOvYL66D+tCRJxbp=XqV59yeZ0dA1Kxoczkcpe5X9sA@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 6 Jun 2024 16:18:35 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0joTyOcRU0FyaHEEYEbiPbbNSFzW3P7eJJ4MM5QdhQR2w@mail.gmail.com>
+Message-ID: <CAJZ5v0joTyOcRU0FyaHEEYEbiPbbNSFzW3P7eJJ4MM5QdhQR2w@mail.gmail.com>
+Subject: Re: [PATCH v1] thermal: core: Do not fail cdev registration because
+ of invalid initial state
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
+	Linux ACPI <linux-acpi@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Lukasz Luba <lukasz.luba@arm.com>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>, 
+	Laura Nao <laura.nao@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 4.05.2024 10:01 AM, Varadarajan Narayanan wrote:
-> Bjorn,
-> 
->> On Tue, Apr 30, 2024 at 12:12:08PM +0530, Varadarajan Narayanan wrote:
->> MSM platforms manage NoC related clocks and scaling from RPM.
->> However, in IPQ SoCs, RPM is not involved in managing NoC
->> related clocks and there is no NoC scaling.
->>
->> However, there is a requirement to enable some NoC interface
->> clocks for the accessing the peripherals present in the
->> system. Hence add a minimalistic interconnect driver that
->> establishes a path from the processor/memory to those peripherals
->> and vice versa.
->>
->> Change icc-clk driver to take master and slave ids instead
->> of auto generating.
->>
->> Currently, drivers/clk/qcom/clk-cbf-8996.c is the only user of
->> icc-clk. And, it had exactly one master and one slave node.
->> For this the auto generated master (= 1) and slave (= 0) was
->> enough.
->>
->> However, when drivers/clk/qcom/gcc-ipq9574.c wanted to make use
->> of the icc-clk framework, it had more number of master and slave
->> nodes and the auto generated ids did not suit the usage.
->>
->> ---
->> v11:	No code changes
->> 	Commit log changed for the first patch
->> 	Added Acked-By: to 3 patches
-> 
-> Can this be included in your driver changes for 6.10?
+On Thu, Jun 6, 2024 at 3:42=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.org=
+> wrote:
+>
+> On Thu, Jun 6, 2024 at 3:07=E2=80=AFPM Daniel Lezcano <daniel.lezcano@lin=
+aro.org> wrote:
+> >
+> > On 05/06/2024 21:17, Rafael J. Wysocki wrote:
+> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >
+> > > It is reported that commit 31a0fa0019b0 ("thermal/debugfs: Pass cooli=
+ng
+> > > device state to thermal_debug_cdev_add()") causes the ACPI fan driver
+> > > to fail probing on some systems which turns out to be due to the _FST
+> > > control method returning an invalid value until _FSL is first evaluat=
+ed
+> > > for the given fan.  If this happens, the .get_cur_state() cooling dev=
+ice
+> > > callback returns an error and __thermal_cooling_device_register() fai=
+ls
+> > > as uses that callback after commit 31a0fa0019b0.
+> > >
+> > > Arguably, _FST should not return an inavlid value even if it is
+> > > evaluated before _FSL, so this may be regarded as a platform firmware
+> > > issue, but at the same time it is not a good enough reason for failin=
+g
+> > > the cooling device registration where the initial cooling device stat=
+e
+> > > is only needed to initialize a thermal debug facility.
+> > >
+> > > Accordingly, modify __thermal_cooling_device_register() to pass a
+> > > negative state value to thermal_debug_cdev_add() instead of failing
+> > > if the initial .get_cur_state() callback invocation fails and adjust
+> > > the thermal debug code to ignore negative cooling device state values=
+.
+> > >
+> > > Fixes: 31a0fa0019b0 ("thermal/debugfs: Pass cooling device state to t=
+hermal_debug_cdev_add()")
+> > > Closes: https://lore.kernel.org/linux-acpi/20240530153727.843378-1-la=
+ura.nao@collabora.com
+> > > Reported-by: Laura Nao <laura.nao@collabora.com>
+> > > Tested-by: Laura Nao <laura.nao@collabora.com>
+> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > As it is a driver issue, it should be fixed in the driver, not in the
+> > core code. The resulting code logic in the core is trying to deal with
+> > bad driver behavior, it does not really seem appropriate.
 
-FWIW there is still an open discussion at v9
-<CAA8EJpqENsojPQmCbma_nQLEZq8nK1fz1K0JdtvLd=kPrH_DBw@mail.gmail.com>
+Besides, I don't quite agree with dismissing it as a driver issue.  If
+a driver cannot determine the cooling device state, it should not be
+required to make it up.
 
-Konrad
+Because .get_cur_state() is specifically designed to be able to return
+an error, the core should be prepared to deal with errors returned by
+it and propagating the error is not always the best choice, like in
+this particular case.
+
+> > The core code has been clean up from the high friction it had with the
+> > legacy ACPI code. It would be nice to continue it this direction.
+
+This isn't really ACPI specific.  Any driver can return an error from
+.get_cur_state() if it has a good enough reason.
+
+> Essentially, you are saying that .get_cur_state() should not return an
+> error even if it gets an utterly invalid value from the platform
+> firmware.
+>
+> What value should it return then?
 
