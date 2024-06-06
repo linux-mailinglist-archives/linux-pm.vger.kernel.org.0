@@ -1,123 +1,281 @@
-Return-Path: <linux-pm+bounces-8713-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8714-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6892E8FE813
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 15:43:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CEF88FE869
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 16:06:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C7294B22821
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 13:43:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 240901C25878
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 14:06:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C45C819642A;
-	Thu,  6 Jun 2024 13:43:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F10C196C97;
+	Thu,  6 Jun 2024 14:06:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WIc05CTM"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="luh/ZlY6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 978BA195FFE;
-	Thu,  6 Jun 2024 13:43:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D1DF196C72
+	for <linux-pm@vger.kernel.org>; Thu,  6 Jun 2024 14:06:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717681391; cv=none; b=Q1EKqOkU4mANxF6/2hdTS7jtdL27t8LxcNzV6MBt73P1PPWTsVXWiZBn19+eL88LDjVbrIctx6DQBmB1NCusZc6t0fRV8EzvR6G+pCsmrI2xoY7zBQonbE0lqsAarVgsaywVeSaAsIiZZP4Q6LXYAugzG+gyQLFj5Tf2xVnWbnA=
+	t=1717682769; cv=none; b=lZAErstDf5CqcKFwI8uLQ2L7QgWsBsNYZ0k2h+a32Y+M6wjvqBqt9Eroog9axrjxJXQ1mud97iJxQrFfGP8xg3TlEcF5p/+0ygliCD6ttc/9bjj/b1cOnqyQIBc3kZw4xfAvfcUE00cii5gktMaBvZfuYO/4EjRUvl9RILHWOXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717681391; c=relaxed/simple;
-	bh=kX1+TUdz8cNcUskmb6NdxdcNtxJMTV95e7OlXyGW47I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eZyi6m9F4HR6xcfgXp0PTcCksCEJTSiwmFjTI+/oD1MKQDhaXCpp5kwycneSya3GLyYe4c1kgcoL4A7qQoxlhAKAExUdE1B9l/fdvJVaiQyumxfQp36RGKGRE9kwDEGCHU1260QeLtnig02aBIqYAP9dpXEuZCZsvMgtJ4oEoNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WIc05CTM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C596C4AF07;
-	Thu,  6 Jun 2024 13:43:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717681391;
-	bh=kX1+TUdz8cNcUskmb6NdxdcNtxJMTV95e7OlXyGW47I=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=WIc05CTM9DM8Wlx6/Rn1BWhHD5ovl2CQXMXEBFXrZ89KOhwXp1cXAACCF1B+GvLzj
-	 hI2O3ErLmx2uhcXKCEW03IL0y9+7d6WCZpnXCG501cj/7jQFvsHHsP5BPs8XPa/kWq
-	 WxLsoeCaIdk2QQGg2Hr02gNwG3Y35gkkbx2dnRmcaWiLk49Z0EH6egckjyHC6pVlky
-	 fbCA7SB/KtDF54JrakHBiF2xCSOCHfZh6m4bDOBhyC5eWCbccMmHX5oRakieRCIkl5
-	 0g767rw59SGKOSHObRdiGHDqCqeowAOxTPGg3a1VuswLlvMEGEG6UI24EEIA3S/VDh
-	 rzuZiToF+B9ZQ==
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-5b335681e82so139871eaf.2;
-        Thu, 06 Jun 2024 06:43:11 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVb/qiuHsyCR55cQtvwXAGppqbjruaPWSGPA0VdCjznq21AJzl8R6cESM4lxL8u0b41X9bEj4qE5a6qilEFpFmiYRcoVm3HMKuHp9gwao5KZKGm915yt2j49GF9ka5kd4MCM4vmEEGUnApr04RfVxCE1QxtUyssioaqMTj4XyXphMCL
-X-Gm-Message-State: AOJu0Yw2gSw1I3Pg7IKvCMsyXBx/9zprKkVxz0nwV+ZRNObaZHBrBmBL
-	o6BasYHgHkBJBzzMXLCpuL+IflQlz9biDGxav3Alu2nKuVqBICeXbCz3JxM6n3gdEWxwoIt2W0H
-	BvZ8+nsfsEDTx9kh8bD0kn4/ZQ1g=
-X-Google-Smtp-Source: AGHT+IGH1/PBSYTdAuOFfLPnVUByi6WZQhVobPYV9sXwjcCyOryn71Pt2/ePacaenZivpYC63hY1sNj+df3fcdywwHk=
-X-Received: by 2002:a05:6820:2b02:b0:5b2:7e47:e914 with SMTP id
- 006d021491bc7-5ba78d3bb71mr334007eaf.0.1717681390197; Thu, 06 Jun 2024
- 06:43:10 -0700 (PDT)
+	s=arc-20240116; t=1717682769; c=relaxed/simple;
+	bh=0XIaO8VC8/Cr25KGmS0Cf8z2nqAra51paSuynMDMkSA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GTl/76HqTN1+7uZFhP0ZbHKMgfuwXHdnnDnbqJqyImK6aOUnsjw/ZZVAKQ8zSkSoTom4jrXltaSEYtCUiV0UtveaUpBlTo57OrtUM0dDsQmlQ9sVQC72gsxK0sJqixjCSwOQNv5lylZMPcbeIEMVI110jZdk+bUXeAPKCChlkhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=luh/ZlY6; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-57a1fe63a96so1207811a12.0
+        for <linux-pm@vger.kernel.org>; Thu, 06 Jun 2024 07:06:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1717682765; x=1718287565; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=vQKb19ONiS07YwbhzyqTZ4NVaKzqW4YHDAO1Nu9VvEE=;
+        b=luh/ZlY6dJvTVX+ZmD4u7Vjkfi8G833l5e9dYSiFv5pIXEj5aN745++PCX2h39PRAK
+         o/Cfr0sZDk36ykEHjIYuB+HeQtzUzJlN1RNay63ryX6iADoTe4R7AYKoU2yy4i2Z/eej
+         nVGfcSoVblDQt1OnN19JON5s8sJw16/Z8hPXdLCLZYLfJZmwmzBsAqKPCTtj0FQOgsbo
+         DEqQzL8P7DhxaiCipM4spw59v6vs1DS9HzNZ/p3z0PRSBttvaI1gtMXT8uYLo2BzdwXb
+         kpvOfxGCpe4eZAFEDGrRIDPJHnaV7ZppNSCjYym3/EOAJvHfbYXW/5wbzWvJGkyKgUek
+         hLAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717682765; x=1718287565;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vQKb19ONiS07YwbhzyqTZ4NVaKzqW4YHDAO1Nu9VvEE=;
+        b=jCmys5+ajgnGHFjubodOAZ6DdOQQPzcMXTwZO2vsqb4FLBtrZCg6gVkkcdjBug3mFP
+         Ac+38mfJTEMmgDGxF8EzPx3DNHIA71PVP6oxRvJ/GIjyc/AhiZD3H9683CImYV6gahJ9
+         hDPvIzs7YD7T5thFWoX3vXde9AJZFprdJXuUvtHm+koEQS42CBolNOlizWg6i+4QcfnI
+         4or6TsUb4wUWjF6MAg2OMGwbNdKDCTTwvLBBMM0j2wEQTSjLnpft8vsRiBXcJK2Qb2BK
+         Pf2WUhVj/aMGQTAUU3tJ8QIYj8YtRdJz7+WsCdK4Gqdtqd5mbaoSBUlu/kvOOopVWTSt
+         b2hg==
+X-Forwarded-Encrypted: i=1; AJvYcCXr0W7e1p8PaXn8o0DZm3mMkYWVSpRw9GOQSLWIvPy69232dDACZpetqKX12fq4tgFkksK4B6L7icAUpiB3Tz5fBaVwqSvDRrY=
+X-Gm-Message-State: AOJu0YzM+dA8hUx6q2zT4kcH9TIO+0U0hP2/s94MbZI+SPF68od70DzG
+	C1Up8jNB5jV/0Hz6RBCBIAScxhSBHoss5PUdbhRJXPiKQPuRLuKblbVCBdnS52o=
+X-Google-Smtp-Source: AGHT+IHMBu9F3fZBohRfOXGBJmwL+dUO/U6UFuk7SvnfrU+SXs+rB4HE/CdJVvunmmD5Lrwi01e+sw==
+X-Received: by 2002:a50:ab0d:0:b0:57a:79c2:e9d5 with SMTP id 4fb4d7f45d1cf-57a8b6ac6c0mr3439122a12.18.1717682764777;
+        Thu, 06 Jun 2024 07:06:04 -0700 (PDT)
+Received: from [192.168.128.139] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57aadcbf568sm1166892a12.0.2024.06.06.07.06.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jun 2024 07:06:04 -0700 (PDT)
+Message-ID: <1a08ef42-b52f-4c97-90d7-e7fdee7725b4@linaro.org>
+Date: Thu, 6 Jun 2024 16:06:01 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <4569763.LvFx2qVVIh@kreacher> <5f93f034-f781-47e0-b8ce-3c8407a709f7@linaro.org>
-In-Reply-To: <5f93f034-f781-47e0-b8ce-3c8407a709f7@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 6 Jun 2024 15:42:58 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hkOvYL66D+tCRJxbp=XqV59yeZ0dA1Kxoczkcpe5X9sA@mail.gmail.com>
-Message-ID: <CAJZ5v0hkOvYL66D+tCRJxbp=XqV59yeZ0dA1Kxoczkcpe5X9sA@mail.gmail.com>
-Subject: Re: [PATCH v1] thermal: core: Do not fail cdev registration because
- of invalid initial state
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	Linux ACPI <linux-acpi@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Lukasz Luba <lukasz.luba@arm.com>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>, 
-	Laura Nao <laura.nao@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 6/6] arm64: dts: qcom: ipq9574: Add icc provider
+ ability to gcc
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc: Georgi Djakov <djakov@kernel.org>, andersson@kernel.org,
+ mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, quic_anusha@quicinc.com,
+ linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20240418092305.2337429-1-quic_varada@quicinc.com>
+ <20240418092305.2337429-7-quic_varada@quicinc.com>
+ <a7194edd-a2c8-46fc-bea1-f26b0960e535@linaro.org>
+ <Ziov6bWBXYXJ4Zp8@hu-varada-blr.qualcomm.com>
+ <27f4f3dd-9375-40cf-8c8f-1c4edf66e31b@linaro.org>
+ <ZjNdTmmXucjtRxJt@hu-varada-blr.qualcomm.com>
+ <c015b3a5-2213-4ebd-b960-d97ed1fe7062@kernel.org>
+ <ZjshR0ekcn0gxwOa@hu-varada-blr.qualcomm.com>
+ <CAA8EJpqENsojPQmCbma_nQLEZq8nK1fz1K0JdtvLd=kPrH_DBw@mail.gmail.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <CAA8EJpqENsojPQmCbma_nQLEZq8nK1fz1K0JdtvLd=kPrH_DBw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jun 6, 2024 at 3:07=E2=80=AFPM Daniel Lezcano <daniel.lezcano@linar=
-o.org> wrote:
->
-> On 05/06/2024 21:17, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > It is reported that commit 31a0fa0019b0 ("thermal/debugfs: Pass cooling
-> > device state to thermal_debug_cdev_add()") causes the ACPI fan driver
-> > to fail probing on some systems which turns out to be due to the _FST
-> > control method returning an invalid value until _FSL is first evaluated
-> > for the given fan.  If this happens, the .get_cur_state() cooling devic=
-e
-> > callback returns an error and __thermal_cooling_device_register() fails
-> > as uses that callback after commit 31a0fa0019b0.
-> >
-> > Arguably, _FST should not return an inavlid value even if it is
-> > evaluated before _FSL, so this may be regarded as a platform firmware
-> > issue, but at the same time it is not a good enough reason for failing
-> > the cooling device registration where the initial cooling device state
-> > is only needed to initialize a thermal debug facility.
-> >
-> > Accordingly, modify __thermal_cooling_device_register() to pass a
-> > negative state value to thermal_debug_cdev_add() instead of failing
-> > if the initial .get_cur_state() callback invocation fails and adjust
-> > the thermal debug code to ignore negative cooling device state values.
-> >
-> > Fixes: 31a0fa0019b0 ("thermal/debugfs: Pass cooling device state to the=
-rmal_debug_cdev_add()")
-> > Closes: https://lore.kernel.org/linux-acpi/20240530153727.843378-1-laur=
-a.nao@collabora.com
-> > Reported-by: Laura Nao <laura.nao@collabora.com>
-> > Tested-by: Laura Nao <laura.nao@collabora.com>
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> As it is a driver issue, it should be fixed in the driver, not in the
-> core code. The resulting code logic in the core is trying to deal with
-> bad driver behavior, it does not really seem appropriate.
->
-> The core code has been clean up from the high friction it had with the
-> legacy ACPI code. It would be nice to continue it this direction.
+On 8.05.2024 10:10 AM, Dmitry Baryshkov wrote:
+> On Wed, 8 May 2024 at 09:53, Varadarajan Narayanan
+> <quic_varada@quicinc.com> wrote:
+>>
+>> On Fri, May 03, 2024 at 04:51:04PM +0300, Georgi Djakov wrote:
+>>> Hi Varada,
+>>>
+>>> Thank you for your work on this!
+>>>
+>>> On 2.05.24 12:30, Varadarajan Narayanan wrote:
+>>>> On Tue, Apr 30, 2024 at 12:05:29PM +0200, Konrad Dybcio wrote:
+>>>>> On 25.04.2024 12:26 PM, Varadarajan Narayanan wrote:
+>>>>>> On Tue, Apr 23, 2024 at 02:58:41PM +0200, Konrad Dybcio wrote:
+>>>>>>>
+>>>>>>>
+>>>>>>> On 4/18/24 11:23, Varadarajan Narayanan wrote:
+>>>>>>>> IPQ SoCs dont involve RPM in managing NoC related clocks and
+>>>>>>>> there is no NoC scaling. Linux itself handles these clocks.
+>>>>>>>> However, these should not be exposed as just clocks and align
+>>>>>>>> with other Qualcomm SoCs that handle these clocks from a
+>>>>>>>> interconnect provider.
+>>>>>>>>
+>>>>>>>> Hence include icc provider capability to the gcc node so that
+>>>>>>>> peripherals can use the interconnect facility to enable these
+>>>>>>>> clocks.
+>>>>>>>>
+>>>>>>>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>>>>>>>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+>>>>>>>> ---
+>>>>>>>
+>>>>>>> If this is all you do to enable interconnect (which is not the case,
+>>>>>>> as this patch only satisfies the bindings checker, the meaningful
+>>>>>>> change happens in the previous patch) and nothing explodes, this is
+>>>>>>> an apparent sign of your driver doing nothing.
+>>>>>>
+>>>>>> It appears to do nothing because, we are just enabling the clock
+>>>>>> provider to also act as interconnect provider. Only when the
+>>>>>> consumers are enabled with interconnect usage, this will create
+>>>>>> paths and turn on the relevant NOC clocks.
+>>>>>
+>>>>> No, with sync_state it actually does "something" (sets the interconnect
+>>>>> path bandwidths to zero). And *this* patch does nothing functionally,
+>>>>> it only makes the dt checker happy.
+>>>>
+>>>> I understand.
+>>>>
+>>>>>> This interconnect will be used by the PCIe and NSS blocks. When
+>>>>>> those patches were posted earlier, they were put on hold until
+>>>>>> interconnect driver is available.
+>>>>>>
+>>>>>> Once this patch gets in, PCIe for example will make use of icc.
+>>>>>> Please refer to https://lore.kernel.org/linux-arm-msm/20230519090219.15925-5-quic_devipriy@quicinc.com/.
+>>>>>>
+>>>>>> The 'pcieX' nodes will include the following entries.
+>>>>>>
+>>>>>>         interconnects = <&gcc MASTER_ANOC_PCIE0 &gcc SLAVE_ANOC_PCIE0>,
+>>>>>>                         <&gcc MASTER_SNOC_PCIE0 &gcc SLAVE_SNOC_PCIE0>;
+>>>>>>         interconnect-names = "pcie-mem", "cpu-pcie";
+>>>>>
+>>>>> Okay. What about USB that's already enabled? And BIMC/MEMNOC?
+>>>>
+>>>> For USB, the GCC_ANOC_USB_AXI_CLK is enabled as part of the iface
+>>>> clock. Hence, interconnect is not specified there.
+>>>>
+>>>> MEMNOC to System NOC interfaces seem to be enabled automatically.
+>>>> Software doesn't have to turn on or program specific clocks.
+>>>>
+>>>>>>> The expected reaction to "enabling interconnect" without defining the
+>>>>>>> required paths for your hardware would be a crash-on-sync_state, as all
+>>>>>>> unused (from Linux's POV) resources ought to be shut down.
+>>>>>>>
+>>>>>>> Because you lack sync_state, the interconnects silently retain the state
+>>>>>>> that they were left in (which is not deterministic), and that's precisely
+>>>>>>> what we want to avoid.
+>>>>>>
+>>>>>> I tried to set 'sync_state' to icc_sync_state to be invoked and
+>>>>>> didn't see any crash.
+>>>>>
+>>>>> Have you confirmed that the registers are actually written to, and with
+>>>>> correct values?
+>>>>
+>>>> I tried the following combinations:-
+>>>>
+>>>> 1. Top of tree linux-next + This patch set
+>>>>
+>>>>     * icc_sync_state called
+>>>>     * No crash or hang observed
+>>>>     * From /sys/kernel/debug/clk/clk_summary can see the
+>>>>       relevant clocks are set to the expected rates (compared
+>>>>       with downstream kernel)
+>>>>
+>>>> 2. Top of tree linux-next + This patch set + PCIe enablement
+>>>>
+>>>>     * icc_sync_state NOT called
+>>>
+>>> If sync_state() is not being called, that usually means that there
+>>> are interconnect consumers that haven't probed successfully (PCIe?)
+>>> or their dependencies. That can be checked in /sys/class/devlink/.../status
+>>> But i am not sure how this works for PCI devices however.
+>>>
+>>> You can also manually force a call to sync_state by writing "1" to
+>>> the interconnect provider's /sys/devices/.../state_synced
+>>>
+>>> Anyway, the question is if PCIe and NSS work without this driver?
+>>
+>> No.
+>>
+>>> If they work, is this because the clocks are turned on by default
+>>> or by the boot loader?
+>>
+>> Initially, the PCIe/NSS driver enabled these clocks directly
+>> by having them in their DT nodes itself. Based on community
+>> feedback this was removed and after that PCIe/NSS did not work.
+>>
+>>> Then if an interconnect path (clock) gets disabled either when we
+>>> reach a sync_state (with no bandwidth requests) or we explicitly
+>>> call icc_set_bw() with 0 bandwidth values, i would expect that
+>>> these PCIe and NSS devices would not function anymore (it might
+>>> save some power etc) and if this is unexpected we should see a
+>>> a crash or hang...
+>>>
+>>> Can you confirm this?
+>>
+>> With ICC enabled, icc_set_bw (with non-zero values) is called by
+>> PCIe and NSS drivers. Haven't checked with icc_set_bw with zero
+>> values.
+>>
+>> PCIe:   qcom_pcie_probe -> qcom_pcie_icc_init -> icc_set_bw
+>> NSS:    ppe_icc_init -> icc_set_bw
+>>
+>> I believe sync_state is not getting called since there is a
+>> non-zero set bandwidth request. Which seems to be aligned with
+>> your explanation.
+> 
+> This doesn't look correct. sync_state is being called once all
+> consumers are probed. It doesn't matter whether those consumers have
+> non-zero bandwidth requests or no.
 
-Essentially, you are saying that .get_cur_state() should not return an
-error even if it gets an utterly invalid value from the platform
-firmware.
+/sys/kernel/debug/devices_deferred may have some useful info, too
 
-What value should it return then?
+Konrad
 
