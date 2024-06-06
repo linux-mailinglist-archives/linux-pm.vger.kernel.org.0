@@ -1,128 +1,160 @@
-Return-Path: <linux-pm+bounces-8737-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8738-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CC548FF468
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 20:12:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D68CC8FF475
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 20:15:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 101521F21ABE
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 18:12:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F04B287C4F
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 18:15:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B101D199383;
-	Thu,  6 Jun 2024 18:12:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C255199385;
+	Thu,  6 Jun 2024 18:14:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NCe97Jy0"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="LRBftX5x"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30A5F16FF26;
-	Thu,  6 Jun 2024 18:12:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B74F198E74;
+	Thu,  6 Jun 2024 18:14:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717697565; cv=none; b=DiYTaL1OjwY6o9TU0gCPat9mfGfzWJ5eR3zX3LYoDA8mgE4czmHIukG7PA4bCsMzNXbcRdJHGL56FJKz8wKZ7dNazIKl6AimnOCixsseHlAHR6GfLBr4itAvXz8gN7MHqpN31ObALvp4nmEzE8vPbjMttBVbbGwUWGcMFs/tFMM=
+	t=1717697698; cv=none; b=l+DImWGznili8tB2O8DU/JL1fl8nwRjvN52RiGDUR+z27WG5H+K+fZgtNj1/ZW5C+KIFVll6+zFScNgBqmXv1tE1aabfyGvEF+tc78bsX/RTfKc5rlTb9+uNhHHhGs3FpFmfWw8PFVWJqg9agD9Pj5pX8l2FDQkc/DjssHz0QK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717697565; c=relaxed/simple;
-	bh=HiI/oLWPaJYnVHp8ME9u+IoBB1OrV4LXCTP5IlQqX2g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GRde3nTLzB8zuprFFWDGqMmDNfW6ppIJ/+W/r9SHyJuL8yEgv+ycKh0qXQ7tORmSV9bEgtV4qh95ubJmRLxmoyDSN0ORuPkrsC++54Zzz0ywl2ShkeHOdh6CSP9PBPzrJlIpf8ZS0K7SrsWkx3/EPbBtBoYYy53FxJt/2rVwtos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NCe97Jy0; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717697564; x=1749233564;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=HiI/oLWPaJYnVHp8ME9u+IoBB1OrV4LXCTP5IlQqX2g=;
-  b=NCe97Jy0bzMzWETnnqAkVwooqTzQc1TmwSOddrA4OVp3IETecWZaU0FQ
-   eT/Ti/qK64FpS5OAddriwvQJkPKL7v8Nznnnfsa3k/8uITTmXLKTmHzx7
-   AIB6DpMBuZiWRys1eA5Y9/Qcg1+sO5sm/eR6+ycWdmZrL13o9mR2BVJuS
-   y/eCRZlq11+4zCAsTVncmHGMI0LSgHvSseuzBoficDvTBxRk8hwlDxzw5
-   vHlFVwieb2IgZM9aa2qhfrngBfVcetq4LaIzB44Zq4jXF00TWXVKZWVXK
-   eVzRKR3zYEB6pe34VEoVYyc50CVJYcYu/94OqMUawUaeod2z19VIWmaM5
-   g==;
-X-CSE-ConnectionGUID: cDmcBfENSuaNk+2q/2NbjQ==
-X-CSE-MsgGUID: zROOiIJkSiCGtI6jQPSWVQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11095"; a="24963466"
-X-IronPort-AV: E=Sophos;i="6.08,219,1712646000"; 
-   d="scan'208";a="24963466"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2024 11:12:36 -0700
-X-CSE-ConnectionGUID: XNrJW7EeQ5Wyey27xaw8Zg==
-X-CSE-MsgGUID: v3t2HpxhQ1m36LJLjA7yFg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,219,1712646000"; 
-   d="scan'208";a="38122661"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.19])
-  by orviesa009.jf.intel.com with ESMTP; 06 Jun 2024 11:12:36 -0700
-From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To: rafael@kernel.org,
-	viresh.kumar@linaro.org
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] cpufreq: intel_pstate: Update Meteor Lake EPPs
-Date: Thu,  6 Jun 2024 11:12:14 -0700
-Message-ID: <20240606181214.2456266-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.44.0
+	s=arc-20240116; t=1717697698; c=relaxed/simple;
+	bh=M9XIPOULFDe6w6kGb/xahMh6Yl3IJasd1iK5x4l9yqw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=EN+3Y7WZeMXGAt6bkG3urpVmb69/AH7b2kl7sr4JVf67RtOvKtmgnJ+ysgbSkW5bECUdVCm3LFdx89qRm56Ym9aeWSWbMfTBC8rymoQz+RCmyy1KOm3LD9YkkIm5Tn431MmN1hMmQZTVpejT4zm3MDdYfl+1QHY668ALghf+PJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=fail (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=LRBftX5x reason="signature verification failed"; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.1.0)
+ id 436db8d5d006e18c; Thu, 6 Jun 2024 20:14:53 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 352946A65D2;
+	Thu,  6 Jun 2024 20:14:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1717697693;
+	bh=M9XIPOULFDe6w6kGb/xahMh6Yl3IJasd1iK5x4l9yqw=;
+	h=From:To:Cc:Subject:Date;
+	b=LRBftX5xDVJR0MW/8CQlboQhcFkEEFkZNIArPAVzKM7iV7dfh6+EnO3pNMNv8tOTG
+	 /A2zwtBh7bhvJf+EOCLmNWo1qZ4thq6M3rOuhi1Jt8hV4f+iFBlS/DHSmcS31G555S
+	 XpIwAR0ejTC3jYV724rc8wddTKWatK3XaQEcpSM3dWWje7NGND1uhazg6mjpdfTSnI
+	 7TKHHSdX2myi62lLJ0DobgZhR4APtCoP1PcgPQAi3Qx+/XPaB8VM58y3dKcJwaN/XR
+	 65XbwPrg6fk15ZocsOZblkzAA4A7Kh7zOSZ00Im/Az51O6W4ddSo+v2MJWlEJG7Kki
+	 xZo0iqU895n4g==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Laura Nao <laura.nao@collabora.com>
+Cc: Linux ACPI <linux-acpi@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Zhang Rui <rui.zhang@intel.com>
+Subject:
+ [PATCH v3] thermal: core: Do not fail cdev registration because of invalid
+ initial state
+Date: Thu, 06 Jun 2024 20:14:52 +0200
+Message-ID: <12456961.O9o76ZdvQC@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrvdelkedguddvudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeegfffhudejlefhtdegffekteduhfethffhieettefhkeevgfdvgfefieekiefgheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepkedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhgruhhrrgdrnhgrohestgholhhlrggsohhrrgdrtghomhdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhk
+ vghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=8 Fuz1=8 Fuz2=8
 
-Update the default balance_performance EPP to 64. This gives better
-performance and also perf/watt compared to current value of 115.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Subject: [PATCH v3] thermal: core: Do not fail cdev registration because of invalid initial state
 
-For example:
+It is reported that commit 31a0fa0019b0 ("thermal/debugfs: Pass cooling
+device state to thermal_debug_cdev_add()") causes the ACPI fan driver
+to fail probing on some systems which turns out to be due to the _FST
+control method returning an invalid value until _FSL is first evaluated
+for the given fan.  If this happens, the .get_cur_state() cooling device
+callback returns an error and __thermal_cooling_device_register() fails
+as uses that callback after commit 31a0fa0019b0.
 
-Speedometer 2.1
-	score: +19%
-	Perf/watt: +5.25%
+Arguably, _FST should not return an invalid value even if it is
+evaluated before _FSL, so this may be regarded as a platform firmware
+issue, but at the same time it is not a good enough reason for failing
+the cooling device registration where the initial cooling device state
+is only needed to initialize a thermal debug facility.
 
-Webxprt 4 score
-	score: +12%
-	Perf/watt: +6.12%
+Accordingly, modify __thermal_cooling_device_register() to avoid
+calling thermal_debug_cdev_add() instead of returning an error if the
+initial .get_cur_state() callback invocation fails.
 
-3DMark Wildlife extreme unlimited score
-	score: +3.2%
-	Perf/watt: +11.5%
-
-Geekbench6 MT
-	score: +2.14%
-	Perf/watt: +0.32%
-
-Also update balance_power EPP default to 179. With this change:
-	Video Playback power is reduced by 52%
-	Team video conference power is reduced by 35%
-
-With Power profile daemon now sets balance_power EPP on DC instead of
-balance_performance, updating balance_power EPP will help to extend
-battery life.
-
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Fixes: 31a0fa0019b0 ("thermal/debugfs: Pass cooling device state to thermal_debug_cdev_add()")
+Closes: https://lore.kernel.org/linux-acpi/20240530153727.843378-1-laura.nao@collabora.com
+Reported-by: Laura Nao <laura.nao@collabora.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/cpufreq/intel_pstate.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index dbbf299f4219..8b0032d6a519 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -3429,7 +3429,7 @@ static const struct x86_cpu_id intel_epp_default[] = {
- 	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L, HWP_SET_DEF_BALANCE_PERF_EPP(102)),
- 	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X, HWP_SET_DEF_BALANCE_PERF_EPP(32)),
- 	X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE_L, HWP_SET_EPP_VALUES(HWP_EPP_POWERSAVE,
--							HWP_EPP_BALANCE_POWERSAVE, 115, 16)),
-+								    179, 64, 16)),
- 	{}
- };
+v2 -> v3:
+   * Add a comment to explain the initial state of a cooling device (Daniel).
+     No functional changes.
+
+v1 -> v2:
+   * Instead of making the thermal debug code effectively ignore the invalid
+     initial cooling device state, simply don't register thermal debugfs for
+     a cooling device if its initial state returned by the driver's
+     .get_cur_state() is invalid (Daniel).
+
+Laura, please test this one even though I don't see why it wouldn't work for
+you if the v1 did.
+
+---
+ drivers/thermal/thermal_core.c |   13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+Index: linux-pm/drivers/thermal/thermal_core.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_core.c
++++ linux-pm/drivers/thermal/thermal_core.c
+@@ -999,9 +999,17 @@ __thermal_cooling_device_register(struct
+ 	if (ret)
+ 		goto out_cdev_type;
  
--- 
-2.44.0
++	/*
++	 * The cooling device's current state is only needed for debug
++	 * initialization below, so a failure to get it does not cause
++	 * the entire cooling device initialization to fail.  However,
++	 * the debug will not work for the device if its initial state
++	 * cannot be determined and drivers are responsible for ensuring
++	 * that this will not happen.
++	 */
+ 	ret = cdev->ops->get_cur_state(cdev, &current_state);
+ 	if (ret)
+-		goto out_cdev_type;
++		current_state = ULONG_MAX;
+ 
+ 	thermal_cooling_device_setup_sysfs(cdev);
+ 
+@@ -1016,7 +1024,8 @@ __thermal_cooling_device_register(struct
+ 		return ERR_PTR(ret);
+ 	}
+ 
+-	thermal_debug_cdev_add(cdev, current_state);
++	if (current_state <= cdev->max_state)
++		thermal_debug_cdev_add(cdev, current_state);
+ 
+ 	/* Add 'this' new cdev to the global cdev list */
+ 	mutex_lock(&thermal_list_lock);
+
+
 
 
