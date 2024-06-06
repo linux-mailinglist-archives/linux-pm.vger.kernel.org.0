@@ -1,296 +1,136 @@
-Return-Path: <linux-pm+bounces-8694-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8695-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A10928FE247
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 11:16:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CD468FE277
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 11:22:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0FC371F21D9C
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 09:16:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52E2A1C24ED7
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2024 09:22:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AC6014E2FF;
-	Thu,  6 Jun 2024 09:10:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82BBD1514F9;
+	Thu,  6 Jun 2024 09:21:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="GLEjZbbp"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="D5BgrmD3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DBD36D1B9;
-	Thu,  6 Jun 2024 09:10:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0DA63398E
+	for <linux-pm@vger.kernel.org>; Thu,  6 Jun 2024 09:21:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717665034; cv=none; b=nWKgzcxvFB+gRqW2jzBqxqF6R+OKyS4LIWQCf2tUQpoNRUhT9ItezIIjyZzQ8kHjoocrGWEmkoRDboYvf7v9v4C898pGu+y4vwuSMa6lwYszganN+RGS4Nr1a900quviHYlXx9rqXLsit9jWgduzhpw/Dh5ReTe+rySM8RmpRI0=
+	t=1717665707; cv=none; b=Iq3OlPh+MxyQKG3KuN08YqHNfImHpSnydZSqHcVEpyc3O4F/lPeVxzOBUGMgD1DlnEJB0cHQwuZA0pb+TYwERQha6pRNOhPw9x1qM7Prn6PW3P/tuF8mkR8LTMKT42mEn/WsKBqqZJCwSXImfOW65uC67OhcxJn0Uhm11Jpz5Ac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717665034; c=relaxed/simple;
-	bh=EtGIx90prizG+AnE+pFraDLV268gRS80lT4+w+aqaZo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=q3p26rtqxSIdhOCxgcJzuk+pzXGxjWCMiKmdX2HNY1Yl9p11+IoKAbmTzA4YS3tZgPdVkorqRvtXcBxZToy1AMsurdAfBkHd+FfFwi6MYtjONrPmro6vdSeepWSbc9N5A8tnuVWimnIZPqmhj9Y+u8uQbcwhDVmF5uzL5kRuAWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=GLEjZbbp; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 455KIBiS004162;
-	Thu, 6 Jun 2024 09:10:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	zsBeWenux3zM5BvoDcuWn2gC94RPHDwvuvLCikPbdsY=; b=GLEjZbbpMY6av01w
-	XDxtPr5aOkXg59+kr0F4JyYqZ/PGu9tgH5e+u3GvMz7QKkDTiNKaK3B5U1MjHBm/
-	boStCUGknYtFuWDYvQthlIjwcjZQf993vum9Rforj2hL2ohDMovtHaCSrCem1XAP
-	xmSsVHIKe76uKIKadBkWYKinD0cI7zQhBu3yTKckd/aBQlKlWkp4RLaBDOQ+c8Ht
-	NKATM3bhsBePxpD4nQpT7C6jOJ55K9kAOUs3qsxBtXsVpAgvOpUwGKTHMT0/U08d
-	Juxkvvg3BTfqtbMW1L+9QiJtR7I4nYBsmsNAhsPOteMpqA09Eiv7lfFUjHaGg+yk
-	yabyLQ==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yjxxas99h-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 06 Jun 2024 09:10:29 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4569ACcj031595
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 6 Jun 2024 09:10:12 GMT
-Received: from [10.214.67.37] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 6 Jun 2024
- 02:10:08 -0700
-Message-ID: <b9ee77da-bd51-4d32-8f35-d38fe8b77f44@quicinc.com>
-Date: Thu, 6 Jun 2024 14:39:52 +0530
+	s=arc-20240116; t=1717665707; c=relaxed/simple;
+	bh=tjwN2braW1ggfU8ulOrgsPDVHY3oLWrcM+PDLwBsLrQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Iq0NrtBQmcoPyBKKpw0qGq6veepT+q6C7/Z8lE2z5uUnsSANZHn0Mda5E7bfhPtBGjoTPdJ1b6o2RLYoqI4lUyK7/f3fShIxbB7u0Eg3xy1gzRvJbgBIgL+HbwDzuxcsEu2K8Jyp7urB/NWAhab4KdqpVeS+OJC9vbuAmX5Asd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=D5BgrmD3; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-42155143bb6so8423865e9.1
+        for <linux-pm@vger.kernel.org>; Thu, 06 Jun 2024 02:21:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1717665704; x=1718270504; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NW4EvucckY8CVmeUy8IT9ST3GVjxL8wLdD6zQ7ebgWc=;
+        b=D5BgrmD3B0Se48+upm2jtHZWBJOI4CHn4AoMZ0nRWfguuFT7uoi0/M0RbYrsl1GFB9
+         sKTGkEn3YiFmWNAdQNdOkX3w3y+Nrj5ADX+7d1tr4xdVW5gZTU4OtX+RVOuWQBZAwas8
+         W61ALj5DmlBtfPTfgiqNIKvifarIfd9NywAE/7l6yg0icWEcsa00XIRGU0P0CsDyXMbw
+         AvZ4zEyyyERbETf9ALZI01wEThqMoxC0WZKfsK13/t19dStKP02KS6CYdFYvGMCMdMY5
+         jIG7enDfhRgmBzSAWwLH99YA5ngnQMU1/Bo7wic5/gN28mxXxYIIkJk/HVZbyrhAxvPc
+         M7RQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717665704; x=1718270504;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NW4EvucckY8CVmeUy8IT9ST3GVjxL8wLdD6zQ7ebgWc=;
+        b=rT6x1qSRO/esomocr4oAqq3aSppZ5Y7RO5Bte+IakfXclbw1ZyPvQJZP70wyjW7qGJ
+         9koXC6t67DVYFpfmbBFakwZA4xMzyccWc3vqlA2wgE49LStoCkBsEzgplLl2wxFoW6mN
+         qRhXdVN9yscBjAtFmmKIWyloMRkqgCBsmt8guioSkpTcbRAs29U81DqYDq/Zh2L/wF9N
+         XDwNeylG9nX6Ou5oki+SH1Xhep9db8DIJFhja5kSwDG9ykVmiH3CJL7XYqOyUfyP2HXP
+         ljVxttr74X5XQZFDSTMJAk1IKq1j7fpVIs085jJGLhTS3Kv5DqlHVfMkOxy8yl9+SWQc
+         VsBA==
+X-Forwarded-Encrypted: i=1; AJvYcCWHJgiJtDvTcygW61Ul77gsqFE8ehhGB8cHx7eScjcx3qS1UrBPghkWhXjW2chvNeQvd0hHzODQVmmULreYQ+x8djIxcOjcJI8=
+X-Gm-Message-State: AOJu0YzXL4c7uhOXdNIq++4NBMtk83poSPZCwodnc8H6fLgqju7t4MfH
+	Qw1zSGdDx33NLY2pi/aMzp4T+3NGgf2tcnQ+fBaz8Xeaesg55YjqFLJl3leEGHmNVhFFMzLSt1W
+	1
+X-Google-Smtp-Source: AGHT+IEQUFhZ4ffQXqczY6bwPIu6J1c6sh9bixcCzNZvbDmwint0JLpN8+SWvWpMQ7EjeERX9pZH2w==
+X-Received: by 2002:a5d:4c52:0:b0:354:fca5:4190 with SMTP id ffacd0b85a97d-35e8ef09a32mr3843778f8f.41.1717665703974;
+        Thu, 06 Jun 2024 02:21:43 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-35ef5d4a582sm1033012f8f.35.2024.06.06.02.21.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jun 2024 02:21:43 -0700 (PDT)
+From: Neil Armstrong <neil.armstrong@linaro.org>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Kevin Hilman <khilman@baylibre.com>, 
+ Jerome Brunet <jbrunet@baylibre.com>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+ Jianxin Pan <jianxin.pan@amlogic.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
+ Xianwei Zhao <xianwei.zhao@amlogic.com>
+Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-pm@vger.kernel.org
+In-Reply-To: <20240528-a4_secpowerdomain-v1-0-2a9d7df9b128@amlogic.com>
+References: <20240528-a4_secpowerdomain-v1-0-2a9d7df9b128@amlogic.com>
+Subject: Re: [PATCH 0/3] Power: A4: add power domain driver
+Message-Id: <171766570315.3938980.14182626736757886496.b4-ty@linaro.org>
+Date: Thu, 06 Jun 2024 11:21:43 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] arm64: dts: qcom: x1e80100: Add BWMONs
-To: Sibi Sankar <quic_sibis@quicinc.com>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <djakov@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <srinivas.kandagatla@linaro.org>
-CC: <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <quic_rgottimu@quicinc.com>, <conor+dt@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <abel.vesa@linaro.org>
-References: <20240604011157.2358019-1-quic_sibis@quicinc.com>
- <20240604011157.2358019-4-quic_sibis@quicinc.com>
-Content-Language: en-US
-From: Shivnandan Kumar <quic_kshivnan@quicinc.com>
-In-Reply-To: <20240604011157.2358019-4-quic_sibis@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: GntE29tcrGe8qrZnNCwTRtwg1-kSzRFh
-X-Proofpoint-GUID: GntE29tcrGe8qrZnNCwTRtwg1-kSzRFh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-06_01,2024-06-06_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=900 adultscore=0
- priorityscore=1501 spamscore=0 malwarescore=0 mlxscore=0 bulkscore=0
- phishscore=0 suspectscore=0 lowpriorityscore=0 clxscore=1011
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2405170001 definitions=main-2406060067
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13.0
 
+Hi,
 
-
-On 6/4/2024 6:41 AM, Sibi Sankar wrote:
-> Add the CPU and LLCC BWMONs on X1E80100 SoCs.
+On Tue, 28 May 2024 16:39:27 +0800, Xianwei Zhao wrote:
+> Add power controller driver support for Amlogic A4 SoC.
 > 
-> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
-> ---
->   arch/arm64/boot/dts/qcom/x1e80100.dtsi | 169 +++++++++++++++++++++++++
->   1 file changed, 169 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/x1e80100.dtsi b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
-> index 1929c34ae70a..d86c4d3be126 100644
-> --- a/arch/arm64/boot/dts/qcom/x1e80100.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
-> @@ -5329,6 +5329,175 @@ cpu_scp_lpri1: scp-sram-section@200 {
->   			};
->   		};
->   
-> +		pmu@24091000 {
-> +			compatible = "qcom,x1e80100-llcc-bwmon", "qcom,sc7280-llcc-bwmon";
-> +			reg = <0 0x24091000 0 0x1000>;
-> +
-> +			interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +			interconnects = <&mc_virt MASTER_LLCC 3 &mc_virt SLAVE_EBI1 3>;
-> +
-> +			operating-points-v2 = <&llcc_bwmon_opp_table>;
-> +
-> +			llcc_bwmon_opp_table: opp-table {
-> +				compatible = "operating-points-v2";
-> +
-> +				opp-0 {
 
-Nitpick,In one table, we start from ‘opp-0,’ while in the other table, 
-it begins with ‘opp-1,it is better to make it consistent across table.
+Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.11/arm64-dt)
 
-> +					opp-peak-kBps = <800000>;
-> +				};
-> +
-> +				opp-1 {
-> +					opp-peak-kBps = <2188000>;
-> +				};
-> +
-> +				opp-2 {
-> +					opp-peak-kBps = <3072000>;
-> +				};
-> +
-> +				opp-3 {
-> +					opp-peak-kBps = <6220800>;
-> +				};
-> +
-> +				opp-4 {
-> +					opp-peak-kBps = <6835200>;
-> +				};
-> +
-> +				opp-5 {
-> +					opp-peak-kBps = <8371200>;
-> +				};
-> +
-> +				opp-6 {
-> +					opp-peak-kBps = <10944000>;
-> +				};
-> +
-> +				opp-7 {
-> +					opp-peak-kBps = <12748800>;
-> +				};
-> +
-> +				opp-8 {
-> +					opp-peak-kBps = <14745600>;
-> +				};
-> +
-> +				opp-9 {
-> +					opp-peak-kBps = <16896000>;
-> +				};
-> +			};
-> +		};
-> +
-> +		pmu@240b3400 {
-> +			compatible = "qcom,x1e80100-cpu-bwmon", "qcom,sdm845-bwmon";
-> +			reg = <0 0x240b3400 0 0x600>;
-> +
-> +			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &gem_noc SLAVE_LLCC 3>;
-> +			operating-points-v2 = <&cpu0_bwmon_opp_table>;
-> +
-> +			cpu0_bwmon_opp_table: opp-table {
-> +				compatible = "operating-points-v2";
-> +
-> +				opp-1 {
-> +					opp-peak-kBps = <4800000>;
-> +				};
-> +
-> +				opp-2 {
-> +					opp-peak-kBps = <7464000>;
-> +				};
-> +
-> +				opp-3 {
-> +					opp-peak-kBps = <9600000>;
-> +				};
-> +
-> +				opp-4 {
-> +					opp-peak-kBps = <12896000>;
-> +				};
-> +
-> +				opp-5 {
-> +					opp-peak-kBps = <14928000>;
-> +				};
-> +
-> +				opp-6 {
-> +					opp-peak-kBps = <17064000>;
-> +				};
-> +			};
-> +		};
-> +
-> +		pmu@240b5400 {
-> +			compatible = "qcom,x1e80100-cpu-bwmon", "qcom,sdm845-bwmon";
-> +			reg = <0 0x240b5400 0 0x600>;
-> +
-> +			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &gem_noc SLAVE_LLCC 3>;
-> +			operating-points-v2 = <&cpu8_bwmon_opp_table>;
-> +
-> +			cpu8_bwmon_opp_table: opp-table {
-> +				compatible = "operating-points-v2";
-> +
-> +				opp-1 {
-> +					opp-peak-kBps = <4800000>;
-> +				};
-> +
-> +				opp-2 {
-> +					opp-peak-kBps = <7464000>;
-> +				};
-> +
-> +				opp-3 {
-> +					opp-peak-kBps = <9600000>;
-> +				};
-> +
-> +				opp-4 {
-> +					opp-peak-kBps = <12896000>;
-> +				};
-> +
-> +				opp-5 {
-> +					opp-peak-kBps = <14928000>;
-> +				};
-> +
-> +				opp-6 {
-> +					opp-peak-kBps = <17064000>;
-> +				};
-> +			};
-> +		};
-> +
-> +		pmu@240b6400 {
-> +			compatible = "qcom,x1e80100-cpu-bwmon", "qcom,sdm845-bwmon";
-> +			reg = <0 0x240b6400 0 0x600>;
-> +
-> +			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &gem_noc SLAVE_LLCC 3>;
-> +			operating-points-v2 = <&cpu4_bwmon_opp_table>;
-> +
-> +			cpu4_bwmon_opp_table: opp-table {
-> +				compatible = "operating-points-v2";
-> +
-> +				opp-1 {
-> +					opp-peak-kBps = <4800000>;
-> +				};
-> +
-> +				opp-2 {
-> +					opp-peak-kBps = <7464000>;
-> +				};
-> +
-> +				opp-3 {
-> +					opp-peak-kBps = <9600000>;
-> +				};
-> +
-> +				opp-4 {
-> +					opp-peak-kBps = <12896000>;
-> +				};
-> +
-> +				opp-5 {
-> +					opp-peak-kBps = <14928000>;
-> +				};
-> +
-> +				opp-6 {
-> +					opp-peak-kBps = <17064000>;
-> +				};
-> +			};
-> +		};
-> +
->   		system-cache-controller@25000000 {
->   			compatible = "qcom,x1e80100-llcc";
->   			reg = <0 0x25000000 0 0x200000>,
+[1/3] dt-bindings: power: add Amlogic A4 power domains
+      (no commit info)
+[2/3] pmdomain: amlogic: Add support for A4 power domains controller
+      (no commit info)
+[3/3] arm64: dts: amlogic: a4: add power domain controller node
+      https://git.kernel.org/amlogic/c/c830ead0d16131de93d2020369ede4d670a4123b
 
+These changes has been applied on the intermediate git tree [1].
 
-Thanks,
-Shivnandan
+The v6.11/arm64-dt branch will then be sent via a formal Pull Request to the Linux SoC maintainers
+for inclusion in their intermediate git branches in order to be sent to Linus during
+the next merge window, or sooner if it's a set of fixes.
+
+In the cases of fixes, those will be merged in the current release candidate
+kernel and as soon they appear on the Linux master branch they will be
+backported to the previous Stable and Long-Stable kernels [2].
+
+The intermediate git branches are merged daily in the linux-next tree [3],
+people are encouraged testing these pre-release kernels and report issues on the
+relevant mailing-lists.
+
+If problems are discovered on those changes, please submit a signed-off-by revert
+patch followed by a corrective changeset.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+
+-- 
+Neil
+
 
