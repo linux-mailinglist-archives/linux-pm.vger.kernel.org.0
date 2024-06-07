@@ -1,121 +1,101 @@
-Return-Path: <linux-pm+bounces-8804-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8805-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2F62900C73
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 21:26:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A256B900C77
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 21:30:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7EB2EB20D48
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 19:26:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 28D53285963
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 19:30:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 746E914036D;
-	Fri,  7 Jun 2024 19:26:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D66BE125C0;
+	Fri,  7 Jun 2024 19:30:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B+wUjyI3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mfo+YLZO"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A66AD2E5;
-	Fri,  7 Jun 2024 19:26:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2C39DDC9
+	for <linux-pm@vger.kernel.org>; Fri,  7 Jun 2024 19:30:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717788392; cv=none; b=Vs+w0tBGQteBLbsiYxfjK7BwoZ4HZtudQih5b9SP23r5LaSFsTi2BppOtQ2AMY7v5Ha60jV0UpnmiQnDUAVFCTWfYDF01JFH75FlDqnpT0sPsTz+7xn32ybaOlBwKH9VxfoRYbYKMIo4nsRXL7XsUooaUx6verJzlIP2o0tG2Sg=
+	t=1717788629; cv=none; b=ILW9s6001BNqSsSjyAl4JCg3Ihnx0fh9EMufo3aRVhGrcnutYmrYmIyuoBMuZyUgpz2Jdr4azytfChONiLZDtiLFelo64AbzN81cRwrSTYdO7FOFREF+19qoJzt5uD+OfK4Gupm97ql0jpNxVppbxSH4D/ls2R53h+kqvRv65NI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717788392; c=relaxed/simple;
-	bh=G79+bqVInJHcymuYBymhLDPTm1SW8aHugZAKnQjXQoM=;
+	s=arc-20240116; t=1717788629; c=relaxed/simple;
+	bh=aM8DbRADmzNNzQG67PsIVFpUYTds7c90MYYnmHN5+uc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tA3idvXg74cPdlIG4EJNzcZFxwOEyEAZIPX09HJwu/I5RtMwIaVBEsx3awDlWIHo23eC0uqDDsFyLX+aQfnqYGS6ihM17XorZvKSX9GCEf/0p5yGj3AGhlPSDMTNZkpPB17BzyubCyCmheXIeHzqCqeDos0NkNFHcELUn1FJD+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B+wUjyI3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1B8AC32786;
-	Fri,  7 Jun 2024 19:26:31 +0000 (UTC)
+	 To:Cc:Content-Type; b=WgI+TBnx21mehv7+KixSLYpepq32GeszosbXyZ5oyZ2D05yNR5HsPvOv6N2QJ/BIVpluGWwXO+HDvFb6PPx5qfJwFaoJvDPfzKkBJX1LifpgvY99b5R/pEr1NvIe2eLBWnC4AV24tEmgPSdkbq0lV4aFCuj3tis+Rxvn9gPYxrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mfo+YLZO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C945C32786
+	for <linux-pm@vger.kernel.org>; Fri,  7 Jun 2024 19:30:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717788391;
-	bh=G79+bqVInJHcymuYBymhLDPTm1SW8aHugZAKnQjXQoM=;
+	s=k20201202; t=1717788629;
+	bh=aM8DbRADmzNNzQG67PsIVFpUYTds7c90MYYnmHN5+uc=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=B+wUjyI3GdObFOF2X8xCI8HV4H3u+nkcrMGrDH2+DwfwB1e0Tb/5FJVtL6i/dpEH8
-	 AUXWisqNYutnJOF+iphclC3qHtL68TD1J7UvDTJyf0EccOyN/OSw2SoyNdJzy5vZRl
-	 Tv3rdS2AEO8fp8/Evh7Sq+zdHUCIUIoDss4CK3FFK98WwoApb0JCtWV9b0DWxb9eP6
-	 5cPA1n5BL28Zmavk8fKD20Bvolan4gQG00so1x7nuibFrE8pbWMqKovGcETbTQ1akZ
-	 lY7dqeLqfsZ/1ucCRgKPrT7q3qErDIt3d8Lu4Y39hOA2cszfevcN6hng1zS65q9C4i
-	 QT8B2NhNlEyAQ==
-Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-3d21c5b48f5so14167b6e.0;
-        Fri, 07 Jun 2024 12:26:31 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV4NiPGHuHfQs8d/fjZPKbb5QpPsFej7pHcMRIYTrgkyKsqlg/+XS3aqU3c2Td1yiwXthsrxcAK0Ktq/D/VjmcLTpDb3yzPjDJiP6x/9pZzGv3wxJuumAsenOCu98yk/hCM5iMBZNI=
-X-Gm-Message-State: AOJu0YyZC+wlMfv74PQqq0S12+fym/rU0Czep1QJGUlMyosJm7UojVvm
-	6pE9RNvr8OpyPyZxBfxzg1NdbyJVdu1baD7LmPORA42k6XCNtJ0Fc0W/OR1L+8OsjO9IgBkYm6i
-	M10aeQLhcd1HLSFJ+eCeYhjMeNYA=
-X-Google-Smtp-Source: AGHT+IGe4YDLMC1VPuov6ECazHzXXBggKeKCmQyWizyYIsOCWRXbjCnXLn9qaBtY+SGk+U99r0LI7eIRNJn/lvgUIis=
-X-Received: by 2002:a4a:a7c9:0:b0:5ba:6959:edf8 with SMTP id
- 006d021491bc7-5baae6da3bfmr3588960eaf.1.1717788391242; Fri, 07 Jun 2024
- 12:26:31 -0700 (PDT)
+	b=mfo+YLZOEO5liLBPHvSltj1hBTi6RzdJzJS+R3i7LwTriSu35ool2TSTi6Ho8WyGF
+	 lkDCw8tCQntSl26GLqyOy00SCv4XOJA4AqyOGrGOcihvB03Y+P+NXIbpGT/nK0or2y
+	 9hT6+gWeCAuRpcol8nNdT2sFNopVaH5qqKbwFr9z/xApldo+LiXM8Cz9ZTsySQZVgk
+	 wIPseGU4yyLfLvgtapyshXOp6PtZhvuHRW3l8aThFJ1U4I4g4AlPfo2IP2aVIaGUzP
+	 c86rKEzOQ2fd2AEySOKBRNjzDz0E2VdiHMjOXDDAwwQQSopVhERL+DHK+UbNuYOsi8
+	 Ka7D2UZdVE4Ng==
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5baa9b4d2ceso225853eaf.3
+        for <linux-pm@vger.kernel.org>; Fri, 07 Jun 2024 12:30:29 -0700 (PDT)
+X-Gm-Message-State: AOJu0YzgVus5sW0a0jzn0g2NZzAZgCZdri236lNDS41KDailm+gZ8WLt
+	Eb080X8Yn6bs2N+VR3d1fumWcc8ZU7GsTogQz3nRCDcaWjg+ycVCN/TEwcQjGoNYbHxNjVOw8Rr
+	VVhuZElu4Olv9SKJKP3VfQ81YYFE=
+X-Google-Smtp-Source: AGHT+IGDCPIMFe2WrB6HAz+AsP4XaeNiPKlZj5jCMy5VujOGs+ipOs7dqGyRXUrc3WXkNuTcUWQJrfPrNV7IyaJdbfU=
+X-Received: by 2002:a4a:cb84:0:b0:5b2:7aa7:7b29 with SMTP id
+ 006d021491bc7-5baae9ee8bamr3292708eaf.1.1717788628369; Fri, 07 Jun 2024
+ 12:30:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240530151704.282453-1-rui.zhang@intel.com>
-In-Reply-To: <20240530151704.282453-1-rui.zhang@intel.com>
+References: <cover.1717146154.git.todd.e.brandt@intel.com>
+In-Reply-To: <cover.1717146154.git.todd.e.brandt@intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 7 Jun 2024 21:26:19 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iVtb8K0ww8REum6T90bu321sWoKCVUN0t-8Wzv9ZvkYw@mail.gmail.com>
-Message-ID: <CAJZ5v0iVtb8K0ww8REum6T90bu321sWoKCVUN0t-8Wzv9ZvkYw@mail.gmail.com>
-Subject: Re: [PATCH] thermal: intel: intel_pch: Improve cooling log
-To: Zhang Rui <rui.zhang@intel.com>
-Cc: rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, pmenzel@molgen.mpg.de, len.brown@intel.com
+Date: Fri, 7 Jun 2024 21:30:17 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0ggBwYGQTL15vCSeqxZzbhAYMpCekrOhCc4w=K-4HThkA@mail.gmail.com>
+Message-ID: <CAJZ5v0ggBwYGQTL15vCSeqxZzbhAYMpCekrOhCc4w=K-4HThkA@mail.gmail.com>
+Subject: Re: [PATCH 0/2] pm-graph v5.12
+To: Todd Brandt <todd.e.brandt@intel.com>
+Cc: linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com, rjw@rjwysocki.net, 
+	todd.e.brandt@linux.intel.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 30, 2024 at 5:17=E2=80=AFPM Zhang Rui <rui.zhang@intel.com> wro=
-te:
+On Fri, May 31, 2024 at 11:13=E2=80=AFAM Todd Brandt <todd.e.brandt@intel.c=
+om> wrote:
 >
-> The intel_pch_thermal cooling mechanism currently only provides one of
-> the following final conclusions:
-> 1. intel_pch_thermal 0000:00:12.0: CPU-PCH is cool [48C]
-> 2. intel_pch_thermal 0000:00:12.0: CPU-PCH is cool [49C] after 30700 ms d=
-elay
-> 3. intel_pch_thermal 0000:00:12.0: CPU-PCH is hot [60C] after 60000 ms de=
-lay. S0ix might fail
-> 4. intel_pch_thermal 0000:00:12.0: Wakeup event detected, abort cooling
+> pm-graph v5.12
 >
-> This does not provide sufficient context about what is happening,
-> especially for case 4.
+> Code revamp for python3.12:
+>  sleepgraph/bootgraph function correctly in python3.12 but include a slew
+>  of deprecation warnings for unsupported regexes. This patch fixes up all
+>  the strings in the code so that it comforms with python3.12 standards.
 >
-> Add one line log to indicate when PCH overheats and the cooling delay
-> has started.
+> Other updates:
+> - fix S3 suspend fail double run by using fp.flush to /sys/power/state
+> - when running turbostat print the return value
+> - handle case where html files have binary data
+> - max issues in summary-issues is now 100 (in case there are thousands)
+> - add backup to dmidecode, use /sys/class/dmi/id/ in case /dev/mem fails
+> - update summary page to use full mode (disk-platform instead of disk)
 >
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> ---
->  drivers/thermal/intel/intel_pch_thermal.c | 5 +++++
->  1 file changed, 5 insertions(+)
+> Todd Brandt (2):
+>   pm-graph v5.12, fixes
+>   pm-graph v5.12, code revamp for python3.12
 >
-> diff --git a/drivers/thermal/intel/intel_pch_thermal.c b/drivers/thermal/=
-intel/intel_pch_thermal.c
-> index f5be2c389351..fc326985796c 100644
-> --- a/drivers/thermal/intel/intel_pch_thermal.c
-> +++ b/drivers/thermal/intel/intel_pch_thermal.c
-> @@ -298,6 +298,11 @@ static int intel_pch_thermal_suspend_noirq(struct de=
-vice *device)
->         /* Get the PCH current temperature value */
->         pch_cur_temp =3D GET_PCH_TEMP(WPT_TEMP_TSR & readw(ptd->hw_base +=
- WPT_TEMP));
+>  tools/power/pm-graph/bootgraph.py  |   16 +-
+>  tools/power/pm-graph/sleepgraph.py | 1098 ++++++++++++++--------------
+>  2 files changed, 571 insertions(+), 543 deletions(-)
 >
-> +       if (pch_cur_temp >=3D pch_thr_temp)
-> +               dev_warn(&ptd->pdev->dev,
-> +                       "CPU-PCH current temp [%dC] higher than the thres=
-hold temp [%dC], S0ix might fail. Start cooling...\n",
-> +                       pch_cur_temp, pch_thr_temp);
-> +
->         /*
->          * If current PCH temperature is higher than configured PCH thres=
-hold
->          * value, run some delay loop with sleep to let the current tempe=
-rature
 > --
 
-Applied as 6.11 material, thanks!
+Both patches applied as 6.11 material, thanks!
 
