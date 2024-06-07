@@ -1,40 +1,40 @@
-Return-Path: <linux-pm+bounces-8765-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8766-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EBC78FFF7A
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 11:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BF328FFFAE
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 11:36:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2AECF1F2563E
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 09:29:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0F6951F21A55
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 09:36:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 028FB15B969;
-	Fri,  7 Jun 2024 09:29:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83B5514F10E;
+	Fri,  7 Jun 2024 09:36:00 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 859F215B143;
-	Fri,  7 Jun 2024 09:29:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A022C132139;
+	Fri,  7 Jun 2024 09:35:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717752548; cv=none; b=WtVCvWM/JZWGqTceuRgvYqH5zZD/IbLHWrvIGnQHHWrL6hKm4v5dbcD28+tv6xuwWgJIzuJupiWcMvklZV85r6gIjQsKWbgBt0SLbEqG6RLmWdfysmXUEkkQlTGq+lkTNTFGZrKw27tj8rwmacCOhJ5flb5pgRfUHHfQEN2c/E0=
+	t=1717752960; cv=none; b=XoyG6j/0teQ/bv1e5v2rCXmEF0b01uwFcsOARU/22JGJ8KQNRvcZWKTBCwnGjPWu0VBPx15LZ6ggz3FqHkMks8bZnYcl4ujORe86nEzh2qm324fQF0hW04RpEIeugKsaphj++N9jOiUzGE7ndmvkYqty0s1RbScpSA9ple+pdwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717752548; c=relaxed/simple;
-	bh=tVKja3TODpkq5BiJV/Alpr164LIt6krldc8AlGeoxQM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Rh3AywwXNtHZFPYQHK0KJocXwiWFxgcttwg4Y10FV2qf+KXhGidTheMmXBVpWDQhlZQLpNZyiYEEfu79AUdbnqqBMzWmh8VeeiWpKJcPQFqNlNLpPMECWEyXgg+pk2d2YiNeCT/igy3vLMNiP3gkMTPaQ59wzO1IhruHfD8aKoc=
+	s=arc-20240116; t=1717752960; c=relaxed/simple;
+	bh=oTDTxjuZkTvSB42v+me5M4PJ7i/VHqUvXYJkggMqRPU=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=fshiX+lZI8mxyC2ox8HZH79TUt/B4ZcmPcFrbY/WJpDY0JPeP3AvPHGasRjFbvg8jBBzmu7UbO40YPXFQSXmH4iE53TtZ3kQoEt7POv9kHuo4jUoTlqOwep5u59NQ3/k6+OnMclXoLkBi9bIaJ0yefyI7Xzd2bsyRL8oTHtOkGk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4B2532F4;
-	Fri,  7 Jun 2024 02:29:31 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2BC532F4;
+	Fri,  7 Jun 2024 02:36:22 -0700 (PDT)
 Received: from [10.57.70.22] (unknown [10.57.70.22])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 94FE73F762;
-	Fri,  7 Jun 2024 02:29:03 -0700 (PDT)
-Message-ID: <edffb2d4-a13d-4973-ae6f-af993a6225de@arm.com>
-Date: Fri, 7 Jun 2024 10:29:01 +0100
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5BA743F762;
+	Fri,  7 Jun 2024 02:35:55 -0700 (PDT)
+Message-ID: <53190254-4e9a-4204-b09a-fb1eb31d0efb@arm.com>
+Date: Fri, 7 Jun 2024 10:35:53 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,68 +42,61 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/6] cpuidle: teo: Increase minimum time to stop tick
+From: Christian Loehle <christian.loehle@arm.com>
+Subject: Re: [PATCH 1/6] cpuidle: teo: Increase util-threshold
 To: Dietmar Eggemann <dietmar.eggemann@arm.com>, linux-pm@vger.kernel.org,
  linux-kernel@vger.kernel.org, rafael@kernel.org
 Cc: vincent.guittot@linaro.org, qyousef@layalina.io, peterz@infradead.org,
  daniel.lezcano@linaro.org, anna-maria@linutronix.de,
  kajetan.puchalski@arm.com, lukasz.luba@arm.com
 References: <20240606090050.327614-1-christian.loehle@arm.com>
- <20240606090050.327614-5-christian.loehle@arm.com>
- <c11acac7-085a-4041-a1f3-8b4f46e4b691@arm.com>
+ <20240606090050.327614-2-christian.loehle@arm.com>
+ <19d87e24-7c2b-4396-9514-74150b896cf3@arm.com>
 Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <c11acac7-085a-4041-a1f3-8b4f46e4b691@arm.com>
+In-Reply-To: <19d87e24-7c2b-4396-9514-74150b896cf3@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 6/7/24 09:14, Dietmar Eggemann wrote:
+On 6/7/24 09:01, Dietmar Eggemann wrote:
 > On 06/06/2024 11:00, Christian Loehle wrote:
->> Since stopping the tick isn't free, add at least some minor constant
->> (1ms) for the threshold to stop the tick.
+>> Increase the util-threshold by a lot as it was low enough for some
+>> minor load to always be active, especially on smaller CPUs.
 > 
-> Sounds pretty arbitrary to me? 'duration_ns' is either based on
-> target_residency_ns or tick_nohz_get_sleep_length() or even set to
-> TICK_NSEC/2. Does adding 1ms makes sense to all these cases? But then
-> why 1ms?
+> We see the blocked part of the CPU utilization as something telling the
+> task scheduler that the corresponding tasks might be runnable soon again
+> on this CPU.
+> 
+> This model seems to be used here as well. I guess folks are still
+> debating whether the amount of blocked utilization is a good enough
+> indicator for the length of idle time.
 
-It definitely is arbitrary, you're correct.
-Feel free to treat this as RFC. I'll probably just drop this from the
-serie and issue separately (to get the actual fixes merged more quickly).
-Anyway I'd like to hear comments on this.
-
-We are only interested in the cost of stopping the tick, which doesn't
-really depend on the selected state residency nor the expected sleep length.
-1ms works fine (for me!!), making it depend on TICK_NSEC would be natural,
-too, but using TICK_NSEC is far too long for CONFIG_HZ=100 (and TICK_NSEC/2
-too short for CONFIG_HZ=1000).
-The cost of stopping the tick depends on a number of factors and knowing all
-of them is probably not on the table anytime soon and until then I'd consider
-this an improvement over 0.
+Right, the blocked utilization is treated as an indicator that we will
+be brought out of sleep by a non-timer wakeup.
 
 > 
->> Signed-off-by: Christian Loehle <christian.loehle@arm.com>
->> ---
->>  drivers/cpuidle/governors/teo.c | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
->> index 216d34747e3b..ca9422bbd8db 100644
->> --- a/drivers/cpuidle/governors/teo.c
->> +++ b/drivers/cpuidle/governors/teo.c
->> @@ -622,10 +622,10 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
->>  	/*
->>  	 * Allow the tick to be stopped unless the selected state is a polling
->>  	 * one or the expected idle duration is shorter than the tick period
->> -	 * length.
->> +	 * length plus some constant (1ms) to account for stopping it.
->>  	 */
->>  	if ((!(drv->states[idx].flags & CPUIDLE_FLAG_POLLING) &&
->> -	    duration_ns >= TICK_NSEC) || tick_nohz_tick_stopped())
->> +	    duration_ns > NSEC_PER_MSEC + TICK_NSEC) || tick_nohz_tick_stopped())
->>  		return idx;
->>  
->>  out_tick_state:
+>> For small cap CPUs (Pixel6) the util threshold is as low as 1.
+>> For CPUs of capacity <64 it is 0. So ensure it is at a minimum, too.
 > 
+> So before this threshold was 16 on a 1024 CPU, now it's 256?
+> 
+> A <= 200 CPU has now a threshold of 50.
+> 
+> Where do those numbers come from? Just from running another workload on
+> a specific device?
+> 
+> [...]
 
+More or less yes.
+Kajetan identified two broad use-cases for the utilization-based state
+bypass: Early utilization ramp-up and high utilization scenarios.
+The reports made it clear that the former can't be handled with a
+threshold for just a single value as it will be too aggressive in
+sustained (non-ramp-up) workloads.
+To be fair, with patches 5 and 6 of this series, the ramp-up is
+also handled quite early by the intercepts logic itself.
+So as a fix I increased the value high enough to not trigger in
+low-utilization scenarios.
+There is likely room for optimization here, e.g. many wakeups
+are also IPIs more related to the general system utilization instead
+of the current CPU.
 
