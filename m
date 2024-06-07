@@ -1,510 +1,196 @@
-Return-Path: <linux-pm+bounces-8778-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8777-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77A0A90018F
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 13:04:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 061EF900137
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 12:51:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D4471C220A8
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 11:04:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5C5E9B231D9
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 10:51:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1AA1186E2E;
-	Fri,  7 Jun 2024 11:04:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AD9F1862A1;
+	Fri,  7 Jun 2024 10:51:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sx8ROLsc"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ln5YiZc6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE77A13D2B2
-	for <linux-pm@vger.kernel.org>; Fri,  7 Jun 2024 11:04:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDE7E186281
+	for <linux-pm@vger.kernel.org>; Fri,  7 Jun 2024 10:51:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717758261; cv=none; b=q6qvtpAOxhnLDNm/KdR8tpUPLLssDh58Xm2qJV+xHzhzzPKOFPe/uKqDRLRDoOwAh6T2/rKXPe+FCV1SqU0QNLoI87ZndDklJWjKDgMzBChWcnGGow+D0oAypzitz07t5D9E+awuvRFCARCe9078SqKzqsoJTD25wgtHfRnbaok=
+	t=1717757509; cv=none; b=DgroqGwXd+CKYVmLJMYr5GvTQAbgTeYbz5TY03cwdomznILipcve+U2f+kPzV2BrG0Z1uneBbK5YdjYQFPfUmzlJwd7uRqq/nZkNseUJy29qSaGbx5/cu+/cpbXVIF0ozPMucctetFTsa22QQaFWfmbYSLyNsprp6AoL/IIcIpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717758261; c=relaxed/simple;
-	bh=AN/mXFLmmOOxh4ohQqh0I5EZsgTEbPwsV7LU8Ha71SI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=s7IwsCJ2ddaZfB/06T6KiF7+a9PDf1i8JsDhwCMo/20+Z2U+94tonD2wmGSqbDQiVe2K8Yvl8x7OVVu73culdDwTTE5AR1w4tdveM3QkJ+M3a6QMkRgpN4PjCk3+M6O40tCHlNWOBDZ5kAp6/dYTazl34HOP3fZ8Bgj5Dawevf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sx8ROLsc; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-42163fa630aso9559345e9.3
-        for <linux-pm@vger.kernel.org>; Fri, 07 Jun 2024 04:04:19 -0700 (PDT)
+	s=arc-20240116; t=1717757509; c=relaxed/simple;
+	bh=FFbj21ozJQKf4i41vhO+He8GzAZG9POBGWSpHtgddTw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ckEi7DXUIAP7uqMy8jXJk1SnrT37Q/ZhBOngGK9yt2QVuy7YaHD3JUXyA5MO5bC1teFwxHYst3C2csuJ8gWfkYVy0AUGlRJSkSxBspR8SGhVBt2XaxzzI5eaFQAmq+oXxoljklaq8alDDzF6Fmzi/H9U5xP4eufoue1/UCe9KXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ln5YiZc6; arc=none smtp.client-ip=209.85.208.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2e6f33150bcso19834761fa.2
+        for <linux-pm@vger.kernel.org>; Fri, 07 Jun 2024 03:51:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1717758258; x=1718363058; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to
-         :references:user-agent:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=dlz1M1Q96MoJTbBHiqN6xZFkx4A4jAugPwmqHEAfQlM=;
-        b=sx8ROLscim+16/5RnC+EJHtkqutKqN66BekfmIea1CLQhllcXogYZaoxQi8OF/AFFb
-         LdpWUCQFpqsnLrV5UlB2nE3NOkXOxvhgnlViZjHiyQxI6wEbEy/RZGJvt3Fc2JixA7gP
-         cIy67SSNzLIGMq8jmWLPb1uuYlgiDIOoIXuWzYBT0fVeHMrzeUVNzOS/57nTalCcXOxC
-         ti8HfZnqu7yar+kDZ154joNwXa8SWV9heVAVfXVM4rGrBdii1yK2E7+jzIMuDH/G8IeL
-         vcrqYUIcv8nrBx8cWUZRRcgVeT1zSM2opxHYaE2AdckFqqpzQe9JxLgYZ4GqD4/BOCXh
-         chKw==
+        d=google.com; s=20230601; t=1717757506; x=1718362306; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LmeXUhFF655AvDeF8viECIcXvU5zP377LCGo+5Zcuww=;
+        b=Ln5YiZc6E7N94HOps5slmYwc9HJA7Ba9+LauR5+WSsJFdeB1/iRMZEPKoD7NO8ajvv
+         mGHMtcmji+J5fTo5hVYtcV6AzKYTJDluItgCGWyt7yGpxPrvmB/qX/uObZ4/AgRaf8fU
+         W6Kxh+S4AaXzcl41LmkI+uVRGOV3J34hidxM/S5ym2zsHs45iWNpBpSxoYaJmqFA3lWX
+         A6XGlNxINwrX5KBuKArVbh92vUuQVPMmesL+J/O7b7+cjlSYIF3p11dyV7l5jzE+w7Tw
+         3WQXijnJQbjl+X5hFbKzogmnfHPc4+wHjl5h1tBZsL9Boqu5t+oKqpm1iSRQ0vJ8iggM
+         +FrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717758258; x=1718363058;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to
-         :references:user-agent:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dlz1M1Q96MoJTbBHiqN6xZFkx4A4jAugPwmqHEAfQlM=;
-        b=TYA5hDxSOglCbttVBeFrpOgaD9g3UAVei+qcN3nK2/toSpd9JoxNJiEL+fYooD8PFz
-         5sH19X7pr7DA7Kg53BOYGCatIw8H+d94U4wwVcKI1oA8U23OfWk5bfQ499/M1TS6FedZ
-         uYg+jb7E3emtf7u0epfFl4ccAAkOk4bR6jBLLRwJOTkzVHegz57SW2AkUv44d71HpHmy
-         sF5z48tJ6anaBkPjZEH8g92WAe2lnAuiYymgl1a6BUMF0a0dU9GnWXfrivaVRAt99/xN
-         V3JHdvZ4g5HttRAIWKw4p0PBQNJqzUbKXI2ANHzFes/QaDp29404FjGs546dJ+7xUMEl
-         l82Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXDcBIgDadD/cJNvX8U1WXHR5ExqoABL7PnKHX4aUo2Hl1FYPlsmpoxRmk0LRJ33jKNrGoDOJ74L3gEzgCN0dImJ4iz37HK2Ko=
-X-Gm-Message-State: AOJu0YwQH5jEhHPdHIXDFbG0yvp8uom6XiZdmPWh3P/rUb824PgOkeU7
-	1D51X+Xyn/ZeEgXt3qvAigkvsVU8N9CVXE/mz4kP1s0PX6MecvZiWuFzn0MJ7Qs=
-X-Google-Smtp-Source: AGHT+IHod7WifBUl7WN31uqgwKkQIdjobL7dtcDM7zsUKlmpwG3Nkk+YAZ0yifsUngtlMlKS08HWgA==
-X-Received: by 2002:a05:600c:4f8e:b0:41b:f022:8e69 with SMTP id 5b1f17b1804b1-42164a03160mr19707055e9.19.1717758258064;
-        Fri, 07 Jun 2024 04:04:18 -0700 (PDT)
-Received: from meli-email.org (adsl-105.37.6.1.tellas.gr. [37.6.1.105])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4215809fcbesm84707525e9.0.2024.06.07.04.04.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jun 2024 04:04:17 -0700 (PDT)
-Date: Fri, 07 Jun 2024 13:38:17 +0300
-From: Manos Pitsidianakis <manos.pitsidianakis@linaro.org>
-To: Viresh Kumar <viresh.kumar@linaro.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, Bj=?UTF-8?B?w7Y=?= rn Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org, Vincent Guittot <vincent.guittot@linaro.org>, Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>, rust-for-linux@vger.kernel.org, Manos Pitsidianakis <manos.pitsidianakis@linaro.org>, Erik Schilling <erik.schilling@linaro.org>, Alex Benn=?UTF-8?B?w6k=?= e <alex.bennee@linaro.org>, Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH V2 2/8] rust: Extend OPP bindings for the OPP table
-User-Agent: meli 0.8.5
-References: <cover.1717750631.git.viresh.kumar@linaro.org> <dc156230814a899e5e3ffb6f3a0e5471d92506de.1717750631.git.viresh.kumar@linaro.org>
-In-Reply-To: <dc156230814a899e5e3ffb6f3a0e5471d92506de.1717750631.git.viresh.kumar@linaro.org>
-Message-ID: <epir3.2kxc5jzd28c@linaro.org>
+        d=1e100.net; s=20230601; t=1717757506; x=1718362306;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LmeXUhFF655AvDeF8viECIcXvU5zP377LCGo+5Zcuww=;
+        b=wQ8xDhF4VuD9Yn2ycp1YE/gQTVJ6etVoSQxqD55tNPWKAGv9X4bVavVFhB9ES+7CU8
+         pswR/Bt94PKjov6oTz7c89Ci+qQ0DEwnOfb4hQZ93GnK3VbRDQ6pTfbxls14NoOVp/6r
+         QLaauu6zrcBDPXUJ0H0hhk99O6IcCbv6mxn2l1M5QJcj14WGX2LV6kiXBCQI2xOzsrNF
+         aOKVzSuQc605bwefWjleiLAQbQZoFy9WFfSq5oi3QS48d+GjZd/qeEjz/KiW7dYWh5Yl
+         LEboyOH4+jj7YRhWbPRVr0vl8g9vv0qwwADpxZ29UeG9BarBj2LHAYBgKuxct8lTrE8g
+         rsFA==
+X-Forwarded-Encrypted: i=1; AJvYcCXRkxS3nVENqkdWP29Cg8a6DYbDQJ4hDtvpj0BcKgGEfXF1EGtqxGJfrnkNQCGh126Er3FsDH/61+CPoYaElFmWGZo+7RjLSNQ=
+X-Gm-Message-State: AOJu0YxbjOTHkRRVwZTqcZ5rw7rhaOHFasLEAN25yXof7b4T3v8SzuA6
+	2RAr93QDTVc5k/aFpt41RH3SS14OpSv6suSqn4vucN3ga2Yyr2Q7vY1yepvXfr2OmgwexE2fPrs
+	UoCCpu4z2kUqWLGgrjgH2/Me7UCR0YDeYqPn+
+X-Google-Smtp-Source: AGHT+IEFeA+ZKzhPTRkU9THjSAXPFZL65kZKzyqLrJjbcP6cigRGWjQ8n8Uxp6WFaK9P/DGcdNOxRalnf+pNS3YoNsA=
+X-Received: by 2002:a2e:88c6:0:b0:2ea:8291:c667 with SMTP id
+ 38308e7fff4ca-2eadce24b75mr13406881fa.13.1717757505728; Fri, 07 Jun 2024
+ 03:51:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset=utf-8; format=flowed
+References: <cover.1717750631.git.viresh.kumar@linaro.org> <e74e3a14e6da3f920cee90d32a023ba4805328a0.1717750631.git.viresh.kumar@linaro.org>
+In-Reply-To: <e74e3a14e6da3f920cee90d32a023ba4805328a0.1717750631.git.viresh.kumar@linaro.org>
+From: Alice Ryhl <aliceryhl@google.com>
+Date: Fri, 7 Jun 2024 12:51:33 +0200
+Message-ID: <CAH5fLgjChZCtTUnHVHJat-sXFyLVE+MgDXrNDiUD0LNsUndpBQ@mail.gmail.com>
+Subject: Re: [RFC PATCH V2 1/8] rust: Add initial bindings for OPP framework
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	linux-pm@vger.kernel.org, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>, rust-for-linux@vger.kernel.org, 
+	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>, Erik Schilling <erik.schilling@linaro.org>, 
+	=?UTF-8?B?QWxleCBCZW5uw6ll?= <alex.bennee@linaro.org>, 
+	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 07 Jun 2024 12:12, Viresh Kumar <viresh.kumar@linaro.org> wrote:
->This extends OPP bindings with the bindings for the `struct opp_table`.
+On Fri, Jun 7, 2024 at 11:12=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
+rg> wrote:
 >
->Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
->---
-> rust/kernel/opp.rs | 374 ++++++++++++++++++++++++++++++++++++++++++++-
-> 1 file changed, 372 insertions(+), 2 deletions(-)
+> This commit adds initial Rust bindings for the Operating performance
+> points (OPP) core. This adds bindings for `struct dev_pm_opp` and
+> `struct dev_pm_opp_data` to begin with.
 >
->diff --git a/rust/kernel/opp.rs b/rust/kernel/opp.rs
->index 9e5cf0412ed5..06f36845047f 100644
->--- a/rust/kernel/opp.rs
->+++ b/rust/kernel/opp.rs
->@@ -7,9 +7,9 @@
-> //! C header: [`include/linux/pm_opp.h`](../../../../../../include/linux/pm_opp.h)
-> 
-> use crate::{
->-    bindings,
->+    bindings, cpumask,
->     device::Device,
->-    error::{code::*, to_result, Result},
->+    error::{code::*, from_err_ptr, to_result, Error, Result},
->     types::{ARef, AlwaysRefCounted, Opaque},
-> };
-> 
->@@ -31,6 +31,376 @@ pub fn new(freq: u64, u_volt: u64, level: u32, turbo: bool) -> Self {
->     }
-> }
-> 
->+/// OPP search types.
->+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
->+pub enum SearchType {
->+    /// Search for exact value.
->+    Exact,
->+    /// Search for highest value less than equal to value.
->+    Floor,
->+    /// Search for lowest value greater than equal to value.
->+    Ceil,
->+}
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Seeing this enum made me think about memory layouts which are not stable 
-in Rust and can change between compilations unless they have a specific 
-`repr`.
+> +//! Operating performance points.
+> +//!
+> +//! This module provides bindings for interacting with the OPP subsystem=
+.
+> +//!
+> +//! C header: [`include/linux/pm_opp.h`](../../../../../../include/linux=
+/pm_opp.h)
 
-Not related to this series directly, has there been discussion about 
-guaranteeing struct layouts in kernel APIs? It'd require a lot of things 
-to happen to cause a problem (multiple users of an API in the kernel in 
-separate compilation units maybe even compiled with different rustc 
-versions).
+Please use srctree links instead.
 
->+
->+/// Operating performance point (OPP) table.
->+///
->+/// # Invariants
->+///
->+/// The pointer stored in `Self` is non-null and valid for the lifetime of the ARef instance. In
->+/// particular, the ARef instance owns an increment on underlying object’s reference count.
->+pub struct Table {
->+    ptr: *mut bindings::opp_table,
->+    dev: ARef<Device>,
->+    em: bool,
->+    of: bool,
->+    cpumask: Option<cpumask::Cpumask>,
->+}
->+
->+// SAFETY: The fields of `Table` are safe to be used from any thread.
->+unsafe impl Send for Table {}
->+
->+// SAFETY: The fields of `Table` are safe to be referenced from any thread.
->+unsafe impl Sync for Table {}
->+
->+impl Table {
->+    /// Creates a new OPP table instance from raw pointer.
->+    ///
->+    /// # Safety
->+    ///
->+    /// Callers must ensure that `ptr` is valid and non-null.
->+    unsafe fn from_ptr(ptr: *mut bindings::opp_table, dev: ARef<Device>) -> Self {
->+        // SAFETY: By the safety requirements, ptr is valid and its refcount will be incremented.
->+        unsafe { bindings::dev_pm_opp_get_opp_table_ref(ptr) };
->+
->+        Self {
->+            ptr,
->+            dev,
->+            em: false,
->+            of: false,
->+            cpumask: None,
->+        }
->+    }
->+
->+    /// Find OPP table from device.
->+    pub fn from_dev(dev: ARef<Device>) -> Result<Self> {
->+        // SAFETY: The requirements are satisfied by the existence of `Device` and its safety
->+        // requirements. Refcount of the OPP table is incremented as well.
->+        let ptr = from_err_ptr(unsafe { bindings::dev_pm_opp_get_opp_table(dev.as_raw()) })?;
->+
->+        Ok(Self {
->+            ptr,
->+            dev: dev.clone(),
+C header: [`include/linux/pm_opp.h`](srctree/include/linux/pm_opp.h)
 
-Clone is not probably not needed here, right? the argument value will be 
-dropped after this.
+> +impl OPP {
+> +    /// Creates a reference to a [`OPP`] from a valid pointer.
+> +    ///
+> +    /// # Safety
+> +    ///
+> +    /// The caller must ensure that `ptr` is valid and remains valid for=
+ the lifetime of the
+> +    /// returned [`OPP`] reference.
+> +    pub unsafe fn from_ptr_owned(ptr: *mut bindings::dev_pm_opp) -> Resu=
+lt<ARef<Self>> {
+> +        let ptr =3D ptr::NonNull::new(ptr).ok_or(ENODEV)?;
+> +
+> +        // SAFETY: The safety requirements guarantee the validity of the=
+ pointer.
+> +        //
+> +        // INVARIANT: The refcount is already incremented by the C API t=
+hat returned the pointer,
+> +        // and we pass ownership of the refcount to the new `ARef<OPP>`.
+> +        Ok(unsafe { ARef::from_raw(ptr.cast()) })
+> +    }
+> +
+> +    /// Creates a reference to a [`OPP`] from a valid pointer.
+> +    ///
+> +    /// # Safety
+> +    ///
+> +    /// The caller must ensure that `ptr` is valid and remains valid for=
+ the lifetime of the
+> +    /// returned [`OPP`] reference.
+> +    pub unsafe fn from_ptr(ptr: *mut bindings::dev_pm_opp) -> Result<ARe=
+f<Self>> {
+> +        let opp =3D unsafe { Self::from_ptr_owned(ptr) }?;
+> +
+> +        // Take an extra reference to the OPP since the caller didn't ta=
+ke it.
+> +        opp.inc_ref();
+> +
+> +        Ok(opp)
+> +    }
 
->+            em: false,
->+            of: false,
->+            cpumask: None,
->+        })
->+    }
->+
->+    /// Add device tree based OPP table for the device.
->+    #[cfg(CONFIG_OF)]
->+    pub fn from_of(dev: ARef<Device>, index: i32) -> Result<Self> {
->+        // SAFETY: The requirements are satisfied by the existence of `Device` and its safety
->+        // requirements. Refcount of the OPP table is incremented as well.
->+        to_result(unsafe { bindings::dev_pm_opp_of_add_table_indexed(dev.as_raw(), index) })?;
->+
->+        // Fetch the newly created table.
->+        let mut table = Self::from_dev(dev)?;
->+        table.of = true;
->+
->+        Ok(table)
->+    }
->+
->+    // Remove device tree based OPP table for the device.
->+    #[cfg(CONFIG_OF)]
->+    fn remove_of(&self) {
->+        // SAFETY: The requirements are satisfied by the existence of `Device` and its safety
->+        // requirements. We took the reference from `from_of` earlier, it is safe to drop the same
->+        // now.
->+        unsafe { bindings::dev_pm_opp_of_remove_table(self.dev.as_raw()) };
->+    }
->+
->+    /// Add device tree based OPP table for CPU devices.
->+    #[cfg(CONFIG_OF)]
->+    pub fn from_of_cpumask(dev: ARef<Device>, cpumask: &mut cpumask::Cpumask) -> Result<Self> {
->+        // SAFETY: The cpumask is valid and the returned ptr will be owned by the [`Table`] instance.
->+        to_result(unsafe { bindings::dev_pm_opp_of_cpumask_add_table(cpumask.as_ptr()) })?;
->+
->+        // Fetch the newly created table.
->+        let mut table = Self::from_dev(dev)?;
->+        // SAFETY: The `cpumask` is guaranteed by the C code to be valid.
->+        table.cpumask = Some(unsafe { cpumask::Cpumask::new(cpumask.as_mut_ptr()) });
->+
->+        Ok(table)
->+    }
->+
->+    // Remove device tree based OPP table for CPU devices.
->+    #[cfg(CONFIG_OF)]
->+    fn remove_of_cpumask(&self, cpumask: &cpumask::Cpumask) {
->+        // SAFETY: The cpumask is valid and we took the reference from `from_of_cpumask` earlier,
->+        // it is safe to drop the same now.
->+        unsafe { bindings::dev_pm_opp_of_cpumask_remove_table(cpumask.as_ptr()) };
->+    }
->+
->+    /// Returns the number of OPPs in the table.
->+    pub fn opp_count(&self) -> Result<u32> {
->+        // SAFETY: The requirements are satisfied by the existence of `Device` and its safety
->+        // requirements.
->+        let ret = unsafe { bindings::dev_pm_opp_get_opp_count(self.dev.as_raw()) };
->+        if ret < 0 {
->+            Err(Error::from_errno(ret))
->+        } else {
->+            Ok(ret as u32)
->+        }
->+    }
->+
->+    /// Returns max clock latency of the OPPs in the table.
->+    pub fn max_clock_latency(&self) -> u64 {
->+        // SAFETY: The requirements are satisfied by the existence of `Device` and its safety
->+        // requirements.
->+        unsafe { bindings::dev_pm_opp_get_max_clock_latency(self.dev.as_raw()) }
->+    }
->+
->+    /// Returns max volt latency of the OPPs in the table.
->+    pub fn max_volt_latency(&self) -> u64 {
->+        // SAFETY: The requirements are satisfied by the existence of `Device` and its safety
->+        // requirements.
->+        unsafe { bindings::dev_pm_opp_get_max_volt_latency(self.dev.as_raw()) }
->+    }
->+
->+    /// Returns max transition latency of the OPPs in the table.
->+    pub fn max_transition_latency(&self) -> u64 {
->+        // SAFETY: The requirements are satisfied by the existence of `Device` and its safety
->+        // requirements.
->+        unsafe { bindings::dev_pm_opp_get_max_transition_latency(self.dev.as_raw()) }
->+    }
->+
->+    /// Returns the suspend OPP.
->+    pub fn suspend_freq(&self) -> u64 {
->+        // SAFETY: The requirements are satisfied by the existence of `Device` and its safety
->+        // requirements.
->+        unsafe { bindings::dev_pm_opp_get_suspend_opp_freq(self.dev.as_raw()) }
->+    }
->+
->+    /// Synchronizes regulators used by the OPP table.
->+    pub fn sync_regulators(&self) -> Result<()> {
->+        // SAFETY: The requirements are satisfied by the existence of `Device` and its safety
->+        // requirements.
->+        to_result(unsafe { bindings::dev_pm_opp_sync_regulators(self.dev.as_raw()) })
->+    }
->+
->+    /// Gets sharing CPUs.
->+    pub fn sharing_cpus(dev: ARef<Device>, cpumask: &mut cpumask::Cpumask) -> Result<()> {
->+        // SAFETY: The requirements are satisfied by the existence of `Device` and its safety
->+        // requirements.
->+        to_result(unsafe {
->+            bindings::dev_pm_opp_get_sharing_cpus(dev.as_raw(), cpumask.as_mut_ptr())
->+        })
->+    }
->+
->+    /// Sets sharing CPUs.
->+    pub fn set_sharing_cpus(&self, cpumask: &cpumask::Cpumask) -> Result<()> {
->+        // SAFETY: The requirements are satisfied by the existence of `Device` and its safety
->+        // requirements.
->+        to_result(unsafe {
->+            bindings::dev_pm_opp_set_sharing_cpus(self.dev.as_raw(), cpumask.as_ptr())
->+        })
->+    }
->+
->+    /// Gets sharing CPUs from Device tree.
->+    #[cfg(CONFIG_OF)]
->+    pub fn of_sharing_cpus(dev: ARef<Device>, cpumask: &mut cpumask::Cpumask) -> Result<()> {
->+        // SAFETY: The requirements are satisfied by the existence of `Device` and its safety
->+        // requirements.
->+        to_result(unsafe {
->+            bindings::dev_pm_opp_of_get_sharing_cpus(dev.as_raw(), cpumask.as_mut_ptr())
->+        })
->+    }
->+
->+    /// Updates the voltage value for an OPP.
->+    pub fn adjust_voltage(
->+        &self,
->+        freq: u64,
->+        u_volt: u64,
->+        u_volt_min: u64,
->+        u_volt_max: u64,
->+    ) -> Result<()> {
->+        // SAFETY: The requirements are satisfied by the existence of `Device` and its safety
->+        // requirements.
->+        to_result(unsafe {
->+            bindings::dev_pm_opp_adjust_voltage(
->+                self.dev.as_raw(),
->+                freq,
->+                u_volt,
->+                u_volt_min,
->+                u_volt_max,
->+            )
->+        })
->+    }
->+
->+    /// Sets a matching OPP based on frequency.
->+    pub fn set_rate(&self, freq: u64) -> Result<()> {
->+        // SAFETY: The requirements are satisfied by the existence of `Device` and its safety
->+        // requirements.
->+        to_result(unsafe { bindings::dev_pm_opp_set_rate(self.dev.as_raw(), freq) })
->+    }
->+
->+    /// Sets exact OPP.
->+    pub fn set_opp(&self, opp: ARef<OPP>) -> Result<()> {
->+        // SAFETY: The requirements are satisfied by the existence of `Device` and its safety
->+        // requirements.
->+        to_result(unsafe { bindings::dev_pm_opp_set_opp(self.dev.as_raw(), opp.as_mut_ptr()) })
->+    }
->+
->+    /// Finds OPP based on frequency.
->+    pub fn opp_from_freq(
->+        &self,
->+        mut freq: u64,
->+        available: Option<bool>,
->+        index: Option<u32>,
->+        stype: SearchType,
->+    ) -> Result<ARef<OPP>> {
->+        let rdev = self.dev.as_raw();
->+        let index = index.unwrap_or(0);
->+
->+        let ptr = from_err_ptr(match stype {
->+            SearchType::Exact => {
->+                if let Some(available) = available {
->+                    // SAFETY: The requirements are satisfied by the existence of `Device` and
->+                    // its safety requirements. The returned ptr will be owned by the new [`OPP`]
->+                    // instance.
->+                    unsafe {
->+                        bindings::dev_pm_opp_find_freq_exact_indexed(rdev, freq, index, available)
->+                    }
->+                } else {
->+                    return Err(EINVAL);
->+                }
->+            }
->+
->+            // SAFETY: The requirements are satisfied by the existence of `Device` and its
->+            // safety requirements. The returned ptr will be owned by the new [`OPP`] instance.
->+            SearchType::Ceil => unsafe {
->+                bindings::dev_pm_opp_find_freq_ceil_indexed(rdev, &mut freq as *mut u64, index)
->+            },
->+
->+            // SAFETY: The requirements are satisfied by the existence of `Device` and its
->+            // safety requirements. The returned ptr will be owned by the new [`OPP`] instance.
->+            SearchType::Floor => unsafe {
->+                bindings::dev_pm_opp_find_freq_floor_indexed(rdev, &mut freq as *mut u64, index)
->+            },
->+        })?;
->+
->+        // SAFETY: The `ptr` is guaranteed by the C code to be valid.
->+        unsafe { OPP::from_ptr_owned(ptr) }
->+    }
->+
->+    /// Finds OPP based on level.
->+    pub fn opp_from_level(&self, mut level: u32, stype: SearchType) -> Result<ARef<OPP>> {
->+        let rdev = self.dev.as_raw();
->+
->+        let ptr = from_err_ptr(match stype {
->+            // SAFETY: The requirements are satisfied by the existence of `Device` and its
->+            // safety requirements. The returned ptr will be owned by the new [`OPP`] instance.
->+            SearchType::Exact => unsafe { bindings::dev_pm_opp_find_level_exact(rdev, level) },
->+
+I would recommend a slightly different approach here. You can provide
+a method called `from_raw_opp` that takes a *mut bindings::dev_pm_opp
+and returns a &Self. The ARef type provides a method that converts
+&Self to ARef<Self> by taking a refcount. This way, users would also
+be able to call OPP methods without giving Rust any refcounts. You can
+compare to my file patchset, where I am going to rename the equivalent
+method to `from_raw_file` in the next version.
 
-Minor style comment, the empty lines between match patterns are unusual
+As for `from_ptr_owned`, I would probably rename it to
+`from_raw_opp_owned` or similar. It's often nice to use a more
+descriptive name than just "ptr".
 
->+            // SAFETY: The requirements are satisfied by the existence of `Device` and its
->+            // safety requirements. The returned ptr will be owned by the new [`OPP`] instance.
->+            SearchType::Ceil => unsafe {
->+                bindings::dev_pm_opp_find_level_ceil(rdev, &mut level as *mut u32)
->+            },
->+
->+            // SAFETY: The requirements are satisfied by the existence of `Device` and its
->+            // safety requirements. The returned ptr will be owned by the new [`OPP`] instance.
->+            SearchType::Floor => unsafe {
->+                bindings::dev_pm_opp_find_level_floor(rdev, &mut level as *mut u32)
->+            },
->+        })?;
->+
->+        // SAFETY: The `ptr` is guaranteed by the C code to be valid.
->+        unsafe { OPP::from_ptr_owned(ptr) }
->+    }
->+
->+    /// Finds OPP based on bandwidth.
->+    pub fn opp_from_bw(&self, mut bw: u32, index: i32, stype: SearchType) -> Result<ARef<OPP>> {
->+        let rdev = self.dev.as_raw();
->+
->+        let ptr = from_err_ptr(match stype {
->+            // The OPP core doesn't support this yet.
->+            SearchType::Exact => return Err(EINVAL),
->+
->+            // SAFETY: The requirements are satisfied by the existence of `Device` and its
->+            // safety requirements. The returned ptr will be owned by the new [`OPP`] instance.
->+            SearchType::Ceil => unsafe {
->+                bindings::dev_pm_opp_find_bw_ceil(rdev, &mut bw as *mut u32, index)
->+            },
->+
->+            // SAFETY: The requirements are satisfied by the existence of `Device` and its
->+            // safety requirements. The returned ptr will be owned by the new [`OPP`] instance.
->+            SearchType::Floor => unsafe {
->+                bindings::dev_pm_opp_find_bw_floor(rdev, &mut bw as *mut u32, index)
->+            },
->+        })?;
->+
->+        // SAFETY: The `ptr` is guaranteed by the C code to be valid.
->+        unsafe { OPP::from_ptr_owned(ptr) }
->+    }
->+
->+    /// Enable the OPP.
->+    pub fn enable_opp(&self, freq: u64) -> Result<()> {
->+        // SAFETY: The requirements are satisfied by the existence of `Device` and its safety
->+        // requirements.
->+        to_result(unsafe { bindings::dev_pm_opp_enable(self.dev.as_raw(), freq) })
->+    }
->+
->+    /// Disable the OPP.
->+    pub fn disable_opp(&self, freq: u64) -> Result<()> {
->+        // SAFETY: The requirements are satisfied by the existence of `Device` and its safety
->+        // requirements.
->+        to_result(unsafe { bindings::dev_pm_opp_disable(self.dev.as_raw(), freq) })
->+    }
->+
->+    /// Registers with Energy model.
->+    #[cfg(CONFIG_OF)]
->+    pub fn of_register_em(&mut self, cpumask: &mut cpumask::Cpumask) -> Result<()> {
->+        // SAFETY: The requirements are satisfied by the existence of `Device` and its safety
->+        // requirements.
->+        to_result(unsafe {
->+            bindings::dev_pm_opp_of_register_em(self.dev.as_raw(), cpumask.as_mut_ptr())
->+        })?;
->+
->+        self.em = true;
->+        Ok(())
->+    }
->+
->+    // Unregisters with Energy model.
->+    #[cfg(CONFIG_OF)]
->+    fn of_unregister_em(&self) {
->+        // SAFETY: The requirements are satisfied by the existence of `Device` and its safety
->+        // requirements. We registered with the EM framework earlier, it is safe to unregister now.
->+        unsafe { bindings::em_dev_unregister_perf_domain(self.dev.as_raw()) };
->+    }
->+}
->+
->+impl Drop for Table {
->+    fn drop(&mut self) {
->+        // SAFETY: By the type invariants, we know that `self` owns a reference, so it is safe
->+        // to relinquish it now.
->+        unsafe { bindings::dev_pm_opp_put_opp_table(self.ptr) };
->+
->+        #[cfg(CONFIG_OF)]
->+        {
->+            if self.em {
->+                self.of_unregister_em();
->+            }
->+
->+            if self.of {
->+                self.remove_of();
->+            } else if let Some(cpumask) = &self.cpumask {
->+                self.remove_of_cpumask(cpumask);
->+            }
->+        }
->+    }
->+}
->+
-> /// Operating performance point (OPP).
-> ///
-> /// # Invariants
->-- 
->2.31.1.272.g89b43f80a514
->
+> +    fn as_mut_ptr(&self) -> *mut bindings::dev_pm_opp {
+> +        self.0.get()
+> +    }
+
+I think most existing examples call this `as_raw` and mark it `#[inline]`.
+
+> +    /// Adds an OPP dynamically.
+> +    pub fn add(dev: ARef<Device>, mut data: Data) -> Result<()> {
+> +        // SAFETY: The requirements are satisfied by the existence of `D=
+evice` and its safety
+> +        // requirements.
+> +        to_result(unsafe { bindings::dev_pm_opp_add_dynamic(dev.as_raw()=
+, &mut data.0) })
+> +    }
+> +
+> +    /// Removes a dynamically added OPP.
+> +    pub fn remove(dev: ARef<Device>, freq: u64) {
+> +        // SAFETY: The requirements are satisfied by the existence of `D=
+evice` and its safety
+> +        // requirements.
+> +        unsafe { bindings::dev_pm_opp_remove(dev.as_raw(), freq) };
+> +    }
+
+Is it intentional that these methods take ownership of a refcount to
+the device that it then drops after calling the C function?
+
+Also, why are these methods defined on OPP when they appear to be
+methods on Device and don't take any OPP argument?
+
+Alice
 
