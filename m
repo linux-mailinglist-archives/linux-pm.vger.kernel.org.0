@@ -1,291 +1,174 @@
-Return-Path: <linux-pm+bounces-8784-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8785-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35DCF900655
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 16:22:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 435B990083D
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 17:07:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B378D1F222EA
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 14:22:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A2B331F2731A
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 15:07:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EC45188CAD;
-	Fri,  7 Jun 2024 14:22:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35B49199380;
+	Fri,  7 Jun 2024 15:05:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ni87Lu/1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JdOkLoTu"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26F9513F436;
-	Fri,  7 Jun 2024 14:22:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FA2F198E84;
+	Fri,  7 Jun 2024 15:05:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717770124; cv=none; b=uVtKH91qxEerQU+q4WIGFK/LOQiPwjDmgbzA9SyyjK8s6SJX1IJXWKbonFX+3arDt42eCy5nyPCxIEPgIbqZppyUCfhFaVfBntwGK45ot5ZgX9ZS+gp9Has+gUqvFura9qHx6clCbjRToUJn1o1nvavc/94d4tOtPyIl/bM/OSE=
+	t=1717772709; cv=none; b=MI1zGRXifVaXlB3SCHCll6lzvA2ZQ0q4MN3/TEj2Q7elI3ldt5iGS4ujyhAFgCp0X3ZhJC3LHo627jt260BU9lUyVyHnFsyvzAXeumlJrngTfOzgKOAPy9e8ZUkRMV91yFK4cQmmkLSQ4O1uwqm2l7PEihwCsrNCgZoWlCtEsjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717770124; c=relaxed/simple;
-	bh=lN9LGnrgukjSjfQdaXfz6zoh1opVnc8Kbq0knfFwjw4=;
+	s=arc-20240116; t=1717772709; c=relaxed/simple;
+	bh=hxdOBIFpzvLuVlj0/tQBcXCexd1esA1lmDKCEQeF3os=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uSql0RloPVEb5SDM2v0Y1yCynVh+pZYidHkKAPcLGZJexgIegCJ9eR7prRvJauVMgtWUIf5K2ecdUZ+Bv2dn147r7+Z3ydds5F6d9DV/AshsOcPRSrQnvE9AbGozhUN+hnKZdsYVuDlcVHDax66hxeFkbe+ViwgxpFcSaFjxFMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ni87Lu/1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94912C4AF09;
-	Fri,  7 Jun 2024 14:22:03 +0000 (UTC)
+	 To:Cc:Content-Type; b=U8yfinLrEuk9cQAYDi04enupDMgWYefh/yv8fmhug8dCxJPYkxpHl0ICjrrQVvPgUElNiCGCfgjI+XWBu4HbWV5busInbJFM/w9E3T/8fdWppptPcjZ+VB6d2qNBrhi5+J/mopCTyj/LDApu1BLzSuqabLGYqepRL0Spl88/uec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JdOkLoTu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98155C3277B;
+	Fri,  7 Jun 2024 15:05:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717770123;
-	bh=lN9LGnrgukjSjfQdaXfz6zoh1opVnc8Kbq0knfFwjw4=;
+	s=k20201202; t=1717772708;
+	bh=hxdOBIFpzvLuVlj0/tQBcXCexd1esA1lmDKCEQeF3os=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Ni87Lu/1s8fiBFXiewQHZBjZuWU0h4ZRzUgqvYVPBs74xJk03T4u3R51nIN7hsPU5
-	 11Ac35LQK5xSx9u4GKn33t2vYRArPw0xPDRKzk7jUm27VjFMzteZwmC2Aj4nodnVV1
-	 RsJ+B9GOESPVazKgDToSOJsCAdoFf88EkzKyUfn9oLC+2ZWIq01KjtyBQte4diylQz
-	 vTbzr+AHY6+FFMTgW8cj73aCAzw4+V3rmAa7HB4B1sSbHn5byldjGSPscp22hM9O+R
-	 rlLI+sP+TFOim3uEjIh02jvuUhArBO32G0ZVhqHBCxiwlrTNKDB19UfepT9F8qf4B6
-	 kYvAFZloGMwzg==
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-5ba77a212adso107594eaf.3;
-        Fri, 07 Jun 2024 07:22:03 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXzpgVZmu6flofI75ma5PMqJHQS5nbYdkiUsjxpxCVGzaLrU0tXroesLFoK5eK60o6VwLOKgpSxzu8PU+h51cyNzeNP1q9fvUzWOq475VQtNyTgkRiHR+5wIXCywgfnbC78RsFJ784=
-X-Gm-Message-State: AOJu0YwO4rPDJHxZ8WXI4D7olHiLJpM3uwPTCm7axp49K42nqipJEAk3
-	QDxY2WIkBxccCf3FrHUQB4ybinppvQ4bhwIM20hBdRaAdfAV6YkpCs+j9EAG/7GbiEK1ag3Iwy3
-	Mq2EFnAW2LPy4W8c+jHzb0OrFaxg=
-X-Google-Smtp-Source: AGHT+IHrM4ProVsLq7TgVqRCERzD299+z5L7cTWF4rF+2zQvdtv5DTX/4oA2KtO7uwrtYe1Vz2O5sTGbf/mom2XM5ac=
-X-Received: by 2002:a05:6820:708:b0:5ba:6669:ba6e with SMTP id
- 006d021491bc7-5baaed4f14dmr2423032eaf.1.1717770122391; Fri, 07 Jun 2024
- 07:22:02 -0700 (PDT)
+	b=JdOkLoTuwU5TUS/3Jnkj8onU1nEE/NJd1hlbXzy4ym2o4U3wTEN7j0d2ioefsrqeC
+	 1HMy3F4DagBQrDgKMxVw3BRqaMVEpPMLL4l+RGFnT4d4305AzqxodiZjEyv6Gp7Ckx
+	 NRDZZLpc69z1WsOAFWoGdbvDpIsi2uPQ0BVNpwCHdRTzymUJKWtnbuWXFqW5fX0nmG
+	 bNucAus4qZMeheiMFGCXTt/mR1vJMveUCBfyDArgwAyZq6hImXuuA9RsnsjFIYlE2f
+	 KPSzGEueSqnUutxCVFled7fBvaknBYjO0awW3BOe5kCk2F0m+Zns8RycmEAsz2gry6
+	 rRoDKJ/O2czlw==
+Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-3d218bbba30so46029b6e.3;
+        Fri, 07 Jun 2024 08:05:08 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUb1bWKE1H/tLnut/mdXSjFEgelKxnRRz5vmoo9R4ge4F9UM0RErSSdnELQjM5Wtzh0DcQJNlys/q+SWcCw/HpFRzuUrl4NyTKUjuVL0n3Zj9BPFIgyaz0o6LMshq4UIIUQRhVWgGw=
+X-Gm-Message-State: AOJu0Yx6Mlxi5TDDt6mjp6f/YP2GO/1Mf6binL19ciMLQNFN3vDS7hha
+	xl9/F6j5QIWM0Z2DdfVcEtV/+xSvNT1hbtyoTEmWsIcRt1HSRtScdtvd16KX6p7fGICSldPNCG9
+	lqM+OFRlVGgzPqqAWjNbgsXxEV2E=
+X-Google-Smtp-Source: AGHT+IHRrjLeNDoOnuN/4gDMAgpm5VMxw9tymilfNC3lKc+GBnDyxi6xNkOedNoYPNPhHySGqiQCjeDa5/7W/juq1ck=
+X-Received: by 2002:a4a:a788:0:b0:5ba:ca8a:6598 with SMTP id
+ 006d021491bc7-5baca8a70b5mr898315eaf.0.1717772707773; Fri, 07 Jun 2024
+ 08:05:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240603081331.3829278-1-beata.michalska@arm.com>
- <20240603081331.3829278-2-beata.michalska@arm.com> <20240603114811.oio3uemniib5uaa2@vireshk-i7>
- <CAJZ5v0j1bqhmKrJirw+WgEVDdszZ9xQSgmfazVKMVa8H6_5TSw@mail.gmail.com> <20240606085513.pptx5dtjcvvg3zo4@vireshk-i7>
-In-Reply-To: <20240606085513.pptx5dtjcvvg3zo4@vireshk-i7>
+References: <13494237.uLZWGnKmhe@kreacher> <8366982.T7Z3S40VBb@kreacher>
+ <bf3ebf1571a4788e97daf861eb493c12d42639a3.camel@xry111.site>
+ <6d5ee74605bd9574baa5ed111cb54e959414437a.camel@linux.intel.com>
+ <6ebadacd8aaa307a5766cdb1b4d4a5c69acd87ac.camel@xry111.site>
+ <30a30c5107a47a2cc3fd39306728f70dd649d7fe.camel@linux.intel.com>
+ <f382e06635b3b52841d1e0c11dcf639d225edae0.camel@xry111.site>
+ <29d69252dcdc398f147c9139a8666d09e7bd831d.camel@linux.intel.com>
+ <0324bc3a88654855719cd48a5ed69a34eea31037.camel@xry111.site>
+ <c3526e7a0e80ec1a3a011259c38ab4b772040ea4.camel@linux.intel.com>
+ <48eba83030e155f703b4248e9c1ae65aa44b1a83.camel@xry111.site>
+ <CAJZ5v0jjLgG3VY_kBYc4mTrL2ybD2LfBTk2_H7xY0+Aq5g827A@mail.gmail.com>
+ <f34c20ae3feac0e3570125f124e440d51c5e4d9b.camel@linux.intel.com>
+ <1da736da33a61de92314934ecf7fa0420d6d6b81.camel@linux.intel.com>
+ <aa643910265b9d92a397d5148b31d37b2c421b8b.camel@xry111.site>
+ <63e98f2151ef64de92cf7e3da796937755ea5552.camel@linux.intel.com>
+ <258ce61c155c28937620f6abe57a39f2b4b0ff56.camel@xry111.site>
+ <101b903e58f2ebae60934edc374c7cda09f83de1.camel@linux.intel.com>
+ <CAJZ5v0jBBgjBny0Ps9bvHc7q1Un_6sdudpNL0==Z5HB+gHH0Hw@mail.gmail.com>
+ <651d11578646200cdb0a91c46ed09a22f29e94a0.camel@linux.intel.com>
+ <1031cc4e4b507628531d9115ce7e4bc588dbab1c.camel@xry111.site> <a2f992adc034063de7f63e9065976f39f9929503.camel@linux.intel.com>
+In-Reply-To: <a2f992adc034063de7f63e9065976f39f9929503.camel@linux.intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 7 Jun 2024 16:21:51 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0it5vZvzkbErkGOVruPbkxgr8VMTgQzsncpdQmvCOfBng@mail.gmail.com>
-Message-ID: <CAJZ5v0it5vZvzkbErkGOVruPbkxgr8VMTgQzsncpdQmvCOfBng@mail.gmail.com>
-Subject: Re: [PATCH 1/1] cpufreq: Rewire arch specific feedback for cpuinfo/scaling_cur_freq
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Beata Michalska <beata.michalska@arm.com>, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, len.brown@intel.com, 
-	ionela.voinescu@arm.com, vanshikonda@os.amperecomputing.com, 
-	sumitg@nvidia.com, vincent.guittot@linaro.org
+Date: Fri, 7 Jun 2024 17:04:56 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gvY6FGwhzTKrmNnKc48ixWAgTeT3Sw2tOUfshDwq3NcA@mail.gmail.com>
+Message-ID: <CAJZ5v0gvY6FGwhzTKrmNnKc48ixWAgTeT3Sw2tOUfshDwq3NcA@mail.gmail.com>
+Subject: Re: [PATCH v1 2/6] cpufreq: intel_pstate: Do not update
+ global.turbo_disabled after initialization
+To: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: Xi Ruoyao <xry111@xry111.site>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>
+Content-Type: multipart/mixed; boundary="0000000000000d69a0061a4e20a2"
+
+--0000000000000d69a0061a4e20a2
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 6, 2024 at 10:55=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
-rg> wrote:
+On Wed, Jun 5, 2024 at 2:05=E2=80=AFPM srinivas pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
 >
-> On 03-06-24, 15:43, Rafael J. Wysocki wrote:
-> > On Mon, Jun 3, 2024 at 1:48=E2=80=AFPM Viresh Kumar <viresh.kumar@linar=
-o.org> wrote:
-> > > Rafael,
-> > >
-> > > We probably need to decide on a policy for these two files, it is
-> > > getting a bit confusing.
-> > >
-> > > cpuinfo_cur_freq:
-> > >
-> > > The purpose of this file is abundantly clear. This returns the best
-> > > possible guess of the current hardware frequency. It should rely on
-> > > arch_freq_get_on_cpu() or ->get() to get the value.
+> On Wed, 2024-06-05 at 13:21 +0800, Xi Ruoyao wrote:
+> > On Tue, 2024-06-04 at 09:56 -0700, srinivas pandruvada wrote:
+> > > > > With such a delay, I am not sure how this even worked before.
 > >
-> > Let me quote the documentation:
-> >
-> > "This is expected to be the frequency the hardware actually runs at.
-> > If that frequency cannot be determined, this attribute should not be
-> > present."
-> >
-> > In my reading, this has nothing to do with arch_freq_get_on_cpu(), at
-> > least on x86.
-> >
-> > > Perhaps we can
-> > > make this available all the time, instead of conditionally on ->get()
-> > > callback (which isn't present for intel-pstate for example).
-> >
-> > We could, but then on x86 there is no expectation that this file will
-> > be present and changing this may introduce significant confusion
-> > because of the way it is documented (which would need to be changed,
-> > but people might be forgiven for failing to notice the change of
-> > interpretation of this file).
+> > It didn't work out of box but it worked after manually writing 0 to
+> > no_turbo after 20 seconds, see
+> > https://bugzilla.kernel.org/show_bug.cgi?id=3D218702.
 >
-> > > scaling_cur_freq:
-> > >
-> > > This should better reflect the last requested frequency, but since a
-> > > significant time now it is trying to show what cpuinfo_cur_freq shows=
-.
-> >
-> > Well, not really.
-> >
-> > > commit c034b02e213d ("cpufreq: expose scaling_cur_freq sysfs file for=
- set_policy() drivers")
-> > > commit f8475cef9008 ("x86: use common aperfmperf_khz_on_cpu() to calc=
-ulate KHz using APERF/MPERF")
-> >
-> > "In the majority of cases, this is the frequency of the last P-state
-> > requested by the scaling driver from the hardware using the scaling
-> > interface provided by it, which may or may not reflect the frequency
-> > the CPU is actually running at (due to hardware design and other
-> > limitations).
-> >
-> > Some architectures (e.g. x86) may attempt to provide information more
-> > precisely reflecting the current CPU frequency through this attribute,
-> > but that still may not be the exact current CPU frequency as seen by
-> > the hardware at the moment."
+> That make sense. So it never worked out of box. The store_no_turbo()
+> has additional read for turbo flag before, which is removed now. I
+> think adding that back will will restore old behavior.
 >
-> Right, with time the documentation is updated and now it has mixed
-> the purpose of both these files IMO.
+> diff --git a/drivers/cpufreq/intel_pstate.c
+> b/drivers/cpufreq/intel_pstate.c
+> index 4b986c044741..0d5330e5b96b 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -1301,6 +1301,8 @@ static ssize_t store_no_turbo(struct kobject *a,
+> struct kobj_attribute *b,
 >
-> > So the problem is that on Intel x86 with HWP and intel_pstate in the
-> > active mode, say, "the frequency of the last P-state requested by the
-> > scaling driver from the hardware" is actually never known, so exposing
-> > it via scaling_cur_freq is not possible.
-> >
-> > Moreover, because cpuinfo_cur_freq is not present at all in that case,
-> > scaling_cur_freq is the only way to allow user space to get an idea
-> > about the CPU current frequency.  I don't think it can be changed now
-> > without confusing users.
+>         no_turbo =3D !!clamp_t(int, input, 0, 1);
 >
-> Yes, this is a valid concern. The changes in documentation have been
-> there for many years and changing the behavior now is not going to be
-> an easy / right thing to do.
->
-> > > What should we do ? I wonder if we will break some userspace tools
-> > > (which may have started relying on these changes).
-> >
-> > We will.
-> >
-> > IIUC, it is desirable to expose "the frequency of the last P-state
-> > requested by the scaling driver from the hardware" via
-> > scaling_cur_freq on ARM, but it is also desirable to expose an
-> > approximation of the actual current CPU frequency, so the only way to
-> > do that without confusing the heck out of everybody downstream would
-> > be to introduce a new attribute for this purpose and document it
-> > precisely.
->
-> Hmm, having 3 files would confuse people even more I guess. I wanted
-> to get this sorted to have the same behavior for all platforms, but it
-> seems somewhat difficult to achieve now.
->
-> What about this, hopefully this doesn't break any existing platforms
-> and fix the problems for ARM (and others):
->
-> - scaling_cur_freq:
->
->   Returns the frequency of the last P-state requested by the scaling
->   driver from the hardware.
-
-This would change the behavior for intel_pstate in the passive mode AFAICS.
-
-ATM it calls arch_freq_get_on_cpu(), after the change it would return
-policy->cur which would not be the same value most of the time.  And
-in the ->adjust_perf() case policy->cur is not updated by it even.
-
->  For set_policy() drivers, use the ->get()
->   callback to get a value that can provide the best estimate to user.
->
->   To make this work, we can add get() callback to intel and amd pstate
->   drivers, and use arch_freq_get_on_cpu().
->
->   This will keep the current behavior intact for such drivers.
-
-Well, the passive mode thing would need to be addressed then.
-
-> - cpuinfo_cur_freq:
->
->   Currently this file is available only if the get() callback is
->   available. Maybe we can keep this behavior as is, and expose this
->   now for both the pstate drivers (once above change is added). We
->   will be left with only one driver that doesn't provide the get()
->   callback: pasemi-cpufreq.c
-
-I would rather get rid of it completely.
-
->   Coming back to the implementation of the file read operation, I
->   think the whole purpose of arch_freq_get_on_cpu() was to get a
->   better estimate (which may not be perfect) of the frequency the
->   hardware is really running at (in the last window) and if a platform
->   provides this, then it can be given priority over the ->get()
->   callback in order to show the value to userspace.
-
-There was a reason to add it and it was related to policy->cur being
-meaningless on x86 in general (even in the acpi-cpufreq case), but
-let's not go there.
-
-Hooking this up to cpuinfo_cur_freq on x86 wouldn't make much sense
-IMV because at times it is not even close to the frequency the
-hardware is running at.  It comes from the previous tick period,
-basically, and the hardware can adjust the frequency with a resolution
-that is orders of magnitude higher than the tick rate.
-
->   And so, if the platform provides, we can use arch_freq_get_on_cpu()
->   first and then the get() callback.
->
-> That would leave us to this change for the core, and yes a get()
-> callback for intel-pstate and amd-pstate:
->
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 7c6879efe9ef..e265f8450160 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -756,12 +756,8 @@ __weak unsigned int arch_freq_get_on_cpu(int cpu)
->  static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char=
- *buf)
->  {
->         ssize_t ret;
-> -       unsigned int freq;
->
-> -       freq =3D arch_freq_get_on_cpu(policy->cpu);
-> -       if (freq)
-> -               ret =3D sprintf(buf, "%u\n", freq);
-> -       else if (cpufreq_driver->setpolicy && cpufreq_driver->get)
-> +       if (cpufreq_driver->setpolicy && cpufreq_driver->get)
->                 ret =3D sprintf(buf, "%u\n", cpufreq_driver->get(policy->=
-cpu));
->         else
->                 ret =3D sprintf(buf, "%u\n", policy->cur);
-> @@ -795,7 +791,10 @@ store_one(scaling_max_freq, max);
->  static ssize_t show_cpuinfo_cur_freq(struct cpufreq_policy *policy,
->                                         char *buf)
->  {
-> -       unsigned int cur_freq =3D __cpufreq_get(policy);
-> +       unsigned int cur_freq =3D arch_freq_get_on_cpu(policy->cpu);
+> +       global.turbo_disabled =3D turbo_is_disabled();
 > +
-> +       if (!cur_freq)
-> +               cur_freq =3D __cpufreq_get(policy);
->
->         if (cur_freq)
->                 return sprintf(buf, "%u\n", cur_freq);
+>         if (no_turbo =3D=3D global.no_turbo)
+>                 goto unlock_driver;
 >
 >
-> I think this will also make more sense from documentation's
-> perspective, which says that:
->
-> "In the majority of cases, this is the frequency of the last P-state
-> requested by the scaling driver from the hardware using the scaling
-> interface provided by it, which may or may not reflect the frequency
-> the CPU is actually running at (due to hardware design and other
-> limitations)."
->
-> -- we do this at the core level.
->
-> "Some architectures (e.g. x86) may attempt to provide information more
-> precisely reflecting the current CPU frequency through this attribute,
-> but that still may not be the exact current CPU frequency as seen by
-> the hardware at the moment."
->
-> -- and this at driver level, as a special case.
+> Need to adjust the mutex around it also.
 
-Well, this sounds nice, but the changes are a bit problematic.
+Anyhow, it can be made work.
 
-If you don't want 3 files, I'd drop cpuinfo_cur_freq and introduce
-something else to replace it which will expose the
-arch_freq_get_on_cpu() return value and will be documented
-accordingly.
+global.turbo_disabled can be updated right before it is checked in
+store_no_turbo(), so if 0 is written to no_turbo (and global.no_turbo
+is 1), it will succeed if global.turbo_disabled changes from 1 to 0.
 
-Then scaling_cur_freq can be (over time) switched over to returning
-policy->cur in the cases when it is meaningful and -ENODATA otherwise.
+Something like the attached (untested) patch.
 
-This would at least allow us to stop making up stuff.
+--0000000000000d69a0061a4e20a2
+Content-Type: text/x-patch; charset="US-ASCII"; name="intel_pstate-turbo_disabled.patch"
+Content-Disposition: attachment; 
+	filename="intel_pstate-turbo_disabled.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_lx4tgzik0>
+X-Attachment-Id: f_lx4tgzik0
+
+LS0tCiBkcml2ZXJzL2NwdWZyZXEvaW50ZWxfcHN0YXRlLmMgfCAgIDE5ICsrKysrKysrKysrKy0t
+LS0tLS0KIDEgZmlsZSBjaGFuZ2VkLCAxMiBpbnNlcnRpb25zKCspLCA3IGRlbGV0aW9ucygtKQoK
+SW5kZXg6IGxpbnV4LXBtL2RyaXZlcnMvY3B1ZnJlcS9pbnRlbF9wc3RhdGUuYwo9PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+Ci0tLSBsaW51eC1wbS5vcmlnL2RyaXZlcnMvY3B1ZnJlcS9pbnRlbF9wc3RhdGUuYworKysgbGlu
+dXgtcG0vZHJpdmVycy9jcHVmcmVxL2ludGVsX3BzdGF0ZS5jCkBAIC0xMzAyLDEyICsxMzAyLDE3
+IEBAIHN0YXRpYyBzc2l6ZV90IHN0b3JlX25vX3R1cmJvKHN0cnVjdCBrb2IKIAogCW5vX3R1cmJv
+ID0gISFjbGFtcF90KGludCwgaW5wdXQsIDAsIDEpOwogCi0JaWYgKG5vX3R1cmJvID09IGdsb2Jh
+bC5ub190dXJibykKLQkJZ290byB1bmxvY2tfZHJpdmVyOwotCi0JaWYgKGdsb2JhbC50dXJib19k
+aXNhYmxlZCkgewotCQlwcl9ub3RpY2Vfb25jZSgiVHVyYm8gZGlzYWJsZWQgYnkgQklPUyBvciB1
+bmF2YWlsYWJsZSBvbiBwcm9jZXNzb3JcbiIpOworCVdSSVRFX09OQ0UoZ2xvYmFsLnR1cmJvX2Rp
+c2FibGVkLCB0dXJib19pc19kaXNhYmxlZCgpKTsKKwlpZiAoZ2xvYmFsLnR1cmJvX2Rpc2FibGVk
+ICYmICFub190dXJibykgeworCQlwcl9ub3RpY2UoIlR1cmJvIGRpc2FibGVkIGJ5IEJJT1Mgb3Ig
+dW5hdmFpbGFibGUgb24gcHJvY2Vzc29yXG4iKTsKIAkJY291bnQgPSAtRVBFUk07CisJCWlmIChn
+bG9iYWwubm9fdHVyYm8pCisJCQlnb3RvIHVubG9ja19kcml2ZXI7CisJCWVsc2UKKwkJCW5vX3R1
+cmJvID0gMTsKKwl9CisKKwlpZiAobm9fdHVyYm8gPT0gZ2xvYmFsLm5vX3R1cmJvKSB7CiAJCWdv
+dG8gdW5sb2NrX2RyaXZlcjsKIAl9CiAKQEAgLTE3NjIsNyArMTc2Nyw3IEBAIHN0YXRpYyB1NjQg
+YXRvbV9nZXRfdmFsKHN0cnVjdCBjcHVkYXRhICoKIAl1MzIgdmlkOwogCiAJdmFsID0gKHU2NClw
+c3RhdGUgPDwgODsKLQlpZiAoUkVBRF9PTkNFKGdsb2JhbC5ub190dXJibykgJiYgIWdsb2JhbC50
+dXJib19kaXNhYmxlZCkKKwlpZiAoUkVBRF9PTkNFKGdsb2JhbC5ub190dXJibykgJiYgIVJFQURf
+T05DRShnbG9iYWwudHVyYm9fZGlzYWJsZWQpKQogCQl2YWwgfD0gKHU2NCkxIDw8IDMyOwogCiAJ
+dmlkX2ZwID0gY3B1ZGF0YS0+dmlkLm1pbiArIG11bF9mcCgKQEAgLTE5MjcsNyArMTkzMiw3IEBA
+IHN0YXRpYyB1NjQgY29yZV9nZXRfdmFsKHN0cnVjdCBjcHVkYXRhICoKIAl1NjQgdmFsOwogCiAJ
+dmFsID0gKHU2NClwc3RhdGUgPDwgODsKLQlpZiAoUkVBRF9PTkNFKGdsb2JhbC5ub190dXJibykg
+JiYgIWdsb2JhbC50dXJib19kaXNhYmxlZCkKKwlpZiAoUkVBRF9PTkNFKGdsb2JhbC5ub190dXJi
+bykgJiYgIVJFQURfT05DRShnbG9iYWwudHVyYm9fZGlzYWJsZWQpKQogCQl2YWwgfD0gKHU2NCkx
+IDw8IDMyOwogCiAJcmV0dXJuIHZhbDsK
+--0000000000000d69a0061a4e20a2--
 
