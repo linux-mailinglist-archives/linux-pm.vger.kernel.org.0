@@ -1,110 +1,131 @@
-Return-Path: <linux-pm+bounces-8796-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8797-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80E7A900C06
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 20:48:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3719E900C25
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 20:57:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F1543B23240
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 18:48:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 496CC1C2178D
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 18:57:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B35014900C;
-	Fri,  7 Jun 2024 18:48:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A1091411E6;
+	Fri,  7 Jun 2024 18:56:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gL3d+/bs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VdeN7wPh"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72BB31A270;
-	Fri,  7 Jun 2024 18:48:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02D0F13F440;
+	Fri,  7 Jun 2024 18:56:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717786098; cv=none; b=ADcDX6v1mTXuumC4cqGAKkZyUuURI1nd6n3REnnKalfVK3TfIv+L58Qg+qiZCOWD19oXp+vsMiwZAJ1oMJ0ttz6kgxXiEZ1bSCLA3tO2HkOhYlWEcZcfoCYKLG9fLHxjCGUYID4VJasZl0OR//AYJPw81ZBaibi5glO3jEe91LI=
+	t=1717786581; cv=none; b=DynNNJ9OsNfQT/KVKGvyvwmzQbTJ6YbmMnwkT0LIpD6659Xwzckl3x9WUNF0dHvZKqQqmGB1WqyNTsxfw8aGp/Oi6Z6bJjeaNJAhMu8+NSbkHIYgXqhgOWNgUNa9vBCPiQN2MCG/udlMPdKPFvjeO+a8p5TT/5g38X8kPUUAtXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717786098; c=relaxed/simple;
-	bh=292CfxvmPGuyb+tMs5SvZaHZBZTxfqcwlEPRda2+kI0=;
+	s=arc-20240116; t=1717786581; c=relaxed/simple;
+	bh=zNWgpa9VXBHQ6K/ORcFzW8pPuEGTlF88v/NSUrhSNik=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=n0z7OM4m8A6zWKVRz9l1T5gTM5frz9iLt01eiB9JIiK1SsTwwTG9Col2d+w0U4kqJ7dG+1JON0GouWwCkbHF4Z+dJk86dhuUPqbROfDEczrL2ZoF5z9Jkm4Ztz/8AYuDhFu3m6Iyyq8XOlJ+0Z6PYj5erIcnS8gG03sp+a35dCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gL3d+/bs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A5BBC4AF08;
-	Fri,  7 Jun 2024 18:48:18 +0000 (UTC)
+	 To:Cc:Content-Type; b=CjKQXwlTkXyo95vF91zMPuLNJBTpoYzLF6mwkeC56UeWo8W5c1dDC0uugebcSCjxzNNVELabk56qP85D9ZFQe4fnLXq1Su8BtPkLMWeDx2CBYXTPFtZyrz3uZRpqMoowgSTwt+zbRBeH9dyQfT4l0aNHUv/01ndjhq5Y4brlf0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VdeN7wPh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89365C32786;
+	Fri,  7 Jun 2024 18:56:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717786098;
-	bh=292CfxvmPGuyb+tMs5SvZaHZBZTxfqcwlEPRda2+kI0=;
+	s=k20201202; t=1717786580;
+	bh=zNWgpa9VXBHQ6K/ORcFzW8pPuEGTlF88v/NSUrhSNik=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=gL3d+/bssv5SVqtIe7zAY01xkeufkfsUsT7s+tyL4VySxqs3JDgtYadsa2q6vFM33
-	 ydeheJ/+zAtkHRcD4f+xS829j0OkTY/t1cJO2OhZtB8cPNX9B7Dx8ENUDD48yPDwY9
-	 7G9yQrko/ohpZBIuQ5/Xe0NAu9lwhyPwRpCSUZBU+GcFVWSrdnrjK6TnEDJNFNl467
-	 z1KsWtCQe7XhOhtWbJzIfKiyvq7TcwTFCyOH7zY4LY5JtLFU+YJboTuYbhCH9kmCxx
-	 VIy3Yt2um05QnvftF3Epkxu1EBjgG4m87ILlRKDrO0YznTghbwDpxDESvoEmQ65IM0
-	 E2VeNnnhgMTkQ==
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-5b335681e82so369339eaf.2;
-        Fri, 07 Jun 2024 11:48:18 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU1XjpZVfhcMxh6CqBr8P7TdLbbFfcdTwVazYy1VO9/dpkwZ6IP+b1MKJBHMuYPfmljtgnFLUD7WeTSFVyk0p+nMPwusJoBxhQQCuUVFgmcl5HYtBE4TbH77Kw3TTFu/wB8MHnZLbZ50UY+jVGUwkukCgCWP2SvdRXi9uS/bP+SMb6H
-X-Gm-Message-State: AOJu0YwwW/LQ0SZ94dXTIqDpF2cOg05+9AmBpvUi8qNih3iLMlHw0Igz
-	XZaLvAZPDaWl+YOFVudVmgbig5FvMbCbGJmMhi5KyCPmYTzGQvMxBqetgtxBE7DSd62jkL00YRO
-	rH1SUul13GCidD7FjmKVkEMFyX0U=
-X-Google-Smtp-Source: AGHT+IEL7OH/WeqRUrMAZsTNoGZw/iPaAVSU96WBVKUOiGZkyn9pov/OMQgKKn5VJw+LmjSdxULhpkvBM3GAi0dDhys=
-X-Received: by 2002:a4a:a283:0:b0:5ba:c4ed:ee98 with SMTP id
- 006d021491bc7-5bac4edef89mr1797321eaf.0.1717786097416; Fri, 07 Jun 2024
- 11:48:17 -0700 (PDT)
+	b=VdeN7wPhFVJvSwlBdZ3Ii2k6lMz/62HnkZ/WtRZYJ/BOhlN4cQ9vIIrYM+/Oe4V1x
+	 lujLHNiAZh6v5o3lssfTzE8jfyQPHhZba2DK45xlTn12DIezO3LPaLpoYDkWSy+tnC
+	 mMHgKAXqFZCLd+ekxtU7h7WKXMR/nsSzrqxG5s2F0FQ9kaTTFK1cBle4BCWACB9kfQ
+	 AsReA195TueIz2iS//B/hv+h/AEy7Vy5qbpKiShl0+ljwCzo4hDPOrGHE7bQl/wsoA
+	 NWljPtvsL5f0lLzFLF05wslrBXTNFUqQZK3P9L3l/FHF/BDLEfIVaKqm2ofZyITyAz
+	 c+qsv0lFstzeA==
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-5b97f09cde3so315064eaf.0;
+        Fri, 07 Jun 2024 11:56:20 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUPb601KzUtWLAO8MsR7xj5roULXPqyOMVdEVWb0x3cfVzcca9aJtso47hibV70bCTHhMDgL0/Ldhcr9SPfGBL4I0fm2+jt8WEHxyaIajoSpHxmYf15pjVlFZaU8Ye5WnnKWtwIBZw=
+X-Gm-Message-State: AOJu0Yxwy9YpMiKk+/K8noKAXgXjyBpKYF9Nu4onrw9eQVq65dvooF5k
+	u7dlbdVegGwTqG2KkoalwjropVCfOwPPRVbhO1co6dvdDJU6eH9g/Nx+6K9d8L5PfrT4rPYIxkw
+	qir2L6ikxtxEWqId8CYuRUftDaJg=
+X-Google-Smtp-Source: AGHT+IHf4cOCql64dvD/89u9az0s0VjnGJoR8BgxX3dokipl8Ufw9hkQTdZZa0ZbAbm3o3Pz9djck2RAX5oE5Gd4mAg=
+X-Received: by 2002:a4a:cb84:0:b0:5b2:7aa7:7b29 with SMTP id
+ 006d021491bc7-5baae9ee8bamr3205096eaf.1.1717786579837; Fri, 07 Jun 2024
+ 11:56:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240528184720.56259-1-tony.luck@intel.com>
-In-Reply-To: <20240528184720.56259-1-tony.luck@intel.com>
+References: <7d999005-4441-4b8a-b159-3d0ebc2ed9d9@arm.com>
+In-Reply-To: <7d999005-4441-4b8a-b159-3d0ebc2ed9d9@arm.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 7 Jun 2024 20:48:06 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0joU5dzkdB6m_StXneVA9oNCpmBk8qrLvR2pGJYBBZqMw@mail.gmail.com>
-Message-ID: <CAJZ5v0joU5dzkdB6m_StXneVA9oNCpmBk8qrLvR2pGJYBBZqMw@mail.gmail.com>
-Subject: Re: [PATCH 0/8] PM/ACPI - New Intel CPU #defines
-To: Tony Luck <tony.luck@intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	patches@lists.linux.dev
+Date: Fri, 7 Jun 2024 20:56:08 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jU4A6mdrnzXde1TEvKnVYHg2ONa5hkKy8Oiy8izKAhag@mail.gmail.com>
+Message-ID: <CAJZ5v0jU4A6mdrnzXde1TEvKnVYHg2ONa5hkKy8Oiy8izKAhag@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: menu: Cleanup after loadavg removal
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	linux-pm@vger.kernel.org, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 28, 2024 at 8:47=E2=80=AFPM Tony Luck <tony.luck@intel.com> wro=
-te:
+On Tue, Jun 4, 2024 at 12:55=E2=80=AFPM Christian Loehle
+<christian.loehle@arm.com> wrote:
 >
-> These patches were previously posted in a patch bomb[1] across
-> all subsystems. The core pieces of that patch bomb are now
-> upstream, so here are just the PM/ACPI bits (previously
-> Acked by Rafael).
+> The performance impact of loadavg was removed with commit a7fe5190c03f
+> ("cpuidle: menu: Remove get_loadavg() from the performance multiplier")
+> With only iowait remaining the description can be simplified, remove
+> also the no longer needed includes.
 >
-> Signed-off-by: Tony Luck <tony.luck@intel.com>
+> Signed-off-by: Christian Loehle <christian.loehle@arm.com>
+> ---
+>  drivers/cpuidle/governors/menu.c | 17 +++++------------
+>  1 file changed, 5 insertions(+), 12 deletions(-)
 >
-> [1] https://lore.kernel.org/all/ZlYVqSlx8GLwTJEr@agluck-desk3.sc.intel.co=
-m/
+> diff --git a/drivers/cpuidle/governors/menu.c b/drivers/cpuidle/governors=
+/menu.c
+> index b96e3da0fedd..783b5d1dacdc 100644
+> --- a/drivers/cpuidle/governors/menu.c
+> +++ b/drivers/cpuidle/governors/menu.c
+> @@ -14,8 +14,6 @@
+>  #include <linux/ktime.h>
+>  #include <linux/hrtimer.h>
+>  #include <linux/tick.h>
+> -#include <linux/sched.h>
+> -#include <linux/sched/loadavg.h>
+>  #include <linux/sched/stat.h>
+>  #include <linux/math64.h>
 >
-> Tony Luck (8):
->   cpufreq: Switch to new Intel CPU model defines
->   intel_idle: Switch to new Intel CPU model defines
->   powercap: intel_rapl: Switch to new Intel CPU model defines
->   ASoC: Intel: Switch to new Intel CPU model defines
->   thermal: intel: intel_tcc_cooling: Switch to new Intel CPU model
->     defines
->   ACPI: LPSS: Switch to new Intel CPU model defines
->   cpufreq: intel_pstate: Switch to new Intel CPU model defines
->   powercap: intel_rapl: Switch to new Intel CPU model defines
+> @@ -95,16 +93,11 @@
+>   * state, and thus the less likely a busy CPU will hit such a deep
+>   * C state.
+>   *
+> - * Two factors are used in determing this multiplier:
+> - * a value of 10 is added for each point of "per cpu load average" we ha=
+ve.
+> - * a value of 5 points is added for each process that is waiting for
+> - * IO on this CPU.
+> - * (these values are experimentally determined)
+> - *
+> - * The load average factor gives a longer term (few seconds) input to th=
+e
+> - * decision, while the iowait value gives a cpu local instantanious inpu=
+t.
+> - * The iowait factor may look low, but realize that this is also already
+> - * represented in the system load average.
+> + * Currently there is only one value determining the factor:
+> + * 10 points are added for each process that is waiting for IO on this C=
+PU.
+> + * (This value was experimentally determined.)
+> + * Utilization is no longer a factor as it was shown that it never contr=
+ibuted
+> + * significantly to the performance multiplier in the first place.
+>   *
+>   */
 >
->  include/linux/platform_data/x86/soc.h         |  12 +-
->  drivers/acpi/x86/lpss.c                       |   4 +-
->  drivers/cpufreq/intel_pstate.c                |  90 +++++++------
->  drivers/cpufreq/speedstep-centrino.c          |   8 +-
->  drivers/idle/intel_idle.c                     | 116 ++++++++---------
->  drivers/powercap/intel_rapl_common.c          | 120 +++++++++---------
->  drivers/powercap/intel_rapl_msr.c             |  16 +--
->  drivers/thermal/intel/intel_soc_dts_thermal.c |   2 +-
->  drivers/thermal/intel/intel_tcc_cooling.c     |  30 ++---
->  9 files changed, 198 insertions(+), 200 deletions(-)
+> --
 
-All patches in the series have been applied as 6.11 material, thank you!
+Applied as 6.11 material, thanks!
 
