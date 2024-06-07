@@ -1,81 +1,263 @@
-Return-Path: <linux-pm+bounces-8749-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8750-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 242138FFE7D
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 10:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 831668FFED8
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 11:09:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D5591C22A8B
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 08:57:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 898A01C217CE
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 09:09:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 943CD15B12A;
-	Fri,  7 Jun 2024 08:57:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A98D215D5A2;
+	Fri,  7 Jun 2024 09:07:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="MF0vmhWv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9815C15AAC2;
-	Fri,  7 Jun 2024 08:57:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE2E15357A
+	for <linux-pm@vger.kernel.org>; Fri,  7 Jun 2024 09:07:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717750636; cv=none; b=MGLYk4mfMkie+Nwb6gE3HVo8Hgtw1HyJoCcdEWhwHGMwGc2VwGCpNuv68pWgBLkEaMNK41rVSmUdJpSwkkMS4zuzud664nJuGO1DTafzae+yt+KvA8rU09FtXrlcz7p+81GwnU0yo6q6MxSVMGnYHBforFCdoHTGFTFoMqkehbs=
+	t=1717751264; cv=none; b=Hqk/REWzWPsLyrT4ufdOQoAjb20ZMLlmgzH6KRo1On30g9eMrQHfhoRoM2IF21OwC0V3RMinpxTeWnDw/sonVo7yW8RHmxUzKi78HE7rnlzv0c6Q1YBptumR1bAVuRQZaCKG3G/azJzKIjDgYsCr4t6fQUApeClxygW2CA/gw7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717750636; c=relaxed/simple;
-	bh=fWf8dL9zgX4/tY0MKEO40QNhd6iKATLd5H6NU7pTBcw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FzVLAHsLlpKeAjfTzmYVPxHlB3paZ6MSLvd1g605MarBdZ1i2vZ/r/GJSTNdFAeY5CvvTTd6EodOptv6EVULguH75tDUcrYp56Sl9YHZU7SQiMmyL22617+yTSYfYE0vcLrIv/vmFQU8TOWyS3FJyxJ5y1DgcjHEjnDfZO+3CvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 08DC92F4;
-	Fri,  7 Jun 2024 01:57:38 -0700 (PDT)
-Received: from [192.168.2.88] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D6F013F762;
-	Fri,  7 Jun 2024 01:57:11 -0700 (PDT)
-Message-ID: <96eb4e13-e1c7-4c64-a4bf-0d2b5610d390@arm.com>
-Date: Fri, 7 Jun 2024 10:57:10 +0200
+	s=arc-20240116; t=1717751264; c=relaxed/simple;
+	bh=SiuQJKN9hxXei11TN1uKogeLoAkX43+LmTZIS8AiFlw=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=gqDH0KzeVjDmZMP8CON/dCjVpZw49PNsGkA8jZWDLWiSaJOy4bhRq40nS+ny4dIBBH9O3bAaWf4ShEw9JEH6iVv//uymZmkjLb3s9V0O3Cvmp2R4DI9PL/nuraq0DcMYqIcJMZ7Ekd3dHTiSY7+tglS/PQV+WahgmomXK7SXoqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=MF0vmhWv; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2c1a99b75d8so1421436a91.3
+        for <linux-pm@vger.kernel.org>; Fri, 07 Jun 2024 02:07:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1717751262; x=1718356062; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=KMWXi0x474xhjCOnYYY9uoP9w91qN9tSCcSZ9Z0wKyY=;
+        b=MF0vmhWveSQpa9+No5Rs9rICwMTDFAQLqg2qhB2UOzMUaXSzMwZ/6jy77BRbH/0I4U
+         r5cohBGSK8413SiXnnYPtawVSxuqA3C1uabfQ6BFijNNKSeA2nGva4dh/vEJ4QOi0zrp
+         avxBoVnJVIz7LdmI5Hin8xlWrAB2NEMimyinVC1lRf8ZdGS2L0+LU45K2kszUoQ7U6OH
+         aST1hO3oFJ3wIa5QFq/AIFTv0ETXCpD3vnX6VLBBfOgaS4SHKBxr34H31Zn5ytEqwO6d
+         o71aik5ndsVMw+IwG8HuJaGbvcnZDGPkTxtn5WpkXJiBJC4qkMZXjqA7ceQKRHj+0Cpv
+         a35Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717751262; x=1718356062;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KMWXi0x474xhjCOnYYY9uoP9w91qN9tSCcSZ9Z0wKyY=;
+        b=Q3lUcu4aKRsqNMfrOxGs9noY5e+R3qAyJaliK4n/5bdHG8+sb5bEZ3TXw6zzlCGFjc
+         xpifnqLfc4V8aw2ur+aiQ2r+1JBJl7A2VXVtUnSSEw/X8GuiKEL7ZNp1Hv0KGInMVRIQ
+         MZF06pNmajjRTrv5s/rc9/1Ih9FYUZcf25gWhcOLHGeMGZESyM46YkND8u/lTZ2UOsNa
+         dPXWWQ4RK9s2fNdBSOcV9rccFs/lNvbkIyxEvFVs/784JYiG2Y3ng5ouWDoX7Zoa3mVd
+         QChn1oV1DOUfDFMxSUuw5rkdlfN18zB5bF8af7anjR5gZs1o6M0cdvMHbNLxDUiQtWLI
+         TrfQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUkTD/8btk5fTrhMde/QNfOFAa1f1lK5/BK5J9iXWohH8EZzyzSy6QBlsuix56p6jOpvUDJlmqqH8pfQpXiMzR9Q5ApzoNyVyY=
+X-Gm-Message-State: AOJu0YxdHWFqnISII/zxfrSS6EVUMvKxlvnswqbp1ZSAPctCpGMxDNB8
+	W01u/lLOZp+mQSPkhvj7h2FwcqPJ6SH5PcitGmThIs99CVhXTbnWBCzagUlwTi0=
+X-Google-Smtp-Source: AGHT+IF0TnzZkEofFYxHd3jXLY2W07m7i86SjohSt6dyTa3HubDrz5ytnXQjFPIuGS2Ea3Du33CsMQ==
+X-Received: by 2002:a17:90a:34c2:b0:2a5:e087:768a with SMTP id 98e67ed59e1d1-2c2bcb0f52dmr2063172a91.29.1717751261741;
+        Fri, 07 Jun 2024 02:07:41 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c2806bd536sm5117645a91.45.2024.06.07.02.07.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jun 2024 02:07:41 -0700 (PDT)
+Message-ID: <6662cddd.170a0220.2a828.e44f@mx.google.com>
+Date: Fri, 07 Jun 2024 02:07:41 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/6] cpuidle: teo: Remove recent intercepts metric
-To: Christian Loehle <christian.loehle@arm.com>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, rafael@kernel.org
-Cc: vincent.guittot@linaro.org, qyousef@layalina.io, peterz@infradead.org,
- daniel.lezcano@linaro.org, anna-maria@linutronix.de,
- kajetan.puchalski@arm.com, lukasz.luba@arm.com
-References: <20240606090050.327614-1-christian.loehle@arm.com>
- <20240606090050.327614-6-christian.loehle@arm.com>
-From: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Content-Language: en-US
-In-Reply-To: <20240606090050.327614-6-christian.loehle@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v6.10-rc2-102-gddb5639c3f502
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 19 warnings (v6.10-rc2-102-gddb5639c3f502)
+To: rafael@kernel.org, linux-pm@vger.kernel.org,
+ kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On 06/06/2024 11:00, Christian Loehle wrote:
-> The logic for recent intercepts didn't work, there is an underflow
-> that can be observed during boot already, which teo usually doesn't
-> recover from, making the entire logic pointless.
+pm/testing build: 8 builds: 0 failed, 8 passed, 19 warnings (v6.10-rc2-102-=
+gddb5639c3f502)
 
-Is this related to:
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+10-rc2-102-gddb5639c3f502/
 
-https://lkml.kernel.org/r/0ce2d536-1125-4df8-9a5b-0d5e389cd8af@arm.com ?
+Tree: pm
+Branch: testing
+Git Describe: v6.10-rc2-102-gddb5639c3f502
+Git Commit: ddb5639c3f5021ecff49f6acc8b2c90bf5337216
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-In this case, a link here would be helpful to get the story.
+Warnings Detected:
 
-> Furthermore the recent intercepts also were never reset, thus not
-> actually being very 'recent'.
-> 
-> If it turns out to be necessary to focus more heavily on resets, the
-> intercepts metric also could be adjusted to decay more quickly.
-> 
-> Fixes: 77577558f25d ("cpuidle: teo: Rework most recent idle duration values treatment")
-> Signed-off-by: Christian Loehle <christian.loehle@arm.com>
+arc:
+    haps_hs_smp_defconfig (gcc-10): 2 warnings
 
-[...]
+arm64:
 
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 3 warnings
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 14 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
+rototypes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
+pes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
+prototypes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
+ypes]
+    1    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
+type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
+type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
+type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
+type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =
+=E2=80=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype fo=
+r =E2=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt=
+_provider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cel=
+ls' found, but node is not an interrupt provider
+    1    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt=
+_provider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node=
+ is not an interrupt provider
+    1    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed=
+ prerequisite 'interrupt_provider'
+    1    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_p=
+rovider): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt=
+ provider
+    1    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed=
+ prerequisite 'interrupt_provider'
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt_prov=
+ider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node is n=
+ot an interrupt provider
+    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt_prov=
+ider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cells' f=
+ound, but node is not an interrupt provider
+    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed prer=
+equisite 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_provid=
+er): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt prov=
+ider
+    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed prer=
+equisite 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 14 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
+types]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
+ypes]
+    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for =E2=
+=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =E2=80=
+=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
 
