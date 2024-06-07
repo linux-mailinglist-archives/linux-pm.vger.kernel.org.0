@@ -1,132 +1,110 @@
-Return-Path: <linux-pm+bounces-8795-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8796-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C388D900B67
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 19:41:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80E7A900C06
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 20:48:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 342241F242DB
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 17:41:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F1543B23240
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 18:48:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA9BD19D087;
-	Fri,  7 Jun 2024 17:40:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B35014900C;
+	Fri,  7 Jun 2024 18:48:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="WDq1TV74"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gL3d+/bs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74DFF19D076;
-	Fri,  7 Jun 2024 17:40:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72BB31A270;
+	Fri,  7 Jun 2024 18:48:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717782038; cv=none; b=BLlF/Vt1ycKoOxB2iy+Ixb9h86fsr4Z0sQlny6gHsHdnd0BzF8JUWhpwYeuZzcFMq9zTbufKGOJjZmLqpTV7LnvgyzPuZDe64YeoC7FbFWGpMJT/IaEYiwBt+Rty3DgS1BhQWABSoeu1ruuVPTubYTjK4JioMtH8jg6zmsx15FM=
+	t=1717786098; cv=none; b=ADcDX6v1mTXuumC4cqGAKkZyUuURI1nd6n3REnnKalfVK3TfIv+L58Qg+qiZCOWD19oXp+vsMiwZAJ1oMJ0ttz6kgxXiEZ1bSCLA3tO2HkOhYlWEcZcfoCYKLG9fLHxjCGUYID4VJasZl0OR//AYJPw81ZBaibi5glO3jEe91LI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717782038; c=relaxed/simple;
-	bh=epSMVVuXNACAijVWTrM3ArHfYRBpQLqBQbzPpdgO3Eg=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DjpXSrvxgLcxPHB/RnmYNh6dIwX7hi0QYWQGUyNmdGfT+ULic5E00tsFqXBoExNgT5L2lm8VqJmpUjB0epaJMUYYY7AILEr2DOkkGp83tsmHjxqkyz+bAYWeU8cJIez2U1jzB+rpHn2dY5DlbCP227e5LQMBvQMthfBhGxjHbGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=WDq1TV74; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 457HeUSj019778;
-	Fri, 7 Jun 2024 17:40:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=6UlsSXBZh5pTvYqrBUJWqJhX
-	gnYP7hCHxrTA0qyIk6c=; b=WDq1TV748rWohgTXNEeAPBc/PWNEDCo/cGIBFHLq
-	/zQKzOc6vu1HxFwuTV+30S5GmT6zhb5D5mOCjI0sQW1I0P5Zeb0cOESTdjlz6Tq0
-	/PglW5TwH5gfVv87mu2qF8WzXJwUjPid9TO/YMjOP7YuqZhQllbmQ0NsPANV9iw6
-	JFCOp3xaSTD5ojSS1rqzE4Egy+os0/P30upZQCUMsimP++W9LdxTijmvQ/i2oevX
-	/RRx//H8jG5sJO2M6YmabAxxqYHfFvkfIQ/x02wEf/u44S0EHxt83Wz46NibATYz
-	DR7IoLcLgW0A7B6igVVkG9t4Zwv1jWALh4lOsapKKLW4wQ==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ykg2qk69y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 07 Jun 2024 17:40:33 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 457HeXsw020629
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 7 Jun 2024 17:40:33 GMT
-Received: from hu-okukatla-hyd.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Fri, 7 Jun 2024 10:40:28 -0700
-From: Odelu Kukatla <quic_okukatla@quicinc.com>
-To: Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>, Rob Herring
-	<robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC: Kees Cook <keescook@chromium.org>, <cros-qcom-dts-watchers@chromium.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>, <quic_rlaggysh@quicinc.com>,
-        <quic_mdtipton@quicinc.com>, <quic_okukatla@quicinc.com>
-Subject: [PATCH v5 4/4] arm64: dts: qcom: sc7280: Add clocks for QOS configuration
-Date: Fri, 7 Jun 2024 23:09:27 +0530
-Message-ID: <20240607173927.26321-5-quic_okukatla@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20240607173927.26321-1-quic_okukatla@quicinc.com>
-References: <20240607173927.26321-1-quic_okukatla@quicinc.com>
+	s=arc-20240116; t=1717786098; c=relaxed/simple;
+	bh=292CfxvmPGuyb+tMs5SvZaHZBZTxfqcwlEPRda2+kI0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=n0z7OM4m8A6zWKVRz9l1T5gTM5frz9iLt01eiB9JIiK1SsTwwTG9Col2d+w0U4kqJ7dG+1JON0GouWwCkbHF4Z+dJk86dhuUPqbROfDEczrL2ZoF5z9Jkm4Ztz/8AYuDhFu3m6Iyyq8XOlJ+0Z6PYj5erIcnS8gG03sp+a35dCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gL3d+/bs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A5BBC4AF08;
+	Fri,  7 Jun 2024 18:48:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717786098;
+	bh=292CfxvmPGuyb+tMs5SvZaHZBZTxfqcwlEPRda2+kI0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=gL3d+/bssv5SVqtIe7zAY01xkeufkfsUsT7s+tyL4VySxqs3JDgtYadsa2q6vFM33
+	 ydeheJ/+zAtkHRcD4f+xS829j0OkTY/t1cJO2OhZtB8cPNX9B7Dx8ENUDD48yPDwY9
+	 7G9yQrko/ohpZBIuQ5/Xe0NAu9lwhyPwRpCSUZBU+GcFVWSrdnrjK6TnEDJNFNl467
+	 z1KsWtCQe7XhOhtWbJzIfKiyvq7TcwTFCyOH7zY4LY5JtLFU+YJboTuYbhCH9kmCxx
+	 VIy3Yt2um05QnvftF3Epkxu1EBjgG4m87ILlRKDrO0YznTghbwDpxDESvoEmQ65IM0
+	 E2VeNnnhgMTkQ==
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-5b335681e82so369339eaf.2;
+        Fri, 07 Jun 2024 11:48:18 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU1XjpZVfhcMxh6CqBr8P7TdLbbFfcdTwVazYy1VO9/dpkwZ6IP+b1MKJBHMuYPfmljtgnFLUD7WeTSFVyk0p+nMPwusJoBxhQQCuUVFgmcl5HYtBE4TbH77Kw3TTFu/wB8MHnZLbZ50UY+jVGUwkukCgCWP2SvdRXi9uS/bP+SMb6H
+X-Gm-Message-State: AOJu0YwwW/LQ0SZ94dXTIqDpF2cOg05+9AmBpvUi8qNih3iLMlHw0Igz
+	XZaLvAZPDaWl+YOFVudVmgbig5FvMbCbGJmMhi5KyCPmYTzGQvMxBqetgtxBE7DSd62jkL00YRO
+	rH1SUul13GCidD7FjmKVkEMFyX0U=
+X-Google-Smtp-Source: AGHT+IEL7OH/WeqRUrMAZsTNoGZw/iPaAVSU96WBVKUOiGZkyn9pov/OMQgKKn5VJw+LmjSdxULhpkvBM3GAi0dDhys=
+X-Received: by 2002:a4a:a283:0:b0:5ba:c4ed:ee98 with SMTP id
+ 006d021491bc7-5bac4edef89mr1797321eaf.0.1717786097416; Fri, 07 Jun 2024
+ 11:48:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: CAg6-UoE0tYABgQQBV5YwsX3GS1BHrbN
-X-Proofpoint-ORIG-GUID: CAg6-UoE0tYABgQQBV5YwsX3GS1BHrbN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-07_10,2024-06-06_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
- spamscore=0 malwarescore=0 clxscore=1015 bulkscore=0 impostorscore=0
- lowpriorityscore=0 mlxscore=0 suspectscore=0 priorityscore=1501
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2405170001 definitions=main-2406070130
+References: <20240528184720.56259-1-tony.luck@intel.com>
+In-Reply-To: <20240528184720.56259-1-tony.luck@intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 7 Jun 2024 20:48:06 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0joU5dzkdB6m_StXneVA9oNCpmBk8qrLvR2pGJYBBZqMw@mail.gmail.com>
+Message-ID: <CAJZ5v0joU5dzkdB6m_StXneVA9oNCpmBk8qrLvR2pGJYBBZqMw@mail.gmail.com>
+Subject: Re: [PATCH 0/8] PM/ACPI - New Intel CPU #defines
+To: Tony Luck <tony.luck@intel.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add clocks which need to be enbaled for configuring
-QoS on sc7280.
+On Tue, May 28, 2024 at 8:47=E2=80=AFPM Tony Luck <tony.luck@intel.com> wro=
+te:
+>
+> These patches were previously posted in a patch bomb[1] across
+> all subsystems. The core pieces of that patch bomb are now
+> upstream, so here are just the PM/ACPI bits (previously
+> Acked by Rafael).
+>
+> Signed-off-by: Tony Luck <tony.luck@intel.com>
+>
+> [1] https://lore.kernel.org/all/ZlYVqSlx8GLwTJEr@agluck-desk3.sc.intel.co=
+m/
+>
+> Tony Luck (8):
+>   cpufreq: Switch to new Intel CPU model defines
+>   intel_idle: Switch to new Intel CPU model defines
+>   powercap: intel_rapl: Switch to new Intel CPU model defines
+>   ASoC: Intel: Switch to new Intel CPU model defines
+>   thermal: intel: intel_tcc_cooling: Switch to new Intel CPU model
+>     defines
+>   ACPI: LPSS: Switch to new Intel CPU model defines
+>   cpufreq: intel_pstate: Switch to new Intel CPU model defines
+>   powercap: intel_rapl: Switch to new Intel CPU model defines
+>
+>  include/linux/platform_data/x86/soc.h         |  12 +-
+>  drivers/acpi/x86/lpss.c                       |   4 +-
+>  drivers/cpufreq/intel_pstate.c                |  90 +++++++------
+>  drivers/cpufreq/speedstep-centrino.c          |   8 +-
+>  drivers/idle/intel_idle.c                     | 116 ++++++++---------
+>  drivers/powercap/intel_rapl_common.c          | 120 +++++++++---------
+>  drivers/powercap/intel_rapl_msr.c             |  16 +--
+>  drivers/thermal/intel/intel_soc_dts_thermal.c |   2 +-
+>  drivers/thermal/intel/intel_tcc_cooling.c     |  30 ++---
+>  9 files changed, 198 insertions(+), 200 deletions(-)
 
-Signed-off-by: Odelu Kukatla <quic_okukatla@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index ba43fba2c551..a3c640d394e9 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -2130,6 +2130,8 @@
- 			reg = <0 0x016e0000 0 0x1c080>;
- 			#interconnect-cells = <2>;
- 			qcom,bcm-voters = <&apps_bcm_voter>;
-+			clocks = <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
-+				 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>;
- 		};
- 
- 		aggre2_noc: interconnect@1700000 {
-@@ -2137,6 +2139,7 @@
- 			compatible = "qcom,sc7280-aggre2-noc";
- 			#interconnect-cells = <2>;
- 			qcom,bcm-voters = <&apps_bcm_voter>;
-+			clocks = <&rpmhcc RPMH_IPA_CLK>;
- 		};
- 
- 		mmss_noc: interconnect@1740000 {
--- 
-2.17.1
-
+All patches in the series have been applied as 6.11 material, thank you!
 
