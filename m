@@ -1,106 +1,110 @@
-Return-Path: <linux-pm+bounces-8798-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8799-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 020B4900C2E
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 20:58:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A27B2900C33
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 21:00:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 799D2B2496E
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 18:58:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 409501F2339E
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 19:00:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83FBB143756;
-	Fri,  7 Jun 2024 18:58:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC890482FE;
+	Fri,  7 Jun 2024 19:00:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YOXKifFL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HMmKY4kO"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CBC54204F;
-	Fri,  7 Jun 2024 18:58:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E94433EE;
+	Fri,  7 Jun 2024 19:00:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717786710; cv=none; b=XY4xjJvtDilAaDRlI6Bi6l5JcGKOFCZ3al0w9ZxKH4gtQDB0shFPuhsqc2ZbuR3wSbmA7zrIv4a/oL4SaRDL0Ucjzvjlps8Ht/BuPzmI8DGnyaaGfl/nln+2bi5+Zg3fneDC6yaPKKXJlJEFKARrrog3fdT5QdfK0/b0gJ/fKQc=
+	t=1717786841; cv=none; b=NoDcVw5v9v8l4vQQiAEMrHlGjEgaBxDbDVZs11p6L01PYx1MKl59Mg2mbPnWrXbz6c19kp3Z2LIN7jgdqsRpqplFVgGs8OxPN9oZs+IGF3A1qFkUHwij9760Xrv1vJYq84IfS1UK6sesFAznpTlGEssNiLAlJoJvekXbsABj1F0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717786710; c=relaxed/simple;
-	bh=YVTm9rx3hAIDwiIpXyJ3t35LjCIU0Wrud/PJ+L0hRAM=;
+	s=arc-20240116; t=1717786841; c=relaxed/simple;
+	bh=IPM3ZjOOoKK9XZRO/WkOmRAqEmZd5KnB0OIVkFoyJt0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YbyAYhGYZNW90z5lJYNnvSq4iDI19wgUEittKupTktBgYv4z+f0EqdehQuqHUlMNfcc92TiOCVhJLrzhdw42APwRkiitO+mAnAOXMQsHfiPQFkgIubKtcu/o26pHq/6ZBe8VLTX0DRlxkNekuqlsJ8LdZikC8SC/n9zbOpPEgQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YOXKifFL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4830C2BBFC;
-	Fri,  7 Jun 2024 18:58:29 +0000 (UTC)
+	 To:Cc:Content-Type; b=K0u/8MjzR0KBRnimrd4L7x1WkpQaOZ+QawxsPR1Uiy+3meF8djX9qISB3NZvT5NQy5BshRoV8opM6tFRaCyTmeNU9ScNKyT6h9YTSgx0q8KCMkCT7pQAypxvUK3yaxCnsgHfEhRjpA17+O+JvSgD1cMvoGzcvKXCodYCrzVRnM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HMmKY4kO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0841C4AF08;
+	Fri,  7 Jun 2024 19:00:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717786709;
-	bh=YVTm9rx3hAIDwiIpXyJ3t35LjCIU0Wrud/PJ+L0hRAM=;
+	s=k20201202; t=1717786841;
+	bh=IPM3ZjOOoKK9XZRO/WkOmRAqEmZd5KnB0OIVkFoyJt0=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=YOXKifFLgh1ZwqWzgL1zO3O1tqr3aZniW/A8l/E5vc9ZlYhbhB2DrXCw1o+7TZYtF
-	 YHmdib2DG5g7XI5I55qAjKl2ft0FLnuxLzfcDy7pnd57tSC0ZtSBjBX6iEonQZc8jy
-	 ZZug2odzQSxDzrvJjyidTkV+TBoGj2jixdjwmnegYUCCr11h8amaTJ7KCybpFucGZV
-	 L7o/Zxo3N1kAwYHS1/72TIleKAWPFX/5BL83KfoRBoGb+7yM+PmoslBy+X8rdN5t95
-	 KdGqLLLZ4JHRAKwfAV9F9OzVwr9cxk9RkgkK6ML7dZaCgtqXY5204pkD2yTu/w3Opv
-	 0RPIjjWIt+Low==
-Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-3d21cb3833cso164b6e.2;
-        Fri, 07 Jun 2024 11:58:29 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUXSmD4EfwccQ46kuD5vYSUcOpw9yqBioMfuuBplHQ9PErj89wDoARdYM02zLk1N2flQt+HEf0PvxlwEi2HDDWMXA6RqXj05lW146wXxyH5Pr2BWcA/OjmrSWIeqm8OkUwxWPZtR2k=
-X-Gm-Message-State: AOJu0YywVtN71rvu6GQMjKS6+4c+H8YImGIlgbFjBWPbvZrc2abGbFbG
-	LgHuRLTt9Slumg5qNNrDwKrD73j6kwVV3QYeMTNlxg+QszlH4aTXy7bH1ZZ7yEv8VWMCpNpOb+J
-	Q7AqlB/GyUN2VD1TIRhwjsVxKUeA=
-X-Google-Smtp-Source: AGHT+IGw5cRrg2vCKWwrVtK4aJ1gOUjrrLKAIr3heL058J6se6B98dIXlZo0HBZoAj9H51KF/LHUNOw+tW2ziMwSNpU=
-X-Received: by 2002:a4a:a788:0:b0:5ba:ca8a:6598 with SMTP id
- 006d021491bc7-5baca8a70b5mr1596823eaf.0.1717786709173; Fri, 07 Jun 2024
- 11:58:29 -0700 (PDT)
+	b=HMmKY4kON5jYIpNgJWHAqigbtXut0meWxfry6TCSfOf4J90q07JjF+fb7JOERKuUr
+	 oFTNwv/qfpFZsF9YHywvujdVx6o+lOwa4D8e+sUWCQl6wyPPgDEGYK761o3+X3K0Y9
+	 OxqETGzOVHuhskjYR1qFkjmZv1PsCZRF9J7c6wmeBHt7/Mv+0kuaJJQqxS81AQoT+V
+	 Wy14eBRqFPkmpQOZteiBKmXaaCt/Ct/EEiyeTIAbxqvzbQTBclNWhkg8OThWHVPRFo
+	 rIasBBJo4nJR0GgLTHrlHI7ZFkbgkAkoFCmIMBSWs6gIdKf47qzXyz0bHtwbE+Giyk
+	 jM4ka91SBxF6Q==
+Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-3d21c5b48f5so10200b6e.0;
+        Fri, 07 Jun 2024 12:00:40 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWyQkvlhipV2yBTjXii0PvYm9X3/HRLxpPmZwXLm2ncj1GHS+dDc38xmxPgonGZphBDOnwlwhgqKIqZLuAp1JxmBItDVrFPGA+c5fTtpSczep+jhQb9TfUB0pTGRm/C30RZxeFpa4eT90RTwUPaQZK9G0vZFYQ8YyAoal4mSnKygV4Wd9+cX44=
+X-Gm-Message-State: AOJu0YyYvKtiAUrU5Tz10zLhQL2vOPjG98dZ4EYKF2xb/cnBCYM2onGj
+	CXwHU7Oa8K8j5mSjNNrrs3KDp2bCcTsKgHoA5t6t4veAP00sVmGLkCh+waRkczLJXBKycjBv9GN
+	Yd0oc2DJcEcnr/g4dGJ7HBXIxdZ8=
+X-Google-Smtp-Source: AGHT+IGuJmKnxkTd0KYNZ8GHs2XH6rZN6o7VLhS21c0RGPNYMnNAYBlTibs+T91Q58vZVrd6rRw/ZLbD9DyQjDDA3iY=
+X-Received: by 2002:a4a:a7c9:0:b0:5ba:6959:edf8 with SMTP id
+ 006d021491bc7-5baae6da3bfmr3518182eaf.1.1717786840309; Fri, 07 Jun 2024
+ 12:00:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240605135841.97446-1-thorsten.blum@toblux.com>
-In-Reply-To: <20240605135841.97446-1-thorsten.blum@toblux.com>
+References: <AS8PR02MB723748EF627AEB253C437FD48BFA2@AS8PR02MB7237.eurprd02.prod.outlook.com>
+In-Reply-To: <AS8PR02MB723748EF627AEB253C437FD48BFA2@AS8PR02MB7237.eurprd02.prod.outlook.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 7 Jun 2024 20:58:18 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jQi_7LQWRSXngxAwByKKDcikRx4Vu9Mjj86dMqCTzMCQ@mail.gmail.com>
-Message-ID: <CAJZ5v0jQi_7LQWRSXngxAwByKKDcikRx4Vu9Mjj86dMqCTzMCQ@mail.gmail.com>
-Subject: Re: [PATCH] powercap: idle_inject: Simplify if condition
-To: Thorsten Blum <thorsten.blum@toblux.com>
-Cc: rafael@kernel.org, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Fri, 7 Jun 2024 21:00:29 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0ghxCYZKdf3zixi6StSCir7Yyiy5iyPeG2+GmyHU4yzWw@mail.gmail.com>
+Message-ID: <CAJZ5v0ghxCYZKdf3zixi6StSCir7Yyiy5iyPeG2+GmyHU4yzWw@mail.gmail.com>
+Subject: Re: [PATCH] thermal: int3400: Use sizeof(*pointer) instead of sizeof(type)
+To: Erick Archer <erick.archer@outlook.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
+	srinivas pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
+	Ard Biesheuvel <ardb@kernel.org>, Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>, 
+	Lukas Wunner <lukas@wunner.de>, Kees Cook <keescook@chromium.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Justin Stitt <justinstitt@google.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 5, 2024 at 3:59=E2=80=AFPM Thorsten Blum <thorsten.blum@toblux.=
-com> wrote:
+On Thu, Jun 6, 2024 at 7:21=E2=80=AFPM Erick Archer <erick.archer@outlook.c=
+om> wrote:
 >
-> The if condition !A || A && B can be simplified to !A || B.
+> It is preferred to use sizeof(*pointer) instead of sizeof(type)
+> due to the type of the variable can change and one needs not
+> change the former (unlike the latter). This patch has no effect
+> on runtime behavior.
 >
-> Fixes the following Coccinelle/coccicheck warning reported by
-> excluded_middle.cocci:
->
->         WARNING !A || A && B is equivalent to !A || B
->
-> Compile-tested only.
->
-> Signed-off-by: Thorsten Blum <thorsten.blum@toblux.com>
+> Signed-off-by: Erick Archer <erick.archer@outlook.com>
 > ---
->  drivers/powercap/idle_inject.c | 2 +-
+>  drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_injec=
-t.c
-> index e18a2cc4e46a..bafc59904ed3 100644
-> --- a/drivers/powercap/idle_inject.c
-> +++ b/drivers/powercap/idle_inject.c
-> @@ -127,7 +127,7 @@ static enum hrtimer_restart idle_inject_timer_fn(stru=
-ct hrtimer *timer)
->         struct idle_inject_device *ii_dev =3D
->                 container_of(timer, struct idle_inject_device, timer);
+> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/dr=
+ivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> index fa96972266e4..b0c0f0ffdcb0 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> @@ -571,7 +571,7 @@ static int int3400_thermal_probe(struct platform_devi=
+ce *pdev)
+>         if (!adev)
+>                 return -ENODEV;
 >
-> -       if (!ii_dev->update || (ii_dev->update && ii_dev->update()))
-> +       if (!ii_dev->update || ii_dev->update())
->                 idle_inject_wakeup(ii_dev);
+> -       priv =3D kzalloc(sizeof(struct int3400_thermal_priv), GFP_KERNEL)=
+;
+> +       priv =3D kzalloc(sizeof(*priv), GFP_KERNEL);
+>         if (!priv)
+>                 return -ENOMEM;
 >
->         duration_us =3D READ_ONCE(ii_dev->run_duration_us);
 > --
 
 Applied as 6.11 material, thanks!
