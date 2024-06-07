@@ -1,105 +1,102 @@
-Return-Path: <linux-pm+bounces-8801-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8802-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62258900C56
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 21:14:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA098900C67
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 21:20:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F22CC281103
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 19:14:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 925961F21A9A
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 19:20:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCDC014658E;
-	Fri,  7 Jun 2024 19:13:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68C63149DED;
+	Fri,  7 Jun 2024 19:20:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CI+1PEZA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AwfGeeKY"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 935DB13E8BE;
-	Fri,  7 Jun 2024 19:13:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42BE3D2EE;
+	Fri,  7 Jun 2024 19:20:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717787631; cv=none; b=IdJw3kp7loU6S0ecKonF1MCopy3HoamgBDL+E/jX/S+9gyHZWPRUsWt65KY55hv6Rz+/DNVSBFlfOquNmmSd3zXh63FZlHTbOxhCuOzBMM+rOrW/AcWSR73WPtJwmsBw1tAwPO/5PeZG1EHreIia2KZSwn/hbSGVstQJUYaZkGQ=
+	t=1717788020; cv=none; b=V0BmmAWcyKP1YnE/gKdcR6irdyaFaQCC/G2Ps7Op3GraFSXtZqZzXKYZWgEWpFwP8iFn8y5HkvHxa+4ZfFJAs/zB5ZXzU4Rk3m4+oprSDRbty/C4VmZQjfw6efQAQZJtnZJwIXso+cdzcNXZH9ewz+kOOX61Wc6IBOHAB/ftyIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717787631; c=relaxed/simple;
-	bh=x2ahY+dEvDzy4HX0T+/KAbqwUVPGgL1I0GbISGbHWxw=;
+	s=arc-20240116; t=1717788020; c=relaxed/simple;
+	bh=OL0/L9WY08c0iKLw+OMR1jbr3mgWXPWBsC+s5SBorg4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m8VMCA4TED+JwVZ8gIDj2gql3eLviH0agm8McreRTTFwFeWW6Nnm7sibuxY9zaGDD9BtpJHwzdamZ7g8Hpr9fEQwsb6/C+QS40Shv7Olcukv8m0i2lzpA6pm+jqhfN2IF8lI4Yuls2tdh6ucz1UzIX1OHvDzmQhrbILkFaE5ZlQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CI+1PEZA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 217CEC32786;
-	Fri,  7 Jun 2024 19:13:51 +0000 (UTC)
+	 To:Cc:Content-Type; b=VSjqeynomJPFeUF5Gzoc+Ew8p5gKbrxpVu/yvtEuH49Juo2voFnV9lQberIvUL4SQ5Fz3eswPVjW85tv14n2Zv+Hsu0JnptD4+yMLhQINLSEH8yP0YeQ28MwfRlgo4TuzRL80q7xNorV9+YhAiGjiRDQoFqNwRV43gvAhta5EUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AwfGeeKY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4908C2BBFC;
+	Fri,  7 Jun 2024 19:20:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717787631;
-	bh=x2ahY+dEvDzy4HX0T+/KAbqwUVPGgL1I0GbISGbHWxw=;
+	s=k20201202; t=1717788019;
+	bh=OL0/L9WY08c0iKLw+OMR1jbr3mgWXPWBsC+s5SBorg4=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=CI+1PEZAFYUs+a13vyaW5ladIKnwaUaQhsM04Z5me+nnzgXPVcNRZ4o+6PN14obF3
-	 GJnQRkOjch8PeQGLOHOknI1iQK+InJLEQvSFe+6UkNy+KKjJSak+mYxL64MRIJ3KYi
-	 8uLirbimhffFrqD3UioNGIR50i8OsDxQX9pKLs/iBEDdWNFnUy4mDWR56ZXrJkF04o
-	 edjQ1dsLn9g5jLXKpj4VTCUWMwPmaPjnQaCn+QFSLo87BRmhX9hjBkJGJwK2RckXrn
-	 /cQSuA2nqjsRHMbqe4s67X826Mg36rUwRJ3epM+B4RoI5QXIdkBKOoIY7LJcoTI9UT
-	 9sHwgf+ESuT9Q==
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5bacd54d58bso18894eaf.1;
-        Fri, 07 Jun 2024 12:13:51 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWIxw2IOEAqf6sxJVFmZGhirUpZ+rRQ+Ue86JmBt+BmFKkj5FP2QpNPKIdskGrBlSIHiYLbTC96UzBBWxXuAy3ljo6eg2XkOMtnKM8h9wZa0BIMKQ8tqOffvjStACZh+Apa/gudZ1I=
-X-Gm-Message-State: AOJu0YyVL6CjEzjj96DaS+V/U4xsrrKODy2dwqRXFNOrSO9cZqTYT8VB
-	UiSjazoayw6EEuJ1plohHOtPlw0ld8nXJZv3qevAi+FbiyY4aufVPzyDalUP+XVx9fDav5Qpy2z
-	4aCyw0gOtsjDdZvTJ+da0AgeKrnA=
-X-Google-Smtp-Source: AGHT+IEJbHNU8DWPnlOJfgLYjv0dwVSwuAAS5eZsRR3KtCLu9uwfJ/a3EIVxxcdh6FBPfgZ9ciUGpkcRPFW7tcRvYBo=
-X-Received: by 2002:a05:6820:708:b0:5ba:6669:ba6e with SMTP id
- 006d021491bc7-5baaed4f14dmr3172627eaf.1.1717787630415; Fri, 07 Jun 2024
- 12:13:50 -0700 (PDT)
+	b=AwfGeeKYUGsCBWvtlmPlTonNo9xgVJFrH7kQzwnmRuxj0wLhNOvNiKabfkWGkWkxA
+	 YJStbblDPwBn9RPZOQxqFYoa+Pg8YTsH+yQwdJppvePXpDjq2EcH1JfyaN1zPzhXmL
+	 T1NPmDgqvmU4ZonaVf+Dzh2q/MMdaQFvd4ysmzBS2y9i0nCW8BxYnF74XybBzY9MMZ
+	 m8ZuLbfFDnPNy6V1Xh8sot0B/GZceDUQ/+pGXjKswqriEg2eMLYz5btWNx/+m3m8co
+	 Rc+9360Jj+HMN0AdAd/9laQrdeEmzbtvrncG2L8yCQmYZxrLKMhQb0FMbAs9VigZV2
+	 YbFMd8mMbKV1w==
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-5ba68c30395so274630eaf.1;
+        Fri, 07 Jun 2024 12:20:19 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXQsTeoQANl0Jb/hPgZZxlN0Wi3R4kZUzH9z+YinSt/7jPrGtlzhu/UfOLFYrkAB8JzXkatYkJKT2n6NAgHu0MJPtwe5R66NvA0HhvJc+O8KjK5x8JgndutARg8zATZnRoC3X9dKc4=
+X-Gm-Message-State: AOJu0YzpVGuzhZiMVWXbiXlCM99WVWFmCe95ei+COplKRH0ASeX81hn2
+	9A5J5LM5sDdxCLr3dSzYpwd/eswN7FRgYADLNzYEkJNNsUMF9DPS4O9JTzTNcPoXmjsxN6D+6/n
+	+KW2z8GePo8Bgvt44bu9yzuFmsWE=
+X-Google-Smtp-Source: AGHT+IEtAayEu1dMu4S/alfVbVYyGb7fa7+NmlvDSSUY2JG4KpYGjyAWp7GGSiMtfBwEXKBdOnExzNQIwedWI7ML7kw=
+X-Received: by 2002:a4a:ac08:0:b0:5aa:3e4f:f01e with SMTP id
+ 006d021491bc7-5baae73b688mr3326747eaf.1.1717788019071; Fri, 07 Jun 2024
+ 12:20:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240606182748.2457952-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20240606182748.2457952-1-srinivas.pandruvada@linux.intel.com>
+References: <20240530055330.1279381-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20240530055330.1279381-1-srinivas.pandruvada@linux.intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 7 Jun 2024 21:13:39 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0g+R6JK=T9EjmweRPKmcorw93JmPM4u-Z=pywv6kH7zUA@mail.gmail.com>
-Message-ID: <CAJZ5v0g+R6JK=T9EjmweRPKmcorw93JmPM4u-Z=pywv6kH7zUA@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Update Arrow Lake EPPs
+Date: Fri, 7 Jun 2024 21:20:08 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hugkS3ZtAoqs1OiaxdDvKo3XrmPyHAAoOscQdNUiqHSA@mail.gmail.com>
+Message-ID: <CAJZ5v0hugkS3ZtAoqs1OiaxdDvKo3XrmPyHAAoOscQdNUiqHSA@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Support Emerald Rapids OOB mode
 To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 Cc: rafael@kernel.org, viresh.kumar@linaro.org, linux-pm@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 6, 2024 at 8:27=E2=80=AFPM Srinivas Pandruvada
+On Thu, May 30, 2024 at 7:53=E2=80=AFAM Srinivas Pandruvada
 <srinivas.pandruvada@linux.intel.com> wrote:
 >
-> Use the same default EPPs as Meteor Lake generation.
+> Prevent intel_pstate to load when OOB (Out Of Band) P-states mode is
+> enabled in Emerald Rapids. The OOB identifying bits are same as the
+> prior generation CPUs like Sapphire Rapids servers. So, also add Emerald
+> Rapids to intel_pstate_cpu_oob_ids list.
 >
 > Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 > ---
->  drivers/cpufreq/intel_pstate.c | 2 ++
->  1 file changed, 2 insertions(+)
+>  drivers/cpufreq/intel_pstate.c | 1 +
+>  1 file changed, 1 insertion(+)
 >
 > diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstat=
 e.c
-> index 8b0032d6a519..8550fae383b0 100644
+> index 4b986c044741..6b6d47d3ec02 100644
 > --- a/drivers/cpufreq/intel_pstate.c
 > +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -3430,6 +3430,8 @@ static const struct x86_cpu_id intel_epp_default[] =
-=3D {
->         X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X, HWP_SET_DEF_BALANCE_=
-PERF_EPP(32)),
->         X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE_L, HWP_SET_EPP_VALUES(HWP_E=
-PP_POWERSAVE,
->                                                                     179, =
-64, 16)),
-> +       X86_MATCH_INTEL_FAM6_MODEL(ARROWLAKE, HWP_SET_EPP_VALUES(HWP_EPP_=
-POWERSAVE,
-> +                                                                179, 64,=
- 16)),
+> @@ -2404,6 +2404,7 @@ static const struct x86_cpu_id intel_pstate_cpu_oob=
+_ids[] __initconst =3D {
+>         X86_MATCH(SKYLAKE_X,            core_funcs),
+>         X86_MATCH(ICELAKE_X,            core_funcs),
+>         X86_MATCH(SAPPHIRERAPIDS_X,     core_funcs),
+> +       X86_MATCH(EMERALDRAPIDS_X,      core_funcs),
 >         {}
 >  };
->
+>  #endif
 > --
 
 Rebased on top of the Tony's series:
