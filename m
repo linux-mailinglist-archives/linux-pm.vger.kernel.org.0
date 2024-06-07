@@ -1,278 +1,264 @@
-Return-Path: <linux-pm+bounces-8781-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8782-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9AE490028D
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 13:46:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE719900443
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 14:58:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 45C161F250E0
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 11:46:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 466E2B25CB1
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 12:58:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B00E919007A;
-	Fri,  7 Jun 2024 11:46:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02A6D1922D3;
+	Fri,  7 Jun 2024 12:58:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CoZhXKKH"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="uSIyZuNU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFC581527A4;
-	Fri,  7 Jun 2024 11:46:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5998718732D
+	for <linux-pm@vger.kernel.org>; Fri,  7 Jun 2024 12:58:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717760792; cv=none; b=ltlV5a4+wwxC3vdbJhvdQmtwHHR2Klytb9LvWMlwfwAI6KJSlW+MDWg6k6xJaQ5AuFVwo1gbNHOqzMvpcvFicGkZaouaL4hQcUJKUPgrFTayvl/HNmYP1vv/tB54nsoT/DhG2jBojcMowHz02oK3RcwnkDNlmnAFpa5dqPsvDuM=
+	t=1717765088; cv=none; b=s/eegnBZdXYBt0wZq16ukw7XYdTndCZPNvgUx8PBdJRxkS3v2jumDlrSDlBCz+YL9giSqnQ/y3TGgkhwBv/GGkEgKm1sMqu+GZ/nIkj/NMDsKkU2EguA0XCRl+G97XrxtEpWAAJpbJXIWU9vts2huUUpU9Nq4/8bnMl7GPZZfJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717760792; c=relaxed/simple;
-	bh=WgoPOvpJBrjFRzJkMr0lOsjcrFohGFp24YpP2tSK04c=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=fAjEXV3hixdSBKzJkqa97qOXDyWT5bHWZ2E04lma6Z3Fu0KFvPSweYgbB9iLHDPLfoppEuzLyCYif82MRWCxlIuvnC70ojIbSopw92XdxqWCeA6C4/j++8Ecps/zBT35tUrEaKLqaT+M2qjjgnXN6PJn3L0x5GJArXMm4v6K860=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CoZhXKKH; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717760791; x=1749296791;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=WgoPOvpJBrjFRzJkMr0lOsjcrFohGFp24YpP2tSK04c=;
-  b=CoZhXKKHANDuPBh6mFhQQ+Nm+6+uKzTjsT5V6kGS8bwoGm/AJcXeVOLm
-   A7JcjEu4peb+RSg3ifgezvZb3KlWEhNcYoJjHD7Ze+DO/OgAgPgrPtpMx
-   ExcDq3vaKlvWK+eh4SPngIk0Q3IlaQ11McSEof4vB/Ii8NQCzpX6Ir+oI
-   fzC1Vzg+MWUC6BA3N2p+r/kYQIA7JZAKQ67P8cT6hDCB3JP/9+4Zf88rF
-   0oRVa2wF7n16mUq6xwTWz4j1e+lWh00Ly9UeMwYtkYmM/JZX31WWxa9GX
-   Z113+3Otk4/DTVnEWCTRcxk0wJIu5FrWoDiR6+EfbP740LBjQEZSFHC0p
-   w==;
-X-CSE-ConnectionGUID: lLWB/BQ/SMq5f4D/w/WuGg==
-X-CSE-MsgGUID: F/M4WIOqSWCs6hs8Nkno4w==
-X-IronPort-AV: E=McAfee;i="6600,9927,11095"; a="14321039"
-X-IronPort-AV: E=Sophos;i="6.08,221,1712646000"; 
-   d="scan'208";a="14321039"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2024 04:46:30 -0700
-X-CSE-ConnectionGUID: 4lKNgLrKSGCxUy3it4FE/Q==
-X-CSE-MsgGUID: +x08uut2TuWWc9SfCar14w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,221,1712646000"; 
-   d="scan'208";a="38400831"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.184])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2024 04:46:24 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Fri, 7 Jun 2024 14:46:20 +0300 (EEST)
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
-    Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-    Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-    Hans de Goede <hdegoede@redhat.com>, 
-    =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-    Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
-    Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-    Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-    Konrad Dybcio <konrad.dybcio@linaro.org>, linux-pm@vger.kernel.org, 
-    devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-    platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org, 
-    linux-arm-msm@vger.kernel.org, Nikita Travkin <nikita@trvn.ru>
-Subject: Re: [PATCH v5 2/6] platform: arm64: add Lenovo Yoga C630 WOS EC
- driver
-In-Reply-To: <20240607-yoga-ec-driver-v5-2-1ac91a0b4326@linaro.org>
-Message-ID: <3a9cb5b3-92a0-640d-baac-0429a91a669b@linux.intel.com>
-References: <20240607-yoga-ec-driver-v5-0-1ac91a0b4326@linaro.org> <20240607-yoga-ec-driver-v5-2-1ac91a0b4326@linaro.org>
+	s=arc-20240116; t=1717765088; c=relaxed/simple;
+	bh=eWdrYxc/9CNbGryFCUETzWPsfLUvdelPD1kkYUOvek4=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=OeXXqOMa7bnmq6yz9PUhsn+DQUzJSCok4mtbzf9zYTFhguJOwWh03EY5ACMkzDuVf73ZKAGUpeg/KNZUeV6Kk+VMS/yQHkSEuAYTawzEvR3yyEOqt3FlnWyHo6HeZyncErjhthf4t/wUqaJ0oK0ORsh0JIAUF3bvRwkAklBBniw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=uSIyZuNU; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7040e8fd0fbso633573b3a.1
+        for <linux-pm@vger.kernel.org>; Fri, 07 Jun 2024 05:58:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1717765086; x=1718369886; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=CprkTihaZKAZAJ7gsGkgQpCbNtZc0BScFmTv/KG4L0I=;
+        b=uSIyZuNUpFhavO+er8QoLxypf0qup6xLrJdGM3hb0fa3Y52YVXwNPGMNqb+psVafBe
+         f8qA/hyuO+d4r590q5JbmIpUv5oeVBWmT/sKH/vRu3RsUw4vbQ6DTa1YpWxRerlUys2R
+         rPMwe7GvA8Li4RdWldfq+ClLRqS1vqMTuE7ySFx7X1Kf2RGPLX/x3MEUSOhnGB0YCZub
+         vBz2aTOwJgmOmlTV1QgORXzKu8zwem28D5wPllx3Yq6J+7BnibinX+ig1mLvouV3kViJ
+         Dg5VZUy/4GapPxHT20CN0aQWeKQNUXzQ8caK5BXcLpGaetgt1owR5klPAe6XdtHfsNpA
+         mpQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717765086; x=1718369886;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CprkTihaZKAZAJ7gsGkgQpCbNtZc0BScFmTv/KG4L0I=;
+        b=TarGTXhbfdeN1apNHgiUn8biTN0fUI1PYTDiEY0Q/SbpXRBJFTWnIv+gx+YoWPB/CZ
+         uOngX2AkuVKYSIxyOyGhHK+b96r8ljzKzv4fQMLGg2wI5YURjfMD86Icj4hvs5NDqAkf
+         FsN3RQPpKr1cOhoAa9L5pRo6OQG10fldbMTZcmZUpGY1EqOX3LIEVf58l8vYwcE16XcP
+         pUNNQEQUjb+OwikqHjMtOMN5NHDzwjhuDVQ+gmLoVeStVlX6zV/QbAQncIcDbV6ENgqk
+         69pJ5Y9fAYG4khb7PImAUXlhwH0dIQrkEIMM5Z8QbICJZ5RnAZQx18QRWHD4igjN1r0Y
+         bduA==
+X-Forwarded-Encrypted: i=1; AJvYcCUBefI0/TGBtldC8XYMFfAsAGai2Uy1b3u4PsNwvFMfG38M6g4EbADG6i6Uoit3gpV8/qZvdJiKc+A5BPx/cPthiLrL6yPiTHU=
+X-Gm-Message-State: AOJu0YwwSQBLZt6zc0B7wkqfBMlstatfNfOF+JSM2Kt5v3GTMj8mSEEK
+	b623gWSrCaD/TqyQyqJpWYKXbC9enQelQBRI2YeOgF7YWeDsz/UwUvtq4XLvi2xiaZsRYQygZkE
+	S
+X-Google-Smtp-Source: AGHT+IFGD6cDP6jhd9I1hblNI4I8+XdWP5jZhnErQVNmO+zP+hal5wsFRTtpRVWZcbWgKMW0oC1wYA==
+X-Received: by 2002:a05:6a00:a1f:b0:703:efa7:e594 with SMTP id d2e1a72fcca58-7040c752726mr3134640b3a.33.1717765086453;
+        Fri, 07 Jun 2024 05:58:06 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-703fd50beb6sm2615054b3a.176.2024.06.07.05.58.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jun 2024 05:58:06 -0700 (PDT)
+Message-ID: <666303de.050a0220.27dadb.6d4d@mx.google.com>
+Date: Fri, 07 Jun 2024 05:58:06 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v6.10-rc2-102-g8ed7b65b7edc3
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 19 warnings (v6.10-rc2-102-g8ed7b65b7edc3)
+To: rafael@kernel.org, linux-pm@vger.kernel.org,
+ kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On Fri, 7 Jun 2024, Dmitry Baryshkov wrote:
+pm/testing build: 8 builds: 0 failed, 8 passed, 19 warnings (v6.10-rc2-102-=
+g8ed7b65b7edc3)
 
-> Lenovo Yoga C630 WOS is a laptop using Snapdragon 850 SoC. Like many
-> laptops it uses an embedded controller (EC) to perform various platform
-> operations, including, but not limited, to Type-C port control or power
-> supply handlng.
-> 
-> Add the driver for the EC, that creates devices for UCSI and power
-> supply devices.
-> 
-> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->  drivers/platform/arm64/Kconfig                 |  14 ++
->  drivers/platform/arm64/Makefile                |   1 +
->  drivers/platform/arm64/lenovo-yoga-c630.c      | 283 +++++++++++++++++++++++++
->  include/linux/platform_data/lenovo-yoga-c630.h |  43 ++++
->  4 files changed, 341 insertions(+)
-> 
-> diff --git a/drivers/platform/arm64/Kconfig b/drivers/platform/arm64/Kconfig
-> index 8fdca0f8e909..8c103b3150d1 100644
-> --- a/drivers/platform/arm64/Kconfig
-> +++ b/drivers/platform/arm64/Kconfig
-> @@ -32,4 +32,18 @@ config EC_ACER_ASPIRE1
->  	  laptop where this information is not properly exposed via the
->  	  standard ACPI devices.
->  
-> +config EC_LENOVO_YOGA_C630
-> +	tristate "Lenovo Yoga C630 Embedded Controller driver"
-> +	depends on I2C
-> +	help
-> +	  Driver for the Embedded Controller in the Qualcomm Snapdragon-based
-> +	  Lenovo Yoga C630, which provides battery and power adapter
-> +	  information.
-> +
-> +	  This driver provides battery and AC status support for the mentioned
-> +	  laptop where this information is not properly exposed via the
-> +	  standard ACPI devices.
-> +
-> +	  Say M or Y here to include this support.
-> +
->  endif # ARM64_PLATFORM_DEVICES
-> diff --git a/drivers/platform/arm64/Makefile b/drivers/platform/arm64/Makefile
-> index 4fcc9855579b..b2ae9114fdd8 100644
-> --- a/drivers/platform/arm64/Makefile
-> +++ b/drivers/platform/arm64/Makefile
-> @@ -6,3 +6,4 @@
->  #
->  
->  obj-$(CONFIG_EC_ACER_ASPIRE1)	+= acer-aspire1-ec.o
-> +obj-$(CONFIG_EC_LENOVO_YOGA_C630) += lenovo-yoga-c630.o
-> diff --git a/drivers/platform/arm64/lenovo-yoga-c630.c b/drivers/platform/arm64/lenovo-yoga-c630.c
-> new file mode 100644
-> index 000000000000..ffad8c443a13
-> --- /dev/null
-> +++ b/drivers/platform/arm64/lenovo-yoga-c630.c
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+10-rc2-102-g8ed7b65b7edc3/
 
-> +int yoga_c630_ec_read8(struct yoga_c630_ec *ec, u8 addr)
-> +{
-> +	u8 req[2] = { LENOVO_EC_READ_REG, };
-> +	int ret;
-> +	u8 val;
-> +
-> +	scoped_guard(mutex, &ec->lock) {
-> +		req[1] = addr;
-> +		ret = yoga_c630_ec_request(ec, req, sizeof(req), &val, 1);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
-> +
-> +	return val;
+Tree: pm
+Branch: testing
+Git Describe: v6.10-rc2-102-g8ed7b65b7edc3
+Git Commit: 8ed7b65b7edc3518cbcd873aef5d23f2fcd37ee7
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-For simple cases like this which don't do logic after the unlock, guard() 
-would be enough (I don't mind scoped_guard() myself though).
+Warnings Detected:
 
-> +}
-> +EXPORT_SYMBOL_GPL(yoga_c630_ec_read8);
-> +
-> +int yoga_c630_ec_read16(struct yoga_c630_ec *ec, u8 addr)
-> +{
-> +	u8 req[2] = { LENOVO_EC_READ_REG, };
-> +	int ret;
-> +	u8 msb;
-> +	u8 lsb;
+arc:
+    haps_hs_smp_defconfig (gcc-10): 2 warnings
 
-addr + 1 could overflow below so it would be good the return -EINVAL if 
-0xff addr is given as a parameter.
+arm64:
 
-> +	scoped_guard(mutex, &ec->lock) {
-> +		req[1] = addr;
-> +		ret = yoga_c630_ec_request(ec, req, sizeof(req), &lsb, 1);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		req[1] = addr + 1;
-> +		ret = yoga_c630_ec_request(ec, req, sizeof(req), &msb, 1);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
-> +
-> +	return msb << 8 | lsb;
-> +}
-> +EXPORT_SYMBOL_GPL(yoga_c630_ec_read16);
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 3 warnings
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 14 warnings
+
+x86_64:
 
 
-> +
-> +u16 yoga_c630_ec_ucsi_get_version(struct yoga_c630_ec *ec)
-> +{
-> +	u8 req[3] = { 0xb3, 0xf2, 0x20};
-> +	int ret;
-> +	u8 msb;
-> +	u8 lsb;
-> +
-> +	scoped_guard(mutex, &ec->lock) {
-> +		ret = yoga_c630_ec_request(ec, req, sizeof(req), &lsb, 1);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		req[2] = 0x21;
+Warnings summary:
 
-Could you name 0x20 with a define and use it above and with + 1 here?
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
+rototypes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
+pes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
+prototypes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
+ypes]
+    1    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
+type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
+type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
+type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
+type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =
+=E2=80=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype fo=
+r =E2=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
+    1    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt=
+_provider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cel=
+ls' found, but node is not an interrupt provider
+    1    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt=
+_provider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node=
+ is not an interrupt provider
+    1    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed=
+ prerequisite 'interrupt_provider'
+    1    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_p=
+rovider): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt=
+ provider
+    1    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed=
+ prerequisite 'interrupt_provider'
 
-> +		ret = yoga_c630_ec_request(ec, req, sizeof(req), &msb, 1);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
-> +
-> +	return msb << 8 | lsb;
-> +}
-> +EXPORT_SYMBOL_GPL(yoga_c630_ec_ucsi_get_version);
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
-> diff --git a/include/linux/platform_data/lenovo-yoga-c630.h b/include/linux/platform_data/lenovo-yoga-c630.h
-> new file mode 100644
-> index 000000000000..5571dd65ce08
-> --- /dev/null
-> +++ b/include/linux/platform_data/lenovo-yoga-c630.h
-> @@ -0,0 +1,43 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2022-2024, Linaro Ltd
-> + * Authors:
-> + *    Bjorn Andersson
-> + *    Dmitry Baryshkov
-> + */
-> +
-> +#ifndef _LENOVO_YOGA_C630_DATA_H
-> +#define _LENOVO_YOGA_C630_DATA_H
-> +
-> +struct yoga_c630_ec;
-> +struct notifier_block;
-> +
-> +#define YOGA_C630_MOD_NAME	"lenovo_yoga_c630"
-> +
-> +#define YOGA_C630_DEV_UCSI	"ucsi"
-> +#define YOGA_C630_DEV_PSY	"psy"
-> +
-> +int yoga_c630_ec_read8(struct yoga_c630_ec *ec, u8 addr);
-> +int yoga_c630_ec_read16(struct yoga_c630_ec *ec, u8 addr);
-> +
-> +int yoga_c630_ec_register_notify(struct yoga_c630_ec *ec, struct notifier_block *nb);
-> +void yoga_c630_ec_unregister_notify(struct yoga_c630_ec *ec, struct notifier_block *nb);
-> +
-> +#define YOGA_C630_UCSI_WRITE_SIZE	8
-> +#define YOGA_C630_UCSI_CCI_SIZE		4
-> +#define YOGA_C630_UCSI_DATA_SIZE	16
-> +#define YOGA_C630_UCSI_READ_SIZE	(YOGA_C630_UCSI_CCI_SIZE + YOGA_C630_UCSI_DATA_SIZE)
+Detailed per-defconfig build reports:
 
-Add newline here.
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
+tion mismatches
 
-> +u16 yoga_c630_ec_ucsi_get_version(struct yoga_c630_ec *ec);
-> +int yoga_c630_ec_ucsi_write(struct yoga_c630_ec *ec,
-> +			    const u8 req[YOGA_C630_UCSI_WRITE_SIZE]);
-> +int yoga_c630_ec_ucsi_read(struct yoga_c630_ec *ec,
-> +			   u8 resp[YOGA_C630_UCSI_READ_SIZE]);
-> +
-> +#define LENOVO_EC_EVENT_USB		0x20
-> +#define LENOVO_EC_EVENT_UCSI		0x21
-> +#define LENOVO_EC_EVENT_HPD		0x22
-> +#define LENOVO_EC_EVENT_BAT_STATUS	0x24
-> +#define LENOVO_EC_EVENT_BAT_INFO	0x25
-> +#define LENOVO_EC_EVENT_BAT_ADPT_STATUS	0x37
-> +
-> +#endif
-> 
-> 
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.17-178.5: Warning (interrupt_prov=
+ider): /pci@14000000/pci2_root@0,0: '#interrupt-cells' found, but node is n=
+ot an interrupt provider
+    arch/mips/boot/dts/img/boston.dts:136.23-177.6: Warning (interrupt_prov=
+ider): /pci@14000000/pci2_root@0,0/eg20t_bridge@1,0,0: '#interrupt-cells' f=
+ound, but node is not an interrupt provider
+    arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed prer=
+equisite 'interrupt_provider'
 
--- 
- i.
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
 
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    arch/arc/boot/dts/haps_hs_idu.dts:68.16-72.5: Warning (interrupt_provid=
+er): /fpga/pct: '#interrupt-cells' found, but node is not an interrupt prov=
+ider
+    arch/arc/boot/dts/haps_hs_idu.dtb: Warning (interrupt_map): Failed prer=
+equisite 'interrupt_provider'
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 14 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
+types]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
+ypes]
+    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for =E2=
+=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =E2=80=
+=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
 
