@@ -1,60 +1,60 @@
-Return-Path: <linux-pm+bounces-8792-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8793-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B995900B5B
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 19:40:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF931900B61
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 19:41:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D3A71C21DC3
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 17:40:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2DF75B232D9
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 17:40:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2047B19B3F7;
-	Fri,  7 Jun 2024 17:40:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAF4A19B587;
+	Fri,  7 Jun 2024 17:40:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="f+sCSV7D"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="QaWJ/Z15"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3165D19B587;
-	Fri,  7 Jun 2024 17:40:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A038C19B3E4;
+	Fri,  7 Jun 2024 17:40:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717782026; cv=none; b=bq24SZ/j14jSSuwIroShqr6I7VYwlgw4fFOebjdKFdJrWyS4IRQ9wVjLR6nZJDf3mNNk7SglTOgoV8jhL8HZ5hc5iikRyyoPejX5QfAk76/Vzp1QCRFiN/gkY9H8MfaF0OU3x3od1TC2kV12SlcoI4B5htwt4yi8wro+3lnDBUk=
+	t=1717782033; cv=none; b=OID19vLhD4XDa9pZZ2UZOv0sX9xhyL+RRFkRA6PO3wo2sWU+BIsuvHoKPFZSRIupcEst7SbXWJWbHXqnZ6Ojgjk3dLsiqoCsNrWueMjOTvRYb02InSdexAeTsRGYqJCmkMOke0+6WyMZyxbVZg6NMGbwXHHDGCHajE3QbynY0XQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717782026; c=relaxed/simple;
-	bh=Jrm880KG9+pTCGGYCC+cjQcV12aTpUtPIX2KI7D+xDE=;
+	s=arc-20240116; t=1717782033; c=relaxed/simple;
+	bh=vcLNBdfb5X1uH1rDBsMlhi+NLBEo1qnsfc9WC4CKA1I=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YCLYvWtbumkOUio1BJcObK3GwzuQBWhAP0yg37OxEPLuBN1bDwBGS/2rJ8phkoQRBdazxzkskdJmWPjfeaFdKdciw3xMn+4eKC5Wzt/PXWnYmUZtcBQNPLhvtywqTANta9MwCf0elw9jMUwvFm8fdUFY35H31eoRpZDuwo05mEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=f+sCSV7D; arc=none smtp.client-ip=205.220.180.131
+	 MIME-Version:Content-Type; b=RA9BBaj0qv67MLNOw6EmDPV46mKp+hyXbp/wusHfAy+N70LDGqI1lAued69wvDcgDvkGfVcpx34ehFws1CVEBpVzzVcvVgT7hcW/V22aMM+i0JVKsPI09yuWMJV63bfDga2d6nsy9A6bh7T/62AMcBIbsxT8b291BImfTdqXmdw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=QaWJ/Z15; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 457HZxhp008842;
-	Fri, 7 Jun 2024 17:40:19 GMT
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 457HZhRB028213;
+	Fri, 7 Jun 2024 17:40:24 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=icQOAzGx3kHB2IEx3MiPsT5O
-	kmeNwAnoAUM7Mlk2Owo=; b=f+sCSV7DaeIbTaNoS4+29TDlc5JkOG+tukS00wHP
-	R125EWJx+09lEIIukEwTmV63EQEIP0MJDn+UTRAHstmdLi6a2eq0vlhW2UmPJeWR
-	uWt/2FRZUD4mjPNvszNY8oSQJdlNQBZHm0F4c1RSVIfIziAQI8eIstKKW7OIyIK7
-	A5gvVupclP9C9vF3ASHx7DiNg9QQ8KGvzZO9nasEqTBmGE3X/eP2OFJGNfUrlAPj
-	S+d7X1+Nec/fd+jjfN1alQr1Kp2t76dz4MxUgTUxE1/u1iykSvI9xMZ4aShT5fnr
-	9kAqCTyJR+j0D/nuD4zS04FGpkUlFrBQ++gWBgkAvubtfg==
+	:references:subject:to; s=qcppdkim1; bh=NcMmSete2f2zn6oBP5ryr5iW
+	QQ4yXf3jAQcz9cbBKEs=; b=QaWJ/Z15i6Y5E8pGCnsX0qVzGv9nCKiMeMm3PTdJ
+	PNQvM8HCGdZNKCv88u6uOyWR9AZJeQ8hVx6Ccy+UtTh9BVb0e/rKAJZ28eu+WKsD
+	TT0myucVNo/BHrq4uMp7tQyeyioETzWql8Fz8Ji43odjW9dbt15m4GlyHD+oLwgw
+	jsklMc30iv0Dev0/T3SkqpvAJrRQ+Mw9OOjsS8pxOSlVb93lVBRaU7+AEiLfzbk4
+	rPO8JWicKsexSyFC4pcuRZhuk5aBzWkmv8GxFO1aBHFMl+u5okaHOcj+tE79pSed
+	efx/3zjg8m1Wev6ksdURlyxLzs/tMT3Rqfim6jhRKfEXJQ==
 Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yk8tccac7-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yk3h2vx2x-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 07 Jun 2024 17:40:19 +0000 (GMT)
+	Fri, 07 Jun 2024 17:40:24 +0000 (GMT)
 Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 457HeH9K004364
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 457HeMA1004383
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 7 Jun 2024 17:40:17 GMT
+	Fri, 7 Jun 2024 17:40:22 GMT
 Received: from hu-okukatla-hyd.qualcomm.com (10.80.80.8) by
  nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Fri, 7 Jun 2024 10:40:12 -0700
+ 15.2.1544.9; Fri, 7 Jun 2024 10:40:17 -0700
 From: Odelu Kukatla <quic_okukatla@quicinc.com>
 To: Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio
@@ -69,9 +69,9 @@ CC: Kees Cook <keescook@chromium.org>, <cros-qcom-dts-watchers@chromium.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-hardening@vger.kernel.org>, <quic_rlaggysh@quicinc.com>,
         <quic_mdtipton@quicinc.com>, <quic_okukatla@quicinc.com>
-Subject: [PATCH v5 1/4] interconnect: qcom: icc-rpmh: Add QoS configuration support
-Date: Fri, 7 Jun 2024 23:09:24 +0530
-Message-ID: <20240607173927.26321-2-quic_okukatla@quicinc.com>
+Subject: [PATCH v5 2/4] interconnect: qcom: sc7280: enable QoS configuration
+Date: Fri, 7 Jun 2024 23:09:25 +0530
+Message-ID: <20240607173927.26321-3-quic_okukatla@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20240607173927.26321-1-quic_okukatla@quicinc.com>
 References: <20240607173927.26321-1-quic_okukatla@quicinc.com>
@@ -86,257 +86,607 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01c.na.qualcomm.com (10.47.97.35)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: PaZIt1xbz1eha4idetLyDZeqzkcfTxQ4
-X-Proofpoint-GUID: PaZIt1xbz1eha4idetLyDZeqzkcfTxQ4
+X-Proofpoint-GUID: 8ovxQT1zDM_5VpaC5_PNLpitmNPKO_5n
+X-Proofpoint-ORIG-GUID: 8ovxQT1zDM_5VpaC5_PNLpitmNPKO_5n
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-06-07_10,2024-06-06_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- clxscore=1015 malwarescore=0 suspectscore=0 phishscore=0 impostorscore=0
- mlxlogscore=999 priorityscore=1501 spamscore=0 adultscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2405170001
- definitions=main-2406070130
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 bulkscore=0 mlxscore=0 priorityscore=1501 clxscore=1015
+ suspectscore=0 spamscore=0 mlxlogscore=999 adultscore=0 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2405170001 definitions=main-2406070130
 
-Add QoS support for QNOC device for configuring priority,
-priority forward disable and urgency forwarding. QoS is required
-to prioritize the traffic originating from different interconnect
-masters at NoC (Network On Chip).
+Enable QoS configuration for master ports with predefined values
+for priority and urgency forawrding.
 
 Signed-off-by: Odelu Kukatla <quic_okukatla@quicinc.com>
 ---
- drivers/interconnect/qcom/icc-rpmh.c | 93 ++++++++++++++++++++++++++++
- drivers/interconnect/qcom/icc-rpmh.h | 35 +++++++++++
- 2 files changed, 128 insertions(+)
+ drivers/interconnect/qcom/sc7280.c | 274 +++++++++++++++++++++++++++++
+ 1 file changed, 274 insertions(+)
 
-diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
-index c1aa265c1f4e..ceea9522df83 100644
---- a/drivers/interconnect/qcom/icc-rpmh.c
-+++ b/drivers/interconnect/qcom/icc-rpmh.c
-@@ -1,8 +1,11 @@
+diff --git a/drivers/interconnect/qcom/sc7280.c b/drivers/interconnect/qcom/sc7280.c
+index 7d33694368e8..759c609a20bf 100644
+--- a/drivers/interconnect/qcom/sc7280.c
++++ b/drivers/interconnect/qcom/sc7280.c
+@@ -1,6 +1,7 @@
  // SPDX-License-Identifier: GPL-2.0
  /*
-  * Copyright (c) 2020, The Linux Foundation. All rights reserved.
+  * Copyright (c) 2021, The Linux Foundation. All rights reserved.
 + * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+  *
   */
  
-+#include <linux/bitfield.h>
-+#include <linux/clk.h>
- #include <linux/interconnect.h>
- #include <linux/interconnect-provider.h>
- #include <linux/module.h>
-@@ -14,6 +17,38 @@
- #include "icc-common.h"
- #include "icc-rpmh.h"
- 
-+/* QNOC QoS */
-+#define QOSGEN_MAINCTL_LO(p, qp)	(0x8 + (p->port_offsets[qp]))
-+#define QOS_SLV_URG_MSG_EN_MASK		GENMASK(3, 3)
-+#define QOS_DFLT_PRIO_MASK		GENMASK(6, 4)
-+#define QOS_DISABLE_MASK		GENMASK(24, 24)
-+
-+/**
-+ * qcom_icc_set_qos - initialize static QoS configurations
-+ * @qp: qcom icc provider to which @node belongs
-+ * @node: qcom icc node to operate on
-+ */
-+static void qcom_icc_set_qos(struct qcom_icc_provider *qp,
-+			     struct qcom_icc_node *node)
-+{
-+	const struct qcom_icc_qosbox *qos = node->qosbox;
-+	int port;
-+
-+	for (port = 0; port < qos->num_ports; port++) {
-+		regmap_update_bits(qp->regmap, QOSGEN_MAINCTL_LO(qos, port),
-+				   QOS_DISABLE_MASK,
-+				   FIELD_PREP(QOS_DISABLE_MASK, qos->prio_fwd_disable));
-+
-+		regmap_update_bits(qp->regmap, QOSGEN_MAINCTL_LO(qos, port),
-+				   QOS_DFLT_PRIO_MASK,
-+				   FIELD_PREP(QOS_DFLT_PRIO_MASK, qos->prio));
-+
-+		regmap_update_bits(qp->regmap, QOSGEN_MAINCTL_LO(qos, port),
-+				   QOS_SLV_URG_MSG_EN_MASK,
-+				   FIELD_PREP(QOS_SLV_URG_MSG_EN_MASK, qos->urg_fwd));
-+	}
-+}
-+
- /**
-  * qcom_icc_pre_aggregate - cleans up stale values from prior icc_set
-  * @node: icc node to operate on
-@@ -159,6 +194,36 @@ int qcom_icc_bcm_init(struct qcom_icc_bcm *bcm, struct device *dev)
- }
- EXPORT_SYMBOL_GPL(qcom_icc_bcm_init);
- 
-+/**
-+ * qcom_icc_rpmh_configure_qos - configure QoS parameters
-+ * @qp: qcom icc provider associated with QoS endpoint nodes
-+ *
-+ * Return: 0 on success, or an error code otherwise
-+ */
-+static int qcom_icc_rpmh_configure_qos(struct qcom_icc_provider *qp)
-+{
-+	struct qcom_icc_node *qnode;
-+	size_t i;
-+	int ret;
-+
-+	ret = clk_bulk_prepare_enable(qp->num_clks, qp->clks);
-+	if (ret)
-+		return ret;
-+
-+	for (i = 0; i < qp->num_nodes; i++) {
-+		qnode = qp->nodes[i];
-+		if (!qnode)
-+			continue;
-+
-+		if (qnode->qosbox)
-+			qcom_icc_set_qos(qp, qnode);
-+	}
-+
-+	clk_bulk_disable_unprepare(qp->num_clks, qp->clks);
-+
-+	return ret;
-+}
-+
- int qcom_icc_rpmh_probe(struct platform_device *pdev)
- {
- 	const struct qcom_icc_desc *desc;
-@@ -199,7 +264,9 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
- 
- 	qp->dev = dev;
- 	qp->bcms = desc->bcms;
-+	qp->nodes = desc->nodes;
- 	qp->num_bcms = desc->num_bcms;
-+	qp->num_nodes = desc->num_nodes;
- 
- 	qp->voter = of_bcm_voter_get(qp->dev, NULL);
- 	if (IS_ERR(qp->voter))
-@@ -229,6 +296,32 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
- 		data->nodes[i] = node;
- 	}
- 
-+	if (desc->config) {
-+		struct resource *res;
-+		void __iomem *base;
-+
-+		base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-+		if (IS_ERR(base))
-+			goto skip_qos_config;
-+
-+		qp->regmap = devm_regmap_init_mmio(dev, base, desc->config);
-+		if (IS_ERR(qp->regmap)) {
-+			dev_info(dev, "Skipping QoS, regmap failed; %ld\n", PTR_ERR(qp->regmap));
-+			goto skip_qos_config;
-+		}
-+
-+		qp->num_clks = devm_clk_bulk_get_all(qp->dev, &qp->clks);
-+		if (qp->num_clks < 0) {
-+			dev_info(dev, "Skipping QoS, failed to get clk: %d\n", qp->num_clks);
-+			goto skip_qos_config;
-+		}
-+
-+		ret = qcom_icc_rpmh_configure_qos(qp);
-+		if (ret)
-+			dev_info(dev, "Failed to program QoS: %d\n", ret);
-+	}
-+
-+skip_qos_config:
- 	ret = icc_provider_register(provider);
- 	if (ret)
- 		goto err_remove_nodes;
-diff --git a/drivers/interconnect/qcom/icc-rpmh.h b/drivers/interconnect/qcom/icc-rpmh.h
-index 2de29460e808..9a5142c70486 100644
---- a/drivers/interconnect/qcom/icc-rpmh.h
-+++ b/drivers/interconnect/qcom/icc-rpmh.h
-@@ -1,12 +1,14 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /*
-  * Copyright (c) 2020, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
-  */
- 
- #ifndef __DRIVERS_INTERCONNECT_QCOM_ICC_RPMH_H__
- #define __DRIVERS_INTERCONNECT_QCOM_ICC_RPMH_H__
- 
- #include <dt-bindings/interconnect/qcom,icc.h>
-+#include <linux/regmap.h>
- 
- #define to_qcom_provider(_provider) \
- 	container_of(_provider, struct qcom_icc_provider, provider)
-@@ -18,6 +20,11 @@
-  * @bcms: list of bcms that maps to the provider
-  * @num_bcms: number of @bcms
-  * @voter: bcm voter targeted by this provider
-+ * @nodes: list of icc nodes that maps to the provider
-+ * @num_nodes: number of @nodes
-+ * @regmap: used for QoS, register access
-+ * @clks : clks required for register access
-+ * @num_clks: number of @clks
-  */
- struct qcom_icc_provider {
- 	struct icc_provider provider;
-@@ -25,6 +32,11 @@ struct qcom_icc_provider {
- 	struct qcom_icc_bcm * const *bcms;
- 	size_t num_bcms;
- 	struct bcm_voter *voter;
-+	struct qcom_icc_node * const *nodes;
-+	size_t num_nodes;
-+	struct regmap *regmap;
-+	struct clk_bulk_data *clks;
-+	int num_clks;
+@@ -21,6 +22,12 @@ static struct qcom_icc_node qhm_qspi = {
+ 	.id = SC7280_MASTER_QSPI_0,
+ 	.channels = 1,
+ 	.buswidth = 4,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 1,
++		.port_offsets = { 0x7000 },
++		.prio = 2,
++		.urg_fwd = 0,
++	},
+ 	.num_links = 1,
+ 	.links = { SC7280_SLAVE_A1NOC_SNOC },
+ };
+@@ -30,6 +37,12 @@ static struct qcom_icc_node qhm_qup0 = {
+ 	.id = SC7280_MASTER_QUP_0,
+ 	.channels = 1,
+ 	.buswidth = 4,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 1,
++		.port_offsets = { 0x11000 },
++		.prio = 2,
++		.urg_fwd = 0,
++	},
+ 	.num_links = 1,
+ 	.links = { SC7280_SLAVE_A1NOC_SNOC },
+ };
+@@ -39,6 +52,12 @@ static struct qcom_icc_node qhm_qup1 = {
+ 	.id = SC7280_MASTER_QUP_1,
+ 	.channels = 1,
+ 	.buswidth = 4,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 1,
++		.port_offsets = { 0x8000 },
++		.prio = 2,
++		.urg_fwd = 0,
++	},
+ 	.num_links = 1,
+ 	.links = { SC7280_SLAVE_A1NOC_SNOC },
+ };
+@@ -57,6 +76,12 @@ static struct qcom_icc_node xm_sdc1 = {
+ 	.id = SC7280_MASTER_SDCC_1,
+ 	.channels = 1,
+ 	.buswidth = 8,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 1,
++		.port_offsets = { 0xc000 },
++		.prio = 2,
++		.urg_fwd = 0,
++	},
+ 	.num_links = 1,
+ 	.links = { SC7280_SLAVE_A1NOC_SNOC },
+ };
+@@ -66,6 +91,12 @@ static struct qcom_icc_node xm_sdc2 = {
+ 	.id = SC7280_MASTER_SDCC_2,
+ 	.channels = 1,
+ 	.buswidth = 8,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 1,
++		.port_offsets = { 0xe000 },
++		.prio = 2,
++		.urg_fwd = 0,
++	},
+ 	.num_links = 1,
+ 	.links = { SC7280_SLAVE_A1NOC_SNOC },
+ };
+@@ -75,6 +106,12 @@ static struct qcom_icc_node xm_sdc4 = {
+ 	.id = SC7280_MASTER_SDCC_4,
+ 	.channels = 1,
+ 	.buswidth = 8,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 1,
++		.port_offsets = { 0x9000 },
++		.prio = 2,
++		.urg_fwd = 0,
++	},
+ 	.num_links = 1,
+ 	.links = { SC7280_SLAVE_A1NOC_SNOC },
+ };
+@@ -84,6 +121,12 @@ static struct qcom_icc_node xm_ufs_mem = {
+ 	.id = SC7280_MASTER_UFS_MEM,
+ 	.channels = 1,
+ 	.buswidth = 8,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 1,
++		.port_offsets = { 0xa000 },
++		.prio = 2,
++		.urg_fwd = 0,
++	},
+ 	.num_links = 1,
+ 	.links = { SC7280_SLAVE_A1NOC_SNOC },
+ };
+@@ -102,6 +145,12 @@ static struct qcom_icc_node xm_usb3_0 = {
+ 	.id = SC7280_MASTER_USB3_0,
+ 	.channels = 1,
+ 	.buswidth = 8,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 1,
++		.port_offsets = { 0xb000 },
++		.prio = 2,
++		.urg_fwd = 0,
++	},
+ 	.num_links = 1,
+ 	.links = { SC7280_SLAVE_A1NOC_SNOC },
+ };
+@@ -111,6 +160,12 @@ static struct qcom_icc_node qhm_qdss_bam = {
+ 	.id = SC7280_MASTER_QDSS_BAM,
+ 	.channels = 1,
+ 	.buswidth = 4,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 1,
++		.port_offsets = { 0x18000 },
++		.prio = 2,
++		.urg_fwd = 0,
++	},
+ 	.num_links = 1,
+ 	.links = { SC7280_SLAVE_A2NOC_SNOC },
+ };
+@@ -129,6 +184,12 @@ static struct qcom_icc_node qnm_cnoc_datapath = {
+ 	.id = SC7280_MASTER_CNOC_A2NOC,
+ 	.channels = 1,
+ 	.buswidth = 8,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 1,
++		.port_offsets = { 0x1c000 },
++		.prio = 2,
++		.urg_fwd = 0,
++	},
+ 	.num_links = 1,
+ 	.links = { SC7280_SLAVE_A2NOC_SNOC },
+ };
+@@ -138,6 +199,12 @@ static struct qcom_icc_node qxm_crypto = {
+ 	.id = SC7280_MASTER_CRYPTO,
+ 	.channels = 1,
+ 	.buswidth = 8,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 1,
++		.port_offsets = { 0x1d000 },
++		.prio = 2,
++		.urg_fwd = 0,
++	},
+ 	.num_links = 1,
+ 	.links = { SC7280_SLAVE_A2NOC_SNOC },
+ };
+@@ -147,6 +214,12 @@ static struct qcom_icc_node qxm_ipa = {
+ 	.id = SC7280_MASTER_IPA,
+ 	.channels = 1,
+ 	.buswidth = 8,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 1,
++		.port_offsets = { 0x10000 },
++		.prio = 2,
++		.urg_fwd = 0,
++	},
+ 	.num_links = 1,
+ 	.links = { SC7280_SLAVE_A2NOC_SNOC },
+ };
+@@ -173,6 +246,12 @@ static struct qcom_icc_node xm_qdss_etr = {
+ 	.id = SC7280_MASTER_QDSS_ETR,
+ 	.channels = 1,
+ 	.buswidth = 8,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 1,
++		.port_offsets = { 0x15000 },
++		.prio = 2,
++		.urg_fwd = 0,
++	},
+ 	.num_links = 1,
+ 	.links = { SC7280_SLAVE_A2NOC_SNOC },
+ };
+@@ -305,6 +384,12 @@ static struct qcom_icc_node alm_gpu_tcu = {
+ 	.id = SC7280_MASTER_GPU_TCU,
+ 	.channels = 1,
+ 	.buswidth = 8,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 1,
++		.port_offsets = { 0xd7000 },
++		.prio = 2,
++		.urg_fwd = 0,
++	},
+ 	.num_links = 2,
+ 	.links = { SC7280_SLAVE_GEM_NOC_CNOC, SC7280_SLAVE_LLCC },
+ };
+@@ -314,6 +399,12 @@ static struct qcom_icc_node alm_sys_tcu = {
+ 	.id = SC7280_MASTER_SYS_TCU,
+ 	.channels = 1,
+ 	.buswidth = 8,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 1,
++		.port_offsets = { 0xd6000 },
++		.prio = 6,
++		.urg_fwd = 0,
++	},
+ 	.num_links = 2,
+ 	.links = { SC7280_SLAVE_GEM_NOC_CNOC, SC7280_SLAVE_LLCC },
+ };
+@@ -333,6 +424,12 @@ static struct qcom_icc_node qnm_cmpnoc = {
+ 	.id = SC7280_MASTER_COMPUTE_NOC,
+ 	.channels = 2,
+ 	.buswidth = 32,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 2,
++		.port_offsets = { 0x21000, 0x61000 },
++		.prio = 0,
++		.urg_fwd = 1,
++	},
+ 	.num_links = 2,
+ 	.links = { SC7280_SLAVE_GEM_NOC_CNOC, SC7280_SLAVE_LLCC },
+ };
+@@ -353,6 +450,12 @@ static struct qcom_icc_node qnm_gpu = {
+ 	.id = SC7280_MASTER_GFX3D,
+ 	.channels = 2,
+ 	.buswidth = 32,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 2,
++		.port_offsets = { 0x22000, 0x62000 },
++		.prio = 0,
++		.urg_fwd = 0,
++	},
+ 	.num_links = 2,
+ 	.links = { SC7280_SLAVE_GEM_NOC_CNOC, SC7280_SLAVE_LLCC },
+ };
+@@ -362,6 +465,12 @@ static struct qcom_icc_node qnm_mnoc_hf = {
+ 	.id = SC7280_MASTER_MNOC_HF_MEM_NOC,
+ 	.channels = 2,
+ 	.buswidth = 32,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 2,
++		.port_offsets = { 0x23000, 0x63000 },
++		.prio = 0,
++		.urg_fwd = 1,
++	},
+ 	.num_links = 1,
+ 	.links = { SC7280_SLAVE_LLCC },
+ };
+@@ -371,6 +480,12 @@ static struct qcom_icc_node qnm_mnoc_sf = {
+ 	.id = SC7280_MASTER_MNOC_SF_MEM_NOC,
+ 	.channels = 1,
+ 	.buswidth = 32,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 1,
++		.port_offsets = { 0xcf000 },
++		.prio = 0,
++		.urg_fwd = 1,
++	},
+ 	.num_links = 2,
+ 	.links = { SC7280_SLAVE_GEM_NOC_CNOC, SC7280_SLAVE_LLCC },
+ };
+@@ -389,6 +504,12 @@ static struct qcom_icc_node qnm_snoc_gc = {
+ 	.id = SC7280_MASTER_SNOC_GC_MEM_NOC,
+ 	.channels = 1,
+ 	.buswidth = 8,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 1,
++		.port_offsets = { 0xd3000 },
++		.prio = 0,
++		.urg_fwd = 1,
++	},
+ 	.num_links = 1,
+ 	.links = { SC7280_SLAVE_LLCC },
+ };
+@@ -398,6 +519,12 @@ static struct qcom_icc_node qnm_snoc_sf = {
+ 	.id = SC7280_MASTER_SNOC_SF_MEM_NOC,
+ 	.channels = 1,
+ 	.buswidth = 16,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 1,
++		.port_offsets = { 0xd4000 },
++		.prio = 0,
++		.urg_fwd = 1,
++	},
+ 	.num_links = 3,
+ 	.links = { SC7280_SLAVE_GEM_NOC_CNOC, SC7280_SLAVE_LLCC,
+ 		   SC7280_SLAVE_MEM_NOC_PCIE_SNOC },
+@@ -437,6 +564,12 @@ static struct qcom_icc_node qnm_video0 = {
+ 	.id = SC7280_MASTER_VIDEO_P0,
+ 	.channels = 1,
+ 	.buswidth = 32,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 1,
++		.port_offsets = { 0x14000 },
++		.prio = 0,
++		.urg_fwd = 1,
++	},
+ 	.num_links = 1,
+ 	.links = { SC7280_SLAVE_MNOC_SF_MEM_NOC },
+ };
+@@ -446,6 +579,12 @@ static struct qcom_icc_node qnm_video_cpu = {
+ 	.id = SC7280_MASTER_VIDEO_PROC,
+ 	.channels = 1,
+ 	.buswidth = 8,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 1,
++		.port_offsets = { 0x15000 },
++		.prio = 0,
++		.urg_fwd = 1,
++	},
+ 	.num_links = 1,
+ 	.links = { SC7280_SLAVE_MNOC_SF_MEM_NOC },
+ };
+@@ -455,6 +594,12 @@ static struct qcom_icc_node qxm_camnoc_hf = {
+ 	.id = SC7280_MASTER_CAMNOC_HF,
+ 	.channels = 2,
+ 	.buswidth = 32,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 2,
++		.port_offsets = { 0x10000, 0x10180 },
++		.prio = 0,
++		.urg_fwd = 1,
++	},
+ 	.num_links = 1,
+ 	.links = { SC7280_SLAVE_MNOC_HF_MEM_NOC },
+ };
+@@ -464,6 +609,12 @@ static struct qcom_icc_node qxm_camnoc_icp = {
+ 	.id = SC7280_MASTER_CAMNOC_ICP,
+ 	.channels = 1,
+ 	.buswidth = 8,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 1,
++		.port_offsets = { 0x11000 },
++		.prio = 0,
++		.urg_fwd = 1,
++	},
+ 	.num_links = 1,
+ 	.links = { SC7280_SLAVE_MNOC_SF_MEM_NOC },
+ };
+@@ -473,6 +624,12 @@ static struct qcom_icc_node qxm_camnoc_sf = {
+ 	.id = SC7280_MASTER_CAMNOC_SF,
+ 	.channels = 1,
+ 	.buswidth = 32,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 1,
++		.port_offsets = { 0x12000 },
++		.prio = 0,
++		.urg_fwd = 1,
++	},
+ 	.num_links = 1,
+ 	.links = { SC7280_SLAVE_MNOC_SF_MEM_NOC },
+ };
+@@ -482,6 +639,12 @@ static struct qcom_icc_node qxm_mdp0 = {
+ 	.id = SC7280_MASTER_MDP0,
+ 	.channels = 1,
+ 	.buswidth = 32,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 1,
++		.port_offsets = { 0x16000 },
++		.prio = 0,
++		.urg_fwd = 1,
++	},
+ 	.num_links = 1,
+ 	.links = { SC7280_SLAVE_MNOC_HF_MEM_NOC },
+ };
+@@ -536,6 +699,12 @@ static struct qcom_icc_node qxm_pimem = {
+ 	.id = SC7280_MASTER_PIMEM,
+ 	.channels = 1,
+ 	.buswidth = 8,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 1,
++		.port_offsets = { 0x8000 },
++		.prio = 2,
++		.urg_fwd = 0,
++	},
+ 	.num_links = 1,
+ 	.links = { SC7280_SLAVE_SNOC_GEM_NOC_GC },
+ };
+@@ -545,6 +714,12 @@ static struct qcom_icc_node xm_gic = {
+ 	.id = SC7280_MASTER_GIC,
+ 	.channels = 1,
+ 	.buswidth = 8,
++	.qosbox = &(const struct qcom_icc_qosbox) {
++		.num_ports = 1,
++		.port_offsets = { 0xa000 },
++		.prio = 2,
++		.urg_fwd = 0,
++	},
+ 	.num_links = 1,
+ 	.links = { SC7280_SLAVE_SNOC_GEM_NOC_GC },
+ };
+@@ -1502,7 +1677,16 @@ static struct qcom_icc_node * const aggre1_noc_nodes[] = {
+ 	[SLAVE_SERVICE_A1NOC] = &srvc_aggre1_noc,
  };
  
- /**
-@@ -41,6 +53,26 @@ struct bcm_db {
- 	u8 reserved;
- };
- 
-+#define MAX_PORTS		2
-+
-+/**
-+ * struct qcom_icc_qosbox - Qualcomm specific QoS config
-+ * @prio: priority value assigned to requests on the node
-+ * @urg_fwd: whether to forward the urgency promotion issued by master
-+ * (endpoint), or discard
-+ * @prio_fwd_disable: whether to forward the priority driven by master, or
-+ * override by @prio
-+ * @num_ports: number of @ports
-+ * @port_offsets: qos register offsets
-+ */
-+struct qcom_icc_qosbox {
-+	const u32 prio;
-+	const bool urg_fwd;
-+	const bool prio_fwd_disable;
-+	const u32 num_ports;
-+	const u32 port_offsets[MAX_PORTS];
++static const struct regmap_config sc7280_aggre1_noc_regmap_config = {
++	.reg_bits = 32,
++	.reg_stride = 4,
++	.val_bits = 32,
++	.max_register = 0x1c080,
++	.fast_io = true,
 +};
 +
- #define MAX_LINKS		128
- #define MAX_BCMS		64
- #define MAX_BCM_PER_NODE	3
-@@ -58,6 +90,7 @@ struct bcm_db {
-  * @max_peak: current max aggregate value of all peak bw requests
-  * @bcms: list of bcms associated with this logical node
-  * @num_bcms: num of @bcms
-+ * @qosbox: QoS config data associated with node
-  */
- struct qcom_icc_node {
- 	const char *name;
-@@ -70,6 +103,7 @@ struct qcom_icc_node {
- 	u64 max_peak[QCOM_ICC_NUM_BUCKETS];
- 	struct qcom_icc_bcm *bcms[MAX_BCM_PER_NODE];
- 	size_t num_bcms;
-+	const struct qcom_icc_qosbox *qosbox;
+ static const struct qcom_icc_desc sc7280_aggre1_noc = {
++	.config = &sc7280_aggre1_noc_regmap_config,
+ 	.nodes = aggre1_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre1_noc_nodes),
+ 	.bcms = aggre1_noc_bcms,
+@@ -1513,6 +1697,14 @@ static struct qcom_icc_bcm * const aggre2_noc_bcms[] = {
+ 	&bcm_ce0,
  };
  
- /**
-@@ -114,6 +148,7 @@ struct qcom_icc_fabric {
++static const struct regmap_config sc7280_aggre2_noc_regmap_config = {
++	.reg_bits = 32,
++	.reg_stride = 4,
++	.val_bits = 32,
++	.max_register = 0x2b080,
++	.fast_io = true,
++};
++
+ static struct qcom_icc_node * const aggre2_noc_nodes[] = {
+ 	[MASTER_QDSS_BAM] = &qhm_qdss_bam,
+ 	[MASTER_A2NOC_CFG] = &qnm_a2noc_cfg,
+@@ -1525,6 +1717,7 @@ static struct qcom_icc_node * const aggre2_noc_nodes[] = {
  };
  
- struct qcom_icc_desc {
-+	const struct regmap_config *config;
- 	struct qcom_icc_node * const *nodes;
- 	size_t num_nodes;
- 	struct qcom_icc_bcm * const *bcms;
+ static const struct qcom_icc_desc sc7280_aggre2_noc = {
++	.config = &sc7280_aggre2_noc_regmap_config,
+ 	.nodes = aggre2_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre2_noc_nodes),
+ 	.bcms = aggre2_noc_bcms,
+@@ -1605,7 +1798,16 @@ static struct qcom_icc_node * const cnoc2_nodes[] = {
+ 	[SLAVE_SNOC_CFG] = &qns_snoc_cfg,
+ };
+ 
++static const struct regmap_config sc7280_cnoc2_regmap_config = {
++	.reg_bits = 32,
++	.reg_stride = 4,
++	.val_bits = 32,
++	.max_register = 0x1000,
++	.fast_io = true,
++};
++
+ static const struct qcom_icc_desc sc7280_cnoc2 = {
++	.config = &sc7280_cnoc2_regmap_config,
+ 	.nodes = cnoc2_nodes,
+ 	.num_nodes = ARRAY_SIZE(cnoc2_nodes),
+ 	.bcms = cnoc2_bcms,
+@@ -1637,7 +1839,16 @@ static struct qcom_icc_node * const cnoc3_nodes[] = {
+ 	[SLAVE_TCU] = &xs_sys_tcu_cfg,
+ };
+ 
++static const struct regmap_config sc7280_cnoc3_regmap_config = {
++	.reg_bits = 32,
++	.reg_stride = 4,
++	.val_bits = 32,
++	.max_register = 0x1000,
++	.fast_io = true,
++};
++
+ static const struct qcom_icc_desc sc7280_cnoc3 = {
++	.config = &sc7280_cnoc3_regmap_config,
+ 	.nodes = cnoc3_nodes,
+ 	.num_nodes = ARRAY_SIZE(cnoc3_nodes),
+ 	.bcms = cnoc3_bcms,
+@@ -1653,7 +1864,16 @@ static struct qcom_icc_node * const dc_noc_nodes[] = {
+ 	[SLAVE_GEM_NOC_CFG] = &qns_gemnoc,
+ };
+ 
++static const struct regmap_config sc7280_dc_noc_regmap_config = {
++	.reg_bits = 32,
++	.reg_stride = 4,
++	.val_bits = 32,
++	.max_register = 0x5080,
++	.fast_io = true,
++};
++
+ static const struct qcom_icc_desc sc7280_dc_noc = {
++	.config = &sc7280_dc_noc_regmap_config,
+ 	.nodes = dc_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(dc_noc_nodes),
+ 	.bcms = dc_noc_bcms,
+@@ -1689,7 +1909,16 @@ static struct qcom_icc_node * const gem_noc_nodes[] = {
+ 	[SLAVE_SERVICE_GEM_NOC] = &srvc_sys_gemnoc,
+ };
+ 
++static const struct regmap_config sc7280_gem_noc_regmap_config = {
++	.reg_bits = 32,
++	.reg_stride = 4,
++	.val_bits = 32,
++	.max_register = 0xe2200,
++	.fast_io = true,
++};
++
+ static const struct qcom_icc_desc sc7280_gem_noc = {
++	.config = &sc7280_gem_noc_regmap_config,
+ 	.nodes = gem_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(gem_noc_nodes),
+ 	.bcms = gem_noc_bcms,
+@@ -1709,7 +1938,16 @@ static struct qcom_icc_node * const lpass_ag_noc_nodes[] = {
+ 	[SLAVE_SERVICE_LPASS_AG_NOC] = &srvc_niu_lpass_agnoc,
+ };
+ 
++static const struct regmap_config sc7280_lpass_ag_noc_regmap_config = {
++	.reg_bits = 32,
++	.reg_stride = 4,
++	.val_bits = 32,
++	.max_register = 0xf080,
++	.fast_io = true,
++};
++
+ static const struct qcom_icc_desc sc7280_lpass_ag_noc = {
++	.config = &sc7280_lpass_ag_noc_regmap_config,
+ 	.nodes = lpass_ag_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(lpass_ag_noc_nodes),
+ 	.bcms = lpass_ag_noc_bcms,
+@@ -1726,7 +1964,16 @@ static struct qcom_icc_node * const mc_virt_nodes[] = {
+ 	[SLAVE_EBI1] = &ebi,
+ };
+ 
++static const struct regmap_config sc7280_mc_virt_regmap_config = {
++	.reg_bits = 32,
++	.reg_stride = 4,
++	.val_bits = 32,
++	.max_register = 0x4,
++	.fast_io = true,
++};
++
+ static const struct qcom_icc_desc sc7280_mc_virt = {
++	.config = &sc7280_mc_virt_regmap_config,
+ 	.nodes = mc_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
+ 	.bcms = mc_virt_bcms,
+@@ -1753,7 +2000,16 @@ static struct qcom_icc_node * const mmss_noc_nodes[] = {
+ 	[SLAVE_SERVICE_MNOC] = &srvc_mnoc,
+ };
+ 
++static const struct regmap_config sc7280_mmss_noc_regmap_config = {
++	.reg_bits = 32,
++	.reg_stride = 4,
++	.val_bits = 32,
++	.max_register = 0x1e080,
++	.fast_io = true,
++};
++
+ static const struct qcom_icc_desc sc7280_mmss_noc = {
++	.config = &sc7280_mmss_noc_regmap_config,
+ 	.nodes = mmss_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(mmss_noc_nodes),
+ 	.bcms = mmss_noc_bcms,
+@@ -1772,7 +2028,16 @@ static struct qcom_icc_node * const nsp_noc_nodes[] = {
+ 	[SLAVE_SERVICE_NSP_NOC] = &service_nsp_noc,
+ };
+ 
++static const struct regmap_config sc7280_nsp_noc_regmap_config = {
++	.reg_bits = 32,
++	.reg_stride = 4,
++	.val_bits = 32,
++	.max_register = 0x10000,
++	.fast_io = true,
++};
++
+ static const struct qcom_icc_desc sc7280_nsp_noc = {
++	.config = &sc7280_nsp_noc_regmap_config,
+ 	.nodes = nsp_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(nsp_noc_nodes),
+ 	.bcms = nsp_noc_bcms,
+@@ -1797,7 +2062,16 @@ static struct qcom_icc_node * const system_noc_nodes[] = {
+ 	[SLAVE_SERVICE_SNOC] = &srvc_snoc,
+ };
+ 
++static const struct regmap_config sc7280_system_noc_regmap_config = {
++	.reg_bits = 32,
++	.reg_stride = 4,
++	.val_bits = 32,
++	.max_register = 0x15480,
++	.fast_io = true,
++};
++
+ static const struct qcom_icc_desc sc7280_system_noc = {
++	.config = &sc7280_system_noc_regmap_config,
+ 	.nodes = system_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(system_noc_nodes),
+ 	.bcms = system_noc_bcms,
 -- 
 2.17.1
 
