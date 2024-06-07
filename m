@@ -1,150 +1,291 @@
-Return-Path: <linux-pm+bounces-8783-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8784-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 111D7900536
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 15:41:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35DCF900655
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 16:22:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B1741C2229A
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 13:41:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B378D1F222EA
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2024 14:22:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDFF61940B1;
-	Fri,  7 Jun 2024 13:41:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EC45188CAD;
+	Fri,  7 Jun 2024 14:22:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="W769un6C"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ni87Lu/1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 354B419048A
-	for <linux-pm@vger.kernel.org>; Fri,  7 Jun 2024 13:41:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26F9513F436;
+	Fri,  7 Jun 2024 14:22:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717767683; cv=none; b=ZMEbMXzfTKmxmbr5OJDs/4H2zcxtIMiermghjugNVTwkwvF7ZYYwz5Dok/q/GTxjG4l1Ss9+32wBxzaDP7t/cpiPfxlC0a+GjWkoVfi0n0Hpmnrdpbup9V6NvJpzmPl/p9CljNH9HuuqBup/IrxZaD6o9noboXeWkoEUTWsJqGk=
+	t=1717770124; cv=none; b=uVtKH91qxEerQU+q4WIGFK/LOQiPwjDmgbzA9SyyjK8s6SJX1IJXWKbonFX+3arDt42eCy5nyPCxIEPgIbqZppyUCfhFaVfBntwGK45ot5ZgX9ZS+gp9Has+gUqvFura9qHx6clCbjRToUJn1o1nvavc/94d4tOtPyIl/bM/OSE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717767683; c=relaxed/simple;
-	bh=6aqTZTHnsThL0Ki6wuxZQ+3XCVXkV5GeXuIEmASScqs=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=BsBu7ghxfLmqRvAuT8j/McGKBMSsJxoG0WWxRJx2YPZoNXJW1fpEA/1XOGRhkVpt7jWPzdLhHNsd89uLJho5Ryj8sCtvJAY9Cvb1iob9LxrJXQ6Zx+5Ir0ww4BF+89BDtqX+A5uYNVsAArfmXTzHOqG5XWaHxergo5wXJjXcPFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=W769un6C; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1f4c7b022f8so19296175ad.1
-        for <linux-pm@vger.kernel.org>; Fri, 07 Jun 2024 06:41:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1717767681; x=1718372481; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=kjz2FXGfmGKiaGm/XNhlc5MjeSZ7VhsWXNrc+Nu+u0M=;
-        b=W769un6CaFtmkZJ4FxrbdpC9WgNQwEWdXRSBAK6SR5sBryW/IDo6CBn2p3GWkhwkzT
-         Tq1vvnVDjU2/wbWxIlUYU6GiSnq/Q9l4MdymNV0zEvroxbFklWmLA6lbKyz+siq4KR8N
-         Fuxx+QXBjdq3XiVg2UtVZWwZSCtydQpEa+h2bvQDZxI8pTPTUYJCaSniuezd6MwF4zCu
-         I8eSQJjmTUr2fZJTmsltqpyiNgkJqFtso1Gy8qnrk9o+Nj4D2DLyPtKSmDZsGG74MNBy
-         JXsFyQq+jyMlv8R7Z8mIkcOKP9qa0IGsF9b/nyrKyuSIHBBe0+Vd0jTg0To39R0uKW+R
-         2cdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717767681; x=1718372481;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kjz2FXGfmGKiaGm/XNhlc5MjeSZ7VhsWXNrc+Nu+u0M=;
-        b=kE1R5Ot7ri/NTCwuP9Iy3hOvB1MIJIJNRVb9xwWKg6L1NCCUV+JNWrC55PkBRfzBUO
-         /ZbxHHS6ilLgE6ywxfXoYb5BrC9+6DEeKn+K+XlUIe38+eAddAm/lJFJ/KIClNgJg9Ml
-         8Zm5wqFCuQmDZAXTPghWvdmR/3/tVXUrpzqwv2pxGh84z8ocxBVJEXLoQ26kngPyteD7
-         6OSAqtw+yG6NA1qaSbEW3qZbFGh6h3E9g7yey30ooJYzY+WsHw6DjY5Lelwy8jyX0eHC
-         JXsq0jLZsKcwmEMAsJi3QPccZZUdAMha8YTEng4NaAJKhJ/kXf3ggveYNvFiOc0e9N2B
-         hDew==
-X-Forwarded-Encrypted: i=1; AJvYcCVLLdJBl+zwZu0Oa6Tw0rXgS5K65klQteaFA52h+4kLFAceOu5j0AtqFLj5/8ccGeurv9YMsHcHM/6oYUbY2g6GrD7kfJAR+xs=
-X-Gm-Message-State: AOJu0Yw5Cxa2jVJr7U0yA0FTISRI5Ed0kR85J26+VXkjKuutwPqOZI2L
-	4hpaGKJc+4doTEj8+OjYH7cq4ED/BCpi+KVTQ+9+ecZcMI+AqFtnsaNz17Y3M1lE4vTU5N6asAh
-	e
-X-Google-Smtp-Source: AGHT+IFaY5R3aF7qSNwzayfIRVp+HbUo/iE2KeH4/RD3ROaLO1gR35m0fPAyhq4zWZhQNvCL62QDDw==
-X-Received: by 2002:a17:903:230a:b0:1f3:6ac:fbcd with SMTP id d9443c01a7336-1f6d0377214mr29049065ad.44.1717767681445;
-        Fri, 07 Jun 2024 06:41:21 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6bd7606easm34266895ad.45.2024.06.07.06.41.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jun 2024 06:41:21 -0700 (PDT)
-Message-ID: <66630e01.170a0220.365a8f.9210@mx.google.com>
-Date: Fri, 07 Jun 2024 06:41:21 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1717770124; c=relaxed/simple;
+	bh=lN9LGnrgukjSjfQdaXfz6zoh1opVnc8Kbq0knfFwjw4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uSql0RloPVEb5SDM2v0Y1yCynVh+pZYidHkKAPcLGZJexgIegCJ9eR7prRvJauVMgtWUIf5K2ecdUZ+Bv2dn147r7+Z3ydds5F6d9DV/AshsOcPRSrQnvE9AbGozhUN+hnKZdsYVuDlcVHDax66hxeFkbe+ViwgxpFcSaFjxFMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ni87Lu/1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94912C4AF09;
+	Fri,  7 Jun 2024 14:22:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717770123;
+	bh=lN9LGnrgukjSjfQdaXfz6zoh1opVnc8Kbq0knfFwjw4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Ni87Lu/1s8fiBFXiewQHZBjZuWU0h4ZRzUgqvYVPBs74xJk03T4u3R51nIN7hsPU5
+	 11Ac35LQK5xSx9u4GKn33t2vYRArPw0xPDRKzk7jUm27VjFMzteZwmC2Aj4nodnVV1
+	 RsJ+B9GOESPVazKgDToSOJsCAdoFf88EkzKyUfn9oLC+2ZWIq01KjtyBQte4diylQz
+	 vTbzr+AHY6+FFMTgW8cj73aCAzw4+V3rmAa7HB4B1sSbHn5byldjGSPscp22hM9O+R
+	 rlLI+sP+TFOim3uEjIh02jvuUhArBO32G0ZVhqHBCxiwlrTNKDB19UfepT9F8qf4B6
+	 kYvAFZloGMwzg==
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-5ba77a212adso107594eaf.3;
+        Fri, 07 Jun 2024 07:22:03 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXzpgVZmu6flofI75ma5PMqJHQS5nbYdkiUsjxpxCVGzaLrU0tXroesLFoK5eK60o6VwLOKgpSxzu8PU+h51cyNzeNP1q9fvUzWOq475VQtNyTgkRiHR+5wIXCywgfnbC78RsFJ784=
+X-Gm-Message-State: AOJu0YwO4rPDJHxZ8WXI4D7olHiLJpM3uwPTCm7axp49K42nqipJEAk3
+	QDxY2WIkBxccCf3FrHUQB4ybinppvQ4bhwIM20hBdRaAdfAV6YkpCs+j9EAG/7GbiEK1ag3Iwy3
+	Mq2EFnAW2LPy4W8c+jHzb0OrFaxg=
+X-Google-Smtp-Source: AGHT+IHrM4ProVsLq7TgVqRCERzD299+z5L7cTWF4rF+2zQvdtv5DTX/4oA2KtO7uwrtYe1Vz2O5sTGbf/mom2XM5ac=
+X-Received: by 2002:a05:6820:708:b0:5ba:6669:ba6e with SMTP id
+ 006d021491bc7-5baaed4f14dmr2423032eaf.1.1717770122391; Fri, 07 Jun 2024
+ 07:22:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240603081331.3829278-1-beata.michalska@arm.com>
+ <20240603081331.3829278-2-beata.michalska@arm.com> <20240603114811.oio3uemniib5uaa2@vireshk-i7>
+ <CAJZ5v0j1bqhmKrJirw+WgEVDdszZ9xQSgmfazVKMVa8H6_5TSw@mail.gmail.com> <20240606085513.pptx5dtjcvvg3zo4@vireshk-i7>
+In-Reply-To: <20240606085513.pptx5dtjcvvg3zo4@vireshk-i7>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 7 Jun 2024 16:21:51 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0it5vZvzkbErkGOVruPbkxgr8VMTgQzsncpdQmvCOfBng@mail.gmail.com>
+Message-ID: <CAJZ5v0it5vZvzkbErkGOVruPbkxgr8VMTgQzsncpdQmvCOfBng@mail.gmail.com>
+Subject: Re: [PATCH 1/1] cpufreq: Rewire arch specific feedback for cpuinfo/scaling_cur_freq
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Beata Michalska <beata.michalska@arm.com>, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, len.brown@intel.com, 
+	ionela.voinescu@arm.com, vanshikonda@os.amperecomputing.com, 
+	sumitg@nvidia.com, vincent.guittot@linaro.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v6.10-rc2-102-g8ed7b65b7edc3
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing baseline: 61 runs,
- 1 regressions (v6.10-rc2-102-g8ed7b65b7edc3)
-To: rafael@kernel.org, linux-pm@vger.kernel.org,
- kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
 
-pm/testing baseline: 61 runs, 1 regressions (v6.10-rc2-102-g8ed7b65b7edc3)
+On Thu, Jun 6, 2024 at 10:55=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
+rg> wrote:
+>
+> On 03-06-24, 15:43, Rafael J. Wysocki wrote:
+> > On Mon, Jun 3, 2024 at 1:48=E2=80=AFPM Viresh Kumar <viresh.kumar@linar=
+o.org> wrote:
+> > > Rafael,
+> > >
+> > > We probably need to decide on a policy for these two files, it is
+> > > getting a bit confusing.
+> > >
+> > > cpuinfo_cur_freq:
+> > >
+> > > The purpose of this file is abundantly clear. This returns the best
+> > > possible guess of the current hardware frequency. It should rely on
+> > > arch_freq_get_on_cpu() or ->get() to get the value.
+> >
+> > Let me quote the documentation:
+> >
+> > "This is expected to be the frequency the hardware actually runs at.
+> > If that frequency cannot be determined, this attribute should not be
+> > present."
+> >
+> > In my reading, this has nothing to do with arch_freq_get_on_cpu(), at
+> > least on x86.
+> >
+> > > Perhaps we can
+> > > make this available all the time, instead of conditionally on ->get()
+> > > callback (which isn't present for intel-pstate for example).
+> >
+> > We could, but then on x86 there is no expectation that this file will
+> > be present and changing this may introduce significant confusion
+> > because of the way it is documented (which would need to be changed,
+> > but people might be forgiven for failing to notice the change of
+> > interpretation of this file).
+>
+> > > scaling_cur_freq:
+> > >
+> > > This should better reflect the last requested frequency, but since a
+> > > significant time now it is trying to show what cpuinfo_cur_freq shows=
+.
+> >
+> > Well, not really.
+> >
+> > > commit c034b02e213d ("cpufreq: expose scaling_cur_freq sysfs file for=
+ set_policy() drivers")
+> > > commit f8475cef9008 ("x86: use common aperfmperf_khz_on_cpu() to calc=
+ulate KHz using APERF/MPERF")
+> >
+> > "In the majority of cases, this is the frequency of the last P-state
+> > requested by the scaling driver from the hardware using the scaling
+> > interface provided by it, which may or may not reflect the frequency
+> > the CPU is actually running at (due to hardware design and other
+> > limitations).
+> >
+> > Some architectures (e.g. x86) may attempt to provide information more
+> > precisely reflecting the current CPU frequency through this attribute,
+> > but that still may not be the exact current CPU frequency as seen by
+> > the hardware at the moment."
+>
+> Right, with time the documentation is updated and now it has mixed
+> the purpose of both these files IMO.
+>
+> > So the problem is that on Intel x86 with HWP and intel_pstate in the
+> > active mode, say, "the frequency of the last P-state requested by the
+> > scaling driver from the hardware" is actually never known, so exposing
+> > it via scaling_cur_freq is not possible.
+> >
+> > Moreover, because cpuinfo_cur_freq is not present at all in that case,
+> > scaling_cur_freq is the only way to allow user space to get an idea
+> > about the CPU current frequency.  I don't think it can be changed now
+> > without confusing users.
+>
+> Yes, this is a valid concern. The changes in documentation have been
+> there for many years and changing the behavior now is not going to be
+> an easy / right thing to do.
+>
+> > > What should we do ? I wonder if we will break some userspace tools
+> > > (which may have started relying on these changes).
+> >
+> > We will.
+> >
+> > IIUC, it is desirable to expose "the frequency of the last P-state
+> > requested by the scaling driver from the hardware" via
+> > scaling_cur_freq on ARM, but it is also desirable to expose an
+> > approximation of the actual current CPU frequency, so the only way to
+> > do that without confusing the heck out of everybody downstream would
+> > be to introduce a new attribute for this purpose and document it
+> > precisely.
+>
+> Hmm, having 3 files would confuse people even more I guess. I wanted
+> to get this sorted to have the same behavior for all platforms, but it
+> seems somewhat difficult to achieve now.
+>
+> What about this, hopefully this doesn't break any existing platforms
+> and fix the problems for ARM (and others):
+>
+> - scaling_cur_freq:
+>
+>   Returns the frequency of the last P-state requested by the scaling
+>   driver from the hardware.
 
-Regressions Summary
--------------------
+This would change the behavior for intel_pstate in the passive mode AFAICS.
 
-platform                 | arch  | lab             | compiler | defconfig |=
- regressions
--------------------------+-------+-----------------+----------+-----------+=
-------------
-imx8mm-innocomm-wb15-evk | arm64 | lab-pengutronix | gcc-10   | defconfig |=
- 1          =
+ATM it calls arch_freq_get_on_cpu(), after the change it would return
+policy->cur which would not be the same value most of the time.  And
+in the ->adjust_perf() case policy->cur is not updated by it even.
 
+>  For set_policy() drivers, use the ->get()
+>   callback to get a value that can provide the best estimate to user.
+>
+>   To make this work, we can add get() callback to intel and amd pstate
+>   drivers, and use arch_freq_get_on_cpu().
+>
+>   This will keep the current behavior intact for such drivers.
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.10-rc=
-2-102-g8ed7b65b7edc3/plan/baseline/
+Well, the passive mode thing would need to be addressed then.
 
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v6.10-rc2-102-g8ed7b65b7edc3
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      8ed7b65b7edc3518cbcd873aef5d23f2fcd37ee7 =
+> - cpuinfo_cur_freq:
+>
+>   Currently this file is available only if the get() callback is
+>   available. Maybe we can keep this behavior as is, and expose this
+>   now for both the pstate drivers (once above change is added). We
+>   will be left with only one driver that doesn't provide the get()
+>   callback: pasemi-cpufreq.c
 
+I would rather get rid of it completely.
 
+>   Coming back to the implementation of the file read operation, I
+>   think the whole purpose of arch_freq_get_on_cpu() was to get a
+>   better estimate (which may not be perfect) of the frequency the
+>   hardware is really running at (in the last window) and if a platform
+>   provides this, then it can be given priority over the ->get()
+>   callback in order to show the value to userspace.
 
-Test Regressions
----------------- =
+There was a reason to add it and it was related to policy->cur being
+meaningless on x86 in general (even in the acpi-cpufreq case), but
+let's not go there.
 
+Hooking this up to cpuinfo_cur_freq on x86 wouldn't make much sense
+IMV because at times it is not even close to the frequency the
+hardware is running at.  It comes from the previous tick period,
+basically, and the hardware can adjust the frequency with a resolution
+that is orders of magnitude higher than the tick rate.
 
+>   And so, if the platform provides, we can use arch_freq_get_on_cpu()
+>   first and then the get() callback.
+>
+> That would leave us to this change for the core, and yes a get()
+> callback for intel-pstate and amd-pstate:
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 7c6879efe9ef..e265f8450160 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -756,12 +756,8 @@ __weak unsigned int arch_freq_get_on_cpu(int cpu)
+>  static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char=
+ *buf)
+>  {
+>         ssize_t ret;
+> -       unsigned int freq;
+>
+> -       freq =3D arch_freq_get_on_cpu(policy->cpu);
+> -       if (freq)
+> -               ret =3D sprintf(buf, "%u\n", freq);
+> -       else if (cpufreq_driver->setpolicy && cpufreq_driver->get)
+> +       if (cpufreq_driver->setpolicy && cpufreq_driver->get)
+>                 ret =3D sprintf(buf, "%u\n", cpufreq_driver->get(policy->=
+cpu));
+>         else
+>                 ret =3D sprintf(buf, "%u\n", policy->cur);
+> @@ -795,7 +791,10 @@ store_one(scaling_max_freq, max);
+>  static ssize_t show_cpuinfo_cur_freq(struct cpufreq_policy *policy,
+>                                         char *buf)
+>  {
+> -       unsigned int cur_freq =3D __cpufreq_get(policy);
+> +       unsigned int cur_freq =3D arch_freq_get_on_cpu(policy->cpu);
+> +
+> +       if (!cur_freq)
+> +               cur_freq =3D __cpufreq_get(policy);
+>
+>         if (cur_freq)
+>                 return sprintf(buf, "%u\n", cur_freq);
+>
+>
+> I think this will also make more sense from documentation's
+> perspective, which says that:
+>
+> "In the majority of cases, this is the frequency of the last P-state
+> requested by the scaling driver from the hardware using the scaling
+> interface provided by it, which may or may not reflect the frequency
+> the CPU is actually running at (due to hardware design and other
+> limitations)."
+>
+> -- we do this at the core level.
+>
+> "Some architectures (e.g. x86) may attempt to provide information more
+> precisely reflecting the current CPU frequency through this attribute,
+> but that still may not be the exact current CPU frequency as seen by
+> the hardware at the moment."
+>
+> -- and this at driver level, as a special case.
 
-platform                 | arch  | lab             | compiler | defconfig |=
- regressions
--------------------------+-------+-----------------+----------+-----------+=
-------------
-imx8mm-innocomm-wb15-evk | arm64 | lab-pengutronix | gcc-10   | defconfig |=
- 1          =
+Well, this sounds nice, but the changes are a bit problematic.
 
+If you don't want 3 files, I'd drop cpuinfo_cur_freq and introduce
+something else to replace it which will expose the
+arch_freq_get_on_cpu() return value and will be documented
+accordingly.
 
-  Details:     https://kernelci.org/test/plan/id/666303e864196ba46a7e709e
+Then scaling_cur_freq can be (over time) switched over to returning
+policy->cur in the cases when it is meaningful and -ENODATA otherwise.
 
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.10-rc2-102-g8ed7=
-b65b7edc3/arm64/defconfig/gcc-10/lab-pengutronix/baseline-imx8mm-innocomm-w=
-b15-evk.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.10-rc2-102-g8ed7=
-b65b7edc3/arm64/defconfig/gcc-10/lab-pengutronix/baseline-imx8mm-innocomm-w=
-b15-evk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230703.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/666303e864196ba46a7e7=
-09f
-        new failure (last pass: v6.10-rc2-102-gddb5639c3f502) =
-
- =20
+This would at least allow us to stop making up stuff.
 
