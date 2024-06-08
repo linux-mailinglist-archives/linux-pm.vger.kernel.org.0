@@ -1,222 +1,154 @@
-Return-Path: <linux-pm+bounces-8812-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8813-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3704C9012E2
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Jun 2024 19:02:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C469F9012E4
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Jun 2024 19:03:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D5081C20C24
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Jun 2024 17:02:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6ACB91F22017
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Jun 2024 17:03:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDFCC15A86A;
-	Sat,  8 Jun 2024 17:02:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A34B17839B;
+	Sat,  8 Jun 2024 17:03:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PRhcHzZp"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="ABe7Kc3s"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 996901EA67;
-	Sat,  8 Jun 2024 17:02:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E0C21E4A6;
+	Sat,  8 Jun 2024 17:03:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717866138; cv=none; b=YoYYzhrS9DdGGtUSHZF+fm47LXPS+Us8UmI4pl6i2SpKM+HBmCC1s/+cRNQld+gNq19AkVaEkX7Yp9TMCNE7EvaXaoKjBsv63SCrCb7hyqeITww8rwq6cTHuxnUvFtuFDzUK2TlmgofS3Ig6RcJBVrIqhWrnhocaafm0yiOLOqc=
+	t=1717866189; cv=none; b=Po/mlruE7ljLrvFgZiOse0I+LtKwNbUhwk+pTSrfIAGpmAQQp8dXOO+ttItv/gfsbEC04rpuFAnvBOCzwp1VzPLzuK7a9MEBeZfWPAb3cenDpiDbLDhDNgjqhcsWS85waMA7YPS3yFlRV/TF7rU/O6VDZPmL3774ayR7rO2Fak4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717866138; c=relaxed/simple;
-	bh=eZJtXYgzKJ03NKp+AX7YKQVkN/76dyMCDDFDfAawOwM=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=WyY+R/oJuZ09xZhPOhjm/IVv1hSqRQDf6Sq/7W9WkyIz4UTvnpSebSXuOBpftOJSWCCMl0EI+DyTfKdpDt0ouFwLnku5Bf0bqUfqz2a9+E9OKkuwoyoVzfP3FJ4kHXt8N1oMXHAp1qB5I6l7miw8rmXvAq3sYZLLIj74SlkI/SM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PRhcHzZp; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717866137; x=1749402137;
-  h=date:from:to:cc:subject:message-id;
-  bh=eZJtXYgzKJ03NKp+AX7YKQVkN/76dyMCDDFDfAawOwM=;
-  b=PRhcHzZp9e2PogPqnsZdl0sCZdv/X8cHN6R1WyDmr/aSI+U7R1HOniOM
-   KEip5qTs97Lma+ryHQ6g62fjc30/QUT0ZZckhre9RD6O9K0Ob0AUDZafI
-   izVd0XnzzbJ3wCbq9lGOr06g/pPcYQ2E7b3EjyEVWHoI0m8XjtNXeQhF5
-   Rk4MKUt99VibBI3CxVs/TLfKHutlYGgY3Vigp/T6hmikB+bEhFP3rEUP3
-   bvh6r5K//Qav3F570xPkIGe7qFFMcKC02fjK0hYXfu+5AzlnAa5URk+KN
-   vKpohiXaFaxziySfgtKh4D5kaVYdo6K4ZiOtlUGrk4kodIUqoNn2YKwRB
-   g==;
-X-CSE-ConnectionGUID: Og0G7R+vTu6sgwJOfzCw7w==
-X-CSE-MsgGUID: Nue1PuqDT6iBliZRK9B5kg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11097"; a="14531605"
-X-IronPort-AV: E=Sophos;i="6.08,223,1712646000"; 
-   d="scan'208";a="14531605"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2024 10:02:16 -0700
-X-CSE-ConnectionGUID: EH1HrxCURSu71okqJWJjEg==
-X-CSE-MsgGUID: /RC4otj3TnK9vM75Zj8muA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,223,1712646000"; 
-   d="scan'208";a="38718165"
-Received: from lkp-server01.sh.intel.com (HELO 8967fbab76b3) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 08 Jun 2024 10:02:08 -0700
-Received: from kbuild by 8967fbab76b3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sFzSA-0000Fo-0U;
-	Sat, 08 Jun 2024 17:02:06 +0000
-Date: Sun, 09 Jun 2024 01:01:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- fd9fbb776ff6329fa87359a01d98f7d7949e7599
-Message-ID: <202406090119.pVMonwQe-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1717866189; c=relaxed/simple;
+	bh=aueIvf1hpPSoXzp5MDugHfujuyMFd0wpUQBGOz+woqM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SS8awZXQxEQf50Q5w8oXVPiKOE5z/C++1Q2tNpuClLC17bP9RRzUout92gxSxnpvuX5uBe2pLaFSSjZrUKxxfizNbYSsqvXKmpDVVpv/FYBLCOVMWWn5KcInQh56lohqsbyLm8+v+melOfXX9YvaulUVcoCXtkkxdb849ffoIJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=ABe7Kc3s; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1717866175;
+	bh=aueIvf1hpPSoXzp5MDugHfujuyMFd0wpUQBGOz+woqM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ABe7Kc3swRWGza89hhw/QA4ntSQ27MCPhSzAk/lmH7UDsh3k8O4lpkioyPTBXKL2r
+	 iiYcEWm0MHoLKRns/qfLWT/6+g4riVrK+XWi5lQvK4u7AI07E847dyKWaJ8JN8vr85
+	 5lh8qB4MqsZlMGGyx83QkFFBUV+5FB0Zr633l704=
+Date: Sat, 8 Jun 2024 19:02:53 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Armin Wolf <W_Armin@gmx.de>
+Cc: Sebastian Reichel <sre@kernel.org>, 
+	Jeremy Soller <jeremy@system76.com>, System76 Product Development <productdev@system76.com>, 
+	Hans de Goede <hdegoede@redhat.com>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH RFC 0/6] power: supply: extension API
+Message-ID: <b3d265a3-5bf0-4ed7-b959-9c92aac8fa43@t-8ch.de>
+References: <20240606-power-supply-extensions-v1-0-b45669290bdc@weissschuh.net>
+ <41964782-222c-45fa-846e-3656eff5b3a9@gmx.de>
+ <86cafef5-8a41-46c8-8ee6-6b25dd165b58@t-8ch.de>
+ <992978fb-d74c-4da7-a103-9b623b78d889@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <992978fb-d74c-4da7-a103-9b623b78d889@gmx.de>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: fd9fbb776ff6329fa87359a01d98f7d7949e7599  Merge branch 'pm-tools' into bleeding-edge
+On 2024-06-08 18:27:07+0000, Armin Wolf wrote:
+> Am 07.06.24 um 12:26 schrieb Thomas Weißschuh:
+> 
+> > On 2024-06-07 01:10:02+0000, Armin Wolf wrote:
+> > > Am 06.06.24 um 16:50 schrieb Thomas Weißschuh:
+> > > 
+> > > > Introduce a mechanism for drivers to extend the properties implemented
+> > > > by a power supply.
 
-elapsed time: 1237m
+<snip>
 
-configs tested: 128
-configs skipped: 3
+> > > > 
+> > > > [0] https://lore.kernel.org/lkml/20240528-cros_ec-charge-control-v2-0-81fb27e1cff4@weissschuh.net/
+> > > Nice, i love this proposal!
+> > Good to hear!
+> > 
+> > > I agree that the hwmon update functionality will need some changes in the hwmon core to work,
+> > > but there would be at least one driver benefiting from this (dell-wmi-ddv). Maybe we can add
+> > > support for this at a later point in time.
+> > Surely. Alternatively we could re-register the hwmon device after an
+> > extension was added.
+> > 
+> > > The possibility of registering multiple power supply extensions on a single power supply will
+> > > be necessary to support battery charge control on Dell notebooks in the future. This is because
+> > > there will be two drivers on Dell notebooks which register battery extensions: dell-wmi-ddv and
+> > > dell-laptop (when support for battery charge control is supported someday).
+> > > 
+> > > How difficult would it be to support such scenarios? If its very difficult, then maybe we can implement
+> > > this later when the need arises.
+> > It's not really difficult. The problem is in the callback functions
+> > going from a 'struct power_supply' back to the correct extension struct
+> > for use with container_of() to access the drivers private data.
+> > 
+> > But we can add a marker member to 'struct power_supply_ext' with which
+> > the callback can figure out which of the registered extensions is its
+> > own. Something like "led_hw_trigger_type" in the LED subsystem.
+> 
+> Maybe we can do the same thing as the battery hook API and just pass a pointer to
+> the power_supply_ext instance to the callbacks. They then can use container_of()
+> to access the drivers private data if the struct power_supply_ext is embedded
+> inside the private data struct.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+That indeed sounds like the obvious thing to do.
+I tried very hard to keep the callback signatures exactly the same as in
+power_supply_desc and didn't even see this possibility.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20240608   gcc  
-arc                   randconfig-002-20240608   gcc  
-arc                           tb10x_defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                            dove_defconfig   gcc  
-arm                           h3600_defconfig   gcc  
-arm                       multi_v4t_defconfig   clang
-arm                             pxa_defconfig   gcc  
-arm                   randconfig-001-20240608   gcc  
-arm                   randconfig-002-20240608   clang
-arm                   randconfig-003-20240608   clang
-arm                   randconfig-004-20240608   clang
-arm                           spitz_defconfig   gcc  
-arm                           tegra_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240608   gcc  
-arm64                 randconfig-002-20240608   gcc  
-arm64                 randconfig-003-20240608   gcc  
-arm64                 randconfig-004-20240608   clang
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240608   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240608   gcc  
-i386         buildonly-randconfig-002-20240608   clang
-i386         buildonly-randconfig-003-20240608   gcc  
-i386         buildonly-randconfig-004-20240608   gcc  
-i386         buildonly-randconfig-005-20240608   clang
-i386         buildonly-randconfig-006-20240608   gcc  
-i386                                defconfig   clang
-i386                  randconfig-001-20240608   clang
-i386                  randconfig-002-20240608   gcc  
-i386                  randconfig-003-20240608   gcc  
-i386                  randconfig-004-20240608   clang
-i386                  randconfig-005-20240608   gcc  
-i386                  randconfig-006-20240608   gcc  
-i386                  randconfig-011-20240608   clang
-i386                  randconfig-012-20240608   clang
-i386                  randconfig-013-20240608   clang
-i386                  randconfig-014-20240608   gcc  
-i386                  randconfig-015-20240608   clang
-i386                  randconfig-016-20240608   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                          ath79_defconfig   gcc  
-mips                     decstation_defconfig   gcc  
-nios2                         10m50_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                     asp8347_defconfig   clang
-powerpc                       eiger_defconfig   clang
-powerpc                          g5_defconfig   gcc  
-powerpc                     kmeter1_defconfig   gcc  
-powerpc                      ppc44x_defconfig   clang
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                          urquell_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64                              defconfig   gcc  
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
+> 
+> > 
+> > And some documentation about how conflicts are to be resolved.
+> > 
+> > Thomas
+> 
+> Sound like a plan, i suggest that extensions be prevented from registering with
+> a power supply containing conflicting properties or containing extensions with
+> conflicting properties.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Ack.
+
+> As a side note, maybe there is a way to make power_supply_update_groups() available
+> for other power supply drivers? Afaik the ACPI battery driver would benefit from this too.
+
+I'll take a look and spin that into its own series.
+Or as you seem to know that driver better, I'd be happy if you did.
+
+> Thanks,
+> Armin Wolf
+> 
+> > > > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> > > > ---
+> > > > Thomas Weißschuh (6):
+> > > >         power: supply: sysfs: use power_supply_property_is_writeable()
+> > > >         power: supply: core: avoid iterating properties directly
+> > > >         power: supply: core: implement extension API
+> > > >         power: supply: core: add locking around extension access
+> > > >         power: supply: test-power: implement a power supply extension
+> > > >         platform/x86: system76: Use power_supply extension API
+> > > > 
+> > > >    drivers/platform/x86/system76_acpi.c      |  83 +++++++++---------
+> > > >    drivers/power/supply/power_supply.h       |   9 ++
+> > > >    drivers/power/supply/power_supply_core.c  | 136 ++++++++++++++++++++++++++++--
+> > > >    drivers/power/supply/power_supply_hwmon.c |  48 +++++------
+> > > >    drivers/power/supply/power_supply_sysfs.c |  39 ++++++---
+> > > >    drivers/power/supply/test_power.c         | 102 ++++++++++++++++++++++
+> > > >    include/linux/power_supply.h              |  25 ++++++
+> > > >    7 files changed, 357 insertions(+), 85 deletions(-)
+> > > > ---
+> > > > base-commit: 2df0193e62cf887f373995fb8a91068562784adc
+> > > > change-id: 20240602-power-supply-extensions-07d949f509d9
 
