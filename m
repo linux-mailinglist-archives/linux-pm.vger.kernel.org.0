@@ -1,47 +1,47 @@
-Return-Path: <linux-pm+bounces-8815-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8819-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C187090134B
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Jun 2024 21:19:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75530901355
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Jun 2024 21:20:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2AAC02823C2
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Jun 2024 19:19:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC4442823D3
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Jun 2024 19:20:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD85E1C2A8;
-	Sat,  8 Jun 2024 19:19:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31322446D2;
+	Sat,  8 Jun 2024 19:19:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="ixLaohDg"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="i4CmwGnY"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E0BE208D0;
-	Sat,  8 Jun 2024 19:19:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 735C136B0D;
+	Sat,  8 Jun 2024 19:19:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717874388; cv=none; b=gO52VcdmQu+S5RIZ+g/ovnZ0m4FjSqs/5YafGMkpSiMHX2bxUiccfH6j1uegEJPcdtlFkHzmoQd6kdUUx5jJXIwrb9cR30TEHrK0F8Zgg/kVWYknuSeQAs3wvI9QcKRaSBAdXiDJj4uhEprZ76fN5Ko1+F8FUj2rgQQaXAxKwKY=
+	t=1717874392; cv=none; b=B7aGg6bIRKr3d4ULQV3u2b06lmCgyCdZaTKPrCFT2qBJLn18NKvdgdK30ybFuu9xj8iNbkkFVgsN3YLFVrjOQN8a8gq1QF7CClQsJTDSwpipQGQ1ZVYluEdFATj2EqAlm9rMo6AEKTe0/iZHWNiJsHEhxLW0yvD59F1FbCYphyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717874388; c=relaxed/simple;
-	bh=NVTFW9lAWIoQvL0uH2dUd52c6tWadKD9uO+zu4zfROE=;
+	s=arc-20240116; t=1717874392; c=relaxed/simple;
+	bh=tSWgaNbICmLdESUXwsfkk/co8yDnfuRtdvYQKfLXD1I=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=TYHjUu39E1H3VIUVGyE1k8g4X4zuw/zpKkjbwdYkr0XudKgxOJKe7S/Kwq0+C/E8Mx59laN8Y3qeHziqdAJ+1Zj28YFd07z1451zQi8gy8C4kf1gJzfpDSoZvaLU+A5udXb6axd+IwxAV0fEItIYpcv28wtyPCs0q0xr0GncHfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=ixLaohDg; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=ZGuiQY3grcZTe1AjioS/TpM9tUxhUhcY50Pp7uecweCyGN8ExYAmmSJXxGkcM3LgSXvK5ewd2CYTXoDmkJLvonJAblpKg07RIM1gv+68bj8LV3DRydN/Hk/zJThpS0ywdPqQq3E0xpx5IMK6xDUS61PH11twcApkLzPz7Ww7NHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=i4CmwGnY; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1717874384;
-	bh=NVTFW9lAWIoQvL0uH2dUd52c6tWadKD9uO+zu4zfROE=;
+	s=mail; t=1717874385;
+	bh=tSWgaNbICmLdESUXwsfkk/co8yDnfuRtdvYQKfLXD1I=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=ixLaohDge3pqrTGVuskx0P4Wdfn0PFaqg7N7IVBaWpuDtEsa58BAfhOw2tfVO+BEx
-	 jCNACM+kLLw2MPSAgRhCOAaXBvo1L25QhYUtpz9Okge8NYacl/yDoYSurjABHlKmJe
-	 uNJGdQnrEMYjVkKCwEOr+5nYc22Do2D6OqR8ilHg=
+	b=i4CmwGnY03B4zu944Y0vCeIrNN715h+Q/YLmFJxjED/2yRkp3x0nWBcB0KY+FHpFQ
+	 whJ4VWASHhDgjm0Mb9wMi4gRcGLKP1uMkY1sJngp+RKLMuRwVC5a0TZA27OeMrCtI3
+	 7GqAUuVFlKUhFYwWfOpV/vXIOYECxsslH8X7lyAo=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Sat, 08 Jun 2024 21:19:40 +0200
-Subject: [PATCH RFC v2 4/5] power: supply: test-power: implement a power
- supply extension
+Date: Sat, 08 Jun 2024 21:19:41 +0200
+Subject: [PATCH RFC v2 5/5] platform/x86: system76: Use power_supply
+ extension API
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,182 +50,180 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240608-power-supply-extensions-v2-4-2dcd35b012ad@weissschuh.net>
+Message-Id: <20240608-power-supply-extensions-v2-5-2dcd35b012ad@weissschuh.net>
 References: <20240608-power-supply-extensions-v2-0-2dcd35b012ad@weissschuh.net>
 In-Reply-To: <20240608-power-supply-extensions-v2-0-2dcd35b012ad@weissschuh.net>
 To: Sebastian Reichel <sre@kernel.org>, Armin Wolf <W_Armin@gmx.de>
 Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1717874383; l=5076;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1717874383; l=5330;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=NVTFW9lAWIoQvL0uH2dUd52c6tWadKD9uO+zu4zfROE=;
- b=BHP6KKIkH5Qayt4PMND8WwZC4/znxn7BNRlcZJNtteTApXR71PBaWNsTKwjGm+J1pPa877HkA
- Vc93fTKeUpDAL8zPNiUhvlGq3PDkAWhM9zyaLH16QHwXAVGpNgvA6jJ
+ bh=tSWgaNbICmLdESUXwsfkk/co8yDnfuRtdvYQKfLXD1I=;
+ b=voWK3Eqnksjg/maciOsahYbqlTj5u23CJueEHCilcO7xfaLOOk+7srpnLv2kWH0LO+NuKVAoc
+ zE2/py1XNIZD6YXo1xUHktSyMGCgMHIuw1tzy7KhWVLvCmB+p7JTZzl
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Allow easy testing of the new power supply extension functionality.
-
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- drivers/power/supply/test_power.c | 101 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 101 insertions(+)
+ drivers/platform/x86/system76_acpi.c | 93 ++++++++++++++++++++----------------
+ 1 file changed, 51 insertions(+), 42 deletions(-)
 
-diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply/test_power.c
-index 442ceb7795e1..12c1573e547a 100644
---- a/drivers/power/supply/test_power.c
-+++ b/drivers/power/supply/test_power.c
-@@ -37,6 +37,7 @@ static int battery_charge_counter	= -1000;
- static int battery_current		= -1600;
- static enum power_supply_charge_behaviour battery_charge_behaviour =
- 	POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO;
-+static bool battery_hook;
- 
- static bool module_initialized;
- 
-@@ -238,6 +239,79 @@ static const struct power_supply_config test_power_configs[] = {
- 	},
+diff --git a/drivers/platform/x86/system76_acpi.c b/drivers/platform/x86/system76_acpi.c
+index 3da753b3d00d..d9bc5cae2dda 100644
+--- a/drivers/platform/x86/system76_acpi.c
++++ b/drivers/platform/x86/system76_acpi.c
+@@ -162,7 +162,7 @@ enum {
+ 	THRESHOLD_END,
  };
  
-+static int power_supply_ext_manufacture_year = 1234;
-+static const enum power_supply_property power_supply_ext_props[] = {
-+	POWER_SUPPLY_PROP_MANUFACTURE_YEAR,
-+};
-+
-+static int power_supply_ext_get_property(struct power_supply *psy,
-+					 const struct power_supply_ext *ext,
-+					 enum power_supply_property psp,
-+					 union power_supply_propval *val)
-+{
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_MANUFACTURE_YEAR:
-+		val->intval = power_supply_ext_manufacture_year;
-+		break;
-+	default:
-+		pr_info("%s: some properties deliberately report errors.\n",
-+			__func__);
-+		return -EINVAL;
-+	}
-+	return 0;
-+}
-+
-+static int power_supply_ext_set_property(struct power_supply *psy,
-+					 const struct power_supply_ext *ext,
-+					 enum power_supply_property psp,
-+					 const union power_supply_propval *val)
-+{
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_MANUFACTURE_YEAR:
-+		power_supply_ext_manufacture_year = val->intval;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+	return 0;
-+}
-+
-+static int power_supply_ext_property_is_writeable(struct power_supply *psy,
-+						  const struct power_supply_ext *ext,
-+						  enum power_supply_property psp)
-+{
-+	return true;
-+}
-+
-+static const struct power_supply_ext power_supply_ext = {
-+	.properties = power_supply_ext_props,
-+	.num_properties = ARRAY_SIZE(power_supply_ext_props),
-+	.get_property = power_supply_ext_get_property,
-+	.set_property = power_supply_ext_set_property,
-+	.property_is_writeable = power_supply_ext_property_is_writeable,
-+};
-+
-+static void test_battery_configure_battery_hook(bool enable)
-+{
-+	struct power_supply *psy;
-+
-+	if (battery_hook == enable)
-+		return;
-+
-+	psy = test_power_supplies[TEST_BATTERY];
-+
-+	if (enable) {
-+		if (power_supply_register_extension(psy, &power_supply_ext)) {
-+			pr_err("registering battery extension failed\n");
-+			return;
-+		}
-+	} else {
-+		power_supply_unregister_extension(psy, &power_supply_ext);
-+	}
-+
-+	battery_hook = enable;
-+}
-+
- static int __init test_power_init(void)
+-static ssize_t battery_get_threshold(int which, char *buf)
++static int battery_get_threshold(int which, int *val)
  {
- 	int i;
-@@ -258,6 +332,8 @@ static int __init test_power_init(void)
- 		}
- 	}
+ 	struct acpi_object_list input;
+ 	union acpi_object param;
+@@ -186,29 +186,21 @@ static ssize_t battery_get_threshold(int which, char *buf)
+ 	if (ret == BATTERY_THRESHOLD_INVALID)
+ 		return -EINVAL;
  
-+	test_battery_configure_battery_hook(true);
-+
- 	module_initialized = true;
- 	return 0;
- failed:
-@@ -524,6 +600,22 @@ static int param_set_battery_current(const char *key,
- 
- #define param_get_battery_current param_get_int
- 
-+static int param_set_battery_hook(const char *key,
-+				  const struct kernel_param *kp)
-+{
-+	int tmp;
-+
-+	if (1 != sscanf(key, "%d", &tmp))
-+		return -EINVAL;
-+	if (tmp != 1 && tmp != 0)
-+		return -EINVAL;
-+
-+	test_battery_configure_battery_hook(tmp);
+-	return sysfs_emit(buf, "%d\n", (int)ret);
++	*val = ret;
 +	return 0;
+ }
+ 
+-static ssize_t battery_set_threshold(int which, const char *buf, size_t count)
++static int battery_set_threshold(int which, unsigned int value)
+ {
+ 	struct acpi_object_list input;
+ 	union acpi_object params[2];
+ 	acpi_handle handle;
+ 	acpi_status status;
+-	unsigned int value;
+-	int ret;
+ 
+ 	handle = ec_get_handle();
+ 	if (!handle)
+ 		return -ENODEV;
+ 
+-	ret = kstrtouint(buf, 10, &value);
+-	if (ret)
+-		return ret;
+-
+-	if (value > 100)
+-		return -EINVAL;
+-
+ 	input.count = 2;
+ 	input.pointer = params;
+ 	// Start/stop selection
+@@ -222,52 +214,69 @@ static ssize_t battery_set_threshold(int which, const char *buf, size_t count)
+ 	if (ACPI_FAILURE(status))
+ 		return -EIO;
+ 
+-	return count;
+-}
+-
+-static ssize_t charge_control_start_threshold_show(struct device *dev,
+-	struct device_attribute *attr, char *buf)
+-{
+-	return battery_get_threshold(THRESHOLD_START, buf);
+-}
+-
+-static ssize_t charge_control_start_threshold_store(struct device *dev,
+-	struct device_attribute *attr, const char *buf, size_t count)
+-{
+-	return battery_set_threshold(THRESHOLD_START, buf, count);
++	return 0;
+ }
+ 
+-static DEVICE_ATTR_RW(charge_control_start_threshold);
++static const enum power_supply_property system76_battery_properties[] = {
++	POWER_SUPPLY_PROP_CHARGE_CONTROL_START_THRESHOLD,
++	POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD,
++};
+ 
+-static ssize_t charge_control_end_threshold_show(struct device *dev,
+-	struct device_attribute *attr, char *buf)
++static int system76_property_is_writeable(struct power_supply *psy,
++					  const struct power_supply_ext *ext,
++					  enum power_supply_property psp)
+ {
+-	return battery_get_threshold(THRESHOLD_END, buf);
++	return true;
+ }
+ 
+-static ssize_t charge_control_end_threshold_store(struct device *dev,
+-	struct device_attribute *attr, const char *buf, size_t count)
++static int system76_get_property(struct power_supply *psy,
++				 const struct power_supply_ext *ext,
++				 enum power_supply_property psp,
++				 union power_supply_propval *val)
+ {
+-	return battery_set_threshold(THRESHOLD_END, buf, count);
++	switch (psp) {
++	case POWER_SUPPLY_PROP_CHARGE_CONTROL_START_THRESHOLD:
++		return battery_get_threshold(THRESHOLD_START, &val->intval);
++	case POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD:
++		return battery_get_threshold(THRESHOLD_END, &val->intval);
++	default:
++		return -EINVAL;
++	};
 +}
 +
-+#define param_get_battery_hook param_get_int
-+
- static const struct kernel_param_ops param_ops_ac_online = {
- 	.set = param_set_ac_online,
- 	.get = param_get_ac_online,
-@@ -574,6 +666,11 @@ static const struct kernel_param_ops param_ops_battery_current = {
- 	.get = param_get_battery_current,
++static int system76_set_property(struct power_supply *psy, const struct power_supply_ext *ext,
++				 enum power_supply_property psp,
++				 const union power_supply_propval *val)
++{
++	switch (psp) {
++	case POWER_SUPPLY_PROP_CHARGE_CONTROL_START_THRESHOLD:
++		if (val->intval < 0 || val->intval > 100)
++			return -EINVAL;
++		return battery_set_threshold(THRESHOLD_START, val->intval);
++	case POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD:
++		if (val->intval < 0 || val->intval > 100)
++			return -EINVAL;
++		return battery_set_threshold(THRESHOLD_END, val->intval);
++	default:
++		return -EINVAL;
++	};
+ }
+ 
+-static DEVICE_ATTR_RW(charge_control_end_threshold);
+-
+-static struct attribute *system76_battery_attrs[] = {
+-	&dev_attr_charge_control_start_threshold.attr,
+-	&dev_attr_charge_control_end_threshold.attr,
+-	NULL,
++static const struct power_supply_ext system76_power_supply_ext = {
++	.properties            = system76_battery_properties,
++	.num_properties        = ARRAY_SIZE(system76_battery_properties),
++	.property_is_writeable = system76_property_is_writeable,
++	.get_property          = system76_get_property,
++	.set_property          = system76_set_property,
  };
  
-+static const struct kernel_param_ops param_ops_battery_hook = {
-+	.set = param_set_battery_hook,
-+	.get = param_get_battery_hook,
-+};
-+
- #define param_check_ac_online(name, p) __param_check(name, p, void);
- #define param_check_usb_online(name, p) __param_check(name, p, void);
- #define param_check_battery_status(name, p) __param_check(name, p, void);
-@@ -584,6 +681,7 @@ static const struct kernel_param_ops param_ops_battery_current = {
- #define param_check_battery_voltage(name, p) __param_check(name, p, void);
- #define param_check_battery_charge_counter(name, p) __param_check(name, p, void);
- #define param_check_battery_current(name, p) __param_check(name, p, void);
-+#define param_check_battery_hook(name, p) __param_check(name, p, void);
+-ATTRIBUTE_GROUPS(system76_battery);
+-
+ static int system76_battery_add(struct power_supply *battery, struct acpi_battery_hook *hook)
+ {
+ 	// System76 EC only supports 1 battery
+ 	if (strcmp(battery->desc->name, "BAT0") != 0)
+ 		return -ENODEV;
  
+-	if (device_add_groups(&battery->dev, system76_battery_groups))
++	if (power_supply_register_extension(battery, &system76_power_supply_ext))
+ 		return -ENODEV;
  
- module_param(ac_online, ac_online, 0644);
-@@ -621,6 +719,9 @@ MODULE_PARM_DESC(battery_charge_counter,
- module_param(battery_current, battery_current, 0644);
- MODULE_PARM_DESC(battery_current, "battery current (milliampere)");
+ 	return 0;
+@@ -275,7 +284,7 @@ static int system76_battery_add(struct power_supply *battery, struct acpi_batter
  
-+module_param(battery_hook, battery_hook, 0644);
-+MODULE_PARM_DESC(battery_hook, "battery hook");
-+
- MODULE_DESCRIPTION("Power supply driver for testing");
- MODULE_AUTHOR("Anton Vorontsov <cbouatmailru@gmail.com>");
- MODULE_LICENSE("GPL");
+ static int system76_battery_remove(struct power_supply *battery, struct acpi_battery_hook *hook)
+ {
+-	device_remove_groups(&battery->dev, system76_battery_groups);
++	power_supply_unregister_extension(battery, &system76_power_supply_ext);
+ 	return 0;
+ }
+ 
 
 -- 
 2.45.2
