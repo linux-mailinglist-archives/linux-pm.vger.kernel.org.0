@@ -1,47 +1,63 @@
-Return-Path: <linux-pm+bounces-8819-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8820-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75530901355
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Jun 2024 21:20:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A664901465
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Jun 2024 06:03:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC4442823D3
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Jun 2024 19:20:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E72721C20D53
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Jun 2024 04:03:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31322446D2;
-	Sat,  8 Jun 2024 19:19:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7612479F2;
+	Sun,  9 Jun 2024 04:03:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="i4CmwGnY"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="k9mLrtrI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 735C136B0D;
-	Sat,  8 Jun 2024 19:19:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B18784C79;
+	Sun,  9 Jun 2024 04:03:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717874392; cv=none; b=B7aGg6bIRKr3d4ULQV3u2b06lmCgyCdZaTKPrCFT2qBJLn18NKvdgdK30ybFuu9xj8iNbkkFVgsN3YLFVrjOQN8a8gq1QF7CClQsJTDSwpipQGQ1ZVYluEdFATj2EqAlm9rMo6AEKTe0/iZHWNiJsHEhxLW0yvD59F1FbCYphyk=
+	t=1717905795; cv=none; b=sGS6J8Yem/vRxB+Qo9jNb+BuZq4hz7z7MMa0oYgHeN/BCCfE1qE2nEFa8BEVr2kcrd5aXauiPOUj2RRC2Xp4UkZtDdMyeP2wx4fdQn/Y5N6yUWQuBZe1O057DJlIDKrUlHfdtf2ReBmBNmy9HepzunTeMWY3mjotYsyHTWtEqDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717874392; c=relaxed/simple;
-	bh=tSWgaNbICmLdESUXwsfkk/co8yDnfuRtdvYQKfLXD1I=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ZGuiQY3grcZTe1AjioS/TpM9tUxhUhcY50Pp7uecweCyGN8ExYAmmSJXxGkcM3LgSXvK5ewd2CYTXoDmkJLvonJAblpKg07RIM1gv+68bj8LV3DRydN/Hk/zJThpS0ywdPqQq3E0xpx5IMK6xDUS61PH11twcApkLzPz7Ww7NHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=i4CmwGnY; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1717874385;
-	bh=tSWgaNbICmLdESUXwsfkk/co8yDnfuRtdvYQKfLXD1I=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=i4CmwGnY03B4zu944Y0vCeIrNN715h+Q/YLmFJxjED/2yRkp3x0nWBcB0KY+FHpFQ
-	 whJ4VWASHhDgjm0Mb9wMi4gRcGLKP1uMkY1sJngp+RKLMuRwVC5a0TZA27OeMrCtI3
-	 7GqAUuVFlKUhFYwWfOpV/vXIOYECxsslH8X7lyAo=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Sat, 08 Jun 2024 21:19:41 +0200
-Subject: [PATCH RFC v2 5/5] platform/x86: system76: Use power_supply
- extension API
+	s=arc-20240116; t=1717905795; c=relaxed/simple;
+	bh=+G8rylvToyZMf6Ef92YfIsfhhHIEvlNHkuznkdJlNRc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=K7Pjjyk8QWekaSFWPN1MqA6qtkbqzCUl8/fdLvJsoRSqIRSZ2JM0zwq0Or3aufaT02n90DtyJAEhDXyUoNPSE6HdqUUa4AC1yYzCdDR2bT8P2FW/KDkdxkijqCLDHfP7+Kr6RD1zpzNzmQad+LDEbhqMqNBmLtsSv79UsU6/6Fs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=k9mLrtrI; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4593H8lv021006;
+	Sun, 9 Jun 2024 04:03:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=YX5GA6YJcJC4DY/xZbHKJk
+	4i8DEHF1YttbfbK+g7ZuA=; b=k9mLrtrIShOS7ep8I3+mP/r+UQjfiX9JQstqA+
+	O/a4kWI0Zvouj0nh5v5SCUeSJw3m0N0zej9fIImLuRbXZUoVAPse8DaYU44NXVGQ
+	xK4+MJb6i757ot0Sf8lktDU20KB8nzHS7J5+u77JKEedbCwOs/UVvToJPp+IO/Hk
+	p3Vq9sRVl5E9+NCVOkGY0+QFJD0x3jkazLPOe+bOot7QdSLpFPskwl41/Hkuh3h+
+	J3JFOHjGzu8/816tBTwkcvMBp4lzh6rqMp1LoGVukcODwzF46zRg4AZcgBPBr0DE
+	tZ21DRXR29cEdg0CUEpE+8vjM6zBhWA4mv2/kCRDgBd9vhmg==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yme8rsenf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 09 Jun 2024 04:03:00 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45942xeH000782
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 9 Jun 2024 04:02:59 GMT
+Received: from [169.254.0.1] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Sat, 8 Jun 2024
+ 21:02:58 -0700
+From: Jeff Johnson <quic_jjohnson@quicinc.com>
+Date: Sat, 8 Jun 2024 21:02:54 -0700
+Subject: [PATCH] power: reset: piix4: add missing MODULE_DESCRIPTION()
+ macro
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -49,183 +65,54 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240608-power-supply-extensions-v2-5-2dcd35b012ad@weissschuh.net>
-References: <20240608-power-supply-extensions-v2-0-2dcd35b012ad@weissschuh.net>
-In-Reply-To: <20240608-power-supply-extensions-v2-0-2dcd35b012ad@weissschuh.net>
-To: Sebastian Reichel <sre@kernel.org>, Armin Wolf <W_Armin@gmx.de>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Content-Transfer-Encoding: 7bit
+Message-ID: <20240608-md-drivers-power-reset-v1-1-08dbc1a546a2@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIAG0pZWYC/x3MTQqDMBBA4avIrDuQSoihVyld5GesAzXKjLWCe
+ Hdjl9/ivR2UhEnh0ewgtLLyVCrutwbSEMqbkHM1tKa1xhmPY8YsvJIoztOPBIWUFrTex94523X
+ JQY1noZ63//j5qo5BCaOEkoZr9+Hy3XAMupDAcZx0zAE6hwAAAA==
+To: Sebastian Reichel <sre@kernel.org>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>,
+        Jeff Johnson <quic_jjohnson@quicinc.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1717874383; l=5330;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=tSWgaNbICmLdESUXwsfkk/co8yDnfuRtdvYQKfLXD1I=;
- b=voWK3Eqnksjg/maciOsahYbqlTj5u23CJueEHCilcO7xfaLOOk+7srpnLv2kWH0LO+NuKVAoc
- zE2/py1XNIZD6YXo1xUHktSyMGCgMHIuw1tzy7KhWVLvCmB+p7JTZzl
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: BQcEm8OiJQWmplj-PuWlqaQqsHZQc3WN
+X-Proofpoint-GUID: BQcEm8OiJQWmplj-PuWlqaQqsHZQc3WN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-08_16,2024-06-06_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 adultscore=0
+ suspectscore=0 bulkscore=0 phishscore=0 spamscore=0 lowpriorityscore=0
+ priorityscore=1501 mlxlogscore=999 impostorscore=0 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2405170001 definitions=main-2406090029
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+make allmodconfig && make W=1 C=1 reports:
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/power/reset/piix4-poweroff.o
+
+Add the missing invocation of the MODULE_DESCRIPTION() macro.
+
+Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
 ---
- drivers/platform/x86/system76_acpi.c | 93 ++++++++++++++++++++----------------
- 1 file changed, 51 insertions(+), 42 deletions(-)
+ drivers/power/reset/piix4-poweroff.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/platform/x86/system76_acpi.c b/drivers/platform/x86/system76_acpi.c
-index 3da753b3d00d..d9bc5cae2dda 100644
---- a/drivers/platform/x86/system76_acpi.c
-+++ b/drivers/platform/x86/system76_acpi.c
-@@ -162,7 +162,7 @@ enum {
- 	THRESHOLD_END,
- };
+diff --git a/drivers/power/reset/piix4-poweroff.c b/drivers/power/reset/piix4-poweroff.c
+index 7f308292d7e3..e6822c021000 100644
+--- a/drivers/power/reset/piix4-poweroff.c
++++ b/drivers/power/reset/piix4-poweroff.c
+@@ -106,4 +106,5 @@ static struct pci_driver piix4_poweroff_driver = {
  
--static ssize_t battery_get_threshold(int which, char *buf)
-+static int battery_get_threshold(int which, int *val)
- {
- 	struct acpi_object_list input;
- 	union acpi_object param;
-@@ -186,29 +186,21 @@ static ssize_t battery_get_threshold(int which, char *buf)
- 	if (ret == BATTERY_THRESHOLD_INVALID)
- 		return -EINVAL;
- 
--	return sysfs_emit(buf, "%d\n", (int)ret);
-+	*val = ret;
-+	return 0;
- }
- 
--static ssize_t battery_set_threshold(int which, const char *buf, size_t count)
-+static int battery_set_threshold(int which, unsigned int value)
- {
- 	struct acpi_object_list input;
- 	union acpi_object params[2];
- 	acpi_handle handle;
- 	acpi_status status;
--	unsigned int value;
--	int ret;
- 
- 	handle = ec_get_handle();
- 	if (!handle)
- 		return -ENODEV;
- 
--	ret = kstrtouint(buf, 10, &value);
--	if (ret)
--		return ret;
--
--	if (value > 100)
--		return -EINVAL;
--
- 	input.count = 2;
- 	input.pointer = params;
- 	// Start/stop selection
-@@ -222,52 +214,69 @@ static ssize_t battery_set_threshold(int which, const char *buf, size_t count)
- 	if (ACPI_FAILURE(status))
- 		return -EIO;
- 
--	return count;
--}
--
--static ssize_t charge_control_start_threshold_show(struct device *dev,
--	struct device_attribute *attr, char *buf)
--{
--	return battery_get_threshold(THRESHOLD_START, buf);
--}
--
--static ssize_t charge_control_start_threshold_store(struct device *dev,
--	struct device_attribute *attr, const char *buf, size_t count)
--{
--	return battery_set_threshold(THRESHOLD_START, buf, count);
-+	return 0;
- }
- 
--static DEVICE_ATTR_RW(charge_control_start_threshold);
-+static const enum power_supply_property system76_battery_properties[] = {
-+	POWER_SUPPLY_PROP_CHARGE_CONTROL_START_THRESHOLD,
-+	POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD,
-+};
- 
--static ssize_t charge_control_end_threshold_show(struct device *dev,
--	struct device_attribute *attr, char *buf)
-+static int system76_property_is_writeable(struct power_supply *psy,
-+					  const struct power_supply_ext *ext,
-+					  enum power_supply_property psp)
- {
--	return battery_get_threshold(THRESHOLD_END, buf);
-+	return true;
- }
- 
--static ssize_t charge_control_end_threshold_store(struct device *dev,
--	struct device_attribute *attr, const char *buf, size_t count)
-+static int system76_get_property(struct power_supply *psy,
-+				 const struct power_supply_ext *ext,
-+				 enum power_supply_property psp,
-+				 union power_supply_propval *val)
- {
--	return battery_set_threshold(THRESHOLD_END, buf, count);
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_CHARGE_CONTROL_START_THRESHOLD:
-+		return battery_get_threshold(THRESHOLD_START, &val->intval);
-+	case POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD:
-+		return battery_get_threshold(THRESHOLD_END, &val->intval);
-+	default:
-+		return -EINVAL;
-+	};
-+}
-+
-+static int system76_set_property(struct power_supply *psy, const struct power_supply_ext *ext,
-+				 enum power_supply_property psp,
-+				 const union power_supply_propval *val)
-+{
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_CHARGE_CONTROL_START_THRESHOLD:
-+		if (val->intval < 0 || val->intval > 100)
-+			return -EINVAL;
-+		return battery_set_threshold(THRESHOLD_START, val->intval);
-+	case POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD:
-+		if (val->intval < 0 || val->intval > 100)
-+			return -EINVAL;
-+		return battery_set_threshold(THRESHOLD_END, val->intval);
-+	default:
-+		return -EINVAL;
-+	};
- }
- 
--static DEVICE_ATTR_RW(charge_control_end_threshold);
--
--static struct attribute *system76_battery_attrs[] = {
--	&dev_attr_charge_control_start_threshold.attr,
--	&dev_attr_charge_control_end_threshold.attr,
--	NULL,
-+static const struct power_supply_ext system76_power_supply_ext = {
-+	.properties            = system76_battery_properties,
-+	.num_properties        = ARRAY_SIZE(system76_battery_properties),
-+	.property_is_writeable = system76_property_is_writeable,
-+	.get_property          = system76_get_property,
-+	.set_property          = system76_set_property,
- };
- 
--ATTRIBUTE_GROUPS(system76_battery);
--
- static int system76_battery_add(struct power_supply *battery, struct acpi_battery_hook *hook)
- {
- 	// System76 EC only supports 1 battery
- 	if (strcmp(battery->desc->name, "BAT0") != 0)
- 		return -ENODEV;
- 
--	if (device_add_groups(&battery->dev, system76_battery_groups))
-+	if (power_supply_register_extension(battery, &system76_power_supply_ext))
- 		return -ENODEV;
- 
- 	return 0;
-@@ -275,7 +284,7 @@ static int system76_battery_add(struct power_supply *battery, struct acpi_batter
- 
- static int system76_battery_remove(struct power_supply *battery, struct acpi_battery_hook *hook)
- {
--	device_remove_groups(&battery->dev, system76_battery_groups);
-+	power_supply_unregister_extension(battery, &system76_power_supply_ext);
- 	return 0;
- }
- 
+ module_pci_driver(piix4_poweroff_driver);
+ MODULE_AUTHOR("Paul Burton <paul.burton@mips.com>");
++MODULE_DESCRIPTION("Intel PIIX4 power-off driver");
+ MODULE_LICENSE("GPL");
 
--- 
-2.45.2
+---
+base-commit: 19ca0d8a433ff37018f9429f7e7739e9f3d3d2b4
+change-id: 20240608-md-drivers-power-reset-488bf66477c6
 
 
