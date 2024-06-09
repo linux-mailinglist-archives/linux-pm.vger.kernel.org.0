@@ -1,92 +1,82 @@
-Return-Path: <linux-pm+bounces-8831-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8832-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF381901888
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 00:33:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A53B0901890
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 00:47:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 55FB8280F4A
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Jun 2024 22:33:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A353B1C2094C
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Jun 2024 22:47:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20B7D1CF9B;
-	Sun,  9 Jun 2024 22:33:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A9014779D;
+	Sun,  9 Jun 2024 22:47:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="rYrstpRz"
+	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="L3grKSon"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6977818EB0
-	for <linux-pm@vger.kernel.org>; Sun,  9 Jun 2024 22:33:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59C8D208CB
+	for <linux-pm@vger.kernel.org>; Sun,  9 Jun 2024 22:47:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717972431; cv=none; b=CK3Vc49XAE+Wy1iIdr1uGg1kOCQ/h8gOUSe5ftk1VlI+np1cl+k52mKbZipRId4uGi3Id6Ot25XPz9V/Y2UAx4+MWu6JQ4Cg3H/lNfaQTAAP2pZqNPt7rVsOFqR54o3SIe2ADePTgTKpBIpjgA8cMOAO3/d5D6WPegvWOpwQdb8=
+	t=1717973226; cv=none; b=R4XQY1qbLVGSQQzHQjRlr1pWwhayi+aH27GbbaUaXbwdruSimtReKOsHqOsgLnheSwwTx5c5Uov2QpP+OKRsgvNPRipEfQFft4jxowPb8Y7XULwcrGr5IzMbdHf56a2WTC5mz/pVye6tiJb4OPasnvCo45eQuAC2GrGd6QzsTV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717972431; c=relaxed/simple;
-	bh=8g3TSkHE1uXYn55WFoRu/IEFdwU9kbyHYT6DaHOmo3U=;
+	s=arc-20240116; t=1717973226; c=relaxed/simple;
+	bh=CF+cO1pSinPGWgCkR6VFs6IZwJ4BytxCPSPFPveyHtU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fR1KT4+Zwu+zsqsF+MSQKOo1gqgPyyaMXKss2+UFibfi0aKCiyI5eP+gNKgxkfE77Kl6FydnqvJ7Q47HoV4/XNnS9sm7N7s9E3+8HuDOdPRUoh/7XfTgOIT4Ju/N+aXpCR5i/u0YTjNoUk8GQFxEaC5j2byRsrX7yjNgn4GY+t4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=rYrstpRz; arc=none smtp.client-ip=209.85.128.46
+	 Content-Type:Content-Disposition:In-Reply-To; b=NQ541es5CuvFEPOtDG5B93tN4FYfjV1SrPvE97OkOdjQrh/xTGBYtSCiACnm4n4q0F4+zWeWN65i2oRoIgwLuyHun6DacFIEIfLg320tY9giJTutoRABt5GPDT1yx/f9PetOF/p8YWSuo+uks+m571WZ1fgRwOZFt9Wi+FB/i14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=L3grKSon; arc=none smtp.client-ip=209.85.128.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-42179dafd6bso8350365e9.0
-        for <linux-pm@vger.kernel.org>; Sun, 09 Jun 2024 15:33:49 -0700 (PDT)
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-42172ed3487so15888665e9.0
+        for <linux-pm@vger.kernel.org>; Sun, 09 Jun 2024 15:47:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1717972428; x=1718577228; darn=vger.kernel.org;
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1717973222; x=1718578022; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VkbZilJ766JsBJPln79PC2kt+4TOFMEz6FFO/bHlf/o=;
-        b=rYrstpRzaKLkilMhT1fJVoBqygpb+xzfXnr8jficJKEDEBd89reSrwzRJrD8V2Ppk7
-         NeSbSIzay7ZdJVsLH3lWyPCT8uZSg6nxO+BJq1FbxBduompcZN48aejQLQU59QFTNAkn
-         XiG0YRIpm07PIV6TiXkeIcFDVVU9Hj1x51zS/SchhVqEZQb0qf88oiphVSVKplNjgHkG
-         S3u1OUvHLffQLyk2Y3uBh+nuwkV2DK5m70KT4J0j9vhLYfdH8Rer0z6dktaJ9M7y+Gbg
-         9fVuPqFX+OmQFHvpwyOJuqSUH4QzmeD/2oxYD4siguGuF1dz8naY/uKzs/Qzl0BIGabS
-         G/fA==
+        bh=2WtKTGPRhj0z7HQ6EPmJaANaylZUzntqsNLAHly3ENA=;
+        b=L3grKSonXsj1Ell1Q1dDrBvdu5mg09BodMzUq3cCxnaod1fMc6xVGmRM/kLl1rPnII
+         BI+n4XkN9Z1kJw/PVDtA75HfWch9yNABx95He5QSSiPfwYdH9/3Ofm/k+wxDCIGHNmUc
+         U+SeKVexG2gXQvc8V/1ycwIM7xtU14w+9aF8wVIaQfSpYQVrnof1DVSEkGm+tWcmi31j
+         2ZwBR8YZZTdvJUPRjAhcJYikRtuqRRjwHs7CtO8eKVf6Hz4TNGbZwc7zBFAn1gWSKool
+         AgQp9MKbIEbSJesTmmS7/F8zbmBlxu36A8+aQqva/ZneGn/jiYUi5NGGLaHkoYo2Nc/a
+         VifA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717972428; x=1718577228;
+        d=1e100.net; s=20230601; t=1717973222; x=1718578022;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VkbZilJ766JsBJPln79PC2kt+4TOFMEz6FFO/bHlf/o=;
-        b=OE6oTvLw5fjC9sTvO+8VHOUxy8s2CpqXHKrs8+K2W1rkt+oFxMAwIArmmfDu2w4YXx
-         02QTzjs6uC41WNK2a04skB5xmB/Npbz89b4eA1WPcnDrLMKNzsZYHEHzbEOYrWhjNdbM
-         PxYHaJay8pKqXu57Uci+XL/lVt6Wu66CnXWiNvqwh+cWuTkIrJnfieOHZtioVAm8X4Qx
-         EPjTyHLwQ9Vh7fu/r0MboqOvFnZtTvOZcTz7WkprzCsO13f7D1BXm49ifeJETdel1x6l
-         G3zWaUV/afglA/tV9gw4h62AYpobz3wzBFA7uzAMTwF6QFVIukBCu20z/witXx/p8AtA
-         EBZg==
-X-Forwarded-Encrypted: i=1; AJvYcCUVc1g83/3kFIRwRw5e921yumC5fWvTmQ8FFho0TgMl6s9w6UEmHRR/F8AsjAcn3Xs73rTqh9WUKVim1xyfBipOTb03dK1hWCE=
-X-Gm-Message-State: AOJu0Yzzlyrir2OIkHaVrO0XDj163GBdyaMlEQN0KhxwDGZqInI3qKOI
-	MTjwP0o6bty5kowpwPxKp+nSr9ZAcUQPGemumnk9tpt1HhlzUOxhBRgqZ71JgnE=
-X-Google-Smtp-Source: AGHT+IFU4nKKmcH19ZhdblzBWvcEtv7VuGuyDDEZ+xh6GiEx1R+Sryr4La1jaasuiyCG5x/dj6GyCQ==
-X-Received: by 2002:adf:ed52:0:b0:355:b9d2:4667 with SMTP id ffacd0b85a97d-35efea6fa89mr7128009f8f.29.1717972427659;
-        Sun, 09 Jun 2024 15:33:47 -0700 (PDT)
+        bh=2WtKTGPRhj0z7HQ6EPmJaANaylZUzntqsNLAHly3ENA=;
+        b=OmQJO8MTf5DjCKZ/UOmiSQRVb1Mv703EsmsjqMxbRVLaZ1QhgdP1Ry4iRVhOxing9M
+         mGGDh2p/2r3v8uf5jwhJxTE+Brv7KzTb0nlaeuoN8mJsoHbKlQbbc5CGv7op9kTcvCaN
+         8t9Fk3I5Eo9VF/ImOCJG+Trhh91fVMiGc6iVcPgPZvjMxYGks3BqhI1oP5H0IFLUh7qD
+         a/L7UeW4Nfc9GMHPArlx8uvbWWhZpUoyorju15qkbhjw4Z1VPFn9ZiNnjD9yrtXCrl0+
+         9AC6faoN/cdA9+9mjL73+Cl4GSDEPIREnjwu/AR1thUQpdw5uH0RZqQj30SaMxj0GAsI
+         7wpg==
+X-Gm-Message-State: AOJu0YzI0mobQ1y3hxLBR31kpv/Rjy4xW88fWr02JYK8xhsLJ3rwHCJ7
+	xDxK24hK0HtOCLzJNu53TgslGbkOh204IsmYOYSTaS8eW0p+yT86XCsMEsQ5nTo=
+X-Google-Smtp-Source: AGHT+IFeLN3Eubzn1uX7ekPwZGluQ4RwPDVnJ0LDW2iX1nYkbJDRca0Ehd7IGNHlN/ZzwllLO+GXbg==
+X-Received: by 2002:a05:600c:500f:b0:41f:9ae3:57f2 with SMTP id 5b1f17b1804b1-42164a3f64cmr64627845e9.37.1717973222593;
+        Sun, 09 Jun 2024 15:47:02 -0700 (PDT)
 Received: from airbuntu (host81-157-90-255.range81-157.btcentralplus.com. [81.157.90.255])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-35f1ed08253sm2772387f8f.24.2024.06.09.15.33.47
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-421c20e9f51sm20248635e9.17.2024.06.09.15.47.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Jun 2024 15:33:47 -0700 (PDT)
-Date: Sun, 9 Jun 2024 23:33:46 +0100
+        Sun, 09 Jun 2024 15:47:02 -0700 (PDT)
+Date: Sun, 9 Jun 2024 23:47:01 +0100
 From: Qais Yousef <qyousef@layalina.io>
 To: Christian Loehle <christian.loehle@arm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Daniel Bristot de Oliveira <bristot@redhat.com>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Hongyan Xia <hongyan.xia2@arm.com>,
-	John Stultz <jstultz@google.com>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] sched: Consolidate cpufreq updates
-Message-ID: <20240609223346.4xlkcze3fg2bhhcn@airbuntu>
-References: <20240530104653.1234004-1-qyousef@layalina.io>
- <1b44938c-9535-47e7-8cbc-2b844e5dfdff@arm.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	rafael@kernel.org, vincent.guittot@linaro.org, peterz@infradead.org,
+	daniel.lezcano@linaro.org, anna-maria@linutronix.de,
+	kajetan.puchalski@arm.com, lukasz.luba@arm.com,
+	dietmar.eggemann@arm.com
+Subject: Re: [PATCH 1/6] cpuidle: teo: Increase util-threshold
+Message-ID: <20240609224701.pc6om2o5ep6btywe@airbuntu>
+References: <20240606090050.327614-1-christian.loehle@arm.com>
+ <20240606090050.327614-2-christian.loehle@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -95,89 +85,76 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1b44938c-9535-47e7-8cbc-2b844e5dfdff@arm.com>
+In-Reply-To: <20240606090050.327614-2-christian.loehle@arm.com>
 
-On 06/05/24 13:24, Christian Loehle wrote:
-> On 5/30/24 11:46, Qais Yousef wrote:
-> > Improve the interaction with cpufreq governors by making the
-> > cpufreq_update_util() calls more intentional.
-> > 
-> > At the moment we send them when load is updated for CFS, bandwidth for
-> > DL and at enqueue/dequeue for RT. But this can lead to too many updates
-> > sent in a short period of time and potentially be ignored at a critical
-> > moment due to the rate_limit_us in schedutil.
-> > 
-> > For example, simultaneous task enqueue on the CPU where 2nd task is
-> > bigger and requires higher freq. The trigger to cpufreq_update_util() by
-> > the first task will lead to dropping the 2nd request until tick. Or
-> > another CPU in the same policy triggers a freq update shortly after.
-> > 
-> > Updates at enqueue for RT are not strictly required. Though they do help
-> > to reduce the delay for switching the frequency and the potential
-> > observation of lower frequency during this delay. But current logic
-> > doesn't intentionally (at least to my understanding) try to speed up the
-> > request.
-> > 
-> > To help reduce the amount of cpufreq updates and make them more
-> > purposeful, consolidate them into these locations:
-> > 
-> > 1. context_switch()
-> > 2. task_tick_fair()
-> > 3. update_blocked_averages()
-> > 4. on syscall that changes policy or uclamp values
-> > 
-> > The update at context switch should help guarantee that DL and RT get
-> > the right frequency straightaway when they're RUNNING. As mentioned
-> > though the update will happen slightly after enqueue_task(); though in
-> > an ideal world these tasks should be RUNNING ASAP and this additional
-> > delay should be negligible.
+On 06/06/24 10:00, Christian Loehle wrote:
+> Increase the util-threshold by a lot as it was low enough for some
+> minor load to always be active, especially on smaller CPUs.
 > 
-> Do we care at all about PREEMPT_NONE (and voluntary) here? I assume no.
-> Anyway one scenario that should regress when we don't update at RT enqueue:
-> (Essentially means that util of higher prio dominates over lower, if
-> higher is enqueued first.)
-> System:
-> OPP 0, cap: 102, 100MHz; OPP 1, cap: 1024, 1000MHz
-> RT task A prio=0 runtime@OPP1=1ms, uclamp_min=0; RT task B prio=1 runtime@OPP1=1ms, uclamp_min=1024
-> rate_limit_us = freq transition delay = 1 (assume basically instant switch)
-> Let's say CONFIG_HZ=100 for the tick to not get in the way, doesn't really matter.
+> For small cap CPUs (Pixel6) the util threshold is as low as 1.
+> For CPUs of capacity <64 it is 0. So ensure it is at a minimum, too.
 > 
-> Before:
-> t+0:		Enqueue task A switch to OPP0
-> Running A at OPP 0
-> t+2us:		Enqueue task B switch to OPP1
-> t+1000us:	Task A done, switch to task B.
-> t+2000us:	Task B done
+> Fixes: 9ce0f7c4bc64 ("cpuidle: teo: Introduce util-awareness")
+> Reported-by: Qais Yousef <qyousef@layalina.io>
+> Reported-by: Vincent Guittot <vincent.guittot@linaro.org>
+> Suggested-by: Kajetan Puchalski <kajetan.puchalski@arm.com>
+> Signed-off-by: Christian Loehle <christian.loehle@arm.com>
+> ---
+>  drivers/cpuidle/governors/teo.c | 11 +++++------
+>  1 file changed, 5 insertions(+), 6 deletions(-)
 > 
-> Now:
-> t+0:		Enqueue task A switch to OPP0
-> Running A at OPP 0
-> t+2us:		Enqueue task B
-> t+10000us:	Task A done, switch to task B and OPP1
-> t+11000us:	Task B done
-> 
-> Or am I missing something?
+> diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
+> index 7244f71c59c5..45f43e2ee02d 100644
+> --- a/drivers/cpuidle/governors/teo.c
+> +++ b/drivers/cpuidle/governors/teo.c
+> @@ -146,13 +146,11 @@
+>   * The number of bits to shift the CPU's capacity by in order to determine
+>   * the utilized threshold.
+>   *
+> - * 6 was chosen based on testing as the number that achieved the best balance
+> - * of power and performance on average.
+> - *
+>   * The resulting threshold is high enough to not be triggered by background
+> - * noise and low enough to react quickly when activity starts to ramp up.
+> + * noise.
+>   */
+> -#define UTIL_THRESHOLD_SHIFT 6
+> +#define UTIL_THRESHOLD_SHIFT 2
+> +#define UTIL_THRESHOLD_MIN 50
+>  
+>  /*
+>   * The PULSE value is added to metrics when they grow and the DECAY_SHIFT value
+> @@ -671,7 +669,8 @@ static int teo_enable_device(struct cpuidle_driver *drv,
+>  	int i;
+>  
+>  	memset(cpu_data, 0, sizeof(*cpu_data));
+> -	cpu_data->util_threshold = max_capacity >> UTIL_THRESHOLD_SHIFT;
+> +	cpu_data->util_threshold = max(UTIL_THRESHOLD_MIN,
+> +				max_capacity >> UTIL_THRESHOLD_SHIFT);
 
-I think this is the correct behavior where each task gets to run at the correct
-frequency, no?
+Thanks for trying to fix this. But I am afraid this is not a solution. There's
+no magic number that can truly work here - we tried. As I tried to explain
+before, a higher util value doesn't mean long idle time is unlikely. And
+blocked load can cause problems where a decay can take too long.
 
-Generally if the system is overloaded with RT tasks with same priority are
-likely to end up stuck on the same CPU for that long (ie no other CPU in the
-system is able to pull one of the tasks), relying on frequency to save the day
-is wrong IMO. Userspace must ensure not to starve such busy tasks with
-0 uclamp_min if the system being overloaded is likely scenario. And they need
-to manage priorities correctly to ensure these busy RT tasks are not a hogger
-if something else finds this latency not acceptable.
+We are following up with the suggestions I have thrown back then and we'll
+share results if anything actually works.
 
-Proper Hard RT systems disable DVFS generally as they introduce unacceptable
-delays.
-
-Note that with today's code Task B request is most likely dropped and both will
-end up running at OPP0.
+For now, I think a revert is more appropriate. There was some perf benefit, but
+the power regressions were bad and there's no threshold value that actually
+works. The thresholding concept itself is incorrect and flawed - it seemed the
+correct thing back then, yes. But in a hindsight now it doesn't work.
 
 
-Cheers
+Thanks!
 
 --
 Qais Yousef
+
+>  
+>  	for (i = 0; i < NR_RECENT; i++)
+>  		cpu_data->recent_idx[i] = -1;
+> -- 
+> 2.34.1
+> 
 
