@@ -1,93 +1,92 @@
-Return-Path: <linux-pm+bounces-8830-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8831-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 759B9901880
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 00:20:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF381901888
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 00:33:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 90481B20B93
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Jun 2024 22:20:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 55FB8280F4A
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Jun 2024 22:33:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC4371F95A;
-	Sun,  9 Jun 2024 22:20:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20B7D1CF9B;
+	Sun,  9 Jun 2024 22:33:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="op2Ookdx"
+	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="rYrstpRz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5726EAF9
-	for <linux-pm@vger.kernel.org>; Sun,  9 Jun 2024 22:20:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6977818EB0
+	for <linux-pm@vger.kernel.org>; Sun,  9 Jun 2024 22:33:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717971634; cv=none; b=SmPCsDpOaB5G2KLs/SmJFFql5TGr765JbSE+wIKnpabAbtmqujUifgroUn/uAOkF4MC3a87Z0aNcQWoHmjkgdfAJfVMwAh0hrgj2wsnKhqau9R/wOZ78eaRBQWcJ3OhFQZ8emttwQvgFqFWDbFK1jS4+EU0BkcCRkbGlkX2dbfc=
+	t=1717972431; cv=none; b=CK3Vc49XAE+Wy1iIdr1uGg1kOCQ/h8gOUSe5ftk1VlI+np1cl+k52mKbZipRId4uGi3Id6Ot25XPz9V/Y2UAx4+MWu6JQ4Cg3H/lNfaQTAAP2pZqNPt7rVsOFqR54o3SIe2ADePTgTKpBIpjgA8cMOAO3/d5D6WPegvWOpwQdb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717971634; c=relaxed/simple;
-	bh=9+n4z6PHma9WMp2Smv74h7ErUV/1pq2HGsBupGkD7dA=;
+	s=arc-20240116; t=1717972431; c=relaxed/simple;
+	bh=8g3TSkHE1uXYn55WFoRu/IEFdwU9kbyHYT6DaHOmo3U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z2+vGnjpUR1/OWirfdZr6YdvJZ723pdcyl4MwLXZTyRFiqNfIn22MvLuq1vzI03Lm/122k07sPmBUvyM9Alh+sY+FmGwsh5u4/vaPHlZLmnsVMGK+aU/O01GxYydQpu9qxW1XRLYmDPoq8JSLwx44F1uOwDWFI75kbab6AkQZ0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=op2Ookdx; arc=none smtp.client-ip=209.85.221.41
+	 Content-Type:Content-Disposition:In-Reply-To; b=fR1KT4+Zwu+zsqsF+MSQKOo1gqgPyyaMXKss2+UFibfi0aKCiyI5eP+gNKgxkfE77Kl6FydnqvJ7Q47HoV4/XNnS9sm7N7s9E3+8HuDOdPRUoh/7XfTgOIT4Ju/N+aXpCR5i/u0YTjNoUk8GQFxEaC5j2byRsrX7yjNgn4GY+t4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=rYrstpRz; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-35f1cb7a40fso775926f8f.0
-        for <linux-pm@vger.kernel.org>; Sun, 09 Jun 2024 15:20:32 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-42179dafd6bso8350365e9.0
+        for <linux-pm@vger.kernel.org>; Sun, 09 Jun 2024 15:33:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1717971631; x=1718576431; darn=vger.kernel.org;
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1717972428; x=1718577228; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oHc0h4ytn0quxx7T9SUT8FUoAjYS+2WFatBpz0qSLT8=;
-        b=op2OokdxRnKRuXEghujswnMB315tnkCrp17dbS4oo/gXjwlzwa9XKecPUAlD2Kq4WE
-         WMQO/Du+E+xZCQGR+Dy/V/G1q2X+Yp0DWF2eK16MiInMqbSt+SnIEWPxR3Dee6DrV/Hm
-         zqF+FN0eON0+qGFSvPPWj+YeV1nyDDpwLEM9953VUz6OnWwtsFAbEShT4VPa99FSz/xq
-         bUbIZOdjbWTlpBTa0WhXp+E7EwFtetmHaq8ekyo6/Hj51uAXWebvSVfD+TWeRyjiAZP/
-         W3rnTAYIIPFNKgVSHjq1laBS2Nt8EwBs/ReTi1Zqkq1rUPP0YjO4xW/W8gaJgZcMIQCy
-         diiQ==
+        bh=VkbZilJ766JsBJPln79PC2kt+4TOFMEz6FFO/bHlf/o=;
+        b=rYrstpRzaKLkilMhT1fJVoBqygpb+xzfXnr8jficJKEDEBd89reSrwzRJrD8V2Ppk7
+         NeSbSIzay7ZdJVsLH3lWyPCT8uZSg6nxO+BJq1FbxBduompcZN48aejQLQU59QFTNAkn
+         XiG0YRIpm07PIV6TiXkeIcFDVVU9Hj1x51zS/SchhVqEZQb0qf88oiphVSVKplNjgHkG
+         S3u1OUvHLffQLyk2Y3uBh+nuwkV2DK5m70KT4J0j9vhLYfdH8Rer0z6dktaJ9M7y+Gbg
+         9fVuPqFX+OmQFHvpwyOJuqSUH4QzmeD/2oxYD4siguGuF1dz8naY/uKzs/Qzl0BIGabS
+         G/fA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717971631; x=1718576431;
+        d=1e100.net; s=20230601; t=1717972428; x=1718577228;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oHc0h4ytn0quxx7T9SUT8FUoAjYS+2WFatBpz0qSLT8=;
-        b=DKzYFy+CiP2X7fBbiEP6dvzPoUcI9SuPJwtfxrjhY+rwn0WylrXr9ccaQLFrhyN1dS
-         +9eC03sKLWWjPO+ID+hKjVP+UJYrCTjJkEU/ZGxmXvyfL283Utuw2EbHj7jgs/KlqPWK
-         sghkAOS6IoIPQ2AGY/39pqHOb/CkyLzhLK0enq97SIPmipB3Bu+bKLfS913G20WFJ6zS
-         Zg1mitM5cvhVEjZonMSHPVhvzodFlkak7TxfOpsIHkDLJsaFjdKqnUwvrzpLw8xEOLUR
-         +6i72+VjAKhrfUihtigGcKAlOyBf6zJLQiW2l8cr/MrBC2nhGxIYiK2TWt1+RtzpGJfY
-         KXBA==
-X-Forwarded-Encrypted: i=1; AJvYcCWvFCUofeQ+1R1EQRvyfcgPI5Hgbhm2+YimhNwn+sYbnd4E3+GNwa7chXAzbsuGUXQsWbMyq5QvX8vy1WDZTSjoZH2Cnn31O7k=
-X-Gm-Message-State: AOJu0Yw3V/fG1B0BACwnJvjgMW7rEG5CjBIdsyWIJxvi/wHbV75rfMwl
-	ekSMo2BWwrwM4ieb/U89nuQR4WQMy1MkRWUhDvczpYeYx9pXTLHsx1xBgCIQNWQ=
-X-Google-Smtp-Source: AGHT+IHeyJMWEvfMZi/wZCb6BpC4/fb80QGI+bbYZBWrD7lSEDalPFXwyGcRzY9689gjelOtNXYOyg==
-X-Received: by 2002:a5d:634e:0:b0:35f:1384:de4d with SMTP id ffacd0b85a97d-35f1384e1e3mr2786380f8f.37.1717971631047;
-        Sun, 09 Jun 2024 15:20:31 -0700 (PDT)
+        bh=VkbZilJ766JsBJPln79PC2kt+4TOFMEz6FFO/bHlf/o=;
+        b=OE6oTvLw5fjC9sTvO+8VHOUxy8s2CpqXHKrs8+K2W1rkt+oFxMAwIArmmfDu2w4YXx
+         02QTzjs6uC41WNK2a04skB5xmB/Npbz89b4eA1WPcnDrLMKNzsZYHEHzbEOYrWhjNdbM
+         PxYHaJay8pKqXu57Uci+XL/lVt6Wu66CnXWiNvqwh+cWuTkIrJnfieOHZtioVAm8X4Qx
+         EPjTyHLwQ9Vh7fu/r0MboqOvFnZtTvOZcTz7WkprzCsO13f7D1BXm49ifeJETdel1x6l
+         G3zWaUV/afglA/tV9gw4h62AYpobz3wzBFA7uzAMTwF6QFVIukBCu20z/witXx/p8AtA
+         EBZg==
+X-Forwarded-Encrypted: i=1; AJvYcCUVc1g83/3kFIRwRw5e921yumC5fWvTmQ8FFho0TgMl6s9w6UEmHRR/F8AsjAcn3Xs73rTqh9WUKVim1xyfBipOTb03dK1hWCE=
+X-Gm-Message-State: AOJu0Yzzlyrir2OIkHaVrO0XDj163GBdyaMlEQN0KhxwDGZqInI3qKOI
+	MTjwP0o6bty5kowpwPxKp+nSr9ZAcUQPGemumnk9tpt1HhlzUOxhBRgqZ71JgnE=
+X-Google-Smtp-Source: AGHT+IFU4nKKmcH19ZhdblzBWvcEtv7VuGuyDDEZ+xh6GiEx1R+Sryr4La1jaasuiyCG5x/dj6GyCQ==
+X-Received: by 2002:adf:ed52:0:b0:355:b9d2:4667 with SMTP id ffacd0b85a97d-35efea6fa89mr7128009f8f.29.1717972427659;
+        Sun, 09 Jun 2024 15:33:47 -0700 (PDT)
 Received: from airbuntu (host81-157-90-255.range81-157.btcentralplus.com. [81.157.90.255])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-421f23d06ddsm3444455e9.8.2024.06.09.15.20.29
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-35f1ed08253sm2772387f8f.24.2024.06.09.15.33.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Jun 2024 15:20:30 -0700 (PDT)
-Date: Sun, 9 Jun 2024 23:20:29 +0100
+        Sun, 09 Jun 2024 15:33:47 -0700 (PDT)
+Date: Sun, 9 Jun 2024 23:33:46 +0100
 From: Qais Yousef <qyousef@layalina.io>
-To: Vincent Guittot <vincent.guittot@linaro.org>
+To: Christian Loehle <christian.loehle@arm.com>
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Viresh Kumar <viresh.kumar@linaro.org>,
 	Ingo Molnar <mingo@kernel.org>,
 	Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
 	Juri Lelli <juri.lelli@redhat.com>,
 	Steven Rostedt <rostedt@goodmis.org>,
 	Dietmar Eggemann <dietmar.eggemann@arm.com>,
 	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
 	Daniel Bristot de Oliveira <bristot@redhat.com>,
 	Valentin Schneider <vschneid@redhat.com>,
-	Christian Loehle <christian.loehle@arm.com>,
 	Hongyan Xia <hongyan.xia2@arm.com>,
 	John Stultz <jstultz@google.com>, linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v5] sched: Consolidate cpufreq updates
-Message-ID: <20240609222029.yebhborjptp3gr6a@airbuntu>
+Message-ID: <20240609223346.4xlkcze3fg2bhhcn@airbuntu>
 References: <20240530104653.1234004-1-qyousef@layalina.io>
- <20240601224017.qku2mhbaz4vsh3a3@airbuntu>
- <CAKfTPtCHfnDAD-p_ScqHh7cZ=7AXDTw3fE0+ynMHNvCjuG8ogw@mail.gmail.com>
+ <1b44938c-9535-47e7-8cbc-2b844e5dfdff@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -96,95 +95,89 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAKfTPtCHfnDAD-p_ScqHh7cZ=7AXDTw3fE0+ynMHNvCjuG8ogw@mail.gmail.com>
+In-Reply-To: <1b44938c-9535-47e7-8cbc-2b844e5dfdff@arm.com>
 
-On 06/05/24 14:22, Vincent Guittot wrote:
-> Hi Qais,
+On 06/05/24 13:24, Christian Loehle wrote:
+> On 5/30/24 11:46, Qais Yousef wrote:
+> > Improve the interaction with cpufreq governors by making the
+> > cpufreq_update_util() calls more intentional.
+> > 
+> > At the moment we send them when load is updated for CFS, bandwidth for
+> > DL and at enqueue/dequeue for RT. But this can lead to too many updates
+> > sent in a short period of time and potentially be ignored at a critical
+> > moment due to the rate_limit_us in schedutil.
+> > 
+> > For example, simultaneous task enqueue on the CPU where 2nd task is
+> > bigger and requires higher freq. The trigger to cpufreq_update_util() by
+> > the first task will lead to dropping the 2nd request until tick. Or
+> > another CPU in the same policy triggers a freq update shortly after.
+> > 
+> > Updates at enqueue for RT are not strictly required. Though they do help
+> > to reduce the delay for switching the frequency and the potential
+> > observation of lower frequency during this delay. But current logic
+> > doesn't intentionally (at least to my understanding) try to speed up the
+> > request.
+> > 
+> > To help reduce the amount of cpufreq updates and make them more
+> > purposeful, consolidate them into these locations:
+> > 
+> > 1. context_switch()
+> > 2. task_tick_fair()
+> > 3. update_blocked_averages()
+> > 4. on syscall that changes policy or uclamp values
+> > 
+> > The update at context switch should help guarantee that DL and RT get
+> > the right frequency straightaway when they're RUNNING. As mentioned
+> > though the update will happen slightly after enqueue_task(); though in
+> > an ideal world these tasks should be RUNNING ASAP and this additional
+> > delay should be negligible.
 > 
-> On Sun, 2 Jun 2024 at 00:40, Qais Yousef <qyousef@layalina.io> wrote:
-> >
-> > On 05/30/24 11:46, Qais Yousef wrote:
-> >
-> > > +static __always_inline void
-> > > +__update_cpufreq_ctx_switch(struct rq *rq, struct task_struct *prev)
-> > > +{
-> >
-> > I found a problem here. We should check if prev was sugov task. I hit a
-> > corner case where we were constantly switching between RT task and sugov.
-> >
-> >         if (prev && prev->dl.flags & SCHED_FLAG_SUGOV) {
-> >                 /* Sugov just did an update, don't be too aggressive */
-> >                 return;
-> >         }
-> >
+> Do we care at all about PREEMPT_NONE (and voluntary) here? I assume no.
+> Anyway one scenario that should regress when we don't update at RT enqueue:
+> (Essentially means that util of higher prio dominates over lower, if
+> higher is enqueued first.)
+> System:
+> OPP 0, cap: 102, 100MHz; OPP 1, cap: 1024, 1000MHz
+> RT task A prio=0 runtime@OPP1=1ms, uclamp_min=0; RT task B prio=1 runtime@OPP1=1ms, uclamp_min=1024
+> rate_limit_us = freq transition delay = 1 (assume basically instant switch)
+> Let's say CONFIG_HZ=100 for the tick to not get in the way, doesn't really matter.
 > 
-> I reran my test with this v5 and the fix above but the problem is
-> still there, it waits for the next tick to update the frequency
-> whereas the cpu was idle.
-
-Hurmph. Sorry I forgot to rerun this test. I broke it again with this
-optimization :( Maybe I can replace this with explicit check with util_avg ==
-SCHED_CAPACITY_SCALE, though this is not generic enough..
-
-	diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-	index 6d8d569cdb6a..d64d47b4471a 100644
-	--- a/kernel/sched/fair.c
-	+++ b/kernel/sched/fair.c
-	@@ -4702,7 +4702,6 @@ static void detach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
-	 static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
-	 {
-		u64 now = cfs_rq_clock_pelt(cfs_rq);
-	-       unsigned long prev_util_avg = cfs_rq->avg.util_avg;
-
-		/*
-		 * Track task load average for carrying it to new CPU after migrated, and
-	@@ -4736,16 +4735,6 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
-		} else if (cfs_rq->decayed && (flags & UPDATE_TG)) {
-			update_tg_load_avg(cfs_rq);
-		}
-	-
-	-       /*
-	-        * This field is used to indicate whether a trigger of cpufreq update
-	-        * is required. When the CPU is saturated, other load signals could
-	-        * still be changing, but util_avg would have settled down, so ensure
-	-        * that we don't trigger unnecessary updates as from fair policy point
-	-        * of view, nothing has changed to cause a cpufreq update.
-	-        */
-	-       if (cfs_rq->decayed && prev_util_avg == cfs_rq->avg.util_avg)
-	-               cfs_rq->decayed = false;
-	 }
-
-	 /*
-
+> Before:
+> t+0:		Enqueue task A switch to OPP0
+> Running A at OPP 0
+> t+2us:		Enqueue task B switch to OPP1
+> t+1000us:	Task A done, switch to task B.
+> t+2000us:	Task B done
 > 
-> Also continuing here the discussion started on v2:
+> Now:
+> t+0:		Enqueue task A switch to OPP0
+> Running A at OPP 0
+> t+2us:		Enqueue task B
+> t+10000us:	Task A done, switch to task B and OPP1
+> t+11000us:	Task B done
 > 
-> I agree that in the current implementation we are probably calling way
-> too much cpufreq_update, we can optimize some sequences and using the
-> context switch is a good way to get a better sampling but this is not
-> enough and we still need to call cpufreq_update in some other case
-> involving enqueue. The delay of waiting for the next tick is not
+> Or am I missing something?
 
-Do you have any suggestions? I'm not sure how to classify different type of
-enqueue events where some would need an update and others don't.
+I think this is the correct behavior where each task gets to run at the correct
+frequency, no?
 
-I think cases that involve wakeup preemption not causing a context switch AND
-maybe a large change in util_avg?
+Generally if the system is overloaded with RT tasks with same priority are
+likely to end up stuck on the same CPU for that long (ie no other CPU in the
+system is able to pull one of the tasks), relying on frequency to save the day
+is wrong IMO. Userspace must ensure not to starve such busy tasks with
+0 uclamp_min if the system being overloaded is likely scenario. And they need
+to manage priorities correctly to ensure these busy RT tasks are not a hogger
+if something else finds this latency not acceptable.
 
-> acceptable nor sustainable especially with 250 and lower HZ but I'm
+Proper Hard RT systems disable DVFS generally as they introduce unacceptable
+delays.
 
-I think it is fine for 250. I have been testing with this and didn't see
-issues. But wider testing could yield different results.
+Note that with today's code Task B request is most likely dropped and both will
+end up running at OPP0.
 
-> pretty sure it would be the same for some system using 1000HZ. IIUC
-> new HW is becoming much more efficient at updating the frequency so it
-> would not be a problem for this new system to update performance more
-> frequently especially when it ends up being as simple as writing a
-> value in a memory region without waiting for it to be applied (like
-> cpufreq fast_switch methods). All this to say that always/only waiting
-> for context switch or tick might be suitable for your case but it
-> doesn't look like the right solution for all devices and systems
 
-I just don't want us to end up with probabilistic approach. I am fine with more
-updates, but we need to be more intentional/specific when it's truly needed.
+Cheers
+
+--
+Qais Yousef
 
