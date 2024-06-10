@@ -1,74 +1,40 @@
-Return-Path: <linux-pm+bounces-8849-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8850-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CA4C901DAE
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 11:03:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F2CA901DE1
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 11:11:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 654A71C21225
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 09:03:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF0EB1C214C3
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 09:11:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C67682862;
-	Mon, 10 Jun 2024 08:59:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QsO458Bh"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8680F6F314;
+	Mon, 10 Jun 2024 09:11:11 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69BE2823A9
-	for <linux-pm@vger.kernel.org>; Mon, 10 Jun 2024 08:59:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02B846BFA3;
+	Mon, 10 Jun 2024 09:11:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718009963; cv=none; b=YFGo4qoNg2JbKtC2ZqbNyB2rQyMlPaMYiSu2v7+znpQAbj2f8PotGKwYGKVsyWPLlDYgez4X0XwzGbzw8tOhMEojRHUcOOVFjaJK7O5Nmd+efvc9z02CXRX7ju0CfOgbgJpdbntnpJL6961gLgoYSIkiWlOpaACZnwyQUVk7v7Q=
+	t=1718010671; cv=none; b=ZA16oQVBdc/hsNg6ws12ianBQNXkfmzBBuVaEiMlGTt2F5NT+tdj9PtUqW5HYWtWqviltB+tCf1imDyUDwwlwHYIsoMzU8WRy4j6qnNG13l5VWYju2CVC2m/bDSUdxG6lFd31gnJ9KisVDN3BS9DdLgu8/6DO0Dp0fRaze4Avvg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718009963; c=relaxed/simple;
-	bh=vHneDFUBNs0GqnfTI6Q7Qcn+foJQXhLeHMKZSlyD3T8=;
+	s=arc-20240116; t=1718010671; c=relaxed/simple;
+	bh=h0vH6BRr2TnAPPCehOMOST6X8bmut1Pgvhshrf+Rcos=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ViKNr7wBRjY9VVeH7XS89I8eB0tWGvWjZE9ejIIq1dQMIDpMrmHudOxlopCfftaYhul0rrisLljGaFP9TcAytqJhE/5KIcSLQsq0ZdNjMSlJ/0UAzUPwebWmGV7os0VI/m5r4Du3hCHVMGHZujx/ejzZz5t1vzxHFh6AmI5o4S0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QsO458Bh; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-42138eadf64so35871335e9.3
-        for <linux-pm@vger.kernel.org>; Mon, 10 Jun 2024 01:59:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1718009959; x=1718614759; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VvSu55HWnwB5FrLzdsKEOL90pn7dtAat3/WOLZaHz4c=;
-        b=QsO458BhIkRDEeNxOpbXcA/hsD4PLvekklndhhaGCcmfSH5pNZ0l7F1edVIYHcYi2/
-         b5SKvI8+Td75JjUkC62tFgdbhPhukYnZyBs2YVtTftdMErC5mFvp4yT4bU/wlLK58bgf
-         XGLPn00idANzRESNoWr/gyrzqr7n4Soy1RiDC5tZ+Aju22/bHSqlryHL2y/mAvnDcLsO
-         hbaVU2j61i+amhv0QvDbNpX6QgynLm/gZiVTegOI7zQl6VCDL07De47d13oV8MpKxSSm
-         eeUW0TbyEKZu1p7fh4iDK83dRF8xCSFTwqCzP0c84MFsmT6/g6VEiSjhi208kWg1LFiF
-         uQuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718009959; x=1718614759;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VvSu55HWnwB5FrLzdsKEOL90pn7dtAat3/WOLZaHz4c=;
-        b=k1caBW2onClw5GBE6tnnk1uZ9QyMPl4AdfBjhj02SiHdMXM3eA5QgwS2A6hb9wplKU
-         h4ErtwHwhWkaC39cy+1U4XoBv8ZyDZHQ4duOpXW+E/wuEwNeiG8L4KdzuU2jvMI2zCJ0
-         BiNR2MBMLlxZC8w5XCD1wT+db0vdApuY3Z2/ricb/WvqR5z3t/VUE+vlRii0f+E/2OkK
-         CvQz/ZmERU6dgl8kctowZU8slwojx/Q38XJJ9WLVNub4mRNt7Da89b98DhLo5XILmJwp
-         P8gHyGiJuCf8cY0eyfka3iyBJ1V6RocJqvhh3L9BGVHA+Eew4olEI5hhE1z0ymHF9Ngw
-         4B2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCV6S45Zh1WxQBoBsvFAhB/yGhbYobNw2vNot5eY3+faCxwe/jdlqFq2fTgIN09dazyTsInmMf0Awe2+0wg72cpBEQLr5PGlUcg=
-X-Gm-Message-State: AOJu0Yxhf9o9HIlsl5pELUtm+ss/APC0Bpn31L4zmppIkU6ZitWSxtPA
-	Upb4tZNitCdvtvQ/DT95DIxv2DqWDiDs7cGboEt+AzcUbYVVk6OogOKqClwTfaM=
-X-Google-Smtp-Source: AGHT+IHgamB6ykVfBUAH6mSf0Uvt0ewso3ix2AMmR+6+4Uj9SJGPp1d1Wu+SEngslWbR4dwQwvPXNg==
-X-Received: by 2002:a05:600c:a01:b0:421:6475:abee with SMTP id 5b1f17b1804b1-42164a038b6mr68198995e9.23.1718009958670;
-        Mon, 10 Jun 2024 01:59:18 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:bb3:9a3a:605f:c4c3? ([2a05:6e02:1041:c10:bb3:9a3a:605f:c4c3])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4215c2cd247sm138237425e9.40.2024.06.10.01.59.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jun 2024 01:59:18 -0700 (PDT)
-Message-ID: <ad4f1cfb-28f0-4d80-8c0b-dc42b01ecfa7@linaro.org>
-Date: Mon, 10 Jun 2024 10:59:17 +0200
+	 In-Reply-To:Content-Type; b=usDg0TJh/WvC4NfpG4ApfTNDrCgLXkIyiEowu6wehNA457bsGTB1OjjAtZlPJDavt6D32hgXQ+xCFhSqkPhPKUn1UoMcpVWxXE9zZGXmiaiWs59KiwwmDOqZX0kGULtTDpV7gjEjHfSBqeMqXIzk9ON8sL85C48/XQqawK8J69k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1CD2F12FC;
+	Mon, 10 Jun 2024 02:11:27 -0700 (PDT)
+Received: from [10.57.71.68] (unknown [10.57.71.68])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1F5A23F73B;
+	Mon, 10 Jun 2024 02:11:01 -0700 (PDT)
+Message-ID: <569b7923-d7ba-49a9-a88d-906f44903d20@arm.com>
+Date: Mon, 10 Jun 2024 10:11:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -76,41 +42,94 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/8] thermal/debugfs: Adjust check for trips without
- statistics in tze_seq_show()
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Lukasz Luba <lukasz.luba@arm.com>
-References: <5794974.DvuYhMxLoT@kreacher> <8389302.T7Z3S40VBb@kreacher>
+Subject: Re: [PATCH 1/6] cpuidle: teo: Increase util-threshold
+To: Qais Yousef <qyousef@layalina.io>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ rafael@kernel.org, vincent.guittot@linaro.org, peterz@infradead.org,
+ daniel.lezcano@linaro.org, anna-maria@linutronix.de,
+ kajetan.puchalski@arm.com, lukasz.luba@arm.com, dietmar.eggemann@arm.com
+References: <20240606090050.327614-1-christian.loehle@arm.com>
+ <20240606090050.327614-2-christian.loehle@arm.com>
+ <20240609224701.pc6om2o5ep6btywe@airbuntu>
 Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <8389302.T7Z3S40VBb@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <20240609224701.pc6om2o5ep6btywe@airbuntu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 28/05/2024 16:57, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 6/9/24 23:47, Qais Yousef wrote:
+> On 06/06/24 10:00, Christian Loehle wrote:
+>> Increase the util-threshold by a lot as it was low enough for some
+>> minor load to always be active, especially on smaller CPUs.
+>>
+>> For small cap CPUs (Pixel6) the util threshold is as low as 1.
+>> For CPUs of capacity <64 it is 0. So ensure it is at a minimum, too.
+>>
+>> Fixes: 9ce0f7c4bc64 ("cpuidle: teo: Introduce util-awareness")
+>> Reported-by: Qais Yousef <qyousef@layalina.io>
+>> Reported-by: Vincent Guittot <vincent.guittot@linaro.org>
+>> Suggested-by: Kajetan Puchalski <kajetan.puchalski@arm.com>
+>> Signed-off-by: Christian Loehle <christian.loehle@arm.com>
+>> ---
+>>  drivers/cpuidle/governors/teo.c | 11 +++++------
+>>  1 file changed, 5 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
+>> index 7244f71c59c5..45f43e2ee02d 100644
+>> --- a/drivers/cpuidle/governors/teo.c
+>> +++ b/drivers/cpuidle/governors/teo.c
+>> @@ -146,13 +146,11 @@
+>>   * The number of bits to shift the CPU's capacity by in order to determine
+>>   * the utilized threshold.
+>>   *
+>> - * 6 was chosen based on testing as the number that achieved the best balance
+>> - * of power and performance on average.
+>> - *
+>>   * The resulting threshold is high enough to not be triggered by background
+>> - * noise and low enough to react quickly when activity starts to ramp up.
+>> + * noise.
+>>   */
+>> -#define UTIL_THRESHOLD_SHIFT 6
+>> +#define UTIL_THRESHOLD_SHIFT 2
+>> +#define UTIL_THRESHOLD_MIN 50
+>>  
+>>  /*
+>>   * The PULSE value is added to metrics when they grow and the DECAY_SHIFT value
+>> @@ -671,7 +669,8 @@ static int teo_enable_device(struct cpuidle_driver *drv,
+>>  	int i;
+>>  
+>>  	memset(cpu_data, 0, sizeof(*cpu_data));
+>> -	cpu_data->util_threshold = max_capacity >> UTIL_THRESHOLD_SHIFT;
+>> +	cpu_data->util_threshold = max(UTIL_THRESHOLD_MIN,
+>> +				max_capacity >> UTIL_THRESHOLD_SHIFT);
 > 
-> Initialize the trip_temp field in struct trip_stats to
-> THERMAL_TEMP_INVALID and adjust the check for trips without
-> statistics in tze_seq_show() to look at that field instead of
-> comparing min and max.
+> Thanks for trying to fix this. But I am afraid this is not a solution. There's
+> no magic number that can truly work here - we tried. As I tried to explain
+> before, a higher util value doesn't mean long idle time is unlikely. And
+> blocked load can cause problems where a decay can take too long.
 > 
-> This will mostly be useful to simplify subsequent changes.
-> 
-> No intentional functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
+> We are following up with the suggestions I have thrown back then and we'll
+> share results if anything actually works.
 
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Namely watching increase / decrease of utilization?
+I think you would have to watch at least a couple of values before entering such
+a logic and at that point the intercepts logic will handle it anyway.
+Furthermore IMO we should be wary about introducing any state in teo that persists
+across calls if not absolutely necessary (like intercept-detection) as it really
+makes teo much less predictable.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+> 
+> For now, I think a revert is more appropriate. There was some perf benefit, but
+> the power regressions were bad and there's no threshold value that actually
+> works. The thresholding concept itself is incorrect and flawed - it seemed the
+> correct thing back then, yes. But in a hindsight now it doesn't work.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Unfortunate :/
+OK. I'll do some more testing with that, too. From what I can see a revert wouldn't
+have terrible fallout with the series altogether, so I might just change this for
+v2 and drop 2/6.
+
+Kind Regards,
+Christian
 
 
