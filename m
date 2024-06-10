@@ -1,219 +1,201 @@
-Return-Path: <linux-pm+bounces-8836-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8837-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3273F901C69
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 10:08:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9490B901CE9
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 10:28:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C0251C21D2D
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 08:08:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CDF71F2127B
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 08:28:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C01C6F2EA;
-	Mon, 10 Jun 2024 08:08:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 435686F06D;
+	Mon, 10 Jun 2024 08:28:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SSdm1Yf7"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NRTxXx3h"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74EB26BFCA
-	for <linux-pm@vger.kernel.org>; Mon, 10 Jun 2024 08:08:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E258723B0
+	for <linux-pm@vger.kernel.org>; Mon, 10 Jun 2024 08:28:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718006896; cv=none; b=Ub2uEqSEQvzqqBmyMOMN8p3nBL8kOjygJmGi0nujwp1wM/YHXPAnuEl030GSlT3YP/zfxL4NyImFgsyVUXFhlxVI+w0n+ZXOZGIi7jV8qKUU1Bse1tRgvcqL3FlcUDed4E99kRCghdDQQTxPu5OT8RbiJjiexFZGvB9UFTlTlyk=
+	t=1718008127; cv=none; b=E0iq5Oh2gsEJ+pmxlS7/jrPJ4zRTzSN9ONldZrcy9xler1OAR21ITpYuvb3TpA1GEtS68VWeZ1n1yYETmNfKTg73lQQCxgUhgcs+SJt/hSeA5uDXUzocktU20ctLIftgYf3J3Y1AQpqUPgqTc9zI0K24OU5PCZ0rRZ3IE32fJ84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718006896; c=relaxed/simple;
-	bh=/L5y1Dv6ivY3eszYnYmdXRYc401x9YYY2yBAmmyUG/k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qkqrXwqKYLlEyi3tVNnUgBRGwYp67DNApdXC7s9xjE5vYoHs4jWqeRpBNALI9i7B8hSblO44aBS0MOnEwL/UllRVb73NADwC5n6I4d7z5TnGtjqTCAPGTXLTbcVln7k2nGTJgLYDadZKo9pzZaaCNRfvWNwNOo67SJTv2tltS+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SSdm1Yf7; arc=none smtp.client-ip=209.85.167.48
+	s=arc-20240116; t=1718008127; c=relaxed/simple;
+	bh=dM6k5DbWIP8ixdzmtFZSfJNzZE44gJhJcdHlZIYPzic=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=O+nD0RPVdsO9IVinpJ+k5MeGIeBq/hvPeSflI+S/A+yTpMOnmw7sJ1ChZmAbeIEMx+xR4eCik7YA3L0hXTpoqjRYyZpoRVaS+PLZu1C325pui+AtyR9NcllpQVZeh/GJA/9aNzrkiMr0wzu5l0O3ZNs8GJ5hRxahgA1ZW5jg0n8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NRTxXx3h; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-52c8342af5eso1190552e87.3
-        for <linux-pm@vger.kernel.org>; Mon, 10 Jun 2024 01:08:14 -0700 (PDT)
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4217d808034so10423325e9.3
+        for <linux-pm@vger.kernel.org>; Mon, 10 Jun 2024 01:28:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1718006892; x=1718611692; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/L5y1Dv6ivY3eszYnYmdXRYc401x9YYY2yBAmmyUG/k=;
-        b=SSdm1Yf7Ra0G4T+e1Uib9M+gpZrMF9N8k3TFc0cVz1F5pABZzdduYWAgb/AYK6aN5U
-         uGRb/9C4DKJ1MAyhzNdKqtcLtbbSe8pWQRtjbEXBTFYju2cMxL2Ljf60A9rhzibs/z9k
-         58QLu/Go6rD3ZcOU2IPsm9uBcLwH6W8ua/ujy6yuJ5oy7dAijMMVBbsXY4yd4XeI8BMF
-         tBO40weDDLMTfnvv7w8kEWecrxwMfi5uAXCD7QK5dcWAdVEgifdMXyQiRMcm7v1g27Rl
-         Fpd3yivenYWJYij2nMGl+Ls46Hekj1+LChnFu8YHVJOJbKSpUse8j4k2fpw4j2G2Sdq2
-         vB0A==
+        d=linaro.org; s=google; t=1718008123; x=1718612923; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sAIjV9YREPOA3y7uEEQgAajQX3eo8bQN1I0xBsKhc/E=;
+        b=NRTxXx3hL6pYhkm1sYUfkyJI1noFstOgG2GHcuMMhBfQfLP+GQXsaQdHRukdbRdU/x
+         Pf+aPoruCZ9qClHKBLtndYyvuAtQf3wJ24HMSd+lipVzdtTL3hDUo4kYwU5MV6SHDMhE
+         EW4NHoOv5viBI7ILJALP3dAcmoxp3fMuUv0iIdPORAmGH0FtyXF2Q6bEK/ALlMFuvMBC
+         4AgqBKRO2bwFqdB18y9UNfAR6ZND/6m/PvZR3rNgVCnENwXiu96vSRarXbPpoJJeGqJc
+         3RUVnNrc/Thh8tjHMdpZ7hCYyhzmGvM0pK/eyViSJZRQgVmLd7kV4DEYkFQoz7PU/vi5
+         mFng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718006892; x=1718611692;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/L5y1Dv6ivY3eszYnYmdXRYc401x9YYY2yBAmmyUG/k=;
-        b=BigOUfTKLl1gaFAMyssxe0Z69OSut2LJOqsTClsGBAFLKrihWENY1iRdfNkgBbKuVN
-         ev7YlsBcWaKasBPYwanKXM/KelGEDwy/jE8O9Fdo22lIKQYva8nNlaLJFTSHcl6qeqpR
-         xGR9cppl67KxSrH2mByupSY1TuUy9u2fdWrs8QeGKpt4vZBHaXTrQ+qVzjNzESX1tft2
-         rchrw/54Lxx5tKWTkljG0L6YgQq8iRHnXAyKf65xrAGX4zrUKdwCo80atkahRUtiqHp+
-         OTO6GhsreZ/25Ik4MEFwOwhQt9DDGTElhRk5gqfAhZWXm3tGZDK4B05Ukc3yyJwv8+Jo
-         R1xQ==
-X-Forwarded-Encrypted: i=1; AJvYcCURKXmypVjGmRtr8QQbvLqMc9Cw701BvCKGKjpfTdy+w7Ta/kRy7Wv9ecS1DIbyPQ2sGzNUv5Ei8vheBs3/u5mdc9IhVkqA4ps=
-X-Gm-Message-State: AOJu0YzbTTrGX+JGvuquMwybiJitK0etfbaeAn5DteNRF8GYQ5LKcLJA
-	imXCs92Fd1jIvCVFaDi/ctgG+74vyN4w/ErNQNYsSHT9yJU/w8+OjwJOsK5p+JJOAOacU0j1xvJ
-	SinPag/rC+bDlpveBnDHPUVeEdZRt+Npw98n5rg==
-X-Google-Smtp-Source: AGHT+IEoIIaopVbMhKiBzu+ZFeFG117iZrYhuaSy1PLsnicMvCE0nAaF1iUL9hhnUeVtUHqe9i20V059/u6XmSWe6yI=
-X-Received: by 2002:a05:6512:234d:b0:52b:be9b:cafe with SMTP id
- 2adb3069b0e04-52bbe9bcbadmr5940256e87.21.1718006892189; Mon, 10 Jun 2024
- 01:08:12 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1718008123; x=1718612923;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sAIjV9YREPOA3y7uEEQgAajQX3eo8bQN1I0xBsKhc/E=;
+        b=lhMlnmWuzE3BEULuKqDbsgnYb1c4LW+VYUkKKY2A2WoXS8llZL8ljGoOnwkSx+Ts9c
+         kgrmehIMDNd5SlcQ+WIphtzfgDDk5PcIqSCtK9fV7zaqdBsa6XFAQ2+wdxVZUMLhUlG8
+         YWlw783lRyW27IENoN7bG37Qk+tUOO93xScBYbUuFCewbX8of9DZOH49EGbSZeESo3oD
+         O6lt8muwJqNL4e1pp6p8UhLfdyfyMJ4DccrPCorEt2J/eM1mVVq0V7JWcDtPmtRFz86A
+         onk8gW0tN6QdnMnrg4Un+n5B58Ec5HYYxGT7pr1lqZZqDUyQZbUHQAOWC1zKtI1PNtnq
+         cmkg==
+X-Forwarded-Encrypted: i=1; AJvYcCVoORmjbFhyCxeRAjxMw5zohjmi6Rf9u0iJfskeiFgufaFlj0pSYrtUfFc83PqcSDiy8MvfQ4DbKaZxMJN2RP5HuwIzmBu2wBE=
+X-Gm-Message-State: AOJu0YzghwBeM2WOZpXU7HXXNuZnIDKxH7s7ok90seif0zmJ0s2VgjBA
+	KUuq5DKrQ8YVmi0eqPzSVM1leaQzYPbzBR19299PG4ekZjz7EnPhetADhtOnABE=
+X-Google-Smtp-Source: AGHT+IHPCRLdBIjnYoKmaoO0wJ+nCvloZ3gIQJhkNoof6djxllay6FKmoB4Bzi5wPFS51BxbZin8xw==
+X-Received: by 2002:a5d:53c3:0:b0:35f:234a:9c0e with SMTP id ffacd0b85a97d-35f234a9cd9mr1585362f8f.30.1718008122991;
+        Mon, 10 Jun 2024 01:28:42 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:bb3:9a3a:605f:c4c3? ([2a05:6e02:1041:c10:bb3:9a3a:605f:c4c3])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-35f2210ae90sm2862139f8f.97.2024.06.10.01.28.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jun 2024 01:28:42 -0700 (PDT)
+Message-ID: <dd446bf6-05ca-4861-b3b1-f113c3528f13@linaro.org>
+Date: Mon, 10 Jun 2024 10:28:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240603211538.289765-1-andriy.shevchenko@linux.intel.com> <87tti9cfry.fsf@intel.com>
-In-Reply-To: <87tti9cfry.fsf@intel.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Mon, 10 Jun 2024 10:08:00 +0200
-Message-ID: <CACRpkdZFPG_YLici-BmYfk9HZ36f4WavCN3JNotkk8cPgCODCg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] treewide: Align match_string() with sysfs_match_string()
-To: Jani Nikula <jani.nikula@linux.intel.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Corey Minyard <minyard@acm.org>, 
-	Allen Pais <apais@linux.microsoft.com>, 
-	Sebastian Reichel <sebastian.reichel@collabora.com>, Perry Yuan <perry.yuan@amd.com>, 
-	Giovanni Cabiddu <giovanni.cabiddu@intel.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	Nuno Sa <nuno.sa@analog.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Randy Dunlap <rdunlap@infradead.org>, Andi Shyti <andi.shyti@kernel.org>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, Lee Jones <lee@kernel.org>, 
-	Samuel Holland <samuel@sholland.org>, Elad Nachman <enachman@marvell.com>, 
-	Arseniy Krasnov <AVKrasnov@sberdevices.ru>, Johannes Berg <johannes.berg@intel.com>, 
-	Gregory Greenman <gregory.greenman@intel.com>, Benjamin Berg <benjamin.berg@intel.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Robert Richter <rrichter@amd.com>, Vinod Koul <vkoul@kernel.org>, 
-	Chunfeng Yun <chunfeng.yun@mediatek.com>, Hans de Goede <hdegoede@redhat.com>, 
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	Nikita Kravets <teackot@gmail.com>, Jiri Slaby <jirislaby@kernel.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Stanley Chang <stanley_chang@realtek.com>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Abdel Alkuor <abdelalkuor@geotab.com>, 
-	Kent Overstreet <kent.overstreet@linux.dev>, Eric Biggers <ebiggers@google.com>, 
-	Kees Cook <keescook@chromium.org>, Ingo Molnar <mingo@kernel.org>, 
-	"Steven Rostedt (Google)" <rostedt@goodmis.org>, Daniel Bristot de Oliveira <bristot@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Hugh Dickins <hughd@google.com>, 
-	Abel Wu <wuyun.abel@bytedance.com>, John Johansen <john.johansen@canonical.com>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Stefan Berger <stefanb@linux.ibm.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
-	Takashi Iwai <tiwai@suse.de>, Takashi Sakamoto <o-takashi@sakamocchi.jp>, 
-	Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, Mark Brown <broonie@kernel.org>, 
-	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>, linuxppc-dev@lists.ozlabs.org, 
-	linux-kernel@vger.kernel.org, keyrings@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linux-ide@vger.kernel.org, openipmi-developer@lists.sourceforge.net, 
-	linux-clk@vger.kernel.org, linux-rpi-kernel@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
-	linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org, qat-linux@intel.com, 
-	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org, 
-	intel-xe@lists.freedesktop.org, nouveau@lists.freedesktop.org, 
-	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-leds@vger.kernel.org, linux-sunxi@lists.linux.dev, 
-	linux-omap@vger.kernel.org, linux-mmc@vger.kernel.org, 
-	linux-mtd@lists.infradead.org, netdev@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, linux-pci@vger.kernel.org, 
-	linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org, 
-	linux-gpio@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
-	linux-staging@lists.linux.dev, linux-usb@vger.kernel.org, 
-	linux-fbdev@vger.kernel.org, linux-bcachefs@vger.kernel.org, 
-	linux-hardening@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, alsa-devel@alsa-project.org, 
-	linux-sound@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, David Howells <dhowells@redhat.com>, 
-	"David S. Miller" <davem@davemloft.net>, "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Sergey Shtylyov <s.shtylyov@omp.ru>, Damien Le Moal <dlemoal@kernel.org>, 
-	Niklas Cassel <cassel@kernel.org>, Daniel Scally <djrscally@gmail.com>, 
-	Sakari Ailus <sakari.ailus@linux.intel.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Heiko Stuebner <heiko@sntech.de>, 
-	Peter De Schrijver <pdeschrijver@nvidia.com>, Prashant Gaikwad <pgaikwad@nvidia.com>, 
-	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	Huang Rui <ray.huang@amd.com>, "Gautham R. Shenoy" <gautham.shenoy@amd.com>, 
-	Mario Limonciello <mario.limonciello@amd.com>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, 
-	Tvrtko Ursulin <tursulin@ursulin.net>, Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>, 
-	Danilo Krummrich <dakr@redhat.com>, Jean Delvare <jdelvare@suse.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Pavel Machek <pavel@ucw.cz>, 
-	Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Tony Lindgren <tony@atomide.com>, Adrian Hunter <adrian.hunter@intel.com>, Hu Ziji <huziji@marvell.com>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Miquel Raynal <miquel.raynal@bootlin.com>, 
-	Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
-	Potnuri Bharat Teja <bharat@chelsio.com>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Miri Korenblit <miriam.rachel.korenblit@intel.com>, Kalle Valo <kvalo@kernel.org>, 
-	Mahesh J Salgaonkar <mahesh@linux.ibm.com>, "Oliver O'Halloran" <oohall@gmail.com>, 
-	Kishon Vijay Abraham I <kishon@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, JC Kuo <jckuo@nvidia.com>, 
-	Andrew Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>, 
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Sebastian Reichel <sre@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
-	Helge Deller <deller@gmx.de>, Brian Foster <bfoster@redhat.com>, 
-	Zhihao Cheng <chengzhihao1@huawei.com>, Tejun Heo <tj@kernel.org>, 
-	Zefan Li <lizefan.x@bytedance.com>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Daniel Bristot de Oliveira <bristot@redhat.com>, Valentin Schneider <vschneid@redhat.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jason Baron <jbaron@akamai.com>, Jim Cromie <jim.cromie@gmail.com>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Clemens Ladisch <clemens@ladisch.de>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/8] thermal/debugfs: Do not extend mitigation episodes
+ beyond system resume
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Lukasz Luba <lukasz.luba@arm.com>
+References: <5794974.DvuYhMxLoT@kreacher> <2337425.ElGaqSPkdT@kreacher>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <2337425.ElGaqSPkdT@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jun 4, 2024 at 9:46=E2=80=AFAM Jani Nikula <jani.nikula@linux.intel=
-.com> wrote:
+On 28/05/2024 16:53, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Because thermal zone handling by the thermal core is started from
+> scratch during resume from system-wide suspend, prevent the debug
+> code from extending mitigation episodes beyond that point by ending
+> the mitigation episode currently in progress, if any, for each thermal
+> zone.
 
-[Maybe slightly off-topic, ranty]
+Why it is done at resume time and not at suspend time ?
 
-> Why do we think it's a good idea to increase and normalize the use of
-> double-underscore function names across the kernel, like
-> __match_string() in this case? It should mean "reserved for the
-> implementation, not to be called directly".
->
-> If it's to be used directly, it should be named accordingly, right?
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> 
+> v1 -> v2: Rebase.
+> 
+> ---
+>   drivers/thermal/thermal_core.c    |    1 +
+>   drivers/thermal/thermal_debugfs.c |   36 ++++++++++++++++++++++++++++++++++++
+>   drivers/thermal/thermal_debugfs.h |    2 ++
+>   3 files changed, 39 insertions(+)
+> 
+> Index: linux-pm/drivers/thermal/thermal_core.c
+> ===================================================================
+> --- linux-pm.orig/drivers/thermal/thermal_core.c
+> +++ linux-pm/drivers/thermal/thermal_core.c
+> @@ -1641,6 +1641,7 @@ static void thermal_zone_device_resume(s
+>   
+>   	tz->suspended = false;
+>   
+> +	thermal_debug_tz_resume(tz);
+>   	thermal_zone_device_init(tz);
+>   	__thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+>   
+> Index: linux-pm/drivers/thermal/thermal_debugfs.c
+> ===================================================================
+> --- linux-pm.orig/drivers/thermal/thermal_debugfs.c
+> +++ linux-pm/drivers/thermal/thermal_debugfs.c
+> @@ -926,3 +926,39 @@ void thermal_debug_tz_remove(struct ther
+>   	thermal_debugfs_remove_id(thermal_dbg);
+>   	kfree(trips_crossed);
+>   }
+> +
+> +void thermal_debug_tz_resume(struct thermal_zone_device *tz)
+> +{
+> +	struct thermal_debugfs *thermal_dbg = tz->debugfs;
+> +	ktime_t now = ktime_get();
+> +	struct tz_debugfs *tz_dbg;
+> +	struct tz_episode *tze;
+> +	int i;
+> +
+> +	if (!thermal_dbg)
+> +		return;
+> +
+> +	mutex_lock(&thermal_dbg->lock);
+> +
+> +	tz_dbg = &thermal_dbg->tz_dbg;
+> +
+> +	if (!tz_dbg->nr_trips)
+> +		goto out;
+> +
+> +	/*
+> +	 * A mitigation episode was in progress before the preceding system
+> +	 * suspend transition, so close it because the zone handling is starting
+> +	 * over from scratch.
+> +	 */
+> +	tze = list_first_entry(&tz_dbg->tz_episodes, struct tz_episode, node);
+> +
+> +	for (i = 0; i < tz_dbg->nr_trips; i++)
+> +		tz_episode_close_trip(tze, tz_dbg->trips_crossed[i], now);
+> +
+> +	tze->duration = ktime_sub(now, tze->timestamp);
+> +
+> +	tz_dbg->nr_trips = 0;
+> +
+> +out:
+> +	mutex_unlock(&thermal_dbg->lock);
+> +}
+> Index: linux-pm/drivers/thermal/thermal_debugfs.h
+> ===================================================================
+> --- linux-pm.orig/drivers/thermal/thermal_debugfs.h
+> +++ linux-pm/drivers/thermal/thermal_debugfs.h
+> @@ -7,6 +7,7 @@ void thermal_debug_cdev_remove(struct th
+>   void thermal_debug_cdev_state_update(const struct thermal_cooling_device *cdev, int state);
+>   void thermal_debug_tz_add(struct thermal_zone_device *tz);
+>   void thermal_debug_tz_remove(struct thermal_zone_device *tz);
+> +void thermal_debug_tz_resume(struct thermal_zone_device *tz);
+>   void thermal_debug_tz_trip_up(struct thermal_zone_device *tz,
+>   			      const struct thermal_trip *trip);
+>   void thermal_debug_tz_trip_down(struct thermal_zone_device *tz,
+> @@ -20,6 +21,7 @@ static inline void thermal_debug_cdev_st
+>   						   int state) {}
+>   static inline void thermal_debug_tz_add(struct thermal_zone_device *tz) {}
+>   static inline void thermal_debug_tz_remove(struct thermal_zone_device *tz) {}
+> +static inline void thermal_debug_tz_resume(struct thermal_zone_device *tz) {}
+>   static inline void thermal_debug_tz_trip_up(struct thermal_zone_device *tz,
+>   					    const struct thermal_trip *trip) {};
+>   static inline void thermal_debug_tz_trip_down(struct thermal_zone_device *tz,
+> 
+> 
+> 
 
-It's a huge mess. "__" prefix is just so ambiguous I think it just
-shouldn't be used or prolifierated, and it usually breaks Rusty Russells
-API rules times over.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Consider __set_bit() from <linux/bitops.h>, used all over the place,
-in contrast with set_bit() for example, what does "__" represent in
-this context that makes __set_bit() different from set_bit()?
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
-It means "non-atomic"...
-
-How does a random contributor know this?
-
-Yeah, you guess it. By the token of "everybody knows that".
-(Grep, google, repeat for the number of contributors to the kernel.)
-
-I was considering to send a script to Torvalds to just change all
-this to set_bit_nonatomic() (etc) but was hesitating because that
-makes the name unambiguous but long. I think I stayed off it
-because changing stuff like that all over the place creates churn
-and churn is bad.
-
-Yours,
-Linus Walleij
 
