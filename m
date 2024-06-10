@@ -1,160 +1,137 @@
-Return-Path: <linux-pm+bounces-8832-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-8833-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A53B0901890
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 00:47:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82E659019B5
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 06:23:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A353B1C2094C
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Jun 2024 22:47:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C899281B86
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2024 04:22:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A9014779D;
-	Sun,  9 Jun 2024 22:47:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36819A93A;
+	Mon, 10 Jun 2024 04:22:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="L3grKSon"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="h5Fk5AUq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59C8D208CB
-	for <linux-pm@vger.kernel.org>; Sun,  9 Jun 2024 22:47:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2CC96FB6
+	for <linux-pm@vger.kernel.org>; Mon, 10 Jun 2024 04:22:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717973226; cv=none; b=R4XQY1qbLVGSQQzHQjRlr1pWwhayi+aH27GbbaUaXbwdruSimtReKOsHqOsgLnheSwwTx5c5Uov2QpP+OKRsgvNPRipEfQFft4jxowPb8Y7XULwcrGr5IzMbdHf56a2WTC5mz/pVye6tiJb4OPasnvCo45eQuAC2GrGd6QzsTV8=
+	t=1717993376; cv=none; b=tz4uw5Sghmssbpge5TSFtp2SVrDwO8K9oF2sYoHINNZFfk3gYDylLhf09CXA7ss6FGweYrFT+XwJmH5bfBvadP7deoteLswcREcr1retHzfuaI/CeqpJxpre7l/KLNL66930x6NufTXTNaFfBn790RD+7+oLvL0PGUtzmAfwtj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717973226; c=relaxed/simple;
-	bh=CF+cO1pSinPGWgCkR6VFs6IZwJ4BytxCPSPFPveyHtU=;
+	s=arc-20240116; t=1717993376; c=relaxed/simple;
+	bh=0O2vT/NFbDSpRpojVgi4cfit4eulfxI1gkhEAmX4BJ0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NQ541es5CuvFEPOtDG5B93tN4FYfjV1SrPvE97OkOdjQrh/xTGBYtSCiACnm4n4q0F4+zWeWN65i2oRoIgwLuyHun6DacFIEIfLg320tY9giJTutoRABt5GPDT1yx/f9PetOF/p8YWSuo+uks+m571WZ1fgRwOZFt9Wi+FB/i14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=L3grKSon; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-42172ed3487so15888665e9.0
-        for <linux-pm@vger.kernel.org>; Sun, 09 Jun 2024 15:47:04 -0700 (PDT)
+	 Content-Type:Content-Disposition:In-Reply-To; b=qH/NLgFsIYzrpvY91o3Sde94Ccak1EskN6dBBMKnmy5YGMzZpCeXXvwlgJQIXsjcb2yHH7tsgr5Oe+naV/Rv2hsyk6Lbk6nL52LeF271w2jMFdI/IGwbknfYGyHXCK5jr3IWJiIcplvhX3OKNCfHlYhQh8jlUz9kw6omFxEAy5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=h5Fk5AUq; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2c2ccff8f0aso1692916a91.0
+        for <linux-pm@vger.kernel.org>; Sun, 09 Jun 2024 21:22:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1717973222; x=1718578022; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1717993374; x=1718598174; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2WtKTGPRhj0z7HQ6EPmJaANaylZUzntqsNLAHly3ENA=;
-        b=L3grKSonXsj1Ell1Q1dDrBvdu5mg09BodMzUq3cCxnaod1fMc6xVGmRM/kLl1rPnII
-         BI+n4XkN9Z1kJw/PVDtA75HfWch9yNABx95He5QSSiPfwYdH9/3Ofm/k+wxDCIGHNmUc
-         U+SeKVexG2gXQvc8V/1ycwIM7xtU14w+9aF8wVIaQfSpYQVrnof1DVSEkGm+tWcmi31j
-         2ZwBR8YZZTdvJUPRjAhcJYikRtuqRRjwHs7CtO8eKVf6Hz4TNGbZwc7zBFAn1gWSKool
-         AgQp9MKbIEbSJesTmmS7/F8zbmBlxu36A8+aQqva/ZneGn/jiYUi5NGGLaHkoYo2Nc/a
-         VifA==
+        bh=+09eQoC+I5g5eNQtRLU+Ga+T20APAwmlVnC6I3aJD7Y=;
+        b=h5Fk5AUqwJJz9gRL6YAtT+Cxk1j9XLbwhRb8hOL29UqlwH9ySjhRY6yHbyRavbqrgS
+         2i72DVbIaJcYlIr1fjwb6ZbVKAww/aXKAN6gHuP0x9JUhuR4ylwOeF8rRUx1eG0orGgr
+         DmV8Nu+aEuekRe1TgufgClO27Yw4BZ076w7brqxEZ912p7zEziB5azUwLgfKOi648taV
+         HnXBauBN5tcOc9SkM5SzwK0Lvr+OlzCYW3mw0DqQ6ZhlO+WuD3gGU8ZYQHi66ArxtdVk
+         ZtHoOfowv7qb4gRoDIdy3DK1B1JpHZccJhmX/yVz+KzqhNdr7+FbwCjVL/+/BwGj0D+d
+         1drQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717973222; x=1718578022;
+        d=1e100.net; s=20230601; t=1717993374; x=1718598174;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2WtKTGPRhj0z7HQ6EPmJaANaylZUzntqsNLAHly3ENA=;
-        b=OmQJO8MTf5DjCKZ/UOmiSQRVb1Mv703EsmsjqMxbRVLaZ1QhgdP1Ry4iRVhOxing9M
-         mGGDh2p/2r3v8uf5jwhJxTE+Brv7KzTb0nlaeuoN8mJsoHbKlQbbc5CGv7op9kTcvCaN
-         8t9Fk3I5Eo9VF/ImOCJG+Trhh91fVMiGc6iVcPgPZvjMxYGks3BqhI1oP5H0IFLUh7qD
-         a/L7UeW4Nfc9GMHPArlx8uvbWWhZpUoyorju15qkbhjw4Z1VPFn9ZiNnjD9yrtXCrl0+
-         9AC6faoN/cdA9+9mjL73+Cl4GSDEPIREnjwu/AR1thUQpdw5uH0RZqQj30SaMxj0GAsI
-         7wpg==
-X-Gm-Message-State: AOJu0YzI0mobQ1y3hxLBR31kpv/Rjy4xW88fWr02JYK8xhsLJ3rwHCJ7
-	xDxK24hK0HtOCLzJNu53TgslGbkOh204IsmYOYSTaS8eW0p+yT86XCsMEsQ5nTo=
-X-Google-Smtp-Source: AGHT+IFeLN3Eubzn1uX7ekPwZGluQ4RwPDVnJ0LDW2iX1nYkbJDRca0Ehd7IGNHlN/ZzwllLO+GXbg==
-X-Received: by 2002:a05:600c:500f:b0:41f:9ae3:57f2 with SMTP id 5b1f17b1804b1-42164a3f64cmr64627845e9.37.1717973222593;
-        Sun, 09 Jun 2024 15:47:02 -0700 (PDT)
-Received: from airbuntu (host81-157-90-255.range81-157.btcentralplus.com. [81.157.90.255])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-421c20e9f51sm20248635e9.17.2024.06.09.15.47.02
+        bh=+09eQoC+I5g5eNQtRLU+Ga+T20APAwmlVnC6I3aJD7Y=;
+        b=NB+fTPal2L3CpNDRvQzWBVfpBoqQOIHRRMw9CbNwQNevRgsx77ae3VcBLoi3uY0Lpn
+         JTTW9hwrWS65r2gvzEYoFLggu6ZNnpipBmQcr7sO9C7pgQIELICJ2LaYMB8Yt3MHRA+d
+         PDkvUcannW3rXmRf3WGob7jdrEb5a2vse2YOJfx8uxhdUg4Wq1JP7p0J/L7knAYf0g2e
+         3h9xCFoNvH6ZSgwMz59uSEx2sYrBgzjToLZaTRNSR73l45VQP35F62V+WgBw91OrBtzJ
+         6mV5iiUlJrVyDGYcrK5E/pB52FZ2ryy2dpbSDKoMLMNzSz/BqP6RcddPtwJUsk71pHF8
+         AA8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVz0vX1sUi21CUuUEsSRo7nRtctOsehydWZVpgdDNo9inhnV09nzIzaH/Mb3R/Q+jSDaHPu4tl3UL5B2JTDHYfndf7tbZ91Zl8=
+X-Gm-Message-State: AOJu0Yy66pKbJm8KWTGuYS4aHNIYzr83fxIM6n3eDvyTbGgx2ZwE+lyO
+	W8WtykHBZTv5ulM6ykxOuixLBYRzKo6xXYZdI1IPhQvIFlFBhFpTotxWnYOcF2zWTKbdEnYAyJj
+	R
+X-Google-Smtp-Source: AGHT+IHPYgNdTd5rMnCuMD1fIfilGijJyc9W8RL6pTRXVfjKVXGxHWmAnc69/KfDUjjjhKEzAXG/FQ==
+X-Received: by 2002:a17:90a:7441:b0:2c2:cbd2:df0c with SMTP id 98e67ed59e1d1-2c2cbd2e02amr5858699a91.15.1717993373659;
+        Sun, 09 Jun 2024 21:22:53 -0700 (PDT)
+Received: from localhost ([122.172.82.13])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c2e9d8a7d6sm3092647a91.57.2024.06.09.21.22.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Jun 2024 15:47:02 -0700 (PDT)
-Date: Sun, 9 Jun 2024 23:47:01 +0100
-From: Qais Yousef <qyousef@layalina.io>
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	rafael@kernel.org, vincent.guittot@linaro.org, peterz@infradead.org,
-	daniel.lezcano@linaro.org, anna-maria@linutronix.de,
-	kajetan.puchalski@arm.com, lukasz.luba@arm.com,
-	dietmar.eggemann@arm.com
-Subject: Re: [PATCH 1/6] cpuidle: teo: Increase util-threshold
-Message-ID: <20240609224701.pc6om2o5ep6btywe@airbuntu>
-References: <20240606090050.327614-1-christian.loehle@arm.com>
- <20240606090050.327614-2-christian.loehle@arm.com>
+        Sun, 09 Jun 2024 21:22:53 -0700 (PDT)
+Date: Mon, 10 Jun 2024 09:52:50 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Primoz Fiser <primoz.fiser@norik.com>
+Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, upstream@lists.phytec.de
+Subject: Re: [PATCH 2/2] OPP: ti: Use devm_pm_opp_set_config_regulators
+Message-ID: <20240610042250.xccda2pr277v6asf@vireshk-i7>
+References: <20240606113334.396693-1-primoz.fiser@norik.com>
+ <20240606113334.396693-2-primoz.fiser@norik.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240606090050.327614-2-christian.loehle@arm.com>
+In-Reply-To: <20240606113334.396693-2-primoz.fiser@norik.com>
 
-On 06/06/24 10:00, Christian Loehle wrote:
-> Increase the util-threshold by a lot as it was low enough for some
-> minor load to always be active, especially on smaller CPUs.
+Hi Primoz,
+
+Thanks for your changes, they look exactly as we discussed earlier, but .. 
+
+On 06-06-24, 13:33, Primoz Fiser wrote:
+> Function ti_opp_supply_probe() since commit 6baee034cb55 ("OPP: ti:
+> Migrate to dev_pm_opp_set_config_regulators()") returns wrong values
+> when all goes well and hence driver probing eventually fails.
 > 
-> For small cap CPUs (Pixel6) the util threshold is as low as 1.
-> For CPUs of capacity <64 it is 0. So ensure it is at a minimum, too.
+> Switch to using devm_pm_opp_set_config_regulators() function that
+> correctly handles return values and doesn't require us to handle
+> returned tokens.
 > 
-> Fixes: 9ce0f7c4bc64 ("cpuidle: teo: Introduce util-awareness")
-> Reported-by: Qais Yousef <qyousef@layalina.io>
-> Reported-by: Vincent Guittot <vincent.guittot@linaro.org>
-> Suggested-by: Kajetan Puchalski <kajetan.puchalski@arm.com>
-> Signed-off-by: Christian Loehle <christian.loehle@arm.com>
+> Fixes: 6baee034cb55 ("OPP: ti: Migrate to dev_pm_opp_set_config_regulators()")
+> Signed-off-by: Primoz Fiser <primoz.fiser@norik.com>
 > ---
->  drivers/cpuidle/governors/teo.c | 11 +++++------
->  1 file changed, 5 insertions(+), 6 deletions(-)
+>  drivers/opp/ti-opp-supply.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
-> index 7244f71c59c5..45f43e2ee02d 100644
-> --- a/drivers/cpuidle/governors/teo.c
-> +++ b/drivers/cpuidle/governors/teo.c
-> @@ -146,13 +146,11 @@
->   * The number of bits to shift the CPU's capacity by in order to determine
->   * the utilized threshold.
->   *
-> - * 6 was chosen based on testing as the number that achieved the best balance
-> - * of power and performance on average.
-> - *
->   * The resulting threshold is high enough to not be triggered by background
-> - * noise and low enough to react quickly when activity starts to ramp up.
-> + * noise.
->   */
-> -#define UTIL_THRESHOLD_SHIFT 6
-> +#define UTIL_THRESHOLD_SHIFT 2
-> +#define UTIL_THRESHOLD_MIN 50
+> diff --git a/drivers/opp/ti-opp-supply.c b/drivers/opp/ti-opp-supply.c
+> index e3b97cd1fbbf..8a4bcc5fb9dc 100644
+> --- a/drivers/opp/ti-opp-supply.c
+> +++ b/drivers/opp/ti-opp-supply.c
+> @@ -392,7 +392,7 @@ static int ti_opp_supply_probe(struct platform_device *pdev)
+>  			return ret;
+>  	}
 >  
->  /*
->   * The PULSE value is added to metrics when they grow and the DECAY_SHIFT value
-> @@ -671,7 +669,8 @@ static int teo_enable_device(struct cpuidle_driver *drv,
->  	int i;
->  
->  	memset(cpu_data, 0, sizeof(*cpu_data));
-> -	cpu_data->util_threshold = max_capacity >> UTIL_THRESHOLD_SHIFT;
-> +	cpu_data->util_threshold = max(UTIL_THRESHOLD_MIN,
-> +				max_capacity >> UTIL_THRESHOLD_SHIFT);
+> -	ret = dev_pm_opp_set_config_regulators(cpu_dev, ti_opp_config_regulators);
+> +	ret = devm_pm_opp_set_config_regulators(cpu_dev, ti_opp_config_regulators);
+>  	if (ret < 0)
+>  		_free_optimized_voltages(dev, &opp_data);
 
-Thanks for trying to fix this. But I am afraid this is not a solution. There's
-no magic number that can truly work here - we tried. As I tried to explain
-before, a higher util value doesn't mean long idle time is unlikely. And
-blocked load can cause problems where a decay can take too long.
+-- I made a mistake.
 
-We are following up with the suggestions I have thrown back then and we'll
-share results if anything actually works.
+The driver gets probed with a platform device, while
+devm_pm_opp_set_config_regulators() works with cpu device. And so the
+issue related to module insertion/removal/insertion will still be
+there :(.
 
-For now, I think a revert is more appropriate. There was some perf benefit, but
-the power regressions were bad and there's no threshold value that actually
-works. The thresholding concept itself is incorrect and flawed - it seemed the
-correct thing back then, yes. But in a hindsight now it doesn't work.
+Did you try that though ?
 
+The only way to get this solved is probably by introducing a remove()
+method, which clears the OPP config and stores the token returned by
+dev_pm_opp_set_config_regulators().
 
-Thanks!
-
---
-Qais Yousef
-
->  
->  	for (i = 0; i < NR_RECENT; i++)
->  		cpu_data->recent_idx[i] = -1;
-> -- 
-> 2.34.1
-> 
+-- 
+viresh
 
